@@ -22,7 +22,7 @@ reg [31:0]d;
 wire [31:0]dout;
 
 // Create the clocks
-parameter SAMPLE_FREQ = 93.333333e6;
+parameter SAMPLE_FREQ = 9.333333e6;
 parameter HC = 1e9/SAMPLE_FREQ/2;
 parameter C = 2*HC;
 reg clken;
@@ -33,7 +33,7 @@ always #HC clk = clk^clken;
 `define TWO_POW_17      131072
 
 
-real carrierFreqHz = 23333333;
+real carrierFreqHz = 2333333;
 //real carrierFreqHz = 0;
 real carrierFreqNorm = carrierFreqHz * `SAMPLE_PERIOD * `TWO_POW_32;
 integer carrierFreqInt = carrierFreqNorm;
@@ -54,6 +54,10 @@ integer deviationInt = deviationNorm*interpolationGain;
 wire [31:0]deviationQ31 = deviationInt;
 wire [17:0]deviation = deviationQ31[31:14];
 
+real cicDecimation = SAMPLE_FREQ/bitrateBps/2/2;
+integer cicDecimationInt = cicDecimation;
+
+
 real resamplerFreqSps = 2*2*bitrateBps;     // 2 samples per bit, factor of 2 in the halfband
 real resamplerFreqNorm = resamplerFreqSps/SAMPLE_FREQ * `TWO_POW_32;
 integer resamplerFreqInt = resamplerFreqNorm;
@@ -66,13 +70,14 @@ integer resamplerLimitInt = resamplerLimitNorm;
 ******************************************************************************/
 
 // Random data
-reg     randData;
 parameter PN17 = 16'h008e,
           MASK17 = 16'h00ff;
 reg [15:0]sr;
 reg [4:0]zeroCount;
+wire modClk;
+reg  modData;
 always @(negedge modClk or posedge reset) begin
-    if (burstState != RANDDATA) begin
+    if (reset) begin
         zeroCount <= 5'b0;
         sr <= MASK17;
         end
@@ -93,12 +98,11 @@ always @(negedge modClk or posedge reset) begin
 /******************************************************************************
                             Instantiate a Modulator
 ******************************************************************************/
-wire    [9:0]iRx,qRx;
 wire    [17:0]iTx,qTx;
-reg     [31:0]fmModFreq;
+wire    [31:0]fmModFreq;
 reg     fmModCS;
 fmMod fmMod( 
-    .clk(clk), .reset(reset), .syncIn(sync), 
+    .clk(clk), .reset(reset), 
     .cs(fmModCS),
     .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
     .addr(a),
@@ -125,18 +129,21 @@ dds dds (
                             Channel Model
 ******************************************************************************/
 
-wire [9:0]iSignal = {{2{iTx[17]}},iTx[17:10]};
-wire [9:0]qSignal = {{2{qTx[17]}},qTx[17:10]};
-real iSignalReal = (iSignal[9] ? (iSignal - 1024.0) : iSignal)/512.0;
-real qSignalReal = (qSignal[9] ? (qSignal - 1024.0) : qSignal)/512.0;
+reg  measureSNR;
+initial measureSNR = 0;
+wire    [17:0]iRx,qRx;
+wire    [17:0]iSignal = {{2{iTx[17]}},iTx[17:2]};
+wire    [17:0]qSignal = {{2{qTx[17]}},qTx[17:2]};
+real iSignalReal = (iSignal[17] ? (iSignal - 262144.0) : iSignal)/131072.0;
+real qSignalReal = (qSignal[17] ? (qSignal - 262144.0) : qSignal)/131072.0;
 real iTxReal = (iTx[17] ? (iTx - 262144.0) : iTx)/131072.0;
 real qTxReal = (qTx[17] ? (qTx - 262144.0) : qTx)/131072.0;
 real signalMagSquared;
 real noiseMagSquared;
 integer txSampleCount;
-reg [9:0]iNoise,qNoise;
-real iNoiseReal = (iNoise[9] ? (iNoise - 1024.0) : iNoise)/512.0;
-real qNoiseReal = (qNoise[9] ? (qNoise - 1024.0) : qNoise)/512.0;
+reg [17:0]iNoise,qNoise;
+real iNoiseReal = (iNoise[17] ? (iNoise - 262144.0) : iNoise)/131072.0;
+real qNoiseReal = (qNoise[17] ? (qNoise - 262144.0) : qNoise)/131072.0;
 always @(negedge clk) begin
     `ifdef ADD_NOISE
     iNoise <= $gaussPLI();
@@ -145,7 +152,7 @@ always @(negedge clk) begin
     iNoise <= 0;
     qNoise <= 0;
     `endif
-    if (txRadio.txRamp.txEnable) begin
+    if (measureSNR) begin
         signalMagSquared <= signalMagSquared + (iSignalReal*iSignalReal + qSignalReal*qSignalReal);
         noiseMagSquared <= noiseMagSquared + (iNoiseReal*iNoiseReal + qNoiseReal*qNoiseReal);
         txSampleCount <= txSampleCount + 1;
@@ -157,8 +164,8 @@ always @(negedge clk) begin
         end
     end
 
-real iChReal = (iRx[9] ? (iRx - 1024.0) : iRx)/512.0;
-real qChReal = (qRx[9] ? (qRx - 1024.0) : qRx)/512.0;
+real iChReal = (iRx[17] ? (iRx - 262144.0) : iRx)/131072.0;
+real qChReal = (qRx[17] ? (qRx - 262144.0) : qRx)/131072.0;
 assign iRx = iSignal + iNoise;
 assign qRx = qSignal + qNoise;
 
@@ -186,8 +193,8 @@ demod demod(
 reg [15:0]testSR;
 reg [4:0]testZeroCount;
 reg testData;
-always @(negedge demodClk or burstState) begin
-    if (burstState != RANDDATA) begin
+always @(negedge demodClk or reset) begin
+    if (reset) begin
         testZeroCount <= 5'b0;
         testSR <= MASK17;
         end
@@ -332,7 +339,7 @@ initial begin
     // The 11.5 is a fudge factor (should be 12 for the 2 bit shift) for the scaling 
     // down of the transmit waveform from full scale.
     // The 13.0 is to translate from SNR to EBNO which is 10log10(bitrate/bandwidth).
-    $initGaussPLI(1,8.0 + 11.5 - 13.0,512.0);
+    $initGaussPLI(1,8.0 + 11.5 - 13.0,131072.0);
     `endif
     demod.ddc.cicReset = 0;
     reset = 0;
@@ -362,28 +369,17 @@ initial begin
 
     // Init the sample rate loop filters
     write32(createAddress(`BITSYNCSPACE,`LF_CONTROL),1);    // Zero the error
-    if (rxRadio.fskMode[1]) begin
-        write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h0015000e);    
-        write32(createAddress(`BITSYNCSPACE,`LF_LIMIT), resamplerLimitInt/2);    
-        write32(createAddress(`BITSYNCSPACE,`LF_LOOPOFFSET), resamplerFreqInt/2);    
-        end
-    else begin
-        write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h0014000c);    
-        write32(createAddress(`BITSYNCSPACE,`LF_LIMIT), resamplerLimitInt);    
-        write32(createAddress(`BITSYNCSPACE,`LF_LOOPOFFSET), resamplerFreqInt);    
-        end
+    write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h0014000c);    
+    write32(createAddress(`BITSYNCSPACE,`LF_LIMIT), resamplerLimitInt);    
+    write32(createAddress(`BITSYNCSPACE,`LF_LOOPOFFSET), resamplerFreqInt);    
     write32(createAddress(`BITSYNCSPACE,`LF_FSKTHRESHOLD), 32);
 
     // Init the downcoverter register set
     write32(createAddress(`DDCSPACE,`DDC_CENTER_FREQ), carrierFreq);
 
     // Init the cicResampler register set
-    if (rxRadio.fskMode[1]) begin
-        write32(createAddress(`CICDECSPACE,`CIC_SHIFT), 13);
-        end
-    else begin
-        write32(createAddress(`CICDECSPACE,`CIC_SHIFT), 10);
-        end
+    write32(createAddress(`CICDECSPACE,`CIC_DECIMATION),cicDecimationInt);
+    write32(createAddress(`CICDECSPACE,`CIC_SHIFT), 10);
 
     // Init the channel agc loop filter
     write32(createAddress(`CHAGCSPACE,`ALF_CONTROL),1);                 // Zero the error
@@ -413,9 +409,6 @@ initial begin
     #(2*C) ;
     demod.ddc.cicReset = 0;
 
-    // Enable the burst
-    burstStart = 1;
-
     // Wait 14 bit periods
     #(28*bitrateSamplesInt*C) ;
 
@@ -430,17 +423,8 @@ initial begin
     write32(createAddress(`CHAGCSPACE,`ALF_CONTROL),0);              
     `endif
 
-    // Wait for the preamble
-    if (rxRadio.fskMode[1]) begin
-        #(2*2*(ALT_SYMBOLS + UW_SYMBOLS)*bitrateSamplesInt*C) ;
-        end
-    else begin
-        #(2*(ALT_SYMBOLS + UW_SYMBOLS)*bitrateSamplesInt*C) ;
-        end
-    $stop;
-
-    // Wait for the data portion of the burst
-    #(2*DATA_BITS*bitrateSamplesInt*C) ;
+    // Wait for some data to pass thru
+    #(2*100*bitrateSamplesInt*C) ;
     `ifdef MATLAB_VECTORS
     $fclose(outfile);
     `endif

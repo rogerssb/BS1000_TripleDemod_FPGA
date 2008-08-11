@@ -1,0 +1,14 @@
+# Output products list for <halfbandEven>
+core_resources.txt
+halfbandEven.asy
+halfbandEven.mif
+halfbandEven.ngc
+halfbandEven.sym
+halfbandEven.v
+halfbandEven.veo
+halfbandEven.xco
+halfbandEven_fir_compiler_v3_2_xst_1.ngc_xst.xrpt
+halfbandEven_fir_compiler_v3_2_xst_1_vhdl.prj
+halfbandEven_flist.txt
+halfbandEven_xmdf.tcl
+hex_halfbandEven.mif

@@ -95,8 +95,12 @@ real accI2Real = ((accI2Slice > 2147483647.0) ? accI2Slice-4294967296.0 : accI2S
 
 // Create the decimated clock enable
 reg syncOut;
+reg [9:0]decCount;
 always @(posedge clk) begin
-    if (sync) begin
+    if (reset) begin
+        decCount <= 1;
+        end
+    else if (sync) begin
         if (decCount == 0) begin
             decCount <= cicDecimation;
             syncOut <= 1;

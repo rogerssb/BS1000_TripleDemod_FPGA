@@ -37,7 +37,7 @@ always @(addr) begin
         default:     demodSpace <= 0;
         endcase
     end
-wire    [2:0]   fskMode;
+wire    [2:0]   demodMode;
 wire    [31:0]  demodDout;
 demodRegs demodRegs(
     .addr(addr),
@@ -52,19 +52,15 @@ demodRegs demodRegs(
                                 Downconverter
 ******************************************************************************/
 wire [17:0]iDdc,qDdc;
-wire [31:0]resamplerPhaseInc;
 wire [31:0]ddcDout;
-wire [19:0]nbAgcGain;
 ddc ddc( 
-    .clk(clk), .reset(reset), .syncIn(~txSelect), 
+    .clk(clk), .reset(reset), .syncIn(syncIn), 
     .wr0(wr0) , .wr1(wr1), .wr2(wr2), .wr3(wr3),
     .addr(addr),
     .din(din),
     .dout(ddcDout),
     .ddcFreqOffset(32'h0),
     .offsetEn(1'b1),
-    .fskDdcFreq(fskDdcFreq),
-    .iDds(iDds),.qDds(qDds),
     .symTimes2SyncOut(ddcSymTimes2Sync),
     .symTimes4SyncOut(ddcSymTimes4Sync),
     .iIn(iRx), .qIn(qRx), 

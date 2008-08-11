@@ -1,13 +1,13 @@
 [Options]
 DebugEnable=No
+NoFloatWarn=Yes
 [Settings]
 Version=Silvaco4.10.0.R
-VisualDebug=
 [Analyzer]
-SymbolFile=
-C0Width=58
+C0Width=130
 C1Width=58
-C2Width=58
+C2Width=41
+GotoSource=N
 [Spice]
 [LibraryFiles]
 0=..\..\Xilinx\10.1\ISE\verilog\src\unisims\{.v}
@@ -32,3 +32,45 @@ CommandLine=+define+SIMULATE
 13=.\coregen\dds.v
 14=demodRegs.v
 15=shifter18to48.v
+16=.\halfband\halfband.v
+17=.\coregen\halfbandEven.v
+18=variableGain.v
+[View]
+1=Last 23359.122ns 148988.018ns 3925.903ns 124843.715ns 58781.961ns
+[Group0]
+Name=New Group2
+[Group3]
+Name="Micro"
+0="test.demod : wr0" default
+1="test.demod : wr1" default
+2="test.demod : wr2" default
+3="test.demod : wr3" default
+4="test.demod : din[31:0]" default
+5="test.demod : addr[11:0]" default
+[Group2]
+Name="Tx"
+0="test.fmMod : interpReal" default Real AnalogDisplay AType=Step Scale=Auto
+1="test.fmMod : shapedReal" default Real AnalogDisplay AType=Step Scale=Auto
+2="test.fmMod : cicShift[4:0]" default
+3="test.fmMod : cicOut[33:0]" default
+4="test.fmMod : shapedReady" default
+5="test.fmMod : modValue[2:0]" default
+6="test.fmMod : bitrateDiv[15:0]" default
+7="test.fmMod : modData" default
+8="test.fmMod : modClk" default
+9="test.fmMod : reset" default
+10="test.fmMod : clk" default
+[Group1]
+Name="Rx"
+0="test.demod.ddc : cicReset" default
+1="test.demod.ddc : iAgcReal" default Real AnalogDisplay AType=Step Scale=Auto
+2="test.demod.ddc : iHbReal" default Real AnalogDisplay AType=Step Scale=Auto
+3="test.demod.ddc : iCicReal" default Real AnalogDisplay AType=Step Scale=Auto
+4="test.demod.ddc : iMixReal" default Real AnalogDisplay AType=Step Scale=Auto
+OpenGroup=Yes
+[GroupInfo]
+0=New Group2 : 0 : 0 : 0
+1=Tx : 1 : 1 : 0
+2=Micro : 2 : 1 : 0
+3=Rx : 3 : 1 : 0
+[Bookmarks]

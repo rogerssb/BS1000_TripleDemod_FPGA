@@ -17,8 +17,8 @@ output  [31:0]dataOut;
 input   cs;
 input   wr0,wr1,wr2,wr3;
 
-output  [1:0]   demodMode;
-reg     [1:0]   demodMode;
+output  [2:0]   demodMode;
+reg     [2:0]   demodMode;
 
 always @(negedge wr0) begin
     if (cs) begin

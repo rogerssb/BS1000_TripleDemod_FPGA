@@ -8,8 +8,6 @@ module ddc( clk, reset, syncIn,
             dout,
             ddcFreqOffset,
             offsetEn,
-            ddcFreq,
-            iDds,qDds,
             symTimes2SyncOut,
             symTimes4SyncOut,
             iIn, qIn, 
@@ -24,8 +22,6 @@ input [31:0]din;
 output [31:0]dout;
 input [31:0]ddcFreqOffset;
 input offsetEn;
-output [31:0]ddcFreq;
-input [17:0]iDds,qDds;
 output symTimes2SyncOut;
 output symTimes4SyncOut;
 input [17:0]iIn;
@@ -63,6 +59,8 @@ always @(posedge clk) begin
 
 
 // LO Generator
+wire    [17:0]iDds;
+wire    [17:0]qDds;
 dds dds ( 
     .sclr(reset), 
     .clk(clk), 
@@ -143,6 +141,7 @@ real qHbReal = ((qHb > 131071.0) ? (qHb - 262144.0) : qHb)/131072.0;
 `endif
 
 wire [17:0]iAgc,qAgc;
+wire [19:0]nbAgcGain = {4'h0,16'hffff};
 variableGain gainI(
     .clk(clk), .clkEn(iHbSyncOut),
     .exponent(nbAgcGain[19:16]), .mantissa(nbAgcGain[15:0]),
