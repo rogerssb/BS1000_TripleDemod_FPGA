@@ -4,17 +4,45 @@ NoFloatWarn=Yes
 [Settings]
 Version=Silvaco4.10.0.R
 [Analyzer]
-C0Width=130
+C0Width=58
 C1Width=58
-C2Width=41
+C2Width=58
 GotoSource=N
 [Spice]
+MainFile=
 [LibraryFiles]
 0=..\..\Xilinx\10.1\ISE\verilog\src\unisims\{.v}
 [PliFiles]
 0=gausspli.dll
 [DebugMode]
 CommandLine=+define+SIMULATE
+[View]
+1=Last 0.000ns 225208.864ns 7037.777ns 110844.987ns 58781.961ns
+[Group0]
+Name=New Group2
+[Group3]
+Name="Micro"
+0="test.demod : wr0" default
+1="test.demod : wr1" default
+2="test.demod : wr2" default
+3="test.demod : wr3" default
+4="test.demod : din[31:0]" default
+5="test.demod : addr[11:0]" default
+OpenGroup=
+[Group2]
+Name="Tx"
+0="test.fmMod : interpReal" default Real AnalogDisplay AType=Step Scale=Auto
+1="test.fmMod : shapedReal" default Real AnalogDisplay AType=Step Scale=Auto
+2="test.fmMod : cicShift[4:0]" default
+3="test.fmMod : cicOut[33:0]" default
+4="test.fmMod : shapedReady" default
+5="test.fmMod : modValue[2:0]" default
+6="test.fmMod : bitrateDiv[15:0]" default
+7="test.fmMod : modData" default
+8="test.fmMod : modClk" default
+9="test.fmMod : reset" default
+10="test.fmMod : clk" default
+OpenGroup=
 [Files]
 0=test.v
 1=demod.v
@@ -35,38 +63,20 @@ CommandLine=+define+SIMULATE
 16=.\halfband\halfband.v
 17=.\coregen\halfbandEven.v
 18=variableGain.v
-[View]
-1=Last 23359.122ns 148988.018ns 3925.903ns 124843.715ns 58781.961ns
-[Group0]
-Name=New Group2
-[Group3]
-Name="Micro"
-0="test.demod : wr0" default
-1="test.demod : wr1" default
-2="test.demod : wr2" default
-3="test.demod : wr3" default
-4="test.demod : din[31:0]" default
-5="test.demod : addr[11:0]" default
-[Group2]
-Name="Tx"
-0="test.fmMod : interpReal" default Real AnalogDisplay AType=Step Scale=Auto
-1="test.fmMod : shapedReal" default Real AnalogDisplay AType=Step Scale=Auto
-2="test.fmMod : cicShift[4:0]" default
-3="test.fmMod : cicOut[33:0]" default
-4="test.fmMod : shapedReady" default
-5="test.fmMod : modValue[2:0]" default
-6="test.fmMod : bitrateDiv[15:0]" default
-7="test.fmMod : modData" default
-8="test.fmMod : modClk" default
-9="test.fmMod : reset" default
-10="test.fmMod : clk" default
+19=.\fmDemod\fmDemod.v
+20=..\cordic\src\vm_cordic.v
 [Group1]
 Name="Rx"
-0="test.demod.ddc : cicReset" default
-1="test.demod.ddc : iAgcReal" default Real AnalogDisplay AType=Step Scale=Auto
-2="test.demod.ddc : iHbReal" default Real AnalogDisplay AType=Step Scale=Auto
-3="test.demod.ddc : iCicReal" default Real AnalogDisplay AType=Step Scale=Auto
-4="test.demod.ddc : iMixReal" default Real AnalogDisplay AType=Step Scale=Auto
+0="test.demod.ddc : syncOut" default
+1="test.demod.demod : sync" default Unknown
+2="test.demod.fmDemod : magReal" default Real AnalogDisplay AType=Step Scale=Auto
+3="test.demod.fmDemod : freqReal" default Real AnalogDisplay AType=Step Scale=Auto
+4="test.fmMod : interpReal" default Real AnalogDisplay AType=PWL Scale=Auto
+5="test.demod.ddc : cicReset" default
+6="test.demod.ddc : iAgcReal" default Real AnalogDisplay AType=Step Scale=Auto
+7="test.demod.ddc : iHbReal" default Real AnalogDisplay AType=Step Scale=Auto
+8="test.demod.ddc : iCicReal" default Real AnalogDisplay AType=Step Scale=Auto
+9="test.demod.ddc : iMixReal" default Real AnalogDisplay AType=Step Scale=Auto
 OpenGroup=Yes
 [GroupInfo]
 0=New Group2 : 0 : 0 : 0

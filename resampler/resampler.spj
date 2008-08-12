@@ -1,0 +1,48 @@
+[Options]
+DebugEnable=No
+NoFloatWarn=Yes
+[Settings]
+Version=Silvaco4.10.0.R
+VisualDebug=
+[Analyzer]
+SymbolFile=
+C0Width=107
+C1Width=58
+C2Width=45
+GotoSource=N
+[Spice]
+[LibraryFiles]
+0=..\..\..\Xilinx\10.1\ISE\verilog\src\unisims\{.v}
+[DebugMode]
+CommandLine=+define+SIMULATE
+[Files]
+0=resampler.v
+1=..\coregen\resamplerTap8.v
+2=..\coregen\mpy18x18.v
+3=..\coregen\resamplerTap0.v
+4=..\coregen\resamplerTap1.v
+5=..\coregen\resamplerTap2.v
+6=..\coregen\resamplerTap3.v
+7=..\coregen\resamplerTap4.v
+8=..\coregen\resamplerTap5.v
+9=..\coregen\resamplerTap6.v
+10=..\coregen\resamplerTap7.v
+11=..\coregen\dds.v
+[View]
+1=Last 0.000ns 10359.999ns 345.334ns 1401.140ns 997.150ns
+[Group0]
+Name="Default"
+0="test.resampler : iOutReal" default Real AnalogDisplay AType=Step Scale=Auto
+1="test : iInReal" default Real AnalogDisplay AType=PWL Scale=Auto
+2="test.resampler : offsetInt" default Decimal AnalogDisplay AType=Step Scale=Auto
+3="test.resampler : offset[4:0]" default
+4="test.resampler : phaseSum[31:0]" default
+5="test.resampler : phase[31:0]" default
+6="test.resampler : resamplerPhaseInc[31:0]" default
+7="test.resampler : resample" default
+8="test.resampler : clk" default
+9="test.resampler : reset" default
+10="test.resampler : sync" default
+OpenGroup=Yes
+[GroupInfo]
+0=Default : 0 : 1 : 0

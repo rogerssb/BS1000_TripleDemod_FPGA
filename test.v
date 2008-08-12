@@ -54,7 +54,7 @@ integer deviationInt = deviationNorm*interpolationGain;
 wire [31:0]deviationQ31 = deviationInt;
 wire [17:0]deviation = deviationQ31[31:14];
 
-real cicDecimation = SAMPLE_FREQ/bitrateBps/2/2;
+real cicDecimation = SAMPLE_FREQ/bitrateBps/2/2/2;
 integer cicDecimationInt = cicDecimation;
 
 
@@ -101,6 +101,8 @@ always @(negedge modClk or posedge reset) begin
 wire    [17:0]iTx,qTx;
 wire    [31:0]fmModFreq;
 reg     fmModCS;
+reg     enableTx;
+initial enableTx = 0;
 fmMod fmMod( 
     .clk(clk), .reset(reset), 
     .cs(fmModCS),
@@ -112,7 +114,7 @@ fmMod fmMod(
     .txSelect(1'b1),
     .modData(modData),
     .modClkOut(modClk),
-    .modDataValid(1'b1),
+    .modDataValid(enableTx),
     .fmModFreq(fmModFreq)
     );
 dds dds ( 
@@ -403,6 +405,7 @@ initial begin
     // Wait 1.5 bit periods
     #(3.0*bitrateSamplesInt*C) ;
 
+    enableTx = 1;
 
     // Create a reset to clear the cic resampler
     demod.ddc.cicReset = 1;

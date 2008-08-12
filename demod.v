@@ -61,12 +61,25 @@ ddc ddc(
     .dout(ddcDout),
     .ddcFreqOffset(32'h0),
     .offsetEn(1'b1),
-    .symTimes2SyncOut(ddcSymTimes2Sync),
-    .symTimes4SyncOut(ddcSymTimes4Sync),
+    .syncOut(ddcSync),
     .iIn(iRx), .qIn(qRx), 
     .iOut(iDdc), .qOut(qDdc)
     );
 
+
+/******************************************************************************
+                                FM Demodulator
+******************************************************************************/
+wire [7:0]phase;
+wire [7:0]freq;
+wire [8:0]mag;
+fmDemod fmDemod( 
+    .clk(clk), .reset(reset), .sync(ddcSync),
+    .iFm(iDdc),.qFm(qDdc),
+    .phase(phase),
+    .freq(freq),
+    .mag(mag)
+    );
 
 /******************************************************************************
                                 uP dout mux

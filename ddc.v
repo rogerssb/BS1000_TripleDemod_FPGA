@@ -8,8 +8,7 @@ module ddc( clk, reset, syncIn,
             dout,
             ddcFreqOffset,
             offsetEn,
-            symTimes2SyncOut,
-            symTimes4SyncOut,
+            syncOut,
             iIn, qIn, 
             iOut, qOut);
 
@@ -22,8 +21,7 @@ input [31:0]din;
 output [31:0]dout;
 input [31:0]ddcFreqOffset;
 input offsetEn;
-output symTimes2SyncOut;
-output symTimes4SyncOut;
+output syncOut;
 input [17:0]iIn;
 input [17:0]qIn;
 output [17:0]iOut;
@@ -162,8 +160,7 @@ real qAgcReal = ((qAgc > 131071.0) ? (qAgc - 262144.0) : qAgc)/131072.0;
 
 assign iOut = iHb;
 assign qOut = qHb;
-assign symTimes2SyncOut = iHbSyncOut;
-assign symTimes4SyncOut = cicSyncOut;
+assign syncOut = iHbSyncOut;
 
 reg [31:0]dout;
 always @(addr or cicDout or ddcDout) begin
