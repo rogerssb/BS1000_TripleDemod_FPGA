@@ -10,7 +10,7 @@ fi = ip;        % fi is normalized to ip;
 fn = fi/2;
 fc = 0.5/fn;
 
-writeFile = 0;
+writeFile = 1;
 
 %win = chebwin(taps,50);
 %win = nuttallwin(taps);
@@ -63,77 +63,14 @@ axis([0 2 (ds/2 - 1) ds/2]);
 
 
 if writeFile == 1
-    g = downsample(h,ip,0);
-    fid = fopen('resamplerTap0.coe','w');
-    fprintf(fid,'radix=10;\n');
-    fprintf(fid,'coefdata=\n');
-    fprintf(fid,'%d,\n',g(1:ds-1);
-    fprintf(fid,'%d;\n',g(ds));
-    fclose(fid);
-
-    g = downsample(h,ip,1);
-    fid = fopen('resamplerTap1.coe','w');
-    fprintf(fid,'radix=10;\n');
-    fprintf(fid,'coefdata=\n');
-    fprintf(fid,'%d,\n',g(1:ds-1);
-    fprintf(fid,'%d;\n',g(ds));
-    fclose(fid);
-
-    g = downsample(h,ip,2);
-    fid = fopen('resamplerTap2.coe','w');
-    fprintf(fid,'radix=10;\n');
-    fprintf(fid,'coefdata=\n');
-    fprintf(fid,'%d,\n',g(1:ds-1);
-    fprintf(fid,'%d;\n',g(ds));
-    fclose(fid);
-
-    g = downsample(h,ip,3);
-    fid = fopen('resamplerTap3.coe','w');
-    fprintf(fid,'radix=10;\n');
-    fprintf(fid,'coefdata=\n');
-    fprintf(fid,'%d,\n',g(1:ds-1);
-    fprintf(fid,'%d;\n',g(ds));
-    fclose(fid);
-
-    g = downsample(h,ip,4);
-    fid = fopen('resamplerTap4.coe','w');
-    fprintf(fid,'radix=10;\n');
-    fprintf(fid,'coefdata=\n');
-    fprintf(fid,'%d,\n',g(1:ds-1);
-    fprintf(fid,'%d;\n',g(ds));
-    fclose(fid);
-
-    g = downsample(h,ip,5);
-    fid = fopen('resamplerTap5.coe','w');
-    fprintf(fid,'radix=10;\n');
-    fprintf(fid,'coefdata=\n');
-    fprintf(fid,'%d,\n',g(1:ds-1);
-    fprintf(fid,'%d;\n',g(ds));
-    fclose(fid);
-
-    g = downsample(h,ip,6);
-    fid = fopen('resamplerTap6.coe','w');
-    fprintf(fid,'radix=10;\n');
-    fprintf(fid,'coefdata=\n');
-    fprintf(fid,'%d,\n',g(1:ds-1);
-    fprintf(fid,'%d;\n',g(ds));
-    fclose(fid);
-
-    g = downsample(h,ip,7);
-    fid = fopen('resamplerTap7.coe','w');
-    fprintf(fid,'radix=10;\n');
-    fprintf(fid,'coefdata=\n');
-    fprintf(fid,'%d,\n',g(1:ds-1);
-    fprintf(fid,'%d;\n',g(ds));
-    fclose(fid);
-
-    g = downsample(h,ip,8);
-    fid = fopen('resamplerTap8.coe','w');
-    fprintf(fid,'radix=10;\n');
-    fprintf(fid,'coefdata=\n');
-    fprintf(fid,'%d,\n',g(1:ds-1);
-    fprintf(fid,'%d;\n',g(ds));
-    fclose(fid);
-
+    h = round((2^17)*h*ip);
+    for i = 1:(ip*ds)
+        if (h(i) < 0)
+            h(i) = h(i) + 2^18;
+        end
     end
+    fid = fopen('resampler.hex','w');
+    fprintf(fid,'%X\n',h);
+    fclose(fid);
+end
 

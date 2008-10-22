@@ -58,8 +58,8 @@ real cicDecimation = SAMPLE_FREQ/bitrateBps/2/2/2;
 integer cicDecimationInt = cicDecimation;
 
 
-real resamplerFreqSps = 2*2*bitrateBps;     // 2 samples per bit, factor of 2 in the halfband
-real resamplerFreqNorm = resamplerFreqSps/SAMPLE_FREQ * `TWO_POW_32;
+real resamplerFreqSps = 2*bitrateBps;     // 2 samples per symbol
+real resamplerFreqNorm = resamplerFreqSps/(SAMPLE_FREQ/cicDecimationInt/2.0) * `TWO_POW_32;
 integer resamplerFreqInt = resamplerFreqNorm;
 
 real resamplerLimitNorm = 0.001*resamplerFreqSps/SAMPLE_FREQ * `TWO_POW_32;
@@ -370,6 +370,7 @@ initial begin
     write32(createAddress(`DEMODSPACE,`DEMOD_CONTROL),{29'bx,`MODE_2FSK});
 
     // Init the sample rate loop filters
+    write32(createAddress(`RESAMPSPACE,`RESAMPLER_RATE),resamplerFreqInt);
     write32(createAddress(`BITSYNCSPACE,`LF_CONTROL),1);    // Zero the error
     write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h0014000c);    
     write32(createAddress(`BITSYNCSPACE,`LF_LIMIT), resamplerLimitInt);    

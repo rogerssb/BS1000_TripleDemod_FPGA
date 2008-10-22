@@ -66,20 +66,76 @@ ddc ddc(
     .iOut(iDdc), .qOut(qDdc)
     );
 
+/******************************************************************************
+                                  Resampler
+******************************************************************************/
+wire    [17:0]  iResamp,qResamp;
+wire    [31:0]  resamplerFreqOffset;
+wire    [31:0]  resampDout;
+resampler resampler(
+    .clk(clk), .reset(reset), .sync(ddcSync),
+    .wr0(wr0) , .wr1(wr1), .wr2(wr2), .wr3(wr3),
+    .addr(addr),
+    .din(din),
+    .dout(resampDout),
+    .resamplerFreqOffset(resamplerFreqOffset),
+    .offsetEn(1'b1),
+    .iIn(iDdc),
+    .qIn(qDdc),
+    .iOut(iResamp),
+    .qOut(qResamp),
+    .syncOut(resampSync)
+    );
+
 
 /******************************************************************************
-                                FM Demodulator
+                           Phase/Freq/Mag Detector
 ******************************************************************************/
 wire [7:0]phase;
 wire [7:0]freq;
 wire [8:0]mag;
 fmDemod fmDemod( 
-    .clk(clk), .reset(reset), .sync(ddcSync),
-    .iFm(iDdc),.qFm(qDdc),
+    .clk(clk), .reset(reset), .sync(resampSync),
+    .iFm(iResamp),.qFm(qResamp),
     .phase(phase),
     .freq(freq),
     .mag(mag)
     );
+
+
+/******************************************************************************
+                             AFC/Sweep/Costas Loop
+******************************************************************************/
+
+/******************************************************************************
+                                Bitsync Loop
+******************************************************************************/
+reg bitsyncSpace;
+always @(addr) begin
+    casex(addr)
+        `BITSYNCSPACE:  bitsyncSpace <= 1;
+        default:        bitsyncSpace <= 0;
+        endcase
+    end
+wire    [31:0]  bitsyncDout;
+bitsync bitsync(
+    .sampleClk(clk), .reset(reset), 
+    .symTimes2Sync(resampSync),
+    .demodMode(demodMode),
+    .cs(bitsyncSpace),
+    .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
+    .addr(addr),
+    .din(din),
+    .dout(bitsyncDout),
+    .freq(freq),
+    .symClk(symClk),
+    .symData(demodData),
+    .bitClk(demodClk),
+    .bitData(demodBit),
+    .sampleFreq(resamplerFreqOffset)
+    );
+
+
 
 /******************************************************************************
                                 uP dout mux
@@ -87,10 +143,14 @@ fmDemod fmDemod(
 reg [31:0]dout;
 always @(addr or 
          demodDout or
-         ddcDout) begin
+         ddcDout or
+         resampDout or 
+         bitsyncDout) begin
     casex (addr)
         `DEMODSPACE:        dout <= demodDout;
         `DDCSPACE:          dout <= ddcDout;
+        `RESAMPSPACE:       dout <= resampDout;
+        `BITSYNCSPACE:      dout <= bitsyncDout;
         default:            dout <= 32'bx;
         endcase
     end

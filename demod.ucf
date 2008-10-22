@@ -1,0 +1,3 @@
+NET "clk" TNM_NET = clk;
+TIMESPEC TS_clk = PERIOD "clk" 93.33 MHz HIGH 50%;
+CONFIG VCCAUX=3.3;

@@ -10,7 +10,7 @@ fi = ip;        % fi is normalized to ip;
 fn = fi/2;
 fc = 0.5/fn;
 
-writeFile = 1;
+writeFile = 0;
 
 %win = chebwin(taps,50);
 %win = nuttallwin(taps);
@@ -49,7 +49,7 @@ figure(2);
 
 g = downsample(h,ip,0);
 [G w] = grpdelay(g,1,1024,fi/ip);
-plot(w,G,'b');
+plot(w,G,'r');
 hold on;
 for i = 1:(ip-1)
     g = downsample(h,ip,i);
@@ -59,7 +59,31 @@ for i = 1:(ip-1)
 hold off;
 axis([0 2 (ds/2 - 1) ds/2]);
 
+k = 0:99;
+x = sin(2*pi*(k)/20);
+g = downsample(h,ip,0);
+y = filter(g,1,x);
+figure(3);
+plot(k,y,'b');
+hold on;
+g = downsample(h,ip,16);
+y = filter(g,1,x);
+plot(k,y,'r');
+hold off;
 
+
+% Build the lookup table for the time offset calculation. It contains 1/x, where x
+% is the input to the LUT.
+x = 1:31;
+x = ones(1,31)./x;
+x = [1.0 x];
+lut = round((2^17 - 1) .* x);
+fid = fopen('reciprocalLut.coe','w');
+fprintf(fid,'memory_initialization_radix=10;\n');
+fprintf(fid,'memory_initialization_vector=\n');
+fprintf(fid,'%d,\n',lut(1:31));
+fprintf(fid,'%d;\n',lut(32));
+fclose(fid);
 
 
 if writeFile == 1

@@ -8,6 +8,7 @@
 `define CICDECSPACE     12'b0011_xxxx_xxxx
 `define BITSYNCSPACE    12'b0100_xxxx_xxxx
 `define CHAGCSPACE      12'b0111_xxxx_xxxx
+`define RESAMPSPACE     12'b1000_xxxx_xxxx
 
 // Define the global radio memory map
 `define DEMOD_CONTROL   12'hxx0
@@ -45,6 +46,9 @@
 `define ALF_GAINS       12'bxxxx_xxx0_1000
 `define ALF_ULIMIT      12'bxxxx_xxx0_1100
 `define ALF_LLIMIT      12'bxxxx_xxx1_0000
+
+// Define the DDC memory map
+`define RESAMPLER_RATE  12'hxx0
 
 
 `endif

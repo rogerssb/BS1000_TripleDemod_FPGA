@@ -1,20 +1,64 @@
 [Options]
 DebugEnable=No
 NoFloatWarn=Yes
+DigitalThreshold=
 [Settings]
 Version=Silvaco4.10.0.R
-VisualDebug=
 [Analyzer]
-SymbolFile=
-C0Width=107
+C0Width=179
 C1Width=58
-C2Width=45
+C2Width=48
 GotoSource=N
+MinScale=
+MaxScale=
 [Spice]
 [LibraryFiles]
 0=..\..\..\Xilinx\10.1\ISE\verilog\src\unisims\{.v}
 [DebugMode]
 CommandLine=+define+SIMULATE
+[View]
+1=Last 76832.966ns 94328.786ns 401.741ns 78617.675ns 92758.956ns
+[Plusargs]
+0=memsave+test.impulse
+[Group1]
+Name="SR"
+0="test.resampler : \iSR[0] [17:0]" default
+1="test.resampler : \iSR[1] [17:0]" default
+2="test.resampler : \iSR[2] [17:0]" default
+3="test.resampler : \iSR[3] [17:0]" default
+4="test.resampler : \iSR[4] [17:0]" default
+5="test.resampler : \iSR[5] [17:0]" default
+6="test.resampler : \iSR[6] [17:0]" default
+7="test.resampler : \iSR[7] [17:0]" default
+8="test.resampler : \iSR[8] [17:0]" default
+OpenGroup=
+[Group2]
+Name="COEFS"
+0="test.resampler : tap0Coef[17:0]" default
+1="test.resampler : tap1Coef[17:0]" default
+2="test.resampler : tap2Coef[17:0]" default
+3="test.resampler : tap3Coef[17:0]" default
+4="test.resampler : tap4Coef[17:0]" default
+5="test.resampler : tap5Coef[17:0]" default
+6="test.resampler : tap6Coef[17:0]" default
+7="test.resampler : tap7Coef[17:0]" default
+8="test.resampler : tap8Coef[17:0]" default
+OpenGroup=
+[Group3]
+Name="resampler"
+0="test.resampler : iSum[35:0]" default
+1="test.resampler : i4567[35:0]" default
+2="test.resampler : i67[35:0]" default
+3="test.resampler : i0Product[35:0]" default
+4="test.resampler : i1Product[35:0]" default
+5="test.resampler : i2Product[35:0]" default
+6="test.resampler : i3Product[35:0]" default
+7="test.resampler : i4Product[35:0]" default
+8="test.resampler : i5Product[35:0]" default
+9="test.resampler : i6Product[35:0]" default
+10="test.resampler : i7Product[35:0]" default
+11="test.resampler : i8Product[35:0]" default
+12="test.resampler : resampleDelay[5:0]" default
 [Files]
 0=resampler.v
 1=..\coregen\resamplerTap8.v
@@ -28,21 +72,38 @@ CommandLine=+define+SIMULATE
 9=..\coregen\resamplerTap6.v
 10=..\coregen\resamplerTap7.v
 11=..\coregen\dds.v
-[View]
-1=Last 0.000ns 10359.999ns 345.334ns 1401.140ns 997.150ns
+12=resampRegs.v
+13=..\coregen\reciprocalLut.v
 [Group0]
 Name="Default"
-0="test.resampler : iOutReal" default Real AnalogDisplay AType=Step Scale=Auto
-1="test : iInReal" default Real AnalogDisplay AType=PWL Scale=Auto
-2="test.resampler : offsetInt" default Decimal AnalogDisplay AType=Step Scale=Auto
-3="test.resampler : offset[4:0]" default
-4="test.resampler : phaseSum[31:0]" default
-5="test.resampler : phase[31:0]" default
-6="test.resampler : resamplerPhaseInc[31:0]" default
-7="test.resampler : resample" default
-8="test.resampler : clk" default
-9="test.resampler : reset" default
-10="test.resampler : sync" default
+0="test.resampler : clk" default
+1="test.resampler : iOut[17:0]" default
+2="test : resamplerFreqInt" default Decimal AnalogDisplay AType=PWL Scale=Auto
+3="test : resamplerFreqNorm" default Real AnalogDisplay AType=PWL Scale=Auto
+4="test : vectorCount" default Decimal AnalogDisplay AType=Step Scale=Auto
+5="test : saveVectors" default
+6="test.resampler : iOutReal" default Real AnalogDisplay AType=Step Scale=Auto
+7="test : iInReal" default Real AnalogDisplay AType=Step Scale=Auto
+8="test.resampler : lutProduct[35:0]" default
+9="test.resampler.offsetMpy : a[17:0]" default
+10="test.resampler : reciprocal[17:0]" default
+11="test.resampler.lut : a[4:0]" default
+12="test.resampler : offsetInt" default Decimal AnalogDisplay AType=Step Scale=Auto
+13="test.resampler : newOffset[4:0]" default
+14="test.resampler : offset[4:0]" default
+15="test.resampler : oldOffset[4:0]" default
+16="test.resampler : phaseSum[31:0]" default
+17="test.resampler : phase[31:0]" default
+18="test.resampler : resamplerPhaseInc[31:0]" default
+19="test.resampler : resampleDelay[6]" default
+20="test.resampler : resample" default
+21="test.resampler : reset" default
+22="test.resampler : sync" default
 OpenGroup=Yes
+[Define]
+0=TEST_MODULE
 [GroupInfo]
 0=Default : 0 : 1 : 0
+1=SR : 1 : 1 : 0
+2=COEFS : 2 : 1 : 0
+3=resampler : 3 : 1 : 0

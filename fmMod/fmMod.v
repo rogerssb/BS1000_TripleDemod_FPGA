@@ -1,9 +1,9 @@
 `timescale 1ns / 10 ps
 
-`define MODE_2FSK       2'b00
-`define MODE_SHAPED2FSK 2'b01
-`define MODE_4FSK       2'b10
-`define MODE_SHAPED4FSK 2'b11
+`define FMMOD_MODE_2FSK       2'b00
+`define FMMOD_MODE_SHAPED2FSK 2'b01
+`define FMMOD_MODE_4FSK       2'b10
+`define FMMOD_MODE_SHAPED4FSK 2'b11
 // Define the FM memory map
 `define FM_MOD_FREQ     12'hxx0
 `define FM_MOD_DEV      12'hxx4
@@ -74,13 +74,13 @@ always @(posedge clk) begin
             bitrateCount <= bitrateDiv;
             modClkOut <= ~modClkOut;
             casex (fskMode)
-                `MODE_2FSK,
-                `MODE_SHAPED2FSK: 
+                `FMMOD_MODE_2FSK,
+                `FMMOD_MODE_SHAPED2FSK: 
                     begin
                     modSampleEn <= 1;
                     end
-                `MODE_4FSK,
-                `MODE_SHAPED4FSK: 
+                `FMMOD_MODE_4FSK,
+                `FMMOD_MODE_SHAPED4FSK: 
                     begin
                     if (!modClkOut) begin
                         modSampleEn <= 1;
@@ -109,7 +109,7 @@ always @(posedge clk) begin
         end
     else begin
         casex (fskMode)
-            `MODE_2FSK:
+            `FMMOD_MODE_2FSK:
                 begin
                 if (modSampleEn) begin
                     if (modData) begin
@@ -120,7 +120,7 @@ always @(posedge clk) begin
                         end
                     end
                 end
-            `MODE_SHAPED2FSK: 
+            `FMMOD_MODE_SHAPED2FSK: 
                 begin
                 if (modSampleEn) begin
                     if (modClk) begin
@@ -136,7 +136,7 @@ always @(posedge clk) begin
                         end
                     end
                 end
-            `MODE_4FSK:
+            `FMMOD_MODE_4FSK:
                 begin
                 if (modSampleEn) begin
                     bitSR <= {bitSR[0],modData};
@@ -151,7 +151,7 @@ always @(posedge clk) begin
                         end
                     end
                 end
-            `MODE_SHAPED4FSK: 
+            `FMMOD_MODE_SHAPED4FSK: 
                 begin
                 if (modSampleEn) begin
                     bitSR <= {bitSR[0],modData};
