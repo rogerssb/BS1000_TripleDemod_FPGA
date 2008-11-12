@@ -1,0 +1,63 @@
+[Options]
+DebugEnable=No
+NoFloatWarn=Yes
+[Settings]
+Version=Silvaco4.10.0.R
+VisualDebug=
+[Analyzer]
+C0Width=58
+C1Width=58
+C2Width=58
+GotoSource=N
+SymbolFile=
+[Spice]
+MainFile=
+[LibraryFiles]
+0=..\..\..\Xilinx\10.1\ISE\verilog\src\unisims\{.v}
+[DebugMode]
+CommandLine=+define+SIMULATE
+[View]
+1=Last 0.000ns 296501.568ns 6738.672ns 29080.273ns 30571.570ns
+[Files]
+0=resamp.v
+1=..\coregen\dds.v
+[Plusargs]
+0=memsave+resampler.taps
+[Group1]
+Name="New Group2"
+0="test.resampler : \taps[2] [17:0]" default
+1="test.resampler : \taps[1] [17:0]" default
+2="test.resampler : \taps[0] [17:0]" default
+[Define]
+0=TEST_MODULE
+[Group0]
+Name="Default"
+0="test.resampler : clk" default
+1="test.resampler : iOut[17:0]" default
+2="test : resamplerFreqInt" default Decimal AnalogDisplay AType=PWL Scale=Auto
+3="test : resamplerFreqNorm" default Real AnalogDisplay AType=PWL Scale=Auto
+4="test : vectorCount" default Decimal AnalogDisplay AType=Step Scale=Auto
+5="test : saveVectors" default Unknown
+6="test.resampler : iOutReal" default Real AnalogDisplay AType=Step Scale=Auto
+7="test.resampler : sumTotal" default Real AnalogDisplay AType=Step Scale=Auto
+8="test : iInReal" default Real AnalogDisplay AType=Step Scale=Auto
+9="test.resampler : offsetInt" default Decimal AnalogDisplay AType=Step Scale=Auto
+10="test.resampler : offset[4:0]" default
+11="test.resampler : resampleCount[4:0]" default
+12="test.resampler : firDelay[4:0]" default
+13="test.resampler : phaseSum[31:0]" default
+14="test.resampler : phaseSum[32]" default
+15="test.resampler : refPhase[31:0]" default
+16="test.resampler : phase[31:0]" default
+17="test.resampler : refPhase[31]" default
+18="test.resampler : additionalClocks" default Real AnalogDisplay AType=Step Scale=Auto
+19="test.resampler : resamplerPhaseInc[31:0]" default
+20="test.resampler : resample" default
+21="test.resampler : reset" default
+22="test : clk" default
+23="test.resampler : sync" default
+OpenGroup=Yes
+[GroupInfo]
+0=Default : 0 : 1 : 0
+1=New Group2 : 1 : 1 : 0
+[Bookmarks]

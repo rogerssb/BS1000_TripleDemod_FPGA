@@ -51,16 +51,17 @@ demodRegs demodRegs(
 /******************************************************************************
                                 Downconverter
 ******************************************************************************/
-wire [17:0]iDdc,qDdc;
-wire [31:0]ddcDout;
+wire    [17:0]  iDdc,qDdc;
+wire    [31:0]  carrierFreqOffset;
+wire    [31:0]  ddcDout;
 ddc ddc( 
     .clk(clk), .reset(reset), .syncIn(syncIn), 
     .wr0(wr0) , .wr1(wr1), .wr2(wr2), .wr3(wr3),
     .addr(addr),
     .din(din),
     .dout(ddcDout),
-    .ddcFreqOffset(32'h0),
-    .offsetEn(1'b1),
+    .ddcFreqOffset(carrierFreqOffset),
+    .offsetEn(carrierOffsetEn),
     .syncOut(ddcSync),
     .iIn(iRx), .qIn(qRx), 
     .iOut(iDdc), .qOut(qDdc)
@@ -87,16 +88,32 @@ resampler resampler(
     .syncOut(resampSync)
     );
 
+/******************************************************************************
+                               Symbol Offset Deskew
+******************************************************************************/
+reg     [17:0]  iSym,qSym,qDelay;
+always @(posedge clk) begin
+    if (resampSync) begin
+        iSym <= iResamp;
+        qDelay <= qResamp;
+        if (demodMode == `MODE_OQPSK) begin
+            qSym <= qDelay;
+            end
+        else begin
+            qSym <= qResamp;
+            end
+        end
+    end
 
 /******************************************************************************
                            Phase/Freq/Mag Detector
 ******************************************************************************/
-wire [7:0]phase;
-wire [7:0]freq;
-wire [8:0]mag;
+wire    [7:0]   phase;
+wire    [7:0]   freq;
+wire    [8:0]   mag;
 fmDemod fmDemod( 
     .clk(clk), .reset(reset), .sync(resampSync),
-    .iFm(iResamp),.qFm(qResamp),
+    .iFm(iSym),.qFm(qSym),
     .phase(phase),
     .freq(freq),
     .mag(mag)
@@ -106,28 +123,39 @@ fmDemod fmDemod(
 /******************************************************************************
                              AFC/Sweep/Costas Loop
 ******************************************************************************/
+wire    [7:0]   offsetError;
+wire    [31:0]  freqDout;
+carrierLoop carrierLoop(
+    .clk(clk), .reset(reset),
+    .sync(resampSync),
+    .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
+    .addr(addr),
+    .din(din),
+    .dout(freqDout),
+    .demodMode(demodMode),
+    .phase(phase),
+    .freq(freq),
+    .offsetError(offsetError),
+    .offsetErrorEn(offsetErrorEn),
+    .carrierFreqOffset(carrierFreqOffset),
+    .carrierFreqEn(carrierOffsetEn)
+    );
 
 /******************************************************************************
                                 Bitsync Loop
 ******************************************************************************/
-reg bitsyncSpace;
-always @(addr) begin
-    casex(addr)
-        `BITSYNCSPACE:  bitsyncSpace <= 1;
-        default:        bitsyncSpace <= 0;
-        endcase
-    end
 wire    [31:0]  bitsyncDout;
 bitsync bitsync(
     .sampleClk(clk), .reset(reset), 
     .symTimes2Sync(resampSync),
     .demodMode(demodMode),
-    .cs(bitsyncSpace),
     .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
     .addr(addr),
     .din(din),
     .dout(bitsyncDout),
     .freq(freq),
+    .offsetError(offsetError),
+    .offsetErrorEn(offsetErrorEn),
     .symClk(symClk),
     .symData(demodData),
     .bitClk(demodClk),

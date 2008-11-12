@@ -9,6 +9,7 @@
 `define BITSYNCSPACE    12'b0100_xxxx_xxxx
 `define CHAGCSPACE      12'b0111_xxxx_xxxx
 `define RESAMPSPACE     12'b1000_xxxx_xxxx
+`define CARRIERSPACE    12'b1001_xxxx_xxxx
 
 // Define the global radio memory map
 `define DEMOD_CONTROL   12'hxx0
@@ -37,8 +38,7 @@
 `define LF_CONTROL      12'bxxxx_xxx0_0000
 `define LF_LEAD_LAG     12'bxxxx_xxx0_0100
 `define LF_LIMIT        12'bxxxx_xxx0_1000
-`define LF_LOOPOFFSET   12'bxxxx_xxx0_1100
-`define LF_FSKTHRESHOLD 12'bxxxx_xxx1_0000
+`define LF_LOOPDATA     12'bxxxx_xxx0_1100
 
 // Define the AGC Loop Filter memory map
 `define ALF_CONTROL     12'bxxxx_xxx0_0000

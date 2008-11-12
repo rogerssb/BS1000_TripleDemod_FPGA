@@ -11,8 +11,7 @@ module loopFilter (
     error,
     errorEn,
     loopFreq,
-    slip,
-    fskThreshold
+    ctrl2
     );
 
 input           clk, clkEn, reset;
@@ -24,8 +23,7 @@ output  [31:0]  dout;
 input   [7:0]   error;
 input           errorEn;
 output  [31:0]  loopFreq;
-output          slip;
-output  [7:0]   fskThreshold;
+output          ctrl2;
 
 wire loopFilterEn = clkEn & errorEn;
 
@@ -34,7 +32,6 @@ wire    [4:0]   lead, lag;
 wire    [31:0]  limit;
 wire    [31:0]  lowerLimit = -limit;
 wire    [31:0]  upperLimit = limit;
-wire    [31:0]  loopOffset;
 loopRegs micro(
     .addr(addr),
     .dataIn(din),
@@ -43,12 +40,10 @@ loopRegs micro(
     .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
     .invertError(invertError),
     .zeroError(zeroError),
-    .slip(slip),
-    .lead(lead),
-    .lag(lag),
-    .limit(limit),
-    .loopOffset(loopOffset),
-    .fskThreshold(fskThreshold)
+    .ctrl2(ctrl2),
+    .leadExp(lead),
+    .lagExp(lag),
+    .limit(limit)
     );
 
 /**************************** Adjust Error ************************************/
@@ -204,6 +199,6 @@ always @(posedge clk) begin
     end
 
 
-assign loopFreq = filterSum + loopOffset;
+assign loopFreq = filterSum;
 
 endmodule

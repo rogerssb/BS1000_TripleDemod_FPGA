@@ -1,15 +1,18 @@
 `timescale 1ns/1ps
 
+`define ENABLE_SLIP
+
 module bitsync(
     sampleClk, reset, 
     symTimes2Sync,
     demodMode,
-    cs,
     wr0,wr1,wr2,wr3,
     addr,
     din,
     dout,
     freq,
+    offsetError,
+    offsetErrorEn,
     symClk,
     symData,
     bitClk,
@@ -17,21 +20,22 @@ module bitsync(
     sampleFreq
     );
 
-input sampleClk;
-input reset;
-input symTimes2Sync;
-input [2:0]demodMode;
-input cs;
-input wr0,wr1,wr2,wr3;
-input [11:0]addr;
-input [31:0]din;
-output [31:0]dout;
-input [7:0]freq;
-output symClk;
-output [7:0]symData;
-output bitClk;
-output bitData;
-output [31:0]sampleFreq;
+input           sampleClk;
+input           reset;
+input           symTimes2Sync;
+input   [2:0]   demodMode;
+input           wr0,wr1,wr2,wr3;
+input   [11:0]  addr;
+input   [31:0]  din;
+output  [31:0]  dout;
+input   [7:0]   freq;
+output  [7:0]   offsetError;
+output          offsetErrorEn;
+output          symClk;
+output  [7:0]   symData;
+output          bitClk;
+output          bitData;
+output  [31:0]  sampleFreq;
 
 
 //******************************* Phase Error Detector ************************
@@ -62,10 +66,10 @@ wire [7:0]negOffTime = (~offTime + 1);
 reg  [7:0]timingError;
 wire timingErrorEn = (phaseState == ONTIME);
 
-// Frequency error variables
-wire [8:0]freqErrorSum = {bbSR[2][7],bbSR[2]} + {bbSR[0][7],bbSR[0]};
-reg  [7:0]freqError;
-wire freqErrorEn = (phaseState == OFFTIME);
+// DC Offset error variables
+wire [8:0]offsetErrorSum = {bbSR[2][7],bbSR[2]} + {bbSR[0][7],bbSR[0]};
+reg  [7:0]offsetError;
+wire offsetErrorEn = (phaseState == OFFTIME);
 
 reg  stateMachineSlip;
 wire registerSlip;
@@ -83,7 +87,7 @@ always @(posedge sampleClk) begin
         slipState <= AVERAGE;
         slipped <= 0;
         timingError <= 0;
-        freqError <= 0;
+        offsetError <= 0;
         avgCount <= 15;
         avgError <= 0;
         avgSlipError <= 0;
@@ -95,13 +99,17 @@ always @(posedge sampleClk) begin
         bbSR[2] <= bbSR[1];
         case (phaseState)
             ONTIME: begin
-                freqError <= freqErrorSum[8:1];
+                offsetError <= offsetErrorSum[8:1];
+                `ifdef ENABLE_SLIP
                 if (slip && ~slipped) begin
                     phaseState <= ONTIME;
                     end
                 else begin
                     phaseState <= OFFTIME;
                     end
+                `else
+                phaseState = OFFTIME;
+                `endif
                 slipped <= slip;
                 end
             OFFTIME: begin
@@ -163,6 +171,10 @@ always @(posedge sampleClk) begin
         end
     end
 
+`ifdef SIMULATE
+real timingErrorReal = ((timingError > 127.0) ? timingError - 256.0 : timingError)/128.0;
+`endif
+
 //************************ Recovered Clock and Data ***************************
 
 reg [7:0]symData;
@@ -181,11 +193,17 @@ assign bitClk  = symClk;
 
 //******************************** Loop Filter ********************************
 
-
+reg bitsyncSpace;
+always @(addr) begin
+    casex(addr)
+        `BITSYNCSPACE:  bitsyncSpace <= 1;
+        default:        bitsyncSpace <= 0;
+        endcase
+    end
 loopFilter sampleLoop(.clk(sampleClk),
                       .clkEn(symTimes2Sync),
                       .reset(reset),
-                      .cs(cs),
+                      .cs(bitsyncSpace),
                       .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
                       .addr(addr),
                       .din(din),
@@ -193,7 +211,7 @@ loopFilter sampleLoop(.clk(sampleClk),
                       .error(timingError),
                       .errorEn(timingErrorEn),
                       .loopFreq(sampleFreq),
-                      .slip(registerSlip)
+                      .ctrl2(registerSlip)
                       );
 
 `ifdef SIMULATE

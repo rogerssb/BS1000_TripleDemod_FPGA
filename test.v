@@ -28,21 +28,22 @@ parameter C = 2*HC;
 reg clken;
 always #HC clk = clk^clken;
 `define SAMPLE_PERIOD   (C*1e-9)
-`define TWO_POW_32      4294967296
-`define TWO_POW_31      2147483648
-`define TWO_POW_17      131072
+`define TWO_POW_32      4294967296.0
+`define TWO_POW_31      2147483648.0
+`define TWO_POW_17      131072.0
 
 
-real carrierFreqHz = 2333333;
+real carrierFreqHz = 2333333.0;
 //real carrierFreqHz = 0;
 real carrierFreqNorm = carrierFreqHz * `SAMPLE_PERIOD * `TWO_POW_32;
 integer carrierFreqInt = carrierFreqNorm;
 wire [31:0] carrierFreq = carrierFreqInt;
 
-real bitrateBps = 250000;
-real bitrateSamples = 1/bitrateBps/`SAMPLE_PERIOD/2;
+real bitrateBps = 250000.0;
+real bitrateSamples = 1/bitrateBps/`SAMPLE_PERIOD/2.0;
 integer bitrateSamplesInt = bitrateSamples;
 wire [15:0]bitrateDivider = bitrateSamplesInt - 1;
+real actualBitrateBps = SAMPLE_FREQ/bitrateSamplesInt/2.0;
 
 // value = 2^ceiling(log2(R*R))/(R*R), where R = interpolation rate of the FM
 // modulator
@@ -54,13 +55,14 @@ integer deviationInt = deviationNorm*interpolationGain;
 wire [31:0]deviationQ31 = deviationInt;
 wire [17:0]deviation = deviationQ31[31:14];
 
-real cicDecimation = SAMPLE_FREQ/bitrateBps/2/2/2;
+real cicDecimation = SAMPLE_FREQ/bitrateBps/2.0/2.0/2.0;
 integer cicDecimationInt = cicDecimation;
 
 
-real resamplerFreqSps = 2*bitrateBps;     // 2 samples per symbol
+real resamplerFreqSps = 2*actualBitrateBps;     // 2 samples per symbol
 real resamplerFreqNorm = resamplerFreqSps/(SAMPLE_FREQ/cicDecimationInt/2.0) * `TWO_POW_32;
-integer resamplerFreqInt = resamplerFreqNorm;
+integer resamplerFreqInt = (resamplerFreqNorm >= `TWO_POW_31) ? (resamplerFreqNorm - `TWO_POW_32) : resamplerFreqNorm;
+//integer resamplerFreqInt = resamplerFreqNorm;
 
 real resamplerLimitNorm = 0.001*resamplerFreqSps/SAMPLE_FREQ * `TWO_POW_32;
 integer resamplerLimitInt = resamplerLimitNorm;
@@ -69,13 +71,25 @@ integer resamplerLimitInt = resamplerLimitNorm;
                             Create a bit stream
 ******************************************************************************/
 
+// Alternating ones and zeros
+reg     [3:0]altSR;
+wire    modClk;
+reg     altData;
+always @(negedge modClk or posedge reset) begin
+    if (reset) begin
+        altData <= 0;
+        end
+    else begin
+        altData <= ~altData;
+        end
+    end
+
 // Random data
 parameter PN17 = 16'h008e,
           MASK17 = 16'h00ff;
 reg [15:0]sr;
 reg [4:0]zeroCount;
-wire modClk;
-reg  modData;
+reg  randData;
 always @(negedge modClk or posedge reset) begin
     if (reset) begin
         zeroCount <= 5'b0;
@@ -91,10 +105,10 @@ always @(negedge modClk or posedge reset) begin
         zeroCount <= zeroCount + 5'h1;
         sr <= sr >> 1;
         end
-    modData <= sr[0];
+    randData <= sr[0];
     end
 
-
+wire modData = altData;
 /******************************************************************************
                             Instantiate a Modulator
 ******************************************************************************/
@@ -372,16 +386,20 @@ initial begin
     // Init the sample rate loop filters
     write32(createAddress(`RESAMPSPACE,`RESAMPLER_RATE),resamplerFreqInt);
     write32(createAddress(`BITSYNCSPACE,`LF_CONTROL),1);    // Zero the error
-    write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h0014000c);    
+    write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h00180014);    
+    //write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h0014000c);    
     write32(createAddress(`BITSYNCSPACE,`LF_LIMIT), resamplerLimitInt);    
-    write32(createAddress(`BITSYNCSPACE,`LF_LOOPOFFSET), resamplerFreqInt);    
-    write32(createAddress(`BITSYNCSPACE,`LF_FSKTHRESHOLD), 32);
+
+    // Init the carrier loop filters
+    write32(createAddress(`CARRIERSPACE,`LF_CONTROL),1);    // Zero the error
+    write32(createAddress(`CARRIERSPACE,`LF_LEAD_LAG),0);   // Force loop gains to zero
+    write32(createAddress(`CARRIERSPACE,`LF_LIMIT), 32'h00001000);
 
     // Init the downcoverter register set
     write32(createAddress(`DDCSPACE,`DDC_CENTER_FREQ), carrierFreq);
 
     // Init the cicResampler register set
-    write32(createAddress(`CICDECSPACE,`CIC_DECIMATION),cicDecimationInt);
+    write32(createAddress(`CICDECSPACE,`CIC_DECIMATION),cicDecimationInt-1);
     write32(createAddress(`CICDECSPACE,`CIC_SHIFT), 10);
 
     // Init the channel agc loop filter
@@ -397,6 +415,11 @@ initial begin
 
     // Wait 9.5 bit periods
     #(19*bitrateSamplesInt*C) ;
+
+    // Force the carrier frequency to load. We have to do this because
+    // the load is normally not done in FSK mode until you get symbol
+    // enables from the bitsync
+    demod.ddc.ddcFreq = -carrierFreq;
 
     // Create a reset to clear the nco accumulator
     reset = 1;

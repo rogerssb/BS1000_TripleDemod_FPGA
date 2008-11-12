@@ -110,6 +110,7 @@ mpy18x18 offsetMpy (
     .p(lutProduct)
     );
 reg     [4:0]   newOffset;
+wire    [5:0]   roundedLutProduct = lutProduct[22:17] + {5'h0,lutProduct[16]};
 always @(posedge clk) begin
     if (reset) begin
         phase <= 0;
@@ -130,7 +131,13 @@ always @(posedge clk) begin
         end
     resampleDelay <= {resampleDelay[8:0],resample};
     if (resampleDelay[1]) begin
-        newOffset <= lutProduct[21:17] + {4'h0,lutProduct[16]};
+        //newOffset <= lutProduct[21:17] + {4'h0,lutProduct[16]};
+        if (roundedLutProduct[5]) begin
+            newOffset <= 5'h1f;
+            end
+        else begin
+            newOffset <= roundedLutProduct[4:0];
+            end
         end
     end
 
@@ -143,6 +150,8 @@ wire    [4:0]offset = oldOffset;
 
 `ifdef SIMULATE
 integer offsetInt = offset;
+real inIReal = ((iSR[0] > 131071.0) ? (iSR[0] - 262144.0) : iSR[0])/131072.0;
+real inQReal = ((qSR[0] > 131071.0) ? (qSR[0] - 262144.0) : qSR[0])/131072.0;
 `endif
 
 /******************************************************************************
@@ -366,6 +375,7 @@ assign syncOut = resampleDelay[6];
 
 `ifdef SIMULATE
 real iOutReal = ((iOut > 131071.0) ? (iOut - 262144.0) : iOut)/131072.0;
+real qOutReal = ((qOut > 131071.0) ? (qOut - 262144.0) : qOut)/131072.0;
 `endif
 
 endmodule
@@ -385,9 +395,10 @@ module test;
 reg reset,clk;
 
 // Create the clocks
-parameter HC = 50;
+parameter SAMPLE_FREQ = 9.333333e6;
+parameter HC = 1e9/SAMPLE_FREQ/2;
 parameter C = 2*HC;
-parameter syncDecimation = 4;
+parameter syncDecimation = 10;
 reg clken;
 always #HC clk = clk^clken;
 
@@ -568,8 +579,8 @@ initial begin
     syncCount = 0;
     clk = 0;
     resampler.resampRegs.resampleRate = 32'h0;
-    resamplerFreqHz = 23.0/32.0/syncDecimation*10e6;
-    //resamplerFreqHz = 7e6;
+    //resamplerFreqHz = 23.0/32.0/syncDecimation*10e6;
+    resamplerFreqHz = 500000.0;
     carrierFreqHz = resamplerFreqHz/4.0;
 
     // Turn on the clock

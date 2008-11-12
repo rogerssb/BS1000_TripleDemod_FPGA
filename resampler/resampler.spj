@@ -4,20 +4,22 @@ NoFloatWarn=Yes
 DigitalThreshold=
 [Settings]
 Version=Silvaco4.10.0.R
+VisualDebug=
 [Analyzer]
-C0Width=179
+C0Width=159
 C1Width=58
-C2Width=48
+C2Width=68
 GotoSource=N
 MinScale=
 MaxScale=
+SymbolFile=
 [Spice]
 [LibraryFiles]
 0=..\..\..\Xilinx\10.1\ISE\verilog\src\unisims\{.v}
 [DebugMode]
 CommandLine=+define+SIMULATE
 [View]
-1=Last 76832.966ns 94328.786ns 401.741ns 78617.675ns 92758.956ns
+1=Last 0.000ns 356761.600ns 11892.054ns 61265.451ns 52153.851ns
 [Plusargs]
 0=memsave+test.impulse
 [Group1]
@@ -31,7 +33,6 @@ Name="SR"
 6="test.resampler : \iSR[6] [17:0]" default
 7="test.resampler : \iSR[7] [17:0]" default
 8="test.resampler : \iSR[8] [17:0]" default
-OpenGroup=
 [Group2]
 Name="COEFS"
 0="test.resampler : tap0Coef[17:0]" default
@@ -43,7 +44,6 @@ Name="COEFS"
 6="test.resampler : tap6Coef[17:0]" default
 7="test.resampler : tap7Coef[17:0]" default
 8="test.resampler : tap8Coef[17:0]" default
-OpenGroup=
 [Group3]
 Name="resampler"
 0="test.resampler : iSum[35:0]" default
@@ -59,6 +59,7 @@ Name="resampler"
 10="test.resampler : i7Product[35:0]" default
 11="test.resampler : i8Product[35:0]" default
 12="test.resampler : resampleDelay[5:0]" default
+OpenGroup=
 [Files]
 0=resampler.v
 1=..\coregen\resamplerTap8.v
@@ -74,6 +75,8 @@ Name="resampler"
 11=..\coregen\dds.v
 12=resampRegs.v
 13=..\coregen\reciprocalLut.v
+[Define]
+0=TEST_MODULE
 [Group0]
 Name="Default"
 0="test.resampler : clk" default
@@ -83,15 +86,15 @@ Name="Default"
 4="test : vectorCount" default Decimal AnalogDisplay AType=Step Scale=Auto
 5="test : saveVectors" default
 6="test.resampler : iOutReal" default Real AnalogDisplay AType=Step Scale=Auto
-7="test : iInReal" default Real AnalogDisplay AType=Step Scale=Auto
-8="test.resampler : lutProduct[35:0]" default
+7="test.resampler : inputReal" default Real AnalogDisplay AType=Step Scale=Auto
+8="test.resampler : lutProduct[22:17]" default
 9="test.resampler.offsetMpy : a[17:0]" default
 10="test.resampler : reciprocal[17:0]" default
 11="test.resampler.lut : a[4:0]" default
 12="test.resampler : offsetInt" default Decimal AnalogDisplay AType=Step Scale=Auto
 13="test.resampler : newOffset[4:0]" default
 14="test.resampler : offset[4:0]" default
-15="test.resampler : oldOffset[4:0]" default
+15="test.resampler : oldOffset[4:0]" default Unknown
 16="test.resampler : phaseSum[31:0]" default
 17="test.resampler : phase[31:0]" default
 18="test.resampler : resamplerPhaseInc[31:0]" default
@@ -100,8 +103,6 @@ Name="Default"
 21="test.resampler : reset" default
 22="test.resampler : sync" default
 OpenGroup=Yes
-[Define]
-0=TEST_MODULE
 [GroupInfo]
 0=Default : 0 : 1 : 0
 1=SR : 1 : 1 : 0

@@ -9,12 +9,13 @@ module loopRegs(addr,
                wr0, wr1, wr2, wr3,
                invertError,
                zeroError,
-               slip,
-               lead,
-               lag,
+               ctrl2,
+               leadExp,
+               leadMan,
+               lagExp,
+               lagMan,
                limit,
-               loopOffset,
-               fskThreshold
+               loopData
                );
 
 input   [11:0]addr;
@@ -23,23 +24,26 @@ output  [31:0]dataOut;
 input   cs;
 input   wr0,wr1,wr2,wr3;
 
-output          invertError,zeroError,slip;
-reg             invertError,zeroError,slip;
+output          invertError,zeroError,ctrl2;
+reg             invertError,zeroError,ctrl2;
 
-output  [4:0]   lead;
-reg     [4:0]   lead;
+output  [4:0]   leadExp;
+reg     [4:0]   leadExp;
 
-output  [4:0]   lag;
-reg     [4:0]   lag;
+output  [7:0]   leadMan;
+reg     [7:0]   leadMan;
+
+output  [4:0]   lagExp;
+reg     [4:0]   lagExp;
+
+output  [7:0]   lagMan;
+reg     [7:0]   lagMan;
 
 output  [31:0]  limit;
 reg     [31:0]  limit;
 
-output  [31:0]  loopOffset;
-reg     [31:0]  loopOffset;
-
-output  [7:0]   fskThreshold;
-reg     [7:0]   fskThreshold;
+output  [31:0]  loopData;
+reg     [31:0]  loopData;
 
 always @(negedge wr0) begin
     if (cs) begin
@@ -47,19 +51,16 @@ always @(negedge wr0) begin
             `LF_CONTROL: begin
                 zeroError <= dataIn[0];
                 invertError <= dataIn[1];
-                slip <= dataIn[2];
+                ctrl2 <= dataIn[2];
                 end
             `LF_LEAD_LAG: begin
-               lag <= dataIn[4:0];
+               lagExp <= dataIn[4:0];
                end
             `LF_LIMIT: begin
                 limit[7:0] <= dataIn[7:0];
                 end
-            `LF_LOOPOFFSET: begin
-                loopOffset[7:0] <= dataIn[7:0];
-                end
-            `LF_FSKTHRESHOLD: begin
-                fskThreshold <= dataIn[7:0];
+            `LF_LOOPDATA: begin
+                loopData[7:0] <= dataIn[7:0];
                 end
             default: ;
             endcase
@@ -69,11 +70,14 @@ always @(negedge wr0) begin
 always @(negedge wr1) begin
     if (cs) begin
         casex (addr)
+            `LF_LEAD_LAG: begin
+               lagMan <= dataIn[15:8];
+               end
             `LF_LIMIT: begin
                 limit[15:8] <= dataIn[15:8];
                 end
-            `LF_LOOPOFFSET: begin
-                loopOffset[15:8] <= dataIn[15:8];
+            `LF_LOOPDATA: begin
+                loopData[15:8] <= dataIn[15:8];
                 end
             default:  ;
             endcase
@@ -84,13 +88,13 @@ always @(negedge wr2) begin
     if (cs) begin
         casex (addr)
             `LF_LEAD_LAG: begin
-               lead <= dataIn[20:16];
+               leadExp <= dataIn[20:16];
                end
             `LF_LIMIT: begin
                 limit[23:16] <= dataIn[23:16];
                 end
-            `LF_LOOPOFFSET: begin
-                loopOffset[23:16] <= dataIn[23:16];
+            `LF_LOOPDATA: begin
+                loopData[23:16] <= dataIn[23:16];
                 end
             default:  ;
             endcase
@@ -100,11 +104,14 @@ always @(negedge wr2) begin
 always @(negedge wr3) begin
     if (cs) begin
         casex (addr)
+            `LF_LEAD_LAG: begin
+               leadMan <= dataIn[31:24];
+               end
             `LF_LIMIT: begin
                 limit[31:24] <= dataIn[31:24];
                 end
-            `LF_LOOPOFFSET: begin
-                loopOffset[31:24] <= dataIn[31:24];
+            `LF_LOOPDATA: begin
+                loopData[31:24] <= dataIn[31:24];
                 end
             default:  ;
             endcase
@@ -113,19 +120,17 @@ always @(negedge wr3) begin
 
 reg [31:0]dataOut;
 always @(addr or cs or
-         slip or invertError or zeroError or
-         lag or lead or
+         ctrl2 or invertError or zeroError or
+         lagExp or lagMan or leadExp or leadMan or
          limit or 
-         loopOffset or
-         fskThreshold
+         loopData
          ) begin
     if (cs) begin
         casex (addr)
-            `LF_CONTROL:        dataOut <= {29'bx,slip,invertError,zeroError};
-            `LF_LEAD_LAG:       dataOut <= {11'bx,lead,11'bx,lag};
+            `LF_CONTROL:        dataOut <= {29'bx,ctrl2,invertError,zeroError};
+            `LF_LEAD_LAG:       dataOut <= {leadMan,3'bx,leadExp,lagMan,3'bx,lagExp};
             `LF_LIMIT:          dataOut <= limit;
-            `LF_LOOPOFFSET:     dataOut <= loopOffset;
-            `LF_FSKTHRESHOLD:   dataOut <= {24'bx,fskThreshold};
+            `LF_LOOPDATA:       dataOut <= loopData;
             default:            dataOut <= 32'hx;
             endcase
         end
