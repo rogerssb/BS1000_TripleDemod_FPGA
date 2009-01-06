@@ -25,6 +25,7 @@ always @(posedge clk) begin
             leadError <= 0;
             end
         else begin
+            leadError[31] <= error[7];
             case(leadExp)
                 5'h00: leadError[30:0] <= {{31{error[7]}}};
                 5'h01: leadError[30:0] <= {{30{error[7]}},error[6]};

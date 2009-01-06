@@ -69,7 +69,7 @@ wire timingErrorEn = (phaseState == ONTIME);
 // DC Offset error variables
 wire [8:0]offsetErrorSum = {bbSR[2][7],bbSR[2]} + {bbSR[0][7],bbSR[0]};
 reg  [7:0]offsetError;
-wire offsetErrorEn = (phaseState == OFFTIME);
+wire offsetErrorEn = (phaseState == ONTIME);
 
 reg  stateMachineSlip;
 wire registerSlip;
@@ -99,7 +99,6 @@ always @(posedge sampleClk) begin
         bbSR[2] <= bbSR[1];
         case (phaseState)
             ONTIME: begin
-                offsetError <= offsetErrorSum[8:1];
                 `ifdef ENABLE_SLIP
                 if (slip && ~slipped) begin
                     phaseState <= ONTIME;
@@ -116,7 +115,9 @@ always @(posedge sampleClk) begin
                 phaseState <= ONTIME;
                 // Is there a data transition?
                 if (earlySign != lateSign) begin
-                    // Yes. High to low?
+                    // Yes. Calculate DC offset error
+                    offsetError <= offsetErrorSum[8:1];
+                    // High to low transition?
                     if (earlySign) begin
                         timingError <= offTime;
                         slipError <= lateOnTime;
@@ -128,6 +129,7 @@ always @(posedge sampleClk) begin
                         end
                     end
                 else begin
+                    offsetError <= 8'h00;
                     timingError <= 8'h00;
                     end
                 end

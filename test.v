@@ -34,10 +34,19 @@ always #HC clk = clk^clken;
 
 
 real carrierFreqHz = 2333333.0;
-//real carrierFreqHz = 0;
 real carrierFreqNorm = carrierFreqHz * `SAMPLE_PERIOD * `TWO_POW_32;
 integer carrierFreqInt = carrierFreqNorm;
 wire [31:0] carrierFreq = carrierFreqInt;
+
+real carrierOffsetFreqHz = 0.0;
+real carrierOffsetFreqNorm = carrierOffsetFreqHz * `SAMPLE_PERIOD * `TWO_POW_32;
+integer carrierOffsetFreqInt = carrierOffsetFreqNorm;
+wire [31:0] carrierOffsetFreq = carrierOffsetFreqInt;
+
+real carrierLimitHz = 60000.0;
+real carrierLimitNorm = carrierLimitHz * `SAMPLE_PERIOD * `TWO_POW_32;
+integer carrierLimitInt = carrierLimitNorm;
+wire [31:0] carrierLimit = carrierLimitInt;
 
 real bitrateBps = 250000.0;
 real bitrateSamples = 1/bitrateBps/`SAMPLE_PERIOD/2.0;
@@ -108,7 +117,7 @@ always @(negedge modClk or posedge reset) begin
     randData <= sr[0];
     end
 
-wire modData = altData;
+wire modData = randData;
 /******************************************************************************
                             Instantiate a Modulator
 ******************************************************************************/
@@ -373,7 +382,7 @@ initial begin
     // Init the fm modulator
     // Init the modulator register set
     fmModCS = 1;
-    write32(`FM_MOD_FREQ, carrierFreq);
+    write32(`FM_MOD_FREQ, carrierFreq + carrierOffsetFreq);
     write32(`FM_MOD_DEV, {14'bx,deviation});
     write32(`FM_MOD_BITRATE, {1'b0,15'bx,bitrateDivider});
     // This value is ceiling(log2(R*R)), where R = interpolation rate.
@@ -386,21 +395,21 @@ initial begin
     // Init the sample rate loop filters
     write32(createAddress(`RESAMPSPACE,`RESAMPLER_RATE),resamplerFreqInt);
     write32(createAddress(`BITSYNCSPACE,`LF_CONTROL),1);    // Zero the error
-    write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h00180014);    
+    write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h001a0014);    
     //write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h0014000c);    
     write32(createAddress(`BITSYNCSPACE,`LF_LIMIT), resamplerLimitInt);    
 
     // Init the carrier loop filters
     write32(createAddress(`CARRIERSPACE,`LF_CONTROL),1);    // Zero the error
-    write32(createAddress(`CARRIERSPACE,`LF_LEAD_LAG),0);   // Force loop gains to zero
-    write32(createAddress(`CARRIERSPACE,`LF_LIMIT), 32'h00001000);
+    write32(createAddress(`CARRIERSPACE,`LF_LEAD_LAG),32'h00000012);   
+    write32(createAddress(`CARRIERSPACE,`LF_LIMIT), carrierLimit);
 
     // Init the downcoverter register set
     write32(createAddress(`DDCSPACE,`DDC_CENTER_FREQ), carrierFreq);
 
     // Init the cicResampler register set
     write32(createAddress(`CICDECSPACE,`CIC_DECIMATION),cicDecimationInt-1);
-    write32(createAddress(`CICDECSPACE,`CIC_SHIFT), 10);
+    write32(createAddress(`CICDECSPACE,`CIC_SHIFT), 5);
 
     // Init the channel agc loop filter
     write32(createAddress(`CHAGCSPACE,`ALF_CONTROL),1);                 // Zero the error
@@ -442,6 +451,12 @@ initial begin
     // Enable the sample rate loop
     write32(createAddress(`BITSYNCSPACE,`LF_CONTROL),0);  
 
+    // Wait 2 bit periods
+    #(4*bitrateSamplesInt*C) ;
+
+    // Enable the AFC loop and invert the error
+    write32(createAddress(`CARRIERSPACE,`LF_CONTROL),2);  
+
     `ifdef ENABLE_AGC
     // Wait 8 bit periods
     #(16*bitrateSamplesInt*C) ;
@@ -459,5 +474,6 @@ initial begin
 
     end
 
+real carrierOffsetReal = demod.carrierLoop.carrierOffsetReal * SAMPLE_FREQ/2.0;
 endmodule
 

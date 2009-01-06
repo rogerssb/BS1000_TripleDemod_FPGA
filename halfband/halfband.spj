@@ -7,13 +7,12 @@ MainFile=
 [DebugMode]
 CommandLine=+define+SIMULATE
 [Analyzer]
-C0Width=133
+C0Width=160
 C1Width=58
-C2Width=113
+C2Width=53
 SymbolFile=
-GotoSource=
 [View]
-1=Last 0.000ns 10359.999ns 392.966ns 3414.067ns 3586.147ns
+1=Last 0.000ns 17683.470ns 392.966ns 3414.067ns 3586.147ns
 [Files]
 0=halfband.v
 1=..\coregen\halfbandEven.v

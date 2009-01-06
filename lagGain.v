@@ -30,6 +30,7 @@ always @(posedge clk) begin
             lagError <= 0;
             end
         else begin
+            lagError[31] <= error[7];
             case(lagExp)
                 5'h00: lagError[30:0] <= {{31{error[7]}}};
                 5'h01: lagError[30:0] <= {{30{error[7]}},error[6]};
