@@ -35,17 +35,18 @@
 `define CIC_SHIFT       12'hxx4
 
 // Define the Loop Filter memory map
-`define LF_CONTROL      12'bxxxx_xxx0_0000
-`define LF_LEAD_LAG     12'bxxxx_xxx0_0100
-`define LF_LIMIT        12'bxxxx_xxx0_1000
-`define LF_LOOPDATA     12'bxxxx_xxx0_1100
+`define LF_CONTROL      12'bxxxx_xxx0_00xx
+`define LF_LEAD_LAG     12'bxxxx_xxx0_01xx
+`define LF_LIMIT        12'bxxxx_xxx0_10xx
+`define LF_LOOPDATA     12'bxxxx_xxx0_11xx
 
 // Define the AGC Loop Filter memory map
-`define ALF_CONTROL     12'bxxxx_xxx0_0000
-`define ALF_SETPOINT    12'bxxxx_xxx0_0100
-`define ALF_GAINS       12'bxxxx_xxx0_1000
-`define ALF_ULIMIT      12'bxxxx_xxx0_1100
-`define ALF_LLIMIT      12'bxxxx_xxx1_0000
+`define ALF_CONTROL     12'bxxxx_xxx0_00xx
+`define ALF_SETPOINT    12'bxxxx_xxx0_01xx
+`define ALF_GAINS       12'bxxxx_xxx0_10xx
+`define ALF_ULIMIT      12'bxxxx_xxx0_11xx
+`define ALF_LLIMIT      12'bxxxx_xxx1_00xx
+`define ALF_INTEGRATOR  12'bxxxx_xxx1_01xx
 
 // Define the DDC memory map
 `define RESAMPLER_RATE  12'hxx0

@@ -52,6 +52,7 @@ demodRegs demodRegs(
                                 Downconverter
 ******************************************************************************/
 wire    [17:0]  iDdc,qDdc;
+wire    [19:0]  nbAgcGain;
 wire    [31:0]  carrierFreqOffset;
 wire    [31:0]  ddcDout;
 ddc ddc( 
@@ -62,10 +63,26 @@ ddc ddc(
     .dout(ddcDout),
     .ddcFreqOffset(carrierFreqOffset),
     .offsetEn(carrierOffsetEn),
+    .nbAgcGain(nbAgcGain),
     .syncOut(ddcSync),
     .iIn(iRx), .qIn(qRx), 
     .iOut(iDdc), .qOut(qDdc)
     );
+
+/******************************************************************************
+                            Narrowband Channel AGC
+******************************************************************************/
+wire    [31:0]  nbAgcDout;
+channelAGC channelAGC( 
+    .clk(clk), .reset(reset), .syncIn(ddcSync),
+    .wr0(wr0) , .wr1(wr1), .wr2(wr2), .wr3(wr3),
+    .addr(addr),
+    .din(din),
+    .dout(nbAgcDout),
+    .iIn(iDdc),.qIn(qDdc),
+    .agcGain(nbAgcGain)
+    );
+    
 
 /******************************************************************************
                                   Resampler

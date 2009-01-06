@@ -8,24 +8,26 @@ module ddc( clk, reset, syncIn,
             dout,
             ddcFreqOffset,
             offsetEn,
+            nbAgcGain,
             syncOut,
             iIn, qIn, 
             iOut, qOut);
 
-input clk;
-input reset;
-input syncIn;
-input wr0,wr1,wr2,wr3;
-input [11:0]addr;
-input [31:0]din;
-output [31:0]dout;
-input [31:0]ddcFreqOffset;
-input offsetEn;
-output syncOut;
-input [17:0]iIn;
-input [17:0]qIn;
-output [17:0]iOut;
-output [17:0]qOut;
+input           clk;
+input           reset;
+input           syncIn;
+input           wr0,wr1,wr2,wr3;
+input   [11:0]  addr;
+input   [31:0]  din;
+output  [31:0]  dout;
+input   [31:0]  ddcFreqOffset;
+input           offsetEn;
+input   [19:0]  nbAgcGain;
+output          syncOut;
+input   [17:0]  iIn;
+input   [17:0]  qIn;
+output  [17:0]  iOut;
+output  [17:0]  qOut;
 
 
 // Microprocessor interface
@@ -92,7 +94,7 @@ real qMixReal = ((qMix > 131071.0) ? (qMix - 262144.0) : qMix)/131072.0;
 
 
 // CIC Decimator
-wire [17:0]iCic,qCic;
+wire [47:0]iCic,qCic;
 wire cicSyncOut;
 wire [31:0]cicDout;
 `ifdef SIMULATE
@@ -112,23 +114,45 @@ cicDecimator cic(
     .syncOut(cicSyncOut)
     );
 
+wire [17:0]iAgc,qAgc;
+variableGain gainI(
+    .clk(clk), .clkEn(cicSyncOut),
+    .exponent(nbAgcGain[19:16]), .mantissa(nbAgcGain[15:0]),
+    .din(iCic),
+    .dout(iAgc)
+    );
+variableGain gainQ(
+    .clk(clk), .clkEn(cicSyncOut),
+    .exponent(nbAgcGain[19:16]), .mantissa(nbAgcGain[15:0]),
+    .din(qCic),
+    .dout(qAgc)
+    );
+
 `ifdef SIMULATE
-real iCicReal = ((iCic > 131071.0) ? (iCic - 262144.0) : iCic)/131072.0;
-real qCicReal = ((qCic > 131071.0) ? (qCic - 262144.0) : qCic)/131072.0;
+real iAgcReal = ((iAgc > 131071.0) ? (iAgc - 262144.0) : iAgc)/131072.0;
+real qAgcReal = ((qAgc > 131071.0) ? (qAgc - 262144.0) : qAgc)/131072.0;
 `endif
 
 
 // Halfband Filters
 wire [17:0]iHb,qHb;
 halfbandDecimate hbI( 
+`ifdef SIMULATE
+    .clk(clk), .reset(cicReset), .sync(cicSyncOut),
+`else
     .clk(clk), .reset(reset), .sync(cicSyncOut),
-    .hbIn(iCic),
+`endif
+    .hbIn(iAgc),
     .hbOut(iHb),
     .syncOut(iHbSyncOut)
     );
 halfbandDecimate hbQ( 
+`ifdef SIMULATE
+    .clk(clk), .reset(cicReset), .sync(cicSyncOut),
+`else
     .clk(clk), .reset(reset), .sync(cicSyncOut),
-    .hbIn(qCic),
+`endif
+    .hbIn(qAgc),
     .hbOut(qHb),
     .syncOut(qHbSyncOut)
     );
@@ -136,26 +160,6 @@ halfbandDecimate hbQ(
 `ifdef SIMULATE
 real iHbReal = ((iHb > 131071.0) ? (iHb - 262144.0) : iHb)/131072.0;
 real qHbReal = ((qHb > 131071.0) ? (qHb - 262144.0) : qHb)/131072.0;
-`endif
-
-wire [17:0]iAgc,qAgc;
-wire [19:0]nbAgcGain = {4'h0,16'hffff};
-variableGain gainI(
-    .clk(clk), .clkEn(iHbSyncOut),
-    .exponent(nbAgcGain[19:16]), .mantissa(nbAgcGain[15:0]),
-    .din(iHb),
-    .dout(iAgc)
-    );
-variableGain gainQ(
-    .clk(clk), .clkEn(qHbSyncOut),
-    .exponent(nbAgcGain[19:16]), .mantissa(nbAgcGain[15:0]),
-    .din(qHb),
-    .dout(qAgc)
-    );
-
-`ifdef SIMULATE
-real iAgcReal = ((iAgc > 131071.0) ? (iAgc - 262144.0) : iAgc)/131072.0;
-real qAgcReal = ((qAgc > 131071.0) ? (qAgc - 262144.0) : qAgc)/131072.0;
 `endif
 
 assign iOut = iHb;

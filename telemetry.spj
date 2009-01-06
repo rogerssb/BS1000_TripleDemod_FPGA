@@ -5,9 +5,9 @@ DigitalThreshold=
 [Settings]
 Version=Silvaco4.10.0.R
 [Analyzer]
-C0Width=140
+C0Width=58
 C1Width=58
-C2Width=117
+C2Width=58
 GotoSource=N
 [Spice]
 [LibraryFiles]
@@ -17,7 +17,7 @@ GotoSource=N
 [DebugMode]
 CommandLine=+define+SIMULATE
 [View]
-1=Last 152404.256ns 714974.761ns 13083.035ns 154339.331ns 140543.019ns
+1=Last 0.000ns 530285.746ns 18816.591ns 157118.534ns 13312.217ns
 [Group0]
 Name=New Group2
 [Group3]
@@ -44,6 +44,37 @@ Name="Tx"
 10="test.fmMod : clk" default
 OpenGroup=
 [Define]
+[Group4]
+Name="Bitsync"
+0="test.demod.bitsync : timingErrorReal" default Real AnalogDisplay AType=Step Scale=Auto
+1="test.demod.bitsync : slip" default
+2="test.demod.bitsync : slipState[1:0]" default
+3="test.demod.bitsync : avgSlipError[11:0]" default
+4="test.demod.bitsync : avgError[11:0]" default
+5="test.demod.bitsync : timingError[7:0]" default
+6="test.demod.bitsync : lateSign" default
+7="test.demod.bitsync : earlySign" default
+8="test.demod.bitsync : offTime[7:0]" default
+9="test.demod.bitsync : freq[7:0]" default
+10="test.demod.bitsync.sampleLoop : zeroError" default
+11="test.demod.fmDemod : freqReal" default Real AnalogDisplay AType=Step Scale=Fixed MinScaleDbl=-0.5 MaxScaleDbl=0.5
+12="test.demod.bitsync : phaseState" default
+13="test.demod.bitsync : symTimes2Sync" default
+14="test.demod.resampler : resamplerFreqOffset[31:0]" default
+15="test.demod.bitsync : sampleFreqReal" default Real AnalogDisplay AType=Step Scale=Fixed MinScaleDbl=-0.004 MaxScaleDbl=0.004
+16="test.demod.resampler : qOutReal" default Real AnalogDisplay AType=Step Scale=Auto
+17="test.demod.resampler : inQReal" default Real AnalogDisplay AType=Step Scale=Auto
+18="test : cicDecimationInt" default Decimal AnalogDisplay AType=PWL Scale=Auto
+[Group5]
+Name="Carrier"
+0="test.demod.carrierLoop : lagAccum[31:0]" default
+1="test.demod.carrierLoop.lagGain : lagError[31:0]" default
+2="test.demod.carrierLoop : carrierOffsetReal" default Real AnalogDisplay AType=Step Scale=Auto
+3="test : carrierOffsetReal" default Real AnalogDisplay AType=Step Scale=Auto
+4="test.demod.carrierLoop : offsetErrorEn" default
+5="test.demod.carrierLoop : offsetError[7:0]" default
+6="test.demod.bitsync : offsetErrorSum[8:0]" default
+7="test.demod : freq[7:0]" default
 [Files]
 0=test.v
 1=demod.v
@@ -84,52 +115,25 @@ OpenGroup=
 36=lead.v
 37=carrierLoop.v
 38=lagGain.v
-[Group4]
-Name="Bitsync"
-0="test.demod.bitsync : timingErrorReal" default Real AnalogDisplay AType=Step Scale=Auto
-1="test.demod.bitsync : slip" default
-2="test.demod.bitsync : slipState[1:0]" default
-3="test.demod.bitsync : avgSlipError[11:0]" default
-4="test.demod.bitsync : avgError[11:0]" default
-5="test.demod.bitsync : timingError[7:0]" default
-6="test.demod.bitsync : lateSign" default
-7="test.demod.bitsync : earlySign" default
-8="test.demod.bitsync : offTime[7:0]" default
-9="test.demod.bitsync : freq[7:0]" default
-10="test.demod.bitsync.sampleLoop : zeroError" default
-11="test.demod.fmDemod : freqReal" default Real AnalogDisplay AType=Step Scale=Fixed MinScaleDbl=-0.5 MaxScaleDbl=0.5
-12="test.demod.bitsync : phaseState" default
-13="test.demod.bitsync : symTimes2Sync" default
-14="test.demod.resampler : resamplerFreqOffset[31:0]" default
-15="test.demod.bitsync : sampleFreqReal" default Real AnalogDisplay AType=Step Scale=Fixed MinScaleDbl=-0.004 MaxScaleDbl=0.004
-16="test.demod.resampler : qOutReal" default Real AnalogDisplay AType=Step Scale=Auto
-17="test.demod.resampler : inQReal" default Real AnalogDisplay AType=Step Scale=Auto
-18="test : cicDecimationInt" default Decimal AnalogDisplay AType=PWL Scale=Auto
+39=log2.v
+40=channelAgc.v
+41=agcLoopRegs.v
+42=agcLoopFilter.v
 [Group1]
 Name="Rx"
 0="test.demod.resampler : reset" default
-1="test.demod.fmDemod : magReal" default Real AnalogDisplay AType=Step Scale=Auto
-2="test.demod.fmDemod : freqReal" default Real AnalogDisplay AType=Step Scale=Fixed MinScaleDbl=-0.5 MaxScaleDbl=0.5
-3="test.fmMod : interpReal" default Real AnalogDisplay AType=PWL Scale=Auto
-4="test.demod.ddc : cicReset" default
-5="test.demod.resampler : iOutReal" default Real AnalogDisplay AType=Step Scale=Auto
-6="test.demod.ddc : qAgcReal" default Real AnalogDisplay AType=Step Scale=Auto
-7="test.demod.ddc : iAgcReal" default Real AnalogDisplay AType=Step Scale=Auto
-8="test.demod.ddc : iHbReal" default Real AnalogDisplay AType=Step Scale=Auto
-9="test.demod.ddc : qCicReal" default Real AnalogDisplay AType=PWL Scale=Auto
-10="test.demod.ddc : iCicReal" default Real AnalogDisplay AType=Step Scale=Auto
-11="test.demod.ddc : iMixReal" default Real AnalogDisplay AType=Step Scale=Auto
-OpenGroup=Yes
-[Group5]
-Name="Carrier"
-0="test.demod.carrierLoop : lagAccum[31:0]" default
-1="test.demod.carrierLoop.lagGain : lagError[31:0]" default
-2="test.demod.carrierLoop : carrierOffsetReal" default Real AnalogDisplay AType=Step Scale=Auto
-3="test : carrierOffsetReal" default Real AnalogDisplay AType=Step Scale=Auto
-4="test.demod.carrierLoop : offsetErrorEn" default
-5="test.demod.carrierLoop : offsetError[7:0]" default
-6="test.demod.bitsync : offsetErrorSum[8:0]" default
-7="test.demod : freq[7:0]" default
+1="test.demod.channelAGC.chAgcLoopFilter : integratorReal" default Real AnalogDisplay AType=PWL Scale=Auto
+2="test.demod.fmDemod : magReal" default Real AnalogDisplay AType=Step Scale=Auto
+3="test.demod.fmDemod : freqReal" default Real AnalogDisplay AType=Step Scale=Fixed MinScaleDbl=-0.5 MaxScaleDbl=0.5
+4="test.fmMod : interpReal" default Real AnalogDisplay AType=Step Scale=Auto
+5="test.demod.ddc : cicReset" default
+6="test.demod.resampler : iOutReal" default Real AnalogDisplay AType=Step Scale=Auto
+7="test.demod.ddc : iHbReal" default Real AnalogDisplay AType=Step Scale=Auto
+8="test.demod.ddc : qAgcReal" default Real AnalogDisplay AType=Step Scale=Auto
+9="test.demod.ddc : iAgcReal" default Real AnalogDisplay AType=Step Scale=Auto
+10="test.demod.ddc.cic : qCicReal" default Real AnalogDisplay AType=Step Scale=Auto
+11="test.demod.ddc.cic : iCicReal" default Real AnalogDisplay AType=Step Scale=Auto
+12="test.demod.ddc : iMixReal" default Real AnalogDisplay AType=Step Scale=Auto
 OpenGroup=Yes
 [GroupInfo]
 0=New Group2 : 0 : 0 : 0

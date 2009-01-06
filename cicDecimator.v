@@ -20,7 +20,7 @@ input [11:0]addr;
 input [31:0]din;
 output [31:0]dout;
 input  [17:0]inI,inQ;
-output [17:0]outI,outQ;
+output [47:0]outI,outQ;
 output  syncOut;
 
 
@@ -138,12 +138,12 @@ always @(posedge clk) begin
     end
 
 // Final outputs
-assign outI = tapI3[47:30];
-assign outQ = tapQ3[47:30];
+assign outI = tapI3[47:0];
+assign outQ = tapQ3[47:0];
 
 `ifdef SIMULATE
-real iCicReal = ((outI > 131071.0) ? (outI - 262144.0) : outI)/131072.0;
-real qCicReal = ((outQ > 131071.0) ? (outQ - 262144.0) : outQ)/131072.0;
+real iCicReal = ((outI[47:30] > 131071.0) ? (outI[47:30] - 262144.0) : outI[47:30])/131072.0;
+real qCicReal = ((outQ[47:30] > 131071.0) ? (outQ[47:30] - 262144.0) : outQ[47:30])/131072.0;
 `endif
 
 endmodule

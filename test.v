@@ -1,7 +1,7 @@
 `include "./addressMap.v"
 `timescale 1ns/100ps
 
-//`define ENABLE_AGC
+`define ENABLE_AGC
 //`define ADD_NOISE
 //`define BER_TEST
 //`define MATLAB_VECTORS
@@ -154,15 +154,18 @@ dds dds (
                             Channel Model
 ******************************************************************************/
 
+real iTxReal = (iTx[17] ? (iTx - 262144.0) : iTx)/131072.0;
+real qTxReal = (qTx[17] ? (qTx - 262144.0) : qTx)/131072.0;
+real txScaleFactor;
+
+wire [17:0]iSignal = 131072.0*iTxReal * txScaleFactor;
+wire [17:0]qSignal = 131072.0*qTxReal * txScaleFactor;
+
 reg  measureSNR;
 initial measureSNR = 0;
 wire    [17:0]iRx,qRx;
-wire    [17:0]iSignal = {{2{iTx[17]}},iTx[17:2]};
-wire    [17:0]qSignal = {{2{qTx[17]}},qTx[17:2]};
 real iSignalReal = (iSignal[17] ? (iSignal - 262144.0) : iSignal)/131072.0;
 real qSignalReal = (qSignal[17] ? (qSignal - 262144.0) : qSignal)/131072.0;
-real iTxReal = (iTx[17] ? (iTx - 262144.0) : iTx)/131072.0;
-real qTxReal = (qTx[17] ? (qTx - 262144.0) : qTx)/131072.0;
 real signalMagSquared;
 real noiseMagSquared;
 integer txSampleCount;
@@ -366,7 +369,7 @@ initial begin
     // The 13.0 is to translate from SNR to EBNO which is 10log10(bitrate/bandwidth).
     $initGaussPLI(1,8.0 + 11.5 - 13.0,131072.0);
     `endif
-    demod.ddc.cicReset = 0;
+    demod.ddc.cicReset = 1;
     reset = 0;
     sync = 1;
     clk = 0;
@@ -374,6 +377,7 @@ initial begin
     we0 = 0; we1 = 0; we2 = 0; we3 = 0; 
     d = 32'hz;
     fmModCS = 0;
+    txScaleFactor = 0.05;
 
     // Turn on the clock
     clken=1;
@@ -409,18 +413,19 @@ initial begin
 
     // Init the cicResampler register set
     write32(createAddress(`CICDECSPACE,`CIC_DECIMATION),cicDecimationInt-1);
-    write32(createAddress(`CICDECSPACE,`CIC_SHIFT), 5);
+    write32(createAddress(`CICDECSPACE,`CIC_SHIFT), 6);
 
     // Init the channel agc loop filter
     write32(createAddress(`CHAGCSPACE,`ALF_CONTROL),1);                 // Zero the error
-    write32(createAddress(`CHAGCSPACE,`ALF_SETPOINT),32'h000000e0);     // AGC Setpoint
-    write32(createAddress(`CHAGCSPACE,`ALF_GAINS),32'h00000018);        // AGC Loop Gain
+    write32(createAddress(`CHAGCSPACE,`ALF_SETPOINT),32'h000000f0);     // AGC Setpoint
+    write32(createAddress(`CHAGCSPACE,`ALF_GAINS),32'h00180018);        // AGC Loop Gain
     write32(createAddress(`CHAGCSPACE,`ALF_ULIMIT),32'h4fffffff);       // AGC Upper limit
-    write32(createAddress(`CHAGCSPACE,`ALF_LLIMIT),32'h20000000);       // AGC Lower limit
+    write32(createAddress(`CHAGCSPACE,`ALF_LLIMIT),32'h00000000);       // AGC Lower limit
 
     reset = 1;
     #(2*C) ;
     reset = 0;
+    demod.ddc.cicReset = 0;
 
     // Wait 9.5 bit periods
     #(19*bitrateSamplesInt*C) ;
@@ -458,9 +463,6 @@ initial begin
     write32(createAddress(`CARRIERSPACE,`LF_CONTROL),2);  
 
     `ifdef ENABLE_AGC
-    // Wait 8 bit periods
-    #(16*bitrateSamplesInt*C) ;
-
     // Enable the AGC loop
     write32(createAddress(`CHAGCSPACE,`ALF_CONTROL),0);              
     `endif
