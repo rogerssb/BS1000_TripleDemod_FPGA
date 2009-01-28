@@ -23,7 +23,7 @@ module top
   dac0_nCs,dac0_sclk,
   dac1_nCs,dac1_sclk,
   dac2_nCs,dac2_sclk,
-  dac0_d,dac1_d,dac2_d
+  dac0_d,dac1_d,dac2_d,
   dac0_clk,dac1_clk,dac2_clk,
   adc_d,
   iDataClk,
@@ -145,6 +145,7 @@ assign dac_rst = rs;
 //                                Legacy Demod
 //******************************************************************************
 
+wire            nWr = nWe;
 wire            rd  = !nCs & !nRd;
 wire            wr0 = !nCs & !nWr & !addr1;
 wire            wr1 = !nCs & !nWr & !addr1;
@@ -160,7 +161,7 @@ demod demod(
     .addr(addr),
     .din(dataIn),
     .dout(demodDout),
-    .iRx({adc_d,4'h0}), qRx(18'h0), 
+    .iRx({adc_d,4'h0}), .qRx(18'h0), 
     .iDataClk(iDataClk),
     .iBit(iBit),
     .qDataClk(qDataClk),
@@ -301,7 +302,7 @@ always @(
         `RESAMPSPACE,   
         `CARRIERSPACE,
         `CHAGCSPACE : begin
-            if (add[1]) begin
+            if (addr[1]) begin
                 rd_mux <= demodDout[31:16];
                 end
             else begin

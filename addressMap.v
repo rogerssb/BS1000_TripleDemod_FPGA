@@ -14,6 +14,14 @@
 `define INTERP1SPACE    12'b1011_xxxx_xxxx
 `define INTERP2SPACE    12'b1100_xxxx_xxxx
 
+`define MISC_SPACE      12'b1001_xxxx_xxxx
+`define CLOCK_SPACE     12'b1010_xxxx_xxxx
+`define GPIOSPACE       12'b1011_xxxx_xxxx
+`define DAC_SPACE       12'b1000_xxxx_xxxx
+
+
+
+
 // Define the global radio memory map
 `define DEMOD_CONTROL   12'hxx0
 `define MODE_AM         3'b000
@@ -58,6 +66,21 @@
 // Define the interpolator memory map
 `define INTERP_EXPONENT 12'bxxxx_xxxx_00xx
 `define INTERP_MANTISSA 12'bxxxx_xxxx_01xx
+
+
+// Define the MISCELANEOUS locations
+`define RESET       12'hxx0
+`define VERSION     12'hxx2
+
+// Define the GPIO locations
+`define LEDS        12'hxx0
+
+// Define the DAC control locations
+`define DAC_WDATA      12'hxx0
+`define DAC_RDATA      12'hxx2
+`define DAC_SELECT     12'hxx4
+`define DAC_STATUS     12'hxx6
+
 
 `endif
 
