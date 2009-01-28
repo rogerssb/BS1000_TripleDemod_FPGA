@@ -1,0 +1,48 @@
+[Options]
+DebugEnable=No
+NoFloatWarn=Yes
+[Settings]
+Version=Silvaco4.10.32.R
+VisualDebug=
+[Files]
+0=cicComp.v
+1=.\coregen\mpy18x18.v
+[LibraryFiles]
+0=..\..\Xilinx\10.1\ISE\verilog\src\unisims\{.v}
+[Analyzer]
+C0Width=114
+C1Width=58
+C2Width=59
+SymbolFile=
+GotoSource=N
+[View]
+1=Last 37984.225ns 38766.610ns 25.279ns 38120.732ns 240.471ns
+[Define]
+0=TEST_MODULE
+1=SIMULATE
+[Group0]
+Name="Default"
+0="test.cicComp : outReal" default Real AnalogDisplay AType=Step Scale=Auto
+1="test.cicComp : inReal" default Real AnalogDisplay AType=Step Scale=Auto
+2="test.cicComp : midTap[17:0]" default
+3="test.cicComp : sum0[18:0]" default
+4="test.cicComp : sum1[18:0]" default
+5="test.cicComp : coef0[17:0]" default
+6="test.cicComp : coef1[17:0]" default
+7="test.cicComp : coef2[17:0]" default
+8="test.cicComp : finalSum[19:0]" default
+9="test.cicComp : tap2[35:0]" default
+10="test.cicComp : \sr[3] [17:0]" default
+11="test.cicComp : tap1[35:0]" default
+12="test.cicComp : \sr[5] [17:0]" default
+13="test.cicComp : \sr[1] [17:0]" default
+14="test.cicComp : tap0[35:0]" default
+15="test.cicComp : \sr[7] [17:0]" default
+16="test.cicComp : compIn[17:0]" default
+17="test.cicComp : clk" default
+18="test.cicComp : reset" default
+19="test.cicComp : sync" default
+20="test.cicComp : compOut[17:0]" default
+OpenGroup=Yes
+[GroupInfo]
+0=Default : 0 : 1 : 0

@@ -10,7 +10,7 @@ module bitsync(
     addr,
     din,
     dout,
-    freq,
+    i,q,
     offsetError,
     offsetErrorEn,
     symClk,
@@ -28,11 +28,11 @@ input           wr0,wr1,wr2,wr3;
 input   [11:0]  addr;
 input   [31:0]  din;
 output  [31:0]  dout;
-input   [7:0]   freq;
-output  [7:0]   offsetError;
+input   [17:0]  i,q;
+output  [17:0]  offsetError;
 output          offsetErrorEn;
 output          symClk;
-output  [7:0]   symData;
+output  [17:0]  symData;
 output          bitClk;
 output          bitData;
 output  [31:0]  sampleFreq;
@@ -54,32 +54,36 @@ parameter SLIP0 =    2'b11;
 parameter SLIP1 =    2'b10;
 
 // Fifo of baseband inputs
-reg [7:0]bbSR[2:0];
+reg [17:0]bbSR[2:0];
 
 // Timing error variables
-wire earlySign = bbSR[2][7];
-wire lateSign = bbSR[0][7];
-wire [7:0]earlyOnTime = bbSR[2];
-wire [7:0]lateOnTime = bbSR[0];
-wire [7:0]offTime = bbSR[1];
-wire [7:0]negOffTime = (~offTime + 1);
-reg  [7:0]timingError;
+wire earlySign = bbSR[2][17];
+wire lateSign = bbSR[0][17];
+wire [17:0]earlyOnTime = bbSR[2];
+wire [17:0]lateOnTime = bbSR[0];
+wire [17:0]offTime = bbSR[1];
+wire [17:0]negOffTime = (~offTime + 1);
+reg  [17:0]timingError;
 wire timingErrorEn = (phaseState == ONTIME);
 
 // DC Offset error variables
-wire [8:0]offsetErrorSum = {bbSR[2][7],bbSR[2]} + {bbSR[0][7],bbSR[0]};
-reg  [7:0]offsetError;
+wire [18:0]offsetErrorSum = {bbSR[2][7],bbSR[2]} + {bbSR[0][7],bbSR[0]};
+reg  [17:0]offsetError;
 wire offsetErrorEn = (phaseState == ONTIME);
 
 reg  stateMachineSlip;
 wire registerSlip;
+`ifdef ENABLE_SMSLIP
 wire slip = (stateMachineSlip | registerSlip);
+`else
+wire slip = registerSlip;
+`endif
 reg slipped;
-reg  [7:0]slipError;
-wire [7:0]absError = timingError[7] ? (~timingError + 1) : timingError;
-wire [7:0]absSlipError = slipError[7] ? (~slipError + 1) : slipError;
-reg  [11:0]avgError;
-reg  [11:0]avgSlipError;
+reg  [17:0]slipError;
+wire [17:0]absError = timingError[7] ? (~timingError + 1) : timingError;
+wire [17:0]absSlipError = slipError[7] ? (~slipError + 1) : slipError;
+reg  [21:0]avgError;
+reg  [21:0]avgSlipError;
 reg  [3:0]avgCount;
 always @(posedge sampleClk) begin
     if (reset) begin
@@ -93,8 +97,8 @@ always @(posedge sampleClk) begin
         avgSlipError <= 0;
         end
     else if (symTimes2Sync) begin
-        // Shift register of frequency values
-        bbSR[0] <= freq;
+        // Shift register of baseband sample values
+        bbSR[0] <= i;
         bbSR[1] <= bbSR[0];
         bbSR[2] <= bbSR[1];
         case (phaseState)
@@ -116,7 +120,7 @@ always @(posedge sampleClk) begin
                 // Is there a data transition?
                 if (earlySign != lateSign) begin
                     // Yes. Calculate DC offset error
-                    offsetError <= offsetErrorSum[8:1];
+                    offsetError <= offsetErrorSum[18:1];
                     // High to low transition?
                     if (earlySign) begin
                         timingError <= offTime;
@@ -153,7 +157,7 @@ always @(posedge sampleClk) begin
                 avgCount <= 15;
                 avgError <= 0;
                 avgSlipError <= 0;
-                if (avgSlipError < {1'b0,avgError[11:1]}) begin
+                if (avgSlipError < {1'b0,avgError[21:1]}) begin
                     slipState <= SLIP0;
                     stateMachineSlip <= 1;
                     end
@@ -174,23 +178,23 @@ always @(posedge sampleClk) begin
     end
 
 `ifdef SIMULATE
-real timingErrorReal = ((timingError > 127.0) ? timingError - 256.0 : timingError)/128.0;
+real timingErrorReal = ((timingError > 131071.0) ? timingError - 262144.0 : timingError)/131072.0;
 `endif
 
 //************************ Recovered Clock and Data ***************************
 
-reg [7:0]symData;
+reg [17:0]symData;
 always @(posedge sampleClk) begin
     if (symTimes2Sync) begin
         if (timingErrorEn) begin
-            symData <= freq;
+            symData <= i;
             end
         end
     end
 
 assign symClk = timingErrorEn;
 
-assign bitData = ~symData[7];
+assign bitData = ~symData[17];
 assign bitClk  = symClk;
 
 //******************************** Loop Filter ********************************
@@ -210,7 +214,7 @@ loopFilter sampleLoop(.clk(sampleClk),
                       .addr(addr),
                       .din(din),
                       .dout(dout),
-                      .error(timingError),
+                      .error(timingError[17:10]),
                       .errorEn(timingErrorEn),
                       .loopFreq(sampleFreq),
                       .ctrl2(registerSlip)

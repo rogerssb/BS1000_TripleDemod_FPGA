@@ -4,11 +4,6 @@
 `define FMMOD_MODE_SHAPED2FSK 2'b01
 `define FMMOD_MODE_4FSK       2'b10
 `define FMMOD_MODE_SHAPED4FSK 2'b11
-// Define the FM memory map
-`define FM_MOD_FREQ     12'hxx0
-`define FM_MOD_DEV      12'hxx4
-`define FM_MOD_BITRATE  12'hxx8
-`define FM_MOD_CIC      12'hxxc
 
 module fmMod( 
     clk, reset,
@@ -192,7 +187,7 @@ real shapedReal = ((shapedOutput > 131071.0) ? (shapedOutput - 262144.0) : shape
 
 // CIC Interpolation Filter
 wire [33:0]cicOut;
-cicInterpolate cicInterpolate(
+fmInterpolate fmInterpolate(
     .clk(clk), .reset(reset), .clkEn(shapedReady),
     .dIn(shapedOutput),
     .dOut(cicOut)

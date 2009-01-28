@@ -110,6 +110,9 @@ always @(posedge clk) begin
             syncOut <= 0;
             end
         end
+    else begin
+        syncOut <= 0;
+        end
     end
 
 // 3rd order comb with a FIR structure to minimize delay

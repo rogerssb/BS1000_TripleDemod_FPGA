@@ -1,16 +1,16 @@
 `timescale 1ns / 10 ps
 
 module halfbandDecimate( clk, reset, sync,
-                 hbIn,
-                 hbOut,
+                 iIn,qIn,
+                 iOut,qOut,
                  syncOut
                  );
 
 input clk;
 input reset;
 input sync;
-input  [17:0]hbIn;
-output [17:0]hbOut;
+input  [17:0]iIn,qIn;
+output [17:0]iOut,qOut;
 output syncOut;
 
 reg evenSync;
@@ -24,22 +24,24 @@ always @(posedge clk) begin
     end
 
 // Even tap fir
-wire [32:0]evenOut;
-halfbandEven evenFir(.clk(clk),
-                     .nd(evenSync & sync),
-                     .rfd(),
-                     .rdy(),
-                     .din(hbIn),
-                     .dout(evenOut)
-                     );
-/*
-reg [32:0]evenOut;
-always @(posedge clk) begin
-    if (evenSync & sync) begin
-        evenOut <= hbEvenOut;
-        end
-    end
-*/
+wire [32:0]evenOutI;
+wire [32:0]evenOutQ;
+halfbandEven evenFirI(
+    .clk(clk),
+    .nd(evenSync & sync),
+    .rfd(),
+    .rdy(),
+    .din(iIn),
+    .dout(evenOutI)
+    );
+halfbandEven evenFirQ(
+    .clk(clk),
+    .nd(evenSync & sync),
+    .rfd(),
+    .rdy(),
+    .din(qIn),
+    .dout(evenOutQ)
+    );
 
 // Odd tap delay and scale
 // Detect the input decimation
@@ -58,50 +60,79 @@ always @(posedge clk) begin
     end
 
 `define ODD_DELAY  16
-reg [17:0]fifo[`ODD_DELAY-1:0];
+reg [17:0]fifoI[`ODD_DELAY-1:0];
+reg [17:0]fifoQ[`ODD_DELAY-1:0];
 always @(posedge clk) begin
     if (sync) begin
         if (!evenSync) begin
-            /*
-            for (i = 0; i < `ODD_DELAY-1; i <= i + 1) begin
-                fifo[i+1] <= fifo[i];
-                end
-            */
-            fifo[0] <= hbIn;
-            fifo[1] <= fifo[0];
-            fifo[2] <= fifo[1];
-            fifo[3] <= fifo[2];
-            fifo[4] <= fifo[3];
-            fifo[5] <= fifo[4];
-            fifo[6] <= fifo[5];
-            fifo[7] <= fifo[6];
-            fifo[8] <= fifo[7];
-            fifo[9] <= fifo[8];
-            fifo[10] <= fifo[9];
-            fifo[11] <= fifo[10];
-            fifo[12] <= fifo[11];
-            fifo[13] <= fifo[12];
-            fifo[14] <= fifo[13];
-            fifo[15] <= fifo[14];
+            fifoI[0] <= iIn;
+            fifoI[1] <= fifoI[0];
+            fifoI[2] <= fifoI[1];
+            fifoI[3] <= fifoI[2];
+            fifoI[4] <= fifoI[3];
+            fifoI[5] <= fifoI[4];
+            fifoI[6] <= fifoI[5];
+            fifoI[7] <= fifoI[6];
+            fifoI[8] <= fifoI[7];
+            fifoI[9] <= fifoI[8];
+            fifoI[10] <= fifoI[9];
+            fifoI[11] <= fifoI[10];
+            fifoI[12] <= fifoI[11];
+            fifoI[13] <= fifoI[12];
+            fifoI[14] <= fifoI[13];
+            fifoI[15] <= fifoI[14];
+            fifoQ[0] <= qIn;
+            fifoQ[1] <= fifoQ[0];
+            fifoQ[2] <= fifoQ[1];
+            fifoQ[3] <= fifoQ[2];
+            fifoQ[4] <= fifoQ[3];
+            fifoQ[5] <= fifoQ[4];
+            fifoQ[6] <= fifoQ[5];
+            fifoQ[7] <= fifoQ[6];
+            fifoQ[8] <= fifoQ[7];
+            fifoQ[9] <= fifoQ[8];
+            fifoQ[10] <= fifoQ[9];
+            fifoQ[11] <= fifoQ[10];
+            fifoQ[12] <= fifoQ[11];
+            fifoQ[13] <= fifoQ[12];
+            fifoQ[14] <= fifoQ[13];
+            fifoQ[15] <= fifoQ[14];
             end
         end
     end
-reg [17:0]oddOut;
-always @(fifoMux or fifo[14] or fifo[11] or fifo[10]) begin
+reg [17:0]oddOutI,oddOutQ;
+always @(
+    fifoMux or 
+    fifoI[14] or fifoI[11] or fifoI[10] or
+    fifoQ[14] or fifoQ[11] or fifoQ[10]) begin
     case(fifoMux)
-        0:          oddOut = fifo[14];
-        1:          oddOut = fifo[11];
-        2:          oddOut = fifo[10];
-        default:    oddOut = fifo[10];
+        0: begin
+            oddOutI = fifoI[14];
+            oddOutQ = fifoQ[14];
+            end
+        1: begin
+            oddOutI = fifoI[11];
+            oddOutQ = fifoQ[11];
+            end
+        2: begin
+            oddOutI = fifoI[10];
+            oddOutQ = fifoQ[10];
+            end
+        default: begin
+            oddOutI = fifoI[10];
+            oddOutQ = fifoQ[10];
+            end
         endcase
     end
 
 // Add 'em up
-reg [17:0]hbOut;
+reg [17:0]iOut;
+reg [17:0]qOut;
 always @(posedge clk) begin
     if (sync) begin
         if (evenSync) begin
-            hbOut <= evenOut[27:10] + {{1{oddOut[17]}},oddOut[17:1]};
+            iOut <= evenOutI[27:10] + {{1{oddOutI[17]}},oddOutI[17:1]};
+            qOut <= evenOutQ[27:10] + {{1{oddOutQ[17]}},oddOutQ[17:1]};
             end
         end
     end
@@ -112,7 +143,8 @@ always @(posedge clk) begin
     end
 
 `ifdef SIMULATE
-real outReal = ((hbOut > 131071.0) ? (hbOut - 262144.0) : hbOut)/131072.0;
+real outIReal = ((iOut > 131071.0) ? (iOut - 262144.0) : iOut)/131072.0;
+real outQReal = ((qOut > 131071.0) ? (qOut - 262144.0) : qOut)/131072.0;
 `endif
 
 endmodule

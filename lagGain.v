@@ -6,6 +6,7 @@ module lagGain (
     lagExp,
     limit,
     sweepOffsetMag,
+    carrierInSync,
     lagAccum
     );
 
@@ -14,6 +15,7 @@ input   [7:0]   error;
 input   [4:0]   lagExp;
 input   [31:0]  limit;
 input   [31:0]  sweepOffsetMag;
+input           carrierInSync;
 
 output  [31:0]  lagAccum;
 reg     [31:0]  lagAccum;
@@ -76,6 +78,7 @@ always @(posedge clk) begin
 // CASE3                                            LL        UL
 //
 reg     [31:0]  sweepOffset;
+reg     [31:0]  sweepMag;
 wire    [31:0]  lowerLimit = -limit;
 wire    [31:0]  upperLimit = limit;
 wire    [31:0]  sum = lagAccum + lagError + sweepOffset;
@@ -85,31 +88,45 @@ always @ (posedge clk or posedge reset) begin
         begin
         lagAccum <= 0;
         sweepOffset <= 0;
+        sweepMag <= 0;
         end
     else if (clkEn) begin
-        if ( (sum[31] && upperLimit[31])          // both negative
-          && (sum >= upperLimit) ) begin          // between upper limit and 0
-            lagAccum <= upperLimit;
-            sweepOffset <= -sweepOffsetMag;
-            end
-        else if ( (!sum[31] && !upperLimit[31])   // both positive
-               && (sum >= upperLimit) ) begin     // between upper limit and +saturation
-            lagAccum <= upperLimit;
-            sweepOffset <= -sweepOffsetMag;
-            end
-        else if ( (!sum[31] && !lowerLimit[31])   // both positive
-               && (sum < lowerLimit) ) begin      // between lower limit and 0
-            lagAccum <= lowerLimit;
-            sweepOffset <= sweepOffsetMag;
-            end
-        else if ( (sum[31] && lowerLimit[31])     // both negative
-               && (sum < lowerLimit) ) begin      // between lower limit and -saturation
-            lagAccum <= lowerLimit;
-            sweepOffset <= sweepOffsetMag;
+        if (carrierInSync) begin
+            lagAccum <= sum;
+            sweepOffset <= 0;
             end
         else begin
-            lagAccum <= sum;
-            sweepOffset <= sweepOffset;
+            if ( (sum[31] && upperLimit[31])          // both negative
+              && (sum >= upperLimit) ) begin          // between upper limit and 0
+                lagAccum <= upperLimit;
+                sweepOffset <= -sweepOffsetMag;
+                sweepMag <= -sweepOffsetMag;
+                end
+            else if ( (!sum[31] && !upperLimit[31])   // both positive
+                   && (sum >= upperLimit) ) begin     // between upper limit and +saturation
+                lagAccum <= upperLimit;
+                sweepOffset <= -sweepOffsetMag;
+                sweepMag <= -sweepOffsetMag;
+                end
+            else if ( (!sum[31] && !lowerLimit[31])   // both positive
+                   && (sum < lowerLimit) ) begin      // between lower limit and 0
+                lagAccum <= lowerLimit;
+                sweepOffset <= sweepOffsetMag;
+                sweepMag <= sweepOffsetMag;
+                end
+            else if ( (sum[31] && lowerLimit[31])     // both negative
+                   && (sum < lowerLimit) ) begin      // between lower limit and -saturation
+                lagAccum <= lowerLimit;
+                sweepOffset <= sweepOffsetMag;
+                sweepMag <= sweepOffsetMag;
+                end
+            else begin
+                lagAccum <= sum;
+                sweepOffset <= sweepMag;
+                if (sweepMag == 0) begin
+                    sweepMag <= sweepOffsetMag;
+                    end
+                end
             end
         end
     else begin

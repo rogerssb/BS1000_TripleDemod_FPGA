@@ -1,5 +1,5 @@
 `timescale 1ns / 10 ps
-`include "..\addressMap.v"
+`include "addressMap.v"
 
 module resampler( 
     clk, reset, sync,
@@ -66,12 +66,13 @@ integer i;
 `endif
 always @(posedge clk) begin
     if (sync) begin
-        `ifdef SIMULATE
-        for (i = 7; i >= 0; i = i-1) begin
-            iSR[i+1] <= iSR[i];
-            qSR[i+1] <= qSR[i];
-            end
-        `endif
+        //`ifdef SIMULATE
+        //for (i = 7; i >= 0; i = i-1) begin
+        //    iSR[i+1] <= iSR[i];
+        //    qSR[i+1] <= qSR[i];
+        //    end
+        //`endif
+        iSR[8] <= iSR[7];
         iSR[7] <= iSR[6];
         iSR[6] <= iSR[5];
         iSR[5] <= iSR[4];
@@ -80,6 +81,7 @@ always @(posedge clk) begin
         iSR[2] <= iSR[1];
         iSR[1] <= iSR[0];
         iSR[0] <= iIn;
+        qSR[8] <= qSR[7];
         qSR[7] <= qSR[6];
         qSR[6] <= qSR[5];
         qSR[5] <= qSR[4];

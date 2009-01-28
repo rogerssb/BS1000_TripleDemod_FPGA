@@ -1,3 +1,19 @@
 NET "clk" TNM_NET = clk;
 TIMESPEC TS_clk = PERIOD "clk" 93.33 MHz HIGH 50%;
 CONFIG VCCAUX=3.3;
+NET "wr0" TNM_NET = wr0;
+TIMESPEC TS_wr0 = PERIOD "wr0" 50 ns HIGH 50%;
+NET "wr1" TNM_NET = wr1;
+TIMESPEC TS_wr1 = PERIOD "wr1" 50 ns HIGH 50%;
+NET "wr2" TNM_NET = wr2;
+TIMESPEC TS_wr2 = PERIOD "wr2" 50 ns HIGH 50%;
+NET "wr3" TNM_NET = wr3;
+TIMESPEC TS_wr3 = PERIOD "wr3" 50 ns HIGH 50%;
+NET "ddc/hb0/syncOut" TNM_NET = hb0Group;
+NET "ddc/agcSync" TNM_NET = agcGroup;
+NET "ddc/cic/syncOut" TNM_NET = cicGroup;
+NET "ddc/hb/syncOut" TNM_NET = hbGroup;
+NET "bitsync/sampleLoop/loopFilterEn" TNM_NET = bitsyncLFGroup;
+TIMEGRP "slowGroup" = "hb0Group" "agcGroup" "cicGroup" "hbGroup" "bitsyncLFGroup";
+TIMESPEC TS_slowGroup = PERIOD "slowGroup" 46.67 MHz;
+

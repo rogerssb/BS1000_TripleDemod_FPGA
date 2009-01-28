@@ -48,6 +48,8 @@ real carrierLimitNorm = carrierLimitHz * `SAMPLE_PERIOD * `TWO_POW_32;
 integer carrierLimitInt = carrierLimitNorm;
 wire [31:0] carrierLimit = carrierLimitInt;
 
+wire [31:0] sweepRate = 32'h00800000;
+
 real bitrateBps = 250000.0;
 real bitrateSamples = 1/bitrateBps/`SAMPLE_PERIOD/2.0;
 integer bitrateSamplesInt = bitrateSamples;
@@ -64,12 +66,12 @@ integer deviationInt = deviationNorm*interpolationGain;
 wire [31:0]deviationQ31 = deviationInt;
 wire [17:0]deviation = deviationQ31[31:14];
 
-real cicDecimation = SAMPLE_FREQ/bitrateBps/2.0/2.0/2.0;
+real cicDecimation = SAMPLE_FREQ/bitrateBps/2.0/2.0/2.0/2.0;
 integer cicDecimationInt = cicDecimation;
 
 
 real resamplerFreqSps = 2*actualBitrateBps;     // 2 samples per symbol
-real resamplerFreqNorm = resamplerFreqSps/(SAMPLE_FREQ/cicDecimationInt/2.0) * `TWO_POW_32;
+real resamplerFreqNorm = resamplerFreqSps/(SAMPLE_FREQ/cicDecimationInt/4.0) * `TWO_POW_32;
 integer resamplerFreqInt = (resamplerFreqNorm >= `TWO_POW_31) ? (resamplerFreqNorm - `TWO_POW_32) : resamplerFreqNorm;
 //integer resamplerFreqInt = resamplerFreqNorm;
 
@@ -203,16 +205,95 @@ assign qRx = qSignal + qNoise;
 /******************************************************************************
                             Instantiate the Demod
 ******************************************************************************/
+wire    [17:0]  dac0Out,dac1Out,dac2Out;
 demod demod( 
     .clk(clk), .reset(reset), .syncIn(sync), 
     .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
     .addr(a),
     .din(d),
     .dout(dout),
-    .demodClk(demodClk),
-    .demodBit(demodBit),
-    .iRx(iRx), .qRx(qRx)
+    .iDataClk(demodClk),
+    .iBit(demodBit),
+    .iRx(iRx), .qRx(qRx),
+    .dac0Sync(dac0Sync),
+    .dac0Data(dac0Out),
+    .dac1Sync(dac1Sync),
+    .dac1Data(dac1Out),
+    .dac2Sync(dac2Sync),
+    .dac2Data(dac2Out)
     );
+
+reg dac0CS,dac1CS,dac2CS;
+always @(a) begin
+    casex (a)
+        `INTERP0SPACE: begin
+            dac0CS <= 1;
+            dac1CS <= 0;
+            dac2CS <= 0;
+            end
+        `INTERP1SPACE: begin
+            dac0CS <= 0;
+            dac1CS <= 1;
+            dac2CS <= 0;
+            end
+        `INTERP2SPACE: begin
+            dac0CS <= 0;
+            dac1CS <= 0;
+            dac2CS <= 1;
+            end
+        default: begin  
+            dac0CS <= 0;
+            dac1CS <= 0;
+            dac2CS <= 0;
+            end
+        endcase
+    end
+wire    [31:0]  dac0Dout;
+wire    [17:0]  dac0Data;
+reg             interpReset;
+interpolate dac0Interp(
+    .clk(clk), .reset(interpReset), .clkEn(dac0Sync),
+    .cs(dac0CS),
+    .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
+    .addr(a),
+    .din(d),
+    .dout(dac0Dout),
+    .dataIn(dac0Out),
+    .dataOut(dac0Data)
+    );
+assign dac0_d = dac0Data[17:4];
+assign dac0_clk = clk;
+
+wire    [31:0]  dac1Dout;
+wire    [17:0]  dac1Data;
+interpolate dac1Interp(
+    .clk(clk), .reset(interpReset), .clkEn(dac1Sync),
+    .cs(dac1CS),
+    .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
+    .addr(a),
+    .din(d),
+    .dout(dac1Dout),
+    .dataIn(dac1Out),
+    .dataOut(dac1Data)
+    );
+assign dac1_d = dac1Data[17:4];
+assign dac1_clk = clk;
+
+wire    [31:0]  dac2Dout;
+wire    [17:0]  dac2Data;
+interpolate dac2Interp(
+    .clk(clk), .reset(interpReset), .clkEn(dac2Sync),
+    .cs(dac2CS),
+    .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
+    .addr(a),
+    .din(d),
+    .dout(dac2Dout),
+    .dataIn(dac2Out),
+    .dataOut(dac2Data)
+    );
+assign dac2_d = dac2Data[17:4];
+assign dac2_clk = clk;
+
 
 /******************************************************************************
                        Delay Line for BER Testing
@@ -369,7 +450,9 @@ initial begin
     // The 13.0 is to translate from SNR to EBNO which is 10log10(bitrate/bandwidth).
     $initGaussPLI(1,8.0 + 11.5 - 13.0,131072.0);
     `endif
+    demod.ddc.hbReset = 1;
     demod.ddc.cicReset = 1;
+    interpReset = 0;
     reset = 0;
     sync = 1;
     clk = 0;
@@ -377,7 +460,7 @@ initial begin
     we0 = 0; we1 = 0; we2 = 0; we3 = 0; 
     d = 32'hz;
     fmModCS = 0;
-    txScaleFactor = 0.05;
+    txScaleFactor = 0.25;
 
     // Turn on the clock
     clken=1;
@@ -407,13 +490,15 @@ initial begin
     write32(createAddress(`CARRIERSPACE,`LF_CONTROL),1);    // Zero the error
     write32(createAddress(`CARRIERSPACE,`LF_LEAD_LAG),32'h00000012);   
     write32(createAddress(`CARRIERSPACE,`LF_LIMIT), carrierLimit);
+    write32(createAddress(`CARRIERSPACE,`LF_LOOPDATA), sweepRate);
 
     // Init the downcoverter register set
+    write32(createAddress(`DDCSPACE,`DDC_CONTROL),0);
     write32(createAddress(`DDCSPACE,`DDC_CENTER_FREQ), carrierFreq);
 
     // Init the cicResampler register set
     write32(createAddress(`CICDECSPACE,`CIC_DECIMATION),cicDecimationInt-1);
-    write32(createAddress(`CICDECSPACE,`CIC_SHIFT), 6);
+    write32(createAddress(`CICDECSPACE,`CIC_SHIFT), 3);
 
     // Init the channel agc loop filter
     write32(createAddress(`CHAGCSPACE,`ALF_CONTROL),1);                 // Zero the error
@@ -422,9 +507,18 @@ initial begin
     write32(createAddress(`CHAGCSPACE,`ALF_ULIMIT),32'h4fffffff);       // AGC Upper limit
     write32(createAddress(`CHAGCSPACE,`ALF_LLIMIT),32'h00000000);       // AGC Lower limit
 
+    // Set the DAC interpolator gains
+    write32(createAddress(`INTERP0SPACE, `INTERP_EXPONENT), 8);
+    write32(createAddress(`INTERP0SPACE, `INTERP_MANTISSA), 32'h0001ffff);
+    write32(createAddress(`INTERP1SPACE, `INTERP_EXPONENT), 8);
+    write32(createAddress(`INTERP1SPACE, `INTERP_MANTISSA), 32'h0001ffff);
+    write32(createAddress(`INTERP2SPACE, `INTERP_EXPONENT), 8);
+    write32(createAddress(`INTERP2SPACE, `INTERP_MANTISSA), 32'h0001ffff);
+
     reset = 1;
     #(2*C) ;
     reset = 0;
+    demod.ddc.hbReset = 0;
     demod.ddc.cicReset = 0;
 
     // Wait 9.5 bit periods
@@ -440,10 +534,18 @@ initial begin
     #(2*C) ;
     reset = 0;
 
-    // Wait 1.5 bit periods
-    #(3.0*bitrateSamplesInt*C) ;
+    // Wait 2.0 bit periods
+    #(4.0*bitrateSamplesInt*C) ;
 
     enableTx = 1;
+
+    // Create a reset to clear the halfband
+    demod.ddc.hbReset = 1;
+    #(2*C) ;
+    demod.ddc.hbReset = 0;
+
+    // Wait 2 bit periods
+    #(4.0*bitrateSamplesInt*C) ;
 
     // Create a reset to clear the cic resampler
     demod.ddc.cicReset = 1;
@@ -453,6 +555,11 @@ initial begin
     // Wait 14 bit periods
     #(28*bitrateSamplesInt*C) ;
 
+    // Create a reset to clear the interpolators
+    interpReset = 1;
+    #(2*C) ;
+    interpReset = 0;
+
     // Enable the sample rate loop
     write32(createAddress(`BITSYNCSPACE,`LF_CONTROL),0);  
 
@@ -460,7 +567,7 @@ initial begin
     #(4*bitrateSamplesInt*C) ;
 
     // Enable the AFC loop and invert the error
-    write32(createAddress(`CARRIERSPACE,`LF_CONTROL),2);  
+    // write32(createAddress(`CARRIERSPACE,`LF_CONTROL),2);  
 
     `ifdef ENABLE_AGC
     // Enable the AGC loop

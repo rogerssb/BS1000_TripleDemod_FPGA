@@ -7,9 +7,16 @@ module demod(
     din,
     dout,
     iRx, qRx, 
-    demodClk,
-    demodData,
-    demodBit
+    iDataClk,
+    iBit,
+    qDataClk,
+    qBit,
+    dac0Sync,
+    dac0Data,
+    dac1Sync,
+    dac1Data,
+    dac2Sync,
+    dac2Data
     );
 
 input           clk;
@@ -19,11 +26,19 @@ input           rd,wr0,wr1,wr2,wr3;
 input   [11:0]  addr;
 input   [31:0]  din;
 output  [31:0]  dout;
-input   [17:0]   iRx;
-input   [17:0]   qRx;
-output          demodClk;
-output  [7:0]   demodData;
-output          demodBit;
+input   [17:0]  iRx;
+input   [17:0]  qRx;
+output          iDataClk;
+output          iBit;
+output          qDataClk;
+output          qBit;
+output          dac0Sync;
+output  [17:0]  dac0Data;
+output          dac1Sync;
+output  [17:0]  dac1Data;
+output          dac2Sync;
+output  [17:0]  dac2Data;
+
 
 
 /******************************************************************************
@@ -84,6 +99,8 @@ channelAGC channelAGC(
     );
     
 
+//`define RESAMPLER_FIRST
+`ifdef RESAMPLER_FIRST
 /******************************************************************************
                                   Resampler
 ******************************************************************************/
@@ -140,11 +157,12 @@ fmDemod fmDemod(
 /******************************************************************************
                              AFC/Sweep/Costas Loop
 ******************************************************************************/
-wire    [7:0]   offsetError;
+wire    [17:0]   offsetError;
 wire    [31:0]  freqDout;
 carrierLoop carrierLoop(
     .clk(clk), .reset(reset),
-    .sync(resampSync),
+    .resampSync(resampSync),
+    .ddcSync(ddcSync),
     .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
     .addr(addr),
     .din(din),
@@ -152,7 +170,7 @@ carrierLoop carrierLoop(
     .demodMode(demodMode),
     .phase(phase),
     .freq(freq),
-    .offsetError(offsetError),
+    .offsetError(offsetError[17:10]),
     .offsetErrorEn(offsetErrorEn),
     .carrierFreqOffset(carrierFreqOffset),
     .carrierFreqEn(carrierOffsetEn)
@@ -162,6 +180,7 @@ carrierLoop carrierLoop(
                                 Bitsync Loop
 ******************************************************************************/
 wire    [31:0]  bitsyncDout;
+wire    [17:0]  demodData;
 bitsync bitsync(
     .sampleClk(clk), .reset(reset), 
     .symTimes2Sync(resampSync),
@@ -170,7 +189,7 @@ bitsync bitsync(
     .addr(addr),
     .din(din),
     .dout(bitsyncDout),
-    .freq(freq),
+    .i({freq,10'b0}),.q(),
     .offsetError(offsetError),
     .offsetErrorEn(offsetErrorEn),
     .symClk(symClk),
@@ -181,6 +200,189 @@ bitsync bitsync(
     );
 
 
+`else   // RESAMPLER_FIRST
+
+/******************************************************************************
+                           Phase/Freq/Mag Detector
+******************************************************************************/
+wire    [7:0]   phase;
+wire    [7:0]   freq;
+wire    [8:0]   mag;
+fmDemod fmDemod( 
+    .clk(clk), .reset(reset), .sync(ddcSync),
+    .iFm(iDdc),.qFm(qDdc),
+    .phase(phase),
+    .freq(freq),
+    .mag(mag)
+    );
+
+
+/******************************************************************************
+                             AFC/Sweep/Costas Loop
+******************************************************************************/
+wire    [17:0]   offsetError;
+wire    [31:0]  freqDout;
+carrierLoop carrierLoop(
+    .clk(clk), .reset(reset),
+    .resampSync(resampSync),
+    .ddcSync(ddcSync),
+    .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
+    .addr(addr),
+    .din(din),
+    .dout(freqDout),
+    .demodMode(demodMode),
+    .phase(phase),
+    .freq(freq),
+    .offsetError(offsetError[17:10]),
+    .offsetErrorEn(offsetErrorEn),
+    .carrierFreqOffset(carrierFreqOffset),
+    .carrierFreqEn(carrierOffsetEn)
+    );
+
+/******************************************************************************
+                                  Resampler
+******************************************************************************/
+reg     [17:0]  iResampIn,qResampIn;
+always @(posedge clk) begin
+    case (demodMode)
+        `MODE_2FSK: begin
+            iResampIn <= {freq,10'b0};
+            qResampIn <= 0;
+            end
+        default: begin
+            iResampIn <= iDdc;
+            qResampIn <= qDdc;
+            end
+        endcase
+    end
+wire    [17:0]  iResamp,qResamp;
+wire    [31:0]  resamplerFreqOffset;
+wire    [31:0]  resampDout;
+resampler resampler(
+    .clk(clk), .reset(reset), .sync(ddcSync),
+    .wr0(wr0) , .wr1(wr1), .wr2(wr2), .wr3(wr3),
+    .addr(addr),
+    .din(din),
+    .dout(resampDout),
+    .resamplerFreqOffset(resamplerFreqOffset),
+    .offsetEn(1'b1),
+    .iIn(iResampIn),
+    .qIn(qResampIn),
+    .iOut(iResamp),
+    .qOut(qResamp),
+    .syncOut(resampSync)
+    );
+
+/******************************************************************************
+                               Symbol Offset Deskew
+******************************************************************************/
+reg     [17:0]  iSym,qSym,qDelay;
+always @(posedge clk) begin
+    if (resampSync) begin
+        iSym <= iResamp;
+        qDelay <= qResamp;
+        if (demodMode == `MODE_OQPSK) begin
+            qSym <= qDelay;
+            end
+        else begin
+            qSym <= qResamp;
+            end
+        end
+    end
+
+/******************************************************************************
+                                Bitsync Loop
+******************************************************************************/
+wire    [17:0]  demodData;
+wire    [31:0]  bitsyncDout;
+bitsync bitsync(
+    .sampleClk(clk), .reset(reset), 
+    .symTimes2Sync(resampSync),
+    .demodMode(demodMode),
+    .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
+    .addr(addr),
+    .din(din),
+    .dout(bitsyncDout),
+    .i(iSym), .q(qSym),
+    .offsetError(offsetError),
+    .offsetErrorEn(offsetErrorEn),
+    .symClk(symClk),
+    .symData(demodData),
+    .bitClk(demodClk),
+    .bitData(demodBit),
+    .sampleFreq(resamplerFreqOffset)
+    );
+
+
+
+`endif  // RESAMPLER_FIRST
+
+/******************************************************************************
+                               Data Output Mux
+******************************************************************************/
+reg iDataClk,iBit;
+reg qDataClk,qBit;
+always @(demodMode or demodClk or demodBit) begin
+    iDataClk <= demodClk;
+    iBit <= demodBit;
+    qDataClk <= demodClk;
+    qBit <= demodBit;
+    end
+
+/******************************************************************************
+                               DAC Output Mux
+******************************************************************************/
+
+reg             dac0Sync;
+reg     [17:0]  dac0Data;
+reg             dac1Sync;
+reg     [17:0]  dac1Data;
+reg             dac2Sync;
+reg     [17:0]  dac2Data;
+always @(posedge clk) begin
+    case (demodMode) 
+        `MODE_AM: begin
+            dac0Sync <= ddcSync;
+            dac0Data <= iDdc;
+            dac1Sync <= ddcSync;
+            dac1Data <= qDdc;
+            dac2Sync <= ddcSync;
+            dac2Data <= {~mag[8],mag[7:0],9'b0};
+            end
+        `MODE_FM: begin
+            dac0Sync <= ddcSync;
+            dac0Data <= iDdc;
+            dac1Sync <= ddcSync;
+            dac1Data <= qDdc;
+            dac2Sync <= ddcSync;
+            dac2Data <= {freq,10'b0};
+            end
+        `MODE_PM: begin
+            dac0Sync <= ddcSync;
+            dac0Data <= iDdc;
+            dac1Sync <= ddcSync;
+            dac1Data <= qDdc;
+            dac2Sync <= ddcSync;
+            dac2Data <= {phase,10'b0};
+            end
+        `MODE_2FSK: begin
+            dac0Sync <= ddcSync;
+            dac0Data <= iDdc;
+            dac1Sync <= ddcSync;
+            dac1Data <= qDdc;
+            dac2Sync <= ddcSync;
+            dac2Data <= {freq,10'b0};
+            end
+        default: begin
+            dac0Sync <= ddcSync;
+            dac0Data <= iDdc;
+            dac1Sync <= ddcSync;
+            dac1Data <= qDdc;
+            dac2Sync <= resampSync;
+            dac2Data <= {freq,10'b0};
+            end
+        endcase
+    end
 
 /******************************************************************************
                                 uP dout mux

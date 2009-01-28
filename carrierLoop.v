@@ -3,7 +3,8 @@
 
 module carrierLoop(
     clk, reset, 
-    sync,
+    ddcSync,
+    resampSync,
     wr0,wr1,wr2,wr3,
     addr,
     din,
@@ -19,7 +20,8 @@ module carrierLoop(
 
 input           clk;
 input           reset;
-input           sync;
+input           ddcSync;
+input           resampSync;
 input           wr0,wr1,wr2,wr3;
 input   [11:0]  addr;
 input   [31:0]  din;
@@ -71,31 +73,43 @@ loopRegs loopRegs(
 // Determine the source of the error signal
 reg     [7:0]   modeError;
 reg             modeErrorEn;
-always @(demodMode or offsetError or offsetErrorEn or phase or freq) begin
+reg             sync;
+always @(demodMode or offsetError or offsetErrorEn or phase or freq or ddcSync or resampSync) begin
     case (demodMode)
         `MODE_AM: begin
+            sync <= ddcSync;
             modeError <= 0;
             modeErrorEn <= 1'b1;
             end
         `MODE_PM: begin
+            sync <= ddcSync;
             modeError <= phase;
             modeErrorEn <= 1'b1;
             end
         `MODE_FM: begin
+            sync <= ddcSync;
             modeError <= freq;
             modeErrorEn <= 1'b1;
             end
         `MODE_2FSK: begin
+            sync <= resampSync;
             modeError <= offsetError;
             modeErrorEn <= offsetErrorEn;
             end
         `MODE_BPSK: begin
+            sync <= resampSync;
             modeError <= {phase[6:0],1'b0};
             modeErrorEn <= 1'b1;
             end
         `MODE_QPSK,
         `MODE_OQPSK: begin
+            sync <= resampSync;
             modeError <= {phase[5:0],2'b0} - 8'h20;
+            modeErrorEn <= 1'b1;
+            end
+        default: begin
+            sync <= 1'b1;
+            modeError <= 0;
             modeErrorEn <= 1'b1;
             end
         endcase
@@ -119,19 +133,6 @@ always @(posedge clk) begin
     end
 
 
-/*************************** Sweep Control ************************************/
-reg     [31:0]  sweepOffset;
-wire            carrierLock;
-always @(posedge clk) begin
-    if (carrierLock) begin
-        sweepOffset <= 0;
-        end
-    else begin
-        sweepOffset <= sweepOffsetMag;
-        end
-    end
-
-
 /***************************** Loop Filter ************************************/
 
 // Instantiate the lead/lag filter gain path
@@ -143,13 +144,15 @@ leadGain leadGain (
     .leadError(leadError)
     );
 
+wire            carrierLock;
 wire    [31:0]  lagAccum;
 lagGain lagGain (
     .clk(clk), .clkEn(loopFilterEn), .reset(reset), 
     .error(loopError),
     .lagExp(lagExp),
     .limit(limit),
-    .sweepOffsetMag(sweepOffset),
+    .sweepOffsetMag(sweepOffsetMag),
+    .carrierInSync(carrierLock),
     .lagAccum(lagAccum)
     );
 

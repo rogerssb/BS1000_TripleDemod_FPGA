@@ -2,31 +2,35 @@
 
 `include "addressMap.v"
 
-module resampRegs(
+module interpRegs(
+    cs,
     addr,
     dataIn,
     dataOut,
-    cs,
     wr0, wr1, wr2, wr3,
-    resampleRate
+    exponent,
+    mantissa
     );
 
+input   cs;
 input   [11:0]addr;
 input   [31:0]dataIn;
 output  [31:0]dataOut;
-input   cs;
 input   wr0,wr1,wr2,wr3;
 
-output  [31:0] resampleRate;
-reg     [31:0] resampleRate;
+output  [4:0]exponent;
+reg     [4:0]exponent;
+
+output  [17:0] mantissa;
+reg     [17:0] mantissa;
+
 
 always @(negedge wr0) begin
     if (cs) begin
         casex (addr)
-            `RESAMPLER_RATE: begin
-               resampleRate[7:0] <= dataIn[7:0];
-               end
-            default: ;
+            `INTERP_MANTISSA:   mantissa[7:0] <= dataIn[7:0];
+            `INTERP_EXPONENT:   exponent[4:0] <= dataIn[4:0];
+            default:  ;
             endcase
         end
     end
@@ -34,7 +38,7 @@ always @(negedge wr0) begin
 always @(negedge wr1) begin
     if (cs) begin
         casex (addr)
-            `RESAMPLER_RATE:   resampleRate[15:8] <= dataIn[15:8];
+            `INTERP_MANTISSA:   mantissa[15:8] <= dataIn[15:8];
             default:  ;
             endcase
         end
@@ -43,28 +47,21 @@ always @(negedge wr1) begin
 always @(negedge wr2) begin
     if (cs) begin
         casex (addr)
-            `RESAMPLER_RATE:   resampleRate[23:16] <= dataIn[23:16];
-            default:  ;
-            endcase
-        end
-    end
-
-always @(negedge wr3) begin
-    if (cs) begin
-        casex (addr)
-            `RESAMPLER_RATE:   resampleRate[31:24] <= dataIn[31:24];
+            `INTERP_MANTISSA:   mantissa[17:16] <= dataIn[17:16];
             default:  ;
             endcase
         end
     end
 
 reg [31:0]dataOut;
-always @(addr or cs or
-         resampleRate
-         ) begin
+always @(cs or addr or
+         exponent or 
+         mantissa)
+    begin
     if (cs) begin
         casex (addr)
-            `RESAMPLER_RATE:   dataOut <= resampleRate;
+            `INTERP_MANTISSA:   dataOut <= {14'bx,mantissa};
+            `INTERP_EXPONENT:   dataOut <= {27'bx,exponent};
             default:            dataOut <= 32'hx;
             endcase
         end

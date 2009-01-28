@@ -10,6 +10,9 @@
 `define CHAGCSPACE      12'b0111_xxxx_xxxx
 `define RESAMPSPACE     12'b1000_xxxx_xxxx
 `define CARRIERSPACE    12'b1001_xxxx_xxxx
+`define INTERP0SPACE    12'b1010_xxxx_xxxx
+`define INTERP1SPACE    12'b1011_xxxx_xxxx
+`define INTERP2SPACE    12'b1100_xxxx_xxxx
 
 // Define the global radio memory map
 `define DEMOD_CONTROL   12'hxx0
@@ -22,17 +25,18 @@
 `define MODE_OQPSK      3'b111
 
 // Define the FM memory map
-`define FM_MOD_FREQ     12'hxx0
-`define FM_MOD_DEV      12'hxx4
-`define FM_MOD_BITRATE  12'hxx8
-`define FM_MOD_CIC      12'hxxc
+`define FM_MOD_FREQ     12'bxxxx_xxxx_00xx
+`define FM_MOD_DEV      12'bxxxx_xxxx_01xx
+`define FM_MOD_BITRATE  12'bxxxx_xxxx_10xx
+`define FM_MOD_CIC      12'bxxxx_xxxx_11xx
 
 // Define the DDC memory map
-`define DDC_CENTER_FREQ 12'hxx0
+`define DDC_CENTER_FREQ 12'bxxxx_xxxx_00xx
+`define DDC_CONTROL     12'bxxxx_xxxx_01xx
 
 // Define the CIC Decimator memory map
-`define CIC_DECIMATION  12'hxx0
-`define CIC_SHIFT       12'hxx4
+`define CIC_DECIMATION  12'bxxxx_xxxx_00xx
+`define CIC_SHIFT       12'bxxxx_xxxx_01xx
 
 // Define the Loop Filter memory map
 `define LF_CONTROL      12'bxxxx_xxx0_00xx
@@ -51,6 +55,9 @@
 // Define the DDC memory map
 `define RESAMPLER_RATE  12'hxx0
 
+// Define the interpolator memory map
+`define INTERP_EXPONENT 12'bxxxx_xxxx_00xx
+`define INTERP_MANTISSA 12'bxxxx_xxxx_01xx
 
 `endif
 
