@@ -16,7 +16,10 @@ module top
   (
   ck933,
   nWe,nRd,nCs,
-  addr12,addr11,addr10,addr9,addr4,addr3,addr2,addr1,
+  addr12,
+  addr11,addr10,addr9,addr8,
+  addr7,addr6,addr5,addr4,
+  addr3,addr2,addr1,
   data,
   dac_rst,
   dac_sdio,
@@ -36,7 +39,10 @@ module top
 input nWe;
 input ck933;
 input nRd,nCs;
-input addr12,addr11,addr10,addr9,addr4,addr3,addr2,addr1;
+input addr12;
+input addr11,addr10,addr9,addr8;
+input addr7, addr6,addr5,addr4;
+input addr3,addr2,addr1;
 inout [15:0]data;
 inout dac_sdio;
 output dac_rst;
@@ -52,7 +58,7 @@ output bsync_nLock,demod_nLock;
 
 parameter VER_NUMBER = 16'hABCD;
 
-wire [11:0]addr = {addr11,addr10,addr9,4'bx,addr4,addr3,addr2,addr1,1'b0};
+wire [11:0]addr = {addr11,addr10,addr9,addr8,addr7,addr6,addr5,addr4,addr3,addr2,addr1,1'b0};
 
 //******************************************************************************
 //                               Miscellaneous
@@ -157,7 +163,7 @@ wire    [17:0]  dac0Out,dac1Out,dac2Out;
 wire    [31:0]  demodDout;
 demod demod( 
     .clk(ck933), .reset(rs), .syncIn(1'b1), 
-    .rd(rd), .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
+    .rd(rd), .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
     .addr(addr),
     .din(dataIn),
     .dout(demodDout),
