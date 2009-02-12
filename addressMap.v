@@ -68,7 +68,7 @@
 `define INTERP_MANTISSA 12'bxxxx_xxxx_01xx
 
 
-// Define the MISCELANEOUS locations
+// Define the MISCELLANEOUS locations
 `define RESET       12'hxx0
 `define VERSION     12'hxx2
 
