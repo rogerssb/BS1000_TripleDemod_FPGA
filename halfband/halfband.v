@@ -125,6 +125,7 @@ always @(
         endcase
     end
 
+`ifdef OLD_HB
 // Add 'em up
 reg [17:0]iOut;
 reg [17:0]qOut;
@@ -133,9 +134,42 @@ always @(posedge clk) begin
         if (evenSync) begin
             iOut <= evenOutI[27:10] + {{1{oddOutI[17]}},oddOutI[17:1]};
             qOut <= evenOutQ[27:10] + {{1{oddOutQ[17]}},oddOutQ[17:1]};
+            //iOut <= evenOutI[26:9] + oddOutI;
+            //qOut <= evenOutQ[26:9] + oddOutQ;
             end
         end
     end
+`else
+// Add 'em up
+wire    [18:0]  sumI = evenOutI[28:10] + {{2{oddOutI[17]}},oddOutI[17:1]};
+wire    [18:0]  sumQ = evenOutQ[28:10] + {{2{oddOutQ[17]}},oddOutQ[17:1]};
+reg     [17:0]  iOut;
+reg     [17:0]  qOut;
+always @(posedge clk) begin
+    if (sync) begin
+        if (evenSync) begin
+            if (sumI[18] & !sumI[17]) begin
+                iOut <= 18'h20001;
+                end
+            else if (!sumI[18] & sumI[17]) begin
+                iOut <= 18'h1ffff;
+                end
+            else begin
+                iOut <= sumI[17:0];
+                end
+            if (sumQ[18] & !sumQ[17]) begin
+                qOut <= 18'h20001;
+                end
+            else if (!sumQ[18] & sumQ[17]) begin
+                qOut <= 18'h1ffff;
+                end
+            else begin
+                qOut <= sumQ[17:0];
+                end
+            end
+        end
+    end
+`endif
 
 reg syncOut;
 always @(posedge clk) begin
@@ -152,8 +186,8 @@ endmodule
 //`define TEST_MODULE
 `ifdef TEST_MODULE
 
-//`define SINEWAVE_TEST
-`define IMPULSE_TEST
+`define SINEWAVE_TEST
+//`define IMPULSE_TEST
 
 `timescale 1ns/100ps
 
@@ -171,7 +205,7 @@ reg sync;
 reg [3:0]syncCount;
 always @(posedge clk) begin
     if (syncCount == 0) begin
-        syncCount <= 5;
+        syncCount <= 0;
         sync <= 1;
         end
     else begin
@@ -191,8 +225,8 @@ always @(posedge clk) begin
 reg     [17:0]hbIn;
 wire    [17:0]hbOut;
 halfbandDecimate hb ( .clk(clk), .reset(reset), .sync(sync),
-                      .hbIn(hbIn),
-                      .hbOut(hbOut),
+                      .iIn(hbIn),
+                      .iOut(hbOut),
                       .syncOut()
                     );
 
@@ -204,7 +238,7 @@ real carrierFreqNorm = carrierFreqHz * `SAMPLE_PERIOD * `TWO_POW_32;
 integer carrierFreqInt = carrierFreqNorm;
 wire [31:0] freq = carrierFreqInt;
 wire [17:0]sineOut;
-nco dds(.sclr(reset), .clk(clk), .we(1'b1), .data(freq), .sine(sineOut), .cosine());
+dds dds(.sclr(reset), .clk(clk), .we(1'b1), .data(freq), .sine(sineOut), .cosine());
 
 always @(posedge clk) begin
     hbIn <= sineOut;

@@ -1,5 +1,6 @@
 [Options]
 DebugEnable=No
+NoFloatWarn=Yes
 [Settings]
 Version=Silvaco4.10.0.R
 [Spice]
@@ -7,29 +8,32 @@ MainFile=
 [DebugMode]
 CommandLine=+define+SIMULATE
 [Analyzer]
-C0Width=160
+C0Width=124
 C1Width=58
-C2Width=53
+C2Width=68
+GotoSource=N
 SymbolFile=
 [View]
-1=Last 0.000ns 17683.470ns 392.966ns 3414.067ns 3586.147ns
+1=Last 1336.236ns 13323.636ns 387.315ns 9005.073ns 3586.147ns
+[LibraryFiles]
+0=..\..\..\Xilinx\10.1\ISE\verilog\src\unisims\{.v}
 [Files]
 0=halfband.v
 1=..\coregen\halfbandEven.v
-2=..\coregen\nco.v
-[LibraryFiles]
-0=..\..\..\Xilinx\10.1\ISE\verilog\src\unisims\{.v}
+2=..\coregen\dds.v
+[Define]
+0=TEST_MODULE
 [Group0]
 Name="Default"
-0="test.hb.evenFir : rfd" default
-1="test.hb.evenFir : rdy" default
-2="test.hb : ( {oddOut[17],oddOut[17:2]} )" default
-3="test.hb : evenOut[27:10]" default
-4="test.hb : outReal" default Real AnalogDisplay AType=Step Scale=Auto
-5="test : bitCount[5:0]" default Unknown
+0="test.hb.evenFir : rfd" default Unknown
+1="test.hb.evenFir : rdy" default Unknown
+2="test.hb : ( {oddOut[17],oddOut[17:2]} )" default Unknown
+3="test.hb : evenOut[27:10]" default Unknown
+4="test.hb : outIReal" default Real AnalogDisplay AType=Step Scale=Auto
+5="test : bitCount[5:0]" default
 6="test.hb : syncOut" default
 7="test.hb : evenSync" default
-8="test.hb : \fifo[0] [17:0]" default
+8="test.hb : \fifo[0] [17:0]" default Unknown
 9="test : hbOut[17:0]" default
 10="test : hbIn[17:0]" default
 11="test : sync" default

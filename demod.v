@@ -67,7 +67,7 @@ demodRegs demodRegs(
                                 Downconverter
 ******************************************************************************/
 wire    [17:0]  iDdc,qDdc;
-wire    [19:0]  nbAgcGain;
+wire    [20:0]  nbAgcGain;
 wire    [31:0]  carrierFreqOffset;
 wire    [31:0]  ddcDout;
 ddc ddc( 
@@ -76,11 +76,15 @@ ddc ddc(
     .addr(addr),
     .din(din),
     .dout(ddcDout),
-    .ddcFreqOffset(carrierFreqOffset),
-    .offsetEn(carrierOffsetEn),
+    //.ddcFreqOffset(carrierFreqOffset),
+    //.offsetEn(carrierOffsetEn),
     .nbAgcGain(nbAgcGain),
+    .ddcFreqOffset(32'h0),
+    .offsetEn(1'b1),
+    //.nbAgcGain(21'h0),
     .syncOut(ddcSync),
-    .iIn(iRx), .qIn(qRx), 
+    //.iIn(iRx), .qIn(qRx), 
+    .iIn(18'h0ffff), .qIn(18'h0), 
     .iOut(iDdc), .qOut(qDdc)
     );
 
@@ -99,7 +103,7 @@ channelAGC channelAGC(
     );
     
 
-//`define RESAMPLER_FIRST
+`define RESAMPLER_FIRST
 `ifdef RESAMPLER_FIRST
 /******************************************************************************
                                   Resampler
@@ -333,6 +337,13 @@ always @(demodMode or demodClk or demodBit) begin
                                DAC Output Mux
 ******************************************************************************/
 
+//`define SKIP_DATAMUX
+`ifdef SKIP_DATAMUX
+assign dac0Data = iDdc;
+assign dac0Sync = ddcSync;
+assign dac1Data = qDdc;
+assign dac1Sync = ddcSync;
+`else
 reg             dac0Sync;
 reg     [17:0]  dac0Data;
 reg             dac1Sync;
@@ -373,6 +384,14 @@ always @(posedge clk) begin
             dac2Sync <= ddcSync;
             dac2Data <= {freq,10'b0};
             end
+        `MODE_BPSK: begin
+            dac0Sync <= ddcSync;
+            dac0Data <= iDdc;
+            dac1Sync <= ddcSync;
+            dac1Data <= qDdc;
+            dac2Sync <= ddcSync;
+            dac2Data <= {~mag[8],mag[7:0],9'b0};
+            end
         default: begin
             dac0Sync <= ddcSync;
             dac0Data <= iDdc;
@@ -383,6 +402,7 @@ always @(posedge clk) begin
             end
         endcase
     end
+`endif
 
 /******************************************************************************
                                 uP dout mux
@@ -391,10 +411,13 @@ reg [31:0]dout;
 always @(addr or 
          demodDout or
          ddcDout or
+         nbAgcDout or
          resampDout or 
          bitsyncDout) begin
     casex (addr)
         `DEMODSPACE:        dout <= demodDout;
+        `CHAGCSPACE:        dout <= nbAgcDout;
+        `CICDECSPACE,
         `DDCSPACE:          dout <= ddcDout;
         `RESAMPSPACE:       dout <= resampDout;
         `BITSYNCSPACE:      dout <= bitsyncDout;

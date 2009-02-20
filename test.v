@@ -60,6 +60,7 @@ real actualBitrateBps = SAMPLE_FREQ/bitrateSamplesInt/2.0;
 // modulator
 real interpolationGain = 1.28;
 
+//real deviationHz = 0*0.35 * bitrateBps;
 real deviationHz = 2*0.35 * bitrateBps;
 real deviationNorm = deviationHz * `SAMPLE_PERIOD * `TWO_POW_32;
 integer deviationInt = deviationNorm*interpolationGain;
@@ -123,7 +124,6 @@ wire modData = randData;
 /******************************************************************************
                             Instantiate a Modulator
 ******************************************************************************/
-wire    [17:0]iTx,qTx;
 wire    [31:0]fmModFreq;
 reg     fmModCS;
 reg     enableTx;
@@ -142,7 +142,9 @@ fmMod fmMod(
     .modDataValid(enableTx),
     .fmModFreq(fmModFreq)
     );
-dds dds ( 
+`ifdef USE_BASEBAND
+wire    [17:0]iTx,qTx;
+dds iqDds ( 
     .sclr(reset), 
     .clk(clk), 
     .we(1'b1), 
@@ -150,6 +152,47 @@ dds dds (
     .sine(qTx), 
     .cosine(iTx)
     );
+`else
+wire    [17:0]  iBB,qBB;
+dds iqDds ( 
+    .sclr(reset), 
+    .clk(clk), 
+    .we(1'b1), 
+    .data(fmModFreq), 
+    .sine(qBB), 
+    .cosine(iBB)
+    );
+wire    [17:0]  iLO,qLO;
+dds carrierDds (
+    .sclr(reset), 
+    .clk(clk), 
+    .we(1'b1), 
+    .data(carrierFreq), 
+    .sine(qLO), 
+    .cosine(iLO)
+    );
+wire [35:0]productI;
+mpy18x18 mpyI(.clk(clk), 
+                .sclr(reset),
+                .a(iBB), 
+                .b(iLO), 
+                .p(productI)
+                );
+wire [35:0]productQ;
+mpy18x18 mpyQ(.clk(clk), 
+                .sclr(reset),
+                .a(qBB), 
+                .b(qLO), 
+                .p(productQ)
+                );
+wire [35:0]carrierSum = productI + productQ;
+reg [17:0]iTx;
+wire [17:0]qTx = 18'h0;
+always @(posedge clk) begin
+    iTx <= carrierSum[35:18];
+    end
+`endif
+
 
 
 /******************************************************************************
@@ -469,7 +512,8 @@ initial begin
     // Init the fm modulator
     // Init the modulator register set
     fmModCS = 1;
-    write32(`FM_MOD_FREQ, carrierFreq + carrierOffsetFreq);
+    //write32(`FM_MOD_FREQ, carrierFreq + carrierOffsetFreq);
+    write32(`FM_MOD_FREQ, carrierOffsetFreq);
     write32(`FM_MOD_DEV, {14'bx,deviation});
     write32(`FM_MOD_BITRATE, {1'b0,15'bx,bitrateDivider});
     // This value is ceiling(log2(R*R)), where R = interpolation rate.

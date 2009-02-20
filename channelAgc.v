@@ -17,7 +17,7 @@ input   [11:0]  addr;
 input   [31:0]  din;
 output  [31:0]  dout;
 input   [17:0]  iIn,qIn;
-output  [19:0]  agcGain;
+output  [20:0]  agcGain;
 
 
 
@@ -161,6 +161,6 @@ agcLoopFilter chAgcLoopFilter(
     .loopOutput(loopOutput)
     );
 
-assign agcGain = loopOutput[31:12];
+assign agcGain = loopOutput[31:11];
 
 endmodule

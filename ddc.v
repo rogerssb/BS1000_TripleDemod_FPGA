@@ -22,7 +22,7 @@ input   [31:0]  din;
 output  [31:0]  dout;
 input   [31:0]  ddcFreqOffset;
 input           offsetEn;
-input   [19:0]  nbAgcGain;
+input   [20:0]  nbAgcGain;
 output          syncOut;
 input   [17:0]  iIn;
 input   [17:0]  qIn;
@@ -54,10 +54,15 @@ ddcRegs micro(
 
 // Create the LO frequency
 reg [31:0] ddcFreq;
+reg [31:0] newOffset;
 always @(posedge clk) begin
-    if (offsetEn) begin
-        ddcFreq <= ddcFreqOffset - ddcCenterFreq;
+    if (reset) begin
+        newOffset <= 0;
         end
+    if (offsetEn) begin
+        newOffset <= ddcFreqOffset;
+        end
+    ddcFreq <= ddcFreqOffset - ddcCenterFreq;
     end
 
 
@@ -144,13 +149,13 @@ wire            agcSync = bypassCic ? hb0SyncOut : cicSyncOut;
 wire    [17:0]  iAgc,qAgc;
 variableGain gainI(
     .clk(clk), .clkEn(agcSync),
-    .exponent(nbAgcGain[19:16]), .mantissa(nbAgcGain[15:0]),
+    .exponent(nbAgcGain[20:16]), .mantissa(nbAgcGain[15:0]),
     .din(iAgcIn),
     .dout(iAgc)
     );
 variableGain gainQ(
     .clk(clk), .clkEn(agcSync),
-    .exponent(nbAgcGain[19:16]), .mantissa(nbAgcGain[15:0]),
+    .exponent(nbAgcGain[20:16]), .mantissa(nbAgcGain[15:0]),
     .din(qAgcIn),
     .dout(qAgc)
     );
@@ -192,7 +197,7 @@ halfbandDecimate hb(
 `else
     .clk(clk), .reset(reset), .sync(agcSync),
 `endif
-    .iIn(iComp),.qIn(qComp),
+    .iIn(iHbIn),.qIn(qHbIn),
     .iOut(iHb),.qOut(qHb),
     .syncOut(hbSyncOut)
     );
@@ -202,6 +207,9 @@ real iHbReal = ((iHb > 131071.0) ? (iHb - 262144.0) : iHb)/131072.0;
 real qHbReal = ((qHb > 131071.0) ? (qHb - 262144.0) : qHb)/131072.0;
 `endif
 
+//assign iOut = iAgc;
+//assign qOut = qAgc;
+//assign syncOut = agcSync;
 assign iOut = bypassHb ? iAgc : iHb;
 assign qOut = bypassHb ? qAgc : qHb;
 assign syncOut = bypassHb ? agcSync : hbSyncOut;
@@ -216,3 +224,4 @@ always @(addr or cicDout or ddcDout) begin
     end
 
 endmodule
+                     

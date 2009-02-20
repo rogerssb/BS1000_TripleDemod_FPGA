@@ -114,28 +114,24 @@ always @(posedge clk) begin
 //            00<------|------------|-----80--------|---------|--------->ff
 // CASE1               LL                                     UL
 //
-wire [32:0] sum = {integrator[31],integrator} + {leadError[31],leadError};
+wire [32:0] sum = {1'b0,integrator} + {leadError[31],leadError};
 always @ (posedge clk or posedge reset) begin
     if (reset) begin
         integrator <= 0;
         end
     else if (clkEn) begin
-        // Have we overflowed the integrator?
-        if (sum[32]) begin     
-            // Yes. In which direction?
-            if (leadError[31]) begin
-                // negative
+        // Have we overflowed the integrator in the negative direction?
+        if (leadError[31] && sum[32]) begin     
                 integrator <= lowerLimit;
                 end
-            else begin
-                // positive
+        // Have we overflowed the integrator in the positive direction?
+        else if (!leadError[31] && sum[32]) begin
                 integrator <= upperLimit;
-                end
             end
         // Have we exceeded the limits?
-        else if (sum >= upperLimit)    
+        else if (sum[31:0] >= upperLimit)    
             integrator <= upperLimit;
-        else if (sum <= lowerLimit)       // between lower limit and 0
+        else if (sum[31:0] <= lowerLimit)  
             integrator <= lowerLimit;
         // Must be OK.
         else

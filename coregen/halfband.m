@@ -4,6 +4,8 @@ fn = fs/2;
 taps = 35;
 order = taps-1;
 
+writeFile == 0;
+
 delta = 0.05;
 qf = remez(order,[0 0.25-delta 0.25+delta 0.5]/fn,[1 1 0 0]);
 
@@ -31,12 +33,14 @@ hold on;
 plot(w1,20*log10(abs(H1)),'r'),grid
 
 
-fid = fopen('halfbandEven.coe','w');
-fprintf(fid,'radix=10;\n');
-fprintf(fid,'coefdata=\n');
-fprintf(fid,'%d,\n',qf(1:2:taps-2));
-fprintf(fid,'%d;\n',qf(taps));
-fclose(fid);
+if writeFile==1
+    fid = fopen('halfbandEven.coe','w');
+    fprintf(fid,'radix=10;\n');
+    fprintf(fid,'coefdata=\n');
+    fprintf(fid,'%d,\n',qf(1:2:taps-2));
+    fprintf(fid,'%d;\n',qf(taps));
+    fclose(fid);
+end
 
 
 
