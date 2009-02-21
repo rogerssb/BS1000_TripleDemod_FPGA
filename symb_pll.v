@@ -28,25 +28,14 @@ output [15:0]do;
 
 // processor write -------------------------------------------------------------
 
-reg [15:0]ref,fbk,vco,nco_step;
-always @(negedge wr) begin
-    if(en) begin
-        casex (a)
-            `SYMB_PLL_REF: ref <= di;
-            `SYMB_PLL_FBK: fbk <= di;
-            `SYMB_PLL_VCO: vco <= di;
-            `SYMB_PLL_NCO: nco_step <= di;
-            default: ;
-        endcase
-    end
-end
+`ifdef MANUAL_NCO_SETUP
 
-/*
 wire [15:0]ref = 1;
 wire [15:0]fbk = 1;
 wire [15:0]vco = 1;
 
 parameter vco_freq = 10;  // KHz
+
 parameter nco_step =  vco_freq == 10 ? 7 : (
                       vco_freq == 20 ? 13 : (
                       vco_freq == 50 ? 33 : (
@@ -58,13 +47,28 @@ parameter nco_step =  vco_freq == 10 ? 7 : (
                       vco_freq == 5000 ? 3277 : (
                       vco_freq == 6250 ? 4096 : 0 )))))))));
 
-*/
+`else
+
+reg [15:0]ref,fbk,vco,nco_step;
+always @(negedge wr)begin
+  if(en)begin
+    casex (a)
+      `SYMB_PLL_REF: ref <= di;
+      `SYMB_PLL_FBK: fbk <= di;
+      `SYMB_PLL_VCO: vco <= di;
+      `SYMB_PLL_NCO: nco_step <= di;
+      default: ;
+    endcase
+  end
+end
+
+`endif
 
 // processor read --------------------------------------------------------------
 
 reg [15:0]do;
-always @(a or en or ref or fbk or vco or nco_step) begin
-  if(en) begin
+always @(a or en or ref or fbk or vco or nco_step)begin
+  if(en)begin
     casex(a)
       `SYMB_PLL_REF: do <= ref;
       `SYMB_PLL_FBK: do <= fbk;
@@ -78,16 +82,19 @@ end
 
 // test nco --------------------------------------------------------------------
 
+`define USE_NCO
+`ifdef USE_NCO
 reg [15:0]acc;
-reg test_clk_en;
+reg nco_clk_en;
 wire [15:0]acc_in = acc+nco_step;
 always @(posedge clk or posedge rs)begin
   if(rs)acc <= 0;
   else begin
     acc <= acc_in;
-    test_clk_en <= !acc[15] && acc_in[15];
+    nco_clk_en <= !acc[15] && acc_in[15];
     end
   end
+`endif
 
 // reference divider -----------------------------------------------------------
 
@@ -99,8 +106,13 @@ always @(posedge clk or posedge rs)begin
     ref_cnt <= 1;
     ref_div <= 0;
     end
-//  else if(clk_en)begin
-  else if(test_clk_en)begin
+
+  `ifdef USE_NCO
+  else if(nco_clk_en)begin
+  `else
+  else if(clk_en)begin
+  `endif
+
     if(ref_cnt == ref_cnt_tc)begin
       ref_cnt <= 1;
       ref_div <= !ref_div;
@@ -112,7 +124,6 @@ always @(posedge clk or posedge rs)begin
     end
 end
 
-`define USE_NCO
 `ifdef USE_NCO
 assign clk_ref = ref < 2 ? acc[15] : ref_div;
 `else
