@@ -142,6 +142,7 @@ fmMod fmMod(
     .modDataValid(enableTx),
     .fmModFreq(fmModFreq)
     );
+`define USE_BASEBAND
 `ifdef USE_BASEBAND
 wire    [17:0]iTx,qTx;
 dds iqDds ( 
@@ -149,9 +150,10 @@ dds iqDds (
     .clk(clk), 
     .we(1'b1), 
     .data(fmModFreq), 
-    .sine(qTx), 
+    .sine(), 
     .cosine(iTx)
     );
+assign qTx = 18'h0;
 `else
 wire    [17:0]  iBB,qBB;
 dds iqDds ( 
@@ -512,8 +514,8 @@ initial begin
     // Init the fm modulator
     // Init the modulator register set
     fmModCS = 1;
-    //write32(`FM_MOD_FREQ, carrierFreq + carrierOffsetFreq);
-    write32(`FM_MOD_FREQ, carrierOffsetFreq);
+    write32(`FM_MOD_FREQ, carrierFreq + carrierOffsetFreq);
+    //write32(`FM_MOD_FREQ, carrierOffsetFreq);
     write32(`FM_MOD_DEV, {14'bx,deviation});
     write32(`FM_MOD_BITRATE, {1'b0,15'bx,bitrateDivider});
     // This value is ceiling(log2(R*R)), where R = interpolation rate.
@@ -526,7 +528,7 @@ initial begin
     // Init the sample rate loop filters
     write32(createAddress(`RESAMPSPACE,`RESAMPLER_RATE),resamplerFreqInt);
     write32(createAddress(`BITSYNCSPACE,`LF_CONTROL),1);    // Zero the error
-    write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h001a0014);    
+    write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h001b0016);    
     //write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h0014000c);    
     write32(createAddress(`BITSYNCSPACE,`LF_LIMIT), resamplerLimitInt);    
 

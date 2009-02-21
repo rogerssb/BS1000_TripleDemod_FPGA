@@ -235,7 +235,11 @@ demod demod(
     .dac1Sync(dac1Sync),
     .dac1Data(dac1Out),
     .dac2Sync(dac2Sync),
-    .dac2Data(dac2Out)
+    .dac2Data(dac2Out),
+    .iDataClk(iDataClk),
+    .iBit(iBit),
+    .qDataClk(qDataClk),
+    .qBit(qBit)
     );
 `endif
 

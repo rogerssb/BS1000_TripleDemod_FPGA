@@ -59,7 +59,7 @@ always @(posedge clk) begin
     if (reset) begin
         newOffset <= 0;
         end
-    if (offsetEn) begin
+    else if (offsetEn) begin
         newOffset <= ddcFreqOffset;
         end
     ddcFreq <= ddcFreqOffset - ddcCenterFreq;

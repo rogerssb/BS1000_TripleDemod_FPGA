@@ -76,15 +76,14 @@ ddc ddc(
     .addr(addr),
     .din(din),
     .dout(ddcDout),
-    //.ddcFreqOffset(carrierFreqOffset),
-    //.offsetEn(carrierOffsetEn),
+    .ddcFreqOffset(carrierFreqOffset),
+    .offsetEn(carrierOffsetEn),
     .nbAgcGain(nbAgcGain),
-    .ddcFreqOffset(32'h0),
-    .offsetEn(1'b1),
+    //.ddcFreqOffset(32'h0),
+    //.offsetEn(1'b1),
     //.nbAgcGain(21'h0),
     .syncOut(ddcSync),
-    //.iIn(iRx), .qIn(qRx), 
-    .iIn(18'h0ffff), .qIn(18'h0), 
+    .iIn(iRx), .qIn(qRx), 
     .iOut(iDdc), .qOut(qDdc)
     );
 
@@ -103,7 +102,7 @@ channelAGC channelAGC(
     );
     
 
-`define RESAMPLER_FIRST
+//`define RESAMPLER_FIRST
 `ifdef RESAMPLER_FIRST
 /******************************************************************************
                                   Resampler
@@ -381,8 +380,8 @@ always @(posedge clk) begin
             dac0Data <= iDdc;
             dac1Sync <= ddcSync;
             dac1Data <= qDdc;
-            dac2Sync <= ddcSync;
-            dac2Data <= {freq,10'b0};
+            dac2Sync <= resampSync;
+            dac2Data <= demodData;
             end
         `MODE_BPSK: begin
             dac0Sync <= ddcSync;

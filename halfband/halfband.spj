@@ -8,13 +8,13 @@ MainFile=
 [DebugMode]
 CommandLine=+define+SIMULATE
 [Analyzer]
-C0Width=124
+C0Width=182
 C1Width=58
-C2Width=68
+C2Width=94
 GotoSource=N
 SymbolFile=
 [View]
-1=Last 1336.236ns 13323.636ns 387.315ns 9005.073ns 3586.147ns
+1=Last 0.000ns 12919.999ns 452.589ns 3338.171ns 3519.952ns
 [LibraryFiles]
 0=..\..\..\Xilinx\10.1\ISE\verilog\src\unisims\{.v}
 [Files]
@@ -30,16 +30,17 @@ Name="Default"
 2="test.hb : ( {oddOut[17],oddOut[17:2]} )" default Unknown
 3="test.hb : evenOut[27:10]" default Unknown
 4="test.hb : outIReal" default Real AnalogDisplay AType=Step Scale=Auto
-5="test : bitCount[5:0]" default
-6="test.hb : syncOut" default
-7="test.hb : evenSync" default
-8="test.hb : \fifo[0] [17:0]" default Unknown
-9="test : hbOut[17:0]" default
-10="test : hbIn[17:0]" default
-11="test : sync" default
-12="test : reset" default
-13="test : clk" default
+5="test.hb : inIReal" default Real AnalogDisplay AType=Step Scale=Auto
+6="test : bitCount[5:0]" default Unknown
+7="test.hb : syncOut" default
+8="test.hb : evenSync" default
+9="test.hb : \fifo[0] [17:0]" default Unknown
+10="test : hbOut[17:0]" default
+11="test : hbIn[17:0]" default
+12="test.hb : decCount[1:0]" default
+13="test : sync" default
+14="test : reset" default
+15="test : clk" default
 OpenGroup=Yes
 [GroupInfo]
 0=Default : 0 : 1 : 0
-[Bookmarks]

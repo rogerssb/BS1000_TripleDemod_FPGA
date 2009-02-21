@@ -1,7 +1,7 @@
 ##############################################################
 #
-# Xilinx Core Generator version K.31
-# Date: Sat Aug 09 00:35:53 2008
+# Xilinx Core Generator version K.39
+# Date: Sat Feb 21 12:26:42 2009
 #
 ##############################################################
 #
@@ -36,7 +36,7 @@ SELECT FIR_Compiler family Xilinx,_Inc. 3.2
 # END Select
 # BEGIN Parameters
 CSET allow_rounding_approximation=false
-CSET clock_frequency=40
+CSET clock_frequency=100
 CSET coefficient_buffer_type=Not_Applicable
 CSET coefficient_file=C:/modem/fskRadio/coregen/halfbandEven.coe
 CSET coefficient_reload=false
@@ -72,11 +72,11 @@ CSET preference_for_other_storage=Not_Applicable
 CSET quantization=Integer_Coefficients
 CSET rate_change_type=Integer
 CSET registered_output=true
-CSET sample_frequency=10
+CSET sample_frequency=50
 CSET stopband_max=1.0
 CSET stopband_min=0.5
 CSET zero_pack_factor=1
 # END Parameters
 GENERATE
-# CRC: 58a95ff1
+# CRC: 890a9241
 

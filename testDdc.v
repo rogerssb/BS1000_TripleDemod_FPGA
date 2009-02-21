@@ -332,35 +332,43 @@ initial begin
 
 
     // Check different carrier Frequencies
-    carrierFreqHz <= 1e4;
+    carrierFreqHz = 1e4;
+    #(1*C) ;
     write32(createAddress(`DDCSPACE,`DDC_CENTER_FREQ), carrierFreq);
     #(50*bitrateSamplesInt*C) ;
 
-    carrierFreqHz <= 1e5;
+    carrierFreqHz = 1e5;
+    #(1*C) ;
     write32(createAddress(`DDCSPACE,`DDC_CENTER_FREQ), carrierFreq);
     #(50*bitrateSamplesInt*C) ;
 
-    carrierFreqHz <= 2e5;
+    carrierFreqHz = 2e5;
+    #(1*C) ;
     write32(createAddress(`DDCSPACE,`DDC_CENTER_FREQ), carrierFreq);
     #(50*bitrateSamplesInt*C) ;
 
-    carrierFreqHz <= 4e5;
+    carrierFreqHz = 4e5;
+    #(1*C) ;
     write32(createAddress(`DDCSPACE,`DDC_CENTER_FREQ), carrierFreq);
     #(50*bitrateSamplesInt*C) ;
 
-    carrierFreqHz <= 8e5;
+    carrierFreqHz = 8e5;
+    #(1*C) ;
     write32(createAddress(`DDCSPACE,`DDC_CENTER_FREQ), carrierFreq);
     #(50*bitrateSamplesInt*C) ;
 
-    carrierFreqHz <= 16e5;
+    carrierFreqHz = 16e5;
+    #(1*C) ;
     write32(createAddress(`DDCSPACE,`DDC_CENTER_FREQ), carrierFreq);
     #(50*bitrateSamplesInt*C) ;
 
-    carrierFreqHz <= 1.6e6;
+    carrierFreqHz = 1.6e6;
+    #(1*C) ;
     write32(createAddress(`DDCSPACE,`DDC_CENTER_FREQ), carrierFreq);
     #(50*bitrateSamplesInt*C) ;
 
-    carrierFreqHz <= 4.6e6;
+    carrierFreqHz = 4.6e6;
+    #(1*C) ;
     write32(createAddress(`DDCSPACE,`DDC_CENTER_FREQ), carrierFreq);
     #(50*bitrateSamplesInt*C) ;
 

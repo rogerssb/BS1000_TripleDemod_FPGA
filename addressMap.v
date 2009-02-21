@@ -60,7 +60,7 @@
 `define ALF_INTEGRATOR  12'bxxxx_xxx1_01xx
 
 // Define the DDC memory map
-`define RESAMPLER_RATE  12'hxx0
+`define RESAMPLER_RATE  12'bxxxx_xxxx_00xx
 
 // Define the interpolator memory map
 `define INTERP_EXPONENT 12'bxxxx_xxxx_00xx
@@ -68,17 +68,17 @@
 
 
 // Define the MISCELLANEOUS locations
-`define RESET       12'hxx0
-`define VERSION     12'hxx2
+`define RESET           12'bxxxx_xxxx_x00x
+`define VERSION         12'bxxxx_xxxx_x01x
 
 // Define the GPIO locations
-`define LEDS        12'hxx0
+`define LEDS            12'bxxxx_xxxx_xx0x
 
 // Define the DAC control locations
-`define DAC_WDATA      12'hxx0
-`define DAC_RDATA      12'hxx2
-`define DAC_SELECT     12'hxx4
-`define DAC_STATUS     12'hxx6
+`define DAC_WDATA       12'bxxxx_xxxx_x00x
+`define DAC_RDATA       12'bxxxx_xxxx_x01x
+`define DAC_SELECT      12'bxxxx_xxxx_x10x
+`define DAC_STATUS      12'bxxxx_xxxx_x11x
 
 
 `endif

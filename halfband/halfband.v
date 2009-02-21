@@ -28,7 +28,7 @@ wire [32:0]evenOutI;
 wire [32:0]evenOutQ;
 halfbandEven evenFirI(
     .clk(clk),
-    .nd(evenSync & sync),
+    .nd((evenSync & sync) | reset),
     .rfd(),
     .rdy(),
     .din(iIn),
@@ -36,7 +36,7 @@ halfbandEven evenFirI(
     );
 halfbandEven evenFirQ(
     .clk(clk),
-    .nd(evenSync & sync),
+    .nd((evenSync & sync) | reset),
     .rfd(),
     .rdy(),
     .din(qIn),
@@ -53,7 +53,7 @@ always @(posedge clk) begin
         fifoMux <= decCount;
         end
     else begin
-        if (decCount < 2) begin
+        if (decCount < 3) begin
             decCount <= decCount + 1;
             end
         end
@@ -103,20 +103,20 @@ always @(posedge clk) begin
 reg [17:0]oddOutI,oddOutQ;
 always @(
     fifoMux or 
-    fifoI[14] or fifoI[11] or fifoI[10] or
-    fifoQ[14] or fifoQ[11] or fifoQ[10]) begin
+    fifoI[15] or fifoI[12] or fifoI[11] or fifoI[10] or
+    fifoQ[15] or fifoQ[12] or fifoQ[11] or fifoQ[10]) begin
     case(fifoMux)
         0: begin
-            oddOutI = fifoI[14];
-            oddOutQ = fifoQ[14];
+            oddOutI = fifoI[15];
+            oddOutQ = fifoQ[15];
             end
         1: begin
-            oddOutI = fifoI[11];
-            oddOutQ = fifoQ[11];
+            oddOutI = fifoI[12];
+            oddOutQ = fifoQ[12];
             end
         2: begin
-            oddOutI = fifoI[10];
-            oddOutQ = fifoQ[10];
+            oddOutI = fifoI[11];
+            oddOutQ = fifoQ[11];
             end
         default: begin
             oddOutI = fifoI[10];
@@ -177,6 +177,7 @@ always @(posedge clk) begin
     end
 
 `ifdef SIMULATE
+real inIReal = ((iIn > 131071.0) ? (iIn - 262144.0) : iIn)/131072.0;
 real outIReal = ((iOut > 131071.0) ? (iOut - 262144.0) : iOut)/131072.0;
 real outQReal = ((qOut > 131071.0) ? (qOut - 262144.0) : qOut)/131072.0;
 `endif
@@ -196,6 +197,7 @@ module test;
 reg reset,clk;
 
 // Create the clocks
+parameter decimation = 1;
 parameter HC = 5;
 parameter C = 2*HC;
 reg clken;
@@ -205,7 +207,7 @@ reg sync;
 reg [3:0]syncCount;
 always @(posedge clk) begin
     if (syncCount == 0) begin
-        syncCount <= 0;
+        syncCount <= decimation-1;
         sync <= 1;
         end
     else begin
@@ -241,7 +243,9 @@ wire [17:0]sineOut;
 dds dds(.sclr(reset), .clk(clk), .we(1'b1), .data(freq), .sine(sineOut), .cosine());
 
 always @(posedge clk) begin
-    hbIn <= sineOut;
+    if (sync) begin
+        hbIn <= sineOut;
+        end
     end
 
 initial begin
@@ -261,19 +265,19 @@ initial begin
 
     #(256*C) ;
 
-    carrierFreqHz = 20e6/2;
+    carrierFreqHz = 20e6/decimation;
 
     #(256*C) ;
 
-    carrierFreqHz = 25e6/2;
+    carrierFreqHz = 25e6/decimation;
 
     #(256*C) ;
 
-    carrierFreqHz = 30e6/2;
+    carrierFreqHz = 30e6/decimation;
 
     #(256*C) ;
 
-    carrierFreqHz = 35e6/2;
+    carrierFreqHz = 35e6/decimation;
 
     #(256*C) ;
 
@@ -292,13 +296,15 @@ always @(posedge clk) begin
             hbIn <= 18'h10000;
             end
         else if (bitCount == 1) begin
-            hbIn <= 18'h10000;
+            //hbIn <= 18'h10000;
+            hbIn <= 18'h00000;
             end
         else if (bitCount == 63) begin
             hbIn <= 18'h10000;
             end
         else if (bitCount == 64) begin
-            hbIn <= 18'h10000;
+            //hbIn <= 18'h10000;
+            hbIn <= 18'h00000;
             end
         else begin
             hbIn <= 18'h0;
