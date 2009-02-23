@@ -15,7 +15,7 @@ GotoSource=N
 [DebugMode]
 CommandLine=+define+SIMULATE
 [View]
-1=Last 0.000ns 0.000ns 16879.014ns 136708.507ns 139895.290ns
+1=Last 116641.840ns 823991.324ns 16449.988ns 136708.507ns 139895.290ns
 [Group0]
 Name=New Group2
 [Group3]
@@ -26,6 +26,7 @@ Name="Micro"
 3="test.demod : wr3" default
 4="test.demod : din[31:0]" default
 5="test.demod : addr[11:0]" default
+OpenGroup=
 [Group2]
 Name="Tx"
 0="test.fmMod : interpReal" default Real AnalogDisplay AType=Step Scale=Auto
@@ -39,6 +40,7 @@ Name="Tx"
 8="test.fmMod : modClk" default
 9="test.fmMod : reset" default
 10="test.fmMod : clk" default
+OpenGroup=
 [Group5]
 Name="Carrier"
 0="test.demod.carrierLoop.lagGain : sweepOffsetMag[31:0]" default
@@ -53,6 +55,7 @@ Name="Carrier"
 9="test.demod.carrierLoop : offsetError[7:0]" default
 10="test.demod.bitsync : offsetErrorSum[8:0]" default
 11="test.demod : freq[7:0]" default
+OpenGroup=
 [IncDirs]
 0=.
 [PliFiles]
@@ -113,7 +116,6 @@ Name="DAC"
 2="test.dac0Interp : interpReal" default Real AnalogDisplay AType=Step Scale=Auto
 3="test.dac0Interp : exponentAdjusted[17:0]" default
 4="test.dac0Interp : dataIn[17:0]" default
-OpenGroup=
 [Group1]
 Name="Rx"
 0="test.demod.resampler : reset" default
@@ -134,7 +136,6 @@ Name="Rx"
 15="test.demod.ddc : qMixReal" default Real AnalogDisplay AType=Step Scale=Auto
 16="test.demod.ddc : iMixReal" default Real AnalogDisplay AType=Step Scale=Auto
 17="test : iSignalReal" default Real AnalogDisplay AType=Step Scale=Auto
-OpenGroup=
 [Group4]
 Name="Bitsync"
 0="test.demod.bitsync : slip" default
@@ -166,4 +167,3 @@ OpenGroup=Yes
 4=Bitsync : 4 : 1 : 0
 5=Carrier : 5 : 1 : 0
 6=DAC : 6 : 1 : 0
-[Bookmarks]

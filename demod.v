@@ -381,7 +381,7 @@ always @(posedge clk) begin
             dac1Sync <= ddcSync;
             dac1Data <= qDdc;
             dac2Sync <= resampSync;
-            dac2Data <= demodData;
+            dac2Data <= iSym;
             end
         `MODE_BPSK: begin
             dac0Sync <= ddcSync;
