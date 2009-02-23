@@ -63,8 +63,9 @@
 `define RESAMPLER_RATE  12'bxxxx_xxxx_00xx
 
 // Define the interpolator memory map
-`define INTERP_EXPONENT 12'bxxxx_xxxx_00xx
-`define INTERP_MANTISSA 12'bxxxx_xxxx_01xx
+`define INTERP_CONTROL  12'bxxxx_xxxx_00xx
+`define INTERP_EXPONENT 12'bxxxx_xxxx_01xx
+`define INTERP_MANTISSA 12'bxxxx_xxxx_10xx
 
 
 // Define the MISCELLANEOUS locations

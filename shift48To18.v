@@ -58,128 +58,128 @@ always @(posedge clk) begin
         // Check for overflow
         case (shift)
             0: begin
+                satPos <= !sign && (dIn[47:15] != 33'h0_0000_0000);
+                satNeg <=  sign && (dIn[47:15] != 33'h1_ffff_ffff);
+                end
+            1: begin
                 satPos <= !sign && (dIn[47:16] != 32'h0000_0000);
                 satNeg <=  sign && (dIn[47:16] != 32'hffff_ffff);
                 end
-            1: begin
+            2: begin
                 satPos <= !sign && (dIn[47:17] != 31'h0000_0000);
                 satNeg <=  sign && (dIn[47:17] != 31'h7fff_ffff);
                 end
-            2: begin
+            3: begin
                 satPos <= !sign && (dIn[47:18] != 30'h0000_0000);
                 satNeg <=  sign && (dIn[47:18] != 30'h3fff_ffff);
                 end
-            3: begin
+            4: begin
                 satPos <= !sign && (dIn[47:19] != 29'h0000_0000);
                 satNeg <=  sign && (dIn[47:19] != 29'h1fff_ffff);
                 end
-            4: begin
-                satPos <= !sign && (dIn[47:20] != 28'h0000_000);
-                satNeg <=  sign && (dIn[47:20] != 28'hffff_fff);
-                end
             5: begin
-                satPos <= !sign && (dIn[47:21] != 27'h0000_000);
-                satNeg <=  sign && (dIn[47:21] != 27'h7fff_fff);
+                satPos <= !sign && (dIn[47:20] != 28'h000_0000);
+                satNeg <=  sign && (dIn[47:20] != 28'hfff_ffff);
                 end
             6: begin
-                satPos <= !sign && (dIn[47:22] != 26'h0000_000);
-                satNeg <=  sign && (dIn[47:22] != 26'h3fff_fff);
+                satPos <= !sign && (dIn[47:21] != 27'h000_0000);
+                satNeg <=  sign && (dIn[47:21] != 27'h7ff_ffff);
                 end
             7: begin
-                satPos <= !sign && (dIn[47:23] != 25'h0000_000);
-                satNeg <=  sign && (dIn[47:23] != 25'h1fff_fff);
+                satPos <= !sign && (dIn[47:22] != 26'h000_0000);
+                satNeg <=  sign && (dIn[47:22] != 26'h3ff_ffff);
                 end
             8: begin
-                satPos <= !sign && (dIn[47:24] != 24'h0000_00);
-                satNeg <=  sign && (dIn[47:24] != 24'hffff_ff);
+                satPos <= !sign && (dIn[47:23] != 25'h00_0000);
+                satNeg <=  sign && (dIn[47:23] != 25'h1ff_ffff);
                 end
             9: begin
-                satPos <= !sign && (dIn[47:25] != 23'h0000_00);
-                satNeg <=  sign && (dIn[47:25] != 23'h7fff_ff);
+                satPos <= !sign && (dIn[47:24] != 24'h00_0000);
+                satNeg <=  sign && (dIn[47:24] != 24'hff_ffff);
                 end
            10: begin
-                satPos <= !sign && (dIn[47:26] != 22'h0000_00);
-                satNeg <=  sign && (dIn[47:26] != 22'h3fff_ff);
+                satPos <= !sign && (dIn[47:25] != 23'h00_0000);
+                satNeg <=  sign && (dIn[47:25] != 23'h7f_ffff);
                 end
            11: begin
-                satPos <= !sign && (dIn[47:27] != 21'h0000_00);
-                satNeg <=  sign && (dIn[47:27] != 21'h1fff_ff);
+                satPos <= !sign && (dIn[47:26] != 22'h00_0000);
+                satNeg <=  sign && (dIn[47:26] != 22'h3f_ffff);
                 end
            12: begin
-                satPos <= !sign && (dIn[47:28] != 20'h0000_0);
-                satNeg <=  sign && (dIn[47:28] != 20'hffff_f);
+                satPos <= !sign && (dIn[47:27] != 21'h00_0000);
+                satNeg <=  sign && (dIn[47:27] != 21'h1f_ffff);
                 end
            13: begin
-                satPos <= !sign && (dIn[47:29] != 19'h0000_0);
-                satNeg <=  sign && (dIn[47:29] != 19'h7fff_f);
+                satPos <= !sign && (dIn[47:28] != 20'h0_0000);
+                satNeg <=  sign && (dIn[47:28] != 20'hf_ffff);
                 end
            14: begin
-                satPos <= !sign && (dIn[47:30] != 18'h0000_0);
-                satNeg <=  sign && (dIn[47:30] != 18'h3fff_f);
+                satPos <= !sign && (dIn[47:29] != 19'h0_0000);
+                satNeg <=  sign && (dIn[47:29] != 19'h7_ffff);
                 end
            15: begin
-                satPos <= !sign && (dIn[47:31] != 17'h0000_0);
-                satNeg <=  sign && (dIn[47:31] != 17'h1fff_f);
+                satPos <= !sign && (dIn[47:30] != 18'h0_0000);
+                satNeg <=  sign && (dIn[47:30] != 18'h3_ffff);
                 end
            16: begin
+                satPos <= !sign && (dIn[47:31] != 17'h0_0000);
+                satNeg <=  sign && (dIn[47:31] != 17'h1_ffff);
+                end
+           17: begin
                 satPos <= !sign && (dIn[47:32] != 16'h0000);
                 satNeg <=  sign && (dIn[47:32] != 16'hffff);
                 end
-           17: begin
+           18: begin
                 satPos <= !sign && (dIn[47:33] != 15'h0000);
                 satNeg <=  sign && (dIn[47:33] != 15'h7fff);
                 end
-           18: begin
+           19: begin
                 satPos <= !sign && (dIn[47:34] != 14'h0000);
                 satNeg <=  sign && (dIn[47:34] != 14'h3fff);
                 end
-           19: begin
-                satPos <= !sign && (dIn[47:35] != 13'h0000);
+           20: begin
+                satPos <= !sign && (dIn[47:35] != 13'h000);
                 satNeg <=  sign && (dIn[47:35] != 13'h1fff);
                 end
-           20: begin
+           21: begin
                 satPos <= !sign && (dIn[47:36] != 12'h000);
                 satNeg <=  sign && (dIn[47:36] != 12'hfff);
                 end
-           21: begin
+           22: begin
                 satPos <= !sign && (dIn[47:37] != 11'h000);
                 satNeg <=  sign && (dIn[47:37] != 11'h7ff);
                 end
-           22: begin
+           23: begin
                 satPos <= !sign && (dIn[47:38] != 10'h000);
                 satNeg <=  sign && (dIn[47:38] != 10'h3ff);
                 end
-           23: begin
-                satPos <= !sign && (dIn[47:39] !=  9'h000);
+           24: begin
+                satPos <= !sign && (dIn[47:39] !=  9'h00);
                 satNeg <=  sign && (dIn[47:39] !=  9'h1ff);
                 end
-           24: begin
+           25: begin
                 satPos <= !sign && (dIn[47:40] !=  8'h00);
                 satNeg <=  sign && (dIn[47:40] !=  8'hff);
                 end
-           25: begin
+           26: begin
                 satPos <= !sign && (dIn[47:41] !=  7'h00);
                 satNeg <=  sign && (dIn[47:41] !=  7'h7f);
                 end
-           26: begin
+           27: begin
                 satPos <= !sign && (dIn[47:42] !=  6'h00);
                 satNeg <=  sign && (dIn[47:42] !=  6'h3f);
                 end
-           27: begin
-                satPos <= !sign && (dIn[47:43] !=  5'h00);
+           28: begin
+                satPos <= !sign && (dIn[47:43] !=  5'h0);
                 satNeg <=  sign && (dIn[47:43] !=  5'h1f);
                 end
-           28: begin
+           29: begin
                 satPos <= !sign && (dIn[47:44] !=  4'h0);
                 satNeg <=  sign && (dIn[47:44] !=  4'hf);
                 end
-           29: begin
+           30: begin
                 satPos <= !sign && (dIn[47:45] !=  3'h0);
                 satNeg <=  sign && (dIn[47:45] !=  3'h7);
-                end
-           30: begin
-                satPos <= !sign && (dIn[47:46] !=  2'h0);
-                satNeg <=  sign && (dIn[47:46] !=  2'h3);
                 end
             default: begin
                 satPos <= 0;

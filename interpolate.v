@@ -31,14 +31,31 @@ interpRegs regs  (
     .dataIn(din),
     .dataOut(dout),
     .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+    .bypass(bypass),
     .exponent(exponent),
     .mantissa(mantissa)
     );
 
+reg cicReset;
+reg bp0,bp1,bp2;
+always @(posedge clk) begin
+    if (clkEn) begin
+        bp0 <= bypass;
+        bp1 <= bp0;
+        bp2 <= bp1;
+        if (!bp1 && bp2) begin
+            cicReset <= 1;
+            end
+        else begin
+            cicReset <= 0;
+            end
+        end
+    end
+
 // CIC Interpolation Filter
 wire [47:0]cicOut;
 cicInterpolate cicInterpolate(
-    .clk(clk), .reset(reset), .clkEn(clkEn),
+    .clk(clk), .reset(reset | cicReset), .clkEn(clkEn),
     .dIn(dataIn),
     .dOut(cicOut)
     );
@@ -52,16 +69,27 @@ shift48to18 cicGainAdjust(
 
 wire [35:0]scaledValue;
 mpy18x18 mantissaScaler (
-    .sclr(1'b0),
+    .sclr(cicReset),
     .clk(clk),
     .a(exponentAdjusted),
     .b(mantissa),
     .p(scaledValue)
     );
 
-assign dataOut = scaledValue[34:17];
+reg     [17:0]  dataOut;
+always @(posedge clk) begin
+    if (bypass) begin
+        if (clkEn) begin
+            dataOut <= dataIn;
+            end
+        end
+    else begin
+        dataOut <= scaledValue[33:16];
+        end
+    end
 
 `ifdef SIMULATE
+real expAdjReal = (exponentAdjusted[17] ? (exponentAdjusted - 262144.0) : exponentAdjusted)/131072.0;
 real interpReal = (dataOut[17] ? (dataOut - 262144.0) : dataOut)/131072.0;
 `endif
 

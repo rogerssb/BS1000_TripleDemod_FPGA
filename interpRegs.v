@@ -8,6 +8,7 @@ module interpRegs(
     dataIn,
     dataOut,
     wr0, wr1, wr2, wr3,
+    bypass,
     exponent,
     mantissa
     );
@@ -24,10 +25,14 @@ reg     [4:0]exponent;
 output  [17:0] mantissa;
 reg     [17:0] mantissa;
 
+output  bypass;
+reg     bypass;
+
 
 always @(negedge wr0) begin
     if (cs) begin
         casex (addr)
+            `INTERP_CONTROL:    bypass <= dataIn[0];
             `INTERP_MANTISSA:   mantissa[7:0] <= dataIn[7:0];
             `INTERP_EXPONENT:   exponent[4:0] <= dataIn[4:0];
             default:  ;
@@ -55,11 +60,13 @@ always @(negedge wr2) begin
 
 reg [31:0]dataOut;
 always @(cs or addr or
+         bypass or
          exponent or 
          mantissa)
     begin
     if (cs) begin
         casex (addr)
+            `INTERP_CONTROL:    dataOut <= {31'h0,bypass};
             `INTERP_MANTISSA:   dataOut <= {14'bx,mantissa};
             `INTERP_EXPONENT:   dataOut <= {27'bx,exponent};
             default:            dataOut <= 32'hx;

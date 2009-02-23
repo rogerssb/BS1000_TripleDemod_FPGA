@@ -97,13 +97,13 @@ always @(demodMode or offsetError or offsetErrorEn or phase or freq or ddcSync o
             modeErrorEn <= offsetErrorEn;
             end
         `MODE_BPSK: begin
-            sync <= resampSync;
-            modeError <= {phase[6:0],1'b0};
+            sync <= ddcSync;
+            modeError <= {phase[6:0],1'b0} - 8'h40;
             modeErrorEn <= 1'b1;
             end
         `MODE_QPSK,
         `MODE_OQPSK: begin
-            sync <= resampSync;
+            sync <= ddcSync;
             modeError <= {phase[5:0],2'b0} - 8'h20;
             modeErrorEn <= 1'b1;
             end

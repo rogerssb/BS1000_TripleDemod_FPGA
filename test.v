@@ -22,7 +22,8 @@ reg [31:0]d;
 wire [31:0]dout;
 
 // Create the clocks
-parameter SAMPLE_FREQ = 9.333333e6;
+//parameter SAMPLE_FREQ = 9.333333e6;
+parameter SAMPLE_FREQ = 10e6;
 parameter HC = 1e9/SAMPLE_FREQ/2;
 parameter C = 2*HC;
 reg clken;
@@ -33,7 +34,7 @@ always #HC clk = clk^clken;
 `define TWO_POW_17      131072.0
 
 
-real carrierFreqHz = 2333333.0;
+real carrierFreqHz = 2500000.0;
 real carrierFreqNorm = carrierFreqHz * `SAMPLE_PERIOD * `TWO_POW_32;
 integer carrierFreqInt = carrierFreqNorm;
 wire [31:0] carrierFreq = carrierFreqInt;
@@ -50,7 +51,7 @@ wire [31:0] carrierLimit = carrierLimitInt;
 
 wire [31:0] sweepRate = 32'h00800000;
 
-real bitrateBps = 250000.0;
+real bitrateBps = 400000.0;
 real bitrateSamples = 1/bitrateBps/`SAMPLE_PERIOD/2.0;
 integer bitrateSamplesInt = bitrateSamples;
 wire [15:0]bitrateDivider = bitrateSamplesInt - 1;
@@ -58,7 +59,7 @@ real actualBitrateBps = SAMPLE_FREQ/bitrateSamplesInt/2.0;
 
 // value = 2^ceiling(log2(R*R))/(R*R), where R = interpolation rate of the FM
 // modulator
-real interpolationGain = 1.28;
+real interpolationGain = 1.77777777;
 
 //real deviationHz = 0*0.35 * bitrateBps;
 real deviationHz = 2*0.35 * bitrateBps;
@@ -505,7 +506,7 @@ initial begin
     we0 = 0; we1 = 0; we2 = 0; we3 = 0; 
     d = 32'hz;
     fmModCS = 0;
-    txScaleFactor = 0.25;
+    txScaleFactor = 0.707;
 
     // Turn on the clock
     clken=1;
@@ -548,18 +549,21 @@ initial begin
 
     // Init the channel agc loop filter
     write32(createAddress(`CHAGCSPACE,`ALF_CONTROL),1);                 // Zero the error
-    write32(createAddress(`CHAGCSPACE,`ALF_SETPOINT),32'h000000f0);     // AGC Setpoint
+    write32(createAddress(`CHAGCSPACE,`ALF_SETPOINT),32'h000000f8);     // AGC Setpoint
     write32(createAddress(`CHAGCSPACE,`ALF_GAINS),32'h00180018);        // AGC Loop Gain
     write32(createAddress(`CHAGCSPACE,`ALF_ULIMIT),32'h4fffffff);       // AGC Upper limit
     write32(createAddress(`CHAGCSPACE,`ALF_LLIMIT),32'h00000000);       // AGC Lower limit
 
     // Set the DAC interpolator gains
+    write32(createAddress(`INTERP0SPACE, `INTERP_CONTROL),0);
     write32(createAddress(`INTERP0SPACE, `INTERP_EXPONENT), 8);
-    write32(createAddress(`INTERP0SPACE, `INTERP_MANTISSA), 32'h0001ffff);
+    write32(createAddress(`INTERP0SPACE, `INTERP_MANTISSA), 32'h00012000);
+    write32(createAddress(`INTERP1SPACE, `INTERP_CONTROL),0);
     write32(createAddress(`INTERP1SPACE, `INTERP_EXPONENT), 8);
-    write32(createAddress(`INTERP1SPACE, `INTERP_MANTISSA), 32'h0001ffff);
+    write32(createAddress(`INTERP1SPACE, `INTERP_MANTISSA), 32'h00012000);
+    write32(createAddress(`INTERP2SPACE, `INTERP_CONTROL),0);
     write32(createAddress(`INTERP2SPACE, `INTERP_EXPONENT), 8);
-    write32(createAddress(`INTERP2SPACE, `INTERP_MANTISSA), 32'h0001ffff);
+    write32(createAddress(`INTERP2SPACE, `INTERP_MANTISSA), 32'h00012000);
 
     reset = 1;
     #(2*C) ;

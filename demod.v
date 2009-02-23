@@ -79,9 +79,6 @@ ddc ddc(
     .ddcFreqOffset(carrierFreqOffset),
     .offsetEn(carrierOffsetEn),
     .nbAgcGain(nbAgcGain),
-    //.ddcFreqOffset(32'h0),
-    //.offsetEn(1'b1),
-    //.nbAgcGain(21'h0),
     .syncOut(ddcSync),
     .iIn(iRx), .qIn(qRx), 
     .iOut(iDdc), .qOut(qDdc)
@@ -388,8 +385,8 @@ always @(posedge clk) begin
             dac0Data <= iDdc;
             dac1Sync <= ddcSync;
             dac1Data <= qDdc;
-            dac2Sync <= ddcSync;
-            dac2Data <= {~mag[8],mag[7:0],9'b0};
+            dac2Sync <= resampSync;
+            dac2Data <= iSym;
             end
         default: begin
             dac0Sync <= ddcSync;
@@ -420,6 +417,7 @@ always @(addr or
         `DDCSPACE:          dout <= ddcDout;
         `RESAMPSPACE:       dout <= resampDout;
         `BITSYNCSPACE:      dout <= bitsyncDout;
+        `CARRIERSPACE:      dout <= freqDout;
         default:            dout <= 32'bx;
         endcase
     end

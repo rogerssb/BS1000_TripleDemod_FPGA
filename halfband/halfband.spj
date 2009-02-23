@@ -8,13 +8,13 @@ MainFile=
 [DebugMode]
 CommandLine=+define+SIMULATE
 [Analyzer]
-C0Width=182
+C0Width=165
 C1Width=58
-C2Width=94
+C2Width=92
 GotoSource=N
 SymbolFile=
 [View]
-1=Last 0.000ns 12919.999ns 452.589ns 3338.171ns 3519.952ns
+1=Last 960.974ns 2189.689ns 28.945ns 1787.353ns 2081.909ns
 [LibraryFiles]
 0=..\..\..\Xilinx\10.1\ISE\verilog\src\unisims\{.v}
 [Files]
