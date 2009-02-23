@@ -166,7 +166,7 @@ dac_control dac_control
 assign dac_sdio = dac_soe ? dac_sdo : 1'bz;
 assign dac0_nCs = !dac0_sel;
 assign dac1_nCs = !dac1_sel;
-assign dac2_nCs = !dac2_sel; 
+assign dac2_nCs = !dac2_sel;
 assign dac0_sclk = dac_sck;
 assign dac1_sclk = dac_sck;
 assign dac2_sclk = dac_sck;
@@ -204,8 +204,8 @@ wire    [31:0]  demodDout;
                                 Downconverter
 ******************************************************************************/
 wire    [17:0]  iDdc,qDdc;
-ddc ddc( 
-    .clk(ck933), .reset(reset), .syncIn(1'b1), 
+ddc ddc(
+    .clk(ck933), .reset(reset), .syncIn(1'b1),
     .wr0(wr0) , .wr1(wr1), .wr2(wr2), .wr3(wr3),
     .addr(addr),
     .din(dataIn),
@@ -214,7 +214,7 @@ ddc ddc(
     .offsetEn(1'b1),
     .nbAgcGain(21'h0),
     .syncOut(ddcSync),
-    .iIn({ifInput,4'h0}), .qIn(18'h0), 
+    .iIn({ifInput,4'h0}), .qIn(18'h0),
     .iOut(dac0Out), .qOut(dac1Out)
     );
 
@@ -223,13 +223,13 @@ wire dac1Sync = ddcSync;
 wire dac2Sync = ddcSync;
 `else
 
-demod demod( 
-    .clk(ck933), .reset(reset), .syncIn(1'b1), 
+demod demod(
+    .clk(ck933), .reset(reset), .syncIn(1'b1),
     .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
     .addr(addr),
     .din(dataIn),
     .dout(demodDout),
-    .iRx({ifInput,4'h0}), .qRx(18'h0), 
+    .iRx({ifInput,4'h0}), .qRx(18'h0),
     .dac0Sync(dac0Sync),
     .dac0Data(dac0Out),
     .dac1Sync(dac1Sync),
@@ -266,7 +266,7 @@ always @(addr) begin
             dac1CS <= 0;
             dac2CS <= 1;
             end
-        default: begin  
+        default: begin
             dac0CS <= 0;
             dac1CS <= 0;
             dac2CS <= 0;
@@ -382,8 +382,41 @@ assign dac2_clk = ck933;
 
 `endif
 
+//******************************************************************************
+//                                 Decoder
+//******************************************************************************
+/*
+reg decoder_space;
+always @(addr) begin
+  casex(addr)
+    `DECODERSPACE: decoder_space <= 1; // need to add term to addressMap.v
+    default: decoder_space <= 0;
+  endcase
+end
 
+wire decoder_en = !nCs && decoder_space;
+wire [15:0]decoder_dout;
 
+decoder decoder
+  (
+  .rs(reset),
+  .en(decoder_en),
+  .wr0(wr0),
+	.wr1(wr1),
+  .addr(addr),
+  .din(data),
+  .dout(decoder_dout),
+  .ck933(ck933),
+  .symb_clk_en(),       // symbol rate clock enable
+  .symb_clk_2x_en(),    // 2x symbol rate clock enable
+  .symb_i(),            // input, i
+  .symb_q(),            // input, q
+  .dout_i(),            // output, i data
+  .cout_i(),            // output, i clock
+  .dout_q(),            // output, q data
+  .cout_q()             // output, q clock
+  );
+*/
 
 //******************************************************************************
 //                                 GPIO
@@ -410,9 +443,9 @@ gpio gpio
   .d(gpio_q),
   .q(gpio_q)
   );
-  
+
 assign bsync_nLock = gpio_q[0];
-assign demod_nLock = gpio_q[1];  
+assign demod_nLock = gpio_q[1];
 
 //******************************************************************************
 //                           Processor Read Data Mux
@@ -420,19 +453,19 @@ assign demod_nLock = gpio_q[1];
 
 reg [15:0] rd_mux;
 always @(
-    addr or 
+    addr or
     demodDout or
-    gpio_dout or 
+    gpio_dout or
     dac_dout or
     misc_dout
     )begin
     casex(addr)
-        `DEMODSPACE,    
-        `DDCSPACE,      
+        `DEMODSPACE,
+        `DDCSPACE,
         `CICDECSPACE,
-        `BITSYNCSPACE,  
-        `CHAGCSPACE, 
-        `RESAMPSPACE,   
+        `BITSYNCSPACE,
+        `CHAGCSPACE,
+        `RESAMPSPACE,
         `CARRIERSPACE,
         `CHAGCSPACE : begin
             if (addr[1]) begin
@@ -443,8 +476,9 @@ always @(
                 end
             end
         `DAC_SPACE : rd_mux <= dac_dout;
-        `MISC_SPACE : rd_mux <= misc_dout;    
+        `MISC_SPACE : rd_mux <= misc_dout;
         `GPIOSPACE: rd_mux <= gpio_dout;
+//				`DECODERSPACE: rd_mux <= decoder_dout;
         default : rd_mux <= 16'hxxxx;
         endcase
     end
