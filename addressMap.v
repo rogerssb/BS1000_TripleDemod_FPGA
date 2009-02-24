@@ -7,8 +7,8 @@
 `define DDCSPACE        12'b0010_xxxx_xxxx
 `define CICDECSPACE     12'b0011_xxxx_xxxx
 `define BITSYNCSPACE    12'b0100_xxxx_xxxx
-`define DECODERSPACE		12'b0101_xxxx_xxxx
-`define PLLSPACE				12'b0110_xxxx_xxxx
+`define DECODERSPACE    12'b0101_xxxx_xxxx
+`define PLLSPACE        12'b0110_xxxx_xxxx
 `define CHAGCSPACE      12'b0111_xxxx_xxxx
 `define RESAMPSPACE     12'b1000_xxxx_xxxx
 `define CARRIERSPACE    12'b1001_xxxx_xxxx
@@ -79,9 +79,9 @@
 `define DAC_SELECT      12'bxxxx_xxxx_x10x
 `define DAC_STATUS      12'bxxxx_xxxx_x11x
 
-`define SYMB_PLL_REF	12'hxx0
-`define SYMB_PLL_FBK	12'hxx2
-`define SYMB_PLL_VCO	12'hxx4
-`define SYMB_PLL_NCO	12'hxx6
+`define SYMB_PLL_REF    12'bxxxx_xxxx_x00x
+`define SYMB_PLL_FBK    12'bxxxx_xxxx_x01x
+`define SYMB_PLL_VCO    12'bxxxx_xxxx_x10x
+`define SYMB_PLL_NCO    12'bxxxx_xxxx_x11x
 
 `endif

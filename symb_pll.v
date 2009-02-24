@@ -94,7 +94,7 @@ end
 
 // test nco --------------------------------------------------------------------
 
-`define USE_NCO
+//`define USE_NCO
 `ifdef USE_NCO
 reg [15:0]acc;
 reg nco_clk_en;
