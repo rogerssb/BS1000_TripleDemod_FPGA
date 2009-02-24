@@ -29,10 +29,10 @@ module top
   dac0_d,dac1_d,dac2_d,
   dac0_clk,dac1_clk,dac2_clk,
   adc_d,
-  iDataClk,
-  iBit,
-  qDataClk,
-  qBit,
+  cout_i, //iDataClk,
+  dout_i, //iBit
+  cout_q, //qDataClk,
+  dout_q, //qBit
   bsync_nLock,demod_nLock,
   symb_pll_ref,symb_pll_vco,symb_pll_fbk
   );
@@ -53,8 +53,8 @@ output dac2_nCs,dac2_sclk;
 output [13:0]dac0_d,dac1_d,dac2_d;
 output dac0_clk,dac1_clk,dac2_clk;
 input [13:0]adc_d;
-output iDataClk,iBit;
-output qDataClk,qBit;
+output cout_i,dout_i; //iDataClk,iBit;
+output cout_q,dout_q; //qDataClk,qBit;
 output bsync_nLock,demod_nLock;
 output symb_pll_ref,symb_pll_fbk;
 input symb_pll_vco;
@@ -503,8 +503,13 @@ symb_pll symb_pll
   .clk_ref(symb_pll_ref),     // output pad, comparator reference clock
   .clk_vco(symb_pll_vco),     // input pad, vco output
   .clk_fbk(symb_pll_fbk),     // output pad, comparator feedback clock
-  .clk_out(symb_pll_out)        // output, filtered symbol clock
+  .clk_out(symb_pll_out)      // output, filtered symbol clock
   );
+
+assign dout_q = decoder_fifo_dout_q,
+       dout_i = decoder_fifo_dout_i,
+			 cout_i = symb_pll_out,
+			 cout_q = symb_pll_out;
 
 //******************************************************************************
 //                                 GPIO
