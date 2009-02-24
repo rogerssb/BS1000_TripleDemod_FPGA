@@ -133,16 +133,11 @@ wire dac_en = !nCs & dac_space;
 
 reg [1:0]dac_clk_div;
 always @(posedge ck933)begin
-        dac_clk_div <= dac_clk_div -1;
   dac_clk_div <= dac_clk_div -1;
 end
 
 wire dac_control_ck;
 BUFG BUFG_dac_control_ck
-        (
-        .O(dac_control_ck), // Clock buffer output
-        .I(dac_clk_div[1]) // Clock buffer input
-        );
   (
   .O(dac_control_ck), // Clock buffer output
   .I(dac_clk_div[1]) // Clock buffer input
@@ -247,7 +242,9 @@ demod demod(
     .iDataClk(iDataClk),
     .iBit(iBit),
     .qDataClk(qDataClk),
-    .qBit(qBit)
+    .qBit(qBit),
+    .symTimes2Sync(symTimes2Sync),
+    .symSync(symSync)
     );
 `endif
 
@@ -448,14 +445,14 @@ decoder decoder
   .din(data),
   .dout(decoder_dout),
   .ck933(ck933),
-  .symb_clk_en(),           // symbol rate clock enable
-  .symb_clk_2x_en(),        // 2x symbol rate clock enable
-  .symb_i(),                // input, i
-  .symb_q(),                // input, q
-  .dout_i(decoder_dout_i),  // output, i data
-  .cout_i(decoder_cout_i),  // output, i & q clock
-  .dout_q(decoder_dout_q),  // output, q data
-  .cout_q(decoder_cout_q),  // output, q clock
+  .symb_clk_en(symSync),            // symbol rate clock enable
+  .symb_clk_2x_en(symTimes2Sync),   // 2x symbol rate clock enable
+  .symb_i({iBit,2'b0}),             // input, i
+  .symb_q({qBit,2'b0}),             // input, q
+  .dout_i(decoder_dout_i),          // output, i data
+  .cout_i(decoder_cout_i),          // output, i & q clock
+  .dout_q(decoder_dout_q),          // output, q data
+  .cout_q(decoder_cout_q),          // output, q clock
   .fifo_rs(decoder_fifo_rs)
   );
 
@@ -579,4 +576,4 @@ always @(
 
 assign data = (!nCs & !nRd) ? rd_mux : 16'hzzzz;
 
-
+endmodule

@@ -98,7 +98,7 @@ always @(demodMode or offsetError or offsetErrorEn or phase or freq or ddcSync o
             end
         `MODE_BPSK: begin
             sync <= ddcSync;
-            modeError <= {phase[6:0],1'b0} - 8'h40;
+            modeError <= {phase[6:0],1'b0};
             modeErrorEn <= 1'b1;
             end
         `MODE_QPSK,
@@ -115,6 +115,9 @@ always @(demodMode or offsetError or offsetErrorEn or phase or freq or ddcSync o
         endcase
     end
 
+`ifdef SIMULATE
+real modeErrorReal = (modeError[7] ? modeError - 256.0 : modeError)/128.0;
+`endif
 
 wire loopFilterEn = sync & modeErrorEn;
 

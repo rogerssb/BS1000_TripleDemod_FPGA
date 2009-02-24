@@ -11,6 +11,8 @@ module demod(
     iBit,
     qDataClk,
     qBit,
+    symTimes2Sync,
+    symSync,
     dac0Sync,
     dac0Data,
     dac1Sync,
@@ -32,6 +34,8 @@ output          iDataClk;
 output          iBit;
 output          qDataClk;
 output          qBit;
+output          symTimes2Sync;
+output          symSync;
 output          dac0Sync;
 output  [17:0]  dac0Data;
 output          dac1Sync;
@@ -313,7 +317,8 @@ bitsync bitsync(
     .sampleFreq(resamplerFreqOffset)
     );
 
-
+assign symTimes2Sync = resampSync;
+assign symSync = (symClk & resampSync);
 
 `endif  // RESAMPLER_FIRST
 
@@ -409,6 +414,7 @@ always @(addr or
          ddcDout or
          nbAgcDout or
          resampDout or 
+         freqDout or
          bitsyncDout) begin
     casex (addr)
         `DEMODSPACE:        dout <= demodDout;

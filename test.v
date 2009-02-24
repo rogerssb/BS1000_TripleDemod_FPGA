@@ -61,7 +61,7 @@ real actualBitrateBps = SAMPLE_FREQ/bitrateSamplesInt/2.0;
 // modulator
 real interpolationGain = 1.77777777;
 
-//real deviationHz = 0*0.35 * bitrateBps;
+real deviationHz = 0*0.35 * bitrateBps;
 real deviationHz = 2*0.35 * bitrateBps;
 real deviationNorm = deviationHz * `SAMPLE_PERIOD * `TWO_POW_32;
 integer deviationInt = deviationNorm*interpolationGain;
@@ -516,7 +516,6 @@ initial begin
     // Init the modulator register set
     fmModCS = 1;
     write32(`FM_MOD_FREQ, carrierFreq + carrierOffsetFreq);
-    //write32(`FM_MOD_FREQ, carrierOffsetFreq);
     write32(`FM_MOD_DEV, {14'bx,deviation});
     write32(`FM_MOD_BITRATE, {1'b0,15'bx,bitrateDivider});
     // This value is ceiling(log2(R*R)), where R = interpolation rate.
