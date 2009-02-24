@@ -1,0 +1,11 @@
+# Output products list for <decoder_output_fifo>
+decoder_output_fifo.asy
+decoder_output_fifo.ngc
+decoder_output_fifo.sym
+decoder_output_fifo.v
+decoder_output_fifo.veo
+decoder_output_fifo.xco
+decoder_output_fifo_fifo_generator_v4_3_xst_1.ngc_xst.xrpt
+decoder_output_fifo_fifo_generator_v4_3_xst_1_vhdl.prj
+decoder_output_fifo_flist.txt
+decoder_output_fifo_xmdf.tcl
