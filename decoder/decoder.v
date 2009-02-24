@@ -27,7 +27,8 @@ module decoder
   dout_i,
   cout_i,
   dout_q,
-  cout_q
+  cout_q,
+  fifo_rs
   );
 
 input rs,en,wr0,wr1;
@@ -37,6 +38,7 @@ input [15:0]din;
 output [15:0]dout;
 input [2:0]symb_i,symb_q;
 output dout_i,cout_i,dout_q,cout_q;
+output fifo_rs;
 
 //------------------------------------------------------------------------------
 //                          Biphase to NRZ Conversion
@@ -229,8 +231,7 @@ wire clock_sel_out = biphase ? biphase_en : (
 wire clk_inv;
 wire clock_out = clock_sel_out ^ !clk_inv;
 
-reg [2:0] dout_i;
-reg [2:0] dout_q;
+reg [2:0]dout_i,dout_q;
 
 always @(negedge clock_out)begin
   dout_i <= formatted_out_i;
@@ -266,7 +267,8 @@ assign {mode,
         derandomize,
         data_inv,
         clk_sel,
-        clk_inv} = regs_q[10:0];
+        clk_inv,
+				fifo_rs} = regs_q[11:0];
 
 
 /*
@@ -274,7 +276,6 @@ assign {mode,
 //                                Peak detection
 //------------------------------------------------------------------------------
 
-// Create a one clock pulse from the decay pulse.
 reg decayDelayed,decayPulse;
 always @(posedge ck933) begin
     decayDelayed <= decay;
@@ -282,7 +283,6 @@ always @(posedge ck933) begin
 end
 PeakDetect PeakI(rs, ck933, decayPulse, I_Video, posPeakI, negPeakI);
 PeakDetect PeakQ(rs, ck933, decayPulse, Q_Video, posPeakQ, negPeakQ);
-
 
 //------------------------------------------------------------------------------
 //                             Signal Quality

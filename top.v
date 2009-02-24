@@ -33,7 +33,8 @@ module top
   iBit,
   qDataClk,
   qBit,
-  bsync_nLock,demod_nLock
+  bsync_nLock,demod_nLock,
+  symb_pll_ref,symb_pll_vco,symb_pll_fbk
   );
 
 input nWe;
@@ -55,6 +56,8 @@ input [13:0]adc_d;
 output iDataClk,iBit;
 output qDataClk,qBit;
 output bsync_nLock,demod_nLock;
+output symb_pll_ref,symb_pll_fbk;
+input symb_pll_vco;
 
 parameter VER_NUMBER = 16'h0003;
 
@@ -91,25 +94,25 @@ reg reset;
 reg rs0,rs1;
 reg [2:0]resetCount;
 always @(posedge ck933 or posedge rs) begin
-    if (rs) begin
-        rs0 <= 1;
-        end
-    else begin
-        rs1 <= rs0;
-        if (rs1) begin
-            resetCount <= 5;
-            reset <= 1;
-            rs0 <= 0;
-            end
-        else if (resetCount != 0) begin
-            resetCount <= resetCount - 1;
-            reset <= 1;
-            end
-        else begin
-            reset <= 0;
-            end
-        end
+  if (rs) begin
+    rs0 <= 1;
     end
+  else begin
+    rs1 <= rs0;
+    if (rs1) begin
+      resetCount <= 5;
+        reset <= 1;
+        rs0 <= 0;
+        end
+    else if (resetCount != 0) begin
+      resetCount <= resetCount - 1;
+      reset <= 1;
+      end
+    else begin
+      reset <= 0;
+      end
+    end
+  end
 
 
 //******************************************************************************
@@ -121,7 +124,7 @@ always @(addr) begin
   casex(addr)
     `DAC_SPACE: dac_space <= 1;
     default: dac_space <= 0;
-  endcase
+    endcase
 end
 wire dac_en = !nCs & dac_space;
 
@@ -131,6 +134,7 @@ wire dac_en = !nCs & dac_space;
 reg [1:0]dac_clk_div;
 always @(posedge ck933)begin
         dac_clk_div <= dac_clk_div -1;
+  dac_clk_div <= dac_clk_div -1;
 end
 
 wire dac_control_ck;
@@ -139,6 +143,10 @@ BUFG BUFG_dac_control_ck
         .O(dac_control_ck), // Clock buffer output
         .I(dac_clk_div[1]) // Clock buffer input
         );
+  (
+  .O(dac_control_ck), // Clock buffer output
+  .I(dac_clk_div[1]) // Clock buffer input
+  );
 // End of BUFG_inst instantiation
 
 wire [15:0]dac_dout;
@@ -415,38 +423,91 @@ assign dac2_clk = ck933;
 //******************************************************************************
 //                                 Decoder
 //******************************************************************************
-/*
+
 reg decoder_space;
 always @(addr) begin
   casex(addr)
-    `DECODERSPACE: decoder_space <= 1; // need to add term to addressMap.v
+    `DECODERSPACE: decoder_space <= 1;
     default: decoder_space <= 0;
   endcase
 end
 
 wire decoder_en = !nCs && decoder_space;
 wire [15:0]decoder_dout;
+wire [2:0]decoder_dout_i,decoder_dout_q;
+wire decoder_cout_i,decoder_cout_q;
+wire decoder_fifo_rs;
 
 decoder decoder
   (
   .rs(reset),
   .en(decoder_en),
   .wr0(wr0),
-        .wr1(wr1),
+  .wr1(wr1),
   .addr(addr),
   .din(data),
   .dout(decoder_dout),
   .ck933(ck933),
-  .symb_clk_en(),       // symbol rate clock enable
-  .symb_clk_2x_en(),    // 2x symbol rate clock enable
-  .symb_i(),            // input, i
-  .symb_q(),            // input, q
-  .dout_i(),            // output, i data
-  .cout_i(),            // output, i clock
-  .dout_q(),            // output, q data
-  .cout_q()             // output, q clock
+  .symb_clk_en(),           // symbol rate clock enable
+  .symb_clk_2x_en(),        // 2x symbol rate clock enable
+  .symb_i(),                // input, i
+  .symb_q(),                // input, q
+  .dout_i(decoder_dout_i),  // output, i data
+  .cout_i(decoder_cout_i),  // output, i & q clock
+  .dout_q(decoder_dout_q),  // output, q data
+  .cout_q(decoder_cout_q),  // output, q clock
+  .fifo_rs(decoder_fifo_rs)
   );
-*/
+
+//******************************************************************************
+//                   Decoder Output FIFO and Symbol Clock PLL
+//******************************************************************************
+
+wire decoder_fifo_dout_i,decoder_fifo_dout_q;
+wire decoder_fifo_empty,decoder_fifo_full,decoder_fifo_ren;
+wire symb_pll_out;
+
+decoder_output_fifo decoder_output_fifo
+  (
+  .din({decoder_dout_q[2],decoder_dout_i[2]}),
+  .rd_clk(symb_pll_out),
+  .rd_en(decoder_fifo_ren),
+  .rst(decoder_fifo_rs),
+  .wr_clk(decoder_cout_i),
+  .wr_en(1'b1),
+  .dout({decoder_fifo_dout_q,decoder_fifo_dout_i}),
+  .empty(decoder_fifo_empty),
+  .full(decoder_fifo_full),
+  .prog_full(decoder_fifo_ren)
+  );
+
+reg pll_space;
+always @(addr) begin
+  casex(addr)
+    `PLLSPACE: pll_space <= 1;
+    default: pll_space <= 0;
+  endcase
+end
+
+wire symb_pll_en = !nCs && pll_space;
+wire [15:0]symb_pll_dout;
+
+symb_pll symb_pll
+  (
+  .rs(reset),
+  .en(symb_pll_en),
+  .wr0(wr0),
+  .wr1(wr1),
+  .a(addr),
+  .di(data),
+  .do(symb_pll_dout),
+  .clk(decoder_cout_i),
+  .clk_en(1'b1),
+  .clk_ref(symb_pll_ref),     // output pad, comparator reference clock
+  .clk_vco(symb_pll_vco),     // input pad, vco output
+  .clk_fbk(symb_pll_fbk),     // output pad, comparator feedback clock
+  .clk_out(symb_pll_out)        // output, filtered symbol clock
+  );
 
 //******************************************************************************
 //                                 GPIO
@@ -483,62 +544,39 @@ assign demod_nLock = gpio_q[1];
 
 reg [15:0] rd_mux;
 always @(
-    addr or
-    demodDout or
-    gpio_dout or
-    dac_dout or
-    //decoder_dout or
-    dac0Dout or dac1Dout or dac2Dout or
-    misc_dout
-    )begin
-    casex(addr)
-        `DEMODSPACE,
-        `DDCSPACE,
-        `CICDECSPACE,
-        `BITSYNCSPACE,
-        `CHAGCSPACE,
-        `RESAMPSPACE,
-        `CARRIERSPACE,
-        `CHAGCSPACE : begin
-            if (addr[1]) begin
-                rd_mux <= demodDout[31:16];
-                end
-            else begin
-                rd_mux <= demodDout[15:0];
-                end
-            end
-        `DAC_SPACE : rd_mux <= dac_dout;
-        `MISC_SPACE : rd_mux <= misc_dout;
-        `GPIOSPACE: rd_mux <= gpio_dout;
-        //`DECODERSPACE: rd_mux <= decoder_dout;
-        `INTERP0SPACE: begin
-            if (addr[1]) begin
-                rd_mux <= dac0Dout[31:16];
-                end
-            else begin
-                rd_mux <= dac0Dout[15:0];
-                end
-            end
-        `INTERP1SPACE: begin
-            if (addr[1]) begin
-                rd_mux <= dac1Dout[31:16];
-                end
-            else begin
-                rd_mux <= dac1Dout[15:0];
-                end
-            end
-        `INTERP2SPACE: begin
-            if (addr[1]) begin
-                rd_mux <= dac2Dout[31:16];
-                end
-            else begin
-                rd_mux <= dac2Dout[15:0];
-                end
-            end
-        default : rd_mux <= 16'hxxxx;
-        endcase
-    end
+  addr or
+  demodDout or
+  gpio_dout or
+  dac_dout or
+  misc_dout or
+  decoder_dout or
+  symb_pll_dout
+  )begin
+  casex(addr)
+    `DEMODSPACE,
+    `DDCSPACE,
+    `CICDECSPACE,
+    `BITSYNCSPACE,
+    `CHAGCSPACE,
+    `RESAMPSPACE,
+    `CARRIERSPACE,
+    `CHAGCSPACE : begin
+      if (addr[1]) begin
+        rd_mux <= demodDout[31:16];
+        end
+      else begin
+        rd_mux <= demodDout[15:0];
+        end
+      end
+    `DAC_SPACE : rd_mux <= dac_dout;
+    `MISC_SPACE : rd_mux <= misc_dout;
+    `GPIOSPACE: rd_mux <= gpio_dout;
+    `DECODERSPACE: rd_mux <= decoder_dout;
+    `PLLSPACE: rd_mux <= symb_pll_dout;
+    default : rd_mux <= 16'hxxxx;
+    endcase
+  end
 
 assign data = (!nCs & !nRd) ? rd_mux : 16'hzzzz;
 
-endmodule
+
