@@ -4,22 +4,20 @@ NoFloatWarn=Yes
 DigitalThreshold=
 [Settings]
 Version=Silvaco4.10.0.R
-VisualDebug=
 [Analyzer]
-C0Width=159
+C0Width=165
 C1Width=58
-C2Width=68
+C2Width=92
 GotoSource=N
 MinScale=
 MaxScale=
-SymbolFile=
 [Spice]
 [LibraryFiles]
 0=..\..\..\Xilinx\10.1\ISE\verilog\src\unisims\{.v}
 [DebugMode]
 CommandLine=+define+SIMULATE
 [View]
-1=Last 0.000ns 356761.600ns 11892.054ns 61265.451ns 52153.851ns
+1=Last 0.000ns 440571.499ns 11872.874ns 61265.451ns 52153.851ns
 [Plusargs]
 0=memsave+test.impulse
 [Group1]
@@ -75,6 +73,8 @@ OpenGroup=
 11=..\coregen\dds.v
 12=resampRegs.v
 13=..\coregen\reciprocalLut.v
+[IncDirs]
+0=..
 [Define]
 0=TEST_MODULE
 [Group0]
@@ -87,21 +87,22 @@ Name="Default"
 5="test : saveVectors" default
 6="test.resampler : iOutReal" default Real AnalogDisplay AType=Step Scale=Auto
 7="test.resampler : inputReal" default Real AnalogDisplay AType=Step Scale=Auto
-8="test.resampler : lutProduct[22:17]" default
-9="test.resampler.offsetMpy : a[17:0]" default
-10="test.resampler : reciprocal[17:0]" default
-11="test.resampler.lut : a[4:0]" default
-12="test.resampler : offsetInt" default Decimal AnalogDisplay AType=Step Scale=Auto
-13="test.resampler : newOffset[4:0]" default
-14="test.resampler : offset[4:0]" default
-15="test.resampler : oldOffset[4:0]" default Unknown
-16="test.resampler : phaseSum[31:0]" default
-17="test.resampler : phase[31:0]" default
-18="test.resampler : resamplerPhaseInc[31:0]" default
-19="test.resampler : resampleDelay[6]" default
-20="test.resampler : resample" default
-21="test.resampler : reset" default
-22="test.resampler : sync" default
+8="test : iInReal" default Real AnalogDisplay AType=PWL Scale=Auto
+9="test.resampler : lutProduct[22:17]" default
+10="test.resampler.offsetMpy : a[17:0]" default
+11="test.resampler : reciprocal[17:0]" default
+12="test.resampler.lut : a[4:0]" default
+13="test.resampler : offsetInt" default Decimal AnalogDisplay AType=Step Scale=Auto
+14="test.resampler : newOffset[4:0]" default
+15="test.resampler : offset[4:0]" default
+16="test.resampler : oldOffset[4:0]" default Unknown
+17="test.resampler : phaseSum[31:0]" default
+18="test.resampler : phase[31:0]" default
+19="test.resampler : resamplerPhaseInc[31:0]" default
+20="test.resampler : resampleDelay[6]" default
+21="test.resampler : resample" default
+22="test.resampler : reset" default
+23="test.resampler : sync" default
 OpenGroup=Yes
 [GroupInfo]
 0=Default : 0 : 1 : 0

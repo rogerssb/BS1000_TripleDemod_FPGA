@@ -326,7 +326,7 @@ bitsync bitsync(
     );
 
 assign symTimes2Sync = resampSync;
-assign symSync = (symClk & resampSync);
+assign symSync = symClk & resampSync;
 
 `endif  // RESAMPLER_FIRST
 
@@ -393,6 +393,14 @@ always @(posedge clk) begin
             dac0Data <= {phaseError,10'h0};
             dac0Sync <= ddcSync;
             end
+        `DAC_SYMEN: begin
+            dac0Data <= {symSync,17'h0};
+            dac0Sync <= 1'b1;
+            end
+        `DAC_SYMX2EN: begin
+            dac0Data <= {symTimes2Sync,17'h0};
+            dac0Sync <= 1'b1;
+            end
         default: begin
             dac0Data <= iDdc;
             dac0Sync <= ddcSync;
@@ -432,6 +440,14 @@ always @(posedge clk) begin
             dac1Data <= {phaseError,10'h0};
             dac1Sync <= ddcSync;
             end
+        `DAC_SYMEN: begin
+            dac1Data <= {symSync,17'h0};
+            dac1Sync <= 1'b1;
+            end
+        `DAC_SYMX2EN: begin
+            dac1Data <= {symTimes2Sync,17'h0};
+            dac1Sync <= 1'b1;
+            end
         default: begin
             dac1Data <= iDdc;
             dac1Sync <= ddcSync;
@@ -470,6 +486,14 @@ always @(posedge clk) begin
         `DAC_PHERROR: begin
             dac2Data <= {phaseError,10'h0};
             dac2Sync <= ddcSync;
+            end
+        `DAC_SYMEN: begin
+            dac2Data <= {symSync,17'h0};
+            dac2Sync <= 1'b1;
+            end
+        `DAC_SYMX2EN: begin
+            dac2Data <= {symTimes2Sync,17'h0};
+            dac2Sync <= 1'b1;
             end
         default: begin
             dac2Data <= iDdc;

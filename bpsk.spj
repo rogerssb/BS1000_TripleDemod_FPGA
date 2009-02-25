@@ -5,9 +5,9 @@ DigitalThreshold=
 [Settings]
 Version=Silvaco4.10.0.R
 [Analyzer]
-C0Width=156
+C0Width=165
 C1Width=58
-C2Width=101
+C2Width=27
 GotoSource=N
 [Spice]
 [LibraryFiles]
@@ -15,7 +15,7 @@ GotoSource=N
 [DebugMode]
 CommandLine=+define+SIMULATE
 [View]
-1=Last 323421.906ns 721371.468ns 9374.548ns 230140.679ns 239429.591ns
+1=Last 0.000ns 396550.100ns 14071.133ns 351678.603ns 360325.389ns
 [Group0]
 Name=New Group2
 [Group3]
@@ -67,6 +67,7 @@ Name="Bitsync"
 17="test.demod.resampler : iOutReal" default Real AnalogDisplay AType=Step Scale=Auto
 18="test.demod.resampler : inIReal" default Real AnalogDisplay AType=Step Scale=Fixed MinScaleDbl=-1 MaxScaleDbl=1
 19="test : cicDecimationInt" default Decimal AnalogDisplay AType=PWL Scale=Auto
+OpenGroup=
 [Files]
 0=testBpsk.v
 1=demod.v
@@ -137,6 +138,7 @@ Name="Rx"
 16="test.demod.ddc : qMixReal" default Real AnalogDisplay AType=Step Scale=Auto
 17="test.demod.ddc : iMixReal" default Real AnalogDisplay AType=Step Scale=Auto
 18="test : iSignalReal" default Real AnalogDisplay AType=Step Scale=Auto
+OpenGroup=
 [Group5]
 Name="Carrier"
 0="test.demod.carrierLoop.lagGain : sweepOffsetMag[31:0]" default
@@ -166,6 +168,12 @@ Name="DAC"
 5="test.dac0Interp : expAdjReal" default Real AnalogDisplay AType=PWL Scale=Auto
 6="test.dac0Interp : exponentAdjusted[17:0]" default
 7="test.dac0Interp : dataIn[17:0]" default
+OpenGroup=
+[Group7]
+Name="Resampler"
+0="test.demod.resampler : iSumReal" default Real AnalogDisplay AType=Step Scale=Auto
+1="test.demod.resampler : iOutReal" default Real AnalogDisplay AType=Step Scale=Auto
+2="test.demod.resampler : inIReal" default Real AnalogDisplay AType=Step Scale=Auto
 OpenGroup=Yes
 [GroupInfo]
 0=New Group2 : 0 : 0 : 0
@@ -175,4 +183,5 @@ OpenGroup=Yes
 4=Bitsync : 4 : 1 : 0
 5=Carrier : 5 : 1 : 0
 6=DAC : 6 : 1 : 0
+7=Resampler : 7 : 1 : 0
 [Bookmarks]

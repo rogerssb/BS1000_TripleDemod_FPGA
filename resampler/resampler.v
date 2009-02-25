@@ -364,8 +364,25 @@ always @(posedge clk) begin
     `else
     if (resampleDelay[5]) begin
     `endif
-        iOut <= iSum[34:17];
-        qOut <= qSum[34:17];
+        // Check for overflow
+        if (iSum[35] && !iSum[34]) begin
+            iOut <= 18'h20001;
+            end
+        else if (!iSum[35] && iSum[34]) begin
+            iOut <= 18'h1ffff;
+            end
+        else begin
+            iOut <= iSum[34:17];
+            end
+        if (qSum[35] && !qSum[34]) begin
+            qOut <= 18'h20001;
+            end
+        else if (!qSum[35] && qSum[34]) begin
+            qOut <= 18'h1ffff;
+            end
+        else begin
+            qOut <= qSum[34:17];
+            end
         end
     end
 
@@ -377,6 +394,7 @@ assign syncOut = resampleDelay[6];
 
 `ifdef SIMULATE
 real iOutReal = ((iOut > 131071.0) ? (iOut - 262144.0) : iOut)/131072.0;
+real iSumReal = (iSum[35] ? (iSum[35:18] - 262144.0) : iSum[35:18])/131072.0;
 real qOutReal = ((qOut > 131071.0) ? (qOut - 262144.0) : qOut)/131072.0;
 `endif
 
@@ -388,7 +406,7 @@ endmodule
 //`define RAMP_TEST
 `define SINEWAVE_TEST
 //`define IMPULSE_TEST
-`define MATLAB_VECTORS
+//`define MATLAB_VECTORS
 
 `timescale 1ns/100ps
 
@@ -540,8 +558,10 @@ reg ddsreset;
 dds dds(.sclr(ddsreset), .clk(clk), .we(1'b1), .data(freq), .sine(sineOut), .cosine(cosineOut));
 
 always @(posedge clk) begin
-    iIn <= {cosineOut[17],cosineOut[17:1]};
-    qIn <= {sineOut[17],sineOut[17:1]};
+    //iIn <= {cosineOut[17],cosineOut[17:1]};
+    //qIn <= {sineOut[17],sineOut[17:1]};
+    iIn <= {cosineOut};
+    qIn <= {sineOut};
     end
 
 `ifdef SIMULATE
@@ -583,7 +603,7 @@ initial begin
     resampler.resampRegs.resampleRate = 32'h0;
     //resamplerFreqHz = 23.0/32.0/syncDecimation*10e6;
     resamplerFreqHz = 500000.0;
-    carrierFreqHz = resamplerFreqHz/4.0;
+    carrierFreqHz = resamplerFreqHz/4.0 + resamplerFreqHz/512.0;
 
     // Turn on the clock
     clken=1;
@@ -598,7 +618,7 @@ initial begin
     #(2*C) ;
     reset = 0;
 
-    #(1024*C) ;
+    #(4096*C) ;
 
     $stop;
 

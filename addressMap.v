@@ -37,6 +37,8 @@
 `define DAC_PHASE       4'b0101
 `define DAC_MAG         4'b0110
 `define DAC_PHERROR     4'b0111
+`define DAC_SYMEN       4'b1000
+`define DAC_SYMX2EN     4'b1001
 
 // Define the FM memory map
 `define FM_MOD_FREQ     12'bxxxx_xxxx_00xx

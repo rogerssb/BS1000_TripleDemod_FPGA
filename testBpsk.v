@@ -534,7 +534,7 @@ initial begin
     write32(createAddress(`CHAGCSPACE,`ALF_LLIMIT),32'h00000000);       // AGC Lower limit
 
     // Set the DAC interpolator gains
-    write32(createAddress(`DEMODSPACE, `DEMOD_DACSELECT), {12'h0,`DAC_PHERROR,
+    write32(createAddress(`DEMODSPACE, `DEMOD_DACSELECT), {12'h0,`DAC_ISYM,
                                                            4'h0,`DAC_Q,
                                                            4'h0,`DAC_I});
     write32(createAddress(`INTERP0SPACE, `INTERP_CONTROL),0);

@@ -9,7 +9,7 @@
 //------------------------------------------------------------------------------
 
 `timescale 1ns/100ps
-`include "addressMap.v"
+`include "../addressMap.v"
 
 module decoder
   (
@@ -229,6 +229,9 @@ format_output format_output_q
 wire clk_sel;
 assign cout = biphase ? biphase_en : (
               clk_sel ? symb_clk_en : symb_clk_2x_en);
+
+assign dout_i = formatted_out_i[2];
+assign dout_q = formatted_out_q[2];
 
 //------------------------------------------------------------------------------
 //                                 Registers

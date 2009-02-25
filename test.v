@@ -61,7 +61,7 @@ real actualBitrateBps = SAMPLE_FREQ/bitrateSamplesInt/2.0;
 // modulator
 real interpolationGain = 1.77777777;
 
-real deviationHz = 0*0.35 * bitrateBps;
+//real deviationHz = 0*0.35 * bitrateBps;
 real deviationHz = 2*0.35 * bitrateBps;
 real deviationNorm = deviationHz * `SAMPLE_PERIOD * `TWO_POW_32;
 integer deviationInt = deviationNorm*interpolationGain;
@@ -266,7 +266,9 @@ demod demod(
     .dac1Sync(dac1Sync),
     .dac1Data(dac1Out),
     .dac2Sync(dac2Sync),
-    .dac2Data(dac2Out)
+    .dac2Data(dac2Out),
+    .symSync(symEn),
+    .symTimes2Sync(symX2En)
     );
 
 reg dac0CS,dac1CS,dac2CS;
@@ -340,6 +342,26 @@ interpolate dac2Interp(
 assign dac2_d = dac2Data[17:4];
 assign dac2_clk = clk;
 
+
+decoder decoder
+  (
+  .rs(reset),
+  .en(1'b0),
+  .wr0(1'b0),.wr1(1'b0),
+  .addr(),
+  .din(),
+  .dout(),
+  .ck933(clk),
+  .symb_clk_en(symEn),
+  .symb_clk_2x_en(symX2En),
+  .symb_i({demodBit,2'b0}),
+  .symb_q(),
+  .dout_i(),
+  .dout_q(),
+  .cout(),
+  .fifo_rs(),
+  .clk_inv()
+  );
 
 /******************************************************************************
                        Delay Line for BER Testing
@@ -507,6 +529,8 @@ initial begin
     d = 32'hz;
     fmModCS = 0;
     txScaleFactor = 0.707;
+    decoder.decoder_regs.q = 16'h0004;
+
 
     // Turn on the clock
     clken=1;
@@ -554,13 +578,16 @@ initial begin
     write32(createAddress(`CHAGCSPACE,`ALF_LLIMIT),32'h00000000);       // AGC Lower limit
 
     // Set the DAC interpolator gains
+    write32(createAddress(`DEMODSPACE, `DEMOD_DACSELECT), {12'h0,`DAC_SYMEN,
+                                                           4'h0,`DAC_Q,
+                                                           4'h0,`DAC_I});
     write32(createAddress(`INTERP0SPACE, `INTERP_CONTROL),0);
     write32(createAddress(`INTERP0SPACE, `INTERP_EXPONENT), 8);
     write32(createAddress(`INTERP0SPACE, `INTERP_MANTISSA), 32'h00012000);
     write32(createAddress(`INTERP1SPACE, `INTERP_CONTROL),0);
     write32(createAddress(`INTERP1SPACE, `INTERP_EXPONENT), 8);
     write32(createAddress(`INTERP1SPACE, `INTERP_MANTISSA), 32'h00012000);
-    write32(createAddress(`INTERP2SPACE, `INTERP_CONTROL),0);
+    write32(createAddress(`INTERP2SPACE, `INTERP_CONTROL),1);
     write32(createAddress(`INTERP2SPACE, `INTERP_EXPONENT), 8);
     write32(createAddress(`INTERP2SPACE, `INTERP_MANTISSA), 32'h00012000);
 
