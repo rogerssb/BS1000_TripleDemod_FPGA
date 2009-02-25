@@ -25,10 +25,10 @@ module decoder
   symb_i,
   symb_q,
   dout_i,
-  cout_i,
   dout_q,
-  cout_q,
-  fifo_rs
+  cout,
+  fifo_rs,
+  clk_inv
   );
 
 input rs,en,wr0,wr1;
@@ -37,8 +37,9 @@ input [11:0]addr;
 input [15:0]din;
 output [15:0]dout;
 input [2:0]symb_i,symb_q;
-output dout_i,cout_i,dout_q,cout_q;
+output dout_i,dout_q,cout;
 output fifo_rs;
+output clk_inv;
 
 //------------------------------------------------------------------------------
 //                          Biphase to NRZ Conversion
@@ -50,7 +51,7 @@ always @(posedge ck933)begin
     last_symb_i <= symb_i;
 end
 
-wire biphase_en;
+wire biphase,biphase_en;
 wire [2:0] nrz_i;
 biphase_to_nrz biphase_to_nrz
   (
@@ -202,6 +203,7 @@ wire [2:0] sign_mag_i = data_inv ? ~{derand_out_i,out_sel_i[1:0]} :
 wire [2:0] sign_mag_q = data_inv ? ~{derand_out_q,out_sel_q[1:0]} :
                                     {derand_out_q,out_sel_q[1:0]};
 
+wire sign_mag;
 wire [2:0]formatted_out_i;
 format_output format_output_i
   (
@@ -225,21 +227,8 @@ format_output format_output_q
   );
 
 wire clk_sel;
-wire clock_sel_out = biphase ? biphase_en : (
-                     clk_sel ? symb_clk_en : symb_clk_2x_en);
-
-wire clk_inv;
-wire clock_out = clock_sel_out ^ !clk_inv;
-
-reg [2:0]dout_i,dout_q;
-
-always @(negedge clock_out)begin
-  dout_i <= formatted_out_i;
-  dout_q <= formatted_out_q;
-  end
-
-assign cout_i = clock_out;
-assign cout_q = clock_out;
+assign cout = biphase ? biphase_en : (
+              clk_sel ? symb_clk_en : symb_clk_2x_en);
 
 //------------------------------------------------------------------------------
 //                                 Registers
@@ -268,7 +257,7 @@ assign {mode,
         data_inv,
         clk_sel,
         clk_inv,
-				fifo_rs} = regs_q[11:0];
+        fifo_rs} = regs_q[11:0];
 
 
 /*
@@ -331,5 +320,79 @@ sigQual sigQual(ck933,rs,absI,sigQualData);
 `endif
 */
 
+endmodule
+
+/*
+module decoder_test;
+
+reg rs,en,wr0,wr1;
+reg ck933,symb_clk_en,symb_clk_2x_en;
+reg [11:0]addr;
+reg [15:0]din;
+wire [15:0]dout;
+reg [2:0]symb_i,symb_q;
+wire dout_i,dout_q,cout;
+wire fifo_rs;
+wire clk_inv;
+
+decoder uut
+  (
+  rs,
+  en,
+  wr0,wr1,
+  addr,
+  din,
+  dout,
+  ck933,
+  symb_clk_en,
+  symb_clk_2x_en,
+  symb_i,
+  symb_q,
+  dout_i,
+  dout_q,
+  cout,
+  fifo_rs,
+  clk_inv
+  );
+
+initial begin
+  rs = 0;
+  en = 0;
+  wr0 = 0;
+  wr1 = 0;
+  ck933 = 0;
+  symb_clk_en = 0;
+  symb_clk_2x_en = 0;
+  addr = 0;
+  din = 0;
+  symb_i = 0;
+  symb_q = 0;
+
+  uut.decoder_regs.q = 16'h0004;
+
+  #100 rs = !rs;
+  #100 rs = !rs;
+end
+
+always #5 ck933 = !ck933;
+
+//set symb_clk_en rate at 4 MHz
+
+reg [4:0]symb_divider;
+always @(posedge ck933 or posedge rs)begin
+  if(rs)begin
+    symb_divider <= 0;
+    symb_clk_en <= 0;
+    end
+  else if(symb_divider==24)begin
+    symb_divider <= 0;
+    symb_clk_en <= 1;
+    end
+  else begin
+    symb_divider <= symb_divider +1;
+    symb_clk_en <= 0;
+    end
+end
 
 endmodule
+*/

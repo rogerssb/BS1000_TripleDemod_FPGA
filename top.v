@@ -432,8 +432,9 @@ end
 wire decoder_en = !nCs && decoder_space;
 wire [15:0]decoder_dout;
 wire [2:0]decoder_dout_i,decoder_dout_q;
-wire decoder_cout_i,decoder_cout_q;
+wire decoder_cout;
 wire decoder_fifo_rs;
+wire cout_inv;
 
 decoder decoder
   (
@@ -450,10 +451,10 @@ decoder decoder
   .symb_i({iBit,2'b0}),             // input, i
   .symb_q({qBit,2'b0}),             // input, q
   .dout_i(decoder_dout_i),          // output, i data
-  .cout_i(decoder_cout_i),          // output, i & q clock
   .dout_q(decoder_dout_q),          // output, q data
-  .cout_q(decoder_cout_q),          // output, q clock
-  .fifo_rs(decoder_fifo_rs)
+  .cout(decoder_cout),              // output, i/q clock
+  .fifo_rs(decoder_fifo_rs),
+	.clk_inv(cout_inv)
   );
 
 //******************************************************************************
@@ -470,8 +471,8 @@ decoder_output_fifo decoder_output_fifo
   .rd_clk(symb_pll_out),
   .rd_en(decoder_fifo_ren),
   .rst(decoder_fifo_rs),
-  .wr_clk(decoder_cout_i),
-  .wr_en(1'b1),
+  .wr_clk(ck933),
+  .wr_en(decoder_cout),
   .dout({decoder_fifo_dout_q,decoder_fifo_dout_i}),
   .empty(decoder_fifo_empty),
   .full(decoder_fifo_full),
@@ -498,18 +499,25 @@ symb_pll symb_pll
   .a(addr),
   .di(data),
   .do(symb_pll_dout),
-  .clk(decoder_cout_i),
+  .clk(decoder_cout),
   .clk_en(1'b1),
   .clk_ref(symb_pll_ref),     // output pad, comparator reference clock
   .clk_vco(symb_pll_vco),     // input pad, vco output
   .clk_fbk(symb_pll_fbk),     // output pad, comparator feedback clock
-  .clk_out(symb_pll_out)      // output, filtered symbol clock
+  .clk_out(symb_pll_out)      // output, symbol clock
   );
 
-assign dout_q = decoder_fifo_dout_q,
-       dout_i = decoder_fifo_dout_i,
-			 cout_i = symb_pll_out,
-			 cout_q = symb_pll_out;
+wire cout = symb_pll_out ^ !cout_inv;
+assign cout_i = cout;
+assign cout_q = cout;
+
+reg [2:0]dout_i,dout_q;
+always @(negedge cout)begin
+  dout_i <= decoder_fifo_dout_i;
+  dout_q <= decoder_fifo_dout_q;
+  end
+
+
 
 //******************************************************************************
 //                                 GPIO
