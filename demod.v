@@ -57,6 +57,9 @@ always @(addr) begin
         endcase
     end
 wire    [2:0]   demodMode;
+wire    [3:0]   dac0Select;
+wire    [3:0]   dac1Select;
+wire    [3:0]   dac2Select;
 wire    [31:0]  demodDout;
 demodRegs demodRegs(
     .addr(addr),
@@ -64,7 +67,10 @@ demodRegs demodRegs(
     .dataOut(demodDout),
     .cs(demodSpace),
     .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
-    .demodMode(demodMode)
+    .demodMode(demodMode),
+    .dac0Select(dac0Select),
+    .dac1Select(dac1Select),
+    .dac2Select(dac2Select)
     );
 
 /******************************************************************************
@@ -224,7 +230,8 @@ fmDemod fmDemod(
 /******************************************************************************
                              AFC/Sweep/Costas Loop
 ******************************************************************************/
-wire    [17:0]   offsetError;
+wire    [17:0]  offsetError;
+wire    [7:0]   phaseError;
 wire    [31:0]  freqDout;
 carrierLoop carrierLoop(
     .clk(clk), .reset(reset),
@@ -240,7 +247,8 @@ carrierLoop carrierLoop(
     .offsetError(offsetError[17:10]),
     .offsetErrorEn(offsetErrorEn),
     .carrierFreqOffset(carrierFreqOffset),
-    .carrierFreqEn(carrierOffsetEn)
+    .carrierFreqEn(carrierOffsetEn),
+    .loopError(phaseError)
     );
 
 /******************************************************************************
@@ -352,56 +360,123 @@ reg     [17:0]  dac1Data;
 reg             dac2Sync;
 reg     [17:0]  dac2Data;
 always @(posedge clk) begin
-    case (demodMode) 
-        `MODE_AM: begin
-            dac0Sync <= ddcSync;
+    case (dac0Select) 
+        `DAC_I: begin
             dac0Data <= iDdc;
-            dac1Sync <= ddcSync;
-            dac1Data <= qDdc;
-            dac2Sync <= ddcSync;
-            dac2Data <= {~mag[8],mag[7:0],9'b0};
+            dac0Sync <= ddcSync;
             end
-        `MODE_FM: begin
+        `DAC_Q: begin
+            dac0Data <= qDdc;
             dac0Sync <= ddcSync;
-            dac0Data <= iDdc;
-            dac1Sync <= ddcSync;
-            dac1Data <= qDdc;
-            dac2Sync <= ddcSync;
-            dac2Data <= {freq,10'b0};
             end
-        `MODE_PM: begin
-            dac0Sync <= ddcSync;
-            dac0Data <= iDdc;
-            dac1Sync <= ddcSync;
-            dac1Data <= qDdc;
-            dac2Sync <= ddcSync;
-            dac2Data <= {phase,10'b0};
+        `DAC_ISYM: begin
+            dac0Data <= iSym;
+            dac0Sync <= resampSync;
             end
-        `MODE_2FSK: begin
-            dac0Sync <= ddcSync;
-            dac0Data <= iDdc;
-            dac1Sync <= ddcSync;
-            dac1Data <= qDdc;
-            dac2Sync <= resampSync;
-            dac2Data <= iSym;
+        `DAC_QSYM: begin
+            dac0Data <= qSym;
+            dac0Sync <= resampSync;
             end
-        `MODE_BPSK: begin
+        `DAC_FREQ: begin
+            dac0Data <= {freq,10'h0};
             dac0Sync <= ddcSync;
-            dac0Data <= iDdc;
-            dac1Sync <= ddcSync;
-            dac1Data <= qDdc;
-            dac2Sync <= resampSync;
-            dac2Data <= iSym;
+            end
+        `DAC_PHASE: begin
+            dac0Data <= {phase,10'b0};
+            dac0Sync <= ddcSync;
+            end
+        `DAC_MAG: begin
+            dac0Data <= {~mag[8],mag[7:0],9'b0};
+            dac0Sync <= ddcSync;
+            end
+        `DAC_PHERROR: begin
+            dac0Data <= {phaseError,10'h0};
+            dac0Sync <= ddcSync;
             end
         default: begin
-            dac0Sync <= ddcSync;
             dac0Data <= iDdc;
-            dac1Sync <= ddcSync;
-            dac1Data <= qDdc;
-            dac2Sync <= resampSync;
-            dac2Data <= {freq,10'b0};
+            dac0Sync <= ddcSync;
             end
         endcase
+
+    case (dac1Select) 
+        `DAC_I: begin
+            dac1Data <= iDdc;
+            dac1Sync <= ddcSync;
+            end
+        `DAC_Q: begin
+            dac1Data <= qDdc;
+            dac1Sync <= ddcSync;
+            end
+        `DAC_ISYM: begin
+            dac1Data <= iSym;
+            dac1Sync <= resampSync;
+            end
+        `DAC_QSYM: begin
+            dac1Data <= qSym;
+            dac1Sync <= resampSync;
+            end
+        `DAC_FREQ: begin
+            dac1Data <= {freq,10'h0};
+            dac1Sync <= ddcSync;
+            end
+        `DAC_PHASE: begin
+            dac1Data <= {phase,10'b0};
+            dac1Sync <= ddcSync;
+            end
+        `DAC_MAG: begin
+            dac1Data <= {~mag[8],mag[7:0],9'b0};
+            dac1Sync <= ddcSync;
+            end
+        `DAC_PHERROR: begin
+            dac1Data <= {phaseError,10'h0};
+            dac1Sync <= ddcSync;
+            end
+        default: begin
+            dac1Data <= iDdc;
+            dac1Sync <= ddcSync;
+            end
+        endcase
+
+    case (dac2Select) 
+        `DAC_I: begin
+            dac2Data <= iDdc;
+            dac2Sync <= ddcSync;
+            end
+        `DAC_Q: begin
+            dac2Data <= qDdc;
+            dac2Sync <= ddcSync;
+            end
+        `DAC_ISYM: begin
+            dac2Data <= iSym;
+            dac2Sync <= resampSync;
+            end
+        `DAC_QSYM: begin
+            dac2Data <= qSym;
+            dac2Sync <= resampSync;
+            end
+        `DAC_FREQ: begin
+            dac2Data <= {freq,10'h0};
+            dac2Sync <= ddcSync;
+            end
+        `DAC_PHASE: begin
+            dac2Data <= {phase,10'b0};
+            dac2Sync <= ddcSync;
+            end
+        `DAC_MAG: begin
+            dac2Data <= {~mag[8],mag[7:0],9'b0};
+            dac2Sync <= ddcSync;
+            end
+        `DAC_PHERROR: begin
+            dac2Data <= {phaseError,10'h0};
+            dac2Sync <= ddcSync;
+            end
+        default: begin
+            dac2Data <= iDdc;
+            dac2Sync <= ddcSync;
+            end
+        endcase
+
     end
 `endif
 

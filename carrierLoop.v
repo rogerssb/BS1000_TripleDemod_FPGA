@@ -15,7 +15,8 @@ module carrierLoop(
     offsetError,
     offsetErrorEn,
     carrierFreqOffset,
-    carrierFreqEn
+    carrierFreqEn,
+    loopError
     );
 
 input           clk;
@@ -33,6 +34,7 @@ input   [7:0]   offsetError;
 input           offsetErrorEn;
 output  [31:0]  carrierFreqOffset;
 output          carrierFreqEn;
+output  [7:0]   loopError;
 
 
 /***************************** Control Registers ******************************/
@@ -74,7 +76,12 @@ loopRegs loopRegs(
 reg     [7:0]   modeError;
 reg             modeErrorEn;
 reg             sync;
-always @(demodMode or offsetError or offsetErrorEn or phase or freq or ddcSync or resampSync) begin
+wire    [7:0]   bpskPhase = phase;
+wire    [7:0]   qpskPhase = phase - 8'h20;
+always @(demodMode or offsetError or offsetErrorEn or 
+         qpskPhase or bpskPhase or
+         phase or freq or 
+         ddcSync or resampSync) begin
     case (demodMode)
         `MODE_AM: begin
             sync <= ddcSync;
@@ -98,13 +105,13 @@ always @(demodMode or offsetError or offsetErrorEn or phase or freq or ddcSync o
             end
         `MODE_BPSK: begin
             sync <= ddcSync;
-            modeError <= {phase[6:0],1'b0};
+            modeError <= {bpskPhase[6:0],1'b0};
             modeErrorEn <= 1'b1;
             end
         `MODE_QPSK,
         `MODE_OQPSK: begin
             sync <= ddcSync;
-            modeError <= {phase[5:0],2'b0} - 8'h20;
+            modeError <= {qpskPhase[5:0],2'b0};
             modeErrorEn <= 1'b1;
             end
         default: begin
@@ -124,14 +131,16 @@ wire loopFilterEn = sync & modeErrorEn;
 /**************************** Adjust Error ************************************/
 reg [7:0]loopError;
 always @(posedge clk) begin 
-    if (zeroError) begin
-        loopError <= 8'h0;
-        end
-    else if (invertError) begin
-        loopError <= ~modeError + 1;
-        end
-    else begin
-        loopError <= modeError;
+    if (loopFilterEn) begin
+        if (zeroError) begin
+            loopError <= 8'h0;
+            end
+        else if (invertError) begin
+            loopError <= ~modeError + 1;
+            end
+        else begin
+            loopError <= modeError;
+            end
         end
     end
 
