@@ -445,7 +445,7 @@ decoder decoder
   .addr(addr),
   .din(data),
   .dout(decoder_dout),
-  .ck933(ck933),
+  .clk(ck933),
   .symb_clk_en(symSync),            // symbol rate clock enable
   .symb_clk_2x_en(symTimes2Sync),   // 2x symbol rate clock enable
   .symb_i({iBit,2'b0}),             // input, i
@@ -454,7 +454,7 @@ decoder decoder
   .dout_q(decoder_dout_q),          // output, q data
   .cout(decoder_cout),              // output, i/q clock
   .fifo_rs(decoder_fifo_rs),
-        .clk_inv(cout_inv)
+  .clk_inv(cout_inv)
   );
 
 //******************************************************************************
@@ -517,8 +517,6 @@ always @(negedge cout)begin
   dout_q <= decoder_fifo_dout_q;
   end
 
-
-
 //******************************************************************************
 //                                 GPIO
 //******************************************************************************
@@ -572,37 +570,37 @@ always @(
     `RESAMPSPACE,
     `CARRIERSPACE,
     `CHAGCSPACE : begin
-        if (addr[1]) begin
-            rd_mux <= demodDout[31:16];
-            end
-        else begin
-            rd_mux <= demodDout[15:0];
-            end
+      if (addr[1]) begin
+        rd_mux <= demodDout[31:16];
         end
+      else begin
+        rd_mux <= demodDout[15:0];
+        end
+      end
     `INTERP0SPACE: begin
-        if (addr[1]) begin
-            rd_mux <= dac0Dout[31:16];
-            end
-        else begin
-            rd_mux <= dac0Dout[15:0];
-            end
+      if (addr[1]) begin
+        rd_mux <= dac0Dout[31:16];
         end
+      else begin
+        rd_mux <= dac0Dout[15:0];
+        end
+      end
     `INTERP1SPACE: begin
-        if (addr[1]) begin
-            rd_mux <= dac1Dout[31:16];
-            end
-        else begin
-            rd_mux <= dac1Dout[15:0];
-            end
+      if (addr[1]) begin
+        rd_mux <= dac1Dout[31:16];
         end
+      else begin
+        rd_mux <= dac1Dout[15:0];
+        end
+      end
     `INTERP2SPACE: begin
-        if (addr[1]) begin
-            rd_mux <= dac2Dout[31:16];
-            end
-        else begin
-            rd_mux <= dac2Dout[15:0];
-            end
+      if (addr[1]) begin
+        rd_mux <= dac2Dout[31:16];
         end
+      else begin
+        rd_mux <= dac2Dout[15:0];
+        end
+      end
     `DAC_SPACE : rd_mux <= dac_dout;
     `MISC_SPACE : rd_mux <= misc_dout;
     `GPIOSPACE: rd_mux <= gpio_dout;

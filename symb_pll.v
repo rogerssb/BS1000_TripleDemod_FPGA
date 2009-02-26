@@ -199,12 +199,11 @@ reg clk_vco;        // pll vco output clock
 wire clk_fbk;       // pll comparator feedback clock
 wire clk_out;       // filtered symbol clock
 
-reg rs,en,wr;       // processor interface signals
+reg rs,en,wr0,wr1;  // processor interface signals
 reg [11:0]a;
 reg [15:0]di;
 wire [15:0]do;
-
-symb_pll uut(rs,en,wr,a,di,do,clk,clk_en,clk_ref,clk_vco,clk_fbk,clk_out);
+symb_pll uut(rs,en,wr0,wr1,a,di,do,clk,1'b1,/*clk_en,*/clk_ref,clk_vco,clk_fbk,clk_out);
 
 always #5 clk = !clk; // 100 MHz system clock
 always @(posedge clk) clk_en = !clk_en;
@@ -217,21 +216,14 @@ initial begin
   clk_vco = 0;
   rs = 0;
   en = 0;
-  wr = 0;
+  wr0 = 0;
+  wr1 = 0;
   a = 0;
   di = 0;
 
-  // test reference divider
-  // stretches clk_en n times into clk_ref
-  //uut.ref = 4;
-
-  // test feedback divider
-  // stretches clk_vco n times into clk_fbk
-  //  uut.fbk = 2;
-
-  // test vco output divider
-  // stretches clk_vco n times into clk_out
-  // uut.vco = 8;
+  uut.ref = 1;
+  uut.fbk = 1;
+  uut.vco = 1;
 
   #200 rs = 1;
   #200 rs = 0;

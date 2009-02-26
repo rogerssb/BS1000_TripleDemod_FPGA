@@ -19,7 +19,7 @@ module decoder
   addr,
   din,
   dout,
-  ck933,
+  clk,
   symb_clk_en,
   symb_clk_2x_en,
   symb_i,
@@ -32,7 +32,7 @@ module decoder
   );
 
 input rs,en,wr0,wr1;
-input ck933,symb_clk_en,symb_clk_2x_en;
+input clk,symb_clk_en,symb_clk_2x_en;
 input [11:0]addr;
 input [15:0]din;
 output [15:0]dout;
@@ -46,7 +46,7 @@ output clk_inv;
 //------------------------------------------------------------------------------
 
 reg [2:0]last_symb_i;
-always @(posedge ck933)begin
+always @(posedge clk)begin
   if(symb_clk_en)
     last_symb_i <= symb_i;
 end
@@ -56,7 +56,7 @@ wire [2:0] nrz_i;
 biphase_to_nrz biphase_to_nrz
   (
   .rs(rs),
-  .clk(ck933),
+  .clk(clk),
   .symb_clk_en(symb_clk_en),
   .biphase_en(biphase_en),
   .biphase(biphase),
@@ -66,7 +66,7 @@ biphase_to_nrz biphase_to_nrz
   );
 
 reg [2:0] nrz_q, nrz_delay_i, nrz_delay_q;
-always @(posedge ck933 or posedge rs)begin
+always @(posedge clk or posedge rs)begin
   if(rs)begin
     nrz_delay_i <= 0;
     nrz_delay_q <= 0;
@@ -92,7 +92,7 @@ mrk_spc_decode mrk_spc_decode_i
   .rs(rs),
   .din(nrz_i),
   .last_din(nrz_delay_i),
-  .clk(ck933),
+  .clk(clk),
   .clk_en(symb_clk_en),
   .biphase_en(biphase_en),
   .mode(mode),
@@ -105,7 +105,7 @@ mrk_spc_decode mrk_spc_decode_q
   .rs(rs),
   .din(nrz_q),
   .last_din(nrz_delay_q),
-  .clk(ck933),
+  .clk(clk),
   .clk_en(symb_clk_en),
   .biphase_en(biphase_en),
   .mode(mode),
@@ -119,7 +119,7 @@ mrk_spc_decode mrk_spc_decode_q
 reg [2:0] demux_i, demux_q;
 wire swap;
 
-always @(posedge ck933)begin
+always @(posedge clk)begin
   if(symb_clk_2x_en)begin
     if(swap ^ symb_clk_en)
       demux_i <= dec_i;
@@ -135,7 +135,7 @@ end
 
 reg [2:0]dec_delay_i, dec_delay_q;
 reg [2:0]feher_demux_i,feher_demux_q;
-always @(posedge ck933) begin
+always @(posedge clk) begin
     if(symb_clk_2x_en)begin
       dec_delay_i <= dec_i;
       dec_delay_q <= dec_q;
@@ -152,7 +152,7 @@ always @(posedge ck933) begin
 reg [2:0] out_sel_i, out_sel_q;
 wire feher, demux;
 
-always @(posedge ck933) begin
+always @(posedge clk) begin
   if(symb_clk_2x_en)begin
     if(feher)begin
       out_sel_i <= feher_demux_i;
@@ -177,7 +177,7 @@ reg [14:0]rand_nrz_shft;
 wire rand_nrz_shft_en = demux ? symb_clk_2x_en : symb_clk_2x_en;  //was div_n==0;
 reg  rand_nrz_dec_out;
 
-always @(posedge ck933 or posedge rs) begin
+always @(posedge clk or posedge rs) begin
   if(rs) begin
     rand_nrz_shft <= 15'h0 ;
     rand_nrz_dec_out <= 1'b0 ;
@@ -208,7 +208,7 @@ wire [2:0]formatted_out_i;
 format_output format_output_i
   (
   .din(sign_mag_i),
-  .clk(ck933),
+  .clk(clk),
   .clk_en(symb_clk_2x_en),
   .mode(sign_mag),
   .rs(rs),
@@ -219,7 +219,7 @@ wire [2:0]formatted_out_q;
 format_output format_output_q
   (
   .din(sign_mag_q),
-  .clk(ck933),
+  .clk(clk),
   .clk_en(symb_clk_2x_en),
   .mode(sign_mag),
   .rs(rs),
@@ -269,12 +269,12 @@ assign {mode,
 //------------------------------------------------------------------------------
 
 reg decayDelayed,decayPulse;
-always @(posedge ck933) begin
+always @(posedge clk) begin
     decayDelayed <= decay;
     decayPulse <= decay & ! decayDelayed;
 end
-PeakDetect PeakI(rs, ck933, decayPulse, I_Video, posPeakI, negPeakI);
-PeakDetect PeakQ(rs, ck933, decayPulse, Q_Video, posPeakQ, negPeakQ);
+PeakDetect PeakI(rs, clk, decayPulse, I_Video, posPeakI, negPeakI);
+PeakDetect PeakQ(rs, clk, decayPulse, Q_Video, posPeakQ, negPeakQ);
 
 //------------------------------------------------------------------------------
 //                             Signal Quality
@@ -309,7 +309,7 @@ wire    serialOut = ((|iEnd) | (|qEnd)), bitSyncLock = 1'b1;
 
 reg [5:0]adcI;
 reg [4:0]absI;
-always @(posedge ck933) begin
+always @(posedge clk) begin
     adcI <= I_ADC;
     if (adcI[5]) begin
         absI = adcI[4:0];
@@ -318,7 +318,7 @@ always @(posedge ck933) begin
         absI = ~adcI[4:0];
     end
 end
-sigQual sigQual(ck933,rs,absI,sigQualData);
+sigQual sigQual(clk,rs,absI,sigQualData);
 
 `endif
 */
@@ -329,7 +329,7 @@ endmodule
 module decoder_test;
 
 reg rs,en,wr0,wr1;
-reg ck933,symb_clk_en,symb_clk_2x_en;
+reg clk,symb_clk_en,symb_clk_2x_en;
 reg [11:0]addr;
 reg [15:0]din;
 wire [15:0]dout;
@@ -346,7 +346,7 @@ decoder uut
   addr,
   din,
   dout,
-  ck933,
+  clk,
   symb_clk_en,
   symb_clk_2x_en,
   symb_i,
@@ -363,7 +363,7 @@ initial begin
   en = 0;
   wr0 = 0;
   wr1 = 0;
-  ck933 = 0;
+  clk = 0;
   symb_clk_en = 0;
   symb_clk_2x_en = 0;
   addr = 0;
@@ -377,12 +377,12 @@ initial begin
   #100 rs = !rs;
 end
 
-always #5 ck933 = !ck933;
+always #5 clk = !clk;
 
 //set symb_clk_en rate at 4 MHz
 
 reg [4:0]symb_divider;
-always @(posedge ck933 or posedge rs)begin
+always @(posedge clk or posedge rs)begin
   if(rs)begin
     symb_divider <= 0;
     symb_clk_en <= 0;
