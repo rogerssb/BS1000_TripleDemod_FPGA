@@ -9,9 +9,11 @@ module loopFilter (
     din,
     dout,
     error,
-    errorEn,
     loopFreq,
-    ctrl2
+    ctrl2,
+    satPos,
+    satNeg,
+    lockCount
     );
 
 input           clk, clkEn, reset;
@@ -21,11 +23,12 @@ input   [11:0]  addr;
 input   [31:0]  din;
 output  [31:0]  dout;
 input   [7:0]   error;
-input           errorEn;
 output  [31:0]  loopFreq;
 output          ctrl2;
+output          satPos;
+output          satNeg;
+output  [15:0]  lockCount;
 
-wire loopFilterEn = clkEn & errorEn;
 
 // Microprocessor interface
 wire    [4:0]   lead, lag;
@@ -43,7 +46,8 @@ loopRegs micro(
     .ctrl2(ctrl2),
     .leadExp(lead),
     .lagExp(lag),
-    .limit(limit)
+    .limit(limit),
+    .lockCount(lockCount)
     );
 
 /**************************** Adjust Error ************************************/
@@ -70,7 +74,7 @@ always @(posedge clk) begin
     if (reset) begin
         leadError <= 0;
         end
-    else if (loopFilterEn) begin
+    else if (clkEn) begin
         leadError[31] <= loopError[7];
         case(lead)
               5'h00: leadError[30:0] <= {{31{loopError[7]}}};
@@ -116,7 +120,7 @@ always @(posedge clk) begin
     if (reset) begin
         lagError <= 0;
         end
-    else if (loopFilterEn) begin
+    else if (clkEn) begin
         lagError[31] <= loopError[7];
         case(lag)
               5'h00: lagError[30:0] <= {{31{loopError[7]}}};
@@ -162,27 +166,42 @@ always @(posedge clk) begin
 // CASE3                                            LL        UL
 //
 wire [31:0] sum = lagAccum + lagError;
-
+reg         satPos,satNeg;
 always @ (posedge clk or posedge reset) begin
    if (reset)
       begin
       lagAccum <= 0;
     end
-   else if (loopFilterEn) begin
+   else if (clkEn) begin
       if ( (sum[31] && upperLimit[31])          // both negative
-         && (sum >= upperLimit) )        // between upper limit and 0
+         && (sum >= upperLimit) ) begin       // between upper limit and 0
             lagAccum <= upperLimit;
+            satPos <= 1;
+            satNeg <= 0;
+            end
       else if ( (!sum[31] && !upperLimit[31])   // both positive
-           && (sum >= upperLimit) )       // between upper limit and +saturation
+           && (sum >= upperLimit) ) begin       // between upper limit and +saturation
             lagAccum <= upperLimit;
+            satPos <= 1;
+            satNeg <= 0;
+            end
       else if ( (!sum[31] && !lowerLimit[31])   // both positive
-           && (sum < lowerLimit) )       // between lower limit and 0
+           && (sum < lowerLimit) ) begin      // between lower limit and 0
             lagAccum <= lowerLimit;
+            satPos <= 0;
+            satNeg <= 1;
+            end
       else if ( (sum[31] && lowerLimit[31])     // both negative
-           && (sum < lowerLimit) )        // between lower limit and -saturation
+           && (sum < lowerLimit) ) begin        // between lower limit and -saturation
             lagAccum <= lowerLimit;
-      else
+            satPos <= 0;
+            satNeg <= 1;
+            end
+      else begin
          lagAccum <= sum;
+         satPos <= 0;
+         satNeg <= 0;
+         end
       end
    else
       lagAccum <= lagAccum;
@@ -193,7 +212,7 @@ always @(posedge clk) begin
     if (reset) begin
         filterSum <= 0;
         end
-    else if (loopFilterEn) begin
+    else if (clkEn) begin
         filterSum <= lagAccum + leadError;
         end
     end

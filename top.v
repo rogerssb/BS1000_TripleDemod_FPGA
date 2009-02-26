@@ -243,6 +243,8 @@ demod demod(
     .iBit(iBit),
     .qDataClk(qDataClk),
     .qBit(qBit),
+    .bitsyncLock(bitsyncLock),
+    .carrierLock(carrierLock),
     .symTimes2Sync(symTimes2Sync),
     .symSync(symSync)
     );
@@ -543,8 +545,8 @@ gpio gpio
   .q(gpio_q)
   );
 
-assign bsync_nLock = gpio_q[0];
-assign demod_nLock = gpio_q[1];
+assign bsync_nLock = !bitsyncLock;
+assign demod_nLock = !carrierLock;
 
 //******************************************************************************
 //                           Processor Read Data Mux

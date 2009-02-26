@@ -37,8 +37,7 @@
 `define DAC_PHASE       4'b0101
 `define DAC_MAG         4'b0110
 `define DAC_PHERROR     4'b0111
-`define DAC_SYMEN       4'b1000
-`define DAC_SYMX2EN     4'b1001
+`define DAC_BSLOCK      4'b1000
 
 // Define the FM memory map
 `define FM_MOD_FREQ     12'bxxxx_xxxx_00xx
@@ -59,6 +58,7 @@
 `define LF_LEAD_LAG     12'bxxxx_xxx0_01xx
 `define LF_LIMIT        12'bxxxx_xxx0_10xx
 `define LF_LOOPDATA     12'bxxxx_xxx0_11xx
+`define LF_LOCKDETECTOR 12'bxxxx_xxx1_00xx
 
 // Define the AGC Loop Filter memory map
 `define ALF_CONTROL     12'bxxxx_xxx0_00xx

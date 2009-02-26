@@ -17,7 +17,9 @@ module bitsync(
     symData,
     bitClk,
     bitData,
-    sampleFreq
+    sampleFreq,
+    bitsyncLock,
+    lockCounter
     );
 
 input           sampleClk;
@@ -36,6 +38,8 @@ output  [17:0]  symData;
 output          bitClk;
 output          bitData;
 output  [31:0]  sampleFreq;
+output          bitsyncLock;
+output  [15:0]  lockCounter;
 
 
 //******************************* Phase Error Detector ************************
@@ -206,8 +210,10 @@ always @(addr) begin
         default:        bitsyncSpace <= 0;
         endcase
     end
+wire    [15:0]  lockCount;
+wire            loopFilterEn = (symTimes2Sync & timingErrorEn);
 loopFilter sampleLoop(.clk(sampleClk),
-                      .clkEn(symTimes2Sync),
+                      .clkEn(loopFilterEn),
                       .reset(reset),
                       .cs(bitsyncSpace),
                       .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
@@ -215,10 +221,46 @@ loopFilter sampleLoop(.clk(sampleClk),
                       .din(din),
                       .dout(dout),
                       .error(timingError[17:10]),
-                      .errorEn(timingErrorEn),
                       .loopFreq(sampleFreq),
-                      .ctrl2(registerSlip)
+                      .ctrl2(registerSlip),
+                      .satPos(satPos),
+                      .satNeg(satNeg),
+                      .lockCount(lockCount)
                       );
+
+//************************** Lock Detector ************************************
+
+wire    [16:0]  lockPlus = {1'b0,lockCounter} + 1;
+wire    [16:0]  lockMinus = {1'b0,lockCounter} - 1;
+reg     [15:0]  lockCounter;
+reg             bitsyncLock;
+always @(posedge sampleClk) begin
+    if (reset) begin
+        lockCounter <= 0;
+        bitsyncLock <= 0;
+        end
+    else if (loopFilterEn) begin
+        if (satPos || satNeg) begin
+            if (lockMinus[16]) begin
+                bitsyncLock <= 0;
+                lockCounter <= lockCount;
+                end
+            else begin
+                lockCounter <= lockMinus;
+                end
+            end
+        else begin
+            if (lockPlus[16]) begin
+                bitsyncLock <= 1;
+                lockCounter <= lockCount;
+                end
+            else begin
+                lockCounter <= lockPlus[15:0];
+                end
+            end
+        end
+    end
+
 
 `ifdef SIMULATE
 real sampleFreqReal = ((sampleFreq > 2147483647.0) ? sampleFreq-4294967296.0 : sampleFreq)/2147483648.0;

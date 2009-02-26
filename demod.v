@@ -11,6 +11,8 @@ module demod(
     iBit,
     qDataClk,
     qBit,
+    bitsyncLock,
+    carrierLock,
     symTimes2Sync,
     symSync,
     dac0Sync,
@@ -34,6 +36,8 @@ output          iDataClk;
 output          iBit;
 output          qDataClk;
 output          qBit;
+output          bitsyncLock;
+output          carrierLock;
 output          symTimes2Sync;
 output          symSync;
 output          dac0Sync;
@@ -248,7 +252,8 @@ carrierLoop carrierLoop(
     .offsetErrorEn(offsetErrorEn),
     .carrierFreqOffset(carrierFreqOffset),
     .carrierFreqEn(carrierOffsetEn),
-    .loopError(phaseError)
+    .loopError(phaseError),
+    .carrierLock(carrierLock)
     );
 
 /******************************************************************************
@@ -306,6 +311,7 @@ always @(posedge clk) begin
                                 Bitsync Loop
 ******************************************************************************/
 wire    [17:0]  demodData;
+wire    [15:0]  bsLockCounter;
 wire    [31:0]  bitsyncDout;
 bitsync bitsync(
     .sampleClk(clk), .reset(reset), 
@@ -322,7 +328,9 @@ bitsync bitsync(
     .symData(demodData),
     .bitClk(demodClk),
     .bitData(demodBit),
-    .sampleFreq(resamplerFreqOffset)
+    .sampleFreq(resamplerFreqOffset),
+    .bitsyncLock(bitsyncLock),
+    .lockCounter(bsLockCounter)
     );
 
 assign symTimes2Sync = resampSync;
@@ -393,12 +401,8 @@ always @(posedge clk) begin
             dac0Data <= {phaseError,10'h0};
             dac0Sync <= ddcSync;
             end
-        `DAC_SYMEN: begin
-            dac0Data <= {symSync,17'h0};
-            dac0Sync <= 1'b1;
-            end
-        `DAC_SYMX2EN: begin
-            dac0Data <= {symTimes2Sync,17'h0};
+        `DAC_BSLOCK: begin
+            dac0Data <= {bsLockCounter,2'b0};
             dac0Sync <= 1'b1;
             end
         default: begin
@@ -440,12 +444,8 @@ always @(posedge clk) begin
             dac1Data <= {phaseError,10'h0};
             dac1Sync <= ddcSync;
             end
-        `DAC_SYMEN: begin
-            dac1Data <= {symSync,17'h0};
-            dac1Sync <= 1'b1;
-            end
-        `DAC_SYMX2EN: begin
-            dac1Data <= {symTimes2Sync,17'h0};
+        `DAC_BSLOCK: begin
+            dac1Data <= {bsLockCounter,2'b0};
             dac1Sync <= 1'b1;
             end
         default: begin
@@ -487,12 +487,8 @@ always @(posedge clk) begin
             dac2Data <= {phaseError,10'h0};
             dac2Sync <= ddcSync;
             end
-        `DAC_SYMEN: begin
-            dac2Data <= {symSync,17'h0};
-            dac2Sync <= 1'b1;
-            end
-        `DAC_SYMX2EN: begin
-            dac2Data <= {symTimes2Sync,17'h0};
+        `DAC_BSLOCK: begin
+            dac2Data <= {bsLockCounter,2'b0};
             dac2Sync <= 1'b1;
             end
         default: begin

@@ -91,41 +91,55 @@ always @ (posedge clk or posedge reset) begin
         sweepMag <= 0;
         end
     else if (clkEn) begin
-        if (carrierInSync) begin
-            lagAccum <= sum;
-            sweepOffset <= 0;
-            end
-        else begin
-            if ( (sum[31] && upperLimit[31])          // both negative
-              && (sum >= upperLimit) ) begin          // between upper limit and 0
-                lagAccum <= upperLimit;
-                sweepOffset <= -sweepOffsetMag;
-                sweepMag <= -sweepOffsetMag;
-                end
-            else if ( (!sum[31] && !upperLimit[31])   // both positive
-                   && (sum >= upperLimit) ) begin     // between upper limit and +saturation
-                lagAccum <= upperLimit;
-                sweepOffset <= -sweepOffsetMag;
-                sweepMag <= -sweepOffsetMag;
-                end
-            else if ( (!sum[31] && !lowerLimit[31])   // both positive
-                   && (sum < lowerLimit) ) begin      // between lower limit and 0
-                lagAccum <= lowerLimit;
-                sweepOffset <= sweepOffsetMag;
-                sweepMag <= sweepOffsetMag;
-                end
-            else if ( (sum[31] && lowerLimit[31])     // both negative
-                   && (sum < lowerLimit) ) begin      // between lower limit and -saturation
-                lagAccum <= lowerLimit;
-                sweepOffset <= sweepOffsetMag;
-                sweepMag <= sweepOffsetMag;
+        if ( (sum[31] && upperLimit[31])          // both negative
+            && (sum >= upperLimit) ) begin          // between upper limit and 0
+            lagAccum <= upperLimit;
+            if (carrierInSync) begin
+                sweepOffset <= 0;
                 end
             else begin
-                lagAccum <= sum;
-                sweepOffset <= sweepMag;
-                if (sweepMag == 0) begin
-                    sweepMag <= sweepOffsetMag;
-                    end
+                sweepOffset <= -sweepOffsetMag;
+                sweepMag <= -sweepOffsetMag;
+                end
+            end
+        else if ( (!sum[31] && !upperLimit[31])   // both positive
+                && (sum >= upperLimit) ) begin     // between upper limit and +saturation
+            lagAccum <= upperLimit;
+            if (carrierInSync) begin
+                sweepOffset <= 0;
+                end
+            else begin
+                sweepOffset <= -sweepOffsetMag;
+                sweepMag <= -sweepOffsetMag;
+                end
+            end
+        else if ( (!sum[31] && !lowerLimit[31])   // both positive
+                && (sum < lowerLimit) ) begin      // between lower limit and 0
+            lagAccum <= lowerLimit;
+            if (carrierInSync) begin
+                sweepOffset <= 0;
+                end
+            else begin
+                sweepOffset <= sweepOffsetMag;
+                sweepMag <= sweepOffsetMag;
+                end
+            end
+        else if ( (sum[31] && lowerLimit[31])     // both negative
+                && (sum < lowerLimit) ) begin      // between lower limit and -saturation
+            lagAccum <= lowerLimit;
+            if (carrierInSync) begin
+                sweepOffset <= 0;
+                end
+            else begin
+                sweepOffset <= sweepOffsetMag;
+                sweepMag <= sweepOffsetMag;
+                end
+            end
+        else begin
+            lagAccum <= sum;
+            sweepOffset <= sweepMag;
+            if (sweepMag == 0) begin
+                sweepMag <= sweepOffsetMag;
                 end
             end
         end

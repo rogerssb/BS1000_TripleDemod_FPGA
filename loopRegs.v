@@ -15,7 +15,9 @@ module loopRegs(addr,
                lagExp,
                lagMan,
                limit,
-               loopData
+               loopData,
+               lockCount,
+               syncThreshold
                );
 
 input   [11:0]addr;
@@ -45,6 +47,12 @@ reg     [31:0]  limit;
 output  [31:0]  loopData;
 reg     [31:0]  loopData;
 
+output  [15:0]  lockCount;
+reg     [15:0]  lockCount;
+
+output  [7:0]   syncThreshold;
+reg     [7:0]   syncThreshold;
+
 always @(negedge wr0) begin
     if (cs) begin
         casex (addr)
@@ -61,6 +69,9 @@ always @(negedge wr0) begin
                 end
             `LF_LOOPDATA: begin
                 loopData[7:0] <= dataIn[7:0];
+                end
+            `LF_LOCKDETECTOR: begin
+                lockCount[7:0] <= dataIn[7:0];
                 end
             default: ;
             endcase
@@ -79,6 +90,9 @@ always @(negedge wr1) begin
             `LF_LOOPDATA: begin
                 loopData[15:8] <= dataIn[15:8];
                 end
+            `LF_LOCKDETECTOR: begin
+                lockCount[15:8] <= dataIn[15:8];
+                end
             default:  ;
             endcase
         end
@@ -95,6 +109,9 @@ always @(negedge wr2) begin
                 end
             `LF_LOOPDATA: begin
                 loopData[23:16] <= dataIn[23:16];
+                end
+            `LF_LOCKDETECTOR: begin
+                syncThreshold[23:16] <= dataIn[23:16];
                 end
             default:  ;
             endcase
@@ -123,7 +140,8 @@ always @(addr or cs or
          ctrl2 or invertError or zeroError or
          lagExp or lagMan or leadExp or leadMan or
          limit or 
-         loopData
+         loopData or
+         lockCount or syncThreshold
          ) begin
     if (cs) begin
         casex (addr)
@@ -131,6 +149,7 @@ always @(addr or cs or
             `LF_LEAD_LAG:       dataOut <= {leadMan,3'bx,leadExp,lagMan,3'bx,lagExp};
             `LF_LIMIT:          dataOut <= limit;
             `LF_LOOPDATA:       dataOut <= loopData;
+            `LF_LOCKDETECTOR:   dataOut <= {8'h0,syncThreshold,lockCount};
             default:            dataOut <= 32'hx;
             endcase
         end
