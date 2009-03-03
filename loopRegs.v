@@ -111,7 +111,7 @@ always @(negedge wr2) begin
                 loopData[23:16] <= dataIn[23:16];
                 end
             `LF_LOCKDETECTOR: begin
-                syncThreshold[23:16] <= dataIn[23:16];
+                syncThreshold <= dataIn[23:16];
                 end
             default:  ;
             endcase

@@ -71,7 +71,7 @@ reg  [17:0]timingError;
 wire timingErrorEn = (phaseState == ONTIME);
 
 // DC Offset error variables
-wire [18:0]offsetErrorSum = {bbSR[2][7],bbSR[2]} + {bbSR[0][7],bbSR[0]};
+wire [18:0]offsetErrorSum = {bbSR[2][17],bbSR[2]} + {bbSR[0][17],bbSR[0]};
 reg  [17:0]offsetError;
 wire offsetErrorEn = (phaseState == ONTIME);
 
@@ -84,11 +84,12 @@ wire slip = registerSlip;
 `endif
 reg slipped;
 reg  [17:0]slipError;
-wire [17:0]absError = timingError[7] ? (~timingError + 1) : timingError;
-wire [17:0]absSlipError = slipError[7] ? (~slipError + 1) : slipError;
+wire [17:0]absError = timingError[17] ? (~timingError + 1) : timingError;
+wire [17:0]absSlipError = slipError[17] ? (~slipError + 1) : slipError;
 reg  [21:0]avgError;
 reg  [21:0]avgSlipError;
 reg  [3:0]avgCount;
+reg  transition;
 always @(posedge sampleClk) begin
     if (reset) begin
         phaseState <= ONTIME;
@@ -124,6 +125,7 @@ always @(posedge sampleClk) begin
                 // Is there a data transition?
                 if (earlySign != lateSign) begin
                     // Yes. Calculate DC offset error
+                    transition <= 1;
                     offsetError <= offsetErrorSum[18:1];
                     // High to low transition?
                     if (earlySign) begin
@@ -137,8 +139,9 @@ always @(posedge sampleClk) begin
                         end
                     end
                 else begin
-                    offsetError <= 8'h00;
-                    timingError <= 8'h00;
+                    transition <= 0;
+                    offsetError <= 18'h00;
+                    timingError <= 18'h00;
                     end
                 end
             endcase
@@ -146,7 +149,7 @@ always @(posedge sampleClk) begin
         case (slipState)
             AVERAGE: begin
                 stateMachineSlip <= 0;
-                if (timingErrorEn) begin
+                if (timingErrorEn && transition) begin
                     avgError <= avgError + {4'b0,absError};
                     avgSlipError <= avgSlipError + {4'b0,absSlipError};
                     if (avgCount == 0) begin
@@ -211,6 +214,7 @@ always @(addr) begin
         endcase
     end
 wire    [15:0]  lockCount;
+wire    [7:0]   syncThreshold;
 wire            loopFilterEn = (symTimes2Sync & timingErrorEn);
 loopFilter sampleLoop(.clk(sampleClk),
                       .clkEn(loopFilterEn),
@@ -225,14 +229,53 @@ loopFilter sampleLoop(.clk(sampleClk),
                       .ctrl2(registerSlip),
                       .satPos(satPos),
                       .satNeg(satNeg),
-                      .lockCount(lockCount)
+                      .lockCount(lockCount),
+                      .syncThreshold(syncThreshold)
                       );
 
 //************************** Lock Detector ************************************
 
-wire    [16:0]  lockPlus = {1'b0,lockCounter} + 1;
-wire    [16:0]  lockMinus = {1'b0,lockCounter} - 1;
+`define NEW_DETECTOR
+`ifdef NEW_DETECTOR
 reg     [15:0]  lockCounter;
+wire    [16:0]  lockPlus = {1'b0,lockCounter} + 17'h00001;
+wire    [16:0]  lockMinus = {1'b0,lockCounter} + 17'h1ffff;
+reg             bitsyncLock;
+always @(posedge sampleClk) begin
+    if (reset) begin
+        lockCounter <= 0;
+        bitsyncLock <= 0;
+        end
+    else if (symTimes2Sync) begin
+        if (slipState == TEST) begin
+            //if (avgError[21:14] > syncThreshold) begin
+            if (avgError[21:14] > {1'b0,avgSlipError[21:15]}) begin
+                if (lockMinus[16]) begin
+                    bitsyncLock <= 0;
+                    lockCounter <= lockCount;
+                    end
+                else begin
+                    lockCounter <= lockMinus[15:0];
+                    end
+                end
+            else begin
+                if (lockPlus[16]) begin
+                    bitsyncLock <= 1;
+                    lockCounter <= lockCount;
+                    end
+                else begin
+                    lockCounter <= lockPlus[15:0];
+                    end
+                end
+            end
+        end
+    end
+
+`else
+
+reg     [15:0]  lockCounter;
+wire    [16:0]  lockPlus = {1'b0,lockCounter} + 17'h00001;
+wire    [16:0]  lockMinus = {1'b0,lockCounter} - {2'b0,syncThreshold};
 reg             bitsyncLock;
 always @(posedge sampleClk) begin
     if (reset) begin
@@ -246,7 +289,7 @@ always @(posedge sampleClk) begin
                 lockCounter <= lockCount;
                 end
             else begin
-                lockCounter <= lockMinus;
+                lockCounter <= lockMinus[15:0];
                 end
             end
         else begin
@@ -261,6 +304,7 @@ always @(posedge sampleClk) begin
         end
     end
 
+`endif
 
 `ifdef SIMULATE
 real sampleFreqReal = ((sampleFreq > 2147483647.0) ? sampleFreq-4294967296.0 : sampleFreq)/2147483648.0;

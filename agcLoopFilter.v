@@ -46,16 +46,17 @@ agcLoopRegs loopRegs(
 
 /**************************** Adjust Error ************************************/
 reg [7:0]loopError;
-wire [7:0]error = agcSetpoint - signalLevel;
+wire [8:0]error = {1'b0,agcSetpoint} - {1'b0,signalLevel};
+wire [8:0]negError = {1'b0,signalLevel} - {1'b0,agcSetpoint};
 always @(posedge clk) begin 
     if (zeroError) begin
         loopError <= 8'h0;
         end
     else if (invertError) begin
-        loopError <= ~error + 1;
+        loopError <= negError[8:1];
         end
     else begin
-        loopError <= error;
+        loopError <= error[8:1];
         end
     end
 

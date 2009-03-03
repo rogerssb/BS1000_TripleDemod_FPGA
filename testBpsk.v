@@ -49,7 +49,7 @@ real carrierLimitNorm = carrierLimitHz * `SAMPLE_PERIOD * `TWO_POW_32;
 integer carrierLimitInt = carrierLimitNorm;
 wire [31:0] carrierLimit = carrierLimitInt;
 
-wire [31:0] sweepRate = 32'h00800000;
+wire [31:0] sweepRate = 32'h00000000;
 
 real bitrateBps = 400000.0;
 real bitrateSamples = 1/bitrateBps/`SAMPLE_PERIOD/2.0;
@@ -486,7 +486,7 @@ initial begin
     we0 = 0; we1 = 0; we2 = 0; we3 = 0; 
     d = 32'hz;
     fmModCS = 0;
-    txScaleFactor = 0.707;
+    txScaleFactor = 0.5;
 
     // Turn on the clock
     clken=1;
@@ -511,12 +511,14 @@ initial begin
     write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h001b0016);    
     //write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h0014000c);    
     write32(createAddress(`BITSYNCSPACE,`LF_LIMIT), resamplerLimitInt);    
+    write32(createAddress(`BITSYNCSPACE,`LF_LOCKDETECTOR), 32'h00200800);
 
     // Init the carrier loop filters
     write32(createAddress(`CARRIERSPACE,`LF_CONTROL),1);    // Zero the error
-    write32(createAddress(`CARRIERSPACE,`LF_LEAD_LAG),32'h00140000);   
+    write32(createAddress(`CARRIERSPACE,`LF_LEAD_LAG),32'h00100004);   
     write32(createAddress(`CARRIERSPACE,`LF_LIMIT), carrierLimit);
     write32(createAddress(`CARRIERSPACE,`LF_LOOPDATA), sweepRate);
+    write32(createAddress(`CARRIERSPACE,`LF_LOCKDETECTOR), 32'h00200800);
 
     // Init the downcoverter register set
     write32(createAddress(`DDCSPACE,`DDC_CONTROL),0);

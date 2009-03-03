@@ -13,7 +13,8 @@ module loopFilter (
     ctrl2,
     satPos,
     satNeg,
-    lockCount
+    lockCount,
+    syncThreshold
     );
 
 input           clk, clkEn, reset;
@@ -28,6 +29,7 @@ output          ctrl2;
 output          satPos;
 output          satNeg;
 output  [15:0]  lockCount;
+output  [7:0]   syncThreshold;
 
 
 // Microprocessor interface
@@ -47,7 +49,8 @@ loopRegs micro(
     .leadExp(lead),
     .lagExp(lag),
     .limit(limit),
-    .lockCount(lockCount)
+    .lockCount(lockCount),
+    .syncThreshold(syncThreshold)
     );
 
 /**************************** Adjust Error ************************************/

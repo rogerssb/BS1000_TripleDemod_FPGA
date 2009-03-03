@@ -17,7 +17,8 @@ module carrierLoop(
     carrierFreqOffset,
     carrierFreqEn,
     loopError,
-    carrierLock
+    carrierLock,
+    lockCounter
     );
 
 input           clk;
@@ -37,6 +38,7 @@ output  [31:0]  carrierFreqOffset;
 output          carrierFreqEn;
 output  [7:0]   loopError;
 output          carrierLock;
+output  [15:0]  lockCounter;
 
 
 /***************************** Control Registers ******************************/
@@ -198,8 +200,8 @@ always @(posedge clk) begin
 /******************************* Lock Detector ********************************/
 wire    [7:0]   absModeError = modeError[7] ? negModeError : modeError;
 reg     [15:0]  lockCounter;
-wire    [16:0]  lockPlus = {1'b0,lockCounter} + 1;
-wire    [16:0]  lockMinus = {1'b0,lockCounter} - 1;
+wire    [16:0]  lockPlus = {1'b0,lockCounter} + 17'h00001;
+wire    [16:0]  lockMinus = {1'b0,lockCounter} + 17'h1ffff;
 always @(posedge clk) begin
     if (reset) begin
         lockCounter <= 0;
@@ -213,7 +215,7 @@ always @(posedge clk) begin
                     lockCounter <= lockCount;
                     end
                 else begin
-                    lockCounter <= lockMinus;
+                    lockCounter <= lockMinus[15:0];
                     end
                 end
             else begin

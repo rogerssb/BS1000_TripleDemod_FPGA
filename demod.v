@@ -236,6 +236,7 @@ fmDemod fmDemod(
 ******************************************************************************/
 wire    [17:0]  offsetError;
 wire    [7:0]   phaseError;
+wire    [15:0]  freqLockCounter;
 wire    [31:0]  freqDout;
 carrierLoop carrierLoop(
     .clk(clk), .reset(reset),
@@ -253,7 +254,8 @@ carrierLoop carrierLoop(
     .carrierFreqOffset(carrierFreqOffset),
     .carrierFreqEn(carrierOffsetEn),
     .loopError(phaseError),
-    .carrierLock(carrierLock)
+    .carrierLock(carrierLock),
+    .lockCounter(freqLockCounter)
     );
 
 /******************************************************************************
@@ -405,6 +407,10 @@ always @(posedge clk) begin
             dac0Data <= {bsLockCounter,2'b0};
             dac0Sync <= 1'b1;
             end
+        `DAC_FREQLOCK: begin
+            dac0Data <= {freqLockCounter,2'b0};
+            dac0Sync <= 1'b1;
+            end
         default: begin
             dac0Data <= iDdc;
             dac0Sync <= ddcSync;
@@ -448,6 +454,10 @@ always @(posedge clk) begin
             dac1Data <= {bsLockCounter,2'b0};
             dac1Sync <= 1'b1;
             end
+        `DAC_FREQLOCK: begin
+            dac1Data <= {freqLockCounter,2'b0};
+            dac1Sync <= 1'b1;
+            end
         default: begin
             dac1Data <= iDdc;
             dac1Sync <= ddcSync;
@@ -489,6 +499,10 @@ always @(posedge clk) begin
             end
         `DAC_BSLOCK: begin
             dac2Data <= {bsLockCounter,2'b0};
+            dac2Sync <= 1'b1;
+            end
+        `DAC_FREQLOCK: begin
+            dac2Data <= {freqLockCounter,2'b0};
             dac2Sync <= 1'b1;
             end
         default: begin
