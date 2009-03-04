@@ -7,7 +7,7 @@ Version=Silvaco4.10.0.R
 [Analyzer]
 C0Width=58
 C1Width=58
-C2Width=58
+C2Width=218
 GotoSource=N
 [Spice]
 [LibraryFiles]
@@ -56,8 +56,6 @@ Name="Carrier"
 10="test.demod.bitsync : offsetErrorSum[8:0]" default
 11="test.demod : freq[7:0]" default
 OpenGroup=
-[IncDirs]
-0=.
 [PliFiles]
 0=.\gaussPLI\gaussPLI.dll
 [Group4]
@@ -184,4 +182,5 @@ OpenGroup=Yes
 4=Bitsync : 4 : 1 : 0
 5=Carrier : 5 : 1 : 0
 6=DAC : 6 : 1 : 0
-[Bookmarks]
+[IncDirs]
+0=.

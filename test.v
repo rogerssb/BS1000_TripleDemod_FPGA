@@ -351,7 +351,7 @@ decoder decoder
   .addr(),
   .din(),
   .dout(),
-  .ck933(clk),
+  .clk(clk),
   .symb_clk_en(symEn),
   .symb_clk_2x_en(symX2En),
   .symb_i({demodBit,2'b0}),
@@ -578,7 +578,7 @@ initial begin
     write32(createAddress(`CHAGCSPACE,`ALF_LLIMIT),32'h00000000);       // AGC Lower limit
 
     // Set the DAC interpolator gains
-    write32(createAddress(`DEMODSPACE, `DEMOD_DACSELECT), {12'h0,`DAC_SYMEN,
+    write32(createAddress(`DEMODSPACE, `DEMOD_DACSELECT), {12'h0,`DAC_FREQ,
                                                            4'h0,`DAC_Q,
                                                            4'h0,`DAC_I});
     write32(createAddress(`INTERP0SPACE, `INTERP_CONTROL),0);

@@ -143,28 +143,28 @@ always @(posedge clk) begin
 // Add 'em up
 wire    [18:0]  sumI = evenOutI[28:10] + {{2{oddOutI[17]}},oddOutI[17:1]};
 wire    [18:0]  sumQ = evenOutQ[28:10] + {{2{oddOutQ[17]}},oddOutQ[17:1]};
-reg     [17:0]  iOut;
-reg     [17:0]  qOut;
+reg     [17:0]  iData;
+reg     [17:0]  qData;
 always @(posedge clk) begin
     if (sync) begin
         if (evenSync) begin
             if (sumI[18] & !sumI[17]) begin
-                iOut <= 18'h20001;
+                iData <= 18'h20001;
                 end
             else if (!sumI[18] & sumI[17]) begin
-                iOut <= 18'h1ffff;
+                iData <= 18'h1ffff;
                 end
             else begin
-                iOut <= sumI[17:0];
+                iData <= sumI[17:0];
                 end
             if (sumQ[18] & !sumQ[17]) begin
-                qOut <= 18'h20001;
+                qData <= 18'h20001;
                 end
             else if (!sumQ[18] & sumQ[17]) begin
-                qOut <= 18'h1ffff;
+                qData <= 18'h1ffff;
                 end
             else begin
-                qOut <= sumQ[17:0];
+                qData <= sumQ[17:0];
                 end
             end
         end
@@ -172,7 +172,11 @@ always @(posedge clk) begin
 `endif
 
 reg syncOut;
+reg     [17:0]  iOut;
+reg     [17:0]  qOut;
 always @(posedge clk) begin
+    iOut <= iData;
+    qOut <= qData;
     syncOut <= evenSync & sync;
     end
 

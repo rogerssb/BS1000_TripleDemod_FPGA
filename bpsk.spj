@@ -5,9 +5,9 @@ DigitalThreshold=
 [Settings]
 Version=Silvaco4.10.0.R
 [Analyzer]
-C0Width=151
+C0Width=58
 C1Width=58
-C2Width=106
+C2Width=199
 GotoSource=N
 [Spice]
 [LibraryFiles]
@@ -15,7 +15,7 @@ GotoSource=N
 [DebugMode]
 CommandLine=+define+SIMULATE
 [View]
-1=Last 225752.295ns 603787.204ns 8905.416ns 573508.790ns 772501.087ns
+1=Last 327167.887ns 328749.742ns 51.110ns 327644.588ns 328278.330ns
 [Group0]
 Name=New Group2
 [Group3]
@@ -116,17 +116,6 @@ Name="Rx"
 17="test.demod.ddc : iMixReal" default Real AnalogDisplay AType=Step Scale=Auto
 18="test : iSignalReal" default Real AnalogDisplay AType=Step Scale=Auto
 OpenGroup=
-[Group6]
-Name="DAC"
-0="test.dac2Interp : dataIn[17:0]" default
-1="test.dac2Interp : clkEn" default
-2="test.dac2Interp : interpReal" default Real AnalogDisplay AType=Step Scale=Fixed MinScaleDbl=-1 MaxScaleDbl=1
-3="test.dac1Interp : interpReal" default Real AnalogDisplay AType=Step Scale=Fixed MinScaleDbl=-1 MaxScaleDbl=1
-4="test.dac0Interp : interpReal" default Real AnalogDisplay AType=Step Scale=Fixed MinScaleDbl=-1 MaxScaleDbl=1
-5="test.dac0Interp : expAdjReal" default Real AnalogDisplay AType=PWL Scale=Auto
-6="test.dac0Interp : exponentAdjusted[17:0]" default
-7="test.dac0Interp : dataIn[17:0]" default
-OpenGroup=
 [Group7]
 Name="Resampler"
 0="test.demod.resampler : iSumReal" default Real AnalogDisplay AType=Step Scale=Auto
@@ -184,6 +173,21 @@ Name="Bitsync"
 22="test.demod.resampler : iOutReal" default Real AnalogDisplay AType=Step Scale=Auto
 23="test.demod.resampler : inIReal" default Real AnalogDisplay AType=Step Scale=Fixed MinScaleDbl=-1 MaxScaleDbl=1
 24="test : cicDecimationInt" default Decimal AnalogDisplay AType=PWL Scale=Auto
+OpenGroup=
+[Group6]
+Name="DAC"
+0="test.dac2Interp : dataIn[17:0]" default
+1="test.dac2Interp : clkEn" default
+2="test.dac2Interp : interpReal" default Real AnalogDisplay AType=Step Scale=Fixed MinScaleDbl=-1 MaxScaleDbl=1
+3="test.dac1Interp : interpReal" default Real AnalogDisplay AType=Step Scale=Fixed MinScaleDbl=-1 MaxScaleDbl=1
+4="test.dac0Interp : interpReal" default Real AnalogDisplay AType=Step Scale=Fixed MinScaleDbl=-1 MaxScaleDbl=1
+5="test.dac0Interp : clkEn" default
+6="test.demod.ddc.hb : iOut[17:0]" default
+7="test.demod.ddc.hb : syncOut" default
+8="test.demod.ddc.hb : sync" default
+9="test.dac0Interp : expAdjReal" default Real AnalogDisplay AType=PWL Scale=Auto
+10="test.dac0Interp : exponentAdjusted[17:0]" default
+11="test.dac0Interp : dataIn[17:0]" default
 OpenGroup=Yes
 [GroupInfo]
 0=New Group2 : 0 : 0 : 0

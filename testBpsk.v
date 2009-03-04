@@ -486,7 +486,7 @@ initial begin
     we0 = 0; we1 = 0; we2 = 0; we3 = 0; 
     d = 32'hz;
     fmModCS = 0;
-    txScaleFactor = 0.5;
+    txScaleFactor = 0.25;
 
     // Turn on the clock
     clken=1;
@@ -540,13 +540,13 @@ initial begin
                                                            4'h0,`DAC_Q,
                                                            4'h0,`DAC_I});
     write32(createAddress(`INTERP0SPACE, `INTERP_CONTROL),0);
-    write32(createAddress(`INTERP0SPACE, `INTERP_EXPONENT), 9);
+    write32(createAddress(`INTERP0SPACE, `INTERP_EXPONENT), 7);
     write32(createAddress(`INTERP0SPACE, `INTERP_MANTISSA), 32'h00012000);
     write32(createAddress(`INTERP1SPACE, `INTERP_CONTROL),0);
-    write32(createAddress(`INTERP1SPACE, `INTERP_EXPONENT), 9);
+    write32(createAddress(`INTERP1SPACE, `INTERP_EXPONENT), 7);
     write32(createAddress(`INTERP1SPACE, `INTERP_MANTISSA), 32'h00012000);
     write32(createAddress(`INTERP2SPACE, `INTERP_CONTROL),1);
-    write32(createAddress(`INTERP2SPACE, `INTERP_EXPONENT), 9);
+    write32(createAddress(`INTERP2SPACE, `INTERP_EXPONENT), 7);
     write32(createAddress(`INTERP2SPACE, `INTERP_MANTISSA), 32'h00012000);
 
     reset = 1;
@@ -613,6 +613,12 @@ initial begin
     `ifdef MATLAB_VECTORS
     $fclose(outfile);
     `endif
+    $stop;
+
+    txScaleFactor = 0.707;
+
+    // Wait for some data to pass thru
+    #(2*100*bitrateSamplesInt*C) ;
     $stop;
 
     end
