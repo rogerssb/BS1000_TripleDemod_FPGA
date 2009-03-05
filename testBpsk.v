@@ -486,7 +486,7 @@ initial begin
     we0 = 0; we1 = 0; we2 = 0; we3 = 0; 
     d = 32'hz;
     fmModCS = 0;
-    txScaleFactor = 0.25;
+    txScaleFactor = 0.001;
 
     // Turn on the clock
     clken=1;

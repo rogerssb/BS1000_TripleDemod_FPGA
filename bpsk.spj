@@ -7,7 +7,7 @@ Version=Silvaco4.10.0.R
 [Analyzer]
 C0Width=58
 C1Width=58
-C2Width=199
+C2Width=58
 GotoSource=N
 [Spice]
 [LibraryFiles]
@@ -15,7 +15,7 @@ GotoSource=N
 [DebugMode]
 CommandLine=+define+SIMULATE
 [View]
-1=Last 327167.887ns 328749.742ns 51.110ns 327644.588ns 328278.330ns
+1=Last 250327.144ns 633260.019ns 9020.798ns 510577.166ns 328278.330ns
 [Group0]
 Name=New Group2
 [Group3]
@@ -26,7 +26,6 @@ Name="Micro"
 3="test.demod : wr3" default
 4="test.demod : din[31:0]" default
 5="test.demod : addr[11:0]" default
-OpenGroup=
 [Group2]
 Name="Tx"
 0="test.fmMod : interpReal" default Real AnalogDisplay AType=Step Scale=Auto
@@ -40,7 +39,6 @@ Name="Tx"
 8="test.fmMod : modClk" default
 9="test.fmMod : reset" default
 10="test.fmMod : clk" default
-OpenGroup=
 [IncDirs]
 0=.
 [PliFiles]
@@ -115,13 +113,12 @@ Name="Rx"
 16="test.demod.ddc : qMixReal" default Real AnalogDisplay AType=Step Scale=Auto
 17="test.demod.ddc : iMixReal" default Real AnalogDisplay AType=Step Scale=Auto
 18="test : iSignalReal" default Real AnalogDisplay AType=Step Scale=Auto
-OpenGroup=
+OpenGroup=Yes
 [Group7]
 Name="Resampler"
 0="test.demod.resampler : iSumReal" default Real AnalogDisplay AType=Step Scale=Auto
 1="test.demod.resampler : iOutReal" default Real AnalogDisplay AType=Step Scale=Auto
 2="test.demod.resampler : inIReal" default Real AnalogDisplay AType=Step Scale=Auto
-OpenGroup=
 [Group5]
 Name="Carrier"
 0="test.demod.carrierLoop.lagGain : sweepOffsetMag[31:0]" default
@@ -145,7 +142,6 @@ Name="Carrier"
 18="test.demod.bitsync : offsetErrorSum[8:0]" default
 19="test.demod.carrierLoop : zeroError" default
 20="test.demod : freq[7:0]" default
-OpenGroup=
 [Group4]
 Name="Bitsync"
 0="test.demod.bitsync : lockCounter[15:0]" default
@@ -173,7 +169,6 @@ Name="Bitsync"
 22="test.demod.resampler : iOutReal" default Real AnalogDisplay AType=Step Scale=Auto
 23="test.demod.resampler : inIReal" default Real AnalogDisplay AType=Step Scale=Fixed MinScaleDbl=-1 MaxScaleDbl=1
 24="test : cicDecimationInt" default Decimal AnalogDisplay AType=PWL Scale=Auto
-OpenGroup=
 [Group6]
 Name="DAC"
 0="test.dac2Interp : dataIn[17:0]" default

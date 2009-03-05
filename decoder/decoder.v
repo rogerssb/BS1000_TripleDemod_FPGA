@@ -9,7 +9,7 @@
 //------------------------------------------------------------------------------
 
 `timescale 1ns/100ps
-`include "../addressMap.v"
+`include "addressMap.v"
 
 module decoder
   (

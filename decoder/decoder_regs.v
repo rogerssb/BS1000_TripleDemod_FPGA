@@ -11,7 +11,7 @@
 //-----------------------------------------------------------------------------
 
 `timescale 1 ns/100ps
-`include "../addressMap.v"
+`include "addressMap.v"
 
 module decoder_regs
   (

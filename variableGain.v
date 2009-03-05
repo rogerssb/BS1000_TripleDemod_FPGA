@@ -210,14 +210,16 @@ mpy18x18 gainScaler (
 
 reg     [17:0]  dout;
 always @(posedge clk) begin
-    if (scaledValue[35] && (scaledValue[34:33] != 2'b11)) begin
-        dout <= 18'h20001;
-        end
-    else if (!scaledValue[35] && (scaledValue[34:33] != 2'b00)) begin
-        dout <= 18'h1ffff;
-        end
-    else begin
-        dout <= scaledValue[33:16];
+    if (clkEn) begin
+        if (scaledValue[35] && (scaledValue[34:33] != 2'b11)) begin
+            dout <= 18'h20001;
+            end
+        else if (!scaledValue[35] && (scaledValue[34:33] != 2'b00)) begin
+            dout <= 18'h1ffff;
+            end
+        else begin
+            dout <= scaledValue[33:16];
+            end
         end
     end
 

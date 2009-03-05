@@ -5,9 +5,9 @@ DigitalThreshold=
 [Settings]
 Version=Silvaco4.10.0.R
 [Analyzer]
-C0Width=58
+C0Width=156
 C1Width=58
-C2Width=218
+C2Width=120
 GotoSource=N
 [Spice]
 [LibraryFiles]
@@ -15,7 +15,7 @@ GotoSource=N
 [DebugMode]
 CommandLine=+define+SIMULATE
 [View]
-1=Last 60351.010ns 199225.641ns 4487.064ns 117261.929ns 172901.518ns
+1=Last 117026.420ns 119333.585ns 53.655ns 117261.929ns 119131.549ns
 [Group0]
 Name=New Group2
 [Group3]
@@ -157,6 +157,8 @@ OpenGroup=
 50=.\decoder\decoder.v
 51=.\decoder\decoder_regs.v
 52=.\decoder\format_output.v
+[IncDirs]
+0=.
 [Group6]
 Name="DAC"
 0="test.dac2Interp : interpReal" default Real AnalogDisplay AType=Step Scale=Auto
@@ -165,14 +167,15 @@ Name="DAC"
 3="test.dac0Interp : expAdjReal" default Real AnalogDisplay AType=PWL Scale=Auto
 4="test.dac0Interp : exponentAdjusted[17:0]" default
 5="test.dac0Interp : dataIn[17:0]" default
-6="test.decoder : dout_i" default
-7="test.decoder : symb_i[2:0]" default
-8="test.decoder : cout" default
-9="test.demod : symTimes2Sync" default
-10="test.demod : symSync" default
-11="test.demod : symClk" default
-12="test.demod : resampSync" default
-13="test.demod : ddcSync" default
+6="test.dac0Interp : clkEn" default
+7="test.decoder : dout_i" default
+8="test.decoder : symb_i[2:0]" default
+9="test.decoder : cout" default
+10="test.demod : symTimes2Sync" default
+11="test.demod : symSync" default
+12="test.demod : symClk" default
+13="test.demod : resampSync" default
+14="test.demod : ddcSync" default
 OpenGroup=Yes
 [GroupInfo]
 0=New Group2 : 0 : 0 : 0
@@ -182,5 +185,3 @@ OpenGroup=Yes
 4=Bitsync : 4 : 1 : 0
 5=Carrier : 5 : 1 : 0
 6=DAC : 6 : 1 : 0
-[IncDirs]
-0=.

@@ -1,6 +1,6 @@
 `timescale 1ns/10ps
 
-`include "../addressMap.v"
+`include "addressMap.v"
 
 module resampRegs(
     addr,

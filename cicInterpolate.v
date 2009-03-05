@@ -15,13 +15,13 @@ output  [47:0]  dOut;
 
 // 3rd order comb with a FIR structure to minimize delay
 // (1 - z)^3 = 1 - 3z + 3z^2 - z^3
-wire    [18:0]  slice = {dIn[17],dIn};
-wire    [19:0]  dinX3 = {slice[18],slice} + {slice,1'b0};
-reg     [19:0]  tap0;
-reg     [19:0]  tap1;
-reg     [19:0]  tap2;
-reg     [19:0]  tap3;
-wire    [19:0]  sum3 = tap2 + {slice[18],slice};
+wire    [19:0]  slice = {dIn[17],dIn[17],dIn};
+wire    [20:0]  dinX3 = {slice[19],slice} + {slice,1'b0};
+reg     [20:0]  tap0;
+reg     [20:0]  tap1;
+reg     [20:0]  tap2;
+reg     [20:0]  tap3;
+wire    [20:0]  sum3 = tap2 + {slice[19],slice};
 always @(posedge clk) begin
     if (reset) begin
         tap0 <= 0;
@@ -30,7 +30,7 @@ always @(posedge clk) begin
         tap3 <= 0;
         end
     else if (clkEn) begin
-        tap0 <= {slice[18],slice};
+        tap0 <= {slice[19],slice};
         tap1 <= dinX3 - tap0;
         tap2 <= tap1 - dinX3;
         tap3 <= sum3;
@@ -41,10 +41,10 @@ always @(posedge clk) begin
     end
 
 `ifdef SIMULATE
-real tap0Real = (tap0[19] ? tap0 - 1048576.0 : tap0)/524288.0;
-real tap1Real = (tap1[19] ? tap1 - 1048576.0 : tap1)/524288.0; 
-real tap2Real = (tap2[19] ? tap2 - 1048576.0 : tap2)/524288.0; 
-real sum3Real = (sum3[19] ? sum3 - 1048576.0 : sum3)/524288.0; 
+real tap0Real = (tap0[20] ? tap0 - 2097152.0 : tap0)/1048576.0;
+real tap1Real = (tap1[20] ? tap1 - 2097152.0 : tap1)/1048576.0; 
+real tap2Real = (tap2[20] ? tap2 - 2097152.0 : tap2)/1048576.0; 
+real sum3Real = (sum3[20] ? sum3 - 2097152.0 : sum3)/1048576.0; 
 `endif
 
 // Three stages of integration
@@ -56,7 +56,7 @@ always @(posedge clk) begin
         acc2 <= 0;
         end
     else begin
-        acc0 <= acc0 + {{28{tap3[19]}},tap3};
+        acc0 <= acc0 + {{27{tap3[20]}},tap3};
         acc1 <= acc1 + acc0;
         acc2 <= acc2 + acc1;
         end
