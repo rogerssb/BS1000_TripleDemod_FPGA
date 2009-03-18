@@ -58,10 +58,12 @@ wire    [31:0]  loopOffset;
 wire    [31:0]  sweepOffsetMag;
 wire    [15:0]  lockCount;
 wire    [7:0]   syncThreshold;
+wire    [31:0]  lagAccum;
 loopRegs loopRegs(
     .cs(freqLoopSpace),
     .addr(addr),
     .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
+    .lagAccum(lagAccum),
     .dataIn(din),
     .dataOut(dout),
     .invertError(invertError),
@@ -174,7 +176,6 @@ leadGain leadGain (
     );
 
 reg             carrierLock;
-wire    [31:0]  lagAccum;
 lagGain lagGain (
     .clk(clk), .clkEn(loopFilterEn), .reset(reset), 
     .error(loopError),

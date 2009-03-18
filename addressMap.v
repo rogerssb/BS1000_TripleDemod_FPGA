@@ -26,8 +26,8 @@
 `define MODE_FM         3'b010
 `define MODE_2FSK       3'b011
 `define MODE_BPSK       3'b100
-`define MODE_QPSK       3'b110
-`define MODE_OQPSK      3'b111
+`define MODE_QPSK       3'b101
+`define MODE_OQPSK      3'b110
 `define DEMOD_DACSELECT 12'bxxxx_xxxx_01xx
 `define DAC_I           4'b0000
 `define DAC_Q           4'b0001
@@ -60,6 +60,7 @@
 `define LF_LIMIT        12'bxxxx_xxx0_10xx
 `define LF_LOOPDATA     12'bxxxx_xxx0_11xx
 `define LF_LOCKDETECTOR 12'bxxxx_xxx1_00xx
+`define LF_INTEGRATOR   12'bxxxx_xxx1_01xx
 
 // Define the AGC Loop Filter memory map
 `define ALF_CONTROL     12'bxxxx_xxx0_00xx

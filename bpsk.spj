@@ -7,7 +7,7 @@ Version=Silvaco4.10.0.R
 [Analyzer]
 C0Width=58
 C1Width=58
-C2Width=58
+C2Width=199
 GotoSource=N
 [Spice]
 [LibraryFiles]
@@ -15,7 +15,7 @@ GotoSource=N
 [DebugMode]
 CommandLine=+define+SIMULATE
 [View]
-1=Last 250327.144ns 633260.019ns 9020.798ns 510577.166ns 328278.330ns
+1=Last 540489.393ns 1240520.836ns 16279.801ns 1181913.552ns 328278.330ns
 [Group0]
 Name=New Group2
 [Group3]
@@ -39,6 +39,7 @@ Name="Tx"
 8="test.fmMod : modClk" default
 9="test.fmMod : reset" default
 10="test.fmMod : clk" default
+OpenGroup=
 [IncDirs]
 0=.
 [PliFiles]
@@ -142,6 +143,7 @@ Name="Carrier"
 18="test.demod.bitsync : offsetErrorSum[8:0]" default
 19="test.demod.carrierLoop : zeroError" default
 20="test.demod : freq[7:0]" default
+OpenGroup=Yes
 [Group4]
 Name="Bitsync"
 0="test.demod.bitsync : lockCounter[15:0]" default
@@ -183,7 +185,7 @@ Name="DAC"
 9="test.dac0Interp : expAdjReal" default Real AnalogDisplay AType=PWL Scale=Auto
 10="test.dac0Interp : exponentAdjusted[17:0]" default
 11="test.dac0Interp : dataIn[17:0]" default
-OpenGroup=Yes
+OpenGroup=
 [GroupInfo]
 0=New Group2 : 0 : 0 : 0
 1=Tx : 1 : 1 : 0
@@ -193,3 +195,4 @@ OpenGroup=Yes
 5=Carrier : 5 : 1 : 0
 6=DAC : 6 : 1 : 0
 7=Resampler : 7 : 1 : 0
+[Bookmarks]

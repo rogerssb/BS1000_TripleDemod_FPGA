@@ -46,6 +46,7 @@ loopRegs micro(
     .invertError(invertError),
     .zeroError(zeroError),
     .ctrl2(ctrl2),
+    .clearAccum(clearAccum),
     .leadExp(lead),
     .lagExp(lag),
     .limit(limit),
@@ -78,9 +79,14 @@ always @(posedge clk) begin
         leadError <= 0;
         end
     else if (clkEn) begin
-        leadError[31] <= loopError[7];
+        if (lead == 5'h00) begin
+            leadError[31] <= 1'b0;
+            end
+        else begin
+            leadError[31] <= loopError[7];
+            end
         case(lead)
-              5'h00: leadError[30:0] <= {{31{loopError[7]}}};
+              5'h00: leadError[30:0] <= 31'h0;
               5'h01: leadError[30:0] <= {{30{loopError[7]}},loopError[6]};
               5'h02: leadError[30:0] <= {{29{loopError[7]}},loopError[6:5]};
               5'h03: leadError[30:0] <= {{28{loopError[7]}},loopError[6:4]};
@@ -124,9 +130,14 @@ always @(posedge clk) begin
         lagError <= 0;
         end
     else if (clkEn) begin
-        lagError[31] <= loopError[7];
+        if (lag == 5'h00) begin
+            lagError[31] <= 1'b0;
+            end
+        else begin
+            lagError[31] <= loopError[7];
+            end
         case(lag)
-              5'h00: lagError[30:0] <= {{31{loopError[7]}}};
+              5'h00: lagError[30:0] <= 31'h0;
               5'h01: lagError[30:0] <= {{30{loopError[7]}},loopError[6]};
               5'h02: lagError[30:0] <= {{29{loopError[7]}},loopError[6:5]};
               5'h03: lagError[30:0] <= {{28{loopError[7]}},loopError[6:4]};
@@ -175,6 +186,9 @@ always @ (posedge clk or posedge reset) begin
       begin
       lagAccum <= 0;
     end
+   else if (clearAccum) begin
+      lagAccum <= 0;
+      end
    else if (clkEn) begin
       if ( (sum[31] && upperLimit[31])          // both negative
          && (sum >= upperLimit) ) begin       // between upper limit and 0

@@ -7,9 +7,11 @@ module loopRegs(addr,
                dataOut,
                cs,
                wr0, wr1, wr2, wr3,
+               lagAccum,
                invertError,
                zeroError,
                ctrl2,
+               clearAccum,
                leadExp,
                leadMan,
                lagExp,
@@ -26,8 +28,10 @@ output  [31:0]dataOut;
 input   cs;
 input   wr0,wr1,wr2,wr3;
 
-output          invertError,zeroError,ctrl2;
-reg             invertError,zeroError,ctrl2;
+input   [31:0]  lagAccum;
+
+output          invertError,zeroError,ctrl2,clearAccum;
+reg             invertError,zeroError,ctrl2,clearAccum;
 
 output  [4:0]   leadExp;
 reg     [4:0]   leadExp;
@@ -60,6 +64,7 @@ always @(negedge wr0) begin
                 zeroError <= dataIn[0];
                 invertError <= dataIn[1];
                 ctrl2 <= dataIn[2];
+                clearAccum <= dataIn[3];
                 end
             `LF_LEAD_LAG: begin
                lagExp <= dataIn[4:0];
@@ -137,19 +142,21 @@ always @(negedge wr3) begin
 
 reg [31:0]dataOut;
 always @(addr or cs or
-         ctrl2 or invertError or zeroError or
+         ctrl2 or invertError or zeroError or clearAccum or
          lagExp or lagMan or leadExp or leadMan or
          limit or 
          loopData or
-         lockCount or syncThreshold
+         lockCount or syncThreshold or
+         lagAccum
          ) begin
     if (cs) begin
         casex (addr)
-            `LF_CONTROL:        dataOut <= {29'bx,ctrl2,invertError,zeroError};
+            `LF_CONTROL:        dataOut <= {28'bx,clearAccum,ctrl2,invertError,zeroError};
             `LF_LEAD_LAG:       dataOut <= {leadMan,3'bx,leadExp,lagMan,3'bx,lagExp};
             `LF_LIMIT:          dataOut <= limit;
             `LF_LOOPDATA:       dataOut <= loopData;
             `LF_LOCKDETECTOR:   dataOut <= {8'h0,syncThreshold,lockCount};
+            `LF_INTEGRATOR:     dataOut <= lagAccum;
             default:            dataOut <= 32'hx;
             endcase
         end
