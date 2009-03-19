@@ -69,6 +69,7 @@ loopRegs loopRegs(
     .invertError(invertError),
     .zeroError(zeroError),
     .ctrl2(sweepEnable),
+    .clearAccum(clearAccum),
     .leadMan(),
     .leadExp(leadExp),
     .lagMan(),
@@ -181,7 +182,9 @@ lagGain lagGain (
     .error(loopError),
     .lagExp(lagExp),
     .limit(limit),
+    .sweepEnable(sweepEnable),
     .sweepOffsetMag(sweepOffsetMag),
+    .clearAccum(clearAccum),
     .carrierInSync(carrierLock),
     .lagAccum(lagAccum)
     );

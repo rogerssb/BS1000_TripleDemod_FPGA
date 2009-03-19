@@ -5,8 +5,10 @@ module lagGain (
     error,
     lagExp,
     limit,
+    sweepEnable,
     sweepOffsetMag,
     carrierInSync,
+    clearAccum,
     lagAccum
     );
 
@@ -14,8 +16,10 @@ input           clk, clkEn, reset;
 input   [7:0]   error;
 input   [4:0]   lagExp;
 input   [31:0]  limit;
+input           sweepEnable;
 input   [31:0]  sweepOffsetMag;
 input           carrierInSync;
+input           clearAccum;
 
 output  [31:0]  lagAccum;
 reg     [31:0]  lagAccum;
@@ -34,7 +38,7 @@ always @(posedge clk) begin
         else begin
             lagError[31] <= error[7];
             case(lagExp)
-                5'h00: lagError[30:0] <= {{31{error[7]}}};
+                5'h00: lagError[30:0] <= 31'h0;
                 5'h01: lagError[30:0] <= {{30{error[7]}},error[6]};
                 5'h02: lagError[30:0] <= {{29{error[7]}},error[6:5]};
                 5'h03: lagError[30:0] <= {{28{error[7]}},error[6:4]};
@@ -78,45 +82,48 @@ always @(posedge clk) begin
 // CASE3                                            LL        UL
 //
 reg     [31:0]  sweepOffset;
+wire    [31:0]  negSweepOffsetMag = ~sweepOffsetMag + 1;
 reg     [31:0]  sweepMag;
 wire    [31:0]  lowerLimit = -limit;
 wire    [31:0]  upperLimit = limit;
 wire    [31:0]  sum = lagAccum + lagError + sweepOffset;
 
 always @ (posedge clk or posedge reset) begin
-    if (reset)
-        begin
+    if (reset) begin
         lagAccum <= 0;
         sweepOffset <= 0;
         sweepMag <= 0;
+        end
+    else if (clearAccum) begin
+        lagAccum <= 0;
         end
     else if (clkEn) begin
         if ( (sum[31] && upperLimit[31])          // both negative
             && (sum >= upperLimit) ) begin          // between upper limit and 0
             lagAccum <= upperLimit;
-            if (carrierInSync) begin
+            if (carrierInSync || !sweepEnable) begin
                 sweepOffset <= 0;
                 end
             else begin
-                sweepOffset <= -sweepOffsetMag;
-                sweepMag <= -sweepOffsetMag;
+                sweepOffset <= negSweepOffsetMag;
+                sweepMag <= negSweepOffsetMag;
                 end
             end
         else if ( (!sum[31] && !upperLimit[31])   // both positive
                 && (sum >= upperLimit) ) begin     // between upper limit and +saturation
             lagAccum <= upperLimit;
-            if (carrierInSync) begin
+            if (carrierInSync || !sweepEnable) begin
                 sweepOffset <= 0;
                 end
             else begin
-                sweepOffset <= -sweepOffsetMag;
-                sweepMag <= -sweepOffsetMag;
+                sweepOffset <= negSweepOffsetMag;
+                sweepMag <= negSweepOffsetMag;
                 end
             end
         else if ( (!sum[31] && !lowerLimit[31])   // both positive
                 && (sum < lowerLimit) ) begin      // between lower limit and 0
             lagAccum <= lowerLimit;
-            if (carrierInSync) begin
+            if (carrierInSync || !sweepEnable) begin
                 sweepOffset <= 0;
                 end
             else begin
@@ -127,7 +134,7 @@ always @ (posedge clk or posedge reset) begin
         else if ( (sum[31] && lowerLimit[31])     // both negative
                 && (sum < lowerLimit) ) begin      // between lower limit and -saturation
             lagAccum <= lowerLimit;
-            if (carrierInSync) begin
+            if (carrierInSync || !sweepEnable) begin
                 sweepOffset <= 0;
                 end
             else begin
@@ -137,7 +144,15 @@ always @ (posedge clk or posedge reset) begin
             end
         else begin
             lagAccum <= sum;
-            sweepOffset <= sweepMag;
+            if (carrierInSync) begin
+                sweepOffset <= 0;
+                end
+            else if (!sweepEnable) begin
+                sweepOffset <= 0;
+                end
+            else begin
+                sweepOffset <= sweepMag;
+                end
             if (sweepMag == 0) begin
                 sweepMag <= sweepOffsetMag;
                 end

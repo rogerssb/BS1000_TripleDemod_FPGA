@@ -22,8 +22,7 @@ reg [31:0]d;
 wire [31:0]dout;
 
 // Create the clocks
-//parameter SAMPLE_FREQ = 9.333333e6;
-parameter SAMPLE_FREQ = 10e6;
+parameter SAMPLE_FREQ = 9.333333e6;
 parameter HC = 1e9/SAMPLE_FREQ/2;
 parameter C = 2*HC;
 reg clken;
@@ -34,24 +33,24 @@ always #HC clk = clk^clken;
 `define TWO_POW_17      131072.0
 
 
-real carrierFreqHz = 2500000.0;
+real carrierFreqHz = 2333333.3;
 real carrierFreqNorm = carrierFreqHz * `SAMPLE_PERIOD * `TWO_POW_32;
 integer carrierFreqInt = carrierFreqNorm;
 wire [31:0] carrierFreq = carrierFreqInt;
 
-real carrierOffsetFreqHz = 25000.0;
+real carrierOffsetFreqHz = 0.0;
 real carrierOffsetFreqNorm = carrierOffsetFreqHz * `SAMPLE_PERIOD * `TWO_POW_32;
 integer carrierOffsetFreqInt = carrierOffsetFreqNorm;
 wire [31:0] carrierOffsetFreq = carrierOffsetFreqInt;
 
-real carrierLimitHz = 60000.0;
+real carrierLimitHz = 25000.0;
 real carrierLimitNorm = carrierLimitHz * `SAMPLE_PERIOD * `TWO_POW_32;
 integer carrierLimitInt = carrierLimitNorm;
 wire [31:0] carrierLimit = carrierLimitInt;
 
-wire [31:0] sweepRate = 32'h00010000;
+wire [31:0] sweepRate = 32'h00000000;
 
-real bitrateBps = 40000.0;
+real bitrateBps = 400000.0;
 real bitrateSamples = 1/bitrateBps/`SAMPLE_PERIOD/2.0;
 integer bitrateSamplesInt = bitrateSamples;
 wire [15:0]bitrateDivider = bitrateSamplesInt - 1;
@@ -59,7 +58,7 @@ real actualBitrateBps = SAMPLE_FREQ/bitrateSamplesInt/2.0;
 
 // value = 2^ceiling(log2(R*R))/(R*R), where R = interpolation rate of the FM
 // modulator
-real interpolationGain = 1.024;
+real interpolationGain = 1.777;
 
 real deviationHz = 0*0.35 * bitrateBps;
 //real deviationHz = 2*0.35 * bitrateBps;
@@ -486,7 +485,7 @@ initial begin
     we0 = 0; we1 = 0; we2 = 0; we3 = 0; 
     d = 32'hz;
     fmModCS = 0;
-    txScaleFactor = 0.001;
+    txScaleFactor = 0.25;
 
     // Turn on the clock
     clken=1;
@@ -515,10 +514,10 @@ initial begin
 
     // Init the carrier loop filters
     write32(createAddress(`CARRIERSPACE,`LF_CONTROL),1);    // Zero the error
-    write32(createAddress(`CARRIERSPACE,`LF_LEAD_LAG),32'h00100004);   
+    write32(createAddress(`CARRIERSPACE,`LF_LEAD_LAG),32'h0014000b);   
     write32(createAddress(`CARRIERSPACE,`LF_LIMIT), carrierLimit);
     write32(createAddress(`CARRIERSPACE,`LF_LOOPDATA), sweepRate);
-    write32(createAddress(`CARRIERSPACE,`LF_LOCKDETECTOR), 32'h00200800);
+    write32(createAddress(`CARRIERSPACE,`LF_LOCKDETECTOR), 32'h00280800);
 
     // Init the downcoverter register set
     write32(createAddress(`DDCSPACE,`DDC_CONTROL),0);
@@ -526,7 +525,7 @@ initial begin
 
     // Init the cicResampler register set
     write32(createAddress(`CICDECSPACE,`CIC_DECIMATION),cicDecimationInt-1);
-    write32(createAddress(`CICDECSPACE,`CIC_SHIFT), 3);
+    write32(createAddress(`CICDECSPACE,`CIC_SHIFT), 4);
 
     // Init the channel agc loop filter
     write32(createAddress(`CHAGCSPACE,`ALF_CONTROL),1);                 // Zero the error
@@ -615,7 +614,7 @@ initial begin
     `endif
     $stop;
 
-    txScaleFactor = 0.707;
+    txScaleFactor = 0.25;
 
     // Wait for some data to pass thru
     #(2*100*bitrateSamplesInt*C) ;

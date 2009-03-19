@@ -5,9 +5,9 @@ DigitalThreshold=
 [Settings]
 Version=Silvaco4.10.0.R
 [Analyzer]
-C0Width=58
+C0Width=151
 C1Width=58
-C2Width=199
+C2Width=106
 GotoSource=N
 [Spice]
 [LibraryFiles]
@@ -15,7 +15,7 @@ GotoSource=N
 [DebugMode]
 CommandLine=+define+SIMULATE
 [View]
-1=Last 540489.393ns 1240520.836ns 16279.801ns 1181913.552ns 328278.330ns
+1=Last 0.000ns 805661.601ns 20609.948ns 1181913.552ns 328278.330ns
 [Group0]
 Name=New Group2
 [Group3]

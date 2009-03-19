@@ -34,7 +34,7 @@ always @(addr) begin
     end
 
 wire    [4:0]   cicShift;
-wire    [9:0]   cicDecimation;
+wire    [14:0]   cicDecimation;
 cicRegs regs (
     .cs(cs),
     .addr(addr),
@@ -95,7 +95,7 @@ real accI2Real = ((accI2Slice > 2147483647.0) ? accI2Slice-4294967296.0 : accI2S
 
 // Create the decimated clock enable
 reg syncOut;
-reg [9:0]decCount;
+reg [14:0]decCount;
 always @(posedge clk) begin
     if (reset) begin
         decCount <= 1;
