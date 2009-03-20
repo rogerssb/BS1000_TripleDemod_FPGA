@@ -22,14 +22,14 @@ input   wr0,wr1,wr2,wr3;
 output  [14:0] cicDecimation;
 reg     [14:0] cicDecimation;
 
-output  [4:0] cicShift;
-reg     [4:0] cicShift;
+output  [5:0] cicShift;
+reg     [5:0] cicShift;
 
 always @(negedge wr0) begin
     if (cs) begin
         casex (addr)
             `CIC_DECIMATION:    cicDecimation[7:0] <= dataIn[7:0];
-            `CIC_SHIFT:         cicShift <= dataIn[4:0];
+            `CIC_SHIFT:         cicShift <= dataIn[5:0];
             default: ;
             endcase
         end
@@ -51,7 +51,7 @@ always @(addr or cs or
     if (cs) begin
         casex (addr)
             `CIC_DECIMATION:    dataOut <= {17'b0,cicDecimation};
-            `CIC_SHIFT:         dataOut <= {27'b0,cicShift};
+            `CIC_SHIFT:         dataOut <= {26'b0,cicShift};
             default:            dataOut <= 32'h0;
             endcase
         end

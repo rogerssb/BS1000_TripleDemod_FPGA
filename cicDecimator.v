@@ -33,7 +33,7 @@ always @(addr) begin
         endcase
     end
 
-wire    [4:0]   cicShift;
+wire    [5:0]   cicShift;
 wire    [14:0]   cicDecimation;
 cicRegs regs (
     .cs(cs),

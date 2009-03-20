@@ -58,12 +58,12 @@ wire    [31:0]  loopOffset;
 wire    [31:0]  sweepOffsetMag;
 wire    [15:0]  lockCount;
 wire    [7:0]   syncThreshold;
-wire    [31:0]  lagAccum;
+wire    [39:0]  lagAccum;
 loopRegs loopRegs(
     .cs(freqLoopSpace),
     .addr(addr),
     .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
-    .lagAccum(lagAccum),
+    .lagAccum(lagAccum[39:8]),
     .dataIn(din),
     .dataOut(dout),
     .invertError(invertError),
@@ -168,7 +168,7 @@ always @(posedge clk) begin
 /***************************** Loop Filter ************************************/
 
 // Instantiate the lead/lag filter gain path
-wire    [31:0]  leadError;
+wire    [39:0]  leadError;
 leadGain leadGain (
     .clk(clk), .clkEn(loopFilterEn), .reset(reset), 
     .error(loopError),
@@ -191,7 +191,7 @@ lagGain lagGain (
 
 
 // Final filter output
-reg [31:0]filterSum;
+reg [39:0]filterSum;
 always @(posedge clk) begin
     if (reset) begin
         filterSum <= 0;
@@ -240,7 +240,7 @@ always @(posedge clk) begin
 
 
 // Final Outputs
-assign carrierFreqOffset = filterSum;
+assign carrierFreqOffset = filterSum[39:8];
 assign carrierFreqEn = loopFilterEn;
 
 `ifdef SIMULATE

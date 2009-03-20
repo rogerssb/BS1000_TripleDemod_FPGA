@@ -203,7 +203,7 @@ reg rs,en,wr0,wr1;  // processor interface signals
 reg [11:0]a;
 reg [15:0]di;
 wire [15:0]do;
-symb_pll uut(rs,en,wr0,wr1,a,di,do,clk,1'b1,/*clk_en,*/clk_ref,clk_vco,clk_fbk,clk_out);
+symb_pll uut(rs,en,wr0,wr1,a,di,do,clk,1'b1,clk_ref,clk_vco,clk_fbk,clk_out);
 
 always #5 clk = !clk; // 100 MHz system clock
 always @(posedge clk) clk_en = !clk_en;

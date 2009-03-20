@@ -4,7 +4,7 @@ module shifter18to48(clk,sync,shift,din,dout);
 
 input   clk;
 input   sync;
-input   [4:0]shift;
+input   [5:0]shift;
 input   [17:0]din;
 output  [47:0]dout;
 
@@ -103,8 +103,26 @@ always @(posedge clk) begin
             29: begin
                 outBits <= {{29{din[17]}},din,1'b0};
                 end
-            default: begin
+            30: begin
                 outBits <= {{30{din[17]}},din};
+                end
+            31: begin
+                outBits <= {{31{din[17]}},din[17:1]};
+                end
+            32: begin
+                outBits <= {{32{din[17]}},din[17:2]};
+                end
+            33: begin
+                outBits <= {{33{din[17]}},din[17:3]};
+                end
+            34: begin
+                outBits <= {{34{din[17]}},din[17:4]};
+                end
+            35: begin
+                outBits <= {{35{din[17]}},din[17:5]};
+                end
+            default: begin
+                outBits <= {{36{din[17]}},din[17:6]};
                 end
             endcase
         end
