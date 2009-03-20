@@ -88,14 +88,18 @@ wire    [31:0]  lowerLimit = -limit;
 wire    [31:0]  upperLimit = limit;
 wire    [39:0]  sum = lagAccum + lagError + {{8{sweepOffset[31]}},sweepOffset};
 
+reg [3:0] here;
+
 always @ (posedge clk or posedge reset) begin
     if (reset) begin
         lagAccum <= 0;
         sweepOffset <= 0;
         sweepMag <= 0;
+        here <= 0;
         end
     else if (clearAccum) begin
         lagAccum <= 0;
+        here <= 1;
         end
     else if (clkEn) begin
         if ( (sum[39] && upperLimit[31])          // both negative
@@ -103,10 +107,12 @@ always @ (posedge clk or posedge reset) begin
             lagAccum <= {upperLimit,8'hff};
             if (carrierInSync || !sweepEnable) begin
                 sweepOffset <= 0;
+                here <= 2;
                 end
             else begin
                 sweepOffset <= negSweepOffsetMag;
                 sweepMag <= negSweepOffsetMag;
+                here <= 3;
                 end
             end
         else if ( (!sum[39] && !upperLimit[31])   // both positive
@@ -114,10 +120,12 @@ always @ (posedge clk or posedge reset) begin
             lagAccum <= {upperLimit,8'h0};
             if (carrierInSync || !sweepEnable) begin
                 sweepOffset <= 0;
+                here <= 4;
                 end
             else begin
                 sweepOffset <= negSweepOffsetMag;
                 sweepMag <= negSweepOffsetMag;
+                here <= 5;
                 end
             end
         else if ( (!sum[39] && !lowerLimit[31])   // both positive
@@ -125,10 +133,12 @@ always @ (posedge clk or posedge reset) begin
             lagAccum <= {lowerLimit,8'h0};
             if (carrierInSync || !sweepEnable) begin
                 sweepOffset <= 0;
+                here <= 6;
                 end
             else begin
                 sweepOffset <= sweepOffsetMag;
                 sweepMag <= sweepOffsetMag;
+                here <= 7;
                 end
             end
         else if ( (sum[39] && lowerLimit[31])     // both negative
@@ -136,31 +146,76 @@ always @ (posedge clk or posedge reset) begin
             lagAccum <= {lowerLimit,8'hff};
             if (carrierInSync || !sweepEnable) begin
                 sweepOffset <= 0;
+                here <= 8;
                 end
             else begin
                 sweepOffset <= sweepOffsetMag;
                 sweepMag <= sweepOffsetMag;
+                here <= 9;
                 end
             end
         else begin
             lagAccum <= sum;
             if (carrierInSync) begin
                 sweepOffset <= 0;
+                here <= 10;
                 end
             else if (!sweepEnable) begin
                 sweepOffset <= 0;
+                here <= 11;
                 end
             else begin
                 sweepOffset <= sweepMag;
+                here <= 12;
                 end
             if (sweepMag == 0) begin
                 sweepMag <= sweepOffsetMag;
+                here <= 13;
                 end
             end
         end
     else begin
         lagAccum <= lagAccum;
+        here <= 14;
         end
     end
 
 endmodule
+
+`ifdef TEST_LAG_GAIN
+module test;
+reg           clk;    initial clk = 0;
+reg           clkEn;  initial clkEn = 1;
+reg           reset;  initial reset = 0;
+reg   [7:0]   error;  initial error = 0;
+reg   [4:0]   lagExp; initial lagExp = 0;
+reg   [31:0]  limit;  initial limit = 1;
+reg           sweepEnable;    initial sweepEnable = 1;
+reg   [31:0]  sweepOffsetMag; initial sweepOffsetMag = 1;
+reg           carrierInSync;  initial carrierInSync = 0;
+reg           clearAccum;     initial clearAccum = 0;
+
+wire  [39:0]  lagAccum;
+
+lagGain uut (
+    clk, clkEn, reset,
+    error,
+    lagExp,
+    limit,
+    sweepEnable,
+    sweepOffsetMag,
+    carrierInSync,
+    clearAccum,
+    lagAccum
+    );
+
+always #5 clk = !clk;
+
+initial begin
+	$monitor("%d", uut.here);
+	#100 reset = !reset;
+    #100 reset = !reset;
+    end
+endmodule	
+`endif
+
