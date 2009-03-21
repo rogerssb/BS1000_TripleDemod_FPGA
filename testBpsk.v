@@ -2,15 +2,17 @@
 `timescale 1ns/100ps
 
 `define ENABLE_AGC
+//`define TRIM_DATA
 //`define ADD_NOISE
 //`define BER_TEST
 //`define MATLAB_VECTORS
 
-`ifdef BER_TEST
+`ifdef TRIM_DATA
 !control .savsim=1
 !mkeep (test
-!mexclude (test(rxRadio
-!mexclude (test(txRadio
+//!mexclude (test(dds
+!mexclude (test(demod(ddc
+!mkeep (test(lagAccumReal
 `endif
 
 module test;
@@ -48,7 +50,8 @@ real carrierLimitNorm = carrierLimitHz * `SAMPLE_PERIOD * `TWO_POW_32;
 integer carrierLimitInt = carrierLimitNorm;
 wire [31:0] carrierLimit = carrierLimitInt;
 
-wire [31:0] sweepRate = 32'h00000000;
+wire [31:0] sweepRate = 32'hffff0000;
+//wire [31:0] sweepRate = 32'h0039c759;
 
 real bitrateBps = 400000.0;
 real bitrateSamples = 1/bitrateBps/`SAMPLE_PERIOD/2.0;
@@ -83,9 +86,27 @@ integer resamplerLimitInt = resamplerLimitNorm;
                             Create a bit stream
 ******************************************************************************/
 
+integer bitrateCount;
+reg     modClk;
+always @(posedge clk) begin
+    if (reset) begin
+        bitrateCount <= 0;
+        modClk <= 0;
+        end
+    else begin
+        if (bitrateCount == 0) begin
+            bitrateCount <= bitrateSamplesInt-1;
+            modClk <= ~modClk;
+            end
+        else begin
+            bitrateCount <= bitrateCount - 1;
+            end
+        end
+    end
+
+
 // Alternating ones and zeros
 reg     [3:0]altSR;
-wire    modClk;
 reg     altData;
 always @(negedge modClk or posedge reset) begin
     if (reset) begin
@@ -124,24 +145,6 @@ wire modData = randData;
 /******************************************************************************
                             Instantiate a Modulator
 ******************************************************************************/
-wire    [31:0]fmModFreq;
-reg     fmModCS;
-reg     enableTx;
-initial enableTx = 0;
-fmMod fmMod( 
-    .clk(clk), .reset(reset), 
-    .cs(fmModCS),
-    .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
-    .addr(a),
-    .din(d),
-    .dout(dout),
-    .fskMode(2'b00),
-    .txSelect(1'b1),
-    .modData(modData),
-    .modClkOut(modClk),
-    .modDataValid(enableTx),
-    .fmModFreq(fmModFreq)
-    );
 wire    [17:0]  iBB,qBB;
 assign iBB = {randData,17'h10000};
 assign qBB = 18'h0;
@@ -150,7 +153,7 @@ dds carrierDds (
     .sclr(reset), 
     .clk(clk), 
     .we(1'b1), 
-    .data(carrierFreq), 
+    .data(carrierFreq + carrierOffsetFreq), 
     .sine(qLO), 
     .cosine(iLO)
     );
@@ -484,27 +487,17 @@ initial begin
     rd = 0;
     we0 = 0; we1 = 0; we2 = 0; we3 = 0; 
     d = 32'hz;
-    fmModCS = 0;
     txScaleFactor = 0.25;
 
     // Turn on the clock
     clken=1;
     #(10*C) ;
 
-    // Init the fm modulator
-    // Init the modulator register set
-    fmModCS = 1;
-    write32(`FM_MOD_FREQ, carrierFreq + carrierOffsetFreq);
-    write32(`FM_MOD_DEV, {14'bx,deviation});
-    write32(`FM_MOD_BITRATE, {1'b0,15'bx,bitrateDivider});
-    // This value is ceiling(log2(R*R)), where R = interpolation rate.
-    write32(`FM_MOD_CIC,16);
-    fmModCS = 0;
-
     // Init the mode
     write32(createAddress(`DEMODSPACE,`DEMOD_CONTROL),{29'bx,`MODE_BPSK});
 
     // Init the sample rate loop filters
+    resamplerFreqInt = 32'h83a83a84;
     write32(createAddress(`RESAMPSPACE,`RESAMPLER_RATE),resamplerFreqInt);
     write32(createAddress(`BITSYNCSPACE,`LF_CONTROL),1);    // Zero the error
     write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h001b0016);    
@@ -520,12 +513,13 @@ initial begin
     write32(createAddress(`CARRIERSPACE,`LF_LOCKDETECTOR), 32'h00280800);
 
     // Init the downcoverter register set
-    write32(createAddress(`DDCSPACE,`DDC_CONTROL),0);
+    write32(createAddress(`DDCSPACE,`DDC_CONTROL),2);
     write32(createAddress(`DDCSPACE,`DDC_CENTER_FREQ), carrierFreq);
 
     // Init the cicResampler register set
+    cicDecimationInt = 3;
     write32(createAddress(`CICDECSPACE,`CIC_DECIMATION),cicDecimationInt-1);
-    write32(createAddress(`CICDECSPACE,`CIC_SHIFT), 4);
+    write32(createAddress(`CICDECSPACE,`CIC_SHIFT), 5);
 
     // Init the channel agc loop filter
     write32(createAddress(`CHAGCSPACE,`ALF_CONTROL),1);                 // Zero the error
@@ -539,14 +533,14 @@ initial begin
                                                            4'h0,`DAC_Q,
                                                            4'h0,`DAC_I});
     write32(createAddress(`INTERP0SPACE, `INTERP_CONTROL),0);
-    write32(createAddress(`INTERP0SPACE, `INTERP_EXPONENT), 7);
-    write32(createAddress(`INTERP0SPACE, `INTERP_MANTISSA), 32'h00012000);
+    write32(createAddress(`INTERP0SPACE, `INTERP_EXPONENT), 6);
+    write32(createAddress(`INTERP0SPACE, `INTERP_MANTISSA), 32'h0001c71c);
     write32(createAddress(`INTERP1SPACE, `INTERP_CONTROL),0);
-    write32(createAddress(`INTERP1SPACE, `INTERP_EXPONENT), 7);
-    write32(createAddress(`INTERP1SPACE, `INTERP_MANTISSA), 32'h00012000);
+    write32(createAddress(`INTERP1SPACE, `INTERP_EXPONENT), 6);
+    write32(createAddress(`INTERP1SPACE, `INTERP_MANTISSA), 32'h0001c71c);
     write32(createAddress(`INTERP2SPACE, `INTERP_CONTROL),1);
-    write32(createAddress(`INTERP2SPACE, `INTERP_EXPONENT), 7);
-    write32(createAddress(`INTERP2SPACE, `INTERP_MANTISSA), 32'h00012000);
+    write32(createAddress(`INTERP2SPACE, `INTERP_EXPONENT), 6);
+    write32(createAddress(`INTERP2SPACE, `INTERP_MANTISSA), 32'h0001c71c);
 
     reset = 1;
     #(2*C) ;
@@ -569,8 +563,6 @@ initial begin
 
     // Wait 2.0 bit periods
     #(4.0*bitrateSamplesInt*C) ;
-
-    enableTx = 1;
 
     // Create a reset to clear the halfband
     demod.ddc.hbReset = 1;
@@ -599,8 +591,8 @@ initial begin
     // Wait 2 bit periods
     #(4*bitrateSamplesInt*C) ;
 
-    // Enable the carrier loop and invert the error
-    write32(createAddress(`CARRIERSPACE,`LF_CONTROL),2);  
+    // Enable the carrier loop, invert the error, and enable sweep
+    write32(createAddress(`CARRIERSPACE,`LF_CONTROL),5);  
 
     `ifdef ENABLE_AGC
     // Enable the AGC loop
@@ -623,5 +615,6 @@ initial begin
     end
 
 real carrierOffsetReal = demod.carrierLoop.carrierOffsetReal * SAMPLE_FREQ/2.0;
+real lagAccumReal = demod.carrierLoop.lagAccumReal * SAMPLE_FREQ/2.0;
 endmodule
 

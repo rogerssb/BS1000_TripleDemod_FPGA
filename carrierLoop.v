@@ -245,6 +245,8 @@ assign carrierFreqEn = loopFilterEn;
 
 `ifdef SIMULATE
 real carrierOffsetReal = ((carrierFreqOffset > 2147483647.0) ? carrierFreqOffset-4294967296.0 : carrierFreqOffset)/2147483648.0;
+real lagAccumReal = ((lagAccum[39:8] > 2147483647.0) ? lagAccum[39:8]-4294967296.0 : lagAccum[39:8])/2147483648.0; 
+integer lockCounterInt = lockCounter;
 `endif
 
 
