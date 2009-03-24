@@ -7,7 +7,7 @@
 // \   \   \/     Version: K.39
 //  \   \         Application: netgen
 //  /   /         Filename: halfbandEven.v
-// /___/   /\     Timestamp: Sat Feb 21 07:26:42 2009
+// /___/   /\     Timestamp: Mon Mar 23 20:15:02 2009
 // \   \  /  \ 
 //  \___\/\___\
 //             

@@ -142,10 +142,27 @@ cicDecimator cic(
     .syncOut(cicSyncOut)
     );
 
+`ifdef MUX_ONLY
 wire    [47:0]  iAgcIn,qAgcIn;
 assign          iAgcIn = bypassCic ? {iHb0,30'h0} : iCic;
 assign          qAgcIn = bypassCic ? {qHb0,30'h0} : qCic;
 wire            agcSync = bypassCic ? hb0SyncOut : cicSyncOut;
+`else
+reg     [47:0]  iAgcIn,qAgcIn;
+reg             agcSync;
+always @(posedge clk) begin
+    if (bypassCic) begin
+        iAgcIn <= {iHb0,30'h0};
+        qAgcIn <= {qHb0,30'h0};
+        agcSync <= hb0SyncOut;
+        end
+    else begin
+        iAgcIn <= iCic;
+        qAgcIn <= qCic;
+        agcSync <= cicSyncOut;
+        end
+    end
+`endif
 wire    [17:0]  iAgc,qAgc;
 variableGain gainI(
     .clk(clk), .clkEn(agcSync),
@@ -207,12 +224,27 @@ real iHbReal = ((iHb > 131071.0) ? (iHb - 262144.0) : iHb)/131072.0;
 real qHbReal = ((qHb > 131071.0) ? (qHb - 262144.0) : qHb)/131072.0;
 `endif
 
-//assign iOut = iAgc;
-//assign qOut = qAgc;
-//assign syncOut = agcSync;
+`ifdef MUX_ONLY
 assign iOut = bypassHb ? iAgc : iHb;
 assign qOut = bypassHb ? qAgc : qHb;
 assign syncOut = bypassHb ? agcSync : hbSyncOut;
+`else
+reg     [17:0]  iOut;
+reg     [17:0]  qOut;
+reg             syncOut;
+always @(posedge clk) begin
+    if (bypassHb) begin
+        iOut <= iAgc;
+        qOut <= qAgc;
+        syncOut <= agcSync;
+        end
+    else begin
+        iOut <= iHb;
+        qOut <= qHb;
+        syncOut <= hbSyncOut;
+        end
+    end
+`endif
 
 reg [31:0]dout;
 always @(addr or cicDout or ddcDout) begin
