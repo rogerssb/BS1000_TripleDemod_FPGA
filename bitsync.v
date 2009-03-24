@@ -42,6 +42,69 @@ output          bitsyncLock;
 output  [15:0]  lockCounter;
 
 
+//****************************** Two Sample Sum *******************************
+reg     [17:0]  iDelay,qDelay;
+reg     [17:0]  iMF,qMF;
+wire    [18:0]  iSum = {iDelay[17],iDelay} + {i[17],i};
+wire    [18:0]  qSum = {qDelay[17],qDelay} + {q[17],q};
+always @(posedge sampleClk) begin
+    if (symTimes2Sync) begin
+        iDelay <= i;
+        qDelay <= q;
+        iMF <= iSum[18:1];
+        qMF <= qSum[18:1];
+        end
+    end
+
+//************************** Frequency Discriminator **************************
+`define USE_FMDEMOD
+`ifdef USE_FMDEMOD
+wire    [7:0]   phase;
+wire    [7:0]   freqOut;
+wire    [8:0]   mag;
+fmDemod fmDemod( 
+    .clk(sampleClk), .reset(reset), .sync(symTimes2Sync),
+    .iFm(iMF),.qFm(qMF),
+    .phase(phase),
+    .freq(freqOut),
+    .mag(mag)
+    );
+wire    [17:0]  freq = {freqOut,10'b0};
+`else
+reg     [17:0]  iMF0,iMF1;
+reg     [17:0]  qMF0,qMF1;
+wire    [35:0]  term1,term2;
+mpy18x18 mult1(.clk(sampleClk), 
+                .sclr(reset),
+                .a(qMF1), 
+                .b(iMF), 
+                .p(term1)
+                );
+mpy18x18 mult2(.clk(sampleClk), 
+                .sclr(reset),
+                .a(iMF1), 
+                .b(qMF), 
+                .p(term2)
+                );
+
+wire    [35:0]  diff = term1 - term2;
+reg     [17:0]  freq;
+always @(posedge sampleClk) begin
+    if (symTimes2Sync) begin
+        iMF0 <= iMF;
+        iMF1 <= iMF0;
+        qMF0 <= qMF;
+        qMF1 <= qMF0;
+        freq <= diff[35:18];
+        end
+end
+`endif
+
+`ifdef SIMULATE
+real freqReal = ((freq > 131071.0) ? freq - 262144.0 : freq)/131072.0;
+`endif
+
+
 //******************************* Phase Error Detector ************************
 
 // State machine:
@@ -103,7 +166,12 @@ always @(posedge sampleClk) begin
         end
     else if (symTimes2Sync) begin
         // Shift register of baseband sample values
-        bbSR[0] <= i;
+        if (demodMode == `MODE_2FSK) begin
+            bbSR[0] <= freq;
+            end
+        else begin
+            bbSR[0] <= iMF;
+            end
         bbSR[1] <= bbSR[0];
         bbSR[2] <= bbSR[1];
         case (phaseState)
@@ -190,18 +258,19 @@ real timingErrorReal = ((timingError > 131071.0) ? timingError - 262144.0 : timi
 
 //************************ Recovered Clock and Data ***************************
 
-reg [17:0]symData;
+reg     [17:0]  symData;
+reg             bitData;
 always @(posedge sampleClk) begin
     if (symTimes2Sync) begin
+        symData <= bbSR[1];
         if (timingErrorEn) begin
-            symData <= i;
+            bitData <= bbSR[1][17];
             end
         end
     end
 
 assign symClk = timingErrorEn;
 
-assign bitData = ~symData[17];
 assign bitClk  = symClk;
 
 //******************************** Loop Filter ********************************

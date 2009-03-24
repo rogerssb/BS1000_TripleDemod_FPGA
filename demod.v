@@ -261,6 +261,7 @@ carrierLoop carrierLoop(
 /******************************************************************************
                                   Resampler
 ******************************************************************************/
+/*
 reg     [17:0]  iResampIn,qResampIn;
 always @(posedge clk) begin
     case (demodMode)
@@ -274,6 +275,7 @@ always @(posedge clk) begin
             end
         endcase
     end
+*/
 wire    [17:0]  iResamp,qResamp;
 wire    [31:0]  resamplerFreqOffset;
 wire    [31:0]  resampDout;
@@ -285,8 +287,8 @@ resampler resampler(
     .dout(resampDout),
     .resamplerFreqOffset(resamplerFreqOffset),
     .offsetEn(1'b1),
-    .iIn(iResampIn),
-    .qIn(qResampIn),
+    .iIn(iDdc),
+    .qIn(qDdc),
     .iOut(iResamp),
     .qOut(qResamp),
     .syncOut(resampSync)
@@ -312,7 +314,7 @@ always @(posedge clk) begin
 /******************************************************************************
                                 Bitsync Loop
 ******************************************************************************/
-wire    [17:0]  demodData;
+wire    [17:0]  iSymData;
 wire    [15:0]  bsLockCounter;
 wire    [31:0]  bitsyncDout;
 bitsync bitsync(
@@ -327,7 +329,7 @@ bitsync bitsync(
     .offsetError(offsetError),
     .offsetErrorEn(offsetErrorEn),
     .symClk(symClk),
-    .symData(demodData),
+    .symData(iSymData),
     .bitClk(demodClk),
     .bitData(demodBit),
     .sampleFreq(resamplerFreqOffset),
@@ -380,7 +382,7 @@ always @(posedge clk) begin
             dac0Sync <= ddcSync;
             end
         `DAC_ISYM: begin
-            dac0Data <= iSym;
+            dac0Data <= iSymData;
             dac0Sync <= resampSync;
             end
         `DAC_QSYM: begin
@@ -427,7 +429,7 @@ always @(posedge clk) begin
             dac1Sync <= ddcSync;
             end
         `DAC_ISYM: begin
-            dac1Data <= iSym;
+            dac1Data <= iSymData;
             dac1Sync <= resampSync;
             end
         `DAC_QSYM: begin
@@ -474,7 +476,7 @@ always @(posedge clk) begin
             dac2Sync <= ddcSync;
             end
         `DAC_ISYM: begin
-            dac2Data <= iSym;
+            dac2Data <= iSymData;
             dac2Sync <= resampSync;
             end
         `DAC_QSYM: begin
