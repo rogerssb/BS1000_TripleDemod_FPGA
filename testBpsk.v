@@ -40,7 +40,7 @@ real carrierFreqNorm = carrierFreqHz * `SAMPLE_PERIOD * `TWO_POW_32;
 integer carrierFreqInt = carrierFreqNorm;
 wire [31:0] carrierFreq = carrierFreqInt;
 
-real carrierOffsetFreqHz = 0.0;
+real carrierOffsetFreqHz = 10000.0;
 real carrierOffsetFreqNorm = carrierOffsetFreqHz * `SAMPLE_PERIOD * `TWO_POW_32;
 integer carrierOffsetFreqInt = carrierOffsetFreqNorm;
 wire [31:0] carrierOffsetFreq = carrierOffsetFreqInt;
@@ -138,10 +138,10 @@ always @(negedge modClk or posedge reset) begin
         zeroCount <= zeroCount + 5'h1;
         sr <= sr >> 1;
         end
-    randData <= sr[0];
+    //randData <= sr[0];
+    randData <= 1'b0;
     end
 
-wire modData = randData;
 /******************************************************************************
                             Instantiate a Modulator
 ******************************************************************************/

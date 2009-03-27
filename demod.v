@@ -61,9 +61,13 @@ always @(addr) begin
         endcase
     end
 wire    [2:0]   demodMode;
+wire    [1:0]   bitsyncMode;
 wire    [3:0]   dac0Select;
 wire    [3:0]   dac1Select;
 wire    [3:0]   dac2Select;
+wire    [15:0]  falseLockAlpha;
+wire    [15:0]  falseLockThreshold;
+reg             highFreqOffset;
 wire    [31:0]  demodDout;
 demodRegs demodRegs(
     .addr(addr),
@@ -71,10 +75,14 @@ demodRegs demodRegs(
     .dataOut(demodDout),
     .cs(demodSpace),
     .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+    .highFreqOffset(highFreqOffset),
     .demodMode(demodMode),
+    .bitsyncMode(bitsyncMode),
     .dac0Select(dac0Select),
     .dac1Select(dac1Select),
-    .dac2Select(dac2Select)
+    .dac2Select(dac2Select),
+    .falseLockAlpha(falseLockAlpha),
+    .falseLockThreshold(falseLockThreshold)
     );
 
 /******************************************************************************
@@ -230,6 +238,46 @@ fmDemod fmDemod(
     .mag(mag)
     );
 
+/******************************************************************************
+                             False Lock Detector
+******************************************************************************/
+
+// Average the frequency error.
+reg     [17:0]  averageFreq;
+wire    [17:0]  oneMinusFalseLockAlpha = (18'h20000 + ~{falseLockAlpha,2'b0});
+wire    [35:0]  alpha;
+mpy18x18 mpyFLD0(
+    .clk(clk), 
+    .sclr(reset),
+    .a({freq,10'b0}), 
+    .b({falseLockAlpha,2'b0}), 
+    .p(alpha)
+    );
+wire    [35:0]  oneMinusAlpha;
+wire    [35:0]  alphaSum = alpha + oneMinusAlpha;
+mpy18x18 mpyFLD1(
+    .clk(clk), 
+    .sclr(reset),
+    .a(averageFreq), 
+    .b(oneMinusFalseLockAlpha), 
+    .p(oneMinusAlpha)
+    );
+wire    [17:0]  negAverageFreq = -averageFreq;
+wire    [17:0]  absAverageFreq = averageFreq[17] ? negAverageFreq : averageFreq;
+always @(posedge clk) begin
+    if (ddcSync) begin
+        averageFreq <= alphaSum[34:17];
+        if (absAverageFreq > falseLockThreshold) begin
+            highFreqOffset <= 1;
+            end
+        else begin
+            highFreqOffset <= 0;
+            end
+        end
+    end
+
+
+
 
 /******************************************************************************
                              AFC/Sweep/Costas Loop
@@ -249,6 +297,7 @@ carrierLoop carrierLoop(
     .demodMode(demodMode),
     .phase(phase),
     .freq(freq),
+    .highFreqOffset(highFreqOffset),
     .offsetError(offsetError[17:10]),
     .offsetErrorEn(offsetErrorEn),
     .carrierFreqOffset(carrierFreqOffset),
@@ -315,12 +364,14 @@ always @(posedge clk) begin
                                 Bitsync Loop
 ******************************************************************************/
 wire    [17:0]  iSymData;
+wire    [17:0]  qSymData;
 wire    [15:0]  bsLockCounter;
 wire    [31:0]  bitsyncDout;
 bitsync bitsync(
     .sampleClk(clk), .reset(reset), 
     .symTimes2Sync(resampSync),
     .demodMode(demodMode),
+    .bitsyncMode(bitsyncMode),
     .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
     .addr(addr),
     .din(din),
@@ -329,9 +380,11 @@ bitsync bitsync(
     .offsetError(offsetError),
     .offsetErrorEn(offsetErrorEn),
     .symClk(symClk),
-    .symData(iSymData),
+    .symDataI(iSymData),
+    .symDataQ(qSymData),
     .bitClk(demodClk),
-    .bitData(demodBit),
+    .bitDataI(iBit),
+    .bitDataQ(qBit),
     .sampleFreq(resamplerFreqOffset),
     .bitsyncLock(bitsyncLock),
     .lockCounter(bsLockCounter)
@@ -345,13 +398,11 @@ assign symSync = symClk & resampSync;
 /******************************************************************************
                                Data Output Mux
 ******************************************************************************/
-reg iDataClk,iBit;
-reg qDataClk,qBit;
-always @(demodMode or demodClk or demodBit) begin
+reg iDataClk;
+reg qDataClk;
+always @(demodMode or demodClk) begin
     iDataClk <= demodClk;
-    iBit <= demodBit;
     qDataClk <= demodClk;
-    qBit <= demodBit;
     end
 
 /******************************************************************************
@@ -386,7 +437,7 @@ always @(posedge clk) begin
             dac0Sync <= resampSync;
             end
         `DAC_QSYM: begin
-            dac0Data <= qSym;
+            dac0Data <= qSymData;
             dac0Sync <= resampSync;
             end
         `DAC_FREQ: begin
@@ -413,6 +464,10 @@ always @(posedge clk) begin
             dac0Data <= {freqLockCounter,2'b0};
             dac0Sync <= 1'b1;
             end
+        `DAC_AVGFREQ: begin
+            dac0Data <= averageFreq;
+            dac0Sync <= ddcSync;
+            end
         default: begin
             dac0Data <= iDdc;
             dac0Sync <= ddcSync;
@@ -433,7 +488,7 @@ always @(posedge clk) begin
             dac1Sync <= resampSync;
             end
         `DAC_QSYM: begin
-            dac1Data <= qSym;
+            dac1Data <= qSymData;
             dac1Sync <= resampSync;
             end
         `DAC_FREQ: begin
@@ -460,6 +515,10 @@ always @(posedge clk) begin
             dac1Data <= {freqLockCounter,2'b0};
             dac1Sync <= 1'b1;
             end
+        `DAC_AVGFREQ: begin
+            dac1Data <= averageFreq;
+            dac1Sync <= ddcSync;
+            end
         default: begin
             dac1Data <= iDdc;
             dac1Sync <= ddcSync;
@@ -480,7 +539,7 @@ always @(posedge clk) begin
             dac2Sync <= resampSync;
             end
         `DAC_QSYM: begin
-            dac2Data <= qSym;
+            dac2Data <= qSymData;
             dac2Sync <= resampSync;
             end
         `DAC_FREQ: begin
@@ -506,6 +565,10 @@ always @(posedge clk) begin
         `DAC_FREQLOCK: begin
             dac2Data <= {freqLockCounter,2'b0};
             dac2Sync <= 1'b1;
+            end
+        `DAC_AVGFREQ: begin
+            dac2Data <= averageFreq;
+            dac2Sync <= ddcSync;
             end
         default: begin
             dac2Data <= iDdc;

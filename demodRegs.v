@@ -8,10 +8,14 @@ module demodRegs(
     dataOut,
     cs,
     wr0, wr1, wr2, wr3,
+    highFreqOffset,
     demodMode,
+    bitsyncMode,
     dac0Select,
     dac1Select,
-    dac2Select
+    dac2Select,
+    falseLockAlpha,
+    falseLockThreshold
     );
 
 input   [11:0]addr;
@@ -20,8 +24,13 @@ output  [31:0]dataOut;
 input   cs;
 input   wr0,wr1,wr2,wr3;
 
+input           highFreqOffset;
+
 output  [2:0]   demodMode;
 reg     [2:0]   demodMode;
+
+output  [1:0]   bitsyncMode;
+reg     [1:0]   bitsyncMode;
 
 output  [3:0]   dac0Select;
 reg     [3:0]   dac0Select;
@@ -32,6 +41,12 @@ reg     [3:0]   dac1Select;
 output  [3:0]   dac2Select;
 reg     [3:0]   dac2Select;
 
+output  [15:0]  falseLockAlpha;
+reg     [15:0]  falseLockAlpha;
+
+output  [15:0]  falseLockThreshold;
+reg     [15:0]  falseLockThreshold;
+
 always @(negedge wr0) begin
     if (cs) begin
         casex (addr)
@@ -40,6 +55,9 @@ always @(negedge wr0) begin
                 end
             `DEMOD_DACSELECT: begin
                 dac0Select <= dataIn[3:0];
+                end
+            `DEMOD_FALSELOCK: begin
+                falseLockAlpha[7:0] <= dataIn[7:0];
                 end
             default: ;
             endcase
@@ -52,6 +70,9 @@ always @(negedge wr1) begin
             `DEMOD_DACSELECT: begin
                 dac1Select <= dataIn[11:8];
                 end
+            `DEMOD_FALSELOCK: begin
+                falseLockAlpha[15:8] <= dataIn[15:8];
+                end
             default: ;
             endcase
         end
@@ -60,8 +81,25 @@ always @(negedge wr1) begin
 always @(negedge wr2) begin
     if (cs) begin
         casex (addr)
+            `DEMOD_CONTROL: begin
+                bitsyncMode <= dataIn[17:16];
+                end
             `DEMOD_DACSELECT: begin
                 dac2Select <= dataIn[19:16];
+                end
+            `DEMOD_FALSELOCK: begin
+                falseLockThreshold[7:0] <= dataIn[23:16];
+                end
+            default: ;
+            endcase
+        end
+    end
+
+always @(negedge wr3) begin
+    if (cs) begin
+        casex (addr)
+            `DEMOD_FALSELOCK: begin
+                falseLockThreshold[15:8] <= dataIn[31:24];
                 end
             default: ;
             endcase
@@ -71,12 +109,15 @@ always @(negedge wr2) begin
 reg [31:0]dataOut;
 always @(addr or cs or
          demodMode or
-         dac0Select or dac1Select or dac2Select 
+         bitsyncMode or
+         dac0Select or dac1Select or dac2Select or
+         falseLockAlpha or falseLockThreshold or highFreqOffset
          ) begin
     if (cs) begin
         casex (addr)
-            `DEMOD_CONTROL:     dataOut <= {29'b0,demodMode};
+            `DEMOD_CONTROL:     dataOut <= {highFreqOffset,13'b0,bitsyncMode,13'b0,demodMode};
             `DEMOD_DACSELECT:   dataOut <= {12'h0,dac2Select,4'h0,dac1Select,4'h0,dac0Select};
+            `DEMOD_FALSELOCK:   dataOut <= {falseLockThreshold,falseLockAlpha};
             default:            dataOut <= 32'h0;
             endcase
         end

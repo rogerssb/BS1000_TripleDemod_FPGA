@@ -547,7 +547,7 @@ initial begin
     fmModCS = 0;
 
     // Init the mode
-    write32(createAddress(`DEMODSPACE,`DEMOD_CONTROL),{29'bx,`MODE_2FSK});
+    write32(createAddress(`DEMODSPACE,`DEMOD_CONTROL),{14'bx,`MODE_SINGLE_RAIL,13'bx,`MODE_2FSK});
 
     // Init the sample rate loop filters
     write32(createAddress(`RESAMPSPACE,`RESAMPLER_RATE),resamplerFreqInt);

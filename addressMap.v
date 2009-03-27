@@ -21,24 +21,29 @@
 
 // Define the global radio memory map
 `define DEMOD_CONTROL   12'bxxxx_xxxx_00xx
-`define MODE_AM         3'b000
-`define MODE_PM         3'b001
-`define MODE_FM         3'b010
-`define MODE_2FSK       3'b011
-`define MODE_BPSK       3'b100
-`define MODE_QPSK       3'b101
-`define MODE_OQPSK      3'b110
+`define MODE_AM             3'b000
+`define MODE_PM             3'b001
+`define MODE_FM             3'b010
+`define MODE_2FSK           3'b011
+`define MODE_BPSK           3'b100
+`define MODE_QPSK           3'b101
+`define MODE_OQPSK          3'b110
+`define MODE_SINGLE_RAIL    2'b00
+`define MODE_DUAL_RAIL      2'b01
+`define MODE_IND_RAIL       2'b10
 `define DEMOD_DACSELECT 12'bxxxx_xxxx_01xx
-`define DAC_I           4'b0000
-`define DAC_Q           4'b0001
-`define DAC_ISYM        4'b0010
-`define DAC_QSYM        4'b0011
-`define DAC_FREQ        4'b0100
-`define DAC_PHASE       4'b0101
-`define DAC_MAG         4'b0110
-`define DAC_PHERROR     4'b0111
-`define DAC_BSLOCK      4'b1000
-`define DAC_FREQLOCK    4'b1001
+`define DAC_I               4'b0000
+`define DAC_Q               4'b0001
+`define DAC_ISYM            4'b0010
+`define DAC_QSYM            4'b0011
+`define DAC_FREQ            4'b0100
+`define DAC_PHASE           4'b0101
+`define DAC_MAG             4'b0110
+`define DAC_PHERROR         4'b0111
+`define DAC_BSLOCK          4'b1000
+`define DAC_FREQLOCK        4'b1001
+`define DAC_AVGFREQ         4'b1010
+`define DEMOD_FALSELOCK 12'bxxxx_xxxx_10xx
 
 // Define the FM memory map
 `define FM_MOD_FREQ     12'bxxxx_xxxx_00xx

@@ -12,7 +12,7 @@
 `include "addressMap.v"
 `include "defines.v"
 
-module symb_pll(rs,en,wr0,wr1,a,di,do,clk,clk_en,clk_ref,clk_vco,clk_fbk,clk_out);
+module symb_pll(rs,en,wr0,wr1,wr2,wr3,a,di,do,clk,clk_en,clk_ref,clk_vco,clk_fbk,clk_out);
 
 input clk;            // system clock
 input clk_en;         // system clock enable
@@ -21,9 +21,9 @@ input clk_vco;        // pll vco output clock
 output clk_fbk;       // pll comparator feedback clock
 output clk_out;       // filtered symbol clock
 
-input rs,en,wr0,wr1;  // processor interface signals
+input rs,en,wr0,wr1,wr2,wr3;  // processor interface signals
 input [11:0]a;
-input [15:0]di;
+input [31:0]di;
 output [15:0]do;
 
 // processor write -------------------------------------------------------------
@@ -54,9 +54,7 @@ always @(negedge wr0)begin
   if(en)begin
     casex (a)
       `SYMB_PLL_REF: ref[7:0] <= di[7:0];
-      `SYMB_PLL_FBK: fbk[7:0] <= di[7:0];
       `SYMB_PLL_VCO: vco[7:0] <= di[7:0];
-      `SYMB_PLL_NCO: nco_step[7:0] <= di[7:0];
       default: ;
     endcase
   end
@@ -66,14 +64,31 @@ always @(negedge wr1)begin
   if(en)begin
     casex (a)
       `SYMB_PLL_REF: ref[15:8] <= di[15:8];
-      `SYMB_PLL_FBK: fbk[15:8] <= di[15:8];
       `SYMB_PLL_VCO: vco[15:8] <= di[15:8];
-      `SYMB_PLL_NCO: nco_step[15:8] <= di[15:8];
       default: ;
     endcase
   end
 end
 
+always @(negedge wr2)begin
+  if(en)begin
+    casex (a)
+      `SYMB_PLL_FBK: fbk[7:0] <= di[23:16];
+      `SYMB_PLL_NCO: nco_step[7:0] <= di[23:16];
+      default: ;
+    endcase
+  end
+end
+
+always @(negedge wr3)begin
+  if(en)begin
+    casex (a)
+      `SYMB_PLL_FBK: fbk[15:8] <= di[31:24];
+      `SYMB_PLL_NCO: nco_step[15:8] <= di[31:24];
+      default: ;
+    endcase
+  end
+end
 `endif
 
 // processor read --------------------------------------------------------------

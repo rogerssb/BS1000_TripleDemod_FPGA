@@ -12,6 +12,7 @@ module carrierLoop(
     demodMode,
     phase,
     freq,
+    highFreqOffset,
     offsetError,
     offsetErrorEn,
     carrierFreqOffset,
@@ -32,6 +33,7 @@ output  [31:0]  dout;
 input   [2:0]   demodMode;
 input   [7:0]   phase;
 input   [7:0]   freq;
+input           highFreqOffset;
 input   [7:0]   offsetError;
 input           offsetErrorEn;
 output  [31:0]  carrierFreqOffset;
@@ -150,9 +152,11 @@ wire loopFilterEn = sync & modeErrorEn;
 /**************************** Adjust Error ************************************/
 reg     [7:0]   loopError;
 wire    [7:0]   negModeError = ~modeError + 1;
+reg             carrierLock;
+wire            breakLoop = (zeroError || (sweepEnable && !carrierLock && highFreqOffset));
 always @(posedge clk) begin 
     if (loopFilterEn) begin
-        if (zeroError) begin
+        if (breakLoop) begin
             loopError <= 8'h0;
             end
         else if (invertError) begin
@@ -176,7 +180,6 @@ leadGain leadGain (
     .leadError(leadError)
     );
 
-reg             carrierLock;
 lagGain lagGain (
     .clk(clk), .clkEn(loopFilterEn), .reset(reset), 
     .error(loopError),

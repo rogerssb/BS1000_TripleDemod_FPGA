@@ -6,6 +6,7 @@ module bitsync(
     sampleClk, reset, 
     symTimes2Sync,
     demodMode,
+    bitsyncMode,
     wr0,wr1,wr2,wr3,
     addr,
     din,
@@ -14,9 +15,11 @@ module bitsync(
     offsetError,
     offsetErrorEn,
     symClk,
-    symData,
+    symDataI,
+    symDataQ,
     bitClk,
-    bitData,
+    bitDataI,
+    bitDataQ,
     sampleFreq,
     bitsyncLock,
     lockCounter
@@ -26,6 +29,7 @@ input           sampleClk;
 input           reset;
 input           symTimes2Sync;
 input   [2:0]   demodMode;
+input   [1:0]   bitsyncMode;
 input           wr0,wr1,wr2,wr3;
 input   [11:0]  addr;
 input   [31:0]  din;
@@ -34,9 +38,11 @@ input   [17:0]  i,q;
 output  [17:0]  offsetError;
 output          offsetErrorEn;
 output          symClk;
-output  [17:0]  symData;
+output  [17:0]  symDataI;
+output  [17:0]  symDataQ;
 output          bitClk;
-output          bitData;
+output          bitDataI;
+output          bitDataQ;
 output  [31:0]  sampleFreq;
 output          bitsyncLock;
 output  [15:0]  lockCounter;
@@ -121,20 +127,30 @@ parameter SLIP0 =    2'b11;
 parameter SLIP1 =    2'b10;
 
 // Fifo of baseband inputs
-reg [17:0]bbSR[2:0];
+reg [17:0]bbSRI[2:0];
+reg [17:0]bbSRQ[2:0];
 
 // Timing error variables
-wire earlySign = bbSR[2][17];
-wire lateSign = bbSR[0][17];
-wire [17:0]earlyOnTime = bbSR[2];
-wire [17:0]lateOnTime = bbSR[0];
-wire [17:0]offTime = bbSR[1];
-wire [17:0]negOffTime = (~offTime + 1);
-reg  [17:0]timingError;
+wire earlySignI = bbSRI[2][17];
+wire lateSignI = bbSRI[0][17];
+wire [17:0]earlyOnTimeI = bbSRI[2];
+wire [17:0]lateOnTimeI = bbSRI[0];
+wire [17:0]offTimeI = bbSRI[1];
+wire [17:0]negoffTimeI = (~offTimeI + 1);
+wire earlySignQ = bbSRQ[2][17];
+wire lateSignQ = bbSRQ[0][17];
+wire [17:0]earlyOnTimeQ = bbSRQ[2];
+wire [17:0]lateOnTimeQ = bbSRQ[0];
+wire [17:0]offTimeQ = bbSRQ[1];
+wire [17:0]negoffTimeQ = (~offTimeQ + 1);
+
+reg  [17:0]timingErrorI;
+reg  [17:0]timingErrorQ;
+wire    [18:0]  timingError = {timingErrorI[17],timingErrorI} + {timingErrorQ[17],timingErrorQ};
 wire timingErrorEn = (phaseState == ONTIME);
 
 // DC Offset error variables
-wire [18:0]offsetErrorSum = {bbSR[2][17],bbSR[2]} + {bbSR[0][17],bbSR[0]};
+wire [18:0]offsetErrorSum = {bbSRI[2][17],bbSRI[2]} + {bbSRI[0][17],bbSRI[0]};
 reg  [17:0]offsetError;
 wire offsetErrorEn = (phaseState == ONTIME);
 
@@ -147,7 +163,7 @@ wire slip = registerSlip;
 `endif
 reg slipped;
 reg  [17:0]slipError;
-wire [17:0]absError = timingError[17] ? (~timingError + 1) : timingError;
+wire [17:0]absError = timingErrorI[17] ? (~timingErrorI + 1) : timingErrorI;
 wire [17:0]absSlipError = slipError[17] ? (~slipError + 1) : slipError;
 reg  [21:0]avgError;
 reg  [21:0]avgSlipError;
@@ -158,7 +174,8 @@ always @(posedge sampleClk) begin
         phaseState <= ONTIME;
         slipState <= AVERAGE;
         slipped <= 0;
-        timingError <= 0;
+        timingErrorI <= 0;
+        timingErrorQ <= 0;
         offsetError <= 0;
         avgCount <= 15;
         avgError <= 0;
@@ -167,13 +184,21 @@ always @(posedge sampleClk) begin
     else if (symTimes2Sync) begin
         // Shift register of baseband sample values
         if (demodMode == `MODE_2FSK) begin
-            bbSR[0] <= freq;
+            bbSRI[0] <= freq;
+            bbSRQ[0] <= freq;
+            end
+        else if (bitsyncMode == `MODE_DUAL_RAIL) begin
+            bbSRI[0] <= iMF;
+            bbSRQ[0] <= qMF;
             end
         else begin
-            bbSR[0] <= iMF;
+            bbSRI[0] <= iMF;
+            bbSRQ[0] <= iMF;
             end
-        bbSR[1] <= bbSR[0];
-        bbSR[2] <= bbSR[1];
+        bbSRI[1] <= bbSRI[0];
+        bbSRI[2] <= bbSRI[1];
+        bbSRQ[1] <= bbSRQ[0];
+        bbSRQ[2] <= bbSRQ[1];
         case (phaseState)
             ONTIME: begin
                 `ifdef ENABLE_SLIP
@@ -190,26 +215,40 @@ always @(posedge sampleClk) begin
                 end
             OFFTIME: begin
                 phaseState <= ONTIME;
-                // Is there a data transition?
-                if (earlySign != lateSign) begin
+                // Is there a data transition on I?
+                if (earlySignI != lateSignI) begin
                     // Yes. Calculate DC offset error
                     transition <= 1;
                     offsetError <= offsetErrorSum[18:1];
                     // High to low transition?
-                    if (earlySign) begin
-                        timingError <= offTime;
-                        slipError <= lateOnTime;
+                    if (earlySignI) begin
+                        timingErrorI <= offTimeI;
+                        slipError <= lateOnTimeI;
                         end
                     // Or low to high?
                     else begin
-                        timingError <= negOffTime;
-                        slipError <= earlyOnTime;
+                        timingErrorI <= negoffTimeI;
+                        slipError <= earlyOnTimeI;
                         end
                     end
                 else begin
                     transition <= 0;
                     offsetError <= 18'h00;
-                    timingError <= 18'h00;
+                    timingErrorI <= 18'h00;
+                    end
+                // Is there a data transition on Q?
+                if (earlySignQ != lateSignQ) begin
+                    // High to low transition?
+                    if (earlySignQ) begin
+                        timingErrorQ <= offTimeQ;
+                        end
+                    // Or low to high?
+                    else begin
+                        timingErrorQ <= negoffTimeQ;
+                        end
+                    end
+                else begin
+                    timingErrorQ <= 18'h00;
                     end
                 end
             endcase
@@ -253,18 +292,23 @@ always @(posedge sampleClk) begin
     end
 
 `ifdef SIMULATE
-real timingErrorReal = ((timingError > 131071.0) ? timingError - 262144.0 : timingError)/131072.0;
+wire    [17:0]  timingErr = timingError[18:1];
+real timingErrorReal = ((timingErr > 131071.0) ? timingErr - 262144.0 : timingErr)/131072.0;
 `endif
 
 //************************ Recovered Clock and Data ***************************
 
-reg     [17:0]  symData;
-reg             bitData;
+reg     [17:0]  symDataI;
+reg     [17:0]  symDataQ;
+reg             bitDataI;
+reg             bitDataQ;
 always @(posedge sampleClk) begin
     if (symTimes2Sync) begin
-        symData <= bbSR[1];
+        symDataI <= bbSRI[1];
+        symDataQ <= bbSRQ[1];
         if (timingErrorEn) begin
-            bitData <= bbSR[1][17];
+            bitDataI <= bbSRI[1][17];
+            bitDataQ <= bbSRQ[1][17];
             end
         end
     end
@@ -293,7 +337,7 @@ loopFilter sampleLoop(.clk(sampleClk),
                       .addr(addr),
                       .din(din),
                       .dout(dout),
-                      .error(timingError[17:10]),
+                      .error(timingError[18:11]),
                       .loopFreq(sampleFreq),
                       .ctrl2(registerSlip),
                       .satPos(satPos),
