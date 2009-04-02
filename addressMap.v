@@ -44,6 +44,7 @@
 `define DAC_FREQLOCK        4'b1001
 `define DAC_AVGFREQ         4'b1010
 `define DEMOD_FALSELOCK 12'bxxxx_xxxx_10xx
+`define DEMOD_STATUS    12'bxxxx_xxxx_11xx
 
 // Define the FM memory map
 `define FM_MOD_FREQ     12'bxxxx_xxxx_00xx

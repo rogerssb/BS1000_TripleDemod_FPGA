@@ -76,6 +76,8 @@ demodRegs demodRegs(
     .cs(demodSpace),
     .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
     .highFreqOffset(highFreqOffset),
+    .bitsyncLock(bitsyncLock),
+    .demodLock(carrierLock),
     .demodMode(demodMode),
     .bitsyncMode(bitsyncMode),
     .dac0Select(dac0Select),
