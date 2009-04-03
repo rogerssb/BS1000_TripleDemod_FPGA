@@ -6,7 +6,7 @@ module lagGain (
     lagExp,
     limit,
     sweepEnable,
-    sweepOffsetMag,
+    sweepRateMag,
     carrierInSync,
     clearAccum,
     lagAccum
@@ -17,7 +17,7 @@ input   [7:0]   error;
 input   [4:0]   lagExp;
 input   [31:0]  limit;
 input           sweepEnable;
-input   [31:0]  sweepOffsetMag;
+input   [31:0]  sweepRateMag;
 input           carrierInSync;
 input           clearAccum;
 
@@ -81,6 +81,7 @@ always @(posedge clk) begin
 // CASE2               LL          UL
 // CASE3                                            LL        UL
 //
+reg     [31:0]  sweepOffsetMag;
 reg     [31:0]  sweepOffset;
 wire    [31:0]  negSweepOffsetMag = -sweepOffsetMag;
 reg     [31:0]  sweepMag;
@@ -98,33 +99,64 @@ always @ (posedge clk or posedge reset) begin
         lagAccum <= 0;
         end
     else if (clkEn) begin
+        // Check to see if the sweep rate has changed.
+        if (sweepOffsetMag != sweepRateMag) begin
+            sweepOffsetMag <= sweepRateMag;
+            sweepMag <= sweepRateMag;
+            end
+    
+        // Test the upper and lower limits on the accumulator.
+        // Have we reached the upper limit?
         if ( (!sum[39] && !upperLimit[31])              // both positive
                 && (sum[39:8] >= upperLimit) ) begin    // between upper limit and +saturation
+            // Yes. Limit the accumulator
             lagAccum <= {upperLimit,8'h0};
+            // Is sweep enabled?
             if (sweepEnable) begin
-                sweepMag <= negSweepOffsetMag;
+                // Yes. Are we in sync?
                 if (carrierInSync) begin
+                    // Yes. Stop Sweeping
                     sweepOffset <= 0;
                     end
                 else begin
+                    // No. Start using the reversed direction.
                     sweepOffset <= negSweepOffsetMag;
                     end
+                // Save the new sweep direction
+                sweepMag <= negSweepOffsetMag;
+                end
+            else begin  
+                // No. Stop sweeping.
+                sweepOffset <= 0;
                 end
             end
+        // Have we reached the lower limit?
         else if ( (sum[39] && lowerLimit[31])           // both negative
                 && (sum[39:8] < lowerLimit) ) begin     // between lower limit and -saturation
+            // Yes. Limit the accumulator
             lagAccum <= {lowerLimit,8'hff};
+            // Is sweep enabled?
             if (sweepEnable) begin
-                sweepMag <= sweepOffsetMag;
+                // Yes. Are we in sync?
                 if (carrierInSync) begin
+                    // Yes. Stop Sweeping
                     sweepOffset <= 0;
                     end
                 else begin
+                    // No. Start using the reversed direction.
                     sweepOffset <= sweepOffsetMag;
                     end
+                // Save the new sweep direction.
+                sweepMag <= sweepOffsetMag;
+                end
+            else begin  
+                // No. Stop sweeping.
+                sweepOffset <= 0;
                 end
             end
+        // We get here if we are not at the limits.
         else begin
+            // Update the accumulator.
             lagAccum <= sum;
             if (!sweepEnable) begin
                 sweepOffset <= 0;
@@ -134,9 +166,6 @@ always @ (posedge clk or posedge reset) begin
                 end
             else begin
                 sweepOffset <= sweepMag;
-                end
-            if (sweepMag == 0) begin
-                sweepMag <= sweepOffsetMag;
                 end
             end
         end

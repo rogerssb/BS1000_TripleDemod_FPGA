@@ -186,7 +186,7 @@ lagGain lagGain (
     .lagExp(lagExp),
     .limit(limit),
     .sweepEnable(sweepEnable),
-    .sweepOffsetMag(sweepOffsetMag),
+    .sweepRateMag(sweepOffsetMag),
     .clearAccum(clearAccum),
     .carrierInSync(carrierLock),
     .lagAccum(lagAccum)
