@@ -120,7 +120,7 @@ always @(addr or cs or
          ) begin
     if (cs) begin
         casex (addr)
-            `DEMOD_CONTROL:     dataOut <= {highFreqOffset,13'b0,bitsyncMode,13'b0,demodMode};
+            `DEMOD_CONTROL:     dataOut <= {14'b0,bitsyncMode,13'b0,demodMode};
             `DEMOD_DACSELECT:   dataOut <= {12'h0,dac2Select,4'h0,dac1Select,4'h0,dac0Select};
             `DEMOD_FALSELOCK:   dataOut <= {falseLockThreshold,falseLockAlpha};
             `DEMOD_STATUS:      dataOut <= {29'h0,highFreqOffset,bitsyncLock,demodLock};

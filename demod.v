@@ -297,6 +297,7 @@ always @(posedge clk) begin
                              AFC/Sweep/Costas Loop
 ******************************************************************************/
 wire    [17:0]  offsetError;
+wire    [7:0]   symPhase;
 wire    [7:0]   demodLoopError;
 wire    [15:0]  freqLockCounter;
 wire    [31:0]  freqDout;
@@ -304,6 +305,7 @@ carrierLoop carrierLoop(
     .clk(clk), .reset(reset),
     .resampSync(resampSync),
     .ddcSync(ddcSync),
+    .symSync(symPhaseSync),
     .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
     .addr(addr),
     .din(din),
@@ -314,6 +316,7 @@ carrierLoop carrierLoop(
     .highFreqOffset(highFreqOffset),
     .offsetError(offsetError[17:10]),
     .offsetErrorEn(offsetErrorEn),
+    .symPhase(symPhase),
     .carrierFreqOffset(carrierFreqOffset),
     .carrierFreqEn(carrierOffsetEn),
     .loopError(demodLoopError),
@@ -396,6 +399,8 @@ bitsync bitsync(
     .symClk(symClk),
     .symDataI(iSymData),
     .symDataQ(qSymData),
+    .symPhase(symPhase),
+    .symPhaseSync(symPhaseSync),
     .bitClk(demodClk),
     .bitDataI(iBit),
     .bitDataQ(qBit),
@@ -468,7 +473,7 @@ always @(posedge clk) begin
             end
         `DAC_PHERROR: begin
             dac0Data <= {demodLoopError,10'h0};
-            dac0Sync <= ddcSync;
+            dac0Sync <= carrierOffsetEn;
             end
         `DAC_BSLOCK: begin
             dac0Data <= {bsLockCounter,2'b0};
@@ -523,7 +528,7 @@ always @(posedge clk) begin
             end
         `DAC_PHERROR: begin
             dac1Data <= {demodLoopError,10'h0};
-            dac1Sync <= ddcSync;
+            dac1Sync <= carrierOffsetEn;
             end
         `DAC_BSLOCK: begin
             dac1Data <= {bsLockCounter,2'b0};
@@ -578,7 +583,7 @@ always @(posedge clk) begin
             end
         `DAC_PHERROR: begin
             dac2Data <= {demodLoopError,10'h0};
-            dac2Sync <= ddcSync;
+            dac2Sync <= carrierOffsetEn;
             end
         `DAC_BSLOCK: begin
             dac2Data <= {bsLockCounter,2'b0};

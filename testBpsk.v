@@ -40,7 +40,7 @@ real carrierFreqNorm = carrierFreqHz * `SAMPLE_PERIOD * `TWO_POW_32;
 integer carrierFreqInt = carrierFreqNorm;
 wire [31:0] carrierFreq = carrierFreqInt;
 
-real carrierOffsetFreqHz = 10000.0;
+real carrierOffsetFreqHz = 0000.0;
 real carrierOffsetFreqNorm = carrierOffsetFreqHz * `SAMPLE_PERIOD * `TWO_POW_32;
 integer carrierOffsetFreqInt = carrierOffsetFreqNorm;
 wire [31:0] carrierOffsetFreq = carrierOffsetFreqInt;
@@ -87,9 +87,10 @@ integer resamplerLimitInt = resamplerLimitNorm;
 ******************************************************************************/
 
 integer bitrateCount;
+reg     modReset;
 reg     modClk;
 always @(posedge clk) begin
-    if (reset) begin
+    if (modReset) begin
         bitrateCount <= 0;
         modClk <= 0;
         end
@@ -138,8 +139,8 @@ always @(negedge modClk or posedge reset) begin
         zeroCount <= zeroCount + 5'h1;
         sr <= sr >> 1;
         end
-    //randData <= sr[0];
-    randData <= 1'b0;
+    randData <= sr[0];
+    //randData <= 1'b0;
     end
 
 /******************************************************************************
@@ -481,6 +482,7 @@ initial begin
     demod.ddc.hbReset = 1;
     demod.ddc.cicReset = 1;
     interpReset = 0;
+    modReset = 0;
     reset = 0;
     sync = 1;
     clk = 0;
@@ -497,20 +499,21 @@ initial begin
     write32(createAddress(`DEMODSPACE,`DEMOD_CONTROL),{29'bx,`MODE_BPSK});
 
     // Init the sample rate loop filters
-    resamplerFreqInt = 32'h83a83a84;
+    //resamplerFreqInt = 32'h83a83a84;
+    resamplerFreqInt = 32'h8000eff9;
     write32(createAddress(`RESAMPSPACE,`RESAMPLER_RATE),resamplerFreqInt);
     write32(createAddress(`BITSYNCSPACE,`LF_CONTROL),1);    // Zero the error
-    write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h001b0016);    
+    write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h001a000d);    
     //write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h0014000c);    
     write32(createAddress(`BITSYNCSPACE,`LF_LIMIT), resamplerLimitInt);    
-    write32(createAddress(`BITSYNCSPACE,`LF_LOCKDETECTOR), 32'h00200800);
+    write32(createAddress(`BITSYNCSPACE,`LF_LOCKDETECTOR), 32'h00308000);
 
     // Init the carrier loop filters
     write32(createAddress(`CARRIERSPACE,`LF_CONTROL),1);    // Zero the error
     write32(createAddress(`CARRIERSPACE,`LF_LEAD_LAG),32'h0014000b);   
     write32(createAddress(`CARRIERSPACE,`LF_LIMIT), carrierLimit);
     write32(createAddress(`CARRIERSPACE,`LF_LOOPDATA), sweepRate);
-    write32(createAddress(`CARRIERSPACE,`LF_LOCKDETECTOR), 32'h00280800);
+    write32(createAddress(`CARRIERSPACE,`LF_LOCKDETECTOR), 32'h00308000);
 
     // Init the downcoverter register set
     write32(createAddress(`DDCSPACE,`DDC_CONTROL),2);
@@ -523,7 +526,7 @@ initial begin
 
     // Init the channel agc loop filter
     write32(createAddress(`CHAGCSPACE,`ALF_CONTROL),1);                 // Zero the error
-    write32(createAddress(`CHAGCSPACE,`ALF_SETPOINT),32'h000000f8);     // AGC Setpoint
+    write32(createAddress(`CHAGCSPACE,`ALF_SETPOINT),32'h000000e8);     // AGC Setpoint
     write32(createAddress(`CHAGCSPACE,`ALF_GAINS),32'h00180018);        // AGC Loop Gain
     write32(createAddress(`CHAGCSPACE,`ALF_ULIMIT),32'h4fffffff);       // AGC Upper limit
     write32(createAddress(`CHAGCSPACE,`ALF_LLIMIT),32'h00000000);       // AGC Lower limit
@@ -561,6 +564,14 @@ initial begin
     #(2*C) ;
     reset = 0;
 
+    // Wait 0.5 bit periods
+    #(1.0*bitrateSamplesInt*C) ;
+
+    // Create a reset to restart the modulator
+    modReset = 1;
+    #(2*C) ;
+    modReset = 0;
+
     // Wait 2.0 bit periods
     #(4.0*bitrateSamplesInt*C) ;
 
@@ -569,7 +580,7 @@ initial begin
     #(2*C) ;
     demod.ddc.hbReset = 0;
 
-    // Wait 2 bit periods
+    // Wait 2.0 bit periods
     #(4.0*bitrateSamplesInt*C) ;
 
     // Create a reset to clear the cic resampler
@@ -592,7 +603,7 @@ initial begin
     #(4*bitrateSamplesInt*C) ;
 
     // Enable the carrier loop, invert the error, and enable sweep
-    write32(createAddress(`CARRIERSPACE,`LF_CONTROL),5);  
+    write32(createAddress(`CARRIERSPACE,`LF_CONTROL),2);  
 
     `ifdef ENABLE_AGC
     // Enable the AGC loop

@@ -5,6 +5,7 @@ module carrierLoop(
     clk, reset, 
     ddcSync,
     resampSync,
+    symSync,
     wr0,wr1,wr2,wr3,
     addr,
     din,
@@ -15,6 +16,7 @@ module carrierLoop(
     highFreqOffset,
     offsetError,
     offsetErrorEn,
+    symPhase,
     carrierFreqOffset,
     carrierFreqEn,
     loopError,
@@ -26,6 +28,7 @@ input           clk;
 input           reset;
 input           ddcSync;
 input           resampSync;
+input           symSync;
 input           wr0,wr1,wr2,wr3;
 input   [11:0]  addr;
 input   [31:0]  din;
@@ -36,6 +39,7 @@ input   [7:0]   freq;
 input           highFreqOffset;
 input   [7:0]   offsetError;
 input           offsetErrorEn;
+input   [7:0]   symPhase;
 output  [31:0]  carrierFreqOffset;
 output          carrierFreqEn;
 output  [7:0]   loopError;
@@ -91,11 +95,14 @@ reg             modeErrorEn;
 reg             sync;
 wire    [7:0]   bpskPhase = phase;
 wire    [7:0]   qpskPhase = phase - 8'h20;
+wire    [7:0]   bpskSymPhase = symPhase;
+wire    [7:0]   qpskSymPhase = symPhase - 8'h20;
 reg             enableCarrierLock;
 always @(demodMode or offsetError or offsetErrorEn or 
          qpskPhase or bpskPhase or
+         qpskSymPhase or bpskSymPhase or
          phase or freq or 
-         ddcSync or resampSync) begin
+         ddcSync or resampSync or symSync) begin
     case (demodMode)
         `MODE_AM: begin
             sync <= ddcSync;
@@ -124,6 +131,8 @@ always @(demodMode or offsetError or offsetErrorEn or
         `MODE_BPSK: begin
             sync <= ddcSync;
             modeError <= {bpskPhase[6:0],1'b0};
+            //sync <= symSync;
+            //modeError <= {bpskSymPhase[5:0],2'b0};
             modeErrorEn <= 1'b1;
             enableCarrierLock = 1;
             end
@@ -131,6 +140,8 @@ always @(demodMode or offsetError or offsetErrorEn or
         `MODE_OQPSK: begin
             sync <= ddcSync;
             modeError <= {qpskPhase[5:0],2'b0};
+            //sync <= symSync;
+            //modeError <= {qpskSymPhase[5:0],2'b0};
             modeErrorEn <= 1'b1;
             enableCarrierLock = 1;
             end

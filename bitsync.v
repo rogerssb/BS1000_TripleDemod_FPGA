@@ -17,6 +17,8 @@ module bitsync(
     symClk,
     symDataI,
     symDataQ,
+    symPhase,
+    symPhaseSync,
     bitClk,
     bitDataI,
     bitDataQ,
@@ -40,6 +42,8 @@ output          offsetErrorEn;
 output          symClk;
 output  [17:0]  symDataI;
 output  [17:0]  symDataQ;
+output  [7:0]   symPhase;
+output          symPhaseSync;
 output          bitClk;
 output          bitDataI;
 output          bitDataQ;
@@ -294,18 +298,38 @@ always @(posedge sampleClk) begin
 `ifdef SIMULATE
 wire    [17:0]  timingErr = timingError[18:1];
 real timingErrorReal = ((timingErr > 131071.0) ? timingErr - 262144.0 : timingErr)/131072.0;
+real iMFReal = (iMF[17] ? iMF - 262144.0 : iMF)/131072.0;
+real qMFReal = (qMF[17] ? qMF - 262144.0 : qMF)/131072.0;
 `endif
 
 //************************ Recovered Clock and Data ***************************
 
 reg     [17:0]  symDataI;
 reg     [17:0]  symDataQ;
+reg     [7:0]   symPhase;
+reg             enSR[9:0];
+assign          symPhaseSync = enSR[9];
 reg             bitDataI;
 reg             bitDataQ;
 always @(posedge sampleClk) begin
     if (symTimes2Sync) begin
+        // Delay the clock enable to match the delay through the fmDemod
+        enSR[0] <= timingErrorEn;
+        enSR[1] <= enSR[0];
+        enSR[2] <= enSR[1];
+        enSR[3] <= enSR[2];
+        enSR[4] <= enSR[3];
+        enSR[5] <= enSR[4];
+        enSR[6] <= enSR[5];
+        enSR[7] <= enSR[6];
+        enSR[8] <= enSR[7];
+        enSR[9] <= enSR[8];
+        // Capture the output samples
         symDataI <= bbSRI[1];
         symDataQ <= bbSRQ[1];
+        if (symPhaseSync) begin
+            symPhase <= phase;
+            end
         if (timingErrorEn) begin
             bitDataI <= bbSRI[1][17];
             bitDataQ <= bbSRQ[1][17];
@@ -313,10 +337,15 @@ always @(posedge sampleClk) begin
         end
     end
 
+
 assign symClk = timingErrorEn;
 
 assign bitClk  = symClk;
 
+`ifdef SIMULATE
+real symDataIReal = (symDataI[17] ? symDataI - 262144.0 : symDataI)/131072.0;
+real symPhaseReal = (symPhase[7] ? symPhase - 256.0 : symPhase)/128.0;
+`endif
 //******************************** Loop Filter ********************************
 
 reg bitsyncSpace;
