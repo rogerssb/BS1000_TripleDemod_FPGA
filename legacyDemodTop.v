@@ -47,27 +47,4 @@ output  [17:0]  dac1Data;
 output          dac2Sync;
 output  [17:0]  dac2Data;
 
-legacyDemod legacyDemod(
-    clk, reset, syncIn,
-    rd, wr0,wr1,wr2,wr3,
-    addr,
-    din,
-    dout,
-    iRx, qRx,
-    iDataClk,
-    iBit,
-    qDataClk,
-    qBit,
-    bitsyncLock,
-    carrierLock,
-    symTimes2Sync,
-    symSync,
-    dac0Sync,
-    dac0Data,
-    dac1Sync,
-    dac1Data,
-    dac2Sync,
-    dac2Data
-    );
-
 endmodule
