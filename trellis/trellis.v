@@ -10,10 +10,16 @@
 
 `timescale 1ns/1ps
 
-module trellis(clk,reset,symEn,sym2xEn,I,Q);
+module trellis(
+  clk,reset,symEn,sym2xEn,
+  iIn,qIn,
+  wr0,wr1,wr2,wr3,
+  addr,
+  din,dout
+  );
 
 input clk,reset,symEn,sym2xEn;
-input [17:0]I,Q;
+input [17:0]iIn,qIn;
 
 
 input clk,reset,symEn,sym2xEn;

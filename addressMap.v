@@ -16,7 +16,7 @@
 `define INTERP1SPACE    12'b1011_xxxx_xxxx
 `define INTERP2SPACE    12'b1100_xxxx_xxxx
 `define MISC_SPACE      12'b1101_xxxx_xxxx
-`define GPIOSPACE       12'b1110_xxxx_xxxx
+`define TRELLIS_SPACE   12'b1110_xxxx_xxxx
 `define DAC_SPACE       12'b1111_xxxx_xxxx
 
 // Define the global radio memory map
@@ -89,9 +89,6 @@
 // Define the MISCELLANEOUS locations
 `define RESET           12'bxxxx_xxxx_x00x
 `define VERSION         12'bxxxx_xxxx_x01x
-
-// Define the GPIO locations
-`define LEDS            12'bxxxx_xxxx_xx0x
 
 // Define the DAC control locations
 `define DAC_WDATA       12'bxxxx_xxxx_x00x

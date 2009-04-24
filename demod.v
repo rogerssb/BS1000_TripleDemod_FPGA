@@ -20,7 +20,9 @@ module demod(
     dac1Sync,
     dac1Data,
     dac2Sync,
-    dac2Data
+    dac2Data,
+    iSymData,
+    qSymData
     );
 
 input           clk;
@@ -46,6 +48,8 @@ output          dac1Sync;
 output  [17:0]  dac1Data;
 output          dac2Sync;
 output  [17:0]  dac2Data;
+
+output [17:0]   iSymData,qSymData;
 
 
 
