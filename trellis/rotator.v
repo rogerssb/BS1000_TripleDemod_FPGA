@@ -59,25 +59,25 @@ output [17:0]
   out0Pt20Real,out0Pt20Imag,out1Pt20Real,out1Pt20Imag;
 
 parameter pt1Real = 18'h1FFFF,  pt1Imag = 18'h00000,
-          pt2Real = 18'h1E6F0,  pt2Imag = 18'h09E37,
-          pt3Real = 18'h19E37,  pt3Imag = 18'h12CF2,
-          pt4Real = 18'h12CF2,  pt4Imag = 18'h19E37,
-          pt5Real = 18'h09E37,  pt5Imag = 18'h1E6F0,
-          pt6Real = 18'h00000,  pt6Imag = 18'h1FFFF,
-          pt7Real = 18'h361C9,  pt7Imag = 18'h1E6F0,
-          pt8Real = 18'h2D30E,  pt8Imag = 18'h19E37,
-          pt9Real = 18'h261C9,  pt9Imag = 18'h12CF2,
-         pt10Real = 18'h21910, pt10Imag = 18'h09E37,
+          pt2Real = 18'h1E6F0,  pt2Imag = 18'h361C9,
+          pt3Real = 18'h19E37,  pt3Imag = 18'h2D30E,
+          pt4Real = 18'h12CF2,  pt4Imag = 18'h261C9,
+          pt5Real = 18'h09E37,  pt5Imag = 18'h21910,
+          pt6Real = 18'h00000,  pt6Imag = 18'h20001,
+          pt7Real = 18'h361C9,  pt7Imag = 18'h21910,
+          pt8Real = 18'h2D30E,  pt8Imag = 18'h261C9,
+          pt9Real = 18'h261C9,  pt9Imag = 18'h2D30E,
+         pt10Real = 18'h21910, pt10Imag = 18'h361C9,
          pt11Real = 18'h20001, pt11Imag = 18'h00000,
-         pt12Real = 18'h21910, pt12Imag = 18'h361C9,
-         pt13Real = 18'h261C9, pt13Imag = 18'h2D30E,
-         pt14Real = 18'h2D30E, pt14Imag = 18'h261C9,
-         pt15Real = 18'h361C9, pt15Imag = 18'h21910,
-         pt16Real = 18'h00000, pt16Imag = 18'h20001,
-         pt17Real = 18'h09E37, pt17Imag = 18'h21910,
-         pt18Real = 18'h12CF2, pt18Imag = 18'h261C9,
-         pt19Real = 18'h19E37, pt19Imag = 18'h2D30E,
-         pt20Real = 18'h1E6F0, pt20Imag = 18'h361C9;
+         pt12Real = 18'h21910, pt12Imag = 18'h09E37,
+         pt13Real = 18'h261C9, pt13Imag = 18'h12CF2,
+         pt14Real = 18'h2D30E, pt14Imag = 18'h19E37,
+         pt15Real = 18'h361C9, pt15Imag = 18'h1E6F0,
+         pt16Real = 18'h00000, pt16Imag = 18'h1FFFF,
+         pt17Real = 18'h09E37, pt17Imag = 18'h1E6F0,
+         pt18Real = 18'h12CF2, pt18Imag = 18'h19E37,
+         pt19Real = 18'h19E37, pt19Imag = 18'h12CF2,
+         pt20Real = 18'h1E6F0, pt20Imag = 18'h09E37;
 
 reg [17:0]iInBuf0,iInBuf1,qInBuf0,qInBuf1;
 always @(posedge clk)begin

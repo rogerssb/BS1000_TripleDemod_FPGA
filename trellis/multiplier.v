@@ -10,11 +10,11 @@
 
 `timescale 1ns/1ps
 
-module multiplier(clk,symEn,a,b,c,d,re0,im0,re1,im1);
+module multiplier(clk,symEn,a,b,c,d,reOut0,imOut0,reOut1,imOut1);
 
 input clk,symEn;
 input [17:0]a,b,c,d;
-output [17:0]re0,im0,re1,im1;
+output [17:0]reOut0,imOut0,reOut1,imOut1;
 
 // (a + bi)(c + di) = (ac - bd) + (bc + ad)i
 
@@ -49,14 +49,31 @@ multiplier_v10_0 mult_axd(
 wire [35:0]sumR = {axc[34],axc[34:0]} - {bxd[34],bxd[34:0]};
 wire [35:0]sumI = {bxc[34],bxc[34:0]} + {axd[34],axd[34:0]};
 
-reg [17:0]re0,im0,re1,im1;
+wire [17:0]sumRwire = sumR[35:18];
+wire [17:0]sumIwire = sumI[35:18];
+
+reg [17:0]re0,im0;
 always @(posedge clk)begin
-    re1 <= sumR[35:18];
-    im1 <= sumI[35:18];
   if(symEn)begin
     re0 <= sumR[35:18];
     im0 <= sumI[35:18];
     end
   end
 
+// resync outputs to symEn
+reg [17:0]reOut0,imOut0,reOut1,imOut1;
+reg symEnDelay;
+always @(posedge clk)begin
+  `ifdef SIMULATE
+  #1 symEnDelay <= symEn;
+  `else
+  symEnDelay <= symEn;
+  `endif
+  if(symEnDelay)begin
+    reOut0 <= re0;
+    imOut0 <= im0;
+    reOut1 <= sumR[35:18];
+    imOut1 <= sumI[35:18];
+    end
+  end
 endmodule
