@@ -59,7 +59,7 @@ output bsync_nLock,demod_nLock;
 output symb_pll_ref,symb_pll_fbk;
 input symb_pll_vco;
 
-parameter VER_NUMBER = 16'h0032;
+parameter VER_NUMBER = 16'h0033;
 
 wire [11:0]addr = {addr11,addr10,addr9,addr8,addr7,addr6,addr5,addr4,addr3,addr2,addr1,1'b0};
 

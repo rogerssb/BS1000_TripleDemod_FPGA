@@ -51,6 +51,37 @@ output  [31:0]  sampleFreq;
 output          bitsyncLock;
 output  [15:0]  lockCounter;
 
+`ifdef USE_COMP
+
+wire    [17:0]  iComp,qComp;
+cicComp cicCompI(
+    .clk(sampleClk), 
+    .reset(reset),
+    .sync(symTimes2Sync), 
+    .compIn(i),
+    .compOut(iComp)
+    );
+cicComp cicCompQ(
+    .clk(sampleClk), 
+    .reset(reset),
+    .sync(symTimes2Sync), 
+    .compIn(q),
+    .compOut(qComp)
+    );
+//****************************** Two Sample Sum *******************************
+reg     [17:0]  iDelay,qDelay;
+reg     [17:0]  iMF,qMF;
+wire    [18:0]  iSum = {iDelay[17],iDelay} + {iComp[17],iComp};
+wire    [18:0]  qSum = {qDelay[17],qDelay} + {qComp[17],qComp};
+always @(posedge sampleClk) begin
+    if (symTimes2Sync) begin
+        iDelay <= iComp;
+        qDelay <= qComp;
+        iMF <= iSum[18:1];
+        qMF <= qSum[18:1];
+        end
+    end
+`else
 
 //****************************** Two Sample Sum *******************************
 reg     [17:0]  iDelay,qDelay;
@@ -65,6 +96,7 @@ always @(posedge sampleClk) begin
         qMF <= qSum[18:1];
         end
     end
+`endif
 
 //************************** Frequency Discriminator **************************
 `define USE_FMDEMOD
@@ -112,6 +144,7 @@ end
 
 `ifdef SIMULATE
 real freqReal = ((freq > 131071.0) ? freq - 262144.0 : freq)/131072.0;
+real phaseReal = ((phase > 127.0) ? phase - 256.0: phase)/256.0;
 `endif
 
 

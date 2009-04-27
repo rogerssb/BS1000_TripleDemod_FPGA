@@ -75,6 +75,120 @@ always @(posedge clk) begin
         end
     end
 
+`define NEW_SWEEP
+`ifdef NEW_SWEEP
+
+parameter SWEEP_OFF     = 3'b001;
+parameter SWEEP_UP      = 3'b010;
+parameter SWEEP_DOWN    = 3'b100;
+reg     [2:0]   sweepState;
+reg             sweepingUp;
+reg     [31:0]  sweepOffset;
+wire    [31:0]  negSweepRateMag = -sweepRateMag;
+reg             hitUpperLimit,hitLowerLimit;
+always @ (posedge clk) begin
+    if (clkEn) begin
+        if (sweepEnable) begin
+            case (sweepState) 
+                SWEEP_OFF: begin
+                    if (carrierInSync) begin
+                        sweepState <= SWEEP_OFF;
+                        sweepOffset <= 0;
+                        end
+                    else begin
+                        if (sweepingUp) begin
+                            sweepState <= SWEEP_UP;
+                            sweepOffset <= sweepRateMag;
+                            end
+                        else begin
+                            sweepState <= SWEEP_DOWN;
+                            sweepOffset <= negSweepRateMag;
+                            end
+                        end
+                    end
+                SWEEP_UP: begin
+                    if (carrierInSync) begin
+                        sweepState <= SWEEP_OFF;
+                        sweepOffset <= 0;
+                        sweepingUp <= 1;
+                        end
+                    else if (hitUpperLimit) begin
+                        sweepState <= SWEEP_DOWN;
+                        sweepOffset <= negSweepRateMag;
+                        end
+                    else begin
+                        sweepOffset <= sweepRateMag;
+                        end
+                    end
+                SWEEP_DOWN: begin
+                    if (carrierInSync) begin
+                        sweepState <= SWEEP_OFF;
+                        sweepOffset <= 0;
+                        sweepingUp <= 0;
+                        end
+                    else if (hitLowerLimit) begin
+                        sweepState <= SWEEP_UP;
+                        sweepOffset <= sweepRateMag;
+                        end
+                    else begin
+                        sweepOffset <= negSweepRateMag;
+                        end
+                    end
+                default: begin
+                    sweepState <= SWEEP_OFF;
+                    sweepOffset <= 0;
+                    sweepingUp <= 1;
+                    end
+                endcase
+            end
+        else begin
+            sweepState <= SWEEP_OFF;
+            sweepOffset <= 0;
+            sweepingUp <= 1;
+            end
+        end
+    end
+
+
+wire    [31:0]  lowerLimit = -limit;
+wire    [31:0]  upperLimit = limit;
+wire    [39:0]  sum = lagAccum + lagError + {{8{sweepOffset[31]}},sweepOffset};
+always @ (posedge clk or posedge reset) begin
+    if (reset) begin
+        lagAccum <= 0;
+        end
+    else if (clearAccum) begin
+        lagAccum <= 0;
+        end
+    else if (clkEn) begin
+        // Test the upper and lower limits on the accumulator.
+        // Have we reached the upper limit?
+        if ( (!sum[39] && !upperLimit[31])              // both positive
+                && (sum[39:8] >= upperLimit) ) begin    // between upper limit and +saturation
+            // Yes. Limit the accumulator
+            lagAccum <= {upperLimit,8'h0};
+            hitLowerLimit <= 0;
+            hitUpperLimit <= 1;
+            end
+        // Have we reached the lower limit?
+        else if ( (sum[39] && lowerLimit[31])           // both negative
+                && (sum[39:8] < lowerLimit) ) begin     // between lower limit and -saturation
+            // Yes. Limit the accumulator
+            lagAccum <= {lowerLimit,8'hff};
+            hitLowerLimit <= 1;
+            hitUpperLimit <= 0;
+            end
+        else begin
+            lagAccum <= sum;
+            hitLowerLimit <= 0;
+            hitUpperLimit <= 0;
+            end
+        end
+    end
+
+
+`else
+
 // limit and accumulate the decimated accPhaseB
 //            80<------|------------|------0--------|---------|--------->7f
 // CASE1               LL                                     UL
@@ -107,7 +221,7 @@ always @ (posedge clk or posedge reset) begin
     
         // Test the upper and lower limits on the accumulator.
         // Have we reached the upper limit?
-        if ( (!sum[39] && !upperLimit[31])              // both positive
+        else if ( (!sum[39] && !upperLimit[31])              // both positive
                 && (sum[39:8] >= upperLimit) ) begin    // between upper limit and +saturation
             // Yes. Limit the accumulator
             lagAccum <= {upperLimit,8'h0};
@@ -170,5 +284,6 @@ always @ (posedge clk or posedge reset) begin
             end
         end
     end
+`endif
 
 endmodule
