@@ -51,6 +51,7 @@ output  [31:0]  sampleFreq;
 output          bitsyncLock;
 output  [15:0]  lockCounter;
 
+`define USE_COMP
 `ifdef USE_COMP
 
 wire    [17:0]  iComp,qComp;
@@ -69,16 +70,32 @@ cicComp cicCompQ(
     .compOut(qComp)
     );
 //****************************** Two Sample Sum *******************************
+wire            useCompFilter;
+wire            useSummer;
 reg     [17:0]  iDelay,qDelay;
 reg     [17:0]  iMF,qMF;
-wire    [18:0]  iSum = {iDelay[17],iDelay} + {iComp[17],iComp};
-wire    [18:0]  qSum = {qDelay[17],qDelay} + {qComp[17],qComp};
+wire    [18:0]  iSum = useCompFilter ? ({iDelay[17],iDelay} + {iComp[17],iComp}) 
+                                     : ({iDelay[17],iDelay} + {i[17],i});
+wire    [18:0]  qSum = useCompFilter ? ({qDelay[17],qDelay} + {qComp[17],qComp})
+                                     : ({qDelay[17],qDelay} + {q[17],q});
 always @(posedge sampleClk) begin
     if (symTimes2Sync) begin
-        iDelay <= iComp;
-        qDelay <= qComp;
-        iMF <= iSum[18:1];
-        qMF <= qSum[18:1];
+        if (useCompFilter) begin
+            iDelay <= iComp;
+            qDelay <= qComp;
+            end
+        else begin
+            iDelay <= i;
+            qDelay <= q;
+            end
+        if (useSummer) begin
+            iMF <= iSum[18:1];
+            qMF <= qSum[18:1];
+            end
+        else begin
+            iMF <= iDelay;
+            qMF <= qDelay;
+            end
         end
     end
 `else
@@ -192,11 +209,10 @@ reg  [17:0]offsetError;
 wire offsetErrorEn = (phaseState == ONTIME);
 
 reg  stateMachineSlip;
-wire registerSlip;
 `ifdef ENABLE_SMSLIP
-wire slip = (stateMachineSlip | registerSlip);
+wire slip = stateMachineSlip;
 `else
-wire slip = registerSlip;
+wire slip = 1'b0;
 `endif
 reg slipped;
 reg  [17:0]slipError;
@@ -401,7 +417,8 @@ loopFilter sampleLoop(.clk(sampleClk),
                       .dout(dout),
                       .error(timingError[18:11]),
                       .loopFreq(sampleFreq),
-                      .ctrl2(registerSlip),
+                      .ctrl2(useCompFilter),
+                      .ctrl4(useSummer),
                       .satPos(satPos),
                       .satNeg(satNeg),
                       .lockCount(lockCount),

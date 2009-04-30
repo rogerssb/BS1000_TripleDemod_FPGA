@@ -521,32 +521,6 @@ always @(negedge cout)begin
   dout_q <= decoder_fifo_dout_q;
   end
 
-//******************************************************************************
-//                                 GPIO
-//******************************************************************************
-
-reg gpio_space;
-always @(addr) begin
-  casex(addr)
-    `GPIOSPACE: gpio_space <= 1;
-    default: gpio_space <= 0;
-  endcase
-end
-wire gpio_en = !nCs && gpio_space;
-
-wire [15:0]gpio_q,gpio_dout;
-
-gpio gpio
-  (
-  .wr(!nWe),
-  .a(addr),
-  .di(data),
-  .do(gpio_dout),
-  .en(gpio_en),
-  .d(gpio_q),
-  .q(gpio_q)
-  );
-
 assign bsync_nLock = !bitsyncLock;
 assign demod_nLock = !carrierLock;
 
@@ -559,7 +533,6 @@ always @(
   addr or
   demodDout or
   dac0Dout or dac1Dout or dac2Dout or
-  gpio_dout or
   dac_dout or
   misc_dout or
   decoder_dout or
@@ -607,7 +580,6 @@ always @(
       end
     `DAC_SPACE : rd_mux <= dac_dout;
     `MISC_SPACE : rd_mux <= misc_dout;
-    `GPIOSPACE: rd_mux <= gpio_dout;
     `DECODERSPACE: rd_mux <= decoder_dout;
     `PLLSPACE: rd_mux <= symb_pll_dout;
     default : rd_mux <= 16'hxxxx;

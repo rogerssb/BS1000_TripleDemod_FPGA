@@ -283,7 +283,12 @@ wire    [17:0]  negAverageFreq = -averageFreq;
 wire    [17:0]  absAverageFreq = averageFreq[17] ? negAverageFreq : averageFreq;
 always @(posedge clk) begin
     if (ddcSync) begin
-        freqSample <= {freqError,10'h0};
+        if (demodMode == `MODE_OQPSK) begin
+            freqSample <= {freq,10'h0};
+            end
+        else begin
+            freqSample <= {freqError,10'h0};
+            end
         averageFreq <= alphaSum[34:17];
         if (absAverageFreq > falseLockThreshold) begin
             highFreqOffset <= 1;
@@ -457,7 +462,8 @@ always @(posedge clk) begin
             end
         `DAC_ISYM: begin
             dac0Data <= iSymData;
-            dac0Sync <= resampSync;
+            //dac0Sync <= resampSync;
+            dac0Sync <= !symClk & resampSync;
             end
         `DAC_QSYM: begin
             dac0Data <= qSymData;
@@ -516,7 +522,8 @@ always @(posedge clk) begin
             end
         `DAC_QSYM: begin
             dac1Data <= qSymData;
-            dac1Sync <= resampSync;
+            //dac1Sync <= resampSync;
+            dac1Sync <= !symClk & resampSync;
             end
         `DAC_FREQ: begin
             dac1Data <= {freq,10'h0};

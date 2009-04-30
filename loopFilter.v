@@ -11,6 +11,7 @@ module loopFilter (
     error,
     loopFreq,
     ctrl2,
+    ctrl4,
     satPos,
     satNeg,
     lockCount,
@@ -26,6 +27,7 @@ output  [31:0]  dout;
 input   [7:0]   error;
 output  [31:0]  loopFreq;
 output          ctrl2;
+output          ctrl4;
 output          satPos;
 output          satNeg;
 output  [15:0]  lockCount;
@@ -37,16 +39,19 @@ wire    [4:0]   lead, lag;
 wire    [31:0]  limit;
 wire    [31:0]  lowerLimit = -limit;
 wire    [31:0]  upperLimit = limit;
+reg     [31:0]  lagAccum;
 loopRegs micro(
     .addr(addr),
     .dataIn(din),
     .dataOut(dout),
     .cs(cs),
     .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+    .lagAccum(lagAccum),
     .invertError(invertError),
     .zeroError(zeroError),
     .ctrl2(ctrl2),
     .clearAccum(clearAccum),
+    .ctrl4(ctrl4),
     .leadExp(lead),
     .lagExp(lag),
     .limit(limit),
@@ -69,7 +74,6 @@ always @(posedge clk) begin
     end
 
 
-reg [31:0] lagAccum;
 
 /*************************** Lead Gain Section ********************************/
 
