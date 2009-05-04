@@ -111,58 +111,50 @@ initial begin
 
   end
 
-function [17:0] convert ;
-  input [17:0] d ;
-  if(d[17])
-    convert = ~d +1 ;
-  else
-    convert = d ;
-  endfunction
-
 always @(posedge clk)begin
   if(symEn)begin
     $fdisplay(file1, "(%h,%h) (%h,%h)",uut.f0I,uut.f0Q,uut.f1I,uut.f1Q);
     $fdisplay(file2, "%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d",
-      convert(uut.out0Pt1Real),
-      convert(uut.out0Pt2Real),
-      convert(uut.out0Pt3Real),
-      convert(uut.out0Pt4Real),
-      convert(uut.out0Pt5Real),
-      convert(uut.out0Pt6Real),
-      convert(uut.out0Pt7Real),
-      convert(uut.out0Pt8Real),
-      convert(uut.out0Pt9Real),
-      convert(uut.out0Pt10Real),
-      convert(uut.out0Pt11Real),
-      convert(uut.out0Pt12Real),
-      convert(uut.out0Pt13Real),
-      convert(uut.out0Pt14Real),
-      convert(uut.out0Pt15Real),
-      convert(uut.out0Pt16Real),
-      convert(uut.out0Pt17Real),
-      convert(uut.out0Pt18Real),
-      convert(uut.out0Pt19Real),
-      convert(uut.out0Pt20Real),
-      convert(uut.out1Pt1Real),
-      convert(uut.out1Pt2Real),
-      convert(uut.out1Pt3Real),
-      convert(uut.out1Pt4Real),
-      convert(uut.out1Pt5Real),
-      convert(uut.out1Pt6Real),
-      convert(uut.out1Pt7Real),
-      convert(uut.out1Pt8Real),
-      convert(uut.out1Pt9Real),
-      convert(uut.out1Pt10Real),
-      convert(uut.out1Pt11Real),
-      convert(uut.out1Pt12Real),
-      convert(uut.out1Pt13Real),
-      convert(uut.out1Pt14Real),
-      convert(uut.out1Pt15Real),
-      convert(uut.out1Pt16Real),
-      convert(uut.out1Pt17Real),
-      convert(uut.out1Pt18Real),
-      convert(uut.out1Pt19Real),
-      convert(uut.out1Pt20Real));
+      $signed(uut.out0Pt1Real),
+      $signed(uut.out0Pt2Real),
+      $signed(uut.out0Pt3Real),
+      $signed(uut.out0Pt4Real),
+      $signed(uut.out0Pt5Real),
+      $signed(uut.out0Pt6Real),
+      $signed(uut.out0Pt7Real),
+      $signed(uut.out0Pt8Real),
+      $signed(uut.out0Pt9Real),
+      $signed(uut.out0Pt10Real),
+      $signed(uut.out0Pt11Real),
+      $signed(uut.out0Pt12Real),
+      $signed(uut.out0Pt13Real),
+      $signed(uut.out0Pt14Real),
+      $signed(uut.out0Pt15Real),
+      $signed(uut.out0Pt16Real),
+      $signed(uut.out0Pt17Real),
+      $signed(uut.out0Pt18Real),
+      $signed(uut.out0Pt19Real),
+      $signed(uut.out0Pt20Real),
+      $signed(uut.out1Pt1Real),
+      $signed(uut.out1Pt2Real),
+      $signed(uut.out1Pt3Real),
+      $signed(uut.out1Pt4Real),
+      $signed(uut.out1Pt5Real),
+      $signed(uut.out1Pt6Real),
+      $signed(uut.out1Pt7Real),
+      $signed(uut.out1Pt8Real),
+      $signed(uut.out1Pt9Real),
+      $signed(uut.out1Pt10Real),
+      $signed(uut.out1Pt11Real),
+      $signed(uut.out1Pt12Real),
+      $signed(uut.out1Pt13Real),
+      $signed(uut.out1Pt14Real),
+      $signed(uut.out1Pt15Real),
+      $signed(uut.out1Pt16Real),
+      $signed(uut.out1Pt17Real),
+      $signed(uut.out1Pt18Real),
+      $signed(uut.out1Pt19Real),
+      $signed(uut.out1Pt20Real));
     end
   end
 

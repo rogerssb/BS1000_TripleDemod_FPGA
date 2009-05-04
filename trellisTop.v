@@ -262,7 +262,13 @@ assign demod_nLock = !carrierLock;
 //                                 Trellis Decoder
 //******************************************************************************
 
+
+
 wire [31:0]trellis_dout;
+
+wire decision;
+wire [7:0]freqError;  // this width is set by parameter in the viterbi files 
+
 trellis trellis(
   .clk(ck933),
   .reset(reset),
@@ -276,11 +282,13 @@ trellis trellis(
   .wr3(wr3),
   .addr(addr),
   .din(dataIn),
-  .dout(trellis_dout)
+  .dout(trellis_dout),
+  .decision(decision),
+  .freqError(freqError)
   );
 
-wire [2:0]decoder_iIn = () ? {trellis_iBit,2'b0} : {iBit,2'b0}; 
-wire [2:0]decoder_qIn = () ? {trellis_qBit,2'b0} : {qBit,2'b0};
+wire [2:0]decoder_iIn = (1'b1) ? {trellis_iBit,2'b0} : {iBit,2'b0}; 
+wire [2:0]decoder_qIn = (1'b1) ? {trellis_qBit,2'b0} : {qBit,2'b0};
 
 //******************************************************************************
 //                              DAC Outputs
