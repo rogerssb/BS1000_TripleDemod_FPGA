@@ -24,10 +24,6 @@ parameter size = 8;
 
 input clk,reset,symEn,sym2xEn;
 input [17:0]iIn,qIn;
-
-
-input clk,reset,symEn,sym2xEn;
-input [17:0]iIn,qIn;
 input wr0,wr1,wr2,wr3;
 input [11:0]addr;
 input [31:0]din;

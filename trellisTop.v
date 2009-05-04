@@ -260,8 +260,8 @@ trellis trellis(
   .freqError(freqError)
   );
 
-wire [2:0]decoder_iIn = (1'b1) ? {trellis_iBit,2'b0} : {iBit,2'b0}; 
-wire [2:0]decoder_qIn = (1'b1) ? {trellis_qBit,2'b0} : {qBit,2'b0};
+wire [2:0]decoder_iIn = (1'b1) ? {decision,2'b0} : {iBit,2'b0}; 
+wire [2:0]decoder_qIn = (1'b1) ? {3'b0} : {qBit,2'b0};
 
 //******************************************************************************
 //                              DAC Outputs
@@ -543,7 +543,6 @@ always @(
   addr or
   demodDout or
   dac0Dout or dac1Dout or dac2Dout or
-  gpio_dout or
   dac_dout or
   misc_dout or
   decoder_dout or
