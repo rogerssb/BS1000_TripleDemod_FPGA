@@ -200,32 +200,6 @@ wire    [31:0]  dataIn = {data,data};
 wire    [17:0]  dac0Out,dac1Out,dac2Out;
 wire    [31:0]  demodDout;
 
-//`define DDS_ONLY
-`ifdef DDS_ONLY
-
-/******************************************************************************
-                                Downconverter
-******************************************************************************/
-wire    [17:0]  iDdc,qDdc;
-ddc ddc(
-    .clk(ck933), .reset(reset), .syncIn(1'b1),
-    .wr0(wr0) , .wr1(wr1), .wr2(wr2), .wr3(wr3),
-    .addr(addr),
-    .din(dataIn),
-    .dout(demodDout),
-    .ddcFreqOffset(32'h0),
-    .offsetEn(1'b1),
-    .nbAgcGain(21'h0),
-    .syncOut(ddcSync),
-    .iIn({ifInput,4'h0}), .qIn(18'h0),
-    .iOut(dac0Out), .qOut(dac1Out)
-    );
-
-wire dac0Sync = ddcSync;
-wire dac1Sync = ddcSync;
-wire dac2Sync = ddcSync;
-`else
-
 wire [17:0]iSymData,qSymData;
 wire diBit,qBit;
 demod demod(
@@ -253,7 +227,6 @@ demod demod(
     .qSymData(qSymData)
 
     );
-`endif
 
 assign bsync_nLock = !bitsyncLock;
 assign demod_nLock = !carrierLock;
@@ -579,7 +552,6 @@ always @(
   )begin
   casex(addr)
     `DEMODSPACE,
-    `TRELLIS_SPACE,
     `DDCSPACE,
     `CICDECSPACE,
     `BITSYNCSPACE,
