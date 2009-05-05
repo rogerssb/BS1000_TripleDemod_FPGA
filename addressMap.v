@@ -28,6 +28,7 @@
 `define MODE_BPSK           3'b100
 `define MODE_QPSK           3'b101
 `define MODE_OQPSK          3'b110
+`define MODE_PCMTRELLIS     3'b111
 `define MODE_SINGLE_RAIL    2'b00
 `define MODE_DUAL_RAIL      2'b01
 `define MODE_IND_RAIL       2'b10

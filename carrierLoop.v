@@ -108,25 +108,25 @@ always @(demodMode or offsetError or offsetErrorEn or
             sync <= ddcSync;
             modeError <= 0;
             modeErrorEn <= 1'b1;
-            enableCarrierLock = 0;
+            enableCarrierLock <= 0;
             end
         `MODE_PM: begin
             sync <= ddcSync;
             modeError <= phase;
             modeErrorEn <= 1'b1;
-            enableCarrierLock = 1;
+            enableCarrierLock <= 1;
             end
         `MODE_FM: begin
             sync <= ddcSync;
             modeError <= freq;
             modeErrorEn <= 1'b1;
-            enableCarrierLock = 0;
+            enableCarrierLock <= 0;
             end
         `MODE_2FSK: begin
             sync <= resampSync;
             modeError <= offsetError;
             modeErrorEn <= offsetErrorEn;
-            enableCarrierLock = 0;
+            enableCarrierLock <= 0;
             end
         `MODE_BPSK: begin
             sync <= ddcSync;
@@ -134,7 +134,7 @@ always @(demodMode or offsetError or offsetErrorEn or
             //sync <= symSync;
             //modeError <= {bpskSymPhase[5:0],2'b0};
             modeErrorEn <= 1'b1;
-            enableCarrierLock = 1;
+            enableCarrierLock <= 1;
             end
         `MODE_QPSK,
         `MODE_OQPSK: begin
@@ -143,13 +143,19 @@ always @(demodMode or offsetError or offsetErrorEn or
             //sync <= symSync;
             //modeError <= {qpskSymPhase[5:0],2'b0};
             modeErrorEn <= 1'b1;
-            enableCarrierLock = 1;
+            enableCarrierLock <= 1;
+            end
+        `MODE_PCMTRELLIS: begin
+            sync <= symSync;
+            modeError <= phase;
+            modeErrorEn <= 1'b1;
+            enableCarrierLock <= 0;
             end
         default: begin
             sync <= 1'b1;
             modeError <= 0;
             modeErrorEn <= 1'b1;
-            enableCarrierLock = 1;
+            enableCarrierLock <= 1;
             end
         endcase
     end

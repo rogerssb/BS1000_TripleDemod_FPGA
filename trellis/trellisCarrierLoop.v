@@ -12,6 +12,7 @@
 
 module trellisCarrierLoop(clk,reset,symEn,sym2xEn,
   iIn,qIn,
+  phaseError,
   wr0,wr1,wr2,wr3,
   addr,
   din,dout,
@@ -20,6 +21,7 @@ module trellisCarrierLoop(clk,reset,symEn,sym2xEn,
 
 input clk,reset,symEn,sym2xEn;
 input [17:0]iIn,qIn;
+input   [7:0]   phaseError;
 input wr0,wr1,wr2,wr3;
 input [11:0]addr;
 input [31:0]din;
@@ -32,13 +34,13 @@ carrierLoop carrierLoop(
   .reset(reset), 
   .ddcSync(),
   .resampSync(),
-  .symSync(),
+  .symSync(symEn),
   .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
   .addr(addr),
   .din(din),
   .dout(dout),
-  .demodMode(),
-  .phase(),
+  .demodMode(`MODE_PCMTRELLIS),
+  .phase(phaseError),
   .freq(),
   .highFreqOffset(1'b0),
   .offsetError(),

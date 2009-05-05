@@ -16,8 +16,7 @@ module trellis(
   wr0,wr1,wr2,wr3,
   addr,
   din,dout,
-  decision,
-  freqError
+  decision
   );
 
 parameter size = 8;
@@ -29,10 +28,10 @@ input [11:0]addr;
 input [31:0]din;
 output [31:0]dout;
 output decision;
-output [size-1:0]freqError;
 
 
-wire [17:0]carrierLoopIOut,carrierLoopQOut;
+wire    [size-1:0]  phaseError;
+wire    [17:0]  carrierLoopIOut,carrierLoopQOut;
 trellisCarrierLoop trellisCarrierLoop(
   .clk(clk),
   .reset(reset),
@@ -40,6 +39,7 @@ trellisCarrierLoop trellisCarrierLoop(
   .sym2xEn(sym2xEn),
   .iIn(iIn),
   .qIn(qIn),
+  .phaseError(phaseError),
   .wr0(wr0),
   .wr1(wr1),
   .wr2(wr2),
@@ -129,7 +129,6 @@ rotator rotator(
 
 
 wire decision;
-wire [size-1:0] freqError;
 
 viterbi_top #(size)viterbi_top(
   .clk(clk),.reset(reset),.symEn(symEn),.sym2xEn(sym2xEn),
@@ -173,7 +172,7 @@ viterbi_top #(size)viterbi_top(
   .out1Pt19Real(out1Pt19Real[17:17-(size-1)]),.out1Pt19Imag(out1Pt19Imag[17:17-(size-1)]),
   .out0Pt20Real(out0Pt20Real[17:17-(size-1)]),.out0Pt20Imag(out0Pt20Imag[17:17-(size-1)]),
   .out1Pt20Real(out1Pt20Real[17:17-(size-1)]),.out1Pt20Imag(out1Pt20Imag[17:17-(size-1)]),
-  .decision(decision),.freqError(freqError)
+  .decision(decision),.freqError(phaseError)
   );
    
    

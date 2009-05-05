@@ -240,7 +240,6 @@ assign demod_nLock = !carrierLock;
 wire [31:0]trellis_dout;
 
 wire decision;
-wire [7:0]freqError;  // this width is set by parameter in the viterbi files 
 
 trellis trellis(
   .clk(ck933),
@@ -256,8 +255,7 @@ trellis trellis(
   .addr(addr),
   .din(dataIn),
   .dout(trellis_dout),
-  .decision(decision),
-  .freqError(freqError)
+  .decision(decision)
   );
 
 wire [2:0]decoder_iIn = (1'b1) ? {decision,2'b0} : {iBit,2'b0}; 
