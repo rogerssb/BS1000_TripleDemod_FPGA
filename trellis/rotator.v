@@ -34,9 +34,9 @@ module rotator(
   out0Pt20Real,out0Pt20Imag,out1Pt20Real,out1Pt20Imag);
 
 input clk,reset,symEn;
-input [17:0]iIn0,qIn0,iIn1,qIn1;
-
-output [17:0]
+parameter ROT_BITS = 0;
+input [(ROT_BITS-1):0]iIn0,qIn0,iIn1,qIn1;
+output [(ROT_BITS-1):0]
   out0Pt1Real,out0Pt1Imag,out1Pt1Real,out1Pt1Imag,
   out0Pt2Real,out0Pt2Imag,out1Pt2Real,out1Pt2Imag,
   out0Pt3Real,out0Pt3Imag,out1Pt3Real,out1Pt3Imag,
@@ -58,6 +58,7 @@ output [17:0]
   out0Pt19Real,out0Pt19Imag,out1Pt19Real,out1Pt19Imag,
   out0Pt20Real,out0Pt20Imag,out1Pt20Real,out1Pt20Imag;
 
+/*
 parameter pt1Real = 18'h1FFFF,  pt1Imag = 18'h00000,
           pt2Real = 18'h1E6F0,  pt2Imag = 18'h361C9,
           pt3Real = 18'h19E37,  pt3Imag = 18'h2D30E,
@@ -78,8 +79,30 @@ parameter pt1Real = 18'h1FFFF,  pt1Imag = 18'h00000,
          pt18Real = 18'h12CF2, pt18Imag = 18'h19E37,
          pt19Real = 18'h19E37, pt19Imag = 18'h12CF2,
          pt20Real = 18'h1E6F0, pt20Imag = 18'h09E37;
+*/
 
-reg [17:0]iInBuf0,iInBuf1,qInBuf0,qInBuf1;
+parameter pt1Real = 10'h1FF,  pt1Imag = 10'h000,
+          pt2Real = 10'h1E6,  pt2Imag = 10'h362,
+          pt3Real = 10'h19D,  pt3Imag = 10'h2D4,
+          pt4Real = 10'h12C,  pt4Imag = 10'h263,
+          pt5Real = 10'h09E,  pt5Imag = 10'h21A,
+          pt6Real = 10'h000,  pt6Imag = 10'h201,
+          pt7Real = 10'h362,  pt7Imag = 10'h21A,
+          pt8Real = 10'h2D4,  pt8Imag = 10'h263,
+          pt9Real = 10'h263,  pt9Imag = 10'h2D4,
+         pt10Real = 10'h21A, pt10Imag = 10'h362,
+         pt11Real = 10'h201, pt11Imag = 10'h000,
+         pt12Real = 10'h21A, pt12Imag = 10'h09E,
+         pt13Real = 10'h263, pt13Imag = 10'h12C,
+         pt14Real = 10'h2D4, pt14Imag = 10'h19D,
+         pt15Real = 10'h362, pt15Imag = 10'h1E6,
+         pt16Real = 10'h000, pt16Imag = 10'h1FF,
+         pt17Real = 10'h09E, pt17Imag = 10'h1E6,
+         pt18Real = 10'h12C, pt18Imag = 10'h19D,
+         pt19Real = 10'h19D, pt19Imag = 10'h12C,
+         pt20Real = 10'h1E6, pt20Imag = 10'h09E;
+
+reg [(ROT_BITS-1):0]iInBuf0,iInBuf1,qInBuf0,qInBuf1;
 always @(posedge clk)begin
   if(symEn)begin
     iInBuf0 <= iIn0;
@@ -89,9 +112,290 @@ always @(posedge clk)begin
     end
   end
 
-wire [17:0]iInSel = symEn ? iInBuf1 : iInBuf0;
-wire [17:0]qInSel = symEn ? qInBuf1 : qInBuf0;
+wire [(ROT_BITS-1):0]iInSel = symEn ? iInBuf1 : iInBuf0;
+wire [(ROT_BITS-1):0]qInSel = symEn ? qInBuf1 : qInBuf0;
 
+rotator_mult10x10 m1
+  (
+  .clk(clk),
+  .symEn(symEn),
+  .a(iInSel),
+  .b(qInSel),
+  .c(pt1Real),
+  .d(pt1Imag),
+  .reOut0(out0Pt1Real),
+  .imOut0(out0Pt1Imag),
+  .reOut1(out1Pt1Real),
+  .imOut1(out1Pt1Imag)
+  );
+
+rotator_mult10x10 m2
+  (
+  .clk(clk),
+  .symEn(symEn),
+  .a(iInSel),
+  .b(qInSel),
+  .c(pt2Real),
+  .d(pt2Imag),
+  .reOut0(out0Pt2Real),
+  .imOut0(out0Pt2Imag),
+  .reOut1(out1Pt2Real),
+  .imOut1(out1Pt2Imag)
+  );
+
+rotator_mult10x10 m3
+  (
+  .clk(clk),
+  .symEn(symEn),
+  .a(iInSel),
+  .b(qInSel),
+  .c(pt3Real),
+  .d(pt3Imag),
+  .reOut0(out0Pt3Real),
+  .imOut0(out0Pt3Imag),
+  .reOut1(out1Pt3Real),
+  .imOut1(out1Pt3Imag)
+  );
+
+rotator_mult10x10 m4
+  (
+  .clk(clk),
+  .symEn(symEn),
+  .a(iInSel),
+  .b(qInSel),
+  .c(pt4Real),
+  .d(pt4Imag),
+  .reOut0(out0Pt4Real),
+  .imOut0(out0Pt4Imag),
+  .reOut1(out1Pt4Real),
+  .imOut1(out1Pt4Imag)
+  );
+
+rotator_mult10x10 m5
+  (
+  .clk(clk),
+  .symEn(symEn),
+  .a(iInSel),
+  .b(qInSel),
+  .c(pt5Real),
+  .d(pt5Imag),
+  .reOut0(out0Pt5Real),
+  .imOut0(out0Pt5Imag),
+  .reOut1(out1Pt5Real),
+  .imOut1(out1Pt5Imag)
+  );
+
+rotator_mult10x10 m6
+  (
+  .clk(clk),
+  .symEn(symEn),
+  .a(iInSel),
+  .b(qInSel),
+  .c(pt6Real),
+  .d(pt6Imag),
+  .reOut0(out0Pt6Real),
+  .imOut0(out0Pt6Imag),
+  .reOut1(out1Pt6Real),
+  .imOut1(out1Pt6Imag)
+  );
+
+rotator_mult10x10 m7
+  (
+  .clk(clk),
+  .symEn(symEn),
+  .a(iInSel),
+  .b(qInSel),
+  .c(pt7Real),
+  .d(pt7Imag),
+  .reOut0(out0Pt7Real),
+  .imOut0(out0Pt7Imag),
+  .reOut1(out1Pt7Real),
+  .imOut1(out1Pt7Imag)
+  );
+
+rotator_mult10x10 m8
+  (
+  .clk(clk),
+  .symEn(symEn),
+  .a(iInSel),
+  .b(qInSel),
+  .c(pt8Real),
+  .d(pt8Imag),
+  .reOut0(out0Pt8Real),
+  .imOut0(out0Pt8Imag),
+  .reOut1(out1Pt8Real),
+  .imOut1(out1Pt8Imag)
+  );
+
+rotator_mult10x10 m9
+  (
+  .clk(clk),
+  .symEn(symEn),
+  .a(iInSel),
+  .b(qInSel),
+  .c(pt9Real),
+  .d(pt9Imag),
+  .reOut0(out0Pt9Real),
+  .imOut0(out0Pt9Imag),
+  .reOut1(out1Pt9Real),
+  .imOut1(out1Pt9Imag)
+  );
+
+rotator_mult10x10 m10
+  (
+  .clk(clk),
+  .symEn(symEn),
+  .a(iInSel),
+  .b(qInSel),
+  .c(pt10Real),
+  .d(pt10Imag),
+  .reOut0(out0Pt10Real),
+  .imOut0(out0Pt10Imag),
+  .reOut1(out1Pt10Real),
+  .imOut1(out1Pt10Imag)
+  );
+
+rotator_mult10x10 m11
+  (
+  .clk(clk),
+  .symEn(symEn),
+  .a(iInSel),
+  .b(qInSel),
+  .c(pt11Real),
+  .d(pt11Imag),
+  .reOut0(out0Pt11Real),
+  .imOut0(out0Pt11Imag),
+  .reOut1(out1Pt11Real),
+  .imOut1(out1Pt11Imag)
+  );
+
+rotator_mult10x10 m12
+  (
+  .clk(clk),
+  .symEn(symEn),
+  .a(iInSel),
+  .b(qInSel),
+  .c(pt12Real),
+  .d(pt12Imag),
+  .reOut0(out0Pt12Real),
+  .imOut0(out0Pt12Imag),
+  .reOut1(out1Pt12Real),
+  .imOut1(out1Pt12Imag)
+  );
+
+rotator_mult10x10 m13
+  (
+  .clk(clk),
+  .symEn(symEn),
+  .a(iInSel),
+  .b(qInSel),
+  .c(pt13Real),
+  .d(pt13Imag),
+  .reOut0(out0Pt13Real),
+  .imOut0(out0Pt13Imag),
+  .reOut1(out1Pt13Real),
+  .imOut1(out1Pt13Imag)
+  );
+
+rotator_mult10x10 m14
+  (
+  .clk(clk),
+  .symEn(symEn),
+  .a(iInSel),
+  .b(qInSel),
+  .c(pt14Real),
+  .d(pt14Imag),
+  .reOut0(out0Pt14Real),
+  .imOut0(out0Pt14Imag),
+  .reOut1(out1Pt14Real),
+  .imOut1(out1Pt14Imag)
+  );
+
+rotator_mult10x10 m15
+  (
+  .clk(clk),
+  .symEn(symEn),
+  .a(iInSel),
+  .b(qInSel),
+  .c(pt15Real),
+  .d(pt15Imag),
+  .reOut0(out0Pt15Real),
+  .imOut0(out0Pt15Imag),
+  .reOut1(out1Pt15Real),
+  .imOut1(out1Pt15Imag)
+  );
+
+rotator_mult10x10 m16
+  (
+  .clk(clk),
+  .symEn(symEn),
+  .a(iInSel),
+  .b(qInSel),
+  .c(pt16Real),
+  .d(pt16Imag),
+  .reOut0(out0Pt16Real),
+  .imOut0(out0Pt16Imag),
+  .reOut1(out1Pt16Real),
+  .imOut1(out1Pt16Imag)
+  );
+
+rotator_mult10x10 m17
+  (
+  .clk(clk),
+  .symEn(symEn),
+  .a(iInSel),
+  .b(qInSel),
+  .c(pt17Real),
+  .d(pt17Imag),
+  .reOut0(out0Pt17Real),
+  .imOut0(out0Pt17Imag),
+  .reOut1(out1Pt17Real),
+  .imOut1(out1Pt17Imag)
+  );
+
+rotator_mult10x10 m18
+  (
+  .clk(clk),
+  .symEn(symEn),
+  .a(iInSel),
+  .b(qInSel),
+  .c(pt18Real),
+  .d(pt18Imag),
+  .reOut0(out0Pt18Real),
+  .imOut0(out0Pt18Imag),
+  .reOut1(out1Pt18Real),
+  .imOut1(out1Pt18Imag)
+  );
+
+rotator_mult10x10 m19
+  (
+  .clk(clk),
+  .symEn(symEn),
+  .a(iInSel),
+  .b(qInSel),
+  .c(pt19Real),
+  .d(pt19Imag),
+  .reOut0(out0Pt19Real),
+  .imOut0(out0Pt19Imag),
+  .reOut1(out1Pt19Real),
+  .imOut1(out1Pt19Imag)
+  );
+
+rotator_mult10x10 m20
+  (
+  .clk(clk),
+  .symEn(symEn),
+  .a(iInSel),
+  .b(qInSel),
+  .c(pt20Real),
+  .d(pt20Imag),
+  .reOut0(out0Pt20Real),
+  .imOut0(out0Pt20Imag),
+  .reOut1(out1Pt20Real),
+  .imOut1(out1Pt20Imag)
+  );
+
+/*
 multiplier m1(clk,symEn,iInSel,qInSel,pt1Real,pt1Imag,out0Pt1Real,out0Pt1Imag,out1Pt1Real,out1Pt1Imag);
 multiplier m2(clk,symEn,iInSel,qInSel,pt2Real,pt2Imag,out0Pt2Real,out0Pt2Imag,out1Pt2Real,out1Pt2Imag);
 multiplier m3(clk,symEn,iInSel,qInSel,pt3Real,pt3Imag,out0Pt3Real,out0Pt3Imag,out1Pt3Real,out1Pt3Imag);
@@ -112,5 +416,7 @@ multiplier m17(clk,symEn,iInSel,qInSel,pt17Real,pt17Imag,out0Pt17Real,out0Pt17Im
 multiplier m18(clk,symEn,iInSel,qInSel,pt18Real,pt18Imag,out0Pt18Real,out0Pt18Imag,out1Pt18Real,out1Pt18Imag);
 multiplier m19(clk,symEn,iInSel,qInSel,pt19Real,pt19Imag,out0Pt19Real,out0Pt19Imag,out1Pt19Real,out1Pt19Imag);
 multiplier m20(clk,symEn,iInSel,qInSel,pt20Real,pt20Imag,out0Pt20Real,out0Pt20Imag,out1Pt20Real,out1Pt20Imag);
+*/
+
 
 endmodule

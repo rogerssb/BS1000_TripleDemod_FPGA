@@ -15,7 +15,7 @@ module test;
 reg clk,reset;
 reg [79:0]din;
 reg symEn,sym2xEn;
-wire [17:0]
+wire [9:0]
   out0Pt1Real,out1Pt1Real,
   out0Pt2Real,out1Pt2Real,
   out0Pt3Real,out1Pt3Real,
@@ -72,10 +72,10 @@ always @(posedge clk)begin
     endcase
   end
 
-// `define ONEZERO
+ `define ONEZERO
 // `define ALLZEROES
 //`define ALLONES
-`define RANDOM
+// `define RANDOM
 
 integer file1,file2;
 initial begin
