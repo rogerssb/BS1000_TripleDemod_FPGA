@@ -49,7 +49,7 @@ real carrierLimitNorm = carrierLimitHz * `SAMPLE_PERIOD * `TWO_POW_32;
 integer carrierLimitInt = carrierLimitNorm;
 wire [31:0] carrierLimit = carrierLimitInt;
 
-wire [31:0] sweepRate = 32'h00800000;
+wire [31:0] sweepRate = 32'h00000000;
 
 real bitrateBps = 400000.0;
 real bitrateSamples = 1/bitrateBps/`SAMPLE_PERIOD/2.0;
@@ -121,8 +121,8 @@ always @(negedge modClk or posedge reset) begin
     randData <= sr[0];
     end
 
-wire modData = randData;
-//wire modData = altData;
+//wire modData = randData;
+wire modData = altData;
 /******************************************************************************
                             Instantiate a Modulator
 ******************************************************************************/

@@ -15,7 +15,7 @@ GotoSource=N
 [DebugMode]
 CommandLine=+define+SIMULATE
 [View]
-1=Last 0.000ns 355699.999ns 9099.303ns 348516.767ns 353926.929ns
+1=Last 0.000ns 228850.101ns 9099.303ns 348516.767ns 353926.929ns
 [Group0]
 Name=New Group2
 [Group3]
@@ -77,6 +77,7 @@ Name="Rx"
 17="test.demod.ddc : qMixReal" default Real AnalogDisplay AType=Step Scale=Auto
 18="test.demod.ddc : iMixReal" default Real AnalogDisplay AType=Step Scale=Auto
 19="test : iSignalReal" default Real AnalogDisplay AType=Step Scale=Auto
+OpenGroup=Yes
 [IncDirs]
 0=.
 [Group6]
