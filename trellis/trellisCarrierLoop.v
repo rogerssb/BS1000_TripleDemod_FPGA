@@ -44,7 +44,6 @@ wire    [4:0]   leadExp;
 wire    [4:0]   lagExp;
 wire    [31:0]  limit;
 wire    [31:0]  loopOffset;
-wire    [31:0]  sweepOffsetMag;
 wire    [15:0]  lockCount;
 wire    [7:0]   syncThreshold;
 wire    [39:0]  lagAccum;
@@ -57,14 +56,12 @@ loopRegs loopRegs(
     .dataOut(dout),
     .invertError(invertError),
     .zeroError(zeroError),
-    .ctrl2(sweepEnable),
     .clearAccum(clearAccum),
     .leadMan(),
     .leadExp(leadExp),
     .lagMan(),
     .lagExp(lagExp),
     .limit(limit),
-    .loopData(sweepOffsetMag),
     .lockCount(lockCount),
     .syncThreshold(syncThreshold)
     );
@@ -84,10 +81,10 @@ always @(posedge clk) begin
             loopError <= 8'h0;
             end
         else if (invertError) begin
-            loopError <= negModeError;
+            loopError <= negPhaseError;
             end
         else begin
-            loopError <= modeError;
+            loopError <= phaseError;
             end
         end
     end
@@ -109,8 +106,7 @@ lagGain lagGain (
     .error(loopError),
     .lagExp(lagExp),
     .limit(limit),
-    .sweepEnable(sweepEnable),
-    .sweepRateMag(sweepOffsetMag),
+    .sweepEnable(1'b0),
     .clearAccum(clearAccum),
     .carrierInSync(carrierLock),
     .lagAccum(lagAccum)
@@ -139,29 +135,24 @@ always @(posedge clk) begin
         carrierLock <= 0;
         end
     else if (loopFilterEn) begin
-        if (enableCarrierLock) begin
-            if (absPhaseError > syncThreshold) begin
-                if (lockMinus[16]) begin
-                    carrierLock <= 0;
-                    lockCounter <= lockCount;
-                    end
-                else begin
-                    lockCounter <= lockMinus[15:0];
-                    end
-                end
-            else begin
-                if (lockPlus[16]) begin
-                    carrierLock <= 1;
-                    lockCounter <= lockCount;
-                    end
-                else begin
-                    lockCounter <= lockPlus[15:0];
-                    end
-                end
-            end
-        else begin
-            carrierLock <= 1;
-            end
+			if (absPhaseError > syncThreshold) begin
+				 if (lockMinus[16]) begin
+					  carrierLock <= 0;
+					  lockCounter <= lockCount;
+					  end
+				 else begin
+					  lockCounter <= lockMinus[15:0];
+					  end
+				 end
+			else begin
+				 if (lockPlus[16]) begin
+					  carrierLock <= 1;
+					  lockCounter <= lockCount;
+					  end
+				 else begin
+					  lockCounter <= lockPlus[15:0];
+					  end
+				 end
         end
     end
 
