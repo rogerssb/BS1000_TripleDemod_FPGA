@@ -29,29 +29,153 @@ output [31:0]dout;
 output [17:0]iOut,qOut;
 
 wire[31:0]carrierFreqOffset;
-carrierLoop carrierLoop(
-  .clk(clk), 
-  .reset(reset), 
-  .ddcSync(),
-  .resampSync(),
-  .symSync(symEn),
-  .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
-  .addr(addr),
-  .din(din),
-  .dout(dout),
-  .demodMode(`MODE_PCMTRELLIS),
-  .phase(phaseError),
-  .freq(),
-  .highFreqOffset(1'b0),
-  .offsetError(),
-  .offsetErrorEn(),
-  .symPhase(),
-  .carrierFreqOffset(carrierFreqOffset),
-  .carrierFreqEn(carrierFreqEn),
-  .loopError(),
-  .carrierLock(),
-  .lockCounter()
-  );
+
+/***************************** Control Registers ******************************/
+
+reg trellisSpace;
+always @(addr) begin
+    casex(addr)
+        `CARRIERSPACE:  trellisSpace <= 1;
+        default:        trellisSpace <= 0;
+        endcase
+    end
+wire    [31:0]  dout;
+wire    [4:0]   leadExp;
+wire    [4:0]   lagExp;
+wire    [31:0]  limit;
+wire    [31:0]  loopOffset;
+wire    [31:0]  sweepOffsetMag;
+wire    [15:0]  lockCount;
+wire    [7:0]   syncThreshold;
+wire    [39:0]  lagAccum;
+loopRegs loopRegs(
+    .cs(trellisSpace),
+    .addr(addr),
+    .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
+    .lagAccum(lagAccum[39:8]),
+    .dataIn(din),
+    .dataOut(dout),
+    .invertError(invertError),
+    .zeroError(zeroError),
+    .ctrl2(sweepEnable),
+    .clearAccum(clearAccum),
+    .leadMan(),
+    .leadExp(leadExp),
+    .lagMan(),
+    .lagExp(lagExp),
+    .limit(limit),
+    .loopData(sweepOffsetMag),
+    .lockCount(lockCount),
+    .syncThreshold(syncThreshold)
+    );
+
+
+wire loopFilterEn = symEn;
+
+/**************************** Adjust Error ************************************/
+reg     [7:0]   loopError;
+wire    [7:0]   negPhaseError = ~phaseError + 1;
+reg             carrierLock;
+//wire            breakLoop = (zeroError || (sweepEnable && !carrierLock && highFreqOffset));
+wire            breakLoop = zeroError;
+always @(posedge clk) begin 
+    if (loopFilterEn) begin
+        if (breakLoop) begin
+            loopError <= 8'h0;
+            end
+        else if (invertError) begin
+            loopError <= negModeError;
+            end
+        else begin
+            loopError <= modeError;
+            end
+        end
+    end
+
+
+/***************************** Loop Filter ************************************/
+
+// Instantiate the lead/lag filter gain path
+wire    [39:0]  leadError;
+leadGain leadGain (
+    .clk(clk), .clkEn(loopFilterEn), .reset(reset), 
+    .error(loopError),
+    .leadExp(leadExp),
+    .leadError(leadError)
+    );
+
+lagGain lagGain (
+    .clk(clk), .clkEn(loopFilterEn), .reset(reset), 
+    .error(loopError),
+    .lagExp(lagExp),
+    .limit(limit),
+    .sweepEnable(sweepEnable),
+    .sweepRateMag(sweepOffsetMag),
+    .clearAccum(clearAccum),
+    .carrierInSync(carrierLock),
+    .lagAccum(lagAccum)
+    );
+
+
+// Final filter output
+reg [39:0]filterSum;
+always @(posedge clk) begin
+    if (reset) begin
+        filterSum <= 0;
+        end
+    else if (loopFilterEn) begin
+        filterSum <= lagAccum + leadError;
+        end
+    end
+
+/******************************* Lock Detector ********************************/
+wire    [7:0]   absPhaseError = phaseError[7] ? negPhaseError : phaseError;
+reg     [15:0]  lockCounter;
+wire    [16:0]  lockPlus = {1'b0,lockCounter} + 17'h00001;
+wire    [16:0]  lockMinus = {1'b0,lockCounter} + 17'h1ffff;
+always @(posedge clk) begin
+    if (reset) begin
+        lockCounter <= 0;
+        carrierLock <= 0;
+        end
+    else if (loopFilterEn) begin
+        if (enableCarrierLock) begin
+            if (absPhaseError > syncThreshold) begin
+                if (lockMinus[16]) begin
+                    carrierLock <= 0;
+                    lockCounter <= lockCount;
+                    end
+                else begin
+                    lockCounter <= lockMinus[15:0];
+                    end
+                end
+            else begin
+                if (lockPlus[16]) begin
+                    carrierLock <= 1;
+                    lockCounter <= lockCount;
+                    end
+                else begin
+                    lockCounter <= lockPlus[15:0];
+                    end
+                end
+            end
+        else begin
+            carrierLock <= 1;
+            end
+        end
+    end
+
+
+// Final Outputs
+assign carrierFreqOffset = filterSum[39:8];
+assign carrierFreqEn = loopFilterEn;
+
+`ifdef SIMULATE
+real carrierOffsetReal = ((carrierFreqOffset > 2147483647.0) ? carrierFreqOffset-4294967296.0 : carrierFreqOffset)/2147483648.0;
+real lagAccumReal = ((lagAccum[39:8] > 2147483647.0) ? lagAccum[39:8]-4294967296.0 : lagAccum[39:8])/2147483648.0; 
+integer lockCounterInt = lockCounter;
+`endif
+
 
 // Create the LO frequency
 reg [31:0] newOffset;
