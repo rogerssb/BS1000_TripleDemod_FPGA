@@ -89,29 +89,37 @@ module viterbi_top(clk,reset,symEn,sym2xEn,
 				out0Pt19Imag_1dly, out1Pt19Imag_1dly, out0Pt19Imag_2dly, out1Pt19Imag_2dly,
 				out0Pt20Imag_1dly, out1Pt20Imag_1dly, out0Pt20Imag_2dly, out1Pt20Imag_2dly;
    
-    
-   
+
+`ifdef SIMULATE
+   // in simulation we have to reset the accumulatios when the input data is known.
+   // simReset is toggled in the test bench
+   reg 			simReset;
+   wire 			acsReset = simReset;
+`else
+   wire 			acsReset = reset;
+`endif
+      
    // 20 Add Compare Select (acs) units with its decision output (sel0..sel19) 
-   acs #(size) acs0  (clk, reset, symEn, out1Pt1Real,  out0Pt15Real, accMetOut[0 ][(size-1)+4:0], accMetOut[14][(size-1)+4:0], accMetOut[7 ][(size-1)+4:0], sel[ 7]);
-   acs #(size) acs1  (clk, reset, symEn, out1Pt2Real,  out0Pt16Real, accMetOut[1 ][(size-1)+4:0], accMetOut[15][(size-1)+4:0], accMetOut[8 ][(size-1)+4:0], sel[ 8]);
-   acs #(size) acs2  (clk, reset, symEn, out1Pt3Real,  out0Pt17Real, accMetOut[2 ][(size-1)+4:0], accMetOut[16][(size-1)+4:0], accMetOut[9 ][(size-1)+4:0], sel[ 9]);
-   acs #(size) acs3  (clk, reset, symEn, out1Pt4Real,  out0Pt18Real, accMetOut[3 ][(size-1)+4:0], accMetOut[17][(size-1)+4:0], accMetOut[10][(size-1)+4:0], sel[10]);
-   acs #(size) acs4  (clk, reset, symEn, out1Pt5Real,  out0Pt19Real, accMetOut[4 ][(size-1)+4:0], accMetOut[18][(size-1)+4:0], accMetOut[11][(size-1)+4:0], sel[11]);
-   acs #(size) acs5  (clk, reset, symEn, out1Pt6Real,  out0Pt20Real, accMetOut[5 ][(size-1)+4:0], accMetOut[19][(size-1)+4:0], accMetOut[12][(size-1)+4:0], sel[12]);
-   acs #(size) acs6  (clk, reset, symEn, out1Pt7Real,  out0Pt1Real,  accMetOut[6 ][(size-1)+4:0], accMetOut[0 ][(size-1)+4:0], accMetOut[13][(size-1)+4:0], sel[13]);
-   acs #(size) acs7  (clk, reset, symEn, out1Pt8Real,  out0Pt2Real,  accMetOut[7 ][(size-1)+4:0], accMetOut[1 ][(size-1)+4:0], accMetOut[14][(size-1)+4:0], sel[14]);
-   acs #(size) acs8  (clk, reset, symEn, out1Pt9Real,  out0Pt3Real,  accMetOut[8 ][(size-1)+4:0], accMetOut[2 ][(size-1)+4:0], accMetOut[15][(size-1)+4:0], sel[15]);
-   acs #(size) acs9  (clk, reset, symEn, out1Pt10Real, out0Pt4Real,  accMetOut[9 ][(size-1)+4:0], accMetOut[3 ][(size-1)+4:0], accMetOut[16][(size-1)+4:0], sel[16]);
-   acs #(size) acs10 (clk, reset, symEn, out1Pt11Real, out0Pt5Real,  accMetOut[10][(size-1)+4:0], accMetOut[4 ][(size-1)+4:0], accMetOut[17][(size-1)+4:0], sel[17]);
-   acs #(size) acs11 (clk, reset, symEn, out1Pt12Real, out0Pt6Real,  accMetOut[11][(size-1)+4:0], accMetOut[5 ][(size-1)+4:0], accMetOut[18][(size-1)+4:0], sel[18]);
-   acs #(size) acs12 (clk, reset, symEn, out1Pt13Real, out0Pt7Real,  accMetOut[12][(size-1)+4:0], accMetOut[6 ][(size-1)+4:0], accMetOut[19][(size-1)+4:0], sel[19]);
-   acs #(size) acs13 (clk, reset, symEn, out1Pt14Real, out0Pt8Real,  accMetOut[13][(size-1)+4:0], accMetOut[7 ][(size-1)+4:0], accMetOut[0 ][(size-1)+4:0], sel[ 0]);
-   acs #(size) acs14 (clk, reset, symEn, out1Pt15Real, out0Pt9Real,  accMetOut[14][(size-1)+4:0], accMetOut[8 ][(size-1)+4:0], accMetOut[1 ][(size-1)+4:0], sel[ 1]);
-   acs #(size) acs15 (clk, reset, symEn, out1Pt16Real, out0Pt10Real, accMetOut[15][(size-1)+4:0], accMetOut[9 ][(size-1)+4:0], accMetOut[2 ][(size-1)+4:0], sel[ 2]);
-   acs #(size) acs16 (clk, reset, symEn, out1Pt17Real, out0Pt11Real, accMetOut[16][(size-1)+4:0], accMetOut[10][(size-1)+4:0], accMetOut[3 ][(size-1)+4:0], sel[ 3]);
-   acs #(size) acs17 (clk, reset, symEn, out1Pt18Real, out0Pt12Real, accMetOut[17][(size-1)+4:0], accMetOut[11][(size-1)+4:0], accMetOut[4 ][(size-1)+4:0], sel[ 4]);
-   acs #(size) acs18 (clk, reset, symEn, out1Pt19Real, out0Pt13Real, accMetOut[18][(size-1)+4:0], accMetOut[12][(size-1)+4:0], accMetOut[5 ][(size-1)+4:0], sel[ 5]);
-   acs #(size) acs19 (clk, reset, symEn, out1Pt20Real, out0Pt14Real, accMetOut[19][(size-1)+4:0], accMetOut[13][(size-1)+4:0], accMetOut[6 ][(size-1)+4:0], sel[ 6]);
+   acs #(size) acs0  (clk, acsReset, symEn, out1Pt1Real,  out0Pt15Real, accMetOut[0 ][(size-1)+4:0], accMetOut[14][(size-1)+4:0], accMetOut[7 ][(size-1)+4:0], sel[ 7]);
+   acs #(size) acs1  (clk, acsReset, symEn, out1Pt2Real,  out0Pt16Real, accMetOut[1 ][(size-1)+4:0], accMetOut[15][(size-1)+4:0], accMetOut[8 ][(size-1)+4:0], sel[ 8]);
+   acs #(size) acs2  (clk, acsReset, symEn, out1Pt3Real,  out0Pt17Real, accMetOut[2 ][(size-1)+4:0], accMetOut[16][(size-1)+4:0], accMetOut[9 ][(size-1)+4:0], sel[ 9]);
+   acs #(size) acs3  (clk, acsReset, symEn, out1Pt4Real,  out0Pt18Real, accMetOut[3 ][(size-1)+4:0], accMetOut[17][(size-1)+4:0], accMetOut[10][(size-1)+4:0], sel[10]);
+   acs #(size) acs4  (clk, acsReset, symEn, out1Pt5Real,  out0Pt19Real, accMetOut[4 ][(size-1)+4:0], accMetOut[18][(size-1)+4:0], accMetOut[11][(size-1)+4:0], sel[11]);
+   acs #(size) acs5  (clk, acsReset, symEn, out1Pt6Real,  out0Pt20Real, accMetOut[5 ][(size-1)+4:0], accMetOut[19][(size-1)+4:0], accMetOut[12][(size-1)+4:0], sel[12]);
+   acs #(size) acs6  (clk, acsReset, symEn, out1Pt7Real,  out0Pt1Real,  accMetOut[6 ][(size-1)+4:0], accMetOut[0 ][(size-1)+4:0], accMetOut[13][(size-1)+4:0], sel[13]);
+   acs #(size) acs7  (clk, acsReset, symEn, out1Pt8Real,  out0Pt2Real,  accMetOut[7 ][(size-1)+4:0], accMetOut[1 ][(size-1)+4:0], accMetOut[14][(size-1)+4:0], sel[14]);
+   acs #(size) acs8  (clk, acsReset, symEn, out1Pt9Real,  out0Pt3Real,  accMetOut[8 ][(size-1)+4:0], accMetOut[2 ][(size-1)+4:0], accMetOut[15][(size-1)+4:0], sel[15]);
+   acs #(size) acs9  (clk, acsReset, symEn, out1Pt10Real, out0Pt4Real,  accMetOut[9 ][(size-1)+4:0], accMetOut[3 ][(size-1)+4:0], accMetOut[16][(size-1)+4:0], sel[16]);
+   acs #(size) acs10 (clk, acsReset, symEn, out1Pt11Real, out0Pt5Real,  accMetOut[10][(size-1)+4:0], accMetOut[4 ][(size-1)+4:0], accMetOut[17][(size-1)+4:0], sel[17]);
+   acs #(size) acs11 (clk, acsReset, symEn, out1Pt12Real, out0Pt6Real,  accMetOut[11][(size-1)+4:0], accMetOut[5 ][(size-1)+4:0], accMetOut[18][(size-1)+4:0], sel[18]);
+   acs #(size) acs12 (clk, acsReset, symEn, out1Pt13Real, out0Pt7Real,  accMetOut[12][(size-1)+4:0], accMetOut[6 ][(size-1)+4:0], accMetOut[19][(size-1)+4:0], sel[19]);
+   acs #(size) acs13 (clk, acsReset, symEn, out1Pt14Real, out0Pt8Real,  accMetOut[13][(size-1)+4:0], accMetOut[7 ][(size-1)+4:0], accMetOut[0 ][(size-1)+4:0], sel[ 0]);
+   acs #(size) acs14 (clk, acsReset, symEn, out1Pt15Real, out0Pt9Real,  accMetOut[14][(size-1)+4:0], accMetOut[8 ][(size-1)+4:0], accMetOut[1 ][(size-1)+4:0], sel[ 1]);
+   acs #(size) acs15 (clk, acsReset, symEn, out1Pt16Real, out0Pt10Real, accMetOut[15][(size-1)+4:0], accMetOut[9 ][(size-1)+4:0], accMetOut[2 ][(size-1)+4:0], sel[ 2]);
+   acs #(size) acs16 (clk, acsReset, symEn, out1Pt17Real, out0Pt11Real, accMetOut[16][(size-1)+4:0], accMetOut[10][(size-1)+4:0], accMetOut[3 ][(size-1)+4:0], sel[ 3]);
+   acs #(size) acs17 (clk, acsReset, symEn, out1Pt18Real, out0Pt12Real, accMetOut[17][(size-1)+4:0], accMetOut[11][(size-1)+4:0], accMetOut[4 ][(size-1)+4:0], sel[ 4]);
+   acs #(size) acs18 (clk, acsReset, symEn, out1Pt19Real, out0Pt13Real, accMetOut[18][(size-1)+4:0], accMetOut[12][(size-1)+4:0], accMetOut[5 ][(size-1)+4:0], sel[ 5]);
+   acs #(size) acs19 (clk, acsReset, symEn, out1Pt20Real, out0Pt14Real, accMetOut[19][(size-1)+4:0], accMetOut[13][(size-1)+4:0], accMetOut[6 ][(size-1)+4:0], sel[ 6]);
 
                                                                                             
    maxMetric #(size) maxMetric (clk,reset,symEn,sym2xEn ,
