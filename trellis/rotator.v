@@ -112,10 +112,15 @@ always @(posedge clk)begin
     end
   end
 
-wire [(ROT_BITS-1):0]iInSel = symEn ? iInBuf1 : iInBuf0;
-wire [(ROT_BITS-1):0]qInSel = symEn ? qInBuf1 : qInBuf0;
+reg symEnDelay;
+always @(posedge clk)begin 
+  symEnDelay <= symEn;
+  end
 
-rotator_mult10x10 m1
+wire [(ROT_BITS-1):0]iInSel = symEnDelay ? iInBuf0 : iInBuf1;
+wire [(ROT_BITS-1):0]qInSel = symEnDelay ? qInBuf0 : qInBuf1;
+
+rotMult m1
   (
   .clk(clk),
   .symEn(symEn),
@@ -129,7 +134,7 @@ rotator_mult10x10 m1
   .imOut1(out1Pt1Imag)
   );
 
-rotator_mult10x10 m2
+rotMult m2
   (
   .clk(clk),
   .symEn(symEn),
@@ -143,7 +148,7 @@ rotator_mult10x10 m2
   .imOut1(out1Pt2Imag)
   );
 
-rotator_mult10x10 m3
+rotMult m3
   (
   .clk(clk),
   .symEn(symEn),
@@ -157,7 +162,7 @@ rotator_mult10x10 m3
   .imOut1(out1Pt3Imag)
   );
 
-rotator_mult10x10 m4
+rotMult m4
   (
   .clk(clk),
   .symEn(symEn),
@@ -171,7 +176,7 @@ rotator_mult10x10 m4
   .imOut1(out1Pt4Imag)
   );
 
-rotator_mult10x10 m5
+rotMult m5
   (
   .clk(clk),
   .symEn(symEn),
@@ -185,7 +190,7 @@ rotator_mult10x10 m5
   .imOut1(out1Pt5Imag)
   );
 
-rotator_mult10x10 m6
+rotMult m6
   (
   .clk(clk),
   .symEn(symEn),
@@ -199,7 +204,7 @@ rotator_mult10x10 m6
   .imOut1(out1Pt6Imag)
   );
 
-rotator_mult10x10 m7
+rotMult m7
   (
   .clk(clk),
   .symEn(symEn),
@@ -213,7 +218,7 @@ rotator_mult10x10 m7
   .imOut1(out1Pt7Imag)
   );
 
-rotator_mult10x10 m8
+rotMult m8
   (
   .clk(clk),
   .symEn(symEn),
@@ -227,7 +232,7 @@ rotator_mult10x10 m8
   .imOut1(out1Pt8Imag)
   );
 
-rotator_mult10x10 m9
+rotMult m9
   (
   .clk(clk),
   .symEn(symEn),
@@ -241,7 +246,7 @@ rotator_mult10x10 m9
   .imOut1(out1Pt9Imag)
   );
 
-rotator_mult10x10 m10
+rotMult m10
   (
   .clk(clk),
   .symEn(symEn),
@@ -255,7 +260,7 @@ rotator_mult10x10 m10
   .imOut1(out1Pt10Imag)
   );
 
-rotator_mult10x10 m11
+rotMult m11
   (
   .clk(clk),
   .symEn(symEn),
@@ -269,7 +274,7 @@ rotator_mult10x10 m11
   .imOut1(out1Pt11Imag)
   );
 
-rotator_mult10x10 m12
+rotMult m12
   (
   .clk(clk),
   .symEn(symEn),
@@ -283,7 +288,7 @@ rotator_mult10x10 m12
   .imOut1(out1Pt12Imag)
   );
 
-rotator_mult10x10 m13
+rotMult m13
   (
   .clk(clk),
   .symEn(symEn),
@@ -297,7 +302,7 @@ rotator_mult10x10 m13
   .imOut1(out1Pt13Imag)
   );
 
-rotator_mult10x10 m14
+rotMult m14
   (
   .clk(clk),
   .symEn(symEn),
@@ -311,7 +316,7 @@ rotator_mult10x10 m14
   .imOut1(out1Pt14Imag)
   );
 
-rotator_mult10x10 m15
+rotMult m15
   (
   .clk(clk),
   .symEn(symEn),
@@ -325,7 +330,7 @@ rotator_mult10x10 m15
   .imOut1(out1Pt15Imag)
   );
 
-rotator_mult10x10 m16
+rotMult m16
   (
   .clk(clk),
   .symEn(symEn),
@@ -339,7 +344,7 @@ rotator_mult10x10 m16
   .imOut1(out1Pt16Imag)
   );
 
-rotator_mult10x10 m17
+rotMult m17
   (
   .clk(clk),
   .symEn(symEn),
@@ -353,7 +358,7 @@ rotator_mult10x10 m17
   .imOut1(out1Pt17Imag)
   );
 
-rotator_mult10x10 m18
+rotMult m18
   (
   .clk(clk),
   .symEn(symEn),
@@ -367,7 +372,7 @@ rotator_mult10x10 m18
   .imOut1(out1Pt18Imag)
   );
 
-rotator_mult10x10 m19
+rotMult m19
   (
   .clk(clk),
   .symEn(symEn),
@@ -381,7 +386,7 @@ rotator_mult10x10 m19
   .imOut1(out1Pt19Imag)
   );
 
-rotator_mult10x10 m20
+rotMult m20
   (
   .clk(clk),
   .symEn(symEn),

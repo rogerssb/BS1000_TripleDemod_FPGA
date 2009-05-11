@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------------
 // Project      SEMCO Multi-mode Demodulator
-// Design       Distributed Multiplier 18x18
+// Design       Rotator's 10x10 Distributed Multiplier
 // Created      10 April 09
 //-----------------------------------------------------------------------------
 // 1.0      (VS)Initial coding
@@ -10,7 +10,7 @@
 
 `timescale 1ns/1ps
 
-module rotator_mult10x10(clk,symEn,a,b,c,d,reOut0,imOut0,reOut1,imOut1);
+module rotMult(clk,symEn,a,b,c,d,reOut0,imOut0,reOut1,imOut1);
 
 input clk,symEn;
 input [9:0]a,b,c,d;
@@ -49,9 +49,11 @@ mult10x10 mult_axd(
 wire [20:0]sumR = {axc[19],axc[19:0]} - {bxd[19],bxd[19:0]};
 wire [20:0]sumI = {bxc[19],bxc[19:0]} + {axd[19],axd[19:0]};
 
+reg [7:0]symEnDelay;
 reg [9:0]re0,im0;
 always @(posedge clk)begin
-  if(symEn)begin
+  symEnDelay <= {symEnDelay[6:0],symEn};
+  if(symEnDelay[4])begin
     re0 <= sumR[20:11];
     im0 <= sumI[20:11];
     end
@@ -59,14 +61,8 @@ always @(posedge clk)begin
 
 // resync outputs to symEn
 reg [9:0]reOut0,imOut0,reOut1,imOut1;
-reg symEnDelay;
 always @(posedge clk)begin
-  `ifdef SIMULATE
-  #1 symEnDelay <= symEn;
-  `else
-  symEnDelay <= symEn;
-  `endif
-  if(symEnDelay)begin
+  if(symEn)begin
     reOut0 <= re0;
     imOut0 <= im0;
     reOut1 <= sumR[20:11];
