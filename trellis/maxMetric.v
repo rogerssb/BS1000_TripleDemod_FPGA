@@ -53,7 +53,7 @@ module maxMetric(clk,reset,symEn,sym2xEn ,
    // Stage 2 compare
    comp4twosComp  #(size, 0)  compS2_0_3   (clk, /*reset*/, maxValS1_0 , maxValS1_1 , maxValS1_2 , maxValS1_3 , iS2  , maxValS2  );
    // Stage 3 compare (final compare)
-   comp4twosComp  #(size, 0)  compS3_0_3   (clk, /*reset*/, maxValS2   , maxValS1_4_dly1clk, 11'b11111111111, 11'b11111111111, iS3, maxValS3);
+   comp4twosComp  #(size, 0)  compS3_0_3   (clk, /*reset*/, maxValS2   , maxValS1_4_dly1clk, 12'b111111111111, 12'b111111111111, iS3, maxValS3);
 
    always @(posedge clk) begin
       iS1_4_dly1clk <= iS1_4;
