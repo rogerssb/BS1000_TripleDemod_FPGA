@@ -234,7 +234,14 @@ assign demod_nLock = !carrierLock;
 //******************************************************************************
 //                                 Trellis Decoder
 //******************************************************************************
-
+reg     symEn,sym2xEn;
+reg     [17:0]iIn,qIn;
+always @(posedge ck933) begin
+    symEn <= symSync;
+    sym2xEn <= symTimes2Sync;
+    iIn <= iSymData;
+    qIn <= qSymData;
+    end
 
 
 wire [31:0]trellis_dout;
@@ -244,10 +251,10 @@ wire decision;
 trellis trellis(
   .clk(ck933),
   .reset(reset),
-  .symEn(symSync),
-  .sym2xEn(symTimes2Sync),
-  .iIn(iSymData),
-  .qIn(qSymData),
+  .symEn(symEn),
+  .sym2xEn(sym2xEn),
+  .iIn(iIn),
+  .qIn(qIn),
   .wr0(wr0),
   .wr1(wr1),
   .wr2(wr2),

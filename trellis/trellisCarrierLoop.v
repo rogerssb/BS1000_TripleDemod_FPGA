@@ -35,7 +35,7 @@ wire[31:0]carrierFreqOffset;
 reg trellisSpace;
 always @(addr) begin
     casex(addr)
-        `CARRIERSPACE:  trellisSpace <= 1;
+        `TRELLIS_SPACE: trellisSpace <= 1;
         default:        trellisSpace <= 0;
         endcase
     end
@@ -135,24 +135,24 @@ always @(posedge clk) begin
         carrierLock <= 0;
         end
     else if (loopFilterEn) begin
-			if (absPhaseError > syncThreshold) begin
-				 if (lockMinus[16]) begin
-					  carrierLock <= 0;
-					  lockCounter <= lockCount;
-					  end
-				 else begin
-					  lockCounter <= lockMinus[15:0];
-					  end
-				 end
-			else begin
-				 if (lockPlus[16]) begin
-					  carrierLock <= 1;
-					  lockCounter <= lockCount;
-					  end
-				 else begin
-					  lockCounter <= lockPlus[15:0];
-					  end
-				 end
+                        if (absPhaseError > syncThreshold) begin
+                                 if (lockMinus[16]) begin
+                                          carrierLock <= 0;
+                                          lockCounter <= lockCount;
+                                          end
+                                 else begin
+                                          lockCounter <= lockMinus[15:0];
+                                          end
+                                 end
+                        else begin
+                                 if (lockPlus[16]) begin
+                                          carrierLock <= 1;
+                                          lockCounter <= lockCount;
+                                          end
+                                 else begin
+                                          lockCounter <= lockPlus[15:0];
+                                          end
+                                 end
         end
     end
 

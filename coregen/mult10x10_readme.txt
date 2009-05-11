@@ -1,5 +1,5 @@
 The following files were generated for 'mult10x10' in directory 
-C:\work\semco\demod\pcba\fpga2\coregen\:
+C:\modem\telemetry\coregen\:
 
 mult10x10.asy:
    Graphical symbol information file. Used by the ISE tools and some
