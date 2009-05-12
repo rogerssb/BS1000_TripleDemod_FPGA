@@ -71,14 +71,9 @@ wire [31:0] carrierLimit = carrierLimitInt;
 
 wire [31:0] sweepRate = 32'h00000000;
 
-real bitrateBps;
-real bitrateSamples;
-integer bitrateSamplesInt;
-initial begin
-  bitrateBps = 400000.0;
-  bitrateSamples = 1/bitrateBps/`SAMPLE_PERIOD/2.0;
-  bitrateSamplesInt = bitrateSamples;
-end
+real bitrateBps = 500000.0;
+real bitrateSamples = 1/bitrateBps/`SAMPLE_PERIOD/2.0;
+integer bitrateSamplesInt = bitrateSamples;
 wire [15:0]bitrateDivider = bitrateSamplesInt - 1;
 real actualBitrateBps;
 initial begin
@@ -87,11 +82,8 @@ end
 		    
 // value = 2^ceiling(log2(R*R))/(R*R), where R = interpolation rate of the FM
 // modulator
-real interpolationGain;
-initial begin
-  interpolationGain = 1.77777777;		   
-end
-		    
+real interpolationGain = 1.28;
+
 //real deviationHz = 0*0.35 * bitrateBps;
 real deviationHz;
 real deviationNorm;
@@ -104,21 +96,13 @@ end
 wire [31:0]deviationQ31 = deviationInt;
 wire [17:0]deviation = deviationQ31[31:14];
 
-real cicDecimation;
-integer cicDecimationInt;
-initial begin
-  cicDecimation = SAMPLE_FREQ/bitrateBps/2.0/2.0/2.0/2.0;
-  cicDecimationInt = cicDecimation;		    
-end
-		    
-real resamplerFreqSps;
-real resamplerFreqNorm;
-integer resamplerFreqInt;
-initial begin
-  resamplerFreqSps = 2*actualBitrateBps;     // 2 samples per symbol
-  resamplerFreqNorm = resamplerFreqSps/(SAMPLE_FREQ/cicDecimationInt/4.0) * `TWO_POW_32;
-  resamplerFreqInt = (resamplerFreqNorm >= `TWO_POW_31) ? (resamplerFreqNorm - `TWO_POW_32) : resamplerFreqNorm;
-end		    
+real cicDecimation = SAMPLE_FREQ/bitrateBps/2.0/2.0/2.0/2.0;
+integer cicDecimationInt = (cicDecimation < 2.0) ? 2 : cicDecimation;
+
+
+real resamplerFreqSps = 2*actualBitrateBps;     // 2 samples per symbol
+real resamplerFreqNorm = resamplerFreqSps/(SAMPLE_FREQ/cicDecimationInt/4.0) * `TWO_POW_32;
+integer resamplerFreqInt = (resamplerFreqNorm >= `TWO_POW_31) ? (resamplerFreqNorm - `TWO_POW_32) : resamplerFreqNorm;
 //integer resamplerFreqInt = resamplerFreqNorm;
 real resamplerLimitNorm;
 integer resamplerLimitInt;
@@ -625,7 +609,7 @@ initial begin
     write32(`FM_MOD_DEV, {14'bx,deviation});
     write32(`FM_MOD_BITRATE, {1'b0,15'bx,bitrateDivider});
     // This value is ceiling(log2(R*R)), where R = interpolation rate.
-    write32(`FM_MOD_CIC,9);
+    write32(`FM_MOD_CIC,7);
     fmModCS = 0;
 
     // Init the mode
