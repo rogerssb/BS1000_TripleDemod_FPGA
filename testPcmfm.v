@@ -1,6 +1,8 @@
 `include "./addressMap.v"
 `timescale 1ns/100ps
 
+`define ALDEC
+
 `define ENABLE_AGC
 //`define ADD_NOISE
 //`define BER_TEST
@@ -34,52 +36,96 @@ always #HC clk = clk^clken;
 `define TWO_POW_17      131072.0
 
 
-real carrierFreqHz = 2500000.0;
-real carrierFreqNorm = carrierFreqHz * `SAMPLE_PERIOD * `TWO_POW_32;
-integer carrierFreqInt = carrierFreqNorm;
+real carrierFreqHz;
+real carrierFreqNorm;
+initial begin 
+  carrierFreqHz = 2500000.0;
+  carrierFreqNorm = carrierFreqHz * `SAMPLE_PERIOD * `TWO_POW_32;
+end		    
+
+integer carrierFreqInt;
+initial begin 
+  carrierFreqInt = carrierFreqNorm; 
+end
 wire [31:0] carrierFreq = carrierFreqInt;
 
-real carrierOffsetFreqHz = 0.0;
-real carrierOffsetFreqNorm = carrierOffsetFreqHz * `SAMPLE_PERIOD * `TWO_POW_32;
-integer carrierOffsetFreqInt = carrierOffsetFreqNorm;
+real carrierOffsetFreqHz;
+real carrierOffsetFreqNorm;
+integer carrierOffsetFreqInt;
+initial begin 
+  carrierOffsetFreqHz = 0.0;
+  carrierOffsetFreqNorm = carrierOffsetFreqHz * `SAMPLE_PERIOD * `TWO_POW_32;
+  carrierOffsetFreqInt = carrierOffsetFreqNorm;
+end		    
 wire [31:0] carrierOffsetFreq = carrierOffsetFreqInt;
 
-real carrierLimitHz = 60000.0;
-real carrierLimitNorm = carrierLimitHz * `SAMPLE_PERIOD * `TWO_POW_32;
-integer carrierLimitInt = carrierLimitNorm;
+real carrierLimitHz;
+real carrierLimitNorm;
+integer carrierLimitInt;
+initial begin 
+  carrierLimitHz = 60000.0;
+  carrierLimitNorm = carrierLimitHz * `SAMPLE_PERIOD * `TWO_POW_32;
+  carrierLimitInt = carrierLimitNorm;
+end		    
 wire [31:0] carrierLimit = carrierLimitInt;
 
 wire [31:0] sweepRate = 32'h00000000;
 
-real bitrateBps = 400000.0;
-real bitrateSamples = 1/bitrateBps/`SAMPLE_PERIOD/2.0;
-integer bitrateSamplesInt = bitrateSamples;
+real bitrateBps;
+real bitrateSamples;
+integer bitrateSamplesInt;
+initial begin
+  bitrateBps = 400000.0;
+  bitrateSamples = 1/bitrateBps/`SAMPLE_PERIOD/2.0;
+  bitrateSamplesInt = bitrateSamples;
+end
 wire [15:0]bitrateDivider = bitrateSamplesInt - 1;
-real actualBitrateBps = SAMPLE_FREQ/bitrateSamplesInt/2.0;
-
+real actualBitrateBps;
+initial begin
+  actualBitrateBps = SAMPLE_FREQ/bitrateSamplesInt/2.0;		 
+end
+		    
 // value = 2^ceiling(log2(R*R))/(R*R), where R = interpolation rate of the FM
 // modulator
-real interpolationGain = 1.77777777;
-
+real interpolationGain;
+initial begin
+  interpolationGain = 1.77777777;		   
+end
+		    
 //real deviationHz = 0*0.35 * bitrateBps;
-real deviationHz = 2*0.35 * bitrateBps;
-real deviationNorm = deviationHz * `SAMPLE_PERIOD * `TWO_POW_32;
-integer deviationInt = deviationNorm*interpolationGain;
+real deviationHz;
+real deviationNorm;
+integer deviationInt;
+initial begin 
+  deviationHz = 2*0.35 * bitrateBps;
+  deviationNorm = deviationHz * `SAMPLE_PERIOD * `TWO_POW_32;
+  deviationInt = deviationNorm*interpolationGain;
+end
 wire [31:0]deviationQ31 = deviationInt;
 wire [17:0]deviation = deviationQ31[31:14];
 
-real cicDecimation = SAMPLE_FREQ/bitrateBps/2.0/2.0/2.0/2.0;
-integer cicDecimationInt = cicDecimation;
-
-
-real resamplerFreqSps = 2*actualBitrateBps;     // 2 samples per symbol
-real resamplerFreqNorm = resamplerFreqSps/(SAMPLE_FREQ/cicDecimationInt/4.0) * `TWO_POW_32;
-integer resamplerFreqInt = (resamplerFreqNorm >= `TWO_POW_31) ? (resamplerFreqNorm - `TWO_POW_32) : resamplerFreqNorm;
+real cicDecimation;
+integer cicDecimationInt;
+initial begin
+  cicDecimation = SAMPLE_FREQ/bitrateBps/2.0/2.0/2.0/2.0;
+  cicDecimationInt = cicDecimation;		    
+end
+		    
+real resamplerFreqSps;
+real resamplerFreqNorm;
+integer resamplerFreqInt;
+initial begin
+  resamplerFreqSps = 2*actualBitrateBps;     // 2 samples per symbol
+  resamplerFreqNorm = resamplerFreqSps/(SAMPLE_FREQ/cicDecimationInt/4.0) * `TWO_POW_32;
+  resamplerFreqInt = (resamplerFreqNorm >= `TWO_POW_31) ? (resamplerFreqNorm - `TWO_POW_32) : resamplerFreqNorm;
+end		    
 //integer resamplerFreqInt = resamplerFreqNorm;
-
-real resamplerLimitNorm = 0.001*resamplerFreqSps/SAMPLE_FREQ * `TWO_POW_32;
-integer resamplerLimitInt = resamplerLimitNorm;
-
+real resamplerLimitNorm;
+integer resamplerLimitInt;
+initial begin 
+  resamplerLimitNorm = 0.001*resamplerFreqSps/SAMPLE_FREQ * `TWO_POW_32;
+  resamplerLimitInt = resamplerLimitNorm;
+end
 /******************************************************************************
                             Create a bit stream
 ******************************************************************************/
@@ -203,9 +249,12 @@ always @(posedge clk) begin
                             Channel Model
 ******************************************************************************/
 
-real iTxReal = (iTx[17] ? (iTx - 262144.0) : iTx)/131072.0;
-real qTxReal = (qTx[17] ? (qTx - 262144.0) : qTx)/131072.0;
+real iTxReal;
+real qTxReal;
 real txScaleFactor;
+ always @(iTx) iTxReal = (iTx[17] ? (iTx - 262144.0) : iTx)/131072.0;
+ always @(qTx) qTxReal = (qTx[17] ? (qTx - 262144.0) : qTx)/131072.0;
+
 
 wire [17:0]iSignal = 131072.0*iTxReal * txScaleFactor;
 wire [17:0]qSignal = 131072.0*qTxReal * txScaleFactor;
@@ -213,14 +262,20 @@ wire [17:0]qSignal = 131072.0*qTxReal * txScaleFactor;
 reg  measureSNR;
 initial measureSNR = 0;
 wire    [17:0]iRx,qRx;
-real iSignalReal = (iSignal[17] ? (iSignal - 262144.0) : iSignal)/131072.0;
-real qSignalReal = (qSignal[17] ? (qSignal - 262144.0) : qSignal)/131072.0;
+real iSignalReal;
+real qSignalReal;
 real signalMagSquared;
 real noiseMagSquared;
 integer txSampleCount;
 reg [17:0]iNoise,qNoise;
-real iNoiseReal = (iNoise[17] ? (iNoise - 262144.0) : iNoise)/131072.0;
-real qNoiseReal = (qNoise[17] ? (qNoise - 262144.0) : qNoise)/131072.0;
+real iNoiseReal;
+real qNoiseReal;
+always @(iSignal) iSignalReal = (iSignal[17] ? (iSignal - 262144.0) : iSignal)/131072.0;
+always @(qSignal)  qSignalReal = (qSignal[17] ? (qSignal - 262144.0) : qSignal)/131072.0;
+always @(iNoise)  iNoiseReal = (iNoise[17] ? (iNoise - 262144.0) : iNoise)/131072.0;
+always @(qNoise)  qNoiseReal = (qNoise[17] ? (qNoise - 262144.0) : qNoise)/131072.0;
+
+		    
 always @(negedge clk) begin
     `ifdef ADD_NOISE
     iNoise <= $gaussPLI();
@@ -241,8 +296,11 @@ always @(negedge clk) begin
         end
     end
 
-real iChReal = (iRx[17] ? (iRx - 262144.0) : iRx)/131072.0;
-real qChReal = (qRx[17] ? (qRx - 262144.0) : qRx)/131072.0;
+real iChReal;
+real qChReal;
+always @(iRx) iChReal = (iRx[17] ? (iRx - 262144.0) : iRx)/131072.0;
+always @(qRx)  qChReal = (qRx[17] ? (qRx - 262144.0) : qRx)/131072.0;
+		    
 assign iRx = iSignal + iNoise;
 assign qRx = qSignal + qNoise;
 
@@ -252,7 +310,7 @@ assign qRx = qSignal + qNoise;
 /******************************************************************************
                             Instantiate the Demod
 ******************************************************************************/
-wire    [17:0]  dac0Out,dac1Out,dac2Out;
+wire    [17:0]  dac0Out,dac1Out,dac2Out, iSymData, qSymData;
 demod demod( 
     .clk(clk), .reset(reset), .syncIn(sync), 
     .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
@@ -269,7 +327,9 @@ demod demod(
     .dac2Sync(dac2Sync),
     .dac2Data(dac2Out),
     .symSync(symEn),
-    .symTimes2Sync(symX2En)
+    .symTimes2Sync(symX2En),
+	.iSymData(iSymData),
+    .qSymData(qSymData)
     );
 
 reg dac0CS,dac1CS,dac2CS;
@@ -364,6 +424,26 @@ decoder decoder
   .clk_inv()
   );
 
+
+trellis trellis
+  (
+   .clk      (clk),
+   .reset    (reset),
+   .symEn    (symEn),
+   .sym2xEn  (symX2En),
+   .iIn      (iSymData[17:0]),
+   .qIn      (qSymData[17:0]),
+   .wr0      (we0),
+   .wr1      (we1),
+   .wr2      (we2),
+   .wr3      (we3),
+   .addr     (a),
+   .din      (d),
+   .dout     (),
+   .decision (decision)
+   );
+
+		    
 /******************************************************************************
                        Delay Line for BER Testing
 ******************************************************************************/
@@ -531,6 +611,7 @@ initial begin
     fmModCS = 0;
     txScaleFactor = 0.707;
     decoder.decoder_regs.q = 16'h0004;
+    trellis.viterbi_top.simReset = 0;
 
 
     // Turn on the clock
@@ -563,6 +644,9 @@ initial begin
     write32(createAddress(`CARRIERSPACE,`LF_LIMIT), carrierLimit);
     write32(createAddress(`CARRIERSPACE,`LF_LOOPDATA), sweepRate);
 
+    // Init the trellis carrier loop
+    write32(createAddress(`TRELLIS_SPACE,`LF_CONTROL),9);    // Forces the lag acc and the error term to be zero
+		    
     // Init the downcoverter register set
     write32(createAddress(`DDCSPACE,`DDC_CONTROL),0);
     write32(createAddress(`DDCSPACE,`DDC_CENTER_FREQ), carrierFreq);
@@ -637,6 +721,11 @@ initial begin
     #(2*C) ;
     interpReset = 0;
 
+    // Create a reset to clear the accumulator in the trellis 
+    trellis.viterbi_top.simReset = 1;
+    #(2*C) ;
+    trellis.viterbi_top.simReset = 0;
+
     // Enable the sample rate loop
     write32(createAddress(`BITSYNCSPACE,`LF_CONTROL),0);  
 
@@ -660,6 +749,8 @@ initial begin
 
     end
 
-real carrierOffsetReal = demod.carrierLoop.carrierOffsetReal * SAMPLE_FREQ/2.0;
+real carrierOffsetReal;
+always @(demod.carrierLoop.carrierOffsetReal) carrierOffsetReal = demod.carrierLoop.carrierOffsetReal * SAMPLE_FREQ/2.0;
+
 endmodule
 

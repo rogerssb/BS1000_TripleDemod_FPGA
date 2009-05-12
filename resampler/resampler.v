@@ -151,9 +151,12 @@ wire    [4:0]offset = oldOffset;
 `endif
 
 `ifdef SIMULATE
-integer offsetInt = offset;
-real inIReal = ((iSR[0] > 131071.0) ? (iSR[0] - 262144.0) : iSR[0])/131072.0;
-real inQReal = ((qSR[0] > 131071.0) ? (qSR[0] - 262144.0) : qSR[0])/131072.0;
+integer offsetInt;
+real inIReal;
+real inQReal;
+always @(offset) offsetInt = offset;
+always @(iSR[0]) inIReal = ((iSR[0] > 131071.0) ? (iSR[0] - 262144.0) : iSR[0])/131072.0;
+always @(qSR[0]) inQReal = ((qSR[0] > 131071.0) ? (qSR[0] - 262144.0) : qSR[0])/131072.0;
 `endif
 
 /******************************************************************************
@@ -393,9 +396,12 @@ assign syncOut = resampleDelay[6];
 `endif
 
 `ifdef SIMULATE
-real iOutReal = ((iOut > 131071.0) ? (iOut - 262144.0) : iOut)/131072.0;
-real iSumReal = (iSum[35] ? (iSum[35:18] - 262144.0) : iSum[35:18])/131072.0;
-real qOutReal = ((qOut > 131071.0) ? (qOut - 262144.0) : qOut)/131072.0;
+real iOutReal;
+real iSumReal;
+real qOutReal;
+always @(iOut) iOutReal = ((iOut > 131071.0) ? (iOut - 262144.0) : iOut)/131072.0;
+always @(iSum) iSumReal = (iSum[35] ? (iSum[35:18] - 262144.0) : iSum[35:18])/131072.0;
+always @(qOut) qOutReal = ((qOut > 131071.0) ? (qOut - 262144.0) : qOut)/131072.0;
 `endif
 
 endmodule

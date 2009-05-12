@@ -86,11 +86,14 @@ always @(posedge clk) begin
 
 `ifdef SIMULATE
 wire [31:0]accI0Slice = accI0[47:16];
-real accI0Real = ((accI0Slice > 2147483647.0) ? accI0Slice-4294967296.0 : accI0Slice)/2147483648.0;
+real accI0Real;
+always @(accI0Slice) accI0Real = ((accI0Slice > 2147483647.0) ? accI0Slice-4294967296.0 : accI0Slice)/2147483648.0;
 wire [31:0]accI1Slice = accI1[47:16];
-real accI1Real = ((accI1Slice > 2147483647.0) ? accI1Slice-4294967296.0 : accI1Slice)/2147483648.0;
+real accI1Real;
+always @(accI1Slice) accI1Real = ((accI1Slice > 2147483647.0) ? accI1Slice-4294967296.0 : accI1Slice)/2147483648.0;
 wire [31:0]accI2Slice = accI2[47:16];
-real accI2Real = ((accI2Slice > 2147483647.0) ? accI2Slice-4294967296.0 : accI2Slice)/2147483648.0;
+real accI2Real;
+always @(accI2Slice) accI2Real = ((accI2Slice > 2147483647.0) ? accI2Slice-4294967296.0 : accI2Slice)/2147483648.0;
 `endif
 
 // Create the decimated clock enable
@@ -145,8 +148,10 @@ assign outI = tapI3[47:0];
 assign outQ = tapQ3[47:0];
 
 `ifdef SIMULATE
-real iCicReal = ((outI[47:30] > 131071.0) ? (outI[47:30] - 262144.0) : outI[47:30])/131072.0;
-real qCicReal = ((outQ[47:30] > 131071.0) ? (outQ[47:30] - 262144.0) : outQ[47:30])/131072.0;
+real iCicReal;
+real qCicReal;
+always @(outI) iCicReal = ((outI[47:30] > 131071.0) ? (outI[47:30] - 262144.0) : outI[47:30])/131072.0;
+always @(outQ) qCicReal = ((outQ[47:30] > 131071.0) ? (outQ[47:30] - 262144.0) : outQ[47:30])/131072.0;
 `endif
 
 endmodule

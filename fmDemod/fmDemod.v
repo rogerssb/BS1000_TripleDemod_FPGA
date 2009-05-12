@@ -1,4 +1,5 @@
 `timescale 1ns / 10 ps
+`include "addressMap.v"
 
 module fmDemod( 
     clk, reset, sync,
@@ -23,8 +24,10 @@ output  [7:0]   freqError;
 output  [8:0]   mag;
 
 `ifdef SIMULATE
-real iFmReal = ((iFm > 131071.0) ? (iFm - 262144.0) : iFm)/131072.0;
-real qFmReal = ((qFm > 131071.0) ? (qFm - 262144.0) : qFm)/131072.0;
+real iFmReal;
+real qFmReal;
+always @(iFm) iFmReal = ((iFm > 131071.0) ? (iFm - 262144.0) : iFm)/131072.0;
+always @(qFm) qFmReal = ((qFm > 131071.0) ? (qFm - 262144.0) : qFm)/131072.0;
 `endif
 
 
@@ -106,11 +109,16 @@ always @(posedge clk) begin
 
 
 `ifdef SIMULATE
-real magReal   = mag/512.0;
-real phaseReal = ((phase > 127.0) ? (phase - 256.0) : phase)/128.0;
-real phaseErrorReal = ((phaseError > 127.0) ? (phaseError - 256.0) : phaseError)/128.0;
-real freqReal = ((freq > 127.0) ? (freq - 256.0) : freq)/128.0; 
-real freqErrorReal = ((freqError > 127.0) ? (freqError - 256.0) : freqError)/128.0; 
+real magReal;
+real phaseReal;
+real phaseErrorReal;
+real freqReal;
+real freqErrorReal; 
+always @(mag) magReal   = mag/512.0;
+always @(phase) phaseReal = ((phase > 127.0) ? (phase - 256.0) : phase)/128.0;
+always @(phaseError) phaseErrorReal = ((phaseError > 127.0) ? (phaseError - 256.0) : phaseError)/128.0;
+always @(freq) freqReal = ((freq > 127.0) ? (freq - 256.0) : freq)/128.0; 
+always @(freqError) freqErrorReal = ((freqError > 127.0) ? (freqError - 256.0) : freqError)/128.0; 
 `endif
 
 endmodule

@@ -156,7 +156,8 @@ always @(demodMode or offsetError or offsetErrorEn or
     end
 
 `ifdef SIMULATE
-real modeErrorReal = (modeError[7] ? modeError - 256.0 : modeError)/128.0;
+real modeErrorReal;
+always @(modeError) modeErrorReal = (modeError[7] ? modeError - 256.0 : modeError)/128.0;
 `endif
 
 wire loopFilterEn = sync & modeErrorEn;
@@ -259,9 +260,12 @@ assign carrierFreqOffset = filterSum[39:8];
 assign carrierFreqEn = loopFilterEn;
 
 `ifdef SIMULATE
-real carrierOffsetReal = ((carrierFreqOffset > 2147483647.0) ? carrierFreqOffset-4294967296.0 : carrierFreqOffset)/2147483648.0;
-real lagAccumReal = ((lagAccum[39:8] > 2147483647.0) ? lagAccum[39:8]-4294967296.0 : lagAccum[39:8])/2147483648.0; 
-integer lockCounterInt = lockCounter;
+real carrierOffsetReal;
+real lagAccumReal; 
+integer lockCounterInt;
+always @(carrierFreqOffset) carrierOffsetReal = ((carrierFreqOffset > 2147483647.0) ? carrierFreqOffset-4294967296.0 : carrierFreqOffset)/2147483648.0;
+always @(lagAccum[39:8]) lagAccumReal = ((lagAccum[39:8] > 2147483647.0) ? lagAccum[39:8]-4294967296.0 : lagAccum[39:8])/2147483648.0; 
+always @(lockCounter) lockCounterInt = lockCounter;
 `endif
 
 

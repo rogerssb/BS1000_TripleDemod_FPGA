@@ -89,8 +89,10 @@ always @(posedge clk) begin
     end
 
 `ifdef SIMULATE
-real expAdjReal = (exponentAdjusted[17] ? (exponentAdjusted - 262144.0) : exponentAdjusted)/131072.0;
-real interpReal = (dataOut[17] ? (dataOut - 262144.0) : dataOut)/131072.0;
+real expAdjReal;
+real interpReal;
+always @(exponentAdjusted) expAdjReal = (exponentAdjusted[17] ? (exponentAdjusted - 262144.0) : exponentAdjusted)/131072.0;
+always @(dataOut) interpReal = (dataOut[17] ? (dataOut - 262144.0) : dataOut)/131072.0;
 `endif
 
 

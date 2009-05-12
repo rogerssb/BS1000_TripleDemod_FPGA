@@ -1,3 +1,4 @@
+`include "./addressMap.v"
 `timescale 1ns/1ps
 
 `define ENABLE_SLIP
@@ -162,8 +163,10 @@ end
 `endif
 
 `ifdef SIMULATE
-real freqReal = ((freq > 131071.0) ? freq - 262144.0 : freq)/131072.0;
-real phaseReal = ((phase > 127.0) ? phase - 256.0: phase)/256.0;
+real freqReal;
+real phaseReal;
+always @(freq) freqReal = ((freq > 131071.0) ? freq - 262144.0 : freq)/131072.0;
+always @(phase) phaseReal = ((phase > 127.0) ? phase - 256.0: phase)/256.0;
 `endif
 
 
@@ -348,9 +351,12 @@ always @(posedge sampleClk) begin
 
 `ifdef SIMULATE
 wire    [17:0]  timingErr = timingError[18:1];
-real timingErrorReal = ((timingErr > 131071.0) ? timingErr - 262144.0 : timingErr)/131072.0;
-real iMFReal = (iMF[17] ? iMF - 262144.0 : iMF)/131072.0;
-real qMFReal = (qMF[17] ? qMF - 262144.0 : qMF)/131072.0;
+real timingErrorReal;
+real iMFReal;
+real qMFReal;
+always @(timingErr) timingErrorReal = ((timingErr > 131071.0) ? timingErr - 262144.0 : timingErr)/131072.0;
+always @(iMF) iMFReal = (iMF[17] ? iMF - 262144.0 : iMF)/131072.0;
+always @(qMF) qMFReal = (qMF[17] ? qMF - 262144.0 : qMF)/131072.0;
 `endif
 
 //************************ Recovered Clock and Data ***************************
@@ -394,8 +400,10 @@ assign symClk = timingErrorEn;
 assign bitClk  = symClk;
 
 `ifdef SIMULATE
-real symDataIReal = (symDataI[17] ? symDataI - 262144.0 : symDataI)/131072.0;
-real symPhaseReal = (symPhase[7] ? symPhase - 256.0 : symPhase)/128.0;
+real symDataIReal;
+real symPhaseReal;
+always @(symDataI) symDataIReal = (symDataI[17] ? symDataI - 262144.0 : symDataI)/131072.0;
+always @(symPhase) symPhaseReal = (symPhase[7] ? symPhase - 256.0 : symPhase)/128.0;
 `endif
 //******************************** Loop Filter ********************************
 
@@ -501,7 +509,8 @@ always @(posedge sampleClk) begin
 `endif
 
 `ifdef SIMULATE
-real sampleFreqReal = ((sampleFreq > 2147483647.0) ? sampleFreq-4294967296.0 : sampleFreq)/2147483648.0;
+real sampleFreqReal;
+always @(sampleFreq) sampleFreqReal = ((sampleFreq > 2147483647.0) ? sampleFreq-4294967296.0 : sampleFreq)/2147483648.0;
 `endif
 
 endmodule

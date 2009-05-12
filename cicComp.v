@@ -84,8 +84,10 @@ always @(posedge clk) begin
 
 
 `ifdef SIMULATE
-real inReal = ((compIn > 131071.0) ? (compIn - 262144.0) : compIn)/131072.0;
-real outReal = ((compOut > 131071.0) ? (compOut - 262144.0) : compOut)/131072.0;
+real inReal;
+real outReal;
+always @(compIn) inReal = ((compIn > 131071.0) ? (compIn - 262144.0) : compIn)/131072.0;
+always @(compOut) outReal = ((compOut > 131071.0) ? (compOut - 262144.0) : compOut)/131072.0;
 `endif
 
 endmodule

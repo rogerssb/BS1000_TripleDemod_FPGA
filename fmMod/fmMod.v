@@ -182,7 +182,8 @@ wire shaped = fskMode[0];
 wire [17:0]shapedOutput = shaped ? {shapingFirOut[10:0],7'b0} : {modValue,15'b0};
 
 `ifdef SIMULATE
-real shapedReal = ((shapedOutput > 131071.0) ? (shapedOutput - 262144.0) : shapedOutput)/131072.0;
+real shapedReal;
+always @(shapedOutput) shapedReal = ((shapedOutput > 131071.0) ? (shapedOutput - 262144.0) : shapedOutput)/131072.0;
 `endif
 
 // CIC Interpolation Filter
@@ -201,7 +202,8 @@ shift34to18 cicGainAdjust(
     );
 
 `ifdef SIMULATE
-real interpReal = (devInput[17] ? (devInput - 262144.0) : devInput)/131072.0;
+real interpReal;
+always @(devInput) interpReal = (devInput[17] ? (devInput - 262144.0) : devInput)/131072.0;
 `endif
 
 wire [35:0]devValue;

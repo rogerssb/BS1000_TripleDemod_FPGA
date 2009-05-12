@@ -181,9 +181,12 @@ always @(posedge clk) begin
     end
 
 `ifdef SIMULATE
-real inIReal = ((iIn > 131071.0) ? (iIn - 262144.0) : iIn)/131072.0;
-real outIReal = ((iOut > 131071.0) ? (iOut - 262144.0) : iOut)/131072.0;
-real outQReal = ((qOut > 131071.0) ? (qOut - 262144.0) : qOut)/131072.0;
+real inIReal;
+real outIReal;
+real outQReal;
+always @(iIn) inIReal = ((iIn > 131071.0) ? (iIn - 262144.0) : iIn)/131072.0;
+always @(iOut) outIReal = ((iOut > 131071.0) ? (iOut - 262144.0) : iOut)/131072.0;
+always @(qOut) outQReal = ((qOut > 131071.0) ? (qOut - 262144.0) : qOut)/131072.0;
 `endif
 
 endmodule

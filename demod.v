@@ -1,3 +1,4 @@
+`include "./addressMap.v"
 `timescale 1ns / 10 ps
 
 module demod( 

@@ -78,8 +78,11 @@ dds dds (
     .cosine(iDds)
     );
 `ifdef SIMULATE
-real iDdsReal = ((iDds > 131071.0) ? (iDds - 262144.0) : iDds)/131072.0;
-real qDdsReal = ((qDds > 131071.0) ? (qDds - 262144.0) : qDds)/131072.0;
+real iDdsReal;
+real qDdsReal;
+always @(iDds) iDdsReal = ((iDds > 131071.0) ? (iDds - 262144.0) : iDds)/131072.0;
+always @(qDds) qDdsReal = ((qDds > 131071.0) ? (qDds - 262144.0) : qDds)/131072.0;
+
 `endif
 
 
@@ -96,8 +99,10 @@ cmpy18 mixer( .clk(clk),
               .pImag(qMix)
               );
 `ifdef SIMULATE
-real iMixReal = ((iMix > 131071.0) ? (iMix - 262144.0) : iMix)/131072.0;
-real qMixReal = ((qMix > 131071.0) ? (qMix - 262144.0) : qMix)/131072.0;
+real iMixReal;
+real qMixReal;
+always @(iMix) iMixReal = ((iMix > 131071.0) ? (iMix - 262144.0) : iMix)/131072.0;
+always @(qMix) qMixReal = ((qMix > 131071.0) ? (qMix - 262144.0) : qMix)/131072.0;
 `endif
 
 
@@ -117,8 +122,10 @@ halfbandDecimate hb0(
     );
 
 `ifdef SIMULATE
-real iHb0Real = ((iHb0 > 131071.0) ? (iHb0 - 262144.0) : iHb0)/131072.0;
-real qHb0Real = ((qHb0 > 131071.0) ? (qHb0 - 262144.0) : qHb0)/131072.0;
+real iHb0Real;
+real qHb0Real;
+always @(iHb0) iHb0Real = ((iHb0 > 131071.0) ? (iHb0 - 262144.0) : iHb0)/131072.0;
+always @(qHb0) qHb0Real = ((qHb0 > 131071.0) ? (qHb0 - 262144.0) : qHb0)/131072.0;
 `endif
 
 // CIC Decimator
@@ -178,8 +185,10 @@ variableGain gainQ(
     );
 
 `ifdef SIMULATE
-real iAgcReal = ((iAgc > 131071.0) ? (iAgc - 262144.0) : iAgc)/131072.0;
-real qAgcReal = ((qAgc > 131071.0) ? (qAgc - 262144.0) : qAgc)/131072.0;
+real iAgcReal;
+real qAgcReal;
+always @(iAgc) iAgcReal = ((iAgc > 131071.0) ? (iAgc - 262144.0) : iAgc)/131072.0;
+always @(qAgc) qAgcReal = ((qAgc > 131071.0) ? (qAgc - 262144.0) : qAgc)/131072.0;
 `endif
 
 // CIC Compensation
@@ -199,8 +208,10 @@ cicComp cicCompQ(
     .compOut(qComp)
     );
 `ifdef SIMULATE
-real iCompReal = ((iComp > 131071.0) ? (iComp - 262144.0) : iComp)/131072.0;
-real qCompReal = ((qComp > 131071.0) ? (qComp - 262144.0) : qComp)/131072.0;
+real iCompReal;
+real qCompReal;
+always @(iComp) iCompReal = ((iComp > 131071.0) ? (iComp - 262144.0) : iComp)/131072.0;
+always @(qComp) qCompReal = ((qComp > 131071.0) ? (qComp - 262144.0) : qComp)/131072.0;
 `endif
 
 // Second Halfband Filter
@@ -220,8 +231,10 @@ halfbandDecimate hb(
     );
 
 `ifdef SIMULATE
-real iHbReal = ((iHb > 131071.0) ? (iHb - 262144.0) : iHb)/131072.0;
-real qHbReal = ((qHb > 131071.0) ? (qHb - 262144.0) : qHb)/131072.0;
+real iHbReal;
+real qHbReal;
+always @(iHb) iHbReal = ((iHb > 131071.0) ? (iHb - 262144.0) : iHb)/131072.0;
+always @(qHb) qHbReal = ((qHb > 131071.0) ? (qHb - 262144.0) : qHb)/131072.0;
 `endif
 
 `ifdef MUX_ONLY
