@@ -9,6 +9,7 @@
 //-----------------------------------------------------------------------------
 
 `timescale 1ns/1ps
+`include ".\..\addressMap.v"
 
 module trellisCarrierLoop(clk,reset,symEn,sym2xEn,
   iIn,qIn,
@@ -16,7 +17,9 @@ module trellisCarrierLoop(clk,reset,symEn,sym2xEn,
   wr0,wr1,wr2,wr3,
   addr,
   din,dout,
-  iOut,qOut
+  iOut,qOut,
+  symEnDly,
+  sym2xEnDly
   );
 
 input clk,reset,symEn,sym2xEn;
@@ -27,6 +30,8 @@ input [11:0]addr;
 input [31:0]din;
 output [31:0]dout;
 output [17:0]iOut,qOut;
+output symEnDly;
+output sym2xEnDly;
 
 wire[31:0]carrierFreqOffset;
 
@@ -162,9 +167,12 @@ assign carrierFreqOffset = filterSum[39:8];
 assign carrierFreqEn = loopFilterEn;
 
 `ifdef SIMULATE
-real carrierOffsetReal = ((carrierFreqOffset > 2147483647.0) ? carrierFreqOffset-4294967296.0 : carrierFreqOffset)/2147483648.0;
-real lagAccumReal = ((lagAccum[39:8] > 2147483647.0) ? lagAccum[39:8]-4294967296.0 : lagAccum[39:8])/2147483648.0; 
-integer lockCounterInt = lockCounter;
+real carrierOffsetReal;
+real lagAccumReal; 
+integer lockCounterInt;
+always @(carrierFreqOffset) carrierOffsetReal = ((carrierFreqOffset > 2147483647.0) ? carrierFreqOffset-4294967296.0 : carrierFreqOffset)/2147483648.0;
+always @(lagAccum) lagAccumReal = ((lagAccum[39:8] > 2147483647.0) ? lagAccum[39:8]-4294967296.0 : lagAccum[39:8])/2147483648.0; 
+always @(lockCounter) lockCounterInt = lockCounter;
 `endif
 
 
@@ -189,5 +197,21 @@ dds dds(
   .sine(bImag)); // Bus [17 : 0] 
 
 cmpy18 cmpy18(clk,reset,iIn,qIn,bReal,bImag,iOut,qOut);
+
+reg [3:0] symEnSr;
+reg [3:0] sym2xEnSr;
+always @(posedge clk) begin
+    if (reset) begin
+        symEnSr <= 0;
+            sym2xEnSr <= 0;
+        end
+    else begin
+        symEnSr <= {symEnSr[2:0], symEn};
+            sym2xEnSr <= {sym2xEnSr[2:0], sym2xEn};
+        end
+    end
+
+assign symEnDly = symEnSr[3];
+assign sym2xEnDly = sym2xEnSr[3];
 
 endmodule

@@ -48,7 +48,9 @@ trellisCarrierLoop trellisCarrierLoop(
   .din(din),
   .dout(dout),
   .iOut(carrierLoopIOut),
-  .qOut(carrierLoopQOut)
+  .qOut(carrierLoopQOut),
+  .symEnDly(symEnDly),
+  .sym2xEnDly(sym2xEnDly)
   );
 
 // there are two samples per symbol and their coefficients order below is
@@ -85,7 +87,7 @@ wire [ROT_BITS-1:0]
   out0Pt20Real,out1Pt20Real,        out0Pt20Imag,out1Pt20Imag;
 
 rotator #(ROT_BITS) rotator(
-  clk,reset,symEn,
+  clk,reset,symEnDly,
   f0I[17:(17-(ROT_BITS-1))],
   f0Q[17:(17-(ROT_BITS-1))],
   f1I[17:(17-(ROT_BITS-1))],
@@ -137,7 +139,7 @@ rotator #(ROT_BITS) rotator(
 wire decision;
 
 viterbi_top #(size)viterbi_top(
-  .clk(clk),.reset(reset),.symEn(symEn),.sym2xEn(sym2xEn),
+  .clk(clk),.reset(reset),.symEn(symEnDly),.sym2xEn(sym2xEnDly),
   .out0Pt1Real(out0Pt1Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),.out0Pt1Imag(out0Pt1Imag[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),
   .out1Pt1Real(out1Pt1Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),.out1Pt1Imag(out1Pt1Imag[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),
   .out0Pt2Real(out0Pt2Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),.out0Pt2Imag(out0Pt2Imag[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),
