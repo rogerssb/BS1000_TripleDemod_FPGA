@@ -9,6 +9,7 @@
 //-----------------------------------------------------------------------------
 
 `timescale 1ns/1ps
+`include "./addressMap.v"
 
 module trellis(
     clk,reset,symEn,sym2xEn,
@@ -71,10 +72,10 @@ trellisCarrierLoop trellisCarrierLoop(
 // 0 real, 0 imag, 1 real, 1 imag
 
 wire [17:0]f0I,f0Q;
-mfilter #(18'h1B48C,18'h10B85,18'h3D7D4,18'h1FE6B) f0(clk,reset,symEn,sym2xEn,carrierLoopIOut,carrierLoopQOut,f0I,f0Q);
+mfilter #(18'h1B48C,18'h10B85,18'h3D7D4,18'h1FE6B) f0(clk,reset,symEnDly,sym2xEnDly,carrierLoopIOut,carrierLoopQOut,f0I,f0Q);
 
 wire [17:0]f1I,f1Q;
-mfilter #(18'h1B48C,18'h2F47B,18'h3D7D4,18'h20195) f1(clk,reset,symEn,sym2xEn,carrierLoopIOut,carrierLoopQOut,f1I,f1Q);
+mfilter #(18'h1B48C,18'h2F47B,18'h3D7D4,18'h20195) f1(clk,reset,symEnDly,sym2xEnDly,carrierLoopIOut,carrierLoopQOut,f1I,f1Q);
 
 parameter ROT_BITS = 10;
 
