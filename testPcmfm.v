@@ -113,6 +113,15 @@ end
 /******************************************************************************
                             Create a bit stream
 ******************************************************************************/
+reg     altCnt;
+always @(negedge modClk or posedge reset) begin
+    if (reset) begin
+        altCnt <= 0;
+        end
+    else begin
+        altCnt <= altCnt+1;
+        end
+    end
 
 // Alternating ones and zeros
 reg     [3:0]altSR;
@@ -122,7 +131,7 @@ always @(negedge modClk or posedge reset) begin
     if (reset) begin
         altData <= 0;
         end
-    else begin
+    else if(altCnt == 1) begin
         altData <= ~altData;
         end
     end
@@ -310,10 +319,14 @@ demod demod(
     .dac1Data(dac1Out),
     .dac2Sync(dac2Sync),
     .dac2Data(dac2Out),
-    .symSync(symEn),
-    .symTimes2Sync(symX2En),
-	.iSymData(iSymData),
-    .qSymData(qSymData)
+    .symSync(symSync),
+    .symTimes2Sync(symTimes2Sync),
+//    .iSymData(iSymData),
+//    .qSymData(qSymData),
+    .trellisSymSync(trellisSymSync),
+    .iTrellis(iSymData),
+    .qTrellis(qSymData)                       
+
     );
 
 reg dac0CS,dac1CS,dac2CS;
@@ -397,8 +410,8 @@ decoder decoder
   .din(),
   .dout(),
   .clk(clk),
-  .symb_clk_en(symEn),
-  .symb_clk_2x_en(symX2En),
+  .symb_clk_en(symSync),
+  .symb_clk_2x_en(symTimes2Sync),
   .symb_i({demodBit,2'b0}),
   .symb_q(),
   .dout_i(),
@@ -408,15 +421,26 @@ decoder decoder
   .clk_inv()
   );
 
+//******************************************************************************
+//                                 Trellis Decoder
+//******************************************************************************
+reg     symEn,sym2xEn;
+reg     [17:0]iIn,qIn;
+always @(posedge clk) begin
+    symEn <= trellisSymSync;
+    sym2xEn <= symTimes2Sync;
+    iIn <= iSymData;
+    qIn <= qSymData;
+    end
 
 trellis trellis
   (
    .clk      (clk),
    .reset    (reset),
    .symEn    (symEn),
-   .sym2xEn  (symX2En),
-   .iIn      (iSymData[17:0]),
-   .qIn      (qSymData[17:0]),
+   .sym2xEn  (sym2xEn),
+   .iIn      (iIn),
+   .qIn      (qIn),
    .wr0      (we0),
    .wr1      (we1),
    .wr2      (we2),
