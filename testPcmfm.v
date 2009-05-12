@@ -72,8 +72,12 @@ wire [31:0] carrierLimit = carrierLimitInt;
 wire [31:0] sweepRate = 32'h00000000;
 
 real bitrateBps = 500000.0;
-real bitrateSamples = 1/bitrateBps/`SAMPLE_PERIOD/2.0;
-integer bitrateSamplesInt = bitrateSamples;
+real bitrateSamples;
+integer bitrateSamplesInt;
+initial begin
+bitrateSamples = 1/bitrateBps/`SAMPLE_PERIOD/2.0;
+bitrateSamplesInt = bitrateSamples;
+end
 wire [15:0]bitrateDivider = bitrateSamplesInt - 1;
 real actualBitrateBps;
 initial begin
@@ -96,13 +100,19 @@ end
 wire [31:0]deviationQ31 = deviationInt;
 wire [17:0]deviation = deviationQ31[31:14];
 
-real cicDecimation = SAMPLE_FREQ/bitrateBps/2.0/2.0/2.0/2.0;
-integer cicDecimationInt = (cicDecimation < 2.0) ? 2 : cicDecimation;
+real cicDecimation;
+integer cicDecimationInt;
+always @(bitrateBps) cicDecimation = SAMPLE_FREQ/bitrateBps/2.0/2.0/2.0/2.0;
+always @(cicDecimation) cicDecimationInt = (cicDecimation < 2.0) ? 2 : cicDecimation;
 
 
-real resamplerFreqSps = 2*actualBitrateBps;     // 2 samples per symbol
-real resamplerFreqNorm = resamplerFreqSps/(SAMPLE_FREQ/cicDecimationInt/4.0) * `TWO_POW_32;
-integer resamplerFreqInt = (resamplerFreqNorm >= `TWO_POW_31) ? (resamplerFreqNorm - `TWO_POW_32) : resamplerFreqNorm;
+real resamplerFreqSps;     // 2 samples per symbol
+real resamplerFreqNorm;
+integer resamplerFreqInt;
+always @(actualBitrateBps) resamplerFreqSps = 2*actualBitrateBps;     // 2 samples per symbol
+always @(resamplerFreqSps or cicDecimationInt) resamplerFreqNorm = resamplerFreqSps/(SAMPLE_FREQ/cicDecimationInt/4.0) * `TWO_POW_32;
+always @(resamplerFreqNorm) resamplerFreqInt = (resamplerFreqNorm >= `TWO_POW_31) ? (resamplerFreqNorm - `TWO_POW_32) : resamplerFreqNorm;
+
 //integer resamplerFreqInt = resamplerFreqNorm;
 real resamplerLimitNorm;
 integer resamplerLimitInt;
