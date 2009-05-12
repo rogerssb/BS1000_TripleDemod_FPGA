@@ -9,8 +9,8 @@
 //-----------------------------------------------------------------------------
 
 `timescale 1ns/1ps
-`include ".\..\addressMap.v"
-
+`include "./addressMap.v"
+           
 module trellisCarrierLoop(clk,reset,symEn,sym2xEn,
   iIn,qIn,
   phaseError,
@@ -140,24 +140,24 @@ always @(posedge clk) begin
         carrierLock <= 0;
         end
     else if (loopFilterEn) begin
-                        if (absPhaseError > syncThreshold) begin
-                                 if (lockMinus[16]) begin
-                                          carrierLock <= 0;
-                                          lockCounter <= lockCount;
-                                          end
-                                 else begin
-                                          lockCounter <= lockMinus[15:0];
-                                          end
-                                 end
-                        else begin
-                                 if (lockPlus[16]) begin
-                                          carrierLock <= 1;
-                                          lockCounter <= lockCount;
-                                          end
-                                 else begin
-                                          lockCounter <= lockPlus[15:0];
-                                          end
-                                 end
+        if (absPhaseError > syncThreshold) begin
+            if (lockMinus[16]) begin
+                carrierLock <= 0;
+                lockCounter <= lockCount;
+                end
+            else begin
+                lockCounter <= lockMinus[15:0];
+                end
+            end
+        else begin
+            if (lockPlus[16]) begin
+                carrierLock <= 1;
+                lockCounter <= lockCount;
+                end
+            else begin
+                lockCounter <= lockPlus[15:0];
+                end
+            end
         end
     end
 

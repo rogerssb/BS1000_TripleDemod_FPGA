@@ -11,23 +11,37 @@
 `timescale 1ns/1ps
 
 module trellis(
-  clk,reset,symEn,sym2xEn,
-  iIn,qIn,
-  wr0,wr1,wr2,wr3,
-  addr,
-  din,dout,
-  decision
-  );
+    clk,reset,symEn,sym2xEn,
+    iIn,qIn,
+    wr0,wr1,wr2,wr3,
+    addr,
+    din,dout,
+    dac0Select,dac1Select,dac2Select,
+    dac0Sync,
+    dac0Data,
+    dac1Sync,
+    dac1Data,
+    dac2Sync,
+    dac2Data,
+    decision
+    );
 
 parameter size = 8;
 
-input clk,reset,symEn,sym2xEn;
-input [17:0]iIn,qIn;
-input wr0,wr1,wr2,wr3;
-input [11:0]addr;
-input [31:0]din;
-output [31:0]dout;
-output decision;
+input           clk,reset,symEn,sym2xEn;
+input   [17:0]  iIn,qIn;
+input           wr0,wr1,wr2,wr3;
+input   [11:0]  addr;
+input   [31:0]  din;
+output  [31:0]  dout;
+input   [3:0]   dac0Select,dac1Select,dac2Select;
+output          dac0Sync;
+output  [17:0]  dac0Data;
+output          dac1Sync;
+output  [17:0]  dac1Data;
+output          dac2Sync;
+output  [17:0]  dac2Data;
+output          decision;
 
 
 wire    [size-1:0]  phaseError;
@@ -183,6 +197,52 @@ viterbi_top #(size)viterbi_top(
   .decision(decision),.freqError(phaseError)
   );
 
+
+/******************************************************************************
+                               DAC Output Mux
+******************************************************************************/
+
+reg             dac0Sync;
+reg     [17:0]  dac0Data;
+reg             dac1Sync;
+reg     [17:0]  dac1Data;
+reg             dac2Sync;
+reg     [17:0]  dac2Data;
+always @(posedge clk) begin
+    case (dac0Select) 
+        `DAC_TRELLIS_PHERR: begin
+            dac0Data <= {phaseError,10'b0};
+            dac0Sync <= symEn;
+            end
+        default: begin
+            dac0Data <= {phaseError,10'b0};
+            dac0Sync <= symEn;
+            end
+        endcase
+
+    case (dac1Select) 
+        `DAC_TRELLIS_PHERR: begin
+            dac1Data <= {phaseError,10'b0};
+            dac1Sync <= symEn;
+            end
+        default: begin
+            dac1Data <= {phaseError,10'b0};
+            dac1Sync <= symEn;
+            end
+        endcase
+
+    case (dac2Select) 
+        `DAC_TRELLIS_PHERR: begin
+            dac2Data <= {phaseError,10'b0};
+            dac2Sync <= symEn;
+            end
+        default: begin
+            dac2Data <= {phaseError,10'b0};
+            dac2Sync <= symEn;
+            end
+        endcase
+
+    end
 
 
 

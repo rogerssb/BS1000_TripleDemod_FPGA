@@ -24,7 +24,8 @@ module bitsync(
     bitDataQ,
     sampleFreq,
     bitsyncLock,
-    lockCounter
+    lockCounter,
+    iMF,qMF
     );
 
 input           sampleClk;
@@ -50,6 +51,7 @@ output          bitDataQ;
 output  [31:0]  sampleFreq;
 output          bitsyncLock;
 output  [15:0]  lockCounter;
+output  [17:0]  iMF,qMF;
 
 `define USE_COMP
 `ifdef USE_COMP
@@ -236,7 +238,7 @@ always @(posedge sampleClk) begin
         end
     else if (symTimes2Sync) begin
         // Shift register of baseband sample values
-        if (demodMode == `MODE_2FSK) begin
+        if ((demodMode == `MODE_2FSK) || (demodMode == `MODE_PCMTRELLIS))begin
             bbSRI[0] <= freq;
             bbSRQ[0] <= freq;
             end

@@ -197,11 +197,12 @@ wire            wr2 = !nCs & !nWr & addr1;
 wire            wr3 = !nCs & !nWr & addr1;
 wire    [31:0]  dataIn = {data,data};
 
-wire    [17:0]  dac0Out,dac1Out,dac2Out;
+wire    [17:0]  demod0Out,demod1Out,demod2Out;
 wire    [31:0]  demodDout;
 
-wire [17:0]iSymData,qSymData;
-wire diBit,qBit;
+wire    [3:0]   dac0Select,dac1Select,dac2Select;
+wire    [17:0]  iSymData,qSymData;
+wire            diBit,qBit;
 demod demod(
     .clk(ck933), .reset(reset), .syncIn(1'b1),
     .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
@@ -209,12 +210,15 @@ demod demod(
     .din(dataIn),
     .dout(demodDout),
     .iRx({ifInput,4'h0}), .qRx(18'h0),
-    .dac0Sync(dac0Sync),
-    .dac0Data(dac0Out),
-    .dac1Sync(dac1Sync),
-    .dac1Data(dac1Out),
-    .dac2Sync(dac2Sync),
-    .dac2Data(dac2Out),
+    .dac0Select(dac0Select),
+    .dac1Select(dac1Select),
+    .dac2Select(dac2Select),
+    .dac0Sync(demod0Sync),
+    .dac0Data(demod0Out),
+    .dac1Sync(demod1Sync),
+    .dac1Data(demod1Out),
+    .dac2Sync(demod2Sync),
+    .dac2Data(demod2Out),
     .iDataClk(iDataClk),
     .iBit(iBit),
     .qDataClk(qDataClk),
@@ -223,8 +227,10 @@ demod demod(
     .carrierLock(carrierLock),
     .symTimes2Sync(symTimes2Sync),
     .symSync(symSync),
-    .iSymData(iSymData),
-    .qSymData(qSymData)
+    .trellisSymSync(trellisSymSync),
+    .iTrellis(iSymData),
+    .qTrellis(qSymData),
+
 
     );
 
@@ -237,36 +243,45 @@ assign demod_nLock = !carrierLock;
 reg     symEn,sym2xEn;
 reg     [17:0]iIn,qIn;
 always @(posedge ck933) begin
-    symEn <= symSync;
+    symEn <= trellisSymSync;
     sym2xEn <= symTimes2Sync;
     iIn <= iSymData;
     qIn <= qSymData;
     end
 
 
-wire [31:0]trellis_dout;
 
-wire decision;
-
+wire    [17:0]  trellis0Out,trellis1Out,trellis2Out;
+wire            decision;
+wire    [31:0]  trellis_dout;
 trellis trellis(
-  .clk(ck933),
-  .reset(reset),
-  .symEn(symEn),
-  .sym2xEn(sym2xEn),
-  .iIn(iIn),
-  .qIn(qIn),
-  .wr0(wr0),
-  .wr1(wr1),
-  .wr2(wr2),
-  .wr3(wr3),
-  .addr(addr),
-  .din(dataIn),
-  .dout(trellis_dout),
-  .decision(decision)
-  );
+    .clk(ck933),
+    .reset(reset),
+    .symEn(symEn),
+    .sym2xEn(sym2xEn),
+    .iIn(iIn),
+    .qIn(qIn),
+    .wr0(wr0),
+    .wr1(wr1),
+    .wr2(wr2),
+    .wr3(wr3),
+    .addr(addr),
+    .din(dataIn),
+    .dout(trellis_dout),
+    .dac0Select(dac0Select),
+    .dac1Select(dac1Select),
+    .dac2Select(dac2Select),
+    .dac0Sync(trellis0Sync),
+    .dac0Data(trellis0Out),
+    .dac1Sync(trellis1Sync),
+    .dac1Data(trellis1Out),
+    .dac2Sync(trellis2Sync),
+    .dac2Data(trellis2Out),
+    .decision(decision)
+    );
 
 wire [2:0]decoder_iIn = (1'b1) ? {decision,2'b0} : {iBit,2'b0}; 
-wire [2:0]decoder_qIn = (1'b1) ? {3'b0} : {qBit,2'b0};
+wire [2:0]decoder_qIn = (1'b1) ? {iBit,2'b0} : {qBit,2'b0};
 
 //******************************************************************************
 //                              DAC Outputs
@@ -294,6 +309,41 @@ always @(addr) begin
             dac0CS <= 0;
             dac1CS <= 0;
             dac2CS <= 0;
+            end
+        endcase
+    end
+
+reg     [17:0]  dac0Out,dac1Out,dac2Out;
+reg             dac0Sync,dac1Sync,dac2Sync;
+always @(posedge ck933) begin
+    case (dac0Select) 
+        `DAC_TRELLIS_PHERR: begin
+            dac0Out <= trellis0Out;
+            dac0Sync <= trellis0Sync;
+            end
+        default: begin
+            dac0Out <= demod0Out;
+            dac0Sync <= demod0Sync;
+            end
+        endcase
+    case (dac1Select) 
+        `DAC_TRELLIS_PHERR: begin
+            dac1Out <= trellis1Out;
+            dac1Sync <= trellis1Sync;
+            end
+        default: begin
+            dac1Out <= demod1Out;
+            dac1Sync <= demod1Sync;
+            end
+        endcase
+    case (dac2Select)
+        `DAC_TRELLIS_PHERR: begin
+            dac2Out <= trellis2Out;
+            dac2Sync <= trellis2Sync;
+            end
+        default: begin
+            dac2Out <= demod2Out;
+            dac2Sync <= demod2Sync;
             end
         endcase
     end

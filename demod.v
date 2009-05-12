@@ -15,6 +15,8 @@ module demod(
     carrierLock,
     symTimes2Sync,
     symSync,
+    trellisSymSync,
+    dac0Select,dac1Select,dac2Select,
     dac0Sync,
     dac0Data,
     dac1Sync,
@@ -22,7 +24,9 @@ module demod(
     dac2Sync,
     dac2Data,
     iSymData,
-    qSymData
+    qSymData,
+    iTrellis,
+    qTrellis
     );
 
 input           clk;
@@ -42,6 +46,8 @@ output          bitsyncLock;
 output          carrierLock;
 output          symTimes2Sync;
 output          symSync;
+output          trellisSymSync;
+output  [3:0]   dac0Select,dac1Select,dac2Select;
 output          dac0Sync;
 output  [17:0]  dac0Data;
 output          dac1Sync;
@@ -50,6 +56,7 @@ output          dac2Sync;
 output  [17:0]  dac2Data;
 
 output [17:0]   iSymData,qSymData;
+output  [17:0]  iTrellis,qTrellis;
 
 
 
@@ -66,9 +73,6 @@ always @(addr) begin
     end
 wire    [2:0]   demodMode;
 wire    [1:0]   bitsyncMode;
-wire    [3:0]   dac0Select;
-wire    [3:0]   dac1Select;
-wire    [3:0]   dac2Select;
 wire    [15:0]  falseLockAlpha;
 wire    [15:0]  falseLockThreshold;
 reg             highFreqOffset;
@@ -415,11 +419,13 @@ bitsync bitsync(
     .bitDataQ(qBit),
     .sampleFreq(resamplerFreqOffset),
     .bitsyncLock(bitsyncLock),
-    .lockCounter(bsLockCounter)
+    .lockCounter(bsLockCounter),
+    .iMF(iTrellis),.qMF(qTrellis)
     );
 
 assign symTimes2Sync = resampSync;
 assign symSync = symClk & resampSync;
+assign trellisSymSync = !symClk & resampSync;
 
 `endif  // RESAMPLER_FIRST
 

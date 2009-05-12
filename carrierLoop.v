@@ -122,6 +122,7 @@ always @(demodMode or offsetError or offsetErrorEn or
             modeErrorEn <= 1'b1;
             enableCarrierLock <= 0;
             end
+        `MODE_PCMTRELLIS,
         `MODE_2FSK: begin
             sync <= resampSync;
             modeError <= offsetError;
@@ -144,12 +145,6 @@ always @(demodMode or offsetError or offsetErrorEn or
             //modeError <= {qpskSymPhase[5:0],2'b0};
             modeErrorEn <= 1'b1;
             enableCarrierLock <= 1;
-            end
-        `MODE_PCMTRELLIS: begin
-            sync <= symSync;
-            modeError <= phase;
-            modeErrorEn <= 1'b1;
-            enableCarrierLock <= 0;
             end
         default: begin
             sync <= 1'b1;
