@@ -21,45 +21,28 @@ parameter reC0 = 18'h0, imC0 = 18'h0, reC1 = 18'h0, imC1 = 18'h0;
 
 // two multiplier approach ------------------------------------------------
 
-// latch the second sample
-reg [17:0]iIn1,qIn1;
+// latch the samples
+reg [17:0]iIn0,qIn0,iIn1,qIn1;
 always @(posedge clk)begin
-  if(!symEn & sym2xEn)begin
-    iIn1 <= iIn;
-    qIn1 <= qIn;
-    end
-  end
-
-// latch the first sample
-reg [17:0]iIn0,qIn0;
-always @(posedge clk)begin
-  if(symEn)begin
-    iIn0 <= iIn;
-    qIn0 <= qIn;
-    end
-  end
-
-// relatch both samples for input into multipliers
-reg [17:0]aReal0,aImag0,aReal1,aImag1;
-always @(posedge clk)begin
-  if(symEn)begin
-    aReal0 <= iIn0;
-    aImag0 <= qIn0;
-    aReal1 <= iIn1;
-    aImag1 <= qIn1;
+  if(sym2xEn)begin
+	  if(symEn)begin
+      iIn0 <= iIn;
+      qIn0 <= qIn;
+	    end
+  	else begin
+      iIn1 <= iIn;
+      qIn1 <= qIn;
+      end
     end
   end
 
 wire [17:0] pReal0,pImag0;
-cmpy18 mult0(clk,reset,aReal0,aImag0,reC0,imC0,pReal0,pImag0);
+cmpy18 mult0(clk,reset,iIn0,qIn0,reC0,imC0,pReal0,pImag0);
 
 wire [17:0] pReal1,pImag1;
-cmpy18 mult1(clk,reset,aReal1,aImag1,reC1,imC1,pReal1,pImag1);
+cmpy18 mult1(clk,reset,iIn1,qIn1,reC1,imC1,pReal1,pImag1);
 
-reg [17:0]iOut,qOut;
-always @(posedge clk)begin
-  iOut <= pReal0 + pReal1;
-  qOut <= pImag0 + pImag1;
-  end
+assign iOut = pReal0 + pReal1;
+assign qOut = pImag0 + pImag1;
 
 endmodule

@@ -10,9 +10,9 @@
 
 `timescale 1ns/1ps
 
-module rotMult(clk,symEn,a,b,c,d,reOut0,imOut0,reOut1,imOut1);
+module rotMult(clk,ena,a,b,c,d,reOut0,imOut0,reOut1,imOut1);
 
-input clk,symEn;
+input clk,ena;
 input [9:0]a,b,c,d;
 output [9:0]reOut0,imOut0,reOut1,imOut1;
 
@@ -49,24 +49,22 @@ mult10x10 mult_axd(
 wire [20:0]sumR = {axc[19],axc[19:0]} - {bxd[19],bxd[19:0]};
 wire [20:0]sumI = {bxc[19],bxc[19:0]} + {axd[19],axd[19:0]};
 
-reg [7:0]symEnDelay;
-reg [9:0]re0,im0;
+// align the outputs
+
+reg [9:0]enaDelay;
+reg [9:0]re0,im0,reOut0,imOut0,reOut1,imOut1;
 always @(posedge clk)begin
-  symEnDelay <= {symEnDelay[6:0],symEn};
-  if(symEnDelay[4])begin
+  enaDelay <= {enaDelay[8:0],ena};
+  if(enaDelay[4])begin
     re0 <= sumR[20:11];
     im0 <= sumI[20:11];
     end
-  end
-
-// resync outputs to symEn
-reg [9:0]reOut0,imOut0,reOut1,imOut1;
-always @(posedge clk)begin
-  if(symEn)begin
+  else if(enaDelay[5])begin
     reOut0 <= re0;
     imOut0 <= im0;
     reOut1 <= sumR[20:11];
     imOut1 <= sumI[20:11];
     end
   end
+
 endmodule

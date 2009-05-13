@@ -11,7 +11,7 @@
 `timescale 1ns/1ps
 
 module rotator(
-  clk,reset,symEn,iIn0,qIn0,iIn1,qIn1,
+  clk,reset,ena,iIn0,qIn0,iIn1,qIn1,
   out0Pt1Real,out0Pt1Imag,out1Pt1Real,out1Pt1Imag,
   out0Pt2Real,out0Pt2Imag,out1Pt2Real,out1Pt2Imag,
   out0Pt3Real,out0Pt3Imag,out1Pt3Real,out1Pt3Imag,
@@ -33,7 +33,7 @@ module rotator(
   out0Pt19Real,out0Pt19Imag,out1Pt19Real,out1Pt19Imag,
   out0Pt20Real,out0Pt20Imag,out1Pt20Real,out1Pt20Imag);
 
-input clk,reset,symEn;
+input clk,reset,ena;
 parameter ROT_BITS = 0;
 input [(ROT_BITS-1):0]iIn0,qIn0,iIn1,qIn1;
 output [(ROT_BITS-1):0]
@@ -58,29 +58,6 @@ output [(ROT_BITS-1):0]
   out0Pt19Real,out0Pt19Imag,out1Pt19Real,out1Pt19Imag,
   out0Pt20Real,out0Pt20Imag,out1Pt20Real,out1Pt20Imag;
 
-/*
-parameter pt1Real = 18'h1FFFF,  pt1Imag = 18'h00000,
-          pt2Real = 18'h1E6F0,  pt2Imag = 18'h361C9,
-          pt3Real = 18'h19E37,  pt3Imag = 18'h2D30E,
-          pt4Real = 18'h12CF2,  pt4Imag = 18'h261C9,
-          pt5Real = 18'h09E37,  pt5Imag = 18'h21910,
-          pt6Real = 18'h00000,  pt6Imag = 18'h20001,
-          pt7Real = 18'h361C9,  pt7Imag = 18'h21910,
-          pt8Real = 18'h2D30E,  pt8Imag = 18'h261C9,
-          pt9Real = 18'h261C9,  pt9Imag = 18'h2D30E,
-         pt10Real = 18'h21910, pt10Imag = 18'h361C9,
-         pt11Real = 18'h20001, pt11Imag = 18'h00000,
-         pt12Real = 18'h21910, pt12Imag = 18'h09E37,
-         pt13Real = 18'h261C9, pt13Imag = 18'h12CF2,
-         pt14Real = 18'h2D30E, pt14Imag = 18'h19E37,
-         pt15Real = 18'h361C9, pt15Imag = 18'h1E6F0,
-         pt16Real = 18'h00000, pt16Imag = 18'h1FFFF,
-         pt17Real = 18'h09E37, pt17Imag = 18'h1E6F0,
-         pt18Real = 18'h12CF2, pt18Imag = 18'h19E37,
-         pt19Real = 18'h19E37, pt19Imag = 18'h12CF2,
-         pt20Real = 18'h1E6F0, pt20Imag = 18'h09E37;
-*/
-
 parameter pt1Real = 10'h1FF,  pt1Imag = 10'h000,
           pt2Real = 10'h1E6,  pt2Imag = 10'h362,
           pt3Real = 10'h19D,  pt3Imag = 10'h2D4,
@@ -104,7 +81,7 @@ parameter pt1Real = 10'h1FF,  pt1Imag = 10'h000,
 
 reg [(ROT_BITS-1):0]iInBuf0,iInBuf1,qInBuf0,qInBuf1;
 always @(posedge clk)begin
-  if(symEn)begin
+  if(ena)begin
     iInBuf0 <= iIn0;
     iInBuf1 <= iIn1;
     qInBuf0 <= qIn0;
@@ -112,18 +89,18 @@ always @(posedge clk)begin
     end
   end
 
-reg symEnDelay;
-always @(posedge clk)begin 
-  symEnDelay <= symEn;
+reg enaDelay;
+always @(posedge clk)begin
+  enaDelay <= ena;
   end
 
-wire [(ROT_BITS-1):0]iInSel = symEnDelay ? iInBuf0 : iInBuf1;
-wire [(ROT_BITS-1):0]qInSel = symEnDelay ? qInBuf0 : qInBuf1;
+wire [(ROT_BITS-1):0]iInSel = enaDelay ? iInBuf0 : iInBuf1;
+wire [(ROT_BITS-1):0]qInSel = enaDelay ? qInBuf0 : qInBuf1;
 
 rotMult m1
   (
   .clk(clk),
-  .symEn(symEn),
+  .ena(ena),
   .a(iInSel),
   .b(qInSel),
   .c(pt1Real),
@@ -137,7 +114,7 @@ rotMult m1
 rotMult m2
   (
   .clk(clk),
-  .symEn(symEn),
+  .ena(ena),
   .a(iInSel),
   .b(qInSel),
   .c(pt2Real),
@@ -151,7 +128,7 @@ rotMult m2
 rotMult m3
   (
   .clk(clk),
-  .symEn(symEn),
+  .ena(ena),
   .a(iInSel),
   .b(qInSel),
   .c(pt3Real),
@@ -165,7 +142,7 @@ rotMult m3
 rotMult m4
   (
   .clk(clk),
-  .symEn(symEn),
+  .ena(ena),
   .a(iInSel),
   .b(qInSel),
   .c(pt4Real),
@@ -179,7 +156,7 @@ rotMult m4
 rotMult m5
   (
   .clk(clk),
-  .symEn(symEn),
+  .ena(ena),
   .a(iInSel),
   .b(qInSel),
   .c(pt5Real),
@@ -193,7 +170,7 @@ rotMult m5
 rotMult m6
   (
   .clk(clk),
-  .symEn(symEn),
+  .ena(ena),
   .a(iInSel),
   .b(qInSel),
   .c(pt6Real),
@@ -207,7 +184,7 @@ rotMult m6
 rotMult m7
   (
   .clk(clk),
-  .symEn(symEn),
+  .ena(ena),
   .a(iInSel),
   .b(qInSel),
   .c(pt7Real),
@@ -221,7 +198,7 @@ rotMult m7
 rotMult m8
   (
   .clk(clk),
-  .symEn(symEn),
+  .ena(ena),
   .a(iInSel),
   .b(qInSel),
   .c(pt8Real),
@@ -235,7 +212,7 @@ rotMult m8
 rotMult m9
   (
   .clk(clk),
-  .symEn(symEn),
+  .ena(ena),
   .a(iInSel),
   .b(qInSel),
   .c(pt9Real),
@@ -249,7 +226,7 @@ rotMult m9
 rotMult m10
   (
   .clk(clk),
-  .symEn(symEn),
+  .ena(ena),
   .a(iInSel),
   .b(qInSel),
   .c(pt10Real),
@@ -263,7 +240,7 @@ rotMult m10
 rotMult m11
   (
   .clk(clk),
-  .symEn(symEn),
+  .ena(ena),
   .a(iInSel),
   .b(qInSel),
   .c(pt11Real),
@@ -277,7 +254,7 @@ rotMult m11
 rotMult m12
   (
   .clk(clk),
-  .symEn(symEn),
+  .ena(ena),
   .a(iInSel),
   .b(qInSel),
   .c(pt12Real),
@@ -291,7 +268,7 @@ rotMult m12
 rotMult m13
   (
   .clk(clk),
-  .symEn(symEn),
+  .ena(ena),
   .a(iInSel),
   .b(qInSel),
   .c(pt13Real),
@@ -305,7 +282,7 @@ rotMult m13
 rotMult m14
   (
   .clk(clk),
-  .symEn(symEn),
+  .ena(ena),
   .a(iInSel),
   .b(qInSel),
   .c(pt14Real),
@@ -319,7 +296,7 @@ rotMult m14
 rotMult m15
   (
   .clk(clk),
-  .symEn(symEn),
+  .ena(ena),
   .a(iInSel),
   .b(qInSel),
   .c(pt15Real),
@@ -333,7 +310,7 @@ rotMult m15
 rotMult m16
   (
   .clk(clk),
-  .symEn(symEn),
+  .ena(ena),
   .a(iInSel),
   .b(qInSel),
   .c(pt16Real),
@@ -347,7 +324,7 @@ rotMult m16
 rotMult m17
   (
   .clk(clk),
-  .symEn(symEn),
+  .ena(ena),
   .a(iInSel),
   .b(qInSel),
   .c(pt17Real),
@@ -361,7 +338,7 @@ rotMult m17
 rotMult m18
   (
   .clk(clk),
-  .symEn(symEn),
+  .ena(ena),
   .a(iInSel),
   .b(qInSel),
   .c(pt18Real),
@@ -375,7 +352,7 @@ rotMult m18
 rotMult m19
   (
   .clk(clk),
-  .symEn(symEn),
+  .ena(ena),
   .a(iInSel),
   .b(qInSel),
   .c(pt19Real),
@@ -389,7 +366,7 @@ rotMult m19
 rotMult m20
   (
   .clk(clk),
-  .symEn(symEn),
+  .ena(ena),
   .a(iInSel),
   .b(qInSel),
   .c(pt20Real),
@@ -399,29 +376,5 @@ rotMult m20
   .reOut1(out1Pt20Real),
   .imOut1(out1Pt20Imag)
   );
-
-/*
-multiplier m1(clk,symEn,iInSel,qInSel,pt1Real,pt1Imag,out0Pt1Real,out0Pt1Imag,out1Pt1Real,out1Pt1Imag);
-multiplier m2(clk,symEn,iInSel,qInSel,pt2Real,pt2Imag,out0Pt2Real,out0Pt2Imag,out1Pt2Real,out1Pt2Imag);
-multiplier m3(clk,symEn,iInSel,qInSel,pt3Real,pt3Imag,out0Pt3Real,out0Pt3Imag,out1Pt3Real,out1Pt3Imag);
-multiplier m4(clk,symEn,iInSel,qInSel,pt4Real,pt4Imag,out0Pt4Real,out0Pt4Imag,out1Pt4Real,out1Pt4Imag);
-multiplier m5(clk,symEn,iInSel,qInSel,pt5Real,pt5Imag,out0Pt5Real,out0Pt5Imag,out1Pt5Real,out1Pt5Imag);
-multiplier m6(clk,symEn,iInSel,qInSel,pt6Real,pt6Imag,out0Pt6Real,out0Pt6Imag,out1Pt6Real,out1Pt6Imag);
-multiplier m7(clk,symEn,iInSel,qInSel,pt7Real,pt7Imag,out0Pt7Real,out0Pt7Imag,out1Pt7Real,out1Pt7Imag);
-multiplier m8(clk,symEn,iInSel,qInSel,pt8Real,pt8Imag,out0Pt8Real,out0Pt8Imag,out1Pt8Real,out1Pt8Imag);
-multiplier m9(clk,symEn,iInSel,qInSel,pt9Real,pt9Imag,out0Pt9Real,out0Pt9Imag,out1Pt9Real,out1Pt9Imag);
-multiplier m10(clk,symEn,iInSel,qInSel,pt10Real,pt10Imag,out0Pt10Real,out0Pt10Imag,out1Pt10Real,out1Pt10Imag);
-multiplier m11(clk,symEn,iInSel,qInSel,pt11Real,pt11Imag,out0Pt11Real,out0Pt11Imag,out1Pt11Real,out1Pt11Imag);
-multiplier m12(clk,symEn,iInSel,qInSel,pt12Real,pt12Imag,out0Pt12Real,out0Pt12Imag,out1Pt12Real,out1Pt12Imag);
-multiplier m13(clk,symEn,iInSel,qInSel,pt13Real,pt13Imag,out0Pt13Real,out0Pt13Imag,out1Pt13Real,out1Pt13Imag);
-multiplier m14(clk,symEn,iInSel,qInSel,pt14Real,pt14Imag,out0Pt14Real,out0Pt14Imag,out1Pt14Real,out1Pt14Imag);
-multiplier m15(clk,symEn,iInSel,qInSel,pt15Real,pt15Imag,out0Pt15Real,out0Pt15Imag,out1Pt15Real,out1Pt15Imag);
-multiplier m16(clk,symEn,iInSel,qInSel,pt16Real,pt16Imag,out0Pt16Real,out0Pt16Imag,out1Pt16Real,out1Pt16Imag);
-multiplier m17(clk,symEn,iInSel,qInSel,pt17Real,pt17Imag,out0Pt17Real,out0Pt17Imag,out1Pt17Real,out1Pt17Imag);
-multiplier m18(clk,symEn,iInSel,qInSel,pt18Real,pt18Imag,out0Pt18Real,out0Pt18Imag,out1Pt18Real,out1Pt18Imag);
-multiplier m19(clk,symEn,iInSel,qInSel,pt19Real,pt19Imag,out0Pt19Real,out0Pt19Imag,out1Pt19Real,out1Pt19Imag);
-multiplier m20(clk,symEn,iInSel,qInSel,pt20Real,pt20Imag,out0Pt20Real,out0Pt20Imag,out1Pt20Real,out1Pt20Imag);
-*/
-
 
 endmodule
