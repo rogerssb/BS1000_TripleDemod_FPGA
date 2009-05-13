@@ -211,35 +211,59 @@ reg             dac2Sync;
 reg     [17:0]  dac2Data;
 always @(posedge clk) begin
     case (dac0Select) 
+        `DAC_TRELLIS_I: begin
+            dac0Data <= carrierLoopIOut;
+            dac0Sync <= sym2xEnDly;
+            end
+        `DAC_TRELLIS_Q: begin
+            dac0Data <= carrierLoopQOut;
+            dac0Sync <= sym2xEnDly;
+            end
         `DAC_TRELLIS_PHERR: begin
             dac0Data <= {phaseError,10'b0};
-            dac0Sync <= symEn;
+            dac0Sync <= symEnDly;
             end
         default: begin
             dac0Data <= {phaseError,10'b0};
-            dac0Sync <= symEn;
+            dac0Sync <= symEnDly;
             end
         endcase
 
     case (dac1Select) 
+        `DAC_TRELLIS_I: begin
+            dac1Data <= carrierLoopIOut;
+            dac1Sync <= sym2xEnDly;
+            end
+        `DAC_TRELLIS_Q: begin
+            dac1Data <= carrierLoopQOut;
+            dac1Sync <= sym2xEnDly;
+            end
         `DAC_TRELLIS_PHERR: begin
             dac1Data <= {phaseError,10'b0};
-            dac1Sync <= symEn;
+            dac1Sync <= symEnDly;
             end
         default: begin
             dac1Data <= {phaseError,10'b0};
-            dac1Sync <= symEn;
+            dac1Sync <= symEnDly;
             end
         endcase
 
     case (dac2Select) 
+        `DAC_TRELLIS_I: begin
+            dac2Data <= carrierLoopIOut;
+            dac2Sync <= sym2xEnDly;
+            end
+        `DAC_TRELLIS_Q: begin
+            dac2Data <= carrierLoopQOut;
+            dac2Sync <= sym2xEnDly;
+            end
         `DAC_TRELLIS_PHERR: begin
             dac2Data <= {phaseError,10'b0};
-            dac2Sync <= symEn;
+            dac2Sync <= symEnDly;
             end
         default: begin
             dac2Data <= {phaseError,10'b0};
-            dac2Sync <= symEn;
+            dac2Sync <= symEnDly;
             end
         endcase
 

@@ -45,7 +45,9 @@
 `define DAC_FREQLOCK        4'b1001
 `define DAC_AVGFREQ         4'b1010
 `define DAC_FREQERROR       4'b1011
-`define DAC_TRELLIS_PHERR   4'b1100
+`define DAC_TRELLIS_I       4'b1100
+`define DAC_TRELLIS_Q       4'b1101
+`define DAC_TRELLIS_PHERR   4'b1110
 `define DEMOD_FALSELOCK 12'bxxxx_xxxx_10xx
 `define DEMOD_STATUS    12'bxxxx_xxxx_11xx
 

@@ -2,16 +2,18 @@
 
 module comp4twosComp (clk,reset,a,b,c,d,index,maxVal);
    parameter             size = 8;
-   parameter 		 indexOffset=0;
-   defparam 		 compTwosCompFunc.size = size;
-   input 			 clk,reset;
+   parameter             indexOffset=0;
+   defparam              compTwosCompFunc.size = size;
+
+
+   input                         clk,reset;
    input [(size-1)+4:0]  a, b, c, d;
-   output [4:0] 		 index;
+   output [4:0]                  index;
    output [(size-1)+4:0] maxVal;
-   reg [(size-1)+4:0] 	 maxVal;
-   reg [1:0] 		 tempIndex;
-   reg [4:0] 		 index;                         
-   wire 			 sel0, sel1;
+   reg [(size-1)+4:0]    maxVal;
+   reg [1:0]             tempIndex;
+   reg [4:0]             index;                         
+   wire                          sel0, sel1;
 
       
    // This function returns 0 if "a" is larger and 1 if "b" is larger

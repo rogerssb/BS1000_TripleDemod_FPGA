@@ -1,21 +1,31 @@
 [Options]
 DebugEnable=No
 NoFloatWarn=Yes
-DigitalThreshold=
+SimFileSize=
 [Settings]
 Version=Silvaco4.10.0.R
+LintOptionsFile=
+VisualDebug=
+DisableCache=
+SimFile=
 [Analyzer]
 C0Width=165
 C1Width=58
 C2Width=92
 GotoSource=N
+SymbolFile=
+MinScale=
+MaxScale=
 [Spice]
 [LibraryFiles]
 0=..\..\Xilinx\10.1\ISE\verilog\src\unisims\{.v}
 [DebugMode]
 CommandLine=+define+SIMULATE
+RecirculateTime=
+UseRecirculateTime=
+DiskSize=1000M
 [View]
-1=Last 347817.103ns 354493.342ns 157.273ns 348516.767ns 353926.929ns
+1=Last 314198.782ns 329821.316ns 368.022ns 315100.436ns 328454.783ns
 [Group0]
 Name=New Group2
 [Group3]
@@ -155,6 +165,9 @@ OpenGroup=
 50=.\decoder\decoder.v
 51=.\decoder\decoder_regs.v
 52=.\decoder\format_output.v
+[Plusargs]
+0=
+[Define]
 [Group4]
 Name="Bitsync"
 0="test.demod.bitsync : slip" default
@@ -173,12 +186,12 @@ Name="Bitsync"
 13="test.demod.bitsync : freq[17:0]" default
 14="test.demod.bitsync : \bbSRI[1] [17:0]" default
 15="test.demod.bitsync.sampleLoop : zeroError" default
-16="test.demod.bitsync : phaseState" default
-17="test.demod.bitsync : qMF[17:0]" default
-18="test.demod.bitsync : iMF[17:0]" default
-19="test.demod : iResamp[17:0]" default
-20="test.demod : symSync" default
-21="test.demod.bitsync : symTimes2Sync" default
+16="test.demod.bitsync : symTimes2Sync" default
+17="test.demod.bitsync : phaseState" default
+18="test.demod.bitsync : qMF[17:0]" default
+19="test.demod.bitsync : iMF[17:0]" default
+20="test.demod : iResamp[17:0]" default
+21="test.demod : symSync" default
 22="test.demod : trellisSymSync" default
 23="test.demod : qSymData[17:0]" default
 24="test.demod : iSymData[17:0]" default
@@ -199,4 +212,3 @@ OpenGroup=Yes
 4=Bitsync : 4 : 1 : 0
 5=Carrier : 5 : 1 : 0
 6=DAC : 6 : 1 : 0
-[Bookmarks]

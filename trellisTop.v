@@ -229,7 +229,7 @@ demod demod(
     .symSync(symSync),
     .trellisSymSync(trellisSymSync),
     .iTrellis(iSymData),
-    .qTrellis(qSymData),
+    .qTrellis(qSymData)
 
 
     );
@@ -317,6 +317,8 @@ reg     [17:0]  dac0Out,dac1Out,dac2Out;
 reg             dac0Sync,dac1Sync,dac2Sync;
 always @(posedge ck933) begin
     case (dac0Select) 
+        `DAC_TRELLIS_I,
+        `DAC_TRELLIS_Q,
         `DAC_TRELLIS_PHERR: begin
             dac0Out <= trellis0Out;
             dac0Sync <= trellis0Sync;
@@ -327,6 +329,8 @@ always @(posedge ck933) begin
             end
         endcase
     case (dac1Select) 
+        `DAC_TRELLIS_I,
+        `DAC_TRELLIS_Q,
         `DAC_TRELLIS_PHERR: begin
             dac1Out <= trellis1Out;
             dac1Sync <= trellis1Sync;
@@ -337,6 +341,8 @@ always @(posedge ck933) begin
             end
         endcase
     case (dac2Select)
+        `DAC_TRELLIS_I,
+        `DAC_TRELLIS_Q,
         `DAC_TRELLIS_PHERR: begin
             dac2Out <= trellis2Out;
             dac2Sync <= trellis2Sync;
