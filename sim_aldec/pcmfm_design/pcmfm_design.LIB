@@ -1,18 +1,18 @@
-timestamp=1242139536483
+timestamp=1242331919060
 
 [$root]
-A/$root=22|""|0|1*6963290
-B/$root=3*8656278
+A/$root=22|""|0|1*7711452
+B/$root=3*11294292
 
 [acs]
-A/acs=22|./../../trellis/acs.v|76|1*6469617
-B/acs=3*7426062
-P/~emb=441,744,1021,1444
+A/acs=22|./../../trellis/acs.v|76|1*7518172
+B/acs=3*10698946
+P/~emb=481,807,1159,1614
 R=./../../trellis/acs.v|76
 
 [adder2s]
-A/adder2s=22|./../../trellis/acs.v|7|1*6460699
-B/adder2s=3*7398091
+A/adder2s=22|./../../trellis/acs.v|7|1*7509254
+B/adder2s=3*10670975
 P/~emb=283,479,740,863
 R=./../../trellis/acs.v|7
 
@@ -35,15 +35,15 @@ P/~emb=379,623,864,1010
 R=./../../decoder/biphase_to_nrz.v|13
 
 [bitsync]
-A/bitsync=22|./../../bitsync.v|6|1*4743629
-B/bitsync=3*3935799
-P/~emb=1287,2455,3967,4971
+A/bitsync=22|./../../bitsync.v|6|1*7023177
+B/bitsync=3*8797345
+P/~emb=1357,2529,4053,5071
 R=./../../bitsync.v|6
 
 [carrierLoop]
-A/carrierLoop=22|./../../carrierloop.v|4|1*5616699
-B/carrierLoop=3*4598602
-P/~emb=1038,1968,2933,3811
+A/carrierLoop=22|./../../carrierloop.v|4|1*7044858
+B/carrierLoop=3*8847421
+P/~emb=1038,1968,2926,3796
 R=./../../carrierloop.v|4
 
 [channelAGC]
@@ -83,8 +83,8 @@ P/~emb=349,638,934,1279
 R=./../../cmpy18.v|1
 
 [comp]
-A/comp=22|./../../trellis/acs.v|32|1*6464083
-B/comp=3*7414883
+A/comp=22|./../../trellis/acs.v|32|1*7512638
+B/comp=3*10687767
 P/~emb=179,370,573,706
 R=./../../trellis/acs.v|32
 
@@ -125,9 +125,9 @@ P/~emb=309,516,792,980
 R=./../../decoder/decoder_regs.v|16
 
 [demod]
-A/demod=22|./../../demod.v|4|1*6611657
-B/demod=3*7785336
-P/~emb=1136,2321,3700,5868
+A/demod=22|./../../demod.v|4|1*7005229
+B/demod=3*8773775
+P/~emb=1427,2651,4080,6302
 R=./../../demod.v|4
 
 [demodRegs]
@@ -227,15 +227,15 @@ P/~emb=910,1343,1951,2351
 R=./../../loopregs.v|5
 
 [maxMetric]
-A/maxMetric=22|./../../trellis/maxmetric.v|6|1*6478847
-B/maxMetric=3*7448059
-P/~emb=1368,1882,2478,3009
+A/maxMetric=22|./../../trellis/maxmetric.v|6|1*7530202
+B/maxMetric=3*10711416
+P/~emb=1371,1893,2549,3099
 R=./../../trellis/maxmetric.v|6
 
 [mfilter]
-A/mfilter=22|./../../trellis/mfilter.v|13|1*6489048
-B/mfilter=3*7456456
-P/~emb=439,756,1089,1309
+A/mfilter=22|./../../trellis/mfilter.v|13|1*7523579
+B/mfilter=3*10702529
+P/~emb=441,740,1063,1267
 R=./../../trellis/mfilter.v|13
 
 [mpy18x18]
@@ -269,8 +269,8 @@ P/~emb=196,11292,30776,92072
 R=./../../coregen/multiplier_v10_0.v|36
 
 [mux_2_1]
-A/mux_2_1=22|./../../trellis/acs.v|60|1*6466707
-B/mux_2_1=3*7422655
+A/mux_2_1=22|./../../trellis/acs.v|60|1*7515262
+B/mux_2_1=3*10695539
 P/~emb=243,419,609,702
 R=./../../trellis/acs.v|60
 
@@ -347,15 +347,15 @@ P/~emb=133,816,1750,3513
 R=./../../coregen/resamplertap8.v|36
 
 [rotMult]
-A/rotMult=22|./../../trellis/rotmult.v|13|1*6495446
-B/rotMult=3*7466616
-P/~emb=397,704,1042,1401
+A/rotMult=22|./../../trellis/rotmult.v|13|1*7541629
+B/rotMult=3*10726238
+P/~emb=393,698,1021,1374
 R=./../../trellis/rotmult.v|13
 
 [rotator]
-A/rotator=22|./../../trellis/rotator.v|13|1*6506530
-B/rotator=3*7474953
-P/~emb=6383,7417,8550,11311
+A/rotator=22|./../../trellis/rotator.v|13|1*7553418
+B/rotator=3*10756156
+P/~emb=6379,7410,8544,11304
 R=./../../trellis/rotator.v|13
 
 [shapingFir]
@@ -383,26 +383,26 @@ P/~emb=238,650,1075,1417
 R=./../../shifter18to48.v|3
 
 [test]
-A/test=22|./../../testpcmfm.v|18|1*6912270
-B/test=3*8520628
-P/~emb=471,2445,4418,5966
+A/test=22|./../../testpcmfm.v|18|1*7712130
+B/test=3*11294428
+P/~emb=471,2478,4512,6048
 R=./../../testpcmfm.v|18
 
 [traceBackTable]
-A/traceBackTable=22|./../../trellis/tracebacktable.v|14|1*6540455
-B/traceBackTable=3*7537925
-P/~emb=395,734,1107,1353
+A/traceBackTable=22|./../../trellis/tracebacktable.v|14|1*7547454
+B/traceBackTable=3*10729489
+P/~emb=358,705,1100,1343
 R=./../../trellis/tracebacktable.v|14
 
 [trellis]
-A/trellis=22|./../../trellis/trellis.v|13|1*6842659
-B/trellis=3*8338047
-P/~emb=566,1468,2260,4530
-R=./../../trellis/trellis.v|13
+A/trellis=22|./../../trellis/trellis.v|14|1*7646820
+B/trellis=3*11050910
+P/~emb=968,1936,2874,5034
+R=./../../trellis/trellis.v|14
 
 [trellisCarrierLoop]
-A/trellisCarrierLoop=22|./../../trellis/trelliscarrierloop.v|14|1*6963952
-B/trellisCarrierLoop=3*8656414
+A/trellisCarrierLoop=22|./../../trellis/trelliscarrierloop.v|14|1*7669246
+B/trellisCarrierLoop=3*11172439
 P/~emb=713,1531,2375,3252
 R=./../../trellis/trelliscarrierloop.v|14
 
@@ -419,9 +419,9 @@ P/~emb=321,1092,1618,2103
 R=./../../variablegain.v|4
 
 [viterbi_top]
-A/viterbi_top=22|./../../trellis/viteri_top.v|13|1*6576651
-B/viterbi_top=3*7693116
-P/~emb=4793,6161,7423,9097
+A/viterbi_top=22|./../../trellis/viteri_top.v|13|1*7610371
+B/viterbi_top=3*10940805
+P/~emb=4758,6156,7475,9215
 R=./../../trellis/viteri_top.v|13
 
 [vm_cordic]
@@ -514,57 +514,61 @@ C:/projects/semco/svn_checkout_folder/trellis/trellis.v=0*2532600*2535192
 C:/projects/semco/svn_checkout_folder/trellis/viteri_top.v=0*2687520*2691955
 C:/projects/semco/svn_checkout_folder/variableGain.v=0*1308103*1310132
 C:/projects/semco/svn_checkout_folder/vm_cordic.v=0*2265435*2268453
-LastVerilogToplevel=trellisCarrierLoop
-ModifyID=10002
+LastVerilogToplevel=test
+ModifyID=10786
 Version=73
+c:/projects/semco/svn_checkout_folder/bitsync.v=0*3632936*3637152
+c:/projects/semco/svn_checkout_folder/carrierLoop.v=0*3643726*3646330
 c:/projects/semco/svn_checkout_folder/coregen/mult10x10.v=0*3295629*3312560
 c:/projects/semco/svn_checkout_folder/decoder/decoder.v=0*3580340*3582340
 c:/projects/semco/svn_checkout_folder/decoder/decoder_regs.v=0*3585042*3585750
-c:/projects/semco/svn_checkout_folder/demod.v=0*3396913*3400711
+c:/projects/semco/svn_checkout_folder/demod.v=0*3620039*3623901
 c:/projects/semco/svn_checkout_folder/fmDemod/fmDemod.v=0*3573453*3574749
 c:/projects/semco/svn_checkout_folder/loopRegs.v=0*3551718*3553199
 c:/projects/semco/svn_checkout_folder/resampler/resampRegs.v=0*3546168*3547004
 c:/projects/semco/svn_checkout_folder/resampler/resampler.v=0*3540109*3543201
-c:/projects/semco/svn_checkout_folder/testPcmfm.v=0*3564146*3569692
-c:/projects/semco/svn_checkout_folder/trellis/acs.v=0*3187709*3188985
+c:/projects/semco/svn_checkout_folder/testPcmfm.v=0*4013254*4019024
+c:/projects/semco/svn_checkout_folder/trellis/acs.v=0*3901801*3903189
 c:/projects/semco/svn_checkout_folder/trellis/acs.v_comp4twoscomp.v_maxmetric.v_mfilter.v_rotmult.v_multiplier.v_rotator.v_tracebacktable.v_trellis.v_trelliscarrierloop.v_viteri_top.v=0*3371955*3387284
-c:/projects/semco/svn_checkout_folder/trellis/mfilter.v=0*3319558*3320325
-c:/projects/semco/svn_checkout_folder/trellis/rotMult.v=0*3315733*3316532
-c:/projects/semco/svn_checkout_folder/trellis/rotator.v=0*3205608*3207912
-c:/projects/semco/svn_checkout_folder/trellis/trellis.v=0*3521303*3524215
-c:/projects/semco/svn_checkout_folder/trellis/trellisCarrierLoop.v=0*3591388*3593655
+c:/projects/semco/svn_checkout_folder/trellis/maxMetric.v=0*3912107*3913661
+c:/projects/semco/svn_checkout_folder/trellis/mfilter.v=0*3906133*3906868
+c:/projects/semco/svn_checkout_folder/trellis/rotMult.v=0*3916869*3917668
+c:/projects/semco/svn_checkout_folder/trellis/rotator.v=0*3936640*3938928
+c:/projects/semco/svn_checkout_folder/trellis/traceBackTable.v=0*3921862*3923549
+c:/projects/semco/svn_checkout_folder/trellis/trellis.v=0*3973623*3976775
+c:/projects/semco/svn_checkout_folder/trellis/trellisCarrierLoop.v=0*3982520*3984739
 c:/projects/semco/svn_checkout_folder/trellis/trelliscarrierloop.v=0*3504764*3507031
-c:/projects/semco/svn_checkout_folder/trellis/viteri_top.v=0*3083769*3088236
+c:/projects/semco/svn_checkout_folder/trellis/viteri_top.v=0*3961819*3966414
 c:/projects/semco/svn_checkout_folder/trellisTop.v=0*3412697*3417332
 
 [~MFT]
-0=1077|0pcmfm_design.mgf|3593655|689170
-1=753|1pcmfm_design.mgf|6963952|2750235
-3=753|3pcmfm_design.mgf|8656414|7123230
+0=1270|0pcmfm_design.mgf|4019024|827334
+1=891|1pcmfm_design.mgf|7712130|3509396
+3=891|3pcmfm_design.mgf|11294428|9819650
 
 [~U]
-$root=12|0*3586371|
-acs=12|0*3324653||0x80
-adder2s=12|0*3321619||0x80
+$root=12|0*4002485|
+acs=12|0*3899900||0x90
+adder2s=12|0*3896866||0x80
 agcLoopFilter=12|0*2625252||0x80
 agcLoopRegs=12|0*883058||0x90
 biphase_to_nrz=12|0*910606||0x90
-bitsync=12|0*2577131||0x90
-carrierLoop=12|0*2928911||0x90
+bitsync=12|0*3625201||0x90
+carrierLoop=12|0*3638470||0x90
 channelAGC=12|0*2615224||0x90
 cicComp=12|0*2647549||0x80
 cicDecimator=12|0*2631847||0x80
 cicInterpolate=12|0*2656735||0x80
 cicRegs=12|0*1311407||0x90
 cmpy18=12|0*956916||0x90
-comp=12|0*3322764||0x80
+comp=12|0*3898011||0x80
 comp4twosComp=12|0*3326252||0x80
 ddc=12|0*2568548||0x90
 ddcRegs=12|0*1753803||0x80
 dds=12|0*1067852||0x80
 decoder=12|0*3576075||0x80
 decoder_regs=12|0*3583650||0x80
-demod=12|0*3388834||0x80
+demod=12|0*3611543||0x80
 demodRegs=12|0*846376||0x90
 fmDemod=12|0*3570964||0x80
 fmInterpolate=12|0*1921519||0x90
@@ -581,14 +585,14 @@ leadGain=12|0*945487||0x80
 log2=12|0*2606156||0x80
 loopFilter=12|0*2249309||0x80
 loopRegs=12|0*3548303||0x80
-maxMetric=12|0*3328520||0x80
-mfilter=12|0*3332200||0x80
+maxMetric=12|0*3908258||0x90
+mfilter=12|0*3904559||0x80
 mpy18x18=12|0*851466||0x80
 mrk_spc_decode=12|0*907508||0x90
 mult10x10=12|0*3248501||0x80
 multiplier=12|0*3335713||0x90
 multiplier_v10_0=12|0*2368309||0x80
-mux_2_1=12|0*3323770||0x80
+mux_2_1=12|0*3899017||0x80
 reciprocalLut=12|0*1043161||0x90
 resampRegs=12|0*3544483||0x80
 resampler=12|0*3533356||0x90
@@ -601,18 +605,18 @@ resamplerTap5=12|0*988156||0x90
 resamplerTap6=12|0*968441||0x90
 resamplerTap7=12|0*999938||0x90
 resamplerTap8=12|0*979701||0x90
-rotMult=12|0*3333884||0x80
-rotator=12|0*3337588||0x80
+rotMult=12|0*3915069||0x90
+rotator=12|0*3924978||0x80
 shapingFir=12|0*2714879||0x80
 shift34to18=12|0*1758016||0x90
 shift48to18=12|0*949663||0x80
 shifter18to48=12|0*1763202||0x80
-test=12|0*3554454||0x90
-traceBackTable=12|0*3349256||0x80
-trellis=12|0*3516167||0x80
-trellisCarrierLoop=12|0*3587081||0x90
+test=12|0*4003307||0x90
+traceBackTable=12|0*3919090||0x90
+trellis=12|0*3967839||0x80
+trellisCarrierLoop=12|0*3978213||0x90
 trellisTop=12|0*3402027||0x90
 variableGain=12|0*1303736||0x90
-viterbi_top=12|0*3361048||0x80
+viterbi_top=12|0*3950708||0x80
 vm_cordic=12|0*2258044||0x90
 

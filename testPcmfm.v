@@ -663,7 +663,8 @@ initial begin
 
     // Init the trellis carrier loop
     write32(createAddress(`TRELLIS_SPACE,`LF_CONTROL),9);    // Forces the lag acc and the error term to be zero
-                    
+    write32(createAddress(`TRELLIS_SPACE,`LF_LEAD_LAG),32'h0010_0000);   
+		    
     // Init the downcoverter register set
     write32(createAddress(`DDCSPACE,`DDC_CONTROL),0);
     write32(createAddress(`DDCSPACE,`DDC_CENTER_FREQ), carrierFreq);
@@ -740,9 +741,9 @@ initial begin
 
     `ifdef TRELLIS
     // Create a reset to clear the accumulator in the trellis 
-    trellis.viterbi_top.simReset = 1;
-    #(2*C) ;
-    trellis.viterbi_top.simReset = 0;
+    //trellis.viterbi_top.simReset = 1;
+    //#(2*C) ;
+    //trellis.viterbi_top.simReset = 0;
     `endif
 
     // Enable the sample rate loop
@@ -753,12 +754,19 @@ initial begin
 
     // Enable the AFC loop and invert the error
     // write32(createAddress(`CARRIERSPACE,`LF_CONTROL),2);  
+    #(160*C) ;
+    write32(createAddress(`TRELLIS_SPACE,`LF_CONTROL),0);
 
     `ifdef ENABLE_AGC
     // Enable the AGC loop
     write32(createAddress(`CHAGCSPACE,`ALF_CONTROL),0);              
     `endif
-
+	
+    // Create a reset to clear the accumulator in the trellis 
+    trellis.viterbi_top.simReset = 1;
+    #(6*C) ;
+    trellis.viterbi_top.simReset = 0;
+	
     // Wait for some data to pass thru
     #(2*100*bitrateSamplesInt*C) ;
     `ifdef MATLAB_VECTORS

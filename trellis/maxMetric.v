@@ -3,45 +3,46 @@
 // Finds the index (0-19) of the metric wih the largest number. The maxValue is also computed but is not used in the design
 // If all inputs are the same the 19th (13hex) index will be picked.
 // All done with 2's complement numbers
-module maxMetric(clk,reset,symEn,sym2xEn ,
+module maxMetric(clk,reset,symEn,
                  accMetOut0 , accMetOut1 , accMetOut2 , accMetOut3 , accMetOut4 , 
                  accMetOut5 , accMetOut6 , accMetOut7 , accMetOut8 , accMetOut9 , 
                  accMetOut10, accMetOut11, accMetOut12, accMetOut13, accMetOut14, 
                  accMetOut15, accMetOut16, accMetOut17, accMetOut18, accMetOut19,
-                 index
+                 index, symEnDly
                  );
    
    parameter            size = 8;
-   input                clk,reset,symEn,sym2xEn;
+   input                clk,reset,symEn;
    input [(size-1)+4:0] accMetOut0 , accMetOut1 , accMetOut2 , accMetOut3 , 
-				accMetOut4 , accMetOut5 , accMetOut6 , accMetOut7 , 
-				accMetOut8 , accMetOut9 , accMetOut10, accMetOut11, 
-				accMetOut12, accMetOut13, accMetOut14, accMetOut15, 
-				accMetOut16, accMetOut17, accMetOut18, accMetOut19;
-   output [4:0] 		index; // max index (0-19)
-   reg [4:0] 		index;                      
+                        accMetOut4 , accMetOut5 , accMetOut6 , accMetOut7 , 
+                        accMetOut8 , accMetOut9 , accMetOut10, accMetOut11, 
+                        accMetOut12, accMetOut13, accMetOut14, accMetOut15, 
+                        accMetOut16, accMetOut17, accMetOut18, accMetOut19;
+   output [4:0]         index; // max index (0-19)
+   output               symEnDly;
+   reg [4:0]            index;                      
 
-   wire [(size-1)+4:0] 	maxValS1_0, maxValS1_1, maxValS1_2, maxValS1_3, maxValS1_4,
-				maxValS2,
-				maxValS3;
+   wire [(size-1)+4:0]  maxValS1_0, maxValS1_1, maxValS1_2, maxValS1_3, maxValS1_4,
+                        maxValS2,
+                        maxValS3;
                                     
-   reg [(size-1)+4:0] 	maxVal; // the maximum value is not used in the design but it is nice for debug
-   reg [(size-1)+4:0] 	maxValS1_4_dly1clk;
+   reg [(size-1)+4:0]   maxVal; // the maximum value is not used in the design but it is nice for debug
+   reg [(size-1)+4:0]   maxValS1_4_dly1clk;
       
-   wire [4:0] 		iS1_0; // possible value 3..0
-   wire [4:0] 		iS1_1; // possible value 4..7
-   wire [4:0] 		iS1_2; // possible value 8..11
-   wire [4:0] 		iS1_3; // possible value 12..15
-   wire [4:0] 		iS1_4; // possible value 16..19
-   reg [4:0] 		iS1_4_dly1clk;
+   wire [4:0]           iS1_0; // possible value 3..0
+   wire [4:0]           iS1_1; // possible value 4..7
+   wire [4:0]           iS1_2; // possible value 8..11
+   wire [4:0]           iS1_3; // possible value 12..15
+   wire [4:0]           iS1_4; // possible value 16..19
+   reg [4:0]            iS1_4_dly1clk;
    
-   wire [4:0] 		iS2, iS3;
+   wire [4:0]           iS2, iS3;
    
-   reg [4:0] 		iS2_dly1clk;
+   reg [4:0]            iS2_dly1clk;
    
-   reg [4:0] 		indexS2;
-   reg 			syncToACS;
-   reg [1:0] 		cnt;
+   reg [4:0]            indexS2;
+   reg                  syncToACS;
+   reg [1:0]            cnt;
                
 
    // Stage 1 compare. The index value comming out of is scaled to 0..19 using the parameter indesOffset, by adding 4,8,12,or 16
@@ -120,5 +121,16 @@ module maxMetric(clk,reset,symEn,sym2xEn ,
         end
      end
 
+   reg [3:0]             symEnSr;
+   always @(posedge clk) begin
+      if (reset) begin
+         symEnSr <= 0;
+      end
+      else begin
+         symEnSr <= {symEnSr[2:0], symEn};
+      end
+   end
+   assign symEnDly = symEnSr[3];
+
    
-endmodule         
+endmodule

@@ -11,14 +11,14 @@
 `timescale 1ns/1ps
 
 // I may have to delay the symEn into this module to allow for the last samples to be computed
-module traceBackTable(clk, reset, symEn, sym2xEn,
+module traceBackTable(clk, reset, symEn,
                       sel, index,
                       decision,
                       oneOrZeroPredecessor
                       );
    
    parameter          size = 8;
-   input              clk,reset,symEn,sym2xEn;
+   input              clk,reset,symEn;
    input [19:0]       sel;   // 20 induvidual decision. 0 or 1 tell us if we trace + or - 7 modulo 20 
    input [4:0]        index; // pointer to the state which has the maximum metric
    output             decision, oneOrZeroPredecessor;
@@ -125,23 +125,52 @@ module traceBackTable(clk, reset, symEn, sym2xEn,
            tbPtr <= tbPtr;
         end
      end
-           
-   
+
+
+  reg t0, t1, t2, t3, t4, t5;
    // Final decision bit
    always @(posedge clk)
      if (reset) begin
         decision <= 0;
-        oneOrZeroPredecessor <= 0;
+        //oneOrZeroPredecessor <= 0;
      end
      else if (stateCnt==2) begin
-        oneOrZeroPredecessor <= tbtSr[index][0]; //This bit is used to find the frequancy offset error term.
+        //oneOrZeroPredecessor <= tbtSr[index][0]; //This bit is used to find the frequancy offset error term.
+/* -----\/----- EXCLUDED -----\/-----
+	  t0 <= tbtSr[index][0];
+	  t1 <= tbtSr[index][1];
+	  t2 <= tbtSr[index][2];
+	  t3 <= tbtSr[index][3];
+	  t4 <= tbtSr[index][4];
+	  t5 <= tbtSr[index][5];
+ -----/\----- EXCLUDED -----/\----- */
      end
      else if (stateCnt == 3) begin
         decision <= tbtSr[tbPtr][3]; 
+	  t0 <= tbtSr[tbPtr][0];
+	  t1 <= tbtSr[tbPtr][1];
+	  t2 <= tbtSr[tbPtr][2];
+	  t3 <= tbtSr[tbPtr][3];
+	  t4 <= tbtSr[tbPtr][4];
+	  t5 <= tbtSr[tbPtr][5];
      end
      else begin
         decision <=  decision;
-        oneOrZeroPredecessor <= oneOrZeroPredecessor;
+        //oneOrZeroPredecessor <= oneOrZeroPredecessor;
      end
+
+
+/* -----\/----- EXCLUDED -----\/-----
+  always @(posedge clk)
+     begin
+        if (reset) begin
+           oneOrZeroPredecessor <= 0;
+        end
+        else if (symEn) begin
+	     oneOrZeroPredecessor <= sel[index];
+        end
+     end
+ -----/\----- EXCLUDED -----/\----- */
+
    
 endmodule

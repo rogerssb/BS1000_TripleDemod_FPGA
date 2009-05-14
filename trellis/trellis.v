@@ -46,6 +46,7 @@ output          decision;
 
 
 wire    [size-1:0]  phaseError;
+/* -----\/----- EXCLUDED -----\/-----
 wire    [17:0]  carrierLoopIOut,carrierLoopQOut;
 trellisCarrierLoop trellisCarrierLoop(
   .clk(clk),
@@ -67,21 +68,25 @@ trellisCarrierLoop trellisCarrierLoop(
   .symEnDly(symEnDly),
   .sym2xEnDly(sym2xEnDly)
   );
+ -----/\----- EXCLUDED -----/\----- */
 
 // there are two samples per symbol and their coefficients order below is
 // 0 real, 0 imag, 1 real, 1 imag
 
 wire [17:0]f0I,f0Q;
+//mfilter #(18'h1B48C,18'h10B85,18'h3D7D4,18'h1FE6B) f0(clk,reset,symEnDly,sym2xEnDly,carrierLoopIOut,carrierLoopQOut,f0I,f0Q);
 mfilter #(18'h1B48C,18'h10B85,18'h3D7D4,18'h1FE6B) f0(clk,reset,symEn,sym2xEn,iIn,qIn,f0I,f0Q);
 
 wire [17:0]f1I,f1Q;
+//mfilter #(18'h1B48C,18'h2F47B,18'h3D7D4,18'h20195) f1(clk,reset,symEnDly,sym2xEnDly,carrierLoopIOut,carrierLoopQOut,f1I,f1Q);
 mfilter #(18'h1B48C,18'h2F47B,18'h3D7D4,18'h20195) f1(clk,reset,symEn,sym2xEn,iIn,qIn,f1I,f1Q);
 
-reg [15:0]sym2xEnDelay;
-always @(posedge clk)sym2xEnDelay <= {sym2xEnDelay[14:0],(sym2xEn && !symEn)};
+reg [15:0]sym2xEnShift;
+//always @(posedge clk)sym2xEnShift <= {sym2xEnShift[14:0],(sym2xEnDly && !symEnDly)};
+always @(posedge clk)sym2xEnShift <= {sym2xEnShift[14:0],(sym2xEn && !symEn)};
 
-wire rotEna = sym2xEnDelay[4];
-wire trellEna = sym2xEnDelay[11];
+wire rotEna = sym2xEnShift[4];
+wire trellEna = sym2xEnShift[11];
 
 parameter ROT_BITS = 10;
 
@@ -160,7 +165,7 @@ rotator #(ROT_BITS) rotator(
 wire decision;
 
 viterbi_top #(size)viterbi_top(
-  .clk(clk),.reset(reset),.symEn(symEnDly),.sym2xEn(sym2xEnDly),
+  .clk(clk),.reset(reset),.symEn(trellEna),
   .out0Pt1Real(out0Pt1Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),.out0Pt1Imag(out0Pt1Imag[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),
   .out1Pt1Real(out1Pt1Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),.out1Pt1Imag(out1Pt1Imag[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),
   .out0Pt2Real(out0Pt2Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),.out0Pt2Imag(out0Pt2Imag[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),
@@ -201,13 +206,14 @@ viterbi_top #(size)viterbi_top(
   .out1Pt19Real(out1Pt19Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),.out1Pt19Imag(out1Pt19Imag[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),
   .out0Pt20Real(out0Pt20Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),.out0Pt20Imag(out0Pt20Imag[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),
   .out1Pt20Real(out1Pt20Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),.out1Pt20Imag(out1Pt20Imag[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),
-  .decision(decision),.freqError(phaseError)
+  .decision(decision),.phaseError(phaseError)
   );
 
 
 /******************************************************************************
                                DAC Output Mux
 ******************************************************************************/
+/* -----\/----- EXCLUDED -----\/-----
 
 reg             dac0Sync;
 reg     [17:0]  dac0Data;
@@ -274,8 +280,16 @@ always @(posedge clk) begin
         endcase
 
     end
+ -----/\----- EXCLUDED -----/\----- */
 
 
+
+integer file;
+initial file = $fopen("iInAndqIn_module_trellis.dat") ;
+
+   always @(posedge clk)begin
+     $fdisplay(file, "%d\t %d ", $signed(iIn), $signed(qIn));
+   end
 
 
 endmodule
