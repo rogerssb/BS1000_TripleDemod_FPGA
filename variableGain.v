@@ -199,12 +199,19 @@ always @(posedge clk) begin
         end
     end
 
+reg     [15:0]  man0,man1;
+always @(posedge clk) begin
+    if (clkEn) begin
+        man0 <= mantissa;
+        man1 <= man0;
+        end
+    end
 wire [35:0]scaledValue;
 mpy18x18 gainScaler (
     .sclr(1'b0),
     .clk(clk),
     .a(shift),
-    .b({2'b01,mantissa}),
+    .b({2'b01,man1}),
     .p(scaledValue)
     );
 
