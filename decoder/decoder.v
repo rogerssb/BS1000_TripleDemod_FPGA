@@ -116,12 +116,19 @@ mrk_spc_decode mrk_spc_decode_q
 //                          QPSK / OQPSK Demultiplexing
 //------------------------------------------------------------------------------
 
+reg mux_ctrl;
+always @(posedge clk)begin
+  if(symb_clk_2x_en)begin
+    mux_ctrl <= !mux_ctrl;
+    end
+  end
+
 reg [2:0] demux_i, demux_q;
 wire swap;
 
 always @(posedge clk)begin
   if(symb_clk_2x_en)begin
-    if(swap ^ symb_clk_en)
+    if(swap ^ mux_ctrl) //symb_clk_en)
       demux_i <= dec_i;
     else
       demux_i <= dec_q;
@@ -139,7 +146,7 @@ always @(posedge clk) begin
     if(symb_clk_2x_en)begin
       dec_delay_i <= dec_i;
       dec_delay_q <= dec_q;
-      feher_demux_i <= (swap ^ symb_clk_en) ? (dec_delay_i ^ dec_q) :
+      feher_demux_i <= (swap ^ mux_ctrl /*symb_clk_en*/ ) ? (dec_delay_i ^ dec_q) :
                                               (dec_delay_i ^ ~dec_q);
       feher_demux_q <= dec_delay_q;
       end
