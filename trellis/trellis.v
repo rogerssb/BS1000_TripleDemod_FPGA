@@ -28,6 +28,7 @@ module trellis(
     );
 
 parameter size = 8;
+parameter ROT_BITS = 10;
 
 input           clk,reset,symEn,sym2xEn;
 input   [17:0]  iIn,qIn;
@@ -45,9 +46,10 @@ output  [17:0]  dac2Data;
 output          decision;
 
 
-wire    [size-1:0]  phaseError;
+wire    [ROT_BITS-1:0]  phaseError;
 
 wire    [17:0]  carrierLoopIOut,carrierLoopQOut;
+wire    [17:0]  carrierLoopIOutX2,carrierLoopQOutX2;
 trellisCarrierLoop trellisCarrierLoop(
   .clk(clk),
   .reset(reset),
@@ -55,7 +57,7 @@ trellisCarrierLoop trellisCarrierLoop(
   .sym2xEn(sym2xEn),
   .iIn(iIn),
   .qIn(qIn),
-  .phaseError(phaseError),
+  .phaseError(phErrShft),
   .wr0(wr0),
   .wr1(wr1),
   .wr2(wr2),
@@ -69,26 +71,53 @@ trellisCarrierLoop trellisCarrierLoop(
   .sym2xEnDly(sym2xEnDly)
   );
 
+// multiply by two the output from the carrierLoop to compensate for the 1/2 in the cmpy18 module.
+multBy2withSat times2I(
+                       .clk(clk), 
+                       .symEn(symEnDly), 
+                       .sym2xEn(sym2xEnDly), 
+                       //.symEn(symEn), 
+                       //.sym2xEn(sym2xEn), 
+                       .dIn(carrierLoopIOut),
+                       //.dIn(iIn),
+                       .dOut(carrierLoopIOutX2), 
+                       .symEnDly(symEnDly_mult2), 
+                       .sym2xEnDly(sym2xEnDly_mult2)
+                       );
+
+multBy2withSat times2Q(
+                       .clk(clk), 
+                       .symEn(symEnDly), 
+                       .sym2xEn(sym2xEnDly), 
+                       //.symEn(symEn), 
+                       //.sym2xEn(sym2xEn), 
+                       .dIn(carrierLoopQOut),
+                       //.dIn(qIn),
+                       .dOut(carrierLoopQOutX2), 
+                       .symEnDly(),
+                       .sym2xEnDly()
+                       );
+   
 
 // there are two samples per symbol and their coefficients order below is
 // 0 real, 0 imag, 1 real, 1 imag
 
 wire [17:0]f0I,f0Q;
-mfilter #(18'h1B48C,18'h10B85,18'h3D7D4,18'h1FE6B) f0(clk,reset,symEnDly,sym2xEnDly,carrierLoopIOut,carrierLoopQOut,f0I,f0Q);
+//mfilter #(18'h1B48C,18'h10B85,18'h3D7D4,18'h1FE6B) f0(clk,reset,symEnDly,sym2xEnDly,carrierLoopIOut,carrierLoopQOut,f0I,f0Q);
+mfilter #(18'h1B48C,18'h10B85,18'h3D7D4,18'h1FE6B) f0(clk,reset,symEnDly_mult2,sym2xEnDly_mult2,carrierLoopIOutX2,carrierLoopQOutX2,f0I,f0Q);
 //mfilter #(18'h1B48C,18'h10B85,18'h3D7D4,18'h1FE6B) f0(clk,reset,symEn,sym2xEn,iIn,qIn,f0I,f0Q);
 
 wire [17:0]f1I,f1Q;
-mfilter #(18'h1B48C,18'h2F47B,18'h3D7D4,18'h20195) f1(clk,reset,symEnDly,sym2xEnDly,carrierLoopIOut,carrierLoopQOut,f1I,f1Q);
+//mfilter #(18'h1B48C,18'h2F47B,18'h3D7D4,18'h20195) f1(clk,reset,symEnDly,sym2xEnDly,carrierLoopIOut,carrierLoopQOut,f1I,f1Q);
+mfilter #(18'h1B48C,18'h2F47B,18'h3D7D4,18'h20195) f1(clk,reset,symEnDly_mult2,sym2xEnDly_mult2,carrierLoopIOutX2,carrierLoopQOutX2,f1I,f1Q);
 //mfilter #(18'h1B48C,18'h2F47B,18'h3D7D4,18'h20195) f1(clk,reset,symEn,sym2xEn,iIn,qIn,f1I,f1Q);
 
 reg [15:0]sym2xEnShift;
-always @(posedge clk)sym2xEnShift <= {sym2xEnShift[14:0],(sym2xEnDly && !symEnDly)};
+always @(posedge clk)sym2xEnShift <= {sym2xEnShift[14:0],(sym2xEnDly_mult2 && !symEnDly_mult2)};
 //always @(posedge clk)sym2xEnShift <= {sym2xEnShift[14:0],(sym2xEn && !symEn)};
 
 wire rotEna = sym2xEnShift[4];
 wire trellEna = sym2xEnShift[11];
-
-parameter ROT_BITS = 10;
 
 wire [ROT_BITS-1:0]
   out0Pt1Real,out1Pt1Real,          out0Pt1Imag,out1Pt1Imag,
@@ -160,12 +189,53 @@ rotator #(ROT_BITS) rotator(
   out1Pt20Real,out1Pt20Imag
   );
 
-
+  
 
 wire decision;
 
-viterbi_top #(size)viterbi_top(
+viterbi_top #(size, ROT_BITS)viterbi_top(
   .clk(clk),.reset(reset),.symEn(trellEna),
+  .out0Pt1Real(out0Pt1Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)])    ,.out0Pt1Imag(out0Pt1Imag),
+  .out1Pt1Real(out1Pt1Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)])    ,.out1Pt1Imag(out1Pt1Imag),
+  .out0Pt2Real(out0Pt2Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)])    ,.out0Pt2Imag(out0Pt2Imag),
+  .out1Pt2Real(out1Pt2Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)])    ,.out1Pt2Imag(out1Pt2Imag),
+  .out0Pt3Real(out0Pt3Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)])    ,.out0Pt3Imag(out0Pt3Imag),
+  .out1Pt3Real(out1Pt3Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)])    ,.out1Pt3Imag(out1Pt3Imag),
+  .out0Pt4Real(out0Pt4Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)])    ,.out0Pt4Imag(out0Pt4Imag),
+  .out1Pt4Real(out1Pt4Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)])    ,.out1Pt4Imag(out1Pt4Imag),
+  .out0Pt5Real(out0Pt5Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)])    ,.out0Pt5Imag(out0Pt5Imag),
+  .out1Pt5Real(out1Pt5Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)])    ,.out1Pt5Imag(out1Pt5Imag),
+  .out0Pt6Real(out0Pt6Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)])    ,.out0Pt6Imag(out0Pt6Imag),
+  .out1Pt6Real(out1Pt6Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)])    ,.out1Pt6Imag(out1Pt6Imag),
+  .out0Pt7Real(out0Pt7Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)])    ,.out0Pt7Imag(out0Pt7Imag),
+  .out1Pt7Real(out1Pt7Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)])    ,.out1Pt7Imag(out1Pt7Imag),
+  .out0Pt8Real(out0Pt8Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)])    ,.out0Pt8Imag(out0Pt8Imag),
+  .out1Pt8Real(out1Pt8Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)])    ,.out1Pt8Imag(out1Pt8Imag),
+  .out0Pt9Real(out0Pt9Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)])    ,.out0Pt9Imag(out0Pt9Imag),
+  .out1Pt9Real(out1Pt9Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)])    ,.out1Pt9Imag(out1Pt9Imag),
+  .out0Pt10Real(out0Pt10Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),.out0Pt10Imag(out0Pt10Imag),
+  .out1Pt10Real(out1Pt10Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),.out1Pt10Imag(out1Pt10Imag),
+  .out0Pt11Real(out0Pt11Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),.out0Pt11Imag(out0Pt11Imag),
+  .out1Pt11Real(out1Pt11Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),.out1Pt11Imag(out1Pt11Imag),
+  .out0Pt12Real(out0Pt12Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),.out0Pt12Imag(out0Pt12Imag),
+  .out1Pt12Real(out1Pt12Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),.out1Pt12Imag(out1Pt12Imag),
+  .out0Pt13Real(out0Pt13Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),.out0Pt13Imag(out0Pt13Imag),
+  .out1Pt13Real(out1Pt13Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),.out1Pt13Imag(out1Pt13Imag),
+  .out0Pt14Real(out0Pt14Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),.out0Pt14Imag(out0Pt14Imag),
+  .out1Pt14Real(out1Pt14Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),.out1Pt14Imag(out1Pt14Imag),
+  .out0Pt15Real(out0Pt15Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),.out0Pt15Imag(out0Pt15Imag),
+  .out1Pt15Real(out1Pt15Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),.out1Pt15Imag(out1Pt15Imag),
+  .out0Pt16Real(out0Pt16Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),.out0Pt16Imag(out0Pt16Imag),
+  .out1Pt16Real(out1Pt16Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),.out1Pt16Imag(out1Pt16Imag),
+  .out0Pt17Real(out0Pt17Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),.out0Pt17Imag(out0Pt17Imag),
+  .out1Pt17Real(out1Pt17Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),.out1Pt17Imag(out1Pt17Imag),
+  .out0Pt18Real(out0Pt18Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),.out0Pt18Imag(out0Pt18Imag),
+  .out1Pt18Real(out1Pt18Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),.out1Pt18Imag(out1Pt18Imag),
+  .out0Pt19Real(out0Pt19Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),.out0Pt19Imag(out0Pt19Imag),
+  .out1Pt19Real(out1Pt19Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),.out1Pt19Imag(out1Pt19Imag),
+  .out0Pt20Real(out0Pt20Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),.out0Pt20Imag(out0Pt20Imag),
+  .out1Pt20Real(out1Pt20Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),.out1Pt20Imag(out1Pt20Imag),
+/* -----\/----- EXCLUDED -----\/-----
   .out0Pt1Real(out0Pt1Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),.out0Pt1Imag(out0Pt1Imag[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),
   .out1Pt1Real(out1Pt1Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),.out1Pt1Imag(out1Pt1Imag[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),
   .out0Pt2Real(out0Pt2Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),.out0Pt2Imag(out0Pt2Imag[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),
@@ -206,10 +276,47 @@ viterbi_top #(size)viterbi_top(
   .out1Pt19Real(out1Pt19Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),.out1Pt19Imag(out1Pt19Imag[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),
   .out0Pt20Real(out0Pt20Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),.out0Pt20Imag(out0Pt20Imag[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),
   .out1Pt20Real(out1Pt20Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),.out1Pt20Imag(out1Pt20Imag[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),
+ -----/\----- EXCLUDED -----/\----- */
   .decision(decision),.phaseError(phaseError)
   );
 
 
+
+
+   reg [7:0]            dataBits;
+   reg [7:0]            phErrShft;
+  
+   reg                  satPos,satNeg;
+   wire                 sign = phaseError[9];
+
+   always @(posedge clk) begin
+      //if (symEn | sym2xEn) begin
+         dataBits <= {phaseError[4:0], 3'b000};
+         satPos <= !sign && (phaseError[9:4] != 6'b000000);
+         satNeg <=  sign && (phaseError[9:4] != 6'b111111);
+         if (satPos) begin
+            phErrShft <= 8'hff;
+         end
+         else if (satNeg) begin
+            phErrShft <= 8'h11;
+         end
+         else begin
+            phErrShft <= dataBits;
+         end
+      //end   
+   end
+
+
+
+
+
+
+
+
+
+
+
+   
 /******************************************************************************
                                DAC Output Mux
 ******************************************************************************/
@@ -232,11 +339,11 @@ always @(posedge clk) begin
             end
         `DAC_TRELLIS_PHERR: begin
             dac0Data <= {phaseError,10'b0};
-            dac0Sync <= symEnDly;
+            dac0Sync <= symEnDly_mult2;
             end
         default: begin
             dac0Data <= {phaseError,10'b0};
-            dac0Sync <= symEnDly;
+            dac0Sync <= symEnDly_mult2;
             end
         endcase
 
@@ -251,11 +358,11 @@ always @(posedge clk) begin
             end
         `DAC_TRELLIS_PHERR: begin
             dac1Data <= {phaseError,10'b0};
-            dac1Sync <= symEnDly;
+            dac1Sync <= symEnDly_mult2;
             end
         default: begin
             dac1Data <= {phaseError,10'b0};
-            dac1Sync <= symEnDly;
+            dac1Sync <= symEnDly_mult2;
             end
         endcase
 
@@ -270,11 +377,11 @@ always @(posedge clk) begin
             end
         `DAC_TRELLIS_PHERR: begin
             dac2Data <= {phaseError,10'b0};
-            dac2Sync <= symEnDly;
+            dac2Sync <= symEnDly_mult2;
             end
         default: begin
             dac2Data <= {phaseError,10'b0};
-            dac2Sync <= symEnDly;
+            dac2Sync <= symEnDly_mult2;
             end
         endcase
 
@@ -282,12 +389,64 @@ always @(posedge clk) begin
 
 
 
-integer file;
-initial file = $fopen("iInAndqIn_module_trellis.dat") ;
+//integer file;
+//initial file = $fopen("iInAndqIn_module_trellis.dat") ;
+//
+//   always @(posedge clk)begin
+//     $fdisplay(file, "%d\t %d ", $signed(iIn), $signed(qIn));
+//   end
+
+
+integer file1;
+initial file1 = $fopen("multBy2(signed).dat") ;
 
    always @(posedge clk)begin
-     $fdisplay(file, "%d\t %d ", $signed(iIn), $signed(qIn));
+     $fdisplay(file1, "%b %d\t %b %d ", sym2xEnDly, $signed(carrierLoopIOut), sym2xEnDly_mult2, $signed(carrierLoopIOutX2));
    end
 
+   
+endmodule
+
+
+
+
+module multBy2withSat(clk, symEn, sym2xEn, dIn, dOut, symEnDly, sym2xEnDly);
+   
+   input                 clk,symEn, sym2xEn; 
+   input [17:0]          dIn;
+   output [17:0]         dOut;
+   output                symEnDly, sym2xEnDly;
+      
+   reg [17:0]            dataBits;
+   reg [17:0]            dOut;
+  
+   reg                   satPos,satNeg;
+   wire                  sign = dIn[17];
+   always @(posedge clk) begin
+      if (symEn | sym2xEn) begin
+         dataBits <= {dIn[16:0], 1'b0};
+         satPos <= !sign && (dIn[17:16] != 2'b00);
+         satNeg <=  sign && (dIn[17:16] != 2'b11);
+         if (satPos) begin
+            dOut <= 18'h1ffff;
+         end
+         else if (satNeg) begin
+            dOut <= 18'h20001;
+         end
+         else begin
+            dOut <= dataBits;
+         end
+      end   
+   end
+
+   reg [3:0] symEnSr;
+   reg [3:0] sym2xEnSr;
+   always @(posedge clk) begin
+      symEnSr <= {symEnSr[2:0], symEn};
+      sym2xEnSr <= {sym2xEnSr[2:0], sym2xEn};
+   end
+   
+   assign symEnDly = symEnSr[3];
+   assign sym2xEnDly = sym2xEnSr[3];
 
 endmodule

@@ -192,7 +192,12 @@ dds dds(
   .clk(clk),
   .sclr(reset),
   .we(1'b1),
-  .data(newOffset), // Bus [31 : 0] 
+`ifdef S_CURVE_TESTING
+  .data(32'h00020000), // Bus [31 : 0] 
+//  .data(32'h00000000), // Bus [31 : 0] 
+`else  
+  .data(newOffset), // Bus [31 : 0]
+`endif
   .cosine(bReal), // Bus [17 : 0] 
   .sine(bImag)); // Bus [17 : 0] 
 

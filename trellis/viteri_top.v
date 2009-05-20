@@ -34,56 +34,79 @@ module viterbi_top(clk,reset,symEn,
                    decision, phaseError);
    
    parameter            size = 8;
-   input                        clk,reset,symEn;
-   input [size-1:0]     out0Pt1Real, out0Pt1Imag, out1Pt1Real, out1Pt1Imag,
-                                out0Pt2Real, out0Pt2Imag, out1Pt2Real, out1Pt2Imag,
-                                out0Pt3Real, out0Pt3Imag, out1Pt3Real, out1Pt3Imag,
-                                out0Pt4Real, out0Pt4Imag, out1Pt4Real, out1Pt4Imag,
-                                out0Pt5Real, out0Pt5Imag, out1Pt5Real, out1Pt5Imag,
-                                out0Pt6Real, out0Pt6Imag, out1Pt6Real, out1Pt6Imag,
-                                out0Pt7Real, out0Pt7Imag, out1Pt7Real, out1Pt7Imag,
-                                out0Pt8Real, out0Pt8Imag, out1Pt8Real, out1Pt8Imag,
-                                out0Pt9Real, out0Pt9Imag, out1Pt9Real, out1Pt9Imag,
-                                out0Pt10Real,out0Pt10Imag,out1Pt10Real,out1Pt10Imag,
-                                out0Pt11Real,out0Pt11Imag,out1Pt11Real,out1Pt11Imag,
-                                out0Pt12Real,out0Pt12Imag,out1Pt12Real,out1Pt12Imag,
-                                out0Pt13Real,out0Pt13Imag,out1Pt13Real,out1Pt13Imag,
-                                out0Pt14Real,out0Pt14Imag,out1Pt14Real,out1Pt14Imag,
-                                out0Pt15Real,out0Pt15Imag,out1Pt15Real,out1Pt15Imag,
-                                out0Pt16Real,out0Pt16Imag,out1Pt16Real,out1Pt16Imag,
-                                out0Pt17Real,out0Pt17Imag,out1Pt17Real,out1Pt17Imag,
-                                out0Pt18Real,out0Pt18Imag,out1Pt18Real,out1Pt18Imag,
-                                out0Pt19Real,out0Pt19Imag,out1Pt19Real,out1Pt19Imag,
-                                out0Pt20Real,out0Pt20Imag,out1Pt20Real,out1Pt20Imag;
+   parameter            ROT_BITS = 10;
+   input                clk,reset,symEn;
+   input [size-1:0]     out0Pt1Real, out1Pt1Real,  
+                        out0Pt2Real, out1Pt2Real,  
+                        out0Pt3Real, out1Pt3Real,  
+                        out0Pt4Real, out1Pt4Real,  
+                        out0Pt5Real, out1Pt5Real,  
+                        out0Pt6Real, out1Pt6Real,  
+                        out0Pt7Real, out1Pt7Real,  
+                        out0Pt8Real, out1Pt8Real,  
+                        out0Pt9Real, out1Pt9Real,  
+                        out0Pt10Real,out1Pt10Real, 
+                        out0Pt11Real,out1Pt11Real, 
+                        out0Pt12Real,out1Pt12Real, 
+                        out0Pt13Real,out1Pt13Real, 
+                        out0Pt14Real,out1Pt14Real, 
+                        out0Pt15Real,out1Pt15Real, 
+                        out0Pt16Real,out1Pt16Real, 
+                        out0Pt17Real,out1Pt17Real, 
+                        out0Pt18Real,out1Pt18Real, 
+                        out0Pt19Real,out1Pt19Real, 
+                        out0Pt20Real,out1Pt20Real;
+
+   input [ROT_BITS-1:0] out0Pt1Imag, out1Pt1Imag,     
+                        out0Pt2Imag, out1Pt2Imag,     
+                        out0Pt3Imag, out1Pt3Imag,     
+                        out0Pt4Imag, out1Pt4Imag,     
+                        out0Pt5Imag, out1Pt5Imag,     
+                        out0Pt6Imag, out1Pt6Imag,     
+                        out0Pt7Imag, out1Pt7Imag,        
+                        out0Pt8Imag, out1Pt8Imag,     
+                        out0Pt9Imag,  out1Pt9Imag,    
+                        out0Pt10Imag, out1Pt10Imag,
+                        out0Pt11Imag, out1Pt11Imag,
+                        out0Pt12Imag, out1Pt12Imag,
+                        out0Pt13Imag, out1Pt13Imag,
+                        out0Pt14Imag, out1Pt14Imag,
+                        out0Pt15Imag, out1Pt15Imag,
+                        out0Pt16Imag, out1Pt16Imag,
+                        out0Pt17Imag, out1Pt17Imag,
+                        out0Pt18Imag, out1Pt18Imag,
+                        out0Pt19Imag, out1Pt19Imag,
+                        out0Pt20Imag, out1Pt20Imag;
    
-   output                       decision;
+   output               decision;
    output [size-1:0]    phaseError;
    wire [(size-1)+4:0]  accMetOut [0:19];
    wire [19:0]          sel;
    reg [19:0]           sel_1dly;
    wire [4:0]           index;
-   reg [size-1:0]       phaseError;
+   reg [ROT_BITS-1:0]   phaseError;
    reg [1:0]            cnt;
-   reg [size-1:0]       out0Pt1Imag_1dly , out1Pt1Imag_1dly , out0Pt1Imag_2dly , out1Pt1Imag_2dly ,
-                                out0Pt2Imag_1dly , out1Pt2Imag_1dly , out0Pt2Imag_2dly , out1Pt2Imag_2dly ,
-                                out0Pt3Imag_1dly , out1Pt3Imag_1dly , out0Pt3Imag_2dly , out1Pt3Imag_2dly ,
-                                out0Pt4Imag_1dly , out1Pt4Imag_1dly , out0Pt4Imag_2dly , out1Pt4Imag_2dly ,
-                                out0Pt5Imag_1dly , out1Pt5Imag_1dly , out0Pt5Imag_2dly , out1Pt5Imag_2dly ,
-                                out0Pt6Imag_1dly , out1Pt6Imag_1dly , out0Pt6Imag_2dly , out1Pt6Imag_2dly ,
-                                out0Pt7Imag_1dly , out1Pt7Imag_1dly , out0Pt7Imag_2dly , out1Pt7Imag_2dly ,
-                                out0Pt8Imag_1dly , out1Pt8Imag_1dly , out0Pt8Imag_2dly , out1Pt8Imag_2dly ,
-                                out0Pt9Imag_1dly , out1Pt9Imag_1dly , out0Pt9Imag_2dly , out1Pt9Imag_2dly ,
-                                out0Pt10Imag_1dly, out1Pt10Imag_1dly, out0Pt10Imag_2dly, out1Pt10Imag_2dly,
-                                out0Pt11Imag_1dly, out1Pt11Imag_1dly, out0Pt11Imag_2dly, out1Pt11Imag_2dly,
-                                out0Pt12Imag_1dly, out1Pt12Imag_1dly, out0Pt12Imag_2dly, out1Pt12Imag_2dly,
-                                out0Pt13Imag_1dly, out1Pt13Imag_1dly, out0Pt13Imag_2dly, out1Pt13Imag_2dly,
-                                out0Pt14Imag_1dly, out1Pt14Imag_1dly, out0Pt14Imag_2dly, out1Pt14Imag_2dly,
-                                out0Pt15Imag_1dly, out1Pt15Imag_1dly, out0Pt15Imag_2dly, out1Pt15Imag_2dly,
-                                out0Pt16Imag_1dly, out1Pt16Imag_1dly, out0Pt16Imag_2dly, out1Pt16Imag_2dly,
-                                out0Pt17Imag_1dly, out1Pt17Imag_1dly, out0Pt17Imag_2dly, out1Pt17Imag_2dly,
-                                out0Pt18Imag_1dly, out1Pt18Imag_1dly, out0Pt18Imag_2dly, out1Pt18Imag_2dly,
-                                out0Pt19Imag_1dly, out1Pt19Imag_1dly, out0Pt19Imag_2dly, out1Pt19Imag_2dly,
-                                out0Pt20Imag_1dly, out1Pt20Imag_1dly, out0Pt20Imag_2dly, out1Pt20Imag_2dly;
+
+   reg [ROT_BITS-1:0]   out0Pt1Imag_1dly , out1Pt1Imag_1dly , out0Pt1Imag_2dly , out1Pt1Imag_2dly ,
+                        out0Pt2Imag_1dly , out1Pt2Imag_1dly , out0Pt2Imag_2dly , out1Pt2Imag_2dly ,
+                        out0Pt3Imag_1dly , out1Pt3Imag_1dly , out0Pt3Imag_2dly , out1Pt3Imag_2dly ,
+                        out0Pt4Imag_1dly , out1Pt4Imag_1dly , out0Pt4Imag_2dly , out1Pt4Imag_2dly ,
+                        out0Pt5Imag_1dly , out1Pt5Imag_1dly , out0Pt5Imag_2dly , out1Pt5Imag_2dly ,
+                        out0Pt6Imag_1dly , out1Pt6Imag_1dly , out0Pt6Imag_2dly , out1Pt6Imag_2dly ,
+                        out0Pt7Imag_1dly , out1Pt7Imag_1dly , out0Pt7Imag_2dly , out1Pt7Imag_2dly ,
+                        out0Pt8Imag_1dly , out1Pt8Imag_1dly , out0Pt8Imag_2dly , out1Pt8Imag_2dly ,
+                        out0Pt9Imag_1dly , out1Pt9Imag_1dly , out0Pt9Imag_2dly , out1Pt9Imag_2dly ,
+                        out0Pt10Imag_1dly, out1Pt10Imag_1dly, out0Pt10Imag_2dly, out1Pt10Imag_2dly,
+                        out0Pt11Imag_1dly, out1Pt11Imag_1dly, out0Pt11Imag_2dly, out1Pt11Imag_2dly,
+                        out0Pt12Imag_1dly, out1Pt12Imag_1dly, out0Pt12Imag_2dly, out1Pt12Imag_2dly,
+                        out0Pt13Imag_1dly, out1Pt13Imag_1dly, out0Pt13Imag_2dly, out1Pt13Imag_2dly,
+                        out0Pt14Imag_1dly, out1Pt14Imag_1dly, out0Pt14Imag_2dly, out1Pt14Imag_2dly,
+                        out0Pt15Imag_1dly, out1Pt15Imag_1dly, out0Pt15Imag_2dly, out1Pt15Imag_2dly,
+                        out0Pt16Imag_1dly, out1Pt16Imag_1dly, out0Pt16Imag_2dly, out1Pt16Imag_2dly,
+                        out0Pt17Imag_1dly, out1Pt17Imag_1dly, out0Pt17Imag_2dly, out1Pt17Imag_2dly,
+                        out0Pt18Imag_1dly, out1Pt18Imag_1dly, out0Pt18Imag_2dly, out1Pt18Imag_2dly,
+                        out0Pt19Imag_1dly, out1Pt19Imag_1dly, out0Pt19Imag_2dly, out1Pt19Imag_2dly,
+                        out0Pt20Imag_1dly, out1Pt20Imag_1dly, out0Pt20Imag_2dly, out1Pt20Imag_2dly;
    
 
 `ifdef SIMULATE
