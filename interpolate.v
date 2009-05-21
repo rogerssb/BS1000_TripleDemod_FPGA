@@ -23,8 +23,9 @@ input   [17:0]dataIn;
 output  [17:0]dataOut;
 
 // Register interface
-wire [17:0]mantissa;
-wire [4:0]exponent;
+wire    [17:0]  testValue;
+wire    [17:0]  mantissa;
+wire    [4:0]   exponent;
 interpRegs regs  (
     .cs(cs),
     .addr(addr),
@@ -32,6 +33,8 @@ interpRegs regs  (
     .dataOut(dout),
     .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
     .bypass(bypass),
+    .test(test),
+    .testValue(testValue),
     .exponent(exponent),
     .mantissa(mantissa)
     );
@@ -78,7 +81,10 @@ mpy18x18 mantissaScaler (
 
 reg     [17:0]  dataOut;
 always @(posedge clk) begin
-    if (bypass) begin
+    if (test) begin
+        dataOut <= testValue;
+        end
+    else if (bypass) begin
         if (clkEn) begin
             dataOut <= dataIn;
             end

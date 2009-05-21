@@ -2,6 +2,7 @@
 `timescale 1ns/100ps
 
 `define ALDEC
+`define TRELLIS
 
 `define ENABLE_AGC
 //`define ADD_NOISE
@@ -133,7 +134,7 @@ always @(negedge modClk or posedge reset) begin
         altData <= 0;
         altCnt <= 0;
         end
-    else if (altCnt == 1) begin
+    else if (altCnt == 0) begin
         altData <= ~altData;
         altCnt <= 0;
         end
@@ -664,7 +665,7 @@ initial begin
     // Init the trellis carrier loop
     write32(createAddress(`TRELLIS_SPACE,`LF_CONTROL),9);    // Forces the lag acc and the error term to be zero
     write32(createAddress(`TRELLIS_SPACE,`LF_LEAD_LAG),32'h0010_0000);   
-		    
+                    
     // Init the downcoverter register set
     write32(createAddress(`DDCSPACE,`DDC_CONTROL),0);
     write32(createAddress(`DDCSPACE,`DDC_CENTER_FREQ), carrierFreq);
@@ -750,23 +751,23 @@ initial begin
     write32(createAddress(`BITSYNCSPACE,`LF_CONTROL),0);  
 
     // Wait 2 bit periods
-    #(4*bitrateSamplesInt*C) ;
+    #(10*bitrateSamplesInt*C) ;
 
-    // Enable the AFC loop and invert the error
-    // write32(createAddress(`CARRIERSPACE,`LF_CONTROL),2);  
-    #(160*C) ;
+    // Create a reset to clear the accumulator in the trellis 
+    trellis.viterbi_top.simReset = 1;
+    #(6*C) ;
+    trellis.viterbi_top.simReset = 0;
+        
+
+    // Enable the trellis carrier loop
+    #(10*bitrateSamplesInt*C) ;
     write32(createAddress(`TRELLIS_SPACE,`LF_CONTROL),0);
 
     `ifdef ENABLE_AGC
     // Enable the AGC loop
     write32(createAddress(`CHAGCSPACE,`ALF_CONTROL),0);              
     `endif
-	
-    // Create a reset to clear the accumulator in the trellis 
-    trellis.viterbi_top.simReset = 1;
-    #(6*C) ;
-    trellis.viterbi_top.simReset = 0;
-	
+        
     // Wait for some data to pass thru
     #(2*100*bitrateSamplesInt*C) ;
     `ifdef MATLAB_VECTORS

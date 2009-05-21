@@ -76,6 +76,7 @@ wire    [2:0]   demodMode;
 wire    [1:0]   bitsyncMode;
 wire    [15:0]  falseLockAlpha;
 wire    [15:0]  falseLockThreshold;
+wire    [4:0]   amTC;
 reg             highFreqOffset;
 wire    [31:0]  demodDout;
 demodRegs demodRegs(
@@ -93,7 +94,8 @@ demodRegs demodRegs(
     .dac1Select(dac1Select),
     .dac2Select(dac2Select),
     .falseLockAlpha(falseLockAlpha),
-    .falseLockThreshold(falseLockThreshold)
+    .falseLockThreshold(falseLockThreshold),
+    .amTC(amTC)
     );
 
 /******************************************************************************
@@ -132,114 +134,6 @@ channelAGC channelAGC(
     );
     
 
-//`define RESAMPLER_FIRST
-`ifdef RESAMPLER_FIRST
-/******************************************************************************
-                                  Resampler
-******************************************************************************/
-wire    [17:0]  iResamp,qResamp;
-wire    [31:0]  resamplerFreqOffset;
-wire    [31:0]  resampDout;
-resampler resampler(
-    .clk(clk), .reset(reset), .sync(ddcSync),
-    .wr0(wr0) , .wr1(wr1), .wr2(wr2), .wr3(wr3),
-    .addr(addr),
-    .din(din),
-    .dout(resampDout),
-    .resamplerFreqOffset(resamplerFreqOffset),
-    .offsetEn(1'b1),
-    .iIn(iDdc),
-    .qIn(qDdc),
-    .iOut(iResamp),
-    .qOut(qResamp),
-    .syncOut(resampSync)
-    );
-
-/******************************************************************************
-                               Symbol Offset Deskew
-******************************************************************************/
-reg     [17:0]  iSym,qSym,qDelay;
-always @(posedge clk) begin
-    if (resampSync) begin
-        iSym <= iResamp;
-        qDelay <= qResamp;
-        if (demodMode == `MODE_OQPSK) begin
-            qSym <= qDelay;
-            end
-        else begin
-            qSym <= qResamp;
-            end
-        end
-    end
-
-/******************************************************************************
-                           Phase/Freq/Mag Detector
-******************************************************************************/
-wire    [7:0]   phase;
-wire    [7:0]   phaseError;
-wire    [7:0]   freq;
-wire    [7:0]   freqError;
-wire    [8:0]   mag;
-fmDemod fmDemod( 
-    .clk(clk), .reset(reset), .sync(resampSync),
-    .iFm(iSym),.qFm(qSym),
-    .demodMode(demodMode),
-    .phase(phase),
-    .phaseError(phaseError),
-    .freq(freq),
-    .freqError(freqError),
-    .mag(mag)
-    );
-
-
-/******************************************************************************
-                             AFC/Sweep/Costas Loop
-******************************************************************************/
-wire    [17:0]   offsetError;
-wire    [31:0]  freqDout;
-carrierLoop carrierLoop(
-    .clk(clk), .reset(reset),
-    .resampSync(resampSync),
-    .ddcSync(ddcSync),
-    .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
-    .addr(addr),
-    .din(din),
-    .dout(freqDout),
-    .demodMode(demodMode),
-    .phase(phase),
-    .freq(freq),
-    .offsetError(offsetError[17:10]),
-    .offsetErrorEn(offsetErrorEn),
-    .carrierFreqOffset(carrierFreqOffset),
-    .carrierFreqEn(carrierOffsetEn)
-    );
-
-/******************************************************************************
-                                Bitsync Loop
-******************************************************************************/
-wire    [31:0]  bitsyncDout;
-wire    [17:0]  demodData;
-bitsync bitsync(
-    .sampleClk(clk), .reset(reset), 
-    .symTimes2Sync(resampSync),
-    .demodMode(demodMode),
-    .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
-    .addr(addr),
-    .din(din),
-    .dout(bitsyncDout),
-    .i({freq,10'b0}),.q(),
-    .offsetError(offsetError),
-    .offsetErrorEn(offsetErrorEn),
-    .symClk(symClk),
-    .symData(demodData),
-    .bitClk(demodClk),
-    .bitData(demodBit),
-    .sampleFreq(resamplerFreqOffset)
-    );
-
-
-`else   // RESAMPLER_FIRST
-
 /******************************************************************************
                            Phase/Freq/Mag Detector
 ******************************************************************************/
@@ -258,6 +152,27 @@ fmDemod fmDemod(
     .freqError(freqError),
     .mag(mag)
     );
+
+/******************************************************************************
+                           Magnitude Filter
+******************************************************************************/
+reg     [9:0]  magError;
+wire    [39:0]  magAccum;
+always @(posedge clk) begin
+    if (ddcSync) begin
+        magError <= {1'b0,mag} - magAccum[39:30];
+        end
+    end
+lagGain magLoop(
+    .clk(clk), .clkEn(ddcSync), .reset(reset), 
+    .error(magError[9:2]),
+    .lagExp(amTC),
+    .limit(32'h7fffffff),
+    .clearAccum(1'b0),
+    .sweepEnable(1'b0),
+    .lagAccum(magAccum)
+    );
+
 
 /******************************************************************************
                              False Lock Detector
@@ -428,8 +343,6 @@ assign symTimes2Sync = resampSync;
 assign symSync = symClk & resampSync;
 assign trellisSymSync = !symClk & resampSync;
 
-`endif  // RESAMPLER_FIRST
-
 /******************************************************************************
                                Data Output Mux
 ******************************************************************************/
@@ -485,7 +398,8 @@ always @(posedge clk) begin
             dac0Sync <= ddcSync;
             end
         `DAC_MAG: begin
-            dac0Data <= {~mag[8],mag[7:0],9'b0};
+            //dac0Data <= {~mag[8],mag[7:0],9'b0};
+            dac0Data <= {~magAccum[38],magAccum[37:21]};
             dac0Sync <= ddcSync;
             end
         `DAC_PHERROR: begin
@@ -541,7 +455,8 @@ always @(posedge clk) begin
             dac1Sync <= ddcSync;
             end
         `DAC_MAG: begin
-            dac1Data <= {~mag[8],mag[7:0],9'b0};
+            //dac1Data <= {~mag[8],mag[7:0],9'b0};
+            dac1Data <= {~magAccum[38],magAccum[37:21]};
             dac1Sync <= ddcSync;
             end
         `DAC_PHERROR: begin
@@ -596,7 +511,8 @@ always @(posedge clk) begin
             dac2Sync <= ddcSync;
             end
         `DAC_MAG: begin
-            dac2Data <= {~mag[8],mag[7:0],9'b0};
+            //dac2Data <= {~mag[8],mag[7:0],9'b0};
+            dac2Data <= {~magAccum[38],magAccum[37:21]};
             dac2Sync <= ddcSync;
             end
         `DAC_PHERROR: begin

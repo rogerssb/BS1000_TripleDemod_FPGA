@@ -5,9 +5,9 @@ DigitalThreshold=
 [Settings]
 Version=Silvaco4.10.0.R
 [Analyzer]
-C0Width=165
+C0Width=58
 C1Width=58
-C2Width=92
+C2Width=58
 GotoSource=N
 MinScale=
 MaxScale=
@@ -17,7 +17,7 @@ MaxScale=
 [DebugMode]
 CommandLine=+define+SIMULATE
 [View]
-1=Last 0.000ns 440571.499ns 11872.874ns 61265.451ns 52153.851ns
+1=Last 11548.462ns 101499.333ns 2118.984ns 61265.451ns 52153.851ns
 [Plusargs]
 0=memsave+test.impulse
 [Group1]
@@ -31,6 +31,7 @@ Name="SR"
 6="test.resampler : \iSR[6] [17:0]" default
 7="test.resampler : \iSR[7] [17:0]" default
 8="test.resampler : \iSR[8] [17:0]" default
+OpenGroup=
 [Group2]
 Name="COEFS"
 0="test.resampler : tap0Coef[17:0]" default
@@ -42,6 +43,7 @@ Name="COEFS"
 6="test.resampler : tap6Coef[17:0]" default
 7="test.resampler : tap7Coef[17:0]" default
 8="test.resampler : tap8Coef[17:0]" default
+OpenGroup=
 [Group3]
 Name="resampler"
 0="test.resampler : iSum[35:0]" default
@@ -57,7 +59,6 @@ Name="resampler"
 10="test.resampler : i7Product[35:0]" default
 11="test.resampler : i8Product[35:0]" default
 12="test.resampler : resampleDelay[5:0]" default
-OpenGroup=
 [Files]
 0=resampler.v
 1=..\coregen\resamplerTap8.v
@@ -109,3 +110,4 @@ OpenGroup=Yes
 1=SR : 1 : 1 : 0
 2=COEFS : 2 : 1 : 0
 3=resampler : 3 : 1 : 0
+[Bookmarks]

@@ -17,7 +17,8 @@ module demodRegs(
     dac1Select,
     dac2Select,
     falseLockAlpha,
-    falseLockThreshold
+    falseLockThreshold,
+    amTC
     );
 
 input   [11:0]addr;
@@ -51,6 +52,9 @@ reg     [15:0]  falseLockAlpha;
 output  [15:0]  falseLockThreshold;
 reg     [15:0]  falseLockThreshold;
 
+output  [4:0]   amTC;
+reg     [4:0]   amTC;
+
 always @(negedge wr0) begin
     if (cs) begin
         casex (addr)
@@ -62,6 +66,9 @@ always @(negedge wr0) begin
                 end
             `DEMOD_FALSELOCK: begin
                 falseLockAlpha[7:0] <= dataIn[7:0];
+                end
+            `DEMOD_AMTC: begin
+                amTC <= dataIn[4:0];
                 end
             default: ;
             endcase
@@ -116,7 +123,8 @@ always @(addr or cs or
          bitsyncMode or
          dac0Select or dac1Select or dac2Select or
          falseLockAlpha or falseLockThreshold or 
-         highFreqOffset or bitsyncLock or demodLock
+         highFreqOffset or bitsyncLock or demodLock or
+         amTC
          ) begin
     if (cs) begin
         casex (addr)
@@ -124,6 +132,7 @@ always @(addr or cs or
             `DEMOD_DACSELECT:   dataOut <= {12'h0,dac2Select,4'h0,dac1Select,4'h0,dac0Select};
             `DEMOD_FALSELOCK:   dataOut <= {falseLockThreshold,falseLockAlpha};
             `DEMOD_STATUS:      dataOut <= {29'h0,highFreqOffset,bitsyncLock,demodLock};
+            `DEMOD_AMTC:        dataOut <= {27'b0,amTC};
             default:            dataOut <= 32'h0;
             endcase
         end

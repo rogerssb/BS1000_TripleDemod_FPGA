@@ -424,7 +424,7 @@ reg reset,clk;
 parameter SAMPLE_FREQ = 9.333333e6;
 parameter HC = 1e9/SAMPLE_FREQ/2;
 parameter C = 2*HC;
-parameter syncDecimation = 10;
+parameter syncDecimation = 2;
 reg clken;
 always #HC clk = clk^clken;
 
@@ -608,7 +608,7 @@ initial begin
     clk = 0;
     resampler.resampRegs.resampleRate = 32'h0;
     //resamplerFreqHz = 23.0/32.0/syncDecimation*10e6;
-    resamplerFreqHz = 500000.0;
+    resamplerFreqHz = 2400000.0;
     carrierFreqHz = resamplerFreqHz/4.0 + resamplerFreqHz/512.0;
 
     // Turn on the clock

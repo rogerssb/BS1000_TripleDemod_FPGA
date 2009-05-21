@@ -20,7 +20,7 @@
 `define DAC_SPACE       12'b1111_xxxx_xxxx
 
 // Define the global radio memory map
-`define DEMOD_CONTROL   12'bxxxx_xxxx_00xx
+`define DEMOD_CONTROL   12'bxxxx_xxx0_00xx
 `define MODE_AM             3'b000
 `define MODE_PM             3'b001
 `define MODE_FM             3'b010
@@ -32,7 +32,7 @@
 `define MODE_SINGLE_RAIL    2'b00
 `define MODE_DUAL_RAIL      2'b01
 `define MODE_IND_RAIL       2'b10
-`define DEMOD_DACSELECT 12'bxxxx_xxxx_01xx
+`define DEMOD_DACSELECT 12'bxxxx_xxx0_01xx
 `define DAC_I               4'b0000
 `define DAC_Q               4'b0001
 `define DAC_ISYM            4'b0010
@@ -48,8 +48,9 @@
 `define DAC_TRELLIS_I       4'b1100
 `define DAC_TRELLIS_Q       4'b1101
 `define DAC_TRELLIS_PHERR   4'b1110
-`define DEMOD_FALSELOCK 12'bxxxx_xxxx_10xx
-`define DEMOD_STATUS    12'bxxxx_xxxx_11xx
+`define DEMOD_FALSELOCK 12'bxxxx_xxx0_10xx
+`define DEMOD_STATUS    12'bxxxx_xxx0_11xx
+`define DEMOD_AMTC      12'bxxxx_xxx1_00xx
 
 // Define the FM memory map
 `define FM_MOD_FREQ     12'bxxxx_xxxx_00xx
@@ -88,6 +89,7 @@
 `define INTERP_CONTROL  12'bxxxx_xxxx_00xx
 `define INTERP_EXPONENT 12'bxxxx_xxxx_01xx
 `define INTERP_MANTISSA 12'bxxxx_xxxx_10xx
+`define INTERP_TEST     12'bxxxx_xxxx_11xx
 
 
 // Define the MISCELLANEOUS locations

@@ -9,6 +9,8 @@ module interpRegs(
     dataOut,
     wr0, wr1, wr2, wr3,
     bypass,
+    test,
+    testValue,
     exponent,
     mantissa
     );
@@ -28,13 +30,23 @@ reg     [17:0] mantissa;
 output  bypass;
 reg     bypass;
 
+output  test;
+reg     test;
+
+output  [17:0]  testValue;
+reg     [17:0]  testValue;
+
 
 always @(negedge wr0) begin
     if (cs) begin
         casex (addr)
-            `INTERP_CONTROL:    bypass <= dataIn[0];
+            `INTERP_CONTROL: begin
+                                bypass <= dataIn[0];
+                                test <= dataIn[1];
+                end
             `INTERP_MANTISSA:   mantissa[7:0] <= dataIn[7:0];
             `INTERP_EXPONENT:   exponent[4:0] <= dataIn[4:0];
+            `INTERP_TEST:       testValue[7:0] <= dataIn[7:0];
             default:  ;
             endcase
         end
@@ -44,6 +56,7 @@ always @(negedge wr1) begin
     if (cs) begin
         casex (addr)
             `INTERP_MANTISSA:   mantissa[15:8] <= dataIn[15:8];
+            `INTERP_TEST:       testValue[15:8] <= dataIn[15:8];
             default:  ;
             endcase
         end
@@ -53,6 +66,7 @@ always @(negedge wr2) begin
     if (cs) begin
         casex (addr)
             `INTERP_MANTISSA:   mantissa[17:16] <= dataIn[17:16];
+            `INTERP_TEST:       testValue[17:16] <= dataIn[17:16];
             default:  ;
             endcase
         end
@@ -61,14 +75,17 @@ always @(negedge wr2) begin
 reg [31:0]dataOut;
 always @(cs or addr or
          bypass or
+         test or
          exponent or 
-         mantissa)
+         mantissa or
+         testValue)
     begin
     if (cs) begin
         casex (addr)
-            `INTERP_CONTROL:    dataOut <= {31'h0,bypass};
+            `INTERP_CONTROL:    dataOut <= {30'h0,test,bypass};
             `INTERP_MANTISSA:   dataOut <= {14'bx,mantissa};
             `INTERP_EXPONENT:   dataOut <= {27'bx,exponent};
+            `INTERP_TEST:       dataOut <= {14'b0,testValue};
             default:            dataOut <= 32'hx;
             endcase
         end

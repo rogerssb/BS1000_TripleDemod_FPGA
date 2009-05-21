@@ -79,7 +79,7 @@ module viterbi_top(clk,reset,symEn,
                         out0Pt20Imag, out1Pt20Imag;
    
    output               decision;
-   output [size-1:0]    phaseError;
+   output [ROT_BITS-1:0]    phaseError;
    wire [(size-1)+4:0]  accMetOut [0:19];
    wire [19:0]          sel;
    reg [19:0]           sel_1dly;
