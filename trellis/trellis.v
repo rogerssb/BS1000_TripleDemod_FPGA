@@ -24,7 +24,8 @@ module trellis(
     dac1Data,
     dac2Sync,
     dac2Data,
-    decision
+    decision,
+    symEn_tbtDly
     );
 
 parameter size = 8;
@@ -44,7 +45,8 @@ output  [17:0]  dac1Data;
 output          dac2Sync;
 output  [17:0]  dac2Data;
 output          decision;
-
+output          symEn_tbtDly;
+   
 
 wire    [ROT_BITS-1:0]  phaseError;
 
@@ -280,6 +282,7 @@ viterbi_top #(size, ROT_BITS)viterbi_top(
   .out1Pt20Real(out1Pt20Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),.out1Pt20Imag(out1Pt20Imag[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),
  -----/\----- EXCLUDED -----/\----- */
   .decision(decision),
+  .symEn_tbtDly(symEn_tbtDly),
   .phaseError(phaseError),
   .symEn_phErr(symEn_phErr)
   );

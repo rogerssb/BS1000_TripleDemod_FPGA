@@ -167,8 +167,10 @@ always @(negedge modClk or posedge reset) begin
     randData <= sr[0];
     end
 
-//wire modData = randData;
-wire modData = altData;
+wire modData = randData;
+//wire modData = altData;
+
+
 /******************************************************************************
                             Instantiate a Modulator
 ******************************************************************************/
@@ -443,20 +445,21 @@ always @(posedge clk) begin
 
 trellis trellis
   (
-   .clk      (clk),
-   .reset    (reset),
-   .symEn    (symEn),
-   .sym2xEn  (sym2xEn),
-   .iIn      (iIn),
-   .qIn      (qIn),
-   .wr0      (we0),
-   .wr1      (we1),
-   .wr2      (we2),
-   .wr3      (we3),
-   .addr     (a),
-   .din      (d),
-   .dout     (),
-   .decision (decision)
+   .clk          (clk),
+   .reset        (reset),
+   .symEn        (symEn),
+   .sym2xEn      (sym2xEn),
+   .iIn          (iIn),
+   .qIn          (qIn),
+   .wr0          (we0),
+   .wr1          (we1),
+   .wr2          (we2),
+   .wr3          (we3),
+   .addr         (a),
+   .din          (d),
+   .dout         (),
+   .decision     (decision),
+   .symEn_tbtDly (symEn_tbtDly)
    );
 `endif
                     
@@ -467,7 +470,8 @@ trellis trellis
 reg [15:0]testSR;
 reg [4:0]testZeroCount;
 reg testData;
-always @(negedge demodClk or reset) begin
+//always @(negedge demodClk or reset) begin
+always @(negedge symEn_tbtDly or reset) begin
     if (reset) begin
         testZeroCount <= 5'b0;
         testSR <= MASK17;
@@ -487,21 +491,24 @@ always @(negedge demodClk or reset) begin
 
 reg [127:0]delaySR;
 reg txDelay;
-always @(negedge demodClk) begin
-    txDelay <= delaySR[19];
+//always @(negedge demodClk) begin
+always @(posedge symEn_tbtDly) begin
+    txDelay <= delaySR[21];
     delaySR <= {delaySR[126:0],testData};
     end
 
-reg testBits;
+reg testBits;  
 initial testBits = 0;
 integer bitErrors;
 initial bitErrors = 0;
 integer testBitCount;
 initial testBitCount = 0;
-always @(posedge demodClk) begin
+//always @(posedge demodClk) begin
+always @(negedge symEn_tbtDly) begin
     if (testBits) begin
         testBitCount <= testBitCount + 1;
-        if (demodBit != txDelay) begin
+        //if (demodBit != txDelay) begin
+        if (decision != txDelay) begin
             bitErrors <= bitErrors + 1;
             end
         end
@@ -761,7 +768,7 @@ initial begin
 
     // Enable the trellis carrier loop
     #(10*bitrateSamplesInt*C) ;
-    write32(createAddress(`TRELLIS_SPACE,`LF_CONTROL),0);
+    write32(createAddress(`TRELLIS_SPACE,`LF_CONTROL),2);
 
     `ifdef ENABLE_AGC
     // Enable the AGC loop
@@ -769,7 +776,11 @@ initial begin
     `endif
         
     // Wait for some data to pass thru
-    #(2*100*bitrateSamplesInt*C) ;
+    #(2*50*bitrateSamplesInt*C) ;
+    // Turn on the BERT
+    testBits = 1;
+    // Run the BERT
+    #(2*200000*bitrateSamplesInt*C) ;
     `ifdef MATLAB_VECTORS
     $fclose(outfile);
     `endif

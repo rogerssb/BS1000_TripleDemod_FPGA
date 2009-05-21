@@ -31,7 +31,7 @@ module viterbi_top(clk,reset,symEn,
                    out0Pt18Real,out0Pt18Imag,out1Pt18Real,out1Pt18Imag,
                    out0Pt19Real,out0Pt19Imag,out1Pt19Real,out1Pt19Imag,
                    out0Pt20Real,out0Pt20Imag,out1Pt20Real,out1Pt20Imag,
-                   decision, phaseError, symEn_phErr);
+                   decision, symEn_tbtDly, phaseError, symEn_phErr);
    
    parameter            size = 8;
    parameter            ROT_BITS = 10;
@@ -79,6 +79,7 @@ module viterbi_top(clk,reset,symEn,
                         out0Pt20Imag, out1Pt20Imag;
    
    output                decision;
+   output                symEn_tbtDly;
    output [ROT_BITS-1:0] phaseError;
    output                symEn_phErr;
    wire [(size-1)+4:0]   accMetOut [0:19];
@@ -182,12 +183,19 @@ module viterbi_top(clk,reset,symEn,
              sel_1dly <= sel;
           end
      end
-   
-         
       
-   traceBackTable #(size) tbu(clk, reset, symEn_maxMetDly, sel_1dly, index, decision, /*oneOrZeroPredecessor*/);
-
-
+   traceBackTable #(size) tbu
+     (
+      .clk(clk), 
+      .reset(reset), 
+      .symEn(symEn_maxMetDly),
+      .sel(sel_1dly), 
+      .index(index),
+      .decision(decision),
+      .oneOrZeroPredecessor(),
+      .symEnDly(symEn_tbtDly)
+      );
+   
    always @(posedge clk)
      begin
           if (symEn) begin

@@ -14,7 +14,8 @@
 module traceBackTable(clk, reset, symEn,
                       sel, index,
                       decision,
-                      oneOrZeroPredecessor
+                      oneOrZeroPredecessor,
+                      symEnDly
                       );
    
    parameter          size = 8;
@@ -22,6 +23,7 @@ module traceBackTable(clk, reset, symEn,
    input [19:0]       sel;   // 20 induvidual decision. 0 or 1 tell us if we trace + or - 7 modulo 20 
    input [4:0]        index; // pointer to the state which has the maximum metric
    output             decision, oneOrZeroPredecessor;
+   output             symEnDly;
    reg                decision, oneOrZeroPredecessor;
    reg [5:0]          tbtSr [19:0];
    reg [2:0]          stateCnt;
@@ -137,22 +139,22 @@ module traceBackTable(clk, reset, symEn,
      else if (stateCnt==2) begin
         //oneOrZeroPredecessor <= tbtSr[index][0]; //This bit is used to find the frequancy offset error term.
 /* -----\/----- EXCLUDED -----\/-----
-	  t0 <= tbtSr[index][0];
-	  t1 <= tbtSr[index][1];
-	  t2 <= tbtSr[index][2];
-	  t3 <= tbtSr[index][3];
-	  t4 <= tbtSr[index][4];
-	  t5 <= tbtSr[index][5];
+        t0 <= tbtSr[index][0];
+        t1 <= tbtSr[index][1];
+        t2 <= tbtSr[index][2];
+        t3 <= tbtSr[index][3];
+        t4 <= tbtSr[index][4];
+        t5 <= tbtSr[index][5];
  -----/\----- EXCLUDED -----/\----- */
      end
      else if (stateCnt == 3) begin
         decision <= tbtSr[tbPtr][3]; 
-	  t0 <= tbtSr[tbPtr][0];
-	  t1 <= tbtSr[tbPtr][1];
-	  t2 <= tbtSr[tbPtr][2];
-	  t3 <= tbtSr[tbPtr][3];
-	  t4 <= tbtSr[tbPtr][4];
-	  t5 <= tbtSr[tbPtr][5];
+        t0 <= tbtSr[tbPtr][0];
+        t1 <= tbtSr[tbPtr][1];
+        t2 <= tbtSr[tbPtr][2];
+        t3 <= tbtSr[tbPtr][3];
+        t4 <= tbtSr[tbPtr][4];
+        t5 <= tbtSr[tbPtr][5];
      end
      else begin
         decision <=  decision;
@@ -167,10 +169,22 @@ module traceBackTable(clk, reset, symEn,
            oneOrZeroPredecessor <= 0;
         end
         else if (symEn) begin
-	     oneOrZeroPredecessor <= sel[index];
+           oneOrZeroPredecessor <= sel[index];
         end
      end
  -----/\----- EXCLUDED -----/\----- */
+ 
 
+   reg [5:0] symEnSr;
+   always @(posedge clk) begin
+      if (reset) begin
+         symEnSr <= 0;
+      end
+      else begin
+         symEnSr <= {symEnSr[4:0], symEn};
+      end
+   end
    
+   assign symEnDly = symEnSr[5];
+
 endmodule
