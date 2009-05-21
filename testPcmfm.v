@@ -427,7 +427,7 @@ decoder decoder
   .fifo_rs(),
   .clk_inv()
   );
-
+`define TRELLIS
 `ifdef TRELLIS
 //******************************************************************************
 //                                 Trellis Decoder

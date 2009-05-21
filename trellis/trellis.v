@@ -58,6 +58,8 @@ trellisCarrierLoop trellisCarrierLoop(
   .iIn(iIn),
   .qIn(qIn),
   .phaseError(phErrShft),
+  .symEn_phErr(symEn_phErr),
+  //.phaseError(8'h00),
   .wr0(wr0),
   .wr1(wr1),
   .wr2(wr2),
@@ -277,7 +279,9 @@ viterbi_top #(size, ROT_BITS)viterbi_top(
   .out0Pt20Real(out0Pt20Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),.out0Pt20Imag(out0Pt20Imag[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),
   .out1Pt20Real(out1Pt20Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),.out1Pt20Imag(out1Pt20Imag[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),
  -----/\----- EXCLUDED -----/\----- */
-  .decision(decision),.phaseError(phaseError)
+  .decision(decision),
+  .phaseError(phaseError),
+  .symEn_phErr(symEn_phErr)
   );
 
 
@@ -291,14 +295,14 @@ viterbi_top #(size, ROT_BITS)viterbi_top(
 
    always @(posedge clk) begin
       //if (symEn | sym2xEn) begin
-         dataBits <= {phaseError[4:0], 3'b000};
-         satPos <= !sign && (phaseError[9:4] != 6'b000000);
-         satNeg <=  sign && (phaseError[9:4] != 6'b111111);
+         dataBits <= {phaseError[5:0], 2'b00};
+         satPos <= !sign && (phaseError[9:5] != 5'b00000);
+         satNeg <=  sign && (phaseError[9:5] != 5'b11111);
          if (satPos) begin
-            phErrShft <= 8'hff;
+            phErrShft <= 8'h7f;
          end
          else if (satNeg) begin
-            phErrShft <= 8'h11;
+            phErrShft <= 8'h81;
          end
          else begin
             phErrShft <= dataBits;

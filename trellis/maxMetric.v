@@ -44,7 +44,6 @@ module maxMetric(clk,reset,symEn,
    reg                  syncToACS;
    reg [1:0]            cnt;
                
-
    // Stage 1 compare. The index value comming out of is scaled to 0..19 using the parameter indesOffset, by adding 4,8,12,or 16
    comp4twosComp  #(size, 0)  compS1_0_3   (clk, /*reset*/, accMetOut0 , accMetOut1 , accMetOut2 , accMetOut3 , iS1_0, maxValS1_0);
    comp4twosComp  #(size, 4)  compS1_4_7   (clk, /*reset*/, accMetOut4 , accMetOut5 , accMetOut6 , accMetOut7 , iS1_1, maxValS1_1);

@@ -1,97 +1,97 @@
-timestamp=1242331919060
+timestamp=1242796761375
 
 [$root]
-A/$root=22|""|0|1*7711452
-B/$root=3*11294292
+A/$root=22|""|0|1*12311791
+B/$root=3*13956529
 
 [acs]
-A/acs=22|./../../trellis/acs.v|76|1*7518172
-B/acs=3*10698946
+A/acs=22|./../../trellis/acs.v|76|1*7867029
+B/acs=3*11898986
 P/~emb=481,807,1159,1614
 R=./../../trellis/acs.v|76
 
 [adder2s]
-A/adder2s=22|./../../trellis/acs.v|7|1*7509254
-B/adder2s=3*10670975
+A/adder2s=22|./../../trellis/acs.v|7|1*7858111
+B/adder2s=3*11871015
 P/~emb=283,479,740,863
 R=./../../trellis/acs.v|7
 
 [agcLoopFilter]
-A/agcLoopFilter=22|./../../agcloopfilter.v|4|1*4825113
-B/agcLoopFilter=3*4063009
+A/agcLoopFilter=22|./../../agcloopfilter.v|4|1*8183971
+B/agcLoopFilter=3*12651745
 P/~emb=515,1165,1650,2087
 R=./../../agcloopfilter.v|4
 
 [agcLoopRegs]
-A/agcLoopRegs=22|./../../agcloopregs.v|5|1*186148
-B/agcLoopRegs=3*498993
+A/agcLoopRegs=22|./../../agcloopregs.v|5|1*8252648
+B/agcLoopRegs=3*12709520
 P/~emb=714,1107,1594,1932
 R=./../../agcloopregs.v|5
 
 [biphase_to_nrz]
-A/biphase_to_nrz=22|./../../decoder/biphase_to_nrz.v|13|1*220210
-B/biphase_to_nrz=3*602102
+A/biphase_to_nrz=22|./../../decoder/biphase_to_nrz.v|13|1*8289033
+B/biphase_to_nrz=3*12955517
 P/~emb=379,623,864,1010
 R=./../../decoder/biphase_to_nrz.v|13
 
 [bitsync]
-A/bitsync=22|./../../bitsync.v|6|1*7023177
-B/bitsync=3*8797345
+A/bitsync=22|./../../bitsync.v|6|1*8120139
+B/bitsync=3*12500510
 P/~emb=1357,2529,4053,5071
 R=./../../bitsync.v|6
 
 [carrierLoop]
-A/carrierLoop=22|./../../carrierloop.v|4|1*7044858
-B/carrierLoop=3*8847421
+A/carrierLoop=22|./../../carrierloop.v|4|1*8141820
+B/carrierLoop=3*12550490
 P/~emb=1038,1968,2926,3796
 R=./../../carrierloop.v|4
 
 [channelAGC]
-A/channelAGC=22|./../../channelagc.v|4|1*4808671
-B/channelAGC=3*4039948
+A/channelAGC=22|./../../channelagc.v|4|1*8169672
+B/channelAGC=3*12633534
 P/~emb=498,1073,1619,2242
 R=./../../channelagc.v|4
 
 [cicComp]
-A/cicComp=22|./../../ciccomp.v|3|1*4857970
-B/cicComp=3*4131552
+A/cicComp=22|./../../ciccomp.v|3|1*8112727
+B/cicComp=3*12490399
 P/~emb=299,744,1215,1606
 R=./../../ciccomp.v|3
 
 [cicDecimator]
-A/cicDecimator=22|./../../cicdecimator.v|4|1*4832968
-B/cicDecimator=3*4091887
+A/cicDecimator=22|./../../cicdecimator.v|4|1*11184747
+B/cicDecimator=3*13387224
 P/~emb=567,1148,1852,2366
 R=./../../cicdecimator.v|4
 
 [cicInterpolate]
-A/cicInterpolate=22|./../../cicinterpolate.v|4|1*4873299
-B/cicInterpolate=3*4156050
+A/cicInterpolate=22|./../../cicinterpolate.v|4|1*9544943
+B/cicInterpolate=3*13349084
 P/~emb=237,608,1022,1191
 R=./../../cicinterpolate.v|4
 
 [cicRegs]
-A/cicRegs=22|./../../cicregs.v|7|1*1271837
-B/cicRegs=3*962816
+A/cicRegs=22|./../../cicregs.v|7|1*9534200
+B/cicRegs=3*13320240
 P/~emb=418,697,990,1187
 R=./../../cicregs.v|7
 
 [cmpy18]
-A/cmpy18=22|./../../cmpy18.v|1|1*277815
-B/cmpy18=3*762691
+A/cmpy18=22|./../../cmpy18.v|1|1*8544563
+B/cmpy18=3*13137040
 P/~emb=349,638,934,1279
 R=./../../cmpy18.v|1
 
 [comp]
-A/comp=22|./../../trellis/acs.v|32|1*7512638
-B/comp=3*10687767
+A/comp=22|./../../trellis/acs.v|32|1*7861495
+B/comp=3*11887807
 P/~emb=179,370,573,706
 R=./../../trellis/acs.v|32
 
 [comp4twosComp]
-A/comp4twosComp=22|./../../trellis/comp4twoscomp.v|3|1*6473767
-B/comp4twosComp=3*7428241
-P/~emb=508,788,1321,1531
+A/comp4twosComp=22|./../../trellis/comp4twoscomp.v|3|1*7872420
+B/comp4twosComp=3*11902581
+P/~emb=508,788,1323,1533
 R=./../../trellis/comp4twoscomp.v|3
 
 [ddc]
@@ -101,44 +101,44 @@ P/~emb=691,1575,2501,3712
 R=./../../ddc.v|4
 
 [ddcRegs]
-A/ddcRegs=22|./../../ddcregs.v|5|1*2929067
-B/ddcRegs=3*1011220
+A/ddcRegs=22|./../../ddcregs.v|5|1*11196388
+B/ddcRegs=3*13406125
 P/~emb=454,745,1082,1316
 R=./../../ddcregs.v|5
 
 [dds]
-A/dds=22|./../../coregen/dds.v|36|1*539248
-B/dds=3*883391
+A/dds=22|./../../coregen/dds.v|36|1*8805932
+B/dds=3*13257740
 P/~emb=251,39805,66508,129611
 R=./../../coregen/dds.v|36
 
 [decoder]
-A/decoder=22|./../../decoder/decoder.v|14|1*6947801
-B/decoder=3*8637846
-P/~emb=662,1305,2249,3155
+A/decoder=22|./../../decoder/decoder.v|14|1*8293392
+B/decoder=3*12961247
+P/~emb=662,1313,2282,3198
 R=./../../decoder/decoder.v|14
 
 [decoder_regs]
-A/decoder_regs=22|./../../decoder/decoder_regs.v|16|1*6959894
-B/decoder_regs=3*8652690
+A/decoder_regs=22|./../../decoder/decoder_regs.v|16|1*8305734
+B/decoder_regs=3*12976635
 P/~emb=309,516,792,980
 R=./../../decoder/decoder_regs.v|16
 
 [demod]
-A/demod=22|./../../demod.v|4|1*7005229
-B/demod=3*8773775
+A/demod=22|./../../demod.v|4|1*8094779
+B/demod=3*12466853
 P/~emb=1427,2651,4080,6302
 R=./../../demod.v|4
 
 [demodRegs]
-A/demodRegs=22|./../../demodregs.v|5|1*94924
-B/demodRegs=3*240053
+A/demodRegs=22|./../../demodregs.v|5|1*8178261
+B/demodRegs=3*12642220
 P/~emb=822,1235,1738,2071
 R=./../../demodregs.v|5
 
 [fmDemod]
-A/fmDemod=22|./../../fmdemod/fmdemod.v|4|1*6940508
-B/fmDemod=3*8623334
+A/fmDemod=22|./../../fmdemod/fmdemod.v|4|1*8258023
+B/fmDemod=3*12719900
 P/~emb=468,938,1403,1739
 R=./../../fmdemod/fmdemod.v|4
 
@@ -149,218 +149,224 @@ P/~emb=235,490,808,977
 R=./../../fmmod/cicinterpolate.v|4
 
 [fmMod]
-A/fmMod=22|./../../fmmod/fmmod.v|8|1*4881200
-B/fmMod=3*4170425
+A/fmMod=22|./../../fmmod/fmmod.v|8|1*11747489
+B/fmMod=3*13485178
 P/~emb=659,1400,2178,3003
 R=./../../fmmod/fmmod.v|8
 
 [fmModRegs]
-A/fmModRegs=22|./../../fmmod/micro.v|5|1*2942088
-B/fmModRegs=3*1062469
+A/fmModRegs=22|./../../fmmod/micro.v|5|1*11204997
+B/fmModRegs=3*13444990
 P/~emb=555,904,1284,1525
 R=./../../fmmod/micro.v|5
 
 [format_output]
-A/format_output=22|./../../decoder/format_output.v|21|1*240688
-B/format_output=3*626364
+A/format_output=22|./../../decoder/format_output.v|21|1*8309824
+B/format_output=3*12980359
 P/~emb=259,464,634,743
 R=./../../decoder/format_output.v|21
 
 [glbl]
-A/glbl=22|./../../coregen/mult10x10.v|3755|1*6441598
-B/glbl=3*7379992
-P/~emb=102,455,755,848
-R=./../../coregen/mult10x10.v|3755
+A/glbl=22|./../../coregen/multiplier_v10_0.v|8267|1*12188005
+B/glbl=3*13522717
+P/~emb=102,462,762,855
+R=./../../coregen/multiplier_v10_0.v|8267
 
 [halfbandDecimate]
-A/halfbandDecimate=22|./../../halfband/halfband.v|3|1*4945938
-B/halfbandDecimate=3*4317892
+A/halfbandDecimate=22|./../../halfband/halfband.v|3|1*11210142
+B/halfbandDecimate=3*13453195
 P/~emb=347,805,1366,1828
 R=./../../halfband/halfband.v|3
 
 [halfbandEven]
-A/halfbandEven=22|./../../coregen/halfbandeven.v|36|1*1276262
-B/halfbandEven=3*966967
+A/halfbandEven=22|./../../coregen/halfbandeven.v|36|1*9552876
+B/halfbandEven=3*13363459
 P/~emb=254,36764,105198,277404
 R=./../../coregen/halfbandeven.v|36
 
 [interpRegs]
-A/interpRegs=22|./../../interpregs.v|5|1*248251
-B/interpRegs=3*634421
+A/interpRegs=22|./../../interpregs.v|5|1*8317666
+B/interpRegs=3*12989080
 P/~emb=449,756,1088,1306
 R=./../../interpregs.v|5
 
 [interpolate]
-A/interpolate=22|./../../interpolate.v|3|1*4801449
-B/interpolate=3*4034729
+A/interpolate=22|./../../interpolate.v|3|1*8525952
+B/interpolate=3*13059652
 P/~emb=495,964,1439,2021
 R=./../../interpolate.v|3
 
 [lagGain]
-A/lagGain=22|./../../laggain.v|3|1*252882
-B/lagGain=3*639983
+A/lagGain=22|./../../laggain.v|3|1*8322329
+B/lagGain=3*12994642
 P/~emb=589,1231,1802,2152
 R=./../../laggain.v|3
 
 [leadGain]
-A/leadGain=22|./../../lead.v|3|1*266506
-B/leadGain=3*690486
+A/leadGain=22|./../../lead.v|3|1*8533206
+B/leadGain=3*13064871
 P/~emb=279,711,935,1099
 R=./../../lead.v|3
 
 [log2]
-A/log2=22|./../../log2.v|4|1*4797767
-B/log2=3*4028941
+A/log2=22|./../../log2.v|4|1*8313920
+B/log2=3*12983280
 P/~emb=221,638,947,1194
 R=./../../log2.v|4
 
 [loopFilter]
-A/loopFilter=22|./../../loopfilter.v|4|1*3967843
-B/loopFilter=3*2853042
+A/loopFilter=22|./../../loopfilter.v|4|1*8161211
+B/loopFilter=3*12583851
 P/~emb=734,1416,2043,2635
 R=./../../loopfilter.v|4
 
 [loopRegs]
-A/loopRegs=22|./../../loopregs.v|5|1*6906288
-B/loopRegs=3*8507335
+A/loopRegs=22|./../../loopregs.v|5|1*8155213
+B/loopRegs=3*12570630
 P/~emb=910,1343,1951,2351
 R=./../../loopregs.v|5
 
 [maxMetric]
-A/maxMetric=22|./../../trellis/maxmetric.v|6|1*7530202
-B/maxMetric=3*10711416
+A/maxMetric=22|./../../trellis/maxmetric.v|6|1*7878178
+B/maxMetric=3*11922535
 P/~emb=1371,1893,2549,3099
 R=./../../trellis/maxmetric.v|6
 
 [mfilter]
-A/mfilter=22|./../../trellis/mfilter.v|13|1*7523579
-B/mfilter=3*10702529
+A/mfilter=22|./../../trellis/mfilter.v|13|1*7889589
+B/mfilter=3*11937333
 P/~emb=441,740,1063,1267
 R=./../../trellis/mfilter.v|13
 
 [mpy18x18]
-A/mpy18x18=22|./../../coregen/mpy18x18.v|36|1*100602
-B/mpy18x18=3*249590
+A/mpy18x18=22|./../../coregen/mpy18x18.v|36|1*8191858
+B/mpy18x18=3*12680635
 P/~emb=211,2176,4803,7054
 R=./../../coregen/mpy18x18.v|36
 
 [mrk_spc_decode]
-A/mrk_spc_decode=22|./../../decoder/mrk_spc_decode.v|13|1*215643
-B/mrk_spc_decode=3*594964
+A/mrk_spc_decode=22|./../../decoder/mrk_spc_decode.v|13|1*8284466
+B/mrk_spc_decode=3*12948379
 P/~emb=450,723,953,1087
 R=./../../decoder/mrk_spc_decode.v|13
 
 [mult10x10]
-A/mult10x10=22|./../../coregen/mult10x10.v|36|1*6250885
-B/mult10x10=3*7366598
+A/mult10x10=22|./../../coregen/mult10x10.v|36|1*8329245
+B/mult10x10=3*13042022
 P/~emb=180,5834,15231,41073
 R=./../../coregen/mult10x10.v|36
 
+[multBy2withSat]
+A/multBy2withSat=22|./../../trellis/trellis.v|414|1*12336774
+B/multBy2withSat=3*14031737
+P/~emb=324,621,910,1059
+R=./../../trellis/trellis.v|414
+
 [multiplier]
-A/multiplier=22|./../../trellis/multiplier.v|13|1*6500767
-B/multiplier=3*7470035
+A/multiplier=22|./../../trellis/multiplier.v|13|1*7902021
+B/multiplier=3*11949483
 P/~emb=411,725,1077,1436
 R=./../../trellis/multiplier.v|13
 
 [multiplier_v10_0]
-A/multiplier_v10_0=22|./../../coregen/multiplier_v10_0.v|36|1*4179722
-B/multiplier_v10_0=3*3569050
+A/multiplier_v10_0=22|./../../coregen/multiplier_v10_0.v|36|1*11757265
+B/multiplier_v10_0=3*13498724
 P/~emb=196,11292,30776,92072
 R=./../../coregen/multiplier_v10_0.v|36
 
 [mux_2_1]
-A/mux_2_1=22|./../../trellis/acs.v|60|1*7515262
-B/mux_2_1=3*10695539
+A/mux_2_1=22|./../../trellis/acs.v|60|1*7864119
+B/mux_2_1=3*11895579
 P/~emb=243,419,609,702
 R=./../../trellis/acs.v|60
 
 [reciprocalLut]
-A/reciprocalLut=22|./../../coregen/reciprocallut.v|36|1*481022
-B/reciprocalLut=3*859709
+A/reciprocalLut=22|./../../coregen/reciprocallut.v|36|1*8747770
+B/reciprocalLut=3*13234058
 P/~emb=133,1237,2708,6356
 R=./../../coregen/reciprocallut.v|36
 
 [resampRegs]
-A/resampRegs=22|./../../resampler/resampregs.v|5|1*6901860
-B/resampRegs=3*8501805
+A/resampRegs=22|./../../resampler/resampregs.v|5|1*9529724
+B/resampRegs=3*13314710
 P/~emb=378,638,941,1163
 R=./../../resampler/resampregs.v|5
 
 [resampler]
-A/resampler=22|./../../resampler/resampler.v|4|1*6876620
-B/resampler=3*8471691
+A/resampler=22|./../../resampler/resampler.v|4|1*9504452
+B/resampler=3*13284536
 P/~emb=666,1646,3054,4850
 R=./../../resampler/resampler.v|4
 
 [resamplerTap0]
-A/resamplerTap0=22|./../../coregen/resamplertap0.v|36|1*283247
-B/resamplerTap0=3*765269
+A/resamplerTap0=22|./../../coregen/resamplertap0.v|36|1*8550011
+B/resamplerTap0=3*13139618
 P/~emb=133,801,1716,3384
 R=./../../coregen/resamplertap0.v|36
 
 [resamplerTap1]
-A/resamplerTap1=22|./../../coregen/resamplertap1.v|36|1*457355
-B/resamplerTap1=3*847916
+A/resamplerTap1=22|./../../coregen/resamplertap1.v|36|1*8724119
+B/resamplerTap1=3*13222265
 P/~emb=133,994,2153,4657
 R=./../../coregen/resamplertap1.v|36
 
 [resamplerTap2]
-A/resamplerTap2=22|./../../coregen/resamplertap2.v|36|1*429954
-B/resamplerTap2=3*836087
+A/resamplerTap2=22|./../../coregen/resamplertap2.v|36|1*8696718
+B/resamplerTap2=3*13210436
 P/~emb=133,1074,2405,5454
 R=./../../coregen/resamplertap2.v|36
 
 [resamplerTap3]
-A/resamplerTap3=22|./../../coregen/resamplertap3.v|36|1*402522
-B/resamplerTap3=3*824258
+A/resamplerTap3=22|./../../coregen/resamplertap3.v|36|1*8669302
+B/resamplerTap3=3*13198607
 P/~emb=133,1091,2460,5814
 R=./../../coregen/resamplertap3.v|36
 
 [resamplerTap4]
-A/resamplerTap4=22|./../../coregen/resamplertap4.v|36|1*511062
-B/resamplerTap4=3*871562
+A/resamplerTap4=22|./../../coregen/resamplertap4.v|36|1*8777778
+B/resamplerTap4=3*13245911
 P/~emb=133,1128,2517,5851
 R=./../../coregen/resamplertap4.v|36
 
 [resamplerTap5]
-A/resamplerTap5=22|./../../coregen/resamplertap5.v|36|1*350216
-B/resamplerTap5=3*800612
+A/resamplerTap5=22|./../../coregen/resamplertap5.v|36|1*8616996
+B/resamplerTap5=3*13174961
 P/~emb=133,1120,2512,5827
 R=./../../coregen/resamplertap5.v|36
 
 [resamplerTap6]
-A/resamplerTap6=22|./../../coregen/resamplertap6.v|36|1*303469
-B/resamplerTap6=3*777026
+A/resamplerTap6=22|./../../coregen/resamplertap6.v|36|1*8570249
+B/resamplerTap6=3*13151375
 P/~emb=133,1081,2405,5472
 R=./../../coregen/resamplertap6.v|36
 
 [resamplerTap7]
-A/resamplerTap7=22|./../../coregen/resamplertap7.v|36|1*378669
-B/resamplerTap7=3*812465
+A/resamplerTap7=22|./../../coregen/resamplertap7.v|36|1*8645449
+B/resamplerTap7=3*13186814
 P/~emb=133,966,2105,4562
 R=./../../coregen/resamplertap7.v|36
 
 [resamplerTap8]
-A/resamplerTap8=22|./../../coregen/resamplertap8.v|36|1*330058
-B/resamplerTap8=3*788855
+A/resamplerTap8=22|./../../coregen/resamplertap8.v|36|1*8596838
+B/resamplerTap8=3*13163204
 P/~emb=133,816,1750,3513
 R=./../../coregen/resamplertap8.v|36
 
 [rotMult]
-A/rotMult=22|./../../trellis/rotmult.v|13|1*7541629
-B/rotMult=3*10726238
+A/rotMult=22|./../../trellis/rotmult.v|13|1*7896212
+B/rotMult=3*11946232
 P/~emb=393,698,1021,1374
 R=./../../trellis/rotmult.v|13
 
 [rotator]
-A/rotator=22|./../../trellis/rotator.v|13|1*7553418
-B/rotator=3*10756156
+A/rotator=22|./../../trellis/rotator.v|13|1*7908462
+B/rotator=3*11954537
 P/~emb=6379,7410,8544,11304
 R=./../../trellis/rotator.v|13
 
 [shapingFir]
-A/shapingFir=22|./../../coregen/shapingfir.v|36|1*4979678
-B/shapingFir=3*4366679
+A/shapingFir=22|./../../coregen/shapingfir.v|36|1*11218610
+B/shapingFir=3*13471964
 P/~emb=249,12781,35506,90889
 R=./../../coregen/shapingfir.v|36
 
@@ -371,38 +377,38 @@ P/~emb=235,700,1045,1301
 R=./../../fmmod/shift34to18.v|3
 
 [shift48to18]
-A/shift48to18=22|./../../shift48to18.v|3|1*270136
-B/shift48to18=3*724667
+A/shift48to18=22|./../../shift48to18.v|3|1*8536868
+B/shift48to18=3*13098896
 P/~emb=235,732,1267,1615
 R=./../../shift48to18.v|3
 
 [shifter18to48]
-A/shifter18to48=22|./../../shifter18to48.v|3|1*2938107
-B/shifter18to48=3*1030055
+A/shifter18to48=22|./../../shifter18to48.v|3|1*11201016
+B/shifter18to48=3*13412588
 P/~emb=238,650,1075,1417
 R=./../../shifter18to48.v|3
 
 [test]
-A/test=22|./../../testpcmfm.v|18|1*7712130
-B/test=3*11294428
-P/~emb=471,2478,4512,6048
+A/test=22|./../../testpcmfm.v|18|1*12282871
+B/test=3*13849935
+P/~emb=471,2478,4492,6021
 R=./../../testpcmfm.v|18
 
 [traceBackTable]
-A/traceBackTable=22|./../../trellis/tracebacktable.v|14|1*7547454
-B/traceBackTable=3*10729489
+A/traceBackTable=22|./../../trellis/tracebacktable.v|14|1*7942925
+B/traceBackTable=3*12017657
 P/~emb=358,705,1100,1343
 R=./../../trellis/tracebacktable.v|14
 
 [trellis]
-A/trellis=22|./../../trellis/trellis.v|14|1*7646820
-B/trellis=3*11050910
-P/~emb=968,1936,2874,5034
+A/trellis=22|./../../trellis/trellis.v|14|1*12312485
+B/trellis=3*13956665
+P/~emb=962,2174,3333,5724
 R=./../../trellis/trellis.v|14
 
 [trellisCarrierLoop]
-A/trellisCarrierLoop=22|./../../trellis/trelliscarrierloop.v|14|1*7669246
-B/trellisCarrierLoop=3*11172439
+A/trellisCarrierLoop=22|./../../trellis/trelliscarrierloop.v|14|1*7977942
+B/trellisCarrierLoop=3*12123694
 P/~emb=713,1531,2375,3252
 R=./../../trellis/trelliscarrierloop.v|14
 
@@ -413,20 +419,20 @@ P/~emb=1643,3321,5266,8388
 R=./../../trellistop.v|15
 
 [variableGain]
-A/variableGain=22|./../../variablegain.v|4|1*1265873
-B/variableGain=3*939579
-P/~emb=321,1092,1618,2103
+A/variableGain=22|./../../variablegain.v|4|1*9538593
+B/variableGain=3*13324391
+P/~emb=321,1103,1657,2155
 R=./../../variablegain.v|4
 
 [viterbi_top]
-A/viterbi_top=22|./../../trellis/viteri_top.v|13|1*7610371
-B/viterbi_top=3*10940805
-P/~emb=4758,6156,7475,9215
+A/viterbi_top=22|./../../trellis/viteri_top.v|13|1*8028097
+B/viterbi_top=3*12249302
+P/~emb=4946,6354,7832,9531
 R=./../../trellis/viteri_top.v|13
 
 [vm_cordic]
-A/vm_cordic=22|./../../vm_cordic.v|8|1*3976256
-B/vm_cordic=3*2902233
+A/vm_cordic=22|./../../vm_cordic.v|8|1*8265348
+B/vm_cordic=3*12734400
 P/~emb=2458,3394,5044,5395
 R=./../../vm_cordic.v|8
 
@@ -515,108 +521,153 @@ C:/projects/semco/svn_checkout_folder/trellis/viteri_top.v=0*2687520*2691955
 C:/projects/semco/svn_checkout_folder/variableGain.v=0*1308103*1310132
 C:/projects/semco/svn_checkout_folder/vm_cordic.v=0*2265435*2268453
 LastVerilogToplevel=test
-ModifyID=10786
+ModifyID=12690
 Version=73
-c:/projects/semco/svn_checkout_folder/bitsync.v=0*3632936*3637152
-c:/projects/semco/svn_checkout_folder/carrierLoop.v=0*3643726*3646330
-c:/projects/semco/svn_checkout_folder/coregen/mult10x10.v=0*3295629*3312560
-c:/projects/semco/svn_checkout_folder/decoder/decoder.v=0*3580340*3582340
-c:/projects/semco/svn_checkout_folder/decoder/decoder_regs.v=0*3585042*3585750
-c:/projects/semco/svn_checkout_folder/demod.v=0*3620039*3623901
-c:/projects/semco/svn_checkout_folder/fmDemod/fmDemod.v=0*3573453*3574749
-c:/projects/semco/svn_checkout_folder/loopRegs.v=0*3551718*3553199
-c:/projects/semco/svn_checkout_folder/resampler/resampRegs.v=0*3546168*3547004
-c:/projects/semco/svn_checkout_folder/resampler/resampler.v=0*3540109*3543201
-c:/projects/semco/svn_checkout_folder/testPcmfm.v=0*4013254*4019024
-c:/projects/semco/svn_checkout_folder/trellis/acs.v=0*3901801*3903189
+c:/projects/semco/svn_checkout_folder/agcLoopFilter.v=0*4284444*4286346
+c:/projects/semco/svn_checkout_folder/agcLoopRegs.v=0*4307497*4308757
+c:/projects/semco/svn_checkout_folder/bitsync.v=0*4239181*4243397
+c:/projects/semco/svn_checkout_folder/carrierLoop.v=0*4250099*4252703
+c:/projects/semco/svn_checkout_folder/channelAgc.v=0*4272365*4273832
+c:/projects/semco/svn_checkout_folder/cicComp.v=0*4228744*4229984
+c:/projects/semco/svn_checkout_folder/cicDecimator.v=0*5250595*5252416
+c:/projects/semco/svn_checkout_folder/cicInterpolate.v=0*4818836*4820019
+c:/projects/semco/svn_checkout_folder/cicRegs.v=0*4806147*4806986
+c:/projects/semco/svn_checkout_folder/cmpy18.v=0*4451139*4451865
+c:/projects/semco/svn_checkout_folder/coregen/dds.v=0*4718614*4787123
+c:/projects/semco/svn_checkout_folder/coregen/halfbandEven.v=0*5143731*5245482
+c:/projects/semco/svn_checkout_folder/coregen/mpy18x18.v=0*4298571*4303164
+c:/projects/semco/svn_checkout_folder/coregen/mult10x10.v=0*4412918*4429849
+c:/projects/semco/svn_checkout_folder/coregen/multiplier_v10_0.v=0*5530123*5568229
+c:/projects/semco/svn_checkout_folder/coregen/reciprocalLut.v=0*4549526*4552588
+c:/projects/semco/svn_checkout_folder/coregen/resamplerTap0.v=0*4458669*4460659
+c:/projects/semco/svn_checkout_folder/coregen/resamplerTap1.v=0*4536909*4539379
+c:/projects/semco/svn_checkout_folder/coregen/resamplerTap2.v=0*4525970*4528632
+c:/projects/semco/svn_checkout_folder/coregen/resamplerTap3.v=0*4514049*4516807
+c:/projects/semco/svn_checkout_folder/coregen/resamplerTap4.v=0*4562192*4564982
+c:/projects/semco/svn_checkout_folder/coregen/resamplerTap5.v=0*4491126*4493916
+c:/projects/semco/svn_checkout_folder/coregen/resamplerTap6.v=0*4469801*4472511
+c:/projects/semco/svn_checkout_folder/coregen/resamplerTap7.v=0*4502080*4504502
+c:/projects/semco/svn_checkout_folder/coregen/resamplerTap8.v=0*4479504*4481558
+c:/projects/semco/svn_checkout_folder/coregen/shapingFir.v=0*5382230*5416890
+c:/projects/semco/svn_checkout_folder/ddcRegs.v=0*5256019*5256970
+c:/projects/semco/svn_checkout_folder/decoder/biphase_to_nrz.v=0*4332587*4333393
+c:/projects/semco/svn_checkout_folder/decoder/decoder.v=0*4339247*4341295
+c:/projects/semco/svn_checkout_folder/decoder/decoder_regs.v=0*4344189*4344897
+c:/projects/semco/svn_checkout_folder/decoder/format_output.v=0*4347442*4348039
+c:/projects/semco/svn_checkout_folder/decoder/mrk_spc_decode.v=0*4328870*4329612
+c:/projects/semco/svn_checkout_folder/demod.v=0*4221156*4225018
+c:/projects/semco/svn_checkout_folder/demodRegs.v=0*4278209*4279499
+c:/projects/semco/svn_checkout_folder/fmDemod/fmDemod.v=0*4312744*4314040
+c:/projects/semco/svn_checkout_folder/fmMod/fmMod.v=0*5422770*5424862
+c:/projects/semco/svn_checkout_folder/fmMod/micro.v=0*5266208*5267308
+c:/projects/semco/svn_checkout_folder/halfband/halfband.v=0*5272268*5274030
+c:/projects/semco/svn_checkout_folder/interpRegs.v=0*4355832*4356738
+c:/projects/semco/svn_checkout_folder/interpolate.v=0*4433975*4435219
+c:/projects/semco/svn_checkout_folder/lagGain.v=0*4362112*4364232
+c:/projects/semco/svn_checkout_folder/lead.v=0*4438885*4440058
+c:/projects/semco/svn_checkout_folder/log2.v=0*4351516*4352480
+c:/projects/semco/svn_checkout_folder/loopFilter.v=0*4265371*4267926
+c:/projects/semco/svn_checkout_folder/loopRegs.v=0*4257600*4259081
+c:/projects/semco/svn_checkout_folder/resampler/resampRegs.v=0*4801993*4802829
+c:/projects/semco/svn_checkout_folder/resampler/resampler.v=0*4795534*4798626
+c:/projects/semco/svn_checkout_folder/shift48To18.v=0*4445868*4447944
+c:/projects/semco/svn_checkout_folder/shifter18to48.v=0*5261182*5262284
+c:/projects/semco/svn_checkout_folder/testPcmfm.v=0*5631854*5637544
+c:/projects/semco/svn_checkout_folder/trellis/acs.v=0*4090728*4092116
 c:/projects/semco/svn_checkout_folder/trellis/acs.v_comp4twoscomp.v_maxmetric.v_mfilter.v_rotmult.v_multiplier.v_rotator.v_tracebacktable.v_trellis.v_trelliscarrierloop.v_viteri_top.v=0*3371955*3387284
-c:/projects/semco/svn_checkout_folder/trellis/maxMetric.v=0*3912107*3913661
-c:/projects/semco/svn_checkout_folder/trellis/mfilter.v=0*3906133*3906868
-c:/projects/semco/svn_checkout_folder/trellis/rotMult.v=0*3916869*3917668
-c:/projects/semco/svn_checkout_folder/trellis/rotator.v=0*3936640*3938928
-c:/projects/semco/svn_checkout_folder/trellis/traceBackTable.v=0*3921862*3923549
-c:/projects/semco/svn_checkout_folder/trellis/trellis.v=0*3973623*3976775
-c:/projects/semco/svn_checkout_folder/trellis/trellisCarrierLoop.v=0*3982520*3984739
+c:/projects/semco/svn_checkout_folder/trellis/comp4twosComp.v=0*4095806*4096916
+c:/projects/semco/svn_checkout_folder/trellis/comp4twoscomp.v_testpcmfm.v=0*4032291*4038517
+c:/projects/semco/svn_checkout_folder/trellis/maxMetric.v=0*4102193*4103747
+c:/projects/semco/svn_checkout_folder/trellis/mfilter.v=0*4106761*4107496
+c:/projects/semco/svn_checkout_folder/trellis/multiplier.v=0*4114846*4115664
+c:/projects/semco/svn_checkout_folder/trellis/rotMult.v=0*4110734*4111533
+c:/projects/semco/svn_checkout_folder/trellis/rotator.v=0*4128767*4131055
+c:/projects/semco/svn_checkout_folder/trellis/traceBackTable.v=0*4135265*4136952
+c:/projects/semco/svn_checkout_folder/trellis/trellis.v=0*5647804*5652076
+c:/projects/semco/svn_checkout_folder/trellis/trellisCarrierLoop.v=0*4157027*4159262
 c:/projects/semco/svn_checkout_folder/trellis/trelliscarrierloop.v=0*3504764*3507031
-c:/projects/semco/svn_checkout_folder/trellis/viteri_top.v=0*3961819*3966414
+c:/projects/semco/svn_checkout_folder/trellis/viteri_top.v=0*4189601*4194180
 c:/projects/semco/svn_checkout_folder/trellisTop.v=0*3412697*3417332
+c:/projects/semco/svn_checkout_folder/variableGain.v=0*4813102*4815179
+c:/projects/semco/svn_checkout_folder/vm_cordic.v=0*4322949*4325967
 
 [~MFT]
-0=1270|0pcmfm_design.mgf|4019024|827334
-1=891|1pcmfm_design.mgf|7712130|3509396
-3=891|3pcmfm_design.mgf|11294428|9819650
+0=1642|0pcmfm_design.mgf|5652076|952905
+1=1226|1pcmfm_design.mgf|12336774|8101295
+3=1226|3pcmfm_design.mgf|14031737|12493490
 
 [~U]
-$root=12|0*4002485|
-acs=12|0*3899900||0x90
-adder2s=12|0*3896866||0x80
-agcLoopFilter=12|0*2625252||0x80
-agcLoopRegs=12|0*883058||0x90
-biphase_to_nrz=12|0*910606||0x90
-bitsync=12|0*3625201||0x90
-carrierLoop=12|0*3638470||0x90
-channelAGC=12|0*2615224||0x90
-cicComp=12|0*2647549||0x80
-cicDecimator=12|0*2631847||0x80
-cicInterpolate=12|0*2656735||0x80
-cicRegs=12|0*1311407||0x90
-cmpy18=12|0*956916||0x90
-comp=12|0*3898011||0x80
-comp4twosComp=12|0*3326252||0x80
+$root=12|0*5638138|
+acs=12|0*4088827||0x80
+adder2s=12|0*4085793||0x80
+agcLoopFilter=12|0*4280979||0x80
+agcLoopRegs=12|0*4304667||0x80
+biphase_to_nrz=12|0*4331137||0x80
+bitsync=12|0*4231446||0x90
+carrierLoop=12|0*4244843||0x90
+channelAGC=12|0*4269407||0x90
+cicComp=12|0*4226462||0x80
+cicDecimator=12|0*5247165||0x80
+cicInterpolate=12|0*4816854||0x80
+cicRegs=12|0*4804512||0x80
+cmpy18=12|0*4449538||0x80
+comp=12|0*4086938||0x80
+comp4twosComp=12|0*4093534||0x80
 ddc=12|0*2568548||0x90
-ddcRegs=12|0*1753803||0x80
-dds=12|0*1067852||0x80
-decoder=12|0*3576075||0x80
-decoder_regs=12|0*3583650||0x80
-demod=12|0*3611543||0x80
-demodRegs=12|0*846376||0x90
-fmDemod=12|0*3570964||0x80
+ddcRegs=12|0*5254107||0x80
+dds=12|0*4566778||0x80
+decoder=12|0*4334902||0x80
+decoder_regs=12|0*4342797||0x80
+demod=12|0*4212660||0x80
+demodRegs=12|0*4275313||0x80
+fmDemod=12|0*4310255||0x80
 fmInterpolate=12|0*1921519||0x90
-fmMod=12|0*2661177||0x80
-fmModRegs=12|0*1768218||0x90
-format_output=12|0*924081||0x80
-glbl=12|0*3294468||0x90
-halfbandDecimate=12|0*2697232||0x80
-halfbandEven=12|0*1315183||0x90
-interpRegs=12|0*930397||0x90
-interpolate=12|0*2610260||0x80
-lagGain=12|0*934101||0x80
-leadGain=12|0*945487||0x80
-log2=12|0*2606156||0x80
-loopFilter=12|0*2249309||0x80
-loopRegs=12|0*3548303||0x80
-maxMetric=12|0*3908258||0x90
-mfilter=12|0*3904559||0x80
-mpy18x18=12|0*851466||0x80
-mrk_spc_decode=12|0*907508||0x90
-mult10x10=12|0*3248501||0x80
-multiplier=12|0*3335713||0x90
-multiplier_v10_0=12|0*2368309||0x80
-mux_2_1=12|0*3899017||0x80
-reciprocalLut=12|0*1043161||0x90
-resampRegs=12|0*3544483||0x80
-resampler=12|0*3533356||0x90
-resamplerTap0=12|0*960224||0x90
-resamplerTap1=12|0*1032958||0x90
-resamplerTap2=12|0*1021693||0x90
-resamplerTap3=12|0*1009948||0x90
-resamplerTap4=12|0*1055842||0x90
-resamplerTap5=12|0*988156||0x90
-resamplerTap6=12|0*968441||0x90
-resamplerTap7=12|0*999938||0x90
-resamplerTap8=12|0*979701||0x90
-rotMult=12|0*3915069||0x90
-rotator=12|0*3924978||0x80
-shapingFir=12|0*2714879||0x80
+fmMod=12|0*5418619||0x80
+fmModRegs=12|0*5263976||0x90
+format_output=12|0*4346404||0x80
+glbl=12|0*5528955||0x90
+halfbandDecimate=12|0*5268998||0x80
+halfbandEven=12|0*4821712||0x90
+interpRegs=12|0*4353971||0x90
+interpolate=12|0*4431465||0x80
+lagGain=12|0*4358251||0x80
+leadGain=12|0*4436813||0x80
+log2=12|0*4349563||0x80
+loopFilter=12|0*4260544||0x80
+loopRegs=12|0*4254185||0x80
+maxMetric=12|0*4098344||0x90
+mfilter=12|0*4105187||0x80
+mpy18x18=12|0*4287830||0x80
+mrk_spc_decode=12|0*4327447||0x80
+mult10x10=12|0*4365790||0x80
+multBy2withSat=12|0*5646320||0x80
+multiplier=12|0*4112971||0x90
+multiplier_v10_0=12|0*5426810||0x80
+mux_2_1=12|0*4087944||0x80
+reciprocalLut=12|0*4541031||0x80
+resampRegs=12|0*4800308||0x80
+resampler=12|0*4788781||0x90
+resamplerTap0=12|0*4453454||0x90
+resamplerTap1=12|0*4530284||0x90
+resamplerTap2=12|0*4518459||0x80
+resamplerTap3=12|0*4506154||0x80
+resamplerTap4=12|0*4554240||0x80
+resamplerTap5=12|0*4483194||0x90
+resamplerTap6=12|0*4462279||0x90
+resamplerTap7=12|0*4495568||0x80
+resamplerTap8=12|0*4474147||0x80
+rotMult=12|0*4108934||0x90
+rotator=12|0*4117105||0x80
+shapingFir=12|0*5275758||0x90
 shift34to18=12|0*1758016||0x90
-shift48to18=12|0*949663||0x80
-shifter18to48=12|0*1763202||0x80
-test=12|0*4003307||0x90
-traceBackTable=12|0*3919090||0x90
-trellis=12|0*3967839||0x80
-trellisCarrierLoop=12|0*3978213||0x90
+shift48to18=12|0*4441645||0x80
+shifter18to48=12|0*5258624||0x80
+test=12|0*5621969||0x90
+traceBackTable=12|0*4132493||0x80
+trellis=12|0*5639248||0x80
+trellisCarrierLoop=12|0*4152720||0x90
 trellisTop=12|0*3402027||0x90
-variableGain=12|0*1303736||0x90
-viterbi_top=12|0*3950708||0x80
-vm_cordic=12|0*2258044||0x90
+variableGain=12|0*4808640||0x80
+viterbi_top=12|0*4178190||0x80
+vm_cordic=12|0*4315558||0x80
 

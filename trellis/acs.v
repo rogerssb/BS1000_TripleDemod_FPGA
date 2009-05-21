@@ -41,7 +41,7 @@ module comp (/*clk,*/ a, b, bLarger);
      begin
         case ({a[size-1], b[size-1]}) // Checking the sign bit 
           2'b00: begin // both pos
-             bLarger <= (b >= a) ? 1 : 0;
+             bLarger <= (b > a) ? 1 : 0;
           end
           2'b01: begin // a=pos, b=neg
              bLarger <= 0;
@@ -50,7 +50,7 @@ module comp (/*clk,*/ a, b, bLarger);
              bLarger <= 1;
           end
           2'b11: begin //both neg
-             bLarger <= (b >= a) ? 1 : 0;
+             bLarger <= (b > a) ? 1 : 0;
           end
         endcase
      end

@@ -14,6 +14,7 @@
 module trellisCarrierLoop(clk,reset,symEn,sym2xEn,
   iIn,qIn,
   phaseError,
+  symEn_phErr,
   wr0,wr1,wr2,wr3,
   addr,
   din,dout,
@@ -25,6 +26,7 @@ module trellisCarrierLoop(clk,reset,symEn,sym2xEn,
 input clk,reset,symEn,sym2xEn;
 input [17:0]iIn,qIn;
 input   [7:0]   phaseError;
+input symEn_phErr;
 input wr0,wr1,wr2,wr3;
 input [11:0]addr;
 input [31:0]din;
@@ -72,7 +74,8 @@ loopRegs loopRegs(
     );
 
 
-wire loopFilterEn = symEn;
+//wire loopFilterEn = symEn;
+wire loopFilterEn = symEn_phErr;
 
 /**************************** Adjust Error ************************************/
 reg     [7:0]   loopError;
@@ -193,8 +196,7 @@ dds dds(
   .sclr(reset),
   .we(1'b1),
 `ifdef S_CURVE_TESTING
-  .data(32'h00020000), // Bus [31 : 0] 
-//  .data(32'h00000000), // Bus [31 : 0] 
+  .data(32'h00100000), // Bus [31 : 0] 
 `else  
   .data(newOffset), // Bus [31 : 0]
 `endif
