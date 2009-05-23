@@ -493,7 +493,7 @@ reg [127:0]delaySR;
 reg txDelay;
 //always @(negedge demodClk) begin
 always @(posedge symEn_tbtDly) begin
-    txDelay <= delaySR[21];
+    txDelay <= delaySR[17];
     delaySR <= {delaySR[126:0],testData};
     end
 

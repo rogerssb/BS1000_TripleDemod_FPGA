@@ -196,7 +196,7 @@ dds dds(
   .sclr(reset),
   .we(1'b1),
 `ifdef S_CURVE_TESTING
-  .data(32'h00100000), // Bus [31 : 0] 
+  .data(32'h00000000), // Bus [31 : 0] 
 `else  
   .data(newOffset), // Bus [31 : 0]
 `endif

@@ -1,18 +1,18 @@
-timestamp=1242946332483
+timestamp=1243071435758
 
 [$root]
-A/$root=22|""|0|1*13019216
-B/$root=3*16182966
+A/$root=22|""|0|1*13827366
+B/$root=3*18545034
 
 [acs]
-A/acs=22|./../../trellis/acs.v|76|1*12350605
-B/acs=3*14063970
-P/~emb=481,807,1159,1614
+A/acs=22|./../../trellis/acs.v|76|1*13558524
+B/acs=3*17800418
+P/~emb=562,911,1289,1750
 R=./../../trellis/acs.v|76
 
 [adder2s]
-A/adder2s=22|./../../trellis/acs.v|7|1*12341687
-B/adder2s=3*14035999
+A/adder2s=22|./../../trellis/acs.v|7|1*13549606
+B/adder2s=3*17772447
 P/~emb=283,479,740,863
 R=./../../trellis/acs.v|7
 
@@ -83,14 +83,14 @@ P/~emb=349,638,934,1279
 R=./../../cmpy18.v|1
 
 [comp]
-A/comp=22|./../../trellis/acs.v|32|1*12345071
-B/comp=3*14052791
+A/comp=22|./../../trellis/acs.v|32|1*13552990
+B/comp=3*17789239
 P/~emb=179,370,573,706
 R=./../../trellis/acs.v|32
 
 [comp4twosComp]
-A/comp4twosComp=22|./../../trellis/comp4twoscomp.v|3|1*12356028
-B/comp4twosComp=3*14067565
+A/comp4twosComp=22|./../../trellis/comp4twoscomp.v|3|1*13564424
+B/comp4twosComp=3*17804821
 P/~emb=508,788,1323,1533
 R=./../../trellis/comp4twoscomp.v|3
 
@@ -227,14 +227,14 @@ P/~emb=910,1343,1951,2351
 R=./../../loopregs.v|5
 
 [maxMetric]
-A/maxMetric=22|./../../trellis/maxmetric.v|6|1*12361818
-B/maxMetric=3*14087519
-P/~emb=1371,1893,2548,3101
+A/maxMetric=22|./../../trellis/maxmetric.v|6|1*13570214
+B/maxMetric=3*17824775
+P/~emb=1452,2000,2679,3243
 R=./../../trellis/maxmetric.v|6
 
 [mfilter]
-A/mfilter=22|./../../trellis/mfilter.v|13|1*12373261
-B/mfilter=3*14102317
+A/mfilter=22|./../../trellis/mfilter.v|13|1*13582132
+B/mfilter=3*17840417
 P/~emb=441,740,1063,1267
 R=./../../trellis/mfilter.v|13
 
@@ -257,14 +257,14 @@ P/~emb=180,5834,15231,41073
 R=./../../coregen/mult10x10.v|36
 
 [multBy2withSat]
-A/multBy2withSat=22|./../../trellis/trellis.v|420|1*12760164
-B/multBy2withSat=3*15271262
+A/multBy2withSat=22|./../../trellis/trellis.v|388|1*13667300
+B/multBy2withSat=3*18024676
 P/~emb=324,621,910,1059
-R=./../../trellis/trellis.v|420
+R=./../../trellis/trellis.v|388
 
 [multiplier]
-A/multiplier=22|./../../trellis/multiplier.v|13|1*12385725
-B/multiplier=3*14114455
+A/multiplier=22|./../../trellis/multiplier.v|13|1*13594628
+B/multiplier=3*17852555
 P/~emb=411,725,1077,1436
 R=./../../trellis/multiplier.v|13
 
@@ -275,8 +275,8 @@ P/~emb=196,11292,30776,92072
 R=./../../coregen/multiplier_v10_0.v|36
 
 [mux_2_1]
-A/mux_2_1=22|./../../trellis/acs.v|60|1*12347695
-B/mux_2_1=3*14060563
+A/mux_2_1=22|./../../trellis/acs.v|60|1*13555614
+B/mux_2_1=3*17797011
 P/~emb=243,419,609,702
 R=./../../trellis/acs.v|60
 
@@ -353,14 +353,14 @@ P/~emb=133,816,1750,3513
 R=./../../coregen/resamplertap8.v|36
 
 [rotMult]
-A/rotMult=22|./../../trellis/rotmult.v|13|1*12379900
-B/rotMult=3*14111204
+A/rotMult=22|./../../trellis/rotmult.v|13|1*13588787
+B/rotMult=3*17849304
 P/~emb=393,698,1021,1374
 R=./../../trellis/rotmult.v|13
 
 [rotator]
-A/rotator=22|./../../trellis/rotator.v|13|1*12392198
-B/rotator=3*14119509
+A/rotator=22|./../../trellis/rotator.v|13|1*13601101
+B/rotator=3*17857609
 P/~emb=6379,7410,8544,11304
 R=./../../trellis/rotator.v|13
 
@@ -389,26 +389,26 @@ P/~emb=238,650,1075,1417
 R=./../../shifter18to48.v|3
 
 [test]
-A/test=22|./../../testpcmfm.v|19|1*13019910
-B/test=3*16183102
-P/~emb=471,2519,4555,6096
+A/test=22|./../../testpcmfm.v|19|1*13798271
+B/test=3*18435368
+P/~emb=471,2489,4504,6037
 R=./../../testpcmfm.v|19
 
 [traceBackTable]
-A/traceBackTable=22|./../../trellis/tracebacktable.v|14|1*12832895
-B/traceBackTable=3*15494439
-P/~emb=398,757,1219,1486
+A/traceBackTable=22|./../../trellis/tracebacktable.v|14|1*13828060
+B/traceBackTable=3*18545170
+P/~emb=478,880,1437,1760
 R=./../../trellis/tracebacktable.v|14
 
 [trellis]
-A/trellis=22|./../../trellis/trellis.v|14|1*12735688
-B/trellis=3*15196202
-P/~emb=1010,2242,3419,5859
+A/trellis=22|./../../trellis/trellis.v|14|1*13642642
+B/trellis=3*17949748
+P/~emb=1062,2264,3462,5921
 R=./../../trellis/trellis.v|14
 
 [trellisCarrierLoop]
-A/trellisCarrierLoop=22|./../../trellis/trelliscarrierloop.v|14|1*12461926
-B/trellisCarrierLoop=3*14288666
+A/trellisCarrierLoop=22|./../../trellis/trelliscarrierloop.v|14|1*13672229
+B/trellisCarrierLoop=3*18028926
 P/~emb=758,1581,2432,3314
 R=./../../trellis/trelliscarrierloop.v|14
 
@@ -425,9 +425,9 @@ P/~emb=321,1103,1657,2155
 R=./../../variablegain.v|4
 
 [viterbi_top]
-A/viterbi_top=22|./../../trellis/viteri_top.v|13|1*12795159
-B/viterbi_top=3*15382786
-P/~emb=5040,6495,8021,9834
+A/viterbi_top=22|./../../trellis/viteri_top.v|13|1*13685415
+B/viterbi_top=3*18043689
+P/~emb=5129,6617,8155,10036
 R=./../../trellis/viteri_top.v|13
 
 [vm_cordic]
@@ -521,7 +521,7 @@ C:/projects/semco/svn_checkout_folder/trellis/viteri_top.v=0*2687520*2691955
 C:/projects/semco/svn_checkout_folder/variableGain.v=0*1308103*1310132
 C:/projects/semco/svn_checkout_folder/vm_cordic.v=0*2265435*2268453
 LastVerilogToplevel=test
-ModifyID=13428
+ModifyID=14516
 Version=73
 c:/projects/semco/svn_checkout_folder/agcLoopFilter.v=0*4284444*4286346
 c:/projects/semco/svn_checkout_folder/agcLoopRegs.v=0*4307497*4308757
@@ -572,35 +572,35 @@ c:/projects/semco/svn_checkout_folder/resampler/resampRegs.v=0*4801993*4802829
 c:/projects/semco/svn_checkout_folder/resampler/resampler.v=0*4795534*4798626
 c:/projects/semco/svn_checkout_folder/shift48To18.v=0*4445868*4447944
 c:/projects/semco/svn_checkout_folder/shifter18to48.v=0*5261182*5262284
-c:/projects/semco/svn_checkout_folder/testPcmfm.v=0*6047290*6053140
+c:/projects/semco/svn_checkout_folder/testPcmfm.v=0*6490399*6496185
 c:/projects/semco/svn_checkout_folder/testpcmfm.v=0*5844579*5850413
-c:/projects/semco/svn_checkout_folder/trellis/acs.v=0*5658769*5660157
+c:/projects/semco/svn_checkout_folder/trellis/acs.v=0*6341221*6342705
 c:/projects/semco/svn_checkout_folder/trellis/acs.v_comp4twoscomp.v_maxmetric.v_mfilter.v_rotmult.v_multiplier.v_rotator.v_tracebacktable.v_trellis.v_trelliscarrierloop.v_viteri_top.v=0*3371955*3387284
-c:/projects/semco/svn_checkout_folder/trellis/comp4twosComp.v=0*5664167*5665277
+c:/projects/semco/svn_checkout_folder/trellis/comp4twosComp.v=0*6346555*6347665
 c:/projects/semco/svn_checkout_folder/trellis/comp4twoscomp.v_testpcmfm.v=0*4032291*4038517
-c:/projects/semco/svn_checkout_folder/trellis/maxMetric.v=0*5670890*5672444
-c:/projects/semco/svn_checkout_folder/trellis/mfilter.v=0*5675762*5676497
-c:/projects/semco/svn_checkout_folder/trellis/multiplier.v=0*5684199*5685017
-c:/projects/semco/svn_checkout_folder/trellis/rotMult.v=0*5679991*5680790
-c:/projects/semco/svn_checkout_folder/trellis/rotator.v=0*5698216*5700504
-c:/projects/semco/svn_checkout_folder/trellis/traceBackTable.v=0*5929433*5931232
-c:/projects/semco/svn_checkout_folder/trellis/trellis.v=0*5885105*5889425
-c:/projects/semco/svn_checkout_folder/trellis/trellisCarrierLoop.v=0*5726860*5729111
+c:/projects/semco/svn_checkout_folder/trellis/maxMetric.v=0*6353269*6354919
+c:/projects/semco/svn_checkout_folder/trellis/mfilter.v=0*6358077*6358812
+c:/projects/semco/svn_checkout_folder/trellis/multiplier.v=0*6366450*6367268
+c:/projects/semco/svn_checkout_folder/trellis/rotMult.v=0*6362194*6362993
+c:/projects/semco/svn_checkout_folder/trellis/rotator.v=0*6380515*6382803
+c:/projects/semco/svn_checkout_folder/trellis/traceBackTable.v=0*6501198*6503253
+c:/projects/semco/svn_checkout_folder/trellis/trellis.v=0*6399754*6404026
+c:/projects/semco/svn_checkout_folder/trellis/trellisCarrierLoop.v=0*6409976*6412227
 c:/projects/semco/svn_checkout_folder/trellis/trelliscarrierloop.v=0*3504764*3507031
-c:/projects/semco/svn_checkout_folder/trellis/viteri_top.v=0*5920079*5924898
+c:/projects/semco/svn_checkout_folder/trellis/viteri_top.v=0*6425823*6430722
 c:/projects/semco/svn_checkout_folder/trellisTop.v=0*3412697*3417332
 c:/projects/semco/svn_checkout_folder/variableGain.v=0*4813102*4815179
 c:/projects/semco/svn_checkout_folder/vm_cordic.v=0*4322949*4325967
 
 [~MFT]
-0=1825|0pcmfm_design.mgf|6053140|1084658
-1=1356|1pcmfm_design.mgf|13019910|8807660
-3=1356|3pcmfm_design.mgf|16183102|14745055
+0=2085|0pcmfm_design.mgf|6503253|1235562
+1=1548|1pcmfm_design.mgf|13828060|9590281
+3=1548|3pcmfm_design.mgf|18545170|17023964
 
 [~U]
-$root=12|0*6036308|
-acs=12|0*5656868||0x80
-adder2s=12|0*5653834||0x80
+$root=12|0*6496779|
+acs=12|0*6339151||0x80
+adder2s=12|0*6336117||0x80
 agcLoopFilter=12|0*4280979||0x80
 agcLoopRegs=12|0*4304667||0x80
 biphase_to_nrz=12|0*4331137||0x80
@@ -612,8 +612,8 @@ cicDecimator=12|0*5247165||0x80
 cicInterpolate=12|0*4816854||0x80
 cicRegs=12|0*4804512||0x80
 cmpy18=12|0*4449538||0x80
-comp=12|0*5654979||0x80
-comp4twosComp=12|0*5661895||0x80
+comp=12|0*6337262||0x80
+comp4twosComp=12|0*6344283||0x80
 ddc=12|0*2568548||0x90
 ddcRegs=12|0*5254107||0x80
 dds=12|0*4566778||0x80
@@ -636,15 +636,15 @@ leadGain=12|0*4436813||0x80
 log2=12|0*4349563||0x80
 loopFilter=12|0*4260544||0x80
 loopRegs=12|0*4254185||0x80
-maxMetric=12|0*5667041||0x90
-mfilter=12|0*5674188||0x80
+maxMetric=12|0*6349253||0x90
+mfilter=12|0*6356503||0x80
 mpy18x18=12|0*4287830||0x80
 mrk_spc_decode=12|0*4327447||0x80
 mult10x10=12|0*4365790||0x80
-multBy2withSat=12|0*5883621||0x80
-multiplier=12|0*5682324||0x90
+multBy2withSat=12|0*6398270||0x80
+multiplier=12|0*6364575||0x90
 multiplier_v10_0=12|0*5426810||0x80
-mux_2_1=12|0*5655985||0x80
+mux_2_1=12|0*6338268||0x80
 reciprocalLut=12|0*4541031||0x80
 resampRegs=12|0*4800308||0x80
 resampler=12|0*4788781||0x90
@@ -657,18 +657,18 @@ resamplerTap5=12|0*4483194||0x90
 resamplerTap6=12|0*4462279||0x90
 resamplerTap7=12|0*4495568||0x80
 resamplerTap8=12|0*4474147||0x80
-rotMult=12|0*5678191||0x90
-rotator=12|0*5686554||0x80
+rotMult=12|0*6360394||0x90
+rotator=12|0*6368853||0x80
 shapingFir=12|0*5275758||0x90
 shift34to18=12|0*1758016||0x90
 shift48to18=12|0*4441645||0x80
 shifter18to48=12|0*5258624||0x80
-test=12|0*6037242||0x90
-traceBackTable=12|0*5926451||0x80
-trellis=12|0*5876406||0x80
-trellisCarrierLoop=12|0*5722492||0x90
+test=12|0*6480475||0x90
+traceBackTable=12|0*6497729||0x80
+trellis=12|0*6391029||0x80
+trellisCarrierLoop=12|0*6405608||0x90
 trellisTop=12|0*3402027||0x90
 variableGain=12|0*4808640||0x80
-viterbi_top=12|0*5908305||0x80
+viterbi_top=12|0*6413820||0x80
 vm_cordic=12|0*4315558||0x80
 

@@ -11,19 +11,20 @@
 `timescale 1ns/1ps
 
 // I may have to delay the symEn into this module to allow for the last samples to be computed
-module traceBackTable(clk, reset, symEn,
+module traceBackTable(clk, reset, symEn, sym2xEn,
                       sel, index,
                       decision,
                       oneOrZeroPredecessor,
-                      symEnDly
+                      symEnDly, sym2xEnDly
                       );
    
    parameter          size = 8;
-   input              clk,reset,symEn;
+   input              clk,reset,symEn,sym2xEn;
    input [19:0]       sel;   // 20 induvidual decision. 0 or 1 tell us if we trace + or - 7 modulo 20 
    input [4:0]        index; // pointer to the state which has the maximum metric
    output             decision, oneOrZeroPredecessor;
    output             symEnDly;
+   output             sym2xEnDly;
    reg                decision, oneOrZeroPredecessor;
    reg [5:0]          tbtSr [19:0];
    reg [2:0]          stateCnt;
@@ -175,16 +176,86 @@ module traceBackTable(clk, reset, symEn,
  -----/\----- EXCLUDED -----/\----- */
  
 
-   reg [5:0] symEnSr;
+/* -----\/----- EXCLUDED -----\/-----
+   reg [8:0] symEnSr;
    always @(posedge clk) begin
       if (reset) begin
          symEnSr <= 0;
       end
       else begin
-         symEnSr <= {symEnSr[4:0], symEn};
+         symEnSr <= {symEnSr[7:0], symEn};
       end
    end
    
-   assign symEnDly = symEnSr[5];
+   assign symEnDly = symEnSr[8];
+ -----/\----- EXCLUDED -----/\----- */
 
+
+/* -----\/----- EXCLUDED -----\/-----
+   reg [21:0] symEnSr;
+   reg [21:0] sym2xEnSr;
+   always @(posedge clk) begin
+      if (reset) begin
+         symEnSr <= 0;
+         sym2xEnSr <= 0;
+      end
+      else begin
+         symEnSr <= {symEnSr[20:0], symEn};
+         sym2xEnSr <= {sym2xEnSr[20:0], sym2xEn};
+      end
+   end
+   
+   assign symEnDly = symEnSr[9];
+   assign sym2xEnDly = sym2xEnSr[9];
+ -----/\----- EXCLUDED -----/\----- */
+
+
+   reg [8:0] symEnSr;
+   reg [24:0] sym2xEnSr;
+   always @(posedge clk) begin
+      if (reset) begin
+         symEnSr <= 0;
+      end
+      else if(symEn) begin
+         symEnSr <= {symEnSr[7:0], symEn};
+      end
+      else if(symEnSr[0]) begin
+         symEnSr <= {symEnSr[7:0], symEn};
+      end
+   end
+
+   reg sym2xEn_1d;
+   always @(posedge clk) sym2xEn_1d <= sym2xEn;
+	
+   always @(posedge clk) begin
+      if (reset) begin
+         sym2xEnSr <= 0;
+	end
+      else if(sym2xEn) begin
+         sym2xEnSr <= {sym2xEnSr[19:0], 1'b1}; 
+      end
+      else if(sym2xEn_1d) begin
+         sym2xEnSr <= {sym2xEnSr[19:0], 1'b0};
+      end
+   end
+   
+   
+
+   reg [2:0] symEnSr2;
+   reg sym2xEnDly;
+   always @(posedge clk) begin
+      if (reset) begin
+         symEnSr2 <= 0;
+         sym2xEnDly <= 0;
+      end
+      else begin
+         symEnSr2 <= {symEnSr2[1:0], symEnSr[8]};
+         sym2xEnDly <= sym2xEnSr[20];
+      end
+   end
+
+
+   assign symEnDly = symEnSr2[2];
+  // assign sym2xEnDly = (cnt==5);
+   
 endmodule

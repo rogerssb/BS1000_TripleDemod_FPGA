@@ -3,23 +3,23 @@
 // Finds the index (0-19) of the metric wih the largest number. The maxValue is also computed but is not used in the design
 // If all inputs are the same the 19th (13hex) index will be picked.
 // All done with 2's complement numbers
-module maxMetric(clk,reset,symEn,
+module maxMetric(clk, reset, symEn, sym2xEn,
                  accMetOut0 , accMetOut1 , accMetOut2 , accMetOut3 , accMetOut4 , 
                  accMetOut5 , accMetOut6 , accMetOut7 , accMetOut8 , accMetOut9 , 
                  accMetOut10, accMetOut11, accMetOut12, accMetOut13, accMetOut14, 
                  accMetOut15, accMetOut16, accMetOut17, accMetOut18, accMetOut19,
-                 index, symEnDly
+                 index, symEnDly, sym2xEnDly
                  );
    
    parameter            size = 8;
-   input                clk,reset,symEn;
+   input                clk,reset,symEn,sym2xEn;
    input [(size-1)+4:0] accMetOut0 , accMetOut1 , accMetOut2 , accMetOut3 , 
                         accMetOut4 , accMetOut5 , accMetOut6 , accMetOut7 , 
                         accMetOut8 , accMetOut9 , accMetOut10, accMetOut11, 
                         accMetOut12, accMetOut13, accMetOut14, accMetOut15, 
                         accMetOut16, accMetOut17, accMetOut18, accMetOut19;
    output [4:0]         index; // max index (0-19)
-   output               symEnDly;
+   output               symEnDly, sym2xEnDly;
    reg [4:0]            index;                      
 
    wire [(size-1)+4:0]  maxValS1_0, maxValS1_1, maxValS1_2, maxValS1_3, maxValS1_4,
@@ -120,6 +120,7 @@ module maxMetric(clk,reset,symEn,
         end
      end
 
+   /* -----\/----- EXCLUDED -----\/-----
    reg [3:0]             symEnSr;
    always @(posedge clk) begin
       if (reset) begin
@@ -130,6 +131,25 @@ module maxMetric(clk,reset,symEn,
       end
    end
    assign symEnDly = symEnSr[3];
+
+ -----/\----- EXCLUDED -----/\----- */
+
+   reg [3:0] symEnSr;
+   reg [3:0] sym2xEnSr;
+   always @(posedge clk) begin
+      if (reset) begin
+         symEnSr <= 0;
+         sym2xEnSr <= 0;
+      end
+      else begin
+         symEnSr <= {symEnSr[2:0], symEn};
+         sym2xEnSr <= {sym2xEnSr[2:0], sym2xEn};
+      end
+   end
+   
+   assign symEnDly = symEnSr[3];
+   assign sym2xEnDly = sym2xEnSr[3];
+
 
    
 endmodule

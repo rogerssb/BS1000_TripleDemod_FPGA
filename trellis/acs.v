@@ -73,16 +73,18 @@ module mux_2_1 (clk, a, b, sel, y);
 endmodule         
             
 
-module acs (clk, reset, symEn, matFilt1, matFilt2, accMet1, accMet2, accMetOut, sel, symEnDly);
+module acs (clk, reset, symEn, sym2xEn, matFilt1, matFilt2, accMet1, accMet2, accMetOut, sel, symEnDly, sym2xEnDly);
    parameter             size = 8;
    input                 clk, reset;
    input                 symEn;
+   input                 sym2xEn;
    input [size-1:0]      matFilt1, matFilt2;
    input [(size-1)+4:0]  accMet1, accMet2;
    output [(size-1)+4:0] accMetOut;
    output                sel;
-   output 			 symEnDly;
-      
+   output                symEnDly;
+   output                sym2xEnDly;
+         
    wire [(size-1)+4:0]   accMetOut;
    
    wire [(size-1)+4:0]   add1, add2;
@@ -126,15 +128,34 @@ module acs (clk, reset, symEn, matFilt1, matFilt2, accMet1, accMet2, accMetOut, 
       .y         (accMetOut  )
       );
 
-   reg [3:0] 		 symEnSr;
+/* -----\/----- EXCLUDED -----\/-----
+   reg [3:0]             symEnSr;
    always @(posedge clk) begin
-	if (reset) begin
+      if (reset) begin
          symEnSr <= 0;
-	end
-	else begin
+      end
+      else begin
          symEnSr <= {symEnSr[2:0], symEn};
-	end
+      end
    end
    assign symEnDly = symEnSr[3];
+ -----/\----- EXCLUDED -----/\----- */
+
+
+   reg [3:0] symEnSr;
+   reg [3:0] sym2xEnSr;
+   always @(posedge clk) begin
+      if (reset) begin
+         symEnSr <= 0;
+         sym2xEnSr <= 0;
+      end
+      else begin
+         symEnSr <= {symEnSr[2:0], symEn};
+         sym2xEnSr <= {sym2xEnSr[2:0], sym2xEn};
+      end
+   end
+   
+   assign symEnDly = symEnSr[3];
+   assign sym2xEnDly = sym2xEnSr[3];
    
 endmodule
