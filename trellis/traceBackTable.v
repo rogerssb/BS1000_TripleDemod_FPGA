@@ -174,88 +174,56 @@ module traceBackTable(clk, reset, symEn, sym2xEn,
         end
      end
  -----/\----- EXCLUDED -----/\----- */
- 
 
-/* -----\/----- EXCLUDED -----\/-----
-   reg [8:0] symEnSr;
-   always @(posedge clk) begin
-      if (reset) begin
-         symEnSr <= 0;
-      end
-      else begin
-         symEnSr <= {symEnSr[7:0], symEn};
-      end
+
+
+    
+ // ++++++++++++  symEN shift +++++++++++++
+  reg [8:0] symEnSr;
+  reg [24:0] sym2xEnSr;
+  always @(posedge clk) begin
+     if (reset) begin
+        symEnSr <= 0;
+     end
+     else if(symEn) begin
+        symEnSr <= {symEnSr[7:0], symEn};
+     end
+     else if(symEnSr[0]) begin
+        symEnSr <= {symEnSr[7:0], symEn};
+     end
+  end
+
+
+
+  // ++++++++++++  sym2xEN shift +++++++++++++
+  always @(posedge clk) begin
+     if (reset) begin
+        sym2xEnSr <= 0;
    end
-   
-   assign symEnDly = symEnSr[8];
- -----/\----- EXCLUDED -----/\----- */
+     else if(sym2xEn) begin
+        sym2xEnSr <= {sym2xEnSr[15:0], 1'b1};
+     end
+     else if(sym2xEnSr[0]) begin
+        sym2xEnSr <= {sym2xEnSr[15:0], 1'b0};
+     end
+  end
+
+  reg [2:0] symEnSr2,sym2xEnSr2;
+//  reg sym2xEnDly;
+  always @(posedge clk) begin
+     if (reset) begin
+        symEnSr2 <= 0;
+        sym2xEnSr2 <= 0;
+     end
+     else begin
+        symEnSr2 <= {symEnSr2[1:0], symEnSr[8]};
+        sym2xEnSr2 <= {sym2xEnSr2[1:0], sym2xEnSr[16]};                // sym2xEn final output
+     end
+  end
+
+  // +++++++ symEn final output +++++++++
+  assign symEnDly = symEnSr2[2];
+  assign sym2xEnDly = sym2xEnSr2[2];
 
 
-/* -----\/----- EXCLUDED -----\/-----
-   reg [21:0] symEnSr;
-   reg [21:0] sym2xEnSr;
-   always @(posedge clk) begin
-      if (reset) begin
-         symEnSr <= 0;
-         sym2xEnSr <= 0;
-      end
-      else begin
-         symEnSr <= {symEnSr[20:0], symEn};
-         sym2xEnSr <= {sym2xEnSr[20:0], sym2xEn};
-      end
-   end
-   
-   assign symEnDly = symEnSr[9];
-   assign sym2xEnDly = sym2xEnSr[9];
- -----/\----- EXCLUDED -----/\----- */
-
-
-   reg [8:0] symEnSr;
-   reg [24:0] sym2xEnSr;
-   always @(posedge clk) begin
-      if (reset) begin
-         symEnSr <= 0;
-      end
-      else if(symEn) begin
-         symEnSr <= {symEnSr[7:0], symEn};
-      end
-      else if(symEnSr[0]) begin
-         symEnSr <= {symEnSr[7:0], symEn};
-      end
-   end
-
-   reg sym2xEn_1d;
-   always @(posedge clk) sym2xEn_1d <= sym2xEn;
-	
-   always @(posedge clk) begin
-      if (reset) begin
-         sym2xEnSr <= 0;
-	end
-      else if(sym2xEn) begin
-         sym2xEnSr <= {sym2xEnSr[19:0], 1'b1}; 
-      end
-      else if(sym2xEn_1d) begin
-         sym2xEnSr <= {sym2xEnSr[19:0], 1'b0};
-      end
-   end
-   
-   
-
-   reg [2:0] symEnSr2;
-   reg sym2xEnDly;
-   always @(posedge clk) begin
-      if (reset) begin
-         symEnSr2 <= 0;
-         sym2xEnDly <= 0;
-      end
-      else begin
-         symEnSr2 <= {symEnSr2[1:0], symEnSr[8]};
-         sym2xEnDly <= sym2xEnSr[20];
-      end
-   end
-
-
-   assign symEnDly = symEnSr2[2];
-  // assign sym2xEnDly = (cnt==5);
-   
 endmodule
