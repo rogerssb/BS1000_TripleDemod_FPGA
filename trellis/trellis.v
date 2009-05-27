@@ -393,7 +393,7 @@ module multBy2withSat(clk, symEn, sym2xEn, dIn, dOut, symEnDly, sym2xEnDly);
    output                symEnDly, sym2xEnDly;
       
    reg [17:0]            dataBits;
-   reg [17:0]            dOut;
+   reg [17:0]            dOut, dOutTmp;
   
    reg                   satPos,satNeg;
    wire                  sign = dIn[17];
@@ -402,20 +402,22 @@ module multBy2withSat(clk, symEn, sym2xEn, dIn, dOut, symEnDly, sym2xEnDly);
          dataBits <= {dIn[16:0], 1'b0};
          satPos <= !sign && (dIn[17:16] != 2'b00);
          satNeg <=  sign && (dIn[17:16] != 2'b11);
+         dOut <= dOutTmp;
          if (satPos) begin
-            dOut <= 18'h1ffff;
+            dOutTmp <= 18'h1ffff;
          end
          else if (satNeg) begin
-            dOut <= 18'h20001;
+            dOutTmp <= 18'h20001;
          end
          else begin
-            dOut <= dataBits;
+            dOutTmp <= dataBits;
          end
       end   
    end
 
    // It works to reuse the symEn without delay because it takes 2 sym2xEn to produce the times 2 output
+   // Had to add "dOut <= dOutTmp" to line up the 2 samples per symbol correctly 
    assign symEnDly = symEn;
    assign sym2xEnDly = sym2xEn;
-
+   
 endmodule

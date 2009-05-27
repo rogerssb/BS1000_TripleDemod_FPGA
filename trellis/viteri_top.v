@@ -246,18 +246,32 @@ module viterbi_top(clk, reset, symEn, sym2xEn,
 
    // creates an enable which strobes only every other symEn 
    assign symEn_phErr = symEn_acsDly & everyOtherSymEn;
+
+   always @(posedge clk)
+     begin
+        if (reset) begin
+           everyOtherSymEn <= 0;
+        end
+        else begin 
+           if (symEn_acsDly) begin
+              everyOtherSymEn <= ~everyOtherSymEn;
+           end
+		end
+	 end
+	 
+   
    
    // Computing the error term
    always @(posedge clk)
      begin
         if (reset) begin
            phaseError <= 0;
-           everyOtherSymEn <= 1;
+//           everyOtherSymEn <= 1;
         end
         else begin 
-           if (symEn_acsDly) begin
-              everyOtherSymEn <= ~everyOtherSymEn;
-           end
+//           if (symEn_acsDly) begin
+//              everyOtherSymEn <= ~everyOtherSymEn;
+//           end
            if (symEn_phErr) begin
              case ( {index[4:1], 1'b0} ) // selecting only the even imaginary parts
                0 : if (oneOrZeroPredecessor==0) phaseError <= out0Pt1Imag_2dly ;
@@ -302,8 +316,8 @@ module viterbi_top(clk, reset, symEn, sym2xEn,
                    else                         phaseError <= out1Pt20Imag_2dly;
              endcase
         end
-            end     //remove
-     end
+     end     //remove
+   end
 
 
 `ifdef SIMULATE
