@@ -1,8 +1,8 @@
-timestamp=1243466078739
+timestamp=1243620400904
 
 [$root]
-A/$root=22|""|0|1*19528539
-B/$root=3*22401226
+A/$root=22|""|0|1*19930637
+B/$root=3*23472983
 
 [acs]
 A/acs=22|./../../trellis/acs.v|76|1*14049518
@@ -196,6 +196,12 @@ B/interpolate=3*21731975
 P/~emb=495,975,1463,2069
 R=./../../interpolate.v|3
 
+[iqMagEst]
+A/iqMagEst=22|./../../trellis/iqmagest.v|3|1*19908838
+B/iqMagEst=3*23450345
+P/~emb=349,713,1121,1567
+R=./../../trellis/iqmagest.v|3
+
 [lagGain]
 A/lagGain=22|./../../laggain.v|3|1*18587412
 B/lagGain=3*21174737
@@ -257,10 +263,10 @@ P/~emb=180,5834,15231,41073
 R=./../../coregen/mult10x10.v|36
 
 [multBy2withSat]
-A/multBy2withSat=22|./../../trellis/trellis.v|388|1*19553907
-B/multBy2withSat=3*22476290
+A/multBy2withSat=22|./../../trellis/trellis.v|409|1*19942643
+B/multBy2withSat=3*23485311
 P/~emb=324,608,865,1007
-R=./../../trellis/trellis.v|388
+R=./../../trellis/trellis.v|409
 
 [multiplier]
 A/multiplier=22|./../../trellis/multiplier.v|13|1*14097540
@@ -389,9 +395,9 @@ P/~emb=238,650,1075,1417
 R=./../../shifter18to48.v|3
 
 [test]
-A/test=22|./../../testpcmfm.v|19|1*18613735
-B/test=3*21255502
-P/~emb=471,2489,4504,6037
+A/test=22|./../../testpcmfm.v|19|1*19849977
+B/test=3*23313294
+P/~emb=471,2462,4482,6018
 R=./../../testpcmfm.v|19
 
 [traceBackTable]
@@ -401,14 +407,14 @@ P/~emb=479,873,1424,1747
 R=./../../trellis/tracebacktable.v|14
 
 [trellis]
-A/trellis=22|./../../trellis/trellis.v|14|1*19529249
-B/trellis=3*22401362
-P/~emb=1062,2264,3462,5921
+A/trellis=22|./../../trellis/trellis.v|14|1*19931347
+B/trellis=3*23473119
+P/~emb=1062,1829,2641,3590
 R=./../../trellis/trellis.v|14
 
 [trellisCarrierLoop]
-A/trellisCarrierLoop=22|./../../trellis/trelliscarrierloop.v|14|1*14175256
-B/trellisCarrierLoop=3*19345087
+A/trellisCarrierLoop=22|./../../trellis/trelliscarrierloop.v|14|1*19895620
+B/trellisCarrierLoop=3*23435594
 P/~emb=758,1581,2432,3314
 R=./../../trellis/trelliscarrierloop.v|14
 
@@ -425,8 +431,8 @@ P/~emb=321,1103,1657,2155
 R=./../../variablegain.v|4
 
 [viterbi_top]
-A/viterbi_top=22|./../../trellis/viteri_top.v|13|1*19372717
-B/viterbi_top=3*21974597
+A/viterbi_top=22|./../../trellis/viteri_top.v|13|1*19588306
+B/viterbi_top=3*22589414
 P/~emb=5129,6617,8176,10075
 R=./../../trellis/viteri_top.v|13
 
@@ -520,8 +526,8 @@ C:/projects/semco/svn_checkout_folder/trellis/trellis.v=0*2532600*2535192
 C:/projects/semco/svn_checkout_folder/trellis/viteri_top.v=0*2687520*2691955
 C:/projects/semco/svn_checkout_folder/variableGain.v=0*1308103*1310132
 C:/projects/semco/svn_checkout_folder/vm_cordic.v=0*2265435*2268453
-LastVerilogToplevel=glbl
-ModifyID=17573
+LastVerilogToplevel=iqMagEst
+ModifyID=18069
 Version=73
 c:/projects/semco/svn_checkout_folder/agcLoopFilter.v=0*6806000*6807902
 c:/projects/semco/svn_checkout_folder/agcLoopRegs.v=0*8195788*8197048
@@ -575,32 +581,33 @@ c:/projects/semco/svn_checkout_folder/resampler/resampler.v=0*8384084*8387176
 c:/projects/semco/svn_checkout_folder/shift48To18.v=0*6969643*6971719
 c:/projects/semco/svn_checkout_folder/shifter18to48.v=0*7802614*7803716
 c:/projects/semco/svn_checkout_folder/testPcmfm.v=0*8300826*8306612
-c:/projects/semco/svn_checkout_folder/testpcmfm.v=0*5844579*5850413
+c:/projects/semco/svn_checkout_folder/testpcmfm.v=0*8864508*8870246
 c:/projects/semco/svn_checkout_folder/trellis/acs.v=0*6623957*6625441
 c:/projects/semco/svn_checkout_folder/trellis/acs.v_comp4twoscomp.v_maxmetric.v_mfilter.v_rotmult.v_multiplier.v_rotator.v_tracebacktable.v_trellis.v_trelliscarrierloop.v_viteri_top.v=0*3371955*3387284
 c:/projects/semco/svn_checkout_folder/trellis/comp4twosComp.v=0*6629307*6630417
 c:/projects/semco/svn_checkout_folder/trellis/comp4twoscomp.v_testpcmfm.v=0*4032291*4038517
+c:/projects/semco/svn_checkout_folder/trellis/iqMagEst.v=0*8893442*8894498
 c:/projects/semco/svn_checkout_folder/trellis/maxMetric.v=0*6643303*6644953
 c:/projects/semco/svn_checkout_folder/trellis/mfilter.v=0*6648127*6648862
 c:/projects/semco/svn_checkout_folder/trellis/multiplier.v=0*6656548*6657366
 c:/projects/semco/svn_checkout_folder/trellis/rotMult.v=0*6652260*6653059
 c:/projects/semco/svn_checkout_folder/trellis/rotator.v=0*6670629*6672917
 c:/projects/semco/svn_checkout_folder/trellis/traceBackTable.v=0*6677970*6680009
-c:/projects/semco/svn_checkout_folder/trellis/trellis.v=0*8673643*8677867
-c:/projects/semco/svn_checkout_folder/trellis/trellisCarrierLoop.v=0*6700396*6702647
+c:/projects/semco/svn_checkout_folder/trellis/trellis.v=0*8912832*8915296
+c:/projects/semco/svn_checkout_folder/trellis/trellisCarrierLoop.v=0*8887037*8889288
 c:/projects/semco/svn_checkout_folder/trellis/trelliscarrierloop.v=0*3504764*3507031
-c:/projects/semco/svn_checkout_folder/trellis/viteri_top.v=0*8598428*8603359
+c:/projects/semco/svn_checkout_folder/trellis/viteri_top.v=0*8709583*8714530
 c:/projects/semco/svn_checkout_folder/trellisTop.v=0*3412697*3417332
 c:/projects/semco/svn_checkout_folder/variableGain.v=0*7338925*7341002
 c:/projects/semco/svn_checkout_folder/vm_cordic.v=0*8366524*8369542
 
 [~MFT]
-0=2827|0pcmfm_design.mgf|8677867|1856339
-1=2088|1pcmfm_design.mgf|19553907|15311369
-3=2088|3pcmfm_design.mgf|22476290|20924790
+0=2945|0pcmfm_design.mgf|8915296|1935843
+1=2175|1pcmfm_design.mgf|19942643|15707628
+3=2175|3pcmfm_design.mgf|23485311|21992475
 
 [~U]
-$root=12|0*8663631|
+$root=12|0*8905528|
 acs=12|0*6621887||0x80
 adder2s=12|0*6618853||0x80
 agcLoopFilter=12|0*6802535||0x80
@@ -633,6 +640,7 @@ halfbandDecimate=12|0*7810734||0x80
 halfbandEven=12|0*7347839||0x90
 interpRegs=12|0*6876679||0x80
 interpolate=12|0*8371488||0x80
+iqMagEst=12|0*8891347||0x90
 lagGain=12|0*8266072||0x80
 leadGain=12|0*6960492||0x80
 log2=12|0*6872175||0x80
@@ -643,7 +651,7 @@ mfilter=12|0*6646553||0x80
 mpy18x18=12|0*8199156||0x80
 mrk_spc_decode=12|0*6849515||0x80
 mult10x10=12|0*6889136||0x80
-multBy2withSat=12|0*8672256||0x80
+multBy2withSat=12|0*8911445||0x80
 multiplier=12|0*6654673||0x90
 multiplier_v10_0=12|0*7968914||0x80
 mux_2_1=12|0*6621004||0x80
@@ -665,12 +673,12 @@ shapingFir=12|0*8420226||0x90
 shift34to18=12|0*7794406||0x90
 shift48to18=12|0*6965420||0x80
 shifter18to48=12|0*7800056||0x90
-test=12|0*8290902||0x90
+test=12|0*8854656||0x90
 traceBackTable=12|0*6674515||0x80
-trellis=12|0*8665015||0x80
-trellisCarrierLoop=12|0*6696028||0x90
+trellis=12|0*8906912||0x80
+trellisCarrierLoop=12|0*8882669||0x90
 trellisTop=12|0*3402027||0x90
 variableGain=12|0*7334463||0x80
-viterbi_top=12|0*8586352||0x80
+viterbi_top=12|0*8697506||0x80
 vm_cordic=12|0*8359133||0x80
 

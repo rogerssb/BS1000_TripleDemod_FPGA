@@ -26,7 +26,7 @@ module trellis(
     dac2Data,
     decision,
     symEn_tbtDly,
-	sym2xEn_tbtDly
+    sym2xEn_tbtDly
     );
 
 parameter size = 8;
@@ -49,8 +49,8 @@ output          decision;
 output          symEn_tbtDly;
 output          sym2xEn_tbtDly;
    
-
 wire    [ROT_BITS-1:0]  phaseError;
+wire                    decision;
 
 wire    [17:0]  carrierLoopIOut,carrierLoopQOut;
 wire    [17:0]  carrierLoopIOutX2,carrierLoopQOutX2;
@@ -61,8 +61,13 @@ trellisCarrierLoop trellisCarrierLoop(
   .sym2xEn(sym2xEn),
   .iIn(iIn),
   .qIn(qIn),
+`ifndef IQ_MAG
   .phaseError(phErrShft),
   .symEn_phErr(symEn_phErr),
+`else
+  .phaseError(0),
+  .symEn_phErr(rotEna),
+`endif
   .wr0(wr0),
   .wr1(wr1),
   .wr2(wr2),
@@ -110,13 +115,30 @@ mfilter #(18'h1B48C,18'h2F47B,18'h3D7D4,18'h20195) f1(clk,reset,symEnDly_mult2,s
 reg [15:0]symEnShift;
 always @(posedge clk)symEnShift <= {symEnShift[14:0],(sym2xEnDly_mult2 && !symEnDly_mult2)};
 
-wire rotEna = symEnShift[4];
+wire rotEna = symEnShift[3];
 wire trellEna = symEnShift[14];
 
 reg [15:0]sym2xEnShift;
 always @(posedge clk)sym2xEnShift <= {sym2xEnShift[14:0],sym2xEnDly_mult2};
 wire trell2xEna = sym2xEnShift[14];
 
+
+`ifdef IQ_MAG
+iqMagEst iqMagEst
+  ( 
+    .clk(clk), .reset(reset), .syncIn(rotEna),
+    .iIn_0(f0I),
+    .qIn_0(f0Q),
+    .iIn_1(f1I),
+    .qIn_1(f1Q),
+    .decision(decision)
+    );
+
+assign symEn_tbtDly = rotEna;
+assign sym2xEn_tbtDly = 0;  // need to allign
+
+`else
+   
    
 wire [ROT_BITS-1:0]
   out0Pt1Real,out1Pt1Real,          out0Pt1Imag,out1Pt1Imag,
@@ -190,7 +212,6 @@ rotator #(ROT_BITS) rotator(
 
   
 
-wire decision;
 
 viterbi_top #(size, ROT_BITS)viterbi_top(
   .clk(clk), .reset(reset), .symEn(trellEna), .sym2xEn(trell2xEna),
@@ -283,7 +304,7 @@ viterbi_top #(size, ROT_BITS)viterbi_top(
   .symEn_phErr(symEn_phErr)
   );
 
-
+`endif
 
 
    reg [7:0]            dataBits;

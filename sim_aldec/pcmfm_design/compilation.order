@@ -63,3 +63,4 @@
 .\..\..\trellis\trellis.v
 .\..\..\trellis\trellisCarrierLoop.v
 .\..\..\trellis\viteri_top.v
+.\..\..\trellis\iqMagEst.v

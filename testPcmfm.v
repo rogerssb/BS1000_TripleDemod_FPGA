@@ -167,8 +167,8 @@ always @(negedge modClk or posedge reset) begin
     randData <= sr[0];
     end
 
-wire modData = randData;
-//wire modData = altData;
+//wire modData = randData;
+wire modData = altData;
 
 
 /******************************************************************************
@@ -493,7 +493,11 @@ reg [127:0]delaySR;
 reg txDelay;
 //always @(negedge demodClk) begin
 always @(posedge symEn_tbtDly) begin
+`ifdef IQ_MAG
+    txDelay <= delaySR[19];
+`else
     txDelay <= delaySR[17];
+`endif	
     delaySR <= {delaySR[126:0],testData};
     end
 
@@ -635,9 +639,10 @@ initial begin
     txScaleFactor = 0.707;
     decoder.decoder_regs.q = 16'h0004;
     `ifdef TRELLIS
+	`ifndef IQ_MAG
     trellis.viterbi_top.simReset = 0;
     `endif
-
+	`endif
 
     // Turn on the clock
     clken=1;
@@ -760,11 +765,12 @@ initial begin
     // Wait 2 bit periods
     #(10*bitrateSamplesInt*C) ;
 
-    // Create a reset to clear the accumulator in the trellis 
+    // Create a reset to clear the accumulator in the trellis
+	`ifndef IQ_MAG
     trellis.viterbi_top.simReset = 1;
     #(6*C) ;
     trellis.viterbi_top.simReset = 0;
-        
+    `endif        
 
     // Enable the trellis carrier loop
     #(10*bitrateSamplesInt*C) ;

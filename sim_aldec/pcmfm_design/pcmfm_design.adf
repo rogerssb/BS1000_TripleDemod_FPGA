@@ -65,10 +65,7 @@ PriorityLibNames=ovi_xilinxcorelib;
 EnableSLP=0
 
 [DefineMacro]
-Global=SIMULATE
-
-[Groups]
-trellis=1
+Global=SIMULATE IQ_MAG
 
 [LocalVerilogDirs]
 Count=1
@@ -79,6 +76,9 @@ SPARTAN3ADSP=
 ovi_xilinxcorelib=
 ovi_simprim=
 ovi_unisim=
+
+[Groups]
+trellis=1
 
 [Files]
 /..\..\..\testPcmfm.v=-1
@@ -154,6 +154,7 @@ trellis/..\..\..\..\trellis\traceBackTable.v=-1
 trellis/..\..\..\..\trellis\trellis.v=-1
 trellis/..\..\..\..\trellis\trellisCarrierLoop.v=-1
 trellis/..\..\..\..\trellis\viteri_top.v=-1
+trellis/..\..\..\..\trellis\iqMagEst.v=-1
 
 [Files.Data]
 .\..\..\testPcmfm.v=Verilog Source Code
@@ -229,3 +230,5 @@ trellis/..\..\..\..\trellis\viteri_top.v=-1
 .\..\..\trellis\trellis.v=Verilog Source Code
 .\..\..\trellis\trellisCarrierLoop.v=Verilog Source Code
 .\..\..\trellis\viteri_top.v=Verilog Source Code
+.\..\..\trellis\iqMagEst.v=Verilog Source Code
+

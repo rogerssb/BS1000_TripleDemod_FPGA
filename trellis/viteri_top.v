@@ -250,7 +250,7 @@ module viterbi_top(clk, reset, symEn, sym2xEn,
    always @(posedge clk)
      begin
         if (reset) begin
-           everyOtherSymEn <= 0;
+           everyOtherSymEn <= 1;
         end
         else begin 
            if (symEn_acsDly) begin
