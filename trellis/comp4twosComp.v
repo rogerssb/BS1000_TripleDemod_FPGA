@@ -3,7 +3,10 @@
 module comp4twosComp (clk,reset,a,b,c,d,index,maxVal);
    parameter             size = 8;
    parameter             indexOffset=0;
+   `ifdef SIMULATE
+   `else
    defparam              compTwosCompFunc.size = size;
+   `endif
 
 
    input                         clk,reset;

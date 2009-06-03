@@ -68,18 +68,18 @@ wire [36:0]  sum_1 = {1'b0, iSquare_1} + {1'b0, qSquare_1};
 
   always @(posedge clk)
      if (reset) begin
-	  magEst_0 <= 0;
-	  magEst_1 <= 0;
+          magEst_0 <= 0;
+          magEst_1 <= 0;
      end
      else if (syncIn) begin
-	  magEst_0 <= sum_0;
-	  magEst_1 <= sum_1;
-	  if (magEst_0 >= magEst_1) begin
-	     decision <= 1;
-	  end
-	  else begin
-	     decision <= 0;
-	  end
+          magEst_0 <= sum_0;
+          magEst_1 <= sum_1;
+          if (magEst_0 >= magEst_1) begin
+             decision <= 0;
+          end
+          else begin
+             decision <= 1;
+          end
      end
 
 

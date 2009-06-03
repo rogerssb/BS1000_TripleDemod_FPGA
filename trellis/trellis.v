@@ -52,6 +52,7 @@ output          sym2xEn_tbtDly;
 wire    [ROT_BITS-1:0]  phaseError;
 wire                    decision;
 
+reg     [7:0]   phErrShft;
 wire    [17:0]  carrierLoopIOut,carrierLoopQOut;
 wire    [17:0]  carrierLoopIOutX2,carrierLoopQOutX2;
 trellisCarrierLoop trellisCarrierLoop(
@@ -80,6 +81,12 @@ trellisCarrierLoop trellisCarrierLoop(
   .symEnDly(symEnDly),
   .sym2xEnDly(sym2xEnDly)
   );
+
+`ifdef SIMULATE
+real phErrReal;
+always @(phErrShft) phErrReal = (phErrShft[7] ? phErrShft - 256.0 : phErrShft);
+`endif
+
 
 // multiply by two the output from the carrierLoop to compensate for the 1/2 in the cmpy18 module.
 multBy2withSat times2I(
@@ -122,6 +129,24 @@ reg [15:0]sym2xEnShift;
 always @(posedge clk)sym2xEnShift <= {sym2xEnShift[14:0],sym2xEnDly_mult2};
 wire trell2xEna = sym2xEnShift[14];
 
+   
+`ifdef SIMULATE
+real f0IReal;
+always @(f0I) f0IReal <= f0I[17] ? f0I - 262144.0 : f0I;
+real f0QReal;
+always @(f0Q) f0QReal <= f0Q[17] ? f0Q - 262144.0 : f0Q;
+real f1IReal;
+always @(f1I) f1IReal <= f1I[17] ? f1I - 262144.0 : f1I;
+real f1QReal;
+always @(f1Q) f1QReal <= f1Q[17] ? f1Q - 262144.0 : f1Q;
+real mag0,mag1;
+always @(posedge clk) begin
+    if (rotEna) begin
+        mag0 <= (f0IReal*f0IReal) + (f0QReal*f0QReal);
+        mag1 <= (f1IReal*f1IReal) + (f1QReal*f1QReal);
+        end                        
+    end
+`endif
 
 `ifdef IQ_MAG
 iqMagEst iqMagEst
@@ -212,6 +237,7 @@ rotator #(ROT_BITS) rotator(
 
   
 
+wire    [4:0]   index;
 
 viterbi_top #(size, ROT_BITS)viterbi_top(
   .clk(clk), .reset(reset), .symEn(trellEna), .sym2xEn(trell2xEna),
@@ -297,6 +323,7 @@ viterbi_top #(size, ROT_BITS)viterbi_top(
   .out0Pt20Real(out0Pt20Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),.out0Pt20Imag(out0Pt20Imag[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),
   .out1Pt20Real(out1Pt20Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),.out1Pt20Imag(out1Pt20Imag[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),
  -----/\----- EXCLUDED -----/\----- */
+  .index(index),
   .decision(decision),
   .symEn_tbtDly(symEn_tbtDly),
   .sym2xEn_tbtDly(sym2xEn_tbtDly),
@@ -308,7 +335,6 @@ viterbi_top #(size, ROT_BITS)viterbi_top(
 
 
    reg [7:0]            dataBits;
-   reg [7:0]            phErrShft;
   
    reg                  satPos,satNeg;
    wire                 sign = phaseError[9];
@@ -344,58 +370,70 @@ reg     [17:0]  dac2Data;
 always @(posedge clk) begin
     case (dac0Select) 
         `DAC_TRELLIS_I: begin
-            dac0Data <= carrierLoopIOut;
-            dac0Sync <= sym2xEnDly;
+            dac0Data <= carrierLoopIOutX2;
+            dac0Sync <= sym2xEnDly_mult2;
             end
         `DAC_TRELLIS_Q: begin
-            dac0Data <= carrierLoopQOut;
-            dac0Sync <= sym2xEnDly;
+            dac0Data <= carrierLoopQOutX2;
+            dac0Sync <= sym2xEnDly_mult2;
             end
         `DAC_TRELLIS_PHERR: begin
-            dac0Data <= {phaseError,10'b0};
-            dac0Sync <= symEnDly_mult2;
+            dac0Data <= {phErrShft,10'b0};
+            dac0Sync <= symEn_phErr;
+            end
+        `DAC_TRELLIS_INDEX: begin
+            dac0Data <= {1'b0,index,12'b0};
+            dac0Sync <= symEn_tbtDly;
             end
         default: begin
-            dac0Data <= {phaseError,10'b0};
-            dac0Sync <= symEnDly_mult2;
+            dac0Data <= {phErrShft,10'b0};
+            dac0Sync <= symEn_phErr;
             end
         endcase
 
     case (dac1Select) 
         `DAC_TRELLIS_I: begin
-            dac1Data <= carrierLoopIOut;
-            dac1Sync <= sym2xEnDly;
+            dac1Data <= carrierLoopIOutX2;
+            dac1Sync <= sym2xEnDly_mult2;
             end
         `DAC_TRELLIS_Q: begin
-            dac1Data <= carrierLoopQOut;
-            dac1Sync <= sym2xEnDly;
+            dac1Data <= carrierLoopQOutX2;
+            dac1Sync <= sym2xEnDly_mult2;
             end
         `DAC_TRELLIS_PHERR: begin
-            dac1Data <= {phaseError,10'b0};
-            dac1Sync <= symEnDly_mult2;
+            dac1Data <= {phErrShft,10'b0};
+            dac1Sync <= symEn_phErr;
+            end
+        `DAC_TRELLIS_INDEX: begin
+            dac1Data <= {1'b0,index,12'b0};
+            dac1Sync <= symEn_tbtDly;
             end
         default: begin
-            dac1Data <= {phaseError,10'b0};
-            dac1Sync <= symEnDly_mult2;
+            dac1Data <= {phErrShft,10'b0};
+            dac1Sync <= symEn_phErr;
             end
         endcase
 
     case (dac2Select) 
         `DAC_TRELLIS_I: begin
-            dac2Data <= carrierLoopIOut;
-            dac2Sync <= sym2xEnDly;
+            dac2Data <= carrierLoopIOutX2;
+            dac2Sync <= sym2xEnDly_mult2;
             end
         `DAC_TRELLIS_Q: begin
-            dac2Data <= carrierLoopQOut;
-            dac2Sync <= sym2xEnDly;
+            dac2Data <= carrierLoopQOutX2;
+            dac2Sync <= sym2xEnDly_mult2;
             end
         `DAC_TRELLIS_PHERR: begin
-            dac2Data <= {phaseError,10'b0};
-            dac2Sync <= symEnDly_mult2;
+            dac2Data <= {phErrShft,10'b0};
+            dac2Sync <= symEn_phErr;
+            end
+        `DAC_TRELLIS_INDEX: begin
+            dac2Data <= {1'b0,index,12'b0};
+            dac2Sync <= symEn_tbtDly;
             end
         default: begin
-            dac2Data <= {phaseError,10'b0};
-            dac2Sync <= symEnDly_mult2;
+            dac2Data <= {phErrShft,10'b0};
+            dac2Sync <= symEn_phErr;
             end
         endcase
 

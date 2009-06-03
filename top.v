@@ -59,7 +59,7 @@ output bsync_nLock,demod_nLock;
 output symb_pll_ref,symb_pll_fbk;
 input symb_pll_vco;
 
-parameter VER_NUMBER = 16'h0055;
+parameter VER_NUMBER = 16'h0056;
 
 wire [11:0]addr = {addr11,addr10,addr9,addr8,addr7,addr6,addr5,addr4,addr3,addr2,addr1,1'b0};
 
@@ -76,19 +76,71 @@ always @(addr) begin
 end
 wire misc_en = !nCs && misc_space;
 
-// address decoded reset
-reg [15:0] misc_dout;
-reg rs;
-always @(addr or misc_en) begin
-  rs <= 0;
-  if(misc_en) begin
-    casex (addr)
-      `RESET: rs <= 1;
-      `VERSION: misc_dout <= VER_NUMBER;
-      default: ;
-    endcase
-  end
+// MISCSPACE Writes
+reg             clockCounterEn;
+reg             startClockCounter;
+always @(posedge nWe or posedge clockCounterEn) begin
+    if (clockCounterEn) begin
+        startClockCounter <= 0;
+        end
+    else if (misc_en) begin
+        casex (addr) 
+            `MISC_CLOCK:    startClockCounter <= 1;
+            endcase
+        end
+    end
+
+// MISCSPACE Reads
+reg     [31:0]  misc_dout;
+reg     [31:0]  clockCounterHold;
+reg             rs;
+always @(addr or misc_en or clockCounterHold) begin
+    if(misc_en) begin
+        casex (addr)
+            `MISC_RESET: begin
+                rs <= 1;
+                misc_dout <= 32'b0;
+                end
+            `MISC_VERSION: begin
+                rs <= 0;
+                misc_dout <= {VER_NUMBER,16'b0};
+                end
+            `MISC_CLOCK: begin
+                rs <= 0;
+                misc_dout <= clockCounterHold;
+                end
+            default: begin
+                misc_dout <= 32'b0;
+                rs <= 0;
+                end
+        endcase
+    end else begin
+        rs <= 0;
+        misc_dout <= 32'b0;
+    end
+
 end
+
+reg     [31:0]  clockCounter;
+reg             sc0,sc1;
+reg             me0,me1;
+always @(posedge ck933) begin
+    sc0 <= startClockCounter;
+    sc1 <= sc0;
+    if (sc0 & !sc1) begin
+        clockCounterEn <= 1;
+        clockCounter <= 0;
+        end
+    else begin
+        clockCounterEn <= 0;
+        clockCounter <= clockCounter + 1;
+        end
+    me0 <= misc_en;
+    me1 <= me0;
+    if (me0 & !me1) begin
+        clockCounterHold <= clockCounter;
+        end
+    end
 
 reg reset;
 reg rs0,rs1;
@@ -113,7 +165,6 @@ always @(posedge ck933 or posedge rs) begin
       end
     end
   end
-
 
 //******************************************************************************
 //                           DAC Serial Interface
@@ -579,7 +630,14 @@ always @(
         end
       end
     `DAC_SPACE : rd_mux <= dac_dout;
-    `MISC_SPACE : rd_mux <= misc_dout;
+    `MISC_SPACE : begin
+        if (addr[1]) begin
+            rd_mux <= misc_dout[31:16];
+            end
+        else begin
+            rd_mux <= misc_dout[15:0];
+            end
+        end
     `DECODERSPACE: rd_mux <= decoder_dout;
     `PLLSPACE: rd_mux <= symb_pll_dout;
     default : rd_mux <= 16'hxxxx;

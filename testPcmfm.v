@@ -5,15 +5,15 @@
 `define TRELLIS
 
 `define ENABLE_AGC
-//`define ADD_NOISE
+`define ADD_NOISE
 //`define BER_TEST
 //`define MATLAB_VECTORS
 
 `ifdef BER_TEST
 !control .savsim=1
 !mkeep (test
-!mexclude (test(rxRadio
-!mexclude (test(txRadio
+!mexclude (test(demod
+!mexclude (test(trellis
 `endif
 
 module test;
@@ -167,8 +167,8 @@ always @(negedge modClk or posedge reset) begin
     randData <= sr[0];
     end
 
-//wire modData = randData;
-wire modData = altData;
+wire modData = randData;
+//wire modData = altData;
 
 
 /******************************************************************************
@@ -263,7 +263,8 @@ wire [17:0]qSignal = 131072.0*qTxReal * txScaleFactor;
 
 reg  measureSNR;
 initial measureSNR = 0;
-wire    [17:0]iRx,qRx;
+reg     [17:0]iRx;
+wire    [17:0]qRx;
 real iSignalReal;
 real qSignalReal;
 real signalMagSquared;
@@ -281,7 +282,8 @@ always @(qNoise)  qNoiseReal = (qNoise[17] ? (qNoise - 262144.0) : qNoise)/13107
 always @(negedge clk) begin
     `ifdef ADD_NOISE
     iNoise <= $gaussPLI();
-    qNoise <= $gaussPLI();
+    //qNoise <= $gaussPLI();
+    qNoise <= 0;
     `else
     iNoise <= 0;
     qNoise <= 0;
@@ -302,8 +304,19 @@ real iChReal;
 real qChReal;
 always @(iRx) iChReal = (iRx[17] ? (iRx - 262144.0) : iRx)/131072.0;
 always @(qRx)  qChReal = (qRx[17] ? (qRx - 262144.0) : qRx)/131072.0;
-                    
-assign iRx = iSignal + iNoise;
+     
+wire    [18:0]  iRxSum = {iSignal[17],iSignal} + {iNoise[17],iNoise};                    
+always @(iRxSum) begin
+    if (iRxSum[18] & !iRxSum[17]) begin
+        iRx = 18'h20001;
+        end
+    else if (!iRxSum[18] & iRxSum[17]) begin
+        iRx = 18'h1ffff;
+        end
+    else begin
+        iRx = iRxSum[17:0];
+        end
+    end
 assign qRx = qSignal + qNoise;
 
 
@@ -497,7 +510,7 @@ always @(posedge symEn_tbtDly) begin
     txDelay <= delaySR[19];
 `else
     txDelay <= delaySR[17];
-`endif	
+`endif  
     delaySR <= {delaySR[126:0],testData};
     end
 
@@ -624,7 +637,7 @@ initial begin
     // The 11.5 is a fudge factor (should be 12 for the 2 bit shift) for the scaling 
     // down of the transmit waveform from full scale.
     // The 13.0 is to translate from SNR to EBNO which is 10log10(bitrate/bandwidth).
-    $initGaussPLI(1,8.0 + 11.5 - 13.0,131072.0);
+    $initGaussPLI(1,15.0 + 11.5 - 7.0,131072.0);
     `endif
     demod.ddc.hbReset = 1;
     demod.ddc.cicReset = 1;
@@ -636,13 +649,13 @@ initial begin
     we0 = 0; we1 = 0; we2 = 0; we3 = 0; 
     d = 32'hz;
     fmModCS = 0;
-    txScaleFactor = 0.707;
+    txScaleFactor = 0.25;
     decoder.decoder_regs.q = 16'h0004;
     `ifdef TRELLIS
-	`ifndef IQ_MAG
+    `ifndef IQ_MAG
     trellis.viterbi_top.simReset = 0;
     `endif
-	`endif
+    `endif
 
     // Turn on the clock
     clken=1;
@@ -688,7 +701,7 @@ initial begin
 
     // Init the channel agc loop filter
     write32(createAddress(`CHAGCSPACE,`ALF_CONTROL),1);                 // Zero the error
-    write32(createAddress(`CHAGCSPACE,`ALF_SETPOINT),32'h000000f8);     // AGC Setpoint
+    write32(createAddress(`CHAGCSPACE,`ALF_SETPOINT),32'h000000f0);     // AGC Setpoint
     write32(createAddress(`CHAGCSPACE,`ALF_GAINS),32'h00180018);        // AGC Loop Gain
     write32(createAddress(`CHAGCSPACE,`ALF_ULIMIT),32'h4fffffff);       // AGC Upper limit
     write32(createAddress(`CHAGCSPACE,`ALF_LLIMIT),32'h00000000);       // AGC Lower limit
@@ -766,7 +779,7 @@ initial begin
     #(10*bitrateSamplesInt*C) ;
 
     // Create a reset to clear the accumulator in the trellis
-	`ifndef IQ_MAG
+        `ifndef IQ_MAG
     trellis.viterbi_top.simReset = 1;
     #(6*C) ;
     trellis.viterbi_top.simReset = 0;
@@ -782,9 +795,10 @@ initial begin
     `endif
         
     // Wait for some data to pass thru
-    #(2*50*bitrateSamplesInt*C) ;
+    #(2*150*bitrateSamplesInt*C) ;
     // Turn on the BERT
     testBits = 1;
+    measureSNR = 1;
     // Run the BERT
     #(2*200000*bitrateSamplesInt*C) ;
     `ifdef MATLAB_VECTORS

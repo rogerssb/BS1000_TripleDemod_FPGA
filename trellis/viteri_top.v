@@ -31,7 +31,7 @@ module viterbi_top(clk, reset, symEn, sym2xEn,
                    out0Pt18Real,out0Pt18Imag,out1Pt18Real,out1Pt18Imag,
                    out0Pt19Real,out0Pt19Imag,out1Pt19Real,out1Pt19Imag,
                    out0Pt20Real,out0Pt20Imag,out1Pt20Real,out1Pt20Imag,
-                   decision, symEn_tbtDly, sym2xEn_tbtDly, phaseError, symEn_phErr);
+                   index, decision, symEn_tbtDly, sym2xEn_tbtDly, phaseError, symEn_phErr);
    
    parameter            size = 8;
    parameter            ROT_BITS = 10;
@@ -78,6 +78,7 @@ module viterbi_top(clk, reset, symEn, sym2xEn,
                         out0Pt19Imag, out1Pt19Imag,
                         out0Pt20Imag, out1Pt20Imag;
    
+   output   [4:0]        index;
    output                decision;
    output                symEn_tbtDly, sym2xEn_tbtDly;
    output [ROT_BITS-1:0] phaseError;
@@ -256,9 +257,9 @@ module viterbi_top(clk, reset, symEn, sym2xEn,
            if (symEn_acsDly) begin
               everyOtherSymEn <= ~everyOtherSymEn;
            end
-		end
-	 end
-	 
+                end
+         end
+         
    
    
    // Computing the error term
@@ -276,44 +277,47 @@ module viterbi_top(clk, reset, symEn, sym2xEn,
              case ( {index[4:1], 1'b0} ) // selecting only the even imaginary parts
                0 : if (oneOrZeroPredecessor==0) phaseError <= out0Pt1Imag_2dly ;
                    else                         phaseError <= out1Pt1Imag_2dly ;
-               1 : if (oneOrZeroPredecessor==0) phaseError <= out0Pt2Imag_2dly ;
-                   else                         phaseError <= out1Pt2Imag_2dly ;
                2 : if (oneOrZeroPredecessor==0) phaseError <= out0Pt3Imag_2dly ;
                    else                         phaseError <= out1Pt3Imag_2dly ;
-               3 : if (oneOrZeroPredecessor==0) phaseError <= out0Pt4Imag_2dly ;
-                   else                         phaseError <= out1Pt4Imag_2dly ;  
                4 : if (oneOrZeroPredecessor==0) phaseError <= out0Pt5Imag_2dly ;
                    else                         phaseError <= out1Pt5Imag_2dly ; 
-               5 : if (oneOrZeroPredecessor==0) phaseError <= out0Pt6Imag_2dly ;
-                   else                         phaseError <= out1Pt6Imag_2dly ; 
                6 : if (oneOrZeroPredecessor==0) phaseError <= out0Pt7Imag_2dly ;
                    else                         phaseError <= out1Pt7Imag_2dly ; 
-               7 : if (oneOrZeroPredecessor==0) phaseError <= out0Pt8Imag_2dly ;
-                   else                         phaseError <= out1Pt8Imag_2dly ; 
                8 : if (oneOrZeroPredecessor==0) phaseError <= out0Pt9Imag_2dly ;
                    else                         phaseError <= out1Pt9Imag_2dly ;
-               9 : if (oneOrZeroPredecessor==0) phaseError <= out0Pt10Imag_2dly;
-                   else                         phaseError <= out1Pt10Imag_2dly;  
                10: if (oneOrZeroPredecessor==0) phaseError <= out0Pt11Imag_2dly;
                    else                         phaseError <= out1Pt11Imag_2dly;
-               11: if (oneOrZeroPredecessor==0) phaseError <= out0Pt12Imag_2dly;
-                   else                         phaseError <= out1Pt12Imag_2dly;
                12: if (oneOrZeroPredecessor==0) phaseError <= out0Pt13Imag_2dly;
                    else                         phaseError <= out1Pt13Imag_2dly;
-               13: if (oneOrZeroPredecessor==0) phaseError <= out0Pt14Imag_2dly;
-                   else                         phaseError <= out1Pt14Imag_2dly;
                14: if (oneOrZeroPredecessor==0) phaseError <= out0Pt15Imag_2dly;
                    else                         phaseError <= out1Pt15Imag_2dly;
-               15: if (oneOrZeroPredecessor==0) phaseError <= out0Pt16Imag_2dly;
-                   else                         phaseError <= out1Pt16Imag_2dly;
                16: if (oneOrZeroPredecessor==0) phaseError <= out0Pt17Imag_2dly;
                    else                         phaseError <= out1Pt17Imag_2dly;
-               17: if (oneOrZeroPredecessor==0) phaseError <= out0Pt18Imag_2dly;
-                   else                         phaseError <= out1Pt18Imag_2dly;
                18: if (oneOrZeroPredecessor==0) phaseError <= out0Pt19Imag_2dly;
                    else                         phaseError <= out1Pt19Imag_2dly;
+               `ifdef USE_ODDS
+               1 : if (oneOrZeroPredecessor==0) phaseError <= out0Pt2Imag_2dly ;
+                   else                         phaseError <= out1Pt2Imag_2dly ;
+               3 : if (oneOrZeroPredecessor==0) phaseError <= out0Pt4Imag_2dly ;
+                   else                         phaseError <= out1Pt4Imag_2dly ;  
+               5 : if (oneOrZeroPredecessor==0) phaseError <= out0Pt6Imag_2dly ;
+                   else                         phaseError <= out1Pt6Imag_2dly ; 
+               7 : if (oneOrZeroPredecessor==0) phaseError <= out0Pt8Imag_2dly ;
+                   else                         phaseError <= out1Pt8Imag_2dly ; 
+               9 : if (oneOrZeroPredecessor==0) phaseError <= out0Pt10Imag_2dly;
+                   else                         phaseError <= out1Pt10Imag_2dly;  
+               11: if (oneOrZeroPredecessor==0) phaseError <= out0Pt12Imag_2dly;
+                   else                         phaseError <= out1Pt12Imag_2dly;
+               13: if (oneOrZeroPredecessor==0) phaseError <= out0Pt14Imag_2dly;
+                   else                         phaseError <= out1Pt14Imag_2dly;
+               15: if (oneOrZeroPredecessor==0) phaseError <= out0Pt16Imag_2dly;
+                   else                         phaseError <= out1Pt16Imag_2dly;
+               17: if (oneOrZeroPredecessor==0) phaseError <= out0Pt18Imag_2dly;
+                   else                         phaseError <= out1Pt18Imag_2dly;
                19: if (oneOrZeroPredecessor==0) phaseError <= out0Pt20Imag_2dly;
                    else                         phaseError <= out1Pt20Imag_2dly;
+               `endif
+               default: phaseError <= 0;
              endcase
         end
      end     //remove

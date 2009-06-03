@@ -221,4 +221,11 @@ always @(posedge clk) begin
 assign symEnDly = symEnSr[3];
 assign sym2xEnDly = sym2xEnSr[3];
 
+`ifdef SIMULATE
+real iOutReal;
+always @(iOut) iOutReal = (iOut[17] ? iOut - 272144.0 : iOut)/131072.0;
+real iInReal;
+always @(iIn) iInReal = (iIn[17] ? iIn - 272144.0 : iIn)/131072.0;
+`endif
+
 endmodule

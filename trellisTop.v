@@ -252,6 +252,7 @@ always @(posedge ck933) begin
 
 
 wire    [17:0]  trellis0Out,trellis1Out,trellis2Out;
+wire    [4:0]   index;
 wire            decision;
 wire    [31:0]  trellis_dout;
 trellis trellis(
@@ -277,6 +278,7 @@ trellis trellis(
     .dac1Data(trellis1Out),
     .dac2Sync(trellis2Sync),
     .dac2Data(trellis2Out),
+    .symEn_tbtDly(trellisSymEn),
     .decision(decision)
     );
 
@@ -319,7 +321,8 @@ always @(posedge ck933) begin
     case (dac0Select) 
         `DAC_TRELLIS_I,
         `DAC_TRELLIS_Q,
-        `DAC_TRELLIS_PHERR: begin
+        `DAC_TRELLIS_PHERR,
+        `DAC_TRELLIS_INDEX: begin
             dac0Out <= trellis0Out;
             dac0Sync <= trellis0Sync;
             end
@@ -331,7 +334,8 @@ always @(posedge ck933) begin
     case (dac1Select) 
         `DAC_TRELLIS_I,
         `DAC_TRELLIS_Q,
-        `DAC_TRELLIS_PHERR: begin
+        `DAC_TRELLIS_PHERR,
+        `DAC_TRELLIS_INDEX: begin
             dac1Out <= trellis1Out;
             dac1Sync <= trellis1Sync;
             end
@@ -343,7 +347,8 @@ always @(posedge ck933) begin
     case (dac2Select)
         `DAC_TRELLIS_I,
         `DAC_TRELLIS_Q,
-        `DAC_TRELLIS_PHERR: begin
+        `DAC_TRELLIS_PHERR,
+        `DAC_TRELLIS_INDEX: begin
             dac2Out <= trellis2Out;
             dac2Sync <= trellis2Sync;
             end
@@ -492,6 +497,23 @@ assign dac2_clk = ck933;
 
 `endif
 
+`define DIRECT_OUTPUTS
+`ifdef DIRECT_OUTPUTS
+reg cout_i;
+reg dout_i;
+reg cout_q;
+reg dout_q;
+always @(posedge ck933) begin
+    cout_i <= trellisSymEn;
+    dout_i <= decision;
+    cout_q <= iDataClk;
+    dout_q <= iBit;
+    end
+
+wire [15:0]decoder_dout = 16'b0;
+wire [15:0]symb_pll_dout = 16'b0;
+
+`else
 //******************************************************************************
 //                                 Decoder
 //******************************************************************************
@@ -521,7 +543,8 @@ decoder decoder
   .din(data),
   .dout(decoder_dout),
   .clk(ck933),
-  .symb_clk_en(symSync),            // symbol rate clock enable
+  .symb_clk_en(trellisSymEn),            // symbol rate clock enable
+  //.symb_clk_en(symSync),            // symbol rate clock enable
   .symb_clk_2x_en(symTimes2Sync),   // 2x symbol rate clock enable
   .symb_i(decoder_iIn),             // input, i
   .symb_q(decoder_qIn),             // input, q
@@ -593,7 +616,7 @@ always @(negedge cout)begin
   dout_i <= decoder_fifo_dout_i;
   dout_q <= decoder_fifo_dout_q;
   end
-
+`endif
 
 //******************************************************************************
 //                           Processor Read Data Mux

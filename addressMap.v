@@ -48,6 +48,7 @@
 `define DAC_TRELLIS_I       4'b1100
 `define DAC_TRELLIS_Q       4'b1101
 `define DAC_TRELLIS_PHERR   4'b1110
+`define DAC_TRELLIS_INDEX   4'b1111
 `define DEMOD_FALSELOCK 12'bxxxx_xxx0_10xx
 `define DEMOD_STATUS    12'bxxxx_xxx0_11xx
 `define DEMOD_AMTC      12'bxxxx_xxx1_00xx
@@ -93,8 +94,9 @@
 
 
 // Define the MISCELLANEOUS locations
-`define RESET           12'bxxxx_xxxx_x00x
-`define VERSION         12'bxxxx_xxxx_x01x
+`define MISC_RESET      12'bxxxx_xxxx_x00x
+`define MISC_VERSION    12'bxxxx_xxxx_x01x
+`define MISC_CLOCK      12'bxxxx_xxxx_x1xx
 
 // Define the DAC control locations
 `define DAC_WDATA       12'bxxxx_xxxx_x00x
