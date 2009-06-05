@@ -26,7 +26,8 @@ module trellis(
     dac2Data,
     decision,
     symEn_tbtDly,
-    sym2xEn_tbtDly
+    sym2xEn_tbtDly,
+    oneOrZeroPredecessor
     );
 
 parameter size = 8;
@@ -48,6 +49,8 @@ output  [17:0]  dac2Data;
 output          decision;
 output          symEn_tbtDly;
 output          sym2xEn_tbtDly;
+output          oneOrZeroPredecessor;
+   
    
 wire    [ROT_BITS-1:0]  phaseError;
 wire                    decision;
@@ -115,19 +118,24 @@ multBy2withSat times2Q(
 
 wire [17:0]f0I,f0Q;
 mfilter #(18'h1B48C,18'h10B85,18'h3D7D4,18'h1FE6B) f0(clk,reset,symEnDly_mult2,sym2xEnDly_mult2,carrierLoopIOutX2,carrierLoopQOutX2,f0I,f0Q);
+//mfilter #(18'h1B48C,18'h10B85,18'h3D7D4,18'h1FE6B) f0(clk,reset,symEn,sym2xEn,iIn,qIn,f0I,f0Q);
 
 wire [17:0]f1I,f1Q;
 mfilter #(18'h1B48C,18'h2F47B,18'h3D7D4,18'h20195) f1(clk,reset,symEnDly_mult2,sym2xEnDly_mult2,carrierLoopIOutX2,carrierLoopQOutX2,f1I,f1Q);
+//mfilter #(18'h1B48C,18'h2F47B,18'h3D7D4,18'h20195) f1(clk,reset,symEn,sym2xEn,iIn,qIn,f1I,f1Q);
 
 reg [15:0]symEnShift;
 always @(posedge clk)symEnShift <= {symEnShift[14:0],(sym2xEnDly_mult2 && !symEnDly_mult2)};
+//always @(posedge clk)symEnShift <= {symEnShift[14:0],(sym2xEn && !symEn)};
 
-wire rotEna = symEnShift[3];
-wire trellEna = symEnShift[14];
+wire rotEna = symEnShift[4];
+//wire trellEna = symEnShift[14];
+wire trellEna = symEnShift[10];
 
 reg [15:0]sym2xEnShift;
 always @(posedge clk)sym2xEnShift <= {sym2xEnShift[14:0],sym2xEnDly_mult2};
-wire trell2xEna = sym2xEnShift[14];
+//wire trell2xEna = sym2xEnShift[14];
+wire trell2xEna = sym2xEnShift[12];
 
    
 `ifdef SIMULATE
@@ -239,7 +247,8 @@ rotator #(ROT_BITS) rotator(
 
 wire    [4:0]   index;
 
-viterbi_top #(size, ROT_BITS)viterbi_top(
+viterbi_top #(size, ROT_BITS)viterbi_top
+  (
   .clk(clk), .reset(reset), .symEn(trellEna), .sym2xEn(trell2xEna),
   .out0Pt1Real(out0Pt1Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)])    ,.out0Pt1Imag(out0Pt1Imag),
   .out1Pt1Real(out1Pt1Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)])    ,.out1Pt1Imag(out1Pt1Imag),
@@ -328,7 +337,8 @@ viterbi_top #(size, ROT_BITS)viterbi_top(
   .symEn_tbtDly(symEn_tbtDly),
   .sym2xEn_tbtDly(sym2xEn_tbtDly),
   .phaseError(phaseError),
-  .symEn_phErr(symEn_phErr)
+  .symEn_phErr(symEn_phErr),
+  .oneOrZeroPredecessor(oneOrZeroPredecessor)		     
   );
 
 `endif

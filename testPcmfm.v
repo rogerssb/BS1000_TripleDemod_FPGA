@@ -509,7 +509,7 @@ always @(posedge symEn_tbtDly) begin
 `ifdef IQ_MAG
     txDelay <= delaySR[19];
 `else
-    txDelay <= delaySR[17];
+    txDelay <= delaySR[20];
 `endif  
     delaySR <= {delaySR[126:0],testData};
     end

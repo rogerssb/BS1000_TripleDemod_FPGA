@@ -1,5 +1,6 @@
 .\..\..\testPcmfm.v
 .\..\..\demod.v
+.\..\..\decoder\decoder.v
 .\..\..\cicComp.v
 .\..\..\bitsync.v
 .\..\..\carrierLoop.v
@@ -14,7 +15,6 @@
 .\..\..\vm_cordic.v
 .\..\..\decoder\mrk_spc_decode.v
 .\..\..\decoder\biphase_to_nrz.v
-.\..\..\decoder\decoder.v
 .\..\..\decoder\decoder_regs.v
 .\..\..\decoder\format_output.v
 .\..\..\log2.v
@@ -63,4 +63,3 @@
 .\..\..\trellis\trellis.v
 .\..\..\trellis\trellisCarrierLoop.v
 .\..\..\trellis\viteri_top.v
-.\..\..\trellis\iqMagEst.v

@@ -25,6 +25,17 @@ FLOWTOOLS=NONE
 VerilogDirsChanged=1
 FAMILY=Xilinx Automotive_Spartan3A_DSP
 WireDelay=2
+NoTchkMsg=0
+NoTimingChecks=0
+HESPrepare=0
+ASDBDatabaseRefresh=0
+ENABLE_ADV_DATAFLOW=1
+EnableXtrace=0
+SplitNetVectors=0
+StackMemorySize=32
+ASDBREFTESHTIME=1
+RetvalMemorySize=32
+VsimAdditionalOptions=
 
 [HierarchyViewer]
 SortInfo=u
@@ -65,96 +76,22 @@ PriorityLibNames=ovi_xilinxcorelib;
 EnableSLP=0
 
 [DefineMacro]
-Global=SIMULATE IQ_MAG
+Global=SIMULATE
 
-[LocalVerilogDirs]
-Count=1
-IncludeDir0=C:\projects\semco\svn_checkout_folder
-
-[Verilog Library]
-SPARTAN3ADSP=
-ovi_xilinxcorelib=
-ovi_simprim=
-ovi_unisim=
-
-[Groups]
-trellis=1
-
-[Files]
-/..\..\..\testPcmfm.v=-1
-/..\..\..\demod.v=-1
-/..\..\..\cicComp.v=-1
-/..\..\..\bitsync.v=-1
-/..\..\..\carrierLoop.v=-1
-/..\..\..\loopRegs.v=-1
-/..\..\..\loopFilter.v=-1
-/..\..\..\channelAgc.v=-1
-/..\..\..\demodRegs.v=-1
-/..\..\..\agcLoopFilter.v=-1
-/..\..\..\coregen\mpy18x18.v=-1
-/..\..\..\agcLoopRegs.v=-1
-/..\..\..\fmDemod\fmDemod.v=-1
-/..\..\..\vm_cordic.v=-1
-/..\..\..\decoder\mrk_spc_decode.v=-1
-/..\..\..\decoder\biphase_to_nrz.v=-1
-/..\..\..\decoder\decoder.v=-1
-/..\..\..\decoder\decoder_regs.v=-1
-/..\..\..\decoder\format_output.v=-1
-/..\..\..\log2.v=-1
-/..\..\..\interpRegs.v=-1
-/..\..\..\lagGain.v=-1
-/..\..\..\coregen\mult10x10.v=-1
-/..\..\..\interpolate.v=-1
-/..\..\..\lead.v=-1
-/..\..\..\shift48To18.v=-1
-/..\..\..\cmpy18.v=-1
-/..\..\..\coregen\resamplerTap0.v=-1
-/..\..\..\coregen\resamplerTap6.v=-1
-/..\..\..\coregen\resamplerTap8.v=-1
-/..\..\..\coregen\resamplerTap5.v=-1
-/..\..\..\coregen\resamplerTap7.v=-1
-/..\..\..\coregen\resamplerTap3.v=-1
-/..\..\..\coregen\resamplerTap2.v=-1
-/..\..\..\coregen\resamplerTap1.v=-1
-/..\..\..\coregen\reciprocalLut.v=-1
-/..\..\..\coregen\resamplerTap4.v=-1
-/..\..\..\coregen\dds.v=-1
-/..\..\..\resampler\resampler.v=-1
-/..\..\..\resampler\resampRegs.v=-1
-/..\..\..\cicRegs.v=-1
-/..\..\..\variableGain.v=-1
-/..\..\..\cicInterpolate.v=-1
-/..\..\..\coregen\halfbandEven.v=-1
-/..\..\..\cicDecimator.v=-1
-/..\..\..\ddc.v=-1
-/..\..\..\ddcRegs.v=-1
-/..\..\..\fmMod\shift34to18.v=-1
-/..\..\..\shifter18to48.v=-1
-/..\..\..\fmMod\micro.v=-1
-/..\..\..\halfband\halfband.v=-1
-/..\..\..\coregen\shapingFir.v=-1
-/..\..\..\fmMod\fmMod.v=-1
-/..\..\..\coregen\multiplier_v10_0.v=-1
-/phase error.asdb=-1
-/phase error.awc=-1
-/phase error real.awf=-1
-/trellis carrier loop.awf=-1
-/test.awf=-1
-/trellis and more.awf=-1
-/bitsync.awf=-1
-/BERT and symEn alignment.awf=-1
-trellis/..\..\..\..\trellis\acs.v=-1
-trellis/..\..\..\..\trellis\comp4twosComp.v=-1
-trellis/..\..\..\..\trellis\maxMetric.v=-1
-trellis/..\..\..\..\trellis\mfilter.v=-1
-trellis/..\..\..\..\trellis\rotMult.v=-1
-trellis/..\..\..\..\trellis\multiplier.v=-1
-trellis/..\..\..\..\trellis\rotator.v=-1
-trellis/..\..\..\..\trellis\traceBackTable.v=-1
-trellis/..\..\..\..\trellis\trellis.v=-1
-trellis/..\..\..\..\trellis\trellisCarrierLoop.v=-1
-trellis/..\..\..\..\trellis\viteri_top.v=-1
-trellis/..\..\..\..\trellis\iqMagEst.v=-1
+[LocalVhdlSets]
+DisableVHDL87Key=0
+EnableVHDL93Key=0
+EnableVHDL2002Key=1
+EnableVHDL2006Key=0
+NetlistCompilation=1
+Syntax RelaxLRM=0
+MaxErrorsKey=100
+CompileWithDebug=1
+OptimizationLevel=3
+DisableRangeChecks=0
+ProtectLevel=0
+AdditionalOptions=
+IncrementalCompilation=0
 
 [Files.Data]
 .\..\..\testPcmfm.v=Verilog Source Code
@@ -231,4 +168,93 @@ trellis/..\..\..\..\trellis\iqMagEst.v=-1
 .\..\..\trellis\trellisCarrierLoop.v=Verilog Source Code
 .\..\..\trellis\viteri_top.v=Verilog Source Code
 .\..\..\trellis\iqMagEst.v=Verilog Source Code
+
+[LocalVerilogDirs]
+Count=1
+IncludeDir0=C:\projects\semco\svn_checkout_folder
+
+[Verilog Library]
+SPARTAN3ADSP=
+ovi_xilinxcorelib=
+ovi_simprim=
+ovi_unisim=
+
+[Groups]
+trellis=1
+
+[Files]
+/..\..\..\testPcmfm.v=-1
+/..\..\..\demod.v=-1
+/..\..\..\decoder\decoder.v=-1
+/..\..\..\cicComp.v=-1
+/..\..\..\bitsync.v=-1
+/..\..\..\carrierLoop.v=-1
+/..\..\..\loopRegs.v=-1
+/..\..\..\loopFilter.v=-1
+/..\..\..\channelAgc.v=-1
+/..\..\..\demodRegs.v=-1
+/..\..\..\agcLoopFilter.v=-1
+/..\..\..\coregen\mpy18x18.v=-1
+/..\..\..\agcLoopRegs.v=-1
+/..\..\..\fmDemod\fmDemod.v=-1
+/..\..\..\vm_cordic.v=-1
+/..\..\..\decoder\mrk_spc_decode.v=-1
+/..\..\..\decoder\biphase_to_nrz.v=-1
+/..\..\..\decoder\decoder_regs.v=-1
+/..\..\..\decoder\format_output.v=-1
+/..\..\..\log2.v=-1
+/..\..\..\interpRegs.v=-1
+/..\..\..\lagGain.v=-1
+/..\..\..\coregen\mult10x10.v=-1
+/..\..\..\interpolate.v=-1
+/..\..\..\lead.v=-1
+/..\..\..\shift48To18.v=-1
+/..\..\..\cmpy18.v=-1
+/..\..\..\coregen\resamplerTap0.v=-1
+/..\..\..\coregen\resamplerTap6.v=-1
+/..\..\..\coregen\resamplerTap8.v=-1
+/..\..\..\coregen\resamplerTap5.v=-1
+/..\..\..\coregen\resamplerTap7.v=-1
+/..\..\..\coregen\resamplerTap3.v=-1
+/..\..\..\coregen\resamplerTap2.v=-1
+/..\..\..\coregen\resamplerTap1.v=-1
+/..\..\..\coregen\reciprocalLut.v=-1
+/..\..\..\coregen\resamplerTap4.v=-1
+/..\..\..\coregen\dds.v=-1
+/..\..\..\resampler\resampler.v=-1
+/..\..\..\resampler\resampRegs.v=-1
+/..\..\..\cicRegs.v=-1
+/..\..\..\variableGain.v=-1
+/..\..\..\cicInterpolate.v=-1
+/..\..\..\coregen\halfbandEven.v=-1
+/..\..\..\cicDecimator.v=-1
+/..\..\..\ddc.v=-1
+/..\..\..\ddcRegs.v=-1
+/..\..\..\fmMod\shift34to18.v=-1
+/..\..\..\shifter18to48.v=-1
+/..\..\..\fmMod\micro.v=-1
+/..\..\..\halfband\halfband.v=-1
+/..\..\..\coregen\shapingFir.v=-1
+/..\..\..\fmMod\fmMod.v=-1
+/..\..\..\coregen\multiplier_v10_0.v=-1
+/phase error.asdb=-1
+/phase error.awc=-1
+/phase error real.awf=-1
+/trellis carrier loop.awf=-1
+/test.awf=-1
+/trellis and more.awf=-1
+/bitsync.awf=-1
+/BERT and symEn alignment.awf=-1
+trellis/..\..\..\..\trellis\acs.v=-1
+trellis/..\..\..\..\trellis\comp4twosComp.v=-1
+trellis/..\..\..\..\trellis\maxMetric.v=-1
+trellis/..\..\..\..\trellis\mfilter.v=-1
+trellis/..\..\..\..\trellis\rotMult.v=-1
+trellis/..\..\..\..\trellis\multiplier.v=-1
+trellis/..\..\..\..\trellis\rotator.v=-1
+trellis/..\..\..\..\trellis\traceBackTable.v=-1
+trellis/..\..\..\..\trellis\trellis.v=-1
+trellis/..\..\..\..\trellis\trellisCarrierLoop.v=-1
+trellis/..\..\..\..\trellis\viteri_top.v=-1
+trellis/..\..\..\..\trellis\iqMagEst.v=-1
 

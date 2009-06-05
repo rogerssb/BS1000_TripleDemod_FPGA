@@ -73,6 +73,25 @@ module maxMetric(clk, reset, symEn, sym2xEn,
      end
 
  
+   // temporary latching the MaxVal and Index at the right spot. This can be improved!!
+   reg [4:0]            indexTmp;                      
+   reg [(size-1)+4:0]   maxValTmp; // the maximum value is not used in the design but it is nice for debug
+   always @(posedge clk)
+     begin
+        if (reset) begin
+           indexTmp <= 0;
+           maxValTmp <= 0;
+        end
+        else if (syncToACS) begin
+	  //else if (symEn) begin
+           maxValTmp <= maxValS3;
+           if (iS3==0)
+             indexTmp <= indexS2;
+           else
+             indexTmp <= iS1_4_dly1clk;
+        end
+     end
+   
    // Latching the final index and MaxVal
    always @(posedge clk)
      begin
@@ -80,12 +99,9 @@ module maxMetric(clk, reset, symEn, sym2xEn,
            index <= 0;
            maxVal <= 0;
         end
-        else if (syncToACS) begin
-           maxVal <= maxValS3;
-           if (iS3==0)
-             index <= indexS2;
-           else
-             index <= iS1_4_dly1clk;
+    	  else if (symEn) begin
+           maxVal <= maxValTmp;
+           index <= indexTmp;
         end
      end
    
@@ -120,20 +136,8 @@ module maxMetric(clk, reset, symEn, sym2xEn,
         end
      end
 
-   /* -----\/----- EXCLUDED -----\/-----
-   reg [3:0]             symEnSr;
-   always @(posedge clk) begin
-      if (reset) begin
-         symEnSr <= 0;
-      end
-      else begin
-         symEnSr <= {symEnSr[2:0], symEn};
-      end
-   end
-   assign symEnDly = symEnSr[3];
 
- -----/\----- EXCLUDED -----/\----- */
-
+/* -----\/----- EXCLUDED -----\/-----
    reg [3:0] symEnSr;
    reg [3:0] sym2xEnSr;
    always @(posedge clk) begin
@@ -149,7 +153,10 @@ module maxMetric(clk, reset, symEn, sym2xEn,
    
    assign symEnDly = symEnSr[3];
    assign sym2xEnDly = sym2xEnSr[3];
+ -----/\----- EXCLUDED -----/\----- */
 
+   assign symEnDly = symEn;
+   assign sym2xEnDly = sym2xEn;
 
    
 endmodule
