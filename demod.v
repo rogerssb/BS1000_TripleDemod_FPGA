@@ -341,7 +341,7 @@ bitsync bitsync(
 
 assign symTimes2Sync = resampSync;
 assign symSync = symClk & resampSync;
-assign trellisSymSync = !symClk & resampSync;
+assign trellisSymSync = symClk & resampSync;
 
 /******************************************************************************
                                Data Output Mux

@@ -86,8 +86,8 @@ module viterbi_top(clk, reset, symEn, sym2xEn,
    output                oneOrZeroPredecessor;
    wire [(size-1)+4:0]   accMetOut [0:19];
    wire [19:0]           sel;
-   reg [19:0] 		 sel_1dly, sel_2dly, sel_3dly;
-   wire [4:0] 		 index;
+   reg [19:0]            sel_1dly, sel_2dly, sel_3dly;
+   wire [4:0]            index;
    reg [ROT_BITS-1:0]    phaseError;
    reg [1:0]             cnt;
 
@@ -124,6 +124,9 @@ module viterbi_top(clk, reset, symEn, sym2xEn,
       
    // 20 Add Compare Select (acs) units with its decision output (sel0..sel19) 
 
+   wire s0, s1, s2, s3,  s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15, s16, s17, s18, s19;
+   wire shiftIn = s0 | s1 | s2 | s3 |  s4 | s5 | s6 | s7 | s8 | s9 | s10 | s11 | s12 | s13 | s14 | s15 | s16 | s17 | s18 | s19; // shiftIn determines if the accumlator output need to be shifted or not
+
    acs #(size) acs7  (clk, acsReset, symEn, sym2xEn, out1Pt1Real,  out0Pt15Real,  accMetOut[0][(size-1)+4:0],  accMetOut[14][(size-1)+4:0], accMetOut[7][(size-1)+4:0],  sel[7 ], shiftIn, s7, symEn_acsDly, sym2xEn_acsDly);
    acs #(size) acs8  (clk, acsReset, symEn, sym2xEn, out1Pt2Real,  out0Pt16Real,  accMetOut[1][(size-1)+4:0],  accMetOut[15][(size-1)+4:0], accMetOut[8][(size-1)+4:0],  sel[8 ], shiftIn, s8, , );
    acs #(size) acs9  (clk, acsReset, symEn, sym2xEn, out1Pt3Real,  out0Pt17Real,  accMetOut[2][(size-1)+4:0],  accMetOut[16][(size-1)+4:0], accMetOut[9][(size-1)+4:0],  sel[9 ], shiftIn, s9, , );
@@ -147,10 +150,6 @@ module viterbi_top(clk, reset, symEn, sym2xEn,
 
    //acs #(size) acs0  (clk, acsReset, symEn, sym2xEn, 8'h6,  8'h7,  accMetOut[0][(size-1)+4:0], accMetOut[0][(size-1)+4:0], accMetOut[0][(size-1)+4:0], sel[0 ], sin, sin, , );
 
-   
-   wire s0, s1, s2, s3,  s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15, s16, s17, s18, s19;
-   wire shiftIn = s0 | s1 | s2 | s3 |  s4 | s5 | s6 | s7 | s8 | s9 | s10 | s11 | s12 | s13 | s14 | s15 | s16 | s17 | s18 | s19; // shiftIn determines if the accumlator output need to be shifted or not
-   
                                                                                             
    maxMetric #(size) maxMetric (clk, reset, symEn_acsDly, sym2xEn_acsDly,
                                 accMetOut[0 ], accMetOut[1 ], accMetOut[2 ], accMetOut[3 ], accMetOut[4 ], 
@@ -173,11 +172,11 @@ module viterbi_top(clk, reset, symEn, sym2xEn,
              sel_1dly <= sel;
              sel_2dly <= sel_1dly;
              sel_3dly <= sel_2dly;
-		 testDec <= sel[index];
-		 testDec1 <= sel_1dly[index];
-		 testDec2 <= sel_2dly[index];
-		 testDec3 <= sel_3dly[index];
-	    end
+                 testDec <= sel[index];
+                 testDec1 <= sel_1dly[index];
+                 testDec2 <= sel_2dly[index];
+                 testDec3 <= sel_3dly[index];
+            end
      end
 
 /* -----\/----- EXCLUDED -----\/-----
@@ -202,7 +201,7 @@ module viterbi_top(clk, reset, symEn, sym2xEn,
       .symEn(symEn_maxMetDly),
       .sym2xEn(sym2xEn_maxMetDly),
       //.sel(sel_1dly), 
-	.sel(sel_2dly), 
+        .sel(sel_2dly), 
       .index(index),
 //      .decision(decision1),
       .decision(decision),
@@ -339,23 +338,23 @@ module viterbi_top(clk, reset, symEn, sym2xEn,
    // creates an enable which strobes only every other symEn 
    assign symEn_phErr = symEn_acsDly & everyOtherSymEn;
 
+   reg [4:0] index_1d;
    always @(posedge clk)
      begin
         if (reset) begin
            everyOtherSymEn <= 1;
-	     index_1d <= 0;
+           index_1d <= 0;
         end
         else begin 
            if (symEn_acsDly) begin
               everyOtherSymEn <= ~everyOtherSymEn;
-		  index_1d <= index;
+              index_1d <= index;
            end
-                end
-         end
+        end
+      end
          
    //reg oneOrZeroPredecessor_1d;
  
-   reg [4:0] index_1d;
       
    // Computing the error term
    always @(posedge clk)

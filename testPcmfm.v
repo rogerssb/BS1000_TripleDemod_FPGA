@@ -509,7 +509,7 @@ always @(posedge symEn_tbtDly) begin
 `ifdef IQ_MAG
     txDelay <= delaySR[19];
 `else
-    txDelay <= delaySR[20];
+    txDelay <= delaySR[18];
 `endif  
     delaySR <= {delaySR[126:0],testData};
     end
@@ -637,7 +637,7 @@ initial begin
     // The 11.5 is a fudge factor (should be 12 for the 2 bit shift) for the scaling 
     // down of the transmit waveform from full scale.
     // The 13.0 is to translate from SNR to EBNO which is 10log10(bitrate/bandwidth).
-    $initGaussPLI(1,15.0 + 11.5 - 7.0,131072.0);
+    $initGaussPLI(1,8.0 + 11.5 - 7.0,131072.0);
     `endif
     demod.ddc.hbReset = 1;
     demod.ddc.cicReset = 1;
@@ -795,7 +795,7 @@ initial begin
     `endif
         
     // Wait for some data to pass thru
-    #(2*150*bitrateSamplesInt*C) ;
+    #(2*50*bitrateSamplesInt*C) ;
     // Turn on the BERT
     testBits = 1;
     measureSNR = 1;

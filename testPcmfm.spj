@@ -18,7 +18,7 @@ MaxScale=
 CommandLine=+define+SIMULATE
 DiskSize=5000M
 [View]
-1=Last 0.000ns 1116000.000ns 28548.838ns 1110549.798ns 566467.072ns
+1=Last 71988.813ns 303498.293ns 5453.698ns 743616.161ns 566467.072ns
 [Group0]
 Name=New Group2
 [Group3]
@@ -29,7 +29,6 @@ Name="Micro"
 3="test.demod : wr3" default
 4="test.demod : din[31:0]" default
 5="test.demod : addr[11:0]" default
-OpenGroup=
 [Group5]
 Name="Carrier"
 0="test.demod.carrierLoop.lagGain : sweepOffsetMag[31:0]" default
@@ -44,7 +43,6 @@ Name="Carrier"
 9="test.demod.carrierLoop : offsetError[7:0]" default
 10="test.demod.bitsync : offsetErrorSum[8:0]" default
 11="test.demod : freq[7:0]" default
-OpenGroup=
 [PliFiles]
 0=.\gaussPLI\gaussPLI.dll
 [IncDirs]
@@ -66,7 +64,6 @@ Name="DAC"
 12="test.demod : symClk" default
 13="test.demod : resampSync" default
 14="test.demod : ddcSync" default
-OpenGroup=
 [Plusargs]
 0=
 [Group4]
@@ -104,7 +101,6 @@ Name="Bitsync"
 30="test.demod.resampler : iOutReal" default Real AnalogDisplay AType=Step Scale=Auto
 31="test.demod.resampler : inIReal" default Real AnalogDisplay AType=Step Scale=Fixed MinScaleDbl=-1 MaxScaleDbl=1
 32="test : cicDecimationInt" default Decimal AnalogDisplay AType=PWL Scale=Auto
-OpenGroup=
 [Mexclude]
 0=test.trellis.f0
 1=test.trellis.f1
@@ -160,7 +156,6 @@ Name="Tx"
 11="test.fmMod : modClk" default
 12="test.fmMod : reset" default
 13="test.fmMod : clk" default
-OpenGroup=
 [Group1]
 Name="Rx"
 0="test.demod.resampler : reset" default
@@ -184,7 +179,6 @@ Name="Rx"
 18="test.demod.ddc : iMixReal" default Real AnalogDisplay AType=Step Scale=Auto
 19="test : iSignalReal" default Real AnalogDisplay AType=Step Scale=Auto
 20="test : iChReal" default Real AnalogDisplay AType=Step Scale=Auto
-OpenGroup=
 [Files]
 0=testPcmfm.v
 1=demod.v

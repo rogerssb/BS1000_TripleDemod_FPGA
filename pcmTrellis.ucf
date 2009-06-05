@@ -233,6 +233,8 @@ TIMEGRP "sync" = "sync0" "sync1" "sync2" "sync3" "sync4" "sync5" "sync6" "sync7"
 TIMEGRP "reg0" = FFS(demod/bitsync/sampleLoop/micro/*);
 TIMEGRP "reg1" = FFS(demod/carrierLoop/loopRegs/*);
 TIMEGRP "reg2" = FFS(trellis/trellisCarrierLoop/loopRegs/*);
+TIMEGRP "acs" = FFS(trellis/viterbi_top/acs*);
+TIMEGRP "rotOut" = FFS(trellis/rotator/m*/reOut*) FFS(trellis/rotator/m*/imOut*);
 NET "demod/dac0Sync" TNM_NET = syncGroup;
 NET "demod/dac1Sync" TNM_NET = syncGroup;
 NET "demod/dac2Sync" TNM_NET = syncGroup;
@@ -273,4 +275,6 @@ TIMESPEC TS_interp00 = FROM "tg6" TO "tg9" 93.333333 MHz;
 TIMESPEC TS_interp10 = FROM "tg7" TO "tg10" 93.333333 MHz;
 TIMESPEC TS_interp20 = FROM "tg8" TO "tg11" 93.333333 MHz;
 TIMESPEC TS_interp01 = FROM "tg12" to "tg13" 93.333333 MHz;
+TIMESPEC TS_symEn = PERIOD "acs" 23.333333 MHz;
+TIMESPEC TS_symEn0 = FROM "rotOut" TO "acs" 23.333333 MHz;
 

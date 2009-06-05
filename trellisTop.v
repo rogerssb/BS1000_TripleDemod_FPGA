@@ -83,8 +83,8 @@ always @(addr or misc_en) begin
   rs <= 0;
   if(misc_en) begin
     casex (addr)
-      `RESET: rs <= 1;
-      `VERSION: misc_dout <= VER_NUMBER;
+      `MISC_RESET: rs <= 1;
+      `MISC_VERSION: misc_dout <= VER_NUMBER;
       default: ;
     endcase
   end
