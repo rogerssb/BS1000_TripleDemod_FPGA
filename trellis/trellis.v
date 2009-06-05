@@ -338,7 +338,7 @@ viterbi_top #(size, ROT_BITS)viterbi_top
   .sym2xEn_tbtDly(sym2xEn_tbtDly),
   .phaseError(phaseError),
   .symEn_phErr(symEn_phErr),
-  .oneOrZeroPredecessor(oneOrZeroPredecessor)		     
+  .oneOrZeroPredecessor(oneOrZeroPredecessor)              
   );
 
 `endif
@@ -462,7 +462,7 @@ module multBy2withSat(clk, symEn, sym2xEn, dIn, dOut, symEnDly, sym2xEnDly);
    output                symEnDly, sym2xEnDly;
       
    reg [17:0]            dataBits;
-   reg [17:0]            dOut, dOutTmp;
+   reg [17:0]            dOut;//, dOutTmp;
   
    reg                   satPos,satNeg;
    wire                  sign = dIn[17];
@@ -471,15 +471,15 @@ module multBy2withSat(clk, symEn, sym2xEn, dIn, dOut, symEnDly, sym2xEnDly);
          dataBits <= {dIn[16:0], 1'b0};
          satPos <= !sign && (dIn[17:16] != 2'b00);
          satNeg <=  sign && (dIn[17:16] != 2'b11);
-         dOut <= dOutTmp;
+         //dOut <= dOutTmp;
          if (satPos) begin
-            dOutTmp <= 18'h1ffff;
+            dOut <= 18'h1ffff;
          end
          else if (satNeg) begin
-            dOutTmp <= 18'h20001;
+            dOut <= 18'h20001;
          end
          else begin
-            dOutTmp <= dataBits;
+            dOut <= dataBits;
          end
       end   
    end
