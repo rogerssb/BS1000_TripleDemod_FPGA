@@ -3,23 +3,23 @@
 // Finds the index (0-19) of the metric wih the largest number. The maxValue is also computed but is not used in the design
 // If all inputs are the same the 19th (13hex) index will be picked.
 // All done with 2's complement numbers
-module maxMetric(clk, reset, symEn, sym2xEn,
+module maxMetric(clk, reset, symEn,
                  accMetOut0 , accMetOut1 , accMetOut2 , accMetOut3 , accMetOut4 , 
                  accMetOut5 , accMetOut6 , accMetOut7 , accMetOut8 , accMetOut9 , 
                  accMetOut10, accMetOut11, accMetOut12, accMetOut13, accMetOut14, 
                  accMetOut15, accMetOut16, accMetOut17, accMetOut18, accMetOut19,
-                 index, symEnDly, sym2xEnDly
+                 index, symEnDly
                  );
    
    parameter            size = 8;
-   input                clk,reset,symEn,sym2xEn;
+   input                clk,reset,symEn;
    input [(size-1)+4:0] accMetOut0 , accMetOut1 , accMetOut2 , accMetOut3 , 
                         accMetOut4 , accMetOut5 , accMetOut6 , accMetOut7 , 
                         accMetOut8 , accMetOut9 , accMetOut10, accMetOut11, 
                         accMetOut12, accMetOut13, accMetOut14, accMetOut15, 
                         accMetOut16, accMetOut17, accMetOut18, accMetOut19;
    output [4:0]         index; // max index (0-19)
-   output               symEnDly, sym2xEnDly;
+   output               symEnDly;
    reg [4:0]            index;                      
 
    wire [(size-1)+4:0]  maxValS1_0, maxValS1_1, maxValS1_2, maxValS1_3, maxValS1_4,
@@ -83,7 +83,7 @@ module maxMetric(clk, reset, symEn, sym2xEn,
            maxValTmp <= 0;
         end
         else if (syncToACS) begin
-	  //else if (symEn) begin
+          //else if (symEn) begin
            maxValTmp <= maxValS3;
            if (iS3==0)
              indexTmp <= indexS2;
@@ -99,7 +99,7 @@ module maxMetric(clk, reset, symEn, sym2xEn,
            index <= 0;
            maxVal <= 0;
         end
-    	  else if (symEn) begin
+          else if (symEn) begin
            maxVal <= maxValTmp;
            index <= indexTmp;
         end
@@ -156,7 +156,6 @@ module maxMetric(clk, reset, symEn, sym2xEn,
  -----/\----- EXCLUDED -----/\----- */
 
    assign symEnDly = symEn;
-   assign sym2xEnDly = sym2xEn;
 
    
 endmodule

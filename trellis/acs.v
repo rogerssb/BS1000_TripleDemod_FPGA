@@ -66,19 +66,16 @@ module mux_2_1 (a, b, sel, y);
 endmodule         
             
 
-module acs (clk, reset, symEn, sym2xEn, matFilt1, matFilt2, accMet1, accMet2, accMetOut, selOut, shiftIn, shiftOut, symEnDly, sym2xEnDly);
+module acs (clk, reset, symEn, matFilt1, matFilt2, accMet1, accMet2, accMetOut, selOut, shiftIn, shiftOut);
    parameter             size = 8;
    input                 clk, reset;
    input                 symEn;
-   input                 sym2xEn;
    input [size-1:0]      matFilt1, matFilt2;
    input [(size-1)+4:0]  accMet1, accMet2;
    output [(size-1)+4:0] accMetOut;
    output                selOut;
    input                 shiftIn;
    output                shiftOut;
-   output                symEnDly;
-   output                sym2xEnDly;
          
    reg  [(size-1)+4:0]   accMetOut;
    reg  [(size-1)+4:0]   accTemp;
@@ -133,11 +130,13 @@ module acs (clk, reset, symEn, sym2xEn, matFilt1, matFilt2, accMet1, accMet2, ac
    
    // subtracting of a constant and saturate all neg numbers to zero to bring down the acc and prevent it from overflowing
 
-   always @(muxOut or shiftIn) begin
-	accTemp <= muxOut - 512;
-	if (accTemp[(size-1)+4]) begin // check to see if the msb is 1 (i.e. neg), then set the acc to zero
-	   accTemp <= 0;
-	end
+   wire [(size-1)+4:0]  accTempSum = muxOut - 512;
+   always @(accTempSum) begin
+        if (accTempSum[(size-1)+4]) begin // check to see if the msb is 1 (i.e. neg), then set the acc to zero
+            accTemp <= 0;
+        end else begin
+            accTemp <= accTempSum;
+        end
    end
 
 
@@ -146,13 +145,13 @@ module acs (clk, reset, symEn, sym2xEn, matFilt1, matFilt2, accMet1, accMet2, ac
          accMetOut <= 0;
       end
       else if (symEn) begin
-	   if (shiftIn) begin
-		accMetOut <= accTemp;
-	   end
-	   else begin
-		accMetOut <= muxOut;
+           if (shiftIn) begin
+                accMetOut <= accTemp;
+           end
+           else begin
+                accMetOut <= muxOut;
          end
-	end
+        end
    
 
 /* -----\/----- EXCLUDED -----\/-----
@@ -180,9 +179,6 @@ module acs (clk, reset, symEn, sym2xEn, matFilt1, matFilt2, accMet1, accMet2, ac
          selOut <= ~bLarger;
       end
    
-   assign symEnDly = symEn;
-   assign sym2xEnDly = sym2xEn;
-
 /* -----\/----- EXCLUDED -----\/-----
    reg [3:0] symEnSr;
    reg [3:0] sym2xEnSr;

@@ -1,11 +1,11 @@
 `include "./addressMap.v"
 `timescale 1ns/100ps
 
-`define ALDEC
+//`define ALDEC
 `define TRELLIS
 
 `define ENABLE_AGC
-`define ADD_NOISE
+//`define ADD_NOISE
 //`define BER_TEST
 //`define MATLAB_VECTORS
 
@@ -456,10 +456,11 @@ always @(posedge clk) begin
     qIn <= qSymData;
     end
 
+reg trellisReset;
 trellis trellis
   (
    .clk          (clk),
-   .reset        (reset),
+   .reset        (trellisReset),
    .symEn        (symEn),
    .sym2xEn      (sym2xEn),
    .iIn          (iIn),
@@ -509,7 +510,7 @@ always @(posedge symEn_tbtDly) begin
 `ifdef IQ_MAG
     txDelay <= delaySR[19];
 `else
-    txDelay <= delaySR[18];
+    txDelay <= delaySR[13];
 `endif  
     delaySR <= {delaySR[126:0],testData};
     end
@@ -637,7 +638,7 @@ initial begin
     // The 11.5 is a fudge factor (should be 12 for the 2 bit shift) for the scaling 
     // down of the transmit waveform from full scale.
     // The 13.0 is to translate from SNR to EBNO which is 10log10(bitrate/bandwidth).
-    $initGaussPLI(1,8.0 + 11.5 - 7.0,131072.0);
+    $initGaussPLI(1,4.0 + 11.5 - 7.0,131072.0);
     `endif
     demod.ddc.hbReset = 1;
     demod.ddc.cicReset = 1;
@@ -653,7 +654,8 @@ initial begin
     decoder.decoder_regs.q = 16'h0004;
     `ifdef TRELLIS
     `ifndef IQ_MAG
-    trellis.viterbi_top.simReset = 0;
+    //trellis.viterbi_top.simReset = 0;
+    trellisReset = 0;
     `endif
     `endif
 
@@ -689,7 +691,9 @@ initial begin
 
     // Init the trellis carrier loop
     write32(createAddress(`TRELLIS_SPACE,`LF_CONTROL),9);    // Forces the lag acc and the error term to be zero
-    write32(createAddress(`TRELLIS_SPACE,`LF_LEAD_LAG),32'h0010_0000);   
+    write32(createAddress(`TRELLIS_SPACE,`LF_LEAD_LAG),32'h0011_0004);   
+    write32(createAddress(`TRELLIS_SPACE,`LF_LIMIT),32'h0010_0000);   
+
                     
     // Init the downcoverter register set
     write32(createAddress(`DDCSPACE,`DDC_CONTROL),0);
@@ -701,7 +705,7 @@ initial begin
 
     // Init the channel agc loop filter
     write32(createAddress(`CHAGCSPACE,`ALF_CONTROL),1);                 // Zero the error
-    write32(createAddress(`CHAGCSPACE,`ALF_SETPOINT),32'h000000f0);     // AGC Setpoint
+    write32(createAddress(`CHAGCSPACE,`ALF_SETPOINT),32'h000000e0);     // AGC Setpoint
     write32(createAddress(`CHAGCSPACE,`ALF_GAINS),32'h00180018);        // AGC Loop Gain
     write32(createAddress(`CHAGCSPACE,`ALF_ULIMIT),32'h4fffffff);       // AGC Upper limit
     write32(createAddress(`CHAGCSPACE,`ALF_LLIMIT),32'h00000000);       // AGC Lower limit
@@ -765,13 +769,6 @@ initial begin
     #(2*C) ;
     interpReset = 0;
 
-    `ifdef TRELLIS
-    // Create a reset to clear the accumulator in the trellis 
-    //trellis.viterbi_top.simReset = 1;
-    //#(2*C) ;
-    //trellis.viterbi_top.simReset = 0;
-    `endif
-
     // Enable the sample rate loop
     write32(createAddress(`BITSYNCSPACE,`LF_CONTROL),0);  
 
@@ -779,10 +776,17 @@ initial begin
     #(10*bitrateSamplesInt*C) ;
 
     // Create a reset to clear the accumulator in the trellis
-        `ifndef IQ_MAG
-    trellis.viterbi_top.simReset = 1;
+    `ifndef IQ_MAG
+    //trellis.viterbi_top.simReset = 1;
+    trellisReset = 1;
     #(6*C) ;
-    trellis.viterbi_top.simReset = 0;
+    //trellis.viterbi_top.simReset = 0;
+    trellisReset = 0;
+    #(12*bitrateSamplesInt*C) ;
+    trellisReset = 1;
+    #(1*bitrateSamplesInt*C) ;
+    trellisReset = 0;
+
     `endif        
 
     // Enable the trellis carrier loop
