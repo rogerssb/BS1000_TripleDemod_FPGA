@@ -178,7 +178,7 @@ always @(lagAccum) lagAccumReal = ((lagAccum[39:8] > 2147483647.0) ? lagAccum[39
 always @(lockCounter) lockCounterInt = lockCounter;
 `endif
 
-
+`ifndef S_CURVE_TESTING
 // Create the LO frequency
 reg [31:0] newOffset;
 always @(posedge clk) begin
@@ -190,16 +190,42 @@ always @(posedge clk) begin
         end
     end
 
+wire ddsReset <= reset;
+
+`else				  
+
+// s-curve testing
+reg resetWithPhaseOffset=0;	
+reg [31:0] newOffset;
+reg set;
+always @(posedge clk) begin
+   if (reset) begin
+      resetWithPhaseOffset <= 1;
+      newOffset <= 32'h00000000;
+      set <= 0;
+   end
+   else begin
+      resetWithPhaseOffset <= 0; // release the reset															
+	  //newOffset <= 32'h60000000; //do a one time write of 4000_0000 to rotate pi/2  (i.e. set the initial phase)
+      newOffset <= 32'h00000000; //do a one time write of 4000_0000 to rotate pi/2  (i.e. set the initial phase)
+	  set <= 1;
+      if (set) begin
+         //newOffset <= 32'h01000000; // this value will change the constate freq out of the dds 
+		 newOffset <= 32'h00000000; // this value will change the constate freq out of the dds 
+      end
+   end
+end
+
+wire ddsReset = resetWithPhaseOffset;
+`endif
+
+
 wire [17:0]bReal,bImag;
 dds dds(
   .clk(clk),
-  .sclr(reset),
+  .sclr(ddsReset),
   .we(1'b1),
-`ifdef S_CURVE_TESTING
-  .data(32'h00000000), // Bus [31 : 0] 
-`else  
   .data(newOffset), // Bus [31 : 0]
-`endif
   .cosine(bReal), // Bus [17 : 0] 
   .sine(bImag)); // Bus [17 : 0] 
 

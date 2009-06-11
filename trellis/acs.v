@@ -49,33 +49,46 @@ endmodule
    
 module mux_2_1 (a, b, sel, y);
    parameter               size = 8;
-   input [(size-1)+4:0]    a, b;
+   input [size-1:0]        a, b;
    input                   sel;
-   output [(size-1)+4:0]   y;
-   reg [(size-1)+4:0]      y;
+   output [size-1:0]       y;
+   reg [size-1:0]          y;
    
    always @ (sel or a or b) begin
-     if (sel == 0) begin
-       y <= a;
-     end
-     else begin
-       y <= b;
-     end
+      if (sel == 0) begin
+         y <= a;
+      end
+      else begin
+         y <= b;
+      end
    end
-
+   
 endmodule         
             
 
-module acs (clk, reset, symEn, matFilt1, matFilt2, accMet1, accMet2, accMetOut, selOut, shiftIn, shiftOut);
+module acs 
+  (
+   clk, reset, symEn,
+   matFilt1, matFilt2,
+   accMet1, accMet2,
+   accMetOut, selOut,
+   normalizeIn, normalizeOut,
+   out0PtImag, out1PtImag, outImag
+   );
    parameter             size = 8;
+   parameter             ROT_BITS = 10;
    input                 clk, reset;
    input                 symEn;
    input [size-1:0]      matFilt1, matFilt2;
    input [(size-1)+4:0]  accMet1, accMet2;
    output [(size-1)+4:0] accMetOut;
    output                selOut;
-   input                 shiftIn;
-   output                shiftOut;
+   input                 normalizeIn;
+   output                normalizeOut;
+     
+   input [ROT_BITS-1:0]  out0PtImag, out1PtImag;
+   output [ROT_BITS-1:0] outImag;
+ 
          
    reg  [(size-1)+4:0]   accMetOut;
    reg  [(size-1)+4:0]   accTemp;
@@ -84,7 +97,9 @@ module acs (clk, reset, symEn, matFilt1, matFilt2, accMet1, accMet2, accMetOut, 
    wire [(size-1)+4:0]   muxOut;
    wire                  bLarger;
    reg                   selOut;
-         
+   reg [ROT_BITS-1:0]    outImag;
+   wire [ROT_BITS-1:0]   outImagAsync;
+   
    // First we add the accumulatior metric with the matchfilter output
    adder2s #(size) adder2s_1
      (
@@ -109,7 +124,7 @@ module acs (clk, reset, symEn, matFilt1, matFilt2, accMet1, accMet2, accMetOut, 
       );
 
    // Select
-   mux_2_1 #(size) selector
+   mux_2_1 #(size+4) selector
      (
       .a         (add1       ),
       .b         (add2       ), 
@@ -117,14 +132,22 @@ module acs (clk, reset, symEn, matFilt1, matFilt2, accMet1, accMet2, accMetOut, 
       .y         (muxOut     )
       );
 
-   reg shiftOut;
+   mux_2_1 #(ROT_BITS) selectorImag
+     (
+      .a         (out1PtImag   ),
+      .b         (out0PtImag   ), 
+      .sel       (bLarger      ), 
+      .y         (outImagAsync )
+      );
+
+   reg normalizeOut;
    always @(muxOut[(size-1)+4:(size-1)+3]) begin
          //if ( accMetOut[(size-1)+4:(size-1)+1] == 4'b0001 ) begin //check (in the pos. case) if the acc. 8th bit saturate
          if ((muxOut[(size-1)+4:(size-1)+3] == 2'b01) ) begin //check (in the pos. case) if the acc. 8th bit saturate
-            shiftOut <= 1;
+            normalizeOut <= 1;
          end
          else begin
-            shiftOut <= 0;
+            normalizeOut <= 0;
          end
       end
    
@@ -141,60 +164,26 @@ module acs (clk, reset, symEn, matFilt1, matFilt2, accMet1, accMet2, accMetOut, 
 
 
    always @(posedge clk)
-      if (reset) begin
-         accMetOut <= 0;
-      end
-      else if (symEn) begin
-           if (shiftIn) begin
-                accMetOut <= accTemp;
-           end
-           else begin
-                accMetOut <= muxOut;
-         end
+     if (reset) begin
+        accMetOut <= 0;
+     end
+     else if (symEn) begin
+        if (normalizeIn) begin
+           accMetOut <= accTemp;
         end
+        else begin
+           accMetOut <= muxOut;
+        end
+     end
    
-
-/* -----\/----- EXCLUDED -----\/-----
    always @(posedge clk)
-      if (reset) begin
-         accMetOut <= 0;
-      end
-      else if (symEn) begin
-         if (shiftIn) begin
-            accMetOut <= 0;
-            //accMetOut <= accMetOut - 64;
-            //accMetOut <= {1'b0, muxOut[(size-1)+4:1]};
-         end
-         else begin
-            accMetOut <= muxOut;
-         end
-      end
- -----/\----- EXCLUDED -----/\----- */
-
-   always @(posedge clk)
-      if (reset) begin
-         selOut <= 0;
-      end
-      else if (symEn) begin
-         selOut <= ~bLarger;
-      end
-   
-/* -----\/----- EXCLUDED -----\/-----
-   reg [3:0] symEnSr;
-   reg [3:0] sym2xEnSr;
-   always @(posedge clk) begin
-      if (reset) begin
-         symEnSr <= 0;
-         sym2xEnSr <= 0;
-      end
-      else begin
-         symEnSr <= {symEnSr[2:0], symEn};
-         sym2xEnSr <= {sym2xEnSr[2:0], sym2xEn};
-      end
-   end
-   
-   assign symEnDly = symEnSr[3];
-   assign sym2xEnDly = sym2xEnSr[3];
- -----/\----- EXCLUDED -----/\----- */
+     if (reset) begin
+        selOut <= 0;
+        outImag <= 0;
+     end
+     else if (symEn) begin
+        selOut <= ~bLarger;
+        outImag <= outImagAsync;
+     end
    
 endmodule

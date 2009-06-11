@@ -136,26 +136,6 @@ module maxMetric(clk, reset, symEn,
         end
      end
 
-
-/* -----\/----- EXCLUDED -----\/-----
-   reg [3:0] symEnSr;
-   reg [3:0] sym2xEnSr;
-   always @(posedge clk) begin
-      if (reset) begin
-         symEnSr <= 0;
-         sym2xEnSr <= 0;
-      end
-      else begin
-         symEnSr <= {symEnSr[2:0], symEn};
-         sym2xEnSr <= {sym2xEnSr[2:0], sym2xEn};
-      end
-   end
-   
-   assign symEnDly = symEnSr[3];
-   assign sym2xEnDly = sym2xEnSr[3];
- -----/\----- EXCLUDED -----/\----- */
-
    assign symEnDly = symEn;
-
    
 endmodule
