@@ -69,7 +69,7 @@ endmodule
 module acs 
   (
    clk, reset, symEn,
-   matFilt1, matFilt2,
+   out1PtReal, out0PtReal,
    accMet1, accMet2,
    accMetOut, selOut,
    normalizeIn, normalizeOut,
@@ -79,7 +79,7 @@ module acs
    parameter             ROT_BITS = 10;
    input                 clk, reset;
    input                 symEn;
-   input [size-1:0]      matFilt1, matFilt2;
+   input [size-1:0]      out1PtReal, out0PtReal;
    input [(size-1)+4:0]  accMet1, accMet2;
    output [(size-1)+4:0] accMetOut;
    output                selOut;
@@ -103,16 +103,16 @@ module acs
    // First we add the accumulatior metric with the matchfilter output
    adder2s #(size) adder2s_1
      (
-      .a          (matFilt1),
-      .b          (accMet1 ),
-      .sum        (add1    )
+      .a          (out1PtReal),
+      .b          (accMet1   ),
+      .sum        (add1      )
       );   
    
    adder2s #(size) adder2s_2
      (
-      .a          (matFilt2),
-      .b          (accMet2 ),
-      .sum        (add2    )
+      .a          (out0PtReal),
+      .b          (accMet2   ),
+      .sum        (add2      )
       );   
 
    // Compare

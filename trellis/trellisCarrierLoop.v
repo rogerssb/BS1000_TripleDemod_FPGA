@@ -190,7 +190,7 @@ always @(posedge clk) begin
         end
     end
 
-wire ddsReset <= reset;
+wire ddsReset = reset;
 
 `else				  
 
