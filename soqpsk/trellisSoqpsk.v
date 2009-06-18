@@ -168,11 +168,13 @@ module trellisSoqpsk
       );
 
 `ifdef SIMULATE
+/* -----\/----- EXCLUDED -----\/-----
    initial begin
       $display("=====================================================================================",);
       $display("  I    \t\t Q    \t\t mfzI  \t\t mfzQ  \t\t mfmI  \t\t mfmQ  \t\t mfpI  \t\t mfpQ",);
       $display("=====================================================================================",);
    end
+ -----/\----- EXCLUDED -----/\----- */
    
    
    always @(posedge clk)begin
@@ -195,11 +197,11 @@ module trellisSoqpsk
 //                  $itor($signed(carrierLoopQOutX2))/(2**17));
 //      end
       
-      if(sym2xEnDly)begin
-         $display(" mfmI, mfmQ \t %1.4f\t\t%1.4f\t\t",
-                  $itor($signed(mfmI))/(2**16),
-                  $itor($signed(mfmQ))/(2**16));
-      end
+//      if(sym2xEnDly)begin
+//         $display(" mfpI, mfpQ \t %1.4f\t\t%1.4f\t\t",
+//                  $itor($signed(mfpI))/(2**16),
+//                  $itor($signed(mfpQ))/(2**16));
+//      end
    end
 `endif   
      
@@ -288,20 +290,20 @@ module trellisSoqpsk
                        rotMfm0Imag, rotMfm1Imag, rotMfm2Imag, rotMfm3Imag,  // 4 imag part rotated "match filter minus" output
                        rotMfp0Imag, rotMfp1Imag, rotMfp2Imag, rotMfp3Imag;  // 4 imag part rotated "match filter plus" outputs
    
-   assign              rotMfz0Real = mfzI, rotMfz0Imag = mfzQ;
-   assign              rotMfz1Real = mfzQ, rotMfz1Imag = -mfzI;
-   assign              rotMfz2Real = -mfzI, rotMfz2Imag = -mfzQ;
-   assign              rotMfz3Real = -mfzQ, rotMfz3Imag = mfzI;
+   assign              rotMfz0Real =  mfzI[17:17-(ROT_BITS-1)], rotMfz0Imag =  mfzQ[17:17-(ROT_BITS-1)];
+   assign              rotMfz1Real =  mfzQ[17:17-(ROT_BITS-1)], rotMfz1Imag = -mfzI[17:17-(ROT_BITS-1)];
+   assign              rotMfz2Real = -mfzI[17:17-(ROT_BITS-1)], rotMfz2Imag = -mfzQ[17:17-(ROT_BITS-1)];
+   assign              rotMfz3Real = -mfzQ[17:17-(ROT_BITS-1)], rotMfz3Imag =  mfzI[17:17-(ROT_BITS-1)];
 
-   assign              rotMfm0Real = mfmI, rotMfm0Imag = mfmQ;
-   assign              rotMfm1Real = mfmQ, rotMfm1Imag = -mfmI;
-   assign              rotMfm2Real = -mfmI, rotMfm2Imag = -mfmQ;
-   assign              rotMfm3Real = -mfmQ, rotMfm3Imag = mfmI;
+   assign              rotMfm0Real =  mfmI[17:17-(ROT_BITS-1)], rotMfm0Imag =  mfmQ[17:17-(ROT_BITS-1)];
+   assign              rotMfm1Real =  mfmQ[17:17-(ROT_BITS-1)], rotMfm1Imag = -mfmI[17:17-(ROT_BITS-1)];
+   assign              rotMfm2Real = -mfmI[17:17-(ROT_BITS-1)], rotMfm2Imag = -mfmQ[17:17-(ROT_BITS-1)];
+   assign              rotMfm3Real = -mfmQ[17:17-(ROT_BITS-1)], rotMfm3Imag =  mfmI[17:17-(ROT_BITS-1)];
 
-   assign              rotMfp0Real = mfpI, rotMfp0Imag = mfpQ;
-   assign              rotMfp1Real = mfpQ, rotMfp1Imag = -mfpI;
-   assign              rotMfp2Real = -mfpI, rotMfp2Imag = -mfpQ;
-   assign              rotMfp3Real = -mfpQ, rotMfp3Imag = mfpI;
+   assign              rotMfp0Real =  mfpI[17:17-(ROT_BITS-1)], rotMfp0Imag =  mfpQ[17:17-(ROT_BITS-1)];
+   assign              rotMfp1Real =  mfpQ[17:17-(ROT_BITS-1)], rotMfp1Imag = -mfpI[17:17-(ROT_BITS-1)];
+   assign              rotMfp2Real = -mfpI[17:17-(ROT_BITS-1)], rotMfp2Imag = -mfpQ[17:17-(ROT_BITS-1)];
+   assign              rotMfp3Real = -mfpQ[17:17-(ROT_BITS-1)], rotMfp3Imag =  mfpI[17:17-(ROT_BITS-1)];
               
 
    reg [ROT_BITS-1:0]  rotMfz0RealOut, rotMfz1RealOut, rotMfz2RealOut, rotMfz3RealOut,
@@ -313,7 +315,7 @@ module trellisSoqpsk
    
    // sync with sym2xEn
    always @(posedge clk) begin
-      if (sym2xEn) begin
+      if (sym2xEnDly) begin
          // mfz real
          rotMfz0RealOut <= rotMfz0Real;
          rotMfz1RealOut <= rotMfz1Real;
@@ -346,7 +348,32 @@ module trellisSoqpsk
          rotMfp3ImagOut <= rotMfp3Imag;
       end
    end
-                    
+
+`ifdef SIMULATE
+   always @(posedge clk)begin
+      if(sym2xEnDly)begin
+         $display("\t%1.3f  \t%1.3f  \t%1.3f  \t%1.3f  \t%1.3f  \t%1.3f  \t%1.3f  \t%1.3f",
+                  $itor($signed(rotMfz0RealOut))/(2**(ROT_BITS-1)),
+                  $itor($signed(rotMfz0ImagOut))/(2**(ROT_BITS-1)),
+                  $itor($signed(rotMfz1RealOut))/(2**(ROT_BITS-1)),
+                  $itor($signed(rotMfz1ImagOut))/(2**(ROT_BITS-1)),
+                  $itor($signed(rotMfz2RealOut))/(2**(ROT_BITS-1)),
+                  $itor($signed(rotMfz2ImagOut))/(2**(ROT_BITS-1)),
+                  $itor($signed(rotMfz3RealOut))/(2**(ROT_BITS-1)),
+                  $itor($signed(rotMfz3ImagOut))/(2**(ROT_BITS-1)));
+                  /* -----\/----- EXCLUDED -----\/-----
+                  $itor($signed(rotMfp0RealOut))/(2**(ROT_BITS-2)),
+                  $itor($signed(rotMfp0ImagOut))/(2**(ROT_BITS-2)),
+                  $itor($signed(rotMfp1RealOut))/(2**(ROT_BITS-2)),
+                  $itor($signed(rotMfp1ImagOut))/(2**(ROT_BITS-2)),
+                  $itor($signed(rotMfp2RealOut))/(2**(ROT_BITS-2)),
+                  $itor($signed(rotMfp2ImagOut))/(2**(ROT_BITS-2)),
+                  $itor($signed(rotMfp3RealOut))/(2**(ROT_BITS-2)),
+                  $itor($signed(rotMfp3ImagOut))/(2**(ROT_BITS-2)));
+                   -----/\----- EXCLUDED -----/\----- */
+      end
+   end
+`endif   
 
    wire    [4:0]   index;
 
