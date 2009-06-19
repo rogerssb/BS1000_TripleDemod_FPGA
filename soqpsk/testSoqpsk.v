@@ -205,7 +205,7 @@ initial begin
 
 
 `ifndef IQ_MAG
-#380 uut.soqpskTop.simReset = 0; // release the accumulation reset when valid data out of the rotators
+#500 uut.soqpskTop.simReset = 0; // release the accumulation reset when valid data out of the rotators
 `endif
    
 

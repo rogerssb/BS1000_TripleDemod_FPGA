@@ -94,7 +94,7 @@ module trellisSoqpsk
    
 
 // multiply by two the output from the carrierLoop to compensate for the 1/2 in the cmpy18 module.
-   multBy2withSat times2I
+   multBy2withSat carrLoopTimes2I
      (
       .clk(clk), 
       .symEn(symEnDly), 
@@ -104,14 +104,8 @@ module trellisSoqpsk
       .symEnDly(), 
       .sym2xEnDly()
       );
-
-`ifdef SIMULATE
-   real                carrierLoopIOutX2_REAL, carrierLoopQOutX2_REAL;
-   always @(carrierLoopIOutX2) carrierLoopIOutX2_REAL = $itor($signed(carrierLoopIOutX2))/(2**17);
-   always @(carrierLoopQOutX2) carrierLoopQOutX2_REAL = $itor($signed(carrierLoopQOutX2))/(2**17);
-`endif
    
-   multBy2withSat times2Q
+   multBy2withSat carrLoopTimes2Q
      (
       .clk(clk), 
       .symEn(symEnDly), 
@@ -122,22 +116,38 @@ module trellisSoqpsk
       .sym2xEnDly()
       );
 
-   //match filter zero (contant 1 multiply so we add just flops to align with "mfm" and "mfp")
-   reg [17:0]         mfzISr0, mfzISr1, mfzISr2, mfzISr3, mfzQSr0, mfzQSr1, mfzQSr2, mfzQSr3;
+`ifdef SIMULATE
+   real                carrierLoopIOutX2_REAL, carrierLoopQOutX2_REAL;
+   always @(carrierLoopIOutX2) carrierLoopIOutX2_REAL = $itor($signed(carrierLoopIOutX2))/(2**17);
+   always @(carrierLoopQOutX2) carrierLoopQOutX2_REAL = $itor($signed(carrierLoopQOutX2))/(2**17);
+`endif
+
+   
+   // match filter zero (contant 1 multiply so we add 4 flops to align with "mfm" and "mfp")
+   // Now due to a scaling factor in the mfilter the mfm and mfp output has to be sclaed back by mult by 2, this now
+   // adds another flop.
+   // **** Looking at the waveform and comparing all rotMf* outputs. It looks like I need a 6th flop delay ********
+   // Look into this!!!!!!!!!!!
+   reg [17:0]         mfzISr0, mfzISr1, mfzISr2, mfzISr3, mfzISr4, mfzISr5, 
+                      mfzQSr0, mfzQSr1, mfzQSr2, mfzQSr3, mfzQSr4, mfzQSr5;
    always @(posedge clk) begin
       if (sym2xEnDly) begin
          mfzISr0  <=  carrierLoopIOutX2;
          mfzISr1  <=  mfzISr0;
          mfzISr2  <=  mfzISr1;
          mfzISr3  <=  mfzISr2; 
+         mfzISr4  <=  mfzISr3; 
+         mfzISr5  <=  mfzISr4; 
          mfzQSr0  <=  carrierLoopQOutX2;
          mfzQSr1  <=  mfzQSr0;
          mfzQSr2  <=  mfzQSr1;
          mfzQSr3  <=  mfzQSr2; 
+         mfzQSr4  <=  mfzQSr3; 
+         mfzQSr5  <=  mfzQSr4; 
       end
    end
-   wire [17:0]          mfzI=mfzISr3;
-   wire [17:0]          mfzQ=mfzQSr3;
+   wire [17:0]          mfzI=mfzISr5;
+   wire [17:0]          mfzQ=mfzQSr5;
 
    // Match filter minus
    wire [17:0] mfmI,mfmQ;
@@ -167,6 +177,56 @@ module trellisSoqpsk
       .qOut    (mfpQ               )
       );
 
+
+   // Have to multiply mfm, mfp I and Q by 2 to compensate for the "loss" in the mfilter.
+   // The mfz does not go through the mfilter so a extra sym2xEn delay is sufficient.
+   wire [17:0] mfmIX2,mfmQX2;
+   wire [17:0] mfpIX2,mfpQX2;
+   multBy2withSat mfmTimes2I
+     (
+      .clk        (clk), 
+      .symEn      (symEnDly), 
+      .sym2xEn    (sym2xEnDly), 
+      .dIn        (mfmI),
+      .dOut       (mfmIX2), 
+      .symEnDly   (),
+      .sym2xEnDly ()
+      );
+
+   multBy2withSat mfmTimes2Q
+     (
+      .clk        (clk), 
+      .symEn      (symEnDly), 
+      .sym2xEn    (sym2xEnDly), 
+      .dIn        (mfmQ),
+      .dOut       (mfmQX2), 
+      .symEnDly   (),
+      .sym2xEnDly ()
+      );
+
+   multBy2withSat mfpTimes2I
+     (
+      .clk        (clk), 
+      .symEn      (symEnDly), 
+      .sym2xEn    (sym2xEnDly), 
+      .dIn        (mfpI),
+      .dOut       (mfpIX2), 
+      .symEnDly   (),
+      .sym2xEnDly ()
+      );
+
+   multBy2withSat mfpTimes2Q
+     (
+      .clk        (clk), 
+      .symEn      (symEnDly), 
+      .sym2xEn    (sym2xEnDly), 
+      .dIn        (mfpQ),
+      .dOut       (mfpQX2), 
+      .symEnDly   (),
+      .sym2xEnDly ()
+      );
+   
+   
 `ifdef SIMULATE
 /* -----\/----- EXCLUDED -----\/-----
    initial begin
@@ -223,64 +283,6 @@ module trellisSoqpsk
    always @(posedge clk)sym2xEnShift <= {sym2xEnShift[14:0],sym2xEnDly};
    //wire       trell2xEna = sym2xEnShift[14];
    wire        trell2xEna = sym2xEnShift[12];
-
-   
-//`ifdef SIMULATE
-//   real        mfpIReal;
-//   always @(mfpI) mfpIReal <= mfpI[17] ? mfpI - 262144.0 : mfpI;
-//   real        mfpQReal;
-//   always @(mfpQ) mfpQReal <= mfpQ[17] ? mfpQ - 262144.0 : mfpQ;
-//   real        mfmIReal;
-//   always @(mfmI) mfmIReal <= mfmI[17] ? mfmI - 262144.0 : mfmI;
-//   real        mfmQReal;
-//   always @(mfmQ) mfmQReal <= mfmQ[17] ? mfmQ - 262144.0 : mfmQ;
-//   real        mag0,mag1;
-//   reg         magDecision;
-//   reg [6:0]   mdSR;
-//   always @(posedge clk) begin
-//      if (rotEna) begin
-//         mag0 <= (mfpIReal*mfpIReal) + (mfpQReal*mfpQReal);
-//         mag1 <= (mfmIReal*mfmIReal) + (mfmQReal*mfmQReal);
-//         if (mag0 < mag1) begin
-//            mdSR <= {mdSR[5:0],1'b1};
-//         end
-//         else begin
-//            mdSR <= {mdSR[5:0],1'b0};
-//         end
-//      end                        
-//      if (trellEna) begin
-//         magDecision <= mdSR[6];
-//      end
-//   end
-//`endif
-   
-`ifdef IQ_MAG
-   assign          symEn_tbtDly = rotEna;
-   assign          sym2xEn_tbtDly = 0;  // need to allign
-   wire [4:0]      index = 0;
-   assign          symEn_phErr = 1;
-   wire            trellEna = 1;
-   always @(posedge clk) begin 
-      phErrShft <= 0;
-   end
-   
-   
-   iqMagEst iqMagEst
-     ( 
-       .clk(clk), .reset(reset), .syncIn(/*rotEna*/),
-       //.iIn_0(mfpI),
-       //.qIn_0(mfpQ),
-       //.iIn_1(mfmI),
-       //.qIn_1(mfmQ),
-       .iIn_0({out0Pt10Real,8'b0}),
-       .qIn_0({out0Pt10Imag,8'b0}),
-       .iIn_1({out1Pt10Real,8'b0}),
-       .qIn_1({out1Pt10Imag,8'b0}),
-       .decision(decision)
-       );
-
-`else
-
    
    // Rotations
    wire [ROT_BITS-1:0] rotMfz0Real, rotMfz1Real, rotMfz2Real, rotMfz3Real,  // 4 real part rotated "match filter zero" outputs
@@ -295,15 +297,15 @@ module trellisSoqpsk
    assign              rotMfz2Real = -mfzI[17:17-(ROT_BITS-1)], rotMfz2Imag = -mfzQ[17:17-(ROT_BITS-1)];
    assign              rotMfz3Real = -mfzQ[17:17-(ROT_BITS-1)], rotMfz3Imag =  mfzI[17:17-(ROT_BITS-1)];
 
-   assign              rotMfm0Real =  mfmI[17:17-(ROT_BITS-1)], rotMfm0Imag =  mfmQ[17:17-(ROT_BITS-1)];
-   assign              rotMfm1Real =  mfmQ[17:17-(ROT_BITS-1)], rotMfm1Imag = -mfmI[17:17-(ROT_BITS-1)];
-   assign              rotMfm2Real = -mfmI[17:17-(ROT_BITS-1)], rotMfm2Imag = -mfmQ[17:17-(ROT_BITS-1)];
-   assign              rotMfm3Real = -mfmQ[17:17-(ROT_BITS-1)], rotMfm3Imag =  mfmI[17:17-(ROT_BITS-1)];
+   assign              rotMfm0Real =  mfmIX2[17:17-(ROT_BITS-1)], rotMfm0Imag =  mfmQX2[17:17-(ROT_BITS-1)];
+   assign              rotMfm1Real =  mfmQX2[17:17-(ROT_BITS-1)], rotMfm1Imag = -mfmIX2[17:17-(ROT_BITS-1)];
+   assign              rotMfm2Real = -mfmIX2[17:17-(ROT_BITS-1)], rotMfm2Imag = -mfmQX2[17:17-(ROT_BITS-1)];
+   assign              rotMfm3Real = -mfmQX2[17:17-(ROT_BITS-1)], rotMfm3Imag =  mfmIX2[17:17-(ROT_BITS-1)];
 
-   assign              rotMfp0Real =  mfpI[17:17-(ROT_BITS-1)], rotMfp0Imag =  mfpQ[17:17-(ROT_BITS-1)];
-   assign              rotMfp1Real =  mfpQ[17:17-(ROT_BITS-1)], rotMfp1Imag = -mfpI[17:17-(ROT_BITS-1)];
-   assign              rotMfp2Real = -mfpI[17:17-(ROT_BITS-1)], rotMfp2Imag = -mfpQ[17:17-(ROT_BITS-1)];
-   assign              rotMfp3Real = -mfpQ[17:17-(ROT_BITS-1)], rotMfp3Imag =  mfpI[17:17-(ROT_BITS-1)];
+   assign              rotMfp0Real =  mfpIX2[17:17-(ROT_BITS-1)], rotMfp0Imag =  mfpQX2[17:17-(ROT_BITS-1)];
+   assign              rotMfp1Real =  mfpQX2[17:17-(ROT_BITS-1)], rotMfp1Imag = -mfpIX2[17:17-(ROT_BITS-1)];
+   assign              rotMfp2Real = -mfpIX2[17:17-(ROT_BITS-1)], rotMfp2Imag = -mfpQX2[17:17-(ROT_BITS-1)];
+   assign              rotMfp3Real = -mfpQX2[17:17-(ROT_BITS-1)], rotMfp3Imag =  mfpIX2[17:17-(ROT_BITS-1)];
               
 
    reg [ROT_BITS-1:0]  rotMfz0RealOut, rotMfz1RealOut, rotMfz2RealOut, rotMfz3RealOut,
@@ -419,7 +421,6 @@ soqpskTop #(size, ROT_BITS) soqpskTop
       //end   
    end
 
-`endif
    
 /******************************************************************************
                                DAC Output Mux
