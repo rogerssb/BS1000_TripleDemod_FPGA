@@ -131,7 +131,7 @@ always @(demodMode or offsetError or offsetErrorEn or
             end
         `MODE_BPSK: begin
             sync <= ddcSync;
-            modeError <= {bpskPhase[6:0],1'b0};
+            modeError <= {bpskPhase[6:0],1'b1};
             //sync <= symSync;
             //modeError <= {bpskSymPhase[5:0],2'b0};
             modeErrorEn <= 1'b1;
@@ -140,7 +140,7 @@ always @(demodMode or offsetError or offsetErrorEn or
         `MODE_QPSK,
         `MODE_OQPSK: begin
             sync <= ddcSync;
-            modeError <= {qpskPhase[5:0],2'b0};
+            modeError <= {qpskPhase[5:0],2'b10};
             //sync <= symSync;
             //modeError <= {qpskSymPhase[5:0],2'b0};
             modeErrorEn <= 1'b1;
@@ -155,12 +155,22 @@ always @(demodMode or offsetError or offsetErrorEn or
         endcase
     end
 
+wire loopFilterEn = sync & modeErrorEn;
+
 `ifdef SIMULATE
 real modeErrorReal;
 always @(modeError) modeErrorReal = (modeError[7] ? modeError - 256.0 : modeError)/128.0;
+real avgErrorReal;
+always @(posedge clk) begin
+    if (reset) begin
+        avgErrorReal <= 0.0;
+        end
+    else if (loopFilterEn) begin
+        avgErrorReal <= (0.99 * avgErrorReal) + (0.01 * modeErrorReal);
+        end
+    end
 `endif
 
-wire loopFilterEn = sync & modeErrorEn;
 
 /**************************** Adjust Error ************************************/
 reg     [7:0]   loopError;

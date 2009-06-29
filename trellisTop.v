@@ -262,6 +262,7 @@ trellis trellis(
     .sym2xEn(sym2xEn),
     .iIn(iIn),
     .qIn(qIn),
+    .legacyBit(!iBit),
     .wr0(wr0),
     .wr1(wr1),
     .wr2(wr2),

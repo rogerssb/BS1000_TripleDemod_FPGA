@@ -14,6 +14,7 @@
 module trellis(
     clk,reset,symEn,sym2xEn,
     iIn,qIn,
+    legacyBit,
     wr0,wr1,wr2,wr3,
     addr,
     din,dout,
@@ -34,6 +35,7 @@ parameter ROT_BITS = 10;
 
 input           clk,reset,symEn,sym2xEn;
 input   [17:0]  iIn,qIn;
+input           legacyBit;
 input           wr0,wr1,wr2,wr3;
 input   [11:0]  addr;
 input   [31:0]  din;
@@ -55,8 +57,8 @@ wire                    decision;
 
 wire            symEn_phErr;
 reg     [7:0]   phErrShft;
+wire    [7:0]   freq;
 wire    [17:0]  carrierLoopIOut,carrierLoopQOut;
-wire    [17:0]  carrierLoopIOutX2,carrierLoopQOutX2;
 trellisCarrierLoop trellisCarrierLoop(
   .clk(clk),
   .reset(reset),
@@ -64,6 +66,7 @@ trellisCarrierLoop trellisCarrierLoop(
   .sym2xEn(sym2xEn),
   .iIn(iIn),
   .qIn(qIn),
+  .legacyBit(legacyBit),
   .phaseError(phErrShft),
   .symEn_phErr(symEn_phErr),
   .wr0(wr0),
@@ -76,7 +79,8 @@ trellisCarrierLoop trellisCarrierLoop(
   .iOut(carrierLoopIOut),
   .qOut(carrierLoopQOut),
   .symEnDly(symEnDly),
-  .sym2xEnDly(sym2xEnDly)
+  .sym2xEnDly(sym2xEnDly),
+  .freq(freq)
   );
 
 `ifdef SIMULATE
@@ -85,41 +89,19 @@ always @(phErrShft) phErrReal = (phErrShft[7] ? phErrShft - 256.0 : phErrShft);
 `endif
 
 
-// multiply by two the output from the carrierLoop to compensate for the 1/2 in the cmpy18 module.
-multBy2withSat times2I(
-                       .clk(clk), 
-                       .symEn(symEnDly), 
-                       .sym2xEn(sym2xEnDly), 
-                       .dIn(carrierLoopIOut),
-                       .dOut(carrierLoopIOutX2), 
-                       .symEnDly(symEnDly_mult2), 
-                       .sym2xEnDly(sym2xEnDly_mult2)
-                       );
-
-multBy2withSat times2Q(
-                       .clk(clk), 
-                       .symEn(symEnDly), 
-                       .sym2xEn(sym2xEnDly), 
-                       .dIn(carrierLoopQOut),
-                       .dOut(carrierLoopQOutX2), 
-                       .symEnDly(),
-                       .sym2xEnDly()
-                       );
-   
-
 // there are two samples per symbol and their coefficients order below is
 // 0 real, 0 imag, 1 real, 1 imag
 
 wire [17:0]f0I,f0Q;
-mfilter #(18'h1B48C,18'h10B85,18'h3D7D4,18'h1FE6B) f0(clk,reset,symEnDly_mult2,sym2xEnDly_mult2,carrierLoopIOutX2,carrierLoopQOutX2,f0I,f0Q);
+mfilter #(18'h1B48C,18'h10B85,18'h3D7D4,18'h1FE6B) f0(clk,reset,symEnDly,sym2xEnDly,carrierLoopIOut,carrierLoopQOut,f0I,f0Q);
 //mfilter #(18'h1B48C,18'h10B85,18'h3D7D4,18'h1FE6B) f0(clk,reset,symEn,sym2xEn,iIn,qIn,f0I,f0Q);
 
 wire [17:0]f1I,f1Q;
-mfilter #(18'h1B48C,18'h2F47B,18'h3D7D4,18'h20195) f1(clk,reset,symEnDly_mult2,sym2xEnDly_mult2,carrierLoopIOutX2,carrierLoopQOutX2,f1I,f1Q);
+mfilter #(18'h1B48C,18'h2F47B,18'h3D7D4,18'h20195) f1(clk,reset,symEnDly,sym2xEnDly,carrierLoopIOut,carrierLoopQOut,f1I,f1Q);
 //mfilter #(18'h1B48C,18'h2F47B,18'h3D7D4,18'h20195) f1(clk,reset,symEn,sym2xEn,iIn,qIn,f1I,f1Q);
 
 reg [15:0]symEnShift;
-always @(posedge clk)symEnShift <= {symEnShift[14:0],(sym2xEnDly_mult2 && !symEnDly_mult2)};
+always @(posedge clk)symEnShift <= {symEnShift[14:0],(sym2xEnDly && !symEnDly)};
 //always @(posedge clk)symEnShift <= {symEnShift[14:0],(sym2xEn && !symEn)};
 
 wire rotEna = symEnShift[4];
@@ -127,7 +109,7 @@ wire rotEna = symEnShift[4];
 wire trellEna = symEnShift[10];
 
 reg [15:0]sym2xEnShift;
-always @(posedge clk)sym2xEnShift <= {sym2xEnShift[14:0],sym2xEnDly_mult2};
+always @(posedge clk)sym2xEnShift <= {sym2xEnShift[14:0],sym2xEnDly};
 //wire trell2xEna = sym2xEnShift[14];
 wire trell2xEna = sym2xEnShift[12];
 
@@ -264,7 +246,6 @@ rotator #(ROT_BITS) rotator(
 wire    [4:0]   index;
 
 `ifdef VITERBI_ANNOTATE
-reg trellEnaDly,trell2xEnaDly;
 reg [ROT_BITS-1:0]
   out0Pt1RealDly,out1Pt1RealDly,          out0Pt1ImagDly,out1Pt1ImagDly,
   out0Pt2RealDly,out1Pt2RealDly,          out0Pt2ImagDly,out1Pt2ImagDly,
@@ -289,7 +270,6 @@ reg [ROT_BITS-1:0]
 
 always @(negedge clk) begin
     trellEnaDly <= trellEna;
-    trell2xEnaDly <= trell2xEnaDly;
     out0Pt1RealDly <= out0Pt1Real;
     out1Pt1RealDly <= out1Pt1Real;
     out0Pt1ImagDly <= out0Pt1Imag;
@@ -548,12 +528,12 @@ reg     [17:0]  dac2Data;
 always @(posedge clk) begin
     case (dac0Select) 
         `DAC_TRELLIS_I: begin
-            dac0Data <= carrierLoopIOutX2;
-            dac0Sync <= sym2xEnDly_mult2;
+            dac0Data <= carrierLoopIOut;
+            dac0Sync <= sym2xEnDly;
             end
         `DAC_TRELLIS_Q: begin
-            dac0Data <= carrierLoopQOutX2;
-            dac0Sync <= sym2xEnDly_mult2;
+            dac0Data <= carrierLoopQOut;
+            dac0Sync <= sym2xEnDly;
             end
         `DAC_TRELLIS_PHERR: begin
             dac0Data <= {phErrShft,10'b0};
@@ -571,12 +551,12 @@ always @(posedge clk) begin
 
     case (dac1Select) 
         `DAC_TRELLIS_I: begin
-            dac1Data <= carrierLoopIOutX2;
-            dac1Sync <= sym2xEnDly_mult2;
+            dac1Data <= carrierLoopIOut;
+            dac1Sync <= sym2xEnDly;
             end
         `DAC_TRELLIS_Q: begin
-            dac1Data <= carrierLoopQOutX2;
-            dac1Sync <= sym2xEnDly_mult2;
+            dac1Data <= carrierLoopQOut;
+            dac1Sync <= sym2xEnDly;
             end
         `DAC_TRELLIS_PHERR: begin
             dac1Data <= {phErrShft,10'b0};
@@ -594,20 +574,20 @@ always @(posedge clk) begin
 
     case (dac2Select) 
         `DAC_TRELLIS_I: begin
-            dac2Data <= carrierLoopIOutX2;
-            dac2Sync <= sym2xEnDly_mult2;
+            dac2Data <= carrierLoopIOut;
+            dac2Sync <= sym2xEnDly;
             end
         `DAC_TRELLIS_Q: begin
-            dac2Data <= carrierLoopQOutX2;
-            dac2Sync <= sym2xEnDly_mult2;
+            dac2Data <= carrierLoopQOut;
+            dac2Sync <= sym2xEnDly;
             end
         `DAC_TRELLIS_PHERR: begin
             dac2Data <= {phErrShft,10'b0};
             dac2Sync <= symEn_phErr;
             end
         `DAC_TRELLIS_INDEX: begin
-            dac2Data <= {1'b0,index,12'b0};
-            dac2Sync <= trellEna;
+            dac2Data <= {freq,10'b0};
+            dac2Sync <= sym2xEnDly;
             end
         default: begin
             dac2Data <= {phErrShft,10'b0};
@@ -622,39 +602,3 @@ endmodule
 
 
 
-module multBy2withSat(clk, symEn, sym2xEn, dIn, dOut, symEnDly, sym2xEnDly);
-   
-   input                 clk,symEn, sym2xEn; 
-   input [17:0]          dIn;
-   output [17:0]         dOut;
-   output                symEnDly, sym2xEnDly;
-      
-   reg [17:0]            dataBits;
-   reg [17:0]            dOut;//, dOutTmp;
-  
-   reg                   satPos,satNeg;
-   wire                  sign = dIn[17];
-   always @(posedge clk) begin
-      if (sym2xEn) begin
-         dataBits <= {dIn[16:0], 1'b0};
-         satPos <= !sign && (dIn[17:16] != 2'b00);
-         satNeg <=  sign && (dIn[17:16] != 2'b11);
-         //dOut <= dOutTmp;
-         if (satPos) begin
-            dOut <= 18'h1ffff;
-         end
-         else if (satNeg) begin
-            dOut <= 18'h20001;
-         end
-         else begin
-            dOut <= dataBits;
-         end
-      end   
-   end
-
-   // It works to reuse the symEn without delay because it takes 2 sym2xEn to produce the times 2 output
-   // Had to add "dOut <= dOutTmp" to line up the 2 samples per symbol correctly 
-   assign symEnDly = symEn;
-   assign sym2xEnDly = sym2xEn;
-   
-endmodule

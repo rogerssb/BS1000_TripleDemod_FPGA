@@ -15,6 +15,7 @@ module bitsync(
     i,q,
     offsetError,
     offsetErrorEn,
+    fskDeviation,
     symClk,
     symDataI,
     symDataQ,
@@ -41,6 +42,7 @@ output  [31:0]  dout;
 input   [17:0]  i,q;
 output  [17:0]  offsetError;
 output          offsetErrorEn;
+output  [15:0]  fskDeviation;
 output          symClk;
 output  [17:0]  symDataI;
 output  [17:0]  symDataQ;
@@ -210,8 +212,12 @@ wire timingErrorEn = (phaseState == ONTIME);
 
 // DC Offset error variables
 wire [18:0]offsetErrorSum = {bbSRI[2][17],bbSRI[2]} + {bbSRI[0][17],bbSRI[0]};
-reg  [17:0]offsetError;
-wire offsetErrorEn = (phaseState == ONTIME);
+reg  [17:0]dcError;
+wire offsetErrorEn = (phaseState == OFFTIME);
+
+// Deviation variables
+reg  [17:0]deviation;
+wire [17:0]absDeviation = deviation[17] ? (~deviation + 1) : deviation;
 
 reg  stateMachineSlip;
 `ifdef ENABLE_SMSLIP
@@ -234,7 +240,7 @@ always @(posedge sampleClk) begin
         slipped <= 0;
         timingErrorI <= 0;
         timingErrorQ <= 0;
-        offsetError <= 0;
+        dcError <= 0;
         avgCount <= 15;
         avgError <= 0;
         avgSlipError <= 0;
@@ -277,7 +283,15 @@ always @(posedge sampleClk) begin
                 if (earlySignI != lateSignI) begin
                     // Yes. Calculate DC offset error
                     transition <= 1;
-                    offsetError <= offsetErrorSum[18:1];
+                    if (offsetErrorSum[18:17] == 2'b10) begin
+                        dcError <= 18'h20001;
+                        end
+                    else if (offsetErrorSum[18:17] == 2'b01) begin
+                        dcError <= 18'h1ffff;
+                        end
+                    else begin
+                        dcError <= offsetErrorSum[17:0];
+                        end
                     // High to low transition?
                     if (earlySignI) begin
                         timingErrorI <= offTimeI;
@@ -291,8 +305,9 @@ always @(posedge sampleClk) begin
                     end
                 else begin
                     transition <= 0;
-                    offsetError <= 18'h00;
+                    dcError <= 18'h00;
                     timingErrorI <= 18'h00;
+                    deviation <= offTimeI;
                     end
                 // Is there a data transition on Q?
                 if (earlySignQ != lateSignQ) begin
@@ -357,6 +372,34 @@ real qMFReal;
 always @(timingErr) timingErrorReal = ((timingErr > 131071.0) ? timingErr - 262144.0 : timingErr)/131072.0;
 always @(iMF) iMFReal = (iMF[17] ? iMF - 262144.0 : iMF)/131072.0;
 always @(qMF) qMFReal = (qMF[17] ? qMF - 262144.0 : qMF)/131072.0;
+`endif
+
+
+// Calculation of average DC offset (freq offset in FSK mode) and average FSK deviation.
+reg     [24:0]  avgDeviation;
+reg     [24:0]  avgOffsetError;
+assign          offsetError = avgOffsetError[24:7];
+always @(posedge sampleClk) begin
+    if (reset) begin
+        avgOffsetError <= 0;
+        avgDeviation <= 0;
+        end
+    else if (symTimes2Sync) begin
+        if (offsetErrorEn) begin
+            avgOffsetError <= (avgOffsetError - {{7{avgOffsetError[24]}},avgOffsetError[24:7]})
+                            + {{7{dcError[17]}},dcError};
+            end
+        if (offsetErrorEn && !transition) begin
+            avgDeviation <= (avgDeviation - {{7{avgDeviation[24]}},avgDeviation[24:7]})
+                          + {{7{absDeviation[17]}},absDeviation};
+            end
+        end
+    end
+assign fskDeviation = avgDeviation[24:9];
+
+`ifdef SIMULATE
+real avgOffsetReal = (avgOffsetError[24] ? avgOffsetError[24:7] - 262144.0 : avgOffsetError[24:7])/131072.0;
+real avgDevReal = (avgDeviation[24] ? avgDeviation[24:7] - 262144.0 : avgDeviation[24:7])/131072.0;
 `endif
 
 //************************ Recovered Clock and Data ***************************

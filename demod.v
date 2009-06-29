@@ -72,6 +72,7 @@ always @(addr) begin
         default:     demodSpace <= 0;
         endcase
     end
+wire    [15:0]  fskDeviation;
 wire    [2:0]   demodMode;
 wire    [1:0]   bitsyncMode;
 wire    [15:0]  falseLockAlpha;
@@ -88,6 +89,7 @@ demodRegs demodRegs(
     .highFreqOffset(highFreqOffset),
     .bitsyncLock(bitsyncLock),
     .demodLock(carrierLock),
+    .fskDeviation(fskDeviation),
     .demodMode(demodMode),
     .bitsyncMode(bitsyncMode),
     .dac0Select(dac0Select),
@@ -226,6 +228,7 @@ always @(posedge clk) begin
                              AFC/Sweep/Costas Loop
 ******************************************************************************/
 wire    [17:0]  offsetError;
+wire    [7:0]   rndOffsetError = offsetError[17:10] + offsetError[9];
 wire    [7:0]   symPhase;
 wire    [7:0]   demodLoopError;
 wire    [15:0]  freqLockCounter;
@@ -243,7 +246,7 @@ carrierLoop carrierLoop(
     .phase(phase),
     .freq(freq),
     .highFreqOffset(highFreqOffset),
-    .offsetError(offsetError[17:10]),
+    .offsetError(rndOffsetError),
     .offsetErrorEn(offsetErrorEn),
     .symPhase(symPhase),
     .carrierFreqOffset(carrierFreqOffset),
@@ -325,6 +328,7 @@ bitsync bitsync(
     .i(iSym), .q(qSym),
     .offsetError(offsetError),
     .offsetErrorEn(offsetErrorEn),
+    .fskDeviation(fskDeviation),
     .symClk(symClk),
     .symDataI(iSymData),
     .symDataQ(qSymData),

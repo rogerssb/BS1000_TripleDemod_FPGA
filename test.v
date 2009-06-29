@@ -49,9 +49,9 @@ real carrierLimitNorm = carrierLimitHz * `SAMPLE_PERIOD * `TWO_POW_32;
 integer carrierLimitInt = carrierLimitNorm;
 wire [31:0] carrierLimit = carrierLimitInt;
 
-wire [31:0] sweepRate = 32'h00800000;
+wire [31:0] sweepRate = 32'h00000000;
 
-real bitrateBps = 400000.0;
+real bitrateBps = 500000.0;
 real bitrateSamples = 1/bitrateBps/`SAMPLE_PERIOD/2.0;
 integer bitrateSamplesInt = bitrateSamples;
 wire [15:0]bitrateDivider = bitrateSamplesInt - 1;
@@ -59,7 +59,7 @@ real actualBitrateBps = SAMPLE_FREQ/bitrateSamplesInt/2.0;
 
 // value = 2^ceiling(log2(R*R))/(R*R), where R = interpolation rate of the FM
 // modulator
-real interpolationGain = 1.77777777;
+real interpolationGain = 1.28;
 
 //real deviationHz = 0*0.35 * bitrateBps;
 real deviationHz = 2*0.35 * bitrateBps;
@@ -68,8 +68,10 @@ integer deviationInt = deviationNorm*interpolationGain;
 wire [31:0]deviationQ31 = deviationInt;
 wire [17:0]deviation = deviationQ31[31:14];
 
-real cicDecimation = SAMPLE_FREQ/bitrateBps/2.0/2.0/2.0/2.0;
-integer cicDecimationInt = cicDecimation;
+real cicDecimation;
+initial cicDecimation = SAMPLE_FREQ/bitrateBps/2.0/2.0/2.0/2.0;
+integer cicDecimationInt;
+initial cicDecimationInt = (cicDecimation < 2.0) ? 2 : cicDecimation;
 
 
 real resamplerFreqSps = 2*actualBitrateBps;     // 2 samples per symbol
@@ -149,6 +151,7 @@ wire    [17:0]iTx,qTx;
 dds iqDds ( 
     .sclr(reset), 
     .clk(clk), 
+    .ce(1'b1),
     .we(1'b1), 
     .data(fmModFreq), 
     .sine(), 
@@ -160,6 +163,7 @@ wire    [17:0]  iBB,qBB;
 dds iqDds ( 
     .sclr(reset), 
     .clk(clk), 
+    .ce(1'b1),
     .we(1'b1), 
     .data(fmModFreq), 
     .sine(qBB), 
@@ -169,6 +173,7 @@ wire    [17:0]  iLO,qLO;
 dds carrierDds (
     .sclr(reset), 
     .clk(clk), 
+    .ce(1'b1),
     .we(1'b1), 
     .data(carrierFreq), 
     .sine(qLO), 
@@ -543,7 +548,7 @@ initial begin
     write32(`FM_MOD_DEV, {14'bx,deviation});
     write32(`FM_MOD_BITRATE, {1'b0,15'bx,bitrateDivider});
     // This value is ceiling(log2(R*R)), where R = interpolation rate.
-    write32(`FM_MOD_CIC,9);
+    write32(`FM_MOD_CIC,7);
     fmModCS = 0;
 
     // Init the mode
@@ -558,7 +563,7 @@ initial begin
 
     // Init the carrier loop filters
     write32(createAddress(`CARRIERSPACE,`LF_CONTROL),1);    // Zero the error
-    write32(createAddress(`CARRIERSPACE,`LF_LEAD_LAG),32'h00000012);   
+    write32(createAddress(`CARRIERSPACE,`LF_LEAD_LAG),32'h00000014);   
     write32(createAddress(`CARRIERSPACE,`LF_LIMIT), carrierLimit);
     write32(createAddress(`CARRIERSPACE,`LF_LOOPDATA), sweepRate);
 
@@ -572,7 +577,7 @@ initial begin
 
     // Init the channel agc loop filter
     write32(createAddress(`CHAGCSPACE,`ALF_CONTROL),1);                 // Zero the error
-    write32(createAddress(`CHAGCSPACE,`ALF_SETPOINT),32'h000000f8);     // AGC Setpoint
+    write32(createAddress(`CHAGCSPACE,`ALF_SETPOINT),32'h000000e0);     // AGC Setpoint
     write32(createAddress(`CHAGCSPACE,`ALF_GAINS),32'h00180018);        // AGC Loop Gain
     write32(createAddress(`CHAGCSPACE,`ALF_ULIMIT),32'h4fffffff);       // AGC Upper limit
     write32(createAddress(`CHAGCSPACE,`ALF_LLIMIT),32'h00000000);       // AGC Lower limit
@@ -643,7 +648,7 @@ initial begin
     #(4*bitrateSamplesInt*C) ;
 
     // Enable the AFC loop and invert the error
-    // write32(createAddress(`CARRIERSPACE,`LF_CONTROL),2);  
+    write32(createAddress(`CARRIERSPACE,`LF_CONTROL),2);  
 
     `ifdef ENABLE_AGC
     // Enable the AGC loop

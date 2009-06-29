@@ -10,9 +10,11 @@
 
 `timescale 1ns/1ps
 `include "./addressMap.v"
+`define USE_LEGACY
            
 module trellisCarrierLoop(clk,reset,symEn,sym2xEn,
   iIn,qIn,
+  legacyBit,
   phaseError,
   symEn_phErr,
   wr0,wr1,wr2,wr3,
@@ -20,11 +22,13 @@ module trellisCarrierLoop(clk,reset,symEn,sym2xEn,
   din,dout,
   iOut,qOut,
   symEnDly,
-  sym2xEnDly
+  sym2xEnDly,
+  freq
   );
 
 input clk,reset,symEn,sym2xEn;
 input [17:0]iIn,qIn;
+input legacyBit;
 input   [7:0]   phaseError;
 input symEn_phErr;
 input wr0,wr1,wr2,wr3;
@@ -34,6 +38,7 @@ output [31:0]dout;
 output [17:0]iOut,qOut;
 output symEnDly;
 output sym2xEnDly;
+output  [7:0]freq;
 
 wire[31:0]carrierFreqOffset;
 
@@ -50,7 +55,7 @@ wire    [31:0]  dout;
 wire    [4:0]   leadExp;
 wire    [4:0]   lagExp;
 wire    [31:0]  limit;
-wire    [31:0]  loopOffset;
+wire    [31:0]  loopData;
 wire    [15:0]  lockCount;
 wire    [7:0]   syncThreshold;
 wire    [39:0]  lagAccum;
@@ -70,18 +75,17 @@ loopRegs loopRegs(
     .lagExp(lagExp),
     .limit(limit),
     .lockCount(lockCount),
-    .syncThreshold(syncThreshold)
+    .syncThreshold(syncThreshold),
+    .loopData(loopData)
     );
 
 
-//wire loopFilterEn = symEn;
 wire loopFilterEn = symEn_phErr;
 
 /**************************** Adjust Error ************************************/
 reg     [7:0]   loopError;
 wire    [7:0]   negPhaseError = ~phaseError + 1;
 reg             carrierLock;
-//wire            breakLoop = (zeroError || (sweepEnable && !carrierLock && highFreqOffset));
 wire            breakLoop = zeroError;
 always @(posedge clk) begin 
     if (loopFilterEn) begin
@@ -189,13 +193,25 @@ always @(posedge clk) begin
         newOffset <= carrierFreqOffset;
         end
     end
+reg [31:0] deviationCorrection;
+always @(posedge clk) begin
+    if (symEn) begin
+        if (legacyBit) begin
+            deviationCorrection <= loopData;
+            end
+        else begin
+            deviationCorrection <= -loopData;
+            end
+        end
+    end
+wire [31:0] ddsFreq = newOffset + deviationCorrection;
 
 wire ddsReset = reset;
 
-`else				  
+`else                             
 
 // s-curve testing
-reg resetWithPhaseOffset=0;	
+reg resetWithPhaseOffset=0;     
 reg [31:0] newOffset;
 reg set;
 always @(posedge clk) begin
@@ -205,13 +221,13 @@ always @(posedge clk) begin
       set <= 0;
    end
    else begin
-      resetWithPhaseOffset <= 0; // release the reset															
-	  //newOffset <= 32'h60000000; //do a one time write of 4000_0000 to rotate pi/2  (i.e. set the initial phase)
+      resetWithPhaseOffset <= 0; // release the reset                                                                                                                   
+          //newOffset <= 32'h60000000; //do a one time write of 4000_0000 to rotate pi/2  (i.e. set the initial phase)
       newOffset <= 32'h00000000; //do a one time write of 4000_0000 to rotate pi/2  (i.e. set the initial phase)
-	  set <= 1;
+          set <= 1;
       if (set) begin
          //newOffset <= 32'h01000000; // this value will change the constate freq out of the dds 
-		 newOffset <= 32'h00000000; // this value will change the constate freq out of the dds 
+                 newOffset <= 32'h00000000; // this value will change the constate freq out of the dds 
       end
    end
 end
@@ -219,39 +235,134 @@ end
 wire ddsReset = resetWithPhaseOffset;
 `endif
 
+`ifdef USE_LEGACY
+// Delay the input samples to line up with the legacy demod's detected bit
+reg     [17:0]  iIns[24:0];
+reg     [17:0]  qIns[24:0];
+always @(posedge clk) begin
+    if (sym2xEn) begin
+        iIns[ 0] <= iIn;
+        iIns[ 1] <= iIns[ 0];
+        iIns[ 2] <= iIns[ 1];
+        iIns[ 3] <= iIns[ 2];
+        iIns[ 4] <= iIns[ 3];
+        iIns[ 5] <= iIns[ 4];
+        iIns[ 6] <= iIns[ 5];
+        iIns[ 7] <= iIns[ 6];
+        iIns[ 8] <= iIns[ 7];
+        iIns[ 9] <= iIns[ 8];
+        iIns[10] <= iIns[ 9];
+        iIns[11] <= iIns[10];
+        iIns[12] <= iIns[11];
+        iIns[13] <= iIns[12];
+        iIns[14] <= iIns[13];
+        iIns[15] <= iIns[14];
+        iIns[16] <= iIns[15];
+        iIns[17] <= iIns[16];
+        iIns[18] <= iIns[17];
+        iIns[19] <= iIns[18];
+        iIns[20] <= iIns[19];
+        iIns[21] <= iIns[20];
+        iIns[22] <= iIns[21];
+        iIns[23] <= iIns[22];
+        iIns[24] <= iIns[23];
+        qIns[ 0] <= qIn;
+        qIns[ 1] <= qIns[ 0];
+        qIns[ 2] <= qIns[ 1];
+        qIns[ 3] <= qIns[ 2];
+        qIns[ 4] <= qIns[ 3];
+        qIns[ 5] <= qIns[ 4];
+        qIns[ 6] <= qIns[ 5];
+        qIns[ 7] <= qIns[ 6];
+        qIns[ 8] <= qIns[ 7];
+        qIns[ 9] <= qIns[ 8];
+        qIns[10] <= qIns[ 9];
+        qIns[11] <= qIns[10];
+        qIns[12] <= qIns[11];
+        qIns[13] <= qIns[12];
+        qIns[14] <= qIns[13];
+        qIns[15] <= qIns[14];
+        qIns[16] <= qIns[15];
+        qIns[17] <= qIns[16];
+        qIns[18] <= qIns[17];
+        qIns[19] <= qIns[18];
+        qIns[20] <= qIns[19];
+        qIns[21] <= qIns[20];
+        qIns[22] <= qIns[21];
+        qIns[23] <= qIns[22];
+        qIns[24] <= qIns[23];
+        end
+    end
+wire    [17:0]  iInput = iIns[22];
+wire    [17:0]  qInput = qIns[22];
+//wire    [17:0]  iInput = iIns[23];
+//wire    [17:0]  qInput = qIns[23];
+`else
+wire    [17:0]  iInput = iIn;
+wire    [17:0]  qInput = qIn;
+`endif
 
 wire [17:0]bReal,bImag;
+wire    [17:0]  iMpy,qMpy;
 dds dds(
   .clk(clk),
   .sclr(ddsReset),
+  .ce(sym2xEn),
   .we(1'b1),
-  .data(newOffset), // Bus [31 : 0]
+  .data(ddsFreq), // Bus [31 : 0]
   .cosine(bReal), // Bus [17 : 0] 
   .sine(bImag)); // Bus [17 : 0] 
 
-cmpy18 cmpy18(clk,reset,iIn,qIn,bReal,bImag,iOut,qOut);
+cmpy18 cmpy18(clk,reset,iInput,qInput,bReal,bImag,iMpy,qMpy);
 
-reg [3:0] symEnSr;
-reg [3:0] sym2xEnSr;
+reg [4:0] symEnSr;
+reg [4:0] sym2xEnSr;
+`ifdef USE_LEGACY
+reg [17:0]  iOut,qOut;
+`endif
 always @(posedge clk) begin
     if (reset) begin
         symEnSr <= 0;
-            sym2xEnSr <= 0;
+        sym2xEnSr <= 0;
         end
     else begin
         symEnSr <= {symEnSr[2:0], symEn};
-            sym2xEnSr <= {sym2xEnSr[2:0], sym2xEn};
+        sym2xEnSr <= {sym2xEnSr[2:0], sym2xEn};
         end
+    `ifdef USE_LEGACY
+    if (sym2xEnDly) begin
+        iOut <= iMpy;
+        qOut <= qMpy;
+        end
+    `endif
     end
+`ifdef USE_LEGACY
+`else
+assign iOut = iMpy;
+assign qOut = qMpy;
+`endif
 
 assign symEnDly = symEnSr[3];
 assign sym2xEnDly = sym2xEnSr[3];
+
+wire    [7:0]   freq;
+fmDemod fmDemod( 
+    .clk(clk), .reset(reset), .sync(sym2xEnDly),
+    .iFm(iOut),.qFm(qOut),
+    .demodMode(`MODE_2FSK),
+    .freq(freq)
+    );
 
 `ifdef SIMULATE
 real iOutReal;
 always @(iOut) iOutReal = (iOut[17] ? iOut - 272144.0 : iOut)/131072.0;
 real iInReal;
-always @(iIn) iInReal = (iIn[17] ? iIn - 272144.0 : iIn)/131072.0;
+always @(iInput) iInReal = (iInput[17] ? iInput - 272144.0 : iInput)/131072.0;
+real qInReal;
+always @(qInput) qInReal = (qInput[17] ? qInput - 272144.0 : qInput)/131072.0;
+
+real freqReal = (freq[7] ? freq - 256.0 : freq)/128.0;
+
 `endif
 
 endmodule

@@ -94,7 +94,7 @@ real deviationHz;
 real deviationNorm;
 integer deviationInt;
 initial begin 
-  deviationHz = 2*0.35 * bitrateBps;
+  deviationHz = 2*0.325 * bitrateBps;
   deviationNorm = deviationHz * `SAMPLE_PERIOD * `TWO_POW_32;
   deviationInt = deviationNorm*interpolationGain;
 end
@@ -126,7 +126,7 @@ end
 ******************************************************************************/
 // Alternating ones and zeros
 wire    modClk;
-reg     altCnt;
+integer altCnt;
 reg     [3:0]altSR;
 reg     altData;
 always @(negedge modClk or posedge reset) begin
@@ -169,6 +169,7 @@ always @(negedge modClk or posedge reset) begin
 
 wire modData = randData;
 //wire modData = altData;
+//wire modData = 1'b0;
 
 
 /******************************************************************************
@@ -198,6 +199,7 @@ wire    [17:0]iTx,qTx;
 dds iqDds ( 
     .sclr(reset), 
     .clk(clk), 
+    .ce(1'b1),
     .we(1'b1), 
     .data(fmModFreq), 
     .sine(), 
@@ -209,6 +211,7 @@ wire    [17:0]  iBB,qBB;
 dds iqDds ( 
     .sclr(reset), 
     .clk(clk), 
+    .ce(1'b1),
     .we(1'b1), 
     .data(fmModFreq), 
     .sine(qBB), 
@@ -218,6 +221,7 @@ wire    [17:0]  iLO,qLO;
 dds carrierDds (
     .sclr(reset), 
     .clk(clk), 
+    .ce(1'b1),
     .we(1'b1), 
     .data(carrierFreq), 
     .sine(qLO), 
@@ -465,6 +469,7 @@ trellis trellis
    .sym2xEn      (sym2xEn),
    .iIn          (iIn),
    .qIn          (qIn),
+   .legacyBit    (!demodBit),
    .wr0          (we0),
    .wr1          (we1),
    .wr2          (we2),
@@ -485,34 +490,37 @@ reg [15:0]testSR;
 reg [4:0]testZeroCount;
 reg testData;
 //always @(negedge demodClk or reset) begin
-always @(negedge symEn_tbtDly or reset) begin
+always @(posedge clk or reset) begin
     if (reset) begin
         testZeroCount <= 5'b0;
         testSR <= MASK17;
         end
-    else if (testSR[0] | (testZeroCount == 5'b11111))
-        begin
-        testZeroCount <= 5'h0;
-        testSR <= {1'b0, testSR[15:1]} ^ PN17;
+    else if (symEn_tbtDly) begin
+        if (testSR[0] | (testZeroCount == 5'b11111))
+            begin
+            testZeroCount <= 5'h0;
+            testSR <= {1'b0, testSR[15:1]} ^ PN17;
+            end
+        else
+            begin
+            testZeroCount <= testZeroCount + 5'h1;
+            testSR <= testSR >> 1;
+            end
+        testData <= testSR[0];
         end
-    else
-        begin
-        testZeroCount <= testZeroCount + 5'h1;
-        testSR <= testSR >> 1;
-        end
-    testData <= testSR[0];
     end
 
 reg [127:0]delaySR;
 reg txDelay;
-//always @(negedge demodClk) begin
-always @(posedge symEn_tbtDly) begin
-`ifdef IQ_MAG
-    txDelay <= delaySR[19];
-`else
-    txDelay <= delaySR[13];
-`endif  
-    delaySR <= {delaySR[126:0],testData};
+always @(posedge clk) begin
+    if (symEn_tbtDly) begin
+        `ifdef IQ_MAG
+        txDelay <= delaySR[19];
+        `else
+        txDelay <= delaySR[15];
+        `endif  
+        delaySR <= {delaySR[126:0],testData};
+        end
     end
 
 reg testBits;  
@@ -522,12 +530,14 @@ initial bitErrors = 0;
 integer testBitCount;
 initial testBitCount = 0;
 //always @(posedge demodClk) begin
-always @(negedge symEn_tbtDly) begin
-    if (testBits) begin
-        testBitCount <= testBitCount + 1;
-        //if (demodBit != txDelay) begin
-        if (decision != txDelay) begin
-            bitErrors <= bitErrors + 1;
+always @(posedge clk) begin
+    if (symEn_tbtDly) begin
+        if (testBits) begin
+            testBitCount <= testBitCount + 1;
+            //if (demodBit != txDelay) begin
+            if (decision != txDelay) begin
+                bitErrors <= bitErrors + 1;
+                end
             end
         end
     end
@@ -638,7 +648,7 @@ initial begin
     // The 11.5 is a fudge factor (should be 12 for the 2 bit shift) for the scaling 
     // down of the transmit waveform from full scale.
     // The 13.0 is to translate from SNR to EBNO which is 10log10(bitrate/bandwidth).
-    $initGaussPLI(1,4.0 + 11.5 - 7.0,131072.0);
+    $initGaussPLI(1,8.0 + 11.5 - 7.0,131072.0);
     `endif
     demod.ddc.hbReset = 1;
     demod.ddc.cicReset = 1;
@@ -691,8 +701,9 @@ initial begin
 
     // Init the trellis carrier loop
     write32(createAddress(`TRELLIS_SPACE,`LF_CONTROL),9);    // Forces the lag acc and the error term to be zero
-    write32(createAddress(`TRELLIS_SPACE,`LF_LEAD_LAG),32'h0011_0004);   
+    write32(createAddress(`TRELLIS_SPACE,`LF_LEAD_LAG),32'h0016_0008);   
     write32(createAddress(`TRELLIS_SPACE,`LF_LIMIT),32'h0010_0000);   
+    write32(createAddress(`TRELLIS_SPACE,`LF_LOOPDATA),32'h0333_3333);
 
                     
     // Init the downcoverter register set
@@ -779,12 +790,17 @@ initial begin
     `ifndef IQ_MAG
     //trellis.viterbi_top.simReset = 1;
     trellisReset = 1;
-    #(6*C) ;
+    #(2*bitrateSamplesInt*C) ;
     //trellis.viterbi_top.simReset = 0;
     trellisReset = 0;
-    #(12*bitrateSamplesInt*C) ;
+    #(10*bitrateSamplesInt*C) ;
     trellisReset = 1;
-    #(1*bitrateSamplesInt*C) ;
+    #(2*bitrateSamplesInt*C) ;
+    //trellis.viterbi_top.simReset = 0;
+    trellisReset = 0;
+    #(20*bitrateSamplesInt*C) ;
+    trellisReset = 1;
+    #(2*bitrateSamplesInt*C) ;
     trellisReset = 0;
 
     `endif        

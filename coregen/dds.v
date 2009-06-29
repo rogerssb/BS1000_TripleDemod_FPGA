@@ -4,10 +4,10 @@
 //   ____  ____
 //  /   /\/   /
 // /___/  \  /    Vendor: Xilinx
-// \   \   \/     Version: K.31
+// \   \   \/     Version: K.39
 //  \   \         Application: netgen
 //  /   /         Filename: dds.v
-// /___/   /\     Timestamp: Fri Aug 08 15:19:43 2008
+// /___/   /\     Timestamp: Thu Jun 11 16:14:27 2009
 // \   \  /  \ 
 //  \___\/\___\
 //             
@@ -34,9 +34,10 @@
 `timescale 1 ns/1 ps
 
 module dds (
-  sclr, clk, we, data, sine, cosine
+  sclr, ce, clk, we, data, sine, cosine
 );
   input sclr;
+  input ce;
   input clk;
   input we;
   input [31 : 0] data;
@@ -45,22 +46,21 @@ module dds (
   
   // synthesis translate_off
   
-  wire \BU2/U0/i_rom/Madd_asyn_sin_ls1_cy<0>_rt_1343 ;
-  wire \BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<1>_rt_1326 ;
-  wire \BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<2>_rt_1324 ;
-  wire \BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<3>_rt_1322 ;
-  wire \BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<4>_rt_1320 ;
-  wire \BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<5>_rt_1318 ;
-  wire \BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<6>_rt_1316 ;
-  wire \BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<7>_rt_1314 ;
-  wire \BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<1>_rt_1311 ;
-  wire \BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<2>_rt_1309 ;
-  wire \BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<3>_rt_1307 ;
-  wire \BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<4>_rt_1305 ;
-  wire \BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<5>_rt_1303 ;
-  wire \BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<6>_rt_1301 ;
-  wire \BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<7>_rt_1299 ;
-  wire \BU2/N1 ;
+  wire \BU2/U0/i_rom/Madd_asyn_sin_ls1_cy<0>_rt_1362 ;
+  wire \BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<1>_rt_1344 ;
+  wire \BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<2>_rt_1342 ;
+  wire \BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<3>_rt_1340 ;
+  wire \BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<4>_rt_1338 ;
+  wire \BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<5>_rt_1336 ;
+  wire \BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<6>_rt_1334 ;
+  wire \BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<7>_rt_1332 ;
+  wire \BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<1>_rt_1328 ;
+  wire \BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<2>_rt_1326 ;
+  wire \BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<3>_rt_1324 ;
+  wire \BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<4>_rt_1322 ;
+  wire \BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<5>_rt_1320 ;
+  wire \BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<6>_rt_1318 ;
+  wire \BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<7>_rt_1316 ;
   wire \BU2/U0/i_dither.i_dither/lfsr_9_not0001 ;
   wire \BU2/U0/i_dither.i_dither/lfsr_8_not0001 ;
   wire \BU2/U0/i_dither.i_dither/lfsr_7_not0001 ;
@@ -71,9 +71,8 @@ module dds (
   wire \BU2/U0/i_dither.i_dither/lfsr_2_not0001 ;
   wire \BU2/U0/i_dither.i_dither/lfsr_1_not0001 ;
   wire \BU2/U0/i_dither.i_dither/lfsr_10_not0001 ;
-  wire \BU2/U0/i_dither.i_dither/ce_i ;
-  wire \BU2/U0/i_rom/i_rtl.i_quarter_table.i_addr_reg_c/Mshreg_Q_1_642 ;
-  wire \BU2/U0/i_rom/i_rtl.i_quarter_table.i_addr_reg_c/Mshreg_Q_0_641 ;
+  wire \BU2/U0/i_rom/i_rtl.i_quarter_table.i_addr_reg_c/Mshreg_Q_1_657 ;
+  wire \BU2/U0/i_rom/i_rtl.i_quarter_table.i_addr_reg_c/Mshreg_Q_0_656 ;
   wire \BU2/U0/i_rom/i_rtl.i_quarter_table.i_addr_reg_c/N1 ;
   wire \BU2/U0/i_rom/i_rtl.i_quarter_table.i_addr_reg_c/N0 ;
   wire NLW_VCC_P_UNCONNECTED;
@@ -2483,28 +2482,28 @@ module dds (
   wire [13 : 0] \BU2/U0/i_rom/mod_cos_addr ;
   wire [13 : 0] \BU2/U0/i_rom/asyn_mod_cos_addr ;
   wire [8 : 0] \BU2/U0/i_rom/asyn_cos_ls1_pre ;
+  wire [0 : 0] \BU2/U0/i_rom/Madd_asyn_cos_ls1_lut ;
   wire [8 : 0] \BU2/U0/i_rom/Madd_asyn_cos_ls1_cy ;
   wire [8 : 1] \BU2/U0/i_rom/asyn_sin_ls1_pre ;
   wire [8 : 0] \BU2/U0/i_rom/Madd_asyn_sin_ls1_cy ;
+  wire [0 : 0] \BU2/U0/i_rom/Madd_asyn_cos_ms2_lut ;
   wire [7 : 0] \BU2/U0/i_rom/Madd_asyn_cos_ms2_cy ;
+  wire [0 : 0] \BU2/U0/i_rom/Madd_asyn_sin_ms2_lut ;
   wire [7 : 0] \BU2/U0/i_rom/Madd_asyn_sin_ms2_cy ;
   wire [0 : 0] \BU2/U0/i_rom/quadrant_bypass_b ;
   wire [16 : 0] \BU2/U0/i_rom/asyn_cos_RAM_op ;
   wire [16 : 0] \BU2/U0/i_rom/cos_RAM_op ;
   wire [16 : 0] \BU2/U0/i_rom/asyn_sin_RAM_op ;
   wire [16 : 0] \BU2/U0/i_rom/sin_RAM_op ;
-  wire [0 : 0] \BU2/U0/i_rom/Madd_asyn_cos_ms2_lut ;
-  wire [8 : 1] \BU2/U0/i_rom/asyn_cos_ms2 ;
-  wire [0 : 0] \BU2/U0/i_rom/Madd_asyn_sin_ms2_lut ;
-  wire [8 : 1] \BU2/U0/i_rom/asyn_sin_ms2 ;
+  wire [8 : 0] \BU2/U0/i_rom/asyn_cos_ms2 ;
+  wire [8 : 0] \BU2/U0/i_rom/asyn_sin_ms2 ;
   wire [8 : 0] \BU2/U0/i_rom/asyn_cos_ms1 ;
   wire [8 : 0] \BU2/U0/i_rom/cos_ms1 ;
   wire [8 : 0] \BU2/U0/i_rom/asyn_sin_ms1 ;
   wire [8 : 0] \BU2/U0/i_rom/sin_ms1 ;
-  wire [0 : 0] \BU2/U0/i_rom/Madd_asyn_cos_ls1_lut ;
-  wire [8 : 1] \BU2/U0/i_rom/asyn_cos_ls1 ;
+  wire [8 : 0] \BU2/U0/i_rom/asyn_cos_ls1 ;
   wire [9 : 0] \BU2/U0/i_rom/cos_ls1 ;
-  wire [8 : 1] \BU2/U0/i_rom/asyn_sin_ls1 ;
+  wire [8 : 0] \BU2/U0/i_rom/asyn_sin_ls1 ;
   wire [9 : 0] \BU2/U0/i_rom/sin_ls1 ;
   wire [48 : 31] \BU2/U0/final_sin ;
   wire [48 : 31] \BU2/U0/final_cos ;
@@ -2515,7 +2514,7 @@ module dds (
   wire [30 : 7] \BU2/U0/i_fabric.i_dither_add.i_dither_add/Madd_temp_cy ;
   wire [9 : 0] \BU2/U0/dither_i ;
   wire [31 : 0] \BU2/U0/i_accum/acc_phase_b ;
-  wire [31 : 1] \BU2/U0/i_accum/i_fabric.i_one_channel.i_accum/Madd_temp_lut ;
+  wire [31 : 0] \BU2/U0/i_accum/i_fabric.i_one_channel.i_accum/Madd_temp_lut ;
   wire [31 : 0] \BU2/U0/i_accum/phase_inc ;
   wire [30 : 0] \BU2/U0/i_accum/i_fabric.i_one_channel.i_accum/Madd_temp_cy ;
   wire [0 : 0] \BU2/channel ;
@@ -2684,12 +2683,12 @@ module dds (
   \BU2/U0/i_rom/Mram_sin_cos_lut1  (
     .CLKA(clk),
     .CLKB(clk),
-    .ENA(\BU2/N1 ),
-    .ENB(\BU2/N1 ),
+    .ENA(ce),
+    .ENB(ce),
     .RSTA(\BU2/channel [0]),
     .RSTB(\BU2/channel [0]),
-    .REGCEA(\BU2/N1 ),
-    .REGCEB(\BU2/N1 ),
+    .REGCEA(ce),
+    .REGCEB(ce),
     .ADDRA({\BU2/U0/i_rom/mod_sin_addr [13], \BU2/U0/i_rom/mod_sin_addr [12], \BU2/U0/i_rom/mod_sin_addr [11], \BU2/U0/i_rom/mod_sin_addr [10], 
 \BU2/U0/i_rom/mod_sin_addr [9], \BU2/U0/i_rom/mod_sin_addr [8], \BU2/U0/i_rom/mod_sin_addr [7], \BU2/U0/i_rom/mod_sin_addr [6], 
 \BU2/U0/i_rom/mod_sin_addr [5], \BU2/U0/i_rom/mod_sin_addr [4], \BU2/U0/i_rom/mod_sin_addr [3], \BU2/U0/i_rom/mod_sin_addr [2], 
@@ -2861,12 +2860,12 @@ module dds (
   \BU2/U0/i_rom/Mram_sin_cos_lut2  (
     .CLKA(clk),
     .CLKB(clk),
-    .ENA(\BU2/N1 ),
-    .ENB(\BU2/N1 ),
+    .ENA(ce),
+    .ENB(ce),
     .RSTA(\BU2/channel [0]),
     .RSTB(\BU2/channel [0]),
-    .REGCEA(\BU2/N1 ),
-    .REGCEB(\BU2/N1 ),
+    .REGCEA(ce),
+    .REGCEB(ce),
     .ADDRA({\BU2/U0/i_rom/mod_sin_addr [13], \BU2/U0/i_rom/mod_sin_addr [12], \BU2/U0/i_rom/mod_sin_addr [11], \BU2/U0/i_rom/mod_sin_addr [10], 
 \BU2/U0/i_rom/mod_sin_addr [9], \BU2/U0/i_rom/mod_sin_addr [8], \BU2/U0/i_rom/mod_sin_addr [7], \BU2/U0/i_rom/mod_sin_addr [6], 
 \BU2/U0/i_rom/mod_sin_addr [5], \BU2/U0/i_rom/mod_sin_addr [4], \BU2/U0/i_rom/mod_sin_addr [3], \BU2/U0/i_rom/mod_sin_addr [2], 
@@ -3038,12 +3037,12 @@ module dds (
   \BU2/U0/i_rom/Mram_sin_cos_lut3  (
     .CLKA(clk),
     .CLKB(clk),
-    .ENA(\BU2/N1 ),
-    .ENB(\BU2/N1 ),
+    .ENA(ce),
+    .ENB(ce),
     .RSTA(\BU2/channel [0]),
     .RSTB(\BU2/channel [0]),
-    .REGCEA(\BU2/N1 ),
-    .REGCEB(\BU2/N1 ),
+    .REGCEA(ce),
+    .REGCEB(ce),
     .ADDRA({\BU2/U0/i_rom/mod_sin_addr [13], \BU2/U0/i_rom/mod_sin_addr [12], \BU2/U0/i_rom/mod_sin_addr [11], \BU2/U0/i_rom/mod_sin_addr [10], 
 \BU2/U0/i_rom/mod_sin_addr [9], \BU2/U0/i_rom/mod_sin_addr [8], \BU2/U0/i_rom/mod_sin_addr [7], \BU2/U0/i_rom/mod_sin_addr [6], 
 \BU2/U0/i_rom/mod_sin_addr [5], \BU2/U0/i_rom/mod_sin_addr [4], \BU2/U0/i_rom/mod_sin_addr [3], \BU2/U0/i_rom/mod_sin_addr [2], 
@@ -3215,12 +3214,12 @@ module dds (
   \BU2/U0/i_rom/Mram_sin_cos_lut4  (
     .CLKA(clk),
     .CLKB(clk),
-    .ENA(\BU2/N1 ),
-    .ENB(\BU2/N1 ),
+    .ENA(ce),
+    .ENB(ce),
     .RSTA(\BU2/channel [0]),
     .RSTB(\BU2/channel [0]),
-    .REGCEA(\BU2/N1 ),
-    .REGCEB(\BU2/N1 ),
+    .REGCEA(ce),
+    .REGCEB(ce),
     .ADDRA({\BU2/U0/i_rom/mod_sin_addr [13], \BU2/U0/i_rom/mod_sin_addr [12], \BU2/U0/i_rom/mod_sin_addr [11], \BU2/U0/i_rom/mod_sin_addr [10], 
 \BU2/U0/i_rom/mod_sin_addr [9], \BU2/U0/i_rom/mod_sin_addr [8], \BU2/U0/i_rom/mod_sin_addr [7], \BU2/U0/i_rom/mod_sin_addr [6], 
 \BU2/U0/i_rom/mod_sin_addr [5], \BU2/U0/i_rom/mod_sin_addr [4], \BU2/U0/i_rom/mod_sin_addr [3], \BU2/U0/i_rom/mod_sin_addr [2], 
@@ -3392,12 +3391,12 @@ module dds (
   \BU2/U0/i_rom/Mram_sin_cos_lut5  (
     .CLKA(clk),
     .CLKB(clk),
-    .ENA(\BU2/N1 ),
-    .ENB(\BU2/N1 ),
+    .ENA(ce),
+    .ENB(ce),
     .RSTA(\BU2/channel [0]),
     .RSTB(\BU2/channel [0]),
-    .REGCEA(\BU2/N1 ),
-    .REGCEB(\BU2/N1 ),
+    .REGCEA(ce),
+    .REGCEB(ce),
     .ADDRA({\BU2/U0/i_rom/mod_sin_addr [13], \BU2/U0/i_rom/mod_sin_addr [12], \BU2/U0/i_rom/mod_sin_addr [11], \BU2/U0/i_rom/mod_sin_addr [10], 
 \BU2/U0/i_rom/mod_sin_addr [9], \BU2/U0/i_rom/mod_sin_addr [8], \BU2/U0/i_rom/mod_sin_addr [7], \BU2/U0/i_rom/mod_sin_addr [6], 
 \BU2/U0/i_rom/mod_sin_addr [5], \BU2/U0/i_rom/mod_sin_addr [4], \BU2/U0/i_rom/mod_sin_addr [3], \BU2/U0/i_rom/mod_sin_addr [2], 
@@ -3569,12 +3568,12 @@ module dds (
   \BU2/U0/i_rom/Mram_sin_cos_lut6  (
     .CLKA(clk),
     .CLKB(clk),
-    .ENA(\BU2/N1 ),
-    .ENB(\BU2/N1 ),
+    .ENA(ce),
+    .ENB(ce),
     .RSTA(\BU2/channel [0]),
     .RSTB(\BU2/channel [0]),
-    .REGCEA(\BU2/N1 ),
-    .REGCEB(\BU2/N1 ),
+    .REGCEA(ce),
+    .REGCEB(ce),
     .ADDRA({\BU2/U0/i_rom/mod_sin_addr [13], \BU2/U0/i_rom/mod_sin_addr [12], \BU2/U0/i_rom/mod_sin_addr [11], \BU2/U0/i_rom/mod_sin_addr [10], 
 \BU2/U0/i_rom/mod_sin_addr [9], \BU2/U0/i_rom/mod_sin_addr [8], \BU2/U0/i_rom/mod_sin_addr [7], \BU2/U0/i_rom/mod_sin_addr [6], 
 \BU2/U0/i_rom/mod_sin_addr [5], \BU2/U0/i_rom/mod_sin_addr [4], \BU2/U0/i_rom/mod_sin_addr [3], \BU2/U0/i_rom/mod_sin_addr [2], 
@@ -3746,12 +3745,12 @@ module dds (
   \BU2/U0/i_rom/Mram_sin_cos_lut7  (
     .CLKA(clk),
     .CLKB(clk),
-    .ENA(\BU2/N1 ),
-    .ENB(\BU2/N1 ),
+    .ENA(ce),
+    .ENB(ce),
     .RSTA(\BU2/channel [0]),
     .RSTB(\BU2/channel [0]),
-    .REGCEA(\BU2/N1 ),
-    .REGCEB(\BU2/N1 ),
+    .REGCEA(ce),
+    .REGCEB(ce),
     .ADDRA({\BU2/U0/i_rom/mod_sin_addr [13], \BU2/U0/i_rom/mod_sin_addr [12], \BU2/U0/i_rom/mod_sin_addr [11], \BU2/U0/i_rom/mod_sin_addr [10], 
 \BU2/U0/i_rom/mod_sin_addr [9], \BU2/U0/i_rom/mod_sin_addr [8], \BU2/U0/i_rom/mod_sin_addr [7], \BU2/U0/i_rom/mod_sin_addr [6], 
 \BU2/U0/i_rom/mod_sin_addr [5], \BU2/U0/i_rom/mod_sin_addr [4], \BU2/U0/i_rom/mod_sin_addr [3], \BU2/U0/i_rom/mod_sin_addr [2], 
@@ -3923,12 +3922,12 @@ module dds (
   \BU2/U0/i_rom/Mram_sin_cos_lut8  (
     .CLKA(clk),
     .CLKB(clk),
-    .ENA(\BU2/N1 ),
-    .ENB(\BU2/N1 ),
+    .ENA(ce),
+    .ENB(ce),
     .RSTA(\BU2/channel [0]),
     .RSTB(\BU2/channel [0]),
-    .REGCEA(\BU2/N1 ),
-    .REGCEB(\BU2/N1 ),
+    .REGCEA(ce),
+    .REGCEB(ce),
     .ADDRA({\BU2/U0/i_rom/mod_sin_addr [13], \BU2/U0/i_rom/mod_sin_addr [12], \BU2/U0/i_rom/mod_sin_addr [11], \BU2/U0/i_rom/mod_sin_addr [10], 
 \BU2/U0/i_rom/mod_sin_addr [9], \BU2/U0/i_rom/mod_sin_addr [8], \BU2/U0/i_rom/mod_sin_addr [7], \BU2/U0/i_rom/mod_sin_addr [6], 
 \BU2/U0/i_rom/mod_sin_addr [5], \BU2/U0/i_rom/mod_sin_addr [4], \BU2/U0/i_rom/mod_sin_addr [3], \BU2/U0/i_rom/mod_sin_addr [2], 
@@ -4100,12 +4099,12 @@ module dds (
   \BU2/U0/i_rom/Mram_sin_cos_lut9  (
     .CLKA(clk),
     .CLKB(clk),
-    .ENA(\BU2/N1 ),
-    .ENB(\BU2/N1 ),
+    .ENA(ce),
+    .ENB(ce),
     .RSTA(\BU2/channel [0]),
     .RSTB(\BU2/channel [0]),
-    .REGCEA(\BU2/N1 ),
-    .REGCEB(\BU2/N1 ),
+    .REGCEA(ce),
+    .REGCEB(ce),
     .ADDRA({\BU2/U0/i_rom/mod_sin_addr [13], \BU2/U0/i_rom/mod_sin_addr [12], \BU2/U0/i_rom/mod_sin_addr [11], \BU2/U0/i_rom/mod_sin_addr [10], 
 \BU2/U0/i_rom/mod_sin_addr [9], \BU2/U0/i_rom/mod_sin_addr [8], \BU2/U0/i_rom/mod_sin_addr [7], \BU2/U0/i_rom/mod_sin_addr [6], 
 \BU2/U0/i_rom/mod_sin_addr [5], \BU2/U0/i_rom/mod_sin_addr [4], \BU2/U0/i_rom/mod_sin_addr [3], \BU2/U0/i_rom/mod_sin_addr [2], 
@@ -4277,12 +4276,12 @@ module dds (
   \BU2/U0/i_rom/Mram_sin_cos_lut10  (
     .CLKA(clk),
     .CLKB(clk),
-    .ENA(\BU2/N1 ),
-    .ENB(\BU2/N1 ),
+    .ENA(ce),
+    .ENB(ce),
     .RSTA(\BU2/channel [0]),
     .RSTB(\BU2/channel [0]),
-    .REGCEA(\BU2/N1 ),
-    .REGCEB(\BU2/N1 ),
+    .REGCEA(ce),
+    .REGCEB(ce),
     .ADDRA({\BU2/U0/i_rom/mod_sin_addr [13], \BU2/U0/i_rom/mod_sin_addr [12], \BU2/U0/i_rom/mod_sin_addr [11], \BU2/U0/i_rom/mod_sin_addr [10], 
 \BU2/U0/i_rom/mod_sin_addr [9], \BU2/U0/i_rom/mod_sin_addr [8], \BU2/U0/i_rom/mod_sin_addr [7], \BU2/U0/i_rom/mod_sin_addr [6], 
 \BU2/U0/i_rom/mod_sin_addr [5], \BU2/U0/i_rom/mod_sin_addr [4], \BU2/U0/i_rom/mod_sin_addr [3], \BU2/U0/i_rom/mod_sin_addr [2], 
@@ -4454,12 +4453,12 @@ module dds (
   \BU2/U0/i_rom/Mram_sin_cos_lut11  (
     .CLKA(clk),
     .CLKB(clk),
-    .ENA(\BU2/N1 ),
-    .ENB(\BU2/N1 ),
+    .ENA(ce),
+    .ENB(ce),
     .RSTA(\BU2/channel [0]),
     .RSTB(\BU2/channel [0]),
-    .REGCEA(\BU2/N1 ),
-    .REGCEB(\BU2/N1 ),
+    .REGCEA(ce),
+    .REGCEB(ce),
     .ADDRA({\BU2/U0/i_rom/mod_sin_addr [13], \BU2/U0/i_rom/mod_sin_addr [12], \BU2/U0/i_rom/mod_sin_addr [11], \BU2/U0/i_rom/mod_sin_addr [10], 
 \BU2/U0/i_rom/mod_sin_addr [9], \BU2/U0/i_rom/mod_sin_addr [8], \BU2/U0/i_rom/mod_sin_addr [7], \BU2/U0/i_rom/mod_sin_addr [6], 
 \BU2/U0/i_rom/mod_sin_addr [5], \BU2/U0/i_rom/mod_sin_addr [4], \BU2/U0/i_rom/mod_sin_addr [3], \BU2/U0/i_rom/mod_sin_addr [2], 
@@ -4631,12 +4630,12 @@ module dds (
   \BU2/U0/i_rom/Mram_sin_cos_lut12  (
     .CLKA(clk),
     .CLKB(clk),
-    .ENA(\BU2/N1 ),
-    .ENB(\BU2/N1 ),
+    .ENA(ce),
+    .ENB(ce),
     .RSTA(\BU2/channel [0]),
     .RSTB(\BU2/channel [0]),
-    .REGCEA(\BU2/N1 ),
-    .REGCEB(\BU2/N1 ),
+    .REGCEA(ce),
+    .REGCEB(ce),
     .ADDRA({\BU2/U0/i_rom/mod_sin_addr [13], \BU2/U0/i_rom/mod_sin_addr [12], \BU2/U0/i_rom/mod_sin_addr [11], \BU2/U0/i_rom/mod_sin_addr [10], 
 \BU2/U0/i_rom/mod_sin_addr [9], \BU2/U0/i_rom/mod_sin_addr [8], \BU2/U0/i_rom/mod_sin_addr [7], \BU2/U0/i_rom/mod_sin_addr [6], 
 \BU2/U0/i_rom/mod_sin_addr [5], \BU2/U0/i_rom/mod_sin_addr [4], \BU2/U0/i_rom/mod_sin_addr [3], \BU2/U0/i_rom/mod_sin_addr [2], 
@@ -4808,12 +4807,12 @@ module dds (
   \BU2/U0/i_rom/Mram_sin_cos_lut13  (
     .CLKA(clk),
     .CLKB(clk),
-    .ENA(\BU2/N1 ),
-    .ENB(\BU2/N1 ),
+    .ENA(ce),
+    .ENB(ce),
     .RSTA(\BU2/channel [0]),
     .RSTB(\BU2/channel [0]),
-    .REGCEA(\BU2/N1 ),
-    .REGCEB(\BU2/N1 ),
+    .REGCEA(ce),
+    .REGCEB(ce),
     .ADDRA({\BU2/U0/i_rom/mod_sin_addr [13], \BU2/U0/i_rom/mod_sin_addr [12], \BU2/U0/i_rom/mod_sin_addr [11], \BU2/U0/i_rom/mod_sin_addr [10], 
 \BU2/U0/i_rom/mod_sin_addr [9], \BU2/U0/i_rom/mod_sin_addr [8], \BU2/U0/i_rom/mod_sin_addr [7], \BU2/U0/i_rom/mod_sin_addr [6], 
 \BU2/U0/i_rom/mod_sin_addr [5], \BU2/U0/i_rom/mod_sin_addr [4], \BU2/U0/i_rom/mod_sin_addr [3], \BU2/U0/i_rom/mod_sin_addr [2], 
@@ -4985,12 +4984,12 @@ module dds (
   \BU2/U0/i_rom/Mram_sin_cos_lut14  (
     .CLKA(clk),
     .CLKB(clk),
-    .ENA(\BU2/N1 ),
-    .ENB(\BU2/N1 ),
+    .ENA(ce),
+    .ENB(ce),
     .RSTA(\BU2/channel [0]),
     .RSTB(\BU2/channel [0]),
-    .REGCEA(\BU2/N1 ),
-    .REGCEB(\BU2/N1 ),
+    .REGCEA(ce),
+    .REGCEB(ce),
     .ADDRA({\BU2/U0/i_rom/mod_sin_addr [13], \BU2/U0/i_rom/mod_sin_addr [12], \BU2/U0/i_rom/mod_sin_addr [11], \BU2/U0/i_rom/mod_sin_addr [10], 
 \BU2/U0/i_rom/mod_sin_addr [9], \BU2/U0/i_rom/mod_sin_addr [8], \BU2/U0/i_rom/mod_sin_addr [7], \BU2/U0/i_rom/mod_sin_addr [6], 
 \BU2/U0/i_rom/mod_sin_addr [5], \BU2/U0/i_rom/mod_sin_addr [4], \BU2/U0/i_rom/mod_sin_addr [3], \BU2/U0/i_rom/mod_sin_addr [2], 
@@ -5162,12 +5161,12 @@ module dds (
   \BU2/U0/i_rom/Mram_sin_cos_lut15  (
     .CLKA(clk),
     .CLKB(clk),
-    .ENA(\BU2/N1 ),
-    .ENB(\BU2/N1 ),
+    .ENA(ce),
+    .ENB(ce),
     .RSTA(\BU2/channel [0]),
     .RSTB(\BU2/channel [0]),
-    .REGCEA(\BU2/N1 ),
-    .REGCEB(\BU2/N1 ),
+    .REGCEA(ce),
+    .REGCEB(ce),
     .ADDRA({\BU2/U0/i_rom/mod_sin_addr [13], \BU2/U0/i_rom/mod_sin_addr [12], \BU2/U0/i_rom/mod_sin_addr [11], \BU2/U0/i_rom/mod_sin_addr [10], 
 \BU2/U0/i_rom/mod_sin_addr [9], \BU2/U0/i_rom/mod_sin_addr [8], \BU2/U0/i_rom/mod_sin_addr [7], \BU2/U0/i_rom/mod_sin_addr [6], 
 \BU2/U0/i_rom/mod_sin_addr [5], \BU2/U0/i_rom/mod_sin_addr [4], \BU2/U0/i_rom/mod_sin_addr [3], \BU2/U0/i_rom/mod_sin_addr [2], 
@@ -5339,12 +5338,12 @@ module dds (
   \BU2/U0/i_rom/Mram_sin_cos_lut16  (
     .CLKA(clk),
     .CLKB(clk),
-    .ENA(\BU2/N1 ),
-    .ENB(\BU2/N1 ),
+    .ENA(ce),
+    .ENB(ce),
     .RSTA(\BU2/channel [0]),
     .RSTB(\BU2/channel [0]),
-    .REGCEA(\BU2/N1 ),
-    .REGCEB(\BU2/N1 ),
+    .REGCEA(ce),
+    .REGCEB(ce),
     .ADDRA({\BU2/U0/i_rom/mod_sin_addr [13], \BU2/U0/i_rom/mod_sin_addr [12], \BU2/U0/i_rom/mod_sin_addr [11], \BU2/U0/i_rom/mod_sin_addr [10], 
 \BU2/U0/i_rom/mod_sin_addr [9], \BU2/U0/i_rom/mod_sin_addr [8], \BU2/U0/i_rom/mod_sin_addr [7], \BU2/U0/i_rom/mod_sin_addr [6], 
 \BU2/U0/i_rom/mod_sin_addr [5], \BU2/U0/i_rom/mod_sin_addr [4], \BU2/U0/i_rom/mod_sin_addr [3], \BU2/U0/i_rom/mod_sin_addr [2], 
@@ -5516,12 +5515,12 @@ module dds (
   \BU2/U0/i_rom/Mram_sin_cos_lut17  (
     .CLKA(clk),
     .CLKB(clk),
-    .ENA(\BU2/N1 ),
-    .ENB(\BU2/N1 ),
+    .ENA(ce),
+    .ENB(ce),
     .RSTA(\BU2/channel [0]),
     .RSTB(\BU2/channel [0]),
-    .REGCEA(\BU2/N1 ),
-    .REGCEB(\BU2/N1 ),
+    .REGCEA(ce),
+    .REGCEB(ce),
     .ADDRA({\BU2/U0/i_rom/mod_sin_addr [13], \BU2/U0/i_rom/mod_sin_addr [12], \BU2/U0/i_rom/mod_sin_addr [11], \BU2/U0/i_rom/mod_sin_addr [10], 
 \BU2/U0/i_rom/mod_sin_addr [9], \BU2/U0/i_rom/mod_sin_addr [8], \BU2/U0/i_rom/mod_sin_addr [7], \BU2/U0/i_rom/mod_sin_addr [6], 
 \BU2/U0/i_rom/mod_sin_addr [5], \BU2/U0/i_rom/mod_sin_addr [4], \BU2/U0/i_rom/mod_sin_addr [3], \BU2/U0/i_rom/mod_sin_addr [2], 
@@ -5609,7 +5608,7 @@ module dds (
     .INIT ( 2'h2 ))
   \BU2/U0/i_rom/Madd_asyn_sin_ls1_cy<0>_rt  (
     .I0(\BU2/U0/i_rom/sin_RAM_op [0]),
-    .O(\BU2/U0/i_rom/Madd_asyn_sin_ls1_cy<0>_rt_1343 )
+    .O(\BU2/U0/i_rom/Madd_asyn_sin_ls1_cy<0>_rt_1362 )
   );
   LUT3 #(
     .INIT ( 8'h96 ))
@@ -5849,85 +5848,85 @@ module dds (
     .INIT ( 2'h2 ))
   \BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<1>_rt  (
     .I0(\BU2/U0/i_rom/cos_ms1 [1]),
-    .O(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<1>_rt_1326 )
+    .O(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<1>_rt_1344 )
   );
   LUT1 #(
     .INIT ( 2'h2 ))
   \BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<2>_rt  (
     .I0(\BU2/U0/i_rom/cos_ms1 [2]),
-    .O(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<2>_rt_1324 )
+    .O(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<2>_rt_1342 )
   );
   LUT1 #(
     .INIT ( 2'h2 ))
   \BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<3>_rt  (
     .I0(\BU2/U0/i_rom/cos_ms1 [3]),
-    .O(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<3>_rt_1322 )
+    .O(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<3>_rt_1340 )
   );
   LUT1 #(
     .INIT ( 2'h2 ))
   \BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<4>_rt  (
     .I0(\BU2/U0/i_rom/cos_ms1 [4]),
-    .O(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<4>_rt_1320 )
+    .O(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<4>_rt_1338 )
   );
   LUT1 #(
     .INIT ( 2'h2 ))
   \BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<5>_rt  (
     .I0(\BU2/U0/i_rom/cos_ms1 [5]),
-    .O(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<5>_rt_1318 )
+    .O(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<5>_rt_1336 )
   );
   LUT1 #(
     .INIT ( 2'h2 ))
   \BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<6>_rt  (
     .I0(\BU2/U0/i_rom/cos_ms1 [6]),
-    .O(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<6>_rt_1316 )
+    .O(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<6>_rt_1334 )
   );
   LUT1 #(
     .INIT ( 2'h2 ))
   \BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<7>_rt  (
     .I0(\BU2/U0/i_rom/cos_ms1 [7]),
-    .O(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<7>_rt_1314 )
+    .O(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<7>_rt_1332 )
   );
   LUT1 #(
     .INIT ( 2'h2 ))
   \BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<1>_rt  (
     .I0(\BU2/U0/i_rom/sin_ms1 [1]),
-    .O(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<1>_rt_1311 )
+    .O(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<1>_rt_1328 )
   );
   LUT1 #(
     .INIT ( 2'h2 ))
   \BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<2>_rt  (
     .I0(\BU2/U0/i_rom/sin_ms1 [2]),
-    .O(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<2>_rt_1309 )
+    .O(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<2>_rt_1326 )
   );
   LUT1 #(
     .INIT ( 2'h2 ))
   \BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<3>_rt  (
     .I0(\BU2/U0/i_rom/sin_ms1 [3]),
-    .O(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<3>_rt_1307 )
+    .O(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<3>_rt_1324 )
   );
   LUT1 #(
     .INIT ( 2'h2 ))
   \BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<4>_rt  (
     .I0(\BU2/U0/i_rom/sin_ms1 [4]),
-    .O(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<4>_rt_1305 )
+    .O(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<4>_rt_1322 )
   );
   LUT1 #(
     .INIT ( 2'h2 ))
   \BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<5>_rt  (
     .I0(\BU2/U0/i_rom/sin_ms1 [5]),
-    .O(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<5>_rt_1303 )
+    .O(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<5>_rt_1320 )
   );
   LUT1 #(
     .INIT ( 2'h2 ))
   \BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<6>_rt  (
     .I0(\BU2/U0/i_rom/sin_ms1 [6]),
-    .O(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<6>_rt_1301 )
+    .O(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<6>_rt_1318 )
   );
   LUT1 #(
     .INIT ( 2'h2 ))
   \BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<7>_rt  (
     .I0(\BU2/U0/i_rom/sin_ms1 [7]),
-    .O(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<7>_rt_1299 )
+    .O(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<7>_rt_1316 )
   );
   LUT2 #(
     .INIT ( 4'h6 ))
@@ -6146,199 +6145,227 @@ module dds (
     .I1(\BU2/U0/i_rom/sin_RAM_op [16]),
     .O(\BU2/U0/i_rom/asyn_sin_ms1 [7])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/mod_sin_addr_0  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_mod_sin_addr [0]),
     .Q(\BU2/U0/i_rom/mod_sin_addr [0])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/mod_sin_addr_1  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_mod_sin_addr [1]),
     .Q(\BU2/U0/i_rom/mod_sin_addr [1])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/mod_sin_addr_2  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_mod_sin_addr [2]),
     .Q(\BU2/U0/i_rom/mod_sin_addr [2])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/mod_sin_addr_3  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_mod_sin_addr [3]),
     .Q(\BU2/U0/i_rom/mod_sin_addr [3])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/mod_sin_addr_4  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_mod_sin_addr [4]),
     .Q(\BU2/U0/i_rom/mod_sin_addr [4])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/mod_sin_addr_5  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_mod_sin_addr [5]),
     .Q(\BU2/U0/i_rom/mod_sin_addr [5])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/mod_sin_addr_6  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_mod_sin_addr [6]),
     .Q(\BU2/U0/i_rom/mod_sin_addr [6])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/mod_sin_addr_7  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_mod_sin_addr [7]),
     .Q(\BU2/U0/i_rom/mod_sin_addr [7])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/mod_sin_addr_8  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_mod_sin_addr [8]),
     .Q(\BU2/U0/i_rom/mod_sin_addr [8])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/mod_sin_addr_9  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_mod_sin_addr [9]),
     .Q(\BU2/U0/i_rom/mod_sin_addr [9])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/mod_sin_addr_10  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_mod_sin_addr [10]),
     .Q(\BU2/U0/i_rom/mod_sin_addr [10])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/mod_sin_addr_11  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_mod_sin_addr [11]),
     .Q(\BU2/U0/i_rom/mod_sin_addr [11])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/mod_sin_addr_12  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_mod_sin_addr [12]),
     .Q(\BU2/U0/i_rom/mod_sin_addr [12])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/mod_sin_addr_13  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_mod_sin_addr [13]),
     .Q(\BU2/U0/i_rom/mod_sin_addr [13])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/mod_cos_addr_0  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_mod_cos_addr [0]),
     .Q(\BU2/U0/i_rom/mod_cos_addr [0])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/mod_cos_addr_1  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_mod_cos_addr [1]),
     .Q(\BU2/U0/i_rom/mod_cos_addr [1])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/mod_cos_addr_2  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_mod_cos_addr [2]),
     .Q(\BU2/U0/i_rom/mod_cos_addr [2])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/mod_cos_addr_3  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_mod_cos_addr [3]),
     .Q(\BU2/U0/i_rom/mod_cos_addr [3])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/mod_cos_addr_4  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_mod_cos_addr [4]),
     .Q(\BU2/U0/i_rom/mod_cos_addr [4])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/mod_cos_addr_5  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_mod_cos_addr [5]),
     .Q(\BU2/U0/i_rom/mod_cos_addr [5])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/mod_cos_addr_6  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_mod_cos_addr [6]),
     .Q(\BU2/U0/i_rom/mod_cos_addr [6])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/mod_cos_addr_7  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_mod_cos_addr [7]),
     .Q(\BU2/U0/i_rom/mod_cos_addr [7])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/mod_cos_addr_8  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_mod_cos_addr [8]),
     .Q(\BU2/U0/i_rom/mod_cos_addr [8])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/mod_cos_addr_9  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_mod_cos_addr [9]),
     .Q(\BU2/U0/i_rom/mod_cos_addr [9])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/mod_cos_addr_10  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_mod_cos_addr [10]),
     .Q(\BU2/U0/i_rom/mod_cos_addr [10])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/mod_cos_addr_11  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_mod_cos_addr [11]),
     .Q(\BU2/U0/i_rom/mod_cos_addr [11])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/mod_cos_addr_12  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_mod_cos_addr [12]),
     .Q(\BU2/U0/i_rom/mod_cos_addr [12])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/mod_cos_addr_13  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_mod_cos_addr [13]),
     .Q(\BU2/U0/i_rom/mod_cos_addr [13])
   );
@@ -6354,6 +6381,11 @@ module dds (
     .DI(\BU2/U0/i_rom/asyn_cos_ls1_pre [0]),
     .S(\BU2/U0/i_rom/Madd_asyn_cos_ls1_lut [0]),
     .O(\BU2/U0/i_rom/Madd_asyn_cos_ls1_cy [0])
+  );
+  XORCY   \BU2/U0/i_rom/Madd_asyn_cos_ls1_xor<0>  (
+    .CI(\BU2/channel [0]),
+    .LI(\BU2/U0/i_rom/Madd_asyn_cos_ls1_lut [0]),
+    .O(\BU2/U0/i_rom/asyn_cos_ls1 [0])
   );
   MUXCY   \BU2/U0/i_rom/Madd_asyn_cos_ls1_cy<1>  (
     .CI(\BU2/U0/i_rom/Madd_asyn_cos_ls1_cy [0]),
@@ -6446,8 +6478,13 @@ module dds (
   MUXCY   \BU2/U0/i_rom/Madd_asyn_sin_ls1_cy<0>  (
     .CI(\BU2/channel [0]),
     .DI(\BU2/U0/i_rom/asyn_sin_ms1 [8]),
-    .S(\BU2/U0/i_rom/Madd_asyn_sin_ls1_cy<0>_rt_1343 ),
+    .S(\BU2/U0/i_rom/Madd_asyn_sin_ls1_cy<0>_rt_1362 ),
     .O(\BU2/U0/i_rom/Madd_asyn_sin_ls1_cy [0])
+  );
+  XORCY   \BU2/U0/i_rom/Madd_asyn_sin_ls1_xor<0>  (
+    .CI(\BU2/channel [0]),
+    .LI(\BU2/U0/i_rom/Madd_asyn_sin_ls1_cy<0>_rt_1362 ),
+    .O(\BU2/U0/i_rom/asyn_sin_ls1 [0])
   );
   MUXCY   \BU2/U0/i_rom/Madd_asyn_sin_ls1_cy<1>  (
     .CI(\BU2/U0/i_rom/Madd_asyn_sin_ls1_cy [0]),
@@ -6550,81 +6587,86 @@ module dds (
     .S(\BU2/U0/i_rom/Madd_asyn_cos_ms2_lut [0]),
     .O(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy [0])
   );
+  XORCY   \BU2/U0/i_rom/Madd_asyn_cos_ms2_xor<0>  (
+    .CI(\BU2/channel [0]),
+    .LI(\BU2/U0/i_rom/Madd_asyn_cos_ms2_lut [0]),
+    .O(\BU2/U0/i_rom/asyn_cos_ms2 [0])
+  );
   MUXCY   \BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<1>  (
     .CI(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy [0]),
     .DI(\BU2/channel [0]),
-    .S(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<1>_rt_1326 ),
+    .S(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<1>_rt_1344 ),
     .O(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy [1])
   );
   XORCY   \BU2/U0/i_rom/Madd_asyn_cos_ms2_xor<1>  (
     .CI(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy [0]),
-    .LI(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<1>_rt_1326 ),
+    .LI(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<1>_rt_1344 ),
     .O(\BU2/U0/i_rom/asyn_cos_ms2 [1])
   );
   MUXCY   \BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<2>  (
     .CI(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy [1]),
     .DI(\BU2/channel [0]),
-    .S(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<2>_rt_1324 ),
+    .S(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<2>_rt_1342 ),
     .O(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy [2])
   );
   XORCY   \BU2/U0/i_rom/Madd_asyn_cos_ms2_xor<2>  (
     .CI(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy [1]),
-    .LI(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<2>_rt_1324 ),
+    .LI(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<2>_rt_1342 ),
     .O(\BU2/U0/i_rom/asyn_cos_ms2 [2])
   );
   MUXCY   \BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<3>  (
     .CI(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy [2]),
     .DI(\BU2/channel [0]),
-    .S(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<3>_rt_1322 ),
+    .S(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<3>_rt_1340 ),
     .O(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy [3])
   );
   XORCY   \BU2/U0/i_rom/Madd_asyn_cos_ms2_xor<3>  (
     .CI(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy [2]),
-    .LI(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<3>_rt_1322 ),
+    .LI(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<3>_rt_1340 ),
     .O(\BU2/U0/i_rom/asyn_cos_ms2 [3])
   );
   MUXCY   \BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<4>  (
     .CI(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy [3]),
     .DI(\BU2/channel [0]),
-    .S(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<4>_rt_1320 ),
+    .S(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<4>_rt_1338 ),
     .O(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy [4])
   );
   XORCY   \BU2/U0/i_rom/Madd_asyn_cos_ms2_xor<4>  (
     .CI(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy [3]),
-    .LI(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<4>_rt_1320 ),
+    .LI(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<4>_rt_1338 ),
     .O(\BU2/U0/i_rom/asyn_cos_ms2 [4])
   );
   MUXCY   \BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<5>  (
     .CI(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy [4]),
     .DI(\BU2/channel [0]),
-    .S(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<5>_rt_1318 ),
+    .S(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<5>_rt_1336 ),
     .O(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy [5])
   );
   XORCY   \BU2/U0/i_rom/Madd_asyn_cos_ms2_xor<5>  (
     .CI(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy [4]),
-    .LI(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<5>_rt_1318 ),
+    .LI(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<5>_rt_1336 ),
     .O(\BU2/U0/i_rom/asyn_cos_ms2 [5])
   );
   MUXCY   \BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<6>  (
     .CI(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy [5]),
     .DI(\BU2/channel [0]),
-    .S(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<6>_rt_1316 ),
+    .S(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<6>_rt_1334 ),
     .O(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy [6])
   );
   XORCY   \BU2/U0/i_rom/Madd_asyn_cos_ms2_xor<6>  (
     .CI(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy [5]),
-    .LI(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<6>_rt_1316 ),
+    .LI(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<6>_rt_1334 ),
     .O(\BU2/U0/i_rom/asyn_cos_ms2 [6])
   );
   MUXCY   \BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<7>  (
     .CI(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy [6]),
     .DI(\BU2/channel [0]),
-    .S(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<7>_rt_1314 ),
+    .S(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<7>_rt_1332 ),
     .O(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy [7])
   );
   XORCY   \BU2/U0/i_rom/Madd_asyn_cos_ms2_xor<7>  (
     .CI(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy [6]),
-    .LI(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<7>_rt_1314 ),
+    .LI(\BU2/U0/i_rom/Madd_asyn_cos_ms2_cy<7>_rt_1332 ),
     .O(\BU2/U0/i_rom/asyn_cos_ms2 [7])
   );
   XORCY   \BU2/U0/i_rom/Madd_asyn_cos_ms2_xor<8>  (
@@ -6645,81 +6687,86 @@ module dds (
     .S(\BU2/U0/i_rom/Madd_asyn_sin_ms2_lut [0]),
     .O(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy [0])
   );
+  XORCY   \BU2/U0/i_rom/Madd_asyn_sin_ms2_xor<0>  (
+    .CI(\BU2/channel [0]),
+    .LI(\BU2/U0/i_rom/Madd_asyn_sin_ms2_lut [0]),
+    .O(\BU2/U0/i_rom/asyn_sin_ms2 [0])
+  );
   MUXCY   \BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<1>  (
     .CI(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy [0]),
     .DI(\BU2/channel [0]),
-    .S(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<1>_rt_1311 ),
+    .S(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<1>_rt_1328 ),
     .O(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy [1])
   );
   XORCY   \BU2/U0/i_rom/Madd_asyn_sin_ms2_xor<1>  (
     .CI(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy [0]),
-    .LI(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<1>_rt_1311 ),
+    .LI(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<1>_rt_1328 ),
     .O(\BU2/U0/i_rom/asyn_sin_ms2 [1])
   );
   MUXCY   \BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<2>  (
     .CI(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy [1]),
     .DI(\BU2/channel [0]),
-    .S(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<2>_rt_1309 ),
+    .S(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<2>_rt_1326 ),
     .O(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy [2])
   );
   XORCY   \BU2/U0/i_rom/Madd_asyn_sin_ms2_xor<2>  (
     .CI(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy [1]),
-    .LI(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<2>_rt_1309 ),
+    .LI(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<2>_rt_1326 ),
     .O(\BU2/U0/i_rom/asyn_sin_ms2 [2])
   );
   MUXCY   \BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<3>  (
     .CI(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy [2]),
     .DI(\BU2/channel [0]),
-    .S(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<3>_rt_1307 ),
+    .S(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<3>_rt_1324 ),
     .O(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy [3])
   );
   XORCY   \BU2/U0/i_rom/Madd_asyn_sin_ms2_xor<3>  (
     .CI(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy [2]),
-    .LI(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<3>_rt_1307 ),
+    .LI(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<3>_rt_1324 ),
     .O(\BU2/U0/i_rom/asyn_sin_ms2 [3])
   );
   MUXCY   \BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<4>  (
     .CI(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy [3]),
     .DI(\BU2/channel [0]),
-    .S(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<4>_rt_1305 ),
+    .S(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<4>_rt_1322 ),
     .O(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy [4])
   );
   XORCY   \BU2/U0/i_rom/Madd_asyn_sin_ms2_xor<4>  (
     .CI(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy [3]),
-    .LI(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<4>_rt_1305 ),
+    .LI(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<4>_rt_1322 ),
     .O(\BU2/U0/i_rom/asyn_sin_ms2 [4])
   );
   MUXCY   \BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<5>  (
     .CI(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy [4]),
     .DI(\BU2/channel [0]),
-    .S(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<5>_rt_1303 ),
+    .S(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<5>_rt_1320 ),
     .O(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy [5])
   );
   XORCY   \BU2/U0/i_rom/Madd_asyn_sin_ms2_xor<5>  (
     .CI(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy [4]),
-    .LI(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<5>_rt_1303 ),
+    .LI(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<5>_rt_1320 ),
     .O(\BU2/U0/i_rom/asyn_sin_ms2 [5])
   );
   MUXCY   \BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<6>  (
     .CI(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy [5]),
     .DI(\BU2/channel [0]),
-    .S(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<6>_rt_1301 ),
+    .S(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<6>_rt_1318 ),
     .O(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy [6])
   );
   XORCY   \BU2/U0/i_rom/Madd_asyn_sin_ms2_xor<6>  (
     .CI(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy [5]),
-    .LI(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<6>_rt_1301 ),
+    .LI(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<6>_rt_1318 ),
     .O(\BU2/U0/i_rom/asyn_sin_ms2 [6])
   );
   MUXCY   \BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<7>  (
     .CI(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy [6]),
     .DI(\BU2/channel [0]),
-    .S(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<7>_rt_1299 ),
+    .S(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<7>_rt_1316 ),
     .O(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy [7])
   );
   XORCY   \BU2/U0/i_rom/Madd_asyn_sin_ms2_xor<7>  (
     .CI(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy [6]),
-    .LI(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<7>_rt_1299 ),
+    .LI(\BU2/U0/i_rom/Madd_asyn_sin_ms2_cy<7>_rt_1316 ),
     .O(\BU2/U0/i_rom/asyn_sin_ms2 [7])
   );
   XORCY   \BU2/U0/i_rom/Madd_asyn_sin_ms2_xor<8>  (
@@ -7678,10 +7725,15 @@ module dds (
     .I1(\BU2/U0/i_accum/phase_inc [1]),
     .O(\BU2/U0/i_accum/i_fabric.i_one_channel.i_accum/Madd_temp_lut [1])
   );
+  XORCY   \BU2/U0/i_accum/i_fabric.i_one_channel.i_accum/Madd_temp_xor<0>  (
+    .CI(\BU2/channel [0]),
+    .LI(\BU2/U0/i_accum/i_fabric.i_one_channel.i_accum/Madd_temp_lut [0]),
+    .O(\BU2/U0/i_accum/acc_phase_b [0])
+  );
   MUXCY   \BU2/U0/i_accum/i_fabric.i_one_channel.i_accum/Madd_temp_cy<0>  (
     .CI(\BU2/channel [0]),
     .DI(\BU2/U0/acc_phase [0]),
-    .S(\BU2/U0/i_accum/acc_phase_b [0]),
+    .S(\BU2/U0/i_accum/i_fabric.i_one_channel.i_accum/Madd_temp_lut [0]),
     .O(\BU2/U0/i_accum/i_fabric.i_one_channel.i_accum/Madd_temp_cy [0])
   );
   LUT2 #(
@@ -7689,10 +7741,7 @@ module dds (
   \BU2/U0/i_accum/i_fabric.i_one_channel.i_accum/Madd_temp_lut<0>  (
     .I0(\BU2/U0/acc_phase [0]),
     .I1(\BU2/U0/i_accum/phase_inc [0]),
-    .O(\BU2/U0/i_accum/acc_phase_b [0])
-  );
-  VCC   \BU2/XST_VCC  (
-    .P(\BU2/N1 )
+    .O(\BU2/U0/i_accum/i_fabric.i_one_channel.i_accum/Madd_temp_lut [0])
   );
   GND   \BU2/XST_GND  (
     .G(\BU2/channel [0])
@@ -7771,7 +7820,7 @@ module dds (
     .INIT ( 1'b0 ))
   \BU2/U0/i_dither.i_dither/lfsr_18  (
     .C(clk),
-    .CE(\BU2/U0/i_dither.i_dither/ce_i ),
+    .CE(ce),
     .D(\BU2/U0/dither_i [7]),
     .R(sclr),
     .Q(\BU2/U0/i_dither.i_dither/lfsr [18])
@@ -7780,7 +7829,7 @@ module dds (
     .INIT ( 1'b0 ))
   \BU2/U0/i_dither.i_dither/lfsr_17  (
     .C(clk),
-    .CE(\BU2/U0/i_dither.i_dither/ce_i ),
+    .CE(ce),
     .D(\BU2/U0/dither_i [6]),
     .R(sclr),
     .Q(\BU2/U0/i_dither.i_dither/lfsr [17])
@@ -7789,7 +7838,7 @@ module dds (
     .INIT ( 1'b0 ))
   \BU2/U0/i_dither.i_dither/lfsr_15  (
     .C(clk),
-    .CE(\BU2/U0/i_dither.i_dither/ce_i ),
+    .CE(ce),
     .D(\BU2/U0/dither_i [4]),
     .R(sclr),
     .Q(\BU2/U0/i_dither.i_dither/lfsr [15])
@@ -7798,7 +7847,7 @@ module dds (
     .INIT ( 1'b0 ))
   \BU2/U0/i_dither.i_dither/lfsr_14  (
     .C(clk),
-    .CE(\BU2/U0/i_dither.i_dither/ce_i ),
+    .CE(ce),
     .D(\BU2/U0/dither_i [3]),
     .R(sclr),
     .Q(\BU2/U0/i_dither.i_dither/lfsr [14])
@@ -7807,7 +7856,7 @@ module dds (
     .INIT ( 1'b0 ))
   \BU2/U0/i_dither.i_dither/lfsr_16  (
     .C(clk),
-    .CE(\BU2/U0/i_dither.i_dither/ce_i ),
+    .CE(ce),
     .D(\BU2/U0/dither_i [5]),
     .R(sclr),
     .Q(\BU2/U0/i_dither.i_dither/lfsr [16])
@@ -7816,7 +7865,7 @@ module dds (
     .INIT ( 1'b0 ))
   \BU2/U0/i_dither.i_dither/lfsr_13  (
     .C(clk),
-    .CE(\BU2/U0/i_dither.i_dither/ce_i ),
+    .CE(ce),
     .D(\BU2/U0/dither_i [2]),
     .R(sclr),
     .Q(\BU2/U0/i_dither.i_dither/lfsr [13])
@@ -7825,7 +7874,7 @@ module dds (
     .INIT ( 1'b0 ))
   \BU2/U0/i_dither.i_dither/lfsr_12  (
     .C(clk),
-    .CE(\BU2/U0/i_dither.i_dither/ce_i ),
+    .CE(ce),
     .D(\BU2/U0/dither_i [1]),
     .R(sclr),
     .Q(\BU2/U0/i_dither.i_dither/lfsr [12])
@@ -7834,7 +7883,7 @@ module dds (
     .INIT ( 1'b0 ))
   \BU2/U0/i_dither.i_dither/lfsr_11  (
     .C(clk),
-    .CE(\BU2/U0/i_dither.i_dither/ce_i ),
+    .CE(ce),
     .D(\BU2/U0/dither_i [0]),
     .R(sclr),
     .Q(\BU2/U0/i_dither.i_dither/lfsr [11])
@@ -7843,7 +7892,7 @@ module dds (
     .INIT ( 1'b0 ))
   \BU2/U0/i_dither.i_dither/lfsr_9  (
     .C(clk),
-    .CE(\BU2/U0/i_dither.i_dither/ce_i ),
+    .CE(ce),
     .D(\BU2/U0/i_dither.i_dither/lfsr_9_not0001 ),
     .R(sclr),
     .Q(\BU2/U0/dither_i [8])
@@ -7852,7 +7901,7 @@ module dds (
     .INIT ( 1'b0 ))
   \BU2/U0/i_dither.i_dither/lfsr_8  (
     .C(clk),
-    .CE(\BU2/U0/i_dither.i_dither/ce_i ),
+    .CE(ce),
     .D(\BU2/U0/i_dither.i_dither/lfsr_8_not0001 ),
     .R(sclr),
     .Q(\BU2/U0/dither_i [7])
@@ -7861,7 +7910,7 @@ module dds (
     .INIT ( 1'b0 ))
   \BU2/U0/i_dither.i_dither/lfsr_7  (
     .C(clk),
-    .CE(\BU2/U0/i_dither.i_dither/ce_i ),
+    .CE(ce),
     .D(\BU2/U0/i_dither.i_dither/lfsr_7_not0001 ),
     .R(sclr),
     .Q(\BU2/U0/dither_i [6])
@@ -7870,7 +7919,7 @@ module dds (
     .INIT ( 1'b0 ))
   \BU2/U0/i_dither.i_dither/lfsr_6  (
     .C(clk),
-    .CE(\BU2/U0/i_dither.i_dither/ce_i ),
+    .CE(ce),
     .D(\BU2/U0/i_dither.i_dither/lfsr_6_not0001 ),
     .R(sclr),
     .Q(\BU2/U0/dither_i [5])
@@ -7879,7 +7928,7 @@ module dds (
     .INIT ( 1'b0 ))
   \BU2/U0/i_dither.i_dither/lfsr_4  (
     .C(clk),
-    .CE(\BU2/U0/i_dither.i_dither/ce_i ),
+    .CE(ce),
     .D(\BU2/U0/i_dither.i_dither/lfsr_4_not0001 ),
     .R(sclr),
     .Q(\BU2/U0/dither_i [3])
@@ -7888,7 +7937,7 @@ module dds (
     .INIT ( 1'b0 ))
   \BU2/U0/i_dither.i_dither/lfsr_3  (
     .C(clk),
-    .CE(\BU2/U0/i_dither.i_dither/ce_i ),
+    .CE(ce),
     .D(\BU2/U0/i_dither.i_dither/lfsr_3_not0001 ),
     .R(sclr),
     .Q(\BU2/U0/dither_i [2])
@@ -7897,7 +7946,7 @@ module dds (
     .INIT ( 1'b0 ))
   \BU2/U0/i_dither.i_dither/lfsr_5  (
     .C(clk),
-    .CE(\BU2/U0/i_dither.i_dither/ce_i ),
+    .CE(ce),
     .D(\BU2/U0/i_dither.i_dither/lfsr_5_not0001 ),
     .R(sclr),
     .Q(\BU2/U0/dither_i [4])
@@ -7906,7 +7955,7 @@ module dds (
     .INIT ( 1'b0 ))
   \BU2/U0/i_dither.i_dither/lfsr_2  (
     .C(clk),
-    .CE(\BU2/U0/i_dither.i_dither/ce_i ),
+    .CE(ce),
     .D(\BU2/U0/i_dither.i_dither/lfsr_2_not0001 ),
     .R(sclr),
     .Q(\BU2/U0/dither_i [1])
@@ -7915,7 +7964,7 @@ module dds (
     .INIT ( 1'b0 ))
   \BU2/U0/i_dither.i_dither/lfsr_1  (
     .C(clk),
-    .CE(\BU2/U0/i_dither.i_dither/ce_i ),
+    .CE(ce),
     .D(\BU2/U0/i_dither.i_dither/lfsr_1_not0001 ),
     .R(sclr),
     .Q(\BU2/U0/dither_i [0])
@@ -7924,410 +7973,459 @@ module dds (
     .INIT ( 1'b0 ))
   \BU2/U0/i_dither.i_dither/lfsr_10  (
     .C(clk),
-    .CE(\BU2/U0/i_dither.i_dither/ce_i ),
+    .CE(ce),
     .D(\BU2/U0/i_dither.i_dither/lfsr_10_not0001 ),
     .R(sclr),
     .Q(\BU2/U0/dither_i [9])
   );
-  VCC   \BU2/U0/i_dither.i_dither/XST_VCC  (
-    .P(\BU2/U0/i_dither.i_dither/ce_i )
-  );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_fabric.i_dither_pipe/opt_has_reg.i_reg/fd/output_32  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/acc_phase_shaped_pre [31]),
     .Q(\BU2/U0/acc_phase_shaped [31])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_fabric.i_dither_pipe/opt_has_reg.i_reg/fd/output_31  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/acc_phase_shaped_pre [30]),
     .Q(\BU2/U0/acc_phase_shaped [30])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_fabric.i_dither_pipe/opt_has_reg.i_reg/fd/output_30  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/acc_phase_shaped_pre [29]),
     .Q(\BU2/U0/acc_phase_shaped [29])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_fabric.i_dither_pipe/opt_has_reg.i_reg/fd/output_29  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/acc_phase_shaped_pre [28]),
     .Q(\BU2/U0/acc_phase_shaped [28])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_fabric.i_dither_pipe/opt_has_reg.i_reg/fd/output_28  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/acc_phase_shaped_pre [27]),
     .Q(\BU2/U0/acc_phase_shaped [27])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_fabric.i_dither_pipe/opt_has_reg.i_reg/fd/output_27  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/acc_phase_shaped_pre [26]),
     .Q(\BU2/U0/acc_phase_shaped [26])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_fabric.i_dither_pipe/opt_has_reg.i_reg/fd/output_26  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/acc_phase_shaped_pre [25]),
     .Q(\BU2/U0/acc_phase_shaped [25])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_fabric.i_dither_pipe/opt_has_reg.i_reg/fd/output_25  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/acc_phase_shaped_pre [24]),
     .Q(\BU2/U0/acc_phase_shaped [24])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_fabric.i_dither_pipe/opt_has_reg.i_reg/fd/output_24  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/acc_phase_shaped_pre [23]),
     .Q(\BU2/U0/acc_phase_shaped [23])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_fabric.i_dither_pipe/opt_has_reg.i_reg/fd/output_23  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/acc_phase_shaped_pre [22]),
     .Q(\BU2/U0/acc_phase_shaped [22])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_fabric.i_dither_pipe/opt_has_reg.i_reg/fd/output_22  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/acc_phase_shaped_pre [21]),
     .Q(\BU2/U0/acc_phase_shaped [21])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_fabric.i_dither_pipe/opt_has_reg.i_reg/fd/output_21  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/acc_phase_shaped_pre [20]),
     .Q(\BU2/U0/acc_phase_shaped [20])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_fabric.i_dither_pipe/opt_has_reg.i_reg/fd/output_20  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/acc_phase_shaped_pre [19]),
     .Q(\BU2/U0/acc_phase_shaped [19])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_fabric.i_dither_pipe/opt_has_reg.i_reg/fd/output_19  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/acc_phase_shaped_pre [18]),
     .Q(\BU2/U0/acc_phase_shaped [18])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_fabric.i_dither_pipe/opt_has_reg.i_reg/fd/output_18  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/acc_phase_shaped_pre [17]),
     .Q(\BU2/U0/acc_phase_shaped [17])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_fabric.i_dither_pipe/opt_has_reg.i_reg/fd/output_17  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/acc_phase_shaped_pre [16]),
     .Q(\BU2/U0/acc_phase_shaped [16])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_has_cosine.i_cos_op/opt_has_reg.i_reg/fd/output_18  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/final_cos [48]),
     .R(\BU2/channel [0]),
     .Q(cosine_3[17])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_has_cosine.i_cos_op/opt_has_reg.i_reg/fd/output_17  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/final_cos [47]),
     .R(\BU2/channel [0]),
     .Q(cosine_3[16])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_has_cosine.i_cos_op/opt_has_reg.i_reg/fd/output_16  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/final_cos [46]),
     .R(\BU2/channel [0]),
     .Q(cosine_3[15])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_has_cosine.i_cos_op/opt_has_reg.i_reg/fd/output_15  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/final_cos [45]),
     .R(\BU2/channel [0]),
     .Q(cosine_3[14])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_has_cosine.i_cos_op/opt_has_reg.i_reg/fd/output_14  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/final_cos [44]),
     .R(\BU2/channel [0]),
     .Q(cosine_3[13])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_has_cosine.i_cos_op/opt_has_reg.i_reg/fd/output_13  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/final_cos [43]),
     .R(\BU2/channel [0]),
     .Q(cosine_3[12])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_has_cosine.i_cos_op/opt_has_reg.i_reg/fd/output_12  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/final_cos [42]),
     .R(\BU2/channel [0]),
     .Q(cosine_3[11])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_has_cosine.i_cos_op/opt_has_reg.i_reg/fd/output_11  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/final_cos [41]),
     .R(\BU2/channel [0]),
     .Q(cosine_3[10])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_has_cosine.i_cos_op/opt_has_reg.i_reg/fd/output_10  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/final_cos [40]),
     .R(\BU2/channel [0]),
     .Q(cosine_3[9])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_has_cosine.i_cos_op/opt_has_reg.i_reg/fd/output_9  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/final_cos [39]),
     .R(\BU2/channel [0]),
     .Q(cosine_3[8])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_has_cosine.i_cos_op/opt_has_reg.i_reg/fd/output_8  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/final_cos [38]),
     .R(\BU2/channel [0]),
     .Q(cosine_3[7])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_has_cosine.i_cos_op/opt_has_reg.i_reg/fd/output_7  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/final_cos [37]),
     .R(\BU2/channel [0]),
     .Q(cosine_3[6])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_has_cosine.i_cos_op/opt_has_reg.i_reg/fd/output_6  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/final_cos [36]),
     .R(\BU2/channel [0]),
     .Q(cosine_3[5])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_has_cosine.i_cos_op/opt_has_reg.i_reg/fd/output_5  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/final_cos [35]),
     .R(\BU2/channel [0]),
     .Q(cosine_3[4])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_has_cosine.i_cos_op/opt_has_reg.i_reg/fd/output_4  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/final_cos [34]),
     .R(\BU2/channel [0]),
     .Q(cosine_3[3])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_has_cosine.i_cos_op/opt_has_reg.i_reg/fd/output_3  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/final_cos [33]),
     .R(\BU2/channel [0]),
     .Q(cosine_3[2])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_has_cosine.i_cos_op/opt_has_reg.i_reg/fd/output_2  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/final_cos [32]),
     .R(\BU2/channel [0]),
     .Q(cosine_3[1])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_has_cosine.i_cos_op/opt_has_reg.i_reg/fd/output_1  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/final_cos [31]),
     .R(\BU2/channel [0]),
     .Q(cosine_3[0])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_has_sine.i_sin_op/opt_has_reg.i_reg/fd/output_18  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/final_sin [48]),
     .R(\BU2/channel [0]),
     .Q(sine_4[17])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_has_sine.i_sin_op/opt_has_reg.i_reg/fd/output_17  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/final_sin [47]),
     .R(\BU2/channel [0]),
     .Q(sine_4[16])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_has_sine.i_sin_op/opt_has_reg.i_reg/fd/output_16  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/final_sin [46]),
     .R(\BU2/channel [0]),
     .Q(sine_4[15])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_has_sine.i_sin_op/opt_has_reg.i_reg/fd/output_15  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/final_sin [45]),
     .R(\BU2/channel [0]),
     .Q(sine_4[14])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_has_sine.i_sin_op/opt_has_reg.i_reg/fd/output_14  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/final_sin [44]),
     .R(\BU2/channel [0]),
     .Q(sine_4[13])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_has_sine.i_sin_op/opt_has_reg.i_reg/fd/output_13  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/final_sin [43]),
     .R(\BU2/channel [0]),
     .Q(sine_4[12])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_has_sine.i_sin_op/opt_has_reg.i_reg/fd/output_12  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/final_sin [42]),
     .R(\BU2/channel [0]),
     .Q(sine_4[11])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_has_sine.i_sin_op/opt_has_reg.i_reg/fd/output_11  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/final_sin [41]),
     .R(\BU2/channel [0]),
     .Q(sine_4[10])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_has_sine.i_sin_op/opt_has_reg.i_reg/fd/output_10  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/final_sin [40]),
     .R(\BU2/channel [0]),
     .Q(sine_4[9])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_has_sine.i_sin_op/opt_has_reg.i_reg/fd/output_9  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/final_sin [39]),
     .R(\BU2/channel [0]),
     .Q(sine_4[8])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_has_sine.i_sin_op/opt_has_reg.i_reg/fd/output_8  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/final_sin [38]),
     .R(\BU2/channel [0]),
     .Q(sine_4[7])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_has_sine.i_sin_op/opt_has_reg.i_reg/fd/output_7  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/final_sin [37]),
     .R(\BU2/channel [0]),
     .Q(sine_4[6])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_has_sine.i_sin_op/opt_has_reg.i_reg/fd/output_6  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/final_sin [36]),
     .R(\BU2/channel [0]),
     .Q(sine_4[5])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_has_sine.i_sin_op/opt_has_reg.i_reg/fd/output_5  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/final_sin [35]),
     .R(\BU2/channel [0]),
     .Q(sine_4[4])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_has_sine.i_sin_op/opt_has_reg.i_reg/fd/output_4  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/final_sin [34]),
     .R(\BU2/channel [0]),
     .Q(sine_4[3])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_has_sine.i_sin_op/opt_has_reg.i_reg/fd/output_3  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/final_sin [33]),
     .R(\BU2/channel [0]),
     .Q(sine_4[2])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_has_sine.i_sin_op/opt_has_reg.i_reg/fd/output_2  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/final_sin [32]),
     .R(\BU2/channel [0]),
     .Q(sine_4[1])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_has_sine.i_sin_op/opt_has_reg.i_reg/fd/output_1  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/final_sin [31]),
     .R(\BU2/channel [0]),
     .Q(sine_4[0])
@@ -8588,1053 +8686,1197 @@ module dds (
     .D(data_2[0]),
     .Q(\BU2/U0/i_accum/phase_inc [0])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_accum/i_fabric.i_common.i_phase_acc/opt_has_reg.i_reg/fd/output_32  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_accum/acc_phase_b [31]),
     .R(sclr),
     .Q(\BU2/U0/acc_phase [31])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_accum/i_fabric.i_common.i_phase_acc/opt_has_reg.i_reg/fd/output_31  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_accum/acc_phase_b [30]),
     .R(sclr),
     .Q(\BU2/U0/acc_phase [30])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_accum/i_fabric.i_common.i_phase_acc/opt_has_reg.i_reg/fd/output_30  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_accum/acc_phase_b [29]),
     .R(sclr),
     .Q(\BU2/U0/acc_phase [29])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_accum/i_fabric.i_common.i_phase_acc/opt_has_reg.i_reg/fd/output_29  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_accum/acc_phase_b [28]),
     .R(sclr),
     .Q(\BU2/U0/acc_phase [28])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_accum/i_fabric.i_common.i_phase_acc/opt_has_reg.i_reg/fd/output_28  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_accum/acc_phase_b [27]),
     .R(sclr),
     .Q(\BU2/U0/acc_phase [27])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_accum/i_fabric.i_common.i_phase_acc/opt_has_reg.i_reg/fd/output_27  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_accum/acc_phase_b [26]),
     .R(sclr),
     .Q(\BU2/U0/acc_phase [26])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_accum/i_fabric.i_common.i_phase_acc/opt_has_reg.i_reg/fd/output_26  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_accum/acc_phase_b [25]),
     .R(sclr),
     .Q(\BU2/U0/acc_phase [25])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_accum/i_fabric.i_common.i_phase_acc/opt_has_reg.i_reg/fd/output_25  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_accum/acc_phase_b [24]),
     .R(sclr),
     .Q(\BU2/U0/acc_phase [24])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_accum/i_fabric.i_common.i_phase_acc/opt_has_reg.i_reg/fd/output_24  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_accum/acc_phase_b [23]),
     .R(sclr),
     .Q(\BU2/U0/acc_phase [23])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_accum/i_fabric.i_common.i_phase_acc/opt_has_reg.i_reg/fd/output_23  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_accum/acc_phase_b [22]),
     .R(sclr),
     .Q(\BU2/U0/acc_phase [22])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_accum/i_fabric.i_common.i_phase_acc/opt_has_reg.i_reg/fd/output_22  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_accum/acc_phase_b [21]),
     .R(sclr),
     .Q(\BU2/U0/acc_phase [21])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_accum/i_fabric.i_common.i_phase_acc/opt_has_reg.i_reg/fd/output_21  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_accum/acc_phase_b [20]),
     .R(sclr),
     .Q(\BU2/U0/acc_phase [20])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_accum/i_fabric.i_common.i_phase_acc/opt_has_reg.i_reg/fd/output_20  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_accum/acc_phase_b [19]),
     .R(sclr),
     .Q(\BU2/U0/acc_phase [19])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_accum/i_fabric.i_common.i_phase_acc/opt_has_reg.i_reg/fd/output_19  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_accum/acc_phase_b [18]),
     .R(sclr),
     .Q(\BU2/U0/acc_phase [18])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_accum/i_fabric.i_common.i_phase_acc/opt_has_reg.i_reg/fd/output_18  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_accum/acc_phase_b [17]),
     .R(sclr),
     .Q(\BU2/U0/acc_phase [17])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_accum/i_fabric.i_common.i_phase_acc/opt_has_reg.i_reg/fd/output_17  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_accum/acc_phase_b [16]),
     .R(sclr),
     .Q(\BU2/U0/acc_phase [16])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_accum/i_fabric.i_common.i_phase_acc/opt_has_reg.i_reg/fd/output_16  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_accum/acc_phase_b [15]),
     .R(sclr),
     .Q(\BU2/U0/acc_phase [15])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_accum/i_fabric.i_common.i_phase_acc/opt_has_reg.i_reg/fd/output_15  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_accum/acc_phase_b [14]),
     .R(sclr),
     .Q(\BU2/U0/acc_phase [14])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_accum/i_fabric.i_common.i_phase_acc/opt_has_reg.i_reg/fd/output_14  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_accum/acc_phase_b [13]),
     .R(sclr),
     .Q(\BU2/U0/acc_phase [13])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_accum/i_fabric.i_common.i_phase_acc/opt_has_reg.i_reg/fd/output_13  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_accum/acc_phase_b [12]),
     .R(sclr),
     .Q(\BU2/U0/acc_phase [12])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_accum/i_fabric.i_common.i_phase_acc/opt_has_reg.i_reg/fd/output_12  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_accum/acc_phase_b [11]),
     .R(sclr),
     .Q(\BU2/U0/acc_phase [11])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_accum/i_fabric.i_common.i_phase_acc/opt_has_reg.i_reg/fd/output_11  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_accum/acc_phase_b [10]),
     .R(sclr),
     .Q(\BU2/U0/acc_phase [10])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_accum/i_fabric.i_common.i_phase_acc/opt_has_reg.i_reg/fd/output_10  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_accum/acc_phase_b [9]),
     .R(sclr),
     .Q(\BU2/U0/acc_phase [9])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_accum/i_fabric.i_common.i_phase_acc/opt_has_reg.i_reg/fd/output_9  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_accum/acc_phase_b [8]),
     .R(sclr),
     .Q(\BU2/U0/acc_phase [8])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_accum/i_fabric.i_common.i_phase_acc/opt_has_reg.i_reg/fd/output_8  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_accum/acc_phase_b [7]),
     .R(sclr),
     .Q(\BU2/U0/acc_phase [7])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_accum/i_fabric.i_common.i_phase_acc/opt_has_reg.i_reg/fd/output_7  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_accum/acc_phase_b [6]),
     .R(sclr),
     .Q(\BU2/U0/acc_phase [6])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_accum/i_fabric.i_common.i_phase_acc/opt_has_reg.i_reg/fd/output_6  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_accum/acc_phase_b [5]),
     .R(sclr),
     .Q(\BU2/U0/acc_phase [5])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_accum/i_fabric.i_common.i_phase_acc/opt_has_reg.i_reg/fd/output_5  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_accum/acc_phase_b [4]),
     .R(sclr),
     .Q(\BU2/U0/acc_phase [4])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_accum/i_fabric.i_common.i_phase_acc/opt_has_reg.i_reg/fd/output_4  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_accum/acc_phase_b [3]),
     .R(sclr),
     .Q(\BU2/U0/acc_phase [3])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_accum/i_fabric.i_common.i_phase_acc/opt_has_reg.i_reg/fd/output_3  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_accum/acc_phase_b [2]),
     .R(sclr),
     .Q(\BU2/U0/acc_phase [2])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_accum/i_fabric.i_common.i_phase_acc/opt_has_reg.i_reg/fd/output_2  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_accum/acc_phase_b [1]),
     .R(sclr),
     .Q(\BU2/U0/acc_phase [1])
   );
-  FDR #(
+  FDRE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_accum/i_fabric.i_common.i_phase_acc/opt_has_reg.i_reg/fd/output_1  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_accum/acc_phase_b [0]),
     .R(sclr),
     .Q(\BU2/U0/acc_phase [0])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_original_sin_ls/opt_has_reg.i_reg/fd/output_10  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/Madd_asyn_sin_ls1_cy [8]),
     .Q(\BU2/U0/i_rom/sin_ls1 [9])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_original_sin_ls/opt_has_reg.i_reg/fd/output_9  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_sin_ls1 [8]),
     .Q(\BU2/U0/i_rom/sin_ls1 [8])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_original_sin_ls/opt_has_reg.i_reg/fd/output_8  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_sin_ls1 [7]),
     .Q(\BU2/U0/i_rom/sin_ls1 [7])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_original_sin_ls/opt_has_reg.i_reg/fd/output_7  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_sin_ls1 [6]),
     .Q(\BU2/U0/i_rom/sin_ls1 [6])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_original_sin_ls/opt_has_reg.i_reg/fd/output_6  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_sin_ls1 [5]),
     .Q(\BU2/U0/i_rom/sin_ls1 [5])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_original_sin_ls/opt_has_reg.i_reg/fd/output_5  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_sin_ls1 [4]),
     .Q(\BU2/U0/i_rom/sin_ls1 [4])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_original_sin_ls/opt_has_reg.i_reg/fd/output_4  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_sin_ls1 [3]),
     .Q(\BU2/U0/i_rom/sin_ls1 [3])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_original_sin_ls/opt_has_reg.i_reg/fd/output_3  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_sin_ls1 [2]),
     .Q(\BU2/U0/i_rom/sin_ls1 [2])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_original_sin_ls/opt_has_reg.i_reg/fd/output_2  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_sin_ls1 [1]),
     .Q(\BU2/U0/i_rom/sin_ls1 [1])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_original_sin_ls/opt_has_reg.i_reg/fd/output_1  (
     .C(clk),
-    .D(\BU2/U0/i_rom/sin_RAM_op [0]),
+    .CE(ce),
+    .D(\BU2/U0/i_rom/asyn_sin_ls1 [0]),
     .Q(\BU2/U0/i_rom/sin_ls1 [0])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_original_cos_ls/opt_has_reg.i_reg/fd/output_10  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/Madd_asyn_cos_ls1_cy [8]),
     .Q(\BU2/U0/i_rom/cos_ls1 [9])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_original_cos_ls/opt_has_reg.i_reg/fd/output_9  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_cos_ls1 [8]),
     .Q(\BU2/U0/i_rom/cos_ls1 [8])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_original_cos_ls/opt_has_reg.i_reg/fd/output_8  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_cos_ls1 [7]),
     .Q(\BU2/U0/i_rom/cos_ls1 [7])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_original_cos_ls/opt_has_reg.i_reg/fd/output_7  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_cos_ls1 [6]),
     .Q(\BU2/U0/i_rom/cos_ls1 [6])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_original_cos_ls/opt_has_reg.i_reg/fd/output_6  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_cos_ls1 [5]),
     .Q(\BU2/U0/i_rom/cos_ls1 [5])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_original_cos_ls/opt_has_reg.i_reg/fd/output_5  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_cos_ls1 [4]),
     .Q(\BU2/U0/i_rom/cos_ls1 [4])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_original_cos_ls/opt_has_reg.i_reg/fd/output_4  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_cos_ls1 [3]),
     .Q(\BU2/U0/i_rom/cos_ls1 [3])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_original_cos_ls/opt_has_reg.i_reg/fd/output_3  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_cos_ls1 [2]),
     .Q(\BU2/U0/i_rom/cos_ls1 [2])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_original_cos_ls/opt_has_reg.i_reg/fd/output_2  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_cos_ls1 [1]),
     .Q(\BU2/U0/i_rom/cos_ls1 [1])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_original_cos_ls/opt_has_reg.i_reg/fd/output_1  (
     .C(clk),
-    .D(\BU2/U0/i_rom/Madd_asyn_cos_ls1_lut [0]),
+    .CE(ce),
+    .D(\BU2/U0/i_rom/asyn_cos_ls1 [0]),
     .Q(\BU2/U0/i_rom/cos_ls1 [0])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_original_sin_ms/opt_has_reg.i_reg/fd/output_9  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_sin_ms1 [8]),
     .Q(\BU2/U0/i_rom/sin_ms1 [8])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_original_sin_ms/opt_has_reg.i_reg/fd/output_8  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_sin_ms1 [7]),
     .Q(\BU2/U0/i_rom/sin_ms1 [7])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_original_sin_ms/opt_has_reg.i_reg/fd/output_7  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_sin_ms1 [6]),
     .Q(\BU2/U0/i_rom/sin_ms1 [6])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_original_sin_ms/opt_has_reg.i_reg/fd/output_6  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_sin_ms1 [5]),
     .Q(\BU2/U0/i_rom/sin_ms1 [5])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_original_sin_ms/opt_has_reg.i_reg/fd/output_5  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_sin_ms1 [4]),
     .Q(\BU2/U0/i_rom/sin_ms1 [4])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_original_sin_ms/opt_has_reg.i_reg/fd/output_4  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_sin_ms1 [3]),
     .Q(\BU2/U0/i_rom/sin_ms1 [3])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_original_sin_ms/opt_has_reg.i_reg/fd/output_3  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_sin_ms1 [2]),
     .Q(\BU2/U0/i_rom/sin_ms1 [2])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_original_sin_ms/opt_has_reg.i_reg/fd/output_2  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_sin_ms1 [1]),
     .Q(\BU2/U0/i_rom/sin_ms1 [1])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_original_sin_ms/opt_has_reg.i_reg/fd/output_1  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_sin_ms1 [0]),
     .Q(\BU2/U0/i_rom/sin_ms1 [0])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_original_cos_ms/opt_has_reg.i_reg/fd/output_9  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_cos_ms1 [8]),
     .Q(\BU2/U0/i_rom/cos_ms1 [8])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_original_cos_ms/opt_has_reg.i_reg/fd/output_8  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_cos_ms1 [7]),
     .Q(\BU2/U0/i_rom/cos_ms1 [7])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_original_cos_ms/opt_has_reg.i_reg/fd/output_7  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_cos_ms1 [6]),
     .Q(\BU2/U0/i_rom/cos_ms1 [6])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_original_cos_ms/opt_has_reg.i_reg/fd/output_6  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_cos_ms1 [5]),
     .Q(\BU2/U0/i_rom/cos_ms1 [5])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_original_cos_ms/opt_has_reg.i_reg/fd/output_5  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_cos_ms1 [4]),
     .Q(\BU2/U0/i_rom/cos_ms1 [4])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_original_cos_ms/opt_has_reg.i_reg/fd/output_4  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_cos_ms1 [3]),
     .Q(\BU2/U0/i_rom/cos_ms1 [3])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_original_cos_ms/opt_has_reg.i_reg/fd/output_3  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_cos_ms1 [2]),
     .Q(\BU2/U0/i_rom/cos_ms1 [2])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_original_cos_ms/opt_has_reg.i_reg/fd/output_2  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_cos_ms1 [1]),
     .Q(\BU2/U0/i_rom/cos_ms1 [1])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_original_cos_ms/opt_has_reg.i_reg/fd/output_1  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_cos_ms1 [0]),
     .Q(\BU2/U0/i_rom/cos_ms1 [0])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_cardinal_sin_ms/opt_has_reg.i_reg/fd/output_9  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_sin_ms2 [8]),
     .Q(\BU2/U0/final_sin [48])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_cardinal_sin_ms/opt_has_reg.i_reg/fd/output_8  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_sin_ms2 [7]),
     .Q(\BU2/U0/final_sin [47])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_cardinal_sin_ms/opt_has_reg.i_reg/fd/output_7  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_sin_ms2 [6]),
     .Q(\BU2/U0/final_sin [46])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_cardinal_sin_ms/opt_has_reg.i_reg/fd/output_6  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_sin_ms2 [5]),
     .Q(\BU2/U0/final_sin [45])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_cardinal_sin_ms/opt_has_reg.i_reg/fd/output_5  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_sin_ms2 [4]),
     .Q(\BU2/U0/final_sin [44])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_cardinal_sin_ms/opt_has_reg.i_reg/fd/output_4  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_sin_ms2 [3]),
     .Q(\BU2/U0/final_sin [43])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_cardinal_sin_ms/opt_has_reg.i_reg/fd/output_3  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_sin_ms2 [2]),
     .Q(\BU2/U0/final_sin [42])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_cardinal_sin_ms/opt_has_reg.i_reg/fd/output_2  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_sin_ms2 [1]),
     .Q(\BU2/U0/final_sin [41])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_cardinal_sin_ms/opt_has_reg.i_reg/fd/output_1  (
     .C(clk),
-    .D(\BU2/U0/i_rom/Madd_asyn_sin_ms2_lut [0]),
+    .CE(ce),
+    .D(\BU2/U0/i_rom/asyn_sin_ms2 [0]),
     .Q(\BU2/U0/final_sin [40])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_cardinal_sin_ls/opt_has_reg.i_reg/fd/output_9  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/sin_ls1 [8]),
     .Q(\BU2/U0/final_sin [39])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_cardinal_sin_ls/opt_has_reg.i_reg/fd/output_8  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/sin_ls1 [7]),
     .Q(\BU2/U0/final_sin [38])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_cardinal_sin_ls/opt_has_reg.i_reg/fd/output_7  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/sin_ls1 [6]),
     .Q(\BU2/U0/final_sin [37])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_cardinal_sin_ls/opt_has_reg.i_reg/fd/output_6  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/sin_ls1 [5]),
     .Q(\BU2/U0/final_sin [36])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_cardinal_sin_ls/opt_has_reg.i_reg/fd/output_5  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/sin_ls1 [4]),
     .Q(\BU2/U0/final_sin [35])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_cardinal_sin_ls/opt_has_reg.i_reg/fd/output_4  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/sin_ls1 [3]),
     .Q(\BU2/U0/final_sin [34])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_cardinal_sin_ls/opt_has_reg.i_reg/fd/output_3  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/sin_ls1 [2]),
     .Q(\BU2/U0/final_sin [33])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_cardinal_sin_ls/opt_has_reg.i_reg/fd/output_2  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/sin_ls1 [1]),
     .Q(\BU2/U0/final_sin [32])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_cardinal_sin_ls/opt_has_reg.i_reg/fd/output_1  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/sin_ls1 [0]),
     .Q(\BU2/U0/final_sin [31])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_cardinal_cos_ms/opt_has_reg.i_reg/fd/output_9  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_cos_ms2 [8]),
     .Q(\BU2/U0/final_cos [48])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_cardinal_cos_ms/opt_has_reg.i_reg/fd/output_8  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_cos_ms2 [7]),
     .Q(\BU2/U0/final_cos [47])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_cardinal_cos_ms/opt_has_reg.i_reg/fd/output_7  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_cos_ms2 [6]),
     .Q(\BU2/U0/final_cos [46])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_cardinal_cos_ms/opt_has_reg.i_reg/fd/output_6  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_cos_ms2 [5]),
     .Q(\BU2/U0/final_cos [45])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_cardinal_cos_ms/opt_has_reg.i_reg/fd/output_5  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_cos_ms2 [4]),
     .Q(\BU2/U0/final_cos [44])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_cardinal_cos_ms/opt_has_reg.i_reg/fd/output_4  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_cos_ms2 [3]),
     .Q(\BU2/U0/final_cos [43])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_cardinal_cos_ms/opt_has_reg.i_reg/fd/output_3  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_cos_ms2 [2]),
     .Q(\BU2/U0/final_cos [42])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_cardinal_cos_ms/opt_has_reg.i_reg/fd/output_2  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_cos_ms2 [1]),
     .Q(\BU2/U0/final_cos [41])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_cardinal_cos_ms/opt_has_reg.i_reg/fd/output_1  (
     .C(clk),
-    .D(\BU2/U0/i_rom/Madd_asyn_cos_ms2_lut [0]),
+    .CE(ce),
+    .D(\BU2/U0/i_rom/asyn_cos_ms2 [0]),
     .Q(\BU2/U0/final_cos [40])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_cardinal_cos_ls/opt_has_reg.i_reg/fd/output_9  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/cos_ls1 [8]),
     .Q(\BU2/U0/final_cos [39])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_cardinal_cos_ls/opt_has_reg.i_reg/fd/output_8  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/cos_ls1 [7]),
     .Q(\BU2/U0/final_cos [38])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_cardinal_cos_ls/opt_has_reg.i_reg/fd/output_7  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/cos_ls1 [6]),
     .Q(\BU2/U0/final_cos [37])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_cardinal_cos_ls/opt_has_reg.i_reg/fd/output_6  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/cos_ls1 [5]),
     .Q(\BU2/U0/final_cos [36])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_cardinal_cos_ls/opt_has_reg.i_reg/fd/output_5  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/cos_ls1 [4]),
     .Q(\BU2/U0/final_cos [35])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_cardinal_cos_ls/opt_has_reg.i_reg/fd/output_4  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/cos_ls1 [3]),
     .Q(\BU2/U0/final_cos [34])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_cardinal_cos_ls/opt_has_reg.i_reg/fd/output_3  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/cos_ls1 [2]),
     .Q(\BU2/U0/final_cos [33])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_cardinal_cos_ls/opt_has_reg.i_reg/fd/output_2  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/cos_ls1 [1]),
     .Q(\BU2/U0/final_cos [32])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_piped_map.i_cardinal_cos_ls/opt_has_reg.i_reg/fd/output_1  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/cos_ls1 [0]),
     .Q(\BU2/U0/final_cos [31])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_rom_reg_a/opt_has_reg.i_reg/fd/output_17  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_sin_RAM_op [16]),
     .Q(\BU2/U0/i_rom/sin_RAM_op [16])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_rom_reg_a/opt_has_reg.i_reg/fd/output_16  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_sin_RAM_op [15]),
     .Q(\BU2/U0/i_rom/sin_RAM_op [15])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_rom_reg_a/opt_has_reg.i_reg/fd/output_15  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_sin_RAM_op [14]),
     .Q(\BU2/U0/i_rom/sin_RAM_op [14])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_rom_reg_a/opt_has_reg.i_reg/fd/output_14  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_sin_RAM_op [13]),
     .Q(\BU2/U0/i_rom/sin_RAM_op [13])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_rom_reg_a/opt_has_reg.i_reg/fd/output_13  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_sin_RAM_op [12]),
     .Q(\BU2/U0/i_rom/sin_RAM_op [12])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_rom_reg_a/opt_has_reg.i_reg/fd/output_12  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_sin_RAM_op [11]),
     .Q(\BU2/U0/i_rom/sin_RAM_op [11])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_rom_reg_a/opt_has_reg.i_reg/fd/output_11  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_sin_RAM_op [10]),
     .Q(\BU2/U0/i_rom/sin_RAM_op [10])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_rom_reg_a/opt_has_reg.i_reg/fd/output_10  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_sin_RAM_op [9]),
     .Q(\BU2/U0/i_rom/sin_RAM_op [9])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_rom_reg_a/opt_has_reg.i_reg/fd/output_9  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_sin_RAM_op [8]),
     .Q(\BU2/U0/i_rom/sin_RAM_op [8])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_rom_reg_a/opt_has_reg.i_reg/fd/output_8  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_sin_RAM_op [7]),
     .Q(\BU2/U0/i_rom/sin_RAM_op [7])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_rom_reg_a/opt_has_reg.i_reg/fd/output_7  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_sin_RAM_op [6]),
     .Q(\BU2/U0/i_rom/sin_RAM_op [6])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_rom_reg_a/opt_has_reg.i_reg/fd/output_6  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_sin_RAM_op [5]),
     .Q(\BU2/U0/i_rom/sin_RAM_op [5])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_rom_reg_a/opt_has_reg.i_reg/fd/output_5  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_sin_RAM_op [4]),
     .Q(\BU2/U0/i_rom/sin_RAM_op [4])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_rom_reg_a/opt_has_reg.i_reg/fd/output_4  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_sin_RAM_op [3]),
     .Q(\BU2/U0/i_rom/sin_RAM_op [3])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_rom_reg_a/opt_has_reg.i_reg/fd/output_3  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_sin_RAM_op [2]),
     .Q(\BU2/U0/i_rom/sin_RAM_op [2])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_rom_reg_a/opt_has_reg.i_reg/fd/output_2  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_sin_RAM_op [1]),
     .Q(\BU2/U0/i_rom/sin_RAM_op [1])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_rom_reg_a/opt_has_reg.i_reg/fd/output_1  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_sin_RAM_op [0]),
     .Q(\BU2/U0/i_rom/sin_RAM_op [0])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_rom_reg_b/opt_has_reg.i_reg/fd/output_17  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_cos_RAM_op [16]),
     .Q(\BU2/U0/i_rom/cos_RAM_op [16])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_rom_reg_b/opt_has_reg.i_reg/fd/output_16  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_cos_RAM_op [15]),
     .Q(\BU2/U0/i_rom/cos_RAM_op [15])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_rom_reg_b/opt_has_reg.i_reg/fd/output_15  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_cos_RAM_op [14]),
     .Q(\BU2/U0/i_rom/cos_RAM_op [14])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_rom_reg_b/opt_has_reg.i_reg/fd/output_14  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_cos_RAM_op [13]),
     .Q(\BU2/U0/i_rom/cos_RAM_op [13])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_rom_reg_b/opt_has_reg.i_reg/fd/output_13  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_cos_RAM_op [12]),
     .Q(\BU2/U0/i_rom/cos_RAM_op [12])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_rom_reg_b/opt_has_reg.i_reg/fd/output_12  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_cos_RAM_op [11]),
     .Q(\BU2/U0/i_rom/cos_RAM_op [11])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_rom_reg_b/opt_has_reg.i_reg/fd/output_11  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_cos_RAM_op [10]),
     .Q(\BU2/U0/i_rom/cos_RAM_op [10])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_rom_reg_b/opt_has_reg.i_reg/fd/output_10  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_cos_RAM_op [9]),
     .Q(\BU2/U0/i_rom/cos_RAM_op [9])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_rom_reg_b/opt_has_reg.i_reg/fd/output_9  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_cos_RAM_op [8]),
     .Q(\BU2/U0/i_rom/cos_RAM_op [8])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_rom_reg_b/opt_has_reg.i_reg/fd/output_8  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_cos_RAM_op [7]),
     .Q(\BU2/U0/i_rom/cos_RAM_op [7])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_rom_reg_b/opt_has_reg.i_reg/fd/output_7  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_cos_RAM_op [6]),
     .Q(\BU2/U0/i_rom/cos_RAM_op [6])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_rom_reg_b/opt_has_reg.i_reg/fd/output_6  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_cos_RAM_op [5]),
     .Q(\BU2/U0/i_rom/cos_RAM_op [5])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_rom_reg_b/opt_has_reg.i_reg/fd/output_5  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_cos_RAM_op [4]),
     .Q(\BU2/U0/i_rom/cos_RAM_op [4])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_rom_reg_b/opt_has_reg.i_reg/fd/output_4  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_cos_RAM_op [3]),
     .Q(\BU2/U0/i_rom/cos_RAM_op [3])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_rom_reg_b/opt_has_reg.i_reg/fd/output_3  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_cos_RAM_op [2]),
     .Q(\BU2/U0/i_rom/cos_RAM_op [2])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_rom_reg_b/opt_has_reg.i_reg/fd/output_2  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_cos_RAM_op [1]),
     .Q(\BU2/U0/i_rom/cos_RAM_op [1])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_rom_reg_b/opt_has_reg.i_reg/fd/output_1  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/i_rom/asyn_cos_RAM_op [0]),
     .Q(\BU2/U0/i_rom/cos_RAM_op [0])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_addr_reg_c/Q_1  (
     .C(clk),
-    .D(\BU2/U0/i_rom/i_rtl.i_quarter_table.i_addr_reg_c/Mshreg_Q_1_642 ),
+    .CE(ce),
+    .D(\BU2/U0/i_rom/i_rtl.i_quarter_table.i_addr_reg_c/Mshreg_Q_1_657 ),
     .Q(\BU2/U0/i_rom/asyn_sin_ms1 [8])
   );
-  SRL16 #(
+  SRL16E #(
     .INIT ( 16'h0000 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_addr_reg_c/Mshreg_Q_1  (
     .A0(\BU2/U0/i_rom/i_rtl.i_quarter_table.i_addr_reg_c/N1 ),
     .A1(\BU2/U0/i_rom/i_rtl.i_quarter_table.i_addr_reg_c/N0 ),
     .A2(\BU2/U0/i_rom/i_rtl.i_quarter_table.i_addr_reg_c/N0 ),
     .A3(\BU2/U0/i_rom/i_rtl.i_quarter_table.i_addr_reg_c/N0 ),
+    .CE(ce),
     .CLK(clk),
     .D(\BU2/U0/i_rom/i_rtl.i_quarter_table.i_addr_reg_c/first_q [1]),
-    .Q(\BU2/U0/i_rom/i_rtl.i_quarter_table.i_addr_reg_c/Mshreg_Q_1_642 )
+    .Q(\BU2/U0/i_rom/i_rtl.i_quarter_table.i_addr_reg_c/Mshreg_Q_1_657 )
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_addr_reg_c/Q_0  (
     .C(clk),
-    .D(\BU2/U0/i_rom/i_rtl.i_quarter_table.i_addr_reg_c/Mshreg_Q_0_641 ),
+    .CE(ce),
+    .D(\BU2/U0/i_rom/i_rtl.i_quarter_table.i_addr_reg_c/Mshreg_Q_0_656 ),
     .Q(\BU2/U0/i_rom/quadrant_bypass_b [0])
   );
-  SRL16 #(
+  SRL16E #(
     .INIT ( 16'h0000 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_addr_reg_c/Mshreg_Q_0  (
     .A0(\BU2/U0/i_rom/i_rtl.i_quarter_table.i_addr_reg_c/N1 ),
     .A1(\BU2/U0/i_rom/i_rtl.i_quarter_table.i_addr_reg_c/N0 ),
     .A2(\BU2/U0/i_rom/i_rtl.i_quarter_table.i_addr_reg_c/N0 ),
     .A3(\BU2/U0/i_rom/i_rtl.i_quarter_table.i_addr_reg_c/N0 ),
+    .CE(ce),
     .CLK(clk),
     .D(\BU2/U0/i_rom/i_rtl.i_quarter_table.i_addr_reg_c/first_q [0]),
-    .Q(\BU2/U0/i_rom/i_rtl.i_quarter_table.i_addr_reg_c/Mshreg_Q_0_641 )
+    .Q(\BU2/U0/i_rom/i_rtl.i_quarter_table.i_addr_reg_c/Mshreg_Q_0_656 )
   );
   VCC   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_addr_reg_c/XST_VCC  (
     .P(\BU2/U0/i_rom/i_rtl.i_quarter_table.i_addr_reg_c/N1 )
@@ -9642,17 +9884,19 @@ module dds (
   GND   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_addr_reg_c/XST_GND  (
     .G(\BU2/U0/i_rom/i_rtl.i_quarter_table.i_addr_reg_c/N0 )
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_addr_reg_c/first_q_1  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/acc_phase_shaped [31]),
     .Q(\BU2/U0/i_rom/i_rtl.i_quarter_table.i_addr_reg_c/first_q [1])
   );
-  FD #(
+  FDE #(
     .INIT ( 1'b0 ))
   \BU2/U0/i_rom/i_rtl.i_quarter_table.i_addr_reg_c/first_q_0  (
     .C(clk),
+    .CE(ce),
     .D(\BU2/U0/acc_phase_shaped [30]),
     .Q(\BU2/U0/i_rom/i_rtl.i_quarter_table.i_addr_reg_c/first_q [0])
   );

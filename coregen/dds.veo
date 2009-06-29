@@ -32,6 +32,7 @@
 
 //----------- Begin Cut here for INSTANTIATION Template ---// INST_TAG
 dds YourInstanceName (
+	.ce(ce),
 	.clk(clk),
 	.sclr(sclr),
 	.we(we),

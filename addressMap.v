@@ -52,6 +52,7 @@
 `define DEMOD_FALSELOCK 12'bxxxx_xxx0_10xx
 `define DEMOD_STATUS    12'bxxxx_xxx0_11xx
 `define DEMOD_AMTC      12'bxxxx_xxx1_00xx
+`define DEMOD_FSKDEV    12'bxxxx_xxx1_01xx
 
 // Define the FM memory map
 `define FM_MOD_FREQ     12'bxxxx_xxxx_00xx

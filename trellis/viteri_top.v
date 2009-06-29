@@ -141,9 +141,9 @@ module viterbi_top(clk, reset, symEn,
 `ifdef SIMULATE
    // in simulation we have to reset the accumulatios when the input data is known.
    // simReset is toggled in the test bench
-   reg                  simReset;
-   wire                 acsReset = simReset;
-//   wire                 acsReset = reset;
+   //reg                  simReset;
+   //wire                 acsReset = simReset;
+   wire                 acsReset = reset;
 `else
    wire                 acsReset = reset;
 `endif
@@ -485,6 +485,11 @@ module viterbi_top(clk, reset, symEn,
        end
 
 assign decision = tbDecision;
+
+`ifdef SIMULATE
+real devErrorReal;
+always @(devError) devErrorReal = devError[9] ? devError - 1024.0 : devError;
+`endif
 
 `ifdef SIMULATE
 

@@ -72,6 +72,7 @@ wire    [17:0]qDds;
 dds dds ( 
     .sclr(reset), 
     .clk(clk), 
+    .ce(1'b1),
     .we(1'b1), 
     .data(ddcFreq), 
     .sine(qDds), 
