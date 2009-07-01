@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------------
 // Project      SEMCO Multi-mode Demodulator
-// Design       Viterbi Decoder Top
+// Design       SOQPSK Viterbi Decoder Top
 // Created      24 April 09
 //-----------------------------------------------------------------------------
 // 1.0      (amj) initial coding
@@ -123,31 +123,27 @@ module trellisSoqpsk
 `endif
 
    
-   // match filter zero (contant 1 multiply so we add 4 flops to align with "mfm" and "mfp")
-   // Now due to a scaling factor in the mfilter the mfm and mfp output has to be sclaed back by mult by 2, this now
+   // match filter zero (constant 1 multiply so we add 4 flops to align with "mfm" and "mfp")
+   // Now due to a scaling factor in the mfilter the mfm and mfp output has to be scaled back by mult by 2, this
    // adds another flop.
    // **** Looking at the waveform and comparing all rotMf* outputs. It looks like I need a 6th flop delay ********
    // Look into this!!!!!!!!!!!
-   reg [17:0]         mfzISr0, mfzISr1, mfzISr2, mfzISr3, mfzISr4, mfzISr5, 
-                      mfzQSr0, mfzQSr1, mfzQSr2, mfzQSr3, mfzQSr4, mfzQSr5;
+   reg [17:0]         mfzISr0, mfzISr1, mfzISr2, mfzISr3, 
+                      mfzQSr0, mfzQSr1, mfzQSr2, mfzQSr3;
    always @(posedge clk) begin
       if (sym2xEnDly) begin
          mfzISr0  <=  carrierLoopIOutX2;
          mfzISr1  <=  mfzISr0;
          mfzISr2  <=  mfzISr1;
          mfzISr3  <=  mfzISr2; 
-         mfzISr4  <=  mfzISr3; 
-         mfzISr5  <=  mfzISr4; 
          mfzQSr0  <=  carrierLoopQOutX2;
          mfzQSr1  <=  mfzQSr0;
          mfzQSr2  <=  mfzQSr1;
          mfzQSr3  <=  mfzQSr2; 
-         mfzQSr4  <=  mfzQSr3; 
-         mfzQSr5  <=  mfzQSr4; 
       end
    end
-   wire [17:0]          mfzI=mfzISr5;
-   wire [17:0]          mfzQ=mfzQSr5;
+   wire [17:0]          mfzI=mfzISr3;
+   wire [17:0]          mfzQ=mfzQSr3;
 
    // Match filter minus
    wire [17:0] mfmI,mfmQ;
@@ -271,6 +267,7 @@ module trellisSoqpsk
    
    // *****If I use sym2xEn as clock in the mult. I don't think I need to use the delayed version of symEn and sym2xEn *******
    
+   /* -----\/----- EXCLUDED -----\/-----
    reg [15:0]  symEnShift;
    always @(posedge clk)symEnShift <= {symEnShift[14:0],(sym2xEnDly && !symEnDly)};
    //always @(posedge clk)symEnShift <= {symEnShift[14:0],(sym2xEn && !symEn)};
@@ -283,6 +280,7 @@ module trellisSoqpsk
    always @(posedge clk)sym2xEnShift <= {sym2xEnShift[14:0],sym2xEnDly};
    //wire       trell2xEna = sym2xEnShift[14];
    wire        trell2xEna = sym2xEnShift[12];
+   -----/\----- EXCLUDED -----/\----- */
    
    // Rotations
    wire [ROT_BITS-1:0] rotMfz0Real, rotMfz1Real, rotMfz2Real, rotMfz3Real,  // 4 real part rotated "match filter zero" outputs
@@ -292,6 +290,24 @@ module trellisSoqpsk
                        rotMfm0Imag, rotMfm1Imag, rotMfm2Imag, rotMfm3Imag,  // 4 imag part rotated "match filter minus" output
                        rotMfp0Imag, rotMfp1Imag, rotMfp2Imag, rotMfp3Imag;  // 4 imag part rotated "match filter plus" outputs
    
+   // Instead of multipying the minus and plus mfR's I divide the mfZ by two. The reason for this is to get around a sutuation issue with the multBy2withSat() 
+
+   assign              rotMfz0Real =  {mfzI[17], mfzI[17:17-(ROT_BITS-2)]}, rotMfz0Imag =  {mfzQ[17], mfzQ[17:17-(ROT_BITS-2)]};
+   assign              rotMfz1Real =  {mfzQ[17], mfzQ[17:17-(ROT_BITS-2)]}, rotMfz1Imag = -{mfzI[17], mfzI[17:17-(ROT_BITS-2)]}; 
+   assign              rotMfz2Real = -{mfzI[17], mfzI[17:17-(ROT_BITS-2)]}, rotMfz2Imag = -{mfzQ[17], mfzQ[17:17-(ROT_BITS-2)]};
+   assign              rotMfz3Real = -{mfzQ[17], mfzQ[17:17-(ROT_BITS-2)]}, rotMfz3Imag =  {mfzI[17], mfzI[17:17-(ROT_BITS-2)]};
+
+   assign              rotMfm0Real =  mfmI[17:17-(ROT_BITS-1)], rotMfm0Imag =  mfmQ[17:17-(ROT_BITS-1)];
+   assign              rotMfm1Real =  mfmQ[17:17-(ROT_BITS-1)], rotMfm1Imag = -mfmI[17:17-(ROT_BITS-1)];
+   assign              rotMfm2Real = -mfmI[17:17-(ROT_BITS-1)], rotMfm2Imag = -mfmQ[17:17-(ROT_BITS-1)];
+   assign              rotMfm3Real = -mfmQ[17:17-(ROT_BITS-1)], rotMfm3Imag =  mfmI[17:17-(ROT_BITS-1)];
+
+   assign              rotMfp0Real =  mfpI[17:17-(ROT_BITS-1)], rotMfp0Imag =  mfpQ[17:17-(ROT_BITS-1)];
+   assign              rotMfp1Real =  mfpQ[17:17-(ROT_BITS-1)], rotMfp1Imag = -mfpI[17:17-(ROT_BITS-1)];
+   assign              rotMfp2Real = -mfpI[17:17-(ROT_BITS-1)], rotMfp2Imag = -mfpQ[17:17-(ROT_BITS-1)];
+   assign              rotMfp3Real = -mfpQ[17:17-(ROT_BITS-1)], rotMfp3Imag =  mfpI[17:17-(ROT_BITS-1)];
+
+   /* -----\/----- EXCLUDED -----\/-----
    assign              rotMfz0Real =  mfzI[17:17-(ROT_BITS-1)], rotMfz0Imag =  mfzQ[17:17-(ROT_BITS-1)];
    assign              rotMfz1Real =  mfzQ[17:17-(ROT_BITS-1)], rotMfz1Imag = -mfzI[17:17-(ROT_BITS-1)];
    assign              rotMfz2Real = -mfzI[17:17-(ROT_BITS-1)], rotMfz2Imag = -mfzQ[17:17-(ROT_BITS-1)];
@@ -306,6 +322,7 @@ module trellisSoqpsk
    assign              rotMfp1Real =  mfpQX2[17:17-(ROT_BITS-1)], rotMfp1Imag = -mfpIX2[17:17-(ROT_BITS-1)];
    assign              rotMfp2Real = -mfpIX2[17:17-(ROT_BITS-1)], rotMfp2Imag = -mfpQX2[17:17-(ROT_BITS-1)];
    assign              rotMfp3Real = -mfpQX2[17:17-(ROT_BITS-1)], rotMfp3Imag =  mfpIX2[17:17-(ROT_BITS-1)];
+    -----/\----- EXCLUDED -----/\----- */
               
 
    reg [ROT_BITS-1:0]  rotMfz0RealOut, rotMfz1RealOut, rotMfz2RealOut, rotMfz3RealOut,
@@ -354,7 +371,8 @@ module trellisSoqpsk
 `ifdef SIMULATE
    always @(posedge clk)begin
       if(sym2xEnDly)begin
-         $display("\t%1.3f  \t%1.3f  \t%1.3f  \t%1.3f  \t%1.3f  \t%1.3f  \t%1.3f  \t%1.3f",
+//         $display("\t%1.3f\t%1.3f\t%1.3f\t%1.3f\t%1.3f\t%1.3f\t%1.3f\t%1.3f",
+                  /* -----\/----- EXCLUDED -----\/-----
                   $itor($signed(rotMfz0RealOut))/(2**(ROT_BITS-1)),
                   $itor($signed(rotMfz0ImagOut))/(2**(ROT_BITS-1)),
                   $itor($signed(rotMfz1RealOut))/(2**(ROT_BITS-1)),
@@ -363,28 +381,26 @@ module trellisSoqpsk
                   $itor($signed(rotMfz2ImagOut))/(2**(ROT_BITS-1)),
                   $itor($signed(rotMfz3RealOut))/(2**(ROT_BITS-1)),
                   $itor($signed(rotMfz3ImagOut))/(2**(ROT_BITS-1)));
-                  /* -----\/----- EXCLUDED -----\/-----
-                  $itor($signed(rotMfp0RealOut))/(2**(ROT_BITS-2)),
-                  $itor($signed(rotMfp0ImagOut))/(2**(ROT_BITS-2)),
-                  $itor($signed(rotMfp1RealOut))/(2**(ROT_BITS-2)),
-                  $itor($signed(rotMfp1ImagOut))/(2**(ROT_BITS-2)),
-                  $itor($signed(rotMfp2RealOut))/(2**(ROT_BITS-2)),
-                  $itor($signed(rotMfp2ImagOut))/(2**(ROT_BITS-2)),
-                  $itor($signed(rotMfp3RealOut))/(2**(ROT_BITS-2)),
-                  $itor($signed(rotMfp3ImagOut))/(2**(ROT_BITS-2)));
                    -----/\----- EXCLUDED -----/\----- */
+//                  $itor($signed(rotMfz0RealOut))/(2**(ROT_BITS-2)),
+//                  $itor($signed(rotMfz0ImagOut))/(2**(ROT_BITS-2)),
+//                  $itor($signed(rotMfz1RealOut))/(2**(ROT_BITS-2)),
+//                  $itor($signed(rotMfz1ImagOut))/(2**(ROT_BITS-2)),
+//                  $itor($signed(rotMfz2RealOut))/(2**(ROT_BITS-2)),
+//                  $itor($signed(rotMfz2ImagOut))/(2**(ROT_BITS-2)),
+//                  $itor($signed(rotMfz3RealOut))/(2**(ROT_BITS-2)),
+//                  $itor($signed(rotMfz3ImagOut))/(2**(ROT_BITS-2)));
       end
    end
 `endif   
 
-   wire    [4:0]   index;
+   wire    [1:0]   index;
 
    
 soqpskTop #(size, ROT_BITS) soqpskTop
    (
     //symEn should be sym2xEn
-    .clk(clk), .reset(reset), .symEn(sym2xEn),
-    //.clk(clk), .reset(reset), .symEn(trellEna),
+    .clk(clk), .reset(reset), .symEn(sym2xEnDly),
     .mfZr0Real(rotMfz0RealOut[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]), .mfPr0Real(rotMfp0RealOut[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]), .mfMr0Real(rotMfm0RealOut[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),
     .mfZr1Real(rotMfz1RealOut[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]), .mfPr1Real(rotMfp1RealOut[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]), .mfMr1Real(rotMfm1RealOut[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),
     .mfZr2Real(rotMfz2RealOut[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]), .mfPr2Real(rotMfp2RealOut[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]), .mfMr2Real(rotMfm2RealOut[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),
@@ -405,7 +421,7 @@ soqpskTop #(size, ROT_BITS) soqpskTop
    wire                 sign = phaseError[9];
 
    always @(posedge clk) begin
-      //if (symEn | sym2xEn) begin
+      if (sym2xEn) begin
          dataBits <= {phaseError[5:0], 2'b00};
          satPos <= !sign && (phaseError[9:5] != 5'b00000);
          satNeg <=  sign && (phaseError[9:5] != 5'b11111);
@@ -418,7 +434,7 @@ soqpskTop #(size, ROT_BITS) soqpskTop
          else begin
             phErrShft <= dataBits;
          end
-      //end   
+      end   
    end
 
    
@@ -448,7 +464,7 @@ always @(posedge clk) begin
             end
         `DAC_TRELLIS_INDEX: begin
             dac0Data <= {1'b0,index,12'b0};
-            dac0Sync <= trellEna;
+            dac0Sync <= sym2xEnDly;
             end
         default: begin
             dac0Data <= {phErrShft,10'b0};
@@ -471,7 +487,7 @@ always @(posedge clk) begin
             end
         `DAC_TRELLIS_INDEX: begin
             dac1Data <= {1'b0,index,12'b0};
-            dac1Sync <= trellEna;
+            dac1Sync <= sym2xEnDly;
             end
         default: begin
             dac1Data <= {phErrShft,10'b0};
@@ -494,7 +510,7 @@ always @(posedge clk) begin
             end
         `DAC_TRELLIS_INDEX: begin
             dac2Data <= {1'b0,index,12'b0};
-            dac2Sync <= trellEna;
+            dac2Sync <= sym2xEnDly;
             end
         default: begin
             dac2Data <= {phErrShft,10'b0};

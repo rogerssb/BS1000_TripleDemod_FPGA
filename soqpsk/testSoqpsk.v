@@ -109,13 +109,13 @@ reg simBit;
 	
 always @(posedge clk)begin
    // #1;
-   if(cnt == 17) cnt <= 0;
-   //if(cnt == 8) cnt <= 0;
+   //if(cnt == 17) cnt <= 0;
+   if(cnt == 8) cnt <= 0;
    //else if(cntEna) cnt <= cnt +1 + randData;
    else if(cntEna) cnt <= cnt +1;	  
    case(cnt)
-     0,8: begin 
-     //0,4: begin
+     //0,8: begin 
+     0,4: begin
         symEn <= 1;
         sym2xEn <= 1;
         simBit <= readMemResult[bitIndex];
@@ -127,8 +127,8 @@ always @(posedge clk)begin
 	   bitIndex <= bitIndex +1; 
 	end
      end
-     4,13: begin	
-     //2,6: begin
+     //4,13: begin	
+     2,6: begin
         symEn <= 0;
         sym2xEn <= 1;
 	//simBit <= readMemResult[index];
@@ -150,9 +150,8 @@ end
   
   
 //`define ONEZERO
-//`define ALLZEROES
-`define ALLONES
-//`define RANDOM
+//`define ALLONES
+`define RANDOM
 //`define RANDOM_SIM_NO_NOISE
 //`define RANDOM_SIM_NOISE
 
@@ -168,44 +167,31 @@ initial begin
   bitError = 0;
   din = 0;
   
-`ifdef ONEZERO 
-      $readmemh("P:/semco/matlab sim results/One Zero/mfinputs.hex", readMem);
-      //$readmemh("P:/semco/MultiModeDemod_107-001/pcmFmFilterRotator/One Zero/mfinputs.hex", readMem);
-//    file1 = $fopen("../One Zero/filterOutput.dat");
-//    file2 = $fopen("../One Zero/rotatorOutput.dat");
+`ifdef ONEZERO
+      $readmemh("P:/semco/matlab_sim_results/soqpsk/One Zero/mfinputs.hex", readMem);
 `endif
       
 `ifdef ALLONES
       $readmemh("P:/semco/matlab_sim_results/soqpsk/All Ones/mfinputs.hex", readMem);
-//    file1 = $fopen("../All Zeroes/filterOutput.dat");
-//    file2 = $fopen("../All Zeroes/rotatorOutput.dat");
 `endif
-      
-`ifdef ALLZEROES
-      $readmemh("P:/semco/MultiModeDemod_107-001/pcmFmFilterRotator/All Ones/mfinputs.hex", readMem);
-//    file1 = $fopen("../All Ones/filterOutput.dat");
-//    file2 = $fopen("../All Ones/rotatorOutput.dat");
-`endif
-      
+            
 `ifdef RANDOM
-      $readmemh("P:/semco/MultiModeDemod_107-001/pcmFmFilterRotator/Random/mfinputs.hex", readMem);
-//    file1 = $fopen("../Random/filterOutput.dat");
-//    file2 = $fopen("../Random/rotatorOutput.dat");
+      $readmemh("P:/semco/matlab_sim_results/soqpsk/Random/mfinputs.hex", readMem);
 `endif
 
-`ifdef RANDOM_SIM_NO_NOISE
-      $readmemh("c:/projects/semco/hdl/data/noisy_data.txt", readMemResult);
-      $readmemh("c:/projects/semco/hdl/data/clean_samples.hex", readMem);
-`endif
+//`ifdef RANDOM_SIM_NO_NOISE
+//      $readmemh("c:/projects/semco/hdl/data/noisy_data.txt", readMemResult);
+//      $readmemh("c:/projects/semco/hdl/data/clean_samples.hex", readMem);
+//`endif
 
-`ifdef RANDOM_SIM_NOISE
-      $readmemh("c:/projects/semco/hdl/data/noisy_data.txt", readMemResult);
-      $readmemh("c:/projects/semco/hdl/data/noisy_samples.hex", readMem);
-`endif
+//`ifdef RANDOM_SIM_NOISE
+//      $readmemh("c:/projects/semco/hdl/data/noisy_data.txt", readMemResult);
+//      $readmemh("c:/projects/semco/hdl/data/noisy_samples.hex", readMem);
+//`endif
 
 
 `ifndef IQ_MAG
-#500 uut.soqpskTop.simReset = 0; // release the accumulation reset when valid data out of the rotators
+#335 uut.soqpskTop.simReset = 0; // release the accumulation reset when valid data out of the rotators
 `endif
    
 

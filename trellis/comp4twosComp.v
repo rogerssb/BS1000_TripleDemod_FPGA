@@ -1,6 +1,6 @@
 `timescale 1ns/1ps
 
-module comp4twosComp (clk,reset,a,b,c,d,index,maxVal);
+module comp4twosComp (clk,a,b,c,d,index,maxVal);
    parameter             size = 8;
    parameter             indexOffset=0;
    `ifdef SIMULATE
@@ -9,7 +9,7 @@ module comp4twosComp (clk,reset,a,b,c,d,index,maxVal);
    `endif
 
 
-   input                 clk,reset;
+   input                 clk;
    input [(size-1)+4:0]  a, b, c, d;
    output [4:0]          index;
    output [(size-1)+4:0] maxVal;
