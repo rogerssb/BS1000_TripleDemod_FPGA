@@ -237,6 +237,49 @@ rotMult m10
   .imOut1(out1Pt10Imag)
   );
 
+`define USE_SYMMETRY
+`ifdef USE_SYMMETRY
+assign out0Pt11Real = -out0Pt1Real;
+assign out0Pt11Imag = -out0Pt1Imag;
+assign out1Pt11Real = -out1Pt1Real;
+assign out1Pt11Imag = -out1Pt1Imag;
+assign out0Pt12Real = -out0Pt2Real;
+assign out0Pt12Imag = -out0Pt2Imag;
+assign out1Pt12Real = -out1Pt2Real;
+assign out1Pt12Imag = -out1Pt2Imag;
+assign out0Pt13Real = -out0Pt3Real;
+assign out0Pt13Imag = -out0Pt3Imag;
+assign out1Pt13Real = -out1Pt3Real;
+assign out1Pt13Imag = -out1Pt3Imag;
+assign out0Pt14Real = -out0Pt4Real;
+assign out0Pt14Imag = -out0Pt4Imag;
+assign out1Pt14Real = -out1Pt4Real;
+assign out1Pt14Imag = -out1Pt4Imag;
+assign out0Pt15Real = -out0Pt5Real;
+assign out0Pt15Imag = -out0Pt5Imag;
+assign out1Pt15Real = -out1Pt5Real;
+assign out1Pt15Imag = -out1Pt5Imag;
+assign out0Pt16Real = -out0Pt6Real;
+assign out0Pt16Imag = -out0Pt6Imag;
+assign out1Pt16Real = -out1Pt6Real;
+assign out1Pt16Imag = -out1Pt6Imag;
+assign out0Pt17Real = -out0Pt7Real;
+assign out0Pt17Imag = -out0Pt7Imag;
+assign out1Pt17Real = -out1Pt7Real;
+assign out1Pt17Imag = -out1Pt7Imag;
+assign out0Pt18Real = -out0Pt8Real;
+assign out0Pt18Imag = -out0Pt8Imag;
+assign out1Pt18Real = -out1Pt8Real;
+assign out1Pt18Imag = -out1Pt8Imag;
+assign out0Pt19Real = -out0Pt9Real;
+assign out0Pt19Imag = -out0Pt9Imag;
+assign out1Pt19Real = -out1Pt9Real;
+assign out1Pt19Imag = -out1Pt9Imag;
+assign out0Pt20Real = -out0Pt10Real;
+assign out0Pt20Imag = -out0Pt10Imag;
+assign out1Pt20Real = -out1Pt10Real;
+assign out1Pt20Imag = -out1Pt10Imag;
+`else
 rotMult m11
   (
   .clk(clk),
@@ -376,5 +419,6 @@ rotMult m20
   .reOut1(out1Pt20Real),
   .imOut1(out1Pt20Imag)
   );
+`endif
 
 endmodule

@@ -94,7 +94,7 @@ real deviationHz;
 real deviationNorm;
 integer deviationInt;
 initial begin 
-  deviationHz = 2*0.325 * bitrateBps;
+  deviationHz = 2*0.300 * bitrateBps;
   deviationNorm = deviationHz * `SAMPLE_PERIOD * `TWO_POW_32;
   deviationInt = deviationNorm*interpolationGain;
 end
@@ -703,7 +703,7 @@ initial begin
     write32(createAddress(`TRELLIS_SPACE,`LF_CONTROL),9);    // Forces the lag acc and the error term to be zero
     write32(createAddress(`TRELLIS_SPACE,`LF_LEAD_LAG),32'h0016_0008);   
     write32(createAddress(`TRELLIS_SPACE,`LF_LIMIT),32'h0010_0000);   
-    write32(createAddress(`TRELLIS_SPACE,`LF_LOOPDATA),32'h0333_3333);
+    write32(createAddress(`TRELLIS_SPACE,`LF_LOOPDATA),32'h0666_6666);
 
                     
     // Init the downcoverter register set
@@ -780,8 +780,8 @@ initial begin
     #(2*C) ;
     interpReset = 0;
 
-    // Enable the sample rate loop
-    write32(createAddress(`BITSYNCSPACE,`LF_CONTROL),0);  
+    // Enable the sample rate loop without 2 sample summer
+    write32(createAddress(`BITSYNCSPACE,`LF_CONTROL),32'h0000_0000);  
 
     // Wait 2 bit periods
     #(10*bitrateSamplesInt*C) ;

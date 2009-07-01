@@ -4,10 +4,11 @@ DebugEnable=
 [Settings]
 Version=Silvaco4.10.0.R
 LintOptionsFile=
+OpenFileDir=C:\modem\fskRadio
 [Analyzer]
-C0Width=123
+C0Width=162
 C1Width=58
-C2Width=37
+C2Width=95
 GotoSource=N
 MinScale=
 MaxScale=
@@ -18,7 +19,7 @@ MaxScale=
 CommandLine=+define+SIMULATE
 DiskSize=5000M
 [View]
-1=Last 184204.096ns 216177.488ns 1098.742ns 218484.846ns 226780.243ns
+1=Last 0.000ns 683350.101ns 22785.848ns 276848.053ns 319001.872ns
 [Group0]
 Name=New Group2
 [Group3]
@@ -29,7 +30,6 @@ Name="Micro"
 3="test.demod : wr3" default
 4="test.demod : din[31:0]" default
 5="test.demod : addr[11:0]" default
-OpenGroup=
 [Group5]
 Name="Carrier"
 0="test.demod.carrierLoop.lagGain : sweepOffsetMag[31:0]" default
@@ -44,7 +44,6 @@ Name="Carrier"
 9="test.demod.carrierLoop : offsetError[7:0]" default
 10="test.demod.bitsync : offsetErrorSum[8:0]" default
 11="test.demod : freq[7:0]" default
-OpenGroup=
 [PliFiles]
 0=.\gaussPLI\gaussPLI.dll
 [IncDirs]
@@ -66,7 +65,6 @@ Name="DAC"
 12="test.demod : symClk" default
 13="test.demod : resampSync" default
 14="test.demod : ddcSync" default
-OpenGroup=
 [Plusargs]
 0=
 [Group4]
@@ -104,7 +102,6 @@ Name="Bitsync"
 30="test.demod.resampler : iOutReal" default Real AnalogDisplay AType=Step Scale=Auto
 31="test.demod.resampler : inIReal" default Real AnalogDisplay AType=Step Scale=Fixed MinScaleDbl=-1 MaxScaleDbl=1
 32="test : cicDecimationInt" default Decimal AnalogDisplay AType=PWL Scale=Auto
-OpenGroup=
 [Group2]
 Name="Tx"
 0="test : txSampleCount" default Decimal AnalogDisplay AType=Step Scale=Auto
@@ -121,7 +118,6 @@ Name="Tx"
 11="test.fmMod : modClk" default
 12="test.fmMod : reset" default
 13="test.fmMod : clk" default
-OpenGroup=
 [Group1]
 Name="Rx"
 0="test.demod.resampler : reset" default
@@ -145,7 +141,6 @@ Name="Rx"
 18="test.demod.ddc : iMixReal" default Real AnalogDisplay AType=Step Scale=Auto
 19="test : iSignalReal" default Real AnalogDisplay AType=Step Scale=Auto
 20="test : iChReal" default Real AnalogDisplay AType=Step Scale=Auto
-OpenGroup=
 [Files]
 0=testPcmfm.v
 1=demod.v
@@ -264,3 +259,4 @@ OpenGroup=Yes
 5=Carrier : 5 : 1 : 0
 6=DAC : 6 : 1 : 0
 7=Trellis : 7 : 1 : 0
+[Bookmarks]
