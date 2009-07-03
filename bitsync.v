@@ -6,6 +6,7 @@
 module bitsync(
     sampleClk, reset, 
     symTimes2Sync,
+    auResampSync,
     demodMode,
     bitsyncMode,
     wr0,wr1,wr2,wr3,
@@ -33,7 +34,8 @@ module bitsync(
 input           sampleClk;
 input           reset;
 input           symTimes2Sync;
-input   [2:0]   demodMode;
+input           auResampSync;
+input   [3:0]   demodMode;
 input   [1:0]   bitsyncMode;
 input           wr0,wr1,wr2,wr3;
 input   [11:0]  addr;
@@ -555,6 +557,137 @@ always @(posedge sampleClk) begin
 real sampleFreqReal;
 always @(sampleFreq) sampleFreqReal = ((sampleFreq > 2147483647.0) ? sampleFreq-4294967296.0 : sampleFreq)/2147483648.0;
 `endif
+
+
+//*****************************************************************************
+//                  Asymmetric, Unbalanced QPSK Support
+//*****************************************************************************
+/*
+**  This creates a second bitsync that is completely independent of the primary
+**  bitsync given above. This allows the data and clock from a QPSK signal which 
+**  has two bitstreams which are unrelated in terms of bitrate to be recovered
+**  and output on the two clock/data outputs.
+**
+******************************************************************************/
+
+//****************************** Two Sample Sum *******************************
+reg     [17:0]  auDelay;
+reg     [17:0]  auMF;
+wire    [18:0]  auSum = {auDelay[17],auDelay} + {au[17],au};
+always @(posedge sampleClk) begin
+    if (symTimes2Sync) begin
+        auDelay <= au;
+        auMF <= auSum[18:1];
+        end
+    end
+
+//******************************* Phase Error Detector ************************
+
+// State machine:
+//      Based on two clocks per symbol
+
+reg auPhaseState;
+
+// Fifo of baseband inputs
+reg [17:0]auSR[2:0];
+
+// Timing error variables
+wire auEarlySign = auSR[2][17];
+wire auLateSign = auSR[0][17];
+wire [17:0]auEarlyOnTime = auSR[2];
+wire [17:0]auLateOnTime = auSR[0];
+wire [17:0]auOffTime = auSR[1];
+wire [17:0]negAuOffTime = (~auOffTime + 1);
+
+reg  [17:0]auOffTimeLevel;
+wire auTimingErrorEn = (auPhaseState == ONTIME);
+
+reg  [17:0]auOnTimeLevel;
+wire [17:0]auOffTimeMag = auOffTimeLevel[17] ? (~auOffTimeLevel + 1) : auOffTimeLevel;
+wire [17:0]auOnTimeMag = auOnTimeLevel[17] ? (~auOnTimeLevel + 1) : auOnTimeLevel;
+reg  [21:0]avgAuOffTimeMag;
+reg  [21:0]avgAuOnTimeMag;
+reg  [3:0]auAvgCount;
+reg  auTransition;
+always @(posedge sampleClk) begin
+    if (reset) begin
+        auPhaseState <= ONTIME;
+        slipState <= AVERAGE;
+        slipped <= 0;
+        auOffTimeLevel <= 0;
+        auAvgCount <= 15;
+        avgAuOffTimeMag <= 0;
+        avgAuOnTimeMag <= 0;
+        end
+    else if (symTimes2Sync) begin
+        // Shift register of baseband sample values
+        auSR[0] <= qMF;
+        auSR[1] <= auSR[0];
+        auSR[2] <= auSR[1];
+        case (auPhaseState)
+            ONTIME: begin
+                auPhaseState = OFFTIME;
+                end
+            OFFTIME: begin
+                auPhaseState <= ONTIME;
+                // Is there a data transition on I?
+                if (auEarlySign != auLateSign) begin
+                    // Yes. 
+                    auTransition <= 1;
+                    // High to low transition?
+                    if (auEarlySign) begin
+                        auOffTimeLevel <= auOffTime;
+                        auOnTimeLevel <= auLateOnTime;
+                        end
+                    // Or low to high?
+                    else begin
+                        auOffTimeLevel <= negAuOffTime;
+                        auOnTimeLevel <= auEarlyOnTime;
+                        end
+                    end
+                else begin
+                    auTransition <= 0;
+                    auOffTimeLevel <= 18'h00;
+                    end
+                end
+            endcase
+        end
+    end
+
+`ifdef SIMULATE
+wire    [17:0]  auTimingErr = auOffTimeLevel;
+real auTimingErrorReal;
+always @(auTimingErr) auTimingErrorReal = ((auTimingErr > 131071.0) ? auTimingErr - 262144.0 : auTimingErr)/131072.0;
+`endif
+
+
+        // Averaging state machine
+        case (auAvgState)
+            AVERAGE: begin
+                if (auTimingErrorEn && auTransition) begin
+                    avgAuOffTimeMag <= avgAuOffTimeMag + {4'b0,auOffTimeMag};
+                    avgAuOnTimeMag <= avgAuOnTimeMag + {4'b0,auOnTimeMag};
+                    if (auAvgCount == 0) begin
+                        auAvgState <= TEST;
+                        end
+                    else begin
+                        auAvgCount <= auAvgCount - 1;
+                        end
+                    end
+                end
+            TEST: begin
+                auAvgCount <= 15;
+                avgAuOffTimeMag <= 0;
+                avgAuOnTimeMag <= 0;
+                if (avgAuOnTimeMag < {1'b0,avgAuOffTimeMag[21:1]}) begin
+                    slipState <= SLIP0;
+                    stateMachineSlip <= 1;
+                    end
+                else begin
+                    slipState <= AVERAGE;
+                    end
+                end
+
 
 endmodule
 

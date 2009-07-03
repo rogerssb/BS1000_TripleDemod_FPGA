@@ -33,7 +33,7 @@ input           wr0,wr1,wr2,wr3;
 input   [11:0]  addr;
 input   [31:0]  din;
 output  [31:0]  dout;
-input   [2:0]   demodMode;
+input   [3:0]   demodMode;
 input   [7:0]   phase;
 input   [7:0]   freq;
 input           highFreqOffset;

@@ -135,10 +135,10 @@ wire cicSyncOut;
 wire [31:0]cicDout;
 `ifdef SIMULATE
 reg cicReset;
-cicDecimator cic( 
+dualDecimator cic( 
     .clk(clk), .reset(cicReset), .sync(hb0SyncOut),
 `else
-cicDecimator cic( 
+dualDecimator cic( 
     .clk(clk), .reset(reset), .sync(hb0SyncOut),
 `endif
     .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),

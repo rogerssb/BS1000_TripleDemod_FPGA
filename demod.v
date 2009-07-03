@@ -73,7 +73,7 @@ always @(addr) begin
         endcase
     end
 wire    [15:0]  fskDeviation;
-wire    [2:0]   demodMode;
+wire    [3:0]   demodMode;
 wire    [1:0]   bitsyncMode;
 wire    [15:0]  falseLockAlpha;
 wire    [15:0]  falseLockThreshold;
@@ -277,19 +277,22 @@ always @(posedge clk) begin
 wire    [17:0]  iResamp,qResamp;
 wire    [31:0]  resamplerFreqOffset;
 wire    [31:0]  resampDout;
-resampler resampler(
+dualResampler resampler(
     .clk(clk), .reset(reset), .sync(ddcSync),
     .wr0(wr0) , .wr1(wr1), .wr2(wr2), .wr3(wr3),
     .addr(addr),
     .din(din),
     .dout(resampDout),
     .resamplerFreqOffset(resamplerFreqOffset),
+    .auResamplerFreqOffset(auResamplerFreqOffset),
     .offsetEn(1'b1),
+    .auOffsetEn(1'b1),
     .iIn(iDdc),
     .qIn(qDdc),
     .iOut(iResamp),
     .qOut(qResamp),
-    .syncOut(resampSync)
+    .syncOut(resampSync),
+    .auSyncOut(auResampSync)
     );
 
 /******************************************************************************

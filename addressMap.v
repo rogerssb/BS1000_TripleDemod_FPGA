@@ -21,14 +21,17 @@
 
 // Define the global radio memory map
 `define DEMOD_CONTROL   12'bxxxx_xxx0_00xx
-`define MODE_AM             3'b000
-`define MODE_PM             3'b001
-`define MODE_FM             3'b010
-`define MODE_2FSK           3'b011
-`define MODE_BPSK           3'b100
-`define MODE_QPSK           3'b101
-`define MODE_OQPSK          3'b110
-`define MODE_PCMTRELLIS     3'b111
+`define MODE_AM             4'b0000
+`define MODE_PM             4'b0001
+`define MODE_FM             4'b0010
+`define MODE_2FSK           4'b0011
+`define MODE_BPSK           4'b0100
+`define MODE_QPSK           4'b0101
+`define MODE_OQPSK          4'b0110
+`define MODE_AUQPSK         4'b0111
+`define MODE_PCMTRELLIS     4'b1000
+`define MODE_SOQPSK         4'b1001
+`define MODE_MULTIH         4'b1010
 `define MODE_SINGLE_RAIL    2'b00
 `define MODE_DUAL_RAIL      2'b01
 `define MODE_IND_RAIL       2'b10
@@ -85,7 +88,11 @@
 `define ALF_INTEGRATOR  12'bxxxx_xxx1_01xx
 
 // Define the DDC memory map
-`define RESAMPLER_RATE  12'bxxxx_xxxx_00xx
+`define RESAMPLER_RATE          12'bxxxx_xxx0_00xx
+`define RESAMPLER_AURATE        12'bxxxx_xxx0_01xx
+`define RESAMPLER_AUDECIMATION  12'bxxxx_xxx0_10xx
+`define RESAMPLER_AUSHIFT       12'bxxxx_xxx0_11xx
+`define RESAMPLER_AUENABLE      12'bxxxx_xxx1_xxxx
 
 // Define the interpolator memory map
 `define INTERP_CONTROL  12'bxxxx_xxxx_00xx

@@ -34,8 +34,8 @@ input           demodLock;
 
 input   [15:0]  fskDeviation;
 
-output  [2:0]   demodMode;
-reg     [2:0]   demodMode;
+output  [3:0]   demodMode;
+reg     [3:0]   demodMode;
 
 output  [1:0]   bitsyncMode;
 reg     [1:0]   bitsyncMode;
@@ -62,7 +62,7 @@ always @(negedge wr0) begin
     if (cs) begin
         casex (addr)
             `DEMOD_CONTROL: begin
-                demodMode <= dataIn[2:0];
+                demodMode <= dataIn[3:0];
                 end
             `DEMOD_DACSELECT: begin
                 dac0Select <= dataIn[3:0];
@@ -132,7 +132,7 @@ always @(addr or cs or
          ) begin
     if (cs) begin
         casex (addr)
-            `DEMOD_CONTROL:     dataOut <= {14'b0,bitsyncMode,13'b0,demodMode};
+            `DEMOD_CONTROL:     dataOut <= {14'b0,bitsyncMode,12'b0,demodMode};
             `DEMOD_DACSELECT:   dataOut <= {12'h0,dac2Select,4'h0,dac1Select,4'h0,dac0Select};
             `DEMOD_FALSELOCK:   dataOut <= {falseLockThreshold,falseLockAlpha};
             `DEMOD_STATUS:      dataOut <= {29'h0,highFreqOffset,bitsyncLock,demodLock};
