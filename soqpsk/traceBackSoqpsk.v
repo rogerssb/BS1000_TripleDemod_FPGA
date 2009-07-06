@@ -18,7 +18,6 @@ module traceBackSoqpsk
    symEnEven,
    sel, index,
    decision,
-   symEnDly
    );
    
    parameter          size = 8;
@@ -27,7 +26,6 @@ module traceBackSoqpsk
    input [3:0]        sel;   // 4 induvidual decision.
    input [1:0]        index; // pointer to the state which has the maximum metric
    output             decision;
-   output             symEnDly;
    wire               decision;
 
    wire               dec = sel[index];
@@ -59,34 +57,20 @@ module traceBackSoqpsk
            nState <= cState;
         end
      end
-
-   
    
    reg [3:0] sel_1dly;
-   reg [3:0] sel_2dly;
-   reg [3:0] sel_3dly;
    always @(posedge clk)
      begin
         if (reset) begin
            sel_1dly <= 0;
-           sel_2dly <= 0;
-           sel_3dly <= 0;
         end
         else begin
            if (symEn) begin  
               sel_1dly <= sel;
-              sel_2dly <= sel_1dly;
-              sel_3dly <= sel_2dly;
            end
         end 
      end
-
 	 
    assign decision = sel_1dly[nState];
 	 
-  // +++++++ symEn final output +++++++++
-  //assign symEnDly = symEnSr2[2];
-
-
-
 endmodule

@@ -32,9 +32,8 @@ trellisSoqpsk uut
     .dac1Data(), 
     .dac2Sync(), 
     .dac2Data(), 
-    .decision(decision), 
-    .sym2xEn_out(sym2xEn_out), 
-    .oneOrZeroPredecessor(testDec1)
+    .decision(decision),
+	.sym2xEnDly(sym2xEnDly)
  );
  
 wire testDec1;
@@ -157,10 +156,10 @@ end
 
 integer file1,file2;
 initial begin
-  #100 reset = !reset;
 `ifndef IQ_MAG
   uut.soqpskTop.simReset = 1;
 `endif
+  #100 reset = !reset;
   #100 reset = !reset;
   index = 0;
   bitIndex = 0;
@@ -191,7 +190,7 @@ initial begin
 
 
 `ifndef IQ_MAG
-#335 uut.soqpskTop.simReset = 0; // release the accumulation reset when valid data out of the rotators
+#305 uut.soqpskTop.simReset = 0; // release the accumulation reset when valid data out of the rotators
 `endif
    
 
@@ -203,7 +202,7 @@ initial begin
   
   integer bitError;
   always @(posedge clk) begin
-	  if (sym2xEn_out) begin	
+	  if (sym2xEnDly) begin	
 		  bertSr <= {bertSr[14:0], simBit};
 		  acsDecision <= testDec1;
 		  //if (acsDecision != bertSr[6]) begin		  // without carrier loop

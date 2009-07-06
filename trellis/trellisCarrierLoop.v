@@ -361,7 +361,8 @@ always @(iInput) iInReal = (iInput[17] ? iInput - 272144.0 : iInput)/131072.0;
 real qInReal;
 always @(qInput) qInReal = (qInput[17] ? qInput - 272144.0 : qInput)/131072.0;
 
-real freqReal = (freq[7] ? freq - 256.0 : freq)/128.0;
+real freqReal;
+always @(freq) freqReal = (freq[7] ? freq - 256.0 : freq)/128.0;
 
 `endif
 
