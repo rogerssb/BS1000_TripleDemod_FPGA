@@ -265,9 +265,15 @@ always @(posedge sampleClk) begin
         end
     else if (symTimes2Sync) begin
         // Shift register of baseband sample values
-        if ((demodMode == `MODE_2FSK) || (demodMode == `MODE_PCMTRELLIS))begin
+        if ( (demodMode == `MODE_2FSK) 
+          || (demodMode == `MODE_PCMTRELLIS)
+          || (demodMode == `MODE_FM)) begin
             bbSRI[0] <= freq;
             bbSRQ[0] <= freq;
+            end
+        else if (demodMode == `MODE_PM) begin
+            bbSRI[0] <= {phase,10'b0};
+            bbSRQ[0] <= {phase,10'b0};
             end
         else if (bitsyncMode == `MODE_DUAL_RAIL) begin
             bbSRI[0] <= iMF;
