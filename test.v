@@ -263,7 +263,6 @@ demod demod(
     .addr(a),
     .din(d),
     .dout(dout),
-    .iDataClk(demodClk),
     .iBit(demodBit),
     .iRx(iRx), .qRx(qRx),
     .dac0Sync(dac0Sync),
@@ -272,8 +271,8 @@ demod demod(
     .dac1Data(dac1Out),
     .dac2Sync(dac2Sync),
     .dac2Data(dac2Out),
-    .symSync(symEn),
-    .symTimes2Sync(symX2En)
+    .iSymEn(symEn),
+    .iSym2xEn(symX2En)
     );
 
 reg dac0CS,dac1CS,dac2CS;
@@ -375,29 +374,35 @@ decoder decoder
 reg [15:0]testSR;
 reg [4:0]testZeroCount;
 reg testData;
-always @(negedge demodClk or reset) begin
+//always @(negedge demodClk or reset) begin
+always @(posedge clk or reset) begin
     if (reset) begin
         testZeroCount <= 5'b0;
         testSR <= MASK17;
         end
-    else if (testSR[0] | (testZeroCount == 5'b11111))
-        begin
-        testZeroCount <= 5'h0;
-        testSR <= {1'b0, testSR[15:1]} ^ PN17;
+    else if (symEn) begin
+        if (testSR[0] | (testZeroCount == 5'b11111))
+            begin
+            testZeroCount <= 5'h0;
+            testSR <= {1'b0, testSR[15:1]} ^ PN17;
+            end
+        else
+            begin
+            testZeroCount <= testZeroCount + 5'h1;
+            testSR <= testSR >> 1;
+            end
+        testData <= testSR[0];
         end
-    else
-        begin
-        testZeroCount <= testZeroCount + 5'h1;
-        testSR <= testSR >> 1;
-        end
-    testData <= testSR[0];
     end
 
 reg [127:0]delaySR;
 reg txDelay;
-always @(negedge demodClk) begin
-    txDelay <= delaySR[19];
-    delaySR <= {delaySR[126:0],testData};
+//always @(negedge demodClk) begin
+always @(posedge clk) begin
+    if (symEn) begin
+        txDelay <= delaySR[19];
+        delaySR <= {delaySR[126:0],testData};
+        end
     end
 
 reg testBits;
@@ -406,11 +411,13 @@ integer bitErrors;
 initial bitErrors = 0;
 integer testBitCount;
 initial testBitCount = 0;
-always @(posedge demodClk) begin
-    if (testBits) begin
-        testBitCount <= testBitCount + 1;
-        if (demodBit != txDelay) begin
-            bitErrors <= bitErrors + 1;
+always @(posedge clk) begin
+    if (symEn) begin
+        if (testBits) begin
+            testBitCount <= testBitCount + 1;
+            if (demodBit != txDelay) begin
+                bitErrors <= bitErrors + 1;
+                end
             end
         end
     end
@@ -648,7 +655,7 @@ initial begin
     #(4*bitrateSamplesInt*C) ;
 
     // Enable the AFC loop and invert the error
-    write32(createAddress(`CARRIERSPACE,`LF_CONTROL),2);  
+    //write32(createAddress(`CARRIERSPACE,`LF_CONTROL),2);  
 
     `ifdef ENABLE_AGC
     // Enable the AGC loop

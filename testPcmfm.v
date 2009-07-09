@@ -336,7 +336,6 @@ demod demod(
     .addr(a),
     .din(d),
     .dout(dout),
-    .iDataClk(demodClk),
     .iBit(demodBit),
     .iRx(iRx), .qRx(qRx),
     .dac0Sync(dac0Sync),
@@ -489,7 +488,6 @@ trellis trellis
 reg [15:0]testSR;
 reg [4:0]testZeroCount;
 reg testData;
-//always @(negedge demodClk or reset) begin
 always @(posedge clk or reset) begin
     if (reset) begin
         testZeroCount <= 5'b0;
@@ -529,7 +527,6 @@ integer bitErrors;
 initial bitErrors = 0;
 integer testBitCount;
 initial testBitCount = 0;
-//always @(posedge demodClk) begin
 always @(posedge clk) begin
     if (symEn_tbtDly) begin
         if (testBits) begin

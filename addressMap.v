@@ -6,7 +6,8 @@
 `define FMMODSPACE      12'b0001_xxxx_xxxx
 `define DDCSPACE        12'b0010_xxxx_xxxx
 `define CICDECSPACE     12'b0011_xxxx_xxxx
-`define BITSYNCSPACE    12'b0100_xxxx_xxxx
+`define BITSYNCSPACE    12'b0100_0xxx_xxxx
+`define BITSYNCAUSPACE  12'b0100_1xxx_xxxx
 `define DECODERSPACE    12'b0101_xxxx_xxxx
 `define PLLSPACE        12'b0110_xxxx_xxxx
 `define CHAGCSPACE      12'b0111_xxxx_xxxx
@@ -92,7 +93,6 @@
 `define RESAMPLER_AURATE        12'bxxxx_xxx0_01xx
 `define RESAMPLER_AUDECIMATION  12'bxxxx_xxx0_10xx
 `define RESAMPLER_AUSHIFT       12'bxxxx_xxx0_11xx
-`define RESAMPLER_AUENABLE      12'bxxxx_xxx1_xxxx
 
 // Define the interpolator memory map
 `define INTERP_CONTROL  12'bxxxx_xxxx_00xx

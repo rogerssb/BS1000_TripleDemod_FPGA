@@ -80,7 +80,8 @@ always @(posedge clk) begin
                 phaseError <= {bpskPhase[6:0],1'b0};
                 end
             `MODE_QPSK,
-            `MODE_OQPSK: begin
+            `MODE_OQPSK,
+            `MODE_AUQPSK: begin
                 phaseError <= {qpskPhase[5:0],2'b0};
                 end
             default: begin

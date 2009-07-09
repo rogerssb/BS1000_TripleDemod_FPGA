@@ -48,6 +48,7 @@ ddcRegs micro(
     .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
     .bypassCic(bypassCic),
     .bypassHb(bypassHb),
+    .swapIQ(swapIQ),
     .ddcCenterFreq(ddcCenterFreq)
     );
 
@@ -248,13 +249,25 @@ reg     [17:0]  qOut;
 reg             syncOut;
 always @(posedge clk) begin
     if (bypassHb) begin
-        iOut <= iAgc;
-        qOut <= qAgc;
+        if (swapIQ) begin
+            iOut <= qAgc;
+            qOut <= iAgc;
+            end
+        else begin
+            iOut <= iAgc;
+            qOut <= qAgc;
+            end
         syncOut <= agcSync;
         end
     else begin
-        iOut <= iHb;
-        qOut <= qHb;
+        if (swapIQ) begin
+            iOut <= qHb;
+            qOut <= iHb;
+            end
+        else begin
+            iOut <= iHb;
+            qOut <= qHb;
+            end
         syncOut <= hbSyncOut;
         end
     end

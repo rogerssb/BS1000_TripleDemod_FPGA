@@ -8,9 +8,9 @@ Version=Silvaco4.10.0.R
 DisableCache=
 SimFile=
 [Analyzer]
-C0Width=165
+C0Width=58
 C1Width=58
-C2Width=92
+C2Width=199
 GotoSource=N
 [Spice]
 [LibraryFiles]
@@ -21,7 +21,7 @@ RecirculateTime=
 UseRecirculateTime=
 DiskSize=5000M
 [View]
-1=Last 0.000ns 278499.999ns 6943.333ns 272525.820ns 1294852.502ns
+1=Last 0.000ns 302431.599ns 7033.293ns 216582.337ns 196843.490ns
 [Group0]
 Name=New Group2
 [Group3]
@@ -32,6 +32,7 @@ Name="Micro"
 3="test.demod : wr3" default
 4="test.demod : din[31:0]" default
 5="test.demod : addr[11:0]" default
+OpenGroup=
 [Group2]
 Name="Tx"
 0="test.fmMod : interpReal" default Real AnalogDisplay AType=Step Scale=Auto
@@ -45,6 +46,7 @@ Name="Tx"
 8="test.fmMod : modClk" default
 9="test.fmMod : reset" default
 10="test.fmMod : clk" default
+OpenGroup=
 [PliFiles]
 0=.\gaussPLI\gaussPLI.dll
 [Group1]
@@ -69,6 +71,7 @@ Name="Rx"
 17="test.demod.ddc : qMixReal" default Real AnalogDisplay AType=Step Scale=Auto
 18="test.demod.ddc : iMixReal" default Real AnalogDisplay AType=Step Scale=Auto
 19="test : iSignalReal" default Real AnalogDisplay AType=Step Scale=Auto
+OpenGroup=
 [IncDirs]
 0=.
 [Group6]
@@ -88,6 +91,7 @@ Name="DAC"
 12="test.demod : symClk" default
 13="test.demod : resampSync" default
 14="test.demod : ddcSync" default
+OpenGroup=
 [Group5]
 Name="Carrier"
 0="test.demod.carrierLoop.lagGain : sweepOffsetMag[31:0]" default Unknown
@@ -108,6 +112,7 @@ Name="Carrier"
 15="test.demod.bitsync : offsetErrorSum[18:0]" default
 16="test.demod.bitsync : \bbSRI[2] [17:0]" default
 17="test.demod.bitsync : \bbSRI[0] [17:0]" default
+OpenGroup=
 [Files]
 0=test.v
 1=demod.v
@@ -203,4 +208,3 @@ OpenGroup=Yes
 4=Bitsync : 4 : 1 : 0
 5=Carrier : 5 : 1 : 0
 6=DAC : 6 : 1 : 0
-[Bookmarks]

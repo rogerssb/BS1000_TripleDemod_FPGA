@@ -11,8 +11,7 @@ module resampRegs(
     resampleRate,
     auResampleRate,
     auShift,
-    auDecimation,
-    auEnable
+    auDecimation
     );
 
 input   [11:0]addr;
@@ -33,9 +32,6 @@ reg     [14:0] auDecimation;
 output  [5:0] auShift;
 reg     [5:0] auShift;
 
-output  auEnable;
-reg     auEnable;
-
 always @(negedge wr0) begin
     if (cs) begin
         casex (addr)
@@ -43,7 +39,6 @@ always @(negedge wr0) begin
             `RESAMPLER_AURATE: auResampleRate[7:0] <= dataIn[7:0];
             `RESAMPLER_AUDECIMATION: auDecimation[7:0] <= dataIn[7:0];
             `RESAMPLER_AUSHIFT: auShift <= dataIn[5:0];
-            `RESAMPLER_AUENABLE: auEnable <= dataIn[0];
             default: ;
             endcase
         end
@@ -83,8 +78,7 @@ always @(negedge wr3) begin
 reg [31:0]dataOut;
 always @(addr or cs or
          resampleRate or auResampleRate or
-         auDecimation or auShift or
-         auEnable
+         auDecimation or auShift
          ) begin
     if (cs) begin
         casex (addr)
@@ -92,7 +86,6 @@ always @(addr or cs or
             `RESAMPLER_AURATE:          dataOut <= auResampleRate;
             `RESAMPLER_AUDECIMATION:    dataOut <= {17'b0,auDecimation};
             `RESAMPLER_AUSHIFT:         dataOut <= {26'b0,auShift};
-            `RESAMPLER_AUENABLE:        dataOut <= {31'b0,auEnable};
             default:                    dataOut <= 32'hx;
             endcase
         end

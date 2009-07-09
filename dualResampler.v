@@ -7,8 +7,9 @@ module dualResampler(
     addr,
     din,
     dout,
+    demodMode,
     resamplerFreqOffset,
-    auresamplerFreqOffset,
+    auResamplerFreqOffset,
     offsetEn,
     auOffsetEn,
     iIn,
@@ -16,7 +17,7 @@ module dualResampler(
     iOut,
     qOut,
     syncOut,
-    auSyncOut,
+    auSyncOut
     );
 
 input           clk;
@@ -26,6 +27,7 @@ input           wr0,wr1,wr2,wr3;
 input   [11:0]  addr;
 input   [31:0]  din;
 output  [31:0]  dout;
+input   [3:0]   demodMode;
 input   [31:0]  resamplerFreqOffset;
 input   [31:0]  auResamplerFreqOffset;
 input           offsetEn;
@@ -56,7 +58,7 @@ resampRegs resampRegs(
     .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
     .resampleRate(resampleRate),
     .auResampleRate(auResampleRate),
-    .auShiftGain(auShift),
+    .auShift(auShift),
     .auDecimation(auDecimation)
      );
 
@@ -78,14 +80,15 @@ cicDecimator auCic(
     .decimation(auDecimation),
     .in(qIn),
     .out(cicOut),
-    .syncOut(auSyncOut)
+    .syncOut(auCicSyncOut)
     );
 
+wire            auEnable = (demodMode == `MODE_AUQPSK);
 wire    [31:0]  rqResampleRate =    auEnable ? auResampleRate : resampleRate;
-wire    [31:0]  rqFreqOffset =      auEnable ? auResamplerFreqOffset : resampleRate;
+wire    [31:0]  rqFreqOffset =      auEnable ? auResamplerFreqOffset : resamplerFreqOffset;
 wire            rqOffsetEn =        auEnable ? auOffsetEn : offsetEn;
 wire    [17:0]  rqIn =              auEnable ? cicOut[47:30] : qIn;
-wire            rqSync =            auEnable ? auSyncOut : sync;
+wire            rqSync =            auEnable ? auCicSyncOut : sync;
 resampler resamplerQ( 
     .clk(clk), .reset(reset), .sync(rqSync),
     .resampleRate(rqResampleRate),

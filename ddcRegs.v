@@ -8,7 +8,7 @@ module ddcRegs(addr,
                cs,
                wr0, wr1, wr2, wr3,
                ddcCenterFreq,
-               bypassCic, bypassHb
+               bypassCic, bypassHb, swapIQ
                );
 
 input   [11:0]addr;
@@ -26,6 +26,9 @@ reg             bypassHb;
 output          bypassCic;
 reg             bypassCic;
 
+output          swapIQ;
+reg             swapIQ;
+
 always @(negedge wr0) begin
     if (cs) begin
         casex (addr)
@@ -35,6 +38,7 @@ always @(negedge wr0) begin
             `DDC_CONTROL: begin
                 bypassCic = dataIn[0];
                 bypassHb = dataIn[1];
+                swapIQ = dataIn[2];
                 end
             default: ;
             endcase
@@ -71,12 +75,12 @@ always @(negedge wr3) begin
 reg [31:0]dataOut;
 always @(addr or cs or
          ddcCenterFreq or
-         bypassCic or bypassHb
+         bypassCic or bypassHb or swapIQ
          ) begin
     if (cs) begin
         casex (addr)
             `DDC_CENTER_FREQ:   dataOut <= ddcCenterFreq;
-            `DDC_CONTROL:       dataOut <= {30'hx,bypassHb,bypassCic};
+            `DDC_CONTROL:       dataOut <= {29'hx,swapIQ,bypassHb,bypassCic};
             default:            dataOut <= 32'hx;
             endcase
         end

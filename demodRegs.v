@@ -10,6 +10,7 @@ module demodRegs(
     wr0, wr1, wr2, wr3,
     highFreqOffset,
     bitsyncLock,
+    auBitsyncLock,
     demodLock,
     fskDeviation,
     demodMode,
@@ -30,6 +31,7 @@ input   wr0,wr1,wr2,wr3;
 
 input           highFreqOffset;
 input           bitsyncLock;
+input           auBitsyncLock;
 input           demodLock;
 
 input   [15:0]  fskDeviation;
@@ -57,6 +59,7 @@ reg     [15:0]  falseLockThreshold;
 
 output  [4:0]   amTC;
 reg     [4:0]   amTC;
+
 
 always @(negedge wr0) begin
     if (cs) begin
@@ -127,7 +130,7 @@ always @(addr or cs or
          bitsyncMode or
          dac0Select or dac1Select or dac2Select or
          falseLockAlpha or falseLockThreshold or 
-         highFreqOffset or bitsyncLock or demodLock or
+         auBitsyncLock or highFreqOffset or bitsyncLock or demodLock or
          amTC
          ) begin
     if (cs) begin
@@ -135,7 +138,8 @@ always @(addr or cs or
             `DEMOD_CONTROL:     dataOut <= {14'b0,bitsyncMode,12'b0,demodMode};
             `DEMOD_DACSELECT:   dataOut <= {12'h0,dac2Select,4'h0,dac1Select,4'h0,dac0Select};
             `DEMOD_FALSELOCK:   dataOut <= {falseLockThreshold,falseLockAlpha};
-            `DEMOD_STATUS:      dataOut <= {29'h0,highFreqOffset,bitsyncLock,demodLock};
+            `DEMOD_STATUS:      dataOut <= {28'h0,
+                                            auBitsyncLock,highFreqOffset,bitsyncLock,demodLock};
             `DEMOD_AMTC:        dataOut <= {27'b0,amTC};
             `DEMOD_FSKDEV:      dataOut <= {16'b0,fskDeviation};
             default:            dataOut <= 32'h0;

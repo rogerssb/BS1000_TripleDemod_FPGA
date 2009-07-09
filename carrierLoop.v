@@ -138,7 +138,8 @@ always @(demodMode or offsetError or offsetErrorEn or
             enableCarrierLock <= 1;
             end
         `MODE_QPSK,
-        `MODE_OQPSK: begin
+        `MODE_OQPSK,
+        `MODE_AUQPSK: begin
             sync <= ddcSync;
             modeError <= {qpskPhase[5:0],2'b10};
             //sync <= symSync;
@@ -233,33 +234,28 @@ reg     [15:0]  lockCounter;
 wire    [16:0]  lockPlus = {1'b0,lockCounter} + 17'h00001;
 wire    [16:0]  lockMinus = {1'b0,lockCounter} + 17'h1ffff;
 always @(posedge clk) begin
-    if (reset) begin
+    if (reset || !enableCarrierLock) begin
         lockCounter <= 0;
-        carrierLock <= 0;
+        carrierLock <= 1;
         end
     else if (loopFilterEn) begin
-        if (enableCarrierLock) begin
-            if (absModeError > syncThreshold) begin
-                if (lockMinus[16]) begin
-                    carrierLock <= 0;
-                    lockCounter <= lockCount;
-                    end
-                else begin
-                    lockCounter <= lockMinus[15:0];
-                    end
+        if (absModeError > syncThreshold) begin
+            if (lockMinus[16]) begin
+                carrierLock <= 0;
+                lockCounter <= lockCount;
                 end
             else begin
-                if (lockPlus[16]) begin
-                    carrierLock <= 1;
-                    lockCounter <= lockCount;
-                    end
-                else begin
-                    lockCounter <= lockPlus[15:0];
-                    end
+                lockCounter <= lockMinus[15:0];
                 end
             end
         else begin
-            carrierLock <= 1;
+            if (lockPlus[16]) begin
+                carrierLock <= 1;
+                lockCounter <= lockCount;
+                end
+            else begin
+                lockCounter <= lockPlus[15:0];
+                end
             end
         end
     end

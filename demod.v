@@ -8,15 +8,20 @@ module demod(
     din,
     dout,
     iRx, qRx, 
-    iDataClk,
+    iSym2xEn,
+    iSymEn,
+    iSymData,
     iBit,
-    qDataClk,
+    qSym2xEn,
+    qSymEn,
+    qSymClk,
+    qSymData,
     qBit,
     bitsyncLock,
     carrierLock,
-    symTimes2Sync,
-    symSync,
     trellisSymSync,
+    iTrellis,
+    qTrellis,
     dac0Select,dac1Select,dac2Select,
     dac0Sync,
     dac0Data,
@@ -24,10 +29,7 @@ module demod(
     dac1Data,
     dac2Sync,
     dac2Data,
-    iSymData,
-    qSymData,
-    iTrellis,
-    qTrellis
+    demodMode
     );
 
 input           clk;
@@ -39,15 +41,19 @@ input   [31:0]  din;
 output  [31:0]  dout;
 input   [17:0]  iRx;
 input   [17:0]  qRx;
-output          iDataClk;
+output          iSym2xEn;
+output          iSymEn;
 output          iBit;
-output          qDataClk;
+output [17:0]   iSymData;
+output          qSym2xEn;
+output          qSymEn;
+output          qSymClk;
 output          qBit;
+output [17:0]   qSymData;
 output          bitsyncLock;
 output          carrierLock;
-output          symTimes2Sync;
-output          symSync;
 output          trellisSymSync;
+output  [17:0]  iTrellis,qTrellis;
 output  [3:0]   dac0Select,dac1Select,dac2Select;
 output          dac0Sync;
 output  [17:0]  dac0Data;
@@ -55,9 +61,7 @@ output          dac1Sync;
 output  [17:0]  dac1Data;
 output          dac2Sync;
 output  [17:0]  dac2Data;
-
-output [17:0]   iSymData,qSymData;
-output  [17:0]  iTrellis,qTrellis;
+output  [3:0]   demodMode;
 
 
 
@@ -73,7 +77,6 @@ always @(addr) begin
         endcase
     end
 wire    [15:0]  fskDeviation;
-wire    [3:0]   demodMode;
 wire    [1:0]   bitsyncMode;
 wire    [15:0]  falseLockAlpha;
 wire    [15:0]  falseLockThreshold;
@@ -88,6 +91,7 @@ demodRegs demodRegs(
     .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
     .highFreqOffset(highFreqOffset),
     .bitsyncLock(bitsyncLock),
+    .auBitsyncLock(auBitsyncLock),
     .demodLock(carrierLock),
     .fskDeviation(fskDeviation),
     .demodMode(demodMode),
@@ -257,25 +261,27 @@ carrierLoop carrierLoop(
     );
 
 /******************************************************************************
+                                  I/Q Swap
+******************************************************************************/
+wire            auIQSwap;
+reg     [17:0]  iSwap,qSwap;
+always @(posedge clk) begin
+    if (auIQSwap) begin
+        iSwap <= qDdc;
+        qSwap <= iDdc;
+        end
+    else begin
+        iSwap <= iDdc;
+        qSwap <= qDdc;
+        end
+    end
+
+/******************************************************************************
                                   Resampler
 ******************************************************************************/
-/*
-reg     [17:0]  iResampIn,qResampIn;
-always @(posedge clk) begin
-    case (demodMode)
-        `MODE_2FSK: begin
-            iResampIn <= {freq,10'b0};
-            qResampIn <= 0;
-            end
-        default: begin
-            iResampIn <= iDdc;
-            qResampIn <= qDdc;
-            end
-        endcase
-    end
-*/
 wire    [17:0]  iResamp,qResamp;
 wire    [31:0]  resamplerFreqOffset;
+wire    [31:0]  auResamplerFreqOffset;
 wire    [31:0]  resampDout;
 dualResampler resampler(
     .clk(clk), .reset(reset), .sync(ddcSync),
@@ -283,12 +289,13 @@ dualResampler resampler(
     .addr(addr),
     .din(din),
     .dout(resampDout),
+    .demodMode(demodMode),
     .resamplerFreqOffset(resamplerFreqOffset),
     .auResamplerFreqOffset(auResamplerFreqOffset),
     .offsetEn(1'b1),
     .auOffsetEn(1'b1),
-    .iIn(iDdc),
-    .qIn(qDdc),
+    .iIn(iSwap),
+    .qIn(qSwap),
     .iOut(iResamp),
     .qOut(qResamp),
     .syncOut(resampSync),
@@ -318,10 +325,12 @@ always @(posedge clk) begin
 wire    [17:0]  iSymData;
 wire    [17:0]  qSymData;
 wire    [15:0]  bsLockCounter;
+wire    [15:0]  auLockCounter;
 wire    [31:0]  bitsyncDout;
 bitsync bitsync(
     .sampleClk(clk), .reset(reset), 
     .symTimes2Sync(resampSync),
+    .auResampSync(auResampSync),
     .demodMode(demodMode),
     .bitsyncMode(bitsyncMode),
     .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
@@ -329,36 +338,32 @@ bitsync bitsync(
     .din(din),
     .dout(bitsyncDout),
     .i(iSym), .q(qSym),
+    .au(qResamp),
     .offsetError(offsetError),
     .offsetErrorEn(offsetErrorEn),
     .fskDeviation(fskDeviation),
-    .symClk(symClk),
+    .iSym2xEn(iSym2xEn),
+    .iSymEn(iSymEn),
     .symDataI(iSymData),
+    .bitDataI(iBit),
+    .qSym2xEn(qSym2xEn),
+    .qSymEn(qSymEn),
+    .qSymClk(qSymClk),
     .symDataQ(qSymData),
+    .bitDataQ(qBit),
     .symPhase(symPhase),
     .symPhaseSync(symPhaseSync),
-    .bitClk(demodClk),
-    .bitDataI(iBit),
-    .bitDataQ(qBit),
     .sampleFreq(resamplerFreqOffset),
+    .auSampleFreq(auResamplerFreqOffset),
     .bitsyncLock(bitsyncLock),
     .lockCounter(bsLockCounter),
+    .auBitsyncLock(auBitsyncLock),
+    .auLockCounter(auLockCounter),
+    .auIQSwap(auIQSwap),
     .iMF(iTrellis),.qMF(qTrellis)
     );
 
-assign symTimes2Sync = resampSync;
-assign symSync = symClk & resampSync;
-assign trellisSymSync = symClk & resampSync;
-
-/******************************************************************************
-                               Data Output Mux
-******************************************************************************/
-reg iDataClk;
-reg qDataClk;
-always @(demodMode or demodClk) begin
-    iDataClk <= demodClk;
-    qDataClk <= demodClk;
-    end
+assign trellisSymSync = iSymEn & resampSync;
 
 /******************************************************************************
                                DAC Output Mux
@@ -366,9 +371,9 @@ always @(demodMode or demodClk) begin
 
 //`define SKIP_DATAMUX
 `ifdef SKIP_DATAMUX
-assign dac0Data = iDdc;
+assign dac0Data = iSwap;
 assign dac0Sync = ddcSync;
-assign dac1Data = qDdc;
+assign dac1Data = qSwap;
 assign dac1Sync = ddcSync;
 `else
 reg             dac0Sync;
@@ -380,17 +385,16 @@ reg     [17:0]  dac2Data;
 always @(posedge clk) begin
     case (dac0Select) 
         `DAC_I: begin
-            dac0Data <= iDdc;
+            dac0Data <= iSwap;
             dac0Sync <= ddcSync;
             end
         `DAC_Q: begin
-            dac0Data <= qDdc;
+            dac0Data <= qSwap;
             dac0Sync <= ddcSync;
             end
         `DAC_ISYM: begin
             dac0Data <= iSymData;
-            //dac0Sync <= resampSync;
-            dac0Sync <= !symClk & resampSync;
+            dac0Sync <= resampSync;
             end
         `DAC_QSYM: begin
             dac0Data <= qSymData;
@@ -414,7 +418,7 @@ always @(posedge clk) begin
             dac0Sync <= carrierOffsetEn;
             end
         `DAC_BSLOCK: begin
-            dac0Data <= {bsLockCounter,2'b0};
+            dac0Data <= {auLockCounter,2'b0};
             dac0Sync <= 1'b1;
             end
         `DAC_FREQLOCK: begin
@@ -430,18 +434,18 @@ always @(posedge clk) begin
             dac0Sync <= ddcSync;
             end
         default: begin
-            dac0Data <= iDdc;
+            dac0Data <= iSwap;
             dac0Sync <= ddcSync;
             end
         endcase
 
     case (dac1Select) 
         `DAC_I: begin
-            dac1Data <= iDdc;
+            dac1Data <= iSwap;
             dac1Sync <= ddcSync;
             end
         `DAC_Q: begin
-            dac1Data <= qDdc;
+            dac1Data <= qSwap;
             dac1Sync <= ddcSync;
             end
         `DAC_ISYM: begin
@@ -450,8 +454,7 @@ always @(posedge clk) begin
             end
         `DAC_QSYM: begin
             dac1Data <= qSymData;
-            //dac1Sync <= resampSync;
-            dac1Sync <= !symClk & resampSync;
+            dac1Sync <= resampSync;
             end
         `DAC_FREQ: begin
             dac1Data <= {freq,10'h0};
@@ -487,18 +490,18 @@ always @(posedge clk) begin
             dac1Sync <= ddcSync;
             end
         default: begin
-            dac1Data <= iDdc;
+            dac1Data <= iSwap;
             dac1Sync <= ddcSync;
             end
         endcase
 
     case (dac2Select) 
         `DAC_I: begin
-            dac2Data <= iDdc;
+            dac2Data <= iSwap;
             dac2Sync <= ddcSync;
             end
         `DAC_Q: begin
-            dac2Data <= qDdc;
+            dac2Data <= qSwap;
             dac2Sync <= ddcSync;
             end
         `DAC_ISYM: begin
@@ -543,7 +546,7 @@ always @(posedge clk) begin
             dac2Sync <= ddcSync;
             end
         default: begin
-            dac2Data <= iDdc;
+            dac2Data <= iSwap;
             dac2Sync <= ddcSync;
             end
         endcase
@@ -568,6 +571,7 @@ always @(addr or
         `CICDECSPACE,
         `DDCSPACE:          dout <= ddcDout;
         `RESAMPSPACE:       dout <= resampDout;
+        `BITSYNCAUSPACE,
         `BITSYNCSPACE:      dout <= bitsyncDout;
         `CARRIERSPACE:      dout <= freqDout;
         default:            dout <= 32'bx;

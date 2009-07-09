@@ -14,20 +14,28 @@ module bitsync(
     din,
     dout,
     i,q,
+    au,
     offsetError,
     offsetErrorEn,
     fskDeviation,
-    symClk,
+    iSym2xEn,
+    iSymEn,
     symDataI,
+    bitDataI,
+    qSym2xEn,
+    qSymEn,
+    qSymClk,
     symDataQ,
+    bitDataQ,
     symPhase,
     symPhaseSync,
-    bitClk,
-    bitDataI,
-    bitDataQ,
     sampleFreq,
+    auSampleFreq,
     bitsyncLock,
     lockCounter,
+    auBitsyncLock,
+    auLockCounter,
+    auIQSwap,
     iMF,qMF
     );
 
@@ -42,20 +50,28 @@ input   [11:0]  addr;
 input   [31:0]  din;
 output  [31:0]  dout;
 input   [17:0]  i,q;
+input   [17:0]  au;
 output  [17:0]  offsetError;
 output          offsetErrorEn;
 output  [15:0]  fskDeviation;
-output          symClk;
+output          iSym2xEn;
+output          iSymEn;
 output  [17:0]  symDataI;
+output          bitDataI;
+output          qSym2xEn;
+output          qSymEn;
+output          qSymClk;
 output  [17:0]  symDataQ;
+output          bitDataQ;
 output  [7:0]   symPhase;
 output          symPhaseSync;
-output          bitClk;
-output          bitDataI;
-output          bitDataQ;
 output  [31:0]  sampleFreq;
+output  [31:0]  auSampleFreq;
 output          bitsyncLock;
 output  [15:0]  lockCounter;
+output          auBitsyncLock;
+output  [15:0]  auLockCounter;
+output          auIQSwap;
 output  [17:0]  iMF,qMF;
 
 `define USE_COMP
@@ -404,52 +420,6 @@ real avgOffsetReal = (avgOffsetError[24] ? avgOffsetError[24:7] - 262144.0 : avg
 real avgDevReal = (avgDeviation[24] ? avgDeviation[24:7] - 262144.0 : avgDeviation[24:7])/131072.0;
 `endif
 
-//************************ Recovered Clock and Data ***************************
-
-reg     [17:0]  symDataI;
-reg     [17:0]  symDataQ;
-reg     [7:0]   symPhase;
-reg             enSR[9:0];
-assign          symPhaseSync = enSR[9];
-reg             bitDataI;
-reg             bitDataQ;
-always @(posedge sampleClk) begin
-    if (symTimes2Sync) begin
-        // Delay the clock enable to match the delay through the fmDemod
-        enSR[0] <= timingErrorEn;
-        enSR[1] <= enSR[0];
-        enSR[2] <= enSR[1];
-        enSR[3] <= enSR[2];
-        enSR[4] <= enSR[3];
-        enSR[5] <= enSR[4];
-        enSR[6] <= enSR[5];
-        enSR[7] <= enSR[6];
-        enSR[8] <= enSR[7];
-        enSR[9] <= enSR[8];
-        // Capture the output samples
-        symDataI <= bbSRI[1];
-        symDataQ <= bbSRQ[1];
-        if (symPhaseSync) begin
-            symPhase <= phase;
-            end
-        if (timingErrorEn) begin
-            bitDataI <= bbSRI[1][17];
-            bitDataQ <= bbSRQ[1][17];
-            end
-        end
-    end
-
-
-assign symClk = timingErrorEn;
-
-assign bitClk  = symClk;
-
-`ifdef SIMULATE
-real symDataIReal;
-real symPhaseReal;
-always @(symDataI) symDataIReal = (symDataI[17] ? symDataI - 262144.0 : symDataI)/131072.0;
-always @(symPhase) symPhaseReal = (symPhase[7] ? symPhase - 256.0 : symPhase)/128.0;
-`endif
 //******************************** Loop Filter ********************************
 
 reg bitsyncSpace;
@@ -462,23 +432,25 @@ always @(addr) begin
 wire    [15:0]  lockCount;
 wire    [7:0]   syncThreshold;
 wire            loopFilterEn = (symTimes2Sync & timingErrorEn);
-loopFilter sampleLoop(.clk(sampleClk),
-                      .clkEn(loopFilterEn),
-                      .reset(reset),
-                      .cs(bitsyncSpace),
-                      .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
-                      .addr(addr),
-                      .din(din),
-                      .dout(dout),
-                      .error(timingError[18:11]),
-                      .loopFreq(sampleFreq),
-                      .ctrl2(useCompFilter),
-                      .ctrl4(useSummer),
-                      .satPos(satPos),
-                      .satNeg(satNeg),
-                      .lockCount(lockCount),
-                      .syncThreshold(syncThreshold)
-                      );
+wire    [31:0]  bsDout;
+loopFilter sampleLoop(
+    .clk(sampleClk),
+    .clkEn(loopFilterEn),
+    .reset(reset),
+    .cs(bitsyncSpace),
+    .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
+    .addr(addr),
+    .din(din),
+    .dout(bsDout),
+    .error(timingError[18:11]),
+    .loopFreq(sampleFreq),
+    .ctrl2(useCompFilter),
+    .ctrl4(useSummer),
+    .satPos(satPos),
+    .satNeg(satNeg),
+    .lockCount(lockCount),
+    .syncThreshold(syncThreshold)
+    );
 
 //************************** Lock Detector ************************************
 
@@ -497,18 +469,18 @@ always @(posedge sampleClk) begin
         if (slipState == TEST) begin
             //if (avgError[21:14] > syncThreshold) begin
             if (avgError[21:14] > {1'b0,avgSlipError[21:15]}) begin
-                if (lockMinus[16]) begin
+                if (lockCounter == (16'hffff-lockCount)) begin
                     bitsyncLock <= 0;
-                    lockCounter <= lockCount;
+                    lockCounter <= 16'h0;
                     end
                 else begin
                     lockCounter <= lockMinus[15:0];
                     end
                 end
             else begin
-                if (lockPlus[16]) begin
+                if (lockCounter == lockCount) begin
                     bitsyncLock <= 1;
-                    lockCounter <= lockCount;
+                    lockCounter <= 16'h0;
                     end
                 else begin
                     lockCounter <= lockPlus[15:0];
@@ -570,12 +542,14 @@ always @(sampleFreq) sampleFreqReal = ((sampleFreq > 2147483647.0) ? sampleFreq-
 **
 ******************************************************************************/
 
+wire auEnable = (demodMode == `MODE_AUQPSK);
+
 //****************************** Two Sample Sum *******************************
 reg     [17:0]  auDelay;
 reg     [17:0]  auMF;
 wire    [18:0]  auSum = {auDelay[17],auDelay} + {au[17],au};
 always @(posedge sampleClk) begin
-    if (symTimes2Sync) begin
+    if (auResampSync) begin
         auDelay <= au;
         auMF <= auSum[18:1];
         end
@@ -603,30 +577,20 @@ reg  [17:0]auOffTimeLevel;
 wire auTimingErrorEn = (auPhaseState == ONTIME);
 
 reg  [17:0]auOnTimeLevel;
-wire [17:0]auOffTimeMag = auOffTimeLevel[17] ? (~auOffTimeLevel + 1) : auOffTimeLevel;
-wire [17:0]auOnTimeMag = auOnTimeLevel[17] ? (~auOnTimeLevel + 1) : auOnTimeLevel;
-reg  [21:0]avgAuOffTimeMag;
-reg  [21:0]avgAuOnTimeMag;
-reg  [3:0]auAvgCount;
 reg  auTransition;
 always @(posedge sampleClk) begin
-    if (reset) begin
+    if (!auEnable) begin
         auPhaseState <= ONTIME;
-        slipState <= AVERAGE;
-        slipped <= 0;
         auOffTimeLevel <= 0;
-        auAvgCount <= 15;
-        avgAuOffTimeMag <= 0;
-        avgAuOnTimeMag <= 0;
         end
-    else if (symTimes2Sync) begin
+    else if (auResampSync) begin
         // Shift register of baseband sample values
-        auSR[0] <= qMF;
+        auSR[0] <= auMF;
         auSR[1] <= auSR[0];
         auSR[2] <= auSR[1];
         case (auPhaseState)
             ONTIME: begin
-                auPhaseState = OFFTIME;
+                auPhaseState <= OFFTIME;
                 end
             OFFTIME: begin
                 auPhaseState <= ONTIME;
@@ -660,7 +624,63 @@ real auTimingErrorReal;
 always @(auTimingErr) auTimingErrorReal = ((auTimingErr > 131071.0) ? auTimingErr - 262144.0 : auTimingErr)/131072.0;
 `endif
 
+//******************************** Loop Filter ********************************
 
+reg auBitsyncSpace;
+always @(addr) begin
+    casex(addr)
+        `BITSYNCAUSPACE:    auBitsyncSpace <= 1;
+        default:            auBitsyncSpace <= 0;
+        endcase
+    end
+
+wire    [31:0]  auDout;
+wire    [15:0]  auLockCount;
+wire    [7:0]   auSwapCount;
+wire            auLoopFilterEn = (auResampSync & auTimingErrorEn);
+loopFilter auSampleLoop(
+    .clk(sampleClk),
+    .clkEn(auLoopFilterEn),
+    .reset(reset),
+    .cs(auBitsyncSpace),
+    .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
+    .addr(addr),
+    .din(din),
+    .dout(auDout),
+    .error(auOffTimeLevel[17:10]),
+    .loopFreq(auSampleFreq),
+    .lockCount(auLockCount),
+    .syncThreshold(auSwapCount)
+    );
+
+
+//************************** Lock Detector ************************************
+
+reg     [1:0]   auAvgState;
+
+reg     [7:0]   auSwapCounter;
+reg             auIQSwap;
+reg     [15:0]  auLockCounter;
+wire    [16:0]  auLockPlus = {1'b0,auLockCounter} + 17'h00001;
+wire    [16:0]  auLockMinus = {1'b0,auLockCounter} + 17'h1ffff;
+reg             auBitsyncLock;
+wire    [17:0]  auOffTimeMag = auOffTimeLevel[17] ? (~auOffTimeLevel + 1) : auOffTimeLevel;
+wire    [17:0]  auOnTimeMag = auOnTimeLevel[17] ? (~auOnTimeLevel + 1) : auOnTimeLevel;
+reg     [21:0]  avgAuOffTimeMag;
+reg     [21:0]  avgAuOnTimeMag;
+reg     [3:0]   auAvgCount;
+always @(posedge sampleClk) begin
+    if (!auEnable) begin
+        auAvgState <= AVERAGE;
+        auLockCounter <= 0;
+        auBitsyncLock <= 0;
+        auAvgCount <= 15;
+        avgAuOffTimeMag <= 0;
+        avgAuOnTimeMag <= 0;
+        auIQSwap <= 0;
+        auSwapCounter <= auSwapCount;
+        end
+    else if (auResampSync) begin
         // Averaging state machine
         case (auAvgState)
             AVERAGE: begin
@@ -679,15 +699,135 @@ always @(auTimingErr) auTimingErrorReal = ((auTimingErr > 131071.0) ? auTimingEr
                 auAvgCount <= 15;
                 avgAuOffTimeMag <= 0;
                 avgAuOnTimeMag <= 0;
-                if (avgAuOnTimeMag < {1'b0,avgAuOffTimeMag[21:1]}) begin
-                    slipState <= SLIP0;
-                    stateMachineSlip <= 1;
+                auAvgState <= AVERAGE;
+                end
+            endcase
+        if (auAvgState == TEST) begin
+            if (avgAuOffTimeMag[21:14] > {1'b0,avgAuOnTimeMag[21:15]}) begin
+                if (auLockCounter == (16'hffff - auLockCount)) begin
+                    auBitsyncLock <= 0;
+                    auLockCounter <= 16'h0;
+                    if (bitsyncLock) begin
+                        if (auSwapCounter > 0) begin
+                            auSwapCounter <= auSwapCounter - 1;
+                            end
+                        else begin
+                            auSwapCounter <= auSwapCount;
+                            auIQSwap <= ~auIQSwap;
+                            end
+                        end
                     end
                 else begin
-                    slipState <= AVERAGE;
+                    auLockCounter <= auLockMinus[15:0];
                     end
                 end
+            else begin
+                if (auLockCounter == auLockCount) begin
+                    auBitsyncLock <= 1;
+                    auLockCounter <= 16'h0;
+                    auSwapCounter <= auSwapCount;
+                    end
+                else begin
+                    auLockCounter <= auLockPlus[15:0];
+                    end
+                end
+            end
+        end
+    end
 
+//************************** I/Q Swap State Machine ***************************
+always @(posedge sampleClk) begin
+    if (!auEnable ) begin
+        end
+    else if (auResampSync) begin
+        
+        end
+    end
+
+
+/******************************************************************************
+                                uP dout mux
+******************************************************************************/
+reg [31:0]dout;
+always @(addr or 
+         bsDout or
+         auDout) begin
+    casex (addr)
+        `BITSYNCSPACE:      dout <= bsDout;
+        `BITSYNCAUSPACE:    dout <= auDout;
+        default:            dout <= 32'bx;
+        endcase
+    end
+
+
+
+
+/******************************************************************************
+                           Recovered Clock and Data 
+******************************************************************************/
+
+
+reg     [17:0]  symDataI;
+reg     [17:0]  symDataQ;
+reg     [7:0]   symPhase;
+reg             enSR[9:0];
+assign          symPhaseSync = enSR[9];
+reg             bitDataI;
+reg             bitDataQ;
+always @(posedge sampleClk) begin
+    if (symTimes2Sync) begin
+        // Delay the clock enable to match the delay through the fmDemod
+        enSR[0] <= timingErrorEn;
+        enSR[1] <= enSR[0];
+        enSR[2] <= enSR[1];
+        enSR[3] <= enSR[2];
+        enSR[4] <= enSR[3];
+        enSR[5] <= enSR[4];
+        enSR[6] <= enSR[5];
+        enSR[7] <= enSR[6];
+        enSR[8] <= enSR[7];
+        enSR[9] <= enSR[8];
+        if (symPhaseSync) begin
+            symPhase <= phase;
+            end
+        // Capture the I output sample
+        symDataI <= bbSRI[1];
+        if (timingErrorEn) begin
+            bitDataI <= bbSRI[1][17];
+            end
+        end
+    if (auEnable) begin
+        if (auResampSync) begin
+            symDataQ <= auSR[1];
+            if (auTimingErrorEn) begin
+                bitDataQ <= auSR[1][17];
+                end
+            end
+        end
+    else begin
+        if (symTimes2Sync) begin
+            symDataQ <= bbSRQ[1];
+            if (timingErrorEn) begin
+                bitDataQ <= bbSRQ[1][17];
+                end
+            end
+        end
+    end
+
+// Clock Enables
+assign iSym2xEn = symTimes2Sync;
+assign iSymEn = symTimes2Sync & timingErrorEn;
+assign qSym2xEn = auEnable ? auResampSync : symTimes2Sync;
+assign qSymEn = auEnable ? (auResampSync & auTimingErrorEn) : (symTimes2Sync & timingErrorEn);
+assign qSymClk = auTimingErrorEn;
+
+
+`ifdef SIMULATE
+real symDataIReal;
+real symPhaseReal;
+always @(symDataI) symDataIReal = (symDataI[17] ? symDataI - 262144.0 : symDataI)/131072.0;
+always @(symPhase) symPhaseReal = (symPhase[7] ? symPhase - 256.0 : symPhase)/128.0;
+`endif
 
 endmodule
 

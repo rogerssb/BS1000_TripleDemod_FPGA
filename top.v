@@ -29,10 +29,10 @@ module top
   dac0_d,dac1_d,dac2_d,
   dac0_clk,dac1_clk,dac2_clk,
   adc_d,
-  cout_i, //iDataClk,
-  dout_i, //iBit
-  cout_q, //qDataClk,
-  dout_q, //qBit
+  cout_i, 
+  dout_i, 
+  cout_q, 
+  dout_q, 
   bsync_nLock,demod_nLock,
   symb_pll_ref,symb_pll_vco,symb_pll_fbk
   );
@@ -53,13 +53,13 @@ output dac2_nCs,dac2_sclk;
 output [13:0]dac0_d,dac1_d,dac2_d;
 output dac0_clk,dac1_clk,dac2_clk;
 input [13:0]adc_d;
-output cout_i,dout_i; //iDataClk,iBit;
-output cout_q,dout_q; //qDataClk,qBit;
+output cout_i,dout_i; 
+output cout_q,dout_q; 
 output bsync_nLock,demod_nLock;
 output symb_pll_ref,symb_pll_fbk;
 input symb_pll_vco;
 
-parameter VER_NUMBER = 16'h005d;
+parameter VER_NUMBER = 16'h006c;
 
 wire [11:0]addr = {addr11,addr10,addr9,addr8,addr7,addr6,addr5,addr4,addr3,addr2,addr1,1'b0};
 
@@ -250,32 +250,7 @@ wire    [31:0]  dataIn = {data,data};
 
 wire    [17:0]  dac0Out,dac1Out,dac2Out;
 wire    [31:0]  demodDout;
-
-//`define DDS_ONLY
-`ifdef DDS_ONLY
-
-/******************************************************************************
-                                Downconverter
-******************************************************************************/
-wire    [17:0]  iDdc,qDdc;
-ddc ddc(
-    .clk(ck933), .reset(reset), .syncIn(1'b1),
-    .wr0(wr0) , .wr1(wr1), .wr2(wr2), .wr3(wr3),
-    .addr(addr),
-    .din(dataIn),
-    .dout(demodDout),
-    .ddcFreqOffset(32'h0),
-    .offsetEn(1'b1),
-    .nbAgcGain(21'h0),
-    .syncOut(ddcSync),
-    .iIn({ifInput,4'h0}), .qIn(18'h0),
-    .iOut(dac0Out), .qOut(dac1Out)
-    );
-
-wire dac0Sync = ddcSync;
-wire dac1Sync = ddcSync;
-wire dac2Sync = ddcSync;
-`else
+wire    [3:0]   demodMode;
 
 demod demod(
     .clk(ck933), .reset(reset), .syncIn(1'b1),
@@ -283,6 +258,7 @@ demod demod(
     .addr(addr),
     .din(dataIn),
     .dout(demodDout),
+    .demodMode(demodMode),
     .iRx({ifInput,4'h0}), .qRx(18'h0),
     .dac0Sync(dac0Sync),
     .dac0Data(dac0Out),
@@ -290,16 +266,16 @@ demod demod(
     .dac1Data(dac1Out),
     .dac2Sync(dac2Sync),
     .dac2Data(dac2Out),
-    .iDataClk(iDataClk),
-    .iBit(iBit),
-    .qDataClk(qDataClk),
-    .qBit(qBit),
     .bitsyncLock(bitsyncLock),
     .carrierLock(carrierLock),
-    .symTimes2Sync(symTimes2Sync),
-    .symSync(symSync)
+    .iSym2xEn(iSym2xEn),
+    .iSymEn(iSymEn),
+    .iBit(iBit),
+    .qSym2xEn(qSym2xEn),
+    .qSymEn(qSymEn),
+    .qSymClk(qSymClk),
+    .qBit(qBit)
     );
-`endif
 
 
 //******************************************************************************
@@ -499,8 +475,8 @@ decoder decoder
   .din(data),
   .dout(decoder_dout),
   .clk(ck933),
-  .symb_clk_en(symSync),            // symbol rate clock enable
-  .symb_clk_2x_en(symTimes2Sync),   // 2x symbol rate clock enable
+  .symb_clk_en(iSymEn),            // symbol rate clock enable
+  .symb_clk_2x_en(iSym2xEn),   // 2x symbol rate clock enable
   .symb_i({iBit,2'b0}),             // input, i
   .symb_q({qBit,2'b0}),             // input, q
   .dout_i(decoder_dout_i),          // output, i data
@@ -564,13 +540,14 @@ symb_pll symb_pll
 
 wire cout = symb_pll_out ^ !cout_inv;
 assign cout_i = cout;
-assign cout_q = cout;
+assign cout_q = (demodMode == `MODE_AUQPSK) ? qSymClk : cout;
 
-reg dout_i,dout_q;
+reg dout_i,decQ;
 always @(negedge cout)begin
   dout_i <= decoder_fifo_dout_i;
-  dout_q <= decoder_fifo_dout_q;
+  decQ <= decoder_fifo_dout_q;
   end
+assign dout_q = (demodMode == `MODE_AUQPSK) ? qBit : decQ;
 
 assign bsync_nLock = !bitsyncLock;
 assign demod_nLock = !carrierLock;
@@ -594,6 +571,7 @@ always @(
     `DDCSPACE,
     `CICDECSPACE,
     `BITSYNCSPACE,
+    `BITSYNCAUSPACE,
     `CHAGCSPACE,
     `RESAMPSPACE,
     `CARRIERSPACE,
