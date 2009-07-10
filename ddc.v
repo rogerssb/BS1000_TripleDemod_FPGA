@@ -7,6 +7,7 @@ module ddc( clk, reset, syncIn,
             din,
             dout,
             ddcFreqOffset,
+            leadFreq,
             offsetEn,
             nbAgcGain,
             syncOut,
@@ -21,6 +22,7 @@ input   [11:0]  addr;
 input   [31:0]  din;
 output  [31:0]  dout;
 input   [31:0]  ddcFreqOffset;
+input   [31:0]  leadFreq;
 input           offsetEn;
 input   [20:0]  nbAgcGain;
 output          syncOut;
@@ -48,7 +50,6 @@ ddcRegs micro(
     .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
     .bypassCic(bypassCic),
     .bypassHb(bypassHb),
-    .swapIQ(swapIQ),
     .ddcCenterFreq(ddcCenterFreq)
     );
 
@@ -240,38 +241,76 @@ always @(qHb) qHbReal = ((qHb > 131071.0) ? (qHb - 262144.0) : qHb)/131072.0;
 `endif
 
 `ifdef MUX_ONLY
-assign iOut = bypassHb ? iAgc : iHb;
-assign qOut = bypassHb ? qAgc : qHb;
+assign iBB = bypassHb ? iAgc : iHb;
+assign qBB = bypassHb ? qAgc : qHb;
 assign syncOut = bypassHb ? agcSync : hbSyncOut;
 `else
-reg     [17:0]  iOut;
-reg     [17:0]  qOut;
+reg     [17:0]  iBB;
+reg     [17:0]  qBB;
 reg             syncOut;
 always @(posedge clk) begin
     if (bypassHb) begin
-        if (swapIQ) begin
-            iOut <= qAgc;
-            qOut <= iAgc;
-            end
-        else begin
-            iOut <= iAgc;
-            qOut <= qAgc;
-            end
+        iBB <= iAgc;
+        qBB <= qAgc;
         syncOut <= agcSync;
         end
     else begin
-        if (swapIQ) begin
-            iOut <= qHb;
-            qOut <= iHb;
-            end
-        else begin
-            iOut <= iHb;
-            qOut <= qHb;
-            end
+        iBB <= iHb;
+        qBB <= qHb;
         syncOut <= hbSyncOut;
         end
     end
 `endif
+
+// Lead Complex Mixer
+wire    [17:0]iLeadDds;
+wire    [17:0]qLeadDds;
+dds leadDds ( 
+    .sclr(reset), 
+    .clk(clk), 
+    .ce(1'b1),
+    .we(1'b1), 
+    .data(leadFreq), 
+    .sine(qLeadDds), 
+    .cosine(iLeadDds)
+    );
+`ifdef SIMULATE
+real iLeadDdsReal;
+real qLeadDdsReal;
+always @(iLeadDds) iLeadDdsReal = ((iLeadDds > 131071.0) ? (iLeadDds - 262144.0) : iLeadDds)/131072.0;
+always @(qLeadDds) qLeadDdsReal = ((qLeadDds > 131071.0) ? (qLeadDds - 262144.0) : qLeadDds)/131072.0;
+
+`endif
+
+
+// Complex Multiplier
+wire    [17:0]  iLead,qLead;
+cmpy18 leadMixer( 
+    .clk(clk),
+    .reset(reset),
+    .aReal(iBB),
+    .aImag(qBB),
+    .bReal(iLeadDds),
+    .bImag(qLeadDds),
+    .pReal(iLead),
+    .pImag(qLead)
+    );
+
+reg     [17:0]  iOut,qOut;
+always @(posedge clk) begin
+    if (syncOut) begin
+        iOut <= iLead;
+        qOut <= qLead;
+        end
+    end
+
+`ifdef SIMULATE
+real iOutReal;
+real qOutReal;
+always @(iOut) iOutReal = ((iOut > 131071.0) ? (iOut - 262144.0) : iOut)/131072.0;
+always @(qOut) qOutReal = ((qOut > 131071.0) ? (qOut - 262144.0) : qOut)/131072.0;
+`endif
+
 
 reg [31:0]dout;
 always @(addr or cicDout or ddcDout) begin

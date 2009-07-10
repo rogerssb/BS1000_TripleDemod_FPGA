@@ -9,7 +9,9 @@ module fmDemod(
     phaseError,
     freq,
     freqError,
-    mag);
+    mag,
+    syncOut
+    );
 
 input clk;
 input reset;
@@ -22,6 +24,7 @@ output  [7:0]   phaseError;
 output  [7:0]   freq;
 output  [7:0]   freqError;
 output  [8:0]   mag;
+output          syncOut;
 
 `ifdef SIMULATE
 real iFmReal;
@@ -42,27 +45,21 @@ cordic18x12 cordic( .clk        (clk),
                     .phase_out  (phase)
                   );
 `else
-vm_cordic cordic(.clk(clk),
-                 .ena(sync),
-                 .x(iFm[17:8]),.y(qFm[17:8]),
-                 .m(mag),
-                 .p(phase)
-                 );
-/*
-cordic cordic (.clk(clk),
-               .ena(sync),
-               .Iin(iFm[17:8]), .Qin(qFm[17:8]),
-               .magn(mag),
-               .phase(phase)
-               );
-*/
+vm_cordic_fast cordic(
+    .clk(clk),
+    .ena(sync),
+    .x(iFm[17:8]),.y(qFm[17:8]),
+    .m(mag),
+    .p(phase),
+    .enOut(syncOut)
+    );
 `endif
 
 wire    [7:0]   bpskPhase = phase;
 wire    [7:0]   qpskPhase = phase - 8'h20;
 reg     [7:0]   phaseError;
 always @(posedge clk) begin
-    if (sync) begin
+    if (syncOut) begin
         case (demodMode)
             `MODE_AM: begin
                 phaseError <= 0;
@@ -100,7 +97,7 @@ reg [7:0]prevPhaseError;
 wire [7:0]phaseDiff = phase - prevPhase;
 wire [7:0]phaseErrorDiff = phaseError - prevPhaseError;
 always @(posedge clk) begin
-    if (sync) begin
+    if (syncOut) begin
         freq <= phaseDiff;
         prevPhase <= phase;
         freqError <= phaseErrorDiff;

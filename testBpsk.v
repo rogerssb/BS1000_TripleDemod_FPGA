@@ -153,6 +153,7 @@ wire    [17:0]  iLO,qLO;
 dds carrierDds (
     .sclr(reset), 
     .clk(clk), 
+    .ce(1'b1),
     .we(1'b1), 
     .data(carrierFreq + carrierOffsetFreq), 
     .sine(qLO), 
@@ -241,7 +242,7 @@ demod demod(
     .addr(a),
     .din(d),
     .dout(dout),
-    .iDataClk(demodClk),
+    .iSym2xEn(iSym2xEn),
     .iBit(demodBit),
     .iRx(iRx), .qRx(qRx),
     .dac0Sync(dac0Sync),
@@ -251,6 +252,15 @@ demod demod(
     .dac2Sync(dac2Sync),
     .dac2Data(dac2Out)
     );
+reg demodClk;
+always @(posedge clk) begin
+    if (reset) begin
+        demodClk <= 0;
+        end
+    else if (iSym2xEn) begin
+        demodClk <= ~demodClk;
+        end
+    end
 
 reg dac0CS,dac1CS,dac2CS;
 always @(a) begin

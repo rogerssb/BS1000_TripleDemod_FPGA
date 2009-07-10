@@ -18,6 +18,7 @@ module carrierLoop(
     offsetErrorEn,
     symPhase,
     carrierFreqOffset,
+    carrierLeadFreq,
     carrierFreqEn,
     loopError,
     carrierLock,
@@ -41,6 +42,7 @@ input   [7:0]   offsetError;
 input           offsetErrorEn;
 input   [7:0]   symPhase;
 output  [31:0]  carrierFreqOffset;
+output  [31:0]  carrierLeadFreq;
 output          carrierFreqEn;
 output  [7:0]   loopError;
 output          carrierLock;
@@ -240,18 +242,18 @@ always @(posedge clk) begin
         end
     else if (loopFilterEn) begin
         if (absModeError > syncThreshold) begin
-            if (lockMinus[16]) begin
+            if (lockCounter == (16'hffff - lockCount)) begin
                 carrierLock <= 0;
-                lockCounter <= lockCount;
+                lockCounter <= 0;
                 end
             else begin
                 lockCounter <= lockMinus[15:0];
                 end
             end
         else begin
-            if (lockPlus[16]) begin
+            if (lockCounter == lockCount) begin
                 carrierLock <= 1;
-                lockCounter <= lockCount;
+                lockCounter <= 0;
                 end
             else begin
                 lockCounter <= lockPlus[15:0];
@@ -262,7 +264,9 @@ always @(posedge clk) begin
 
 
 // Final Outputs
-assign carrierFreqOffset = filterSum[39:8];
+//assign carrierFreqOffset = filterSum[39:8];
+assign carrierFreqOffset = lagAccum[39:8];
+assign carrierLeadFreq = leadError[39:8];
 assign carrierFreqEn = loopFilterEn;
 
 `ifdef SIMULATE

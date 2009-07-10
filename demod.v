@@ -110,6 +110,7 @@ demodRegs demodRegs(
 wire    [17:0]  iDdc,qDdc;
 wire    [20:0]  nbAgcGain;
 wire    [31:0]  carrierFreqOffset;
+wire    [31:0]  carrierLeadFreq;
 wire    [31:0]  ddcDout;
 ddc ddc( 
     .clk(clk), .reset(reset), .syncIn(syncIn), 
@@ -118,6 +119,7 @@ ddc ddc(
     .din(din),
     .dout(ddcDout),
     .ddcFreqOffset(carrierFreqOffset),
+    .leadFreq(carrierLeadFreq),
     .offsetEn(carrierOffsetEn),
     .nbAgcGain(nbAgcGain),
     .syncOut(ddcSync),
@@ -156,7 +158,8 @@ fmDemod fmDemod(
     .phaseError(phaseError),
     .freq(freq),
     .freqError(freqError),
-    .mag(mag)
+    .mag(mag),
+    .syncOut(demodSync)
     );
 
 /******************************************************************************
@@ -165,12 +168,12 @@ fmDemod fmDemod(
 reg     [9:0]  magError;
 wire    [39:0]  magAccum;
 always @(posedge clk) begin
-    if (ddcSync) begin
+    if (demodSync) begin
         magError <= {1'b0,mag} - magAccum[39:30];
         end
     end
 lagGain magLoop(
-    .clk(clk), .clkEn(ddcSync), .reset(reset), 
+    .clk(clk), .clkEn(demodSync), .reset(reset), 
     .error(magError[9:2]),
     .lagExp(amTC),
     .limit(32'h7fffffff),
@@ -208,7 +211,7 @@ mpy18x18 mpyFLD1(
 wire    [17:0]  negAverageFreq = -averageFreq;
 wire    [17:0]  absAverageFreq = averageFreq[17] ? negAverageFreq : averageFreq;
 always @(posedge clk) begin
-    if (ddcSync) begin
+    if (demodSync) begin
         if (demodMode == `MODE_OQPSK) begin
             freqSample <= {freq,10'h0};
             end
@@ -240,7 +243,7 @@ wire    [31:0]  freqDout;
 carrierLoop carrierLoop(
     .clk(clk), .reset(reset),
     .resampSync(resampSync),
-    .ddcSync(ddcSync),
+    .ddcSync(demodSync),
     .symSync(symPhaseSync),
     .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
     .addr(addr),
@@ -254,6 +257,7 @@ carrierLoop carrierLoop(
     .offsetErrorEn(offsetErrorEn),
     .symPhase(symPhase),
     .carrierFreqOffset(carrierFreqOffset),
+    .carrierLeadFreq(carrierLeadFreq),
     .carrierFreqEn(carrierOffsetEn),
     .loopError(demodLoopError),
     .carrierLock(carrierLock),
@@ -402,16 +406,16 @@ always @(posedge clk) begin
             end
         `DAC_FREQ: begin
             dac0Data <= {freq,10'h0};
-            dac0Sync <= ddcSync;
+            dac0Sync <= demodSync;
             end
         `DAC_PHASE: begin
             dac0Data <= {phase,10'b0};
-            dac0Sync <= ddcSync;
+            dac0Sync <= demodSync;
             end
         `DAC_MAG: begin
             //dac0Data <= {~mag[8],mag[7:0],9'b0};
             dac0Data <= {~magAccum[38],magAccum[37:21]};
-            dac0Sync <= ddcSync;
+            dac0Sync <= demodSync;
             end
         `DAC_PHERROR: begin
             dac0Data <= {demodLoopError,10'h0};
@@ -431,7 +435,7 @@ always @(posedge clk) begin
             end
         `DAC_FREQERROR: begin
             dac0Data <= {freqError,10'h0};
-            dac0Sync <= ddcSync;
+            dac0Sync <= demodSync;
             end
         default: begin
             dac0Data <= iSwap;
@@ -458,16 +462,16 @@ always @(posedge clk) begin
             end
         `DAC_FREQ: begin
             dac1Data <= {freq,10'h0};
-            dac1Sync <= ddcSync;
+            dac1Sync <= demodSync;
             end
         `DAC_PHASE: begin
             dac1Data <= {phase,10'b0};
-            dac1Sync <= ddcSync;
+            dac1Sync <= demodSync;
             end
         `DAC_MAG: begin
             //dac1Data <= {~mag[8],mag[7:0],9'b0};
             dac1Data <= {~magAccum[38],magAccum[37:21]};
-            dac1Sync <= ddcSync;
+            dac1Sync <= demodSync;
             end
         `DAC_PHERROR: begin
             dac1Data <= {demodLoopError,10'h0};
@@ -487,7 +491,7 @@ always @(posedge clk) begin
             end
         `DAC_FREQERROR: begin
             dac1Data <= {freqError,10'h0};
-            dac1Sync <= ddcSync;
+            dac1Sync <= demodSync;
             end
         default: begin
             dac1Data <= iSwap;
@@ -514,16 +518,16 @@ always @(posedge clk) begin
             end
         `DAC_FREQ: begin
             dac2Data <= {freq,10'h0};
-            dac2Sync <= ddcSync;
+            dac2Sync <= demodSync;
             end
         `DAC_PHASE: begin
             dac2Data <= {phase,10'b0};
-            dac2Sync <= ddcSync;
+            dac2Sync <= demodSync;
             end
         `DAC_MAG: begin
             //dac2Data <= {~mag[8],mag[7:0],9'b0};
             dac2Data <= {~magAccum[38],magAccum[37:21]};
-            dac2Sync <= ddcSync;
+            dac2Sync <= demodSync;
             end
         `DAC_PHERROR: begin
             dac2Data <= {demodLoopError,10'h0};
@@ -543,7 +547,7 @@ always @(posedge clk) begin
             end
         `DAC_FREQERROR: begin
             dac2Data <= {freqError,10'h0};
-            dac2Sync <= ddcSync;
+            dac2Sync <= demodSync;
             end
         default: begin
             dac2Data <= iSwap;

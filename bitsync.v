@@ -142,16 +142,26 @@ always @(posedge sampleClk) begin
 `define USE_FMDEMOD
 `ifdef USE_FMDEMOD
 wire    [7:0]   phase;
-wire    [7:0]   freqOut;
 wire    [8:0]   mag;
-fmDemod fmDemod( 
-    .clk(sampleClk), .reset(reset), .sync(symTimes2Sync),
-    .iFm(iMF),.qFm(qMF),
-    .phase(phase),
-    .freq(freqOut),
-    .mag(mag)
+vm_cordic cordic(
+    .clk(sampleClk),
+    .ena(symTimes2Sync),
+    .x(iMF[17:8]),.y(qMF[17:8]),
+    .m(mag),
+    .p(phase)
     );
+reg [7:0]freqOut;
+reg [7:0]prevPhase;
+wire [7:0]phaseDiff = phase - prevPhase;
+always @(posedge sampleClk) begin
+    if (symTimes2Sync) begin
+        freqOut <= phaseDiff;
+        prevPhase <= phase;
+        end
+    end
+
 wire    [17:0]  freq = {freqOut,10'b0};
+
 `else
 reg     [17:0]  iMF0,iMF1;
 reg     [17:0]  qMF0,qMF1;
