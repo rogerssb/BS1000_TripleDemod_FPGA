@@ -9,7 +9,7 @@ module vm_cordic_fast(clk,ena,x,y,m,p,enOut);
 
     parameter n = 10;
 
-    `include "vm_include.v"
+    `include "vm_include_fast.v"
 
     input   clk;
     input   ena;

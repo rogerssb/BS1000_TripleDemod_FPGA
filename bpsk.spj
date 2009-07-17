@@ -5,9 +5,9 @@ DigitalThreshold=
 [Settings]
 Version=Silvaco4.10.0.R
 [Analyzer]
-C0Width=165
+C0Width=58
 C1Width=58
-C2Width=92
+C2Width=58
 GotoSource=N
 [Spice]
 [LibraryFiles]
@@ -209,4 +209,3 @@ OpenGroup=Yes
 5=Carrier : 5 : 1 : 0
 6=DAC : 6 : 1 : 0
 7=Resampler : 7 : 1 : 0
-[Bookmarks]

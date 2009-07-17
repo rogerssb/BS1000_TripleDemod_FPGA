@@ -7,7 +7,7 @@
 
 module vm_cordic(clk,ena,x,y,m,p);
 
-    parameter n = 10;
+    parameter n = 12;
 
     `include "vm_include.v"
 

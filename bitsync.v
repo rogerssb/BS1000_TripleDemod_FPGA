@@ -141,18 +141,18 @@ always @(posedge sampleClk) begin
 //************************** Frequency Discriminator **************************
 `define USE_FMDEMOD
 `ifdef USE_FMDEMOD
-wire    [7:0]   phase;
+wire    [9:0]   phase;
 wire    [8:0]   mag;
 vm_cordic cordic(
     .clk(sampleClk),
     .ena(symTimes2Sync),
-    .x(iMF[17:8]),.y(qMF[17:8]),
+    .x(iMF[17:6]),.y(qMF[17:6]),
     .m(mag),
     .p(phase)
     );
-reg [7:0]freqOut;
-reg [7:0]prevPhase;
-wire [7:0]phaseDiff = phase - prevPhase;
+reg [9:0]freqOut;
+reg [9:0]prevPhase;
+wire [9:0]phaseDiff = phase - prevPhase;
 always @(posedge sampleClk) begin
     if (symTimes2Sync) begin
         freqOut <= phaseDiff;
@@ -160,7 +160,7 @@ always @(posedge sampleClk) begin
         end
     end
 
-wire    [17:0]  freq = {freqOut,10'b0};
+wire    [17:0]  freq = {freqOut,8'b0};
 
 `else
 reg     [17:0]  iMF0,iMF1;
@@ -239,7 +239,6 @@ wire    [18:0]  timingError = {timingErrorI[17],timingErrorI} + {timingErrorQ[17
 wire timingErrorEn = (phaseState == ONTIME);
 
 // DC Offset error variables
-wire [18:0]offsetErrorSum = {bbSRI[2][17],bbSRI[2]} + {bbSRI[0][17],bbSRI[0]};
 reg  [17:0]dcError;
 wire offsetErrorEn = (phaseState == OFFTIME);
 
@@ -282,8 +281,8 @@ always @(posedge sampleClk) begin
             bbSRQ[0] <= freq;
             end
         else if (demodMode == `MODE_PM) begin
-            bbSRI[0] <= {phase,10'b0};
-            bbSRQ[0] <= {phase,10'b0};
+            bbSRI[0] <= {phase,8'b0};
+            bbSRQ[0] <= {phase,8'b0};
             end
         else if (bitsyncMode == `MODE_DUAL_RAIL) begin
             bbSRI[0] <= iMF;
@@ -317,15 +316,7 @@ always @(posedge sampleClk) begin
                 if (earlySignI != lateSignI) begin
                     // Yes. Calculate DC offset error
                     transition <= 1;
-                    if (offsetErrorSum[18:17] == 2'b10) begin
-                        dcError <= 18'h20001;
-                        end
-                    else if (offsetErrorSum[18:17] == 2'b01) begin
-                        dcError <= 18'h1ffff;
-                        end
-                    else begin
-                        dcError <= offsetErrorSum[17:0];
-                        end
+                    dcError <= offTimeI;
                     // High to low transition?
                     if (earlySignI) begin
                         timingErrorI <= offTimeI;
@@ -412,14 +403,15 @@ always @(qMF) qMFReal = (qMF[17] ? qMF - 262144.0 : qMF)/131072.0;
 // Calculation of average DC offset (freq offset in FSK mode) and average FSK deviation.
 reg     [24:0]  avgDeviation;
 reg     [24:0]  avgOffsetError;
-assign          offsetError = avgOffsetError[24:7];
+assign          offsetError = dcError;
+//assign          offsetError = avgOffsetError[24:7];
 always @(posedge sampleClk) begin
     if (reset) begin
         avgOffsetError <= 0;
         avgDeviation <= 0;
         end
     else if (symTimes2Sync) begin
-        if (offsetErrorEn) begin
+        if (offsetErrorEn && transition) begin
             avgOffsetError <= (avgOffsetError - {{7{avgOffsetError[24]}},avgOffsetError[24:7]})
                             + {{7{dcError[17]}},dcError};
             end

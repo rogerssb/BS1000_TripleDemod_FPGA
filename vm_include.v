@@ -147,6 +147,6 @@ parameter mh = 10, ml = 2;
 
 // phase output slice
 
-parameter ph = 8, pl = 1;
+parameter ph = 10, pl = 1;
 
 

@@ -26,7 +26,8 @@ module trellis(
     dac2Sync,
     dac2Data,
     decision,
-    symEn_tbtDly,
+    symEnOut,
+    sym2xEnOut,
     oneOrZeroPredecessor
     );
 
@@ -48,7 +49,8 @@ output  [17:0]  dac1Data;
 output          dac2Sync;
 output  [17:0]  dac2Data;
 output          decision;
-output          symEn_tbtDly;
+output          symEnOut;
+output          sym2xEnOut;
 output          oneOrZeroPredecessor;
    
    
@@ -144,8 +146,8 @@ always @(posedge clk) begin
 `endif
 
 `ifdef IQ_MAG
-assign symEn_tbtDly = rotEna;
-assign sym2xEn_tbtDly = 0;  // need to allign
+assign symEnOut = rotEna;
+assign sym2xEnOut = 0;  // need to allign
 wire    [4:0]   index = 0;
 assign          symEn_phErr = 1;
 wire            trellEna = 1;
@@ -483,12 +485,20 @@ viterbi_top #(size, ROT_BITS)viterbi_top
 `endif
   .index(index),
   .decision(decision),
-  .symEn_tbtDly(symEn_tbtDly),
+  .symEn_tbtDly(symEnOut),
   .phaseError(phaseError),
   .symEn_phErr(symEn_phErr),
   .oneOrZeroPredecessor(oneOrZeroPredecessor)              
   );
 
+// This is a kludge to create a 2x clock enable from the 1x clock enable to satisfy the design
+// of the pre-existing line decoder. This design assumes at least 3 clocks between each 1x clock
+// enable.
+reg se0,sym2xEnOut;
+always @(posedge clk) begin
+    se0 <= symEnOut;
+    sym2xEnOut <= se0 | symEnOut;
+    end
 
 
    reg [7:0]            dataBits;

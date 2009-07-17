@@ -6,9 +6,9 @@ Version=Silvaco4.10.0.R
 LintOptionsFile=
 OpenFileDir=C:\modem\fskRadio
 [Analyzer]
-C0Width=58
+C0Width=162
 C1Width=58
-C2Width=58
+C2Width=95
 GotoSource=N
 MinScale=
 MaxScale=
@@ -19,7 +19,7 @@ MaxScale=
 CommandLine=+define+SIMULATE
 DiskSize=5000M
 [View]
-1=Last 0.000ns 683350.101ns 22785.848ns 276848.053ns 319001.872ns
+1=Last 274777.394ns 306276.398ns 1082.440ns 285334.855ns 288582.171ns
 [Group0]
 Name=New Group2
 [Group3]
@@ -141,6 +141,17 @@ Name="Rx"
 18="test.demod.ddc : iMixReal" default Real AnalogDisplay AType=Step Scale=Auto
 19="test : iSignalReal" default Real AnalogDisplay AType=Step Scale=Auto
 20="test : iChReal" default Real AnalogDisplay AType=Step Scale=Auto
+[Mexclude]
+0=test.trellis.f0
+1=test.trellis.f1
+2=test.trellis.rotator
+3=test.dac0Interp
+4=test.dac1Interp
+5=test.dac2Interp
+6=test.decoder
+7=test.demod
+[Mkeep]
+0=test.trellis.viterbi_top
 [Files]
 0=testPcmfm.v
 1=demod.v
@@ -162,93 +173,86 @@ Name="Rx"
 17=.\coregen\halfbandEven.v
 18=variableGain.v
 19=.\fmDemod\fmDemod.v
-20=..\cordic\src\vm_cordic.v
-21=.\resampler\resampRegs.v
-22=.\resampler\resampler.v
-23=.\coregen\reciprocalLut.v
-24=.\coregen\resamplerTap8.v
-25=.\coregen\resamplerTap0.v
-26=.\coregen\resamplerTap1.v
-27=.\coregen\resamplerTap2.v
-28=.\coregen\resamplerTap3.v
-29=.\coregen\resamplerTap4.v
-30=.\coregen\resamplerTap5.v
-31=.\coregen\resamplerTap6.v
-32=.\coregen\resamplerTap7.v
-33=bitsync.v
-34=loopRegs.v
-35=loopFilter.v
-36=lead.v
-37=carrierLoop.v
-38=lagGain.v
-39=log2.v
-40=channelAgc.v
-41=agcLoopRegs.v
-42=agcLoopFilter.v
-43=cicComp.v
-44=cicInterpolate.v
-45=interpolate.v
-46=interpRegs.v
-47=shift48To18.v
-48=.\decoder\mrk_spc_decode.v
-49=.\decoder\biphase_to_nrz.v
-50=.\decoder\decoder.v
-51=.\decoder\decoder_regs.v
-52=.\decoder\format_output.v
-53=.\trellis\mfilter.v
-54=.\trellis\trellis.v
-55=.\trellis\trellisCarrierLoop.v
-56=.\trellis\viteri_top.v
-57=.\trellis\acs.v
-58=.\trellis\comp4twosComp.v
-59=.\trellis\maxMetric.v
-60=.\trellis\rotator.v
-61=.\trellis\rotMult.v
-62=.\trellis\traceBackTable.v
-63=.\coregen\mult10x10.v
-[Mexclude]
-0=test.trellis.f0
-1=test.trellis.f1
-2=test.trellis.rotator
-3=test.dac0Interp
-4=test.dac1Interp
-5=test.dac2Interp
-6=test.decoder
-7=test.demod
-[Mkeep]
-0=test.trellis.viterbi_top
+20=.\resampler\resampRegs.v
+21=.\resampler\resampler.v
+22=.\coregen\reciprocalLut.v
+23=.\coregen\resamplerTap8.v
+24=.\coregen\resamplerTap0.v
+25=.\coregen\resamplerTap1.v
+26=.\coregen\resamplerTap2.v
+27=.\coregen\resamplerTap3.v
+28=.\coregen\resamplerTap4.v
+29=.\coregen\resamplerTap5.v
+30=.\coregen\resamplerTap6.v
+31=.\coregen\resamplerTap7.v
+32=bitsync.v
+33=loopRegs.v
+34=loopFilter.v
+35=lead.v
+36=carrierLoop.v
+37=lagGain.v
+38=log2.v
+39=channelAgc.v
+40=agcLoopRegs.v
+41=agcLoopFilter.v
+42=cicComp.v
+43=cicInterpolate.v
+44=interpolate.v
+45=interpRegs.v
+46=shift48To18.v
+47=.\decoder\mrk_spc_decode.v
+48=.\decoder\biphase_to_nrz.v
+49=.\decoder\decoder.v
+50=.\decoder\decoder_regs.v
+51=.\decoder\format_output.v
+52=.\trellis\mfilter.v
+53=.\trellis\trellis.v
+54=.\trellis\trellisCarrierLoop.v
+55=.\trellis\viteri_top.v
+56=.\trellis\acs.v
+57=.\trellis\comp4twosComp.v
+58=.\trellis\maxMetric.v
+59=.\trellis\rotator.v
+60=.\trellis\rotMult.v
+61=.\trellis\traceBackTable.v
+62=.\coregen\mult10x10.v
+63=dualResampler.v
+64=dualDecimator.v
+65=vm_cordic_fast.v
+66=vm_cordic.v
 [Group7]
 Name="Trellis"
 0="test.trellis : magDecision" default
 1="test : txDelay" default
 2="test.trellis : decision" default
-3="test : bitErrors" default Decimal AnalogDisplay AType=Step Scale=Auto
-4="test : testBitCount" default Decimal AnalogDisplay AType=Step Scale=Auto
-5="test : testBits" default
-6="test.trellis.viterbi_top : devErrorReal" default Real AnalogDisplay AType=Step Scale=Auto
-7="test.trellis : phErrReal" default Real AnalogDisplay AType=Step Scale=Auto
-8="test.trellis : mag1" default Real AnalogDisplay AType=Step Scale=Auto
-9="test.trellis : mag0" default Real AnalogDisplay AType=Step Scale=Auto
-10="test.trellis : f1QReal" default Real AnalogDisplay AType=Step Scale=Auto
-11="test.trellis : f1IReal" default Real AnalogDisplay AType=Step Scale=Auto
-12="test.trellis : f0QReal" default Real AnalogDisplay AType=Step Scale=Auto
-13="test.trellis : f0IReal" default Real AnalogDisplay AType=Step Scale=Auto
-14="test.trellis : rotEna" default
-15="test.trellis.trellisCarrierLoop : iOutReal" default Real AnalogDisplay AType=Step Scale=Fixed MinScaleDbl=-0.5 MaxScaleDbl=0.5
-16="test.trellis.trellisCarrierLoop : symEnDly" default
-17="test.trellis.trellisCarrierLoop : sym2xEnDly" default
-18="test.trellis.trellisCarrierLoop : sym2xEn" default
-19="test.trellis.trellisCarrierLoop : newOffset[31:0]" default
-20="test.trellis.trellisCarrierLoop : breakLoop" default
-21="test.trellis.trellisCarrierLoop : deviationCorrection[31:0]" default
-22="test.trellis.trellisCarrierLoop : legacyBit" default
-23="test.trellis.trellisCarrierLoop : freqReal" default Real AnalogDisplay AType=Step Scale=Auto
-24="test.trellis.trellisCarrierLoop : qInReal" default Real AnalogDisplay AType=Step Scale=Auto
-25="test.trellis.trellisCarrierLoop : iInReal" default Real AnalogDisplay AType=Step Scale=Auto
-26="test.trellis.trellisCarrierLoop : iIn[17:0]" default
-27="test.trellis.trellisCarrierLoop : phaseError[7:0]" default
-28="test.trellis : phErrShft[7:0]" default
-29="test : trellisReset" default
+3="test.trellis : symEn_tbtDly" default
+4="test : bitErrors" default Decimal AnalogDisplay AType=Step Scale=Auto
+5="test : testBitCount" default Decimal AnalogDisplay AType=Step Scale=Auto
+6="test : testBits" default
+7="test.trellis.viterbi_top : devErrorReal" default Real AnalogDisplay AType=Step Scale=Auto
+8="test.trellis : phErrReal" default Real AnalogDisplay AType=Step Scale=Auto
+9="test.trellis : mag1" default Real AnalogDisplay AType=Step Scale=Auto
+10="test.trellis : mag0" default Real AnalogDisplay AType=Step Scale=Auto
+11="test.trellis : f1QReal" default Real AnalogDisplay AType=Step Scale=Auto
+12="test.trellis : f1IReal" default Real AnalogDisplay AType=Step Scale=Auto
+13="test.trellis : f0QReal" default Real AnalogDisplay AType=Step Scale=Auto
+14="test.trellis : f0IReal" default Real AnalogDisplay AType=Step Scale=Auto
+15="test.trellis : rotEna" default
+16="test.trellis.trellisCarrierLoop : iOutReal" default Real AnalogDisplay AType=Step Scale=Fixed MinScaleDbl=-0.5 MaxScaleDbl=0.5
+17="test.trellis.trellisCarrierLoop : symEnDly" default
+18="test.trellis.trellisCarrierLoop : sym2xEnDly" default
+19="test.trellis.trellisCarrierLoop : sym2xEn" default
+20="test.trellis.trellisCarrierLoop : newOffset[31:0]" default
+21="test.trellis.trellisCarrierLoop : breakLoop" default
+22="test.trellis.trellisCarrierLoop : deviationCorrection[31:0]" default
+23="test.trellis.trellisCarrierLoop : legacyBit" default
+24="test.trellis.trellisCarrierLoop : freqReal" default Real AnalogDisplay AType=Step Scale=Auto
+25="test.trellis.trellisCarrierLoop : qInReal" default Real AnalogDisplay AType=Step Scale=Auto
+26="test.trellis.trellisCarrierLoop : iInReal" default Real AnalogDisplay AType=Step Scale=Auto
+27="test.trellis.trellisCarrierLoop : iIn[17:0]" default
+28="test.trellis.trellisCarrierLoop : phaseError[7:0]" default
+29="test.trellis : phErrShft[7:0]" default
+30="test : trellisReset" default
 OpenGroup=Yes
 [GroupInfo]
 0=New Group2 : 0 : 0 : 0
