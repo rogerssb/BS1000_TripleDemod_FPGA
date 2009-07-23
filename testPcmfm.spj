@@ -6,9 +6,9 @@ Version=Silvaco4.10.0.R
 LintOptionsFile=
 OpenFileDir=C:\modem\fskRadio
 [Analyzer]
-C0Width=162
+C0Width=58
 C1Width=58
-C2Width=95
+C2Width=58
 GotoSource=N
 MinScale=
 MaxScale=
@@ -263,3 +263,4 @@ OpenGroup=Yes
 5=Carrier : 5 : 1 : 0
 6=DAC : 6 : 1 : 0
 7=Trellis : 7 : 1 : 0
+[Bookmarks]

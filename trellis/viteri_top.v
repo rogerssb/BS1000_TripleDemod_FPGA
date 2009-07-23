@@ -137,6 +137,28 @@ module viterbi_top(clk, reset, symEn,
                        out18Imag, 
                        out19Imag, 
                        out20Imag;
+`ifdef USE_LEAKY
+   wire [ROT_BITS-1:0] out1Real , 
+                       out2Real , 
+                       out3Real , 
+                       out4Real , 
+                       out5Real , 
+                       out6Real , 
+                       out7Real , 
+                       out8Real , 
+                       out9Real , 
+                       out10Real, 
+                       out11Real, 
+                       out12Real, 
+                       out13Real, 
+                       out14Real, 
+                       out15Real, 
+                       out16Real, 
+                       out17Real, 
+                       out18Real, 
+                       out19Real, 
+                       out20Real;
+`endif
    
 `ifdef SIMULATE
    // in simulation we have to reset the accumulatios when the input data is known.
@@ -175,6 +197,28 @@ module viterbi_top(clk, reset, symEn,
    acs acs5  (.clk(clk), .reset(acsReset), .symEn(symEn), .matFilt1(out1Pt19Real),  .matFilt2(out0Pt13Real),  .accMet1(accMetOut[18][(size-1)+4:0]), .accMet2(accMetOut[12][(size-1)+4:0]), .accMetOut(accMetOut[5][(size-1)+4:0] ), .selOut(sel[5 ]), .normalizeIn(normalizeIn), .normalizeOut(s5 ), .out1PtImag(out1Pt19Imag), .out0PtImag(out0Pt13Imag), .outImag(out6Imag ) );
    acs acs6  (.clk(clk), .reset(acsReset), .symEn(symEn), .matFilt1(out1Pt20Real),  .matFilt2(out0Pt14Real),  .accMet1(accMetOut[19][(size-1)+4:0]), .accMet2(accMetOut[13][(size-1)+4:0]), .accMetOut(accMetOut[6][(size-1)+4:0] ), .selOut(sel[6 ]), .normalizeIn(normalizeIn), .normalizeOut(s6 ), .out1PtImag(out1Pt20Imag), .out0PtImag(out0Pt14Imag), .outImag(out7Imag ) );
 `else                                                                                                                                                                                                                                                                                                                                                                                                              
+`ifdef USE_LEAKY
+   acs #(size, ROT_BITS) acs7  (.clk(clk), .reset(acsReset), .symEn(symEn), .matFilt1(out1Pt1Real ),  .matFilt2(out0Pt15Real),  .accMet1(accMetOut[0][(size-1)+4:0] ), .accMet2(accMetOut[14][(size-1)+4:0]), .accMetOut(accMetOut[7][(size-1)+4:0] ), .selOut(sel[7 ]), .normalizeIn(normalizeIn), .normalizeOut(s7 ), .out1PtImag(out1Pt1Imag ), .out0PtImag(out0Pt15Imag), .outImag(out8Imag ), .outReal(out8Real ) );
+   acs #(size, ROT_BITS) acs8  (.clk(clk), .reset(acsReset), .symEn(symEn), .matFilt1(out1Pt2Real ),  .matFilt2(out0Pt16Real),  .accMet1(accMetOut[1][(size-1)+4:0] ), .accMet2(accMetOut[15][(size-1)+4:0]), .accMetOut(accMetOut[8][(size-1)+4:0] ), .selOut(sel[8 ]), .normalizeIn(normalizeIn), .normalizeOut(s8 ), .out1PtImag(out1Pt2Imag ), .out0PtImag(out0Pt16Imag), .outImag(out9Imag ), .outReal(out9Real ) );
+   acs #(size, ROT_BITS) acs9  (.clk(clk), .reset(acsReset), .symEn(symEn), .matFilt1(out1Pt3Real ),  .matFilt2(out0Pt17Real),  .accMet1(accMetOut[2][(size-1)+4:0] ), .accMet2(accMetOut[16][(size-1)+4:0]), .accMetOut(accMetOut[9][(size-1)+4:0] ), .selOut(sel[9 ]), .normalizeIn(normalizeIn), .normalizeOut(s9 ), .out1PtImag(out1Pt3Imag ), .out0PtImag(out0Pt17Imag), .outImag(out10Imag), .outReal(out10Real) );
+   acs #(size, ROT_BITS) acs10 (.clk(clk), .reset(acsReset), .symEn(symEn), .matFilt1(out1Pt4Real ),  .matFilt2(out0Pt18Real),  .accMet1(accMetOut[3][(size-1)+4:0] ), .accMet2(accMetOut[17][(size-1)+4:0]), .accMetOut(accMetOut[10][(size-1)+4:0]), .selOut(sel[10]), .normalizeIn(normalizeIn), .normalizeOut(s10), .out1PtImag(out1Pt4Imag ), .out0PtImag(out0Pt18Imag), .outImag(out11Imag), .outReal(out11Real) );
+   acs #(size, ROT_BITS) acs11 (.clk(clk), .reset(acsReset), .symEn(symEn), .matFilt1(out1Pt5Real ),  .matFilt2(out0Pt19Real),  .accMet1(accMetOut[4][(size-1)+4:0] ), .accMet2(accMetOut[18][(size-1)+4:0]), .accMetOut(accMetOut[11][(size-1)+4:0]), .selOut(sel[11]), .normalizeIn(normalizeIn), .normalizeOut(s11), .out1PtImag(out1Pt5Imag ), .out0PtImag(out0Pt19Imag), .outImag(out12Imag), .outReal(out12Real) );
+   acs #(size, ROT_BITS) acs12 (.clk(clk), .reset(acsReset), .symEn(symEn), .matFilt1(out1Pt6Real ),  .matFilt2(out0Pt20Real),  .accMet1(accMetOut[5][(size-1)+4:0] ), .accMet2(accMetOut[19][(size-1)+4:0]), .accMetOut(accMetOut[12][(size-1)+4:0]), .selOut(sel[12]), .normalizeIn(normalizeIn), .normalizeOut(s12), .out1PtImag(out1Pt6Imag ), .out0PtImag(out0Pt20Imag), .outImag(out13Imag), .outReal(out13Real) );
+   acs #(size, ROT_BITS) acs13 (.clk(clk), .reset(acsReset), .symEn(symEn), .matFilt1(out1Pt7Real ),  .matFilt2(out0Pt1Real ),  .accMet1(accMetOut[6][(size-1)+4:0] ), .accMet2(accMetOut[0 ][(size-1)+4:0]), .accMetOut(accMetOut[13][(size-1)+4:0]), .selOut(sel[13]), .normalizeIn(normalizeIn), .normalizeOut(s13), .out1PtImag(out1Pt7Imag ), .out0PtImag(out0Pt1Imag ), .outImag(out14Imag), .outReal(out14Real) );
+   acs #(size, ROT_BITS) acs14 (.clk(clk), .reset(acsReset), .symEn(symEn), .matFilt1(out1Pt8Real ),  .matFilt2(out0Pt2Real ),  .accMet1(accMetOut[7][(size-1)+4:0] ), .accMet2(accMetOut[1 ][(size-1)+4:0]), .accMetOut(accMetOut[14][(size-1)+4:0]), .selOut(sel[14]), .normalizeIn(normalizeIn), .normalizeOut(s14), .out1PtImag(out1Pt8Imag ), .out0PtImag(out0Pt2Imag ), .outImag(out15Imag), .outReal(out15Real) );
+   acs #(size, ROT_BITS) acs15 (.clk(clk), .reset(acsReset), .symEn(symEn), .matFilt1(out1Pt9Real ),  .matFilt2(out0Pt3Real ),  .accMet1(accMetOut[8][(size-1)+4:0] ), .accMet2(accMetOut[2 ][(size-1)+4:0]), .accMetOut(accMetOut[15][(size-1)+4:0]), .selOut(sel[15]), .normalizeIn(normalizeIn), .normalizeOut(s15), .out1PtImag(out1Pt9Imag ), .out0PtImag(out0Pt3Imag ), .outImag(out16Imag), .outReal(out16Real) );
+   acs #(size, ROT_BITS) acs16 (.clk(clk), .reset(acsReset), .symEn(symEn), .matFilt1(out1Pt10Real),  .matFilt2(out0Pt4Real ),  .accMet1(accMetOut[9][(size-1)+4:0] ), .accMet2(accMetOut[3 ][(size-1)+4:0]), .accMetOut(accMetOut[16][(size-1)+4:0]), .selOut(sel[16]), .normalizeIn(normalizeIn), .normalizeOut(s16), .out1PtImag(out1Pt10Imag), .out0PtImag(out0Pt4Imag ), .outImag(out17Imag), .outReal(out17Real) );
+   acs #(size, ROT_BITS) acs17 (.clk(clk), .reset(acsReset), .symEn(symEn), .matFilt1(out1Pt11Real),  .matFilt2(out0Pt5Real ),  .accMet1(accMetOut[10][(size-1)+4:0]), .accMet2(accMetOut[4 ][(size-1)+4:0]), .accMetOut(accMetOut[17][(size-1)+4:0]), .selOut(sel[17]), .normalizeIn(normalizeIn), .normalizeOut(s17), .out1PtImag(out1Pt11Imag), .out0PtImag(out0Pt5Imag ), .outImag(out18Imag), .outReal(out18Real) );
+   acs #(size, ROT_BITS) acs18 (.clk(clk), .reset(acsReset), .symEn(symEn), .matFilt1(out1Pt12Real),  .matFilt2(out0Pt6Real ),  .accMet1(accMetOut[11][(size-1)+4:0]), .accMet2(accMetOut[5 ][(size-1)+4:0]), .accMetOut(accMetOut[18][(size-1)+4:0]), .selOut(sel[18]), .normalizeIn(normalizeIn), .normalizeOut(s18), .out1PtImag(out1Pt12Imag), .out0PtImag(out0Pt6Imag ), .outImag(out19Imag), .outReal(out19Real) );
+   acs #(size, ROT_BITS) acs19 (.clk(clk), .reset(acsReset), .symEn(symEn), .matFilt1(out1Pt13Real),  .matFilt2(out0Pt7Real ),  .accMet1(accMetOut[12][(size-1)+4:0]), .accMet2(accMetOut[6 ][(size-1)+4:0]), .accMetOut(accMetOut[19][(size-1)+4:0]), .selOut(sel[19]), .normalizeIn(normalizeIn), .normalizeOut(s19), .out1PtImag(out1Pt13Imag), .out0PtImag(out0Pt7Imag ), .outImag(out20Imag), .outReal(out20Real) );
+   acs #(size, ROT_BITS) acs0  (.clk(clk), .reset(acsReset), .symEn(symEn), .matFilt1(out1Pt14Real),  .matFilt2(out0Pt8Real ),  .accMet1(accMetOut[13][(size-1)+4:0]), .accMet2(accMetOut[7 ][(size-1)+4:0]), .accMetOut(accMetOut[0][(size-1)+4:0] ), .selOut(sel[0 ]), .normalizeIn(normalizeIn), .normalizeOut(s0 ), .out1PtImag(out1Pt14Imag), .out0PtImag(out0Pt8Imag ), .outImag(out1Imag ), .outReal(out1Real ) );
+   acs #(size, ROT_BITS) acs1  (.clk(clk), .reset(acsReset), .symEn(symEn), .matFilt1(out1Pt15Real),  .matFilt2(out0Pt9Real ),  .accMet1(accMetOut[14][(size-1)+4:0]), .accMet2(accMetOut[8 ][(size-1)+4:0]), .accMetOut(accMetOut[1][(size-1)+4:0] ), .selOut(sel[1 ]), .normalizeIn(normalizeIn), .normalizeOut(s1 ), .out1PtImag(out1Pt15Imag), .out0PtImag(out0Pt9Imag ), .outImag(out2Imag ), .outReal(out2Real ) );
+   acs #(size, ROT_BITS) acs2  (.clk(clk), .reset(acsReset), .symEn(symEn), .matFilt1(out1Pt16Real),  .matFilt2(out0Pt10Real),  .accMet1(accMetOut[15][(size-1)+4:0]), .accMet2(accMetOut[9 ][(size-1)+4:0]), .accMetOut(accMetOut[2][(size-1)+4:0] ), .selOut(sel[2 ]), .normalizeIn(normalizeIn), .normalizeOut(s2 ), .out1PtImag(out1Pt16Imag), .out0PtImag(out0Pt10Imag), .outImag(out3Imag ), .outReal(out3Real ) );
+   acs #(size, ROT_BITS) acs3  (.clk(clk), .reset(acsReset), .symEn(symEn), .matFilt1(out1Pt17Real),  .matFilt2(out0Pt11Real),  .accMet1(accMetOut[16][(size-1)+4:0]), .accMet2(accMetOut[10][(size-1)+4:0]), .accMetOut(accMetOut[3][(size-1)+4:0] ), .selOut(sel[3 ]), .normalizeIn(normalizeIn), .normalizeOut(s3 ), .out1PtImag(out1Pt17Imag), .out0PtImag(out0Pt11Imag), .outImag(out4Imag ), .outReal(out4Real ) );
+   acs #(size, ROT_BITS) acs4  (.clk(clk), .reset(acsReset), .symEn(symEn), .matFilt1(out1Pt18Real),  .matFilt2(out0Pt12Real),  .accMet1(accMetOut[17][(size-1)+4:0]), .accMet2(accMetOut[11][(size-1)+4:0]), .accMetOut(accMetOut[4][(size-1)+4:0] ), .selOut(sel[4 ]), .normalizeIn(normalizeIn), .normalizeOut(s4 ), .out1PtImag(out1Pt18Imag), .out0PtImag(out0Pt12Imag), .outImag(out5Imag ), .outReal(out5Real ) );
+   acs #(size, ROT_BITS) acs5  (.clk(clk), .reset(acsReset), .symEn(symEn), .matFilt1(out1Pt19Real),  .matFilt2(out0Pt13Real),  .accMet1(accMetOut[18][(size-1)+4:0]), .accMet2(accMetOut[12][(size-1)+4:0]), .accMetOut(accMetOut[5][(size-1)+4:0] ), .selOut(sel[5 ]), .normalizeIn(normalizeIn), .normalizeOut(s5 ), .out1PtImag(out1Pt19Imag), .out0PtImag(out0Pt13Imag), .outImag(out6Imag ), .outReal(out6Real ) );
+   acs #(size, ROT_BITS) acs6  (.clk(clk), .reset(acsReset), .symEn(symEn), .matFilt1(out1Pt20Real),  .matFilt2(out0Pt14Real),  .accMet1(accMetOut[19][(size-1)+4:0]), .accMet2(accMetOut[13][(size-1)+4:0]), .accMetOut(accMetOut[6][(size-1)+4:0] ), .selOut(sel[6 ]), .normalizeIn(normalizeIn), .normalizeOut(s6 ), .out1PtImag(out1Pt20Imag), .out0PtImag(out0Pt14Imag), .outImag(out7Imag ), .outReal(out7Real ) );
+`else
    acs #(size, ROT_BITS) acs7  (.clk(clk), .reset(acsReset), .symEn(symEn), .matFilt1(out1Pt1Real ),  .matFilt2(out0Pt15Real),  .accMet1(accMetOut[0][(size-1)+4:0] ), .accMet2(accMetOut[14][(size-1)+4:0]), .accMetOut(accMetOut[7][(size-1)+4:0] ), .selOut(sel[7 ]), .normalizeIn(normalizeIn), .normalizeOut(s7 ), .out1PtImag(out1Pt1Imag ), .out0PtImag(out0Pt15Imag), .outImag(out8Imag ) );
    acs #(size, ROT_BITS) acs8  (.clk(clk), .reset(acsReset), .symEn(symEn), .matFilt1(out1Pt2Real ),  .matFilt2(out0Pt16Real),  .accMet1(accMetOut[1][(size-1)+4:0] ), .accMet2(accMetOut[15][(size-1)+4:0]), .accMetOut(accMetOut[8][(size-1)+4:0] ), .selOut(sel[8 ]), .normalizeIn(normalizeIn), .normalizeOut(s8 ), .out1PtImag(out1Pt2Imag ), .out0PtImag(out0Pt16Imag), .outImag(out9Imag ) );
    acs #(size, ROT_BITS) acs9  (.clk(clk), .reset(acsReset), .symEn(symEn), .matFilt1(out1Pt3Real ),  .matFilt2(out0Pt17Real),  .accMet1(accMetOut[2][(size-1)+4:0] ), .accMet2(accMetOut[16][(size-1)+4:0]), .accMetOut(accMetOut[9][(size-1)+4:0] ), .selOut(sel[9 ]), .normalizeIn(normalizeIn), .normalizeOut(s9 ), .out1PtImag(out1Pt3Imag ), .out0PtImag(out0Pt17Imag), .outImag(out10Imag) );
@@ -195,6 +239,7 @@ module viterbi_top(clk, reset, symEn,
    acs #(size, ROT_BITS) acs4  (.clk(clk), .reset(acsReset), .symEn(symEn), .matFilt1(out1Pt18Real),  .matFilt2(out0Pt12Real),  .accMet1(accMetOut[17][(size-1)+4:0]), .accMet2(accMetOut[11][(size-1)+4:0]), .accMetOut(accMetOut[4][(size-1)+4:0] ), .selOut(sel[4 ]), .normalizeIn(normalizeIn), .normalizeOut(s4 ), .out1PtImag(out1Pt18Imag), .out0PtImag(out0Pt12Imag), .outImag(out5Imag ) );
    acs #(size, ROT_BITS) acs5  (.clk(clk), .reset(acsReset), .symEn(symEn), .matFilt1(out1Pt19Real),  .matFilt2(out0Pt13Real),  .accMet1(accMetOut[18][(size-1)+4:0]), .accMet2(accMetOut[12][(size-1)+4:0]), .accMetOut(accMetOut[5][(size-1)+4:0] ), .selOut(sel[5 ]), .normalizeIn(normalizeIn), .normalizeOut(s5 ), .out1PtImag(out1Pt19Imag), .out0PtImag(out0Pt13Imag), .outImag(out6Imag ) );
    acs #(size, ROT_BITS) acs6  (.clk(clk), .reset(acsReset), .symEn(symEn), .matFilt1(out1Pt20Real),  .matFilt2(out0Pt14Real),  .accMet1(accMetOut[19][(size-1)+4:0]), .accMet2(accMetOut[13][(size-1)+4:0]), .accMetOut(accMetOut[6][(size-1)+4:0] ), .selOut(sel[6 ]), .normalizeIn(normalizeIn), .normalizeOut(s6 ), .out1PtImag(out1Pt20Imag), .out0PtImag(out0Pt14Imag), .outImag(out7Imag ) );
+`endif
 `endif
 
 `ifdef MAX_ANNOTATE

@@ -74,6 +74,9 @@ module acs
    accMetOut, selOut,
    normalizeIn, normalizeOut,
    out0PtImag, out1PtImag, outImag
+   `ifdef USE_LEAKY
+   ,outReal
+   `endif
    );
    parameter             size = 8;
    parameter             ROT_BITS = 10;
@@ -88,6 +91,10 @@ module acs
      
    input [ROT_BITS-1:0]  out0PtImag, out1PtImag;
    output [ROT_BITS-1:0] outImag;
+
+   `ifdef USE_LEAKY
+   output [ROT_BITS-1:0] outReal;
+   `endif
  
          
    reg  [(size-1)+4:0]   accMetOut;
@@ -100,6 +107,10 @@ module acs
    reg [ROT_BITS-1:0]    outImag;
    wire [ROT_BITS-1:0]   outImagAsync;
    
+   `ifdef USE_LEAKY
+   reg [ROT_BITS-1:0] outReal;
+   `endif
+ 
    // First we add the accumulatior metric with the matchfilter output
    adder2s #(size) adder2s_1
      (
@@ -139,6 +150,16 @@ module acs
       .sel       (bLarger      ), 
       .y         (outImagAsync )
       );
+
+`ifdef USE_LEAKY
+   mux_2_1 #(size) selectorReal
+     (
+      .a         (out1PtReal   ),
+      .b         (out0PtReal   ), 
+      .sel       (bLarger      ), 
+      .y         (outRealAsync )
+      );
+`endif
 
    reg normalizeOut;
    always @(muxOut[(size-1)+4:(size-1)+3]) begin
@@ -180,10 +201,16 @@ module acs
      if (reset) begin
         selOut <= 0;
         outImag <= 0;
+        `ifdef USE_LEAKY
+        outReal <= 0;
+        `endif
      end
      else if (symEn) begin
         selOut <= ~bLarger;
         outImag <= outImagAsync;
+        `ifdef USE_LEAKY
+        outReal <= {outRealAsync,{ROT_BITS-size{1'b0}}};
+        `endif
      end
    
 endmodule

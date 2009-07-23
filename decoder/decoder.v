@@ -118,10 +118,15 @@ mrk_spc_decode mrk_spc_decode_q
 
 reg mux_ctrl;
 always @(posedge clk)begin
-  if(symb_clk_2x_en)begin
-    mux_ctrl <= !mux_ctrl;
+    if(symb_clk_2x_en)begin
+        if (symb_clk_en) begin
+            mux_ctrl <= 1;
+            end
+        else begin
+            mux_ctrl <= 0;
+            end
+        end
     end
-  end
 
 reg [2:0] demux_i, demux_q;
 wire swap;
