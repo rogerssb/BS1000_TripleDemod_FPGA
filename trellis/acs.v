@@ -82,7 +82,7 @@ module acs
    parameter             ROT_BITS = 10;
    input                 clk, reset;
    input                 symEn;
-   input [size-1:0]      out1PtReal, out0PtReal;
+   input [ROT_BITS-1:0]  out1PtReal, out0PtReal;
    input [(size-1)+4:0]  accMet1, accMet2;
    output [(size-1)+4:0] accMetOut;
    output                selOut;
@@ -108,20 +108,21 @@ module acs
    wire [ROT_BITS-1:0]   outImagAsync;
    
    `ifdef USE_LEAKY
+   wire [ROT_BITS-1:0] outRealAsync;
    reg [ROT_BITS-1:0] outReal;
    `endif
  
    // First we add the accumulatior metric with the matchfilter output
    adder2s #(size) adder2s_1
      (
-      .a          (out1PtReal),
+      .a          (out1PtReal[(ROT_BITS-1):(ROT_BITS-size)]),
       .b          (accMet1   ),
       .sum        (add1      )
       );   
    
    adder2s #(size) adder2s_2
      (
-      .a          (out0PtReal),
+      .a          (out0PtReal[(ROT_BITS-1):(ROT_BITS-size)]),
       .b          (accMet2   ),
       .sum        (add2      )
       );   
@@ -152,7 +153,7 @@ module acs
       );
 
 `ifdef USE_LEAKY
-   mux_2_1 #(size) selectorReal
+   mux_2_1 #(ROT_BITS) selectorReal
      (
       .a         (out1PtReal   ),
       .b         (out0PtReal   ), 
@@ -209,7 +210,7 @@ module acs
         selOut <= ~bLarger;
         outImag <= outImagAsync;
         `ifdef USE_LEAKY
-        outReal <= {outRealAsync,{ROT_BITS-size{1'b0}}};
+        outReal <= outRealAsync;
         `endif
      end
    

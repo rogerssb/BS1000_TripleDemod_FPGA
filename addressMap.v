@@ -117,4 +117,10 @@
 `define SYMB_PLL_VCO    12'bxxxx_xxxx_x10x
 `define SYMB_PLL_NCO    12'bxxxx_xxxx_x11x
 
+// Define the Leaky Integrator registers
+`define LEAKY_CONTROL   12'bxxxx_xxxx_00xx
+`define LEAKY_ALPHA     12'bxxxx_xxxx_01xx
+`define LEAKY_ONE       12'bxxxx_xxxx_10xx
+`define LEAKY_DEV       12'bxxxx_xxxx_11xx
+
 `endif

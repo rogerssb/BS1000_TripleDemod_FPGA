@@ -94,7 +94,7 @@ real deviationHz;
 real deviationNorm;
 integer deviationInt;
 initial begin 
-  deviationHz = 2*0.300 * bitrateBps;
+  deviationHz = 2*0.350 * bitrateBps;
   deviationNorm = deviationHz * `SAMPLE_PERIOD * `TWO_POW_32;
   deviationInt = deviationNorm*interpolationGain;
 end
@@ -477,7 +477,7 @@ trellis trellis
    .din          (d),
    .dout         (),
    .decision     (decision),
-   .symEn_tbtDly (symEn_tbtDly)
+   .symEnOut     (symEnTrellisOut)
    );
 `endif
                     
@@ -493,7 +493,7 @@ always @(posedge clk or reset) begin
         testZeroCount <= 5'b0;
         testSR <= MASK17;
         end
-    else if (symEn_tbtDly) begin
+    else if (symEnTrellisOut) begin
         if (testSR[0] | (testZeroCount == 5'b11111))
             begin
             testZeroCount <= 5'h0;
@@ -511,7 +511,7 @@ always @(posedge clk or reset) begin
 reg [127:0]delaySR;
 reg txDelay;
 always @(posedge clk) begin
-    if (symEn_tbtDly) begin
+    if (symEnTrellisOut) begin
         `ifdef IQ_MAG
         txDelay <= delaySR[19];
         `else
@@ -528,7 +528,7 @@ initial bitErrors = 0;
 integer testBitCount;
 initial testBitCount = 0;
 always @(posedge clk) begin
-    if (symEn_tbtDly) begin
+    if (symEnTrellisOut) begin
         if (testBits) begin
             testBitCount <= testBitCount + 1;
             //if (demodBit != txDelay) begin
@@ -700,7 +700,8 @@ initial begin
     write32(createAddress(`TRELLIS_SPACE,`LF_CONTROL),9);    // Forces the lag acc and the error term to be zero
     write32(createAddress(`TRELLIS_SPACE,`LF_LEAD_LAG),32'h0016_0008);   
     write32(createAddress(`TRELLIS_SPACE,`LF_LIMIT),32'h0010_0000);   
-    write32(createAddress(`TRELLIS_SPACE,`LF_LOOPDATA),32'h0666_6666);
+    //write32(createAddress(`TRELLIS_SPACE,`LF_LOOPDATA),32'h0333_3333);
+    write32(createAddress(`TRELLIS_SPACE,`LF_LOOPDATA),32'h0);
 
                     
     // Init the downcoverter register set
