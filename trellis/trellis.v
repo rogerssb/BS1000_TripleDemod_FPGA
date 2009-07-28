@@ -59,9 +59,9 @@ wire                    decision;
 wire            symEn_phErr;
 reg     [7:0]   phErrShft;
 `ifdef USE_LEAKY
-wire    [ROT_BITS-1:0]   phaseErrorReal,phaseErrorImag;
-`else
+wire    [ROT_BITS-1:0]   phaseErrorReal;
 `endif
+wire    [ROT_BITS-1:0]   phaseErrorImag;
 wire    [7:0]   freq;
 wire    [17:0]  carrierLoopIOut,carrierLoopQOut;
 trellisCarrierLoop trellisCarrierLoop(
@@ -75,6 +75,7 @@ trellisCarrierLoop trellisCarrierLoop(
   `ifdef USE_LEAKY
   .phaseErrorReal(phaseErrorReal),
   .phaseErrorImag(phaseErrorImag),
+  .enableLoop(enableLoop),
   `else
   .phaseError(phErrShft),
   `endif
@@ -501,11 +502,14 @@ viterbi_top #(size, ROT_BITS)viterbi_top
   .index(index),
   .decision(decision),
   .symEn_tbtDly(symEnOut),
+  `ifdef USE_LEAKY
   .phaseErrorReal(phaseErrorReal),
+  `endif
   .phaseErrorImag(phaseErrorImag),
   .symEn_phErr(symEn_phErr),
   .oneOrZeroPredecessor(oneOrZeroPredecessor)              
   );
+
 
 // This is a kludge to create a 2x clock enable from the 1x clock enable to satisfy the design
 // of the pre-existing line decoder. This design assumes at least 3 clocks between each 1x clock
@@ -524,9 +528,9 @@ always @(posedge clk) begin
 
    always @(posedge clk) begin
       //if (symEn | sym2xEn) begin
-         dataBits <= {phaseErrorImag[5:0], 2'b00};
-         satPos <= !sign && (phaseErrorImag[9:5] != 5'b00000);
-         satNeg <=  sign && (phaseErrorImag[9:5] != 5'b11111);
+         dataBits <= phaseErrorImag[7:0];
+         satPos <= !sign && (phaseErrorImag[9:7] != 3'b000);
+         satNeg <=  sign && (phaseErrorImag[9:7] != 3'b111);
          if (satPos) begin
             phErrShft <= 8'h7f;
          end
@@ -539,7 +543,9 @@ always @(posedge clk) begin
       //end   
    end
 
-`endif
+
+
+`endif //IQ_MAG
    
 /******************************************************************************
                                DAC Output Mux

@@ -313,7 +313,7 @@ dds dds(
   .cosine(bReal), // Bus [17 : 0] 
   .sine(bImag)); // Bus [17 : 0] 
 
-cmpy18 cmpy18(clk,reset,iInput,qInput,bReal,bImag,iMpy,qMpy);
+cmpy18Sat cmpy18Sat(clk,reset,iInput,qInput,bReal,bImag,iMpy,qMpy);
 
 reg [4:0] symEnSr;
 reg [4:0] sym2xEnSr;
