@@ -9,6 +9,7 @@ module leakyRegs(
     cs,
     wr0, wr1, wr2, wr3,
     enableLoop,
+    invertLoop,
     alpha, oneMinusAlpha,
     deviation
     );
@@ -22,6 +23,9 @@ input   wr0,wr1,wr2,wr3;
 output          enableLoop;
 reg             enableLoop;
 
+output          invertLoop;
+reg             invertLoop;
+
 output  [17:0]  alpha;
 reg     [17:0]  alpha;
 
@@ -34,7 +38,10 @@ reg     [31:0]  deviation;
 always @(negedge wr0) begin
     if (cs) begin
         casex (addr)
-            `LEAKY_CONTROL: enableLoop <= dataIn[0];
+            `LEAKY_CONTROL: begin
+                enableLoop <= dataIn[0];
+                invertLoop <= dataIn[1];
+                end
             `LEAKY_ALPHA: begin
                 alpha[7:0] <= dataIn[7:0];
                 end
@@ -97,12 +104,13 @@ always @(negedge wr3) begin
 reg [31:0]dataOut;
 always @(addr or cs or
          enableLoop or
+         invertLoop or
          alpha or oneMinusAlpha or
          deviation
          ) begin
     if (cs) begin
         casex (addr)
-            `LEAKY_CONTROL: dataOut <= {31'h0,enableLoop};
+            `LEAKY_CONTROL: dataOut <= {30'h0,invertLoop,enableLoop};
             `LEAKY_ALPHA:   dataOut <= {14'h0,alpha};
             `LEAKY_ONE:     dataOut <= {14'h0,oneMinusAlpha};
             `LEAKY_DEV:     dataOut <= deviation;

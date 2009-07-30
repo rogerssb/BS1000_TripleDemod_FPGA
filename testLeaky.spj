@@ -19,7 +19,7 @@ MaxScale=
 CommandLine=+define+SIMULATE
 DiskSize=5000M
 [View]
-1=Last 0.000ns 649650.101ns 16618.957ns 300887.881ns 336686.289ns
+1=Last 0.000ns 1575550.000ns 39461.180ns 92814.050ns 726727.790ns
 [Group0]
 Name=New Group2
 [Group3]
@@ -227,7 +227,7 @@ OpenGroup=Yes
 66=.\trellis\trellisLeakyLoop.v
 67=.\trellis\leakyRegs.v
 68=cmpy18Sat.v
-69=.\trellis\trellisAgc.v
+69=.\coregen\polar2Cart.v
 [Group7]
 Name="Trellis"
 0="test.trellis : magDecision" default
@@ -238,40 +238,39 @@ Name="Trellis"
 5="test : testBits" default
 6="test.trellis : mag1" default Real AnalogDisplay AType=Step Scale=Auto
 7="test.trellis : mag0" default Real AnalogDisplay AType=Step Scale=Auto
-8="test.trellis : f1QReal" default Real AnalogDisplay AType=Step Scale=Auto
-9="test.trellis : f1IReal" default Real AnalogDisplay AType=Step Scale=Auto
-10="test.trellis : f0QReal" default Real AnalogDisplay AType=Step Scale=Auto
-11="test.trellis : f0IReal" default Real AnalogDisplay AType=Step Scale=Auto
-12="test.trellis : rotEna" default
-13="test.trellis.trellisCarrierLoop : symEnDly" default
-14="test.trellis.trellisCarrierLoop : sym2xEnDly" default
-15="test.trellis.trellisCarrierLoop : sym2xEn" default
-16="test.trellis.trellisCarrierLoop.trellisAGC : integratorReal" default Real AnalogDisplay AType=Step Scale=Auto
-17="test.trellis.trellisCarrierLoop : enableLoop" default
-18="test.trellis.trellisCarrierLoop : qRotReal" default Real AnalogDisplay AType=Step Scale=Auto
-19="test.trellis.trellisCarrierLoop : iRotReal" default Real AnalogDisplay AType=Step Scale=Auto
-20="test.trellis.trellisCarrierLoop : agcImag[17:0]" default
-21="test.trellis.trellisCarrierLoop : agcReal[17:0]" default
-22="test.trellis.trellisCarrierLoop : rotationImag[17:0]" default
-23="test.trellis.trellisCarrierLoop : rotationReal[17:0]" default
-24="test.trellis.trellisCarrierLoop : imagSumReal" default Real AnalogDisplay AType=Step Scale=Auto
-25="test.trellis : errorImagReal" default Real AnalogDisplay AType=Step Scale=Auto
-26="test.trellis.trellisCarrierLoop : realSumReal" default Real AnalogDisplay AType=Step Scale=Auto
-27="test.trellis : errorRealReal" default Real AnalogDisplay AType=Step Scale=Auto
-28="test.trellis.trellisCarrierLoop : oneMinusAlpha[17:0]" default
-29="test.trellis.trellisCarrierLoop : alpha[17:0]" default
-30="test.trellis.trellisCarrierLoop : phaseErrorImag[9:0]" default
-31="test.trellis.trellisCarrierLoop : phaseErrorReal[9:0]" default
-32="test.trellis.viterbi_top : index_1d[4:1]" default
-33="test.trellis.trellisCarrierLoop : deviationCorrection[31:0]" default
-34="test.trellis.trellisCarrierLoop : legacyBit" default
-35="test.trellis.trellisCarrierLoop : freqReal" default Real AnalogDisplay AType=Step Scale=Auto
-36="test.trellis.trellisCarrierLoop : qInReal" default Real AnalogDisplay AType=Step Scale=Auto
-37="test.trellis.trellisCarrierLoop : iOutReal" default Real AnalogDisplay AType=Step Scale=Fixed MinScaleDbl=-0.5 MaxScaleDbl=0.5
-38="test.trellis.trellisCarrierLoop : iInReal" default Real AnalogDisplay AType=Step Scale=Fixed MinScaleDbl=-0.5 MaxScaleDbl=0.5
-39="test.trellis.trellisCarrierLoop : phaseError[7:0]" default Unknown
-40="test.trellis : phErrShft[7:0]" default
-41="test : trellisReset" default
+8="test.trellis.trellisCarrierLoop : enableLoop" default
+9="test.trellis.trellisCarrierLoop : qRotReal" default Real AnalogDisplay AType=Step Scale=Auto
+10="test.trellis.trellisCarrierLoop : iRotReal" default Real AnalogDisplay AType=Step Scale=Auto
+11="test.trellis.trellisCarrierLoop : rotationImag[17:0]" default
+12="test.trellis.trellisCarrierLoop : rotationReal[17:0]" default
+13="test.trellis : errorImagReal" default Real AnalogDisplay AType=Step Scale=Auto
+14="test.trellis : errorRealReal" default Real AnalogDisplay AType=Step Scale=Auto
+15="test.trellis.trellisCarrierLoop : phaseSumReal" default Real AnalogDisplay AType=Step Scale=Auto
+16="test.trellis.trellisCarrierLoop : oneMinusAlpha[17:0]" default
+17="test.trellis.trellisCarrierLoop : alpha[17:0]" default
+18="test.trellis.trellisCarrierLoop : phaseErrorImag[9:0]" default
+19="test.trellis.trellisCarrierLoop : phaseErrorReal[9:0]" default
+20="test.trellis.viterbi_top : out19Real[9:0]" default
+21="test.trellis.viterbi_top : out17Real[9:0]" default
+22="test.trellis.viterbi_top : out15Real[9:0]" default
+23="test.trellis.viterbi_top : out13Real[9:0]" default
+24="test.trellis.viterbi_top : out11Real[9:0]" default
+25="test.trellis.viterbi_top : out9Real[9:0]" default
+26="test.trellis.viterbi_top : out7Real[9:0]" default
+27="test.trellis.viterbi_top : out5Real[9:0]" default
+28="test.trellis.viterbi_top : out3Real[9:0]" default
+29="test.trellis.viterbi_top : out1Real[9:0]" default
+30="test.trellis.viterbi_top : index_1d[4:1]" default
+31="test.trellis.viterbi_top : index[4:0]" default
+32="test.trellis.viterbi_top.tbt1 : tbPtr[4:0]" default
+33="test.trellis.viterbi_top.tbt1 : stateCnt[2:0]" default
+34="test.trellis.trellisCarrierLoop : deviationCorrection[31:0]" default
+35="test.trellis.trellisCarrierLoop : legacyBit" default
+36="test.trellis.trellisCarrierLoop : freqReal" default Real AnalogDisplay AType=Step Scale=Auto
+37="test.trellis.trellisCarrierLoop : qInReal" default Real AnalogDisplay AType=Step Scale=Auto
+38="test.trellis.trellisCarrierLoop : iOutReal" default Real AnalogDisplay AType=Step Scale=Fixed MinScaleDbl=-0.5 MaxScaleDbl=0.5
+39="test.trellis.trellisCarrierLoop : iInReal" default Real AnalogDisplay AType=Step Scale=Fixed MinScaleDbl=-0.5 MaxScaleDbl=0.5
+40="test : trellisReset" default
 OpenGroup=Yes
 [GroupInfo]
 0=New Group2 : 0 : 0 : 0

@@ -54,7 +54,7 @@ real carrierOffsetFreqHz;
 real carrierOffsetFreqNorm;
 integer carrierOffsetFreqInt;
 initial begin 
-  carrierOffsetFreqHz = 0.0;
+  carrierOffsetFreqHz = 250.0;
   carrierOffsetFreqNorm = carrierOffsetFreqHz * `SAMPLE_PERIOD * `TWO_POW_32;
   carrierOffsetFreqInt = carrierOffsetFreqNorm;
 end                 
@@ -698,9 +698,9 @@ initial begin
 
     // Init the trellis carrier loop
     write32(createAddress(`TRELLIS_SPACE,`LEAKY_CONTROL),32'h0000_0000);
-    write32(createAddress(`TRELLIS_SPACE,`LEAKY_ALPHA),32'h0000_8000);   
-    write32(createAddress(`TRELLIS_SPACE,`LEAKY_ONE),32'h0001_8000);   
-    //write32(createAddress(`TRELLIS_SPACE,`LF_LOOPDATA),32'h0333_3333);
+    write32(createAddress(`TRELLIS_SPACE,`LEAKY_ALPHA),32'h0000_3334);   
+    write32(createAddress(`TRELLIS_SPACE,`LEAKY_ONE),32'h0001_cccc);   
+    //write32(createAddress(`TRELLIS_SPACE,`LEAKY_DEV),32'h0666_6666);
     write32(createAddress(`TRELLIS_SPACE,`LEAKY_DEV),32'h0);
 
                     
@@ -782,7 +782,7 @@ initial begin
     write32(createAddress(`BITSYNCSPACE,`LF_CONTROL),32'h0000_0000);  
 
     // Wait 2 bit periods
-    #(10*bitrateSamplesInt*C) ;
+    #(10.0*bitrateSamplesInt*C) ;
 
     // Create a reset to clear the accumulator in the trellis
     `ifndef IQ_MAG
@@ -809,7 +809,6 @@ initial begin
 
     // Enable the trellis carrier loop
     #(10*bitrateSamplesInt*C) ;
-    //write32(createAddress(`TRELLIS_SPACE,`LEAKY_CONTROL),1);
 
     `ifdef ENABLE_AGC
     // Enable the AGC loop
@@ -818,7 +817,7 @@ initial begin
         
     // Enable the trellis carrier loop
     #(50*bitrateSamplesInt*C) ;
-    write32(createAddress(`TRELLIS_SPACE,`LEAKY_CONTROL),1);
+    //write32(createAddress(`TRELLIS_SPACE,`LEAKY_CONTROL),1);
 
     // Wait for some data to pass thru
     #(2*50*bitrateSamplesInt*C) ;

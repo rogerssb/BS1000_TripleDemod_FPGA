@@ -259,7 +259,7 @@ wire [17:0]absSlipError = slipError[17] ? (~slipError + 1) : slipError;
 reg  [21:0]avgError;
 reg  [21:0]avgSlipError;
 reg  [3:0]avgCount;
-reg  transition;
+reg  transition, prevTransition;
 always @(posedge sampleClk) begin
     if (reset) begin
         phaseState <= ONTIME;
@@ -313,6 +313,7 @@ always @(posedge sampleClk) begin
             OFFTIME: begin
                 phaseState <= ONTIME;
                 // Is there a data transition on I?
+                prevTransition <= transition;
                 if (earlySignI != lateSignI) begin
                     // Yes. Calculate DC offset error
                     transition <= 1;
@@ -332,7 +333,8 @@ always @(posedge sampleClk) begin
                     transition <= 0;
                     dcError <= 18'h00;
                     timingErrorI <= 18'h00;
-                    deviation <= offTimeI;
+                    //deviation <= offTimeI;
+                    deviation <= earlyOnTimeI;
                     end
                 // Is there a data transition on Q?
                 if (earlySignQ != lateSignQ) begin
@@ -415,7 +417,7 @@ always @(posedge sampleClk) begin
             avgOffsetError <= (avgOffsetError - {{7{avgOffsetError[24]}},avgOffsetError[24:7]})
                             + {{7{dcError[17]}},dcError};
             end
-        if (offsetErrorEn && !transition) begin
+        if (offsetErrorEn && !transition && !prevTransition) begin
             avgDeviation <= (avgDeviation - {{7{avgDeviation[24]}},avgDeviation[24:7]})
                           + {{7{absDeviation[17]}},absDeviation};
             end

@@ -20,6 +20,7 @@ module trellisCarrierLoop(clk,reset,symEn,sym2xEn,
   addr,
   din,dout,
   enableLoop,
+  phaseError,
   iOut,qOut,
   symEnDly,
   sym2xEnDly,
@@ -36,6 +37,7 @@ input   [11:0]  addr;
 input   [31:0]  din;
 output  [31:0]  dout;
 output          enableLoop;
+output  [7:0]   phaseError;
 output  [17:0]  iOut,qOut;
 output          symEnDly;
 output          sym2xEnDly;
@@ -62,80 +64,79 @@ leakyRegs leakyRegs(
     .dataIn(din),
     .dataOut(dout),
     .enableLoop(enableLoop),
+    .invertLoop(invertLoop),
     .alpha(alpha),
     .oneMinusAlpha(oneMinusAlpha),
     .deviation(dev)
     );
 
 
-wire loopFilterEn = symEn_phErr;
+/************************* Cartesion to Polar *********************************/
+wire    [7:0]   phase;
+vm_cordic_fast cordic(
+    .clk(clk),
+    .ena(symEn_phErr),
+    .x(phaseErrorReal),.y(phaseErrorImag),
+    .p(phase),
+    .enOut(phaseSymEn)
+    );
+assign phaseError = phase;
 
 /************************ Leaky Integrator ************************************/
 
-wire [35:0]productAlphaReal;
-mpy18x18 mpyAlphaReal(
+wire [35:0]productAlpha;
+mpy18x18 mpyAlpha(
     .clk(clk), 
     .sclr(reset),
     .a(alpha), 
-    .b({phaseErrorReal,8'h0}), 
-    .p(productAlphaReal)
+    .b({phase,10'h0}), 
+    .p(productAlpha)
     );
-wire [35:0]productOneMinusAlphaReal;
-reg  [35:0]realSum;
-mpy18x18 mpyOneMinusAlphaReal(
+wire [35:0]productOneMinusAlpha;
+reg  [35:0]phaseSum;
+mpy18x18 mpyOneMinusAlpha(
     .clk(clk), 
     .sclr(reset),
     .a(oneMinusAlpha), 
-    .b(realSum[34:17]), 
-    .p(productOneMinusAlphaReal)
+    .b(phaseSum[34:17]), 
+    .p(productOneMinusAlpha)
     );
 always @(posedge clk) begin
-    if (symEn_phErr) begin
-        realSum <= {productAlphaReal[34],productAlphaReal[34:0]} 
-                 + {productOneMinusAlphaReal[34],productOneMinusAlphaReal[34:0]};
+    if (phaseSymEn) begin
+        phaseSum <= {productAlpha[34],productAlpha[34:0]} 
+                  + {productOneMinusAlpha[34],productOneMinusAlpha[34:0]};
         end
     end
-
-wire [35:0]productAlphaImag;
-mpy18x18 mpyAlphaImag(
-    .clk(clk), 
-    .sclr(reset),
-    .a(alpha), 
-    .b({phaseErrorImag,8'h0}), 
-    .p(productAlphaImag)
-    );
-wire [35:0]productOneMinusAlphaImag;
-reg  [35:0]imagSum;
-mpy18x18 mpyOneMinusAlphaImag(
-    .clk(clk), 
-    .sclr(reset),
-    .a(oneMinusAlpha), 
-    .b(imagSum[34:17]), 
-    .p(productOneMinusAlphaImag)
-    );
-always @(posedge clk) begin
-    if (symEn_phErr) begin
-        imagSum <= {productAlphaImag[34],productAlphaImag[34:0]} 
-                 + {productOneMinusAlphaImag[34],productOneMinusAlphaImag[34:0]};
-        end
-    end
-
 
 `ifdef SIMULATE
-real realSumReal = (realSum[34] ? realSum[34:17] - 262144.0 : realSum[34:17])/131072.0;
-real imagSumReal = (imagSum[34] ? imagSum[34:17] - 262144.0 : imagSum[34:17])/131072.0;
+real phaseSumReal = (phaseSum[34] ? phaseSum[34:17] - 262144.0 : phaseSum[34:17])/131072.0;
 `endif
+
+wire    [9:0]   rotReal,rotImag;
+polar2Cart polar2Cart(
+    .sclr(reset),
+    .ce(phaseSymEn), 
+    .clk(clk), 
+    .we(1'b1), 
+    .data(phaseSum[34:21]), 
+    .sine(rotImag), 
+    .cosine(rotReal)
+);
 
 reg [17:0]rotationReal;
 reg [17:0]rotationImag;
 always @(posedge clk) begin
     if (enableLoop) begin
-    //if (1'b0) begin
-        rotationReal <= realSum[34:17];
-        rotationImag <= -imagSum[34:17];
+        rotationReal <= {rotReal,8'b0};
+        if (invertLoop) begin
+            rotationImag <= {rotImag,8'b0};
+            end
+        else begin
+            rotationImag <= {-rotImag,8'b0};
+            end
         end
     else begin
-        rotationReal <= 18'h04000;
+        rotationReal <= 18'h1ffff;
         rotationImag <= 18'h0;
         end
     end
@@ -230,28 +231,13 @@ dds dds(
 
 cmpy18Sat mixerCmpy(clk,reset,iInput,qInput,bReal,bImag,iMpy,qMpy);
 
-wire    [20:0]  trellisGain;
-wire    [17:0]  agcReal,agcImag;
-variableGain errorGainReal(
-    .clk(clk), .clkEn(symEn_phErr), .reset(reset), 
-    .exponent(trellisGain[20:16]), .mantissa(trellisGain[15:0]),
-    .din({rotationReal,30'h0}),
-    .dout(agcReal)
-    );
-variableGain errorGainImag(
-    .clk(clk), .clkEn(symEn_phErr), .reset(reset), 
-    .exponent(trellisGain[20:16]), .mantissa(trellisGain[15:0]),
-    .din({rotationImag,30'h0}),
-    .dout(agcImag)
-    );
-
 `ifdef SIMULATE
-real iRotReal = (agcReal[17] ? agcReal - 262144.0 : agcReal)/131072.0;
-real qRotReal = (agcImag[17] ? agcImag - 262144.0 : agcImag)/131072.0;
+real iRotReal = (rotationReal[17] ? rotationReal - 262144.0 : rotationReal)/131072.0;
+real qRotReal = (rotationImag[17] ? rotationImag - 262144.0 : rotationImag)/131072.0;
 `endif
 
 wire    [17:0]  iLeaky,qLeaky;
-cmpy18Sat leakyCmpy(clk,reset,iMpy,qMpy,agcReal,agcImag,iLeaky,qLeaky);
+cmpy18Sat leakyCmpy(clk,reset,iMpy,qMpy,rotationReal,rotationImag,iLeaky,qLeaky);
 
 reg [7:0] symEnSr;
 reg [7:0] sym2xEnSr;
@@ -293,13 +279,5 @@ always @(qInput) qInReal = (qInput[17] ? qInput - 272144.0 : qInput)/131072.0;
 real freqReal = (freq[7] ? freq - 256.0 : freq)/128.0;
 
 `endif
-
-trellisAGC trellisAGC( 
-    .clk(clk), .reset(reset), .syncIn(sym2xEn),
-    .enableLoop(enableLoop),
-    .iRef(iInput),.qRef(qInput),
-    .iIn(iOut),.qIn(qOut),
-    .agcGain(trellisGain)
-    );
 
 endmodule

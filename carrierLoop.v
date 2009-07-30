@@ -118,13 +118,13 @@ always @(demodMode or offsetError or offsetErrorEn or
             modeErrorEn <= 1'b1;
             enableCarrierLock <= 1;
             end
+        `MODE_PCMTRELLIS,
         `MODE_FM: begin
             sync <= ddcSync;
             modeError <= freq;
             modeErrorEn <= 1'b1;
             enableCarrierLock <= 0;
             end
-        `MODE_PCMTRELLIS,
         `MODE_2FSK: begin
             sync <= resampSync;
             modeError <= offsetError;

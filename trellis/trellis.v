@@ -60,6 +60,7 @@ wire            symEn_phErr;
 reg     [7:0]   phErrShft;
 `ifdef USE_LEAKY
 wire    [ROT_BITS-1:0]   phaseErrorReal;
+wire    [7:0]   phaseError;
 `endif
 wire    [ROT_BITS-1:0]   phaseErrorImag;
 wire    [7:0]   freq;
@@ -76,6 +77,7 @@ trellisCarrierLoop trellisCarrierLoop(
   .phaseErrorReal(phaseErrorReal),
   .phaseErrorImag(phaseErrorImag),
   .enableLoop(enableLoop),
+  .phaseError(phaseError),
   `else
   .phaseError(phErrShft),
   `endif
@@ -521,27 +523,24 @@ always @(posedge clk) begin
     end
 
 
-   reg [7:0]            dataBits;
-  
-   reg                  satPos,satNeg;
-   wire                 sign = phaseErrorImag[9];
+reg     [7:0]   dataBits;
+reg             satPos,satNeg;
+wire            sign = phaseErrorImag[9];
 
-   always @(posedge clk) begin
-      //if (symEn | sym2xEn) begin
-         dataBits <= phaseErrorImag[7:0];
-         satPos <= !sign && (phaseErrorImag[9:7] != 3'b000);
-         satNeg <=  sign && (phaseErrorImag[9:7] != 3'b111);
-         if (satPos) begin
+always @(posedge clk) begin
+    if (symEn_phErr) begin
+        dataBits <= phaseErrorImag[7:0];
+        satPos <= !sign && (phaseErrorImag[8:7] != 2'b00);
+        satNeg <=  sign && (phaseErrorImag[8:7] != 2'b11);
+        if (satPos) begin
             phErrShft <= 8'h7f;
-         end
-         else if (satNeg) begin
+        end else if (satNeg) begin
             phErrShft <= 8'h81;
-         end
-         else begin
+        end else begin
             phErrShft <= dataBits;
-         end
-      //end   
-   end
+        end
+    end   
+end
 
 
 
@@ -568,7 +567,11 @@ always @(posedge clk) begin
             dac0Sync <= sym2xEnDly;
             end
         `DAC_TRELLIS_PHERR: begin
+            `ifdef USE_LEAKY
+            dac0Data <= {phaseErrorReal,8'b0};
+            `else
             dac0Data <= {phErrShft,10'b0};
+            `endif
             dac0Sync <= symEn_phErr;
             end
         `DAC_TRELLIS_INDEX: begin
@@ -591,12 +594,16 @@ always @(posedge clk) begin
             dac1Sync <= sym2xEnDly;
             end
         `DAC_TRELLIS_PHERR: begin
+            `ifdef USE_LEAKY
+            dac1Data <= {phaseErrorImag,8'b0};
+            `else
             dac1Data <= {phErrShft,10'b0};
+            `endif
             dac1Sync <= symEn_phErr;
             end
         `DAC_TRELLIS_INDEX: begin
-            dac1Data <= {1'b0,index,12'b0};
-            dac1Sync <= trellEna;
+            dac2Data <= {freq,10'b0};
+            dac2Sync <= sym2xEnDly;
             end
         default: begin
             dac1Data <= {phErrShft,10'b0};
@@ -614,12 +621,16 @@ always @(posedge clk) begin
             dac2Sync <= sym2xEnDly;
             end
         `DAC_TRELLIS_PHERR: begin
+            `ifdef USE_LEAKY
+            dac2Data <= {phaseError,10'b0};
+            `else
             dac2Data <= {phErrShft,10'b0};
+            `endif
             dac2Sync <= symEn_phErr;
             end
         `DAC_TRELLIS_INDEX: begin
-            dac2Data <= {freq,10'b0};
-            dac2Sync <= sym2xEnDly;
+            dac2Data <= {phErrShft,10'b0};
+            dac2Sync <= symEn_phErr;
             end
         default: begin
             dac2Data <= {phErrShft,10'b0};
