@@ -27,8 +27,6 @@ module bitsync(
     qSymClk,
     symDataQ,
     bitDataQ,
-    symPhase,
-    symPhaseSync,
     sampleFreq,
     auSampleFreq,
     bitsyncLock,
@@ -63,8 +61,6 @@ output          qSymEn;
 output          qSymClk;
 output  [17:0]  symDataQ;
 output          bitDataQ;
-output  [7:0]   symPhase;
-output          symPhaseSync;
 output  [31:0]  sampleFreq;
 output  [31:0]  auSampleFreq;
 output          bitsyncLock;
@@ -141,26 +137,29 @@ always @(posedge sampleClk) begin
 //************************** Frequency Discriminator **************************
 `define USE_FMDEMOD
 `ifdef USE_FMDEMOD
-wire    [9:0]   phase;
-wire    [8:0]   mag;
+wire    [11:0]   phase;
 vm_cordic cordic(
     .clk(sampleClk),
     .ena(symTimes2Sync),
-    .x(iMF[17:6]),.y(qMF[17:6]),
-    .m(mag),
+    .x(iMF[17:4]),.y(qMF[17:4]),
     .p(phase)
     );
-reg [9:0]freqOut;
-reg [9:0]prevPhase;
-wire [9:0]phaseDiff = phase - prevPhase;
+reg [11:0]freqOut;
+reg [11:0]prevPhase;
+wire [11:0]phaseDiff = phase - prevPhase;
 always @(posedge sampleClk) begin
     if (symTimes2Sync) begin
-        freqOut <= phaseDiff;
+        if (phaseDiff == 12'h800) begin
+            freqOut <= 0;
+            end
+        else begin
+            freqOut <= phaseDiff;
+            end
         prevPhase <= phase;
         end
     end
 
-wire    [17:0]  freq = {freqOut,8'b0};
+wire    [17:0]  freq = {freqOut,6'b0};
 
 `else
 reg     [17:0]  iMF0,iMF1;
@@ -195,8 +194,8 @@ end
 `ifdef SIMULATE
 real freqReal;
 real phaseReal;
-always @(freq) freqReal = ((freq > 131071.0) ? freq - 262144.0 : freq)/131072.0;
-always @(phase) phaseReal = ((phase > 127.0) ? phase - 256.0: phase)/256.0;
+always @(freq) freqReal = (freq[17] ? freq - 262144.0 : freq)/131072.0;
+always @(phase) phaseReal = (phase[11] ? phase - 4096.0: phase)/2048.0;
 `endif
 
 
@@ -216,15 +215,16 @@ parameter SLIP0 =    2'b11;
 parameter SLIP1 =    2'b10;
 
 // Fifo of baseband inputs
-reg [17:0]bbSRI[2:0];
-reg [17:0]bbSRQ[2:0];
+reg [17:0]bbSRI[3:0];
+reg [17:0]bbSRQ[3:0];
 
 // Timing error variables
 wire earlySignI = bbSRI[2][17];
 wire lateSignI = bbSRI[0][17];
+wire [17:0]prevOffTimeI = bbSRI[3];
 wire [17:0]earlyOnTimeI = bbSRI[2];
-wire [17:0]lateOnTimeI = bbSRI[0];
 wire [17:0]offTimeI = bbSRI[1];
+wire [17:0]lateOnTimeI = bbSRI[0];
 wire [17:0]negoffTimeI = (~offTimeI + 1);
 wire earlySignQ = bbSRQ[2][17];
 wire lateSignQ = bbSRQ[0][17];
@@ -239,8 +239,10 @@ wire    [18:0]  timingError = {timingErrorI[17],timingErrorI} + {timingErrorQ[17
 wire timingErrorEn = (phaseState == ONTIME);
 
 // DC Offset error variables
+//`define SINGLE_PULSE
+`define ZERO_CROSSING
 reg  [17:0]dcError;
-wire offsetErrorEn = (phaseState == OFFTIME);
+wire offsetEn = (phaseState == OFFTIME);
 
 // Deviation variables
 reg  [17:0]deviation;
@@ -259,7 +261,10 @@ wire [17:0]absSlipError = slipError[17] ? (~slipError + 1) : slipError;
 reg  [21:0]avgError;
 reg  [21:0]avgSlipError;
 reg  [3:0]avgCount;
-reg  transition, prevTransition;
+reg  dcErrorAvailable;
+reg  transition;
+reg  [1:0]noTransitionCount;
+reg  [1:0]transitionCount;
 always @(posedge sampleClk) begin
     if (reset) begin
         phaseState <= ONTIME;
@@ -281,8 +286,8 @@ always @(posedge sampleClk) begin
             bbSRQ[0] <= freq;
             end
         else if (demodMode == `MODE_PM) begin
-            bbSRI[0] <= {phase,8'b0};
-            bbSRQ[0] <= {phase,8'b0};
+            bbSRI[0] <= {phase,6'b0};
+            bbSRQ[0] <= {phase,6'b0};
             end
         else if (bitsyncMode == `MODE_DUAL_RAIL) begin
             bbSRI[0] <= iMF;
@@ -294,6 +299,7 @@ always @(posedge sampleClk) begin
             end
         bbSRI[1] <= bbSRI[0];
         bbSRI[2] <= bbSRI[1];
+        bbSRI[3] <= bbSRI[2];
         bbSRQ[1] <= bbSRQ[0];
         bbSRQ[2] <= bbSRQ[1];
         case (phaseState)
@@ -313,11 +319,31 @@ always @(posedge sampleClk) begin
             OFFTIME: begin
                 phaseState <= ONTIME;
                 // Is there a data transition on I?
-                prevTransition <= transition;
                 if (earlySignI != lateSignI) begin
                     // Yes. Calculate DC offset error
                     transition <= 1;
-                    dcError <= offTimeI;
+                    noTransitionCount <= 0;
+                    transitionCount <= transitionCount + 1;
+                    `ifdef SINGLE_PULSE
+                    if (transitionCount[0]) begin
+                        dcError <= earlyOnTimeI + lateOnTimeI;
+                        dcErrorAvailable <= 1;
+                        end
+                    else begin
+                        dcError <= 0;
+                        dcErrorAvailable <= 0;
+                        end
+                    `endif
+                    `ifdef ZERO_CROSSING
+                    if (transitionCount[0] && (earlySignI != lateSignI)) begin
+                        dcError <= offTimeI + prevOffTimeI;
+                        dcErrorAvailable <= 1;
+                        end
+                    else begin
+                        dcError <= 0;
+                        dcErrorAvailable <= 0;
+                        end
+                    `endif
                     // High to low transition?
                     if (earlySignI) begin
                         timingErrorI <= offTimeI;
@@ -331,6 +357,13 @@ always @(posedge sampleClk) begin
                     end
                 else begin
                     transition <= 0;
+                    `ifdef SINGLE_PULSE
+                    dcErrorAvailable <= 0;
+                    `endif
+                    transitionCount <= 0;
+                    if (noTransitionCount < 3) begin
+                        noTransitionCount <= noTransitionCount + 1;
+                        end
                     dcError <= 18'h00;
                     timingErrorI <= 18'h00;
                     //deviation <= offTimeI;
@@ -406,6 +439,12 @@ always @(qMF) qMFReal = (qMF[17] ? qMF - 262144.0 : qMF)/131072.0;
 reg     [24:0]  avgDeviation;
 reg     [24:0]  avgOffsetError;
 assign          offsetError = dcError;
+`ifdef SINGLE_PULSE
+assign          offsetErrorEn = (dcErrorAvailable && offsetEn);
+`endif
+`ifdef ZERO_CROSSING
+assign          offsetErrorEn = offsetEn;
+`endif
 //assign          offsetError = avgOffsetError[24:7];
 always @(posedge sampleClk) begin
     if (reset) begin
@@ -413,11 +452,11 @@ always @(posedge sampleClk) begin
         avgDeviation <= 0;
         end
     else if (symTimes2Sync) begin
-        if (offsetErrorEn && transition) begin
+        if (offsetEn && dcErrorAvailable) begin
             avgOffsetError <= (avgOffsetError - {{7{avgOffsetError[24]}},avgOffsetError[24:7]})
                             + {{7{dcError[17]}},dcError};
             end
-        if (offsetErrorEn && !transition && !prevTransition) begin
+        if (offsetEn && (noTransitionCount > 1)) begin
             avgDeviation <= (avgDeviation - {{7{avgDeviation[24]}},avgDeviation[24:7]})
                           + {{7{absDeviation[17]}},absDeviation};
             end
@@ -779,27 +818,10 @@ always @(addr or
 
 reg     [17:0]  symDataI;
 reg     [17:0]  symDataQ;
-reg     [7:0]   symPhase;
-reg             enSR[9:0];
-assign          symPhaseSync = enSR[9];
 reg             bitDataI;
 reg             bitDataQ;
 always @(posedge sampleClk) begin
     if (symTimes2Sync) begin
-        // Delay the clock enable to match the delay through the fmDemod
-        enSR[0] <= timingErrorEn;
-        enSR[1] <= enSR[0];
-        enSR[2] <= enSR[1];
-        enSR[3] <= enSR[2];
-        enSR[4] <= enSR[3];
-        enSR[5] <= enSR[4];
-        enSR[6] <= enSR[5];
-        enSR[7] <= enSR[6];
-        enSR[8] <= enSR[7];
-        enSR[9] <= enSR[8];
-        if (symPhaseSync) begin
-            symPhase <= phase;
-            end
         // Capture the I output sample
         symDataI <= bbSRI[1];
         if (timingErrorEn) begin
@@ -834,9 +856,7 @@ assign qSymClk = auTimingErrorEn;
 
 `ifdef SIMULATE
 real symDataIReal;
-real symPhaseReal;
 always @(symDataI) symDataIReal = (symDataI[17] ? symDataI - 262144.0 : symDataI)/131072.0;
-always @(symPhase) symPhaseReal = (symPhase[7] ? symPhase - 256.0 : symPhase)/128.0;
 `endif
 
 endmodule

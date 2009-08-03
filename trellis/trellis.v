@@ -63,7 +63,7 @@ wire    [ROT_BITS-1:0]   phaseErrorReal;
 wire    [7:0]   phaseError;
 `endif
 wire    [ROT_BITS-1:0]   phaseErrorImag;
-wire    [7:0]   freq;
+wire    [11:0]   freq;
 wire    [17:0]  carrierLoopIOut,carrierLoopQOut;
 trellisCarrierLoop trellisCarrierLoop(
   .clk(clk),
@@ -543,6 +543,39 @@ always @(posedge clk) begin
 end
 
 
+`ifdef ESTIMATE_BER
+// Create a delayed version of the legacy bit to compare to the decision bit as
+// an estimate of the SNR
+reg     [31:0]  legacySR;
+always @(posedge clk) begin
+    if (symEn) begin
+        legacySR <= {legacySR[30:0],legacyBit};
+        end
+    end
+bitFifo bitFifo(
+    .clk(clk),
+    .reset(reset),
+    .enIn(symEn),
+    .enOut(symEnOut),
+    .din(legacySR[12]),
+    .dout(legacyDelayed)
+    );
+
+reg     [15:0]  bitCount;
+reg     [15:0]  bitErrorCount;
+always @(posedge clk) begin 
+    if (reset) begin
+        bitCount <= 16'hffff;
+        bitErrorCount <= 0;
+        end
+    else if ((symEnOut) && (bitCount != 0)) begin
+        bitCount <= bitCount - 1;
+        if (legacyDelayed != decision) begin
+            bitErrorCount <= bitErrorCount + 1;
+            end
+        end
+    end
+`endif
 
 `endif //IQ_MAG
    
@@ -602,7 +635,7 @@ always @(posedge clk) begin
             dac1Sync <= symEn_phErr;
             end
         `DAC_TRELLIS_INDEX: begin
-            dac2Data <= {freq,10'b0};
+            dac2Data <= {freq,6'b0};
             dac2Sync <= sym2xEnDly;
             end
         default: begin

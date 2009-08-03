@@ -72,7 +72,35 @@ parameter atan_ki = n==08 ? 'h0020 : (
                     n==12 ? 'h0003 : (
                     n==14 ? 'h000a : (
                     n==16 ? 'h0029 : (
-                    n==18 ? 'h000a3 : 'h0028c)))));
+                    n==18 ? 'h000a3 : 'h0028c))))),
+
+          atan_k8 = n==08 ? 'h0000 : (
+                    n==10 ? 'h0000 : (
+                    n==12 ? 'h0001 : (
+                    n==14 ? 'h0005 : (
+                    n==16 ? 'h0000 : (
+                    n==18 ? 'h00051 : 'h00000))))),
+
+          atan_k9 = n==08 ? 'h0000 : (
+                    n==10 ? 'h0000 : (
+                    n==12 ? 'h0000 : (
+                    n==14 ? 'h0003 : (
+                    n==16 ? 'h0000 : (
+                    n==18 ? 'h00000 : 'h00000))))),
+
+          atan_k10 = n==08 ? 'h0000 : (
+                    n==10 ? 'h0000 : (
+                    n==12 ? 'h0000 : (
+                    n==14 ? 'h0001 : (
+                    n==16 ? 'h0000 : (
+                    n==18 ? 'h0000 : 'h00000))))),
+
+          atan_k11 = n==08 ? 'h0000 : (
+                    n==10 ? 'h0000 : (
+                    n==12 ? 'h0000 : (
+                    n==14 ? 'h0001 : (
+                    n==16 ? 'h0000 : (
+                    n==18 ? 'h00000 : 'h00000)))));
 
 
 parameter natan_ki = n==08 ? 'hffe0 : (
@@ -136,17 +164,45 @@ parameter natan_ki = n==08 ? 'hffe0 : (
                         n==12 ? 'hfffd : (
                         n==14 ? 'hfff6 : (
                         n==16 ? 'hffd7 : (
-                        n==18 ? 'hfff5d : 'hffd74)))));
+                        n==18 ? 'hfff5d : 'hffd74))))),
+
+             natan_k8 = n==08 ? 'h0000 : (
+                        n==10 ? 'h0000 : (
+                        n==12 ? 'hffff : (
+                        n==14 ? 'hfffb : (
+                        n==16 ? 'h0000 : (
+                        n==18 ? 'hfffaf : 'h00000))))),
+
+             natan_k9 = n==08 ? 'h0000 : (
+                        n==10 ? 'h0000 : (
+                        n==12 ? 'hffff : (
+                        n==14 ? 'hfffd : (
+                        n==16 ? 'h0000 : (
+                        n==18 ? 'hfffd7 : 'h00000))))),
+
+             natan_k10 = n==08 ? 'h0000 : (
+                        n==10 ? 'h0000 : (
+                        n==12 ? 'h0000 : (
+                        n==14 ? 'hffff : (
+                        n==16 ? 'h0000 : (
+                        n==18 ? 'h00000 : 'h00000))))),
+
+             natan_k11 = n==08 ? 'h0000 : (
+                        n==10 ? 'h0000 : (
+                        n==12 ? 'h0000 : (
+                        n==14 ? 'hffff : (
+                        n==16 ? 'h0000 : (
+                        n==18 ? 'h00000 : 'h00000)))));
 
 
 //  for n = 10, parameters are set to match the CORDIC in the Microdyne RCB-4000
 
 // magnitude output slice
 
-parameter mh = 10, ml = 2;
+parameter mh = 14, ml = 2;
 
 // phase output slice
 
-parameter ph = 10, pl = 1;
+parameter ph = 12, pl = 1;
 
 

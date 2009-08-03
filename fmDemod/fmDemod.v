@@ -19,11 +19,11 @@ input sync;
 input   [17:0]  iFm;
 input   [17:0]  qFm;
 input   [3:0]   demodMode;
-output  [7:0]   phase;
-output  [7:0]   phaseError;
-output  [7:0]   freq;
-output  [7:0]   freqError;
-output  [8:0]   mag;
+output  [11:0]   phase;
+output  [11:0]   phaseError;
+output  [11:0]   freq;
+output  [11:0]   freqError;
+output  [12:0]   mag;
 output          syncOut;
 
 `ifdef SIMULATE
@@ -48,16 +48,16 @@ cordic18x12 cordic( .clk        (clk),
 vm_cordic_fast cordic(
     .clk(clk),
     .ena(sync),
-    .x(iFm[17:8]),.y(qFm[17:8]),
+    .x(iFm[17:4]),.y(qFm[17:4]),
     .m(mag),
     .p(phase),
     .enOut(syncOut)
     );
 `endif
 
-wire    [7:0]   bpskPhase = phase;
-wire    [7:0]   qpskPhase = phase - 8'h20;
-reg     [7:0]   phaseError;
+wire    [11:0]   bpskPhase = phase;
+wire    [11:0]   qpskPhase = phase - 12'h200;
+reg     [11:0]   phaseError;
 always @(posedge clk) begin
     if (syncOut) begin
         case (demodMode)
@@ -74,12 +74,12 @@ always @(posedge clk) begin
                 phaseError <= phase;
                 end
             `MODE_BPSK: begin
-                phaseError <= {bpskPhase[6:0],1'b0};
+                phaseError <= {bpskPhase[10:0],1'b0};
                 end
             `MODE_QPSK,
             `MODE_OQPSK,
             `MODE_AUQPSK: begin
-                phaseError <= {qpskPhase[5:0],2'b0};
+                phaseError <= {qpskPhase[9:0],2'b0};
                 end
             default: begin
                 phaseError <= 0;
@@ -90,15 +90,20 @@ always @(posedge clk) begin
 
 // FM = derivative approximation based on phase difference
 
-reg [7:0]freq;
-reg [7:0]freqError;
-reg [7:0]prevPhase;
-reg [7:0]prevPhaseError;
-wire [7:0]phaseDiff = phase - prevPhase;
-wire [7:0]phaseErrorDiff = phaseError - prevPhaseError;
+reg [11:0]freq;
+reg [11:0]freqError;
+reg [11:0]prevPhase;
+reg [11:0]prevPhaseError;
+wire [11:0]phaseDiff = phase - prevPhase;
+wire [11:0]phaseErrorDiff = phaseError - prevPhaseError;
 always @(posedge clk) begin
     if (syncOut) begin
-        freq <= phaseDiff;
+        if (phaseDiff == 12'h800) begin
+            freq <= 12'h0;
+            end
+        else begin
+            freq <= phaseDiff;
+            end
         prevPhase <= phase;
         freqError <= phaseErrorDiff;
         prevPhaseError <= phaseError;
@@ -113,10 +118,10 @@ real phaseErrorReal;
 real freqReal;
 real freqErrorReal; 
 always @(mag) magReal   = mag/512.0;
-always @(phase) phaseReal = ((phase > 127.0) ? (phase - 256.0) : phase)/128.0;
-always @(phaseError) phaseErrorReal = ((phaseError > 127.0) ? (phaseError - 256.0) : phaseError)/128.0;
-always @(freq) freqReal = ((freq > 127.0) ? (freq - 256.0) : freq)/128.0; 
-always @(freqError) freqErrorReal = ((freqError > 127.0) ? (freqError - 256.0) : freqError)/128.0; 
+always @(phase) phaseReal = (phase[11] ? (phase - 4096.0) : phase)/2048.0;
+always @(phaseError) phaseErrorReal = (phaseError[11] ? (phaseError - 4096.0) : phaseError)/2048.0;
+always @(freq) freqReal = (freq[11] ? (freq - 4096.0) : freq)/2048.0; 
+always @(freqError) freqErrorReal = (freqError[11] ? (freqError - 4096.0) : freqError)/2048.0; 
 `endif
 
 endmodule

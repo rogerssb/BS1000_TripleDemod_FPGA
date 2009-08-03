@@ -39,7 +39,7 @@ real carrierFreqNorm = carrierFreqHz * `SAMPLE_PERIOD * `TWO_POW_32;
 integer carrierFreqInt = carrierFreqNorm;
 wire [31:0] carrierFreq = carrierFreqInt;
 
-real carrierOffsetFreqHz = 0.0;
+real carrierOffsetFreqHz = 3000.0;
 real carrierOffsetFreqNorm = carrierOffsetFreqHz * `SAMPLE_PERIOD * `TWO_POW_32;
 integer carrierOffsetFreqInt = carrierOffsetFreqNorm;
 wire [31:0] carrierOffsetFreq = carrierOffsetFreqInt;
@@ -564,7 +564,7 @@ initial begin
     // Init the sample rate loop filters
     write32(createAddress(`RESAMPSPACE,`RESAMPLER_RATE),resamplerFreqInt);
     write32(createAddress(`BITSYNCSPACE,`LF_CONTROL),1);    // Zero the error
-    write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h001b0016);    
+    write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h001c0014);    
     //write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h0014000c);    
     write32(createAddress(`BITSYNCSPACE,`LF_LIMIT), resamplerLimitInt);    
 
@@ -668,6 +668,8 @@ initial begin
     $fclose(outfile);
     `endif
     $stop;
+
+    write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h0018000c);    
 
     end
 

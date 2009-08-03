@@ -7,7 +7,7 @@
 
 module vm_cordic_fast(clk,ena,x,y,m,p,enOut);
 
-    parameter n = 10;
+    parameter n = 14;
 
     `include "vm_include_fast.v"
 
@@ -21,11 +21,11 @@ module vm_cordic_fast(clk,ena,x,y,m,p,enOut);
 
     reg [n:0] xin, yin, zin;
 
-    reg [10:0]   enSR;
+    reg [14:0]   enSR;
     always @(posedge clk) begin
-        enSR <= {enSR[9:0],ena};
+        enSR <= {enSR[13:0],ena};
         end
-    assign enOut = enSR[10];
+    assign enOut = enSR[14];
 
     always @(posedge clk)begin
         xin <= {x[n-1],x[n-1:0]};
@@ -230,18 +230,98 @@ module vm_cordic_fast(clk,ena,x,y,m,p,enOut);
             end
         end
 
+    // 2^(-8) rotation --------------------------------------------------------
+
+    reg [n:0] x8, y8, z8;
+
+    wire [n:0] nx8 = ~x8 +1;
+    wire [n:0] ny8 = ~y8 +1;
+
+    always @(posedge clk)begin
+        if(y7[n])begin 
+            x8 <= x7 + {{8{ny7[n]}},ny7[n:8]};
+            y8 <= y7 + {{8{x7[n]}},x7[n:8]};
+            z8 <= z7 + atan_k8;
+            end
+        else begin
+            x8 <= x7 + {{8{y7[n]}},y7[n:8]};
+            y8 <= y7 + {{8{nx7[n]}},nx7[n:8]};
+            z8 <= z7 + natan_k8;
+            end
+        end
+
+    // 2^(-9) rotation --------------------------------------------------------
+
+    reg [n:0] x9, y9, z9;
+
+    wire [n:0] nx9 = ~x9 +1;
+    wire [n:0] ny9 = ~y9 +1;
+
+    always @(posedge clk)begin
+        if(y8[n])begin 
+            x9 <= x8 + {{9{ny8[n]}},ny8[n:9]};
+            y9 <= y8 + {{9{x8[n]}},x8[n:9]};
+            z9 <= z8 + atan_k9;
+            end
+        else begin
+            x9 <= x8 + {{9{y8[n]}},y8[n:9]};
+            y9 <= y8 + {{9{nx8[n]}},nx8[n:9]};
+            z9 <= z8 + natan_k9;
+            end
+        end
+
+    // 2^(-10) rotation --------------------------------------------------------
+
+    reg [n:0] x10, y10, z10;
+
+    wire [n:0] nx10 = ~x10 +1;
+    wire [n:0] ny10 = ~y10 +1;
+
+    always @(posedge clk)begin
+        if(y9[n])begin 
+            x10 <= x9 + {{10{ny9[n]}},ny9[n:10]};
+            y10 <= y9 + {{10{x9[n]}},x9[n:10]};
+            z10 <= z9 + atan_k10;
+            end
+        else begin
+            x10 <= x9 + {{10{y9[n]}},y9[n:10]};
+            y10 <= y9 + {{10{nx9[n]}},nx9[n:10]};
+            z10 <= z9 + natan_k10;
+            end
+        end
+
+    // 2^(-11) rotation --------------------------------------------------------
+
+    reg [n:0] x11, y11, z11;
+
+    wire [n:0] nx11 = ~x11 +1;
+    wire [n:0] ny11 = ~y11 +1;
+
+    always @(posedge clk)begin
+        if(y10[n])begin 
+            x11 <= x10 + {{11{ny10[n]}},ny10[n:11]};
+            y11 <= y10 + {{11{x10[n]}},x10[n:11]};
+            z11 <= z10 + atan_k11;
+            end
+        else begin
+            x11 <= x10 + {{11{y10[n]}},y10[n:11]};
+            y11 <= y10 + {{11{nx10[n]}},nx10[n:11]};
+            z11 <= z10 + natan_k11;
+            end
+        end
+
     // output slicing ---------------------------------------------------------
 
     reg [mh:ml] m;
     reg [ph:pl] p;
 
     // Scale the magnitude by (2 - 0.25) = 1.75
-    wire [mh+1:ml]mX2 = {x7[mh:ml],1'b0};
-    wire [mh+1:ml]mDiv4 = {3'b0,x7[mh:ml+2]};
+    wire [mh+1:ml]mX2 = {x11[mh:ml],1'b0};
+    wire [mh+1:ml]mDiv4 = {3'b0,x11[mh:ml+2]};
     wire [mh+1:ml]mScaled = mX2 - mDiv4;
     always @(posedge clk)begin
-        m <= mScaled[mh+1] ? 9'h1ff : mScaled[mh:ml];
-        p <= ~z7[ph:pl] +1;
+        m <= mScaled[mh+1] ? 13'h1fff : mScaled[mh:ml];
+        p <= ~z11[ph:pl] +1;
         end
 
 endmodule
@@ -249,45 +329,47 @@ endmodule
 `ifdef SELFTEST
 module test ();
 
+parameter n = 14;
+
 reg clk;
+reg reset;
 initial clk = 0;
 always  #5 clk = !clk;
 
-reg [23:0] sincos_memory [2047:0];
-initial $readmemh("sincos.hex", sincos_memory) ;
+// LO Generator
+wire    [17:0]iDds;
+wire    [17:0]qDds;
+dds dds ( 
+    .sclr(reset), 
+    .clk(clk), 
+    .ce(1'b1),
+    .we(1'b1), 
+    .data(32'h00200000), 
+    .sine(qDds), 
+    .cosine(iDds)
+    );
 
-reg [23:0] sincos_array;
-reg [10:0] sincos_index; 
-initial sincos_index = 0;
-initial sincos_array = 0;
-
-reg [9:0]xCounter,yCounter;
-initial xCounter = 0;
-initial yCounter = 0;
-always @(posedge clk)begin
-    sincos_index <= sincos_index +1;
-    sincos_array <= sincos_memory[sincos_index];
-    xCounter <= xCounter + 1;
-    if (xCounter == 10'h3ff) begin
-        yCounter <= yCounter + 1;
-        end
-    end
-
-reg dataSwitch;
-wire [9:0]x = dataSwitch ? xCounter : sincos_array[9:0];
-wire [9:0]y = dataSwitch ? yCounter : sincos_array[21:12];
-real xReal = (x[9] ? x - 1024.0 : x)/512.0;
-real yReal = (y[9] ? y - 1024.0 : y)/512.0;
-wire [8:0]mag;
-wire [7:0]phase;
-real magReal = mag/512.0;
-real phaseReal = (phase[7] ? phase - 256.0 : phase)/128.0;
-vm_cordic uut(clk,1'b1,x,y,mag,phase);
+wire    [n-1:0]  x = iDds[17:(17-n+1)];
+wire    [n-1:0]  y = qDds[17:(17-n+1)];
+real xReal = (x[n-1] ? x - 16384.0 : x)/8192.0;
+real yReal = (y[n-1] ? y - 16384.0 : y)/8192.0;
+wire [n-2:0]mag;
+wire [n-3:0]phase;
+real magReal = mag/8192.0;
+real phaseReal = (phase[n-3] ? phase - 4096.0 : phase)/2048.0;
+vm_cordic_fast #(n) uut(
+    .clk(clk),
+    .ena(1'b1),
+    .x(x), .y(y),
+    .m(mag),
+    .p(phase));
 
 initial begin
-    dataSwitch = 0;
-    #(4*5120) ;
-    dataSwitch = 1;
+    reset = 0;
+    #(2*10) ;
+    reset = 1;
+    #(2*10) ;
+    reset = 0;
     #(1024*1024*10) ;
     $stop;
     

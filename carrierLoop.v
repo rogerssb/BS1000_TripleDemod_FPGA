@@ -5,7 +5,6 @@ module carrierLoop(
     clk, reset, 
     ddcSync,
     resampSync,
-    symSync,
     wr0,wr1,wr2,wr3,
     addr,
     din,
@@ -16,7 +15,6 @@ module carrierLoop(
     highFreqOffset,
     offsetError,
     offsetErrorEn,
-    symPhase,
     carrierFreqOffset,
     carrierLeadFreq,
     carrierFreqEn,
@@ -29,22 +27,20 @@ input           clk;
 input           reset;
 input           ddcSync;
 input           resampSync;
-input           symSync;
 input           wr0,wr1,wr2,wr3;
 input   [11:0]  addr;
 input   [31:0]  din;
 output  [31:0]  dout;
 input   [3:0]   demodMode;
-input   [7:0]   phase;
-input   [7:0]   freq;
+input   [11:0]  phase;
+input   [11:0]  freq;
 input           highFreqOffset;
-input   [7:0]   offsetError;
+input   [11:0]  offsetError;
 input           offsetErrorEn;
-input   [7:0]   symPhase;
 output  [31:0]  carrierFreqOffset;
 output  [31:0]  carrierLeadFreq;
 output          carrierFreqEn;
-output  [7:0]   loopError;
+output  [11:0]   loopError;
 output          carrierLock;
 output  [15:0]  lockCounter;
 
@@ -92,19 +88,16 @@ loopRegs loopRegs(
 /************************ Error Signal Source *********************************/
 
 // Determine the source of the error signal
-reg     [7:0]   modeError;
+reg     [11:0]   modeError;
 reg             modeErrorEn;
 reg             sync;
-wire    [7:0]   bpskPhase = phase;
-wire    [7:0]   qpskPhase = phase - 8'h20;
-wire    [7:0]   bpskSymPhase = symPhase;
-wire    [7:0]   qpskSymPhase = symPhase - 8'h20;
+wire    [11:0]   bpskPhase = phase;
+wire    [11:0]   qpskPhase = phase - 12'h200;
 reg             enableCarrierLock;
 always @(demodMode or offsetError or offsetErrorEn or 
          qpskPhase or bpskPhase or
-         qpskSymPhase or bpskSymPhase or
          phase or freq or 
-         ddcSync or resampSync or symSync) begin
+         ddcSync or resampSync) begin
     case (demodMode)
         `MODE_AM: begin
             sync <= ddcSync;
@@ -133,9 +126,7 @@ always @(demodMode or offsetError or offsetErrorEn or
             end
         `MODE_BPSK: begin
             sync <= ddcSync;
-            modeError <= {bpskPhase[6:0],1'b1};
-            //sync <= symSync;
-            //modeError <= {bpskSymPhase[5:0],2'b0};
+            modeError <= {bpskPhase[10:0],1'b1};
             modeErrorEn <= 1'b1;
             enableCarrierLock <= 1;
             end
@@ -143,9 +134,7 @@ always @(demodMode or offsetError or offsetErrorEn or
         `MODE_OQPSK,
         `MODE_AUQPSK: begin
             sync <= ddcSync;
-            modeError <= {qpskPhase[5:0],2'b10};
-            //sync <= symSync;
-            //modeError <= {qpskSymPhase[5:0],2'b0};
+            modeError <= {qpskPhase[9:0],2'b10};
             modeErrorEn <= 1'b1;
             enableCarrierLock <= 1;
             end
@@ -162,28 +151,28 @@ wire loopFilterEn = sync & modeErrorEn;
 
 `ifdef SIMULATE
 real modeErrorReal;
-always @(modeError) modeErrorReal = (modeError[7] ? modeError - 256.0 : modeError)/128.0;
+always @(modeError) modeErrorReal = (modeError[11] ? modeError - 4096.0 : modeError)/2048.0;
 real avgErrorReal;
 always @(posedge clk) begin
     if (reset) begin
         avgErrorReal <= 0.0;
         end
     else if (loopFilterEn) begin
-        avgErrorReal <= (0.99 * avgErrorReal) + (0.01 * modeErrorReal);
+        avgErrorReal <= (0.999 * avgErrorReal) + (0.001 * modeErrorReal);
         end
     end
 `endif
 
 
 /**************************** Adjust Error ************************************/
-reg     [7:0]   loopError;
-wire    [7:0]   negModeError = ~modeError + 1;
+reg     [11:0]   loopError;
+wire    [11:0]   negModeError = ~modeError + 1;
 reg             carrierLock;
 wire            breakLoop = (zeroError || (sweepEnable && !carrierLock && highFreqOffset));
 always @(posedge clk) begin 
     if (loopFilterEn) begin
         if (breakLoop) begin
-            loopError <= 8'h0;
+            loopError <= 12'h0;
             end
         else if (invertError) begin
             loopError <= negModeError;
@@ -199,14 +188,14 @@ always @(posedge clk) begin
 
 // Instantiate the lead/lag filter gain path
 wire    [39:0]  leadError;
-leadGain leadGain (
+leadGain12 leadGain (
     .clk(clk), .clkEn(loopFilterEn), .reset(reset), 
     .error(loopError),
     .leadExp(leadExp),
     .leadError(leadError)
     );
 
-lagGain lagGain (
+lagGain12 lagGain (
     .clk(clk), .clkEn(loopFilterEn), .reset(reset), 
     .error(loopError),
     .lagExp(lagExp),
@@ -231,7 +220,7 @@ always @(posedge clk) begin
     end
 
 /******************************* Lock Detector ********************************/
-wire    [7:0]   absModeError = modeError[7] ? negModeError : modeError;
+wire    [11:0]   absModeError = modeError[7] ? negModeError : modeError;
 reg     [15:0]  lockCounter;
 wire    [16:0]  lockPlus = {1'b0,lockCounter} + 17'h00001;
 wire    [16:0]  lockMinus = {1'b0,lockCounter} + 17'h1ffff;

@@ -38,7 +38,7 @@ output [31:0]dout;
 output [17:0]iOut,qOut;
 output symEnDly;
 output sym2xEnDly;
-output  [7:0]freq;
+output  [11:0]freq;
 
 wire[31:0]carrierFreqOffset;
 
@@ -345,7 +345,7 @@ assign qOut = qMpy;
 assign symEnDly = symEnSr[3];
 assign sym2xEnDly = sym2xEnSr[3];
 
-wire    [7:0]   freq;
+wire    [11:0]   freq;
 fmDemod fmDemod( 
     .clk(clk), .reset(reset), .sync(sym2xEnDly),
     .iFm(iOut),.qFm(qOut),
@@ -362,7 +362,7 @@ real qInReal;
 always @(qInput) qInReal = (qInput[17] ? qInput - 272144.0 : qInput)/131072.0;
 
 real freqReal;
-always @(freq) freqReal = (freq[7] ? freq - 256.0 : freq)/128.0;
+always @(freq) freqReal = (freq[11] ? freq - 4096.0 : freq)/2048.0;
 
 `endif
 
