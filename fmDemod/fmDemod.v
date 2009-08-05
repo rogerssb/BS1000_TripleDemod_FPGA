@@ -90,16 +90,26 @@ always @(posedge clk) begin
 
 // FM = derivative approximation based on phase difference
 
-reg [11:0]freq;
-reg [11:0]freqError;
-reg [11:0]prevPhase;
-reg [11:0]prevPhaseError;
-wire [11:0]phaseDiff = phase - prevPhase;
-wire [11:0]phaseErrorDiff = phaseError - prevPhaseError;
+reg     [11:0]  freq;
+reg     [11:0]  freqError;
+reg     [11:0]  prevPhase;
+reg     [11:0]  prevPhaseError;
+wire    [11:0]  phaseDiff = phase - prevPhase;
+wire    [11:0]  phaseErrorDiff = phaseError - prevPhaseError;
+reg             polarityFlag;
+`ifdef SIMULATE
+initial polarityFlag = 1;
+`endif
 always @(posedge clk) begin
     if (syncOut) begin
         if (phaseDiff == 12'h800) begin
-            freq <= 12'h0;
+            polarityFlag <= ~polarityFlag;
+            if (polarityFlag) begin
+                freq <= 12'h801;
+                end
+            else begin
+                freq <= 12'h7ff;
+                end
             end
         else begin
             freq <= phaseDiff;

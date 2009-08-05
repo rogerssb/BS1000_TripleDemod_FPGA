@@ -39,7 +39,7 @@ real carrierFreqNorm = carrierFreqHz * `SAMPLE_PERIOD * `TWO_POW_32;
 integer carrierFreqInt = carrierFreqNorm;
 wire [31:0] carrierFreq = carrierFreqInt;
 
-real carrierOffsetFreqHz = 3000.0;
+real carrierOffsetFreqHz = 0.0;
 real carrierOffsetFreqNorm = carrierOffsetFreqHz * `SAMPLE_PERIOD * `TWO_POW_32;
 integer carrierOffsetFreqInt = carrierOffsetFreqNorm;
 wire [31:0] carrierOffsetFreq = carrierOffsetFreqInt;
@@ -51,7 +51,7 @@ wire [31:0] carrierLimit = carrierLimitInt;
 
 wire [31:0] sweepRate = 32'h00000000;
 
-real bitrateBps = 500000.0;
+real bitrateBps = 555555.6;
 real bitrateSamples = 1/bitrateBps/`SAMPLE_PERIOD/2.0;
 integer bitrateSamplesInt = bitrateSamples;
 wire [15:0]bitrateDivider = bitrateSamplesInt - 1;
@@ -62,7 +62,7 @@ real actualBitrateBps = SAMPLE_FREQ/bitrateSamplesInt/2.0;
 real interpolationGain = 1.28;
 
 //real deviationHz = 0*0.35 * bitrateBps;
-real deviationHz = 2*0.35 * bitrateBps;
+real deviationHz = 2*0.525 * bitrateBps;
 real deviationNorm = deviationHz * `SAMPLE_PERIOD * `TWO_POW_32;
 integer deviationInt = deviationNorm*interpolationGain;
 wire [31:0]deviationQ31 = deviationInt;
@@ -570,7 +570,7 @@ initial begin
 
     // Init the carrier loop filters
     write32(createAddress(`CARRIERSPACE,`LF_CONTROL),1);    // Zero the error
-    write32(createAddress(`CARRIERSPACE,`LF_LEAD_LAG),32'h00000014);   
+    write32(createAddress(`CARRIERSPACE,`LF_LEAD_LAG),32'h0000000c);   
     write32(createAddress(`CARRIERSPACE,`LF_LIMIT), carrierLimit);
     write32(createAddress(`CARRIERSPACE,`LF_LOOPDATA), sweepRate);
 
@@ -655,7 +655,7 @@ initial begin
     #(4*bitrateSamplesInt*C) ;
 
     // Enable the AFC loop and invert the error
-    write32(createAddress(`CARRIERSPACE,`LF_CONTROL),2);  
+    //write32(createAddress(`CARRIERSPACE,`LF_CONTROL),2);  
 
     `ifdef ENABLE_AGC
     // Enable the AGC loop

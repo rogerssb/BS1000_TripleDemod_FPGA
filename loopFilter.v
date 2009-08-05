@@ -83,45 +83,39 @@ always @(posedge clk) begin
         leadError <= 0;
         end
     else if (clkEn) begin
-        if (lead == 5'h00) begin
-            leadError[31] <= 1'b0;
-            end
-        else begin
-            leadError[31] <= loopError[7];
-            end
         case(lead)
-              5'h00: leadError[30:0] <= 31'h0;
-              5'h01: leadError[30:0] <= {{30{loopError[7]}},loopError[6]};
-              5'h02: leadError[30:0] <= {{29{loopError[7]}},loopError[6:5]};
-              5'h03: leadError[30:0] <= {{28{loopError[7]}},loopError[6:4]};
-              5'h04: leadError[30:0] <= {{27{loopError[7]}},loopError[6:3]};
-              5'h05: leadError[30:0] <= {{26{loopError[7]}},loopError[6:2]};
-              5'h06: leadError[30:0] <= {{25{loopError[7]}},loopError[6:1]};
-              5'h07: leadError[30:0] <= {{24{loopError[7]}},loopError[6:0]};
-              5'h08: leadError[30:0] <= {{23{loopError[7]}},loopError[6:0],{1{loopError[7]}}};
-              5'h09: leadError[30:0] <= {{22{loopError[7]}},loopError[6:0],{2{loopError[7]}}};
-              5'h0A: leadError[30:0] <= {{21{loopError[7]}},loopError[6:0],{3{loopError[7]}}};
-              5'h0B: leadError[30:0] <= {{20{loopError[7]}},loopError[6:0],{4{loopError[7]}}};
-              5'h0C: leadError[30:0] <= {{19{loopError[7]}},loopError[6:0],{5{loopError[7]}}};
-              5'h0D: leadError[30:0] <= {{18{loopError[7]}},loopError[6:0],{6{loopError[7]}}};
-              5'h0E: leadError[30:0] <= {{17{loopError[7]}},loopError[6:0],{7{loopError[7]}}};
-              5'h0F: leadError[30:0] <= {{16{loopError[7]}},loopError[6:0],{8{loopError[7]}}};
-              5'h10: leadError[30:0] <= {{15{loopError[7]}},loopError[6:0],{9{loopError[7]}}};
-              5'h11: leadError[30:0] <= {{14{loopError[7]}},loopError[6:0],{10{loopError[7]}}};
-              5'h12: leadError[30:0] <= {{13{loopError[7]}},loopError[6:0],{11{loopError[7]}}};
-              5'h13: leadError[30:0] <= {{12{loopError[7]}},loopError[6:0],{12{loopError[7]}}};
-              5'h14: leadError[30:0] <= {{11{loopError[7]}},loopError[6:0],{13{loopError[7]}}};
-              5'h15: leadError[30:0] <= {{10{loopError[7]}},loopError[6:0],{14{loopError[7]}}};
-              5'h16: leadError[30:0] <= {{09{loopError[7]}},loopError[6:0],{15{loopError[7]}}};
-              5'h17: leadError[30:0] <= {{08{loopError[7]}},loopError[6:0],{16{loopError[7]}}};
-              5'h18: leadError[30:0] <= {{07{loopError[7]}},loopError[6:0],{17{loopError[7]}}};
-              5'h19: leadError[30:0] <= {{06{loopError[7]}},loopError[6:0],{18{loopError[7]}}};
-              5'h1A: leadError[30:0] <= {{05{loopError[7]}},loopError[6:0],{19{loopError[7]}}};
-              5'h1B: leadError[30:0] <= {{04{loopError[7]}},loopError[6:0],{20{loopError[7]}}};
-              5'h1C: leadError[30:0] <= {{03{loopError[7]}},loopError[6:0],{21{loopError[7]}}};
-              5'h1D: leadError[30:0] <= {{02{loopError[7]}},loopError[6:0],{22{loopError[7]}}};
-              5'h1E: leadError[30:0] <= {{01{loopError[7]}},loopError[6:0],{23{loopError[7]}}};
-              5'h1F: leadError[30:0] <= {loopError[6:0],{24{loopError[7]}}};
+              5'h00: leadError <= 32'h0;
+              5'h01: leadError <= {{30{loopError[7]}},loopError[7:6]};
+              5'h02: leadError <= {{29{loopError[7]}},loopError[7:5]};
+              5'h03: leadError <= {{28{loopError[7]}},loopError[7:4]};
+              5'h04: leadError <= {{27{loopError[7]}},loopError[7:3]};
+              5'h05: leadError <= {{26{loopError[7]}},loopError[7:2]};
+              5'h06: leadError <= {{25{loopError[7]}},loopError[7:1]};
+              5'h07: leadError <= {{24{loopError[7]}},loopError};
+              5'h08: leadError <= {{23{loopError[7]}},loopError, 1'b0};
+              5'h09: leadError <= {{22{loopError[7]}},loopError, 2'b0};
+              5'h0A: leadError <= {{21{loopError[7]}},loopError, 3'b0};
+              5'h0B: leadError <= {{20{loopError[7]}},loopError, 4'b0};
+              5'h0C: leadError <= {{19{loopError[7]}},loopError, 5'b0};
+              5'h0D: leadError <= {{18{loopError[7]}},loopError, 6'b0};
+              5'h0E: leadError <= {{17{loopError[7]}},loopError, 7'b0};
+              5'h0F: leadError <= {{16{loopError[7]}},loopError, 8'b0};
+              5'h10: leadError <= {{15{loopError[7]}},loopError, 9'b0};
+              5'h11: leadError <= {{14{loopError[7]}},loopError,10'b0};
+              5'h12: leadError <= {{13{loopError[7]}},loopError,11'b0};
+              5'h13: leadError <= {{12{loopError[7]}},loopError,12'b0};
+              5'h14: leadError <= {{11{loopError[7]}},loopError,13'b0};
+              5'h15: leadError <= {{10{loopError[7]}},loopError,14'b0};
+              5'h16: leadError <= {{09{loopError[7]}},loopError,15'b0};
+              5'h17: leadError <= {{08{loopError[7]}},loopError,16'b0};
+              5'h18: leadError <= {{07{loopError[7]}},loopError,17'b0};
+              5'h19: leadError <= {{06{loopError[7]}},loopError,18'b0};
+              5'h1A: leadError <= {{05{loopError[7]}},loopError,19'b0};
+              5'h1B: leadError <= {{04{loopError[7]}},loopError,20'b0};
+              5'h1C: leadError <= {{03{loopError[7]}},loopError,21'b0};
+              5'h1D: leadError <= {{02{loopError[7]}},loopError,22'b0};
+              5'h1E: leadError <= {{01{loopError[7]}},loopError,23'b0};
+              5'h1F: leadError <= {loopError,24'b0};
               endcase
         end
   end
@@ -134,45 +128,39 @@ always @(posedge clk) begin
         lagError <= 0;
         end
     else if (clkEn) begin
-        if (lag == 5'h00) begin
-            lagError[31] <= 1'b0;
-            end
-        else begin
-            lagError[31] <= loopError[7];
-            end
         case(lag)
-              5'h00: lagError[30:0] <= 31'h0;
-              5'h01: lagError[30:0] <= {{30{loopError[7]}},loopError[6]};
-              5'h02: lagError[30:0] <= {{29{loopError[7]}},loopError[6:5]};
-              5'h03: lagError[30:0] <= {{28{loopError[7]}},loopError[6:4]};
-              5'h04: lagError[30:0] <= {{27{loopError[7]}},loopError[6:3]};
-              5'h05: lagError[30:0] <= {{26{loopError[7]}},loopError[6:2]};
-              5'h06: lagError[30:0] <= {{25{loopError[7]}},loopError[6:1]};
-              5'h07: lagError[30:0] <= {{24{loopError[7]}},loopError[6:0]};
-              5'h08: lagError[30:0] <= {{23{loopError[7]}},loopError[6:0],{1{loopError[7]}}};
-              5'h09: lagError[30:0] <= {{22{loopError[7]}},loopError[6:0],{2{loopError[7]}}};
-              5'h0A: lagError[30:0] <= {{21{loopError[7]}},loopError[6:0],{3{loopError[7]}}};
-              5'h0B: lagError[30:0] <= {{20{loopError[7]}},loopError[6:0],{4{loopError[7]}}};
-              5'h0C: lagError[30:0] <= {{19{loopError[7]}},loopError[6:0],{5{loopError[7]}}};
-              5'h0D: lagError[30:0] <= {{18{loopError[7]}},loopError[6:0],{6{loopError[7]}}};
-              5'h0E: lagError[30:0] <= {{17{loopError[7]}},loopError[6:0],{7{loopError[7]}}};
-              5'h0F: lagError[30:0] <= {{16{loopError[7]}},loopError[6:0],{8{loopError[7]}}};
-              5'h10: lagError[30:0] <= {{15{loopError[7]}},loopError[6:0],{9{loopError[7]}}};
-              5'h11: lagError[30:0] <= {{14{loopError[7]}},loopError[6:0],{10{loopError[7]}}};
-              5'h12: lagError[30:0] <= {{13{loopError[7]}},loopError[6:0],{11{loopError[7]}}};
-              5'h13: lagError[30:0] <= {{12{loopError[7]}},loopError[6:0],{12{loopError[7]}}};
-              5'h14: lagError[30:0] <= {{11{loopError[7]}},loopError[6:0],{13{loopError[7]}}};
-              5'h15: lagError[30:0] <= {{10{loopError[7]}},loopError[6:0],{14{loopError[7]}}};
-              5'h16: lagError[30:0] <= {{09{loopError[7]}},loopError[6:0],{15{loopError[7]}}};
-              5'h17: lagError[30:0] <= {{08{loopError[7]}},loopError[6:0],{16{loopError[7]}}};
-              5'h18: lagError[30:0] <= {{07{loopError[7]}},loopError[6:0],{17{loopError[7]}}};
-              5'h19: lagError[30:0] <= {{06{loopError[7]}},loopError[6:0],{18{loopError[7]}}};
-              5'h1A: lagError[30:0] <= {{05{loopError[7]}},loopError[6:0],{19{loopError[7]}}};
-              5'h1B: lagError[30:0] <= {{04{loopError[7]}},loopError[6:0],{20{loopError[7]}}};
-              5'h1C: lagError[30:0] <= {{03{loopError[7]}},loopError[6:0],{21{loopError[7]}}};
-              5'h1D: lagError[30:0] <= {{02{loopError[7]}},loopError[6:0],{22{loopError[7]}}};
-              5'h1E: lagError[30:0] <= {{01{loopError[7]}},loopError[6:0],{23{loopError[7]}}};
-              5'h1F: lagError[30:0] <= {loopError[6:0],{24{loopError[7]}}};
+              5'h00: lagError <= 32'h0;
+              5'h01: lagError <= {{30{loopError[7]}},loopError[7:6]};
+              5'h02: lagError <= {{29{loopError[7]}},loopError[7:5]};
+              5'h03: lagError <= {{28{loopError[7]}},loopError[7:4]};
+              5'h04: lagError <= {{27{loopError[7]}},loopError[7:3]};
+              5'h05: lagError <= {{26{loopError[7]}},loopError[7:2]};
+              5'h06: lagError <= {{25{loopError[7]}},loopError[7:1]};
+              5'h07: lagError <= {{24{loopError[7]}},loopError};
+              5'h08: lagError <= {{23{loopError[7]}},loopError, 1'b0};
+              5'h09: lagError <= {{22{loopError[7]}},loopError, 2'b0};
+              5'h0A: lagError <= {{21{loopError[7]}},loopError, 3'b0};
+              5'h0B: lagError <= {{20{loopError[7]}},loopError, 4'b0};
+              5'h0C: lagError <= {{19{loopError[7]}},loopError, 5'b0};
+              5'h0D: lagError <= {{18{loopError[7]}},loopError, 6'b0};
+              5'h0E: lagError <= {{17{loopError[7]}},loopError, 7'b0};
+              5'h0F: lagError <= {{16{loopError[7]}},loopError, 8'b0};
+              5'h10: lagError <= {{15{loopError[7]}},loopError, 9'b0};
+              5'h11: lagError <= {{14{loopError[7]}},loopError,10'b0};
+              5'h12: lagError <= {{13{loopError[7]}},loopError,11'b0};
+              5'h13: lagError <= {{12{loopError[7]}},loopError,12'b0};
+              5'h14: lagError <= {{11{loopError[7]}},loopError,13'b0};
+              5'h15: lagError <= {{10{loopError[7]}},loopError,14'b0};
+              5'h16: lagError <= {{09{loopError[7]}},loopError,15'b0};
+              5'h17: lagError <= {{08{loopError[7]}},loopError,16'b0};
+              5'h18: lagError <= {{07{loopError[7]}},loopError,17'b0};
+              5'h19: lagError <= {{06{loopError[7]}},loopError,18'b0};
+              5'h1A: lagError <= {{05{loopError[7]}},loopError,19'b0};
+              5'h1B: lagError <= {{04{loopError[7]}},loopError,20'b0};
+              5'h1C: lagError <= {{03{loopError[7]}},loopError,21'b0};
+              5'h1D: lagError <= {{02{loopError[7]}},loopError,22'b0};
+              5'h1E: lagError <= {{01{loopError[7]}},loopError,23'b0};
+              5'h1F: lagError <= {loopError,24'b0};
               endcase
         end
   end

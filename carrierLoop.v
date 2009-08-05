@@ -74,6 +74,7 @@ loopRegs loopRegs(
     .zeroError(zeroError),
     .ctrl2(sweepEnable),
     .clearAccum(clearAccum),
+    .ctrl4(switchError),
     .leadMan(),
     .leadExp(leadExp),
     .lagMan(),
@@ -83,6 +84,86 @@ loopRegs loopRegs(
     .lockCount(lockCount),
     .syncThreshold(syncThreshold)
     );
+
+
+/************************ Frequency Peak Detect *******************************/
+reg     [18:0]  newFreq;
+reg     [18:0]  posFrequency;
+reg     [18:0]  negFrequency;
+wire    [18:0]  freqError = posFrequency + negFrequency;
+reg     [11:0]  freqOut;
+always @(posedge clk) begin
+    if (reset) begin
+        posFrequency <= 0;
+        negFrequency <= 19'h7ffff;
+        end
+    else if (ddcSync) begin
+        if (freq == 12'h800) begin
+            newFreq <= 19'h40080;
+            end
+        else begin
+            newFreq <= {freq,7'b0};
+            end
+        if (newFreq[18]) begin
+            if (newFreq < negFrequency) begin
+                negFrequency <= negFrequency - {{7{negFrequency[18]}},negFrequency[18:7]}
+                              + {{7{newFreq[18]}},newFreq[18:7]};
+                end
+            else begin
+                if (negFrequency != 19'h0) begin
+                    negFrequency <= (negFrequency + 1);
+                    end
+                end
+            end
+        else begin
+            if (newFreq > posFrequency) begin
+                posFrequency <= posFrequency - {{7{posFrequency[18]}},posFrequency[18:7]}
+                              + {{7{newFreq[18]}},newFreq[18:7]};
+                end
+            else begin
+                if (posFrequency != 19'h0) begin
+                    posFrequency <= posFrequency - 1;
+                    end
+                end
+            end
+        if (switchError) begin
+            //freqOut <= posFrequency[18:7];
+            freqOut <= freq;
+            end
+        else begin
+            //freqOut <= negFrequency[18:7];
+            freqOut <= freqError[18:7] + freqError[6];
+            end
+        end
+    end
+`ifdef SIMULATE
+real posFrequencyReal;
+always @(posFrequency) posFrequencyReal = (posFrequency[18] ? posFrequency[18:7] - 4096.0 : posFrequency[18:7])/2048.0;
+real negFrequencyReal;
+always @(negFrequency) negFrequencyReal = (negFrequency[18] ? negFrequency[18:7] - 4096.0 : negFrequency[18:7])/2048.0;
+`endif
+
+
+
+
+// Calculation of average DC offset (freq offset in FSK mode) and average FSK deviation.
+reg     [18:0]  avgFrequency;
+always @(posedge clk) begin
+    if (reset) begin
+        avgFrequency <= 0;
+        end
+    else if (ddcSync) begin
+        avgFrequency <= (avgFrequency - {{7{avgFrequency[18]}},avgFrequency[18:7]})
+                      + {{7{freq[11]}},freq};
+        end
+    end
+wire    [11:0]  filteredFreq = avgFrequency[18:7] + avgFrequency[6];
+
+`ifdef SIMULATE
+real avgFrequencyReal = (avgFrequency[18] ? avgFrequency[18:7] - 4096.0 : avgFrequency[18:7])/2048.0;
+`endif
+
+
 
 
 /************************ Error Signal Source *********************************/
@@ -112,18 +193,19 @@ always @(demodMode or offsetError or offsetErrorEn or
             enableCarrierLock <= 1;
             end
         `MODE_PCMTRELLIS,
-        `MODE_FM: begin
+        `MODE_FM,
+        `MODE_2FSK: begin
             sync <= ddcSync;
-            modeError <= freq;
+            modeError <= freqOut;
             modeErrorEn <= 1'b1;
             enableCarrierLock <= 0;
             end
-        `MODE_2FSK: begin
-            sync <= resampSync;
-            modeError <= offsetError;
-            modeErrorEn <= offsetErrorEn;
-            enableCarrierLock <= 0;
-            end
+        //`MODE_2FSK: begin
+        //    sync <= resampSync;
+        //    modeError <= offsetError;
+        //    modeErrorEn <= offsetErrorEn;
+        //    enableCarrierLock <= 0;
+        //    end
         `MODE_BPSK: begin
             sync <= ddcSync;
             modeError <= {bpskPhase[10:0],1'b1};
