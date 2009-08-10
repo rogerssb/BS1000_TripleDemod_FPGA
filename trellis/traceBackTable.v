@@ -14,7 +14,6 @@
 module traceBackTable(clk, reset, symEn,
                       sel, index,
                       decision,
-                      tbDelta,
                       oneOrZeroPredecessor,
                       symEnDly
                       );
@@ -23,7 +22,6 @@ module traceBackTable(clk, reset, symEn,
    input              clk,reset,symEn;
    input [19:0]       sel;   // 20 induvidual decision. 0 or 1 tell us if we trace + or - 7 modulo 20 
    input [4:0]        index; // pointer to the state which has the maximum metric
-   output [5:0]       tbDelta;
    output             decision, oneOrZeroPredecessor;
    output             symEnDly;
    reg                decision, oneOrZeroPredecessor;
@@ -173,9 +171,6 @@ module traceBackTable(clk, reset, symEn,
 
 
   reg t0, t1, t2, t3, t4, t5;
-  reg [4:0]tbIndex,tbPrevIndex;
-  wire [5:0]tbDiff = {1'b0,tbPrevIndex} - {1'b0,tbIndex};
-  reg [5:0] tbDelta;
    // Final decision bit
    always @(posedge clk)
      if (reset) begin
@@ -194,24 +189,6 @@ module traceBackTable(clk, reset, symEn,
  -----/\----- EXCLUDED -----/\----- */
      end
      else if (stateCnt == 3) begin
-        tbIndex <= tbPtr;
-        tbPrevIndex <= tbIndex;
-        if (tbDiff[5]) begin
-            if (tbDiff < 6'h37) begin
-                tbDelta <= tbDiff + 6'h14;
-                end
-            else begin
-                tbDelta <= tbDiff;
-                end
-            end
-        else begin
-            if (tbDiff > 6'h09) begin
-                tbDelta <= tbDiff - 6'h14;
-                end
-            else begin
-                tbDelta <= tbDiff;
-                end
-            end
         case (tbPtr)
             0: begin
                 decision <= tbtSr0[3]; 

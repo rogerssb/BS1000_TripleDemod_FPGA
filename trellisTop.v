@@ -736,6 +736,7 @@ always @(
         rd_mux <= dac2Dout[15:0];
         end
       end
+    `TRELLISLFSPACE,
     `TRELLIS_SPACE: begin
       if (addr[1]) begin
         rd_mux <= trellis_dout[31:16];

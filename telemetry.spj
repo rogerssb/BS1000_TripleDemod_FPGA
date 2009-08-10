@@ -8,9 +8,9 @@ Version=Silvaco4.10.0.R
 DisableCache=
 SimFile=
 [Analyzer]
-C0Width=162
+C0Width=58
 C1Width=58
-C2Width=102
+C2Width=58
 GotoSource=N
 [Spice]
 [LibraryFiles]
@@ -21,7 +21,7 @@ RecirculateTime=
 UseRecirculateTime=
 DiskSize=5000M
 [View]
-1=Last 280664.076ns 555773.683ns 6534.670ns 1386979.406ns 1124481.981ns
+1=Last 323761.278ns 337803.775ns 333.551ns 342520.677ns 356534.244ns
 [Group0]
 Name=New Group2
 [Group3]
@@ -32,7 +32,6 @@ Name="Micro"
 3="test.demod : wr3" default
 4="test.demod : din[31:0]" default
 5="test.demod : addr[11:0]" default
-OpenGroup=
 [Group2]
 Name="Tx"
 0="test.fmMod : interpReal" default Real AnalogDisplay AType=Step Scale=Auto
@@ -46,7 +45,6 @@ Name="Tx"
 8="test.fmMod : modClk" default
 9="test.fmMod : reset" default
 10="test.fmMod : clk" default
-OpenGroup=
 [PliFiles]
 0=.\gaussPLI\gaussPLI.dll
 [IncDirs]
@@ -68,7 +66,6 @@ Name="DAC"
 12="test.demod : symClk" default
 13="test.demod : resampSync" default
 14="test.demod : ddcSync" default
-OpenGroup=
 [Files]
 0=test.v
 1=demod.v
@@ -161,7 +158,7 @@ Name="Bitsync"
 30="test.demod.resampler.resamplerI : outReal" default Real AnalogDisplay AType=Step Scale=Auto
 31="test.demod.resampler.resamplerI : inReal" default Real AnalogDisplay AType=Step Scale=Auto
 32="test : cicDecimationInt" default Decimal AnalogDisplay AType=PWL Scale=Auto
-OpenGroup=
+OpenGroup=Yes
 [Group5]
 Name="Carrier"
 0="test.demod.carrierLoop.lagGain : sweepOffsetMag[31:0]" default Unknown
@@ -185,7 +182,7 @@ Name="Carrier"
 18="test.demod.carrierLoop : negFrequency[18:0]" default
 19="test.demod.carrierLoop : posFrequency[18:0]" default
 20="test.demod.carrierLoop : newFreq[18:0]" default
-OpenGroup=Yes
+OpenGroup=
 [Group1]
 Name="Rx"
 0="test.demod.resampler : reset" default
@@ -208,7 +205,6 @@ Name="Rx"
 17="test.demod.ddc : qMixReal" default Real AnalogDisplay AType=Step Scale=Auto
 18="test.demod.ddc : iMixReal" default Real AnalogDisplay AType=Step Scale=Auto
 19="test : iSignalReal" default Real AnalogDisplay AType=Step Scale=Auto
-OpenGroup=Yes
 [GroupInfo]
 0=New Group2 : 0 : 0 : 0
 1=Tx : 1 : 1 : 0
@@ -217,3 +213,4 @@ OpenGroup=Yes
 4=Bitsync : 4 : 1 : 0
 5=Carrier : 5 : 1 : 0
 6=DAC : 6 : 1 : 0
+[Bookmarks]

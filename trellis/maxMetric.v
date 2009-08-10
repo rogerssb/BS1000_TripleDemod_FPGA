@@ -8,26 +8,28 @@ module maxMetric(clk, reset, symEn,
                  accMetOut5 , accMetOut6 , accMetOut7 , accMetOut8 , accMetOut9 , 
                  accMetOut10, accMetOut11, accMetOut12, accMetOut13, accMetOut14, 
                  accMetOut15, accMetOut16, accMetOut17, accMetOut18, accMetOut19,
+                 maxVal,
                  index, symEnDly
                  );
    
-   parameter            size = 8;
+   parameter            size = 12;
    input                clk,reset,symEn;
-   input [(size-1)+4:0] accMetOut0 , accMetOut1 , accMetOut2 , accMetOut3 , 
+   input [(size-1):0] accMetOut0 , accMetOut1 , accMetOut2 , accMetOut3 , 
                         accMetOut4 , accMetOut5 , accMetOut6 , accMetOut7 , 
                         accMetOut8 , accMetOut9 , accMetOut10, accMetOut11, 
                         accMetOut12, accMetOut13, accMetOut14, accMetOut15, 
                         accMetOut16, accMetOut17, accMetOut18, accMetOut19;
    output [4:0]         index; // max index (0-19)
+   output [(size-1):0] maxVal;
    output               symEnDly;
    reg [4:0]            index;                      
 
-   wire [(size-1)+4:0]  maxValS1_0, maxValS1_1, maxValS1_2, maxValS1_3, maxValS1_4,
+   wire [(size-1):0]  maxValS1_0, maxValS1_1, maxValS1_2, maxValS1_3, maxValS1_4,
                         maxValS2,
                         maxValS3;
                                     
-   reg [(size-1)+4:0]   maxVal; // the maximum value is not used in the design but it is nice for debug
-   reg [(size-1)+4:0]   maxValS1_4_dly1clk;
+   reg [(size-1):0]   maxVal; // the maximum value is not used in the design but it is nice for debug
+   reg [(size-1):0]   maxValS1_4_dly1clk;
       
    wire [4:0]           iS1_0; // possible value 3..0
    wire [4:0]           iS1_1; // possible value 4..7
@@ -53,7 +55,7 @@ module maxMetric(clk, reset, symEn,
    // Stage 2 compare
    comp4twosComp  #(size, 0)  compS2_0_3   (clk, /*reset*/, maxValS1_0 , maxValS1_1 , maxValS1_2 , maxValS1_3 , iS2  , maxValS2  );
    // Stage 3 compare (final compare)
-   comp4twosComp  #(size, 0)  compS3_0_3   (clk, /*reset*/, maxValS2   , maxValS1_4_dly1clk, 12'b111111111111, 12'b111111111111, iS3, maxValS3);
+   comp4twosComp  #(size, 0)  compS3_0_3   (clk, /*reset*/, maxValS2   , maxValS1_4_dly1clk, {1'b1,{(size-1){1'b0}}}, {1'b1,{(size-1){1'b0}}}, iS3, maxValS3);
 
    always @(posedge clk) begin
       iS1_4_dly1clk <= iS1_4;
@@ -75,7 +77,7 @@ module maxMetric(clk, reset, symEn,
  
    // temporary latching the MaxVal and Index at the right spot. This can be improved!!
    reg [4:0]            indexTmp;                      
-   reg [(size-1)+4:0]   maxValTmp; // the maximum value is not used in the design but it is nice for debug
+   reg [(size-1):0]   maxValTmp; // the maximum value is not used in the design but it is nice for debug
    always @(posedge clk)
      begin
         if (reset) begin

@@ -1,7 +1,7 @@
 `timescale 1ns/1ps
 
-module comp4twosComp (clk,a,b,c,d,index,maxVal);
-   parameter             size = 8;
+module comp4twosComp (clk,reset,a,b,c,d,index,maxVal);
+   parameter             size = 12;
    parameter             indexOffset=0;
    `ifdef SIMULATE
    `else
@@ -9,11 +9,11 @@ module comp4twosComp (clk,a,b,c,d,index,maxVal);
    `endif
 
 
-   input                 clk;
-   input [(size-1)+4:0]  a, b, c, d;
+   input                 clk,reset;
+   input [(size-1):0]  a, b, c, d;
    output [4:0]          index;
-   output [(size-1)+4:0] maxVal;
-   reg [(size-1)+4:0]    maxVal;
+   output [(size-1):0] maxVal;
+   reg [(size-1):0]    maxVal;
    reg [1:0]             tempIndex;
    reg [4:0]             index;                         
    wire                          sel0, sel1;
@@ -21,10 +21,10 @@ module comp4twosComp (clk,a,b,c,d,index,maxVal);
       
    // This function returns 0 if "a" is larger and 1 if "b" is larger
    function compTwosCompFunc;
-      parameter size = 8;
-      input [size-1+4:0] a,b;
+      parameter size = 12;
+      input [size-1:0] a,b;
       begin
-         case ({a[size-1+4], b[size-1+4]}) // Checking the sign bit 
+         case ({a[size-1], b[size-1]}) // Checking the sign bit 
            2'b00: begin // both pos
               compTwosCompFunc = (b >= a) ? 1'b1 : 1'b0;
            end

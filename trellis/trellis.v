@@ -65,6 +65,7 @@ wire    [7:0]   phaseError;
 wire    [ROT_BITS-1:0]   phaseErrorImag;
 wire    [11:0]   freq;
 wire    [17:0]  carrierLoopIOut,carrierLoopQOut;
+wire    [31:0]  trellisLoopDout;
 trellisCarrierLoop trellisCarrierLoop(
   .clk(clk),
   .reset(reset),
@@ -88,7 +89,7 @@ trellisCarrierLoop trellisCarrierLoop(
   .wr3(wr3),
   .addr(addr),
   .din(din),
-  .dout(dout),
+  .dout(trellisLoopDout),
   .iOut(carrierLoopIOut),
   .qOut(carrierLoopQOut),
   .symEnDly(symEnDly),
@@ -133,7 +134,53 @@ always @(posedge clk)sym2xEnShift <= {sym2xEnShift[14:0],sym2xEnDly};
 //wire trell2xEna = sym2xEnShift[14];
 wire trell2xEna = sym2xEnShift[12];
 
+
+//`define NEW_HDETECTOR
+`ifdef NEW_HDETECTOR
+
+wire    [11:0]  cordicPhase;
+reg     [11:0]  prevPhase;
+reg     [11:0]  phaseDiff;
+reg     [11:0]  absPhaseDiff;
+reg             cordicEn;
+
+vm_cordic mfPhase(
+    .clk(clk),
+    .ena(rotEna),
+    .x(f0I[17:4]),
+    .y(f0Q[17:4]),
+    .p(cordicPhase)
+    );
+
+always @(posedge clk) begin
+    if (rotEna) begin
+        prevPhase <= cordicPhase;
+        absPhaseDiff <= phaseDiff[11] ? -phaseDiff : phaseDiff;
+        phaseDiff <= prevPhase - cordicPhase;
+        end
+    end
+wire    [15:0]  fskDeviation;
+reg     [18:0]  avgDeviation;
+always @(posedge clk) begin
+    if (reset) begin
+        avgDeviation <= 0;
+        end
+    if (rotEna && absPhaseDiff[10]) begin
+        avgDeviation <= (avgDeviation - {{7{avgDeviation[18]}},avgDeviation[18:7]})
+                        + {{7{absPhaseDiff[11]}},absPhaseDiff};
+        end
+    end
+assign fskDeviation = avgDeviation[18:3] + avgDeviation[2];
+
    
+`ifdef SIMULATE
+real diffReal;
+always @(absPhaseDiff) diffReal = (absPhaseDiff[11] ? absPhaseDiff - 4096.0 : absPhaseDiff)/2048.0;
+real devReal;
+always @(fskDeviation) devReal = (fskDeviation[15] ? fskDeviation - 65536.0 : fskDeviation)/32768.0;
+`endif
+`endif
+
 `ifdef SIMULATE
 real f0IReal;
 always @(f0I) f0IReal <= f0I[17] ? f0I - 262144.0 : f0I;
@@ -415,9 +462,15 @@ viterbi_top viterbi_top
   .out0Pt20Real(out0Pt20Real),.out0Pt20Imag(out0Pt20Imag),
   .out1Pt20Real(out1Pt20Real),.out1Pt20Imag(out1Pt20Imag),
 `else
+`ifdef USE_DECAY
+reg     [7:0]   decayFactor;
+`endif
 viterbi_top #(size, ROT_BITS)viterbi_top
   (
   .clk(clk), .reset(reset), .symEn(trellEna),
+  `ifdef USE_DECAY
+  .decayFactor(decayFactor),
+  `endif
   .out0Pt1Real(out0Pt1Real)    ,.out0Pt1Imag(out0Pt1Imag),
   .out1Pt1Real(out1Pt1Real)    ,.out1Pt1Imag(out1Pt1Imag),
   .out0Pt2Real(out0Pt2Real)    ,.out0Pt2Imag(out0Pt2Imag),
@@ -542,7 +595,118 @@ always @(posedge clk) begin
     end   
 end
 
+//`define INDEX_AVG
+`ifdef INDEX_AVG
+wire    [4:0]           index0;
+wire    [ROT_BITS-1:0]  maxVal0;
+maxMetric #(ROT_BITS) maxMetric0 (
+    .clk(clk), 
+    .reset(reset), 
+    .symEn(trellEna), 
+    .accMetOut0( out0Pt1Real ), .accMetOut1( out0Pt2Real ), 
+    .accMetOut2( out0Pt3Real ), .accMetOut3( out0Pt4Real ), 
+    .accMetOut4( out0Pt5Real ), .accMetOut5( out0Pt6Real ), 
+    .accMetOut6( out0Pt7Real ), .accMetOut7( out0Pt8Real ), 
+    .accMetOut8( out0Pt9Real ), .accMetOut9( out0Pt10Real), 
+    .accMetOut10(out0Pt11Real), .accMetOut11(out0Pt12Real), 
+    .accMetOut12(out0Pt13Real), .accMetOut13(out0Pt14Real), 
+    .accMetOut14(out0Pt15Real), .accMetOut15(out0Pt16Real), 
+    .accMetOut16(out0Pt17Real), .accMetOut17(out0Pt18Real), 
+    .accMetOut18(out0Pt19Real), .accMetOut19(out0Pt20Real),
+    .maxVal(maxVal0),
+    .index(index0), .symEnDly(maxEn)
+    );
 
+wire    [4:0]           index1;
+wire    [ROT_BITS-1:0]  maxVal1;
+maxMetric #(ROT_BITS) maxMetric1 (
+    .clk(clk), 
+    .reset(reset), 
+    .symEn(trellEna), 
+    .accMetOut0( out1Pt1Real ), .accMetOut1( out1Pt2Real ), 
+    .accMetOut2( out1Pt3Real ), .accMetOut3( out1Pt4Real ), 
+    .accMetOut4( out1Pt5Real ), .accMetOut5( out1Pt6Real ), 
+    .accMetOut6( out1Pt7Real ), .accMetOut7( out1Pt8Real ), 
+    .accMetOut8( out1Pt9Real ), .accMetOut9( out1Pt10Real), 
+    .accMetOut10(out1Pt11Real), .accMetOut11(out1Pt12Real), 
+    .accMetOut12(out1Pt13Real), .accMetOut13(out1Pt14Real), 
+    .accMetOut14(out1Pt15Real), .accMetOut15(out1Pt16Real), 
+    .accMetOut16(out1Pt17Real), .accMetOut17(out1Pt18Real), 
+    .accMetOut18(out1Pt19Real), .accMetOut19(out1Pt20Real),
+    .maxVal(maxVal1),
+    .index(index1), .symEnDly()
+    );
+
+reg     [4:0]   prevIndex;
+reg     [4:0]   maxIndex;
+wire    [5:0]   idxDiff = {1'b0,prevIndex} - {1'b0,index0};
+reg     [5:0]   idxDelta;
+always @(posedge clk) begin
+    if (maxEn) begin
+        case ({maxVal0[ROT_BITS-1], maxVal1[ROT_BITS-1]}) // Checking the sign bit 
+            2'b00: begin // both pos
+                if (maxVal0 > maxVal1) maxIndex <= index0;
+                else maxIndex <= index1;
+           end
+           2'b01: begin // a=pos, b=neg
+                maxIndex <= index0;
+           end
+           2'b10: begin // a=neg, b=pos
+                maxIndex <= index1;
+           end
+           2'b11: begin //both neg
+                if (maxVal0 > maxVal1) maxIndex <= index0;
+                else maxIndex <= index1;
+           end
+         endcase
+            
+        prevIndex <= index0;
+        if (idxDiff[5]) begin
+            if (idxDiff < 6'h37) begin
+                idxDelta <= idxDiff + 6'h14;
+                end
+            else begin
+                idxDelta <= idxDiff;
+                end
+            end
+        else begin
+            if (idxDiff > 6'h09) begin
+                idxDelta <= idxDiff - 6'h14;
+                end
+            else begin
+                idxDelta <= idxDiff;
+                end
+            end
+        end
+    end
+
+`ifdef SIMULATE
+real delta;
+always @(idxDelta) delta = idxDelta[5] ? idxDelta - 64.0 : idxDelta;
+real avgPosDelta;
+real avgNegDelta;
+real avgDelta;
+always @(posedge clk) begin
+    if (reset) begin
+        avgPosDelta <= 0.0;
+        avgNegDelta <= 0.0;
+        end
+    else if (maxEn) begin
+        if (idxDelta[5]) begin
+            avgNegDelta <= (0.99 * avgNegDelta) + (0.01 * delta);
+            avgDelta <= (0.99 * avgDelta) + (0.01 * (-delta));
+            end
+        else begin
+            avgPosDelta <= (0.99 * avgPosDelta) + (0.01 * delta);
+            avgDelta <= (0.99 * avgDelta) + (0.01 * delta);
+            end
+        end
+    end
+`endif
+`endif
+
+
+`define ESTIMATE_BER
 `ifdef ESTIMATE_BER
 // Create a delayed version of the legacy bit to compare to the decision bit as
 // an estimate of the SNR
@@ -554,21 +718,28 @@ always @(posedge clk) begin
     end
 bitFifo bitFifo(
     .clk(clk),
-    .reset(reset),
+    .reset(reset),      
     .enIn(symEn),
     .enOut(symEnOut),
-    .din(legacySR[12]),
+    .din(legacySR[13]),
     .dout(legacyDelayed)
     );
 
 reg     [15:0]  bitCount;
 reg     [15:0]  bitErrorCount;
+reg             berRestart;
+reg             br0,br1;
+reg             berRestarted;
 always @(posedge clk) begin 
-    if (reset) begin
+    br0 <= berRestart;
+    br1 <= br0;
+    if (reset | br1) begin
         bitCount <= 16'hffff;
         bitErrorCount <= 0;
+        berRestarted <= 1;
         end
     else if ((symEnOut) && (bitCount != 0)) begin
+        berRestarted <= 0;
         bitCount <= bitCount - 1;
         if (legacyDelayed != decision) begin
             bitErrorCount <= bitErrorCount + 1;
@@ -579,6 +750,77 @@ always @(posedge clk) begin
 
 `endif //IQ_MAG
    
+/************************ Trellis Register Definitions ************************/
+
+reg trellisSpace;
+always @(addr) begin
+    casex(addr)
+        `TRELLIS_SPACE: trellisSpace <= 1;
+        default:        trellisSpace <= 0;
+        endcase
+    end
+
+`ifdef USE_DECAY
+always @(negedge wr0) begin
+    if (trellisSpace) begin
+        casex (addr) 
+            `TRELLIS_DECAY:     decayFactor <= din[7:0];
+            default: ;
+            endcase
+        end
+    end
+`endif
+
+always @(negedge wr2 or posedge berRestarted) begin
+    if (berRestarted) begin
+        berRestart <= 0;
+        end
+    else if (trellisSpace) begin
+        berRestart <= 1;
+        end
+    end
+
+reg [31:0]trellisDout;
+always @(trellisSpace or addr or 
+         bitErrorCount or bitCount
+         `ifdef HNEW_DETECTOR
+         or fskDeviation
+         `endif
+         `ifdef USE_DECAY
+         or decayFactor
+         `endif
+         ) begin
+    if (trellisSpace) begin
+        casex (addr)
+            `TRELLIS_BER:       trellisDout <= {bitErrorCount,bitCount};
+            `ifdef HNEW_DETECTOR
+            `TRELLIS_DEV:       trellisDout <= {16'b0,fskDeviation};
+            `endif
+            `ifdef USE_DECAY
+            `TRELLIS_DECAY:     trellisDout <= {24'b0,decayFactor};
+            `endif
+            default:            trellisDout <= 32'hx;
+            endcase
+        end
+    else begin
+        trellisDout <= 32'hx;
+        end
+    end
+
+reg [31:0]dout;
+always @(addr or 
+         bitErrorCount or bitCount or
+         trellisDout or trellisLoopDout
+         ) begin
+    casex (addr)
+        `TRELLIS_SPACE:     dout <= trellisDout;
+        `TRELLISLFSPACE:    dout <= trellisLoopDout;
+        default:            dout <= 32'hx;
+        endcase
+    end
+
+
+
 /******************************************************************************
                                DAC Output Mux
 ******************************************************************************/

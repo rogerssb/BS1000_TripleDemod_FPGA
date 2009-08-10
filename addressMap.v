@@ -17,7 +17,8 @@
 `define INTERP1SPACE    12'b1011_xxxx_xxxx
 `define INTERP2SPACE    12'b1100_xxxx_xxxx
 `define MISC_SPACE      12'b1101_xxxx_xxxx
-`define TRELLIS_SPACE   12'b1110_xxxx_xxxx
+`define TRELLISLFSPACE  12'b1110_0xxx_xxxx
+`define TRELLIS_SPACE   12'b1110_1xxx_xxxx
 `define DAC_SPACE       12'b1111_xxxx_xxxx
 
 // Define the global radio memory map
@@ -122,5 +123,12 @@
 `define LEAKY_ALPHA     12'bxxxx_xxxx_01xx
 `define LEAKY_ONE       12'bxxxx_xxxx_10xx
 `define LEAKY_DEV       12'bxxxx_xxxx_11xx
+
+// Define the Trellis registers
+`define USE_DECAY
+`define TRELLIS_BER     12'bxxxx_xxxx_00xx
+`define TRELLIS_DEV     12'bxxxx_xxxx_01xx
+`define TRELLIS_DECAY   12'bxxxx_xxxx_10xx
+
 
 `endif

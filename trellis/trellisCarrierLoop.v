@@ -23,7 +23,8 @@ module trellisCarrierLoop(clk,reset,symEn,sym2xEn,
   iOut,qOut,
   symEnDly,
   sym2xEnDly,
-  freq
+  freq,
+  lockCounter
   );
 
 input clk,reset,symEn,sym2xEn;
@@ -39,6 +40,7 @@ output [17:0]iOut,qOut;
 output symEnDly;
 output sym2xEnDly;
 output  [11:0]freq;
+output  [15:0]  lockCounter;
 
 wire[31:0]carrierFreqOffset;
 
@@ -47,8 +49,8 @@ wire[31:0]carrierFreqOffset;
 reg trellisSpace;
 always @(addr) begin
     casex(addr)
-        `TRELLIS_SPACE: trellisSpace <= 1;
-        default:        trellisSpace <= 0;
+        `TRELLISLFSPACE:    trellisSpace <= 1;
+        default:            trellisSpace <= 0;
         endcase
     end
 wire    [31:0]  dout;
@@ -57,7 +59,7 @@ wire    [4:0]   lagExp;
 wire    [31:0]  limit;
 wire    [31:0]  loopData;
 wire    [15:0]  lockCount;
-wire    [7:0]   syncThreshold;
+wire    [11:0]   syncThreshold;
 wire    [39:0]  lagAccum;
 loopRegs loopRegs(
     .cs(trellisSpace),
@@ -147,7 +149,7 @@ always @(posedge clk) begin
         carrierLock <= 0;
         end
     else if (loopFilterEn) begin
-        if (absPhaseError > syncThreshold) begin
+        if (absPhaseError > syncThreshold[7:0]) begin
             if (lockMinus[16]) begin
                 carrierLock <= 0;
                 lockCounter <= lockCount;
@@ -194,14 +196,21 @@ always @(posedge clk) begin
         end
     end
 reg [31:0] deviationCorrection;
+reg [31:0] devCorrection;
+reg prevLegacyBit;
 always @(posedge clk) begin
-    if (symEn) begin
-        if (legacyBit) begin
-            deviationCorrection <= loopData;
+    if (sym2xEn) begin
+        prevLegacyBit <= legacyBit;
+        if (legacyBit & prevLegacyBit) begin
+            devCorrection <= loopData;
+            end
+        else if (!legacyBit & !prevLegacyBit) begin
+            devCorrection <= -loopData;
             end
         else begin
-            deviationCorrection <= -loopData;
+            devCorrection <= 0;
             end
+        deviationCorrection <= devCorrection;
         end
     end
 wire [31:0] ddsFreq = newOffset + deviationCorrection;
@@ -237,8 +246,8 @@ wire ddsReset = resetWithPhaseOffset;
 
 `ifdef USE_LEGACY
 // Delay the input samples to line up with the legacy demod's detected bit
-reg     [17:0]  iIns[24:0];
-reg     [17:0]  qIns[24:0];
+reg     [17:0]  iIns[32:0];
+reg     [17:0]  qIns[32:0];
 always @(posedge clk) begin
     if (sym2xEn) begin
         iIns[ 0] <= iIn;
@@ -266,6 +275,14 @@ always @(posedge clk) begin
         iIns[22] <= iIns[21];
         iIns[23] <= iIns[22];
         iIns[24] <= iIns[23];
+        iIns[25] <= iIns[24];
+        iIns[26] <= iIns[25];
+        iIns[27] <= iIns[26];
+        iIns[28] <= iIns[27];
+        iIns[29] <= iIns[28];
+        iIns[30] <= iIns[29];
+        iIns[31] <= iIns[30];
+        iIns[32] <= iIns[31];
         qIns[ 0] <= qIn;
         qIns[ 1] <= qIns[ 0];
         qIns[ 2] <= qIns[ 1];
@@ -291,10 +308,18 @@ always @(posedge clk) begin
         qIns[22] <= qIns[21];
         qIns[23] <= qIns[22];
         qIns[24] <= qIns[23];
+        qIns[25] <= qIns[24];
+        qIns[26] <= qIns[25];
+        qIns[27] <= qIns[26];
+        qIns[28] <= qIns[27];
+        qIns[29] <= qIns[28];
+        qIns[30] <= qIns[29];
+        qIns[31] <= qIns[30];
+        qIns[32] <= qIns[31];
         end
     end
-wire    [17:0]  iInput = iIns[22];
-wire    [17:0]  qInput = qIns[22];
+wire    [17:0]  iInput = iIns[28];
+wire    [17:0]  qInput = qIns[28];
 //wire    [17:0]  iInput = iIns[23];
 //wire    [17:0]  qInput = qIns[23];
 `else

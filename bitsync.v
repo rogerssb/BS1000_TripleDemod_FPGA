@@ -153,7 +153,7 @@ always @(posedge sampleClk) begin
             freqOut <= 0;
             end
         else begin
-            freqOut <= phaseDiff;
+        freqOut <= phaseDiff;
             end
         prevPhase <= phase;
         end
@@ -239,8 +239,6 @@ wire    [18:0]  timingError = {timingErrorI[17],timingErrorI} + {timingErrorQ[17
 wire timingErrorEn = (phaseState == ONTIME);
 
 // DC Offset error variables
-//`define SINGLE_PULSE
-`define ZERO_CROSSING
 reg  [17:0]dcError;
 wire offsetEn = (phaseState == OFFTIME);
 
@@ -324,17 +322,6 @@ always @(posedge sampleClk) begin
                     transition <= 1;
                     noTransitionCount <= 0;
                     transitionCount <= transitionCount + 1;
-                    `ifdef SINGLE_PULSE
-                    if (transitionCount[0]) begin
-                        dcError <= earlyOnTimeI + lateOnTimeI;
-                        dcErrorAvailable <= 1;
-                        end
-                    else begin
-                        dcError <= 0;
-                        dcErrorAvailable <= 0;
-                        end
-                    `endif
-                    `ifdef ZERO_CROSSING
                     if (transitionCount[0] && (earlySignI != lateSignI)) begin
                         dcError <= offTimeI + prevOffTimeI;
                         dcErrorAvailable <= 1;
@@ -343,7 +330,6 @@ always @(posedge sampleClk) begin
                         dcError <= 0;
                         dcErrorAvailable <= 0;
                         end
-                    `endif
                     // High to low transition?
                     if (earlySignI) begin
                         timingErrorI <= offTimeI;
@@ -357,9 +343,6 @@ always @(posedge sampleClk) begin
                     end
                 else begin
                     transition <= 0;
-                    `ifdef SINGLE_PULSE
-                    dcErrorAvailable <= 0;
-                    `endif
                     transitionCount <= 0;
                     if (noTransitionCount < 3) begin
                         noTransitionCount <= noTransitionCount + 1;
@@ -439,12 +422,7 @@ always @(qMF) qMFReal = (qMF[17] ? qMF - 262144.0 : qMF)/131072.0;
 reg     [24:0]  avgDeviation;
 reg     [24:0]  avgOffsetError;
 assign          offsetError = dcError;
-`ifdef SINGLE_PULSE
-assign          offsetErrorEn = (dcErrorAvailable && offsetEn);
-`endif
-`ifdef ZERO_CROSSING
 assign          offsetErrorEn = offsetEn;
-`endif
 //assign          offsetError = avgOffsetError[24:7];
 always @(posedge sampleClk) begin
     if (reset) begin
@@ -479,7 +457,7 @@ always @(addr) begin
         endcase
     end
 wire    [15:0]  lockCount;
-wire    [7:0]   syncThreshold;
+wire    [11:0]   syncThreshold;
 wire            loopFilterEn = (symTimes2Sync & timingErrorEn);
 wire    [31:0]  bsDout;
 loopFilter sampleLoop(
@@ -491,7 +469,7 @@ loopFilter sampleLoop(
     .addr(addr),
     .din(din),
     .dout(bsDout),
-    .error(timingError[18:11]),
+    .error(timingError[18:7] + timingError[6]),
     .loopFreq(sampleFreq),
     .ctrl2(useCompFilter),
     .ctrl4(useSummer),
@@ -685,7 +663,7 @@ always @(addr) begin
 
 wire    [31:0]  auDout;
 wire    [15:0]  auLockCount;
-wire    [7:0]   auSwapCount;
+wire    [11:0]   auSyncThreshold;
 wire            auLoopFilterEn = (auResampSync & auTimingErrorEn);
 loopFilter auSampleLoop(
     .clk(sampleClk),
@@ -696,17 +674,17 @@ loopFilter auSampleLoop(
     .addr(addr),
     .din(din),
     .dout(auDout),
-    .error(auOffTimeLevel[17:10]),
+    .error(auOffTimeLevel[17:6] + auOffTimeLevel[5]),
     .loopFreq(auSampleFreq),
     .lockCount(auLockCount),
-    .syncThreshold(auSwapCount)
+    .syncThreshold(auSyncThreshold)
     );
 
 
 //************************** Lock Detector ************************************
 
 reg     [1:0]   auAvgState;
-
+wire    [7:0]   auSwapCount = auSyncThreshold[7:0];
 reg     [7:0]   auSwapCounter;
 reg             auIQSwap;
 reg     [15:0]  auLockCounter;

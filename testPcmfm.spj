@@ -1,25 +1,30 @@
 [Options]
 NoFloatWarn=Yes
 DebugEnable=
+SimFileSize=
+DigitalThreshold=
 [Settings]
 Version=Silvaco4.10.0.R
-LintOptionsFile=
 OpenFileDir=C:\modem\fskRadio
+VisualDebug=
+DisableCache=
+SimFile=
 [Analyzer]
 C0Width=162
 C1Width=58
 C2Width=102
 GotoSource=N
-MinScale=
-MaxScale=
+SymbolFile=
 [Spice]
 [LibraryFiles]
 0=..\..\Xilinx\10.1\ISE\verilog\src\unisims\{.v}
 [DebugMode]
 CommandLine=+define+SIMULATE
 DiskSize=5000M
+RecirculateTime=
+UseRecirculateTime=
 [View]
-1=Last 225056.474ns 287125.767ns 1474.330ns 150839.536ns 186522.007ns
+1=Last 176277.203ns 182698.903ns 152.173ns 198368.388ns 203603.109ns
 [Group0]
 Name=New Group2
 [Group3]
@@ -68,8 +73,6 @@ Name="DAC"
 13="test.demod : resampSync" default
 14="test.demod : ddcSync" default
 OpenGroup=
-[Plusargs]
-0=
 [Group4]
 Name="Bitsync"
 0="test.demod.bitsync : slip" default
@@ -158,7 +161,8 @@ OpenGroup=
 7=test.demod
 [Mkeep]
 0=test.trellis.viterbi_top
-[Define]
+[Plusargs]
+0=
 [Files]
 0=testPcmfm.v
 1=demod.v
@@ -192,45 +196,46 @@ OpenGroup=
 29=.\coregen\resamplerTap5.v
 30=.\coregen\resamplerTap6.v
 31=.\coregen\resamplerTap7.v
-32=bitsync.v
-33=loopRegs.v
-34=loopFilter.v
-35=lead.v
-36=carrierLoop.v
-37=lagGain.v
-38=log2.v
-39=channelAgc.v
-40=agcLoopRegs.v
-41=agcLoopFilter.v
-42=cicComp.v
-43=cicInterpolate.v
-44=interpolate.v
-45=interpRegs.v
-46=shift48To18.v
-47=.\decoder\mrk_spc_decode.v
-48=.\decoder\biphase_to_nrz.v
-49=.\decoder\decoder.v
-50=.\decoder\decoder_regs.v
-51=.\decoder\format_output.v
-52=.\trellis\mfilter.v
-53=.\trellis\trellis.v
-54=.\trellis\trellisCarrierLoop.v
-55=.\trellis\viteri_top.v
-56=.\trellis\acs.v
-57=.\trellis\comp4twosComp.v
-58=.\trellis\maxMetric.v
-59=.\trellis\rotator.v
-60=.\trellis\rotMult.v
-61=.\trellis\traceBackTable.v
-62=.\coregen\mult10x10.v
-63=dualResampler.v
-64=dualDecimator.v
-65=vm_cordic_fast.v
-66=vm_cordic.v
-67=cmpy18Sat.v
-68=bitFifo.v
-69=lagGain12.v
-70=leadGain12.v
+32=loopRegs.v
+33=lead.v
+34=carrierLoop.v
+35=lagGain.v
+36=log2.v
+37=channelAgc.v
+38=agcLoopRegs.v
+39=agcLoopFilter.v
+40=cicComp.v
+41=cicInterpolate.v
+42=interpolate.v
+43=interpRegs.v
+44=shift48To18.v
+45=.\decoder\mrk_spc_decode.v
+46=.\decoder\biphase_to_nrz.v
+47=.\decoder\decoder.v
+48=.\decoder\decoder_regs.v
+49=.\decoder\format_output.v
+50=.\trellis\mfilter.v
+51=.\trellis\trellis.v
+52=.\trellis\trellisCarrierLoop.v
+53=.\trellis\viteri_top.v
+54=.\trellis\acs.v
+55=.\trellis\comp4twosComp.v
+56=.\trellis\maxMetric.v
+57=.\trellis\rotator.v
+58=.\trellis\rotMult.v
+59=.\trellis\traceBackTable.v
+60=.\coregen\mult10x10.v
+61=dualResampler.v
+62=dualDecimator.v
+63=vm_cordic_fast.v
+64=cmpy18Sat.v
+65=bitFifo.v
+66=lagGain12.v
+67=leadGain12.v
+68=bitsync.v
+69=loopFilter.v
+70=vm_cordic.v
+71=.\coregen\mult12x8.v
 [Group7]
 Name="Trellis"
 0="test.trellis.viterbi_top : out1Imag_2dly[9:0]" default
@@ -238,40 +243,68 @@ Name="Trellis"
 2="test.trellis.viterbi_top : out1Imag[9:0]" default
 3="test.trellis.viterbi_top : index_1d[4:0]" default
 4="test.trellis.viterbi_top : index[4:0]" default
-5="test.trellis.viterbi_top : symEn_phErr" default
-6="test.trellis.viterbi_top : symEn" default
-7="test.trellis : symEn_tbtDly" default Unknown
-8="test.trellis.viterbi_top : devErrorReal" default Real AnalogDisplay AType=Step Scale=Auto
-9="test.trellis : phErrReal" default Real AnalogDisplay AType=Step Scale=Auto
-10="test.trellis : mag1" default Real AnalogDisplay AType=Step Scale=Auto
-11="test.trellis : mag0" default Real AnalogDisplay AType=Step Scale=Auto
-12="test.trellis.trellisCarrierLoop : newOffset[31:0]" default
-13="test.trellis.trellisCarrierLoop : breakLoop" default
-14="test.trellis.trellisCarrierLoop : deviationCorrection[31:0]" default
-15="test.trellis.viterbi_top : symEn_tbtDly" default
-16="test.trellis : sym2xEn" default
-17="test.trellis : symEn" default
-18="test.trellis.bitFifo : depth[2:0]" default Unknown
-19="test.trellis.bitFifo : dout" default Unknown
-20="test.trellis.bitFifo : outputEn" default Unknown
-21="test.trellis.bitFifo : rdAddr[1:0]" default Unknown
-22="test.trellis.bitFifo : wrAddr[1:0]" default Unknown
-23="test : bitErrors" default Decimal AnalogDisplay AType=Step Scale=Auto
-24="test : testBitCount" default Decimal AnalogDisplay AType=Step Scale=Auto
-25="test : testBits" default
-26="test.trellis : legacyDelayed" default Unknown
-27="test.trellis.trellisCarrierLoop : legacyBit" default
-28="test.trellis : magDecision" default
-29="test : txDelay" default
-30="test.trellis : decision" default
-31="test.trellis.viterbi_top.tbt1 : tbDelta[5:0]" default
-32="test.trellis.trellisCarrierLoop : freqReal" default Real AnalogDisplay AType=Step Scale=Auto
-33="test.trellis.trellisCarrierLoop : qInReal" default Real AnalogDisplay AType=Step Scale=Auto
-34="test.trellis.trellisCarrierLoop : iInReal" default Real AnalogDisplay AType=Step Scale=Auto
-35="test.trellis.trellisCarrierLoop : iIn[17:0]" default
-36="test.trellis.trellisCarrierLoop : phaseError[7:0]" default
-37="test.trellis : phErrShft[7:0]" default
-38="test : trellisReset" default
+5="test.trellis.trellisCarrierLoop : carrierFreqOffset[31:0]" default
+6="test.trellis.trellisCarrierLoop : lagAccum[39:8]" default
+7="test.trellis.viterbi_top : devErrorReal" default Real AnalogDisplay AType=Step Scale=Auto
+8="test.trellis : phErrReal" default Real AnalogDisplay AType=Step Scale=Auto
+9="test.trellis.trellisCarrierLoop : freqReal" default Real AnalogDisplay AType=Step Scale=Auto
+10="test.trellis.trellisCarrierLoop : symEnDly" default
+11="test.trellis.trellisCarrierLoop : sym2xEnDly" default
+12="test.trellis.trellisCarrierLoop : iMpy[17:0]" default
+13="test.trellis : devReal" default Real AnalogDisplay AType=Step Scale=Auto
+14="test.trellis : diffReal" default Real AnalogDisplay AType=Step Scale=Auto
+15="test.trellis : fskDeviation[15:0]" default Unknown
+16="test.trellis : phaseDiff[11:0]" default Unknown
+17="test.trellis : firstPhase[11:0]" default Unknown
+18="test.trellis : cordicPhase[11:0]" default Unknown
+19="test.trellis : devAvgEn" default Unknown
+20="test.trellis : cordicEn" default Unknown
+21="test.trellis : devState[2:0]" default Unknown
+22="test.trellis : rotEna" default
+23="test.trellis : mag1" default Real AnalogDisplay AType=Step Scale=Auto
+24="test.trellis : mag0" default Real AnalogDisplay AType=Step Scale=Auto
+25="test.trellis : magDecision" default
+26="test.trellis.trellisCarrierLoop : newOffset[31:0]" default
+27="test.trellis.trellisCarrierLoop : breakLoop" default
+28="test.trellis.trellisCarrierLoop : deviationCorrection[31:0]" default
+29="test.trellis.viterbi_top : symEn_tbtDly" default
+30="test.trellis : sym2xEn" default
+31="test.trellis : symEn" default
+32="test.trellis.bitFifo : depth[2:0]" default
+33="test.trellis.bitFifo : dout" default
+34="test.trellis.bitFifo : outputEn" default
+35="test.trellis.bitFifo : rdAddr[1:0]" default
+36="test.trellis.bitFifo : wrAddr[1:0]" default
+37="test : bitErrors" default Decimal AnalogDisplay AType=Step Scale=Auto
+38="test : testBitCount" default Decimal AnalogDisplay AType=Step Scale=Auto
+39="test : testBits" default
+40="test.trellis : berRestart" default
+41="test.trellis : berRestarted" default
+42="test.trellis : bitCount[15:0]" default
+43="test.trellis : bitErrorCount[15:0]" default
+44="test.trellis : legacyDelayed" default
+45="test.trellis.trellisCarrierLoop : legacyBit" default
+46="test : txDelay" default
+47="test.trellis : decision" default
+48="test.trellis : avgDelta" default Real AnalogDisplay AType=Step Scale=Auto
+49="test.trellis : avgNegDelta" default Real AnalogDisplay AType=Step Scale=Auto
+50="test.trellis : avgPosDelta" default Real AnalogDisplay AType=Step Scale=Auto
+51="test.trellis : idxDiff[5:0]" default Unknown
+52="test.trellis : index[4:0]" default
+53="test.trellis.viterbi_top.acs0.accumDecay : a[11:0]" default
+54="test.trellis.viterbi_top.acs0.accumDecay : b[7:0]" default
+55="test.trellis.viterbi_top.acs0.accumDecay : ce" default
+56="test.trellis.viterbi_top.acs0.accumDecay : clk" default
+57="test.trellis.viterbi_top.acs0.accumDecay : sclr" default
+58="test.trellis.viterbi_top.acs0.accumDecay : p[11:0]" default
+59="test.trellis.viterbi_top.acs0 : accMetOut[11:0]" default
+60="test.trellis.trellisCarrierLoop : freqReal" default Real AnalogDisplay AType=Step Scale=Auto
+61="test.trellis.trellisCarrierLoop : qInReal" default Real AnalogDisplay AType=Step Scale=Auto
+62="test.trellis.trellisCarrierLoop : iInReal" default Real AnalogDisplay AType=Step Scale=Auto
+63="test.trellis.trellisCarrierLoop : iIn[17:0]" default
+64="test.trellis.trellisCarrierLoop : phaseError[7:0]" default
+65="test.trellis : phErrShft[7:0]" default
+66="test : trellisReset" default
 OpenGroup=Yes
 [GroupInfo]
 0=New Group2 : 0 : 0 : 0
@@ -282,4 +315,3 @@ OpenGroup=Yes
 5=Carrier : 5 : 1 : 0
 6=DAC : 6 : 1 : 0
 7=Trellis : 7 : 1 : 0
-[Bookmarks]

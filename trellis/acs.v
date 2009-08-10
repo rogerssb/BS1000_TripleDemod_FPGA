@@ -1,5 +1,5 @@
+`include "./addressMap.v"
 `timescale 1ns/1ps
-
 
 // two's complement adder
 // This added adds 2, two's comp. numbers of different number of bits
@@ -69,6 +69,9 @@ endmodule
 module acs 
   (
    clk, reset, symEn,
+   `ifdef USE_DECAY
+   decayFactor,
+   `endif
    out1PtReal, out0PtReal,
    accMet1, accMet2,
    accMetOut, selOut,
@@ -80,6 +83,9 @@ module acs
    parameter             ROT_BITS = 10;
    input                 clk, reset;
    input                 symEn;
+   `ifdef USE_DECAY
+   input [7:0]           decayFactor;
+   `endif
    input [ROT_BITS-1:0]  out1PtReal, out0PtReal;
    input [(size-1)+4:0]  accMet1, accMet2;
    output [(size-1)+4:0] accMetOut;
@@ -90,9 +96,14 @@ module acs
    input [ROT_BITS-1:0]  out0PtImag, out1PtImag;
    output [ROT_BITS-1:0] outImag;
    output [ROT_BITS-1:0] outReal;
+
  
          
+   `ifdef USE_DECAY
+   wire [(size-1)+4:0]   accMetOut;
+   `else
    reg  [(size-1)+4:0]   accMetOut;
+   `endif
    reg  [(size-1)+4:0]   accTemp;
    
    wire [(size-1)+4:0]   add1, add2;
@@ -176,6 +187,20 @@ module acs
    end
 
 
+`ifdef USE_DECAY
+
+wire    [12:0]  decayOut;
+assign          accMetOut = decayOut[12:1] + decayOut[0];
+mult12x8 accumDecay(
+    .ce(symEn), 
+    .clk(clk), 
+    .sclr(reset),
+    .a(normalizeIn ? accTemp : muxOut), 
+    .b(decayFactor), 
+    .p(decayOut)
+    );
+
+`else
    always @(posedge clk)
      if (reset) begin
         accMetOut <= 0;
@@ -188,7 +213,8 @@ module acs
            accMetOut <= muxOut;
         end
      end
-   
+`endif   
+
    always @(posedge clk)
      if (reset) begin
         selOut <= 0;

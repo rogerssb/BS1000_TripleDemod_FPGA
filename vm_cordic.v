@@ -350,10 +350,8 @@ module vm_cordic(clk,ena,x,y,m,p);
     wire [mh+1:ml]mDiv4 = {3'b0,x11[mh:ml+2]};
     wire [mh+1:ml]mScaled = mX2 - mDiv4;
     always @(posedge clk)begin
-        if (ena) begin
-            m <= mScaled[mh+1] ? 13'h1fff : mScaled[mh:ml];
-            p <= ~z11[ph:pl] +1;
-            end
+        m <= mScaled[mh+1] ? 13'h1fff : mScaled[mh:ml];
+        p <= ~z11[ph:pl] +1;
         end
 
 endmodule

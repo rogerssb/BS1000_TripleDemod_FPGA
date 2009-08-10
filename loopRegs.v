@@ -55,8 +55,8 @@ reg     [31:0]  loopData;
 output  [15:0]  lockCount;
 reg     [15:0]  lockCount;
 
-output  [7:0]   syncThreshold;
-reg     [7:0]   syncThreshold;
+output  [11:0]   syncThreshold;
+reg     [11:0]   syncThreshold;
 
 always @(negedge wr0) begin
     if (cs) begin
@@ -118,7 +118,7 @@ always @(negedge wr2) begin
                 loopData[23:16] <= dataIn[23:16];
                 end
             `LF_LOCKDETECTOR: begin
-                syncThreshold <= dataIn[23:16];
+                syncThreshold[7:0] <= dataIn[23:16];
                 end
             default:  ;
             endcase
@@ -136,6 +136,9 @@ always @(negedge wr3) begin
                 end
             `LF_LOOPDATA: begin
                 loopData[31:24] <= dataIn[31:24];
+                end
+            `LF_LOCKDETECTOR: begin
+                syncThreshold[11:8] <= dataIn[27:24];
                 end
             default:  ;
             endcase
@@ -157,7 +160,7 @@ always @(addr or cs or
             `LF_LEAD_LAG:       dataOut <= {leadMan,3'bx,leadExp,lagMan,3'bx,lagExp};
             `LF_LIMIT:          dataOut <= limit;
             `LF_LOOPDATA:       dataOut <= loopData;
-            `LF_LOCKDETECTOR:   dataOut <= {8'h0,syncThreshold,lockCount};
+            `LF_LOCKDETECTOR:   dataOut <= {4'h0,syncThreshold,lockCount};
             `LF_INTEGRATOR:     dataOut <= lagAccum;
             default:            dataOut <= 32'hx;
             endcase

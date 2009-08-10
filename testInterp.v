@@ -2,7 +2,7 @@
 `timescale 1ns/100ps
 
 `define ENABLE_AGC
-//`define ADD_NOISE
+`define ADD_NOISE
 //`define BER_TEST
 //`define MATLAB_VECTORS
 
@@ -49,9 +49,9 @@ real carrierLimitNorm = carrierLimitHz * `SAMPLE_PERIOD * `TWO_POW_32;
 integer carrierLimitInt = carrierLimitNorm;
 wire [31:0] carrierLimit = carrierLimitInt;
 
-wire [31:0] sweepRate = 32'h00000000;
+wire [31:0] sweepRate = 32'h00800000;
 
-real bitrateBps = 500000.0;
+real bitrateBps = 400000.0;
 real bitrateSamples = 1/bitrateBps/`SAMPLE_PERIOD/2.0;
 integer bitrateSamplesInt = bitrateSamples;
 wire [15:0]bitrateDivider = bitrateSamplesInt - 1;
@@ -59,19 +59,17 @@ real actualBitrateBps = SAMPLE_FREQ/bitrateSamplesInt/2.0;
 
 // value = 2^ceiling(log2(R*R))/(R*R), where R = interpolation rate of the FM
 // modulator
-real interpolationGain = 1.28;
+real interpolationGain = 1.77777777;
 
 //real deviationHz = 0*0.35 * bitrateBps;
-real deviationHz = 2*0.350 * bitrateBps;
+real deviationHz = 2*0.35 * bitrateBps;
 real deviationNorm = deviationHz * `SAMPLE_PERIOD * `TWO_POW_32;
 integer deviationInt = deviationNorm*interpolationGain;
 wire [31:0]deviationQ31 = deviationInt;
 wire [17:0]deviation = deviationQ31[31:14];
 
-real cicDecimation;
-initial cicDecimation = SAMPLE_FREQ/bitrateBps/2.0/2.0/2.0/2.0;
-integer cicDecimationInt;
-initial cicDecimationInt = (cicDecimation < 2.0) ? 2 : cicDecimation;
+real cicDecimation = SAMPLE_FREQ/bitrateBps/2.0/2.0/2.0/2.0;
+integer cicDecimationInt = cicDecimation;
 
 
 real resamplerFreqSps = 2*actualBitrateBps;     // 2 samples per symbol
@@ -151,7 +149,6 @@ wire    [17:0]iTx,qTx;
 dds iqDds ( 
     .sclr(reset), 
     .clk(clk), 
-    .ce(1'b1),
     .we(1'b1), 
     .data(fmModFreq), 
     .sine(), 
@@ -163,7 +160,6 @@ wire    [17:0]  iBB,qBB;
 dds iqDds ( 
     .sclr(reset), 
     .clk(clk), 
-    .ce(1'b1),
     .we(1'b1), 
     .data(fmModFreq), 
     .sine(qBB), 
@@ -173,7 +169,6 @@ wire    [17:0]  iLO,qLO;
 dds carrierDds (
     .sclr(reset), 
     .clk(clk), 
-    .ce(1'b1),
     .we(1'b1), 
     .data(carrierFreq), 
     .sine(qLO), 
@@ -247,8 +242,10 @@ always @(negedge clk) begin
 
 real iChReal = (iRx[17] ? (iRx - 262144.0) : iRx)/131072.0;
 real qChReal = (qRx[17] ? (qRx - 262144.0) : qRx)/131072.0;
-assign iRx = iSignal + iNoise;
-assign qRx = qSignal + qNoise;
+
+reg signal;
+assign iRx = signal ? iSignal : iNoise;
+assign qRx = signal ? qSignal : qNoise;
 
 
 
@@ -263,6 +260,7 @@ demod demod(
     .addr(a),
     .din(d),
     .dout(dout),
+    .iDataClk(demodClk),
     .iBit(demodBit),
     .iRx(iRx), .qRx(qRx),
     .dac0Sync(dac0Sync),
@@ -271,8 +269,8 @@ demod demod(
     .dac1Data(dac1Out),
     .dac2Sync(dac2Sync),
     .dac2Data(dac2Out),
-    .iSymEn(symEn),
-    .iSym2xEn(symX2En)
+    .symSync(symEn),
+    .symTimes2Sync(symX2En)
     );
 
 reg dac0CS,dac1CS,dac2CS;
@@ -374,35 +372,29 @@ decoder decoder
 reg [15:0]testSR;
 reg [4:0]testZeroCount;
 reg testData;
-//always @(negedge demodClk or reset) begin
-always @(posedge clk or reset) begin
+always @(negedge demodClk or reset) begin
     if (reset) begin
         testZeroCount <= 5'b0;
         testSR <= MASK17;
         end
-    else if (symEn) begin
-        if (testSR[0] | (testZeroCount == 5'b11111))
-            begin
-            testZeroCount <= 5'h0;
-            testSR <= {1'b0, testSR[15:1]} ^ PN17;
-            end
-        else
-            begin
-            testZeroCount <= testZeroCount + 5'h1;
-            testSR <= testSR >> 1;
-            end
-        testData <= testSR[0];
+    else if (testSR[0] | (testZeroCount == 5'b11111))
+        begin
+        testZeroCount <= 5'h0;
+        testSR <= {1'b0, testSR[15:1]} ^ PN17;
         end
+    else
+        begin
+        testZeroCount <= testZeroCount + 5'h1;
+        testSR <= testSR >> 1;
+        end
+    testData <= testSR[0];
     end
 
 reg [127:0]delaySR;
 reg txDelay;
-//always @(negedge demodClk) begin
-always @(posedge clk) begin
-    if (symEn) begin
-        txDelay <= delaySR[19];
-        delaySR <= {delaySR[126:0],testData};
-        end
+always @(negedge demodClk) begin
+    txDelay <= delaySR[19];
+    delaySR <= {delaySR[126:0],testData};
     end
 
 reg testBits;
@@ -411,13 +403,11 @@ integer bitErrors;
 initial bitErrors = 0;
 integer testBitCount;
 initial testBitCount = 0;
-always @(posedge clk) begin
-    if (symEn) begin
-        if (testBits) begin
-            testBitCount <= testBitCount + 1;
-            if (demodBit != txDelay) begin
-                bitErrors <= bitErrors + 1;
-                end
+always @(posedge demodClk) begin
+    if (testBits) begin
+        testBitCount <= testBitCount + 1;
+        if (demodBit != txDelay) begin
+            bitErrors <= bitErrors + 1;
             end
         end
     end
@@ -528,7 +518,7 @@ initial begin
     // The 11.5 is a fudge factor (should be 12 for the 2 bit shift) for the scaling 
     // down of the transmit waveform from full scale.
     // The 13.0 is to translate from SNR to EBNO which is 10log10(bitrate/bandwidth).
-    $initGaussPLI(1,8.0 + 11.5 - 13.0,131072.0);
+    $initGaussPLI(1,0.0 + 11.5 - 13.0,131072.0);
     `endif
     demod.ddc.hbReset = 1;
     demod.ddc.cicReset = 1;
@@ -542,6 +532,7 @@ initial begin
     fmModCS = 0;
     txScaleFactor = 0.707;
     decoder.decoder_regs.q = 16'h0004;
+    signal = 1;
 
 
     // Turn on the clock
@@ -555,22 +546,22 @@ initial begin
     write32(`FM_MOD_DEV, {14'bx,deviation});
     write32(`FM_MOD_BITRATE, {1'b0,15'bx,bitrateDivider});
     // This value is ceiling(log2(R*R)), where R = interpolation rate.
-    write32(`FM_MOD_CIC,7);
+    write32(`FM_MOD_CIC,9);
     fmModCS = 0;
 
     // Init the mode
-    write32(createAddress(`DEMODSPACE,`DEMOD_CONTROL),{14'bx,`MODE_SINGLE_RAIL,13'bx,`MODE_2FSK});
+    write32(createAddress(`DEMODSPACE,`DEMOD_CONTROL),{29'bx,`MODE_2FSK});
 
     // Init the sample rate loop filters
     write32(createAddress(`RESAMPSPACE,`RESAMPLER_RATE),resamplerFreqInt);
     write32(createAddress(`BITSYNCSPACE,`LF_CONTROL),1);    // Zero the error
-    write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h001c0014);    
+    write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h001b0016);    
     //write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h0014000c);    
     write32(createAddress(`BITSYNCSPACE,`LF_LIMIT), resamplerLimitInt);    
 
     // Init the carrier loop filters
     write32(createAddress(`CARRIERSPACE,`LF_CONTROL),1);    // Zero the error
-    write32(createAddress(`CARRIERSPACE,`LF_LEAD_LAG),32'h0000000c);   
+    write32(createAddress(`CARRIERSPACE,`LF_LEAD_LAG),32'h00000012);   
     write32(createAddress(`CARRIERSPACE,`LF_LIMIT), carrierLimit);
     write32(createAddress(`CARRIERSPACE,`LF_LOOPDATA), sweepRate);
 
@@ -584,7 +575,7 @@ initial begin
 
     // Init the channel agc loop filter
     write32(createAddress(`CHAGCSPACE,`ALF_CONTROL),1);                 // Zero the error
-    write32(createAddress(`CHAGCSPACE,`ALF_SETPOINT),32'h000000e0);     // AGC Setpoint
+    write32(createAddress(`CHAGCSPACE,`ALF_SETPOINT),32'h000000f8);     // AGC Setpoint
     write32(createAddress(`CHAGCSPACE,`ALF_GAINS),32'h00180018);        // AGC Loop Gain
     write32(createAddress(`CHAGCSPACE,`ALF_ULIMIT),32'h4fffffff);       // AGC Upper limit
     write32(createAddress(`CHAGCSPACE,`ALF_LLIMIT),32'h00000000);       // AGC Lower limit
@@ -599,7 +590,7 @@ initial begin
     write32(createAddress(`INTERP1SPACE, `INTERP_CONTROL),0);
     write32(createAddress(`INTERP1SPACE, `INTERP_EXPONENT), 8);
     write32(createAddress(`INTERP1SPACE, `INTERP_MANTISSA), 32'h00012000);
-    write32(createAddress(`INTERP2SPACE, `INTERP_CONTROL),1);
+    write32(createAddress(`INTERP2SPACE, `INTERP_CONTROL),0);
     write32(createAddress(`INTERP2SPACE, `INTERP_EXPONENT), 8);
     write32(createAddress(`INTERP2SPACE, `INTERP_MANTISSA), 32'h00012000);
 
@@ -655,7 +646,7 @@ initial begin
     #(4*bitrateSamplesInt*C) ;
 
     // Enable the AFC loop and invert the error
-    //write32(createAddress(`CARRIERSPACE,`LF_CONTROL),2);  
+    // write32(createAddress(`CARRIERSPACE,`LF_CONTROL),2);  
 
     `ifdef ENABLE_AGC
     // Enable the AGC loop
@@ -664,12 +655,16 @@ initial begin
 
     // Wait for some data to pass thru
     #(2*100*bitrateSamplesInt*C) ;
-    `ifdef MATLAB_VECTORS
-    $fclose(outfile);
-    `endif
     $stop;
 
-    write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h0018000c);    
+    signal = 0;
+    // Wait for some data to pass thru
+    #(2*100*bitrateSamplesInt*C) ;
+
+    signal = 1;
+    // Wait for some data to pass thru
+    #(2*100*bitrateSamplesInt*C) ;
+    $stop;
 
     end
 

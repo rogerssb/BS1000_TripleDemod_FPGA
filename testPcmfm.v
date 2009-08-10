@@ -54,7 +54,7 @@ real carrierOffsetFreqHz;
 real carrierOffsetFreqNorm;
 integer carrierOffsetFreqInt;
 initial begin 
-  carrierOffsetFreqHz = 0.0;
+  carrierOffsetFreqHz = 2000.0;
   carrierOffsetFreqNorm = carrierOffsetFreqHz * `SAMPLE_PERIOD * `TWO_POW_32;
   carrierOffsetFreqInt = carrierOffsetFreqNorm;
 end                 
@@ -515,7 +515,7 @@ always @(posedge clk) begin
         `ifdef IQ_MAG
         txDelay <= delaySR[19];
         `else
-        txDelay <= delaySR[15];
+        txDelay <= delaySR[18];
         `endif  
         delaySR <= {delaySR[126:0],testData};
         end
@@ -697,12 +697,14 @@ initial begin
     write32(createAddress(`CARRIERSPACE,`LF_LOOPDATA), sweepRate);
 
     // Init the trellis carrier loop
-    write32(createAddress(`TRELLIS_SPACE,`LF_CONTROL),9);    // Forces the lag acc and the error term to be zero
-    write32(createAddress(`TRELLIS_SPACE,`LF_LEAD_LAG),32'h0016_0008);   
-    write32(createAddress(`TRELLIS_SPACE,`LF_LIMIT),32'h0010_0000);   
-    //write32(createAddress(`TRELLIS_SPACE,`LF_LOOPDATA),32'h0333_3333);
-    write32(createAddress(`TRELLIS_SPACE,`LF_LOOPDATA),32'h0);
+    write32(createAddress(`TRELLISLFSPACE,`LF_CONTROL),9);    // Forces the lag acc and the error term to be zero
+    write32(createAddress(`TRELLISLFSPACE,`LF_LEAD_LAG),32'h0016_0010);   
+    write32(createAddress(`TRELLISLFSPACE,`LF_LIMIT),32'h0100_0000);   
+    //write32(createAddress(`TRELLISLFSPACE,`LF_LOOPDATA),32'h0333_3333);
+    //write32(createAddress(`TRELLISLFSPACE,`LF_LOOPDATA),32'h0666_6666);
+    write32(createAddress(`TRELLISLFSPACE,`LF_LOOPDATA),32'h0);
 
+    write32(createAddress(`TRELLIS_SPACE,`TRELLIS_DECAY),166);
                     
     // Init the downcoverter register set
     write32(createAddress(`DDCSPACE,`DDC_CONTROL),0);
@@ -796,7 +798,7 @@ initial begin
     #(2*bitrateSamplesInt*C) ;
     //trellis.viterbi_top.simReset = 0;
     trellisReset = 0;
-    #(20*bitrateSamplesInt*C) ;
+    #(30*bitrateSamplesInt*C) ;
     trellisReset = 1;
     #(2*bitrateSamplesInt*C) ;
     trellisReset = 0;
@@ -815,6 +817,7 @@ initial begin
     // Wait for some data to pass thru
     #(2*50*bitrateSamplesInt*C) ;
     // Turn on the BERT
+    write32(createAddress(`TRELLIS_SPACE,`LF_CONTROL),32'h0);
     testBits = 1;
     measureSNR = 1;
     // Run the BERT
