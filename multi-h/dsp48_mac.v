@@ -6,19 +6,27 @@
 
 `timescale 1 ns/1 ps
 
-module mpyacc18x18 (
-  sclr, clk, a, b, acc, p
-);
+module dsp48_mac 
+  (
+   sclr, 
+   clk, 
+   a, 
+   b, 
+   acc,
+   accClr, 
+   p
+   );
+   
    input            sclr;
    input            clk;
    input [17 : 0]   a;
    input [17 : 0]   b;
    input            acc;
-   //output [35 : 0]  p;
+   input            accClr;
    output [47 : 0]  p;
    
    wire [7:0]       OPMODE = {4'b0000, acc, 3'b001}; // OPMODE sets up the operation of the DSP48A block. The acc input
-                                      // turns on the output accumulator
+                                                     // turns on the output accumulator
 
 // DSP48A: DSP Function Block
 // Spartan-3A DSP
@@ -66,7 +74,7 @@ DSP48A_inst (
 .RSTD        (sclr      ), // 1-bit reset input for D input pipeline registers
 .RSTM        (sclr      ), // 1-bit reset input for M pipeline registers
 .RSTOPMODE   (sclr      ), // 1-bit reset input for OPMODE input pipeline registers
-.RSTP        (sclr      ) // 1-bit reset input for P output pipeline registers
+.RSTP        (accClr    )  // 1-bit reset input for P output pipeline registers
 );
 // End of DSP48A_inst instantiation
 
