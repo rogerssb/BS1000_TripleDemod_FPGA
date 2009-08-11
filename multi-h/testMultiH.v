@@ -12,39 +12,46 @@
 
 module test;
 
-reg clk,reset;
-reg clkDiv2;
-reg [79:0]din;
-reg symEn,sym2xEn;
+   reg clk,reset;
+   reg clkDiv2;
+   reg [79:0] din;
+   reg        symEn,sym2xEn;
 
 `include "mfiltCoeff.v"
 
-mfilt # (C0_0, C0_1, C0_2, C0_3, C1_0, C1_1, C1_2, C1_3)
-//mfilt # ( 10, 20, 30, 40, C1_0, C1_1, C1_2, C1_3)
-
-uut_mfilt
-  (
-   .clk     (clk       ), 
-   .reset   (reset     ), 
-   .symEn   (symEn     ), 
-   .sym2xEn (sym2xEn   ),
-   .i       (din[57:40]),    
-   .q       (din[17:0] ),    
-   .mfI     (          ),   
-   .mfQ     (          )
-   );
+   mfilt # (C0_0, C0_1, C0_2, C0_3, C1_0, C1_1, C1_2, C1_3) uut_mfilt
+     (
+      .clk     (clk       ), 
+      .reset   (reset     ), 
+      .symEn   (symEn     ), 
+      .sym2xEn (sym2xEn   ),
+      .i       (din[57:40]),    
+      .q       (din[17:0] ),    
+      .mf0I    (          ),   
+      .mf0Q    (          ),
+      .mf1I    (          ),   
+      .mf1Q    (          )
+      );
    
-
-    
-wire testDec1;
-
-initial clk = 0;
-initial clkDiv2 = 0;
-initial reset = 0;
-
-always #4 clk = !clk; 
-always @(posedge clk) clkDiv2 = !clkDiv2; 
-	
+   mfiltBank uut_mfiltBank
+     (
+      .clk     (clk       ),
+      .reset   (reset     ),
+      .symEn   (symEn     ),
+      .sym2xEn (sym2xEn   ),
+      .i       (din[57:40]),
+      .q       (din[17:0] )
+      );   
+   
+   wire       testDec1;
+   
+   initial clk = 0;
+   initial clkDiv2 = 0;
+   initial reset = 0;
+   
+   always #4 clk = !clk; 
+   always @(posedge clk) clkDiv2 = !clkDiv2; 
+   
 
 
 reg [79:0] readMem[200:0];

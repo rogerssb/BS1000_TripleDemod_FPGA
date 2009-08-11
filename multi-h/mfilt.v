@@ -3,7 +3,15 @@
 // Design       multi-h match filter
 // Created      05 August 09
 //-----------------------------------------------------------------------------
-// 
+// This module implements a decimating FIR filter. The implementation uses the 
+// dsp48a xilinx core to perform a 4 coefficient MAC. The incomming I and Q is
+// multiplied with a set of complex coefficient (coeffA + j*coeffB) which are passed in as 
+// paremeters.
+//  mf0 = (i + j*q) * (coeffA + j*coeffB)
+//  mf1 = (i + j*q) * conj(coeffA + j*coeffB) 
+//      = (i + j*q) * (coeffA - j*coeffB)
+
+//  
 // 1.0      AMJ initial coding
 //
 //
@@ -14,10 +22,12 @@
 module mfilt
   (
    clk, reset, symEn, sym2xEn,
-   i,     // data-in normally I 
-   q,     // data-in normally Q
-   mfI,   // match filter output real
-   mfQ    // match filter output imag
+   i,       // data-in normally I 
+   q,       // data-in normally Q
+   mf0I,    // match filter output real
+   mf0Q,    // match filter output imag
+   mf1I,    // match filter output real
+   mf1Q     // match filter output imag
    );
    
    // assign coefficients at module instantiation
@@ -27,7 +37,8 @@ module mfilt
    //parameter             NUM_BITS = 10;
    input                 clk, reset, symEn, sym2xEn;
    input [17:0]          i, q;
-   output [35:0]         mfI, mfQ;
+   output [35:0]         mf0I, mf0Q;
+   output [35:0]         mf1I, mf1Q;
 
    reg [17:0]            coeffA, coeffB;
    reg [17:0]            dataA, dataB;
@@ -37,7 +48,8 @@ module mfilt
    assign                accClr = reset;
    reg                   accTmp, acc;
    wire [35:0]           macA, macB, macC, macD;
-   reg [35:0]            mfI, mfQ;
+   reg [35:0]            mf0I, mf0Q;
+   reg [35:0]            mf1I, mf1Q;
 
    // dataReal*coeffReal
    dsp48_mac macA_inst
@@ -211,12 +223,16 @@ module mfilt
    
    always @(posedge clk)
      if (reset) begin
-        mfI <= 0;
-        mfQ <= 0;	
+        mf0I <= 0;
+        mf0Q <= 0;	
+        mf1I <= 0;
+        mf1Q <= 0;	
      end
      else if (macLatchSr[3:2] == 2'b01) begin
-        mfI <= {macA[34], macA[34:0]} - {macB[34], macB[34:0]};
-        mfQ <= {macC[34], macC[34:0]} + {macD[34], macD[34:0]};
+        mf0I <= {macA[34], macA[34:0]} - {macB[34], macB[34:0]};
+        mf0Q <= {macC[34], macC[34:0]} + {macD[34], macD[34:0]};
+        mf1I <= {macA[34], macA[34:0]} + {macB[34], macB[34:0]};  // this output represents a multiplication of the complex conjugate of the coefficient
+        mf1Q <= {macC[34], macC[34:0]} - {macD[34], macD[34:0]}; // this output represents a multiplication of the complex conjugate of the coefficient
      end
 
         
@@ -239,13 +255,13 @@ module mfilt
         c_real <= $itor($signed(coeffA))/(2**17);
         acc_real <= $itor($signed(macA))/(2**(35-1));   // why a div by 2?? 
         macALatch_real <= $itor($signed(macALatch))/(2**(35-1));   // why a div by 2?? 
-        macI_real <= $itor($signed(mfI))/(2**(35-1));   // why a div by 2?? 
+        macI_real <= $itor($signed(mf0I))/(2**(35-1));   // why a div by 2?? 
         // 
         q_real <= $itor($signed(dataB))/(2**17);
         cIm_real <= $itor($signed(coeffB))/(2**17);
         accQ_real <= $itor($signed(macB))/(2**(35-1));   // why a div by 2?? 
         macBLatch_real <= $itor($signed(macBLatch))/(2**(35-1));   // why a div by 2?? 
-        macQ_real <= $itor($signed(mfQ))/(2**(35-1));   // why a div by 2?? 
+        macQ_real <= $itor($signed(mf0Q))/(2**(35-1));   // why a div by 2?? 
      end
    
 
@@ -253,8 +269,8 @@ module mfilt
      begin
         if (symEn)begin
          $display("%f\t%f",
-                  $itor($signed(mfI))/(2**(35-1)),
-                  $itor($signed(mfQ))/(2**(35-1)));
+                  $itor($signed(mf0I))/(2**(35-1)),
+                  $itor($signed(mf0Q))/(2**(35-1)));
                   //$itor($signed(dataA))/(2**17),
                   //$itor($signed(coeffA))/(2**17),
                   //$itor($signed(macALatch))/(2**32));
