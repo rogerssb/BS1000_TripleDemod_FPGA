@@ -212,7 +212,8 @@ wire    [17:0]  negAverageFreq = -averageFreq;
 wire    [17:0]  absAverageFreq = averageFreq[17] ? negAverageFreq : averageFreq;
 always @(posedge clk) begin
     if (demodSync) begin
-        if (demodMode == `MODE_OQPSK) begin
+        if ( (demodMode == `MODE_OQPSK)
+          || (demodMode == `MODE_SOQPSK)) begin
             freqSample <= {freq,6'h0};
             end
         else begin
@@ -311,7 +312,8 @@ always @(posedge clk) begin
     if (resampSync) begin
         iSym <= iResamp;
         qDelay <= qResamp;
-        if (demodMode == `MODE_OQPSK) begin
+        if ( (demodMode == `MODE_OQPSK)
+          || (demodMode == `MODE_SOQPSK)) begin
             qSym <= qDelay;
             end
         else begin

@@ -132,6 +132,7 @@ always @(demodMode or offsetError or offsetErrorEn or
             end
         `MODE_QPSK,
         `MODE_OQPSK,
+        `MODE_SOQPSK,
         `MODE_AUQPSK: begin
             sync <= ddcSync;
             modeError <= {qpskPhase[9:0],2'b10};
@@ -220,7 +221,8 @@ always @(posedge clk) begin
     end
 
 /******************************* Lock Detector ********************************/
-wire    [11:0]   absModeError = modeError[11] ? negModeError : modeError;
+
+reg     [11:0]  absModeError;
 reg     [15:0]  lockCounter;
 wire    [16:0]  lockPlus = {1'b0,lockCounter} + 17'h00001;
 wire    [16:0]  lockMinus = {1'b0,lockCounter} + 17'h1ffff;
@@ -230,6 +232,7 @@ always @(posedge clk) begin
         carrierLock <= 1;
         end
     else if (loopFilterEn) begin
+        absModeError <= modeError[11] ? negModeError : modeError;
         if (absModeError > syncThreshold) begin
             if (lockCounter == (16'hffff - lockCount)) begin
                 carrierLock <= 0;

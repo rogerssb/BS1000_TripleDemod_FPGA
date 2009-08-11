@@ -34,6 +34,7 @@ interpRegs regs  (
     .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
     .bypass(bypass),
     .test(test),
+    .invert(invert),
     .testValue(testValue),
     .exponent(exponent),
     .mantissa(mantissa)
@@ -86,11 +87,21 @@ always @(posedge clk) begin
         end
     else if (bypass) begin
         if (clkEn) begin
-            dataOut <= dataIn;
+            if (invert) begin
+                dataOut <= -dataIn;
+                end
+            else begin
+                dataOut <= dataIn;
+                end
             end
         end
     else begin
-        dataOut <= scaledValue[33:16];
+        if (invert) begin
+            dataOut <= -scaledValue[33:16];
+            end
+        else begin
+            dataOut <= scaledValue[33:16];
+            end
         end
     end
 

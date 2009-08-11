@@ -10,6 +10,7 @@ module interpRegs(
     wr0, wr1, wr2, wr3,
     bypass,
     test,
+    invert,
     testValue,
     exponent,
     mantissa
@@ -33,6 +34,9 @@ reg     bypass;
 output  test;
 reg     test;
 
+output  invert;
+reg     invert;
+
 output  [17:0]  testValue;
 reg     [17:0]  testValue;
 
@@ -43,6 +47,7 @@ always @(negedge wr0) begin
             `INTERP_CONTROL: begin
                                 bypass <= dataIn[0];
                                 test <= dataIn[1];
+                                invert <= dataIn[2];
                 end
             `INTERP_MANTISSA:   mantissa[7:0] <= dataIn[7:0];
             `INTERP_EXPONENT:   exponent[4:0] <= dataIn[4:0];
@@ -82,7 +87,7 @@ always @(cs or addr or
     begin
     if (cs) begin
         casex (addr)
-            `INTERP_CONTROL:    dataOut <= {30'h0,test,bypass};
+            `INTERP_CONTROL:    dataOut <= {29'h0,invert,test,bypass};
             `INTERP_MANTISSA:   dataOut <= {14'bx,mantissa};
             `INTERP_EXPONENT:   dataOut <= {27'bx,exponent};
             `INTERP_TEST:       dataOut <= {14'b0,testValue};
