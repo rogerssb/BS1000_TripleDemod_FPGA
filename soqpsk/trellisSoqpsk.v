@@ -113,9 +113,9 @@ module trellisSoqpsk
       );
 
 `ifdef SIMULATE
-   real                carrierLoopIOutX2_REAL, carrierLoopQOutX2_REAL;
-   always @(carrierLoopIOutX2) carrierLoopIOutX2_REAL = $itor($signed(carrierLoopIOutX2))/(2**17);
-   always @(carrierLoopQOutX2) carrierLoopQOutX2_REAL = $itor($signed(carrierLoopQOutX2))/(2**17);
+   real                carrierLoopIOut_REAL, carrierLoopQOut_REAL;
+   always @(carrierLoopIOut) carrierLoopIOut_REAL = $itor($signed(carrierLoopIOut))/(2**17);
+   always @(carrierLoopQOut) carrierLoopQOut_REAL = $itor($signed(carrierLoopQOut))/(2**17);
 `endif
 
    
@@ -126,11 +126,11 @@ module trellisSoqpsk
                       mfzQSr0, mfzQSr1, mfzQSr2, mfzQSr3;
    always @(posedge clk) begin
       if (sym2xEnDly) begin
-         mfzISr0  <=  carrierLoopIOutX2;
+         mfzISr0  <=  carrierLoopIOut;
          mfzISr1  <=  mfzISr0;
          mfzISr2  <=  mfzISr1;
          mfzISr3  <=  mfzISr2; 
-         mfzQSr0  <=  carrierLoopQOutX2;
+         mfzQSr0  <=  carrierLoopQOut;
          mfzQSr1  <=  mfzQSr0;
          mfzQSr2  <=  mfzQSr1;
          mfzQSr3  <=  mfzQSr2; 
@@ -143,28 +143,28 @@ module trellisSoqpsk
    wire [17:0] mfmI,mfmQ;
    mfilter #(MFM_CONST_REAL, MFM_CONST_IMAG) mfm
      (
-      .clk     (clk                ), 
-      .reset   (reset              ), 
-      .symEn   (symEnDly           ), 
-      .sym2xEn (sym2xEnDly         ),
-      .iIn     (carrierLoopIOutX2  ),
-      .qIn     (carrierLoopQOutX2  ),
-      .iOut    (mfmI               ),
-      .qOut    (mfmQ               )
+      .clk     (clk              ), 
+      .reset   (reset            ), 
+      .symEn   (symEnDly         ), 
+      .sym2xEn (sym2xEnDly       ),
+      .iIn     (carrierLoopIOut  ),
+      .qIn     (carrierLoopQOut  ),
+      .iOut    (mfmI             ),
+      .qOut    (mfmQ             )
       );
 
    // Match filter plus
    wire [17:0] mfpI,mfpQ;
    mfilter #(MFP_CONST_REAL, MFP_CONST_IMAG) mfp
      (
-      .clk     (clk                ), 
-      .reset   (reset              ), 
-      .symEn   (symEnDly           ), 
-      .sym2xEn (sym2xEnDly         ),
-      .iIn     (carrierLoopIOutX2  ),
-      .qIn     (carrierLoopQOutX2  ),
-      .iOut    (mfpI               ),
-      .qOut    (mfpQ               )
+      .clk     (clk              ), 
+      .reset   (reset            ), 
+      .symEn   (symEnDly         ), 
+      .sym2xEn (sym2xEnDly       ),
+      .iIn     (carrierLoopIOut  ),
+      .qIn     (carrierLoopQOut  ),
+      .iOut    (mfpI             ),
+      .qOut    (mfpQ             )
       );
 
 
@@ -378,7 +378,7 @@ module trellisSoqpsk
    wire    [1:0]   index;
 
    
-soqpskTop #(size, ROT_BITS) soqpskTop
+soqpskViterbi #(size, ROT_BITS) soqpskViterbi
    (
     // For the SOQPSK mode the there is one sample per symbol and there for the faster sym2xEn is used as symEn
     .clk(clk), .reset(reset), .symEn(sym2xEnDly),
@@ -432,11 +432,11 @@ reg     [17:0]  dac2Data;
 always @(posedge clk) begin
     case (dac0Select) 
         `DAC_TRELLIS_I: begin
-            dac0Data <= carrierLoopIOutX2;
+            dac0Data <= carrierLoopIOut;
             dac0Sync <= sym2xEnDly;
             end
         `DAC_TRELLIS_Q: begin
-            dac0Data <= carrierLoopQOutX2;
+            dac0Data <= carrierLoopQOut;
             dac0Sync <= sym2xEnDly;
             end
         `DAC_TRELLIS_PHERR: begin
@@ -455,11 +455,11 @@ always @(posedge clk) begin
 
     case (dac1Select) 
         `DAC_TRELLIS_I: begin
-            dac1Data <= carrierLoopIOutX2;
+            dac1Data <= carrierLoopIOut;
             dac1Sync <= sym2xEnDly;
             end
         `DAC_TRELLIS_Q: begin
-            dac1Data <= carrierLoopQOutX2;
+            dac1Data <= carrierLoopQOut;
             dac1Sync <= sym2xEnDly;
             end
         `DAC_TRELLIS_PHERR: begin
@@ -478,11 +478,11 @@ always @(posedge clk) begin
 
     case (dac2Select) 
         `DAC_TRELLIS_I: begin
-            dac2Data <= carrierLoopIOutX2;
+            dac2Data <= carrierLoopIOut;
             dac2Sync <= sym2xEnDly;
             end
         `DAC_TRELLIS_Q: begin
-            dac2Data <= carrierLoopQOutX2;
+            dac2Data <= carrierLoopQOut;
             dac2Sync <= sym2xEnDly;
             end
         `DAC_TRELLIS_PHERR: begin

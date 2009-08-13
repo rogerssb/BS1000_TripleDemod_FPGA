@@ -327,6 +327,7 @@ always @(posedge clk) begin
 ******************************************************************************/
 wire    [17:0]  iSymData;
 wire    [17:0]  qSymData;
+wire    [17:0]  iMF,qMF;
 wire    [15:0]  bsLockCounter;
 wire    [15:0]  auLockCounter;
 wire    [31:0]  bitsyncDout;
@@ -361,10 +362,22 @@ bitsync bitsync(
     .auBitsyncLock(auBitsyncLock),
     .auLockCounter(auLockCounter),
     .auIQSwap(auIQSwap),
-    .iMF(iTrellis),.qMF(qTrellis)
+    .iMF(iMF),.qMF(qMF)
     );
 
 assign trellisSymSync = iSymEn & resampSync;
+always @(iMF or qMF or
+         iResamp or qResamp or
+         demodMode) begin
+    if (demodMode == `MODE_PCMTRELLIS) begin
+        iTrellis = iMF;
+        qTrellis = qMF;
+        end
+    else begin
+        iTrellis = iResamp;
+        qTrellis = qResamp;
+        end
+    end
 
 /******************************************************************************
                                DAC Output Mux

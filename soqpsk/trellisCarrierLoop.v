@@ -234,7 +234,7 @@ dds dds(
   .cosine(bReal), // Bus [17 : 0] 
   .sine(bImag)); // Bus [17 : 0] 
 
-cmpy18 cmpy18(clk,reset,iIn,qIn,bReal,bImag,iOut,qOut);
+cmpy18Sat cmpy18Sat(clk,reset,iInput,qInput,bReal,bImag,iMpy,qMpy);
 
 reg [3:0] symEnSr;
 reg [3:0] sym2xEnSr;
@@ -248,6 +248,8 @@ always @(posedge clk) begin
             sym2xEnSr <= {sym2xEnSr[2:0], sym2xEn};
         end
     end
+assign iOut = iMpy;
+assign qOut = qMpy;
 
 assign symEnDly = symEnSr[3];
 assign sym2xEnDly = sym2xEnSr[3];

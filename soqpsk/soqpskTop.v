@@ -10,7 +10,7 @@
 
 `timescale 1ns/1ps
   
-module soqpskTop
+module soqpskViterbi
   (clk, reset, symEn,
    mfZr0Real, mfPr0Real, mfMr0Real,
    mfZr1Real, mfPr1Real, mfMr1Real,
@@ -222,9 +222,9 @@ module soqpskTop
    always @(phaseError) phErr_REAL = $itor($signed(phaseError))/(2**ROT_BITS);
 
    always @(posedge clk)begin
-      if(symEn)begin				   
+      if(symEn)begin                               
          $display("%f\t%d", phErr_REAL, $signed(phaseError));
-      end					  
+      end                                         
    end
 `endif
 
