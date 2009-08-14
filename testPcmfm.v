@@ -515,7 +515,7 @@ always @(posedge clk) begin
         `ifdef IQ_MAG
         txDelay <= delaySR[19];
         `else
-        txDelay <= delaySR[18];
+        txDelay <= delaySR[17];
         `endif  
         delaySR <= {delaySR[126:0],testData};
         end
@@ -704,7 +704,7 @@ initial begin
     //write32(createAddress(`TRELLISLFSPACE,`LF_LOOPDATA),32'h0666_6666);
     write32(createAddress(`TRELLISLFSPACE,`LF_LOOPDATA),32'h0);
 
-    write32(createAddress(`TRELLIS_SPACE,`TRELLIS_DECAY),166);
+    write32(createAddress(`TRELLIS_SPACE,`TRELLIS_DECAY),217);
                     
     // Init the downcoverter register set
     write32(createAddress(`DDCSPACE,`DDC_CONTROL),0);
@@ -807,7 +807,7 @@ initial begin
 
     // Enable the trellis carrier loop
     #(10*bitrateSamplesInt*C) ;
-    write32(createAddress(`TRELLIS_SPACE,`LF_CONTROL),2);
+    write32(createAddress(`TRELLISLFSPACE,`LF_CONTROL),2);
 
     `ifdef ENABLE_AGC
     // Enable the AGC loop

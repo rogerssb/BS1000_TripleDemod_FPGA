@@ -10,9 +10,9 @@ VisualDebug=
 DisableCache=
 SimFile=
 [Analyzer]
-C0Width=58
+C0Width=162
 C1Width=58
-C2Width=206
+C2Width=102
 GotoSource=N
 SymbolFile=
 [Spice]
@@ -24,7 +24,7 @@ DiskSize=5000M
 RecirculateTime=
 UseRecirculateTime=
 [View]
-1=Last 176277.203ns 182820.642ns 152.173ns 198368.388ns 203603.109ns
+1=Last 0.000ns 355240.894ns 8438.026ns 198368.388ns 203603.109ns
 [Group0]
 Name=New Group2
 [Group3]
@@ -35,6 +35,7 @@ Name="Micro"
 3="test.demod : wr3" default
 4="test.demod : din[31:0]" default
 5="test.demod : addr[11:0]" default
+OpenGroup=
 [Group5]
 Name="Carrier"
 0="test.demod.carrierLoop.lagGain : sweepOffsetMag[31:0]" default
@@ -49,6 +50,7 @@ Name="Carrier"
 9="test.demod.carrierLoop : offsetError[7:0]" default
 10="test.demod.bitsync : offsetErrorSum[8:0]" default
 11="test.demod : freq[7:0]" default
+OpenGroup=
 [PliFiles]
 0=.\gaussPLI\gaussPLI.dll
 [IncDirs]
@@ -70,6 +72,7 @@ Name="DAC"
 12="test.demod : symClk" default
 13="test.demod : resampSync" default
 14="test.demod : ddcSync" default
+OpenGroup=
 [Group4]
 Name="Bitsync"
 0="test.demod.bitsync : slip" default
@@ -105,6 +108,7 @@ Name="Bitsync"
 30="test.demod.resampler : iOutReal" default Real AnalogDisplay AType=Step Scale=Auto
 31="test.demod.resampler : inIReal" default Real AnalogDisplay AType=Step Scale=Fixed MinScaleDbl=-1 MaxScaleDbl=1
 32="test : cicDecimationInt" default Decimal AnalogDisplay AType=PWL Scale=Auto
+OpenGroup=
 [Group2]
 Name="Tx"
 0="test : txSampleCount" default Decimal AnalogDisplay AType=Step Scale=Auto
@@ -121,6 +125,7 @@ Name="Tx"
 11="test.fmMod : modClk" default
 12="test.fmMod : reset" default
 13="test.fmMod : clk" default
+OpenGroup=
 [Group1]
 Name="Rx"
 0="test.demod.resampler : reset" default
@@ -144,6 +149,7 @@ Name="Rx"
 18="test.demod.ddc : iMixReal" default Real AnalogDisplay AType=Step Scale=Auto
 19="test : iSignalReal" default Real AnalogDisplay AType=Step Scale=Auto
 20="test : iChReal" default Real AnalogDisplay AType=Step Scale=Auto
+OpenGroup=
 [Mexclude]
 0=test.trellis.f0
 1=test.trellis.f1

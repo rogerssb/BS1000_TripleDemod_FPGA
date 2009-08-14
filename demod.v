@@ -366,6 +366,7 @@ bitsync bitsync(
     );
 
 assign trellisSymSync = iSymEn & resampSync;
+reg     [17:0]  iTrellis,qTrellis;
 always @(iMF or qMF or
          iResamp or qResamp or
          demodMode) begin

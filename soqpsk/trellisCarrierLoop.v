@@ -14,7 +14,6 @@
 module trellisCarrierLoop(clk,reset,symEn,sym2xEn,
   iIn,qIn,
   phaseError,
-  symEn_phErr,
   wr0,wr1,wr2,wr3,
   addr,
   din,dout,
@@ -26,7 +25,6 @@ module trellisCarrierLoop(clk,reset,symEn,sym2xEn,
 input clk,reset,symEn,sym2xEn;
 input [17:0]iIn,qIn;
 input   [7:0]   phaseError;
-input symEn_phErr;
 input wr0,wr1,wr2,wr3;
 input [11:0]addr;
 input [31:0]din;
@@ -74,8 +72,7 @@ loopRegs loopRegs(
     );
 
 
-//wire loopFilterEn = symEn;
-wire loopFilterEn = symEn_phErr;
+wire loopFilterEn = sym2xEnDly;
 
 /**************************** Adjust Error ************************************/
 reg     [7:0]   loopError;
@@ -192,10 +189,10 @@ always @(posedge clk) begin
 
 wire ddsReset = reset;
 
-`else				  
+`else                             
 
 // s-curve testing
-reg resetWithPhaseOffset=0;	
+reg resetWithPhaseOffset=0;     
 reg [31:0] newOffset;
 reg set;
 always @(posedge clk) begin
@@ -205,13 +202,13 @@ always @(posedge clk) begin
       set <= 0;
    end
    else begin
-      resetWithPhaseOffset <= 0; // release the reset															
-	  //newOffset <= 32'h60000000; //do a one time write of 4000_0000 to rotate pi/2  (i.e. set the initial phase)
+      resetWithPhaseOffset <= 0; // release the reset                                                                                                                   
+          //newOffset <= 32'h60000000; //do a one time write of 4000_0000 to rotate pi/2  (i.e. set the initial phase)
       newOffset <= 32'h00000000; //do a one time write of 4000_0000 to rotate pi/2  (i.e. set the initial phase)
-	  set <= 1;
+          set <= 1;
       if (set) begin
          //newOffset <= 32'h01000000; // this value will change the constate freq out of the dds 
-		 newOffset <= 32'h00000000; // this value will change the constate freq out of the dds 
+                 newOffset <= 32'h00000000; // this value will change the constate freq out of the dds 
       end
    end
 end
@@ -241,11 +238,11 @@ reg [3:0] sym2xEnSr;
 always @(posedge clk) begin
     if (reset) begin
         symEnSr <= 0;
-            sym2xEnSr <= 0;
+        sym2xEnSr <= 0;
         end
     else begin
         symEnSr <= {symEnSr[2:0], symEn};
-            sym2xEnSr <= {sym2xEnSr[2:0], sym2xEn};
+        sym2xEnSr <= {sym2xEnSr[2:0], sym2xEn};
         end
     end
 assign iOut = iMpy;

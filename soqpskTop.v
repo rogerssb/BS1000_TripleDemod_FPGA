@@ -12,7 +12,7 @@
 `include "addressMap.v"
 `include "defines.v"
 
-module trellisTop
+module soqpskTop
   (
   ck933,
   nWe,nRd,nCs,
@@ -304,6 +304,8 @@ always @(posedge ck933) begin
     end
 
 
+wire    [17:0]  trellis0Out,trellis1Out,trellis2Out;
+wire    [31:0]  trellis_dout;
 trellisSoqpsk soqpsk
     (
     .clk(ck933),
@@ -328,7 +330,6 @@ trellisSoqpsk soqpsk
     .dac1Data(trellis1Out),
     .dac2Sync(trellis2Sync),
     .dac2Data(trellis2Out),
-    .symEnOut(trellisSymEn),
     .sym2xEnOut(trellisSym2xEn),
     .decision(trellisBit)
    );
@@ -584,7 +585,7 @@ wire cout_inv;
 wire trellisEn = (demodMode == `MODE_PCMTRELLIS);
 wire [2:0]decoder_iIn = trellisEn ? {trellisBit,2'b0} : {iBit,2'b0}; 
 wire [2:0]decoder_qIn = {qBit,2'b0};
-wire decoderSymEn = trellisEn ? trellisSymEn : iSymEn;
+wire decoderSymEn = trellisEn ? trellisSym2xEn : iSymEn;
 wire decoderSym2xEn = trellisEn ? trellisSym2xEn : iSym2xEn;
 
 decoder decoder

@@ -81,6 +81,7 @@ reg [31:0]dataOut;
 always @(cs or addr or
          bypass or
          test or
+         invert or
          exponent or 
          mantissa or
          testValue)

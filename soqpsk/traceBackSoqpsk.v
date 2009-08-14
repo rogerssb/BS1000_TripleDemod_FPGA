@@ -17,7 +17,7 @@ module traceBackSoqpsk
    symEn,
    symEnEven,
    sel, index,
-   decision,
+   decision
    );
    
    parameter          size = 8;
@@ -70,7 +70,7 @@ module traceBackSoqpsk
            end
         end 
      end
-	 
+         
    assign decision = sel_1dly[nState];
-	 
+         
 endmodule

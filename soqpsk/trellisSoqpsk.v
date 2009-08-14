@@ -26,7 +26,7 @@ module trellisSoqpsk
    dac2Sync,
    dac2Data,
    decision,
-   sym2xEnDly,
+   sym2xEnOut
    );
    
    parameter size = 8;
@@ -51,7 +51,7 @@ module trellisSoqpsk
    output        dac2Sync;
    output [17:0] dac2Data;
    output        decision;
-   output        sym2xEnDly;
+   output        sym2xEnOut;
    
    
    wire [ROT_BITS-1:0] phaseError;
@@ -60,7 +60,7 @@ module trellisSoqpsk
    reg [7:0]           phErrShft;
    wire [17:0]         carrierLoopIOut,carrierLoopQOut;
    wire [17:0]         carrierLoopIOutX2,carrierLoopQOutX2;
-   
+   wire [31:0]         trellisLoopDout;
    trellisCarrierLoop trellisCarrierLoop
      (
       .clk(clk),
@@ -76,11 +76,11 @@ module trellisSoqpsk
       .wr3(wr3),
       .addr(addr),
       .din(din),
-      .dout(dout),
+      .dout(trellisLoopDout),
       .iOut(carrierLoopIOut),
       .qOut(carrierLoopQOut),
       .symEnDly(symEnDly),
-      .sym2xEnDly(sym2xEnDly)
+      .sym2xEnDly(sym2xEnOut)
       );
 
 `ifdef SIMULATE
@@ -94,22 +94,22 @@ module trellisSoqpsk
      (
       .clk(clk), 
       .symEn(symEnDly), 
-      .sym2xEn(sym2xEnDly), 
+      .sym2xEn(sym2xEnOut), 
       .dIn(carrierLoopIOut),
       .dOut(carrierLoopIOutX2), 
       .symEnDly(), 
-      .sym2xEnDly()
+      .sym2xEnOut()
       );
    
    multBy2withSat carrLoopTimes2Q
      (
       .clk(clk), 
       .symEn(symEnDly), 
-      .sym2xEn(sym2xEnDly), 
+      .sym2xEn(sym2xEnOut), 
       .dIn(carrierLoopQOut),
       .dOut(carrierLoopQOutX2), 
       .symEnDly(),
-      .sym2xEnDly()
+      .sym2xEnOut()
       );
 
 `ifdef SIMULATE
@@ -125,7 +125,7 @@ module trellisSoqpsk
    reg [17:0]         mfzISr0, mfzISr1, mfzISr2, mfzISr3, 
                       mfzQSr0, mfzQSr1, mfzQSr2, mfzQSr3;
    always @(posedge clk) begin
-      if (sym2xEnDly) begin
+      if (sym2xEnOut) begin
          mfzISr0  <=  carrierLoopIOut;
          mfzISr1  <=  mfzISr0;
          mfzISr2  <=  mfzISr1;
@@ -146,7 +146,7 @@ module trellisSoqpsk
       .clk     (clk              ), 
       .reset   (reset            ), 
       .symEn   (symEnDly         ), 
-      .sym2xEn (sym2xEnDly       ),
+      .sym2xEn (sym2xEnOut       ),
       .iIn     (carrierLoopIOut  ),
       .qIn     (carrierLoopQOut  ),
       .iOut    (mfmI             ),
@@ -160,7 +160,7 @@ module trellisSoqpsk
       .clk     (clk              ), 
       .reset   (reset            ), 
       .symEn   (symEnDly         ), 
-      .sym2xEn (sym2xEnDly       ),
+      .sym2xEn (sym2xEnOut       ),
       .iIn     (carrierLoopIOut  ),
       .qIn     (carrierLoopQOut  ),
       .iOut    (mfpI             ),
@@ -176,44 +176,44 @@ module trellisSoqpsk
      (
       .clk        (clk), 
       .symEn      (symEnDly), 
-      .sym2xEn    (sym2xEnDly), 
+      .sym2xEn    (sym2xEnOut), 
       .dIn        (mfmI),
       .dOut       (mfmIX2), 
       .symEnDly   (),
-      .sym2xEnDly ()
+      .sym2xEnOut ()
       );
 
    multBy2withSat mfmTimes2Q
      (
       .clk        (clk), 
       .symEn      (symEnDly), 
-      .sym2xEn    (sym2xEnDly), 
+      .sym2xEn    (sym2xEnOut), 
       .dIn        (mfmQ),
       .dOut       (mfmQX2), 
       .symEnDly   (),
-      .sym2xEnDly ()
+      .sym2xEnOut ()
       );
 
    multBy2withSat mfpTimes2I
      (
       .clk        (clk), 
       .symEn      (symEnDly), 
-      .sym2xEn    (sym2xEnDly), 
+      .sym2xEn    (sym2xEnOut), 
       .dIn        (mfpI),
       .dOut       (mfpIX2), 
       .symEnDly   (),
-      .sym2xEnDly ()
+      .sym2xEnOut ()
       );
 
    multBy2withSat mfpTimes2Q
      (
       .clk        (clk), 
       .symEn      (symEnDly), 
-      .sym2xEn    (sym2xEnDly), 
+      .sym2xEn    (sym2xEnOut), 
       .dIn        (mfpQ),
       .dOut       (mfpQX2), 
       .symEnDly   (),
-      .sym2xEnDly ()
+      .sym2xEnOut ()
       );
    
    
@@ -230,13 +230,13 @@ module trellisSoqpsk
 //                  $itor($signed(mfpI))/(2**17),
 //                  $itor($signed(mfpQ))/(2**17));
 
-//      if(sym2xEnDly)begin
+//      if(sym2xEnOut)begin
 //         $display(" i2x, q2x \t %1.4f\t\t%1.4f\t\t",
 //                  $itor($signed(carrierLoopIOutX2))/(2**17),
 //                  $itor($signed(carrierLoopQOutX2))/(2**17));
 //      end
       
-//      if(sym2xEnDly)begin
+//      if(sym2xEnOut)begin
 //         $display(" mfpI, mfpQ \t %1.4f\t\t%1.4f\t\t",
 //                  $itor($signed(mfpI))/(2**16),
 //                  $itor($signed(mfpQ))/(2**16));
@@ -296,7 +296,7 @@ module trellisSoqpsk
    
    // sync with sym2xEn
    always @(posedge clk) begin
-      if (sym2xEnDly) begin
+      if (sym2xEnOut) begin
          // mfz real
          rotMfz0RealOut <= rotMfz0Real;
          rotMfz1RealOut <= rotMfz1Real;
@@ -347,7 +347,7 @@ module trellisSoqpsk
    
    
    always @(posedge clk)begin
-      if(sym2xEnDly)begin
+      if(sym2xEnOut)begin
     //     $display("\t%1.3f\t%1.3f\t%1.3f\t%1.3f\t%1.3f\t%1.3f\t%1.3f\t%1.3f",
     //              $itor($signed(rotMfp0RealOut))/(2**(ROT_BITS-2)),
     //              $itor($signed(rotMfp0ImagOut))/(2**(ROT_BITS-2)),
@@ -377,11 +377,12 @@ module trellisSoqpsk
 
    wire    [1:0]   index;
 
-   
+reg     [7:0]   decayFactor;   
 soqpskViterbi #(size, ROT_BITS) soqpskViterbi
    (
     // For the SOQPSK mode the there is one sample per symbol and there for the faster sym2xEn is used as symEn
-    .clk(clk), .reset(reset), .symEn(sym2xEnDly),
+    .clk(clk), .reset(reset), .symEn(sym2xEnOut),
+    .decayFactor(decayFactor),
     .mfZr0Real(rotMfz0RealOut[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]), .mfPr0Real(rotMfp0RealOut[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]), .mfMr0Real(rotMfm0RealOut[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),
     .mfZr1Real(rotMfz1RealOut[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]), .mfPr1Real(rotMfp1RealOut[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]), .mfMr1Real(rotMfm1RealOut[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),
     .mfZr2Real(rotMfz2RealOut[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]), .mfPr2Real(rotMfp2RealOut[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]), .mfMr2Real(rotMfm2RealOut[(ROT_BITS-1):(ROT_BITS-1)-(size-1)]),
@@ -402,7 +403,7 @@ soqpskViterbi #(size, ROT_BITS) soqpskViterbi
    wire                 sign = phaseError[9];
 
    always @(posedge clk) begin
-      if (sym2xEnDly) begin
+      if (sym2xEnOut) begin
          dataBits <= {phaseError[6:0], 1'b0};
          satPos <= !sign && (phaseError[9:6] != 5'b0000);
          satNeg <=  sign && (phaseError[9:6] != 5'b1111);
@@ -419,6 +420,53 @@ soqpskViterbi #(size, ROT_BITS) soqpskViterbi
    end
 
    
+/************************ Trellis Register Definitions ************************/
+
+reg trellisSpace;
+always @(addr) begin
+    casex(addr)
+        `TRELLIS_SPACE: trellisSpace <= 1;
+        default:        trellisSpace <= 0;
+        endcase
+    end
+
+always @(negedge wr0) begin
+    if (trellisSpace) begin
+        casex (addr) 
+            `TRELLIS_DECAY:     decayFactor <= din[7:0];
+            default: ;
+            endcase
+        end
+    end
+
+reg [31:0]trellisDout;
+always @(trellisSpace or addr
+         or decayFactor
+         ) begin
+    if (trellisSpace) begin
+        casex (addr)
+            `TRELLIS_DECAY:     trellisDout <= {24'b0,decayFactor};
+            default:            trellisDout <= 32'hx;
+            endcase
+        end
+    else begin
+        trellisDout <= 32'hx;
+        end
+    end
+
+reg [31:0]dout;
+always @(addr or 
+         trellisDout or trellisLoopDout
+         ) begin
+    casex (addr)
+        `TRELLIS_SPACE:     dout <= trellisDout;
+        `TRELLISLFSPACE:    dout <= trellisLoopDout;
+        default:            dout <= 32'hx;
+        endcase
+    end
+
+
+
 /******************************************************************************
                                DAC Output Mux
 ******************************************************************************/
@@ -433,69 +481,69 @@ always @(posedge clk) begin
     case (dac0Select) 
         `DAC_TRELLIS_I: begin
             dac0Data <= carrierLoopIOut;
-            dac0Sync <= sym2xEnDly;
+            dac0Sync <= sym2xEnOut;
             end
         `DAC_TRELLIS_Q: begin
             dac0Data <= carrierLoopQOut;
-            dac0Sync <= sym2xEnDly;
+            dac0Sync <= sym2xEnOut;
             end
         `DAC_TRELLIS_PHERR: begin
             dac0Data <= {phErrShft,10'b0};
-            dac0Sync <= sym2xEnDly;
+            dac0Sync <= sym2xEnOut;
             end
         `DAC_TRELLIS_INDEX: begin
             dac0Data <= {1'b0,index,12'b0};
-            dac0Sync <= sym2xEnDly;
+            dac0Sync <= sym2xEnOut;
             end
         default: begin
             dac0Data <= {phErrShft,10'b0};
-            dac0Sync <= sym2xEnDly;
+            dac0Sync <= sym2xEnOut;
             end
         endcase
 
     case (dac1Select) 
         `DAC_TRELLIS_I: begin
             dac1Data <= carrierLoopIOut;
-            dac1Sync <= sym2xEnDly;
+            dac1Sync <= sym2xEnOut;
             end
         `DAC_TRELLIS_Q: begin
             dac1Data <= carrierLoopQOut;
-            dac1Sync <= sym2xEnDly;
+            dac1Sync <= sym2xEnOut;
             end
         `DAC_TRELLIS_PHERR: begin
             dac1Data <= {phErrShft,10'b0};
-            dac1Sync <= sym2xEnDly;
+            dac1Sync <= sym2xEnOut;
             end
         `DAC_TRELLIS_INDEX: begin
             dac1Data <= {1'b0,index,12'b0};
-            dac1Sync <= sym2xEnDly;
+            dac1Sync <= sym2xEnOut;
             end
         default: begin
             dac1Data <= {phErrShft,10'b0};
-            dac1Sync <= sym2xEnDly;
+            dac1Sync <= sym2xEnOut;
             end
         endcase
 
     case (dac2Select) 
         `DAC_TRELLIS_I: begin
             dac2Data <= carrierLoopIOut;
-            dac2Sync <= sym2xEnDly;
+            dac2Sync <= sym2xEnOut;
             end
         `DAC_TRELLIS_Q: begin
             dac2Data <= carrierLoopQOut;
-            dac2Sync <= sym2xEnDly;
+            dac2Sync <= sym2xEnOut;
             end
         `DAC_TRELLIS_PHERR: begin
             dac2Data <= {phErrShft,10'b0};
-            dac2Sync <= sym2xEnDly;
+            dac2Sync <= sym2xEnOut;
             end
         `DAC_TRELLIS_INDEX: begin
             dac2Data <= {1'b0,index,12'b0};
-            dac2Sync <= sym2xEnDly;
+            dac2Sync <= sym2xEnOut;
             end
         default: begin
             dac2Data <= {phErrShft,10'b0};
-            dac2Sync <= sym2xEnDly;
+            dac2Sync <= sym2xEnOut;
             end
         endcase
 
@@ -506,12 +554,12 @@ endmodule
 
 
 
-module multBy2withSat(clk, symEn, sym2xEn, dIn, dOut, symEnDly, sym2xEnDly);
+module multBy2withSat(clk, symEn, sym2xEn, dIn, dOut, symEnDly, sym2xEnOut);
    
    input                 clk,symEn, sym2xEn; 
    input [17:0]          dIn;
    output [17:0]         dOut;
-   output                symEnDly, sym2xEnDly;
+   output                symEnDly, sym2xEnOut;
       
    reg [17:0]            dataBits;
    reg [17:0]            dOut;//, dOutTmp;
@@ -539,6 +587,6 @@ module multBy2withSat(clk, symEn, sym2xEn, dIn, dOut, symEnDly, sym2xEnDly);
    // It works to reuse the symEn without delay because it takes 2 sym2xEn to produce the times 2 output
    // Had to add "dOut <= dOutTmp" to line up the 2 samples per symbol correctly 
    assign symEnDly = symEn;
-   assign sym2xEnDly = sym2xEn;
+   assign sym2xEnOut = sym2xEn;
    
 endmodule
