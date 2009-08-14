@@ -164,6 +164,9 @@ module acs
       .y         (outRealAsync )
       );
 
+`define USE_DELAYED_NORM
+`ifdef USE_DELAYED_NORM
+`else
    reg normalizeOut;
    always @(muxOut[(size-1)+4:(size-1)+3]) begin
          //if ( accMetOut[(size-1)+4:(size-1)+1] == 4'b0001 ) begin //check (in the pos. case) if the acc. 8th bit saturate
@@ -174,6 +177,7 @@ module acs
             normalizeOut <= 0;
          end
       end
+`endif
    
    // subtracting of a constant and saturate all neg numbers to zero to bring down the acc and prevent it from overflowing
 
@@ -200,6 +204,18 @@ mult12x8 accumDecay(
     .p(decayOut)
     );
 
+`ifdef USE_DELAYED_NORM
+   reg normalizeOut;
+   always @(decayOut[12:11]) begin
+         if ((decayOut[12:11] == 2'b01) ) begin //check (in the pos. case) if the acc. 8th bit saturate
+            normalizeOut <= 1;
+         end
+         else begin
+            normalizeOut <= 0;
+         end
+      end
+`endif
+   
 `else
    always @(posedge clk)
      if (reset) begin
