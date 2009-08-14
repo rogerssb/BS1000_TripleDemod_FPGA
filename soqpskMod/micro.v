@@ -2,17 +2,17 @@
 
 `include "..\addressMap.v"
 
-module fmModRegs(cs,
-                 addr,
-                 dataIn,
-                 dataOut,
-                 wr0, wr1, wr2, wr3,
-                 carrierFreq,
-                 deviation,
-                 bitrateDiv,
-                 modClkSel,
-                 cicShift
-                 );
+module soqpskModRegs(cs,
+                     addr,
+                     dataIn,
+                     dataOut,
+                     wr0, wr1, wr2, wr3,
+                     carrierFreq,
+                     deviation,
+                     bitrateDiv,
+                     modClkSel,
+                     cicShift
+                     );
 
 input   cs;
 input   [11:0]addr;

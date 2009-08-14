@@ -19,25 +19,32 @@ reg clken;
 always #HC clk = clk^clken;
 `define SAMPLE_PERIOD   (C*1e-9)
 `define SAMPLE_FREQ     (1e9/C)
-`define TWO_POW_32      4294967296
-`define TWO_POW_31      2147483648
+`define TWO_POW_32      4294967296.0
+`define TWO_POW_31      2147483648.0
 `define TWO_POW_17      131072
 
 
 real carrierFreqHz = 1000000;
 //real carrierFreqHz = 0;
-real carrierFreqNorm = carrierFreqHz * `SAMPLE_PERIOD * `TWO_POW_32;
-integer carrierFreqInt = carrierFreqNorm;
+real carrierFreqNorm;
+always @(carrierFreqHz) carrierFreqNorm = carrierFreqHz * `SAMPLE_PERIOD * `TWO_POW_32;
+integer carrierFreqInt;
+assign carrierFreqInt = carrierFreqNorm;
 wire [31:0] carrierFreq = carrierFreqInt;
 
 real bitrateBps = 250000;
-real bitrateSamples = 1/bitrateBps/`SAMPLE_PERIOD/2;
-integer bitrateSamplesInt = bitrateSamples;
-wire [15:0]bitrateDivider = bitrateSamplesInt - 1;
+real bitrateSamples;
+assign bitrateSamples = 1/bitrateBps/`SAMPLE_PERIOD/2;
 
-real deviationHz = 1.28*2*0.25 * bitrateBps;
-real deviationNorm = deviationHz * `SAMPLE_PERIOD * `TWO_POW_32;
-integer deviationInt = deviationNorm;
+integer bitrateSamplesIn;
+assign bitrateSamplesInt = bitrateSamples;
+wire [15:0]bitrateDivider = bitrateSamplesInt - 1;
+real deviationHz;
+assign deviationHz = 1.28*2*0.25 * bitrateBps;
+real deviationNorm;
+assign deviationNorm = deviationHz * `SAMPLE_PERIOD * `TWO_POW_32;
+integer deviationInt;
+assign deviationInt = deviationNorm;
 wire [31:0]deviationQ31 = deviationInt;
 wire [17:0]deviation = deviationQ31[31:14];
 
@@ -78,6 +85,8 @@ reg     modDataValid;
 reg     txSelect;
 reg     [1:0]fskMode;
 wire    [31:0]fmModFreq;
+
+/* -----\/----- EXCLUDED -----\/-----
 fmMod fmMod(
     .clk(clk), .reset(reset),
     .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
@@ -92,7 +101,25 @@ fmMod fmMod(
     .fskMode(`MODE_2FSK),
     .fmModFreq(fmModFreq)
     );
+ -----/\----- EXCLUDED -----/\----- */
 
+
+soqpskMod soqpskMod
+  ( 
+    .clk(clk), .reset(reset),
+    .cs(), // soqpskModReg cs
+    .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+    .addr(a),
+    .din(d),
+    .dout(dout),
+    .modData(modData),
+    .modClkIn(),
+    .modClkOut(modClk),
+    .modDataValid(modDataValid),
+    .soqpskModFreq(soqpskModFreq)
+    );
+
+   
 wire    [17:0]iDds,qDds;
 dds dds( 
     .clk(clk), .reset(reset),

@@ -25,8 +25,8 @@ input modData;
 input modClkIn;
 output modClkOut;
 input modDataValid;
-input txSelect;
-input [1:0]fskMode;
+//input txSelect;
+//input [1:0]fskMode;
 output [31:0]soqpskModFreq;
 
 // Register interface
@@ -34,7 +34,7 @@ wire [31:0]carrierFreq;
 wire [17:0]deviation;
 wire [15:0]bitrateDiv;
 wire [4:0]cicShift;
-soqpskModRegs regs  (
+soqpskModRegs soqpskModRegs  (
     .cs(cs),
     .addr(addr),
     .dataIn(din),
@@ -51,7 +51,6 @@ soqpskModRegs regs  (
 reg modClkOut;
 reg modSampleEn;
 reg [15:0]bitrateCount;
-reg [1:0]bitSR;
 always @(posedge clk) begin
     if (reset) begin
         bitrateCount <= bitrateDiv;
@@ -96,10 +95,10 @@ always @(posedge clk) begin
         end
     else if (modSampleEn) begin
         if (modClkOut) begin
-            bitSR <= {bitSR[1:0],qBit}
+            bitSR <= {bitSR[1:0],qBit};
             end
         else begin
-            bitSR <= {bitSR[1:0],iBit}
+            bitSR <= {bitSR[1:0],iBit};
             end
         case (bitSR)
             3'b000: modValue <= 3'b000;
@@ -153,6 +152,7 @@ soqpskFir modFir(
     .din(modValue),
     .dout(shapingFirOut)
     );
+   
 
 `ifdef SIMULATE
 real shapedReal;
@@ -161,7 +161,7 @@ always @(shapingFirOut) shapedReal = ((shapingFirOut > 131071.0) ? (shapingFirOu
 
 // CIC Interpolation Filter
 wire [33:0]cicOut;
-cicInterpolate interpolate(
+cicInterpolate cicInterpolate(
     .clk(clk), .reset(reset), .clkEn(shapedReady),
     .dIn({shapingFirOut[10:0],7'b0}),
     .dOut(cicOut)
