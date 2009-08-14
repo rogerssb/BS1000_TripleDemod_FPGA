@@ -144,7 +144,7 @@ always @(posedge clk) begin
 
 // Run the samples through the shaping filter
 wire [17:0]shapingFirOut;
-soqpskFir modFir(
+soqpskFir soqpskFir(
     .clk(clk), 
     .nd(modSampleEn),
     .rfd(),

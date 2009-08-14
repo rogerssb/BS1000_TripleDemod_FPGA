@@ -4,7 +4,7 @@
 `define MATLAB_VECTORS
 
 
-module test;
+module testSoqpskMod;
 
 reg reset,clk,we0,we1,we2,we3,rd;
 reg sync;
@@ -29,22 +29,22 @@ real carrierFreqHz = 1000000;
 real carrierFreqNorm;
 always @(carrierFreqHz) carrierFreqNorm = carrierFreqHz * `SAMPLE_PERIOD * `TWO_POW_32;
 integer carrierFreqInt;
-assign carrierFreqInt = carrierFreqNorm;
+always @(carrierFreqNorm) carrierFreqInt = carrierFreqNorm;
 wire [31:0] carrierFreq = carrierFreqInt;
 
 real bitrateBps = 250000;
 real bitrateSamples;
-assign bitrateSamples = 1/bitrateBps/`SAMPLE_PERIOD/2;
+always @(bitrateBps) bitrateSamples = 1/bitrateBps/`SAMPLE_PERIOD/2;
 
-integer bitrateSamplesIn;
-assign bitrateSamplesInt = bitrateSamples;
+integer bitrateSamplesInt;
+always @(bitrateSamples) bitrateSamplesInt = bitrateSamples;
 wire [15:0]bitrateDivider = bitrateSamplesInt - 1;
 real deviationHz;
-assign deviationHz = 1.28*2*0.25 * bitrateBps;
+always @(bitrateBps) deviationHz = 1.28*2*0.25 * bitrateBps;
 real deviationNorm;
-assign deviationNorm = deviationHz * `SAMPLE_PERIOD * `TWO_POW_32;
+always @(deviationHz) deviationNorm = deviationHz * `SAMPLE_PERIOD * `TWO_POW_32;
 integer deviationInt;
-assign deviationInt = deviationNorm;
+always @(deviationNorm) deviationInt = deviationNorm;
 wire [31:0]deviationQ31 = deviationInt;
 wire [17:0]deviation = deviationQ31[31:14];
 
@@ -56,32 +56,30 @@ parameter PN17 = 16'h008e,
 
 reg [15:0]sr;
 reg [4:0]zeroCount;
-always @(negedge modClk or posedge reset) begin
-    if (reset) begin
-        zeroCount <= 5'b0;
-        sr <= MASK17;
-        end
-    else if (sr[0] | (zeroCount == 5'b11111))
-        begin
-        zeroCount <= 5'h0;
-        sr <= {1'b0, sr[15:1]} ^ PN17;
-        end
-    else
-        begin
-        zeroCount <= zeroCount + 5'h1;
-        sr <= sr >> 1;
-        end
-    modData <= sr[0];
-//    txUserData <= 0;
-    end
-
-
+   always @(negedge modClk or posedge reset) begin
+      if (reset) begin
+         zeroCount <= 5'b0;
+         sr <= MASK17;
+      end
+      else if (sr[0] | (zeroCount == 5'b11111)) begin
+         zeroCount <= 5'h0;
+         sr <= {1'b0, sr[15:1]} ^ PN17;
+      end
+      else begin
+         zeroCount <= zeroCount + 5'h1;
+         sr <= sr >> 1;
+      end
+      modData <= sr[0];
+      //    txUserData <= 0;
+   end
+   
+   
 
 
 // Instantiate the modulator
-wire    [17:0]iMod;
-wire    [17:0]qMod;
-reg     modDataValid;
+//wire [17:0] iMod;
+//wire [17:0] qMod;
+reg         modDataValid;
 reg     txSelect;
 reg     [1:0]fskMode;
 wire    [31:0]fmModFreq;
@@ -107,8 +105,8 @@ fmMod fmMod(
 soqpskMod soqpskMod
   ( 
     .clk(clk), .reset(reset),
-    .cs(), // soqpskModReg cs
-    .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+    .cs(1'b1), // soqpskModReg cs
+    .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
     .addr(a),
     .din(d),
     .dout(dout),
@@ -121,6 +119,8 @@ soqpskMod soqpskMod
 
    
 wire    [17:0]iDds,qDds;
+
+/* -----\/----- EXCLUDED -----\/-----
 dds dds( 
     .clk(clk), .reset(reset),
     .txSelect(txSelect),
@@ -128,7 +128,17 @@ dds dds(
     .txFreq(fmModFreq),
     .iDds(iDds), .qDds(qDds)
     );
+ -----/\----- EXCLUDED -----/\----- */
 
+dds dds(
+  .clk(clk),
+  .sclr(reset),
+  .ce(1'b1),
+  .we(1'b1),
+  .data(32'b0), // Bus [31 : 0]
+  .cosine(iDds), // Bus [17 : 0] 
+  .sine(qDds)); // Bus [17 : 0] 
+   
 
 `ifdef MATLAB_VECTORS
 /******************************************************************************
@@ -144,7 +154,7 @@ initial begin
     end
 always @(negedge clk) begin
     if (sampleVectors) begin
-        $fwrite(outfile,"%f %f\n",dds.iDdsReal,dds.qDdsReal);
+        //$fwrite(outfile,"%f %f\n",dds.sine,dds.cosine);
         vectorCount <= vectorCount + 1;
         if (vectorCount == 10239) begin
             $fclose(outfile);
