@@ -5,7 +5,7 @@
     The structure and the elements are likely to change over the next few releases.
     This means code written to parse this file will need to be revisited each subsequent release.-->
 
-  <application stringID="Xst" timeStamp="Fri Aug 14 14:56:55 2009">
+  <application stringID="Xst" timeStamp="Tue Aug 18 11:11:08 2009">
     <section stringID="XST_ADVANCED_HDL_SYNTHESIS_REPORTFOUND_NO_MACRO"/>
     <section stringID="XST_FINAL_REGISTER_REPORTFOUND_NO_MACRO"/>
     <section stringID="XST_PARTITION_REPORT">
@@ -21,14 +21,14 @@
         <item stringID="XST_KEEP_HIERARCHY" value="no"/>
       </section>
       <section stringID="XST_DESIGN_STATISTICS">
-        <item stringID="XST_IOS" value="62"/>
+        <item stringID="XST_IOS" value="65"/>
       </section>
       <section stringID="XST_CELL_USAGE"></section>
     </section>
     <section stringID="XST_DEVICE_UTILIZATION_SUMMARY">
       <item stringID="XST_SELECTED_DEVICE" value="3sd3400afg676-5"/>
       <item AVAILABLE="23872" dataType="int" stringID="XST_NUMBER_OF_SLICES" value="0"/>
-      <item dataType="int" stringID="XST_NUMBER_OF_IOS" value="62"/>
+      <item dataType="int" stringID="XST_NUMBER_OF_IOS" value="65"/>
       <item AVAILABLE="469" dataType="int" stringID="XST_NUMBER_OF_BONDED_IOBS" value="0"/>
     </section>
     <section stringID="XST_PARTITION_RESOURCE_SUMMARY">

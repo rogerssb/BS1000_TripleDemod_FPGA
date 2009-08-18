@@ -37,6 +37,6 @@ soqpskFir YourInstanceName (
 	.din(din), // Bus [2 : 0] 
 	.rfd(rfd),
 	.rdy(rdy),
-	.dout(dout)); // Bus [16 : 0] 
+	.dout(dout)); // Bus [17 : 0] 
 
 // INST_TAG_END ------ End INSTANTIATION Template ---------
