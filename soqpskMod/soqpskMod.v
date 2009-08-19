@@ -67,81 +67,127 @@ always @(posedge clk) begin
         end
     end
 
-// Select the modulator bit clock;
-wire modClk = modClkOut;
+   reg modDataLatch;
+   always @(negedge modClkOut) begin
+      modDataLatch <= modData;
+   end
+   
 
-// Do the IRIG standard differential encoding
-reg iBit,qBit;
-always @(posedge clk) begin
-    if (reset) begin
-        iBit <= 0;
-        qBit <= 0;
-        end
-    else if (modSampleEn) begin
-        if (modClkOut) begin
-            iBit <= modData ^ !qBit;
-            end
-        else begin
-            qBit <= modData ^ iBit;
-            end
-        end
-    end
+   // Differential encoder from Billys Matlab sim
+   // d[n] = a[n] xor d[n-2]
+   reg     [1:0]   binSR;
+   reg             evenOdd;
+   always @(posedge clk) begin
+      if (reset) begin
+         evenOdd <= 0;
+         binSR <= 2'b01;
+      end
+      else if (modSampleEn) begin
+         if (modClkOut) begin
+            evenOdd <= !evenOdd;
+            binSR <= {binSR[0], diffEncValue};
+         end
+      end
+   end  
 
+   wire diffEncValue = modDataLatch ^ binSR[1];
+
+
+   // Do the IRIG standard differential encoding for SOQPSK-TG
+   // I[2n]   = a[2n] xor not(Q[2n-1])
+   // Q[2n+1] = a[2n+1] xor I[2n]
+   reg  iBit,qBit;
+   always @(posedge clk) begin
+      if (reset) begin
+         iBit <= 0;
+         qBit <= 0;
+         evenOdd <= 0;
+      end
+      else if (modSampleEn) begin
+         if (modClkOut) begin
+            evenOdd <= !evenOdd;
+            if (evenOdd) begin
+               iBit <= modData ^ !qBit;
+            end
+            else begin
+               qBit <= modData ^ iBit;
+            end
+         end
+      end
+   end  
+
+   wire debugBitSR = bitSR[0];
+   
+   
 // Do the dibit to ternary encoding
 reg     [2:0]   bitSR;
 reg     [2:0]   modValue;
-always @(posedge clk) begin
-    if (reset) begin
-        end
-    else if (modSampleEn) begin
-        if (modClkOut) begin
-            bitSR <= {bitSR[1:0],qBit};
+   always @(posedge clk) begin
+      if (reset) begin
+      end
+      else if (modSampleEn) begin
+         if (modClkOut) begin
+`define BILLY_PRECODER
+`ifdef BILLY_PRECODER 
+            bitSR <= {bitSR[1:0],diffEncValue};
+`else
+            if (evenOdd) begin
+               bitSR <= {bitSR[1:0],qBit};
             end
-        else begin
-            bitSR <= {bitSR[1:0],iBit};
+            else begin
+               bitSR <= {bitSR[1:0],iBit};
             end
-        case (bitSR)
-            3'b000: modValue <= 3'b000;
-            3'b001: begin
-                if (modClkOut) begin
-                    modValue <= 3'b110;
-                    end
-                else begin
+`endif
+         end
+         if (modClkOut) begin
+            case (bitSR)
+              3'b001: begin
+                 if (evenOdd) begin
                     modValue <= 3'b010;
-                    end
-                end
-            3'b010: modValue <= 3'b000;
-            3'b011: begin
-                if (modClkOut) begin
-                    modValue <= 3'b010;
-                    end
-                else begin
+                 end
+                 else begin
                     modValue <= 3'b110;
-                    end
-                end
-            3'b100: begin
-                if (modClkOut) begin
-                    modValue <= 3'b010;
-                    end
-                else begin
+                 end
+              end
+              3'b011: begin
+                 if (evenOdd) begin
                     modValue <= 3'b110;
-                    end
-                end
-            3'b101: modValue <= 3'b000;
-            3'b110: begin
-                if (modClkOut) begin
-                    modValue <= 3'b110;
-                    end
-                else begin
+                 end
+                 else begin
                     modValue <= 3'b010;
-                    end
-                end
-            3'b111: modValue <= 3'b000;
+                 end
+              end
+              3'b100: begin
+                 if (evenOdd) begin
+                    modValue <= 3'b110;
+                 end
+                 else begin
+                    modValue <= 3'b010;
+                 end
+              end
+              3'b110: begin
+                 if (evenOdd) begin
+                    modValue <= 3'b010;
+                 end
+                 else begin
+                    modValue <= 3'b110;
+                 end
+              end
+              default begin // all other cases output zero
+                 modValue <= 3'b000;
+              end
             endcase
-        end
-    end
+          end
+         else begin
+            modValue <= 3'b000;
+         end
+      end
+   end
+   
 
 
+
+   
 // Run the samples through the shaping filter
 wire [17:0]shapingFirOut;
 soqpskFir soqpskFir(

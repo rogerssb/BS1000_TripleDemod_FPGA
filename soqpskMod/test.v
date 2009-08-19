@@ -49,7 +49,8 @@ wire [31:0]deviationQ31 = deviationInt;
 wire [17:0]deviation = deviationQ31[31:14];
 
 // Create a bit stream
-reg     modData;
+reg     modDataTB;
+reg     modDataMLab;
 wire    modClk;
 parameter PN17 = 16'h008e,
           MASK17 = 16'h00ff;
@@ -69,20 +70,60 @@ reg [4:0]zeroCount;
          zeroCount <= zeroCount + 5'h1;
          sr <= sr >> 1;
       end
-      modData <= sr[0];
+      modDataTB <= sr[0];
       //    txUserData <= 0;
    end
    
-   
+   reg [20:0] srMLab;
+   integer srTernary [39:0];
+   reg [2:0] ternary;
+   integer i;
+   always @(negedge modClk or posedge reset) begin
+      if (reset) begin
+         srMLab <= 21'b01001_0100_0010_0001_0010;
+         srTernary[0] = -1;
+         srTernary[1] = 0;
+         srTernary[2] = 0;
+         srTernary[3] = -1;
+         srTernary[4] = 0;
+         srTernary[5] = 1;
+         srTernary[6] = 0;
+         srTernary[7] = 0;
+         srTernary[8] = 0;
+         srTernary[9] = 0;
+         srTernary[10] = 1;
+         srTernary[11] = 0;
+         srTernary[12] = 0;
+         srTernary[13] = 0;
+         srTernary[14] = 0;
+         srTernary[15] = 1;
+         srTernary[16] = 0;
+         srTernary[17] = 0;
+         srTernary[18] = 1;
+         srTernary[19] = 0;
+	 i=0;
+         modDataMLab <= 1'b0;
+      end
+      else if (modDataValid) begin
+         srMLab <= srMLab << 1;
+	 if (i<19) i=i+1;
+      end
+      modDataMLab <= srMLab[20];
+      ternary <= srTernary[i];
+   end
 
+`define MATLAB   
+`ifdef MATLAB 
+   wire modData = modDataMLab;
+`else
+   wire modData = modDataTB;
+`endif
 
 // Instantiate the modulator
-//wire [17:0] iMod;
-//wire [17:0] qMod;
-reg         modDataValid;
-reg     txSelect;
-reg     [1:0]fskMode;
-wire    [31:0]fmModFreq;
+   reg          modDataValid;
+   reg          txSelect;
+   reg [1:0]    fskMode;
+   wire [31:0]  fmModFreq;
 
 /* -----\/----- EXCLUDED -----\/-----
 fmMod fmMod(
@@ -117,19 +158,46 @@ soqpskMod soqpskMod
     .soqpskModFreq(soqpskModFreq)
     );
 
+`ifdef TEST_SOQPAKFIR
+// Generate internal bitrate clock
+reg modClkOutUUT;
+reg modSampleEn;
+reg [15:0]bitrateCount;
+   always @(posedge clk) begin
+      if (reset) begin
+         bitrateCount <= bitrateDivider;
+         modClkOutUUT <= 0;
+      end
+      else if (bitrateCount == 0) begin
+         bitrateCount <= bitrateDivider;
+         modClkOutUUT <= ~modClkOutUUT;
+         modSampleEn <= 1 ;
+      end
+      else begin
+         modSampleEn <= 0;
+         bitrateCount <= bitrateCount - 1;
+      end
+   end
    
+   wire [16:0] firOut;
+   soqpskFir modFir_UUT
+     (
+      .clk(clk), 
+      .nd(modSampleEn),
+      .rfd(),
+      .rdy(rdy),
+      .din(ternary),
+      .dout(firOut)
+      );
+   
+   always @(posedge clk)begin
+      if(modDataValid & rdy) begin
+         $display("%f", $itor($signed(firOut))/(2**17));
+      end
+   end
+`endif
+	
 wire    [17:0]iDds,qDds;
-
-/* -----\/----- EXCLUDED -----\/-----
-dds dds( 
-    .clk(clk), .reset(reset),
-    .txSelect(txSelect),
-    .rxFreq(32'b0),
-    .txFreq(fmModFreq),
-    .iDds(iDds), .qDds(qDds)
-    );
- -----/\----- EXCLUDED -----/\----- */
-
 dds dds(
   .clk(clk),
   .sclr(reset),
@@ -263,7 +331,7 @@ initial begin
 
     reset = 1;
     #(2*C) ;
-    reset = 0;
+    reset = 0;									  
 
     // Wait 8 bit periods for the shaping filter to flush
     #(16*bitrateSamplesInt*C) ;
