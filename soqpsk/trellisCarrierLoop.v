@@ -40,7 +40,7 @@ wire[31:0]carrierFreqOffset;
 reg trellisSpace;
 always @(addr) begin
     casex(addr)
-        `TRELLIS_SPACE: trellisSpace <= 1;
+        `TRELLISLFSPACE: trellisSpace <= 1;
         default:        trellisSpace <= 0;
         endcase
     end
@@ -50,7 +50,7 @@ wire    [4:0]   lagExp;
 wire    [31:0]  limit;
 wire    [31:0]  loopOffset;
 wire    [15:0]  lockCount;
-wire    [7:0]   syncThreshold;
+wire    [11:0]   syncThreshold;
 wire    [39:0]  lagAccum;
 loopRegs loopRegs(
     .cs(trellisSpace),
@@ -140,7 +140,7 @@ always @(posedge clk) begin
         carrierLock <= 0;
         end
     else if (loopFilterEn) begin
-        if (absPhaseError > syncThreshold) begin
+        if (absPhaseError > syncThreshold[7:0]) begin
             if (lockMinus[16]) begin
                 carrierLock <= 0;
                 lockCounter <= lockCount;
@@ -231,7 +231,13 @@ dds dds(
   .cosine(bReal), // Bus [17 : 0] 
   .sine(bImag)); // Bus [17 : 0] 
 
-cmpy18Sat cmpy18Sat(clk,reset,iInput,qInput,bReal,bImag,iMpy,qMpy);
+wire    [17:0]  iMpy,qMpy;
+cmpy18Sat cmpy18Sat(
+    .clk(clk),
+    .reset(reset),
+    .aReal(iIn),.aImag(qIn),
+    .bReal(bReal),.bImag(bImag),
+    .pReal(iMpy),.pImag(qMpy));
 
 reg [3:0] symEnSr;
 reg [3:0] sym2xEnSr;

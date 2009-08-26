@@ -28,7 +28,7 @@ module soqpskViterbi
    parameter             ROT_BITS = 10;
    input                 clk,reset,symEn;
    input [7:0]           decayFactor;
-   input [size-1:0]      mfZr0Real, mfPr0Real, mfMr0Real,
+   input [ROT_BITS-1:0]  mfZr0Real, mfPr0Real, mfMr0Real,
                          mfZr1Real, mfPr1Real, mfMr1Real,
                          mfZr2Real, mfPr2Real, mfMr2Real,
                          mfZr3Real, mfPr3Real, mfMr3Real;
@@ -76,17 +76,48 @@ module soqpskViterbi
 
    reg                   everyOtherSymEn;
    wire                  symEnEven = everyOtherSymEn;
+   `define USE_CLOCK_MUX
+   `ifdef USE_CLOCK_MUX
    // A mux is placed in front of each match filter 1 rotation input on the ACS (add compare select module). The mux selects depending upon even or odd symEn interval
    // Real
-   wire [size-1:0]       mf1Acs0 = symEnEven ? mfMr0Real : mfPr2Real;
-   wire [size-1:0]       mf1Acs1 = symEnEven ? mfPr1Real : mfMr3Real;
-   wire [size-1:0]       mf1Acs2 = symEnEven ? mfPr3Real : mfMr1Real;
-   wire [size-1:0]       mf1Acs3 = symEnEven ? mfMr2Real : mfPr0Real;
+reg     [ROT_BITS-1:0]  mf1Acs0;
+reg     [ROT_BITS-1:0]  mf1Acs1;
+reg     [ROT_BITS-1:0]  mf1Acs2;
+reg     [ROT_BITS-1:0]  mf1Acs3;
+always @(posedge clk) begin
+    if (symEn) begin
+        mf1Acs0 <= symEnEven ? mfMr0Real : mfPr2Real;
+        mf1Acs1 <= symEnEven ? mfPr1Real : mfMr3Real;
+        mf1Acs2 <= symEnEven ? mfPr3Real : mfMr1Real;
+        mf1Acs3 <= symEnEven ? mfMr2Real : mfPr0Real;
+        end
+    end
+   // Imag
+reg     [ROT_BITS-1:0]  mf1Acs0Im;
+reg     [ROT_BITS-1:0]  mf1Acs1Im;
+reg     [ROT_BITS-1:0]  mf1Acs2Im;
+reg     [ROT_BITS-1:0]  mf1Acs3Im;
+always @(posedge clk) begin
+    if (symEn) begin
+        mf1Acs0Im <= symEnEven ? mfMr0Imag : mfPr2Imag;
+        mf1Acs1Im <= symEnEven ? mfPr1Imag : mfMr3Imag;
+        mf1Acs2Im <= symEnEven ? mfPr3Imag : mfMr1Imag;
+        mf1Acs3Im <= symEnEven ? mfMr2Imag : mfPr0Imag;
+        end
+    end
+   `else
+   // A mux is placed in front of each match filter 1 rotation input on the ACS (add compare select module). The mux selects depending upon even or odd symEn interval
+   // Real
+   wire [ROT_BITS-1:0]       mf1Acs0 = symEnEven ? mfMr0Real : mfPr2Real;
+   wire [ROT_BITS-1:0]       mf1Acs1 = symEnEven ? mfPr1Real : mfMr3Real;
+   wire [ROT_BITS-1:0]       mf1Acs2 = symEnEven ? mfPr3Real : mfMr1Real;
+   wire [ROT_BITS-1:0]       mf1Acs3 = symEnEven ? mfMr2Real : mfPr0Real;
    // Imag
    wire [ROT_BITS-1:0]   mf1Acs0Im = symEnEven ? mfMr0Imag : mfPr2Imag;
    wire [ROT_BITS-1:0]   mf1Acs1Im = symEnEven ? mfPr1Imag : mfMr3Imag;
    wire [ROT_BITS-1:0]   mf1Acs2Im = symEnEven ? mfPr3Imag : mfMr1Imag;
    wire [ROT_BITS-1:0]   mf1Acs3Im = symEnEven ? mfMr2Imag : mfPr0Imag;
+   `endif
    
    // A mux is placed in front of each accumulated metric 1 rotation input on the ACS (add compare select module). The mux selects depending upon even or odd symEn interval
    wire [size+4-1:0]     acc1Acs0 = symEnEven ? accMetOut[2][(size-1)+4:0] : accMetOut[1][(size-1)+4:0];
@@ -111,7 +142,7 @@ module soqpskViterbi
      end
  -----/\----- EXCLUDED -----/\----- */
       
-   //                                                                        MF 1                    MF 0                  ACC 1                                 ACC 0                                                                                                                      IMAG MF 1               IMAG MF 0                                                                       
+   //                                                                                                   MF 1                    MF 0                  ACC 1                                 ACC 0                                                                                                                      IMAG MF 1               IMAG MF 0                                                                       
    acs #(size, ROT_BITS) acs0  (.clk(clk), .reset(acsReset), .symEn(symEn), .decayFactor(decayFactor), .out1PtReal(mf1Acs0), .out0PtReal(mfZr3Real), .accMet1(acc1Acs0), .accMet2(accMetOut[0][(size-1)+4:0]), .accMetOut(accMetOut[0][(size-1)+4:0]), .selOut(sel[0]), .normalizeIn(normalizeIn), .normalizeOut(s0), .out1PtImag(mf1Acs0Im), .out0PtImag(mfZr3Imag), .outImag(out1Imag) );
    acs #(size, ROT_BITS) acs1  (.clk(clk), .reset(acsReset), .symEn(symEn), .decayFactor(decayFactor), .out1PtReal(mf1Acs1), .out0PtReal(mfZr2Real), .accMet1(acc1Acs1), .accMet2(accMetOut[1][(size-1)+4:0]), .accMetOut(accMetOut[1][(size-1)+4:0]), .selOut(sel[1]), .normalizeIn(normalizeIn), .normalizeOut(s1), .out1PtImag(mf1Acs1Im), .out0PtImag(mfZr2Imag), .outImag(out2Imag) );
    acs #(size, ROT_BITS) acs2  (.clk(clk), .reset(acsReset), .symEn(symEn), .decayFactor(decayFactor), .out1PtReal(mf1Acs2), .out0PtReal(mfZr0Real), .accMet1(acc1Acs2), .accMet2(accMetOut[2][(size-1)+4:0]), .accMetOut(accMetOut[2][(size-1)+4:0]), .selOut(sel[2]), .normalizeIn(normalizeIn), .normalizeOut(s2), .out1PtImag(mf1Acs2Im), .out0PtImag(mfZr0Imag), .outImag(out3Imag) );
@@ -119,7 +150,7 @@ module soqpskViterbi
 
   
    // For the SOQPSK mode we have only 4 states so we don't need the large maxMetric module
-   comp4twosComp  #(size, 0)  soqpskMaxMetric   
+   comp4twosComp  #((size+4), 0)  soqpskMaxMetric   
      (
       .clk    (clk         ), 
       .reset  (acsReset    ),
@@ -224,9 +255,10 @@ module soqpskViterbi
    real                phErr_REAL;   
    always @(phaseError) phErr_REAL = $itor($signed(phaseError))/(2**ROT_BITS);
 
+
    always @(posedge clk)begin
       if(symEn)begin                               
-         $display("%f\t%d", phErr_REAL, $signed(phaseError));
+         //$display("%f\t%d", phErr_REAL, $signed(phaseError));
       end                                         
    end
 `endif
