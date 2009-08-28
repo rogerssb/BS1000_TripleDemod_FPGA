@@ -23,7 +23,7 @@
 *     appliances, devices, or systems. Use in such applications are            *
 *     expressly prohibited.                                                    *
 *                                                                              *
-*     (c) Copyright 1995-2007 Xilinx, Inc.                                     *
+*     (c) Copyright 1995-2009 Xilinx, Inc.                                     *
 *     All rights reserved.                                                     *
 *******************************************************************************/
 // The following must be inserted into your Verilog file for this
@@ -34,9 +34,15 @@
 soqpskFir YourInstanceName (
 	.clk(clk),
 	.nd(nd),
-	.din(din), // Bus [2 : 0] 
 	.rfd(rfd),
 	.rdy(rdy),
+	.din(din), // Bus [2 : 0] 
 	.dout(dout)); // Bus [17 : 0] 
 
 // INST_TAG_END ------ End INSTANTIATION Template ---------
+
+// You must compile the wrapper file soqpskFir.v when simulating
+// the core, soqpskFir. When compiling the wrapper file, be sure to
+// reference the XilinxCoreLib Verilog simulation library. For detailed
+// instructions, please refer to the "CORE Generator Help".
+

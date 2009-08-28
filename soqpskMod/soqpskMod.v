@@ -1,6 +1,7 @@
 `timescale 1ns / 10 ps
 
-module soqpskMod( 
+module soqpskMod
+  ( 
     clk, reset,
     cs,
     wr0, wr1, wr2, wr3,
@@ -11,7 +12,8 @@ module soqpskMod(
     modClkIn,
     modClkOut,
     modDataValid,
-    soqpskModFreq
+    soqpskModFreq,
+    modSampleEn                  
     );
 
 input clk;
@@ -28,7 +30,8 @@ input modDataValid;
 //input txSelect;
 //input [1:0]fskMode;
 output [31:0]soqpskModFreq;
-
+output modSampleEn;
+   
 // Register interface
 wire [31:0]carrierFreq;
 wire [17:0]deviation;
@@ -67,56 +70,66 @@ always @(posedge clk) begin
         end
     end
 
+/* -----\/----- EXCLUDED -----\/-----
    reg modDataLatch;
    always @(negedge modClkOut) begin
       modDataLatch <= modData;
    end
-   
+ -----/\----- EXCLUDED -----/\----- */
 
-   // Differential encoder from Billys Matlab sim
-   // d[n] = a[n] xor d[n-2]
-   reg     [1:0]   binSR;
    reg             evenOdd;
    always @(posedge clk) begin
       if (reset) begin
-         evenOdd <= 0;
+         evenOdd <= 1;
+      end
+      else if (modSampleEn) begin
+         if (modClkOut) begin
+            evenOdd <= !evenOdd;
+         end
+      end
+   end  
+
+
+
+   
+//`define BILLY_PRECODER
+`ifdef BILLY_PRECODER 
+   // Differential encoder from Billys Matlab sim
+   // d[n] = a[n] xor d[n-2]
+   reg     [1:0]   binSR;
+   always @(posedge clk) begin
+      if (reset) begin
          binSR <= 2'b01;
       end
       else if (modSampleEn) begin
          if (modClkOut) begin
-            evenOdd <= !evenOdd;
             binSR <= {binSR[0], diffEncValue};
          end
       end
    end  
-
    wire diffEncValue = modDataLatch ^ binSR[1];
-
+`endif
 
    // Do the IRIG standard differential encoding for SOQPSK-TG
    // I[2n]   = a[2n] xor not(Q[2n-1])
    // Q[2n+1] = a[2n+1] xor I[2n]
-   reg  iBit,qBit;
+   //reg  diffEncValueTG;
+   reg  modDataLatch;
+   reg  diffEncValueTG_1d;
    always @(posedge clk) begin
       if (reset) begin
-         iBit <= 0;
-         qBit <= 0;
-         evenOdd <= 0;
+         modDataLatch <= 0;
+         diffEncValueTG_1d <= 0;
       end
       else if (modSampleEn) begin
          if (modClkOut) begin
-            evenOdd <= !evenOdd;
-            if (evenOdd) begin
-               iBit <= modData ^ !qBit;
-            end
-            else begin
-               qBit <= modData ^ iBit;
-            end
+            modDataLatch <= modData;
+            diffEncValueTG_1d <= diffEncValueTG;
          end
       end
    end  
 
-   wire debugBitSR = bitSR[0];
+   wire diffEncValueTG = !evenOdd ?  modDataLatch ^ diffEncValueTG_1d : modDataLatch ^ !diffEncValueTG_1d;
    
    
 // Do the dibit to ternary encoding
@@ -124,19 +137,14 @@ reg     [2:0]   bitSR;
 reg     [2:0]   modValue;
    always @(posedge clk) begin
       if (reset) begin
+         bitSR <= 3'b0;
       end
       else if (modSampleEn) begin
          if (modClkOut) begin
-`define BILLY_PRECODER
 `ifdef BILLY_PRECODER 
             bitSR <= {bitSR[1:0],diffEncValue};
-`else
-            if (evenOdd) begin
-               bitSR <= {bitSR[1:0],qBit};
-            end
-            else begin
-               bitSR <= {bitSR[1:0],iBit};
-            end
+`else // SOQPK-TG
+            bitSR <= {bitSR[1:0], diffEncValueTG};
 `endif
          end
          if (modClkOut) begin
@@ -179,30 +187,49 @@ reg     [2:0]   modValue;
             endcase
           end
          else begin
-            modValue <= 3'b000;
+            //modValue <= 3'b000;
          end
       end
    end
    
 
-
+   reg [2:0] firIn;
+   always @(posedge clk) begin
+      if (reset) begin
+         firIn <= 3'b0;
+      end
+      else if (modSampleEn) begin
+         if (modClkOut) begin
+            firIn <=modValue;
+         end
+         else begin
+            firIn <= 1'b0;
+         end
+      end
+   end
+   
+            
 
    
 // Run the samples through the shaping filter
-wire [17:0]shapingFirOut;
+wire [16:0]shapingFirOut;
 soqpskFir soqpskFir(
     .clk(clk), 
+    //.nd(modSampleEn & modClkOut),
     .nd(modSampleEn),
     .rfd(),
     .rdy(shapedReady),
-    .din(modValue),
+    //.din(modValue),
+    .din(firIn),
     .dout(shapingFirOut)
     );
    
-
+	
 `ifdef SIMULATE
 real shapedReal;
-always @(shapingFirOut) shapedReal = ((shapingFirOut > 131071.0) ? (shapingFirOut - 262144.0) : shapingFirOut)/131072.0;
+always @(shapingFirOut) shapedReal = $itor($signed(shapingFirOut))/(2**13);
+//always @(shapingFirOut) shapedReal = $itor($signed(shapingFirOut))/(2**13);
+//always @(shapingFirOut) shapedReal = ((shapingFirOut > 131071.0) ? (shapingFirOut - 262144.0) : shapingFirOut)/131072.0;
 `endif
 
 // CIC Interpolation Filter

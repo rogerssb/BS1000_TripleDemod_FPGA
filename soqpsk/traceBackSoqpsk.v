@@ -26,7 +26,7 @@ module traceBackSoqpsk
    input [3:0]        sel;   // 4 induvidual decision.
    input [1:0]        index; // pointer to the state which has the maximum metric
    output             decision;
-   wire               decision;
+   reg                decision;
 
    wire               dec = sel[index];
 
@@ -63,14 +63,42 @@ module traceBackSoqpsk
      begin
         if (reset) begin
            sel_1dly <= 0;
+           decision <= 1'b0;
         end
         else begin
            if (symEn) begin  
               sel_1dly <= sel;
+              decision <= decisionTmp;
            end
         end 
      end
          
-   assign decision = sel_1dly[nState];
+
+   //assign decision = sel_1dly[nState];
+ 
+   // This portion of the code includes the decoding of the "new" soqpsk waveform
+   // If simulating agenst the origenal testbench you need to checkout the previous version of this file
+   // rev134 would work for the traceback
+   reg decisionTmp;
+   always @(symEnEven or nState )
+     begin
+        if (!symEnEven) begin // Odd state
+           if (nState==2'b01  || nState==2'b10) begin
+              decisionTmp <= !sel_1dly[nState]; //invert the decision
+           end
+           else begin
+              decisionTmp <= sel_1dly[nState];
+           end
+        end
+        else begin            // Even state
+           if (nState==2'b00 || nState==2'b11) begin
+              decisionTmp <= !sel_1dly[nState]; //invert the decision
+           end
+           else begin
+              decisionTmp <= sel_1dly[nState];
+           end
+        end
+     end
+
          
 endmodule

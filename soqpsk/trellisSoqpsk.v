@@ -384,7 +384,8 @@ soqpskViterbi #(size, ROT_BITS) soqpskViterbi
    (
     // For the SOQPSK mode the there is one sample per symbol and there for the faster sym2xEn is used as symEn
     .clk(clk), .reset(reset), .symEn(ternarySymEnOut),
-    .decayFactor(decayFactor),
+//    .decayFactor(decayFactor),
+    .decayFactor(8'hff),
     .mfZr0Real(rotMfz0RealOut), .mfPr0Real(rotMfp0RealOut), .mfMr0Real(rotMfm0RealOut),
     .mfZr1Real(rotMfz1RealOut), .mfPr1Real(rotMfp1RealOut), .mfMr1Real(rotMfm1RealOut),
     .mfZr2Real(rotMfz2RealOut), .mfPr2Real(rotMfp2RealOut), .mfMr2Real(rotMfm2RealOut),

@@ -139,7 +139,7 @@ always @(posedge clk)begin
      default: begin
         symEn <= 0;
         sym2xEn <= 0;
-        din <= 0;
+        //din <= 0;
      end
    endcase
 end

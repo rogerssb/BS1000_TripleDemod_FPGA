@@ -49,10 +49,10 @@ module soqpskViterbi
    reg [ROT_BITS-1:0]    phaseError;
    reg [ROT_BITS-1:0]    devError;
    
-   reg [ROT_BITS-1:0]    out1Imag_1dly , //out1Imag_2dly , 
-                         out2Imag_1dly , //out2Imag_2dly , 
-                         out3Imag_1dly , //out3Imag_2dly , 
-                         out4Imag_1dly ; //, out4Imag_2dly ;
+   reg [ROT_BITS-1:0]    out1Imag_1dly , 
+                         out2Imag_1dly , 
+                         out3Imag_1dly , 
+                         out4Imag_1dly ; 
    
    wire [ROT_BITS-1:0]   out1Imag , 
                          out2Imag , 
@@ -80,18 +80,38 @@ module soqpskViterbi
    `ifdef USE_CLOCK_MUX
    // A mux is placed in front of each match filter 1 rotation input on the ACS (add compare select module). The mux selects depending upon even or odd symEn interval
    // Real
-reg     [ROT_BITS-1:0]  mf1Acs0;
-reg     [ROT_BITS-1:0]  mf1Acs1;
-reg     [ROT_BITS-1:0]  mf1Acs2;
-reg     [ROT_BITS-1:0]  mf1Acs3;
+
+   wire  [(ROT_BITS-1):(ROT_BITS-1)-(size-1)] mfMr0RealTrunc = mfMr0Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)];
+   wire  [(ROT_BITS-1):(ROT_BITS-1)-(size-1)] mfPr2RealTrunc = mfPr2Real[(ROT_BITS-1):(ROT_BITS-1)-(size-1)];
+   
+   wire [size-1:0]                            mf1Acs0Trunc = !symEnEven ? mfMr0RealTrunc : mfPr2RealTrunc;
+                         
+   reg [ROT_BITS-1:0]                         mf1Acs0;
+   reg [ROT_BITS-1:0]                         mf1Acs1;
+   reg [ROT_BITS-1:0]                         mf1Acs2;
+   reg [ROT_BITS-1:0]                         mf1Acs3;
+   reg [ROT_BITS-1:0]                         mfZr3RealTmp, mfZr3RealLatched;
+   reg [ROT_BITS-1:0]                         mfZr2RealTmp, mfZr2RealLatched;
+   reg [ROT_BITS-1:0]                         mfZr0RealTmp, mfZr0RealLatched;
+   reg [ROT_BITS-1:0]                         mfZr1RealTmp, mfZr1RealLatched;     
+
 always @(posedge clk) begin
     if (symEn) begin
-        mf1Acs0 <= symEnEven ? mfMr0Real : mfPr2Real;
-        mf1Acs1 <= symEnEven ? mfPr1Real : mfMr3Real;
-        mf1Acs2 <= symEnEven ? mfPr3Real : mfMr1Real;
-        mf1Acs3 <= symEnEven ? mfMr2Real : mfPr0Real;
-        end
+       mf1Acs0 <= !symEnEven ? mfMr0Real : mfPr2Real;
+       mf1Acs1 <= !symEnEven ? mfPr1Real : mfMr3Real;
+       mf1Acs2 <= !symEnEven ? mfPr3Real : mfMr1Real;
+       mf1Acs3 <= !symEnEven ? mfMr2Real : mfPr0Real;
+       mfZr3RealTmp <= mfZr3Real;
+       mfZr2RealTmp <= mfZr2Real;
+       mfZr0RealTmp <= mfZr0Real;
+       mfZr1RealTmp <= mfZr1Real;     
+       mfZr3RealLatched <= mfZr3RealTmp;
+       mfZr2RealLatched <= mfZr2RealTmp;
+       mfZr0RealLatched <= mfZr0RealTmp;
+       mfZr1RealLatched <= mfZr1RealTmp;     
     end
+end
+ 
    // Imag
 reg     [ROT_BITS-1:0]  mf1Acs0Im;
 reg     [ROT_BITS-1:0]  mf1Acs1Im;
@@ -99,10 +119,10 @@ reg     [ROT_BITS-1:0]  mf1Acs2Im;
 reg     [ROT_BITS-1:0]  mf1Acs3Im;
 always @(posedge clk) begin
     if (symEn) begin
-        mf1Acs0Im <= symEnEven ? mfMr0Imag : mfPr2Imag;
-        mf1Acs1Im <= symEnEven ? mfPr1Imag : mfMr3Imag;
-        mf1Acs2Im <= symEnEven ? mfPr3Imag : mfMr1Imag;
-        mf1Acs3Im <= symEnEven ? mfMr2Imag : mfPr0Imag;
+        mf1Acs0Im <= !symEnEven ? mfMr0Imag : mfPr2Imag;
+        mf1Acs1Im <= !symEnEven ? mfPr1Imag : mfMr3Imag;
+        mf1Acs2Im <= !symEnEven ? mfPr3Imag : mfMr1Imag;
+        mf1Acs3Im <= !symEnEven ? mfMr2Imag : mfPr0Imag;
         end
     end
    `else
@@ -113,11 +133,17 @@ always @(posedge clk) begin
    wire [ROT_BITS-1:0]       mf1Acs2 = symEnEven ? mfPr3Real : mfMr1Real;
    wire [ROT_BITS-1:0]       mf1Acs3 = symEnEven ? mfMr2Real : mfPr0Real;
    // Imag
-   wire [ROT_BITS-1:0]   mf1Acs0Im = symEnEven ? mfMr0Imag : mfPr2Imag;
-   wire [ROT_BITS-1:0]   mf1Acs1Im = symEnEven ? mfPr1Imag : mfMr3Imag;
-   wire [ROT_BITS-1:0]   mf1Acs2Im = symEnEven ? mfPr3Imag : mfMr1Imag;
-   wire [ROT_BITS-1:0]   mf1Acs3Im = symEnEven ? mfMr2Imag : mfPr0Imag;
-   `endif
+   wire [ROT_BITS-1:0]       mf1Acs0Im = symEnEven ? mfMr0Imag : mfPr2Imag;
+   wire [ROT_BITS-1:0]       mf1Acs1Im = symEnEven ? mfPr1Imag : mfMr3Imag;
+   wire [ROT_BITS-1:0]       mf1Acs2Im = symEnEven ? mfPr3Imag : mfMr1Imag;
+   wire [ROT_BITS-1:0]       mf1Acs3Im = symEnEven ? mfMr2Imag : mfPr0Imag;
+   
+   wire [ROT_BITS-1:0]       mfZr3RealLatched = mfZr3Real;
+   wire [ROT_BITS-1:0]       mfZr2RealLatched = mfZr2Real;
+   wire [ROT_BITS-1:0]       mfZr0RealLatched = mfZr0Real;
+   wire [ROT_BITS-1:0]       mfZr1RealLatched = mfZr1Real;     
+  
+  `endif
    
    // A mux is placed in front of each accumulated metric 1 rotation input on the ACS (add compare select module). The mux selects depending upon even or odd symEn interval
    wire [size+4-1:0]     acc1Acs0 = symEnEven ? accMetOut[2][(size-1)+4:0] : accMetOut[1][(size-1)+4:0];
@@ -125,28 +151,12 @@ always @(posedge clk) begin
    wire [size+4-1:0]     acc1Acs2 = symEnEven ? accMetOut[0][(size-1)+4:0] : accMetOut[3][(size-1)+4:0];
    wire [size+4-1:0]     acc1Acs3 = symEnEven ? accMetOut[1][(size-1)+4:0] : accMetOut[2][(size-1)+4:0];
 
-/* -----\/----- EXCLUDED -----\/-----
-   reg [ROT_BITS-1:0]    mf1Acs0Im_1dly, mf1Acs1Im_1dly, mf1Acs2Im_1dly, mf1Acs3Im_1dly,
-                         mfZr3Imag_1dly, mfZr2Imag_1dly, mfZr0Imag_1dly, mfZr1Imag_1dly;
-   
-   always @(posedge clk)
-     if (symEn) begin
-        mf1Acs0Im_1dly <= mf1Acs0Im;
-        mf1Acs1Im_1dly <= mf1Acs1Im;
-        mf1Acs2Im_1dly <= mf1Acs2Im;
-        mf1Acs3Im_1dly <= mf1Acs3Im;
-        mfZr3Imag_1dly <= mfZr3Imag;  
-        mfZr2Imag_1dly <= mfZr2Imag;  
-        mfZr0Imag_1dly <= mfZr0Imag;  
-        mfZr1Imag_1dly <= mfZr1Imag;
-     end
- -----/\----- EXCLUDED -----/\----- */
       
    //                                                                                                   MF 1                    MF 0                  ACC 1                                 ACC 0                                                                                                                      IMAG MF 1               IMAG MF 0                                                                       
-   acs #(size, ROT_BITS) acs0  (.clk(clk), .reset(acsReset), .symEn(symEn), .decayFactor(decayFactor), .out1PtReal(mf1Acs0), .out0PtReal(mfZr3Real), .accMet1(acc1Acs0), .accMet2(accMetOut[0][(size-1)+4:0]), .accMetOut(accMetOut[0][(size-1)+4:0]), .selOut(sel[0]), .normalizeIn(normalizeIn), .normalizeOut(s0), .out1PtImag(mf1Acs0Im), .out0PtImag(mfZr3Imag), .outImag(out1Imag) );
-   acs #(size, ROT_BITS) acs1  (.clk(clk), .reset(acsReset), .symEn(symEn), .decayFactor(decayFactor), .out1PtReal(mf1Acs1), .out0PtReal(mfZr2Real), .accMet1(acc1Acs1), .accMet2(accMetOut[1][(size-1)+4:0]), .accMetOut(accMetOut[1][(size-1)+4:0]), .selOut(sel[1]), .normalizeIn(normalizeIn), .normalizeOut(s1), .out1PtImag(mf1Acs1Im), .out0PtImag(mfZr2Imag), .outImag(out2Imag) );
-   acs #(size, ROT_BITS) acs2  (.clk(clk), .reset(acsReset), .symEn(symEn), .decayFactor(decayFactor), .out1PtReal(mf1Acs2), .out0PtReal(mfZr0Real), .accMet1(acc1Acs2), .accMet2(accMetOut[2][(size-1)+4:0]), .accMetOut(accMetOut[2][(size-1)+4:0]), .selOut(sel[2]), .normalizeIn(normalizeIn), .normalizeOut(s2), .out1PtImag(mf1Acs2Im), .out0PtImag(mfZr0Imag), .outImag(out3Imag) );
-   acs #(size, ROT_BITS) acs3  (.clk(clk), .reset(acsReset), .symEn(symEn), .decayFactor(decayFactor), .out1PtReal(mf1Acs3), .out0PtReal(mfZr1Real), .accMet1(acc1Acs3), .accMet2(accMetOut[3][(size-1)+4:0]), .accMetOut(accMetOut[3][(size-1)+4:0]), .selOut(sel[3]), .normalizeIn(normalizeIn), .normalizeOut(s3), .out1PtImag(mf1Acs3Im), .out0PtImag(mfZr1Imag), .outImag(out4Imag) );
+   acs #(size, ROT_BITS) acs0  (.clk(clk), .reset(acsReset), .symEn(symEn), .decayFactor(decayFactor), .out1PtReal(mf1Acs0), .out0PtReal(mfZr3RealLatched), .accMet1(acc1Acs0), .accMet2(accMetOut[0][(size-1)+4:0]), .accMetOut(accMetOut[0][(size-1)+4:0]), .selOut(sel[0]), .normalizeIn(normalizeIn), .normalizeOut(s0), .out1PtImag(mf1Acs0Im), .out0PtImag(mfZr3Imag), .outImag(out1Imag) );
+   acs #(size, ROT_BITS) acs1  (.clk(clk), .reset(acsReset), .symEn(symEn), .decayFactor(decayFactor), .out1PtReal(mf1Acs1), .out0PtReal(mfZr2RealLatched), .accMet1(acc1Acs1), .accMet2(accMetOut[1][(size-1)+4:0]), .accMetOut(accMetOut[1][(size-1)+4:0]), .selOut(sel[1]), .normalizeIn(normalizeIn), .normalizeOut(s1), .out1PtImag(mf1Acs1Im), .out0PtImag(mfZr2Imag), .outImag(out2Imag) );
+   acs #(size, ROT_BITS) acs2  (.clk(clk), .reset(acsReset), .symEn(symEn), .decayFactor(decayFactor), .out1PtReal(mf1Acs2), .out0PtReal(mfZr0RealLatched), .accMet1(acc1Acs2), .accMet2(accMetOut[2][(size-1)+4:0]), .accMetOut(accMetOut[2][(size-1)+4:0]), .selOut(sel[2]), .normalizeIn(normalizeIn), .normalizeOut(s2), .out1PtImag(mf1Acs2Im), .out0PtImag(mfZr0Imag), .outImag(out3Imag) );
+   acs #(size, ROT_BITS) acs3  (.clk(clk), .reset(acsReset), .symEn(symEn), .decayFactor(decayFactor), .out1PtReal(mf1Acs3), .out0PtReal(mfZr1RealLatched), .accMet1(acc1Acs3), .accMet2(accMetOut[3][(size-1)+4:0]), .accMetOut(accMetOut[3][(size-1)+4:0]), .selOut(sel[3]), .normalizeIn(normalizeIn), .normalizeOut(s3), .out1PtImag(mf1Acs3Im), .out0PtImag(mfZr1Imag), .outImag(out4Imag) );
 
   
    // For the SOQPSK mode we have only 4 states so we don't need the large maxMetric module

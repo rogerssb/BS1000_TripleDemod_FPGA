@@ -76,42 +76,192 @@ reg [4:0]zeroCount;
    
    reg [20:0] srMLab;
    integer srTernary [39:0];
+   integer srTernaryFir [39:0];
+   reg [20:0] aSubNSR;
+   reg aSubN;
    reg [2:0] ternary;
    integer i;
    always @(negedge modClk or posedge reset) begin
       if (reset) begin
          srMLab <= 21'b01001_0100_0010_0001_0010;
-         srTernary[0] = -1;
-         srTernary[1] = 0;
-         srTernary[2] = 0;
-         srTernary[3] = -1;
-         srTernary[4] = 0;
-         srTernary[5] = 1;
-         srTernary[6] = 0;
-         srTernary[7] = 0;
-         srTernary[8] = 0;
-         srTernary[9] = 0;
-         srTernary[10] = 1;
-         srTernary[11] = 0;
-         srTernary[12] = 0;
-         srTernary[13] = 0;
-         srTernary[14] = 0;
-         srTernary[15] = 1;
-         srTernary[16] = 0;
-         srTernary[17] = 0;
-         srTernary[18] = 1;
-         srTernary[19] = 0;
+         aSubNSR <=  21'b00010_1011_0000_1101_0000;
+
+
+         srTernary[0] = 0 ;
+         srTernary[1] = 0 ;
+         srTernary[2] = 0 ;
+         srTernary[3] = 0 ;
+         srTernary[4] = 0 ;
+         srTernary[5] = 0 ;
+         srTernary[6] = 0 ;
+         srTernary[7] = 0 ;
+         srTernary[8] = 0 ;
+         srTernary[9] = 0 ;
+         srTernary[10]= 0 ;
+         srTernary[11]= 0 ;
+         srTernary[12]= 0 ;
+         srTernary[13]= 0 ;
+         srTernary[14]= 0 ;
+         srTernary[15]= 0 ;
+         srTernary[16]= 0 ;
+         srTernary[17]= 0 ;
+         srTernary[18]= 0 ;
+         srTernary[19]= 0;
+         srTernary[20]= 1 ;
+         srTernary[21]= 0 ;
+         srTernary[22]= 1 ;
+         srTernary[23]= 0 ;
+         srTernary[24]= 1 ;
+         srTernary[25]= 0;
+         srTernary[26]= 1 ;
+         srTernary[27]= 0;
+         srTernary[28]= 1 ;
+         srTernary[29]= 0;
+         srTernary[30]= 1 ;
+         srTernary[31]= 0 ;
+         srTernary[32]= 1 ;
+         srTernary[33]= 0 ;
+         srTernary[34]= 1 ;
+         srTernary[35]= 0;
+         srTernary[36]= 1 ;
+         srTernary[37]= 0 ;
+         srTernary[38]= 1 ;
+
+
+
+/* -----\/----- EXCLUDED -----\/-----
+         srTernary[0] = 0 ;
+         srTernary[1] = 0 ;
+         srTernary[2] = 1 ;
+         srTernary[3] = 0 ;
+         srTernary[4] = 1 ;
+         srTernary[5] = 0;
+         srTernary[6] = 0 ;
+         srTernary[7] = 0 ;
+         srTernary[8] = 0 ;
+         srTernary[9] = 0 ;
+         srTernary[10]= 1 ;
+         srTernary[11]= 0 ;
+         srTernary[12]= 1 ;
+         srTernary[13]= 0 ;
+         srTernary[14]= 0 ;
+         srTernary[15]= 0;
+         srTernary[16]= 0 ;
+         srTernary[17]= 0;
+         srTernary[18]= 1 ;
+         srTernary[19]= 0;
+         srTernary[20]= 1 ;
+         srTernary[21]= 0 ;
+         srTernary[22]= 0 ;
+         srTernary[23]= 0 ;
+         srTernary[24]= 0 ;
+         srTernary[25]= 0;
+         srTernary[26]= 1 ;
+         srTernary[27]= 0;
+         srTernary[28]= 1 ;
+         srTernary[29]= 0;
+         srTernary[30]= 0 ;
+         srTernary[31]= 0 ;
+         srTernary[32]= 0 ;
+         srTernary[33]= 0 ;
+         srTernary[34]= 1 ;
+         srTernary[35]= 0;
+         srTernary[36]= 1 ;
+         srTernary[37]= 0 ;
+         srTernary[38]= 0 ;
+
+ -----/\----- EXCLUDED -----/\----- */
+/* -----\/----- EXCLUDED -----\/-----
+         srTernary[0] = 0 ;
+         srTernary[1] = 0 ;
+         srTernary[2] = 0 ;
+         srTernary[3] = 0 ;
+         srTernary[4] = 0 ;
+         srTernary[5] = -3;
+         srTernary[6] = 0 ;
+         srTernary[7] = 0 ;
+         srTernary[8] = 0 ;
+         srTernary[9] = 0 ;
+         srTernary[10]= 0 ;
+         srTernary[11]= 0 ;
+         srTernary[12]= 0 ;
+         srTernary[13]= 0 ;
+         srTernary[14]= 0 ;
+         srTernary[15]= -3;
+         srTernary[16]= 0 ;
+         srTernary[17]= -3;
+         srTernary[18]= 0 ;
+         srTernary[19]= -3;
+         srTernary[20]= 0 ;
+         srTernary[21]= 0 ;
+         srTernary[22]= 0 ;
+         srTernary[23]= 0 ;
+         srTernary[24]= 0 ;
+         srTernary[25]= -3;
+         srTernary[26]= 0 ;
+         srTernary[27]= -3;
+         srTernary[28]= 0 ;
+         srTernary[29]= -3;
+         srTernary[30]= 0 ;
+         srTernary[31]= 0 ;
+         srTernary[32]= 0 ;
+         srTernary[33]= 0 ;
+         srTernary[34]= 0 ;
+         srTernary[35]= -3;
+         srTernary[36]= 0 ;
+         srTernary[37]= 0 ;
+         srTernary[38]= 0 ;
+ -----/\----- EXCLUDED -----/\----- */
+
+         srTernaryFir[0] =  0 ;
+         srTernaryFir[1] =  0 ;
+         srTernaryFir[2] =  0;
+         srTernaryFir[3] =  0 ;
+         srTernaryFir[4] =  0 ;
+         srTernaryFir[5] =  0 ;
+         srTernaryFir[6] =  0 ;
+         srTernaryFir[7] =  0;
+         srTernaryFir[8] =  1;
+         srTernaryFir[9] =  0;
+         srTernaryFir[10] = 0 ;
+         srTernaryFir[11] = 0 ;
+         srTernaryFir[12] = 0;
+         srTernaryFir[13] = 0;
+         srTernaryFir[14] = 0;
+         srTernaryFir[15] = 0 ;
+         srTernaryFir[16] = 0 ;
+         srTernaryFir[17] = 0;
+         srTernaryFir[18] = 0 ;
+         srTernaryFir[19] = 0 ;
+
 	 i=0;
          modDataMLab <= 1'b0;
       end
       else if (modDataValid) begin
          srMLab <= srMLab << 1;
-	 if (i<19) i=i+1;
+         aSubNSR <= aSubNSR << 1;
+	 //if (i<19) i=i+1;
+         if (i<38+4) i=i+1;
       end
-      modDataMLab <= srMLab[20];
-      ternary <= srTernary[i];
+         modDataMLab <= srMLab[20];
+         aSubN <= aSubNSR[20];
    end
 
+   reg en;
+   always @(posedge clk) begin
+      if (reset) begin
+         ternary <= 0;
+      end
+      en <= modSampleEn;
+      if (en & modClk) begin
+         ternary <= srTernary[i-4];   // -4 just to alighn with simulation
+         //ternary <= srTernaryFir[i-4];   // -4 just to alighn with simulation
+      end
+   end
+   
+
+   
+   
 `define MATLAB   
 `ifdef MATLAB 
    wire modData = modDataMLab;
@@ -155,9 +305,10 @@ soqpskMod soqpskMod
     .modClkIn(),
     .modClkOut(modClk),
     .modDataValid(modDataValid),
-    .soqpskModFreq(soqpskModFreq)
+    .soqpskModFreq(soqpskModFreq) //,
+    //.modSampleEn(modSampleEn)
     );
-
+`define TEST_SOQPAKFIR 
 `ifdef TEST_SOQPAKFIR
 // Generate internal bitrate clock
 reg modClkOutUUT;
@@ -179,22 +330,26 @@ reg [15:0]bitrateCount;
       end
    end
    
-   wire [16:0] firOut;
+   wire [17:0] firOut;
    soqpskFir modFir_UUT
      (
       .clk(clk), 
-      .nd(modSampleEn),
+      .nd(modSampleEn & modClk),
+      //.nd(en),
       .rfd(),
       .rdy(rdy),
       .din(ternary),
       .dout(firOut)
       );
    
+/* -----\/----- EXCLUDED -----\/-----
    always @(posedge clk)begin
       if(modDataValid & rdy) begin
-         $display("%f", $itor($signed(firOut))/(2**17));
+         //$display("%f", $itor($signed(firOut))/(2**13));
+         $display("%d", firOut);
       end
    end
+ -----/\----- EXCLUDED -----/\----- */
 `endif
 	
 wire    [17:0]iDds,qDds;
@@ -208,6 +363,23 @@ dds dds(
   .sine(qDds)); // Bus [17 : 0] 
    
 
+
+   reg [39:0] readMem [127:0];
+   initial $readmemh("C:/projects/semco/svn_checkout_folder/soqpskMod/sim.dat", readMem);
+
+   real simResult;
+   integer index;
+   always @(posedge clk)begin
+      if (reset) begin
+         index <= 0;  
+      end
+      else if (modDataValid & modSampleEn) begin
+        index <= index + 1;
+      	simResult <= $itor($signed(readMem[index-7]))/(2**18);
+      end
+   end
+
+   
 `ifdef MATLAB_VECTORS
 /******************************************************************************
                           Vector data for Matlab Analysis

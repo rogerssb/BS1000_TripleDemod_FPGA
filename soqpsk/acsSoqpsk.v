@@ -130,7 +130,7 @@ module acs
    
    adder2s #(size) adder2s_2
      (
-      .a          (out0PtReal[(ROT_BITS-1):(ROT_BITS-size)]),
+      .a          (out0PtReal[(ROT_BITS-1):(ROT_BITS-size)]), 
       .b          (accMet2   ),
       .sum        (add2      )
       );   
