@@ -70,12 +70,6 @@ always @(posedge clk) begin
         end
     end
 
-/* -----\/----- EXCLUDED -----\/-----
-   reg modDataLatch;
-   always @(negedge modClkOut) begin
-      modDataLatch <= modData;
-   end
- -----/\----- EXCLUDED -----/\----- */
 
    reg             evenOdd;
    always @(posedge clk) begin
@@ -215,7 +209,6 @@ reg     [2:0]   modValue;
 wire [16:0]shapingFirOut;
 soqpskFir soqpskFir(
     .clk(clk), 
-    //.nd(modSampleEn & modClkOut),
     .nd(modSampleEn),
     .rfd(),
     .rdy(shapedReady),
@@ -228,7 +221,6 @@ soqpskFir soqpskFir(
 `ifdef SIMULATE
 real shapedReal;
 always @(shapingFirOut) shapedReal = $itor($signed(shapingFirOut))/(2**13);
-//always @(shapingFirOut) shapedReal = $itor($signed(shapingFirOut))/(2**13);
 //always @(shapingFirOut) shapedReal = ((shapingFirOut > 131071.0) ? (shapingFirOut - 262144.0) : shapingFirOut)/131072.0;
 `endif
 
@@ -236,7 +228,7 @@ always @(shapingFirOut) shapedReal = $itor($signed(shapingFirOut))/(2**13);
 wire [33:0]cicOut;
 cicInterpolate cicInterpolate(
     .clk(clk), .reset(reset), .clkEn(shapedReady),
-    .dIn({shapingFirOut[10:0],7'b0}),
+    .dIn({shapingFirOut[11:0],6'b0}), 
     .dOut(cicOut)
     );
 wire [17:0]devInput;

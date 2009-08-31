@@ -305,7 +305,7 @@ soqpskMod soqpskMod
     .modClkIn(),
     .modClkOut(modClk),
     .modDataValid(modDataValid),
-    .soqpskModFreq(soqpskModFreq) //,
+    .soqpskModFreq() //,
     //.modSampleEn(modSampleEn)
     );
 `define TEST_SOQPAKFIR 
@@ -330,7 +330,7 @@ reg [15:0]bitrateCount;
       end
    end
    
-   wire [17:0] firOut;
+   wire [16:0] firOut;
    soqpskFir modFir_UUT
      (
       .clk(clk), 
@@ -519,7 +519,8 @@ initial begin
 
     // Create a reset to clear the nco accumulator
     reset = 1;
-    #(2*C) ;
+    // amj #(2*C) ;
+    #(200*C) ;
     reset = 0;
 
     // Set the valid bit and wait 5 bit periods
