@@ -1,7 +1,7 @@
 ##############################################################
 #
 # Xilinx Core Generator version 11.2
-# Date: Wed Aug 26 15:03:59 2009
+# Date: Mon Aug 31 13:39:02 2009
 #
 ##############################################################
 #
@@ -46,7 +46,7 @@ CSET coefficient_reload=false
 CSET coefficient_sets=1
 CSET coefficient_sign=Signed
 CSET coefficient_structure=Inferred
-CSET coefficient_width=11
+CSET coefficient_width=10
 CSET coefficientsource=COE_File
 CSET coefficientvector=6,0,-4,-3,5,6,-6,-13,7,44,64,44,7,-13,-6,6,5,-3,-4,0,6
 CSET columnconfig=1
@@ -75,7 +75,7 @@ CSET number_paths=1
 CSET optimization_goal=Area
 CSET output_buffer_type=Not_Applicable
 CSET output_rounding_mode=Full_Precision
-CSET output_width=18
+CSET output_width=17
 CSET passband_max=0.5
 CSET passband_min=0.0
 CSET preference_for_other_storage=Not_Applicable
@@ -92,4 +92,4 @@ CSET usechan_in_adv=false
 CSET zero_pack_factor=1
 # END Parameters
 GENERATE
-# CRC:  3619fc9
+# CRC: 69b131ac
