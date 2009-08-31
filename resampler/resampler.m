@@ -1,20 +1,20 @@
 % This generates the filter coefficients for the resampler. The resampler accepts an
 % input sample rate, fi, between of 2*fo > fi > fo, where fo is the output sample rate.
 
-ds = 9;         % ds = data spread, fir taps used for each delay
+ds = 7;         % ds = data spread, fir taps used for each delay
 ip = 32;        % ip = interpolation points, number of delays available within a sample
 taps = ds*ip;   % total taps
 order = taps-1;
 
 fi = ip;        % fi is normalized to ip;
 fn = fi/2;
-fc = 0.5/fn;
+fc = 0.45/fn;
 
-writeFile = 1;
+writeFile = 0;
 
 %win = chebwin(taps,50);
 %win = nuttallwin(taps);
-win = kaiser(taps,9);
+win = kaiser(taps,7);
 %win = blackman(taps);
 %win = gausswin(taps);
 %win = bohmanwin(taps);
@@ -54,7 +54,7 @@ hold on;
 for i = 1:(ip-1)
     g = downsample(h,ip,i);
     [G w] = grpdelay(g,1,1024,fi/ip);
-    plot(w,G,'b');
+    plot(w,G,'b'),grid
     end
 hold off;
 axis([0 2 (ds/2 - 1) ds/2]);
