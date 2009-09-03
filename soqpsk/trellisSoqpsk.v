@@ -27,7 +27,7 @@ module trellisSoqpsk
    dac2Data,
    decision,
    ternarySymEnOut,
-   ternarySym2xEnOut
+   //ternarySym2xEnOut
    );
    
    parameter size = 8;
@@ -53,7 +53,7 @@ module trellisSoqpsk
    output [17:0] dac2Data;
    output        decision;
    output        ternarySymEnOut;
-   output        ternarySym2xEnOut;
+   //output        ternarySym2xEnOut;
    
    
    wire [ROT_BITS-1:0] phaseError;
@@ -61,7 +61,6 @@ module trellisSoqpsk
    
    reg [7:0]           phErrShft;
    wire [17:0]         carrierLoopIOut,carrierLoopQOut;
-   wire [17:0]         carrierLoopIOutX2,carrierLoopQOutX2;
    wire [31:0]         trellisLoopDout;
    trellisCarrierLoop trellisCarrierLoop
      (
@@ -91,28 +90,6 @@ module trellisSoqpsk
 `endif
    
 
-// multiply by two the output from the carrierLoop to compensate for the 1/2 in the cmpy18 module.
-   multBy2withSat carrLoopTimes2I
-     (
-      .clk(clk), 
-      .symEn(symEnDly), 
-      .sym2xEn(ternarySymEnOut), 
-      .dIn(carrierLoopIOut),
-      .dOut(carrierLoopIOutX2), 
-      .symEnDly(), 
-      .sym2xEnOut()
-      );
-   
-   multBy2withSat carrLoopTimes2Q
-     (
-      .clk(clk), 
-      .symEn(symEnDly), 
-      .sym2xEn(ternarySymEnOut), 
-      .dIn(carrierLoopQOut),
-      .dOut(carrierLoopQOutX2), 
-      .symEnDly(),
-      .sym2xEnOut()
-      );
 
 `ifdef SIMULATE
    real                carrierLoopIOut_REAL, carrierLoopQOut_REAL;
@@ -124,22 +101,24 @@ module trellisSoqpsk
    // match filter zero (constant 1 multiply so we add 4 flops to align with "mfm" and "mfp")
    // Now due to a scaling factor in the mfilter the mfm and mfp output has to be scaled back by mult by 2, this
    // adds another flop.
-   reg [17:0]         mfzISr0, mfzISr1, mfzISr2, mfzISr3, 
-                      mfzQSr0, mfzQSr1, mfzQSr2, mfzQSr3;
+   reg [17:0]         mfzISr0, mfzISr1, mfzISr2, mfzISr3, mfzISr4, 
+                      mfzQSr0, mfzQSr1, mfzQSr2, mfzQSr3, mfzQSr4;
    always @(posedge clk) begin
       if (ternarySymEnOut) begin
          mfzISr0  <=  carrierLoopIOut;
          mfzISr1  <=  mfzISr0;
          mfzISr2  <=  mfzISr1;
          mfzISr3  <=  mfzISr2; 
+         mfzISr4  <=  mfzISr3; 
          mfzQSr0  <=  carrierLoopQOut;
          mfzQSr1  <=  mfzQSr0;
          mfzQSr2  <=  mfzQSr1;
          mfzQSr3  <=  mfzQSr2; 
+         mfzQSr4  <=  mfzQSr3; 
       end
    end
-   wire [17:0]          mfzI=mfzISr3;
-   wire [17:0]          mfzQ=mfzQSr3;
+   wire [17:0]          mfzI=mfzISr4;
+   wire [17:0]          mfzQ=mfzQSr4;
 
    // Match filter minus
    wire [17:0] mfmI,mfmQ;
@@ -168,83 +147,6 @@ module trellisSoqpsk
       .iOut    (mfpI             ),
       .qOut    (mfpQ             )
       );
-
-
-   // Have to multiply mfm, mfp I and Q by 2 to compensate for the "loss" in the mfilter.
-   // The mfz does not go through the mfilter so a extra sym2xEn delay is sufficient.
-   wire [17:0] mfmIX2,mfmQX2;
-   wire [17:0] mfpIX2,mfpQX2;
-   multBy2withSat mfmTimes2I
-     (
-      .clk        (clk), 
-      .symEn      (symEnDly), 
-      .sym2xEn    (ternarySymEnOut), 
-      .dIn        (mfmI),
-      .dOut       (mfmIX2), 
-      .symEnDly   (),
-      .sym2xEnOut ()
-      );
-
-   multBy2withSat mfmTimes2Q
-     (
-      .clk        (clk), 
-      .symEn      (symEnDly), 
-      .sym2xEn    (ternarySymEnOut), 
-      .dIn        (mfmQ),
-      .dOut       (mfmQX2), 
-      .symEnDly   (),
-      .sym2xEnOut ()
-      );
-
-   multBy2withSat mfpTimes2I
-     (
-      .clk        (clk), 
-      .symEn      (symEnDly), 
-      .sym2xEn    (ternarySymEnOut), 
-      .dIn        (mfpI),
-      .dOut       (mfpIX2), 
-      .symEnDly   (),
-      .sym2xEnOut ()
-      );
-
-   multBy2withSat mfpTimes2Q
-     (
-      .clk        (clk), 
-      .symEn      (symEnDly), 
-      .sym2xEn    (ternarySymEnOut), 
-      .dIn        (mfpQ),
-      .dOut       (mfpQX2), 
-      .symEnDly   (),
-      .sym2xEnOut ()
-      );
-   
-   
-`ifdef SIMULATE
-   always @(posedge clk)begin
-      if(sym2xEn)begin
-//         $display("  %1.4f\t\t%1.4f\t\t%1.4f\t\t%1.4f\t\t%1.4f\t\t%1.4f\t\t%1.4f\t\t%1.4f",
-//                  $itor($signed(carrierLoopIOutX2))/(2**17),
-//                  $itor($signed(carrierLoopQOutX2))/(2**17),
-//                  $itor($signed(mfzI))/(2**17),
-//                  $itor($signed(mfzQ))/(2**17),
-//                  $itor($signed(mfmI))/(2**17),
-//                  $itor($signed(mfmQ))/(2**17),
-//                  $itor($signed(mfpI))/(2**17),
-//                  $itor($signed(mfpQ))/(2**17));
-
-//      if(ternarySymEnOut)begin
-//         $display(" i2x, q2x \t %1.4f\t\t%1.4f\t\t",
-//                  $itor($signed(carrierLoopIOutX2))/(2**17),
-//                  $itor($signed(carrierLoopQOutX2))/(2**17));
-//      end
-      
-//      if(ternarySymEnOut)begin
-//         $display(" mfpI, mfpQ \t %1.4f\t\t%1.4f\t\t",
-//                  $itor($signed(mfpI))/(2**16),
-//                  $itor($signed(mfpQ))/(2**16));
-      end
-   end
-`endif   
         
    // Rotations
    wire [ROT_BITS-1:0] rotMfz0Real, rotMfz1Real, rotMfz2Real, rotMfz3Real,  // 4 real part rotated "match filter zero" outputs
@@ -270,24 +172,6 @@ module trellisSoqpsk
    assign              rotMfp1Real =  mfpQ[17:17-(ROT_BITS-1)], rotMfp1Imag = -mfpI[17:17-(ROT_BITS-1)];
    assign              rotMfp2Real = -mfpI[17:17-(ROT_BITS-1)], rotMfp2Imag = -mfpQ[17:17-(ROT_BITS-1)];
    assign              rotMfp3Real = -mfpQ[17:17-(ROT_BITS-1)], rotMfp3Imag =  mfpI[17:17-(ROT_BITS-1)];
-
-   /* -----\/----- EXCLUDED -----\/-----
-   assign              rotMfz0Real =  mfzI[17:17-(ROT_BITS-1)], rotMfz0Imag =  mfzQ[17:17-(ROT_BITS-1)];
-   assign              rotMfz1Real =  mfzQ[17:17-(ROT_BITS-1)], rotMfz1Imag = -mfzI[17:17-(ROT_BITS-1)];
-   assign              rotMfz2Real = -mfzI[17:17-(ROT_BITS-1)], rotMfz2Imag = -mfzQ[17:17-(ROT_BITS-1)];
-   assign              rotMfz3Real = -mfzQ[17:17-(ROT_BITS-1)], rotMfz3Imag =  mfzI[17:17-(ROT_BITS-1)];
-
-   assign              rotMfm0Real =  mfmIX2[17:17-(ROT_BITS-1)], rotMfm0Imag =  mfmQX2[17:17-(ROT_BITS-1)];
-   assign              rotMfm1Real =  mfmQX2[17:17-(ROT_BITS-1)], rotMfm1Imag = -mfmIX2[17:17-(ROT_BITS-1)];
-   assign              rotMfm2Real = -mfmIX2[17:17-(ROT_BITS-1)], rotMfm2Imag = -mfmQX2[17:17-(ROT_BITS-1)];
-   assign              rotMfm3Real = -mfmQX2[17:17-(ROT_BITS-1)], rotMfm3Imag =  mfmIX2[17:17-(ROT_BITS-1)];
-
-   assign              rotMfp0Real =  mfpIX2[17:17-(ROT_BITS-1)], rotMfp0Imag =  mfpQX2[17:17-(ROT_BITS-1)];
-   assign              rotMfp1Real =  mfpQX2[17:17-(ROT_BITS-1)], rotMfp1Imag = -mfpIX2[17:17-(ROT_BITS-1)];
-   assign              rotMfp2Real = -mfpIX2[17:17-(ROT_BITS-1)], rotMfp2Imag = -mfpQX2[17:17-(ROT_BITS-1)];
-   assign              rotMfp3Real = -mfpQX2[17:17-(ROT_BITS-1)], rotMfp3Imag =  mfpIX2[17:17-(ROT_BITS-1)];
-    -----/\----- EXCLUDED -----/\----- */
-              
 
    reg [ROT_BITS-1:0]  rotMfz0RealOut, rotMfz1RealOut, rotMfz2RealOut, rotMfz3RealOut,
                        rotMfm0RealOut, rotMfm1RealOut, rotMfm2RealOut, rotMfm3RealOut,
@@ -350,16 +234,6 @@ module trellisSoqpsk
    
    always @(posedge clk)begin
       if(ternarySymEnOut)begin
-    //     $display("\t%1.3f\t%1.3f\t%1.3f\t%1.3f\t%1.3f\t%1.3f\t%1.3f\t%1.3f",
-    //              $itor($signed(rotMfp0RealOut))/(2**(ROT_BITS-2)),
-    //              $itor($signed(rotMfp0ImagOut))/(2**(ROT_BITS-2)),
-    //              $itor($signed(rotMfp1RealOut))/(2**(ROT_BITS-2)),
-    //              $itor($signed(rotMfp1ImagOut))/(2**(ROT_BITS-2)),
-    //              $itor($signed(rotMfp2RealOut))/(2**(ROT_BITS-2)),
-    //              $itor($signed(rotMfp2ImagOut))/(2**(ROT_BITS-2)),
-    //              $itor($signed(rotMfp3RealOut))/(2**(ROT_BITS-2)),
-    //              $itor($signed(rotMfp3ImagOut))/(2**(ROT_BITS-2)));
-
          rotMfz0ImagOut_REAL = $itor($signed(rotMfz0ImagOut))/(2**(ROT_BITS-2));
          rotMfz1ImagOut_REAL = $itor($signed(rotMfz1ImagOut))/(2**(ROT_BITS-2));
          rotMfz2ImagOut_REAL = $itor($signed(rotMfz2ImagOut))/(2**(ROT_BITS-2));
@@ -383,9 +257,12 @@ reg     [7:0]   decayFactor;
 soqpskViterbi #(size, ROT_BITS) soqpskViterbi
    (
     // For the SOQPSK mode the there is one sample per symbol and there for the faster sym2xEn is used as symEn
-    .clk(clk), .reset(reset), .symEn(ternarySymEnOut),
-//    .decayFactor(decayFactor),
-    .decayFactor(8'hff),
+    .clk(clk), .reset(reset), .symEn(ternarySymEnOut), 
+	`ifdef ALDEC_SIM
+	.decayFactor(8'hff),
+	`else
+    .decayFactor(decayFactor),
+	`endif
     .mfZr0Real(rotMfz0RealOut), .mfPr0Real(rotMfp0RealOut), .mfMr0Real(rotMfm0RealOut),
     .mfZr1Real(rotMfz1RealOut), .mfPr1Real(rotMfp1RealOut), .mfMr1Real(rotMfm1RealOut),
     .mfZr2Real(rotMfz2RealOut), .mfPr2Real(rotMfp2RealOut), .mfMr2Real(rotMfm2RealOut),
@@ -425,11 +302,11 @@ soqpskViterbi #(size, ROT_BITS) soqpskViterbi
 // This is a kludge to create a 2x clock enable from the 1x clock enable to satisfy the design
 // of the pre-existing line decoder. This design assumes at least 3 clocks between each 1x clock
 // enable.
-reg se0;
-assign ternarySym2xEnOut = se0 | ternarySymEnOut;
-always @(posedge clk) begin
-    se0 <= ternarySymEnOut;
-    end
+//reg se0;
+//assign ternarySym2xEnOut = se0 | ternarySymEnOut;
+//always @(posedge clk) begin
+//    se0 <= ternarySymEnOut;
+//    end
 
    
 /************************ Trellis Register Definitions ************************/
@@ -565,6 +442,7 @@ endmodule
 
 
 
+/* -----\/----- EXCLUDED -----\/-----
 
 module multBy2withSat(clk, symEn, sym2xEn, dIn, dOut, symEnDly, sym2xEnOut);
    
@@ -602,3 +480,4 @@ module multBy2withSat(clk, symEn, sym2xEn, dIn, dOut, symEnDly, sym2xEnOut);
    assign sym2xEnOut = sym2xEn;
    
 endmodule
+ -----/\----- EXCLUDED -----/\----- */

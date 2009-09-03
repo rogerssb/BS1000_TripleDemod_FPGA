@@ -90,10 +90,10 @@ module soqpskViterbi
    reg [ROT_BITS-1:0]                         mf1Acs1;
    reg [ROT_BITS-1:0]                         mf1Acs2;
    reg [ROT_BITS-1:0]                         mf1Acs3;
-   reg [ROT_BITS-1:0]                         mfZr3RealTmp, mfZr3RealLatched;
-   reg [ROT_BITS-1:0]                         mfZr2RealTmp, mfZr2RealLatched;
-   reg [ROT_BITS-1:0]                         mfZr0RealTmp, mfZr0RealLatched;
-   reg [ROT_BITS-1:0]                         mfZr1RealTmp, mfZr1RealLatched;     
+   reg [ROT_BITS-1:0]                         mfZr3RealLatched;
+   reg [ROT_BITS-1:0]                         mfZr2RealLatched;
+   reg [ROT_BITS-1:0]                         mfZr0RealLatched;
+   reg [ROT_BITS-1:0]                         mfZr1RealLatched;     
 
 always @(posedge clk) begin
     if (symEn) begin
@@ -101,28 +101,30 @@ always @(posedge clk) begin
        mf1Acs1 <= !symEnEven ? mfPr1Real : mfMr3Real;
        mf1Acs2 <= !symEnEven ? mfPr3Real : mfMr1Real;
        mf1Acs3 <= !symEnEven ? mfMr2Real : mfPr0Real;
-       mfZr3RealTmp <= mfZr3Real;
-       mfZr2RealTmp <= mfZr2Real;
-       mfZr0RealTmp <= mfZr0Real;
-       mfZr1RealTmp <= mfZr1Real;     
-       mfZr3RealLatched <= mfZr3RealTmp;
-       mfZr2RealLatched <= mfZr2RealTmp;
-       mfZr0RealLatched <= mfZr0RealTmp;
-       mfZr1RealLatched <= mfZr1RealTmp;     
+       mfZr3RealLatched <= mfZr3Real;
+       mfZr2RealLatched <= mfZr2Real;
+       mfZr0RealLatched <= mfZr0Real;
+       mfZr1RealLatched <= mfZr1Real;     
+
+
     end
 end
- 
+
    // Imag
-reg     [ROT_BITS-1:0]  mf1Acs0Im;
-reg     [ROT_BITS-1:0]  mf1Acs1Im;
-reg     [ROT_BITS-1:0]  mf1Acs2Im;
-reg     [ROT_BITS-1:0]  mf1Acs3Im;
+reg     [ROT_BITS-1:0]  mf1Acs0Im, mfZr3ImagLatched;
+reg     [ROT_BITS-1:0]  mf1Acs1Im, mfZr2ImagLatched;
+reg     [ROT_BITS-1:0]  mf1Acs2Im, mfZr0ImagLatched;
+reg     [ROT_BITS-1:0]  mf1Acs3Im, mfZr1ImagLatched;
 always @(posedge clk) begin
     if (symEn) begin
-        mf1Acs0Im <= !symEnEven ? mfMr0Imag : mfPr2Imag;
-        mf1Acs1Im <= !symEnEven ? mfPr1Imag : mfMr3Imag;
-        mf1Acs2Im <= !symEnEven ? mfPr3Imag : mfMr1Imag;
-        mf1Acs3Im <= !symEnEven ? mfMr2Imag : mfPr0Imag;
+       mf1Acs0Im <= !symEnEven ? mfMr0Imag : mfPr2Imag;
+       mf1Acs1Im <= !symEnEven ? mfPr1Imag : mfMr3Imag;
+       mf1Acs2Im <= !symEnEven ? mfPr3Imag : mfMr1Imag;
+       mf1Acs3Im <= !symEnEven ? mfMr2Imag : mfPr0Imag;
+       mfZr3ImagLatched <= mfZr3Imag;
+       mfZr2ImagLatched <= mfZr2Imag;
+       mfZr0ImagLatched <= mfZr0Imag;
+       mfZr1ImagLatched <= mfZr1Imag;     
         end
     end
    `else
@@ -142,6 +144,10 @@ always @(posedge clk) begin
    wire [ROT_BITS-1:0]       mfZr2RealLatched = mfZr2Real;
    wire [ROT_BITS-1:0]       mfZr0RealLatched = mfZr0Real;
    wire [ROT_BITS-1:0]       mfZr1RealLatched = mfZr1Real;     
+   wire [ROT_BITS-1:0]       mfZr3ImagLatched = mfZr3Imag;
+   wire [ROT_BITS-1:0]       mfZr2ImagLatched = mfZr2Imag;
+   wire [ROT_BITS-1:0]       mfZr0ImagLatched = mfZr0Imag;
+   wire [ROT_BITS-1:0]       mfZr1ImagLatched = mfZr1Imag;     
   
   `endif
    
@@ -152,11 +158,11 @@ always @(posedge clk) begin
    wire [size+4-1:0]     acc1Acs3 = symEnEven ? accMetOut[1][(size-1)+4:0] : accMetOut[2][(size-1)+4:0];
 
       
-   //                                                                                                   MF 1                    MF 0                  ACC 1                                 ACC 0                                                                                                                      IMAG MF 1               IMAG MF 0                                                                       
-   acs #(size, ROT_BITS) acs0  (.clk(clk), .reset(acsReset), .symEn(symEn), .decayFactor(decayFactor), .out1PtReal(mf1Acs0), .out0PtReal(mfZr3RealLatched), .accMet1(acc1Acs0), .accMet2(accMetOut[0][(size-1)+4:0]), .accMetOut(accMetOut[0][(size-1)+4:0]), .selOut(sel[0]), .normalizeIn(normalizeIn), .normalizeOut(s0), .out1PtImag(mf1Acs0Im), .out0PtImag(mfZr3Imag), .outImag(out1Imag) );
-   acs #(size, ROT_BITS) acs1  (.clk(clk), .reset(acsReset), .symEn(symEn), .decayFactor(decayFactor), .out1PtReal(mf1Acs1), .out0PtReal(mfZr2RealLatched), .accMet1(acc1Acs1), .accMet2(accMetOut[1][(size-1)+4:0]), .accMetOut(accMetOut[1][(size-1)+4:0]), .selOut(sel[1]), .normalizeIn(normalizeIn), .normalizeOut(s1), .out1PtImag(mf1Acs1Im), .out0PtImag(mfZr2Imag), .outImag(out2Imag) );
-   acs #(size, ROT_BITS) acs2  (.clk(clk), .reset(acsReset), .symEn(symEn), .decayFactor(decayFactor), .out1PtReal(mf1Acs2), .out0PtReal(mfZr0RealLatched), .accMet1(acc1Acs2), .accMet2(accMetOut[2][(size-1)+4:0]), .accMetOut(accMetOut[2][(size-1)+4:0]), .selOut(sel[2]), .normalizeIn(normalizeIn), .normalizeOut(s2), .out1PtImag(mf1Acs2Im), .out0PtImag(mfZr0Imag), .outImag(out3Imag) );
-   acs #(size, ROT_BITS) acs3  (.clk(clk), .reset(acsReset), .symEn(symEn), .decayFactor(decayFactor), .out1PtReal(mf1Acs3), .out0PtReal(mfZr1RealLatched), .accMet1(acc1Acs3), .accMet2(accMetOut[3][(size-1)+4:0]), .accMetOut(accMetOut[3][(size-1)+4:0]), .selOut(sel[3]), .normalizeIn(normalizeIn), .normalizeOut(s3), .out1PtImag(mf1Acs3Im), .out0PtImag(mfZr1Imag), .outImag(out4Imag) );
+   //                                                                                                   MF 1                    MF 0                  ACC 1                                 ACC 0                                                                                                                         IMAG MF 1               IMAG MF 0                                                                       
+   acs #(size, ROT_BITS) acs0  (.clk(clk), .reset(acsReset), .symEn(symEn), .decayFactor(decayFactor), .out1PtReal(mf1Acs0), .out0PtReal(mfZr3RealLatched), .accMet1(acc1Acs0), .accMet2(accMetOut[0][(size-1)+4:0]), .accMetOut(accMetOut[0][(size-1)+4:0]), .selOut(sel[0]), .normalizeIn(normalizeIn), .normalizeOut(s0), .out1PtImag(mf1Acs0Im), .out0PtImag(mfZr3ImagLatched), .outImag(out1Imag) );
+   acs #(size, ROT_BITS) acs1  (.clk(clk), .reset(acsReset), .symEn(symEn), .decayFactor(decayFactor), .out1PtReal(mf1Acs1), .out0PtReal(mfZr2RealLatched), .accMet1(acc1Acs1), .accMet2(accMetOut[1][(size-1)+4:0]), .accMetOut(accMetOut[1][(size-1)+4:0]), .selOut(sel[1]), .normalizeIn(normalizeIn), .normalizeOut(s1), .out1PtImag(mf1Acs1Im), .out0PtImag(mfZr2ImagLatched), .outImag(out2Imag) );
+   acs #(size, ROT_BITS) acs2  (.clk(clk), .reset(acsReset), .symEn(symEn), .decayFactor(decayFactor), .out1PtReal(mf1Acs2), .out0PtReal(mfZr0RealLatched), .accMet1(acc1Acs2), .accMet2(accMetOut[2][(size-1)+4:0]), .accMetOut(accMetOut[2][(size-1)+4:0]), .selOut(sel[2]), .normalizeIn(normalizeIn), .normalizeOut(s2), .out1PtImag(mf1Acs2Im), .out0PtImag(mfZr0ImagLatched), .outImag(out3Imag) );
+   acs #(size, ROT_BITS) acs3  (.clk(clk), .reset(acsReset), .symEn(symEn), .decayFactor(decayFactor), .out1PtReal(mf1Acs3), .out0PtReal(mfZr1RealLatched), .accMet1(acc1Acs3), .accMet2(accMetOut[3][(size-1)+4:0]), .accMetOut(accMetOut[3][(size-1)+4:0]), .selOut(sel[3]), .normalizeIn(normalizeIn), .normalizeOut(s3), .out1PtImag(mf1Acs3Im), .out0PtImag(mfZr1ImagLatched), .outImag(out4Imag) );
 
   
    // For the SOQPSK mode we have only 4 states so we don't need the large maxMetric module
@@ -265,7 +271,6 @@ always @(posedge clk) begin
    real                phErr_REAL;   
    always @(phaseError) phErr_REAL = $itor($signed(phaseError))/(2**ROT_BITS);
 
-
    always @(posedge clk)begin
       if(symEn)begin                               
          //$display("%f\t%d", phErr_REAL, $signed(phaseError));
@@ -283,13 +288,13 @@ always @(posedge clk) begin
            if (symEn) begin
               case ( index ) // selecting only the even imaginary parts
                 0 : phaseError <= out1Imag_1dly ;
-                2 : phaseError <= out3Imag_1dly ;
                 1 : phaseError <= out2Imag_1dly ;
+                2 : phaseError <= out3Imag_1dly ;
                 3 : phaseError <= out4Imag_1dly ;
                 default: phaseError <= 0;
               endcase
            end
         end
      end
-
+   
 endmodule

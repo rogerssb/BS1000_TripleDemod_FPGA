@@ -74,15 +74,10 @@ module traceBackSoqpsk
      end
          
 
-   //assign decision = sel_1dly[nState];
- 
-   // This portion of the code includes the decoding of the "new" soqpsk waveform
-   // If simulating agenst the origenal testbench you need to checkout the previous version of this file
-   // rev134 would work for the traceback
    reg decisionTmp;
    always @(symEnEven or nState )
      begin
-        if (!symEnEven) begin // Odd state
+        if (symEnEven) begin // Odd state
            if (nState==2'b01  || nState==2'b10) begin
               decisionTmp <= !sel_1dly[nState]; //invert the decision
            end

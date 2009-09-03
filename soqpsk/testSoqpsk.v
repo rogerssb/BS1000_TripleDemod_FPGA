@@ -19,22 +19,22 @@ reg symEn,sym2xEn;
 
 
 trellisSoqpsk uut
-(
-    .clk(clk), .reset(reset), .symEn(symEn), .sym2xEn(sym2xEn), 
-    .iIn(din[57:40]), .qIn(din[17:0]), 
-    .wr0(), .wr1(), .wr2(), .wr3(), 
-    .addr(), 
-    .din(), .dout(), 
-    .dac0Select(), .dac1Select(), .dac2Select(), 
-    .dac0Sync(), 
-    .dac0Data(), 
-    .dac1Sync(), 
-    .dac1Data(), 
-    .dac2Sync(), 
-    .dac2Data(), 
-    .decision(decision)
-	//.sym2xEnDly(sym2xEnDly)
- );
+  (
+   .clk(clk), .reset(reset), .symEn(symEn), .sym2xEn(sym2xEn), 
+   .iIn(din[57:40]), .qIn(din[17:0]), 
+   .wr0(), .wr1(), .wr2(), .wr3(), 
+   .addr(), 
+   .din(), .dout(), 
+   .dac0Select(), .dac1Select(), .dac2Select(), 
+   .dac0Sync(), 
+   .dac0Data(), 
+   .dac1Sync(), 
+   .dac1Data(), 
+   .dac2Sync(), 
+   .dac2Data(), 
+   .decision(decision),
+   .ternarySymEnOut(ternarySymEnOut)
+   );
  
 wire testDec1;
 
