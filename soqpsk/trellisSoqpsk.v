@@ -11,6 +11,8 @@
 `timescale 1ns/1ps
 `include "../addressMap.v"
 
+`define BYPASS_LOOP
+
 module trellisSoqpsk
   (
    clk,reset,symEn,sym2xEn,
@@ -27,7 +29,7 @@ module trellisSoqpsk
    dac2Data,
    decision,
    ternarySymEnOut,
-   //ternarySym2xEnOut
+   ternarySym2xEnOut
    );
    
    parameter size = 8;
@@ -53,7 +55,7 @@ module trellisSoqpsk
    output [17:0] dac2Data;
    output        decision;
    output        ternarySymEnOut;
-   //output        ternarySym2xEnOut;
+   output        ternarySym2xEnOut;
    
    
    wire [ROT_BITS-1:0] phaseError;
@@ -70,7 +72,7 @@ module trellisSoqpsk
       .sym2xEn(sym2xEn),
       .iIn(iIn),
       .qIn(qIn),
-      .phaseError(phErrShft),
+      .phaseError(phaseError[9:2]),
       .wr0(wr0),
       .wr1(wr1),
       .wr2(wr2),
@@ -81,8 +83,14 @@ module trellisSoqpsk
       .iOut(carrierLoopIOut),
       .qOut(carrierLoopQOut),
       .symEnDly(symEnDly),
+      `ifdef BYPASS_LOOP
+      .sym2xEnDly()
+      );
+    assign ternarySymEnOut = sym2xEn;
+      `else
       .sym2xEnDly(ternarySymEnOut)
       );
+      `endif
 
 `ifdef SIMULATE
    real                phErrReal;
@@ -90,11 +98,14 @@ module trellisSoqpsk
 `endif
    
 
-
+   
 `ifdef SIMULATE
    real                carrierLoopIOut_REAL, carrierLoopQOut_REAL;
    always @(carrierLoopIOut) carrierLoopIOut_REAL = $itor($signed(carrierLoopIOut))/(2**17);
    always @(carrierLoopQOut) carrierLoopQOut_REAL = $itor($signed(carrierLoopQOut))/(2**17);
+   real iInReal,qInReal;
+   always @(iIn) iInReal = $itor($signed(iIn))/(2**17);
+   always @(qIn) qInReal = $itor($signed(qIn))/(2**17);
 `endif
 
    
@@ -105,12 +116,20 @@ module trellisSoqpsk
                       mfzQSr0, mfzQSr1, mfzQSr2, mfzQSr3, mfzQSr4;
    always @(posedge clk) begin
       if (ternarySymEnOut) begin
+         `ifdef BYPASS_LOOP
+         mfzISr0  <=  iIn;
+         `else
          mfzISr0  <=  carrierLoopIOut;
+         `endif
          mfzISr1  <=  mfzISr0;
          mfzISr2  <=  mfzISr1;
          mfzISr3  <=  mfzISr2; 
          mfzISr4  <=  mfzISr3; 
+         `ifdef BYPASS_LOOP
+         mfzQSr0  <=  qIn;
+         `else
          mfzQSr0  <=  carrierLoopQOut;
+         `endif
          mfzQSr1  <=  mfzQSr0;
          mfzQSr2  <=  mfzQSr1;
          mfzQSr3  <=  mfzQSr2; 
@@ -126,10 +145,16 @@ module trellisSoqpsk
      (
       .clk     (clk              ), 
       .reset   (reset            ), 
-      .symEn   (symEnDly         ), 
       .sym2xEn (ternarySymEnOut       ),
+      `ifdef BYPASS_LOOP
+      .symEn   (symEn         ), 
+      .iIn     (iIn  ),
+      .qIn     (qIn  ),
+      `else
+      .symEn   (symEnDly         ), 
       .iIn     (carrierLoopIOut  ),
       .qIn     (carrierLoopQOut  ),
+      `endif
       .iOut    (mfmI             ),
       .qOut    (mfmQ             )
       );
@@ -140,14 +165,20 @@ module trellisSoqpsk
      (
       .clk     (clk              ), 
       .reset   (reset            ), 
-      .symEn   (symEnDly         ), 
       .sym2xEn (ternarySymEnOut       ),
+      `ifdef BYPASS_LOOP
+      .symEn   (symEn         ), 
+      .iIn     (iIn  ),
+      .qIn     (qIn  ),
+      `else
+      .symEn   (symEnDly         ), 
       .iIn     (carrierLoopIOut  ),
       .qIn     (carrierLoopQOut  ),
+      `endif
       .iOut    (mfpI             ),
       .qOut    (mfpQ             )
       );
-        
+
    // Rotations
    wire [ROT_BITS-1:0] rotMfz0Real, rotMfz1Real, rotMfz2Real, rotMfz3Real,  // 4 real part rotated "match filter zero" outputs
                        rotMfm0Real, rotMfm1Real, rotMfm2Real, rotMfm3Real,  // 4 real part rotated "match filter minus" outputs
@@ -257,12 +288,12 @@ reg     [7:0]   decayFactor;
 soqpskViterbi #(size, ROT_BITS) soqpskViterbi
    (
     // For the SOQPSK mode the there is one sample per symbol and there for the faster sym2xEn is used as symEn
-    .clk(clk), .reset(reset), .symEn(ternarySymEnOut), 
-	`ifdef ALDEC_SIM
-	.decayFactor(8'hff),
-	`else
+    .clk(clk), .reset(reset), .symEn(ternarySymEnOut),
+        `ifdef ALDEC_SIM
+    .decayFactor(8'hff),
+        `else
     .decayFactor(decayFactor),
-	`endif
+        `endif
     .mfZr0Real(rotMfz0RealOut), .mfPr0Real(rotMfp0RealOut), .mfMr0Real(rotMfm0RealOut),
     .mfZr1Real(rotMfz1RealOut), .mfPr1Real(rotMfp1RealOut), .mfMr1Real(rotMfm1RealOut),
     .mfZr2Real(rotMfz2RealOut), .mfPr2Real(rotMfp2RealOut), .mfMr2Real(rotMfm2RealOut),
@@ -302,11 +333,11 @@ soqpskViterbi #(size, ROT_BITS) soqpskViterbi
 // This is a kludge to create a 2x clock enable from the 1x clock enable to satisfy the design
 // of the pre-existing line decoder. This design assumes at least 3 clocks between each 1x clock
 // enable.
-//reg se0;
-//assign ternarySym2xEnOut = se0 | ternarySymEnOut;
-//always @(posedge clk) begin
-//    se0 <= ternarySymEnOut;
-//    end
+reg se0;
+assign ternarySym2xEnOut = se0 | ternarySymEnOut;
+always @(posedge clk) begin
+    se0 <= ternarySymEnOut;
+    end
 
    
 /************************ Trellis Register Definitions ************************/
@@ -369,11 +400,19 @@ reg     [17:0]  dac2Data;
 always @(posedge clk) begin
     case (dac0Select) 
         `DAC_TRELLIS_I: begin
+            `ifdef BYPASS_LOOP
+            dac0Data <= iIn;
+            `else
             dac0Data <= carrierLoopIOut;
+            `endif
             dac0Sync <= ternarySymEnOut;
             end
         `DAC_TRELLIS_Q: begin
+            `ifdef BYPASS_LOOP
+            dac0Data <= qIn;
+            `else
             dac0Data <= carrierLoopQOut;
+            `endif
             dac0Sync <= ternarySymEnOut;
             end
         `DAC_TRELLIS_PHERR: begin
@@ -392,11 +431,19 @@ always @(posedge clk) begin
 
     case (dac1Select) 
         `DAC_TRELLIS_I: begin
+            `ifdef BYPASS_LOOP
+            dac1Data <= iIn;
+            `else
             dac1Data <= carrierLoopIOut;
+            `endif
             dac1Sync <= ternarySymEnOut;
             end
         `DAC_TRELLIS_Q: begin
+            `ifdef BYPASS_LOOP
+            dac1Data <= qIn;
+            `else
             dac1Data <= carrierLoopQOut;
+            `endif
             dac1Sync <= ternarySymEnOut;
             end
         `DAC_TRELLIS_PHERR: begin
@@ -415,11 +462,19 @@ always @(posedge clk) begin
 
     case (dac2Select) 
         `DAC_TRELLIS_I: begin
+            `ifdef BYPASS_LOOP
+            dac2Data <= iIn;
+            `else
             dac2Data <= carrierLoopIOut;
+            `endif
             dac2Sync <= ternarySymEnOut;
             end
         `DAC_TRELLIS_Q: begin
+            `ifdef BYPASS_LOOP
+            dac2Data <= qIn;
+            `else
             dac2Data <= carrierLoopQOut;
+            `endif
             dac2Sync <= ternarySymEnOut;
             end
         `DAC_TRELLIS_PHERR: begin

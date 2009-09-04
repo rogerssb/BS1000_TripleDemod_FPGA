@@ -59,6 +59,7 @@ module traceBackSoqpsk
      end
    
    reg [3:0] sel_1dly;
+   reg decisionTmp;
    always @(posedge clk)
      begin
         if (reset) begin
@@ -74,7 +75,6 @@ module traceBackSoqpsk
      end
          
 
-   reg decisionTmp;
    always @(symEnEven or nState )
      begin
         if (symEnEven) begin // Odd state

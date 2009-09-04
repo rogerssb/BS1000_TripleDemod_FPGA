@@ -41,7 +41,11 @@ module soqpskViterbi
    output                decision;
    output [ROT_BITS-1:0] phaseError;
    output [ROT_BITS-1:0] devError;
-   wire [(size-1)+4:0]   accMetOut [0:3];
+//   wire [(size-1)+4:0]   accMetOut [0:3];
+   wire [(size-1)+4:0]   accMetOut0;
+   wire [(size-1)+4:0]   accMetOut1;
+   wire [(size-1)+4:0]   accMetOut2;
+   wire [(size-1)+4:0]   accMetOut3;
    wire [3:0]            sel;
    reg [3:0]             sel_1dly, sel_2dly, sel_3dly;
    wire[4:0]             indexTmp;
@@ -62,8 +66,8 @@ module soqpskViterbi
    // in simulation we have to reset the accumulatios when the input data is known.
    // simReset is toggled in the test bench
    reg                   simReset;
-   wire                  acsReset = simReset;
-   //wire                 acsReset = reset;
+   //wire                  acsReset = simReset;
+   wire                 acsReset = reset;
 `else
    wire                  acsReset = reset;
 `endif
@@ -109,7 +113,7 @@ always @(posedge clk) begin
 
     end
 end
-
+ 
    // Imag
 reg     [ROT_BITS-1:0]  mf1Acs0Im, mfZr3ImagLatched;
 reg     [ROT_BITS-1:0]  mf1Acs1Im, mfZr2ImagLatched;
@@ -117,10 +121,10 @@ reg     [ROT_BITS-1:0]  mf1Acs2Im, mfZr0ImagLatched;
 reg     [ROT_BITS-1:0]  mf1Acs3Im, mfZr1ImagLatched;
 always @(posedge clk) begin
     if (symEn) begin
-       mf1Acs0Im <= !symEnEven ? mfMr0Imag : mfPr2Imag;
-       mf1Acs1Im <= !symEnEven ? mfPr1Imag : mfMr3Imag;
-       mf1Acs2Im <= !symEnEven ? mfPr3Imag : mfMr1Imag;
-       mf1Acs3Im <= !symEnEven ? mfMr2Imag : mfPr0Imag;
+        mf1Acs0Im <= !symEnEven ? mfMr0Imag : mfPr2Imag;
+        mf1Acs1Im <= !symEnEven ? mfPr1Imag : mfMr3Imag;
+        mf1Acs2Im <= !symEnEven ? mfPr3Imag : mfMr1Imag;
+        mf1Acs3Im <= !symEnEven ? mfMr2Imag : mfPr0Imag;
        mfZr3ImagLatched <= mfZr3Imag;
        mfZr2ImagLatched <= mfZr2Imag;
        mfZr0ImagLatched <= mfZr0Imag;
@@ -152,17 +156,17 @@ always @(posedge clk) begin
   `endif
    
    // A mux is placed in front of each accumulated metric 1 rotation input on the ACS (add compare select module). The mux selects depending upon even or odd symEn interval
-   wire [size+4-1:0]     acc1Acs0 = symEnEven ? accMetOut[2][(size-1)+4:0] : accMetOut[1][(size-1)+4:0];
-   wire [size+4-1:0]     acc1Acs1 = symEnEven ? accMetOut[3][(size-1)+4:0] : accMetOut[0][(size-1)+4:0];
-   wire [size+4-1:0]     acc1Acs2 = symEnEven ? accMetOut[0][(size-1)+4:0] : accMetOut[3][(size-1)+4:0];
-   wire [size+4-1:0]     acc1Acs3 = symEnEven ? accMetOut[1][(size-1)+4:0] : accMetOut[2][(size-1)+4:0];
+   wire [size+4-1:0]     acc1Acs0 = symEnEven ? accMetOut2[(size-1)+4:0] : accMetOut1[(size-1)+4:0];
+   wire [size+4-1:0]     acc1Acs1 = symEnEven ? accMetOut3[(size-1)+4:0] : accMetOut0[(size-1)+4:0];
+   wire [size+4-1:0]     acc1Acs2 = symEnEven ? accMetOut0[(size-1)+4:0] : accMetOut3[(size-1)+4:0];
+   wire [size+4-1:0]     acc1Acs3 = symEnEven ? accMetOut1[(size-1)+4:0] : accMetOut2[(size-1)+4:0];
 
       
-   //                                                                                                   MF 1                    MF 0                  ACC 1                                 ACC 0                                                                                                                         IMAG MF 1               IMAG MF 0                                                                       
-   acs #(size, ROT_BITS) acs0  (.clk(clk), .reset(acsReset), .symEn(symEn), .decayFactor(decayFactor), .out1PtReal(mf1Acs0), .out0PtReal(mfZr3RealLatched), .accMet1(acc1Acs0), .accMet2(accMetOut[0][(size-1)+4:0]), .accMetOut(accMetOut[0][(size-1)+4:0]), .selOut(sel[0]), .normalizeIn(normalizeIn), .normalizeOut(s0), .out1PtImag(mf1Acs0Im), .out0PtImag(mfZr3ImagLatched), .outImag(out1Imag) );
-   acs #(size, ROT_BITS) acs1  (.clk(clk), .reset(acsReset), .symEn(symEn), .decayFactor(decayFactor), .out1PtReal(mf1Acs1), .out0PtReal(mfZr2RealLatched), .accMet1(acc1Acs1), .accMet2(accMetOut[1][(size-1)+4:0]), .accMetOut(accMetOut[1][(size-1)+4:0]), .selOut(sel[1]), .normalizeIn(normalizeIn), .normalizeOut(s1), .out1PtImag(mf1Acs1Im), .out0PtImag(mfZr2ImagLatched), .outImag(out2Imag) );
-   acs #(size, ROT_BITS) acs2  (.clk(clk), .reset(acsReset), .symEn(symEn), .decayFactor(decayFactor), .out1PtReal(mf1Acs2), .out0PtReal(mfZr0RealLatched), .accMet1(acc1Acs2), .accMet2(accMetOut[2][(size-1)+4:0]), .accMetOut(accMetOut[2][(size-1)+4:0]), .selOut(sel[2]), .normalizeIn(normalizeIn), .normalizeOut(s2), .out1PtImag(mf1Acs2Im), .out0PtImag(mfZr0ImagLatched), .outImag(out3Imag) );
-   acs #(size, ROT_BITS) acs3  (.clk(clk), .reset(acsReset), .symEn(symEn), .decayFactor(decayFactor), .out1PtReal(mf1Acs3), .out0PtReal(mfZr1RealLatched), .accMet1(acc1Acs3), .accMet2(accMetOut[3][(size-1)+4:0]), .accMetOut(accMetOut[3][(size-1)+4:0]), .selOut(sel[3]), .normalizeIn(normalizeIn), .normalizeOut(s3), .out1PtImag(mf1Acs3Im), .out0PtImag(mfZr1ImagLatched), .outImag(out4Imag) );
+   //                                                                                                   MF 1                    MF 0                  ACC 1                                 ACC 0                                                                                                                      IMAG MF 1               IMAG MF 0                                                                       
+   acs #(size, ROT_BITS) acs0  (.clk(clk), .reset(acsReset), .symEn(symEn), .decayFactor(decayFactor), .out1PtReal(mf1Acs0), .out0PtReal(mfZr3RealLatched), .accMet1(acc1Acs0), .accMet2(accMetOut0[(size-1)+4:0]), .accMetOut(accMetOut0[(size-1)+4:0]), .selOut(sel[0]), .normalizeIn(normalizeIn), .normalizeOut(s0), .out1PtImag(mf1Acs0Im), .out0PtImag(mfZr3ImagLatched), .outImag(out1Imag) );
+   acs #(size, ROT_BITS) acs1  (.clk(clk), .reset(acsReset), .symEn(symEn), .decayFactor(decayFactor), .out1PtReal(mf1Acs1), .out0PtReal(mfZr2RealLatched), .accMet1(acc1Acs1), .accMet2(accMetOut1[(size-1)+4:0]), .accMetOut(accMetOut1[(size-1)+4:0]), .selOut(sel[1]), .normalizeIn(normalizeIn), .normalizeOut(s1), .out1PtImag(mf1Acs1Im), .out0PtImag(mfZr2ImagLatched), .outImag(out2Imag) );
+   acs #(size, ROT_BITS) acs2  (.clk(clk), .reset(acsReset), .symEn(symEn), .decayFactor(decayFactor), .out1PtReal(mf1Acs2), .out0PtReal(mfZr0RealLatched), .accMet1(acc1Acs2), .accMet2(accMetOut2[(size-1)+4:0]), .accMetOut(accMetOut2[(size-1)+4:0]), .selOut(sel[2]), .normalizeIn(normalizeIn), .normalizeOut(s2), .out1PtImag(mf1Acs2Im), .out0PtImag(mfZr0ImagLatched), .outImag(out3Imag) );
+   acs #(size, ROT_BITS) acs3  (.clk(clk), .reset(acsReset), .symEn(symEn), .decayFactor(decayFactor), .out1PtReal(mf1Acs3), .out0PtReal(mfZr1RealLatched), .accMet1(acc1Acs3), .accMet2(accMetOut3[(size-1)+4:0]), .accMetOut(accMetOut3[(size-1)+4:0]), .selOut(sel[3]), .normalizeIn(normalizeIn), .normalizeOut(s3), .out1PtImag(mf1Acs3Im), .out0PtImag(mfZr1ImagLatched), .outImag(out4Imag) );
 
   
    // For the SOQPSK mode we have only 4 states so we don't need the large maxMetric module
@@ -170,10 +174,10 @@ always @(posedge clk) begin
      (
       .clk    (clk         ), 
       .reset  (acsReset    ),
-      .a      (accMetOut[0]), 
-      .b      (accMetOut[1]), 
-      .c      (accMetOut[2]), 
-      .d      (accMetOut[3]), 
+      .a      (accMetOut0), 
+      .b      (accMetOut1), 
+      .c      (accMetOut2), 
+      .d      (accMetOut3), 
       .index  (indexTmp    ), 
       .maxVal (            )
       );
@@ -296,5 +300,5 @@ always @(posedge clk) begin
            end
         end
      end
-   
+
 endmodule
