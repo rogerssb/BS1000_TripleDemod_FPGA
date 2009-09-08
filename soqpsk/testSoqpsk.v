@@ -49,6 +49,7 @@ always @(posedge clk) clkDiv2 = !clkDiv2;
 
 reg [79:0] readMem[20009:0];
 reg [0:0] readMemResult[10001:0];
+reg [1:0] readMemMaxIndex [1023:0];
 //reg [1:0] index;
 reg [15:0] index;  
 reg [15:0] bitIndex;  
@@ -61,37 +62,23 @@ initial begin
 reg [4:0]cnt; initial cnt = 20;
 reg cntEna;
 
-	
-// Random data
-parameter  PN17 = 16'h008e,
-           MASK17 = 16'h00ff;
-reg [15:0] sr;
-reg [4:0]  zeroCount;
-reg        randData;
-always @(negedge clk or posedge reset) begin
-    if (reset) begin
-        zeroCount <= 5'b0;
-        sr <= MASK17;
-        end
-    else if (sr[0] | (zeroCount == 5'b11111))
-        begin
-        zeroCount <= 5'h0;
-        sr <= {1'b0, sr[15:1]} ^ PN17;
-        end
-    else
-        begin
-        zeroCount <= zeroCount + 5'h1;
-        sr <= sr >> 1;
-        end
-    randData <= sr[0];
-    end
 
 reg [23:0] delaySr;
-always @(posedge clk) begin
-	delaySr <= {delaySr[22:0], simBit};
-end
+reg [1:0] delaySrMaxIndex [23:0];
+reg [1:0] resultDlyMaxIndex;
+reg [9:0] ii;
+wire indexError;
+	always @(negedge sym2xEn) begin
+	   for (ii=0; ii<20; ii=ii+1) begin
+		  delaySrMaxIndex[ii+1] <= delaySrMaxIndex[ii];		
+       end	 			  
+       delaySrMaxIndex[0] <= simMaxIndex;
+       resultDlyMaxIndex <= delaySrMaxIndex[8];
+    end
+	// Checking the max Metric index
+	assign indexError = (uut.soqpskViterbi.index != resultDlyMaxIndex) ? 1:0;
+
 reg [15:0]symEnShift;
-//always @(posedge clk)symEnShift <= {symEnShift[14:0],(sym2xEnDly_mult2 && !symEnDly_mult2)};
 always @(posedge clk)symEnShift <= {symEnShift[14:0],(sym2xEn && !symEn)};
 
 wire rotEnaTb = symEnShift[4];
@@ -104,20 +91,21 @@ always @(posedge clk) begin
 	end	
 end
 
-reg simBit;	
+reg simBit;
+reg [1:0] simMaxIndex;
 	
 always @(posedge clk)begin
    // #1;
    //if(cnt == 17) cnt <= 0;
-   if(cnt == 8) cnt <= 0;
-   //else if(cntEna) cnt <= cnt +1 + randData;
+   if(cnt == 7) cnt <= 0;
    else if(cntEna) cnt <= cnt +1;	  
    case(cnt)
      //0,8: begin 
      0,4: begin
         symEn <= 1;
         sym2xEn <= 1;
-        simBit <= readMemResult[bitIndex];
+        simBit <= readMemResult[index];
+	simMaxIndex <= readMemMaxIndex[index];
         din <= readMem[index];
 	    //if (index >= 79) begin index <= 0; end // reading in 4*20 samples then wrap around. 20 comes from the # trellis states 
         if (index >= 20000) begin index <= 0; end // reading in 4*20 samples then wrap around. 20 comes from the # trellis states
@@ -130,7 +118,8 @@ always @(posedge clk)begin
      2,6: begin
         symEn <= 0;
         sym2xEn <= 1;
-	//simBit <= readMemResult[index];
+	simBit <= readMemResult[index];
+	simMaxIndex <= readMemMaxIndex[index];
         din <= readMem[index];
 	//if (index >= 79) begin index <= 0; end // reading in 4*20 samples then wrap around. 20 comes from the # trellis states
 	if (index >= 20000) begin index <= 0; end // reading in 4*20 samples then wrap around. 20 comes from the # trellis states
@@ -150,7 +139,12 @@ end
   
 //`define ONEZERO
 //`define ALLONES
-`define RANDOM
+//`define RANDOM
+//`define A5A5
+//`define RANDOM_LONG
+//`define RANDOM_LONG_1000
+`define pn6
+//`define RANDOM_LONG_W_NOICE
 //`define RANDOM_SIM_NO_NOISE
 //`define RANDOM_SIM_NOISE
 
@@ -176,6 +170,34 @@ initial begin
             
 `ifdef RANDOM
       $readmemh("P:/semco/matlab_sim_results/soqpsk/Random/mfinputs.hex", readMem);
+`endif
+
+`ifdef RANDOM_LONG
+      $readmemh("P:/semco/matlab_sim_results/soqpsk/Random/maxIndex.txt", readMemMaxIndex);
+      $readmemh("P:/semco/matlab_sim_results/soqpsk/Random/mfinputs_long.hex", readMem);
+`endif
+
+`ifdef RANDOM_LONG_1000
+      $readmemh("P:/semco/matlab_sim_results/soqpsk/Random1000/matlabBits.txt", readMemResult);
+      $readmemh("P:/semco/matlab_sim_results/soqpsk/Random1000/maxIndex.txt", readMemMaxIndex);
+      //$readmemh("P:/semco/matlab_sim_results/soqpsk/Random1000/mfinputs.hex", readMem);
+      $readmemh("P:/semco/matlab_sim_results/soqpsk/Random1000/mfinputsDiv16.hex", readMem);
+`endif
+
+`ifdef pn6
+      $readmemh("P:/semco/matlab_sim_results/soqpsk/pn6/matlabBits.txt", readMemResult);
+      $readmemh("P:/semco/matlab_sim_results/soqpsk/pn6/maxIndex.txt", readMemMaxIndex);
+      //$readmemh("P:/semco/matlab_sim_results/soqpsk/pn6/mfinputs.hex", readMem);
+      $readmemh("P:/semco/matlab_sim_results/soqpsk/pn6/mfinputsDiv16.hex", readMem);
+`endif
+
+`ifdef RANDOM_LONG_W_NOICE																		
+      $readmemh("P:/semco/matlab_sim_results/soqpsk/RandomWith20dbNoise/maxIndex.txt", readMemMaxIndex);
+      $readmemh("P:/semco/matlab_sim_results/soqpsk/RandomWith20dbNoise/mfinputs.hex", readMem);
+`endif
+
+`ifdef A5A5
+      $readmemh("P:/semco/matlab_sim_results/soqpsk/A5A5A5/mfinputs.hex", readMem);
 `endif
 
 //`ifdef RANDOM_SIM_NO_NOISE
@@ -204,13 +226,13 @@ initial begin
   always @(posedge clk) begin
      //if (sym2xEnDly) begin	
      if (sym2xEn) begin	
-		  bertSr <= {bertSr[14:0], simBit};
-		  acsDecision <= testDec1;
-		  //if (acsDecision != bertSr[6]) begin		  // without carrier loop
-		  if (decision != bertSr[11]) begin			  // with carrierloop
-			  bitError <= bitError + 1;
-		  end
-	  end
+	bertSr <= {bertSr[14:0], simBit};
+	acsDecision <= testDec1;
+	//if (acsDecision != bertSr[6]) begin		  // without carrier loop
+	if (decision != bertSr[12]) begin			  // with carrierloop
+	   bitError <= bitError + 1;
+	end
+     end
   end
   
 			  
