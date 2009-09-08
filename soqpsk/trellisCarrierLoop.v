@@ -10,6 +10,8 @@
 
 `timescale 1ns/1ps
 `include "./addressMap.v"
+
+`define BYPASS_LOOP
            
 module trellisCarrierLoop(clk,reset,symEn,sym2xEn,
   iIn,qIn,
@@ -231,6 +233,15 @@ dds dds(
   .cosine(bReal), // Bus [17 : 0] 
   .sine(bImag)); // Bus [17 : 0] 
 
+`ifdef BYPASS_LOOP
+wire    [17:0]  iMpy,qMpy;
+cmpy18Sat cmpy18Sat(
+    .clk(clk),
+    .reset(reset),
+    .aReal(iIn),.aImag(qIn),
+    .bReal(18'h16a09),.bImag(18'h16a09),     // (1/sqrt(2)) * 131072 = 0x16a09
+    .pReal(iMpy),.pImag(qMpy));
+`else
 wire    [17:0]  iMpy,qMpy;
 cmpy18Sat cmpy18Sat(
     .clk(clk),
@@ -238,6 +249,7 @@ cmpy18Sat cmpy18Sat(
     .aReal(iIn),.aImag(qIn),
     .bReal(bReal),.bImag(bImag),
     .pReal(iMpy),.pImag(qMpy));
+`endif
 
 reg [3:0] symEnSr;
 reg [3:0] sym2xEnSr;

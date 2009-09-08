@@ -11,8 +11,6 @@
 `timescale 1ns/1ps
 `include "../addressMap.v"
 
-`define BYPASS_LOOP
-
 module trellisSoqpsk
   (
    clk,reset,symEn,sym2xEn,
@@ -83,18 +81,12 @@ module trellisSoqpsk
       .iOut(carrierLoopIOut),
       .qOut(carrierLoopQOut),
       .symEnDly(symEnDly),
-      `ifdef BYPASS_LOOP
-      .sym2xEnDly()
-      );
-    assign ternarySymEnOut = sym2xEn;
-      `else
       .sym2xEnDly(ternarySymEnOut)
       );
-      `endif
 
 `ifdef SIMULATE
    real                phErrReal;
-   always @(phErrShft) phErrReal = (phErrShft[7] ? phErrShft - 256.0 : phErrShft);
+   always @(phaseError) phErrReal = $itor($signed(phaseError))/(2**9);
 `endif
    
 
@@ -116,20 +108,12 @@ module trellisSoqpsk
                       mfzQSr0, mfzQSr1, mfzQSr2, mfzQSr3, mfzQSr4;
    always @(posedge clk) begin
       if (ternarySymEnOut) begin
-         `ifdef BYPASS_LOOP
-         mfzISr0  <=  iIn;
-         `else
          mfzISr0  <=  carrierLoopIOut;
-         `endif
          mfzISr1  <=  mfzISr0;
          mfzISr2  <=  mfzISr1;
          mfzISr3  <=  mfzISr2; 
          mfzISr4  <=  mfzISr3; 
-         `ifdef BYPASS_LOOP
-         mfzQSr0  <=  qIn;
-         `else
          mfzQSr0  <=  carrierLoopQOut;
-         `endif
          mfzQSr1  <=  mfzQSr0;
          mfzQSr2  <=  mfzQSr1;
          mfzQSr3  <=  mfzQSr2; 
@@ -146,15 +130,9 @@ module trellisSoqpsk
       .clk     (clk              ), 
       .reset   (reset            ), 
       .sym2xEn (ternarySymEnOut       ),
-      `ifdef BYPASS_LOOP
-      .symEn   (symEn         ), 
-      .iIn     (iIn  ),
-      .qIn     (qIn  ),
-      `else
       .symEn   (symEnDly         ), 
       .iIn     (carrierLoopIOut  ),
       .qIn     (carrierLoopQOut  ),
-      `endif
       .iOut    (mfmI             ),
       .qOut    (mfmQ             )
       );
@@ -166,15 +144,9 @@ module trellisSoqpsk
       .clk     (clk              ), 
       .reset   (reset            ), 
       .sym2xEn (ternarySymEnOut       ),
-      `ifdef BYPASS_LOOP
-      .symEn   (symEn         ), 
-      .iIn     (iIn  ),
-      .qIn     (qIn  ),
-      `else
       .symEn   (symEnDly         ), 
       .iIn     (carrierLoopIOut  ),
       .qIn     (carrierLoopQOut  ),
-      `endif
       .iOut    (mfpI             ),
       .qOut    (mfpQ             )
       );
@@ -400,23 +372,15 @@ reg     [17:0]  dac2Data;
 always @(posedge clk) begin
     case (dac0Select) 
         `DAC_TRELLIS_I: begin
-            `ifdef BYPASS_LOOP
-            dac0Data <= iIn;
-            `else
             dac0Data <= carrierLoopIOut;
-            `endif
             dac0Sync <= ternarySymEnOut;
             end
         `DAC_TRELLIS_Q: begin
-            `ifdef BYPASS_LOOP
-            dac0Data <= qIn;
-            `else
             dac0Data <= carrierLoopQOut;
-            `endif
             dac0Sync <= ternarySymEnOut;
             end
         `DAC_TRELLIS_PHERR: begin
-            dac0Data <= {phErrShft,10'b0};
+            dac0Data <= {phaseError,8'b0};
             dac0Sync <= ternarySymEnOut;
             end
         `DAC_TRELLIS_INDEX: begin
@@ -424,30 +388,22 @@ always @(posedge clk) begin
             dac0Sync <= ternarySymEnOut;
             end
         default: begin
-            dac0Data <= {phErrShft,10'b0};
+            dac0Data <= {phaseError,8'b0};
             dac0Sync <= ternarySymEnOut;
             end
         endcase
 
     case (dac1Select) 
         `DAC_TRELLIS_I: begin
-            `ifdef BYPASS_LOOP
-            dac1Data <= iIn;
-            `else
             dac1Data <= carrierLoopIOut;
-            `endif
             dac1Sync <= ternarySymEnOut;
             end
         `DAC_TRELLIS_Q: begin
-            `ifdef BYPASS_LOOP
-            dac1Data <= qIn;
-            `else
             dac1Data <= carrierLoopQOut;
-            `endif
             dac1Sync <= ternarySymEnOut;
             end
         `DAC_TRELLIS_PHERR: begin
-            dac1Data <= {phErrShft,10'b0};
+            dac1Data <= {phaseError,8'b0};
             dac1Sync <= ternarySymEnOut;
             end
         `DAC_TRELLIS_INDEX: begin
@@ -455,30 +411,22 @@ always @(posedge clk) begin
             dac1Sync <= ternarySymEnOut;
             end
         default: begin
-            dac1Data <= {phErrShft,10'b0};
+            dac1Data <= {phaseError,8'b0};
             dac1Sync <= ternarySymEnOut;
             end
         endcase
 
     case (dac2Select) 
         `DAC_TRELLIS_I: begin
-            `ifdef BYPASS_LOOP
-            dac2Data <= iIn;
-            `else
             dac2Data <= carrierLoopIOut;
-            `endif
             dac2Sync <= ternarySymEnOut;
             end
         `DAC_TRELLIS_Q: begin
-            `ifdef BYPASS_LOOP
-            dac2Data <= qIn;
-            `else
             dac2Data <= carrierLoopQOut;
-            `endif
             dac2Sync <= ternarySymEnOut;
             end
         `DAC_TRELLIS_PHERR: begin
-            dac2Data <= {phErrShft,10'b0};
+            dac2Data <= {phaseError,8'b0};
             dac2Sync <= ternarySymEnOut;
             end
         `DAC_TRELLIS_INDEX: begin
@@ -486,7 +434,7 @@ always @(posedge clk) begin
             dac2Sync <= ternarySymEnOut;
             end
         default: begin
-            dac2Data <= {phErrShft,10'b0};
+            dac2Data <= {phaseError,8'b0};
             dac2Sync <= ternarySymEnOut;
             end
         endcase
