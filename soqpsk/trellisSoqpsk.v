@@ -78,12 +78,17 @@ module trellisSoqpsk
       .addr(addr),
       .din(din),
       .dout(trellisLoopDout),
-      .iOut(carrierLoopIOut),
-      .qOut(carrierLoopQOut),
-      .symEnDly(),
-       .sym2xEnDly(ternarySymEnOut)
+      //.iOut(carrierLoopIOut),
+      //.qOut(carrierLoopQOut),
+      .symEnDly()
+      //.sym2xEnDly(ternarySymEnOut)
        );
 
+   assign carrierLoopIOut = iIn;
+   assign carrierLoopQOut = qIn;
+   wire   ternarySymEnOut = sym2xEn;
+   
+   
 
 `ifdef SIMULATE
    real                phErrReal;
@@ -101,12 +106,44 @@ module trellisSoqpsk
    always @(qIn) qInReal = $itor($signed(qIn))/(2**17);
 `endif
 
+
+
+//`define SYN_NETLIST_MFILT
+`ifdef SYN_NETLIST_MFILT
+//   wire [17:0] mfzI_syn,mfzQ_syn;
+//   wire [17:0] mfmI_syn,mfmQ_syn;
+//   wire [17:0] mfpI_syn,mfpQ_syn;
+//
+//   mfWrap_syn mfWrap 
+//     (
+//      .clk(clk), .reset(reset), .symEn(), .sym2xEn(ternarySymEnOut), 
+//      .mfmI(mfmI_syn), .mfmQ(mfmQ_syn), 
+//      .mfpI(mfpI_syn), .mfpQ(mfpQ_syn), 
+//      .mfzI(mfzI_syn), .mfzQ(mfzQ_syn), 
+//      .iIn(carrierLoopIOut), .qIn(carrierLoopQOut)
+//      );
+	  
+	  
+   wire [17:0] mfzI,mfzQ;
+   wire [17:0] mfmI,mfmQ;
+   wire [17:0] mfpI,mfpQ;
+
+   mfWrap_syn mfWrap 
+     (
+      .clk(clk), .reset(reset), .symEn(), .sym2xEn(ternarySymEnOut), 
+      .mfmI(mfmI), .mfmQ(mfmQ), 
+      .mfpI(mfpI), .mfpQ(mfpQ), 
+      .mfzI(mfzI), .mfzQ(mfzQ), 
+      .iIn(carrierLoopIOut), .qIn(carrierLoopQOut),
+      );
+
+`else
    
    // match filter zero (constant 1 multiply so we add 4 flops to align with "mfm" and "mfp")
    // Now due to a scaling factor in the mfilter the mfm and mfp output has to be scaled back by mult by 2, this
    // adds another flop.
-   reg [17:0]         mfzISr0, mfzISr1, mfzISr2, mfzISr3, mfzISr4, 
-                      mfzQSr0, mfzQSr1, mfzQSr2, mfzQSr3, mfzQSr4;
+   reg [17:0]         mfzISr0, mfzISr1, mfzISr2, mfzISr3, mfzISr4, mfzISr5, 
+                      mfzQSr0, mfzQSr1, mfzQSr2, mfzQSr3, mfzQSr4, mfzQSr5;
    always @(posedge clk) begin
       if (ternarySymEnOut) begin
          mfzISr0  <=  carrierLoopIOut;
@@ -114,15 +151,17 @@ module trellisSoqpsk
          mfzISr2  <=  mfzISr1;
          mfzISr3  <=  mfzISr2; 
          mfzISr4  <=  mfzISr3; 
+         mfzISr5  <=  mfzISr4; 
          mfzQSr0  <=  carrierLoopQOut;
          mfzQSr1  <=  mfzQSr0;
          mfzQSr2  <=  mfzQSr1;
          mfzQSr3  <=  mfzQSr2; 
          mfzQSr4  <=  mfzQSr3; 
+         mfzQSr5  <=  mfzQSr4; 
       end
    end
-   wire [17:0]          mfzI=mfzISr4;
-   wire [17:0]          mfzQ=mfzQSr4;
+   wire [17:0]          mfzI=mfzISr3;
+   wire [17:0]          mfzQ=mfzQSr3;
 
    // Match filter minus
    wire [17:0] mfmI,mfmQ;
@@ -136,6 +175,9 @@ module trellisSoqpsk
       .qIn     (carrierLoopQOut  ),
       .iOut    (mfmI             ),
       .qOut    (mfmQ             )
+      //.symEnDly  (symEnDly         ),
+      //.sym2xEnDly(ternarySymEnOut       )
+
       );
 
    // Match filter plus
@@ -151,7 +193,10 @@ module trellisSoqpsk
       .iOut    (mfpI             ),
       .qOut    (mfpQ             )
       );
-
+	
+`endif	
+	  
+	  
    // Rotations
    wire [ROT_BITS-1:0] rotMfz0Real, rotMfz1Real, rotMfz2Real, rotMfz3Real,  // 4 real part rotated "match filter zero" outputs
                        rotMfm0Real, rotMfm1Real, rotMfm2Real, rotMfm3Real,  // 4 real part rotated "match filter minus" outputs
@@ -257,7 +302,33 @@ module trellisSoqpsk
 
    wire    [1:0]   index;
 
-reg     [7:0]   decayFactor;   
+reg     [7:0]   decayFactor;   	  
+//`define SYN_NETLIST
+`ifdef SYN_NETLIST
+soqpskViterbi_syn #(size, ROT_BITS) soqpskViterbi
+   (
+    // For the SOQPSK mode the there is one sample per symbol and there for the faster sym2xEn is used as symEn
+    .clk(clk), .reset(reset), .symEn(ternarySymEnOut),
+        `ifdef ALDEC_SIM
+    .decayFactor(8'hff),
+        `else
+    .decayFactor(decayFactor),
+        `endif
+    .mfZr0Real(rotMfz0RealOut), .mfPr0Real(rotMfp0RealOut), .mfMr0Real(rotMfm0RealOut),
+    .mfZr1Real(rotMfz1RealOut), .mfPr1Real(rotMfp1RealOut), .mfMr1Real(rotMfm1RealOut),
+    .mfZr2Real(rotMfz2RealOut), .mfPr2Real(rotMfp2RealOut), .mfMr2Real(rotMfm2RealOut),
+    .mfZr3Real(rotMfz3RealOut), .mfPr3Real(rotMfp3RealOut), .mfMr3Real(rotMfm3RealOut),
+    .mfZr0Imag(rotMfz0ImagOut), .mfPr0Imag(rotMfp0ImagOut), .mfMr0Imag(rotMfm0ImagOut),
+    .mfZr1Imag(rotMfz1ImagOut), .mfPr1Imag(rotMfp1ImagOut), .mfMr1Imag(rotMfm1ImagOut),
+    .mfZr2Imag(rotMfz2ImagOut), .mfPr2Imag(rotMfp2ImagOut), .mfMr2Imag(rotMfm2ImagOut),
+    .mfZr3Imag(rotMfz3ImagOut), .mfPr3Imag(rotMfp3ImagOut), .mfMr3Imag(rotMfm3ImagOut),
+    .index(index),
+    .decision(decision),
+    .phaseError(phaseError),
+    .devError()
+    );
+`else
+	
 soqpskViterbi #(size, ROT_BITS) soqpskViterbi
    (
     // For the SOQPSK mode the there is one sample per symbol and there for the faster sym2xEn is used as symEn
@@ -280,6 +351,8 @@ soqpskViterbi #(size, ROT_BITS) soqpskViterbi
     .phaseError(phaseError),
     .devError()
     );
+
+`endif
 
    reg [7:0]            dataBits;
   

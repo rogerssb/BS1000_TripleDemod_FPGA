@@ -17,7 +17,28 @@ reg clkDiv2;
 reg [79:0]din;
 reg symEn,sym2xEn;
 
-
+//`define SYN_NETLIST_WHOLE
+`ifdef SYN_NETLIST_WHOLE
+trellisSoqpsk_syn uut
+  (
+   .clk(clk), .reset(reset), .symEn(symEn), .sym2xEn(sym2xEn), 
+   .iIn(din[57:40]), .qIn(din[17:0]), 
+   .wr0(), .wr1(), .wr2(), .wr3(), 
+   .addr(), 
+   .din(), .dout(), 
+   .dac0Select(), .dac1Select(), .dac2Select(), 
+   .dac0Sync(), 
+   .dac0Data(), 
+   .dac1Sync(), 
+   .dac1Data(), 
+   .dac2Sync(), 
+   .dac2Data(), 
+   .decision(decision),
+   .ternarySymEnOut(ternarySymEnOut)
+   );
+   
+`else
+	
 trellisSoqpsk uut
   (
    .clk(clk), .reset(reset), .symEn(symEn), .sym2xEn(sym2xEn), 
@@ -35,7 +56,9 @@ trellisSoqpsk uut
    .decision(decision),
    .ternarySymEnOut(ternarySymEnOut)
    );
- 
+   
+`endif
+
 wire testDec1;
 
 initial clk = 0;
@@ -76,7 +99,7 @@ wire indexError;
        resultDlyMaxIndex <= delaySrMaxIndex[8];
     end
 	// Checking the max Metric index
-	assign indexError = (uut.soqpskViterbi.index != resultDlyMaxIndex) ? 1:0;
+	//assign indexError = (uut.soqpskViterbi.index != resultDlyMaxIndex) ? 1:0;
 
 reg [15:0]symEnShift;
 always @(posedge clk)symEnShift <= {symEnShift[14:0],(sym2xEn && !symEn)};
@@ -97,7 +120,7 @@ reg [1:0] simMaxIndex;
 always @(posedge clk)begin
    // #1;
    //if(cnt == 17) cnt <= 0;
-   if(cnt == 7) cnt <= 0;
+   if(cnt == 10) cnt <= 0;
    else if(cntEna) cnt <= cnt +1;	  
    case(cnt)
      //0,8: begin 
@@ -105,7 +128,7 @@ always @(posedge clk)begin
         symEn <= 1;
         sym2xEn <= 1;
         simBit <= readMemResult[index];
-	simMaxIndex <= readMemMaxIndex[index];
+        simMaxIndex <= readMemMaxIndex[index];
         din <= readMem[index];
 	    //if (index >= 79) begin index <= 0; end // reading in 4*20 samples then wrap around. 20 comes from the # trellis states 
         if (index >= 20000) begin index <= 0; end // reading in 4*20 samples then wrap around. 20 comes from the # trellis states
@@ -118,8 +141,8 @@ always @(posedge clk)begin
      2,6: begin
         symEn <= 0;
         sym2xEn <= 1;
-	simBit <= readMemResult[index];
-	simMaxIndex <= readMemMaxIndex[index];
+        simBit <= readMemResult[index];
+        simMaxIndex <= readMemMaxIndex[index];
         din <= readMem[index];
 	//if (index >= 79) begin index <= 0; end // reading in 4*20 samples then wrap around. 20 comes from the # trellis states
 	if (index >= 20000) begin index <= 0; end // reading in 4*20 samples then wrap around. 20 comes from the # trellis states
@@ -150,9 +173,9 @@ end
 
 integer file1,file2;
 initial begin
-`ifndef IQ_MAG
-  uut.soqpskViterbi.simReset = 1;
-`endif
+//`ifndef IQ_MAG
+//  uut.soqpskViterbi.simReset = 1;
+//`endif
   #100 reset = !reset;
   #100 reset = !reset;
   index = 0;
@@ -212,7 +235,9 @@ initial begin
 
 
 `ifndef IQ_MAG
-#305 uut.soqpskViterbi.simReset = 0; // release the accumulation reset when valid data out of the rotators
+//#305 uut.soqpskViterbi.simReset = 0; // release the accumulation reset when valid data out of the rotators
+#300 reset = !reset; // release the accumulation reset when valid data out of the rotators
+#100 reset = !reset;
 `endif
    
 
@@ -229,7 +254,7 @@ initial begin
 	bertSr <= {bertSr[14:0], simBit};
 	acsDecision <= testDec1;
 	//if (acsDecision != bertSr[6]) begin		  // without carrier loop
-	if (decision != bertSr[12]) begin			  // with carrierloop
+	if (decision != bertSr[10]) begin			  // with carrierloop
 	   bitError <= bitError + 1;
 	end
      end

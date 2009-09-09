@@ -1,0 +1,13 @@
+# Output products list for <mpy18x18WithCe>
+_xmsgs\
+mpy18x18WithCe.gise
+mpy18x18WithCe.ise
+mpy18x18WithCe.ngc
+mpy18x18WithCe.v
+mpy18x18WithCe.veo
+mpy18x18WithCe.xco
+mpy18x18WithCe.xise
+mpy18x18WithCe_flist.txt
+mpy18x18WithCe_readme.txt
+mpy18x18WithCe_xdb\tmp\
+mpy18x18WithCe_xmdf.tcl

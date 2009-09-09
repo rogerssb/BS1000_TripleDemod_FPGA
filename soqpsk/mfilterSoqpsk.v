@@ -23,15 +23,14 @@ module mfilter
    
    // assign coefficients at module instantiation
    parameter     reC = 18'h0, imC = 18'h0;
-
+   
    wire [17:0]       iOutMult, qOutMult;
    // Complex mult
-   // maybe I can use sym2xEn instead of clk
-   cmpy18 cmpMult
+   cmpy18WithCe cmpMult
      (
-      //.clk   ( clk    ),
-      .clk   ( sym2xEn ),
+      .clk   ( clk     ),
       .reset ( reset   ),
+	  .ce    (sym2xEn  ),
       .aReal ( iIn     ),
       .aImag ( qIn     ),
       .bReal ( reC     ),
@@ -42,6 +41,7 @@ module mfilter
 
    // latch the samples
    reg [17:0]       iOut, qOut;
+ 
    always @(posedge clk)begin
       if(sym2xEn)begin
          iOut <= iOutMult;
