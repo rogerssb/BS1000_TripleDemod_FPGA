@@ -77,17 +77,20 @@ module trellisSoqpsk
       .wr3(wr3),
       .addr(addr),
       .din(din),
-      .dout(trellisLoopDout),
-      //.iOut(carrierLoopIOut),
-      //.qOut(carrierLoopQOut),
-      .symEnDly()
-      //.sym2xEnDly(ternarySymEnOut)
+      .dout(trellisLoopDout)
+	  `ifndef ALDEC_SIM
+      , .iOut(carrierLoopIOut),
+      .qOut(carrierLoopQOut),
+      .symEnDly(),
+      .sym2xEnDly(ternarySymEnOut)
+	  `endif
        );
-
+  
+`ifdef ALDEC_SIM	   
    assign carrierLoopIOut = iIn;
    assign carrierLoopQOut = qIn;
    wire   ternarySymEnOut = sym2xEn;
-   
+ `endif  
    
 
 `ifdef SIMULATE
@@ -160,8 +163,8 @@ module trellisSoqpsk
          mfzQSr5  <=  mfzQSr4; 
       end
    end
-   wire [17:0]          mfzI=mfzISr3;
-   wire [17:0]          mfzQ=mfzQSr3;
+   wire [17:0]          mfzI=mfzISr2;
+   wire [17:0]          mfzQ=mfzQSr2;
 
    // Match filter minus
    wire [17:0] mfmI,mfmQ;
@@ -175,9 +178,6 @@ module trellisSoqpsk
       .qIn     (carrierLoopQOut  ),
       .iOut    (mfmI             ),
       .qOut    (mfmQ             )
-      //.symEnDly  (symEnDly         ),
-      //.sym2xEnDly(ternarySymEnOut       )
-
       );
 
    // Match filter plus

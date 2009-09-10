@@ -70,9 +70,9 @@ always @(posedge clk) clkDiv2 = !clkDiv2;
 	
 
 
-reg [79:0] readMem[20009:0];
-reg [0:0] readMemResult[10001:0];
-reg [1:0] readMemMaxIndex [1023:0];
+reg [79:0] readMem[10100:0];
+reg [0:0] readMemResult[10100:0];
+reg [1:0] readMemMaxIndex [10100:0];
 //reg [1:0] index;
 reg [15:0] index;  
 reg [15:0] bitIndex;  
@@ -96,10 +96,10 @@ wire indexError;
 		  delaySrMaxIndex[ii+1] <= delaySrMaxIndex[ii];		
        end	 			  
        delaySrMaxIndex[0] <= simMaxIndex;
-       resultDlyMaxIndex <= delaySrMaxIndex[8];
+       resultDlyMaxIndex <= delaySrMaxIndex[6];
     end
 	// Checking the max Metric index
-	//assign indexError = (uut.soqpskViterbi.index != resultDlyMaxIndex) ? 1:0;
+	assign indexError = (uut.soqpskViterbi.index != resultDlyMaxIndex) ? 1:0;
 
 reg [15:0]symEnShift;
 always @(posedge clk)symEnShift <= {symEnShift[14:0],(sym2xEn && !symEn)};
@@ -166,7 +166,8 @@ end
 //`define A5A5
 //`define RANDOM_LONG
 //`define RANDOM_LONG_1000
-`define pn6
+//`define pn6
+`define RANDOM_10000_10dB
 //`define RANDOM_LONG_W_NOICE
 //`define RANDOM_SIM_NO_NOISE
 //`define RANDOM_SIM_NOISE
@@ -203,16 +204,22 @@ initial begin
 `ifdef RANDOM_LONG_1000
       $readmemh("P:/semco/matlab_sim_results/soqpsk/Random1000/matlabBits.txt", readMemResult);
       $readmemh("P:/semco/matlab_sim_results/soqpsk/Random1000/maxIndex.txt", readMemMaxIndex);
-      //$readmemh("P:/semco/matlab_sim_results/soqpsk/Random1000/mfinputs.hex", readMem);
-      $readmemh("P:/semco/matlab_sim_results/soqpsk/Random1000/mfinputsDiv16.hex", readMem);
+      $readmemh("P:/semco/matlab_sim_results/soqpsk/Random1000/mfinputs.hex", readMem);
+      //$readmemh("P:/semco/matlab_sim_results/soqpsk/Random1000/mfinputsDiv16.hex", readMem);
 `endif
 
 `ifdef pn6
       $readmemh("P:/semco/matlab_sim_results/soqpsk/pn6/matlabBits.txt", readMemResult);
       $readmemh("P:/semco/matlab_sim_results/soqpsk/pn6/maxIndex.txt", readMemMaxIndex);
-      //$readmemh("P:/semco/matlab_sim_results/soqpsk/pn6/mfinputs.hex", readMem);
       $readmemh("P:/semco/matlab_sim_results/soqpsk/pn6/mfinputsDiv16.hex", readMem);
 `endif
+
+`ifdef RANDOM_10000_10dB
+      $readmemh("P:/semco/matlab_sim_results/soqpsk/random10000_10dB/matlabBits.txt", readMemResult);
+      $readmemh("P:/semco/matlab_sim_results/soqpsk/random10000_10dB/maxIndex.txt", readMemMaxIndex);
+      $readmemh("P:/semco/matlab_sim_results/soqpsk/random10000_10dB/mfinputs.hex", readMem);
+`endif
+
 
 `ifdef RANDOM_LONG_W_NOICE																		
       $readmemh("P:/semco/matlab_sim_results/soqpsk/RandomWith20dbNoise/maxIndex.txt", readMemMaxIndex);
