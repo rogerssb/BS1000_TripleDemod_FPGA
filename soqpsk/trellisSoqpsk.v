@@ -85,14 +85,14 @@ module trellisSoqpsk
       .sym2xEnDly(ternarySymEnOut)
 	  `endif
        );
-  
+
 `ifdef ALDEC_SIM	   
    assign carrierLoopIOut = iIn;
    assign carrierLoopQOut = qIn;
    wire   ternarySymEnOut = sym2xEn;
  `endif  
    
-
+   
 `ifdef SIMULATE
    real                phErrReal;
    always @(phaseError) phErrReal = $itor($signed(phaseError))/(2**9);
@@ -125,8 +125,8 @@ module trellisSoqpsk
 //      .mfzI(mfzI_syn), .mfzQ(mfzQ_syn), 
 //      .iIn(carrierLoopIOut), .qIn(carrierLoopQOut)
 //      );
-	  
-	  
+          
+          
    wire [17:0] mfzI,mfzQ;
    wire [17:0] mfmI,mfmQ;
    wire [17:0] mfpI,mfpQ;
@@ -193,10 +193,10 @@ module trellisSoqpsk
       .iOut    (mfpI             ),
       .qOut    (mfpQ             )
       );
-	
-`endif	
-	  
-	  
+        
+`endif  
+          
+          
    // Rotations
    wire [ROT_BITS-1:0] rotMfz0Real, rotMfz1Real, rotMfz2Real, rotMfz3Real,  // 4 real part rotated "match filter zero" outputs
                        rotMfm0Real, rotMfm1Real, rotMfm2Real, rotMfm3Real,  // 4 real part rotated "match filter minus" outputs
@@ -302,7 +302,7 @@ module trellisSoqpsk
 
    wire    [1:0]   index;
 
-reg     [7:0]   decayFactor;   	  
+reg     [7:0]   decayFactor;      
 //`define SYN_NETLIST
 `ifdef SYN_NETLIST
 soqpskViterbi_syn #(size, ROT_BITS) soqpskViterbi
@@ -328,7 +328,7 @@ soqpskViterbi_syn #(size, ROT_BITS) soqpskViterbi
     .devError()
     );
 `else
-	
+        
 soqpskViterbi #(size, ROT_BITS) soqpskViterbi
    (
     // For the SOQPSK mode the there is one sample per symbol and there for the faster sym2xEn is used as symEn

@@ -1,7 +1,7 @@
 ##############################################################
 #
 # Xilinx Core Generator version K.39
-# Date: Sat Aug 08 17:05:05 2009
+# Date: Sat Aug 15 17:53:12 2009
 #
 ##############################################################
 #
@@ -40,7 +40,7 @@ CSET clockenable=true
 CSET component_name=mult12x8
 CSET constvalue=129
 CSET dynamic_constant_reload=false
-CSET multiplier_construction=Use_LUTs
+CSET multiplier_construction=Use_Mults
 CSET multtype=Parallel_Multiplier
 CSET optgoal=Speed
 CSET outputwidthhigh=19
@@ -60,5 +60,5 @@ CSET userounding=false
 CSET zerodetect=false
 # END Parameters
 GENERATE
-# CRC: 8fe6e8db
+# CRC:  422260d
 

@@ -1,7 +1,7 @@
 ##############################################################
 #
-# Xilinx Core Generator version 11.2
-# Date: Wed Sep 09 22:52:48 2009
+# Xilinx Core Generator version K.39
+# Date: Thu Sep 10 13:47:41 2009
 #
 ##############################################################
 #
@@ -14,33 +14,33 @@
 #
 # BEGIN Project Options
 SET addpads = False
-SET asysymbol = False
+SET asysymbol = True
 SET busformat = BusFormatAngleBracketNotRipped
 SET createndf = False
 SET designentry = Verilog
-SET device = xc3sd1800a
+SET device = xc3sd3400a
 SET devicefamily = spartan3adsp
-SET flowvendor = Foundation_ISE
+SET flowvendor = Foundation_iSE
 SET formalverification = False
 SET foundationsym = False
 SET implementationfiletype = Ngc
-SET package = cs484
+SET package = fg676
 SET removerpms = False
-SET simulationfiles = Behavioral
+SET simulationfiles = Structural
 SET speedgrade = -4
 SET verilogsim = True
 SET vhdlsim = False
 # END Project Options
 # BEGIN Select
-SELECT Multiplier family Xilinx,_Inc. 11.0
+SELECT Multiplier family Xilinx,_Inc. 10.0
 # END Select
 # BEGIN Parameters
 CSET ccmimp=Distributed_Memory
 CSET clockenable=true
 CSET component_name=mpy18x18WithCe
 CSET constvalue=129
-CSET internaluser=0
-CSET multiplier_construction=Use_LUTs
+CSET dynamic_constant_reload=false
+CSET multiplier_construction=Use_Mults
 CSET multtype=Parallel_Multiplier
 CSET optgoal=Speed
 CSET outputwidthhigh=35
@@ -50,12 +50,15 @@ CSET portatype=Signed
 CSET portawidth=18
 CSET portbtype=Signed
 CSET portbwidth=18
+CSET reloadable=false
 CSET roundpoint=0
 CSET sclrcepriority=SCLR_Overrides_CE
 CSET syncclear=false
 CSET use_custom_output_width=false
+CSET use_load_done=false
 CSET userounding=false
 CSET zerodetect=false
 # END Parameters
 GENERATE
-# CRC: e9315fe1
+# CRC: 77d714a8
+

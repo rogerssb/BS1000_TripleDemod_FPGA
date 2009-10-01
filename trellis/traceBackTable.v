@@ -47,17 +47,12 @@ module traceBackTable(clk, reset, symEn,
    reg [5:0]          tbtSr19;
    reg [2:0]          stateCnt;
    reg [4:0]          tbPtr;
-   integer            k;
    
    // 3bits x 20 states trace-back shift-register
    always @(posedge clk)
      begin
         if (reset) begin
            //reset the whole traceback table to all zeroes
-           /*
-           for ( k=0 ; k<20; k=k+1 )
-             tbtSr[k] <= 0;
-           */
            tbtSr0  <= 0;
            tbtSr1  <= 0;
            tbtSr2  <= 0;

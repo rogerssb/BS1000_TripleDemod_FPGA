@@ -16,10 +16,12 @@
 `define INTERP0SPACE    12'b1010_xxxx_xxxx
 `define INTERP1SPACE    12'b1011_xxxx_xxxx
 `define INTERP2SPACE    12'b1100_xxxx_xxxx
-`define MISC_SPACE      12'b1101_xxxx_xxxx
+`define MISC_SPACE      12'b1101_0xxx_xxxx
+`define SDISPACE        12'b1101_1xxx_xxxx
 `define TRELLISLFSPACE  12'b1110_0xxx_xxxx
 `define TRELLIS_SPACE   12'b1110_1xxx_xxxx
-`define DAC_SPACE       12'b1111_xxxx_xxxx
+`define DAC_SPACE       12'b1111_0xxx_xxxx
+`define UARTSPACE       12'b1111_1xxx_xxxx
 
 // Define the global radio memory map
 `define DEMOD_CONTROL   12'bxxxx_xxx0_00xx
@@ -130,5 +132,10 @@
 `define TRELLIS_DEV     12'bxxxx_xxxx_01xx
 `define TRELLIS_DECAY   12'bxxxx_xxxx_10xx
 
+// Define the SDI registers
+`define SDI_CONTROL     12'bxxxx_xxxx_00xx
+
+// Define the UART registers
+`define UART_BAUD_DIV   12'bxxxx_xxxx_00xx
 
 `endif

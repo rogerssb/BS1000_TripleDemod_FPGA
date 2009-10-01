@@ -1,7 +1,7 @@
 `timescale 1ns / 10 ps
 `include "..\addressMap.v"
 
-module cicInterpolate( 
+module soqpskCicInterpolate( 
     clk, reset, clkEn,
     dIn,
     dOut

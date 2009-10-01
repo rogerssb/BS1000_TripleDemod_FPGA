@@ -195,7 +195,7 @@ module acs
 
 wire    [12:0]  decayOut;
 assign          accMetOut = decayOut[12:1] + decayOut[0];
-mult12x8 accumDecay(
+mult12x8Lut accumDecay(
     .ce(symEn), 
     .clk(clk), 
     .sclr(reset),

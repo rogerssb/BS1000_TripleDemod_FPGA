@@ -51,7 +51,7 @@ wire [31:0] carrierLimit = carrierLimitInt;
 
 wire [31:0] sweepRate = 32'h00000000;
 
-real bitrateBps = 500000.0;
+real bitrateBps = 200000.0;
 real bitrateSamples = 1/bitrateBps/`SAMPLE_PERIOD/2.0;
 integer bitrateSamplesInt = bitrateSamples;
 wire [15:0]bitrateDivider = bitrateSamplesInt - 1;
@@ -59,7 +59,7 @@ real actualBitrateBps = SAMPLE_FREQ/bitrateSamplesInt/2.0;
 
 // value = 2^ceiling(log2(R*R))/(R*R), where R = interpolation rate of the FM
 // modulator
-real interpolationGain = 1.28;
+real interpolationGain = 1.6384;
 
 //real deviationHz = 0*0.35 * bitrateBps;
 real deviationHz = 2*0.350 * bitrateBps;
@@ -257,6 +257,7 @@ assign qRx = qSignal + qNoise;
                             Instantiate the Demod
 ******************************************************************************/
 wire    [17:0]  dac0Out,dac1Out,dac2Out;
+wire    [17:0]  iSymData,qSymData;
 demod demod( 
     .clk(clk), .reset(reset), .syncIn(sync), 
     .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
@@ -272,7 +273,10 @@ demod demod(
     .dac2Sync(dac2Sync),
     .dac2Data(dac2Out),
     .iSymEn(symEn),
-    .iSym2xEn(symX2En)
+    .iSym2xEn(symX2En),
+    .iSymData(iSymData),
+    .qSymEn(qSymEn),
+    .qSymData(qSymData)
     );
 
 reg dac0CS,dac1CS,dac2CS;
@@ -366,6 +370,31 @@ decoder decoder
   .fifo_rs(),
   .clk_inv()
   );
+
+
+//******************************************************************************
+//                        SDI Output Interface
+//******************************************************************************
+
+wire    [31:0]  sdiDout;
+sdi sdi(
+    .clk(clk),
+    .reset(reset),
+    .wr0(we0),
+    .wr1(we1),
+    .wr2(we2),
+    .wr3(we3),
+    .addr(a),
+    .dataIn(d),
+    .dataOut(),
+    .iSymEn(symEn),
+    .iSymData(iSymData),
+    .qSymEn(qSymEn),
+    .qSymData(qSymData),
+    .sdiOut(sdiOut)
+    );
+
+
 
 /******************************************************************************
                        Delay Line for BER Testing
@@ -555,7 +584,7 @@ initial begin
     write32(`FM_MOD_DEV, {14'bx,deviation});
     write32(`FM_MOD_BITRATE, {1'b0,15'bx,bitrateDivider});
     // This value is ceiling(log2(R*R)), where R = interpolation rate.
-    write32(`FM_MOD_CIC,7);
+    write32(`FM_MOD_CIC,9);
     fmModCS = 0;
 
     // Init the mode
@@ -580,7 +609,7 @@ initial begin
 
     // Init the cicResampler register set
     write32(createAddress(`CICDECSPACE,`CIC_DECIMATION),cicDecimationInt-1);
-    write32(createAddress(`CICDECSPACE,`CIC_SHIFT), 3);
+    write32(createAddress(`CICDECSPACE,`CIC_SHIFT), 5);
 
     // Init the channel agc loop filter
     write32(createAddress(`CHAGCSPACE,`ALF_CONTROL),1);                 // Zero the error
@@ -602,6 +631,9 @@ initial begin
     write32(createAddress(`INTERP2SPACE, `INTERP_CONTROL),1);
     write32(createAddress(`INTERP2SPACE, `INTERP_EXPONENT), 8);
     write32(createAddress(`INTERP2SPACE, `INTERP_MANTISSA), 32'h00012000);
+
+    // Set the SDI baudrate
+    write32(createAddress(`UARTSPACE, `UART_BAUD_DIV),99);
 
     reset = 1;
     #(2*C) ;
@@ -661,6 +693,10 @@ initial begin
     // Enable the AGC loop
     write32(createAddress(`CHAGCSPACE,`ALF_CONTROL),0);              
     `endif
+
+    // Enable the SDI
+    write32(createAddress(`SDISPACE,`SDI_CONTROL),1);
+
 
     // Wait for some data to pass thru
     #(2*100*bitrateSamplesInt*C) ;

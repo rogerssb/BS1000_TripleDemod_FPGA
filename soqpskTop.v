@@ -330,7 +330,8 @@ trellisSoqpsk soqpsk
     .dac1Data(trellis1Out),
     .dac2Sync(trellis2Sync),
     .dac2Data(trellis2Out),
-    .sym2xEnOut(trellisSym2xEn),
+    .ternarySymEnOut(trellisSymEn),
+    .ternarySym2xEnOut(trellisSym2xEn),
     .decision(trellisBit)
    );
    
@@ -582,10 +583,10 @@ wire decoder_cout;
 wire decoder_fifo_rs;
 wire cout_inv;
 
-wire trellisEn = (demodMode == `MODE_PCMTRELLIS);
+wire trellisEn = (demodMode == `MODE_SOQPSK);
 wire [2:0]decoder_iIn = trellisEn ? {trellisBit,2'b0} : {iBit,2'b0}; 
-wire [2:0]decoder_qIn = {qBit,2'b0};
-wire decoderSymEn = trellisEn ? trellisSym2xEn : iSymEn;
+wire [2:0]decoder_qIn = trellisEn ? {trellisBit,2'b0} : {qBit,2'b0};
+wire decoderSymEn = trellisEn ? trellisSymEn : iSymEn;
 wire decoderSym2xEn = trellisEn ? trellisSym2xEn : iSym2xEn;
 
 decoder decoder
@@ -667,14 +668,30 @@ symb_pll symb_pll
 
 wire cout = symb_pll_out ^ !cout_inv;
 assign cout_i = cout;
-assign cout_q = (demodMode == `MODE_AUQPSK) ? qSymClk : cout;
+reg cout_q;
+always @(demodMode or qSymClk or cout or trellisSymEn) begin
+    case (demodMode)
+        `MODE_AUQPSK:   cout_q = qSymClk;
+        `MODE_SOQPSK:   cout_q = trellisSymEn;
+        default:       cout_q = cout;
+        endcase
+    end
+//assign cout_q = (demodMode == `MODE_AUQPSK) ? qSymClk : cout;
 
 reg dout_i,decQ;
 always @(negedge cout)begin
   dout_i <= decoder_fifo_dout_i;
   decQ <= decoder_fifo_dout_q;
   end
-assign dout_q = (demodMode == `MODE_AUQPSK) ? qBit : decQ;
+reg dout_q;
+always @(demodMode or qBit or decQ or trellisBit) begin
+    case (demodMode)
+        `MODE_AUQPSK:   dout_q = qBit;
+        `MODE_SOQPSK:   dout_q = trellisBit;
+        default:       dout_q = decQ;
+        endcase
+    end
+//assign dout_q = (demodMode == `MODE_AUQPSK) ? qBit : decQ;
 `endif
 
 //******************************************************************************

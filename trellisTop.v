@@ -33,6 +33,7 @@ module trellisTop
   dout_i, 
   cout_q, 
   dout_q, 
+  sdiOut,
   bsync_nLock,demod_nLock,
   symb_pll_ref,symb_pll_vco,symb_pll_fbk
   );
@@ -58,6 +59,7 @@ output cout_q,dout_q;
 output bsync_nLock,demod_nLock;
 output symb_pll_ref,symb_pll_fbk;
 input symb_pll_vco;
+output  sdiOut;
 
 parameter VER_NUMBER = 16'h007d;
 
@@ -681,6 +683,29 @@ assign dout_q = (demodMode == `MODE_AUQPSK) ? qBit : decQ;
 `endif
 
 //******************************************************************************
+//                        SDI Output Interface
+//******************************************************************************
+
+wire    [31:0]  sdiDout;
+sdi sdi(
+    .clk(ck933),
+    .reset(reset),
+    .wr0(wr0),
+    .wr1(wr1),
+    .wr2(wr2),
+    .wr3(wr3),
+    .addr(addr),
+    .dataIn(dataIn),
+    .dataOut(sdiDout),
+    .iSymEn(iSymEn),
+    .iSymData(iSymData),
+    .qSymEn(qSymEn),
+    .qSymData(qSymData),
+    .sdiOut(sdiOut)
+    );
+
+
+//******************************************************************************
 //                           Processor Read Data Mux
 //******************************************************************************
 
@@ -693,7 +718,8 @@ always @(
   misc_dout or
   decoder_dout or
   symb_pll_dout or
-  trellis_dout
+  trellis_dout or
+  sdiDout
   )begin
   casex(addr)
     `DEMODSPACE,
@@ -756,6 +782,15 @@ always @(
         end
     `DECODERSPACE: rd_mux <= decoder_dout;
     `PLLSPACE: rd_mux <= symb_pll_dout;
+    `UARTSPACE,
+    `SDISPACE: begin
+        if (addr[1]) begin
+            rd_mux <= sdiDout[31:16];
+            end
+        else begin
+            rd_mux <= sdiDout[15:0];
+            end
+        end
     default : rd_mux <= 16'hxxxx;
     endcase
   end

@@ -110,6 +110,7 @@ always @(posedge clk) begin
    //reg  diffEncValueTG;
    reg  modDataLatch;
    reg  diffEncValueTG_1d;
+   wire diffEncValueTG;
    always @(posedge clk) begin
       if (reset) begin
          modDataLatch <= 0;
@@ -123,7 +124,7 @@ always @(posedge clk) begin
       end
    end  
 
-   wire diffEncValueTG = !evenOdd ?  modDataLatch ^ diffEncValueTG_1d : modDataLatch ^ !diffEncValueTG_1d;
+   assign diffEncValueTG = !evenOdd ?  modDataLatch ^ diffEncValueTG_1d : modDataLatch ^ !diffEncValueTG_1d;
    
    
 // Do the dibit to ternary encoding
@@ -197,7 +198,7 @@ reg     [2:0]   modValue;
             firIn <=modValue;
          end
          else begin
-            firIn <= 1'b0;
+            firIn <= 3'b0;
          end
       end
    end
@@ -212,21 +213,20 @@ soqpskFir soqpskFir(
     .nd(modSampleEn),
     .rfd(),
     .rdy(shapedReady),
-    //.din(modValue),
     .din(firIn),
     .dout(shapingFirOut)
     );
    
-	
+        
 `ifdef SIMULATE
 real shapedReal;
-always @(shapingFirOut) shapedReal = $itor($signed(shapingFirOut))/(2**13);
+always @(shapingFirOut) shapedReal = $itor($signed(shapingFirOut))/(2**11);
 //always @(shapingFirOut) shapedReal = ((shapingFirOut > 131071.0) ? (shapingFirOut - 262144.0) : shapingFirOut)/131072.0;
 `endif
 
 // CIC Interpolation Filter
 wire [33:0]cicOut;
-cicInterpolate cicInterpolate(
+soqpskInterpolate soqpskInterpolate(
     .clk(clk), .reset(reset), .clkEn(shapedReady),
     .dIn({shapingFirOut[11:0],6'b0}), 
     .dOut(cicOut)
@@ -242,6 +242,7 @@ shift34to18 cicGainAdjust(
 `ifdef SIMULATE
 real interpReal;
 always @(devInput) interpReal = (devInput[17] ? (devInput - 262144.0) : devInput)/131072.0;
+//always @(cicOut) interpReal = (cicOut[33] ? (cicOut[33:16] - 262144.0) : cicOut[33:16])/131072.0;
 `endif
 
 wire [35:0]devValue;

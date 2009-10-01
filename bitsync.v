@@ -135,8 +135,6 @@ always @(posedge sampleClk) begin
 `endif
 
 //************************** Frequency Discriminator **************************
-`define USE_FMDEMOD
-`ifdef USE_FMDEMOD
 wire    [11:0]   phase;
 vm_cordic cordic(
     .clk(sampleClk),
@@ -161,35 +159,6 @@ always @(posedge sampleClk) begin
 
 wire    [17:0]  freq = {freqOut,6'b0};
 
-`else
-reg     [17:0]  iMF0,iMF1;
-reg     [17:0]  qMF0,qMF1;
-wire    [35:0]  term1,term2;
-mpy18x18 mult1(.clk(sampleClk), 
-                .sclr(reset),
-                .a(qMF1), 
-                .b(iMF), 
-                .p(term1)
-                );
-mpy18x18 mult2(.clk(sampleClk), 
-                .sclr(reset),
-                .a(iMF1), 
-                .b(qMF), 
-                .p(term2)
-                );
-
-wire    [35:0]  diff = term1 - term2;
-reg     [17:0]  freq;
-always @(posedge sampleClk) begin
-    if (symTimes2Sync) begin
-        iMF0 <= iMF;
-        iMF1 <= iMF0;
-        qMF0 <= qMF;
-        qMF1 <= qMF0;
-        freq <= diff[35:18];
-        end
-end
-`endif
 
 `ifdef SIMULATE
 real freqReal;

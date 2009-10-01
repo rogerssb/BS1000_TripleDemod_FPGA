@@ -564,7 +564,8 @@ always @(
   dac_dout or
   misc_dout or
   decoder_dout or
-  symb_pll_dout
+  symb_pll_dout or
+  fifoDout
   )begin
   casex(addr)
     `DEMODSPACE,
@@ -618,6 +619,14 @@ always @(
         end
     `DECODERSPACE: rd_mux <= decoder_dout;
     `PLLSPACE: rd_mux <= symb_pll_dout;
+    `FIFOSPACE: begin
+        if (addr[1]) begin
+            rd_mux <= fifoDout[31:16];
+            end
+        else begin
+            rd_mux <= fifoDout[15:0];
+            end
+        end
     default : rd_mux <= 16'hxxxx;
     endcase
   end
