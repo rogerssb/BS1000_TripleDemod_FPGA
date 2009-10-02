@@ -258,6 +258,8 @@ assign qRx = qSignal + qNoise;
 ******************************************************************************/
 wire    [17:0]  dac0Out,dac1Out,dac2Out;
 wire    [17:0]  iSymData,qSymData;
+wire    [17:0]  iEye,qEye;
+wire    [4:0]   eyeOffset;
 demod demod( 
     .clk(clk), .reset(reset), .syncIn(sync), 
     .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
@@ -276,7 +278,10 @@ demod demod(
     .iSym2xEn(symX2En),
     .iSymData(iSymData),
     .qSymEn(qSymEn),
-    .qSymData(qSymData)
+    .qSymData(qSymData),
+    .eyeSync(eyeSync),
+    .iEye(iEye),.qEye(qEye),
+    .eyeOffset(eyeOffset)
     );
 
 reg dac0CS,dac1CS,dac2CS;
@@ -391,6 +396,9 @@ sdi sdi(
     .iSymData(iSymData),
     .qSymEn(qSymEn),
     .qSymData(qSymData),
+    .eyeSync(eyeSync),
+    .iEye(iEye),.qEye(qEye),
+    .eyeOffset(eyeOffset),
     .sdiOut(sdiOut)
     );
 
@@ -694,8 +702,8 @@ initial begin
     write32(createAddress(`CHAGCSPACE,`ALF_CONTROL),0);              
     `endif
 
-    // Enable the SDI
-    write32(createAddress(`SDISPACE,`SDI_CONTROL),1);
+    // Enable the SDI in eye pattern mode
+    write32(createAddress(`SDISPACE,`SDI_CONTROL),32'h00000082);
 
 
     // Wait for some data to pass thru

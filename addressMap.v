@@ -134,6 +134,10 @@
 
 // Define the SDI registers
 `define SDI_CONTROL     12'bxxxx_xxxx_00xx
+`define SDI_MODE_DISABLED       2'b00
+`define SDI_MODE_CONSTELLATION  2'b01
+`define SDI_MODE_EYE            2'b10
+`define SDI_MODE_ARTM           2'b11
 
 // Define the UART registers
 `define UART_BAUD_DIV   12'bxxxx_xxxx_00xx

@@ -8,9 +8,9 @@ Version=Silvaco4.10.0.R
 DisableCache=
 SimFile=
 [Analyzer]
-C0Width=140
+C0Width=116
 C1Width=58
-C2Width=131
+C2Width=136
 GotoSource=N
 [Spice]
 [LibraryFiles]
@@ -21,7 +21,7 @@ RecirculateTime=
 UseRecirculateTime=
 DiskSize=5000M
 [View]
-1=Last 3019358.438ns 3691201.092ns 15734.020ns 1433548.684ns 1504107.503ns
+1=Last 1523853.546ns 2031210.634ns 11881.899ns 265780.946ns 283439.514ns
 [Group0]
 Name=New Group2
 [Group3]
@@ -212,18 +212,29 @@ OpenGroup=
 58=.\coregen\dataFifo.v
 [Group7]
 Name="SDI"
-0="test.sdi : sdiOut" default
-1="test.sdi.uartTx : dataNeeded" default
-2="test.sdi.uartTx : dataAvailable" default
-3="test.sdi : fifoEn" default
-4="test.sdi : fifoReadEn" default
-5="test.sdi : iSymEn" default
-6="test.sdi : iSymData[17:0]" default
-7="test.sdi : fifoDone" default
-8="test.sdi : sdiEnable" default
-9="test.sdi : fifoEmpty" default
-10="test.sdi : baudEn" default
-11="test.sdi : baudDiv[15:0]" default
+0="test.sdi : eyeCount[2:0]" default
+1="test.sdi : eyeEn" default
+2="test.sdi : eyeRef[4:0]" default
+3="test.sdi : eyeState[1:0]" default
+4="test.sdi : wrEn" default
+5="test.sdi : qEye[17:0]" default
+6="test.demod : iEye[17:0]" default
+7="test.demod : eyeOffset[4:0]" default
+8="test.demod : eyeSync" default
+9="test.sdi : iIn[15:0]" default
+10="test.demod : ddcSync" default
+11="test.sdi : sdiOut" default
+12="test.sdi.uartTx : dataNeeded" default
+13="test.sdi.uartTx : dataAvailable" default
+14="test.sdi : fifoEn" default
+15="test.sdi : fifoReadEn" default
+16="test.sdi : iSymEn" default
+17="test.sdi : iSymData[17:0]" default
+18="test.sdi : fifoDone" default
+19="test.sdi : sdiEnable" default
+20="test.sdi : fifoEmpty" default
+21="test.sdi : baudEn" default
+22="test.sdi : baudDiv[15:0]" default
 OpenGroup=Yes
 [GroupInfo]
 0=New Group2 : 0 : 0 : 0
@@ -234,3 +245,4 @@ OpenGroup=Yes
 5=Carrier : 5 : 1 : 0
 6=DAC : 6 : 1 : 0
 7=SDI : 7 : 1 : 0
+[Bookmarks]

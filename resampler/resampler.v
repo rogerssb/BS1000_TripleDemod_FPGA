@@ -8,18 +8,20 @@ module resampler(
     offsetEn,
     in,
     out,
-    syncOut
+    syncOut,
+    sampleOffset
     );
 
 input clk;
 input reset;
 input sync;
-input   [31:0]resampleRate;
-input   [31:0]resamplerFreqOffset;
-input   offsetEn;
-input   [17:0]in;
-output  [17:0]out;
-output syncOut;
+input   [31:0]  resampleRate;
+input   [31:0]  resamplerFreqOffset;
+input           offsetEn;
+input   [17:0]  in;
+output  [17:0]  out;
+output          syncOut;
+output  [4:0]   sampleOffset;
 
 // Create the resampler rate
 reg [31:0] resamplerPhaseInc;
@@ -112,6 +114,8 @@ wire    [4:0]offset = newOffset;
 `else
 wire    [4:0]offset = oldOffset;
 `endif
+
+assign sampleOffset = offset;
 
 `ifdef SIMULATE
 integer offsetInt;

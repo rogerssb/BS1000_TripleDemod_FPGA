@@ -17,6 +17,7 @@ module dualResampler(
     iOut,
     qOut,
     syncOut,
+    sampleOffset,
     auSyncOut
     );
 
@@ -35,6 +36,7 @@ input           auOffsetEn;
 input   [17:0]  iIn,qIn;
 output  [17:0]  iOut,qOut;
 output          syncOut;
+output  [4:0]   sampleOffset;
 output          auSyncOut;
 
 // Microprocessor interface
@@ -70,7 +72,8 @@ resampler resamplerI(
     .offsetEn(offsetEn),
     .in(iIn),
     .out(iOut),
-    .syncOut(syncOut)
+    .syncOut(syncOut),
+    .sampleOffset(sampleOffset)
     );
 
 wire    [47:0]  cicOut;
@@ -96,7 +99,8 @@ resampler resamplerQ(
     .offsetEn(rqOffsetEn),
     .in(rqIn),
     .out(qOut),
-    .syncOut(auSyncOut)
+    .syncOut(auSyncOut),
+    .sampleOffset()
     );
 
 

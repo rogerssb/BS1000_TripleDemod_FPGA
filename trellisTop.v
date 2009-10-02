@@ -61,7 +61,7 @@ output symb_pll_ref,symb_pll_fbk;
 input symb_pll_vco;
 output  sdiOut;
 
-parameter VER_NUMBER = 16'h007d;
+parameter VER_NUMBER = 16'h0093;
 
 wire [11:0]addr = {addr11,addr10,addr9,addr8,addr7,addr6,addr5,addr4,addr3,addr2,addr1,1'b0};
 
@@ -258,6 +258,9 @@ wire    [3:0]   demodMode;
 wire    [3:0]   dac0Select,dac1Select,dac2Select;
 wire    [17:0]  iSymData,qSymData;
 wire            iBit,qBit;
+
+wire    [17:0]  iEye,qEye;
+wire    [4:0]   eyeOffset;
 demod demod(
     .clk(ck933), .reset(reset), .syncIn(1'b1),
     .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
@@ -286,7 +289,10 @@ demod demod(
     .carrierLock(carrierLock),
     .trellisSymSync(trellisSymSync),
     .iTrellis(iSymData),
-    .qTrellis(qSymData)
+    .qTrellis(qSymData),
+    .eyeSync(eyeSync),
+    .iEye(iEye),.qEye(qEye),
+    .eyeOffset(eyeOffset)
     );
 
 
@@ -701,6 +707,9 @@ sdi sdi(
     .iSymData(iSymData),
     .qSymEn(qSymEn),
     .qSymData(qSymData),
+    .eyeSync(eyeSync),
+    .iEye(iEye),.qEye(qEye),
+    .eyeOffset(eyeOffset),
     .sdiOut(sdiOut)
     );
 

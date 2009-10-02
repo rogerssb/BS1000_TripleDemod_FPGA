@@ -248,6 +248,7 @@ NET "demod/resampler/resamplerI/resampleDelay*" TNM_NET = FFS syncGroup;
 NET "demod/resampler/resamplerQ/resampleDelay*" TNM_NET = FFS syncGroup;
 NET "demod/carrierLoop/loopFilterEn*" TNM_NET = FFS syncGroup;
 NET "demod/fmDemod/cordic/enSR*" TNM_NET = FFS syncGroup;
+NET "demod/bitsync/phaseState*" TNM_NET = FFS syncGroup;
 NET "symEn*" TNM_NET = FFS syncGroup;
 NET "sym2xEn*" TNM_NET = FFS syncGroup;
 NET "trellis/viterbi_top/tbt1/symEnSr2*" TNM_NET = FFS syncGroup;

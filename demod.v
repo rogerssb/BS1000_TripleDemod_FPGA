@@ -29,7 +29,10 @@ module demod(
     dac1Data,
     dac2Sync,
     dac2Data,
-    demodMode
+    demodMode,
+    eyeSync,
+    iEye,qEye,
+    eyeOffset
     );
 
 input           clk;
@@ -62,6 +65,9 @@ output  [17:0]  dac1Data;
 output          dac2Sync;
 output  [17:0]  dac2Data;
 output  [3:0]   demodMode;
+output          eyeSync;
+output  [17:0]  iEye,qEye;
+output  [4:0]   eyeOffset;
 
 
 
@@ -268,13 +274,15 @@ carrierLoop carrierLoop(
 wire            auIQSwap;
 reg     [17:0]  iSwap,qSwap;
 always @(posedge clk) begin
-    if (auIQSwap) begin
-        iSwap <= qDdc;
-        qSwap <= iDdc;
-        end
-    else begin
-        iSwap <= iDdc;
-        qSwap <= qDdc;
+    if (ddcSync) begin
+        if (auIQSwap) begin
+            iSwap <= qDdc;
+            qSwap <= iDdc;
+            end
+        else begin
+            iSwap <= iDdc;
+            qSwap <= qDdc;
+            end
         end
     end
 
@@ -301,8 +309,26 @@ dualResampler resampler(
     .iOut(iResamp),
     .qOut(qResamp),
     .syncOut(resampSync),
+    .sampleOffset(eyeOffset),
     .auSyncOut(auResampSync)
     );
+
+// Delay the ddc output samples to line things up with the eyeOffset
+reg     [17:0]  iSwap0,iSwap1,iSwap2;
+reg     [17:0]  qSwap0,qSwap1,qSwap2;
+reg     [7:0]   ddcSyncSR;
+always @(posedge clk) begin
+    ddcSyncSR <= {ddcSyncSR[6:0],ddcSync};
+    iSwap0 <= iSwap;
+    iSwap1 <= iSwap0;
+    iSwap2 <= iSwap1;
+    qSwap0 <= qSwap;
+    qSwap1 <= qSwap0;
+    qSwap2 <= qSwap1;
+    end
+assign eyeSync = ddcSyncSR[2];
+assign iEye = iSwap2;
+assign qEye = qSwap2;
 
 /******************************************************************************
                                Symbol Offset Deskew

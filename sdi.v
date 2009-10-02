@@ -12,6 +12,9 @@ module sdi(
     iSymData,
     qSymEn,
     qSymData,
+    eyeSync,
+    iEye,qEye,
+    eyeOffset,
     sdiOut
     );
 
@@ -25,6 +28,9 @@ input           iSymEn;
 input   [17:0]  iSymData;
 input           qSymEn;
 input   [17:0]  qSymData;
+input           eyeSync;
+input   [17:0]  iEye,qEye;
+input   [4:0]   eyeOffset;
 output          sdiOut;
 
 
@@ -36,25 +42,30 @@ always @(addr) begin
   endcase
 end
 
-wire    fifoDone;
-reg     sdiEnable;
-wire    sdiEnableReset = (fifoDone || reset);
+wire            fifoDone;
+reg             sdiEnable;
+reg     [1:0]   sdiMode;
+wire            sdiEnableReset = (fifoDone || reset);
 always @(negedge wr0 or posedge sdiEnableReset) begin
     if (sdiEnableReset) begin
         sdiEnable <= 0;
         end
     else if (sdiSpace) begin
         casex (addr) 
-            `SDI_CONTROL:       sdiEnable <= 1;
+            `SDI_CONTROL: begin
+                sdiEnable <= dataIn[7];
+                sdiMode <= dataIn[1:0];
+                end     
             endcase
         end
     end
 wire    fifoEmpty;
 reg     [31:0]  sdiDout;
 always @(addr or
+         sdiMode or
          fifoEmpty) begin
     casex(addr)
-        `SDI_CONTROL:           sdiDout <= {31'b0,fifoEmpty};
+        `SDI_CONTROL:           sdiDout <= {fifoEmpty,29'b0,sdiMode};
         default:                sdiDout <= 32'hx;
         endcase
     end
@@ -71,28 +82,82 @@ always @(posedge clk or posedge fifoDone) begin
         end
     end
 
+
+// Eye diagram data acquisition state machine
+parameter EYE_IDLE =    2'b00,
+          EYE_WAIT =    2'b01,
+          EYE_WRITE =   2'b11;
+reg     [1:0]   eyeState;
+reg             eyeEn;
+reg     [2:0]   eyeCount;
+reg     [4:0]   eyeRef;
+always @(posedge clk) begin
+    if (reset) begin
+        eyeState <= EYE_IDLE;
+        eyeEn <= 0;
+        end
+    else if (eyeSync) begin
+        case (eyeState)
+            EYE_IDLE: begin
+                if (fifoEn) begin
+                    eyeRef <= eyeOffset;
+                    eyeState <= EYE_WAIT;
+                    end
+                end
+            EYE_WAIT: begin
+                if (!fifoEn) begin
+                    eyeState <= EYE_IDLE;
+                    end
+                else if (eyeOffset == eyeRef) begin
+                    eyeState <= EYE_WRITE;
+                    eyeCount <= 7;
+                    eyeEn <= 1;
+                    end
+                end
+            EYE_WRITE: begin
+                if (eyeCount == 0) begin
+                    eyeState <= EYE_WAIT;
+                    eyeEn <= 0;
+                    end
+                else begin
+                    eyeCount <= eyeCount - 1;
+                    end
+                end
+            default: begin
+                eyeState <= EYE_IDLE;
+                eyeEn <= 0;
+                end
+            endcase
+        end
+    end
+
+
+
 wire    [15:0]  iSym;
 reg             fifoReadEn;
+wire    [15:0]  iIn = (sdiMode == `SDI_MODE_CONSTELLATION) ? iSymData[17:2] : iEye[17:2];
+wire    [15:0]  qIn = (sdiMode == `SDI_MODE_CONSTELLATION) ? qSymData[17:2] : qEye[17:2];
+wire            wrEn = (sdiMode == `SDI_MODE_CONSTELLATION) ? iSymEn : (eyeEn && eyeSync);
 dataFifo iFifo (
-    .srst(reset), 
+    .srst(!sdiEnable), 
     .rd_en(fifoReadEn), 
-    .wr_en(iSymEn && fifoEn), 
+    .wr_en(wrEn && fifoEn), 
     .full(fifoDone), 
     .empty(fifoEmpty), 
     .clk(clk), 
     .dout(iSym), 
-    .din(iSymData[17:2])
+    .din(iIn)
     );
 wire    [15:0]  qSym;
 dataFifo qFifo (
-    .srst(reset), 
+    .srst(!sdiEnable), 
     .rd_en(fifoReadEn), 
-    .wr_en(qSymEn && fifoEn), 
+    .wr_en(wrEn && fifoEn), 
     .full(), 
     .empty(), 
     .clk(clk), 
     .dout(qSym), 
-    .din(qSymData[17:2])
+    .din(qIn)
     );
 
 // UART Data Mux
