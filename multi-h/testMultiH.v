@@ -12,13 +12,14 @@
 
 module test;
 
-   reg clk,reset;
-   reg clkDiv2;
-   reg [79:0] din;
+   reg        clk,reset;
+   reg        clkDiv2;
+   reg [79:0] din, dinH;
    reg        symEn,sym2xEn;
 
 `include "mfiltCoeff.v"
 
+`ifdef SIM_MFILT
    mfilt # (C0_0, C0_1, C0_2, C0_3, C1_0, C1_1, C1_2, C1_3) uut_mfilt
      (
       .clk     (clk       ), 
@@ -42,6 +43,41 @@ module test;
       .i       (din[57:40]),
       .q       (din[17:0] )
       );   
+`endif
+
+
+
+`define SIM_ROT
+`ifdef SIM_ROT
+   rotator uut_rot
+     (
+      .clk     (clk       ), 
+      .reset   (reset     ), 
+      .symEn   (symEn     ), 
+      .i       (dinH[57:40]),    
+      .q       (dinH[17:0] ),
+//      .i       (18'h16A0A ),
+//      .q       (18'h16A0A ), 
+//      .i       (18'h1D907 ),
+      //.q       (18'hf3C11 ), 
+	  
+//0.98078528	0.195090322		000001F629_00000063E3
+//0.923879533	0.382683432		000001D907_000000C3EF
+//0.831469612	0.555570233		000001A9B6_0000011C74
+//0.707106781	0.707106781		0000016A0A_0000016A0A
+      //.i       (18'h1F629 ), 
+      //.q       (18'h063E3 ),
+      //.i       (18'h2D907 ), 
+      //.q       (18'h1C3EF ),
+//        .i       (18'h20001 ), 
+//        .q       (18'h0 ),
+
+      .sel     (rotSel    ),
+      .iOut    (          ),   
+      .qOut    (          )
+      );
+`endif
+
    
    wire       testDec1;
    
@@ -60,7 +96,10 @@ reg [0:0] readMemResult[100:0];
 reg [15:0] index;  
 reg [15:0] bitIndex;  
 
-initial begin
+reg [4:0] rotSel;	
+
+initial begin 
+	rotSel = 0;
     cntEna = 0;
     #250 cntEna = 1;
     end
@@ -112,7 +151,6 @@ always @(posedge clk) begin
 end
 
 reg simBit;	
-	
 always @(posedge clk)begin
    // #1;
    //if(cnt == 17) cnt <= 0;
@@ -126,6 +164,7 @@ always @(posedge clk)begin
         sym2xEn <= 1;
         simBit <= readMemResult[bitIndex];
         din <= readMem[index];
+		rotSel <= rotSel + 1;
 	    //if (index >= 79) begin index <= 0; end // reading in 4*20 samples then wrap around. 20 comes from the # trellis states 
         if (index >= 20000) begin index <= 0; end // reading in 4*20 samples then wrap around. 20 comes from the # trellis states
 	else begin 
@@ -138,10 +177,10 @@ always @(posedge clk)begin
         symEn <= 0;
         sym2xEn <= 1;
 	//simBit <= readMemResult[index];
-        din <= readMem[index];
+        //din <= readMem[index];
 	//if (index >= 79) begin index <= 0; end // reading in 4*20 samples then wrap around. 20 comes from the # trellis states
-	if (index >= 20000) begin index <= 0; end // reading in 4*20 samples then wrap around. 20 comes from the # trellis states
-	else begin index <= index +1; end
+	//if (index >= 20000) begin index <= 0; end // reading in 4*20 samples then wrap around. 20 comes from the # trellis states
+	//else begin index <= index +1; end
      end
      default: begin
         symEn <= 0;
@@ -149,25 +188,23 @@ always @(posedge clk)begin
         //din <= 0;
      end
    endcase
+end	 
+
+integer indexH;
+initial indexH=0;
+always @(posedge clk)begin
+	if(rotSel==31 & cnt==1) begin
+	dinH <= readMem[indexH];
+	indexH <= indexH + 1;
+	end
 end
+
 	
-/* -----\/----- EXCLUDED -----\/-----
-   reg [17:0] A,B;
-   always @(posedge clk)
-     if (reset) begin
-        A <= -20;
-        B <= 2;
-     end
-     else if (sym2xEn) begin 
-        A <= A + 1;
-        B <= B + 1;
-     end
- -----/\----- EXCLUDED -----/\----- */
-   
-  
-  
+
+	
+`define MULTI_H_ROT_TEST  
 //`define ONEZERO
-`define ALLONES
+//`define ALLONES
 //`define RANDOM
 //`define RANDOM_SIM_NO_NOISE
 //`define RANDOM_SIM_NOISE
@@ -182,8 +219,8 @@ initial begin
   bitError = 0;
   din = 0;
   
-`ifdef ONEZERO
-      $readmemh("", readMem);
+`ifdef MULTI_H_ROT_TEST
+      $readmemh("C:/projects/semco/svn_checkout_folder/multi-h/mult-h-rot-test.hex", readMem);
 `endif
       
 `ifdef ALLONES
