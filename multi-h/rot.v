@@ -6,25 +6,33 @@
 //
 // 1.0      AMJ initial coding
 //
-//
+// Updateing the module to run at the clock rate and not at the symbol rate.
 //-----------------------------------------------------------------------------
 
 `timescale 1ns/1ps
   
 module rot
   (
-   clk, reset, symEn,
+   clk, reset, symEn, sym2xEn,
    i,       // data-in normally I 
    q,       // data-in normally Q
    sel,
+   angle,
+   symEnOut,
+   sym2xEnOut,
+   selOut,
    iOut,    
    qOut     
    );
    
 
-   input                 clk, reset, symEn;
+   input                 clk, reset, symEn, sym2xEn;
    input [17:0]          i, q;
-   input [2:0]           sel;
+   input [2:0]           angle;
+   input [4:0]           sel;
+   output                symEnOut;
+   output                sym2xEnOut;
+   output [4:0]          selOut;
    output [17:0]         iOut, qOut;
 
    reg [17:0]            iOut, qOut;
@@ -41,8 +49,8 @@ module rot
 
    //1to5 Mux:  This will save some power when we turn off the unused multipliers 
 /* -----\/----- EXCLUDED -----\/-----
-   always @(sel or symEn) begin
-      case (sel)
+   always @(angle or symEn) begin
+      case (angle[2:0])
           0: begin
              ce0 <= symEn;
              ce1 <= 0;
@@ -78,12 +86,13 @@ module rot
              ce3 <= 0;
              ce4 <= symEn;
           end
-        endcase // case(sel)
+        endcase
      end
  -----/\----- EXCLUDED -----/\----- */
 
    
-   
+   // aligning the un-rotated I and Q with the data rotated data
+   // The are 3 clock delays through the multiplyers   
    reg [17:0]          iSR0, qSR0, iSR1, qSR1, iSR2, qSR2;
    always @(posedge clk)
      if (reset) begin
@@ -94,7 +103,7 @@ module rot
         iSR2 <= 0;
         qSR2 <= 0;	
      end
-     else if (ce0) begin
+     else begin
         iSR0 <= i    ;
         qSR0 <= q    ;
         iSR1 <= iSR0 ;
@@ -258,8 +267,9 @@ module rot
         iOut <= 0;
         qOut <= 0;	
      end
-     else if (symEn) begin
-        casex (sel)
+     //else if (symEn) begin
+     else begin
+        casex (angle)
           3'b000: begin //0
              iOut <= {iSR2[17], iSR2[17:1]}; //have to div by 2 to match rotated outputs
              qOut <= {qSR2[17], qSR2[17:1]}; //have to div by 2 to match rotated outputs
@@ -280,9 +290,39 @@ module rot
              iOut <= {ixCr4[23], ixCr4[23:7]}                       - {qxCi4[23], qxCi4[23:7]};
              qOut <= {ixCi4[23], ixCi4[23:7]}                       + {qxCr4[23], qxCr4[23:7]};
           end
-        endcase // case(sel)
+        endcase
      end
 
+   // The rot module is runnign at the 100 MHz rate and not the symEn rate, so we have to provide synch signal aligned with data.
+   reg [4:0] symEnSr;
+   reg [4:0] sym2xEnSr;
+   reg [4:0] selSr0, selSr1, selSr2, selSr3, selSr4;
+   always @(posedge clk) begin
+      if (reset) begin
+         symEnSr <= 0;
+         sym2xEnSr <= 0;
+         selSr0 <= 5'b0; 
+         selSr1 <= 5'b0; 
+         selSr2 <= 5'b0; 
+         selSr3 <= 5'b0;
+         selSr4 <= 5'b0;
+      end
+      else begin
+         symEnSr <= {symEnSr[3:0], symEn};
+         sym2xEnSr <= {sym2xEnSr[3:0], sym2xEn};
+         selSr0 <= sel; 
+         selSr1 <= selSr0; 
+         selSr2 <= selSr1; 
+         selSr3 <= selSr2;
+         selSr4 <= selSr3;
+      end
+   end
+
+   assign symEnOut = symEnSr[4];
+   assign sym2xEnOut = sym2xEnSr[4];
+   assign selOut = selSr4;
+   
+   
 /* -----\/----- EXCLUDED -----\/-----
 `ifdef SIMULATE
    real iOut_real;

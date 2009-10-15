@@ -13,25 +13,30 @@
   
 module rotator
   (
-   clk, reset, symEn,
+   clk, reset, symEn, sym2xEn,
    i,
    q,
    sel,
+   symEnOut,
+   sym2xEnOut,
    iOut,    
    qOut     
    );
    
 
-   input                 clk, reset, symEn;
+   input                 clk, reset, symEn, sym2xEn;
    input [17:0]          i, q;
    input [4:0]           sel;
+   output                symEnOut;
+   output                sym2xEnOut;
    output [17:0]         iOut, qOut;
    reg [17:0]            iOut, qOut;
    wire [17:0]           iRot, qRot;
 
    reg [17:0] iLimit, qLimit;
-   always @(posedge clk) begin
-      if (symEn) begin
+//   always @(posedge clk) begin
+//      if (symEn) begin
+   always @(i or q) begin
          if (i == 18'h20000) begin
             iLimit <= 18'h20001;
          end
@@ -44,118 +49,101 @@ module rotator
          else begin
             qLimit <= q;
          end
-      end
+//      end
    end
    
    
    reg [17:0]           iIn, qIn;
-   reg [2:0]            selIn;
-   always @(iLimit or qLimit or sel) begin
+   reg [2:0]            angle;
+//   always @(iLimit or qLimit or sel) begin
+   always @(posedge clk) begin
         case (sel)
           // First quadrant
           0,1,2,3: begin
              iIn <= iLimit;
              qIn <= qLimit;
-             selIn <= sel[2:0];
+             angle <= sel[2:0];
           end
           4,5,6,7: begin
              iIn <= qLimit;
              qIn <= iLimit;
-             selIn <= ~sel[2:0]+1;
+             angle <= ~sel[2:0]+1;
           end
           // Second quadrant
           8,9,10,11: begin
              iIn <= -qLimit;
              qIn <= iLimit;
-             selIn <= sel[2:0];
+             angle <= sel[2:0];
           end
           12,13,14,15: begin
              iIn <= -iLimit;
              qIn <= qLimit;
-             selIn <= ~sel[2:0]+1;
+             angle <= ~sel[2:0]+1;
           end
           // Third quadrant
           16,17,18,19: begin
              iIn <= -iLimit;
              qIn <= -qLimit;
-             selIn <= sel[2:0];
+             angle <= sel[2:0];
           end
           20,21,22,23: begin
              iIn <= -qLimit;
              qIn <= -iLimit;
-             selIn <= ~sel[2:0]+1;
+             angle <= ~sel[2:0]+1;
           end
           // Fourth quadrant
           24,25,26,27: begin
              iIn <= qLimit;
              qIn <= -iLimit;
-             selIn <= sel[2:0];
+             angle <= sel[2:0];
           end
           28,29,30,31: begin
              iIn <= iLimit;
              qIn <= -qLimit;
-             selIn <= ~sel[2:0]+1;
+             angle <= ~sel[2:0]+1;
           end
         endcase // case(sel)
      end
-
+   wire [4:0] selRot;
    rot rot
      ( 
-       .clk   (clk), 
-       .reset (reset), 
-       .symEn (symEn), 
-       .i     (iIn), 
-       .q     (qIn), 
-       .sel   (selIn), 
-       .iOut  (iRot), 
-       .qOut  (qRot) 
+       .clk        (clk), 
+       .reset      (reset), 
+       .symEn      (symEn), 
+       .sym2xEn    (sym2xEn), 
+       .i          (iIn), 
+       .q          (qIn), 
+       .sel        (sel),
+       .angle      (angle),
+       .symEnOut   (symEnOut),
+       .sym2xEnOut (junk),
+       .selOut     (selRot),
+       .iOut       (iRot), 
+       .qOut       (qRot) 
        );
 
-   reg [4:0] sel_1dly, sel_2dly;
+   reg [4:0] sel_1dly;
    always @(posedge clk)
      if (reset) begin
         iOut <= 0;
         qOut <= 0;
         sel_1dly <= 0;
-        sel_2dly <= 0;
      end
-     else if (symEn) begin
-        sel_1dly <= sel;
-        sel_2dly <= sel_1dly;
-        case (sel_1dly)
-          // First quadrant
-          1,2,3,4: begin
+     //else if (symEn) begin
+     else begin
+        //sel_1dly <= sel;
+        sel_1dly <= selRot;
+        //case (sel_1dly)
+        case (selRot)
+          0,1,2,3, 8,9,10,11, 16,17,18,19, 24,25,26,27 : begin
              iOut <= iRot;
              qOut <= qRot;
           end
-          5,6,7,8: begin
+          4,5,6,7, 20,21,22,23 : begin
              iOut <= -iRot;
              qOut <= qRot;
           end
-          // Second quadrant
-          9,10,11,12: begin
-             iOut <= iRot;
-             qOut <= qRot;
-          end
-          13,14,15,16: begin
-             iOut <= iRot;
-             qOut <= -qRot;
-          end
-          // Third quadrant
-          17,18,19,20: begin
-             iOut <= iRot;
-             qOut <= qRot;
-          end
-          21,22,23,24: begin
-             iOut <= -iRot;
-             qOut <= qRot;
-          end
-          // Fourth quadrant
-          25,26,27,28: begin
-             iOut <= iRot;
-             qOut <= qRot;
-          end
-          29,30,31,0: begin
+          12,13,14,15, 28,29,30,31: begin
              iOut <= iRot;
              qOut <= -qRot;
           end
@@ -163,58 +151,6 @@ module rotator
      end
 
    
-/* -----\/----- EXCLUDED -----\/-----
-   reg [4:0] sel_1dly, sel_2dly;
-   always @(posedge clk)
-     if (reset) begin
-        iOut <= 0;
-        qOut <= 0;
-        sel_1dly <= 0;
-        sel_2dly <= 0;
-     end
-     else if (symEn) begin
-        sel_1dly <= sel;
-        sel_2dly <= sel_1dly;
-        case (sel_1dly)
-          // First quadrant
-          1,2,3,4: begin
-             iOut <= iRot00;
-             qOut <= qRot00;
-          end
-          5,6,7,8: begin
-             iOut <= -iRot01;
-             qOut <= qRot01;
-          end
-          // Second quadrant
-          9,10,11,12: begin
-             iOut <= iRot10;
-             qOut <= qRot10;
-          end
-          13,14,15,16: begin
-             iOut <= iRot11;
-             qOut <= -qRot11;
-          end
-          // Third quadrant
-          17,18,19,20: begin
-             iOut <= iRot20;
-             qOut <= qRot20;
-          end
-          21,22,23,24: begin
-             iOut <= -iRot21;
-             qOut <= qRot21;
-          end
-          // Fourth quadrant
-          25,26,27,28: begin
-             iOut <= iRot30;
-             qOut <= qRot30;
-          end
-          29,30,31,0: begin
-             iOut <= iRot31;
-             qOut <= -qRot31;
-          end
-        endcase // case(sel)
-     end
- -----/\----- EXCLUDED -----/\----- */
 
 `ifdef SIMULATE
 
@@ -225,12 +161,13 @@ module rotator
    end
    
    always @(posedge clk) begin
-      if (symEn) begin
+      //if (symEn) begin
+      //if (symEnRot) begin
          $display("%d\t%f\t%f",
                   sel,
                   iOut_real,
                   qOut_real);
-      end
+      //end
    end
 
 
