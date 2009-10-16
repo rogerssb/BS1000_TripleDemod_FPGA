@@ -9,7 +9,7 @@
 //-----------------------------------------------------------------------------
 
 `timescale 1ns/1ps
-`include "../addressMap.v"
+`include "addressMap.v"
 
 module trellisSoqpsk
   (
@@ -62,7 +62,7 @@ module trellisSoqpsk
    reg [7:0]           phErrShft;
    wire [17:0]         carrierLoopIOut,carrierLoopQOut;
    wire [31:0]         trellisLoopDout;
-   trellisCarrierLoop trellisCarrierLoop
+   soqpskCarrierLoop soqpskCarrierLoop
      (
       .clk(clk),
       .reset(reset),
@@ -78,15 +78,15 @@ module trellisSoqpsk
       .addr(addr),
       .din(din),
       .dout(trellisLoopDout)
-	  `ifndef ALDEC_SIM
+          `ifndef ALDEC_SIM
       , .iOut(carrierLoopIOut),
       .qOut(carrierLoopQOut),
       .symEnDly(),
       .sym2xEnDly(ternarySymEnOut)
-	  `endif
+          `endif
        );
 
-`ifdef ALDEC_SIM	   
+`ifdef ALDEC_SIM           
    assign carrierLoopIOut = iIn;
    assign carrierLoopQOut = qIn;
    wire   ternarySymEnOut = sym2xEn;
@@ -168,7 +168,7 @@ module trellisSoqpsk
 
    // Match filter minus
    wire [17:0] mfmI,mfmQ;
-   mfilter #(MFM_CONST_REAL, MFM_CONST_IMAG) mfm
+   soqpskMfilter #(MFM_CONST_REAL, MFM_CONST_IMAG) mfm
      (
       .clk     (clk              ), 
       .reset   (reset            ), 
@@ -182,7 +182,7 @@ module trellisSoqpsk
 
    // Match filter plus
    wire [17:0] mfpI,mfpQ;
-   mfilter #(MFP_CONST_REAL, MFP_CONST_IMAG) mfp
+   soqpskMfilter #(MFP_CONST_REAL, MFP_CONST_IMAG) mfp
      (
       .clk     (clk              ), 
       .reset   (reset            ), 

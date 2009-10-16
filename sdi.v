@@ -42,10 +42,10 @@ always @(addr) begin
   endcase
 end
 
-wire            fifoDone;
+wire            fifoFull;
 reg             sdiEnable;
 reg     [1:0]   sdiMode;
-wire            sdiEnableReset = (fifoDone || reset);
+wire            sdiEnableReset = (fifoFull || reset);
 always @(negedge wr0 or posedge sdiEnableReset) begin
     if (sdiEnableReset) begin
         sdiEnable <= 0;
@@ -70,9 +70,10 @@ always @(addr or
         endcase
     end
 
+
 reg     fifoEn0,fifoEn;
-always @(posedge clk or posedge fifoDone) begin
-    if (fifoDone) begin
+always @(posedge clk or posedge fifoFull) begin
+    if (fifoFull) begin
         fifoEn0 <= 0;
         fifoEn <= 0;
         end
@@ -81,7 +82,6 @@ always @(posedge clk or posedge fifoDone) begin
         fifoEn <= fifoEn0;
         end
     end
-
 
 // Eye diagram data acquisition state machine
 parameter EYE_IDLE =    2'b00,
@@ -138,11 +138,12 @@ reg             fifoReadEn;
 wire    [15:0]  iIn = (sdiMode == `SDI_MODE_CONSTELLATION) ? iSymData[17:2] : iEye[17:2];
 wire    [15:0]  qIn = (sdiMode == `SDI_MODE_CONSTELLATION) ? qSymData[17:2] : qEye[17:2];
 wire            wrEn = (sdiMode == `SDI_MODE_CONSTELLATION) ? iSymEn : (eyeEn && eyeSync);
+reg             fifoReset;
 dataFifo iFifo (
-    .srst(!sdiEnable), 
+    .srst(fifoReset), 
     .rd_en(fifoReadEn), 
     .wr_en(wrEn && fifoEn), 
-    .full(fifoDone), 
+    .full(fifoFull), 
     .empty(fifoEmpty), 
     .clk(clk), 
     .dout(iSym), 
@@ -150,7 +151,7 @@ dataFifo iFifo (
     );
 wire    [15:0]  qSym;
 dataFifo qFifo (
-    .srst(!sdiEnable), 
+    .srst(fifoReset), 
     .rd_en(fifoReadEn), 
     .wr_en(wrEn && fifoEn), 
     .full(), 
@@ -179,10 +180,12 @@ always @(posedge clk) begin
         muxState <= MUX_IDLE;
         uartDataAvailable <= 0;
         fifoReadEn <= 0;
+        fifoReset <= 1;
         end
     else begin
         case (muxState) 
             MUX_IDLE: begin
+                fifoReset <= 0;
                 if (!fifoEn && !fifoEmpty && uartDataNeeded) begin
                     muxState <= MUX_IMSB;
                     uartDataAvailable <= 1;
@@ -233,6 +236,7 @@ always @(posedge clk) begin
                 if (fifoEmpty) begin
                     muxState <= MUX_IDLE;
                     uartDataAvailable <= 0;
+                    fifoReset <= 1;
                     end
                 else if (!fifoEmpty && uartDataNeeded) begin
                     muxState <= MUX_IMSB;

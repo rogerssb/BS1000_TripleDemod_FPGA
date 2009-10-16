@@ -21,7 +21,7 @@ RecirculateTime=
 UseRecirculateTime=
 DiskSize=5000M
 [View]
-1=Last 1523853.546ns 2031210.634ns 11881.899ns 265780.946ns 283439.514ns
+1=Last 1862445.357ns 2561578.691ns 16373.146ns 185134.834ns 1443271.452ns
 [Group0]
 Name=New Group2
 [Group3]
@@ -226,15 +226,17 @@ Name="SDI"
 11="test.sdi : sdiOut" default
 12="test.sdi.uartTx : dataNeeded" default
 13="test.sdi.uartTx : dataAvailable" default
-14="test.sdi : fifoEn" default
-15="test.sdi : fifoReadEn" default
-16="test.sdi : iSymEn" default
-17="test.sdi : iSymData[17:0]" default
-18="test.sdi : fifoDone" default
+14="test.sdi : wrEn" default
+15="test.sdi : fifoEn" default
+16="test.sdi : fifoReadEn" default
+17="test.sdi : iSymEn" default
+18="test.sdi : iSymData[17:0]" default
 19="test.sdi : sdiEnable" default
-20="test.sdi : fifoEmpty" default
-21="test.sdi : baudEn" default
-22="test.sdi : baudDiv[15:0]" default
+20="test.sdi : fifoFull" default
+21="test.sdi : fifoEmpty" default
+22="test.sdi : fifoReset" default
+23="test.sdi : baudEn" default
+24="test.sdi : baudDiv[15:0]" default
 OpenGroup=Yes
 [GroupInfo]
 0=New Group2 : 0 : 0 : 0

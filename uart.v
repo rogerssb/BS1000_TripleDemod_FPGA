@@ -124,7 +124,7 @@ always @(posedge clk) begin
     if (reset) begin
         txState <= UARTTX_IDLE;
         dataNeeded <= 1;
-        uartOutput <= 0;
+        uartOutput <= 1;
         end
     else if (baudEn) begin
         case (txState) 
@@ -134,7 +134,7 @@ always @(posedge clk) begin
                     txSR <= data;
                     txBitcount <= 7;
                     dataNeeded <= 0;
-                    uartOutput <= 1;
+                    uartOutput <= 0;
                     end
                 end
             UARTTX_START: begin
@@ -145,7 +145,7 @@ always @(posedge clk) begin
             UARTTX_DATA: begin
                 if (txBitcount == 0) begin
                     txState <= UARTTX_STOP;
-                    uartOutput <= 0;
+                    uartOutput <= 1;
                     dataNeeded <= 1;
                     end
                 else begin
@@ -160,11 +160,11 @@ always @(posedge clk) begin
                     txSR <= data;
                     txBitcount <= 7;
                     dataNeeded <= 0;
-                    uartOutput <= 1;
+                    uartOutput <= 0;
                     end
                 else begin
                     txState <= UARTTX_IDLE;
-                    uartOutput <= 0;
+                    uartOutput <= 1;
                     end
                 end
             default: begin

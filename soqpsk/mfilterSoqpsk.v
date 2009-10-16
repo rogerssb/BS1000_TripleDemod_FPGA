@@ -10,7 +10,7 @@
 
 `timescale 1ns/1ps
 
-module mfilter
+module soqpskMfilter
   (
    clk, reset, symEn, sym2xEn,
    iIn,qIn,
@@ -30,7 +30,7 @@ module mfilter
      (
       .clk   ( clk     ),
       .reset ( reset   ),
-	  .ce    (sym2xEn  ),
+          .ce    (sym2xEn  ),
       .aReal ( iIn     ),
       .aImag ( qIn     ),
       .bReal ( reC     ),

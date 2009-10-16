@@ -34,7 +34,7 @@ module bitsync(
     auBitsyncLock,
     auLockCounter,
     auIQSwap,
-    iMF,qMF
+    iTrellis,qTrellis
     );
 
 input           sampleClk;
@@ -68,7 +68,7 @@ output  [15:0]  lockCounter;
 output          auBitsyncLock;
 output  [15:0]  auLockCounter;
 output          auIQSwap;
-output  [17:0]  iMF,qMF;
+output  [17:0]  iTrellis,qTrellis;
 
 `define USE_COMP
 `ifdef USE_COMP
@@ -92,7 +92,7 @@ cicComp cicCompQ(
 wire            useCompFilter;
 wire            useSummer;
 reg     [17:0]  iDelay,qDelay;
-reg     [17:0]  iMF,qMF;
+reg     [17:0]  iFiltered,qFiltered;
 wire    [18:0]  iSum = useCompFilter ? ({iDelay[17],iDelay} + {iComp[17],iComp}) 
                                      : ({iDelay[17],iDelay} + {i[17],i});
 wire    [18:0]  qSum = useCompFilter ? ({qDelay[17],qDelay} + {qComp[17],qComp})
@@ -108,12 +108,12 @@ always @(posedge sampleClk) begin
             qDelay <= q;
             end
         if (useSummer) begin
-            iMF <= iSum[18:1];
-            qMF <= qSum[18:1];
+            iFiltered <= iSum[18:1];
+            qFiltered <= qSum[18:1];
             end
         else begin
-            iMF <= iDelay;
-            qMF <= qDelay;
+            iFiltered <= iDelay;
+            qFiltered <= qDelay;
             end
         end
     end
@@ -121,18 +121,39 @@ always @(posedge sampleClk) begin
 
 //****************************** Two Sample Sum *******************************
 reg     [17:0]  iDelay,qDelay;
-reg     [17:0]  iMF,qMF;
+reg     [17:0]  iFiltered,qFiltered;
 wire    [18:0]  iSum = {iDelay[17],iDelay} + {i[17],i};
 wire    [18:0]  qSum = {qDelay[17],qDelay} + {q[17],q};
 always @(posedge sampleClk) begin
     if (symTimes2Sync) begin
         iDelay <= i;
         qDelay <= q;
-        iMF <= iSum[18:1];
-        qMF <= qSum[18:1];
+        iFiltered <= iSum[18:1];
+        qFiltered <= qSum[18:1];
         end
     end
 `endif
+
+/******************************************************************************
+                               Symbol Offset Deskew
+******************************************************************************/
+reg     [17:0]  iMF,qMF,qSymDelay;
+always @(posedge sampleClk) begin
+    if (symTimes2Sync) begin
+        iMF <= iFiltered;
+        qSymDelay <= qFiltered;
+        if ( (demodMode == `MODE_OQPSK)
+          || (demodMode == `MODE_SOQPSK)) begin
+            qMF <= qSymDelay;
+            end
+        else begin
+            qMF <= qFiltered;
+            end
+        end
+    end
+
+assign iTrellis = (demodMode == `MODE_PCMTRELLIS) ? iFiltered : i;
+assign qTrellis = (demodMode == `MODE_PCMTRELLIS) ? qFiltered : q;
 
 //************************** Frequency Discriminator **************************
 wire    [11:0]   phase;
@@ -247,6 +268,7 @@ always @(posedge sampleClk) begin
     else if (symTimes2Sync) begin
         // Shift register of baseband sample values
         if ( (demodMode == `MODE_2FSK) 
+          || (demodMode == `MODE_MULTIH)
           || (demodMode == `MODE_PCMTRELLIS)
           || (demodMode == `MODE_FM)) begin
             bbSRI[0] <= freq;
@@ -450,8 +472,6 @@ loopFilter sampleLoop(
 
 //************************** Lock Detector ************************************
 
-`define NEW_DETECTOR
-`ifdef NEW_DETECTOR
 reg     [15:0]  lockCounter;
 wire    [16:0]  lockPlus = {1'b0,lockCounter} + 17'h00001;
 wire    [16:0]  lockMinus = {1'b0,lockCounter} + 17'h1ffff;
@@ -463,7 +483,6 @@ always @(posedge sampleClk) begin
         end
     else if (symTimes2Sync) begin
         if (slipState == TEST) begin
-            //if (avgError[21:14] > syncThreshold) begin
             if (avgError[21:14] > {1'b0,avgSlipError[21:15]}) begin
                 if (lockCounter == (16'hffff-lockCount)) begin
                     bitsyncLock <= 0;
@@ -486,40 +505,6 @@ always @(posedge sampleClk) begin
         end
     end
 
-`else
-
-reg     [15:0]  lockCounter;
-wire    [16:0]  lockPlus = {1'b0,lockCounter} + 17'h00001;
-wire    [16:0]  lockMinus = {1'b0,lockCounter} - {2'b0,syncThreshold};
-reg             bitsyncLock;
-always @(posedge sampleClk) begin
-    if (reset) begin
-        lockCounter <= 0;
-        bitsyncLock <= 0;
-        end
-    else if (loopFilterEn) begin
-        if (satPos || satNeg) begin
-            if (lockMinus[16]) begin
-                bitsyncLock <= 0;
-                lockCounter <= lockCount;
-                end
-            else begin
-                lockCounter <= lockMinus[15:0];
-                end
-            end
-        else begin
-            if (lockPlus[16]) begin
-                bitsyncLock <= 1;
-                lockCounter <= lockCount;
-                end
-            else begin
-                lockCounter <= lockPlus[15:0];
-                end
-            end
-        end
-    end
-
-`endif
 
 `ifdef SIMULATE
 real sampleFreqReal;

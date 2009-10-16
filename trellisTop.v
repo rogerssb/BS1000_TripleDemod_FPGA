@@ -61,7 +61,7 @@ output symb_pll_ref,symb_pll_fbk;
 input symb_pll_vco;
 output  sdiOut;
 
-parameter VER_NUMBER = 16'h0093;
+parameter VER_NUMBER = 16'h0096;
 
 wire [11:0]addr = {addr11,addr10,addr9,addr8,addr7,addr6,addr5,addr4,addr3,addr2,addr1,1'b0};
 
@@ -295,13 +295,6 @@ demod demod(
     .eyeOffset(eyeOffset)
     );
 
-
-assign bsync_nLock = !bitsyncLock;
-assign demod_nLock = !carrierLock;
-
-//******************************************************************************
-//                                 Trellis Decoder
-//******************************************************************************
 reg     symEn,sym2xEn;
 reg     [17:0]iIn,qIn;
 always @(posedge ck933) begin
@@ -312,10 +305,16 @@ always @(posedge ck933) begin
     end
 
 
+assign bsync_nLock = !bitsyncLock;
+assign demod_nLock = !carrierLock;
 
-wire    [17:0]  trellis0Out,trellis1Out,trellis2Out;
-wire    [4:0]   index;
-wire    [31:0]  trellis_dout;
+//******************************************************************************
+//                             PCM Trellis Decoder
+//******************************************************************************
+
+
+wire    [17:0]  pcmTrellis0Out,pcmTrellis1Out,pcmTrellis2Out;
+wire    [31:0]  pcmTrellisDout;
 trellis trellis(
     .clk(ck933),
     .reset(reset),
@@ -330,20 +329,90 @@ trellis trellis(
     .wr3(wr3),
     .addr(addr),
     .din(dataIn),
-    .dout(trellis_dout),
+    .dout(pcmTrellisDout),
     .dac0Select(dac0Select),
     .dac1Select(dac1Select),
     .dac2Select(dac2Select),
-    .dac0Sync(trellis0Sync),
-    .dac0Data(trellis0Out),
-    .dac1Sync(trellis1Sync),
-    .dac1Data(trellis1Out),
-    .dac2Sync(trellis2Sync),
-    .dac2Data(trellis2Out),
-    .symEnOut(trellisSymEn),
-    .sym2xEnOut(trellisSym2xEn),
-    .decision(trellisBit)
+    .dac0Sync(pcmTrellis0Sync),
+    .dac0Data(pcmTrellis0Out),
+    .dac1Sync(pcmTrellis1Sync),
+    .dac1Data(pcmTrellis1Out),
+    .dac2Sync(pcmTrellis2Sync),
+    .dac2Data(pcmTrellis2Out),
+    .symEnOut(pcmTrellisSymEn),
+    .sym2xEnOut(pcmTrellisSym2xEn),
+    .decision(pcmTrellisBit)
     );
+
+//******************************************************************************
+//                           SOQPSK Trellis Decoder
+//******************************************************************************
+wire    [17:0]  soqpskTrellis0Out,soqpskTrellis1Out,soqpskTrellis2Out;
+wire    [31:0]  soqpskTrellisDout;
+trellisSoqpsk soqpsk
+    (
+    .clk(ck933),
+    .reset(reset),
+    .symEn(symEn),
+    .sym2xEn(sym2xEn),
+    .iIn(iIn),
+    .qIn(qIn),
+    .wr0(wr0),
+    .wr1(wr1),
+    .wr2(wr2),
+    .wr3(wr3),
+    .addr(addr),
+    .din(dataIn),
+    .dout(soqpskTrellisDout),
+    .dac0Select(dac0Select),
+    .dac1Select(dac1Select),
+    .dac2Select(dac2Select),
+    .dac0Sync(soqpskTrellis0Sync),
+    .dac0Data(soqpskTrellis0Out),
+    .dac1Sync(soqpskTrellis1Sync),
+    .dac1Data(soqpskTrellis1Out),
+    .dac2Sync(soqpskTrellis2Sync),
+    .dac2Data(soqpskTrellis2Out),
+    .ternarySymEnOut(soqpskTrellisSymEn),
+    .ternarySym2xEnOut(soqpskTrellisSym2xEn),
+    .decision(soqpskTrellisBit)
+   );
+   
+
+//******************************************************************************
+//                          Trellis Muxes
+//******************************************************************************
+wire    [31:0] trellisDout = (demodMode == `MODE_PCMTRELLIS)
+                           ? pcmTrellisDout
+                           : soqpskTrellisDout;
+wire    [17:0] trellis0Out = (demodMode == `MODE_PCMTRELLIS)
+                           ? pcmTrellis0Out
+                           : soqpskTrellis0Out;
+wire    trellis0Sync = (demodMode == `MODE_PCMTRELLIS)
+                     ? pcmTrellis0Sync
+                     : soqpskTrellis0Sync;
+wire    [17:0] trellis1Out = (demodMode == `MODE_PCMTRELLIS)
+                           ? pcmTrellis1Out
+                           : soqpskTrellis1Out;
+wire    trellis1Sync = (demodMode == `MODE_PCMTRELLIS)
+                     ? pcmTrellis1Sync
+                     : soqpskTrellis1Sync;
+wire    [17:0] trellis2Out = (demodMode == `MODE_PCMTRELLIS)
+                           ? pcmTrellis2Out
+                           : soqpskTrellis2Out;
+wire    trellis2Sync = (demodMode == `MODE_PCMTRELLIS)
+                     ? pcmTrellis2Sync
+                     : soqpskTrellis2Sync;
+wire    trellisSymEn = (demodMode == `MODE_PCMTRELLIS)
+                     ? pcmTrellisSymEn
+                     : soqpskTrellisSymEn;
+wire    trellisSym2xEn = (demodMode == `MODE_PCMTRELLIS)
+                       ? pcmTrellisSym2xEn
+                       : soqpskTrellisSym2xEn;
+wire    trellisBit = (demodMode == `MODE_PCMTRELLIS)
+                   ? pcmTrellisBit
+                   : soqpskTrellisBit;
+
 
 //******************************************************************************
 //                              DAC Outputs
@@ -593,9 +662,9 @@ wire decoder_cout;
 wire decoder_fifo_rs;
 wire cout_inv;
 
-wire trellisEn = (demodMode == `MODE_PCMTRELLIS);
+wire trellisEn = ((demodMode == `MODE_PCMTRELLIS) || (demodMode == `MODE_SOQPSK));
 wire [2:0]decoder_iIn = trellisEn ? {trellisBit,2'b0} : {iBit,2'b0}; 
-wire [2:0]decoder_qIn = {qBit,2'b0};
+wire [2:0]decoder_qIn = trellisEn ? {trellisBit,2'b0} : {qBit,2'b0};
 wire decoderSymEn = trellisEn ? trellisSymEn : iSymEn;
 wire decoderSym2xEn = trellisEn ? trellisSym2xEn : iSym2xEn;
 
@@ -678,14 +747,30 @@ symb_pll symb_pll
 
 wire cout = symb_pll_out ^ !cout_inv;
 assign cout_i = cout;
-assign cout_q = (demodMode == `MODE_AUQPSK) ? qSymClk : cout;
+reg cout_q;
+always @(demodMode or qSymClk or cout or trellisSymEn) begin
+    case (demodMode)
+        `MODE_AUQPSK:   cout_q = qSymClk;
+        `MODE_SOQPSK:   cout_q = trellisSymEn;
+        default:       cout_q = cout;
+        endcase
+    end
+//assign cout_q = (demodMode == `MODE_AUQPSK) ? qSymClk : cout;
 
 reg dout_i,decQ;
 always @(negedge cout)begin
   dout_i <= decoder_fifo_dout_i;
   decQ <= decoder_fifo_dout_q;
   end
-assign dout_q = (demodMode == `MODE_AUQPSK) ? qBit : decQ;
+reg dout_q;
+always @(demodMode or qBit or decQ or trellisBit) begin
+    case (demodMode)
+        `MODE_AUQPSK:   dout_q = qBit;
+        `MODE_SOQPSK:   dout_q = trellisBit;
+        default:       dout_q = decQ;
+        endcase
+    end
+//assign dout_q = (demodMode == `MODE_AUQPSK) ? qBit : decQ;
 `endif
 
 //******************************************************************************
@@ -727,7 +812,7 @@ always @(
   misc_dout or
   decoder_dout or
   symb_pll_dout or
-  trellis_dout or
+  trellisDout or
   sdiDout
   )begin
   casex(addr)
@@ -774,10 +859,10 @@ always @(
     `TRELLISLFSPACE,
     `TRELLIS_SPACE: begin
       if (addr[1]) begin
-        rd_mux <= trellis_dout[31:16];
+        rd_mux <= trellisDout[31:16];
         end
       else begin
-        rd_mux <= trellis_dout[15:0];
+        rd_mux <= trellisDout[15:0];
         end
       end
     `DAC_SPACE : rd_mux <= dac_dout;

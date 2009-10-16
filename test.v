@@ -702,8 +702,8 @@ initial begin
     write32(createAddress(`CHAGCSPACE,`ALF_CONTROL),0);              
     `endif
 
-    // Enable the SDI in eye pattern mode
-    write32(createAddress(`SDISPACE,`SDI_CONTROL),32'h00000082);
+    // Enable the SDI in constellation mode
+    write32(createAddress(`SDISPACE,`SDI_CONTROL),32'h00000081);
 
 
     // Wait for some data to pass thru

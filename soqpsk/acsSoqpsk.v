@@ -4,7 +4,7 @@
 // two's complement adder
 // This added adds 2, two's comp. numbers of different number of bits
 // the "b" side of the added is 4 bits wider than the a side, so the result it then: sizeof(a) + 4bits + 1carry out 
-module adder2s (a, b, sum);
+module soqpskAdder2s (a, b, sum);
    parameter             size = 8;
    input [size-1:0]      a;
    input [(size-1)+4:0]  b;
@@ -21,7 +21,7 @@ module adder2s (a, b, sum);
 endmodule
             
 
-module comp (a, b, bLarger);
+module soqpskComp (a, b, bLarger);
    parameter                 size = 8;
    input [(size-1)+4: 0]     a, b;
    output                    bLarger;
@@ -47,7 +47,7 @@ module comp (a, b, bLarger);
 endmodule                                                    
 
    
-module mux_2_1 (a, b, sel, y);
+module soqpskMux_2_1 (a, b, sel, y);
    parameter               size = 8;
    input [size-1:0]        a, b;
    input                   sel;
@@ -66,7 +66,7 @@ module mux_2_1 (a, b, sel, y);
 endmodule         
             
 
-module acs 
+module soqpskAcs 
   (
    clk, reset, symEn,
    decayFactor,
@@ -109,7 +109,7 @@ module acs
    reg [ROT_BITS-1:0] outReal;
  
    // First we add the accumulatior metric with the matchfilter output
-   adder2s #(size) adder2s_1
+   soqpskAdder2s #(size) adder2s_1
      (
       .a          (out1PtReal[(ROT_BITS-1):(ROT_BITS-size)]),
       .b          (accMet1   ),
@@ -128,7 +128,7 @@ module acs
    wire [(size-1)+4:0]  acc1 = normalizeIn ? acc1Temp : add1;
 
    
-   adder2s #(size) adder2s_2
+   soqpskAdder2s #(size) adder2s_2
      (
       .a          (out0PtReal[(ROT_BITS-1):(ROT_BITS-size)]), 
       .b          (accMet2   ),
@@ -147,7 +147,7 @@ module acs
    wire [(size-1)+4:0]  acc2 = normalizeIn ? acc2Temp : add2;
 
    // Compare
-   comp #(size) comparator
+   soqpskComp #(size) comparator
      (
       .a          (add1   ), 
       .b          (add2   ), 
@@ -155,7 +155,7 @@ module acs
       );
 
    // Select
-   mux_2_1 #(size+4) selector
+   soqpskMux_2_1 #(size+4) selector
      (
       .a         (acc1       ),
       .b         (acc2       ), 
@@ -163,7 +163,7 @@ module acs
       .y         (muxOut     )
       );
 
-   mux_2_1 #(ROT_BITS) selectorImag
+   soqpskMux_2_1 #(ROT_BITS) selectorImag
      (
       .a         (out1PtImag   ),
       .b         (out0PtImag   ), 
@@ -171,7 +171,7 @@ module acs
       .y         (outImagAsync )
       );
 
-   mux_2_1 #(ROT_BITS) selectorReal
+   soqpskMux_2_1 #(ROT_BITS) selectorReal
      (
       .a         (out1PtReal   ),
       .b         (out0PtReal   ), 

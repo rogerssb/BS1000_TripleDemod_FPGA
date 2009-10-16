@@ -331,29 +331,10 @@ assign iEye = iSwap2;
 assign qEye = qSwap2;
 
 /******************************************************************************
-                               Symbol Offset Deskew
-******************************************************************************/
-reg     [17:0]  iSym,qSym,qDelay;
-always @(posedge clk) begin
-    if (resampSync) begin
-        iSym <= iResamp;
-        qDelay <= qResamp;
-        if ( (demodMode == `MODE_OQPSK)
-          || (demodMode == `MODE_SOQPSK)) begin
-            qSym <= qDelay;
-            end
-        else begin
-            qSym <= qResamp;
-            end
-        end
-    end
-
-/******************************************************************************
                                 Bitsync Loop
 ******************************************************************************/
 wire    [17:0]  iSymData;
 wire    [17:0]  qSymData;
-wire    [17:0]  iMF,qMF;
 wire    [15:0]  bsLockCounter;
 wire    [15:0]  auLockCounter;
 wire    [31:0]  bitsyncDout;
@@ -367,7 +348,7 @@ bitsync bitsync(
     .addr(addr),
     .din(din),
     .dout(bitsyncDout),
-    .i(iSym), .q(qSym),
+    .i(iResamp), .q(qResamp),
     .au(qResamp),
     .offsetError(offsetError),
     .offsetErrorEn(offsetErrorEn),
@@ -388,23 +369,10 @@ bitsync bitsync(
     .auBitsyncLock(auBitsyncLock),
     .auLockCounter(auLockCounter),
     .auIQSwap(auIQSwap),
-    .iMF(iMF),.qMF(qMF)
+    .iTrellis(iTrellis),.qTrellis(qTrellis)
     );
 
 assign trellisSymSync = iSymEn & resampSync;
-reg     [17:0]  iTrellis,qTrellis;
-always @(iMF or qMF or
-         iResamp or qResamp or
-         demodMode) begin
-    if (demodMode == `MODE_PCMTRELLIS) begin
-        iTrellis = iMF;
-        qTrellis = qMF;
-        end
-    else begin
-        iTrellis = iResamp;
-        qTrellis = qResamp;
-        end
-    end
 
 /******************************************************************************
                                DAC Output Mux
