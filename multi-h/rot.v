@@ -267,7 +267,6 @@ module rot
         iOut <= 0;
         qOut <= 0;	
      end
-     //else if (symEn) begin
      else begin
         casex (angle)
           3'b000: begin //0
