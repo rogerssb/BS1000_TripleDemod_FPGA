@@ -715,6 +715,8 @@ initial begin
 
     write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h0018000c);    
 
+    read32(createAddress(`SDISPACE,`SDI_CONTROL));
+
     end
 
 real carrierOffsetReal = demod.carrierLoop.carrierOffsetReal * SAMPLE_FREQ/2.0;

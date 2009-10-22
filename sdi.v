@@ -137,7 +137,8 @@ wire    [15:0]  iSym;
 reg             fifoReadEn;
 wire    [15:0]  iIn = (sdiMode == `SDI_MODE_CONSTELLATION) ? iSymData[17:2] : iEye[17:2];
 wire    [15:0]  qIn = (sdiMode == `SDI_MODE_CONSTELLATION) ? qSymData[17:2] : qEye[17:2];
-wire            wrEn = (sdiMode == `SDI_MODE_CONSTELLATION) ? iSymEn : (eyeEn && eyeSync);
+//wire            wrEn = (sdiMode == `SDI_MODE_CONSTELLATION) ? iSymEn : (eyeEn && eyeSync);
+wire            wrEn = (sdiMode == `SDI_MODE_CONSTELLATION) ? iSymEn : eyeSync;
 reg             fifoReset;
 dataFifo iFifo (
     .srst(fifoReset), 
@@ -163,32 +164,61 @@ dataFifo qFifo (
 
 // UART Data Mux
 parameter MUX_IDLE =        4'b0000,
-          MUX_IMSB =        4'b0001,
-          MUX_IMSB_WAIT =   4'b0011,    
-          MUX_ILSB =        4'b0010,
-          MUX_ILSB_WAIT =   4'b0110,
-          MUX_QMSB =        4'b0111,
-          MUX_QMSB_WAIT =   4'b0101,
-          MUX_QLSB =        4'b0100,
-          MUX_QLSB_WAIT =   4'b1100;
+          MUX_CMSB =        4'b0001,
+          MUX_CMSB_WAIT =   4'b0011,
+          MUX_CLSB =        4'b0010,
+          MUX_CLSB_WAIT =   4'b0110,
+          MUX_IMSB =        4'b0111,
+          MUX_IMSB_WAIT =   4'b0101,    
+          MUX_ILSB =        4'b0100,
+          MUX_ILSB_WAIT =   4'b1100,
+          MUX_QMSB =        4'b1101,
+          MUX_QMSB_WAIT =   4'b1111,
+          MUX_QLSB =        4'b1110,
+          MUX_QLSB_WAIT =   4'b1010;
 reg     [3:0]   muxState;
 reg             uartDataAvailable;
 wire            uartDataNeeded;
 reg     [7:0]   uartData;
+reg     [15:0]  uartCount;
 always @(posedge clk) begin
     if (reset) begin
         muxState <= MUX_IDLE;
         uartDataAvailable <= 0;
         fifoReadEn <= 0;
         fifoReset <= 1;
+        uartCount <= 0;
         end
     else begin
         case (muxState) 
             MUX_IDLE: begin
                 fifoReset <= 0;
                 if (!fifoEn && !fifoEmpty && uartDataNeeded) begin
-                    muxState <= MUX_IMSB;
+                    muxState <= MUX_CMSB;
                     uartDataAvailable <= 1;
+                    uartData <= uartCount[15:8];
+                    end
+                end
+            MUX_CMSB: begin
+                if (!uartDataNeeded) begin
+                    muxState <= MUX_CMSB_WAIT;
+                    end
+                end
+            MUX_CMSB_WAIT: begin
+                if (uartDataNeeded) begin
+                    muxState <= MUX_CLSB;
+                    uartData <= uartCount[7:0];
+                    uartCount <= uartCount + 1;
+                    end
+                end
+            MUX_CLSB: begin
+                if (!uartDataNeeded) begin
+                    muxState <= MUX_CLSB_WAIT;
+                    end
+                end
+            MUX_CLSB_WAIT: begin
+                if (uartDataNeeded) begin
+                    muxState <= MUX_IMSB;
                     uartData <= iSym[15:8];
                     end
                 end
@@ -237,16 +267,18 @@ always @(posedge clk) begin
                     muxState <= MUX_IDLE;
                     uartDataAvailable <= 0;
                     fifoReset <= 1;
+                    uartCount <= 0;
                     end
                 else if (!fifoEmpty && uartDataNeeded) begin
-                    muxState <= MUX_IMSB;
-                    uartData <= iSym[15:8];
+                    muxState <= MUX_CMSB;
+                    uartData <= uartCount[15:8];
                     end
                 end
             default: begin
                 muxState <= MUX_IDLE;
                 uartDataAvailable <= 0;
                 fifoReadEn <= 0;
+                uartCount <= 0;
                 end
             endcase
         end

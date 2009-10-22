@@ -8,9 +8,9 @@ Version=Silvaco4.10.0.R
 DisableCache=
 SimFile=
 [Analyzer]
-C0Width=116
+C0Width=117
 C1Width=58
-C2Width=136
+C2Width=135
 GotoSource=N
 [Spice]
 [LibraryFiles]
@@ -21,7 +21,7 @@ RecirculateTime=
 UseRecirculateTime=
 DiskSize=5000M
 [View]
-1=Last 1862445.357ns 2561578.691ns 16373.146ns 185134.834ns 1443271.452ns
+1=Last 662196.987ns 712603.995ns 1172.256ns 667285.703ns 707894.604ns
 [Group0]
 Name=New Group2
 [Group3]
@@ -32,6 +32,7 @@ Name="Micro"
 3="test.demod : wr3" default
 4="test.demod : din[31:0]" default
 5="test.demod : addr[11:0]" default
+OpenGroup=
 [Group2]
 Name="Tx"
 0="test.fmMod : interpReal" default Real AnalogDisplay AType=Step Scale=Auto
@@ -45,6 +46,7 @@ Name="Tx"
 8="test.fmMod : modClk" default
 9="test.fmMod : reset" default
 10="test.fmMod : clk" default
+OpenGroup=
 [PliFiles]
 0=.\gaussPLI\gaussPLI.dll
 [IncDirs]
@@ -66,6 +68,7 @@ Name="DAC"
 12="test.demod : symClk" default
 13="test.demod : resampSync" default
 14="test.demod : ddcSync" default
+OpenGroup=
 [Group4]
 Name="Bitsync"
 0="test.demod.bitsync : avgOffsetReal" default Real AnalogDisplay AType=Step Scale=Auto
@@ -101,7 +104,6 @@ Name="Bitsync"
 30="test.demod.resampler.resamplerI : outReal" default Real AnalogDisplay AType=Step Scale=Auto
 31="test.demod.resampler.resamplerI : inReal" default Real AnalogDisplay AType=Step Scale=Auto
 32="test : cicDecimationInt" default Decimal AnalogDisplay AType=PWL Scale=Auto
-OpenGroup=
 [Group5]
 Name="Carrier"
 0="test.demod.carrierLoop.lagGain : sweepOffsetMag[31:0]" default Unknown
@@ -125,7 +127,6 @@ Name="Carrier"
 18="test.demod.carrierLoop : negFrequency[18:0]" default
 19="test.demod.carrierLoop : posFrequency[18:0]" default
 20="test.demod.carrierLoop : newFreq[18:0]" default
-OpenGroup=
 [Group1]
 Name="Rx"
 0="test.demod.resampler : reset" default
@@ -149,7 +150,6 @@ Name="Rx"
 18="test.demod.ddc : iMixReal" default Real AnalogDisplay AType=Step Scale=Auto
 19="test : iSignalReal" default Real AnalogDisplay AType=Step Scale=Auto
 20="test : cicDecimationInt" default Decimal AnalogDisplay AType=PWL Scale=Auto
-OpenGroup=
 [Files]
 0=test.v
 1=demod.v
@@ -224,19 +224,21 @@ Name="SDI"
 9="test.sdi : iIn[15:0]" default
 10="test.demod : ddcSync" default
 11="test.sdi : sdiOut" default
-12="test.sdi.uartTx : dataNeeded" default
-13="test.sdi.uartTx : dataAvailable" default
-14="test.sdi : wrEn" default
-15="test.sdi : fifoEn" default
-16="test.sdi : fifoReadEn" default
-17="test.sdi : iSymEn" default
-18="test.sdi : iSymData[17:0]" default
-19="test.sdi : sdiEnable" default
-20="test.sdi : fifoFull" default
-21="test.sdi : fifoEmpty" default
-22="test.sdi : fifoReset" default
-23="test.sdi : baudEn" default
-24="test.sdi : baudDiv[15:0]" default
+12="test.sdi : uartCount[15:0]" default
+13="test.sdi.uartTx : dataNeeded" default
+14="test.sdi.uartTx : dataAvailable" default
+15="test.sdi : wrEn" default
+16="test.sdi : fifoEn" default
+17="test.sdi : fifoReadEn" default
+18="test.sdi : iSymEn" default
+19="test.sdi : iSymData[17:0]" default
+20="test.sdi : sdiEnable" default
+21="test.sdi : fifoFull" default
+22="test.sdi : fifoEmpty" default
+23="test.sdi : fifoReset" default
+24="test.sdi : muxState[3:0]" default
+25="test.sdi : baudEn" default
+26="test.sdi : baudDiv[15:0]" default
 OpenGroup=Yes
 [GroupInfo]
 0=New Group2 : 0 : 0 : 0
@@ -247,4 +249,3 @@ OpenGroup=Yes
 5=Carrier : 5 : 1 : 0
 6=DAC : 6 : 1 : 0
 7=SDI : 7 : 1 : 0
-[Bookmarks]

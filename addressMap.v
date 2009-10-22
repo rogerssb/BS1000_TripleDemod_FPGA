@@ -2,7 +2,7 @@
 `define ADDRESS_MAP
 
 // Split the memory space for the different functions
-`define DEMODSPACE      12'b0000_xxxx_xxxx
+`define DEMODSPACE      12'b0000_0xxx_xxxx
 `define FMMODSPACE      12'b0001_xxxx_xxxx
 `define DDCSPACE        12'b0010_xxxx_xxxx
 `define CICDECSPACE     12'b0011_xxxx_xxxx

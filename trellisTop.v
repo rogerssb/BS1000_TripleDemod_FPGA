@@ -61,7 +61,7 @@ output symb_pll_ref,symb_pll_fbk;
 input symb_pll_vco;
 output  sdiOut;
 
-parameter VER_NUMBER = 16'h0096;
+parameter VER_NUMBER = 16'h0098;
 
 wire [11:0]addr = {addr11,addr10,addr9,addr8,addr7,addr6,addr5,addr4,addr3,addr2,addr1,1'b0};
 
@@ -96,8 +96,8 @@ always @(posedge nWe or posedge clockCounterEn) begin
 reg     [31:0]  misc_dout;
 reg     [31:0]  clockCounterHold;
 reg rs;
-always @(addr or misc_en or clockCounterHold) begin
-  if(misc_en) begin
+always @(addr or misc_en or nRd or clockCounterHold) begin
+  if(misc_en && !nRd) begin
     casex (addr)
             `MISC_RESET: begin
                 rs <= 1;

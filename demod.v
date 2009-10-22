@@ -326,9 +326,14 @@ always @(posedge clk) begin
     qSwap1 <= qSwap0;
     qSwap2 <= qSwap1;
     end
-assign eyeSync = ddcSyncSR[2];
-assign iEye = iSwap2;
-assign qEye = qSwap2;
+
+//assign eyeSync = ddcSyncSR[2];
+//assign iEye = iSwap2;
+//assign qEye = qSwap2;
+
+assign eyeSync = resampSync;
+assign iEye = iResamp;
+assign qEye = qResamp;
 
 /******************************************************************************
                                 Bitsync Loop
