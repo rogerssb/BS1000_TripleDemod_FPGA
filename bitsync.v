@@ -152,8 +152,8 @@ always @(posedge sampleClk) begin
         end
     end
 
-assign iTrellis = (demodMode == `MODE_PCMTRELLIS) ? iFiltered : i;
-assign qTrellis = (demodMode == `MODE_PCMTRELLIS) ? qFiltered : q;
+assign iTrellis = (demodMode == `MODE_PCMTRELLIS) ? iMF : i;
+assign qTrellis = (demodMode == `MODE_PCMTRELLIS) ? qMF : q;
 
 //************************** Frequency Discriminator **************************
 wire    [11:0]   phase;
@@ -207,59 +207,21 @@ parameter SLIP1 =    2'b10;
 // Fifo of baseband inputs
 reg [17:0]bbSRI[3:0];
 reg [17:0]bbSRQ[3:0];
-reg [17:0]negBbSRI[2:0];
-reg [17:0]negBbSRQ[2:0];
 
 // Timing error variables
 wire earlySignI = bbSRI[2][17];
 wire lateSignI = bbSRI[0][17];
 wire [17:0]prevOffTimeI = bbSRI[3];
 wire [17:0]earlyOnTimeI = bbSRI[2];
-wire [17:0]negEarlyOnTimeI = negBbSRI[2];
 wire [17:0]offTimeI = bbSRI[1];
 wire [17:0]lateOnTimeI = bbSRI[0];
-wire [17:0]negLateOnTimeI = negBbSRI[0];
-wire [17:0]negoffTimeI = negBbSRI[1];
+wire [17:0]negoffTimeI = (~offTimeI + 1);
 wire earlySignQ = bbSRQ[2][17];
 wire lateSignQ = bbSRQ[0][17];
 wire [17:0]earlyOnTimeQ = bbSRQ[2];
 wire [17:0]lateOnTimeQ = bbSRQ[0];
 wire [17:0]offTimeQ = bbSRQ[1];
-wire [17:0]negoffTimeQ = negBbSRQ[1];
-
-wire    [11:0]   syncThreshold;
-wire [17:0]deviationThreshold = {syncThreshold,6'b0};
-wire earlyMinus3 =  (negEarlyOnTimeI > deviationThreshold);
-wire earlyMinus1 =  !earlyMinus3;
-wire earlyPlus3 =   (earlyOnTimeI > deviationThreshold);
-wire earlyPlus1 =   !earlyPlus3;
-wire lateMinus3 =  (negLateOnTimeI > deviationThreshold);
-wire lateMinus1 =  !lateMinus3;
-wire latePlus3 =   (lateOnTimeI > deviationThreshold);
-wire latePlus1 =   !latePlus3;
-reg  sameAmplitudes;
-always @(earlySignI or 
-         earlyMinus3 or lateMinus3 or
-         earlyMinus1 or lateMinus1 or
-         earlyPlus1 or latePlus1 or
-         earlyPlus3 or latePlus3 or
-        demodMode) begin
-    if (demodMode == `MODE_MULTIH) begin
-        // Is the early symbol negative?
-        if (earlySignI) begin
-            // Yes. 
-            sameAmplitudes = ( (earlyMinus3 && latePlus3)
-                            || (earlyMinus1 && latePlus1));
-            end
-        else begin
-            sameAmplitudes = ( (earlyPlus3 && lateMinus3)
-                            || (earlyPlus1 && lateMinus1));
-            end
-        end
-    else begin
-        sameAmplitudes = 1'b1;
-        end
-    end
+wire [17:0]negoffTimeQ = (~offTimeQ + 1);
 
 reg  [17:0]timingErrorI;
 reg  [17:0]timingErrorQ;
@@ -311,36 +273,24 @@ always @(posedge sampleClk) begin
           || (demodMode == `MODE_FM)) begin
             bbSRI[0] <= freq;
             bbSRQ[0] <= freq;
-            negBbSRI[0] <= -freq;
-            negBbSRQ[0] <= -freq;
             end
         else if (demodMode == `MODE_PM) begin
             bbSRI[0] <= {phase,6'b0};
             bbSRQ[0] <= {phase,6'b0};
-            negBbSRI[0] <= -{phase,6'b0};
-            negBbSRQ[0] <= -{phase,6'b0};
             end
         else if (bitsyncMode == `MODE_DUAL_RAIL) begin
             bbSRI[0] <= iMF;
             bbSRQ[0] <= qMF;
-            negBbSRI[0] <= -iMF;
-            negBbSRQ[0] <= -qMF;
             end
         else begin
             bbSRI[0] <= iMF;
             bbSRQ[0] <= iMF;
-            negBbSRI[0] <= -iMF;
-            negBbSRQ[0] <= -iMF;
             end
         bbSRI[1] <= bbSRI[0];
         bbSRI[2] <= bbSRI[1];
         bbSRI[3] <= bbSRI[2];
         bbSRQ[1] <= bbSRQ[0];
         bbSRQ[2] <= bbSRQ[1];
-        negBbSRI[1] <= negBbSRI[0];
-        negBbSRI[2] <= negBbSRI[1];
-        negBbSRQ[1] <= negBbSRQ[0];
-        negBbSRQ[2] <= negBbSRQ[1];
         case (phaseState)
             ONTIME: begin
                 `ifdef ENABLE_SLIP
@@ -358,7 +308,7 @@ always @(posedge sampleClk) begin
             OFFTIME: begin
                 phaseState <= ONTIME;
                 // Is there a data transition on I?
-                if ((earlySignI != lateSignI) && sameAmplitudes) begin
+                if (earlySignI != lateSignI) begin
                     // Yes. Calculate DC offset error
                     transition <= 1;
                     noTransitionCount <= 0;
@@ -394,7 +344,7 @@ always @(posedge sampleClk) begin
                     deviation <= earlyOnTimeI;
                     end
                 // Is there a data transition on Q?
-                if ((earlySignQ != lateSignQ) && sameAmplitudes) begin
+                if (earlySignQ != lateSignQ) begin
                     // High to low transition?
                     if (earlySignQ) begin
                         timingErrorQ <= offTimeQ;

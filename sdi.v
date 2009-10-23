@@ -85,12 +85,9 @@ always @(posedge clk or posedge fifoFull) begin
 
 // Eye diagram data acquisition state machine
 parameter EYE_IDLE =    2'b00,
-          EYE_WAIT =    2'b01,
-          EYE_WRITE =   2'b11;
+          EYE_WAIT =    2'b01;
 reg     [1:0]   eyeState;
 reg             eyeEn;
-reg     [2:0]   eyeCount;
-reg     [4:0]   eyeRef;
 always @(posedge clk) begin
     if (reset) begin
         eyeState <= EYE_IDLE;
@@ -99,28 +96,15 @@ always @(posedge clk) begin
     else if (eyeSync) begin
         case (eyeState)
             EYE_IDLE: begin
-                if (fifoEn) begin
-                    eyeRef <= eyeOffset;
+                if (fifoEn && iSymEn) begin
+                    eyeEn <= 1;
                     eyeState <= EYE_WAIT;
                     end
                 end
             EYE_WAIT: begin
                 if (!fifoEn) begin
                     eyeState <= EYE_IDLE;
-                    end
-                else if (eyeOffset == eyeRef) begin
-                    eyeState <= EYE_WRITE;
-                    eyeCount <= 7;
-                    eyeEn <= 1;
-                    end
-                end
-            EYE_WRITE: begin
-                if (eyeCount == 0) begin
-                    eyeState <= EYE_WAIT;
                     eyeEn <= 0;
-                    end
-                else begin
-                    eyeCount <= eyeCount - 1;
                     end
                 end
             default: begin
@@ -137,8 +121,7 @@ wire    [15:0]  iSym;
 reg             fifoReadEn;
 wire    [15:0]  iIn = (sdiMode == `SDI_MODE_CONSTELLATION) ? iSymData[17:2] : iEye[17:2];
 wire    [15:0]  qIn = (sdiMode == `SDI_MODE_CONSTELLATION) ? qSymData[17:2] : qEye[17:2];
-//wire            wrEn = (sdiMode == `SDI_MODE_CONSTELLATION) ? iSymEn : (eyeEn && eyeSync);
-wire            wrEn = (sdiMode == `SDI_MODE_CONSTELLATION) ? iSymEn : eyeSync;
+wire            wrEn = (sdiMode == `SDI_MODE_CONSTELLATION) ? iSymEn : (eyeEn && eyeSync);
 reg             fifoReset;
 dataFifo iFifo (
     .srst(fifoReset), 

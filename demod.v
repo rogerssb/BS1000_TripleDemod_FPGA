@@ -331,10 +331,6 @@ always @(posedge clk) begin
 //assign iEye = iSwap2;
 //assign qEye = qSwap2;
 
-assign eyeSync = resampSync;
-assign iEye = iResamp;
-assign qEye = qResamp;
-
 /******************************************************************************
                                 Bitsync Loop
 ******************************************************************************/
@@ -378,6 +374,11 @@ bitsync bitsync(
     );
 
 assign trellisSymSync = iSymEn & resampSync;
+
+assign eyeSync = resampSync;
+assign iEye = (demodMode == `MODE_PCMTRELLIS) ? iSymData : iResamp;
+assign qEye = (demodMode == `MODE_PCMTRELLIS) ? qSymData : qResamp;
+
 
 /******************************************************************************
                                DAC Output Mux
