@@ -7,6 +7,7 @@
 // 1.0      AMJ initial coding
 //
 // Updateing the module to run at the clock rate and not at the symbol rate.
+// oct-17-09: Parameterize the vector width
 //-----------------------------------------------------------------------------
 
 `timescale 1ns/1ps
@@ -25,26 +26,29 @@ module rot
    qOut     
    );
    
-
-   input                 clk, reset, symEn, sym2xEn;
-   input [17:0]          i, q;
-   input [2:0]           angle;
-   input [4:0]           sel;
-   output                symEnOut;
-   output                sym2xEnOut;
-   output [4:0]          selOut;
-   output [17:0]         iOut, qOut;
-
-   reg [17:0]            iOut, qOut;
-   wire [21:0]           ixCi1, qxCi1;
-   wire [23:0]           ixCr1, qxCr1;
-   wire [22:0]           ixCi2, qxCi2;
-   wire [23:0]           ixCr2, qxCr2;
-   wire [23:0]           ixCr3, ixCi3, qxCr3, qxCi3;
-   wire [23:0]           ixCr4, ixCi4, qxCr4, qxCi4;
-
+   parameter               ROT_BITS=12; // Here we want the numbits to 
+                                        // be the same as the numbits in 
+                                        // the core multiplyers. If you like 
+                                        // to optimize, change the core first. 
+   input                   clk, reset, symEn, sym2xEn;
+   input [(ROT_BITS-1):0]  i, q;
+   input [2:0]             angle;
+   input [4:0]             sel;
+   output                  symEnOut;
+   output                  sym2xEnOut;
+   output [4:0]            selOut;
+   output [(ROT_BITS-1):0] iOut, qOut;
+   
+   reg [(ROT_BITS-1):0]    iOut, qOut;
+   wire [21:0]             ixCi1, qxCi1;
+   wire [23:0]             ixCr1, qxCr1;
+   wire [22:0]             ixCi2, qxCi2;
+   wire [23:0]             ixCr2, qxCr2;
+   wire [23:0]             ixCr3, ixCi3, qxCr3, qxCi3;
+   wire [23:0]             ixCr4, ixCi4, qxCr4, qxCi4;
+   
    //reg                   ce0, ce1, ce2, ce3, ce4;
-   wire                  ce0=1, ce1=1, ce2=1, ce3=1, ce4=1;
+   wire                    ce0=1, ce1=1, ce2=1, ce3=1, ce4=1;
 
 
    //1to5 Mux:  This will save some power when we turn off the unused multipliers 
@@ -93,7 +97,7 @@ module rot
    
    // aligning the un-rotated I and Q with the data rotated data
    // The are 3 clock delays through the multiplyers   
-   reg [17:0]          iSR0, qSR0, iSR1, qSR1, iSR2, qSR2;
+   reg [(ROT_BITS-1):0]    iSR0, qSR0, iSR1, qSR1, iSR2, qSR2;
    always @(posedge clk)
      if (reset) begin
         iSR0 <= 0;
@@ -118,8 +122,8 @@ module rot
    constMult12x12_re1 reCr1
      (
       .clk    (clk      ),
-      .a      (i[17:6]  ),   // Bus [11 : 0] 
-      .ce     (ce1    ),
+      .a      (i[ROT_BITS-1:0]  ),   // Bus [11 : 0] 
+      .ce     (ce1      ),
       .sclr   (reset    ),
       .p      (ixCr1    )    // Bus [23 : 0] 
       );  
@@ -128,8 +132,8 @@ module rot
    constMult12x12_im1 imCi1
      (
       .clk    (clk      ),
-      .a      (q[17:6]  ),   // Bus [11 : 0] 
-      .ce     (ce1    ),
+      .a      (q[ROT_BITS-1:0]  ),   // Bus [11 : 0] 
+      .ce     (ce1      ),
       .sclr   (reset    ),
       .p      (qxCi1    )    // Bus [21 : 0] 
       );
@@ -138,8 +142,8 @@ module rot
    constMult12x12_im1 reCi1
      (
       .clk    (clk      ),
-      .a      (i[17:6]  ),   // Bus [11 : 0] 
-      .ce     (ce1    ),
+      .a      (i[ROT_BITS-1:0]  ),   // Bus [11 : 0] 
+      .ce     (ce1      ),
       .sclr   (reset    ),
       .p      (ixCi1    )    // Bus [21 : 0] 
       );
@@ -148,8 +152,8 @@ module rot
    constMult12x12_re1 imCr1
      (
       .clk    (clk      ),
-      .a      (q[17:6]  ),   // Bus [11 : 0] 
-      .ce     (ce1    ),
+      .a      (q[ROT_BITS-1:0]  ),   // Bus [11 : 0] 
+      .ce     (ce1      ),
       .sclr   (reset    ),
       .p      (qxCr1    )    // Bus [23 : 0] 
       );  
@@ -159,8 +163,8 @@ module rot
    constMult12x12_re2 reCr2
      (
       .clk    (clk      ),
-      .a      (i[17:6]  ),   // Bus [11 : 0] 
-      .ce     (ce2    ),
+      .a      (i[ROT_BITS-1:0]  ),   // Bus [11 : 0] 
+      .ce     (ce2      ),
       .sclr   (reset    ),
       .p      (ixCr2    )    // Bus [23 : 0] 
       );  
@@ -169,8 +173,8 @@ module rot
    constMult12x12_im2 imCi2
      (
       .clk    (clk      ),
-      .a      (q[17:6]  ),   // Bus [11 : 0] 
-      .ce     (ce2    ),
+      .a      (q[ROT_BITS-1:0]  ),   // Bus [11 : 0] 
+      .ce     (ce2      ),
       .sclr   (reset    ),
       .p      (qxCi2    )    // Bus [22 : 0] 
       );
@@ -179,8 +183,8 @@ module rot
    constMult12x12_im2 reCi2
      (
       .clk    (clk      ),
-      .a      (i[17:6]  ),   // Bus [11 : 0] 
-      .ce     (ce2    ),
+      .a      (i[ROT_BITS-1:0]  ),   // Bus [11 : 0] 
+      .ce     (ce2      ),
       .sclr   (reset    ),
       .p      (ixCi2    )    // Bus [22 : 0] 
       );
@@ -189,8 +193,8 @@ module rot
    constMult12x12_re2 imCr2
      (
       .clk    (clk      ),
-      .a      (q[17:6]  ),   // Bus [11 : 0] 
-      .ce     (ce2    ),
+      .a      (q[ROT_BITS-1:0]  ),   // Bus [11 : 0] 
+      .ce     (ce2      ),
       .sclr   (reset    ),
       .p      (qxCr2    )    // Bus [23 : 0] 
       );
@@ -200,8 +204,8 @@ module rot
    constMult12x12_re3 reCr3
      (
       .clk    (clk      ),
-      .a      (i[17:6]  ),   // Bus [11 : 0] 
-      .ce     (ce3    ),
+      .a      (i[ROT_BITS-1:0]  ),   // Bus [11 : 0] 
+      .ce     (ce3      ),
       .sclr   (reset    ),
       .p      (ixCr3    )    // Bus [23 : 0] 
       );  
@@ -210,8 +214,8 @@ module rot
    constMult12x12_im3 imCi3
      (
       .clk    (clk      ),
-      .a      (q[17:6]  ),   // Bus [11 : 0] 
-      .ce     (ce3    ),
+      .a      (q[(ROT_BITS-1):0]  ),   // Bus [11 : 0] 
+      .ce     (ce3      ),
       .sclr   (reset    ),
       .p      (qxCi3    )    // Bus [23 : 0] 
       );
@@ -220,8 +224,8 @@ module rot
    constMult12x12_im3 reCi3
      (
       .clk    (clk      ),
-      .a      (i[17:6]  ),   // Bus [11 : 0] 
-      .ce     (ce3    ),
+      .a      (i[ROT_BITS-1:0]  ),   // Bus [11 : 0] 
+      .ce     (ce3      ),
       .sclr   (reset    ),
       .p      (ixCi3    )    // Bus [23 : 0] 
       );
@@ -230,8 +234,8 @@ module rot
    constMult12x12_re3 imCr3
      (
       .clk    (clk      ),
-      .a      (q[17:6]  ),   // Bus [11 : 0] 
-      .ce     (ce3    ),
+      .a      (q[ROT_BITS-1:0]  ),   // Bus [11 : 0] 
+      .ce     (ce3      ),
       .sclr   (reset    ),
       .p      (qxCr3    )    // Bus [23 : 0] 
       );
@@ -241,8 +245,8 @@ module rot
    constMult12x12_re4 reCr4
      (
       .clk    (clk      ),
-      .a      (i[17:6]  ),   // Bus [11 : 0] 
-      .ce     (ce4    ),
+      .a      (i[ROT_BITS-1:0]  ),   // Bus [11 : 0] 
+      .ce     (ce4      ),
       .sclr   (reset    ),
       .p      (ixCr4    )    // Bus [23 : 0] 
       );  
@@ -251,8 +255,8 @@ module rot
    constMult12x12_re4 imCi4
      (
       .clk    (clk      ),
-      .a      (q[17:6]  ),   // Bus [11 : 0] 
-      .ce     (ce4    ),
+      .a      (q[ROT_BITS-1:0]  ),   // Bus [11 : 0] 
+      .ce     (ce4      ),
       .sclr   (reset    ),
       .p      (qxCi4    )    // Bus [23 : 0] 
       );
@@ -270,8 +274,8 @@ module rot
      else begin
         casex (angle)
           3'b000: begin //0
-             iOut <= {iSR2[17], iSR2[17:1]}; //have to div by 2 to match rotated outputs
-             qOut <= {qSR2[17], qSR2[17:1]}; //have to div by 2 to match rotated outputs
+             iOut <= {iSR2[ROT_BITS-1], iSR2[ROT_BITS-1:1]}; //have to div by 2 to match rotated outputs
+             qOut <= {qSR2[ROT_BITS-1], qSR2[ROT_BITS-1:1]}; //have to div by 2 to match rotated outputs
           end
           3'bx01: begin //1 or 5
              iOut <= {ixCr1[23], ixCr1[23:7]}                       - {qxCi1[21], qxCi1[21], qxCi1[21], qxCi1[21:7]};
@@ -327,15 +331,15 @@ module rot
    real iOut_real;
    real qOut_real;
    always @(iOut or qOut) begin
-        iOut_real <= $itor($signed(iOut))/(2**16);
-        qOut_real <= $itor($signed(qOut))/(2**16);
+        iOut_real <= $itor($signed(iOut))/(2**(ROT_BITS-1));
+        qOut_real <= $itor($signed(qOut))/(2**(ROT_BITS-1));
    end
    
    always @(posedge clk) begin
       if (symEn) begin
          $display("%f\t%f",
-                  $itor($signed(iOut))/(2**16),
-                  $itor($signed(qOut))/(2**16));
+                  $itor($signed(iOut))/(2**(ROT_BITS-1)),
+                  $itor($signed(qOut))/(2**(ROT_BITS-1));
       end
    end
 `endif

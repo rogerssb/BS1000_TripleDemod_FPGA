@@ -47,7 +47,7 @@ module test;
 
 
 
-`define SIM_ROT
+//`define SIM_ROT
 `ifdef SIM_ROT
    rotator uut_rot
      (
@@ -62,6 +62,86 @@ module test;
       );
 `endif
 
+
+   wire [4:0] tilt;
+   testTilt testTilt
+     (
+      .clk   (clk  ), 
+      .reset (reset), 
+      .symEn (symEn),
+      .tilt  (tilt )
+      );
+
+
+   acsMultH acsMultH 
+     (
+      .clk               (clk    ),
+      .reset             (reset  ),
+      .symEn             (symEn  ),
+      .sym2xEn           (sym2xEn),
+      //.decayFactor       (8'hff),
+/* -----\/----- EXCLUDED -----\/-----
+      .mfI_45_0          (1      ),
+      .mfI_45_1          (2      ),
+      .mfI_45_2          (3      ),
+      .mfI_45_3          (4      ),
+      .mfI_54_0          (6      ),
+      .mfI_54_1          (7      ),
+      .mfI_54_2          (8      ),
+      .mfI_54_3          (9      ),
+      .mfQ_45_0          (101    ),
+      .mfQ_45_1          (102    ),
+      .mfQ_45_2          (103    ),
+      .mfQ_45_3          (104    ),
+      .mfQ_54_0          (106    ),
+      .mfQ_54_1          (107    ),
+      .mfQ_54_2          (108    ),
+      .mfQ_54_3          (109    ),
+ -----/\----- EXCLUDED -----/\----- */
+      .mfI_45_0          (dinH[57:40]),
+      .mfI_45_1          (dinH[57:40]),
+      .mfI_45_2          (dinH[57:40]),
+      .mfI_45_3          (dinH[57:40]),
+      .mfI_54_0          (dinH[57:40]),
+      .mfI_54_1          (dinH[57:40]),
+      .mfI_54_2          (dinH[57:40]),
+      .mfI_54_3          (dinH[57:40]),
+      .mfQ_45_0          (dinH[17:0] ),
+      .mfQ_45_1          (dinH[17:0] ),
+      .mfQ_45_2          (dinH[17:0] ),
+      .mfQ_45_3          (dinH[17:0] ),
+      .mfQ_54_0          (dinH[17:0] ),
+      .mfQ_54_1          (dinH[17:0] ),
+      .mfQ_54_2          (dinH[17:0] ),
+      .mfQ_54_3          (dinH[17:0] ),
+
+      .tilt              (tilt       ),
+      .accMet_45_0       (accMet_45_0),
+      .accMet_45_1       (accMet_45_1),
+      .accMet_45_2       (accMet_45_2),
+      .accMet_45_3       (accMet_45_3),
+      .accMet_54_0       (accMet_54_0),
+      .accMet_54_1       (accMet_54_1),
+      .accMet_54_2       (accMet_54_2),
+      .accMet_54_3       (accMet_54_3),
+      .selOut            (           ),
+      .normalizeIn       ( norm      ),
+      .normalizeOut      ( norm      ),
+      .accMetOut         (accMetOut  ),
+      .iOut              (           ),
+      .qOut              (           )
+      );
+
+   wire [11:0] accMetOut;
+   wire [11:0] accMet_45_0 = accMetOut;
+   wire [11:0] accMet_45_1 = accMetOut;
+   wire [11:0] accMet_45_2 = accMetOut;
+   wire [11:0] accMet_45_3 = accMetOut;
+   wire [11:0] accMet_54_0 = accMetOut;
+   wire [11:0] accMet_54_1 = accMetOut;
+   wire [11:0] accMet_54_2 = accMetOut;
+   wire [11:0] accMet_54_3 = accMetOut;
+   
    
    wire       testDec1;
    
@@ -179,7 +259,7 @@ always @(posedge clk)begin
         default: begin
            symEn <= 0;
            sym2xEn <= 0;
-           //dinH <= 0;
+           dinH <= 0;
            //din <= 0;
         end
       endcase

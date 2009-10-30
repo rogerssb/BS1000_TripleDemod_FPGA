@@ -8,6 +8,7 @@
 //
 // tested on all 32 input combinations and all 32 rotation
 // oct-15-09: Rewrote ro run at the 100MHz clock rate
+// oct-17-09: Parameterize the vector width
 //-----------------------------------------------------------------------------
 
 `timescale 1ns/1ps
@@ -24,17 +25,17 @@ module rotator
    qOut     
    );
    
-
+   parameter             ROT_BITS=10;
    input                 clk, reset, symEn, sym2xEn;
-   input [17:0]          i, q;
+   input [ROT_BITS-1:0]          i, q;
    input [4:0]           sel;
    output                symEnOut;
    output                sym2xEnOut;
-   output [17:0]         iOut, qOut;
-   reg [17:0]            iOut, qOut;
-   wire [17:0]           iRot, qRot;
+   output [ROT_BITS-1:0]         iOut, qOut;
+   reg [ROT_BITS-1:0]            iOut, qOut;
+   wire [ROT_BITS-1:0]           iRot, qRot;
 
-   reg [17:0] iLimit, qLimit;
+   reg [ROT_BITS-1:0] iLimit, qLimit;
    always @(i or q) begin
       if (i == 18'h20000) begin
          iLimit <= 18'h20001;
@@ -51,7 +52,7 @@ module rotator
    end
    
    
-   reg [17:0]           iIn, qIn;
+   reg [ROT_BITS-1:0]           iIn, qIn;
    reg [2:0]            angle;
    always @(posedge clk) begin
       case (sel)
@@ -103,23 +104,30 @@ module rotator
    end
    
    wire [4:0] selRot;
+   wire [ROT_BITS+2-1:0] iRotTmp, qRotTmp;
    rot rot
      ( 
        .clk        (clk), 
        .reset      (reset), 
        .symEn      (symEn), 
        .sym2xEn    (sym2xEn), 
-       .i          (iIn), 
-       .q          (qIn), 
+       .i          ({iIn[ROT_BITS-1:ROT_BITS-2],iIn}), 
+       .q          ({qIn[ROT_BITS-1:ROT_BITS-2],qIn}), 
        .sel        (sel),
        .angle      (angle),
        .symEnOut   (symEnOut),
-       .sym2xEnOut (junk),
+       .sym2xEnOut (sym2xEnOut),
        .selOut     (selRot),
-       .iOut       (iRot), 
-       .qOut       (qRot) 
+       .iOut       (iRotTmp), 
+       .qOut       (qRotTmp) 
        );
 
+   // The width in the rot module is currently 12 and ROT_BITS=10
+   // 12-10=2. At some point we may want to regenerate the core mult
+   // in the rot module to make things consistant.
+   assign     iRot = iRotTmp[ROT_BITS+2-1:2],
+              qRot = qRotTmp[ROT_BITS+2-1:2];
+   
    always @(posedge clk)
      if (reset) begin
         iOut <= 0;
@@ -147,16 +155,16 @@ module rotator
 `ifdef SIMULATE
    real iOut_real, qOut_real;
    always @(iOut or qOut) begin
-       iOut_real <= $itor($signed(iOut))/(2**16);
-       qOut_real <= $itor($signed(qOut))/(2**16);
+       iOut_real <= $itor($signed(iOut))/(2**(ROT_BITS-1));
+       qOut_real <= $itor($signed(qOut))/(2**(ROT_BITS-1));
    end
    
-   always @(posedge clk) begin
-         $display("%d\t%f\t%f",
-                  sel,
-                  iOut_real,
-                  qOut_real);
-   end
+   //always @(posedge clk) begin
+   //      $display("%d\t%f\t%f",
+   //               sel,
+   //               iOut_real,
+   //               qOut_real);
+   //end
 
 
 /* -----\/----- EXCLUDED -----\/-----
@@ -181,22 +189,22 @@ module rotator
 
    always @(iRot00 or qRot00 or iRot01 or qRot01 or iRot10 or qRot10 or iRot11 or qRot11 or 
             iRot20 or qRot20 or iRot21 or qRot21 or iRot30 or qRot30 or iRot31 or qRot31    ) begin
-       iRot00_real <= $itor($signed(iRot00))/(2**16);
-       qRot00_real <= $itor($signed(qRot00))/(2**16);
-       iRot01_real <= $itor($signed(iRot01))/(2**16);
-       qRot01_real <= $itor($signed(qRot01))/(2**16);
-       iRot10_real <= $itor($signed(iRot10))/(2**16);
-       qRot10_real <= $itor($signed(qRot10))/(2**16);
-       iRot11_real <= $itor($signed(iRot11))/(2**16);
-       qRot11_real <= $itor($signed(qRot11))/(2**16);
-       iRot20_real <= $itor($signed(iRot20))/(2**16);
-       qRot20_real <= $itor($signed(qRot20))/(2**16);
-       iRot21_real <= $itor($signed(iRot21))/(2**16);
-       qRot21_real <= $itor($signed(qRot21))/(2**16);
-       iRot30_real <= $itor($signed(iRot30))/(2**16);
-       qRot30_real <= $itor($signed(qRot30))/(2**16);
-       iRot31_real <= $itor($signed(iRot31))/(2**16);
-       qRot31_real <= $itor($signed(qRot31))/(2**16);
+       iRot00_real <= $itor($signed(iRot00))/(ROT_BITS-1);
+       qRot00_real <= $itor($signed(qRot00))/(ROT_BITS-1);
+       iRot01_real <= $itor($signed(iRot01))/(ROT_BITS-1);
+       qRot01_real <= $itor($signed(qRot01))/(ROT_BITS-1);
+       iRot10_real <= $itor($signed(iRot10))/(ROT_BITS-1);
+       qRot10_real <= $itor($signed(qRot10))/(ROT_BITS-1);
+       iRot11_real <= $itor($signed(iRot11))/(ROT_BITS-1);
+       qRot11_real <= $itor($signed(qRot11))/(ROT_BITS-1);
+       iRot20_real <= $itor($signed(iRot20))/(ROT_BITS-1);
+       qRot20_real <= $itor($signed(qRot20))/(ROT_BITS-1);
+       iRot21_real <= $itor($signed(iRot21))/(ROT_BITS-1);
+       qRot21_real <= $itor($signed(qRot21))/(ROT_BITS-1);
+       iRot30_real <= $itor($signed(iRot30))/(ROT_BITS-1);
+       qRot30_real <= $itor($signed(qRot30))/(ROT_BITS-1);
+       iRot31_real <= $itor($signed(iRot31))/(ROT_BITS-1);
+       qRot31_real <= $itor($signed(qRot31))/(ROT_BITS-1);
    end
    
    always @(posedge clk) begin

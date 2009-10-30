@@ -39,17 +39,16 @@ module mfiltBank
    mf_m3p3_45Imag, mf_m3p1_45Imag, mf_m3m1_45Imag, mf_m3m3_45Imag, // conjugate of signals above 
    mf_p1p3_45Imag, mf_p1p1_45Imag, mf_p1m1_45Imag, mf_p1m3_45Imag,
    mf_m1p3_45Imag, mf_m1p1_45Imag, mf_m1m1_45Imag, mf_m1m3_45Imag, // conjugate of signals above 
-  
    mf_p3p3_54Imag, mf_p3p1_54Imag, mf_p3m1_54Imag, mf_p3m3_54Imag,
    mf_m3p3_54Imag, mf_m3p1_54Imag, mf_m3m1_54Imag, mf_m3m3_54Imag, // conjugate of signals above 
    mf_p1p3_54Imag, mf_p1p1_54Imag, mf_p1m1_54Imag, mf_p1m3_54Imag,
    mf_m1p3_54Imag, mf_m1p1_54Imag, mf_m1m1_54Imag, mf_m1m3_54Imag  // conjugate of signals above 
    );
    
-   parameter             NUM_BITS = 10;
+   parameter             MF_BITS = 10;
    input                 clk, reset, symEn, sym2xEn;
    input [17:0]          i,q;
-   output [NUM_BITS-1:0] mf_p3p3_45Real, mf_p3p1_45Real, mf_p3m1_45Real, mf_p3m3_45Real,
+   output [MF_BITS-1:0]  mf_p3p3_45Real, mf_p3p1_45Real, mf_p3m1_45Real, mf_p3m3_45Real,
                          mf_m3p3_45Real, mf_m3p1_45Real, mf_m3m1_45Real, mf_m3m3_45Real,
                          mf_p1p3_45Real, mf_p1p1_45Real, mf_p1m1_45Real, mf_p1m3_45Real,
                          mf_m1p3_45Real, mf_m1p1_45Real, mf_m1m1_45Real, mf_m1m3_45Real,
@@ -89,5 +88,20 @@ module mfiltBank
    mfilt # (C26_0, C26_1, C26_2, C26_3, C27_0, C27_1, C27_2, C27_3) mf_1p1_54 ( .clk(clk), .reset(reset), .symEn(symEn), .sym2xEn(sym2xEn), .i(i), .q(q), .mf0I(mf_p1p1_54Real), .mf0Q(mf_p1p1_54Imag), .mf1I(mf_m1p1_54Real), .mf1Q(mf_m1p1_54Imag) );
    mfilt # (C28_0, C28_1, C28_2, C28_3, C29_0, C29_1, C29_2, C29_3) mf_1m1_54 ( .clk(clk), .reset(reset), .symEn(symEn), .sym2xEn(sym2xEn), .i(i), .q(q), .mf0I(mf_p1m1_54Real), .mf0Q(mf_p1m1_54Imag), .mf1I(mf_m1m1_54Real), .mf1Q(mf_m1m1_54Imag) );
    mfilt # (C30_0, C30_1, C30_2, C30_3, C31_0, C31_1, C31_2, C31_3) mf_1m3_54 ( .clk(clk), .reset(reset), .symEn(symEn), .sym2xEn(sym2xEn), .i(i), .q(q), .mf0I(mf_p1m3_54Real), .mf0Q(mf_p1m3_54Imag), .mf1I(mf_m1m3_54Real), .mf1Q(mf_m1m3_54Imag) );
-                                                                                                                                                                                               
+
+   
+      always @(posedge clk)
+     begin
+        //if (symEn)begin
+         $display("\t%f\t%f\t%f\t%f\t%f\t%f",
+                  $itor($signed(i))/(2**17),
+                  $itor($signed(q))/(2**17),
+                  $itor($signed(mf_p3p3_45Real))/(2**(MF_BITS-1)),
+                  $itor($signed(mf_p3p3_45Imag))/(2**(MF_BITS-1)),
+                  $itor($signed(mf_p3p1_45Real))/(2**(MF_BITS-1)),
+                  $itor($signed(mf_p3p1_45Imag))/(2**(MF_BITS-1)));
+        //end
+     end
+
+   
 endmodule

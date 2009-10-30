@@ -47,7 +47,7 @@ module test;
 
 
 
-`define SIM_ROT
+//`define SIM_ROT
 `ifdef SIM_ROT
    rotator uut_rot
      (
@@ -56,28 +56,119 @@ module test;
       .symEn   (symEn     ), 
       .i       (dinH[57:40]),    
       .q       (dinH[17:0] ),
-//      .i       (18'h16A0A ),
-//      .q       (18'h16A0A ), 
-//      .i       (18'h1D907 ),
-      //.q       (18'hf3C11 ), 
-	  
-//0.98078528	0.195090322		000001F629_00000063E3
-//0.923879533	0.382683432		000001D907_000000C3EF
-//0.831469612	0.555570233		000001A9B6_0000011C74
-//0.707106781	0.707106781		0000016A0A_0000016A0A
-      //.i       (18'h1F629 ), 
-      //.q       (18'h063E3 ),
-      //.i       (18'h2D907 ), 
-      //.q       (18'h1C3EF ),
-//        .i       (18'h20001 ), 
-//        .q       (18'h0 ),
-
       .sel     (rotSel    ),
       .iOut    (          ),   
       .qOut    (          )
       );
 `endif
 
+`ifdef SIM_ACS
+   wire [4:0] tilt;
+   testTilt testTilt
+     (
+      .clk   (clk  ), 
+      .reset (reset), 
+      .symEn (symEn),
+      .tilt  (tilt )
+      );
+
+
+   acsMultH acsMultH 
+     (
+      .clk               (clk    ),
+      .reset             (reset  ),
+      .symEn             (symEn  ),
+      .sym2xEn           (sym2xEn),
+      //.decayFactor       (8'hff),
+/* -----\/----- EXCLUDED -----\/-----
+      .mfI_45_0          (1      ),
+      .mfI_45_1          (2      ),
+      .mfI_45_2          (3      ),
+      .mfI_45_3          (4      ),
+      .mfI_54_0          (6      ),
+      .mfI_54_1          (7      ),
+      .mfI_54_2          (8      ),
+      .mfI_54_3          (9      ),
+      .mfQ_45_0          (101    ),
+      .mfQ_45_1          (102    ),
+      .mfQ_45_2          (103    ),
+      .mfQ_45_3          (104    ),
+      .mfQ_54_0          (106    ),
+      .mfQ_54_1          (107    ),
+      .mfQ_54_2          (108    ),
+      .mfQ_54_3          (109    ),
+ -----/\----- EXCLUDED -----/\----- */
+      .mfI_45_0          (dinH[57:40]),
+      .mfI_45_1          (dinH[57:40]),
+      .mfI_45_2          (dinH[57:40]),
+      .mfI_45_3          (dinH[57:40]),
+      .mfI_54_0          (dinH[57:40]),
+      .mfI_54_1          (dinH[57:40]),
+      .mfI_54_2          (dinH[57:40]),
+      .mfI_54_3          (dinH[57:40]),
+      .mfQ_45_0          (dinH[17:0] ),
+      .mfQ_45_1          (dinH[17:0] ),
+      .mfQ_45_2          (dinH[17:0] ),
+      .mfQ_45_3          (dinH[17:0] ),
+      .mfQ_54_0          (dinH[17:0] ),
+      .mfQ_54_1          (dinH[17:0] ),
+      .mfQ_54_2          (dinH[17:0] ),
+      .mfQ_54_3          (dinH[17:0] ),
+
+      .tilt              (tilt       ),
+      .accMet_45_0       (accMet_45_0),
+      .accMet_45_1       (accMet_45_1),
+      .accMet_45_2       (accMet_45_2),
+      .accMet_45_3       (accMet_45_3),
+      .accMet_54_0       (accMet_54_0),
+      .accMet_54_1       (accMet_54_1),
+      .accMet_54_2       (accMet_54_2),
+      .accMet_54_3       (accMet_54_3),
+      .selOut            (           ),
+      .normalizeIn       ( norm      ),
+      .normalizeOut      ( norm      ),
+      .accMetOut         (accMetOut  ),
+      .iOut              (           ),
+      .qOut              (           )
+      );
+
+   // this is just to close the ACS loop
+   wire [11:0] accMetOut;
+   wire [11:0] accMet_45_0 = accMetOut;
+   wire [11:0] accMet_45_1 = accMetOut;
+   wire [11:0] accMet_45_2 = accMetOut;
+   wire [11:0] accMet_45_3 = accMetOut;
+   wire [11:0] accMet_54_0 = accMetOut;
+   wire [11:0] accMet_54_1 = accMetOut;
+   wire [11:0] accMet_54_2 = accMetOut;
+   wire [11:0] accMet_54_3 = accMetOut;
+`endif
+
+   trellisMultiH trellisMultiH
+     (
+      .clk                 (clk     ),
+      .reset               (reset   ),
+      .symEn               (symEn   ),
+      .sym2xEn             (sym2xEn ),
+      .iIn                 (dinH[57:40]),
+      .qIn                 (dinH[17:0] ),
+      /* -----\/----- EXCLUDED -----\/-----
+      wr0,wr1,wr2,wr3,
+      addr,
+      din,dout,
+      dac0Select,dac1Select,dac2Select,
+      dac0Sync,
+      dac0Data,
+      dac1Sync,
+      dac1Data,
+      dac2Sync,
+      dac2Data,
+      -----/\----- EXCLUDED -----/\----- */
+      .decision            (),
+      .quadrarySymEnOut    (),
+      .quadrarySym2xEnOut  ()
+   );
+   
    
    wire       testDec1;
    
@@ -90,7 +181,7 @@ module test;
    
 
 
-reg [79:0] readMem[200:0];
+reg [79:0] readMem[3000:0];
 reg [0:0] readMemResult[100:0];
 //reg [1:0] index;
 reg [15:0] index;  
@@ -143,66 +234,81 @@ always @(posedge clk)symEnShift <= {symEnShift[14:0],(sym2xEn && !symEn)};
 wire rotEnaTb = symEnShift[4];
 
 
-reg resultDly; 
-always @(posedge clk) begin
-	if (rotEnaTb) begin //should be the symEn comming out of the last module who is produsing the decision bit
-		resultDly <= delaySr[23];
-	end	
-end
-
-reg simBit;	
-always @(posedge clk)begin
-   // #1;
-   //if(cnt == 17) cnt <= 0;
-   if(cnt == 13) cnt <= 0;
-   //else if(cntEna) cnt <= cnt +1 + randData;
-   else if(cntEna) cnt <= cnt +1;	  
-   case(cnt)
-     //0,8: begin 
-     0,7: begin
-        symEn <= 1;
-        sym2xEn <= 1;
-        simBit <= readMemResult[bitIndex];
-        din <= readMem[index];
-		rotSel <= rotSel + 1;
-	    //if (index >= 79) begin index <= 0; end // reading in 4*20 samples then wrap around. 20 comes from the # trellis states 
-        if (index >= 20000) begin index <= 0; end // reading in 4*20 samples then wrap around. 20 comes from the # trellis states
-	else begin 
-	   index <= index +1;
-	   bitIndex <= bitIndex +1; 
-	end
-     end
-     //4,13: begin	
-     3,10: begin
-        symEn <= 0;
-        sym2xEn <= 1;
-	//simBit <= readMemResult[index];
-        //din <= readMem[index];
-	//if (index >= 79) begin index <= 0; end // reading in 4*20 samples then wrap around. 20 comes from the # trellis states
-	//if (index >= 20000) begin index <= 0; end // reading in 4*20 samples then wrap around. 20 comes from the # trellis states
-	//else begin index <= index +1; end
-     end
-     default: begin
-        symEn <= 0;
-        sym2xEn <= 0;
-        //din <= 0;
-     end
-   endcase
-end	 
+   reg resultDly; 
+   always @(posedge clk) begin
+      if (rotEnaTb) begin //should be the symEn comming out of the last module who is produsing the decision bit
+	 resultDly <= delaySr[23];
+      end	
+   end
 
 integer indexH;
 initial indexH=0;
+   
+reg simBit;	
 always @(posedge clk)begin
-	if(rotSel==31 & cnt==1) begin
+   if(cnt == 13) begin 
+      cnt <= 0;
+   end	   
+   else if(cntEna) begin 
+      cnt <= cnt +1;
+      case(cnt)
+        0: begin
+           symEn <= 1;
+           sym2xEn <= 1;
+	   rotSel <= rotSel + 1;
+           dinH <= readMem[indexH];
+           indexH <= indexH + 1;
+        end
+        1,2: begin
+           symEn <= 0;
+           sym2xEn <= 0;
+           dinH <= readMem[indexH];
+           indexH <= indexH + 1;
+        end
+        7: begin
+           symEn <= 1;
+           sym2xEn <= 1;
+	   rotSel <= rotSel + 1;
+           dinH <= readMem[indexH];
+           indexH <= indexH + 1;
+        end
+        8,9: begin
+           symEn <= 0;
+           sym2xEn <= 0;
+           dinH <= readMem[indexH];
+           indexH <= indexH + 1;
+        end
+        3,10: begin
+           symEn <= 0;
+           sym2xEn <= 1;
+           dinH <= readMem[indexH];
+        end
+        default: begin
+           symEn <= 0;
+           sym2xEn <= 0;
+           //dinH <= 0;
+           //din <= 0;
+        end
+      endcase
+   end
+end	 
+
+/* -----\/----- EXCLUDED -----\/-----
+integer indexH;
+initial indexH=0;
+always @(posedge clk)begin
+	if(cntEn) begin
 	dinH <= readMem[indexH];
 	indexH <= indexH + 1;
 	end
 end
+ -----/\----- EXCLUDED -----/\----- */
 
 	
 
-	
-`define MULTI_H_ROT_TEST  
+`define ALL_PLUS_3
+//`define MULTI_H_ROT_TEST  
+//`define MULTI_H_ROT_TEST_2  
 //`define ONEZERO
 //`define ALLONES
 //`define RANDOM
@@ -212,8 +318,11 @@ end
 integer file1,file2;
 initial begin
   //uut.soqpskTop.simReset = 1;
-  #100 reset = !reset;
-  #100 reset = !reset;
+   #100 reset = !reset;
+   #100 reset = !reset;
+   #450 reset = !reset;
+   #50 reset = !reset;
+
   index = 0;
   bitIndex = 0;
   bitError = 0;
@@ -222,10 +331,14 @@ initial begin
 `ifdef MULTI_H_ROT_TEST
       $readmemh("C:/projects/semco/svn_checkout_folder/multi-h/mult-h-rot-test.hex", readMem);
 `endif
+
+`ifdef MULTI_H_ROT_TEST_2
+      $readmemh("C:/projects/semco/svn_checkout_folder/multi-h/mult-h-rot-test2.hex", readMem);
+`endif
       
-`ifdef ALLONES
+`ifdef ALL_PLUS_3
 //      $readmemh("P:/semco/matlab_sim_results/multi-h/incNum.hex", readMem);
-      $readmemh("P:/semco/matlab_sim_results/multi-h/mfinputs.hex", readMem);
+      $readmemh("P:/semco/matlab_sim_results/multi-h/mfinputsAllPlus3.hex", readMem);
 `endif
             
 `ifdef RANDOM

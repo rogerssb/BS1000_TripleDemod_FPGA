@@ -116,7 +116,7 @@ module mfilt
 
 
    // This is a realy ugly solution on the bit aligning of data into the mac
-   // First the I and Q is latched and sifted in on the sym2xEn. Then, relatched with the
+   // First the I and Q is latched and shifted in on the sym2xEn. Then, relatched with the
    // symEn to make sure the 4 samples are stable over a symEn. It must be a better way
    // to do this!
    
@@ -268,9 +268,9 @@ module mfilt
    always @(posedge clk)
      begin
         if (symEn)begin
-         $display("%f\t%f",
-                  $itor($signed(mf0I))/(2**(35-1)),
-                  $itor($signed(mf0Q))/(2**(35-1)));
+       //  $display("%f\t%f",
+       //           $itor($signed(mf0I))/(2**(35-1)),
+       //           $itor($signed(mf0Q))/(2**(35-1)));
                   //$itor($signed(dataA))/(2**17),
                   //$itor($signed(coeffA))/(2**17),
                   //$itor($signed(macALatch))/(2**32));
