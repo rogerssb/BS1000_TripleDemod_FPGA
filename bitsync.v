@@ -155,7 +155,7 @@ always @(posedge sampleClk) begin
 assign iTrellis = (demodMode == `MODE_PCMTRELLIS) ? iMF : i;
 assign qTrellis = (demodMode == `MODE_PCMTRELLIS) ? qMF : q;
 
-//************************** Frequency Discriminator **************************
+//*********************** MF Frequency Discriminator **************************
 wire    [11:0]   phase;
 vm_cordic cordic(
     .clk(sampleClk),
@@ -178,16 +178,26 @@ always @(posedge sampleClk) begin
         end
     end
 
-wire    [17:0]  freq = {freqOut,6'b0};
+wire    [11:0]  eqFreq;
+multihEQ multihEQ (
+    .clk(sampleClk), 
+    .sync(symTimes2Sync), 
+    .reset(reset),
+    .din(freqOut),
+    .dout(eqFreq)
+    );
+
+wire    [17:0]  freq = (demodMode == `MODE_MULTIH) ? {eqFreq,6'b0} : {freqOut,6'b0};
 
 
 `ifdef SIMULATE
 real freqReal;
+real multihReal;
 real phaseReal;
 always @(freq) freqReal = (freq[17] ? freq - 262144.0 : freq)/131072.0;
+always @(eqFreq) multihReal = (eqFreq[11] ? eqFreq - 4096.0 : eqFreq)/2048.0;
 always @(phase) phaseReal = (phase[11] ? phase - 4096.0: phase)/2048.0;
 `endif
-
 
 //******************************* Phase Error Detector ************************
 
@@ -226,7 +236,7 @@ wire [17:0]negoffTimeQ = (~offTimeQ + 1);
 reg  [17:0]timingErrorI;
 reg  [17:0]timingErrorQ;
 wire    [18:0]  timingError = {timingErrorI[17],timingErrorI} + {timingErrorQ[17],timingErrorQ};
-wire timingErrorEn = (phaseState == ONTIME);
+assign timingErrorEn = (phaseState == ONTIME);
 
 // DC Offset error variables
 reg  [17:0]dcError;
@@ -449,6 +459,7 @@ always @(addr) begin
     end
 wire    [15:0]  lockCount;
 wire            loopFilterEn = (symTimes2Sync & timingErrorEn);
+wire    [11:0]  syncThreshold;
 wire    [31:0]  bsDout;
 loopFilter sampleLoop(
     .clk(sampleClk),
@@ -751,6 +762,11 @@ reg     [17:0]  symDataI;
 reg     [17:0]  symDataQ;
 reg             bitDataI;
 reg             bitDataQ;
+
+`define ENABLE_MULTIH
+`ifdef ENABLE_MULTIH
+wire    [17:0]  multihThreshold = {syncThreshold,6'b0};
+wire    [17:0]  negMultihThreshold = ~{syncThreshold,6'b0} + 1;
 always @(posedge sampleClk) begin
     if (symTimes2Sync) begin
         // Capture the I output sample
@@ -769,6 +785,47 @@ always @(posedge sampleClk) begin
         end
     else begin
         if (symTimes2Sync) begin
+            // Capture the Q output sample
+            if (demodMode == `MODE_MULTIH) begin
+                symDataQ <= bbSRQ[1];
+                if (timingErrorEn) begin
+                    if (bbSRQ[1][17]) begin
+                        bitDataQ <= (bbSRQ[1] < negMultihThreshold);
+                        end
+                    else begin
+                        bitDataQ <= (bbSRQ[1] < multihThreshold);
+                        end
+                    end
+                end
+            else begin
+                symDataQ <= bbSRQ[1];
+                if (timingErrorEn) begin
+                    bitDataQ <= bbSRQ[1][17];
+                    end
+                end
+            end
+        end
+    end
+`else
+always @(posedge sampleClk) begin
+    if (symTimes2Sync) begin
+        // Capture the I output sample
+        symDataI <= bbSRI[1];
+        if (timingErrorEn) begin
+            bitDataI <= bbSRI[1][17];
+            end
+        end
+    if (auEnable) begin
+        if (auResampSync) begin
+            symDataQ <= auSR[1];
+            if (auTimingErrorEn) begin
+                bitDataQ <= auSR[1][17];
+                end
+            end
+        end
+    else begin
+        if (symTimes2Sync) begin
+            // Capture the Q output sample
             symDataQ <= bbSRQ[1];
             if (timingErrorEn) begin
                 bitDataQ <= bbSRQ[1][17];
@@ -776,6 +833,7 @@ always @(posedge sampleClk) begin
             end
         end
     end
+`endif
 
 // Clock Enables
 assign iSym2xEn = symTimes2Sync;

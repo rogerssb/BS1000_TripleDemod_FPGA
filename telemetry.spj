@@ -8,9 +8,9 @@ Version=Silvaco4.10.0.R
 DisableCache=
 SimFile=
 [Analyzer]
-C0Width=117
+C0Width=165
 C1Width=58
-C2Width=135
+C2Width=87
 GotoSource=N
 [Spice]
 [LibraryFiles]
@@ -21,7 +21,7 @@ RecirculateTime=
 UseRecirculateTime=
 DiskSize=5000M
 [View]
-1=Last 662196.987ns 712603.995ns 1172.256ns 667285.703ns 707894.604ns
+1=Last 554351.654ns 570137.460ns 369.691ns 559065.214ns 567193.285ns
 [Group0]
 Name=New Group2
 [Group3]
@@ -69,41 +69,6 @@ Name="DAC"
 13="test.demod : resampSync" default
 14="test.demod : ddcSync" default
 OpenGroup=
-[Group4]
-Name="Bitsync"
-0="test.demod.bitsync : avgOffsetReal" default Real AnalogDisplay AType=Step Scale=Auto
-1="test.demod.bitsync : avgOffsetError[24:0]" default
-2="test.demod.bitsync : avgDevReal" default Real AnalogDisplay AType=Step Scale=Auto
-3="test.demod.bitsync : avgDeviation[24:0]" default
-4="test.demod.bitsync : deviation[17:0]" default
-5="test.demod.bitsync : noTransitionCount[1:0]" default
-6="test.demod.bitsync : transitionCount[1:0]" default Unknown
-7="test.demod.bitsync : transition" default
-8="test.demod.carrierLoop : offsetErrorEn" default
-9="test.demod.bitsync : dcError[17:0]" default
-10="test.demod.bitsync : timingError[18:0]" default
-11="test.demod.bitsync : timingErrorQ[17:0]" default
-12="test.demod.bitsync : timingErrorI[17:0]" default
-13="test.demod.bitsync : timingErrorEn" default
-14="test.demod.bitsync : lateSignI" default
-15="test.demod.bitsync : earlySignI" default
-16="test.demod.bitsync : earlyOnTimeI[17:0]" default
-17="test.demod.bitsync : offTimeI[17:0]" default
-18="test.demod.bitsync : lateOnTimeI[17:0]" default
-19="test.demod.bitsync : phaseState" default
-20="test.demod.bitsync : freqReal" default Real AnalogDisplay AType=Step Scale=Fixed MinScaleDbl=-0.5 MaxScaleDbl=0.5
-21="test.demod.bitsync : freq[17:0]" default
-22="test.demod.bitsync : \bbSRI[1] [17:0]" default
-23="test.demod.bitsync.sampleLoop : zeroError" default
-24="test.demod.bitsync : symTimes2Sync" default
-25="test.demod.resampler : resamplerFreqOffset[31:0]" default
-26="test.demod.bitsync : sampleFreqReal" default Real AnalogDisplay AType=Step Scale=Fixed MinScaleDbl=-0.004 MaxScaleDbl=0.004
-27="test.demod.bitsync : timingErrorReal" default Real AnalogDisplay AType=Step Scale=Auto
-28="test.demod.resampler.resamplerQ : outReal" default Real AnalogDisplay AType=Step Scale=Auto
-29="test.demod.resampler.resamplerQ : inReal" default Real AnalogDisplay AType=Step Scale=Auto
-30="test.demod.resampler.resamplerI : outReal" default Real AnalogDisplay AType=Step Scale=Auto
-31="test.demod.resampler.resamplerI : inReal" default Real AnalogDisplay AType=Step Scale=Auto
-32="test : cicDecimationInt" default Decimal AnalogDisplay AType=PWL Scale=Auto
 [Group5]
 Name="Carrier"
 0="test.demod.carrierLoop.lagGain : sweepOffsetMag[31:0]" default Unknown
@@ -150,6 +115,36 @@ Name="Rx"
 18="test.demod.ddc : iMixReal" default Real AnalogDisplay AType=Step Scale=Auto
 19="test : iSignalReal" default Real AnalogDisplay AType=Step Scale=Auto
 20="test : cicDecimationInt" default Decimal AnalogDisplay AType=PWL Scale=Auto
+[Group7]
+Name="SDI"
+0="test.sdi : eyeCount[2:0]" default
+1="test.sdi : eyeEn" default
+2="test.sdi : eyeRef[4:0]" default
+3="test.sdi : eyeState[1:0]" default
+4="test.sdi : wrEn" default
+5="test.sdi : qEye[17:0]" default
+6="test.demod : iEye[17:0]" default
+7="test.demod : eyeOffset[4:0]" default
+8="test.demod : eyeSync" default
+9="test.sdi : iIn[15:0]" default
+10="test.demod : ddcSync" default
+11="test.sdi : sdiOut" default
+12="test.sdi : uartCount[15:0]" default
+13="test.sdi.uartTx : dataNeeded" default
+14="test.sdi.uartTx : dataAvailable" default
+15="test.sdi : wrEn" default
+16="test.sdi : fifoEn" default
+17="test.sdi : fifoReadEn" default
+18="test.sdi : iSymEn" default
+19="test.sdi : iSymData[17:0]" default
+20="test.sdi : sdiEnable" default
+21="test.sdi : fifoFull" default
+22="test.sdi : fifoEmpty" default
+23="test.sdi : fifoReset" default
+24="test.sdi : muxState[3:0]" default
+25="test.sdi : baudEn" default
+26="test.sdi : baudDiv[15:0]" default
+OpenGroup=Yes
 [Files]
 0=test.v
 1=demod.v
@@ -210,35 +205,50 @@ Name="Rx"
 56=uart.v
 57=sdi.v
 58=.\coregen\dataFifo.v
-[Group7]
-Name="SDI"
-0="test.sdi : eyeCount[2:0]" default
-1="test.sdi : eyeEn" default
-2="test.sdi : eyeRef[4:0]" default
-3="test.sdi : eyeState[1:0]" default
-4="test.sdi : wrEn" default
-5="test.sdi : qEye[17:0]" default
-6="test.demod : iEye[17:0]" default
-7="test.demod : eyeOffset[4:0]" default
-8="test.demod : eyeSync" default
-9="test.sdi : iIn[15:0]" default
-10="test.demod : ddcSync" default
-11="test.sdi : sdiOut" default
-12="test.sdi : uartCount[15:0]" default
-13="test.sdi.uartTx : dataNeeded" default
-14="test.sdi.uartTx : dataAvailable" default
-15="test.sdi : wrEn" default
-16="test.sdi : fifoEn" default
-17="test.sdi : fifoReadEn" default
-18="test.sdi : iSymEn" default
-19="test.sdi : iSymData[17:0]" default
-20="test.sdi : sdiEnable" default
-21="test.sdi : fifoFull" default
-22="test.sdi : fifoEmpty" default
-23="test.sdi : fifoReset" default
-24="test.sdi : muxState[3:0]" default
-25="test.sdi : baudEn" default
-26="test.sdi : baudDiv[15:0]" default
+59=multihEQ.v
+60=.\coregen\oneThird.v
+[Group4]
+Name="Bitsync"
+0="test.demod.bitsync : avgOffsetReal" default Real AnalogDisplay AType=Step Scale=Auto
+1="test.demod.bitsync : avgOffsetError[24:0]" default
+2="test.demod.bitsync : avgDevReal" default Real AnalogDisplay AType=Step Scale=Auto
+3="test.demod.bitsync : avgDeviation[24:0]" default
+4="test.demod.bitsync : deviation[17:0]" default
+5="test.demod.bitsync : noTransitionCount[1:0]" default
+6="test.demod.bitsync : transitionCount[1:0]" default
+7="test.demod.bitsync : transition" default
+8="test.demod.carrierLoop : offsetErrorEn" default
+9="test.demod.bitsync : dcError[17:0]" default
+10="test.demod.bitsync : timingError[18:0]" default
+11="test.demod.bitsync : timingErrorQ[17:0]" default
+12="test.demod.bitsync : timingErrorI[17:0]" default
+13="test.demod.bitsync : lateSignI" default
+14="test.demod.bitsync : earlySignI" default
+15="test.demod.bitsync : earlyOnTimeI[17:0]" default
+16="test.demod.bitsync : offTimeI[17:0]" default
+17="test.demod.bitsync : lateOnTimeI[17:0]" default
+18="test.demod.bitsync : phaseState" default
+19="test.demod.bitsync : timingErrorEn" default
+20="test.demod.bitsync : multihReal" default Real AnalogDisplay AType=Step Scale=Auto
+21="test.demod.bitsync : freqReal" default Real AnalogDisplay AType=Step Scale=Auto
+22="test.demod.bitsync : reset" default
+23="test.demod.bitsync.multihEQ : tap[21:0]" default
+24="test.demod.bitsync.multihEQ : midTap1[11:0]" default
+25="test.demod.bitsync.multihEQ : sum[12:0]" default
+26="test.demod.bitsync.multihEQ : din[11:0]" default
+27="test.demod.bitsync : eqFreq[25:0]" default
+28="test.demod.bitsync : freq[17:0]" default
+29="test.demod.bitsync : \bbSRI[1] [17:0]" default
+30="test.demod.bitsync.sampleLoop : zeroError" default
+31="test.demod.bitsync : symTimes2Sync" default
+32="test.demod.resampler : resamplerFreqOffset[31:0]" default
+33="test.demod.bitsync : sampleFreqReal" default Real AnalogDisplay AType=Step Scale=Fixed MinScaleDbl=-0.004 MaxScaleDbl=0.004
+34="test.demod.bitsync : timingErrorReal" default Real AnalogDisplay AType=Step Scale=Auto
+35="test.demod.resampler.resamplerQ : outReal" default Real AnalogDisplay AType=Step Scale=Auto
+36="test.demod.resampler.resamplerQ : inReal" default Real AnalogDisplay AType=Step Scale=Auto
+37="test.demod.resampler.resamplerI : outReal" default Real AnalogDisplay AType=Step Scale=Auto
+38="test.demod.resampler.resamplerI : inReal" default Real AnalogDisplay AType=Step Scale=Auto
+39="test : cicDecimationInt" default Decimal AnalogDisplay AType=PWL Scale=Auto
 OpenGroup=Yes
 [GroupInfo]
 0=New Group2 : 0 : 0 : 0
@@ -249,3 +259,4 @@ OpenGroup=Yes
 5=Carrier : 5 : 1 : 0
 6=DAC : 6 : 1 : 0
 7=SDI : 7 : 1 : 0
+[Bookmarks]

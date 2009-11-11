@@ -592,7 +592,7 @@ initial begin
     write32(`FM_MOD_DEV, {14'bx,deviation});
     write32(`FM_MOD_BITRATE, {1'b0,15'bx,bitrateDivider});
     // This value is ceiling(log2(R*R)), where R = interpolation rate.
-    write32(`FM_MOD_CIC,9);
+    write32(`FM_MOD_CIC,10);
     fmModCS = 0;
 
     // Init the mode
@@ -688,8 +688,8 @@ initial begin
     #(2*C) ;
     interpReset = 0;
 
-    // Enable the sample rate loop
-    write32(createAddress(`BITSYNCSPACE,`LF_CONTROL),0);  
+    // Enable the sample rate loop with 2 sample summer
+    write32(createAddress(`BITSYNCSPACE,`LF_CONTROL),32'h00000010);  
 
     // Wait 2 bit periods
     #(4*bitrateSamplesInt*C) ;
@@ -702,8 +702,8 @@ initial begin
     write32(createAddress(`CHAGCSPACE,`ALF_CONTROL),0);              
     `endif
 
-    // Enable the SDI in constellation mode
-    write32(createAddress(`SDISPACE,`SDI_CONTROL),32'h00000081);
+    // Enable the SDI in eye pattern mode
+    write32(createAddress(`SDISPACE,`SDI_CONTROL),32'h00000082);
 
 
     // Wait for some data to pass thru
@@ -713,7 +713,8 @@ initial begin
     `endif
     $stop;
 
-    write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h0018000c);    
+    //write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h0018000c);    
+    write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h001e0018);    
 
     read32(createAddress(`SDISPACE,`SDI_CONTROL));
 

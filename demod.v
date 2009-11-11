@@ -376,8 +376,13 @@ bitsync bitsync(
 assign trellisSymSync = iSymEn & resampSync;
 
 assign eyeSync = resampSync;
-assign iEye = (demodMode == `MODE_PCMTRELLIS) ? iSymData : iResamp;
-assign qEye = (demodMode == `MODE_PCMTRELLIS) ? qSymData : qResamp;
+assign cordicModes = ( (demodMode == `MODE_2FSK) 
+                    || (demodMode == `MODE_PCMTRELLIS)
+                    || (demodMode == `MODE_FM)
+                    || (demodMode == `MODE_PM));
+
+assign iEye = cordicModes ? iSymData : iResamp;
+assign qEye = cordicModes ? qSymData : qResamp;
 
 
 /******************************************************************************
