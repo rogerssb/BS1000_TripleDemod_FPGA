@@ -27,30 +27,30 @@ module rotator
    
    parameter             ROT_BITS=10;
    input                 clk, reset, symEn, sym2xEn;
-   input [ROT_BITS-1:0]          i, q;
+   input [ROT_BITS-1:0]  i, q;
    input [4:0]           sel;
    output                symEnOut;
    output                sym2xEnOut;
-   output [ROT_BITS-1:0]         iOut, qOut;
-   reg [ROT_BITS-1:0]            iOut, qOut;
-   wire [ROT_BITS-1:0]           iRot, qRot;
-
-   reg [ROT_BITS-1:0] iLimit, qLimit;
+   output [ROT_BITS-1:0] iOut, qOut;
+   reg [ROT_BITS-1:0]    iOut, qOut;
+   wire [ROT_BITS-1:0]   iRot, qRot;
+   
+   reg [ROT_BITS-1:0]    iLimit, qLimit;
    always @(i or q) begin
-      if (i == 18'h20000) begin
-         iLimit <= 18'h20001;
+      if (i == 10'h200) begin
+         iLimit <= 10'h201;
       end
       else begin
          iLimit <= i;
       end
-      if (q == 18'h20000) begin
-         qLimit <= 18'h20001;
+      if (q == 10'h200) begin
+         qLimit <= 10'h201;
       end
       else begin
          qLimit <= q;
       end
-   end
-   
+   end	   
+      
    
    reg [ROT_BITS-1:0]           iIn, qIn;
    reg [2:0]            angle;
@@ -104,29 +104,23 @@ module rotator
    end
    
    wire [4:0] selRot;
-   wire [ROT_BITS+2-1:0] iRotTmp, qRotTmp;
    rot rot
      ( 
        .clk        (clk), 
        .reset      (reset), 
        .symEn      (symEn), 
        .sym2xEn    (sym2xEn), 
-       .i          ({iIn[ROT_BITS-1:ROT_BITS-2],iIn}), 
-       .q          ({qIn[ROT_BITS-1:ROT_BITS-2],qIn}), 
+       .i          (iIn), 
+       .q          (qIn), 
        .sel        (sel),
        .angle      (angle),
        .symEnOut   (symEnOut),
        .sym2xEnOut (sym2xEnOut),
        .selOut     (selRot),
-       .iOut       (iRotTmp), 
-       .qOut       (qRotTmp) 
+       .iOut       (iRot), 
+       .qOut       (qRot) 
        );
 
-   // The width in the rot module is currently 12 and ROT_BITS=10
-   // 12-10=2. At some point we may want to regenerate the core mult
-   // in the rot module to make things consistant.
-   assign     iRot = iRotTmp[ROT_BITS+2-1:2],
-              qRot = qRotTmp[ROT_BITS+2-1:2];
    
    always @(posedge clk)
      if (reset) begin
@@ -159,12 +153,14 @@ module rotator
        qOut_real <= $itor($signed(qOut))/(2**(ROT_BITS-1));
    end
    
-   //always @(posedge clk) begin
-   //      $display("%d\t%f\t%f",
-   //               sel,
-   //               iOut_real,
-   //               qOut_real);
-   //end
+   always @(posedge clk) begin
+	   if (sym2xEnOut) begin
+         $display("%d\t%f\t%f",
+                  sel,
+                  iOut_real,
+                  qOut_real);
+	   end
+   end
 
 
 /* -----\/----- EXCLUDED -----\/-----

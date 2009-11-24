@@ -54,7 +54,7 @@ module viterbiMultiH
                          mf_p1p3_54Imag, mf_p1p1_54Imag, mf_p1m1_54Imag, mf_p1m3_54Imag,
                          mf_m1p3_54Imag, mf_m1p1_54Imag, mf_m1m1_54Imag, mf_m1m3_54Imag;
    
-   output [1:0]          index;
+   output [5:0]          index;
    output                decision;
    output [MF_BITS-1:0]  phaseError;
    output [MF_BITS-1:0]  devError;
@@ -68,9 +68,8 @@ module viterbiMultiH
                          accMetOut48, accMetOut49, accMetOut50, accMetOut51, accMetOut52, accMetOut53, accMetOut54, accMetOut55, 
                          accMetOut56, accMetOut57, accMetOut58, accMetOut59, accMetOut60, accMetOut61, accMetOut62, accMetOut63;
 
-   wire [3:0]            sel;
-   wire[4:0]             indexTmp;
-   reg [1:0]             index;
+   //wire [3:0]            sel;
+   reg [5:0]             index;
    reg [MF_BITS-1:0]     phaseError;
    reg [MF_BITS-1:0]     devError;
    
@@ -86,7 +85,7 @@ module viterbiMultiH
       
 
    wire [4:0]            tilt;
-   testTilt testTilt
+   tilt tiltModule
      (
       .clk   (clk  ), 
       .reset (reset), 

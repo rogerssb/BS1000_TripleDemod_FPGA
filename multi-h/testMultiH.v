@@ -19,8 +19,13 @@ module test;
 
 `include "mfiltCoeff.v"
 
+//`define SIM_MFILT
 `ifdef SIM_MFILT
-   mfilt # (C0_0, C0_1, C0_2, C0_3, C1_0, C1_1, C1_2, C1_3) uut_mfilt
+  // mfilt # (C0_0, C0_1, C0_2, C0_3, C1_0, C1_1, C1_2, C1_3) uut_mfilt
+  // mfilt # (18'h1_80_00, 18'h1_00_00, 18'h0_80_00, 18'h0_40_00,
+   mfilt # (18'h1_7F_FF, 18'h0_FF_FF, 18'h0_7F_FF, 18'h0_3F_FF,
+//            18'h0_00_00, 18'h0_00_00, 18'h0_00_00, 18'h0_00_00) uut_mfilt
+            18'h0_1F_FF, 18'h0_07_FF, 18'h0_03_FF, 18'h0_01_FF) uut_mfilt
      (
       .clk     (clk       ), 
       .reset   (reset     ), 
@@ -28,10 +33,10 @@ module test;
       .sym2xEn (sym2xEn   ),
       .i       (din[57:40]),    
       .q       (din[17:0] ),    
-      .mf0I    (          ),   
-      .mf0Q    (          ),
-      .mf1I    (          ),   
-      .mf1Q    (          )
+      .mf0IOut (          ),   
+      .mf0QOut (          ),
+      .mf1IOut (          ),   
+      .mf1QOut (          )
       );
    
    mfiltBank uut_mfiltBank
@@ -47,15 +52,32 @@ module test;
 
 
 
-//`define SIM_ROT
+`define SIM_ROT
 `ifdef SIM_ROT
+
+   // Latching the incomming I and Q samples 
+   reg [9:0]  iInLatch,
+               qInLatch;
+   always @(posedge clk)
+     begin
+        if (sym2xEn)begin
+           //iInLatch <= dinH[57:40];
+           //qInLatch <= dinH[17:0];
+           iInLatch <= dinH[57:48];
+           qInLatch <= dinH[17:8];
+        end
+     end
+
    rotator uut_rot
      (
       .clk     (clk       ), 
       .reset   (reset     ), 
       .symEn   (symEn     ), 
-      .i       (dinH[57:40]),    
-      .q       (dinH[17:0] ),
+      .sym2xEn (sym2xEn   ), 
+      .i       (iInLatch  ),    
+      .q       (qInLatch  ),
+      //.i       (dinH[57:40]),    
+      //.q       (dinH[17:0] ),
       .sel     (rotSel    ),
       .iOut    (          ),   
       .qOut    (          )
@@ -64,7 +86,7 @@ module test;
 
 `ifdef SIM_ACS
    wire [4:0] tilt;
-   testTilt testTilt
+   tilt uut_tilt
      (
       .clk   (clk  ), 
       .reset (reset), 
@@ -72,6 +94,7 @@ module test;
       .tilt  (tilt )
       );
 
+/* -----\/----- EXCLUDED -----\/-----
 
    acsMultH acsMultH 
      (
@@ -80,7 +103,7 @@ module test;
       .symEn             (symEn  ),
       .sym2xEn           (sym2xEn),
       //.decayFactor       (8'hff),
-/* -----\/----- EXCLUDED -----\/-----
+/-* -----\/----- EXCLUDED -----\/-----
       .mfI_45_0          (1      ),
       .mfI_45_1          (2      ),
       .mfI_45_2          (3      ),
@@ -97,7 +120,7 @@ module test;
       .mfQ_54_1          (107    ),
       .mfQ_54_2          (108    ),
       .mfQ_54_3          (109    ),
- -----/\----- EXCLUDED -----/\----- */
+ -----/\----- EXCLUDED -----/\----- *-/
       .mfI_45_0          (dinH[57:40]),
       .mfI_45_1          (dinH[57:40]),
       .mfI_45_2          (dinH[57:40]),
@@ -131,6 +154,7 @@ module test;
       .iOut              (           ),
       .qOut              (           )
       );
+ -----/\----- EXCLUDED -----/\----- */
 
    // this is just to close the ACS loop
    wire [11:0] accMetOut;
@@ -144,6 +168,7 @@ module test;
    wire [11:0] accMet_54_3 = accMetOut;
 `endif
 
+`ifdef FULL_TRELLIS
    trellisMultiH trellisMultiH
      (
       .clk                 (clk     ),
@@ -167,7 +192,8 @@ module test;
       .decision            (),
       .quadrarySymEnOut    (),
       .quadrarySym2xEnOut  ()
-   );
+   );			   
+`endif
    
    
    wire       testDec1;
@@ -246,46 +272,47 @@ initial indexH=0;
    
 reg simBit;	
 always @(posedge clk)begin
-   if(cnt == 13) begin 
-      cnt <= 0;
-   end	   
+   if (reset) begin indexH <= 0; end
+   else if(cnt == 13) begin cnt <= 0; end	   
    else if(cntEna) begin 
       cnt <= cnt +1;
       case(cnt)
         0: begin
            symEn <= 1;
            sym2xEn <= 1;
-	   rotSel <= rotSel + 1;
+           rotSel <= rotSel + 1;
            dinH <= readMem[indexH];
            indexH <= indexH + 1;
         end
-        1,2: begin
-           symEn <= 0;
-           sym2xEn <= 0;
-           dinH <= readMem[indexH];
-           indexH <= indexH + 1;
-        end
+//        1,2: begin
+//           symEn <= 0;
+//           sym2xEn <= 0;
+//           dinH <= readMem[indexH];
+//           indexH <= indexH + 1;
+//        end
         7: begin
            symEn <= 1;
            sym2xEn <= 1;
-	   rotSel <= rotSel + 1;
+           rotSel <= rotSel + 1;
            dinH <= readMem[indexH];
            indexH <= indexH + 1;
         end
-        8,9: begin
-           symEn <= 0;
-           sym2xEn <= 0;
-           dinH <= readMem[indexH];
-           indexH <= indexH + 1;
-        end
+//        8,9: begin
+//           symEn <= 0;
+//           sym2xEn <= 0;
+//           dinH <= readMem[indexH];
+//           indexH <= indexH + 1;
+//        end
         3,10: begin
            symEn <= 0;
            sym2xEn <= 1;
            dinH <= readMem[indexH];
+           indexH <= indexH + 1;
         end
         default: begin
            symEn <= 0;
            sym2xEn <= 0;
+           dinH <= dinH;
            //dinH <= 0;
            //din <= 0;
         end
@@ -293,6 +320,27 @@ always @(posedge clk)begin
    end
 end	 
 
+
+always @(posedge clk)begin
+   if (reset) begin din <= 0; end
+   else if (indexH > 1 && indexH < 7) begin
+      case(cnt)
+        4,5,6,7,8,9,10: begin
+           din[57:40] <= 18'h1_FF_FF;   // I
+           din[17:0]  <= 18'h0_00_00;   // Q
+        end
+        default: begin
+           din <= 0;
+        end
+      endcase // case(cnt)
+   end
+   else begin
+      din[57:40] <= 18'h0_00_00;   // I
+      din[17:0]  <= 18'h0_00_00;   // Q
+   end
+end	 
+
+   
 /* -----\/----- EXCLUDED -----\/-----
 integer indexH;
 initial indexH=0;
@@ -306,9 +354,9 @@ end
 
 	
 
-`define ALL_PLUS_3
+//`define ALL_PLUS_3
 //`define MULTI_H_ROT_TEST  
-//`define MULTI_H_ROT_TEST_2  
+`define MULTI_H_ROT_TEST_2  
 //`define ONEZERO
 //`define ALLONES
 //`define RANDOM

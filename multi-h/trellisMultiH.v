@@ -56,6 +56,18 @@ module trellisMultiH
    wire                decision;
 
 `define ALDEC_SIM
+
+   // Latching the incomming I and Q samples 
+   reg [17:0]  iInLatch,
+               qInLatch;
+   always @(posedge clk)
+     begin
+        if (sym2xEn)begin
+           iInLatch <= iIn;
+           qInLatch <= qIn;
+        end
+     end
+
    
    reg [7:0]           phErrShft;
    wire [17:0]         carrierLoopIOut,carrierLoopQOut;
@@ -66,8 +78,8 @@ module trellisMultiH
       .reset(reset),
       .symEn(symEn),
       .sym2xEn(sym2xEn),
-      .iIn(iIn),
-      .qIn(qIn),
+      .iIn(iInLatch),
+      .qIn(qInLatch),
       .phaseError(phaseError[9:2]),
       .wr0(wr0),
       .wr1(wr1),
@@ -86,8 +98,8 @@ module trellisMultiH
        );
   
 `ifdef ALDEC_SIM	   
-   assign carrierLoopIOut = iIn;
-   assign carrierLoopQOut = qIn;
+   assign carrierLoopIOut = iInLatch;
+   assign carrierLoopQOut = qInLatch;
    wire   quadrarySymEnOut = sym2xEn;
  `endif  
    
@@ -104,8 +116,8 @@ module trellisMultiH
    always @(carrierLoopIOut) carrierLoopIOut_REAL = $itor($signed(carrierLoopIOut))/(2**17);
    always @(carrierLoopQOut) carrierLoopQOut_REAL = $itor($signed(carrierLoopQOut))/(2**17);
    real iInReal,qInReal;
-   always @(iIn) iInReal = $itor($signed(iIn))/(2**17);
-   always @(qIn) qInReal = $itor($signed(qIn))/(2**17);
+   always @(iInLatch) iInReal = $itor($signed(iInLatch))/(2**17);
+   always @(qInLatch) qInReal = $itor($signed(qInLatch))/(2**17);
 `endif
 
 
@@ -208,7 +220,33 @@ module trellisMultiH
       .mf_m1m3_54Imag        (mf_m1m3_54Imag)
       );   
    
+
+
+   always @(posedge clk)
+     begin
+        if (symEn)begin
+           $display("\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f \t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f \t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f \t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f \t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f \t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f \t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f \t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f",	
+                     $itor($signed(mf_p3p3_45Real))/(2**(MF_BITS-2)), $itor($signed(mf_p3p3_45Imag))/(2**(MF_BITS-2)), $itor($signed(mf_p3p1_45Real))/(2**(MF_BITS-2)), $itor($signed(mf_p3p1_45Imag))/(2**(MF_BITS-2)), $itor($signed(mf_p3m1_45Real))/(2**(MF_BITS-2)), $itor($signed(mf_p3m1_45Imag))/(2**(MF_BITS-2)), $itor($signed(mf_p3m3_45Real))/(2**(MF_BITS-2)), $itor($signed(mf_p3m3_45Imag))/(2**(MF_BITS-2)),
+                     $itor($signed(mf_p1p3_45Real))/(2**(MF_BITS-2)), $itor($signed(mf_p1p3_45Imag))/(2**(MF_BITS-2)), $itor($signed(mf_p1p1_45Real))/(2**(MF_BITS-2)), $itor($signed(mf_p1p1_45Imag))/(2**(MF_BITS-2)), $itor($signed(mf_p1m1_45Real))/(2**(MF_BITS-2)), $itor($signed(mf_p1m1_45Imag))/(2**(MF_BITS-2)), $itor($signed(mf_p1m3_45Real))/(2**(MF_BITS-2)), $itor($signed(mf_p1m3_45Imag))/(2**(MF_BITS-2)),
+                     $itor($signed(mf_m1p3_45Real))/(2**(MF_BITS-2)), $itor($signed(mf_m1p3_45Imag))/(2**(MF_BITS-2)), $itor($signed(mf_m1p1_45Real))/(2**(MF_BITS-2)), $itor($signed(mf_m1p1_45Imag))/(2**(MF_BITS-2)), $itor($signed(mf_m1m1_45Real))/(2**(MF_BITS-2)), $itor($signed(mf_m1m1_45Imag))/(2**(MF_BITS-2)), $itor($signed(mf_m1m3_45Real))/(2**(MF_BITS-2)), $itor($signed(mf_m1m3_45Imag))/(2**(MF_BITS-2)),
+                     $itor($signed(mf_m3p3_45Real))/(2**(MF_BITS-2)), $itor($signed(mf_m3p3_45Imag))/(2**(MF_BITS-2)), $itor($signed(mf_m3p1_45Real))/(2**(MF_BITS-2)), $itor($signed(mf_m3p1_45Imag))/(2**(MF_BITS-2)), $itor($signed(mf_m3m1_45Real))/(2**(MF_BITS-2)), $itor($signed(mf_m3m1_45Imag))/(2**(MF_BITS-2)), $itor($signed(mf_m3m3_45Real))/(2**(MF_BITS-2)), $itor($signed(mf_m3m3_45Imag))/(2**(MF_BITS-2)),
+                     $itor($signed(mf_p3p3_54Real))/(2**(MF_BITS-2)), $itor($signed(mf_p3p3_54Imag))/(2**(MF_BITS-2)), $itor($signed(mf_p3p1_54Real))/(2**(MF_BITS-2)), $itor($signed(mf_p3p1_54Imag))/(2**(MF_BITS-2)), $itor($signed(mf_p3m1_54Real))/(2**(MF_BITS-2)), $itor($signed(mf_p3m1_54Imag))/(2**(MF_BITS-2)), $itor($signed(mf_p3m3_54Real))/(2**(MF_BITS-2)), $itor($signed(mf_p3m3_54Imag))/(2**(MF_BITS-2)),
+                     $itor($signed(mf_p1p3_54Real))/(2**(MF_BITS-2)), $itor($signed(mf_p1p3_54Imag))/(2**(MF_BITS-2)), $itor($signed(mf_p1p1_54Real))/(2**(MF_BITS-2)), $itor($signed(mf_p1p1_54Imag))/(2**(MF_BITS-2)), $itor($signed(mf_p1m1_54Real))/(2**(MF_BITS-2)), $itor($signed(mf_p1m1_54Imag))/(2**(MF_BITS-2)), $itor($signed(mf_p1m3_54Real))/(2**(MF_BITS-2)), $itor($signed(mf_p1m3_54Imag))/(2**(MF_BITS-2)),
+                     $itor($signed(mf_m1p3_54Real))/(2**(MF_BITS-2)), $itor($signed(mf_m1p3_54Imag))/(2**(MF_BITS-2)), $itor($signed(mf_m1p1_54Real))/(2**(MF_BITS-2)), $itor($signed(mf_m1p1_54Imag))/(2**(MF_BITS-2)), $itor($signed(mf_m1m1_54Real))/(2**(MF_BITS-2)), $itor($signed(mf_m1m1_54Imag))/(2**(MF_BITS-2)), $itor($signed(mf_m1m3_54Real))/(2**(MF_BITS-2)), $itor($signed(mf_m1m3_54Imag))/(2**(MF_BITS-2)),
+                     $itor($signed(mf_m3p3_54Real))/(2**(MF_BITS-2)), $itor($signed(mf_m3p3_54Imag))/(2**(MF_BITS-2)), $itor($signed(mf_m3p1_54Real))/(2**(MF_BITS-2)), $itor($signed(mf_m3p1_54Imag))/(2**(MF_BITS-2)), $itor($signed(mf_m3m1_54Real))/(2**(MF_BITS-2)), $itor($signed(mf_m3m1_54Imag))/(2**(MF_BITS-2)), $itor($signed(mf_m3m3_54Real))/(2**(MF_BITS-2)), $itor($signed(mf_m3m3_54Imag))/(2**(MF_BITS-2))
+                    );
+        end
+     end
    
+
+/* -----\/----- EXCLUDED -----\/-----
+ always @(posedge clk)
+     begin
+        if (symEn)begin
+           $display("\t%f\t%f",	iInReal, qInReal);
+        end
+     end
+ -----/\----- EXCLUDED -----/\----- */
 
    
 //`ifdef SIMULATE
@@ -220,7 +258,7 @@ module trellisMultiH
 //   end
 //`endif   
 
-   wire    [1:0]   index;
+   wire    [5:0]   index;
 
 reg     [7:0]   decayFactor;   	  
 	

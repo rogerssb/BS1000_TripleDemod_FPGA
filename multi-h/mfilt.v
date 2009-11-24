@@ -24,29 +24,29 @@ module mfilt
    clk, reset, symEn, sym2xEn,
    i,       // data-in normally I 
    q,       // data-in normally Q
-   mf0I,    // match filter output real
-   mf0Q,    // match filter output imag
-   mf1I,    // match filter output real
-   mf1Q     // match filter output imag
+   mf0IOut, // match filter output real
+   mf0QOut, // match filter output imag
+   mf1IOut, // match filter output real
+   mf1QOut  // match filter output imag
    );
    
    // assign coefficients at module instantiation
    parameter cA0 = 18'h0, cA1 = 18'h0, cA2 = 18'h0, cA3 = 18'h0,
              cB0 = 18'h0, cB1 = 18'h0, cB2 = 18'h0, cB3 = 18'h0;
 
-   //parameter             NUM_BITS = 10;
+   parameter             MF_BITS = 10;
    input                 clk, reset, symEn, sym2xEn;
    input [17:0]          i, q;
-   output [35:0]         mf0I, mf0Q;
-   output [35:0]         mf1I, mf1Q;
+   output [35:0]         mf0IOut, mf0QOut;
+   output [35:0]         mf1IOut, mf1QOut;
 
    reg [17:0]            coeffA, coeffB;
    reg [17:0]            dataA, dataB;
-   reg [35:0]            macALatch, macBLatch;
-   
+  
 
-   assign                accClr = reset;
-   reg                   accTmp, acc;
+   wire                  accClr = reset;
+   reg                   accTmp, accTmp2;
+   reg                   acc;
    wire [35:0]           macA, macB, macC, macD;
    reg [35:0]            mf0I, mf0Q;
    reg [35:0]            mf1I, mf1Q;
@@ -99,6 +99,7 @@ module mfilt
       );
 
    
+/* -----\/----- EXCLUDED -----\/-----
    reg [17:0]            ir, qr;
    always @(posedge clk)
      begin
@@ -113,6 +114,7 @@ module mfilt
            end
         end
      end
+ -----/\----- EXCLUDED -----/\----- */
 
 
    // This is a realy ugly solution on the bit aligning of data into the mac
@@ -180,7 +182,8 @@ module mfilt
    reg [1:0] coeffSel;
    always @(posedge clk)
      begin
-        acc <= accTmp;
+        accTmp2 <= accTmp;
+        acc <= accTmp2;
         if (symEn) begin
            coeffSel <= 0;
            accTmp <= 0;
@@ -193,12 +196,17 @@ module mfilt
            accTmp <= 0;
         end
      end
+   
+   //assign acc = accTmp;
+   //assign acc = 0;
 
+   
    // shift in the 4 coefficients and data at the 100MHz clock so we can run the 
    // MAC every symEn  
-   always @(cA0 or cA1 or cA2 or cA3 or cB0 or cB1 or cB2 or cB3 or
-            dA0r or dA1r or dA2r or dA3r or dB0r or dB1r or dB2r or dB3 or
-            coeffSel)
+//   always @(cA0 or cA1 or cA2 or cA3 or cB0 or cB1 or cB2 or cB3 or
+//            dA0r or dA1r or dA2r or dA3r or dB0r or dB1r or dB2r or dB3 or
+//            coeffSel)
+   always @(posedge clk)
      begin
         case (coeffSel)
           0: begin coeffA <= cA0; coeffB <= cB0; dataA <= dA3r; dataB <= dB3r; end
@@ -208,7 +216,7 @@ module mfilt
         endcase
      end
 
-   reg [3:0]   macLatchSr;
+   reg [4:0]   macLatchSr;
    always @(posedge clk)
      if (reset) begin
         macLatchSr <= 0;
@@ -228,53 +236,63 @@ module mfilt
         mf1I <= 0;
         mf1Q <= 0;	
      end
-     else if (macLatchSr[3:2] == 2'b01) begin
+     else if (macLatchSr[4:3] == 2'b01) begin
         mf0I <= {macA[34], macA[34:0]} - {macB[34], macB[34:0]};
         mf0Q <= {macC[34], macC[34:0]} + {macD[34], macD[34:0]};
-        mf1I <= {macA[34], macA[34:0]} + {macB[34], macB[34:0]};  // this output represents a multiplication of the complex conjugate of the coefficient
-        mf1Q <= {macC[34], macC[34:0]} - {macD[34], macD[34:0]}; // this output represents a multiplication of the complex conjugate of the coefficient
+      // here is the problem  mf1I <= {macA[34], macA[34:0]} + {macB[34], macB[34:0]};
+      // here is the problem  mf1Q <= {macC[34], macC[34:0]} - {macD[34], macD[34:0]};
      end
+ 
+	 
+   // **************************************************************************	 
+   // Have to bring the mult value out of the DSP48 in 2 of the mulipiers and do a + accumulation and - accumilation for the conjugat
+   // **************************************************************************	 
 
+   
+   // going from the 36 bits out of the DSP46 core to MF_BITS out of the module, with sign extention
+   wire [MF_BITS-1:0]     mf0IOut = mf0I[35:35-(MF_BITS-1)];
+   wire [MF_BITS-1:0]     mf0QOut = mf0Q[35:35-(MF_BITS-1)];
+   wire [MF_BITS-1:0]     mf1IOut = mf1I[35:35-(MF_BITS-1)];
+   wire [MF_BITS-1:0]     mf1QOut = mf1Q[35:35-(MF_BITS-1)];
         
 `ifdef SIMULATE
    real i_real;
    real c_real;
    real acc_real;
-   real macALatch_real;
    real macI_real;
    real q_real;
    real cIm_real;
    real accQ_real;
-   real macBLatch_real;
    real macQ_real;
       
-   always @(dataA or coeffA or macA or macALatch)
+   always @(dataA or coeffA or macA or dataB or coeffB or macB or 
+            mf0I or mf0Q)
      begin
         // 
         i_real <= $itor($signed(dataA))/(2**17);
         c_real <= $itor($signed(coeffA))/(2**17);
         acc_real <= $itor($signed(macA))/(2**(35-1));   // why a div by 2?? 
-        macALatch_real <= $itor($signed(macALatch))/(2**(35-1));   // why a div by 2?? 
         macI_real <= $itor($signed(mf0I))/(2**(35-1));   // why a div by 2?? 
         // 
         q_real <= $itor($signed(dataB))/(2**17);
         cIm_real <= $itor($signed(coeffB))/(2**17);
         accQ_real <= $itor($signed(macB))/(2**(35-1));   // why a div by 2?? 
-        macBLatch_real <= $itor($signed(macBLatch))/(2**(35-1));   // why a div by 2?? 
         macQ_real <= $itor($signed(mf0Q))/(2**(35-1));   // why a div by 2?? 
      end
    
 
    always @(posedge clk)
      begin
-        if (symEn)begin
-       //  $display("%f\t%f",
-       //           $itor($signed(mf0I))/(2**(35-1)),
-       //           $itor($signed(mf0Q))/(2**(35-1)));
+//        if (symEn)begin
+//           $display("\t%f\t%f",
+//                  $itor($signed(i))/(2**(17)),
+//                  $itor($signed(q))/(2**(17)));
+ //                 $itor($signed(mf0I))/(2**(35-1)),
+ //                 $itor($signed(mf0Q))/(2**(35-1)));
                   //$itor($signed(dataA))/(2**17),
                   //$itor($signed(coeffA))/(2**17),
                   //$itor($signed(macALatch))/(2**32));
-        end
+//        end
      end
 
 `endif
