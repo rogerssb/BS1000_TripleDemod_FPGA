@@ -23,16 +23,22 @@ module test;
 `ifdef SIM_MFILT
   // mfilt # (C0_0, C0_1, C0_2, C0_3, C1_0, C1_1, C1_2, C1_3) uut_mfilt
   // mfilt # (18'h1_80_00, 18'h1_00_00, 18'h0_80_00, 18'h0_40_00,
+/* -----\/----- EXCLUDED -----\/-----
    mfilt # (18'h1_7F_FF, 18'h0_FF_FF, 18'h0_7F_FF, 18'h0_3F_FF,
 //            18'h0_00_00, 18'h0_00_00, 18'h0_00_00, 18'h0_00_00) uut_mfilt
             18'h0_1F_FF, 18'h0_07_FF, 18'h0_03_FF, 18'h0_01_FF) uut_mfilt
+ -----/\----- EXCLUDED -----/\----- */
+   mfilt # (18'h0_00_01, 18'h2, 18'h3, 18'h4,
+            18'h5      , 18'h6, 18'h7, 18'h8) uut_mfilt
      (
       .clk     (clk       ), 
       .reset   (reset     ), 
       .symEn   (symEn     ), 
       .sym2xEn (sym2xEn   ),
-      .i       (din[57:40]),    
-      .q       (din[17:0] ),    
+      //.i       (din[57:40]),    
+      //.q       (din[17:0] ),    
+      .i       (dinH[57:40]),    
+      .q       (dinH[17:0] ),    
       .mf0IOut (          ),   
       .mf0QOut (          ),
       .mf1IOut (          ),   
@@ -45,14 +51,16 @@ module test;
       .reset   (reset     ),
       .symEn   (symEn     ),
       .sym2xEn (sym2xEn   ),
-      .i       (din[57:40]),
-      .q       (din[17:0] )
+      //.i       (din[57:40]),
+      //.q       (din[17:0] )
+      .i       (dinH[57:40]),    
+      .q       (dinH[17:0] )
       );   
 `endif
 
 
 
-`define SIM_ROT
+//`define SIM_ROT
 `ifdef SIM_ROT
 
    // Latching the incomming I and Q samples 
@@ -166,8 +174,9 @@ module test;
    wire [11:0] accMet_54_1 = accMetOut;
    wire [11:0] accMet_54_2 = accMetOut;
    wire [11:0] accMet_54_3 = accMetOut;
-`endif
-
+`endif //  `ifdef SIM_ACS
+   
+`define FULL_TRELLIS
 `ifdef FULL_TRELLIS
    trellisMultiH trellisMultiH
      (
@@ -326,8 +335,9 @@ always @(posedge clk)begin
    else if (indexH > 1 && indexH < 7) begin
       case(cnt)
         4,5,6,7,8,9,10: begin
-           din[57:40] <= 18'h1_FF_FF;   // I
-           din[17:0]  <= 18'h0_00_00;   // Q
+           din[57:40] <= 18'h0_00_0a;   // I
+           //din[17:0]  <= 18'h0_00_00;   // Q
+           din[17:0]  <= 18'h3_ff_f6;   // Q
         end
         default: begin
            din <= 0;
@@ -353,10 +363,9 @@ end
  -----/\----- EXCLUDED -----/\----- */
 
 	
-
-//`define ALL_PLUS_3
+`define ALL_PLUS_3
 //`define MULTI_H_ROT_TEST  
-`define MULTI_H_ROT_TEST_2  
+//`define MULTI_H_ROT_TEST_2  
 //`define ONEZERO
 //`define ALLONES
 //`define RANDOM

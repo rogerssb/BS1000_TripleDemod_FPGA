@@ -4,7 +4,7 @@
 // Created      05 August 09
 //-----------------------------------------------------------------------------
 // This module implements a decimating FIR filter. The implementation uses the 
-// dsp48a xilinx core to perform a 4 coefficient MAC. The incomming I and Q is
+// dsp48a xilinx core to perform a 4 coefficient MAC (see updated 2.0). The incomming I and Q is
 // multiplied with a set of complex coefficient (coeffA + j*coeffB) which are passed in as 
 // paremeters.
 //  mf0 = (i + j*q) * (coeffA + j*coeffB)
@@ -13,7 +13,10 @@
 
 //  
 // 1.0      AMJ initial coding
-//
+// 2.0      bug fix: We can't do the MAC using the dsp48 since the dsp48 output
+//          also has to be a decrimenting accumulation and not just incrementing.
+//          Now, the accumulatior was moved outside the dsp48 core and the 
+//          +/- accumlation is done with logic elements.   
 //
 //-----------------------------------------------------------------------------
 
@@ -45,12 +48,18 @@ module mfilt
   
 
    wire                  accClr = reset;
-   reg                   accTmp, accTmp2;
-   reg                   acc;
-   wire [35:0]           macA, macB, macC, macD;
+   wire [35:0]           multA, multB, multC, multD;
    reg [35:0]            mf0I, mf0Q;
    reg [35:0]            mf1I, mf1Q;
+   reg [35:0]            mf0IAdd, mf0QAdd;
+   reg [35:0]            mf1IAdd, mf1QAdd;
+   reg [35:0]            mf0IAcc, mf0QAcc;
+   reg [35:0]            mf1IAcc, mf1QAcc;
 
+//   reg [35:0]            macAAccP, macBAccP, macCAccP, macDAccP, 
+//                         macAAccN, macBAccN, macCAccN, macDAccN;
+
+   
    // dataReal*coeffReal
    dsp48_mac macA_inst
      (
@@ -58,9 +67,10 @@ module mfilt
       .clk    (clk     ),
       .a      (coeffA  ),//real
       .b      (dataA   ),//real
-      .acc    (acc     ),
+//    .acc    (acc     ),
+      .acc    (1'b0    ),
       .accClr (accClr  ),
-      .p      (macA    ) 
+      .p      (multA    ) 
       );
    //dataImag*coeffImag
    dsp48_mac macB_inst
@@ -69,9 +79,10 @@ module mfilt
       .clk    (clk     ),
       .a      (coeffB  ),//imag
       .b      (dataB   ),//imag
-      .acc    (acc     ),
+//    .acc    (acc     ),
+      .acc    (1'b0    ),
       .accClr (accClr  ),
-      .p      (macB    )
+      .p      (multB    )
       );
 
    // dataReal*coeffImag
@@ -81,9 +92,10 @@ module mfilt
       .clk    (clk     ),
       .a      (coeffB  ),//imag
       .b      (dataA   ),//real
-      .acc    (acc     ),
+//    .acc    (acc     ),
+      .acc    (1'b0    ),
       .accClr (accClr  ),
-      .p      (macC    ) 
+      .p      (multC    ) 
       );
 
    // dataImag*coeffReal
@@ -93,12 +105,17 @@ module mfilt
       .clk    (clk     ),
       .a      (coeffA  ),//real
       .b      (dataB   ),//imag
-      .acc    (acc     ),
+//    .acc    (acc     ),
+      .acc    (1'b0    ),
       .accClr (accClr  ),
-      .p      (macD    )
+      .p      (multD    )
       );
 
+
    
+
+   
+
 /* -----\/----- EXCLUDED -----\/-----
    reg [17:0]            ir, qr;
    always @(posedge clk)
@@ -182,24 +199,14 @@ module mfilt
    reg [1:0] coeffSel;
    always @(posedge clk)
      begin
-        accTmp2 <= accTmp;
-        acc <= accTmp2;
         if (symEn) begin
            coeffSel <= 0;
-           accTmp <= 0;
         end
         else if (coeffSel<3) begin
            coeffSel <= coeffSel+1;
-           accTmp <= 1;
-        end
-        else begin
-           accTmp <= 0;
         end
      end
    
-   //assign acc = accTmp;
-   //assign acc = 0;
-
    
    // shift in the 4 coefficients and data at the 100MHz clock so we can run the 
    // MAC every symEn  
@@ -216,68 +223,120 @@ module mfilt
         endcase
      end
 
-   reg [4:0]   macLatchSr;
+   
+   reg [5:0]   multLatchSr;
    always @(posedge clk)
      if (reset) begin
-        macLatchSr <= 0;
+        multLatchSr <= 0;
      end
      else if (coeffSel == 3) begin
-        macLatchSr <= {macLatchSr, coeffSel[1]};
+        multLatchSr <= {multLatchSr, coeffSel[1]};
      end
      else begin
-        macLatchSr <= {macLatchSr, 1'b0};
+        multLatchSr <= {multLatchSr, 1'b0};
      end
    
-   
-   always @(posedge clk)
-     if (reset) begin
-        mf0I <= 0;
-        mf0Q <= 0;	
-        mf1I <= 0;
-        mf1Q <= 0;	
+
+   always @(mf0IAdd or  multA or multB or
+            mf0QAdd or  multC or multD or
+            mf1IAdd or mf1QAdd ) begin
+        // Match filter Zero
+        mf0IAcc <= mf0IAdd + {multA[34], multA[34:0]} - {multB[34], multB[34:0]}; // A-B
+        mf0QAcc <= mf0QAdd + {multC[34], multC[34:0]} + {multD[34], multD[34:0]}; // C+D
+        // Match filter One
+        mf1IAcc <= mf1IAdd + {multA[34], multA[34:0]} + {multB[34], multB[34:0]}; // A+B
+        mf1QAcc <= mf1QAdd + {multC[34], multC[34:0]} - {multD[34], multD[34:0]}; // C-D
      end
-     else if (macLatchSr[4:3] == 2'b01) begin
-        mf0I <= {macA[34], macA[34:0]} - {macB[34], macB[34:0]};
-        mf0Q <= {macC[34], macC[34:0]} + {macD[34], macD[34:0]};
-      // here is the problem  mf1I <= {macA[34], macA[34:0]} + {macB[34], macB[34:0]};
-      // here is the problem  mf1Q <= {macC[34], macC[34:0]} - {macD[34], macD[34:0]};
+
+   wire accRst = reset || (multLatchSr[1:0] == 2'b01);
+   always @(mf0I or mf0Q or mf1I or mf1Q or accRst)
+     // clearing the accumulator
+     if (accRst) begin
+        mf0IAdd <= 0;
+        mf0QAdd <= 0;	
+        mf1IAdd <= 0;
+        mf1QAdd <= 0;	
      end
- 
-	 
-   // **************************************************************************	 
-   // Have to bring the mult value out of the DSP48 in 2 of the mulipiers and do a + accumulation and - accumilation for the conjugat
-   // **************************************************************************	 
+     else begin
+        // Match filter Zero
+        mf0IAdd <= mf0I;
+        mf0QAdd <= mf0Q;
+        // Match filter One
+        mf1IAdd <= mf1I;
+        mf1QAdd <= mf1Q;
+     end
+
+   always @(posedge clk) begin
+      // Match filter Zero
+      mf0I <= mf0IAcc;
+      mf0Q <= mf0QAcc;
+      // Match filter One
+      mf1I <= mf1IAcc;
+      mf1Q <= mf1QAcc;
+   end
 
    
    // going from the 36 bits out of the DSP46 core to MF_BITS out of the module, with sign extention
-   wire [MF_BITS-1:0]     mf0IOut = mf0I[35:35-(MF_BITS-1)];
-   wire [MF_BITS-1:0]     mf0QOut = mf0Q[35:35-(MF_BITS-1)];
-   wire [MF_BITS-1:0]     mf1IOut = mf1I[35:35-(MF_BITS-1)];
-   wire [MF_BITS-1:0]     mf1QOut = mf1Q[35:35-(MF_BITS-1)];
-        
+//   wire [MF_BITS-1:0]     mf0IOut = mf0I[35:35-(MF_BITS-1)];
+//   wire [MF_BITS-1:0]     mf0QOut = mf0Q[35:35-(MF_BITS-1)];
+//   wire [MF_BITS-1:0]     mf1IOut = mf1I[35:35-(MF_BITS-1)];
+//   wire [MF_BITS-1:0]     mf1QOut = mf1Q[35:35-(MF_BITS-1)];
+
+   reg [MF_BITS-1:0]     mf0IOut;
+   reg [MF_BITS-1:0]     mf0QOut;
+   reg [MF_BITS-1:0]     mf1IOut;
+   reg [MF_BITS-1:0]     mf1QOut;
+/* -----\/----- EXCLUDED -----\/-----
+   reg [35:0]     mf0IOut;
+   reg [35:0]     mf0QOut;
+   reg [35:0]     mf1IOut;
+   reg [35:0]     mf1QOut;
+ -----/\----- EXCLUDED -----/\----- */
+      
+   always @(posedge clk)
+     if (reset) begin
+        mf0IOut <= 0;
+        mf0QOut <= 0;
+        mf1IOut <= 0;
+        mf1QOut <= 0;       
+     end
+     else if (multLatchSr[5:4] == 2'b01) begin
+/* -----\/----- EXCLUDED -----\/-----
+        mf0IOut <= mf0I;
+        mf0QOut <= mf0Q;
+        mf1IOut <= mf1I;  
+        mf1QOut <= mf1Q;
+ -----/\----- EXCLUDED -----/\----- */
+        mf0IOut <= mf0I[35:35-(MF_BITS-1)];
+        mf0QOut <= mf0Q[35:35-(MF_BITS-1)];
+        mf1IOut <= mf1I[35:35-(MF_BITS-1)];  
+        mf1QOut <= mf1Q[35:35-(MF_BITS-1)];
+     end
+          
+
 `ifdef SIMULATE
    real i_real;
    real c_real;
    real acc_real;
-   real macI_real;
+   real multI_real;
    real q_real;
    real cIm_real;
    real accQ_real;
-   real macQ_real;
+   real multQ_real;
       
-   always @(dataA or coeffA or macA or dataB or coeffB or macB or 
+   always @(dataA or coeffA or multA or dataB or coeffB or multB or 
             mf0I or mf0Q)
      begin
         // 
         i_real <= $itor($signed(dataA))/(2**17);
         c_real <= $itor($signed(coeffA))/(2**17);
-        acc_real <= $itor($signed(macA))/(2**(35-1));   // why a div by 2?? 
-        macI_real <= $itor($signed(mf0I))/(2**(35-1));   // why a div by 2?? 
+        acc_real <= $itor($signed(multA))/(2**(35-1));   // why a div by 2?? 
+        multI_real <= $itor($signed(mf0I))/(2**(35-1));   // why a div by 2?? 
         // 
         q_real <= $itor($signed(dataB))/(2**17);
         cIm_real <= $itor($signed(coeffB))/(2**17);
-        accQ_real <= $itor($signed(macB))/(2**(35-1));   // why a div by 2?? 
-        macQ_real <= $itor($signed(mf0Q))/(2**(35-1));   // why a div by 2?? 
+        accQ_real <= $itor($signed(multB))/(2**(35-1));   // why a div by 2?? 
+        multQ_real <= $itor($signed(mf0Q))/(2**(35-1));   // why a div by 2?? 
      end
    
 
@@ -291,7 +350,7 @@ module mfilt
  //                 $itor($signed(mf0Q))/(2**(35-1)));
                   //$itor($signed(dataA))/(2**17),
                   //$itor($signed(coeffA))/(2**17),
-                  //$itor($signed(macALatch))/(2**32));
+                  //$itor($signed(multALatch))/(2**32));
 //        end
      end
 

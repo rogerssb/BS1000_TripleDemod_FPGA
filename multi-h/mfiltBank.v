@@ -90,6 +90,7 @@ module mfiltBank
    mfilt # (C30_0, C30_1, C30_2, C30_3, C31_0, C31_1, C31_2, C31_3) mf_1m3_54 ( .clk(clk), .reset(reset), .symEn(symEn), .sym2xEn(sym2xEn), .i(i), .q(q), .mf0IOut(mf_p1m3_54Real), .mf0QOut(mf_p1m3_54Imag), .mf1IOut(mf_m1m3_54Real), .mf1QOut(mf_m1m3_54Imag) );
 
    
+
 /* -----\/----- EXCLUDED -----\/-----
    always @(posedge clk)
      begin
@@ -104,6 +105,7 @@ module mfiltBank
         //end
      end
  -----/\----- EXCLUDED -----/\----- */
+
 
    
 endmodule

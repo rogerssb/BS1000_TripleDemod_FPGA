@@ -153,14 +153,14 @@ module rotator
        qOut_real <= $itor($signed(qOut))/(2**(ROT_BITS-1));
    end
    
-   always @(posedge clk) begin
-	   if (sym2xEnOut) begin
-         $display("%d\t%f\t%f",
-                  sel,
-                  iOut_real,
-                  qOut_real);
-	   end
-   end
+//   always @(posedge clk) begin
+//	   if (sym2xEnOut) begin
+//         $display("%d\t%f\t%f",
+//                  sel,
+//                  iOut_real,
+//                  qOut_real);
+//	   end
+//   end
 
 
 /* -----\/----- EXCLUDED -----\/-----
