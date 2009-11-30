@@ -56,9 +56,6 @@ module mfilt
    reg [35:0]            mf0IAcc, mf0QAcc;
    reg [35:0]            mf1IAcc, mf1QAcc;
 
-//   reg [35:0]            macAAccP, macBAccP, macCAccP, macDAccP, 
-//                         macAAccN, macBAccN, macCAccN, macDAccN;
-
    
    // dataReal*coeffReal
    dsp48_mac macA_inst
@@ -67,7 +64,6 @@ module mfilt
       .clk    (clk     ),
       .a      (coeffA  ),//real
       .b      (dataA   ),//real
-//    .acc    (acc     ),
       .acc    (1'b0    ),
       .accClr (accClr  ),
       .p      (multA    ) 
@@ -79,7 +75,6 @@ module mfilt
       .clk    (clk     ),
       .a      (coeffB  ),//imag
       .b      (dataB   ),//imag
-//    .acc    (acc     ),
       .acc    (1'b0    ),
       .accClr (accClr  ),
       .p      (multB    )
@@ -92,7 +87,6 @@ module mfilt
       .clk    (clk     ),
       .a      (coeffB  ),//imag
       .b      (dataA   ),//real
-//    .acc    (acc     ),
       .acc    (1'b0    ),
       .accClr (accClr  ),
       .p      (multC    ) 
@@ -105,7 +99,6 @@ module mfilt
       .clk    (clk     ),
       .a      (coeffA  ),//real
       .b      (dataB   ),//imag
-//    .acc    (acc     ),
       .acc    (1'b0    ),
       .accClr (accClr  ),
       .p      (multD    )
@@ -242,10 +235,10 @@ module mfilt
             mf1IAdd or mf1QAdd ) begin
         // Match filter Zero
         mf0IAcc <= mf0IAdd + {multA[34], multA[34:0]} - {multB[34], multB[34:0]}; // A-B
-        mf0QAcc <= mf0QAdd + {multC[34], multC[34:0]} + {multD[34], multD[34:0]}; // C+D
+        mf0QAcc <= mf0QAdd + {multD[34], multD[34:0]} + {multC[34], multC[34:0]}; // D+C
         // Match filter One
         mf1IAcc <= mf1IAdd + {multA[34], multA[34:0]} + {multB[34], multB[34:0]}; // A+B
-        mf1QAcc <= mf1QAdd + {multC[34], multC[34:0]} - {multD[34], multD[34:0]}; // C-D
+        mf1QAcc <= mf1QAdd + {multD[34], multD[34:0]} - {multC[34], multC[34:0]}; // D-C
      end
 
    wire accRst = reset || (multLatchSr[1:0] == 2'b01);

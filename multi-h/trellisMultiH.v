@@ -220,8 +220,8 @@ module trellisMultiH
       .mf_m1m3_54Imag        (mf_m1m3_54Imag)
       );   
    
-
-
+`define SIM_MATCHFILTER_OUTPUTS
+`ifdef SIM_MATCHFILTER_OUTPUTS
    always @(posedge clk)
      begin
         if (symEn)begin
@@ -237,7 +237,7 @@ module trellisMultiH
                     );
         end
      end
-   
+`endif   
 
 /* -----\/----- EXCLUDED -----\/-----
  always @(posedge clk)
