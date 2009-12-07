@@ -83,7 +83,7 @@ module acsMultH
             mfI_45_0 or mfI_54_0 or
             mfI_45_1 or mfI_54_1 or 
             mfI_45_2 or mfI_54_2 or 
-            mfQ_45_3 or mfQ_54_3 or 
+            mfI_45_3 or mfI_54_3 or 
             mfQ_45_0 or mfQ_54_0 or
             mfQ_45_1 or mfQ_54_1 or 
             mfQ_45_2 or mfQ_54_2 or 
@@ -150,7 +150,10 @@ module acsMultH
 
    // Selects the amount of rotation bases on the matlab signal theta(n-2), here called ROT_45/54_?. 
    reg [4:0] rotSel;
-   always @(inputMuxSel or symEnEven)
+   always @(inputMuxSel or symEnEven or tilt or 
+            ROT_45_0 or ROT_45_1 or ROT_45_2 or ROT_45_3 or
+            ROT_54_0 or ROT_54_1 or ROT_54_2 or ROT_54_3
+            )
      begin
         if (symEnEven) begin
            case(inputMuxSel) 

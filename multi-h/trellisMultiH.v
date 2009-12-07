@@ -9,7 +9,7 @@
 //-----------------------------------------------------------------------------
 
 `timescale 1ns/1ps
-`include "../addressMap.v"
+`include "addressMap.v"
 
 module trellisMultiH
   (
@@ -97,7 +97,7 @@ module trellisMultiH
       `endif
        );
   
-`ifdef ALDEC_SIM	   
+`ifdef ALDEC_SIM           
    assign carrierLoopIOut = iInLatch;
    assign carrierLoopQOut = qInLatch;
    wire   quadrarySymEnOut = sym2xEn;
@@ -219,13 +219,14 @@ module trellisMultiH
       .mf_m1m1_54Imag        (mf_m1m1_54Imag),
       .mf_m1m3_54Imag        (mf_m1m3_54Imag)
       );   
-   
+
+`ifdef SIMULATE   
 `define SIM_MATCHFILTER_OUTPUTS
 `ifdef SIM_MATCHFILTER_OUTPUTS
    always @(posedge clk)
      begin
         if (symEn)begin
-           $display("\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f \t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f \t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f \t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f \t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f \t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f \t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f \t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f",	
+           $display("\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f \t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f \t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f \t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f \t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f \t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f \t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f \t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f",  
                      $itor($signed(mf_p3p3_45Real))/(2**(MF_BITS-2)), $itor($signed(mf_p3p3_45Imag))/(2**(MF_BITS-2)), $itor($signed(mf_p3p1_45Real))/(2**(MF_BITS-2)), $itor($signed(mf_p3p1_45Imag))/(2**(MF_BITS-2)), $itor($signed(mf_p3m1_45Real))/(2**(MF_BITS-2)), $itor($signed(mf_p3m1_45Imag))/(2**(MF_BITS-2)), $itor($signed(mf_p3m3_45Real))/(2**(MF_BITS-2)), $itor($signed(mf_p3m3_45Imag))/(2**(MF_BITS-2)),
                      $itor($signed(mf_p1p3_45Real))/(2**(MF_BITS-2)), $itor($signed(mf_p1p3_45Imag))/(2**(MF_BITS-2)), $itor($signed(mf_p1p1_45Real))/(2**(MF_BITS-2)), $itor($signed(mf_p1p1_45Imag))/(2**(MF_BITS-2)), $itor($signed(mf_p1m1_45Real))/(2**(MF_BITS-2)), $itor($signed(mf_p1m1_45Imag))/(2**(MF_BITS-2)), $itor($signed(mf_p1m3_45Real))/(2**(MF_BITS-2)), $itor($signed(mf_p1m3_45Imag))/(2**(MF_BITS-2)),
                      $itor($signed(mf_m1p3_45Real))/(2**(MF_BITS-2)), $itor($signed(mf_m1p3_45Imag))/(2**(MF_BITS-2)), $itor($signed(mf_m1p1_45Real))/(2**(MF_BITS-2)), $itor($signed(mf_m1p1_45Imag))/(2**(MF_BITS-2)), $itor($signed(mf_m1m1_45Real))/(2**(MF_BITS-2)), $itor($signed(mf_m1m1_45Imag))/(2**(MF_BITS-2)), $itor($signed(mf_m1m3_45Real))/(2**(MF_BITS-2)), $itor($signed(mf_m1m3_45Imag))/(2**(MF_BITS-2)),
@@ -238,12 +239,13 @@ module trellisMultiH
         end
      end
 `endif   
+`endif
 
 /* -----\/----- EXCLUDED -----\/-----
  always @(posedge clk)
      begin
         if (symEn)begin
-           $display("\t%f\t%f",	iInReal, qInReal);
+           $display("\t%f\t%f", iInReal, qInReal);
         end
      end
  -----/\----- EXCLUDED -----/\----- */
@@ -260,8 +262,8 @@ module trellisMultiH
 
    wire    [5:0]   index;
 
-reg     [7:0]   decayFactor;   	  
-	
+reg     [7:0]   decayFactor;      
+        
 viterbiMultiH /*#(MF_BITS, ROT_BITS)*/ viterbiMultiH
    (
     .clk                   (clk           ), 

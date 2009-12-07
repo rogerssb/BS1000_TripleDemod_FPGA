@@ -40,8 +40,8 @@ module mfilt
    parameter             MF_BITS = 10;
    input                 clk, reset, symEn, sym2xEn;
    input [17:0]          i, q;
-   output [35:0]         mf0IOut, mf0QOut;
-   output [35:0]         mf1IOut, mf1QOut;
+   output [MF_BITS-1:0]         mf0IOut, mf0QOut;
+   output [MF_BITS-1:0]         mf1IOut, mf1QOut;
 
    reg [17:0]            coeffA, coeffB;
    reg [17:0]            dataA, dataB;
@@ -246,9 +246,9 @@ module mfilt
      // clearing the accumulator
      if (accRst) begin
         mf0IAdd <= 0;
-        mf0QAdd <= 0;	
+        mf0QAdd <= 0;   
         mf1IAdd <= 0;
-        mf1QAdd <= 0;	
+        mf1QAdd <= 0;   
      end
      else begin
         // Match filter Zero

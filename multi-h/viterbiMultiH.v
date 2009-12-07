@@ -69,7 +69,6 @@ module viterbiMultiH
                          accMetOut56, accMetOut57, accMetOut58, accMetOut59, accMetOut60, accMetOut61, accMetOut62, accMetOut63;
 
    //wire [3:0]            sel;
-   reg [5:0]             index;
    reg [MF_BITS-1:0]     phaseError;
    reg [MF_BITS-1:0]     devError;
    
