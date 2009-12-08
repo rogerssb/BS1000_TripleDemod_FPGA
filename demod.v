@@ -402,6 +402,7 @@ reg             dac1Sync;
 reg     [17:0]  dac1Data;
 reg             dac2Sync;
 reg     [17:0]  dac2Data;
+wire    [11:0]  negFreq = ~freq + 1;
 always @(posedge clk) begin
     case (dac0Select) 
         `DAC_I: begin
@@ -421,7 +422,7 @@ always @(posedge clk) begin
             dac0Sync <= resampSync;
             end
         `DAC_FREQ: begin
-            dac0Data <= {freq,6'h0};
+            dac0Data <= {negFreq,6'h0};
             dac0Sync <= demodSync;
             end
         `DAC_PHASE: begin
@@ -477,7 +478,7 @@ always @(posedge clk) begin
             dac1Sync <= resampSync;
             end
         `DAC_FREQ: begin
-            dac1Data <= {freq,6'h0};
+            dac1Data <= {negFreq,6'h0};
             dac1Sync <= demodSync;
             end
         `DAC_PHASE: begin
@@ -533,7 +534,7 @@ always @(posedge clk) begin
             dac2Sync <= resampSync;
             end
         `DAC_FREQ: begin
-            dac2Data <= {freq,6'h0};
+            dac2Data <= {negFreq,6'h0};
             dac2Sync <= demodSync;
             end
         `DAC_PHASE: begin

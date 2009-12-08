@@ -263,6 +263,12 @@ reg  dcErrorAvailable;
 reg  transition;
 reg  [1:0]noTransitionCount;
 reg  [1:0]transitionCount;
+
+wire fmModes = ( (demodMode == `MODE_2FSK)
+              || (demodMode == `MODE_MULTIH)
+              || (demodMode == `MODE_PCMTRELLIS)
+              || (demodMode == `MODE_FM)
+               );
 always @(posedge sampleClk) begin
     if (reset) begin
         phaseState <= ONTIME;
@@ -277,10 +283,7 @@ always @(posedge sampleClk) begin
         end
     else if (symTimes2Sync) begin
         // Shift register of baseband sample values
-        if ( (demodMode == `MODE_2FSK) 
-          || (demodMode == `MODE_MULTIH)
-          || (demodMode == `MODE_PCMTRELLIS)
-          || (demodMode == `MODE_FM)) begin
+        if (fmModes) begin
             bbSRI[0] <= freq;
             bbSRQ[0] <= freq;
             end
@@ -772,7 +775,12 @@ always @(posedge sampleClk) begin
         // Capture the I output sample
         symDataI <= bbSRI[1];
         if (timingErrorEn) begin
-            bitDataI <= bbSRI[1][17];
+            if (fmModes) begin
+                bitDataI <= ~bbSRI[1][17];
+                end
+            else begin
+                bitDataI <= bbSRI[1][17];
+                end
             end
         end
     if (auEnable) begin
@@ -812,7 +820,12 @@ always @(posedge sampleClk) begin
         // Capture the I output sample
         symDataI <= bbSRI[1];
         if (timingErrorEn) begin
-            bitDataI <= bbSRI[1][17];
+            if (fmModes) begin
+                bitDataI <= ~bbSRI[1][17];
+                end
+            else begin
+                bitDataI <= bbSRI[1][17];
+                end
             end
         end
     if (auEnable) begin
