@@ -207,7 +207,25 @@ module mfilt
 //            dA0r or dA1r or dA2r or dA3r or dB0r or dB1r or dB2r or dB3 or
 //            coeffSel)
    always @(posedge clk)
-     begin
+     if (reset) begin
+        coeffA <= 0;
+        coeffA <= 0;
+        coeffA <= 0;
+        coeffA <= 0;
+        coeffB <= 0;
+        coeffB <= 0;
+        coeffB <= 0;
+        coeffB <= 0;
+        dataA <= 0; 
+        dataA <= 0; 
+        dataA <= 0; 
+        dataA <= 0; 
+        dataB <= 0;
+        dataB <= 0;
+        dataB <= 0;
+        dataB <= 0;
+     end
+     else begin
         case (coeffSel)
           0: begin coeffA <= cA0; coeffB <= cB0; dataA <= dA3r; dataB <= dB3r; end
           1: begin coeffA <= cA1; coeffB <= cB1; dataA <= dA2r; dataB <= dB2r; end

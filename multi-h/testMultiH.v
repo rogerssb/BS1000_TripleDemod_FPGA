@@ -281,7 +281,7 @@ initial indexH=0;
    
 reg simBit;	
 always @(posedge clk)begin
-   if (reset) begin indexH <= 0; end
+   if (reset) begin indexH <= 0; dinH <= 0; end
    else if(cnt == 13) begin cnt <= 0; end	   
    else if(cntEna) begin 
       cnt <= cnt +1;
@@ -377,8 +377,8 @@ initial begin
   //uut.soqpskTop.simReset = 1;
    #100 reset = !reset;
    #100 reset = !reset;
-   #450 reset = !reset;
-   #50 reset = !reset;
+   #125 reset = !reset;
+   #475 reset = !reset;
 
   index = 0;
   bitIndex = 0;

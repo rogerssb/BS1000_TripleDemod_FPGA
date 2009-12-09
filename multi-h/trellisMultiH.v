@@ -61,7 +61,11 @@ module trellisMultiH
    reg [17:0]  iInLatch,
                qInLatch;
    always @(posedge clk)
-     begin
+     if (reset) begin
+        iInLatch <= 0;
+        qInLatch <= 0;
+     end
+     else begin
         if (sym2xEn)begin
            iInLatch <= iIn;
            qInLatch <= qIn;
@@ -217,11 +221,13 @@ module trellisMultiH
       .mf_m1p3_54Imag        (mf_m1p3_54Imag),
       .mf_m1p1_54Imag        (mf_m1p1_54Imag),
       .mf_m1m1_54Imag        (mf_m1m1_54Imag),
-      .mf_m1m3_54Imag        (mf_m1m3_54Imag)
+      .mf_m1m3_54Imag        (mf_m1m3_54Imag),
+      .symEnOut              (symEnRot      ), 
+      .sym2xEnOut            (sym2xEnRot    )
       );   
 
 `ifdef SIMULATE   
-`define SIM_MATCHFILTER_OUTPUTS
+//`define SIM_MATCHFILTER_OUTPUTS
 `ifdef SIM_MATCHFILTER_OUTPUTS
    always @(posedge clk)
      begin
@@ -268,8 +274,8 @@ viterbiMultiH /*#(MF_BITS, ROT_BITS)*/ viterbiMultiH
    (
     .clk                   (clk           ), 
     .reset                 (reset         ), 
-    .symEn                 (symEn         ),     // Make sure that the mfilt data is aligned with the quadrary symbol interval  
-    .sym2xEn               (sym2xEn       ),     // Make sure that the mfilt data is aligned with the quadrary symbol interval  
+    .symEn                 (symEnRot      ),     // Make sure that the mfilt data is aligned with the quadrary symbol interval  
+    .sym2xEn               (sym2xEnRot    ),     // Make sure that the mfilt data is aligned with the quadrary symbol interval  
     `ifdef ALDEC_SIM
     .decayFactor           (8'hff         ),
     `else

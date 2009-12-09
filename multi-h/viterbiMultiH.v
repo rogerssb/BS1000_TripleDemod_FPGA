@@ -55,7 +55,7 @@ module viterbiMultiH
                          mf_m1p3_54Imag, mf_m1p1_54Imag, mf_m1m1_54Imag, mf_m1m3_54Imag;
    
    output [5:0]          index;
-   output                decision;
+   output [1:0]          decision;
    output [MF_BITS-1:0]  phaseError;
    output [MF_BITS-1:0]  devError;
 
@@ -198,10 +198,6 @@ module viterbiMultiH
    acsMultH #(11, 6, 1,12,  11, 7, 3,15)  acsMultH45   (.clk(clk), .reset(reset), .symEn(symEn), .sym2xEn(sym2xEn), .mfI_45_0(mf_m3m1_54Real), .mfI_45_1(mf_m1m1_54Real), .mfI_45_2(mf_p1m1_54Real), .mfI_45_3(mf_p3m1_54Real), .mfI_54_0(mf_m3m1_45Real), .mfI_54_1(mf_m1m1_45Real), .mfI_54_2(mf_p1m1_45Real), .mfI_54_3(mf_p3m1_45Real), .mfQ_45_0(mf_m3m1_54Imag), .mfQ_45_1(mf_m1m1_54Imag), .mfQ_45_2(mf_p1m1_54Imag), .mfQ_45_3(mf_p3m1_54Imag), .mfQ_54_0(mf_m3m1_45Imag), .mfQ_54_1(mf_m1m1_45Imag), .mfQ_54_2(mf_p1m1_45Imag), .mfQ_54_3(mf_p3m1_45Imag), .tilt(tilt), .accMet_45_0(accMetOut44), .accMet_45_1(accMetOut25), .accMet_45_2(accMetOut6 ), .accMet_45_3(accMetOut51), .accMet_54_0(accMetOut44), .accMet_54_1(accMetOut29), .accMet_54_2(accMetOut14), .accMet_54_3(accMetOut63), .selOut(selOut45), .normalizeIn(s), .normalizeOut(s45), .accMetOut(accMetOut45), .iOut(iOut45), .qOut(qOut45));
    acsMultH #( 7, 2,13, 8,   7, 3,15,11)  acsMultH30   (.clk(clk), .reset(reset), .symEn(symEn), .sym2xEn(sym2xEn), .mfI_45_0(mf_m3p1_54Real), .mfI_45_1(mf_m1p1_54Real), .mfI_45_2(mf_p1p1_54Real), .mfI_45_3(mf_p3p1_54Real), .mfI_54_0(mf_m3p1_45Real), .mfI_54_1(mf_m1p1_45Real), .mfI_54_2(mf_p1p1_45Real), .mfI_54_3(mf_p3p1_45Real), .mfQ_45_0(mf_m3p1_54Imag), .mfQ_45_1(mf_m1p1_54Imag), .mfQ_45_2(mf_p1p1_54Imag), .mfQ_45_3(mf_p3p1_54Imag), .mfQ_54_0(mf_m3p1_45Imag), .mfQ_54_1(mf_m1p1_45Imag), .mfQ_54_2(mf_p1p1_45Imag), .mfQ_54_3(mf_p3p1_45Imag), .tilt(tilt), .accMet_45_0(accMetOut28), .accMet_45_1(accMetOut9 ), .accMet_45_2(accMetOut54), .accMet_45_3(accMetOut35), .accMet_54_0(accMetOut28), .accMet_54_1(accMetOut13), .accMet_54_2(accMetOut62), .accMet_54_3(accMetOut47), .selOut(selOut30), .normalizeIn(s), .normalizeOut(s30), .accMetOut(accMetOut30), .iOut(iOut30), .qOut(qOut30));
    acsMultH #( 3,14, 9, 4,   3,15,11, 7)  acsMultH15   (.clk(clk), .reset(reset), .symEn(symEn), .sym2xEn(sym2xEn), .mfI_45_0(mf_m3p3_54Real), .mfI_45_1(mf_m1p3_54Real), .mfI_45_2(mf_p1p3_54Real), .mfI_45_3(mf_p3p3_54Real), .mfI_54_0(mf_m3p3_45Real), .mfI_54_1(mf_m1p3_45Real), .mfI_54_2(mf_p1p3_45Real), .mfI_54_3(mf_p3p3_45Real), .mfQ_45_0(mf_m3p3_54Imag), .mfQ_45_1(mf_m1p3_54Imag), .mfQ_45_2(mf_p1p3_54Imag), .mfQ_45_3(mf_p3p3_54Imag), .mfQ_54_0(mf_m3p3_45Imag), .mfQ_54_1(mf_m1p3_45Imag), .mfQ_54_2(mf_p1p3_45Imag), .mfQ_54_3(mf_p3p3_45Imag), .tilt(tilt), .accMet_45_0(accMetOut12), .accMet_45_1(accMetOut57), .accMet_45_2(accMetOut38), .accMet_45_3(accMetOut19), .accMet_54_0(accMetOut12), .accMet_54_1(accMetOut61), .accMet_54_2(accMetOut46), .accMet_54_3(accMetOut31), .selOut(selOut15), .normalizeIn(s), .normalizeOut(s15), .accMetOut(accMetOut15), .iOut(iOut15), .qOut(qOut15));
-                                                                                                                                   
-                                                                                                                                   
-
-
 
 
    maxMetricMultiH  maxMetric 
@@ -227,6 +223,192 @@ module viterbiMultiH
       .accMetOut60(accMetOut60), .accMetOut61(accMetOut61), .accMetOut62(accMetOut62), .accMetOut63(accMetOut63), 
       .index(index), .symEnDly(symEn_maxMetDly)
       );
+
+
+   // ----- decision before the traceback -----
+   reg [1:0]             decision;
+   reg [1:0]             selOut0r , selOut49r , selOut34r , selOut19r , selOut4r , selOut53r , selOut38r , selOut23r , 
+                         selOut8r , selOut57r , selOut42r , selOut27r , selOut12r , selOut61r , selOut46r , selOut31r ,
+                         selOut16r , selOut1r , selOut50r , selOut35r , selOut20r , selOut5r , selOut54r , selOut39r , 
+                         selOut24r , selOut9r , selOut58r , selOut43r , selOut28r , selOut13r , selOut62r , selOut47r , 
+                         selOut32r , selOut17r , selOut2r , selOut51r , selOut36r , selOut21r , selOut6r , selOut55r , 
+                         selOut40r , selOut25r , selOut10r , selOut59r , selOut44r , selOut29r , selOut14r , selOut63r ,
+                         selOut48r , selOut33r , selOut18r , selOut3r , selOut52r , selOut37r , selOut22r , selOut7r ,
+                         selOut56r , selOut41r , selOut26r , selOut11r , selOut60r , selOut45r , selOut30r , selOut15r;
+   always @(posedge clk)
+     begin
+        if (reset) begin
+           decision  <= 0;
+           selOut0r  <= 0;
+           selOut1r  <= 0;
+           selOut2r  <= 0;
+           selOut3r  <= 0;
+           selOut4r  <= 0;
+           selOut5r  <= 0;
+           selOut6r  <= 0;
+           selOut7r  <= 0;
+           selOut8r  <= 0;
+           selOut9r  <= 0;
+           selOut10r <= 0;
+           selOut11r <= 0;
+           selOut12r <= 0;
+           selOut13r <= 0;
+           selOut14r <= 0;
+           selOut15r <= 0;
+           selOut16r <= 0;
+           selOut17r <= 0;
+           selOut18r <= 0;
+           selOut19r <= 0;
+           selOut20r <= 0;
+           selOut31r <= 0;
+           selOut32r <= 0;
+           selOut33r <= 0;
+           selOut34r <= 0;
+           selOut35r <= 0;
+           selOut36r <= 0;
+           selOut37r <= 0;
+           selOut38r <= 0;
+           selOut39r <= 0;
+           selOut40r <= 0;
+           selOut41r <= 0;
+           selOut42r <= 0;
+           selOut43r <= 0;
+           selOut44r <= 0;
+           selOut45r <= 0;
+           selOut46r <= 0;
+           selOut47r <= 0;
+           selOut48r <= 0;
+           selOut49r <= 0;
+           selOut50r <= 0;
+           selOut51r <= 0;
+           selOut52r <= 0;
+           selOut53r <= 0;
+           selOut54r <= 0;
+           selOut55r <= 0;
+           selOut56r <= 0;
+           selOut57r <= 0;
+           selOut58r <= 0;
+           selOut59r <= 0;
+           selOut60r <= 0;
+           selOut61r <= 0;
+           selOut62r <= 0;
+           selOut63r <= 0;           
+        end
+        else if (symEn_maxMetDly) begin
+           selOut0r  <= selOut0 ;
+           selOut1r  <= selOut1 ;
+           selOut2r  <= selOut2 ;
+           selOut3r  <= selOut3 ;
+           selOut4r  <= selOut4 ;
+           selOut5r  <= selOut5 ;
+           selOut6r  <= selOut6 ;
+           selOut7r  <= selOut7 ;
+           selOut8r  <= selOut8 ;
+           selOut9r  <= selOut9 ;
+           selOut10r <= selOut10;
+           selOut11r <= selOut11;
+           selOut12r <= selOut12;
+           selOut13r <= selOut13;
+           selOut14r <= selOut14;
+           selOut15r <= selOut15;
+           selOut16r <= selOut16;
+           selOut17r <= selOut17;
+           selOut18r <= selOut18;
+           selOut19r <= selOut19;
+           selOut20r <= selOut20;
+           selOut31r <= selOut31;
+           selOut32r <= selOut32;
+           selOut33r <= selOut33;
+           selOut34r <= selOut34;
+           selOut35r <= selOut35;
+           selOut36r <= selOut36;
+           selOut37r <= selOut37;
+           selOut38r <= selOut38;
+           selOut39r <= selOut39;
+           selOut40r <= selOut40;
+           selOut41r <= selOut41;
+           selOut42r <= selOut42;
+           selOut43r <= selOut43;
+           selOut44r <= selOut44;
+           selOut45r <= selOut45;
+           selOut46r <= selOut46;
+           selOut47r <= selOut47;
+           selOut48r <= selOut48;
+           selOut49r <= selOut49;
+           selOut50r <= selOut50;
+           selOut51r <= selOut51;
+           selOut52r <= selOut52;
+           selOut53r <= selOut53;
+           selOut54r <= selOut54;
+           selOut55r <= selOut55;
+           selOut56r <= selOut56;
+           selOut57r <= selOut57;
+           selOut58r <= selOut58;
+           selOut59r <= selOut59;
+           selOut60r <= selOut60;
+           selOut61r <= selOut61;
+           selOut62r <= selOut62;
+           selOut63r <= selOut63;           
+           case (index)
+             0 : begin decision <= selOut0r ; end
+             1 : begin decision <= selOut1r ; end
+             2 : begin decision <= selOut2r ; end
+             3 : begin decision <= selOut3r ; end
+             4 : begin decision <= selOut4r ; end
+             5 : begin decision <= selOut5r ; end
+             6 : begin decision <= selOut6r ; end
+             7 : begin decision <= selOut7r ; end
+             8 : begin decision <= selOut8r ; end
+             9 : begin decision <= selOut9r ; end
+             10: begin decision <= selOut10r; end
+             11: begin decision <= selOut11r; end
+             12: begin decision <= selOut12r; end
+             13: begin decision <= selOut13r; end
+             14: begin decision <= selOut14r; end
+             15: begin decision <= selOut15r; end
+             16: begin decision <= selOut16r; end
+             17: begin decision <= selOut17r; end
+             18: begin decision <= selOut18r; end
+             19: begin decision <= selOut19r; end
+             20: begin decision <= selOut20r; end
+             31: begin decision <= selOut31r; end
+             32: begin decision <= selOut32r; end
+             33: begin decision <= selOut33r; end
+             34: begin decision <= selOut34r; end
+             35: begin decision <= selOut35r; end
+             36: begin decision <= selOut36r; end
+             37: begin decision <= selOut37r; end
+             38: begin decision <= selOut38r; end
+             39: begin decision <= selOut39r; end
+             40: begin decision <= selOut40r; end
+             41: begin decision <= selOut41r; end
+             42: begin decision <= selOut42r; end
+             43: begin decision <= selOut43r; end
+             44: begin decision <= selOut44r; end
+             45: begin decision <= selOut45r; end
+             46: begin decision <= selOut46r; end
+             47: begin decision <= selOut47r; end
+             48: begin decision <= selOut48r; end
+             49: begin decision <= selOut49r; end
+             50: begin decision <= selOut50r; end
+             51: begin decision <= selOut51r; end
+             52: begin decision <= selOut52r; end
+             53: begin decision <= selOut53r; end
+             54: begin decision <= selOut54r; end
+             55: begin decision <= selOut55r; end
+             56: begin decision <= selOut56r; end
+             57: begin decision <= selOut57r; end
+             58: begin decision <= selOut58r; end
+             59: begin decision <= selOut59r; end
+             60: begin decision <= selOut60r; end
+             61: begin decision <= selOut61r; end
+             62: begin decision <= selOut62r; end
+             63: begin decision <= selOut63r; end
+           endcase
+        end  
+     end
+
+   
 
                                                                                                                                    
                                                                                                                                    

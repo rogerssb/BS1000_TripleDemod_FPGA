@@ -43,7 +43,8 @@ module mfiltBank
    mf_p3p3_54Imag, mf_p3p1_54Imag, mf_p3m1_54Imag, mf_p3m3_54Imag,
    mf_m3p3_54Imag, mf_m3p1_54Imag, mf_m3m1_54Imag, mf_m3m3_54Imag,
    mf_p1p3_54Imag, mf_p1p1_54Imag, mf_p1m1_54Imag, mf_p1m3_54Imag,
-   mf_m1p3_54Imag, mf_m1p1_54Imag, mf_m1m1_54Imag, mf_m1m3_54Imag 
+   mf_m1p3_54Imag, mf_m1p1_54Imag, mf_m1m1_54Imag, mf_m1m3_54Imag,
+   symEnOut, sym2xEnOut
    );
    
    parameter             MF_BITS = 10;
@@ -65,8 +66,8 @@ module mfiltBank
                          mf_m3p3_54Imag, mf_m3p1_54Imag, mf_m3m1_54Imag, mf_m3m3_54Imag,
                          mf_p1p3_54Imag, mf_p1p1_54Imag, mf_p1m1_54Imag, mf_p1m3_54Imag,
                          mf_m1p3_54Imag, mf_m1p1_54Imag, mf_m1m1_54Imag, mf_m1m3_54Imag;
-
-
+   output                symEnOut, sym2xEnOut;
+   
 
 `include "mfiltCoeff.v"
 
@@ -90,6 +91,23 @@ module mfiltBank
    mfilt # (C28_0, C28_1, C28_2, C28_3, C29_0, C29_1, C29_2, C29_3) mf_x1m1_54 ( .clk(clk), .reset(reset), .symEn(symEn), .sym2xEn(sym2xEn), .i(i), .q(q), .mf0IOut(mf_p1m1_54Real), .mf0QOut(mf_p1m1_54Imag), .mf1IOut(mf_m1p1_54Real), .mf1QOut(mf_m1p1_54Imag) );
    mfilt # (C30_0, C30_1, C30_2, C30_3, C31_0, C31_1, C31_2, C31_3) mf_x1m3_54 ( .clk(clk), .reset(reset), .symEn(symEn), .sym2xEn(sym2xEn), .i(i), .q(q), .mf0IOut(mf_p1m3_54Real), .mf0QOut(mf_p1m3_54Imag), .mf1IOut(mf_m1p3_54Real), .mf1QOut(mf_m1p3_54Imag) );
                                                                                                                                                                                                                              
+   reg [3:0]             symEnSr;
+   reg [3:0]             sym2xEnSr;
+   always @(posedge clk) begin
+      if (reset) begin
+         symEnSr <= 0;
+         sym2xEnSr <= 0;
+      end
+      else begin
+         symEnSr <= {symEnSr[2:0], symEn};
+         sym2xEnSr <= {sym2xEnSr[2:0], sym2xEn};
+      end
+   end                 
+   assign symEnOut = symEnSr[1];
+   assign sym2xEnOut = sym2xEnSr[1];
+
+
+
                                                                                                                                                                                                                              
 /* -----\/----- EXCLUDED -----\/-----
    always @(posedge clk)

@@ -94,12 +94,13 @@ module rot
    reg [7:0]     cReal,
                  cImag;
 
-   always @(posedge clk)
-     if (reset) begin
-        cReal <= 0;
-        cImag <= 0;	
-     end
-     else begin
+//   always @(posedge clk)
+   always @(angle) begin
+//     if (reset) begin
+//        cReal <= 0;
+//        cImag <= 0;	
+//     end
+//     else begin
         casex (angle)				   
           3'b000: begin //0
              cReal <= C_RE0;

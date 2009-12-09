@@ -62,7 +62,7 @@ module maxMetricMultiH(clk, reset, symEn,
    reg [5:0]            indexS2;
    reg [5:0]            indexS3;
 //   reg                  syncToACS;
-   reg [1:0]            cnt;
+//   reg [1:0]            cnt;
                
    // Stage 1 compare. The index value comming out of is scaled to 0..19 using the parameter indesOffset, by adding 4,8,12,or 16
    comp4twosComp  #(size, 0)  compS1_0_3   (clk,  accMetOut0 , accMetOut1 , accMetOut2 , accMetOut3 , iS1_0,  maxValS1_0 );
@@ -72,12 +72,12 @@ module maxMetricMultiH(clk, reset, symEn,
    comp4twosComp  #(size, 16) compS1_16_19 (clk,  accMetOut16, accMetOut17, accMetOut18, accMetOut19, iS1_4,  maxValS1_4 );
    comp4twosComp  #(size, 20) compS1_20_23 (clk,  accMetOut20, accMetOut21, accMetOut22, accMetOut23, iS1_5,  maxValS1_5 );
    comp4twosComp  #(size, 24) compS1_24_27 (clk,  accMetOut24, accMetOut25, accMetOut26, accMetOut27, iS1_6,  maxValS1_6 );
-   comp4twosComp  #(size, 28) compS1_28_31 (clk,  accMetOut28, accMetOut29, accMetOut20, accMetOut21, iS1_7,  maxValS1_7 );
+   comp4twosComp  #(size, 28) compS1_28_31 (clk,  accMetOut28, accMetOut29, accMetOut30, accMetOut31, iS1_7,  maxValS1_7 );
    comp4twosComp  #(size, 32) compS1_32_35 (clk,  accMetOut32, accMetOut33, accMetOut34, accMetOut35, iS1_8,  maxValS1_8 );
    comp4twosComp  #(size, 36) compS1_36_39 (clk,  accMetOut36, accMetOut37, accMetOut38, accMetOut39, iS1_9,  maxValS1_9 );
    comp4twosComp  #(size, 40) compS1_40_43 (clk,  accMetOut40, accMetOut41, accMetOut42, accMetOut43, iS1_10, maxValS1_10);
    comp4twosComp  #(size, 44) compS1_44_47 (clk,  accMetOut44, accMetOut45, accMetOut46, accMetOut47, iS1_11, maxValS1_11);
-   comp4twosComp  #(size, 48) compS1_48_51 (clk,  accMetOut48, accMetOut49, accMetOut40, accMetOut41, iS1_12, maxValS1_12);
+   comp4twosComp  #(size, 48) compS1_48_51 (clk,  accMetOut48, accMetOut49, accMetOut50, accMetOut51, iS1_12, maxValS1_12);
    comp4twosComp  #(size, 52) compS1_52_55 (clk,  accMetOut52, accMetOut53, accMetOut54, accMetOut55, iS1_13, maxValS1_13);
    comp4twosComp  #(size, 56) compS1_56_59 (clk,  accMetOut56, accMetOut57, accMetOut58, accMetOut59, iS1_14, maxValS1_14);
    comp4twosComp  #(size, 60) compS1_60_63 (clk,  accMetOut60, accMetOut61, accMetOut62, accMetOut63, iS1_15, maxValS1_15);
@@ -148,6 +148,7 @@ module maxMetricMultiH(clk, reset, symEn,
    
    
    // counter used to create a delayed verion of the synEn
+/* -----\/----- EXCLUDED -----\/-----
    always @(posedge clk)
      begin
         if (reset || symEn) begin
@@ -160,6 +161,7 @@ module maxMetricMultiH(clk, reset, symEn,
              cnt <= cnt;
         end
      end
+ -----/\----- EXCLUDED -----/\----- */
    
    // Delayed syncEn
 /* -----\/----- EXCLUDED -----\/-----
