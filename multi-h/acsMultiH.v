@@ -258,13 +258,15 @@ module acsMultH
 
    wire [ACS_BITS-1:0]    accMetInAdder = accMetTmp;
 
-   reg [ACS_BITS:0]      aExt;
+   reg [MF_BITS-1:0]      iInAdder, qInAdder;
    always @(posedge clk) begin
       if (reset) begin
-         aExt <= 0;
+         iInAdder <= 0;
+         qInAdder <= 0;
       end
       else begin
-         aExt <= {iOutRot[MF_BITS-1], iOutRot[MF_BITS-1], iOutRot[MF_BITS-1], iOutRot};
+         iInAdder <= iOutRot;
+         qInAdder <= qOutRot;
       end
    end
 
@@ -272,8 +274,7 @@ module acsMultH
    // 2-comp adder: Adds a vector of width 10 and one of 12.
    wire [ACS_BITS-1:0]    sum;
    wire [ACS_BITS:0]      tmpSum;
-//   wire [ACS_BITS:0]      aExt = {iOutRot[MF_BITS-1], iOutRot[MF_BITS-1], iOutRot[MF_BITS-1], iOutRot};
-//   wire [ACS_BITS:0]      bExt = {accMetInAdder[ACS_BITS-1], accMetInAdder};
+   wire [ACS_BITS:0]      aExt = {iInAdder[MF_BITS-1], iInAdder[MF_BITS-1], iInAdder[MF_BITS-1], iInAdder};
    wire [ACS_BITS:0]      bExt = {accMetInAdder[ACS_BITS-1], accMetInAdder};
    assign                 tmpSum = aExt + bExt;
    assign                 sum = tmpSum[ACS_BITS-1:0];    // slicing off the MSB (watchout for the sign bit) 
@@ -337,16 +338,16 @@ module acsMultH
               if (sum>maxSum) begin
                  maxSum <= sum;
                  selOutTmp <= maxCnt;
-                 iSurvivingRotMfTmp <= iOutRot;
-                 qSurvivingRotMfTmp <= qOutRot;
+                 iSurvivingRotMfTmp <= iInAdder;
+                 qSurvivingRotMfTmp <= qInAdder;
               end
            end
            2'b01:  begin // sum=pos, maxSum=neg
               if (sum[ACS_BITS-2:0] < maxSum[ACS_BITS-2:0]) begin
                  maxSum <= sum;
                  selOutTmp <= maxCnt;
-                 iSurvivingRotMfTmp <= iOutRot;
-                 qSurvivingRotMfTmp <= qOutRot;
+                 iSurvivingRotMfTmp <= iInAdder;
+                 qSurvivingRotMfTmp <= qInAdder;
               end
 
            end
@@ -358,16 +359,16 @@ module acsMultH
               if (sum[ACS_BITS-2:0] > maxSum[ACS_BITS-2:0]) begin
                  maxSum <= sum;
                  selOutTmp <= maxCnt;
-                 iSurvivingRotMfTmp <= iOutRot;
-                 qSurvivingRotMfTmp <= qOutRot;
+                 iSurvivingRotMfTmp <= iInAdder;
+                 qSurvivingRotMfTmp <= qInAdder;
               end
            end
          endcase
       end
    end
 
-   wire [MF_BITS-1:0] iOut = iSurvivingRotMfTmp;
-   wire [MF_BITS-1:0] qOut = qSurvivingRotMfTmp;
+   wire [MF_BITS-1:0] iOut = iSurvivingRotMf;
+   wire [MF_BITS-1:0] qOut = qSurvivingRotMf;
    
    
    // --------- Normailzation and forget factor -------------
