@@ -75,7 +75,7 @@ module traceBackSoqpsk
      end
          
 
-   always @(symEnEven or nState )
+   always @(symEnEven or nState or sel_1dly)
      begin
         if (symEnEven) begin // Odd state
            if (nState==2'b01  || nState==2'b10) begin
