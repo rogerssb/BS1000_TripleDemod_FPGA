@@ -186,7 +186,7 @@ end
 //------------------------------------------------------------------------------
 
 reg [14:0]rand_nrz_shft;
-wire rand_nrz_shft_en = demux ? symb_clk_2x_en : symb_clk_2x_en;  //was div_n==0;
+wire rand_nrz_shft_en = demux ? symb_clk_2x_en : symb_clk_en;  //was div_n==0;
 reg  rand_nrz_dec_out;
 
 always @(posedge clk or posedge rs) begin

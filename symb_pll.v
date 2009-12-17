@@ -125,7 +125,7 @@ always @(posedge clk or posedge rs)begin
 
 // reference divider -----------------------------------------------------------
 
-wire [9:0]ref_cnt_tc = ref / 2;
+wire [9:0]ref_cnt_tc = ref[10:1];
 reg [9:0]ref_cnt;
 reg ref_div;
 always @(posedge clk or posedge rs)begin
@@ -141,63 +141,78 @@ always @(posedge clk or posedge rs)begin
   `endif
 
     if(ref_cnt == ref_cnt_tc)begin
-      ref_cnt <= 1;
-      ref_div <= !ref_div;
-      end
+        if (ref_div) begin
+            ref_cnt <= 1;
+            end
+        else begin
+            ref_cnt <= {9'b0,!ref[0]};
+            end
+        ref_div <= !ref_div;
+        end
     else begin
-      ref_cnt <= ref_cnt +1;
-      ref_div <= ref_div;
-      end
+        ref_cnt <= ref_cnt + 1;
+        ref_div <= ref_div;
+        end
     end
 end
 
 `ifdef USE_NCO
 assign clk_ref = ref < 2 ? acc[15] : ref_div;
 `else
-assign clk_ref = ref < 2 ? clk : ref_div;
+assign clk_ref = ref < 2 ? clk_en : ref_div;
 `endif
 
 // feedback divider ------------------------------------------------------------
 
-wire [9:0]fbk_cnt_tc = fbk / 2;
+wire [9:0]fbk_cnt_tc = fbk[10:1];
 reg [9:0]fbk_cnt;
 reg fbk_div;
 always @(posedge clk_vco or posedge rs)begin
-  if(rs)begin
-    fbk_cnt <= 1;
-    fbk_div <= 0;
+    if(rs)begin
+        fbk_cnt <= 1;
+        fbk_div <= 0;
+        end
+    else if(fbk_cnt == fbk_cnt_tc)begin
+        if (fbk_div) begin
+            fbk_cnt <= 1;
+            end
+        else begin
+            fbk_cnt <= {9'b0,!fbk[0]};
+            end
+        fbk_div <= !fbk_div;
+        end
+    else begin
+        fbk_cnt <= fbk_cnt + 1;
+        fbk_div <= fbk_div;
+        end
     end
-  else if(fbk_cnt == fbk_cnt_tc)begin
-    fbk_cnt <= 1;
-    fbk_div <= !fbk_div;
-    end
-  else begin
-    fbk_cnt <= fbk_cnt +1;
-    fbk_div <= fbk_div;
-    end
-end
 
 assign clk_fbk = fbk < 2 ? clk_vco : fbk_div;
 
 // vco output divider ----------------------------------------------------------
 
-wire [9:0]vco_cnt_tc = vco / 2;
+wire [9:0]vco_cnt_tc = vco[10:1];
 reg [9:0]vco_cnt;
 reg vco_div;
 always @(posedge clk_vco or posedge rs)begin
-  if(rs)begin
-    vco_cnt <= 1;
-    vco_div <= 0;
+    if(rs)begin
+        vco_cnt <= 1;
+        vco_div <= 0;
+        end
+    else if(vco_cnt == vco_cnt_tc)begin
+        if (vco_div) begin
+            vco_cnt <= 1;
+            end
+        else begin
+            vco_cnt <= {9'b0,!vco[0]};
+            end
+        vco_div <= !vco_div;
+        end
+    else begin
+        vco_cnt <= vco_cnt + 1;
+        vco_div <= vco_div;
+        end
     end
-  else if(vco_cnt == vco_cnt_tc)begin
-    vco_cnt <= 1;
-    vco_div <= !vco_div;
-    end
-  else begin
-    vco_cnt <= vco_cnt +1;
-    vco_div <= vco_div;
-    end
-end
 
 assign clk_out = vco < 2 ? clk_vco : vco_div;
 

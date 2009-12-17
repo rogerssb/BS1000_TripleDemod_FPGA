@@ -61,7 +61,7 @@ output symb_pll_ref,symb_pll_fbk;
 input symb_pll_vco;
 output  sdiOut;
 
-parameter VER_NUMBER = 16'h00a4;
+parameter VER_NUMBER = 16'h00a5;
 
 wire [11:0]addr = {addr11,addr10,addr9,addr8,addr7,addr6,addr5,addr4,addr3,addr2,addr1,1'b0};
 
@@ -382,37 +382,53 @@ trellisSoqpsk soqpsk
 //******************************************************************************
 //                          Trellis Muxes
 //******************************************************************************
-wire    [31:0] trellisDout = (demodMode == `MODE_PCMTRELLIS)
+wire           pcmTrellisMode = (demodMode == `MODE_PCMTRELLIS);
+wire    [31:0] trellisDout = pcmTrellisMode
                            ? pcmTrellisDout
                            : soqpskTrellisDout;
-wire    [17:0] trellis0Out = (demodMode == `MODE_PCMTRELLIS)
+wire    [17:0] trellis0Out = pcmTrellisMode
                            ? pcmTrellis0Out
                            : soqpskTrellis0Out;
-wire    trellis0Sync = (demodMode == `MODE_PCMTRELLIS)
+wire    trellis0Sync = pcmTrellisMode
                      ? pcmTrellis0Sync
                      : soqpskTrellis0Sync;
-wire    [17:0] trellis1Out = (demodMode == `MODE_PCMTRELLIS)
+wire    [17:0] trellis1Out = pcmTrellisMode
                            ? pcmTrellis1Out
                            : soqpskTrellis1Out;
-wire    trellis1Sync = (demodMode == `MODE_PCMTRELLIS)
+wire    trellis1Sync = pcmTrellisMode
                      ? pcmTrellis1Sync
                      : soqpskTrellis1Sync;
-wire    [17:0] trellis2Out = (demodMode == `MODE_PCMTRELLIS)
+wire    [17:0] trellis2Out = pcmTrellisMode
                            ? pcmTrellis2Out
                            : soqpskTrellis2Out;
-wire    trellis2Sync = (demodMode == `MODE_PCMTRELLIS)
+wire    trellis2Sync = pcmTrellisMode
                      ? pcmTrellis2Sync
                      : soqpskTrellis2Sync;
-wire    trellisSymEn = (demodMode == `MODE_PCMTRELLIS)
+`define RECLOCK_TRELLIS_OUTPUTS
+`ifdef RECLOCK_TRELLIS_OUTPUTS
+reg trellisSymEn,trellisSym2xEn,trellisBit;
+always @(posedge ck933) begin
+    trellisSymEn = pcmTrellisMode
+                 ? pcmTrellisSymEn
+                 : soqpskTrellisSymEn;
+    trellisSym2xEn = pcmTrellisMode
+                   ? pcmTrellisSym2xEn
+                   : soqpskTrellisSym2xEn;
+    trellisBit = pcmTrellisMode
+               ? pcmTrellisBit
+               : soqpskTrellisBit;
+    end
+`else
+wire    trellisSymEn = pcmTrellisMode
                      ? pcmTrellisSymEn
                      : soqpskTrellisSymEn;
-wire    trellisSym2xEn = (demodMode == `MODE_PCMTRELLIS)
+wire    trellisSym2xEn = pcmTrellisMode
                        ? pcmTrellisSym2xEn
                        : soqpskTrellisSym2xEn;
-wire    trellisBit = (demodMode == `MODE_PCMTRELLIS)
+wire    trellisBit = pcmTrellisMode
                    ? pcmTrellisBit
                    : soqpskTrellisBit;
-
+`endif
 
 //******************************************************************************
 //                              DAC Outputs
@@ -662,7 +678,7 @@ wire decoder_cout;
 wire decoder_fifo_rs;
 wire cout_inv;
 
-wire trellisEn = ((demodMode == `MODE_PCMTRELLIS) || (demodMode == `MODE_SOQPSK));
+wire trellisEn = (pcmTrellisMode || (demodMode == `MODE_SOQPSK));
 wire [2:0]decoder_iIn = trellisEn ? {trellisBit,2'b0} : {iBit,2'b0}; 
 wire [2:0]decoder_qIn = trellisEn ? {trellisBit,2'b0} : {qBit,2'b0};
 wire decoderSymEn = trellisEn ? trellisSymEn : iSymEn;
@@ -682,10 +698,6 @@ decoder decoder
   .symb_clk_2x_en(decoderSym2xEn),  // 2x symbol rate clock enable
   .symb_i(decoder_iIn),             // input, i
   .symb_q(decoder_qIn),             // input, q
-  //.symb_clk_en(iSymEn),       // symbol rate clock enable
-  //.symb_clk_2x_en(iSym2xEn),  // 2x symbol rate clock enable
-  //.symb_i({iBit,2'b0}),             // input, i
-  //.symb_q({qBit,2'b0}),             // input, q
   .dout_i(decoder_dout_i),          // output, i data
   .dout_q(decoder_dout_q),          // output, q data
   .cout(decoder_cout),              // output, i/q clock
@@ -737,13 +749,20 @@ symb_pll symb_pll
   .a(addr),
   .di(dataIn),
   .do(symb_pll_dout),
-  .clk(decoder_cout),
-  .clk_en(1'b1),
-  .clk_ref(symb_pll_ref),     // output pad, comparator reference clock
+  //.clk(decoder_cout),
+  //.clk_en(1'b1),
+  .clk(ck933),
+  .clk_en(decoder_cout),
+  .clk_ref(pllRef),           // output pad, comparator reference clock
   .clk_vco(symb_pll_vco),     // input pad, vco output
   .clk_fbk(symb_pll_fbk),     // output pad, comparator feedback clock
   .clk_out(symb_pll_out)      // output, symbol clock
   );
+
+reg symb_pll_ref;
+always @(posedge ck933) begin
+    symb_pll_ref <= pllRef;
+    end
 
 wire cout = symb_pll_out ^ !cout_inv;
 assign cout_i = cout;
@@ -758,7 +777,7 @@ always @(demodMode or qSymClk or cout or trellisSymEn) begin
 //assign cout_q = (demodMode == `MODE_AUQPSK) ? qSymClk : cout;
 
 reg dout_i,decQ;
-always @(negedge cout)begin
+always @(posedge symb_pll_out)begin
   dout_i <= decoder_fifo_dout_i;
   decQ <= decoder_fifo_dout_q;
   end

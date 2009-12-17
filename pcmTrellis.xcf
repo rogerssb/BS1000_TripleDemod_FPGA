@@ -1,4 +1,6 @@
 BEGIN MODEL trellisTop
+Net "symb_pll_ref" IOB = TRUE;
+Net "dout_i" IOB = TRUE;
 Net "dac0_d<0>" IOB = TRUE;
 Net "dac0_d<1>" IOB = TRUE;
 Net "dac0_d<2>" IOB = TRUE;

@@ -1,7 +1,7 @@
-fs = 10000;   %sampling frequency in KHz
+fs = 46667;   %sampling frequency in KHz
 fn = fs/2;
 
-R = 10;      % Decimation
+R = 2;      % Decimation
 N = 3;      % Order
 M = 1;      % Differential Delay
 
@@ -59,8 +59,8 @@ hold on
 plot(w,20*log10(abs(Hb)),'r'),grid
 
 % Repeat the halfband response across the cic response
-% Hsum = Hb .* Hc;
-Hsum = Hc;
+Hsum = Hb .* Hc;
+% Hsum = Hc;
 Hdec = Hsum;
 wdec = w;
 for k = 2:R
