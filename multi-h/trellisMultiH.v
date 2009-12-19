@@ -30,9 +30,8 @@ module trellisMultiH
    quadrarySym2xEnOut
    );
    
-   parameter size = 8;
    parameter MF_BITS = 10;
-   parameter ROT_BITS = 10;
+   parameter ROT_BITS = 8;
 
    input         clk,reset,symEn,sym2xEn;
    input [17:0]  iIn,qIn;
@@ -47,13 +46,13 @@ module trellisMultiH
    output [17:0] dac1Data;
    output        dac2Sync;
    output [17:0] dac2Data;
-   output        decision;
+   output [1:0]  decision;
    output        quadrarySymEnOut;
    output        quadrarySym2xEnOut;
    
    
    wire [ROT_BITS-1:0] phaseError;
-   wire                decision;
+   wire [1:0]          decision;
 
 `define ALDEC_SIM
 
@@ -73,7 +72,7 @@ module trellisMultiH
      end
 
    
-   reg [7:0]           phErrShft;
+   //reg [7:0]           phErrShft;
    wire [17:0]         carrierLoopIOut,carrierLoopQOut;
    wire [31:0]         trellisLoopDout;
    trellisCarrierLoop trellisCarrierLoop
@@ -84,7 +83,7 @@ module trellisMultiH
       .sym2xEn(sym2xEn),
       .iIn(iInLatch),
       .qIn(qInLatch),
-      .phaseError(phaseError[9:2]),
+      .phaseError(phaseError),
       .wr0(wr0),
       .wr1(wr1),
       .wr2(wr2),
@@ -110,7 +109,7 @@ module trellisMultiH
 
 `ifdef SIMULATE
    real                phErrReal;
-   always @(phaseError) phErrReal = $itor($signed(phaseError))/(2**9);
+   always @(phaseError) phErrReal = $itor($signed(phaseError))/(2**7);
 `endif
    
 
@@ -355,8 +354,9 @@ viterbiMultiH /*#(MF_BITS, ROT_BITS)*/ viterbiMultiH
    reg [7:0]            dataBits;
   
    reg                  satPos,satNeg;
-   wire                 sign = phaseError[9];
+   wire                 sign = phaseError[7];
 
+   /* -----\/----- EXCLUDED -----\/-----
    always @(posedge clk) begin
       if (quadrarySymEnOut) begin
          dataBits <= {phaseError[6:0], 1'b0};
@@ -373,6 +373,7 @@ viterbiMultiH /*#(MF_BITS, ROT_BITS)*/ viterbiMultiH
          end
       end   
    end
+    -----/\----- EXCLUDED -----/\----- */
 
 // This is a kludge to create a 2x clock enable from the 1x clock enable to satisfy the design
 // of the pre-existing line decoder. This design assumes at least 3 clocks between each 1x clock

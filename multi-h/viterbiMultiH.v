@@ -35,6 +35,7 @@ module viterbiMultiH
    
    parameter             MF_BITS = 10;
    parameter             ACS_BITS = 12;
+   parameter             ROT_BITS = 8;
    input                 clk, reset, symEn, sym2xEn;
    input [7:0]           decayFactor;
    input [MF_BITS-1:0]   mf_p3p3_45Real, mf_p3p1_45Real, mf_p3m1_45Real, mf_p3m3_45Real,
@@ -56,7 +57,7 @@ module viterbiMultiH
    
    output [5:0]          index;
    output [1:0]          decision;
-   output [MF_BITS-1:0]  phaseError;
+   output [ROT_BITS-1:0] phaseError;
    output [MF_BITS-1:0]  devError;
 
    wire [ACS_BITS-1:0]   accMetOut0, accMetOut1, accMetOut2, accMetOut3, accMetOut4, accMetOut5, accMetOut6, accMetOut7, 
@@ -69,7 +70,7 @@ module viterbiMultiH
                          accMetOut56, accMetOut57, accMetOut58, accMetOut59, accMetOut60, accMetOut61, accMetOut62, accMetOut63;
 
    //wire [3:0]            sel;
-   reg [MF_BITS-1:0]     phaseError;
+   reg [ROT_BITS-1:0]    phaseError;
    reg [MF_BITS-1:0]     devError;
    
 `ifdef SIMULATE
@@ -128,7 +129,7 @@ module viterbiMultiH
                          iOut56, iOut41, iOut26, iOut11, iOut60, iOut45, iOut30, iOut15;
     -----/\----- EXCLUDED -----/\----- */
    // The Imaginary part is used to compute the phaseError
-   wire [MF_BITS-1:0]    qOut0, qOut49, qOut34, qOut19, qOut4, qOut53, qOut38, qOut23,
+   wire [ROT_BITS-1:0]   qOut0, qOut49, qOut34, qOut19, qOut4, qOut53, qOut38, qOut23,
                          qOut8, qOut57, qOut42, qOut27, qOut12, qOut61, qOut46, qOut31,
                          qOut16, qOut1, qOut50, qOut35, qOut20, qOut5, qOut54, qOut39,
                          qOut24, qOut9, qOut58, qOut43, qOut28, qOut13, qOut62, qOut47,
@@ -224,7 +225,7 @@ module viterbiMultiH
       .accMetOut52(accMetOut52), .accMetOut53(accMetOut53), .accMetOut54(accMetOut54), .accMetOut55(accMetOut55), 
       .accMetOut56(accMetOut56), .accMetOut57(accMetOut57), .accMetOut58(accMetOut58), .accMetOut59(accMetOut59),
       .accMetOut60(accMetOut60), .accMetOut61(accMetOut61), .accMetOut62(accMetOut62), .accMetOut63(accMetOut63), 
-      .index(index), .symEnDly(symEn_maxMetDly)
+      .maxVal(), .index(index), .symEnDly(symEn_maxMetDly)
       );
 
 
@@ -238,7 +239,7 @@ module viterbiMultiH
                          selOut40r , selOut25r , selOut10r , selOut59r , selOut44r , selOut29r , selOut14r , selOut63r ,
                          selOut48r , selOut33r , selOut18r , selOut3r , selOut52r , selOut37r , selOut22r , selOut7r ,
                          selOut56r , selOut41r , selOut26r , selOut11r , selOut60r , selOut45r , selOut30r , selOut15r;
-   reg [MF_BITS-1:0]     qOut0r, qOut49r, qOut34r, qOut19r, qOut4r, qOut53r, qOut38r, qOut23r,
+   reg [ROT_BITS-1:0]    qOut0r, qOut49r, qOut34r, qOut19r, qOut4r, qOut53r, qOut38r, qOut23r,
                          qOut8r, qOut57r, qOut42r, qOut27r, qOut12r, qOut61r, qOut46r, qOut31r,
                          qOut16r, qOut1r, qOut50r, qOut35r, qOut20r, qOut5r, qOut54r, qOut39r,
                          qOut24r, qOut9r, qOut58r, qOut43r, qOut28r, qOut13r, qOut62r, qOut47r,

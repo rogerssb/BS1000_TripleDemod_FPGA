@@ -48,7 +48,7 @@ module mfilt
   
 
    wire                  accClr = reset;
-   wire [35:0]           multA, multB, multC, multD;
+   wire [47:0]           multA, multB, multC, multD; 
    reg [35:0]            mf0I, mf0Q;
    reg [35:0]            mf1I, mf1Q;
    reg [35:0]            mf0IAdd, mf0QAdd;

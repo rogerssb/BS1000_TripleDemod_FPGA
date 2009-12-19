@@ -69,7 +69,7 @@ module tiltPhaseAcc
      if (reset) begin
         acc <= 0;
      end
-     else if (~symEnEven) begin
+     else if (symEnEven) begin
         acc <= tilt - 5'b01100; // this has to be (tilt-12)%32 
      end
      else begin
@@ -80,7 +80,8 @@ module tiltPhaseAcc
    always @(posedge clk)
      if (reset) begin
         //tilt <= 0;
-        tilt <= 17;
+        //tilt <= 17;
+        tilt <= 5;
      end
      else if (symEn) begin
         tilt <= acc;

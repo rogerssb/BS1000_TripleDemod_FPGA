@@ -278,13 +278,23 @@ wire rotEnaTb = symEnShift[4];
 
 integer indexH;
 initial indexH=0;
+
+
+always @(posedge clk)begin
+   if (reset) begin cnt <= 0; end
+   else if(cnt == 9) begin cnt <= 0; end
+   else if (cntEna) begin
+      cnt <= cnt +1;
+   end
+end
+   
    
 reg simBit;	
 always @(posedge clk)begin
-   if (reset) begin indexH <= 0; dinH <= 0; end
-   else if(cnt == 13) begin cnt <= 0; end	   
+   if (reset) begin indexH <= 0; dinH <= 0; symEn <= 0; sym2xEn <= 0;end
+   //else if(cnt == 8) begin cnt <= 0; end	   
    else if(cntEna) begin 
-      cnt <= cnt +1;
+      //cnt <= cnt +1;
       case(cnt)
         0: begin
            symEn <= 1;
@@ -293,26 +303,16 @@ always @(posedge clk)begin
            dinH <= readMem[indexH];
            indexH <= indexH + 1;
         end
-//        1,2: begin
-//           symEn <= 0;
-//           sym2xEn <= 0;
-//           dinH <= readMem[indexH];
-//           indexH <= indexH + 1;
-//        end
-        7: begin
+        5: begin
+        //4: begin
            symEn <= 1;
            sym2xEn <= 1;
            rotSel <= rotSel + 1;
            dinH <= readMem[indexH];
            indexH <= indexH + 1;
         end
-//        8,9: begin
-//           symEn <= 0;
-//           sym2xEn <= 0;
-//           dinH <= readMem[indexH];
-//           indexH <= indexH + 1;
-//        end
-        3,10: begin
+        3,7: begin
+        //2,6: begin
            symEn <= 0;
            sym2xEn <= 1;
            dinH <= readMem[indexH];
