@@ -282,7 +282,8 @@ initial indexH=0;
 
 always @(posedge clk)begin
    if (reset) begin cnt <= 0; end
-   else if(cnt == 9) begin cnt <= 0; end
+   //else if(cnt == 10) begin cnt <= 0; end
+   else if(cnt == 7) begin cnt <= 0; end
    else if (cntEna) begin
       cnt <= cnt +1;
    end
@@ -292,9 +293,7 @@ end
 reg simBit;	
 always @(posedge clk)begin
    if (reset) begin indexH <= 0; dinH <= 0; symEn <= 0; sym2xEn <= 0;end
-   //else if(cnt == 8) begin cnt <= 0; end	   
    else if(cntEna) begin 
-      //cnt <= cnt +1;
       case(cnt)
         0: begin
            symEn <= 1;
@@ -303,16 +302,16 @@ always @(posedge clk)begin
            dinH <= readMem[indexH];
            indexH <= indexH + 1;
         end
-        5: begin
-        //4: begin
+        //5: begin
+        4: begin
            symEn <= 1;
            sym2xEn <= 1;
            rotSel <= rotSel + 1;
            dinH <= readMem[indexH];
            indexH <= indexH + 1;
         end
-        3,7: begin
-        //2,6: begin
+        //2,8: begin
+        2,6: begin
            symEn <= 0;
            sym2xEn <= 1;
            dinH <= readMem[indexH];
@@ -363,14 +362,10 @@ end
  -----/\----- EXCLUDED -----/\----- */
 
 	
-`define ALL_PLUS_3
+//`define ALL_PLUS_3
 //`define MULTI_H_ROT_TEST  
 //`define MULTI_H_ROT_TEST_2  
-//`define ONEZERO
-//`define ALLONES
-//`define RANDOM
-//`define RANDOM_SIM_NO_NOISE
-//`define RANDOM_SIM_NOISE
+`define RANDOM
 
 integer file1,file2;
 initial begin
@@ -399,22 +394,8 @@ initial begin
 `endif
             
 `ifdef RANDOM
-      $readmemh("", readMem);
+      $readmemh("P:/semco/matlab_sim_results/multi-h/mfinputsRandom.hex", readMem);
 `endif
-
-//`ifdef RANDOM_SIM_NO_NOISE
-//      $readmemh("c:/projects/semco/hdl/data/noisy_data.txt", readMemResult);
-//      $readmemh("c:/projects/semco/hdl/data/clean_samples.hex", readMem);
-//`endif
-
-//`ifdef RANDOM_SIM_NOISE
-//      $readmemh("c:/projects/semco/hdl/data/noisy_data.txt", readMemResult);
-//      $readmemh("c:/projects/semco/hdl/data/noisy_samples.hex", readMem);
-//`endif
-
-
-//#305 uut.soqpskTop.simReset = 0; // release the accumulation reset when valid data out of the rotators
-   
 
   end
 

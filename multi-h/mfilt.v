@@ -209,20 +209,8 @@ module mfilt
    always @(posedge clk)
      if (reset) begin
         coeffA <= 0;
-        coeffA <= 0;
-        coeffA <= 0;
-        coeffA <= 0;
-        coeffB <= 0;
-        coeffB <= 0;
-        coeffB <= 0;
         coeffB <= 0;
         dataA <= 0; 
-        dataA <= 0; 
-        dataA <= 0; 
-        dataA <= 0; 
-        dataB <= 0;
-        dataB <= 0;
-        dataB <= 0;
         dataB <= 0;
      end
      else begin

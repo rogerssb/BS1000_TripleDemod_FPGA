@@ -3,22 +3,25 @@
 module tilt
   (
    clk, reset, symEn,
-   tilt
+   tilt,
+   symEnEven
    );
    
 
    input                 clk, reset, symEn;
    output [4:0]          tilt;
-
+   output                symEnEven;
+   
    reg                   symEnEven;
    always @(posedge clk)
      begin
         if (reset) begin
-           symEnEven <= 0;
+           //symEnEven <= 0;
+           symEnEven <= 1;
         end
         else begin 
            if (symEn) begin
-              symEnEven <= ~symEnEven;
+              symEnEven <= ~ symEnEven;
            end
         end
       end
@@ -33,11 +36,6 @@ module tilt
       );
 
    endmodule
-   
-
-
-
-
 
 //-----------------------------------------------------------------------------
 // Project      SEMCO Multi-mode Demodulator
@@ -80,8 +78,9 @@ module tiltPhaseAcc
    always @(posedge clk)
      if (reset) begin
         //tilt <= 0;
-        //tilt <= 17;
-        tilt <= 5;
+        tilt <= 17;
+        //tilt <= 5;
+        //tilt <= 22;
      end
      else if (symEn) begin
         tilt <= acc;

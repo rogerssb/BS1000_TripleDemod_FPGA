@@ -2,6 +2,7 @@
 module acsMultH
   (
    clk, reset, symEn, sym2xEn,
+   symEnEven,
    `ifdef USE_DECAY
    decayFactor,
    `endif
@@ -15,7 +16,8 @@ module acsMultH
    selOut,
    normalizeIn, normalizeOut,
    accMetOut,
-   iOut, qOut
+   iOut, qOut,
+   symEnOut, sym2xEnOut
    );
    parameter             ROT_45_0=0, ROT_45_1=0, ROT_45_2 =0,ROT_45_3=0,
                          ROT_54_0=0, ROT_54_1=0, ROT_54_2 =0,ROT_54_3=0;
@@ -25,15 +27,15 @@ module acsMultH
    parameter             ROT_BITS = 8;
    
    input                 clk, reset;
-   input                 symEn, sym2xEn;
+   input                 symEn, sym2xEn, symEnEven;
    `ifdef USE_DECAY
    input [7:0]           decayFactor;
    `endif
 
-   input [MF_BITS-1:0]   mfI_45_0, mfI_45_1, mfI_45_2,mfI_45_3, 
-                         mfI_54_0, mfI_54_1, mfI_54_2,mfI_54_3, 
-                         mfQ_45_0, mfQ_45_1, mfQ_45_2,mfQ_45_3, 
-                         mfQ_54_0, mfQ_54_1, mfQ_54_2,mfQ_54_3;
+   input [MF_BITS-1:0]   mfI_45_0, mfI_45_1, mfI_45_2, mfI_45_3, 
+                         mfI_54_0, mfI_54_1, mfI_54_2, mfI_54_3, 
+                         mfQ_45_0, mfQ_45_1, mfQ_45_2, mfQ_45_3, 
+                         mfQ_54_0, mfQ_54_1, mfQ_54_2, mfQ_54_3;
    input [4:0]           tilt;
    input [ACS_BITS-1:0]  accMet_45_0, accMet_45_1, accMet_45_2, accMet_45_3, 
                          accMet_54_0, accMet_54_1, accMet_54_2, accMet_54_3;
@@ -43,10 +45,54 @@ module acsMultH
    input                 normalizeIn;
    output                normalizeOut;
    output [ACS_BITS-1:0] accMetOut;     
-   output [ROT_BITS-1:0]  iOut;
-   output [ROT_BITS-1:0]  qOut;
+   output [ROT_BITS-1:0] iOut;
+   output [ROT_BITS-1:0] qOut;
+   output                symEnOut, sym2xEnOut;
 
-
+   // re-clock the Match Filter inputs to improve the fan-out on the register to register timing 
+   // from the matchfiter output to the imput of the ACS 
+   reg [MF_BITS-1:0]     mfI_45_0r, mfI_45_1r, mfI_45_2r, mfI_45_3r, 
+                         mfI_54_0r, mfI_54_1r, mfI_54_2r, mfI_54_3r, 
+                         mfQ_45_0r, mfQ_45_1r, mfQ_45_2r, mfQ_45_3r, 
+                         mfQ_54_0r, mfQ_54_1r, mfQ_54_2r, mfQ_54_3r;
+   always @(posedge clk) begin
+      if (reset) begin
+         mfI_45_0r <= 0;
+         mfI_45_1r <= 0;
+         mfI_45_2r <= 0;
+         mfI_45_3r <= 0;
+         mfI_54_0r <= 0;
+         mfI_54_1r <= 0;
+         mfI_54_2r <= 0;
+         mfI_54_3r <= 0;
+         mfQ_45_0r <= 0;
+         mfQ_45_1r <= 0;
+         mfQ_45_2r <= 0;
+         mfQ_45_3r <= 0;
+         mfQ_54_0r <= 0;
+         mfQ_54_1r <= 0;
+         mfQ_54_2r <= 0;
+         mfQ_54_3r <= 0;
+      end
+      else if (symEn) begin
+         mfI_45_0r <= mfI_45_0;
+         mfI_45_1r <= mfI_45_1;
+         mfI_45_2r <= mfI_45_2;
+         mfI_45_3r <= mfI_45_3;
+         mfI_54_0r <= mfI_54_0;
+         mfI_54_1r <= mfI_54_1;
+         mfI_54_2r <= mfI_54_2;
+         mfI_54_3r <= mfI_54_3;
+         mfQ_45_0r <= mfQ_45_0;
+         mfQ_45_1r <= mfQ_45_1;
+         mfQ_45_2r <= mfQ_45_2;
+         mfQ_45_3r <= mfQ_45_3;
+         mfQ_54_0r <= mfQ_54_0;
+         mfQ_54_1r <= mfQ_54_1;
+         mfQ_54_2r <= mfQ_54_2;
+         mfQ_54_3r <= mfQ_54_3;
+      end
+   end
 
    reg [5:0] symEnSr;
    reg [5:0] sym2xEnSr;
@@ -65,23 +111,24 @@ module acsMultH
 
    wire symEnAdder = symEnRot; //symEnSr[3];    
    wire symEnEvenAdder = symEnEvenSr[1]; //symEnEvenSr[5];  // 2 clocks through rotator and 4 in the ACS loop
-   wire symEnMax = symEnSr[4];    
-   //wire symEnOut = symEnSr[???????];
-   //wire sym2xEnOut = sym2xEnSr[???????];
+   wire symEnMax = symEnSr[3];    
+   wire sym2xEnMax = sym2xEnSr[3];    
+   wire symEnOut = symEnMax;
+   wire sym2xEnOut = sym2xEnMax;
 
 
    // Some control singnals  
-   reg                   symEnEven;   // toggles with every symEn
+   //reg                   symEnEven;   // toggles with every symEn
    reg [1:0]             inputMuxSel; // starts to count to 3, resets to 0 at symEn
    always @(posedge clk)
      begin
         if (reset) begin
-           symEnEven <= 0;
+           //symEnEven <= 1;
            inputMuxSel <= 3; //0;
         end
         else begin 
            if (symEn) begin
-              symEnEven <= ~symEnEven;
+              //symEnEven <= ~symEnEven;
               inputMuxSel <= 0;
            end
            else begin
@@ -126,40 +173,40 @@ module acsMultH
    reg [MF_BITS-1:0]    mfI45MuxOut, mfI54MuxOut,
                         mfQ45MuxOut, mfQ54MuxOut;
    always @(inputMuxSel or 
-            mfI_45_0 or mfI_54_0 or
-            mfI_45_1 or mfI_54_1 or 
-            mfI_45_2 or mfI_54_2 or 
-            mfI_45_3 or mfI_54_3 or 
-            mfQ_45_0 or mfQ_54_0 or
-            mfQ_45_1 or mfQ_54_1 or 
-            mfQ_45_2 or mfQ_54_2 or 
-            mfQ_45_3 or mfQ_54_3) 
+            mfI_45_0r or mfI_54_0r or
+            mfI_45_1r or mfI_54_1r or 
+            mfI_45_2r or mfI_54_2r or 
+            mfI_45_3r or mfI_54_3r or 
+            mfQ_45_0r or mfQ_54_0r or
+            mfQ_45_1r or mfQ_54_1r or 
+            mfQ_45_2r or mfQ_54_2r or 
+            mfQ_45_3r or mfQ_54_3r) 
 
      begin
         case(inputMuxSel) 
           0: begin
-             mfI45MuxOut <= mfI_45_0;
-             mfI54MuxOut <= mfI_54_0;
-             mfQ45MuxOut <= mfQ_45_0;
-             mfQ54MuxOut <= mfQ_54_0;
+             mfI45MuxOut <= mfI_45_0r;
+             mfI54MuxOut <= mfI_54_0r;
+             mfQ45MuxOut <= mfQ_45_0r;
+             mfQ54MuxOut <= mfQ_54_0r;
           end
           1: begin
-             mfI45MuxOut <= mfI_45_1;
-             mfI54MuxOut <= mfI_54_1;
-             mfQ45MuxOut <= mfQ_45_1;
-             mfQ54MuxOut <= mfQ_54_1;
+             mfI45MuxOut <= mfI_45_1r;
+             mfI54MuxOut <= mfI_54_1r;
+             mfQ45MuxOut <= mfQ_45_1r;
+             mfQ54MuxOut <= mfQ_54_1r;
           end
           2: begin
-             mfI45MuxOut <= mfI_45_2;
-             mfI54MuxOut <= mfI_54_2;
-             mfQ45MuxOut <= mfQ_45_2;
-             mfQ54MuxOut <= mfQ_54_2;
+             mfI45MuxOut <= mfI_45_2r;
+             mfI54MuxOut <= mfI_54_2r;
+             mfQ45MuxOut <= mfQ_45_2r;
+             mfQ54MuxOut <= mfQ_54_2r;
           end
           3: begin
-             mfI45MuxOut <= mfI_45_3;
-             mfI54MuxOut <= mfI_54_3;
-             mfQ45MuxOut <= mfQ_45_3;
-             mfQ54MuxOut <= mfQ_54_3;
+             mfI45MuxOut <= mfI_45_3r;
+             mfI54MuxOut <= mfI_54_3r;
+             mfQ45MuxOut <= mfQ_45_3r;
+             mfQ54MuxOut <= mfQ_54_3r;
           end
         endcase
      end
