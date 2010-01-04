@@ -32,10 +32,10 @@ module acsMultH
    input [7:0]           decayFactor;
    `endif
 
-   input [MF_BITS-1:0]   mfI_45_0, mfI_45_1, mfI_45_2, mfI_45_3, 
-                         mfI_54_0, mfI_54_1, mfI_54_2, mfI_54_3, 
-                         mfQ_45_0, mfQ_45_1, mfQ_45_2, mfQ_45_3, 
-                         mfQ_54_0, mfQ_54_1, mfQ_54_2, mfQ_54_3;
+   input [MF_BITS-1:0]   mfI_45_0, mfI_45_1, mfI_45_2,mfI_45_3, 
+                         mfI_54_0, mfI_54_1, mfI_54_2,mfI_54_3, 
+                         mfQ_45_0, mfQ_45_1, mfQ_45_2,mfQ_45_3, 
+                         mfQ_54_0, mfQ_54_1, mfQ_54_2,mfQ_54_3;
    input [4:0]           tilt;
    input [ACS_BITS-1:0]  accMet_45_0, accMet_45_1, accMet_45_2, accMet_45_3, 
                          accMet_54_0, accMet_54_1, accMet_54_2, accMet_54_3;
@@ -45,8 +45,8 @@ module acsMultH
    input                 normalizeIn;
    output                normalizeOut;
    output [ACS_BITS-1:0] accMetOut;     
-   output [ROT_BITS-1:0] iOut;
-   output [ROT_BITS-1:0] qOut;
+   output [ROT_BITS-1:0]  iOut;
+   output [ROT_BITS-1:0]  qOut;
    output                symEnOut, sym2xEnOut;
 
    // re-clock the Match Filter inputs to improve the fan-out on the register to register timing 
@@ -97,6 +97,7 @@ module acsMultH
    reg [5:0] symEnSr;
    reg [5:0] sym2xEnSr;
    reg [5:0] symEnEvenSr;
+   wire                symEnRot, sym2xEnRot;
    always @(posedge clk) begin
       if (reset) begin
          symEnSr <= 0;
@@ -118,17 +119,14 @@ module acsMultH
 
 
    // Some control singnals  
-   //reg                   symEnEven;   // toggles with every symEn
    reg [1:0]             inputMuxSel; // starts to count to 3, resets to 0 at symEn
    always @(posedge clk)
      begin
         if (reset) begin
-           //symEnEven <= 1;
            inputMuxSel <= 3; //0;
         end
         else begin 
            if (symEn) begin
-              //symEnEven <= ~symEnEven;
               inputMuxSel <= 0;
            end
            else begin
@@ -350,7 +348,6 @@ module acsMultH
    
    
    wire [ROT_BITS-1:0] iOutRot, qOutRot;
-   wire                symEnRot, sym2xEnRot;
    rot8x8 rotator
      (
       .clk        (clk        ), 
@@ -408,7 +405,6 @@ module acsMultH
    end
 
 
-   wire [1:0] tecken = {sum[ACS_BITS-1], maxSum[ACS_BITS-1]};
    
    
    // finding the max Value

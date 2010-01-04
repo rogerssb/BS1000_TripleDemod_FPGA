@@ -87,9 +87,9 @@ module viterbiMultiH
    wire [4:0]            tilt;
    tilt tiltModule
      (
-      .clk       (clk      ), 
-      .reset     (reset    ), 
-      .symEn     (symEn    ),
+      .clk   (clk  ), 
+      .reset (reset), 
+      .symEn (symEn),
       .tilt      (tilt     ),
       .symEnEven (symEnEven)
       );
@@ -100,7 +100,8 @@ module viterbiMultiH
                          s48, s33, s18, s3, s52, s37, s22, s7, s56, s41, s26, s11, s60, s45, s30, s15;
 
    // ACS acc. normalization control signal
-   reg                   s;
+   reg  s;
+   wire symEnAcs;
    always @(posedge clk)
      begin
         if (reset) begin
@@ -117,7 +118,7 @@ module viterbiMultiH
                  s56 | s41 | s26 | s11 | s60 | s45 | s30 | s15;
         end
      end
-   
+
    wire [1:0]            selOut0 , selOut49 , selOut34 , selOut19 , selOut4 , selOut53 , selOut38 , selOut23 , 
                          selOut8 , selOut57 , selOut42 , selOut27 , selOut12 , selOut61 , selOut46 , selOut31 ,
                          selOut16 , selOut1 , selOut50 , selOut35 , selOut20 , selOut5 , selOut54 , selOut39 , 
@@ -145,7 +146,7 @@ module viterbiMultiH
                          qOut40, qOut25, qOut10, qOut59, qOut44, qOut29, qOut14, qOut63,
                          qOut48, qOut33, qOut18, qOut3, qOut52, qOut37, qOut22, qOut7,
                          qOut56, qOut41, qOut26, qOut11, qOut60, qOut45, qOut30, qOut15;
-   //         h45 rot para  h54 rot param                                                                                                   h45 match filters                                                                                           h54 Match filters                                                                                                                                                                                                                                                                                                                            h45 ACC metrics                                                                                            h54 ACC metrics 
+   //         h45 rot para  h54 rot param                                                                            h45 match filters                                                                                                  h54 Match filters                                                                                                                                                                                                                                                                                                                                                        h45 ACC metrics                                                                                            h54 ACC metrics                                                                                                                                                                                            
    acsMultH #(0 ,11, 6, 1,  0 ,12, 8, 4)  acsMultH0    (.clk(clk), .reset(reset), .symEn(symEn), .sym2xEn(sym2xEn), .symEnEven(symEnEven), .mfI_45_0(mf_m3m3_54Real), .mfI_45_1(mf_m1m3_54Real), .mfI_45_2(mf_p1m3_54Real), .mfI_45_3(mf_p3m3_54Real), .mfI_54_0(mf_m3m3_45Real), .mfI_54_1(mf_m1m3_45Real), .mfI_54_2(mf_p1m3_45Real), .mfI_54_3(mf_p3m3_45Real), .mfQ_45_0(mf_m3m3_54Imag), .mfQ_45_1(mf_m1m3_54Imag), .mfQ_45_2(mf_p1m3_54Imag), .mfQ_45_3(mf_p3m3_54Imag), .mfQ_54_0(mf_m3m3_45Imag), .mfQ_54_1(mf_m1m3_45Imag), .mfQ_54_2(mf_p1m3_45Imag), .mfQ_54_3(mf_p3m3_45Imag), .tilt(tilt), .accMet_45_0(accMetOut0 ), .accMet_45_1(accMetOut45), .accMet_45_2(accMetOut26), .accMet_45_3(accMetOut7 ), .accMet_54_0(accMetOut0 ), .accMet_54_1(accMetOut49), .accMet_54_2(accMetOut34), .accMet_54_3(accMetOut19), .selOut(selOut0 ), .normalizeIn(s), .normalizeOut(s0 ), .accMetOut(accMetOut0 ), .iOut(/*iOut0 */), .qOut(qOut0 ), .symEnOut(symEnAcs), .sym2xEnOut(sym2xEnAcs));
    acsMultH #(12, 7, 2,13,  12, 8, 4, 0)  acsMultH49   (.clk(clk), .reset(reset), .symEn(symEn), .sym2xEn(sym2xEn), .symEnEven(symEnEven), .mfI_45_0(mf_m3m1_54Real), .mfI_45_1(mf_m1m1_54Real), .mfI_45_2(mf_p1m1_54Real), .mfI_45_3(mf_p3m1_54Real), .mfI_54_0(mf_m3m1_45Real), .mfI_54_1(mf_m1m1_45Real), .mfI_54_2(mf_p1m1_45Real), .mfI_54_3(mf_p3m1_45Real), .mfQ_45_0(mf_m3m1_54Imag), .mfQ_45_1(mf_m1m1_54Imag), .mfQ_45_2(mf_p1m1_54Imag), .mfQ_45_3(mf_p3m1_54Imag), .mfQ_54_0(mf_m3m1_45Imag), .mfQ_54_1(mf_m1m1_45Imag), .mfQ_54_2(mf_p1m1_45Imag), .mfQ_54_3(mf_p3m1_45Imag), .tilt(tilt), .accMet_45_0(accMetOut48), .accMet_45_1(accMetOut29), .accMet_45_2(accMetOut10), .accMet_45_3(accMetOut55), .accMet_54_0(accMetOut48), .accMet_54_1(accMetOut33), .accMet_54_2(accMetOut18), .accMet_54_3(accMetOut3 ), .selOut(selOut49), .normalizeIn(s), .normalizeOut(s49), .accMetOut(accMetOut49), .iOut(/*iOut49*/), .qOut(qOut49), .symEnOut(), .sym2xEnOut());
    acsMultH #( 8, 3,14, 9,  8 , 4, 0,12)  acsMultH34   (.clk(clk), .reset(reset), .symEn(symEn), .sym2xEn(sym2xEn), .symEnEven(symEnEven), .mfI_45_0(mf_m3p1_54Real), .mfI_45_1(mf_m1p1_54Real), .mfI_45_2(mf_p1p1_54Real), .mfI_45_3(mf_p3p1_54Real), .mfI_54_0(mf_m3p1_45Real), .mfI_54_1(mf_m1p1_45Real), .mfI_54_2(mf_p1p1_45Real), .mfI_54_3(mf_p3p1_45Real), .mfQ_45_0(mf_m3p1_54Imag), .mfQ_45_1(mf_m1p1_54Imag), .mfQ_45_2(mf_p1p1_54Imag), .mfQ_45_3(mf_p3p1_54Imag), .mfQ_54_0(mf_m3p1_45Imag), .mfQ_54_1(mf_m1p1_45Imag), .mfQ_54_2(mf_p1p1_45Imag), .mfQ_54_3(mf_p3p1_45Imag), .tilt(tilt), .accMet_45_0(accMetOut32), .accMet_45_1(accMetOut13), .accMet_45_2(accMetOut58), .accMet_45_3(accMetOut39), .accMet_54_0(accMetOut32), .accMet_54_1(accMetOut17), .accMet_54_2(accMetOut2 ), .accMet_54_3(accMetOut51), .selOut(selOut34), .normalizeIn(s), .normalizeOut(s34), .accMetOut(accMetOut34), .iOut(/*iOut34*/), .qOut(qOut34), .symEnOut(), .sym2xEnOut());
