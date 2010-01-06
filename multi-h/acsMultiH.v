@@ -209,6 +209,7 @@ module acsMultH
         endcase
      end
    
+/* -----\/----- EXCLUDED -----\/-----
 
    // Two 4to1 input muxes on the accumulated metric inputs. 
    reg [ACS_BITS-1:0]    accMet45MuxOut, accMet54MuxOut;
@@ -252,6 +253,7 @@ module acsMultH
       accMet_54_3_real <= $itor($signed(accMet_54_3))/(2**(ACS_BITS-6));
    end
    `endif 
+ -----/\----- EXCLUDED -----/\----- */
 
 
 
@@ -298,20 +300,18 @@ module acsMultH
    //reg [ACS_BITS-1:0]    accMetTmp;
    always @ (symEnEven or 
              mfI45MuxOut or mfI54MuxOut or
-             mfQ45MuxOut or mfQ54MuxOut /*or 
-             accMet45MuxOut or accMet54MuxOut*/) begin
+             mfQ45MuxOut or mfQ54MuxOut) begin
       if (~symEnEven) begin
          iMfInRot <= mfI45MuxOut;
          qMfInRot <= mfQ45MuxOut;
-         //accMetTmp <= accMet54MuxOut;
       end
       else begin
          iMfInRot <= mfI54MuxOut;
          qMfInRot <= mfQ54MuxOut;
-         //accMetTmp <= accMet45MuxOut;
       end
    end
 
+/* -----\/----- EXCLUDED -----\/-----
 
    reg [ACS_BITS-1:0]    accMetTmp;
    always @ (symEnEvenAdder or 
@@ -323,6 +323,7 @@ module acsMultH
          accMetTmp <= accMet45MuxOut;
       end
    end
+ -----/\----- EXCLUDED -----/\----- */
 
    
    `ifdef SIMULATE
@@ -371,9 +372,156 @@ module acsMultH
       qOutRot_real <= $itor($signed(qOutRot))/(2**(ROT_BITS-2));
    end
    `endif
+
+
+   // Going from a serial stream out of the rotator to parallel
+   reg [ROT_BITS-1:0] iOutRot_0, iOutRot_1, iOutRot_2, iOutRot_3, 
+                       qOutRot_0, qOutRot_1, qOutRot_2, qOutRot_3;
+   always @(inputMuxSelAcs or iOutRot or qOutRot)
+     begin
+        case(inputMuxSelAcs) 
+          0: begin
+             iOutRot_0 <= iOutRot;
+             qOutRot_0 <= qOutRot;
+          end                              
+          1: begin                         
+             iOutRot_1 <= iOutRot;
+             qOutRot_1 <= qOutRot;
+          end                              
+          2: begin                         
+             iOutRot_2 <= iOutRot;
+             qOutRot_2 <= qOutRot;
+          end                              
+          3: begin                         
+             iOutRot_3 <= iOutRot; 
+             qOutRot_3 <= qOutRot;
+          end
+        endcase
+     end
+
+   // Latching the I and Q at the symbol rate
+   reg [ROT_BITS-1:0] iOutRot_0r, iOutRot_1r, iOutRot_2r, iOutRot_3r, 
+                      qOutRot_0r, qOutRot_1r, qOutRot_2r, qOutRot_3r;
+   always @(posedge clk) begin
+      if (reset) begin
+      end
+      else if (symEnRot) begin
+         iOutRot_0r <= iOutRot_0;
+         qOutRot_0r <= qOutRot_0;
+         iOutRot_1r <= iOutRot_1;
+         qOutRot_1r <= qOutRot_1;
+         iOutRot_2r <= iOutRot_2;
+         qOutRot_2r <= qOutRot_2;
+         iOutRot_3r <= iOutRot_3; 
+         qOutRot_3r <= qOutRot_3;
+      end
+   end
+
+   // Two 8to4 input muxes on the accumulated metric inputs. 
+   reg [ACS_BITS-1:0]    accMetMuxOut_0, accMetMuxOut_1, accMetMuxOut_2, accMetMuxOut_3;
+   always @(symEnEvenAdder or 
+            accMet_45_0 or accMet_54_0 or
+            accMet_45_1 or accMet_54_1 or 
+            accMet_45_2 or accMet_54_2 or 
+            accMet_45_3 or accMet_54_3)
+     begin
+        if (symEnEvenAdder) begin 
+           accMetMuxOut_0 <= accMet_54_0;
+           accMetMuxOut_1 <= accMet_54_1;
+           accMetMuxOut_2 <= accMet_54_2;
+           accMetMuxOut_3 <= accMet_54_3;
+        end
+        else begin
+           accMetMuxOut_0 <= accMet_45_0;
+           accMetMuxOut_1 <= accMet_45_1;
+           accMetMuxOut_2 <= accMet_45_2;
+           accMetMuxOut_3 <= accMet_45_3;
+        end
+     end
    
+   
+   // ************* 4 parallel adders ****************
+        
+   // 2-comp adder: Adds a vector of width 8 and one of 12.
+   wire [ACS_BITS-1:0]    sum0;
+   wire [ACS_BITS:0]      tmpSum0;
+   wire [ACS_BITS:0]      aExt0 = {iOutRot_0r[ROT_BITS-1], iOutRot_0r[ROT_BITS-1], iOutRot_0r[ROT_BITS-1], iOutRot_0r[ROT_BITS-1], iOutRot_0r[ROT_BITS-1], iOutRot_0r};
+   wire [ACS_BITS:0]      bExt0 = {accMetMuxOut_0[ACS_BITS-1], accMetMuxOut_0};
+   assign                 tmpSum0 = aExt0 + bExt0;
+   assign                 sum0 = tmpSum0[ACS_BITS-1:0];    // slicing off the MSB (watchout for the sign bit) 
+   // 2-comp adder: Adds a vector of width 8 and one of 12.
+   wire [ACS_BITS-1:0]    sum1;
+   wire [ACS_BITS:0]      tmpSum1;
+   wire [ACS_BITS:0]      aExt1 = {iOutRot_1r[ROT_BITS-1], iOutRot_1r[ROT_BITS-1], iOutRot_1r[ROT_BITS-1], iOutRot_1r[ROT_BITS-1], iOutRot_1r[ROT_BITS-1], iOutRot_1r};
+   wire [ACS_BITS:0]      bExt1 = {accMetMuxOut_1[ACS_BITS-1], accMetMuxOut_1};
+   assign                 tmpSum1 = aExt1 + bExt1;
+   assign                 sum1 = tmpSum1[ACS_BITS-1:0];    // slicing off the MSB (watchout for the sign bit) 
+   // 2-comp adder: Adds a vector of width 8 and one of 12.
+   wire [ACS_BITS-1:0]    sum2;
+   wire [ACS_BITS:0]      tmpSum2;
+   wire [ACS_BITS:0]      aExt2 = {iOutRot_2r[ROT_BITS-1], iOutRot_2r[ROT_BITS-1], iOutRot_2r[ROT_BITS-1], iOutRot_2r[ROT_BITS-1], iOutRot_2r[ROT_BITS-1], iOutRot_2r};
+   wire [ACS_BITS:0]      bExt2 = {accMetMuxOut_2[ACS_BITS-1], accMetMuxOut_2};
+   assign                 tmpSum2 = aExt2 + bExt2;
+   assign                 sum2 = tmpSum2[ACS_BITS-1:0];    // slicing off the MSB (watchout for the sign bit) 
+   // 2-comp adder: Adds a vector of width 8 and one of 12.
+   wire [ACS_BITS-1:0]    sum3;
+   wire [ACS_BITS:0]      tmpSum3;
+   wire [ACS_BITS:0]      aExt3 = {iOutRot_3r[ROT_BITS-1], iOutRot_3r[ROT_BITS-1], iOutRot_3r[ROT_BITS-1], iOutRot_3r[ROT_BITS-1], iOutRot_3r[ROT_BITS-1], iOutRot_3r};
+   wire [ACS_BITS:0]      bExt3 = {accMetMuxOut_3[ACS_BITS-1], accMetMuxOut_3};
+   assign                 tmpSum3 = aExt3 + bExt3;
+   assign                 sum3 = tmpSum3[ACS_BITS-1:0];    // slicing off the MSB (watchout for the sign bit) 
 
 
+   // ************* maxMetric compare and sel *****************
+   
+   wire [ACS_BITS-1:0]    bestMetric;
+   wire [1:0]             select;
+   compSel  #(ACS_BITS, 0) compSel
+     (
+      .clk    (clk),
+      .ce     (symEnRot),
+      .reset  (reset),
+      .a      (sum0),
+      .b      (sum1),
+      .c      (sum2),
+      .d      (sum3),
+      .index  (select),
+      .maxVal (bestMetric)
+      );
+        
+
+   // ** Selecting the winning rotated metrics for phase error correction ** 
+   reg [1:0]              selOut;
+   reg [ROT_BITS-1:0]     iOut;
+   reg [ROT_BITS-1:0]     qOut;
+   always @(posedge clk)
+      if (reset) begin
+         iOut <= 0;
+         qOut <= 0;
+      end
+      else if (symEnRot) begin
+         selOut <= select;
+         case (select)
+           0: begin
+              iOut <= iOutRot_0r;
+              qOut <= qOutRot_0r;
+           end
+           1: begin
+              iOut <= iOutRot_1r;
+              qOut <= qOutRot_1r;
+           end
+           2: begin
+              iOut <= iOutRot_2r;
+              qOut <= qOutRot_2r ;
+           end
+           3: begin
+              iOut <= iOutRot_3r;
+              qOut <= qOutRot_3r ;
+           end
+         endcase
+      end
+   
+   /* -----\/----- EXCLUDED -----\/-----
    wire [ACS_BITS-1:0]    accMetInAdder = accMetTmp;
 
    // ************** replace iInAdder with iOutRot in the file ******************
@@ -409,7 +557,6 @@ module acsMultH
    
    // finding the max Value
    reg [ACS_BITS-1:0]     maxSum;
-   reg [ACS_BITS-1:0]     bestMetric;
    reg [1:0]              selOut;
    reg [1:0]              selOutTmp;
    reg [ROT_BITS-1:0]     iSurvivingRotMf;
@@ -506,6 +653,7 @@ module acsMultH
    
    wire [ROT_BITS-1:0] iOut = iSurvivingRotMf;
    wire [ROT_BITS-1:0] qOut = qSurvivingRotMf;
+    -----/\----- EXCLUDED -----/\----- */
    
    
    // --------- Normailzation and forget factor -------------
@@ -583,18 +731,19 @@ module acsMultH
 `endif   
 
 
+/* -----\/----- EXCLUDED -----\/-----
 `ifdef SIMULATE
-   real accMetOut_real, accMetInAdder_real, accMetTmp_real, sum_real, maxSum_real, bestMetric_real, iInAdder_real;
+   real accMetOut_real, sum_real, maxSum_real, bestMetric_real;
    real iSurvivingRotMf_real, qSurvivingRotMf_real;
-   always @(accMetOut or accMetInAdder or accMetTmp or sum or maxSum or bestMetric or iInAdder or
+   always @(accMetOut or sum or maxSum or bestMetric or
             iSurvivingRotMf or qSurvivingRotMf) begin
       accMetOut_real       <= $itor($signed(accMetOut       ))/(2**(ROT_BITS-2));
-      accMetTmp_real       <= $itor($signed(accMetTmp       ))/(2**(ACS_BITS-6));
-      accMetInAdder_real   <= $itor($signed(accMetInAdder   ))/(2**(ACS_BITS-6));
+      //accMetTmp_real       <= $itor($signed(accMetTmp       ))/(2**(ACS_BITS-6));
+      //accMetInAdder_real   <= $itor($signed(accMetInAdder   ))/(2**(ACS_BITS-6));
       sum_real             <= $itor($signed(sum             ))/(2**(ACS_BITS-6));
       maxSum_real          <= $itor($signed(maxSum          ))/(2**(ACS_BITS-6));
       bestMetric_real      <= $itor($signed(bestMetric      ))/(2**(ACS_BITS-6));
-      iInAdder_real        <= $itor($signed(iInAdder        ))/(2**(ROT_BITS-2));
+      //iInAdder_real        <= $itor($signed(iInAdder        ))/(2**(ROT_BITS-2));
       iSurvivingRotMf_real <= $itor($signed(iSurvivingRotMf ))/(2**(ROT_BITS-2));
       qSurvivingRotMf_real <= $itor($signed(qSurvivingRotMf ))/(2**(ROT_BITS-2));
    end
@@ -602,11 +751,11 @@ module acsMultH
    always @(posedge clk)
      begin
         if(ENABLE_DEBUG_PRINTOUT) begin
-           $display("\t%d\t%d\t%f\t%f\t%f\t%f\t%f\t%d",
+           $display("\t%d\t%d\t%f\t%f\t%f\t%f\t%d",
                     symEnSr[1],
                     maxCnt,
                     iInAdder_real,
-                    accMetInAdder_real,
+//                    accMetInAdder_real,
                     sum_real,
                     maxSum_real,
                     bestMetric_real,
@@ -616,6 +765,7 @@ module acsMultH
      end
 
 `endif
+ -----/\----- EXCLUDED -----/\----- */
    
    
 endmodule
