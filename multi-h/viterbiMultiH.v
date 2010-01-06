@@ -34,7 +34,8 @@ module viterbiMultiH
    phaseError, devError);
    
    parameter             MF_BITS = 10;
-   parameter             ACS_BITS = 12;
+   //parameter             ACS_BITS = 12;
+   parameter             ACS_BITS = 10;
    parameter             ROT_BITS = 8;
    input                 clk, reset, symEn, sym2xEn;
    input [7:0]           decayFactor;
@@ -213,7 +214,7 @@ module viterbiMultiH
    acsMultH #( 3,14, 9, 4,   3,15,11, 7)  acsMultH15   (.clk(clk), .reset(reset), .symEn(symEn), .sym2xEn(sym2xEn), .symEnEven(symEnEven), .mfI_45_0(mf_m3p3_54Real), .mfI_45_1(mf_m1p3_54Real), .mfI_45_2(mf_p1p3_54Real), .mfI_45_3(mf_p3p3_54Real), .mfI_54_0(mf_m3p3_45Real), .mfI_54_1(mf_m1p3_45Real), .mfI_54_2(mf_p1p3_45Real), .mfI_54_3(mf_p3p3_45Real), .mfQ_45_0(mf_m3p3_54Imag), .mfQ_45_1(mf_m1p3_54Imag), .mfQ_45_2(mf_p1p3_54Imag), .mfQ_45_3(mf_p3p3_54Imag), .mfQ_54_0(mf_m3p3_45Imag), .mfQ_54_1(mf_m1p3_45Imag), .mfQ_54_2(mf_p1p3_45Imag), .mfQ_54_3(mf_p3p3_45Imag), .tilt(tilt), .accMet_45_0(accMetOut12), .accMet_45_1(accMetOut57), .accMet_45_2(accMetOut38), .accMet_45_3(accMetOut19), .accMet_54_0(accMetOut12), .accMet_54_1(accMetOut61), .accMet_54_2(accMetOut46), .accMet_54_3(accMetOut31), .selOut(selOut15), .normalizeIn(s), .normalizeOut(s15), .accMetOut(accMetOut15), .iOut(/*iOut15*/), .qOut(qOut15), .symEnOut(), .sym2xEnOut());
 
 
-   maxMetricMultiH  maxMetric 
+   maxMetricMultiH  #(ACS_BITS) maxMetric 
      (
       .clk(clk), 
       .reset(reset), 

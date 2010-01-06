@@ -22,7 +22,8 @@ module acsMultH
    parameter             ROT_45_0=0, ROT_45_1=0, ROT_45_2 =0,ROT_45_3=0,
                          ROT_54_0=0, ROT_54_1=0, ROT_54_2 =0,ROT_54_3=0;
    parameter             ENABLE_DEBUG_PRINTOUT=0;  // Turnes on the debug display printout. You can look at induvidual ASC outputs by turning  
-   parameter             ACS_BITS = 12;
+   //parameter             ACS_BITS = 12;
+   parameter             ACS_BITS = 10;
    parameter             MF_BITS = 10;
    parameter             ROT_BITS = 8;
    
@@ -97,7 +98,7 @@ module acsMultH
    reg [5:0] symEnSr;
    reg [5:0] sym2xEnSr;
    reg [5:0] symEnEvenSr;
-   wire                symEnRot, sym2xEnRot;
+   wire      symEnRot, sym2xEnRot;
    always @(posedge clk) begin
       if (reset) begin
          symEnSr <= 0;
@@ -475,7 +476,7 @@ module acsMultH
    // ************* maxMetric compare and sel *****************
    
    wire [ACS_BITS-1:0]    bestMetric;
-   wire [1:0]             select;
+   wire [5:0]             select;
    compSel  #(ACS_BITS, 0) compSel
      (
       .clk    (clk),
@@ -500,7 +501,7 @@ module acsMultH
          qOut <= 0;
       end
       else if (symEnRot) begin
-         selOut <= select;
+         selOut <= select[1:0];
          case (select)
            0: begin
               iOut <= iOutRot_0r;
@@ -673,7 +674,8 @@ module acsMultH
    
    // subtracting of a constant and saturate all neg numbers to zero to bring down the acc and prevent it from overflowing
 
-   wire [ACS_BITS-1:0]  accTempSum = bestMetric - 512;
+   //wire [ACS_BITS-1:0]  accTempSum = bestMetric - 512;  // use when ACS_BITS=12 
+   wire [ACS_BITS-1:0]  accTempSum = bestMetric - 128;  // use when ACS_BITS=10 
    reg [ACS_BITS-1:0]   accTemp;
    always @(accTempSum) begin
         if (accTempSum[ACS_BITS-1]) begin // check to see if the msb is 1 (i.e. neg), then set the acc to zero
