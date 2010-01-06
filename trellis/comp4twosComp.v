@@ -5,10 +5,10 @@
 module comp4twosComp (clk,a,b,c,d,index,maxVal);
    parameter             size = 12;
    parameter             indexOffset=0;
-`ifdef SIMULATE
-`else
+//`ifdef SIMULATE
+//`else
    defparam              compTwosCompFunc.size = size;
-`endif
+//`endif
    
 
    input                 clk;
