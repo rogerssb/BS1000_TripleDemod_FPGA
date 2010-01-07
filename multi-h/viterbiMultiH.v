@@ -35,7 +35,7 @@ module viterbiMultiH
    
    parameter             MF_BITS = 10;
    //parameter             ACS_BITS = 12;
-   parameter             ACS_BITS = 10;
+   parameter             ACS_BITS = 8;
    parameter             ROT_BITS = 8;
    input                 clk, reset, symEn, sym2xEn;
    input [7:0]           decayFactor;

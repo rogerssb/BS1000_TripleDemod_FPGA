@@ -16,7 +16,7 @@ module maxMetricMultiH(clk, reset, symEn,
                        index, symEnDly
                        );
    
-   parameter            size = 12;
+   parameter            size = 8;
    input                clk,reset,symEn;
    input [(size-1):0]   accMetOut0, accMetOut1, accMetOut2, accMetOut3, accMetOut4, accMetOut5, accMetOut6, accMetOut7, 
                         accMetOut8, accMetOut9, accMetOut10, accMetOut11, accMetOut12, accMetOut13, accMetOut14, accMetOut15, 

@@ -21,11 +21,11 @@ module acsMultH
    );
    parameter             ROT_45_0=0, ROT_45_1=0, ROT_45_2 =0,ROT_45_3=0,
                          ROT_54_0=0, ROT_54_1=0, ROT_54_2 =0,ROT_54_3=0;
-   parameter             ENABLE_DEBUG_PRINTOUT=0;  // Turnes on the debug display printout. You can look at induvidual ASC outputs by turning  
    //parameter             ACS_BITS = 12;
-   parameter             ACS_BITS = 10;
+   parameter             ACS_BITS = 8;
    parameter             MF_BITS = 10;
    parameter             ROT_BITS = 8;
+   parameter             ENABLE_DEBUG_PRINTOUT=0;  // Turnes on the debug display printout. You can look at induvidual ASC outputs by turning  
    
    input                 clk, reset;
    input                 symEn, sym2xEn, symEnEven;
@@ -46,8 +46,8 @@ module acsMultH
    input                 normalizeIn;
    output                normalizeOut;
    output [ACS_BITS-1:0] accMetOut;     
-   output [ROT_BITS-1:0]  iOut;
-   output [ROT_BITS-1:0]  qOut;
+   output [ROT_BITS-1:0] iOut;
+   output [ROT_BITS-1:0] qOut;
    output                symEnOut, sym2xEnOut;
 
    // re-clock the Match Filter inputs to improve the fan-out on the register to register timing 
@@ -489,19 +489,19 @@ module acsMultH
         
    // 2-comp adder: Adds a vector of width 8 and one of 12.
    wire [ACS_BITS-1:0]    aExt0 = {{(ACS_BITS-ROT_BITS){iOutRot_0r[ROT_BITS-1]}}, iOutRot_0r};
-   wire [ACS_BITS-1:0]    bExt0 = {accMetMuxOut_0[ACS_BITS-1], accMetMuxOut_0};
+   wire [ACS_BITS-1:0]    bExt0 = accMetMuxOut_0;
    wire [ACS_BITS-1:0]    sum0 = aExt0 + bExt0;
    // 2-comp adder: Adds a vector of width 8 and one of 12.
    wire [ACS_BITS-1:0]    aExt1 = {{(ACS_BITS-ROT_BITS){iOutRot_1r[ROT_BITS-1]}}, iOutRot_1r};
-   wire [ACS_BITS-1:0]    bExt1 = {accMetMuxOut_1[ACS_BITS-1], accMetMuxOut_1};
+   wire [ACS_BITS-1:0]    bExt1 = accMetMuxOut_1;
    wire [ACS_BITS-1:0]    sum1 = aExt1 + bExt1;
    // 2-comp adder: Adds a vector of width 8 and one of 12.
    wire [ACS_BITS-1:0]    aExt2 = {{(ACS_BITS-ROT_BITS){iOutRot_2r[ROT_BITS-1]}}, iOutRot_2r};
-   wire [ACS_BITS-1:0]    bExt2 = {accMetMuxOut_2[ACS_BITS-1], accMetMuxOut_2};
+   wire [ACS_BITS-1:0]    bExt2 = accMetMuxOut_2;
    wire [ACS_BITS-1:0]    sum2 = aExt2 + bExt2;
    // 2-comp adder: Adds a vector of width 8 and one of 12.
    wire [ACS_BITS-1:0]    aExt3 = {{(ACS_BITS-ROT_BITS){iOutRot_3r[ROT_BITS-1]}}, iOutRot_3r};
-   wire [ACS_BITS-1:0]    bExt3 = {accMetMuxOut_3[ACS_BITS-1], accMetMuxOut_3};
+   wire [ACS_BITS-1:0]    bExt3 = accMetMuxOut_3;
    wire [ACS_BITS-1:0]    sum3 = aExt3 + bExt3;
 
 
@@ -707,7 +707,7 @@ module acsMultH
    // subtracting of a constant and saturate all neg numbers to zero to bring down the acc and prevent it from overflowing
 
    //wire [ACS_BITS-1:0]  accTempSum = bestMetric - 512;  // use when ACS_BITS=12 
-   wire [ACS_BITS-1:0]  accTempSum = bestMetric - 128;  // use when ACS_BITS=10 
+   wire [ACS_BITS-1:0]  accTempSum = bestMetric - 2**(ACS_BITS-3);  
    reg [ACS_BITS-1:0]   accTemp;
    always @(accTempSum) begin
         if (accTempSum[ACS_BITS-1]) begin // check to see if the msb is 1 (i.e. neg), then set the acc to zero
