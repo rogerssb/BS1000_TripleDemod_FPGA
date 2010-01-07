@@ -62,7 +62,7 @@ module rot8x8
 
    // muxing the coefficients which will rotate I and Q samples the amount to angle
    always @(angle) begin
-      case (angle)				   
+      case (angle)                                 
         0 : begin cReal <= C_RE0 ; cImag <= C_IM0 ; end
         1 : begin cReal <= C_RE1 ; cImag <= C_IM1 ; end 
         2 : begin cReal <= C_RE2 ; cImag <= C_IM2 ; end
@@ -98,8 +98,8 @@ module rot8x8
       endcase
    end
    
-   wire [15:0] ixCi, qxCi;
-   wire [15:0] ixCr, qxCr;
+   wire [15:6] ixCi, qxCi;
+   wire [15:6] ixCr, qxCr;
    
    mult8x8 reCr
      (
@@ -108,7 +108,7 @@ module rot8x8
       .clk   (clk            ),
       .a     (i              ),  // [7 : 0] 
       .b     (cReal          ),  // [7 : 0] 
-      .p     (ixCr           )   // [15 : 0]
+      .p     (ixCr           )   // [15 : 6]
       );
         
    mult8x8 imCi
@@ -118,7 +118,7 @@ module rot8x8
       .clk   (clk            ),
       .a     (q              ),  // [7 : 0] 
       .b     (cImag          ),  // [7 : 0] 
-      .p     (qxCi           )   // [15 : 0]
+      .p     (qxCi           )   // [15 : 6]
       );
           
    mult8x8 reCi
@@ -128,7 +128,7 @@ module rot8x8
       .clk   (clk            ),
       .a     (i              ),  // [7 : 0] 
       .b     (cImag          ),  // [7 : 0] 
-      .p     (ixCi           )   // [15 : 0]
+      .p     (ixCi           )   // [15 : 6]
       );
    
    mult8x8 imCr
@@ -138,7 +138,7 @@ module rot8x8
       .clk   (clk            ),
       .a     (q              ),  // [7 : 0] 
       .b     (cReal          ),  // [7 : 0] 
-      .p     (qxCr           )   // [15 : 0]
+      .p     (qxCr           )   // [15 : 6]
       );
 
 
@@ -149,7 +149,7 @@ module rot8x8
    always @(posedge clk)
      if (reset) begin
         iOutTmp <= 0;
-        qOutTmp <= 0;	
+        qOutTmp <= 0;   
      end
      else begin
         iOutTmp <= {ixCr[15], ixCr} - {qxCi[15], qxCi};
@@ -164,7 +164,7 @@ module rot8x8
    real qOut_real;
    always @(iOut or qOut) begin
       iOut_real <= $itor($signed(iOut))/(2**(ROT_BITS-2));
-      qOut_real <= $itor($signed(qOut))/(2**(ROT_BITS-2));		 
+      qOut_real <= $itor($signed(qOut))/(2**(ROT_BITS-2));               
    end
 `endif
 

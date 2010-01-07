@@ -3,7 +3,7 @@
 //  For multi H mode the index has to range from 0-64 so index has to be 6 bits
 
 module compSel (clk,ce,reset,a,b,c,d,index,maxVal);
-   parameter             size = 12;
+   parameter             size = 10;
    parameter             indexOffset=0;
    defparam              compTwosCompFunc.size = size;
 
@@ -21,7 +21,7 @@ module compSel (clk,ce,reset,a,b,c,d,index,maxVal);
       
    // This function returns 0 if "a" is larger and 1 if "b" is larger
    function compTwosCompFunc;
-      parameter size = 12;
+      parameter size = 10;
       input [size-1:0] a,b;
       begin
          case ({a[size-1], b[size-1]}) // Checking the sign bit 
