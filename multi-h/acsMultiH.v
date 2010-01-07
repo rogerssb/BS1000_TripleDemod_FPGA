@@ -488,33 +488,21 @@ module acsMultH
    // ************* 4 parallel adders ****************
         
    // 2-comp adder: Adds a vector of width 8 and one of 12.
-   wire [ACS_BITS-1:0]    sum0;
-   wire [ACS_BITS:0]      tmpSum0;
-   wire [ACS_BITS:0]      aExt0 = {iOutRot_0r[ROT_BITS-1], iOutRot_0r[ROT_BITS-1], iOutRot_0r[ROT_BITS-1], iOutRot_0r[ROT_BITS-1], iOutRot_0r[ROT_BITS-1], iOutRot_0r};
-   wire [ACS_BITS:0]      bExt0 = {accMetMuxOut_0[ACS_BITS-1], accMetMuxOut_0};
-   assign                 tmpSum0 = aExt0 + bExt0;
-   assign                 sum0 = tmpSum0[ACS_BITS-1:0];    // slicing off the MSB (watchout for the sign bit) 
+   wire [ACS_BITS-1:0]    aExt0 = {{(ACS_BITS-ROT_BITS){iOutRot_0r[ROT_BITS-1]}}, iOutRot_0r};
+   wire [ACS_BITS-1:0]    bExt0 = {accMetMuxOut_0[ACS_BITS-1], accMetMuxOut_0};
+   wire [ACS_BITS-1:0]    sum0 = aExt0 + bExt0;
    // 2-comp adder: Adds a vector of width 8 and one of 12.
-   wire [ACS_BITS-1:0]    sum1;
-   wire [ACS_BITS:0]      tmpSum1;
-   wire [ACS_BITS:0]      aExt1 = {iOutRot_1r[ROT_BITS-1], iOutRot_1r[ROT_BITS-1], iOutRot_1r[ROT_BITS-1], iOutRot_1r[ROT_BITS-1], iOutRot_1r[ROT_BITS-1], iOutRot_1r};
-   wire [ACS_BITS:0]      bExt1 = {accMetMuxOut_1[ACS_BITS-1], accMetMuxOut_1};
-   assign                 tmpSum1 = aExt1 + bExt1;
-   assign                 sum1 = tmpSum1[ACS_BITS-1:0];    // slicing off the MSB (watchout for the sign bit) 
+   wire [ACS_BITS-1:0]    aExt1 = {{(ACS_BITS-ROT_BITS){iOutRot_1r[ROT_BITS-1]}}, iOutRot_1r};
+   wire [ACS_BITS-1:0]    bExt1 = {accMetMuxOut_1[ACS_BITS-1], accMetMuxOut_1};
+   wire [ACS_BITS-1:0]    sum1 = aExt1 + bExt1;
    // 2-comp adder: Adds a vector of width 8 and one of 12.
-   wire [ACS_BITS-1:0]    sum2;
-   wire [ACS_BITS:0]      tmpSum2;
-   wire [ACS_BITS:0]      aExt2 = {iOutRot_2r[ROT_BITS-1], iOutRot_2r[ROT_BITS-1], iOutRot_2r[ROT_BITS-1], iOutRot_2r[ROT_BITS-1], iOutRot_2r[ROT_BITS-1], iOutRot_2r};
-   wire [ACS_BITS:0]      bExt2 = {accMetMuxOut_2[ACS_BITS-1], accMetMuxOut_2};
-   assign                 tmpSum2 = aExt2 + bExt2;
-   assign                 sum2 = tmpSum2[ACS_BITS-1:0];    // slicing off the MSB (watchout for the sign bit) 
+   wire [ACS_BITS-1:0]    aExt2 = {{(ACS_BITS-ROT_BITS){iOutRot_2r[ROT_BITS-1]}}, iOutRot_2r};
+   wire [ACS_BITS-1:0]    bExt2 = {accMetMuxOut_2[ACS_BITS-1], accMetMuxOut_2};
+   wire [ACS_BITS-1:0]    sum2 = aExt2 + bExt2;
    // 2-comp adder: Adds a vector of width 8 and one of 12.
-   wire [ACS_BITS-1:0]    sum3;
-   wire [ACS_BITS:0]      tmpSum3;
-   wire [ACS_BITS:0]      aExt3 = {iOutRot_3r[ROT_BITS-1], iOutRot_3r[ROT_BITS-1], iOutRot_3r[ROT_BITS-1], iOutRot_3r[ROT_BITS-1], iOutRot_3r[ROT_BITS-1], iOutRot_3r};
-   wire [ACS_BITS:0]      bExt3 = {accMetMuxOut_3[ACS_BITS-1], accMetMuxOut_3};
-   assign                 tmpSum3 = aExt3 + bExt3;
-   assign                 sum3 = tmpSum3[ACS_BITS-1:0];    // slicing off the MSB (watchout for the sign bit) 
+   wire [ACS_BITS-1:0]    aExt3 = {{(ACS_BITS-ROT_BITS){iOutRot_3r[ROT_BITS-1]}}, iOutRot_3r};
+   wire [ACS_BITS-1:0]    bExt3 = {accMetMuxOut_3[ACS_BITS-1], accMetMuxOut_3};
+   wire [ACS_BITS-1:0]    sum3 = aExt3 + bExt3;
 
 
    // ************* maxMetric compare and sel *****************
