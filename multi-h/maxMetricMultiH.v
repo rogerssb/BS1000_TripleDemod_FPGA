@@ -101,6 +101,7 @@ module maxMetricMultiH(clk, reset, symEn,
           1:  indexS3 <= iS2_1; 
           2:  indexS3 <= iS2_2;
           3:  indexS3 <= iS2_3;
+          default: indexS3 <= 6'bx;
         endcase
      end
 
@@ -127,6 +128,7 @@ module maxMetricMultiH(clk, reset, symEn,
           13: indexS2 <= iS1_13; 
           14: indexS2 <= iS1_14;
           15: indexS2 <= iS1_15;
+          default: indexS2 <= 6'bx;
         endcase
      end
 

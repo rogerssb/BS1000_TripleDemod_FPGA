@@ -374,7 +374,50 @@ module acsMultH
    end
    `endif
 
+`define LWK
+`ifdef LWK
+   // Going from a serial stream out of the rotator to parallel
+   reg [ROT_BITS-1:0] iOutRot_0, iOutRot_1, iOutRot_2, iOutRot_3, 
+                       qOutRot_0, qOutRot_1, qOutRot_2, qOutRot_3;
+   always @(posedge clk) begin
+        case(inputMuxSelAcs) 
+          0: begin
+             iOutRot_0 <= iOutRot;
+             qOutRot_0 <= qOutRot;
+          end                              
+          1: begin                         
+             iOutRot_1 <= iOutRot;
+             qOutRot_1 <= qOutRot;
+          end                              
+          2: begin                         
+             iOutRot_2 <= iOutRot;
+             qOutRot_2 <= qOutRot;
+          end                              
+          3: begin                         
+             iOutRot_3 <= iOutRot; 
+             qOutRot_3 <= qOutRot;
+          end
+        endcase
+     end
 
+   // Latching the I and Q at the symbol rate
+   reg [ROT_BITS-1:0] iOutRot_0r, iOutRot_1r, iOutRot_2r, iOutRot_3r, 
+                      qOutRot_0r, qOutRot_1r, qOutRot_2r, qOutRot_3r;
+   always @(posedge clk) begin
+      if (reset) begin
+      end
+      else if (symEnRot) begin
+         iOutRot_0r <= iOutRot_0;
+         qOutRot_0r <= qOutRot_0;
+         iOutRot_1r <= iOutRot_1;
+         qOutRot_1r <= qOutRot_1;
+         iOutRot_2r <= iOutRot_2;
+         qOutRot_2r <= qOutRot_2;
+         iOutRot_3r <= iOutRot_3; 
+         qOutRot_3r <= qOutRot_3;
+      end
+   end
+`else
    // Going from a serial stream out of the rotator to parallel
    reg [ROT_BITS-1:0] iOutRot_0, iOutRot_1, iOutRot_2, iOutRot_3, 
                        qOutRot_0, qOutRot_1, qOutRot_2, qOutRot_3;
@@ -417,6 +460,7 @@ module acsMultH
          qOutRot_3r <= qOutRot_3;
       end
    end
+`endif
 
    // Two 8to4 input muxes on the accumulated metric inputs. 
    reg [ACS_BITS-1:0]    accMetMuxOut_0, accMetMuxOut_1, accMetMuxOut_2, accMetMuxOut_3;
