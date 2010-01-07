@@ -65,29 +65,29 @@ module maxMetricMultiH(clk, reset, symEn,
 //   reg [1:0]            cnt;
                
    // Stage 1 compare. The index value comming out of is scaled to 0..19 using the parameter indesOffset, by adding 4,8,12,or 16
-   comp4twosComp  #(size, 0)  compS1_0_3   (clk,  accMetOut0 , accMetOut1 , accMetOut2 , accMetOut3 , iS1_0,  maxValS1_0 );
-   comp4twosComp  #(size, 4)  compS1_4_7   (clk,  accMetOut4 , accMetOut5 , accMetOut6 , accMetOut7 , iS1_1,  maxValS1_1 );
-   comp4twosComp  #(size, 8)  compS1_8_11  (clk,  accMetOut8 , accMetOut9 , accMetOut10, accMetOut11, iS1_2,  maxValS1_2 );
-   comp4twosComp  #(size, 12) compS1_12_15 (clk,  accMetOut12, accMetOut13, accMetOut14, accMetOut15, iS1_3,  maxValS1_3 );
-   comp4twosComp  #(size, 16) compS1_16_19 (clk,  accMetOut16, accMetOut17, accMetOut18, accMetOut19, iS1_4,  maxValS1_4 );
-   comp4twosComp  #(size, 20) compS1_20_23 (clk,  accMetOut20, accMetOut21, accMetOut22, accMetOut23, iS1_5,  maxValS1_5 );
-   comp4twosComp  #(size, 24) compS1_24_27 (clk,  accMetOut24, accMetOut25, accMetOut26, accMetOut27, iS1_6,  maxValS1_6 );
-   comp4twosComp  #(size, 28) compS1_28_31 (clk,  accMetOut28, accMetOut29, accMetOut30, accMetOut31, iS1_7,  maxValS1_7 );
-   comp4twosComp  #(size, 32) compS1_32_35 (clk,  accMetOut32, accMetOut33, accMetOut34, accMetOut35, iS1_8,  maxValS1_8 );
-   comp4twosComp  #(size, 36) compS1_36_39 (clk,  accMetOut36, accMetOut37, accMetOut38, accMetOut39, iS1_9,  maxValS1_9 );
-   comp4twosComp  #(size, 40) compS1_40_43 (clk,  accMetOut40, accMetOut41, accMetOut42, accMetOut43, iS1_10, maxValS1_10);
-   comp4twosComp  #(size, 44) compS1_44_47 (clk,  accMetOut44, accMetOut45, accMetOut46, accMetOut47, iS1_11, maxValS1_11);
-   comp4twosComp  #(size, 48) compS1_48_51 (clk,  accMetOut48, accMetOut49, accMetOut50, accMetOut51, iS1_12, maxValS1_12);
-   comp4twosComp  #(size, 52) compS1_52_55 (clk,  accMetOut52, accMetOut53, accMetOut54, accMetOut55, iS1_13, maxValS1_13);
-   comp4twosComp  #(size, 56) compS1_56_59 (clk,  accMetOut56, accMetOut57, accMetOut58, accMetOut59, iS1_14, maxValS1_14);
-   comp4twosComp  #(size, 60) compS1_60_63 (clk,  accMetOut60, accMetOut61, accMetOut62, accMetOut63, iS1_15, maxValS1_15);
+   comp4twosCompMultiH  #(size, 0)  compS1_0_3   (clk,  accMetOut0 , accMetOut1 , accMetOut2 , accMetOut3 , iS1_0,  maxValS1_0 );
+   comp4twosCompMultiH  #(size, 4)  compS1_4_7   (clk,  accMetOut4 , accMetOut5 , accMetOut6 , accMetOut7 , iS1_1,  maxValS1_1 );
+   comp4twosCompMultiH  #(size, 8)  compS1_8_11  (clk,  accMetOut8 , accMetOut9 , accMetOut10, accMetOut11, iS1_2,  maxValS1_2 );
+   comp4twosCompMultiH  #(size, 12) compS1_12_15 (clk,  accMetOut12, accMetOut13, accMetOut14, accMetOut15, iS1_3,  maxValS1_3 );
+   comp4twosCompMultiH  #(size, 16) compS1_16_19 (clk,  accMetOut16, accMetOut17, accMetOut18, accMetOut19, iS1_4,  maxValS1_4 );
+   comp4twosCompMultiH  #(size, 20) compS1_20_23 (clk,  accMetOut20, accMetOut21, accMetOut22, accMetOut23, iS1_5,  maxValS1_5 );
+   comp4twosCompMultiH  #(size, 24) compS1_24_27 (clk,  accMetOut24, accMetOut25, accMetOut26, accMetOut27, iS1_6,  maxValS1_6 );
+   comp4twosCompMultiH  #(size, 28) compS1_28_31 (clk,  accMetOut28, accMetOut29, accMetOut30, accMetOut31, iS1_7,  maxValS1_7 );
+   comp4twosCompMultiH  #(size, 32) compS1_32_35 (clk,  accMetOut32, accMetOut33, accMetOut34, accMetOut35, iS1_8,  maxValS1_8 );
+   comp4twosCompMultiH  #(size, 36) compS1_36_39 (clk,  accMetOut36, accMetOut37, accMetOut38, accMetOut39, iS1_9,  maxValS1_9 );
+   comp4twosCompMultiH  #(size, 40) compS1_40_43 (clk,  accMetOut40, accMetOut41, accMetOut42, accMetOut43, iS1_10, maxValS1_10);
+   comp4twosCompMultiH  #(size, 44) compS1_44_47 (clk,  accMetOut44, accMetOut45, accMetOut46, accMetOut47, iS1_11, maxValS1_11);
+   comp4twosCompMultiH  #(size, 48) compS1_48_51 (clk,  accMetOut48, accMetOut49, accMetOut50, accMetOut51, iS1_12, maxValS1_12);
+   comp4twosCompMultiH  #(size, 52) compS1_52_55 (clk,  accMetOut52, accMetOut53, accMetOut54, accMetOut55, iS1_13, maxValS1_13);
+   comp4twosCompMultiH  #(size, 56) compS1_56_59 (clk,  accMetOut56, accMetOut57, accMetOut58, accMetOut59, iS1_14, maxValS1_14);
+   comp4twosCompMultiH  #(size, 60) compS1_60_63 (clk,  accMetOut60, accMetOut61, accMetOut62, accMetOut63, iS1_15, maxValS1_15);
    // Stage 2 compare
-   comp4twosComp  #(size, 0)  compS2_0_3   (clk, maxValS1_0 , maxValS1_1 , maxValS1_2 , maxValS1_3 , iS2_0  , maxValS2_0 ); //winner from  0-15
-   comp4twosComp  #(size, 4)  compS2_4_7   (clk, maxValS1_4 , maxValS1_5 , maxValS1_6 , maxValS1_7 , iS2_1  , maxValS2_1 ); //winner from 16-31 
-   comp4twosComp  #(size, 8)  compS2_8_11  (clk, maxValS1_8 , maxValS1_9 , maxValS1_10, maxValS1_11, iS2_2  , maxValS2_2 ); //winner from 32-47
-   comp4twosComp  #(size, 12) compS2_12_15 (clk, maxValS1_12, maxValS1_13, maxValS1_14, maxValS1_15, iS2_3  , maxValS2_3 ); //winner from 48-63
+   comp4twosCompMultiH  #(size, 0)  compS2_0_3   (clk, maxValS1_0 , maxValS1_1 , maxValS1_2 , maxValS1_3 , iS2_0  , maxValS2_0 ); //winner from  0-15
+   comp4twosCompMultiH  #(size, 4)  compS2_4_7   (clk, maxValS1_4 , maxValS1_5 , maxValS1_6 , maxValS1_7 , iS2_1  , maxValS2_1 ); //winner from 16-31 
+   comp4twosCompMultiH  #(size, 8)  compS2_8_11  (clk, maxValS1_8 , maxValS1_9 , maxValS1_10, maxValS1_11, iS2_2  , maxValS2_2 ); //winner from 32-47
+   comp4twosCompMultiH  #(size, 12) compS2_12_15 (clk, maxValS1_12, maxValS1_13, maxValS1_14, maxValS1_15, iS2_3  , maxValS2_3 ); //winner from 48-63
    // Stage 3 compare (final compare)
-   comp4twosComp  #(size, 0)  compS3_0_3   (clk, maxValS2_0 , maxValS2_1,  maxValS2_2,  maxValS2_3 , iS3    , maxValS3   );
+   comp4twosCompMultiH  #(size, 0)  compS3_0_3   (clk, maxValS2_0 , maxValS2_1,  maxValS2_2,  maxValS2_3 , iS3    , maxValS3   );
 
    always @(posedge clk) begin
    end
