@@ -2,7 +2,7 @@
 
 //  For multi H mode the index has to range from 0-64 so index has to be 6 bits
 
-module compSel (clk,ce,reset,a,b,c,d,index,maxVal);
+module compSel (clk,ce,reset,a,b,c,d,index,normalize,maxVal);
    parameter             size = 8;
    parameter             indexOffset=0;
    defparam              compTwosCompFunc.size = size;
@@ -11,6 +11,7 @@ module compSel (clk,ce,reset,a,b,c,d,index,maxVal);
 
    input                 clk, ce, reset;
    input [(size-1):0]    a, b, c, d;
+   input                 normalize;
    output [5:0]          index;
    output [(size-1):0]   maxVal;
    reg [(size-1):0]      maxVal;
@@ -89,10 +90,10 @@ module compSel (clk,ce,reset,a,b,c,d,index,maxVal);
      else if (ce) begin
         index <= tempIndex + indexOffset;
         case (tempIndex)
-          0: maxVal <= a;
-          1: maxVal <= b;
-          2: maxVal <= c;
-          3: maxVal <= d;
+          0: maxVal <= normalize ? a - 2**(size-3) : a;
+          1: maxVal <= normalize ? a - 2**(size-3) : b;
+          2: maxVal <= normalize ? a - 2**(size-3) : c;
+          3: maxVal <= normalize ? a - 2**(size-3) : d;
           default: maxVal <= 0;
         endcase
      end
