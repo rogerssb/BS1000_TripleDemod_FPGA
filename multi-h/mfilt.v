@@ -239,28 +239,8 @@ module mfilt
    wire [35:0]  dPlusc  = {multD[34], multD[34:0]} + {multC[34], multC[34:0]};
    wire [35:0]  aPlusb  = {multA[34], multA[34:0]} + {multB[34], multB[34:0]};
    wire [35:0]  dMinusc = {multD[34], multD[34:0]} - {multC[34], multC[34:0]};
-   always @(mf0IAdd or  multA or multB or
-            mf0QAdd or  multC or multD or
-            mf1IAdd or mf1QAdd ) begin
-        // Match filter Zero
-        mf0IAcc <= mf0IAdd + aMinusb; // A-B
-        mf0QAcc <= mf0QAdd + dPlusc; // D+C
-        // Match filter One
-        mf1IAcc <= mf1IAdd + aPlusb; // A+B
-        mf1QAcc <= mf1QAdd + dMinusc; // D-C
-     end
 
    wire accRst = reset || (multLatchSr[1:0] == 2'b01);
-   always @(mf0I or mf0Q or mf1I or mf1Q)
-     begin
-        // Match filter Zero
-        mf0IAdd <= mf0I;
-        mf0QAdd <= mf0Q;
-        // Match filter One
-        mf1IAdd <= mf1I;
-        mf1QAdd <= mf1Q;
-     end
-
    always @(posedge clk) begin
       if (accRst) begin
           // Match filter Zero
@@ -272,11 +252,11 @@ module mfilt
       end
       else begin
           // Match filter Zero
-          mf0I <= mf0IAcc;
-          mf0Q <= mf0QAcc;
+          mf0I <= mf0I + aMinusb;
+          mf0Q <= mf0Q + dPlusc;
           // Match filter One
-          mf1I <= mf1IAcc;
-          mf1Q <= mf1QAcc;
+          mf1I <= mf1I + aPlusb;
+          mf1Q <= mf1Q + dMinusc;
       end
    end
 
