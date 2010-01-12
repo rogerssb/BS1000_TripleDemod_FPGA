@@ -51,10 +51,6 @@ module mfilt
    wire [47:0]           multA, multB, multC, multD; 
    reg [35:0]            mf0I, mf0Q;
    reg [35:0]            mf1I, mf1Q;
-   reg [35:0]            mf0IAdd, mf0QAdd;
-   reg [35:0]            mf1IAdd, mf1QAdd;
-   reg [35:0]            mf0IAcc, mf0QAcc;
-   reg [35:0]            mf1IAcc, mf1QAcc;
 
    
    // dataReal*coeffReal

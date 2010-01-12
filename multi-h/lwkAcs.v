@@ -7,7 +7,6 @@ module acsMultH
    decayFactor,
    `endif
    iMfInRot, qMfInRot,
-   tilt,
    accMetMuxOut_0, accMetMuxOut_1, accMetMuxOut_2, accMetMuxOut_3,
    selOut,
    normalizeIn, normalizeOut,
@@ -30,7 +29,6 @@ module acsMultH
    input [7:0]           decayFactor;
    `endif
    input [MF_BITS-1:0]   iMfInRot, qMfInRot;
-   input [4:0]           tilt;
    input [ACS_BITS-1:0]  accMetMuxOut_0, accMetMuxOut_1, accMetMuxOut_2, accMetMuxOut_3;
    
 
@@ -370,7 +368,7 @@ module acsMultH
 `ifdef USE_DELAYED_NORM
 `else
    reg normalizeOut;
-   always @(bestMetric[ACS_BITS-1:ACS_BITS-2]) begin
+   always @(bestMetric[ACS_BITS-1:ACS_BITS-2] or normalizeIn) begin
       if ((bestMetric[ACS_BITS-1:ACS_BITS-2] == 2'b01) && !normalizeIn ) begin //check (in the pos. case) if the acc. 8th bit saturate
          normalizeOut <= 1;
       end
