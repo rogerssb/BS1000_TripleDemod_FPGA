@@ -49,6 +49,7 @@ module acsMultH
       if (reset) begin
          symEnSr <= 0;
          sym2xEnSr <= 0;
+         symEnEvenSr <= 0;
       end
       else begin
          symEnSr <= {symEnSr[4:0], symEnRot};
@@ -160,13 +161,13 @@ module acsMultH
       );
 
 
-   `ifdef SIMULATE
+`ifdef SIMULATE
    real iOutRot_real, qOutRot_real;
    always @(iOutRot or qOutRot) begin
       iOutRot_real <= $itor($signed(iOutRot))/(2**(ROT_BITS-2));
       qOutRot_real <= $itor($signed(qOutRot))/(2**(ROT_BITS-2));
    end
-   `endif
+`endif
 
 `define LWK
 `ifdef LWK
@@ -207,8 +208,10 @@ module acsMultH
          qOutRot_1r <= qOutRot_1;
          iOutRot_2r <= iOutRot_2;
          qOutRot_2r <= qOutRot_2;
-         iOutRot_3r <= iOutRot_3; 
-         qOutRot_3r <= qOutRot_3;
+         //iOutRot_3r <= iOutRot_3; 
+         //qOutRot_3r <= qOutRot_3;
+         iOutRot_3r <= iOutRot; 
+         qOutRot_3r <= qOutRot;
       end
    end
 `else
@@ -275,7 +278,31 @@ module acsMultH
    wire [ACS_BITS-1:0]    bExt3 = accMetMuxOut_3;
    wire [ACS_BITS-1:0]    sum3 = aExt3 + bExt3;
 
+`ifdef SIMULATE
+   real aExt0_real, aExt1_real, aExt2_real, aExt3_real,
+        bExt0_real, bExt1_real, bExt2_real, bExt3_real;
+   always @(aExt0 or aExt1 or aExt2 or aExt3 or
+            bExt0 or bExt1 or bExt2 or bExt3) begin
+      aExt0_real <= $itor($signed(aExt0))/(2**(ROT_BITS-2));
+      aExt1_real <= $itor($signed(aExt1))/(2**(ROT_BITS-2));
+      aExt2_real <= $itor($signed(aExt2))/(2**(ROT_BITS-2));
+      aExt3_real <= $itor($signed(aExt3))/(2**(ROT_BITS-2));
+      bExt0_real <= $itor($signed(bExt0))/(2**(ROT_BITS-2));
+      bExt1_real <= $itor($signed(bExt1))/(2**(ROT_BITS-2));
+      bExt2_real <= $itor($signed(bExt2))/(2**(ROT_BITS-2));
+      bExt3_real <= $itor($signed(bExt3))/(2**(ROT_BITS-2));
+   end
+   real sum0_real, sum1_real, sum2_real, sum3_real;
+   always @(sum0 or sum1 or sum2 or sum3) begin
+      sum0_real <= $itor($signed(sum0))/(2**(ROT_BITS-2));
+      sum1_real <= $itor($signed(sum1))/(2**(ROT_BITS-2));
+      sum2_real <= $itor($signed(sum2))/(2**(ROT_BITS-2));
+      sum3_real <= $itor($signed(sum3))/(2**(ROT_BITS-2));
+   end
+`endif
 
+
+   
    // ************* maxMetric compare and sel *****************
    
    wire [ACS_BITS-1:0]    bestMetric;

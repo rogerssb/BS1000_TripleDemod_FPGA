@@ -10,21 +10,8 @@ module tilt
 
    input                 clk, reset, symEn;
    output [4:0]          tilt;
-   output                symEnEven;
+   input                 symEnEven;
    
-   reg                   symEnEven;
-   always @(posedge clk)
-     begin
-        if (reset) begin
-           //symEnEven <= 0;
-           symEnEven <= 1;
-        end
-        else begin 
-           if (symEn) begin
-              symEnEven <= ~ symEnEven;
-           end
-        end
-      end
 
    tiltPhaseAcc tiltPhaseAcc
      (
@@ -67,7 +54,7 @@ module tiltPhaseAcc
      if (reset) begin
         acc <= 0;
      end
-     else if (symEnEven) begin
+     else if (~symEnEven) begin
         acc <= tilt - 5'b01100; // this has to be (tilt-12)%32 
      end
      else begin

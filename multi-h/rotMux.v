@@ -1,21 +1,25 @@
-module rotMux (
-    clk, reset, symEn, sym2xEn, symEnEven,
-    mfI_45_0, mfI_45_1, mfI_45_2, mfI_45_3, 
-    mfI_54_0, mfI_54_1, mfI_54_2, mfI_54_3, 
-    mfQ_45_0, mfQ_45_1, mfQ_45_2, mfQ_45_3, 
-    mfQ_54_0, mfQ_54_1, mfQ_54_2, mfQ_54_3,
-    iMfInRot, qMfInRot
-    );
-parameter             MF_BITS = 8;
-
-input                   clk, reset;
-input                   symEn, sym2xEn, symEnEven;
-input   [MF_BITS-1:0]   mfI_45_0, mfI_45_1, mfI_45_2, mfI_45_3, 
-                        mfI_54_0, mfI_54_1, mfI_54_2, mfI_54_3, 
-                        mfQ_45_0, mfQ_45_1, mfQ_45_2, mfQ_45_3, 
-                        mfQ_54_0, mfQ_54_1, mfQ_54_2, mfQ_54_3;
-output  [MF_BITS-1:0]   iMfInRot, qMfInRot;
-
+`timescale 1ns/1ps
+module rotMux 
+  (
+   clk, reset, symEn, sym2xEn, symEnEven,
+   mfI_45_0, mfI_45_1, mfI_45_2, mfI_45_3, 
+   mfI_54_0, mfI_54_1, mfI_54_2, mfI_54_3, 
+   mfQ_45_0, mfQ_45_1, mfQ_45_2, mfQ_45_3, 
+   mfQ_54_0, mfQ_54_1, mfQ_54_2, mfQ_54_3,
+   iMfInRot, qMfInRot,
+   symEnOut, sym2xEnOut, symEnEvenOut
+   );
+   parameter             MF_BITS = 8;
+   
+   input                 clk, reset;
+   input                 symEn, sym2xEn, symEnEven;
+   input [MF_BITS-1:0]   mfI_45_0, mfI_45_1, mfI_45_2, mfI_45_3, 
+                         mfI_54_0, mfI_54_1, mfI_54_2, mfI_54_3, 
+                         mfQ_45_0, mfQ_45_1, mfQ_45_2, mfQ_45_3, 
+                         mfQ_54_0, mfQ_54_1, mfQ_54_2, mfQ_54_3;
+   output [MF_BITS-1:0]  iMfInRot, qMfInRot;
+   output                symEnOut, sym2xEnOut, symEnEvenOut;
+   
 // re-clock the Match Filter inputs to improve the fan-out on the register to register timing 
 // from the matchfiter output to the imput of the ACS 
 reg [MF_BITS-1:0]     mfI_45_0r, mfI_45_1r, mfI_45_2r, mfI_45_3r, 
@@ -125,7 +129,7 @@ always @(inputMuxSel or
 reg [MF_BITS-1:0]     iMfInRot, qMfInRot;
 //reg [ACS_BITS-1:0]    accMetTmp;
 always @(posedge clk) begin
-    if (symEn) begin
+//    if (symEn) begin
         if (~symEnEven) begin
             iMfInRot <= mfI45MuxOut;
             qMfInRot <= mfQ45MuxOut;
@@ -134,8 +138,27 @@ always @(posedge clk) begin
             iMfInRot <= mfI54MuxOut;
             qMfInRot <= mfQ54MuxOut;
         end
-    end
+//    end
 end
 
+   reg [5:0] symEnSr;
+   reg [5:0] sym2xEnSr;
+   reg [5:0] symEnEvenSr;
+   always @(posedge clk) begin
+      if (reset) begin
+         symEnSr <= 0;
+         sym2xEnSr <= 0;
+         symEnEvenSr <= 0;
+      end
+      else begin
+         symEnSr <= {symEnSr[4:0], symEn};
+         sym2xEnSr <= {sym2xEnSr[4:0], sym2xEn};
+         symEnEvenSr <= {symEnEvenSr[4:0], symEnEven};
+      end
+   end
+
+   wire symEnOut = symEnSr[0];    
+   wire sym2xEnOut = sym2xEnSr[0];    
+   wire symEnEvenOut = symEnEvenSr[0];    
    
 endmodule

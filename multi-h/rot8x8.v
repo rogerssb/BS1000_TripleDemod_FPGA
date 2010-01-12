@@ -145,7 +145,7 @@ module rot8x8
    //******************************************************
    // Need to compensate for the div by 2 in the mult cores
    //******************************************************
-   reg [16:0] iOutTmp, qOutTmp;
+   reg [16:6] iOutTmp, qOutTmp;
    always @(posedge clk)
      if (reset) begin
         iOutTmp <= 0;
@@ -160,9 +160,11 @@ module rot8x8
 
 
 `ifdef SIMULATE
-   real iOut_real;
-   real qOut_real;
-   always @(iOut or qOut) begin
+   real i_real, q_real;
+   real iOut_real, qOut_real;
+   always @(i or q or iOut or qOut) begin
+      i_real <= $itor($signed(i))/(2**(ROT_BITS-2));
+      q_real <= $itor($signed(q))/(2**(ROT_BITS-2));               
       iOut_real <= $itor($signed(iOut))/(2**(ROT_BITS-2));
       qOut_real <= $itor($signed(qOut))/(2**(ROT_BITS-2));               
    end
