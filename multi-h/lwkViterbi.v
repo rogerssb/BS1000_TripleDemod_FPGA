@@ -90,24 +90,26 @@ module viterbiMultiH
                          s48, s33, s18, s3, s52, s37, s22, s7, s56, s41, s26, s11, s60, s45, s30, s15;
 
    // ACS acc. normalization control signal
-   reg  s;
+   reg [1:0] normSr;
    wire symEnAcs;
    always @(posedge clk)
      begin
         if (reset) begin
-           s <= 0;
+           normSr <= 0;
         end
         else if (symEnAcs) begin
-           s <=  s0 | s49 | s34 | s19 | s4 | s53 | s38 | s23 |
-                 s8 | s57 | s42 | s27 | s12 | s61 | s46 | s31 |
-                 s16 | s1 | s50 | s35 | s20 | s5 | s54 | s39 |
-                 s24 | s9 | s58 | s43 | s28 | s13 | s62 | s47 |
-                 s32 | s17 | s2 | s51 | s36 | s21 | s6 | s55 |
-                 s40 | s25 | s10 | s59 | s44 | s29 | s14 | s63 |
-                 s48 | s33 | s18 | s3 | s52 | s37 | s22 | s7 |
-                 s56 | s41 | s26 | s11 | s60 | s45 | s30 | s15;
+           normSr <= {normSr[0], s0  | s49 | s34 | s19 | s4  | s53 | s38 | s23 |
+                                 s8  | s57 | s42 | s27 | s12 | s61 | s46 | s31 |
+                                 s16 | s1  | s50 | s35 | s20 | s5  | s54 | s39 |
+                                 s24 | s9  | s58 | s43 | s28 | s13 | s62 | s47 |
+                                 s32 | s17 | s2  | s51 | s36 | s21 | s6  | s55 |
+                                 s40 | s25 | s10 | s59 | s44 | s29 | s14 | s63 |
+                                 s48 | s33 | s18 | s3  | s52 | s37 | s22 | s7  |
+                                 s56 | s41 | s26 | s11 | s60 | s45 | s30 | s15};
         end
      end
+   wire s = (normSr==2'b01) ? 1 : 0; // edge trigger on the normailzation to prevent under saturation
+   
 
    wire [1:0]            selOut0 , selOut49 , selOut34 , selOut19 , selOut4 , selOut53 , selOut38 , selOut23 , 
                          selOut8 , selOut57 , selOut42 , selOut27 , selOut12 , selOut61 , selOut46 , selOut31 ,
@@ -180,7 +182,7 @@ module viterbiMultiH
    rotMux #(MF_BITS) rotMux2     (.clk(clk), .reset(reset), .symEn(symEn), .sym2xEn(sym2xEn), .symEnEven(symEnEven), .mfI_45_0(mf_m3p1_54Real), .mfI_45_1(mf_m1p1_54Real), .mfI_45_2(mf_p1p1_54Real), .mfI_45_3(mf_p3p1_54Real), .mfI_54_0(mf_m3p1_45Real), .mfI_54_1(mf_m1p1_45Real), .mfI_54_2(mf_p1p1_45Real), .mfI_54_3(mf_p3p1_45Real), .mfQ_45_0(mf_m3p1_54Imag), .mfQ_45_1(mf_m1p1_54Imag), .mfQ_45_2(mf_p1p1_54Imag), .mfQ_45_3(mf_p3p1_54Imag), .mfQ_54_0(mf_m3p1_45Imag), .mfQ_54_1(mf_m1p1_45Imag), .mfQ_54_2(mf_p1p1_45Imag), .mfQ_54_3(mf_p3p1_45Imag), .iMfInRot(iMfInRot2), .qMfInRot(qMfInRot2), .symEnOut(), .sym2xEnOut(), .symEnEvenOut() );
    rotMux #(MF_BITS) rotMux3     (.clk(clk), .reset(reset), .symEn(symEn), .sym2xEn(sym2xEn), .symEnEven(symEnEven), .mfI_45_0(mf_m3p3_54Real), .mfI_45_1(mf_m1p3_54Real), .mfI_45_2(mf_p1p3_54Real), .mfI_45_3(mf_p3p3_54Real), .mfI_54_0(mf_m3p3_45Real), .mfI_54_1(mf_m1p3_45Real), .mfI_54_2(mf_p1p3_45Real), .mfI_54_3(mf_p3p3_45Real), .mfQ_45_0(mf_m3p3_54Imag), .mfQ_45_1(mf_m1p3_54Imag), .mfQ_45_2(mf_p1p3_54Imag), .mfQ_45_3(mf_p3p3_54Imag), .mfQ_54_0(mf_m3p3_45Imag), .mfQ_54_1(mf_m1p3_45Imag), .mfQ_54_2(mf_p1p3_45Imag), .mfQ_54_3(mf_p3p3_45Imag), .iMfInRot(iMfInRot3), .qMfInRot(qMfInRot3), .symEnOut(), .sym2xEnOut(), .symEnEvenOut() );
 
-   //         h45 rot para  h54 rot param                                                                            h45 match filters                                                                                                  h54 Match filters                                                                                                                                                                                                                                                                                                                                                        h45 ACC metrics                                                                                            h54 ACC metrics                                                                                                                                                                                            
+   //         h45 rot para  h54 rot param                                                                                                                                                      match filters                                           ACC metrics
    acsMultH #(0 ,11, 6, 1,  0 ,12, 8, 4, ACS_BITS, MF_BITS, ROT_BITS, 0)  acsMultH0    (.clk(clk), .reset(reset), .symEn(symEnRotMux), .sym2xEn(sym2xEnRotMux), .symEnEven(symEnEven), .symEnEvenRot(symEnEvenRotMux), .iMfInRot(iMfInRot0), .qMfInRot(qMfInRot0), .tilt(tilt), .accMetMuxOut_0(accMuxOut0_0 ), .accMetMuxOut_1(accMuxOut0_1 ), .accMetMuxOut_2(accMuxOut0_2 ), .accMetMuxOut_3(accMuxOut0_3 ), .selOut(selOut0 ), .normalizeIn(s), .normalizeOut(s0 ), .accMetOut(accMetOut0 ), .iOut(/*iOut0 */), .qOut(qOut0 ), .symEnOut(symEnAcs), .sym2xEnOut(sym2xEnAcs));
    acsMultH #(12, 7, 2,13,  12, 8, 4, 0, ACS_BITS, MF_BITS, ROT_BITS, 0)  acsMultH49   (.clk(clk), .reset(reset), .symEn(symEnRotMux), .sym2xEn(sym2xEnRotMux), .symEnEven(symEnEven), .symEnEvenRot(symEnEvenRotMux), .iMfInRot(iMfInRot1), .qMfInRot(qMfInRot1), .tilt(tilt), .accMetMuxOut_0(accMuxOut48_0), .accMetMuxOut_1(accMuxOut48_1), .accMetMuxOut_2(accMuxOut48_2), .accMetMuxOut_3(accMuxOut48_3), .selOut(selOut49), .normalizeIn(s), .normalizeOut(s49), .accMetOut(accMetOut49), .iOut(/*iOut49*/), .qOut(qOut49), .symEnOut(), .sym2xEnOut());
    acsMultH #( 8, 3,14, 9,  8 , 4, 0,12, ACS_BITS, MF_BITS, ROT_BITS, 0)  acsMultH34   (.clk(clk), .reset(reset), .symEn(symEnRotMux), .sym2xEn(sym2xEnRotMux), .symEnEven(symEnEven), .symEnEvenRot(symEnEvenRotMux), .iMfInRot(iMfInRot2), .qMfInRot(qMfInRot2), .tilt(tilt), .accMetMuxOut_0(accMuxOut32_0), .accMetMuxOut_1(accMuxOut32_1), .accMetMuxOut_2(accMuxOut32_2), .accMetMuxOut_3(accMuxOut32_3), .selOut(selOut34), .normalizeIn(s), .normalizeOut(s34), .accMetOut(accMetOut34), .iOut(/*iOut34*/), .qOut(qOut34), .symEnOut(), .sym2xEnOut());

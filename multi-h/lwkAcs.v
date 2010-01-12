@@ -371,7 +371,7 @@ module acsMultH
 `else
    reg normalizeOut;
    always @(bestMetric[ACS_BITS-1:ACS_BITS-2]) begin
-      if ((bestMetric[ACS_BITS-1:ACS_BITS-2] == 2'b01) ) begin //check (in the pos. case) if the acc. 8th bit saturate
+      if ((bestMetric[ACS_BITS-1:ACS_BITS-2] == 2'b01) && !normalizeIn ) begin //check (in the pos. case) if the acc. 8th bit saturate
          normalizeOut <= 1;
       end
       else begin
