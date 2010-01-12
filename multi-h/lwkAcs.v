@@ -1,8 +1,8 @@
 `timescale 1ns/1ps
 module acsMultH
   (
-   clk, reset, symEn, sym2xEn,
-   symEnEven,
+   clk, reset, symEn, sym2xEn, symEnEven,
+   symEnEvenRot,
    `ifdef USE_DECAY
    decayFactor,
    `endif
@@ -25,6 +25,7 @@ module acsMultH
    
    input                 clk, reset;
    input                 symEn, sym2xEn, symEnEven;
+   input                 symEnEvenRot;
    `ifdef USE_DECAY
    input [7:0]           decayFactor;
    `endif
@@ -43,23 +44,23 @@ module acsMultH
 
    reg [5:0] symEnSr;
    reg [5:0] sym2xEnSr;
-   reg [5:0] symEnEvenSr;
+   reg [5:0] symEnEvenRotSr;
    wire      symEnRot, sym2xEnRot;
    always @(posedge clk) begin
       if (reset) begin
          symEnSr <= 0;
          sym2xEnSr <= 0;
-         symEnEvenSr <= 0;
+         symEnEvenRotSr <= 0;
       end
       else begin
          symEnSr <= {symEnSr[4:0], symEnRot};
          sym2xEnSr <= {sym2xEnSr[4:0], sym2xEnRot};
-         symEnEvenSr <= {symEnEvenSr[4:0], symEnEven};
+         symEnEvenRotSr <= {symEnEvenRotSr[4:0], symEnEvenRot};
       end
    end
 
    wire symEnAdder = symEnRot; //symEnSr[3];    
-   wire symEnEvenAdder = symEnEvenSr[1]; //symEnEvenSr[5];  // 2 clocks through rotator and 4 in the ACS loop
+   wire symEnEvenAdder = symEnEvenRotSr[1]; //symEnEvenRotSr[5];  // 2 clocks through rotator and 4 in the ACS loop
    wire symEnMax = symEnSr[3];    
    wire sym2xEnMax = sym2xEnSr[3];    
    wire symEnOut = symEnMax;
@@ -104,13 +105,22 @@ module acsMultH
      end
 
    
+   wire [4:0]           tilt;
+   tilt tiltModule
+     (
+      .clk       (clk        ), 
+      .reset     (reset      ), 
+      .symEn     (symEn      ),
+      .tilt      (tilt       ),
+      .symEnEven (symEnEven  )
+      );
 
    
    // Selects the amount of rotation bases on the matlab signal theta(n-2), here called ROT_45/54_?. 
    reg [4:0] rotSel;
-   always @(inputMuxSel or symEnEven or tilt)
+   always @(inputMuxSel or symEnEvenRot or tilt)
      begin
-        if (~symEnEven) begin
+        if (~symEnEvenRot) begin
            case(inputMuxSel) 
              0: begin
                 rotSel <= 32 - (tilt + (ROT_45_0<<1));
