@@ -7,7 +7,7 @@
 // \   \   \/     Version: K.39
 //  \   \         Application: netgen
 //  /   /         Filename: mult8x8.v
-// /___/   /\     Timestamp: Thu Jan 07 10:55:37 2010
+// /___/   /\     Timestamp: Tue Jan 12 18:14:55 2010
 // \   \  /  \ 
 //  \___\/\___\
 //             
@@ -45,6 +45,10 @@ module mult8x8 (
   
   // synthesis translate_off
   
+  wire \BU2/U0/gLUT.iLUT/pp_out_reg_0_0_349 ;
+  wire \BU2/U0/gLUT.iLUT/pp_out_reg_0_1_348 ;
+  wire \BU2/U0/gLUT.iLUT/pp_out_reg_2_0_347 ;
+  wire \BU2/U0/gLUT.iLUT/pp_out_reg_2_1_346 ;
   wire \BU2/U0/gLUT.iLUT/s3_add_out<0>[0] ;
   wire \BU2/U0/gLUT.iLUT/s3_add_out<0>[1] ;
   wire \BU2/U0/gLUT.iLUT/s3_add_out<0>[2] ;
@@ -65,6 +69,62 @@ module mult8x8 (
   wire \BU2/U0/gLUT.iLUT/sum0<0>[14] ;
   wire \BU2/U0/gLUT.iLUT/sum0<0>[15] ;
   wire \BU2/U0/gLUT.iLUT/sum0<0>[17] ;
+  wire \BU2/U0/gLUT.iLUT/pp_out_reg_3_0_276 ;
+  wire \BU2/U0/gLUT.iLUT/pp_out_reg_2_2_275 ;
+  wire \BU2/U0/gLUT.iLUT/sum<1>[2] ;
+  wire \BU2/U0/gLUT.iLUT/pp_out_reg_3_1_272 ;
+  wire \BU2/U0/gLUT.iLUT/pp_out_reg_2_3_271 ;
+  wire \BU2/U0/gLUT.iLUT/sum<1>[3] ;
+  wire \BU2/U0/gLUT.iLUT/pp_out_reg_3_2_267 ;
+  wire \BU2/U0/gLUT.iLUT/pp_out_reg_2_4_266 ;
+  wire \BU2/U0/gLUT.iLUT/sum<1>[4] ;
+  wire \BU2/U0/gLUT.iLUT/pp_out_reg_3_3_262 ;
+  wire \BU2/U0/gLUT.iLUT/pp_out_reg_2_5_261 ;
+  wire \BU2/U0/gLUT.iLUT/sum<1>[5] ;
+  wire \BU2/U0/gLUT.iLUT/pp_out_reg_3_4_257 ;
+  wire \BU2/U0/gLUT.iLUT/pp_out_reg_2_6_256 ;
+  wire \BU2/U0/gLUT.iLUT/sum<1>[6] ;
+  wire \BU2/U0/gLUT.iLUT/pp_out_reg_3_5_252 ;
+  wire \BU2/U0/gLUT.iLUT/pp_out_reg_2_7_251 ;
+  wire \BU2/U0/gLUT.iLUT/sum<1>[7] ;
+  wire \BU2/U0/gLUT.iLUT/pp_out_reg_3_6_247 ;
+  wire \BU2/U0/gLUT.iLUT/pp_out_reg_2_8_246 ;
+  wire \BU2/U0/gLUT.iLUT/sum<1>[8] ;
+  wire \BU2/U0/gLUT.iLUT/pp_out_reg_3_7_242 ;
+  wire \BU2/U0/gLUT.iLUT/sum<1>[9] ;
+  wire \BU2/U0/gLUT.iLUT/pp_out_reg_3_8_238 ;
+  wire \BU2/U0/gLUT.iLUT/sum<1>[10] ;
+  wire \BU2/U0/gLUT.iLUT/pp_out_reg_3_9_234 ;
+  wire \BU2/U0/gLUT.iLUT/pp_out_reg_2_9_233 ;
+  wire \BU2/U0/gLUT.iLUT/sum<1>[12] ;
+  wire \BU2/U0/gLUT.iLUT/pp_out_reg_1_0_229 ;
+  wire \BU2/U0/gLUT.iLUT/pp_out_reg_0_2_228 ;
+  wire \BU2/U0/gLUT.iLUT/sum<0>[2] ;
+  wire \BU2/U0/gLUT.iLUT/pp_out_reg_1_1_225 ;
+  wire \BU2/U0/gLUT.iLUT/pp_out_reg_0_3_224 ;
+  wire \BU2/U0/gLUT.iLUT/sum<0>[3] ;
+  wire \BU2/U0/gLUT.iLUT/pp_out_reg_1_2_220 ;
+  wire \BU2/U0/gLUT.iLUT/pp_out_reg_0_4_219 ;
+  wire \BU2/U0/gLUT.iLUT/sum<0>[4] ;
+  wire \BU2/U0/gLUT.iLUT/pp_out_reg_1_3_215 ;
+  wire \BU2/U0/gLUT.iLUT/pp_out_reg_0_5_214 ;
+  wire \BU2/U0/gLUT.iLUT/sum<0>[5] ;
+  wire \BU2/U0/gLUT.iLUT/pp_out_reg_1_4_210 ;
+  wire \BU2/U0/gLUT.iLUT/pp_out_reg_0_6_209 ;
+  wire \BU2/U0/gLUT.iLUT/sum<0>[6] ;
+  wire \BU2/U0/gLUT.iLUT/pp_out_reg_1_5_205 ;
+  wire \BU2/U0/gLUT.iLUT/pp_out_reg_0_7_204 ;
+  wire \BU2/U0/gLUT.iLUT/sum<0>[7] ;
+  wire \BU2/U0/gLUT.iLUT/pp_out_reg_1_6_200 ;
+  wire \BU2/U0/gLUT.iLUT/pp_out_reg_0_8_199 ;
+  wire \BU2/U0/gLUT.iLUT/sum<0>[8] ;
+  wire \BU2/U0/gLUT.iLUT/pp_out_reg_1_7_195 ;
+  wire \BU2/U0/gLUT.iLUT/sum<0>[9] ;
+  wire \BU2/U0/gLUT.iLUT/pp_out_reg_1_8_191 ;
+  wire \BU2/U0/gLUT.iLUT/sum<0>[10] ;
+  wire \BU2/U0/gLUT.iLUT/pp_out_reg_1_9_187 ;
+  wire \BU2/U0/gLUT.iLUT/pp_out_reg_0_9_186 ;
+  wire \BU2/U0/gLUT.iLUT/sum<0>[12] ;
   wire \BU2/U0/gLUT.iLUT/ma_sig ;
   wire \BU2/U0/gLUT.iLUT/lut_sig ;
   wire \BU2/U0/gLUT.iLUT/ma_sig0 ;
@@ -147,20 +207,20 @@ module mult8x8 (
   wire [7 : 0] a_2;
   wire [7 : 0] b_3;
   wire [9 : 0] p_4;
-  wire [9 : 0] \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut ;
-  wire [8 : 0] \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy ;
   wire [11 : 0] \BU2/U0/gLUT.iLUT/s1_add_out<0> ;
-  wire [9 : 0] \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut ;
-  wire [8 : 0] \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy ;
+  wire [11 : 0] \BU2/U0/gLUT.iLUT/s1_add_out<1> ;
   wire [12 : 0] \BU2/U0/gLUT.iLUT/Madd_sum0_0_add0000_lut ;
   wire [11 : 0] \BU2/U0/gLUT.iLUT/Madd_sum0_0_add0000_cy ;
-  wire [11 : 0] \BU2/U0/gLUT.iLUT/s1_add_out<1> ;
+  wire [9 : 0] \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut ;
+  wire [8 : 0] \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy ;
+  wire [9 : 0] \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut ;
+  wire [8 : 0] \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy ;
+  wire [9 : 0] \BU2/U0/gLUT.iLUT/pp_out<0> ;
   wire [8 : 0] \BU2/U0/gLUT.iLUT/pp_cout<0> ;
-  wire [9 : 2] \BU2/U0/gLUT.iLUT/pp_out<0> ;
   wire [9 : 0] \BU2/U0/gLUT.iLUT/pp_out<1> ;
   wire [8 : 0] \BU2/U0/gLUT.iLUT/pp_cout<1> ;
+  wire [9 : 0] \BU2/U0/gLUT.iLUT/pp_out<2> ;
   wire [8 : 0] \BU2/U0/gLUT.iLUT/pp_cout<2> ;
-  wire [9 : 2] \BU2/U0/gLUT.iLUT/pp_out<2> ;
   wire [9 : 0] \BU2/U0/gLUT.iLUT/pp_out<3> ;
   wire [8 : 0] \BU2/U0/gLUT.iLUT/pp_cout<3> ;
   wire [0 : 0] \BU2/zero_detect ;
@@ -236,23 +296,19 @@ module mult8x8 (
     .I1(b_3[0]),
     .O(\BU2/U0/gLUT.iLUT/lut_sig )
   );
-  LUT4 #(
-    .INIT ( 16'h6AC0 ))
-  \BU2/U0/gLUT.iLUT/Mxor_lut_sig0_Result1  (
-    .I0(b_3[0]),
-    .I1(b_3[1]),
-    .I2(a_2[0]),
-    .I3(a_2[1]),
-    .O(\BU2/U0/gLUT.iLUT/lut_sig0 )
+  LUT2 #(
+    .INIT ( 4'h8 ))
+  \BU2/U0/gLUT.iLUT/lut_sig191  (
+    .I0(a_2[0]),
+    .I1(b_3[4]),
+    .O(\BU2/U0/gLUT.iLUT/lut_sig19 )
   );
-  LUT4 #(
-    .INIT ( 16'h6AC0 ))
-  \BU2/U0/gLUT.iLUT/Mxor_lut_sig1_Result1  (
-    .I0(b_3[0]),
-    .I1(b_3[1]),
-    .I2(a_2[1]),
-    .I3(a_2[2]),
-    .O(\BU2/U0/gLUT.iLUT/lut_sig1_173 )
+  LUT2 #(
+    .INIT ( 4'h7 ))
+  \BU2/U0/gLUT.iLUT/lut_sig291  (
+    .I0(a_2[0]),
+    .I1(b_3[6]),
+    .O(\BU2/U0/gLUT.iLUT/lut_sig29 )
   );
   LUT2 #(
     .INIT ( 4'h8 ))
@@ -263,12 +319,12 @@ module mult8x8 (
   );
   LUT4 #(
     .INIT ( 16'h6AC0 ))
-  \BU2/U0/gLUT.iLUT/Mxor_lut_sig2_Result1  (
+  \BU2/U0/gLUT.iLUT/Mxor_lut_sig0_Result1  (
     .I0(b_3[0]),
     .I1(b_3[1]),
-    .I2(a_2[2]),
-    .I3(a_2[3]),
-    .O(\BU2/U0/gLUT.iLUT/lut_sig2 )
+    .I2(a_2[0]),
+    .I3(a_2[1]),
+    .O(\BU2/U0/gLUT.iLUT/lut_sig0 )
   );
   LUT4 #(
     .INIT ( 16'h6AC0 ))
@@ -281,19 +337,21 @@ module mult8x8 (
   );
   LUT4 #(
     .INIT ( 16'h6AC0 ))
-  \BU2/U0/gLUT.iLUT/Mxor_lut_sig3_Result1  (
-    .I0(b_3[0]),
-    .I1(b_3[1]),
-    .I2(a_2[3]),
-    .I3(a_2[4]),
-    .O(\BU2/U0/gLUT.iLUT/lut_sig3 )
+  \BU2/U0/gLUT.iLUT/Mxor_lut_sig20_Result1  (
+    .I0(b_3[4]),
+    .I1(b_3[5]),
+    .I2(a_2[0]),
+    .I3(a_2[1]),
+    .O(\BU2/U0/gLUT.iLUT/lut_sig20 )
   );
-  LUT2 #(
-    .INIT ( 4'h8 ))
-  \BU2/U0/gLUT.iLUT/lut_sig191  (
+  LUT4 #(
+    .INIT ( 16'h953F ))
+  \BU2/U0/gLUT.iLUT/lut_sig301  (
     .I0(a_2[0]),
-    .I1(b_3[4]),
-    .O(\BU2/U0/gLUT.iLUT/lut_sig19 )
+    .I1(a_2[1]),
+    .I2(b_3[6]),
+    .I3(b_3[7]),
+    .O(\BU2/U0/gLUT.iLUT/lut_sig30 )
   );
   LUT4 #(
     .INIT ( 16'h6AC0 ))
@@ -306,12 +364,30 @@ module mult8x8 (
   );
   LUT4 #(
     .INIT ( 16'h6AC0 ))
-  \BU2/U0/gLUT.iLUT/Mxor_lut_sig4_Result1  (
+  \BU2/U0/gLUT.iLUT/Mxor_lut_sig1_Result1  (
     .I0(b_3[0]),
     .I1(b_3[1]),
-    .I2(a_2[4]),
-    .I3(a_2[5]),
-    .O(\BU2/U0/gLUT.iLUT/lut_sig4 )
+    .I2(a_2[1]),
+    .I3(a_2[2]),
+    .O(\BU2/U0/gLUT.iLUT/lut_sig1_173 )
+  );
+  LUT4 #(
+    .INIT ( 16'h6AC0 ))
+  \BU2/U0/gLUT.iLUT/Mxor_lut_sig21_Result1  (
+    .I0(b_3[4]),
+    .I1(b_3[5]),
+    .I2(a_2[1]),
+    .I3(a_2[2]),
+    .O(\BU2/U0/gLUT.iLUT/lut_sig21 )
+  );
+  LUT4 #(
+    .INIT ( 16'h953F ))
+  \BU2/U0/gLUT.iLUT/lut_sig311  (
+    .I0(a_2[1]),
+    .I1(a_2[2]),
+    .I2(b_3[6]),
+    .I3(b_3[7]),
+    .O(\BU2/U0/gLUT.iLUT/lut_sig31 )
   );
   LUT4 #(
     .INIT ( 16'h6AC0 ))
@@ -324,30 +400,30 @@ module mult8x8 (
   );
   LUT4 #(
     .INIT ( 16'h6AC0 ))
-  \BU2/U0/gLUT.iLUT/Mxor_lut_sig20_Result1  (
+  \BU2/U0/gLUT.iLUT/Mxor_lut_sig22_Result1  (
     .I0(b_3[4]),
     .I1(b_3[5]),
-    .I2(a_2[0]),
-    .I3(a_2[1]),
-    .O(\BU2/U0/gLUT.iLUT/lut_sig20 )
+    .I2(a_2[2]),
+    .I3(a_2[3]),
+    .O(\BU2/U0/gLUT.iLUT/lut_sig22 )
   );
   LUT4 #(
     .INIT ( 16'h6AC0 ))
-  \BU2/U0/gLUT.iLUT/Mxor_lut_sig5_Result1  (
+  \BU2/U0/gLUT.iLUT/Mxor_lut_sig2_Result1  (
     .I0(b_3[0]),
     .I1(b_3[1]),
-    .I2(a_2[5]),
-    .I3(a_2[6]),
-    .O(\BU2/U0/gLUT.iLUT/lut_sig5 )
+    .I2(a_2[2]),
+    .I3(a_2[3]),
+    .O(\BU2/U0/gLUT.iLUT/lut_sig2 )
   );
   LUT4 #(
-    .INIT ( 16'h6AC0 ))
-  \BU2/U0/gLUT.iLUT/Mxor_lut_sig21_Result1  (
-    .I0(b_3[4]),
-    .I1(b_3[5]),
-    .I2(a_2[1]),
-    .I3(a_2[2]),
-    .O(\BU2/U0/gLUT.iLUT/lut_sig21 )
+    .INIT ( 16'h953F ))
+  \BU2/U0/gLUT.iLUT/lut_sig321  (
+    .I0(a_2[2]),
+    .I1(a_2[3]),
+    .I2(b_3[6]),
+    .I3(b_3[7]),
+    .O(\BU2/U0/gLUT.iLUT/lut_sig32 )
   );
   LUT4 #(
     .INIT ( 16'h6AC0 ))
@@ -360,117 +436,21 @@ module mult8x8 (
   );
   LUT4 #(
     .INIT ( 16'h6AC0 ))
-  \BU2/U0/gLUT.iLUT/Mxor_lut_sig6_Result1  (
-    .I0(b_3[0]),
-    .I1(b_3[1]),
-    .I2(a_2[6]),
-    .I3(a_2[7]),
-    .O(\BU2/U0/gLUT.iLUT/lut_sig6 )
-  );
-  LUT2 #(
-    .INIT ( 4'h7 ))
-  \BU2/U0/gLUT.iLUT/lut_sig291  (
-    .I0(a_2[0]),
-    .I1(b_3[6]),
-    .O(\BU2/U0/gLUT.iLUT/lut_sig29 )
-  );
-  LUT4 #(
-    .INIT ( 16'h6AC0 ))
-  \BU2/U0/gLUT.iLUT/Mxor_lut_sig14_Result1  (
-    .I0(b_3[2]),
-    .I1(b_3[3]),
-    .I2(a_2[4]),
-    .I3(a_2[5]),
-    .O(\BU2/U0/gLUT.iLUT/lut_sig14 )
-  );
-  LUT4 #(
-    .INIT ( 16'h6AC0 ))
-  \BU2/U0/gLUT.iLUT/Mxor_lut_sig22_Result1  (
-    .I0(a_2[2]),
-    .I1(b_3[4]),
-    .I2(a_2[3]),
-    .I3(b_3[5]),
-    .O(\BU2/U0/gLUT.iLUT/lut_sig22 )
-  );
-  LUT3 #(
-    .INIT ( 8'h28 ))
-  \BU2/U0/gLUT.iLUT/lut_sig71  (
-    .I0(a_2[7]),
-    .I1(b_3[0]),
-    .I2(b_3[1]),
-    .O(\BU2/U0/gLUT.iLUT/lut_sig7 )
-  );
-  LUT4 #(
-    .INIT ( 16'h953F ))
-  \BU2/U0/gLUT.iLUT/lut_sig301  (
-    .I0(a_2[1]),
-    .I1(a_2[0]),
-    .I2(b_3[7]),
-    .I3(b_3[6]),
-    .O(\BU2/U0/gLUT.iLUT/lut_sig30 )
-  );
-  LUT4 #(
-    .INIT ( 16'h6AC0 ))
   \BU2/U0/gLUT.iLUT/Mxor_lut_sig23_Result1  (
-    .I0(a_2[3]),
-    .I1(b_3[4]),
-    .I2(a_2[4]),
-    .I3(b_3[5]),
+    .I0(b_3[4]),
+    .I1(b_3[5]),
+    .I2(a_2[3]),
+    .I3(a_2[4]),
     .O(\BU2/U0/gLUT.iLUT/lut_sig23 )
   );
   LUT4 #(
     .INIT ( 16'h6AC0 ))
-  \BU2/U0/gLUT.iLUT/Mxor_lut_sig15_Result1  (
-    .I0(a_2[5]),
-    .I1(b_3[2]),
-    .I2(a_2[6]),
-    .I3(b_3[3]),
-    .O(\BU2/U0/gLUT.iLUT/lut_sig15 )
-  );
-  LUT4 #(
-    .INIT ( 16'h953F ))
-  \BU2/U0/gLUT.iLUT/lut_sig311  (
-    .I0(a_2[2]),
-    .I1(a_2[1]),
-    .I2(b_3[7]),
-    .I3(b_3[6]),
-    .O(\BU2/U0/gLUT.iLUT/lut_sig31 )
-  );
-  LUT4 #(
-    .INIT ( 16'h6AC0 ))
-  \BU2/U0/gLUT.iLUT/Mxor_lut_sig16_Result1  (
-    .I0(a_2[6]),
-    .I1(b_3[2]),
-    .I2(a_2[7]),
-    .I3(b_3[3]),
-    .O(\BU2/U0/gLUT.iLUT/lut_sig16 )
-  );
-  LUT4 #(
-    .INIT ( 16'h6AC0 ))
-  \BU2/U0/gLUT.iLUT/Mxor_lut_sig24_Result1  (
-    .I0(a_2[4]),
-    .I1(b_3[4]),
-    .I2(a_2[5]),
-    .I3(b_3[5]),
-    .O(\BU2/U0/gLUT.iLUT/lut_sig24 )
-  );
-  LUT4 #(
-    .INIT ( 16'h953F ))
-  \BU2/U0/gLUT.iLUT/lut_sig321  (
+  \BU2/U0/gLUT.iLUT/Mxor_lut_sig3_Result1  (
     .I0(a_2[3]),
-    .I1(a_2[2]),
-    .I2(b_3[7]),
-    .I3(b_3[6]),
-    .O(\BU2/U0/gLUT.iLUT/lut_sig32 )
-  );
-  LUT4 #(
-    .INIT ( 16'h6AC0 ))
-  \BU2/U0/gLUT.iLUT/Mxor_lut_sig25_Result1  (
-    .I0(a_2[5]),
-    .I1(b_3[4]),
-    .I2(a_2[6]),
-    .I3(b_3[5]),
-    .O(\BU2/U0/gLUT.iLUT/lut_sig25 )
+    .I1(b_3[0]),
+    .I2(a_2[4]),
+    .I3(b_3[1]),
+    .O(\BU2/U0/gLUT.iLUT/lut_sig3 )
   );
   LUT4 #(
     .INIT ( 16'h953F ))
@@ -483,12 +463,30 @@ module mult8x8 (
   );
   LUT4 #(
     .INIT ( 16'h6AC0 ))
-  \BU2/U0/gLUT.iLUT/Mxor_lut_sig26_Result1  (
-    .I0(a_2[6]),
+  \BU2/U0/gLUT.iLUT/Mxor_lut_sig14_Result1  (
+    .I0(a_2[4]),
+    .I1(b_3[2]),
+    .I2(a_2[5]),
+    .I3(b_3[3]),
+    .O(\BU2/U0/gLUT.iLUT/lut_sig14 )
+  );
+  LUT4 #(
+    .INIT ( 16'h6AC0 ))
+  \BU2/U0/gLUT.iLUT/Mxor_lut_sig24_Result1  (
+    .I0(a_2[4]),
     .I1(b_3[4]),
-    .I2(a_2[7]),
+    .I2(a_2[5]),
     .I3(b_3[5]),
-    .O(\BU2/U0/gLUT.iLUT/lut_sig26 )
+    .O(\BU2/U0/gLUT.iLUT/lut_sig24 )
+  );
+  LUT4 #(
+    .INIT ( 16'h6AC0 ))
+  \BU2/U0/gLUT.iLUT/Mxor_lut_sig4_Result1  (
+    .I0(a_2[4]),
+    .I1(b_3[0]),
+    .I2(a_2[5]),
+    .I3(b_3[1]),
+    .O(\BU2/U0/gLUT.iLUT/lut_sig4 )
   );
   LUT4 #(
     .INIT ( 16'h953F ))
@@ -499,13 +497,32 @@ module mult8x8 (
     .I3(b_3[6]),
     .O(\BU2/U0/gLUT.iLUT/lut_sig34 )
   );
-  LUT3 #(
-    .INIT ( 8'h28 ))
-  \BU2/U0/gLUT.iLUT/lut_sig271  (
-    .I0(a_2[7]),
+  LUT4 #(
+    .INIT ( 16'h6AC0 ))
+  \BU2/U0/gLUT.iLUT/Mxor_lut_sig15_Result1  (
+    .I0(a_2[5]),
+    .I1(b_3[2]),
+    .I2(a_2[6]),
+    .I3(b_3[3]),
+    .O(\BU2/U0/gLUT.iLUT/lut_sig15 )
+  );
+  LUT4 #(
+    .INIT ( 16'h6AC0 ))
+  \BU2/U0/gLUT.iLUT/Mxor_lut_sig25_Result1  (
+    .I0(a_2[5]),
     .I1(b_3[4]),
-    .I2(b_3[5]),
-    .O(\BU2/U0/gLUT.iLUT/lut_sig27 )
+    .I2(a_2[6]),
+    .I3(b_3[5]),
+    .O(\BU2/U0/gLUT.iLUT/lut_sig25 )
+  );
+  LUT4 #(
+    .INIT ( 16'h6AC0 ))
+  \BU2/U0/gLUT.iLUT/Mxor_lut_sig5_Result1  (
+    .I0(a_2[5]),
+    .I1(b_3[0]),
+    .I2(a_2[6]),
+    .I3(b_3[1]),
+    .O(\BU2/U0/gLUT.iLUT/lut_sig5 )
   );
   LUT4 #(
     .INIT ( 16'h953F ))
@@ -515,6 +532,33 @@ module mult8x8 (
     .I2(b_3[7]),
     .I3(b_3[6]),
     .O(\BU2/U0/gLUT.iLUT/lut_sig35 )
+  );
+  LUT4 #(
+    .INIT ( 16'h6AC0 ))
+  \BU2/U0/gLUT.iLUT/Mxor_lut_sig16_Result1  (
+    .I0(a_2[6]),
+    .I1(b_3[2]),
+    .I2(a_2[7]),
+    .I3(b_3[3]),
+    .O(\BU2/U0/gLUT.iLUT/lut_sig16 )
+  );
+  LUT4 #(
+    .INIT ( 16'h6AC0 ))
+  \BU2/U0/gLUT.iLUT/Mxor_lut_sig26_Result1  (
+    .I0(a_2[6]),
+    .I1(b_3[4]),
+    .I2(a_2[7]),
+    .I3(b_3[5]),
+    .O(\BU2/U0/gLUT.iLUT/lut_sig26 )
+  );
+  LUT4 #(
+    .INIT ( 16'h6AC0 ))
+  \BU2/U0/gLUT.iLUT/Mxor_lut_sig6_Result1  (
+    .I0(a_2[6]),
+    .I1(b_3[0]),
+    .I2(a_2[7]),
+    .I3(b_3[1]),
+    .O(\BU2/U0/gLUT.iLUT/lut_sig6 )
   );
   LUT4 #(
     .INIT ( 16'h953F ))
@@ -534,12 +578,604 @@ module mult8x8 (
     .O(\BU2/U0/gLUT.iLUT/lut_sig17 )
   );
   LUT3 #(
+    .INIT ( 8'h28 ))
+  \BU2/U0/gLUT.iLUT/lut_sig271  (
+    .I0(a_2[7]),
+    .I1(b_3[4]),
+    .I2(b_3[5]),
+    .O(\BU2/U0/gLUT.iLUT/lut_sig27 )
+  );
+  LUT3 #(
     .INIT ( 8'h9F ))
   \BU2/U0/gLUT.iLUT/lut_sig371  (
     .I0(b_3[7]),
     .I1(b_3[6]),
     .I2(a_2[7]),
     .O(\BU2/U0/gLUT.iLUT/lut_sig37 )
+  );
+  LUT3 #(
+    .INIT ( 8'h28 ))
+  \BU2/U0/gLUT.iLUT/lut_sig71  (
+    .I0(a_2[7]),
+    .I1(b_3[0]),
+    .I2(b_3[1]),
+    .O(\BU2/U0/gLUT.iLUT/lut_sig7 )
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/pp_out_reg_3_0  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/pp_out<3> [0]),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/pp_out_reg_3_0_276 )
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/pp_out_reg_3_1  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/pp_out<3> [1]),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/pp_out_reg_3_1_272 )
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/pp_out_reg_3_2  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/pp_out<3> [2]),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/pp_out_reg_3_2_267 )
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/pp_out_reg_3_3  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/pp_out<3> [3]),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/pp_out_reg_3_3_262 )
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/pp_out_reg_3_4  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/pp_out<3> [4]),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/pp_out_reg_3_4_257 )
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/pp_out_reg_3_5  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/pp_out<3> [5]),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/pp_out_reg_3_5_252 )
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/pp_out_reg_3_6  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/pp_out<3> [6]),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/pp_out_reg_3_6_247 )
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/pp_out_reg_3_7  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/pp_out<3> [7]),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/pp_out_reg_3_7_242 )
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/pp_out_reg_3_8  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/pp_out<3> [8]),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/pp_out_reg_3_8_238 )
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/pp_out_reg_3_9  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/pp_out<3> [9]),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/pp_out_reg_3_9_234 )
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/pp_out_reg_0_0  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/pp_out<0> [0]),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/pp_out_reg_0_0_349 )
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/pp_out_reg_0_1  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/pp_out<0> [1]),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/pp_out_reg_0_1_348 )
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/pp_out_reg_0_2  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/pp_out<0> [2]),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/pp_out_reg_0_2_228 )
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/pp_out_reg_0_3  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/pp_out<0> [3]),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/pp_out_reg_0_3_224 )
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/pp_out_reg_0_4  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/pp_out<0> [4]),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/pp_out_reg_0_4_219 )
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/pp_out_reg_0_5  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/pp_out<0> [5]),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/pp_out_reg_0_5_214 )
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/pp_out_reg_0_6  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/pp_out<0> [6]),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/pp_out_reg_0_6_209 )
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/pp_out_reg_0_7  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/pp_out<0> [7]),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/pp_out_reg_0_7_204 )
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/pp_out_reg_0_8  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/pp_out<0> [8]),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/pp_out_reg_0_8_199 )
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/pp_out_reg_0_9  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/pp_out<0> [9]),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/pp_out_reg_0_9_186 )
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/pp_out_reg_1_0  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/pp_out<1> [0]),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/pp_out_reg_1_0_229 )
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/pp_out_reg_1_1  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/pp_out<1> [1]),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/pp_out_reg_1_1_225 )
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/pp_out_reg_1_2  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/pp_out<1> [2]),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/pp_out_reg_1_2_220 )
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/pp_out_reg_1_3  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/pp_out<1> [3]),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/pp_out_reg_1_3_215 )
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/pp_out_reg_1_4  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/pp_out<1> [4]),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/pp_out_reg_1_4_210 )
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/pp_out_reg_1_5  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/pp_out<1> [5]),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/pp_out_reg_1_5_205 )
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/pp_out_reg_1_6  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/pp_out<1> [6]),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/pp_out_reg_1_6_200 )
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/pp_out_reg_1_7  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/pp_out<1> [7]),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/pp_out_reg_1_7_195 )
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/pp_out_reg_1_8  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/pp_out<1> [8]),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/pp_out_reg_1_8_191 )
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/pp_out_reg_1_9  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/pp_out<1> [9]),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/pp_out_reg_1_9_187 )
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/pp_out_reg_2_0  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/pp_out<2> [0]),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/pp_out_reg_2_0_347 )
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/pp_out_reg_2_1  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/pp_out<2> [1]),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/pp_out_reg_2_1_346 )
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/pp_out_reg_2_2  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/pp_out<2> [2]),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/pp_out_reg_2_2_275 )
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/pp_out_reg_2_3  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/pp_out<2> [3]),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/pp_out_reg_2_3_271 )
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/pp_out_reg_2_4  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/pp_out<2> [4]),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/pp_out_reg_2_4_266 )
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/pp_out_reg_2_5  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/pp_out<2> [5]),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/pp_out_reg_2_5_261 )
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/pp_out_reg_2_6  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/pp_out<2> [6]),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/pp_out_reg_2_6_256 )
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/pp_out_reg_2_7  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/pp_out<2> [7]),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/pp_out_reg_2_7_251 )
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/pp_out_reg_2_8  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/pp_out<2> [8]),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/pp_out_reg_2_8_246 )
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/pp_out_reg_2_9  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/pp_out<2> [9]),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/pp_out_reg_2_9_233 )
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/s1_add_out_0_0  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/pp_out_reg_0_0_349 ),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/s1_add_out<0> [0])
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/s1_add_out_0_1  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/pp_out_reg_0_1_348 ),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/s1_add_out<0> [1])
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/s1_add_out_0_2  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/sum<0>[2] ),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/s1_add_out<0> [2])
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/s1_add_out_0_3  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/sum<0>[3] ),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/s1_add_out<0> [3])
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/s1_add_out_0_4  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/sum<0>[4] ),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/s1_add_out<0> [4])
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/s1_add_out_0_5  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/sum<0>[5] ),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/s1_add_out<0> [5])
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/s1_add_out_0_6  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/sum<0>[6] ),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/s1_add_out<0> [6])
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/s1_add_out_0_7  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/sum<0>[7] ),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/s1_add_out<0> [7])
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/s1_add_out_0_8  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/sum<0>[8] ),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/s1_add_out<0> [8])
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/s1_add_out_0_9  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/sum<0>[9] ),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/s1_add_out<0> [9])
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/s1_add_out_0_10  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/sum<0>[10] ),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/s1_add_out<0> [10])
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/s1_add_out_0_11  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/sum<0>[12] ),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/s1_add_out<0> [11])
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/s1_add_out_1_0  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/pp_out_reg_2_0_347 ),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/s1_add_out<1> [0])
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/s1_add_out_1_1  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/pp_out_reg_2_1_346 ),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/s1_add_out<1> [1])
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/s1_add_out_1_2  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/sum<1>[2] ),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/s1_add_out<1> [2])
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/s1_add_out_1_3  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/sum<1>[3] ),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/s1_add_out<1> [3])
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/s1_add_out_1_4  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/sum<1>[4] ),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/s1_add_out<1> [4])
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/s1_add_out_1_5  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/sum<1>[5] ),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/s1_add_out<1> [5])
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/s1_add_out_1_6  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/sum<1>[6] ),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/s1_add_out<1> [6])
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/s1_add_out_1_7  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/sum<1>[7] ),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/s1_add_out<1> [7])
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/s1_add_out_1_8  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/sum<1>[8] ),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/s1_add_out<1> [8])
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/s1_add_out_1_9  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/sum<1>[9] ),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/s1_add_out<1> [9])
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/s1_add_out_1_10  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/sum<1>[10] ),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/s1_add_out<1> [10])
+  );
+  FDRE #(
+    .INIT ( 1'b0 ))
+  \BU2/U0/gLUT.iLUT/s1_add_out_1_11  (
+    .C(clk),
+    .CE(ce),
+    .D(\BU2/U0/gLUT.iLUT/sum<1>[12] ),
+    .R(sclr),
+    .Q(\BU2/U0/gLUT.iLUT/s1_add_out<1> [11])
   );
   FDRE #(
     .INIT ( 1'b0 ))
@@ -696,354 +1332,6 @@ module mult8x8 (
   );
   LUT2 #(
     .INIT ( 4'h6 ))
-  \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut<0>  (
-    .I0(\BU2/U0/gLUT.iLUT/pp_out<2> [2]),
-    .I1(\BU2/U0/gLUT.iLUT/pp_out<3> [0]),
-    .O(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [0])
-  );
-  MUXCY   \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy<0>  (
-    .CI(\BU2/zero_detect [0]),
-    .DI(\BU2/U0/gLUT.iLUT/pp_out<2> [2]),
-    .S(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [0]),
-    .O(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy [0])
-  );
-  XORCY   \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_xor<0>  (
-    .CI(\BU2/zero_detect [0]),
-    .LI(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [0]),
-    .O(\BU2/U0/gLUT.iLUT/s1_add_out<1> [2])
-  );
-  LUT2 #(
-    .INIT ( 4'h6 ))
-  \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut<1>  (
-    .I0(\BU2/U0/gLUT.iLUT/pp_out<2> [3]),
-    .I1(\BU2/U0/gLUT.iLUT/pp_out<3> [1]),
-    .O(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [1])
-  );
-  MUXCY   \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy<1>  (
-    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy [0]),
-    .DI(\BU2/U0/gLUT.iLUT/pp_out<2> [3]),
-    .S(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [1]),
-    .O(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy [1])
-  );
-  XORCY   \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_xor<1>  (
-    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy [0]),
-    .LI(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [1]),
-    .O(\BU2/U0/gLUT.iLUT/s1_add_out<1> [3])
-  );
-  LUT2 #(
-    .INIT ( 4'h6 ))
-  \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut<2>  (
-    .I0(\BU2/U0/gLUT.iLUT/pp_out<2> [4]),
-    .I1(\BU2/U0/gLUT.iLUT/pp_out<3> [2]),
-    .O(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [2])
-  );
-  MUXCY   \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy<2>  (
-    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy [1]),
-    .DI(\BU2/U0/gLUT.iLUT/pp_out<2> [4]),
-    .S(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [2]),
-    .O(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy [2])
-  );
-  XORCY   \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_xor<2>  (
-    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy [1]),
-    .LI(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [2]),
-    .O(\BU2/U0/gLUT.iLUT/s1_add_out<1> [4])
-  );
-  LUT2 #(
-    .INIT ( 4'h6 ))
-  \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut<3>  (
-    .I0(\BU2/U0/gLUT.iLUT/pp_out<2> [5]),
-    .I1(\BU2/U0/gLUT.iLUT/pp_out<3> [3]),
-    .O(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [3])
-  );
-  MUXCY   \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy<3>  (
-    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy [2]),
-    .DI(\BU2/U0/gLUT.iLUT/pp_out<2> [5]),
-    .S(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [3]),
-    .O(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy [3])
-  );
-  XORCY   \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_xor<3>  (
-    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy [2]),
-    .LI(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [3]),
-    .O(\BU2/U0/gLUT.iLUT/s1_add_out<1> [5])
-  );
-  LUT2 #(
-    .INIT ( 4'h6 ))
-  \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut<4>  (
-    .I0(\BU2/U0/gLUT.iLUT/pp_out<2> [6]),
-    .I1(\BU2/U0/gLUT.iLUT/pp_out<3> [4]),
-    .O(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [4])
-  );
-  MUXCY   \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy<4>  (
-    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy [3]),
-    .DI(\BU2/U0/gLUT.iLUT/pp_out<2> [6]),
-    .S(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [4]),
-    .O(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy [4])
-  );
-  XORCY   \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_xor<4>  (
-    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy [3]),
-    .LI(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [4]),
-    .O(\BU2/U0/gLUT.iLUT/s1_add_out<1> [6])
-  );
-  LUT2 #(
-    .INIT ( 4'h6 ))
-  \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut<5>  (
-    .I0(\BU2/U0/gLUT.iLUT/pp_out<2> [7]),
-    .I1(\BU2/U0/gLUT.iLUT/pp_out<3> [5]),
-    .O(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [5])
-  );
-  MUXCY   \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy<5>  (
-    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy [4]),
-    .DI(\BU2/U0/gLUT.iLUT/pp_out<2> [7]),
-    .S(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [5]),
-    .O(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy [5])
-  );
-  XORCY   \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_xor<5>  (
-    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy [4]),
-    .LI(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [5]),
-    .O(\BU2/U0/gLUT.iLUT/s1_add_out<1> [7])
-  );
-  LUT2 #(
-    .INIT ( 4'h6 ))
-  \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut<6>  (
-    .I0(\BU2/U0/gLUT.iLUT/pp_out<2> [8]),
-    .I1(\BU2/U0/gLUT.iLUT/pp_out<3> [6]),
-    .O(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [6])
-  );
-  MUXCY   \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy<6>  (
-    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy [5]),
-    .DI(\BU2/U0/gLUT.iLUT/pp_out<2> [8]),
-    .S(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [6]),
-    .O(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy [6])
-  );
-  XORCY   \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_xor<6>  (
-    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy [5]),
-    .LI(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [6]),
-    .O(\BU2/U0/gLUT.iLUT/s1_add_out<1> [8])
-  );
-  LUT2 #(
-    .INIT ( 4'h6 ))
-  \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut<7>  (
-    .I0(\BU2/U0/gLUT.iLUT/pp_out<2> [9]),
-    .I1(\BU2/U0/gLUT.iLUT/pp_out<3> [7]),
-    .O(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [7])
-  );
-  MUXCY   \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy<7>  (
-    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy [6]),
-    .DI(\BU2/U0/gLUT.iLUT/pp_out<2> [9]),
-    .S(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [7]),
-    .O(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy [7])
-  );
-  XORCY   \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_xor<7>  (
-    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy [6]),
-    .LI(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [7]),
-    .O(\BU2/U0/gLUT.iLUT/s1_add_out<1> [9])
-  );
-  LUT2 #(
-    .INIT ( 4'h6 ))
-  \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut<8>  (
-    .I0(\BU2/U0/gLUT.iLUT/pp_out<2> [9]),
-    .I1(\BU2/U0/gLUT.iLUT/pp_out<3> [8]),
-    .O(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [8])
-  );
-  MUXCY   \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy<8>  (
-    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy [7]),
-    .DI(\BU2/U0/gLUT.iLUT/pp_out<2> [9]),
-    .S(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [8]),
-    .O(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy [8])
-  );
-  XORCY   \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_xor<8>  (
-    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy [7]),
-    .LI(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [8]),
-    .O(\BU2/U0/gLUT.iLUT/s1_add_out<1> [10])
-  );
-  LUT2 #(
-    .INIT ( 4'h6 ))
-  \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut<9>  (
-    .I0(\BU2/U0/gLUT.iLUT/pp_out<2> [9]),
-    .I1(\BU2/U0/gLUT.iLUT/pp_out<3> [9]),
-    .O(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [9])
-  );
-  XORCY   \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_xor<9>  (
-    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy [8]),
-    .LI(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [9]),
-    .O(\BU2/U0/gLUT.iLUT/s1_add_out<1> [11])
-  );
-  LUT2 #(
-    .INIT ( 4'h6 ))
-  \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut<0>  (
-    .I0(\BU2/U0/gLUT.iLUT/pp_out<0> [2]),
-    .I1(\BU2/U0/gLUT.iLUT/pp_out<1> [0]),
-    .O(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [0])
-  );
-  MUXCY   \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy<0>  (
-    .CI(\BU2/zero_detect [0]),
-    .DI(\BU2/U0/gLUT.iLUT/pp_out<0> [2]),
-    .S(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [0]),
-    .O(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy [0])
-  );
-  XORCY   \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_xor<0>  (
-    .CI(\BU2/zero_detect [0]),
-    .LI(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [0]),
-    .O(\BU2/U0/gLUT.iLUT/s1_add_out<0> [2])
-  );
-  LUT2 #(
-    .INIT ( 4'h6 ))
-  \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut<1>  (
-    .I0(\BU2/U0/gLUT.iLUT/pp_out<0> [3]),
-    .I1(\BU2/U0/gLUT.iLUT/pp_out<1> [1]),
-    .O(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [1])
-  );
-  MUXCY   \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy<1>  (
-    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy [0]),
-    .DI(\BU2/U0/gLUT.iLUT/pp_out<0> [3]),
-    .S(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [1]),
-    .O(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy [1])
-  );
-  XORCY   \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_xor<1>  (
-    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy [0]),
-    .LI(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [1]),
-    .O(\BU2/U0/gLUT.iLUT/s1_add_out<0> [3])
-  );
-  LUT2 #(
-    .INIT ( 4'h6 ))
-  \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut<2>  (
-    .I0(\BU2/U0/gLUT.iLUT/pp_out<0> [4]),
-    .I1(\BU2/U0/gLUT.iLUT/pp_out<1> [2]),
-    .O(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [2])
-  );
-  MUXCY   \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy<2>  (
-    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy [1]),
-    .DI(\BU2/U0/gLUT.iLUT/pp_out<0> [4]),
-    .S(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [2]),
-    .O(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy [2])
-  );
-  XORCY   \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_xor<2>  (
-    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy [1]),
-    .LI(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [2]),
-    .O(\BU2/U0/gLUT.iLUT/s1_add_out<0> [4])
-  );
-  LUT2 #(
-    .INIT ( 4'h6 ))
-  \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut<3>  (
-    .I0(\BU2/U0/gLUT.iLUT/pp_out<0> [5]),
-    .I1(\BU2/U0/gLUT.iLUT/pp_out<1> [3]),
-    .O(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [3])
-  );
-  MUXCY   \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy<3>  (
-    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy [2]),
-    .DI(\BU2/U0/gLUT.iLUT/pp_out<0> [5]),
-    .S(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [3]),
-    .O(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy [3])
-  );
-  XORCY   \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_xor<3>  (
-    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy [2]),
-    .LI(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [3]),
-    .O(\BU2/U0/gLUT.iLUT/s1_add_out<0> [5])
-  );
-  LUT2 #(
-    .INIT ( 4'h6 ))
-  \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut<4>  (
-    .I0(\BU2/U0/gLUT.iLUT/pp_out<0> [6]),
-    .I1(\BU2/U0/gLUT.iLUT/pp_out<1> [4]),
-    .O(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [4])
-  );
-  MUXCY   \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy<4>  (
-    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy [3]),
-    .DI(\BU2/U0/gLUT.iLUT/pp_out<0> [6]),
-    .S(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [4]),
-    .O(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy [4])
-  );
-  XORCY   \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_xor<4>  (
-    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy [3]),
-    .LI(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [4]),
-    .O(\BU2/U0/gLUT.iLUT/s1_add_out<0> [6])
-  );
-  LUT2 #(
-    .INIT ( 4'h6 ))
-  \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut<5>  (
-    .I0(\BU2/U0/gLUT.iLUT/pp_out<0> [7]),
-    .I1(\BU2/U0/gLUT.iLUT/pp_out<1> [5]),
-    .O(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [5])
-  );
-  MUXCY   \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy<5>  (
-    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy [4]),
-    .DI(\BU2/U0/gLUT.iLUT/pp_out<0> [7]),
-    .S(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [5]),
-    .O(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy [5])
-  );
-  XORCY   \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_xor<5>  (
-    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy [4]),
-    .LI(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [5]),
-    .O(\BU2/U0/gLUT.iLUT/s1_add_out<0> [7])
-  );
-  LUT2 #(
-    .INIT ( 4'h6 ))
-  \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut<6>  (
-    .I0(\BU2/U0/gLUT.iLUT/pp_out<0> [8]),
-    .I1(\BU2/U0/gLUT.iLUT/pp_out<1> [6]),
-    .O(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [6])
-  );
-  MUXCY   \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy<6>  (
-    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy [5]),
-    .DI(\BU2/U0/gLUT.iLUT/pp_out<0> [8]),
-    .S(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [6]),
-    .O(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy [6])
-  );
-  XORCY   \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_xor<6>  (
-    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy [5]),
-    .LI(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [6]),
-    .O(\BU2/U0/gLUT.iLUT/s1_add_out<0> [8])
-  );
-  LUT2 #(
-    .INIT ( 4'h6 ))
-  \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut<7>  (
-    .I0(\BU2/U0/gLUT.iLUT/pp_out<0> [9]),
-    .I1(\BU2/U0/gLUT.iLUT/pp_out<1> [7]),
-    .O(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [7])
-  );
-  MUXCY   \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy<7>  (
-    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy [6]),
-    .DI(\BU2/U0/gLUT.iLUT/pp_out<0> [9]),
-    .S(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [7]),
-    .O(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy [7])
-  );
-  XORCY   \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_xor<7>  (
-    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy [6]),
-    .LI(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [7]),
-    .O(\BU2/U0/gLUT.iLUT/s1_add_out<0> [9])
-  );
-  LUT2 #(
-    .INIT ( 4'h6 ))
-  \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut<8>  (
-    .I0(\BU2/U0/gLUT.iLUT/pp_out<0> [9]),
-    .I1(\BU2/U0/gLUT.iLUT/pp_out<1> [8]),
-    .O(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [8])
-  );
-  MUXCY   \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy<8>  (
-    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy [7]),
-    .DI(\BU2/U0/gLUT.iLUT/pp_out<0> [9]),
-    .S(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [8]),
-    .O(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy [8])
-  );
-  XORCY   \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_xor<8>  (
-    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy [7]),
-    .LI(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [8]),
-    .O(\BU2/U0/gLUT.iLUT/s1_add_out<0> [10])
-  );
-  LUT2 #(
-    .INIT ( 4'h6 ))
-  \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut<9>  (
-    .I0(\BU2/U0/gLUT.iLUT/pp_out<0> [9]),
-    .I1(\BU2/U0/gLUT.iLUT/pp_out<1> [9]),
-    .O(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [9])
-  );
-  XORCY   \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_xor<9>  (
-    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy [8]),
-    .LI(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [9]),
-    .O(\BU2/U0/gLUT.iLUT/s1_add_out<0> [11])
-  );
-  LUT2 #(
-    .INIT ( 4'h6 ))
   \BU2/U0/gLUT.iLUT/Madd_sum0_0_add0000_lut<0>  (
     .I0(\BU2/U0/gLUT.iLUT/s1_add_out<0> [4]),
     .I1(\BU2/U0/gLUT.iLUT/s1_add_out<1> [0]),
@@ -1171,8 +1459,8 @@ module mult8x8 (
   LUT2 #(
     .INIT ( 4'h6 ))
   \BU2/U0/gLUT.iLUT/Madd_sum0_0_add0000_lut<7>  (
-    .I0(\BU2/U0/gLUT.iLUT/s1_add_out<0> [11]),
-    .I1(\BU2/U0/gLUT.iLUT/s1_add_out<1> [7]),
+    .I0(\BU2/U0/gLUT.iLUT/s1_add_out<1> [7]),
+    .I1(\BU2/U0/gLUT.iLUT/s1_add_out<0> [11]),
     .O(\BU2/U0/gLUT.iLUT/Madd_sum0_0_add0000_lut [7])
   );
   MUXCY   \BU2/U0/gLUT.iLUT/Madd_sum0_0_add0000_cy<7>  (
@@ -1189,8 +1477,8 @@ module mult8x8 (
   LUT2 #(
     .INIT ( 4'h6 ))
   \BU2/U0/gLUT.iLUT/Madd_sum0_0_add0000_lut<8>  (
-    .I0(\BU2/U0/gLUT.iLUT/s1_add_out<0> [11]),
-    .I1(\BU2/U0/gLUT.iLUT/s1_add_out<1> [8]),
+    .I0(\BU2/U0/gLUT.iLUT/s1_add_out<1> [8]),
+    .I1(\BU2/U0/gLUT.iLUT/s1_add_out<0> [11]),
     .O(\BU2/U0/gLUT.iLUT/Madd_sum0_0_add0000_lut [8])
   );
   MUXCY   \BU2/U0/gLUT.iLUT/Madd_sum0_0_add0000_cy<8>  (
@@ -1207,8 +1495,8 @@ module mult8x8 (
   LUT2 #(
     .INIT ( 4'h6 ))
   \BU2/U0/gLUT.iLUT/Madd_sum0_0_add0000_lut<9>  (
-    .I0(\BU2/U0/gLUT.iLUT/s1_add_out<0> [11]),
-    .I1(\BU2/U0/gLUT.iLUT/s1_add_out<1> [9]),
+    .I0(\BU2/U0/gLUT.iLUT/s1_add_out<1> [9]),
+    .I1(\BU2/U0/gLUT.iLUT/s1_add_out<0> [11]),
     .O(\BU2/U0/gLUT.iLUT/Madd_sum0_0_add0000_lut [9])
   );
   MUXCY   \BU2/U0/gLUT.iLUT/Madd_sum0_0_add0000_cy<9>  (
@@ -1225,8 +1513,8 @@ module mult8x8 (
   LUT2 #(
     .INIT ( 4'h6 ))
   \BU2/U0/gLUT.iLUT/Madd_sum0_0_add0000_lut<10>  (
-    .I0(\BU2/U0/gLUT.iLUT/s1_add_out<0> [11]),
-    .I1(\BU2/U0/gLUT.iLUT/s1_add_out<1> [10]),
+    .I0(\BU2/U0/gLUT.iLUT/s1_add_out<1> [10]),
+    .I1(\BU2/U0/gLUT.iLUT/s1_add_out<0> [11]),
     .O(\BU2/U0/gLUT.iLUT/Madd_sum0_0_add0000_lut [10])
   );
   MUXCY   \BU2/U0/gLUT.iLUT/Madd_sum0_0_add0000_cy<10>  (
@@ -1243,8 +1531,8 @@ module mult8x8 (
   LUT2 #(
     .INIT ( 4'h6 ))
   \BU2/U0/gLUT.iLUT/Madd_sum0_0_add0000_lut<11>  (
-    .I0(\BU2/U0/gLUT.iLUT/s1_add_out<0> [11]),
-    .I1(\BU2/U0/gLUT.iLUT/s1_add_out<1> [11]),
+    .I0(\BU2/U0/gLUT.iLUT/s1_add_out<1> [11]),
+    .I1(\BU2/U0/gLUT.iLUT/s1_add_out<0> [11]),
     .O(\BU2/U0/gLUT.iLUT/Madd_sum0_0_add0000_lut [11])
   );
   MUXCY   \BU2/U0/gLUT.iLUT/Madd_sum0_0_add0000_cy<11>  (
@@ -1270,6 +1558,354 @@ module mult8x8 (
     .LI(\BU2/U0/gLUT.iLUT/Madd_sum0_0_add0000_lut [12]),
     .O(\BU2/U0/gLUT.iLUT/sum0<0>[17] )
   );
+  LUT2 #(
+    .INIT ( 4'h6 ))
+  \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut<0>  (
+    .I0(\BU2/U0/gLUT.iLUT/pp_out_reg_2_2_275 ),
+    .I1(\BU2/U0/gLUT.iLUT/pp_out_reg_3_0_276 ),
+    .O(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [0])
+  );
+  MUXCY   \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy<0>  (
+    .CI(\BU2/zero_detect [0]),
+    .DI(\BU2/U0/gLUT.iLUT/pp_out_reg_2_2_275 ),
+    .S(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [0]),
+    .O(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy [0])
+  );
+  XORCY   \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_xor<0>  (
+    .CI(\BU2/zero_detect [0]),
+    .LI(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [0]),
+    .O(\BU2/U0/gLUT.iLUT/sum<1>[2] )
+  );
+  LUT2 #(
+    .INIT ( 4'h6 ))
+  \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut<1>  (
+    .I0(\BU2/U0/gLUT.iLUT/pp_out_reg_2_3_271 ),
+    .I1(\BU2/U0/gLUT.iLUT/pp_out_reg_3_1_272 ),
+    .O(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [1])
+  );
+  MUXCY   \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy<1>  (
+    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy [0]),
+    .DI(\BU2/U0/gLUT.iLUT/pp_out_reg_2_3_271 ),
+    .S(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [1]),
+    .O(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy [1])
+  );
+  XORCY   \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_xor<1>  (
+    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy [0]),
+    .LI(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [1]),
+    .O(\BU2/U0/gLUT.iLUT/sum<1>[3] )
+  );
+  LUT2 #(
+    .INIT ( 4'h6 ))
+  \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut<2>  (
+    .I0(\BU2/U0/gLUT.iLUT/pp_out_reg_2_4_266 ),
+    .I1(\BU2/U0/gLUT.iLUT/pp_out_reg_3_2_267 ),
+    .O(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [2])
+  );
+  MUXCY   \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy<2>  (
+    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy [1]),
+    .DI(\BU2/U0/gLUT.iLUT/pp_out_reg_2_4_266 ),
+    .S(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [2]),
+    .O(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy [2])
+  );
+  XORCY   \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_xor<2>  (
+    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy [1]),
+    .LI(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [2]),
+    .O(\BU2/U0/gLUT.iLUT/sum<1>[4] )
+  );
+  LUT2 #(
+    .INIT ( 4'h6 ))
+  \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut<3>  (
+    .I0(\BU2/U0/gLUT.iLUT/pp_out_reg_2_5_261 ),
+    .I1(\BU2/U0/gLUT.iLUT/pp_out_reg_3_3_262 ),
+    .O(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [3])
+  );
+  MUXCY   \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy<3>  (
+    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy [2]),
+    .DI(\BU2/U0/gLUT.iLUT/pp_out_reg_2_5_261 ),
+    .S(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [3]),
+    .O(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy [3])
+  );
+  XORCY   \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_xor<3>  (
+    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy [2]),
+    .LI(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [3]),
+    .O(\BU2/U0/gLUT.iLUT/sum<1>[5] )
+  );
+  LUT2 #(
+    .INIT ( 4'h6 ))
+  \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut<4>  (
+    .I0(\BU2/U0/gLUT.iLUT/pp_out_reg_2_6_256 ),
+    .I1(\BU2/U0/gLUT.iLUT/pp_out_reg_3_4_257 ),
+    .O(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [4])
+  );
+  MUXCY   \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy<4>  (
+    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy [3]),
+    .DI(\BU2/U0/gLUT.iLUT/pp_out_reg_2_6_256 ),
+    .S(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [4]),
+    .O(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy [4])
+  );
+  XORCY   \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_xor<4>  (
+    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy [3]),
+    .LI(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [4]),
+    .O(\BU2/U0/gLUT.iLUT/sum<1>[6] )
+  );
+  LUT2 #(
+    .INIT ( 4'h6 ))
+  \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut<5>  (
+    .I0(\BU2/U0/gLUT.iLUT/pp_out_reg_2_7_251 ),
+    .I1(\BU2/U0/gLUT.iLUT/pp_out_reg_3_5_252 ),
+    .O(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [5])
+  );
+  MUXCY   \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy<5>  (
+    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy [4]),
+    .DI(\BU2/U0/gLUT.iLUT/pp_out_reg_2_7_251 ),
+    .S(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [5]),
+    .O(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy [5])
+  );
+  XORCY   \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_xor<5>  (
+    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy [4]),
+    .LI(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [5]),
+    .O(\BU2/U0/gLUT.iLUT/sum<1>[7] )
+  );
+  LUT2 #(
+    .INIT ( 4'h6 ))
+  \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut<6>  (
+    .I0(\BU2/U0/gLUT.iLUT/pp_out_reg_2_8_246 ),
+    .I1(\BU2/U0/gLUT.iLUT/pp_out_reg_3_6_247 ),
+    .O(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [6])
+  );
+  MUXCY   \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy<6>  (
+    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy [5]),
+    .DI(\BU2/U0/gLUT.iLUT/pp_out_reg_2_8_246 ),
+    .S(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [6]),
+    .O(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy [6])
+  );
+  XORCY   \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_xor<6>  (
+    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy [5]),
+    .LI(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [6]),
+    .O(\BU2/U0/gLUT.iLUT/sum<1>[8] )
+  );
+  LUT2 #(
+    .INIT ( 4'h6 ))
+  \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut<7>  (
+    .I0(\BU2/U0/gLUT.iLUT/pp_out_reg_3_7_242 ),
+    .I1(\BU2/U0/gLUT.iLUT/pp_out_reg_2_9_233 ),
+    .O(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [7])
+  );
+  MUXCY   \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy<7>  (
+    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy [6]),
+    .DI(\BU2/U0/gLUT.iLUT/pp_out_reg_2_9_233 ),
+    .S(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [7]),
+    .O(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy [7])
+  );
+  XORCY   \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_xor<7>  (
+    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy [6]),
+    .LI(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [7]),
+    .O(\BU2/U0/gLUT.iLUT/sum<1>[9] )
+  );
+  LUT2 #(
+    .INIT ( 4'h6 ))
+  \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut<8>  (
+    .I0(\BU2/U0/gLUT.iLUT/pp_out_reg_3_8_238 ),
+    .I1(\BU2/U0/gLUT.iLUT/pp_out_reg_2_9_233 ),
+    .O(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [8])
+  );
+  MUXCY   \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy<8>  (
+    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy [7]),
+    .DI(\BU2/U0/gLUT.iLUT/pp_out_reg_2_9_233 ),
+    .S(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [8]),
+    .O(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy [8])
+  );
+  XORCY   \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_xor<8>  (
+    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy [7]),
+    .LI(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [8]),
+    .O(\BU2/U0/gLUT.iLUT/sum<1>[10] )
+  );
+  LUT2 #(
+    .INIT ( 4'h6 ))
+  \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut<9>  (
+    .I0(\BU2/U0/gLUT.iLUT/pp_out_reg_2_9_233 ),
+    .I1(\BU2/U0/gLUT.iLUT/pp_out_reg_3_9_234 ),
+    .O(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [9])
+  );
+  XORCY   \BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_xor<9>  (
+    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_cy [8]),
+    .LI(\BU2/U0/gLUT.iLUT/Madd_sum_1_add0000_lut [9]),
+    .O(\BU2/U0/gLUT.iLUT/sum<1>[12] )
+  );
+  LUT2 #(
+    .INIT ( 4'h6 ))
+  \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut<0>  (
+    .I0(\BU2/U0/gLUT.iLUT/pp_out_reg_0_2_228 ),
+    .I1(\BU2/U0/gLUT.iLUT/pp_out_reg_1_0_229 ),
+    .O(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [0])
+  );
+  MUXCY   \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy<0>  (
+    .CI(\BU2/zero_detect [0]),
+    .DI(\BU2/U0/gLUT.iLUT/pp_out_reg_0_2_228 ),
+    .S(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [0]),
+    .O(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy [0])
+  );
+  XORCY   \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_xor<0>  (
+    .CI(\BU2/zero_detect [0]),
+    .LI(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [0]),
+    .O(\BU2/U0/gLUT.iLUT/sum<0>[2] )
+  );
+  LUT2 #(
+    .INIT ( 4'h6 ))
+  \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut<1>  (
+    .I0(\BU2/U0/gLUT.iLUT/pp_out_reg_0_3_224 ),
+    .I1(\BU2/U0/gLUT.iLUT/pp_out_reg_1_1_225 ),
+    .O(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [1])
+  );
+  MUXCY   \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy<1>  (
+    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy [0]),
+    .DI(\BU2/U0/gLUT.iLUT/pp_out_reg_0_3_224 ),
+    .S(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [1]),
+    .O(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy [1])
+  );
+  XORCY   \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_xor<1>  (
+    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy [0]),
+    .LI(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [1]),
+    .O(\BU2/U0/gLUT.iLUT/sum<0>[3] )
+  );
+  LUT2 #(
+    .INIT ( 4'h6 ))
+  \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut<2>  (
+    .I0(\BU2/U0/gLUT.iLUT/pp_out_reg_0_4_219 ),
+    .I1(\BU2/U0/gLUT.iLUT/pp_out_reg_1_2_220 ),
+    .O(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [2])
+  );
+  MUXCY   \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy<2>  (
+    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy [1]),
+    .DI(\BU2/U0/gLUT.iLUT/pp_out_reg_0_4_219 ),
+    .S(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [2]),
+    .O(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy [2])
+  );
+  XORCY   \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_xor<2>  (
+    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy [1]),
+    .LI(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [2]),
+    .O(\BU2/U0/gLUT.iLUT/sum<0>[4] )
+  );
+  LUT2 #(
+    .INIT ( 4'h6 ))
+  \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut<3>  (
+    .I0(\BU2/U0/gLUT.iLUT/pp_out_reg_0_5_214 ),
+    .I1(\BU2/U0/gLUT.iLUT/pp_out_reg_1_3_215 ),
+    .O(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [3])
+  );
+  MUXCY   \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy<3>  (
+    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy [2]),
+    .DI(\BU2/U0/gLUT.iLUT/pp_out_reg_0_5_214 ),
+    .S(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [3]),
+    .O(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy [3])
+  );
+  XORCY   \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_xor<3>  (
+    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy [2]),
+    .LI(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [3]),
+    .O(\BU2/U0/gLUT.iLUT/sum<0>[5] )
+  );
+  LUT2 #(
+    .INIT ( 4'h6 ))
+  \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut<4>  (
+    .I0(\BU2/U0/gLUT.iLUT/pp_out_reg_0_6_209 ),
+    .I1(\BU2/U0/gLUT.iLUT/pp_out_reg_1_4_210 ),
+    .O(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [4])
+  );
+  MUXCY   \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy<4>  (
+    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy [3]),
+    .DI(\BU2/U0/gLUT.iLUT/pp_out_reg_0_6_209 ),
+    .S(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [4]),
+    .O(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy [4])
+  );
+  XORCY   \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_xor<4>  (
+    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy [3]),
+    .LI(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [4]),
+    .O(\BU2/U0/gLUT.iLUT/sum<0>[6] )
+  );
+  LUT2 #(
+    .INIT ( 4'h6 ))
+  \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut<5>  (
+    .I0(\BU2/U0/gLUT.iLUT/pp_out_reg_0_7_204 ),
+    .I1(\BU2/U0/gLUT.iLUT/pp_out_reg_1_5_205 ),
+    .O(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [5])
+  );
+  MUXCY   \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy<5>  (
+    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy [4]),
+    .DI(\BU2/U0/gLUT.iLUT/pp_out_reg_0_7_204 ),
+    .S(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [5]),
+    .O(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy [5])
+  );
+  XORCY   \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_xor<5>  (
+    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy [4]),
+    .LI(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [5]),
+    .O(\BU2/U0/gLUT.iLUT/sum<0>[7] )
+  );
+  LUT2 #(
+    .INIT ( 4'h6 ))
+  \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut<6>  (
+    .I0(\BU2/U0/gLUT.iLUT/pp_out_reg_0_8_199 ),
+    .I1(\BU2/U0/gLUT.iLUT/pp_out_reg_1_6_200 ),
+    .O(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [6])
+  );
+  MUXCY   \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy<6>  (
+    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy [5]),
+    .DI(\BU2/U0/gLUT.iLUT/pp_out_reg_0_8_199 ),
+    .S(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [6]),
+    .O(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy [6])
+  );
+  XORCY   \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_xor<6>  (
+    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy [5]),
+    .LI(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [6]),
+    .O(\BU2/U0/gLUT.iLUT/sum<0>[8] )
+  );
+  LUT2 #(
+    .INIT ( 4'h6 ))
+  \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut<7>  (
+    .I0(\BU2/U0/gLUT.iLUT/pp_out_reg_1_7_195 ),
+    .I1(\BU2/U0/gLUT.iLUT/pp_out_reg_0_9_186 ),
+    .O(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [7])
+  );
+  MUXCY   \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy<7>  (
+    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy [6]),
+    .DI(\BU2/U0/gLUT.iLUT/pp_out_reg_0_9_186 ),
+    .S(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [7]),
+    .O(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy [7])
+  );
+  XORCY   \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_xor<7>  (
+    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy [6]),
+    .LI(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [7]),
+    .O(\BU2/U0/gLUT.iLUT/sum<0>[9] )
+  );
+  LUT2 #(
+    .INIT ( 4'h6 ))
+  \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut<8>  (
+    .I0(\BU2/U0/gLUT.iLUT/pp_out_reg_1_8_191 ),
+    .I1(\BU2/U0/gLUT.iLUT/pp_out_reg_0_9_186 ),
+    .O(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [8])
+  );
+  MUXCY   \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy<8>  (
+    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy [7]),
+    .DI(\BU2/U0/gLUT.iLUT/pp_out_reg_0_9_186 ),
+    .S(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [8]),
+    .O(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy [8])
+  );
+  XORCY   \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_xor<8>  (
+    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy [7]),
+    .LI(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [8]),
+    .O(\BU2/U0/gLUT.iLUT/sum<0>[10] )
+  );
+  LUT2 #(
+    .INIT ( 4'h6 ))
+  \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut<9>  (
+    .I0(\BU2/U0/gLUT.iLUT/pp_out_reg_0_9_186 ),
+    .I1(\BU2/U0/gLUT.iLUT/pp_out_reg_1_9_187 ),
+    .O(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [9])
+  );
+  XORCY   \BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_xor<9>  (
+    .CI(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_cy [8]),
+    .LI(\BU2/U0/gLUT.iLUT/Madd_sum_0_add0000_lut [9]),
+    .O(\BU2/U0/gLUT.iLUT/sum<0>[12] )
+  );
   MULT_AND   \BU2/U0/gLUT.iLUT/NxM_mult.ppgen[0].carrychain[0].ppadd.b_is_even.stageLSB.ma0  (
     .I0(b_3[0]),
     .I1(a_2[0]),
@@ -1284,7 +1920,7 @@ module mult8x8 (
   XORCY   \BU2/U0/gLUT.iLUT/NxM_mult.ppgen[0].carrychain[0].ppadd.b_is_even.stageLSB.xorcy0  (
     .CI(\BU2/zero_detect [0]),
     .LI(\BU2/U0/gLUT.iLUT/lut_sig ),
-    .O(\BU2/U0/gLUT.iLUT/s1_add_out<0> [0])
+    .O(\BU2/U0/gLUT.iLUT/pp_out<0> [0])
   );
   MULT_AND   \BU2/U0/gLUT.iLUT/NxM_mult.ppgen[0].carrychain[1].ppadd.b_is_even.stageN.ma0  (
     .I0(b_3[1]),
@@ -1300,7 +1936,7 @@ module mult8x8 (
   XORCY   \BU2/U0/gLUT.iLUT/NxM_mult.ppgen[0].carrychain[1].ppadd.b_is_even.stageN.xorcy0  (
     .CI(\BU2/U0/gLUT.iLUT/pp_cout<0> [0]),
     .LI(\BU2/U0/gLUT.iLUT/lut_sig0 ),
-    .O(\BU2/U0/gLUT.iLUT/s1_add_out<0> [1])
+    .O(\BU2/U0/gLUT.iLUT/pp_out<0> [1])
   );
   MULT_AND   \BU2/U0/gLUT.iLUT/NxM_mult.ppgen[0].carrychain[2].ppadd.b_is_even.stageN.ma0  (
     .I0(b_3[1]),
@@ -1582,7 +2218,7 @@ module mult8x8 (
   XORCY   \BU2/U0/gLUT.iLUT/NxM_mult.ppgen[2].carrychain[0].ppadd.b_is_even.stageLSB.xorcy0  (
     .CI(\BU2/zero_detect [0]),
     .LI(\BU2/U0/gLUT.iLUT/lut_sig19 ),
-    .O(\BU2/U0/gLUT.iLUT/s1_add_out<1> [0])
+    .O(\BU2/U0/gLUT.iLUT/pp_out<2> [0])
   );
   MULT_AND   \BU2/U0/gLUT.iLUT/NxM_mult.ppgen[2].carrychain[1].ppadd.b_is_even.stageN.ma0  (
     .I0(b_3[5]),
@@ -1598,7 +2234,7 @@ module mult8x8 (
   XORCY   \BU2/U0/gLUT.iLUT/NxM_mult.ppgen[2].carrychain[1].ppadd.b_is_even.stageN.xorcy0  (
     .CI(\BU2/U0/gLUT.iLUT/pp_cout<2> [0]),
     .LI(\BU2/U0/gLUT.iLUT/lut_sig20 ),
-    .O(\BU2/U0/gLUT.iLUT/s1_add_out<1> [1])
+    .O(\BU2/U0/gLUT.iLUT/pp_out<2> [1])
   );
   MULT_AND   \BU2/U0/gLUT.iLUT/NxM_mult.ppgen[2].carrychain[2].ppadd.b_is_even.stageN.ma0  (
     .I0(b_3[5]),

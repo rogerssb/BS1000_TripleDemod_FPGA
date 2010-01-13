@@ -1,7 +1,7 @@
 ##############################################################
 #
 # Xilinx Core Generator version K.39
-# Date: Thu Jan 07 15:55:37 2010
+# Date: Tue Jan 12 23:14:55 2010
 #
 ##############################################################
 #
@@ -45,7 +45,7 @@ CSET multtype=Parallel_Multiplier
 CSET optgoal=Speed
 CSET outputwidthhigh=15
 CSET outputwidthlow=6
-CSET pipestages=1
+CSET pipestages=3
 CSET portatype=Signed
 CSET portawidth=8
 CSET portbtype=Signed
@@ -60,5 +60,5 @@ CSET userounding=false
 CSET zerodetect=false
 # END Parameters
 GENERATE
-# CRC: e9a6bf6b
+# CRC: 20391fe3
 
