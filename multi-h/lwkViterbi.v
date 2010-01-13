@@ -258,7 +258,7 @@ module viterbiMultiH
          symEnEvenSr <= {symEnEvenSr[4:0], symEnEven};
       end
    end
-   wire symEnEvenAcsMux = symEnEvenSr[3];    // there is a total of 3+1 clock delay through the acs module
+   wire symEnEvenAcsMux = symEnEvenSr[5];    // there is a total of 3+1 clock delay through the acs module
 
 
    acsMux #(ACS_BITS) acsMux0    (.clk(clk), .symEnEven(symEnEvenAcsMux), .accMet_45_0(accMetOut0 ), .accMet_45_1(accMetOut45), .accMet_45_2(accMetOut26), .accMet_45_3(accMetOut7 ), .accMet_54_0(accMetOut0 ), .accMet_54_1(accMetOut49), .accMet_54_2(accMetOut34), .accMet_54_3(accMetOut19), .accMuxOut0(accMuxOut0_0 ), .accMuxOut1(accMuxOut0_1 ), .accMuxOut2(accMuxOut0_2 ), .accMuxOut3(accMuxOut0_3 ));

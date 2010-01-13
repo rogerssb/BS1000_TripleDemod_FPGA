@@ -56,8 +56,8 @@ module rot8x8
       end
    end
 
-   assign symEnOut = symEnSr[2];
-   assign sym2xEnOut = sym2xEnSr[2];
+   assign symEnOut = symEnSr[4];
+   assign sym2xEnOut = sym2xEnSr[4];
    
    reg [7:0]     cReal,
                  cImag;
