@@ -259,8 +259,8 @@ trellisMultiH multih
     .dac1Data(multih1Out),
     .dac2Sync(multih2Sync),
     .dac2Data(multih2Out),
-    .quadrarySymEnOut(multihSymEn),
-    .quadrarySym2xEnOut(multihSym2xEn),
+    .quadrarySymEnOut(multihSymEnOut),
+    .quadrarySym2xEnOut(multihSym2xEnOut),
     .decision(multihBit)
    );
    
@@ -395,7 +395,7 @@ reg dout_i;
 reg cout_q;
 reg dout_q;
 always @(posedge ck933) begin
-    cout_i <= multihSymEn;
+    cout_i <= multihSymEnOut;
     dout_i <= multihBit;
     cout_q <= iSymEn;
     dout_q <= iBit;
@@ -427,8 +427,8 @@ wire cout_inv;
 wire trellisEn = (demodMode == `MODE_MULTIH);
 wire [2:0]decoder_iIn = trellisEn ? {multihBit,2'b0} : {iData,2'b0}; 
 wire [2:0]decoder_qIn = trellisEn ? {multihBit,2'b0} : {qData,2'b0};
-wire decoderSymEn = trellisEn ? multihSymEn : dataSymEn;
-wire decoderSym2xEn = trellisEn ? multihSym2xEn : dataSym2xEn;
+wire decoderSymEn = trellisEn ? multihSymEnOut : dataSymEn;
+wire decoderSym2xEn = trellisEn ? multihSym2xEnOut : dataSym2xEn;
 
 decoder decoder
   (
@@ -506,10 +506,10 @@ symb_pll symb_pll
 wire cout = symb_pll_out ^ !cout_inv;
 assign cout_i = cout;
 reg cout_q;
-always @(demodMode or auSymClk or cout or multihSymEn) begin
+always @(demodMode or auSymClk or cout or multihSymEnOut) begin
     case (demodMode)
         `MODE_AUQPSK:   cout_q = auSymClk;
-        `MODE_SOQPSK:   cout_q = multihSymEn;
+        `MODE_SOQPSK:   cout_q = multihSymEnOut;
         default:        cout_q = cout;
         endcase
     end
@@ -570,3 +570,4 @@ always @(
 assign data = (!nCs & !nRd) ? rd_mux : 16'hzzzz;
 
 endmodule
+                                                
