@@ -37,7 +37,7 @@ DSP48A #(
 .B0REG      (0), // Enable=1/disable=0 first stage B input pipeline register
 .B1REG      (1), // Enable=1/disable=0 second stage B input pipeline register
 .CARRYINREG (1), // Enable=1/disable=0 CARRYIN input pipeline register
-.CARRYINSEL ("CARRYIN"), // Specify carry-in source, "CARRYIN" or "OPMODE5"
+.CARRYINSEL ("OPMODE5"), // Specify carry-in source, "CARRYIN" or "OPMODE5"
 .CREG       (1), // Enable=1/disable=0 C input pipeline register
 .DREG       (1), // Enable=1/disable=0 D pre-adder input pipeline register
 .MREG       (1), // Enable=1/disable=0 M pipeline register

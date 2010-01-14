@@ -12,7 +12,7 @@
 `include "addressMap.v"
 `include "defines.v"
 
-module multihTop (
+module multihPassThru (
     ck933,
     nWe,nRd,nCs,
     addr12,
@@ -25,8 +25,6 @@ module multihTop (
     demodMode,
     dac0Select,dac1Select,dac2Select,
     dac0Data,dac1Data,dac2Data,
-    multiHSymEn,multiHSym2xEn,
-    iMultiH,qMultiH,
     dataSymEn,dataSym2xEn,
     iData,qData,
     auSymClk,
@@ -56,8 +54,6 @@ inout           dac_sdio;
 input   [3:0]   demodMode;
 input   [3:0]   dac0Select,dac1Select,dac2Select;
 input   [13:0]  dac0Data,dac1Data,dac2Data;
-input           multiHSymEn,multiHSym2xEn;
-input   [17:0]  iMultiH,qMultiH;
 input           dataSymEn,dataSym2xEn;
 input           iData,qData;
 input           auSymClk;
@@ -78,7 +74,7 @@ input           symb_pll_vco;
 
 output          sdiOut;
 
-parameter VER_NUMBER = 16'h0079;
+parameter VER_NUMBER = 16'h00aa;
 
 wire    [11:0]  addr = {addr11,addr10,addr9,addr8,addr7,addr6,addr5,addr4,addr3,addr2,addr1,1'b0};
 
@@ -103,7 +99,6 @@ wire misc_en = !nCs && misc_space;
 
 // MISCSPACE Reads
 reg     [31:0]  misc_dout;
-reg     [31:0]  clockCounterHold;
 reg rs;
 always @(addr or misc_en) begin
   if(misc_en) begin
@@ -227,190 +222,70 @@ wire            wr3 = !nCs & !nWr & addr1;
 wire    [31:0]  dataIn = {data,data};
 
 //******************************************************************************
-//                                 Trellis Decoder
-//******************************************************************************
-reg     symEn,sym2xEn;
-reg     [17:0]iIn,qIn;
-always @(posedge ck933) begin
-    symEn <= multiHSymEn;
-    sym2xEn <= multiHSym2xEn;
-    iIn <= iMultiH;
-    qIn <= qMultiH;
-    end
-
-
-wire    [17:0]  multih0Out,multih1Out,multih2Out;
-wire    [31:0]  multih_dout;
-trellisMultiH multih
-    (
-    .clk(ck933),
-    .reset(reset),
-    .symEn(symEn),
-    .sym2xEn(sym2xEn),
-    .iIn(iIn),
-    .qIn(qIn),
-    .wr0(wr0),
-    .wr1(wr1),
-    .wr2(wr2),
-    .wr3(wr3),
-    .addr(addr),
-    .din(dataIn),
-    .dout(multih_dout),
-    .dac0Select(dac0Select),
-    .dac1Select(dac1Select),
-    .dac2Select(dac2Select),
-    .dac0Sync(multih0Sync),
-    .dac0Data(multih0Out),
-    .dac1Sync(multih1Sync),
-    .dac1Data(multih1Out),
-    .dac2Sync(multih2Sync),
-    .dac2Data(multih2Out),
-    .quadrarySymEnOut(multihSymEnOut),
-    .quadrarySym2xEnOut(multihSym2xEnOut),
-    .decision(multihBit)
-   );
-   
-//******************************************************************************
 //                              DAC Outputs
 //******************************************************************************
 
-reg dac0CS,dac1CS,dac2CS;
-always @(addr) begin
-    casex (addr)
-        `INTERP0SPACE: begin
-            dac0CS <= 1;
-            dac1CS <= 0;
-            dac2CS <= 0;
-            end
-        `INTERP1SPACE: begin
-            dac0CS <= 0;
-            dac1CS <= 1;
-            dac2CS <= 0;
-            end
-        `INTERP2SPACE: begin
-            dac0CS <= 0;
-            dac1CS <= 0;
-            dac2CS <= 1;
-            end
-        default: begin
-            dac0CS <= 0;
-            dac1CS <= 0;
-            dac2CS <= 0;
-            end
-        endcase
-    end
-
-reg     [17:0]  dac0Out,dac1Out,dac2Out;
+reg     [13:0]  dac0Out,dac1Out,dac2Out;
 reg             dac0Sync,dac1Sync,dac2Sync;
 always @(posedge ck933) begin
-    case (dac0Select) 
-        `DAC_TRELLIS_I,
-        `DAC_TRELLIS_Q,
-        `DAC_TRELLIS_PHERR,
-        `DAC_TRELLIS_INDEX: begin
-            dac0Out <= multih0Out;
-            dac0Sync <= multih0Sync;
-            end
-        default: begin
-            dac0Out <= dac0Data;
-            dac0Sync <= 1;
-            end
-        endcase
-    case (dac1Select) 
-        `DAC_TRELLIS_I,
-        `DAC_TRELLIS_Q,
-        `DAC_TRELLIS_PHERR,
-        `DAC_TRELLIS_INDEX: begin
-            dac1Out <= multih1Out;
-            dac1Sync <= multih1Sync;
-            end
-        default: begin
-            dac1Out <= dac1Data;
-            dac1Sync <= 1;
-            end
-        endcase
-    case (dac2Select)
-        `DAC_TRELLIS_I,
-        `DAC_TRELLIS_Q,
-        `DAC_TRELLIS_PHERR,
-        `DAC_TRELLIS_INDEX: begin
-            dac2Out <= multih2Out;
-            dac2Sync <= multih2Sync;
-            end
-        default: begin
-            dac2Out <= dac2Data;
-            dac2Sync <= 1;
-            end
-        endcase
+    dac0Out <= dac0Data;
+    dac0Sync <= 1;
+    dac1Out <= dac1Data;
+    dac1Sync <= 1;
+    dac2Out <= dac2Data;
+    dac2Sync <= 1;
     end
 
 
-FDCE dac0_d_0  (.Q(dac0_d[0]),   .C(ck933),  .CE(dac0Sync),  .CLR(1'b0), .D(dac0Out[4]));
-FDCE dac0_d_1  (.Q(dac0_d[1]),   .C(ck933),  .CE(dac0Sync),  .CLR(1'b0), .D(dac0Out[5]));
-FDCE dac0_d_2  (.Q(dac0_d[2]),   .C(ck933),  .CE(dac0Sync),  .CLR(1'b0), .D(dac0Out[6]));
-FDCE dac0_d_3  (.Q(dac0_d[3]),   .C(ck933),  .CE(dac0Sync),  .CLR(1'b0), .D(dac0Out[7]));
-FDCE dac0_d_4  (.Q(dac0_d[4]),   .C(ck933),  .CE(dac0Sync),  .CLR(1'b0), .D(dac0Out[8]));
-FDCE dac0_d_5  (.Q(dac0_d[5]),   .C(ck933),  .CE(dac0Sync),  .CLR(1'b0), .D(dac0Out[9]));
-FDCE dac0_d_6  (.Q(dac0_d[6]),   .C(ck933),  .CE(dac0Sync),  .CLR(1'b0), .D(dac0Out[10]));
-FDCE dac0_d_7  (.Q(dac0_d[7]),   .C(ck933),  .CE(dac0Sync),  .CLR(1'b0), .D(dac0Out[11]));
-FDCE dac0_d_8  (.Q(dac0_d[8]),   .C(ck933),  .CE(dac0Sync),  .CLR(1'b0), .D(dac0Out[12]));
-FDCE dac0_d_9  (.Q(dac0_d[9]),   .C(ck933),  .CE(dac0Sync),  .CLR(1'b0), .D(dac0Out[13]));
-FDCE dac0_d_10 (.Q(dac0_d[10]),  .C(ck933),  .CE(dac0Sync),  .CLR(1'b0), .D(dac0Out[14]));
-FDCE dac0_d_11 (.Q(dac0_d[11]),  .C(ck933),  .CE(dac0Sync),  .CLR(1'b0), .D(dac0Out[15]));
-FDCE dac0_d_12 (.Q(dac0_d[12]),  .C(ck933),  .CE(dac0Sync),  .CLR(1'b0), .D(dac0Out[16]));
-FDCE dac0_d_13 (.Q(dac0_d[13]),  .C(ck933),  .CE(dac0Sync),  .CLR(1'b0), .D(~dac0Out[17]));
+FDCE dac0_d_0  (.Q(dac0_d[0]),   .C(ck933),  .CE(dac0Sync),  .CLR(1'b0), .D(dac0Out[0]));
+FDCE dac0_d_1  (.Q(dac0_d[1]),   .C(ck933),  .CE(dac0Sync),  .CLR(1'b0), .D(dac0Out[1]));
+FDCE dac0_d_2  (.Q(dac0_d[2]),   .C(ck933),  .CE(dac0Sync),  .CLR(1'b0), .D(dac0Out[2]));
+FDCE dac0_d_3  (.Q(dac0_d[3]),   .C(ck933),  .CE(dac0Sync),  .CLR(1'b0), .D(dac0Out[3]));
+FDCE dac0_d_4  (.Q(dac0_d[4]),   .C(ck933),  .CE(dac0Sync),  .CLR(1'b0), .D(dac0Out[4]));
+FDCE dac0_d_5  (.Q(dac0_d[5]),   .C(ck933),  .CE(dac0Sync),  .CLR(1'b0), .D(dac0Out[5]));
+FDCE dac0_d_6  (.Q(dac0_d[6]),   .C(ck933),  .CE(dac0Sync),  .CLR(1'b0), .D(dac0Out[6]));
+FDCE dac0_d_7  (.Q(dac0_d[7]),   .C(ck933),  .CE(dac0Sync),  .CLR(1'b0), .D(dac0Out[7]));
+FDCE dac0_d_8  (.Q(dac0_d[8]),   .C(ck933),  .CE(dac0Sync),  .CLR(1'b0), .D(dac0Out[8]));
+FDCE dac0_d_9  (.Q(dac0_d[9]),   .C(ck933),  .CE(dac0Sync),  .CLR(1'b0), .D(dac0Out[9]));
+FDCE dac0_d_10 (.Q(dac0_d[10]),  .C(ck933),  .CE(dac0Sync),  .CLR(1'b0), .D(dac0Out[10]));
+FDCE dac0_d_11 (.Q(dac0_d[11]),  .C(ck933),  .CE(dac0Sync),  .CLR(1'b0), .D(dac0Out[11]));
+FDCE dac0_d_12 (.Q(dac0_d[12]),  .C(ck933),  .CE(dac0Sync),  .CLR(1'b0), .D(dac0Out[12]));
+FDCE dac0_d_13 (.Q(dac0_d[13]),  .C(ck933),  .CE(dac0Sync),  .CLR(1'b0), .D(~dac0Out[13]));
 assign dac0_clk = ck933;
 
-FDCE dac1_d_0  (.Q(dac1_d[0]),   .C(ck933),  .CE(dac1Sync),  .CLR(1'b0), .D(dac1Out[4]));
-FDCE dac1_d_1  (.Q(dac1_d[1]),   .C(ck933),  .CE(dac1Sync),  .CLR(1'b0), .D(dac1Out[5]));
-FDCE dac1_d_2  (.Q(dac1_d[2]),   .C(ck933),  .CE(dac1Sync),  .CLR(1'b0), .D(dac1Out[6]));
-FDCE dac1_d_3  (.Q(dac1_d[3]),   .C(ck933),  .CE(dac1Sync),  .CLR(1'b0), .D(dac1Out[7]));
-FDCE dac1_d_4  (.Q(dac1_d[4]),   .C(ck933),  .CE(dac1Sync),  .CLR(1'b0), .D(dac1Out[8]));
-FDCE dac1_d_5  (.Q(dac1_d[5]),   .C(ck933),  .CE(dac1Sync),  .CLR(1'b0), .D(dac1Out[9]));
-FDCE dac1_d_6  (.Q(dac1_d[6]),   .C(ck933),  .CE(dac1Sync),  .CLR(1'b0), .D(dac1Out[10]));
-FDCE dac1_d_7  (.Q(dac1_d[7]),   .C(ck933),  .CE(dac1Sync),  .CLR(1'b0), .D(dac1Out[11]));
-FDCE dac1_d_8  (.Q(dac1_d[8]),   .C(ck933),  .CE(dac1Sync),  .CLR(1'b0), .D(dac1Out[12]));
-FDCE dac1_d_9  (.Q(dac1_d[9]),   .C(ck933),  .CE(dac1Sync),  .CLR(1'b0), .D(dac1Out[13]));
-FDCE dac1_d_10 (.Q(dac1_d[10]),  .C(ck933),  .CE(dac1Sync),  .CLR(1'b0), .D(dac1Out[14]));
-FDCE dac1_d_11 (.Q(dac1_d[11]),  .C(ck933),  .CE(dac1Sync),  .CLR(1'b0), .D(dac1Out[15]));
-FDCE dac1_d_12 (.Q(dac1_d[12]),  .C(ck933),  .CE(dac1Sync),  .CLR(1'b0), .D(dac1Out[16]));
-FDCE dac1_d_13 (.Q(dac1_d[13]),  .C(ck933),  .CE(dac1Sync),  .CLR(1'b0), .D(~dac1Out[17]));
+FDCE dac1_d_0  (.Q(dac1_d[0]),   .C(ck933),  .CE(dac1Sync),  .CLR(1'b0), .D(dac1Out[0]));
+FDCE dac1_d_1  (.Q(dac1_d[1]),   .C(ck933),  .CE(dac1Sync),  .CLR(1'b0), .D(dac1Out[1]));
+FDCE dac1_d_2  (.Q(dac1_d[2]),   .C(ck933),  .CE(dac1Sync),  .CLR(1'b0), .D(dac1Out[2]));
+FDCE dac1_d_3  (.Q(dac1_d[3]),   .C(ck933),  .CE(dac1Sync),  .CLR(1'b0), .D(dac1Out[3]));
+FDCE dac1_d_4  (.Q(dac1_d[4]),   .C(ck933),  .CE(dac1Sync),  .CLR(1'b0), .D(dac1Out[4]));
+FDCE dac1_d_5  (.Q(dac1_d[5]),   .C(ck933),  .CE(dac1Sync),  .CLR(1'b0), .D(dac1Out[5]));
+FDCE dac1_d_6  (.Q(dac1_d[6]),   .C(ck933),  .CE(dac1Sync),  .CLR(1'b0), .D(dac1Out[6]));
+FDCE dac1_d_7  (.Q(dac1_d[7]),   .C(ck933),  .CE(dac1Sync),  .CLR(1'b0), .D(dac1Out[7]));
+FDCE dac1_d_8  (.Q(dac1_d[8]),   .C(ck933),  .CE(dac1Sync),  .CLR(1'b0), .D(dac1Out[8]));
+FDCE dac1_d_9  (.Q(dac1_d[9]),   .C(ck933),  .CE(dac1Sync),  .CLR(1'b0), .D(dac1Out[9]));
+FDCE dac1_d_10 (.Q(dac1_d[10]),  .C(ck933),  .CE(dac1Sync),  .CLR(1'b0), .D(dac1Out[10]));
+FDCE dac1_d_11 (.Q(dac1_d[11]),  .C(ck933),  .CE(dac1Sync),  .CLR(1'b0), .D(dac1Out[11]));
+FDCE dac1_d_12 (.Q(dac1_d[12]),  .C(ck933),  .CE(dac1Sync),  .CLR(1'b0), .D(dac1Out[12]));
+FDCE dac1_d_13 (.Q(dac1_d[13]),  .C(ck933),  .CE(dac1Sync),  .CLR(1'b0), .D(~dac1Out[13]));
 assign dac1_clk = ck933;
 
-FDCE dac2_d_0  (.Q(dac2_d[0]),   .C(ck933),  .CE(dac2Sync),  .CLR(1'b0), .D(dac2Out[4]));
-FDCE dac2_d_1  (.Q(dac2_d[1]),   .C(ck933),  .CE(dac2Sync),  .CLR(1'b0), .D(dac2Out[5]));
-FDCE dac2_d_2  (.Q(dac2_d[2]),   .C(ck933),  .CE(dac2Sync),  .CLR(1'b0), .D(dac2Out[6]));
-FDCE dac2_d_3  (.Q(dac2_d[3]),   .C(ck933),  .CE(dac2Sync),  .CLR(1'b0), .D(dac2Out[7]));
-FDCE dac2_d_4  (.Q(dac2_d[4]),   .C(ck933),  .CE(dac2Sync),  .CLR(1'b0), .D(dac2Out[8]));
-FDCE dac2_d_5  (.Q(dac2_d[5]),   .C(ck933),  .CE(dac2Sync),  .CLR(1'b0), .D(dac2Out[9]));
-FDCE dac2_d_6  (.Q(dac2_d[6]),   .C(ck933),  .CE(dac2Sync),  .CLR(1'b0), .D(dac2Out[10]));
-FDCE dac2_d_7  (.Q(dac2_d[7]),   .C(ck933),  .CE(dac2Sync),  .CLR(1'b0), .D(dac2Out[11]));
-FDCE dac2_d_8  (.Q(dac2_d[8]),   .C(ck933),  .CE(dac2Sync),  .CLR(1'b0), .D(dac2Out[12]));
-FDCE dac2_d_9  (.Q(dac2_d[9]),   .C(ck933),  .CE(dac2Sync),  .CLR(1'b0), .D(dac2Out[13]));
-FDCE dac2_d_10 (.Q(dac2_d[10]),  .C(ck933),  .CE(dac2Sync),  .CLR(1'b0), .D(dac2Out[14]));
-FDCE dac2_d_11 (.Q(dac2_d[11]),  .C(ck933),  .CE(dac2Sync),  .CLR(1'b0), .D(dac2Out[15]));
-FDCE dac2_d_12 (.Q(dac2_d[12]),  .C(ck933),  .CE(dac2Sync),  .CLR(1'b0), .D(dac2Out[16]));
-FDCE dac2_d_13 (.Q(dac2_d[13]),  .C(ck933),  .CE(dac2Sync),  .CLR(1'b0), .D(~dac2Out[17]));
+FDCE dac2_d_0  (.Q(dac2_d[0]),   .C(ck933),  .CE(dac2Sync),  .CLR(1'b0), .D(dac2Out[0]));
+FDCE dac2_d_1  (.Q(dac2_d[1]),   .C(ck933),  .CE(dac2Sync),  .CLR(1'b0), .D(dac2Out[1]));
+FDCE dac2_d_2  (.Q(dac2_d[2]),   .C(ck933),  .CE(dac2Sync),  .CLR(1'b0), .D(dac2Out[2]));
+FDCE dac2_d_3  (.Q(dac2_d[3]),   .C(ck933),  .CE(dac2Sync),  .CLR(1'b0), .D(dac2Out[3]));
+FDCE dac2_d_4  (.Q(dac2_d[4]),   .C(ck933),  .CE(dac2Sync),  .CLR(1'b0), .D(dac2Out[4]));
+FDCE dac2_d_5  (.Q(dac2_d[5]),   .C(ck933),  .CE(dac2Sync),  .CLR(1'b0), .D(dac2Out[5]));
+FDCE dac2_d_6  (.Q(dac2_d[6]),   .C(ck933),  .CE(dac2Sync),  .CLR(1'b0), .D(dac2Out[6]));
+FDCE dac2_d_7  (.Q(dac2_d[7]),   .C(ck933),  .CE(dac2Sync),  .CLR(1'b0), .D(dac2Out[7]));
+FDCE dac2_d_8  (.Q(dac2_d[8]),   .C(ck933),  .CE(dac2Sync),  .CLR(1'b0), .D(dac2Out[8]));
+FDCE dac2_d_9  (.Q(dac2_d[9]),   .C(ck933),  .CE(dac2Sync),  .CLR(1'b0), .D(dac2Out[9]));
+FDCE dac2_d_10 (.Q(dac2_d[10]),  .C(ck933),  .CE(dac2Sync),  .CLR(1'b0), .D(dac2Out[10]));
+FDCE dac2_d_11 (.Q(dac2_d[11]),  .C(ck933),  .CE(dac2Sync),  .CLR(1'b0), .D(dac2Out[11]));
+FDCE dac2_d_12 (.Q(dac2_d[12]),  .C(ck933),  .CE(dac2Sync),  .CLR(1'b0), .D(dac2Out[12]));
+FDCE dac2_d_13 (.Q(dac2_d[13]),  .C(ck933),  .CE(dac2Sync),  .CLR(1'b0), .D(~dac2Out[13]));
 assign dac2_clk = ck933;
 
 
-//`define DIRECT_OUTPUTS
-`ifdef DIRECT_OUTPUTS
-reg cout_i;
-reg dout_i;
-reg cout_q;
-reg dout_q;
-always @(posedge ck933) begin
-    cout_i <= multihSymEnOut;
-    dout_i <= multihBit;
-    cout_q <= iSymEn;
-    dout_q <= iBit;
-    end
-
-wire [15:0]decoder_dout = 16'b0;
-wire [15:0]symb_pll_dout = 16'b0;
-
-`else
 //******************************************************************************
 //                                 Decoder
 //******************************************************************************
@@ -431,10 +306,10 @@ wire decoder_fifo_rs;
 wire cout_inv;
 
 wire trellisEn = (demodMode == `MODE_MULTIH);
-wire [2:0]decoder_iIn = trellisEn ? {multihBit,2'b0} : {iData,2'b0}; 
-wire [2:0]decoder_qIn = trellisEn ? {multihBit,2'b0} : {qData,2'b0};
-wire decoderSymEn = trellisEn ? multihSymEnOut : dataSymEn;
-wire decoderSym2xEn = trellisEn ? multihSym2xEnOut : dataSym2xEn;
+wire [2:0]decoder_iIn = {iData,2'b0}; 
+wire [2:0]decoder_qIn = {qData,2'b0};
+wire decoderSymEn = dataSymEn;
+wire decoderSym2xEn = dataSym2xEn;
 
 decoder decoder
   (
@@ -501,40 +376,49 @@ symb_pll symb_pll
   .a(addr),
   .di(dataIn),
   .do(symb_pll_dout),
-  .clk(decoder_cout),
-  .clk_en(1'b1),
-  .clk_ref(symb_pll_ref),     // output pad, comparator reference clock
+  .clk(ck933),
+  .clk_en(decoder_cout),
+  .clk_ref(pllRef),           // output pad, comparator reference clock
   .clk_vco(symb_pll_vco),     // input pad, vco output
   .clk_fbk(symb_pll_fbk),     // output pad, comparator feedback clock
   .clk_out(symb_pll_out)      // output, symbol clock
   );
 
+reg symb_pll_ref;
+always @(posedge ck933) begin
+    symb_pll_ref <= pllRef;
+    end
+
+//`define DIRECT_DATA
+`ifdef DIRECT_DATA
+assign cout_i = decoder_cout;
+assign dout_i = decoder_dout_i;
+assign cout_q = symb_pll_out;
+assign dout_q = decoder_dout_q;
+`else
 wire cout = symb_pll_out ^ !cout_inv;
 assign cout_i = cout;
 reg cout_q;
-always @(demodMode or auSymClk or cout or multihSymEnOut) begin
+always @(demodMode or auSymClk or cout) begin
     case (demodMode)
         `MODE_AUQPSK:   cout_q = auSymClk;
-        `MODE_SOQPSK:   cout_q = multihSymEnOut;
         default:        cout_q = cout;
         endcase
     end
 
 reg dout_i,decQ;
-always @(negedge cout)begin
+always @(posedge symb_pll_out)begin
   dout_i <= decoder_fifo_dout_i;
   decQ <= decoder_fifo_dout_q;
   end
 reg dout_q;
-always @(demodMode or qData or decQ or multihBit) begin
+always @(demodMode or qData or decQ) begin
     case (demodMode)
         `MODE_AUQPSK:   dout_q = qData;
-        `MODE_SOQPSK:   dout_q = multihBit;
         default:        dout_q = decQ;
         endcase
     end
 `endif
-
 //******************************************************************************
 //                           Processor Read Data Mux
 //******************************************************************************
@@ -545,19 +429,9 @@ always @(
   dac_dout or
   misc_dout or
   decoder_dout or
-  symb_pll_dout or
-  multih_dout
+  symb_pll_dout
   )begin
   casex(addr)
-    `TRELLISLFSPACE,
-    `TRELLIS_SPACE: begin
-      if (addr[1]) begin
-        rd_mux <= multih_dout[31:16];
-        end
-      else begin
-        rd_mux <= multih_dout[15:0];
-        end
-      end
     `DAC_SPACE : rd_mux <= dac_dout;
     `MISC_SPACE : begin
         if (addr[1]) begin
