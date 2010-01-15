@@ -501,35 +501,40 @@ symb_pll symb_pll
   .a(addr),
   .di(dataIn),
   .do(symb_pll_dout),
-  .clk(decoder_cout),
-  .clk_en(1'b1),
-  .clk_ref(symb_pll_ref),     // output pad, comparator reference clock
+  //.clk(decoder_cout),
+  //.clk_en(1'b1),
+  .clk(ck933),
+  .clk_en(decoder_cout),
+  .clk_ref(pllRef),           // output pad, comparator reference clock
   .clk_vco(symb_pll_vco),     // input pad, vco output
   .clk_fbk(symb_pll_fbk),     // output pad, comparator feedback clock
   .clk_out(symb_pll_out)      // output, symbol clock
   );
 
+reg symb_pll_ref;
+always @(posedge ck933) begin
+    symb_pll_ref <= pllRef;
+    end
+
 wire cout = symb_pll_out ^ !cout_inv;
 assign cout_i = cout;
 reg cout_q;
-always @(demodMode or auSymClk or cout or multihSymEnOut) begin
+always @(demodMode or auSymClk or cout) begin
     case (demodMode)
         `MODE_AUQPSK:   cout_q = auSymClk;
-        `MODE_SOQPSK:   cout_q = multihSymEnOut;
         default:        cout_q = cout;
         endcase
     end
 
 reg dout_i,decQ;
-always @(negedge cout)begin
+always @(posedge symb_pll_out)begin
   dout_i <= decoder_fifo_dout_i;
   decQ <= decoder_fifo_dout_q;
   end
 reg dout_q;
-always @(demodMode or qData or decQ or multihBit) begin
+always @(demodMode or qData or decQ) begin
     case (demodMode)
         `MODE_AUQPSK:   dout_q = qData;
-        `MODE_SOQPSK:   dout_q = multihBit;
         default:        dout_q = decQ;
         endcase
     end
