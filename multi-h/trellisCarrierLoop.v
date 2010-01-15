@@ -131,39 +131,6 @@ always @(posedge clk) begin
         end
     end
 
-/******************************* Lock Detector ********************************/
-wire    [7:0]   absPhaseError = phaseError[7] ? negPhaseError : phaseError;
-reg     [15:0]  lockCounter;
-wire    [16:0]  lockPlus = {1'b0,lockCounter} + 17'h00001;
-wire    [16:0]  lockMinus = {1'b0,lockCounter} + 17'h1ffff;
-always @(posedge clk) begin
-    if (reset) begin
-        lockCounter <= 0;
-        carrierLock <= 0;
-        end
-    else if (loopFilterEn) begin
-        if (absPhaseError > syncThreshold[7:0]) begin
-            if (lockMinus[16]) begin
-                carrierLock <= 0;
-                lockCounter <= lockCount;
-                end
-            else begin
-                lockCounter <= lockMinus[15:0];
-                end
-            end
-        else begin
-            if (lockPlus[16]) begin
-                carrierLock <= 1;
-                lockCounter <= lockCount;
-                end
-            else begin
-                lockCounter <= lockPlus[15:0];
-                end
-            end
-        end
-    end
-
-
 // Final Outputs
 assign carrierFreqOffset = filterSum[39:8];
 assign carrierFreqEn = loopFilterEn;

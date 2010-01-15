@@ -74,7 +74,7 @@ input           symb_pll_vco;
 
 output          sdiOut;
 
-parameter VER_NUMBER = 16'h00c1;
+parameter VER_NUMBER = 16'h00c4;
 
 wire    [11:0]  addr = {addr11,addr10,addr9,addr8,addr7,addr6,addr5,addr4,addr3,addr2,addr1,1'b0};
 
@@ -306,10 +306,16 @@ wire decoder_fifo_rs;
 wire cout_inv;
 
 wire trellisEn = (demodMode == `MODE_MULTIH);
-wire [2:0]decoder_iIn = {iData,2'b0}; 
-wire [2:0]decoder_qIn = {qData,2'b0};
-wire decoderSymEn = dataSymEn;
-wire decoderSym2xEn = dataSym2xEn;
+reg [2:0]decoder_iIn; 
+reg [2:0]decoder_qIn;
+reg decoderSymEn;
+reg decoderSym2xEn;
+always @(posedge ck933) begin
+    decoder_iIn <= {iData,2'b0};
+    decoder_qIn <= {qData,2'b0};
+    decoderSymEn   <= dataSymEn;  
+    decoderSym2xEn <= dataSym2xEn;
+    end
 
 decoder decoder
   (
@@ -396,13 +402,20 @@ assign dout_i = decoder_dout_i;
 assign cout_q = symb_pll_out;
 assign dout_q = decoder_dout_q;
 `else
+reg auClk,auData;
+always @(posedge ck933) begin
+    auClk <= auSymClk;
+    auData <= qData;
+    end
+
 wire cout = symb_pll_out ^ !cout_inv;
 assign cout_i = cout;
 reg cout_q;
-always @(demodMode or auSymClk or cout) begin
+always @(demodMode or auClk or cout) begin
     case (demodMode)
-        `MODE_AUQPSK:   cout_q = auSymClk;
+        `MODE_AUQPSK:   cout_q = auClk;
         default:        cout_q = cout;
+        //default:        cout_q = decoder_cout;
         endcase
     end
 
@@ -412,9 +425,9 @@ always @(posedge symb_pll_out)begin
   decQ <= decoder_fifo_dout_q;
   end
 reg dout_q;
-always @(demodMode or qData or decQ) begin
+always @(demodMode or auData or decQ) begin
     case (demodMode)
-        `MODE_AUQPSK:   dout_q = qData;
+        `MODE_AUQPSK:   dout_q = auData;
         default:        dout_q = decQ;
         endcase
     end
