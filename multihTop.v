@@ -239,6 +239,7 @@ always @(posedge ck933) begin
     end
 
 
+wire    [1:0]   multihBit;
 wire    [17:0]  multih0Out,multih1Out,multih2Out;
 wire    [31:0]  multih_dout;
 trellisMultiH multih
@@ -431,8 +432,8 @@ wire decoder_fifo_rs;
 wire cout_inv;
 
 wire trellisEn = (demodMode == `MODE_MULTIH);
-wire [2:0]decoder_iIn = trellisEn ? {multihBit,2'b0} : {iData,2'b0}; 
-wire [2:0]decoder_qIn = trellisEn ? {multihBit,2'b0} : {qData,2'b0};
+wire [2:0]decoder_iIn = trellisEn ? {multihBit[0],2'b0} : {iData,2'b0}; 
+wire [2:0]decoder_qIn = trellisEn ? {multihBit[1],2'b0} : {qData,2'b0};
 wire decoderSymEn = trellisEn ? multihSymEnOut : dataSymEn;
 wire decoderSym2xEn = trellisEn ? multihSym2xEnOut : dataSym2xEn;
 
@@ -501,8 +502,6 @@ symb_pll symb_pll
   .a(addr),
   .di(dataIn),
   .do(symb_pll_dout),
-  //.clk(decoder_cout),
-  //.clk_en(1'b1),
   .clk(ck933),
   .clk_en(decoder_cout),
   .clk_ref(pllRef),           // output pad, comparator reference clock
