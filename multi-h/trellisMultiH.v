@@ -33,28 +33,29 @@ module trellisMultiH
    parameter MF_BITS = 10;
    parameter ROT_BITS = 8;
 
-   input         clk,reset,symEn,sym2xEn;
-   input [17:0]  iIn,qIn;
-   input         wr0,wr1,wr2,wr3;
-   input [11:0]  addr;
-   input [31:0]  din;
-   output [31:0] dout;
-   input [3:0]   dac0Select,dac1Select,dac2Select;
-   output        dac0Sync;
-   output [17:0] dac0Data;
-   output        dac1Sync;
-   output [17:0] dac1Data;
-   output        dac2Sync;
-   output [17:0] dac2Data;
-   output [1:0]  decision;
-   output        quadrarySymEnOut;
-   output        quadrarySym2xEnOut;
+   input                    clk,reset,symEn,sym2xEn;
+   input [17:0]             iIn,qIn;
+   input                    wr0,wr1,wr2,wr3;
+   input [11:0]             addr;
+   input [31:0]             din;
+   output [31:0]            dout;
+   input [3:0]              dac0Select,dac1Select,dac2Select;
+   output                   dac0Sync;
+   output [17:0]            dac0Data;
+   output                   dac1Sync;
+   output [17:0]            dac1Data;
+   output                   dac2Sync;
+   output [17:0]            dac2Data;
+   output [1:0]             decision;
+   output [ROT_BITS-1:0]    phaseError;
+   output                   quadrarySymEnOut;
+   output                   quadrarySym2xEnOut;
    
    
-   wire [ROT_BITS-1:0] phaseError;
    wire [1:0]          decision;
 
-`define ALDEC_SIM
+//`define ALDEC_SIM
+`define BYPASS_LOOP
 
    // Latching the incomming I and Q samples 
    reg [17:0]  iInLatch,
@@ -73,6 +74,11 @@ module trellisMultiH
 
    
    //reg [7:0]           phErrShft;
+`ifdef BYPASS_LOOP
+   wire [17:0]         carrierLoopIOut,carrierLoopQOut;
+   assign carrierLoopIOut = iInLatch;
+   assign carrierLoopQOut = qInLatch;
+`else
    wire [17:0]         carrierLoopIOut,carrierLoopQOut;
    wire [31:0]         trellisLoopDout;
    trellisCarrierLoop trellisCarrierLoop
@@ -90,26 +96,18 @@ module trellisMultiH
       .wr3(wr3),
       .addr(addr),
       .din(din),
-      .dout(trellisLoopDout)
-      `ifndef ALDEC_SIM
-      , 
+      .dout(trellisLoopDout),
       .iOut(carrierLoopIOut),
       .qOut(carrierLoopQOut),
       .symEnDly(),
-      .sym2xEnDly(quadrarySymEnOut)
-      `endif
+      .sym2xEnDly(sym2xEnLoop)
        );
-  
-`ifdef ALDEC_SIM           
-   assign carrierLoopIOut = iInLatch;
-   assign carrierLoopQOut = qInLatch;
-   wire   quadrarySymEnOut = sym2xEn;
- `endif  
+`endif  
    
 
 `ifdef SIMULATE
    real                phErrReal;
-   always @(phaseError) phErrReal = $itor($signed(phaseError))/(2**7);
+   always @(phaseError) phErrReal = $itor($signed(phaseError))/(2**9);
 `endif
    
 
@@ -123,14 +121,6 @@ module trellisMultiH
    always @(qInLatch) qInReal = $itor($signed(qInLatch))/(2**17);
 `endif
 
-
-   // sync with sym2xEn
-   always @(posedge clk) begin
-      if (quadrarySymEnOut) begin
-
-
-      end
-   end
 
    wire [MF_BITS-1:0]  mf_p3p3_45Real, mf_p3p1_45Real, mf_p3m1_45Real, mf_p3m3_45Real,
      mf_m3p3_45Real, mf_m3p1_45Real, mf_m3m1_45Real, mf_m3m3_45Real,
@@ -431,6 +421,7 @@ always @(addr or
         endcase
     end
 
+ -----/\----- EXCLUDED -----/\----- */
 
 
 //******************************************************************************
@@ -447,14 +438,22 @@ always @(posedge clk) begin
     case (dac0Select) 
         `DAC_TRELLIS_I: begin
             dac0Data <= carrierLoopIOut;
-            dac0Sync <= quadrarySymEnOut;
+            `ifdef BYPASS_LOOP
+            dac0Sync <= sym2xEn;
+            `else
+            dac0Sync <= sym2xEnLoop;
+            `endif
             end
         `DAC_TRELLIS_Q: begin
             dac0Data <= carrierLoopQOut;
-            dac0Sync <= quadrarySymEnOut;
+            `ifdef BYPASS_LOOP
+            dac0Sync <= sym2xEn;
+            `else
+            dac0Sync <= sym2xEnLoop;
+            `endif
             end
         `DAC_TRELLIS_PHERR: begin
-            dac0Data <= {phaseError,8'b0};
+            dac0Data <= {phaseError,10'b0};
             dac0Sync <= quadrarySymEnOut;
             end
         `DAC_TRELLIS_INDEX: begin
@@ -462,7 +461,7 @@ always @(posedge clk) begin
             dac0Sync <= quadrarySymEnOut;
             end
         default: begin
-            dac0Data <= {phaseError,8'b0};
+            dac0Data <= {phaseError,10'b0};
             dac0Sync <= quadrarySymEnOut;
             end
         endcase
@@ -470,14 +469,22 @@ always @(posedge clk) begin
     case (dac1Select) 
         `DAC_TRELLIS_I: begin
             dac1Data <= carrierLoopIOut;
-            dac1Sync <= quadrarySymEnOut;
+            `ifdef BYPASS_LOOP
+            dac1Sync <= sym2xEn;
+            `else
+            dac1Sync <= sym2xEnLoop;
+            `endif
             end
         `DAC_TRELLIS_Q: begin
             dac1Data <= carrierLoopQOut;
-            dac1Sync <= quadrarySymEnOut;
+            `ifdef BYPASS_LOOP
+            dac0Sync <= sym2xEn;
+            `else
+            dac0Sync <= sym2xEnLoop;
+            `endif
             end
         `DAC_TRELLIS_PHERR: begin
-            dac1Data <= {phaseError,8'b0};
+            dac1Data <= {phaseError,10'b0};
             dac1Sync <= quadrarySymEnOut;
             end
         `DAC_TRELLIS_INDEX: begin
@@ -485,7 +492,7 @@ always @(posedge clk) begin
             dac1Sync <= quadrarySymEnOut;
             end
         default: begin
-            dac1Data <= {phaseError,8'b0};
+            dac1Data <= {phaseError,10'b0};
             dac1Sync <= quadrarySymEnOut;
             end
         endcase
@@ -493,14 +500,22 @@ always @(posedge clk) begin
     case (dac2Select) 
         `DAC_TRELLIS_I: begin
             dac2Data <= carrierLoopIOut;
-            dac2Sync <= quadrarySymEnOut;
+            `ifdef BYPASS_LOOP
+            dac2Sync <= sym2xEn;
+            `else
+            dac2Sync <= sym2xEnLoop;
+            `endif
             end
         `DAC_TRELLIS_Q: begin
             dac2Data <= carrierLoopQOut;
-            dac2Sync <= quadrarySymEnOut;
+            `ifdef BYPASS_LOOP
+            dac2Sync <= sym2xEn;
+            `else
+            dac2Sync <= sym2xEnLoop;
+            `endif
             end
         `DAC_TRELLIS_PHERR: begin
-            dac2Data <= {phaseError,8'b0};
+            dac2Data <= {phaseError,10'b0};
             dac2Sync <= quadrarySymEnOut;
             end
         `DAC_TRELLIS_INDEX: begin
@@ -508,13 +523,12 @@ always @(posedge clk) begin
             dac2Sync <= quadrarySymEnOut;
             end
         default: begin
-            dac2Data <= {phaseError,8'b0};
+            dac2Data <= {phaseError,10'b0};
             dac2Sync <= quadrarySymEnOut;
             end
         endcase
 
     end
- -----/\----- EXCLUDED -----/\----- */
 
 endmodule
 

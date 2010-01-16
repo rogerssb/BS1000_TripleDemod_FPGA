@@ -85,6 +85,25 @@ assign bsync_nLock = bsyncLockInput;
 assign demod_nLock = demodLockInput;
 
 //******************************************************************************
+//                               Reclock Inputs
+//******************************************************************************
+reg     [13:0]  dac0DataIn, dac1DataIn, dac2DataIn;
+reg             dataSymEnIn,dataSym2xEnIn;
+reg             iDataIn,qDataIn;
+reg             auSymClkIn;
+always @(posedge ck933) begin
+    dac0DataIn <= dac0Data;
+    dac1DataIn <= dac1Data;
+    dac2DataIn <= dac2Data;
+    dataSymEnIn <= dataSymEn;
+    dataSym2xEnIn <= dataSym2xEn;
+    iDataIn <= iData;
+    qDataIn <= qData;
+    auSymClkIn <= auSymClk;
+    end
+
+
+//******************************************************************************
 //                               Miscellaneous
 //******************************************************************************
 
@@ -228,11 +247,11 @@ wire    [31:0]  dataIn = {data,data};
 reg     [13:0]  dac0Out,dac1Out,dac2Out;
 reg             dac0Sync,dac1Sync,dac2Sync;
 always @(posedge ck933) begin
-    dac0Out <= dac0Data;
+    dac0Out <= dac0DataIn;
     dac0Sync <= 1;
-    dac1Out <= dac1Data;
+    dac1Out <= dac1DataIn;
     dac1Sync <= 1;
-    dac2Out <= dac2Data;
+    dac2Out <= dac2DataIn;
     dac2Sync <= 1;
     end
 
@@ -311,10 +330,10 @@ reg [2:0]decoder_qIn;
 reg decoderSymEn;
 reg decoderSym2xEn;
 always @(posedge ck933) begin
-    decoder_iIn <= {iData,2'b0};
-    decoder_qIn <= {qData,2'b0};
-    decoderSymEn   <= dataSymEn;  
-    decoderSym2xEn <= dataSym2xEn;
+    decoder_iIn <= {iDataIn,2'b0};
+    decoder_qIn <= {qDataIn,2'b0};
+    decoderSymEn   <= dataSymEnIn;  
+    decoderSym2xEn <= dataSym2xEnIn;
     end
 
 decoder decoder
@@ -395,25 +414,20 @@ always @(posedge ck933) begin
     symb_pll_ref <= pllRef;
     end
 
-//`define DIRECT_DATA
+`define DIRECT_DATA
 `ifdef DIRECT_DATA
 assign cout_i = decoder_cout;
 assign dout_i = decoder_dout_i;
 assign cout_q = symb_pll_out;
 assign dout_q = decoder_dout_q;
 `else
-reg auClk,auData;
-always @(posedge ck933) begin
-    auClk <= auSymClk;
-    auData <= qData;
-    end
 
 wire cout = symb_pll_out ^ !cout_inv;
 assign cout_i = cout;
 reg cout_q;
-always @(demodMode or auClk or cout) begin
+always @(demodMode or auSymClkIn or cout) begin
     case (demodMode)
-        `MODE_AUQPSK:   cout_q = auClk;
+        `MODE_AUQPSK:   cout_q = auSymClkIn;
         default:        cout_q = cout;
         //default:        cout_q = decoder_cout;
         endcase
@@ -425,9 +439,9 @@ always @(posedge symb_pll_out)begin
   decQ <= decoder_fifo_dout_q;
   end
 reg dout_q;
-always @(demodMode or auData or decQ) begin
+always @(demodMode or qDataIn or decQ) begin
     case (demodMode)
-        `MODE_AUQPSK:   dout_q = auData;
+        `MODE_AUQPSK:   dout_q = qDataIn;
         default:        dout_q = decQ;
         endcase
     end
