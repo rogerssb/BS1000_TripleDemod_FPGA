@@ -89,6 +89,31 @@ assign bsync_nLock = bsyncLockInput;
 assign demod_nLock = demodLockInput;
 
 //******************************************************************************
+//                               Reclock Inputs
+//******************************************************************************
+reg     [13:0]  dac0DataIn, dac1DataIn, dac2DataIn;
+reg             multiHSymEnIn,multiHSym2xEnIn;
+reg     [17:0]  iMultiHIn,qMultiHIn;
+reg             dataSymEnIn,dataSym2xEnIn;
+reg             iDataIn,qDataIn;
+reg             auSymClkIn;
+always @(posedge ck933) begin
+    dac0DataIn <= dac0Data;
+    dac1DataIn <= dac1Data;
+    dac2DataIn <= dac2Data;
+    multiHSymEnIn <= multiHSymEn;
+    multiHSym2xEnIn <= multiHSym2xEn;
+    iMultiHIn <= iMultiH;
+    qMultiHIn <= qMultiH;
+    dataSymEnIn <= dataSymEn;
+    dataSym2xEnIn <= dataSym2xEn;
+    iDataIn <= iData;
+    qDataIn <= qData;
+    auSymClkIn <= auSymClk;
+    end
+
+
+//******************************************************************************
 //                               Miscellaneous
 //******************************************************************************
 
@@ -103,7 +128,6 @@ wire misc_en = !nCs && misc_space;
 
 // MISCSPACE Reads
 reg     [31:0]  misc_dout;
-reg     [31:0]  clockCounterHold;
 reg rs;
 always @(addr or misc_en) begin
   if(misc_en) begin
@@ -229,16 +253,6 @@ wire    [31:0]  dataIn = {data,data};
 //******************************************************************************
 //                                 Trellis Decoder
 //******************************************************************************
-reg     symEn,sym2xEn;
-reg     [17:0]iIn,qIn;
-always @(posedge ck933) begin
-    symEn <= multiHSymEn;
-    sym2xEn <= multiHSym2xEn;
-    iIn <= iMultiH;
-    qIn <= qMultiH;
-    end
-
-
 wire    [1:0]   multihBit;
 wire    [17:0]  multih0Out,multih1Out,multih2Out;
 wire    [31:0]  multih_dout;
@@ -246,10 +260,10 @@ trellisMultiH multih
     (
     .clk(ck933),
     .reset(reset),
-    .symEn(symEn),
-    .sym2xEn(sym2xEn),
-    .iIn(iIn),
-    .qIn(qIn),
+    .symEn(multiHSymEnIn),
+    .sym2xEn(multiHSym2xEn),
+    .iIn(iMultiHIn),
+    .qIn(qMultiHIn),
     .wr0(wr0),
     .wr1(wr1),
     .wr2(wr2),
@@ -313,7 +327,7 @@ always @(posedge ck933) begin
             dac0Sync <= multih0Sync;
             end
         default: begin
-            dac0Out <= dac0Data;
+            dac0Out <= dac0DataIn;
             dac0Sync <= 1;
             end
         endcase
@@ -326,7 +340,7 @@ always @(posedge ck933) begin
             dac1Sync <= multih1Sync;
             end
         default: begin
-            dac1Out <= dac1Data;
+            dac1Out <= dac1DataIn;
             dac1Sync <= 1;
             end
         endcase
@@ -339,7 +353,7 @@ always @(posedge ck933) begin
             dac2Sync <= multih2Sync;
             end
         default: begin
-            dac2Out <= dac2Data;
+            dac2Out <= dac2DataIn;
             dac2Sync <= 1;
             end
         endcase
@@ -395,23 +409,6 @@ FDCE dac2_d_13 (.Q(dac2_d[13]),  .C(ck933),  .CE(dac2Sync),  .CLR(1'b0), .D(~dac
 assign dac2_clk = ck933;
 
 
-//`define DIRECT_OUTPUTS
-`ifdef DIRECT_OUTPUTS
-reg cout_i;
-reg dout_i;
-reg cout_q;
-reg dout_q;
-always @(posedge ck933) begin
-    cout_i <= multihSymEnOut;
-    dout_i <= multihBit;
-    cout_q <= iSymEn;
-    dout_q <= iBit;
-    end
-
-wire [15:0]decoder_dout = 16'b0;
-wire [15:0]symb_pll_dout = 16'b0;
-
-`else
 //******************************************************************************
 //                                 Decoder
 //******************************************************************************
@@ -432,11 +429,34 @@ wire decoder_fifo_rs;
 wire cout_inv;
 
 wire trellisEn = (demodMode == `MODE_MULTIH);
-wire [2:0]decoder_iIn = trellisEn ? {multihBit[0],2'b0} : {iData,2'b0}; 
-wire [2:0]decoder_qIn = trellisEn ? {multihBit[1],2'b0} : {qData,2'b0};
-wire decoderSymEn = trellisEn ? multihSymEnOut : dataSymEn;
-wire decoderSym2xEn = trellisEn ? multihSym2xEnOut : dataSym2xEn;
+reg iDec,qDec;
+reg decoderSymEn;
+reg decoderSym2xEn;
+reg iLegacy;
+reg qLegacy;
+reg legacySymEn;
+reg legacySym2xEn;
+always @(posedge ck933) begin
+    iLegacy <= iDataIn;
+    qLegacy <= qDataIn;
+    legacySymEn <= dataSymEnIn;
+    legacySym2xEn <= dataSym2xEnIn;
+    if (trellisEn) begin
+        iDec <= multihBit[0]; 
+        qDec <= multihBit[1];
+        decoderSymEn <= multihSymEnOut;
+        decoderSym2xEn <= multihSym2xEnOut;
+        end
+    else begin
+        iDec <= iLegacy; 
+        qDec <= qLegacy;
+        decoderSymEn <= legacySymEn;
+        decoderSym2xEn <= legacySym2xEn;
+        end
+    end
 
+wire [2:0]decoder_iIn = {iDec,2'b0}; 
+wire [2:0]decoder_qIn = {qDec,2'b0};
 decoder decoder
   (
   .rs(reset),
@@ -515,12 +535,19 @@ always @(posedge ck933) begin
     symb_pll_ref <= pllRef;
     end
 
+//`define DIRECT_DATA
+`ifdef DIRECT_DATA
+assign cout_i = decoder_cout;
+assign dout_i = decoder_dout_i;
+assign cout_q = symb_pll_out;
+assign dout_q = decoder_dout_q;
+`else
 wire cout = symb_pll_out ^ !cout_inv;
 assign cout_i = cout;
 reg cout_q;
-always @(demodMode or auSymClk or cout) begin
+always @(demodMode or auSymClkIn or cout) begin
     case (demodMode)
-        `MODE_AUQPSK:   cout_q = auSymClk;
+        `MODE_AUQPSK:   cout_q = auSymClkIn;
         default:        cout_q = cout;
         endcase
     end
@@ -531,9 +558,9 @@ always @(posedge symb_pll_out)begin
   decQ <= decoder_fifo_dout_q;
   end
 reg dout_q;
-always @(demodMode or qData or decQ) begin
+always @(demodMode or qDataIn or decQ) begin
     case (demodMode)
-        `MODE_AUQPSK:   dout_q = qData;
+        `MODE_AUQPSK:   dout_q = qDataIn;
         default:        dout_q = decQ;
         endcase
     end
