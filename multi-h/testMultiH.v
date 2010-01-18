@@ -199,8 +199,8 @@ module test;
       dac2Data,
       -----/\----- EXCLUDED -----/\----- */
       .decision            (),
-      .quadrarySymEnOut    (),
-      .quadrarySym2xEnOut  ()
+      .symEnOut    (),
+      .sym2xEnOut  ()
    );			   
 `endif
    
@@ -365,7 +365,9 @@ end
 //`define ALL_PLUS_3
 //`define MULTI_H_ROT_TEST  
 //`define MULTI_H_ROT_TEST_2  
-`define RANDOM
+//`define RANDOM
+//`define RANDOM_ATT
+`define RANDOM_LONG
 
 integer file1,file2;
 initial begin
@@ -397,7 +399,17 @@ initial begin
       $readmemh("P:/semco/matlab_sim_results/multi-h/mfinputsRandom.hex", readMem);
 `endif
 
-  end
+
+`ifdef RANDOM_ATT
+      $readmemh("P:/semco/matlab_sim_results/multi-h/mfinputsRandomAttBy_0_25.hex", readMem);
+`endif
+
+`ifdef RANDOM_LONG
+      $readmemh("P:/semco/matlab_sim_results/multi-h/mfinputsRandomLong.hex", readMem);
+`endif
+
+   
+end
 
   // BERT 
   integer bitError;

@@ -102,7 +102,6 @@ module acsMultH
         end
      end
 
-   
    wire [4:0]           tilt;
    tilt tiltModule
      (
@@ -206,20 +205,20 @@ module acsMultH
    // Latching the I and Q at the symbol rate
    reg [ROT_BITS-1:0] iOutRot_0r, iOutRot_1r, iOutRot_2r, iOutRot_3r, 
                       qOutRot_0r, qOutRot_1r, qOutRot_2r, qOutRot_3r;
+   reg [ROT_BITS-1:0] iOutRot_0rr, iOutRot_1rr, iOutRot_2rr, iOutRot_3rr, 
+                      qOutRot_0rr, qOutRot_1rr, qOutRot_2rr, qOutRot_3rr;
    always @(posedge clk) begin
       if (reset) begin
       end
       else if (symEnRot) begin
-         iOutRot_0r <= iOutRot_0;
-         qOutRot_0r <= qOutRot_0;
-         iOutRot_1r <= iOutRot_1;
-         qOutRot_1r <= qOutRot_1;
-         iOutRot_2r <= iOutRot_2;
-         qOutRot_2r <= qOutRot_2;
-         //iOutRot_3r <= iOutRot_3; 
-         //qOutRot_3r <= qOutRot_3;
-         iOutRot_3r <= iOutRot; 
-         qOutRot_3r <= qOutRot;
+         iOutRot_0r <= iOutRot_0;  iOutRot_0rr <= iOutRot_0r;
+         qOutRot_0r <= qOutRot_0;  qOutRot_0rr <= qOutRot_0r;
+         iOutRot_1r <= iOutRot_1;  iOutRot_1rr <= iOutRot_1r;
+         qOutRot_1r <= qOutRot_1;  qOutRot_1rr <= qOutRot_1r;
+         iOutRot_2r <= iOutRot_2;  iOutRot_2rr <= iOutRot_2r;
+         qOutRot_2r <= qOutRot_2;  qOutRot_2rr <= qOutRot_2r;
+         iOutRot_3r <= iOutRot;    iOutRot_3rr <= iOutRot_3r;  
+         qOutRot_3r <= qOutRot;    qOutRot_3rr <= qOutRot_3r;  
       end
    end
 `else
@@ -329,6 +328,12 @@ module acsMultH
       .maxVal (bestMetric)
       );
         
+`ifdef SIMULATE
+   real                   bestMetric_real;
+   always @(bestMetric) begin
+      bestMetric_real <= $itor($signed(bestMetric))/(2**(ROT_BITS-2));
+   end
+`endif
 
    // ** Selecting the winning rotated metrics for phase error correction ** 
    reg [1:0]              selOut;
@@ -343,20 +348,20 @@ module acsMultH
          selOut <= select[1:0];
          case (select)
            0: begin
-              iOut <= iOutRot_0r;
-              qOut <= qOutRot_0r;
+              iOut <= iOutRot_0rr;
+              qOut <= qOutRot_0rr;
            end
            1: begin
-              iOut <= iOutRot_1r;
-              qOut <= qOutRot_1r;
+              iOut <= iOutRot_1rr;
+              qOut <= qOutRot_1rr;
            end
            2: begin
-              iOut <= iOutRot_2r;
-              qOut <= qOutRot_2r ;
+              iOut <= iOutRot_2rr;
+              qOut <= qOutRot_2rr;
            end
            3: begin
-              iOut <= iOutRot_3r;
-              qOut <= qOutRot_3r ;
+              iOut <= iOutRot_3rr;
+              qOut <= qOutRot_3rr;
            end
          endcase
       end

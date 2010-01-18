@@ -26,8 +26,9 @@ module trellisMultiH
    dac2Sync,
    dac2Data,
    decision,
-   quadrarySymEnOut,
-   quadrarySym2xEnOut
+   phaseError,
+   symEnOut,
+   sym2xEnOut
    );
    
    parameter MF_BITS = 10;
@@ -48,8 +49,8 @@ module trellisMultiH
    output [17:0]            dac2Data;
    output [1:0]             decision;
    output [ROT_BITS-1:0]    phaseError;
-   output                   quadrarySymEnOut;
-   output                   quadrarySym2xEnOut;
+   output                   symEnOut;
+   output                   sym2xEnOut;
    
    
    wire [1:0]          decision;
@@ -249,7 +250,7 @@ module trellisMultiH
 //`ifdef SIMULATE
 //   real rotMfz0ImagOut_REAL, rotMfz1ImagOut_REAL, rotMfz2ImagOut_REAL, rotMfz3ImagOut_REAL, rotMfp0ImagOut_REAL, rotMfp1ImagOut_REAL, rotMfp2ImagOut_REAL, rotMfp3ImagOut_REAL, rotMfm0ImagOut_REAL, rotMfm1ImagOut_REAL, rotMfm2ImagOut_REAL, rotMfm3ImagOut_REAL;
 //   always @(posedge clk)begin
-//      if(quadrarySymEnOut)begin
+//      if(symEnOut)begin
 //         rotMfz0ImagOut_REAL = $itor($signed(rotMfz0ImagOut))/(2**(ROT_BITS-2)); rotMfz1ImagOut_REAL = $itor($signed(rotMfz1ImagOut))/(2**(ROT_BITS-2)); rotMfz2ImagOut_REAL = $itor($signed(rotMfz2ImagOut))/(2**(ROT_BITS-2)); rotMfz3ImagOut_REAL = $itor($signed(rotMfz3ImagOut))/(2**(ROT_BITS-2)); rotMfp0ImagOut_REAL = $itor($signed(rotMfp0ImagOut))/(2**(ROT_BITS-2)); rotMfp1ImagOut_REAL = $itor($signed(rotMfp1ImagOut))/(2**(ROT_BITS-2)); rotMfp2ImagOut_REAL = $itor($signed(rotMfp2ImagOut))/(2**(ROT_BITS-2)); rotMfp3ImagOut_REAL = $itor($signed(rotMfp3ImagOut))/(2**(ROT_BITS-2)); rotMfm0ImagOut_REAL = $itor($signed(rotMfm0ImagOut))/(2**(ROT_BITS-2)); rotMfm1ImagOut_REAL = $itor($signed(rotMfm1ImagOut))/(2**(ROT_BITS-2)); rotMfm2ImagOut_REAL = $itor($signed(rotMfm2ImagOut))/(2**(ROT_BITS-2)); rotMfm3ImagOut_REAL = $itor($signed(rotMfm3ImagOut))/(2**(ROT_BITS-2));
 //      end
 //   end
@@ -337,7 +338,9 @@ viterbiMultiH /*#(MF_BITS, ROT_BITS)*/ viterbiMultiH
     .index                 (index         ),
     .decision              (decision      ),
     .phaseError            (phaseError    ),
-    .devError              (              )
+    .devError              (              ),
+    .symEnOut              (symEnOut      ),    
+    .sym2xEnOut            (sym2xEnOut    )     
     );
     
 
@@ -348,7 +351,7 @@ viterbiMultiH /*#(MF_BITS, ROT_BITS)*/ viterbiMultiH
 
    /* -----\/----- EXCLUDED -----\/-----
    always @(posedge clk) begin
-      if (quadrarySymEnOut) begin
+      if (symEnOut) begin
          dataBits <= {phaseError[6:0], 1'b0};
          satPos <= !sign && (phaseError[9:6] != 5'b0000);
          satNeg <=  sign && (phaseError[9:6] != 5'b1111);
@@ -368,11 +371,11 @@ viterbiMultiH /*#(MF_BITS, ROT_BITS)*/ viterbiMultiH
 // This is a kludge to create a 2x clock enable from the 1x clock enable to satisfy the design
 // of the pre-existing line decoder. This design assumes at least 3 clocks between each 1x clock
 // enable.
-reg se0;
-assign quadrarySym2xEnOut = se0 | quadrarySymEnOut;
-always @(posedge clk) begin
-    se0 <= quadrarySymEnOut;
-    end
+//reg se0;
+//assign sym2xEnOut = se0 | symEnOut;
+//always @(posedge clk) begin
+//    se0 <= symEnOut;
+//    end
 
 /* -----\/----- EXCLUDED -----\/-----
    
@@ -454,15 +457,15 @@ always @(posedge clk) begin
             end
         `DAC_TRELLIS_PHERR: begin
             dac0Data <= {phaseError,10'b0};
-            dac0Sync <= quadrarySymEnOut;
+            dac0Sync <= symEnOut;
             end
         `DAC_TRELLIS_INDEX: begin
             dac0Data <= {1'b0,index,12'b0};
-            dac0Sync <= quadrarySymEnOut;
+            dac0Sync <= symEnOut;
             end
         default: begin
             dac0Data <= {phaseError,10'b0};
-            dac0Sync <= quadrarySymEnOut;
+            dac0Sync <= symEnOut;
             end
         endcase
 
@@ -485,15 +488,15 @@ always @(posedge clk) begin
             end
         `DAC_TRELLIS_PHERR: begin
             dac1Data <= {phaseError,10'b0};
-            dac1Sync <= quadrarySymEnOut;
+            dac1Sync <= symEnOut;
             end
         `DAC_TRELLIS_INDEX: begin
             dac1Data <= {1'b0,index,12'b0};
-            dac1Sync <= quadrarySymEnOut;
+            dac1Sync <= symEnOut;
             end
         default: begin
             dac1Data <= {phaseError,10'b0};
-            dac1Sync <= quadrarySymEnOut;
+            dac1Sync <= symEnOut;
             end
         endcase
 
@@ -516,15 +519,15 @@ always @(posedge clk) begin
             end
         `DAC_TRELLIS_PHERR: begin
             dac2Data <= {phaseError,10'b0};
-            dac2Sync <= quadrarySymEnOut;
+            dac2Sync <= symEnOut;
             end
         `DAC_TRELLIS_INDEX: begin
             dac2Data <= {1'b0,index,12'b0};
-            dac2Sync <= quadrarySymEnOut;
+            dac2Sync <= symEnOut;
             end
         default: begin
             dac2Data <= {phaseError,10'b0};
-            dac2Sync <= quadrarySymEnOut;
+            dac2Sync <= symEnOut;
             end
         endcase
 

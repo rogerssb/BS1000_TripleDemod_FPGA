@@ -90,10 +90,10 @@ module compSel (clk,ce,reset,a,b,c,d,index,normalize,maxVal);
      else if (ce) begin
         index <= tempIndex + indexOffset;
         case (tempIndex)
-          0: maxVal <= normalize ? a - 2**(size-3) : a;
-          1: maxVal <= normalize ? a - 2**(size-3) : b;
-          2: maxVal <= normalize ? a - 2**(size-3) : c;
-          3: maxVal <= normalize ? a - 2**(size-3) : d;
+          0: maxVal <= normalize ? a - 2**(size-2) : a;
+          1: maxVal <= normalize ? b - 2**(size-2) : b;
+          2: maxVal <= normalize ? c - 2**(size-2) : c;
+          3: maxVal <= normalize ? d - 2**(size-2) : d;
           default: maxVal <= 0;
         endcase
      end

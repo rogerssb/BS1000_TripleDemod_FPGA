@@ -3,7 +3,7 @@
 // Finds the index (0-19) of the metric wih the largest number. The maxValue is also computed but is not used in the design
 // If all inputs are the same the 19th (13hex) index will be picked.
 // All done with 2's complement numbers
-module maxMetricMultiH(clk, reset, symEn,
+module maxMetricMultiH(clk, reset, symEn, sym2xEn,
                        accMetOut0, accMetOut1, accMetOut2, accMetOut3, accMetOut4, accMetOut5, accMetOut6, accMetOut7, 
                        accMetOut8, accMetOut9, accMetOut10, accMetOut11, accMetOut12, accMetOut13, accMetOut14, accMetOut15, 
                        accMetOut16, accMetOut17, accMetOut18, accMetOut19, accMetOut20, accMetOut21, accMetOut22, accMetOut23,
@@ -13,11 +13,11 @@ module maxMetricMultiH(clk, reset, symEn,
                        accMetOut48, accMetOut49, accMetOut50, accMetOut51, accMetOut52, accMetOut53, accMetOut54, accMetOut55, 
                        accMetOut56, accMetOut57, accMetOut58, accMetOut59, accMetOut60, accMetOut61, accMetOut62, accMetOut63,
                        maxVal,
-                       index, symEnDly
+                       index, symEnOut, sym2xEnOut
                        );
    
    parameter            size = 8;
-   input                clk,reset,symEn;
+   input                clk,reset,symEn,sym2xEn;
    input [(size-1):0]   accMetOut0, accMetOut1, accMetOut2, accMetOut3, accMetOut4, accMetOut5, accMetOut6, accMetOut7, 
                         accMetOut8, accMetOut9, accMetOut10, accMetOut11, accMetOut12, accMetOut13, accMetOut14, accMetOut15, 
                         accMetOut16, accMetOut17, accMetOut18, accMetOut19, accMetOut20, accMetOut21, accMetOut22, accMetOut23,
@@ -28,7 +28,7 @@ module maxMetricMultiH(clk, reset, symEn,
                         accMetOut56, accMetOut57, accMetOut58, accMetOut59, accMetOut60, accMetOut61, accMetOut62, accMetOut63;
    output [5:0]         index; // max index (0-63)
    output [(size-1):0]  maxVal;
-   output               symEnDly;
+   output               symEnOut, sym2xEnOut;
    reg [5:0]            index;                      
    
    wire [(size-1):0]    maxValS1_0, maxValS1_1, maxValS1_2, maxValS1_3, maxValS1_4, maxValS1_5, maxValS1_6, maxValS1_7,
@@ -64,7 +64,7 @@ module maxMetricMultiH(clk, reset, symEn,
 //   reg                  syncToACS;
 //   reg [1:0]            cnt;
                
-   `ifdef USE_CLK
+//   `ifdef USE_CLK
    // Stage 1 compare. The index value comming out of is scaled to 0..19 using the parameter indesOffset, by adding 4,8,12,or 16
    comp4twosCompMultiH  #(size, 0)  compS1_0_3   (clk,  accMetOut0 , accMetOut1 , accMetOut2 , accMetOut3 , iS1_0,  maxValS1_0 );
    comp4twosCompMultiH  #(size, 4)  compS1_4_7   (clk,  accMetOut4 , accMetOut5 , accMetOut6 , accMetOut7 , iS1_1,  maxValS1_1 );
@@ -89,6 +89,7 @@ module maxMetricMultiH(clk, reset, symEn,
    comp4twosCompMultiH  #(size, 12) compS2_12_15 (clk, maxValS1_12, maxValS1_13, maxValS1_14, maxValS1_15, iS2_3  , maxValS2_3 ); //winner from 48-63
    // Stage 3 compare (final compare)
    comp4twosCompMultiH  #(size, 0)  compS3_0_3   (clk, maxValS2_0 , maxValS2_1,  maxValS2_2,  maxValS2_3 , iS3    , maxValS3   );
+/* -----\/----- EXCLUDED -----\/-----
    `else
    // Stage 1 compare. The index value comming out of is scaled to 0..19 using the parameter indesOffset, by adding 4,8,12,or 16
    comp4twosCompMultiH  #(size, 0)  compS1_0_3   (accMetOut0 , accMetOut1 , accMetOut2 , accMetOut3 , iS1_0,  maxValS1_0 );
@@ -115,6 +116,7 @@ module maxMetricMultiH(clk, reset, symEn,
    // Stage 3 compare (final compare)
    comp4twosCompMultiH  #(size, 0)  compS3_0_3   (maxValS2_0 , maxValS2_1,  maxValS2_2,  maxValS2_3 , iS3    , maxValS3   );
    `endif
+ -----/\----- EXCLUDED -----/\----- */
    
    always @(iS3 or iS2_0 or iS2_1 or iS2_2 or iS2_3)
      begin
@@ -171,40 +173,21 @@ module maxMetricMultiH(clk, reset, symEn,
      end
    
    
-   // counter used to create a delayed verion of the synEn
-/* -----\/----- EXCLUDED -----\/-----
-   always @(posedge clk)
-     begin
-        if (reset || symEn) begin
-           cnt <= 0;
-        end
-        else begin
-           if (cnt < 3)
-             cnt <= cnt + 1;
-           else
-             cnt <= cnt;
-        end
-     end
- -----/\----- EXCLUDED -----/\----- */
-   
-   // Delayed syncEn
-/* -----\/----- EXCLUDED -----\/-----
-   always @(posedge clk)
-     begin
-        if (reset) begin
-           syncToACS <= 0;
-        end
-        else begin
-           if (cnt == 0) begin
-              syncToACS <= 1;
-           end
-           else begin
-              syncToACS <= 0;
-           end
-        end
-     end
- -----/\----- EXCLUDED -----/\----- */
+   reg [3:0] symEnSr;
+   reg [3:0] sym2xEnSr;
+   always @(posedge clk) begin
+      if (reset) begin
+         symEnSr <= 0;
+         sym2xEnSr <= 0;
+      end
+      else begin
+         symEnSr <= {symEnSr[3:0], symEn};
+         sym2xEnSr <= {sym2xEnSr[3:0], sym2xEn};
+      end
+   end
 
-   assign symEnDly = symEn;
+   wire symEnOut = symEnSr[3];    
+   wire sym2xEnOut = sym2xEnSr[3];    
+
    
 endmodule
