@@ -424,8 +424,7 @@ always @(addr or
         endcase
     end
 
- -----/\----- EXCLUDED -----/\----- */
-
+ 
 
 //******************************************************************************
 //                               DAC Output Mux
@@ -532,6 +531,7 @@ always @(posedge clk) begin
         endcase
 
     end
+-----/\----- EXCLUDED -----/\----- */
 
 endmodule
 
