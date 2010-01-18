@@ -3,9 +3,6 @@ module acsMultH
   (
    clk, reset, symEn, sym2xEn, symEnEven,
    symEnEvenRot,
-   `ifdef USE_DECAY
-   decayFactor,
-   `endif
    iMfInRot, qMfInRot,
    accMetMuxOut_0, accMetMuxOut_1, accMetMuxOut_2, accMetMuxOut_3,
    selOut,
@@ -25,9 +22,6 @@ module acsMultH
    input                 clk, reset;
    input                 symEn, sym2xEn, symEnEven;
    input                 symEnEvenRot;
-   `ifdef USE_DECAY
-   input [7:0]           decayFactor;
-   `endif
    input [MF_BITS-1:0]   iMfInRot, qMfInRot;
    input [ACS_BITS-1:0]  accMetMuxOut_0, accMetMuxOut_1, accMetMuxOut_2, accMetMuxOut_3;
    
@@ -368,10 +362,7 @@ module acsMultH
    
    
    
-   // --------- Normailzation and forget factor -------------
-//`define USE_DELAYED_NORM
-`ifdef USE_DELAYED_NORM
-`else
+   // --------- Normalization and forget factor -------------
    reg normalizeOut;
    always @(bestMetric[ACS_BITS-1:ACS_BITS-2] or normalizeIn) begin
       if ((bestMetric[ACS_BITS-1:ACS_BITS-2] == 2'b01) && !normalizeIn ) begin //check (in the pos. case) if the acc. 8th bit saturate
@@ -381,40 +372,9 @@ module acsMultH
          normalizeOut <= 0;
       end
    end
-`endif
    
-`ifdef USE_DECAY
-   wire [ACS_BITS-1:0]   accMetOut;
-   wire [12:0]           decayOut;
-   assign                accMetOut = decayOut[12:1] + decayOut[0];
-   
-   mult12x8 accumDecay
-     (
-//      .ce(symEnRot), 
-      .ce(symEnMax), 
-      .clk(clk), 
-      .sclr(reset),
-      .a(normalizeIn ? accTemp : bestMetric), 
-      .b(decayFactor), 
-      .p(decayOut)
-      );
-
-`ifdef USE_DELAYED_NORM
-   reg normalizeOut;
-   always @(decayOut[12:11]) begin
-         if ((decayOut[12:11] == 2'b01) ) begin //check (in the pos. case) if the acc. 8th bit saturate
-            normalizeOut <= 1;
-         end
-         else begin
-            normalizeOut <= 0;
-         end
-      end
-`endif
-   
-`else
 assign accMetOut = bestMetric;
 
-`endif   
 
 
    

@@ -377,7 +377,6 @@ viterbiMultiH /*#(MF_BITS, ROT_BITS)*/ viterbiMultiH
 //    se0 <= symEnOut;
 //    end
 
-/* -----\/----- EXCLUDED -----\/-----
    
 //************************ Trellis Register Definitions ************************
 
@@ -398,32 +397,22 @@ always @(negedge wr0) begin
         end
     end
 
-reg [31:0]trellisDout;
+reg [31:0]dout;
 always @(trellisSpace or addr
          or decayFactor
          ) begin
     if (trellisSpace) begin
         casex (addr)
-            `TRELLIS_DECAY:     trellisDout <= {24'b0,decayFactor};
-            default:            trellisDout <= 32'hx;
+            `TRELLIS_DECAY:     dout <= {24'b0,decayFactor};
+            default:            dout <= 32'hx;
             endcase
         end
     else begin
-        trellisDout <= 32'hx;
+        dout <= 32'hx;
         end
     end
 
-reg [31:0]dout;
-always @(addr or 
-         trellisDout or trellisLoopDout
-         ) begin
-    casex (addr)
-        `TRELLIS_SPACE:     dout <= trellisDout;
-        `TRELLISLFSPACE:    dout <= trellisLoopDout;
-        default:            dout <= 32'hx;
-        endcase
-    end
-
+/* -----\/----- EXCLUDED -----\/-----
  
 
 //******************************************************************************
