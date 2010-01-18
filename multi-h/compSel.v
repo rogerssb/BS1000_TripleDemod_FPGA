@@ -83,6 +83,7 @@ module compSel (clk,ce,reset,a,b,c,d,index,normalize,maxVal);
      end 
    
    // sync with the system clock
+   wire [(size-1):0] tempMax;
    always @(posedge clk)
      if (reset) begin
         maxVal <= 0;
@@ -90,12 +91,15 @@ module compSel (clk,ce,reset,a,b,c,d,index,normalize,maxVal);
      else if (ce) begin
         index <= tempIndex + indexOffset;
         case (tempIndex)
-          0: maxVal <= normalize ? a - 2**(size-2) : a;
-          1: maxVal <= normalize ? b - 2**(size-2) : b;
-          2: maxVal <= normalize ? c - 2**(size-2) : c;
-          3: maxVal <= normalize ? d - 2**(size-2) : d;
-          default: maxVal <= 0;
+          0: tempMax <= a;
+          1: tempMax <= b;
+          2: tempMax <= c;
+          3: tempMax <= d;
+          default: tempMax <= 0;
         endcase
+        if (normalize) begin
+            maxVal <= tempMax - 2**(size-2);
+            end
      end
    
 endmodule         
