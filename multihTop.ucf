@@ -431,6 +431,7 @@ TIMEGRP "mf1I" = FFS(multih/uut_mfiltBank/mf_x*/mf1IOut*);
 TIMEGRP "mf1Q" = FFS(multih/uut_mfiltBank/mf_x*/mf1QOut*);
 TIMEGRP "mf" = "mf0I" "mf0Q" "mf1I" "mf1Q";
 #TIMEGRP "rotOut" = FFS(multih/rotator/m*/reOut*) FFS(multih/rotator/m*/imOut*);
+TIMEGRP "maxMetric" = FFS(multih/viterbiMultH/maxMetric/*);
 NET "multihSymEn*" TNM_NET = FFS syncGroup;
 NET "multihSym2xEn*" TNM_NET = FFS syncGroup;
 NET "multih/trellisCarrierLoop/sym2xEnSr*" TNM_NET = FFS syncGroup;
@@ -448,4 +449,5 @@ TIMESPEC TS_symEn = FROM "mf" TO "mfPipe" 25 MHz;
 TIMESPEC TS_reset = FROM FFS(reset*) to FFS 25 MHz;
 TIMESPEC TS_best = FROM "bestMetric" TO "bestMetric" 25 MHz;
 TIMESPEC TS_sync = FROM "sync" TO FFS 100 MHz;
+TIMESPEC TS_max = FROM "bestMetric" to "maxMetric" 25 MHz;
 
