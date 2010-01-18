@@ -81,25 +81,32 @@ module compSel (clk,ce,reset,a,b,c,d,index,normalize,maxVal);
             end
         endcase 
      end 
+
+
+   reg [(size-1):0] tempMax;
+   initial tempMax = 0;
+   always @(a or b or c or d or tempIndex)
+     case (tempIndex)
+       0: tempMax <= a;
+       1: tempMax <= b;
+       2: tempMax <= c;
+       3: tempMax <= d;
+       default: tempMax <= 0;
+     endcase // case(tempIndex)
    
    // sync with the system clock
-   reg [(size-1):0] tempMax;
    always @(posedge clk)
      if (reset) begin
         maxVal <= 0;
      end
      else if (ce) begin
         index <= tempIndex + indexOffset;
-        case (tempIndex)
-          0: tempMax <= a;
-          1: tempMax <= b;
-          2: tempMax <= c;
-          3: tempMax <= d;
-          default: tempMax <= 0;
-        endcase
         if (normalize) begin
-            maxVal <= tempMax - 2**(size-2);
-            end
+           maxVal <= tempMax - 2**(size-2);
+        end
+        else begin
+           maxVal <= tempMax;
+        end
      end
-   
+
 endmodule         
