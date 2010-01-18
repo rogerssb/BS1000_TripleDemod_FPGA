@@ -281,8 +281,8 @@ trellisMultiH multih
     .dac1Data(multih1Out),
     .dac2Sync(multih2Sync),
     .dac2Data(multih2Out),
-    .quadrarySymEnOut(multihSymEnOut),
-    .quadrarySym2xEnOut(multihSym2xEnOut),
+    .symEnOut(multihSymEnOut),
+    .sym2xEnOut(multihSym2xEnOut),
     .decision(multihBit)
    );
    

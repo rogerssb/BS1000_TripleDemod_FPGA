@@ -83,7 +83,7 @@ module compSel (clk,ce,reset,a,b,c,d,index,normalize,maxVal);
      end 
    
    // sync with the system clock
-   wire [(size-1):0] tempMax;
+   reg [(size-1):0] tempMax;
    always @(posedge clk)
      if (reset) begin
         maxVal <= 0;
