@@ -2,7 +2,8 @@
 
 //  For multi H mode the index has to range from 0-64 so index has to be 6 bits
 
-module comp4twosCompMultiH (clk,a,b,c,d,index,maxVal);
+//module comp4twosCompMultiH (clk,a,b,c,d,index,maxVal);
+module comp4twosCompMultiH (a,b,c,d,index,maxVal);
    parameter             size = 10;
    parameter             indexOffset=0;
 `ifdef SIMULATE
@@ -12,7 +13,7 @@ module comp4twosCompMultiH (clk,a,b,c,d,index,maxVal);
 `endif
    
 
-   input                 clk;
+   //input                 clk;
    input [(size-1):0]    a, b, c, d;
    output [5:0]          index;
    output [(size-1):0]   maxVal;
@@ -85,7 +86,8 @@ module comp4twosCompMultiH (clk,a,b,c,d,index,maxVal);
      end 
    
    // sync with the system clock
-   always @(posedge clk)
+   //always @(posedge clk)
+   always @(tempIndex or indexOffset or a or b or c or d)
      begin
         index <= tempIndex + indexOffset;
         case (tempIndex)

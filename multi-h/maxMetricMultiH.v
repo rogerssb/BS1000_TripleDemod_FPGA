@@ -64,7 +64,7 @@ module maxMetricMultiH(clk, reset, symEn, sym2xEn,
 //   reg                  syncToACS;
 //   reg [1:0]            cnt;
                
-//   `ifdef USE_CLK
+`ifdef USE_CLK
    // Stage 1 compare. The index value comming out of is scaled to 0..19 using the parameter indesOffset, by adding 4,8,12,or 16
    comp4twosCompMultiH  #(size, 0)  compS1_0_3   (clk,  accMetOut0 , accMetOut1 , accMetOut2 , accMetOut3 , iS1_0,  maxValS1_0 );
    comp4twosCompMultiH  #(size, 4)  compS1_4_7   (clk,  accMetOut4 , accMetOut5 , accMetOut6 , accMetOut7 , iS1_1,  maxValS1_1 );
@@ -89,8 +89,7 @@ module maxMetricMultiH(clk, reset, symEn, sym2xEn,
    comp4twosCompMultiH  #(size, 12) compS2_12_15 (clk, maxValS1_12, maxValS1_13, maxValS1_14, maxValS1_15, iS2_3  , maxValS2_3 ); //winner from 48-63
    // Stage 3 compare (final compare)
    comp4twosCompMultiH  #(size, 0)  compS3_0_3   (clk, maxValS2_0 , maxValS2_1,  maxValS2_2,  maxValS2_3 , iS3    , maxValS3   );
-/* -----\/----- EXCLUDED -----\/-----
-   `else
+`else
    // Stage 1 compare. The index value comming out of is scaled to 0..19 using the parameter indesOffset, by adding 4,8,12,or 16
    comp4twosCompMultiH  #(size, 0)  compS1_0_3   (accMetOut0 , accMetOut1 , accMetOut2 , accMetOut3 , iS1_0,  maxValS1_0 );
    comp4twosCompMultiH  #(size, 4)  compS1_4_7   (accMetOut4 , accMetOut5 , accMetOut6 , accMetOut7 , iS1_1,  maxValS1_1 );
@@ -115,8 +114,8 @@ module maxMetricMultiH(clk, reset, symEn, sym2xEn,
    comp4twosCompMultiH  #(size, 12) compS2_12_15 (maxValS1_12, maxValS1_13, maxValS1_14, maxValS1_15, iS2_3  , maxValS2_3 ); //winner from 48-63
    // Stage 3 compare (final compare)
    comp4twosCompMultiH  #(size, 0)  compS3_0_3   (maxValS2_0 , maxValS2_1,  maxValS2_2,  maxValS2_3 , iS3    , maxValS3   );
-   `endif
- -----/\----- EXCLUDED -----/\----- */
+`endif
+
    
    always @(iS3 or iS2_0 or iS2_1 or iS2_2 or iS2_3)
      begin

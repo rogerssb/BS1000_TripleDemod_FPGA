@@ -57,7 +57,7 @@ module viterbiMultiH
                          mf_m1p3_54Imag, mf_m1p1_54Imag, mf_m1m1_54Imag, mf_m1m3_54Imag;
    
    output [5:0]          index;
-   output [1:0]          decision;
+   output [1:0]          decTbtIn;
    output [ROT_BITS-1:0] phaseError;
    output [MF_BITS-1:0]  devError;
 
@@ -240,7 +240,7 @@ module viterbiMultiH
 
 
    // ----- decision before the traceback -----
-   reg [1:0]             decision;
+   reg [1:0]             decTbtIn;
    reg [1:0]             selOut0r , selOut49r , selOut34r , selOut19r , selOut4r , selOut53r , selOut38r , selOut23r , 
                          selOut8r , selOut57r , selOut42r , selOut27r , selOut12r , selOut61r , selOut46r , selOut31r ,
                          selOut16r , selOut1r , selOut50r , selOut35r , selOut20r , selOut5r , selOut54r , selOut39r , 
@@ -260,7 +260,7 @@ module viterbiMultiH
    always @(posedge clk)
      begin
         if (reset) begin
-           decision  <= 0;
+           decTbtIn  <= 0;
            selOut0r  <= 0; selOut1r  <= 0; selOut2r  <= 0; selOut3r  <= 0; selOut4r  <= 0; selOut5r  <= 0; selOut6r  <= 0; selOut7r  <= 0;
            selOut8r  <= 0; selOut9r  <= 0; selOut10r <= 0; selOut11r <= 0; selOut12r <= 0; selOut13r <= 0; selOut14r <= 0; selOut15r <= 0;
            selOut16r <= 0; selOut17r <= 0; selOut18r <= 0; selOut19r <= 0; selOut20r <= 0; selOut21r <= 0; selOut22r <= 0; selOut23r <= 0; 
@@ -345,75 +345,74 @@ module viterbiMultiH
            selOut62r <= selOut62;   qOut62r <= qOut62;
            selOut63r <= selOut63;   qOut63r <= qOut63;
            case (index)
-             0 : begin decision <= selOut0r ; phaseError <= qOut0r ; end
-             1 : begin decision <= selOut1r ; phaseError <= qOut1r ; end
-             2 : begin decision <= selOut2r ; phaseError <= qOut2r ; end
-             3 : begin decision <= selOut3r ; phaseError <= qOut3r ; end
-             4 : begin decision <= selOut4r ; phaseError <= qOut4r ; end
-             5 : begin decision <= selOut5r ; phaseError <= qOut5r ; end
-             6 : begin decision <= selOut6r ; phaseError <= qOut6r ; end
-             7 : begin decision <= selOut7r ; phaseError <= qOut7r ; end
-             8 : begin decision <= selOut8r ; phaseError <= qOut8r ; end
-             9 : begin decision <= selOut9r ; phaseError <= qOut9r ; end
-             10: begin decision <= selOut10r; phaseError <= qOut10r; end
-             11: begin decision <= selOut11r; phaseError <= qOut11r; end
-             12: begin decision <= selOut12r; phaseError <= qOut12r; end
-             13: begin decision <= selOut13r; phaseError <= qOut13r; end
-             14: begin decision <= selOut14r; phaseError <= qOut14r; end
-             15: begin decision <= selOut15r; phaseError <= qOut15r; end
-             16: begin decision <= selOut16r; phaseError <= qOut16r; end
-             17: begin decision <= selOut17r; phaseError <= qOut17r; end
-             18: begin decision <= selOut18r; phaseError <= qOut18r; end
-             19: begin decision <= selOut19r; phaseError <= qOut19r; end
-             20: begin decision <= selOut20r; phaseError <= qOut20r; end
-             21: begin decision <= selOut21r; phaseError <= qOut21r; end
-             22: begin decision <= selOut22r; phaseError <= qOut22r; end
-             23: begin decision <= selOut23r; phaseError <= qOut23r; end
-             24: begin decision <= selOut24r; phaseError <= qOut24r; end
-             25: begin decision <= selOut25r; phaseError <= qOut25r; end
-             26: begin decision <= selOut26r; phaseError <= qOut26r; end
-             27: begin decision <= selOut27r; phaseError <= qOut27r; end
-             28: begin decision <= selOut28r; phaseError <= qOut28r; end
-             29: begin decision <= selOut29r; phaseError <= qOut29r; end
-             30: begin decision <= selOut30r; phaseError <= qOut30r; end
-             31: begin decision <= selOut31r; phaseError <= qOut31r; end
-             32: begin decision <= selOut32r; phaseError <= qOut32r; end
-             33: begin decision <= selOut33r; phaseError <= qOut33r; end
-             34: begin decision <= selOut34r; phaseError <= qOut34r; end
-             35: begin decision <= selOut35r; phaseError <= qOut35r; end
-             36: begin decision <= selOut36r; phaseError <= qOut36r; end
-             37: begin decision <= selOut37r; phaseError <= qOut37r; end
-             38: begin decision <= selOut38r; phaseError <= qOut38r; end
-             39: begin decision <= selOut39r; phaseError <= qOut39r; end
-             40: begin decision <= selOut40r; phaseError <= qOut40r; end
-             41: begin decision <= selOut41r; phaseError <= qOut41r; end
-             42: begin decision <= selOut42r; phaseError <= qOut42r; end
-             43: begin decision <= selOut43r; phaseError <= qOut43r; end
-             44: begin decision <= selOut44r; phaseError <= qOut44r; end
-             45: begin decision <= selOut45r; phaseError <= qOut45r; end
-             46: begin decision <= selOut46r; phaseError <= qOut46r; end
-             47: begin decision <= selOut47r; phaseError <= qOut47r; end
-             48: begin decision <= selOut48r; phaseError <= qOut48r; end
-             49: begin decision <= selOut49r; phaseError <= qOut49r; end
-             50: begin decision <= selOut50r; phaseError <= qOut50r; end
-             51: begin decision <= selOut51r; phaseError <= qOut51r; end
-             52: begin decision <= selOut52r; phaseError <= qOut52r; end
-             53: begin decision <= selOut53r; phaseError <= qOut53r; end
-             54: begin decision <= selOut54r; phaseError <= qOut54r; end
-             55: begin decision <= selOut55r; phaseError <= qOut55r; end
-             56: begin decision <= selOut56r; phaseError <= qOut56r; end
-             57: begin decision <= selOut57r; phaseError <= qOut57r; end
-             58: begin decision <= selOut58r; phaseError <= qOut58r; end
-             59: begin decision <= selOut59r; phaseError <= qOut59r; end
-             60: begin decision <= selOut60r; phaseError <= qOut60r; end
-             61: begin decision <= selOut61r; phaseError <= qOut61r; end
-             62: begin decision <= selOut62r; phaseError <= qOut62r; end
-             63: begin decision <= selOut63r; phaseError <= qOut63r; end
+             0 : begin decTbtIn <= selOut0r ; phaseError <= qOut0r ; end
+             1 : begin decTbtIn <= selOut1r ; phaseError <= qOut1r ; end
+             2 : begin decTbtIn <= selOut2r ; phaseError <= qOut2r ; end
+             3 : begin decTbtIn <= selOut3r ; phaseError <= qOut3r ; end
+             4 : begin decTbtIn <= selOut4r ; phaseError <= qOut4r ; end
+             5 : begin decTbtIn <= selOut5r ; phaseError <= qOut5r ; end
+             6 : begin decTbtIn <= selOut6r ; phaseError <= qOut6r ; end
+             7 : begin decTbtIn <= selOut7r ; phaseError <= qOut7r ; end
+             8 : begin decTbtIn <= selOut8r ; phaseError <= qOut8r ; end
+             9 : begin decTbtIn <= selOut9r ; phaseError <= qOut9r ; end
+             10: begin decTbtIn <= selOut10r; phaseError <= qOut10r; end
+             11: begin decTbtIn <= selOut11r; phaseError <= qOut11r; end
+             12: begin decTbtIn <= selOut12r; phaseError <= qOut12r; end
+             13: begin decTbtIn <= selOut13r; phaseError <= qOut13r; end
+             14: begin decTbtIn <= selOut14r; phaseError <= qOut14r; end
+             15: begin decTbtIn <= selOut15r; phaseError <= qOut15r; end
+             16: begin decTbtIn <= selOut16r; phaseError <= qOut16r; end
+             17: begin decTbtIn <= selOut17r; phaseError <= qOut17r; end
+             18: begin decTbtIn <= selOut18r; phaseError <= qOut18r; end
+             19: begin decTbtIn <= selOut19r; phaseError <= qOut19r; end
+             20: begin decTbtIn <= selOut20r; phaseError <= qOut20r; end
+             21: begin decTbtIn <= selOut21r; phaseError <= qOut21r; end
+             22: begin decTbtIn <= selOut22r; phaseError <= qOut22r; end
+             23: begin decTbtIn <= selOut23r; phaseError <= qOut23r; end
+             24: begin decTbtIn <= selOut24r; phaseError <= qOut24r; end
+             25: begin decTbtIn <= selOut25r; phaseError <= qOut25r; end
+             26: begin decTbtIn <= selOut26r; phaseError <= qOut26r; end
+             27: begin decTbtIn <= selOut27r; phaseError <= qOut27r; end
+             28: begin decTbtIn <= selOut28r; phaseError <= qOut28r; end
+             29: begin decTbtIn <= selOut29r; phaseError <= qOut29r; end
+             30: begin decTbtIn <= selOut30r; phaseError <= qOut30r; end
+             31: begin decTbtIn <= selOut31r; phaseError <= qOut31r; end
+             32: begin decTbtIn <= selOut32r; phaseError <= qOut32r; end
+             33: begin decTbtIn <= selOut33r; phaseError <= qOut33r; end
+             34: begin decTbtIn <= selOut34r; phaseError <= qOut34r; end
+             35: begin decTbtIn <= selOut35r; phaseError <= qOut35r; end
+             36: begin decTbtIn <= selOut36r; phaseError <= qOut36r; end
+             37: begin decTbtIn <= selOut37r; phaseError <= qOut37r; end
+             38: begin decTbtIn <= selOut38r; phaseError <= qOut38r; end
+             39: begin decTbtIn <= selOut39r; phaseError <= qOut39r; end
+             40: begin decTbtIn <= selOut40r; phaseError <= qOut40r; end
+             41: begin decTbtIn <= selOut41r; phaseError <= qOut41r; end
+             42: begin decTbtIn <= selOut42r; phaseError <= qOut42r; end
+             43: begin decTbtIn <= selOut43r; phaseError <= qOut43r; end
+             44: begin decTbtIn <= selOut44r; phaseError <= qOut44r; end
+             45: begin decTbtIn <= selOut45r; phaseError <= qOut45r; end
+             46: begin decTbtIn <= selOut46r; phaseError <= qOut46r; end
+             47: begin decTbtIn <= selOut47r; phaseError <= qOut47r; end
+             48: begin decTbtIn <= selOut48r; phaseError <= qOut48r; end
+             49: begin decTbtIn <= selOut49r; phaseError <= qOut49r; end
+             50: begin decTbtIn <= selOut50r; phaseError <= qOut50r; end
+             51: begin decTbtIn <= selOut51r; phaseError <= qOut51r; end
+             52: begin decTbtIn <= selOut52r; phaseError <= qOut52r; end
+             53: begin decTbtIn <= selOut53r; phaseError <= qOut53r; end
+             54: begin decTbtIn <= selOut54r; phaseError <= qOut54r; end
+             55: begin decTbtIn <= selOut55r; phaseError <= qOut55r; end
+             56: begin decTbtIn <= selOut56r; phaseError <= qOut56r; end
+             57: begin decTbtIn <= selOut57r; phaseError <= qOut57r; end
+             58: begin decTbtIn <= selOut58r; phaseError <= qOut58r; end
+             59: begin decTbtIn <= selOut59r; phaseError <= qOut59r; end
+             60: begin decTbtIn <= selOut60r; phaseError <= qOut60r; end
+             61: begin decTbtIn <= selOut61r; phaseError <= qOut61r; end
+             62: begin decTbtIn <= selOut62r; phaseError <= qOut62r; end
+             63: begin decTbtIn <= selOut63r; phaseError <= qOut63r; end
            endcase
         end  
      end
 
-   
 
                                                                                                                                    
                                                                                                                                    

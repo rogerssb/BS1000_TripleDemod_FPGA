@@ -39,36 +39,36 @@ always @(symEnEven or
         end
     end
    
-wire    [12:0]  decay0Out;
+wire    [ACS_BITS:0]  decay0Out;
 decayMpy10x8 decay0(
     .a(muxOut0), 
     .b(decayFactor), 
     .p(decay0Out)
     );
-assign accMuxOut0 = decay0Out[10:1] + decay0Out[0];
+assign accMuxOut0 = decay0Out[ACS_BITS:1] + decay0Out[0];
 
-wire    [12:0]  decay1Out;
+wire    [ACS_BITS:0]  decay1Out;
 decayMpy10x8 decay1(
     .a(muxOut1), 
     .b(decayFactor), 
     .p(decay1Out)
     );
-assign accMuxOut1 = decay1Out[10:1] + decay1Out[0];
+assign accMuxOut1 = decay1Out[ACS_BITS:1] + decay1Out[0];
 
-wire    [12:0]  decay2Out;
+wire    [ACS_BITS:0]  decay2Out;
 decayMpy10x8 decay2(
     .a(muxOut2), 
     .b(decayFactor), 
     .p(decay2Out)
     );
-assign accMuxOut2 = decay2Out[10:1] + decay2Out[0];
+assign accMuxOut2 = decay2Out[ACS_BITS:1] + decay2Out[0];
 
-wire    [12:0]  decay3Out;
+wire    [ACS_BITS:0]  decay3Out;
 decayMpy10x8 decay3(
     .a(muxOut3), 
     .b(decayFactor), 
     .p(decay3Out)
     );
-assign accMuxOut3 = decay3Out[10:1] + decay3Out[0];
+assign accMuxOut3 = decay3Out[ACS_BITS:1] + decay3Out[0];
 
 endmodule

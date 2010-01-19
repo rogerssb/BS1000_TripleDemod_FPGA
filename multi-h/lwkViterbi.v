@@ -662,6 +662,31 @@ module viterbiMultiH
    assign symEnOut = symEnMaxMet;
    assign sym2xEnOut = sym2xEnMaxMet;
 
+
+
+/* -----\/----- EXCLUDED -----\/-----
+traceBackMultiH
+  (
+   .clk       (clk     ), 
+   .reset     (reset   ), 
+   .symEn     (symEn_maxMetDly),
+   .symEnEven (symEnEven),    // THIS IS NOT THE CORRECT symEnEven TO USE HERE    ***** FIX IT ****
+   .decTbtIn  (decTbtIn),
+   .sel0      (selOut0 ), .sel1 (selOut1 ), .sel2 (selOut2 ), .sel3 (selOut3 ), .sel4 (selOut4 ), .sel5 (selOut5 ), .sel6 (selOut6 ), .sel7 (selOut7 ),
+   .sel8      (selOut8 ), .sel9 (selOut9 ), .sel10(selOut10), .sel11(selOut11), .sel12(selOut12), .sel13(selOut13), .sel14(selOut14), .sel15(selOut15),
+   .sel16     (selOut16), .sel17(selOut17), .sel18(selOut18), .sel19(selOut19), .sel20(selOut20), .sel21(selOut21), .sel22(selOut22), .sel23(selOut23),
+   .sel24     (selOut24), .sel25(selOut25), .sel26(selOut26), .sel27(selOut27), .sel28(selOut28), .sel29(selOut29), .sel30(selOut30), .sel31(selOut31),
+   .sel32     (selOut32), .sel33(selOut33), .sel34(selOut34), .sel35(selOut35), .sel36(selOut36), .sel37(selOut37), .sel38(selOut38), .sel39(selOut39),
+   .sel40     (selOut40), .sel41(selOut41), .sel42(selOut42), .sel43(selOut43), .sel44(selOut44), .sel45(selOut45), .sel46(selOut46), .sel47(selOut47),
+   .sel48     (selOut48), .sel49(selOut49), .sel50(selOut50), .sel51(selOut51), .sel52(selOut52), .sel53(selOut53), .sel54(selOut54), .sel55(selOut55),
+   .sel56     (selOut56), .sel57(selOut57), .sel58(selOut58), .sel59(selOut59), .sel60(selOut60), .sel61(selOut61), .sel62(selOut62), .sel63(selOut63),
+   .index     (index   ),
+   .decision  (decision)
+   );   
+ -----/\----- EXCLUDED -----/\----- */
+
+
+   
 /* -----\/----- EXCLUDED -----\/-----
 `ifdef TB_ANNOTATE
    traceBackSoqpsk tbt1
