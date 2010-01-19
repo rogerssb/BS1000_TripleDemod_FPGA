@@ -109,8 +109,15 @@ module acsMultH
    
    // Selects the amount of rotation bases on the matlab signal theta(n-2), here called ROT_45/54_?. 
    reg [4:0] rotSel;
-   always @(inputMuxSel or symEnEvenRot or tilt)
+   reg [MF_BITS-1:0] iMfInRotR, qMfInRotR;
+   reg symEnRotIn, sym2xEnRotIn;
+   //always @(inputMuxSel or symEnEvenRot or tilt)
+   always @(posedge clk) //clocking the rotSel to improve timing
      begin
+        iMfInRotR <= iMfInRot; // lining up the I and Q with rotSel
+        qMfInRotR <= qMfInRot;
+        symEnRotIn <= symEn;  
+        sym2xEnRotIn <= sym2xEn;
         if (~symEnEvenRot) begin
            case(inputMuxSel) 
              0: begin
@@ -144,16 +151,20 @@ module acsMultH
            endcase // case(inputMuxSel)
         end
      end
+
+
+   // Adding a pipeline delay before the rotator
+   
    
    wire [ROT_BITS-1:0] iOutRot, qOutRot;
    rot8x8 rotator
      (
       .clk        (clk        ), 
       .reset      (reset      ), 
-      .symEn      (symEn      ), 
-      .sym2xEn    (sym2xEn    ), 
-      .i          (iMfInRot[MF_BITS-1:MF_BITS-ROT_BITS] ),    
-      .q          (qMfInRot[MF_BITS-1:MF_BITS-ROT_BITS] ),
+      .symEn      (symEnRotIn  ), 
+      .sym2xEn    (sym2xEnRotIn), 
+      .i          (iMfInRotR[MF_BITS-1:MF_BITS-ROT_BITS] ),    
+      .q          (qMfInRotR[MF_BITS-1:MF_BITS-ROT_BITS] ),
       .angle      (rotSel     ),
       .symEnOut   (symEnRot   ),   
       .sym2xEnOut (sym2xEnRot ),   
