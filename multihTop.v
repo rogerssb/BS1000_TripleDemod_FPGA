@@ -262,7 +262,7 @@ trellisMultiH multih
     .clk(ck933),
     .reset(reset),
     .symEn(multiHSymEnIn),
-    .sym2xEn(multiHSym2xEn),
+    .sym2xEn(multiHSym2xEnIn),
     .iIn(iMultiHIn),
     .qIn(qMultiHIn),
     .wr0(wr0),

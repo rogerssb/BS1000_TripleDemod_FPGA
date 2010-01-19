@@ -236,9 +236,15 @@ module mfilt
    wire [35:0]  aPlusb  = {multA[34], multA[34:0]} + {multB[34], multB[34:0]};
    wire [35:0]  dMinusc = {multD[34], multD[34:0]} - {multC[34], multC[34:0]};
 
-   wire accRst = reset || (multLatchSr[1:0] == 2'b01);
+   wire accRst = (multLatchSr[1:0] == 2'b01);
    always @(posedge clk) begin
-      if (accRst) begin
+		if (reset) begin
+          mf0I <= 0;
+          mf0Q <= 0;
+          mf1I <= 0;
+          mf1Q <= 0;
+			end
+      else if (accRst) begin
           // Match filter Zero
           mf0I <= aMinusb;
           mf0Q <= dPlusc;
