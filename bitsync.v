@@ -152,8 +152,11 @@ always @(posedge sampleClk) begin
         end
     end
 
-assign iTrellis = (demodMode == `MODE_PCMTRELLIS) ? iMF : i;
-assign qTrellis = (demodMode == `MODE_PCMTRELLIS) ? qMF : q;
+wire fmTrellisModes = ( (demodMode == `MODE_MULTIH)
+                     || (demodMode == `MODE_PCMTRELLIS)
+                      );
+assign iTrellis = fmTrellisModes ? iMF : i;
+assign qTrellis = fmTrellisModes ? qMF : q;
 
 //*********************** MF Frequency Discriminator **************************
 wire    [11:0]   phase;
