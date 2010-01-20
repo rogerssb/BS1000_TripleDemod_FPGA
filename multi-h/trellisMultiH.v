@@ -503,7 +503,7 @@ always @(posedge clk) begin
             dac0Sync <= symEnOut;
             end
         `DAC_TRELLIS_INDEX: begin
-            dac0Data <= {1'b0,index,12'b0};
+            dac0Data <= {1'b0,index,11'b0};
             dac0Sync <= symEnOut;
             end
         default: begin
@@ -534,7 +534,7 @@ always @(posedge clk) begin
             dac1Sync <= symEnOut;
             end
         `DAC_TRELLIS_INDEX: begin
-            dac1Data <= {1'b0,index,12'b0};
+            dac1Data <= {1'b0,index,11'b0};
             dac1Sync <= symEnOut;
             end
         default: begin
@@ -565,7 +565,7 @@ always @(posedge clk) begin
             dac2Sync <= symEnOut;
             end
         `DAC_TRELLIS_INDEX: begin
-            dac2Data <= {1'b0,index,12'b0};
+            dac2Data <= {1'b0,index,11'b0};
             dac2Sync <= symEnOut;
             end
         default: begin
