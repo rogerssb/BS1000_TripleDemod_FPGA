@@ -103,8 +103,10 @@ module mfiltBank
          sym2xEnSr <= {sym2xEnSr[12:0], sym2xEn};
       end
    end                 
-   assign symEnOut = symEnSr[8];
-   assign sym2xEnOut = sym2xEnSr[8];
+   assign symEnOut = symEnSr[9];
+   assign sym2xEnOut = sym2xEnSr[9];
+   //assign symEnOut = symEnSr[8];
+   //assign sym2xEnOut = sym2xEnSr[8];
 
 
 

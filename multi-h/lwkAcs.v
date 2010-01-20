@@ -36,28 +36,23 @@ module acsMultH
 
    reg [5:0] symEnSr;
    reg [5:0] sym2xEnSr;
-   reg [5:0] symEnEvenRotSr;
+   reg [5:0] symEnEvenRotSr;   // not needed
    wire      symEnRot, sym2xEnRot;
    always @(posedge clk) begin
       if (reset) begin
          symEnSr <= 0;
          sym2xEnSr <= 0;
-         symEnEvenRotSr <= 0;
+         symEnEvenRotSr <= 0;    // not needed
       end
       else begin
          symEnSr <= {symEnSr[4:0], symEnRot};
          sym2xEnSr <= {sym2xEnSr[4:0], sym2xEnRot};
-         symEnEvenRotSr <= {symEnEvenRotSr[4:0], symEnEvenRot};
+         symEnEvenRotSr <= {symEnEvenRotSr[4:0], symEnEvenRot};   // not needed
       end
    end
 
-   wire symEnAdder = symEnRot; //symEnSr[3];    
-   wire symEnEvenAdder = symEnEvenRotSr[1]; //symEnEvenRotSr[5];  // 2 clocks through rotator and 4 in the ACS loop
-   wire symEnMax = symEnSr[3];    
-   wire sym2xEnMax = sym2xEnSr[3];    
-   wire symEnOut = symEnMax;
-   wire sym2xEnOut = sym2xEnMax;
-
+   wire symEnOut = symEnSr[3];    
+   wire sym2xEnOut = sym2xEnSr[3];    
 
    // Some control singnals  
    reg [1:0]             inputMuxSel; // starts to count to 3, resets to 0 at symEn
@@ -85,7 +80,7 @@ module acsMultH
            inputMuxSelAcs <= 0;
         end
         else begin 
-           if (symEnAdder) begin
+           if (symEnRot) begin
               inputMuxSelAcs <= 0;
            end
            else begin

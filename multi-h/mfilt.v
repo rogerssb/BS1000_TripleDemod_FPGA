@@ -219,7 +219,7 @@ module mfilt
      end
 
    
-   reg [5:0]   multLatchSr;
+   reg [6:0]   multLatchSr;
    always @(posedge clk)
      if (reset) begin
         multLatchSr <= 0;
@@ -231,34 +231,52 @@ module mfilt
         multLatchSr <= {multLatchSr, 1'b0};
      end
    
-   wire [35:0]  aMinusb = {multA[34], multA[34:0]} - {multB[34], multB[34:0]};
-   wire [35:0]  dPlusc  = {multD[34], multD[34:0]} + {multC[34], multC[34:0]};
-   wire [35:0]  aPlusb  = {multA[34], multA[34:0]} + {multB[34], multB[34:0]};
-   wire [35:0]  dMinusc = {multD[34], multD[34:0]} - {multC[34], multC[34:0]};
+   reg [35:0]  aMinusb; 
+   reg [35:0]  dPlusc;
+   reg [35:0]  aPlusb;
+   reg [35:0]  dMinusc;
+   //wire [35:0]  aMinusb = {multA[34], multA[34:0]} - {multB[34], multB[34:0]};
+   //wire [35:0]  dPlusc  = {multD[34], multD[34:0]} + {multC[34], multC[34:0]};
+   //wire [35:0]  aPlusb  = {multA[34], multA[34:0]} + {multB[34], multB[34:0]};
+   //wire [35:0]  dMinusc = {multD[34], multD[34:0]} - {multC[34], multC[34:0]};
 
-   wire accRst = (multLatchSr[1:0] == 2'b01);
+
+   //wire accRst = (multLatchSr[1:0] == 2'b01);
+   wire accRst = (multLatchSr[2:1] == 2'b01);
    always @(posedge clk) begin
-		if (reset) begin
-          mf0I <= 0;
-          mf0Q <= 0;
-          mf1I <= 0;
-          mf1Q <= 0;
-			end
+      if (reset) begin
+         mf0I <= 0;
+         mf0Q <= 0;
+         mf1I <= 0;
+         mf1Q <= 0;
+         aMinusb <= 0;       
+         dPlusc  <= 0;
+         aPlusb  <= 0;
+         dMinusc <= 0;
+      end
       else if (accRst) begin
-          // Match filter Zero
-          mf0I <= aMinusb;
-          mf0Q <= dPlusc;
-          // Match filter One
-          mf1I <= aPlusb;
-          mf1Q <= dMinusc;
+         aMinusb <= {multA[34], multA[34:0]} - {multB[34], multB[34:0]};
+         dPlusc  <= {multD[34], multD[34:0]} + {multC[34], multC[34:0]};
+         aPlusb  <= {multA[34], multA[34:0]} + {multB[34], multB[34:0]};
+         dMinusc <= {multD[34], multD[34:0]} - {multC[34], multC[34:0]};
+         // Match filter Zero
+         mf0I <= aMinusb;
+         mf0Q <= dPlusc;
+         // Match filter One
+         mf1I <= aPlusb;
+         mf1Q <= dMinusc;
       end
       else begin
-          // Match filter Zero
-          mf0I <= mf0I + aMinusb;
-          mf0Q <= mf0Q + dPlusc;
-          // Match filter One
-          mf1I <= mf1I + aPlusb;
-          mf1Q <= mf1Q + dMinusc;
+         aMinusb <= {multA[34], multA[34:0]} - {multB[34], multB[34:0]};
+         dPlusc  <= {multD[34], multD[34:0]} + {multC[34], multC[34:0]};
+         aPlusb  <= {multA[34], multA[34:0]} + {multB[34], multB[34:0]};
+         dMinusc <= {multD[34], multD[34:0]} - {multC[34], multC[34:0]};
+         // Match filter Zero
+         mf0I <= mf0I + aMinusb;
+         mf0Q <= mf0Q + dPlusc;
+         // Match filter One
+         mf1I <= mf1I + aPlusb;
+         mf1Q <= mf1Q + dMinusc;
       end
    end
 
@@ -287,7 +305,8 @@ module mfilt
         mf1IOut <= 0;
         mf1QOut <= 0;       
      end
-     else if (multLatchSr[5:4] == 2'b01) begin
+     //else if (multLatchSr[5:4] == 2'b01) begin
+     else if (multLatchSr[6:5] == 2'b01) begin
 /* -----\/----- EXCLUDED -----\/-----
         mf0IOut <= mf0I;
         mf0QOut <= mf0Q;

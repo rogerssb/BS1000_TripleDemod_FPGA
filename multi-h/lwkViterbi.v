@@ -94,6 +94,21 @@ module viterbiMultiH
                          s32, s17, s2, s51, s36, s21, s6, s55, s40, s25, s10, s59, s44, s29, s14, s63,
                          s48, s33, s18, s3, s52, s37, s22, s7, s56, s41, s26, s11, s60, s45, s30, s15;
 
+
+   // This is not pretty but it is a way to get the design going
+   // The normailization has to be insync with the controls in acsMultH/compSel
+   reg [5:0] symEnSr;
+   always @(posedge clk) begin
+      if (reset) begin
+         symEnSr <= 0;
+      end
+      else begin
+         symEnSr <= {symEnSr[4:0], symEn};
+      end
+   end
+   wire symEnSameAsInCompSel = symEnSr[4];    
+
+
    // ACS acc. normalization control signal
    reg [3:0] normSr;
    wire symEnAcs;
@@ -102,7 +117,7 @@ module viterbiMultiH
         if (reset) begin
            normSr <= 0;
         end
-        else if (symEnAcs) begin
+        else if (symEnSameAsInCompSel) begin
            normSr <= {normSr[2:0], s0  | s49 | s34 | s19 | s4  | s53 | s38 | s23 |
                                  s8  | s57 | s42 | s27 | s12 | s61 | s46 | s31 |
                                  s16 | s1  | s50 | s35 | s20 | s5  | s54 | s39 |
@@ -263,7 +278,8 @@ module viterbiMultiH
          symEnEvenSr <= {symEnEvenSr[4:0], symEnEven};
       end
    end
-   wire symEnEvenAcsMux = symEnEvenSr[5];    // there is a total of 3+1 clock delay through the acs module
+   //wire symEnEvenAcsMux = symEnEvenSr[5];    // there is a total of 3+1 clock delay through the acs module
+   wire symEnEvenAcsMux = symEnEvenSr[4];    // there is a total of 3+1 clock delay through the acs module
 
 
    `ifdef USE_DECAY
@@ -672,7 +688,7 @@ module viterbiMultiH
      (
       .clk       (clk     ), 
       .reset     (reset   ), 
-      .symEn     (symEn_maxMetDly),
+      .symEn     (symEnMaxMet),
       .symEnEven (symEnEven),    // THIS IS NOT THE CORRECT symEnEven TO USE HERE    ***** FIX IT ****
       .decTbtIn  (decTbtIn),
       .sel0      (selOut0 ), .sel1 (selOut1 ), .sel2 (selOut2 ), .sel3 (selOut3 ), .sel4 (selOut4 ), .sel5 (selOut5 ), .sel6 (selOut6 ), .sel7 (selOut7 ),
