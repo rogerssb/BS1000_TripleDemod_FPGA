@@ -13,7 +13,7 @@
 
 module trellisMultiH
   (
-   clk,reset,symEn,sym2xEn,
+   clk,reset,symEnIn,sym2xEnIn,
    iIn,qIn,
    wr0,wr1,wr2,wr3,
    addr,
@@ -26,7 +26,6 @@ module trellisMultiH
    dac2Sync,
    dac2Data,
    decision,
-   phaseError,
    symEnOut,
    sym2xEnOut
    );
@@ -34,7 +33,7 @@ module trellisMultiH
    parameter MF_BITS = 10;
    parameter ROT_BITS = 8;
 
-   input                    clk,reset,symEn,sym2xEn;
+   input                    clk,reset,symEnIn,sym2xEnIn;
    input [17:0]             iIn,qIn;
    input                    wr0,wr1,wr2,wr3;
    input [11:0]             addr;
@@ -48,7 +47,6 @@ module trellisMultiH
    output                   dac2Sync;
    output [17:0]            dac2Data;
    output [1:0]             decision;
-   output [ROT_BITS-1:0]    phaseError;
    output                   symEnOut;
    output                   sym2xEnOut;
    
@@ -58,20 +56,62 @@ module trellisMultiH
 //`define ALDEC_SIM
 `define BYPASS_LOOP
 
-   // Latching the incomming I and Q samples 
-   reg [17:0]  iInLatch,
-               qInLatch;
-   always @(posedge clk)
-     if (reset) begin
+`define USE_SLIP
+`ifdef USE_SLIP
+// Symbol Slip State Machine
+reg             symbolSlip;
+reg             symbolSlipped;
+reg     [1:0]   slipSR;
+wire            slip = (slipSR[1]);
+reg             slippedSymEn;
+reg     [17:0]  slipI,slipQ;
+reg             symEn,sym2xEn;
+always @(posedge clk) begin
+    // Reclock the inputs
+    slipI <= iIn;
+    slipQ <= qIn;
+    sym2xEn <= sym2xEnIn;
+
+    // Create a gated version of symEn.
+    slipSR <= {slipSR[0],symbolSlip};
+    if (symEnIn && slip) begin
+        symEn <= 0;
+        symbolSlipped <= 1;
+        end
+    else begin
+        symEn <= 1;
+        symbolSlipped <= 0;
+        end
+    end
+`else
+wire    [17:0]  slipI = iIn;
+wire    [17:0]  slipQ = qIn;
+wire            symEn = symEnIn;
+wire            sym2xEn = sym2xEnIn;
+`endif
+
+// Latching the incomming I and Q samples 
+reg     [17:0]  iInLatch,qInLatch;
+reg     [17:0]  iDelay,qDelay;
+reg             symbolDelay;
+always @(posedge clk) begin
+    if (reset) begin
         iInLatch <= 0;
         qInLatch <= 0;
-     end
-     else begin
-        if (sym2xEn)begin
-           iInLatch <= iIn;
-           qInLatch <= qIn;
         end
-     end
+    else if (sym2xEn) begin
+        if (symbolDelay) begin
+            iDelay <= slipI;
+            qDelay <= slipQ;
+            iInLatch <= iDelay;
+            qInLatch <= qDelay;
+            end
+        else begin
+            iInLatch <= slipI;
+            qInLatch <= slipQ;
+            end
+        end
+    end
 
    
    //reg [7:0]           phErrShft;
@@ -259,6 +299,7 @@ module trellisMultiH
    wire    [5:0]   index;
 
 reg     [7:0]   decayFactor;      
+wire    [7:0]   phaseError;
         
 viterbiMultiH /*#(MF_BITS, ROT_BITS)*/ viterbiMultiH
    (
@@ -337,6 +378,7 @@ viterbiMultiH /*#(MF_BITS, ROT_BITS)*/ viterbiMultiH
     .mf_m1m3_54Imag        (mf_m1m3_54Imag),
     .index                 (index         ),
     .decision              (decision      ),
+    .normalize             (normalize     ),
     .phaseError            (phaseError    ),
     .devError              (              ),
     .symEnOut              (symEnOut      ),    
@@ -344,12 +386,12 @@ viterbiMultiH /*#(MF_BITS, ROT_BITS)*/ viterbiMultiH
     );
     
 
+   /* -----\/----- EXCLUDED -----\/-----
    reg [7:0]            dataBits;
   
    reg                  satPos,satNeg;
    wire                 sign = phaseError[7];
 
-   /* -----\/----- EXCLUDED -----\/-----
    always @(posedge clk) begin
       if (symEnOut) begin
          dataBits <= {phaseError[6:0], 1'b0};
@@ -392,10 +434,25 @@ always @(negedge wr0) begin
     if (trellisSpace) begin
         casex (addr) 
             `TRELLIS_DECAY:     decayFactor <= din[7:0];
+            `TRELLIS_CONTROL:   symbolDelay <= din[1];
             default: ;
             endcase
         end
     end
+
+
+always @(negedge wr0 or posedge symbolSlipped) begin
+    if (symbolSlipped) begin
+        symbolSlip <= 0;
+        end
+    else if (trellisSpace) begin
+        casex (addr) 
+            `TRELLIS_CONTROL:   symbolSlip <= din[0];
+            default: ;
+            endcase
+        end
+    end
+
 
 reg [31:0]dout;
 always @(trellisSpace or addr
@@ -412,8 +469,6 @@ always @(trellisSpace or addr
         end
     end
 
-/* -----\/----- EXCLUDED -----\/-----
- 
 
 //******************************************************************************
 //                               DAC Output Mux
@@ -444,7 +499,7 @@ always @(posedge clk) begin
             `endif
             end
         `DAC_TRELLIS_PHERR: begin
-            dac0Data <= {phaseError,10'b0};
+            dac0Data <= {normalize,17'b0};
             dac0Sync <= symEnOut;
             end
         `DAC_TRELLIS_INDEX: begin
@@ -452,7 +507,7 @@ always @(posedge clk) begin
             dac0Sync <= symEnOut;
             end
         default: begin
-            dac0Data <= {phaseError,10'b0};
+            dac0Data <= {normalize,17'b0};
             dac0Sync <= symEnOut;
             end
         endcase
@@ -475,7 +530,7 @@ always @(posedge clk) begin
             `endif
             end
         `DAC_TRELLIS_PHERR: begin
-            dac1Data <= {phaseError,10'b0};
+            dac1Data <= {normalize,17'b0};
             dac1Sync <= symEnOut;
             end
         `DAC_TRELLIS_INDEX: begin
@@ -483,7 +538,7 @@ always @(posedge clk) begin
             dac1Sync <= symEnOut;
             end
         default: begin
-            dac1Data <= {phaseError,10'b0};
+            dac1Data <= {normalize,17'b0};
             dac1Sync <= symEnOut;
             end
         endcase
@@ -506,7 +561,7 @@ always @(posedge clk) begin
             `endif
             end
         `DAC_TRELLIS_PHERR: begin
-            dac2Data <= {phaseError,10'b0};
+            dac2Data <= {normalize,17'b0};
             dac2Sync <= symEnOut;
             end
         `DAC_TRELLIS_INDEX: begin
@@ -514,13 +569,12 @@ always @(posedge clk) begin
             dac2Sync <= symEnOut;
             end
         default: begin
-            dac2Data <= {phaseError,10'b0};
+            dac2Data <= {normalize,17'b0};
             dac2Sync <= symEnOut;
             end
         endcase
 
     end
------/\----- EXCLUDED -----/\----- */
 
 endmodule
 

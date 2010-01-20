@@ -131,6 +131,7 @@
 `define TRELLIS_BER     12'bxxxx_xxxx_00xx
 `define TRELLIS_DEV     12'bxxxx_xxxx_01xx
 `define TRELLIS_DECAY   12'bxxxx_xxxx_10xx
+`define TRELLIS_CONTROL 12'bxxxx_xxxx_11xx
 
 // Define the SDI registers
 `define SDI_CONTROL     12'bxxxx_xxxx_00xx

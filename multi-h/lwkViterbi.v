@@ -32,6 +32,7 @@ module viterbiMultiH
    mf_p1p3_54Imag, mf_p1p1_54Imag, mf_p1m1_54Imag, mf_p1m3_54Imag,
    mf_m1p3_54Imag, mf_m1p1_54Imag, mf_m1m1_54Imag, mf_m1m3_54Imag,
    index, decision, 
+   normalize,
    phaseError, devError,
    symEnOut, sym2xEnOut
    );
@@ -61,6 +62,7 @@ module viterbiMultiH
    
    output [5:0]          index;
    output [1:0]          decision;
+   output                normalize;
    output [ROT_BITS-1:0] phaseError;
    output [MF_BITS-1:0]  devError;
    output                symEnOut, sym2xEnOut;
@@ -129,6 +131,7 @@ module viterbiMultiH
         end
      end
    wire s = (normSr[1:0]==2'b01) ? 1 : 0; // edge trigger on the normailzation to prevent under saturation
+   assign normalize = s;
    
 
    wire [1:0]            selOut0 , selOut49 , selOut34 , selOut19 , selOut4 , selOut53 , selOut38 , selOut23 , 
