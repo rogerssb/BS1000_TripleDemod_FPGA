@@ -528,7 +528,7 @@ always @(posedge ck933) begin
     symb_pll_ref <= pllRef;
     end
 
-//`define DIRECT_DATA
+`define DIRECT_DATA
 `ifdef DIRECT_DATA
 assign cout_i = decoder_cout;
 assign dout_i = decoder_dout_i;
