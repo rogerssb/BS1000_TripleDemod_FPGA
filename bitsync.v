@@ -152,8 +152,10 @@ always @(posedge sampleClk) begin
         end
     end
 
-wire fmTrellisModes = ( (demodMode == `MODE_MULTIH)
-                     || (demodMode == `MODE_PCMTRELLIS)
+//wire fmTrellisModes = ( (demodMode == `MODE_MULTIH)
+//                     || (demodMode == `MODE_PCMTRELLIS)
+//                      );
+wire fmTrellisModes = ( (demodMode == `MODE_PCMTRELLIS)
                       );
 assign iTrellis = fmTrellisModes ? iMF : i;
 assign qTrellis = fmTrellisModes ? qMF : q;
