@@ -56,7 +56,7 @@ module trellisMultiH
 //`define ALDEC_SIM
 `define BYPASS_LOOP
 
-`define USE_SLIP
+//`define USE_SLIP
 `ifdef USE_SLIP
 // Symbol Slip State Machine
 reg             symbolSlip;
@@ -440,7 +440,7 @@ always @(negedge wr0) begin
         end
     end
 
-
+`ifdef USE_SLIP
 always @(negedge wr0 or posedge symbolSlipped) begin
     if (symbolSlipped) begin
         symbolSlip <= 0;
@@ -452,7 +452,7 @@ always @(negedge wr0 or posedge symbolSlipped) begin
             endcase
         end
     end
-
+`endif
 
 reg [31:0]dout;
 always @(trellisSpace or addr

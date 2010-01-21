@@ -354,13 +354,12 @@ TIMEGRP "tg10" = FFS(dac1Interp/cicInterpolate/acc0*);
 TIMEGRP "tg11" = FFS(dac2Interp/cicInterpolate/acc0*);
 TIMEGRP "tg12" = FFS(dac*Sync);
 TIMEGRP "tg13" = FFS(dac*Interp/*);
-TIMEGRP "tg14" = FFS(trellis/trellisCarrierLoop/lagGain*) FFS(trellis/trellisCarrierLoop/leadGain*) FFS(trellis/trellisCarrierLoop/filterSum*) FFS(soqpsk/soqpskCarrierLoop/lagGain*) FFS(soqpsk/soqpskCarrierLoop/leadGain*) FFS(soqpsk/soqpskCarrierLoop/filterSum*);
+TIMEGRP "tg14" = FFS(trellis/trellisCarrierLoop/lagGain/*) FFS(trellis/trellisCarrierLoop/leadGain/*) FFS(trellis/trellisCarrierLoop/filterSum*) FFS(soqpsk/soqpskCarrierLoop/lagGain/*) FFS(soqpsk/soqpskCarrierLoop/leadGain/*) FFS(soqpsk/soqpskCarrierLoop/filterSum*);
 TIMEGRP "ddc0" = FFS(demod/ddc/iAgcIn*) FFS(demod/ddc/qAgcIn*);
 TIMEGRP "ddc1" = FFS(demod/ddc/iOut*) FFS(demod/ddc/qOut*);
 TIMEGRP "fmDemod" = FFS(demod/fmDemod/cordic/p*) FFS(trellis/trellisCarrierLoop/fmDemod/cordic/p*);
 TIMEGRP "slowGroup" = "syncGroup" "ddc0" "ddc1" "tg14" "fmDemod";
 TIMESPEC TS_ck933 = PERIOD "ck933" 100 MHz HIGH 50%;
-TIMESPEC TS_nWe = PERIOD "nWe" 100 ns HIGH 50%;
 TIMESPEC TS_slowGroup = PERIOD "slowGroup" 50 MHz;
 TIMESPEC TS_sync = FROM "sync" TO FFS 100 MHz;
 TIMESPEC TS_interp00 = FROM "tg6" TO "tg9" 100 MHz;
@@ -371,6 +370,7 @@ TIMESPEC TS_symEn = PERIOD "acs" 25 MHz;
 TIMESPEC TS_symEn0 = FROM "rotOut" TO "acs" 25 MHz;
 TIMESPEC TS_symEn1 = PERIOD "soqpskAcs" 50 MHz;
 TIMESPEC TS_symEn2 = FROM "soqpskRotOut" TO "soqpskAcs" 50 MHz;
+TIMESPEC TS_nWe = PERIOD "nWe" 100 ns HIGH 50%;
 
 
 
