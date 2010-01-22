@@ -170,8 +170,8 @@ module rot8x8
         iOutTmp <= {ixCr[15], ixCr} - {qxCi[15], qxCi};
         qOutTmp <= {ixCi[15], ixCi} + {qxCr[15], qxCr};
      end
-   assign iOut = iOutTmp[16:7];
-   assign qOut = qOutTmp[16:7];
+   assign iOut = iOutTmp[16:16-ROT_BITS+1];
+   assign qOut = qOutTmp[16:16-ROT_BITS+1];
 
 
 `ifdef SIMULATE

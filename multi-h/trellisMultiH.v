@@ -300,6 +300,7 @@ always @(posedge clk) begin
 
 reg     [7:0]   decayFactor;      
 wire    [7:0]   phaseError;
+wire    [9:0]   maxAcs;
         
 viterbiMultiH /*#(MF_BITS, ROT_BITS)*/ viterbiMultiH
    (
@@ -515,20 +516,24 @@ always @(posedge clk) begin
 
     case (dac1Select) 
         `DAC_TRELLIS_I: begin
-            dac1Data <= carrierLoopIOut;
-            `ifdef BYPASS_LOOP
-            dac1Sync <= sym2xEn;
-            `else
-            dac1Sync <= sym2xEnLoop;
-            `endif
+		      dac1Data <= {mf_p3p3_45Real,{(18-MF_BITS){1'b0}}};
+				dac1Sync <= symEnRot;
+            //dac1Data <= carrierLoopIOut;
+            //`ifdef BYPASS_LOOP
+            //dac1Sync <= sym2xEn;
+            //`else
+            //dac1Sync <= sym2xEnLoop;
+            //`endif
             end
         `DAC_TRELLIS_Q: begin
-            dac1Data <= carrierLoopQOut;
-            `ifdef BYPASS_LOOP
-            dac1Sync <= sym2xEn;
-            `else
-            dac1Sync <= sym2xEnLoop;
-            `endif
+		      dac1Data <= {mf_p3p3_45Imag,{(18-MF_BITS){1'b0}}};
+				dac1Sync <= symEnRot;
+            //dac1Data <= carrierLoopQOut;
+            //`ifdef BYPASS_LOOP
+            //dac1Sync <= sym2xEn;
+            //`else
+            //dac1Sync <= sym2xEnLoop;
+            //`endif
             end
         `DAC_TRELLIS_PHERR: begin
             dac1Data <= {maxAcs,8'b0};

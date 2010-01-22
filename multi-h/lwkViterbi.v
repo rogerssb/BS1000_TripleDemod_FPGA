@@ -208,7 +208,7 @@ module viterbiMultiH
    rotMux #(MF_BITS) rotMux3     (.clk(clk), .reset(reset), .symEn(symEn), .sym2xEn(sym2xEn), .symEnEven(symEnEven), .mfI_45_0(mf_m3p3_54Real), .mfI_45_1(mf_m1p3_54Real), .mfI_45_2(mf_p1p3_54Real), .mfI_45_3(mf_p3p3_54Real), .mfI_54_0(mf_m3p3_45Real), .mfI_54_1(mf_m1p3_45Real), .mfI_54_2(mf_p1p3_45Real), .mfI_54_3(mf_p3p3_45Real), .mfQ_45_0(mf_m3p3_54Imag), .mfQ_45_1(mf_m1p3_54Imag), .mfQ_45_2(mf_p1p3_54Imag), .mfQ_45_3(mf_p3p3_54Imag), .mfQ_54_0(mf_m3p3_45Imag), .mfQ_54_1(mf_m1p3_45Imag), .mfQ_54_2(mf_p1p3_45Imag), .mfQ_54_3(mf_p3p3_45Imag), .iMfInRot(iMfInRot3), .qMfInRot(qMfInRot3), .symEnOut(), .sym2xEnOut(), .symEnEvenOut() );
 
    //         h45 rot para  h54 rot param                                                                                                                                                      match filters                                           ACC metrics
-   acsMultH #(0 ,11, 6, 1,  0 ,12, 8, 4, ACS_BITS, MF_BITS, ROT_BITS, 0)  acsMultH0    (.clk(clk), .reset(reset), .symEn(symEnRotMux), .sym2xEn(sym2xEnRotMux), .symEnEven(symEnEven), .symEnEvenRot(symEnEvenRotMux), .iMfInRot(iMfInRot0), .qMfInRot(qMfInRot0), .accMetMuxOut_0(accMuxOut0_0 ), .accMetMuxOut_1(accMuxOut0_1 ), .accMetMuxOut_2(accMuxOut0_2 ), .accMetMuxOut_3(accMuxOut0_3 ), .selOut(selOut0 ), .normalizeIn(s), .normalizeOut(s0 ), .accMetOut(accMetOut0 ), .iOut(/*iOut0 */), .qOut(qOut0 ), .symEnOut(symEnAcs), .sym2xEnOut(sym2xEnAcs));
+   acsMultH #(0 ,11, 6, 1,  0 ,12, 8, 4, ACS_BITS, MF_BITS, ROT_BITS, 0)  acsMultH0    (.clk(clk), .reset(reset), .symEn(symEnRotMux), .sym2xEn(sym2xEnRotMux), .symEnEven(symEnEven), .symEnEvenRot(symEnEvenRotMux), .iMfInRot(iMfInRot0), .qMfInRot(qMfInRot0), .accMetMuxOut_0(accMuxOut0_0 ), .accMetMuxOut_1(accMuxOut0_1 ), .accMetMuxOut_2(accMuxOut0_2 ), .accMetMuxOut_3(accMuxOut0_3 ), .selOut(selOut0 ), .normalizeIn(s), .normalizeOut(s0 ), .accMetOut(accMetOut0 ), .iOut(/*iOut0*/ ), .qOut(qOut0 ), .symEnOut(symEnAcs), .sym2xEnOut(sym2xEnAcs));
    acsMultH #(12, 7, 2,13,  12, 8, 4, 0, ACS_BITS, MF_BITS, ROT_BITS, 0)  acsMultH49   (.clk(clk), .reset(reset), .symEn(symEnRotMux), .sym2xEn(sym2xEnRotMux), .symEnEven(symEnEven), .symEnEvenRot(symEnEvenRotMux), .iMfInRot(iMfInRot1), .qMfInRot(qMfInRot1), .accMetMuxOut_0(accMuxOut48_0), .accMetMuxOut_1(accMuxOut48_1), .accMetMuxOut_2(accMuxOut48_2), .accMetMuxOut_3(accMuxOut48_3), .selOut(selOut49), .normalizeIn(s), .normalizeOut(s49), .accMetOut(accMetOut49), .iOut(/*iOut49*/), .qOut(qOut49), .symEnOut(), .sym2xEnOut());
    acsMultH #( 8, 3,14, 9,  8 , 4, 0,12, ACS_BITS, MF_BITS, ROT_BITS, 0)  acsMultH34   (.clk(clk), .reset(reset), .symEn(symEnRotMux), .sym2xEn(sym2xEnRotMux), .symEnEven(symEnEven), .symEnEvenRot(symEnEvenRotMux), .iMfInRot(iMfInRot2), .qMfInRot(qMfInRot2), .accMetMuxOut_0(accMuxOut32_0), .accMetMuxOut_1(accMuxOut32_1), .accMetMuxOut_2(accMuxOut32_2), .accMetMuxOut_3(accMuxOut32_3), .selOut(selOut34), .normalizeIn(s), .normalizeOut(s34), .accMetOut(accMetOut34), .iOut(/*iOut34*/), .qOut(qOut34), .symEnOut(), .sym2xEnOut());
    acsMultH #( 4,15,10, 5,  4 , 0,12, 8, ACS_BITS, MF_BITS, ROT_BITS, 0)  acsMultH19   (.clk(clk), .reset(reset), .symEn(symEnRotMux), .sym2xEn(sym2xEnRotMux), .symEnEven(symEnEven), .symEnEvenRot(symEnEvenRotMux), .iMfInRot(iMfInRot3), .qMfInRot(qMfInRot3), .accMetMuxOut_0(accMuxOut16_0), .accMetMuxOut_1(accMuxOut16_1), .accMetMuxOut_2(accMuxOut16_2), .accMetMuxOut_3(accMuxOut16_3), .selOut(selOut19), .normalizeIn(s), .normalizeOut(s19), .accMetOut(accMetOut19), .iOut(/*iOut19*/), .qOut(qOut19), .symEnOut(), .sym2xEnOut());
@@ -345,10 +345,10 @@ module viterbiMultiH
       .accMetOut52(accMetOut52), .accMetOut53(accMetOut53), .accMetOut54(accMetOut54), .accMetOut55(accMetOut55), 
       .accMetOut56(accMetOut56), .accMetOut57(accMetOut57), .accMetOut58(accMetOut58), .accMetOut59(accMetOut59),
       .accMetOut60(accMetOut60), .accMetOut61(accMetOut61), .accMetOut62(accMetOut62), .accMetOut63(accMetOut63), 
-      .maxVal(maxAcs), .index(index),  .symEnOut(symEnMaxMet),    .sym2xEnOut(sym2xEnMaxMet) 
+      .maxVal(), .index(index),  .symEnOut(symEnMaxMet),    .sym2xEnOut(sym2xEnMaxMet) 
       //.symEnDly(symEn_maxMetDly)
       );
-
+    assign maxAcs = {qOut0,2'b0};
 
    // ----- decision before the traceback -----
    reg [1:0]             decision0;
@@ -513,7 +513,7 @@ module viterbiMultiH
 `ifdef ALDEC_SIM
    wire [1:0] decTbtIn = decision1;
 `else
-   wire [1:0] decision = {decision1, decision0};
+   wire [1:0] decision = decision1;
 `endif
    
    // Compute the phase Error 
