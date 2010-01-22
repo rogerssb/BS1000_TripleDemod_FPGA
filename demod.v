@@ -396,6 +396,7 @@ assign dac0Sync = ddcSync;
 assign dac1Data = qSwap;
 assign dac1Sync = ddcSync;
 `else
+wire multihMode = (demodMode == `MODE_MULTIH);
 reg             dac0Sync;
 reg     [17:0]  dac0Data;
 reg             dac1Sync;
@@ -414,11 +415,21 @@ always @(posedge clk) begin
             dac0Sync <= ddcSync;
             end
         `DAC_ISYM: begin
-            dac0Data <= iSymData;
+		      if (multihMode) begin
+					dac0Data <= iTrellis;
+					end
+				else begin
+					dac0Data <= iSymData;
+					end
             dac0Sync <= resampSync;
             end
         `DAC_QSYM: begin
-            dac0Data <= qSymData;
+		      if (multihMode) begin
+					dac0Data <= qTrellis;
+					end
+				else begin
+					dac0Data <= qSymData;
+					end
             dac0Sync <= resampSync;
             end
         `DAC_FREQ: begin
@@ -470,11 +481,21 @@ always @(posedge clk) begin
             dac1Sync <= ddcSync;
             end
         `DAC_ISYM: begin
-            dac1Data <= iSymData;
+		      if (multihMode) begin
+					dac1Data <= iTrellis;
+					end
+				else begin
+					dac1Data <= iSymData;
+					end
             dac1Sync <= resampSync;
             end
         `DAC_QSYM: begin
-            dac1Data <= qSymData;
+		      if (multihMode) begin
+					dac1Data <= qTrellis;
+					end
+				else begin
+					dac1Data <= qSymData;
+					end
             dac1Sync <= resampSync;
             end
         `DAC_FREQ: begin

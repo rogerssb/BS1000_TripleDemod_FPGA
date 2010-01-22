@@ -56,7 +56,7 @@ module trellisMultiH
 //`define ALDEC_SIM
 `define BYPASS_LOOP
 
-//`define USE_SLIP
+`define USE_SLIP
 `ifdef USE_SLIP
 // Symbol Slip State Machine
 reg             symbolSlip;
@@ -79,7 +79,7 @@ always @(posedge clk) begin
         symbolSlipped <= 1;
         end
     else begin
-        symEn <= 1;
+        symEn <= symEnIn;
         symbolSlipped <= 0;
         end
     end
@@ -524,9 +524,9 @@ always @(posedge clk) begin
         `DAC_TRELLIS_Q: begin
             dac1Data <= carrierLoopQOut;
             `ifdef BYPASS_LOOP
-            dac0Sync <= sym2xEn;
+            dac1Sync <= sym2xEn;
             `else
-            dac0Sync <= sym2xEnLoop;
+            dac1Sync <= sym2xEnLoop;
             `endif
             end
         `DAC_TRELLIS_PHERR: begin

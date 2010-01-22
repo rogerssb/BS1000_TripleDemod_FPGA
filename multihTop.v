@@ -102,8 +102,8 @@ always @(posedge ck933) begin
     dac0DataIn <= dac0Data;
     dac1DataIn <= dac1Data;
     dac2DataIn <= dac2Data;
-    multiHSymEnIn <= multiHSymEn & multihMode;
-    multiHSym2xEnIn <= multiHSym2xEn & multihMode;
+    multiHSymEnIn <= multiHSymEn;
+    multiHSym2xEnIn <= multiHSym2xEn;
     iMultiHIn <= iMultiH;
     qMultiHIn <= qMultiH;
     dataSymEnIn <= dataSymEn;
@@ -261,8 +261,8 @@ trellisMultiH multih
     (
     .clk(ck933),
     .reset(reset),
-    .symEnIn(multiHSymEnIn),
-    .sym2xEnIn(multiHSym2xEnIn),
+    .symEnIn(multiHSymEnIn & multihMode),
+    .sym2xEnIn(multiHSym2xEnIn & multihMode),
     .iIn(iMultiHIn),
     .qIn(qMultiHIn),
     .wr0(wr0),

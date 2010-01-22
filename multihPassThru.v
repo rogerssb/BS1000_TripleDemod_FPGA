@@ -25,6 +25,8 @@ module multihPassThru (
     demodMode,
     dac0Select,dac1Select,dac2Select,
     dac0Data,dac1Data,dac2Data,
+    multiHSymEn,multiHSym2xEn,
+    iMultiH,qMultiH,
     dataSymEn,dataSym2xEn,
     iData,qData,
     auSymClk,
@@ -54,6 +56,8 @@ inout           dac_sdio;
 input   [3:0]   demodMode;
 input   [3:0]   dac0Select,dac1Select,dac2Select;
 input   [13:0]  dac0Data,dac1Data,dac2Data;
+input           multiHSymEn,multiHSym2xEn;
+input   [17:0]  iMultiH,qMultiH;
 input           dataSymEn,dataSym2xEn;
 input           iData,qData;
 input           auSymClk;
@@ -87,7 +91,10 @@ assign demod_nLock = demodLockInput;
 //******************************************************************************
 //                               Reclock Inputs
 //******************************************************************************
+wire            multihMode = (demodMode == `MODE_MULTIH);
 reg     [13:0]  dac0DataIn, dac1DataIn, dac2DataIn;
+reg             multiHSymEnIn,multiHSym2xEnIn;
+reg     [17:0]  iMultiHIn,qMultiHIn;
 reg             dataSymEnIn,dataSym2xEnIn;
 reg             iDataIn,qDataIn;
 reg             auSymClkIn;
@@ -95,13 +102,16 @@ always @(posedge ck933) begin
     dac0DataIn <= dac0Data;
     dac1DataIn <= dac1Data;
     dac2DataIn <= dac2Data;
+    multiHSymEnIn <= multiHSymEn;
+    multiHSym2xEnIn <= multiHSym2xEn;
+    iMultiHIn <= iMultiH;
+    qMultiHIn <= qMultiH;
     dataSymEnIn <= dataSymEn;
     dataSym2xEnIn <= dataSym2xEn;
     iDataIn <= iData;
     qDataIn <= qData;
     auSymClkIn <= auSymClk;
     end
-
 
 //******************************************************************************
 //                               Miscellaneous
@@ -247,10 +257,18 @@ wire    [31:0]  dataIn = {data,data};
 reg     [13:0]  dac0Out,dac1Out,dac2Out;
 reg             dac0Sync,dac1Sync,dac2Sync;
 always @(posedge ck933) begin
-    dac0Out <= dac0DataIn;
-    dac0Sync <= 1;
-    dac1Out <= dac1DataIn;
-    dac1Sync <= 1;
+    if (multihMode) begin
+		  dac0Out <= iMultiHIn[17:4];
+		  dac0Sync <= multiHSym2xEnIn;
+		  dac1Out <= qMultiHIn[17:4];
+		  dac1Sync <= multiHSym2xEnIn;
+		  end
+	 else begin
+		  dac0Out <= dac0DataIn;
+		  dac0Sync <= 1;
+		  dac1Out <= dac1DataIn;
+		  dac1Sync <= 1;
+		  end
     dac2Out <= dac2DataIn;
     dac2Sync <= 1;
     end
