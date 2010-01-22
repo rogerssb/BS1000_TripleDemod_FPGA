@@ -161,9 +161,9 @@ module rot8x8
    //******************************************************
    `define MPY2
    `ifdef MPY2
-   wire [16:6] iOutTmp, qOutTmp;
-   assign iOutTmp <= {ixCr[15], ixCr} - {qxCi[15], qxCi};
-   assign qOutTmp <= {ixCi[15], ixCi} + {qxCr[15], qxCr};
+   wire [16:16-ROT_BITS] iOutTmp, qOutTmp;
+   assign iOutTmp = {ixCr[15], ixCr} - {qxCi[15], qxCi};
+   assign qOutTmp = {ixCi[15], ixCi} + {qxCr[15], qxCr};
 
    reg  [(ROT_BITS-1):0]   iOut, qOut;
    always @(posedge clk)
@@ -192,7 +192,7 @@ module rot8x8
             end
      end
    `else
-   reg [16:6] iOutTmp, qOutTmp;
+   reg [16:16-ROT_BITS] iOutTmp, qOutTmp;
    wire [(ROT_BITS-1):0]   iOut, qOut;
    always @(posedge clk)
      if (reset) begin
