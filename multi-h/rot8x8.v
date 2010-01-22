@@ -40,7 +40,6 @@ module rot8x8
    output                  sym2xEnOut;
    output [(ROT_BITS-1):0] iOut, qOut;
    
-   wire [(ROT_BITS-1):0]   iOut, qOut;
 
    // The rot module is running at the 100 MHz rate and not the symEn rate, so we have to provide synch signal aligned with data.
    reg [5:0] symEnSr;
@@ -160,7 +159,41 @@ module rot8x8
    //******************************************************
    // Need to compensate for the div by 2 in the mult cores
    //******************************************************
+   `define MPY2
+   `ifdef MPY2
+   wire [16:6] iOutTmp, qOutTmp;
+   assign iOutTmp <= {ixCr[15], ixCr} - {qxCi[15], qxCi};
+   assign qOutTmp <= {ixCi[15], ixCi} + {qxCr[15], qxCr};
+
+   reg  [(ROT_BITS-1):0]   iOut, qOut;
+   always @(posedge clk)
+     if (reset) begin
+        iOut <= 0;
+        qOut <= 0;   
+     end
+     else begin
+        if (iOutTmp[16] & !iOutTmp[15]) begin
+            iOut <= {1'b1,{ROT_BITS-2{1'b0}},1'b1};
+            end
+        else if (!iOutTmp[16] & iOutTmp[15]) begin
+            iOut <= {1'b0,{ROT_BITS-1{1'b1}}};
+            end
+        else begin
+            iOut <= iOutTmp[15:15-ROT_BITS+1];
+            end
+        if (qOutTmp[16] & !qOutTmp[15]) begin
+            qOut <= {1'b1,{ROT_BITS-2{1'b0}},1'b1};
+            end
+        else if (!qOutTmp[16] & qOutTmp[15]) begin
+            qOut <= {1'b0,{ROT_BITS-1{1'b1}}};
+            end
+        else begin
+            qOut <= qOutTmp[15:15-ROT_BITS+1];
+            end
+     end
+   `else
    reg [16:6] iOutTmp, qOutTmp;
+   wire [(ROT_BITS-1):0]   iOut, qOut;
    always @(posedge clk)
      if (reset) begin
         iOutTmp <= 0;
@@ -172,6 +205,7 @@ module rot8x8
      end
    assign iOut = iOutTmp[16:16-ROT_BITS+1];
    assign qOut = qOutTmp[16:16-ROT_BITS+1];
+   `endif
 
 
 `ifdef SIMULATE

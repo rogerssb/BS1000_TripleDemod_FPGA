@@ -313,10 +313,50 @@ module mfilt
         mf1IOut <= mf1I;  
         mf1QOut <= mf1Q;
  -----/\----- EXCLUDED -----/\----- */
+        `define MPY2
+        `ifdef MPY2
+        if (mf0I[35] & !mf0I[34]) begin
+            mf0IOut <= {1'b1,{MF_BITS-2{1'b0}},1'b1};
+            end
+        else if (!mf0I[35] & mf0I[34]) begin
+            mf0IOut <= {1'b0,{MF_BITS-1{1'b1}}};
+            end
+        else begin
+            mf0IOut <= mf0I[34:34-(MF_BITS-1)];
+            end
+        if (mf0Q[35] & !mf0Q[34]) begin
+            mf0QOut <= {1'b1,{MF_BITS-2{1'b0}},1'b1};
+            end
+        else if (!mf0Q[35] & mf0Q[34]) begin
+            mf0QOut <= {1'b0,{MF_BITS-1{1'b1}}};
+            end
+        else begin
+            mf0QOut <= mf0Q[34:34-(MF_BITS-1)];
+            end
+        if (mf1I[35] & !mf1I[34]) begin
+            mf1IOut <= {1'b1,{MF_BITS-2{1'b0}},1'b1};
+            end
+        else if (!mf1I[35] & mf1I[34]) begin
+            mf1IOut <= {1'b0,{MF_BITS-1{1'b1}}};
+            end
+        else begin
+            mf1IOut <= mf1I[34:34-(MF_BITS-1)];
+            end
+        if (mf1Q[35] & !mf1Q[34]) begin
+            mf1QOut <= {1'b1,{MF_BITS-2{1'b0}},1'b1};
+            end
+        else if (!mf1Q[35] & mf1Q[34]) begin
+            mf1QOut <= {1'b0,{MF_BITS-1{1'b1}}};
+            end
+        else begin
+            mf1QOut <= mf1Q[34:34-(MF_BITS-1)];
+            end
+        `else
         mf0IOut <= mf0I[35:35-(MF_BITS-1)];
         mf0QOut <= mf0Q[35:35-(MF_BITS-1)];
         mf1IOut <= mf1I[35:35-(MF_BITS-1)];  
         mf1QOut <= mf1Q[35:35-(MF_BITS-1)];
+        `endif
      end
           
 
