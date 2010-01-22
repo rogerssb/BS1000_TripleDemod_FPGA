@@ -33,6 +33,7 @@ module viterbiMultiH
    mf_m1p3_54Imag, mf_m1p1_54Imag, mf_m1m1_54Imag, mf_m1m3_54Imag,
    index, decision, 
    normalize,
+   maxAcs,
    phaseError, devError,
    symEnOut, sym2xEnOut
    );
@@ -63,6 +64,7 @@ module viterbiMultiH
    output [5:0]          index;
    output [1:0]          decision;
    output                normalize;
+   output [ACS_BITS-1:0] maxAcs;
    output [ROT_BITS-1:0] phaseError;
    output [MF_BITS-1:0]  devError;
    output                symEnOut, sym2xEnOut;
@@ -343,7 +345,7 @@ module viterbiMultiH
       .accMetOut52(accMetOut52), .accMetOut53(accMetOut53), .accMetOut54(accMetOut54), .accMetOut55(accMetOut55), 
       .accMetOut56(accMetOut56), .accMetOut57(accMetOut57), .accMetOut58(accMetOut58), .accMetOut59(accMetOut59),
       .accMetOut60(accMetOut60), .accMetOut61(accMetOut61), .accMetOut62(accMetOut62), .accMetOut63(accMetOut63), 
-      .maxVal(), .index(index),  .symEnOut(symEnMaxMet),    .sym2xEnOut(sym2xEnMaxMet) 
+      .maxVal(maxAcs), .index(index),  .symEnOut(symEnMaxMet),    .sym2xEnOut(sym2xEnMaxMet) 
       //.symEnDly(symEn_maxMetDly)
       );
 
@@ -511,7 +513,7 @@ module viterbiMultiH
 `ifdef ALDEC_SIM
    wire [1:0] decTbtIn = decision1;
 `else
-   wire [1:0] decision = decision1;
+   wire [1:0] decision = {decision1, decision0};
 `endif
    
    // Compute the phase Error 

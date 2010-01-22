@@ -379,6 +379,7 @@ viterbiMultiH /*#(MF_BITS, ROT_BITS)*/ viterbiMultiH
     .index                 (index         ),
     .decision              (decision      ),
     .normalize             (normalize     ),
+    .maxAcs                (maxAcs        ),
     .phaseError            (phaseError    ),
     .devError              (              ),
     .symEnOut              (symEnOut      ),    
@@ -530,7 +531,7 @@ always @(posedge clk) begin
             `endif
             end
         `DAC_TRELLIS_PHERR: begin
-            dac1Data <= {normalize,17'b0};
+            dac1Data <= {maxAcs,8'b0};
             dac1Sync <= symEnOut;
             end
         `DAC_TRELLIS_INDEX: begin
