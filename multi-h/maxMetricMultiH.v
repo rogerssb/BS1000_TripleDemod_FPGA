@@ -155,9 +155,6 @@ module maxMetricMultiH(clk, reset, symEn, sym2xEn,
         endcase
      end
 
- 
-
-   
    // Latching the final index and MaxVal
    always @(posedge clk)
      begin
@@ -172,21 +169,7 @@ module maxMetricMultiH(clk, reset, symEn, sym2xEn,
      end
    
    
-   reg [3:0] symEnSr;
-   reg [3:0] sym2xEnSr;
-   always @(posedge clk) begin
-      if (reset) begin
-         symEnSr <= 0;
-         sym2xEnSr <= 0;
-      end
-      else begin
-         symEnSr <= {symEnSr[3:0], symEn};
-         sym2xEnSr <= {sym2xEnSr[3:0], sym2xEn};
-      end
-   end
 
-   wire symEnOut = symEnSr[3];    
-   wire sym2xEnOut = sym2xEnSr[3];    
 
    
 endmodule

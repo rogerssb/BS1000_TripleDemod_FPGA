@@ -34,25 +34,10 @@ module acsMultH
    output [ROT_BITS-1:0] qOut;
    output                symEnOut, sym2xEnOut;
 
-   reg [5:0] symEnSr;
-   reg [5:0] sym2xEnSr;
-   reg [5:0] symEnEvenRotSr;   // not needed
-   wire      symEnRot, sym2xEnRot;
-   always @(posedge clk) begin
-      if (reset) begin
-         symEnSr <= 0;
-         sym2xEnSr <= 0;
-         symEnEvenRotSr <= 0;    // not needed
-      end
-      else begin
-         symEnSr <= {symEnSr[4:0], symEnRot};
-         sym2xEnSr <= {sym2xEnSr[4:0], sym2xEnRot};
-         symEnEvenRotSr <= {symEnEvenRotSr[4:0], symEnEvenRot};   // not needed
-      end
-   end
-
-   wire symEnOut = symEnSr[3];    
-   wire sym2xEnOut = sym2xEnSr[3];    
+   
+   wire                  symEnRot, sym2xEnRot;
+   wire                  symEnOut = symEnRot;    
+   wire                  sym2xEnOut = sym2xEnRot;    
 
    // Some control singnals  
    reg [1:0]             inputMuxSel; // starts to count to 3, resets to 0 at symEn
@@ -103,9 +88,9 @@ module acsMultH
 
    
    // Selects the amount of rotation bases on the matlab signal theta(n-2), here called ROT_45/54_?. 
-   reg [4:0] rotSel;
-   reg [MF_BITS-1:0] iMfInRotR, qMfInRotR;
-   reg symEnRotIn, sym2xEnRotIn;
+   reg [4:0]            rotSel;
+   reg [MF_BITS-1:0]    iMfInRotR, qMfInRotR;
+   reg                  symEnRotIn, sym2xEnRotIn;
    //always @(inputMuxSel or symEnEvenRot or tilt)
    always @(posedge clk) //clocking the rotSel to improve timing
      begin
@@ -380,9 +365,6 @@ module acsMultH
    end
    
 assign accMetOut = bestMetric;
-
-
-
    
 endmodule
 

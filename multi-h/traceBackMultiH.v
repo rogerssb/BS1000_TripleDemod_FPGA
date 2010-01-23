@@ -70,6 +70,16 @@ module traceBackMultiH
                       tbt2_48, tbt2_49, tbt2_50, tbt2_51, tbt2_52, tbt2_53, tbt2_54, tbt2_55,
                       tbt2_56, tbt2_57, tbt2_58, tbt2_59, tbt2_60, tbt2_61, tbt2_62, tbt2_63;
    
+   reg [1:0]          sel0r,  sel1r,  sel2r,  sel3r,  sel4r,  sel5r,  sel6r,  sel7r, 
+                      sel8r,  sel9r,  sel10r, sel11r, sel12r, sel13r, sel14r, sel15r,
+                      sel16r, sel17r, sel18r, sel19r, sel20r, sel21r, sel22r, sel23r,
+                      sel24r, sel25r, sel26r, sel27r, sel28r, sel29r, sel30r, sel31r,
+                      sel32r, sel33r, sel34r, sel35r, sel36r, sel37r, sel38r, sel39r,
+                      sel40r, sel41r, sel42r, sel43r, sel44r, sel45r, sel46r, sel47r,
+                      sel48r, sel49r, sel50r, sel51r, sel52r, sel53r, sel54r, sel55r,
+                      sel56r, sel57r, sel58r, sel59r, sel60r, sel61r, sel62r, sel63r;
+
+   
    // 3bits x 64 states trace-back shift-register
    always @(posedge clk)
      begin
@@ -104,70 +114,70 @@ module traceBackMultiH
         end 
         else begin
            if (stateCnt==3) begin  
-              tbt0_0  <= sel0 ;   tbt1_0  <= tbt0_0 ;   tbt2_0  <= tbt1_0 ;
-              tbt0_1  <= sel1 ;   tbt1_1  <= tbt0_1 ;   tbt2_1  <= tbt1_1 ;
-              tbt0_2  <= sel2 ;   tbt1_2  <= tbt0_2 ;   tbt2_2  <= tbt1_2 ;
-              tbt0_3  <= sel3 ;   tbt1_3  <= tbt0_3 ;   tbt2_3  <= tbt1_3 ;
-              tbt0_4  <= sel4 ;   tbt1_4  <= tbt0_4 ;   tbt2_4  <= tbt1_4 ;
-              tbt0_5  <= sel5 ;   tbt1_5  <= tbt0_5 ;   tbt2_5  <= tbt1_5 ;
-              tbt0_6  <= sel6 ;   tbt1_6  <= tbt0_6 ;   tbt2_6  <= tbt1_6 ;
-              tbt0_7  <= sel7 ;   tbt1_7  <= tbt0_7 ;   tbt2_7  <= tbt1_7 ;
-              tbt0_8  <= sel8 ;   tbt1_8  <= tbt0_8 ;   tbt2_8  <= tbt1_8 ;
-              tbt0_9  <= sel9 ;   tbt1_9  <= tbt0_9 ;   tbt2_9  <= tbt1_9 ;
-              tbt0_10 <= sel10;   tbt1_10 <= tbt0_10;   tbt2_10 <= tbt1_10;
-              tbt0_11 <= sel11;   tbt1_11 <= tbt0_11;   tbt2_11 <= tbt1_11;
-              tbt0_12 <= sel12;   tbt1_12 <= tbt0_12;   tbt2_12 <= tbt1_12;
-              tbt0_13 <= sel13;   tbt1_13 <= tbt0_13;   tbt2_13 <= tbt1_13;
-              tbt0_14 <= sel14;   tbt1_14 <= tbt0_14;   tbt2_14 <= tbt1_14;
-              tbt0_15 <= sel15;   tbt1_15 <= tbt0_15;   tbt2_15 <= tbt1_15;
-              tbt0_16 <= sel16;   tbt1_16 <= tbt0_16;   tbt2_16 <= tbt1_16;
-              tbt0_17 <= sel17;   tbt1_17 <= tbt0_17;   tbt2_17 <= tbt1_17;
-              tbt0_18 <= sel18;   tbt1_18 <= tbt0_18;   tbt2_18 <= tbt1_18;
-              tbt0_19 <= sel19;   tbt1_19 <= tbt0_19;   tbt2_19 <= tbt1_19;
-              tbt0_20 <= sel20;   tbt1_20 <= tbt0_20;   tbt2_20 <= tbt1_20;
-              tbt0_21 <= sel21;   tbt1_21 <= tbt0_21;   tbt2_21 <= tbt1_21;
-              tbt0_22 <= sel22;   tbt1_22 <= tbt0_22;   tbt2_22 <= tbt1_22;
-              tbt0_23 <= sel23;   tbt1_23 <= tbt0_23;   tbt2_23 <= tbt1_23;
-              tbt0_24 <= sel24;   tbt1_24 <= tbt0_24;   tbt2_24 <= tbt1_24;
-              tbt0_25 <= sel25;   tbt1_25 <= tbt0_25;   tbt2_25 <= tbt1_25;
-              tbt0_26 <= sel26;   tbt1_26 <= tbt0_26;   tbt2_26 <= tbt1_26;
-              tbt0_27 <= sel27;   tbt1_27 <= tbt0_27;   tbt2_27 <= tbt1_27;
-              tbt0_28 <= sel28;   tbt1_28 <= tbt0_28;   tbt2_28 <= tbt1_28;
-              tbt0_29 <= sel29;   tbt1_29 <= tbt0_29;   tbt2_29 <= tbt1_29;
-              tbt0_30 <= sel30;   tbt1_30 <= tbt0_30;   tbt2_30 <= tbt1_30;
-              tbt0_31 <= sel31;   tbt1_31 <= tbt0_31;   tbt2_31 <= tbt1_31;
-              tbt0_32 <= sel32;   tbt1_32 <= tbt0_32;   tbt2_32 <= tbt1_32;
-              tbt0_33 <= sel33;   tbt1_33 <= tbt0_33;   tbt2_33 <= tbt1_33;
-              tbt0_34 <= sel34;   tbt1_34 <= tbt0_34;   tbt2_34 <= tbt1_34;
-              tbt0_35 <= sel35;   tbt1_35 <= tbt0_35;   tbt2_35 <= tbt1_35;
-              tbt0_36 <= sel36;   tbt1_36 <= tbt0_36;   tbt2_36 <= tbt1_36;
-              tbt0_37 <= sel37;   tbt1_37 <= tbt0_37;   tbt2_37 <= tbt1_37;
-              tbt0_38 <= sel38;   tbt1_38 <= tbt0_38;   tbt2_38 <= tbt1_38;
-              tbt0_39 <= sel39;   tbt1_39 <= tbt0_39;   tbt2_39 <= tbt1_39;
-              tbt0_40 <= sel40;   tbt1_40 <= tbt0_40;   tbt2_40 <= tbt1_40;
-              tbt0_41 <= sel41;   tbt1_41 <= tbt0_41;   tbt2_41 <= tbt1_41;
-              tbt0_42 <= sel42;   tbt1_42 <= tbt0_42;   tbt2_42 <= tbt1_42;
-              tbt0_43 <= sel43;   tbt1_43 <= tbt0_43;   tbt2_43 <= tbt1_43;
-              tbt0_44 <= sel44;   tbt1_44 <= tbt0_44;   tbt2_44 <= tbt1_44;
-              tbt0_45 <= sel45;   tbt1_45 <= tbt0_45;   tbt2_45 <= tbt1_45;
-              tbt0_46 <= sel46;   tbt1_46 <= tbt0_46;   tbt2_46 <= tbt1_46;
-              tbt0_47 <= sel47;   tbt1_47 <= tbt0_47;   tbt2_47 <= tbt1_47;
-              tbt0_48 <= sel48;   tbt1_48 <= tbt0_48;   tbt2_48 <= tbt1_48;
-              tbt0_49 <= sel49;   tbt1_49 <= tbt0_49;   tbt2_49 <= tbt1_49;
-              tbt0_50 <= sel50;   tbt1_50 <= tbt0_50;   tbt2_50 <= tbt1_50;
-              tbt0_51 <= sel51;   tbt1_51 <= tbt0_51;   tbt2_51 <= tbt1_51;
-              tbt0_52 <= sel52;   tbt1_52 <= tbt0_52;   tbt2_52 <= tbt1_52;
-              tbt0_53 <= sel53;   tbt1_53 <= tbt0_53;   tbt2_53 <= tbt1_53;
-              tbt0_54 <= sel54;   tbt1_54 <= tbt0_54;   tbt2_54 <= tbt1_54;
-              tbt0_55 <= sel55;   tbt1_55 <= tbt0_55;   tbt2_55 <= tbt1_55;
-              tbt0_56 <= sel56;   tbt1_56 <= tbt0_56;   tbt2_56 <= tbt1_56;
-              tbt0_57 <= sel57;   tbt1_57 <= tbt0_57;   tbt2_57 <= tbt1_57;
-              tbt0_58 <= sel58;   tbt1_58 <= tbt0_58;   tbt2_58 <= tbt1_58;
-              tbt0_59 <= sel59;   tbt1_59 <= tbt0_59;   tbt2_59 <= tbt1_59;
-              tbt0_60 <= sel60;   tbt1_60 <= tbt0_60;   tbt2_60 <= tbt1_60;
-              tbt0_61 <= sel61;   tbt1_61 <= tbt0_61;   tbt2_61 <= tbt1_61;
-              tbt0_62 <= sel62;   tbt1_62 <= tbt0_62;   tbt2_62 <= tbt1_62;
-              tbt0_63 <= sel63;   tbt1_63 <= tbt0_63;   tbt2_63 <= tbt1_63;
+              tbt0_0  <= sel0r ;   tbt1_0  <= tbt0_0 ;   tbt2_0  <= tbt1_0 ;
+              tbt0_1  <= sel1r ;   tbt1_1  <= tbt0_1 ;   tbt2_1  <= tbt1_1 ;
+              tbt0_2  <= sel2r ;   tbt1_2  <= tbt0_2 ;   tbt2_2  <= tbt1_2 ;
+              tbt0_3  <= sel3r ;   tbt1_3  <= tbt0_3 ;   tbt2_3  <= tbt1_3 ;
+              tbt0_4  <= sel4r ;   tbt1_4  <= tbt0_4 ;   tbt2_4  <= tbt1_4 ;
+              tbt0_5  <= sel5r ;   tbt1_5  <= tbt0_5 ;   tbt2_5  <= tbt1_5 ;
+              tbt0_6  <= sel6r ;   tbt1_6  <= tbt0_6 ;   tbt2_6  <= tbt1_6 ;
+              tbt0_7  <= sel7r ;   tbt1_7  <= tbt0_7 ;   tbt2_7  <= tbt1_7 ;
+              tbt0_8  <= sel8r ;   tbt1_8  <= tbt0_8 ;   tbt2_8  <= tbt1_8 ;
+              tbt0_9  <= sel9r ;   tbt1_9  <= tbt0_9 ;   tbt2_9  <= tbt1_9 ;
+              tbt0_10 <= sel10r;   tbt1_10 <= tbt0_10;   tbt2_10 <= tbt1_10;
+              tbt0_11 <= sel11r;   tbt1_11 <= tbt0_11;   tbt2_11 <= tbt1_11;
+              tbt0_12 <= sel12r;   tbt1_12 <= tbt0_12;   tbt2_12 <= tbt1_12;
+              tbt0_13 <= sel13r;   tbt1_13 <= tbt0_13;   tbt2_13 <= tbt1_13;
+              tbt0_14 <= sel14r;   tbt1_14 <= tbt0_14;   tbt2_14 <= tbt1_14;
+              tbt0_15 <= sel15r;   tbt1_15 <= tbt0_15;   tbt2_15 <= tbt1_15;
+              tbt0_16 <= sel16r;   tbt1_16 <= tbt0_16;   tbt2_16 <= tbt1_16;
+              tbt0_17 <= sel17r;   tbt1_17 <= tbt0_17;   tbt2_17 <= tbt1_17;
+              tbt0_18 <= sel18r;   tbt1_18 <= tbt0_18;   tbt2_18 <= tbt1_18;
+              tbt0_19 <= sel19r;   tbt1_19 <= tbt0_19;   tbt2_19 <= tbt1_19;
+              tbt0_20 <= sel20r;   tbt1_20 <= tbt0_20;   tbt2_20 <= tbt1_20;
+              tbt0_21 <= sel21r;   tbt1_21 <= tbt0_21;   tbt2_21 <= tbt1_21;
+              tbt0_22 <= sel22r;   tbt1_22 <= tbt0_22;   tbt2_22 <= tbt1_22;
+              tbt0_23 <= sel23r;   tbt1_23 <= tbt0_23;   tbt2_23 <= tbt1_23;
+              tbt0_24 <= sel24r;   tbt1_24 <= tbt0_24;   tbt2_24 <= tbt1_24;
+              tbt0_25 <= sel25r;   tbt1_25 <= tbt0_25;   tbt2_25 <= tbt1_25;
+              tbt0_26 <= sel26r;   tbt1_26 <= tbt0_26;   tbt2_26 <= tbt1_26;
+              tbt0_27 <= sel27r;   tbt1_27 <= tbt0_27;   tbt2_27 <= tbt1_27;
+              tbt0_28 <= sel28r;   tbt1_28 <= tbt0_28;   tbt2_28 <= tbt1_28;
+              tbt0_29 <= sel29r;   tbt1_29 <= tbt0_29;   tbt2_29 <= tbt1_29;
+              tbt0_30 <= sel30r;   tbt1_30 <= tbt0_30;   tbt2_30 <= tbt1_30;
+              tbt0_31 <= sel31r;   tbt1_31 <= tbt0_31;   tbt2_31 <= tbt1_31;
+              tbt0_32 <= sel32r;   tbt1_32 <= tbt0_32;   tbt2_32 <= tbt1_32;
+              tbt0_33 <= sel33r;   tbt1_33 <= tbt0_33;   tbt2_33 <= tbt1_33;
+              tbt0_34 <= sel34r;   tbt1_34 <= tbt0_34;   tbt2_34 <= tbt1_34;
+              tbt0_35 <= sel35r;   tbt1_35 <= tbt0_35;   tbt2_35 <= tbt1_35;
+              tbt0_36 <= sel36r;   tbt1_36 <= tbt0_36;   tbt2_36 <= tbt1_36;
+              tbt0_37 <= sel37r;   tbt1_37 <= tbt0_37;   tbt2_37 <= tbt1_37;
+              tbt0_38 <= sel38r;   tbt1_38 <= tbt0_38;   tbt2_38 <= tbt1_38;
+              tbt0_39 <= sel39r;   tbt1_39 <= tbt0_39;   tbt2_39 <= tbt1_39;
+              tbt0_40 <= sel40r;   tbt1_40 <= tbt0_40;   tbt2_40 <= tbt1_40;
+              tbt0_41 <= sel41r;   tbt1_41 <= tbt0_41;   tbt2_41 <= tbt1_41;
+              tbt0_42 <= sel42r;   tbt1_42 <= tbt0_42;   tbt2_42 <= tbt1_42;
+              tbt0_43 <= sel43r;   tbt1_43 <= tbt0_43;   tbt2_43 <= tbt1_43;
+              tbt0_44 <= sel44r;   tbt1_44 <= tbt0_44;   tbt2_44 <= tbt1_44;
+              tbt0_45 <= sel45r;   tbt1_45 <= tbt0_45;   tbt2_45 <= tbt1_45;
+              tbt0_46 <= sel46r;   tbt1_46 <= tbt0_46;   tbt2_46 <= tbt1_46;
+              tbt0_47 <= sel47r;   tbt1_47 <= tbt0_47;   tbt2_47 <= tbt1_47;
+              tbt0_48 <= sel48r;   tbt1_48 <= tbt0_48;   tbt2_48 <= tbt1_48;
+              tbt0_49 <= sel49r;   tbt1_49 <= tbt0_49;   tbt2_49 <= tbt1_49;
+              tbt0_50 <= sel50r;   tbt1_50 <= tbt0_50;   tbt2_50 <= tbt1_50;
+              tbt0_51 <= sel51r;   tbt1_51 <= tbt0_51;   tbt2_51 <= tbt1_51;
+              tbt0_52 <= sel52r;   tbt1_52 <= tbt0_52;   tbt2_52 <= tbt1_52;
+              tbt0_53 <= sel53r;   tbt1_53 <= tbt0_53;   tbt2_53 <= tbt1_53;
+              tbt0_54 <= sel54r;   tbt1_54 <= tbt0_54;   tbt2_54 <= tbt1_54;
+              tbt0_55 <= sel55r;   tbt1_55 <= tbt0_55;   tbt2_55 <= tbt1_55;
+              tbt0_56 <= sel56r;   tbt1_56 <= tbt0_56;   tbt2_56 <= tbt1_56;
+              tbt0_57 <= sel57r;   tbt1_57 <= tbt0_57;   tbt2_57 <= tbt1_57;
+              tbt0_58 <= sel58r;   tbt1_58 <= tbt0_58;   tbt2_58 <= tbt1_58;
+              tbt0_59 <= sel59r;   tbt1_59 <= tbt0_59;   tbt2_59 <= tbt1_59;
+              tbt0_60 <= sel60r;   tbt1_60 <= tbt0_60;   tbt2_60 <= tbt1_60;
+              tbt0_61 <= sel61r;   tbt1_61 <= tbt0_61;   tbt2_61 <= tbt1_61;
+              tbt0_62 <= sel62r;   tbt1_62 <= tbt0_62;   tbt2_62 <= tbt1_62;
+              tbt0_63 <= sel63r;   tbt1_63 <= tbt0_63;   tbt2_63 <= tbt1_63;
            end
         end 
      end
@@ -187,31 +197,51 @@ module traceBackMultiH
         end
      end
    
+
+   reg symEnEvenToggle;
+     always @(posedge clk)
+     if (reset) begin
+        symEnEvenToggle <= 0;
+     end
+     else if (stateCnt == 3) begin
+        symEnEvenToggle <= symEnEven;
+     end
+     else begin
+        symEnEvenToggle <= ~symEnEvenToggle;
+     end
+   
    // Latching the next state
    reg [5:0] nStateLatched;
+   reg [5:0] indexReg;
    always @(posedge clk)
      if (reset) begin
         nStateLatched <= 0;
      end
      else begin
         nStateLatched <= nState;
+        if (symEn) begin
+           indexReg <= index;
+        end
      end
         
    // Updateing the current state initially with the maxMetrinc index at the symEn instance, otherwise update with the latched next state
    reg [5:0]          cState;
-   always @(index or nStateLatched or symEn)
-     if (symEn) begin
-        cState <= index;
+   always @(indexReg or nStateLatched or symEn)
+     //if (symEn) begin
+     if (stateCnt == 0) begin
+        cState <= indexReg;
      end
      else begin
         cState <= nStateLatched;
      end
 
    reg [5:0]          nState;
-   always @(symEnEven or cState[5:2] or decisionTmp)
+   always @(symEnEvenToggle or cState[5:2] or decisionTmp)
      begin
         nState[1:0] <= decisionTmp;
-        if (symEnEven) begin
+        if (symEnEvenToggle) begin
+           nState[5:2] <= cState[5:2]-5*decisionTmp;
+           /* -----\/----- EXCLUDED -----\/-----
            case (cState[5:2]) 
              0 : begin nState[5:2] <= cState[5:2]-5*decisionTmp; end 
              1 : begin nState[5:2] <= cState[5:2]-5*decisionTmp; end 
@@ -230,8 +260,11 @@ module traceBackMultiH
              14: begin nState[5:2] <= cState[5:2]-5*decisionTmp; end
              15: begin nState[5:2] <= cState[5:2]-5*decisionTmp; end
            endcase // case(cState)
+            -----/\----- EXCLUDED -----/\----- */
         end
         else begin
+           nState[5:2] <= cState[5:2]-4*decisionTmp;
+           /* -----\/----- EXCLUDED -----\/-----
            case (cState[5:2]) 
              0 : begin nState[5:2] <= cState[5:2]-4*decisionTmp; end 
              1 : begin nState[5:2] <= cState[5:2]-4*decisionTmp; end 
@@ -250,6 +283,7 @@ module traceBackMultiH
              14: begin nState[5:2] <= cState[5:2]-4*decisionTmp; end
              15: begin nState[5:2] <= cState[5:2]-4*decisionTmp; end
            endcase // case(cState)
+            -----/\----- EXCLUDED -----/\----- */
         end
      end 
 
@@ -262,6 +296,70 @@ module traceBackMultiH
            decisionTmp <= 0;
         end
         else if (symEn) begin
+sel0r<= sel0; 
+sel1r<= sel1; 
+sel2r<= sel2; 
+sel3r<= sel3; 
+sel4r<= sel4; 
+sel5r<= sel5; 
+sel6r<= sel6; 
+sel7r<= sel7; 
+sel8r<= sel8; 
+sel9r<= sel9; 
+sel10r<= sel10;
+sel11r<= sel11;
+sel12r<= sel12;
+sel13r<= sel13;
+sel14r<= sel14;
+sel15r<= sel15;
+sel16r<= sel16;
+sel17r<= sel17;
+sel18r<= sel18;
+sel19r<= sel19;
+sel20r<= sel20;
+sel21r<= sel21;
+sel22r<= sel22;
+sel23r<= sel23;
+sel24r<= sel24;
+sel25r<= sel25;
+sel26r<= sel26;
+sel27r<= sel27;
+sel28r<= sel28;
+sel29r<= sel29;
+sel30r<= sel30;
+sel31r<= sel31;
+sel32r<= sel32;
+sel33r<= sel33;
+sel34r<= sel34;
+sel35r<= sel35;
+sel36r<= sel36;
+sel37r<= sel37;
+sel38r<= sel38;
+sel39r<= sel39;
+sel40r<= sel40;
+sel41r<= sel41;
+sel42r<= sel42;
+sel43r<= sel43;
+sel44r<= sel44;
+sel45r<= sel45;
+sel46r<= sel46;
+sel47r<= sel47;
+sel48r<= sel48;
+sel49r<= sel49;
+sel50r<= sel50;
+sel51r<= sel51;
+sel52r<= sel52;
+sel53r<= sel53;
+sel54r<= sel54;
+sel55r<= sel55;
+sel56r<= sel56;
+sel57r<= sel57;
+sel58r<= sel58;
+sel59r<= sel59;
+sel60r<= sel60;
+sel61r<= sel61;
+sel62r<= sel62;
+sel63r<= sel63;
            //case (nState)
            case (index)
              0 : begin decisionTmp <= sel0 ; end
@@ -538,7 +636,7 @@ module traceBackMultiH
                   63: begin decisionTmp <= tbt2_63; end
                 endcase // case(nState)
              end // case: 2
-             default : decisionTmp <= 2'bzz;
+             default : decisionTmp <= decisionTmp;
              
            endcase // case(stateCnt)
         end // else: !if(symEn)
@@ -567,5 +665,18 @@ module traceBackMultiH
       end 
    end
          
+         
+reg [1:0] decisionTmp_s0, decisionTmp_s1, decisionTmp_s2, decisionTmp_s3, decisionTmp_s4;
+   always @(posedge clk) begin
+      case (stateCnt)
+        0: begin decisionTmp_s0 <= decisionTmp; end
+        1: begin decisionTmp_s1 <= decisionTmp; end
+        2: begin decisionTmp_s2 <= decisionTmp; end
+        3: begin decisionTmp_s3 <= decisionTmp; end
+        default: decisionTmp_s4 <= decisionTmp;
+      endcase // case(stateCnt)
+   end
+
+
          
 endmodule

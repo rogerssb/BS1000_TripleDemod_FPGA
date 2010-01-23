@@ -53,10 +53,12 @@ module trellisMultiH
    
    wire [1:0]          decision;
 
-//`define ALDEC_SIM
 `define BYPASS_LOOP
 
-`define USE_SLIP
+`ifndef ALDEC_SIM    // ALDEC_SIM is set as an env. var. in aldec duting simulation
+`define USE_SLIP     // We don't want to use slip in simulation
+`endif
+
 `ifdef USE_SLIP
 // Symbol Slip State Machine
 reg             symbolSlip;

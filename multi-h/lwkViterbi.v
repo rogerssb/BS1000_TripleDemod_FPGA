@@ -101,17 +101,16 @@ module viterbiMultiH
 
    // This is not pretty but it is a way to get the design going
    // The normailization has to be insync with the controls in acsMultH/compSel
-   reg [5:0] symEnSr;
+   reg [6:0] symEnEvenSr;
    always @(posedge clk) begin
       if (reset) begin
-         symEnSr <= 0;
+         symEnEvenSr <= 0;
       end
       else begin
-         symEnSr <= {symEnSr[4:0], symEn};
+         symEnEvenSr <= {symEnEvenSr[5:0], symEnEven};
       end
    end
-   wire symEnSameAsInCompSel = symEnSr[4];    
-
+   wire symEnEvenAcsMux = symEnEvenSr[6];    // there is a total of 3+1 clock delay through the acs module
 
    // ACS acc. normalization control signal
    reg [3:0] normSr;
@@ -121,7 +120,7 @@ module viterbiMultiH
         if (reset) begin
            normSr <= 0;
         end
-        else if (symEnSameAsInCompSel) begin
+        else if (symEnAcs) begin
            normSr <= {normSr[2:0], s0  | s49 | s34 | s19 | s4  | s53 | s38 | s23 |
                                  s8  | s57 | s42 | s27 | s12 | s61 | s46 | s31 |
                                  s16 | s1  | s50 | s35 | s20 | s5  | s54 | s39 |
@@ -180,7 +179,6 @@ module viterbiMultiH
                          accMuxOut52_0,  accMuxOut52_1,  accMuxOut52_2,  accMuxOut52_3,
                          accMuxOut56_0,  accMuxOut56_1,  accMuxOut56_2,  accMuxOut56_3,
                          accMuxOut60_0,  accMuxOut60_1,  accMuxOut60_2,  accMuxOut60_3;
-   wire                  symEnEvenRotMux;
 
    // symEnEven is the signal who indicate if we are in a 54 or 45 interval
    reg                   symEnEven;
@@ -201,7 +199,7 @@ module viterbiMultiH
                         iMfInRot1, qMfInRot1,
                         iMfInRot2, qMfInRot2,
                         iMfInRot3, qMfInRot3;
-
+   wire                 symEnRotMux, sym2xEnRotMux, symEnEvenRotMux;
    rotMux #(MF_BITS) rotMux0     (.clk(clk), .reset(reset), .symEn(symEn), .sym2xEn(sym2xEn), .symEnEven(symEnEven), .mfI_45_0(mf_m3m3_54Real), .mfI_45_1(mf_m1m3_54Real), .mfI_45_2(mf_p1m3_54Real), .mfI_45_3(mf_p3m3_54Real), .mfI_54_0(mf_m3m3_45Real), .mfI_54_1(mf_m1m3_45Real), .mfI_54_2(mf_p1m3_45Real), .mfI_54_3(mf_p3m3_45Real), .mfQ_45_0(mf_m3m3_54Imag), .mfQ_45_1(mf_m1m3_54Imag), .mfQ_45_2(mf_p1m3_54Imag), .mfQ_45_3(mf_p3m3_54Imag), .mfQ_54_0(mf_m3m3_45Imag), .mfQ_54_1(mf_m1m3_45Imag), .mfQ_54_2(mf_p1m3_45Imag), .mfQ_54_3(mf_p3m3_45Imag), .iMfInRot(iMfInRot0), .qMfInRot(qMfInRot0), .symEnOut(symEnRotMux), .sym2xEnOut(sym2xEnRotMux), .symEnEvenOut(symEnEvenRotMux) );
    rotMux #(MF_BITS) rotMux1     (.clk(clk), .reset(reset), .symEn(symEn), .sym2xEn(sym2xEn), .symEnEven(symEnEven), .mfI_45_0(mf_m3m1_54Real), .mfI_45_1(mf_m1m1_54Real), .mfI_45_2(mf_p1m1_54Real), .mfI_45_3(mf_p3m1_54Real), .mfI_54_0(mf_m3m1_45Real), .mfI_54_1(mf_m1m1_45Real), .mfI_54_2(mf_p1m1_45Real), .mfI_54_3(mf_p3m1_45Real), .mfQ_45_0(mf_m3m1_54Imag), .mfQ_45_1(mf_m1m1_54Imag), .mfQ_45_2(mf_p1m1_54Imag), .mfQ_45_3(mf_p3m1_54Imag), .mfQ_54_0(mf_m3m1_45Imag), .mfQ_54_1(mf_m1m1_45Imag), .mfQ_54_2(mf_p1m1_45Imag), .mfQ_54_3(mf_p3m1_45Imag), .iMfInRot(iMfInRot1), .qMfInRot(qMfInRot1), .symEnOut(), .sym2xEnOut(), .symEnEvenOut() );
    rotMux #(MF_BITS) rotMux2     (.clk(clk), .reset(reset), .symEn(symEn), .sym2xEn(sym2xEn), .symEnEven(symEnEven), .mfI_45_0(mf_m3p1_54Real), .mfI_45_1(mf_m1p1_54Real), .mfI_45_2(mf_p1p1_54Real), .mfI_45_3(mf_p3p1_54Real), .mfI_54_0(mf_m3p1_45Real), .mfI_54_1(mf_m1p1_45Real), .mfI_54_2(mf_p1p1_45Real), .mfI_54_3(mf_p3p1_45Real), .mfQ_45_0(mf_m3p1_54Imag), .mfQ_45_1(mf_m1p1_54Imag), .mfQ_45_2(mf_p1p1_54Imag), .mfQ_45_3(mf_p3p1_54Imag), .mfQ_54_0(mf_m3p1_45Imag), .mfQ_54_1(mf_m1p1_45Imag), .mfQ_54_2(mf_p1p1_45Imag), .mfQ_54_3(mf_p3p1_45Imag), .iMfInRot(iMfInRot2), .qMfInRot(qMfInRot2), .symEnOut(), .sym2xEnOut(), .symEnEvenOut() );
@@ -273,20 +271,6 @@ module viterbiMultiH
    acsMultH #( 7, 2,13, 8,   7, 3,15,11, ACS_BITS, MF_BITS, ROT_BITS, 0)  acsMultH30   (.clk(clk), .reset(reset), .symEn(symEnRotMux), .sym2xEn(sym2xEnRotMux), .symEnEven(symEnEven), .symEnEvenRot(symEnEvenRotMux), .iMfInRot(iMfInRot2), .qMfInRot(qMfInRot2), .accMetMuxOut_0(accMuxOut28_0), .accMetMuxOut_1(accMuxOut28_1), .accMetMuxOut_2(accMuxOut28_2), .accMetMuxOut_3(accMuxOut28_3), .selOut(selOut30), .normalizeIn(s), .normalizeOut(s30), .accMetOut(accMetOut30), .iOut(/*iOut30*/), .qOut(qOut30), .symEnOut(), .sym2xEnOut());
    acsMultH #( 3,14, 9, 4,   3,15,11, 7, ACS_BITS, MF_BITS, ROT_BITS, 0)  acsMultH15   (.clk(clk), .reset(reset), .symEn(symEnRotMux), .sym2xEn(sym2xEnRotMux), .symEnEven(symEnEven), .symEnEvenRot(symEnEvenRotMux), .iMfInRot(iMfInRot3), .qMfInRot(qMfInRot3), .accMetMuxOut_0(accMuxOut12_0), .accMetMuxOut_1(accMuxOut12_1), .accMetMuxOut_2(accMuxOut12_2), .accMetMuxOut_3(accMuxOut12_3), .selOut(selOut15), .normalizeIn(s), .normalizeOut(s15), .accMetOut(accMetOut15), .iOut(/*iOut15*/), .qOut(qOut15), .symEnOut(), .sym2xEnOut());
 
-
-   reg [5:0] symEnEvenSr;
-   always @(posedge clk) begin
-      if (reset) begin
-         symEnEvenSr <= 0;
-      end
-      else begin
-         symEnEvenSr <= {symEnEvenSr[4:0], symEnEven};
-      end
-   end
-   //wire symEnEvenAcsMux = symEnEvenSr[5];    // there is a total of 3+1 clock delay through the acs module
-   wire symEnEvenAcsMux = symEnEvenSr[4];    // there is a total of 3+1 clock delay through the acs module
-
-
    `ifdef USE_DECAY
    acsMuxLut #(ACS_BITS) acsMux0    (.decayFactor(decayFactor), .symEnEven(symEnEvenAcsMux), .accMet_45_0(accMetOut0 ), .accMet_45_1(accMetOut45), .accMet_45_2(accMetOut26), .accMet_45_3(accMetOut7 ), .accMet_54_0(accMetOut0 ), .accMet_54_1(accMetOut49), .accMet_54_2(accMetOut34), .accMet_54_3(accMetOut19), .accMuxOut0(accMuxOut0_0 ), .accMuxOut1(accMuxOut0_1 ), .accMuxOut2(accMuxOut0_2 ), .accMuxOut3(accMuxOut0_3 ));
    acsMuxMpy #(ACS_BITS) acsMux16   (.decayFactor(decayFactor), .symEnEven(symEnEvenAcsMux), .accMet_45_0(accMetOut16), .accMet_45_1(accMetOut61), .accMet_45_2(accMetOut42), .accMet_45_3(accMetOut23), .accMet_54_0(accMetOut16), .accMet_54_1(accMetOut1 ), .accMet_54_2(accMetOut50), .accMet_54_3(accMetOut35), .accMuxOut0(accMuxOut16_0), .accMuxOut1(accMuxOut16_1), .accMuxOut2(accMuxOut16_2), .accMuxOut3(accMuxOut16_3));
@@ -345,8 +329,7 @@ module viterbiMultiH
       .accMetOut52(accMetOut52), .accMetOut53(accMetOut53), .accMetOut54(accMetOut54), .accMetOut55(accMetOut55), 
       .accMetOut56(accMetOut56), .accMetOut57(accMetOut57), .accMetOut58(accMetOut58), .accMetOut59(accMetOut59),
       .accMetOut60(accMetOut60), .accMetOut61(accMetOut61), .accMetOut62(accMetOut62), .accMetOut63(accMetOut63), 
-      .maxVal(), .index(index),  .symEnOut(symEnMaxMet),    .sym2xEnOut(sym2xEnMaxMet) 
-      //.symEnDly(symEn_maxMetDly)
+      .maxVal(), .index(index),  .symEnOut(),    .sym2xEnOut() 
       );
     assign maxAcs = {qOut0,2'b0};
 
@@ -375,7 +358,7 @@ module viterbiMultiH
            selOut48r <= 0; selOut49r <= 0; selOut50r <= 0; selOut51r <= 0; selOut52r <= 0; selOut53r <= 0; selOut54r <= 0; selOut55r <= 0;
            selOut56r <= 0; selOut57r <= 0; selOut58r <= 0; selOut59r <= 0; selOut60r <= 0; selOut61r <= 0; selOut62r <= 0; selOut63r <= 0;
         end
-        else if (symEnMaxMet) begin
+        else if (symEnAcs) begin
            selOut0r  <= selOut0 ;   
            selOut1r  <= selOut1 ;   
            selOut2r  <= selOut2 ;   
@@ -685,16 +668,16 @@ module viterbiMultiH
 
    wire [ROT_BITS-1:0]  phaseError = phaseError1;
    
-   assign symEnOut = symEnMaxMet;
-   assign sym2xEnOut = sym2xEnMaxMet;
+   assign symEnOut = symEnAcs;
+   assign sym2xEnOut = sym2xEnAcs;
 
 `ifdef ALDEC_SIM
    traceBackMultiH traceBackMultiH
      (
       .clk       (clk     ), 
       .reset     (reset   ), 
-      .symEn     (symEnMaxMet),
-      .symEnEven (symEnEven),    // THIS IS NOT THE CORRECT symEnEven TO USE HERE    ***** FIX IT ****
+      .symEn     (symEnAcs),
+      .symEnEven (symEnEvenAcsMux),   
       .decTbtIn  (decTbtIn),
       .sel0      (selOut0 ), .sel1 (selOut1 ), .sel2 (selOut2 ), .sel3 (selOut3 ), .sel4 (selOut4 ), .sel5 (selOut5 ), .sel6 (selOut6 ), .sel7 (selOut7 ),
       .sel8      (selOut8 ), .sel9 (selOut9 ), .sel10(selOut10), .sel11(selOut11), .sel12(selOut12), .sel13(selOut13), .sel14(selOut14), .sel15(selOut15),
@@ -711,33 +694,4 @@ module viterbiMultiH
 
 `endif
    
-
-
-   
-/* -----\/----- EXCLUDED -----\/-----
-`ifdef TB_ANNOTATE
-   traceBackSoqpsk tbt1
-     (
-      .clk(clk), 
-      .reset(reset), 
-      .symEn(symEn),
-      .symEnEven(symEnEven),
-      .sel(sel_1dly), 
-      .index(index),
-      .decision(decision)
-      );
-`else
-   traceBackSoqpsk #(size) tbt1
-     (
-      .clk(clk), 
-      .reset(reset), 
-      .symEn(symEn),
-      .symEnEven(symEnEven),
-      .sel(sel_1dly), 
-      .index(index),
-      .decision(decision)
-      );
-`endif
- -----/\----- EXCLUDED -----/\----- */
-
 endmodule // viterbiMultiH

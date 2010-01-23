@@ -182,8 +182,8 @@ module test;
      (
       .clk                 (clk     ),
       .reset               (reset   ),
-      .symEn               (symEn   ),
-      .sym2xEn             (sym2xEn ),
+      .symEnIn               (symEn   ),
+      .sym2xEnIn             (sym2xEn ),
       .iIn                 (dinH[57:40]),
       .qIn                 (dinH[17:0] ),
       /* -----\/----- EXCLUDED -----\/-----
@@ -283,7 +283,7 @@ initial indexH=0;
 always @(posedge clk)begin
    if (reset) begin cnt <= 0; end
    //else if(cnt == 10) begin cnt <= 0; end
-   else if(cnt == 8) begin cnt <= 0; end
+   else if(cnt == 13) begin cnt <= 0; end
    else if (cntEna) begin
       cnt <= cnt +1;
    end
@@ -302,7 +302,7 @@ always @(posedge clk)begin
            dinH <= readMem[indexH];
            indexH <= indexH + 1;
         end
-        5: begin
+        6: begin
         //4: begin
            symEn <= 1;
            sym2xEn <= 1;
@@ -310,7 +310,7 @@ always @(posedge clk)begin
            dinH <= readMem[indexH];
            indexH <= indexH + 1;
         end
-        2,7: begin
+        2,8: begin
         //2,6: begin
            symEn <= 0;
            sym2xEn <= 1;
@@ -367,7 +367,8 @@ end
 //`define MULTI_H_ROT_TEST_2  
 //`define RANDOM
 //`define RANDOM_ATT
-`define RANDOM_LONG
+//`define RANDOM_LONG
+`define RANDOM_LONG_ATT
 
 integer file1,file2;
 initial begin
@@ -408,6 +409,9 @@ initial begin
       $readmemh("P:/semco/matlab_sim_results/multi-h/mfinputsRandomLong.hex", readMem);
 `endif
 
+`ifdef RANDOM_LONG_ATT
+      $readmemh("P:/semco/matlab_sim_results/multi-h/mfinputsRandomLongAttBy_0_25.hex", readMem);
+`endif
    
 end
 
