@@ -575,7 +575,7 @@ always @(posedge clk) begin
             `endif
             end
         `DAC_TRELLIS_PHERR: begin
-            dac2Data <= {normalize,17'b0};
+            dac2Data <= {phaseError,10'b0};
             dac2Sync <= symEnOut;
             end
         `DAC_TRELLIS_INDEX: begin
@@ -583,7 +583,7 @@ always @(posedge clk) begin
             dac2Sync <= symEnOut;
             end
         default: begin
-            dac2Data <= {normalize,17'b0};
+            dac2Data <= {phaseError,10'b0};
             dac2Sync <= symEnOut;
             end
         endcase

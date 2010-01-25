@@ -10,7 +10,7 @@
 
 `timescale 1ns/1ps
 `define USE_DECAY
-`define USE_TRACEBACK
+//`define USE_TRACEBACK
   
 module viterbiMultiH
   (
