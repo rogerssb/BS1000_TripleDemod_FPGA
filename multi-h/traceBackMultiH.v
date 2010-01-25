@@ -241,7 +241,13 @@ module traceBackMultiH
      begin
         nState[1:0] <= decisionTmp;
         if (symEnEvenToggle) begin
-           nState[5:2] <= cState[5:2]-5*decisionTmp;
+           //nState[5:2] <= cState[5:2]-5*decisionTmp;
+           case (decisionTmp) // lookup table implementation of above
+             0 : begin nState[5:2] <= cState[5:2]; end 
+             1 : begin nState[5:2] <= cState[5:2]-5; end 
+             2 : begin nState[5:2] <= cState[5:2]-10; end 
+             3 : begin nState[5:2] <= cState[5:2]-15; end
+           endcase
            /* -----\/----- EXCLUDED -----\/-----
            case (cState[5:2]) 
              0 : begin nState[5:2] <= cState[5:2]-5*decisionTmp; end 
@@ -264,7 +270,13 @@ module traceBackMultiH
             -----/\----- EXCLUDED -----/\----- */
         end
         else begin
-           nState[5:2] <= cState[5:2]-4*decisionTmp;
+           //nState[5:2] <= cState[5:2]-4*decisionTmp;
+           case (decisionTmp) // lookup table implementation of above
+             0 : begin nState[5:2] <= cState[5:2]; end 
+             1 : begin nState[5:2] <= cState[5:2]-4; end 
+             2 : begin nState[5:2] <= cState[5:2]-8; end 
+             3 : begin nState[5:2] <= cState[5:2]-12; end
+           endcase
            /* -----\/----- EXCLUDED -----\/-----
            case (cState[5:2]) 
              0 : begin nState[5:2] <= cState[5:2]-4*decisionTmp; end 
