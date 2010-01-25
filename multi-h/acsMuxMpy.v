@@ -45,22 +45,7 @@ decayMpy10x8 decay0(
     .b(decayFactor), 
     .p(decay0Out)
     );
-`ifdef LWK_MPY2
-reg     [ACS_BITS-1:0]  accMuxOut0;
-always @(decay0Out) begin
-    if (decay0Out[ACS_BITS] & !decay0Out[ACS_BITS-1]) begin
-        accMuxOut0 <= {1'b1,{ACS_BITS-2{1'b0}},1'b1};
-        end
-    else if (!decay0Out[ACS_BITS] & decay0Out[ACS_BITS-1]) begin
-        accMuxOut0 <= {1'b0,{ACS_BITS-1{1'b1}}};
-        end
-    else begin
-        accMuxOut0 <= decay0Out[ACS_BITS-1:0];
-        end
-    end
-`else
 assign accMuxOut0 = decay0Out[ACS_BITS:1] + decay0Out[0];
-`endif
 
 wire    [ACS_BITS:0]  decay1Out;
 decayMpy10x8 decay1(
@@ -68,22 +53,7 @@ decayMpy10x8 decay1(
     .b(decayFactor), 
     .p(decay1Out)
     );
-`ifdef LWK_MPY2
-reg     [ACS_BITS-1:0]  accMuxOut1;
-always @(decay1Out) begin
-    if (decay1Out[ACS_BITS] & !decay1Out[ACS_BITS-1]) begin
-        accMuxOut1 <= {1'b1,{ACS_BITS-2{1'b0}},1'b1};
-        end
-    else if (!decay1Out[ACS_BITS] & decay1Out[ACS_BITS-1]) begin
-        accMuxOut1 <= {1'b0,{ACS_BITS-1{1'b1}}};
-        end
-    else begin
-        accMuxOut1 <= decay1Out[ACS_BITS-1:0];
-        end
-    end
-`else
 assign accMuxOut1 = decay1Out[ACS_BITS:1] + decay1Out[0];
-`endif
 
 wire    [ACS_BITS:0]  decay2Out;
 decayMpy10x8 decay2(
@@ -91,22 +61,7 @@ decayMpy10x8 decay2(
     .b(decayFactor), 
     .p(decay2Out)
     );
-`ifdef LWK_MPY2
-reg     [ACS_BITS-1:0]  accMuxOut2;
-always @(decay2Out) begin
-    if (decay2Out[ACS_BITS] & !decay2Out[ACS_BITS-1]) begin
-        accMuxOut2 <= {1'b1,{ACS_BITS-2{1'b0}},1'b1};
-        end
-    else if (!decay2Out[ACS_BITS] & decay2Out[ACS_BITS-1]) begin
-        accMuxOut2 <= {1'b0,{ACS_BITS-1{1'b1}}};
-        end
-    else begin
-        accMuxOut2 <= decay2Out[ACS_BITS-1:0];
-        end
-    end
-`else
 assign accMuxOut2 = decay2Out[ACS_BITS:1] + decay2Out[0];
-`endif
 
 wire    [ACS_BITS:0]  decay3Out;
 decayMpy10x8 decay3(
@@ -114,23 +69,7 @@ decayMpy10x8 decay3(
     .b(decayFactor), 
     .p(decay3Out)
     );
-`ifdef LWK_MPY2
-reg     [ACS_BITS-1:0]  accMuxOut3;
-always @(decay3Out) begin
-    if (decay3Out[ACS_BITS] & !decay3Out[ACS_BITS-1]) begin
-        accMuxOut3 <= {1'b1,{ACS_BITS-2{1'b0}},1'b1};
-        end
-    else if (!decay3Out[ACS_BITS] & decay3Out[ACS_BITS-1]) begin
-        accMuxOut3 <= {1'b0,{ACS_BITS-1{1'b1}}};
-        end
-    else begin
-        accMuxOut3 <= decay3Out[ACS_BITS-1:0];
-        end
-    end
-`else
 assign accMuxOut3 = decay3Out[ACS_BITS:1] + decay3Out[0];
-`endif
-
 
 endmodule
 

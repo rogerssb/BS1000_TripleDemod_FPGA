@@ -79,6 +79,21 @@ module traceBackMultiH
                       sel48r, sel49r, sel50r, sel51r, sel52r, sel53r, sel54r, sel55r,
                       sel56r, sel57r, sel58r, sel59r, sel60r, sel61r, sel62r, sel63r;
 
+   // state Machine counter
+   reg [2:0] stateCnt;
+   always @(posedge clk)
+     begin
+        if (reset || symEn) begin
+           stateCnt <= 0;
+        end
+        else begin
+           if (stateCnt < 4) // stay in the state
+             stateCnt <= stateCnt+1;
+           else
+             stateCnt <= stateCnt;
+        end
+     end
+   
    
    // 3bits x 64 states trace-back shift-register
    always @(posedge clk)
@@ -182,21 +197,6 @@ module traceBackMultiH
         end 
      end
 
-   // state Machine counter
-   reg [2:0] stateCnt;
-   always @(posedge clk)
-     begin
-        if (reset || symEn) begin
-           stateCnt <= 0;
-        end
-        else begin
-           if (stateCnt < 4) // stay in the state
-             stateCnt <= stateCnt+1;
-           else
-             stateCnt <= stateCnt;
-        end
-     end
-   
 
    reg symEnEvenToggle;
      always @(posedge clk)
@@ -211,6 +211,7 @@ module traceBackMultiH
      end
    
    // Latching the next state
+   reg [5:0]          nState;
    reg [5:0] nStateLatched;
    reg [5:0] indexReg;
    always @(posedge clk)
@@ -224,9 +225,10 @@ module traceBackMultiH
         end
      end
         
+
    // Updateing the current state initially with the maxMetrinc index at the symEn instance, otherwise update with the latched next state
    reg [5:0]          cState;
-   always @(indexReg or nStateLatched or symEn)
+   always @(indexReg or nStateLatched or stateCnt)
      //if (symEn) begin
      if (stateCnt == 0) begin
         cState <= indexReg;
@@ -235,7 +237,6 @@ module traceBackMultiH
         cState <= nStateLatched;
      end
 
-   reg [5:0]          nState;
    always @(symEnEvenToggle or cState[5:2] or decisionTmp)
      begin
         nState[1:0] <= decisionTmp;
@@ -286,7 +287,6 @@ module traceBackMultiH
             -----/\----- EXCLUDED -----/\----- */
         end
      end 
-
 
 
    //reg [1:0] s0, s1, s2, s3;

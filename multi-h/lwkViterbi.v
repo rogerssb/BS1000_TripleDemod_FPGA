@@ -10,6 +10,7 @@
 
 `timescale 1ns/1ps
 `define USE_DECAY
+`define USE_TRACEBACK
   
 module viterbiMultiH
   (
@@ -493,7 +494,7 @@ module viterbiMultiH
      end
 
 
-`ifdef ALDEC_SIM
+`ifdef USE_TRACEBACK
    wire [1:0] decTbtIn = decision1;
 `else
    wire [1:0] decision = decision1;
@@ -671,7 +672,8 @@ module viterbiMultiH
    assign symEnOut = symEnAcs;
    assign sym2xEnOut = sym2xEnAcs;
 
-`ifdef ALDEC_SIM
+
+`ifdef USE_TRACEBACK
    traceBackMultiH traceBackMultiH
      (
       .clk       (clk     ), 
@@ -690,8 +692,6 @@ module viterbiMultiH
       .index     (index   ),
       .decision  (decision)
       );
-`else
-
 `endif
    
 endmodule // viterbiMultiH

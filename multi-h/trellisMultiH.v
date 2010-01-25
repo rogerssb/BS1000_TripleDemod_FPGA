@@ -313,8 +313,7 @@ viterbiMultiH /*#(MF_BITS, ROT_BITS)*/ viterbiMultiH
     `ifdef ALDEC_SIM
     .decayFactor           (8'hff         ),
     `else
-    //.decayFactor           (decayFactor   ),
-    .decayFactor           (8'hff         ),
+    .decayFactor           (decayFactor   ),
     `endif
     .mf_p3p3_45Real        (mf_p3p3_45Real),
     .mf_p3p1_45Real        (mf_p3p1_45Real),
