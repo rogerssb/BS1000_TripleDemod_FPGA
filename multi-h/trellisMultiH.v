@@ -313,7 +313,8 @@ viterbiMultiH /*#(MF_BITS, ROT_BITS)*/ viterbiMultiH
     `ifdef ALDEC_SIM
     .decayFactor           (8'hff         ),
     `else
-    .decayFactor           (decayFactor   ),
+    //.decayFactor           (decayFactor   ),
+    .decayFactor           (8'hff         ),
     `endif
     .mf_p3p3_45Real        (mf_p3p3_45Real),
     .mf_p3p1_45Real        (mf_p3p1_45Real),
@@ -520,8 +521,8 @@ always @(posedge clk) begin
 
     case (dac1Select) 
         `DAC_TRELLIS_I: begin
-		      dac1Data <= {mf_p3p3_45Real,{(18-MF_BITS){1'b0}}};
-				dac1Sync <= symEnRot;
+            dac1Data <= {mf_p3p3_45Real,{(18-MF_BITS){1'b0}}};
+            dac1Sync <= symEnRot;
             //dac1Data <= carrierLoopIOut;
             //`ifdef BYPASS_LOOP
             //dac1Sync <= sym2xEn;
@@ -530,8 +531,8 @@ always @(posedge clk) begin
             //`endif
             end
         `DAC_TRELLIS_Q: begin
-		      dac1Data <= {mf_p3p3_45Imag,{(18-MF_BITS){1'b0}}};
-				dac1Sync <= symEnRot;
+            dac1Data <= {mf_p3p3_45Imag,{(18-MF_BITS){1'b0}}};
+            dac1Sync <= symEnRot;
             //dac1Data <= carrierLoopQOut;
             //`ifdef BYPASS_LOOP
             //dac1Sync <= sym2xEn;
