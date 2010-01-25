@@ -461,10 +461,12 @@ always @(negedge wr0 or posedge symbolSlipped) begin
 reg [31:0]dout;
 always @(trellisSpace or addr
          or decayFactor
+         or symbolDelay or symbolSlip
          ) begin
     if (trellisSpace) begin
         casex (addr)
             `TRELLIS_DECAY:     dout <= {24'b0,decayFactor};
+            `TRELLIS_CONTROL:   dout <= {30'b0,symbolDelay,symbolSlip};
             default:            dout <= 32'hx;
             endcase
         end

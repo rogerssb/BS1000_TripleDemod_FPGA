@@ -99,6 +99,21 @@ module viterbiMultiH
                          s48, s33, s18, s3, s52, s37, s22, s7, s56, s41, s26, s11, s60, s45, s30, s15;
 
 
+   // symEnEven is the signal who indicate if we are in a 54 or 45 interval
+   reg                   symEnEven;
+   always @(posedge clk)
+     begin
+        if (reset) begin
+           //symEnEven <= 0;
+           symEnEven <= 1;
+        end
+        else begin 
+           if (symEn) begin
+              symEnEven <= ~ symEnEven;
+           end
+        end
+      end
+
    // This is not pretty but it is a way to get the design going
    // The normailization has to be insync with the controls in acsMultH/compSel
    reg [6:0] symEnEvenSr;
@@ -179,21 +194,6 @@ module viterbiMultiH
                          accMuxOut52_0,  accMuxOut52_1,  accMuxOut52_2,  accMuxOut52_3,
                          accMuxOut56_0,  accMuxOut56_1,  accMuxOut56_2,  accMuxOut56_3,
                          accMuxOut60_0,  accMuxOut60_1,  accMuxOut60_2,  accMuxOut60_3;
-
-   // symEnEven is the signal who indicate if we are in a 54 or 45 interval
-   reg                   symEnEven;
-   always @(posedge clk)
-     begin
-        if (reset) begin
-           //symEnEven <= 0;
-           symEnEven <= 1;
-        end
-        else begin 
-           if (symEn) begin
-              symEnEven <= ~ symEnEven;
-           end
-        end
-      end
 
    wire [MF_BITS-1:0]   iMfInRot0, qMfInRot0,
                         iMfInRot1, qMfInRot1,
@@ -329,9 +329,9 @@ module viterbiMultiH
       .accMetOut52(accMetOut52), .accMetOut53(accMetOut53), .accMetOut54(accMetOut54), .accMetOut55(accMetOut55), 
       .accMetOut56(accMetOut56), .accMetOut57(accMetOut57), .accMetOut58(accMetOut58), .accMetOut59(accMetOut59),
       .accMetOut60(accMetOut60), .accMetOut61(accMetOut61), .accMetOut62(accMetOut62), .accMetOut63(accMetOut63), 
-      .maxVal(), .index(index),  .symEnOut(),    .sym2xEnOut() 
+      .maxVal(maxAcs), .index(index),  .symEnOut(),    .sym2xEnOut() 
       );
-    assign maxAcs = {qOut0,2'b0};
+    //assign maxAcs = accMetOut0;
 
    // ----- decision before the traceback -----
    reg [1:0]             decision0;
