@@ -32,6 +32,8 @@ module multihTop (
     auSymClk,
     bsyncLockInput,demodLockInput,
     sdiInput,
+    phaseError,
+    phaseErrorEn,
     dac0_nCs,dac0_sclk,
     dac1_nCs,dac1_sclk,
     dac2_nCs,dac2_sclk,
@@ -63,6 +65,9 @@ input           iData,qData;
 input           auSymClk;
 input           bsyncLockInput,demodLockInput;
 input           sdiInput;
+
+output  [7:0]   phaseError;
+output          phaseErrorEn;
 
 output          dac_rst;
 output          dac0_nCs,dac0_sclk;
@@ -254,6 +259,7 @@ wire    [31:0]  dataIn = {data,data};
 //******************************************************************************
 //                                 Trellis Decoder
 //******************************************************************************
+wire    [7:0]   phaseErrorOut;
 wire    [1:0]   multihBit;
 wire    [17:0]  multih0Out,multih1Out,multih2Out;
 wire    [31:0]  multih_dout;
@@ -283,9 +289,18 @@ trellisMultiH multih
     .dac2Data(multih2Out),
     .symEnOut(multihSymEnOut),
     .sym2xEnOut(multihSym2xEnOut),
+    .phaseError(phaseErrorOut),
     .decision(multihBit)
    );
    
+// reclock the phase error feedback
+reg     [7:0]   phaseError;
+reg             phaseErrorEn;
+always @(posedge ck933) begin
+    phaseError <= phaseErrorOut;
+    phaseErrorEn <= multihSymEnOut;
+    end
+
 //******************************************************************************
 //                              DAC Outputs
 //******************************************************************************

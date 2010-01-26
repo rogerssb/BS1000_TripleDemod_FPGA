@@ -114,10 +114,6 @@ always @(posedge clk) begin
     end
 
    
-   wire [17:0]         carrierLoopIOut,carrierLoopQOut;
-   assign carrierLoopIOut = iInLatch;
-   assign carrierLoopQOut = qInLatch;
-
 `ifdef SIMULATE
    real                phErrReal;
    always @(phaseError) phErrReal = $itor($signed(phaseError))/(2**9);
@@ -126,9 +122,6 @@ always @(posedge clk) begin
 
    
 `ifdef SIMULATE
-   real                carrierLoopIOut_REAL, carrierLoopQOut_REAL;
-   always @(carrierLoopIOut) carrierLoopIOut_REAL = $itor($signed(carrierLoopIOut))/(2**17);
-   always @(carrierLoopQOut) carrierLoopQOut_REAL = $itor($signed(carrierLoopQOut))/(2**17);
    real iInReal,qInReal;
    always @(iInLatch) iInReal = $itor($signed(iInLatch))/(2**17);
    always @(qInLatch) qInReal = $itor($signed(qInLatch))/(2**17);
@@ -158,8 +151,8 @@ always @(posedge clk) begin
       .reset                 (reset     ),
       .symEn                 (symEn     ),
       .sym2xEn               (sym2xEn   ),
-      .i                     (carrierLoopIOut),
-      .q                     (carrierLoopQOut),
+      .i                     (iInLatch),
+      .q                     (qInLatch),
       .mf_p3p3_45Real        (mf_p3p3_45Real),
       .mf_p3p1_45Real        (mf_p3p1_45Real),
       .mf_p3m1_45Real        (mf_p3m1_45Real),
@@ -463,20 +456,12 @@ reg     [17:0]  dac2Data;
 always @(posedge clk) begin
     case (dac0Select) 
         `DAC_TRELLIS_I: begin
-            dac0Data <= carrierLoopIOut;
-            `ifdef BYPASS_LOOP
+            dac0Data <= iInLatch;
             dac0Sync <= sym2xEn;
-            `else
-            dac0Sync <= sym2xEnLoop;
-            `endif
             end
         `DAC_TRELLIS_Q: begin
-            dac0Data <= carrierLoopQOut;
-            `ifdef BYPASS_LOOP
+            dac0Data <= qInLatch;
             dac0Sync <= sym2xEn;
-            `else
-            dac0Sync <= sym2xEnLoop;
-            `endif
             end
         `DAC_TRELLIS_PHERR: begin
             dac0Data <= {normalize,17'b0};
@@ -496,22 +481,14 @@ always @(posedge clk) begin
         `DAC_TRELLIS_I: begin
             dac1Data <= {mf_p3p3_45Real,{(18-MF_BITS){1'b0}}};
             dac1Sync <= symEnRot;
-            //dac1Data <= carrierLoopIOut;
-            //`ifdef BYPASS_LOOP
+            //dac1Data <= iInLatch;
             //dac1Sync <= sym2xEn;
-            //`else
-            //dac1Sync <= sym2xEnLoop;
-            //`endif
             end
         `DAC_TRELLIS_Q: begin
             dac1Data <= {mf_p3p3_45Imag,{(18-MF_BITS){1'b0}}};
             dac1Sync <= symEnRot;
-            //dac1Data <= carrierLoopQOut;
-            //`ifdef BYPASS_LOOP
+            //dac1Data <= qInLatch;
             //dac1Sync <= sym2xEn;
-            //`else
-            //dac1Sync <= sym2xEnLoop;
-            //`endif
             end
         `DAC_TRELLIS_PHERR: begin
             dac1Data <= {maxAcs,8'b0};
@@ -529,20 +506,12 @@ always @(posedge clk) begin
 
     case (dac2Select) 
         `DAC_TRELLIS_I: begin
-            dac2Data <= carrierLoopIOut;
-            `ifdef BYPASS_LOOP
+            dac2Data <= iInLatch;
             dac2Sync <= sym2xEn;
-            `else
-            dac2Sync <= sym2xEnLoop;
-            `endif
             end
         `DAC_TRELLIS_Q: begin
-            dac2Data <= carrierLoopQOut;
-            `ifdef BYPASS_LOOP
+            dac2Data <= qInLatch;
             dac2Sync <= sym2xEn;
-            `else
-            dac2Sync <= sym2xEnLoop;
-            `endif
             end
         `DAC_TRELLIS_PHERR: begin
             dac2Data <= {phaseError,10'b0};

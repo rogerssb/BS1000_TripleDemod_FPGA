@@ -416,6 +416,14 @@ NET "symb_pll_vco" CLOCK_DEDICATED_ROUTE = FALSE;
 NET "sdiOut" LOC = AB20;
 NET "sdiOut" IOSTANDARD = "LVCMOS33";
 
+NET "phaseError<0>" LOC = A5  | IOSTANDARD = "LVCMOS33";
+NET "phaseError<1>" LOC = A8  | IOSTANDARD = "LVCMOS33";
+NET "phaseError<2>" LOC = A11 | IOSTANDARD = "LVCMOS33";
+NET "phaseError<3>" LOC = A13 | IOSTANDARD = "LVCMOS33";
+NET "phaseError<4>" LOC = C9  | IOSTANDARD = "LVCMOS33";
+NET "phaseError<5>" LOC = C12 | IOSTANDARD = "LVCMOS33";
+NET "phaseError<6>" LOC = C13 | IOSTANDARD = "LVCMOS33";
+NET "phaseError<7>" LOC = C18 | IOSTANDARD = "LVCMOS33";
 
 NET "ck933" TNM_NET = ck933;
 NET "nWe" TNM_NET = nWe;
