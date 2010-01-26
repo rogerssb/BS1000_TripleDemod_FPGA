@@ -524,145 +524,27 @@ module viterbiMultiH
            phaseError0 <= 0; 
            phaseError1 <= 0; 
            phaseError2 <= 0; 
-           qOut0r  <= 0; qOut1r  <= 0; qOut2r  <= 0; qOut3r  <= 0; qOut4r  <= 0; qOut5r  <= 0; qOut6r  <= 0; qOut7r  <= 0; 
-           qOut8r  <= 0; qOut9r  <= 0; qOut10r <= 0; qOut11r <= 0; qOut12r <= 0; qOut13r <= 0; qOut14r <= 0; qOut15r <= 0; 
-           qOut16r <= 0; qOut17r <= 0; qOut18r <= 0; qOut19r <= 0; qOut20r <= 0; qOut21r <= 0; qOut22r <= 0; qOut23r <= 0; 
-           qOut24r <= 0; qOut25r <= 0; qOut26r <= 0; qOut27r <= 0; qOut28r <= 0; qOut29r <= 0; qOut20r <= 0; qOut31r <= 0; 
-           qOut32r <= 0; qOut33r <= 0; qOut34r <= 0; qOut35r <= 0; qOut36r <= 0; qOut37r <= 0; qOut38r <= 0; qOut39r <= 0;
-           qOut40r <= 0; qOut41r <= 0; qOut42r <= 0; qOut43r <= 0; qOut44r <= 0; qOut45r <= 0; qOut46r <= 0; qOut47r <= 0; 
-           qOut48r <= 0; qOut49r <= 0; qOut50r <= 0; qOut51r <= 0; qOut52r <= 0; qOut53r <= 0; qOut54r <= 0; qOut55r <= 0; 
-           qOut56r <= 0; qOut57r <= 0; qOut58r <= 0; qOut59r <= 0; qOut60r <= 0; qOut61r <= 0; qOut62r <= 0; qOut63r <= 0; 
+           qOut0r  <= 0; 
+           qOut8r  <= 0; 
+           qOut16r <= 0; 
+           qOut24r <= 0; 
+           qOut32r <= 0; 
+           qOut40r <= 0; 
+           qOut48r <= 0; 
+           qOut56r <= 0; 
         end
         else if (symEnAcs) begin
-           qOut0r  <= qOut0;  qOut0rr  <= qOut0r; 
-           qOut1r  <= qOut1;  qOut1rr  <= qOut1r; 
-           qOut2r  <= qOut2;  qOut2rr  <= qOut2r; 
-           qOut3r  <= qOut3;  qOut3rr  <= qOut3r; 
-           qOut4r  <= qOut4;  qOut4rr  <= qOut4r; 
-           qOut5r  <= qOut5;  qOut5rr  <= qOut5r; 
-           qOut6r  <= qOut6;  qOut6rr  <= qOut6r; 
-           qOut7r  <= qOut7;  qOut7rr  <= qOut7r; 
-           qOut8r  <= qOut8;  qOut8rr  <= qOut8r; 
-           qOut9r  <= qOut9;  qOut9rr  <= qOut9r; 
-           qOut10r <= qOut10; qOut10rr <= qOut10r;
-           qOut11r <= qOut11; qOut11rr <= qOut11r;
-           qOut12r <= qOut12; qOut12rr <= qOut12r;
-           qOut13r <= qOut13; qOut13rr <= qOut13r;
-           qOut14r <= qOut14; qOut14rr <= qOut14r;
-           qOut15r <= qOut15; qOut15rr <= qOut15r;
-           qOut16r <= qOut16; qOut16rr <= qOut16r;
-           qOut17r <= qOut17; qOut17rr <= qOut17r;
-           qOut18r <= qOut18; qOut18rr <= qOut18r;
-           qOut19r <= qOut19; qOut19rr <= qOut19r;
-           qOut20r <= qOut20; qOut20rr <= qOut20r;
-           qOut21r <= qOut21; qOut21rr <= qOut21r;
-           qOut22r <= qOut22; qOut22rr <= qOut22r;
-           qOut23r <= qOut23; qOut23rr <= qOut23r;
-           qOut24r <= qOut24; qOut24rr <= qOut24r;
-           qOut25r <= qOut25; qOut25rr <= qOut25r;
-           qOut26r <= qOut26; qOut26rr <= qOut26r;
-           qOut27r <= qOut27; qOut27rr <= qOut27r;
-           qOut28r <= qOut28; qOut28rr <= qOut28r;
-           qOut29r <= qOut29; qOut29rr <= qOut29r;
-           qOut30r <= qOut30; qOut30rr <= qOut30r;
-           qOut31r <= qOut31; qOut31rr <= qOut31r;
-           qOut32r <= qOut32; qOut32rr <= qOut32r;
-           qOut33r <= qOut33; qOut33rr <= qOut33r;
-           qOut34r <= qOut34; qOut34rr <= qOut34r;
-           qOut35r <= qOut35; qOut35rr <= qOut35r;
-           qOut36r <= qOut36; qOut36rr <= qOut36r;
-           qOut37r <= qOut37; qOut37rr <= qOut37r;
-           qOut38r <= qOut38; qOut38rr <= qOut38r;
-           qOut39r <= qOut39; qOut39rr <= qOut39r;
-           qOut40r <= qOut40; qOut40rr <= qOut40r;
-           qOut41r <= qOut41; qOut41rr <= qOut41r;
-           qOut42r <= qOut42; qOut42rr <= qOut42r;
-           qOut43r <= qOut43; qOut43rr <= qOut43r;
-           qOut44r <= qOut44; qOut44rr <= qOut44r;
-           qOut45r <= qOut45; qOut45rr <= qOut45r;
-           qOut46r <= qOut46; qOut46rr <= qOut46r;
-           qOut47r <= qOut47; qOut47rr <= qOut47r;
-           qOut48r <= qOut48; qOut48rr <= qOut48r;
-           qOut49r <= qOut49; qOut49rr <= qOut49r;
-           qOut50r <= qOut50; qOut50rr <= qOut50r;
-           qOut51r <= qOut51; qOut51rr <= qOut51r;
-           qOut52r <= qOut52; qOut52rr <= qOut52r;
-           qOut53r <= qOut53; qOut53rr <= qOut53r;
-           qOut54r <= qOut54; qOut54rr <= qOut54r;
-           qOut55r <= qOut55; qOut55rr <= qOut55r;
-           qOut56r <= qOut56; qOut56rr <= qOut56r;
-           qOut57r <= qOut57; qOut57rr <= qOut57r;
-           qOut58r <= qOut58; qOut58rr <= qOut58r;
-           qOut59r <= qOut59; qOut59rr <= qOut59r;
-           qOut60r <= qOut60; qOut60rr <= qOut60r;
-           qOut61r <= qOut61; qOut61rr <= qOut61r;
-           qOut62r <= qOut62; qOut62rr <= qOut62r;
-           qOut63r <= qOut63; qOut63rr <= qOut63r;
            case (index)
-             0 : begin  phaseError0 <= qOut0r ; phaseError1 <= qOut0 ;phaseError2 <= qOut0rr ;end
-             1 : begin  phaseError0 <= qOut1r ; phaseError1 <= qOut1 ;phaseError2 <= qOut1rr ;end
-             2 : begin  phaseError0 <= qOut2r ; phaseError1 <= qOut2 ;phaseError2 <= qOut2rr ;end
-             3 : begin  phaseError0 <= qOut3r ; phaseError1 <= qOut3 ;phaseError2 <= qOut3rr ;end
-             4 : begin  phaseError0 <= qOut4r ; phaseError1 <= qOut4 ;phaseError2 <= qOut4rr ;end
-             5 : begin  phaseError0 <= qOut5r ; phaseError1 <= qOut5 ;phaseError2 <= qOut5rr ;end
-             6 : begin  phaseError0 <= qOut6r ; phaseError1 <= qOut6 ;phaseError2 <= qOut6rr ;end
-             7 : begin  phaseError0 <= qOut7r ; phaseError1 <= qOut7 ;phaseError2 <= qOut7rr ;end
-             8 : begin  phaseError0 <= qOut8r ; phaseError1 <= qOut8 ;phaseError2 <= qOut8rr ;end
-             9 : begin  phaseError0 <= qOut9r ; phaseError1 <= qOut9 ;phaseError2 <= qOut9rr ;end
-             10: begin  phaseError0 <= qOut10r; phaseError1 <= qOut10;phaseError2 <= qOut10rr;end
-             11: begin  phaseError0 <= qOut11r; phaseError1 <= qOut11;phaseError2 <= qOut11rr;end
-             12: begin  phaseError0 <= qOut12r; phaseError1 <= qOut12;phaseError2 <= qOut12rr;end
-             13: begin  phaseError0 <= qOut13r; phaseError1 <= qOut13;phaseError2 <= qOut13rr;end
-             14: begin  phaseError0 <= qOut14r; phaseError1 <= qOut14;phaseError2 <= qOut14rr;end
-             15: begin  phaseError0 <= qOut15r; phaseError1 <= qOut15;phaseError2 <= qOut15rr;end
-             16: begin  phaseError0 <= qOut16r; phaseError1 <= qOut16;phaseError2 <= qOut16rr;end
-             17: begin  phaseError0 <= qOut17r; phaseError1 <= qOut17;phaseError2 <= qOut17rr;end
-             18: begin  phaseError0 <= qOut18r; phaseError1 <= qOut18;phaseError2 <= qOut18rr;end
-             19: begin  phaseError0 <= qOut19r; phaseError1 <= qOut19;phaseError2 <= qOut19rr;end
-             20: begin  phaseError0 <= qOut20r; phaseError1 <= qOut20;phaseError2 <= qOut20rr;end
-             21: begin  phaseError0 <= qOut21r; phaseError1 <= qOut21;phaseError2 <= qOut21rr;end
-             22: begin  phaseError0 <= qOut22r; phaseError1 <= qOut22;phaseError2 <= qOut22rr;end
-             23: begin  phaseError0 <= qOut23r; phaseError1 <= qOut23;phaseError2 <= qOut23rr;end
-             24: begin  phaseError0 <= qOut24r; phaseError1 <= qOut24;phaseError2 <= qOut24rr;end
-             25: begin  phaseError0 <= qOut25r; phaseError1 <= qOut25;phaseError2 <= qOut25rr;end
-             26: begin  phaseError0 <= qOut26r; phaseError1 <= qOut26;phaseError2 <= qOut26rr;end
-             27: begin  phaseError0 <= qOut27r; phaseError1 <= qOut27;phaseError2 <= qOut27rr;end
-             28: begin  phaseError0 <= qOut28r; phaseError1 <= qOut28;phaseError2 <= qOut28rr;end
-             29: begin  phaseError0 <= qOut29r; phaseError1 <= qOut29;phaseError2 <= qOut29rr;end
-             30: begin  phaseError0 <= qOut30r; phaseError1 <= qOut30;phaseError2 <= qOut30rr;end
-             31: begin  phaseError0 <= qOut31r; phaseError1 <= qOut31;phaseError2 <= qOut31rr;end
-             32: begin  phaseError0 <= qOut32r; phaseError1 <= qOut32;phaseError2 <= qOut32rr;end
-             33: begin  phaseError0 <= qOut33r; phaseError1 <= qOut33;phaseError2 <= qOut33rr;end
-             34: begin  phaseError0 <= qOut34r; phaseError1 <= qOut34;phaseError2 <= qOut34rr;end
-             35: begin  phaseError0 <= qOut35r; phaseError1 <= qOut35;phaseError2 <= qOut35rr;end
-             36: begin  phaseError0 <= qOut36r; phaseError1 <= qOut36;phaseError2 <= qOut36rr;end
-             37: begin  phaseError0 <= qOut37r; phaseError1 <= qOut37;phaseError2 <= qOut37rr;end
-             38: begin  phaseError0 <= qOut38r; phaseError1 <= qOut38;phaseError2 <= qOut38rr;end
-             39: begin  phaseError0 <= qOut39r; phaseError1 <= qOut39;phaseError2 <= qOut39rr;end
-             40: begin  phaseError0 <= qOut40r; phaseError1 <= qOut40;phaseError2 <= qOut40rr;end
-             41: begin  phaseError0 <= qOut41r; phaseError1 <= qOut41;phaseError2 <= qOut41rr;end
-             42: begin  phaseError0 <= qOut42r; phaseError1 <= qOut42;phaseError2 <= qOut42rr;end
-             43: begin  phaseError0 <= qOut43r; phaseError1 <= qOut43;phaseError2 <= qOut43rr;end
-             44: begin  phaseError0 <= qOut44r; phaseError1 <= qOut44;phaseError2 <= qOut44rr;end
-             45: begin  phaseError0 <= qOut45r; phaseError1 <= qOut45;phaseError2 <= qOut45rr;end
-             46: begin  phaseError0 <= qOut46r; phaseError1 <= qOut46;phaseError2 <= qOut46rr;end
-             47: begin  phaseError0 <= qOut47r; phaseError1 <= qOut47;phaseError2 <= qOut47rr;end
-             48: begin  phaseError0 <= qOut48r; phaseError1 <= qOut48;phaseError2 <= qOut48rr;end
-             49: begin  phaseError0 <= qOut49r; phaseError1 <= qOut49;phaseError2 <= qOut49rr;end
-             50: begin  phaseError0 <= qOut50r; phaseError1 <= qOut50;phaseError2 <= qOut50rr;end
-             51: begin  phaseError0 <= qOut51r; phaseError1 <= qOut51;phaseError2 <= qOut51rr;end
-             52: begin  phaseError0 <= qOut52r; phaseError1 <= qOut52;phaseError2 <= qOut52rr;end
-             53: begin  phaseError0 <= qOut53r; phaseError1 <= qOut53;phaseError2 <= qOut53rr;end
-             54: begin  phaseError0 <= qOut54r; phaseError1 <= qOut54;phaseError2 <= qOut54rr;end
-             55: begin  phaseError0 <= qOut55r; phaseError1 <= qOut55;phaseError2 <= qOut55rr;end
-             56: begin  phaseError0 <= qOut56r; phaseError1 <= qOut56;phaseError2 <= qOut56rr;end
-             57: begin  phaseError0 <= qOut57r; phaseError1 <= qOut57;phaseError2 <= qOut57rr;end
-             58: begin  phaseError0 <= qOut58r; phaseError1 <= qOut58;phaseError2 <= qOut58rr;end
-             59: begin  phaseError0 <= qOut59r; phaseError1 <= qOut59;phaseError2 <= qOut59rr;end
-             60: begin  phaseError0 <= qOut60r; phaseError1 <= qOut60;phaseError2 <= qOut60rr;end
-             61: begin  phaseError0 <= qOut61r; phaseError1 <= qOut61;phaseError2 <= qOut61rr;end
-             62: begin  phaseError0 <= qOut62r; phaseError1 <= qOut62;phaseError2 <= qOut62rr;end
-             63: begin  phaseError0 <= qOut63r; phaseError1 <= qOut63;phaseError2 <= qOut63rr;end
+             0 : begin  phaseError1 <= qOut0 ;end
+             8 : begin  phaseError1 <= qOut8 ;end
+             16: begin  phaseError1 <= qOut16;end
+             24: begin  phaseError1 <= qOut24;end
+             32: begin  phaseError1 <= qOut32;end
+             40: begin  phaseError1 <= qOut40;end
+             48: begin  phaseError1 <= qOut48;end
+             56: begin  phaseError1 <= qOut56;end
+             default: begin
+                        phaseError1 <= 0;
            endcase
         end  
      end
