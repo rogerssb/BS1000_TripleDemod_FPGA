@@ -21,6 +21,8 @@ module legacyPassThru (
     addr3,addr2,addr1,
     data,
     adc_d,
+    multihPhaseError,
+    multihPhaseErrorEn,
     demodMode,
     dac0Select,dac1Select,dac2Select,
     dac0_d,dac1_d,dac2_d,
@@ -42,6 +44,8 @@ input           addr7, addr6,addr5,addr4;
 input           addr3,addr2,addr1;
 inout   [15:0]  data;
 input   [13:0]  adc_d;
+input   [7:0]   multihPhaseError;
+input           multihPhaseErrorEn;
 
 output  [3:0]   demodMode;
 
@@ -248,14 +252,6 @@ always @(posedge ck933) begin
     qIn <= qSymData;
     end
 
-reg     [17:0]  iMultiH,qMultiH;
-FDCE multiHSymEnFF  (.Q(multiHSymEn),   .C(ck933),  .CE(1'b1),  .CLR(1'b0), .D(trellisSymSync & multiHMode));
-FDCE multiHSym2xEnFF  (.Q(multiHSym2xEn),   .C(ck933),  .CE(1'b1),  .CLR(1'b0), .D(iSym2xEn & multiHMode));
-always @(posedge ck933) begin
-    iMultiH <= iSymData;
-    qMultiH <= qSymData;
-    end
-
 
 assign bsync_nLock = !bitsyncLock;
 assign demod_nLock = !carrierLock;
@@ -330,6 +326,50 @@ trellisSoqpsk soqpsk
     .decision(soqpskTrellisBit)
    );
    
+//******************************************************************************
+//                           MultiH Carrier Loop
+//******************************************************************************
+
+reg     [7:0]   multihPhaseErrorIn;
+reg             multihPhaseErrorEnIn;
+always @(posedge ck933) begin
+    multihPhaseErrorIn <= multihPhaseError;
+    multihPhaseErrorEnIn <= multihPhaseErrorEn;
+    end
+
+wire    [17:0]  iMultihLoop,qMultihLoop;
+wire    [31:0]  multihLoopDout;
+multihCarrierLoop multihLoop(
+    .clk(ck933),
+    .reset(reset),
+    .symEn(trellisSymSync & multiHMode),
+    .sym2xEn(iSym2xEn & multiHMode),
+    .iIn(iSymData),
+    .qIn(qSymData),
+    .phaseError(multihPhaseErrorIn),
+    .phaseErrorEn(multihPhaseErrorEnIn),
+    .wr0(wr0),
+    .wr1(wr1),
+    .wr2(wr2),
+    .wr3(wr3),
+    .addr(addr),
+    .din(dataIn),
+    .dout(multihLoopDout),
+    .iOut(iMultihLoop),
+    .qOut(qMultihLoop),
+    .symEnDly(multihLoopEn),
+    .sym2xEnDly(multihLoop2xEn)
+    );
+
+reg     [17:0]  iMultiH,qMultiH;
+FDCE multiHSymEnFF  (.Q(multiHSymEn),   .C(ck933),  .CE(1'b1),  .CLR(1'b0), .D(multihLoopEn));
+FDCE multiHSym2xEnFF  (.Q(multiHSym2xEn),   .C(ck933),  .CE(1'b1),  .CLR(1'b0), .D(multihLoop2xEn));
+always @(posedge ck933) begin
+    iMultiH <= iMultihLoop;
+    qMultiH <= qMultihLoop;
+    end
+
+
 
 //******************************************************************************
 //                          Trellis Muxes
@@ -684,11 +724,21 @@ always @(
       end
     `TRELLISLFSPACE,
     `TRELLIS_SPACE: begin
-      if (addr[1]) begin
-        rd_mux <= trellisDout[31:16];
+      if (multiHMode) begin
+          if (addr[1]) begin
+            rd_mux <= multihLoopDout[31:16];
+            end
+          else begin
+            rd_mux <= multihLoopDout[15:0];
+            end
         end
       else begin
-        rd_mux <= trellisDout[15:0];
+          if (addr[1]) begin
+            rd_mux <= trellisDout[31:16];
+            end
+          else begin
+            rd_mux <= trellisDout[15:0];
+            end
         end
       end
     `MISC_SPACE : begin

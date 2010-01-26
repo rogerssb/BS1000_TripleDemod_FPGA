@@ -26,6 +26,7 @@ module trellisMultiH
    dac2Sync,
    dac2Data,
    decision,
+   phaseError,
    symEnOut,
    sym2xEnOut
    );
@@ -47,14 +48,11 @@ module trellisMultiH
    output                   dac2Sync;
    output [17:0]            dac2Data;
    output [1:0]             decision;
+   output [ROT_BITS-1:0]    phaseError;
    output                   symEnOut;
    output                   sym2xEnOut;
    
    
-   wire [1:0]          decision;
-
-`define BYPASS_LOOP
-
 `ifndef ALDEC_SIM    // ALDEC_SIM is set as an env. var. in aldec duting simulation
 `define USE_SLIP     // We don't want to use slip in simulation
 `endif
@@ -116,37 +114,9 @@ always @(posedge clk) begin
     end
 
    
-   //reg [7:0]           phErrShft;
-`ifdef BYPASS_LOOP
    wire [17:0]         carrierLoopIOut,carrierLoopQOut;
    assign carrierLoopIOut = iInLatch;
    assign carrierLoopQOut = qInLatch;
-`else
-   wire [17:0]         carrierLoopIOut,carrierLoopQOut;
-   wire [31:0]         trellisLoopDout;
-   trellisCarrierLoop trellisCarrierLoop
-     (
-      .clk(clk),
-      .reset(reset),
-      .symEn(symEn),
-      .sym2xEn(sym2xEn),
-      .iIn(iInLatch),
-      .qIn(qInLatch),
-      .phaseError(phaseError),
-      .wr0(wr0),
-      .wr1(wr1),
-      .wr2(wr2),
-      .wr3(wr3),
-      .addr(addr),
-      .din(din),
-      .dout(trellisLoopDout),
-      .iOut(carrierLoopIOut),
-      .qOut(carrierLoopQOut),
-      .symEnDly(),
-      .sym2xEnDly(sym2xEnLoop)
-       );
-`endif  
-   
 
 `ifdef SIMULATE
    real                phErrReal;

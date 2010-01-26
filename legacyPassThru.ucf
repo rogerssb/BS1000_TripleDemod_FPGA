@@ -306,6 +306,19 @@ NET "qData" IOSTANDARD = "LVCMOS33";
 NET "auSymClk" LOC = E12;
 NET "auSymClk" IOSTANDARD = "LVCMOS33";
 
+NET "multihPhaseError<0>" LOC = A18 | IOSTANDARD = "LVCMOS33";
+NET "multihPhaseError<1>" LOC = A15 | IOSTANDARD = "LVCMOS33";
+NET "multihPhaseError<2>" LOC = A12 | IOSTANDARD = "LVCMOS33";
+NET "multihPhaseError<3>" LOC = A10 | IOSTANDARD = "LVCMOS33";
+NET "multihPhaseError<4>" LOC = C14 | IOSTANDARD = "LVCMOS33";
+NET "multihPhaseError<5>" LOC = C11 | IOSTANDARD = "LVCMOS33";
+NET "multihPhaseError<6>" LOC = C10 | IOSTANDARD = "LVCMOS33";
+NET "multihPhaseError<7>" LOC = C5  | IOSTANDARD = "LVCMOS33";
+
+NET "multihPhaseErrorEn"  LOC = D18 | IOSTANDARD = "LVCMOS33";
+
+
+
 NET "ck933" TNM_NET = ck933;
 NET "nWe" TNM_NET = nWe;
 TIMEGRP "sync0" = FFS(demod/ddc/hb0/syncOut*);
