@@ -192,7 +192,8 @@ multihEQ multihEQ (
     .dout(eqFreq)
     );
 
-wire    [17:0]  freq = (demodMode == `MODE_MULTIH) ? {eqFreq,6'b0} : {freqOut,6'b0};
+//wire    [17:0]  freq = (demodMode == `MODE_MULTIH) ? {eqFreq,6'b0} : {freqOut,6'b0};
+wire    [17:0]  freq = {freqOut,6'b0};
 
 
 `ifdef SIMULATE

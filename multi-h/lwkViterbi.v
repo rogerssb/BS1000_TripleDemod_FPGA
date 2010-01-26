@@ -535,16 +535,15 @@ module viterbiMultiH
         end
         else if (symEnAcs) begin
            case (index)
-             0 : begin  phaseError1 <= qOut0 ;end
-             8 : begin  phaseError1 <= qOut8 ;end
-             16: begin  phaseError1 <= qOut16;end
-             24: begin  phaseError1 <= qOut24;end
-             32: begin  phaseError1 <= qOut32;end
-             40: begin  phaseError1 <= qOut40;end
-             48: begin  phaseError1 <= qOut48;end
-             56: begin  phaseError1 <= qOut56;end
-             default: begin
-                        phaseError1 <= 0;
+             0 :      begin  phaseError1 <= qOut0 ;end
+             8 :      begin  phaseError1 <= qOut8 ;end
+             16:      begin  phaseError1 <= qOut16;end
+             24:      begin  phaseError1 <= qOut24;end
+             32:      begin  phaseError1 <= qOut32;end
+             40:      begin  phaseError1 <= qOut40;end
+             48:      begin  phaseError1 <= qOut48;end
+             56:      begin  phaseError1 <= qOut56;end
+             default: begin  phaseError1 <= 0;end
            endcase
         end  
      end
