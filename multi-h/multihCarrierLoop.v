@@ -21,6 +21,16 @@ module multihCarrierLoop(
     wr0,wr1,wr2,wr3,
     addr,
     din,dout,
+    dac0Select,dac1Select,dac2Select,
+    dac0Sync,
+    dac0Data,
+    dac0En,
+    dac1Sync,
+    dac1Data,
+    dac1En,
+    dac2Sync,
+    dac2Data,
+    dac2En,
     iOut,qOut,
     symEnDly,
     sym2xEnDly
@@ -34,7 +44,17 @@ input wr0,wr1,wr2,wr3;
 input [11:0]addr;
 input [31:0]din;
 output [31:0]dout;
-output [17:0]iOut,qOut;
+input   [3:0]   dac0Select,dac1Select,dac2Select;
+output          dac0Sync;
+output  [17:0]  dac0Data;
+output          dac0En;
+output          dac1Sync;
+output  [17:0]  dac1Data;
+output          dac1En;
+output          dac2Sync;
+output  [17:0]  dac2Data;
+output          dac2En;
+output  [17:0]  iOut,qOut;
 output symEnDly;
 output sym2xEnDly;
 
@@ -217,5 +237,98 @@ always @(iOut) iOutReal = (iOut[17] ? iOut - 272144.0 : iOut)/131072.0;
 real iInReal;
 always @(iIn) iInReal = (iIn[17] ? iIn - 272144.0 : iIn)/131072.0;
 `endif
+
+//******************************************************************************
+//                               DAC Output Mux
+//******************************************************************************
+
+reg             dac0Sync;
+reg     [17:0]  dac0Data;
+reg             dac0En;
+reg             dac1Sync;
+reg     [17:0]  dac1Data;
+reg             dac1En;
+reg             dac2Sync;
+reg     [17:0]  dac2Data;
+reg             dac2En;
+always @(posedge clk) begin
+    if (reset) begin
+        dac0En <= 0;
+        dac1En <= 0;
+        dac2En <= 0;
+        end
+    else begin
+        case (dac0Select) 
+            `DAC_I: begin
+                dac0Data <= iIn;
+                dac0Sync <= sym2xEn;
+                dac0En <= 1;
+                end
+            `DAC_Q: begin
+                dac0Data <= qOut;
+                dac0Sync <= sym2xEnDly;
+                dac0En <= 1;
+                end
+            `DAC_PHERROR: begin
+                dac0Data <= {phaseError,10'b0};
+                dac0Sync <= phaseErrorEn;
+                dac0En <= 1;
+                end
+            default: begin
+                dac0Data <= {phaseError,10'b0};
+                dac0Sync <= phaseErrorEn;
+                dac0En <= 0;
+                end
+            endcase
+
+        case (dac1Select) 
+            `DAC_I: begin
+                dac1Data <= iOut;
+                dac1Sync <= sym2xEnDly;
+                dac1En <= 1;
+                end
+            `DAC_Q: begin
+                dac1Data <= qIn;
+                dac1Sync <= sym2xEn;
+                dac1En <= 1;
+                end
+            `DAC_PHERROR: begin
+                dac1Data <= {phaseError,10'b0};
+                dac1Sync <= phaseErrorEn;
+                dac1En <= 1;
+                end
+            default: begin
+                dac1Data <= {phaseError,10'b0};
+                dac1Sync <= phaseErrorEn;
+                dac1En <= 0;
+                end
+            endcase
+
+        case (dac2Select) 
+            `DAC_I: begin
+                dac2Data <= iIn;
+                dac2Sync <= sym2xEn;
+                dac2En <= 1;
+                end
+            `DAC_Q: begin
+                dac2Data <= qIn;
+                dac2Sync <= sym2xEn;
+                dac2En <= 1;
+                end
+            `DAC_PHERROR: begin
+                dac2Data <= {phaseError,10'b0};
+                dac2Sync <= phaseErrorEn;
+                dac2En <= 1;
+                end
+            default: begin
+                dac2Data <= {phaseError,10'b0};
+                dac2Sync <= phaseErrorEn;
+                dac2En <= 0;
+                end
+            endcase
+        end
+    end
+
+
 
 endmodule

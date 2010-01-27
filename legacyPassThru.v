@@ -337,6 +337,7 @@ always @(posedge ck933) begin
     multihPhaseErrorEnIn <= multihPhaseErrorEn;
     end
 
+wire    [17:0]  multihDac0Data,multihDac1Data,multihDac2Data;
 wire    [17:0]  iMultihLoop,qMultihLoop;
 wire    [31:0]  multihLoopDout;
 multihCarrierLoop multihLoop(
@@ -355,6 +356,16 @@ multihCarrierLoop multihLoop(
     .addr(addr),
     .din(dataIn),
     .dout(multihLoopDout),
+    .dac0Select(dac0Select),.dac1Select(dac1Select),.dac2Select(dac2Select),
+    .dac0Sync(multihDac0Sync),
+    .dac0Data(multihDac0Data),
+    .dac0En(multihDac0En),
+    .dac1Sync(multihDac1Sync),
+    .dac1Data(multihDac1Data),
+    .dac1En(multihDac1En),
+    .dac2Sync(multihDac2Sync),
+    .dac2Data(multihDac2Data),
+    .dac2En(multihDac2En),
     .iOut(iMultihLoop),
     .qOut(qMultihLoop),
     .symEnDly(multihLoopEn),
@@ -478,8 +489,14 @@ always @(posedge ck933) begin
             dac0Sync <= trellis0Sync;
             end
         default: begin
-            dac0Out <= demod0Out;
-            dac0Sync <= demod0Sync;
+            if (multihDac0En) begin
+                dac0Out <= multihDac0Data;
+                dac0Sync <= multihDac0Sync;
+                end
+            else begin
+                dac0Out <= demod0Out;
+                dac0Sync <= demod0Sync;
+                end
             end
         endcase
     case (dac1Select) 
@@ -491,8 +508,14 @@ always @(posedge ck933) begin
             dac1Sync <= trellis1Sync;
             end
         default: begin
-            dac1Out <= demod1Out;
-            dac1Sync <= demod1Sync;
+            if (multihDac1En) begin
+                dac1Out <= multihDac1Data;
+                dac1Sync <= multihDac1Sync;
+                end
+            else begin
+                dac1Out <= demod1Out;
+                dac1Sync <= demod1Sync;
+                end
             end
         endcase
     case (dac2Select)
@@ -504,8 +527,14 @@ always @(posedge ck933) begin
             dac2Sync <= trellis2Sync;
             end
         default: begin
-            dac2Out <= demod2Out;
-            dac2Sync <= demod2Sync;
+            if (multihDac2En) begin
+                dac2Out <= multihDac2Data;
+                dac2Sync <= multihDac2Sync;
+                end
+            else begin
+                dac2Out <= demod2Out;
+                dac2Sync <= demod2Sync;
+                end
             end
         endcase
     end
