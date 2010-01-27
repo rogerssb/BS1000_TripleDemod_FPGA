@@ -11,7 +11,7 @@
 `timescale 1ns/1ps
 `include "./addressMap.v"
 
-`define BYPASS_LOOP
+//`define BYPASS_LOOP
            
 module multihCarrierLoop(
     clk,reset,symEn,sym2xEn,
