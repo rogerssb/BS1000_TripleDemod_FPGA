@@ -425,6 +425,8 @@ NET "phaseError<5>" LOC = C12 | IOSTANDARD = "LVCMOS33";
 NET "phaseError<6>" LOC = C13 | IOSTANDARD = "LVCMOS33";
 NET "phaseError<7>" LOC = C18 | IOSTANDARD = "LVCMOS33";
 
+NET "phaseErrorEn"  LOC = D6  | IOSTANDARD = "LVCMOS33";
+
 NET "ck933" TNM_NET = ck933;
 NET "nWe" TNM_NET = nWe;
 NET "reset*" TNM_NET = reset; 
