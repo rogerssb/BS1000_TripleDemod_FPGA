@@ -10,7 +10,7 @@
 
 `timescale 1ns/1ps
 `define USE_DECAY
-//`define USE_TRACEBACK
+`define USE_TRACEBACK
   
 module viterbiMultiH
   (
@@ -543,7 +543,7 @@ module viterbiMultiH
              40:      begin  phaseError1 <= qOut40;end
              48:      begin  phaseError1 <= qOut48;end
              56:      begin  phaseError1 <= qOut56;end
-             default: begin  phaseError1 <= 0;end
+             default: begin  phaseError1 <= phaseError1;end
            endcase
         end  
      end

@@ -753,6 +753,14 @@ always @(
       end
     `TRELLISLFSPACE,
     `TRELLIS_SPACE: begin
+    `ifdef LWK_TEST
+         if (addr[1]) begin
+           rd_mux <= multihLoopDout[31:16];
+           end
+         else begin
+           rd_mux <= multihLoopDout[15:0];
+           end
+    `else
       if (multiHMode) begin
           if (addr[1]) begin
             rd_mux <= multihLoopDout[31:16];
@@ -769,6 +777,7 @@ always @(
             rd_mux <= trellisDout[15:0];
             end
         end
+    `endif
       end
     `MISC_SPACE : begin
         if (addr[1]) begin
