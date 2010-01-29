@@ -3,6 +3,7 @@
 
 module resampler( 
     clk, reset, sync,
+    resetPhase,
     resampleRate,
     resamplerFreqOffset,
     offsetEn,
@@ -15,6 +16,7 @@ module resampler(
 input clk;
 input reset;
 input sync;
+input resetPhase;
 input   [31:0]  resampleRate;
 input   [31:0]  resamplerFreqOffset;
 input           offsetEn;
@@ -26,6 +28,9 @@ output  [4:0]   sampleOffset;
 // Create the resampler rate
 reg [31:0] resamplerPhaseInc;
 always @(posedge clk) begin
+    if (resetPhase) begin
+        resamplerPhaseInc <= 0;
+        end
     if (offsetEn) begin
         resamplerPhaseInc <= resampleRate + resamplerFreqOffset;
         end

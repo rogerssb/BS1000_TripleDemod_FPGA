@@ -66,7 +66,9 @@ resampRegs resampRegs(
 
 
 resampler resamplerI( 
-    .clk(clk), .reset(reset), .sync(sync),
+    .clk(clk), .reset(reset), 
+    .resetPhase(resetPhase),
+    .sync(sync),
     .resampleRate(resampleRate),
     .resamplerFreqOffset(resamplerFreqOffset),
     .offsetEn(offsetEn),
@@ -93,7 +95,9 @@ wire            rqOffsetEn =        auEnable ? auOffsetEn : offsetEn;
 wire    [17:0]  rqIn =              auEnable ? cicOut[47:30] : qIn;
 wire            rqSync =            auEnable ? auCicSyncOut : sync;
 resampler resamplerQ( 
-    .clk(clk), .reset(reset), .sync(rqSync),
+    .clk(clk), .reset(reset),
+    .resetPhase(resetPhase),
+    .sync(rqSync),
     .resampleRate(rqResampleRate),
     .resamplerFreqOffset(rqFreqOffset),
     .offsetEn(rqOffsetEn),
@@ -103,6 +107,7 @@ resampler resamplerQ(
     .sampleOffset()
     );
 
+assign resetPhase = (syncOut ^ auSyncOut) && !auEnable;
 
 endmodule
 
