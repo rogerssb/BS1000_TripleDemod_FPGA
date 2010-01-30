@@ -387,10 +387,10 @@
     <property xil_pn:name="Change Device Speed To Post Trace" xil_pn:value="-4" xil_pn:valueState="default"/>
     <property xil_pn:name="ChipScope Analyzer:" xil_pn:value="" xil_pn:valueState="default"/>
     <property xil_pn:name="Combinatorial Logic Optimization" xil_pn:value="false" xil_pn:valueState="default"/>
-    <property xil_pn:name="Command line syntax" xil_pn:value="" xil_pn:valueState="default"/>
-    <property xil_pn:name="Compile EDK Simulation Library" xil_pn:value="true" xil_pn:valueState="default"/>
+    <property xil_pn:name="Command line syntax" xil_pn:value="????" xil_pn:valueState="non-default"/>
+    <property xil_pn:name="Compile EDK Simulation Library" xil_pn:value="true" xil_pn:valueState="non-default"/>
     <property xil_pn:name="Compile SIMPRIM (Timing) Simulation Library" xil_pn:value="true" xil_pn:valueState="default"/>
-    <property xil_pn:name="Compile SmartModels (PPC, MGT) Simulation Library" xil_pn:value="false" xil_pn:valueState="default"/>
+    <property xil_pn:name="Compile SmartModels (PPC, MGT) Simulation Library" xil_pn:value="false" xil_pn:valueState="non-default"/>
     <property xil_pn:name="Compile UNISIM (Functional) Simulation Library" xil_pn:value="true" xil_pn:valueState="default"/>
     <property xil_pn:name="Compile XilinxCoreLib (CORE Generator) Simulation Library" xil_pn:value="true" xil_pn:valueState="default"/>
     <property xil_pn:name="Compile for HDL Debugging" xil_pn:value="true" xil_pn:valueState="default"/>
@@ -398,6 +398,7 @@
     <property xil_pn:name="Configuration Clk (Configuration Pins)" xil_pn:value="Pull Up" xil_pn:valueState="default"/>
     <property xil_pn:name="Configuration Name" xil_pn:value="Default" xil_pn:valueState="default"/>
     <property xil_pn:name="Configuration Pin Done" xil_pn:value="Pull Up" xil_pn:valueState="default"/>
+    <property xil_pn:name="Configuration Pin HSWAPEN" xil_pn:value="Pull Up" xil_pn:valueState="default"/>
     <property xil_pn:name="Configuration Pin M0" xil_pn:value="Pull Up" xil_pn:valueState="default"/>
     <property xil_pn:name="Configuration Pin M1" xil_pn:value="Pull Up" xil_pn:valueState="default"/>
     <property xil_pn:name="Configuration Pin M2" xil_pn:value="Pull Up" xil_pn:valueState="default"/>
@@ -462,13 +463,14 @@
     <property xil_pn:name="Enable Filter on Suspend Input" xil_pn:value="true" xil_pn:valueState="non-default"/>
     <property xil_pn:name="Enable Internal Done Pipe" xil_pn:value="false" xil_pn:valueState="default"/>
     <property xil_pn:name="Enable Message Filtering" xil_pn:value="false" xil_pn:valueState="default"/>
+    <property xil_pn:name="Enable Multi-Threading" xil_pn:value="false" xil_pn:valueState="default"/>
     <property xil_pn:name="Enable Outputs (Output Events)" xil_pn:value="Default (5)" xil_pn:valueState="default"/>
     <property xil_pn:name="Enable Power-On Reset Detection" xil_pn:value="true" xil_pn:valueState="default"/>
     <property xil_pn:name="Enable Suspend/Wake Global Set/Reset" xil_pn:value="false" xil_pn:valueState="default"/>
     <property xil_pn:name="Encrypt Bitstream" xil_pn:value="false" xil_pn:valueState="default"/>
     <property xil_pn:name="Equivalent Register Removal" xil_pn:value="true" xil_pn:valueState="default"/>
     <property xil_pn:name="Equivalent Register Removal XST" xil_pn:value="true" xil_pn:valueState="default"/>
-    <property xil_pn:name="Exclude Compilation of Deprecated EDK Cores" xil_pn:value="true" xil_pn:valueState="default"/>
+    <property xil_pn:name="Exclude Compilation of Deprecated EDK Cores" xil_pn:value="true" xil_pn:valueState="non-default"/>
     <property xil_pn:name="Exclude Compilation of EDK Sub-Libraries" xil_pn:value="false" xil_pn:valueState="default"/>
     <property xil_pn:name="Extra Effort" xil_pn:value="None" xil_pn:valueState="default"/>
     <property xil_pn:name="Extra Effort (Highest PAR level only)" xil_pn:value="None" xil_pn:valueState="default"/>
@@ -481,6 +483,7 @@
     <property xil_pn:name="Fitter Report Format" xil_pn:value="HTML" xil_pn:valueState="non-default"/>
     <property xil_pn:name="Flatten Output Netlist" xil_pn:value="false" xil_pn:valueState="default"/>
     <property xil_pn:name="Flow Debug Level" xil_pn:value="0" xil_pn:valueState="default"/>
+    <property xil_pn:name="Frequency" xil_pn:value="0.0" xil_pn:valueState="default"/>
     <property xil_pn:name="Full Case" xil_pn:value="false" xil_pn:valueState="default"/>
     <property xil_pn:name="Functional Model Target Language ArchWiz" xil_pn:value="Verilog" xil_pn:valueState="default"/>
     <property xil_pn:name="Functional Model Target Language Coregen" xil_pn:value="Verilog" xil_pn:valueState="default"/>
@@ -500,6 +503,7 @@
     <property xil_pn:name="Generate Post-Place &amp; Route Power Report" xil_pn:value="false" xil_pn:valueState="default"/>
     <property xil_pn:name="Generate Post-Place &amp; Route Simulation Model" xil_pn:value="false" xil_pn:valueState="default"/>
     <property xil_pn:name="Generate RTL Schematic" xil_pn:value="Yes" xil_pn:valueState="default"/>
+    <property xil_pn:name="Generate SAIF File for Power Optimization/Estimation" xil_pn:value="false" xil_pn:valueState="default"/>
     <property xil_pn:name="Generate SAIF File for Power Optimization/Estimation Par" xil_pn:value="false" xil_pn:valueState="default"/>
     <property xil_pn:name="Generate Testbench File" xil_pn:value="false" xil_pn:valueState="default"/>
     <property xil_pn:name="Generate Timegroups Section" xil_pn:value="false" xil_pn:valueState="default"/>
@@ -546,7 +550,7 @@
     <property xil_pn:name="Key 3 (Hex String)" xil_pn:value="" xil_pn:valueState="default"/>
     <property xil_pn:name="Key 4 (Hex String)" xil_pn:value="" xil_pn:valueState="default"/>
     <property xil_pn:name="Key 5 (Hex String)" xil_pn:value="" xil_pn:valueState="default"/>
-    <property xil_pn:name="Language" xil_pn:value="VHDL" xil_pn:valueState="default"/>
+    <property xil_pn:name="Language" xil_pn:value="VHDL" xil_pn:valueState="non-default"/>
     <property xil_pn:name="Last Applied Goal" xil_pn:value="Balanced" xil_pn:valueState="default"/>
     <property xil_pn:name="Last Applied Strategy" xil_pn:value="Xilinx Default (unlocked)" xil_pn:valueState="default"/>
     <property xil_pn:name="Last Unlock Status" xil_pn:value="false" xil_pn:valueState="default"/>
@@ -563,6 +567,10 @@
     <property xil_pn:name="Location of Key 3 in Sequence" xil_pn:value="None" xil_pn:valueState="default"/>
     <property xil_pn:name="Location of Key 4 in Sequence" xil_pn:value="None" xil_pn:valueState="default"/>
     <property xil_pn:name="Location of Key 5 in Sequence" xil_pn:value="None" xil_pn:valueState="default"/>
+    <property xil_pn:name="Log All Signals In Behavioral Simulation" xil_pn:value="false" xil_pn:valueState="default"/>
+    <property xil_pn:name="Log All Signals In Post-Map Simulation" xil_pn:value="false" xil_pn:valueState="default"/>
+    <property xil_pn:name="Log All Signals In Post-Par Simulation" xil_pn:value="false" xil_pn:valueState="default"/>
+    <property xil_pn:name="Log All Signals In Post-Translate Simulation" xil_pn:value="false" xil_pn:valueState="default"/>
     <property xil_pn:name="Logical Shifter Extraction" xil_pn:value="true" xil_pn:valueState="default"/>
     <property xil_pn:name="Macro Search Path" xil_pn:value="coregen" xil_pn:valueState="non-default"/>
     <property xil_pn:name="Manual Implementation Compile Order" xil_pn:value="false" xil_pn:valueState="default"/>
@@ -570,6 +578,7 @@
     <property xil_pn:name="Map Slice Logic into Unused Block RAMs" xil_pn:value="false" xil_pn:valueState="default"/>
     <property xil_pn:name="Max Fanout" xil_pn:value="500" xil_pn:valueState="default"/>
     <property xil_pn:name="Maximum Number of Lines in Report" xil_pn:value="1000" xil_pn:valueState="default"/>
+    <property xil_pn:name="Message Filter File" xil_pn:value="filter.filter" xil_pn:valueState="default"/>
     <property xil_pn:name="Model Tech Simulator:" xil_pn:value="" xil_pn:valueState="default"/>
     <property xil_pn:name="ModelSim Post-Map UUT Instance Name" xil_pn:value="UUT" xil_pn:valueState="default"/>
     <property xil_pn:name="ModelSim Post-Par UUT Instance Name" xil_pn:value="UUT" xil_pn:valueState="default"/>
@@ -604,6 +613,8 @@
     <property xil_pn:name="Other NETGEN Command Line Options" xil_pn:value="" xil_pn:valueState="default"/>
     <property xil_pn:name="Other Ngdbuild Command Line Options" xil_pn:value="" xil_pn:valueState="default"/>
     <property xil_pn:name="Other Place &amp; Route Command Line Options" xil_pn:value="" xil_pn:valueState="default"/>
+    <property xil_pn:name="Other Precision Command Line Options" xil_pn:value="" xil_pn:valueState="default"/>
+    <property xil_pn:name="Other Synplify Command Line Options" xil_pn:value="" xil_pn:valueState="default"/>
     <property xil_pn:name="Other VCOM Command Line Options" xil_pn:value="" xil_pn:valueState="default"/>
     <property xil_pn:name="Other VLOG Command Line Options" xil_pn:value="" xil_pn:valueState="default"/>
     <property xil_pn:name="Other VSIM Command Line Options" xil_pn:value="" xil_pn:valueState="default"/>
@@ -616,7 +627,7 @@
     <property xil_pn:name="Overwrite Existing Symbol" xil_pn:value="false" xil_pn:valueState="default"/>
     <property xil_pn:name="Pack I/O Registers into IOBs" xil_pn:value="Auto" xil_pn:valueState="default"/>
     <property xil_pn:name="Pack I/O Registers/Latches into IOBs" xil_pn:value="Off" xil_pn:valueState="default"/>
-    <property xil_pn:name="Package" xil_pn:value="cs484" xil_pn:valueState="non-default"/>
+    <property xil_pn:name="Package" xil_pn:value="cs484" xil_pn:valueState="default"/>
     <property xil_pn:name="Parallel Case" xil_pn:value="false" xil_pn:valueState="default"/>
     <property xil_pn:name="Path Used in sdf_annotate task" xil_pn:value="Default" xil_pn:valueState="default"/>
     <property xil_pn:name="Path(s) to Previously Compiled EDK Libraries" xil_pn:value="Search in Path" xil_pn:valueState="default"/>
@@ -637,6 +648,7 @@
     <property xil_pn:name="Power Activity File Par" xil_pn:value="" xil_pn:valueState="default"/>
     <property xil_pn:name="Power Reduction Map" xil_pn:value="false" xil_pn:valueState="default"/>
     <property xil_pn:name="Power Reduction Par" xil_pn:value="false" xil_pn:valueState="default"/>
+    <property xil_pn:name="Precision Optimization Goal" xil_pn:value="Balanced" xil_pn:valueState="default"/>
     <property xil_pn:name="Precision:" xil_pn:value="" xil_pn:valueState="default"/>
     <property xil_pn:name="Preferred Language" xil_pn:value="Verilog" xil_pn:valueState="default"/>
     <property xil_pn:name="Priority Encoder Extraction" xil_pn:value="Yes" xil_pn:valueState="default"/>
@@ -688,6 +700,7 @@
     <property xil_pn:name="Run Retiming" xil_pn:value="false" xil_pn:valueState="default"/>
     <property xil_pn:name="Run for Specified Time" xil_pn:value="true" xil_pn:valueState="default"/>
     <property xil_pn:name="Run for Specified Time Par" xil_pn:value="true" xil_pn:valueState="default"/>
+    <property xil_pn:name="SAIF File Name" xil_pn:value="xpower_time_sim.saif" xil_pn:valueState="default"/>
     <property xil_pn:name="SAIF File Name ISim" xil_pn:value="xpower_time_sim.saif" xil_pn:valueState="default"/>
     <property xil_pn:name="SDK Export Directory" xil_pn:value="SDK_Export" xil_pn:valueState="default"/>
     <property xil_pn:name="Safe Implementation" xil_pn:value="No" xil_pn:valueState="default"/>
@@ -706,7 +719,7 @@
     <property xil_pn:name="Simulation Run Time ISim" xil_pn:value="1000 ns" xil_pn:valueState="default"/>
     <property xil_pn:name="Simulation Run Time Modelsim" xil_pn:value="1000ns" xil_pn:valueState="default"/>
     <property xil_pn:name="Simulation Run Time Par" xil_pn:value="1000 ns" xil_pn:valueState="default"/>
-    <property xil_pn:name="Simulator" xil_pn:value="ISim (VHDL/Verilog)" xil_pn:valueState="default"/>
+    <property xil_pn:name="Simulator" xil_pn:value="Modelsim-SE Mixed" xil_pn:valueState="default"/>
     <property xil_pn:name="Simulator Path" xil_pn:value="Search in Path" xil_pn:valueState="default"/>
     <property xil_pn:name="Slice Packing" xil_pn:value="true" xil_pn:valueState="default"/>
     <property xil_pn:name="Slice Utilization Ratio" xil_pn:value="100" xil_pn:valueState="default"/>
@@ -780,6 +793,7 @@
     <property xil_pn:name="Verilog" xil_pn:value="false" xil_pn:valueState="default"/>
     <property xil_pn:name="Verilog 2001 Xst" xil_pn:value="true" xil_pn:valueState="default"/>
     <property xil_pn:name="Verilog Include Directories" xil_pn:value="C:/modem/telemetry/" xil_pn:valueState="non-default"/>
+    <property xil_pn:name="Verilog Include Directories Synplify" xil_pn:value="" xil_pn:valueState="default"/>
     <property xil_pn:name="Verilog Macros" xil_pn:value="" xil_pn:valueState="default"/>
     <property xil_pn:name="Verilog Standard" xil_pn:value="Verilog 2001" xil_pn:valueState="default"/>
     <property xil_pn:name="Wait for DCI Match (Output Events) virtex2" xil_pn:value="Auto" xil_pn:valueState="default"/>

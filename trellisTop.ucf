@@ -1,5 +1,6 @@
 NET "ck933" LOC = Y11;
 NET "nWe" LOC = V12;
+NET "nWe" CLOCK_DEDICATED_ROUTE = FALSE;
 NET "nCs" LOC = V11;
 NET "nRd" LOC = U16;
 NET "data<0>" LOC = W8;
@@ -205,8 +206,8 @@ NET "cout_i" LOC = T22;
 NET "cout_q" LOC = V20;
 NET "dout_i" LOC = T20;
 NET "dout_q" LOC = U22;
-NET "cout_i" IOSTANDARD = "LVCMOS18";
-NET "cout_q" IOSTANDARD = "LVCMOS18";
+NET "cout_i" IOSTANDARD = "LVCMOS18" | FAST;
+NET "cout_q" IOSTANDARD = "LVCMOS18" | FAST;
 NET "dout_i" IOSTANDARD = "LVCMOS18";
 NET "dout_q" IOSTANDARD = "LVCMOS18";
 NET "symb_pll_fbk" LOC = Y13;

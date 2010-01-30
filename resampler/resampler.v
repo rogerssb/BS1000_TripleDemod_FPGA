@@ -31,7 +31,7 @@ always @(posedge clk) begin
     if (resetPhase) begin
         resamplerPhaseInc <= 0;
         end
-    if (offsetEn) begin
+    else if (offsetEn) begin
         resamplerPhaseInc <= resampleRate + resamplerFreqOffset;
         end
     end
@@ -84,7 +84,7 @@ mpy18x18 offsetMpy (
 reg     [4:0]   newOffset;
 wire    [5:0]   roundedLutProduct = lutProduct[22:17] + {5'h0,lutProduct[16]};
 always @(posedge clk) begin
-    if (reset) begin
+    if (reset | resetPhase) begin
         phase <= 0;
         resample <= 0;
         end

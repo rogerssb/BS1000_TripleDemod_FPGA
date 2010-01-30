@@ -108,6 +108,7 @@ resampler resamplerQ(
     );
 
 assign resetPhase = (syncOut ^ auSyncOut) && !auEnable;
+//assign resetPhase = 1'b0;
 
 endmodule
 
