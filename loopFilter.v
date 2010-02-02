@@ -37,6 +37,7 @@ output  [11:0]  syncThreshold;
 // Microprocessor interface
 wire    [4:0]   lead, lag;
 wire    [31:0]  limit;
+wire    [31:0]  loopData;
 wire    [31:0]  lowerLimit = -limit;
 wire    [31:0]  upperLimit = limit;
 reg     [31:0]  lagAccum;
@@ -56,6 +57,7 @@ loopRegs micro(
     .lagExp(lag),
     .limit(limit),
     .lockCount(lockCount),
+    .loopData(loopOffset),
     .syncThreshold(syncThreshold)
     );
 
@@ -65,11 +67,13 @@ always @(posedge clk) begin
     if (zeroError) begin
         loopError <= 12'h0;
         end
-    else if (invertError) begin
-        loopError <= ~error + 1;
-        end
-    else begin
-        loopError <= error;
+    else if (clkEn) begin
+        if (invertError) begin
+            loopError <= ~error + 1 + loopOffset[31:20];
+            end
+        else begin
+            loopError <= error + loopOffset[31:20];
+            end
         end
     end
 
