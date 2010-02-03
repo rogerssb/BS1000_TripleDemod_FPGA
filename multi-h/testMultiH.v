@@ -368,8 +368,12 @@ end
 //`define RANDOM
 //`define RANDOM_ATT
 //`define RANDOM_LONG
-`define RANDOM_LONG_ATT
-
+//`define RANDOM_LONG_ATT
+//`define RANDOM_LONG_ATT_9_5dB_EbNo
+//`define RANDOM_LONG_ATT_NO_NOISE
+//`define RANDOM_LONG_ATT_SOME_NOISE
+`define RANDOM_LONG_ATT_10dB_NOISE
+   
 integer file1,file2;
 initial begin
   //uut.soqpskTop.simReset = 1;
@@ -412,9 +416,30 @@ initial begin
 `ifdef RANDOM_LONG_ATT
       $readmemh("P:/semco/matlab_sim_results/multi-h/mfinputsRandomLongAttBy_0_25.hex", readMem);
 `endif
+
+`ifdef RANDOM_LONG_ATT_9_5dB_EbNo
+      $readmemh("P:/semco/matlab_sim_results/multi-h/mfinputs9_5dBEbNo1000samp.hex", readMem);
+`endif
+
+`ifdef RANDOM_LONG_ATT_NO_NOISE
+      $readmemh("P:/semco/matlab_sim_results/multi-h/mfinputsNoNoise1000samp.hex", readMem);
+`endif
+
+`ifdef RANDOM_LONG_ATT_SOME_NOISE
+      $readmemh("P:/semco/matlab_sim_results/multi-h/mfinputsSimWith6errInMatlabNoTb1000samp.hex", readMem);
+`endif
+
+`ifdef RANDOM_LONG_ATT_10dB_NOISE
+      $readmemh("P:/semco/matlab_sim_results/multi-h/mfinputs10dBEbNo1000samp6ErrWithTB.hex", readMem);
+`endif
+
    
 end
 
+
+
+
+   
   // BERT 
   integer bitError;
 /* -----\/----- EXCLUDED -----\/-----

@@ -203,7 +203,8 @@ module traceBackMultiH
      if (reset) begin
         symEnEvenToggle <= 0;
      end
-     else if (stateCnt == 3) begin
+     //else if (stateCnt == 3) begin
+     else if (stateCnt > 2) begin
         symEnEvenToggle <= symEnEven;
      end
      else begin
@@ -212,8 +213,8 @@ module traceBackMultiH
    
    // Latching the next state
    reg [5:0]          nState;
-   reg [5:0] nStateLatched;
-   reg [5:0] indexReg;
+   reg [5:0]          nStateLatched;
+   reg [5:0]          indexReg;
    always @(posedge clk)
      if (reset) begin
         nStateLatched <= 0;
@@ -248,26 +249,6 @@ module traceBackMultiH
              2 : begin nState[5:2] <= cState[5:2]-10; end 
              3 : begin nState[5:2] <= cState[5:2]-15; end
            endcase
-           /* -----\/----- EXCLUDED -----\/-----
-           case (cState[5:2]) 
-             0 : begin nState[5:2] <= cState[5:2]-5*decisionTmp; end 
-             1 : begin nState[5:2] <= cState[5:2]-5*decisionTmp; end 
-             2 : begin nState[5:2] <= cState[5:2]-5*decisionTmp; end 
-             3 : begin nState[5:2] <= cState[5:2]-5*decisionTmp; end
-             4 : begin nState[5:2] <= cState[5:2]-5*decisionTmp; end
-             5 : begin nState[5:2] <= cState[5:2]-5*decisionTmp; end
-             6 : begin nState[5:2] <= cState[5:2]-5*decisionTmp; end
-             7 : begin nState[5:2] <= cState[5:2]-5*decisionTmp; end
-             8 : begin nState[5:2] <= cState[5:2]-5*decisionTmp; end
-             9 : begin nState[5:2] <= cState[5:2]-5*decisionTmp; end
-             10: begin nState[5:2] <= cState[5:2]-5*decisionTmp; end
-             11: begin nState[5:2] <= cState[5:2]-5*decisionTmp; end
-             12: begin nState[5:2] <= cState[5:2]-5*decisionTmp; end
-             13: begin nState[5:2] <= cState[5:2]-5*decisionTmp; end
-             14: begin nState[5:2] <= cState[5:2]-5*decisionTmp; end
-             15: begin nState[5:2] <= cState[5:2]-5*decisionTmp; end
-           endcase // case(cState)
-            -----/\----- EXCLUDED -----/\----- */
         end
         else begin
            //nState[5:2] <= cState[5:2]-4*decisionTmp;
@@ -277,101 +258,80 @@ module traceBackMultiH
              2 : begin nState[5:2] <= cState[5:2]-8; end 
              3 : begin nState[5:2] <= cState[5:2]-12; end
            endcase
-           /* -----\/----- EXCLUDED -----\/-----
-           case (cState[5:2]) 
-             0 : begin nState[5:2] <= cState[5:2]-4*decisionTmp; end 
-             1 : begin nState[5:2] <= cState[5:2]-4*decisionTmp; end 
-             2 : begin nState[5:2] <= cState[5:2]-4*decisionTmp; end 
-             3 : begin nState[5:2] <= cState[5:2]-4*decisionTmp; end
-             4 : begin nState[5:2] <= cState[5:2]-4*decisionTmp; end
-             5 : begin nState[5:2] <= cState[5:2]-4*decisionTmp; end
-             6 : begin nState[5:2] <= cState[5:2]-4*decisionTmp; end
-             7 : begin nState[5:2] <= cState[5:2]-4*decisionTmp; end
-             8 : begin nState[5:2] <= cState[5:2]-4*decisionTmp; end
-             9 : begin nState[5:2] <= cState[5:2]-4*decisionTmp; end
-             10: begin nState[5:2] <= cState[5:2]-4*decisionTmp; end
-             11: begin nState[5:2] <= cState[5:2]-4*decisionTmp; end
-             12: begin nState[5:2] <= cState[5:2]-4*decisionTmp; end
-             13: begin nState[5:2] <= cState[5:2]-4*decisionTmp; end
-             14: begin nState[5:2] <= cState[5:2]-4*decisionTmp; end
-             15: begin nState[5:2] <= cState[5:2]-4*decisionTmp; end
-           endcase // case(cState)
-            -----/\----- EXCLUDED -----/\----- */
         end
      end 
 
 
-   //reg [1:0] s0, s1, s2, s3;
    always @(posedge clk)
      begin
         if (reset) begin
            decisionTmp <= 0;
         end
         else if (symEn) begin
-sel0r<= sel0; 
-sel1r<= sel1; 
-sel2r<= sel2; 
-sel3r<= sel3; 
-sel4r<= sel4; 
-sel5r<= sel5; 
-sel6r<= sel6; 
-sel7r<= sel7; 
-sel8r<= sel8; 
-sel9r<= sel9; 
-sel10r<= sel10;
-sel11r<= sel11;
-sel12r<= sel12;
-sel13r<= sel13;
-sel14r<= sel14;
-sel15r<= sel15;
-sel16r<= sel16;
-sel17r<= sel17;
-sel18r<= sel18;
-sel19r<= sel19;
-sel20r<= sel20;
-sel21r<= sel21;
-sel22r<= sel22;
-sel23r<= sel23;
-sel24r<= sel24;
-sel25r<= sel25;
-sel26r<= sel26;
-sel27r<= sel27;
-sel28r<= sel28;
-sel29r<= sel29;
-sel30r<= sel30;
-sel31r<= sel31;
-sel32r<= sel32;
-sel33r<= sel33;
-sel34r<= sel34;
-sel35r<= sel35;
-sel36r<= sel36;
-sel37r<= sel37;
-sel38r<= sel38;
-sel39r<= sel39;
-sel40r<= sel40;
-sel41r<= sel41;
-sel42r<= sel42;
-sel43r<= sel43;
-sel44r<= sel44;
-sel45r<= sel45;
-sel46r<= sel46;
-sel47r<= sel47;
-sel48r<= sel48;
-sel49r<= sel49;
-sel50r<= sel50;
-sel51r<= sel51;
-sel52r<= sel52;
-sel53r<= sel53;
-sel54r<= sel54;
-sel55r<= sel55;
-sel56r<= sel56;
-sel57r<= sel57;
-sel58r<= sel58;
-sel59r<= sel59;
-sel60r<= sel60;
-sel61r<= sel61;
-sel62r<= sel62;
-sel63r<= sel63;
+           sel0r<= sel0; 
+           sel1r<= sel1; 
+           sel2r<= sel2; 
+           sel3r<= sel3; 
+           sel4r<= sel4; 
+           sel5r<= sel5; 
+           sel6r<= sel6; 
+           sel7r<= sel7; 
+           sel8r<= sel8; 
+           sel9r<= sel9; 
+           sel10r<= sel10;
+           sel11r<= sel11;
+           sel12r<= sel12;
+           sel13r<= sel13;
+           sel14r<= sel14;
+           sel15r<= sel15;
+           sel16r<= sel16;
+           sel17r<= sel17;
+           sel18r<= sel18;
+           sel19r<= sel19;
+           sel20r<= sel20;
+           sel21r<= sel21;
+           sel22r<= sel22;
+           sel23r<= sel23;
+           sel24r<= sel24;
+           sel25r<= sel25;
+           sel26r<= sel26;
+           sel27r<= sel27;
+           sel28r<= sel28;
+           sel29r<= sel29;
+           sel30r<= sel30;
+           sel31r<= sel31;
+           sel32r<= sel32;
+           sel33r<= sel33;
+           sel34r<= sel34;
+           sel35r<= sel35;
+           sel36r<= sel36;
+           sel37r<= sel37;
+           sel38r<= sel38;
+           sel39r<= sel39;
+           sel40r<= sel40;
+           sel41r<= sel41;
+           sel42r<= sel42;
+           sel43r<= sel43;
+           sel44r<= sel44;
+           sel45r<= sel45;
+           sel46r<= sel46;
+           sel47r<= sel47;
+           sel48r<= sel48;
+           sel49r<= sel49;
+           sel50r<= sel50;
+           sel51r<= sel51;
+           sel52r<= sel52;
+           sel53r<= sel53;
+           sel54r<= sel54;
+           sel55r<= sel55;
+           sel56r<= sel56;
+           sel57r<= sel57;
+           sel58r<= sel58;
+           sel59r<= sel59;
+           sel60r<= sel60;
+           sel61r<= sel61;
+           sel62r<= sel62;
+           sel63r<= sel63;
            //case (nState)
            case (index)
              0 : begin decisionTmp <= sel0 ; end
@@ -654,17 +614,6 @@ sel63r<= sel63;
         end // else: !if(symEn)
      end // always @ (posedge clk)
 
-/* -----\/----- EXCLUDED -----\/-----
-   always @(stateCnt or decisionTmp or s1 or s2 or s3) begin
-      case (stateCnt)
-        0: begin decisionTmp <= s0; end
-        1: begin decisionTmp <= s1; end
-        2: begin decisionTmp <= s2; end
-        3: begin decisionTmp <= s2; end
-        default: decisionTmp <= s2;
-      endcase // case(stateCnt)
-   end
- -----/\----- EXCLUDED -----/\----- */
    
    always @(posedge clk) begin
       if (reset) begin
