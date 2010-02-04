@@ -37,7 +37,7 @@ output  [11:0]  syncThreshold;
 // Microprocessor interface
 wire    [4:0]   lead, lag;
 wire    [31:0]  limit;
-wire    [31:0]  loopData;
+wire    [31:0]  loopOffset;
 wire    [31:0]  lowerLimit = -limit;
 wire    [31:0]  upperLimit = limit;
 reg     [31:0]  lagAccum;
