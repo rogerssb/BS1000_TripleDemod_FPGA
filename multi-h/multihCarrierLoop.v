@@ -104,35 +104,58 @@ wire loopFilterEn = phaseErrorEn;
 
 /**************************** Average Error ***********************************/
 reg     [15:0]  shiftError;
+reg     [7:0]   avgCount;
 always @(phaseError or averageSelect) begin
     case (averageSelect) 
-        0: begin shiftError <= {phaseError,8'b0}; end
-        1: begin shiftError <= {{1{phaseError[7]}},phaseError,7'b0}; end
-        2: begin shiftError <= {{2{phaseError[7]}},phaseError,6'b0}; end
-        3: begin shiftError <= {{3{phaseError[7]}},phaseError,5'b0}; end
-        4: begin shiftError <= {{4{phaseError[7]}},phaseError,4'b0}; end
-        5: begin shiftError <= {{5{phaseError[7]}},phaseError,3'b0}; end
-        6: begin shiftError <= {{6{phaseError[7]}},phaseError,2'b0}; end
-        7: begin shiftError <= {{7{phaseError[7]}},phaseError,1'b0}; end
+        0: begin avgCount <= 0;   shiftError <= {phaseError,8'b0}; end
+        1: begin avgCount <= 1;   shiftError <= {{1{phaseError[7]}},phaseError,7'b0}; end
+        2: begin avgCount <= 3;   shiftError <= {{2{phaseError[7]}},phaseError,6'b0}; end
+        3: begin avgCount <= 7;   shiftError <= {{3{phaseError[7]}},phaseError,5'b0}; end
+        4: begin avgCount <= 15;  shiftError <= {{4{phaseError[7]}},phaseError,4'b0}; end
+        5: begin avgCount <= 31;  shiftError <= {{5{phaseError[7]}},phaseError,3'b0}; end
+        6: begin avgCount <= 63;  shiftError <= {{6{phaseError[7]}},phaseError,2'b0}; end
+        7: begin avgCount <= 255; shiftError <= {{7{phaseError[7]}},phaseError,1'b0}; end
         endcase
     end
-reg     [15:0]  avgError;
+reg     [15:0]  errorAcc;
+wire    [15:0]  posSum = errorAcc + shiftError;
+wire    [15:0]  negSum = errorAcc - shiftError;
+reg     [7:0]   avgCounter;
+reg             loopFilterEn;
+wire            terminalCount <= (avgCounter == 0);
+wire            loopFilterEn <= phaseErrorEn & terminalCount;
+reg     [7:0]   loopError;
 always @(posedge clk) begin
-    if (loopFilterEn) begin
+    if (phaseErrorEn) begin
+        if (terminalCount) begin
+            avgCounter <= avgCount;
+            loopError <= errorAcc[15:8] + errorAcc[7];
+            end
+        else begin
+            avgCounter <= avgCounter - 1
+            end
         if (zeroError) begin
             avgError <= 0;
             end
         else if (invertError) begin
-            avgError <= avgError - shiftError;
+            if (terminalCount) begin
+                errorAcc <= -shiftError;
+                end
+            else begin
+                errorAcc <= negSum;
+                end
             end
         else begin
-            avgError <= avgError + shiftError;
+            if (terminalCount) begin
+                errorAcc <= shiftError;
+                end
+            else begin
+                errorAcc <= posSum;
+                end
             end
         end
     end
 
-/***************************** Round Error ************************************/
-wire    [7:0]   loopError = avgError[15:8] + avgError[7];
 
 /***************************** Loop Filter ************************************/
 
