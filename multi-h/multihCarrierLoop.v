@@ -77,6 +77,8 @@ wire    [31:0]  loopOffset;
 wire    [15:0]  lockCount;
 wire    [11:0]   syncThreshold;
 wire    [39:0]  lagAccum;
+wire    [2:0]   averageSelect;
+wire    [28:0]  junk;
 loopRegs loopRegs(
     .cs(trellisSpace),
     .addr(addr),
@@ -92,6 +94,7 @@ loopRegs loopRegs(
     .lagMan(),
     .lagExp(lagExp),
     .limit(limit),
+    .loopData({junk,averageSelect}),
     .lockCount(lockCount),
     .syncThreshold(syncThreshold)
     );
@@ -99,26 +102,37 @@ loopRegs loopRegs(
 
 wire loopFilterEn = phaseErrorEn;
 
-/**************************** Adjust Error ************************************/
-reg     [7:0]   loopError;
-wire    [7:0]   negPhaseError = ~phaseError + 1;
-reg             carrierLock;
-//wire            breakLoop = (zeroError || (sweepEnable && !carrierLock && highFreqOffset));
-wire            breakLoop = zeroError;
-always @(posedge clk) begin 
+/**************************** Average Error ***********************************/
+reg     [15:0]  shiftError;
+always @(phaseError or averageSelect) begin
+    case (averageSelect) 
+        0: begin shiftError <= {phaseError,8'b0}; end
+        1: begin shiftError <= {{1{phaseError[7]}},phaseError,7'b0}; end
+        2: begin shiftError <= {{2{phaseError[7]}},phaseError,6'b0}; end
+        3: begin shiftError <= {{3{phaseError[7]}},phaseError,5'b0}; end
+        4: begin shiftError <= {{4{phaseError[7]}},phaseError,4'b0}; end
+        5: begin shiftError <= {{5{phaseError[7]}},phaseError,3'b0}; end
+        6: begin shiftError <= {{6{phaseError[7]}},phaseError,2'b0}; end
+        7: begin shiftError <= {{7{phaseError[7]}},phaseError,1'b0}; end
+        endcase
+    end
+reg     [15:0]  avgError;
+always @(posedge clk) begin
     if (loopFilterEn) begin
-        if (breakLoop) begin
-            loopError <= 8'h0;
+        if (zeroError) begin
+            avgError <= 0;
             end
         else if (invertError) begin
-            loopError <= negPhaseError;
+            avgError <= avgError - shiftError;
             end
         else begin
-            loopError <= phaseError;
+            avgError <= avgError + shiftError;
             end
         end
     end
 
+/***************************** Round Error ************************************/
+wire    [7:0]   loopError = avgError[15:8] + avgError[7];
 
 /***************************** Loop Filter ************************************/
 
