@@ -290,6 +290,7 @@ trellisMultiH multih
     .symEnOut(multihSymEnOut),
     .sym2xEnOut(multihSym2xEnOut),
     .phaseError(phaseErrorOut),
+    .phaseErrorEn(phaseErrorEnOut),
     .decision(multihBit)
    );
    
@@ -298,7 +299,7 @@ reg     [7:0]   phaseError;
 reg             phaseErrorEn;
 always @(posedge ck933) begin
     phaseError <= phaseErrorOut;
-    phaseErrorEn <= multihSymEnOut;
+    phaseErrorEn <= phaseErrorEnOut;
     end
 
 //******************************************************************************

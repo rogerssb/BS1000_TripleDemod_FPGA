@@ -100,8 +100,6 @@ loopRegs loopRegs(
     );
 
 
-wire loopFilterEn = phaseErrorEn;
-
 /**************************** Average Error ***********************************/
 reg     [15:0]  shiftError;
 reg     [7:0]   avgCount;
@@ -121,9 +119,8 @@ reg     [15:0]  errorAcc;
 wire    [15:0]  posSum = errorAcc + shiftError;
 wire    [15:0]  negSum = errorAcc - shiftError;
 reg     [7:0]   avgCounter;
-reg             loopFilterEn;
-wire            terminalCount <= (avgCounter == 0);
-wire            loopFilterEn <= phaseErrorEn & terminalCount;
+wire            terminalCount = (avgCounter == 0);
+wire            loopFilterEn = phaseErrorEn & terminalCount;
 reg     [7:0]   loopError;
 always @(posedge clk) begin
     if (phaseErrorEn) begin
@@ -132,10 +129,10 @@ always @(posedge clk) begin
             loopError <= errorAcc[15:8] + errorAcc[7];
             end
         else begin
-            avgCounter <= avgCounter - 1
+            avgCounter <= avgCounter - 1;
             end
         if (zeroError) begin
-            avgError <= 0;
+            errorAcc <= 0;
             end
         else if (invertError) begin
             if (terminalCount) begin
@@ -353,13 +350,15 @@ always @(posedge clk) begin
                 dac2En <= 1;
                 end
             `DAC_PHERROR: begin
-                dac2Data <= {phaseError,10'b0};
-                dac2Sync <= phaseErrorEn;
+				    if (loopFilterEn) begin
+						dac2Data <= {loopError,10'b0};
+						end
+                dac2Sync <= loopFilterEn;
                 dac2En <= 1;
                 end
             default: begin
-                dac2Data <= {phaseError,10'b0};
-                dac2Sync <= phaseErrorEn;
+                dac2Data <= {loopError,10'b0};
+                dac2Sync <= loopFilterEn;
                 dac2En <= 0;
                 end
             endcase

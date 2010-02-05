@@ -27,6 +27,7 @@ module trellisMultiH
    dac2Data,
    decision,
    phaseError,
+   phaseErrorEn,
    symEnOut,
    sym2xEnOut
    );
@@ -49,6 +50,7 @@ module trellisMultiH
    output [17:0]            dac2Data;
    output [1:0]             decision;
    output [ROT_BITS-1:0]    phaseError;
+   output                   phaseErrorEn;
    output                   symEnOut;
    output                   sym2xEnOut;
    
@@ -347,6 +349,7 @@ viterbiMultiH /*#(MF_BITS, ROT_BITS)*/ viterbiMultiH
     .normalize             (normalize     ),
     .maxAcs                (maxAcs        ),
     .phaseError            (phaseError    ),
+    .phaseErrorEn          (phaseErrorEn  ),
     .devError              (              ),
     .symEnOut              (symEnOut      ),    
     .sym2xEnOut            (sym2xEnOut    )     

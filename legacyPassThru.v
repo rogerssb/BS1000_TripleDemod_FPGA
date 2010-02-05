@@ -703,7 +703,8 @@ sdi sdi(
 
 reg [15:0] rd_mux;
 always @(
-  addr or
+  addr or multiHMode or
+  multihLoopDout or
   demodDout or
   dac0Dout or dac1Dout or dac2Dout or
   trellisDout or

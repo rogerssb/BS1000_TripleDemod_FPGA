@@ -36,6 +36,7 @@ module viterbiMultiH
    normalize,
    maxAcs,
    phaseError, devError,
+   phaseErrorEn,
    symEnOut, sym2xEnOut
    );
    
@@ -68,6 +69,7 @@ module viterbiMultiH
    output [ACS_BITS-1:0] maxAcs;
    output [ROT_BITS-1:0] phaseError;
    output [MF_BITS-1:0]  devError;
+   output                phaseErrorEn;
    output                symEnOut, sym2xEnOut;
 
    wire [ACS_BITS-1:0]   accMetOut0, accMetOut1, accMetOut2, accMetOut3, accMetOut4, accMetOut5, accMetOut6, accMetOut7, 
@@ -518,6 +520,7 @@ module viterbiMultiH
                          qOut48rr, qOut33rr, qOut18rr, qOut3rr, qOut52rr, qOut37rr, qOut22rr, qOut7rr,
                          qOut56rr, qOut41rr, qOut26rr, qOut11rr, qOut60rr, qOut45rr, qOut30rr, qOut15rr;
 
+   reg phaseErrorEnOut;
    always @(posedge clk)
      begin
         if (reset) begin
@@ -535,23 +538,24 @@ module viterbiMultiH
         end
         else if (symEnAcs) begin
            case (index)
-             0 :      begin  phaseError1 <= qOut0 ;end
-             8 :      begin  phaseError1 <= qOut8 ;end
-             16:      begin  phaseError1 <= qOut16;end
-             24:      begin  phaseError1 <= qOut24;end
-             32:      begin  phaseError1 <= qOut32;end
-             40:      begin  phaseError1 <= qOut40;end
-             48:      begin  phaseError1 <= qOut48;end
-             56:      begin  phaseError1 <= qOut56;end
-             default: begin  phaseError1 <= phaseError1;end
+             0 :      begin  phaseError1 <= qOut0 ; phaseErrorEnOut <= 1; end
+             1 :      begin  phaseError1 <= qOut1 ; phaseErrorEnOut <= 1; end
+             2 :      begin  phaseError1 <= qOut2 ; phaseErrorEnOut <= 1; end
+             3 :      begin  phaseError1 <= qOut3 ; phaseErrorEnOut <= 1; end
+             4 :      begin  phaseError1 <= qOut4 ; phaseErrorEnOut <= 1; end
+             5 :      begin  phaseError1 <= qOut5 ; phaseErrorEnOut <= 1; end
+             6 :      begin  phaseError1 <= qOut6 ; phaseErrorEnOut <= 1; end
+             7 :      begin  phaseError1 <= qOut7 ; phaseErrorEnOut <= 1; end
+             default: begin  phaseError1 <= phaseError1; phaseErrorEnOut <= 0; end
            endcase
         end  
      end
-
+     
    wire [ROT_BITS-1:0]  phaseError = phaseError1;
    
    assign symEnOut = symEnAcs;
    assign sym2xEnOut = sym2xEnAcs;
+   assign phaseErrorEn = symEnAcs & phaseErrorEnOut;
 
 
 `ifdef USE_TRACEBACK
