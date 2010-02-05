@@ -78,7 +78,9 @@ wire    [15:0]  lockCount;
 wire    [11:0]   syncThreshold;
 wire    [39:0]  lagAccum;
 wire    [2:0]   averageSelect;
-wire    [28:0]  junk;
+wire    [12:0]  rsvd0;
+wire    [4:0]   sampleOffset;
+wire    [10:0]  rsvd1;
 loopRegs loopRegs(
     .cs(trellisSpace),
     .addr(addr),
@@ -94,7 +96,7 @@ loopRegs loopRegs(
     .lagMan(),
     .lagExp(lagExp),
     .limit(limit),
-    .loopData({junk,averageSelect}),
+    .loopData({unused1,sampleOffset,unused0,averageSelect}),
     .lockCount(lockCount),
     .syncThreshold(syncThreshold)
     );
@@ -238,11 +240,29 @@ dds dds(
 //    .bReal(18'h16a09),.bImag(18'h16a09),     // (1/sqrt(2)) * 131072 = 0x16a09
 //    .pReal(iMpy),.pImag(qMpy));
 //`else
+
+reg     [17:0]  iDelay;
+fractionalDelay delayI( 
+    .clk(clk), .reset(reset), .sync(sym2xEn),
+    .sampleOffset(sampleOffset),
+    .in(iIn),
+    .out(iDelay)
+    );
+reg     [17:0]  qDelay;
+fractionalDelay delayQ( 
+    .clk(clk), .reset(reset), .sync(sym2xEn),
+    .sampleOffset(sampleOffset),
+    .in(qIn),
+    .out(qDelay)
+    );
+
+
+
 wire    [17:0]  iMpy,qMpy;
 cmpy18Sat cmpy18Sat(
     .clk(clk),
     .reset(reset),
-    .aReal(iIn),.aImag(qIn),
+    .aReal(iDelay),.aImag(qDelay),
     .bReal(bReal),.bImag(bImag),
     .pReal(iMpy),.pImag(qMpy));
 //`endif
@@ -350,9 +370,9 @@ always @(posedge clk) begin
                 dac2En <= 1;
                 end
             `DAC_PHERROR: begin
-				    if (loopFilterEn) begin
-						dac2Data <= {loopError,10'b0};
-						end
+                                    if (loopFilterEn) begin
+                                                dac2Data <= {loopError,10'b0};
+                                                end
                 dac2Sync <= loopFilterEn;
                 dac2En <= 1;
                 end
