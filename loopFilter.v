@@ -57,7 +57,6 @@ loopRegs micro(
     .lagExp(lag),
     .limit(limit),
     .lockCount(lockCount),
-    .loopData(loopOffset),
     .syncThreshold(syncThreshold)
     );
 
@@ -69,10 +68,10 @@ always @(posedge clk) begin
         end
     else if (clkEn) begin
         if (invertError) begin
-            loopError <= ~error + 1 + loopOffset[31:20];
+            loopError <= ~error + 1;
             end
         else begin
-            loopError <= error + loopOffset[31:20];
+            loopError <= error;
             end
         end
     end

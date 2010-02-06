@@ -35,8 +35,8 @@ module bitsync(
     auLockCounter,
     auIQSwap,
     iTrellis,qTrellis,
-	 bsError,
-	 bsErrorEn
+         bsError,
+         bsErrorEn
     );
 
 input           sampleClk;

@@ -78,9 +78,13 @@ wire    [15:0]  lockCount;
 wire    [11:0]   syncThreshold;
 wire    [39:0]  lagAccum;
 wire    [2:0]   averageSelect;
+`ifdef USE_FRACTIONAL_DELAY
 wire    [12:0]  unused0;
 wire    [4:0]   sampleOffset;
 wire    [10:0]  unused1;
+`else
+wire    [28:0]  unused;
+`endif
 loopRegs loopRegs(
     .cs(trellisSpace),
     .addr(addr),
@@ -96,7 +100,11 @@ loopRegs loopRegs(
     .lagMan(),
     .lagExp(lagExp),
     .limit(limit),
+    `ifdef USE_FRACTIONAL_DELAY
     .loopData({unused1,sampleOffset,unused0,averageSelect}),
+    `else
+    .loopData({unused,averageSelect}),
+    `endif
     .lockCount(lockCount),
     .syncThreshold(syncThreshold)
     );
@@ -241,6 +249,7 @@ dds dds(
 //    .pReal(iMpy),.pImag(qMpy));
 //`else
 
+`ifdef USE_FRACTIONAL_DELAY
 wire    [17:0]  iDelay;
 fractionalDelay delayI( 
     .clk(clk), .reset(reset), .sync(sym2xEn),
@@ -255,14 +264,17 @@ fractionalDelay delayQ(
     .in(qIn),
     .out(qDelay)
     );
-
-
+`endif
 
 wire    [17:0]  iMpy,qMpy;
 cmpy18Sat cmpy18Sat(
     .clk(clk),
     .reset(reset),
+    `ifdef USE_FRACTIONAL_DELAY
     .aReal(iDelay),.aImag(qDelay),
+    `else
+    .aReal(iIn),.aImag(qIn),
+    `endif
     .bReal(bReal),.bImag(bImag),
     .pReal(iMpy),.pImag(qMpy));
 //`endif
@@ -370,9 +382,9 @@ always @(posedge clk) begin
                 dac2En <= 1;
                 end
             `DAC_PHERROR: begin
-                                    if (loopFilterEn) begin
-                                                dac2Data <= {loopError,10'b0};
-                                                end
+                if (loopFilterEn) begin
+                   dac2Data <= {loopError,10'b0};
+                   end
                 dac2Sync <= loopFilterEn;
                 dac2En <= 1;
                 end
