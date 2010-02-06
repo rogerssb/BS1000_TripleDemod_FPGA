@@ -336,6 +336,7 @@ always @(posedge clk) begin
 ******************************************************************************/
 wire    [17:0]  iSymData;
 wire    [17:0]  qSymData;
+wire	  [17:0]  bsError;
 wire    [15:0]  bsLockCounter;
 wire    [15:0]  auLockCounter;
 wire    [31:0]  bitsyncDout;
@@ -370,7 +371,8 @@ bitsync bitsync(
     .auBitsyncLock(auBitsyncLock),
     .auLockCounter(auLockCounter),
     .auIQSwap(auIQSwap),
-    .iTrellis(iTrellis),.qTrellis(qTrellis)
+    .iTrellis(iTrellis),.qTrellis(qTrellis),
+	 .bsError(bsError), .bsErrorEn(bsErrorEn)
     );
 
 assign trellisSymSync = iSymEn & resampSync;
@@ -572,8 +574,8 @@ always @(posedge clk) begin
             dac2Sync <= carrierOffsetEn;
             end
         `DAC_BSLOCK: begin
-            dac2Data <= {bsLockCounter,2'b0};
-            dac2Sync <= 1'b1;
+            dac2Data <= bsError;
+            dac2Sync <= bsErrorEn;
             end
         `DAC_FREQLOCK: begin
             dac2Data <= {freqLockCounter,2'b0};

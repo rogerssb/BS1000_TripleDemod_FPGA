@@ -48,7 +48,6 @@ wire    [17:0]  tap0Coef;
 resamplerTap0 tap0(.a(sampleOffset),.spo(tap0Coef));
 wire    [35:0]  i0Product;
 mpy18x18WithCe mpy0 (
-    .sclr(1'b0),
     .clk(clk),
     .ce(sync),
     .a(inSR[0]),
@@ -60,7 +59,6 @@ wire    [17:0]  tap1Coef;
 resamplerTap1 tap1(.a(sampleOffset),.spo(tap1Coef));
 wire    [35:0]  i1Product;
 mpy18x18WithCe mpy1 (
-    .sclr(1'b0),
     .clk(clk),
     .ce(sync),
     .a(inSR[1]),
@@ -72,7 +70,6 @@ wire    [17:0]  tap2Coef;
 resamplerTap2 tap2(.a(sampleOffset),.spo(tap2Coef));
 wire    [35:0]  i2Product;
 mpy18x18WithCe mpy2 (
-    .sclr(1'b0),
     .clk(clk),
     .ce(sync),
     .a(inSR[2]),
@@ -84,7 +81,6 @@ wire    [17:0]  tap3Coef;
 resamplerTap3 tap3(.a(sampleOffset),.spo(tap3Coef));
 wire    [35:0]  i3Product;
 mpy18x18WithCe mpy3 (
-    .sclr(1'b0),
     .clk(clk),
     .ce(sync),
     .a(inSR[3]),
@@ -96,7 +92,6 @@ wire    [17:0]  tap4Coef;
 resamplerTap4 tap4(.a(sampleOffset),.spo(tap4Coef));
 wire    [35:0]  i4Product;
 mpy18x18WithCe mpy4 (
-    .sclr(1'b0),
     .clk(clk),
     .ce(sync),
     .a(inSR[4]),
@@ -108,7 +103,6 @@ wire    [17:0]  tap5Coef;
 resamplerTap5 tap5(.a(sampleOffset),.spo(tap5Coef));
 wire    [35:0]  i5Product;
 mpy18x18WithCe mpy5 (
-    .sclr(1'b0),
     .clk(clk),
     .ce(sync),
     .a(inSR[5]),
@@ -120,7 +114,6 @@ wire    [17:0]  tap6Coef;
 resamplerTap6 tap6(.a(sampleOffset),.spo(tap6Coef));
 wire    [35:0]  i6Product;
 mpy18x18WithCe mpy6 (
-    .sclr(1'b0),
     .clk(clk),
     .ce(sync),
     .a(inSR[6]),
@@ -132,7 +125,6 @@ wire    [17:0]  tap7Coef;
 resamplerTap7 tap7(.a(sampleOffset),.spo(tap7Coef));
 wire    [35:0]  i7Product;
 mpy18x18WithCe mpy7 (
-    .sclr(1'b0),
     .clk(clk),
     .ce(sync),
     .a(inSR[7]),
@@ -144,7 +136,6 @@ wire    [17:0]  tap8Coef;
 resamplerTap8 tap8(.a(sampleOffset),.spo(tap8Coef));
 wire    [35:0]  i8Product;
 mpy18x18WithCe mpy8 (
-    .sclr(1'b0),
     .clk(clk),
     .ce(sync),
     .a(inSR[8]),

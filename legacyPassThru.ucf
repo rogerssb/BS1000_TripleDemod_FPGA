@@ -332,6 +332,7 @@ TIMEGRP "sync7" = FFS(pcmSymEn) FFS(soqpskSymEn) FFS(trellis/trellisCarrierLoop/
 TIMEGRP "sync8" = FFS(pcmSym2xEn) FFS(soqpskSym2xEn) FFS(trellis/trellisCarrierLoop/sym2xEnSr*) FFS(soqpsk/soqpskCarrierLoop/sym2xEnSr*);
 TIMEGRP "sync9" = FFS(multihPhaseErrorEnIn);
 TIMEGRP "sync" = "sync0" "sync1" "sync2" "sync3" "sync4" "sync5" "sync6" "sync7" "sync8" "sync9";
+TIMEGRP "delay" = FFS(multihLoop/delayI/*) FFS(multihLoop/delayQ/*) DSPS(multihLoop/delayI/*) DSPS(multihLoop/delayQ/*);
 TIMEGRP "acs" = FFS(trellis/viterbi_top/acs*);
 TIMEGRP "soqpskAcs" = FFS(soqpsk/soqpskViterbi/acs*) DSPS(soqpsk/soqpskViterbi/acs*) FFS(soqpsk/soqpskViterbi/mf1Acs*);
 TIMEGRP "rotOut" = FFS(trellis/rotator/m*/reOut*) FFS(trellis/rotator/m*/imOut*);

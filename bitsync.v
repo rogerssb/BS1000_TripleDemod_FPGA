@@ -34,7 +34,9 @@ module bitsync(
     auBitsyncLock,
     auLockCounter,
     auIQSwap,
-    iTrellis,qTrellis
+    iTrellis,qTrellis,
+	 bsError,
+	 bsErrorEn
     );
 
 input           sampleClk;
@@ -69,6 +71,8 @@ output          auBitsyncLock;
 output  [15:0]  auLockCounter;
 output          auIQSwap;
 output  [17:0]  iTrellis,qTrellis;
+output  [17:0]  bsError;
+output          bsErrorEn;
 
 `define USE_COMP
 `ifdef USE_COMP
@@ -488,6 +492,8 @@ loopFilter sampleLoop(
     .lockCount(lockCount),
     .syncThreshold(syncThreshold)
     );
+assign bsError = timingError[18:1] + timingError[0];
+assign bsErrorEn = loopFilterEn;
 
 //************************** Lock Detector ************************************
 

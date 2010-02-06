@@ -78,9 +78,9 @@ wire    [15:0]  lockCount;
 wire    [11:0]   syncThreshold;
 wire    [39:0]  lagAccum;
 wire    [2:0]   averageSelect;
-wire    [12:0]  rsvd0;
+wire    [12:0]  unused0;
 wire    [4:0]   sampleOffset;
-wire    [10:0]  rsvd1;
+wire    [10:0]  unused1;
 loopRegs loopRegs(
     .cs(trellisSpace),
     .addr(addr),
@@ -241,14 +241,14 @@ dds dds(
 //    .pReal(iMpy),.pImag(qMpy));
 //`else
 
-reg     [17:0]  iDelay;
+wire    [17:0]  iDelay;
 fractionalDelay delayI( 
     .clk(clk), .reset(reset), .sync(sym2xEn),
     .sampleOffset(sampleOffset),
     .in(iIn),
     .out(iDelay)
     );
-reg     [17:0]  qDelay;
+wire    [17:0]  qDelay;
 fractionalDelay delayQ( 
     .clk(clk), .reset(reset), .sync(sym2xEn),
     .sampleOffset(sampleOffset),
