@@ -546,7 +546,8 @@ module viterbiMultiH
              5 :      begin  phaseError1 <= qOut5 ; phaseErrorEnOut <= 1; end
              6 :      begin  phaseError1 <= qOut6 ; phaseErrorEnOut <= 1; end
              7 :      begin  phaseError1 <= qOut7 ; phaseErrorEnOut <= 1; end
-             default: begin  phaseError1 <= phaseError1; phaseErrorEnOut <= 0; end
+             // default: begin  phaseError1 <= phaseError1; phaseErrorEnOut <= 0; end
+             default: begin  phaseError1 <= 0; phaseErrorEnOut <= 0; end
            endcase
         end  
      end

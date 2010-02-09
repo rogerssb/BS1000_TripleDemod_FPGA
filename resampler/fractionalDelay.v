@@ -186,3 +186,233 @@ always @(sum) sumReal = (sum[35] ? (sum[35:18] - 262144.0) : sum[35:18])/131072.
 
 endmodule
 
+
+
+
+`ifdef TEST_MODULE
+
+`define SINEWAVE_TEST
+//`define MATLAB_VECTORS
+//`define DEBUG_VECTORS
+
+`timescale 1ns/1ps
+
+module test;
+
+reg reset,clk;
+
+// Create the clocks
+parameter SAMPLE_FREQ = 93.333333e6;
+parameter HC = 1e9/SAMPLE_FREQ/2;
+parameter C = 2*HC;
+parameter syncDecimation = 32;
+reg clken;
+always #HC clk = clk^clken;
+
+reg sync;
+reg [5:0]syncCount;
+always @(posedge clk) begin
+    if (reset) begin
+        syncCount <= syncDecimation-1;
+        end
+    else if (syncCount == 0) begin
+        syncCount <= syncDecimation-1;
+        sync <= 1;
+        end
+    else begin
+        syncCount <= syncCount - 1;
+        sync <= 0;
+        end
+    //sync <= ~sync;
+    //sync <= 1;
+    end
+
+`define SAMPLE_PERIOD   (C*1e-9)
+`define TWO_POW_31      2147483648
+`define TWO_POW_32      4294967296
+`define TWO_POW_17      131072
+
+// Instantiate the halfband filter
+reg     [17:0]iIn;
+reg     [4:0]sampleOffset;
+fractionalDelay delay( 
+    .clk(clk), .reset(reset), .sync(sync),
+    .sampleOffset(sampleOffset),
+    .in(iIn),
+    .out()
+    );
+
+`ifdef SINEWAVE_TEST
+
+//Create a sinewave input
+real carrierFreqHz;
+real carrierFreqNorm = carrierFreqHz * `SAMPLE_PERIOD * `TWO_POW_32;
+integer carrierFreqInt = carrierFreqNorm;
+wire [31:0] freq = carrierFreqInt;
+
+wire [17:0]sineOut,cosineOut;
+reg ddsreset;
+dds dds(.ce (1'b1), .sclr(ddsreset), .clk(clk), .we(1'b1), .data(freq), .sine(sineOut), .cosine(cosineOut));
+
+always @(posedge clk) begin
+    if (sync) begin
+        iIn <= {cosineOut[17],cosineOut[17:1]};
+        //iIn <= 18'h0ffff;
+        //iIn <= 18'h30001;
+        end
+    end
+
+`ifdef SIMULATE
+real iInReal = ((iIn > 131071.0) ? (iIn - 262144.0) : iIn)/131072.0;
+`endif
+
+`ifdef DEBUG_VECTORS
+/******************************************************************************
+                          Vector data for Matlab Analysis
+******************************************************************************/
+integer outfile;
+integer vectorCount;
+initial begin
+    outfile = $fopen("debug.dat");
+    vectorCount = 0;
+    end
+always @(negedge clk) begin
+    if (sync) begin
+        $fwrite(outfile,"%08X\t %08X\t %02X\n",resampler.phase,resampler.phaseSum,resampler.firDelay);
+        end
+    if (resampler.resample) begin
+        $fwrite(outfile,"%f\n",resampler.iOutReal);
+        vectorCount <= vectorCount + 1;
+        if (vectorCount == 1023) begin
+            $fclose(outfile);
+            $stop;
+            end
+        end
+    end
+`endif
+
+`ifdef MATLAB_VECTORS
+/******************************************************************************
+                          Vector data for Matlab Analysis
+******************************************************************************/
+integer outfile;
+integer vectorCount;
+reg saveVectors;
+initial saveVectors = 0;
+initial begin
+    outfile = $fopen("vectors.dat");
+    vectorCount = 0;
+    end
+always @(negedge clk) begin
+    if (resampler.resample && saveVectors) begin
+        $fwrite(outfile,"%f\n",resampler.iOutReal);
+    //if (saveVectors) begin
+    //    $fwrite(outfile,"%f\n",iInReal);
+        vectorCount <= vectorCount + 1;
+        if (vectorCount == 1023) begin
+            $fclose(outfile);
+            $stop;
+            end
+        end
+    end
+`endif
+
+initial begin
+    reset = 0;
+    ddsreset = 0;
+    sync = 1;
+    syncCount = 0;
+    clk = 0;
+    sampleOffset = 15;
+    carrierFreqHz = SAMPLE_FREQ/4/syncDecimation;
+
+    // Turn on the clock
+    clken=1;
+    #(10*C) ;
+
+    ddsreset = 1;
+    #(2*C) ;
+    ddsreset = 0;
+    #(10*C) ;
+
+    reset = 1;
+    #(2*C) ;
+    reset = 0;
+
+    sampleOffset = 0;
+    #(1024*C) ;
+    sampleOffset = 1;
+    #(1024*C) ;
+    sampleOffset = 2;
+    #(1024*C) ;
+    sampleOffset = 3;
+    #(1024*C) ;
+    sampleOffset = 4;
+    #(1024*C) ;
+    sampleOffset = 5;
+    #(1024*C) ;
+    sampleOffset = 6;
+    #(1024*C) ;
+    sampleOffset = 7;
+    #(1024*C) ;
+    sampleOffset = 8;
+    #(1024*C) ;
+    sampleOffset = 9;
+    #(1024*C) ;
+    sampleOffset = 10;
+    #(1024*C) ;
+    sampleOffset = 11;
+    #(1024*C) ;
+    sampleOffset = 12;
+    #(1024*C) ;
+    sampleOffset = 13;
+    #(1024*C) ;
+    sampleOffset = 14;
+    #(1024*C) ;
+    sampleOffset = 15;
+    #(1024*C) ;
+    sampleOffset = 16;
+    #(1024*C) ;
+    sampleOffset = 17;
+    #(1024*C) ;
+    sampleOffset = 18;
+    #(1024*C) ;
+    sampleOffset = 19;
+    #(1024*C) ;
+    sampleOffset = 20;
+    #(1024*C) ;
+    sampleOffset = 21;
+    #(1024*C) ;
+    sampleOffset = 22;
+    #(1024*C) ;
+    sampleOffset = 23;
+    #(1024*C) ;
+    sampleOffset = 24;
+    #(1024*C) ;
+    sampleOffset = 25;
+    #(1024*C) ;
+    sampleOffset = 26;
+    #(1024*C) ;
+    sampleOffset = 27;
+    #(1024*C) ;
+    sampleOffset = 28;
+    #(1024*C) ;
+    sampleOffset = 29;
+    #(1024*C) ;
+    sampleOffset = 30;
+    #(1024*C) ;
+    sampleOffset = 31;
+    #(1024*C) ;
+
+    $stop;
+
+    end
+`endif
+
+
+
+
+endmodule
+
+`endif
+
