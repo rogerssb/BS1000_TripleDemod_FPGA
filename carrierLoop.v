@@ -112,6 +112,7 @@ always @(demodMode or offsetError or offsetErrorEn or
             enableCarrierLock <= 1;
             end
         `MODE_PCMTRELLIS,
+        `MODE_MULTIH,
         `MODE_FM: begin
             sync <= ddcSync;
             modeError <= freq;

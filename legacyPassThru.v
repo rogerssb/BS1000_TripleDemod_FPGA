@@ -23,6 +23,7 @@ module legacyPassThru (
     adc_d,
     multihPhaseError,
     multihPhaseErrorEn,
+    multihPhaseErrorValid,
     demodMode,
     dac0Select,dac1Select,dac2Select,
     dac0_d,dac1_d,dac2_d,
@@ -46,6 +47,7 @@ inout   [15:0]  data;
 input   [13:0]  adc_d;
 input   [7:0]   multihPhaseError;
 input           multihPhaseErrorEn;
+input           multihPhaseErrorValid;
 
 output  [3:0]   demodMode;
 
@@ -254,7 +256,6 @@ always @(posedge ck933) begin
 
 
 assign bsync_nLock = !bitsyncLock;
-assign demod_nLock = !carrierLock;
 
 //******************************************************************************
 //                             PCM Trellis Decoder
@@ -332,9 +333,11 @@ trellisSoqpsk soqpsk
 
 reg     [7:0]   multihPhaseErrorIn;
 reg             multihPhaseErrorEnIn;
+reg             multihPhaseErrorValidIn;
 always @(posedge ck933) begin
     multihPhaseErrorIn <= multihPhaseError;
     multihPhaseErrorEnIn <= multihPhaseErrorEn;
+    multihPhaseErrorValidIn <= multihPhaseErrorValid;
     end
 
 wire    [17:0]  multihDac0Data,multihDac1Data,multihDac2Data;
@@ -349,6 +352,7 @@ multihCarrierLoop multihLoop(
     .qIn(qSymData),
     .phaseError(multihPhaseErrorIn),
     .phaseErrorEn(multihPhaseErrorEnIn),
+    .phaseErrorValid(multihPhaseErrorValidIn),
     .wr0(wr0),
     .wr1(wr1),
     .wr2(wr2),
@@ -366,10 +370,11 @@ multihCarrierLoop multihLoop(
     .dac2Sync(multihDac2Sync),
     .dac2Data(multihDac2Data),
     .dac2En(multihDac2En),
+    .demodLock(multihDemodLock),
     .iOut(iMultihLoop),
     .qOut(qMultihLoop),
-    .symEnDly(multihLoopEn),
-    .sym2xEnDly(multihLoop2xEn)
+    .symEnOut(multihLoopEn),
+    .sym2xEnOut(multihLoop2xEn)
     );
 
 reg     [17:0]  iMultiH,qMultiH;
@@ -380,6 +385,7 @@ always @(posedge ck933) begin
     qMultiH <= qMultihLoop;
     end
 
+assign demod_nLock = multiHMode ? !multihDemodLock : !carrierLock;
 
 
 //******************************************************************************

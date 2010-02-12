@@ -34,6 +34,7 @@ module multihTop (
     sdiInput,
     phaseError,
     phaseErrorEn,
+    phaseErrorValid,
     dac0_nCs,dac0_sclk,
     dac1_nCs,dac1_sclk,
     dac2_nCs,dac2_sclk,
@@ -68,6 +69,7 @@ input           sdiInput;
 
 output  [7:0]   phaseError;
 output          phaseErrorEn;
+output          phaseErrorValid;
 
 output          dac_rst;
 output          dac0_nCs,dac0_sclk;
@@ -291,15 +293,18 @@ trellisMultiH multih
     .sym2xEnOut(multihSym2xEnOut),
     .phaseError(phaseErrorOut),
     .phaseErrorEn(phaseErrorEnOut),
+    .phaseErrorValid(phaseErrorValidOut),
     .decision(multihBit)
    );
    
 // reclock the phase error feedback
 reg     [7:0]   phaseError;
 reg             phaseErrorEn;
+reg             phaseErrorValid;
 always @(posedge ck933) begin
     phaseError <= phaseErrorOut;
     phaseErrorEn <= phaseErrorEnOut;
+    phaseErrorValid <= phaseErrorValidOut;
     end
 
 //******************************************************************************

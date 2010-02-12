@@ -12,12 +12,14 @@
 `include "./addressMap.v"
 
 //`define BYPASS_LOOP
+//`define USE_FRACTIONAL_DELAY
            
 module multihCarrierLoop(
     clk,reset,symEn,sym2xEn,
     iIn,qIn,
     phaseError,
     phaseErrorEn,
+    phaseErrorValid,
     wr0,wr1,wr2,wr3,
     addr,
     din,dout,
@@ -31,15 +33,17 @@ module multihCarrierLoop(
     dac2Sync,
     dac2Data,
     dac2En,
+    demodLock,
     iOut,qOut,
-    symEnDly,
-    sym2xEnDly
+    symEnOut,
+    sym2xEnOut
     );
 
 input clk,reset,symEn,sym2xEn;
 input [17:0]iIn,qIn;
 input   [7:0]   phaseError;
 input           phaseErrorEn;
+input           phaseErrorValid;
 input wr0,wr1,wr2,wr3;
 input [11:0]addr;
 input [31:0]din;
@@ -54,11 +58,12 @@ output          dac1En;
 output          dac2Sync;
 output  [17:0]  dac2Data;
 output          dac2En;
+output          demodLock;
 output  [17:0]  iOut,qOut;
-output symEnDly;
-output sym2xEnDly;
+output          symEnOut;
+output          sym2xEnOut;
 
-wire[31:0]carrierFreqOffset;
+wire    [31:0]  carrierFreqOffset;
 
 /***************************** Control Registers ******************************/
 
@@ -202,6 +207,55 @@ always @(posedge clk) begin
 assign carrierFreqOffset = filterSum[39:8];
 assign carrierFreqEn = loopFilterEn;
 
+
+/******************************* Lock Detector ********************************/
+reg             demodLock;
+reg             symbolSlip;
+reg             errorValid;
+reg     [7:0]   absModeError;
+reg     [15:0]  lockCounter;
+wire    [16:0]  lockPlus = {1'b0,lockCounter} + 17'h00001;
+wire    [16:0]  lockMinus = {1'b0,lockCounter} + 17'h1ffff;
+always @(posedge clk) begin
+    if (reset) begin
+        lockCounter <= 0;
+        demodLock <= 1;
+        symbolSlip <= 0;
+        end
+    else if (phaseErrorEn) begin
+        errorValid <= phaseErrorValid;
+        absModeError <= phaseError[7] ? -phaseError : phaseError;
+        if (errorValid) begin
+            if (absModeError > syncThreshold[7:0]) begin
+                if (lockCounter == (16'hffff - lockCount)) begin
+                    // Declare out of lock condition. If we were previously out of lock,
+                    // slip a symbol.
+                    if (!demodLock) begin
+                        symbolSlip <= 1;
+                        end
+                    demodLock <= 0;
+                    lockCounter <= 0;
+                    end
+                else begin
+                    lockCounter <= lockMinus[15:0];
+                    symbolSlip <= 0;
+                    end
+                end
+            else begin
+                symbolSlip <= 0;
+                if (lockCounter == lockCount) begin
+                    demodLock <= 1;
+                    lockCounter <= 0;
+                    end
+                else begin
+                    lockCounter <= lockPlus[15:0];
+                    end
+                end
+            end
+        end
+    end
+
+
 `ifdef SIMULATE
 real carrierOffsetReal;
 real lagAccumReal; 
@@ -264,6 +318,17 @@ fractionalDelay delayQ(
     .in(qIn),
     .out(qDelay)
     );
+`else
+reg     [17:0]  iRouteDelay0,qRouteDelay0;
+reg     [17:0]  iRouteDelay1,qRouteDelay1;
+always @(posedge clk) begin
+    if (sym2xEn) begin
+        iRouteDelay0 <= iIn;
+        iRouteDelay1 <= iRouteDelay0;
+        qRouteDelay0 <= qIn;
+        qRouteDelay1 <= qRouteDelay0;
+        end
+    end
 `endif
 
 wire    [17:0]  iMpy,qMpy;
@@ -273,12 +338,13 @@ cmpy18Sat cmpy18Sat(
     `ifdef USE_FRACTIONAL_DELAY
     .aReal(iDelay),.aImag(qDelay),
     `else
-    .aReal(iIn),.aImag(qIn),
+    .aReal(iRouteDelay1),.aImag(qRouteDelay1),
     `endif
     .bReal(bReal),.bImag(bImag),
     .pReal(iMpy),.pImag(qMpy));
 //`endif
 
+// Create a new set of clock enables to account for the delay through the complex multiplier
 reg [3:0] symEnSr;
 reg [3:0] sym2xEnSr;
 always @(posedge clk) begin
@@ -291,11 +357,32 @@ always @(posedge clk) begin
         sym2xEnSr <= {sym2xEnSr[2:0], sym2xEn};
         end
     end
-assign iOut = iMpy;
-assign qOut = qMpy;
 
-assign symEnDly = symEnSr[3];
-assign sym2xEnDly = sym2xEnSr[3];
+// Create a symbol slip state machine
+reg     [1:0]   slipSR;
+wire            slip = (!slipSR[0] && symbolSlip);
+//wire            slip = 1'b0;
+reg     [17:0]  slipI,slipQ;
+reg             symEnOut, sym2xEnOut;
+always @(posedge clk) begin
+    // Reclock the inputs
+    slipI <= iMpy;
+    slipQ <= qMpy;
+    sym2xEnOut <= sym2xEnSr[3];
+
+    // Create a gated version of symEn.
+    slipSR <= {slipSR[0],symbolSlip};
+    if (symEnSr[3] && slip) begin
+        symEnOut <= 0;
+        end
+    else begin
+        symEnOut <= symEnSr[3];
+        end
+    end
+
+assign iOut = slipI;
+assign qOut = slipQ;
+
 
 `ifdef SIMULATE
 real iOutReal;
@@ -332,17 +419,22 @@ always @(posedge clk) begin
                 end
             `DAC_Q: begin
                 dac0Data <= qOut;
-                dac0Sync <= sym2xEnDly;
+                dac0Sync <= sym2xEnOut;
                 dac0En <= 1;
                 end
             `DAC_PHERROR: begin
                 dac0Data <= {phaseError,10'b0};
-                dac0Sync <= phaseErrorEn;
+                dac0Sync <= 1;
+                dac0En <= 1;
+                end
+            `DAC_FREQLOCK: begin
+                dac0Data <= {lockCounter,2'b0};
+                dac0Sync <= 1;
                 dac0En <= 1;
                 end
             default: begin
                 dac0Data <= {phaseError,10'b0};
-                dac0Sync <= phaseErrorEn;
+                dac0Sync <= 1;
                 dac0En <= 0;
                 end
             endcase
@@ -350,7 +442,7 @@ always @(posedge clk) begin
         case (dac1Select) 
             `DAC_I: begin
                 dac1Data <= iOut;
-                dac1Sync <= sym2xEnDly;
+                dac1Sync <= sym2xEnOut;
                 dac1En <= 1;
                 end
             `DAC_Q: begin
@@ -360,12 +452,17 @@ always @(posedge clk) begin
                 end
             `DAC_PHERROR: begin
                 dac1Data <= {phaseError,10'b0};
-                dac1Sync <= phaseErrorEn;
+                dac1Sync <= 1;
+                dac1En <= 1;
+                end
+            `DAC_FREQLOCK: begin
+                dac1Data <= {absModeError,10'b0};
+                dac1Sync <= 1;
                 dac1En <= 1;
                 end
             default: begin
                 dac1Data <= {phaseError,10'b0};
-                dac1Sync <= phaseErrorEn;
+                dac1Sync <= 1;
                 dac1En <= 0;
                 end
             endcase
@@ -386,6 +483,11 @@ always @(posedge clk) begin
                    dac2Data <= {loopError,10'b0};
                    end
                 dac2Sync <= loopFilterEn;
+                dac2En <= 1;
+                end
+            `DAC_FREQLOCK: begin
+                dac2Data <= {1'b0,errorValid,16'b0};
+                dac2Sync <= 1;
                 dac2En <= 1;
                 end
             default: begin

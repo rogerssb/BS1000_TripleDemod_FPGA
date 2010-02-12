@@ -11,6 +11,8 @@
 `timescale 1ns/1ps
 `include "addressMap.v"
 
+//`define ALDEC_SIM
+
 module trellisMultiH
   (
    clk,reset,symEnIn,sym2xEnIn,
@@ -28,6 +30,7 @@ module trellisMultiH
    decision,
    phaseError,
    phaseErrorEn,
+   phaseErrorValid,
    symEnOut,
    sym2xEnOut
    );
@@ -51,6 +54,7 @@ module trellisMultiH
    output [1:0]             decision;
    output [ROT_BITS-1:0]    phaseError;
    output                   phaseErrorEn;
+   output                   phaseErrorValid;
    output                   symEnOut;
    output                   sym2xEnOut;
    
@@ -265,7 +269,8 @@ always @(posedge clk) begin
 
    wire    [5:0]   index;
 
-reg     [7:0]   decayFactor;      
+reg     [7:0]   decayFactor;     
+reg             tbEnable; 
 wire    [7:0]   phaseError;
 wire    [9:0]   maxAcs;
         
@@ -276,8 +281,10 @@ viterbiMultiH /*#(MF_BITS, ROT_BITS)*/ viterbiMultiH
     .symEn                 (symEnRot      ),     // Make sure that the mfilt data is aligned with the quadrary symbol interval  
     .sym2xEn               (sym2xEnRot    ),     // Make sure that the mfilt data is aligned with the quadrary symbol interval  
     `ifdef ALDEC_SIM
+    .tbEnable              (1'b1         ),
     .decayFactor           (8'hff         ),
     `else
+    .tbEnable              (tbEnable      ),
     .decayFactor           (decayFactor   ),
     `endif
     .mf_p3p3_45Real        (mf_p3p3_45Real),
@@ -350,6 +357,7 @@ viterbiMultiH /*#(MF_BITS, ROT_BITS)*/ viterbiMultiH
     .maxAcs                (maxAcs        ),
     .phaseError            (phaseError    ),
     .phaseErrorEn          (phaseErrorEn  ),
+    .phaseErrorValid       (phaseErrorValid),
     .devError              (              ),
     .symEnOut              (symEnOut      ),    
     .sym2xEnOut            (sym2xEnOut    )     
@@ -404,7 +412,10 @@ always @(negedge wr0) begin
     if (trellisSpace) begin
         casex (addr) 
             `TRELLIS_DECAY:     decayFactor <= din[7:0];
-            `TRELLIS_CONTROL:   symbolDelay <= din[1];
+            `TRELLIS_CONTROL:   begin
+                                symbolDelay <= din[1];
+                                tbEnable <= din[2];
+                                end
             default: ;
             endcase
         end
@@ -427,6 +438,7 @@ always @(negedge wr0 or posedge symbolSlipped) begin
 reg [31:0]dout;
 always @(trellisSpace or addr
          or decayFactor
+         or tbEnable
          `ifdef USE_SLIP
          or symbolDelay or symbolSlip
          `endif
@@ -435,7 +447,7 @@ always @(trellisSpace or addr
         casex (addr)
             `TRELLIS_DECAY:     dout <= {24'b0,decayFactor};
             `ifdef USE_SLIP
-            `TRELLIS_CONTROL:   dout <= {30'b0,symbolDelay,symbolSlip};
+            `TRELLIS_CONTROL:   dout <= {29'b0,tbEnable,symbolDelay,symbolSlip};
             `endif
             default:            dout <= 32'hx;
             endcase

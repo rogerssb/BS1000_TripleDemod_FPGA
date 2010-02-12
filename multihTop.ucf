@@ -426,6 +426,7 @@ NET "phaseError<6>" LOC = C13 | IOSTANDARD = "LVCMOS33";
 NET "phaseError<7>" LOC = C18 | IOSTANDARD = "LVCMOS33";
 
 NET "phaseErrorEn"  LOC = D6  | IOSTANDARD = "LVCMOS33";
+NET "phaseErrorValid"  LOC = D7  | IOSTANDARD = "LVCMOS33";
 
 NET "ck933" TNM_NET = ck933;
 NET "nWe" TNM_NET = nWe;
@@ -465,4 +466,6 @@ TIMESPEC TS_phase = FROM "phaseError" TO "phaseError" 25 MHz;
 TIMESPEC TS_best = FROM "bestMetric" TO "bestMetric" 25 MHz;
 TIMESPEC TS_max = FROM "bestMetric" to "maxMetric" 25 MHz;
 TIMESPEC TS_sync = FROM "sync" TO FFS 100 MHz;
-TIMESPEC TS_nWe = PERIOD "nWe" 100 ns HIGH 50%;
+#NET "nWe" TNM_NET = nWe;
+#TIMESPEC TS_nWe = PERIOD "nWe" 100 ns HIGH 50%;
+#OFFSET = IN 50 ns VALID 50 ns BEFORE "nWe";
