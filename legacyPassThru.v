@@ -65,7 +65,7 @@ output          auSymClk;
 output          bsync_nLock,demod_nLock;
 output          sdiOut;
 
-parameter VER_NUMBER = 16'h00c2;
+parameter VER_NUMBER = 16'h0100;
 
 wire [11:0]addr = {addr11,addr10,addr9,addr8,addr7,addr6,addr5,addr4,addr3,addr2,addr1,1'b0};
 
@@ -200,7 +200,7 @@ wire    [31:0]  demodDout;
 wire    [3:0]   demodMode;
 wire            pcmTrellisMode = (demodMode == `MODE_PCMTRELLIS);
 wire            soqpskTrellisMode = (demodMode == `MODE_SOQPSK);
-wire            multiHMode = (demodMode == `MODE_MULTIH);
+wire            multihMode = (demodMode == `MODE_MULTIH);
 
 wire    [3:0]   dac0Select,dac1Select,dac2Select;
 wire    [17:0]  iSymData,qSymData;
@@ -346,8 +346,8 @@ wire    [31:0]  multihLoopDout;
 multihCarrierLoop multihLoop(
     .clk(ck933),
     .reset(reset),
-    .symEn(trellisSymSync & multiHMode),
-    .sym2xEn(iSym2xEn & multiHMode),
+    .symEn(trellisSymSync & multihMode),
+    .sym2xEn(iSym2xEn & multihMode),
     .iIn(iSymData),
     .qIn(qSymData),
     .phaseError(multihPhaseErrorIn),
@@ -385,7 +385,7 @@ always @(posedge ck933) begin
     qMultiH <= qMultihLoop;
     end
 
-assign demod_nLock = multiHMode ? !multihDemodLock : !carrierLock;
+assign demod_nLock = multihMode ? !multihDemodLock : !carrierLock;
 
 
 //******************************************************************************
@@ -495,7 +495,7 @@ always @(posedge ck933) begin
             dac0Sync <= trellis0Sync;
             end
         default: begin
-            if (multihDac0En) begin
+            if (multihDac0En && multihMode) begin
                 dac0Out <= multihDac0Data;
                 dac0Sync <= multihDac0Sync;
                 end
@@ -514,7 +514,7 @@ always @(posedge ck933) begin
             dac1Sync <= trellis1Sync;
             end
         default: begin
-            if (multihDac1En) begin
+            if (multihDac1En && multihMode) begin
                 dac1Out <= multihDac1Data;
                 dac1Sync <= multihDac1Sync;
                 end
@@ -533,7 +533,7 @@ always @(posedge ck933) begin
             dac2Sync <= trellis2Sync;
             end
         default: begin
-            if (multihDac2En) begin
+            if (multihDac2En && multihMode) begin
                 dac2Out <= multihDac2Data;
                 dac2Sync <= multihDac2Sync;
                 end
@@ -709,7 +709,7 @@ sdi sdi(
 
 reg [15:0] rd_mux;
 always @(
-  addr or multiHMode or
+  addr or multihMode or
   multihLoopDout or
   demodDout or
   dac0Dout or dac1Dout or dac2Dout or
@@ -768,7 +768,7 @@ always @(
            rd_mux <= multihLoopDout[15:0];
            end
     `else
-      if (multiHMode) begin
+      if (multihMode) begin
           if (addr[1]) begin
             rd_mux <= multihLoopDout[31:16];
             end

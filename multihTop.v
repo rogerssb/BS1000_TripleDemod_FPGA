@@ -85,7 +85,7 @@ input           symb_pll_vco;
 
 output          sdiOut;
 
-parameter VER_NUMBER = 16'h0079;
+parameter VER_NUMBER = 16'h0100;
 
 wire    [11:0]  addr = {addr11,addr10,addr9,addr8,addr7,addr6,addr5,addr4,addr3,addr2,addr1,1'b0};
 
@@ -549,7 +549,7 @@ always @(posedge ck933) begin
     symb_pll_ref <= pllRef;
     end
 
-`define DIRECT_DATA
+//`define DIRECT_DATA
 `ifdef DIRECT_DATA
 assign cout_i = decoder_cout;
 assign dout_i = decoder_dout_i;
