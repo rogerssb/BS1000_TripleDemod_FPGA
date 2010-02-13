@@ -417,21 +417,11 @@ always @(posedge clk) begin
             dac0Sync <= ddcSync;
             end
         `DAC_ISYM: begin
-            if (multihMode) begin
-                dac0Data <= iTrellis;
-                end
-            else begin
-                dac0Data <= iSymData;
-                end
+            dac0Data <= iSymData;
             dac0Sync <= resampSync;
             end
         `DAC_QSYM: begin
-            if (multihMode) begin
-                dac0Data <= qTrellis;
-                end
-            else begin
-                dac0Data <= qSymData;
-                end
+            dac0Data <= qSymData;
             dac0Sync <= resampSync;
             end
         `DAC_FREQ: begin
@@ -483,21 +473,11 @@ always @(posedge clk) begin
             dac1Sync <= ddcSync;
             end
         `DAC_ISYM: begin
-            if (multihMode) begin
-                dac1Data <= iTrellis;
-                end
-            else begin
-                dac1Data <= iSymData;
-                end
+            dac1Data <= iSymData;
             dac1Sync <= resampSync;
             end
         `DAC_QSYM: begin
-            if (multihMode) begin
-                dac1Data <= qTrellis;
-                end
-            else begin
-                dac1Data <= qSymData;
-                end
+            dac1Data <= qSymData;
             dac1Sync <= resampSync;
             end
         `DAC_FREQ: begin

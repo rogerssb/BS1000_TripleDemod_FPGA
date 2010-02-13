@@ -65,7 +65,7 @@ output          auSymClk;
 output          bsync_nLock,demod_nLock;
 output          sdiOut;
 
-parameter VER_NUMBER = 16'h0101;
+parameter VER_NUMBER = 16'h0102;
 
 wire [11:0]addr = {addr11,addr10,addr9,addr8,addr7,addr6,addr5,addr4,addr3,addr2,addr1,1'b0};
 
@@ -242,14 +242,16 @@ demod demod(
     .eyeOffset(eyeOffset)
     );
 
-reg             pcmSymEn,soqpskSymEn;
-reg             pcmSym2xEn,soqpskSym2xEn;
+reg             pcmSymEn,soqpskSymEn,multihSymEn;
+reg             pcmSym2xEn,soqpskSym2xEn,multihSym2xEn;
 reg     [17:0]  iIn,qIn;
 always @(posedge ck933) begin
     pcmSymEn <= trellisSymSync & pcmTrellisMode;
     pcmSym2xEn <= iSym2xEn & pcmTrellisMode;
     soqpskSymEn <= trellisSymSync & soqpskTrellisMode;
     soqpskSym2xEn <= iSym2xEn & soqpskTrellisMode;
+    multihSymEn <= trellisSymSync & multihMode;
+    multihSym2xEn <= iSym2xEn & multihMode;
     iIn <= iSymData;
     qIn <= qSymData;
     end
@@ -346,10 +348,10 @@ wire    [31:0]  multihLoopDout;
 multihCarrierLoop multihLoop(
     .clk(ck933),
     .reset(reset),
-    .symEn(trellisSymSync & multihMode),
-    .sym2xEn(iSym2xEn & multihMode),
-    .iIn(iSymData),
-    .qIn(qSymData),
+    .symEn(multihSymEn),
+    .sym2xEn(multihSym2xEn),
+    .iIn(iIn),
+    .qIn(qIn),
     .phaseError(multihPhaseErrorIn),
     .phaseErrorEn(multihPhaseErrorEnIn),
     .phaseErrorValid(multihPhaseErrorValidIn),

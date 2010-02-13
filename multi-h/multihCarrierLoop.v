@@ -13,6 +13,7 @@
 
 //`define BYPASS_LOOP
 //`define USE_FRACTIONAL_DELAY
+//`define USE_AVERAGE_ERROR
            
 module multihCarrierLoop(
     clk,reset,symEn,sym2xEn,
@@ -115,6 +116,7 @@ loopRegs loopRegs(
     );
 
 
+`ifdef USE_AVERAGE_ERROR
 /**************************** Average Error ***********************************/
 reg     [15:0]  shiftError;
 reg     [7:0]   avgCount;
@@ -167,7 +169,25 @@ always @(posedge clk) begin
             end
         end
     end
-
+`else
+/**************************** Adjust Error ************************************/
+wire            loopFilterEn = phaseErrorEn;
+reg     [7:0]   loopError;
+wire    [7:0]   negPhaseError = ~phaseError + 1;
+always @(posedge clk) begin 
+    if (loopFilterEn) begin
+        if (zeroError) begin
+            loopError <= 0;
+            end
+        else if (invertError) begin
+            loopError <= negPhaseError;
+            end
+        else begin
+            loopError <= phaseError;
+            end
+        end
+    end
+`endif
 
 /***************************** Loop Filter ************************************/
 
