@@ -211,6 +211,7 @@ assign carrierFreqEn = loopFilterEn;
 /******************************* Lock Detector ********************************/
 reg             demodLock;
 reg             symbolSlip;
+reg             symbolSlipped;
 reg             errorValid;
 reg     [7:0]   absModeError;
 reg     [15:0]  lockCounter;
@@ -220,6 +221,8 @@ always @(posedge clk) begin
     if (reset) begin
         lockCounter <= 0;
         demodLock <= 1;
+        end
+    else if (symbolSlipped) begin
         symbolSlip <= 0;
         end
     else if (phaseErrorEn) begin
@@ -238,11 +241,9 @@ always @(posedge clk) begin
                     end
                 else begin
                     lockCounter <= lockMinus[15:0];
-                    symbolSlip <= 0;
                     end
                 end
             else begin
-                symbolSlip <= 0;
                 if (lockCounter == lockCount) begin
                     demodLock <= 1;
                     lockCounter <= 0;
@@ -359,24 +360,27 @@ always @(posedge clk) begin
     end
 
 // Create a symbol slip state machine
-reg     [1:0]   slipSR;
-wire            slip = (!slipSR[0] && symbolSlip);
-//wire            slip = 1'b0;
 reg     [17:0]  slipI,slipQ;
 reg             symEnOut, sym2xEnOut;
 always @(posedge clk) begin
-    // Reclock the inputs
-    slipI <= iMpy;
-    slipQ <= qMpy;
-    sym2xEnOut <= sym2xEnSr[3];
-
-    // Create a gated version of symEn.
-    slipSR <= {slipSR[0],symbolSlip};
-    if (symEnSr[3] && slip) begin
-        symEnOut <= 0;
+    if (reset) begin
+        symbolSlipped <= 0;
         end
     else begin
-        symEnOut <= symEnSr[3];
+        // Reclock the inputs
+        slipI <= iMpy;
+        slipQ <= qMpy;
+        sym2xEnOut <= sym2xEnSr[3];
+
+        // Create a gated version of symEn.
+        if (symEnSr[3] && symbolSlip) begin
+            symEnOut <= 0;
+            symbolSlipped <= 1;
+            end
+        else begin
+            symEnOut <= symEnSr[3];
+            symbolSlipped <= 0;
+            end
         end
     end
 
@@ -423,7 +427,7 @@ always @(posedge clk) begin
                 dac0En <= 1;
                 end
             `DAC_PHERROR: begin
-                dac0Data <= {phaseError,10'b0};
+                dac0Data <= {absModeError,10'b0};
                 dac0Sync <= 1;
                 dac0En <= 1;
                 end
@@ -456,7 +460,7 @@ always @(posedge clk) begin
                 dac1En <= 1;
                 end
             `DAC_FREQLOCK: begin
-                dac1Data <= {absModeError,10'b0};
+                dac1Data <= {1'b0,symbolSlip,16'b0};
                 dac1Sync <= 1;
                 dac1En <= 1;
                 end
