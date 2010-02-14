@@ -209,7 +209,7 @@ lagGain lagGain (
     .limit(limit),
     .sweepEnable(1'b0),
     .clearAccum(clearAccum),
-    .carrierInSync(carrierLock),
+    .carrierInSync(demodLock),
     .lagAccum(lagAccum)
     );
 

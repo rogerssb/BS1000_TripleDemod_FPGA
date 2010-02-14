@@ -214,11 +214,11 @@ NET "dac2_d<11>" IOSTANDARD = "LVCMOS33";
 NET "dac2_d<12>" IOSTANDARD = "LVCMOS33";
 NET "dac2_d<13>" IOSTANDARD = "LVCMOS33";
 
-NET "multiHSymEn" LOC = D9;
-NET "multiHSymEn" IOSTANDARD = "LVCMOS33";
+NET "multihSymEnOut" LOC = D9;
+NET "multihSymEnOut" IOSTANDARD = "LVCMOS33";
 
-NET "multiHSym2xEn" LOC = D7;
-NET "multiHSym2xEn" IOSTANDARD = "LVCMOS33";
+NET "multihSym2xEnOut" LOC = D7;
+NET "multihSym2xEnOut" IOSTANDARD = "LVCMOS33";
 
 NET "iMultiH<0>"  LOC = P19;
 NET "iMultiH<1>"  LOC = P22;

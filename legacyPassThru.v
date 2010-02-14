@@ -27,7 +27,7 @@ module legacyPassThru (
     demodMode,
     dac0Select,dac1Select,dac2Select,
     dac0_d,dac1_d,dac2_d,
-    multiHSymEn,multiHSym2xEn,
+    multihSymEnOut,multihSym2xEnOut,
     iMultiH,qMultiH,
     dataSymEn,dataSym2xEn,
     iData,qData,
@@ -54,7 +54,7 @@ output  [3:0]   demodMode;
 output  [3:0]   dac0Select,dac1Select,dac2Select;
 output  [13:0]  dac0_d,dac1_d,dac2_d;
 
-output          multiHSymEn,multiHSym2xEn;
+output          multihSymEnOut,multihSym2xEnOut;
 output  [17:0]  iMultiH,qMultiH;
 
 output          dataSymEn,dataSym2xEn;
@@ -65,7 +65,7 @@ output          auSymClk;
 output          bsync_nLock,demod_nLock;
 output          sdiOut;
 
-parameter VER_NUMBER = 16'h0103;
+parameter VER_NUMBER = 16'h0104;
 
 wire [11:0]addr = {addr11,addr10,addr9,addr8,addr7,addr6,addr5,addr4,addr3,addr2,addr1,1'b0};
 
@@ -380,8 +380,8 @@ multihCarrierLoop multihLoop(
     );
 
 reg     [17:0]  iMultiH,qMultiH;
-FDCE multiHSymEnFF  (.Q(multiHSymEn),   .C(ck933),  .CE(1'b1),  .CLR(1'b0), .D(multihLoopEn));
-FDCE multiHSym2xEnFF  (.Q(multiHSym2xEn),   .C(ck933),  .CE(1'b1),  .CLR(1'b0), .D(multihLoop2xEn));
+FDCE multiHSymEnFF  (.Q(multihSymEnOut),   .C(ck933),  .CE(1'b1),  .CLR(1'b0), .D(multihLoopEn));
+FDCE multiHSym2xEnFF  (.Q(multihSym2xEnOut),   .C(ck933),  .CE(1'b1),  .CLR(1'b0), .D(multihLoop2xEn));
 always @(posedge ck933) begin
     iMultiH <= iMultihLoop;
     qMultiH <= qMultihLoop;
