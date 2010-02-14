@@ -81,6 +81,7 @@ wire    [4:0]   lagExp;
 wire    [31:0]  limit;
 wire    [31:0]  loopOffset;
 wire    [15:0]  lockCount;
+reg             demodLock;
 wire    [11:0]   syncThreshold;
 wire    [39:0]  lagAccum;
 wire    [2:0]   averageSelect;
@@ -98,6 +99,7 @@ loopRegs loopRegs(
     .lagAccum(lagAccum[39:8]),
     .dataIn(din),
     .dataOut(dout),
+    .lockStatus(demodLock),
     .invertError(invertError),
     .zeroError(zeroError),
     .clearAccum(clearAccum),
@@ -229,7 +231,6 @@ assign carrierFreqEn = loopFilterEn;
 
 
 /******************************* Lock Detector ********************************/
-reg             demodLock;
 reg             symbolSlip;
 reg             symbolSlipped;
 reg             errorValid;

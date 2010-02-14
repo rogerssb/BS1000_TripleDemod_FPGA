@@ -8,6 +8,7 @@ module loopRegs(addr,
                cs,
                wr0, wr1, wr2, wr3,
                lagAccum,
+               lockStatus,
                invertError,
                zeroError,
                ctrl2,
@@ -28,6 +29,8 @@ input   [31:0]dataIn;
 output  [31:0]dataOut;
 input   cs;
 input   wr0,wr1,wr2,wr3;
+
+input           lockStatus;
 
 input   [31:0]  lagAccum;
 
@@ -147,6 +150,7 @@ always @(negedge wr3) begin
 
 reg [31:0]dataOut;
 always @(addr or cs or
+         lockStatus or
          ctrl2 or invertError or zeroError or clearAccum or ctrl4 or
          lagExp or lagMan or leadExp or leadMan or
          limit or 
@@ -156,7 +160,7 @@ always @(addr or cs or
          ) begin
     if (cs) begin
         casex (addr)
-            `LF_CONTROL:        dataOut <= {27'bx,ctrl4,clearAccum,ctrl2,invertError,zeroError};
+            `LF_CONTROL:        dataOut <= {lockStatus,26'b0,ctrl4,clearAccum,ctrl2,invertError,zeroError};
             `LF_LEAD_LAG:       dataOut <= {leadMan,3'bx,leadExp,lagMan,3'bx,lagExp};
             `LF_LIMIT:          dataOut <= limit;
             `LF_LOOPDATA:       dataOut <= loopData;
