@@ -11,7 +11,7 @@
 `timescale 1ns/1ps
 `include "addressMap.v"
 
-//`define ALDEC_SIM
+
 
 module trellisMultiH
   (
@@ -269,7 +269,7 @@ always @(posedge clk) begin
 
    wire    [5:0]   index;
 
-reg     [7:0]   decayFactor;     
+reg     [7:0]   decayFactor;      
 reg             tbEnable; 
 wire    [7:0]   phaseError;
 wire    [9:0]   maxAcs;
@@ -278,8 +278,8 @@ viterbiMultiH /*#(MF_BITS, ROT_BITS)*/ viterbiMultiH
    (
     .clk                   (clk           ), 
     .reset                 (reset         ), 
-    .symEn                 (symEnRot      ),     // Make sure that the mfilt data is aligned with the quadrary symbol interval  
-    .sym2xEn               (sym2xEnRot    ),     // Make sure that the mfilt data is aligned with the quadrary symbol interval  
+    .symEn                 (symEnRot      ),
+    .sym2xEn               (sym2xEnRot    ),
     `ifdef ALDEC_SIM
     .tbEnable              (1'b1         ),
     .decayFactor           (8'hff         ),
@@ -363,39 +363,6 @@ viterbiMultiH /*#(MF_BITS, ROT_BITS)*/ viterbiMultiH
     .sym2xEnOut            (sym2xEnOut    )     
     );
     
-
-   /* -----\/----- EXCLUDED -----\/-----
-   reg [7:0]            dataBits;
-  
-   reg                  satPos,satNeg;
-   wire                 sign = phaseError[7];
-
-   always @(posedge clk) begin
-      if (symEnOut) begin
-         dataBits <= {phaseError[6:0], 1'b0};
-         satPos <= !sign && (phaseError[9:6] != 5'b0000);
-         satNeg <=  sign && (phaseError[9:6] != 5'b1111);
-         if (satPos) begin
-            phErrShft <= 8'h7f;
-         end
-         else if (satNeg) begin
-            phErrShft <= 8'h81;
-         end
-         else begin
-            phErrShft <= dataBits;
-         end
-      end   
-   end
-    -----/\----- EXCLUDED -----/\----- */
-
-// This is a kludge to create a 2x clock enable from the 1x clock enable to satisfy the design
-// of the pre-existing line decoder. This design assumes at least 3 clocks between each 1x clock
-// enable.
-//reg se0;
-//assign sym2xEnOut = se0 | symEnOut;
-//always @(posedge clk) begin
-//    se0 <= symEnOut;
-//    end
 
    
 //************************ Trellis Register Definitions ************************

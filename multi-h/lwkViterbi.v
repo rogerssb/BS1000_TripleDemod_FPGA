@@ -165,8 +165,9 @@ module viterbiMultiH
                          selOut40 , selOut25 , selOut10 , selOut59 , selOut44 , selOut29 , selOut14 , selOut63 ,
                          selOut48 , selOut33 , selOut18 , selOut3 , selOut52 , selOut37 , selOut22 , selOut7 ,
                          selOut56 , selOut41 , selOut26 , selOut11 , selOut60 , selOut45 , selOut30 , selOut15;
+
    /* -----\/----- EXCLUDED -----\/-----
-   wire [MF_BITS-1:0]    iOut0, iOut49, iOut34, iOut19, iOut4, iOut53, iOut38, iOut23,
+   wire [ROT_BITS-1:0]   iOut0, iOut49, iOut34, iOut19, iOut4, iOut53, iOut38, iOut23,
                          iOut8, iOut57, iOut42, iOut27, iOut12, iOut61, iOut46, iOut31,
                          iOut16, iOut1, iOut50, iOut35, iOut20, iOut5, iOut54, iOut39,
                          iOut24, iOut9, iOut58, iOut43, iOut28, iOut13, iOut62, iOut47,
@@ -175,6 +176,7 @@ module viterbiMultiH
                          iOut48, iOut33, iOut18, iOut3, iOut52, iOut37, iOut22, iOut7,
                          iOut56, iOut41, iOut26, iOut11, iOut60, iOut45, iOut30, iOut15;
     -----/\----- EXCLUDED -----/\----- */
+
    // The Imaginary part is used to compute the phaseError
    wire [ROT_BITS-1:0]   qOut0, qOut49, qOut34, qOut19, qOut4, qOut53, qOut38, qOut23,
                          qOut8, qOut57, qOut42, qOut27, qOut12, qOut61, qOut46, qOut31,
@@ -341,7 +343,6 @@ module viterbiMultiH
     //assign maxAcs = accMetOut0;
 
    // ----- decision before the traceback -----
-   reg [1:0]             decision0;
    reg [1:0]             acsDecision;
    reg [1:0]             selOut0r , selOut49r , selOut34r , selOut19r , selOut4r , selOut53r , selOut38r , selOut23r , 
                          selOut8r , selOut57r , selOut42r , selOut27r , selOut12r , selOut61r , selOut46r , selOut31r ,
@@ -351,11 +352,12 @@ module viterbiMultiH
                          selOut40r , selOut25r , selOut10r , selOut59r , selOut44r , selOut29r , selOut14r , selOut63r ,
                          selOut48r , selOut33r , selOut18r , selOut3r , selOut52r , selOut37r , selOut22r , selOut7r ,
                          selOut56r , selOut41r , selOut26r , selOut11r , selOut60r , selOut45r , selOut30r , selOut15r;
+   reg [5:0]             indexReg;
    always @(posedge clk)
      begin
         if (reset) begin
-           decision0  <= 0;
            acsDecision  <= 0;
+           indexReg  <= 0;
            selOut0r  <= 0; selOut1r  <= 0; selOut2r  <= 0; selOut3r  <= 0; selOut4r  <= 0; selOut5r  <= 0; selOut6r  <= 0; selOut7r  <= 0;
            selOut8r  <= 0; selOut9r  <= 0; selOut10r <= 0; selOut11r <= 0; selOut12r <= 0; selOut13r <= 0; selOut14r <= 0; selOut15r <= 0;
            selOut16r <= 0; selOut17r <= 0; selOut18r <= 0; selOut19r <= 0; selOut20r <= 0; selOut21r <= 0; selOut22r <= 0; selOut23r <= 0; 
@@ -430,71 +432,72 @@ module viterbiMultiH
            selOut61r <= selOut61;   
            selOut62r <= selOut62;   
            selOut63r <= selOut63;   
+           indexReg <= index;
            case (index)
-             0 : begin decision0 <= selOut0r ; acsDecision <= selOut0 ;end
-             1 : begin decision0 <= selOut1r ; acsDecision <= selOut1 ;end
-             2 : begin decision0 <= selOut2r ; acsDecision <= selOut2 ;end
-             3 : begin decision0 <= selOut3r ; acsDecision <= selOut3 ;end
-             4 : begin decision0 <= selOut4r ; acsDecision <= selOut4 ;end
-             5 : begin decision0 <= selOut5r ; acsDecision <= selOut5 ;end
-             6 : begin decision0 <= selOut6r ; acsDecision <= selOut6 ;end
-             7 : begin decision0 <= selOut7r ; acsDecision <= selOut7 ;end
-             8 : begin decision0 <= selOut8r ; acsDecision <= selOut8 ;end
-             9 : begin decision0 <= selOut9r ; acsDecision <= selOut9 ;end
-             10: begin decision0 <= selOut10r; acsDecision <= selOut10;end
-             11: begin decision0 <= selOut11r; acsDecision <= selOut11;end
-             12: begin decision0 <= selOut12r; acsDecision <= selOut12;end
-             13: begin decision0 <= selOut13r; acsDecision <= selOut13;end
-             14: begin decision0 <= selOut14r; acsDecision <= selOut14;end
-             15: begin decision0 <= selOut15r; acsDecision <= selOut15;end
-             16: begin decision0 <= selOut16r; acsDecision <= selOut16;end
-             17: begin decision0 <= selOut17r; acsDecision <= selOut17;end
-             18: begin decision0 <= selOut18r; acsDecision <= selOut18;end
-             19: begin decision0 <= selOut19r; acsDecision <= selOut19;end
-             20: begin decision0 <= selOut20r; acsDecision <= selOut20;end
-             21: begin decision0 <= selOut21r; acsDecision <= selOut21;end
-             22: begin decision0 <= selOut22r; acsDecision <= selOut22;end
-             23: begin decision0 <= selOut23r; acsDecision <= selOut23;end
-             24: begin decision0 <= selOut24r; acsDecision <= selOut24;end
-             25: begin decision0 <= selOut25r; acsDecision <= selOut25;end
-             26: begin decision0 <= selOut26r; acsDecision <= selOut26;end
-             27: begin decision0 <= selOut27r; acsDecision <= selOut27;end
-             28: begin decision0 <= selOut28r; acsDecision <= selOut28;end
-             29: begin decision0 <= selOut29r; acsDecision <= selOut29;end
-             30: begin decision0 <= selOut30r; acsDecision <= selOut30;end
-             31: begin decision0 <= selOut31r; acsDecision <= selOut31;end
-             32: begin decision0 <= selOut32r; acsDecision <= selOut32;end
-             33: begin decision0 <= selOut33r; acsDecision <= selOut33;end
-             34: begin decision0 <= selOut34r; acsDecision <= selOut34;end
-             35: begin decision0 <= selOut35r; acsDecision <= selOut35;end
-             36: begin decision0 <= selOut36r; acsDecision <= selOut36;end
-             37: begin decision0 <= selOut37r; acsDecision <= selOut37;end
-             38: begin decision0 <= selOut38r; acsDecision <= selOut38;end
-             39: begin decision0 <= selOut39r; acsDecision <= selOut39;end
-             40: begin decision0 <= selOut40r; acsDecision <= selOut40;end
-             41: begin decision0 <= selOut41r; acsDecision <= selOut41;end
-             42: begin decision0 <= selOut42r; acsDecision <= selOut42;end
-             43: begin decision0 <= selOut43r; acsDecision <= selOut43;end
-             44: begin decision0 <= selOut44r; acsDecision <= selOut44;end
-             45: begin decision0 <= selOut45r; acsDecision <= selOut45;end
-             46: begin decision0 <= selOut46r; acsDecision <= selOut46;end
-             47: begin decision0 <= selOut47r; acsDecision <= selOut47;end
-             48: begin decision0 <= selOut48r; acsDecision <= selOut48;end
-             49: begin decision0 <= selOut49r; acsDecision <= selOut49;end
-             50: begin decision0 <= selOut50r; acsDecision <= selOut50;end
-             51: begin decision0 <= selOut51r; acsDecision <= selOut51;end
-             52: begin decision0 <= selOut52r; acsDecision <= selOut52;end
-             53: begin decision0 <= selOut53r; acsDecision <= selOut53;end
-             54: begin decision0 <= selOut54r; acsDecision <= selOut54;end
-             55: begin decision0 <= selOut55r; acsDecision <= selOut55;end
-             56: begin decision0 <= selOut56r; acsDecision <= selOut56;end
-             57: begin decision0 <= selOut57r; acsDecision <= selOut57;end
-             58: begin decision0 <= selOut58r; acsDecision <= selOut58;end
-             59: begin decision0 <= selOut59r; acsDecision <= selOut59;end
-             60: begin decision0 <= selOut60r; acsDecision <= selOut60;end
-             61: begin decision0 <= selOut61r; acsDecision <= selOut61;end
-             62: begin decision0 <= selOut62r; acsDecision <= selOut62;end
-             63: begin decision0 <= selOut63r; acsDecision <= selOut63;end
+             0 : begin acsDecision <= selOut0 ;end
+             1 : begin acsDecision <= selOut1 ;end
+             2 : begin acsDecision <= selOut2 ;end
+             3 : begin acsDecision <= selOut3 ;end
+             4 : begin acsDecision <= selOut4 ;end
+             5 : begin acsDecision <= selOut5 ;end
+             6 : begin acsDecision <= selOut6 ;end
+             7 : begin acsDecision <= selOut7 ;end
+             8 : begin acsDecision <= selOut8 ;end
+             9 : begin acsDecision <= selOut9 ;end
+             10: begin acsDecision <= selOut10;end
+             11: begin acsDecision <= selOut11;end
+             12: begin acsDecision <= selOut12;end
+             13: begin acsDecision <= selOut13;end
+             14: begin acsDecision <= selOut14;end
+             15: begin acsDecision <= selOut15;end
+             16: begin acsDecision <= selOut16;end
+             17: begin acsDecision <= selOut17;end
+             18: begin acsDecision <= selOut18;end
+             19: begin acsDecision <= selOut19;end
+             20: begin acsDecision <= selOut20;end
+             21: begin acsDecision <= selOut21;end
+             22: begin acsDecision <= selOut22;end
+             23: begin acsDecision <= selOut23;end
+             24: begin acsDecision <= selOut24;end
+             25: begin acsDecision <= selOut25;end
+             26: begin acsDecision <= selOut26;end
+             27: begin acsDecision <= selOut27;end
+             28: begin acsDecision <= selOut28;end
+             29: begin acsDecision <= selOut29;end
+             30: begin acsDecision <= selOut30;end
+             31: begin acsDecision <= selOut31;end
+             32: begin acsDecision <= selOut32;end
+             33: begin acsDecision <= selOut33;end
+             34: begin acsDecision <= selOut34;end
+             35: begin acsDecision <= selOut35;end
+             36: begin acsDecision <= selOut36;end
+             37: begin acsDecision <= selOut37;end
+             38: begin acsDecision <= selOut38;end
+             39: begin acsDecision <= selOut39;end
+             40: begin acsDecision <= selOut40;end
+             41: begin acsDecision <= selOut41;end
+             42: begin acsDecision <= selOut42;end
+             43: begin acsDecision <= selOut43;end
+             44: begin acsDecision <= selOut44;end
+             45: begin acsDecision <= selOut45;end
+             46: begin acsDecision <= selOut46;end
+             47: begin acsDecision <= selOut47;end
+             48: begin acsDecision <= selOut48;end
+             49: begin acsDecision <= selOut49;end
+             50: begin acsDecision <= selOut50;end
+             51: begin acsDecision <= selOut51;end
+             52: begin acsDecision <= selOut52;end
+             53: begin acsDecision <= selOut53;end
+             54: begin acsDecision <= selOut54;end
+             55: begin acsDecision <= selOut55;end
+             56: begin acsDecision <= selOut56;end
+             57: begin acsDecision <= selOut57;end
+             58: begin acsDecision <= selOut58;end
+             59: begin acsDecision <= selOut59;end
+             60: begin acsDecision <= selOut60;end
+             61: begin acsDecision <= selOut61;end
+             62: begin acsDecision <= selOut62;end
+             63: begin acsDecision <= selOut63;end
            endcase
         end  
      end
@@ -523,7 +526,7 @@ module viterbiMultiH
                          qOut56rr, qOut41rr, qOut26rr, qOut11rr, qOut60rr, qOut45rr, qOut30rr, qOut15rr;
 
    reg phaseErrorValid;
-   always @(posedge clk)
+    always @(posedge clk)
      begin
         if (reset) begin
            phaseError0 <= 0; 
@@ -554,7 +557,7 @@ module viterbiMultiH
            phaseErrorValid <= (index[5:3] == 3'b000);
         end  
      end
-     
+
    wire [ROT_BITS-1:0]  phaseError = phaseError1;
    
    assign symEnOut = symEnAcs;
@@ -572,20 +575,29 @@ module viterbiMultiH
       .symEn     (symEnAcs),
       .symEnEven (symEnEvenAcsMux),   
       .decTbtIn  (decTbtIn),
-      .sel0      (selOut0 ), .sel1 (selOut1 ), .sel2 (selOut2 ), .sel3 (selOut3 ), .sel4 (selOut4 ), .sel5 (selOut5 ), .sel6 (selOut6 ), .sel7 (selOut7 ),
-      .sel8      (selOut8 ), .sel9 (selOut9 ), .sel10(selOut10), .sel11(selOut11), .sel12(selOut12), .sel13(selOut13), .sel14(selOut14), .sel15(selOut15),
-      .sel16     (selOut16), .sel17(selOut17), .sel18(selOut18), .sel19(selOut19), .sel20(selOut20), .sel21(selOut21), .sel22(selOut22), .sel23(selOut23),
-      .sel24     (selOut24), .sel25(selOut25), .sel26(selOut26), .sel27(selOut27), .sel28(selOut28), .sel29(selOut29), .sel30(selOut30), .sel31(selOut31),
-      .sel32     (selOut32), .sel33(selOut33), .sel34(selOut34), .sel35(selOut35), .sel36(selOut36), .sel37(selOut37), .sel38(selOut38), .sel39(selOut39),
-      .sel40     (selOut40), .sel41(selOut41), .sel42(selOut42), .sel43(selOut43), .sel44(selOut44), .sel45(selOut45), .sel46(selOut46), .sel47(selOut47),
-      .sel48     (selOut48), .sel49(selOut49), .sel50(selOut50), .sel51(selOut51), .sel52(selOut52), .sel53(selOut53), .sel54(selOut54), .sel55(selOut55),
-      .sel56     (selOut56), .sel57(selOut57), .sel58(selOut58), .sel59(selOut59), .sel60(selOut60), .sel61(selOut61), .sel62(selOut62), .sel63(selOut63),
-      .index     (index   ),
+      .sel0      (selOut0r ), .sel1 (selOut1r ), .sel2 (selOut2r ), .sel3 (selOut3r ), .sel4 (selOut4r ), .sel5 (selOut5r ), .sel6 (selOut6r ), .sel7 (selOut7r ),
+      .sel8      (selOut8r ), .sel9 (selOut9r ), .sel10(selOut10r), .sel11(selOut11r), .sel12(selOut12r), .sel13(selOut13r), .sel14(selOut14r), .sel15(selOut15r),
+      .sel16     (selOut16r), .sel17(selOut17r), .sel18(selOut18r), .sel19(selOut19r), .sel20(selOut20r), .sel21(selOut21r), .sel22(selOut22r), .sel23(selOut23r),
+      .sel24     (selOut24r), .sel25(selOut25r), .sel26(selOut26r), .sel27(selOut27r), .sel28(selOut28r), .sel29(selOut29r), .sel30(selOut30r), .sel31(selOut31r),
+      .sel32     (selOut32r), .sel33(selOut33r), .sel34(selOut34r), .sel35(selOut35r), .sel36(selOut36r), .sel37(selOut37r), .sel38(selOut38r), .sel39(selOut39r),
+      .sel40     (selOut40r), .sel41(selOut41r), .sel42(selOut42r), .sel43(selOut43r), .sel44(selOut44r), .sel45(selOut45r), .sel46(selOut46r), .sel47(selOut47r),
+      .sel48     (selOut48r), .sel49(selOut49r), .sel50(selOut50r), .sel51(selOut51r), .sel52(selOut52r), .sel53(selOut53r), .sel54(selOut54r), .sel55(selOut55r),
+      .sel56     (selOut56r), .sel57(selOut57r), .sel58(selOut58r), .sel59(selOut59r), .sel60(selOut60r), .sel61(selOut61r), .sel62(selOut62r), .sel63(selOut63r),
+      .index     (index ),
       .decision  (tbDecision)
       );
     assign decision = tbEnable ? tbDecision : acsDecision;
 `else
     assign decision = acsDecision;
+`endif
+
+`ifdef SIMULATE
+   always @(posedge clk) begin
+      if (symEnAcs) begin
+         //$display("\t%d\t%d\t%d\t%d\t%d\t%d", index, decision, acsDecision, $signed(iOut), $signed(qOut), phaseErrorEnOut);
+         $display("\t%d\t%d\t%d", index, tbDecision, acsDecision);
+      end
+   end
 `endif
 
    

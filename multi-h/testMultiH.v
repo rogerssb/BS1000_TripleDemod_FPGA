@@ -178,12 +178,16 @@ module test;
    
 `define FULL_TRELLIS
 `ifdef FULL_TRELLIS
+   wire [1:0]  decision;
+   wire [7:0]  phaseError;
+   wire        symEnOut;
+   wire        sym2xEnOut;
    trellisMultiH trellisMultiH
      (
       .clk                 (clk     ),
       .reset               (reset   ),
-      .symEnIn               (symEn   ),
-      .sym2xEnIn             (sym2xEn ),
+      .symEnIn             (symEn   ),
+      .sym2xEnIn           (sym2xEn ),
       .iIn                 (dinH[57:40]),
       .qIn                 (dinH[17:0] ),
       /* -----\/----- EXCLUDED -----\/-----
@@ -198,13 +202,50 @@ module test;
       dac2Sync,
       dac2Data,
       -----/\----- EXCLUDED -----/\----- */
-      .decision            (),
-      .symEnOut    (),
-      .sym2xEnOut  ()
+      .decision            (decision  ),
+      .phaseError          (phaseError),
+      .symEnOut            (symEnOut  ),
+      .sym2xEnOut          (sym2xEnOut) 
    );			   
+
+// `define COMPARE_AGAINST_SYN
+ `ifdef COMPARE_AGAINST_SYN
+   wire [1:0]  decisionSyn;
+   wire [7:0]  phaseErrorSyn;
+   wire        symEnOutSyn;
+   wire        sym2xEnOutSyn;
+   trellisMultiH_sdf trellisMultiH_sdf
+     (
+      .clk                 (clk     ),
+      .reset               (reset   ),
+      .symEnIn             (symEn   ),
+      .sym2xEnIn           (sym2xEn ),
+      .iIn                 (dinH[57:40]),
+      .qIn                 (dinH[17:0] ),
+      .decision            (decisionSyn  ),
+      .phaseError          (phaseErrorSyn),
+      .symEnOut            (symEnOutSyn  ),
+      .sym2xEnOut          (sym2xEnOutSyn) 
+      );			   
+   
+   always @(posedge clk) begin
+      if (reset) begin
+      end
+      else if (sym2xEn) begin
+         if (decision != decisionSyn ) begin 
+            $display("\tDecision missmatch %d\t%d", decision, decisionSyn);
+         end
+         if (phaseError != phaseErrorSyn ) begin 
+            $display("\tphaseError missmatch %d\t%d", phaseError, phaseErrorSyn);
+         end
+      end
+   end
+ `endif
+
 `endif
    
    
+      
    wire       testDec1;
    
    initial clk = 0;
@@ -370,9 +411,10 @@ end
 //`define RANDOM_LONG
 //`define RANDOM_LONG_ATT
 //`define RANDOM_LONG_ATT_9_5dB_EbNo
-//`define RANDOM_LONG_ATT_NO_NOISE
+`define RANDOM_LONG_ATT_NO_NOISE
 //`define RANDOM_LONG_ATT_SOME_NOISE
-`define RANDOM_LONG_ATT_10dB_NOISE
+//`define RANDOM_LONG_ATT_10dB_NOISE
+//`define RANDOM_LONG_ATT_10dB_NOISE_2
    
 integer file1,file2;
 initial begin
@@ -432,6 +474,12 @@ initial begin
 `ifdef RANDOM_LONG_ATT_10dB_NOISE
       $readmemh("P:/semco/matlab_sim_results/multi-h/mfinputs10dBEbNo1000samp6ErrWithTB.hex", readMem);
 `endif
+
+`ifdef RANDOM_LONG_ATT_10dB_NOISE_2
+      $readmemh("P:/semco/matlab_sim_results/multi-h/10dB_with_saved_winning_rotation/multi-h-input.hex", readMem);
+`endif
+
+
 
    
 end
