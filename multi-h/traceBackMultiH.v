@@ -291,7 +291,7 @@ module traceBackMultiH
         end
      end 
 
-   reg [1:0] d1, d2, d3, d4, d5, d6 ,d7 ,d8, d9;
+   reg [1:0] d1, d2, d3, d4, d5, d6 ,d7 ,d8;
    always @(cState or
             tbt0_0  or tbt0_1  or tbt0_2  or tbt0_3  or tbt0_4  or tbt0_5  or tbt0_6  or tbt0_7  or 
             tbt0_8  or tbt0_9  or tbt0_10 or tbt0_11 or tbt0_12 or tbt0_13 or tbt0_14 or tbt0_15 or 
@@ -436,7 +436,7 @@ module traceBackMultiH
 
 
    // final mux for the decision out of the trace back 
-   always @(stateCnt or decTbtIn or d1 or d2 or d3 or d4 or d5 or d6 or d7 or d8 or d9)
+   always @(stateCnt or decTbtIn or d1 or d2 or d3 or d4 or d5 or d6 or d7 or d8)
      case (stateCnt) //State count, counts to the traceback depth of 4, init at symEn 
        0: begin decisionTmp <= decTbtIn; end
        1: begin decisionTmp <= d1; end
@@ -447,7 +447,6 @@ module traceBackMultiH
        6: begin decisionTmp <= d6; end
        7: begin decisionTmp <= d7; end
        8: begin decisionTmp <= d8; end
-       //9: begin decisionTmp <= d9; end
        default : decisionTmp <= d8;
      endcase
    
