@@ -24,7 +24,7 @@ module viterbiMultiH
    mf_p3p3_54Real, mf_p3p1_54Real, mf_p3m1_54Real, mf_p3m3_54Real,
    mf_m3p3_54Real, mf_m3p1_54Real, mf_m3m1_54Real, mf_m3m3_54Real,
    mf_p1p3_54Real, mf_p1p1_54Real, mf_p1m1_54Real, mf_p1m3_54Real,
-   mf_m1p3_54Real, mf_m1p1_54Real, mf_m1m1_54Real, mf_m1m3_54Real,
+   mf_m1p3_54Real, mf_m1p1_54Real, mf_m1m1_54Real, mf_m1m3_54Real,          
    mf_p3p3_45Imag, mf_p3p1_45Imag, mf_p3m1_45Imag, mf_p3m3_45Imag,
    mf_m3p3_45Imag, mf_m3p1_45Imag, mf_m3m1_45Imag, mf_m3m3_45Imag,
    mf_p1p3_45Imag, mf_p1p1_45Imag, mf_p1m1_45Imag, mf_p1m3_45Imag,
@@ -560,12 +560,10 @@ module viterbiMultiH
 
    wire [ROT_BITS-1:0]  phaseError = phaseError1;
    
-   assign symEnOut = symEnAcs;
-   assign sym2xEnOut = sym2xEnAcs;
 //   assign phaseErrorEn = symEnAcs & phaseErrorValid;
    assign phaseErrorEn = symEnAcs;
-
-
+   
+   
 `ifdef USE_TRACEBACK
    wire [1:0] tbDecision;
    traceBackMultiH traceBackMultiH
@@ -573,24 +571,35 @@ module viterbiMultiH
       .clk       (clk     ), 
       .reset     (reset   ), 
       .symEn     (symEnAcs),
+      .sym2xEn   (sym2xEnAcs),
       .symEnEven (symEnEvenAcsMux),   
-      .decTbtIn  (decTbtIn),
-      .sel0      (selOut0r ), .sel1 (selOut1r ), .sel2 (selOut2r ), .sel3 (selOut3r ), .sel4 (selOut4r ), .sel5 (selOut5r ), .sel6 (selOut6r ), .sel7 (selOut7r ),
-      .sel8      (selOut8r ), .sel9 (selOut9r ), .sel10(selOut10r), .sel11(selOut11r), .sel12(selOut12r), .sel13(selOut13r), .sel14(selOut14r), .sel15(selOut15r),
-      .sel16     (selOut16r), .sel17(selOut17r), .sel18(selOut18r), .sel19(selOut19r), .sel20(selOut20r), .sel21(selOut21r), .sel22(selOut22r), .sel23(selOut23r),
-      .sel24     (selOut24r), .sel25(selOut25r), .sel26(selOut26r), .sel27(selOut27r), .sel28(selOut28r), .sel29(selOut29r), .sel30(selOut30r), .sel31(selOut31r),
-      .sel32     (selOut32r), .sel33(selOut33r), .sel34(selOut34r), .sel35(selOut35r), .sel36(selOut36r), .sel37(selOut37r), .sel38(selOut38r), .sel39(selOut39r),
-      .sel40     (selOut40r), .sel41(selOut41r), .sel42(selOut42r), .sel43(selOut43r), .sel44(selOut44r), .sel45(selOut45r), .sel46(selOut46r), .sel47(selOut47r),
-      .sel48     (selOut48r), .sel49(selOut49r), .sel50(selOut50r), .sel51(selOut51r), .sel52(selOut52r), .sel53(selOut53r), .sel54(selOut54r), .sel55(selOut55r),
-      .sel56     (selOut56r), .sel57(selOut57r), .sel58(selOut58r), .sel59(selOut59r), .sel60(selOut60r), .sel61(selOut61r), .sel62(selOut62r), .sel63(selOut63r),
+      .sel0      (selOut0 ), .sel1 (selOut1 ), .sel2 (selOut2 ), .sel3 (selOut3 ), .sel4 (selOut4 ), .sel5 (selOut5 ), .sel6 (selOut6 ), .sel7 (selOut7 ),
+      .sel8      (selOut8 ), .sel9 (selOut9 ), .sel10(selOut10), .sel11(selOut11), .sel12(selOut12), .sel13(selOut13), .sel14(selOut14), .sel15(selOut15),
+      .sel16     (selOut16), .sel17(selOut17), .sel18(selOut18), .sel19(selOut19), .sel20(selOut20), .sel21(selOut21), .sel22(selOut22), .sel23(selOut23),
+      .sel24     (selOut24), .sel25(selOut25), .sel26(selOut26), .sel27(selOut27), .sel28(selOut28), .sel29(selOut29), .sel30(selOut30), .sel31(selOut31),
+      .sel32     (selOut32), .sel33(selOut33), .sel34(selOut34), .sel35(selOut35), .sel36(selOut36), .sel37(selOut37), .sel38(selOut38), .sel39(selOut39),
+      .sel40     (selOut40), .sel41(selOut41), .sel42(selOut42), .sel43(selOut43), .sel44(selOut44), .sel45(selOut45), .sel46(selOut46), .sel47(selOut47),
+      .sel48     (selOut48), .sel49(selOut49), .sel50(selOut50), .sel51(selOut51), .sel52(selOut52), .sel53(selOut53), .sel54(selOut54), .sel55(selOut55),
+      .sel56     (selOut56), .sel57(selOut57), .sel58(selOut58), .sel59(selOut59), .sel60(selOut60), .sel61(selOut61), .sel62(selOut62), .sel63(selOut63),
+      .symEnOut  (symEnTb),
+      .sym2xEnOut(sym2xEnTb),
       .index     (index ),
       .decision  (tbDecision)
       );
-    assign decision = tbEnable ? tbDecision : acsDecision;
+   assign     decision = tbEnable ? tbDecision : acsDecision;
+   assign     symEnOut = symEnTb;
+   assign     sym2xEnOut = sym2xEnTb;
+   
+   
 `else
-    assign decision = acsDecision;
+   assign     symEnOut = symEnAcs;
+   assign     sym2xEnOut = sym2xEnAcs;
+   assign     decision = acsDecision;
 `endif
 
+
+   
+/* -----\/----- EXCLUDED -----\/-----
 `ifdef SIMULATE
    always @(posedge clk) begin
       if (symEnAcs) begin
@@ -599,6 +608,12 @@ module viterbiMultiH
       end
    end
 `endif
+ -----/\----- EXCLUDED -----/\----- */
 
+
+
+
+
+   
    
 endmodule // viterbiMultiH

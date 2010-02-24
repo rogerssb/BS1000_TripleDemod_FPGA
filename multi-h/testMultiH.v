@@ -323,8 +323,8 @@ initial indexH=0;
 
 always @(posedge clk)begin
    if (reset) begin cnt <= 0; end
-   //else if(cnt == 10) begin cnt <= 0; end
-   else if(cnt == 13) begin cnt <= 0; end
+   else if(cnt == 18) begin cnt <= 0; end
+   //else if(cnt == 13) begin cnt <= 0; end
    else if (cntEna) begin
       cnt <= cnt +1;
    end
@@ -343,16 +343,16 @@ always @(posedge clk)begin
            dinH <= readMem[indexH];
            indexH <= indexH + 1;
         end
-        6: begin
-        //4: begin
+        //6: begin
+        9: begin
            symEn <= 1;
            sym2xEn <= 1;
            rotSel <= rotSel + 1;
            dinH <= readMem[indexH];
            indexH <= indexH + 1;
         end
-        2,8: begin
-        //2,6: begin
+        //2,8: begin
+        2,11: begin
            symEn <= 0;
            sym2xEn <= 1;
            dinH <= readMem[indexH];

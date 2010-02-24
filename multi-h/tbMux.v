@@ -8,11 +8,11 @@
 
 `timescale 1ns/1ps
 
-module traceBackMultiH
+module tbMux
   (
    clk, 
-   reset, 
-   en,
+   reset,
+   ce,
    symEnEvenToggle,
    cState,
    tbt0 , tbt1 , tbt2 , tbt3 , tbt4 , tbt5 , tbt6 , tbt7 , 
@@ -24,13 +24,13 @@ module traceBackMultiH
    tbt48, tbt49, tbt50, tbt51, tbt52, tbt53, tbt54, tbt55, 
    tbt56, tbt57, tbt58, tbt59, tbt60, tbt61, tbt62, tbt63,
    nState,
-   index,
-   decision
    );
    
-   input              clk,reset,en;
-   input    [5:0]     cState;
-   input    [1:0]     tbt0 , tbt1 , tbt2 , tbt3 , tbt4 , tbt5 , tbt6 , tbt7 , 
+   input              clk,reset;
+   input              ce;
+   input              symEnEvenToggle;
+   input [5:0]        cState;
+   input [1:0]        tbt0 , tbt1 , tbt2 , tbt3 , tbt4 , tbt5 , tbt6 , tbt7 , 
                       tbt8 , tbt9 , tbt10, tbt11, tbt12, tbt13, tbt14, tbt15, 
                       tbt16, tbt17, tbt18, tbt19, tbt20, tbt21, tbt22, tbt23, 
                       tbt24, tbt25, tbt26, tbt27, tbt28, tbt29, tbt30, tbt31, 
@@ -38,35 +38,34 @@ module traceBackMultiH
                       tbt40, tbt41, tbt42, tbt43, tbt44, tbt45, tbt46, tbt47, 
                       tbt48, tbt49, tbt50, tbt51, tbt52, tbt53, tbt54, tbt55, 
                       tbt56, tbt57, tbt58, tbt59, tbt60, tbt61, tbt62, tbt63; // 64 induvidual decision.
-   input    [5:0]     nState;
-   output   [1:0]     decision;
+   output [5:0]       nState;
 
-   reg [1:0]          d;
-
+   reg [1:0]          d; 
+   reg [5:0]          nState;
    
-   always @(symEnEvenToggle or cState[5:2] or d)
-     begin
-        nState[1:0] <= d;
-        if (symEnEvenToggle) begin
-           //nState[5:2] <= cState[5:2]-5*decisionTmp;
-           case (d) // lookup table implementation of above
-             0 : begin nState[5:2] <= cState[5:2]; end 
-             1 : begin nState[5:2] <= cState[5:2]-5; end 
-             2 : begin nState[5:2] <= cState[5:2]-10; end 
-             3 : begin nState[5:2] <= cState[5:2]-15; end
-           endcase
-        end
-        else begin
-           //nState[5:2] <= cState[5:2]-4*decisionTmp;
-           case (d) // lookup table implementation of above
-             0 : begin nState[5:2] <= cState[5:2]; end 
-             1 : begin nState[5:2] <= cState[5:2]-4; end 
-             2 : begin nState[5:2] <= cState[5:2]-8; end 
-             3 : begin nState[5:2] <= cState[5:2]-12; end
-           endcase
-        end
-     end 
-
+   always @(posedge clk) begin
+      nState[1:0] <= d;
+      if (~symEnEvenToggle) begin
+         //nState[5:2] <= cState[5:2]-5*decisionTmp;
+         case (d) // lookup table implementation of above
+           0 : begin nState[5:2] <= cState[5:2]; end 
+           1 : begin nState[5:2] <= cState[5:2]-5; end 
+           2 : begin nState[5:2] <= cState[5:2]-10; end 
+           3 : begin nState[5:2] <= cState[5:2]-15; end
+         endcase
+      end
+      else begin
+         //nState[5:2] <= cState[5:2]-4*decisionTmp;
+         case (d) // lookup table implementation of above
+           0 : begin nState[5:2] <= cState[5:2]; end 
+           1 : begin nState[5:2] <= cState[5:2]-4; end 
+           2 : begin nState[5:2] <= cState[5:2]-8; end 
+           3 : begin nState[5:2] <= cState[5:2]-12; end
+         endcase
+      end
+   end 
+   
+   
    always @(cState or
             tbt0  or tbt1  or tbt2  or tbt3  or tbt4  or tbt5  or tbt6  or tbt7  or 
             tbt8  or tbt9  or tbt10 or tbt11 or tbt12 or tbt13 or tbt14 or tbt15 or 
@@ -77,7 +76,7 @@ module traceBackMultiH
             tbt48 or tbt49 or tbt50 or tbt51 or tbt52 or tbt53 or tbt54 or tbt55 or 
             tbt56 or tbt57 or tbt58 or tbt59 or tbt60 or tbt61 or tbt62 or tbt63
             ) begin
-     case (cState)
+      case (cState)
        0 : begin d <= tbt0 ; end
        1 : begin d <= tbt1 ; end
        2 : begin d <= tbt2 ; end
@@ -145,5 +144,6 @@ module traceBackMultiH
      endcase
    end
 
+   
+endmodule
 
-endmodule // traceBackMultiH
