@@ -23,7 +23,7 @@ module tbMux
    tbt40, tbt41, tbt42, tbt43, tbt44, tbt45, tbt46, tbt47, 
    tbt48, tbt49, tbt50, tbt51, tbt52, tbt53, tbt54, tbt55, 
    tbt56, tbt57, tbt58, tbt59, tbt60, tbt61, tbt62, tbt63,
-   nState,
+   nState
    );
    
    input              clk,reset;
