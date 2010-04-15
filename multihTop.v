@@ -85,7 +85,7 @@ input           symb_pll_vco;
 
 output          sdiOut;
 
-parameter VER_NUMBER = 16'h010c;
+parameter VER_NUMBER = 16'h010d;
 
 wire    [11:0]  addr = {addr11,addr10,addr9,addr8,addr7,addr6,addr5,addr4,addr3,addr2,addr1,1'b0};
 
@@ -497,22 +497,32 @@ decoder decoder
 //******************************************************************************
 
 wire decoder_fifo_dout_i,decoder_fifo_dout_q;
-wire decoder_fifo_empty,decoder_fifo_full,decoder_fifo_ren;
+wire decoder_fifo_empty,decoder_fifo_full,;
+reg  decoder_fifoReadEn;
 wire symb_pll_out;
 
 decoder_output_fifo decoder_output_fifo
   (
   .din({decoder_dout_q,decoder_dout_i}),
   .rd_clk(symb_pll_out),
-  .rd_en(decoder_fifo_ren),
+  .rd_en(decoder_fifoReadEn),
   .rst(decoder_fifo_rs),
   .wr_clk(ck933),
   .wr_en(decoder_cout),
   .dout({decoder_fifo_dout_q,decoder_fifo_dout_i}),
   .empty(decoder_fifo_empty),
   .full(decoder_fifo_full),
-  .prog_full(decoder_fifo_ren)
+  .prog_full(decoder_fifoHalfFull)
   );
+
+always @(posedge symb_pll_out) begin
+    if (decoder_fifo_rs) begin
+        decoder_fifoReadEn <= 0;
+        end
+    else if (decoder_fifoHalfFull) begin
+        decoder_fifoReadEn <= 1;
+        end
+    end
 
 reg pll_space;
 always @(addr) begin
