@@ -85,7 +85,7 @@ input           symb_pll_vco;
 
 output          sdiOut;
 
-parameter VER_NUMBER = 16'h010d;
+parameter VER_NUMBER = 16'h010e;
 
 wire    [11:0]  addr = {addr11,addr10,addr9,addr8,addr7,addr6,addr5,addr4,addr3,addr2,addr1,1'b0};
 
@@ -497,7 +497,7 @@ decoder decoder
 //******************************************************************************
 
 wire decoder_fifo_dout_i,decoder_fifo_dout_q;
-wire decoder_fifo_empty,decoder_fifo_full,;
+wire decoder_fifo_empty,decoder_fifo_full;
 reg  decoder_fifoReadEn;
 wire symb_pll_out;
 
