@@ -56,11 +56,29 @@ always @(posedge clk) begin
         end
     end
 
+
+
+// CIC Compensation
+wire    [17:0]  cicCompOut;
+cicComp cicComp(
+    .clk(clk), 
+    .reset(reset),
+    .sync(clkEn), 
+    .compIn(dataIn),
+    .compOut(cicCompOut)
+    );
+
+`ifdef SIMULATE
+real compReal;
+always @(cicCompOut) compReal = ((cicCompOut > 131071.0) ? (cicCompOut - 262144.0) : cicCompOut)/131072.0;
+`endif
+
+
 // CIC Interpolation Filter
 wire [47:0]cicOut;
 cicInterpolate cicInterpolate(
     .clk(clk), .reset(reset | cicReset), .clkEn(clkEn),
-    .dIn(dataIn),
+    .dIn(cicCompOut),
     .dOut(cicOut)
     );
 wire [17:0]exponentAdjusted;
@@ -80,6 +98,23 @@ mpy18x18 mantissaScaler (
     .p(scaledValue)
     );
 
+wire [31:0] invSincOut;   
+invSinc invSinc 
+  (
+   .clk(clk),
+   .nd(1'b1),
+   .rfd(),
+   .rdy(),
+   .din(scaledValue[33:16]), // Bus [17 : 0] 
+   .dout(invSincOut)); // Bus [31 : 0]
+   
+   
+reg [22:0] invSincOutScaled;
+always @(posedge clk) begin
+   invSincOutScaled <= invSincOut >>> 9; // divide by 512 and keep the sign
+end
+      
+   
 reg     [17:0]  dataOut;
 always @(posedge clk) begin
     if (test) begin
@@ -97,10 +132,10 @@ always @(posedge clk) begin
         end
     else begin
         if (invert) begin
-            dataOut <= -scaledValue[33:16];
+            dataOut <= -invSincOutScaled[22:5];
             end
         else begin
-            dataOut <= scaledValue[33:16];
+            dataOut <= invSincOutScaled[22:5];
             end
         end
     end
