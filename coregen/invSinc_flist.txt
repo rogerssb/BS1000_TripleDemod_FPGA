@@ -1,6 +1,5 @@
 # Output products list for <invSinc>
 core_resources.txt
-hex_invSinc.mif
 invSinc.asy
 invSinc.mif
 invSinc.ngc
@@ -8,7 +7,14 @@ invSinc.sym
 invSinc.v
 invSinc.veo
 invSinc.xco
+invSincCOEFF_auto0_0.mif
+invSincCOEFF_auto0_1.mif
+invSincCOEFF_auto0_2.mif
+invSincCOEFF_auto0_3.mif
+invSincCOEFF_auto0_4.mif
+invSincCOEFF_auto0_5.mif
 invSinc_fir_compiler_v4_0_xst_1.ngc_xst.xrpt
 invSinc_fir_compiler_v4_0_xst_1_vhdl.prj
 invSinc_flist.txt
 invSinc_xmdf.tcl
+invSincfilt_decode_rom.mif

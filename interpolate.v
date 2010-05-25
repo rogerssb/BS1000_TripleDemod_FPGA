@@ -98,22 +98,16 @@ mpy18x18 mantissaScaler (
     .p(scaledValue)
     );
 
-wire [31:0] invSincOut;   
+wire [24:0] invSincOut;   
 invSinc invSinc 
   (
    .clk(clk),
    .nd(1'b1),
    .rfd(),
    .rdy(),
-   .din(scaledValue[33:16]), // Bus [17 : 0] 
-   .dout(invSincOut)); // Bus [31 : 0]
+   .din(scaledValue[33:18]), // Bus [15 : 0] 
+   .dout(invSincOut)); // Bus [24 : 0]
    
-   
-reg [22:0] invSincOutScaled;
-always @(posedge clk) begin
-   invSincOutScaled <= invSincOut >>> 9; // divide by 512 and keep the sign
-end
-      
    
 reg     [17:0]  dataOut;
 always @(posedge clk) begin
@@ -132,10 +126,10 @@ always @(posedge clk) begin
         end
     else begin
         if (invert) begin
-            dataOut <= -invSincOutScaled[22:5];
+            dataOut <= -invSincOut[23:6];
             end
         else begin
-            dataOut <= invSincOutScaled[22:5];
+            dataOut <= invSincOut[23:6];
             end
         end
     end

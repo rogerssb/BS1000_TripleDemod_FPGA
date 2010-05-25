@@ -40,10 +40,6 @@ utilities_xmdf::xmdfSetData $instance FileSet $fcount relative_path core_resourc
 utilities_xmdf::xmdfSetData $instance FileSet $fcount type text
 incr fcount
 
-utilities_xmdf::xmdfSetData $instance FileSet $fcount relative_path hex_invSinc.mif
-utilities_xmdf::xmdfSetData $instance FileSet $fcount type AnyView
-incr fcount
-
 utilities_xmdf::xmdfSetData $instance FileSet $fcount relative_path invSinc.asy
 utilities_xmdf::xmdfSetData $instance FileSet $fcount type asy
 incr fcount
@@ -72,6 +68,30 @@ utilities_xmdf::xmdfSetData $instance FileSet $fcount relative_path invSinc.xco
 utilities_xmdf::xmdfSetData $instance FileSet $fcount type coregen_ip
 incr fcount
 
+utilities_xmdf::xmdfSetData $instance FileSet $fcount relative_path invSincCOEFF_auto0_0.mif
+utilities_xmdf::xmdfSetData $instance FileSet $fcount type AnyView
+incr fcount
+
+utilities_xmdf::xmdfSetData $instance FileSet $fcount relative_path invSincCOEFF_auto0_1.mif
+utilities_xmdf::xmdfSetData $instance FileSet $fcount type AnyView
+incr fcount
+
+utilities_xmdf::xmdfSetData $instance FileSet $fcount relative_path invSincCOEFF_auto0_2.mif
+utilities_xmdf::xmdfSetData $instance FileSet $fcount type AnyView
+incr fcount
+
+utilities_xmdf::xmdfSetData $instance FileSet $fcount relative_path invSincCOEFF_auto0_3.mif
+utilities_xmdf::xmdfSetData $instance FileSet $fcount type AnyView
+incr fcount
+
+utilities_xmdf::xmdfSetData $instance FileSet $fcount relative_path invSincCOEFF_auto0_4.mif
+utilities_xmdf::xmdfSetData $instance FileSet $fcount type AnyView
+incr fcount
+
+utilities_xmdf::xmdfSetData $instance FileSet $fcount relative_path invSincCOEFF_auto0_5.mif
+utilities_xmdf::xmdfSetData $instance FileSet $fcount type AnyView
+incr fcount
+
 utilities_xmdf::xmdfSetData $instance FileSet $fcount relative_path invSinc_fir_compiler_v4_0_xst_1.ngc_xst.xrpt
 utilities_xmdf::xmdfSetData $instance FileSet $fcount type AnyView
 incr fcount
@@ -81,6 +101,10 @@ utilities_xmdf::xmdfSetData $instance FileSet $fcount type AnyView
 incr fcount
 
 utilities_xmdf::xmdfSetData $instance FileSet $fcount relative_path invSinc_xmdf.tcl
+utilities_xmdf::xmdfSetData $instance FileSet $fcount type AnyView
+incr fcount
+
+utilities_xmdf::xmdfSetData $instance FileSet $fcount relative_path invSincfilt_decode_rom.mif
 utilities_xmdf::xmdfSetData $instance FileSet $fcount type AnyView
 incr fcount
 

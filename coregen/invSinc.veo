@@ -36,7 +36,7 @@ invSinc YourInstanceName (
 	.nd(nd),
 	.rfd(rfd),
 	.rdy(rdy),
-	.din(din), // Bus [17 : 0] 
-	.dout(dout)); // Bus [31 : 0] 
+	.din(din), // Bus [15 : 0] 
+	.dout(dout)); // Bus [24 : 0] 
 
 // INST_TAG_END ------ End INSTANTIATION Template ---------
