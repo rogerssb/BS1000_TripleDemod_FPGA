@@ -126,10 +126,10 @@ always @(posedge clk) begin
         end
     else begin
         if (invert) begin
-            dataOut <= -invSincOut[23:6];
+            dataOut <= -invSincOut[24:7];
             end
         else begin
-            dataOut <= invSincOut[23:6];
+            dataOut <= invSincOut[24:7];
             end
         end
     end
