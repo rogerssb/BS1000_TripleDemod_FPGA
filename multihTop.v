@@ -85,7 +85,7 @@ input           symb_pll_vco;
 
 output          sdiOut;
 
-parameter VER_NUMBER = 16'h010e;
+parameter VER_NUMBER = 16'h0116;
 
 wire    [11:0]  addr = {addr11,addr10,addr9,addr8,addr7,addr6,addr5,addr4,addr3,addr2,addr1,1'b0};
 
@@ -469,8 +469,6 @@ always @(posedge ck933) begin
         end
     end
 
-wire [2:0]decoder_iIn = {iDec,2'b0}; 
-wire [2:0]decoder_qIn = {qDec,2'b0};
 decoder decoder
   (
   .rs(reset),
@@ -483,8 +481,8 @@ decoder decoder
   .clk(ck933),
   .symb_clk_en(decoderSymEn),       // symbol rate clock enable
   .symb_clk_2x_en(decoderSym2xEn),  // 2x symbol rate clock enable
-  .symb_i(decoder_iIn),             // input, i
-  .symb_q(decoder_qIn),             // input, q
+  .symb_i(iDec),                    // input, i
+  .symb_q(qDec),                    // input, q
   .dout_i(decoder_dout_i),          // output, i data
   .dout_q(decoder_dout_q),          // output, q data
   .cout(decoder_cout),              // output, i/q clock
