@@ -68,8 +68,18 @@
 `define FM_MOD_CIC      12'bxxxx_xxxx_11xx
 
 // Define the DDC memory map
-`define DDC_CENTER_FREQ 12'bxxxx_xxxx_00xx
-`define DDC_CONTROL     12'bxxxx_xxxx_01xx
+//`define DDC_CENTER_FREQ 12'bxxxx_xxxx_00xx
+//`define DDC_CONTROL     12'bxxxx_xxxx_01xx
+`define DDC_CENTER_FREQ 12'bxxxx_xx00_00xx
+`define DDC_CONTROL     12'bxxxx_xx00_01xx
+`define DDC_FIR_COEFF_0 12'bxxxx_xx00_10xx
+`define DDC_FIR_COEFF_1 12'bxxxx_xx00_11xx
+`define DDC_FIR_COEFF_2 12'bxxxx_xx01_00xx
+`define DDC_FIR_COEFF_3 12'bxxxx_xx01_01xx
+`define DDC_FIR_COEFF_4 12'bxxxx_xx01_10xx
+`define DDC_FIR_COEFF_5 12'bxxxx_xx01_11xx
+`define DDC_FIR_COEFF_6 12'bxxxx_xx10_00xx
+`define DDC_FIR_COEFF_7 12'bxxxx_xx10_01xx
 
 // Define the CIC Decimator memory map
 `define CIC_DECIMATION  12'bxxxx_xxxx_00xx
