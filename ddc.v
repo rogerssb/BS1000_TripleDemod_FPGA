@@ -34,12 +34,18 @@ output  [17:0]  qOut;
 
 // Microprocessor interface
 reg ddcSpace;
+reg ddcFirSpace;
 always @(addr) begin
     casex(addr)
-        `DDCSPACE: ddcSpace <= 1;
-        default:   ddcSpace <= 0;
+        `DDCSPACE:      ddcSpace <= 1;
+        `DDCFIRSPACE:   ddcFirSpace <= 1;
+        default:   begin
+                        ddcSpace <= 0;
+                        ddcFirSpace <= 0;
+            end
         endcase
     end
+
 wire [31:0]ddcCenterFreq;
 wire [31:0]ddcDout;
 ddcRegs micro(
@@ -152,12 +158,6 @@ dualDecimator cic(
     .syncOut(cicSyncOut)
     );
 
-`ifdef MUX_ONLY
-wire    [47:0]  iAgcIn,qAgcIn;
-assign          iAgcIn = bypassCic ? {iHb0,30'h0} : iCic;
-assign          qAgcIn = bypassCic ? {qHb0,30'h0} : qCic;
-wire            agcSync = bypassCic ? hb0SyncOut : cicSyncOut;
-`else
 reg     [47:0]  iAgcIn,qAgcIn;
 reg             agcSync;
 always @(posedge clk) begin
@@ -172,7 +172,7 @@ always @(posedge clk) begin
         agcSync <= cicSyncOut;
         end
     end
-`endif
+
 wire    [17:0]  iAgc,qAgc;
 variableGain gainI(
     .clk(clk), .clkEn(agcSync),
@@ -229,21 +229,60 @@ halfbandDecimate hb(
     .clk(clk), .reset(reset), .sync(agcSync),
 `endif
     .iIn(iHbIn),.qIn(qHbIn),
-    .iOut(iHb),.qOut(qHb),
-    .syncOut(hbSyncOut)
+    .iOut(iHb1),.qOut(qHb1),
+    .syncOut(hb1SyncOut)
     );
 
 `ifdef SIMULATE
 real iHbReal;
 real qHbReal;
-always @(iHb) iHbReal = ((iHb > 131071.0) ? (iHb - 262144.0) : iHb)/131072.0;
-always @(qHb) qHbReal = ((qHb > 131071.0) ? (qHb - 262144.0) : qHb)/131072.0;
+always @(iHb1) iHbReal = ((iHb1 > 131071.0) ? (iHb1 - 262144.0) : iHb1)/131072.0;
+always @(qHb1) qHbReal = ((qHb1 > 131071.0) ? (qHb1 - 262144.0) : qHb1)/131072.0;
 `endif
 
-`ifdef MUX_ONLY
-assign iBB = bypassHb ? iAgc : iHb;
-assign qBB = bypassHb ? qAgc : qHb;
-assign syncOut = bypassHb ? agcSync : hbSyncOut;
+`ifdef USE_DDC_FIR
+
+reg     [17:0]  iHb;
+reg     [17:0]  qHb;
+reg             hbSyncOut;
+always @(posedge clk) begin
+    if (bypassHb) begin
+        iHb <= iAgc;
+        qHb <= qAgc;
+        hbSyncOut <= agcSync;
+        end
+    else begin
+        iHb <= iHb1;
+        qHb <= qHb1;
+        hbSyncOut <= hb1SyncOut;
+        end
+    end
+
+wire    [31:0]  ddcFirDout;
+dualFir dualFir ( 
+    .clk(clk), .reset(reset), .syncIn(hbSyncOut),
+    .cs(ddcFirSpace), 
+    .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+    .addr(addr),
+    .din(din),
+    .dout(ddcFirDout),
+    .iIn(iHb),.qIn(qHb),
+    .iOut(iFir),.qOut(qFir)
+    );
+
+reg     [17:0]  iBB,qBB;
+always @(posedge clk) begin
+    if (bypassFir) begin
+        iBB <= iHb;
+        qBB <= qHb;
+        syncOut <= hbSyncOut;
+        end
+    else begin
+        iBB <= iFir;
+        qBB <= qFir;
+        syncOut <= hbSyncOut;
+        end
+    end
 `else
 reg     [17:0]  iBB;
 reg     [17:0]  qBB;
@@ -255,11 +294,12 @@ always @(posedge clk) begin
         syncOut <= agcSync;
         end
     else begin
-        iBB <= iHb;
-        qBB <= qHb;
+        iBB <= iHb1;
+        qBB <= qHb1;
         syncOut <= hbSyncOut;
         end
     end
+
 `endif
 
 // Lead Complex Mixer
@@ -313,9 +353,10 @@ always @(qOut) qOutReal = ((qOut > 131071.0) ? (qOut - 262144.0) : qOut)/131072.
 
 
 reg [31:0]dout;
-always @(addr or cicDout or ddcDout) begin
+always @(addr or cicDout or ddcDout or ddcFirDout) begin
     casex (addr)
         `DDCSPACE:          dout <= ddcDout;
+        `DDCFIRSPACE:       dout <= ddcFirDout;
         `CICDECSPACE:       dout <= cicDout;    
         default:            dout <= 32'bx;
         endcase

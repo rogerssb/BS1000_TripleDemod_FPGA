@@ -4,7 +4,8 @@
 // Split the memory space for the different functions
 `define DEMODSPACE      12'b0000_0xxx_xxxx
 `define FMMODSPACE      12'b0001_xxxx_xxxx
-`define DDCSPACE        12'b0010_xxxx_xxxx
+`define DDCSPACE        12'b0010_0xxx_xxxx
+`define DDCFIRSPACE     12'b0010_1xxx_xxxx
 `define CICDECSPACE     12'b0011_xxxx_xxxx
 `define BITSYNCSPACE    12'b0100_0xxx_xxxx
 `define BITSYNCAUSPACE  12'b0100_1xxx_xxxx
@@ -68,18 +69,18 @@
 `define FM_MOD_CIC      12'bxxxx_xxxx_11xx
 
 // Define the DDC memory map
-//`define DDC_CENTER_FREQ 12'bxxxx_xxxx_00xx
-//`define DDC_CONTROL     12'bxxxx_xxxx_01xx
-`define DDC_CENTER_FREQ 12'bxxxx_xx00_00xx
-`define DDC_CONTROL     12'bxxxx_xx00_01xx
-`define DDC_FIR_COEFF_0 12'bxxxx_xx00_10xx
-`define DDC_FIR_COEFF_1 12'bxxxx_xx00_11xx
-`define DDC_FIR_COEFF_2 12'bxxxx_xx01_00xx
-`define DDC_FIR_COEFF_3 12'bxxxx_xx01_01xx
-`define DDC_FIR_COEFF_4 12'bxxxx_xx01_10xx
-`define DDC_FIR_COEFF_5 12'bxxxx_xx01_11xx
-`define DDC_FIR_COEFF_6 12'bxxxx_xx10_00xx
-`define DDC_FIR_COEFF_7 12'bxxxx_xx10_01xx
+`define DDC_CENTER_FREQ 12'bxxxx_xxxx_00xx
+`define DDC_CONTROL     12'bxxxx_xxxx_01xx
+
+// Define the DDC Fir memory map
+`define DDC_FIR_COEFF_0 12'bxxxx_xxxx_000x
+`define DDC_FIR_COEFF_1 12'bxxxx_xxxx_001x
+`define DDC_FIR_COEFF_2 12'bxxxx_xxxx_010x
+`define DDC_FIR_COEFF_3 12'bxxxx_xxxx_011x
+`define DDC_FIR_COEFF_4 12'bxxxx_xxxx_100x
+`define DDC_FIR_COEFF_5 12'bxxxx_xxxx_101x
+`define DDC_FIR_COEFF_6 12'bxxxx_xxxx_110x
+`define DDC_FIR_COEFF_7 12'bxxxx_xxxx_111x
 
 // Define the CIC Decimator memory map
 `define CIC_DECIMATION  12'bxxxx_xxxx_00xx

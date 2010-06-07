@@ -367,7 +367,7 @@ decoder decoder
   .clk(clk),
   .symb_clk_en(symEn),
   .symb_clk_2x_en(symX2En),
-  .symb_i({demodBit,2'b0}),
+  .symb_i(demodBit),
   .symb_q(),
   .dout_i(),
   .dout_q(),
@@ -636,7 +636,7 @@ initial begin
     write32(createAddress(`INTERP1SPACE, `INTERP_CONTROL),0);
     write32(createAddress(`INTERP1SPACE, `INTERP_EXPONENT), 8);
     write32(createAddress(`INTERP1SPACE, `INTERP_MANTISSA), 32'h00012000);
-    write32(createAddress(`INTERP2SPACE, `INTERP_CONTROL),1);
+    write32(createAddress(`INTERP2SPACE, `INTERP_CONTROL),0);
     write32(createAddress(`INTERP2SPACE, `INTERP_EXPONENT), 8);
     write32(createAddress(`INTERP2SPACE, `INTERP_MANTISSA), 32'h00012000);
 

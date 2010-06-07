@@ -53,13 +53,9 @@ module ddcFirCoeffRegs
       if (cs) begin
          casex (addr)
            `DDC_FIR_COEFF_0: begin c0[7:0] <= dataIn[7:0]; end
-           `DDC_FIR_COEFF_1: begin c1[7:0] <= dataIn[7:0]; end
            `DDC_FIR_COEFF_2: begin c2[7:0] <= dataIn[7:0]; end
-           `DDC_FIR_COEFF_3: begin c3[7:0] <= dataIn[7:0]; end
            `DDC_FIR_COEFF_4: begin c4[7:0] <= dataIn[7:0]; end
-           `DDC_FIR_COEFF_5: begin c5[7:0] <= dataIn[7:0]; end
            `DDC_FIR_COEFF_6: begin c6[7:0] <= dataIn[7:0]; end
-           `DDC_FIR_COEFF_7: begin c7[7:0] <= dataIn[7:0]; end
            default: ;
          endcase
       end
@@ -69,50 +65,51 @@ module ddcFirCoeffRegs
       if (cs) begin
          casex (addr)
            `DDC_FIR_COEFF_0: begin c0[15:8] <= dataIn[15:8]; end
-           `DDC_FIR_COEFF_1: begin c1[15:8] <= dataIn[15:8]; end
            `DDC_FIR_COEFF_2: begin c2[15:8] <= dataIn[15:8]; end
-           `DDC_FIR_COEFF_3: begin c3[15:8] <= dataIn[15:8]; end
            `DDC_FIR_COEFF_4: begin c4[15:8] <= dataIn[15:8]; end
-           `DDC_FIR_COEFF_5: begin c5[15:8] <= dataIn[15:8]; end
            `DDC_FIR_COEFF_6: begin c6[15:8] <= dataIn[15:8]; end
-           `DDC_FIR_COEFF_7: begin c7[15:8] <= dataIn[15:8]; end
-           default: ;
-         endcase
-      end
-   end
-  /* -----\/----- EXCLUDED -----\/-----
-   always @(negedge wr2) begin
-      if (cs) begin
-         casex (addr)
-           `DDC_FIR_COEFF_0: begin c0[17:16] <= dataIn[17:16]; end
-           `DDC_FIR_COEFF_1: begin c1[17:16] <= dataIn[17:16]; end
-           `DDC_FIR_COEFF_2: begin c2[17:16] <= dataIn[17:16]; end
-           `DDC_FIR_COEFF_3: begin c3[17:16] <= dataIn[17:16]; end
-           `DDC_FIR_COEFF_4: begin c4[17:16] <= dataIn[17:16]; end
-           `DDC_FIR_COEFF_5: begin c5[17:16] <= dataIn[17:16]; end
-           `DDC_FIR_COEFF_6: begin c6[17:16] <= dataIn[17:16]; end
-           `DDC_FIR_COEFF_7: begin c7[17:16] <= dataIn[17:16]; end
            default: ;
          endcase
       end
    end
 
+   always @(negedge wr2) begin
+      if (cs) begin
+         casex (addr)
+           `DDC_FIR_COEFF_1: begin c1[7:0] <= dataIn[23:16]; end
+           `DDC_FIR_COEFF_3: begin c3[7:0] <= dataIn[23:16]; end
+           `DDC_FIR_COEFF_5: begin c5[7:0] <= dataIn[23:16]; end
+           `DDC_FIR_COEFF_7: begin c7[7:0] <= dataIn[23:16]; end
+           default: ;
+         endcase
+      end
+   end
    
-   -----/\----- EXCLUDED -----/\----- */
-   
+   always @(negedge wr3) begin
+      if (cs) begin
+         casex (addr)
+           `DDC_FIR_COEFF_1: begin c1[15:8] <= dataIn[31:24]; end
+           `DDC_FIR_COEFF_3: begin c3[15:8] <= dataIn[31:24]; end
+           `DDC_FIR_COEFF_5: begin c5[15:8] <= dataIn[31:24]; end
+           `DDC_FIR_COEFF_7: begin c7[15:8] <= dataIn[31:24]; end
+           default: ;
+         endcase
+      end
+   end
+
    reg [31:0]dataOut;
    always @(addr or cs or
             c0 or c1 or c2 or c3 or c4 or c5 or c6 or c7) begin
       if (cs) begin
          casex (addr)
-           `DDC_FIR_COEFF_0:    dataOut <= {16'bx, c0};
-           `DDC_FIR_COEFF_1:    dataOut <= {16'bx, c1};
-           `DDC_FIR_COEFF_2:    dataOut <= {16'bx, c2};
-           `DDC_FIR_COEFF_3:    dataOut <= {16'bx, c3};
-           `DDC_FIR_COEFF_4:    dataOut <= {16'bx, c4};
-           `DDC_FIR_COEFF_5:    dataOut <= {16'bx, c5};
-           `DDC_FIR_COEFF_6:    dataOut <= {16'bx, c6};
-           `DDC_FIR_COEFF_7:    dataOut <= {16'bx, c7};
+           `DDC_FIR_COEFF_0:    dataOut <= {c1, c0};
+           `DDC_FIR_COEFF_1:    dataOut <= {c1, c0};
+           `DDC_FIR_COEFF_2:    dataOut <= {c3, c2};
+           `DDC_FIR_COEFF_3:    dataOut <= {c3, c2};
+           `DDC_FIR_COEFF_4:    dataOut <= {c5, c4};
+           `DDC_FIR_COEFF_5:    dataOut <= {c5, c4};
+           `DDC_FIR_COEFF_6:    dataOut <= {c7, c6};
+           `DDC_FIR_COEFF_7:    dataOut <= {c7, c6};
            default         :    dataOut <= 32'hx;
          endcase
       end
