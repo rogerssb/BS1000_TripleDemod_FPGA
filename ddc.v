@@ -1,6 +1,8 @@
 `timescale 1ns / 10 ps
 `include ".\addressMap.v"
 
+`define USE_DDC_FIR
+
 module ddc( clk, reset, syncIn, 
             wr0,wr1,wr2,wr3,
             addr,
@@ -56,6 +58,9 @@ ddcRegs micro(
     .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
     .bypassCic(bypassCic),
     .bypassHb(bypassHb),
+    `ifdef USE_DDC_FIR
+    .bypassFir(bypassFir),
+    `endif
     .ddcCenterFreq(ddcCenterFreq)
     );
 
@@ -137,6 +142,22 @@ always @(iHb0) iHb0Real = ((iHb0 > 131071.0) ? (iHb0 - 262144.0) : iHb0)/131072.
 always @(qHb0) qHb0Real = ((qHb0 > 131071.0) ? (qHb0 - 262144.0) : qHb0)/131072.0;
 `endif
 
+// If bypassing the CIC decimator, force its clock enable off to save power
+reg     [17:0]  iCicIn,qCicIn;
+reg             cicClockEn;
+always @(posedge clk) begin      
+    if (bypassCic) begin
+        cicClockEn <= 0;
+        iCicIn <= 0;
+        qCicIn <= 0;
+        end
+    else begin
+        cicClockEn <= hb0SyncOut;
+        iCicIn <= iHb0;
+        qCicIn <= qHb0;
+        end
+    end
+
 // CIC Decimator
 wire [47:0]iCic,qCic;
 wire cicSyncOut;
@@ -144,16 +165,16 @@ wire [31:0]cicDout;
 `ifdef SIMULATE
 reg cicReset;
 dualDecimator cic( 
-    .clk(clk), .reset(cicReset), .sync(hb0SyncOut),
+    .clk(clk), .reset(cicReset), .sync(cicClockEn),
 `else
 dualDecimator cic( 
-    .clk(clk), .reset(reset), .sync(hb0SyncOut),
+    .clk(clk), .reset(reset), .sync(cicClockEn),
 `endif
     .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
     .addr(addr),
     .din(din),
     .dout(cicDout),
-    .inI(iHb0),.inQ(qHb0),
+    .inI(iCicIn),.inQ(qCicIn),
     .outI(iCic),.outQ(qCic),
     .syncOut(cicSyncOut)
     );
@@ -216,51 +237,74 @@ real qCompReal;
 always @(iComp) iCompReal = ((iComp > 131071.0) ? (iComp - 262144.0) : iComp)/131072.0;
 always @(qComp) qCompReal = ((qComp > 131071.0) ? (qComp - 262144.0) : qComp)/131072.0;
 `endif
+wire    [17:0]  iMux = bypassCic ? iAgc : iComp;
+wire    [17:0]  qMux = bypassCic ? qAgc : qComp;
+
+
+// If bypassing the second halfband, force its clock enable off to save power
+reg     [17:0]  iHbIn,qHbIn;
+reg             hbClockEn;
+always @(posedge clk) begin      
+    if (bypassHb) begin
+        hbClockEn <= 0;
+        iHbIn <= 0;
+        qHbIn <= 0;
+        end
+    else begin
+        hbClockEn <= agcSync;
+        iHbIn <= iMux;
+        qHbIn <= qMux;
+        end
+    end
 
 // Second Halfband Filter
-wire    [17:0]  iHbIn,qHbIn;
-assign iHbIn = bypassCic ? iAgc : iComp;
-assign qHbIn = bypassCic ? qAgc : qComp;
 wire [17:0]iHb,qHb;
 halfbandDecimate hb( 
 `ifdef SIMULATE
-    .clk(clk), .reset(cicReset), .sync(agcSync),
+    .clk(clk), .reset(cicReset), .sync(hbClockEn),
 `else
-    .clk(clk), .reset(reset), .sync(agcSync),
+    .clk(clk), .reset(reset), .sync(hbClockEn),
 `endif
     .iIn(iHbIn),.qIn(qHbIn),
-    .iOut(iHb1),.qOut(qHb1),
-    .syncOut(hb1SyncOut)
+    .iOut(iHb),.qOut(qHb),
+    .syncOut(hbSyncOut)
     );
 
 `ifdef SIMULATE
 real iHbReal;
 real qHbReal;
-always @(iHb1) iHbReal = ((iHb1 > 131071.0) ? (iHb1 - 262144.0) : iHb1)/131072.0;
-always @(qHb1) qHbReal = ((qHb1 > 131071.0) ? (qHb1 - 262144.0) : qHb1)/131072.0;
+always @(iHb) iHbReal = ((iHb > 131071.0) ? (iHb - 262144.0) : iHb)/131072.0;
+always @(qHb) qHbReal = ((qHb > 131071.0) ? (qHb - 262144.0) : qHb)/131072.0;
 `endif
 
 `ifdef USE_DDC_FIR
-
-reg     [17:0]  iHb;
-reg     [17:0]  qHb;
-reg             hbSyncOut;
+reg     [17:0]  iFirIn;
+reg     [17:0]  qFirIn;
+reg             firClockEn;
 always @(posedge clk) begin
-    if (bypassHb) begin
-        iHb <= iAgc;
-        qHb <= qAgc;
-        hbSyncOut <= agcSync;
+    if (bypassFir) begin
+        firClockEn <= 0;
+        iFirIn <= 0;
+        qFirIn <= 0;
         end
     else begin
-        iHb <= iHb1;
-        qHb <= qHb1;
-        hbSyncOut <= hb1SyncOut;
+        if (bypassHb) begin
+            firClockEn <= agcSync;
+            iFirIn <= iMux;
+            qFirIn <= qMux;
+            end
+        else begin
+            firClockEn <= hbSyncOut;
+            iFirIn <= iHb;
+            qFirIn <= qHb;
+            end
         end
     end
 
 wire    [31:0]  ddcFirDout;
+wire    [17:0]  iFir,qFir;
 dualFir dualFir ( 
-    .clk(clk), .reset(reset), .syncIn(hbSyncOut),
+    .clk(clk), .reset(reset), .syncIn(firClockEn),
     .cs(ddcFirSpace), 
     .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
     .addr(addr),
@@ -271,16 +315,27 @@ dualFir dualFir (
     );
 
 reg     [17:0]  iBB,qBB;
+reg             syncOut;
 always @(posedge clk) begin
     if (bypassFir) begin
         iBB <= iHb;
         qBB <= qHb;
         syncOut <= hbSyncOut;
+        if (bypassHb) begin
+            syncOut <= agcSync;
+            iBB <= iMux;
+            qBB <= qMux;
+            end
+        else begin
+            syncOut <= hbSyncOut;
+            iBB <= iHb;
+            qBB <= qHb;
+            end
         end
     else begin
         iBB <= iFir;
         qBB <= qFir;
-        syncOut <= hbSyncOut;
+        syncOut <= firClockEn;
         end
     end
 `else
@@ -289,13 +344,13 @@ reg     [17:0]  qBB;
 reg             syncOut;
 always @(posedge clk) begin
     if (bypassHb) begin
-        iBB <= iAgc;
-        qBB <= qAgc;
+        iBB <= iMux;
+        qBB <= qMux;
         syncOut <= agcSync;
         end
     else begin
-        iBB <= iHb1;
-        qBB <= qHb1;
+        iBB <= iHb;
+        qBB <= qHb;
         syncOut <= hbSyncOut;
         end
     end
@@ -352,6 +407,7 @@ always @(qOut) qOutReal = ((qOut > 131071.0) ? (qOut - 262144.0) : qOut)/131072.
 `endif
 
 
+`ifdef USE_DDC_FIR
 reg [31:0]dout;
 always @(addr or cicDout or ddcDout or ddcFirDout) begin
     casex (addr)
@@ -361,6 +417,16 @@ always @(addr or cicDout or ddcDout or ddcFirDout) begin
         default:            dout <= 32'bx;
         endcase
     end
+`else
+reg [31:0]dout;
+always @(addr or cicDout or ddcDout) begin
+    casex (addr)
+        `DDCSPACE:          dout <= ddcDout;
+        `CICDECSPACE:       dout <= cicDout;    
+        default:            dout <= 32'bx;
+        endcase
+    end
+`endif
 
 endmodule
                      

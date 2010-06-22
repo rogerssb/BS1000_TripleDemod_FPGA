@@ -612,7 +612,7 @@ initial begin
     write32(createAddress(`CARRIERSPACE,`LF_LOOPDATA), sweepRate);
 
     // Init the downcoverter register set
-    write32(createAddress(`DDCSPACE,`DDC_CONTROL),0);
+    write32(createAddress(`DDCSPACE,`DDC_CONTROL),4);
     write32(createAddress(`DDCSPACE,`DDC_CENTER_FREQ), carrierFreq);
 
     // Init the cicResampler register set

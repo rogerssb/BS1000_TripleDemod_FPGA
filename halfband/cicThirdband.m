@@ -1,7 +1,7 @@
-fs = 93333.333;   %sampling frequency in KHz
+fs = 40000;   %sampling frequency in KHz
 fn = fs/2;
 
-R = 4;      % Decimation
+R = 8;      % Decimation
 N = 3;      % Order
 M = 1;      % Differential Delay
 
@@ -26,10 +26,10 @@ plot(f.*fs,dBH);
 frs = fs/R;
 frn = frs/2;
 
-taps = 34;
+taps = 37;
 order = taps-1;
 fc = 0.5/3;
-delta = 0.05;
+delta = 0.055;
 bfilter = remez(order,2*[0 fc-delta fc+delta 0.5],[1 1 0 0]);
 
 [Hb,w] = freqz(bfilter,1,plotPoints/R,frs);
@@ -58,5 +58,5 @@ Hcomb = 20*log10(abs(H)) + 20*log10(abs(Hdec));
 plot(wdec, Hcomb, 'r');
 
 %axis([0 fn/R -90 10]);
-axis([0 fn -90 10]);
+axis([0 2*fn/R -90 10]);
 

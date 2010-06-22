@@ -189,8 +189,8 @@ always @ ( posedge clk )
         begin
         if ( feher )
             begin
-            out_sel_i <= feher_demux_i ;
-            out_sel_q <= feher_demux_q ;
+            out_sel_i <= !feher_demux_i ;
+            out_sel_q <= !feher_demux_q ;
             end
         else if ( demux )
             begin

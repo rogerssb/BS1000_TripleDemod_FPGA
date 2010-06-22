@@ -8,9 +8,9 @@ Version=Silvaco4.10.0.R
 DisableCache=
 SimFile=
 [Analyzer]
-C0Width=156
+C0Width=58
 C1Width=58
-C2Width=98
+C2Width=58
 GotoSource=N
 [Spice]
 [LibraryFiles]
@@ -21,7 +21,7 @@ RecirculateTime=
 UseRecirculateTime=
 DiskSize=5000M
 [View]
-1=Last 180455.147ns 186355.588ns 138.508ns 182795.933ns 185821.962ns
+1=Last 39927.002ns 234314.466ns 4563.086ns 155910.764ns 185821.962ns
 [Group0]
 Name=New Group2
 [Group3]
@@ -32,7 +32,6 @@ Name="Micro"
 3="test.demod : wr3" default
 4="test.demod : din[31:0]" default
 5="test.demod : addr[11:0]" default
-OpenGroup=
 [Group2]
 Name="Tx"
 0="test.fmMod : interpReal" default Real AnalogDisplay AType=Step Scale=Auto
@@ -46,7 +45,6 @@ Name="Tx"
 8="test.fmMod : modClk" default
 9="test.fmMod : reset" default
 10="test.fmMod : clk" default
-OpenGroup=
 [PliFiles]
 0=.\gaussPLI\gaussPLI.dll
 [IncDirs]
@@ -74,6 +72,7 @@ Name="Carrier"
 18="test.demod.carrierLoop : negFrequency[18:0]" default
 19="test.demod.carrierLoop : posFrequency[18:0]" default
 20="test.demod.carrierLoop : newFreq[18:0]" default
+OpenGroup=
 [Group1]
 Name="Rx"
 0="test.demod.resampler : reset" default
@@ -97,6 +96,7 @@ Name="Rx"
 18="test.demod.ddc : iMixReal" default Real AnalogDisplay AType=Step Scale=Auto
 19="test : iSignalReal" default Real AnalogDisplay AType=Step Scale=Auto
 20="test : cicDecimationInt" default Decimal AnalogDisplay AType=PWL Scale=Auto
+OpenGroup=Yes
 [Group7]
 Name="SDI"
 0="test.sdi : eyeCount[2:0]" default
@@ -126,7 +126,6 @@ Name="SDI"
 24="test.sdi : muxState[3:0]" default
 25="test.sdi : baudEn" default
 26="test.sdi : baudDiv[15:0]" default
-OpenGroup=
 [Group4]
 Name="Bitsync"
 0="test.demod.bitsync : avgOffsetReal" default Real AnalogDisplay AType=Step Scale=Auto
@@ -169,6 +168,25 @@ Name="Bitsync"
 37="test.demod.resampler.resamplerI : outReal" default Real AnalogDisplay AType=Step Scale=Auto
 38="test.demod.resampler.resamplerI : inReal" default Real AnalogDisplay AType=Step Scale=Auto
 39="test : cicDecimationInt" default Decimal AnalogDisplay AType=PWL Scale=Auto
+[Group6]
+Name="DAC"
+0="test.dac2Interp : invSincOut[31:0]" default
+1="test.dac2Interp : scaledValue[35:0]" default
+2="test.dac2Interp : interpReal" default Real AnalogDisplay AType=Step Scale=Auto
+3="test.dac1Interp : interpReal" default Real AnalogDisplay AType=Step Scale=Auto
+4="test.dac0Interp : interpReal" default Real AnalogDisplay AType=Step Scale=Auto
+5="test.dac0Interp : expAdjReal" default Real AnalogDisplay AType=PWL Scale=Auto
+6="test.dac0Interp : exponentAdjusted[17:0]" default
+7="test.dac0Interp : dataIn[17:0]" default
+8="test.dac0Interp : clkEn" default
+9="test.decoder : dout_i" default
+10="test.decoder : symb_i[2:0]" default
+11="test.decoder : cout" default
+12="test.demod : symTimes2Sync" default Unknown
+13="test.demod : symSync" default Unknown
+14="test.demod : symClk" default Unknown
+15="test.demod : resampSync" default
+16="test.demod : ddcSync" default
 OpenGroup=
 [Files]
 0=test.v
@@ -232,26 +250,10 @@ OpenGroup=
 58=multihEQ.v
 59=.\coregen\oneThird.v
 60=.\coregen\invSinc.v
-[Group6]
-Name="DAC"
-0="test.dac2Interp : invSincOut[31:0]" default
-1="test.dac2Interp : scaledValue[35:0]" default
-2="test.dac2Interp : interpReal" default Real AnalogDisplay AType=Step Scale=Auto
-3="test.dac1Interp : interpReal" default Real AnalogDisplay AType=Step Scale=Auto
-4="test.dac0Interp : interpReal" default Real AnalogDisplay AType=Step Scale=Auto
-5="test.dac0Interp : expAdjReal" default Real AnalogDisplay AType=PWL Scale=Auto
-6="test.dac0Interp : exponentAdjusted[17:0]" default
-7="test.dac0Interp : dataIn[17:0]" default
-8="test.dac0Interp : clkEn" default
-9="test.decoder : dout_i" default
-10="test.decoder : symb_i[2:0]" default
-11="test.decoder : cout" default
-12="test.demod : symTimes2Sync" default Unknown
-13="test.demod : symSync" default Unknown
-14="test.demod : symClk" default Unknown
-15="test.demod : resampSync" default
-16="test.demod : ddcSync" default
-OpenGroup=Yes
+61=singleFir.v
+62=dualFir.v
+63=dualFirCoeffRegs.v
+64=.\coregen\mpy18x18WithCe.v
 [GroupInfo]
 0=New Group2 : 0 : 0 : 0
 1=Tx : 1 : 1 : 0
@@ -261,4 +263,3 @@ OpenGroup=Yes
 5=Carrier : 5 : 1 : 0
 6=DAC : 6 : 1 : 0
 7=SDI : 7 : 1 : 0
-[Bookmarks]

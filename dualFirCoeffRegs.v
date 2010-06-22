@@ -32,10 +32,6 @@ module dualFirCoeffRegs
    input         wr0,wr1,wr2,wr3;
    output [15:0] c0, c1, c2, c3, c4, c5, c6, c7;
 
-`ifdef SIMULATE   
- `define SIM_NO_uP
-`endif
-      
 `ifdef SIM_NO_uP
    initial begin
       c0 =  0.0015*2**15;
