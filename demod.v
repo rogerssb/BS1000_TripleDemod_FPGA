@@ -593,6 +593,7 @@ always @(addr or
         `DEMODSPACE:        dout <= demodDout;
         `CHAGCSPACE:        dout <= nbAgcDout;
         `CICDECSPACE,
+        `DDCFIRSPACE,
         `DDCSPACE:          dout <= ddcDout;
         `RESAMPSPACE:       dout <= resampDout;
         `BITSYNCAUSPACE,

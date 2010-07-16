@@ -310,7 +310,7 @@ dualFir dualFir (
     .addr(addr),
     .din(din),
     .dout(ddcFirDout),
-    .iIn(iHb),.qIn(qHb),
+    .iIn(iFirIn),.qIn(qFirIn),
     .iOut(iFir),.qOut(qFir)
     );
 
