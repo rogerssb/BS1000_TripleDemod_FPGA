@@ -65,7 +65,7 @@ output          auSymClk;
 output          bsync_nLock,demod_nLock;
 output          sdiOut;
 
-parameter VER_NUMBER = 16'h011d;
+parameter VER_NUMBER = 16'h011e;
 
 wire [11:0]addr = {addr11,addr10,addr9,addr8,addr7,addr6,addr5,addr4,addr3,addr2,addr1,1'b0};
 
@@ -418,13 +418,13 @@ wire    trellis2Sync = pcmTrellisMode
 `ifdef RECLOCK_TRELLIS_OUTPUTS
 reg trellisSymEn,trellisSym2xEn,trellisBit;
 always @(posedge ck933) begin
-    trellisSymEn = pcmTrellisMode
+    trellisSymEn <= pcmTrellisMode
                  ? pcmTrellisSymEn
                  : soqpskTrellisSymEn;
-    trellisSym2xEn = pcmTrellisMode
+    trellisSym2xEn <= pcmTrellisMode
                    ? pcmTrellisSym2xEn
                    : soqpskTrellisSym2xEn;
-    trellisBit = pcmTrellisMode
+    trellisBit <= pcmTrellisMode
                ? pcmTrellisBit
                : soqpskTrellisBit;
     end
