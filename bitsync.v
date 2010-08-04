@@ -722,6 +722,10 @@ always @(posedge sampleClk) begin
                             auIQSwap <= ~auIQSwap;
                             end
                         end
+                    else begin
+                        auSwapCounter <= auSwapCount;
+                        auIQSwap <= ~auIQSwap;
+                        end
                     end
                 else begin
                     auLockCounter <= auLockMinus[15:0];
