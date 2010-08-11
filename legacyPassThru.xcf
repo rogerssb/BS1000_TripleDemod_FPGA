@@ -87,4 +87,17 @@ NET "dataSym2xEn" IOB = TRUE;
 NET "iData"       IOB = TRUE;
 NET "qData"       IOB = TRUE;
 NET "auSymClk"    IOB = TRUE;
+
+NET "multihPhaseError<0>"  IOB = TRUE;
+NET "multihPhaseError<1>"  IOB = TRUE;
+NET "multihPhaseError<2>"  IOB = TRUE;
+NET "multihPhaseError<3>"  IOB = TRUE;
+NET "multihPhaseError<4>"  IOB = TRUE;
+NET "multihPhaseError<5>"  IOB = TRUE;
+NET "multihPhaseError<6>"  IOB = TRUE;
+NET "multihPhaseError<7>"  IOB = TRUE;
+
+NET "multihPhaseErrorEn"     IOB = TRUE;
+NET "multihPhaseErrorValid"  IOB = TRUE;
+
 END;

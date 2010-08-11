@@ -39,11 +39,17 @@ reg ddcSpace;
 reg ddcFirSpace;
 always @(addr) begin
     casex(addr)
-        `DDCSPACE:      ddcSpace <= 1;
-        `DDCFIRSPACE:   ddcFirSpace <= 1;
+        `DDCSPACE: begin
+            ddcSpace    <= 1;
+            ddcFirSpace <= 0;
+            end
+        `DDCFIRSPACE: begin
+            ddcSpace    <= 0;
+            ddcFirSpace <= 1;
+            end
         default:   begin
-                        ddcSpace <= 0;
-                        ddcFirSpace <= 0;
+            ddcSpace    <= 0;
+            ddcFirSpace <= 0;
             end
         endcase
     end

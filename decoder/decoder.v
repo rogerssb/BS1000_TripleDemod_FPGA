@@ -141,7 +141,7 @@ always @ ( posedge clk )
         end
     end
 
-reg             demux_i, demux_q ;
+reg             demux_out;
 wire            swap ;
 always @ ( posedge clk )
     begin
@@ -149,12 +149,11 @@ always @ ( posedge clk )
         begin
         if ( swap ^ mux_ctrl )
             begin
-            demux_i <= dec_i ;
+            demux_out <= dec_i ;
             end
         else
             begin
-            demux_i <= dec_q ;
-            demux_q <= dec_q ;
+            demux_out <= dec_q ;
             end
         end
     end
@@ -164,16 +163,15 @@ always @ ( posedge clk )
 //------------------------------------------------------------------------------
 
 reg             dec_delay_i, dec_delay_q ;
-reg             feher_demux_i, feher_demux_q ;
+reg             feher_demux_out;
 always @ ( posedge clk )
     begin
     if ( symb_clk_2x_en )
         begin
         dec_delay_i <= dec_i ;
         dec_delay_q <= dec_q ;
-        feher_demux_i <= ( swap ^ mux_ctrl ) ? ( dec_delay_i ^ dec_q ) :
+        feher_demux_out <= ( swap ^ mux_ctrl ) ? ( dec_delay_i ^ dec_q ) :
                                                ( dec_delay_i ^ !dec_q ) ;
-        feher_demux_q <= dec_delay_q ;
         end
     end
 
@@ -189,13 +187,13 @@ always @ ( posedge clk )
         begin
         if ( feher )
             begin
-            out_sel_i <= !feher_demux_i ;
-            out_sel_q <= !feher_demux_q ;
+            out_sel_i <= !feher_demux_out ;
+            out_sel_q <= feher_demux_out ;
             end
         else if ( demux )
             begin
-            out_sel_i <= demux_i ;
-            out_sel_q <= demux_q ;
+            out_sel_i <= !demux_out ;
+            out_sel_q <= demux_out ;
             end
         else
             begin
