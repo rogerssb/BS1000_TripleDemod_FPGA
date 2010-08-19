@@ -65,7 +65,7 @@ output          auSymClk;
 output          bsync_nLock,demod_nLock;
 output          sdiOut;
 
-parameter VER_NUMBER = 16'h0121;
+parameter VER_NUMBER = 16'h0122;
 
 wire [11:0]addr = {addr11,addr10,addr9,addr8,addr7,addr6,addr5,addr4,addr3,addr2,addr1,1'b0};
 
@@ -424,8 +424,11 @@ always @(posedge ck933) begin
     trellisSym2xEn <= pcmTrellisMode
                    ? pcmTrellisSym2xEn
                    : soqpskTrellisSym2xEn;
+    // The pcmTrellisBit is inverted to correct a polarity problem of the data.
+    // This is the wrong place to fix this, but Semco wanted it done in the
+    // FPGA rather than in software configuration somewhere else.
     trellisBit <= pcmTrellisMode
-               ? pcmTrellisBit
+               ? !pcmTrellisBit
                : soqpskTrellisBit;
     end
 `else
