@@ -65,7 +65,7 @@ output          auSymClk;
 output          bsync_nLock,demod_nLock;
 output          sdiOut;
 
-parameter VER_NUMBER = 16'h0122;
+parameter VER_NUMBER = 16'h0123;
 
 wire [11:0]addr = {addr11,addr10,addr9,addr8,addr7,addr6,addr5,addr4,addr3,addr2,addr1,1'b0};
 
@@ -446,12 +446,19 @@ wire    trellisBit = pcmTrellisMode
 //******************************************************************************
 //                              Demod Outputs
 //******************************************************************************
-
+wire fmModes = ( (demodMode == `MODE_2FSK)
+              || (demodMode == `MODE_FM)
+               );
 wire trellisEn = (pcmTrellisMode || (demodMode == `MODE_SOQPSK));
 reg  iData,qData;
 reg  dataSymEn,dataSym2xEn;
 always @(posedge ck933) begin
-    iData <= trellisEn ? trellisBit : iBit;
+    if (fmModes) begin
+        iData <= trellisEn ? trellisBit : ~iBit;
+        end
+    else begin
+        iData <= trellisEn ? trellisBit : iBit;
+        end
     qData <= trellisEn ? trellisBit : qBit;
     dataSymEn <= trellisEn ? trellisSymEn : iSymEn;
     dataSym2xEn <= trellisEn ? trellisSym2xEn : iSym2xEn;

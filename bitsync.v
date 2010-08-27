@@ -791,7 +791,12 @@ always @(posedge sampleClk) begin
         // Capture the I output sample
         symDataI <= bbSRI[1];
         if (timingErrorEn) begin
-            bitDataI <= bbSRI[1][17];
+            if (fmModes) begin
+                bitDataI <= ~bbSRI[1][17];
+                end
+            else begin
+                bitDataI <= bbSRI[1][17];
+                end
             end
         end
     if (auEnable) begin
