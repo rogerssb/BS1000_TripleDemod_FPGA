@@ -103,6 +103,7 @@ mrk_spc_decode mrk_spc_decode_i
   .last_din     (nrz_delay_i),
   .clk          (clk),
   .clk_en       (symb_clk_en),
+  .biphaseMode  (biphase),
   .biphase_en   (biphase_en),
   .mode         (mode),
   .dout         (dec_i)
@@ -116,6 +117,7 @@ mrk_spc_decode mrk_spc_decode_q
   .last_din     (nrz_delay_q),
   .clk          (clk),
   .clk_en       (symb_clk_en),
+  .biphaseMode  (biphase),
   .biphase_en   (biphase_en),
   .mode         (mode),
   .dout         (dec_q)

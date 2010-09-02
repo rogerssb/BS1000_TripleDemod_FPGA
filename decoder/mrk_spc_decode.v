@@ -17,12 +17,14 @@ module mrk_spc_decode
     last_din,
     clk,
     clk_en,
+    biphaseMode,
     biphase_en,
     mode,
     dout
     ) ;
 
 input             rs, clk, clk_en, biphase_en ;
+input             biphaseMode;
 input             din, last_din ;
 input     [1:0]   mode ;
 output            dout ;
@@ -47,19 +49,19 @@ always @ ( posedge clk or posedge rs )
             case ( mode )
                 Bypass:
                     begin
-                    dout <= din ;
+                    dout <= biphaseMode ? ~din :  din ;
                     end
                 Invert:
                     begin
-                    dout <= ~din ;
+                    dout <= biphaseMode ?  din : ~din ;
                     end
                 Mark:
                     begin
-                    dout <=  din ^ last_din ;
+                    dout <= biphaseMode ? ~(din ^ last_din) :  (din ^ last_din);
                     end
                 Space:
                     begin
-                    dout <= ~(din ^ last_din) ;
+                    dout <= biphaseMode ?  (din ^ last_din) : ~(din ^ last_din);
                     end
                 default:
                     begin
