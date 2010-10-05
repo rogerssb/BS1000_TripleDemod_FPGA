@@ -214,33 +214,47 @@ mpy18x18 mpyFLD1(
     .b(oneMinusFalseLockAlpha), 
     .p(oneMinusAlpha)
     );
+
+
+reg     [17:0]  nextFreqSample;
+always @(demodMode or freq or freqError) begin
+    casex (demodMode)
+        `MODE_OQPSK,
+        `MODE_SOQPSK: begin
+            nextFreqSample = {freq,6'h0};
+            end
+        default: begin
+            nextFreqSample = {freqError,6'h0};
+            end
+        endcase
+    end
+
 wire    [17:0]  negAverageFreq = -averageFreq;
 wire    [17:0]  absAverageFreq = averageFreq[17] ? negAverageFreq : averageFreq;
 reg     [17:0]  prevFreqSample;
 always @(posedge clk) begin
     if (demodSync) begin
-        if ( (demodMode == `MODE_OQPSK)
-          || (demodMode == `MODE_SOQPSK)) begin
-            freqSample <= {freq,6'h0};
+        prevFreqSample <= nextFreqSample;
+        // If the last two frequency estimates were different polarity...
+        if (nextFreqSample[17] ^ prevFreqSample[17]) begin
+            // and both are large amplitude ...
+            if ((nextFreqSample[17] ^ nextFreqSample[16]) && (prevFreqSample[17] ^ prevFreqSample[16])) begin
+                // it means the frequency is wrapping around the number system
+                freqSample <= 0;
+                end
+            else begin
+                freqSample <= nextFreqSample;
+                end
             end
         else begin
-            freqSample <= {freqError,6'h0};
+            freqSample <= nextFreqSample;
             end
-        prevFreqSample <= freqSample;
         averageFreq <= alphaSum[34:17];
         end
     end
 
 always @(posedge clk) begin
     if (demodSync) begin
-        // If the last two frequency estimates were different polarity...
-        if (freqSample[17] ^ prevFreqSample[17]) begin
-            // and both are large amplitude ...
-            if ((freqSample[17] ^ freqSample[16]) && (prevFreqSample[17] ^ prevFreqSample[16])) begin
-                // it means the frequency is wrapping around the number system
-                highFreqOffset <= 1;
-                end
-            end
         else if (absAverageFreq > falseLockThreshold) begin
             highFreqOffset <= !carrierLock;
             end
