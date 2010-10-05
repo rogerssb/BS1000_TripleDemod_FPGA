@@ -242,7 +242,7 @@ always @(posedge clk) begin
                 end
             end
         else if (absAverageFreq > falseLockThreshold) begin
-            highFreqOffset <= 1;
+            highFreqOffset <= !carrierLock;
             end
         else begin
             highFreqOffset <= 0;

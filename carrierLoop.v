@@ -170,7 +170,7 @@ always @(posedge clk) begin
 reg     [11:0]   loopError;
 wire    [11:0]   negModeError = ~modeError + 1;
 reg             carrierLock;
-wire            breakLoop = (zeroError || (sweepEnable && !carrierLock && highFreqOffset));
+wire            breakLoop = (zeroError || (sweepEnable && highFreqOffset));
 always @(posedge clk) begin 
     if (loopFilterEn) begin
         if (breakLoop) begin
