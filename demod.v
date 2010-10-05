@@ -216,6 +216,7 @@ mpy18x18 mpyFLD1(
     );
 wire    [17:0]  negAverageFreq = -averageFreq;
 wire    [17:0]  absAverageFreq = averageFreq[17] ? negAverageFreq : averageFreq;
+reg     [17:0]  prevFreqSample;
 always @(posedge clk) begin
     if (demodSync) begin
         if ( (demodMode == `MODE_OQPSK)
@@ -225,8 +226,22 @@ always @(posedge clk) begin
         else begin
             freqSample <= {freqError,6'h0};
             end
+        prevFreqSample <= freqSample;
         averageFreq <= alphaSum[34:17];
-        if (absAverageFreq > falseLockThreshold) begin
+        end
+    end
+
+always @(posedge clk) begin
+    if (demodSync) begin
+        // If the last two frequency estimates were different polarity...
+        if (freqSample[17] ^ prevFreqSample[17]) begin
+            // and both are large amplitude ...
+            if ((freqSample[17] ^ freqSample[16]) && (prevFreqSample[17] ^ prevFreqSample[16])) begin
+                // it means the frequency is wrapping around the number system
+                highFreqOffset <= 1;
+                end
+            end
+        else if (absAverageFreq > falseLockThreshold) begin
             highFreqOffset <= 1;
             end
         else begin
@@ -336,7 +351,7 @@ always @(posedge clk) begin
 ******************************************************************************/
 wire    [17:0]  iSymData;
 wire    [17:0]  qSymData;
-wire	  [17:0]  bsError;
+wire      [17:0]  bsError;
 wire    [15:0]  bsLockCounter;
 wire    [15:0]  auLockCounter;
 wire    [31:0]  bitsyncDout;
@@ -372,7 +387,7 @@ bitsync bitsync(
     .auLockCounter(auLockCounter),
     .auIQSwap(auIQSwap),
     .iTrellis(iTrellis),.qTrellis(qTrellis),
-	 .bsError(bsError), .bsErrorEn(bsErrorEn)
+         .bsError(bsError), .bsErrorEn(bsErrorEn)
     );
 
 assign trellisSymSync = iSymEn & resampSync;
