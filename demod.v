@@ -154,6 +154,7 @@ channelAGC channelAGC(
 wire    [11:0]   phase;
 wire    [11:0]   phaseError;
 wire    [11:0]   freq;
+wire    [11:0]   negFreq = ~freq + 1;
 wire    [11:0]   freqError;
 wire    [12:0]   mag;
 fmDemod fmDemod( 
@@ -167,6 +168,9 @@ fmDemod fmDemod(
     .mag(mag),
     .syncOut(demodSync)
     );
+    
+wire    [17:0]  fm = {negFreq,6'h0};
+wire    [17:0]  fmInv = {freq,6'h0};    
 
 /******************************************************************************
                            Magnitude Filter
@@ -215,46 +219,60 @@ mpy18x18 mpyFLD1(
     .p(oneMinusAlpha)
     );
 
+// Average the absolute value of the frequency error.
+reg     [17:0]  averageAbsFreq;
+wire    [35:0]  absAlpha;
+reg     [17:0]  absFreqSample;
+mpy18x18 mpyFLD2(
+    .clk(clk), 
+    .sclr(reset),
+    .a(absFreqSample), 
+    .b({falseLockAlpha,2'b0}), 
+    .p(absAlpha)
+    );
+wire    [35:0]  oneMinusAbsAlpha;
+wire    [35:0]  absAlphaSum = absAlpha + oneMinusAbsAlpha;
+mpy18x18 mpyFLD3(
+    .clk(clk), 
+    .sclr(reset),
+    .a(averageAbsFreq), 
+    .b(oneMinusFalseLockAlpha), 
+    .p(oneMinusAbsAlpha)
+    );
+
 
 reg     [17:0]  nextFreqSample;
-always @(demodMode or freq or freqError) begin
+reg     [17:0]  nextAbsSample;
+always @(demodMode or fm or fmInv or freqError) begin
     casex (demodMode)
         `MODE_OQPSK,
         `MODE_SOQPSK: begin
-            nextFreqSample = {freq,6'h0};
+            nextFreqSample = fm;
+            nextAbsSample = fm[17] ? fmInv : fm;
             end
         default: begin
             nextFreqSample = {freqError,6'h0};
+            nextAbsSample = 0;
             end
         endcase
     end
 
 wire    [17:0]  negAverageFreq = -averageFreq;
 wire    [17:0]  absAverageFreq = averageFreq[17] ? negAverageFreq : averageFreq;
-reg     [17:0]  prevFreqSample;
 always @(posedge clk) begin
     if (demodSync) begin
-        prevFreqSample <= nextFreqSample;
-        // If the last two frequency estimates were different polarity...
-        if (nextFreqSample[17] ^ prevFreqSample[17]) begin
-            // and both are large amplitude ...
-            if ((nextFreqSample[17] ^ nextFreqSample[16]) && (prevFreqSample[17] ^ prevFreqSample[16])) begin
-                // it means the frequency is wrapping around the number system
-                freqSample <= 0;
-                end
-            else begin
-                freqSample <= nextFreqSample;
-                end
-            end
-        else begin
-            freqSample <= nextFreqSample;
-            end
+        freqSample <= nextFreqSample;
+        absFreqSample <= nextAbsSample;
         averageFreq <= alphaSum[34:17];
+        averageAbsFreq <= absAlphaSum[34:17];
         end
     end
 
 always @(posedge clk) begin
     if (demodSync) begin
+        if (averageAbsFreq > 18'h10000) begin
+            highFreqOffset <= 1;
+            end
         else if (absAverageFreq > falseLockThreshold) begin
             highFreqOffset <= !carrierLock;
             end
@@ -434,7 +452,6 @@ reg             dac1Sync;
 reg     [17:0]  dac1Data;
 reg             dac2Sync;
 reg     [17:0]  dac2Data;
-wire    [11:0]  negFreq = ~freq + 1;
 always @(posedge clk) begin
     case (dac0Select) 
         `DAC_I: begin
@@ -454,7 +471,7 @@ always @(posedge clk) begin
             dac0Sync <= resampSync;
             end
         `DAC_FREQ: begin
-            dac0Data <= {negFreq,6'h0};
+            dac0Data <= fm;
             dac0Sync <= demodSync;
             end
         `DAC_PHASE: begin
@@ -510,7 +527,7 @@ always @(posedge clk) begin
             dac1Sync <= resampSync;
             end
         `DAC_FREQ: begin
-            dac1Data <= {negFreq,6'h0};
+            dac1Data <= fm;
             dac1Sync <= demodSync;
             end
         `DAC_PHASE: begin
@@ -535,7 +552,7 @@ always @(posedge clk) begin
             dac1Sync <= 1'b1;
             end
         `DAC_AVGFREQ: begin
-            dac1Data <= averageFreq;
+            dac1Data <= averageAbsFreq;
             dac1Sync <= ddcSync;
             end
         `DAC_FREQERROR: begin
@@ -566,7 +583,7 @@ always @(posedge clk) begin
             dac2Sync <= resampSync;
             end
         `DAC_FREQ: begin
-            dac2Data <= {negFreq,6'h0};
+            dac2Data <= fm;
             dac2Sync <= demodSync;
             end
         `DAC_PHASE: begin

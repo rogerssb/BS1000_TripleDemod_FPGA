@@ -205,7 +205,7 @@ lagGain12 lagGain (
     .sweepEnable(sweepEnable),
     .sweepRateMag(sweepOffsetMag),
     .clearAccum(clearAccum),
-    .carrierInSync(carrierLock),
+    .carrierInSync(carrierLock && !highFreqOffset),
     .lagAccum(lagAccum)
     );
 
