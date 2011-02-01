@@ -25,8 +25,8 @@ reg [31:0]d;
 wire [31:0]dout;
 
 // Create the clocks
-//parameter SAMPLE_FREQ = 9.333333e6;
-parameter SAMPLE_FREQ = 10e6;
+parameter SAMPLE_FREQ = 93.333333e6;
+//parameter SAMPLE_FREQ = 10e6;
 parameter HC = 1e9/SAMPLE_FREQ/2;
 parameter C = 2*HC;
 reg clken;
@@ -40,7 +40,7 @@ always #HC clk = clk^clken;
 real carrierFreqHz;
 real carrierFreqNorm;
 initial begin 
-  carrierFreqHz = 2500000.0;
+  carrierFreqHz = 23333333.3;
   carrierFreqNorm = carrierFreqHz * `SAMPLE_PERIOD * `TWO_POW_32;
 end                 
 
@@ -54,7 +54,7 @@ real carrierOffsetFreqHz;
 real carrierOffsetFreqNorm;
 integer carrierOffsetFreqInt;
 initial begin 
-  carrierOffsetFreqHz = 2000.0;
+  carrierOffsetFreqHz = 0.0;
   carrierOffsetFreqNorm = carrierOffsetFreqHz * `SAMPLE_PERIOD * `TWO_POW_32;
   carrierOffsetFreqInt = carrierOffsetFreqNorm;
 end                 
@@ -72,7 +72,7 @@ wire [31:0] carrierLimit = carrierLimitInt;
 
 wire [31:0] sweepRate = 32'h00000000;
 
-real bitrateBps = 500000.0;
+real bitrateBps = 9333333.33;
 real bitrateSamples;
 integer bitrateSamplesInt;
 initial begin
@@ -104,7 +104,7 @@ wire [17:0]deviation = deviationQ31[31:14];
 real cicDecimation;
 integer cicDecimationInt;
 initial cicDecimation = SAMPLE_FREQ/bitrateBps/2.0/2.0/2.0/2.0;
-initial cicDecimationInt = (cicDecimation < 2.0) ? 2 : cicDecimation;
+initial cicDecimationInt = (cicDecimation < 2.0) ? 1 : cicDecimation;
 
 
 real resamplerFreqSps;     // 2 samples per symbol
@@ -515,7 +515,7 @@ always @(posedge clk) begin
         `ifdef IQ_MAG
         txDelay <= delaySR[19];
         `else
-        txDelay <= delaySR[20];
+        txDelay <= delaySR[17];
         `endif  
         delaySR <= {delaySR[126:0],testData};
         end
@@ -677,7 +677,7 @@ initial begin
     write32(`FM_MOD_DEV, {14'bx,deviation});
     write32(`FM_MOD_BITRATE, {1'b0,15'bx,bitrateDivider});
     // This value is ceiling(log2(R*R)), where R = interpolation rate.
-    write32(`FM_MOD_CIC,7);
+    write32(`FM_MOD_CIC,5);
     fmModCS = 0;
 
     // Init the mode
@@ -698,7 +698,7 @@ initial begin
 
     // Init the trellis carrier loop
     write32(createAddress(`TRELLISLFSPACE,`LF_CONTROL),9);    // Forces the lag acc and the error term to be zero
-    write32(createAddress(`TRELLISLFSPACE,`LF_LEAD_LAG),32'h0016_0010);   
+    write32(createAddress(`TRELLISLFSPACE,`LF_LEAD_LAG),32'h0015_0005);   
     write32(createAddress(`TRELLISLFSPACE,`LF_LIMIT),32'h0100_0000);   
     //write32(createAddress(`TRELLISLFSPACE,`LF_LOOPDATA),32'h0333_3333);
     //write32(createAddress(`TRELLISLFSPACE,`LF_LOOPDATA),32'h0666_6666);
@@ -707,7 +707,7 @@ initial begin
     write32(createAddress(`TRELLIS_SPACE,`TRELLIS_DECAY),217);
                     
     // Init the downcoverter register set
-    write32(createAddress(`DDCSPACE,`DDC_CONTROL),4);   // Bypass the FIR
+    write32(createAddress(`DDCSPACE,`DDC_CONTROL),5);   // Bypass the CIC and FIR
     write32(createAddress(`DDCSPACE,`DDC_CENTER_FREQ), carrierFreq);
 
     // Init the cicResampler register set

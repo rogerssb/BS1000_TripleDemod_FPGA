@@ -12,10 +12,9 @@ SimFile=
 [Analyzer]
 C0Width=164
 C1Width=58
-C2Width=77
+C2Width=182
 GotoSource=N
 SymbolFile=
-ShowYaxis=
 [Spice]
 [LibraryFiles]
 0=..\..\Xilinx\10.1\ISE\verilog\src\unisims\{.v}
@@ -25,7 +24,7 @@ DiskSize=5000M
 RecirculateTime=
 UseRecirculateTime=
 [View]
-1=Last 122518.580ns 427422.776ns 6961.283ns 140891.140ns 152597.229ns
+1=Last 25870.878ns 32591.050ns 178.728ns 29874.385ns 33270.217ns
 [Group0]
 Name=New Group2
 [Group3]
@@ -126,7 +125,6 @@ Name="Tx"
 11="test.fmMod : modClk" default
 12="test.fmMod : reset" default
 13="test.fmMod : clk" default
-OpenGroup=
 [Mexclude]
 0=test.trellis.f0
 1=test.trellis.f1
@@ -209,6 +207,7 @@ Name="Trellis"
 64="test.trellis.trellisCarrierLoop : phaseError[7:0]" default
 65="test.trellis : phErrShft[7:0]" default
 66="test : trellisReset" default
+OpenGroup=Yes
 [Files]
 0=testPcmfm.v
 1=demod.v
@@ -311,6 +310,9 @@ Name="Rx"
 18="test.demod.ddc : iMixReal" default Real AnalogDisplay AType=Step Scale=Auto
 19="test : iSignalReal" default Real AnalogDisplay AType=Step Scale=Auto
 20="test : iChReal" default Real AnalogDisplay AType=Step Scale=Auto
+21="test : resamplerFreqInt" default AnalogDisplay AType=PWL Scale=Auto
+22="test : cicDecimationInt" default Decimal AnalogDisplay AType=PWL Scale=Auto
+OpenGroup=
 [GroupInfo]
 0=New Group2 : 0 : 0 : 0
 1=Tx : 1 : 1 : 0
