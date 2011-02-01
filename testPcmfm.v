@@ -437,7 +437,7 @@ decoder decoder
   .clk(clk),
   .symb_clk_en(symSync),
   .symb_clk_2x_en(symTimes2Sync),
-  .symb_i({demodBit,2'b0}),
+  .symb_i(demodBit),
   .symb_q(),
   .dout_i(),
   .dout_q(),
@@ -515,7 +515,7 @@ always @(posedge clk) begin
         `ifdef IQ_MAG
         txDelay <= delaySR[19];
         `else
-        txDelay <= delaySR[17];
+        txDelay <= delaySR[20];
         `endif  
         delaySR <= {delaySR[126:0],testData};
         end
@@ -707,7 +707,7 @@ initial begin
     write32(createAddress(`TRELLIS_SPACE,`TRELLIS_DECAY),217);
                     
     // Init the downcoverter register set
-    write32(createAddress(`DDCSPACE,`DDC_CONTROL),0);
+    write32(createAddress(`DDCSPACE,`DDC_CONTROL),4);   // Bypass the FIR
     write32(createAddress(`DDCSPACE,`DDC_CENTER_FREQ), carrierFreq);
 
     // Init the cicResampler register set
