@@ -216,7 +216,7 @@ module traceBackTableDeeper(clk, reset, symEn,
            end
  -----/\----- EXCLUDED -----/\----- */
 
-	else if (symEn) begin
+	else if (symEn && symEnEven) begin
            tbPtr <= index;  // loading in the starting max metric index at the trace back update rate
         end
         else if (outputCnt < TB_DEPTH) begin    
