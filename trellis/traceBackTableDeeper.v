@@ -98,7 +98,63 @@ module traceBackTableDeeper(clk, reset, symEn,
         end 
      end
 
+   reg                   symEnEven;
+   always @(posedge clk)
+     begin
+        if (reset) begin
+           symEnEven <= 1;
+        end
+        else begin 
+           if (symEn) begin
+              symEnEven <= ~ symEnEven;
+           end
+        end
+     end
 
+   // state Machine counter
+   reg [4:0]          stateCnt;
+   always @(posedge clk)
+     begin
+        if (reset) begin
+           stateCnt <= 0;
+        end
+        else if (symEnEven && symEn) begin
+           stateCnt <= 0;
+        end
+        else begin
+           if (stateCnt < TB_DEPTH)
+             if (!symEnEven && symEn) begin // bump up the counter twice when mid symEn shows up. 
+                stateCnt <= stateCnt+2;
+             end
+             else begin // normally, increment enver clock 
+                stateCnt <= stateCnt+1;
+              end
+           else begin // stay in the state
+              stateCnt <= stateCnt;
+           end
+        end
+     end
+
+   
+   // Just a counter the keeps track of when to output the final decision
+   reg [3:0] outputCnt;
+   always @(posedge clk)
+     begin
+        if (reset) begin
+           outputCnt <= 0;
+        end
+        else if (symEnEven && symEn) begin
+           outputCnt <= 0;
+        end
+        else begin
+           if (outputCnt < TB_DEPTH)
+             outputCnt <= outputCnt+1;
+        end
+     end
+   
+
+   
+/* -----\/----- EXCLUDED -----\/-----
    reg clearStateCntFlag;
    always @(posedge clk)
      begin
@@ -106,13 +162,14 @@ module traceBackTableDeeper(clk, reset, symEn,
 	   clearStateCntFlag <= 1;
 	end
 	else if (symEn) begin
+	//else if (symEn && (outputCnt <= TB_DEPTH)) begin
 	   clearStateCntFlag <= ~clearStateCntFlag;
 	end
 	else if (outputCnt == TB_DEPTH-1) begin
 	   clearStateCntFlag <= 1;
 	end
      end
-      
+       
    // state Machine counter
    reg [3:0]          stateCnt;
    reg [3:0] 	      outputCnt;    // Just a counter the keeps track of when to output the final decision
@@ -142,6 +199,7 @@ module traceBackTableDeeper(clk, reset, symEn,
 	   end
         end
      end
+-----/\----- EXCLUDED -----/\----- */
 
   
    // Path Decisions. stateCnt moves us through the "TB_DEPTH" previous paths
@@ -151,11 +209,18 @@ module traceBackTableDeeper(clk, reset, symEn,
         if (reset) begin
            tbPtr <= 0;
         end
+/* -----\/----- EXCLUDED -----\/-----
         else if (outputCnt < TB_DEPTH) begin    
-           if (outputCnt == TB_DEPTH-1) begin
+	   if (symEn) begin
               tbPtr <= index;  // loading in the starting max metric index at the trace back update rate
            end
-           else begin
+ -----/\----- EXCLUDED -----/\----- */
+
+	else if (symEn) begin
+           tbPtr <= index;  // loading in the starting max metric index at the trace back update rate
+        end
+        else if (outputCnt < TB_DEPTH) begin    
+           //else begin
               case (tbPtr)
                 0 : begin // We are in the "0-th" trellis state
                    if (tbtSr0[stateCnt]==0) 
@@ -183,7 +248,7 @@ module traceBackTableDeeper(clk, reset, symEn,
                 18: if (tbtSr18[stateCnt]==0) tbPtr <= 5 ;  else tbPtr <= 11;
                 19: if (tbtSr19[stateCnt]==0) tbPtr <= 6 ;  else tbPtr <= 12;
               endcase
-           end
+           //end
         end
         else begin
            // Stay in the same state
@@ -200,7 +265,8 @@ module traceBackTableDeeper(clk, reset, symEn,
         secondDecision <= 0;
      end
      else if (outputCnt == TB_DEPTH-2) begin   // finding the first decision
-	secondDecision <= secondDecision;
+     //else if (outputCnt == TB_DEPTH-1) begin   // finding the first decision
+     	secondDecision <= secondDecision;
 	if (stateCnt == outputCnt) begin // slow symEn
 	   case (tbPtr)
              0:  begin firstDecision <=  tbtSr0[TB_DEPTH-2]; end
@@ -251,6 +317,7 @@ module traceBackTableDeeper(clk, reset, symEn,
 	end
      end
      else if (outputCnt == TB_DEPTH-1) begin  // finding the second symEn
+     //else if (outputCnt == TB_DEPTH) begin  // finding the second symEn
 	firstDecision <= firstDecision;
 	if (stateCnt == outputCnt) begin // slow symEn
 	   case (tbPtr)
@@ -306,20 +373,20 @@ module traceBackTableDeeper(clk, reset, symEn,
         secondDecision <=  secondDecision;
      end
 
- // Final decision output 
-   always @(posedge clk) begin
-      if (reset) begin
-         decision <= 0;
-      end
-      else if (symEnDly) begin  
-         if (!clearStateCntFlag) begin // low every other symEn
-            decision <= firstDecision;
-         end
-         else begin
-            decision <= secondDecision;
-         end
-      end 
-   end   
+
+/* -----\/----- EXCLUDED -----\/-----
+   reg halfSymEnDlyRate;
+   always @(posedge clk)
+     begin
+        if (reset) begin
+           halfSymEnDlyRate <= 0;
+        end
+        else if (symEnDly) begin
+           halfSymEnDlyRate <= ~ halfSymEnDlyRate;
+        end
+     end
+
+ -----/\----- EXCLUDED -----/\----- */
 
 
    reg [8:0] symEnSr3;
@@ -333,5 +400,35 @@ module traceBackTableDeeper(clk, reset, symEn,
    end
    wire  symEnDly = symEnSr3[8];
    
+   reg [8:0] symEnEvenSr;
+   always @(posedge clk) begin
+      if (reset) begin
+         symEnEvenSr <= 0;
+      end
+      else begin
+         symEnEvenSr <= {symEnEvenSr[7:0], symEnEven};
+      end
+   end
+   wire symEnEvenOut = symEnEvenSr[8];
 
+
+   
+ // Final decision output 
+   always @(posedge clk) begin
+      if (reset) begin
+         decision <= 0;
+      end
+      else if (symEnDly) begin  
+         //if (halfSymEnDlyRate) begin // low every other symEn
+	 if (!symEnEvenOut) begin // low every other symEn
+            decision <= firstDecision;
+         end
+         else begin
+            decision <= secondDecision;
+         end
+      end 
+   end   
+
+
+   
 endmodule
