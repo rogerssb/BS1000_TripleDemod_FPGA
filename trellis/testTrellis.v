@@ -33,7 +33,7 @@ trellis uut
     .dac2Sync(), 
     .dac2Data(), 
     .decision(decision), 
-    .symEn_tbtDly(symEn_tbtDly), 
+    .symEnOut(symEn_tbtDly), 
     .oneOrZeroPredecessor(testDec1)
  );
  
@@ -203,8 +203,8 @@ always @(posedge clk)begin
 //`define ALLZEROES
 //`define ALLONES
 //`define RANDOM
-`define RANDOM_SIM_NO_NOISE
-//`define RANDOM_SIM_NOISE
+//`define RANDOM_SIM_NO_NOISE
+`define RANDOM_SIM_NOISE
 
 integer file1,file2;
 initial begin
@@ -222,7 +222,7 @@ initial begin
   bitError = 0;
   din = 0;
   din_uut2 = 0;	
-  
+  uut.decayFactor =  8'hd9;
 `ifdef ONEZERO 
       $readmemh("P:/semco/matlab sim results/One Zero/mfinputs.hex", readMem);
       //$readmemh("P:/semco/MultiModeDemod_107-001/pcmFmFilterRotator/One Zero/mfinputs.hex", readMem);
@@ -271,13 +271,19 @@ initial begin
   reg acsDecision;
   reg [15:0] bertSr;
   
-  integer bitError;
+  integer bitError, bertIndex;
   always @(posedge clk) begin
-	  if (symEn_tbtDly) begin	
-		  bertSr <= {bertSr[14:0], simBit};
+      if (reset) begin
+          bertIndex <= 0;
+      end
+      else if (symEn_tbtDly) begin	
+		  bertSr <= {bertSr[14:0], readMemResult[bertIndex]};
 		  acsDecision <= testDec1;
+          bertIndex = bertIndex + 1;
 		  //if (acsDecision != bertSr[6]) begin		  // without carrier loop
-		  if (decision != bertSr[11]) begin			  // with carrierloop
+		  //if (decision != bertSr[9]) begin		  // without carrier loop   4 deep traceback
+		  if (decision != bertSr[10]) begin		  // without carrier loop   4 deep traceback
+		  //if (decision != bertSr[11]) begin			  // with carrierloop
 			  bitError <= bitError + 1;
 		  end
 	  end

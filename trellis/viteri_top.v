@@ -305,6 +305,21 @@ wire    [ROT_BITS-1:0]  out1Real ,
         end
      end
    
+`define USE_8_DEEP_TB
+`ifdef USE_8_DEEP_TB     
+
+   traceBackTableDeeper tbtDeeper
+     (
+      .clk(clk), 
+      .reset(reset), 
+      .symEn(symEn_maxMetDly),
+      .sel(sel_2dly), 
+      .index(index),
+      .decision(tbDecision),
+      .symEnDly(symEn_tbtDly)
+      );
+`else
+
 `ifdef TB_ANNOTATE
    traceBackTable tbt1
      (
@@ -330,6 +345,8 @@ wire    [ROT_BITS-1:0]  out1Real ,
       .symEnDly(symEn_tbtDly)
       );
 `endif
+
+`endif //USE_8_DEEP_TB
       
    always @(posedge clk)
      begin
