@@ -43,6 +43,12 @@ module traceBackTableDeeper(clk, reset, symEn,
    reg [TB_DEPTH:0]   tbtSr18;
    reg [TB_DEPTH:0]   tbtSr19;
    reg [4:0]          tbPtr;
+
+
+
+
+   
+   reg 		      test;
    
    // 3bits x 20 states trace-back shift-register
    always @(posedge clk)
@@ -71,9 +77,12 @@ module traceBackTableDeeper(clk, reset, symEn,
            tbtSr19 <= 0;
         end
         else begin
+	   test <= symEn;
+	   
            //if (symEnCnt == 3) begin  // {1}
            //if (outputCnt == TB_DEPTH -1) begin
-	   if (symEn) begin // debug comment: problem with timing ? for 4 deep we hade {3}
+	   //if (symEn) begin
+	   if (test) begin
               tbtSr0  <= {tbtSr0 [TB_DEPTH-1:0], sel[0 ]};
               tbtSr1  <= {tbtSr1 [TB_DEPTH-1:0], sel[1 ]};
               tbtSr2  <= {tbtSr2 [TB_DEPTH-1:0], sel[2 ]};
@@ -152,55 +161,6 @@ module traceBackTableDeeper(clk, reset, symEn,
         end
      end
    
-
-   
-/* -----\/----- EXCLUDED -----\/-----
-   reg clearStateCntFlag;
-   always @(posedge clk)
-     begin
-        if (reset) begin
-	   clearStateCntFlag <= 1;
-	end
-	else if (symEn) begin
-	//else if (symEn && (outputCnt <= TB_DEPTH)) begin
-	   clearStateCntFlag <= ~clearStateCntFlag;
-	end
-	else if (outputCnt == TB_DEPTH-1) begin
-	   clearStateCntFlag <= 1;
-	end
-     end
-       
-   // state Machine counter
-   reg [3:0]          stateCnt;
-   reg [3:0] 	      outputCnt;    // Just a counter the keeps track of when to output the final decision
-   always @(posedge clk)
-     begin
-        if (reset) begin
-	   stateCnt <= 0;
-           outputCnt <= 0;
-	end
-	else if (symEn && clearStateCntFlag) begin
-	   stateCnt <= 0;
-           outputCnt <= 0;
-	end
-        else begin
-           if (outputCnt < TB_DEPTH) begin
-              outputCnt <= outputCnt+1;
-	      if (symEn) begin // check if another symEn occured and if so we need to bump the stateCnt by 2
-		 stateCnt <= stateCnt+2;
-	      end
-	      else begin 
-		 stateCnt <= stateCnt+1;
-	      end
-	   end
-	   else begin
-              stateCnt <= stateCnt; // stop incrementing the stateCnt to prevent roll over
-              outputCnt <= outputCnt;
-	   end
-        end
-     end
------/\----- EXCLUDED -----/\----- */
-
   
    // Path Decisions. stateCnt moves us through the "TB_DEPTH" previous paths
    // This block runs at the clock rate. It takes TB_DEPTH-1 clocks to complete
@@ -209,46 +169,37 @@ module traceBackTableDeeper(clk, reset, symEn,
         if (reset) begin
            tbPtr <= 0;
         end
-/* -----\/----- EXCLUDED -----\/-----
-        else if (outputCnt < TB_DEPTH) begin    
-	   if (symEn) begin
-              tbPtr <= index;  // loading in the starting max metric index at the trace back update rate
-           end
- -----/\----- EXCLUDED -----/\----- */
-
 	else if (symEn && symEnEven) begin
            tbPtr <= index;  // loading in the starting max metric index at the trace back update rate
         end
         else if (outputCnt < TB_DEPTH) begin    
-           //else begin
-              case (tbPtr)
-                0 : begin // We are in the "0-th" trellis state
-                   if (tbtSr0[stateCnt]==0) 
-                     tbPtr <= 7; // sel=0 makes us jump +7 modulo 20.  
-                   else 
-                     tbPtr <= 13;  // sel=1,   jump -7 modulo 20
-                end
-                1 : if (tbtSr1[stateCnt]==0) tbPtr <= 8 ;  else tbPtr <= 14;
-                2 : if (tbtSr2[stateCnt]==0) tbPtr <= 9 ;  else tbPtr <= 15;
-                3:  if (tbtSr3[stateCnt]==0) tbPtr <= 10;  else tbPtr <= 16;
-                4:  if (tbtSr4[stateCnt]==0) tbPtr <= 11;  else tbPtr <= 17;
-                5:  if (tbtSr5[stateCnt]==0) tbPtr <= 12;  else tbPtr <= 18;
-                6:  if (tbtSr6[stateCnt]==0) tbPtr <= 13;  else tbPtr <= 19;
-                7:  if (tbtSr7[stateCnt]==0) tbPtr <= 14;  else tbPtr <= 0 ;
-                8:  if (tbtSr8[stateCnt]==0) tbPtr <= 15;  else tbPtr <= 1 ;
-                9:  if (tbtSr9[stateCnt]==0) tbPtr <= 16;  else tbPtr <= 2 ;
-                10: if (tbtSr10[stateCnt]==0) tbPtr <= 17;  else tbPtr <= 3 ;
-                11: if (tbtSr11[stateCnt]==0) tbPtr <= 18;  else tbPtr <= 4 ;
-                12: if (tbtSr12[stateCnt]==0) tbPtr <= 19;  else tbPtr <= 5 ;
-                13: if (tbtSr13[stateCnt]==0) tbPtr <= 0 ;  else tbPtr <= 6 ;
-                14: if (tbtSr14[stateCnt]==0) tbPtr <= 1 ;  else tbPtr <= 7 ;
-                15: if (tbtSr15[stateCnt]==0) tbPtr <= 2 ;  else tbPtr <= 8 ;
-                16: if (tbtSr16[stateCnt]==0) tbPtr <= 3 ;  else tbPtr <= 9 ;
-                17: if (tbtSr17[stateCnt]==0) tbPtr <= 4 ;  else tbPtr <= 10;
-                18: if (tbtSr18[stateCnt]==0) tbPtr <= 5 ;  else tbPtr <= 11;
-                19: if (tbtSr19[stateCnt]==0) tbPtr <= 6 ;  else tbPtr <= 12;
-              endcase
-           //end
+           case (tbPtr)
+             0 : begin // We are in the "0-th" trellis state
+                if (tbtSr0[stateCnt]==0) 
+                  tbPtr <= 7; // sel=0 makes us jump +7 modulo 20.  
+                else 
+                  tbPtr <= 13;  // sel=1,   jump -7 modulo 20
+             end
+             1 : if (tbtSr1[stateCnt]==0) tbPtr <= 8 ;  else tbPtr <= 14;
+             2 : if (tbtSr2[stateCnt]==0) tbPtr <= 9 ;  else tbPtr <= 15;
+             3:  if (tbtSr3[stateCnt]==0) tbPtr <= 10;  else tbPtr <= 16;
+             4:  if (tbtSr4[stateCnt]==0) tbPtr <= 11;  else tbPtr <= 17;
+             5:  if (tbtSr5[stateCnt]==0) tbPtr <= 12;  else tbPtr <= 18;
+             6:  if (tbtSr6[stateCnt]==0) tbPtr <= 13;  else tbPtr <= 19;
+             7:  if (tbtSr7[stateCnt]==0) tbPtr <= 14;  else tbPtr <= 0 ;
+             8:  if (tbtSr8[stateCnt]==0) tbPtr <= 15;  else tbPtr <= 1 ;
+             9:  if (tbtSr9[stateCnt]==0) tbPtr <= 16;  else tbPtr <= 2 ;
+             10: if (tbtSr10[stateCnt]==0) tbPtr <= 17;  else tbPtr <= 3 ;
+             11: if (tbtSr11[stateCnt]==0) tbPtr <= 18;  else tbPtr <= 4 ;
+             12: if (tbtSr12[stateCnt]==0) tbPtr <= 19;  else tbPtr <= 5 ;
+             13: if (tbtSr13[stateCnt]==0) tbPtr <= 0 ;  else tbPtr <= 6 ;
+             14: if (tbtSr14[stateCnt]==0) tbPtr <= 1 ;  else tbPtr <= 7 ;
+             15: if (tbtSr15[stateCnt]==0) tbPtr <= 2 ;  else tbPtr <= 8 ;
+             16: if (tbtSr16[stateCnt]==0) tbPtr <= 3 ;  else tbPtr <= 9 ;
+             17: if (tbtSr17[stateCnt]==0) tbPtr <= 4 ;  else tbPtr <= 10;
+             18: if (tbtSr18[stateCnt]==0) tbPtr <= 5 ;  else tbPtr <= 11;
+             19: if (tbtSr19[stateCnt]==0) tbPtr <= 6 ;  else tbPtr <= 12;
+           endcase
         end
         else begin
            // Stay in the same state
