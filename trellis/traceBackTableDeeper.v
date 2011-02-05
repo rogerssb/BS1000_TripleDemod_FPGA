@@ -15,13 +15,14 @@ module traceBackTableDeeper(clk, reset, symEn,
                       decision,
                       symEnDly
                       );
-   parameter          TB_DEPTH=8;                       
+   parameter          TB_DEPTH=4;                       
    input              clk,reset,symEn;
    input [19:0]       sel;   // 20 induvidual decision. 0 or 1 tell us if we trace + or - 7 modulo 20 
    input [4:0]        index; // pointer to the state which has the maximum metric
    output             decision;
    output             symEnDly;
    reg                decision;
+   reg [TB_DEPTH:0]   tbtSr0_JUNK; // debug
    reg [TB_DEPTH:0]   tbtSr0;
    reg [TB_DEPTH:0]   tbtSr1;
    reg [TB_DEPTH:0]   tbtSr2;
@@ -44,18 +45,16 @@ module traceBackTableDeeper(clk, reset, symEn,
    reg [TB_DEPTH:0]   tbtSr19;
    reg [4:0]          tbPtr;
 
-
-
-
-   
-   reg 		      test;
    
    // 3bits x 20 states trace-back shift-register
+   // This block is running at the symEn rate.
+   // The input "sel" is stable for the whole symbol 
    always @(posedge clk)
      begin
         if (reset) begin
            //reset the whole traceback table to all zeroes
            tbtSr0  <= 0;
+           tbtSr0_JUNK  <= 0;  // debug
            tbtSr1  <= 0;
            tbtSr2  <= 0;
            tbtSr3  <= 0;
@@ -77,13 +76,9 @@ module traceBackTableDeeper(clk, reset, symEn,
            tbtSr19 <= 0;
         end
         else begin
-	   test <= symEn;
-	   
-           //if (symEnCnt == 3) begin  // {1}
-           //if (outputCnt == TB_DEPTH -1) begin
-	   //if (symEn) begin
-	   if (test) begin
+	   if (symEn) begin
               tbtSr0  <= {tbtSr0 [TB_DEPTH-1:0], sel[0 ]};
+              tbtSr0_JUNK  <=     {tbtSr0 [4:0], sel[0 ]};    // debug
               tbtSr1  <= {tbtSr1 [TB_DEPTH-1:0], sel[1 ]};
               tbtSr2  <= {tbtSr2 [TB_DEPTH-1:0], sel[2 ]};
               tbtSr3  <= {tbtSr3 [TB_DEPTH-1:0], sel[3 ]};
@@ -107,15 +102,19 @@ module traceBackTableDeeper(clk, reset, symEn,
         end 
      end
 
+   reg  decisionTest;
+   
    reg                   symEnEven;
    always @(posedge clk)
      begin
         if (reset) begin
            symEnEven <= 1;
-        end
+	   decisionTest <= 0; //debug
+	end
         else begin 
            if (symEn) begin
-              symEnEven <= ~ symEnEven;
+	      decisionTest <= sel[index];
+	      symEnEven <= ~ symEnEven;
            end
         end
      end
@@ -127,13 +126,15 @@ module traceBackTableDeeper(clk, reset, symEn,
         if (reset) begin
            stateCnt <= 0;
         end
-        else if (symEnEven && symEn) begin
+        // 8 deep else if (symEnEven && symEn) begin
+        else if (symEn) begin
            stateCnt <= 0;
         end
         else begin
            if (stateCnt < TB_DEPTH)
              if (!symEnEven && symEn) begin // bump up the counter twice when mid symEn shows up. 
-                stateCnt <= stateCnt+2;
+                // 8 deep stateCnt <= stateCnt+2;
+		stateCnt <= stateCnt+1;
              end
              else begin // normally, increment enver clock 
                 stateCnt <= stateCnt+1;
@@ -152,7 +153,8 @@ module traceBackTableDeeper(clk, reset, symEn,
         if (reset) begin
            outputCnt <= 0;
         end
-        else if (symEnEven && symEn) begin
+        // 8 deep else if (symEnEven && symEn) begin
+        else if (symEn) begin
            outputCnt <= 0;
         end
         else begin
@@ -160,8 +162,7 @@ module traceBackTableDeeper(clk, reset, symEn,
              outputCnt <= outputCnt+1;
         end
      end
-   
-  
+     
    // Path Decisions. stateCnt moves us through the "TB_DEPTH" previous paths
    // This block runs at the clock rate. It takes TB_DEPTH-1 clocks to complete
    always @(posedge clk)
@@ -169,7 +170,8 @@ module traceBackTableDeeper(clk, reset, symEn,
         if (reset) begin
            tbPtr <= 0;
         end
-	else if (symEn && symEnEven) begin
+	// 8 deep else if (symEn && symEnEven) begin
+	else if (symEn) begin
            tbPtr <= index;  // loading in the starting max metric index at the trace back update rate
         end
         else if (outputCnt < TB_DEPTH) begin    
@@ -216,7 +218,6 @@ module traceBackTableDeeper(clk, reset, symEn,
         secondDecision <= 0;
      end
      else if (outputCnt == TB_DEPTH-2) begin   // finding the first decision
-     //else if (outputCnt == TB_DEPTH-1) begin   // finding the first decision
      	secondDecision <= secondDecision;
 	if (stateCnt == outputCnt) begin // slow symEn
 	   case (tbPtr)
@@ -268,7 +269,6 @@ module traceBackTableDeeper(clk, reset, symEn,
 	end
      end
      else if (outputCnt == TB_DEPTH-1) begin  // finding the second symEn
-     //else if (outputCnt == TB_DEPTH) begin  // finding the second symEn
 	firstDecision <= firstDecision;
 	if (stateCnt == outputCnt) begin // slow symEn
 	   case (tbPtr)
@@ -325,58 +325,60 @@ module traceBackTableDeeper(clk, reset, symEn,
      end
 
 
-/* -----\/----- EXCLUDED -----\/-----
-   reg halfSymEnDlyRate;
-   always @(posedge clk)
-     begin
-        if (reset) begin
-           halfSymEnDlyRate <= 0;
-        end
-        else if (symEnDly) begin
-           halfSymEnDlyRate <= ~ halfSymEnDlyRate;
-        end
-     end
-
- -----/\----- EXCLUDED -----/\----- */
-
-
-   reg [8:0] symEnSr3;
+   reg [11:0] symEnSr;
    always @(posedge clk) begin
       if (reset) begin
-         symEnSr3 <= 0;
+         symEnSr <= 0;
       end
       else begin
-         symEnSr3 <= {symEnSr3[7:0], symEn};
+         symEnSr <= {symEnSr[10:0], symEn};
       end
    end
-   wire  symEnDly = symEnSr3[8];
+// 8 deep   wire  symEnDly = symEnSr[10];
+   wire  symEnDly = symEnSr[5];   
    
-   reg [8:0] symEnEvenSr;
+   reg [11:0] symEnEvenSr;
    always @(posedge clk) begin
       if (reset) begin
          symEnEvenSr <= 0;
       end
       else begin
-         symEnEvenSr <= {symEnEvenSr[7:0], symEnEven};
+         symEnEvenSr <= {symEnEvenSr[10:0], symEnEven};
       end
    end
-   wire symEnEvenOut = symEnEvenSr[8];
+   wire symEnEvenOut = symEnEvenSr[10];
 
 
+   reg [4:0] decisionTestSr;
+
+// 8 deep
+/* -----\/----- EXCLUDED -----\/-----
    
  // Final decision output 
    always @(posedge clk) begin
       if (reset) begin
          decision <= 0;
       end
-      else if (symEnDly) begin  
-         //if (halfSymEnDlyRate) begin // low every other symEn
+      else if (symEnDly) begin
+	 decisionTestSr <= {decisionTestSr[3:0], decisionTest};
 	 if (!symEnEvenOut) begin // low every other symEn
             decision <= firstDecision;
          end
          else begin
             decision <= secondDecision;
          end
+      end 
+   end   
+ -----/\----- EXCLUDED -----/\----- */
+
+ // Final decision output 
+   always @(posedge clk) begin
+      if (reset) begin
+         decision <= 0;
+      end
+      else if (symEnDly) begin
+	 decisionTestSr <= {decisionTestSr[3:0], decisionTest};
+         decision <= firstDecision;
       end 
    end   
 
