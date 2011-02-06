@@ -39,7 +39,6 @@ trellis uut
  
 //trellis uut2(clk,reset,symEn_uut2,sym2xEn_uut2,din_uut2[57:40],din_uut2[17:0],,,,,,,,);
 
-wire testDec1;
 
 initial clk = 0;
 initial clkDiv2 = 0;
@@ -56,24 +55,24 @@ reg [0:0] readMemResult[10001:0];
 reg [15:0] index;  
 reg [15:0] bitIndex;  
 
+reg cntEna;
 initial begin
     cntEna = 0;
     #250 cntEna = 1;
     end
 
 reg [4:0]cnt; initial cnt = 20;
-reg cntEna;
 
 // for uut2	
 reg [79:0]din_uut2;
 reg symEn_uut2, sym2xEn_uut2;
 reg [7:0] index_uut2;  
+reg cntEna_uut2;
 initial begin
     cntEna_uut2 = 0;
     #250 cntEna_uut2 = 1;
     end
 reg [4:0]cnt_uut2; initial cnt_uut2 = 20;
-reg cntEna_uut2;
 // end for uut2
 	
 	
@@ -104,6 +103,7 @@ always @(negedge clk or posedge reset) begin
     end
 
 reg [23:0] delaySr;
+reg simBit;	
 always @(posedge clk) begin
 	delaySr <= {delaySr[22:0], simBit};
 end
@@ -121,7 +121,6 @@ always @(posedge clk) begin
 	end	
 end
 
-reg simBit;	
 	
 always @(posedge clk)begin
  // #1;
@@ -206,6 +205,7 @@ always @(posedge clk)begin
 //`define RANDOM_SIM_NO_NOISE
 `define RANDOM_SIM_NOISE
 
+integer bitError, bertIndex;
 integer file1,file2;
 initial begin
   #100 reset = !reset;
@@ -271,7 +271,6 @@ initial begin
   reg acsDecision;
   reg [15:0] bertSr;
   
-  integer bitError, bertIndex;
   always @(posedge clk) begin
       if (reset) begin
           bertIndex <= 0;
