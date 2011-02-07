@@ -402,6 +402,9 @@ module traceBackTable(clk, reset, symEn,
      end
   end
 
+
+
+   
   reg [2:0] symEnSr2;
   always @(posedge clk) begin
      if (reset) begin

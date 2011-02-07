@@ -305,6 +305,7 @@ wire    [ROT_BITS-1:0]  out1Real ,
         end
      end
    
+/* -----\/----- EXCLUDED -----\/-----
 `define USE_8_DEEP_TB
 `ifdef USE_8_DEEP_TB     
 
@@ -319,7 +320,23 @@ wire    [ROT_BITS-1:0]  out1Real ,
       .symEnDly(symEn_tbtDly)
       );
 `else
+ -----/\----- EXCLUDED -----/\----- */
 
+`define USE_8_DEEP_TB_ONLY_FOR_DEBUG
+`ifdef USE_8_DEEP_TB_ONLY_FOR_DEBUG     
+
+   traceBackTable8deepSlowRate tbt8deepSlowRate
+     (
+      .clk(clk), 
+      .reset(reset), 
+      .symEn(symEn_maxMetDly),
+      .sel(sel_2dly), 
+      .index(index),
+      .decision(tbDecision),
+      .symEnDly(symEn_tbtDly)
+      );
+`else
+   
 `ifdef TB_ANNOTATE
    traceBackTable tbt1
      (
