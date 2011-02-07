@@ -15,14 +15,13 @@ module traceBackTableDeeper(clk, reset, symEn,
                       decision,
                       symEnDly
                       );
-   parameter          TB_DEPTH=4;                       
+   parameter          TB_DEPTH=8;                       
    input              clk,reset,symEn;
    input [19:0]       sel;   // 20 induvidual decision. 0 or 1 tell us if we trace + or - 7 modulo 20 
    input [4:0]        index; // pointer to the state which has the maximum metric
    output             decision;
    output             symEnDly;
    reg                decision;
-   reg [TB_DEPTH:0]   tbtSr0_JUNK; // debug
    reg [TB_DEPTH:0]   tbtSr0;
    reg [TB_DEPTH:0]   tbtSr1;
    reg [TB_DEPTH:0]   tbtSr2;
@@ -43,18 +42,17 @@ module traceBackTableDeeper(clk, reset, symEn,
    reg [TB_DEPTH:0]   tbtSr17;
    reg [TB_DEPTH:0]   tbtSr18;
    reg [TB_DEPTH:0]   tbtSr19;
+   //reg [19:0]   tbtSrDebug[8:0]; // debug
+   //integer 	      i; // debug
+   
    reg [4:0]          tbPtr;
-
    
    // 3bits x 20 states trace-back shift-register
-   // This block is running at the symEn rate.
-   // The input "sel" is stable for the whole symbol 
    always @(posedge clk)
      begin
         if (reset) begin
            //reset the whole traceback table to all zeroes
            tbtSr0  <= 0;
-           tbtSr0_JUNK  <= 0;  // debug
            tbtSr1  <= 0;
            tbtSr2  <= 0;
            tbtSr3  <= 0;
@@ -74,11 +72,25 @@ module traceBackTableDeeper(clk, reset, symEn,
            tbtSr17 <= 0;
            tbtSr18 <= 0;
            tbtSr19 <= 0;
+	   //for (i=0; i < 9; i = i + 1) begin  // Setting individual memory cells to 0
+	   //   tbtSrDebug[i] = 0;
+	   //end
+
         end
         else begin
-	   if (symEn) begin
+           if (symEn) begin // debug comment: problem with timing ? for 4 deep we hade {3}
+              //tbtSrDebug[8] <= tbtSrDebug[7]; //debug
+//              tbtSrDebug[7] <= tbtSrDebug[6]; //debug
+//              tbtSrDebug[6] <= tbtSrDebug[5]; //debug
+//              tbtSrDebug[5] <= tbtSrDebug[4]; //debug
+//              tbtSrDebug[4] <= tbtSrDebug[3]; //debug
+//              tbtSrDebug[3] <= tbtSrDebug[2]; //debug
+//              tbtSrDebug[2] <= tbtSrDebug[1]; //debug
+//              tbtSrDebug[1] <= tbtSrDebug[0]; //debug
+//              tbtSrDebug[0] <= sel; //debug
+//              
+              
               tbtSr0  <= {tbtSr0 [TB_DEPTH-1:0], sel[0 ]};
-              tbtSr0_JUNK  <=     {tbtSr0 [4:0], sel[0 ]};    // debug
               tbtSr1  <= {tbtSr1 [TB_DEPTH-1:0], sel[1 ]};
               tbtSr2  <= {tbtSr2 [TB_DEPTH-1:0], sel[2 ]};
               tbtSr3  <= {tbtSr3 [TB_DEPTH-1:0], sel[3 ]};
@@ -102,19 +114,15 @@ module traceBackTableDeeper(clk, reset, symEn,
         end 
      end
 
-   reg  decisionTest;
-   
    reg                   symEnEven;
    always @(posedge clk)
      begin
         if (reset) begin
            symEnEven <= 1;
-	   decisionTest <= 0; //debug
-	end
+        end
         else begin 
            if (symEn) begin
-	      decisionTest <= sel[index];
-	      symEnEven <= ~ symEnEven;
+              symEnEven <= ~ symEnEven;
            end
         end
      end
@@ -126,15 +134,13 @@ module traceBackTableDeeper(clk, reset, symEn,
         if (reset) begin
            stateCnt <= 0;
         end
-        // 8 deep else if (symEnEven && symEn) begin
-        else if (symEn) begin
+        else if (symEnEven && symEn) begin
            stateCnt <= 0;
         end
         else begin
            if (stateCnt < TB_DEPTH)
              if (!symEnEven && symEn) begin // bump up the counter twice when mid symEn shows up. 
-                // 8 deep stateCnt <= stateCnt+2;
-		stateCnt <= stateCnt+1;
+                stateCnt <= stateCnt+2;
              end
              else begin // normally, increment enver clock 
                 stateCnt <= stateCnt+1;
@@ -153,8 +159,7 @@ module traceBackTableDeeper(clk, reset, symEn,
         if (reset) begin
            outputCnt <= 0;
         end
-        // 8 deep else if (symEnEven && symEn) begin
-        else if (symEn) begin
+        else if (symEnEven && symEn) begin
            outputCnt <= 0;
         end
         else begin
@@ -162,7 +167,11 @@ module traceBackTableDeeper(clk, reset, symEn,
              outputCnt <= outputCnt+1;
         end
      end
-     
+   
+
+   
+
+  
    // Path Decisions. stateCnt moves us through the "TB_DEPTH" previous paths
    // This block runs at the clock rate. It takes TB_DEPTH-1 clocks to complete
    always @(posedge clk)
@@ -170,8 +179,7 @@ module traceBackTableDeeper(clk, reset, symEn,
         if (reset) begin
            tbPtr <= 0;
         end
-	// 8 deep else if (symEn && symEnEven) begin
-	else if (symEn) begin
+        else if (symEn && symEnEven) begin
            tbPtr <= index;  // loading in the starting max metric index at the trace back update rate
         end
         else if (outputCnt < TB_DEPTH) begin    
@@ -208,7 +216,7 @@ module traceBackTableDeeper(clk, reset, symEn,
            tbPtr <= tbPtr;
         end
      end
-
+   
    // Output 2 decisions every other symEn. There my be an offset in the tbtSr if the symEn rate is faster than the traceback table
    // depth. This is determained by comparing the two counters (stateCnt == outputCnt)
    reg firstDecision, secondDecision;
@@ -218,9 +226,9 @@ module traceBackTableDeeper(clk, reset, symEn,
         secondDecision <= 0;
      end
      else if (outputCnt == TB_DEPTH-2) begin   // finding the first decision
-     	secondDecision <= secondDecision;
-	if (stateCnt == outputCnt) begin // slow symEn
-	   case (tbPtr)
+        secondDecision <= secondDecision;
+        if (stateCnt == outputCnt) begin // slow symEn
+           case (tbPtr)
              0:  begin firstDecision <=  tbtSr0[TB_DEPTH-2]; end
              1:  begin firstDecision <=  tbtSr1[TB_DEPTH-2]; end
              2:  begin firstDecision <=  tbtSr2[TB_DEPTH-2]; end
@@ -242,9 +250,9 @@ module traceBackTableDeeper(clk, reset, symEn,
              18: begin firstDecision <= tbtSr18[TB_DEPTH-2]; end
              19: begin firstDecision <= tbtSr19[TB_DEPTH-2]; end
            endcase
-	end
-	else begin // fast symEn
-	   case (tbPtr)
+        end
+        else begin // fast symEn
+           case (tbPtr)
              0:  begin firstDecision <=  tbtSr0[TB_DEPTH-1]; end
              1:  begin firstDecision <=  tbtSr1[TB_DEPTH-1]; end
              2:  begin firstDecision <=  tbtSr2[TB_DEPTH-1]; end
@@ -265,13 +273,13 @@ module traceBackTableDeeper(clk, reset, symEn,
              17: begin firstDecision <= tbtSr17[TB_DEPTH-1]; end
              18: begin firstDecision <= tbtSr18[TB_DEPTH-1]; end
              19: begin firstDecision <= tbtSr19[TB_DEPTH-1]; end
-	   endcase
-	end
+           endcase
+        end
      end
      else if (outputCnt == TB_DEPTH-1) begin  // finding the second symEn
-	firstDecision <= firstDecision;
-	if (stateCnt == outputCnt) begin // slow symEn
-	   case (tbPtr)
+        firstDecision <= firstDecision;
+        if (stateCnt == outputCnt) begin // slow symEn
+           case (tbPtr)
              0:  begin secondDecision <=  tbtSr0[TB_DEPTH-1]; end
              1:  begin secondDecision <=  tbtSr1[TB_DEPTH-1]; end
              2:  begin secondDecision <=  tbtSr2[TB_DEPTH-1]; end
@@ -293,9 +301,9 @@ module traceBackTableDeeper(clk, reset, symEn,
              18: begin secondDecision <= tbtSr18[TB_DEPTH-1]; end
              19: begin secondDecision <= tbtSr19[TB_DEPTH-1]; end
            endcase
-	end
-	else begin // fast symEn
-	   case (tbPtr)
+        end
+        else begin // fast symEn
+           case (tbPtr)
              0:  begin secondDecision <=  tbtSr0[TB_DEPTH]; end
              1:  begin secondDecision <=  tbtSr1[TB_DEPTH]; end
              2:  begin secondDecision <=  tbtSr2[TB_DEPTH]; end
@@ -317,68 +325,114 @@ module traceBackTableDeeper(clk, reset, symEn,
              18: begin secondDecision <= tbtSr18[TB_DEPTH]; end
              19: begin secondDecision <= tbtSr19[TB_DEPTH]; end
            endcase
-	end 
+        end 
      end
      else begin
-	firstDecision <= firstDecision;
+        firstDecision <= firstDecision;
         secondDecision <=  secondDecision;
      end
 
 
-   reg [11:0] symEnSr;
+   reg [8:0] symEnSrOld3;
+   always @(posedge clk) begin
+      if (reset) begin
+         symEnSrOld3 <= 0;
+      end
+      else begin
+         symEnSrOld3 <= {symEnSrOld3[7:0], symEn};
+      end
+   end
+   wire  symEnDlyOld = symEnSrOld3[8];
+   
+   reg [8:0] symEnEvenSrOld;
+   always @(posedge clk) begin
+      if (reset) begin
+         symEnEvenSrOld <= 0;
+      end
+      else begin
+         symEnEvenSrOld <= {symEnEvenSrOld[7:0], symEnEven};
+      end
+   end
+   wire symEnEvenOutOld = symEnEvenSrOld[8];
+
+
+   reg 	decisionOld;
+   always @(posedge clk) begin
+      if (reset) begin
+         decisionOld <= 0;
+      end
+      else if (symEnDlyOld) begin  
+         if (!symEnEvenOutOld) begin // low every other symEn
+            decisionOld <= firstDecision;
+         end
+         else begin
+            decisionOld <= secondDecision;
+         end
+      end 
+   end
+   
+
+
+
+   
+   // ++++++++++++  symEN shift +++++++++++++
+   // Have to keep up with how many symEn delays we have through the traceback
+   // It should corespond to the number of sel[] clocked into the traceback
+   // in this case it is 8 which is detected by symEnSr[16]  16/2= 8. You have to simulate
+   // to see what's going on in the shift register....
+   reg [16:0] symEnSr;
+   reg [16:0] symEnEvenSr;
    always @(posedge clk) begin
       if (reset) begin
          symEnSr <= 0;
-      end
-      else begin
-         symEnSr <= {symEnSr[10:0], symEn};
-      end
-   end
-// 8 deep   wire  symEnDly = symEnSr[10];
-   wire  symEnDly = symEnSr[5];   
-   
-   reg [11:0] symEnEvenSr;
-   always @(posedge clk) begin
-      if (reset) begin
          symEnEvenSr <= 0;
       end
+      else if(symEn) begin
+         symEnSr <= {symEnSr[15:0], symEn};
+         symEnEvenSr <= {symEnEvenSr[15:0], symEnEven};
+      end
+      else if (symEnSr[0]) begin
+         symEnSr <= {symEnSr[15:0], 1'b0};
+         symEnEvenSr <= symEnEvenSr;
+      end
       else begin
-         symEnEvenSr <= {symEnEvenSr[10:0], symEnEven};
+         symEnSr <= symEnSr;
+         symEnEvenSr <= symEnEvenSr;
       end
    end
-   wire symEnEvenOut = symEnEvenSr[10];
+   
+   // This final delay corresonds the number of clockes it takes to traceback in
+   // in the stored trellis. 
+   reg [8:0] symEnSr2;
+   reg [8:0] symEnEvenSr2;
+   always @(posedge clk) begin
+      if (reset) begin
+         symEnSr2 <= 0;
+         symEnEvenSr2 <= 0;
+      end
+      else begin
+         symEnSr2 <= {symEnSr2[7:0], symEnSr[16]};
+         symEnEvenSr2 <= {symEnEvenSr2[7:0], symEnEvenSr[7]};
+      end
+   end
 
+   wire  symEnDly = symEnSr2[7];
+   wire  symEnEvenOut = symEnEvenSr2[8];
 
-   reg [4:0] decisionTestSr;
-
-// 8 deep
-/* -----\/----- EXCLUDED -----\/-----
+   
    
  // Final decision output 
    always @(posedge clk) begin
       if (reset) begin
          decision <= 0;
       end
-      else if (symEnDly) begin
-	 decisionTestSr <= {decisionTestSr[3:0], decisionTest};
-	 if (!symEnEvenOut) begin // low every other symEn
+      else if (symEnDly) begin  
+         if (!symEnEvenOut) begin // low every other symEn
             decision <= firstDecision;
          end
          else begin
             decision <= secondDecision;
          end
-      end 
-   end   
- -----/\----- EXCLUDED -----/\----- */
-
- // Final decision output 
-   always @(posedge clk) begin
-      if (reset) begin
-         decision <= 0;
-      end
-      else if (symEnDly) begin
-	 decisionTestSr <= {decisionTestSr[3:0], decisionTest};
-         decision <= firstDecision;
       end 
    end   
 
