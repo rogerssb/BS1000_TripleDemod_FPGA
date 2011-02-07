@@ -202,23 +202,17 @@ module traceBackTable8deepSlowRate (clk, reset, symEn,
    end
    
    
-   reg [8:0] symEnSr;
+   reg [16:0] symEnSr;
    always @(posedge clk) begin
       if (reset) begin
          symEnSr <= 0;
       end
       else if(symEn) begin
-         symEnSr <= {symEnSr[6:0], symEn, 1'b0};
+         symEnSr <= {symEnSr[15:0], symEn};
       end
-      //else if(symEnR) begin
-      //   symEnSr <= {symEnSr[7:1], symEn};
-      //end
-      //else if (symEnSr[0]) begin
-      //   symEnSr <= {symEnSr[7:0], 1'b0};
-      //end
-      //     else if (symEnSr[1]) begin
-      //        symEnSr <= {symEnSr[7:1], 1'b0, symEnSr[0]};
-      //     end
+      else if (symEnSr[0]) begin
+         symEnSr <= {symEnSr[15:0], 1'b0};
+      end
    end
 
   reg [6:0] symEnSr2;
@@ -227,7 +221,7 @@ module traceBackTable8deepSlowRate (clk, reset, symEn,
         symEnSr2 <= 0;
      end
      else begin
-        symEnSr2 <= {symEnSr2[5:0], symEnSr[8]};
+        symEnSr2 <= {symEnSr2[5:0], symEnSr[16]};
      end
   end
 
