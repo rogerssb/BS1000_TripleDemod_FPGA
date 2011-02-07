@@ -72,24 +72,9 @@ module traceBackTableDeeper(clk, reset, symEn,
            tbtSr17 <= 0;
            tbtSr18 <= 0;
            tbtSr19 <= 0;
-	   //for (i=0; i < 9; i = i + 1) begin  // Setting individual memory cells to 0
-	   //   tbtSrDebug[i] = 0;
-	   //end
-
         end
         else begin
-           if (symEn) begin // debug comment: problem with timing ? for 4 deep we hade {3}
-              //tbtSrDebug[8] <= tbtSrDebug[7]; //debug
-//              tbtSrDebug[7] <= tbtSrDebug[6]; //debug
-//              tbtSrDebug[6] <= tbtSrDebug[5]; //debug
-//              tbtSrDebug[5] <= tbtSrDebug[4]; //debug
-//              tbtSrDebug[4] <= tbtSrDebug[3]; //debug
-//              tbtSrDebug[3] <= tbtSrDebug[2]; //debug
-//              tbtSrDebug[2] <= tbtSrDebug[1]; //debug
-//              tbtSrDebug[1] <= tbtSrDebug[0]; //debug
-//              tbtSrDebug[0] <= sel; //debug
-//              
-              
+           if (symEn) begin // debug comment: problem with timing ? for 4 deep we hade {3}              
               tbtSr0  <= {tbtSr0 [TB_DEPTH-1:0], sel[0 ]};
               tbtSr1  <= {tbtSr1 [TB_DEPTH-1:0], sel[1 ]};
               tbtSr2  <= {tbtSr2 [TB_DEPTH-1:0], sel[2 ]};
@@ -168,9 +153,6 @@ module traceBackTableDeeper(clk, reset, symEn,
         end
      end
    
-
-   
-
   
    // Path Decisions. stateCnt moves us through the "TB_DEPTH" previous paths
    // This block runs at the clock rate. It takes TB_DEPTH-1 clocks to complete
@@ -216,69 +198,46 @@ module traceBackTableDeeper(clk, reset, symEn,
            tbPtr <= tbPtr;
         end
      end
-   
+
    // Output 2 decisions every other symEn. There my be an offset in the tbtSr if the symEn rate is faster than the traceback table
    // depth. This is determained by comparing the two counters (stateCnt == outputCnt)
-   reg firstDecision, secondDecision;
+   reg firstDecision, secondDecision, T1, T2;
    always @(posedge clk)
      if (reset) begin
         firstDecision <= 0;
-        secondDecision <= 0;
+        firstDecision <= 0;
+	T1 <= 0;
+	T2 <= 0;
      end
-     else if (outputCnt == TB_DEPTH-2) begin   // finding the first decision
-        secondDecision <= secondDecision;
+     else if (outputCnt == TB_DEPTH-2) begin   // finding the second decision
+        firstDecision <= firstDecision;
+	T1 <= 1;
+	T2 <= 0;
         if (stateCnt == outputCnt) begin // slow symEn
            case (tbPtr)
-             0:  begin firstDecision <=  tbtSr0[TB_DEPTH-2]; end
-             1:  begin firstDecision <=  tbtSr1[TB_DEPTH-2]; end
-             2:  begin firstDecision <=  tbtSr2[TB_DEPTH-2]; end
-             3:  begin firstDecision <=  tbtSr3[TB_DEPTH-2]; end
-             4:  begin firstDecision <=  tbtSr4[TB_DEPTH-2]; end
-             5:  begin firstDecision <=  tbtSr5[TB_DEPTH-2]; end
-             6:  begin firstDecision <=  tbtSr6[TB_DEPTH-2]; end
-             7:  begin firstDecision <=  tbtSr7[TB_DEPTH-2]; end
-             8:  begin firstDecision <=  tbtSr8[TB_DEPTH-2]; end
-             9:  begin firstDecision <=  tbtSr9[TB_DEPTH-2]; end
-             10: begin firstDecision <= tbtSr10[TB_DEPTH-2]; end
-             11: begin firstDecision <= tbtSr11[TB_DEPTH-2]; end
-             12: begin firstDecision <= tbtSr12[TB_DEPTH-2]; end
-             13: begin firstDecision <= tbtSr13[TB_DEPTH-2]; end
-             14: begin firstDecision <= tbtSr14[TB_DEPTH-2]; end
-             15: begin firstDecision <= tbtSr15[TB_DEPTH-2]; end
-             16: begin firstDecision <= tbtSr16[TB_DEPTH-2]; end
-             17: begin firstDecision <= tbtSr17[TB_DEPTH-2]; end
-             18: begin firstDecision <= tbtSr18[TB_DEPTH-2]; end
-             19: begin firstDecision <= tbtSr19[TB_DEPTH-2]; end
+             0:  begin secondDecision <=  tbtSr0[TB_DEPTH-2]; end
+             1:  begin secondDecision <=  tbtSr1[TB_DEPTH-2]; end
+             2:  begin secondDecision <=  tbtSr2[TB_DEPTH-2]; end
+             3:  begin secondDecision <=  tbtSr3[TB_DEPTH-2]; end
+             4:  begin secondDecision <=  tbtSr4[TB_DEPTH-2]; end
+             5:  begin secondDecision <=  tbtSr5[TB_DEPTH-2]; end
+             6:  begin secondDecision <=  tbtSr6[TB_DEPTH-2]; end
+             7:  begin secondDecision <=  tbtSr7[TB_DEPTH-2]; end
+             8:  begin secondDecision <=  tbtSr8[TB_DEPTH-2]; end
+             9:  begin secondDecision <=  tbtSr9[TB_DEPTH-2]; end
+             10: begin secondDecision <= tbtSr10[TB_DEPTH-2]; end
+             11: begin secondDecision <= tbtSr11[TB_DEPTH-2]; end
+             12: begin secondDecision <= tbtSr12[TB_DEPTH-2]; end
+             13: begin secondDecision <= tbtSr13[TB_DEPTH-2]; end
+             14: begin secondDecision <= tbtSr14[TB_DEPTH-2]; end
+             15: begin secondDecision <= tbtSr15[TB_DEPTH-2]; end
+             16: begin secondDecision <= tbtSr16[TB_DEPTH-2]; end
+             17: begin secondDecision <= tbtSr17[TB_DEPTH-2]; end
+             18: begin secondDecision <= tbtSr18[TB_DEPTH-2]; end
+             19: begin secondDecision <= tbtSr19[TB_DEPTH-2]; end
            endcase
         end
         else begin // fast symEn
-           case (tbPtr)
-             0:  begin firstDecision <=  tbtSr0[TB_DEPTH-1]; end
-             1:  begin firstDecision <=  tbtSr1[TB_DEPTH-1]; end
-             2:  begin firstDecision <=  tbtSr2[TB_DEPTH-1]; end
-             3:  begin firstDecision <=  tbtSr3[TB_DEPTH-1]; end
-             4:  begin firstDecision <=  tbtSr4[TB_DEPTH-1]; end
-             5:  begin firstDecision <=  tbtSr5[TB_DEPTH-1]; end
-             6:  begin firstDecision <=  tbtSr6[TB_DEPTH-1]; end
-             7:  begin firstDecision <=  tbtSr7[TB_DEPTH-1]; end
-             8:  begin firstDecision <=  tbtSr8[TB_DEPTH-1]; end
-             9:  begin firstDecision <=  tbtSr9[TB_DEPTH-1]; end
-             10: begin firstDecision <= tbtSr10[TB_DEPTH-1]; end
-             11: begin firstDecision <= tbtSr11[TB_DEPTH-1]; end
-             12: begin firstDecision <= tbtSr12[TB_DEPTH-1]; end
-             13: begin firstDecision <= tbtSr13[TB_DEPTH-1]; end
-             14: begin firstDecision <= tbtSr14[TB_DEPTH-1]; end
-             15: begin firstDecision <= tbtSr15[TB_DEPTH-1]; end
-             16: begin firstDecision <= tbtSr16[TB_DEPTH-1]; end
-             17: begin firstDecision <= tbtSr17[TB_DEPTH-1]; end
-             18: begin firstDecision <= tbtSr18[TB_DEPTH-1]; end
-             19: begin firstDecision <= tbtSr19[TB_DEPTH-1]; end
-           endcase
-        end
-     end
-     else if (outputCnt == TB_DEPTH-1) begin  // finding the second symEn
-        firstDecision <= firstDecision;
-        if (stateCnt == outputCnt) begin // slow symEn
            case (tbPtr)
              0:  begin secondDecision <=  tbtSr0[TB_DEPTH-1]; end
              1:  begin secondDecision <=  tbtSr1[TB_DEPTH-1]; end
@@ -302,140 +261,123 @@ module traceBackTableDeeper(clk, reset, symEn,
              19: begin secondDecision <= tbtSr19[TB_DEPTH-1]; end
            endcase
         end
+     end
+     else if (outputCnt == TB_DEPTH-1) begin  // finding the first symEn
+        secondDecision <= secondDecision;
+	T1 <= 0;
+	T2 <= 1;
+        if (stateCnt == outputCnt) begin // slow symEn
+           case (tbPtr)
+             0:  begin firstDecision <=  tbtSr0[TB_DEPTH-1]; end
+             1:  begin firstDecision <=  tbtSr1[TB_DEPTH-1]; end
+             2:  begin firstDecision <=  tbtSr2[TB_DEPTH-1]; end
+             3:  begin firstDecision <=  tbtSr3[TB_DEPTH-1]; end
+             4:  begin firstDecision <=  tbtSr4[TB_DEPTH-1]; end
+             5:  begin firstDecision <=  tbtSr5[TB_DEPTH-1]; end
+             6:  begin firstDecision <=  tbtSr6[TB_DEPTH-1]; end
+             7:  begin firstDecision <=  tbtSr7[TB_DEPTH-1]; end
+             8:  begin firstDecision <=  tbtSr8[TB_DEPTH-1]; end
+             9:  begin firstDecision <=  tbtSr9[TB_DEPTH-1]; end
+             10: begin firstDecision <= tbtSr10[TB_DEPTH-1]; end
+             11: begin firstDecision <= tbtSr11[TB_DEPTH-1]; end
+             12: begin firstDecision <= tbtSr12[TB_DEPTH-1]; end
+             13: begin firstDecision <= tbtSr13[TB_DEPTH-1]; end
+             14: begin firstDecision <= tbtSr14[TB_DEPTH-1]; end
+             15: begin firstDecision <= tbtSr15[TB_DEPTH-1]; end
+             16: begin firstDecision <= tbtSr16[TB_DEPTH-1]; end
+             17: begin firstDecision <= tbtSr17[TB_DEPTH-1]; end
+             18: begin firstDecision <= tbtSr18[TB_DEPTH-1]; end
+             19: begin firstDecision <= tbtSr19[TB_DEPTH-1]; end
+           endcase
+        end
         else begin // fast symEn
            case (tbPtr)
-             0:  begin secondDecision <=  tbtSr0[TB_DEPTH]; end
-             1:  begin secondDecision <=  tbtSr1[TB_DEPTH]; end
-             2:  begin secondDecision <=  tbtSr2[TB_DEPTH]; end
-             3:  begin secondDecision <=  tbtSr3[TB_DEPTH]; end
-             4:  begin secondDecision <=  tbtSr4[TB_DEPTH]; end
-             5:  begin secondDecision <=  tbtSr5[TB_DEPTH]; end
-             6:  begin secondDecision <=  tbtSr6[TB_DEPTH]; end
-             7:  begin secondDecision <=  tbtSr7[TB_DEPTH]; end
-             8:  begin secondDecision <=  tbtSr8[TB_DEPTH]; end
-             9:  begin secondDecision <=  tbtSr9[TB_DEPTH]; end
-             10: begin secondDecision <= tbtSr10[TB_DEPTH]; end
-             11: begin secondDecision <= tbtSr11[TB_DEPTH]; end
-             12: begin secondDecision <= tbtSr12[TB_DEPTH]; end
-             13: begin secondDecision <= tbtSr13[TB_DEPTH]; end
-             14: begin secondDecision <= tbtSr14[TB_DEPTH]; end
-             15: begin secondDecision <= tbtSr15[TB_DEPTH]; end
-             16: begin secondDecision <= tbtSr16[TB_DEPTH]; end
-             17: begin secondDecision <= tbtSr17[TB_DEPTH]; end
-             18: begin secondDecision <= tbtSr18[TB_DEPTH]; end
-             19: begin secondDecision <= tbtSr19[TB_DEPTH]; end
+             0:  begin firstDecision <=  tbtSr0[TB_DEPTH]; end
+             1:  begin firstDecision <=  tbtSr1[TB_DEPTH]; end
+             2:  begin firstDecision <=  tbtSr2[TB_DEPTH]; end
+             3:  begin firstDecision <=  tbtSr3[TB_DEPTH]; end
+             4:  begin firstDecision <=  tbtSr4[TB_DEPTH]; end
+             5:  begin firstDecision <=  tbtSr5[TB_DEPTH]; end
+             6:  begin firstDecision <=  tbtSr6[TB_DEPTH]; end
+             7:  begin firstDecision <=  tbtSr7[TB_DEPTH]; end
+             8:  begin firstDecision <=  tbtSr8[TB_DEPTH]; end
+             9:  begin firstDecision <=  tbtSr9[TB_DEPTH]; end
+             10: begin firstDecision <= tbtSr10[TB_DEPTH]; end
+             11: begin firstDecision <= tbtSr11[TB_DEPTH]; end
+             12: begin firstDecision <= tbtSr12[TB_DEPTH]; end
+             13: begin firstDecision <= tbtSr13[TB_DEPTH]; end
+             14: begin firstDecision <= tbtSr14[TB_DEPTH]; end
+             15: begin firstDecision <= tbtSr15[TB_DEPTH]; end
+             16: begin firstDecision <= tbtSr16[TB_DEPTH]; end
+             17: begin firstDecision <= tbtSr17[TB_DEPTH]; end
+             18: begin firstDecision <= tbtSr18[TB_DEPTH]; end
+             19: begin firstDecision <= tbtSr19[TB_DEPTH]; end
            endcase
         end 
      end
      else begin
         firstDecision <= firstDecision;
         secondDecision <=  secondDecision;
+	T1 <= 0;
+	T2 <= 0;
      end
 
 
-   reg [8:0] symEnSrOld3;
+
+
+
+   // Latch the second output again to align it after the first
+   reg  secondDecisionR, secondDecisionRR;
    always @(posedge clk) begin
       if (reset) begin
-         symEnSrOld3 <= 0;
+         secondDecisionR <= 0;
+         secondDecisionRR <= 0;
+      end
+      else if (T1) begin
+         secondDecisionR <= secondDecision;
+         secondDecisionRR <= secondDecisionR;
+      end
+   end
+
+   reg  firstDecisionR;
+   always @(posedge clk) begin
+      if (reset) begin
+         firstDecisionR <= 0;
+      end
+      else if (T2) begin
+         firstDecisionR <= firstDecision;
+      end
+   end
+
+   reg [4:0] firstDecisionSr;
+   reg [4:0] T2Sr;
+   always @(posedge clk) begin
+      if (reset) begin
+         firstDecisionSr <= 0;
+         T2Sr <= 0;
       end
       else begin
-         symEnSrOld3 <= {symEnSrOld3[7:0], symEn};
-      end
-   end
-   wire  symEnDlyOld = symEnSrOld3[8];
-   
-   reg [8:0] symEnEvenSrOld;
-   always @(posedge clk) begin
-      if (reset) begin
-         symEnEvenSrOld <= 0;
-      end
-      else begin
-         symEnEvenSrOld <= {symEnEvenSrOld[7:0], symEnEven};
-      end
-   end
-   wire symEnEvenOutOld = symEnEvenSrOld[8];
-
-
-   reg 	decisionOld;
-   always @(posedge clk) begin
-      if (reset) begin
-         decisionOld <= 0;
-      end
-      else if (symEnDlyOld) begin  
-         if (!symEnEvenOutOld) begin // low every other symEn
-            decisionOld <= firstDecision;
-         end
-         else begin
-            decisionOld <= secondDecision;
-         end
-      end 
-   end
-   
-
-
-
-   
-   // ++++++++++++  symEN shift +++++++++++++
-   // Have to keep up with how many symEn delays we have through the traceback
-   // It should corespond to the number of sel[] clocked into the traceback
-   // in this case it is 8 which is detected by symEnSr[16]  16/2= 8. You have to simulate
-   // to see what's going on in the shift register....
-   reg [16:0] symEnSr;
-   reg [16:0] symEnEvenSr;
-   always @(posedge clk) begin
-      if (reset) begin
-         symEnSr <= 0;
-         symEnEvenSr <= 0;
-      end
-      else if(symEn) begin
-         symEnSr <= {symEnSr[15:0], symEn};
-         symEnEvenSr <= {symEnEvenSr[15:0], symEnEven};
-      end
-      else if (symEnSr[0]) begin
-         symEnSr <= {symEnSr[15:0], 1'b0};
-         symEnEvenSr <= symEnEvenSr;
-      end
-      else begin
-         symEnSr <= symEnSr;
-         symEnEvenSr <= symEnEvenSr;
-      end
-   end
-   
-   // This final delay corresonds the number of clockes it takes to traceback in
-   // in the stored trellis. 
-   reg [8:0] symEnSr2;
-   reg [8:0] symEnEvenSr2;
-   always @(posedge clk) begin
-      if (reset) begin
-         symEnSr2 <= 0;
-         symEnEvenSr2 <= 0;
-      end
-      else begin
-         symEnSr2 <= {symEnSr2[7:0], symEnSr[16]};
-         symEnEvenSr2 <= {symEnEvenSr2[7:0], symEnEvenSr[7]};
+         firstDecisionSr <= {firstDecisionSr[3:0], firstDecisionR};
+         T2Sr <= {T2Sr[3:0], T2};
       end
    end
 
-   wire  symEnDly = symEnSr2[7];
-   wire  symEnEvenOut = symEnEvenSr2[8];
-
+   wire symEnDly = T1 || T2Sr[3];
    
-   
- // Final decision output 
+   // Final decision output
    always @(posedge clk) begin
       if (reset) begin
          decision <= 0;
       end
-      else if (symEnDly) begin  
-         if (!symEnEvenOut) begin // low every other symEn
-            decision <= firstDecision;
-         end
-         else begin
-            decision <= secondDecision;
-         end
+      else if (T1) begin  
+         decision <= secondDecisionRR;
+      end
+      else if (T2Sr[3]) begin
+         decision <= firstDecisionSr[3];
+      end
+      else begin
+	 decision <= decision;
       end 
    end   
-
-
    
 endmodule
