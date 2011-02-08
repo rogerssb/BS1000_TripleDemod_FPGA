@@ -170,9 +170,8 @@ wire    [ROT_BITS-1:0]  out1Real ,
 `ifdef SIMULATE
    // in simulation we have to reset the accumulatios when the input data is known.
    // simReset is toggled in the test bench
-   //reg                  simReset;
-   //wire                 acsReset = simReset;
-   wire                 acsReset = reset;
+   reg                  simReset;
+   wire                 acsReset = simReset;
 `else
    wire                 acsReset = reset;
 `endif
@@ -306,7 +305,7 @@ wire    [ROT_BITS-1:0]  out1Real ,
      end
    
 
-`define USE_8_DEEP_TB
+//`define USE_8_DEEP_TB
 `ifdef USE_8_DEEP_TB      
    
    traceBackTableDeeper tbtDeeper
@@ -335,11 +334,10 @@ wire    [ROT_BITS-1:0]  out1Real ,
       .decision(tbDecision),
       .symEnDly(symEn_tbtDly)
       );
-`else
  -----/\----- EXCLUDED -----/\----- */
    
-/* -----\/----- EXCLUDED -----\/-----
-`ifdef TB_ANNOTATE
+`endif //USE_8_DEEP_TB
+      
    traceBackTable tbt1
      (
       .clk(clk), 
@@ -351,23 +349,7 @@ wire    [ROT_BITS-1:0]  out1Real ,
       .oneOrZeroPredecessor(),
       .symEnDly(symEn_tbtDly)
       );
-`else
-   traceBackTable #(size) tbt1
-     (
-      .clk(clk), 
-      .reset(reset), 
-      .symEn(symEn_maxMetDly),
-      .sel(sel_2dly), 
-      .index(index),
-      .decision(tbDecision),
-      .oneOrZeroPredecessor(),
-      .symEnDly(symEn_tbtDly)
-      );
-`endif
- -----/\----- EXCLUDED -----/\----- */
 
-`endif //USE_8_DEEP_TB
-      
    always @(posedge clk)
      begin
         if (symEn) begin

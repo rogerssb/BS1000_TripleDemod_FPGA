@@ -8,9 +8,9 @@ Version=Silvaco4.10.0.R
 DisableCache=
 SimFile=
 [Analyzer]
-C0Width=58
+C0Width=165
 C1Width=58
-C2Width=58
+C2Width=76
 GotoSource=N
 [Spice]
 [LibraryFiles]
@@ -21,7 +21,7 @@ RecirculateTime=
 UseRecirculateTime=
 DiskSize=5000M
 [View]
-1=Last 39927.002ns 234314.466ns 4563.086ns 155910.764ns 185821.962ns
+1=Last 0.000ns 257450.101ns 6406.998ns 99704.472ns 185821.962ns
 [Group0]
 Name=New Group2
 [Group3]
@@ -32,6 +32,7 @@ Name="Micro"
 3="test.demod : wr3" default
 4="test.demod : din[31:0]" default
 5="test.demod : addr[11:0]" default
+OpenGroup=
 [Group2]
 Name="Tx"
 0="test.fmMod : interpReal" default Real AnalogDisplay AType=Step Scale=Auto
@@ -45,6 +46,7 @@ Name="Tx"
 8="test.fmMod : modClk" default
 9="test.fmMod : reset" default
 10="test.fmMod : clk" default
+OpenGroup=
 [PliFiles]
 0=.\gaussPLI\gaussPLI.dll
 [IncDirs]
@@ -72,7 +74,6 @@ Name="Carrier"
 18="test.demod.carrierLoop : negFrequency[18:0]" default
 19="test.demod.carrierLoop : posFrequency[18:0]" default
 20="test.demod.carrierLoop : newFreq[18:0]" default
-OpenGroup=
 [Group1]
 Name="Rx"
 0="test.demod.resampler : reset" default
@@ -96,7 +97,6 @@ Name="Rx"
 18="test.demod.ddc : iMixReal" default Real AnalogDisplay AType=Step Scale=Auto
 19="test : iSignalReal" default Real AnalogDisplay AType=Step Scale=Auto
 20="test : cicDecimationInt" default Decimal AnalogDisplay AType=PWL Scale=Auto
-OpenGroup=Yes
 [Group7]
 Name="SDI"
 0="test.sdi : eyeCount[2:0]" default
@@ -126,6 +126,7 @@ Name="SDI"
 24="test.sdi : muxState[3:0]" default
 25="test.sdi : baudEn" default
 26="test.sdi : baudDiv[15:0]" default
+OpenGroup=
 [Group4]
 Name="Bitsync"
 0="test.demod.bitsync : avgOffsetReal" default Real AnalogDisplay AType=Step Scale=Auto
@@ -168,6 +169,7 @@ Name="Bitsync"
 37="test.demod.resampler.resamplerI : outReal" default Real AnalogDisplay AType=Step Scale=Auto
 38="test.demod.resampler.resamplerI : inReal" default Real AnalogDisplay AType=Step Scale=Auto
 39="test : cicDecimationInt" default Decimal AnalogDisplay AType=PWL Scale=Auto
+OpenGroup=
 [Group6]
 Name="DAC"
 0="test.dac2Interp : invSincOut[31:0]" default
@@ -187,7 +189,6 @@ Name="DAC"
 14="test.demod : symClk" default Unknown
 15="test.demod : resampSync" default
 16="test.demod : ddcSync" default
-OpenGroup=
 [Files]
 0=test.v
 1=demod.v
@@ -263,3 +264,4 @@ OpenGroup=
 5=Carrier : 5 : 1 : 0
 6=DAC : 6 : 1 : 0
 7=SDI : 7 : 1 : 0
+[Bookmarks]

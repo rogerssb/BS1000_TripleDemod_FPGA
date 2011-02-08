@@ -20,7 +20,7 @@ reg symEn,sym2xEn;
 
 trellis uut
 (
- 	.clk(clk), .reset(reset), .symEn(symEn), .sym2xEn(sym2xEn), 
+        .clk(clk), .reset(reset), .symEn(symEn), .sym2xEn(sym2xEn), 
     .iIn(din[57:40]), .qIn(din[17:0]), 
     .wr0(), .wr1(), .wr2(), .wr3(), 
     .addr(), 
@@ -46,7 +46,7 @@ initial reset = 0;
 
 always #4 clk = !clk; 
 always @(posedge clk) clkDiv2 = !clkDiv2; 
-	
+        
 
 
 reg [79:0] readMem[20009:0];
@@ -63,7 +63,7 @@ initial begin
 
 reg [4:0]cnt; initial cnt = 20;
 
-// for uut2	
+// for uut2     
 reg [79:0]din_uut2;
 reg symEn_uut2, sym2xEn_uut2;
 reg [7:0] index_uut2;  
@@ -74,10 +74,10 @@ initial begin
     end
 reg [4:0]cnt_uut2; initial cnt_uut2 = 20;
 // end for uut2
-	
-	
-	
-	
+        
+        
+        
+        
 // Random data
 parameter  PN17 = 16'h008e,
            MASK17 = 16'h00ff;
@@ -103,9 +103,9 @@ always @(negedge clk or posedge reset) begin
     end
 
 reg [23:0] delaySr;
-reg simBit;	
+reg simBit;     
 always @(posedge clk) begin
-	delaySr <= {delaySr[22:0], simBit};
+        delaySr <= {delaySr[22:0], simBit};
 end
 reg [15:0]symEnShift;
 //always @(posedge clk)symEnShift <= {symEnShift[14:0],(sym2xEnDly_mult2 && !symEnDly_mult2)};
@@ -116,51 +116,51 @@ wire rotEnaTb = symEnShift[4];
 
 reg resultDly; 
 always @(posedge clk) begin
-	if (rotEnaTb) begin //should be the symEn comming out of the last module who is produsinf the decision bit
-		resultDly <= delaySr[23];
-	end	
+        if (rotEnaTb) begin //should be the symEn comming out of the last module who is produsinf the decision bit
+                resultDly <= delaySr[23];
+        end     
 end
 
-	
+        
 always @(posedge clk)begin
  // #1;
   //if(cnt == 17) cnt <= 0;
-  if(cnt == 8) cnt <= 0;
+  if(cnt == 13) cnt <= 0;
   //else if(cntEna) cnt <= cnt +1 + randData;
-  else if(cntEna) cnt <= cnt +1;	  
+  else if(cntEna) cnt <= cnt +1;          
   case(cnt)
     //0,8: begin 
-	0,4: begin
+        0,5,10: begin
       symEn <= 1;
       sym2xEn <= 1;
-	  simBit <= readMemResult[bitIndex];
+          simBit <= readMemResult[bitIndex];
       din <= readMem[index];
-	  //if (index >= 79) begin index <= 0; end // reading in 4*20 samples then wrap around. 20 comes from the # trellis states 
+          //if (index >= 79) begin index <= 0; end // reading in 4*20 samples then wrap around. 20 comes from the # trellis states 
       if (index >= 20000) begin index <= 0; end // reading in 4*20 samples then wrap around. 20 comes from the # trellis states
-	  else begin 
-	     index <= index +1;
-	     bitIndex <= bitIndex +1; 
-	  end
+          else begin 
+             index <= index +1;
+             bitIndex <= bitIndex +1; 
+          end
       end
-    //3,11: begin	
-	2,6: begin
+    //3,11: begin       
+        2,7,12: begin
       symEn <= 0;
       sym2xEn <= 1;
-	  //simBit <= readMemResult[index];
+          //simBit <= readMemResult[index];
       din <= readMem[index];
-	  //if (index >= 79) begin index <= 0; end // reading in 4*20 samples then wrap around. 20 comes from the # trellis states
-	  if (index >= 20000) begin index <= 0; end // reading in 4*20 samples then wrap around. 20 comes from the # trellis states
-	  else begin index <= index +1; end
+          //if (index >= 79) begin index <= 0; end // reading in 4*20 samples then wrap around. 20 comes from the # trellis states
+          if (index >= 20000) begin index <= 0; end // reading in 4*20 samples then wrap around. 20 comes from the # trellis states
+          else begin index <= index +1; end
       end
     default: begin
       symEn <= 0;
       sym2xEn <= 0;
-      din <= 0;
+      //din <= 0;
       end
     endcase
   end
-	
-	
+        
+        
 // always @(posedge clk)begin
 //  #1;
 //  if(cnt == 17) cnt <= 0;
@@ -174,8 +174,8 @@ always @(posedge clk)begin
 //      symEn <= 1;
 //      sym2xEn <= 1;
 //      din <= readMem[index];
-//	  if (index >= 79) begin index <= 0; end // reading in 4*20 samples then wrap around. 20 comes from the # trellis states
-//	  else begin index <= index +1; end
+//        if (index >= 79) begin index <= 0; end // reading in 4*20 samples then wrap around. 20 comes from the # trellis states
+//        else begin index <= index +1; end
 //      end
 //    //3,11: begin
 //    2,7,11,16: begin
@@ -184,8 +184,8 @@ always @(posedge clk)begin
 //      symEn <= 0;
 //      sym2xEn <= 1;
 //      din <= readMem[index];
-//	  if (index >= 79) begin index <= 0; end // reading in 4*20 samples then wrap around. 20 comes from the # trellis states
-//	  else begin index <= index +1; end
+//        if (index >= 79) begin index <= 0; end // reading in 4*20 samples then wrap around. 20 comes from the # trellis states
+//        else begin index <= index +1; end
 //      end
 //    default: begin
 //      symEn <= 0;
@@ -221,7 +221,7 @@ initial begin
   index_uut2 = 0;
   bitError = 0;
   din = 0;
-  din_uut2 = 0;	
+  din_uut2 = 0; 
   uut.decayFactor =  8'hd9;
 `ifdef ONEZERO 
       $readmemh("P:/semco/matlab sim results/One Zero/mfinputs.hex", readMem);
@@ -249,13 +249,13 @@ initial begin
 `endif
 
 `ifdef RANDOM_SIM_NO_NOISE
-      $readmemh("c:/projects/semco/hdl/data/noisy_data.txt", readMemResult);
-      $readmemh("c:/projects/semco/hdl/data/clean_samples.hex", readMem);
+      $readmemh("./simData/noisy_data.txt", readMemResult);
+      $readmemh("./simData/clean_samples.hex", readMem);
 `endif
 
 `ifdef RANDOM_SIM_NOISE
-      $readmemh("c:/projects/semco/hdl/data/noisy_data.txt", readMemResult);
-      $readmemh("c:/projects/semco/hdl/data/noisy_samples.hex", readMem);
+      $readmemh("./simData/noisy_data.txt", readMemResult);
+      $readmemh("./simData/noisy_samples.hex", readMem);
 `endif
 
 
@@ -269,26 +269,26 @@ initial begin
 
   // BERT 
   reg acsDecision;
-  reg [15:0] bertSr;
+  reg [31:0] bertSr;
   
   always @(posedge clk) begin
       if (reset) begin
           bertIndex <= 0;
       end
-      else if (symEn_tbtDly) begin	
-		  bertSr <= {bertSr[14:0], readMemResult[bertIndex]};
-		  acsDecision <= testDec1;
-          bertIndex = bertIndex + 1;
-		  //if (acsDecision != bertSr[6]) begin		  // without carrier loop
-		  //if (decision != bertSr[9]) begin		  // without carrier loop   4 deep traceback
-		  if (decision != bertSr[10]) begin		  // without carrier loop   4 deep traceback
-		  //if (decision != bertSr[11]) begin			  // with carrierloop
-			  bitError <= bitError + 1;
-		  end
-	  end
+      else if (symEn_tbtDly) begin      
+            bertSr <= {bertSr[30:0], readMemResult[bertIndex]};
+            acsDecision <= testDec1;
+            bertIndex = bertIndex + 1;
+            if (decision != bertSr[6]) begin           // without carrier loop
+            //if (decision != bertSr[9]) begin              // without carrier loop   4 deep traceback
+            //if (decision != bertSr[10]) begin               // without carrier loop   4 deep traceback
+            //if (decision != bertSr[11]) begin                     // with carrierloop
+                bitError <= bitError + 1;
+            end
+      end
   end
   
-			  
+                          
 
 
   

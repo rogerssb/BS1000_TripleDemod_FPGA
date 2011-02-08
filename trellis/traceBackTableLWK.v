@@ -15,7 +15,7 @@ module traceBackTableDeeper(clk, reset, symEn,
                       decision,
                       symEnDly
                       );
-   parameter          TB_DEPTH=8;
+   parameter          TB_DEPTH=3;
    parameter          SR_DEPTH=TB_DEPTH+1;
 
    input              clk,reset,symEn;
