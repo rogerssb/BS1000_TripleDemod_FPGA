@@ -16,32 +16,34 @@ module traceBackTableDeeper(clk, reset, symEn,
                       symEnDly
                       );
    parameter          TB_DEPTH=4;
+   parameter          SR_DEPTH=TB_DEPTH+1;
+
    input              clk,reset,symEn;
    input [19:0]       sel;   // 20 induvidual decision. 0 or 1 tell us if we trace + or - 7 modulo 20 
    input [4:0]        index; // pointer to the state which has the maximum metric
    output             decision;
    output             symEnDly;
-   reg [TB_DEPTH:0]   tbtSr0;
-   reg [TB_DEPTH:0]   tbtSr1;
-   reg [TB_DEPTH:0]   tbtSr2;
-   reg [TB_DEPTH:0]   tbtSr3;
-   reg [TB_DEPTH:0]   tbtSr4;
-   reg [TB_DEPTH:0]   tbtSr5;
-   reg [TB_DEPTH:0]   tbtSr6;
-   reg [TB_DEPTH:0]   tbtSr7;
-   reg [TB_DEPTH:0]   tbtSr8;
-   reg [TB_DEPTH:0]   tbtSr9;
-   reg [TB_DEPTH:0]   tbtSr10;
-   reg [TB_DEPTH:0]   tbtSr11;
-   reg [TB_DEPTH:0]   tbtSr12;
-   reg [TB_DEPTH:0]   tbtSr13;
-   reg [TB_DEPTH:0]   tbtSr14;
-   reg [TB_DEPTH:0]   tbtSr15;
-   reg [TB_DEPTH:0]   tbtSr16;
-   reg [TB_DEPTH:0]   tbtSr17;
-   reg [TB_DEPTH:0]   tbtSr18;
-   reg [TB_DEPTH:0]   tbtSr19;
-   reg [4:0]          tbPtr;
+   reg [SR_DEPTH:0]   tbtSr0;
+   reg [SR_DEPTH:0]   tbtSr1;
+   reg [SR_DEPTH:0]   tbtSr2;
+   reg [SR_DEPTH:0]   tbtSr3;
+   reg [SR_DEPTH:0]   tbtSr4;
+   reg [SR_DEPTH:0]   tbtSr5;
+   reg [SR_DEPTH:0]   tbtSr6;
+   reg [SR_DEPTH:0]   tbtSr7;
+   reg [SR_DEPTH:0]   tbtSr8;
+   reg [SR_DEPTH:0]   tbtSr9;
+   reg [SR_DEPTH:0]   tbtSr10;
+   reg [SR_DEPTH:0]   tbtSr11;
+   reg [SR_DEPTH:0]   tbtSr12;
+   reg [SR_DEPTH:0]   tbtSr13;
+   reg [SR_DEPTH:0]   tbtSr14;
+   reg [SR_DEPTH:0]   tbtSr15;
+   reg [SR_DEPTH:0]   tbtSr16;
+   reg [SR_DEPTH:0]   tbtSr17;
+   reg [SR_DEPTH:0]   tbtSr18;
+   reg [SR_DEPTH:0]   tbtSr19;
+   reg [4:0]          tbState;
 
    
    // 3bits x 20 states trace-back shift-register
@@ -101,24 +103,24 @@ module traceBackTableDeeper(clk, reset, symEn,
    reg  decisionTest;
    
    // state Machine counter
-   reg      [3:0]   stateCnt;       // Traceback State
+   reg      [3:0]   stageCnt;       // Traceback Stage Counter
    reg      [3:0]   symEnCount;     // Number of symEn during tracing
    reg              tracing;
-   wire     [3:0]   lastState = TB_DEPTH-1;
-   wire             newTrace = (symEn && (stateCnt == lastState));
+   wire     [3:0]   lastStage = TB_DEPTH;
+   wire             newTrace = (symEn && (stageCnt == lastStage));
    always @(posedge clk) begin
         if (reset) begin
-            stateCnt <= lastState;
+            stageCnt <= lastStage;
             tracing <= 0;
             symEnCount <= 0;
         end
         else if (newTrace) begin
-            stateCnt <= 0;
+            stageCnt <= 1;
             symEnCount <= 0;
             tracing <= 1;
         end
-        else if (stateCnt < lastState) begin
-            stateCnt <= stateCnt + 1;
+        else if (stageCnt < lastStage) begin
+            stageCnt <= stageCnt + 1;
             if (symEn) begin
                 symEnCount <= symEnCount + 1;
             end
@@ -128,78 +130,108 @@ module traceBackTableDeeper(clk, reset, symEn,
         end
    end
 
-   // Path Decisions. stateCnt moves us through the "TB_DEPTH" previous paths
+   // Path Decisions. stageCnt moves us through the "TB_DEPTH" previous paths
    // This block runs at the clock rate. It takes TB_DEPTH-1 clocks to complete
-   wire     [3:0] tbIndex = stateCnt + symEnCount;
+   wire     [3:0] tbIndex = stageCnt + symEnCount;
    always @(posedge clk)
      begin
         if (reset) begin
-           tbPtr <= 0;
+           tbState <= 0;
         end
         // 8 deep else if (symEn && symEnEven) begin
         else if (newTrace) begin
-           tbPtr <= index;  // loading in the starting max metric index at the trace back update rate
+           `define USE_FIRST_STATE
+           `ifdef USE_FIRST_STATE
+           case (index)
+             0 : begin // We are in the "0-th" trellis state
+                if (sel[0]==0) 
+                  tbState <= 7; // sel=0 makes us jump +7 modulo 20.  
+                else 
+                  tbState <= 13;  // sel=1,   jump -7 modulo 20
+                end
+             1 : if (sel[1 ]==0) tbState <= 8 ;  else tbState <= 14;
+             2 : if (sel[2 ]==0) tbState <= 9 ;  else tbState <= 15;
+             3:  if (sel[3 ]==0) tbState <= 10;  else tbState <= 16;
+             4:  if (sel[4 ]==0) tbState <= 11;  else tbState <= 17;
+             5:  if (sel[5 ]==0) tbState <= 12;  else tbState <= 18;
+             6:  if (sel[6 ]==0) tbState <= 13;  else tbState <= 19;
+             7:  if (sel[7 ]==0) tbState <= 14;  else tbState <= 0 ;
+             8:  if (sel[8 ]==0) tbState <= 15;  else tbState <= 1 ;
+             9:  if (sel[9 ]==0) tbState <= 16;  else tbState <= 2 ;
+             10: if (sel[10]==0) tbState <= 17;  else tbState <= 3 ;
+             11: if (sel[11]==0) tbState <= 18;  else tbState <= 4 ;
+             12: if (sel[12]==0) tbState <= 19;  else tbState <= 5 ;
+             13: if (sel[13]==0) tbState <= 0 ;  else tbState <= 6 ;
+             14: if (sel[14]==0) tbState <= 1 ;  else tbState <= 7 ;
+             15: if (sel[15]==0) tbState <= 2 ;  else tbState <= 8 ;
+             16: if (sel[16]==0) tbState <= 3 ;  else tbState <= 9 ;
+             17: if (sel[17]==0) tbState <= 4 ;  else tbState <= 10;
+             18: if (sel[18]==0) tbState <= 5 ;  else tbState <= 11;
+             19: if (sel[19]==0) tbState <= 6 ;  else tbState <= 12;
+           endcase
+           `else
+           tbState <= index;  // loading in the starting max metric index at the trace back update rate
+           `endif
         end
         else begin    
-           case (tbPtr)
+           case (tbState)
              0 : begin // We are in the "0-th" trellis state
                 if (tbtSr0[tbIndex]==0) 
-                  tbPtr <= 7; // sel=0 makes us jump +7 modulo 20.  
+                  tbState <= 7; // sel=0 makes us jump +7 modulo 20.  
                 else 
-                  tbPtr <= 13;  // sel=1,   jump -7 modulo 20
+                  tbState <= 13;  // sel=1,   jump -7 modulo 20
                 end
-             1 : if (tbtSr1[tbIndex]==0) tbPtr <= 8 ;  else tbPtr <= 14;
-             2 : if (tbtSr2[tbIndex]==0) tbPtr <= 9 ;  else tbPtr <= 15;
-             3:  if (tbtSr3[tbIndex]==0) tbPtr <= 10;  else tbPtr <= 16;
-             4:  if (tbtSr4[tbIndex]==0) tbPtr <= 11;  else tbPtr <= 17;
-             5:  if (tbtSr5[tbIndex]==0) tbPtr <= 12;  else tbPtr <= 18;
-             6:  if (tbtSr6[tbIndex]==0) tbPtr <= 13;  else tbPtr <= 19;
-             7:  if (tbtSr7[tbIndex]==0) tbPtr <= 14;  else tbPtr <= 0 ;
-             8:  if (tbtSr8[tbIndex]==0) tbPtr <= 15;  else tbPtr <= 1 ;
-             9:  if (tbtSr9[tbIndex]==0) tbPtr <= 16;  else tbPtr <= 2 ;
-             10: if (tbtSr10[tbIndex]==0) tbPtr <= 17;  else tbPtr <= 3 ;
-             11: if (tbtSr11[tbIndex]==0) tbPtr <= 18;  else tbPtr <= 4 ;
-             12: if (tbtSr12[tbIndex]==0) tbPtr <= 19;  else tbPtr <= 5 ;
-             13: if (tbtSr13[tbIndex]==0) tbPtr <= 0 ;  else tbPtr <= 6 ;
-             14: if (tbtSr14[tbIndex]==0) tbPtr <= 1 ;  else tbPtr <= 7 ;
-             15: if (tbtSr15[tbIndex]==0) tbPtr <= 2 ;  else tbPtr <= 8 ;
-             16: if (tbtSr16[tbIndex]==0) tbPtr <= 3 ;  else tbPtr <= 9 ;
-             17: if (tbtSr17[tbIndex]==0) tbPtr <= 4 ;  else tbPtr <= 10;
-             18: if (tbtSr18[tbIndex]==0) tbPtr <= 5 ;  else tbPtr <= 11;
-             19: if (tbtSr19[tbIndex]==0) tbPtr <= 6 ;  else tbPtr <= 12;
+             1 : if (tbtSr1[tbIndex]==0) tbState <= 8 ;  else tbState <= 14;
+             2 : if (tbtSr2[tbIndex]==0) tbState <= 9 ;  else tbState <= 15;
+             3:  if (tbtSr3[tbIndex]==0) tbState <= 10;  else tbState <= 16;
+             4:  if (tbtSr4[tbIndex]==0) tbState <= 11;  else tbState <= 17;
+             5:  if (tbtSr5[tbIndex]==0) tbState <= 12;  else tbState <= 18;
+             6:  if (tbtSr6[tbIndex]==0) tbState <= 13;  else tbState <= 19;
+             7:  if (tbtSr7[tbIndex]==0) tbState <= 14;  else tbState <= 0 ;
+             8:  if (tbtSr8[tbIndex]==0) tbState <= 15;  else tbState <= 1 ;
+             9:  if (tbtSr9[tbIndex]==0) tbState <= 16;  else tbState <= 2 ;
+             10: if (tbtSr10[tbIndex]==0) tbState <= 17;  else tbState <= 3 ;
+             11: if (tbtSr11[tbIndex]==0) tbState <= 18;  else tbState <= 4 ;
+             12: if (tbtSr12[tbIndex]==0) tbState <= 19;  else tbState <= 5 ;
+             13: if (tbtSr13[tbIndex]==0) tbState <= 0 ;  else tbState <= 6 ;
+             14: if (tbtSr14[tbIndex]==0) tbState <= 1 ;  else tbState <= 7 ;
+             15: if (tbtSr15[tbIndex]==0) tbState <= 2 ;  else tbState <= 8 ;
+             16: if (tbtSr16[tbIndex]==0) tbState <= 3 ;  else tbState <= 9 ;
+             17: if (tbtSr17[tbIndex]==0) tbState <= 4 ;  else tbState <= 10;
+             18: if (tbtSr18[tbIndex]==0) tbState <= 5 ;  else tbState <= 11;
+             19: if (tbtSr19[tbIndex]==0) tbState <= 6 ;  else tbState <= 12;
            endcase
         end
      end
 
     // Decision outputs
     reg     tbDecision;
-    wire    [3:0]   decisionIndex = tbIndex;
     //wire    [3:0]   decisionIndex = tbIndex + (newTrace ? 0 : symEn);
     wire    [3:0]   symEnOutputs = symEnCount + symEn;
-    wire    symEnOut = ((stateCnt >= (lastState-symEnOutputs)) && tracing);
+    wire    symEnOut = ((stageCnt >= (lastStage-symEnOutputs)) && tracing);
     always @(posedge clk) begin
         if (symEnOut) begin
-           case (tbPtr)
-             0:  begin tbDecision <=  tbtSr0[decisionIndex]; end
-             1:  begin tbDecision <=  tbtSr1[decisionIndex]; end
-             2:  begin tbDecision <=  tbtSr2[decisionIndex]; end
-             3:  begin tbDecision <=  tbtSr3[decisionIndex]; end
-             4:  begin tbDecision <=  tbtSr4[decisionIndex]; end
-             5:  begin tbDecision <=  tbtSr5[decisionIndex]; end
-             6:  begin tbDecision <=  tbtSr6[decisionIndex]; end
-             7:  begin tbDecision <=  tbtSr7[decisionIndex]; end
-             8:  begin tbDecision <=  tbtSr8[decisionIndex]; end
-             9:  begin tbDecision <=  tbtSr9[decisionIndex]; end
-             10: begin tbDecision <= tbtSr10[decisionIndex]; end
-             11: begin tbDecision <= tbtSr11[decisionIndex]; end
-             12: begin tbDecision <= tbtSr12[decisionIndex]; end
-             13: begin tbDecision <= tbtSr13[decisionIndex]; end
-             14: begin tbDecision <= tbtSr14[decisionIndex]; end
-             15: begin tbDecision <= tbtSr15[decisionIndex]; end
-             16: begin tbDecision <= tbtSr16[decisionIndex]; end
-             17: begin tbDecision <= tbtSr17[decisionIndex]; end
-             18: begin tbDecision <= tbtSr18[decisionIndex]; end
-             19: begin tbDecision <= tbtSr19[decisionIndex]; end
+           case (tbState)
+             0:  begin tbDecision <=  tbtSr0[tbIndex]; end
+             1:  begin tbDecision <=  tbtSr1[tbIndex]; end
+             2:  begin tbDecision <=  tbtSr2[tbIndex]; end
+             3:  begin tbDecision <=  tbtSr3[tbIndex]; end
+             4:  begin tbDecision <=  tbtSr4[tbIndex]; end
+             5:  begin tbDecision <=  tbtSr5[tbIndex]; end
+             6:  begin tbDecision <=  tbtSr6[tbIndex]; end
+             7:  begin tbDecision <=  tbtSr7[tbIndex]; end
+             8:  begin tbDecision <=  tbtSr8[tbIndex]; end
+             9:  begin tbDecision <=  tbtSr9[tbIndex]; end
+             10: begin tbDecision <= tbtSr10[tbIndex]; end
+             11: begin tbDecision <= tbtSr11[tbIndex]; end
+             12: begin tbDecision <= tbtSr12[tbIndex]; end
+             13: begin tbDecision <= tbtSr13[tbIndex]; end
+             14: begin tbDecision <= tbtSr14[tbIndex]; end
+             15: begin tbDecision <= tbtSr15[tbIndex]; end
+             16: begin tbDecision <= tbtSr16[tbIndex]; end
+             17: begin tbDecision <= tbtSr17[tbIndex]; end
+             18: begin tbDecision <= tbtSr18[tbIndex]; end
+             19: begin tbDecision <= tbtSr19[tbIndex]; end
            endcase
         end
     end
@@ -207,7 +239,7 @@ module traceBackTableDeeper(clk, reset, symEn,
     reg     [2:0]   enCount;
     reg     [3:0]   numOfEnables;
     reg             symEnDly;
-    wire            newTraceOutputs = symEnOut && (stateCnt == lastState);
+    wire            newTraceOutputs = symEnOut && (stageCnt == lastStage);
     always @(posedge clk) begin
         if (newTraceOutputs) begin
             symEnDly <= 1;
