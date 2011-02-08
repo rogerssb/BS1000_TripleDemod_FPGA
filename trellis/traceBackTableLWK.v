@@ -15,7 +15,7 @@ module traceBackTableDeeper(clk, reset, symEn,
                       decision,
                       symEnDly
                       );
-   parameter          TB_DEPTH=4;
+   parameter          TB_DEPTH=8;
    parameter          SR_DEPTH=TB_DEPTH+1;
 
    input              clk,reset,symEn;
@@ -76,26 +76,26 @@ module traceBackTableDeeper(clk, reset, symEn,
         end
         else begin
            if (symEn) begin
-              tbtSr0  <= {tbtSr0 [TB_DEPTH-1:0], sel[0 ]};
-              tbtSr1  <= {tbtSr1 [TB_DEPTH-1:0], sel[1 ]};
-              tbtSr2  <= {tbtSr2 [TB_DEPTH-1:0], sel[2 ]};
-              tbtSr3  <= {tbtSr3 [TB_DEPTH-1:0], sel[3 ]};
-              tbtSr4  <= {tbtSr4 [TB_DEPTH-1:0], sel[4 ]};
-              tbtSr5  <= {tbtSr5 [TB_DEPTH-1:0], sel[5 ]};
-              tbtSr6  <= {tbtSr6 [TB_DEPTH-1:0], sel[6 ]};
-              tbtSr7  <= {tbtSr7 [TB_DEPTH-1:0], sel[7 ]};
-              tbtSr8  <= {tbtSr8 [TB_DEPTH-1:0], sel[8 ]};
-              tbtSr9  <= {tbtSr9 [TB_DEPTH-1:0], sel[9 ]};
-              tbtSr10 <= {tbtSr10[TB_DEPTH-1:0], sel[10]};
-              tbtSr11 <= {tbtSr11[TB_DEPTH-1:0], sel[11]};
-              tbtSr12 <= {tbtSr12[TB_DEPTH-1:0], sel[12]};
-              tbtSr13 <= {tbtSr13[TB_DEPTH-1:0], sel[13]};
-              tbtSr14 <= {tbtSr14[TB_DEPTH-1:0], sel[14]};
-              tbtSr15 <= {tbtSr15[TB_DEPTH-1:0], sel[15]};
-              tbtSr16 <= {tbtSr16[TB_DEPTH-1:0], sel[16]};
-              tbtSr17 <= {tbtSr17[TB_DEPTH-1:0], sel[17]};
-              tbtSr18 <= {tbtSr18[TB_DEPTH-1:0], sel[18]};
-              tbtSr19 <= {tbtSr19[TB_DEPTH-1:0], sel[19]};
+              tbtSr0  <= {tbtSr0 [SR_DEPTH-1:0], sel[0 ]};
+              tbtSr1  <= {tbtSr1 [SR_DEPTH-1:0], sel[1 ]};
+              tbtSr2  <= {tbtSr2 [SR_DEPTH-1:0], sel[2 ]};
+              tbtSr3  <= {tbtSr3 [SR_DEPTH-1:0], sel[3 ]};
+              tbtSr4  <= {tbtSr4 [SR_DEPTH-1:0], sel[4 ]};
+              tbtSr5  <= {tbtSr5 [SR_DEPTH-1:0], sel[5 ]};
+              tbtSr6  <= {tbtSr6 [SR_DEPTH-1:0], sel[6 ]};
+              tbtSr7  <= {tbtSr7 [SR_DEPTH-1:0], sel[7 ]};
+              tbtSr8  <= {tbtSr8 [SR_DEPTH-1:0], sel[8 ]};
+              tbtSr9  <= {tbtSr9 [SR_DEPTH-1:0], sel[9 ]};
+              tbtSr10 <= {tbtSr10[SR_DEPTH-1:0], sel[10]};
+              tbtSr11 <= {tbtSr11[SR_DEPTH-1:0], sel[11]};
+              tbtSr12 <= {tbtSr12[SR_DEPTH-1:0], sel[12]};
+              tbtSr13 <= {tbtSr13[SR_DEPTH-1:0], sel[13]};
+              tbtSr14 <= {tbtSr14[SR_DEPTH-1:0], sel[14]};
+              tbtSr15 <= {tbtSr15[SR_DEPTH-1:0], sel[15]};
+              tbtSr16 <= {tbtSr16[SR_DEPTH-1:0], sel[16]};
+              tbtSr17 <= {tbtSr17[SR_DEPTH-1:0], sel[17]};
+              tbtSr18 <= {tbtSr18[SR_DEPTH-1:0], sel[18]};
+              tbtSr19 <= {tbtSr19[SR_DEPTH-1:0], sel[19]};
            end
         end 
      end
@@ -209,7 +209,13 @@ module traceBackTableDeeper(clk, reset, symEn,
     //wire    [3:0]   decisionIndex = tbIndex + (newTrace ? 0 : symEn);
     wire    [3:0]   symEnOutputs = symEnCount + symEn;
     wire    symEnOut = ((stageCnt >= (lastStage-symEnOutputs)) && tracing);
-    always @(posedge clk) begin
+    //always @(posedge clk) begin
+    always @(symEnOut or tbState or tbIndex or
+             tbtSr0  or tbtSr1  or tbtSr2  or tbtSr3  or tbtSr4  or
+             tbtSr5  or tbtSr6  or tbtSr7  or tbtSr8  or tbtSr9  or
+             tbtSr10 or tbtSr11 or tbtSr12 or tbtSr13 or tbtSr14 or
+             tbtSr15 or tbtSr16 or tbtSr17 or tbtSr18 or tbtSr19 
+             ) begin
         if (symEnOut) begin
            case (tbState)
              0:  begin tbDecision <=  tbtSr0[tbIndex]; end
