@@ -305,10 +305,20 @@ wire    [ROT_BITS-1:0]  out1Real ,
      end
    
 
-//`define USE_8_DEEP_TB
+`define USE_8_DEEP_TB
 `ifdef USE_8_DEEP_TB      
    
-   traceBackTableDeeper tbtDeeper
+	//`define USE_INDEX
+	`ifdef USE_INDEX
+	assign symEn_tbtDly = symEn_maxMetDly;
+	reg tbDecision;
+	always @(posedge clk) begin
+	    if (symEn_maxMetDly) begin
+		     tbDecision <= sel_2dly[index];
+		 end
+	end
+	`else
+   traceBackTableDeeper traceback
      (
       .clk(clk), 
       .reset(reset), 
@@ -318,6 +328,7 @@ wire    [ROT_BITS-1:0]  out1Real ,
       .decision(tbDecision),
       .symEnDly(symEn_tbtDly)
       );
+	`endif
 `else
 
 /* -----\/----- EXCLUDED -----\/-----
@@ -336,9 +347,7 @@ wire    [ROT_BITS-1:0]  out1Real ,
       );
  -----/\----- EXCLUDED -----/\----- */
    
-`endif //USE_8_DEEP_TB
-      
-   traceBackTable tbt1
+   traceBackTable traceback
      (
       .clk(clk), 
       .reset(reset), 
@@ -350,6 +359,8 @@ wire    [ROT_BITS-1:0]  out1Real ,
       .symEnDly(symEn_tbtDly)
       );
 
+`endif //USE_8_DEEP_TB
+      
    always @(posedge clk)
      begin
         if (symEn) begin

@@ -12,7 +12,7 @@ SimFile=
 [Analyzer]
 C0Width=138
 C1Width=58
-C2Width=95
+C2Width=120
 GotoSource=N
 [Spice]
 [DebugMode]
@@ -21,7 +21,7 @@ DiskSize=5000M
 RecirculateTime=
 UseRecirculateTime=
 [View]
-1=Last 0.000ns 4408.000ns 110.200ns 1352.975ns 1800.696ns
+1=Last 0.000ns 8852.001ns 285.450ns 1352.975ns 1800.696ns
 [Group0]
 Name=New Group2
 [PliFiles]
@@ -45,7 +45,7 @@ Name=New Group2
 [LibraryFiles]
 0=..\..\..\Xilinx\10.1\ISE\verilog\src\unisims\{.v}
 [Define]
-0=BYPASS_LOOP
+0=BYPASS_TRELLIS_CARRIER_LOOP
 [Files]
 0=testTrellis.v
 1=viteri_top.v
@@ -65,21 +65,21 @@ Name=New Group2
 15=traceBackTableLWK.v
 [Group1]
 Name="Trellis"
-0="test : bertSr[11]" default
+0="test : bertSr[4]" default
 1="test : decision" default
-2="test.uut.viterbi_top.tbtDeeper.bitLifo : rdAddr[1:0]" default
-3="test.uut.viterbi_top.tbtDeeper.bitLifo : wrAddr[1:0]" default
-4="test.uut.viterbi_top.tbtDeeper.bitLifo : depth[2:0]" default
-5="test.uut.viterbi_top.tbtDeeper : symEnDly" default
-6="test.uut.viterbi_top.tbtDeeper : numOfEnables[3:0]" default
-7="test.uut.viterbi_top.tbtDeeper : enCount[2:0]" default
-8="test.uut.viterbi_top.tbtDeeper.bitLifo : din" default
-9="test.uut.viterbi_top.tbtDeeper : symEnOut" default
-10="test.uut.viterbi_top.tbtDeeper : tracing" default
-11="test.uut.viterbi_top.tbtDeeper : symEnCount[3:0]" default
-12="test.uut.viterbi_top.tbtDeeper : stageCnt[3:0]" default
-13="test.uut.viterbi_top.tbtDeeper : newTrace" default
-14="test.uut.viterbi_top.tbtDeeper : symEn" default
+2="test.uut.viterbi_top.tbtDeeper.bitLifo : rdAddr[1:0]" default Unknown
+3="test.uut.viterbi_top.tbtDeeper.bitLifo : wrAddr[1:0]" default Unknown
+4="test.uut.viterbi_top.tbtDeeper.bitLifo : depth[2:0]" default Unknown
+5="test.uut.viterbi_top.traceback : symEnDly" default
+6="test.uut.viterbi_top.tbtDeeper : numOfEnables[3:0]" default Unknown
+7="test.uut.viterbi_top.tbtDeeper : enCount[2:0]" default Unknown
+8="test.uut.viterbi_top.tbtDeeper.bitLifo : din" default Unknown
+9="test.uut.viterbi_top.tbtDeeper : symEnOut" default Unknown
+10="test.uut.viterbi_top.tbtDeeper : tracing" default Unknown
+11="test.uut.viterbi_top.tbtDeeper : symEnCount[3:0]" default Unknown
+12="test.uut.viterbi_top.tbtDeeper : stageCnt[3:0]" default Unknown
+13="test.uut.viterbi_top.tbtDeeper : newTrace" default Unknown
+14="test.uut.viterbi_top.tbtDeeper : symEn" default Unknown
 15="test.uut : qIn[17:0]" default
 16="test.uut : iIn[17:0]" default
 17="test : index[15:0]" default

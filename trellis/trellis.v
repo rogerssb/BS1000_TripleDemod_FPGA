@@ -65,14 +65,14 @@ wire    [7:0]   phaseError;
 wire    [ROT_BITS-1:0]   phaseErrorImag;
 wire    [11:0]   freq;
 wire    [17:0]  carrierLoopIOut,carrierLoopQOut;
-//`ifdef BYPASS_LOOP
-//assign freq = 0;
-//assign carrierLoopIOut = iIn;
-//assign carrierLoopQOut = qIn;
-//assign trellisLoopDout = 0;
-//wire symEnDly = symEn;
-//wire sym2xEnDly = sym2xEn;
-//`else
+`ifdef BYPASS_TRELLIS_CARRIER_LOOP
+assign freq = 0;
+assign carrierLoopIOut = iIn;
+assign carrierLoopQOut = qIn;
+assign trellisLoopDout = 0;
+wire symEnDly = symEn;
+wire sym2xEnDly = sym2xEn;
+`else
 wire    [31:0]  trellisLoopDout;
 trellisCarrierLoop trellisCarrierLoop(
   .clk(clk),
@@ -104,7 +104,7 @@ trellisCarrierLoop trellisCarrierLoop(
   .sym2xEnDly(sym2xEnDly),
   .freq(freq)
   );
-//`endif
+`endif
 
 `ifdef SIMULATE
 `ifdef USE_LEAKY
