@@ -469,7 +469,57 @@ wire    [ROT_BITS-1:0]  out1Real ,
            if (symEn_tbtDly) begin
              acsDecision <= oneOrZeroPredecessor;
            end
-           
+
+           `ifdef MAX_EVEN_ODD
+           if (symEn_phErr) begin
+             case ( {index[4:1], 1'b0} ) // selecting only the even imaginary parts
+               0 : begin
+                    phaseErrorReal <= out1Real ;
+                    phaseErrorImag <= out1Imag ;
+                    end
+               2 : begin
+                    phaseErrorReal <= out3Real ;
+                    phaseErrorImag <= out3Imag ;
+                    end
+               4 : begin
+                    phaseErrorReal <= out5Real ;
+                    phaseErrorImag <= out5Imag ;
+                    end
+               6 : begin
+                    phaseErrorReal <= out7Real ;
+                    phaseErrorImag <= out7Imag ;
+                    end
+               8 : begin
+                    phaseErrorReal <= out9Real ;
+                    phaseErrorImag <= out9Imag ;
+                    end
+               10: begin
+                    phaseErrorReal <= out11Real;
+                    phaseErrorImag <= out11Imag;
+                    end
+               12: begin
+                    phaseErrorReal <= out13Real;
+                    phaseErrorImag <= out13Imag;
+                    end
+               14: begin
+                    phaseErrorReal <= out15Real;
+                    phaseErrorImag <= out15Imag;
+                    end
+               16: begin
+                    phaseErrorReal <= out17Real;
+                    phaseErrorImag <= out17Imag;
+                    end
+               18: begin
+                    phaseErrorReal <= out19Real;
+                    phaseErrorImag <= out19Imag;
+                    end
+               default: begin
+                    phaseErrorReal <= 0;
+                    phaseErrorImag <= 0;
+                    end
+             endcase
+           end
+           `else           
            if (symEn_phErr) begin
              case ( {index_1d[4:1], 1'b0} ) // selecting only the even imaginary parts
                0 : begin
@@ -518,6 +568,7 @@ wire    [ROT_BITS-1:0]  out1Real ,
                     end
              endcase
            end
+         `endif
          end
        end
 

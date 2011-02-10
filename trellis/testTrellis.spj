@@ -22,7 +22,7 @@ DiskSize=5000M
 RecirculateTime=
 UseRecirculateTime=
 [View]
-1=Last 0.000ns 20164.001ns 504.101ns 20063.219ns 4718.107ns
+1=Last 7687.525ns 13138.106ns 126.025ns 19508.708ns 4718.107ns
 [Group0]
 Name=New Group2
 [PliFiles]
@@ -66,7 +66,7 @@ Name=New Group2
 15=maxMetricEvenOdd.v
 [Group1]
 Name="Trellis"
-0="test : bertSr[4]" default
+0="test : bertSr[1]" default
 1="test.uut.viterbi_top : testDec" default
 2="test : decision" default
 3="test.uut.viterbi_top.traceback : symEnDly" default
@@ -107,3 +107,4 @@ OpenGroup=Yes
 [GroupInfo]
 0=New Group2 : 0 : 0 : 0
 1=Trellis : 1 : 1 : 0
+[Bookmarks]
