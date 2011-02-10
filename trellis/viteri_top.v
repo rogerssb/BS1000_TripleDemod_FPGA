@@ -576,6 +576,8 @@ assign decision = tbDecision;
 
 `ifdef SIMULATE
 
+real phaseError;
+always @(phaseErrorImag) phaseError = $itor($signed(phaseErrorImag));
 integer file;
 initial file = $fopen("decision.dat") ;
 

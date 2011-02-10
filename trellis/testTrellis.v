@@ -202,8 +202,8 @@ always @(posedge clk)begin
 //`define ALLZEROES
 //`define ALLONES
 //`define RANDOM
-//`define RANDOM_SIM_NO_NOISE
-`define RANDOM_SIM_NOISE
+`define RANDOM_SIM_NO_NOISE
+//`define RANDOM_SIM_NOISE
 
 integer bitError, bertIndex;
 integer file1,file2;
