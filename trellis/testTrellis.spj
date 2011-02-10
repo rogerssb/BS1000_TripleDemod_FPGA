@@ -12,7 +12,7 @@ SimFile=
 [Analyzer]
 C0Width=138
 C1Width=58
-C2Width=120
+C2Width=95
 GotoSource=N
 [Spice]
 [DebugMode]
@@ -21,7 +21,7 @@ DiskSize=5000M
 RecirculateTime=
 UseRecirculateTime=
 [View]
-1=Last 0.000ns 8852.001ns 285.450ns 1352.975ns 1800.696ns
+1=Last 0.000ns 3060.100ns 76.503ns 1912.515ns 2254.500ns
 [Group0]
 Name=New Group2
 [PliFiles]
@@ -44,50 +44,53 @@ Name=New Group2
 1=..
 [LibraryFiles]
 0=..\..\..\Xilinx\10.1\ISE\verilog\src\unisims\{.v}
-[Define]
-0=BYPASS_TRELLIS_CARRIER_LOOP
 [Files]
 0=testTrellis.v
 1=viteri_top.v
 2=acs.v
 3=comp4twosComp.v
-4=maxMetric.v
-5=mfilter.v
-6=trellis.v
-7=..\cmpy18.v
-8=rotator.v
-9=rotMult.v
-10=..\coregen\mult10x10.v
-11=..\coregen\mult12x8Lut.v
-12=..\bitFifo.v
-13=..\coregen\mpy18x18.v
-14=bitLifo.v
-15=traceBackTableLWK.v
+4=mfilter.v
+5=trellis.v
+6=..\cmpy18.v
+7=rotator.v
+8=rotMult.v
+9=..\coregen\mult10x10.v
+10=..\coregen\mult12x8Lut.v
+11=..\bitFifo.v
+12=..\coregen\mpy18x18.v
+13=bitLifo.v
+14=traceBackTableLWK.v
+15=maxMetricEvenOdd.v
+[Define]
+0=BYPASS_TRELLIS_CARRIER_LOOP
 [Group1]
 Name="Trellis"
-0="test : bertSr[4]" default
+0="test : bertSr[6]" default
 1="test : decision" default
-2="test.uut.viterbi_top.tbtDeeper.bitLifo : rdAddr[1:0]" default Unknown
-3="test.uut.viterbi_top.tbtDeeper.bitLifo : wrAddr[1:0]" default Unknown
-4="test.uut.viterbi_top.tbtDeeper.bitLifo : depth[2:0]" default Unknown
-5="test.uut.viterbi_top.traceback : symEnDly" default
-6="test.uut.viterbi_top.tbtDeeper : numOfEnables[3:0]" default Unknown
-7="test.uut.viterbi_top.tbtDeeper : enCount[2:0]" default Unknown
-8="test.uut.viterbi_top.tbtDeeper.bitLifo : din" default Unknown
-9="test.uut.viterbi_top.tbtDeeper : symEnOut" default Unknown
-10="test.uut.viterbi_top.tbtDeeper : tracing" default Unknown
-11="test.uut.viterbi_top.tbtDeeper : symEnCount[3:0]" default Unknown
-12="test.uut.viterbi_top.tbtDeeper : stageCnt[3:0]" default Unknown
-13="test.uut.viterbi_top.tbtDeeper : newTrace" default Unknown
-14="test.uut.viterbi_top.tbtDeeper : symEn" default Unknown
-15="test.uut : qIn[17:0]" default
-16="test.uut : iIn[17:0]" default
-17="test : index[15:0]" default
-18="test : bitError" default Decimal AnalogDisplay AType=Step Scale=Auto
-19="test : bertIndex" default Decimal AnalogDisplay AType=Step Scale=Auto
-20="test.uut.viterbi_top : simReset" default
-21="test : reset" default
-22="test : clk" default
+2="test.uut.viterbi_top.traceback : symEnDly" default
+3="test.uut.viterbi_top.traceback : numOfEnables[3:0]" default
+4="test.uut.viterbi_top.traceback : enCount[2:0]" default
+5="test.uut.viterbi_top.traceback : symEnOut" default
+6="test.uut.viterbi_top.traceback : tracing" default
+7="test.uut.viterbi_top.traceback : symEnCount[3:0]" default
+8="test.uut.viterbi_top.traceback : stageCnt[3:0]" default
+9="test.uut.viterbi_top.traceback : newTrace" default
+10="test.uut : qIn[17:0]" default
+11="test.uut : iIn[17:0]" default
+12="test : index[15:0]" default
+13="test.uut.viterbi_top.traceback : symEn" default
+14="test.uut.viterbi_top.maxMetric : maxValE2[11:0]" default
+15="test.uut.viterbi_top.maxMetric : maxValE1_0[11:0]" default
+16="test.uut.viterbi_top.maxMetric : accMetOut6[11:0]" default
+17="test.uut.viterbi_top.maxMetric : accMetOut4[11:0]" default
+18="test.uut.viterbi_top.maxMetric : accMetOut2[11:0]" default
+19="test.uut.viterbi_top.maxMetric : accMetOut0[11:0]" default
+20="test.uut.viterbi_top.maxMetric : symEn" default
+21="test : bitError" default Decimal AnalogDisplay AType=Step Scale=Auto
+22="test : bertIndex" default Decimal AnalogDisplay AType=Step Scale=Auto
+23="test.uut.viterbi_top : simReset" default
+24="test : reset" default
+25="test : clk" default
 OpenGroup=Yes
 [GroupInfo]
 0=New Group2 : 0 : 0 : 0

@@ -248,12 +248,19 @@ wire    [ROT_BITS-1:0]  out1Real ,
 `endif
 `endif
 
-`ifdef MAX_ANNOTATE
-   maxMetric maxMetric symEn
+   reg everyOtherSymEn;
+
+   // creates an enable which strobes only every other symEn 
+   assign symEn_phErr = symEn & everyOtherSymEn;
+
+`define MAX_EVEN_ODD
+`ifdef MAX_EVEN_ODD
+   maxMetricEvenOdd maxMetric
      (
       .clk(clk), 
       .reset(reset), 
       .symEn(symEn), 
+      .even(everyOtherSymEn),
       .accMetOut0( accMetOut[0 ]), .accMetOut1( accMetOut[1 ]), 
       .accMetOut2( accMetOut[2 ]), .accMetOut3( accMetOut[3 ]), 
       .accMetOut4( accMetOut[4 ]), .accMetOut5( accMetOut[5 ]), 
@@ -308,16 +315,16 @@ wire    [ROT_BITS-1:0]  out1Real ,
 `define USE_8_DEEP_TB
 `ifdef USE_8_DEEP_TB      
    
-	//`define USE_INDEX
-	`ifdef USE_INDEX
-	assign symEn_tbtDly = symEn_maxMetDly;
-	reg tbDecision;
-	always @(posedge clk) begin
-	    if (symEn_maxMetDly) begin
-		     tbDecision <= sel_2dly[index];
-		 end
-	end
-	`else
+        //`define USE_INDEX
+        `ifdef USE_INDEX
+        assign symEn_tbtDly = symEn_maxMetDly;
+        reg tbDecision;
+        always @(posedge clk) begin
+            if (symEn_maxMetDly) begin
+                     tbDecision <= sel_2dly[index];
+                 end
+        end
+        `else
    traceBackTableDeeper traceback
      (
       .clk(clk), 
@@ -328,7 +335,7 @@ wire    [ROT_BITS-1:0]  out1Real ,
       .decision(tbDecision),
       .symEnDly(symEn_tbtDly)
       );
-	`endif
+        `endif
 `else
 
 /* -----\/----- EXCLUDED -----\/-----
@@ -429,10 +436,6 @@ wire    [ROT_BITS-1:0]  out1Real ,
      end
    
    wire oneOrZeroPredecessor = sel_2dly[index];
-   reg everyOtherSymEn;
-
-   // creates an enable which strobes only every other symEn 
-   assign symEn_phErr = symEn & everyOtherSymEn;
 
    reg [4:0] index_1d;
    always @(posedge clk)
