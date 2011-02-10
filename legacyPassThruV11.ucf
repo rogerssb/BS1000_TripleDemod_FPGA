@@ -391,6 +391,11 @@ TIMEGRP "ddc2" = FFS(demod/ddc/dualFir/*) DSPS(demod/ddc/dualFir/*);
 TIMEGRP "ddc3" = FFS(demod/ddc/qFirIn*) FFS(demod/ddc/iFirIn*);
 TIMEGRP "fmDemod" = FFS(demod/fmDemod/cordic/p*) FFS(trellis/trellisCarrierLoop/fmDemod/cordic/p*);
 TIMEGRP "slowGroup" = "syncGroup" "ddc" "ddc0" "ddc1" "ddc2" "ddc3" "tg14" "fmDemod";
+
+TIMEGRP "ddsSources" = FFS(trellis/trellisCarrierLoop/newOffset*) FFS(trellis/trellisCarrierLoop/iIns*) FFS(trellis/trellisCarrierLoop/qIns*);
+
+TIMEGRP "phaseFifo" = FFS(trellis/trellisCarrierLoop/phaseFifo*) RAMS(trellis/trellisCarrierLoop/phaseFifo*);
+
 TIMESPEC TS_ck933 = PERIOD "ck933" 100 MHz HIGH 50%;
 TIMESPEC TS_pcmBit = FROM "pcmBit" to "trellisBit" 100 MHz;
 TIMESPEC TS_iBit = FROM "iBit" to "iData" 100 MHz;
@@ -405,6 +410,8 @@ TIMESPEC TS_symEn0 = FROM "rotOut" TO "acs" 25 MHz;
 TIMESPEC TS_symEn1 = PERIOD "soqpskAcs" 50 MHz;
 TIMESPEC TS_symEn2 = FROM "soqpskRotOut" TO "soqpskAcs" 50 MHz;
 TIMESPEC TS_nWe = PERIOD "nWe" 100 ns HIGH 50%;
+TIMESPEC TS_loop = FROM "ddsSources" TO FFS(trellis/trellisCarrierLoop/dds*) 100 MHz;
+TIMESPEC TS_phaseFifo = PERIOD "phaseFifo" 100 MHz;
 
 
 

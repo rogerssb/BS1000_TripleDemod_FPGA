@@ -82,11 +82,24 @@ loopRegs loopRegs(
     );
 
 
-wire loopFilterEn = symEn_phErr;
+/**************************** Phase Error FIFO ********************************/
+
+wire	[7:0]	phaseErrorAligned;
+phaseFifo phaseFifo(
+	.clk(clk),
+	.reset(reset),
+	.enIn(symEn_phErr),
+	.enOut(symEn),
+	.din(phaseError),
+	.dout(phaseErrorAligned)
+	);
+
+
+wire loopFilterEn = symEn;
 
 /**************************** Adjust Error ************************************/
 reg     [7:0]   loopError;
-wire    [7:0]   negPhaseError = ~phaseError + 1;
+wire    [7:0]   negPhaseError = ~phaseErrorAligned + 1;
 reg             carrierLock;
 wire            breakLoop = zeroError;
 always @(posedge clk) begin 
@@ -98,7 +111,7 @@ always @(posedge clk) begin
             loopError <= negPhaseError;
             end
         else begin
-            loopError <= phaseError;
+            loopError <= phaseErrorAligned;
             end
         end
     end
@@ -139,7 +152,7 @@ always @(posedge clk) begin
     end
 
 /******************************* Lock Detector ********************************/
-wire    [7:0]   absPhaseError = phaseError[7] ? negPhaseError : phaseError;
+wire    [7:0]   absPhaseError = phaseErrorAligned[7] ? negPhaseError : phaseErrorAligned;
 reg     [15:0]  lockCounter;
 wire    [16:0]  lockPlus = {1'b0,lockCounter} + 17'h00001;
 wire    [16:0]  lockMinus = {1'b0,lockCounter} + 17'h1ffff;
@@ -195,6 +208,7 @@ always @(posedge clk) begin
         newOffset <= carrierFreqOffset;
         end
     end
+	 
 reg [31:0] deviationCorrection;
 reg [31:0] devCorrection;
 reg prevLegacyBit;

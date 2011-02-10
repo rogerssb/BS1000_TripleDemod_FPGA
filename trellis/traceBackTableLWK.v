@@ -15,9 +15,9 @@ module traceBackTableDeeper(clk, reset, symEn,
                       decision,
                       symEnDly
                       );
-   parameter          TB_DEPTH=1;
+   parameter          TB_DEPTH=3;
    parameter          SR_DEPTH=TB_DEPTH+1;
-	parameter          SR_BITS=3;
+	parameter          SR_BITS=4;
 
    input              clk,reset,symEn;
    input [19:0]       sel;   // 20 induvidual decision. 0 or 1 tell us if we trace + or - 7 modulo 20 
