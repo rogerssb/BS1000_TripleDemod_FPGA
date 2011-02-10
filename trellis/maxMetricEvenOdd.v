@@ -88,19 +88,19 @@ module maxMetricEvenOdd(
                     compareState <= IDLE;
                     if (even) begin
                         case (iE2)
-                            0: index <= {iE1_0,1'b0};
-                            1: index <= {iE1_1,1'b0};
-                            2: index <= {iE1_2,1'b0};
-                            default: index <= {iE1_0,1'b0};
+                            0: index <= {iE1_0[3:0],1'b0};
+                            1: index <= {iE1_1[3:0],1'b0};
+                            2: index <= {iE1_2[3:0],1'b0};
+                            default: index <= {iE1_0[3:0],1'b0};
                             endcase
                         maxVal <= maxValE2;
                         end
                     else begin
                         case (iO2)
-                            0: index <= {iO1_0,1'b0};
-                            1: index <= {iO1_1,1'b0};
-                            2: index <= {iO1_2,1'b0};
-                            default: index <= {iO1_0,1'b0};
+                            0: index <= {iO1_0[3:0],1'b1};
+                            1: index <= {iO1_1[3:0],1'b1};
+                            2: index <= {iO1_2[3:0],1'b1};
+                            default: index <= {iO1_0[3:0],1'b1};
                             endcase
                         maxVal <= maxValO2;
                         end

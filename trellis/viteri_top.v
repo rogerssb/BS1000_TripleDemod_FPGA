@@ -330,7 +330,11 @@ wire    [ROT_BITS-1:0]  out1Real ,
       .clk(clk), 
       .reset(reset), 
       .symEn(symEn_maxMetDly),
+      `ifdef MAX_EVEN_ODD
+      .sel(sel), 
+      `else
       .sel(sel_2dly), 
+      `endif
       .index(index),
       .decision(tbDecision),
       .symEnDly(symEn_tbtDly)

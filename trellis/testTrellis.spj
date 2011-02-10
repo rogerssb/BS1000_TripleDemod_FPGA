@@ -14,6 +14,7 @@ C0Width=138
 C1Width=58
 C2Width=95
 GotoSource=N
+ShowYaxis=
 [Spice]
 [DebugMode]
 CommandLine=+define+SIMULATE
@@ -21,7 +22,7 @@ DiskSize=5000M
 RecirculateTime=
 UseRecirculateTime=
 [View]
-1=Last 0.000ns 3060.100ns 76.503ns 1912.515ns 2254.500ns
+1=Last 0.000ns 20164.001ns 504.101ns 20063.219ns 4718.107ns
 [Group0]
 Name=New Group2
 [PliFiles]
@@ -44,6 +45,8 @@ Name=New Group2
 1=..
 [LibraryFiles]
 0=..\..\..\Xilinx\10.1\ISE\verilog\src\unisims\{.v}
+[Define]
+0=BYPASS_TRELLIS_CARRIER_LOOP
 [Files]
 0=testTrellis.v
 1=viteri_top.v
@@ -61,38 +64,46 @@ Name=New Group2
 13=bitLifo.v
 14=traceBackTableLWK.v
 15=maxMetricEvenOdd.v
-[Define]
-0=BYPASS_TRELLIS_CARRIER_LOOP
 [Group1]
 Name="Trellis"
-0="test : bertSr[6]" default
-1="test : decision" default
-2="test.uut.viterbi_top.traceback : symEnDly" default
-3="test.uut.viterbi_top.traceback : numOfEnables[3:0]" default
-4="test.uut.viterbi_top.traceback : enCount[2:0]" default
-5="test.uut.viterbi_top.traceback : symEnOut" default
-6="test.uut.viterbi_top.traceback : tracing" default
-7="test.uut.viterbi_top.traceback : symEnCount[3:0]" default
-8="test.uut.viterbi_top.traceback : stageCnt[3:0]" default
-9="test.uut.viterbi_top.traceback : newTrace" default
-10="test.uut : qIn[17:0]" default
-11="test.uut : iIn[17:0]" default
-12="test : index[15:0]" default
-13="test.uut.viterbi_top.traceback : symEn" default
-14="test.uut.viterbi_top.maxMetric : maxValE2[11:0]" default
-15="test.uut.viterbi_top.maxMetric : maxValE1_0[11:0]" default
-16="test.uut.viterbi_top.maxMetric : accMetOut6[11:0]" default
-17="test.uut.viterbi_top.maxMetric : accMetOut4[11:0]" default
-18="test.uut.viterbi_top.maxMetric : accMetOut2[11:0]" default
-19="test.uut.viterbi_top.maxMetric : accMetOut0[11:0]" default
-20="test.uut.viterbi_top.maxMetric : symEn" default
-21="test : bitError" default Decimal AnalogDisplay AType=Step Scale=Auto
-22="test : bertIndex" default Decimal AnalogDisplay AType=Step Scale=Auto
-23="test.uut.viterbi_top : simReset" default
-24="test : reset" default
-25="test : clk" default
+0="test : bertSr[4]" default
+1="test.uut.viterbi_top : testDec" default
+2="test : decision" default
+3="test.uut.viterbi_top.traceback : symEnDly" default
+4="test.uut.viterbi_top.traceback : numOfEnables[3:0]" default
+5="test.uut.viterbi_top.traceback : enCount[2:0]" default
+6="test.uut.viterbi_top.traceback : symEnOut" default
+7="test.uut.viterbi_top.traceback : tracing" default
+8="test.uut.viterbi_top.traceback : symEnCount[3:0]" default
+9="test.uut.viterbi_top.traceback : stageCnt[3:0]" default
+10="test.uut.viterbi_top.traceback : newTrace" default
+11="test.uut : qIn[17:0]" default
+12="test.uut : iIn[17:0]" default
+13="test : index[15:0]" default
+14="test.uut.viterbi_top : sel_1dly[19:0]" default
+15="test.uut.viterbi_top : sel[19:0]" default
+16="test.uut.viterbi_top.traceback : symEn" default
+17="test.uut.viterbi_top.maxMetric : even" default
+18="test.uut.viterbi_top.maxMetric : index[4:0]" default
+19="test.uut.viterbi_top.maxMetric : iE2[4:0]" default
+20="test.uut.viterbi_top.maxMetric : iE1_2[4:0]" default
+21="test.uut.viterbi_top.maxMetric : iE1_1[4:0]" default
+22="test.uut.viterbi_top.maxMetric : iE1_0[4:0]" default
+23="test.uut.viterbi_top.maxMetric : maxValE2[11:0]" default
+24="test.uut.viterbi_top.maxMetric : maxValE1_2[11:0]" default
+25="test.uut.viterbi_top.maxMetric : maxValE1_1[11:0]" default
+26="test.uut.viterbi_top.maxMetric : maxValE1_0[11:0]" default
+27="test.uut.viterbi_top.maxMetric : accMetOut6[11:0]" default
+28="test.uut.viterbi_top.maxMetric : accMetOut4[11:0]" default
+29="test.uut.viterbi_top.maxMetric : accMetOut2[11:0]" default
+30="test.uut.viterbi_top.maxMetric : accMetOut0[11:0]" default
+31="test.uut.viterbi_top.maxMetric : symEn" default
+32="test : bitError" default Decimal AnalogDisplay AType=Step Scale=Auto
+33="test : bertIndex" default Decimal AnalogDisplay AType=Step Scale=Auto
+34="test.uut.viterbi_top : simReset" default
+35="test : reset" default
+36="test : clk" default
 OpenGroup=Yes
 [GroupInfo]
 0=New Group2 : 0 : 0 : 0
 1=Trellis : 1 : 1 : 0
-[Bookmarks]

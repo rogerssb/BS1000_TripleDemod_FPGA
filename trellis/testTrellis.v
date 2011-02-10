@@ -279,7 +279,7 @@ initial begin
             bertSr <= {bertSr[30:0], readMemResult[bertIndex]};
             acsDecision <= testDec1;
             bertIndex = bertIndex + 1;
-            if (decision != bertSr[6]) begin           // without carrier loop
+            if (decision != bertSr[4]) begin           // without carrier loop
             //if (decision != bertSr[9]) begin              // without carrier loop   4 deep traceback
             //if (decision != bertSr[10]) begin               // without carrier loop   4 deep traceback
             //if (decision != bertSr[11]) begin                     // with carrierloop
