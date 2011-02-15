@@ -12,8 +12,13 @@
 
 module test;
 
-reg clk,reset;
-reg clkDiv2;
+reg clk; initial clk = 0;
+reg reset; initial reset = 0;
+reg clkDiv2; initial clkDiv2 = 0;
+
+always #4 clk = !clk; 
+always @(posedge clk) clkDiv2 = !clkDiv2; 
+        
 reg [79:0]din;
 reg symEn,sym2xEn;
 
@@ -37,44 +42,18 @@ trellis uut
     .oneOrZeroPredecessor(testDec1)
  );
  
-//trellis uut2(clk,reset,symEn_uut2,sym2xEn_uut2,din_uut2[57:40],din_uut2[17:0],,,,,,,,);
 
-
-initial clk = 0;
-initial clkDiv2 = 0;
-initial reset = 0;
-
-always #4 clk = !clk; 
-always @(posedge clk) clkDiv2 = !clkDiv2; 
-        
 
 
 reg [79:0] readMem[20009:0];
 reg [0:0] readMemResult[10001:0];
-//reg [1:0] index;
 reg [15:0] index;  
 reg [15:0] bitIndex;  
 
-reg cntEna;
-initial begin
-    cntEna = 0;
-    #250 cntEna = 1;
-    end
+wire cntEna = !reset;
 
-reg [4:0]cnt; initial cnt = 20;
+integer cnt; initial cnt = 13;
 
-// for uut2     
-reg [79:0]din_uut2;
-reg symEn_uut2, sym2xEn_uut2;
-reg [7:0] index_uut2;  
-reg cntEna_uut2;
-initial begin
-    cntEna_uut2 = 0;
-    #250 cntEna_uut2 = 1;
-    end
-reg [4:0]cnt_uut2; initial cnt_uut2 = 20;
-// end for uut2
-        
         
         
         
@@ -123,78 +102,37 @@ end
 
         
 always @(posedge clk)begin
- // #1;
-  //if(cnt == 17) cnt <= 0;
-  if(cnt == 13) cnt <= 0;
-  //else if(cntEna) cnt <= cnt +1 + randData;
+  if (reset) cnt <= 13;
+  else if(cnt == 13) cnt <= 0;
   else if(cntEna) cnt <= cnt +1;          
+
   case(cnt)
-    //0,8: begin 
-        0,5,10: begin
+    0,5,10: begin
       symEn <= 1;
       sym2xEn <= 1;
-          simBit <= readMemResult[bitIndex];
+      simBit <= readMemResult[bitIndex];
       din <= readMem[index];
-          //if (index >= 79) begin index <= 0; end // reading in 4*20 samples then wrap around. 20 comes from the # trellis states 
       if (index >= 20000) begin index <= 0; end // reading in 4*20 samples then wrap around. 20 comes from the # trellis states
-          else begin 
-             index <= index +1;
-             bitIndex <= bitIndex +1; 
-          end
+      else begin 
+         index <= index +1;
+         bitIndex <= bitIndex +1; 
       end
-    //3,11: begin       
-        2,7,12: begin
+      end
+    2,7,12: begin
       symEn <= 0;
       sym2xEn <= 1;
-          //simBit <= readMemResult[index];
       din <= readMem[index];
-          //if (index >= 79) begin index <= 0; end // reading in 4*20 samples then wrap around. 20 comes from the # trellis states
-          if (index >= 20000) begin index <= 0; end // reading in 4*20 samples then wrap around. 20 comes from the # trellis states
-          else begin index <= index +1; end
+      if (index >= 20000) begin index <= 0; end // reading in 4*20 samples then wrap around. 20 comes from the # trellis states
+      else begin index <= index +1; end
       end
     default: begin
       symEn <= 0;
       sym2xEn <= 0;
-      //din <= 0;
       end
     endcase
   end
         
         
-// always @(posedge clk)begin
-//  #1;
-//  if(cnt == 17) cnt <= 0;
-//  //if(cnt == 15) cnt <= 0;
-//  else if(cntEna) cnt <= cnt +1;
-//  case(cnt)
-//    //0,9: begin
-//    0,4,9,14: begin
-//    //0,8: begin
-//    //0, 10: begin
-//      symEn <= 1;
-//      sym2xEn <= 1;
-//      din <= readMem[index];
-//        if (index >= 79) begin index <= 0; end // reading in 4*20 samples then wrap around. 20 comes from the # trellis states
-//        else begin index <= index +1; end
-//      end
-//    //3,11: begin
-//    2,7,11,16: begin
-//    //4,12: begin
-//    //6,16: begin
-//      symEn <= 0;
-//      sym2xEn <= 1;
-//      din <= readMem[index];
-//        if (index >= 79) begin index <= 0; end // reading in 4*20 samples then wrap around. 20 comes from the # trellis states
-//        else begin index <= index +1; end
-//      end
-//    default: begin
-//      symEn <= 0;
-//      sym2xEn <= 0;
-//      din <= 0;
-//      end
-//    endcase
-//  end
-
   
   
   
@@ -212,16 +150,11 @@ initial begin
 `ifndef IQ_MAG
   uut.viterbi_top.simReset = 1;
 `endif
-//uut2.viterbi_top.simReset = 1;
   #100 reset = !reset;
-  //cnt_uut2 = 0;
-  //cnt = 0;
   index = 0;
   bitIndex = 0;
-  index_uut2 = 0;
   bitError = 0;
   din = 0;
-  din_uut2 = 0; 
   uut.decayFactor =  8'hd9;
 `ifdef ONEZERO 
       $readmemh("P:/semco/matlab sim results/One Zero/mfinputs.hex", readMem);
@@ -279,7 +212,7 @@ initial begin
             bertSr <= {bertSr[30:0], readMemResult[bertIndex]};
             acsDecision <= testDec1;
             bertIndex = bertIndex + 1;
-            if (decision != bertSr[4]) begin           // without carrier loop
+            if (decision != bertSr[2]) begin           // without carrier loop
             //if (decision != bertSr[9]) begin              // without carrier loop   4 deep traceback
             //if (decision != bertSr[10]) begin               // without carrier loop   4 deep traceback
             //if (decision != bertSr[11]) begin                     // with carrierloop

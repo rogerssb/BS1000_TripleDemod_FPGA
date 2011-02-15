@@ -15,7 +15,7 @@
 module trellisCarrierLoop(clk,reset,symEn,sym2xEn,
   iIn,qIn,
   legacyBit,
-  phaseError,
+  phaseErrorIn,
   symEn_phErr,
   wr0,wr1,wr2,wr3,
   addr,
@@ -30,7 +30,7 @@ module trellisCarrierLoop(clk,reset,symEn,sym2xEn,
 input clk,reset,symEn,sym2xEn;
 input [17:0]iIn,qIn;
 input legacyBit;
-input   [7:0]   phaseError;
+input   [7:0]   phaseErrorIn;
 input symEn_phErr;
 input wr0,wr1,wr2,wr3;
 input [11:0]addr;
@@ -82,24 +82,32 @@ loopRegs loopRegs(
     );
 
 
+//`define USE_PHASE_FIFO
+`ifdef USE_PHASE_FIFO
 /**************************** Phase Error FIFO ********************************/
 
-wire	[7:0]	phaseErrorAligned;
+wire	[7:0]	phaseError;
 phaseFifo phaseFifo(
 	.clk(clk),
 	.reset(reset),
 	.enIn(symEn_phErr),
 	.enOut(symEn),
-	.din(phaseError),
-	.dout(phaseErrorAligned)
+	.din(phaseErrorIn),
+	.dout(phaseError)
 	);
-
-
 wire loopFilterEn = symEn;
+
+`else 
+
+wire    [7:0]   phaseError = phaseErrorIn;
+wire            loopFilterEn = symEn_phErr;
+
+`endif
+
 
 /**************************** Adjust Error ************************************/
 reg     [7:0]   loopError;
-wire    [7:0]   negPhaseError = ~phaseErrorAligned + 1;
+wire    [7:0]   negPhaseError = ~phaseError + 1;
 reg             carrierLock;
 wire            breakLoop = zeroError;
 always @(posedge clk) begin 
@@ -111,7 +119,7 @@ always @(posedge clk) begin
             loopError <= negPhaseError;
             end
         else begin
-            loopError <= phaseErrorAligned;
+            loopError <= phaseError;
             end
         end
     end
@@ -152,7 +160,7 @@ always @(posedge clk) begin
     end
 
 /******************************* Lock Detector ********************************/
-wire    [7:0]   absPhaseError = phaseErrorAligned[7] ? negPhaseError : phaseErrorAligned;
+wire    [7:0]   absPhaseError = phaseError[7] ? negPhaseError : phaseError;
 reg     [15:0]  lockCounter;
 wire    [16:0]  lockPlus = {1'b0,lockCounter} + 17'h00001;
 wire    [16:0]  lockMinus = {1'b0,lockCounter} + 17'h1ffff;

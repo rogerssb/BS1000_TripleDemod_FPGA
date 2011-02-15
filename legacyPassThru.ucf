@@ -328,7 +328,7 @@ TIMEGRP "iData" = FFS(iData*);
 #TIMEGRP "pcmBit" = FFS(trellis/viterbi_top/tbt1/decision*);
 #TIMEGRP "pcmBit" = FFS(trellis/viterbi_top/tbtDeeper/decision*);
 #TIMEGRP "pcmBit" = FFS(trellis/viterbi_top/tbt8deepSlowRate/decision*);
-TIMEGRP "pcmBit" = FFS(trellis/viterbi_top/tbtDeeper/bitLifo/dout*);
+TIMEGRP "pcmBit" = FFS(trellis/viterbi_top/traceback/bitLifo/dout*);
 TIMEGRP "notIData" = FFS EXCEPT iData;
 TIMEGRP "sync0" = FFS(demod/ddc/hb0/syncOut*);
 TIMEGRP "sync1" = FFS(demod/ddc/cic/cicI/syncOut*);
@@ -389,6 +389,16 @@ TIMEGRP "ddc1" = FFS(demod/ddc/iOut*) FFS(demod/ddc/qOut*);
 TIMEGRP "ddc2" = FFS(demod/ddc/dualFir/*) DSPS(demod/ddc/dualFir/*);
 TIMEGRP "fmDemod" = FFS(demod/fmDemod/cordic/p*) FFS(trellis/trellisCarrierLoop/fmDemod/cordic/p*);
 TIMEGRP "slowGroup" = "syncGroup" "ddc0" "ddc1" "ddc2" "tg14" "fmDemod";
+
+TIMEGRP "maxMetric" = FFS(trellis/viterbi_top/maxMetric/*);
+
+TIMEGRP "acsSel" = FFS(trellis/viterbi_top/acs*/sel*);
+
+TIMEGRP "acsAcc" = FFS(trellis/viterbi_top/acs*/accumDecay/*);
+#TIMEGRP "acsAcc" = FFS(trellis/viterbi_top/acs*/accMetOut*);
+
+TIMEGRP "tb" = FFS(trellis/viterbi_top/traceback*);
+
 TIMESPEC TS_ck933 = PERIOD "ck933" 100 MHz HIGH 50%;
 TIMESPEC TS_pcmBit = FROM "pcmBit" to "trellisBit" 100 MHz;
 TIMESPEC TS_iBit = FROM "iBit" to "iData" 100 MHz;
@@ -403,6 +413,9 @@ TIMESPEC TS_symEn0 = FROM "rotOut" TO "acs" 25 MHz;
 TIMESPEC TS_symEn1 = PERIOD "soqpskAcs" 50 MHz;
 TIMESPEC TS_symEn2 = FROM "soqpskRotOut" TO "soqpskAcs" 50 MHz;
 TIMESPEC TS_nWe = PERIOD "nWe" 100 ns HIGH 50%;
+TIMESPEC TS_maxMetric = FROM "maxMetric" TO FFS(trellis*) 100 MHz;
+TIMESPEC TS_sel = FROM "acsSel" TO "tb" 100 MHz;
+TIMESPEC TS_acc = FROM "acsAcc" TO "maxMetric" 30 ns;
 
 
 

@@ -170,7 +170,7 @@ always @(posedge clk) begin
 
   
    // For the SOQPSK mode we have only 4 states so we don't need the large maxMetric module
-   comp4twosComp  #((size+4), 0)  soqpskMaxMetric   
+   soqpskComp4  #((size+4), 0)  soqpskMaxMetric   
      (
       .clk    (clk         ), 
       .reset  (acsReset    ),

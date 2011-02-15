@@ -88,7 +88,7 @@ trellisCarrierLoop trellisCarrierLoop(
   .enableLoop(enableLoop),
   .phaseError(phaseError),
   `else
-  .phaseError(phErrShft),
+  .phaseErrorIn(phErrShft),
   `endif
   .symEn_phErr(symEn_phErr),
   .wr0(wr0),
@@ -474,6 +474,7 @@ viterbi_top viterbi_top
 `ifdef USE_DECAY
 reg     [7:0]   decayFactor;
 `endif
+wire [4:0] indexDelta;
 viterbi_top #(size, ROT_BITS)viterbi_top
   (
   .clk(clk), .reset(reset), .symEn(trellEna),
@@ -564,6 +565,8 @@ viterbi_top #(size, ROT_BITS)viterbi_top
  -----/\----- EXCLUDED -----/\----- */
 `endif
   .index(index),
+  .indexDelta(indexDelta),
+  .symEn_index(symEn_index),
   .decision(decision),
   .symEn_tbtDly(symEnOut),
   `ifdef USE_LEAKY
@@ -859,8 +862,8 @@ always @(posedge clk) begin
             dac0Sync <= symEn_phErr;
             end
         `DAC_TRELLIS_INDEX: begin
-            dac0Data <= {1'b0,index,12'b0};
-            dac0Sync <= trellEna;
+            dac0Data <= {indexDelta,13'b0};
+            dac0Sync <= symEn_index;
             end
         default: begin
             dac0Data <= {phErrShft,10'b0};
@@ -886,8 +889,8 @@ always @(posedge clk) begin
             dac1Sync <= symEn_phErr;
             end
         `DAC_TRELLIS_INDEX: begin
-            dac2Data <= {freq,6'b0};
-            dac2Sync <= sym2xEnDly;
+            dac1Data <= {freq,6'b0};
+            dac1Sync <= sym2xEnDly;
             end
         default: begin
             dac1Data <= {phErrShft,10'b0};
@@ -913,8 +916,8 @@ always @(posedge clk) begin
             dac2Sync <= symEn_phErr;
             end
         `DAC_TRELLIS_INDEX: begin
-            dac2Data <= {phErrShft,10'b0};
-            dac2Sync <= symEn_phErr;
+            dac2Data <= {1'b0,index,12'b0};
+            dac2Sync <= symEnOut;
             end
         default: begin
             dac2Data <= {phErrShft,10'b0};

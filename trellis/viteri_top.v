@@ -36,7 +36,8 @@ module viterbi_top(
     out0Pt18Real,out0Pt18Imag,out1Pt18Real,out1Pt18Imag,
     out0Pt19Real,out0Pt19Imag,out1Pt19Real,out1Pt19Imag,
     out0Pt20Real,out0Pt20Imag,out1Pt20Real,out1Pt20Imag,
-    index, decision, symEn_tbtDly, 
+    index, indexDelta, symEn_index,
+    decision, symEn_tbtDly, 
     phaseErrorReal,phaseErrorImag, 
     symEn_phErr, 
     oneOrZeroPredecessor);
@@ -90,6 +91,8 @@ module viterbi_top(
                         out0Pt20Imag, out1Pt20Imag;
    
    output   [4:0]        index;
+   output   [4:0]        indexDelta;
+   output                symEn_index;
    output                decision;
    output                symEn_tbtDly;
    output [ROT_BITS-1:0] phaseErrorReal,phaseErrorImag;
@@ -250,17 +253,17 @@ wire    [ROT_BITS-1:0]  out1Real ,
 
    reg everyOtherSymEn;
 
-   // creates an enable which strobes only every other symEn 
-   assign symEn_phErr = symEn & everyOtherSymEn;
-
 `define MAX_EVEN_ODD
 `ifdef MAX_EVEN_ODD
+   // creates an enable which strobes only every other symEn 
+   assign symEn_phErr = symEn & !everyOtherSymEn;
+
    maxMetricEvenOdd maxMetric
      (
       .clk(clk), 
       .reset(reset), 
       .symEn(symEn), 
-      .even(everyOtherSymEn),
+      .even(!everyOtherSymEn),
       .accMetOut0( accMetOut[0 ]), .accMetOut1( accMetOut[1 ]), 
       .accMetOut2( accMetOut[2 ]), .accMetOut3( accMetOut[3 ]), 
       .accMetOut4( accMetOut[4 ]), .accMetOut5( accMetOut[5 ]), 
@@ -271,9 +274,16 @@ wire    [ROT_BITS-1:0]  out1Real ,
       .accMetOut14(accMetOut[14]), .accMetOut15(accMetOut[15]), 
       .accMetOut16(accMetOut[16]), .accMetOut17(accMetOut[17]), 
       .accMetOut18(accMetOut[18]), .accMetOut19(accMetOut[19]),
-      .index(index), .symEnDly(symEn_maxMetDly)
+      .index(index),
+      .indexDelta(indexDelta),
+      .symEnDly(symEn_maxMetDly)
       );
+   assign symEn_index = symEn;
+   
 `else                                                                                            
+   // creates an enable which strobes only every other symEn 
+   assign symEn_phErr = symEn & everyOtherSymEn;
+
    maxMetric #(size+4) maxMetric 
      (
       .clk(clk), 
@@ -291,6 +301,10 @@ wire    [ROT_BITS-1:0]  out1Real ,
       .accMetOut18(accMetOut[18]), .accMetOut19(accMetOut[19]),
       .index(index), .symEnDly(symEn_maxMetDly)
       );
+      
+    assign indexDelta = 0;
+    assign symEn_index = symEn;
+    
 `endif
    reg  testDec;
    reg  testDec1;
