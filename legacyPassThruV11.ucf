@@ -318,39 +318,50 @@ NET "multihPhaseError<7>" LOC = C5  | IOSTANDARD = "LVCMOS33";
 NET "multihPhaseErrorEn"  LOC = D18 | IOSTANDARD = "LVCMOS33";
 NET "multihPhaseErrorValid"  LOC = D17 | IOSTANDARD = "LVCMOS33";
 
+NET "nWe" TIG;
 NET "nCs" TIG;
-NET "nRd" TIG;
-NET "data<0>" TIG;
-NET "data<1>" TIG;
-NET "data<2>" TIG;
-NET "data<3>" TIG;
-NET "data<4>" TIG;
-NET "data<5>" TIG;
-NET "data<6>" TIG;
-NET "data<7>" TIG;
-NET "data<8>" TIG;
-NET "data<9>" TIG;
-NET "data<10>" TIG;
-NET "data<11>" TIG;
-NET "data<12>" TIG;
-NET "data<13>" TIG;
-NET "data<14>" TIG;
-NET "data<15>" TIG;
+#NET "nRd" TIG;
+#NET "data<0>" TIG;
+#NET "data<1>" TIG;
+#NET "data<2>" TIG;
+#NET "data<3>" TIG;
+#NET "data<4>" TIG;
+#NET "data<5>" TIG;
+#NET "data<6>" TIG;
+#NET "data<7>" TIG;
+#NET "data<8>" TIG;
+#NET "data<9>" TIG;
+#NET "data<10>" TIG;
+#NET "data<11>" TIG;
+#NET "data<12>" TIG;
+#NET "data<13>" TIG;
+#NET "data<14>" TIG;
+#NET "data<15>" TIG;
 NET "addr1" TIG;
-NET "addr2" TIG;
-NET "addr3" TIG;
-NET "addr4" TIG;
-NET "addr7" TIG;
-NET "addr8" TIG;
-NET "addr9" TIG;
-NET "addr10" TIG;
-NET "addr11" TIG;
-NET "addr12" TIG;
+#NET "addr2" TIG;
+#NET "addr3" TIG;
+#NET "addr4" TIG;
+#NET "addr7" TIG;
+#NET "addr8" TIG;
+#NET "addr9" TIG;
+#NET "addr10" TIG;
+#NET "addr11" TIG;
+#NET "addr12" TIG;
+
+TIMEGRP "dataBus" = PADS(data*);
+TIMEGRP "addrBus" = PADS(addr*);
+TIMEGRP "ctrlBus" = PADS(nCs*) PADS(nRd);
+#TIMEGRP "uP" = "dataBus" "addrBus" "ctrlBus";
 
 
 
-NET "ck933*" TNM_NET = clk;
+NET "ck933*" TNM_NET = FFS clk;
+NET "ck933*" TNM_NET = DSPS clk;
+NET "ck933*" TNM_NET = RAMS clk;
 NET "nWe*" TNM_NET = FFS writeEn;
+NET "wr0*" TNM_NET = FFS writeEn;
+NET "wr2*" TNM_NET = FFS writeEn;
+
 TIMEGRP "trellisBit" = FFS(trellisBit*);
 TIMEGRP "iBit" = FFS(demod/bitsync/bitDataI*) trellisBit;
 TIMEGRP "iData" = FFS(iData*);
@@ -373,10 +384,11 @@ TIMEGRP "sync" = "sync0" "sync1" "sync2" "sync3" "sync4" "sync5" "sync6" "sync7"
 TIMEGRP "newOffset" = FFS(demod/resampler/resamplerI/newOffset*) FFS(demod/resampler/resamplerQ/newOffset*);
 TIMEGRP "resamplerTaps" = DSPS(demod/resampler/resamplerI/*) DSPS(demod/resampler/resamplerQ/*);
 #TIMEGRP "delay" = FFS(multihLoop/delayI/*) FFS(multihLoop/delayQ/*) DSPS(multihLoop/delayI/*) DSPS(multihLoop/delayQ/*);
-TIMEGRP "resamplerPhase" = FFS(demod/resampler/resamplerI/resamplerPhaseInc*) FFS(demod/resampler/resamplerQ/resamplerPhaseInc*);
+TIMEGRP "resamplerPhase" = FFS(demod/resampler/resamplerI/resamplerPhaseInc*) FFS(demod/resampler/resamplerQ/resamplerPhaseInc*) FFS(demod/resampler/resamplerI/phase*) FFS(demod/resampler/resamplerQ/phase*);
 TIMEGRP "acs" = FFS(trellis/viterbi_top/acs*);
 TIMEGRP "soqpskAcs" = DSPS(soqpsk/soqpskViterbi/acs*) FFS(soqpsk/soqpskViterbi/mf1Acs*) FFS(soqpsk/soqpskViterbi/mfZ*) FFS(soqpsk/soqpskViterbi/acs*);
 TIMEGRP "rotSelect" = FFS(trellis/rotator/enaDelay*);
+TIMEGRP "rotInput" = FFS(trellis/rotator/iInBuf*) FFS(trellis/rotator/qInBuf*);
 TIMEGRP "rotOut" = FFS(trellis/rotator/m*/reOut*) FFS(trellis/rotator/m*/imOut*);
 TIMEGRP "soqpskRotOut" = FFS(soqpsk/soqpskViterbi/mf1Acs*) FFS(soqpsk/soqpskViterbi/mfZ*);
 
@@ -412,6 +424,7 @@ NET "soqpsk/soqpskViterbi/everyOtherSymEn*" TNM_NET = FFS syncGroup;
 NET "soqpsk/soqpskViterbi/everyOtherSymEn*" TNM_NET = DSPS syncGroup;
 NET "trellis/trellisCarrierLoop/sym2xEnSr*" TNM_NET = FFS syncGroup;
 NET "trellis/trellisCarrierLoop/symEnSr*" TNM_NET = FFS syncGroup;
+NET "trellis/trellisCarrierLoop/fmDemod/cordic/enSR*" TNM_NET = FFS syncGroup;
 NET "trellis/symEnShift*" TNM_NET = FFS syncGroup;
 NET "multihPhaseErrorEnIn*" TNM_NET = FFS syncGroup;
 
@@ -431,7 +444,8 @@ TIMEGRP "ddc1" = FFS(demod/ddc/iOut*) FFS(demod/ddc/qOut*);
 TIMEGRP "ddc2" = FFS(demod/ddc/dualFir/*) DSPS(demod/ddc/dualFir/*);
 TIMEGRP "ddc3" = FFS(demod/ddc/qFirIn*) FFS(demod/ddc/iFirIn*);
 TIMEGRP "fmDemod" = FFS(demod/fmDemod/cordic/p*) FFS(trellis/trellisCarrierLoop/fmDemod/cordic/p*);
-TIMEGRP "slowGroup" = "syncGroup" "ddc" "ddc0" "ddc1" "ddc2" "ddc3" "tg14" "tg15" "fmDemod";
+TIMEGRP "sdiRam" = RAMS(sdi/*);
+TIMEGRP "slowGroup" = "syncGroup" "ddc" "ddc0" "ddc1" "ddc2" "ddc3" "tg14" "tg15" "fmDemod" "sdiRam";
 
 TIMEGRP "ddcPL0" = FFS(demod/ddc/iCicIn*) FFS(demod/ddc/qCicIn*);
 TIMEGRP "ddcPL1" = FFS(demod/ddc/iAgcIn*) FFS(demod/ddc/qAgcIn*);
@@ -479,6 +493,7 @@ TIMESPEC TS_loop0 = FROM "ddsSources" TO FFS(trellis/trellisCarrierLoop/dds*) 10
 TIMESPEC TS_loop2 = FROM "cmpySources" TO DSPS(trellis/trellisCarrierLoop/cmpy*) 100 MHz;
 #TIMESPEC TS_phaseFifo = PERIOD "phaseFifo" 100 MHz;
 TIMESPEC TS_rotSelect = FROM "rotSelect" TO FFS(trellis/rotator*) 10 ns;
+TIMESPEC TS_rotInput = FROM "rotInput" TO FFS(trellis/rotator*) 10 ns;
 TIMESPEC TS_maxMetric = FROM "maxMetric" TO FFS(trellis*) 100 MHz;
 TIMESPEC TS_sel = FROM "acsSel" TO "tb" 100 MHz;
 TIMESPEC TS_sync = FROM "sync" TO FFS 100 MHz;
@@ -489,6 +504,16 @@ TIMESPEC TS_soqpskIndex = FROM "soqpskAcs" TO FFS(soqpsk/soqpskViterbi/soqpskMax
 # in fast constraints.TIMESPEC TS_nWe = PERIOD "writeEn" 100 ns HIGH 50%;
 TIMESPEC TS_uP0 = FROM "writeEn" TO FFS 100 ns;
 TIMESPEC TS_uP1 = FROM "writeEn" TO DSPS 100 ns;
+TIMESPEC TS_uP2 = FROM "writeEn" TO RAMS 100 ns;
+#OFFSET = IN 40 ns BEFORE "nWe" RISING;
+TIMESPEC TS_uP3 = FROM "addrBus" TO "writeEn" 100 ns;
+TIMESPEC TS_uP4 = FROM "dataBus" TO "writeEn" 100 ns;
+TIMESPEC TS_uP5 = FROM "ctrlBus" TO "writeEn" 100 ns;
+TIMESPEC TS_uP6 = FROM "addrBus" TO "dataBus" 100 ns;
+TIMESPEC TS_uP7 = FROM "ctrlBus" TO "dataBus" 100 ns;
+TIMESPEC TS_uP8 = FROM "writeEn" TO "dataBus" 100 ns;
+TIMESPEC TS_uP9 = FROM "writeEn" TO PADS 100 ns;
 
-
+# Clocked Outputs
+OFFSET = OUT 100 ns AFTER "ck933" RISING;
 
