@@ -18,6 +18,9 @@ module bitsync(
     offsetError,
     offsetErrorEn,
     fskDeviation,
+    `ifdef INTERNAL_ADAPT
+    avgDeviation,
+    `endif
     iSym2xEn,
     iSymEn,
     symDataI,
@@ -54,6 +57,9 @@ input   [17:0]  au;
 output  [17:0]  offsetError;
 output          offsetErrorEn;
 output  [15:0]  fskDeviation;
+`ifdef INTERNAL_ADAPT
+output  [31:0]  avgDeviation;
+`endif
 output          iSym2xEn;
 output          iSymEn;
 output  [17:0]  symDataI;
@@ -432,6 +438,47 @@ always @(qMF) qMFReal = (qMF[17] ? qMF - 262144.0 : qMF)/131072.0;
 `endif
 
 
+`ifdef INTERNAL_ADAPT
+
+// Use a value slightly outside the valid deviation range to limit the deviation
+// Max is 0.42 in Q31 format
+`define MAX_PCMFM_DEVIATION     32'h35C28F5C
+// I'm cheating on this one and using the lowest valid deviation as the limit instead
+// of one slightly lower because there is a bias toward lower values in heavy noise.
+// Min is 0.30 in Q31 format
+`define MIN_PCMFM_DEVIATION     32'h26666666
+// Calculation of average DC offset (freq offset in FSK mode) and average FSK deviation.
+reg     [31:0]  avgDeviation;
+reg     [24:0]  avgOffsetError;
+assign          offsetError = dcError;
+assign          offsetErrorEn = offsetEn;
+//assign          offsetError = avgOffsetError[24:7];
+always @(posedge sampleClk) begin
+    if (reset) begin
+        avgOffsetError <= 0;
+        avgDeviation <= 0;
+        end
+    else if (symTimes2Sync) begin
+        if (offsetEn && dcErrorAvailable) begin
+            avgOffsetError <= (avgOffsetError - {{7{avgOffsetError[24]}},avgOffsetError[24:7]})
+                            + {{7{dcError[17]}},dcError};
+            end
+        if (offsetEn && (noTransitionCount > 1) && bitsyncLock) begin
+            if (avgDeviation > `MAX_PCMFM_DEVIATION) begin
+                avgDeviation <= `MAX_PCMFM_DEVIATION;
+                end
+            else if (avgDeviation < `MIN_PCMFM_DEVIATION) begin
+                avgDeviation <= `MIN_PCMFM_DEVIATION;
+                end
+            else begin
+                avgDeviation <= (avgDeviation - {{10{avgDeviation[31]}},avgDeviation[31:10]})
+                              + {{10{absDeviation[17]}},absDeviation,4'b0};
+                end
+            end
+        end
+    end
+assign fskDeviation = avgDeviation[31:16];
+`else
 // Calculation of average DC offset (freq offset in FSK mode) and average FSK deviation.
 reg     [24:0]  avgDeviation;
 reg     [24:0]  avgOffsetError;
@@ -455,6 +502,7 @@ always @(posedge sampleClk) begin
         end
     end
 assign fskDeviation = avgDeviation[24:9];
+`endif
 
 `ifdef SIMULATE
 real avgOffsetReal = (avgOffsetError[24] ? avgOffsetError[24:7] - 262144.0 : avgOffsetError[24:7])/131072.0;

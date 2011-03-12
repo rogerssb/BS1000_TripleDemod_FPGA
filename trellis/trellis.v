@@ -15,6 +15,9 @@ module trellis(
     clk,reset,symEn,sym2xEn,
     iIn,qIn,
     legacyBit,
+    `ifdef INTERNAL_ADAPT
+    avgDeviation,
+    `endif
     wr0,wr1,wr2,wr3,
     addr,
     din,dout,
@@ -37,6 +40,9 @@ parameter ROT_BITS = 10;
 input           clk,reset,symEn,sym2xEn;
 input   [17:0]  iIn,qIn;
 input           legacyBit;
+`ifdef INTERNAL_ADAPT
+input   [31:0]  avgDeviation;
+`endif
 input           wr0,wr1,wr2,wr3;
 input   [11:0]  addr;
 input   [31:0]  din;
@@ -82,6 +88,9 @@ trellisCarrierLoop trellisCarrierLoop(
   .iIn(iIn),
   .qIn(qIn),
   .legacyBit(legacyBit),
+  `ifdef INTERNAL_ADAPT
+  .avgDeviation(avgDeviation),
+  `endif
   `ifdef USE_LEAKY
   .phaseErrorReal(phaseErrorReal),
   .phaseErrorImag(phaseErrorImag),

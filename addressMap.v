@@ -1,6 +1,8 @@
 `ifndef ADDRESS_MAP
 `define ADDRESS_MAP
 
+`define INTERNAL_ADAPT
+
 // Split the memory space for the different functions
 `define DEMODSPACE      12'b0000_0xxx_xxxx
 `define FMMODSPACE      12'b0001_xxxx_xxxx

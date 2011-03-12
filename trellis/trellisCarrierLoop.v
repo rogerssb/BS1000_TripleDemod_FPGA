@@ -15,6 +15,9 @@
 module trellisCarrierLoop(clk,reset,symEn,sym2xEn,
   iIn,qIn,
   legacyBit,
+    `ifdef INTERNAL_ADAPT
+    avgDeviation,
+    `endif
   phaseErrorIn,
   symEn_phErr,
   wr0,wr1,wr2,wr3,
@@ -30,6 +33,9 @@ module trellisCarrierLoop(clk,reset,symEn,sym2xEn,
 input clk,reset,symEn,sym2xEn;
 input [17:0]iIn,qIn;
 input legacyBit;
+`ifdef INTERNAL_ADAPT
+input   [31:0]  avgDeviation;
+`endif
 input   [7:0]   phaseErrorIn;
 input symEn_phErr;
 input wr0,wr1,wr2,wr3;
@@ -71,6 +77,7 @@ loopRegs loopRegs(
     .invertError(invertError),
     .zeroError(zeroError),
     .clearAccum(clearAccum),
+    .ctrl4(manualDeviation),
     .leadMan(),
     .leadExp(leadExp),
     .lagMan(),
@@ -86,15 +93,15 @@ loopRegs loopRegs(
 `ifdef USE_PHASE_FIFO
 /**************************** Phase Error FIFO ********************************/
 
-wire	[7:0]	phaseError;
+wire    [7:0]   phaseError;
 phaseFifo phaseFifo(
-	.clk(clk),
-	.reset(reset),
-	.enIn(symEn_phErr),
-	.enOut(symEn),
-	.din(phaseErrorIn),
-	.dout(phaseError)
-	);
+        .clk(clk),
+        .reset(reset),
+        .enIn(symEn_phErr),
+        .enOut(symEn),
+        .din(phaseErrorIn),
+        .dout(phaseError)
+        );
 wire loopFilterEn = symEn;
 
 `else 
@@ -216,7 +223,10 @@ always @(posedge clk) begin
         newOffset <= carrierFreqOffset;
         end
     end
-	 
+// The value, 0x2ccccccc, is 0.35 in Q31 format.
+`ifdef INTERNAL_ADAPT
+wire    [31:0]  devDiff = 32'h2ccccccc - avgDeviation;         
+`endif
 reg [31:0] deviationCorrection;
 reg [31:0] devCorrection;
 reg prevLegacyBit;
@@ -224,10 +234,28 @@ always @(posedge clk) begin
     if (sym2xEn) begin
         prevLegacyBit <= legacyBit;
         if (legacyBit & prevLegacyBit) begin
+            `ifdef INTERNAL_ADAPT
+            if (manualDeviation) begin
+                devCorrection <= loopData;
+                end
+            else begin
+                devCorrection <= devDiff;
+                end
+            `else
             devCorrection <= loopData;
+            `endif
             end
         else if (!legacyBit & !prevLegacyBit) begin
+            `ifdef INTERNAL_ADAPT
+            if (manualDeviation) begin
+                devCorrection <= -loopData;
+                end
+            else begin
+                devCorrection <= -devDiff;
+                end
+            `else
             devCorrection <= -loopData;
+            `endif
             end
         else begin
             devCorrection <= 0;
@@ -368,11 +396,15 @@ reg [4:0] sym2xEnSr;
 reg [17:0]  iOut,qOut;
 `endif
 always @(posedge clk) begin
+    `ifdef SIMULATE
+        begin
+    `else
     if (reset) begin
         symEnSr <= 0;
         sym2xEnSr <= 0;
         end
     else begin
+    `endif
         symEnSr <= {symEnSr[2:0], symEn};
         sym2xEnSr <= {sym2xEnSr[2:0], sym2xEn};
         end

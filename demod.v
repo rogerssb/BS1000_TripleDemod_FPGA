@@ -32,7 +32,12 @@ module demod(
     demodMode,
     eyeSync,
     iEye,qEye,
+    `ifdef INTERNAL_ADAPT
+    eyeOffset,
+    avgDeviation
+    `else
     eyeOffset
+    `endif
     );
 
 input           clk;
@@ -68,7 +73,9 @@ output  [3:0]   demodMode;
 output          eyeSync;
 output  [17:0]  iEye,qEye;
 output  [4:0]   eyeOffset;
-
+`ifdef INTERNAL_ADAPT
+output  [31:0]  avgDeviation;
+`endif
 
 
 /******************************************************************************
@@ -402,6 +409,9 @@ bitsync bitsync(
     .offsetError(offsetError),
     .offsetErrorEn(offsetErrorEn),
     .fskDeviation(fskDeviation),
+    `ifdef INTERNAL_ADAPT
+    .avgDeviation(avgDeviation),
+    `endif
     .iSym2xEn(iSym2xEn),
     .iSymEn(iSymEn),
     .symDataI(iSymData),

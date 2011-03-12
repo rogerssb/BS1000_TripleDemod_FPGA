@@ -65,7 +65,7 @@ output          auSymClk;
 output          bsync_nLock,demod_nLock;
 output          sdiOut;
 
-parameter VER_NUMBER = 16'h0144;
+parameter VER_NUMBER = 16'h0146;
 
 wire [11:0]addr = {addr11,addr10,addr9,addr8,addr7,addr6,addr5,addr4,addr3,addr2,addr1,1'b0};
 
@@ -208,6 +208,10 @@ wire            iBit,qBit;
 
 wire    [17:0]  iEye,qEye;
 wire    [4:0]   eyeOffset;
+
+`ifdef INTERNAL_ADAPT
+wire    [31:0]  avgDeviation;
+`endif
 demod demod(
     .clk(ck933), .reset(reset), .syncIn(1'b1),
     .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
@@ -239,7 +243,12 @@ demod demod(
     .qTrellis(qSymData),
     .eyeSync(eyeSync),
     .iEye(iEye),.qEye(qEye),
+    `ifdef INTERNAL_ADAPT
+    .eyeOffset(eyeOffset),
+    .avgDeviation(avgDeviation)
+    `else 
     .eyeOffset(eyeOffset)
+    `endif
     );
 
 reg             pcmSymEn,soqpskSymEn,multihSymEn;
@@ -274,6 +283,9 @@ trellis trellis(
     .iIn(iIn),
     .qIn(qIn),
     .legacyBit(iBit),
+    `ifdef INTERNAL_ADAPT
+    .avgDeviation(avgDeviation),
+    `endif
     .wr0(wr0),
     .wr1(wr1),
     .wr2(wr2),
