@@ -2,7 +2,7 @@
 `timescale 1ns / 10 ps
 
 module demod( 
-    clk, reset, syncIn, 
+    clk, reset,
     rd, wr0,wr1,wr2,wr3,
     addr,
     din,
@@ -42,7 +42,6 @@ module demod(
 
 input           clk;
 input           reset;
-input           syncIn;
 input           rd,wr0,wr1,wr2,wr3;
 input   [11:0]  addr;
 input   [31:0]  din;
@@ -126,7 +125,7 @@ wire    [31:0]  carrierFreqOffset;
 wire    [31:0]  carrierLeadFreq;
 wire    [31:0]  ddcDout;
 ddc ddc( 
-    .clk(clk), .reset(reset), .syncIn(syncIn), 
+    .clk(clk), .reset(reset),
     .wr0(wr0) , .wr1(wr1), .wr2(wr2), .wr3(wr3),
     .addr(addr),
     .din(din),

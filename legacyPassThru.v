@@ -65,7 +65,7 @@ output          auSymClk;
 output          bsync_nLock,demod_nLock;
 output          sdiOut;
 
-parameter VER_NUMBER = 16'h0146;
+parameter VER_NUMBER = 16'h0147;
 
 wire [11:0]addr = {addr11,addr10,addr9,addr8,addr7,addr6,addr5,addr4,addr3,addr2,addr1,1'b0};
 
@@ -91,7 +91,7 @@ always @(posedge nWe or posedge clockCounterEn) begin
         end
     else if (misc_en) begin
         casex (addr) 
-            `MISC_CLOCK:    startClockCounter <= 1;
+            `MISC_CLOCK:        startClockCounter <= 1;
             endcase
         end
     end
@@ -213,7 +213,7 @@ wire    [4:0]   eyeOffset;
 wire    [31:0]  avgDeviation;
 `endif
 demod demod(
-    .clk(ck933), .reset(reset), .syncIn(1'b1),
+    .clk(ck933), .reset(reset),
     .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
     .addr(addr),
     .din(dataIn),

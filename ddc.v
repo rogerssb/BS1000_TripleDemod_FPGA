@@ -3,22 +3,22 @@
 
 `define USE_DDC_FIR
 
-module ddc( clk, reset, syncIn, 
-            wr0,wr1,wr2,wr3,
-            addr,
-            din,
-            dout,
-            ddcFreqOffset,
-            leadFreq,
-            offsetEn,
-            nbAgcGain,
-            syncOut,
-            iIn, qIn, 
-            iOut, qOut);
+module ddc( 
+    clk, reset,
+    wr0,wr1,wr2,wr3,
+    addr,
+    din,
+    dout,
+    ddcFreqOffset,
+    leadFreq,
+    offsetEn,
+    nbAgcGain,
+    syncOut,
+    iIn, qIn, 
+    iOut, qOut);
 
 input           clk;
 input           reset;
-input           syncIn;
 input           wr0,wr1,wr2,wr3;
 input   [11:0]  addr;
 input   [31:0]  din;
@@ -54,8 +54,9 @@ always @(addr) begin
         endcase
     end
 
-wire [31:0]ddcCenterFreq;
-wire [31:0]ddcDout;
+wire    [31:0]  ddcCenterFreq;
+wire    [7:0]   adcDecimation;
+wire    [31:0]  ddcDout;
 ddcRegs micro(
     .addr(addr),
     .dataIn(din),
@@ -67,7 +68,8 @@ ddcRegs micro(
     `ifdef USE_DDC_FIR
     .bypassFir(bypassFir),
     `endif
-    .ddcCenterFreq(ddcCenterFreq)
+    .ddcCenterFreq(ddcCenterFreq),
+    .adcDecimation(adcDecimation)
     );
 
 
@@ -81,7 +83,8 @@ always @(posedge clk) begin
     else if (offsetEn) begin
         newOffset <= ddcFreqOffset;
         end
-    ddcFreq <= ddcFreqOffset - ddcCenterFreq;
+    //ddcFreq <= ddcFreqOffset - ddcCenterFreq;
+    ddcFreq <= newOffset - ddcCenterFreq;
     end
 
 
@@ -131,10 +134,10 @@ wire [17:0]iHb0,qHb0;
 `ifdef SIMULATE
 reg hbReset;
 halfbandDecimate hb0( 
-    .clk(clk), .reset(hbReset), .sync(syncIn),
+    .clk(clk), .reset(hbReset), .sync(1'b1),
 `else
 halfbandDecimate hb0( 
-    .clk(clk), .reset(reset), .sync(syncIn),
+    .clk(clk), .reset(reset), .sync(1'b1),
 `endif
     .iIn(iMix),.qIn(qMix),
     .iOut(iHb0),.qOut(qHb0),
@@ -148,6 +151,27 @@ always @(iHb0) iHb0Real = ((iHb0 > 131071.0) ? (iHb0 - 262144.0) : iHb0)/131072.
 always @(qHb0) qHb0Real = ((qHb0 > 131071.0) ? (qHb0 - 262144.0) : qHb0)/131072.0;
 `endif
 
+// Programmable Clock Decimation. Depends on external SAW filters for this to 
+// work without aliasing
+reg     [7:0]   adcDecimationCount;
+reg             adcClkEn;
+always @(posedge clk) begin
+    if (reset) begin
+        adcDecimationCount <= 0;
+        end
+    else if (hb0SyncOut) begin
+        if (adcDecimationCount == 0) begin
+            adcDecimationCount <= adcDecimation;
+            adcClkEn <= 1;
+            end
+        else begin
+            adcDecimationCount <= adcDecimationCount - 1;
+            adcClkEn <= 0;
+            end
+        end
+    end
+
+
 // If bypassing the CIC decimator, force its clock enable off to save power
 reg     [17:0]  iCicIn,qCicIn;
 reg             cicClockEn;
@@ -158,7 +182,7 @@ always @(posedge clk) begin
         qCicIn <= 0;
         end
     else begin
-        cicClockEn <= hb0SyncOut;
+        cicClockEn <= hb0SyncOut & adcClkEn;
         iCicIn <= iHb0;
         qCicIn <= qHb0;
         end
@@ -191,7 +215,7 @@ always @(posedge clk) begin
     if (bypassCic) begin
         iAgcIn <= {iHb0,30'h0};
         qAgcIn <= {qHb0,30'h0};
-        agcSync <= hb0SyncOut;
+        agcSync <= hb0SyncOut & adcClkEn;
         end
     else begin
         iAgcIn <= iCic;
@@ -324,9 +348,6 @@ reg     [17:0]  iBB,qBB;
 reg             syncOut;
 always @(posedge clk) begin
     if (bypassFir) begin
-        iBB <= iHb;
-        qBB <= qHb;
-        syncOut <= hbSyncOut;
         if (bypassHb) begin
             syncOut <= agcSync;
             iBB <= iMux;
@@ -363,6 +384,17 @@ always @(posedge clk) begin
 
 `endif
 
+// Create the LO frequency
+reg [31:0] newLead;
+always @(posedge clk) begin
+    if (reset) begin
+        newLead <= 0;
+        end
+    else if (offsetEn) begin
+        newLead <= leadFreq;
+        end
+    end
+
 // Lead Complex Mixer
 wire    [17:0]iLeadDds;
 wire    [17:0]qLeadDds;
@@ -371,7 +403,8 @@ dds leadDds (
     .clk(clk), 
     .ce(1'b1),
     .we(1'b1), 
-    .data(leadFreq), 
+    //.data(leadFreq), 
+    .data(newLead), 
     .sine(qLeadDds), 
     .cosine(iLeadDds)
     );

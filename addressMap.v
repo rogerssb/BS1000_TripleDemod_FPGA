@@ -1,7 +1,7 @@
 `ifndef ADDRESS_MAP
 `define ADDRESS_MAP
 
-`define INTERNAL_ADAPT
+//`define INTERNAL_ADAPT
 
 // Split the memory space for the different functions
 `define DEMODSPACE      12'b0000_0xxx_xxxx
@@ -73,6 +73,7 @@
 // Define the DDC memory map
 `define DDC_CENTER_FREQ 12'bxxxx_xxxx_00xx
 `define DDC_CONTROL     12'bxxxx_xxxx_01xx
+`define DDC_DECIMATION  12'bxxxx_xxxx_10xx
 
 // Define the DDC Fir memory map
 `define DDC_FIR_COEFF_0 12'bxxxx_xxxx_000x
@@ -118,9 +119,9 @@
 
 
 // Define the MISCELLANEOUS locations
-`define MISC_RESET      12'bxxxx_xxxx_x00x
-`define MISC_VERSION    12'bxxxx_xxxx_x01x
-`define MISC_CLOCK      12'bxxxx_xxxx_x1xx
+`define MISC_RESET      12'bxxxx_xxxx_000x
+`define MISC_VERSION    12'bxxxx_xxxx_001x
+`define MISC_CLOCK      12'bxxxx_xxxx_01xx
 
 // Define the DAC control locations
 `define DAC_WDATA       12'bxxxx_xxxx_x00x

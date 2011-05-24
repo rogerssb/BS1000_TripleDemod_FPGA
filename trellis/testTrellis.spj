@@ -12,8 +12,9 @@ SimFile=
 [Analyzer]
 C0Width=138
 C1Width=58
-C2Width=88
+C2Width=95
 GotoSource=N
+ShowYaxis=
 [Spice]
 [DebugMode]
 CommandLine=+define+SIMULATE
@@ -21,7 +22,7 @@ DiskSize=5000M
 RecirculateTime=
 UseRecirculateTime=
 [View]
-1=Last 0.000ns 6785.248ns 118.727ns 256.756ns 404.201ns
+1=Last 0.000ns 19996.001ns 499.901ns 279.008ns 404.201ns
 [Group0]
 Name=New Group2
 [PliFiles]
@@ -62,7 +63,7 @@ Name=New Group2
 12=..\coregen\mpy18x18.v
 13=bitLifo.v
 14=traceBackTableLWK.v
-15=maxMetricEvenOdd.v
+15=maxMetricSeven.v
 [Group1]
 Name="Trellis"
 0="test : bertSr[2]" default
@@ -85,31 +86,32 @@ Name="Trellis"
 17="test.uut.viterbi_top.maxMetric : indexDelta[4:0]" default Decimal
 18="test.uut.viterbi_top.maxMetric : indexDiff[4:0]" default
 19="test.uut.viterbi_top.maxMetric : prevIndex[4:0]" default Decimal
-20="test.uut.viterbi_top.maxMetric : index[4:0]" default Decimal
-21="test.uut.viterbi_top.maxMetric : iE2[4:0]" default
-22="test.uut.viterbi_top.maxMetric : iE1_2[4:0]" default
-23="test.uut.viterbi_top.maxMetric : iE1_1[4:0]" default
-24="test.uut.viterbi_top.maxMetric : iE1_0[4:0]" default
-25="test.uut.viterbi_top.maxMetric : maxValE2[11:0]" default
-26="test.uut.viterbi_top.maxMetric : maxValE1_2[11:0]" default
-27="test.uut.viterbi_top.maxMetric : maxValE1_1[11:0]" default
-28="test.uut.viterbi_top.maxMetric : maxValE1_0[11:0]" default
-29="test.uut.viterbi_top.maxMetric : accMetOut6[11:0]" default
-30="test.uut.viterbi_top.maxMetric : accMetOut4[11:0]" default
-31="test.uut.viterbi_top.maxMetric : accMetOut2[11:0]" default
-32="test.uut.viterbi_top.maxMetric : accMetOut0[11:0]" default
-33="test.uut.viterbi_top.maxMetric : symEn" default
-34="test.uut : qIn[17:0]" default
-35="test.uut : iIn[17:0]" default
-36="test : index[15:0]" default
-37="test : cnt" default Decimal AnalogDisplay AType=Step Scale=Auto
-38="test : symEn" default
-39="test : sym2xEn" default
-40="test : bitError" default Decimal AnalogDisplay AType=Step Scale=Auto
-41="test : bertIndex" default Decimal AnalogDisplay AType=Step Scale=Auto
-42="test.uut.viterbi_top : simReset" default
-43="test : reset" default
-44="test : clk" default
+20="test.uut.viterbi_top.maxMetric : index7[4:0]" default
+21="test.uut.viterbi_top.maxMetric : index[4:0]" default Decimal
+22="test.uut.viterbi_top.maxMetric : iE2[4:0]" default
+23="test.uut.viterbi_top.maxMetric : iE1_2[4:0]" default
+24="test.uut.viterbi_top.maxMetric : iE1_1[4:0]" default
+25="test.uut.viterbi_top.maxMetric : iE1_0[4:0]" default
+26="test.uut.viterbi_top.maxMetric : maxValE2[11:0]" default
+27="test.uut.viterbi_top.maxMetric : maxValE1_2[11:0]" default
+28="test.uut.viterbi_top.maxMetric : maxValE1_1[11:0]" default
+29="test.uut.viterbi_top.maxMetric : maxValE1_0[11:0]" default
+30="test.uut.viterbi_top.maxMetric : accMetOut6[11:0]" default
+31="test.uut.viterbi_top.maxMetric : accMetOut4[11:0]" default
+32="test.uut.viterbi_top.maxMetric : accMetOut2[11:0]" default
+33="test.uut.viterbi_top.maxMetric : accMetOut0[11:0]" default
+34="test.uut.viterbi_top.maxMetric : symEn" default
+35="test.uut : qIn[17:0]" default
+36="test.uut : iIn[17:0]" default
+37="test : index[15:0]" default
+38="test : cnt" default Decimal AnalogDisplay AType=Step Scale=Auto
+39="test : symEn" default
+40="test : sym2xEn" default
+41="test : bitError" default Decimal AnalogDisplay AType=Step Scale=Auto
+42="test : bertIndex" default Decimal AnalogDisplay AType=Step Scale=Auto
+43="test.uut.viterbi_top : simReset" default
+44="test : reset" default
+45="test : clk" default
 OpenGroup=Yes
 [GroupInfo]
 0=New Group2 : 0 : 0 : 0

@@ -10,6 +10,8 @@
 // it either comes from an even state or an odd state. This has the effect of forcing
 // indexDelta to always be odd.
 
+// LWK - This version forces the indexDelta to always be +/- 7. However, we will also
+// generate a test index based on the previous version for debug purposes.
 module maxMetricEvenOdd(
     clk, reset, symEn, even,
     accMetOut0 , accMetOut1 , accMetOut2 , accMetOut3 , accMetOut4 , 
@@ -18,22 +20,27 @@ module maxMetricEvenOdd(
     accMetOut15, accMetOut16, accMetOut17, accMetOut18, accMetOut19,
     maxVal,
     index,
+    testIndex,
     indexDelta,
     symEnDly
     );
    
    parameter            size = 12;
    input                clk,reset,symEn,even;
-   input [(size-1):0] accMetOut0 , accMetOut1 , accMetOut2 , accMetOut3 , 
+   input [(size-1):0]   accMetOut0 , accMetOut1 , accMetOut2 , accMetOut3 , 
                         accMetOut4 , accMetOut5 , accMetOut6 , accMetOut7 , 
                         accMetOut8 , accMetOut9 , accMetOut10, accMetOut11, 
                         accMetOut12, accMetOut13, accMetOut14, accMetOut15, 
                         accMetOut16, accMetOut17, accMetOut18, accMetOut19;
-   output [4:0]         index; // max index (0-19)
-   output [4:0]         indexDelta; // max index (0-19)
+   output [4:0]         index;      // index = prevIndex +/- 7
+   output [4:0]         testIndex;  // 0 <= testIndex <= 19
+   output [4:0]         indexDelta; // -10 <= indexDelta <= 9
    output [(size-1):0]  maxVal;
    output               symEnDly;
-   reg [4:0]            index;
+
+
+   reg [4:0]            index7;
+   reg [4:0]            maxIndex;
    reg [4:0]            indexDelta;   
 
    wire [(size-1):0]  maxValE1_0, maxValE1_1, maxValE1_2, 
@@ -67,9 +74,14 @@ module maxMetricEvenOdd(
    comp4twosComp  #(size, 0)  compS2_0_3Odd    (clk, reset, maxValO1_0 , maxValO1_1 , maxValO1_2 , maxNegative, iO2  , maxValO2  );
 
 
+    reg  [(size-1):0]    plus7Metric;
+    reg  [(size-1):0]    minus7Metric;
+
     reg     [1:0]   compareState;
     reg     [4:0]   prevIndex;
-    wire    [5:0]   indexDiff = {1'b0,index} - {1'b0,prevIndex};
+    reg     [4:0]   plus7;
+    reg     [4:0]   minus7;
+    wire    [5:0]   indexDiff = {1'b0,testIndex} - {1'b0,prevIndex};
     parameter   IDLE =      2'b00,
                 STAGE1 =    2'b01,
                 STAGE2 =    2'b11,
@@ -78,7 +90,7 @@ module maxMetricEvenOdd(
         if (reset) begin
             compareState <= IDLE;
             maxVal <= 0;
-            index <= 0;
+            index7 <= 5;
             end
         else begin
             case (compareState)
@@ -162,6 +174,21 @@ module maxMetricEvenOdd(
                     // During this stage the ACS inputs are flowing through the
                     // first stage of comparisons
                     compareState <= STAGE2;
+
+                    // Calculate prevIndex + 7;
+                    if (prevIndex <= 12) begin
+                        plus7 <= prevIndex + 7;
+                        end
+                    else begin
+                        plus7 <= prevIndex - 13;
+                        end
+                    // Calculate prevIndex - 7;
+                    if (prevIndex >= 7) begin
+                        minus7 <= prevIndex - 7;
+                        end
+                    else begin
+                        minus7 <= prevIndex + 13;
+                        end
                     end
                 STAGE2: begin
                     // During this stage the results of the first stage comparisons
@@ -172,27 +199,94 @@ module maxMetricEvenOdd(
                     compareState <= IDLE;
                     if (even) begin
                         case (iE2)
-                            0: index <= {iE1_0[3:0],1'b0};
-                            1: index <= {iE1_1[3:0],1'b0};
-                            2: index <= {iE1_2[3:0],1'b0};
-                            default: index <= {iE1_0[3:0],1'b0};
+                            0: maxIndex <= {iE1_0[3:0],1'b0};
+                            1: maxIndex <= {iE1_1[3:0],1'b0};
+                            2: maxIndex <= {iE1_2[3:0],1'b0};
+                            default: maxIndex <= {iE1_0[3:0],1'b0};
                             endcase
                         maxVal <= maxValE2;
                         end
                     else begin
                         case (iO2)
-                            0: index <= {iO1_0[3:0],1'b1};
-                            1: index <= {iO1_1[3:0],1'b1};
-                            2: index <= {iO1_2[3:0],1'b1};
-                            default: index <= {iO1_0[3:0],1'b1};
+                            0: maxIndex <= {iO1_0[3:0],1'b1};
+                            1: maxIndex <= {iO1_1[3:0],1'b1};
+                            2: maxIndex <= {iO1_2[3:0],1'b1};
+                            default: maxIndex <= {iO1_0[3:0],1'b1};
                             endcase
                         maxVal <= maxValO2;
+                        end
+                    // Compare the plus and minus 7 acs values
+                    if (plus7Metric > minus7Metric) begin
+                        maxVal <= plus7Metric;
+                        index7 <= plus7;
+                        end
+                    else begin
+                        maxVal <= minus7Metric;
+                        index7 <= minus7;
                         end
                     end
             endcase
         end
      end
 
+   always @(accMetOut0  or accMetOut1  or accMetOut2  or accMetOut3  or
+            accMetOut4  or accMetOut5  or accMetOut6  or accMetOut7  or 
+            accMetOut8  or accMetOut9  or accMetOut10 or accMetOut11 or 
+            accMetOut12 or accMetOut13 or accMetOut14 or accMetOut15 or 
+            accMetOut16 or accMetOut17 or accMetOut18 or accMetOut19 or 
+            plus7 or minus7) begin
+        case (plus7)
+            0 : plus7Metric <= accMetOut0;
+            1 : plus7Metric <= accMetOut1;
+            2 : plus7Metric <= accMetOut2;
+            3 : plus7Metric <= accMetOut3;
+            4 : plus7Metric <= accMetOut4;
+            5 : plus7Metric <= accMetOut5;
+            6 : plus7Metric <= accMetOut6;
+            7 : plus7Metric <= accMetOut7;
+            8 : plus7Metric <= accMetOut8;
+            9 : plus7Metric <= accMetOut9;
+            10: plus7Metric <= accMetOut10;
+            11: plus7Metric <= accMetOut11;
+            12: plus7Metric <= accMetOut12;
+            13: plus7Metric <= accMetOut13;
+            14: plus7Metric <= accMetOut14;
+            15: plus7Metric <= accMetOut15;
+            16: plus7Metric <= accMetOut16;
+            17: plus7Metric <= accMetOut17;
+            18: plus7Metric <= accMetOut18;
+            19: plus7Metric <= accMetOut19;
+            default: plus7Metric <= 0;
+            endcase
+        case (minus7)
+            0 : minus7Metric <= accMetOut0;
+            1 : minus7Metric <= accMetOut1;
+            2 : minus7Metric <= accMetOut2;
+            3 : minus7Metric <= accMetOut3;
+            4 : minus7Metric <= accMetOut4;
+            5 : minus7Metric <= accMetOut5;
+            6 : minus7Metric <= accMetOut6;
+            7 : minus7Metric <= accMetOut7;
+            8 : minus7Metric <= accMetOut8;
+            9 : minus7Metric <= accMetOut9;
+            10: minus7Metric <= accMetOut10;
+            11: minus7Metric <= accMetOut11;
+            12: minus7Metric <= accMetOut12;
+            13: minus7Metric <= accMetOut13;
+            14: minus7Metric <= accMetOut14;
+            15: minus7Metric <= accMetOut15;
+            16: minus7Metric <= accMetOut16;
+            17: minus7Metric <= accMetOut17;
+            18: minus7Metric <= accMetOut18;
+            19: minus7Metric <= accMetOut19;
+            default: minus7Metric <= 0;
+            endcase
+        end
+
+
+
      assign symEnDly = symEn;
+     assign testIndex = maxIndex;
+     assign index = index7;
 
 endmodule

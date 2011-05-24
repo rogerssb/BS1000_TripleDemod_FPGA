@@ -5,17 +5,18 @@ DigitalThreshold=
 [Settings]
 Version=Silvaco4.10.0.R
 [Analyzer]
-C0Width=58
+C0Width=142
 C1Width=58
-C2Width=58
+C2Width=91
 GotoSource=N
+ShowYaxis=
 [Spice]
 [LibraryFiles]
 0=..\..\Xilinx\10.1\ISE\verilog\src\unisims\{.v}
 [DebugMode]
 CommandLine=+define+SIMULATE
 [View]
-1=Last 0.000ns 564193.601ns 15020.531ns 577414.676ns 470442.435ns
+1=Last 725014.142ns 740370.097ns 355.051ns 726576.366ns 739074.161ns
 [Group0]
 Name=New Group2
 [Group3]
@@ -26,17 +27,10 @@ Name="Micro"
 3="test.demod : wr3" default
 4="test.demod : din[31:0]" default
 5="test.demod : addr[11:0]" default
-OpenGroup=
 [IncDirs]
 0=.
 [PliFiles]
 0=.\gaussPLI\gaussPLI.dll
-[Group7]
-Name="Resampler"
-0="test.demod.resampler : iSumReal" default Real AnalogDisplay AType=Step Scale=Auto
-1="test.demod.resampler : iOutReal" default Real AnalogDisplay AType=Step Scale=Auto
-2="test.demod.resampler : inIReal" default Real AnalogDisplay AType=Step Scale=Auto
-OpenGroup=
 [Group6]
 Name="DAC"
 0="test.dac2Interp : dataIn[17:0]" default
@@ -51,20 +45,7 @@ Name="DAC"
 9="test.dac0Interp : expAdjReal" default Real AnalogDisplay AType=PWL Scale=Auto
 10="test.dac0Interp : exponentAdjusted[17:0]" default
 11="test.dac0Interp : dataIn[17:0]" default
-[Group2]
-Name="Tx"
-0="test.fmMod : interpReal" default Real AnalogDisplay AType=Step Scale=Auto
-1="test.fmMod : shapedReal" default Real AnalogDisplay AType=Step Scale=Auto
-2="test.fmMod : cicShift[4:0]" default Unknown
-3="test.fmMod : cicOut[33:0]" default Unknown
-4="test.fmMod : shapedReady" default Unknown
-5="test.fmMod : modValue[2:0]" default Unknown
-6="test.fmMod : bitrateDiv[15:0]" default Unknown
-7="test.fmMod : modData" default Unknown
-8="test.fmMod : modClk" default Unknown
-9="test.fmMod : reset" default Unknown
-10="test : randData" default
-11="test.fmMod : clk" default Unknown
+OpenGroup=
 [Group5]
 Name="Carrier"
 0="test.demod.carrierLoop.lagGain : sweepOffsetMag[31:0]" default
@@ -90,7 +71,6 @@ Name="Carrier"
 20="test.demod.bitsync : offsetErrorSum[8:0]" default
 21="test.demod.carrierLoop : zeroError" default
 22="test.demod : freq[7:0]" default
-OpenGroup=
 [Group4]
 Name="Bitsync"
 0="test.demod.bitsync : lockCounter[15:0]" default
@@ -123,7 +103,6 @@ Name="Bitsync"
 27="test : cicDecimationInt" default Decimal AnalogDisplay AType=PWL Scale=Auto
 28="test : actualBitrateBps" default Real AnalogDisplay AType=PWL Scale=Auto
 29="test.demod.bitsync : symPhaseReal" default Real AnalogDisplay AType=Step Scale=Auto
-OpenGroup=Yes
 [Files]
 0=testBpsk.v
 1=demod.v
@@ -155,22 +134,36 @@ OpenGroup=Yes
 27=bitsync.v
 28=loopRegs.v
 29=loopFilter.v
-30=lead.v
-31=carrierLoop.v
-32=lagGain.v
-33=log2.v
-34=channelAgc.v
-35=agcLoopRegs.v
-36=agcLoopFilter.v
-37=cicComp.v
-38=cicInterpolate.v
-39=interpolate.v
-40=interpRegs.v
-41=shift48To18.v
-42=vm_cordic_fast.v
-43=vm_cordic.v
-44=dualResampler.v
-45=dualDecimator.v
+30=carrierLoop.v
+31=log2.v
+32=channelAgc.v
+33=agcLoopRegs.v
+34=agcLoopFilter.v
+35=cicComp.v
+36=cicInterpolate.v
+37=interpolate.v
+38=interpRegs.v
+39=shift48To18.v
+40=vm_cordic_fast.v
+41=vm_cordic.v
+42=dualResampler.v
+43=dualDecimator.v
+44=dualFirCoeffRegs.v
+45=dualFir.v
+46=singleFir.v
+47=.\coregen\mpy18x18WithCe.v
+48=lagGain12.v
+49=leadGain12.v
+50=multihEQ.v
+51=.\coregen\oneThird.v
+52=.\coregen\invSinc.v
+[Group2]
+Name="Tx"
+0="test : randData" default
+1="test : bitrateSamplesInt" default Decimal AnalogDisplay AType=PWL Scale=Auto
+2="test : demodClkEn" default
+3="test : clk" default
+OpenGroup=
 [Group1]
 Name="Rx"
 0="test.demod.resampler : reset" default
@@ -185,20 +178,34 @@ Name="Rx"
 9="test.demod.ddc : cicReset" default
 10="test.demod.resampler : iOutReal" default Real AnalogDisplay AType=Step Scale=Auto
 11="test.demod.ddc : qOutReal" default Real AnalogDisplay AType=Step Scale=Auto
-12="test.demod.ddc : iOutReal" default Real AnalogDisplay AType=Step Scale=Fixed MinScaleDbl=-1 MaxScaleDbl=1
-13="test.demod.ddc : qHbReal" default Real AnalogDisplay AType=Step Scale=Auto
-14="test.demod.ddc : iHbReal" default Real AnalogDisplay AType=Step Scale=Auto
-15="test.demod.ddc : qCompReal" default Real AnalogDisplay AType=Step Scale=Auto
-16="test.demod.ddc : iCompReal" default Real AnalogDisplay AType=Step Scale=Auto
-17="test.demod.ddc : qAgcReal" default Real AnalogDisplay AType=Step Scale=Auto
-18="test.demod.ddc : iAgcReal" default Real AnalogDisplay AType=Step Scale=Auto
-19="test.demod.ddc.cic : qCicReal" default Real AnalogDisplay AType=Step Scale=Auto
-20="test.demod.ddc.cic : iCicReal" default Real AnalogDisplay AType=Step Scale=Auto
-21="test.demod.ddc : qHb0Real" default Real AnalogDisplay AType=Step Scale=Auto
-22="test.demod.ddc : iHb0Real" default Real AnalogDisplay AType=Step Scale=Auto
-23="test.demod.ddc : qMixReal" default Real AnalogDisplay AType=Step Scale=Auto
-24="test.demod.ddc : iMixReal" default Real AnalogDisplay AType=Step Scale=Auto
-25="test : iSignalReal" default Real AnalogDisplay AType=Step Scale=Auto
+12="test.demod.ddc : iOutReal" default Real AnalogDisplay AType=Step Scale=Auto
+13="test.demod : resampSync" default
+14="test.demod : demodSync" default
+15="test.demod : ddcSync" default
+16="test.demod.ddc : cicSyncOut" default
+17="test.demod.ddc : hb0SyncOut" default
+18="test.demod.ddc.hb0 : sync" default
+19="test : demodClkEn" default Unknown
+20="test.demod : clk" default
+21="test.demod.ddc : qHbReal" default Real AnalogDisplay AType=Step Scale=Auto
+22="test.demod.ddc : iHbReal" default Real AnalogDisplay AType=Step Scale=Auto
+23="test.demod.ddc : qCompReal" default Real AnalogDisplay AType=Step Scale=Auto
+24="test.demod.ddc : iCompReal" default Real AnalogDisplay AType=Step Scale=Auto
+25="test.demod.ddc : qAgcReal" default Real AnalogDisplay AType=Step Scale=Auto
+26="test.demod.ddc : iAgcReal" default Real AnalogDisplay AType=Step Scale=Auto
+27="test.demod.ddc.cic : qCicReal" default Real AnalogDisplay AType=Step Scale=Auto
+28="test.demod.ddc.cic : iCicReal" default Real AnalogDisplay AType=Step Scale=Auto
+29="test.demod.ddc : qHb0Real" default Real AnalogDisplay AType=Step Scale=Auto
+30="test.demod.ddc : iHb0Real" default Real AnalogDisplay AType=Step Scale=Auto
+31="test.demod.ddc : qMixReal" default Real AnalogDisplay AType=Step Scale=Auto
+32="test.demod.ddc : iMixReal" default Real AnalogDisplay AType=Step Scale=Auto
+33="test : iSignalReal" default Real AnalogDisplay AType=Step Scale=Auto
+[Group7]
+Name="Resampler"
+0="test.demod.resampler.resamplerI : outReal" default Real AnalogDisplay AType=Step Scale=Auto
+1="test.demod.resampler.resamplerI : inReal" default Real AnalogDisplay AType=Step Scale=Auto
+2="test : resamplerFreqNorm" default Real AnalogDisplay AType=Step Scale=Auto
+3="test : resamplerFreqSps" default Real AnalogDisplay AType=PWL Scale=Auto
 OpenGroup=Yes
 [GroupInfo]
 0=New Group2 : 0 : 0 : 0
@@ -209,3 +216,4 @@ OpenGroup=Yes
 5=Carrier : 5 : 1 : 0
 6=DAC : 6 : 1 : 0
 7=Resampler : 7 : 1 : 0
+[Bookmarks]

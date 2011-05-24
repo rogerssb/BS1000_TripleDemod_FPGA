@@ -24,62 +24,52 @@ reg [31:0]d;
 wire [31:0]dout;
 
 // Create the clocks
-parameter SAMPLE_FREQ = 9.333333e6;
-parameter HC = 1e9/SAMPLE_FREQ/2;
+parameter adcDecimation = 2;
+parameter SYSTEM_FREQ = 9.333333e6;
+parameter SAMPLE_FREQ = SYSTEM_FREQ/adcDecimation;
+parameter HC = 1e9/SYSTEM_FREQ/2;
 parameter C = 2*HC;
 reg clken;
 always #HC clk = clk^clken;
-`define SAMPLE_PERIOD   (C*1e-9)
+`define SYSTEM_PERIOD   (C*1e-9)
 `define TWO_POW_32      4294967296.0
 `define TWO_POW_31      2147483648.0
 `define TWO_POW_17      131072.0
 
 
 real carrierFreqHz = 2333333.3;
-real carrierFreqNorm = carrierFreqHz * `SAMPLE_PERIOD * `TWO_POW_32;
+real carrierFreqNorm = carrierFreqHz * `SYSTEM_PERIOD * `TWO_POW_32;
 integer carrierFreqInt = carrierFreqNorm;
 wire [31:0] carrierFreq = carrierFreqInt;
 
 real carrierOffsetFreqHz = 0000.0;
-real carrierOffsetFreqNorm = carrierOffsetFreqHz * `SAMPLE_PERIOD * `TWO_POW_32;
+real carrierOffsetFreqNorm = carrierOffsetFreqHz * `SYSTEM_PERIOD * `TWO_POW_32;
 integer carrierOffsetFreqInt = carrierOffsetFreqNorm;
 wire [31:0] carrierOffsetFreq = carrierOffsetFreqInt;
 
 real carrierLimitHz = 25000.0;
-real carrierLimitNorm = carrierLimitHz * `SAMPLE_PERIOD * `TWO_POW_32;
+real carrierLimitNorm = carrierLimitHz * `SYSTEM_PERIOD * `TWO_POW_32;
 integer carrierLimitInt = carrierLimitNorm;
 wire [31:0] carrierLimit = carrierLimitInt;
 
 wire [31:0] sweepRate = 32'hffff0000;
 //wire [31:0] sweepRate = 32'h0039c759;
 
-real bitrateBps = 400000.0;
-real bitrateSamples = 1/bitrateBps/`SAMPLE_PERIOD/2.0;
+real bitrateBps = 400000.0/adcDecimation;
+real bitrateSamples = 1/bitrateBps/`SYSTEM_PERIOD/2.0;
 integer bitrateSamplesInt = bitrateSamples;
 wire [15:0]bitrateDivider = bitrateSamplesInt - 1;
-real actualBitrateBps = SAMPLE_FREQ/bitrateSamplesInt/2.0;
+real actualBitrateBps = SYSTEM_FREQ/bitrateSamplesInt/2.0;
 
-// value = 2^ceiling(log2(R*R))/(R*R), where R = interpolation rate of the FM
-// modulator
-real interpolationGain = 1.777;
-
-real deviationHz = 0*0.35 * bitrateBps;
-//real deviationHz = 2*0.35 * bitrateBps;
-real deviationNorm = deviationHz * `SAMPLE_PERIOD * `TWO_POW_32;
-integer deviationInt = deviationNorm*interpolationGain;
-wire [31:0]deviationQ31 = deviationInt;
-wire [17:0]deviation = deviationQ31[31:14];
-
-real cicDecimation = SAMPLE_FREQ/bitrateBps/2.0/2.0/2.0/2.0;
-integer cicDecimationInt = cicDecimation;
+integer cicDecimationInt = 3;
 
 
 real resamplerFreqSps = 2*actualBitrateBps;     // 2 samples per symbol
-real resamplerFreqNorm = resamplerFreqSps/(SAMPLE_FREQ/cicDecimationInt/4.0) * `TWO_POW_32;
+real resamplerFreqNorm = resamplerFreqSps/(SAMPLE_FREQ/cicDecimationInt/2.0) * `TWO_POW_32;
 integer resamplerFreqInt = (resamplerFreqNorm >= `TWO_POW_31) ? (resamplerFreqNorm - `TWO_POW_32) : resamplerFreqNorm;
 //integer resamplerFreqInt = resamplerFreqNorm;
 
-real resamplerLimitNorm = 0.001*resamplerFreqSps/SAMPLE_FREQ * `TWO_POW_32;
+real resamplerLimitNorm = 0.01*resamplerFreqNorm;
 integer resamplerLimitInt = resamplerLimitNorm;
 
 /******************************************************************************
@@ -237,7 +227,7 @@ assign qRx = qSignal + qNoise;
 ******************************************************************************/
 wire    [17:0]  dac0Out,dac1Out,dac2Out;
 demod demod( 
-    .clk(clk), .reset(reset), .syncIn(sync), 
+    .clk(clk), .reset(reset),
     .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
     .addr(a),
     .din(d),
@@ -510,7 +500,7 @@ initial begin
 
     // Init the sample rate loop filters
     //resamplerFreqInt = 32'h83a83a84;
-    resamplerFreqInt = 32'h8000eff9;
+    //resamplerFreqInt = 32'h8000eff9;
     write32(createAddress(`RESAMPSPACE,`RESAMPLER_RATE),resamplerFreqInt);
     write32(createAddress(`BITSYNCSPACE,`LF_CONTROL),1);    // Zero the error
     write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h001a000d);    
@@ -526,11 +516,11 @@ initial begin
     write32(createAddress(`CARRIERSPACE,`LF_LOCKDETECTOR), 32'h00308000);
 
     // Init the downcoverter register set
-    write32(createAddress(`DDCSPACE,`DDC_CONTROL),2);
+    write32(createAddress(`DDCSPACE,`DDC_CONTROL),6);
     write32(createAddress(`DDCSPACE,`DDC_CENTER_FREQ), carrierFreq);
+    write32(createAddress(`DDCSPACE,`DDC_DECIMATION), adcDecimation-1);
 
     // Init the cicResampler register set
-    cicDecimationInt = 3;
     write32(createAddress(`CICDECSPACE,`CIC_DECIMATION),cicDecimationInt-1);
     write32(createAddress(`CICDECSPACE,`CIC_SHIFT), 5);
 

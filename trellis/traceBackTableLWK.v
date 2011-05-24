@@ -15,9 +15,9 @@ module traceBackTableDeeper(clk, reset, symEn,
                       decision,
                       symEnDly
                       );
-   parameter          TB_DEPTH=2;
+   parameter          TB_DEPTH=3;
    parameter          SR_DEPTH=TB_DEPTH+1;
-	parameter          SR_BITS=4;
+   parameter          SR_BITS=4;
 
    input              clk,reset,symEn;
    input [19:0]       sel;   // 20 induvidual decision. 0 or 1 tell us if we trace + or - 7 modulo 20 
@@ -105,7 +105,7 @@ module traceBackTableDeeper(clk, reset, symEn,
    // state Machine counter
    reg      [SR_BITS-1:0]   stageCnt;       // Traceback Stage Counter
    reg      [SR_BITS-1:0]   symEnCount;     // Number of symEn during tracing
-   reg              			 tracing;
+   reg                                   tracing;
    wire     [SR_BITS-1:0]   lastStage = TB_DEPTH;
    wire             newTrace = (symEn && (stageCnt == lastStage));
    always @(posedge clk) begin
@@ -133,26 +133,26 @@ module traceBackTableDeeper(clk, reset, symEn,
    // Path Decisions. stageCnt moves us through the "TB_DEPTH" previous paths
    // This block runs at the clock rate. It takes TB_DEPTH-1 clocks to complete
     wire     [SR_BITS-1:0] tbIndex = stageCnt + symEnCount;
-	 wire	tbt0 = tbtSr0[tbIndex];
-	 wire	tbt1 = tbtSr1[tbIndex];
-	 wire	tbt2 = tbtSr2[tbIndex];
-	 wire	tbt3 = tbtSr3[tbIndex];
-	 wire	tbt4 = tbtSr4[tbIndex];
-	 wire	tbt5 = tbtSr5[tbIndex];
-	 wire	tbt6 = tbtSr6[tbIndex];
-	 wire	tbt7 = tbtSr7[tbIndex];
-	 wire	tbt8 = tbtSr8[tbIndex];
-	 wire	tbt9 = tbtSr9[tbIndex];
-	 wire	tbt10 = tbtSr10[tbIndex];
-	 wire	tbt11 = tbtSr11[tbIndex];
-	 wire	tbt12 = tbtSr12[tbIndex];
-	 wire	tbt13 = tbtSr13[tbIndex];
-	 wire	tbt14 = tbtSr14[tbIndex];
-	 wire	tbt15 = tbtSr15[tbIndex];
-	 wire	tbt16 = tbtSr16[tbIndex];
-	 wire	tbt17 = tbtSr17[tbIndex];
-	 wire	tbt18 = tbtSr18[tbIndex];
-	 wire	tbt19 = tbtSr19[tbIndex];
+         wire   tbt0 = tbtSr0[tbIndex];
+         wire   tbt1 = tbtSr1[tbIndex];
+         wire   tbt2 = tbtSr2[tbIndex];
+         wire   tbt3 = tbtSr3[tbIndex];
+         wire   tbt4 = tbtSr4[tbIndex];
+         wire   tbt5 = tbtSr5[tbIndex];
+         wire   tbt6 = tbtSr6[tbIndex];
+         wire   tbt7 = tbtSr7[tbIndex];
+         wire   tbt8 = tbtSr8[tbIndex];
+         wire   tbt9 = tbtSr9[tbIndex];
+         wire   tbt10 = tbtSr10[tbIndex];
+         wire   tbt11 = tbtSr11[tbIndex];
+         wire   tbt12 = tbtSr12[tbIndex];
+         wire   tbt13 = tbtSr13[tbIndex];
+         wire   tbt14 = tbtSr14[tbIndex];
+         wire   tbt15 = tbtSr15[tbIndex];
+         wire   tbt16 = tbtSr16[tbIndex];
+         wire   tbt17 = tbtSr17[tbIndex];
+         wire   tbt18 = tbtSr18[tbIndex];
+         wire   tbt19 = tbtSr19[tbIndex];
    always @(posedge clk)
      begin
         if (reset) begin
@@ -229,7 +229,7 @@ module traceBackTableDeeper(clk, reset, symEn,
     //wire    [3:0]   decisionIndex = tbIndex + (newTrace ? 0 : symEn);
     wire    [SR_BITS-1:0]   symEnOutputs = symEnCount + symEn;
     wire    symEnOut = ((stageCnt >= (lastStage-symEnOutputs)) && tracing);
-	 
+         
     //always @(posedge clk) begin
     always @(tbState or
              tbt0  or tbt1  or tbt2  or tbt3  or tbt4  or
@@ -237,29 +237,29 @@ module traceBackTableDeeper(clk, reset, symEn,
              tbt10 or tbt11 or tbt12 or tbt13 or tbt14 or
              tbt15 or tbt16 or tbt17 or tbt18 or tbt19 
              ) begin
-		  case (tbState)
-			 0:  begin tbDecision <=  tbt0; end
-			 1:  begin tbDecision <=  tbt1; end
-			 2:  begin tbDecision <=  tbt2; end
-			 3:  begin tbDecision <=  tbt3; end
-			 4:  begin tbDecision <=  tbt4; end
-			 5:  begin tbDecision <=  tbt5; end
-			 6:  begin tbDecision <=  tbt6; end
-			 7:  begin tbDecision <=  tbt7; end
-			 8:  begin tbDecision <=  tbt8; end
-			 9:  begin tbDecision <=  tbt9; end
-			 10: begin tbDecision <= tbt10; end
-			 11: begin tbDecision <= tbt11; end
-			 12: begin tbDecision <= tbt12; end
-			 13: begin tbDecision <= tbt13; end
-			 14: begin tbDecision <= tbt14; end
-			 15: begin tbDecision <= tbt15; end
-			 16: begin tbDecision <= tbt16; end
-			 17: begin tbDecision <= tbt17; end
-			 18: begin tbDecision <= tbt18; end
-			 19: begin tbDecision <= tbt19; end
-			 default: begin tbDecision <= 1'b0; end
-		  endcase
+        case (tbState)
+                0:  begin tbDecision <=  tbt0; end
+                1:  begin tbDecision <=  tbt1; end
+                2:  begin tbDecision <=  tbt2; end
+                3:  begin tbDecision <=  tbt3; end
+                4:  begin tbDecision <=  tbt4; end
+                5:  begin tbDecision <=  tbt5; end
+                6:  begin tbDecision <=  tbt6; end
+                7:  begin tbDecision <=  tbt7; end
+                8:  begin tbDecision <=  tbt8; end
+                9:  begin tbDecision <=  tbt9; end
+                10: begin tbDecision <= tbt10; end
+                11: begin tbDecision <= tbt11; end
+                12: begin tbDecision <= tbt12; end
+                13: begin tbDecision <= tbt13; end
+                14: begin tbDecision <= tbt14; end
+                15: begin tbDecision <= tbt15; end
+                16: begin tbDecision <= tbt16; end
+                17: begin tbDecision <= tbt17; end
+                18: begin tbDecision <= tbt18; end
+                19: begin tbDecision <= tbt19; end
+                default: begin tbDecision <= 1'b0; end
+        endcase
     end
 
     reg     [2:0]   enCount;
