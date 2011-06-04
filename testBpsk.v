@@ -55,7 +55,7 @@ wire [31:0] carrierLimit = carrierLimitInt;
 wire [31:0] sweepRate = 32'hffff0000;
 //wire [31:0] sweepRate = 32'h0039c759;
 
-real bitrateBps = 400000.0/adcDecimation;
+real bitrateBps = 600000.0/adcDecimation;
 real bitrateSamples = 1/bitrateBps/`SYSTEM_PERIOD/2.0;
 integer bitrateSamplesInt = bitrateSamples;
 wire [15:0]bitrateDivider = bitrateSamplesInt - 1;
@@ -65,7 +65,8 @@ integer cicDecimationInt = 3;
 
 
 real resamplerFreqSps = 2*actualBitrateBps;     // 2 samples per symbol
-real resamplerFreqNorm = resamplerFreqSps/(SAMPLE_FREQ/cicDecimationInt/2.0) * `TWO_POW_32;
+//real resamplerFreqNorm = resamplerFreqSps/(SAMPLE_FREQ/cicDecimationInt/2.0) * `TWO_POW_32;
+real resamplerFreqNorm = resamplerFreqSps/(SAMPLE_FREQ/2.0/2.0) * `TWO_POW_32;
 integer resamplerFreqInt = (resamplerFreqNorm >= `TWO_POW_31) ? (resamplerFreqNorm - `TWO_POW_32) : resamplerFreqNorm;
 //integer resamplerFreqInt = resamplerFreqNorm;
 
@@ -516,7 +517,7 @@ initial begin
     write32(createAddress(`CARRIERSPACE,`LF_LOCKDETECTOR), 32'h00308000);
 
     // Init the downcoverter register set
-    write32(createAddress(`DDCSPACE,`DDC_CONTROL),6);
+    write32(createAddress(`DDCSPACE,`DDC_CONTROL),5);
     write32(createAddress(`DDCSPACE,`DDC_CENTER_FREQ), carrierFreq);
     write32(createAddress(`DDCSPACE,`DDC_DECIMATION), adcDecimation-1);
 

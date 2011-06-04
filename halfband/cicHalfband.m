@@ -1,7 +1,7 @@
-fs = 40000;   %sampling frequency in KHz
+fs = 2916667/2;   %sampling frequency in Hz
 fn = fs/2;
 
-R = 2;      % Decimation
+R = 1;      % Decimation
 N = 3;      % Order
 M = 1;      % Differential Delay
 
@@ -46,7 +46,7 @@ plot(w,20*log10(abs(Hc)),'g'),grid
 % Post CIC halfband
 taps = 35;
 order = taps-1;
-delta = 0.055;
+delta = 0.05;
 bfilter = remez(order,2*[0 0.25-delta 0.25+delta 0.5],[1 1 0 0]);
 
 [Hb,w] = freqz(bfilter,1,plotPoints/R,frs);
@@ -72,6 +72,7 @@ bfilter = fir1(order,fc,win);
 [Hf,wf] = freqz(bfilter,1,plotPoints/R/2,frs/2);
 Hf = Hf ./ max(Hf);
 Hf = Hf + 1e-6;
+Hf = ones(plotPoints/R/2,1);
 figure(1);
 hold on
 plot(wf,20*log10(abs(Hf)),'m'),grid
@@ -104,7 +105,7 @@ plot(wdec, 20*log10(abs(Hdec)),'b');
 
 
 
-axis([0 2*fn/R -10 10]);
-%axis([0 2*fn/R -90 10]);
+%axis([0 2*fn/R -10 10]);
+axis([0 2*fn/R -90 10]);
 %axis([0 fn -90 10]);
 

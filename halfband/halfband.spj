@@ -10,11 +10,11 @@ CommandLine=+define+SIMULATE
 [Analyzer]
 C0Width=111
 C1Width=58
-C2Width=218
+C2Width=141
 GotoSource=N
 SymbolFile=
 [View]
-1=Last 0.000ns 0.000ns 0.001ns 1787.353ns 2081.909ns
+1=Last 0.000ns 64119.999ns 1603.000ns 10326.906ns 10660.553ns
 [LibraryFiles]
 0=..\..\..\Xilinx\10.1\ISE\verilog\src\unisims\{.v}
 [Files]

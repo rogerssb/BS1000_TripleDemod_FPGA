@@ -125,8 +125,8 @@ always @(posedge clk or posedge rs)begin
 
 // reference divider -----------------------------------------------------------
 
-wire [9:0]ref_cnt_tc = ref[10:1];
-reg [9:0]ref_cnt;
+wire [14:0]ref_cnt_tc = ref[15:1];
+reg [14:0]ref_cnt;
 reg ref_div;
 always @(posedge clk or posedge rs)begin
   if(rs)begin
@@ -145,7 +145,7 @@ always @(posedge clk or posedge rs)begin
             ref_cnt <= 1;
             end
         else begin
-            ref_cnt <= {9'b0,!ref[0]};
+            ref_cnt <= {14'b0,!ref[0]};
             end
         ref_div <= !ref_div;
         end
@@ -164,8 +164,8 @@ assign clk_ref = ref < 2 ? clk_en : ref_div;
 
 // feedback divider ------------------------------------------------------------
 
-wire [9:0]fbk_cnt_tc = fbk[10:1];
-reg [9:0]fbk_cnt;
+wire [14:0]fbk_cnt_tc = fbk[15:1];
+reg [14:0]fbk_cnt;
 reg fbk_div;
 always @(posedge clk_vco or posedge rs)begin
     if(rs)begin
@@ -177,7 +177,7 @@ always @(posedge clk_vco or posedge rs)begin
             fbk_cnt <= 1;
             end
         else begin
-            fbk_cnt <= {9'b0,!fbk[0]};
+            fbk_cnt <= {14'b0,!fbk[0]};
             end
         fbk_div <= !fbk_div;
         end
@@ -191,8 +191,8 @@ assign clk_fbk = fbk < 2 ? clk_vco : fbk_div;
 
 // vco output divider ----------------------------------------------------------
 
-wire [9:0]vco_cnt_tc = vco[10:1];
-reg [9:0]vco_cnt;
+wire [14:0]vco_cnt_tc = vco[15:1];
+reg [14:0]vco_cnt;
 reg vco_div;
 always @(posedge clk_vco or posedge rs)begin
     if(rs)begin
@@ -204,7 +204,7 @@ always @(posedge clk_vco or posedge rs)begin
             vco_cnt <= 1;
             end
         else begin
-            vco_cnt <= {9'b0,!vco[0]};
+            vco_cnt <= {14'b0,!vco[0]};
             end
         vco_div <= !vco_div;
         end

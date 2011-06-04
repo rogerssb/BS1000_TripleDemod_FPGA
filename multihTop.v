@@ -85,7 +85,7 @@ input           symb_pll_vco;
 
 output          sdiOut;
 
-parameter VER_NUMBER = 16'h0124;
+parameter VER_NUMBER = 16'h0148;
 
 wire    [11:0]  addr = {addr11,addr10,addr9,addr8,addr7,addr6,addr5,addr4,addr3,addr2,addr1,1'b0};
 
@@ -487,7 +487,9 @@ decoder decoder
   .dout_q(decoder_dout_q),          // output, q data
   .cout(decoder_cout),              // output, i/q clock
   .fifo_rs(decoder_fifo_rs),
-  .clk_inv(cout_inv)
+  .clk_inv(cout_inv),
+  .bypass_fifo(bypass_fifo),
+  .symb_clk(symbol_clk)
   );
 
 //******************************************************************************
@@ -557,14 +559,8 @@ always @(posedge ck933) begin
     symb_pll_ref <= pllRef;
     end
 
-//`define DIRECT_DATA
-`ifdef DIRECT_DATA
-assign cout_i = decoder_cout;
-assign dout_i = decoder_dout_i;
-assign cout_q = symb_pll_out;
-assign dout_q = decoder_dout_q;
-`else
-wire cout = symb_pll_out ^ !cout_inv;
+wire clkOut = bypass_fifo ? symbol_clk : symb_pll_out;
+wire cout = (clkOut) ^ !cout_inv;
 assign cout_i = cout;
 reg cout_q;
 always @(demodMode or auSymClkIn or cout) begin
@@ -575,9 +571,9 @@ always @(demodMode or auSymClkIn or cout) begin
     end
 
 reg dout_i,decQ;
-always @(posedge symb_pll_out)begin
-  dout_i <= decoder_fifo_dout_i;
-  decQ <= decoder_fifo_dout_q;
+always @(posedge clkOut)begin
+  dout_i <= bypass_fifo ? decoder_dout_i : decoder_fifo_dout_i;
+  decQ <= bypass_fifo ? decoder_dout_q : decoder_fifo_dout_q;
   end
 reg dout_q;
 always @(demodMode or qDataIn or decQ) begin
@@ -586,7 +582,6 @@ always @(demodMode or qDataIn or decQ) begin
         default:        dout_q = decQ;
         endcase
     end
-`endif
 
 //******************************************************************************
 //                           Processor Read Data Mux

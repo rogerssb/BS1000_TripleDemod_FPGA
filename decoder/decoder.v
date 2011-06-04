@@ -28,7 +28,9 @@ module decoder
   dout_q,
   cout,
   fifo_rs,
-  clk_inv
+  clk_inv,
+  bypass_fifo,
+  symb_clk
   );
 
 input rs,en,wr0,wr1;
@@ -40,6 +42,8 @@ input  symb_i,symb_q;
 output dout_i,dout_q,cout;
 output fifo_rs;
 output clk_inv;
+output symb_clk;
+output bypass_fifo;
 
 //------------------------------------------------------------------------------
 //                          Biphase to NRZ Conversion
@@ -267,6 +271,15 @@ wire    data_inv_q = data_inv ? !derand_out_q : derand_out_q ;
 wire        clk_sel;
 assign      cout = biphase ? biphase_en : (
                     clk_sel ? symb_clk_en : symb_clk_2x_en);
+reg         symb_clk;
+always @(posedge clk) begin
+    if (symb_clk_en) begin
+        symb_clk <= 1;
+        end
+    else if (symb_clk_2x_en) begin
+        symb_clk <= ~symb_clk;
+        end
+    end
 
 assign dout_i = data_inv_i ;
 assign dout_q = data_inv_q ;
@@ -288,17 +301,19 @@ decoder_regs decoder_regs
   .q(regs_q)
   );
 
-assign {mode,
-        sign_mag,
-        biphase,
-        swap,
-        feher,
-        demux,
-        derandomize,
-        data_inv,
-        clk_sel,
-        clk_inv,
-        fifo_rs} = regs_q[11:0];
+assign {
+    bypass_fifo,
+    mode,
+    sign_mag,
+    biphase,
+    swap,
+    feher,
+    demux,
+    derandomize,
+    data_inv,
+    clk_sel,
+    clk_inv,
+    fifo_rs} = regs_q[12:0];
 
 endmodule
 

@@ -45,15 +45,15 @@ halfbandEven evenFirQ(
 
 // Odd tap delay and scale
 // Detect the input decimation
-reg [1:0]decCount;
-reg [1:0]fifoMux;
+reg [2:0]decCount;
+reg [2:0]fifoMux;
 always @(posedge clk) begin
     if (sync) begin
         decCount <= 0;
         fifoMux <= decCount;
         end
     else begin
-        if (decCount < 3) begin
+        if (decCount < 7) begin
             decCount <= decCount + 1;
             end
         end
@@ -103,8 +103,8 @@ always @(posedge clk) begin
 reg [17:0]oddOutI,oddOutQ;
 always @(
     fifoMux or 
-    fifoI[15] or fifoI[12] or fifoI[11] or fifoI[10] or
-    fifoQ[15] or fifoQ[12] or fifoQ[11] or fifoQ[10]) begin
+    fifoI[15] or fifoI[12] or fifoI[11] or fifoI[10] or fifoI[9] or
+    fifoQ[15] or fifoQ[12] or fifoQ[11] or fifoQ[10] or fifoQ[9]) begin
     case(fifoMux)
         0: begin
             oddOutI = fifoI[15];
@@ -118,9 +118,13 @@ always @(
             oddOutI = fifoI[11];
             oddOutQ = fifoQ[11];
             end
-        default: begin
+        3,4,5: begin
             oddOutI = fifoI[10];
             oddOutQ = fifoQ[10];
+            end
+        default: begin
+            oddOutI = fifoI[9];
+            oddOutQ = fifoQ[9];
             end
         endcase
     end
@@ -204,14 +208,14 @@ module test;
 reg reset,clk;
 
 // Create the clocks
-parameter decimation = 1;
+parameter decimation = 20;
 parameter HC = 5;
 parameter C = 2*HC;
 reg clken;
 always #HC clk = clk^clken;
 
 reg sync;
-reg [3:0]syncCount;
+reg [7:0]syncCount;
 always @(posedge clk) begin
     if (syncCount == 0) begin
         syncCount <= decimation-1;
@@ -247,7 +251,7 @@ real carrierFreqNorm = carrierFreqHz * `SAMPLE_PERIOD * `TWO_POW_32;
 integer carrierFreqInt = carrierFreqNorm;
 wire [31:0] freq = carrierFreqInt;
 wire [17:0]sineOut;
-dds dds(.sclr(reset), .clk(clk), .we(1'b1), .data(freq), .sine(sineOut), .cosine());
+dds dds(.sclr(reset), .clk(clk), .ce(1'b1), .we(1'b1), .data(freq), .sine(sineOut), .cosine());
 
 always @(posedge clk) begin
     if (sync) begin
@@ -260,7 +264,7 @@ initial begin
     sync = 1;
     syncCount = 0;
     clk = 0;
-    carrierFreqHz = 1e6;
+    carrierFreqHz = 1e6/decimation;
 
     // Turn on the clock
     clken=1;
@@ -270,23 +274,23 @@ initial begin
     #(2*C) ;
     reset = 0;
 
-    #(256*C) ;
+    #(64*C*decimation) ;
 
     carrierFreqHz = 20e6/decimation;
 
-    #(256*C) ;
+    #(64*C*decimation) ;
 
     carrierFreqHz = 25e6/decimation;
 
-    #(256*C) ;
+    #(64*C*decimation) ;
 
     carrierFreqHz = 30e6/decimation;
 
-    #(256*C) ;
+    #(64*C*decimation) ;
 
     carrierFreqHz = 35e6/decimation;
 
-    #(256*C) ;
+    #(64*C*decimation) ;
 
     $stop;
 
@@ -334,7 +338,7 @@ initial begin
     #(2*C) ;
     reset = 0;
 
-    #(1024*C) ;
+    #(256*C*decimation) ;
 
     $stop;
 

@@ -7,7 +7,7 @@ Version=Silvaco4.10.0.R
 [Analyzer]
 C0Width=142
 C1Width=58
-C2Width=91
+C2Width=20
 GotoSource=N
 ShowYaxis=
 [Spice]
@@ -16,7 +16,7 @@ ShowYaxis=
 [DebugMode]
 CommandLine=+define+SIMULATE
 [View]
-1=Last 725014.142ns 740370.097ns 355.051ns 726576.366ns 739074.161ns
+1=Last 437290.079ns 443104.533ns 196.103ns 437884.991ns 442591.445ns
 [Group0]
 Name=New Group2
 [Group3]
@@ -216,4 +216,3 @@ OpenGroup=Yes
 5=Carrier : 5 : 1 : 0
 6=DAC : 6 : 1 : 0
 7=Resampler : 7 : 1 : 0
-[Bookmarks]
