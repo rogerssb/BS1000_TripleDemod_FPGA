@@ -428,9 +428,57 @@ NET "phaseError<7>" LOC = C18 | IOSTANDARD = "LVCMOS33";
 NET "phaseErrorEn"  LOC = D6  | IOSTANDARD = "LVCMOS33";
 NET "phaseErrorValid"  LOC = D7  | IOSTANDARD = "LVCMOS33";
 
-NET "ck933" TNM_NET = ck933;
-NET "nWe" TNM_NET = nWe;
+NET "nWe" TIG;
+NET "nCs" TIG;
+#NET "nRd" TIG;
+#NET "data<0>" TIG;
+#NET "data<1>" TIG;
+#NET "data<2>" TIG;
+#NET "data<3>" TIG;
+#NET "data<4>" TIG;
+#NET "data<5>" TIG;
+#NET "data<6>" TIG;
+#NET "data<7>" TIG;
+#NET "data<8>" TIG;
+#NET "data<9>" TIG;
+#NET "data<10>" TIG;
+#NET "data<11>" TIG;
+#NET "data<12>" TIG;
+#NET "data<13>" TIG;
+#NET "data<14>" TIG;
+#NET "data<15>" TIG;
+NET "addr1" TIG;
+#NET "addr2" TIG;
+#NET "addr3" TIG;
+#NET "addr4" TIG;
+#NET "addr7" TIG;
+#NET "addr8" TIG;
+#NET "addr9" TIG;
+#NET "addr10" TIG;
+#NET "addr11" TIG;
+#NET "addr12" TIG;
+
+TIMEGRP "dataBus" = PADS(data*);
+TIMEGRP "addrBus" = PADS(addr*);
+TIMEGRP "ctrlBus" = PADS(nCs*) PADS(nRd);
+
+
+NET "ck933*" TNM_NET = FFS ck933;
+NET "ck933*" TNM_NET = DSPS ck933;
+NET "ck933*" TNM_NET = RAMS ck933;
+
 NET "reset*" TNM_NET = reset; 
+
+NET "nWe*" TNM_NET = FFS writeEn;
+NET "wr0*" TNM_NET = FFS writeEn;
+NET "wr2*" TNM_NET = FFS writeEn;
+
+NET "symb_pll_vco" TNM_NET = FFS vco;
+
+NET "dac_control_ck*" TNM_NET = FFS dacRegs;
+
+TIMEGRP "pllFifo" = FFS(decoder_output_fifo/*);
+
 TIMEGRP "sync5" = FFS(multih/viterbiMultiH/acsMultH*/rotator/symEnSr*);
 TIMEGRP "sync6" = FFS(multih/uut_mfiltBank/symEnSr*) FFS(multihSym2xEn*);
 TIMEGRP "sync7" = FFS(multihSymEnIn) FFS(multih/viterbiMultiH/symEnEvenSr*);
@@ -459,7 +507,10 @@ NET "multih/viterbiMultiH/acsMulth*/rotator/symEnSr*" TNM_NET = FFS syncGroup;
 #TIMEGRP "tg14" = FFS(multih/trellisCarrierLoop/lagGain*) FFS(multih/trellisCarrierLoop/leadGain*) FFS(multih/trellisCarrierLoop/filterSum*);
 #TIMEGRP "fmDemod" = FFS(multih/trellisCarrierLoop/fmDemod/cordic/p*);
 TIMEGRP "slowGroup" = "syncGroup";
+
 TIMESPEC TS_ck933 = PERIOD "ck933" 100 MHz HIGH 50%;
+TIMESPEC TS_vco   = PERIOD "vco" 50 MHz HIGH 50 %;
+
 #TIMESPEC TS_slowGroup = PERIOD "slowGroup" 50 MHz;
 TIMESPEC TS_symEn = FROM "mf" TO "mfPipe" 25 MHz;
 TIMESPEC TS_reset = FROM FFS(reset*) to FFS 25 MHz;
@@ -469,6 +520,28 @@ TIMESPEC TS_best = FROM "bestMetric" TO "bestMetric" 25 MHz;
 TIMESPEC TS_max = FROM "bestMetric" to "maxMetric" 25 MHz;
 #TIMESPEC TS_slowTb = FROM "slowTb" TO FFS(multih/viterbiMultiH/traceBackMultiH/tbMux*/cState*) 50 MHz;
 TIMESPEC TS_sync = FROM "sync" TO FFS 100 MHz;
-#NET "nWe" TNM_NET = nWe;
-#TIMESPEC TS_nWe = PERIOD "nWe" 100 ns HIGH 50%;
-#OFFSET = IN 50 ns VALID 50 ns BEFORE "nWe";
+
+
+# The microprocessor registers. This needs to go last to keep uP registers being included 
+# in fast constraints.
+TIMESPEC TS_nWe  = PERIOD "writeEn" 100 ns HIGH 50%;
+TIMESPEC TS_uP0  = FROM "writeEn" TO FFS 100 ns;
+TIMESPEC TS_uP1  = FROM "writeEn" TO DSPS 100 ns;
+TIMESPEC TS_uP2  = FROM "writeEn" TO RAMS 100 ns;
+TIMESPEC TS_uP3  = FROM "addrBus" TO "writeEn" 100 ns;
+TIMESPEC TS_uP4  = FROM "dataBus" TO "writeEn" 100 ns;
+TIMESPEC TS_uP5  = FROM "ctrlBus" TO "writeEn" 100 ns;
+TIMESPEC TS_uP6  = FROM "addrBus" TO "dataBus" 100 ns;
+TIMESPEC TS_uP7  = FROM "ctrlBus" TO "dataBus" 100 ns;
+TIMESPEC TS_uP8  = FROM "writeEn" TO "dataBus" 100 ns;
+TIMESPEC TS_uP9  = FROM "writeEn" TO PADS 100 ns;
+TIMESPEC TS_uP10 = FROM FFS TO "dataBus" 100 ns;
+
+TIMESPEC TS_PADS = FROM PADS TO PADS 100 ns;
+
+TIMESPEC TS_dac0 = FROM dacRegs TO FFS 	100 ns;
+TIMESPEC TS_dac1 = FROM dacRegs TO PADS 100 ns;
+
+TIMESPEC TS_fifo = FROM pllFifo TO pllFifo 100 ns;
+
+
