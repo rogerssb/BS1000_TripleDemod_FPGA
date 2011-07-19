@@ -105,6 +105,15 @@
 `define ALF_LLIMIT      12'bxxxx_xxx1_00xx
 `define ALF_INTEGRATOR  12'bxxxx_xxx1_01xx
 
+// Define the Carrier Loop Filter memory map
+`define CLF_CONTROL      12'bxxxx_xxx0_00xx
+`define CLF_LEAD_LAG     12'bxxxx_xxx0_01xx
+`define CLF_ULIMIT       12'bxxxx_xxx0_10xx
+`define CLF_LOOPDATA     12'bxxxx_xxx0_11xx
+`define CLF_LOCKDETECTOR 12'bxxxx_xxx1_00xx
+`define CLF_INTEGRATOR   12'bxxxx_xxx1_01xx
+`define CLF_LLIMIT       12'bxxxx_xxx1_10xx
+
 // Define the DDC memory map
 `define RESAMPLER_RATE          12'bxxxx_xxx0_00xx
 `define RESAMPLER_AURATE        12'bxxxx_xxx0_01xx

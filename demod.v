@@ -192,7 +192,8 @@ lagGain12 magLoop(
     .clk(clk), .clkEn(demodSync), .reset(reset), 
     .error(magError[13:2]),
     .lagExp(amTC),
-    .limit(32'h7fffffff),
+    .upperLimit(32'h7fffffff),
+    .lowerLimit(32'h00000000),
     .clearAccum(1'b0),
     .sweepEnable(1'b0),
     .lagAccum(magAccum)

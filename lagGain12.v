@@ -4,7 +4,8 @@ module lagGain12 (
     clk, clkEn, reset, 
     error,
     lagExp,
-    limit,
+    upperLimit,
+    lowerLimit,
     sweepEnable,
     sweepRateMag,
     carrierInSync,
@@ -15,7 +16,8 @@ module lagGain12 (
 input           clk, clkEn, reset;
 input   [11:0]   error;
 input   [4:0]   lagExp;
-input   [31:0]  limit;
+input   [31:0]  upperLimit;
+input   [31:0]  lowerLimit;
 input           sweepEnable;
 input   [31:0]  sweepRateMag;
 input           carrierInSync;
@@ -141,8 +143,6 @@ always @ (posedge clk) begin
     end
 
 
-wire    [31:0]  lowerLimit = -limit;
-wire    [31:0]  upperLimit = limit;
 wire    [39:0]  sum = lagAccum + lagError + {{8{sweepOffset[31]}},sweepOffset};
 always @ (posedge clk or posedge reset) begin
     if (reset) begin
@@ -153,27 +153,89 @@ always @ (posedge clk or posedge reset) begin
         end
     else if (clkEn) begin
         // Test the upper and lower limits on the accumulator.
-        // Have we reached the upper limit?
-        if ( (!sum[39] && !upperLimit[31])              // both positive
-                && (sum[39:8] >= upperLimit) ) begin    // between upper limit and +saturation
-            // Yes. Limit the accumulator
-            lagAccum <= {upperLimit,8'h0};
-            hitLowerLimit <= 0;
-            hitUpperLimit <= 1;
-            end
-        // Have we reached the lower limit?
-        else if ( (sum[39] && lowerLimit[31])           // both negative
-                && (sum[39:8] < lowerLimit) ) begin     // between lower limit and -saturation
-            // Yes. Limit the accumulator
-            lagAccum <= {lowerLimit,8'hff};
-            hitLowerLimit <= 1;
-            hitUpperLimit <= 0;
-            end
-        else begin
-            lagAccum <= sum;
-            hitLowerLimit <= 0;
-            hitUpperLimit <= 0;
-            end
+
+        casex ({upperLimit[31],lowerLimit[31],sum[39]})
+            // In this case, the upper limit is reached
+            3'b110: begin
+                lagAccum <= {upperLimit,8'h0};
+                hitLowerLimit <= 0;
+                hitUpperLimit <= 1;
+                end
+            // In this case, the lower limit is reached
+            3'b001: begin
+                lagAccum <= {lowerLimit,8'hff};
+                hitLowerLimit <= 1;
+                hitUpperLimit <= 0;
+                end
+            // In this case, we might reach the upper limit
+            3'b010: begin
+                if (sum[39:8] >= upperLimit) begin 
+                    lagAccum <= {upperLimit,8'h0};
+                    hitLowerLimit <= 0;
+                    hitUpperLimit <= 1;
+                    end
+                else begin
+                    lagAccum <= sum;
+                    hitLowerLimit <= 0;
+                    hitUpperLimit <= 0;
+                    end
+                end
+            // In this case, we might reach the lower limit
+            3'b011: begin
+                if (sum[39:8]  <= lowerLimit) begin
+                    lagAccum <= {lowerLimit,8'hff};
+                    hitLowerLimit <= 1;
+                    hitUpperLimit <= 0;
+                    end
+                else begin
+                    lagAccum <= sum;
+                    hitLowerLimit <= 0;
+                    hitUpperLimit <= 0;
+                    end
+                end
+            // In this case, we might reach either limit
+            3'b000: begin
+                if (sum[39:8] >= upperLimit) begin 
+                    lagAccum <= {upperLimit,8'h0};
+                    hitLowerLimit <= 0;
+                    hitUpperLimit <= 1;
+                    end
+                else if (sum[39:8]  <= lowerLimit) begin
+                    lagAccum <= {lowerLimit,8'hff};
+                    hitLowerLimit <= 1;
+                    hitUpperLimit <= 0;
+                    end
+                else begin
+                    lagAccum <= sum;
+                    hitLowerLimit <= 0;
+                    hitUpperLimit <= 0;
+                    end
+                end
+            // In this case, we might reach either limit
+            3'b111: begin
+                if (sum[39:8]  <= lowerLimit) begin
+                    lagAccum <= {lowerLimit,8'hff};
+                    hitLowerLimit <= 1;
+                    hitUpperLimit <= 0;
+                    end
+                else if (sum[39:8] >= upperLimit) begin 
+                    lagAccum <= {upperLimit,8'h0};
+                    hitLowerLimit <= 0;
+                    hitUpperLimit <= 1;
+                    end
+                else begin
+                    lagAccum <= sum;
+                    hitLowerLimit <= 0;
+                    hitUpperLimit <= 0;
+                    end
+                end
+            // Illegal state. Freeze the accumulator.
+            3'b10x: begin
+                lagAccum <= lagAccum;
+                hitLowerLimit <= 0;
+                hitUpperLimit <= 0;
+                end
+            endcase
         end
     end
 

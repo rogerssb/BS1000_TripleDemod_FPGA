@@ -57,13 +57,14 @@ always @(addr) begin
 wire    [31:0]  dout;
 wire    [4:0]   leadExp;
 wire    [4:0]   lagExp;
-wire    [31:0]  limit;
+wire    [31:0]  upperLimit;
+wire    [31:0]  lowerLimit;
 wire    [31:0]  loopOffset;
 wire    [31:0]  sweepOffsetMag;
 wire    [15:0]  lockCount;
-wire    [11:0]   syncThreshold;
+wire    [11:0]  syncThreshold;
 wire    [39:0]  lagAccum;
-loopRegs loopRegs(
+carrierLoopRegs loopRegs(
     .cs(freqLoopSpace),
     .addr(addr),
     .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
@@ -78,7 +79,8 @@ loopRegs loopRegs(
     .leadExp(leadExp),
     .lagMan(),
     .lagExp(lagExp),
-    .limit(limit),
+    .upperLimit(upperLimit),
+    .lowerLimit(lowerLimit),
     .loopData(sweepOffsetMag),
     .lockCount(lockCount),
     .syncThreshold(syncThreshold)
@@ -201,7 +203,8 @@ lagGain12 lagGain (
     .clk(clk), .clkEn(loopFilterEn), .reset(reset), 
     .error(loopError),
     .lagExp(lagExp),
-    .limit(limit),
+    .upperLimit(upperLimit),
+    .lowerLimit(lowerLimit),
     .sweepEnable(sweepEnable),
     .sweepRateMag(sweepOffsetMag),
     .clearAccum(clearAccum),
