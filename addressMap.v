@@ -20,6 +20,7 @@
 `define INTERP1SPACE    12'b1011_xxxx_xxxx
 `define INTERP2SPACE    12'b1100_xxxx_xxxx
 `define MISC_SPACE      12'b1101_0xxx_xxxx
+`define SUBCARR_TOP_SPACE      12'b1101_0xxx_xxxx   // same as MISC space
 `define SDISPACE        12'b1101_1xxx_xxxx
 `define TRELLISLFSPACE  12'b1110_0xxx_xxxx
 `define TRELLIS_SPACE   12'b1110_1xxx_xxxx
@@ -127,10 +128,12 @@
 `define INTERP_TEST     12'bxxxx_xxxx_11xx
 
 
-// Define the MISCELLANEOUS locations
+// Define the MISCELLANEOUS and subcarrier top level registers
 `define MISC_RESET      12'bxxxx_xxxx_000x
 `define MISC_VERSION    12'bxxxx_xxxx_001x
 `define MISC_CLOCK      12'bxxxx_xxxx_01xx
+`define DAC_IN_SEL      12'bxxxx_xxxx_100x
+`define DEC_IN_SEL      12'bxxxx_xxxx_101x
 
 // Define the DAC control locations
 `define DAC_WDATA       12'bxxxx_xxxx_x00x

@@ -1,13 +1,14 @@
 `include "./addressMap.v"
 `timescale 1ns / 10 ps
 
-module demod( 
+module demod(
     clk, reset,
     rd, wr0,wr1,wr2,wr3,
     addr,
+    ena,
     din,
     dout,
-    iRx, qRx, 
+    iRx, qRx,
     iSym2xEn,
     iSymEn,
     iSymData,
@@ -44,6 +45,7 @@ input           clk;
 input           reset;
 input           rd,wr0,wr1,wr2,wr3;
 input   [11:0]  addr;
+input           ena;
 input   [31:0]  din;
 output  [31:0]  dout;
 input   [17:0]  iRx;
@@ -80,14 +82,14 @@ output  [31:0]  avgDeviation;
 /******************************************************************************
                                 Global Registers
 ******************************************************************************/
-// Microprocessor interface
-reg demodSpace;
-always @(addr) begin
-    casex(addr)
-        `DEMODSPACE: demodSpace <= 1;
-        default:     demodSpace <= 0;
-        endcase
-    end
+//// Microprocessor interface
+//reg demodSpace;
+//always @(addr) begin
+//    casex(addr)
+//        `DEMODSPACE: demodSpace <= 1;
+//        default:     demodSpace <= 0;
+//        endcase
+//    end
 wire    [15:0]  fskDeviation;
 wire    [1:0]   bitsyncMode;
 wire    [15:0]  falseLockAlpha;
@@ -99,7 +101,7 @@ demodRegs demodRegs(
     .addr(addr),
     .dataIn(din),
     .dataOut(demodDout),
-    .cs(demodSpace),
+    .cs(ena), //demodSpace),
     .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
     .highFreqOffset(highFreqOffset),
     .bitsyncLock(bitsyncLock),
@@ -124,7 +126,7 @@ wire    [20:0]  nbAgcGain;
 wire    [31:0]  carrierFreqOffset;
 wire    [31:0]  carrierLeadFreq;
 wire    [31:0]  ddcDout;
-ddc ddc( 
+ddc ddc(
     .clk(clk), .reset(reset),
     .wr0(wr0) , .wr1(wr1), .wr2(wr2), .wr3(wr3),
     .addr(addr),
@@ -135,7 +137,7 @@ ddc ddc(
     .offsetEn(carrierOffsetEn),
     .nbAgcGain(nbAgcGain),
     .syncOut(ddcSync),
-    .iIn(iRx), .qIn(qRx), 
+    .iIn(iRx), .qIn(qRx),
     .iOut(iDdc), .qOut(qDdc)
     );
 
@@ -143,7 +145,7 @@ ddc ddc(
                             Narrowband Channel AGC
 ******************************************************************************/
 wire    [31:0]  nbAgcDout;
-channelAGC channelAGC( 
+channelAGC channelAGC(
     .clk(clk), .reset(reset), .syncIn(ddcSync),
     .wr0(wr0) , .wr1(wr1), .wr2(wr2), .wr3(wr3),
     .addr(addr),
@@ -152,7 +154,7 @@ channelAGC channelAGC(
     .iIn(iDdc),.qIn(qDdc),
     .agcGain(nbAgcGain)
     );
-    
+
 
 /******************************************************************************
                            Phase/Freq/Mag Detector
@@ -163,7 +165,7 @@ wire    [11:0]   freq;
 wire    [11:0]   negFreq = ~freq + 1;
 wire    [11:0]   freqError;
 wire    [12:0]   mag;
-fmDemod fmDemod( 
+fmDemod fmDemod(
     .clk(clk), .reset(reset), .sync(ddcSync),
     .iFm(iDdc),.qFm(qDdc),
     .demodMode(demodMode),
@@ -174,9 +176,9 @@ fmDemod fmDemod(
     .mag(mag),
     .syncOut(demodSync)
     );
-    
+
 wire    [17:0]  fm = {negFreq,6'h0};
-wire    [17:0]  fmInv = {freq,6'h0};    
+wire    [17:0]  fmInv = {freq,6'h0};
 
 /******************************************************************************
                            Magnitude Filter
@@ -189,7 +191,7 @@ always @(posedge clk) begin
         end
     end
 lagGain12 magLoop(
-    .clk(clk), .clkEn(demodSync), .reset(reset), 
+    .clk(clk), .clkEn(demodSync), .reset(reset),
     .error(magError[13:2]),
     .lagExp(amTC),
     .upperLimit(32'h7fffffff),
@@ -210,19 +212,19 @@ wire    [17:0]  oneMinusFalseLockAlpha = (18'h20000 + ~{falseLockAlpha,2'b0});
 wire    [35:0]  alpha;
 reg     [17:0]  freqSample;
 mpy18x18 mpyFLD0(
-    .clk(clk), 
+    .clk(clk),
     .sclr(reset),
-    .a(freqSample), 
-    .b({falseLockAlpha,2'b0}), 
+    .a(freqSample),
+    .b({falseLockAlpha,2'b0}),
     .p(alpha)
     );
 wire    [35:0]  oneMinusAlpha;
 wire    [35:0]  alphaSum = alpha + oneMinusAlpha;
 mpy18x18 mpyFLD1(
-    .clk(clk), 
+    .clk(clk),
     .sclr(reset),
-    .a(averageFreq), 
-    .b(oneMinusFalseLockAlpha), 
+    .a(averageFreq),
+    .b(oneMinusFalseLockAlpha),
     .p(oneMinusAlpha)
     );
 
@@ -231,19 +233,19 @@ reg     [17:0]  averageAbsFreq;
 wire    [35:0]  absAlpha;
 reg     [17:0]  absFreqSample;
 mpy18x18 mpyFLD2(
-    .clk(clk), 
+    .clk(clk),
     .sclr(reset),
-    .a(absFreqSample), 
-    .b({falseLockAlpha,2'b0}), 
+    .a(absFreqSample),
+    .b({falseLockAlpha,2'b0}),
     .p(absAlpha)
     );
 wire    [35:0]  oneMinusAbsAlpha;
 wire    [35:0]  absAlphaSum = absAlpha + oneMinusAbsAlpha;
 mpy18x18 mpyFLD3(
-    .clk(clk), 
+    .clk(clk),
     .sclr(reset),
-    .a(averageAbsFreq), 
-    .b(oneMinusFalseLockAlpha), 
+    .a(averageAbsFreq),
+    .b(oneMinusFalseLockAlpha),
     .p(oneMinusAbsAlpha)
     );
 
@@ -395,7 +397,7 @@ wire    [15:0]  bsLockCounter;
 wire    [15:0]  auLockCounter;
 wire    [31:0]  bitsyncDout;
 bitsync bitsync(
-    .sampleClk(clk), .reset(reset), 
+    .sampleClk(clk), .reset(reset),
     .symTimes2Sync(resampSync),
     .auResampSync(auResampSync),
     .demodMode(demodMode),
@@ -435,7 +437,7 @@ bitsync bitsync(
 assign trellisSymSync = iSymEn & resampSync;
 
 assign eyeSync = resampSync;
-assign cordicModes = ( (demodMode == `MODE_2FSK) 
+assign cordicModes = ( (demodMode == `MODE_2FSK)
                     || (demodMode == `MODE_PCMTRELLIS)
                     || (demodMode == `MODE_FM)
                     || (demodMode == `MODE_PM));
@@ -463,7 +465,7 @@ reg     [17:0]  dac1Data;
 reg             dac2Sync;
 reg     [17:0]  dac2Data;
 always @(posedge clk) begin
-    case (dac0Select) 
+    case (dac0Select)
         `DAC_I: begin
             dac0Data <= iSwap;
             dac0Sync <= ddcSync;
@@ -519,7 +521,7 @@ always @(posedge clk) begin
             end
         endcase
 
-    case (dac1Select) 
+    case (dac1Select)
         `DAC_I: begin
             dac1Data <= iSwap;
             dac1Sync <= ddcSync;
@@ -575,7 +577,7 @@ always @(posedge clk) begin
             end
         endcase
 
-    case (dac2Select) 
+    case (dac2Select)
         `DAC_I: begin
             dac2Data <= iSwap;
             dac2Sync <= ddcSync;
@@ -638,11 +640,11 @@ always @(posedge clk) begin
                                 uP dout mux
 ******************************************************************************/
 reg [31:0]dout;
-always @(addr or 
+always @(addr or
          demodDout or
          ddcDout or
          nbAgcDout or
-         resampDout or 
+         resampDout or
          freqDout or
          bitsyncDout) begin
     casex (addr)
