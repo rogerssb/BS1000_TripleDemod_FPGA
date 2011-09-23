@@ -104,10 +104,7 @@ assign demod_nLock = demodLockInput;
 //******************************************************************************
 //                               Reclock Inputs
 //******************************************************************************
-//wire            multihMode = (demodMode == `MODE_MULTIH);
 reg     [13:0]  dac0DataIn, dac1DataIn, dac2DataIn;
-//reg             multiHSymEnIn,multiHSym2xEnIn;
-//reg     [17:0]  iMultiHIn,qMultiHIn;
 reg             dataSymEnIn,dataSym2xEnIn;
 reg             iDataIn,qDataIn;
 reg             auSymClkIn;
@@ -115,10 +112,6 @@ always @(posedge ck933) begin
     dac0DataIn <= dac0Data;
     dac1DataIn <= dac1Data;
     dac2DataIn <= dac2Data;
-//    multiHSymEnIn <= multiHSymEn;
-//    multiHSym2xEnIn <= multiHSym2xEn;
-//    iMultiHIn <= iMultiH;
-//    qMultiHIn <= qMultiH;
     dataSymEnIn <= dataSymEn;
     dataSym2xEnIn <= dataSym2xEn;
     iDataIn <= iData;
@@ -137,6 +130,14 @@ wire            wr1 = !nCs & !nWr & !addr1;
 wire            wr2 = !nCs & !nWr & addr1;
 wire            wr3 = !nCs & !nWr & addr1;
 wire    [31:0]  dataIn = {data,data};
+
+//******************************************************************************
+//                               Unused Outputs
+//******************************************************************************
+assign phaseError = 8'h0;
+assign phaseErrorEn = 0;
+assign phaseErrorValid = 0;
+
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //  DAC and Decoder Input Select Registers
@@ -201,14 +202,13 @@ always @
                 end
             `DAC_IN_SEL:
                 begin
-                subcarr_top_dout[1:0] <= dac0_in_sel;
-                subcarr_top_dout[3:2] <= dac1_in_sel;
-                subcarr_top_dout[5:4] <= dac2_in_sel;
+                rs <= 0;
+                subcarr_top_dout <= {26'b0,dac2_in_sel,dac1_in_sel,dac0_in_sel};
                 end
             `DEC_IN_SEL:
                 begin
-                subcarr_top_dout[0] <= dec_in_sel;
-                subcarr_top_dout[1] <= dec_out_sel;
+                rs <= 0;
+                subcarr_top_dout <= {30'b0,dec_out_sel,dec_in_sel};
                 end
             default: begin
                 subcarr_top_dout <= 32'b0;
@@ -315,16 +315,8 @@ assign sdiOut = sdiInput;
 //  FM/PM Subcarrier Demodulators
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-reg demodSpace;
-always @(addr) begin
-    casex(addr)
-        `DEMODSPACE: demodSpace <= 1;
-        default:     demodSpace <= 0;
-        endcase
-    end
-
-wire demod1_ena = !nCs && demodSpace && !addr12;
-wire demod2_ena = !nCs && demodSpace && addr12;
+wire demod1_ena = !addr12;
+wire demod2_ena = addr12;
 
 wire    [31:0]  demod1_dout;
 wire    [17:0]  demod1_dac0Data;
@@ -341,12 +333,11 @@ wire            demod1_qSymEn;
 demod demod1(
     .clk(ck933),
     .reset(reset),
-    .wr0(wr0),
-    .wr1(wr1),
-    .wr2(wr2),
-    .wr3(wr3),
+    .wr0(demod1_ena & wr0),
+    .wr1(demod1_ena & wr1),
+    .wr2(demod1_ena & wr2),
+    .wr3(demod1_ena & wr3),
     .addr(addr),
-    .ena(demod1_ena),
     .din(dataIn),
     .dout(demod1_dout),
 //    .demodMode(demodMode),
@@ -401,12 +392,11 @@ wire            demod2_qSymEn;
 demod demod2(
     .clk(ck933),
     .reset(reset),
-    .wr0(wr0),
-    .wr1(wr1),
-    .wr2(wr2),
-    .wr3(wr3),
+    .wr0(demod2_ena & wr0),
+    .wr1(demod2_ena & wr1),
+    .wr2(demod2_ena & wr2),
+    .wr3(demod2_ena & wr3),
     .addr(addr),
-    .ena(demod2_ena),
     .din(dataIn),
     .dout(demod2_dout),
 //    .demodMode(demodMode),
@@ -772,7 +762,8 @@ always @ (posedge ck933)
 //                           Processor Read Data Mux
 //******************************************************************************
 
-wire [31:0]demod_dout = addr12 ? demod2_dout : demod1_dout ;
+//wire [31:0]demod_dout = addr12 ? demod2_dout : demod1_dout ;
+wire [31:0]demod_dout = demod1_dout ;
 wire [15:0]decoder_dout = addr12 ? decoder2_dout : decoder1_dout ;
 
 reg [15:0] rd_mux;
@@ -785,7 +776,23 @@ always @(
   symb_pll_dout
   )begin
   casex(addr)
-    `DEMODSPACE : rd_mux <= demod_dout[15:0];
+    `DEMODSPACE,
+    `DDCSPACE,
+    `DDCFIRSPACE,
+    `CICDECSPACE,
+    `BITSYNCSPACE,
+    `BITSYNCAUSPACE,
+    `CHAGCSPACE,
+    `RESAMPSPACE,
+    `CARRIERSPACE,
+    `CHAGCSPACE : begin
+      if (addr[1]) begin
+        rd_mux <= demod_dout[31:16];
+        end
+      else begin
+        rd_mux <= demod_dout[15:0];
+        end
+      end
     `DAC_SPACE : rd_mux <= dac_dout;
     `SUBCARR_TOP_SPACE : begin
         if (addr[1]) begin
@@ -804,3 +811,4 @@ always @(
 assign data = (!nCs & !nRd) ? rd_mux : 16'hzzzz;
 
 endmodule
+

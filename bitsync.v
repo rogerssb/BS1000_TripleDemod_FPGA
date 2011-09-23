@@ -540,8 +540,13 @@ loopFilter sampleLoop(
     .lockCount(lockCount),
     .syncThreshold(syncThreshold)
     );
-assign bsError = timingError[18:1] + timingError[0];
-assign bsErrorEn = loopFilterEn;
+
+reg     [17:0]  bsError;
+reg             bsErrorEn;
+always @(posedge sampleClk) begin
+    bsError <= timingError[18:1] + timingError[0];
+    bsErrorEn <= loopFilterEn;
+    end
 
 //************************** Lock Detector ************************************
 

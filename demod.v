@@ -5,7 +5,6 @@ module demod(
     clk, reset,
     rd, wr0,wr1,wr2,wr3,
     addr,
-    ena,
     din,
     dout,
     iRx, qRx,
@@ -45,7 +44,6 @@ input           clk;
 input           reset;
 input           rd,wr0,wr1,wr2,wr3;
 input   [11:0]  addr;
-input           ena;
 input   [31:0]  din;
 output  [31:0]  dout;
 input   [17:0]  iRx;
@@ -82,14 +80,14 @@ output  [31:0]  avgDeviation;
 /******************************************************************************
                                 Global Registers
 ******************************************************************************/
-//// Microprocessor interface
-//reg demodSpace;
-//always @(addr) begin
-//    casex(addr)
-//        `DEMODSPACE: demodSpace <= 1;
-//        default:     demodSpace <= 0;
-//        endcase
-//    end
+// Microprocessor interface
+reg demodSpace;
+always @(addr) begin
+    casex(addr)
+        `DEMODSPACE: demodSpace <= 1;
+        default:     demodSpace <= 0;
+        endcase
+    end
 wire    [15:0]  fskDeviation;
 wire    [1:0]   bitsyncMode;
 wire    [15:0]  falseLockAlpha;
@@ -101,7 +99,7 @@ demodRegs demodRegs(
     .addr(addr),
     .dataIn(din),
     .dataOut(demodDout),
-    .cs(ena), //demodSpace),
+    .cs(demodSpace),
     .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
     .highFreqOffset(highFreqOffset),
     .bitsyncLock(bitsyncLock),

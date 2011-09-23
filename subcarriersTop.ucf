@@ -493,34 +493,6 @@ NET "dac_control_ck*" TNM_NET = FFS dacRegs;
 
 TIMEGRP "pllFifo" = FFS(decoder_output_fifo/*);
 
-#TIMEGRP "sync5" = FFS(multih/viterbiMultiH/acsMultH*/rotator/symEnSr*);
-#TIMEGRP "sync6" = FFS(multih/uut_mfiltBank/symEnSr*) FFS(multihSym2xEn*);
-#TIMEGRP "sync7" = FFS(multihSymEnIn) FFS(multih/viterbiMultiH/symEnEvenSr*);
-#TIMEGRP "sync8" = FFS(multihSym2xEnIn) ;
-#TIMEGRP "sync" = "sync5" "sync6" "sync7";
-#TIMEGRP "mfPipe" = FFS(multih/viterbiMultiH/rotMux*/mfI_*) FFS(multih/viterbiMultiH/rotMux*/mfQ_*);
-#TIMEGRP "rot" = FFS(multih/viterbiMultiH/acsMultH*/iOutRot*) FFS(multih/viterbiMultiH/acsMultH*/qOutRot*);
-#TIMEGRP "phaseError" = FFS(multih/viterbiMultiH/acsMultH*/qOut*) FFS(multih/viterbiMultiH/phaseError*);
-#TIMEGRP "bestMetric" = FFS(multih/viterbiMultiH/acsMultH*/compSel/maxVal*) FFS(multih/viterbiMultiH/*selOut*) FFS(multih/viterbiMultiH/symEnEvenSr*) FFS(multih/viterbiMultiH/acsMultH*/compSel/index*);
-#TIMEGRP "mf0I" = FFS(multih/uut_mfiltBank/mf_x*/mf0IOut*);
-#TIMEGRP "mf0Q" = FFS(multih/uut_mfiltBank/mf_x*/mf0QOut*);
-#TIMEGRP "mf1I" = FFS(multih/uut_mfiltBank/mf_x*/mf1IOut*);
-#TIMEGRP "mf1Q" = FFS(multih/uut_mfiltBank/mf_x*/mf1QOut*);
-#TIMEGRP "mf" = "mf0I" "mf0Q" "mf1I" "mf1Q";
-#TIMEGRP "rotOut" = FFS(multih/rotator/m*/reOut*) FFS(multih/rotator/m*/imOut*);
-#TIMEGRP "maxMetric" = FFS(multih/viterbiMultiH/maxMetric/*) FFS(multih/viterbiMultiH/normSr*);
-#TIMEGRP "fastTb" = FFS(multih/viterbiMultiH/traceBackMultiH/tbt0_*);
-#TIMEGRP "slowTb" = FFS(multih/viterbiMultiH/traceBackMultiH/tbt*) EXCEPT "fastTb";
-#NET "multihSymEn*" TNM_NET = FFS syncGroup;
-#NET "multihSym2xEn*" TNM_NET = FFS syncGroup;
-#NET "multih/trellisCarrierLoop/sym2xEnSr*" TNM_NET = FFS syncGroup;
-#NET "multih/uut_mfiltBank/symEnSr*" TNM_NET = FFS syncGroup;
-#NET "multih/uut_mfiltBank/sym2xEnSr*" TNM_NET = FFS syncGroup;
-#NET "multih/viterbiMultiH/acsMulth*/rotator/symEnSr*" TNM_NET = FFS syncGroup;
-#NET "multih/viterbiMultiH/acsMulth*/rotator/sym2xEnSr*" TNM_NET = FFS syncGroup;
-#TIMEGRP "tg14" = FFS(multih/trellisCarrierLoop/lagGain*) FFS(multih/trellisCarrierLoop/leadGain*) FFS(multih/trellisCarrierLoop/filterSum*);
-#TIMEGRP "fmDemod" = FFS(multih/trellisCarrierLoop/fmDemod/cordic/p*);
-#TIMEGRP "slowGroup" = "syncGroup";
 
 TIMESPEC TS_ck933 = PERIOD "ck933" 100 MHz HIGH 50%;
 TIMESPEC TS_vco   = PERIOD "vco" 50 MHz HIGH 50 %;
@@ -578,16 +550,9 @@ TIMESPEC "TS_ddc2" = FROM "ddcPL" TO DSPS 20 ns;
 
 #end legacyV11 paste---------------------------------------
 
-#TIMESPEC TS_slowGroup = PERIOD "slowGroup" 50 MHz;
-#TIMESPEC TS_symEn = FROM "mf" TO "mfPipe" 25 MHz;
-TIMESPEC TS_reset = FROM FFS(reset*) to FFS 25 MHz;
-#TIMESPEC TS_rot = FROM "rot" TO "bestMetric" 25 MHz;
-#TIMESPEC TS_phase = FROM "phaseError" TO "phaseError" 25 MHz;
-#TIMESPEC TS_best = FROM "bestMetric" TO "bestMetric" 25 MHz;
-#TIMESPEC TS_max = FROM "bestMetric" to "maxMetric" 25 MHz;
-#TIMESPEC TS_slowTb = FROM "slowTb" TO FFS(multih/viterbiMultiH/traceBackMultiH/tbMux*/cState*) 50 MHz;
-#TIMESPEC TS_sync = FROM "sync" TO FFS 100 MHz;
+NET "demod1/ddc/hb0/fifomux*" TIG;
 
+TIMESPEC TS_reset = FROM FFS(reset*) to FFS 25 MHz;
 
 # The microprocessor registers. This needs to go last to keep uP registers being included
 # in fast constraints.
