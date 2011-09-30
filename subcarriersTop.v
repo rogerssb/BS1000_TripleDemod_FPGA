@@ -92,7 +92,7 @@ input           symb_pll_vco;
 
 output          sdiOut;
 
-parameter VER_NUMBER = 16'h0149;
+parameter VER_NUMBER = 16'h014D;
 
 wire    [11:0]  addr = {addr11,addr10,addr9,addr8,addr7,addr6,addr5,addr4,addr3,addr2,addr1,1'b0};
 //******************************************************************************
@@ -156,7 +156,9 @@ reg     [1:0]   dac0_in_sel;
 reg     [1:0]   dac1_in_sel;
 reg     [1:0]   dac2_in_sel;
 reg             dec_in_sel;
+`ifdef DOS_DEMODS
 reg             dec_out_sel;
+`endif
 
 always @(negedge wr0) begin
     if (subcarr_top_ena) begin
@@ -167,10 +169,19 @@ always @(negedge wr0) begin
                 dac1_in_sel <= data[3:2];
                 dac2_in_sel <= data[5:4];
                 end
+            default: ;
+            endcase
+        end
+    end
+always @(negedge wr2) begin
+    if (subcarr_top_ena) begin
+        casex (addr)
             `DEC_IN_SEL:
                 begin
                 dec_in_sel <= data[0];
+                `ifdef DOS_DEMODS
                 dec_out_sel <= data[1];
+                `endif
                 end
             default: ;
             endcase
@@ -186,8 +197,12 @@ always @
     dac0_in_sel or
     dac1_in_sel or
     dac2_in_sel or
+    `ifdef DOS_DEMODS
     dec_in_sel or
     dec_out_sel
+    `else
+    dec_in_sel
+    `endif
     ) begin
     if (subcarr_top_ena)
         begin
@@ -203,12 +218,20 @@ always @
             `DAC_IN_SEL:
                 begin
                 rs <= 0;
-                subcarr_top_dout <= {26'b0,dac2_in_sel,dac1_in_sel,dac0_in_sel};
+                `ifdef DOS_DEMODS
+                subcarr_top_dout <= {14'b0,dec_out_sel,dec_in_sel,10'b0,dac2_in_sel,dac1_in_sel,dac0_in_sel};
+                `else
+                subcarr_top_dout <= {15'b0,dec_in_sel,10'b0,dac2_in_sel,dac1_in_sel,dac0_in_sel};
+                `endif
                 end
             `DEC_IN_SEL:
                 begin
                 rs <= 0;
-                subcarr_top_dout <= {30'b0,dec_out_sel,dec_in_sel};
+                `ifdef DOS_DEMODS
+                subcarr_top_dout <= {14'b0,dec_out_sel,dec_in_sel,10'b0,dac2_in_sel,dac1_in_sel,dac0_in_sel};
+                `else
+                subcarr_top_dout <= {15'b0,dec_in_sel,10'b0,dac2_in_sel,dac1_in_sel,dac0_in_sel};
+                `endif
                 end
             default: begin
                 subcarr_top_dout <= 32'b0;
@@ -744,6 +767,7 @@ always @ (posedge ck933)
     cout_i_pad <= cout_i ;
     end
 
+`ifdef DOS_DEMODS
 always @ (posedge ck933)
     begin
     if (dec_out_sel)
@@ -757,14 +781,25 @@ always @ (posedge ck933)
         cout_q_pad <= cout_q ;
         end
     end
+`else
+always @ (posedge ck933)
+    begin
+    dout_q_pad <= dout_q ;
+    cout_q_pad <= cout_q ;
+    end
+`endif
 
 //******************************************************************************
 //                           Processor Read Data Mux
 //******************************************************************************
 
-//wire [31:0]demod_dout = addr12 ? demod2_dout : demod1_dout ;
-wire [31:0]demod_dout = demod1_dout ;
+`ifdef DOS_DEMODS
+wire [31:0]demod_dout = addr12 ? demod2_dout : demod1_dout ;
 wire [15:0]decoder_dout = addr12 ? decoder2_dout : decoder1_dout ;
+`else
+wire [31:0]demod_dout = demod1_dout ;
+wire [15:0]decoder_dout = decoder1_dout ;
+`endif
 
 reg [15:0] rd_mux;
 always @(
