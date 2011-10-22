@@ -122,9 +122,13 @@ always @(demodMode or offsetError or offsetErrorEn or
             enableCarrierLock <= 0;
             end
         `MODE_2FSK: begin
-            sync <= resampSync;
-            modeError <= offsetError;
-            modeErrorEn <= offsetErrorEn;
+            //sync <= resampSync;
+            //modeError <= offsetError;
+            //modeErrorEn <= offsetErrorEn;
+            //enableCarrierLock <= 0;
+            sync <= ddcSync;
+            modeError <= freq;
+            modeErrorEn <= 1'b1;
             enableCarrierLock <= 0;
             end
         `MODE_BPSK: begin

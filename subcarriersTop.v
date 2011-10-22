@@ -47,8 +47,8 @@ module subcarriersTop (
     dac2_nCs,dac2_sclk,
     dac0_d,dac1_d,dac2_d,
     dac0_clk,dac1_clk,dac2_clk,
-    cout_i_pad,dout_i_pad,
-    cout_q_pad,dout_q_pad,
+    cout_i,dout_i,
+    cout_q,dout_q,
     bsync_nLock,demod_nLock,
     symb_pll_ref,symb_pll_vco,symb_pll_fbk,
     sdiOut
@@ -84,15 +84,15 @@ output          dac1_nCs,dac1_sclk;
 output          dac2_nCs,dac2_sclk;
 output  [13:0]  dac0_d,dac1_d,dac2_d;
 output          dac0_clk,dac1_clk,dac2_clk;
-output          cout_i_pad,dout_i_pad;
-output          cout_q_pad,dout_q_pad;
+output          cout_i,dout_i;
+output          cout_q,dout_q;
 output          bsync_nLock,demod_nLock;
 output          symb_pll_ref,symb_pll_fbk;
 input           symb_pll_vco;
 
 output          sdiOut;
 
-parameter VER_NUMBER = 16'h014D;
+parameter VER_NUMBER = 16'h014E;
 
 wire    [11:0]  addr = {addr11,addr10,addr9,addr8,addr7,addr6,addr5,addr4,addr3,addr2,addr1,1'b0};
 //******************************************************************************
@@ -752,41 +752,6 @@ decoder decoder2
   .symb_clk(decoder2_symbol_clk)
   );
 
-`endif
-
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Final output clock and data mux
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-reg dout_i_pad, dout_q_pad;
-reg cout_i_pad, cout_q_pad;
-
-always @ (posedge ck933)
-    begin
-    dout_i_pad <= dout_i ;
-    cout_i_pad <= cout_i ;
-    end
-
-`ifdef DOS_DEMODS
-always @ (posedge ck933)
-    begin
-    if (dec_out_sel)
-        begin
-        dout_q_pad <= decoder2_dout_q ;
-        cout_q_pad <= decoder2_symbol_clk ;
-        end
-    else
-        begin
-        dout_q_pad <= dout_q ;
-        cout_q_pad <= cout_q ;
-        end
-    end
-`else
-always @ (posedge ck933)
-    begin
-    dout_q_pad <= dout_q ;
-    cout_q_pad <= cout_q ;
-    end
 `endif
 
 //******************************************************************************
