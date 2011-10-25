@@ -3,15 +3,9 @@
 // Design       FM/PM Subcarrier Demodulator Top level
 // Created      25 Aug 11
 //-----------------------------------------------------------------------------
+// 27 Sep 11    Added multiboot
 
-//# to complete the test route, the following timing specs were removed.
-//# THESE LINES ARE COPIES
-
-
-//#TIMESPEC TS_ck933 = PERIOD "ck933" 100 MHz HIGH 50%;
-//#TIMESPEC TS_uP5  = FROM "ctrlBus" TO "writeEn" 100 ns;
-//#TIMESPEC TS_fifo = FROM pllFifo TO pllFifo 100 ns;
-
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 `timescale 1ns/100ps
 `include "addressMap.v"
@@ -51,7 +45,8 @@ module subcarriersTop (
     cout_q,dout_q,
     bsync_nLock,demod_nLock,
     symb_pll_ref,symb_pll_vco,symb_pll_fbk,
-    sdiOut
+    sdiOut,
+    vt_txd,vt_rxd
     );
 
 input           nWe;
@@ -92,9 +87,39 @@ input           symb_pll_vco;
 
 output          sdiOut;
 
-parameter VER_NUMBER = 16'h014E;
+output          vt_txd;
+input           vt_rxd;
 
+parameter VER_NUMBER = 16'h014F;
+
+
+`ifndef USE_VTERM
 wire    [11:0]  addr = {addr11,addr10,addr9,addr8,addr7,addr6,addr5,addr4,addr3,addr2,addr1,1'b0};
+wire            add12 = addr12;
+wire            nWr = nWe;
+wire            cs = !nCs;
+wire            wr0 = !nCs & !nWr & !addr1;
+wire            wr1 = !nCs & !nWr & !addr1;
+wire            wr2 = !nCs & !nWr & addr1;
+wire            wr3 = !nCs & !nWr & addr1;
+wire    [31:0]  dataIn = {data,data};
+assign          vt_txd = vt_rxd;    // keep unused pins in ucf with pulldown
+`else
+wire    [15:0]  vt_addr;
+wire    [15:0]  vt_dout;
+wire    [15:0]  vt_din;
+wire            vt_ce,vt_we,vt_oe;
+wire    [11:0]  addr = vt_addr[11:0];
+wire            add12 = vt_addr[12];
+wire            nWr = !vt_we;
+wire            cs = vt_ce;
+wire            wr0 = vt_ce & vt_we & !vt_addr[0];
+wire            wr1 = vt_ce & vt_we & !vt_addr[0];
+wire            wr2 = vt_ce & vt_we & vt_addr[0];
+wire            wr3 = vt_ce & vt_we & vt_addr[0];
+wire    [31:0]  dataIn = {vt_dout,vt_dout};
+`endif
+
 //******************************************************************************
 //                               Pass Throughs
 //******************************************************************************
@@ -123,14 +148,6 @@ wire    [13:0]  demod0_dac0Data =  dac0DataIn;
 wire    [13:0]  demod0_dac1Data =  dac1DataIn;
 wire    [13:0]  demod0_dac2Data =  dac2DataIn;
 
-wire            nWr = nWe;
-wire            rd  = !nCs & !nRd;
-wire            wr0 = !nCs & !nWr & !addr1;
-wire            wr1 = !nCs & !nWr & !addr1;
-wire            wr2 = !nCs & !nWr & addr1;
-wire            wr3 = !nCs & !nWr & addr1;
-wire    [31:0]  dataIn = {data,data};
-
 //******************************************************************************
 //                               Unused Outputs
 //******************************************************************************
@@ -150,7 +167,7 @@ always @(addr) begin
     default:     subcarr_top_space <= 0;
   endcase
 end
-wire subcarr_top_ena = !nCs && subcarr_top_space;
+wire subcarr_top_ena = cs && subcarr_top_space;
 
 reg     [1:0]   dac0_in_sel;
 reg     [1:0]   dac1_in_sel;
@@ -160,19 +177,38 @@ reg             dec_in_sel;
 reg             dec_out_sel;
 `endif
 
+reg     [23:0]  boot_addr;
+
 always @(negedge wr0) begin
     if (subcarr_top_ena) begin
         casex (addr)
             `DAC_IN_SEL:
                 begin
-                dac0_in_sel <= data[1:0];
-                dac1_in_sel <= data[3:2];
-                dac2_in_sel <= data[5:4];
+                dac0_in_sel <= dataIn[1:0];
+                dac1_in_sel <= dataIn[3:2];
+                dac2_in_sel <= dataIn[5:4];
+                end
+            `REBOOT_ADDR:
+                begin
+                boot_addr[7:0] <= dataIn[7:0];
                 end
             default: ;
             endcase
         end
     end
+
+always @(negedge wr1) begin
+    if (subcarr_top_ena) begin
+        casex (addr)
+            `REBOOT_ADDR:
+                begin
+                boot_addr[15:8] <= dataIn[15:8];
+                end
+            default: ;
+            endcase
+        end
+    end
+
 always @(negedge wr2) begin
     if (subcarr_top_ena) begin
         casex (addr)
@@ -182,6 +218,11 @@ always @(negedge wr2) begin
                 `ifdef DOS_DEMODS
                 dec_out_sel <= data[1];
                 `endif
+                end
+
+           `REBOOT_ADDR:
+                begin
+                boot_addr[23:16] <= dataIn[23:16];
                 end
             default: ;
             endcase
@@ -245,6 +286,46 @@ always @
     end
 end
 
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Multi-boot
+// The reboot address is 24 bits. Writing the upper byte triggers a reboot.
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+reg reboot_decode;
+reg [2:0]reboot_decode_sync;
+reg reboot;
+
+always @(wr2 or subcarr_top_ena or addr)
+    begin
+    if (wr2 && subcarr_top_ena)
+        begin
+        casex (addr)
+            `REBOOT_ADDR:
+                begin
+                reboot_decode <= 1'b1 ;
+                end
+            default: reboot_decode <= 1'b0 ;
+        endcase
+        end
+    else
+        begin
+        reboot_decode <= 1'b0 ;
+        end
+    end
+
+always @ (posedge ck933)
+    begin
+    reboot_decode_sync <= {reboot_decode_sync[1:0],reboot_decode};
+    reboot <= (reboot_decode_sync[2:1] == 2'b10);
+    end
+
+multiboot multiboot
+    (
+    .next_addr(boot_addr),
+    .clk(ck933),
+    .reboot(reboot)
+    );
+
 //******************************************************************************
 //                               Miscellaneous
 //******************************************************************************
@@ -284,7 +365,7 @@ always @(addr) begin
     default: dac_space <= 0;
     endcase
 end
-wire dac_en = !nCs & dac_space;
+wire dac_en = cs & dac_space;
 
 // maximum transfer rate on the AD9707 serial port is 20 MHz. The input clock is
 // divided by 4 for an 11.66 MHz transfer clock.
@@ -338,8 +419,8 @@ assign sdiOut = sdiInput;
 //  FM/PM Subcarrier Demodulators
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-wire demod1_ena = !addr12;
-wire demod2_ena = addr12;
+wire demod1_ena = !add12;
+wire demod2_ena = add12;
 
 wire    [31:0]  demod1_dout;
 wire    [17:0]  demod1_dac0Data;
@@ -563,8 +644,8 @@ always @(addr) begin
   endcase
 end
 
-wire decoder1_en = !nCs && decoder_space && !addr12;
-wire decoder2_en = !nCs && decoder_space && addr12;
+wire decoder1_en = cs && decoder_space && !add12;
+wire decoder2_en = cs && decoder_space && add12;
 
 wire [15:0]decoder1_dout;
 wire decoder1_dout_i,decoder1_dout_q;
@@ -658,7 +739,7 @@ always @(addr) begin
   endcase
 end
 
-wire symb_pll_en = !nCs && pll_space;
+wire symb_pll_en = cs && pll_space;
 wire [15:0]symb_pll_dout;
 
 symb_pll symb_pll
@@ -759,8 +840,8 @@ decoder decoder2
 //******************************************************************************
 
 `ifdef DOS_DEMODS
-wire [31:0]demod_dout = addr12 ? demod2_dout : demod1_dout ;
-wire [15:0]decoder_dout = addr12 ? decoder2_dout : decoder1_dout ;
+wire [31:0]demod_dout = add12 ? demod2_dout : demod1_dout ;
+wire [15:0]decoder_dout = add12 ? decoder2_dout : decoder1_dout ;
 `else
 wire [31:0]demod_dout = demod1_dout ;
 wire [15:0]decoder_dout = decoder1_dout ;
@@ -808,7 +889,53 @@ always @(
     endcase
   end
 
-assign data = (!nCs & !nRd) ? rd_mux : 16'hzzzz;
+assign data = (cs & !nRd) ? rd_mux : 16'hzzzz;
+
+
+`ifdef USE_VTERM
+
+assign vt_din = (vt_ce & vt_oe) ? rd_mux : 16'hCAFE;
+
+reg     [1:0] vt_clk;
+always @ (posedge ck933)
+    begin
+    vt_clk <= vt_clk - 2'b1;
+    end
+
+vterm vterm
+    (
+    .addr(vt_addr),     // output, address to registers
+    .ce(vt_ce),         // output, chip enable, high true
+    .clk(vt_clk[1]),    // input, 25M synchronous logic clock
+    .din(vt_din),       // input, read data from registers
+    .dout(vt_dout),     // output, write data to registers
+    .oe(vt_oe),         // output, output enable, high true
+    .rst(1'b0),         // input, synchronous logic reset, high true
+    .rxd(vt_rxd),       // input, async receive data
+    .txd(vt_txd),       // output, async transmit data
+    .we(vt_we)          // output, write enable, high true
+    );
+
+wire [35:0] CONTROL0;
+
+chipscope_icon chipscope_icon (
+    .CONTROL0(CONTROL0) // INOUT BUS [35:0]
+);
+
+chipscope_ila chipscope_ila (
+    .CONTROL(CONTROL0), // INOUT BUS [35:0]
+    .CLK(ck933), // IN
+    .DATA({
+        4'b0,
+        wr2,
+        wr1,
+        wr0,
+        reboot,
+        boot_addr[23:0]
+        }),
+    .TRIG0(subcarr_top_ena)
+);
+
+`endif
 
 endmodule
-
