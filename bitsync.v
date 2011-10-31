@@ -541,12 +541,19 @@ loopFilter sampleLoop(
     .syncThreshold(syncThreshold)
     );
 
+//`define RECLOCK_BSERROR
+`ifdef RECLOCK_BSERROR
 reg     [17:0]  bsError;
 reg             bsErrorEn;
 always @(posedge sampleClk) begin
     bsError <= timingError[18:1] + timingError[0];
     bsErrorEn <= loopFilterEn;
     end
+`else
+assign bsError = timingError[18:1] + timingError[0];
+assign bsErrorEn = loopFilterEn;
+`endif
+
 
 //************************** Lock Detector ************************************
 
