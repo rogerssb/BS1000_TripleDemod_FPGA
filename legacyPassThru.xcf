@@ -42,9 +42,9 @@ Net "dac2_d<11>" IOB = TRUE;
 Net "dac2_d<12>" IOB = TRUE;
 Net "dac2_d<13>" IOB = TRUE;
 
-NET "multihSymEn" IOB = TRUE;
+NET "multihSymEnOut" IOB = TRUE;
 
-NET "multihSym2xEn" IOB = TRUE;
+NET "multihSym2xEnOut" IOB = TRUE;
 
 NET "iMultiH<0>"  IOB = TRUE;
 NET "iMultiH<1>"  IOB = TRUE;

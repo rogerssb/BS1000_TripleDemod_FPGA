@@ -541,7 +541,7 @@ loopFilter sampleLoop(
     .syncThreshold(syncThreshold)
     );
 
-//`define RECLOCK_BSERROR
+`define RECLOCK_BSERROR
 `ifdef RECLOCK_BSERROR
 reg     [17:0]  bsError;
 reg             bsErrorEn;
