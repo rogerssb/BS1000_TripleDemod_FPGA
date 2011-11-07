@@ -134,7 +134,7 @@
 `define MISC_CLOCK      12'bxxxx_xxxx_01xx
 `define DAC_IN_SEL      12'bxxxx_xxxx_100x
 `define DEC_IN_SEL      12'bxxxx_xxxx_101x
-`define REBOOT_ADDR		12'bxxxx_xxxx_110x
+`define REBOOT_ADDR     12'bxxxx_xxxx_11xx
 
 // Define the DAC control locations
 `define DAC_WDATA       12'bxxxx_xxxx_x00x
