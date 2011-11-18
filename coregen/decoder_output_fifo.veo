@@ -23,7 +23,7 @@
 *     appliances, devices, or systems. Use in such applications are            *
 *     expressly prohibited.                                                    *
 *                                                                              *
-*     (c) Copyright 1995-2007 Xilinx, Inc.                                     *
+*     (c) Copyright 1995-2009 Xilinx, Inc.                                     *
 *     All rights reserved.                                                     *
 *******************************************************************************/
 // The following must be inserted into your Verilog file for this
@@ -32,15 +32,15 @@
 
 //----------- Begin Cut here for INSTANTIATION Template ---// INST_TAG
 decoder_output_fifo YourInstanceName (
-	.din(din), // Bus [1 : 0] 
-	.rd_clk(rd_clk),
-	.rd_en(rd_en),
 	.rst(rst),
 	.wr_clk(wr_clk),
+	.rd_clk(rd_clk),
+	.din(din), // Bus [1 : 0] 
 	.wr_en(wr_en),
+	.rd_en(rd_en),
 	.dout(dout), // Bus [1 : 0] 
-	.empty(empty),
 	.full(full),
+	.empty(empty),
 	.prog_full(prog_full));
 
 // INST_TAG_END ------ End INSTANTIATION Template ---------
