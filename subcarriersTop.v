@@ -24,18 +24,13 @@ module subcarriersTop (
     dac_rst,
     dac_sdio,
     demodMode,
-    dac0Select,dac1Select,dac2Select,
+    //dac0Select,dac1Select,dac2Select,
     dac0Data,dac1Data,dac2Data,
-    multiHSymEn,multiHSym2xEn,
-    iMultiH,qMultiH,
     dataSymEn,dataSym2xEn,
     iData,qData,
     auSymClk,
     bsyncLockInput,demodLockInput,
     sdiInput,
-    phaseError,
-    phaseErrorEn,
-    phaseErrorValid,
     dac0_nCs,dac0_sclk,
     dac1_nCs,dac1_sclk,
     dac2_nCs,dac2_sclk,
@@ -59,19 +54,13 @@ input           addr3,addr2,addr1;
 inout   [15:0]  data;
 inout           dac_sdio;
 input   [3:0]   demodMode;
-input   [3:0]   dac0Select,dac1Select,dac2Select;
+//input   [3:0]   dac0Select,dac1Select,dac2Select;
 input   [13:0]  dac0Data,dac1Data,dac2Data;
-input           multiHSymEn,multiHSym2xEn;
-input   [17:0]  iMultiH,qMultiH;
 input           dataSymEn,dataSym2xEn;
 input           iData,qData;
 input           auSymClk;
 input           bsyncLockInput,demodLockInput;
 input           sdiInput;
-
-output  [7:0]   phaseError;
-output          phaseErrorEn;
-output          phaseErrorValid;
 
 output          dac_rst;
 output          dac0_nCs,dac0_sclk;
@@ -90,7 +79,7 @@ output          sdiOut;
 output          vt_txd;
 input           vt_rxd;
 
-parameter VER_NUMBER = 16'h0153;
+parameter VER_NUMBER = 16'h0154;
 
 
 `ifndef USE_VTERM
@@ -129,31 +118,20 @@ assign demod_nLock = demodLockInput;
 //******************************************************************************
 //                               Reclock Inputs
 //******************************************************************************
-reg     [13:0]  dac0DataIn, dac1DataIn, dac2DataIn;
+reg     [13:0]  demod0_dac0DataIn, demod0_dac1DataIn, demod0_dac2DataIn;
 reg             dataSymEnIn,dataSym2xEnIn;
 reg             iDataIn,qDataIn;
 reg             auSymClkIn;
 always @(posedge ck933) begin
-    dac0DataIn <= dac0Data;
-    dac1DataIn <= dac1Data;
-    dac2DataIn <= dac2Data;
+    demod0_dac0DataIn <= dac0Data;
+    demod0_dac1DataIn <= dac1Data;
+    demod0_dac2DataIn <= dac2Data;
     dataSymEnIn <= dataSymEn;
     dataSym2xEnIn <= dataSym2xEn;
     iDataIn <= iData;
     qDataIn <= qData;
     auSymClkIn <= auSymClk;
     end
-
-wire    [13:0]  demod0_dac0Data =  dac0DataIn;
-wire    [13:0]  demod0_dac1Data =  dac1DataIn;
-wire    [13:0]  demod0_dac2Data =  dac2DataIn;
-
-//******************************************************************************
-//                               Unused Outputs
-//******************************************************************************
-assign phaseError = 8'h0;
-assign phaseErrorEn = 0;
-assign phaseErrorValid = 0;
 
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -445,17 +423,17 @@ demod demod1(
     .din(dataIn),
     .dout(demod1_dout),
 //    .demodMode(demodMode),
-    .iRx({dac2DataIn,4'h0}),      // FPGA1 DAC2 output
+    .iRx({demod0_dac2DataIn,4'h0}),      // FPGA1 DAC2 output
     .qRx(18'h0),
     .dac0Data(demod1_dac0Data),
 //    .dac0Select(demod1_dac0Select),
-//    .dac0Sync(demod1_dac0Sync),
+    .dac0Sync(demod1_dac0Sync),
     .dac1Data(demod1_dac1Data),
 //    .dac1Select(demod1_dac1Select),
-//    .dac1Sync(demod1_dac1Sync),
+    .dac1Sync(demod1_dac1Sync),
     .dac2Data(demod1_dac2Data),
 //    .dac2Select(demod1_dac2Select),
-//    .dac2Sync(demod1_dac2Sync),
+    .dac2Sync(demod1_dac2Sync),
     .iSym2xEn(demod1_iSym2xEn),
     .iSymEn(demod1_iSymEn),
     .iBit(demod1_iBit),
@@ -504,7 +482,7 @@ demod demod2(
     .din(dataIn),
     .dout(demod2_dout),
 //    .demodMode(demodMode),
-    .iRx({dac2DataIn,4'h0}),      // FPGA1 DAC2 output
+    .iRx({demod0_dac2DataIn,4'h0}),      // FPGA1 DAC2 output
     .qRx(18'h0),
     .dac0Data(demod2_dac0Data),
 //    .dac0Select(demod2_dac0Select),
@@ -544,10 +522,167 @@ demod demod2(
 //                              DAC Outputs
 //******************************************************************************
 
+reg dac0CS,dac1CS,dac2CS;
+always @(addr) begin
+    casex (addr)
+        `INTERP0SPACE: begin
+            dac0CS <= 1;
+            dac1CS <= 0;
+            dac2CS <= 0;
+            end
+        `INTERP1SPACE: begin
+            dac0CS <= 0;
+            dac1CS <= 1;
+            dac2CS <= 0;
+            end
+        `INTERP2SPACE: begin
+            dac0CS <= 0;
+            dac1CS <= 0;
+            dac2CS <= 1;
+            end
+        default: begin
+            dac0CS <= 0;
+            dac1CS <= 0;
+            dac2CS <= 0;
+            end
+        endcase
+    end
+
+`define USE_INTERPOLATORS
+`ifdef USE_INTERPOLATORS
+wire    [31:0]  dac0Dout;
+wire    [17:0]  demod1_dac0Interp;
+interpolate dac0Interp(
+    .clk(ck933), .reset(reset), .clkEn(demod1_dac0Sync),
+    .cs(dac0CS),
+    .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+    .addr(addr),
+    .din(dataIn),
+    .dout(dac0Dout),
+    .dataIn(demod1_dac0Data),
+    .dataOut(demod1_dac0Interp)
+    );
+
 wire    [13:0]  dac0Out;
 mux_4x1x14 mux_4x1x14_inst_1
     (
-    .A(demod0_dac0Data),
+    .A(demod0_dac0DataIn),
+    .B(demod1_dac0Interp[17:4]),
+    .C(14'h0),
+    .D(14'h0),
+    .Y(dac0Out),
+    .SEL(dac0_in_sel),
+    .CLK(ck933)
+    );
+
+FDCE dac0_d_0  (.Q(dac0_d[0]),   .C(ck933),  .CE(1'b1),  .CLR(1'b0), .D(dac0Out[0] ));
+FDCE dac0_d_1  (.Q(dac0_d[1]),   .C(ck933),  .CE(1'b1),  .CLR(1'b0), .D(dac0Out[1] ));
+FDCE dac0_d_2  (.Q(dac0_d[2]),   .C(ck933),  .CE(1'b1),  .CLR(1'b0), .D(dac0Out[2] ));
+FDCE dac0_d_3  (.Q(dac0_d[3]),   .C(ck933),  .CE(1'b1),  .CLR(1'b0), .D(dac0Out[3] ));
+FDCE dac0_d_4  (.Q(dac0_d[4]),   .C(ck933),  .CE(1'b1),  .CLR(1'b0), .D(dac0Out[4] ));
+FDCE dac0_d_5  (.Q(dac0_d[5]),   .C(ck933),  .CE(1'b1),  .CLR(1'b0), .D(dac0Out[5] ));
+FDCE dac0_d_6  (.Q(dac0_d[6]),   .C(ck933),  .CE(1'b1),  .CLR(1'b0), .D(dac0Out[6] ));
+FDCE dac0_d_7  (.Q(dac0_d[7]),   .C(ck933),  .CE(1'b1),  .CLR(1'b0), .D(dac0Out[7] ));
+FDCE dac0_d_8  (.Q(dac0_d[8]),   .C(ck933),  .CE(1'b1),  .CLR(1'b0), .D(dac0Out[8] ));
+FDCE dac0_d_9  (.Q(dac0_d[9]),   .C(ck933),  .CE(1'b1),  .CLR(1'b0), .D(dac0Out[9] ));
+FDCE dac0_d_10 (.Q(dac0_d[10]),  .C(ck933),  .CE(1'b1),  .CLR(1'b0), .D(dac0Out[10]));
+FDCE dac0_d_11 (.Q(dac0_d[11]),  .C(ck933),  .CE(1'b1),  .CLR(1'b0), .D(dac0Out[11]));
+FDCE dac0_d_12 (.Q(dac0_d[12]),  .C(ck933),  .CE(1'b1),  .CLR(1'b0), .D(dac0Out[12]));
+FDCE dac0_d_13 (.Q(dac0_d[13]),  .C(ck933),  .CE(1'b1),  .CLR(1'b0), .D(~dac0Out[13]));
+assign dac0_clk = ck933;
+
+wire    [31:0]  dac1Dout;
+wire    [17:0]  demod1_dac1Interp;
+interpolate dac1Interp(
+    .clk(ck933), .reset(reset), .clkEn(demod1_dac1Sync),
+    .cs(dac1CS),
+    .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+    .addr(addr),
+    .din(dataIn),
+    .dout(dac1Dout),
+    .dataIn(demod1_dac1Data),
+    .dataOut(demod1_dac1Interp)
+    );
+
+wire    [13:0]  dac1Out;
+mux_4x1x14 mux_4x1x14_inst_2
+    (
+    .A(demod0_dac1DataIn),
+    .B(demod1_dac1Interp[17:4]),
+    .C(14'h0),
+    .D(14'h0),
+    .Y(dac1Out),
+    .SEL(dac1_in_sel),
+    .CLK(ck933)
+    );
+
+FDCE dac1_d_0  (.Q(dac1_d[0]),   .C(ck933),  .CE(1'b1),  .CLR(1'b0), .D(dac1Out[0] ));
+FDCE dac1_d_1  (.Q(dac1_d[1]),   .C(ck933),  .CE(1'b1),  .CLR(1'b0), .D(dac1Out[1] ));
+FDCE dac1_d_2  (.Q(dac1_d[2]),   .C(ck933),  .CE(1'b1),  .CLR(1'b0), .D(dac1Out[2] ));
+FDCE dac1_d_3  (.Q(dac1_d[3]),   .C(ck933),  .CE(1'b1),  .CLR(1'b0), .D(dac1Out[3] ));
+FDCE dac1_d_4  (.Q(dac1_d[4]),   .C(ck933),  .CE(1'b1),  .CLR(1'b0), .D(dac1Out[4] ));
+FDCE dac1_d_5  (.Q(dac1_d[5]),   .C(ck933),  .CE(1'b1),  .CLR(1'b0), .D(dac1Out[5] ));
+FDCE dac1_d_6  (.Q(dac1_d[6]),   .C(ck933),  .CE(1'b1),  .CLR(1'b0), .D(dac1Out[6] ));
+FDCE dac1_d_7  (.Q(dac1_d[7]),   .C(ck933),  .CE(1'b1),  .CLR(1'b0), .D(dac1Out[7] ));
+FDCE dac1_d_8  (.Q(dac1_d[8]),   .C(ck933),  .CE(1'b1),  .CLR(1'b0), .D(dac1Out[8] ));
+FDCE dac1_d_9  (.Q(dac1_d[9]),   .C(ck933),  .CE(1'b1),  .CLR(1'b0), .D(dac1Out[9] ));
+FDCE dac1_d_10 (.Q(dac1_d[10]),  .C(ck933),  .CE(1'b1),  .CLR(1'b0), .D(dac1Out[10]));
+FDCE dac1_d_11 (.Q(dac1_d[11]),  .C(ck933),  .CE(1'b1),  .CLR(1'b0), .D(dac1Out[11]));
+FDCE dac1_d_12 (.Q(dac1_d[12]),  .C(ck933),  .CE(1'b1),  .CLR(1'b0), .D(dac1Out[12]));
+FDCE dac1_d_13 (.Q(dac1_d[13]),  .C(ck933),  .CE(1'b1),  .CLR(1'b0), .D(~dac1Out[13]));
+assign dac1_clk = ck933;
+
+wire    [31:0]  dac2Dout;
+wire    [17:0]  demod1_dac2Interp;
+interpolate dac2Interp(
+    .clk(ck933), .reset(reset), .clkEn(demod1_dac2Sync),
+    .cs(dac2CS),
+    .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+    .addr(addr),
+    .din(dataIn),
+    .dout(dac2Dout),
+    .dataIn(demod1_dac2Data),
+    .dataOut(demod1_dac2Interp)
+    );
+
+wire    [13:0]  dac2Out;
+mux_4x1x14 mux_4x1x14_inst_3
+    (
+    .A(demod0_dac2DataIn),
+    .B(demod1_dac2Interp[17:4]),
+    .C(14'h0),
+    .D(14'h0),
+    .Y(dac2Out),
+    .SEL(dac2_in_sel),
+    .CLK(ck933)
+    );
+
+FDCE dac2_d_0  (.Q(dac2_d[0]),   .C(ck933),  .CE(1'b1),  .CLR(1'b0), .D(dac2Out[0] ));
+FDCE dac2_d_1  (.Q(dac2_d[1]),   .C(ck933),  .CE(1'b1),  .CLR(1'b0), .D(dac2Out[1] ));
+FDCE dac2_d_2  (.Q(dac2_d[2]),   .C(ck933),  .CE(1'b1),  .CLR(1'b0), .D(dac2Out[2] ));
+FDCE dac2_d_3  (.Q(dac2_d[3]),   .C(ck933),  .CE(1'b1),  .CLR(1'b0), .D(dac2Out[3] ));
+FDCE dac2_d_4  (.Q(dac2_d[4]),   .C(ck933),  .CE(1'b1),  .CLR(1'b0), .D(dac2Out[4] ));
+FDCE dac2_d_5  (.Q(dac2_d[5]),   .C(ck933),  .CE(1'b1),  .CLR(1'b0), .D(dac2Out[5] ));
+FDCE dac2_d_6  (.Q(dac2_d[6]),   .C(ck933),  .CE(1'b1),  .CLR(1'b0), .D(dac2Out[6] ));
+FDCE dac2_d_7  (.Q(dac2_d[7]),   .C(ck933),  .CE(1'b1),  .CLR(1'b0), .D(dac2Out[7] ));
+FDCE dac2_d_8  (.Q(dac2_d[8]),   .C(ck933),  .CE(1'b1),  .CLR(1'b0), .D(dac2Out[8] ));
+FDCE dac2_d_9  (.Q(dac2_d[9]),   .C(ck933),  .CE(1'b1),  .CLR(1'b0), .D(dac2Out[9] ));
+FDCE dac2_d_10 (.Q(dac2_d[10]),  .C(ck933),  .CE(1'b1),  .CLR(1'b0), .D(dac2Out[10]));
+FDCE dac2_d_11 (.Q(dac2_d[11]),  .C(ck933),  .CE(1'b1),  .CLR(1'b0), .D(dac2Out[11]));
+FDCE dac2_d_12 (.Q(dac2_d[12]),  .C(ck933),  .CE(1'b1),  .CLR(1'b0), .D(dac2Out[12]));
+FDCE dac2_d_13 (.Q(dac2_d[13]),  .C(ck933),  .CE(1'b1),  .CLR(1'b0), .D(~dac2Out[13]));
+assign dac2_clk = ck933;
+
+`else
+
+wire dac0Sync = 1'b1;
+wire dac1Sync = 1'b1;
+wire dac2Sync = 1'b1;
+
+wire    [13:0]  dac0Out;
+mux_4x1x14 mux_4x1x14_inst_1
+    (
+    .A(demod0_dac0DataIn),
     .B(demod1_dac0Data[17:4]),
     .C(demod2_dac0Data[17:4]),
     .D(14'h0),
@@ -556,10 +691,26 @@ mux_4x1x14 mux_4x1x14_inst_1
     .CLK(ck933)
     );
 
+FDCE dac0_d_0  (.Q(dac0_d[0]),   .C(ck933),  .CE(dac0Sync),  .CLR(1'b0), .D(dac0Out[0] ));
+FDCE dac0_d_1  (.Q(dac0_d[1]),   .C(ck933),  .CE(dac0Sync),  .CLR(1'b0), .D(dac0Out[1] ));
+FDCE dac0_d_2  (.Q(dac0_d[2]),   .C(ck933),  .CE(dac0Sync),  .CLR(1'b0), .D(dac0Out[2] ));
+FDCE dac0_d_3  (.Q(dac0_d[3]),   .C(ck933),  .CE(dac0Sync),  .CLR(1'b0), .D(dac0Out[3] ));
+FDCE dac0_d_4  (.Q(dac0_d[4]),   .C(ck933),  .CE(dac0Sync),  .CLR(1'b0), .D(dac0Out[4] ));
+FDCE dac0_d_5  (.Q(dac0_d[5]),   .C(ck933),  .CE(dac0Sync),  .CLR(1'b0), .D(dac0Out[5] ));
+FDCE dac0_d_6  (.Q(dac0_d[6]),   .C(ck933),  .CE(dac0Sync),  .CLR(1'b0), .D(dac0Out[6] ));
+FDCE dac0_d_7  (.Q(dac0_d[7]),   .C(ck933),  .CE(dac0Sync),  .CLR(1'b0), .D(dac0Out[7] ));
+FDCE dac0_d_8  (.Q(dac0_d[8]),   .C(ck933),  .CE(dac0Sync),  .CLR(1'b0), .D(dac0Out[8] ));
+FDCE dac0_d_9  (.Q(dac0_d[9]),   .C(ck933),  .CE(dac0Sync),  .CLR(1'b0), .D(dac0Out[9] ));
+FDCE dac0_d_10 (.Q(dac0_d[10]),  .C(ck933),  .CE(dac0Sync),  .CLR(1'b0), .D(dac0Out[10]));
+FDCE dac0_d_11 (.Q(dac0_d[11]),  .C(ck933),  .CE(dac0Sync),  .CLR(1'b0), .D(dac0Out[11]));
+FDCE dac0_d_12 (.Q(dac0_d[12]),  .C(ck933),  .CE(dac0Sync),  .CLR(1'b0), .D(dac0Out[12]));
+FDCE dac0_d_13 (.Q(dac0_d[13]),  .C(ck933),  .CE(dac0Sync),  .CLR(1'b0), .D(~dac0Out[13]));
+assign dac0_clk = ck933;
+
 wire    [13:0]  dac1Out;
 mux_4x1x14 mux_4x1x14_inst_2
     (
-    .A(demod0_dac1Data),
+    .A(demod0_dac1DataIn),
     .B(demod1_dac1Data[17:4]),
     .C(demod2_dac1Data[17:4]),
     .D(14'h0),
@@ -567,38 +718,6 @@ mux_4x1x14 mux_4x1x14_inst_2
     .SEL(dac1_in_sel),
     .CLK(ck933)
     );
-
-wire    [13:0]  dac2Out;
-mux_4x1x14 mux_4x1x14_inst_3
-    (
-    .A(demod0_dac2Data),
-    .B(demod1_dac2Data[17:4]),
-    .C(demod2_dac2Data[17:4]),
-    .D(14'h0),
-    .Y(dac2Out),
-    .SEL(dac2_in_sel),
-    .CLK(ck933)
-    );
-
-wire dac0Sync = 1'b1;
-wire dac1Sync = 1'b1;
-wire dac2Sync = 1'b1;
-
-FDCE dac0_d_0  (.Q(dac0_d[0]),   .C(ck933),  .CE(dac0Sync),  .CLR(1'b0), .D(dac0Out[0]));
-FDCE dac0_d_1  (.Q(dac0_d[1]),   .C(ck933),  .CE(dac0Sync),  .CLR(1'b0), .D(dac0Out[1]));
-FDCE dac0_d_2  (.Q(dac0_d[2]),   .C(ck933),  .CE(dac0Sync),  .CLR(1'b0), .D(dac0Out[2]));
-FDCE dac0_d_3  (.Q(dac0_d[3]),   .C(ck933),  .CE(dac0Sync),  .CLR(1'b0), .D(dac0Out[3]));
-FDCE dac0_d_4  (.Q(dac0_d[4]),   .C(ck933),  .CE(dac0Sync),  .CLR(1'b0), .D(dac0Out[4]));
-FDCE dac0_d_5  (.Q(dac0_d[5]),   .C(ck933),  .CE(dac0Sync),  .CLR(1'b0), .D(dac0Out[5]));
-FDCE dac0_d_6  (.Q(dac0_d[6]),   .C(ck933),  .CE(dac0Sync),  .CLR(1'b0), .D(dac0Out[6]));
-FDCE dac0_d_7  (.Q(dac0_d[7]),   .C(ck933),  .CE(dac0Sync),  .CLR(1'b0), .D(dac0Out[7]));
-FDCE dac0_d_8  (.Q(dac0_d[8]),   .C(ck933),  .CE(dac0Sync),  .CLR(1'b0), .D(dac0Out[8]));
-FDCE dac0_d_9  (.Q(dac0_d[9]),   .C(ck933),  .CE(dac0Sync),  .CLR(1'b0), .D(dac0Out[9]));
-FDCE dac0_d_10 (.Q(dac0_d[10]),  .C(ck933),  .CE(dac0Sync),  .CLR(1'b0), .D(dac0Out[10]));
-FDCE dac0_d_11 (.Q(dac0_d[11]),  .C(ck933),  .CE(dac0Sync),  .CLR(1'b0), .D(dac0Out[11]));
-FDCE dac0_d_12 (.Q(dac0_d[12]),  .C(ck933),  .CE(dac0Sync),  .CLR(1'b0), .D(dac0Out[12]));
-FDCE dac0_d_13 (.Q(dac0_d[13]),  .C(ck933),  .CE(dac0Sync),  .CLR(1'b0), .D(~dac0Out[13]));
-assign dac0_clk = ck933;
 
 FDCE dac1_d_0  (.Q(dac1_d[0]),   .C(ck933),  .CE(dac1Sync),  .CLR(1'b0), .D(dac1Out[0]));
 FDCE dac1_d_1  (.Q(dac1_d[1]),   .C(ck933),  .CE(dac1Sync),  .CLR(1'b0), .D(dac1Out[1]));
@@ -616,6 +735,18 @@ FDCE dac1_d_12 (.Q(dac1_d[12]),  .C(ck933),  .CE(dac1Sync),  .CLR(1'b0), .D(dac1
 FDCE dac1_d_13 (.Q(dac1_d[13]),  .C(ck933),  .CE(dac1Sync),  .CLR(1'b0), .D(~dac1Out[13]));
 assign dac1_clk = ck933;
 
+wire    [13:0]  dac2Out;
+mux_4x1x14 mux_4x1x14_inst_3
+    (
+    .A(demod0_dac2DataIn),
+    .B(demod1_dac2Data[17:4]),
+    .C(demod2_dac2Data[17:4]),
+    .D(14'h0),
+    .Y(dac2Out),
+    .SEL(dac2_in_sel),
+    .CLK(ck933)
+    );
+
 FDCE dac2_d_0  (.Q(dac2_d[0]),   .C(ck933),  .CE(dac2Sync),  .CLR(1'b0), .D(dac2Out[0]));
 FDCE dac2_d_1  (.Q(dac2_d[1]),   .C(ck933),  .CE(dac2Sync),  .CLR(1'b0), .D(dac2Out[1]));
 FDCE dac2_d_2  (.Q(dac2_d[2]),   .C(ck933),  .CE(dac2Sync),  .CLR(1'b0), .D(dac2Out[2]));
@@ -631,6 +762,8 @@ FDCE dac2_d_11 (.Q(dac2_d[11]),  .C(ck933),  .CE(dac2Sync),  .CLR(1'b0), .D(dac2
 FDCE dac2_d_12 (.Q(dac2_d[12]),  .C(ck933),  .CE(dac2Sync),  .CLR(1'b0), .D(dac2Out[12]));
 FDCE dac2_d_13 (.Q(dac2_d[13]),  .C(ck933),  .CE(dac2Sync),  .CLR(1'b0), .D(~dac2Out[13]));
 assign dac2_clk = ck933;
+
+`endif
 
 //******************************************************************************
 //                                 Decoder
@@ -851,6 +984,7 @@ reg [15:0] rd_mux;
 always @(
   addr or
   demod_dout or
+  dac0Dout or dac1Dout or dac2Dout or
   dac_dout or
   subcarr_top_dout or
   decoder_dout or
@@ -872,6 +1006,30 @@ always @(
         end
       else begin
         rd_mux <= demod_dout[15:0];
+        end
+      end
+    `INTERP0SPACE: begin
+      if (addr[1]) begin
+        rd_mux <= dac0Dout[31:16];
+        end
+      else begin
+        rd_mux <= dac0Dout[15:0];
+        end
+      end
+    `INTERP1SPACE: begin
+      if (addr[1]) begin
+        rd_mux <= dac1Dout[31:16];
+        end
+      else begin
+        rd_mux <= dac1Dout[15:0];
+        end
+      end
+    `INTERP2SPACE: begin
+      if (addr[1]) begin
+        rd_mux <= dac2Dout[31:16];
+        end
+      else begin
+        rd_mux <= dac2Dout[15:0];
         end
       end
     `DAC_SPACE : rd_mux <= dac_dout;
