@@ -421,7 +421,7 @@ TIMESPEC "TS_ddc2" = FROM "ddcPL" TO DSPS 20 ns;
 
 #end legacyV11 paste---------------------------------------
 
-NET "demod1/ddc/hb0/fifomux*" TIG;
+#NET "demod1/ddc/hb0/fifomux*" TIG;
 
 TIMESPEC TS_reset = FROM FFS(reset*) to FFS 25 MHz;
 
