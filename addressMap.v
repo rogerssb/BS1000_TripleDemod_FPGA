@@ -2,9 +2,15 @@
 `define ADDRESS_MAP
 
 //`define INTERNAL_ADAPT
+`define ADD_SOQPSK_TRELLIS
+//`define FM_FILTER
+
 
 // Split the memory space for the different functions
 `define DEMODSPACE      12'b0000_0xxx_xxxx
+`ifdef FM_FILTER
+`define VIDFIRSPACE     12'b0000_1xxx_xxxx
+`endif
 `define FMMODSPACE      12'b0001_xxxx_xxxx
 `define DDCSPACE        12'b0010_0xxx_xxxx
 `define DDCFIRSPACE     12'b0010_1xxx_xxxx
@@ -161,11 +167,13 @@
 `define TRELLIS_CONTROL 12'bxxxx_xxxx_11xx
 
 // Define the SDI registers
-`define SDI_CONTROL     12'bxxxx_xxxx_00xx
+`define SDI_CONTROL         12'bxxxx_xxxx_00xx
 `define SDI_MODE_DISABLED       2'b00
 `define SDI_MODE_CONSTELLATION  2'b01
 `define SDI_MODE_EYE            2'b10
 `define SDI_MODE_ARTM           2'b11
+`define SDI_ARTM_THRESHOLD  12'bxxxx_xxxx_01xx
+`define SDI_ARTM_COUNTS     12'bxxxx_xxxx_10xx
 
 // Define the UART registers
 `define UART_BAUD_DIV   12'bxxxx_xxxx_00xx

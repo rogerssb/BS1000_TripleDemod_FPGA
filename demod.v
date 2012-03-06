@@ -196,6 +196,8 @@ lagGain12 magLoop(
     .lowerLimit(32'h00000000),
     .clearAccum(1'b0),
     .sweepEnable(1'b0),
+    .acqTrackControl(2'b0),
+    .track(1'b0),
     .lagAccum(magAccum)
     );
 
@@ -448,13 +450,56 @@ assign qEye = cordicModes ? qSymData : qResamp;
                                DAC Output Mux
 ******************************************************************************/
 
-//`define SKIP_DATAMUX
-`ifdef SKIP_DATAMUX
-assign dac0Data = iSwap;
-assign dac0Sync = ddcSync;
-assign dac1Data = qSwap;
-assign dac1Sync = ddcSync;
-`else
+`ifdef FM_FILTER
+// Programmable FIR
+wire    [15:0]  c0c14, c1c13, c2c12, c3c11, c4c10, c5c9 , c6c8 , c7   ;
+reg             firspace;
+always @(addr) begin
+    casex (addr)
+        `VIDFIRSPACE: begin
+            firspace = 1;
+            end
+        default: begin
+            firspace = 0;
+            end
+        endcase
+    end
+
+wire    [31:0]  firDout;
+dualFirCoeffRegs firCoeffRegs (
+    .addr    (addr   ),
+    .dataIn  (din    ),
+    .dataOut (firDout),
+    .cs      (firspace),
+    .wr0     (wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+    .c0      (c0c14  ), 
+    .c1      (c1c13  ), 
+    .c2      (c2c12  ), 
+    .c3      (c3c11  ), 
+    .c4      (c4c10  ), 
+    .c5      (c5c9   ), 
+    .c6      (c6c8   ), 
+    .c7      (c7     )
+    );
+
+wire    [17:0]  firOut;
+singleFir interpFir(
+    .clk        (clk),
+    .reset      (reset),
+    .syncIn     (demodSync),
+    .c0c14      (c0c14  ), 
+    .c1c13      (c1c13  ), 
+    .c2c12      (c2c12  ), 
+    .c3c11      (c3c11  ), 
+    .c4c10      (c4c10  ), 
+    .c5c9       (c5c9   ), 
+    .c6c8       (c6c8   ), 
+    .c7         (c7     ),
+    .in         (fm),
+    .out        (firOut)
+    );
+`endif
+
 wire multihMode = (demodMode == `MODE_MULTIH);
 reg             dac0Sync;
 reg     [17:0]  dac0Data;
@@ -481,7 +526,11 @@ always @(posedge clk) begin
             dac0Sync <= resampSync;
             end
         `DAC_FREQ: begin
+            `ifdef FM_FILTER
+            dac0Data <= firOut;
+            `else
             dac0Data <= fm;
+            `endif
             dac0Sync <= demodSync;
             end
         `DAC_PHASE: begin
@@ -632,7 +681,6 @@ always @(posedge clk) begin
         endcase
 
     end
-`endif
 
 /******************************************************************************
                                 uP dout mux
@@ -640,6 +688,9 @@ always @(posedge clk) begin
 reg [31:0]dout;
 always @(addr or
          demodDout or
+         `ifdef FM_FILTER
+         firDout or
+         `endif
          ddcDout or
          nbAgcDout or
          resampDout or
@@ -647,6 +698,9 @@ always @(addr or
          bitsyncDout) begin
     casex (addr)
         `DEMODSPACE:        dout <= demodDout;
+        `ifdef FM_FILTER
+        `VIDFIRSPACE:       dout <= firDout;
+        `endif
         `CHAGCSPACE:        dout <= nbAgcDout;
         `CICDECSPACE,
         `DDCFIRSPACE,

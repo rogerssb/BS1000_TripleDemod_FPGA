@@ -15,6 +15,7 @@ module carrierLoopRegs(
     ctrl2,
     clearAccum,
     ctrl4,
+    acqTrackControl,
     leadExp,
     leadMan,
     lagExp,
@@ -38,6 +39,9 @@ input   [31:0]  lagAccum;
 
 output          invertError,zeroError,ctrl2,clearAccum,ctrl4;
 reg             invertError,zeroError,ctrl2,clearAccum,ctrl4;
+
+output  [1:0]   acqTrackControl;
+reg     [1:0]   acqTrackControl;
 
 output  [4:0]   leadExp;
 reg     [4:0]   leadExp;
@@ -99,9 +103,12 @@ always @(negedge wr0) begin
 always @(negedge wr1) begin
     if (cs) begin
         casex (addr)
+            `CLF_CONTROL: begin
+                acqTrackControl <= dataIn[9:8];
+                end
             `CLF_LEAD_LAG: begin
-               lagMan <= dataIn[15:8];
-               end
+                lagMan <= dataIn[15:8];
+                end
             `CLF_ULIMIT: begin
                 upperLimit[15:8] <= dataIn[15:8];
                 end
@@ -168,7 +175,7 @@ always @(negedge wr3) begin
 reg [31:0]dataOut;
 always @(addr or cs or
          lockStatus or
-         ctrl2 or invertError or zeroError or clearAccum or ctrl4 or
+         ctrl2 or invertError or zeroError or clearAccum or ctrl4 or acqTrackControl or
          lagExp or lagMan or leadExp or leadMan or
          upperLimit or lowerLimit or
          loopData or
@@ -177,7 +184,7 @@ always @(addr or cs or
          ) begin
     if (cs) begin
         casex (addr)
-            `CLF_CONTROL:        dataOut <= {lockStatus,26'b0,ctrl4,clearAccum,ctrl2,invertError,zeroError};
+            `CLF_CONTROL:        dataOut <= {lockStatus,16'b0,6'b0,acqTrackControl,3'b0,ctrl4,clearAccum,ctrl2,invertError,zeroError};
             `CLF_LEAD_LAG:       dataOut <= {leadMan,3'bx,leadExp,lagMan,3'bx,lagExp};
             `CLF_ULIMIT:         dataOut <= upperLimit;
             `CLF_LLIMIT:         dataOut <= lowerLimit;

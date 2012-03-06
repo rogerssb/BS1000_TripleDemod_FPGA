@@ -56,8 +56,8 @@ always @(posedge clk) begin
         end
     end
 
-
-
+`define CIC_USE_MPYS
+`ifdef CIC_USE_MPYS
 // CIC Compensation
 wire    [17:0]  cicCompOut;
 cicComp cicComp(
@@ -67,6 +67,18 @@ cicComp cicComp(
     .compIn(dataIn),
     .compOut(cicCompOut)
     );
+`else
+wire    [32:0]  lutDout;
+cicCompensation cicComp(
+    .rfd(), 
+    .rdy(), 
+    .nd(clkEn | reset), 
+    .clk(clk), 
+    .dout(lutDout), 
+    .din(dataIn)
+);
+wire    [17:0]  cicCompOut = lutDout[26:9];
+`endif
 
 `ifdef SIMULATE
 real compReal;

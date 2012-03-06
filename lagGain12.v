@@ -10,6 +10,8 @@ module lagGain12 (
     sweepRateMag,
     carrierInSync,
     clearAccum,
+    acqTrackControl,
+    track,
     lagAccum
     );
 
@@ -22,19 +24,43 @@ input           sweepEnable;
 input   [31:0]  sweepRateMag;
 input           carrierInSync;
 input           clearAccum;
+input   [1:0]   acqTrackControl;
+input           track;
 
 output  [39:0]  lagAccum;
 reg     [39:0]  lagAccum;
 
 /*************************** Lag Gain Section ********************************/
 
+// NOTE: The acqTrackControl tells how much to divide the loopwidth by. The choices are
+// zero, 1/2, 1/4, and 1/8. In the loop filter calculations, the lag term is 
+// proportional to the square of the loopwidth. That's why the acqTrackControl
+// is shifted left one bit in this calculation.
+wire    [5:0]   lagSum = {1'b0,lagExp} - {3'b0,acqTrackControl,1'b0};
+reg     [4:0]   lagGain;
 reg     [39:0]  lagError;
 always @(posedge clk) begin
+    // Set lag gain
+    if (track) begin
+        // Did the difference overflow?
+        if (lagSum[5]) begin   
+            // Yes. Limit to the minimum.
+            lagGain <= 1;
+            end
+        else begin
+            lagGain <= lagSum[4:0];
+            end
+        end
+    else begin
+        lagGain <= lagExp;
+        end
+
+    // Calculate the lag error.
     if (reset) begin
         lagError <= 0;
         end
     else if (clkEn) begin
-        case(lagExp)
+        case(lagGain)
             5'h00: lagError <= 40'h0;
             5'h01: lagError <= {{30{error[11]}},error[11:2]};  
             5'h02: lagError <= {{29{error[11]}},error[11:1]};  

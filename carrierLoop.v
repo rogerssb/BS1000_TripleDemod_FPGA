@@ -55,6 +55,7 @@ always @(addr) begin
         endcase
     end
 wire    [31:0]  dout;
+wire    [1:0]   acqTrackControl;
 wire    [4:0]   leadExp;
 wire    [4:0]   lagExp;
 wire    [31:0]  upperLimit;
@@ -75,6 +76,7 @@ carrierLoopRegs loopRegs(
     .zeroError(zeroError),
     .ctrl2(sweepEnable),
     .clearAccum(clearAccum),
+    .acqTrackControl(acqTrackControl),
     .leadMan(),
     .leadExp(leadExp),
     .lagMan(),
@@ -200,6 +202,8 @@ leadGain12 leadGain (
     .clk(clk), .clkEn(loopFilterEn), .reset(reset), 
     .error(loopError),
     .leadExp(leadExp),
+    .acqTrackControl(acqTrackControl),
+    .track(carrierLock),
     .leadError(leadError)
     );
 
@@ -213,6 +217,8 @@ lagGain12 lagGain (
     .sweepRateMag(sweepOffsetMag),
     .clearAccum(clearAccum),
     .carrierInSync(carrierLock && !highFreqOffset),
+    .acqTrackControl(acqTrackControl),
+    .track(carrierLock),
     .lagAccum(lagAccum)
     );
 

@@ -65,7 +65,7 @@ output          auSymClk;
 output          bsync_nLock,demod_nLock;
 output          sdiOut;
 
-parameter VER_NUMBER = 16'h0153;
+parameter VER_NUMBER = 16'h0157;
 
 wire [11:0]addr = {addr11,addr10,addr9,addr8,addr7,addr6,addr5,addr4,addr3,addr2,addr1,1'b0};
 
@@ -307,6 +307,7 @@ trellis trellis(
     .decision(pcmTrellisBit)
     );
 
+`ifdef ADD_SOQPSK_TRELLIS
 //******************************************************************************
 //                           SOQPSK Trellis Decoder
 //******************************************************************************
@@ -340,6 +341,7 @@ trellisSoqpsk soqpsk
     .ternarySym2xEnOut(soqpskTrellisSym2xEn),
     .decision(soqpskTrellisBit)
    );
+`endif
    
 //******************************************************************************
 //                           MultiH Carrier Loop
@@ -402,6 +404,7 @@ always @(posedge ck933) begin
 assign demod_nLock = multihMode ? !multihDemodLock : !carrierLock;
 
 
+`ifdef ADD_SOQPSK_TRELLIS
 //******************************************************************************
 //                          Trellis Muxes
 //******************************************************************************
@@ -454,6 +457,32 @@ wire    trellisBit = pcmTrellisMode
                    ? pcmTrellisBit
                    : soqpskTrellisBit;
 `endif
+
+`else       // ADD_SOQPSK_TRELLIS
+
+//******************************************************************************
+//                          Trellis Muxes
+//******************************************************************************
+wire    [31:0] trellisDout = pcmTrellisDout;
+wire    [17:0] trellis0Out = pcmTrellis0Out;
+wire    trellis0Sync = pcmTrellis0Sync;
+wire    [17:0] trellis1Out = pcmTrellis1Out
+wire    trellis1Sync = pcmTrellis1Sync
+wire    [17:0] trellis2Out = pcmTrellis2Out
+wire    trellis2Sync = pcmTrellis2Sync
+reg trellisSymEn,trellisSym2xEn,trellisBit;
+always @(posedge ck933) begin
+    trellisSymEn <= pcmTrellisSymEn
+    trellisSym2xEn <= pcmTrellisSym2xEn
+    // The pcmTrellisBit is inverted to correct a polarity problem of the data.
+    // This is the wrong place to fix this, but Semco wanted it done in the
+    // FPGA rather than in software configuration somewhere else.
+    trellisBit <= !pcmTrellisBit
+    end
+
+`endif      // ADD_SOQPSK_TRELLIS
+
+
 
 //******************************************************************************
 //                              Demod Outputs
@@ -723,6 +752,7 @@ sdi sdi(
     .eyeSync(eyeSync),
     .iEye(iEye),.qEye(qEye),
     .eyeOffset(eyeOffset),
+    .bitsyncLock(!bsync_nLock), .demodLock(!demod_nLock),
     .sdiOut(sdiOut)
     );
 

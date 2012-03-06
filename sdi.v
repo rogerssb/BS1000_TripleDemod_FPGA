@@ -15,6 +15,7 @@ module sdi(
     eyeSync,
     iEye,qEye,
     eyeOffset,
+    bitsyncLock, demodLock,
     sdiOut
     );
 
@@ -31,6 +32,7 @@ input   [17:0]  qSymData;
 input           eyeSync;
 input   [17:0]  iEye,qEye;
 input   [4:0]   eyeOffset;
+input           bitsyncLock, demodLock;
 output          sdiOut;
 
 
@@ -45,6 +47,7 @@ end
 wire            fifoFull;
 reg             sdiEnable;
 reg     [1:0]   sdiMode;
+reg     [7:0]   artmThreshold;
 wire            sdiEnableReset = (fifoFull || reset);
 always @(negedge wr0 or posedge sdiEnableReset) begin
     if (sdiEnableReset) begin
@@ -56,20 +59,48 @@ always @(negedge wr0 or posedge sdiEnableReset) begin
                 sdiEnable <= dataIn[7];
                 sdiMode <= dataIn[1:0];
                 end     
+            `SDI_ARTM_THRESHOLD: begin
+                artmThreshold[7:0] <= dataIn[7:0];
+                end
             endcase
         end
     end
-wire    fifoEmpty;
+
+wire            fifoEmpty;
+wire    [10:0]  interiorCountOut;
+wire    [10:0]  exteriorCountOut;
+reg             holdCount;
 reg     [31:0]  sdiDout;
-always @(addr or
+always @(addr or sdiSpace or
          sdiMode or
-         fifoEmpty) begin
+         fifoEmpty or
+         artmThreshold or
+         interiorCountOut or exteriorCountOut
+         ) begin
     casex(addr)
-        `SDI_CONTROL:           sdiDout <= {fifoEmpty,29'b0,sdiMode};
-        default:                sdiDout <= 32'hx;
+        `SDI_CONTROL:           begin
+                                sdiDout <= {fifoEmpty,29'b0,sdiMode};
+                                holdCount <= 0;
+                                end
+        `SDI_ARTM_THRESHOLD:    begin
+                                sdiDout <= {24'b0,artmThreshold};
+                                holdCount <= 0;
+                                end
+        `SDI_ARTM_COUNTS:       begin
+                                sdiDout <= {5'b0,exteriorCountOut,5'b0,interiorCountOut};
+                                holdCount <= sdiSpace;
+                                end
+        default:                begin
+                                sdiDout <= 32'hx;
+                                holdCount <= 0;
+                                end
         endcase
     end
 
+
+//*****************************************************************************
+//                        Eye and Constellation Modes
+//*****************************************************************************
 
 reg     fifoEn0,fifoEn;
 always @(posedge clk or posedge fifoFull) begin
@@ -291,9 +322,32 @@ uartTx uartTx(
     .data(uartData),
     .dataAvailable(uartDataAvailable),
     .dataNeeded(uartDataNeeded),
-    .uartOutput(sdiOut)
+    .uartOutput(uartOut)
     );
 
+
+//*****************************************************************************
+//                               ARTM Mode
+//*****************************************************************************
+artmSignalQuality artm(
+    .sysClk(clk),
+    .reset(reset),
+    .hold(holdCount),
+    .demodLock(demodLock),
+    .bitSyncLock(bitsyncLock),
+    .symEnable(iSymEn),
+    .iSymData(iSymData), .qSymData(qSymData),
+    .threshold(artmThreshold),
+    .interiorCountOut(interiorCountOut),
+    .exteriorCountOut(exteriorCountOut),
+    .serialOut(artmOut)
+    );
+
+//*****************************************************************************
+//                              Module Outputs
+//*****************************************************************************
+
+assign sdiOut = (sdiMode == `SDI_MODE_ARTM) ? artmOut : uartOut ;
 
 reg     [31:0]  dataOut;
 always @(addr or sdiDout or uartDout) begin

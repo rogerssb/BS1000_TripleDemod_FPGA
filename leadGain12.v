@@ -3,12 +3,16 @@
 module leadGain12 (
     clk, clkEn, reset, 
     error,
+    acqTrackControl,
+    track,
     leadExp,
     leadError
     );
 
 input           clk, clkEn, reset;
 input   [11:0]   error;
+input   [1:0]   acqTrackControl;
+input           track;
 input   [4:0]   leadExp;
 
 output  [39:0]  leadError;
@@ -16,12 +20,33 @@ reg     [39:0]  leadError;
 
 /*************************** Lead Gain Section ********************************/
 
+// NOTE: The acqTrackControl tells how much to divide the loopwidth by. The choices are
+// zero, 1/2, 1/4, and 1/8. This is accomplished by subtracting the acqTrackControl
+// value from the lead exponent. 
+wire    [5:0]   leadSum = {1'b0,leadExp} - {4'b0,acqTrackControl};
+reg     [4:0]   leadGain;
 always @(posedge clk) begin
+    // Set lead gain
+    if (track) begin
+        // Did the difference overflow?
+        if (leadSum[5]) begin   
+            // Yes. Limit to the minimum.
+            leadGain <= 1;
+            end
+        else begin
+            leadGain <= leadSum[4:0];
+            end
+        end
+    else begin
+        leadGain <= leadExp;
+        end
+
+    // Calculate the lead error.
     if (reset) begin
         leadError <= 0;
         end
     else if (clkEn) begin
-        case(leadExp)
+        case(leadGain)
             5'h00: leadError <= 40'h0;
             5'h01: leadError <= {{30{error[11]}},error[11:2]};      
             5'h02: leadError <= {{29{error[11]}},error[11:1]};      
