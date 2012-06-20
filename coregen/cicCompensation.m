@@ -3,7 +3,7 @@ fn = fs/2;
 
 plotPoints = 1024;
 
-writeFile = 1;
+writeFile = 0;
 
 taps = 11;
 order = taps-1;

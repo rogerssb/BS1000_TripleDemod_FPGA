@@ -261,8 +261,8 @@ wire    [17:0]  iSymData,qSymData;
 wire    [17:0]  iEye,qEye;
 wire    [4:0]   eyeOffset;
 demod demod( 
-    .clk(clk), .reset(reset), .syncIn(sync), 
-    .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
+    .clk(clk), .reset(reset),
+    .wr0(we0 & !fmModCS), .wr1(we1 & !fmModCS), .wr2(we2 & !fmModCS), .wr3(we3 & !fmModCS),
     .addr(a),
     .din(d),
     .dout(dout),
@@ -614,6 +614,7 @@ initial begin
     // Init the downcoverter register set
     write32(createAddress(`DDCSPACE,`DDC_CONTROL),4);
     write32(createAddress(`DDCSPACE,`DDC_CENTER_FREQ), carrierFreq);
+    write32(createAddress(`DDCSPACE,`DDC_DECIMATION), 0);
 
     // Init the cicResampler register set
     write32(createAddress(`CICDECSPACE,`CIC_DECIMATION),cicDecimationInt-1);

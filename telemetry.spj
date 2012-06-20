@@ -10,18 +10,16 @@ SimFile=
 [Analyzer]
 C0Width=165
 C1Width=58
-C2Width=76
+C2Width=74
 GotoSource=N
 [Spice]
-[LibraryFiles]
-0=..\..\Xilinx\10.1\ISE\verilog\src\unisims\{.v}
 [DebugMode]
 CommandLine=+define+SIMULATE
 RecirculateTime=
 UseRecirculateTime=
 DiskSize=5000M
 [View]
-1=Last 0.000ns 257450.101ns 6406.998ns 99704.472ns 185821.962ns
+1=Last 0.000ns 377000.001ns 11655.085ns 454597.500ns 3916.090ns
 [Group0]
 Name=New Group2
 [Group3]
@@ -74,29 +72,6 @@ Name="Carrier"
 18="test.demod.carrierLoop : negFrequency[18:0]" default
 19="test.demod.carrierLoop : posFrequency[18:0]" default
 20="test.demod.carrierLoop : newFreq[18:0]" default
-[Group1]
-Name="Rx"
-0="test.demod.resampler : reset" default
-1="test.demod.channelAGC.chAgcLoopFilter : integratorReal" default Real AnalogDisplay AType=PWL Scale=Auto
-2="test.demod.fmDemod : magReal" default Real AnalogDisplay AType=Step Scale=Auto
-3="test.demod.fmDemod : freqReal" default Real AnalogDisplay AType=Step Scale=Fixed MinScaleDbl=-1 MaxScaleDbl=1
-4="test.fmMod : interpReal" default Real AnalogDisplay AType=Step Scale=Auto
-5="test.demod.ddc : cicReset" default
-6="test.demod.resampler : iOutReal" default Real AnalogDisplay AType=Step Scale=Auto
-7="test.demod.fmDemod : phaseReal" default Real AnalogDisplay AType=Step Scale=Auto
-8="test.demod.ddc : qHbReal" default Real AnalogDisplay AType=Step Scale=Auto
-9="test.demod.ddc : iHbReal" default Real AnalogDisplay AType=Step Scale=Auto
-10="test.demod.ddc : iCompReal" default Real AnalogDisplay AType=Step Scale=Auto
-11="test.demod.ddc : qAgcReal" default Real AnalogDisplay AType=Step Scale=Auto
-12="test.demod.ddc : iAgcReal" default Real AnalogDisplay AType=Step Scale=Auto
-13="test.demod.ddc.cic : qCicReal" default Real AnalogDisplay AType=Step Scale=Auto
-14="test.demod.ddc.cic : iCicReal" default Real AnalogDisplay AType=Step Scale=Auto
-15="test.demod.ddc : qHb0Real" default Real AnalogDisplay AType=Step Scale=Auto
-16="test.demod.ddc : iHb0Real" default Real AnalogDisplay AType=Step Scale=Auto
-17="test.demod.ddc : qMixReal" default Real AnalogDisplay AType=Step Scale=Auto
-18="test.demod.ddc : iMixReal" default Real AnalogDisplay AType=Step Scale=Auto
-19="test : iSignalReal" default Real AnalogDisplay AType=Step Scale=Auto
-20="test : cicDecimationInt" default Decimal AnalogDisplay AType=PWL Scale=Auto
 [Group7]
 Name="SDI"
 0="test.sdi : eyeCount[2:0]" default
@@ -189,6 +164,8 @@ Name="DAC"
 14="test.demod : symClk" default Unknown
 15="test.demod : resampSync" default
 16="test.demod : ddcSync" default
+[LibraryFiles]
+0=..\..\Xilinx\10.1\verilog\src\unisims\{.v}
 [Files]
 0=test.v
 1=demod.v
@@ -255,6 +232,34 @@ Name="DAC"
 62=dualFir.v
 63=dualFirCoeffRegs.v
 64=.\coregen\mpy18x18WithCe.v
+65=carrierLoopRegs.v
+66=artmSignalQuality.v
+[Group1]
+Name="Rx"
+0="test.demod.resampler : reset" default
+1="test.demod.channelAGC.chAgcLoopFilter : integratorReal" default Real AnalogDisplay AType=PWL Scale=Auto
+2="test.demod.fmDemod : magReal" default Real AnalogDisplay AType=Step Scale=Auto
+3="test.demod : fmVideoReal" default Real AnalogDisplay AType=Step Scale=Auto
+4="test.demod : diffReal" default Real AnalogDisplay AType=Step Scale=Auto
+5="test.demod.fmDemod : freqReal" default Real AnalogDisplay AType=Step Scale=Fixed MinScaleDbl=-1 MaxScaleDbl=1
+6="test.fmMod : interpReal" default Real AnalogDisplay AType=Step Scale=Auto
+7="test.demod.ddc : cicReset" default
+8="test.demod.resampler : iOutReal" default Real AnalogDisplay AType=Step Scale=Auto
+9="test.demod.fmDemod : phaseReal" default Real AnalogDisplay AType=Step Scale=Auto
+10="test.demod.ddc : qHbReal" default Real AnalogDisplay AType=Step Scale=Auto
+11="test.demod.ddc : iHbReal" default Real AnalogDisplay AType=Step Scale=Auto
+12="test.demod.ddc : iCompReal" default Real AnalogDisplay AType=Step Scale=Auto
+13="test.demod.ddc : qAgcReal" default Real AnalogDisplay AType=Step Scale=Auto
+14="test.demod.ddc : iAgcReal" default Real AnalogDisplay AType=Step Scale=Auto
+15="test.demod.ddc.cic : qCicReal" default Real AnalogDisplay AType=Step Scale=Auto
+16="test.demod.ddc.cic : iCicReal" default Real AnalogDisplay AType=Step Scale=Auto
+17="test.demod.ddc : qHb0Real" default Real AnalogDisplay AType=Step Scale=Auto
+18="test.demod.ddc : iHb0Real" default Real AnalogDisplay AType=Step Scale=Auto
+19="test.demod.ddc : qMixReal" default Real AnalogDisplay AType=Step Scale=Auto
+20="test.demod.ddc : iMixReal" default Real AnalogDisplay AType=Step Scale=Auto
+21="test : iSignalReal" default Real AnalogDisplay AType=Step Scale=Auto
+22="test : cicDecimationInt" default Decimal AnalogDisplay AType=PWL Scale=Auto
+OpenGroup=Yes
 [GroupInfo]
 0=New Group2 : 0 : 0 : 0
 1=Tx : 1 : 1 : 0
@@ -264,4 +269,3 @@ Name="DAC"
 5=Carrier : 5 : 1 : 0
 6=DAC : 6 : 1 : 0
 7=SDI : 7 : 1 : 0
-[Bookmarks]

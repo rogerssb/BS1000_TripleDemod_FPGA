@@ -377,6 +377,7 @@ NET "demod/ddc/firClockEn*" TNM_NET = FFS syncGroup;
 NET "demod/ddc/firClockEn*" TNM_NET = DSPS syncGroup;
 NET "demod/carrierOffsetEn*" TNM_NET = FFS syncGroup;
 NET "demod/ddc/syncOut*" TNM_NET = FFS syncGroup;
+NET "demod/ddc/syncOut*" TNM_NET = DSPS syncGroup;
 NET "demod/resampler/resamplerI/resampleDelay*" TNM_NET = FFS syncGroup;
 NET "demod/resampler/resamplerQ/resampleDelay*" TNM_NET = FFS syncGroup;
 #NET "demod/resampler/resamplerI/resampleDelay*" TNM_NET = DSPS syncGroup;

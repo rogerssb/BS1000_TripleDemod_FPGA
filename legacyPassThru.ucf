@@ -358,6 +358,7 @@ NET "demod/ddc/hb0/evenSync*" TNM_NET = FFS syncGroup;
 NET "demod/ddc/hb0/syncOut*" TNM_NET = FFS syncGroup;
 NET "demod/carrierOffsetEn*" TNM_NET = FFS syncGroup;
 NET "demod/ddc/syncOut*" TNM_NET = FFS syncGroup;
+NET "demod/ddc/syncOut*" TNM_NET = DSPS syncGroup;
 NET "demod/resampler/resamplerI/resampleDelay*" TNM_NET = FFS syncGroup;
 NET "demod/resampler/resamplerQ/resampleDelay*" TNM_NET = FFS syncGroup;
 NET "demod/carrierLoop/loopFilterEn*" TNM_NET = FFS syncGroup;
@@ -389,7 +390,6 @@ TIMEGRP "ddc1" = FFS(demod/ddc/iOut*) FFS(demod/ddc/qOut*);
 TIMEGRP "ddc2" = FFS(demod/ddc/dualFir/*) DSPS(demod/ddc/dualFir/*);
 TIMEGRP "fmDemod" = FFS(demod/fmDemod/cordic/p*) FFS(trellis/trellisCarrierLoop/fmDemod/cordic/p*);
 TIMEGRP "slowGroup" = "syncGroup" "ddc0" "ddc1" "ddc2" "tg14" "fmDemod";
-
 TIMEGRP "maxMetric" = FFS(trellis/viterbi_top/maxMetric/*);
 
 TIMEGRP "acsSel" = FFS(trellis/viterbi_top/acs*/sel*);

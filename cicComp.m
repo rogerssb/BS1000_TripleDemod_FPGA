@@ -18,6 +18,8 @@ Hc = Hc + 1e-6;
 figure(1);
 hold off
 plot(w,20*log10(abs(Hc)),'r'),grid
+hold on
+plot(w,20*log10(abs(Hc).*(abs(sinc(w).^3))));
 
 dcGain = sum(bfilter);
 gainAdjust = 2^(ceil(log2(dcGain)) - log2(dcGain) - 1);

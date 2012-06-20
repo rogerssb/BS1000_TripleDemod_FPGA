@@ -110,7 +110,7 @@ mpy18x18 mantissaScaler (
     .p(scaledValue)
     );
 
-wire [24:0] invSincOut;   
+wire [29:0] invSincOut;   
 invSinc invSinc 
   (
    .clk(clk),

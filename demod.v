@@ -175,6 +175,51 @@ fmDemod fmDemod(
     .syncOut(demodSync)
     );
 
+reg     [17:0]  iDdc0;
+reg     [17:0]  qDdc0;
+wire    [35:0]  term1,term2;
+mpy18x18WithCe mult1(
+    .clk(clk),
+    .ce(ddcSync),
+    .a(qDdc0),
+    .b(iDdc),
+    .p(term1)
+    );
+mpy18x18WithCe mult2(
+    .clk(clk),
+    .ce(ddcSync),
+    .a(iDdc0),
+    .b(qDdc),
+    .p(term2)
+    );
+
+wire    [35:0]  diff = term2 - term1;
+wire    [17:0]  fmVideo = diff[34:17];
+always @(posedge clk) begin
+    if (ddcSync) begin
+        iDdc0 <= iDdc;
+        qDdc0 <= qDdc;
+        end
+    end
+
+`ifdef SIMULATE
+real    fmVideoReal = $itor($signed(fmVideo))/(2**17);
+real    iDdcReal = $itor($signed(iDdc))/(2**17);
+real    qDdcReal = $itor($signed(qDdc))/(2**17);
+real    iDdc0Real,qDdc0Real;
+real    term0Real,term1Real,diffReal;
+always @(posedge clk) begin
+    if (ddcSync) begin
+        iDdc0Real <= iDdcReal;
+        qDdc0Real <= qDdcReal;
+        term0Real <= iDdcReal*qDdc0Real;
+        term1Real <= qDdcReal*iDdc0Real;
+        diffReal <= term1Real - term0Real;
+        end
+    end
+`endif
+
+
 wire    [17:0]  fm = {negFreq,6'h0};
 wire    [17:0]  fmInv = {freq,6'h0};
 
@@ -500,7 +545,7 @@ singleFir interpFir(
     );
 `endif
 
-wire multihMode = (demodMode == `MODE_MULTIH);
+wire fmMode = (demodMode == `MODE_FM);
 reg             dac0Sync;
 reg     [17:0]  dac0Data;
 reg             dac1Sync;
@@ -529,9 +574,15 @@ always @(posedge clk) begin
             `ifdef FM_FILTER
             dac0Data <= firOut;
             `else
-            dac0Data <= fm;
+            if (fmMode) begin
+                dac0Data <= fmVideo;
+                dac0Sync <= ddcSync;
+                end
+            else begin
+                dac0Data <= fm;
+                dac0Sync <= demodSync;
+                end
             `endif
-            dac0Sync <= demodSync;
             end
         `DAC_PHASE: begin
             dac0Data <= {phase,6'b0};
@@ -586,8 +637,14 @@ always @(posedge clk) begin
             dac1Sync <= resampSync;
             end
         `DAC_FREQ: begin
-            dac1Data <= fm;
-            dac1Sync <= demodSync;
+            if (fmMode) begin
+                dac1Data <= fmVideo;
+                dac1Sync <= ddcSync;
+                end
+            else begin
+                dac1Data <= fm;
+                dac1Sync <= demodSync;
+                end
             end
         `DAC_PHASE: begin
             dac1Data <= {phase,6'b0};
@@ -642,8 +699,14 @@ always @(posedge clk) begin
             dac2Sync <= resampSync;
             end
         `DAC_FREQ: begin
-            dac2Data <= fm;
-            dac2Sync <= demodSync;
+            if (fmMode) begin
+                dac2Data <= fmVideo;
+                dac2Sync <= ddcSync;
+                end
+            else begin
+                dac2Data <= fm;
+                dac2Sync <= demodSync;
+                end
             end
         `DAC_PHASE: begin
             dac2Data <= {phase,6'b0};
