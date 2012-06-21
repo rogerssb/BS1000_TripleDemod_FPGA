@@ -235,24 +235,32 @@ reg [17:0]bbSRI[3:0];
 reg [17:0]bbSRQ[3:0];
 
 // Timing error variables
-wire earlySignI = bbSRI[2][17];
-wire lateSignI = bbSRI[0][17];
-wire [17:0]prevOffTimeI = bbSRI[3];
-wire [17:0]earlyOnTimeI = bbSRI[2];
-wire [17:0]offTimeI = bbSRI[1];
-wire [17:0]lateOnTimeI = bbSRI[0];
-wire [17:0]negoffTimeI = (~offTimeI + 1);
-wire earlySignQ = bbSRQ[2][17];
-wire lateSignQ = bbSRQ[0][17];
-wire [17:0]earlyOnTimeQ = bbSRQ[2];
-wire [17:0]lateOnTimeQ = bbSRQ[0];
-wire [17:0]offTimeQ = bbSRQ[1];
-wire [17:0]negoffTimeQ = (~offTimeQ + 1);
+wire            earlySignI = bbSRI[2][17];
+wire    [17:0]  absEarlyI = earlySignI ? (~bbSRI[2] + 1) : bbSRI[2];
+wire            lateSignI = bbSRI[0][17];
+wire    [17:0]  absLateI = lateSignI ? (~bbSRI[0] + 1) : bbSRI[0];
+wire    [17:0]  prevOffTimeI = bbSRI[3];
+wire    [17:0]  earlyOnTimeI = bbSRI[2];
+wire    [17:0]  offTimeI = bbSRI[1];
+wire    [17:0]  lateOnTimeI = bbSRI[0];
+wire    [17:0]  negoffTimeI = (~offTimeI + 1);
+wire            earlySignQ = bbSRQ[2][17];
+wire    [17:0]  absEarlyQ = earlySignQ ? (~bbSRQ[2] + 1) : bbSRQ[2];
+wire            lateSignQ = bbSRQ[0][17];
+wire    [17:0]  absLateQ = lateSignQ ? (~bbSRQ[0] + 1) : bbSRQ[0];
+wire    [17:0]  earlyOnTimeQ = bbSRQ[2];
+wire    [17:0]  lateOnTimeQ = bbSRQ[0];
+wire    [17:0]  offTimeQ = bbSRQ[1];
+wire    [17:0]  negoffTimeQ = (~offTimeQ + 1);
 
-reg  [17:0]timingErrorI;
-reg  [17:0]timingErrorQ;
+reg     [17:0]  timingErrorI;
+reg     [17:0]  timingErrorQ;
 wire    [18:0]  timingError = {timingErrorI[17],timingErrorI} + {timingErrorQ[17],timingErrorQ};
 assign timingErrorEn = (phaseState == ONTIME);
+
+wire    [11:0]  syncThreshold;
+wire    [17:0]  multihThreshold = {syncThreshold,6'b0};
+wire    [17:0]  negMultihThreshold = ~{syncThreshold,6'b0} + 1;
 
 // DC Offset error variables
 reg  [17:0]dcError;
@@ -336,55 +344,88 @@ always @(posedge sampleClk) begin
                 end
             OFFTIME: begin
                 phaseState <= ONTIME;
-                // Is there a data transition on I?
-                if (earlySignI != lateSignI) begin
-                    // Yes. Calculate DC offset error
-                    transition <= 1;
-                    noTransitionCount <= 0;
-                    transitionCount <= transitionCount + 1;
-                    if (transitionCount[0] && (earlySignI != lateSignI)) begin
-                        dcError <= offTimeI + prevOffTimeI;
-                        dcErrorAvailable <= 1;
+                if (demodMode == `MODE_MULTIH) begin
+                    // Are the early and late symbols opposite polarity?
+                    if (earlySignI != lateSignI) begin
+                        // Yes. Are they of the same deviation?
+                        if ( (absEarlyI < multihThreshold) && (absLateI < multihThreshold)
+                            || (absEarlyI >= multihThreshold) && (absLateI >= multihThreshold)) begin
+                            // Yes.
+                            transition <= 1;
+                            // High to low?
+                            if (earlySignI) begin
+                                timingErrorI <= offTimeI;
+                                slipError <= lateOnTimeI;
+                                end
+                            // Or low to high?
+                            else begin
+                                timingErrorI <= negoffTimeI;
+                                slipError <= earlyOnTimeI;
+                                end
+                            end
+                        else begin
+                            transition <= 0;
+                            timingErrorI <= 8'h0;
+                            timingErrorQ <= 8'h0;
+                            end
                         end
                     else begin
-                        dcError <= 0;
-                        dcErrorAvailable <= 0;
-                        end
-                    // High to low transition?
-                    if (earlySignI) begin
-                        timingErrorI <= offTimeI;
-                        slipError <= lateOnTimeI;
-                        end
-                    // Or low to high?
-                    else begin
-                        timingErrorI <= negoffTimeI;
-                        slipError <= earlyOnTimeI;
+                        transition <= 0;
+                        timingErrorI <= 8'h0;
+                        timingErrorQ <= 8'h0;
                         end
                     end
                 else begin
-                    transition <= 0;
-                    transitionCount <= 0;
-                    if (noTransitionCount < 3) begin
-                        noTransitionCount <= noTransitionCount + 1;
+                    // Is there a data transition on I?
+                    if (earlySignI != lateSignI) begin
+                        // Yes. Calculate DC offset error
+                        transition <= 1;
+                        noTransitionCount <= 0;
+                        transitionCount <= transitionCount + 1;
+                        if (transitionCount[0] && (earlySignI != lateSignI)) begin
+                            dcError <= offTimeI + prevOffTimeI;
+                            dcErrorAvailable <= 1;
+                            end
+                        else begin
+                            dcError <= 0;
+                            dcErrorAvailable <= 0;
+                            end
+                        // High to low transition?
+                        if (earlySignI) begin
+                            timingErrorI <= offTimeI;
+                            slipError <= lateOnTimeI;
+                            end
+                        // Or low to high?
+                        else begin
+                            timingErrorI <= negoffTimeI;
+                            slipError <= earlyOnTimeI;
+                            end
                         end
-                    dcError <= 18'h00;
-                    timingErrorI <= 18'h00;
-                    //deviation <= offTimeI;
-                    deviation <= earlyOnTimeI;
-                    end
-                // Is there a data transition on Q?
-                if (earlySignQ != lateSignQ) begin
-                    // High to low transition?
-                    if (earlySignQ) begin
-                        timingErrorQ <= offTimeQ;
-                        end
-                    // Or low to high?
                     else begin
-                        timingErrorQ <= negoffTimeQ;
+                        transition <= 0;
+                        transitionCount <= 0;
+                        if (noTransitionCount < 3) begin
+                            noTransitionCount <= noTransitionCount + 1;
+                            end
+                        dcError <= 18'h00;
+                        timingErrorI <= 18'h00;
+                        //deviation <= offTimeI;
+                        deviation <= earlyOnTimeI;
                         end
-                    end
-                else begin
-                    timingErrorQ <= 18'h00;
+                    // Is there a data transition on Q?
+                    if (earlySignQ != lateSignQ) begin
+                        // High to low transition?
+                        if (earlySignQ) begin
+                            timingErrorQ <= offTimeQ;
+                            end
+                        // Or low to high?
+                        else begin
+                            timingErrorQ <= negoffTimeQ;
+                            end
+                        end
+                    else begin
+                        timingErrorQ <= 18'h00;
+                        end
                     end
                 end
             endcase
@@ -520,7 +561,6 @@ always @(addr) begin
     end
 wire    [15:0]  lockCount;
 wire            loopFilterEn = (symTimes2Sync & timingErrorEn);
-wire    [11:0]  syncThreshold;
 wire    [31:0]  bsDout;
 loopFilter sampleLoop(
     .clk(sampleClk),
@@ -844,8 +884,6 @@ reg             bitDataQ;
 
 `define ENABLE_MULTIH
 `ifdef ENABLE_MULTIH
-wire    [17:0]  multihThreshold = {syncThreshold,6'b0};
-wire    [17:0]  negMultihThreshold = ~{syncThreshold,6'b0} + 1;
 always @(posedge sampleClk) begin
     if (symTimes2Sync) begin
         // Capture the I output sample
