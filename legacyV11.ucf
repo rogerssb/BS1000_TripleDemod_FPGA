@@ -355,7 +355,7 @@ NET "ck933*" TNM_NET = DSPS clk;
 NET "ck933*" TNM_NET = RAMS clk;
 
 # The default clock rate
-TIMESPEC TS_ck933 = 		PERIOD "clk" 100 MHz HIGH 50%;
+TIMESPEC TS_ck933 = 		PERIOD "clk" 93.33 MHz HIGH 50%;
 TIMESPEC TS_clkToFFS = 	FROM PADS(ck933) TO FFS TIG;
 TIMESPEC TS_clkToDSPS = FROM PADS(ck933) TO DSPS TIG;
 TIMESPEC TS_clkToRAMS = FROM PADS(ck933) TO RAMS TIG;
@@ -402,8 +402,8 @@ NET "trellis/trellisCarrierLoop/symEnSr*" TNM_NET = FFS syncGroup;
 NET "trellis/trellisCarrierLoop/fmDemod/cordic/enSR*" TNM_NET = FFS syncGroup;
 NET "trellis/symEnShift*" TNM_NET = FFS syncGroup;
 NET "multihPhaseErrorEnIn*" TNM_NET = FFS syncGroup;
-TIMESPEC TS_syncGroup = FROM "syncGroup" TO "syncGroup" 20 ns;
-TIMESPEC TS_dacGroup = FROM "syncGroup" TO FFS(demod/dac*Data*) 20 ns;
+TIMESPEC TS_syncGroup = FROM "syncGroup" TO "syncGroup" 46.67 MHz;
+TIMESPEC TS_dacGroup = FROM "syncGroup" TO FFS(demod/dac*Data*) 46.67 MHz;
 
 # DDC that can clock slower
 #TIMEGRP "ddc0" = FFS(demod/ddc/cic/cicI*) FFS(demod/ddc/cic/cicQ*);
@@ -418,8 +418,8 @@ TIMEGRP "ddcPL2" = FFS(demod/ddc/iHbIn*) FFS(demod/ddc/qHbIn*);
 TIMEGRP "ddcPL3" = FFS(demod/ddc/iFirIn*) FFS(demod/ddc/qFirIn*);
 TIMEGRP "ddcPL4" = FFS(demod/ddc/iBB*) FFS(demod/ddc/qBB*);
 TIMEGRP "ddcPL" = "ddcPL0" "ddcPL1" "ddcPL2" "ddcPL3" "ddcPL4";
-TIMESPEC "TS_ddc1" = FROM "ddcPL" TO FFS 20 ns;
-TIMESPEC "TS_ddc2" = FROM "ddcPL" TO DSPS 20 ns;
+TIMESPEC "TS_ddc1" = FROM "ddcPL" TO FFS 46.67 MHz;
+TIMESPEC "TS_ddc2" = FROM "ddcPL" TO DSPS 46.67 MHz;
 #NET "demod/resampler/auCic/syncOut*" TNM_NET = FFS ddcAuCIC;
 #TIMESPEC "TS_ddc2" = FROM "ddcAuCIC" TO "ddcAuCIC" 20 ns;
 
@@ -428,8 +428,8 @@ TIMEGRP "acs" = FFS(trellis/viterbi_top/acs*);
 TIMEGRP "rotOut" = FFS(trellis/rotator/m*/reOut*) FFS(trellis/rotator/m*/imOut*);
 TIMEGRP "maxMetric" = FFS(trellis/viterbi_top/maxMetric/*);
 TIMEGRP "acsAcc" = FFS(trellis/viterbi_top/acs*/accumDecay/*);
-TIMESPEC TS_trellisAcs0 = FROM "acs" TO "acs" 40 ns;
-TIMESPEC TS_trellisAcs1 = FROM "rotOut" TO "acs" 40 ns;
+TIMESPEC TS_trellisAcs0 = FROM "acs" TO "acs" 23.33 MHz;
+TIMESPEC TS_trellisAcs1 = FROM "rotOut" TO "acs" 23.33 MHz;
 TIMESPEC TS_trellisAcs2 = FROM "acsAcc" TO "maxMetric" 30 ns;
 
 # SOQPSK ACS Units that can clock slower.
@@ -437,7 +437,7 @@ TIMEGRP "soqpskMFs" = FFS(soqpsk/soqpskViterbi/everyOtherSymEn*) FFS(soqpsk/soqp
 TIMEGRP "soqpskAcs" = FFS(soqpsk/soqpskViterbi/acs*) DSPS(soqpsk/soqpskViterbi/acs*);
 TIMEGRP "soqpskMetric" = FFS(soqpsk/soqpskViterbi/soqpskMaxMetric/index*);
 TIMEGRP "soqpskSymrate" = "soqpskMFs" "soqpskAcs" "soqpskMetric";
-TIMESPEC TS_soqpskSymrate = FROM "soqpskSymrate" TO "soqpskSymrate" 20 ns;
+TIMESPEC TS_soqpskSymrate = FROM "soqpskSymrate" TO "soqpskSymrate" 46.67 MHz;
 
 # Loop filters that can clock slower
 TIMEGRP "trellisLF" = FFS(trellis/trellisCarrierLoop/lagGain/*) FFS(trellis/trellisCarrierLoop/leadGain/*) FFS(trellis/trellisCarrierLoop/filterSum*) ;
@@ -449,7 +449,7 @@ TIMEGRP "soqpskLF" = FFS(soqpsk/soqpskCarrierLoop/lagGain/*) FFS(soqpsk/soqpskCa
 #NET "demod/ddc/syncOut*" TNM_NET = FFS agcLF;
 #TIMEGRP "loopFilter" = "trellisLF" "soqpskLF" "carrierLF" "multihLF" "auBitsyncLF" "bitsyncLF" "agcLF";
 TIMEGRP "loopFilter" = "trellisLF" "soqpskLF";
-TIMESPEC TS_loopFilter = FROM "loopFilter" TO "loopFilter" 20 ns;
+TIMESPEC TS_loopFilter = FROM "loopFilter" TO "loopFilter" 46.67 MHz;
 
 # Clocked Inputs
 OFFSET = IN 100 ns BEFORE "ck933" RISING;

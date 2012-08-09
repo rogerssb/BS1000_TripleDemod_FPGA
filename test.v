@@ -33,6 +33,9 @@ always #HC clk = clk^clken;
 `define TWO_POW_31      2147483648.0
 `define TWO_POW_17      131072.0
 
+parameter modSampleDecimation = 5;
+parameter modCicShift = 5;          // log2(modSampleDecimation^2)
+parameter ddcDecimation = 2;
 
 real carrierFreqHz = 2500000.0;
 real carrierFreqNorm = carrierFreqHz * `SAMPLE_PERIOD * `TWO_POW_32;
@@ -51,15 +54,14 @@ wire [31:0] carrierLimit = carrierLimitInt;
 
 wire [31:0] sweepRate = 32'h00000000;
 
-real bitrateBps = 200000.0;
+real bitrateBps = SAMPLE_FREQ/modSampleDecimation/2.0;
 real bitrateSamples = 1/bitrateBps/`SAMPLE_PERIOD/2.0;
 integer bitrateSamplesInt = bitrateSamples;
 wire [15:0]bitrateDivider = bitrateSamplesInt - 1;
-real actualBitrateBps = SAMPLE_FREQ/bitrateSamplesInt/2.0;
 
 // value = 2^ceiling(log2(R*R))/(R*R), where R = interpolation rate of the FM
 // modulator
-real interpolationGain = 1.6384;
+real interpolationGain = 1.28;
 
 //real deviationHz = 0*0.35 * bitrateBps;
 real deviationHz = 2*0.350 * bitrateBps;
@@ -69,15 +71,19 @@ wire [31:0]deviationQ31 = deviationInt;
 wire [17:0]deviation = deviationQ31[31:14];
 
 real cicDecimation;
-initial cicDecimation = SAMPLE_FREQ/bitrateBps/2.0/2.0/2.0/2.0;
+initial cicDecimation = (ddcDecimation == 1) ? 1 :
+                        (ddcDecimation == 2) ? 1 :
+                        (ddcDecimation == 3) ? 3 : 
+                                               ddcDecimation/2;
 integer cicDecimationInt;
-initial cicDecimationInt = (cicDecimation < 2.0) ? 2 : cicDecimation;
+initial cicDecimationInt = cicDecimation;
 
-
-real resamplerFreqSps = 2*actualBitrateBps;     // 2 samples per symbol
-real resamplerFreqNorm = resamplerFreqSps/(SAMPLE_FREQ/cicDecimationInt/4.0) * `TWO_POW_32;
+real resamplerFreqSps = 2*bitrateBps;     // 2 samples per symbol
+real resamplerFreqNorm = (ddcDecimation == 1) ? resamplerFreqSps/(SAMPLE_FREQ) * `TWO_POW_32 :
+                         (ddcDecimation == 2) ? resamplerFreqSps/(SAMPLE_FREQ/2.0) * `TWO_POW_32 : 
+                         (ddcDecimation == 3) ? resamplerFreqSps/(SAMPLE_FREQ/3.0) * `TWO_POW_32 :  
+                                                resamplerFreqSps/(SAMPLE_FREQ/cicDecimationInt/2.0) * `TWO_POW_32;
 integer resamplerFreqInt = (resamplerFreqNorm >= `TWO_POW_31) ? (resamplerFreqNorm - `TWO_POW_32) : resamplerFreqNorm;
-//integer resamplerFreqInt = resamplerFreqNorm;
 
 real resamplerLimitNorm = 0.001*resamplerFreqSps/SAMPLE_FREQ * `TWO_POW_32;
 integer resamplerLimitInt = resamplerLimitNorm;
@@ -592,7 +598,7 @@ initial begin
     write32(`FM_MOD_DEV, {14'bx,deviation});
     write32(`FM_MOD_BITRATE, {1'b0,15'bx,bitrateDivider});
     // This value is ceiling(log2(R*R)), where R = interpolation rate.
-    write32(`FM_MOD_CIC,10);
+    write32(`FM_MOD_CIC,modCicShift);
     fmModCS = 0;
 
     // Init the mode
@@ -612,13 +618,13 @@ initial begin
     write32(createAddress(`CARRIERSPACE,`LF_LOOPDATA), sweepRate);
 
     // Init the downcoverter register set
-    write32(createAddress(`DDCSPACE,`DDC_CONTROL),4);
+    write32(createAddress(`DDCSPACE,`DDC_CONTROL),5);
     write32(createAddress(`DDCSPACE,`DDC_CENTER_FREQ), carrierFreq);
     write32(createAddress(`DDCSPACE,`DDC_DECIMATION), 0);
 
     // Init the cicResampler register set
     write32(createAddress(`CICDECSPACE,`CIC_DECIMATION),cicDecimationInt-1);
-    write32(createAddress(`CICDECSPACE,`CIC_SHIFT), 5);
+    write32(createAddress(`CICDECSPACE,`CIC_SHIFT), 3); // log2(cicDecimation ^ 3)
 
     // Init the channel agc loop filter
     write32(createAddress(`CHAGCSPACE,`ALF_CONTROL),1);                 // Zero the error
@@ -674,7 +680,15 @@ initial begin
     demod.ddc.hbReset = 0;
 
     // Wait 2 bit periods
-    #(4.0*bitrateSamplesInt*C) ;
+    #(4*bitrateSamplesInt*C) ;
+
+    // Create a reset to clear the cic resampler
+    demod.ddc.cicReset = 1;
+    #(2*C) ;
+    demod.ddc.cicReset = 0;
+
+    // Wait
+    #(4*bitrateSamplesInt*C) ;
 
     // Create a reset to clear the cic resampler
     demod.ddc.cicReset = 1;
@@ -692,7 +706,7 @@ initial begin
     // Enable the sample rate loop with 2 sample summer
     write32(createAddress(`BITSYNCSPACE,`LF_CONTROL),32'h00000010);  
 
-    // Wait 2 bit periods
+    // Wait
     #(4*bitrateSamplesInt*C) ;
 
     // Enable the AFC loop and invert the error

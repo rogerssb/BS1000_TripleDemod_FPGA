@@ -288,13 +288,24 @@ always @(lockCounter) lockCounterInt = lockCounter;
 `endif
 
 // Create the LO frequency
-reg [31:0] newOffset;
+reg     [31:0]  newOffset;
+reg     [31:0]  savedOffset;
+reg             offsetSaved;
 always @(posedge clk) begin
     if (reset) begin
         newOffset <= 0;
         end
-    else if (carrierFreqEn) begin
+    else if (carrierFreqEn & sym2xEn) begin
         newOffset <= carrierFreqOffset;
+        offsetSaved <= 0;
+        end
+    else if (carrierFreqEn & !sym2xEn) begin
+        savedOffset <= carrierFreqOffset;
+        offsetSaved <= 1;
+        end
+    else if (!carrierFreqEn & sym2xEn & offsetSaved) begin
+        newOffset <= savedOffset;
+        offsetSaved <= 0;
         end
     end
 
@@ -305,11 +316,7 @@ wire [17:0]bReal,bImag;
 dds dds(
   .clk(clk),
   .sclr(ddsReset),
-`ifdef SIMULATE
-  .ce(1'b1),
-`else
   .ce(sym2xEn),
-`endif
   .we(1'b1),
   .data(newOffset), // Bus [31 : 0]
   .cosine(bReal), // Bus [17 : 0] 

@@ -37,7 +37,7 @@ always @(posedge clk) begin
 
 // Tap Mpy
 wire    [35:0]  tap0;
-mpy18x18 mpy0(
+mpy18x18PL1 mpy0(
     .clk(clk),
     .sclr(reset),
     .a(sum0[18:1]),
@@ -45,7 +45,7 @@ mpy18x18 mpy0(
     .p(tap0)
     );
 wire    [35:0]  tap1;
-mpy18x18 mpy1(
+mpy18x18PL1 mpy1(
     .clk(clk),
     .sclr(reset),
     .a(sum1[18:1]),
@@ -53,7 +53,7 @@ mpy18x18 mpy1(
     .p(tap1)
     );
 wire    [35:0]  tap2;
-mpy18x18 mpy2(
+mpy18x18PL1 mpy2(
     .clk(clk),
     .sclr(reset),
     .a(midTap),
@@ -103,8 +103,28 @@ reg reset,clk;
 // Create the clocks
 parameter HC = 5;
 parameter C = 2*HC;
+parameter DECIMATION = 2;
 reg clken;
 always #HC clk = clk^clken;
+
+integer         clkDecimation;
+reg             clkEn;
+always @(posedge clk) begin
+    if (reset) begin
+        clkEn <= 0;
+        clkDecimation <= DECIMATION-1;
+        end
+    else begin
+        if (clkDecimation == 0) begin
+            clkDecimation <= DECIMATION-1;
+            clkEn <= 1;
+            end
+        else begin
+            clkDecimation <= clkDecimation - 1;
+            clkEn <= 0;
+            end
+        end
+    end
 
 reg     [17:0]  din;
 reg     [3:0]   inputCount;
@@ -113,7 +133,7 @@ always @(posedge clk) begin
         din <= 0;
         inputCount <= 0;
         end
-    else begin
+    else if (clkEn) begin
         if (inputCount == 0) begin
             din <= 18'h10000;
             end
@@ -126,7 +146,7 @@ always @(posedge clk) begin
 
 wire    [17:0]  dout;
 cicComp cicComp( 
-    .clk(clk), .reset(reset), .sync(1'b1),
+    .clk(clk), .reset(reset), .sync(clkEn),
     .compIn(din),
     .compOut(dout)
     );
@@ -143,7 +163,8 @@ initial begin
     #(2*C) ;
     reset = 0;
 
-    #(256*C) ;
+    #(256*DECIMATION*C) ;
+    $stop;
     end
 
 endmodule
