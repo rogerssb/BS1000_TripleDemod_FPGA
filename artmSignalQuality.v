@@ -194,11 +194,13 @@ parameter UART_INTMSB = 3;
 parameter UART_INTLSB = 4;
 parameter UART_EXTMSB = 5;
 parameter UART_EXTLSB = 6;
+parameter UART_DELAY =  7;
 parameter BITS_PER_CHAR = 10;    // Start bit, stop bit, and 8 character bits
 parameter SOM = 8'hFF;          // define Start of Message character
 parameter START = 1'b0;         // define Uart start bit
 parameter STOP = 1'b1;          // define Uart stop bit
 parameter CLKS_PER_BIT = 810;   // divide 93.333MHz to 115.2 KHz
+parameter CHARS_OF_DELAY = 17;  // Number of characters it takes to slow the message rate to 500 Hz
 
 
 // Uart bit counter
@@ -232,9 +234,10 @@ always @(posedge sysClk or posedge reset) begin
     end
 
 // Uart state machine
-reg [9:0]shifter;
-wire serialOut = shifter[0];    // uart data is LSB first
-reg [2:0]uartState;
+reg     [9:0]   shifter;
+wire            serialOut = shifter[0];    // uart data is LSB first
+reg     [4:0]   delayCount;
+reg     [2:0]   uartState;
 always @ (posedge sysClk or posedge reset) begin
     if (reset) begin
         shifter <= 0;
@@ -243,10 +246,20 @@ always @ (posedge sysClk or posedge reset) begin
         end
     else if (uartBitBoundary && uartCharBoundary) begin
         casex (uartState)
+            UART_DELAY: begin
+                shifter <= 10'h3ff;
+                if (delayCount > 0) begin
+                    delayCount <= delayCount - 1;
+                    end
+                else begin
+                    uartState <= UART_IDLE;
+                    end
+                end
             UART_EXTLSB: begin
                 uartDataAvailable <= 1'b0;
                 shifter <= {STOP, 1'b0, uartExteriorHold[6:0], START};
-                uartState <= UART_IDLE;
+                delayCount <= CHARS_OF_DELAY-1;
+                uartState <= UART_DELAY;
                 end
             UART_EXTMSB: begin
                 shifter <= {STOP, 5'b0, uartExteriorHold[9:7], START};
