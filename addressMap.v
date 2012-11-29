@@ -2,6 +2,7 @@
 `define ADDRESS_MAP
 
 //`define INTERNAL_ADAPT
+//`define SYM_DEVIATION
 `define ADD_SOQPSK_TRELLIS
 //`define FM_FILTER
 
@@ -100,9 +101,11 @@
 `define LF_CONTROL      12'bxxxx_xxx0_00xx
 `define LF_LEAD_LAG     12'bxxxx_xxx0_01xx
 `define LF_LIMIT        12'bxxxx_xxx0_10xx
-`define LF_LOOPDATA     12'bxxxx_xxx0_11xx
+`define LF_LOOPDATA0    12'bxxxx_xxx0_11xx
 `define LF_LOCKDETECTOR 12'bxxxx_xxx1_00xx
 `define LF_INTEGRATOR   12'bxxxx_xxx1_01xx
+`define LF_LEAD_LAG1    12'bxxxx_xxx1_10xx
+`define LF_LOOPDATA1    12'bxxxx_xxx1_11xx
 
 // Define the AGC Loop Filter memory map
 `define ALF_CONTROL     12'bxxxx_xxx0_00xx

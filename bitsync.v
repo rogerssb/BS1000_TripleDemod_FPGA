@@ -17,9 +17,11 @@ module bitsync(
     au,
     offsetError,
     offsetErrorEn,
+    `ifdef SYM_DEVIATION
     fskDeviation,
-    `ifdef INTERNAL_ADAPT
-    avgDeviation,
+    `else
+    posDeviation,
+    negDeviation,
     `endif
     iSym2xEn,
     iSymEn,
@@ -56,9 +58,11 @@ input   [17:0]  i,q;
 input   [17:0]  au;
 output  [17:0]  offsetError;
 output          offsetErrorEn;
+`ifdef SYM_DEVIATION
 output  [15:0]  fskDeviation;
-`ifdef INTERNAL_ADAPT
-output  [31:0]  avgDeviation;
+`else
+output  [15:0]  posDeviation;
+output  [15:0]  negDeviation;
 `endif
 output          iSym2xEn;
 output          iSymEn;
@@ -268,7 +272,11 @@ wire offsetEn = (phaseState == OFFTIME);
 
 // Deviation variables
 reg  [17:0]deviation;
+`ifdef SYM_DEVIATION
 wire [17:0]absDeviation = deviation[17] ? (~deviation + 1) : deviation;
+`else
+wire [17:0]absDeviation = (~deviation + 1);
+`endif
 
 reg  stateMachineSlip;
 `ifdef ENABLE_SMSLIP
@@ -382,14 +390,9 @@ always @(posedge sampleClk) begin
                         transition <= 1;
                         noTransitionCount <= 0;
                         transitionCount <= transitionCount + 1;
-                        if (transitionCount[0] && (earlySignI != lateSignI)) begin
-                            dcError <= offTimeI + prevOffTimeI;
-                            dcErrorAvailable <= 1;
-                            end
-                        else begin
-                            dcError <= 0;
-                            dcErrorAvailable <= 0;
-                            end
+                        dcError <= offTimeI + prevOffTimeI;
+                        dcErrorAvailable <= 1;
+
                         // High to low transition?
                         if (earlySignI) begin
                             timingErrorI <= offTimeI;
@@ -408,6 +411,7 @@ always @(posedge sampleClk) begin
                             noTransitionCount <= noTransitionCount + 1;
                             end
                         dcError <= 18'h00;
+                        dcErrorAvailable <= 0;
                         timingErrorI <= 18'h00;
                         //deviation <= offTimeI;
                         deviation <= earlyOnTimeI;
@@ -479,49 +483,13 @@ always @(qMF) qMFReal = (qMF[17] ? qMF - 262144.0 : qMF)/131072.0;
 `endif
 
 
-`ifdef INTERNAL_ADAPT
-
-// Use a value slightly outside the valid deviation range to limit the deviation
-// Max is 0.42 in Q31 format
-`define MAX_PCMFM_DEVIATION     32'h35C28F5C
-// I'm cheating on this one and using the lowest valid deviation as the limit instead
-// of one slightly lower because there is a bias toward lower values in heavy noise.
-// Min is 0.30 in Q31 format
-`define MIN_PCMFM_DEVIATION     32'h26666666
 // Calculation of average DC offset (freq offset in FSK mode) and average FSK deviation.
-reg     [31:0]  avgDeviation;
-reg     [24:0]  avgOffsetError;
-assign          offsetError = dcError;
-assign          offsetErrorEn = offsetEn;
-//assign          offsetError = avgOffsetError[24:7];
-always @(posedge sampleClk) begin
-    if (reset) begin
-        avgOffsetError <= 0;
-        avgDeviation <= 0;
-        end
-    else if (symTimes2Sync) begin
-        if (offsetEn && dcErrorAvailable) begin
-            avgOffsetError <= (avgOffsetError - {{7{avgOffsetError[24]}},avgOffsetError[24:7]})
-                            + {{7{dcError[17]}},dcError};
-            end
-        if (offsetEn && (noTransitionCount > 1) && bitsyncLock) begin
-            if (avgDeviation > `MAX_PCMFM_DEVIATION) begin
-                avgDeviation <= `MAX_PCMFM_DEVIATION;
-                end
-            else if (avgDeviation < `MIN_PCMFM_DEVIATION) begin
-                avgDeviation <= `MIN_PCMFM_DEVIATION;
-                end
-            else begin
-                avgDeviation <= (avgDeviation - {{10{avgDeviation[31]}},avgDeviation[31:10]})
-                              + {{10{absDeviation[17]}},absDeviation,4'b0};
-                end
-            end
-        end
-    end
-assign fskDeviation = avgDeviation[31:16];
-`else
-// Calculation of average DC offset (freq offset in FSK mode) and average FSK deviation.
+`ifdef SYM_DEVIATION
 reg     [24:0]  avgDeviation;
+`else
+reg     [24:0]  avgPosDeviation;
+reg     [24:0]  avgNegDeviation;
+`endif
 reg     [24:0]  avgOffsetError;
 assign          offsetError = dcError;
 assign          offsetErrorEn = offsetEn;
@@ -529,20 +497,42 @@ assign          offsetErrorEn = offsetEn;
 always @(posedge sampleClk) begin
     if (reset) begin
         avgOffsetError <= 0;
+        `ifdef SYM_DEVIATION
         avgDeviation <= 0;
+        `else
+        avgPosDeviation <= 0;
+        avgNegDeviation <= 0;
+        `endif
         end
     else if (symTimes2Sync) begin
         if (offsetEn && dcErrorAvailable) begin
             avgOffsetError <= (avgOffsetError - {{7{avgOffsetError[24]}},avgOffsetError[24:7]})
                             + {{7{dcError[17]}},dcError};
             end
+        `ifdef SYM_DEVIATION
         if (offsetEn && (noTransitionCount > 1)) begin
             avgDeviation <= (avgDeviation - {{7{avgDeviation[24]}},avgDeviation[24:7]})
                           + {{7{absDeviation[17]}},absDeviation};
             end
+        `else
+        if (offsetEn && (noTransitionCount > 1)) begin
+            if (deviation[17]) begin
+                avgNegDeviation <= (avgNegDeviation - {{7{avgNegDeviation[24]}},avgNegDeviation[24:7]})
+                                 + {{7{absDeviation[17]}},absDeviation};
+                end
+            else begin
+                avgPosDeviation <= (avgPosDeviation - {{7{avgPosDeviation[24]}},avgPosDeviation[24:7]})
+                                 + {{7{deviation[17]}},deviation};
+                end
+            end
+        `endif
         end
     end
+`ifdef SYM_DEVIATION
 assign fskDeviation = avgDeviation[24:9];
+`else
+assign posDeviation = avgPosDeviation[24:9];
+assign negDeviation = avgNegDeviation[24:9];
 `endif
 
 `ifdef SIMULATE

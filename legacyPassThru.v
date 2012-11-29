@@ -209,9 +209,6 @@ wire            iBit,qBit;
 wire    [17:0]  iEye,qEye;
 wire    [4:0]   eyeOffset;
 
-`ifdef INTERNAL_ADAPT
-wire    [31:0]  avgDeviation;
-`endif
 demod demod(
     .clk(ck933), .reset(reset),
     .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
@@ -243,12 +240,7 @@ demod demod(
     .qTrellis(qSymData),
     .eyeSync(eyeSync),
     .iEye(iEye),.qEye(qEye),
-    `ifdef INTERNAL_ADAPT
-    .eyeOffset(eyeOffset),
-    .avgDeviation(avgDeviation)
-    `else 
     .eyeOffset(eyeOffset)
-    `endif
     );
 
 reg             pcmSymEn,soqpskSymEn,multihSymEn;
@@ -283,9 +275,6 @@ trellis trellis(
     .iIn(iIn),
     .qIn(qIn),
     .legacyBit(iBit),
-    `ifdef INTERNAL_ADAPT
-    .avgDeviation(avgDeviation),
-    `endif
     .wr0(wr0),
     .wr1(wr1),
     .wr2(wr2),

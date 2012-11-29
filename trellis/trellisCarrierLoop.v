@@ -12,43 +12,43 @@
 `include "./addressMap.v"
 `define USE_LEGACY
            
-module trellisCarrierLoop(clk,reset,symEn,sym2xEn,
-  iIn,qIn,
-  legacyBit,
-    `ifdef INTERNAL_ADAPT
-    avgDeviation,
-    `endif
-  phaseErrorIn,
-  symEn_phErr,
-  wr0,wr1,wr2,wr3,
-  addr,
-  din,dout,
-  iOut,qOut,
-  symEnDly,
-  sym2xEnDly,
-  freq,
-  lockCounter
-  );
+module trellisCarrierLoop(
+    clk,reset,
+    symEn,
+    sym2xEn,
+    iIn,qIn,
+    legacyBit,
+    phaseErrorIn,
+    symEn_phErr,
+    wr0,wr1,wr2,wr3,
+    addr,
+    din,dout,
+    iOut,qOut,
+    symEnDly,
+    sym2xEnDly,
+    freq,
+    afcError,
+    lockCounter
+    );
 
-input clk,reset,symEn,sym2xEn;
-input [17:0]iIn,qIn;
-input legacyBit;
-`ifdef INTERNAL_ADAPT
-input   [31:0]  avgDeviation;
-`endif
+input           clk,reset;
+input           symEn,sym2xEn;
+input   [17:0]  iIn,qIn;
+input           legacyBit;
 input   [7:0]   phaseErrorIn;
-input symEn_phErr;
-input wr0,wr1,wr2,wr3;
-input [11:0]addr;
-input [31:0]din;
-output [31:0]dout;
-output [17:0]iOut,qOut;
-output symEnDly;
-output sym2xEnDly;
-output  [11:0]freq;
+input           symEn_phErr;
+input           wr0,wr1,wr2,wr3;
+input   [11:0]  addr;
+input   [31:0]  din;
+output  [31:0]  dout;
+output  [17:0]  iOut,qOut;
+output          symEnDly;
+output          sym2xEnDly;
+output  [11:0]  freq;
+output  [11:0]  afcError;
 output  [15:0]  lockCounter;
 
-wire[31:0]carrierFreqOffset;
+wire    [31:0]  carrierFreqOffset;
 
 /***************************** Control Registers ******************************/
 
@@ -63,10 +63,15 @@ wire    [31:0]  dout;
 wire    [4:0]   leadExp;
 wire    [4:0]   lagExp;
 wire    [31:0]  limit;
-wire    [31:0]  loopData;
+wire    [4:0]   afcGain;
+wire    [31:0]  posDevCorrection;
+wire    [31:0]  negDevCorrection;
 wire    [15:0]  lockCount;
 wire    [11:0]   syncThreshold;
 wire    [39:0]  lagAccum;
+`ifdef INTERNAL_ADAPT
+reg     [31:0]  posDevAccum,negDevAccum;
+`endif
 loopRegs loopRegs(
     .cs(trellisSpace),
     .addr(addr),
@@ -85,7 +90,16 @@ loopRegs loopRegs(
     .limit(limit),
     .lockCount(lockCount),
     .syncThreshold(syncThreshold),
-    .loopData(loopData)
+    .loopData(posDevCorrection),
+    `ifdef INTERNAL_ADAPT
+    .loopDataRead(posDevAccum),
+    .loopData1Read(negDevAccum),
+    `endif
+    .leadMan1(),
+    .leadExp1(),
+    .lagMan1(),
+    .lagExp1(afcGain),
+    .loopData1(negDevCorrection)
     );
 
 
@@ -214,48 +228,82 @@ always @(lockCounter) lockCounterInt = lockCounter;
 
 `ifndef S_CURVE_TESTING
 // Create the LO frequency
-reg [31:0] newOffset;
+reg     [31:0]  newOffset;
+wire    [31:0]  afcOffset;
 always @(posedge clk) begin
     if (reset) begin
         newOffset <= 0;
         end
     else if (carrierFreqEn) begin
-        newOffset <= carrierFreqOffset;
+        newOffset <= carrierFreqOffset + afcOffset;
         end
     end
-// The value, 0x2ccccccc, is 0.35 in Q31 format.
+
+
 `ifdef INTERNAL_ADAPT
-wire    [31:0]  devDiff = 32'h2ccccccc - avgDeviation;         
-`endif
-reg [31:0] deviationCorrection;
-reg [31:0] devCorrection;
-reg prevLegacyBit;
+
+// Mod index of 0.7 corresponds to an index delta of 7
+`define PCMFM_DELTA  7
+`define MAX_POS_DEVIATION   32'h0d000000
+`define MIN_POS_DEVIATION   32'hf3000000
+`define MAX_NEG_DEVIATION   32'h0d000000
+`define MIN_NEG_DEVIATION   32'hf3000000
+
+wire    [4:0]   posDeltaError = `PCMFM_DELTA - indexDelta;
+wire    [4:0]   negDeltaError = indexDelta - `PCMFM_DELTA;
+always @(posedge clk) begin
+    if (symEn_index) begin
+        // Negative Delta?
+        if (indexDelta[4]) begin
+            if ( (negDeltaError[4] & negDevAccum[31])
+              && (negDevAccum <= `MIN_NEG_DEVIATION)) begin
+                negDevAccum <= `MIN_NEG_DEVIATION;
+                end
+            else if ( (!negDeltaError[4] & !negDevAccum[31])
+                   && (negDevAccum >= `MAX_NEG_DEVIATION)) begin
+                negDevAccum <= `MAX_NEG_DEVIATION;
+                end
+            else begin
+                negDevAccum <= negDevAccum + {{16{negDeltaError[4]}},negDeltaError,11'b0};
+                end
+            end
+        else begin
+            if ( (posDeltaError[4] & posDevAccum[31])
+              && (posDevAccum <= `MIN_POS_DEVIATION)) begin
+                posDevAccum <= `MIN_POS_DEVIATION;
+                end
+            else if ( (!posDeltaError[4] & !posDevAccum[31])
+                   && (posDevAccum >= `MAX_POS_DEVIATION)) begin
+                posDevAccum <= `MAX_POS_DEVIATION;
+                end
+            else begin
+                posDevAccum <= posDevAccum + {{16{posDeltaError[4]}},posDeltaError,11'b0}; 
+                end
+            end
+        end
+    end
+
+reg     [31:0]  deviationCorrection;
+reg     [31:0]  devCorrection;
+reg             prevLegacyBit;
 always @(posedge clk) begin
     if (sym2xEn) begin
         prevLegacyBit <= legacyBit;
         if (legacyBit & prevLegacyBit) begin
-            `ifdef INTERNAL_ADAPT
             if (manualDeviation) begin
-                devCorrection <= loopData;
+                devCorrection <= posDevCorrection;
                 end
             else begin
-                devCorrection <= devDiff;
+                devCorrection <= posDevAccum;
                 end
-            `else
-            devCorrection <= loopData;
-            `endif
             end
         else if (!legacyBit & !prevLegacyBit) begin
-            `ifdef INTERNAL_ADAPT
             if (manualDeviation) begin
-                devCorrection <= -loopData;
+                devCorrection <= negDevCorrection;
                 end
             else begin
-                devCorrection <= -devDiff;
+                devCorrection <= negDevAccum;
                 end
-            `else
-            devCorrection <= -loopData;
-            `endif
             end
         else begin
             devCorrection <= 0;
@@ -263,6 +311,30 @@ always @(posedge clk) begin
         deviationCorrection <= devCorrection;
         end
     end
+
+`else   //INTERNAL_ADAPT
+
+reg [31:0] deviationCorrection;
+reg [31:0] devCorrection;
+reg prevLegacyBit;
+always @(posedge clk) begin
+    if (sym2xEn) begin
+        prevLegacyBit <= legacyBit;
+        if (legacyBit & prevLegacyBit) begin
+            devCorrection <= posDevCorrection;
+            end
+        else if (!legacyBit & !prevLegacyBit) begin
+            devCorrection <= negDevCorrection;
+            end
+        else begin
+            devCorrection <= 0;
+            end
+        deviationCorrection <= devCorrection;
+        end
+    end
+
+`endif //INTERNAL_ADAPT
+
 wire [31:0] ddsFreq = newOffset + deviationCorrection;
 
 wire ddsReset = reset;
@@ -431,6 +503,54 @@ fmDemod fmDemod(
     .demodMode(`MODE_2FSK),
     .freq(freq)
     );
+
+// Extract an AFC control signal
+reg     [11:0]  prevMidSample;
+reg     [11:0]  afcError;
+reg             prevSign;
+reg             transition;
+always @(posedge clk) begin
+    if (sym2xEnDly) begin
+        if (!symEnDly) begin
+            if (prevSign != freq[11]) begin
+                transition <= 1;
+                end
+            else begin
+                transition <= 0;
+                end
+            prevSign <= freq[11];
+            end
+        else begin
+            if (transition) begin
+                afcError <= -prevMidSample;
+                end
+            else begin
+                afcError <= 0;
+                end
+            prevMidSample <= freq;
+            end
+        end
+    end
+
+// AFC Loop Filter
+wire    [39:0]  afcAccum;
+lagGain12 afcLoopFilter (
+    .clk(clk), 
+    .clkEn(sym2xEnDly & symEnDly), 
+    .reset(reset), 
+    .error(afcError),
+    .lagExp(afcGain),
+    .upperLimit(32'h0d000000),
+    .lowerLimit(32'hf3000000),
+    .sweepEnable(1'b0),
+    .sweepRateMag(0),
+    .carrierInSync(1'b1),
+    .clearAccum(1'b0),
+    .acqTrackControl(0),
+    .track(1'b1),
+    .lagAccum(afcAccum)
+    );
+assign afcOffset = afcAccum[39:8];
 
 `ifdef SIMULATE
 real iOutReal;

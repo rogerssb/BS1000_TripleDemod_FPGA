@@ -402,8 +402,45 @@ NET "trellis/trellisCarrierLoop/symEnSr*" TNM_NET = FFS syncGroup;
 NET "trellis/trellisCarrierLoop/fmDemod/cordic/enSR*" TNM_NET = FFS syncGroup;
 NET "trellis/symEnShift*" TNM_NET = FFS syncGroup;
 NET "multihPhaseErrorEnIn*" TNM_NET = FFS syncGroup;
+
+# A group composed of all the clock enables
+TIMEGRP "clken0" =  FFS(demod/dac0Sync*) 
+                   FFS(demod/dac1Sync*) 
+                   FFS(demod/dac2Sync*)
+                   FFS(demod/ddc/agcSync*) 
+                   FFS(demod/ddc/cic/cicI/syncOut*) 
+                   FFS(demod/ddc/cic/cicQ/syncOut*);
+TIMEGRP "clken2" = FFS(demod/ddc/cicClockEn*) FFS(demod/ddc/hb/evenSync*) FFS(demod/ddc/hb/syncOut*);
+TIMEGRP "clken3" = FFS(demod/ddc/hbClockEn*) FFS(demod/ddc/hb0/evenSync*) FFS(demod/ddc/hb0/syncOut*);
+TIMEGRP "clken4" = FFS(demod/ddc/firClockEn*);
+#TIMEGRP "clken5" = FFS(demod/carrierOffsetEn*) FFS(demod/ddc/syncOut*);
+TIMEGRP "clken5" = FFS(demod/ddc/syncOut*);
+TIMEGRP "clken6" = FFS(demod/resampler/resamplerI/resampleDelay*);
+TIMEGRP "clken7" = FFS(demod/resampler/resamplerQ/resampleDelay*);
+TIMEGRP "clken8" = FFS(demod/resampler/auCic/syncOut*);
+#TIMEGRP "clken0" = FFS(demod/carrierLoop/loopFilterEn*);
+TIMEGRP "clken9" = FFS(demod/fmDemod/cordic/enSR*) FFS(demod/bitsync/phaseState*);
+TIMEGRP "clken10" = FFS(pcmSymEn*) FFS(pcmSym2xEn*) FFS(soqpskSym2xEn*);
+TIMEGRP "clken11" = FFS(soqpsk/soqpskCarrierLoop/sym2xEnSr*);
+TIMEGRP "clken12" = FFS(multihSymEn*) FFS(multihSym2xEn*);
+TIMEGRP "clken13" = FFS(trellis/viterbi_top/traceback/symEnDly*);
+#TIMEGRP "clken0" = FFS(trellis/viterbi_top/traceback/symEnSr2*);
+TIMEGRP "clken14" = FFS(soqpsk/soqpskViterbi/everyOtherSymEn*);
+TIMEGRP "clken15" = FFS(trellis/trellisCarrierLoop/sym2xEnSr*);
+TIMEGRP "clken16" = FFS(trellis/trellisCarrierLoop/symEnSr*);
+TIMEGRP "clken17" = FFS(trellis/trellisCarrierLoop/fmDemod/cordic/enSR*);
+TIMEGRP "clken18" = FFS(trellis/symEnShift*);
+TIMEGRP "clken19" = FFS(multihPhaseErrorEnIn*);
+TIMEGRP "clken" = clken0 clken2 clken3 clken4 clken5 clken6 clken7 clken8 clken9 clken10 clken11 clken12 clken14 clken15 clken16 clken17 clken18 clken19;
+
+# A group composed of clock-enabled flip-flops
+TIMEGRP "allEnables" = syncGroup EXCEPT clken ;
+
+#TIMESPEC TS_syncGroup = FROM "allEnables" TO "syncGroup" 46.67 MHz;
 TIMESPEC TS_syncGroup = FROM "syncGroup" TO "syncGroup" 46.67 MHz;
 TIMESPEC TS_dacGroup = FROM "syncGroup" TO FFS(demod/dac*Data*) 46.67 MHz;
+TIMESPEC TS_clken = FROM "clken" TO FFS 10 ns;
+
 
 # DDC that can clock slower
 #TIMEGRP "ddc0" = FFS(demod/ddc/cic/cicI*) FFS(demod/ddc/cic/cicQ*);
@@ -411,7 +448,7 @@ TIMESPEC TS_dacGroup = FROM "syncGroup" TO FFS(demod/dac*Data*) 46.67 MHz;
 #TIMEGRP "ddc3" = FFS(demod/ddc/dualFir/*) DSPS(demod/ddc/dualFir/*);
 #TIMEGRP "ddc4" = FFS(demod/ddc/qFirIn*) FFS(demod/ddc/iFirIn*);
 #TIMEGRP "ddc" = "ddc0" "ddc1" "ddc2" "ddc3" "ddc4";
-#TIMESPEC TS_ddc0 = FROM "ddc" to "ddc" 20 ns;
+#TIMESPEC TS_ddc0 = FROM "ddc" to "ddc" 46.67 MHz;
 TIMEGRP "ddcPL0" = FFS(demod/ddc/iCicIn*) FFS(demod/ddc/qCicIn*);
 TIMEGRP "ddcPL1" = FFS(demod/ddc/iAgcIn*) FFS(demod/ddc/qAgcIn*);
 TIMEGRP "ddcPL2" = FFS(demod/ddc/iHbIn*) FFS(demod/ddc/qHbIn*);
@@ -421,7 +458,7 @@ TIMEGRP "ddcPL" = "ddcPL0" "ddcPL1" "ddcPL2" "ddcPL3" "ddcPL4";
 TIMESPEC "TS_ddc1" = FROM "ddcPL" TO FFS 46.67 MHz;
 TIMESPEC "TS_ddc2" = FROM "ddcPL" TO DSPS 46.67 MHz;
 #NET "demod/resampler/auCic/syncOut*" TNM_NET = FFS ddcAuCIC;
-#TIMESPEC "TS_ddc2" = FROM "ddcAuCIC" TO "ddcAuCIC" 20 ns;
+#TIMESPEC "TS_ddc2" = FROM "ddcAuCIC" TO "ddcAuCIC" 46.67 MHz;
 
 # Trellis ACS units that can clock slower.
 TIMEGRP "acs" = FFS(trellis/viterbi_top/acs*);

@@ -15,9 +15,6 @@ module trellis(
     clk,reset,symEn,sym2xEn,
     iIn,qIn,
     legacyBit,
-    `ifdef INTERNAL_ADAPT
-    avgDeviation,
-    `endif
     wr0,wr1,wr2,wr3,
     addr,
     din,dout,
@@ -40,9 +37,6 @@ parameter ROT_BITS = 10;
 input           clk,reset,symEn,sym2xEn;
 input   [17:0]  iIn,qIn;
 input           legacyBit;
-`ifdef INTERNAL_ADAPT
-input   [31:0]  avgDeviation;
-`endif
 input           wr0,wr1,wr2,wr3;
 input   [11:0]  addr;
 input   [31:0]  din;
@@ -64,12 +58,14 @@ wire                    decision;
 
 wire            symEn_phErr;
 reg     [7:0]   phErrShft;
+wire    [4:0]   indexDelta;
 `ifdef USE_LEAKY
 wire    [ROT_BITS-1:0]   phaseErrorReal;
 wire    [7:0]   phaseError;
 `endif
 wire    [ROT_BITS-1:0]   phaseErrorImag;
 wire    [11:0]   freq;
+wire    [11:0]   afcError;
 wire    [17:0]  carrierLoopIOut,carrierLoopQOut;
 `ifdef BYPASS_TRELLIS_CARRIER_LOOP
 assign freq = 0;
@@ -88,9 +84,6 @@ trellisCarrierLoop trellisCarrierLoop(
   .iIn(iIn),
   .qIn(qIn),
   .legacyBit(legacyBit),
-  `ifdef INTERNAL_ADAPT
-  .avgDeviation(avgDeviation),
-  `endif
   `ifdef USE_LEAKY
   .phaseErrorReal(phaseErrorReal),
   .phaseErrorImag(phaseErrorImag),
@@ -100,6 +93,10 @@ trellisCarrierLoop trellisCarrierLoop(
   .phaseErrorIn(phErrShft),
   `endif
   .symEn_phErr(symEn_phErr),
+  `ifdef INTERNAL_ADAPT
+  .symEn_index(symEn_index),
+  .indexDelta(indexDelta),
+  `endif
   .wr0(wr0),
   .wr1(wr1),
   .wr2(wr2),
@@ -111,7 +108,8 @@ trellisCarrierLoop trellisCarrierLoop(
   .qOut(carrierLoopQOut),
   .symEnDly(symEnDly),
   .sym2xEnDly(sym2xEnDly),
-  .freq(freq)
+  .freq(freq),
+  .afcError(afcError)
   );
 `endif
 
@@ -483,7 +481,6 @@ viterbi_top viterbi_top
 `ifdef USE_DECAY
 reg     [7:0]   decayFactor;
 `endif
-wire [4:0] indexDelta;
 viterbi_top #(size, ROT_BITS)viterbi_top
   (
   .clk(clk), .reset(reset), .symEn(trellEna),
@@ -899,6 +896,7 @@ always @(posedge clk) begin
             end
         `DAC_TRELLIS_INDEX: begin
             dac1Data <= {freq,6'b0};
+            //dac1Data <= {afcError,6'b0};
             dac1Sync <= sym2xEnDly;
             end
         default: begin
@@ -925,7 +923,8 @@ always @(posedge clk) begin
             dac2Sync <= symEn_phErr;
             end
         `DAC_TRELLIS_INDEX: begin
-            dac2Data <= {1'b0,index,12'b0};
+            //dac2Data <= {1'b0,index,12'b0};
+            dac2Data <= {1'b0,legacyBit,16'b0};
             dac2Sync <= symEnOut;
             end
         default: begin

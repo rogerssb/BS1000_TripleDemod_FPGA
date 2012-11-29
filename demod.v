@@ -32,12 +32,7 @@ module demod(
     demodMode,
     eyeSync,
     iEye,qEye,
-    `ifdef INTERNAL_ADAPT
-    eyeOffset,
-    avgDeviation
-    `else
     eyeOffset
-    `endif
     );
 
 input           clk;
@@ -72,9 +67,6 @@ output  [3:0]   demodMode;
 output          eyeSync;
 output  [17:0]  iEye,qEye;
 output  [4:0]   eyeOffset;
-`ifdef INTERNAL_ADAPT
-output  [31:0]  avgDeviation;
-`endif
 
 
 /******************************************************************************
@@ -88,7 +80,12 @@ always @(addr) begin
         default:     demodSpace <= 0;
         endcase
     end
+`ifdef SYM_DEVIATION
 wire    [15:0]  fskDeviation;
+`else
+wire    [15:0]  posDeviation;
+wire    [15:0]  negDeviation;
+`endif
 wire    [1:0]   bitsyncMode;
 wire    [15:0]  falseLockAlpha;
 wire    [15:0]  falseLockThreshold;
@@ -105,7 +102,12 @@ demodRegs demodRegs(
     .bitsyncLock(bitsyncLock),
     .auBitsyncLock(auBitsyncLock),
     .demodLock(carrierLock),
+    `ifdef SYM_DEVIATION
     .fskDeviation(fskDeviation),
+    `else
+    .posDeviation(posDeviation),
+    .negDeviation(negDeviation),
+    `endif
     .demodMode(demodMode),
     .bitsyncMode(bitsyncMode),
     .dac0Select(dac0Select),
@@ -455,9 +457,11 @@ bitsync bitsync(
     .au(qResamp),
     .offsetError(offsetError),
     .offsetErrorEn(offsetErrorEn),
+    `ifdef SYM_DEVIATION
     .fskDeviation(fskDeviation),
-    `ifdef INTERNAL_ADAPT
-    .avgDeviation(avgDeviation),
+    `else
+    .posDeviation(posDeviation),
+    .negDeviation(negDeviation),
     `endif
     .iSym2xEn(iSym2xEn),
     .iSymEn(iSymEn),
@@ -476,7 +480,7 @@ bitsync bitsync(
     .auLockCounter(auLockCounter),
     .auIQSwap(auIQSwap),
     .iTrellis(iTrellis),.qTrellis(qTrellis),
-         .bsError(bsError), .bsErrorEn(bsErrorEn)
+    .bsError(bsError), .bsErrorEn(bsErrorEn)
     );
 
 assign trellisSymSync = iSymEn & resampSync;

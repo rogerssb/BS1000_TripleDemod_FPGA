@@ -12,7 +12,12 @@ module demodRegs(
     bitsyncLock,
     auBitsyncLock,
     demodLock,
+    `ifdef SYM_DEVIATION
     fskDeviation,
+    `else
+    posDeviation,
+    negDeviation,
+    `endif
     demodMode,
     bitsyncMode,
     dac0Select,
@@ -34,7 +39,12 @@ input           bitsyncLock;
 input           auBitsyncLock;
 input           demodLock;
 
+`ifdef SYM_DEVIATION
 input   [15:0]  fskDeviation;
+`else
+input   [15:0]  posDeviation;
+input   [15:0]  negDeviation;
+`endif
 
 output  [3:0]   demodMode;
 reg     [3:0]   demodMode;
@@ -124,15 +134,7 @@ always @(negedge wr3) begin
     end
 
 reg [31:0]dataOut;
-always @(addr or cs or
-         fskDeviation or
-         demodMode or
-         bitsyncMode or
-         dac0Select or dac1Select or dac2Select or
-         falseLockAlpha or falseLockThreshold or 
-         auBitsyncLock or highFreqOffset or bitsyncLock or demodLock or
-         amTC
-         ) begin
+always @* begin
     if (cs) begin
         casex (addr)
             `DEMOD_CONTROL:     dataOut <= {14'b0,bitsyncMode,12'b0,demodMode};
@@ -141,7 +143,11 @@ always @(addr or cs or
             `DEMOD_STATUS:      dataOut <= {28'h0,
                                             auBitsyncLock,highFreqOffset,bitsyncLock,demodLock};
             `DEMOD_AMTC:        dataOut <= {27'b0,amTC};
+            `ifdef SYM_DEVIATION
             `DEMOD_FSKDEV:      dataOut <= {16'b0,fskDeviation};
+            `else
+            `DEMOD_FSKDEV:      dataOut <= {negDeviation,posDeviation};
+            `endif
             default:            dataOut <= 32'h0;
             endcase
         end
