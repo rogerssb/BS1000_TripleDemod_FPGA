@@ -1,102 +1,117 @@
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//  multiboot.v                                                  Verne Stauffer
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//  December 01, 2012
+//  This is a rewrite of Scott Rogers' multiboot module. It has been revised in
+//  order to prevent clock and write strobe glitching. The module has also been
+//  expanded to accomodate both Spartan-3 and Spartan-6 devices.
+//
+//  The maximum clock rate for the ICAP_SPARTAN6 primitive is 20 MHz.
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 `timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 		SEMCO
-// Engineer: 		Scott Rogers
-//
-// Create Date:    11:08:12 08/30/2011
-// Design Name:
-// Module Name:    multiboot
-// Project Name:
-// Target Devices:
-// Tool versions:
-// Description: 	Interface to the Spartan-3A ICAP to reload new configuration at specified address.
-//                Does not override the boot mode settings defined by the M[2:0] and VS[2:0] pins
-//
-// Dependencies:
-//
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-//
-//////////////////////////////////////////////////////////////////////////////////
+
 module multiboot
-(
-    input [23:0] next_addr,		//configuration's PROM address
-    input clk,							//clock source for state-machine and ICAP write cycles
-    input reboot						//single pulse (L-H-L) to start FSM, its period must at least the period of clk
-);
+    (
+    input [23:0] next_addr,
+    input clk,
+    input reboot
+    );
 
-	wire ce;
-	wire [7:0] idata;
-	wire write;
-	reg  icap_ce;
-	reg  [7:0] icap_data;
+`ifdef SPARTAN3
+`define LAST_XFER_STATE 20
+`endif
 
-  wire icap_clk;
+`ifdef SPARTAN6
+`define LAST_XFER_STATE 16
+`endif
 
-	ICAP_SPARTAN3A icap
+reg [4 : 0] state = `LAST_XFER_STATE + 1;
+reg [15 : 0] d;
+wire [15 : 0] I = {d[8],d[9],d[10],d[11],d[12],d[13],d[14],d[15],d[0],d[1],d[2],d[3],d[4],d[5],d[6],d[7]};
+
+always@(posedge clk) begin
+    if (reboot) state <= 0;
+    else if(state != `LAST_XFER_STATE + 3) state <= state + 5'd1;
+    end
+
+// don't want this to glitch so make it synchronous
+reg we = 1'b1;
+always @ (posedge clk) begin
+    if ((state >= 2) && (state <= `LAST_XFER_STATE - 1)) we <= 1'b0;
+    else we <= 1'b1;
+    end
+
+`ifdef SPARTAN3
+
+always @* begin
+    case (state)
+        3: d = 16'h00AA;
+        4: d = 16'h0099;
+        5: d = 16'h0032;
+        6: d = 16'h0061;
+        7: d = {8'h00,next_addr[15: 8]};
+        8: d = {8'h00,next_addr[7: 0]};
+        9: d = 16'h0032;
+        10: d = 16'h0081;
+        11: d = 16'h000B;
+        12: d = {8'h00,next_addr[23:16]};
+        13: d = 16'h0030;
+        14: d = 16'h00A1;
+        15: d = 16'h0000;
+        16: d = 16'h000E;
+        17: d = 16'h0020;
+        18: d = 16'h0000;
+        19: d = 16'h0020;
+        20: d = 16'h0000;
+        default: d = 16'h0000;
+        endcase
+    end
+
+ICAP_SPARTAN3A icap
 	(
-
-			.BUSY(),		   	// Busy output
-			.O(),         		// 8-bit data output
-			.CE(ce),       	// Clock enable input
-			.CLK(icap_clk),  	// Clock input
-			.I(idata),        // 8-bit data input
-			.WRITE(write)  	// Write input
+	.BUSY(),
+	.O(),
+	.CE(we),
+	.CLK(clk),
+	.I(I[7 : 0]),
+	.WRITE(we)
 	);
 
+`endif   //SPARTAN3
 
-   reg [4:0] state = 21;
+`ifdef SPARTAN6
 
-   always@(posedge clk)
-	begin
-      if (reboot)
-         state <= 0;
-		else
-			if(state == 23)
-				state <=state;
-			else
-				state <= state + 1;
-	end
+always @* begin
+    case (state)
+        3: d = 16'hFFFF;
+        4: d = 16'hAA99;
+        5: d = 16'h5566;
+        6: d = 16'h3261;
+        7: d = next_addr[15: 0];
+        8: d = 16'h3281;
+        9: d = {8'h0B,next_addr[23 : 16]};
+        10: d = 16'h32A1;
+        11: d = 16'h0000;
+        12: d = 16'h32C1;
+        13: d = 16'h0B00;
+        14: d = 16'h30A1;
+        15: d = 16'h000E;
+        16: d = 16'h2000;
+        default: d = 16'h00;
+        endcase
+    end
 
-	//Give two extra clock pulse before and after writting instructions to the ICAP
-	always @*
-	begin
-		case (state)
-       3: {icap_ce, icap_data} = {1'b0, 8'hAA};         			// sync H
-       4: {icap_ce, icap_data} = {1'b0, 8'h99};         			// sync L
-       5: {icap_ce, icap_data} = {1'b0, 8'h32};         			// gen1 H
-       6: {icap_ce, icap_data} = {1'b0, 8'h61};         			// gen1 L
-       7: {icap_ce, icap_data} = {1'b0, next_addr[15: 8]}; 		// user addr
-       8: {icap_ce, icap_data} = {1'b0, next_addr[ 7: 0]}; 		// user addr
-       9: {icap_ce, icap_data} = {1'b0, 8'h32};         			// gen2 H
-      10: {icap_ce, icap_data} = {1'b0, 8'h81};         			// gen2 L
-      11: {icap_ce, icap_data} = {1'b0, 8'h0B};						// user addr
-      12: {icap_ce, icap_data} = {1'b0, next_addr[23:16]}; 		// user addr
-      13: {icap_ce, icap_data} = {1'b0, 8'h30};			         // cmd H
-      14: {icap_ce, icap_data} = {1'b0, 8'hA1};			         // cmd L
-      15: {icap_ce, icap_data} = {1'b0, 8'h00};			         // reboot H
-      16: {icap_ce, icap_data} = {1'b0, 8'h0E};			         // reboot L
-      17: {icap_ce, icap_data} = {1'b0, 8'h20};				      // no op H
-      18: {icap_ce, icap_data} = {1'b0, 8'h00};			         // no op L
-      19: {icap_ce, icap_data} = {1'b0, 8'h20};				      // no op H
-      20: {icap_ce, icap_data} = {1'b0, 8'h00};			         // no op L
-		default: {icap_ce, icap_data} = {1'b1, 8'h00}; 			   // idle
-	 endcase
-	end
+ICAP_SPARTAN6 icap
+	(
+	.BUSY(),
+	.O(),
+	.CE(we),
+	.CLK(clk),
+	.I(I[15 : 0]),
+	.WRITE(we)
+	);
 
-	assign ce = icap_ce; // active low
-	assign idata[0] = icap_data[7]; // icap data port is LSB first, D[0:7], so swap bit order
-	assign idata[1] = icap_data[6]; //
-	assign idata[2] = icap_data[5]; //
-	assign idata[3] = icap_data[4]; //
-	assign idata[4] = icap_data[3]; //
-	assign idata[5] = icap_data[2]; //
-	assign idata[6] = icap_data[1]; //
-	assign idata[7] = icap_data[0]; //
-	assign write = icap_ce;//1'b0; // active low
-
-	wire iclk_en = (state<23 && state>0);
-	assign icap_clk = iclk_en ? clk:1'b0;
+`endif //SPARTAN6
 
 endmodule
