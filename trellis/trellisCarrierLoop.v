@@ -236,6 +236,7 @@ always @(posedge clk) begin
         end
     else if (carrierFreqEn) begin
         newOffset <= carrierFreqOffset + afcOffset;
+        //newOffset <= carrierFreqOffset;
         end
     end
 
@@ -442,8 +443,8 @@ always @(posedge clk) begin
     end
 wire    [17:0]  iInput = iIns[28];
 wire    [17:0]  qInput = qIns[28];
-//wire    [17:0]  iInput = iIns[23];
-//wire    [17:0]  qInput = qIns[23];
+//wire    [17:0]  iInput = iIns[32];
+//wire    [17:0]  qInput = qIns[32];
 `else
 wire    [17:0]  iInput = iIn;
 wire    [17:0]  qInput = qIn;
@@ -460,10 +461,32 @@ dds dds(
   .cosine(bReal), // Bus [17 : 0] 
   .sine(bImag)); // Bus [17 : 0] 
 
+`ifdef SIMULATE
+wire    [11:0]  signalFreq;
+real            signalFreqReal;
+always @* signalFreqReal = $itor($signed(signalFreq))/(2**11);
+fmDemod signalDemod( 
+    .clk(clk), .reset(reset), .sync(sym2xEn),
+    .iFm(iInput),.qFm(qInput),
+    .demodMode(`MODE_2FSK),
+    .freq(signalFreq)
+    );
+
+wire    [11:0]  corrFreq;
+real            corrFreqReal;
+always @* corrFreqReal = $itor($signed(corrFreq))/(2**11);
+fmDemod corrDemod( 
+    .clk(clk), .reset(reset), .sync(sym2xEn),
+    .iFm(bReal),.qFm(bImag),
+    .demodMode(`MODE_2FSK),
+    .freq(corrFreq)
+    );
+`endif
+
 cmpy18Sat cmpy18Sat(clk,reset,iInput,qInput,bReal,bImag,iMpy,qMpy);
 
-reg [4:0] symEnSr;
-reg [4:0] sym2xEnSr;
+reg [7:0] symEnSr;
+reg [7:0] sym2xEnSr;
 `ifdef USE_LEGACY
 reg [17:0]  iOut,qOut;
 `endif
@@ -477,8 +500,8 @@ always @(posedge clk) begin
         end
     else begin
     `endif
-        symEnSr <= {symEnSr[2:0], symEn};
-        sym2xEnSr <= {sym2xEnSr[2:0], sym2xEn};
+        symEnSr <= {symEnSr[6:0], symEn};
+        sym2xEnSr <= {sym2xEnSr[6:0], sym2xEn};
         end
     `ifdef USE_LEGACY
     if (sym2xEnDly) begin
@@ -495,14 +518,30 @@ assign qOut = qMpy;
 
 assign symEnDly = symEnSr[3];
 assign sym2xEnDly = sym2xEnSr[3];
+//assign symEnDly = symEnSr[4];
+//assign sym2xEnDly = sym2xEnSr[4];
 
-wire    [11:0]   freq;
-fmDemod fmDemod( 
-    .clk(clk), .reset(reset), .sync(sym2xEnDly),
-    .iFm(iOut),.qFm(qOut),
-    .demodMode(`MODE_2FSK),
-    .freq(freq)
+wire    [11:0]   phase;
+vm_cordic cordic(
+    .clk(clk),
+    .ena(sym2xEnDly),
+    .x(iOut[17:4]),.y(qOut[17:4]),
+    .p(phase)
     );
+reg [11:0]freq;
+reg [11:0]prevPhase;
+wire [11:0]phaseDiff = phase - prevPhase;
+always @(posedge clk) begin
+    if (sym2xEnDly) begin
+        if (phaseDiff == 12'h800) begin
+            freq <= 0;
+            end
+        else begin
+        freq <= phaseDiff;
+            end
+        prevPhase <= phase;
+        end
+    end
 
 // Extract an AFC control signal
 reg     [11:0]  prevMidSample;
@@ -522,7 +561,7 @@ always @(posedge clk) begin
             end
         else begin
             if (transition) begin
-                afcError <= -prevMidSample;
+                afcError <= prevMidSample;
                 end
             else begin
                 afcError <= 0;
@@ -536,17 +575,17 @@ always @(posedge clk) begin
 wire    [39:0]  afcAccum;
 lagGain12 afcLoopFilter (
     .clk(clk), 
-    .clkEn(sym2xEnDly & symEnDly), 
+    .clkEn(symEnDly), 
     .reset(reset), 
     .error(afcError),
     .lagExp(afcGain),
     .upperLimit(32'h0d000000),
     .lowerLimit(32'hf3000000),
     .sweepEnable(1'b0),
-    .sweepRateMag(0),
+    .sweepRateMag(32'h0),
     .carrierInSync(1'b1),
     .clearAccum(1'b0),
-    .acqTrackControl(0),
+    .acqTrackControl(2'h0),
     .track(1'b1),
     .lagAccum(afcAccum)
     );

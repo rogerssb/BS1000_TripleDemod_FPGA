@@ -399,39 +399,44 @@ NET "soqpsk/soqpskViterbi/everyOtherSymEn*" TNM_NET = FFS syncGroup;
 NET "soqpsk/soqpskViterbi/everyOtherSymEn*" TNM_NET = DSPS syncGroup;
 NET "trellis/trellisCarrierLoop/sym2xEnSr*" TNM_NET = FFS syncGroup;
 NET "trellis/trellisCarrierLoop/symEnSr*" TNM_NET = FFS syncGroup;
-NET "trellis/trellisCarrierLoop/fmDemod/cordic/enSR*" TNM_NET = FFS syncGroup;
+#NET "trellis/trellisCarrierLoop/fmDemod/cordic/enSR*" TNM_NET = FFS syncGroup;
 NET "trellis/symEnShift*" TNM_NET = FFS syncGroup;
 NET "multihPhaseErrorEnIn*" TNM_NET = FFS syncGroup;
 
 # A group composed of all the clock enables
-TIMEGRP "clken0" =  FFS(demod/dac0Sync*) 
+TIMEGRP "clken" =  FFS(demod/dac0Sync*) 
                    FFS(demod/dac1Sync*) 
                    FFS(demod/dac2Sync*)
                    FFS(demod/ddc/agcSync*) 
                    FFS(demod/ddc/cic/cicI/syncOut*) 
-                   FFS(demod/ddc/cic/cicQ/syncOut*);
-TIMEGRP "clken2" = FFS(demod/ddc/cicClockEn*) FFS(demod/ddc/hb/evenSync*) FFS(demod/ddc/hb/syncOut*);
-TIMEGRP "clken3" = FFS(demod/ddc/hbClockEn*) FFS(demod/ddc/hb0/evenSync*) FFS(demod/ddc/hb0/syncOut*);
-TIMEGRP "clken4" = FFS(demod/ddc/firClockEn*);
-#TIMEGRP "clken5" = FFS(demod/carrierOffsetEn*) FFS(demod/ddc/syncOut*);
-TIMEGRP "clken5" = FFS(demod/ddc/syncOut*);
-TIMEGRP "clken6" = FFS(demod/resampler/resamplerI/resampleDelay*);
-TIMEGRP "clken7" = FFS(demod/resampler/resamplerQ/resampleDelay*);
-TIMEGRP "clken8" = FFS(demod/resampler/auCic/syncOut*);
-#TIMEGRP "clken0" = FFS(demod/carrierLoop/loopFilterEn*);
-TIMEGRP "clken9" = FFS(demod/fmDemod/cordic/enSR*) FFS(demod/bitsync/phaseState*);
-TIMEGRP "clken10" = FFS(pcmSymEn*) FFS(pcmSym2xEn*) FFS(soqpskSym2xEn*);
-TIMEGRP "clken11" = FFS(soqpsk/soqpskCarrierLoop/sym2xEnSr*);
-TIMEGRP "clken12" = FFS(multihSymEn*) FFS(multihSym2xEn*);
-TIMEGRP "clken13" = FFS(trellis/viterbi_top/traceback/symEnDly*);
-#TIMEGRP "clken0" = FFS(trellis/viterbi_top/traceback/symEnSr2*);
-TIMEGRP "clken14" = FFS(soqpsk/soqpskViterbi/everyOtherSymEn*);
-TIMEGRP "clken15" = FFS(trellis/trellisCarrierLoop/sym2xEnSr*);
-TIMEGRP "clken16" = FFS(trellis/trellisCarrierLoop/symEnSr*);
-TIMEGRP "clken17" = FFS(trellis/trellisCarrierLoop/fmDemod/cordic/enSR*);
-TIMEGRP "clken18" = FFS(trellis/symEnShift*);
-TIMEGRP "clken19" = FFS(multihPhaseErrorEnIn*);
-TIMEGRP "clken" = clken0 clken2 clken3 clken4 clken5 clken6 clken7 clken8 clken9 clken10 clken11 clken12 clken14 clken15 clken16 clken17 clken18 clken19;
+                   FFS(demod/ddc/cic/cicQ/syncOut*)
+                   FFS(demod/ddc/cicClockEn*) 
+                   FFS(demod/ddc/hb/evenSync*) 
+                   FFS(demod/ddc/hb/syncOut*)
+                   FFS(demod/ddc/hbClockEn*) 
+                   FFS(demod/ddc/hb0/evenSync*) 
+                   FFS(demod/ddc/hb0/syncOut*)
+                   FFS(demod/ddc/firClockEn*)
+#                   FFS(demod/carrierOffsetEn*)
+                   FFS(demod/ddc/syncOut*)
+                   FFS(demod/resampler/resamplerI/resampleDelay*)
+                   FFS(demod/resampler/resamplerQ/resampleDelay*)
+                   FFS(demod/resampler/auCic/syncOut*)
+#                   FFS(demod/carrierLoop/loopFilterEn*)
+                   FFS(demod/fmDemod/cordic/enSR*) 
+                   FFS(demod/bitsync/phaseState*)
+                   FFS(pcmSymEn*) FFS(pcmSym2xEn*) 
+                   FFS(soqpskSym2xEn*)
+                   FFS(soqpsk/soqpskCarrierLoop/sym2xEnSr*)
+                   FFS(multihSymEn*) FFS(multihSym2xEn*)
+                   FFS(trellis/viterbi_top/traceback/symEnDly*)
+#                   FFS(trellis/viterbi_top/traceback/symEnSr2*)
+                   FFS(soqpsk/soqpskViterbi/everyOtherSymEn*)
+                   FFS(trellis/trellisCarrierLoop/sym2xEnSr*)
+                   FFS(trellis/trellisCarrierLoop/symEnSr*)
+#                   FFS(trellis/trellisCarrierLoop/fmDemod/cordic/enSR*)
+                   FFS(trellis/symEnShift*)
+                   FFS(multihPhaseErrorEnIn*);
 
 # A group composed of clock-enabled flip-flops
 TIMEGRP "allEnables" = syncGroup EXCEPT clken ;
@@ -449,12 +454,11 @@ TIMESPEC TS_clken = FROM "clken" TO FFS 10 ns;
 #TIMEGRP "ddc4" = FFS(demod/ddc/qFirIn*) FFS(demod/ddc/iFirIn*);
 #TIMEGRP "ddc" = "ddc0" "ddc1" "ddc2" "ddc3" "ddc4";
 #TIMESPEC TS_ddc0 = FROM "ddc" to "ddc" 46.67 MHz;
-TIMEGRP "ddcPL0" = FFS(demod/ddc/iCicIn*) FFS(demod/ddc/qCicIn*);
-TIMEGRP "ddcPL1" = FFS(demod/ddc/iAgcIn*) FFS(demod/ddc/qAgcIn*);
-TIMEGRP "ddcPL2" = FFS(demod/ddc/iHbIn*) FFS(demod/ddc/qHbIn*);
-TIMEGRP "ddcPL3" = FFS(demod/ddc/iFirIn*) FFS(demod/ddc/qFirIn*);
-TIMEGRP "ddcPL4" = FFS(demod/ddc/iBB*) FFS(demod/ddc/qBB*);
-TIMEGRP "ddcPL" = "ddcPL0" "ddcPL1" "ddcPL2" "ddcPL3" "ddcPL4";
+TIMEGRP "ddcPL" = FFS(demod/ddc/iCicIn*) FFS(demod/ddc/qCicIn*)
+                  FFS(demod/ddc/iAgcIn*) FFS(demod/ddc/qAgcIn*)
+                  FFS(demod/ddc/iHbIn*) FFS(demod/ddc/qHbIn*)
+                  FFS(demod/ddc/iFirIn*) FFS(demod/ddc/qFirIn*)
+                  FFS(demod/ddc/iBB*) FFS(demod/ddc/qBB*);
 TIMESPEC "TS_ddc1" = FROM "ddcPL" TO FFS 46.67 MHz;
 TIMESPEC "TS_ddc2" = FROM "ddcPL" TO DSPS 46.67 MHz;
 #NET "demod/resampler/auCic/syncOut*" TNM_NET = FFS ddcAuCIC;
@@ -477,8 +481,13 @@ TIMEGRP "soqpskSymrate" = "soqpskMFs" "soqpskAcs" "soqpskMetric";
 TIMESPEC TS_soqpskSymrate = FROM "soqpskSymrate" TO "soqpskSymrate" 46.67 MHz;
 
 # Loop filters that can clock slower
-TIMEGRP "trellisLF" = FFS(trellis/trellisCarrierLoop/lagGain/*) FFS(trellis/trellisCarrierLoop/leadGain/*) FFS(trellis/trellisCarrierLoop/filterSum*) ;
-TIMEGRP "soqpskLF" = FFS(soqpsk/soqpskCarrierLoop/lagGain/*) FFS(soqpsk/soqpskCarrierLoop/leadGain/*) FFS(soqpsk/soqpskCarrierLoop/filterSum*);
+TIMEGRP "trellisLF" = FFS(trellis/trellisCarrierLoop/lagGain/*) 
+                      FFS(trellis/trellisCarrierLoop/leadGain/*) 
+                      FFS(trellis/trellisCarrierLoop/filterSum*) 
+                      FFS(trellis/trellisCarrierLoop/afcLoopFilter/*);
+TIMEGRP "soqpskLF" = FFS(soqpsk/soqpskCarrierLoop/lagGain/*) 
+                     FFS(soqpsk/soqpskCarrierLoop/leadGain/*) 
+                     FFS(soqpsk/soqpskCarrierLoop/filterSum*);
 #NET "demod/carrierLoop/loopFilterEn*" TNM_NET = FFS carrierLF;
 #NET "multihPhaseErrorEnIn*" TNM_NET = FFS multihLF;
 #NET "demod/resampler/auCic/syncOut*" TNM_NET = FFS auBitsyncLF;

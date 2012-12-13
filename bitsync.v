@@ -537,7 +537,14 @@ assign negDeviation = avgNegDeviation[24:9];
 
 `ifdef SIMULATE
 real avgOffsetReal = (avgOffsetError[24] ? avgOffsetError[24:7] - 262144.0 : avgOffsetError[24:7])/131072.0;
+`ifdef SYM_DEVIATION
 real avgDevReal = (avgDeviation[24] ? avgDeviation[24:7] - 262144.0 : avgDeviation[24:7])/131072.0;
+`else
+real avgPosDevReal;
+always @* avgPosDevReal = $itor($signed(avgPosDeviation))/(2**17);
+real avgNegDevReal;
+always @* avgNegDevReal = $itor($signed(avgNegDeviation))/(2**17);
+`endif
 `endif
 
 //******************************** Loop Filter ********************************

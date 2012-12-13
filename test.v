@@ -33,9 +33,9 @@ always #HC clk = clk^clken;
 `define TWO_POW_31      2147483648.0
 `define TWO_POW_17      131072.0
 
-parameter modSampleDecimation = 5;
-parameter modCicShift = 5;          // log2(modSampleDecimation^2)
-parameter ddcDecimation = 2;
+parameter modSampleDecimation = 4;
+parameter modCicShift = 4;          // log2(modSampleDecimation^2)
+parameter ddcDecimation = 3;
 
 real carrierFreqHz = 2500000.0;
 real carrierFreqNorm = carrierFreqHz * `SAMPLE_PERIOD * `TWO_POW_32;
@@ -61,7 +61,7 @@ wire [15:0]bitrateDivider = bitrateSamplesInt - 1;
 
 // value = 2^ceiling(log2(R*R))/(R*R), where R = interpolation rate of the FM
 // modulator
-real interpolationGain = 1.28;
+real interpolationGain = 1.0;
 
 //real deviationHz = 0*0.35 * bitrateBps;
 real deviationHz = 2*0.350 * bitrateBps;
@@ -612,10 +612,11 @@ initial begin
     write32(createAddress(`BITSYNCSPACE,`LF_LIMIT), resamplerLimitInt);    
 
     // Init the carrier loop filters
-    write32(createAddress(`CARRIERSPACE,`LF_CONTROL),1);    // Zero the error
-    write32(createAddress(`CARRIERSPACE,`LF_LEAD_LAG),32'h0000000c);   
-    write32(createAddress(`CARRIERSPACE,`LF_LIMIT), carrierLimit);
-    write32(createAddress(`CARRIERSPACE,`LF_LOOPDATA), sweepRate);
+    write32(createAddress(`CARRIERSPACE,`CLF_CONTROL),1);    // Zero the error
+    write32(createAddress(`CARRIERSPACE,`CLF_LEAD_LAG),32'h0000000c);   
+    write32(createAddress(`CARRIERSPACE,`CLF_ULIMIT), carrierLimit);
+    write32(createAddress(`CARRIERSPACE,`CLF_LLIMIT), -carrierLimit);
+    write32(createAddress(`CARRIERSPACE,`CLF_LOOPDATA), sweepRate);
 
     // Init the downcoverter register set
     write32(createAddress(`DDCSPACE,`DDC_CONTROL),5);

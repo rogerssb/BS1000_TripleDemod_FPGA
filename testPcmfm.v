@@ -331,7 +331,7 @@ assign qRx = qSignal + qNoise;
 ******************************************************************************/
 wire    [17:0]  dac0Out,dac1Out,dac2Out, iSymData, qSymData;
 demod demod( 
-    .clk(clk), .reset(reset), .syncIn(sync), 
+    .clk(clk), .reset(reset),
     .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
     .addr(a),
     .din(d),
@@ -694,21 +694,22 @@ initial begin
     write32(createAddress(`CARRIERSPACE,`LF_CONTROL),1);    // Zero the error
     write32(createAddress(`CARRIERSPACE,`LF_LEAD_LAG),32'h00000012);   
     write32(createAddress(`CARRIERSPACE,`LF_LIMIT), carrierLimit);
-    write32(createAddress(`CARRIERSPACE,`LF_LOOPDATA), sweepRate);
+    write32(createAddress(`CARRIERSPACE,`LF_LOOPDATA0), sweepRate);
 
     // Init the trellis carrier loop
     write32(createAddress(`TRELLISLFSPACE,`LF_CONTROL),9);    // Forces the lag acc and the error term to be zero
     write32(createAddress(`TRELLISLFSPACE,`LF_LEAD_LAG),32'h0015_0005);   
     write32(createAddress(`TRELLISLFSPACE,`LF_LIMIT),32'h0100_0000);   
-    //write32(createAddress(`TRELLISLFSPACE,`LF_LOOPDATA),32'h0333_3333);
-    //write32(createAddress(`TRELLISLFSPACE,`LF_LOOPDATA),32'h0666_6666);
-    write32(createAddress(`TRELLISLFSPACE,`LF_LOOPDATA),32'h0);
+    //write32(createAddress(`TRELLISLFSPACE,`LF_LOOPDATA0),32'h0333_3333);
+    //write32(createAddress(`TRELLISLFSPACE,`LF_LOOPDATA0),32'h0666_6666);
+    write32(createAddress(`TRELLISLFSPACE,`LF_LOOPDATA0),32'h0);
 
     write32(createAddress(`TRELLIS_SPACE,`TRELLIS_DECAY),217);
                     
     // Init the downcoverter register set
     write32(createAddress(`DDCSPACE,`DDC_CONTROL),5);   // Bypass the CIC and FIR
     write32(createAddress(`DDCSPACE,`DDC_CENTER_FREQ), carrierFreq);
+    write32(createAddress(`DDCSPACE,`DDC_DECIMATION), 0);
 
     // Init the cicResampler register set
     write32(createAddress(`CICDECSPACE,`CIC_DECIMATION),cicDecimationInt-1);

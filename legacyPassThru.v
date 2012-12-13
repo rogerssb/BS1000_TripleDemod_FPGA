@@ -65,7 +65,7 @@ output          auSymClk;
 output          bsync_nLock,demod_nLock;
 output          sdiOut;
 
-parameter VER_NUMBER = 16'h015e;
+parameter VER_NUMBER = 16'h0160;
 
 wire [11:0]addr = {addr11,addr10,addr9,addr8,addr7,addr6,addr5,addr4,addr3,addr2,addr1,1'b0};
 
@@ -246,6 +246,7 @@ demod demod(
 reg             pcmSymEn,soqpskSymEn,multihSymEn;
 reg             pcmSym2xEn,soqpskSym2xEn,multihSym2xEn;
 reg     [17:0]  iIn,qIn;
+reg             legacyBit;
 always @(posedge ck933) begin
     pcmSymEn <= trellisSymSync & pcmTrellisMode;
     pcmSym2xEn <= iSym2xEn & pcmTrellisMode;
@@ -255,6 +256,7 @@ always @(posedge ck933) begin
     multihSym2xEn <= iSym2xEn & multihMode;
     iIn <= iSymData;
     qIn <= qSymData;
+    legacyBit <= iBit;
     end
 
 
@@ -275,6 +277,7 @@ trellis trellis(
     .iIn(iIn),
     .qIn(qIn),
     .legacyBit(iBit),
+    //.legacyBit(legacyBit),
     .wr0(wr0),
     .wr1(wr1),
     .wr2(wr2),
