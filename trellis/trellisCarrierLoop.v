@@ -11,6 +11,7 @@
 `timescale 1ns/1ps
 `include "./addressMap.v"
 `define USE_LEGACY
+`define USE_MPY_FM_DISC
            
 module trellisCarrierLoop(
     clk,reset,
@@ -69,6 +70,7 @@ wire    [31:0]  negDevCorrection;
 wire    [15:0]  lockCount;
 wire    [11:0]   syncThreshold;
 wire    [39:0]  lagAccum;
+wire    [39:0]  afcAccum;
 `ifdef INTERNAL_ADAPT
 reg     [31:0]  posDevAccum,negDevAccum;
 `endif
@@ -81,6 +83,7 @@ loopRegs loopRegs(
     .dataOut(dout),
     .invertError(invertError),
     .zeroError(zeroError),
+    .ctrl2(clearAFC),
     .clearAccum(clearAccum),
     .ctrl4(manualDeviation),
     .leadMan(),
@@ -99,7 +102,8 @@ loopRegs loopRegs(
     .leadExp1(),
     .lagMan1(),
     .lagExp1(afcGain),
-    .loopData1(negDevCorrection)
+    .loopData1(negDevCorrection),
+    .loopData1Read(afcAccum[39:8])
     );
 
 
@@ -443,8 +447,8 @@ always @(posedge clk) begin
     end
 wire    [17:0]  iInput = iIns[28];
 wire    [17:0]  qInput = qIns[28];
-//wire    [17:0]  iInput = iIns[32];
-//wire    [17:0]  qInput = qIns[32];
+//wire    [17:0]  iInput = iIns[31];
+//wire    [17:0]  qInput = qIns[31];
 `else
 wire    [17:0]  iInput = iIn;
 wire    [17:0]  qInput = qIn;
@@ -521,6 +525,38 @@ assign sym2xEnDly = sym2xEnSr[3];
 //assign symEnDly = symEnSr[4];
 //assign sym2xEnDly = sym2xEnSr[4];
 
+
+`ifdef USE_MPY_FM_DISC
+
+reg     [17:0]  iOut0;
+reg     [17:0]  qOut0;
+wire    [35:0]  term1,term2;
+mpy18x18WithCe mult1(
+    .clk(clk),
+    .ce(sym2xEnDly),
+    .a(qOut0),
+    .b(iOut),
+    .p(term1)
+    );
+mpy18x18WithCe mult2(
+    .clk(clk),
+    .ce(sym2xEnDly),
+    .a(iOut0),
+    .b(qOut),
+    .p(term2)
+    );
+
+wire    [35:0]  diff = term2 - term1;
+wire    [11:0]  freq = diff[34:23];
+always @(posedge clk) begin
+    if (sym2xEnDly) begin
+        iOut0 <= iOut;
+        qOut0 <= qOut;
+        end
+    end
+
+`else   //USE_MPY_FM_DISC
+
 wire    [11:0]   phase;
 vm_cordic cordic(
     .clk(clk),
@@ -528,20 +564,32 @@ vm_cordic cordic(
     .x(iOut[17:4]),.y(qOut[17:4]),
     .p(phase)
     );
-reg [11:0]freq;
-reg [11:0]prevPhase;
-wire [11:0]phaseDiff = phase - prevPhase;
+reg     [11:0]  freq;
+reg     [11:0]  prevPhase;
+wire    [11:0]  phaseDiff = phase - prevPhase;
+reg             polarityFlag;
+`ifdef SIMULATE
+initial polarityFlag = 1;
+`endif
 always @(posedge clk) begin
     if (sym2xEnDly) begin
         if (phaseDiff == 12'h800) begin
-            freq <= 0;
+            polarityFlag <= ~polarityFlag;
+            if (polarityFlag) begin
+                freq <= 12'h801;
+                end
+            else begin
+                freq <= 12'h7ff;
+                end
             end
         else begin
-        freq <= phaseDiff;
+            freq <= phaseDiff;
             end
         prevPhase <= phase;
         end
     end
+
+`endif //USE_MPY_FM_DISC
 
 // Extract an AFC control signal
 reg     [11:0]  prevMidSample;
@@ -572,7 +620,6 @@ always @(posedge clk) begin
     end
 
 // AFC Loop Filter
-wire    [39:0]  afcAccum;
 lagGain12 afcLoopFilter (
     .clk(clk), 
     .clkEn(symEnDly), 
@@ -584,7 +631,7 @@ lagGain12 afcLoopFilter (
     .sweepEnable(1'b0),
     .sweepRateMag(32'h0),
     .carrierInSync(1'b1),
-    .clearAccum(1'b0),
+    .clearAccum(clearAFC),
     .acqTrackControl(2'h0),
     .track(1'b1),
     .lagAccum(afcAccum)
