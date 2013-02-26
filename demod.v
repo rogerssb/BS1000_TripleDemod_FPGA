@@ -345,10 +345,25 @@ always @(posedge clk) begin
                              AFC/Sweep/Costas Loop
 ******************************************************************************/
 wire    [17:0]  offsetError;
-wire    [11:0]   rndOffsetError = offsetError[17:6] + offsetError[5];
-wire    [11:0]   demodLoopError;
+wire            offsetErrorEn;
+wire    [11:0]  demodLoopError;
 wire    [15:0]  freqLockCounter;
 wire    [31:0]  freqDout;
+wire    [11:0]  rndOffsetError = offsetError[17:6] + offsetError[5];
+//reg     [11:0]   rndOffsetError;
+//always @(posedge clk) begin
+//    if (offsetErrorEn) begin
+//        casex (offsetError[17:14])
+//            4'b10xx,
+//            4'b110x,
+//            4'b1110:    rndOffsetError <= 12'h801;
+//            4'b01xx,
+//            4'b001x,
+//            4'b0001:    rndOffsetError <= 12'h7ff;
+//            default:    rndOffsetError <= offsetError[14:3] + offsetError[2];
+//            endcase
+//        end
+//    end
 carrierLoop carrierLoop(
     .clk(clk), .reset(reset),
     .resampSync(resampSync),

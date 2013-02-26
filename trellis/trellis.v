@@ -924,8 +924,10 @@ always @(posedge clk) begin
             end
         `DAC_TRELLIS_INDEX: begin
             //dac2Data <= {1'b0,index,12'b0};
-            dac2Data <= {1'b0,legacyBit,16'b0};
-            dac2Sync <= symEnOut;
+            //dac2Data <= {1'b0,legacyBit,16'b0};
+            dac2Data <= {afcError,6'b0};
+            //dac2Sync <= symEnOut;
+            dac2Sync <= sym2xEnOut;
             end
         default: begin
             dac2Data <= {phErrShft,10'b0};

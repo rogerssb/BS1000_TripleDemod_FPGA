@@ -98,10 +98,7 @@ reg             sync;
 wire    [11:0]   bpskPhase = phase;
 wire    [11:0]   qpskPhase = phase - 12'h200;
 reg             enableCarrierLock;
-always @(demodMode or offsetError or offsetErrorEn or 
-         qpskPhase or bpskPhase or
-         phase or freq or 
-         ddcSync or resampSync) begin
+always @* begin
     case (demodMode)
         `MODE_AM: begin
             sync <= ddcSync;
@@ -120,6 +117,10 @@ always @(demodMode or offsetError or offsetErrorEn or
             modeError <= offsetError;
             modeErrorEn <= offsetErrorEn;
             enableCarrierLock <= 0;
+            //sync <= ddcSync;
+            //modeError <= freq;
+            //modeErrorEn <= 1'b1;
+            //enableCarrierLock <= 0;
             end
         `MODE_MULTIH,
         `MODE_FM: begin
@@ -276,8 +277,8 @@ always @(posedge clk) begin
 
 // Final Outputs
 //assign carrierFreqOffset = filterSum[39:8];
-assign carrierFreqOffset = lagAccum[39:8];
-assign carrierLeadFreq = leadError[39:8];
+assign carrierFreqOffset = lagAccum[39:8] + lagAccum[7];
+assign carrierLeadFreq = leadError[39:8] + leadError[7];
 assign carrierFreqEn = loopFilterEn;
 
 `ifdef SIMULATE
@@ -289,5 +290,120 @@ always @(lagAccum[39:8]) lagAccumReal = ((lagAccum[39:8] > 2147483647.0) ? lagAc
 always @(lockCounter) lockCounterInt = lockCounter;
 `endif
 
+endmodule
+
+
+
+
+`ifdef TEST_MODULE
+`timescale 1ns/100ps
+
+module test;
+
+reg reset,clk;
+
+// Create the clocks
+parameter SAMPLE_FREQ = 10e6;
+parameter HC = 1e9/SAMPLE_FREQ/2;
+parameter C = 2*HC;
+parameter syncDecimation = 4;
+reg clken;
+always #HC clk = clk^clken;
+
+reg sync;
+reg [3:0]syncCount;
+always @(posedge clk) begin
+    if (syncCount == 0) begin
+        syncCount <= syncDecimation-1;
+        sync <= 1;
+        end
+    else begin
+        syncCount <= syncCount - 1;
+        sync <= 0;
+        end
+    //sync <= ~sync;
+    //sync <= 1;
+    end
+
+// Instantiate the carrier loop filter
+reg     [11:0]  noise;
+carrierLoop loop(
+    .clk(clk), 
+    .reset(reset), 
+    .ddcSync(sync),
+    .resampSync(sync),
+    .wr0(1'b0),.wr1(1'b0),.wr2(1'b0),.wr3(1'b0),
+    .addr(12'b0),
+    .din(),
+    .dout(),
+    .demodMode(`MODE_PCMTRELLIS),
+    .phase(),
+    .freq(),
+    .highFreqOffset(),
+    .offsetError(noise),
+    .offsetErrorEn(sync),
+    .carrierFreqOffset(),
+    .carrierLeadFreq(),
+    .carrierFreqEn(),
+    .loopError(),
+    .carrierLock(),
+    .lockCounter()
+    );
+
+
+
+// Create some noise samples
+real            noiseSum;
+always @(posedge clk) begin
+    if (reset) begin
+        noise <= 0;
+        noiseSum <= 0.0;
+        end
+    else if (sync) begin
+        noise <= $gaussPLI();
+        noiseSum <= noiseSum - $itor($signed(noise));
+        end
+    end
+
+
+initial begin
+    $initGaussPLI(1,8.0,(2.0**10));
+
+    reset = 0;
+    sync = 1;
+    syncCount = 0;
+    clk = 0;
+
+    // Set the loop filter regs
+    loop.loopRegs.leadExp = 0;
+    loop.loopRegs.lagExp = 5'hc;
+    loop.loopRegs.upperLimit = 32'h100000;
+    loop.loopRegs.lowerLimit = 32'hfff00000;
+    loop.loopRegs.zeroError = 1'b1;
+    loop.loopRegs.invertError = 1'b1;
+    loop.loopRegs.acqTrackControl = 2'b00;
+
+    // Turn on the clock
+    clken=1;
+    #(10*C) ;
+
+    // Reset
+    reset = 1;
+    #(2*C) ;
+    reset = 0;
+
+    // Enable the loop filter
+    loop.loopRegs.zeroError = 1'b0;
+
+    // Clock the loop filter
+    #(1024*C) ;
+
+    $stop;
+
+
+
+    end
 
 endmodule
+`endif
+

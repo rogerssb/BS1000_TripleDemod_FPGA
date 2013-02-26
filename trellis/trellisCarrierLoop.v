@@ -11,7 +11,7 @@
 `timescale 1ns/1ps
 `include "./addressMap.v"
 `define USE_LEGACY
-`define USE_MPY_FM_DISC
+//`define USE_MPY_FM_DISC
            
 module trellisCarrierLoop(
     clk,reset,
@@ -329,7 +329,11 @@ always @(posedge clk) begin
             devCorrection <= posDevCorrection;
             end
         else if (!legacyBit & !prevLegacyBit) begin
+            `ifdef SYM_DEVIATION
+            devCorrection <= -posDevCorrection;
+            `else
             devCorrection <= negDevCorrection;
+            `endif
             end
         else begin
             devCorrection <= 0;
@@ -445,10 +449,10 @@ always @(posedge clk) begin
         qIns[32] <= qIns[31];
         end
     end
-wire    [17:0]  iInput = iIns[28];
-wire    [17:0]  qInput = qIns[28];
-//wire    [17:0]  iInput = iIns[31];
-//wire    [17:0]  qInput = qIns[31];
+//wire    [17:0]  iInput = iIns[28];
+//wire    [17:0]  qInput = qIns[28];
+wire    [17:0]  iInput = iIns[31];
+wire    [17:0]  qInput = qIns[31];
 `else
 wire    [17:0]  iInput = iIn;
 wire    [17:0]  qInput = qIn;
@@ -469,7 +473,7 @@ dds dds(
 wire    [11:0]  signalFreq;
 real            signalFreqReal;
 always @* signalFreqReal = $itor($signed(signalFreq))/(2**11);
-fmDemod signalDemod( 
+fmDemodWithCE signalDemod( 
     .clk(clk), .reset(reset), .sync(sym2xEn),
     .iFm(iInput),.qFm(qInput),
     .demodMode(`MODE_2FSK),
@@ -479,7 +483,7 @@ fmDemod signalDemod(
 wire    [11:0]  corrFreq;
 real            corrFreqReal;
 always @* corrFreqReal = $itor($signed(corrFreq))/(2**11);
-fmDemod corrDemod( 
+fmDemodWithCE corrDemod( 
     .clk(clk), .reset(reset), .sync(sym2xEn),
     .iFm(bReal),.qFm(bImag),
     .demodMode(`MODE_2FSK),
@@ -492,7 +496,8 @@ cmpy18Sat cmpy18Sat(clk,reset,iInput,qInput,bReal,bImag,iMpy,qMpy);
 reg [7:0] symEnSr;
 reg [7:0] sym2xEnSr;
 `ifdef USE_LEGACY
-reg [17:0]  iOut,qOut;
+reg [17:0]  iMpy0,qMpy0;
+reg [17:0]  iMpy1,qMpy1;
 `endif
 always @(posedge clk) begin
     `ifdef SIMULATE
@@ -509,12 +514,16 @@ always @(posedge clk) begin
         end
     `ifdef USE_LEGACY
     if (sym2xEnDly) begin
-        iOut <= iMpy;
-        qOut <= qMpy;
+        iMpy0 <= iMpy;
+        qMpy0 <= qMpy;
+        iMpy1 <= iMpy0;
+        qMpy1 <= qMpy0;
         end
     `endif
     end
 `ifdef USE_LEGACY
+assign iOut = iMpy1;
+assign qOut = qMpy1;
 `else
 assign iOut = iMpy;
 assign qOut = qMpy;
@@ -528,30 +537,28 @@ assign sym2xEnDly = sym2xEnSr[3];
 
 `ifdef USE_MPY_FM_DISC
 
-reg     [17:0]  iOut0;
-reg     [17:0]  qOut0;
 wire    [35:0]  term1,term2;
 mpy18x18WithCe mult1(
     .clk(clk),
     .ce(sym2xEnDly),
-    .a(qOut0),
-    .b(iOut),
+    .a(qMpy1),
+    .b(iMpy0),
     .p(term1)
     );
 mpy18x18WithCe mult2(
     .clk(clk),
     .ce(sym2xEnDly),
-    .a(iOut0),
-    .b(qOut),
+    .a(iMpy1),
+    .b(qMpy0),
     .p(term2)
     );
 
 wire    [35:0]  diff = term2 - term1;
-wire    [11:0]  freq = diff[34:23];
+//wire    [11:0]  freq = diff[34:23];
+reg     [11:0]  freq;
 always @(posedge clk) begin
     if (sym2xEnDly) begin
-        iOut0 <= iOut;
-        qOut0 <= qOut;
+        freq <= diff[34:23] + diff[22];
         end
     end
 
@@ -591,6 +598,8 @@ always @(posedge clk) begin
 
 `endif //USE_MPY_FM_DISC
 
+`define USE_MIDSAMPLES
+`ifdef USE_MIDSAMPLES
 // Extract an AFC control signal
 reg     [11:0]  prevMidSample;
 reg     [11:0]  afcError;
@@ -598,7 +607,8 @@ reg             prevSign;
 reg             transition;
 always @(posedge clk) begin
     if (sym2xEnDly) begin
-        if (!symEnDly) begin
+        //if (!symEnDly) begin
+        if (symEnDly) begin
             if (prevSign != freq[11]) begin
                 transition <= 1;
                 end
@@ -618,6 +628,9 @@ always @(posedge clk) begin
             end
         end
     end
+`else
+wire    [11:0]  afcError = -freq;
+`endif
 
 // AFC Loop Filter
 lagGain12 afcLoopFilter (
@@ -636,7 +649,7 @@ lagGain12 afcLoopFilter (
     .track(1'b1),
     .lagAccum(afcAccum)
     );
-assign afcOffset = afcAccum[39:8];
+assign afcOffset = afcAccum[39:8] + afcAccum[7];
 
 `ifdef SIMULATE
 real iOutReal;

@@ -391,6 +391,7 @@ always @(posedge sampleClk) begin
                         noTransitionCount <= 0;
                         transitionCount <= transitionCount + 1;
                         dcError <= offTimeI + prevOffTimeI;
+                        //dcError <= offTimeI;
                         dcErrorAvailable <= 1;
 
                         // High to low transition?
@@ -483,6 +484,79 @@ always @(qMF) qMFReal = (qMF[17] ? qMF - 262144.0 : qMF)/131072.0;
 `endif
 
 
+`define NEW_OFFSET_ERROR
+`ifdef NEW_OFFSET_ERROR
+
+reg     [17:0]  iMF0;
+reg     [17:0]  qMF0;
+wire    [35:0]  term1,term2;
+mpy18x18WithCe mult1(
+    .clk(sampleClk),
+    .ce(symTimes2Sync),
+    .a(qMF0),
+    .b(iMF),
+    .p(term1)
+    );
+mpy18x18WithCe mult2(
+    .clk(sampleClk),
+    .ce(symTimes2Sync),
+    .a(iMF0),
+    .b(qMF),
+    .p(term2)
+    );
+
+wire    [35:0]  diff = term2 - term1;
+wire    [17:0]  mpyFreq = diff[34:17];
+always @(posedge sampleClk) begin
+    if (symTimes2Sync) begin
+        iMF0 <= iMF;
+        qMF0 <= qMF;
+        end
+    end
+
+reg     [17:0]  prevMidSample;
+reg     [17:0]  afcError;
+reg             prevSign;
+reg             bitTransition;
+always @(posedge sampleClk) begin
+    if (symTimes2Sync) begin
+        if (timingErrorEn) begin
+            if (prevSign != mpyFreq[17]) begin
+                bitTransition <= 1;
+                end
+            else begin
+                bitTransition <= 0;
+                end
+            prevSign <= mpyFreq[17];
+            end
+        else begin
+            if (bitTransition) begin
+                afcError <= prevMidSample;
+                end
+            else begin
+                afcError <= 0;
+                end
+            prevMidSample <= mpyFreq;
+            end
+        end
+    end
+assign          offsetError = afcError;
+assign          offsetErrorEn = !timingErrorEn;
+
+`ifdef SIMULATE
+real mpyFreqReal;
+always @* mpyFreqReal = $itor($signed(mpyFreq))/(2**17);
+`endif
+
+`else   //NEW_OFFSET_ERROR
+
+assign          offsetError = dcError;
+assign          offsetErrorEn = offsetEn;
+
+`endif  //NEW_OFFSET_ERROR
+
+
+
 // Calculation of average DC offset (freq offset in FSK mode) and average FSK deviation.
 `ifdef SYM_DEVIATION
 reg     [24:0]  avgDeviation;
@@ -491,8 +565,6 @@ reg     [24:0]  avgPosDeviation;
 reg     [24:0]  avgNegDeviation;
 `endif
 reg     [24:0]  avgOffsetError;
-assign          offsetError = dcError;
-assign          offsetErrorEn = offsetEn;
 //assign          offsetError = avgOffsetError[24:7];
 always @(posedge sampleClk) begin
     if (reset) begin
