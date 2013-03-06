@@ -278,6 +278,7 @@ always @(posedge clk) begin
 // Final Outputs
 //assign carrierFreqOffset = filterSum[39:8];
 assign carrierFreqOffset = lagAccum[39:8] + lagAccum[7];
+//assign carrierLeadFreq = leadError[39:8];
 assign carrierLeadFreq = leadError[39:8] + leadError[7];
 assign carrierFreqEn = loopFilterEn;
 

@@ -64,8 +64,8 @@ wire    [ROT_BITS-1:0]   phaseErrorReal;
 wire    [7:0]   phaseError;
 `endif
 wire    [ROT_BITS-1:0]   phaseErrorImag;
-wire    [11:0]   freq;
-wire    [11:0]   afcError;
+wire    [11:0]   dac0Output;
+wire    [11:0]   dac1Output;
 wire    [17:0]  carrierLoopIOut,carrierLoopQOut;
 `ifdef BYPASS_TRELLIS_CARRIER_LOOP
 assign freq = 0;
@@ -108,8 +108,8 @@ trellisCarrierLoop trellisCarrierLoop(
   .qOut(carrierLoopQOut),
   .symEnDly(symEnDly),
   .sym2xEnDly(sym2xEnDly),
-  .freq(freq),
-  .afcError(afcError)
+  .dac0Output(dac0Output),
+  .dac1Output(dac1Output)
   );
 `endif
 
@@ -895,9 +895,10 @@ always @(posedge clk) begin
             dac1Sync <= symEn_phErr;
             end
         `DAC_TRELLIS_INDEX: begin
-            dac1Data <= {freq,6'b0};
+            dac1Data <= {dac0Output,6'b0};
             //dac1Data <= {afcError,6'b0};
             dac1Sync <= sym2xEnDly;
+            //dac1Sync <= sym2xEn;
             end
         default: begin
             dac1Data <= {phErrShft,10'b0};
@@ -925,9 +926,9 @@ always @(posedge clk) begin
         `DAC_TRELLIS_INDEX: begin
             //dac2Data <= {1'b0,index,12'b0};
             //dac2Data <= {1'b0,legacyBit,16'b0};
-            dac2Data <= {afcError,6'b0};
+            dac2Data <= {dac1Output,6'b0};
             //dac2Sync <= symEnOut;
-            dac2Sync <= sym2xEnOut;
+            dac2Sync <= sym2xEnDly;
             end
         default: begin
             dac2Data <= {phErrShft,10'b0};

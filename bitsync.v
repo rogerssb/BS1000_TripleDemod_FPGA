@@ -390,8 +390,8 @@ always @(posedge sampleClk) begin
                         transition <= 1;
                         noTransitionCount <= 0;
                         transitionCount <= transitionCount + 1;
-                        dcError <= offTimeI + prevOffTimeI;
-                        //dcError <= offTimeI;
+                        //dcError <= offTimeI + prevOffTimeI;
+                        dcError <= offTimeI;
                         dcErrorAvailable <= 1;
 
                         // High to low transition?
@@ -484,7 +484,7 @@ always @(qMF) qMFReal = (qMF[17] ? qMF - 262144.0 : qMF)/131072.0;
 `endif
 
 
-`define NEW_OFFSET_ERROR
+//`define NEW_OFFSET_ERROR
 `ifdef NEW_OFFSET_ERROR
 
 reg     [17:0]  iMF0;

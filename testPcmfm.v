@@ -468,7 +468,7 @@ trellis trellis
    .sym2xEn      (sym2xEn),
    .iIn          (iIn),
    .qIn          (qIn),
-   .legacyBit    (!demodBit),
+   .legacyBit    (demodBit),
    .wr0          (we0),
    .wr1          (we1),
    .wr2          (we2),
@@ -697,12 +697,13 @@ initial begin
     write32(createAddress(`CARRIERSPACE,`LF_LOOPDATA0), sweepRate);
 
     // Init the trellis carrier loop
-    write32(createAddress(`TRELLISLFSPACE,`LF_CONTROL),9);    // Forces the lag acc and the error term to be zero
+    write32(createAddress(`TRELLISLFSPACE,`LF_CONTROL),13);    // Forces the lag acc and the error term to be zero
     write32(createAddress(`TRELLISLFSPACE,`LF_LEAD_LAG),32'h0015_0005);   
     write32(createAddress(`TRELLISLFSPACE,`LF_LIMIT),32'h0100_0000);   
     //write32(createAddress(`TRELLISLFSPACE,`LF_LOOPDATA0),32'h0333_3333);
     //write32(createAddress(`TRELLISLFSPACE,`LF_LOOPDATA0),32'h0666_6666);
-    write32(createAddress(`TRELLISLFSPACE,`LF_LOOPDATA0),32'h0);
+    write32(createAddress(`TRELLISLFSPACE,`LF_LOOPDATA0),32'h0100_0000);
+    write32(createAddress(`TRELLISLFSPACE,`LF_LOOPDATA1),32'hff00_0000);
 
     write32(createAddress(`TRELLIS_SPACE,`TRELLIS_DECAY),217);
                     
@@ -808,7 +809,7 @@ initial begin
 
     // Enable the trellis carrier loop
     #(10*bitrateSamplesInt*C) ;
-    write32(createAddress(`TRELLISLFSPACE,`LF_CONTROL),2);
+    //write32(createAddress(`TRELLISLFSPACE,`LF_CONTROL),6);
 
     `ifdef ENABLE_AGC
     // Enable the AGC loop

@@ -27,8 +27,8 @@ module trellisCarrierLoop(
     iOut,qOut,
     symEnDly,
     sym2xEnDly,
-    freq,
-    afcError,
+    dac0Output,
+    dac1Output,
     lockCounter
     );
 
@@ -45,8 +45,8 @@ output  [31:0]  dout;
 output  [17:0]  iOut,qOut;
 output          symEnDly;
 output          sym2xEnDly;
-output  [11:0]  freq;
-output  [11:0]  afcError;
+output  [11:0]  dac0Output;
+output  [11:0]  dac1Output;
 output  [15:0]  lockCounter;
 
 wire    [31:0]  carrierFreqOffset;
@@ -449,10 +449,11 @@ always @(posedge clk) begin
         qIns[32] <= qIns[31];
         end
     end
-//wire    [17:0]  iInput = iIns[28];
-//wire    [17:0]  qInput = qIns[28];
-wire    [17:0]  iInput = iIns[31];
-wire    [17:0]  qInput = qIns[31];
+//wire    [17:0]  iInput = iIns[31];
+//wire    [17:0]  qInput = qIns[31];
+wire    [17:0]  iInput = iIns[28];
+wire    [17:0]  qInput = qIns[28];
+
 `else
 wire    [17:0]  iInput = iIn;
 wire    [17:0]  qInput = qIn;
@@ -471,24 +472,26 @@ dds dds(
 
 `ifdef SIMULATE
 wire    [11:0]  signalFreq;
-real            signalFreqReal;
-always @* signalFreqReal = $itor($signed(signalFreq))/(2**11);
 fmDemodWithCE signalDemod( 
     .clk(clk), .reset(reset), .sync(sym2xEn),
     .iFm(iInput),.qFm(qInput),
     .demodMode(`MODE_2FSK),
     .freq(signalFreq)
     );
+assign dac0Output = signalFreq;
 
 wire    [11:0]  corrFreq;
-real            corrFreqReal;
-always @* corrFreqReal = $itor($signed(corrFreq))/(2**11);
 fmDemodWithCE corrDemod( 
     .clk(clk), .reset(reset), .sync(sym2xEn),
     .iFm(bReal),.qFm(bImag),
     .demodMode(`MODE_2FSK),
     .freq(corrFreq)
     );
+assign dac1Output = corrFreq;
+real            signalFreqReal;
+always @* signalFreqReal = $itor($signed(signalFreq))/(2**11);
+real            corrFreqReal;
+always @* corrFreqReal = $itor($signed(corrFreq))/(2**11);
 `endif
 
 cmpy18Sat cmpy18Sat(clk,reset,iInput,qInput,bReal,bImag,iMpy,qMpy);
@@ -522,8 +525,12 @@ always @(posedge clk) begin
     `endif
     end
 `ifdef USE_LEGACY
-assign iOut = iMpy1;
-assign qOut = qMpy1;
+//assign iOut = iMpy1;
+//assign qOut = qMpy1;
+assign iOut = iMpy0;
+assign qOut = qMpy0;
+//assign iOut = iMpy;
+//assign qOut = qMpy;
 `else
 assign iOut = iMpy;
 assign qOut = qMpy;
@@ -561,6 +568,7 @@ always @(posedge clk) begin
         freq <= diff[34:23] + diff[22];
         end
     end
+assign dac0Output = freq;
 
 `else   //USE_MPY_FM_DISC
 
@@ -595,7 +603,7 @@ always @(posedge clk) begin
         prevPhase <= phase;
         end
     end
-
+assign dac0Output = freq;
 `endif //USE_MPY_FM_DISC
 
 `define USE_MIDSAMPLES
@@ -607,8 +615,11 @@ reg             prevSign;
 reg             transition;
 always @(posedge clk) begin
     if (sym2xEnDly) begin
-        //if (!symEnDly) begin
+        `ifdef USE_MPY_FM_DISC
+        if (!symEnDly) begin
+        `else
         if (symEnDly) begin
+        `endif
             if (prevSign != freq[11]) begin
                 transition <= 1;
                 end
@@ -624,13 +635,18 @@ always @(posedge clk) begin
             else begin
                 afcError <= 0;
                 end
-            prevMidSample <= freq;
+            `ifdef USE_MPY_FM_DISC
+            prevMidSample <= -freq;
+            `else
+            prevMidSample <= -freq;
+            `endif
             end
         end
     end
 `else
 wire    [11:0]  afcError = -freq;
 `endif
+assign dac1Output = afcError;
 
 // AFC Loop Filter
 lagGain12 afcLoopFilter (
@@ -650,6 +666,7 @@ lagGain12 afcLoopFilter (
     .lagAccum(afcAccum)
     );
 assign afcOffset = afcAccum[39:8] + afcAccum[7];
+//assign afcOffset = afcAccum[39:8];
 
 `ifdef SIMULATE
 real iOutReal;
