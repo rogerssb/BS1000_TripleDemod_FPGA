@@ -52,8 +52,7 @@ output          decision;
 output          symEnOut;
 output          sym2xEnOut;
 output          oneOrZeroPredecessor;
-   
-   
+
 wire                    decision;
 
 wire            symEn_phErr;
@@ -188,7 +187,7 @@ always @(posedge clk) begin
     end
 assign fskDeviation = avgDeviation[18:3] + avgDeviation[2];
 
-   
+
 `ifdef SIMULATE
 real diffReal;
 always @(absPhaseDiff) diffReal = (absPhaseDiff[11] ? absPhaseDiff - 4096.0 : absPhaseDiff)/2048.0;
@@ -219,7 +218,7 @@ always @(posedge clk) begin
         else begin
             mdSR <= {mdSR[5:0],1'b0};
             end
-        end                        
+        end
     if (trellEna) begin
         magDecision <= mdSR[6];
         end
@@ -232,13 +231,13 @@ assign sym2xEnOut = 0;  // need to allign
 wire    [4:0]   index = 0;
 assign          symEn_phErr = 1;
 wire            trellEna = 1;
-always @(posedge clk) begin 
+always @(posedge clk) begin
     phErrShft <= 0;
     end
 
 
 iqMagEst iqMagEst
-  ( 
+  (
     .clk(clk), .reset(reset), .syncIn(rotEna),
     //.iIn_0(f0I),
     //.qIn_0(f0Q),
@@ -252,9 +251,9 @@ iqMagEst iqMagEst
     );
 
 `else
-  
-   
-   
+
+
+
 wire [ROT_BITS-1:0]
   out0Pt1Real,out1Pt1Real,          out0Pt1Imag,out1Pt1Imag,
   out0Pt2Real,out1Pt2Real,          out0Pt2Imag,out1Pt2Imag,
@@ -436,7 +435,7 @@ always @(negedge clk) begin
     end
 viterbi_top viterbi_top
   (
-  .clk(clk), .reset(reset), .symEn(trellEna), 
+  .clk(clk), .reset(reset), .symEn(trellEna),
   .out0Pt1Real(out0Pt1Real)    ,.out0Pt1Imag(out0Pt1Imag),
   .out1Pt1Real(out1Pt1Real)    ,.out1Pt1Imag(out1Pt1Imag),
   .out0Pt2Real(out0Pt2Real)    ,.out0Pt2Imag(out0Pt2Imag),
@@ -580,7 +579,7 @@ viterbi_top #(size, ROT_BITS)viterbi_top
   `endif
   .phaseErrorImag(phaseErrorImag),
   .symEn_phErr(symEn_phErr),
-  .oneOrZeroPredecessor(oneOrZeroPredecessor)              
+  .oneOrZeroPredecessor(oneOrZeroPredecessor)
   );
 
 
@@ -610,7 +609,7 @@ always @(posedge clk) begin
         end else begin
             phErrShft <= dataBits;
         end
-    end   
+    end
 end
 
 //`define INDEX_AVG
@@ -618,18 +617,18 @@ end
 wire    [4:0]           index0;
 wire    [ROT_BITS-1:0]  maxVal0;
 maxMetric #(ROT_BITS) maxMetric0 (
-    .clk(clk), 
-    .reset(reset), 
-    .symEn(trellEna), 
-    .accMetOut0( out0Pt1Real ), .accMetOut1( out0Pt2Real ), 
-    .accMetOut2( out0Pt3Real ), .accMetOut3( out0Pt4Real ), 
-    .accMetOut4( out0Pt5Real ), .accMetOut5( out0Pt6Real ), 
-    .accMetOut6( out0Pt7Real ), .accMetOut7( out0Pt8Real ), 
-    .accMetOut8( out0Pt9Real ), .accMetOut9( out0Pt10Real), 
-    .accMetOut10(out0Pt11Real), .accMetOut11(out0Pt12Real), 
-    .accMetOut12(out0Pt13Real), .accMetOut13(out0Pt14Real), 
-    .accMetOut14(out0Pt15Real), .accMetOut15(out0Pt16Real), 
-    .accMetOut16(out0Pt17Real), .accMetOut17(out0Pt18Real), 
+    .clk(clk),
+    .reset(reset),
+    .symEn(trellEna),
+    .accMetOut0( out0Pt1Real ), .accMetOut1( out0Pt2Real ),
+    .accMetOut2( out0Pt3Real ), .accMetOut3( out0Pt4Real ),
+    .accMetOut4( out0Pt5Real ), .accMetOut5( out0Pt6Real ),
+    .accMetOut6( out0Pt7Real ), .accMetOut7( out0Pt8Real ),
+    .accMetOut8( out0Pt9Real ), .accMetOut9( out0Pt10Real),
+    .accMetOut10(out0Pt11Real), .accMetOut11(out0Pt12Real),
+    .accMetOut12(out0Pt13Real), .accMetOut13(out0Pt14Real),
+    .accMetOut14(out0Pt15Real), .accMetOut15(out0Pt16Real),
+    .accMetOut16(out0Pt17Real), .accMetOut17(out0Pt18Real),
     .accMetOut18(out0Pt19Real), .accMetOut19(out0Pt20Real),
     .maxVal(maxVal0),
     .index(index0), .symEnDly(maxEn)
@@ -638,18 +637,18 @@ maxMetric #(ROT_BITS) maxMetric0 (
 wire    [4:0]           index1;
 wire    [ROT_BITS-1:0]  maxVal1;
 maxMetric #(ROT_BITS) maxMetric1 (
-    .clk(clk), 
-    .reset(reset), 
-    .symEn(trellEna), 
-    .accMetOut0( out1Pt1Real ), .accMetOut1( out1Pt2Real ), 
-    .accMetOut2( out1Pt3Real ), .accMetOut3( out1Pt4Real ), 
-    .accMetOut4( out1Pt5Real ), .accMetOut5( out1Pt6Real ), 
-    .accMetOut6( out1Pt7Real ), .accMetOut7( out1Pt8Real ), 
-    .accMetOut8( out1Pt9Real ), .accMetOut9( out1Pt10Real), 
-    .accMetOut10(out1Pt11Real), .accMetOut11(out1Pt12Real), 
-    .accMetOut12(out1Pt13Real), .accMetOut13(out1Pt14Real), 
-    .accMetOut14(out1Pt15Real), .accMetOut15(out1Pt16Real), 
-    .accMetOut16(out1Pt17Real), .accMetOut17(out1Pt18Real), 
+    .clk(clk),
+    .reset(reset),
+    .symEn(trellEna),
+    .accMetOut0( out1Pt1Real ), .accMetOut1( out1Pt2Real ),
+    .accMetOut2( out1Pt3Real ), .accMetOut3( out1Pt4Real ),
+    .accMetOut4( out1Pt5Real ), .accMetOut5( out1Pt6Real ),
+    .accMetOut6( out1Pt7Real ), .accMetOut7( out1Pt8Real ),
+    .accMetOut8( out1Pt9Real ), .accMetOut9( out1Pt10Real),
+    .accMetOut10(out1Pt11Real), .accMetOut11(out1Pt12Real),
+    .accMetOut12(out1Pt13Real), .accMetOut13(out1Pt14Real),
+    .accMetOut14(out1Pt15Real), .accMetOut15(out1Pt16Real),
+    .accMetOut16(out1Pt17Real), .accMetOut17(out1Pt18Real),
     .accMetOut18(out1Pt19Real), .accMetOut19(out1Pt20Real),
     .maxVal(maxVal1),
     .index(index1), .symEnDly()
@@ -661,7 +660,7 @@ wire    [5:0]   idxDiff = {1'b0,prevIndex} - {1'b0,index0};
 reg     [5:0]   idxDelta;
 always @(posedge clk) begin
     if (maxEn) begin
-        case ({maxVal0[ROT_BITS-1], maxVal1[ROT_BITS-1]}) // Checking the sign bit 
+        case ({maxVal0[ROT_BITS-1], maxVal1[ROT_BITS-1]}) // Checking the sign bit
             2'b00: begin // both pos
                 if (maxVal0 > maxVal1) maxIndex <= index0;
                 else maxIndex <= index1;
@@ -677,7 +676,7 @@ always @(posedge clk) begin
                 else maxIndex <= index1;
            end
          endcase
-            
+
         prevIndex <= index0;
         if (idxDiff[5]) begin
             if (idxDiff < 6'h37) begin
@@ -736,7 +735,7 @@ always @(posedge clk) begin
     end
 bitFifo bitFifo(
     .clk(clk),
-    .reset(reset),      
+    .reset(reset),
     .enIn(symEn),
     .enOut(symEnOut),
     .din(legacySR[13]),
@@ -748,7 +747,7 @@ reg     [15:0]  bitErrorCount;
 reg             berRestart;
 reg             br0,br1;
 reg             berRestarted;
-always @(posedge clk) begin 
+always @(posedge clk) begin
     br0 <= berRestart;
     br1 <= br0;
     if (reset | br1) begin
@@ -767,7 +766,7 @@ always @(posedge clk) begin
 `endif
 
 `endif //IQ_MAG
-   
+
 /************************ Trellis Register Definitions ************************/
 
 reg trellisSpace;
@@ -781,7 +780,7 @@ always @(addr) begin
 `ifdef USE_DECAY
 always @(negedge wr0) begin
     if (trellisSpace) begin
-        casex (addr) 
+        casex (addr)
             `TRELLIS_DECAY:     decayFactor <= din[7:0];
             default: ;
             endcase
@@ -799,7 +798,7 @@ always @(negedge wr2 or posedge berRestarted) begin
     end
 
 reg [31:0]trellisDout;
-always @(trellisSpace or addr or 
+always @(trellisSpace or addr or
          bitErrorCount or bitCount
          `ifdef HNEW_DETECTOR
          or fskDeviation
@@ -826,7 +825,7 @@ always @(trellisSpace or addr or
     end
 
 reg [31:0]dout;
-always @(addr or 
+always @(addr or
          bitErrorCount or bitCount or
          trellisDout or trellisLoopDout
          ) begin
@@ -850,7 +849,7 @@ reg     [17:0]  dac1Data;
 reg             dac2Sync;
 reg     [17:0]  dac2Data;
 always @(posedge clk) begin
-    case (dac0Select) 
+    case (dac0Select)
         `DAC_TRELLIS_I: begin
             dac0Data <= carrierLoopIOut;
             dac0Sync <= sym2xEnDly;
@@ -877,7 +876,7 @@ always @(posedge clk) begin
             end
         endcase
 
-    case (dac1Select) 
+    case (dac1Select)
         `DAC_TRELLIS_I: begin
             dac1Data <= carrierLoopIOut;
             dac1Sync <= sym2xEnDly;
@@ -906,7 +905,7 @@ always @(posedge clk) begin
             end
         endcase
 
-    case (dac2Select) 
+    case (dac2Select)
         `DAC_TRELLIS_I: begin
             dac2Data <= carrierLoopIOut;
             dac2Sync <= sym2xEnDly;
@@ -938,6 +937,27 @@ always @(posedge clk) begin
 
     end
 
+/*
+wire [35:0] CONTROL0 ;
+chipscope_icon icon (
+    .CONTROL0(CONTROL0) // INOUT BUS [35:0]
+);
+chipscope_ila ila (
+    .CONTROL(CONTROL0), // INOUT BUS [35:0]
+    .CLK(clk), // IN
+    .DATA({
+        7'b0,
+        trellisSpace,
+        addr[11:0],
+        decayFactor[7:0],  //qIn[17:10], //qSymData[7:0],
+        wr0, //1'b0,
+        legacyBit,
+        symEn,
+        sym2xEn
+        }), // IN BUS [31:0]
+    .TRIG0(wr0) // IN BUS [0:0]
+);
+*/
 endmodule
 
 

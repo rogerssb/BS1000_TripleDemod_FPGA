@@ -82,7 +82,7 @@ always @(cs or addr or
          bypass or
          test or
          invert or
-         exponent or 
+         exponent or
          mantissa or
          testValue)
     begin
@@ -99,4 +99,5 @@ always @(cs or addr or
         dataOut <= 32'hx;
         end
     end
+
 endmodule

@@ -1,3 +1,4 @@
+
 `ifndef ADDRESS_MAP
 `define ADDRESS_MAP
 
@@ -67,10 +68,13 @@
 `define DAC_TRELLIS_Q       4'b1101
 `define DAC_TRELLIS_PHERR   4'b1110
 `define DAC_TRELLIS_INDEX   4'b1111
-`define DEMOD_FALSELOCK 12'bxxxx_xxx0_10xx
-`define DEMOD_STATUS    12'bxxxx_xxx0_11xx
-`define DEMOD_AMTC      12'bxxxx_xxx1_00xx
-`define DEMOD_FSKDEV    12'bxxxx_xxx1_01xx
+`define DEMOD_FALSELOCK     12'bxxxx_xxx0_10xx
+`define DEMOD_STATUS        12'bxxxx_xxx0_11xx
+`define DEMOD_AMTC          12'bxxxx_xxx1_00xx
+`define DEMOD_FSKDEV        12'bxxxx_xxx1_010x
+`define EQUAL_STEP_EXPO     12'bxxxx_xxx1_011x
+`define EQUAL_CONTROL       12'bxxxx_xxx1_100x
+`define EQUAL_REF_LEVEL     12'bxxxx_xxx1_101x
 
 // Define the FM memory map
 `define FM_MOD_FREQ     12'bxxxx_xxxx_00xx

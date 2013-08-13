@@ -1,6 +1,6 @@
 `timescale 1ns / 10 ps
 
-module interpolate( 
+module interpolate(
     clk, reset, clkEn,
     cs,
     wr0, wr1, wr2, wr3,
@@ -61,20 +61,20 @@ always @(posedge clk) begin
 // CIC Compensation
 wire    [17:0]  cicCompOut;
 cicComp cicComp(
-    .clk(clk), 
+    .clk(clk),
     .reset(reset),
-    .sync(clkEn), 
+    .sync(clkEn),
     .compIn(dataIn),
     .compOut(cicCompOut)
     );
 `else
 wire    [32:0]  lutDout;
 cicCompensation cicComp(
-    .rfd(), 
-    .rdy(), 
-    .nd(clkEn | reset), 
-    .clk(clk), 
-    .dout(lutDout), 
+    .rfd(),
+    .rdy(),
+    .nd(clkEn | reset),
+    .clk(clk),
+    .dout(lutDout),
     .din(dataIn)
 );
 wire    [17:0]  cicCompOut = lutDout[26:9];
@@ -110,17 +110,17 @@ mpy18x18 mantissaScaler (
     .p(scaledValue)
     );
 
-wire [29:0] invSincOut;   
-invSinc invSinc 
+wire [29:0] invSincOut;
+invSinc invSinc
   (
    .clk(clk),
    .nd(1'b1),
    .rfd(),
    .rdy(),
-   .din(scaledValue[33:18]), // Bus [15 : 0] 
+   .din(scaledValue[33:18]), // Bus [15 : 0]
    .dout(invSincOut)); // Bus [24 : 0]
-   
-   
+
+
 reg     [17:0]  dataOut;
 always @(posedge clk) begin
     if (test) begin
