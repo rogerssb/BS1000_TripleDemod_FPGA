@@ -1,0 +1,12 @@
+# Output products list for <cmult18L>
+cmult18L.gise
+cmult18L.ngc
+cmult18L.v
+cmult18L.veo
+cmult18L.xco
+cmult18L.xise
+cmult18L\doc\cmpy_ds291.pdf
+cmult18L\doc\cmpy_v3_1_vinfo.html
+cmult18L_flist.txt
+cmult18L_readme.txt
+cmult18L_xmdf.tcl
