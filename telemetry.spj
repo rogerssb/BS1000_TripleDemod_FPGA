@@ -8,9 +8,9 @@ Version=Silvaco4.10.0.R
 DisableCache=
 SimFile=
 [Analyzer]
-C0Width=165
+C0Width=167
 C1Width=58
-C2Width=76
+C2Width=119
 GotoSource=N
 ShowYaxis=
 [Spice]
@@ -31,7 +31,6 @@ Name="Micro"
 3="test.demod : wr3" default
 4="test.demod : din[31:0]" default
 5="test.demod : addr[11:0]" default
-OpenGroup=
 [PliFiles]
 0=.\gaussPLI\gaussPLI.dll
 [IncDirs]
@@ -59,6 +58,7 @@ Name="Carrier"
 18="test.demod.carrierLoop : negFrequency[18:0]" default
 19="test.demod.carrierLoop : posFrequency[18:0]" default
 20="test.demod.carrierLoop : newFreq[18:0]" default
+OpenGroup=
 [Group7]
 Name="SDI"
 0="test.sdi : eyeCount[2:0]" default
@@ -88,7 +88,6 @@ Name="SDI"
 24="test.sdi : muxState[3:0]" default
 25="test.sdi : baudEn" default
 26="test.sdi : baudDiv[15:0]" default
-OpenGroup=
 [Group6]
 Name="DAC"
 0="test.dac2Interp : invSincOut[31:0]" default
@@ -108,8 +107,7 @@ Name="DAC"
 14="test.demod : symClk" default Unknown
 15="test.demod : resampSync" default
 16="test.demod : ddcSync" default
-[LibraryFiles]
-0=..\..\Xilinx\10.1\verilog\src\unisims\{.v}
+OpenGroup=
 [Group2]
 Name="Tx"
 0="test.fmMod : interpReal" default Real AnalogDisplay AType=Step Scale=Auto
@@ -124,6 +122,7 @@ Name="Tx"
 9="test.fmMod : modClk" default
 10="test.fmMod : reset" default
 11="test.fmMod : clk" default
+OpenGroup=
 [Group1]
 Name="Rx"
 0="test.demod.resampler : reset" default
@@ -154,6 +153,7 @@ Name="Rx"
 25="test.demod.ddc : iMixReal" default Real AnalogDisplay AType=Step Scale=Auto
 26="test : iSignalReal" default Real AnalogDisplay AType=Step Scale=Auto
 27="test : cicDecimationInt" default Decimal AnalogDisplay AType=PWL Scale=Auto
+OpenGroup=Yes
 [Group4]
 Name="Bitsync"
 0="test.demod.bitsync : avgOffsetReal" default Real AnalogDisplay AType=Step Scale=Auto
@@ -201,7 +201,6 @@ Name="Bitsync"
 42="test : resamplerFreqInt" default AnalogDisplay AType=PWL Scale=Auto
 43="test : resamplerFreqNorm" default Real AnalogDisplay AType=PWL Scale=Auto
 44="test : resamplerFreqSps" default Real AnalogDisplay AType=PWL Scale=Auto
-OpenGroup=Yes
 [Files]
 0=test.v
 1=demod.v
@@ -271,6 +270,8 @@ OpenGroup=Yes
 65=carrierLoopRegs.v
 66=artmSignalQuality.v
 67=.\coregen\mpy18x18PL1.v
+[LibraryFiles]
+0=..\..\Xilinx\10.1\ISE\verilog\src\unisims\{.v}
 [GroupInfo]
 0=New Group2 : 0 : 0 : 0
 1=Tx : 1 : 1 : 0
@@ -280,4 +281,3 @@ OpenGroup=Yes
 5=Carrier : 5 : 1 : 0
 6=DAC : 6 : 1 : 0
 7=SDI : 7 : 1 : 0
-[Bookmarks]

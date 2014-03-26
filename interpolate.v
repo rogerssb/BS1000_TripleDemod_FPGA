@@ -35,6 +35,7 @@ interpRegs regs  (
     .bypass(bypass),
     .test(test),
     .invert(invert),
+    .bypassEQ(bypassEQ),
     .testValue(testValue),
     .exponent(exponent),
     .mantissa(mantissa)
@@ -85,12 +86,24 @@ real compReal;
 always @(cicCompOut) compReal = ((cicCompOut > 131071.0) ? (cicCompOut - 262144.0) : cicCompOut)/131072.0;
 `endif
 
+// CIC Interpolation Mux
+reg     [17:0]  cicIn;
+always @(posedge clk) begin
+    if (clkEn) begin
+        if (bypassEQ) begin
+            cicIn <= dataIn;
+            end
+        else begin
+            cicIn <= cicCompOut;
+            end
+        end
+    end
 
 // CIC Interpolation Filter
 wire [47:0]cicOut;
 cicInterpolate cicInterpolate(
     .clk(clk), .reset(reset | cicReset), .clkEn(clkEn),
-    .dIn(cicCompOut),
+    .dIn(cicIn),
     .dOut(cicOut)
     );
 wire [17:0]exponentAdjusted;
@@ -134,6 +147,14 @@ always @(posedge clk) begin
             else begin
                 dataOut <= dataIn;
                 end
+            end
+        end
+    else if (bypassEQ) begin
+        if (invert) begin
+            dataOut <= -scaledValue[33:16];
+            end
+        else begin
+            dataOut <= scaledValue[33:16];
             end
         end
     else begin

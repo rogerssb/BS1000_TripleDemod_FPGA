@@ -123,8 +123,10 @@ always @(
             oddOutQ = fifoQ[10];
             end
         default: begin
-            oddOutI = fifoI[9];
-            oddOutQ = fifoQ[9];
+            //oddOutI = fifoI[9];
+            //oddOutQ = fifoQ[9];
+            oddOutI = fifoI[10];
+            oddOutQ = fifoQ[10];
             end
         endcase
     end
@@ -208,7 +210,7 @@ module test;
 reg reset,clk;
 
 // Create the clocks
-parameter decimation = 20;
+parameter decimation = 9;
 parameter HC = 5;
 parameter C = 2*HC;
 reg clken;
@@ -255,7 +257,7 @@ dds dds(.sclr(reset), .clk(clk), .ce(1'b1), .we(1'b1), .data(freq), .sine(sineOu
 
 always @(posedge clk) begin
     if (sync) begin
-        hbIn <= sineOut;
+        hbIn <= {sineOut[17],sineOut[17:1]};
         end
     end
 
@@ -273,6 +275,10 @@ initial begin
     reset = 1;
     #(2*C) ;
     reset = 0;
+
+    #(64*C*decimation) ;
+
+    carrierFreqHz = 10e6/decimation;
 
     #(64*C*decimation) ;
 

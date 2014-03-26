@@ -10,9 +10,9 @@ VisualDebug=
 DisableCache=
 SimFile=
 [Analyzer]
-C0Width=164
+C0Width=167
 C1Width=58
-C2Width=77
+C2Width=119
 GotoSource=N
 SymbolFile=
 ShowYaxis=
@@ -25,7 +25,7 @@ DiskSize=5000M
 RecirculateTime=
 UseRecirculateTime=
 [View]
-1=Last 30210.454ns 38119.668ns 182.872ns 31408.415ns 33017.680ns
+1=Last 19256.421ns 26754.173ns 182.872ns 31408.415ns 33017.680ns
 [Group0]
 Name=New Group2
 [Group3]
@@ -36,7 +36,6 @@ Name="Micro"
 3="test.demod : wr3" default
 4="test.demod : din[31:0]" default
 5="test.demod : addr[11:0]" default
-OpenGroup=
 [Group5]
 Name="Carrier"
 0="test.demod.carrierLoop.lagGain : sweepOffsetMag[31:0]" default
@@ -51,7 +50,6 @@ Name="Carrier"
 9="test.demod.carrierLoop : offsetError[7:0]" default
 10="test.demod.bitsync : offsetErrorSum[8:0]" default
 11="test.demod : freq[7:0]" default
-OpenGroup=
 [PliFiles]
 0=.\gaussPLI\gaussPLI.dll
 [IncDirs]
@@ -73,7 +71,6 @@ Name="DAC"
 12="test.demod : symClk" default
 13="test.demod : resampSync" default
 14="test.demod : ddcSync" default
-OpenGroup=
 [Group4]
 Name="Bitsync"
 0="test.demod.bitsync : slip" default
@@ -109,7 +106,6 @@ Name="Bitsync"
 30="test.demod.resampler : iOutReal" default Real AnalogDisplay AType=Step Scale=Auto
 31="test.demod.resampler : inIReal" default Real AnalogDisplay AType=Step Scale=Fixed MinScaleDbl=-1 MaxScaleDbl=1
 32="test : cicDecimationInt" default Decimal AnalogDisplay AType=PWL Scale=Auto
-OpenGroup=
 [Group2]
 Name="Tx"
 0="test : txSampleCount" default Decimal AnalogDisplay AType=Step Scale=Auto
@@ -126,6 +122,7 @@ Name="Tx"
 11="test.fmMod : modClk" default
 12="test.fmMod : reset" default
 13="test.fmMod : clk" default
+OpenGroup=
 [Mexclude]
 0=test.trellis.f0
 1=test.trellis.f1
@@ -164,7 +161,7 @@ Name="Rx"
 20="test : iChReal" default Real AnalogDisplay AType=Step Scale=Auto
 21="test : resamplerFreqInt" default AnalogDisplay AType=PWL Scale=Auto
 22="test : cicDecimationInt" default Decimal AnalogDisplay AType=PWL Scale=Auto
-OpenGroup=
+OpenGroup=Yes
 [Group7]
 Name="Trellis"
 0="test.trellis.viterbi_top : out1Imag_2dly[9:0]" default
@@ -239,7 +236,6 @@ Name="Trellis"
 69="test.trellis.trellisCarrierLoop : sym2xEn" default
 70="test.trellis.trellisCarrierLoop : symEn" default
 71="test : trellisReset" default
-OpenGroup=Yes
 [Files]
 0=testPcmfm.v
 1=demod.v
@@ -322,6 +318,7 @@ OpenGroup=Yes
 78=.\coregen\mpy18x18PL1.v
 79=carrierLoopRegs.v
 80=.\trellis\maxMetricEvenOdd.v
+81=.\fmDemod\fmDemodWithCE.v
 [GroupInfo]
 0=New Group2 : 0 : 0 : 0
 1=Tx : 1 : 1 : 0
@@ -331,4 +328,3 @@ OpenGroup=Yes
 5=Carrier : 5 : 1 : 0
 6=DAC : 6 : 1 : 0
 7=Trellis : 7 : 1 : 0
-[Bookmarks]
