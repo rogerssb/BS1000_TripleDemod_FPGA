@@ -13,7 +13,7 @@
 `ifdef FM_FILTER
 `define VIDFIRSPACE     12'b0000_1xxx_xxxx
 `endif
-`define FMMODSPACE      12'b0001_xxxx_xxxx
+`define DESPREADSPACE   12'b0001_xxxx_xxxx
 `define DDCSPACE        12'b0010_0xxx_xxxx
 `define DDCFIRSPACE     12'b0010_1xxx_xxxx
 `define CICDECSPACE     12'b0011_xxxx_xxxx
