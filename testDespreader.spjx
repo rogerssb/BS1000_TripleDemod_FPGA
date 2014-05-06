@@ -7,16 +7,17 @@
     <setting value="+define+SIMULATE" name="CommandLine" />
     <setting value="Silvaco4.12.12.C" name="Version" />
     <setting value="Yes" name="NoFloatWarn" />
+    <setting value="C:\despreader" name="OpenFileDir" />
    </settings>
    <analyzer>
     <settings>
      <setting value="N" name="GotoSource" />
      <setting value="142" name="C0Width" />
      <setting value="58" name="C1Width" />
-     <setting value="157" name="C2Width" />
+     <setting value="77" name="C2Width" />
     </settings>
     <views>
-     <view value="33537.396 ns,62274.341 ns,657.596 ns,36811.767 ns,48385.447 ns" name="Last" />
+     <view value="33626.429 ns,34620.642 ns,21.176 ns,34159.401 ns,34615.242 ns" name="Last" />
     </views>
     <groups>
      <group open="no" name="Rx" show="yes" >
@@ -179,10 +180,35 @@
        <signal name="clkEn" scope="test.demod.despreader.iCorrOnTime" />
        <signal name="corrOut[17:0]" scope="test.demod.despreader.iCorrOnTime" />
        <signal name="reset" scope="test.demod.despreader.iCorrOnTime" />
+       <signal interpolate="Step" radix="Real" name="symDataIReal" scope="test.demod.bitsync" />
        <signal name="codeBit" scope="test.demod.despreader.iCorrOnTime" />
        <signal name="rx[2:0]" scope="test.demod.despreader.iCorrOnTime" />
        <signal interpolate="Step" radix="Real" name="rxReal" scope="test.demod.despreader.iCorrOnTime" />
        <signal interpolate="Step" radix="Real" name="rxSRReal" scope="test.demod.despreader.iCorrOnTime" />
+       <signal name="codeSR[0]" scope="test.demod.despreader.iCorrOnTime" />
+       <signal name="\rxSR[0] [2:0]" scope="test.demod.despreader.iCorrOnTime" />
+       <signal name="codeSR[1]" scope="test.demod.despreader.iCorrOnTime" />
+       <signal name="\rxSR[1] [2:0]" scope="test.demod.despreader.iCorrOnTime" />
+       <signal name="codeSR[2]" scope="test.demod.despreader.iCorrOnTime" />
+       <signal name="\rxSR[2] [2:0]" scope="test.demod.despreader.iCorrOnTime" />
+       <signal name="codeSR[3]" scope="test.demod.despreader.iCorrOnTime" />
+       <signal name="\rxSR[3] [2:0]" scope="test.demod.despreader.iCorrOnTime" />
+       <signal name="codeSR[4]" scope="test.demod.despreader.iCorrOnTime" />
+       <signal name="\rxSR[4] [2:0]" scope="test.demod.despreader.iCorrOnTime" />
+       <signal name="codeSR[5]" scope="test.demod.despreader.iCorrOnTime" />
+       <signal name="\rxSR[5] [2:0]" scope="test.demod.despreader.iCorrOnTime" />
+       <signal name="codeSR[6]" scope="test.demod.despreader.iCorrOnTime" />
+       <signal name="\rxSR[6] [2:0]" scope="test.demod.despreader.iCorrOnTime" />
+       <signal name="codeSR[7]" scope="test.demod.despreader.iCorrOnTime" />
+       <signal name="\rxSR[7] [2:0]" scope="test.demod.despreader.iCorrOnTime" />
+       <signal name="codeSR[8]" scope="test.demod.despreader.iCorrOnTime" />
+       <signal name="\rxSR[8] [2:0]" scope="test.demod.despreader.iCorrOnTime" />
+       <signal name="codeSR[9]" scope="test.demod.despreader.iCorrOnTime" />
+       <signal name="\rxSR[9] [2:0]" scope="test.demod.despreader.iCorrOnTime" />
+       <signal name="codeSR[10]" scope="test.demod.despreader.iCorrOnTime" />
+       <signal name="\rxSR[10] [2:0]" scope="test.demod.despreader.iCorrOnTime" />
+       <signal name="\sum[1] [7:0]" scope="test.demod.despreader.iCorrOnTime" />
+       <signal name="\sum[9] [7:0]" scope="test.demod.despreader.iCorrOnTime" />
       </signals>
      </group>
      <group open="no" name="CodeGen" show="yes" >
@@ -198,7 +224,7 @@
        <signal name="polyTaps[17:0]" scope="test.demod.despreader.codes_gen_a" />
        <signal name="iOutTaps[17:0]" scope="test.demod.despreader.codes_gen_a" />
        <signal name="init[17:0]" scope="test.demod.despreader.codes_gen_a" />
-       <signal name="code[17:0]" scope="test.demod.despreader.codes_gen_a" />
+       <signal name="code[7:0]" scope="test.demod.despreader.codes_gen_a" />
       </signals>
      </group>
      <group open="no" name="New Group2" show="no" />

@@ -53,19 +53,21 @@ always @* rxSRReal = $itor($signed(rxSR[0]))/(2**2);
 `endif
 
 
-    reg     [CorrBits-1:0]  sum;
+    reg     [CorrBits-1:0]  sum[CorrLength:0];
     integer                 j;
     always @(posedge clk) begin
         if (clkEn) begin
-            sum <= 0;
             for (j = 0; j < CorrLength; j = j + 1) begin
                 if (codeSR[j]) begin
-                    sum <= sum - {{(CorrBits-3){rxSR[j][2]}},rxSR[j]};
+                    sum[j+1] <= sum[j] - {{(CorrBits-3){rxSR[j][2]}},rxSR[j]};
                 end
                 else begin
-                    sum <= sum + {{(CorrBits-3){rxSR[j][2]}},rxSR[j]};
+                    sum[j+1] <= sum[j] + {{(CorrBits-3){rxSR[j][2]}},rxSR[j]};
                 end
             end
+        end
+        else begin
+            sum[0] <= 0;
         end
     end    
 

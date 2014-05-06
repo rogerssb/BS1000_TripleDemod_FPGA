@@ -114,7 +114,7 @@ codes_gen pnGen(
     .clkEn(1'b1),
     .reset(reset),
     .ld(pnLoad),
-    .init(18'h3ffff),
+    .init(18'h000c7),
     .polyTaps(18'h008e),
     .restartCount(18'h3ffff),
     .iOutTaps(18'h00080),  
@@ -612,7 +612,7 @@ initial begin
 
     // Init the channel agc loop filter
     write32(createAddress(`CHAGCSPACE,`ALF_CONTROL),1);                 // Zero the error
-    write32(createAddress(`CHAGCSPACE,`ALF_SETPOINT),32'h000000e0);     // AGC Setpoint
+    write32(createAddress(`CHAGCSPACE,`ALF_SETPOINT),32'h000000e8);     // AGC Setpoint
     write32(createAddress(`CHAGCSPACE,`ALF_GAINS),32'h00180018);        // AGC Loop Gain
     write32(createAddress(`CHAGCSPACE,`ALF_ULIMIT),32'h4fffffff);       // AGC Upper limit
     write32(createAddress(`CHAGCSPACE,`ALF_LLIMIT),32'h00000000);       // AGC Lower limit
@@ -636,7 +636,7 @@ initial begin
 
     // Set the despread codes
     demod.despreader.ld = 0;
-    write32(createAddress(`DESPREADSPACE, `DESPREAD_INIT_A),1);
+    write32(createAddress(`DESPREADSPACE, `DESPREAD_INIT_A),32'h1);
     write32(createAddress(`DESPREADSPACE, `DESPREAD_POLYTAPS_A),32'h0000008e);
     write32(createAddress(`DESPREADSPACE, `DESPREAD_RESTART_COUNT_A),32'hffffffff);
     write32(createAddress(`DESPREADSPACE, `DESPREAD_IOUTTAPS_A),32'h00000080);
