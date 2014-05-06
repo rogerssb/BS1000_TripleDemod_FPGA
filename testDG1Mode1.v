@@ -2,18 +2,20 @@
 `timescale 1ns/100ps
 
 `define ENABLE_AGC
-//`define TRIM_DATA
 //`define ADD_NOISE
 //`define BER_TEST
 //`define MATLAB_VECTORS
 
-`ifdef TRIM_DATA
+`ifdef BER_TEST
 !control .savsim=1
 !mkeep (test
-//!mexclude (test(dds
-!mexclude (test(demod(ddc
-!mkeep (test(lagAccumReal
+!mexclude (test(rxRadio
+!mexclude (test(txRadio
 `endif
+
+//`define BPSK
+`define SQPN
+//`define SS_UQPSK
 
 module test;
 
@@ -24,124 +26,128 @@ reg [31:0]d;
 wire [31:0]dout;
 
 // Create the clocks
-parameter adcDecimation = 2;
-parameter SYSTEM_FREQ = 9.333333e6;
-parameter SAMPLE_FREQ = SYSTEM_FREQ/adcDecimation;
-parameter HC = 1e9/SYSTEM_FREQ/2;
+//parameter SAMPLE_FREQ = 9.333333e6;
+parameter SAMPLE_FREQ = 100e6;
+parameter HC = 1e9/SAMPLE_FREQ/2;
 parameter C = 2*HC;
 reg clken;
 always #HC clk = clk^clken;
-`define SYSTEM_PERIOD   (C*1e-9)
+`define SAMPLE_PERIOD   (C*1e-9)
 `define TWO_POW_32      4294967296.0
 `define TWO_POW_31      2147483648.0
 `define TWO_POW_17      131072.0
 
+parameter modSampleDecimation = 8;
+parameter ddcDecimation = 3;
 
-real carrierFreqHz = 2333333.3;
-real carrierFreqNorm = carrierFreqHz * `SYSTEM_PERIOD * `TWO_POW_32;
+//real carrierFreqHz = 2333333.3;
+real carrierFreqHz = 25000000.0;
+real carrierFreqNorm = carrierFreqHz * `SAMPLE_PERIOD * `TWO_POW_32;
 integer carrierFreqInt = carrierFreqNorm;
 wire [31:0] carrierFreq = carrierFreqInt;
 
-real carrierOffsetFreqHz = 0000.0;
-real carrierOffsetFreqNorm = carrierOffsetFreqHz * `SYSTEM_PERIOD * `TWO_POW_32;
+real carrierOffsetFreqHz = 0.0;
+real carrierOffsetFreqNorm = carrierOffsetFreqHz * `SAMPLE_PERIOD * `TWO_POW_32;
 integer carrierOffsetFreqInt = carrierOffsetFreqNorm;
 wire [31:0] carrierOffsetFreq = carrierOffsetFreqInt;
 
-real carrierLimitHz = 25000.0;
-real carrierLimitNorm = carrierLimitHz * `SYSTEM_PERIOD * `TWO_POW_32;
+real carrierLimitHz = 60000.0;
+real carrierLimitNorm = carrierLimitHz * `SAMPLE_PERIOD * `TWO_POW_32;
 integer carrierLimitInt = carrierLimitNorm;
 wire [31:0] carrierLimit = carrierLimitInt;
-integer negCarrierLimitInt = -carrierLimitNorm;
-wire    [31:0]  negCarrierLimit = negCarrierLimitInt;
 
-wire [31:0] sweepRate = 32'hffff0000;
-//wire [31:0] sweepRate = 32'h0039c759;
+wire [31:0] sweepRate = 32'h00000000;
 
-real bitrateBps = 600000.0/adcDecimation;
-real bitrateSamples = 1/bitrateBps/`SYSTEM_PERIOD/2.0;
-integer bitrateSamplesInt = bitrateSamples;
-wire [15:0]bitrateDivider = bitrateSamplesInt - 1;
-real actualBitrateBps = SYSTEM_FREQ/bitrateSamplesInt/2.0;
+real symbolRateSps = SAMPLE_FREQ/modSampleDecimation/2.0;
+real symbolRateSamples = 1/symbolRateSps/`SAMPLE_PERIOD/2.0;
+integer symbolRateSamplesInt = symbolRateSamples;
+wire [15:0]symbolRateDivider = symbolRateSamplesInt - 1;
 
-integer cicDecimationInt = 3;
+// value = 2^ceiling(log2(R*R))/(R*R), where R = interpolation rate of the FM
+// modulator
+real interpolationGain = 1.0;
 
+real cicDecimation;
+initial cicDecimation = (ddcDecimation == 1) ? 1 :
+                        (ddcDecimation == 2) ? 1 :
+                        (ddcDecimation == 3) ? 3 : 
+                                               ddcDecimation/2;
+integer cicDecimationInt;
+initial cicDecimationInt = cicDecimation;
 
-real resamplerFreqSps = 2*actualBitrateBps;     // 2 samples per symbol
-//real resamplerFreqNorm = resamplerFreqSps/(SAMPLE_FREQ/cicDecimationInt/2.0) * `TWO_POW_32;
-real resamplerFreqNorm = resamplerFreqSps/(SAMPLE_FREQ/2.0/2.0) * `TWO_POW_32;
+real resamplerFreqSps = 2*symbolRateSps;     // 2 samples per symbol
+real resamplerFreqNorm = (ddcDecimation == 1) ? resamplerFreqSps/(SAMPLE_FREQ/2.0) * `TWO_POW_32 :
+                         (ddcDecimation == 2) ? resamplerFreqSps/(SAMPLE_FREQ/2.0/2.0) * `TWO_POW_32 : 
+                         (ddcDecimation == 3) ? resamplerFreqSps/(SAMPLE_FREQ/2.0/3.0) * `TWO_POW_32 :  
+                                                resamplerFreqSps/(SAMPLE_FREQ/2.0/cicDecimationInt/2.0) * `TWO_POW_32;
 integer resamplerFreqInt = (resamplerFreqNorm >= `TWO_POW_31) ? (resamplerFreqNorm - `TWO_POW_32) : resamplerFreqNorm;
-//integer resamplerFreqInt = resamplerFreqNorm;
 
-real resamplerLimitNorm = 0.01*resamplerFreqNorm;
+real resamplerLimitNorm = 0.001*resamplerFreqSps/SAMPLE_FREQ * `TWO_POW_32;
 integer resamplerLimitInt = resamplerLimitNorm;
 
 /******************************************************************************
                             Create a bit stream
 ******************************************************************************/
 
-integer bitrateCount;
-reg     modReset;
+integer symbolRateCount;
 reg     modClk;
 always @(posedge clk) begin
-    if (modReset) begin
-        bitrateCount <= 0;
+    if (reset) begin
+        symbolRateCount <= 0;
         modClk <= 0;
         end
     else begin
-        if (bitrateCount == 0) begin
-            bitrateCount <= bitrateSamplesInt-1;
+        if (symbolRateCount == 0) begin
+            symbolRateCount <= symbolRateSamplesInt-1;
             modClk <= ~modClk;
             end
         else begin
-            bitrateCount <= bitrateCount - 1;
+            symbolRateCount <= symbolRateCount - 1;
             end
         end
     end
 
+// PN Code Generator for the transmitter
+reg pnLoad;
+codes_gen pnGen(
+    .clk(modClk),
+    .clkEn(1'b1),
+    .reset(reset),
+    .ld(pnLoad),
+    .init(18'h3ffff),
+    .polyTaps(18'h008e),
+    .restartCount(18'h3ffff),
+    .iOutTaps(18'h00080),  
+    .qOutTaps(18'h00090),
+    .iOut(iCode),
+    .qOut(qCode)
+    );
 
-// Alternating ones and zeros
-reg     [3:0]altSR;
-reg     altData;
-always @(negedge modClk or posedge reset) begin
-    if (reset) begin
-        altData <= 0;
-        end
-    else begin
-        altData <= ~altData;
-        end
+
+reg     iModData;
+reg     qModData;
+reg     oqModData;
+always @(negedge modClk) begin
+    iModData <= iCode;
+    qModData <= qCode;
     end
-
-// Random data
-parameter PN17 = 16'h008e,
-          MASK17 = 16'h00ff;
-reg [15:0]sr;
-reg [4:0]zeroCount;
-reg  randData;
-always @(negedge modClk or posedge reset) begin
-    if (reset) begin
-        zeroCount <= 5'b0;
-        sr <= MASK17;
-        end
-    else if (sr[0] | (zeroCount == 5'b11111))
-        begin
-        zeroCount <= 5'h0;
-        sr <= {1'b0, sr[15:1]} ^ PN17;
-        end
-    else
-        begin
-        zeroCount <= zeroCount + 5'h1;
-        sr <= sr >> 1;
-        end
-    randData <= sr[0];
-    //randData <= 1'b0;
+always @(posedge modClk) begin
+    oqModData <= qCode;
     end
 
 /******************************************************************************
                             Instantiate a Modulator
 ******************************************************************************/
-wire    [17:0]  iBB,qBB;
-assign iBB = {randData,17'h10000};
-assign qBB = 18'h0;
+wire    [17:0]  iBB;
+assign iBB = {iModData,17'h10000};
+reg     [17:0]  qBB;
+always @(*) begin
+    casex (demod.demodMode)
+        `MODE_OQPSK:    qBB = {oqModData,17'h10000};
+        `MODE_BPSK:     qBB = 0;
+        default:        qBB = {qModData,17'h10000};
+        endcase
+    end
 wire    [17:0]  iLO,qLO;
 dds carrierDds (
     .sclr(reset), 
@@ -229,13 +235,15 @@ assign qRx = qSignal + qNoise;
                             Instantiate the Demod
 ******************************************************************************/
 wire    [17:0]  dac0Out,dac1Out,dac2Out;
+wire    [17:0]  iSymData,qSymData;
+wire    [17:0]  iEye,qEye;
+wire    [4:0]   eyeOffset;
 demod demod( 
     .clk(clk), .reset(reset),
     .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
     .addr(a),
     .din(d),
     .dout(dout),
-    .iSym2xEn(iSym2xEn),
     .iBit(demodBit),
     .iRx(iRx), .qRx(qRx),
     .dac0Sync(dac0Sync),
@@ -243,17 +251,16 @@ demod demod(
     .dac1Sync(dac1Sync),
     .dac1Data(dac1Out),
     .dac2Sync(dac2Sync),
-    .dac2Data(dac2Out)
+    .dac2Data(dac2Out),
+    .iSymEn(symEn),
+    .iSym2xEn(symX2En),
+    .iSymData(iSymData),
+    .qSymEn(qSymEn),
+    .qSymData(qSymData),
+    .eyeSync(eyeSync),
+    .iEye(iEye),.qEye(qEye),
+    .eyeOffset(eyeOffset)
     );
-reg demodClk;
-always @(posedge clk) begin
-    if (reset) begin
-        demodClk <= 0;
-        end
-    else if (iSym2xEn) begin
-        demodClk <= ~demodClk;
-        end
-    end
 
 reg dac0CS,dac1CS,dac2CS;
 always @(a) begin
@@ -327,36 +334,92 @@ assign dac2_d = dac2Data[17:4];
 assign dac2_clk = clk;
 
 
+decoder decoder
+  (
+  .rs(reset),
+  .en(1'b0),
+  .wr0(1'b0),.wr1(1'b0),
+  .addr(),
+  .din(),
+  .dout(),
+  .clk(clk),
+  .symb_clk_en(symEn),
+  .symb_clk_2x_en(symX2En),
+  .symb_i(demodBit),
+  .symb_q(),
+  .dout_i(),
+  .dout_q(),
+  .cout(),
+  .fifo_rs(),
+  .clk_inv()
+  );
+
+
+//******************************************************************************
+//                        SDI Output Interface
+//******************************************************************************
+
+wire    [31:0]  sdiDout;
+sdi sdi(
+    .clk(clk),
+    .reset(reset),
+    .wr0(we0),
+    .wr1(we1),
+    .wr2(we2),
+    .wr3(we3),
+    .addr(a),
+    .dataIn(d),
+    .dataOut(),
+    .iSymEn(symEn),
+    .iSymData(iSymData),
+    .qSymEn(qSymEn),
+    .qSymData(qSymData),
+    .eyeSync(eyeSync),
+    .iEye(iEye),.qEye(qEye),
+    .eyeOffset(eyeOffset),
+    .sdiOut(sdiOut)
+    );
+
+
+
 /******************************************************************************
                        Delay Line for BER Testing
 ******************************************************************************/
+parameter PN17 = 16'h008e,
+          MASK17 = 16'h00ff;
 
 reg [15:0]testSR;
 reg [4:0]testZeroCount;
 reg testData;
-always @(negedge demodClk or reset) begin
+//always @(negedge demodClk or reset) begin
+always @(posedge clk or reset) begin
     if (reset) begin
         testZeroCount <= 5'b0;
         testSR <= MASK17;
         end
-    else if (testSR[0] | (testZeroCount == 5'b11111))
-        begin
-        testZeroCount <= 5'h0;
-        testSR <= {1'b0, testSR[15:1]} ^ PN17;
+    else if (symEn) begin
+        if (testSR[0] | (testZeroCount == 5'b11111))
+            begin
+            testZeroCount <= 5'h0;
+            testSR <= {1'b0, testSR[15:1]} ^ PN17;
+            end
+        else
+            begin
+            testZeroCount <= testZeroCount + 5'h1;
+            testSR <= testSR >> 1;
+            end
+        testData <= testSR[0];
         end
-    else
-        begin
-        testZeroCount <= testZeroCount + 5'h1;
-        testSR <= testSR >> 1;
-        end
-    testData <= testSR[0];
     end
 
 reg [127:0]delaySR;
 reg txDelay;
-always @(negedge demodClk) begin
-    txDelay <= delaySR[19];
-    delaySR <= {delaySR[126:0],testData};
+//always @(negedge demodClk) begin
+always @(posedge clk) begin
+    if (symEn) begin
+        txDelay <= delaySR[19];
+        delaySR <= {delaySR[126:0],testData};
+        end
     end
 
 reg testBits;
@@ -365,11 +428,13 @@ integer bitErrors;
 initial bitErrors = 0;
 integer testBitCount;
 initial testBitCount = 0;
-always @(posedge demodClk) begin
-    if (testBits) begin
-        testBitCount <= testBitCount + 1;
-        if (demodBit != txDelay) begin
-            bitErrors <= bitErrors + 1;
+always @(posedge clk) begin
+    if (symEn) begin
+        if (testBits) begin
+            testBitCount <= testBitCount + 1;
+            if (demodBit != txDelay) begin
+                bitErrors <= bitErrors + 1;
+                end
             end
         end
     end
@@ -485,69 +550,98 @@ initial begin
     demod.ddc.hbReset = 1;
     demod.ddc.cicReset = 1;
     interpReset = 0;
-    modReset = 0;
     reset = 0;
     sync = 1;
     clk = 0;
     rd = 0;
     we0 = 0; we1 = 0; we2 = 0; we3 = 0; 
     d = 32'hz;
-    txScaleFactor = 0.25;
+    txScaleFactor = 0.707;
+    decoder.decoder_regs.q = 16'h0004;
+
 
     // Turn on the clock
     clken=1;
     #(10*C) ;
 
     // Init the mode
-    write32(createAddress(`DEMODSPACE,`DEMOD_CONTROL),{29'bx,`MODE_BPSK});
+    `ifdef BPSK
+    write32(createAddress(`DEMODSPACE,`DEMOD_CONTROL),{14'bx,`MODE_SINGLE_RAIL,13'bx,`MODE_BPSK});
+    `else
+    `ifdef SQPN
+    write32(createAddress(`DEMODSPACE,`DEMOD_CONTROL),{14'bx,`MODE_SINGLE_RAIL,13'bx,`MODE_OQPSK});
+    `else
+    write32(createAddress(`DEMODSPACE,`DEMOD_CONTROL),{14'bx,`MODE_SINGLE_RAIL,13'bx,`MODE_SS_UQPSK});
+    `endif
+    `endif
 
     // Init the sample rate loop filters
-    //resamplerFreqInt = 32'h83a83a84;
-    //resamplerFreqInt = 32'h8000eff9;
     write32(createAddress(`RESAMPSPACE,`RESAMPLER_RATE),resamplerFreqInt);
     write32(createAddress(`BITSYNCSPACE,`LF_CONTROL),1);    // Zero the error
-    write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h001a000d);    
+    write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h001e0014);    
     //write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h0014000c);    
     write32(createAddress(`BITSYNCSPACE,`LF_LIMIT), resamplerLimitInt);    
-    write32(createAddress(`BITSYNCSPACE,`LF_LOCKDETECTOR), 32'h00308000);
 
     // Init the carrier loop filters
     write32(createAddress(`CARRIERSPACE,`CLF_CONTROL),1);    // Zero the error
-    write32(createAddress(`CARRIERSPACE,`CLF_LEAD_LAG),32'h0014000b);   
+    write32(createAddress(`CARRIERSPACE,`CLF_LEAD_LAG),32'h0015000b);   
     write32(createAddress(`CARRIERSPACE,`CLF_ULIMIT), carrierLimit);
-    write32(createAddress(`CARRIERSPACE,`CLF_LLIMIT), negCarrierLimit);
+    write32(createAddress(`CARRIERSPACE,`CLF_LLIMIT), -carrierLimit);
     write32(createAddress(`CARRIERSPACE,`CLF_LOOPDATA), sweepRate);
-    write32(createAddress(`CARRIERSPACE,`CLF_LOCKDETECTOR), 32'h00308000);
+    write32(createAddress(`CARRIERSPACE,`CLF_LOCKDETECTOR), 32'h03008000);
 
     // Init the downcoverter register set
-    write32(createAddress(`DDCSPACE,`DDC_CONTROL),5);
+    if (ddcDecimation == 1) begin
+        write32(createAddress(`DDCSPACE,`DDC_CONTROL), {29'h0,3'b111});
+        end
+    else if (ddcDecimation == 2) begin
+        write32(createAddress(`DDCSPACE,`DDC_CONTROL), {29'h0,3'b101});
+        end
+    else if (ddcDecimation == 3) begin
+        write32(createAddress(`DDCSPACE,`DDC_CONTROL), {29'h0,3'b110});
+        end
+    else begin
+        write32(createAddress(`DDCSPACE,`DDC_CONTROL), {29'h0,3'b100});
+        end
     write32(createAddress(`DDCSPACE,`DDC_CENTER_FREQ), carrierFreq);
-    write32(createAddress(`DDCSPACE,`DDC_DECIMATION), adcDecimation-1);
+    write32(createAddress(`DDCSPACE,`DDC_DECIMATION), 0);
 
     // Init the cicResampler register set
     write32(createAddress(`CICDECSPACE,`CIC_DECIMATION),cicDecimationInt-1);
-    write32(createAddress(`CICDECSPACE,`CIC_SHIFT), 5);
+    write32(createAddress(`CICDECSPACE,`CIC_SHIFT), 3); // log2(cicDecimation ^ 3)
 
     // Init the channel agc loop filter
     write32(createAddress(`CHAGCSPACE,`ALF_CONTROL),1);                 // Zero the error
-    write32(createAddress(`CHAGCSPACE,`ALF_SETPOINT),32'h000000e8);     // AGC Setpoint
+    write32(createAddress(`CHAGCSPACE,`ALF_SETPOINT),32'h000000e0);     // AGC Setpoint
     write32(createAddress(`CHAGCSPACE,`ALF_GAINS),32'h00180018);        // AGC Loop Gain
     write32(createAddress(`CHAGCSPACE,`ALF_ULIMIT),32'h4fffffff);       // AGC Upper limit
     write32(createAddress(`CHAGCSPACE,`ALF_LLIMIT),32'h00000000);       // AGC Lower limit
 
     // Set the DAC interpolator gains
-    write32(createAddress(`DEMODSPACE, `DEMOD_DACSELECT), {12'h0,`DAC_ISYM,
+    write32(createAddress(`DEMODSPACE, `DEMOD_DACSELECT), {12'h0,`DAC_FREQ,
                                                            4'h0,`DAC_Q,
                                                            4'h0,`DAC_I});
     write32(createAddress(`INTERP0SPACE, `INTERP_CONTROL),0);
-    write32(createAddress(`INTERP0SPACE, `INTERP_EXPONENT), 6);
-    write32(createAddress(`INTERP0SPACE, `INTERP_MANTISSA), 32'h0001c71c);
+    write32(createAddress(`INTERP0SPACE, `INTERP_EXPONENT), 8);
+    write32(createAddress(`INTERP0SPACE, `INTERP_MANTISSA), 32'h00012000);
     write32(createAddress(`INTERP1SPACE, `INTERP_CONTROL),0);
-    write32(createAddress(`INTERP1SPACE, `INTERP_EXPONENT), 6);
-    write32(createAddress(`INTERP1SPACE, `INTERP_MANTISSA), 32'h0001c71c);
-    write32(createAddress(`INTERP2SPACE, `INTERP_CONTROL),1);
-    write32(createAddress(`INTERP2SPACE, `INTERP_EXPONENT), 6);
-    write32(createAddress(`INTERP2SPACE, `INTERP_MANTISSA), 32'h0001c71c);
+    write32(createAddress(`INTERP1SPACE, `INTERP_EXPONENT), 8);
+    write32(createAddress(`INTERP1SPACE, `INTERP_MANTISSA), 32'h00012000);
+    write32(createAddress(`INTERP2SPACE, `INTERP_CONTROL),0);
+    write32(createAddress(`INTERP2SPACE, `INTERP_EXPONENT), 8);
+    write32(createAddress(`INTERP2SPACE, `INTERP_MANTISSA), 32'h00012000);
+
+    // Set the SDI baudrate
+    write32(createAddress(`UARTSPACE, `UART_BAUD_DIV),99);
+
+    // Set the despread codes
+    demod.despreader.ld = 0;
+    write32(createAddress(`DESPREADSPACE, `DESPREAD_INIT_A),1);
+    write32(createAddress(`DESPREADSPACE, `DESPREAD_POLYTAPS_A),32'h0000008e);
+    write32(createAddress(`DESPREADSPACE, `DESPREAD_RESTART_COUNT_A),32'hffffffff);
+    write32(createAddress(`DESPREADSPACE, `DESPREAD_IOUTTAPS_A),32'h00000080);
+    write32(createAddress(`DESPREADSPACE, `DESPREAD_QOUTTAPS_A),32'h00000090);
+    write32(createAddress(`DESPREADSPACE, `DESPREAD_CONTROL),{30'h0,`MODE_NASA_DG1_MODE1});
 
     reset = 1;
     #(2*C) ;
@@ -556,7 +650,9 @@ initial begin
     demod.ddc.cicReset = 0;
 
     // Wait 9.5 bit periods
-    #(19*bitrateSamplesInt*C) ;
+    pnLoad = 1;
+    #(19*symbolRateSamplesInt*C) ;
+    pnLoad = 0;
 
     // Force the carrier frequency to load. We have to do this because
     // the load is normally not done in FSK mode until you get symbol
@@ -568,24 +664,24 @@ initial begin
     #(2*C) ;
     reset = 0;
 
-    // Wait 0.5 bit periods
-    #(1.0*bitrateSamplesInt*C) ;
-
-    // Create a reset to restart the modulator
-    modReset = 1;
-    #(2*C) ;
-    modReset = 0;
-
     // Wait 2.0 bit periods
-    #(4.0*bitrateSamplesInt*C) ;
+    #(4.0*symbolRateSamplesInt*C) ;
 
     // Create a reset to clear the halfband
     demod.ddc.hbReset = 1;
     #(2*C) ;
     demod.ddc.hbReset = 0;
 
-    // Wait 2.0 bit periods
-    #(4.0*bitrateSamplesInt*C) ;
+    // Wait 2 bit periods
+    #(4*symbolRateSamplesInt*C) ;
+
+    // Create a reset to clear the cic resampler
+    demod.ddc.cicReset = 1;
+    #(2*C) ;
+    demod.ddc.cicReset = 0;
+
+    // Wait
+    #(4*symbolRateSamplesInt*C) ;
 
     // Create a reset to clear the cic resampler
     demod.ddc.cicReset = 1;
@@ -593,7 +689,7 @@ initial begin
     demod.ddc.cicReset = 0;
 
     // Wait 14 bit periods
-    #(28*bitrateSamplesInt*C) ;
+    #(28*symbolRateSamplesInt*C) ;
 
     // Create a reset to clear the interpolators
     interpReset = 1;
@@ -601,10 +697,10 @@ initial begin
     interpReset = 0;
 
     // Enable the sample rate loop
-    write32(createAddress(`BITSYNCSPACE,`LF_CONTROL),0);  
+    write32(createAddress(`BITSYNCSPACE,`LF_CONTROL),32'h00000000);  
 
-    // Wait 2 bit periods
-    #(4*bitrateSamplesInt*C) ;
+    // Wait
+    #(10*symbolRateSamplesInt*C) ;
 
     // Enable the carrier loop, invert the error, and enable sweep
     write32(createAddress(`CARRIERSPACE,`CLF_CONTROL),2);  
@@ -614,22 +710,24 @@ initial begin
     write32(createAddress(`CHAGCSPACE,`ALF_CONTROL),0);              
     `endif
 
+    // Enable the SDI in eye pattern mode
+    write32(createAddress(`SDISPACE,`SDI_CONTROL),32'h00000082);
+
+
     // Wait for some data to pass thru
-    #(2*100*bitrateSamplesInt*C) ;
+    #(2*100*symbolRateSamplesInt*C) ;
     `ifdef MATLAB_VECTORS
     $fclose(outfile);
     `endif
     $stop;
 
-    txScaleFactor = 0.25;
+    //write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h0018000c);    
+    write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h001e0018);    
 
-    // Wait for some data to pass thru
-    #(2*100*bitrateSamplesInt*C) ;
-    $stop;
+    read32(createAddress(`SDISPACE,`SDI_CONTROL));
 
     end
 
 real carrierOffsetReal = demod.carrierLoop.carrierOffsetReal * SAMPLE_FREQ/2.0;
-real lagAccumReal = demod.carrierLoop.lagAccumReal * SAMPLE_FREQ/2.0;
 endmodule
 

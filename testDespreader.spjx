@@ -1,0 +1,288 @@
+<!DOCTYPE SilvacoProject>
+<project version="1" name="bpsk" >
+ <products>
+  <product name="SILOS" >
+   <settings>
+    <setting value="No" name="DebugEnable" />
+    <setting value="+define+SIMULATE" name="CommandLine" />
+    <setting value="Silvaco4.12.12.C" name="Version" />
+    <setting value="Yes" name="NoFloatWarn" />
+   </settings>
+   <analyzer>
+    <settings>
+     <setting value="N" name="GotoSource" />
+     <setting value="142" name="C0Width" />
+     <setting value="58" name="C1Width" />
+     <setting value="157" name="C2Width" />
+    </settings>
+    <views>
+     <view value="33537.396 ns,62274.341 ns,657.596 ns,36811.767 ns,48385.447 ns" name="Last" />
+    </views>
+    <groups>
+     <group open="no" name="Rx" show="yes" >
+      <signals>
+       <signal radix="Real" name="cicDecimation" scope="test" />
+       <signal radix="Real" name="resamplerFreqSps" scope="test" />
+       <signal interpolate="Step" radix="Real" name="iSignalReal" scope="test" />
+       <signal interpolate="Step" radix="Real" name="iMixReal" scope="test.demod.ddc" />
+       <signal interpolate="Step" radix="Real" name="qMixReal" scope="test.demod.ddc" />
+       <signal interpolate="Step" radix="Real" name="iHb0Real" scope="test.demod.ddc" />
+       <signal interpolate="Step" radix="Real" name="qHb0Real" scope="test.demod.ddc" />
+       <signal interpolate="Step" radix="Real" name="iCicReal" scope="test.demod.ddc.cic" />
+       <signal interpolate="Step" radix="Real" name="qCicReal" scope="test.demod.ddc.cic" />
+       <signal interpolate="Step" radix="Real" name="iAgcReal" scope="test.demod.ddc" />
+       <signal interpolate="Step" radix="Real" name="qAgcReal" scope="test.demod.ddc" />
+       <signal interpolate="Step" radix="Real" name="iCompReal" scope="test.demod.ddc" />
+       <signal interpolate="Step" radix="Real" name="qCompReal" scope="test.demod.ddc" />
+       <signal scale="fixed" maxscaledbl="1" interpolate="Step" minscaledbl="-1" radix="Real" name="iHbReal" scope="test.demod.ddc" />
+       <signal scale="fixed" maxscaledbl="1" interpolate="Step" minscaledbl="-1" radix="Real" name="qHbReal" scope="test.demod.ddc" />
+       <signal name="clk" scope="test.demod" />
+       <signal name="demodClkEn" scope="test" />
+       <signal name="sync" scope="test.demod.ddc.hb0" />
+       <signal name="hb0SyncOut" scope="test.demod.ddc" />
+       <signal name="cicSyncOut" scope="test.demod.ddc" />
+       <signal name="ddcSync" scope="test.demod" />
+       <signal name="demodSync" scope="test.demod" />
+       <signal name="resampSync" scope="test.demod" />
+       <signal scale="fixed" maxscaledbl="1" interpolate="Step" minscaledbl="-1" radix="Real" name="iOutReal" scope="test.demod.ddc" />
+       <signal scale="fixed" maxscaledbl="1" interpolate="Step" minscaledbl="-1" radix="Real" name="qOutReal" scope="test.demod.ddc" />
+       <signal interpolate="Step" radix="Real" name="iOutReal" scope="test.demod.resampler" />
+       <signal name="cicReset" scope="test.demod.ddc" />
+       <signal interpolate="Step" radix="Real" name="interpReal" scope="test.fmMod" />
+       <signal interpolate="Step" radix="Real" name="phaseReal" scope="test.demod.fmDemod" />
+       <signal interpolate="Step" radix="Real" name="phaseErrorReal" scope="test.demod.fmDemod" />
+       <signal interpolate="Step" radix="Real" name="modeErrorReal" scope="test.demod.carrierLoop" />
+       <signal scale="fixed" maxscaledbl="0.5" interpolate="Step" minscaledbl="-0.5" radix="Real" name="freqReal" scope="test.demod.fmDemod" />
+       <signal interpolate="Step" radix="Real" name="freqErrorReal" scope="test.demod.fmDemod" />
+       <signal interpolate="Step" radix="Real" name="magReal" scope="test.demod.fmDemod" />
+       <signal radix="Real" name="integratorReal" scope="test.demod.channelAGC.chAgcLoopFilter" />
+       <signal name="reset" scope="test.demod.resampler" />
+      </signals>
+     </group>
+     <group open="no" name="Tx" show="yes" >
+      <signals>
+       <signal name="clk" scope="test" />
+       <signal name="modClk" scope="test" />
+       <signal name="demodClkEn" scope="test" />
+       <signal radix="Decimal" name="bitrateSamplesInt" scope="test" />
+       <signal name="randData" scope="test" />
+       <signal name="pnLoad" scope="test" />
+       <signal name="restartCounter[17:0]" scope="test.pnGen" />
+       <signal name="polyTaps[17:0]" scope="test.pnGen" />
+       <signal name="code[17:0]" scope="test.pnGen" />
+       <signal name="iModData" scope="test" />
+       <signal name="oqModData" scope="test" />
+       <signal name="iBB[17:0]" scope="test" />
+       <signal name="qBB[17:0]" scope="test" />
+      </signals>
+     </group>
+     <group open="no" name="Micro" show="yes" >
+      <signals>
+       <signal name="addr[11:0]" scope="test.demod" />
+       <signal name="din[31:0]" scope="test.demod" />
+       <signal name="wr3" scope="test.demod" />
+       <signal name="wr2" scope="test.demod" />
+       <signal name="wr1" scope="test.demod" />
+       <signal name="wr0" scope="test.demod" />
+      </signals>
+     </group>
+     <group open="no" name="Bitsync" show="yes" >
+      <signals>
+       <signal interpolate="Step" radix="Real" name="symPhaseReal" scope="test.demod.bitsync" />
+       <signal radix="Real" name="actualBitrateBps" scope="test" />
+       <signal radix="Decimal" name="cicDecimationInt" scope="test" />
+       <signal name="iMF[17:0]" scope="test.demod.bitsync" />
+       <signal scale="fixed" maxscaledbl="1" interpolate="Step" minscaledbl="-1" radix="Real" name="iMFReal" scope="test.demod.bitsync" />
+       <signal scale="fixed" maxscaledbl="1" interpolate="Step" minscaledbl="-1" radix="Real" name="qMFReal" scope="test.demod.bitsync" />
+       <signal interpolate="Step" radix="Real" name="timingErrorReal" scope="test.demod.bitsync" />
+       <signal interpolate="Step" radix="Real" name="sampleFreqReal" scope="test.demod.bitsync" />
+       <signal name="resamplerFreqOffset[31:0]" scope="test.demod.resampler" />
+       <signal name="iSymData[17:0]" scope="test.demod" />
+       <signal interpolate="Step" radix="Real" name="symDataIReal" scope="test.demod.bitsync" />
+       <signal name="phase[7:0]" scope="test.demod.bitsync" />
+       <signal name="symSync" scope="test.demod" />
+       <signal name="symTimes2Sync" scope="test.demod.bitsync" />
+       <signal name="phaseState" scope="test.demod.bitsync" />
+       <signal name="zeroError" scope="test.demod.bitsync.sampleLoop" />
+       <signal name="negoffTimeI[17:0]" scope="test.demod.bitsync" />
+       <signal name="offTimeI[17:0]" scope="test.demod.bitsync" />
+       <signal name="earlySignI" scope="test.demod.bitsync" />
+       <signal name="lateSignI" scope="test.demod.bitsync" />
+       <signal name="timingErrorI[17:0]" scope="test.demod.bitsync" />
+       <signal name="avgError[21:0]" scope="test.demod.bitsync" />
+       <signal name="avgSlipError[21:0]" scope="test.demod.bitsync" />
+       <signal name="slipState[1:0]" scope="test.demod.bitsync" />
+       <signal name="slip" scope="test.demod.bitsync" />
+       <signal name="absError[17:10]" scope="test.demod.bitsync" />
+       <signal name="avgError[21:14]" scope="test.demod.bitsync" />
+       <signal name="avgSlipError[21:14]" scope="test.demod.bitsync" />
+       <signal name="syncThreshold[7:0]" scope="test.demod.bitsync" />
+       <signal name="lockCounter[15:0]" scope="test.demod.bitsync" />
+      </signals>
+     </group>
+     <group open="no" name="Carrier" show="yes" >
+      <signals>
+       <signal name="freq[7:0]" scope="test.demod" />
+       <signal name="zeroError" scope="test.demod.carrierLoop" />
+       <signal name="offsetErrorSum[8:0]" scope="test.demod.bitsync" />
+       <signal name="offsetError[7:0]" scope="test.demod.carrierLoop" />
+       <signal name="offsetErrorEn" scope="test.demod.carrierLoop" />
+       <signal name="modeError[7:0]" scope="test.demod.carrierLoop" />
+       <signal name="absModeError[7:0]" scope="test.demod.carrierLoop" />
+       <signal name="syncThreshold[7:0]" scope="test.demod.carrierLoop" />
+       <signal name="modeErrorEn" scope="test.demod.carrierLoop" />
+       <signal name="lockCounter[15:0]" scope="test.demod.carrierLoop" />
+       <signal interpolate="Step" radix="Decimal" name="lockCounterInt" scope="test.demod.carrierLoop" />
+       <signal name="carrierLock" scope="test.demod.carrierLoop" />
+       <signal interpolate="Step" radix="Real" name="modeErrorReal" scope="test.demod.carrierLoop" />
+       <signal interpolate="Step" radix="Real" name="carrierOffsetReal" scope="test" />
+       <signal interpolate="Step" radix="Real" name="carrierOffsetReal" scope="test.demod.carrierLoop" />
+       <signal interpolate="Step" radix="Real" name="lagAccumReal" scope="test" />
+       <signal name="leadError[31:0]" scope="test.demod.carrierLoop" />
+       <signal name="lagError[31:0]" scope="test.demod.carrierLoop.lagGain" />
+       <signal name="lagAccum[31:0]" scope="test.demod.carrierLoop" />
+       <signal name="carrierInSync" scope="test.demod.carrierLoop.lagGain" />
+       <signal name="sweepOffset[31:0]" scope="test.demod.carrierLoop.lagGain" />
+       <signal name="sweepMag[31:0]" scope="test.demod.carrierLoop.lagGain" />
+       <signal name="sweepOffsetMag[31:0]" scope="test.demod.carrierLoop.lagGain" />
+      </signals>
+     </group>
+     <group open="no" name="DAC" show="yes" >
+      <signals>
+       <signal name="dataIn[17:0]" scope="test.dac0Interp" />
+       <signal name="exponentAdjusted[17:0]" scope="test.dac0Interp" />
+       <signal radix="Real" name="expAdjReal" scope="test.dac0Interp" />
+       <signal name="sync" scope="test.demod.ddc.hb" />
+       <signal name="syncOut" scope="test.demod.ddc.hb" />
+       <signal name="iOut[17:0]" scope="test.demod.ddc.hb" />
+       <signal name="clkEn" scope="test.dac0Interp" />
+       <signal scale="fixed" maxscaledbl="1" interpolate="Step" minscaledbl="-1" radix="Real" name="interpReal" scope="test.dac0Interp" />
+       <signal scale="fixed" maxscaledbl="1" interpolate="Step" minscaledbl="-1" radix="Real" name="interpReal" scope="test.dac1Interp" />
+       <signal scale="fixed" maxscaledbl="1" interpolate="Step" minscaledbl="-1" radix="Real" name="interpReal" scope="test.dac2Interp" />
+       <signal name="clkEn" scope="test.dac2Interp" />
+       <signal name="dataIn[17:0]" scope="test.dac2Interp" />
+      </signals>
+     </group>
+     <group open="no" name="Resampler" show="yes" >
+      <signals>
+       <signal radix="Real" name="resamplerFreqSps" scope="test" />
+       <signal interpolate="Step" radix="Real" name="resamplerFreqNorm" scope="test" />
+       <signal name="resampleRate[31:0]" scope="test.demod.resampler" />
+       <signal name="resamplerFreqOffset[31:0]" scope="test.demod.resampler" />
+       <signal interpolate="Step" radix="Real" name="inReal" scope="test.demod.resampler.resamplerI" />
+       <signal interpolate="Step" radix="Real" name="outReal" scope="test.demod.resampler.resamplerI" />
+      </signals>
+     </group>
+     <group open="yes" name="Despreader" show="yes" >
+      <signals>
+       <signal name="clk" scope="test.demod.despreader.iCorrOnTime" />
+       <signal name="clkEn" scope="test.demod.despreader.iCorrOnTime" />
+       <signal name="corrOut[17:0]" scope="test.demod.despreader.iCorrOnTime" />
+       <signal name="reset" scope="test.demod.despreader.iCorrOnTime" />
+       <signal name="codeBit" scope="test.demod.despreader.iCorrOnTime" />
+       <signal name="rx[2:0]" scope="test.demod.despreader.iCorrOnTime" />
+       <signal interpolate="Step" radix="Real" name="rxReal" scope="test.demod.despreader.iCorrOnTime" />
+       <signal interpolate="Step" radix="Real" name="rxSRReal" scope="test.demod.despreader.iCorrOnTime" />
+      </signals>
+     </group>
+     <group open="no" name="CodeGen" show="yes" >
+      <signals>
+       <signal name="qOut" scope="test.demod.despreader.codes_gen_a" />
+       <signal name="iOut" scope="test.demod.despreader.codes_gen_a" />
+       <signal name="reset" scope="test.demod.despreader.codes_gen_a" />
+       <signal name="ld" scope="test.demod.despreader.codes_gen_a" />
+       <signal name="clkEn" scope="test.demod.despreader.codes_gen_a" />
+       <signal name="clk" scope="test.demod.despreader.codes_gen_a" />
+       <signal name="restartCount[17:0]" scope="test.demod.despreader.codes_gen_a" />
+       <signal name="qOutTaps[17:0]" scope="test.demod.despreader.codes_gen_a" />
+       <signal name="polyTaps[17:0]" scope="test.demod.despreader.codes_gen_a" />
+       <signal name="iOutTaps[17:0]" scope="test.demod.despreader.codes_gen_a" />
+       <signal name="init[17:0]" scope="test.demod.despreader.codes_gen_a" />
+       <signal name="code[17:0]" scope="test.demod.despreader.codes_gen_a" />
+      </signals>
+     </group>
+     <group open="no" name="New Group2" show="no" />
+     <group open="yes" name="New Group1" show="no" />
+    </groups>
+   </analyzer>
+   <librarydirs>
+    <directory name="..\..\Xilinx\10.1\ISE\verilog\src\unisims\{.v}" />
+   </librarydirs>
+   <plifiles>
+    <file name=".\gaussPLI\gaussPLI.dll" />
+   </plifiles>
+   <includedirs>
+    <directory name="." />
+   </includedirs>
+   <sourcefiles>
+    <file name="testDG1Mode1.v" />
+    <file name="demod.v" />
+    <file name="shifter18to48.v" />
+    <file name=".\halfband\halfband.v" />
+    <file name=".\coregen\halfbandEven.v" />
+    <file name="variableGain.v" />
+    <file name=".\fmDemod\fmDemod.v" />
+    <file name=".\resampler\resampRegs.v" />
+    <file name=".\resampler\resampler.v" />
+    <file name=".\coregen\reciprocalLut.v" />
+    <file name=".\coregen\resamplerTap8.v" />
+    <file name=".\coregen\resamplerTap0.v" />
+    <file name="ddc.v" />
+    <file name=".\coregen\resamplerTap1.v" />
+    <file name=".\coregen\resamplerTap2.v" />
+    <file name=".\coregen\resamplerTap3.v" />
+    <file name=".\coregen\resamplerTap4.v" />
+    <file name=".\coregen\resamplerTap5.v" />
+    <file name=".\coregen\resamplerTap6.v" />
+    <file name=".\coregen\resamplerTap7.v" />
+    <file name="bitsync.v" />
+    <file name="loopRegs.v" />
+    <file name="loopFilter.v" />
+    <file name="cicDecimator.v" />
+    <file name="carrierLoop.v" />
+    <file name="log2.v" />
+    <file name="channelAgc.v" />
+    <file name="agcLoopRegs.v" />
+    <file name="agcLoopFilter.v" />
+    <file name="cicComp.v" />
+    <file name="cicInterpolate.v" />
+    <file name="interpolate.v" />
+    <file name="interpRegs.v" />
+    <file name="shift48To18.v" />
+    <file name="cicRegs.v" />
+    <file name="vm_cordic_fast.v" />
+    <file name="vm_cordic.v" />
+    <file name="dualResampler.v" />
+    <file name="dualDecimator.v" />
+    <file name="dualFirCoeffRegs.v" />
+    <file name="dualFir.v" />
+    <file name="singleFir.v" />
+    <file name=".\coregen\mpy18x18WithCe.v" />
+    <file name="lagGain12.v" />
+    <file name="leadGain12.v" />
+    <file name="cmpy18.v" />
+    <file name="multihEQ.v" />
+    <file name=".\coregen\oneThird.v" />
+    <file name=".\coregen\invSinc.v" />
+    <file name="ddcRegs.v" />
+    <file name=".\coregen\mpy18x18.v" />
+    <file name=".\coregen\dds.v" />
+    <file name="demodRegs.v" />
+    <file name=".\coregen\mpy18x18PL1.v" />
+    <file name="carrierLoopRegs.v" />
+    <file name=".\decoder\decoder.v" />
+    <file name=".\decoder\decoder_regs.v" />
+    <file name=".\decoder\biphase_to_nrz.v" />
+    <file name=".\decoder\mrk_spc_decode.v" />
+    <file name="sdi.v" />
+    <file name=".\coregen\dataFifo.v" />
+    <file name="uart.v" />
+    <file name="artmSignalQuality.v" />
+    <file name="codes_gen.v" />
+    <file name="dualDespreader.v" />
+    <file name="despreaderRegs.v" />
+    <file name="despreadCorrelator.v" />
+   </sourcefiles>
+  </product>
+ </products>
+</project>

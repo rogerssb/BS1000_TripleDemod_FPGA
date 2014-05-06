@@ -431,23 +431,31 @@ dualResampler resampler(
     .auSyncOut(auResampSync)
     );
 
-// Delay the ddc output samples to line things up with the eyeOffset
-reg     [17:0]  iSwap0,iSwap1,iSwap2;
-reg     [17:0]  qSwap0,qSwap1,qSwap2;
-reg     [7:0]   ddcSyncSR;
-always @(posedge clk) begin
-    ddcSyncSR <= {ddcSyncSR[6:0],ddcSync};
-    iSwap0 <= iSwap;
-    iSwap1 <= iSwap0;
-    iSwap2 <= iSwap1;
-    qSwap0 <= qSwap;
-    qSwap1 <= qSwap0;
-    qSwap2 <= qSwap1;
-    end
 
-//assign eyeSync = ddcSyncSR[2];
-//assign iEye = iSwap2;
-//assign qEye = qSwap2;
+
+
+`ifdef ADD_DESPREADER
+/******************************************************************************
+                                Despreader
+******************************************************************************/
+wire    [17:0]  iDespread,qDespread;
+wire    [1:0]   despreadMode;
+wire    [31:0]  despreaderDout;
+dualDespreader despreader(
+    .clk(clk), 
+    .clkEn(resampSync), .auClkEn(auResampSync),
+    .reset(reset),
+    .wr0(wr0) , .wr1(wr1), .wr2(wr2), .wr3(wr3),
+    .addr(addr),
+    .din(din),
+    .iIn(iResamp), .qIn(qResamp),
+    .dout(despreaderDout),
+    .despreadMode(despreadMode)
+    );
+`endif
+
+
+
 
 /******************************************************************************
                                 Bitsync Loop
