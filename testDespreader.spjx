@@ -14,10 +14,10 @@
      <setting value="N" name="GotoSource" />
      <setting value="142" name="C0Width" />
      <setting value="58" name="C1Width" />
-     <setting value="77" name="C2Width" />
+     <setting value="138" name="C2Width" />
     </settings>
     <views>
-     <view value="33626.429 ns,34620.642 ns,21.176 ns,34159.401 ns,34615.242 ns" name="Last" />
+     <view value="48249.353 ns,52290.554 ns,92.476 ns,38428.401 ns,41618.075 ns" name="Last" />
     </views>
     <groups>
      <group open="no" name="Rx" show="yes" >
@@ -56,7 +56,7 @@
        <signal scale="fixed" maxscaledbl="0.5" interpolate="Step" minscaledbl="-0.5" radix="Real" name="freqReal" scope="test.demod.fmDemod" />
        <signal interpolate="Step" radix="Real" name="freqErrorReal" scope="test.demod.fmDemod" />
        <signal interpolate="Step" radix="Real" name="magReal" scope="test.demod.fmDemod" />
-       <signal radix="Real" name="integratorReal" scope="test.demod.channelAGC.chAgcLoopFilter" />
+       <signal interpolate="Step" radix="Real" name="integratorReal" scope="test.demod.channelAGC.chAgcLoopFilter" />
        <signal name="reset" scope="test.demod.resampler" />
       </signals>
      </group>
@@ -182,36 +182,16 @@
        <signal name="reset" scope="test.demod.despreader.iCorrOnTime" />
        <signal interpolate="Step" radix="Real" name="symDataIReal" scope="test.demod.bitsync" />
        <signal name="codeBit" scope="test.demod.despreader.iCorrOnTime" />
-       <signal name="rx[2:0]" scope="test.demod.despreader.iCorrOnTime" />
+       <signal name="rx[5:0]" scope="test.demod.despreader.iCorrOnTime" />
        <signal interpolate="Step" radix="Real" name="rxReal" scope="test.demod.despreader.iCorrOnTime" />
        <signal interpolate="Step" radix="Real" name="rxSRReal" scope="test.demod.despreader.iCorrOnTime" />
        <signal name="codeSR[0]" scope="test.demod.despreader.iCorrOnTime" />
-       <signal name="\rxSR[0] [2:0]" scope="test.demod.despreader.iCorrOnTime" />
-       <signal name="codeSR[1]" scope="test.demod.despreader.iCorrOnTime" />
-       <signal name="\rxSR[1] [2:0]" scope="test.demod.despreader.iCorrOnTime" />
-       <signal name="codeSR[2]" scope="test.demod.despreader.iCorrOnTime" />
-       <signal name="\rxSR[2] [2:0]" scope="test.demod.despreader.iCorrOnTime" />
-       <signal name="codeSR[3]" scope="test.demod.despreader.iCorrOnTime" />
-       <signal name="\rxSR[3] [2:0]" scope="test.demod.despreader.iCorrOnTime" />
-       <signal name="codeSR[4]" scope="test.demod.despreader.iCorrOnTime" />
-       <signal name="\rxSR[4] [2:0]" scope="test.demod.despreader.iCorrOnTime" />
-       <signal name="codeSR[5]" scope="test.demod.despreader.iCorrOnTime" />
-       <signal name="\rxSR[5] [2:0]" scope="test.demod.despreader.iCorrOnTime" />
-       <signal name="codeSR[6]" scope="test.demod.despreader.iCorrOnTime" />
-       <signal name="\rxSR[6] [2:0]" scope="test.demod.despreader.iCorrOnTime" />
-       <signal name="codeSR[7]" scope="test.demod.despreader.iCorrOnTime" />
-       <signal name="\rxSR[7] [2:0]" scope="test.demod.despreader.iCorrOnTime" />
-       <signal name="codeSR[8]" scope="test.demod.despreader.iCorrOnTime" />
-       <signal name="\rxSR[8] [2:0]" scope="test.demod.despreader.iCorrOnTime" />
-       <signal name="codeSR[9]" scope="test.demod.despreader.iCorrOnTime" />
-       <signal name="\rxSR[9] [2:0]" scope="test.demod.despreader.iCorrOnTime" />
-       <signal name="codeSR[10]" scope="test.demod.despreader.iCorrOnTime" />
-       <signal name="\rxSR[10] [2:0]" scope="test.demod.despreader.iCorrOnTime" />
-       <signal name="\sum[1] [7:0]" scope="test.demod.despreader.iCorrOnTime" />
-       <signal name="\sum[9] [7:0]" scope="test.demod.despreader.iCorrOnTime" />
+       <signal name="\rxSR[0] [5:0]" scope="test.demod.despreader.iCorrOnTime" />
+       <signal name="\sum" scope="test.demod.despreader.iCorrOnTime" />
+       <signal interpolate="Step" radix="Real" name="sumReal" scope="test.demod.despreader.iCorrOnTime" />
       </signals>
      </group>
-     <group open="no" name="CodeGen" show="yes" >
+     <group open="yes" name="CodeGen" show="yes" >
       <signals>
        <signal name="qOut" scope="test.demod.despreader.codes_gen_a" />
        <signal name="iOut" scope="test.demod.despreader.codes_gen_a" />

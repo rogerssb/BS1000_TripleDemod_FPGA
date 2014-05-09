@@ -578,7 +578,7 @@ initial begin
     // Init the sample rate loop filters
     write32(createAddress(`RESAMPSPACE,`RESAMPLER_RATE),resamplerFreqInt);
     write32(createAddress(`BITSYNCSPACE,`LF_CONTROL),1);    // Zero the error
-    write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h001e0014);    
+    write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h001c0010);    
     //write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h0014000c);    
     write32(createAddress(`BITSYNCSPACE,`LF_LIMIT), resamplerLimitInt);    
 

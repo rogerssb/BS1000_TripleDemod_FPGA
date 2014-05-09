@@ -18,6 +18,8 @@ module dualDespreader (
     iCode, qCode
     );
 
+parameter SoftBits = 6;
+
 input           clk;
 input           clkEn, auClkEn;
 input           reset;
@@ -176,6 +178,30 @@ always @ (posedge clk) begin
     end
 end
 
+`define NEW_MAPPING
+`ifdef NEW_MAPPING
+// Map the inputs to soft decision bits
+reg     [SoftBits-1:0]   iSoft;
+reg     [SoftBits-1:0]   qSoft;
+
+always @(posedge clk) begin
+    if (iIn[17:(18-SoftBits)] == {1'b1,{(SoftBits-1){1'b0}}}) begin
+        iSoft <= {1'b1,{(SoftBits-2){1'b0}},1'b1};
+    end
+    else begin
+        iSoft <= iIn[17:(18-SoftBits)];
+    end
+
+    if (qIn[17:(18-SoftBits)] == {1'b1,{(SoftBits-1){1'b0}}}) begin
+        qSoft <= {1'b1,{(SoftBits-2){1'b0}},1'b1};
+    end
+    else begin
+        qSoft <= qIn[17:(18-SoftBits)];
+    end
+end
+
+`else
+
 // Map the inputs to soft decision bits
 reg     [2:0]   iSoft;
 reg     [2:0]   qSoft;
@@ -214,11 +240,24 @@ always @(posedge clk) begin
         4'b100x:    qSoft = 3'b101;
     endcase
 end
+`endif
 
 wire    [17:0]  iOnTimeCorr;
-despreadCorrelator #(.CorrLength(16)) iCorrOnTime(
+despreadCorrelator #(.CorrLength(16), .InputBits(SoftBits)) 
+iCorrOnTime(
     .clk(clk),
-    .clkEn(iChipEn),
+    .clkEn(iSampleEn & iOnTime),
+    .reset(reset),
+    .codeBit(iCode),
+    .rx(iSoft),
+    .corrOut()
+    );
+
+wire    [17:0]  iOffTimeCorr;
+despreadCorrelator #(.CorrLength(16), .InputBits(SoftBits)) 
+iCorrOffTime(
+    .clk(clk),
+    .clkEn(iSampleEn & !iOnTime),
     .reset(reset),
     .codeBit(iCode),
     .rx(iSoft),
