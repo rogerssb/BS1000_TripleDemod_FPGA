@@ -13,9 +13,17 @@ module dualDespreader (
     addr,
     din,
     iIn, qIn,
+    demodMode,
     dout,
-    despreadMode,
-    iCode, qCode
+    iCode, qCode,
+    iDespread,
+    iSymEn,
+    iSym2xEn,
+    qDespread,
+    qSymEn,
+    qSym2xEn,
+    timingError,
+    timingErrorEn
     );
 
 parameter SoftBits = 6;
@@ -27,9 +35,17 @@ input           wr0, wr1, wr2, wr3;
 input   [11:0]  addr;
 input   [31:0]  din;
 input   [17:0]  iIn, qIn;
+input   [4:0]   demodMode;
 output  [31:0]  dout;
-output  [1:0]   despreadMode;
 output          iCode, qCode;
+output  [17:0]  iDespread;
+output          iSymEn;
+output          iSym2xEn;
+output  [17:0]  qDespread;
+output          qSymEn;
+output          qSym2xEn;
+output  [17:0]  timingError;
+output          timingErrorEn;
 
 // Microprocessor interface
 reg cs;
@@ -48,7 +64,6 @@ despreaderRegs regs(
     .dout(dout),
     .cs(cs),
     .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
-    .despreadMode(despreadMode),
     .init_a(init_a),
     .polyTaps_a(polyTaps_a),
     .codeRestartCount_a(codeRestartCount_a),
@@ -63,55 +78,57 @@ despreaderRegs regs(
 // Used for debug
 reg ld;
 
-reg     iSampleEn, iOnTime, iChipEn;
+reg     iSampleEn, iOnTime;
 always @(posedge clk) begin
     if (reset) begin
-        iOnTime <= 0;
+        iOnTime <= 1;
     end
     else if (clkEn) begin
         iSampleEn <= 1;
         if (iOnTime) begin
             iOnTime <= 0;
-            iChipEn <= 1;
         end
         else begin
             iOnTime <= 1;
-            iChipEn <= 0;
         end
     end
     else begin
         iSampleEn <= 0;
-        iChipEn <= 0;
     end
 end
 
-reg     qSampleEn, qOnTime, qChipEn;
+reg     qSampleEn, qOnTime;
 always @(posedge clk) begin
     if (reset) begin
         qOnTime <= 0;
     end
     else if (clkEn) begin
         qSampleEn <= 1;
-        if (qOnTime) begin
-            qOnTime <= 0;
-            qChipEn <= 1;
-        end
-        else begin
-            qOnTime <= 1;
-            qChipEn <= 0;
-        end
+        casex (demodMode) 
+            `MODE_SQPN: begin
+                qOnTime <= iOnTime;
+            end
+            default: begin
+                if (qOnTime) begin
+                    qOnTime <= 0;
+                end
+                else begin
+                    qOnTime <= 1;
+                end
+            end
+        endcase
     end
     else begin
         qSampleEn <= 0;
-        qChipEn <= 0;
     end
 end
 
 
 wire out_a;
+reg dsSlipI;
 codes_gen codes_gen_a(
     .clk(clk),
-    .clkEn(iChipEn),
+    .clkEn(iSampleEn & iOnTime & !dsSlipI),
     .reset(reset),
     .ld(ld | reset),
     .init(init_a),
@@ -124,9 +141,10 @@ codes_gen codes_gen_a(
     );
 
 wire out_b;
+reg dsSlipQ;
 codes_gen codes_gen_b(
     .clk(clk),
-    .clkEn(clkEn),
+    .clkEn(qSampleEn & qOnTime & !dsSlipQ),
     .reset(reset),
     .ld(ld | reset),
     .polyTaps(polyTaps_b),
@@ -135,47 +153,27 @@ codes_gen codes_gen_b(
     .iOut(iOut_b)
     );
 
-reg iCode;
-reg qCode;
+// Delay the Q output of the first generator for SQPN modes
+reg qDelay;
 always @ (posedge clk) begin
-    if (iChipEn) begin
-        casex (despreadMode)
-            `MODE_NASA_DG1_MODE1: begin
-                iCode <= iOut_a;
-            end
-
-            `MODE_NASA_DG1_MODE2: begin
-                iCode <= iOut_a;
-            end
-
-            `MODE_NASA_FWD: begin
-                iCode <= iOut_a;
-            end
-
-            default: begin
-                iCode <= iOut_a;
-            end
-        endcase
+    if (qSampleEn & qOnTime) begin
+        qDelay <= qOut_a;
     end
-    if (qChipEn) begin
-        casex (despreadMode)
-            `MODE_NASA_DG1_MODE1: begin
-                qCode <= qOut_a;
-            end
+end
 
-            `MODE_NASA_DG1_MODE2: begin
-                qCode <= iOut_b;
-            end
-
-            `MODE_NASA_FWD: begin
-                qCode <= iOut_b;
-            end
-
-            default: begin
-                qCode <= qOut_a;
-            end
-        endcase
-    end
+// Select the PN code used for the I channel
+reg iCode, qCode;
+always @* begin
+    casex (demodMode)
+        `MODE_SQPN: begin
+            iCode <= iOut_a;
+            qCode <= qDelay;
+        end
+        default: begin
+            iCode <= iOut_a;
+            qCode <= iOut_b;
+        end
+    endcase
 end
 
 `define NEW_MAPPING
@@ -242,28 +240,252 @@ always @(posedge clk) begin
 end
 `endif
 
-wire    [17:0]  iOnTimeCorr;
-despreadCorrelator #(.CorrLength(16), .InputBits(SoftBits)) 
+//******************************* Despread Correlators *************************
+
+wire    [17:0]  iCorr;
+wire    [17:0]  iBsError;
+despreadCorrelator #(.CorrLength(32), .InputBits(SoftBits), .CorrBits(10)) 
 iCorrOnTime(
     .clk(clk),
-    .clkEn(iSampleEn & iOnTime),
+    .clkEn(iSampleEn),
     .reset(reset),
+    .onTime(iOnTime),
+    .slip(dsSlipI),
     .codeBit(iCode),
     .rx(iSoft),
-    .corrOut()
+    .despread(iCorr),
+    .bsError(iBsError)
     );
 
-wire    [17:0]  iOffTimeCorr;
-despreadCorrelator #(.CorrLength(16), .InputBits(SoftBits)) 
-iCorrOffTime(
+wire    [17:0]  qCorr;
+wire    [17:0]  qBsError;
+reg             swapIQ;
+despreadCorrelator #(.CorrLength(32), .InputBits(SoftBits), .CorrBits(10)) 
+qCorrOnTime(
     .clk(clk),
-    .clkEn(iSampleEn & !iOnTime),
+    .clkEn(qSampleEn),
     .reset(reset),
-    .codeBit(iCode),
-    .rx(iSoft),
-    .corrOut()
+    .onTime(qOnTime),
+    .slip(dsSlipQ),
+    .codeBit(qCode),
+    .rx(swapIQ ? iSoft: qSoft),
+    .despread(qCorr),
+    .bsError(qBsError)
     );
 
+`define ADD_SWAP
+`ifdef ADD_SWAP
+// This correlator is used to detect an I/Q swap.
+wire    [17:0]  swapDespread;
+wire    [17:0]  swapBsError;
+despreadCorrelator #(.CorrLength(32), .InputBits(SoftBits), .CorrBits(10)) 
+swapCorr(
+    .clk(clk),
+    .clkEn(iSampleEn),
+    .reset(reset),
+    .onTime(iOnTime),
+    .slip(dsSlipI),
+    .codeBit(iCode),
+    .rx(qSoft),
+    .despread(swapDespread),
+    .bsError(swapBsError)
+    );
+`endif
+
+
+
+
+//******************************* Acq State Machine ****************************
+
+`define DS_START_COUNT  16'h000f
+`define DS_INC_COUNT    16'h0001
+`define DS_DEC_COUNT    16'h0004
+`define DS_MAX_COUNT    16'h000f
+
+reg     [15:0]  syncCount;
+wire    [15:0]  decSyncCount = syncCount - `DS_DEC_COUNT;
+wire    [15:0]  incSyncCount = syncCount + `DS_INC_COUNT;
+reg             despreadSync;
+
+reg     [17:0]  peakCorrI;
+wire    [17:0]  absCorrI = iCorr[17] ? -iCorr : iCorr;
+reg     [17:0]  peakAbsCorrI;
+`ifdef SIMULATE
+real absCorrIReal;
+always @* absCorrIReal = $itor($signed(absCorrI))/(2**17);
+real peakAbsCorrIReal;
+always @* peakAbsCorrIReal = $itor($signed(peakAbsCorrI))/(2**17);
+`endif
+
+`ifdef ADD_SWAP
+wire            despreadPolarity = swapIQ ? swapDespread[17] : iCorr[17];
+reg     [17:0]  peakCorrSwap;
+wire    [17:0]  absCorrSwap = swapDespread[17] ? -swapDespread : swapDespread;
+reg     [17:0]  peakAbsCorrSwap;
+`ifdef SIMULATE
+real absCorrSwapReal;
+always @* absCorrSwapReal = $itor($signed(absCorrSwap))/(2**17);
+real peakAbsCorrSwapReal;
+always @* peakAbsCorrSwapReal = $itor($signed(peakAbsCorrSwap))/(2**17);
+`endif
+`else 
+wire            despreadPolarity = iCorr[17];
+`endif
+
+reg     [1:0]           acqStateI;
+`define DS_ACQ_SLIP     2'b00
+`define DS_ACQ_TEST     2'b01
+`define DS_ACQ_INSYNC   2'b11
+
+always @(posedge clk) begin
+    if (reset) begin
+        swapIQ <= 0;
+        peakAbsCorrI <= 0;
+        `ifdef ADD_SWAP
+        peakAbsCorrSwap <= 0;
+        `endif
+        peakCorrI <= 0;
+        despreadSync <= 0;
+        syncCount <= `DS_START_COUNT;
+        dsSlipI <= 0;
+        dsSlipQ <= 0;
+        acqStateI <= `DS_ACQ_INSYNC;
+    end
+    `ifdef SIMULATE
+    else if (iCorr === 18'hxxx00) begin
+        peakAbsCorrI <= 18'h04000;
+        peakAbsCorrSwap <= 18'h04000;
+    end
+    `endif
+    else if (iSampleEn) begin
+        if (iOnTime) begin
+            case (acqStateI)
+                `DS_ACQ_SLIP: begin
+                    /*
+                    if (absCorrI > peakAbsCorrI) begin
+                        peakAbsCorrI <= absCorrI;
+                    end
+                    `ifdef ADD_SWAP
+                    if (absCorrSwap > peakAbsCorrSwap) begin
+                        peakAbsCorrSwap <= absCorrSwap;
+                    end
+                    `endif
+                    */
+                    dsSlipI <= 0;
+                    acqStateI <= `DS_ACQ_TEST;
+                    end
+                `DS_ACQ_TEST: begin
+                    /*
+                    if (absCorrI > peakAbsCorrI) begin
+                        peakAbsCorrI <= absCorrI;
+                    end
+                    `ifdef ADD_SWAP
+                    if (absCorrSwap > peakAbsCorrSwap) begin
+                        peakAbsCorrSwap <= absCorrSwap;
+                    end
+                    `endif
+                    */
+                    // Is absCorrI > 2*peakAbsCorrI?
+                    if ({1'b0,absCorrI[17:1]} > peakAbsCorrI) begin
+                        // Yes. Stop slipping the generator and declare sync
+                        dsSlipI <= 0;
+                        swapIQ <= 0;
+                        despreadSync <= 1;
+                        peakCorrI <= iCorr;
+                        syncCount <= `DS_START_COUNT;
+                        acqStateI <= `DS_ACQ_INSYNC;
+                    end
+                    `ifdef ADD_SWAP
+                    // Does the swapped channel have a large correlation peak?
+                    else if ({1'b0,absCorrSwap[17:1]} > peakAbsCorrSwap) begin
+                        // Yes. Stop slipping the generator and declare sync
+                        dsSlipI <= 0;
+                        swapIQ <= 1;
+                        despreadSync <= 1;
+                        peakCorrI <= swapDespread;
+                        syncCount <= `DS_START_COUNT;
+                        acqStateI <= `DS_ACQ_INSYNC;
+                    end
+                    `endif
+                    else begin
+                        dsSlipI <= 1;
+                        acqStateI <= `DS_ACQ_SLIP;
+                    end
+                end
+                `DS_ACQ_INSYNC: begin
+                    // Is the peak negative?
+                    if (peakCorrI[17]) begin
+                        // Yes. Is the current correlator output negative?
+                        if (despreadPolarity) begin
+                            // Yes. In sync indication.
+                            if (syncCount <= (`DS_MAX_COUNT-`DS_INC_COUNT)) begin
+                                syncCount <= incSyncCount;
+                            end
+                        end
+                        else begin
+                            // No. Out of sync indication.
+                            if (syncCount >= `DS_DEC_COUNT) begin
+                                syncCount <= decSyncCount;
+                            end
+                            else begin
+                                // We're out of sync. Start slipping again.
+                                //peakAbsCorrI <= absCorrI;
+                                peakAbsCorrI <= 18'h04000;
+                                `ifdef ADD_SWAP
+                                //peakAbsCorrSwap <= absCorrSwap;
+                                peakAbsCorrSwap <= 18'h04000;
+                                `endif
+                                dsSlipI <= 1;
+                                swapIQ <= 0;
+                                despreadSync <= 0;
+                                acqStateI <= `DS_ACQ_SLIP;
+                            end
+                        end
+                    end
+                    else begin
+                        // No. Is the current correlator output positive?
+                        if (!despreadPolarity) begin
+                            // Yes. In sync indication.
+                            if (syncCount <= (`DS_MAX_COUNT-`DS_INC_COUNT)) begin
+                                syncCount <= incSyncCount;
+                            end
+                        end
+                        else begin
+                            // No. Out of sync indication.
+                            if (syncCount >= `DS_DEC_COUNT) begin
+                                syncCount <= decSyncCount;
+                            end
+                            else begin
+                                // We're out of sync. Start slipping again.
+                                //peakAbsCorrI <= absCorrI;
+                                peakAbsCorrI <= 18'h04000;
+                                `ifdef ADD_SWAP
+                                //peakAbsCorrSwap <= absCorrSwap;
+                                peakAbsCorrSwap <= 18'h04000;
+                                `endif
+                                dsSlipI <= 1;
+                                swapIQ <= 0;
+                                despreadSync <= 0;
+                                acqStateI <= `DS_ACQ_SLIP;
+                            end
+                        end
+                    end
+                end
+            endcase
+        end
+    end
+end
+
+//******************************* Output Assignments **************************
+
+assign iDespread = swapIQ ? swapDespread : iCorr;
+assign iSymEn = iSampleEn & iOnTime;
+assign iSym2xEn = iSampleEn;
+assign qDespread = swapIQ ? iCorr : qCorr;
+assign qSymEn = qSampleEn & qOnTime;
+assign qSym2xEn = qSampleEn;
+assign timingError = swapIQ ? swapBsError : iBsError;
+assign timingErrorEn = !iOnTime & despreadSync;
 
 endmodule
 

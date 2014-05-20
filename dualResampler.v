@@ -28,7 +28,7 @@ input           wr0,wr1,wr2,wr3;
 input   [11:0]  addr;
 input   [31:0]  din;
 output  [31:0]  dout;
-input   [3:0]   demodMode;
+input   [4:0]   demodMode;
 input   [31:0]  resamplerFreqOffset;
 input   [31:0]  auResamplerFreqOffset;
 input           offsetEn;

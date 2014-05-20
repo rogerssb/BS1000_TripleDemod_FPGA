@@ -37,8 +37,8 @@ always #HC clk = clk^clken;
 `define TWO_POW_31      2147483648.0
 `define TWO_POW_17      131072.0
 
-parameter modSampleDecimation = 8;
-parameter ddcDecimation = 3;
+parameter modSampleDecimation = 7;
+parameter ddcDecimation = 2;
 
 //real carrierFreqHz = 2333333.3;
 real carrierFreqHz = 25000000.0;
@@ -114,7 +114,8 @@ codes_gen pnGen(
     .clkEn(1'b1),
     .reset(reset),
     .ld(pnLoad),
-    .init(18'h000c7),
+    //.init(18'h0008f),
+    .init(18'h00063),
     .polyTaps(18'h008e),
     .restartCount(18'h3ffff),
     .iOutTaps(18'h00080),  
@@ -143,6 +144,7 @@ assign iBB = {iModData,17'h10000};
 reg     [17:0]  qBB;
 always @(*) begin
     casex (demod.demodMode)
+        `MODE_SQPN:     qBB = {oqModData,17'h10000};
         `MODE_OQPSK:    qBB = {oqModData,17'h10000};
         `MODE_BPSK:     qBB = 0;
         default:        qBB = {qModData,17'h10000};
@@ -189,8 +191,25 @@ real iTxReal = (iTx[17] ? (iTx - 262144.0) : iTx)/131072.0;
 real qTxReal = (qTx[17] ? (qTx - 262144.0) : qTx)/131072.0;
 real txScaleFactor;
 
-wire [17:0]iSignal = 131072.0*iTxReal * txScaleFactor;
-wire [17:0]qSignal = 131072.0*qTxReal * txScaleFactor;
+//wire [17:0]iSignal = 131072.0*iTxReal * txScaleFactor;
+//wire [17:0]qSignal = 131072.0*qTxReal * txScaleFactor;
+
+// 0 Degrees
+//real rotateReal = 1.0;
+//real rotateImag = 0.0;
+// 45 Degrees
+//real rotateReal = 0.707;
+//real rotateImag = 0.707;
+// 90 Degrees
+real rotateReal = 0.0;
+real rotateImag = 1.0;
+// 180 Degrees
+//real rotateReal = -1.0;
+//real rotateImag = 0.0;
+
+wire    [17:0]iSignal = (2**17)*(iTxReal*rotateReal - qTxReal*rotateImag) * txScaleFactor;
+wire    [17:0]qSignal = (2**17)*(iTxReal*rotateImag + qTxReal*rotateReal) * txScaleFactor;
+
 
 reg  measureSNR;
 initial measureSNR = 0;
@@ -569,7 +588,7 @@ initial begin
     write32(createAddress(`DEMODSPACE,`DEMOD_CONTROL),{14'bx,`MODE_SINGLE_RAIL,13'bx,`MODE_BPSK});
     `else
     `ifdef SQPN
-    write32(createAddress(`DEMODSPACE,`DEMOD_CONTROL),{14'bx,`MODE_SINGLE_RAIL,13'bx,`MODE_OQPSK});
+    write32(createAddress(`DEMODSPACE,`DEMOD_CONTROL),{14'bx,`MODE_SINGLE_RAIL,13'bx,`MODE_SQPN});
     `else
     write32(createAddress(`DEMODSPACE,`DEMOD_CONTROL),{14'bx,`MODE_SINGLE_RAIL,13'bx,`MODE_SS_UQPSK});
     `endif
@@ -616,7 +635,6 @@ initial begin
     write32(createAddress(`CHAGCSPACE,`ALF_GAINS),32'h00180018);        // AGC Loop Gain
     write32(createAddress(`CHAGCSPACE,`ALF_ULIMIT),32'h4fffffff);       // AGC Upper limit
     write32(createAddress(`CHAGCSPACE,`ALF_LLIMIT),32'h00000000);       // AGC Lower limit
-
     // Set the DAC interpolator gains
     write32(createAddress(`DEMODSPACE, `DEMOD_DACSELECT), {12'h0,`DAC_FREQ,
                                                            4'h0,`DAC_Q,
@@ -663,6 +681,7 @@ initial begin
     reset = 1;
     #(2*C) ;
     reset = 0;
+    demod.channelAGC.chAgcLoopFilter.integrator = 32'h1c880000;
 
     // Wait 2.0 bit periods
     #(4.0*symbolRateSamplesInt*C) ;
@@ -715,14 +734,14 @@ initial begin
 
 
     // Wait for some data to pass thru
-    #(2*100*symbolRateSamplesInt*C) ;
+    #(3*100*symbolRateSamplesInt*C) ;
     `ifdef MATLAB_VECTORS
     $fclose(outfile);
     `endif
     $stop;
 
-    //write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h0018000c);    
-    write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h001e0018);    
+    write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h0018000c);    
+    //write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h001e0018);    
 
     read32(createAddress(`SDISPACE,`SDI_CONTROL));
 

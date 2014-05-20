@@ -63,7 +63,7 @@ output          dac1Sync;
 output  [17:0]  dac1Data;
 output          dac2Sync;
 output  [17:0]  dac2Data;
-output  [3:0]   demodMode;
+output  [4:0]   demodMode;
 output          eyeSync;
 output  [17:0]  iEye,qEye;
 output  [4:0]   eyeOffset;
@@ -302,6 +302,7 @@ reg     [17:0]  nextAbsSample;
 always @(demodMode or fm or fmInv or freqError) begin
     casex (demodMode)
         `MODE_OQPSK,
+        `MODE_SQPN,
         `MODE_SOQPSK: begin
             nextFreqSample = fm;
             nextAbsSample = fm[17] ? fmInv : fm;
@@ -438,8 +439,8 @@ dualResampler resampler(
 /******************************************************************************
                                 Despreader
 ******************************************************************************/
-wire    [17:0]  iDespread,qDespread;
-wire    [1:0]   despreadMode;
+wire    [17:0]  iDsSymData,qDsSymData;
+wire    [17:0]  dsTimingError;
 wire    [31:0]  despreaderDout;
 dualDespreader despreader(
     .clk(clk), 
@@ -449,8 +450,16 @@ dualDespreader despreader(
     .addr(addr),
     .din(din),
     .iIn(iResamp), .qIn(qResamp),
+    .demodMode(demodMode),
     .dout(despreaderDout),
-    .despreadMode(despreadMode)
+    .iDespread(iDsSymData),
+    .iSymEn(iDsSymEn),
+    .iSym2xEn(iDsSym2xEn),
+    .qDespread(qDsSymData),
+    .qSymEn(qDsSymEn),
+    .qSym2xEn(qDsSym2xEn),
+    .timingError(dsTimingError),
+    .timingErrorEn(dsTimingErrorEn)
     );
 `endif
 
@@ -460,9 +469,9 @@ dualDespreader despreader(
 /******************************************************************************
                                 Bitsync Loop
 ******************************************************************************/
-wire    [17:0]  iSymData;
-wire    [17:0]  qSymData;
-wire      [17:0]  bsError;
+wire    [17:0]  iBsSymData;
+wire    [17:0]  qBsSymData;
+wire    [17:0]  bsError;
 wire    [15:0]  bsLockCounter;
 wire    [15:0]  auLockCounter;
 wire    [31:0]  bitsyncDout;
@@ -478,6 +487,8 @@ bitsync bitsync(
     .dout(bitsyncDout),
     .i(iResamp), .q(qResamp),
     .au(qResamp),
+    .dsTimingError(dsTimingError),
+    .dsTimingErrorEn(dsTimingErrorEn),
     .offsetError(offsetError),
     .offsetErrorEn(offsetErrorEn),
     `ifdef SYM_DEVIATION
@@ -486,14 +497,14 @@ bitsync bitsync(
     .posDeviation(posDeviation),
     .negDeviation(negDeviation),
     `endif
-    .iSym2xEn(iSym2xEn),
-    .iSymEn(iSymEn),
-    .symDataI(iSymData),
+    .iSym2xEn(iBsSym2xEn),
+    .iSymEn(iBsSymEn),
+    .symDataI(iBsSymData),
     .bitDataI(iBit),
-    .qSym2xEn(qSym2xEn),
-    .qSymEn(qSymEn),
+    .qSym2xEn(qBsSym2xEn),
+    .qSymEn(qBsSymEn),
     .qSymClk(qSymClk),
-    .symDataQ(qSymData),
+    .symDataQ(qBsSymData),
     .bitDataQ(qBit),
     .sampleFreq(resamplerFreqOffset),
     .auSampleFreq(auResamplerFreqOffset),
@@ -505,6 +516,33 @@ bitsync bitsync(
     .iTrellis(iTrellis),.qTrellis(qTrellis),
     .bsError(bsError), .bsErrorEn(bsErrorEn)
     );
+
+reg     [17:0]  iSymData;
+reg             iSymEn;
+reg             iSym2xEn;
+reg     [17:0]  qSymData;
+reg             qSymEn;
+reg             qSym2xEn;
+always @* begin
+    casex (demodMode)
+        `MODE_SQPN: begin
+            iSymData = iDsSymData;
+            iSymEn = iDsSymEn;
+            iSym2xEn = iDsSym2xEn;
+            qSymData = qDsSymData;
+            qSymEn = qDsSymEn;
+            qSym2xEn = qDsSym2xEn;
+        end
+        default: begin
+            iSymData = iBsSymData;
+            iSymEn = iBsSymEn;
+            iSym2xEn = iBsSym2xEn;
+            qSymData = qBsSymData;
+            qSymEn = qBsSymEn;
+            qSym2xEn = qBsSym2xEn;
+        end
+    endcase
+end
 
 assign trellisSymSync = iSymEn & resampSync;
 

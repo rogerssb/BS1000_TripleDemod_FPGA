@@ -15,6 +15,8 @@ module bitsync(
     dout,
     i,q,
     au,
+    dsTimingError,
+    dsTimingErrorEn,
     offsetError,
     offsetErrorEn,
     `ifdef SYM_DEVIATION
@@ -48,7 +50,7 @@ input           sampleClk;
 input           reset;
 input           symTimes2Sync;
 input           auResampSync;
-input   [3:0]   demodMode;
+input   [4:0]   demodMode;
 input   [1:0]   bitsyncMode;
 input           wr0,wr1,wr2,wr3;
 input   [11:0]  addr;
@@ -56,6 +58,8 @@ input   [31:0]  din;
 output  [31:0]  dout;
 input   [17:0]  i,q;
 input   [17:0]  au;
+input   [17:0]  dsTimingError;
+input           dsTimingErrorEn;
 output  [17:0]  offsetError;
 output          offsetErrorEn;
 `ifdef SYM_DEVIATION
@@ -157,6 +161,7 @@ always @(posedge sampleClk) begin
         iMF <= iFiltered;
         qSymDelay <= qFiltered;
         if ( (demodMode == `MODE_OQPSK)
+          || (demodMode == `MODE_SQPN)
           || (demodMode == `MODE_SOQPSK)) begin
             qMF <= qSymDelay;
             end
@@ -629,7 +634,20 @@ always @(addr) begin
         endcase
     end
 wire    [15:0]  lockCount;
-wire            loopFilterEn = (symTimes2Sync & timingErrorEn);
+reg             loopFilterEn;
+reg     [11:0]  loopFilterError;
+always @* begin
+    casex (demodMode) 
+        `MODE_SQPN: begin
+            loopFilterError = dsTimingError[17:6] + dsTimingError[5];
+            loopFilterEn = (symTimes2Sync & dsTimingErrorEn);
+        end
+        default: begin
+            loopFilterError = timingError[18:7] + timingError[6];
+            loopFilterEn = (symTimes2Sync & timingErrorEn);
+        end
+    endcase
+end
 wire    [31:0]  bsDout;
 loopFilter sampleLoop(
     .clk(sampleClk),
@@ -640,7 +658,7 @@ loopFilter sampleLoop(
     .addr(addr),
     .din(din),
     .dout(bsDout),
-    .error(timingError[18:7] + timingError[6]),
+    .error(loopFilterError),
     .loopFreq(sampleFreq),
     .ctrl2(useCompFilter),
     .ctrl4(useSummer),

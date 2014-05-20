@@ -38,17 +38,18 @@
 
 // Define the global radio memory map
 `define DEMOD_CONTROL   12'bxxxx_xxx0_00xx
-`define MODE_AM             4'b0000
-`define MODE_PM             4'b0001
-`define MODE_FM             4'b0010
-`define MODE_2FSK           4'b0011
-`define MODE_BPSK           4'b0100
-`define MODE_QPSK           4'b0101
-`define MODE_OQPSK          4'b0110
-`define MODE_AUQPSK         4'b0111
-`define MODE_PCMTRELLIS     4'b1000
-`define MODE_SOQPSK         4'b1001
-`define MODE_MULTIH         4'b1010
+`define MODE_AM             5'b00000
+`define MODE_PM             5'b00001
+`define MODE_FM             5'b00010
+`define MODE_2FSK           5'b00011
+`define MODE_BPSK           5'b00100
+`define MODE_QPSK           5'b00101
+`define MODE_OQPSK          5'b00110
+`define MODE_AUQPSK         5'b00111
+`define MODE_PCMTRELLIS     5'b01000
+`define MODE_SOQPSK         5'b01001
+`define MODE_MULTIH         5'b01010
+`define MODE_SQPN           5'b10110
 `define MODE_SINGLE_RAIL    2'b00
 `define MODE_DUAL_RAIL      2'b01
 `define MODE_IND_RAIL       2'b10

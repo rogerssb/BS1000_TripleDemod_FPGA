@@ -18,7 +18,7 @@ input reset;
 input sync;
 input   [17:0]  iFm;
 input   [17:0]  qFm;
-input   [3:0]   demodMode;
+input   [4:0]   demodMode;
 output  [11:0]   phase;
 output  [11:0]   phaseError;
 output  [11:0]   freq;
@@ -78,6 +78,7 @@ always @(posedge clk) begin
                 end
             `MODE_QPSK,
             `MODE_OQPSK,
+            `MODE_SQPN,
             `MODE_AUQPSK: begin
                 phaseError <= {qpskPhase[9:0],2'b0};
                 end
