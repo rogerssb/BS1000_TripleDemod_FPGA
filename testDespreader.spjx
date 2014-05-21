@@ -16,13 +16,13 @@
      <setting value="N" name="GotoSource" />
      <setting value="142" name="C0Width" />
      <setting value="58" name="C1Width" />
-     <setting value="77" name="C2Width" />
+     <setting value="138" name="C2Width" />
     </settings>
     <views>
-     <view value="0.000 ns,47049.999 ns,1593.115 ns,32260.578 ns,28108.300 ns" name="Last" />
+     <view value="26661.892 ns,60531.795 ns,775.055 ns,115738.323 ns,35750.828 ns" name="Last" />
     </views>
     <groups>
-     <group open="no" name="Rx" show="yes" >
+     <group open="yes" name="Rx" show="yes" >
       <signals>
        <signal radix="Real" name="cicDecimation" scope="test" />
        <signal radix="Real" name="resamplerFreqSps" scope="test" />
@@ -52,8 +52,10 @@
        <signal interpolate="Step" radix="Real" name="iOutReal" scope="test.demod.resampler" />
        <signal name="cicReset" scope="test.demod.ddc" />
        <signal interpolate="Step" radix="Real" name="interpReal" scope="test.fmMod" />
+       <signal scale="fixed" maxscaledbl="1" interpolate="Step" minscaledbl="-1" radix="Real" name="iFmReal" scope="test.demod.fmDemod" />
+       <signal scale="fixed" maxscaledbl="1" interpolate="Step" minscaledbl="-1" radix="Real" name="qFmReal" scope="test.demod.fmDemod" />
        <signal interpolate="Step" radix="Real" name="phaseReal" scope="test.demod.fmDemod" />
-       <signal interpolate="Step" radix="Real" name="phaseErrorReal" scope="test.demod.fmDemod" />
+       <signal scale="fixed" maxscaledbl="1" interpolate="Step" minscaledbl="-1" radix="Real" name="phaseErrorReal" scope="test.demod.fmDemod" />
        <signal interpolate="Step" radix="Real" name="modeErrorReal" scope="test.demod.carrierLoop" />
        <signal scale="fixed" maxscaledbl="0.5" interpolate="Step" minscaledbl="-0.5" radix="Real" name="freqReal" scope="test.demod.fmDemod" />
        <signal interpolate="Step" radix="Real" name="freqErrorReal" scope="test.demod.fmDemod" />

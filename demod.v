@@ -159,6 +159,25 @@ channelAGC channelAGC(
 /******************************************************************************
                            Phase/Freq/Mag Detector
 ******************************************************************************/
+wire    [17:0]  iDsSymData,qDsSymData;
+wire            iDsSym2xEn;
+reg     [17:0]  iFm,qFm;
+reg             fmDemodClkEn;
+always @(posedge clk) begin
+    casex (demodMode) 
+        `MODE_SQPN: begin
+            fmDemodClkEn <= iDsSym2xEn;
+            iFm <= iDsSymData;
+            qFm <= qDsSymData;
+        end
+        default: begin
+            fmDemodClkEn <= ddcSync;
+            iFm <= iDdc;
+            qFm <= qDdc;
+        end
+    endcase
+end
+
 wire    [11:0]   phase;
 wire    [11:0]   phaseError;
 wire    [11:0]   freq;
@@ -166,8 +185,14 @@ wire    [11:0]   negFreq = ~freq + 1;
 wire    [11:0]   freqError;
 wire    [12:0]   mag;
 fmDemod fmDemod(
-    .clk(clk), .reset(reset), .sync(ddcSync),
+    .clk(clk), .reset(reset), 
+    `ifdef ADD_DESPREADER
+    .sync(fmDemodClkEn),
+    .iFm(iFm),.qFm(qFm),
+    `else
+    .sync(ddcSync),
     .iFm(iDdc),.qFm(qDdc),
+    `endif
     .demodMode(demodMode),
     .phase(phase),
     .phaseError(phaseError),
@@ -439,7 +464,6 @@ dualResampler resampler(
 /******************************************************************************
                                 Despreader
 ******************************************************************************/
-wire    [17:0]  iDsSymData,qDsSymData;
 wire    [17:0]  dsTimingError;
 wire    [31:0]  despreaderDout;
 dualDespreader despreader(

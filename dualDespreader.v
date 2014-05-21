@@ -481,7 +481,7 @@ end
 assign iDespread = swapIQ ? swapDespread : iCorr;
 assign iSymEn = iSampleEn & iOnTime;
 assign iSym2xEn = iSampleEn;
-assign qDespread = swapIQ ? iCorr : qCorr;
+assign qDespread = qCorr;
 assign qSymEn = qSampleEn & qOnTime;
 assign qSym2xEn = qSampleEn;
 assign timingError = swapIQ ? swapBsError : iBsError;
