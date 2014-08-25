@@ -3,8 +3,8 @@
 `define ADDRESS_MAP
 
 //`define INTERNAL_ADAPT
-//`define SYM_DEVIATION
-//`define ADD_SOQPSK_TRELLIS
+`define SYM_DEVIATION
+`define ADD_SOQPSK_TRELLIS
 //`define FM_FILTER
 `define ADD_DESPREADER
 
@@ -193,12 +193,14 @@
 `define DESPREAD_RESTART_COUNT_A    12'bxxxx_xx00_10xx
 `define DESPREAD_IOUTTAPS_A         12'bxxxx_xx00_11xx
 `define DESPREAD_QOUTTAPS_A         12'bxxxx_xx01_00xx
-`define DESPREAD_INIT_B             12'bxxxx_xx01_01xx
-`define DESPREAD_POLYTAPS_B         12'bxxxx_xx01_10xx
-`define DESPREAD_RESTART_COUNT_B    12'bxxxx_xx01_11xx
-`define DESPREAD_IOUTTAPS_B         12'bxxxx_xx10_00xx
-`define DESPREAD_QOUTTAPS_B         12'bxxxx_xx10_01xx
-`define DESPREAD_CONTROL            12'bxxxx_xx11_00xx
+`define DESPREAD_MASK_A             12'bxxxx_xx01_01xx
+`define DESPREAD_INIT_B             12'bxxxx_xx10_00xx
+`define DESPREAD_POLYTAPS_B         12'bxxxx_xx10_01xx
+`define DESPREAD_RESTART_COUNT_B    12'bxxxx_xx10_10xx
+`define DESPREAD_IOUTTAPS_B         12'bxxxx_xx10_11xx
+`define DESPREAD_QOUTTAPS_B         12'bxxxx_xx11_00xx
+`define DESPREAD_MASK_B             12'bxxxx_xx11_01xx
+`define DESPREAD_CONTROL            12'bxxxx_xx11_11xx
 `define MODE_NASA_FWD                   2'b00
 `define MODE_NASA_DG1_MODE1             2'b01
 `define MODE_NASA_DG1_MODE2             2'b10

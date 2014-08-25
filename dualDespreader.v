@@ -58,6 +58,7 @@ always @(addr) begin
 
 wire    [17:0]  init_a, codeRestartCount_a, polyTaps_a, iOutTaps_a, qOutTaps_a;
 wire    [17:0]  init_b, codeRestartCount_b, polyTaps_b, iOutTaps_b;
+wire    [3:0]   corrLength_a,corrLength_b;
 despreaderRegs regs(
     .addr(addr),
     .din(din),
@@ -69,14 +70,14 @@ despreaderRegs regs(
     .codeRestartCount_a(codeRestartCount_a),
     .iOutTaps_a(iOutTaps_a),
     .qOutTaps_a(qOutTaps_a),
+    .corrLength_a(corrLength_a),
     .init_b(init_b),
     .polyTaps_b(polyTaps_b),
     .codeRestartCount_b(codeRestartCount_b),
-    .iOutTaps_b(iOutTaps_b)
+    .iOutTaps_b(iOutTaps_b),
+    .corrLength_b(corrLength_b)
     );
 
-// Used for debug
-reg ld;
 
 reg     iSampleEn, iOnTime;
 always @(posedge clk) begin
@@ -123,14 +124,12 @@ always @(posedge clk) begin
     end
 end
 
-
 wire out_a;
 reg dsSlipI;
 codes_gen codes_gen_a(
     .clk(clk),
     .clkEn(iSampleEn & iOnTime & !dsSlipI),
     .reset(reset),
-    .ld(ld | reset),
     .init(init_a),
     .polyTaps(polyTaps_a),
     .restartCount(codeRestartCount_a),
@@ -146,7 +145,6 @@ codes_gen codes_gen_b(
     .clk(clk),
     .clkEn(qSampleEn & qOnTime & !dsSlipQ),
     .reset(reset),
-    .ld(ld | reset),
     .polyTaps(polyTaps_b),
     .restartCount(codeRestartCount_b),
     .iOutTaps(iOutTaps_b),
@@ -163,15 +161,20 @@ end
 
 // Select the PN code used for the I channel
 reg iCode, qCode;
+reg     [3:0]  iCorrLength, qCorrLength;
 always @* begin
     casex (demodMode)
         `MODE_SQPN: begin
             iCode <= iOut_a;
+            iCorrLength <= corrLength_a;
             qCode <= qDelay;
+            qCorrLength <= corrLength_a;
         end
         default: begin
             iCode <= iOut_a;
+            iCorrLength <= corrLength_a;
             qCode <= iOut_b;
+            qCorrLength <= corrLength_b;
         end
     endcase
 end
@@ -242,9 +245,18 @@ end
 
 //******************************* Despread Correlators *************************
 
+`ifdef SIMULATE
+reg corrSimReset;
+initial corrSimReset = 1;
+wire corrReset = reset | corrSimReset;
+`else
+wire corrReset = ;
+`endif
+
 wire    [17:0]  iCorr;
 wire    [17:0]  iBsError;
-despreadCorrelator #(.CorrLength(32), .InputBits(SoftBits), .CorrBits(10)) 
+wire    [5:0]   iSyncCount;
+despreadCorrelator #(.CorrLength(64), .InputBits(SoftBits), .CorrBits(SoftBits+32))
 iCorrOnTime(
     .clk(clk),
     .clkEn(iSampleEn),
@@ -253,14 +265,16 @@ iCorrOnTime(
     .slip(dsSlipI),
     .codeBit(iCode),
     .rx(iSoft),
+    .corrLength(iCorrLength),
     .despread(iCorr),
-    .bsError(iBsError)
+    .bsError(iBsError),
+    .syncCount(iSyncCount)
     );
 
 wire    [17:0]  qCorr;
 wire    [17:0]  qBsError;
-reg             swapIQ;
-despreadCorrelator #(.CorrLength(32), .InputBits(SoftBits), .CorrBits(10)) 
+wire    [5:0]   qSyncCount;
+despreadCorrelator #(.CorrLength(64), .InputBits(SoftBits), .CorrBits(SoftBits+32)) 
 qCorrOnTime(
     .clk(clk),
     .clkEn(qSampleEn),
@@ -268,18 +282,21 @@ qCorrOnTime(
     .onTime(qOnTime),
     .slip(dsSlipQ),
     .codeBit(qCode),
-    .rx(swapIQ ? iSoft: qSoft),
+    .rx(qSoft),
+    .corrLength(qCorrLength),
     .despread(qCorr),
-    .bsError(qBsError)
+    .bsError(qBsError),
+    .syncCount(qSyncCount)
     );
 
 `define ADD_SWAP
 `ifdef ADD_SWAP
 // This correlator is used to detect an I/Q swap.
-wire    [17:0]  swapDespread;
-wire    [17:0]  swapBsError;
-despreadCorrelator #(.CorrLength(32), .InputBits(SoftBits), .CorrBits(10)) 
-swapCorr(
+wire    [17:0]  iSwapCorr;
+wire    [17:0]  iSwapBsError;
+wire    [5:0]   iSwapSyncCount;
+despreadCorrelator #(.CorrLength(64), .InputBits(SoftBits), .CorrBits(SoftBits+32)) 
+iSwapOnTime(
     .clk(clk),
     .clkEn(iSampleEn),
     .reset(reset),
@@ -287,9 +304,30 @@ swapCorr(
     .slip(dsSlipI),
     .codeBit(iCode),
     .rx(qSoft),
-    .despread(swapDespread),
-    .bsError(swapBsError)
+    .corrLength(iCorrLength),
+    .despread(iSwapCorr),
+    .bsError(iSwapBsError),
+    .syncCount(iSwapSyncCount)
     );
+
+wire    [17:0]  qSwapCorr;
+wire    [17:0]  qSwapBsError;
+wire    [5:0]   qSwapSyncCount;
+despreadCorrelator #(.CorrLength(64), .InputBits(SoftBits), .CorrBits(SoftBits+32)) 
+qSwapOnTime(
+    .clk(clk),
+    .clkEn(qSampleEn),
+    .reset(reset),
+    .onTime(qOnTime),
+    .slip(dsSlipQ),
+    .codeBit(qCode),
+    .rx(iSoft),
+    .corrLength(qCorrLength),
+    .despread(qSwapCorr),
+    .bsError(qSwapBsError),
+    .syncCount(qSwapSyncCount)
+    );
+
 `endif
 
 
@@ -302,14 +340,16 @@ swapCorr(
 `define DS_DEC_COUNT    16'h0004
 `define DS_MAX_COUNT    16'h000f
 
+reg             swapIQ;
 reg     [15:0]  syncCount;
 wire    [15:0]  decSyncCount = syncCount - `DS_DEC_COUNT;
 wire    [15:0]  incSyncCount = syncCount + `DS_INC_COUNT;
 reg             despreadSync;
 
-reg     [17:0]  peakCorrI;
+reg     [17:0]  peakCorrI, peakCorrQ;
 wire    [17:0]  absCorrI = iCorr[17] ? -iCorr : iCorr;
-reg     [17:0]  peakAbsCorrI;
+wire    [17:0]  absCorrQ = qCorr[17] ? -qCorr : qCorr;
+reg     [17:0]  peakAbsCorrI, peakAbsCorrQ;
 `ifdef SIMULATE
 real absCorrIReal;
 always @* absCorrIReal = $itor($signed(absCorrI))/(2**17);
@@ -318,16 +358,20 @@ always @* peakAbsCorrIReal = $itor($signed(peakAbsCorrI))/(2**17);
 `endif
 
 `ifdef ADD_SWAP
-wire            despreadPolarity = swapIQ ? swapDespread[17] : iCorr[17];
-reg     [17:0]  peakCorrSwap;
-wire    [17:0]  absCorrSwap = swapDespread[17] ? -swapDespread : swapDespread;
-reg     [17:0]  peakAbsCorrSwap;
+reg     [17:0]  peakCorrSwapI, peakCorrSwapQ;
+wire    [17:0]  absCorrSwapI = iSwapCorr[17] ? -iSwapCorr : iSwapCorr;
+wire    [17:0]  absCorrSwapQ = qSwapCorr[17] ? -qSwapCorr : qSwapCorr;
+reg     [17:0]  peakAbsCorrSwapI, peakAbsCorrSwapQ;
 `ifdef SIMULATE
-real absCorrSwapReal;
-always @* absCorrSwapReal = $itor($signed(absCorrSwap))/(2**17);
-real peakAbsCorrSwapReal;
-always @* peakAbsCorrSwapReal = $itor($signed(peakAbsCorrSwap))/(2**17);
+real absCorrSwapIReal;
+always @* absCorrSwapIReal = $itor($signed(absCorrSwapI))/(2**17);
+real peakAbsCorrSwapIReal;
+always @* peakAbsCorrSwapIReal = $itor($signed(peakAbsCorrSwapI))/(2**17);
 `endif
+`endif
+
+`ifdef ADD_SWAP
+wire            despreadPolarity = swapIQ ? iSwapCorr[17] : iCorr[17];
 `else 
 wire            despreadPolarity = iCorr[17];
 `endif
@@ -337,12 +381,16 @@ reg     [1:0]           acqStateI;
 `define DS_ACQ_TEST     2'b01
 `define DS_ACQ_INSYNC   2'b11
 
+`define DS_SYNC_THRESHOLD   18'h02000
+
 always @(posedge clk) begin
-    if (reset) begin
+    if (corrReset) begin
         swapIQ <= 0;
         peakAbsCorrI <= 0;
+        peakAbsCorrQ <= 0;
         `ifdef ADD_SWAP
-        peakAbsCorrSwap <= 0;
+        peakAbsCorrSwapI <= 0;
+        peakAbsCorrSwapQ <= 0;
         `endif
         peakCorrI <= 0;
         despreadSync <= 0;
@@ -353,62 +401,48 @@ always @(posedge clk) begin
     end
     `ifdef SIMULATE
     else if (iCorr === 18'hxxx00) begin
-        peakAbsCorrI <= 18'h04000;
-        peakAbsCorrSwap <= 18'h04000;
+        peakAbsCorrI <= `DS_SYNC_THRESHOLD;
+        peakAbsCorrSwapI <= `DS_SYNC_THRESHOLD;
+        peakAbsCorrQ <= `DS_SYNC_THRESHOLD;
+        peakAbsCorrSwapQ <= `DS_SYNC_THRESHOLD;
     end
     `endif
     else if (iSampleEn) begin
         if (iOnTime) begin
             case (acqStateI)
                 `DS_ACQ_SLIP: begin
-                    /*
-                    if (absCorrI > peakAbsCorrI) begin
-                        peakAbsCorrI <= absCorrI;
-                    end
-                    `ifdef ADD_SWAP
-                    if (absCorrSwap > peakAbsCorrSwap) begin
-                        peakAbsCorrSwap <= absCorrSwap;
-                    end
-                    `endif
-                    */
                     dsSlipI <= 0;
+                    dsSlipQ <= 0;
                     acqStateI <= `DS_ACQ_TEST;
                     end
                 `DS_ACQ_TEST: begin
-                    /*
-                    if (absCorrI > peakAbsCorrI) begin
-                        peakAbsCorrI <= absCorrI;
-                    end
-                    `ifdef ADD_SWAP
-                    if (absCorrSwap > peakAbsCorrSwap) begin
-                        peakAbsCorrSwap <= absCorrSwap;
-                    end
-                    `endif
-                    */
                     // Is absCorrI > 2*peakAbsCorrI?
-                    if ({1'b0,absCorrI[17:1]} > peakAbsCorrI) begin
+                    if ( {1'b0,absCorrI[17:1]} > peakAbsCorrI)
+                      && (1'b0,absCorrQ[17:1]} > peakAbsCorrQ)) begin
                         // Yes. Stop slipping the generator and declare sync
                         dsSlipI <= 0;
+                        dsSlipQ <= 0;
                         swapIQ <= 0;
                         despreadSync <= 1;
-                        peakCorrI <= iCorr;
                         syncCount <= `DS_START_COUNT;
                         acqStateI <= `DS_ACQ_INSYNC;
                     end
                     `ifdef ADD_SWAP
                     // Does the swapped channel have a large correlation peak?
-                    else if ({1'b0,absCorrSwap[17:1]} > peakAbsCorrSwap) begin
+                    else if ( {1'b0,absCorrSwapI[17:1]} > peakAbsCorrSwapI)
+                           && {1'b0,absCorrSwapQ[17:1]} > peakAbsCorrSwapQ) begin
                         // Yes. Stop slipping the generator and declare sync
                         dsSlipI <= 0;
+                        dsSlipQ <= 0;
                         swapIQ <= 1;
                         despreadSync <= 1;
-                        peakCorrI <= swapDespread;
                         syncCount <= `DS_START_COUNT;
                         acqStateI <= `DS_ACQ_INSYNC;
                     end
                     `endif
                     else begin
                         dsSlipI <= 1;
+                        dsSlipQ <= 1;
                         acqStateI <= `DS_ACQ_SLIP;
                     end
                 end
@@ -429,13 +463,14 @@ always @(posedge clk) begin
                             end
                             else begin
                                 // We're out of sync. Start slipping again.
-                                //peakAbsCorrI <= absCorrI;
-                                peakAbsCorrI <= 18'h04000;
+                                peakAbsCorrI <= `DS_SYNC_THRESHOLD;
+                                peakAbsCorrQ <= `DS_SYNC_THRESHOLD;
                                 `ifdef ADD_SWAP
-                                //peakAbsCorrSwap <= absCorrSwap;
-                                peakAbsCorrSwap <= 18'h04000;
+                                peakAbsCorrSwapI <= `DS_SYNC_THRESHOLD;
+                                peakAbsCorrSwapQ <= `DS_SYNC_THRESHOLD;
                                 `endif
                                 dsSlipI <= 1;
+                                dsSlipQ <= 1;
                                 swapIQ <= 0;
                                 despreadSync <= 0;
                                 acqStateI <= `DS_ACQ_SLIP;
@@ -457,13 +492,14 @@ always @(posedge clk) begin
                             end
                             else begin
                                 // We're out of sync. Start slipping again.
-                                //peakAbsCorrI <= absCorrI;
-                                peakAbsCorrI <= 18'h04000;
+                                peakAbsCorrI <= `DS_SYNC_THRESHOLD;
+                                peakAbsCorrQ <= `DS_SYNC_THRESHOLD;
                                 `ifdef ADD_SWAP
-                                //peakAbsCorrSwap <= absCorrSwap;
-                                peakAbsCorrSwap <= 18'h04000;
+                                peakAbsCorrSwapI <= `DS_SYNC_THRESHOLD;
+                                peakAbsCorrSwapQ <= `DS_SYNC_THRESHOLD;
                                 `endif
                                 dsSlipI <= 1;
+                                dsSlipQ <= 1;
                                 swapIQ <= 0;
                                 despreadSync <= 0;
                                 acqStateI <= `DS_ACQ_SLIP;
@@ -478,14 +514,30 @@ end
 
 //******************************* Output Assignments **************************
 
-assign iDespread = swapIQ ? swapDespread : iCorr;
 assign iSymEn = iSampleEn & iOnTime;
 assign iSym2xEn = iSampleEn;
-assign qDespread = qCorr;
 assign qSymEn = qSampleEn & qOnTime;
 assign qSym2xEn = qSampleEn;
-assign timingError = swapIQ ? swapBsError : iBsError;
+assign timingError = swapIQ ? iSwapBsError : iBsError;
 assign timingErrorEn = !iOnTime & despreadSync;
+
+reg     [17:0]  iDespread,qDespread;
+always @(posedge clk) begin
+    if (iSym2xEn) begin
+        iDespread <= swapIQ ? iSwapCorr : iCorr;
+    end
+    if (qSym2xEn) begin
+        qDespread <= swapIQ ? qSwapCorr : qCorr;
+    end
+end
+
+`ifdef SIMULATE
+real iDespreadReal;
+always @* iDespreadReal = $itor($signed(iDespread))/(2**17);
+real qDespreadReal;
+always @* qDespreadReal = $itor($signed(qDespread))/(2**17);
+`endif
+
 
 endmodule
 

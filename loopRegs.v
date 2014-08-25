@@ -205,11 +205,11 @@ always @* begin
             `LF_CONTROL:        dataOut = {lockStatus,26'b0,ctrl4,clearAccum,ctrl2,invertError,zeroError};
             `LF_LEAD_LAG:       dataOut = {leadMan,3'bx,leadExp,lagMan,3'bx,lagExp};
             `LF_LIMIT:          dataOut = limit;
-            //`LF_LOOPDATA0:      dataOut = loopData;
-            //`LF_LOOPDATA1:      dataOut = loopData1;
-            `LF_LOOPDATA0:      dataOut = loopDataRead;
+            `LF_LOOPDATA0:      dataOut = loopData;
+            `LF_LOOPDATA1:      dataOut = loopData1;
+            //`LF_LOOPDATA0:      dataOut = loopDataRead;
             `LF_LEAD_LAG1:      dataOut = {leadMan1,3'bx,leadExp1,lagMan1,3'bx,lagExp1};
-            `LF_LOOPDATA1:      dataOut = loopData1Read;
+            //`LF_LOOPDATA1:      dataOut = loopData1Read;
             `LF_LOCKDETECTOR:   dataOut = {4'h0,syncThreshold,lockCount};
             `LF_INTEGRATOR:     dataOut = lagAccum;
             default:            dataOut = 32'hx;

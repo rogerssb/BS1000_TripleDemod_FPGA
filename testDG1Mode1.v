@@ -38,6 +38,7 @@ always #HC clk = clk^clken;
 `define TWO_POW_17      131072.0
 
 parameter modSampleDecimation = 7;
+parameter modChipsPerSymbol = 10;
 parameter ddcDecimation = 2;
 
 //real carrierFreqHz = 2333333.3;
@@ -58,10 +59,10 @@ wire [31:0] carrierLimit = carrierLimitInt;
 
 wire [31:0] sweepRate = 32'h00000000;
 
-real symbolRateSps = SAMPLE_FREQ/modSampleDecimation/2.0;
-real symbolRateSamples = 1/symbolRateSps/`SAMPLE_PERIOD/2.0;
-integer symbolRateSamplesInt = symbolRateSamples;
-wire [15:0]symbolRateDivider = symbolRateSamplesInt - 1;
+real chipRateSps = SAMPLE_FREQ/modSampleDecimation/2.0;
+real chipRateSamples = 1/chipRateSps/`SAMPLE_PERIOD/2.0;
+integer chipRateSamplesInt = chipRateSamples;
+wire [15:0]chipRateDivider = chipRateSamplesInt - 1;
 
 // value = 2^ceiling(log2(R*R))/(R*R), where R = interpolation rate of the FM
 // modulator
@@ -75,7 +76,7 @@ initial cicDecimation = (ddcDecimation == 1) ? 1 :
 integer cicDecimationInt;
 initial cicDecimationInt = cicDecimation;
 
-real resamplerFreqSps = 2*symbolRateSps;     // 2 samples per symbol
+real resamplerFreqSps = 2*chipRateSps;     // 2 samples per symbol
 real resamplerFreqNorm = (ddcDecimation == 1) ? resamplerFreqSps/(SAMPLE_FREQ/2.0) * `TWO_POW_32 :
                          (ddcDecimation == 2) ? resamplerFreqSps/(SAMPLE_FREQ/2.0/2.0) * `TWO_POW_32 : 
                          (ddcDecimation == 3) ? resamplerFreqSps/(SAMPLE_FREQ/2.0/3.0) * `TWO_POW_32 :  
@@ -86,34 +87,46 @@ real resamplerLimitNorm = 0.001*resamplerFreqSps/SAMPLE_FREQ * `TWO_POW_32;
 integer resamplerLimitInt = resamplerLimitNorm;
 
 /******************************************************************************
-                            Create a bit stream
+                            Create a chip sequence
 ******************************************************************************/
 
-integer symbolRateCount;
-reg     modClk;
+integer chipRateCount;
+reg     chipClk;
+reg     negEdgeChipClk;
+reg     posEdgeChipClk;
 always @(posedge clk) begin
     if (reset) begin
-        symbolRateCount <= 0;
-        modClk <= 0;
+        chipRateCount <= 0;
+        chipClk <= 0;
+        negEdgeChipClk <= 0;
+        posEdgeChipClk <= 0;
         end
     else begin
-        if (symbolRateCount == 0) begin
-            symbolRateCount <= symbolRateSamplesInt-1;
-            modClk <= ~modClk;
+        if (chipRateCount == 0) begin
+            chipRateCount <= chipRateSamplesInt-1;
+            chipClk <= ~chipClk;
+            negEdgeChipClk <= 0;
+            posEdgeChipClk <= 0;
             end
         else begin
-            symbolRateCount <= symbolRateCount - 1;
+            chipRateCount <= chipRateCount - 1;
+            if (chipRateCount == 1) begin
+                if (chipClk) begin
+                    negEdgeChipClk <= 1;
+                    end
+                else begin
+                    posEdgeChipClk <= 1;
+                    end
+                end
             end
         end
     end
 
 // PN Code Generator for the transmitter
-reg pnLoad;
 codes_gen pnGen(
-    .clk(modClk),
-    .clkEn(1'b1),
+    .clk(clk),
+    .clkEn(posEdgeChipClk),
     .reset(reset),
-    .ld(pnLoad),
     //.init(18'h0008f),
     .init(18'h00063),
     .polyTaps(18'h008e),
@@ -125,31 +138,150 @@ codes_gen pnGen(
     );
 
 
-reg     iModData;
-reg     qModData;
-reg     oqModData;
-always @(negedge modClk) begin
-    iModData <= iCode;
-    qModData <= qCode;
+reg     iModChip;
+reg     qModChip;
+reg     oqModChip;
+always @(posedge clk) begin
+    if (negEdgeChipClk) begin
+        iModChip <= iCode;
+        qModChip <= qCode;
     end
-always @(posedge modClk) begin
-    oqModData <= qCode;
+end
+always @(posedge clk) begin
+    if (posEdgeChipClk) begin
+        oqModChip <= qCode;
+    end
+end
+
+/******************************************************************************
+                            Create a data stream
+******************************************************************************/
+integer symbolRateCount;
+reg     symbolClk;
+wire    negEdgeSymbolClk = posEdgeChipClk & symbolClk & (symbolRateCount == 0);
+wire    posEdgeSymbolClk = posEdgeChipClk & !symbolClk & (symbolRateCount == 0);
+always @(posedge clk) begin
+    if (reset) begin
+        symbolRateCount <= 0;
+        symbolClk <= 0;
+        end
+    else if (posEdgeChipClk) begin
+        if (symbolRateCount == 0) begin
+            symbolRateCount <= modChipsPerSymbol-1;
+            symbolClk <= ~symbolClk;
+            end
+        else begin
+            symbolRateCount <= symbolRateCount - 1;
+            end
+        end
     end
 
+
+
+// Alternating ones and zeros
+reg     [3:0]altSR;
+wire    modClk;
+reg     altData;
+always @(posedge clk or posedge reset) begin
+    if (reset) begin
+        altData <= 0;
+        end
+    else if (negEdgeSymbolClk) begin
+        altData <= ~altData;
+        end
+    end
+
+// Random data
+parameter PN17 = 16'h008e,
+          MASK17 = 16'h00ff;
+reg [15:0]sr;
+reg [4:0]zeroCount;
+reg  randData;
+always @(posedge clk or posedge reset) begin
+    if (reset) begin
+        zeroCount <= 5'b0;
+        sr <= MASK17;
+        end
+    else if (negEdgeSymbolClk) begin
+        if (sr[0] | (zeroCount == 5'b11111))
+            begin
+            zeroCount <= 5'h0;
+            sr <= {1'b0, sr[15:1]} ^ PN17;
+            end
+        else
+            begin
+            zeroCount <= zeroCount + 5'h1;
+            sr <= sr >> 1;
+            end
+        randData <= sr[0];
+        end
+    end
+
+reg     modData;
+always @(posedge clk) begin
+    if (posEdgeSymbolClk) begin
+        //modData <= altData;
+        modData <= 1'b0;
+        end
+    end
 /******************************************************************************
                             Instantiate a Modulator
 ******************************************************************************/
-wire    [17:0]  iBB;
-assign iBB = {iModData,17'h10000};
+reg     [17:0]  iBB;
 reg     [17:0]  qBB;
 always @(*) begin
     casex (demod.demodMode)
-        `MODE_SQPN:     qBB = {oqModData,17'h10000};
-        `MODE_OQPSK:    qBB = {oqModData,17'h10000};
-        `MODE_BPSK:     qBB = 0;
-        default:        qBB = {qModData,17'h10000};
+        `MODE_SQPN: begin
+            iBB = {iModChip ^ modData,17'h10000};
+            qBB = {oqModChip ^ modData,17'h10000};
+            end
+        `MODE_OQPSK: begin
+            iBB = {modData,17'h10000};
+            qBB = {modData,17'h10000};
+            end
+        `MODE_BPSK: begin
+            iBB = {modData,17'h10000};
+            qBB = 0;
+            end
+        default: begin
+            iBB = {modData,17'h10000};
+            qBB = {qModChip,17'h10000};
+            end
         endcase
     end
+
+`ifdef SIMULATE
+real iBBReal;
+always @* iBBReal = $itor($signed(iBB))/(2.0**17);
+real qBBReal;
+always @* qBBReal = $itor($signed(qBB))/(2.0**17);
+`endif
+
+wire    [17:0]  iMod;
+reg             txInterpReset;
+reg             iModInterpCS;
+interpolate iModInterp(
+    .clk(clk), .reset(txInterpReset), .clkEn(posEdgeChipClk),
+    .cs(iModInterpCS),
+    .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
+    .addr(a),
+    .din(d),
+    .dout(),
+    .dataIn(iBB),
+    .dataOut(iMod)
+    );
+wire    [17:0]  qMod;
+reg             qModInterpCS;
+interpolate qModInterp(
+    .clk(clk), .reset(txInterpReset), .clkEn(posEdgeChipClk),
+    .cs(qModInterpCS),
+    .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
+    .addr(a),
+    .din(d),
+    .dout(),
+    .dataIn(qBB),
+    .dataOut(qMod)
+    );
 wire    [17:0]  iLO,qLO;
 dds carrierDds (
     .sclr(reset), 
@@ -195,14 +327,14 @@ real txScaleFactor;
 //wire [17:0]qSignal = 131072.0*qTxReal * txScaleFactor;
 
 // 0 Degrees
-//real rotateReal = 1.0;
-//real rotateImag = 0.0;
+real rotateReal = 1.0;
+real rotateImag = 0.0;
 // 45 Degrees
 //real rotateReal = 0.707;
 //real rotateImag = 0.707;
 // 90 Degrees
-real rotateReal = 0.0;
-real rotateImag = 1.0;
+//real rotateReal = 0.0;
+//real rotateImag = 1.0;
 // 180 Degrees
 //real rotateReal = -1.0;
 //real rotateImag = 0.0;
@@ -306,9 +438,9 @@ always @(a) begin
             end
         endcase
     end
+reg             interpReset;
 wire    [31:0]  dac0Dout;
 wire    [17:0]  dac0Data;
-reg             interpReset;
 interpolate dac0Interp(
     .clk(clk), .reset(interpReset), .clkEn(dac0Sync),
     .cs(dac0CS),
@@ -404,9 +536,6 @@ sdi sdi(
 /******************************************************************************
                        Delay Line for BER Testing
 ******************************************************************************/
-parameter PN17 = 16'h008e,
-          MASK17 = 16'h00ff;
-
 reg [15:0]testSR;
 reg [4:0]testZeroCount;
 reg testData;
@@ -558,6 +687,7 @@ task read32;
   end
 endtask
 
+integer j;
 initial begin
 
     `ifdef ADD_NOISE
@@ -568,6 +698,7 @@ initial begin
     `endif
     demod.ddc.hbReset = 1;
     demod.ddc.cicReset = 1;
+    txInterpReset = 0;
     interpReset = 0;
     reset = 0;
     sync = 1;
@@ -583,6 +714,14 @@ initial begin
     clken=1;
     #(10*C) ;
 
+    iModInterpCS = 1;
+    qModInterpCS = 1;
+    write32(createAddress(`INTERP0SPACE, `INTERP_CONTROL),8);
+    write32(createAddress(`INTERP0SPACE, `INTERP_EXPONENT), 7);
+    write32(createAddress(`INTERP0SPACE, `INTERP_MANTISSA), 32'h00011000);
+    iModInterpCS = 0;
+    qModInterpCS = 0;
+
     // Init the mode
     `ifdef BPSK
     write32(createAddress(`DEMODSPACE,`DEMOD_CONTROL),{14'bx,`MODE_SINGLE_RAIL,13'bx,`MODE_BPSK});
@@ -597,13 +736,14 @@ initial begin
     // Init the sample rate loop filters
     write32(createAddress(`RESAMPSPACE,`RESAMPLER_RATE),resamplerFreqInt);
     write32(createAddress(`BITSYNCSPACE,`LF_CONTROL),1);    // Zero the error
-    write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h001c0010);    
-    //write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h0014000c);    
+    //write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h001c0010);    
+    write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h001a000c);    
     write32(createAddress(`BITSYNCSPACE,`LF_LIMIT), resamplerLimitInt);    
 
     // Init the carrier loop filters
     write32(createAddress(`CARRIERSPACE,`CLF_CONTROL),1);    // Zero the error
-    write32(createAddress(`CARRIERSPACE,`CLF_LEAD_LAG),32'h0015000b);   
+    //write32(createAddress(`CARRIERSPACE,`CLF_LEAD_LAG),32'h0015000b);   
+    write32(createAddress(`CARRIERSPACE,`CLF_LEAD_LAG),32'h00130008);   
     write32(createAddress(`CARRIERSPACE,`CLF_ULIMIT), carrierLimit);
     write32(createAddress(`CARRIERSPACE,`CLF_LLIMIT), -carrierLimit);
     write32(createAddress(`CARRIERSPACE,`CLF_LOOPDATA), sweepRate);
@@ -653,12 +793,12 @@ initial begin
     write32(createAddress(`UARTSPACE, `UART_BAUD_DIV),99);
 
     // Set the despread codes
-    demod.despreader.ld = 0;
     write32(createAddress(`DESPREADSPACE, `DESPREAD_INIT_A),32'h1);
     write32(createAddress(`DESPREADSPACE, `DESPREAD_POLYTAPS_A),32'h0000008e);
     write32(createAddress(`DESPREADSPACE, `DESPREAD_RESTART_COUNT_A),32'hffffffff);
     write32(createAddress(`DESPREADSPACE, `DESPREAD_IOUTTAPS_A),32'h00000080);
     write32(createAddress(`DESPREADSPACE, `DESPREAD_QOUTTAPS_A),32'h00000090);
+    write32(createAddress(`DESPREADSPACE, `DESPREAD_MASK_A),32'h00000003);
     write32(createAddress(`DESPREADSPACE, `DESPREAD_CONTROL),{30'h0,`MODE_NASA_DG1_MODE1});
 
     reset = 1;
@@ -667,15 +807,13 @@ initial begin
     demod.ddc.hbReset = 0;
     demod.ddc.cicReset = 0;
 
-    // Wait 9.5 bit periods
-    pnLoad = 1;
-    #(19*symbolRateSamplesInt*C) ;
-    pnLoad = 0;
-
     // Force the carrier frequency to load. We have to do this because
     // the load is normally not done in FSK mode until you get symbol
     // enables from the bitsync
     demod.ddc.ddcFreq = -carrierFreq;
+
+    // Wait 9.5 bit periods
+    #(19*chipRateSamplesInt*C) ;
 
     // Create a reset to clear the nco accumulator
     reset = 1;
@@ -683,16 +821,33 @@ initial begin
     reset = 0;
     demod.channelAGC.chAgcLoopFilter.integrator = 32'h1c880000;
 
+    // Wait 20 bit periods
+    #(40*chipRateSamplesInt*C) ;
+    pnGen.restartCounter = 0;
+
+    // Create a reset to clear the transmit interpolators
+    txInterpReset = 1;
+    #(2*C) ;
+    txInterpReset = 0;
+
     // Wait 2.0 bit periods
-    #(4.0*symbolRateSamplesInt*C) ;
+    #(4.0*chipRateSamplesInt*C) ;
 
     // Create a reset to clear the halfband
     demod.ddc.hbReset = 1;
     #(2*C) ;
     demod.ddc.hbReset = 0;
 
+    for (j = 0; j < 64 ; j = j + 1) begin
+        demod.despreader.iCorrOnTime.rxSR[j] = 0;
+        demod.despreader.qCorrOnTime.rxSR[j] = 0;
+        demod.despreader.iSwapOnTime.rxSR[j] = 0;
+        demod.despreader.qSwapOnTime.rxSR[j] = 0;
+    end
+    demod.despreader.corrSimReset = 0;
+
     // Wait 2 bit periods
-    #(4*symbolRateSamplesInt*C) ;
+    #(4*chipRateSamplesInt*C) ;
 
     // Create a reset to clear the cic resampler
     demod.ddc.cicReset = 1;
@@ -700,7 +855,7 @@ initial begin
     demod.ddc.cicReset = 0;
 
     // Wait
-    #(4*symbolRateSamplesInt*C) ;
+    #(4*chipRateSamplesInt*C) ;
 
     // Create a reset to clear the cic resampler
     demod.ddc.cicReset = 1;
@@ -708,7 +863,7 @@ initial begin
     demod.ddc.cicReset = 0;
 
     // Wait 14 bit periods
-    #(28*symbolRateSamplesInt*C) ;
+    #(28*chipRateSamplesInt*C) ;
 
     // Create a reset to clear the interpolators
     interpReset = 1;
@@ -719,7 +874,7 @@ initial begin
     write32(createAddress(`BITSYNCSPACE,`LF_CONTROL),32'h00000000);  
 
     // Wait
-    #(10*symbolRateSamplesInt*C) ;
+    #(10*chipRateSamplesInt*C) ;
 
     // Enable the carrier loop, invert the error, and enable sweep
     write32(createAddress(`CARRIERSPACE,`CLF_CONTROL),2);  
@@ -734,13 +889,13 @@ initial begin
 
 
     // Wait for some data to pass thru
-    #(3*100*symbolRateSamplesInt*C) ;
+    #(3*100*chipRateSamplesInt*C) ;
     `ifdef MATLAB_VECTORS
     $fclose(outfile);
     `endif
     $stop;
 
-    write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h0018000c);    
+    //write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h0018000c);    
     //write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h001e0018);    
 
     read32(createAddress(`SDISPACE,`SDI_CONTROL));

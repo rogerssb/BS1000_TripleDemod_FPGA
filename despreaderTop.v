@@ -2,7 +2,7 @@
 `include "addressMap.v"
 
 
-module top (
+module despreaderTop (
     ck933,
     nWe,nRd,nCs,
     addr12,
@@ -38,7 +38,7 @@ input           addr3,addr2,addr1;
 inout   [15:0]  data;
 input   [13:0]  adc_d;
 
-output  [3:0]   demodMode;
+output  [4:0]   demodMode;
 output  [3:0]   dac0Select,dac1Select,dac2Select;
 output          auSymClk;
 output          bsync_nLock,demod_nLock;
@@ -186,7 +186,7 @@ always @(posedge ck933) begin
 
 wire    [17:0]  demod0Out,demod1Out,demod2Out;
 wire    [31:0]  demodDout;
-wire    [3:0]   demodMode;
+wire    [4:0]   demodMode;
 wire            pcmTrellisMode = (demodMode == `MODE_PCMTRELLIS);
 wire            soqpskTrellisMode = (demodMode == `MODE_SOQPSK);
 wire            multihMode = (demodMode == `MODE_MULTIH);

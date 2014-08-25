@@ -10,7 +10,6 @@ module codes_gen (
     input clk,
     input clkEn,
     input reset,
-    input ld,
     input [17:0] init,
     input [17:0] polyTaps,
     input [17:0] restartCount,
@@ -30,9 +29,10 @@ wire            sum;
 always @ (posedge clk) begin
     if (reset) begin
         code <= init;
+        restartCounter <= restartCount;
         end
     else if (clkEn) begin
-        if (ld | restart) begin
+        if (restart) begin
             restartCounter <= restartCount;
             code <= init;
             end

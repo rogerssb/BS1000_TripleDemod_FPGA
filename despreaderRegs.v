@@ -19,11 +19,13 @@ module despreaderRegs (
     codeRestartCount_a,
     iOutTaps_a,
     qOutTaps_a,
+    corrLength_a,
     init_b,
     polyTaps_b,
     codeRestartCount_b,
     iOutTaps_b,
-    qOutTaps_b
+    qOutTaps_b,
+    corrLength_b
     );
 
 input           cs;
@@ -52,6 +54,9 @@ reg     [17:0]  iOutTaps_a;
 output  [17:0]  qOutTaps_a;
 reg     [17:0]  qOutTaps_a;
 
+output  [3:0]   corrLength_a;
+reg     [3:0]   corrLength_a;
+
 output  [17:0]  init_b;
 reg     [17:0]  init_b;
 
@@ -67,6 +72,9 @@ reg     [17:0]  iOutTaps_b;
 output  [17:0]  qOutTaps_b;
 reg     [17:0]  qOutTaps_b;
 
+output  [3:0]   corrLength_b;
+reg     [3:0]   corrLength_b;
+
 
 always @(negedge wr0) begin
     if (cs) begin
@@ -76,11 +84,13 @@ always @(negedge wr0) begin
             `DESPREAD_RESTART_COUNT_A:  codeRestartCount_a[7:0] <= din[7:0];
             `DESPREAD_IOUTTAPS_A:       iOutTaps_a[7:0] <= din[7:0];
             `DESPREAD_QOUTTAPS_A:       qOutTaps_a[7:0] <= din[7:0];
+            `DESPREAD_MASK_A:           corrLength_a[3:0] <= din[3:0];
             `DESPREAD_INIT_B:           init_b[7:0] <= din[7:0];
             `DESPREAD_POLYTAPS_B:       polyTaps_b[7:0] <= din[7:0];
             `DESPREAD_RESTART_COUNT_B:  codeRestartCount_b[7:0] <= din[7:0];
             `DESPREAD_IOUTTAPS_B:       iOutTaps_b[7:0] <= din[7:0];
             `DESPREAD_QOUTTAPS_B:       qOutTaps_b[7:0] <= din[7:0];
+            `DESPREAD_MASK_B:           corrLength_b[3:0] <= din[3:0];
             `DESPREAD_CONTROL:          despreadMode[1:0] <= din[1:0];
             default: ;
             endcase
@@ -123,14 +133,6 @@ always @(negedge wr2) begin
         end
     end
 
-always @(negedge wr3) begin
-    if (cs) begin
-        casex (addr)
-            default: ;
-            endcase
-        end
-    end
-
 always @ (*) begin
     if (cs) begin
         casex (addr)
@@ -139,11 +141,13 @@ always @ (*) begin
         `DESPREAD_RESTART_COUNT_A:  dout = {14'b0,codeRestartCount_a};
         `DESPREAD_IOUTTAPS_A:       dout = {14'b0,iOutTaps_a};
         `DESPREAD_QOUTTAPS_A:       dout = {14'b0,qOutTaps_a};
+        `DESPREAD_MASK_A:           dout = {28'b0,corrLength_a};
         `DESPREAD_INIT_B:           dout = {14'b0,init_b};
         `DESPREAD_POLYTAPS_B:       dout = {14'b0,polyTaps_b};
         `DESPREAD_RESTART_COUNT_B:  dout = {14'b0,codeRestartCount_b};
         `DESPREAD_IOUTTAPS_B:       dout = {14'b0,iOutTaps_b};
         `DESPREAD_QOUTTAPS_B:       dout = {14'b0,qOutTaps_b};
+        `DESPREAD_MASK_B:           dout = {28'b0,corrLength_b};
         `DESPREAD_CONTROL:          dout = {30'b0,despreadMode};
         default:                    dout = 32'hx;
         endcase

@@ -163,17 +163,17 @@ wire    [17:0]  iDsSymData,qDsSymData;
 wire            iDsSym2xEn;
 reg     [17:0]  iFm,qFm;
 reg             fmDemodClkEn;
-always @(posedge clk) begin
+always @* begin
     casex (demodMode) 
         `MODE_SQPN: begin
-            fmDemodClkEn <= iDsSym2xEn;
-            iFm <= iDsSymData;
-            qFm <= qDsSymData;
+            fmDemodClkEn = iDsSym2xEn;
+            iFm = iDsSymData;
+            qFm = qDsSymData;
         end
         default: begin
-            fmDemodClkEn <= ddcSync;
-            iFm <= iDdc;
-            qFm <= qDdc;
+            fmDemodClkEn = ddcSync;
+            iFm = iDdc;
+            qFm = qDdc;
         end
     endcase
 end
@@ -549,6 +549,7 @@ reg             qSymEn;
 reg             qSym2xEn;
 always @* begin
     casex (demodMode)
+        `ifdef ADD_DESPREADER
         `MODE_SQPN: begin
             iSymData = iDsSymData;
             iSymEn = iDsSymEn;
@@ -557,6 +558,7 @@ always @* begin
             qSymEn = qDsSymEn;
             qSym2xEn = qDsSym2xEn;
         end
+        `endif
         default: begin
             iSymData = iBsSymData;
             iSymEn = iBsSymEn;
