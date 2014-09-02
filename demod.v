@@ -109,6 +109,9 @@ demodRegs demodRegs(
     .negDeviation(negDeviation),
     `endif
     .demodMode(demodMode),
+    `ifdef ADD_DESPREADER
+    .enableDespreader(enableDespreader),
+    `endif
     .bitsyncMode(bitsyncMode),
     .dac0Select(dac0Select),
     .dac1Select(dac1Select),
@@ -159,17 +162,10 @@ channelAGC channelAGC(
 /******************************************************************************
                            Phase/Freq/Mag Detector
 ******************************************************************************/
-wire    [17:0]  iDsSymData,qDsSymData;
-wire            iDsSym2xEn;
 reg     [17:0]  iFm,qFm;
 reg             fmDemodClkEn;
 always @* begin
     casex (demodMode) 
-        `MODE_SQPN: begin
-            fmDemodClkEn = iDsSym2xEn;
-            iFm = iDsSymData;
-            qFm = qDsSymData;
-        end
         default: begin
             fmDemodClkEn = ddcSync;
             iFm = iDdc;
@@ -327,7 +323,6 @@ reg     [17:0]  nextAbsSample;
 always @(demodMode or fm or fmInv or freqError) begin
     casex (demodMode)
         `MODE_OQPSK,
-        `MODE_SQPN,
         `MODE_SOQPSK: begin
             nextFreqSample = fm;
             nextAbsSample = fm[17] ? fmInv : fm;
@@ -466,9 +461,11 @@ dualResampler resampler(
 ******************************************************************************/
 wire    [17:0]  dsTimingError;
 wire    [31:0]  despreaderDout;
+wire    [17:0]  iDsSymData,qDsSymData;
 dualDespreader despreader(
     .clk(clk), 
     .clkEn(resampSync), .auClkEn(auResampSync),
+    .symEn(iSymEn),     .auSymEn(),
     .reset(reset),
     .wr0(wr0) , .wr1(wr1), .wr2(wr2), .wr3(wr3),
     .addr(addr),
@@ -477,13 +474,9 @@ dualDespreader despreader(
     .demodMode(demodMode),
     .dout(despreaderDout),
     .iDespread(iDsSymData),
-    .iSymEn(iDsSymEn),
-    .iSym2xEn(iDsSym2xEn),
     .qDespread(qDsSymData),
-    .qSymEn(qDsSymEn),
-    .qSym2xEn(qDsSym2xEn),
-    .timingError(dsTimingError),
-    .timingErrorEn(dsTimingErrorEn)
+    .iCode(iCode),.qCode(qCode),
+    .iEpoch(iEpoch), .qEpoch(qEpoch)
     );
 `endif
 
@@ -511,8 +504,6 @@ bitsync bitsync(
     .dout(bitsyncDout),
     .i(iResamp), .q(qResamp),
     .au(qResamp),
-    .dsTimingError(dsTimingError),
-    .dsTimingErrorEn(dsTimingErrorEn),
     .offsetError(offsetError),
     .offsetErrorEn(offsetErrorEn),
     `ifdef SYM_DEVIATION
@@ -521,12 +512,12 @@ bitsync bitsync(
     .posDeviation(posDeviation),
     .negDeviation(negDeviation),
     `endif
-    .iSym2xEn(iBsSym2xEn),
-    .iSymEn(iBsSymEn),
+    .iSym2xEn(iSym2xEn),
+    .iSymEn(iSymEn),
     .symDataI(iBsSymData),
     .bitDataI(iBit),
-    .qSym2xEn(qBsSym2xEn),
-    .qSymEn(qBsSymEn),
+    .qSym2xEn(qSym2xEn),
+    .qSymEn(qSymEn),
     .qSymClk(qSymClk),
     .symDataQ(qBsSymData),
     .bitDataQ(qBit),
@@ -541,34 +532,23 @@ bitsync bitsync(
     .bsError(bsError), .bsErrorEn(bsErrorEn)
     );
 
+`ifdef ADD_DESPREADER
 reg     [17:0]  iSymData;
-reg             iSymEn;
-reg             iSym2xEn;
 reg     [17:0]  qSymData;
-reg             qSymEn;
-reg             qSym2xEn;
 always @* begin
-    casex (demodMode)
-        `ifdef ADD_DESPREADER
-        `MODE_SQPN: begin
-            iSymData = iDsSymData;
-            iSymEn = iDsSymEn;
-            iSym2xEn = iDsSym2xEn;
-            qSymData = qDsSymData;
-            qSymEn = qDsSymEn;
-            qSym2xEn = qDsSym2xEn;
-        end
-        `endif
-        default: begin
-            iSymData = iBsSymData;
-            iSymEn = iBsSymEn;
-            iSym2xEn = iBsSym2xEn;
-            qSymData = qBsSymData;
-            qSymEn = qBsSymEn;
-            qSym2xEn = qBsSym2xEn;
-        end
-    endcase
+    if (enableDespreader) begin
+        iSymData = iDsSymData;
+        qSymData = qDsSymData;
+    end
+    else begin
+        iSymData = iBsSymData;
+        qSymData = qBsSymData;
+    end
 end
+`else
+wire    [17:0]  iSymData = iBsSymData;
+wire    [17:0]  qSymData = qBsSymData;
+`endif
 
 assign trellisSymSync = iSymEn & resampSync;
 
@@ -704,6 +684,10 @@ always @(posedge clk) begin
             dac0Data <= {freqError,6'h0};
             dac0Sync <= demodSync;
             end
+        `DAC_DS_CODE: begin
+            dac0Data <= {iCode,17'h10000};
+            dac0Sync <= 1'b1;
+            end
         default: begin
             dac0Data <= iSwap;
             dac0Sync <= ddcSync;
@@ -765,6 +749,10 @@ always @(posedge clk) begin
         `DAC_FREQERROR: begin
             dac1Data <= {freqError,6'h0};
             dac1Sync <= demodSync;
+            end
+        `DAC_DS_CODE: begin
+            dac1Data <= {qCode,17'h10000};
+            dac1Sync <= 1'b1;
             end
         default: begin
             dac1Data <= iSwap;
@@ -828,6 +816,10 @@ always @(posedge clk) begin
             dac2Data <= {freqError,6'h0};
             dac2Sync <= demodSync;
             end
+        `DAC_DS_CODE: begin
+            dac2Data <= {iEpoch,17'h10000};
+            dac2Sync <= 1'b1;
+            end
         default: begin
             dac2Data <= iSwap;
             dac2Sync <= ddcSync;
@@ -840,18 +832,10 @@ always @(posedge clk) begin
                                 uP dout mux
 ******************************************************************************/
 reg [31:0]dout;
-always @(addr or
-         demodDout or
-         `ifdef FM_FILTER
-         firDout or
-         `endif
-         ddcDout or
-         nbAgcDout or
-         resampDout or
-         freqDout or
-         bitsyncDout) begin
+always @* begin
     casex (addr)
         `DEMODSPACE:        dout <= demodDout;
+        `DESPREADSPACE:     dout <= despreaderDout;
         `ifdef FM_FILTER
         `VIDFIRSPACE:       dout <= firDout;
         `endif

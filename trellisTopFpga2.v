@@ -283,6 +283,7 @@ always @(addr) begin
 //******************************************************************************
 wire  pcmTrellisMode = (demodMode == `MODE_PCMTRELLIS);
 wire  soqpskTrellisMode = (demodMode == `MODE_SOQPSK);
+wire  trellisMode = pcmTrellisMode | soqpskTrellisMode;
 
 reg  legacyBit;
 reg  pcmSymEn,soqpskSymEn;
@@ -416,45 +417,55 @@ reg  [17:0] interp0DataIn,interp1DataIn,interp2DataIn;
 reg         dac0Sync,dac1Sync,dac2Sync;
 
 always @(posedge clk) begin
-    case (dac0Select)
-        `DAC_TRELLIS_I,
-        `DAC_TRELLIS_Q,
-        `DAC_TRELLIS_PHERR,
-        `DAC_TRELLIS_INDEX: begin
-            interp0DataIn <= trellis0Out;
-            dac0Sync <= trellis0Sync;
-            end
-        default: begin
-            interp0DataIn <= {demod0DataReg,4'h0};
-            dac0Sync <= demod0SyncReg;
-            end
-        endcase
-    case (dac1Select)
-        `DAC_TRELLIS_I,
-        `DAC_TRELLIS_Q,
-        `DAC_TRELLIS_PHERR,
-        `DAC_TRELLIS_INDEX: begin
-            interp1DataIn <= trellis1Out;
-            dac1Sync <= trellis1Sync;
-            end
-        default: begin
-            interp1DataIn <= {demod1DataReg,4'h0};
-            dac1Sync <= demod1SyncReg;
-            end
-        endcase
-    case (dac2Select)
-        `DAC_TRELLIS_I,
-        `DAC_TRELLIS_Q,
-        `DAC_TRELLIS_PHERR,
-        `DAC_TRELLIS_INDEX: begin
-            interp2DataIn <= trellis2Out;
-            dac2Sync <= trellis2Sync;
-            end
-        default: begin
-            interp2DataIn <= {demod2DataReg,4'h0};
-            dac2Sync <= demod2SyncReg;
-            end
-        endcase
+    if (trellisMode) begin
+        case (dac0Select)
+            `DAC_TRELLIS_I,
+            `DAC_TRELLIS_Q,
+            `DAC_TRELLIS_PHERR,
+            `DAC_TRELLIS_INDEX: begin
+                interp0DataIn <= trellis0Out;
+                dac0Sync <= trellis0Sync;
+                end
+            default: begin
+                interp0DataIn <= {demod0DataReg,4'h0};
+                dac0Sync <= demod0SyncReg;
+                end
+            endcase
+        case (dac1Select)
+            `DAC_TRELLIS_I,
+            `DAC_TRELLIS_Q,
+            `DAC_TRELLIS_PHERR,
+            `DAC_TRELLIS_INDEX: begin
+                interp1DataIn <= trellis1Out;
+                dac1Sync <= trellis1Sync;
+                end
+            default: begin
+                interp1DataIn <= {demod1DataReg,4'h0};
+                dac1Sync <= demod1SyncReg;
+                end
+            endcase
+        case (dac2Select)
+            `DAC_TRELLIS_I,
+            `DAC_TRELLIS_Q,
+            `DAC_TRELLIS_PHERR,
+            `DAC_TRELLIS_INDEX: begin
+                interp2DataIn <= trellis2Out;
+                dac2Sync <= trellis2Sync;
+                end
+            default: begin
+                interp2DataIn <= {demod2DataReg,4'h0};
+                dac2Sync <= demod2SyncReg;
+                end
+            endcase
+        end
+    else begin
+        interp0DataIn <= {demod0DataReg,4'h0};
+        dac0Sync <= demod0SyncReg;
+        interp1DataIn <= {demod1DataReg,4'h0};
+        dac1Sync <= demod1SyncReg;
+        interp2DataIn <= {demod2DataReg,4'h0};
+        dac2Sync <= demod2SyncReg;
+        end
     end
 //******************************************************************************
 //                              Interpolators

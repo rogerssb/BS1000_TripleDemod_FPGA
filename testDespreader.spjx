@@ -19,7 +19,7 @@
      <setting value="231" name="C2Width" />
     </settings>
     <views>
-     <view value="0.000 ns,33830.000 ns,803.620 ns,36398.454 ns,39202.118 ns" name="Last" />
+     <view value="0.000 ns,52369.999 ns,808.517 ns,27685.000 ns,30101.715 ns" name="Last" />
     </views>
     <groups>
      <group open="no" name="Rx" show="yes" >
@@ -72,7 +72,6 @@
       <signals>
        <signal name="clk" scope="test" />
        <signal name="reset" scope="test" />
-       <signal name="posEdgeChipClk" scope="test" />
        <signal name="posEdgeSymbolClk" scope="test" />
        <signal name="modData" scope="test" />
        <signal name="iModData" scope="test" />
@@ -82,8 +81,12 @@
        <signal name="iModData" scope="test" />
        <signal name="oqModData" scope="test" />
        <signal name="iBB[17:0]" scope="test" />
-       <signal interpolate="Step" radix="Real" name="iBBReal" scope="test" />
        <signal name="qBB[17:0]" scope="test" />
+       <signal name="posEdgeChipClk" scope="test" />
+       <signal name="iModChip" scope="test" />
+       <signal name="qModChip" scope="test" />
+       <signal name="oqModChip" scope="test" />
+       <signal interpolate="Step" radix="Real" name="iBBReal" scope="test" />
        <signal interpolate="Step" radix="Real" name="qBBReal" scope="test" />
        <signal name="reset" scope="test.iModInterp" />
        <signal name="dataOut[17:0]" scope="test.iModInterp" />
@@ -171,6 +174,7 @@
      <group open="no" name="DAC" show="yes" >
       <signals>
        <signal name="dataIn[17:0]" scope="test.dac0Interp" />
+       <signal name="dataIn[17:0]" scope="test.dac1Interp" />
        <signal name="exponentAdjusted[17:0]" scope="test.dac0Interp" />
        <signal radix="Real" name="expAdjReal" scope="test.dac0Interp" />
        <signal name="sync" scope="test.demod.ddc.hb" />
@@ -182,6 +186,7 @@
        <signal scale="fixed" maxscaledbl="1" interpolate="Step" minscaledbl="-1" radix="Real" name="interpReal" scope="test.dac2Interp" />
        <signal name="clkEn" scope="test.dac2Interp" />
        <signal name="dataIn[17:0]" scope="test.dac2Interp" />
+       <signal interpolate="Step" radix="Real" name="compReal" scope="test.dac1Interp" />
       </signals>
      </group>
      <group open="no" name="Resampler" show="yes" >
@@ -197,10 +202,14 @@
      <group open="yes" name="Despreader" show="yes" >
       <signals>
        <signal radix="Decimal" name="CorrBits" scope="test.demod.despreader.iCorrOnTime" />
-       <signal name="clk" scope="test.demod.despreader.iCorrOnTime" />
-       <signal name="clkEn" scope="test.demod.despreader.iCorrOnTime" />
-       <signal name="onTime" scope="test.demod.despreader.iCorrOnTime" />
        <signal name="reset" scope="test.demod.despreader.iCorrOnTime" />
+       <signal name="clk" scope="test.demod.despreader.iCorrOnTime" />
+       <signal name="iSampleEn" scope="test.demod.despreader" />
+       <signal name="iOnTime" scope="test.demod.despreader" />
+       <signal name="qSampleEn" scope="test.demod.despreader" />
+       <signal name="qOnTime" scope="test.demod.despreader" />
+       <signal name="iCode" scope="test.demod.despreader" />
+       <signal name="qCode" scope="test.demod.despreader" />
        <signal name="iDespread" scope="test.demod.despreader" />
        <signal interpolate="Step" radix="Real" name="symDataIReal" scope="test.demod.bitsync" />
        <signal name="codeBit" scope="test.demod.despreader.iCorrOnTime" />
@@ -222,11 +231,11 @@
        <signal interpolate="Step" radix="Real" name="rxReal" scope="test.demod.despreader.qSwapOnTime" />
        <signal interpolate="Step" radix="Real" name="rxSRReal" scope="test.demod.despreader.qSwapOnTime" />
        <signal name="codeSR[0]" scope="test.demod.despreader.qSwapOnTime" />
-       <signal interpolate="Step" radix="Real" name="bsErrorReal" scope="test.demod.despreader.iCorrOnTime" />
-       <signal scale="fixed" maxscaledbl="1" interpolate="Step" minscaledbl="-1" radix="Real" name="bsErrorReal" scope="test.demod.despreader.iSwapOnTime" />
        <signal name="corrSimReset" scope="test.demod.despreader" />
        <signal name="despreadSync" scope="test.demod.despreader" />
        <signal name="swapIQ" scope="test.demod.despreader" />
+       <signal name="dwellCount[7:0]" scope="test.demod.despreader" />
+       <signal name="dwellCounter[7:0]" scope="test.demod.despreader" />
        <signal name="dsSlipI" scope="test.demod.despreader" />
        <signal name="dsSlipQ" scope="test.demod.despreader" />
        <signal name="syncCount[5:0]" scope="test.demod.despreader.iCorrOnTime" />
@@ -235,11 +244,13 @@
        <signal name="syncCount[5:0]" scope="test.demod.despreader.qSwapOnTime" />
        <signal name="absCorrI[17:0]" scope="test.demod.despreader" />
        <signal name="peakAbsCorrI[17:0]" scope="test.demod.despreader" />
-       <signal interpolate="Step" radix="Real" name="absCorrIReal" scope="test.demod.despreader" />
+       <signal scale="fixed" maxscaledbl="1" interpolate="Step" minscaledbl="0" radix="Real" name="absCorrIReal" scope="test.demod.despreader" />
+       <signal scale="fixed" maxscaledbl="1" interpolate="Step" minscaledbl="0" radix="Real" name="absCorrQReal" scope="test.demod.despreader" />
        <signal scale="fixed" maxscaledbl="1" interpolate="Step" minscaledbl="0" radix="Real" name="peakAbsCorrIReal" scope="test.demod.despreader" />
        <signal scale="fixed" maxscaledbl="1" interpolate="Step" minscaledbl="-1" radix="Real" name="despreadReal" scope="test.demod.despreader.iCorrOnTime" />
        <signal scale="fixed" maxscaledbl="1" interpolate="Step" minscaledbl="-1" radix="Real" name="despreadReal" scope="test.demod.despreader.qCorrOnTime" />
-       <signal scale="fixed" maxscaledbl="1" interpolate="Step" minscaledbl="0" radix="Real" name="absCorrSwapReal" scope="test.demod.despreader" />
+       <signal scale="fixed" maxscaledbl="1" interpolate="Step" minscaledbl="0" radix="Real" name="absCorrSwapIReal" scope="test.demod.despreader" />
+       <signal scale="fixed" maxscaledbl="1" interpolate="Step" minscaledbl="0" radix="Real" name="absCorrSwapQReal" scope="test.demod.despreader" />
        <signal scale="fixed" maxscaledbl="1" interpolate="Step" minscaledbl="0" radix="Real" name="peakAbsCorrSwapReal" scope="test.demod.despreader" />
        <signal scale="fixed" maxscaledbl="1" interpolate="Step" minscaledbl="-1" radix="Real" name="despreadReal" scope="test.demod.despreader.iSwapOnTime" />
        <signal scale="fixed" maxscaledbl="1" interpolate="Step" minscaledbl="-1" radix="Real" name="despreadReal" scope="test.demod.despreader.qSwapOnTime" />
@@ -269,12 +280,16 @@
        <signal name="clkEn" scope="test.demod.despreader.codes_gen_a" />
        <signal name="clk" scope="test.demod.despreader.codes_gen_a" />
        <signal name="despreadMode[1:0]" scope="test.demod.despreader" />
+       <signal name="restart" scope="test.demod.despreader.codes_gen_a" />
        <signal name="restartCount[17:0]" scope="test.demod.despreader.codes_gen_a" />
        <signal name="qOutTaps[17:0]" scope="test.demod.despreader.codes_gen_a" />
        <signal name="polyTaps[17:0]" scope="test.demod.despreader.codes_gen_a" />
        <signal name="iOutTaps[17:0]" scope="test.demod.despreader.codes_gen_a" />
        <signal name="init[17:0]" scope="test.demod.despreader.codes_gen_a" />
-       <signal name="code[7:0]" scope="test.demod.despreader.codes_gen_a" />
+       <signal name="restartCounter[17:0]" scope="test.demod.despreader.codes_gen_a" />
+       <signal name="epoch[17:0]" scope="test.demod.despreader.codes_gen_a" />
+       <signal name="code[17:0]" scope="test.demod.despreader.codes_gen_a" />
+       <signal name="codeEpoch" scope="test.demod.despreader.codes_gen_a" />
       </signals>
      </group>
      <group open="no" name="New Group2" show="no" />
@@ -292,6 +307,11 @@
    <includedirs>
     <directory name="." />
    </includedirs>
+   <explorer>
+    <settings>
+     <setting value="test.demod.qBsSymEn" name="Scope" />
+    </settings>
+   </explorer>
    <sourcefiles>
     <file name="testDG1Mode1.v" />
     <file name="demod.v" />
@@ -359,13 +379,8 @@
     <file name="codes_gen.v" />
     <file name="dualDespreader.v" />
     <file name="despreaderRegs.v" />
-    <file name="despreadCorrelatorVerne.v" />
+    <file name="despreadCorrelator.v" />
    </sourcefiles>
-   <explorer>
-    <settings>
-     <setting value="test.demod.despreader.qSwapOnTime.despreadReal" name="Scope" />
-    </settings>
-   </explorer>
   </product>
  </products>
 </project>

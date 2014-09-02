@@ -13,6 +13,8 @@ module despreaderRegs (
     addr,
     din,
     dout,
+    slipped_a,
+    slipped_b,
     despreadMode,
     init_a,
     polyTaps_a,
@@ -20,12 +22,18 @@ module despreaderRegs (
     iOutTaps_a,
     qOutTaps_a,
     corrLength_a,
+    epoch_a,
     init_b,
     polyTaps_b,
     codeRestartCount_b,
     iOutTaps_b,
     qOutTaps_b,
-    corrLength_b
+    corrLength_b,
+    epoch_b,
+    dwellCount,
+    manualSlip,
+    slip_a,
+    slip_b
     );
 
 input           cs;
@@ -35,6 +43,9 @@ input   [31:0]  din;
 
 output  [31:0]  dout;
 reg     [31:0]  dout;
+
+input           slipped_a;
+input           slipped_b;
 
 output  [1:0]   despreadMode;
 reg     [1:0]   despreadMode;
@@ -57,6 +68,9 @@ reg     [17:0]  qOutTaps_a;
 output  [3:0]   corrLength_a;
 reg     [3:0]   corrLength_a;
 
+output  [17:0]  epoch_a;
+reg     [17:0]  epoch_a;
+
 output  [17:0]  init_b;
 reg     [17:0]  init_b;
 
@@ -75,6 +89,44 @@ reg     [17:0]  qOutTaps_b;
 output  [3:0]   corrLength_b;
 reg     [3:0]   corrLength_b;
 
+output  [17:0]  epoch_b;
+reg     [17:0]  epoch_b;
+
+output  [7:0]   dwellCount;
+reg     [7:0]   dwellCount;
+
+output          manualSlip;
+reg             manualSlip;
+
+output          slip_a;
+reg             slip_a;
+
+output          slip_b;
+reg             slip_b;
+
+always @(negedge wr3 or posedge slipped_a) begin
+    if (slipped_a) begin
+        slip_a <= 0;
+    end
+    else if (cs) begin
+        casex(addr)
+            `DESPREAD_CONTROL_A:        slip_a <= 1;
+            default: ;
+            endcase
+    end
+end
+always @(negedge wr3 or posedge slipped_b) begin
+    if (slipped_b) begin
+        slip_b <= 0;
+    end
+    else if (cs) begin
+        casex(addr)
+            `DESPREAD_CONTROL_B:        slip_b <= 1;
+            default: ;
+            endcase
+    end
+end
+
 
 always @(negedge wr0) begin
     if (cs) begin
@@ -84,13 +136,15 @@ always @(negedge wr0) begin
             `DESPREAD_RESTART_COUNT_A:  codeRestartCount_a[7:0] <= din[7:0];
             `DESPREAD_IOUTTAPS_A:       iOutTaps_a[7:0] <= din[7:0];
             `DESPREAD_QOUTTAPS_A:       qOutTaps_a[7:0] <= din[7:0];
-            `DESPREAD_MASK_A:           corrLength_a[3:0] <= din[3:0];
+            `DESPREAD_CONTROL_A:        corrLength_a[3:0] <= din[3:0];
+            `DESPREAD_EPOCH_A:          epoch_a[7:0] <= din[7:0];
             `DESPREAD_INIT_B:           init_b[7:0] <= din[7:0];
             `DESPREAD_POLYTAPS_B:       polyTaps_b[7:0] <= din[7:0];
             `DESPREAD_RESTART_COUNT_B:  codeRestartCount_b[7:0] <= din[7:0];
             `DESPREAD_IOUTTAPS_B:       iOutTaps_b[7:0] <= din[7:0];
             `DESPREAD_QOUTTAPS_B:       qOutTaps_b[7:0] <= din[7:0];
-            `DESPREAD_MASK_B:           corrLength_b[3:0] <= din[3:0];
+            `DESPREAD_CONTROL_B:        corrLength_b[3:0] <= din[3:0];
+            `DESPREAD_EPOCH_B:          epoch_b[7:0] <= din[7:0];
             `DESPREAD_CONTROL:          despreadMode[1:0] <= din[1:0];
             default: ;
             endcase
@@ -105,11 +159,14 @@ always @(negedge wr1) begin
             `DESPREAD_RESTART_COUNT_A:  codeRestartCount_a[15:8] <= din[15:8];
             `DESPREAD_IOUTTAPS_A:       iOutTaps_a[15:8] <= din[15:8];
             `DESPREAD_QOUTTAPS_A:       qOutTaps_a[15:8] <= din[15:8];
+            `DESPREAD_EPOCH_A:          epoch_a[15:8] <= din[15:8];
             `DESPREAD_INIT_B:           init_b[15:8] <= din[15:8];
             `DESPREAD_POLYTAPS_B:       polyTaps_b[15:8] <= din[15:8];
             `DESPREAD_RESTART_COUNT_B:  codeRestartCount_b[15:8] <= din[15:8];
             `DESPREAD_IOUTTAPS_B:       iOutTaps_b[15:8] <= din[15:8];
             `DESPREAD_QOUTTAPS_B:       qOutTaps_b[15:8] <= din[15:8];
+            `DESPREAD_EPOCH_B:          epoch_b[15:8] <= din[15:8];
+            `DESPREAD_CONTROL:          dwellCount <= din[15:8];
             default: ;
             endcase
         end
@@ -123,11 +180,22 @@ always @(negedge wr2) begin
             `DESPREAD_RESTART_COUNT_A:  codeRestartCount_a[17:16] <= din[17:16];
             `DESPREAD_IOUTTAPS_A:       iOutTaps_a[17:16] <= din[17:16];
             `DESPREAD_QOUTTAPS_A:       qOutTaps_a[17:16] <= din[17:16];
+            `DESPREAD_EPOCH_A:          epoch_a[17:16] <= din[17:16];
             `DESPREAD_INIT_B:           init_b[17:16] <= din[17:16];
             `DESPREAD_POLYTAPS_B:       polyTaps_b[17:16] <= din[17:16];
             `DESPREAD_RESTART_COUNT_B:  codeRestartCount_b[17:16] <= din[17:16];
             `DESPREAD_IOUTTAPS_B:       iOutTaps_b[17:16] <= din[17:16];
             `DESPREAD_QOUTTAPS_B:       qOutTaps_b[17:16] <= din[17:16];
+            `DESPREAD_EPOCH_B:          epoch_b[17:16] <= din[17:16];
+            default: ;
+            endcase
+        end
+    end
+
+always @(negedge wr3) begin
+    if (cs) begin
+        casex (addr)
+            `DESPREAD_CONTROL:          manualSlip <= din[31];
             default: ;
             endcase
         end
@@ -141,14 +209,16 @@ always @ (*) begin
         `DESPREAD_RESTART_COUNT_A:  dout = {14'b0,codeRestartCount_a};
         `DESPREAD_IOUTTAPS_A:       dout = {14'b0,iOutTaps_a};
         `DESPREAD_QOUTTAPS_A:       dout = {14'b0,qOutTaps_a};
-        `DESPREAD_MASK_A:           dout = {28'b0,corrLength_a};
+        `DESPREAD_CONTROL_A:        dout = {28'b0,corrLength_a};
+        `DESPREAD_EPOCH_A:          dout = {14'b0,epoch_a};
         `DESPREAD_INIT_B:           dout = {14'b0,init_b};
         `DESPREAD_POLYTAPS_B:       dout = {14'b0,polyTaps_b};
         `DESPREAD_RESTART_COUNT_B:  dout = {14'b0,codeRestartCount_b};
         `DESPREAD_IOUTTAPS_B:       dout = {14'b0,iOutTaps_b};
         `DESPREAD_QOUTTAPS_B:       dout = {14'b0,qOutTaps_b};
-        `DESPREAD_MASK_B:           dout = {28'b0,corrLength_b};
-        `DESPREAD_CONTROL:          dout = {30'b0,despreadMode};
+        `DESPREAD_CONTROL_B:        dout = {28'b0,corrLength_b};
+        `DESPREAD_EPOCH_B:          dout = {14'b0,epoch_b};
+        `DESPREAD_CONTROL:          dout = {manualSlip,15'b0,dwellCount,6'b0,despreadMode};
         default:                    dout = 32'hx;
         endcase
     end

@@ -49,7 +49,6 @@
 `define MODE_PCMTRELLIS     5'b01000
 `define MODE_SOQPSK         5'b01001
 `define MODE_MULTIH         5'b01010
-`define MODE_SQPN           5'b10110
 `define MODE_SINGLE_RAIL    2'b00
 `define MODE_DUAL_RAIL      2'b01
 `define MODE_IND_RAIL       2'b10
@@ -66,6 +65,7 @@
 `define DAC_FREQLOCK        4'b1001
 `define DAC_AVGFREQ         4'b1010
 `define DAC_FREQERROR       4'b1011
+`define DAC_DS_CODE         4'b1100
 `define DAC_TRELLIS_I       4'b1100
 `define DAC_TRELLIS_Q       4'b1101
 `define DAC_TRELLIS_PHERR   4'b1110
@@ -193,13 +193,15 @@
 `define DESPREAD_RESTART_COUNT_A    12'bxxxx_xx00_10xx
 `define DESPREAD_IOUTTAPS_A         12'bxxxx_xx00_11xx
 `define DESPREAD_QOUTTAPS_A         12'bxxxx_xx01_00xx
-`define DESPREAD_MASK_A             12'bxxxx_xx01_01xx
+`define DESPREAD_CONTROL_A          12'bxxxx_xx01_01xx
+`define DESPREAD_EPOCH_A            12'bxxxx_xx01_10xx
 `define DESPREAD_INIT_B             12'bxxxx_xx10_00xx
 `define DESPREAD_POLYTAPS_B         12'bxxxx_xx10_01xx
 `define DESPREAD_RESTART_COUNT_B    12'bxxxx_xx10_10xx
 `define DESPREAD_IOUTTAPS_B         12'bxxxx_xx10_11xx
 `define DESPREAD_QOUTTAPS_B         12'bxxxx_xx11_00xx
-`define DESPREAD_MASK_B             12'bxxxx_xx11_01xx
+`define DESPREAD_CONTROL_B          12'bxxxx_xx11_01xx
+`define DESPREAD_EPOCH_B            12'bxxxx_xx11_10xx
 `define DESPREAD_CONTROL            12'bxxxx_xx11_11xx
 `define MODE_NASA_FWD                   2'b00
 `define MODE_NASA_DG1_MODE1             2'b01

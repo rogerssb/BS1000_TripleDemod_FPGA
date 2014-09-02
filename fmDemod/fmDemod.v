@@ -78,7 +78,6 @@ always @(posedge clk) begin
                 end
             `MODE_QPSK,
             `MODE_OQPSK,
-            `MODE_SQPN,
             `MODE_AUQPSK: begin
                 phaseError <= {qpskPhase[9:0],2'b0};
                 end

@@ -19,6 +19,7 @@ module demodRegs(
     negDeviation,
     `endif
     demodMode,
+    enableDespreader,
     bitsyncMode,
     dac0Select,
     dac1Select,
@@ -48,6 +49,9 @@ input   [15:0]  negDeviation;
 
 output  [4:0]   demodMode;
 reg     [4:0]   demodMode;
+
+output          enableDespreader;
+reg             enableDespreader;
 
 output  [1:0]   bitsyncMode;
 reg     [1:0]   bitsyncMode;
@@ -94,6 +98,9 @@ always @(negedge wr0) begin
 always @(negedge wr1) begin
     if (cs) begin
         casex (addr)
+            `DEMOD_CONTROL: begin
+                enableDespreader <= dataIn[15];
+                end
             `DEMOD_DACSELECT: begin
                 dac1Select <= dataIn[11:8];
                 end
@@ -137,7 +144,7 @@ reg [31:0]dataOut;
 always @* begin
     if (cs) begin
         casex (addr)
-            `DEMOD_CONTROL:     dataOut <= {14'b0,bitsyncMode,11'b0,demodMode};
+            `DEMOD_CONTROL:     dataOut <= {14'b0,bitsyncMode,enableDespreader,10'b0,demodMode};
             `DEMOD_DACSELECT:   dataOut <= {12'h0,dac2Select,4'h0,dac1Select,4'h0,dac0Select};
             `DEMOD_FALSELOCK:   dataOut <= {falseLockThreshold,falseLockAlpha};
             `DEMOD_STATUS:      dataOut <= {28'h0,

@@ -10,22 +10,49 @@ module codes_gen (
     input clk,
     input clkEn,
     input reset,
-    input [17:0] init,
+    input [17:0] init,             
+    input [17:0] epoch,
     input [17:0] polyTaps,
     input [17:0] restartCount,
     input [17:0] iOutTaps,  
     input [17:0] qOutTaps,
     output iOut,
-    output qOut
+    output qOut,
+    output codeEpoch
     );
 
-// Extend the ld pulse
+// Figure out a mask from the taps
+reg     [17:0]  mask;
+always @* begin
+    casex(polyTaps) 
+        18'b1x_xxxx_xxxx_xxxx_xxxx: mask = 18'h3ffff;
+        18'b01_xxxx_xxxx_xxxx_xxxx: mask = 18'h1ffff;
+        18'b00_1xxx_xxxx_xxxx_xxxx: mask = 18'h0ffff;
+        18'b00_01xx_xxxx_xxxx_xxxx: mask = 18'h07fff;
+        18'b00_001x_xxxx_xxxx_xxxx: mask = 18'h03fff;
+        18'b00_0001_xxxx_xxxx_xxxx: mask = 18'h01fff;
+        18'b00_0000_1xxx_xxxx_xxxx: mask = 18'h00fff;
+        18'b00_0000_01xx_xxxx_xxxx: mask = 18'h007ff;
+        18'b00_0000_001x_xxxx_xxxx: mask = 18'h003ff;
+        18'b00_0000_0001_xxxx_xxxx: mask = 18'h001ff;
+        18'b00_0000_0000_1xxx_xxxx: mask = 18'h000ff;
+        18'b00_0000_0000_01xx_xxxx: mask = 18'h0007f;
+        18'b00_0000_0000_001x_xxxx: mask = 18'h0003f;
+        18'b00_0000_0000_0001_xxxx: mask = 18'h0001f;
+        18'b00_0000_0000_0000_1xxx: mask = 18'h0000f;
+        18'b00_0000_0000_0000_01xx: mask = 18'h00007;
+        18'b00_0000_0000_0000_001x: mask = 18'h00003;
+        18'b00_0000_0000_0000_0001: mask = 18'h00001;
+    endcase
+end
 
 // Code Generator
 reg     [17:0]  code;
 reg     [17:0]  restartCounter;
 wire            restart = (restartCounter == 0);
 wire            sum;
+reg             codeEpoch_reg;
+assign          codeEpoch = codeEpoch_reg;
 always @ (posedge clk) begin
     if (reset) begin
         code <= init;
@@ -40,6 +67,9 @@ always @ (posedge clk) begin
             code <= {code[16:0],sum};
             restartCounter <= restartCounter - 1;
             end
+
+        // Find the epoch
+        codeEpoch_reg <= ((code & mask) == epoch);
         end
     end
 

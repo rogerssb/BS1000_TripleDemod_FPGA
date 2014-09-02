@@ -145,12 +145,6 @@ always @* begin
             modeErrorEn <= 1'b1;
             enableCarrierLock <= 1;
             end
-        `MODE_SQPN: begin
-            sync <= resampSync;
-            modeError <= {qpskPhase[9:0],2'b10};
-            modeErrorEn <= 1'b1;
-            enableCarrierLock <= 1;
-            end
         `MODE_QPSK,
         `MODE_OQPSK,
         `MODE_SOQPSK,

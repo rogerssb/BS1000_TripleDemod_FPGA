@@ -15,6 +15,7 @@
 
 //`define BPSK
 `define SQPN
+//`define OQPSK
 //`define SS_UQPSK
 
 module test;
@@ -86,6 +87,13 @@ integer resamplerFreqInt = (resamplerFreqNorm >= `TWO_POW_31) ? (resamplerFreqNo
 real resamplerLimitNorm = 0.001*resamplerFreqSps/SAMPLE_FREQ * `TWO_POW_32;
 integer resamplerLimitInt = resamplerLimitNorm;
 
+reg enableDespreader;
+`ifdef SQPN
+initial enableDespreader = 1;
+`else
+initial enableDespreader = 0;
+`endif
+
 /******************************************************************************
                             Create a chip sequence
 ******************************************************************************/
@@ -133,23 +141,15 @@ codes_gen pnGen(
     .restartCount(18'h3ffff),
     .iOutTaps(18'h00080),  
     .qOutTaps(18'h00090),
-    .iOut(iCode),
-    .qOut(qCode)
+    .iOut(iModChip),
+    .qOut(qModChip)
     );
 
 
-reg     iModChip;
-reg     qModChip;
 reg     oqModChip;
 always @(posedge clk) begin
     if (negEdgeChipClk) begin
-        iModChip <= iCode;
-        qModChip <= qCode;
-    end
-end
-always @(posedge clk) begin
-    if (posEdgeChipClk) begin
-        oqModChip <= qCode;
+        oqModChip <= qModChip;
     end
 end
 
@@ -167,7 +167,7 @@ always @(posedge clk) begin
         end
     else if (posEdgeChipClk) begin
         if (symbolRateCount == 0) begin
-            symbolRateCount <= modChipsPerSymbol-1;
+            symbolRateCount <= modChipsPerSymbol/2 - 1;
             symbolClk <= ~symbolClk;
             end
         else begin
@@ -231,24 +231,26 @@ reg     [17:0]  iBB;
 reg     [17:0]  qBB;
 always @(*) begin
     casex (demod.demodMode)
-        `MODE_SQPN: begin
-            iBB = {iModChip ^ modData,17'h10000};
-            qBB = {oqModChip ^ modData,17'h10000};
-            end
         `MODE_OQPSK: begin
-            iBB = {modData,17'h10000};
-            qBB = {modData,17'h10000};
+            if (enableDespreader) begin
+                iBB = {iModChip ^ modData,17'h10000};
+                qBB = {oqModChip ^ modData,17'h10000};
             end
+            else begin
+                iBB = {modData,17'h10000};
+                qBB = {modData,17'h10000};
+            end
+        end
         `MODE_BPSK: begin
             iBB = {modData,17'h10000};
             qBB = 0;
-            end
+        end
         default: begin
             iBB = {modData,17'h10000};
             qBB = {qModChip,17'h10000};
-            end
-        endcase
-    end
+        end
+    endcase
+end
 
 `ifdef SIMULATE
 real iBBReal;
@@ -327,11 +329,11 @@ real txScaleFactor;
 //wire [17:0]qSignal = 131072.0*qTxReal * txScaleFactor;
 
 // 0 Degrees
-real rotateReal = 1.0;
-real rotateImag = 0.0;
+//real rotateReal = 1.0;
+//real rotateImag = 0.0;
 // 45 Degrees
-//real rotateReal = 0.707;
-//real rotateImag = 0.707;
+real rotateReal = 0.707;
+real rotateImag = 0.707;
 // 90 Degrees
 //real rotateReal = 0.0;
 //real rotateImag = 1.0;
@@ -724,12 +726,13 @@ initial begin
 
     // Init the mode
     `ifdef BPSK
-    write32(createAddress(`DEMODSPACE,`DEMOD_CONTROL),{14'bx,`MODE_SINGLE_RAIL,13'bx,`MODE_BPSK});
+    write32(createAddress(`DEMODSPACE,`DEMOD_CONTROL),{14'bx,`MODE_SINGLE_RAIL,enableDespreader,10'bx,`MODE_BPSK});
     `else
     `ifdef SQPN
-    write32(createAddress(`DEMODSPACE,`DEMOD_CONTROL),{14'bx,`MODE_SINGLE_RAIL,13'bx,`MODE_SQPN});
+    //write32(createAddress(`DEMODSPACE,`DEMOD_CONTROL),{14'bx,`MODE_SINGLE_RAIL,enableDespreader,10'bx,`MODE_SQPN});
+    write32(createAddress(`DEMODSPACE,`DEMOD_CONTROL),{14'bx,`MODE_SINGLE_RAIL,enableDespreader,10'bx,`MODE_OQPSK});
     `else
-    write32(createAddress(`DEMODSPACE,`DEMOD_CONTROL),{14'bx,`MODE_SINGLE_RAIL,13'bx,`MODE_SS_UQPSK});
+    write32(createAddress(`DEMODSPACE,`DEMOD_CONTROL),{14'bx,`MODE_SINGLE_RAIL,enableDespreader,10'bx,`MODE_SS_UQPSK});
     `endif
     `endif
 
@@ -777,12 +780,12 @@ initial begin
     write32(createAddress(`CHAGCSPACE,`ALF_LLIMIT),32'h00000000);       // AGC Lower limit
     // Set the DAC interpolator gains
     write32(createAddress(`DEMODSPACE, `DEMOD_DACSELECT), {12'h0,`DAC_FREQ,
-                                                           4'h0,`DAC_Q,
+                                                           4'h0,`DAC_DS_CODE,
                                                            4'h0,`DAC_I});
     write32(createAddress(`INTERP0SPACE, `INTERP_CONTROL),0);
     write32(createAddress(`INTERP0SPACE, `INTERP_EXPONENT), 8);
     write32(createAddress(`INTERP0SPACE, `INTERP_MANTISSA), 32'h00012000);
-    write32(createAddress(`INTERP1SPACE, `INTERP_CONTROL),0);
+    write32(createAddress(`INTERP1SPACE, `INTERP_CONTROL),1);
     write32(createAddress(`INTERP1SPACE, `INTERP_EXPONENT), 8);
     write32(createAddress(`INTERP1SPACE, `INTERP_MANTISSA), 32'h00012000);
     write32(createAddress(`INTERP2SPACE, `INTERP_CONTROL),0);
@@ -795,11 +798,12 @@ initial begin
     // Set the despread codes
     write32(createAddress(`DESPREADSPACE, `DESPREAD_INIT_A),32'h1);
     write32(createAddress(`DESPREADSPACE, `DESPREAD_POLYTAPS_A),32'h0000008e);
-    write32(createAddress(`DESPREADSPACE, `DESPREAD_RESTART_COUNT_A),32'hffffffff);
+    write32(createAddress(`DESPREADSPACE, `DESPREAD_RESTART_COUNT_A),32'h000000fe);
     write32(createAddress(`DESPREADSPACE, `DESPREAD_IOUTTAPS_A),32'h00000080);
     write32(createAddress(`DESPREADSPACE, `DESPREAD_QOUTTAPS_A),32'h00000090);
-    write32(createAddress(`DESPREADSPACE, `DESPREAD_MASK_A),32'h00000003);
-    write32(createAddress(`DESPREADSPACE, `DESPREAD_CONTROL),{30'h0,`MODE_NASA_DG1_MODE1});
+    write32(createAddress(`DESPREADSPACE, `DESPREAD_EPOCH_A),32'h000000ff);
+    write32(createAddress(`DESPREADSPACE, `DESPREAD_CONTROL_A),32'h00000001);
+    write32(createAddress(`DESPREADSPACE, `DESPREAD_CONTROL),{16'h0,8'h0,6'h0,`MODE_NASA_DG1_MODE1});
 
     reset = 1;
     #(2*C) ;

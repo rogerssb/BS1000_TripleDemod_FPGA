@@ -15,8 +15,6 @@ module bitsync(
     dout,
     i,q,
     au,
-    dsTimingError,
-    dsTimingErrorEn,
     offsetError,
     offsetErrorEn,
     `ifdef SYM_DEVIATION
@@ -58,8 +56,6 @@ input   [31:0]  din;
 output  [31:0]  dout;
 input   [17:0]  i,q;
 input   [17:0]  au;
-input   [17:0]  dsTimingError;
-input           dsTimingErrorEn;
 output  [17:0]  offsetError;
 output          offsetErrorEn;
 `ifdef SYM_DEVIATION
@@ -161,7 +157,6 @@ always @(posedge sampleClk) begin
         iMF <= iFiltered;
         qSymDelay <= qFiltered;
         if ( (demodMode == `MODE_OQPSK)
-          || (demodMode == `MODE_SQPN)
           || (demodMode == `MODE_SOQPSK)) begin
             qMF <= qSymDelay;
             end
@@ -638,10 +633,6 @@ reg             loopFilterEn;
 reg     [11:0]  loopFilterError;
 always @* begin
     casex (demodMode) 
-        `MODE_SQPN: begin
-            loopFilterError = dsTimingError[17:6] + dsTimingError[5];
-            loopFilterEn = (symTimes2Sync & dsTimingErrorEn);
-        end
         default: begin
             loopFilterError = timingError[18:7] + timingError[6];
             loopFilterEn = (symTimes2Sync & timingErrorEn);

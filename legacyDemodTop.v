@@ -498,6 +498,7 @@ sdi sdi(
 always @* begin
   casex(addr)
     `DEMODSPACE,
+    `DESPREADSPACE,
     `DDCSPACE,
     `DDCFIRSPACE,
     `CICDECSPACE,

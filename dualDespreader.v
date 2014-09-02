@@ -8,6 +8,7 @@
 module dualDespreader (
     clk,
     clkEn, auClkEn,
+    symEn, auSymEn,
     reset,
     wr0, wr1, wr2, wr3,
     addr,
@@ -16,6 +17,7 @@ module dualDespreader (
     demodMode,
     dout,
     iCode, qCode,
+    iEpoch, qEpoch,
     iDespread,
     iSymEn,
     iSym2xEn,
@@ -30,6 +32,7 @@ parameter SoftBits = 6;
 
 input           clk;
 input           clkEn, auClkEn;
+input           symEn, auSymEn;
 input           reset;
 input           wr0, wr1, wr2, wr3;
 input   [11:0]  addr;
@@ -38,6 +41,7 @@ input   [17:0]  iIn, qIn;
 input   [4:0]   demodMode;
 output  [31:0]  dout;
 output          iCode, qCode;
+output          iEpoch,qEpoch;
 output  [17:0]  iDespread;
 output          iSymEn;
 output          iSym2xEn;
@@ -56,36 +60,51 @@ always @(addr) begin
         endcase
     end
 
-wire    [17:0]  init_a, codeRestartCount_a, polyTaps_a, iOutTaps_a, qOutTaps_a;
-wire    [17:0]  init_b, codeRestartCount_b, polyTaps_b, iOutTaps_b;
+wire    [17:0]  init_a, codeRestartCount_a, polyTaps_a, iOutTaps_a, qOutTaps_a, epoch_a;
+wire    [17:0]  init_b, codeRestartCount_b, polyTaps_b, iOutTaps_b, epoch_b;
 wire    [3:0]   corrLength_a,corrLength_b;
+wire    [7:0]   dwellCount;
+reg             dsSlipI, dsSlipQ;
 despreaderRegs regs(
     .addr(addr),
     .din(din),
     .dout(dout),
+    .slipped_a(dsSlipI),.slipped_b(dsSlipQ),
     .cs(cs),
     .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+    .manualSlip(manualSlip),
     .init_a(init_a),
     .polyTaps_a(polyTaps_a),
     .codeRestartCount_a(codeRestartCount_a),
     .iOutTaps_a(iOutTaps_a),
     .qOutTaps_a(qOutTaps_a),
     .corrLength_a(corrLength_a),
+    .slip_a(slip_a),
+    .epoch_a(epoch_a),
     .init_b(init_b),
     .polyTaps_b(polyTaps_b),
     .codeRestartCount_b(codeRestartCount_b),
     .iOutTaps_b(iOutTaps_b),
-    .corrLength_b(corrLength_b)
+    .corrLength_b(corrLength_b),
+    .slip_b(slip_b),
+    .epoch_b(epoch_b),
+    .dwellCount(dwellCount)
     );
 
 
-reg     iSampleEn, iOnTime;
+wire    iSampleEn = clkEn;
+wire    iOnTime = symEn;
+
+wire    qSampleEn = clkEn;
+wire    qOnTime = clkEn & !symEn;
+
+/*
+reg     iOnTime;
 always @(posedge clk) begin
     if (reset) begin
         iOnTime <= 1;
     end
-    else if (clkEn) begin
-        iSampleEn <= 1;
+    else if (iSampleEn) begin
         if (iOnTime) begin
             iOnTime <= 0;
         end
@@ -93,20 +112,16 @@ always @(posedge clk) begin
             iOnTime <= 1;
         end
     end
-    else begin
-        iSampleEn <= 0;
-    end
 end
 
-reg     qSampleEn, qOnTime;
+reg     qOnTime;
 always @(posedge clk) begin
     if (reset) begin
         qOnTime <= 0;
     end
-    else if (clkEn) begin
-        qSampleEn <= 1;
+    else if (qSampleEn) begin
         casex (demodMode) 
-            `MODE_SQPN: begin
+            `MODE_OQPSK: begin
                 qOnTime <= iOnTime;
             end
             default: begin
@@ -119,36 +134,37 @@ always @(posedge clk) begin
             end
         endcase
     end
-    else begin
-        qSampleEn <= 0;
-    end
 end
+*/
 
 wire out_a;
-reg dsSlipI;
 codes_gen codes_gen_a(
     .clk(clk),
     .clkEn(iSampleEn & iOnTime & !dsSlipI),
     .reset(reset),
     .init(init_a),
+    .epoch(epoch_a),
     .polyTaps(polyTaps_a),
     .restartCount(codeRestartCount_a),
     .iOutTaps(iOutTaps_a),
     .qOutTaps(qOutTaps_a),
     .iOut(iOut_a),
-    .qOut(qOut_a)
+    .qOut(qOut_a),
+    .codeEpoch(codeEpoch_a)
     );
 
 wire out_b;
-reg dsSlipQ;
 codes_gen codes_gen_b(
     .clk(clk),
     .clkEn(qSampleEn & qOnTime & !dsSlipQ),
     .reset(reset),
+    .init(init_b),
+    .epoch(epoch_a),
     .polyTaps(polyTaps_b),
     .restartCount(codeRestartCount_b),
     .iOutTaps(iOutTaps_b),
-    .iOut(iOut_b)
+    .iOut(iOut_b),
+    .codeEpoch(codeEpoch_b)
     );
 
 // Delay the Q output of the first generator for SQPN modes
@@ -160,15 +176,18 @@ always @ (posedge clk) begin
 end
 
 // Select the PN code used for the I channel
-reg iCode, qCode;
-reg     [3:0]  iCorrLength, qCorrLength;
+reg             iCode, qCode;
+reg             iEpoch, qEpoch;
+reg     [3:0]   iCorrLength, qCorrLength;
 always @* begin
     casex (demodMode)
-        `MODE_SQPN: begin
+        `MODE_OQPSK: begin
             iCode <= iOut_a;
             iCorrLength <= corrLength_a;
+            iEpoch <= codeEpoch_a;
             qCode <= qDelay;
             qCorrLength <= corrLength_a;
+            qEpoch <= codeEpoch_a;
         end
         default: begin
             iCode <= iOut_a;
@@ -250,11 +269,10 @@ reg corrSimReset;
 initial corrSimReset = 1;
 wire corrReset = reset | corrSimReset;
 `else
-wire corrReset = ;
+wire corrReset = reset;
 `endif
 
 wire    [17:0]  iCorr;
-wire    [17:0]  iBsError;
 wire    [5:0]   iSyncCount;
 despreadCorrelator #(.CorrLength(64), .InputBits(SoftBits), .CorrBits(SoftBits+32))
 iCorrOnTime(
@@ -267,12 +285,10 @@ iCorrOnTime(
     .rx(iSoft),
     .corrLength(iCorrLength),
     .despread(iCorr),
-    .bsError(iBsError),
     .syncCount(iSyncCount)
     );
 
 wire    [17:0]  qCorr;
-wire    [17:0]  qBsError;
 wire    [5:0]   qSyncCount;
 despreadCorrelator #(.CorrLength(64), .InputBits(SoftBits), .CorrBits(SoftBits+32)) 
 qCorrOnTime(
@@ -285,7 +301,6 @@ qCorrOnTime(
     .rx(qSoft),
     .corrLength(qCorrLength),
     .despread(qCorr),
-    .bsError(qBsError),
     .syncCount(qSyncCount)
     );
 
@@ -293,7 +308,6 @@ qCorrOnTime(
 `ifdef ADD_SWAP
 // This correlator is used to detect an I/Q swap.
 wire    [17:0]  iSwapCorr;
-wire    [17:0]  iSwapBsError;
 wire    [5:0]   iSwapSyncCount;
 despreadCorrelator #(.CorrLength(64), .InputBits(SoftBits), .CorrBits(SoftBits+32)) 
 iSwapOnTime(
@@ -302,16 +316,14 @@ iSwapOnTime(
     .reset(reset),
     .onTime(iOnTime),
     .slip(dsSlipI),
-    .codeBit(iCode),
-    .rx(qSoft),
+    .codeBit(qCode),
+    .rx(iSoft),
     .corrLength(iCorrLength),
     .despread(iSwapCorr),
-    .bsError(iSwapBsError),
     .syncCount(iSwapSyncCount)
     );
 
 wire    [17:0]  qSwapCorr;
-wire    [17:0]  qSwapBsError;
 wire    [5:0]   qSwapSyncCount;
 despreadCorrelator #(.CorrLength(64), .InputBits(SoftBits), .CorrBits(SoftBits+32)) 
 qSwapOnTime(
@@ -320,11 +332,10 @@ qSwapOnTime(
     .reset(reset),
     .onTime(qOnTime),
     .slip(dsSlipQ),
-    .codeBit(qCode),
-    .rx(iSoft),
+    .codeBit(iCode),
+    .rx(qSoft),
     .corrLength(qCorrLength),
     .despread(qSwapCorr),
-    .bsError(qSwapBsError),
     .syncCount(qSwapSyncCount)
     );
 
@@ -335,13 +346,14 @@ qSwapOnTime(
 
 //******************************* Acq State Machine ****************************
 
-`define DS_START_COUNT  16'h000f
+`define DS_START_COUNT  16'h001f
 `define DS_INC_COUNT    16'h0001
-`define DS_DEC_COUNT    16'h0004
-`define DS_MAX_COUNT    16'h000f
+`define DS_DEC_COUNT    16'h0001
+`define DS_MAX_COUNT    16'h001f
 
 reg             swapIQ;
 reg     [15:0]  syncCount;
+reg     [7:0]   dwellCounter;
 wire    [15:0]  decSyncCount = syncCount - `DS_DEC_COUNT;
 wire    [15:0]  incSyncCount = syncCount + `DS_INC_COUNT;
 reg             despreadSync;
@@ -353,6 +365,8 @@ reg     [17:0]  peakAbsCorrI, peakAbsCorrQ;
 `ifdef SIMULATE
 real absCorrIReal;
 always @* absCorrIReal = $itor($signed(absCorrI))/(2**17);
+real absCorrQReal;
+always @* absCorrQReal = $itor($signed(absCorrQ))/(2**17);
 real peakAbsCorrIReal;
 always @* peakAbsCorrIReal = $itor($signed(peakAbsCorrI))/(2**17);
 `endif
@@ -365,6 +379,8 @@ reg     [17:0]  peakAbsCorrSwapI, peakAbsCorrSwapQ;
 `ifdef SIMULATE
 real absCorrSwapIReal;
 always @* absCorrSwapIReal = $itor($signed(absCorrSwapI))/(2**17);
+real absCorrSwapQReal;
+always @* absCorrSwapQReal = $itor($signed(absCorrSwapQ))/(2**17);
 real peakAbsCorrSwapIReal;
 always @* peakAbsCorrSwapIReal = $itor($signed(peakAbsCorrSwapI))/(2**17);
 `endif
@@ -397,7 +413,7 @@ always @(posedge clk) begin
         syncCount <= `DS_START_COUNT;
         dsSlipI <= 0;
         dsSlipQ <= 0;
-        acqStateI <= `DS_ACQ_INSYNC;
+        acqStateI <= `DS_ACQ_TEST;
     end
     `ifdef SIMULATE
     else if (iCorr === 18'hxxx00) begin
@@ -408,17 +424,57 @@ always @(posedge clk) begin
     end
     `endif
     else if (iSampleEn) begin
-        if (iOnTime) begin
+        if (manualSlip) begin
+            if (qOnTime) begin
+                if (slip_a) begin
+                    dsSlipI <= 1;
+                    dsSlipQ <= 1;
+                end
+                else begin
+                    dsSlipI <= 0;
+                    dsSlipQ <= 0;
+                end
+            end
+        end
+        else if (qOnTime) begin
             case (acqStateI)
                 `DS_ACQ_SLIP: begin
                     dsSlipI <= 0;
                     dsSlipQ <= 0;
-                    acqStateI <= `DS_ACQ_TEST;
+                    if (dwellCounter == 0) begin
+                        acqStateI <= `DS_ACQ_TEST;
+                    end
+                    else begin
+                        dwellCounter <= dwellCounter - 1;
+                        end
                     end
                 `DS_ACQ_TEST: begin
+                    `define USE_SYNC_COUNTS
+                    `ifdef USE_SYNC_COUNTS
+                    // Are there too many chip mismatches?
+                    if (iSyncCount + qSyncCount < 3) begin
+                        // No. Stop slipping the generator and declare sync
+                        dsSlipI <= 0;
+                        dsSlipQ <= 0;
+                        swapIQ <= 0;
+                        despreadSync <= 1;
+                        syncCount <= `DS_START_COUNT;
+                        acqStateI <= `DS_ACQ_INSYNC;
+                    end
+                    `ifdef ADD_SWAP
+                    else if (iSwapSyncCount + qSwapSyncCount < 3) begin
+                        dsSlipI <= 0;
+                        dsSlipQ <= 0;
+                        swapIQ <= 1;
+                        despreadSync <= 1;
+                        syncCount <= `DS_START_COUNT;
+                        acqStateI <= `DS_ACQ_INSYNC;
+                    end
+                    `endif
+                    `else
                     // Is absCorrI > 2*peakAbsCorrI?
-                    if ( {1'b0,absCorrI[17:1]} > peakAbsCorrI)
-                      && (1'b0,absCorrQ[17:1]} > peakAbsCorrQ)) begin
+                    if ( ({1'b0,absCorrI[17:1]} > peakAbsCorrI)
+                      && ({1'b0,absCorrQ[17:1]} > peakAbsCorrQ)) begin
                         // Yes. Stop slipping the generator and declare sync
                         dsSlipI <= 0;
                         dsSlipQ <= 0;
@@ -429,8 +485,8 @@ always @(posedge clk) begin
                     end
                     `ifdef ADD_SWAP
                     // Does the swapped channel have a large correlation peak?
-                    else if ( {1'b0,absCorrSwapI[17:1]} > peakAbsCorrSwapI)
-                           && {1'b0,absCorrSwapQ[17:1]} > peakAbsCorrSwapQ) begin
+                    else if ( ({1'b0,absCorrSwapI[17:1]} > peakAbsCorrSwapI)
+                           && ({1'b0,absCorrSwapQ[17:1]} > peakAbsCorrSwapQ)) begin
                         // Yes. Stop slipping the generator and declare sync
                         dsSlipI <= 0;
                         dsSlipQ <= 0;
@@ -440,24 +496,25 @@ always @(posedge clk) begin
                         acqStateI <= `DS_ACQ_INSYNC;
                     end
                     `endif
+                    `endif
                     else begin
                         dsSlipI <= 1;
                         dsSlipQ <= 1;
+                        dwellCounter <= dwellCount;
                         acqStateI <= `DS_ACQ_SLIP;
                     end
                 end
                 `DS_ACQ_INSYNC: begin
-                    // Is the peak negative?
-                    if (peakCorrI[17]) begin
-                        // Yes. Is the current correlator output negative?
-                        if (despreadPolarity) begin
-                            // Yes. In sync indication.
+                    if (swapIQ) begin
+                        // Do we have too many chip mismatches?
+                        if (iSwapSyncCount + qSwapSyncCount < 3) begin
+                            // No. In sync indication
                             if (syncCount <= (`DS_MAX_COUNT-`DS_INC_COUNT)) begin
                                 syncCount <= incSyncCount;
                             end
                         end
                         else begin
-                            // No. Out of sync indication.
+                            // Yes. Out of sync indication.
                             if (syncCount >= `DS_DEC_COUNT) begin
                                 syncCount <= decSyncCount;
                             end
@@ -473,20 +530,21 @@ always @(posedge clk) begin
                                 dsSlipQ <= 1;
                                 swapIQ <= 0;
                                 despreadSync <= 0;
+                                dwellCounter <= dwellCount;
                                 acqStateI <= `DS_ACQ_SLIP;
                             end
                         end
                     end
                     else begin
-                        // No. Is the current correlator output positive?
-                        if (!despreadPolarity) begin
-                            // Yes. In sync indication.
+                        // Do we have too many chip mismatches?
+                        if (iSyncCount + qSyncCount < 3) begin
+                            // No. In sync indication
                             if (syncCount <= (`DS_MAX_COUNT-`DS_INC_COUNT)) begin
                                 syncCount <= incSyncCount;
                             end
                         end
                         else begin
-                            // No. Out of sync indication.
+                            // Yes. Out of sync indication.
                             if (syncCount >= `DS_DEC_COUNT) begin
                                 syncCount <= decSyncCount;
                             end
@@ -502,6 +560,7 @@ always @(posedge clk) begin
                                 dsSlipQ <= 1;
                                 swapIQ <= 0;
                                 despreadSync <= 0;
+                                dwellCounter <= dwellCount;
                                 acqStateI <= `DS_ACQ_SLIP;
                             end
                         end
@@ -514,19 +573,12 @@ end
 
 //******************************* Output Assignments **************************
 
-assign iSymEn = iSampleEn & iOnTime;
-assign iSym2xEn = iSampleEn;
-assign qSymEn = qSampleEn & qOnTime;
-assign qSym2xEn = qSampleEn;
-assign timingError = swapIQ ? iSwapBsError : iBsError;
-assign timingErrorEn = !iOnTime & despreadSync;
-
 reg     [17:0]  iDespread,qDespread;
 always @(posedge clk) begin
-    if (iSym2xEn) begin
+    if (clkEn) begin
         iDespread <= swapIQ ? iSwapCorr : iCorr;
     end
-    if (qSym2xEn) begin
+    if (clkEn) begin
         qDespread <= swapIQ ? qSwapCorr : qCorr;
     end
 end

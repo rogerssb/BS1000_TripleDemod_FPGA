@@ -8,7 +8,6 @@ module despreadCorrelator(
     rx,
     corrLength,
     despread,
-    bsError,
     syncCount
     );
 
@@ -25,7 +24,6 @@ input   codeBit;
 input   [InputBits-1:0] rx;
 input   [3:0]           corrLength;
 output  [17:0]          despread;
-output  [17:0]          bsError;
 output  [5:0]           syncCount;
 //inout   [35:0]  CHIPSCOPE_BUS;
 
@@ -59,35 +57,21 @@ always @* rxReal = $itor($signed(rx))/(2**(InputBits-1));
 
 // Create the onTime correlation shift register
     reg     [InputBits-1:0]     rxSR[CorrLength-1:0];
-    reg     [17:0]              bsError;
     reg     [CorrLength-1:0]    codeSR;
     integer         i;
     always @(posedge clk) begin
         if (reset) begin
             codeSR <= 1;
         end
-        else if (clkEn & onTime) begin
-            rxSR[0] <= rx;
-            for (i = 0; i < CorrLength-1; i = i + 1) begin
-                rxSR[i+1] <= rxSR[i];
-            end
-            if (!slip) begin
-                codeSR <= {codeSR[CorrLength-2:0],codeBit};
-            end
-        end
-        if (clkEn & !onTime) begin
-            // Is there a transition on the code sequence?
-            if (codeBit ^ codeSR[0]) begin
-                // Yes. Encode the bitsync error in the shift register
-                if (codeBit) begin
-                    bsError <= {-rx,{(18-InputBits){1'b0}}};
+        else if (clkEn) begin
+            if (onTime) begin
+                rxSR[0] <= rx;
+                for (i = 0; i < CorrLength-1; i = i + 1) begin
+                    rxSR[i+1] <= rxSR[i];
                 end
-                else begin
-                    bsError <= {rx,{(18-InputBits){1'b0}}};
+                if (!slip) begin
+                    codeSR <= {codeSR[CorrLength-2:0],codeBit};
                 end
-            end
-            else begin
-                bsError <= 0;
             end
         end
     end
@@ -95,8 +79,6 @@ always @* rxReal = $itor($signed(rx))/(2**(InputBits-1));
 `ifdef SIMULATE
 real rxSRReal;
 always @* rxSRReal = $itor($signed(rxSR[0]))/(2**(InputBits-1));
-real bsErrorReal;
-always @* bsErrorReal = $itor($signed(bsError))/(2**17);
 `endif
 
 
@@ -108,25 +90,6 @@ always @* bsErrorReal = $itor($signed(bsError))/(2**17);
     reg     [CorrBits-1:0]  sum40,sum41,sum42,sum43,sum44,sum45,sum46,sum47;
     reg     [CorrBits-1:0]  sum48,sum49,sum50,sum51,sum52,sum53,sum54,sum55;
     reg     [CorrBits-1:0]  sum56,sum57,sum58,sum59,sum60,sum61,sum62,sum63;
-/*
-    wire    [CorrBits-1:0]  sum = sum0  + sum1  + sum2  + sum3
-                                + sum4  + sum5  + sum6  + sum7
-                                + sum8  + sum9  + sum10 + sum11
-                                + sum12 + sum13 + sum14 + sum15
-                                + sum16 + sum17 + sum18 + sum19
-                                + sum20 + sum21 + sum22 + sum23
-                                + sum24 + sum25 + sum26 + sum27
-                                + sum28 + sum29 + sum30 + sum31
-                                + sum32 + sum33 + sum34 + sum35
-                                + sum36 + sum37 + sum38 + sum39
-                                + sum40 + sum41 + sum42 + sum43
-                                + sum44 + sum45 + sum46 + sum47
-                                + sum48 + sum49 + sum50 + sum51
-                                + sum52 + sum53 + sum54 + sum55
-                                + sum56 + sum57 + sum58 + sum59
-                                + sum60 + sum61 + sum62 + sum63;
-*/
-
     always @(posedge clk) begin
         if (clkEn & !onTime) begin
             sum0 <= codeSR[0] ? (-{{(CorrBits-InputBits){rxSR[0][InputBits-1]}},rxSR[0]}) : {{(CorrBits-InputBits){rxSR[0][InputBits-1]}},rxSR[0]};

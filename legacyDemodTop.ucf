@@ -382,13 +382,7 @@ NET "demod/resampler/resamplerI/resampleDelay*" TNM_NET = FFS syncGroup;
 NET "demod/resampler/resamplerQ/resampleDelay*" TNM_NET = FFS syncGroup;
 #NET "demod/resampler/resamplerI/resampleDelay*" TNM_NET = DSPS syncGroup;
 #NET "demod/resampler/resamplerQ/resampleDelay*" TNM_NET = DSPS syncGroup;
-NET "demod/despreader/iSampleEn*" TNM_NET = FFS syncGroup;
-NET "demod/despreader/iSampleEn*" TNM_NET = FFS junkGroup;
-NET "demod/despreader/iOnTime*" TNM_NET = FFS syncGroup;
 NET "demod/despreader/dsSlipI*" TNM_NET = FFS syncGroup;
-#NET "demod/despreader/qSampleEn*" TNM_NET = FFS syncGroup;
-NET "demod/despreader/qOnTime*" TNM_NET = FFS syncGroup;
-#NET "demod/despreader/dsSlipQ*" TNM_NET = FFS syncGroup;
 NET "demod/resampler/auCic/syncOut*" TNM_NET = FFS syncGroup;
 #NET "demod/carrierLoop/loopFilterEn*" TNM_NET = FFS syncGroup;
 NET "demod/fmDemod/cordic/enSR*" TNM_NET = FFS syncGroup;
@@ -443,9 +437,8 @@ TIMEGRP "clken" =  FFS(demod/dac0Sync*)
 #                   FFS(trellis/trellisCarrierLoop/symEnSr*)
 #                   FFS(trellis/trellisCarrierLoop/fmDemod/cordic/enSR*)
 #                   FFS(trellis/symEnShift*)
-                    FFS(demod/despreader/iSampleEn*) FFS(demod/despreader/iOnTime*) FFS(demod/despreader/dsSlipI)
-# 					FFS(demod/despreader/qSampleEn*) FFS(demod/despreader/qOnTime*) FFS(demod/despreader/dsSlipQ)
- 					FFS(demod/despreader/qOnTime*)
+                    FFS(demod/despreader/dsSlipI)
+#                                       FFS(demod/despreader/qSampleEn*) FFS(demod/despreader/qOnTime*) FFS(demod/despreader/dsSlipQ)
                    FFS(multihPhaseErrorEnIn*);
 
 # allEnables = All FFS that have a clock enable input
@@ -462,14 +455,18 @@ TIMEGRP "ddcPL" = FFS(demod/ddc/iCicIn*) FFS(demod/ddc/qCicIn*)
 TIMEGRP "magloop" = FFS( demod/magLoop/lagAccum*) ;
 
 # Despreader that can clock slower
-TIMEGRP "dsSR0" = FFS(demod/despreader/iCorrOnTime/rxSR*) FFS(demod/despreader/iCorrOnTime/codeSR*);
-TIMEGRP "dsSR1" = FFS(demod/despreader/qCorrOnTime/rxSR*) FFS(demod/despreader/qCorrOnTime/codeSR*);
-TIMEGRP "dsSR2" = FFS(demod/despreader/swapCorr/rxSR*) FFS(demod/despreader/swapCorr/codeSR*);
-TIMEGRP "dsSR" = "dsSR0" "dsSR1" "dsSR2";
+#TIMEGRP "dsSR0" = FFS(demod/despreader/iCorrOnTime/rxSR*) FFS(demod/despreader/iCorrOnTime/codeSR*);
+TIMEGRP "dsSR0" =  FFS(demod/despreader/iCorrOnTime/codeSR*);
+#TIMEGRP "dsSR1" = FFS(demod/despreader/qCorrOnTime/rxSR*) FFS(demod/despreader/qCorrOnTime/codeSR*);
+TIMEGRP "dsSR1" =  FFS(demod/despreader/qCorrOnTime/codeSR*);
+TIMEGRP "dsSR2" = FFS(demod/despreader/iSwapOnTime/rxSR*) FFS(demod/despreader/iSwapOnTime/codeSR*);
+TIMEGRP "dsSR3" = FFS(demod/despreader/qSwapOnTime/rxSR*) FFS(demod/despreader/qSwapOnTime/codeSR*);
+TIMEGRP "dsSR" = "dsSR0" "dsSR1" "dsSR2" "dsSR3";
 TIMEGRP "dsSum0" = FFS(demod/despreader/iCorrOnTime/sum*);
 TIMEGRP "dsSum1" = FFS(demod/despreader/qCorrOnTime/sum*);
-TIMEGRP "dsSum2" = FFS(demod/despreader/swapCorr/sum*);
-TIMEGRP "dsSum" = "dsSum0" "dsSum1" "dsSum2" ;
+TIMEGRP "dsSum2" = FFS(demod/despreader/iSwapOnTime/sum*);
+TIMEGRP "dsSum3" = FFS(demod/despreader/qSwapOnTime/sum*);
+TIMEGRP "dsSum" = "dsSum0" "dsSum1" "dsSum2" "dsSum3";
 TIMEGRP "ds" = "dsSR" "dsSum";
 
 
