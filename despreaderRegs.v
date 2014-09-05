@@ -30,7 +30,9 @@ module despreaderRegs (
     qOutTaps_b,
     corrLength_b,
     epoch_b,
-    dwellCount,
+    lockCount,
+    acqSyncThreshold,
+    trkSyncThreshold,
     manualSlip,
     slip_a,
     slip_b
@@ -92,8 +94,14 @@ reg     [3:0]   corrLength_b;
 output  [17:0]  epoch_b;
 reg     [17:0]  epoch_b;
 
-output  [7:0]   dwellCount;
-reg     [7:0]   dwellCount;
+output  [15:0]  lockCount;
+reg     [15:0]  lockCount;
+
+output  [6:0]   acqSyncThreshold;
+reg     [6:0]   acqSyncThreshold;
+
+output  [6:0]   trkSyncThreshold;
+reg     [6:0]   trkSyncThreshold;
 
 output          manualSlip;
 reg             manualSlip;
@@ -145,7 +153,8 @@ always @(negedge wr0) begin
             `DESPREAD_QOUTTAPS_B:       qOutTaps_b[7:0] <= din[7:0];
             `DESPREAD_CONTROL_B:        corrLength_b[3:0] <= din[3:0];
             `DESPREAD_EPOCH_B:          epoch_b[7:0] <= din[7:0];
-            `DESPREAD_CONTROL:          despreadMode[1:0] <= din[1:0];
+            `DESPREAD_SYNC_CONTROL:     acqSyncThreshold <= din[6:0];
+            `DESPREAD_CONTROL:          despreadMode <= din[1:0];
             default: ;
             endcase
         end
@@ -166,7 +175,7 @@ always @(negedge wr1) begin
             `DESPREAD_IOUTTAPS_B:       iOutTaps_b[15:8] <= din[15:8];
             `DESPREAD_QOUTTAPS_B:       qOutTaps_b[15:8] <= din[15:8];
             `DESPREAD_EPOCH_B:          epoch_b[15:8] <= din[15:8];
-            `DESPREAD_CONTROL:          dwellCount <= din[15:8];
+            `DESPREAD_SYNC_CONTROL:     trkSyncThreshold <= din[14:8];
             default: ;
             endcase
         end
@@ -187,6 +196,7 @@ always @(negedge wr2) begin
             `DESPREAD_IOUTTAPS_B:       iOutTaps_b[17:16] <= din[17:16];
             `DESPREAD_QOUTTAPS_B:       qOutTaps_b[17:16] <= din[17:16];
             `DESPREAD_EPOCH_B:          epoch_b[17:16] <= din[17:16];
+            `DESPREAD_SYNC_CONTROL:     lockCount[7:0] <= din[23:16];
             default: ;
             endcase
         end
@@ -195,6 +205,7 @@ always @(negedge wr2) begin
 always @(negedge wr3) begin
     if (cs) begin
         casex (addr)
+            `DESPREAD_SYNC_CONTROL:     lockCount[15:8] <= din[31:24];
             `DESPREAD_CONTROL:          manualSlip <= din[31];
             default: ;
             endcase
@@ -218,7 +229,8 @@ always @ (*) begin
         `DESPREAD_QOUTTAPS_B:       dout = {14'b0,qOutTaps_b};
         `DESPREAD_CONTROL_B:        dout = {28'b0,corrLength_b};
         `DESPREAD_EPOCH_B:          dout = {14'b0,epoch_b};
-        `DESPREAD_CONTROL:          dout = {manualSlip,15'b0,dwellCount,6'b0,despreadMode};
+        `DESPREAD_CONTROL:          dout = {manualSlip,15'b0,8'b0,6'b0,despreadMode};
+        `DESPREAD_SYNC_CONTROL:     dout = {lockCount,1'b0,trkSyncThreshold,1'b0,acqSyncThreshold};
         default:                    dout = 32'hx;
         endcase
     end

@@ -195,6 +195,7 @@
 `define DESPREAD_QOUTTAPS_A         12'bxxxx_xx01_00xx
 `define DESPREAD_CONTROL_A          12'bxxxx_xx01_01xx
 `define DESPREAD_EPOCH_A            12'bxxxx_xx01_10xx
+`define DESPREAD_SYNC_CONTROL       12'bxxxx_xx01_11xx
 `define DESPREAD_INIT_B             12'bxxxx_xx10_00xx
 `define DESPREAD_POLYTAPS_B         12'bxxxx_xx10_01xx
 `define DESPREAD_RESTART_COUNT_B    12'bxxxx_xx10_10xx

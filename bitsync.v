@@ -151,16 +151,21 @@ always @(posedge sampleClk) begin
 /******************************************************************************
                                Symbol Offset Deskew
 ******************************************************************************/
-reg     [17:0]  iMF,qMF,qSymDelay;
+reg     [17:0]  iMF,qMF,iSymDelay,qSymDelay;
 always @(posedge sampleClk) begin
     if (symTimes2Sync) begin
-        iMF <= iFiltered;
+        iSymDelay <= iFiltered;
         qSymDelay <= qFiltered;
-        if ( (demodMode == `MODE_OQPSK)
-          || (demodMode == `MODE_SOQPSK)) begin
+        if (demodMode == `MODE_OQPSK) begin
+            iMF <= iSymDelay;
+            qMF <= qFiltered;
+            end
+        else if (demodMode == `MODE_SOQPSK) begin
+            iMF <= iFiltered;
             qMF <= qSymDelay;
             end
         else begin
+            iMF <= iFiltered;
             qMF <= qFiltered;
             end
         end

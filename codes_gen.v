@@ -131,7 +131,13 @@ wire [1:0] iOutSum3 =
     iOutSum2[1] ^ iOutSum2[0]
     };
 
-assign iOut = iOutSum3[1] ^ iOutSum3[0];
+reg iOut_reg;
+always @(posedge clk) begin
+    if (clkEn) begin
+        iOut_reg <= iOutSum3[1] ^ iOutSum3[0]; 
+    end
+end
+assign iOut = iOut_reg;
 
 
 
@@ -162,7 +168,13 @@ wire [1:0] qOutSum3 =
     qOutSum2[1] ^ qOutSum2[0]
     };
 
-assign qOut = qOutSum3[1] ^ qOutSum3[0];
+reg qOut_reg;
+always @(posedge clk) begin
+    if (clkEn) begin
+        qOut_reg <= qOutSum3[1] ^ qOutSum3[0]; 
+    end
+end
+assign qOut = qOut_reg;
 
 
 

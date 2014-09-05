@@ -220,8 +220,8 @@ always @(posedge clk or posedge reset) begin
 reg     modData;
 always @(posedge clk) begin
     if (posEdgeSymbolClk) begin
-        //modData <= altData;
-        modData <= 1'b0;
+        modData <= altData;
+        //modData <= 1'b0;
         end
     end
 /******************************************************************************
@@ -329,11 +329,11 @@ real txScaleFactor;
 //wire [17:0]qSignal = 131072.0*qTxReal * txScaleFactor;
 
 // 0 Degrees
-//real rotateReal = 1.0;
-//real rotateImag = 0.0;
+real rotateReal = 1.0;
+real rotateImag = 0.0;
 // 45 Degrees
-real rotateReal = 0.707;
-real rotateImag = 0.707;
+//real rotateReal = 0.707;
+//real rotateImag = 0.707;
 // 90 Degrees
 //real rotateReal = 0.0;
 //real rotateImag = 1.0;
@@ -803,6 +803,7 @@ initial begin
     write32(createAddress(`DESPREADSPACE, `DESPREAD_QOUTTAPS_A),32'h00000090);
     write32(createAddress(`DESPREADSPACE, `DESPREAD_EPOCH_A),32'h000000ff);
     write32(createAddress(`DESPREADSPACE, `DESPREAD_CONTROL_A),32'h00000001);
+    write32(createAddress(`DESPREADSPACE, `DESPREAD_SYNC_CONTROL),{16'h0007,1'bx,7'h5,7'h3});
     write32(createAddress(`DESPREADSPACE, `DESPREAD_CONTROL),{16'h0,8'h0,6'h0,`MODE_NASA_DG1_MODE1});
 
     reset = 1;
@@ -848,6 +849,7 @@ initial begin
         demod.despreader.iSwapOnTime.rxSR[j] = 0;
         demod.despreader.qSwapOnTime.rxSR[j] = 0;
     end
+    #(2*chipRateSamplesInt*C) ;
     demod.despreader.corrSimReset = 0;
 
     // Wait 2 bit periods

@@ -73,7 +73,7 @@ output  [17:0]  iTrellis;
 output  [17:0]  qTrellis;  
 output          legacyBit;
 
-parameter VER_NUMBER = 16'h0168;
+parameter VER_NUMBER = 16'h0169;
 
 wire    [11:0]  addr = {addr11,addr10,addr9,addr8,addr7,addr6,addr5,addr4,addr3,addr2,addr1,1'b0};
 wire            nWr = nWe;
@@ -229,6 +229,7 @@ demod demod(
     .din(dataIn),
     .dout(demodDout),
     .demodMode(demodMode),
+    .enableBasebandInputs(1'b0),
     .iRx({ifInput,4'h0}), .qRx(18'h0),
     .dac0Select(dac0Select),
     .dac1Select(dac1Select),
@@ -246,7 +247,7 @@ demod demod(
     .qSymEn(qSymEn),
     .qSymClk(auSymClk),
     .qBit(qBit),
-    .bitsyncLock(bitsyncLock),
+    .timingLock(bitsyncLock),
     .carrierLock(carrierLock),
     .trellisSymSync(trellisSymSync),
     .iTrellis(iSymData),

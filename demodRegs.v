@@ -19,7 +19,10 @@ module demodRegs(
     negDeviation,
     `endif
     demodMode,
+    `ifdef ADD_DESPREADER
+    despreadLock,
     enableDespreader,
+    `endif
     bitsyncMode,
     dac0Select,
     dac1Select,
@@ -39,6 +42,9 @@ input           highFreqOffset;
 input           bitsyncLock;
 input           auBitsyncLock;
 input           demodLock;
+`ifdef ADD_DESPREADER
+input           despreadLock;
+`endif
 
 `ifdef SYM_DEVIATION
 input   [15:0]  fskDeviation;
@@ -50,8 +56,10 @@ input   [15:0]  negDeviation;
 output  [4:0]   demodMode;
 reg     [4:0]   demodMode;
 
+`ifdef ADD_DESPREADER
 output          enableDespreader;
 reg             enableDespreader;
+`endif
 
 output  [1:0]   bitsyncMode;
 reg     [1:0]   bitsyncMode;
@@ -147,7 +155,11 @@ always @* begin
             `DEMOD_CONTROL:     dataOut <= {14'b0,bitsyncMode,enableDespreader,10'b0,demodMode};
             `DEMOD_DACSELECT:   dataOut <= {12'h0,dac2Select,4'h0,dac1Select,4'h0,dac0Select};
             `DEMOD_FALSELOCK:   dataOut <= {falseLockThreshold,falseLockAlpha};
+            `ifdef ADD_DESPREADER
+            `DEMOD_STATUS:      dataOut <= {27'h0,despreadLock,
+            `else
             `DEMOD_STATUS:      dataOut <= {28'h0,
+            `endif
                                             auBitsyncLock,highFreqOffset,bitsyncLock,demodLock};
             `DEMOD_AMTC:        dataOut <= {27'b0,amTC};
             `ifdef SYM_DEVIATION
