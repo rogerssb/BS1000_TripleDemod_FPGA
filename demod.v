@@ -8,7 +8,6 @@ module demod(
     din,
     dout,
     iRx, qRx,
-    enableBasebandInputs,
     bbClkEn,
     iBB, qBB,
     iSym2xEn,
@@ -46,7 +45,6 @@ input   [31:0]  din;
 output  [31:0]  dout;
 input   [17:0]  iRx;
 input   [17:0]  qRx;
-input           enableBasebandInputs;
 input           bbClkEn;
 input   [17:0]  iBB;
 input   [17:0]  qBB;
@@ -147,8 +145,10 @@ ddc ddc(
     .leadFreq(carrierLeadFreq),
     .offsetEn(carrierOffsetEn),
     .nbAgcGain(nbAgcGain),
-    .syncOut(ddcSync),
+    .bbClkEn(bbClkEn),
+    .iBB(iBB), .qBB(qBB),
     .iIn(iRx), .qIn(qRx),
+    .syncOut(ddcSync),
     .iOut(iDdc), .qOut(qDdc)
     );
 
@@ -416,38 +416,19 @@ carrierLoop carrierLoop(
     );
 
 /******************************************************************************
-                               Choose Resampler Input
-******************************************************************************/
-reg     [17:0]  iSwapIn,qSwapIn;
-reg             resampClkEn;
-always @(posedge clk) begin
-    if (enableBasebandInputs) begin
-        resampClkEn <= bbClkEn;
-        iSwapIn <= iBB;
-        qSwapIn <= qBB;
-    end
-    else begin
-        resampClkEn <= ddcSync;
-        iSwapIn <= iDdc;
-        qSwapIn <= qDdc;
-    end
-end
-
-
-/******************************************************************************
                                   I/Q Swap
 ******************************************************************************/
 wire            auIQSwap;
 reg     [17:0]  iResampIn,qResampIn;
 always @(posedge clk) begin
-    if (resampClkEn) begin
+    if (ddcSync) begin
         if (auIQSwap) begin
-            iResampIn <= qSwapIn;
-            qResampIn <= iSwapIn;
+            iResampIn <= qDdc;
+            qResampIn <= iDdc;
             end
         else begin
-            iResampIn <= iSwapIn;
-            qResampIn <= qSwapIn;
+            iResampIn <= iDdc;
+            qResampIn <= qDdc;
             end
         end
     end
@@ -460,7 +441,7 @@ wire    [31:0]  resamplerFreqOffset;
 wire    [31:0]  auResamplerFreqOffset;
 wire    [31:0]  resampDout;
 dualResampler resampler(
-    .clk(clk), .reset(reset), .sync(resampClkEn),
+    .clk(clk), .reset(reset), .sync(ddcSync),
     .wr0(wr0) , .wr1(wr1), .wr2(wr2), .wr3(wr3),
     .addr(addr),
     .din(din),
@@ -514,8 +495,8 @@ dualDespreader despreader(
 /******************************************************************************
                                 Bitsync Loop
 ******************************************************************************/
-wire    [17:0]  iBsSymData;
-wire    [17:0]  qBsSymData;
+wire    [17:0]  iBsSymData,qBsSymData;
+wire    [17:0]  iBsTrellis,qBsTrellis;
 wire    [17:0]  bsError;
 wire    [15:0]  bsLockCounter;
 wire    [15:0]  auLockCounter;
@@ -556,30 +537,42 @@ bitsync bitsync(
     .auBitsyncLock(auBitsyncLock),
     .auLockCounter(auLockCounter),
     .auIQSwap(auIQSwap),
-    .iTrellis(iTrellis),.qTrellis(qTrellis),
+    .iTrellis(iBsTrellis),.qTrellis(qBsTrellis),
     .bsError(bsError), .bsErrorEn(bsErrorEn)
     );
 
 `ifdef ADD_DESPREADER
 reg     [17:0]  iSymData;
 reg     [17:0]  qSymData;
+reg     [17:0]  iTrellis,qTrellis;
 reg             timingLock;
 always @* begin
     if (enableDespreader) begin
         iSymData = iDsSymData;
         qSymData = qDsSymData;
+        iTrellis = iDsSymData;
+        qTrellis = qDsSymData;
         timingLock = despreadLock & bitsyncLock;
     end
     else begin
         iSymData = iBsSymData;
         qSymData = qBsSymData;
+        iTrellis = iBsTrellis;
+        qTrellis = qBsTrellis;
         timingLock = bitsyncLock;
     end
 end
 `else
 wire    [17:0]  iSymData = iBsSymData;
 wire    [17:0]  qSymData = qBsSymData;
+assign          iTrellis = iBsTrellis;
+assign          qTrellis = qBsTrellis;
 wire            timingLock = bitsyncLock;
+`endif
+
+`ifdef SIMULATE
+real iTrellisReal;
+always @* iTrellisReal = $itor($signed(iTrellis))/(2.0**17);
 `endif
 
 assign trellisSymSync = iSymEn & resampSync;
@@ -659,11 +652,11 @@ always @(posedge clk) begin
     case (dac0Select)
         `DAC_I: begin
             dac0Data <= iResampIn;
-            dac0Sync <= resampClkEn;
+            dac0Sync <= ddcSync;
             end
         `DAC_Q: begin
             dac0Data <= qResampIn;
-            dac0Sync <= resampClkEn;
+            dac0Sync <= ddcSync;
             end
         `DAC_ISYM: begin
             dac0Data <= iSymData;
@@ -716,24 +709,26 @@ always @(posedge clk) begin
             dac0Data <= {freqError,6'h0};
             dac0Sync <= demodSync;
             end
+        `ifdef ADD_DESPREADER
         `DAC_DS_CODE: begin
             dac0Data <= {iCode,17'h10000};
             dac0Sync <= 1'b1;
             end
+        `endif
         default: begin
             dac0Data <= iResampIn;
-            dac0Sync <= resampClkEn;
+            dac0Sync <= ddcSync;
             end
         endcase
 
     case (dac1Select)
         `DAC_I: begin
             dac1Data <= iResampIn;
-            dac1Sync <= resampClkEn;
+            dac1Sync <= ddcSync;
             end
         `DAC_Q: begin
             dac1Data <= qResampIn;
-            dac1Sync <= resampClkEn;
+            dac1Sync <= ddcSync;
             end
         `DAC_ISYM: begin
             dac1Data <= iSymData;
@@ -782,24 +777,26 @@ always @(posedge clk) begin
             dac1Data <= {freqError,6'h0};
             dac1Sync <= demodSync;
             end
+        `ifdef ADD_DESPREADER
         `DAC_DS_CODE: begin
             dac1Data <= {qCode,17'h10000};
             dac1Sync <= 1'b1;
             end
+        `endif
         default: begin
             dac1Data <= iResampIn;
-            dac1Sync <= resampClkEn;
+            dac1Sync <= ddcSync;
             end
         endcase
 
     case (dac2Select)
         `DAC_I: begin
             dac2Data <= iResampIn;
-            dac2Sync <= resampClkEn;
+            dac2Sync <= ddcSync;
             end
         `DAC_Q: begin
             dac2Data <= qResampIn;
-            dac2Sync <= resampClkEn;
+            dac2Sync <= ddcSync;
             end
         `DAC_ISYM: begin
             dac2Data <= iSymData;
@@ -848,13 +845,15 @@ always @(posedge clk) begin
             dac2Data <= {freqError,6'h0};
             dac2Sync <= demodSync;
             end
+        `ifdef ADD_DESPREADER
         `DAC_DS_CODE: begin
             dac2Data <= {iEpoch,17'h10000};
             dac2Sync <= 1'b1;
             end
+        `endif
         default: begin
             dac2Data <= iResampIn;
-            dac2Sync <= resampClkEn;
+            dac2Sync <= ddcSync;
             end
         endcase
 
@@ -867,7 +866,9 @@ reg [31:0]dout;
 always @* begin
     casex (addr)
         `DEMODSPACE:        dout <= demodDout;
+        `ifdef ADD_DESPREADER
         `DESPREADSPACE:     dout <= despreaderDout;
+        `endif
         `ifdef FM_FILTER
         `VIDFIRSPACE:       dout <= firDout;
         `endif

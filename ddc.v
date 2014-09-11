@@ -13,9 +13,12 @@ module ddc(
     leadFreq,
     offsetEn,
     nbAgcGain,
-    syncOut,
+    bbClkEn,
+    iBB, qBB,
     iIn, qIn, 
-    iOut, qOut);
+    syncOut,
+    iOut, qOut
+    );
 
 input           clk;
 input           reset;
@@ -27,9 +30,12 @@ input   [31:0]  ddcFreqOffset;
 input   [31:0]  leadFreq;
 input           offsetEn;
 input   [20:0]  nbAgcGain;
-output          syncOut;
+input           bbClkEn;
+input   [17:0]  iBB;
+input   [17:0]  qBB;
 input   [17:0]  iIn;
 input   [17:0]  qIn;
+output          syncOut;
 output  [17:0]  iOut;
 output  [17:0]  qOut;
 
@@ -68,6 +74,7 @@ ddcRegs micro(
     `ifdef USE_DDC_FIR
     .bypassFir(bypassFir),
     `endif
+    .enableBasebandInputs(enableBasebandInputs),
     .ddcCenterFreq(ddcCenterFreq),
     .adcDecimation(adcDecimation)
     );
@@ -182,9 +189,16 @@ always @(posedge clk) begin
         qCicIn <= 0;
         end
     else begin
+        `define ADD_BB
+        `ifdef ADD_BB
+        cicClockEn <= (enableBasebandInputs ? bbClkEn : hb0SyncOut) & adcClkEn;
+        iCicIn <= (enableBasebandInputs ? iBB : iHb0);
+        qCicIn <= (enableBasebandInputs ? qBB : qHb0);
+        `else
         cicClockEn <= hb0SyncOut & adcClkEn;
         iCicIn <= iHb0;
         qCicIn <= qHb0;
+        `endif
         end
     end
 
@@ -213,9 +227,15 @@ reg     [47:0]  iAgcIn,qAgcIn;
 reg             agcSync;
 always @(posedge clk) begin
     if (bypassCic) begin
-        iAgcIn <= {iHb0,30'h0};
-        qAgcIn <= {qHb0,30'h0};
+        `ifdef ADD_BB
+        iAgcIn <=   enableBasebandInputs ? {iBB,30'h0} : {iHb0,30'h0};
+        qAgcIn <=   enableBasebandInputs ? {qBB,30'h0} : {qHb0,30'h0};
+        agcSync <= (enableBasebandInputs ? bbClkEn : hb0SyncOut) & adcClkEn;
+        `else
+        iAgcIn <=  {iHb0,30'h0};
+        qAgcIn <=  {qHb0,30'h0};
         agcSync <= hb0SyncOut & adcClkEn;
+        `endif
         end
     else begin
         iAgcIn <= iCic;
@@ -344,40 +364,40 @@ dualFir dualFir (
     .iOut(iFir),.qOut(qFir)
     );
 
-reg     [17:0]  iBB,qBB;
+reg     [17:0]  iLeadIn,qLeadIn;
 reg             syncOut;
 always @(posedge clk) begin
     if (bypassFir) begin
         if (bypassHb) begin
             syncOut <= agcSync;
-            iBB <= iMux;
-            qBB <= qMux;
+            iLeadIn <= iMux;
+            qLeadIn <= qMux;
             end
         else begin
             syncOut <= hbSyncOut;
-            iBB <= iHb;
-            qBB <= qHb;
+            iLeadIn <= iHb;
+            qLeadIn <= qHb;
             end
         end
     else begin
-        iBB <= iFir;
-        qBB <= qFir;
+        iLeadIn <= iFir;
+        qLeadIn <= qFir;
         syncOut <= firClockEn;
         end
     end
 `else
-reg     [17:0]  iBB;
-reg     [17:0]  qBB;
+reg     [17:0]  iLeadIn;
+reg     [17:0]  qLeadIn;
 reg             syncOut;
 always @(posedge clk) begin
     if (bypassHb) begin
-        iBB <= iMux;
-        qBB <= qMux;
+        iLeadIn <= iMux;
+        qLeadIn <= qMux;
         syncOut <= agcSync;
         end
     else begin
-        iBB <= iHb;
-        qBB <= qHb;
+        iLeadIn <= iHb;
+        qLeadIn <= qHb;
         syncOut <= hbSyncOut;
         end
     end
@@ -422,8 +442,8 @@ wire    [17:0]  iLead,qLead;
 cmpy18 leadMixer( 
     .clk(clk),
     .reset(reset),
-    .aReal(iBB),
-    .aImag(qBB),
+    .aReal(iLeadIn),
+    .aImag(qLeadIn),
     .bReal(iLeadDds),
     .bImag(qLeadDds),
     .pReal(iLead),

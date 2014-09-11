@@ -507,6 +507,21 @@ decoder decoder
   .clk_inv()
   );
 
+reg scEn;
+initial scEn = 1;
+demod scDemod(
+    .clk(clk),
+    .reset(reset),
+    .wr0(scEn & we0),
+    .wr1(scEn & we1),
+    .wr2(scEn & we2),
+    .wr3(scEn & we3),
+    .addr(a),
+    .din(d),
+    .bbClkEn(symEn),
+    .iBB(iSymData),
+    .qBB(qSymData)
+    );
 
 //******************************************************************************
 //                        SDI Output Interface
@@ -700,6 +715,7 @@ initial begin
     `endif
     demod.ddc.hbReset = 1;
     demod.ddc.cicReset = 1;
+    scDemod.ddc.cicReset = 1;
     txInterpReset = 0;
     interpReset = 0;
     reset = 0;
@@ -723,6 +739,30 @@ initial begin
     write32(createAddress(`INTERP0SPACE, `INTERP_MANTISSA), 32'h00011000);
     iModInterpCS = 0;
     qModInterpCS = 0;
+
+    // Init the downcoverter register set
+    scEn = 1;
+    write32(createAddress(`DEMODSPACE,`DEMOD_CONTROL),{14'bx,`MODE_SINGLE_RAIL,1'b0,10'bx,`MODE_QPSK});
+    write32(createAddress(`DDCSPACE,`DDC_CONTROL), {28'h0,4'b1110});
+    write32(createAddress(`DDCSPACE,`DDC_CENTER_FREQ), 0);
+    write32(createAddress(`DDCSPACE,`DDC_DECIMATION), 0);
+    write32(createAddress(`CICDECSPACE,`CIC_DECIMATION),2);
+    write32(createAddress(`CICDECSPACE,`CIC_SHIFT), 5); // log2(cicDecimation ^ 3)
+
+    // Init the sample rate loop filters
+    write32(createAddress(`RESAMPSPACE,`RESAMPLER_RATE),32'h99999999);
+    write32(createAddress(`BITSYNCSPACE,`LF_CONTROL),1);    // Zero the error
+    //write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h001c0010);    
+    write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h001a000c);    
+    write32(createAddress(`BITSYNCSPACE,`LF_LIMIT), resamplerLimitInt);    
+
+    // Init the channel agc loop filter
+    write32(createAddress(`CHAGCSPACE,`ALF_CONTROL),1);                 // Zero the error
+    write32(createAddress(`CHAGCSPACE,`ALF_SETPOINT),32'h000000e8);     // AGC Setpoint
+    write32(createAddress(`CHAGCSPACE,`ALF_GAINS),32'h00180018);        // AGC Loop Gain
+    write32(createAddress(`CHAGCSPACE,`ALF_ULIMIT),32'h4fffffff);       // AGC Upper limit
+    write32(createAddress(`CHAGCSPACE,`ALF_LLIMIT),32'h00000000);       // AGC Lower limit
+    scEn = 0;
 
     // Init the mode
     `ifdef BPSK
@@ -803,14 +843,17 @@ initial begin
     write32(createAddress(`DESPREADSPACE, `DESPREAD_QOUTTAPS_A),32'h00000090);
     write32(createAddress(`DESPREADSPACE, `DESPREAD_EPOCH_A),32'h000000ff);
     write32(createAddress(`DESPREADSPACE, `DESPREAD_CONTROL_A),32'h00000001);
-    write32(createAddress(`DESPREADSPACE, `DESPREAD_SYNC_CONTROL),{16'h0007,1'bx,7'h5,7'h3});
+    write32(createAddress(`DESPREADSPACE, `DESPREAD_SYNC_CONTROL),{16'h0007,1'bx,7'h5,1'bx,7'h3});
     write32(createAddress(`DESPREADSPACE, `DESPREAD_CONTROL),{16'h0,8'h0,6'h0,`MODE_NASA_DG1_MODE1});
+
+
 
     reset = 1;
     #(2*C) ;
     reset = 0;
     demod.ddc.hbReset = 0;
     demod.ddc.cicReset = 0;
+    scDemod.ddc.cicReset = 0;
 
     // Force the carrier frequency to load. We have to do this because
     // the load is normally not done in FSK mode until you get symbol
@@ -893,14 +936,26 @@ initial begin
     // Enable the SDI in eye pattern mode
     write32(createAddress(`SDISPACE,`SDI_CONTROL),32'h00000082);
 
+    #(1*100*chipRateSamplesInt*C) ;
+    scDemod.ddc.hbReset = 1;
+    #(2*C) ;
+    scDemod.ddc.hbReset = 0;
+
+    #(1*100*chipRateSamplesInt*C) ;
+    scDemod.ddc.cicReset = 1;
+    #(2*C) ;
+    scDemod.ddc.cicReset = 0;
 
     // Wait for some data to pass thru
-    #(3*100*chipRateSamplesInt*C) ;
+    #(1*100*chipRateSamplesInt*C) ;
     `ifdef MATLAB_VECTORS
     $fclose(outfile);
     `endif
     $stop;
 
+    scEn = 1;
+    write32(createAddress(`BITSYNCSPACE,`LF_CONTROL),32'h00000000);  
+    scEn = 0;
     //write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h0018000c);    
     //write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h001e0018);    
 

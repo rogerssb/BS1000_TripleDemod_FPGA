@@ -19,7 +19,7 @@
      <setting value="231" name="C2Width" />
     </settings>
     <views>
-     <view value="24908.366 ns,83137.315 ns,820.704 ns,25154.577 ns,29217.062 ns" name="Last" />
+     <view value="141177.305 ns,252844.303 ns,1573.883 ns,34149.504 ns,36471.298 ns" name="Last" />
     </views>
     <groups>
      <group open="no" name="Rx" show="yes" >
@@ -199,7 +199,7 @@
        <signal interpolate="Step" radix="Real" name="outReal" scope="test.demod.resampler.resamplerI" />
       </signals>
      </group>
-     <group open="yes" name="Despreader" show="yes" >
+     <group open="no" name="Despreader" show="yes" >
       <signals>
        <signal radix="Decimal" name="CorrBits" scope="test.demod.despreader.iCorrOnTime" />
        <signal name="reset" scope="test.demod.despreader.iCorrOnTime" />
@@ -250,6 +250,7 @@
        <signal name="absCorrI[17:0]" scope="test.demod.despreader" />
        <signal scale="fixed" maxscaledbl="1" interpolate="Step" minscaledbl="0" radix="Real" name="absCorrIReal" scope="test.demod.despreader" />
        <signal scale="fixed" maxscaledbl="1" interpolate="Step" minscaledbl="0" radix="Real" name="absCorrQReal" scope="test.demod.despreader" />
+       <signal name="iTrellis[17:0]" scope="test.demod" />
        <signal scale="fixed" maxscaledbl="1" interpolate="Step" minscaledbl="-1" radix="Real" name="despreadReal" scope="test.demod.despreader.iCorrOnTime" />
        <signal scale="fixed" maxscaledbl="1" interpolate="Step" minscaledbl="-1" radix="Real" name="despreadReal" scope="test.demod.despreader.qCorrOnTime" />
        <signal scale="fixed" maxscaledbl="1" interpolate="Step" minscaledbl="0" radix="Real" name="absCorrSwapIReal" scope="test.demod.despreader" />
@@ -294,6 +295,30 @@
        <signal name="codeEpoch" scope="test.demod.despreader.codes_gen_a" />
       </signals>
      </group>
+     <group open="yes" name="New Group3" show="yes" >
+      <signals>
+       <signal name="bbClkEn" scope="test.scDemod.ddc" />
+       <signal name="iBB[17:0]" scope="test.scDemod.ddc" />
+       <signal name="bypassCic" scope="test.scDemod.ddc" />
+       <signal name="bypassHb" scope="test.scDemod.ddc" />
+       <signal name="enableBasebandInputs" scope="test.scDemod.ddc" />
+       <signal name="cicReset" scope="test.scDemod.ddc" />
+       <signal name="reset" scope="test.scDemod.ddc.cic" />
+       <signal name="cicDecimation[14:0]" scope="test.scDemod.ddc.cic" />
+       <signal name="cicShift[5:0]" scope="test.scDemod.ddc.cic" />
+       <signal name="inI[17:0]" scope="test.scDemod.ddc.cic" />
+       <signal name="iCic[47:0]" scope="test.scDemod.ddc" />
+       <signal name="cicSyncOut" scope="test.scDemod.ddc" />
+       <signal name="iAgcIn[47:0]" scope="test.scDemod.ddc" />
+       <signal interpolate="Step" radix="Real" name="iAgcReal" scope="test.scDemod.ddc" />
+       <signal name="iComp[17:0]" scope="test.scDemod.ddc" />
+       <signal name="iMux[17:0]" scope="test.scDemod.ddc" />
+       <signal name="iLeadIn[17:0]" scope="test.scDemod.ddc" />
+       <signal interpolate="Step" radix="Real" name="iOutReal" scope="test.scDemod.ddc" />
+       <signal name="iResamp[17:0]" scope="test.scDemod" />
+       <signal interpolate="Step" radix="Real" name="outReal" scope="test.scDemod.resampler.resamplerI" />
+      </signals>
+     </group>
      <group open="no" name="New Group2" show="no" />
      <group open="yes" name="New Group1" show="no" />
      <group open="no" name="I Despreader" show="no" />
@@ -311,7 +336,7 @@
    </includedirs>
    <explorer>
     <settings>
-     <setting value="test.demod.bitsync" name="Scope" />
+     <setting value="test.scDemod.resampler.resamplerI.outReal" name="Scope" />
     </settings>
    </explorer>
    <sourcefiles>
@@ -383,6 +408,9 @@
     <file name="despreaderRegs.v" />
     <file name="despreadCorrelator.v" />
    </sourcefiles>
+   <plusdefines>
+    <define name="LEGACY_DEMOD" />
+   </plusdefines>
   </product>
  </products>
 </project>

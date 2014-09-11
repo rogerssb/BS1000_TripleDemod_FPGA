@@ -9,6 +9,7 @@ module ddcRegs(addr,
                wr0, wr1, wr2, wr3,
                ddcCenterFreq,
                bypassCic, bypassHb,bypassFir,
+               enableBasebandInputs,
                adcDecimation
                );
 
@@ -30,6 +31,9 @@ reg             bypassCic;
 output          bypassFir;
 reg             bypassFir;
 
+output          enableBasebandInputs;
+reg             enableBasebandInputs;
+
 output  [7:0]   adcDecimation;
 reg     [7:0]   adcDecimation;
 
@@ -43,6 +47,7 @@ always @(negedge wr0) begin
                 bypassCic <= dataIn[0];
                 bypassHb <= dataIn[1];
                 bypassFir <= dataIn[2];
+                enableBasebandInputs <= dataIn[3];
                 end
             `DDC_DECIMATION: begin
                 adcDecimation[7:0] <= dataIn[7:0];
@@ -80,15 +85,11 @@ always @(negedge wr3) begin
     end
 
 reg [31:0]dataOut;
-always @(addr or cs or
-         ddcCenterFreq or
-         bypassCic or bypassHb or bypassFir or
-         adcDecimation
-         ) begin
+always @* begin
     if (cs) begin
         casex (addr)
             `DDC_CENTER_FREQ:   dataOut <= ddcCenterFreq;
-            `DDC_CONTROL:       dataOut <= {29'h0,bypassFir,bypassHb,bypassCic};
+            `DDC_CONTROL:       dataOut <= {28'h0,enableBasebandInputs,bypassFir,bypassHb,bypassCic};
             `DDC_DECIMATION:    dataOut <= {24'h0,adcDecimation};
             default:            dataOut <= 32'h0;
             endcase

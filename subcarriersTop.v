@@ -28,6 +28,7 @@ module subcarriersTop (
     dac0Data,dac1Data,dac2Data,
     dataSymEn,dataSym2xEn,
     iData,qData,
+    iBB,qBB,
     auSymClk,
     bsyncLockInput,demodLockInput,
     sdiInput,
@@ -80,7 +81,7 @@ output          sdiOut;
 output          vt_txd;
 input           vt_rxd;
 
-parameter VER_NUMBER = 16'h0156;
+parameter VER_NUMBER = 16'h0178;
 
 
 `ifndef USE_VTERM
@@ -429,8 +430,7 @@ demod demod1(
 //    .demodMode(demodMode),
     .iRx({demod0_dac2DataIn,4'h0}),      // FPGA1 DAC2 output
     .qRx(18'h0),
-    .enableBasebandInputs(enableBasebandInputs),
-    .bbClkEn(dataSym2xEnIn),
+    .bbClkEn(dataSymEnIn),
     .iBB(iBBIn),
     .qBB(qBBIn),
     .dac0Data(demod1_dac0Data),

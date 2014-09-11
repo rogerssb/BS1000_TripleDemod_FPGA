@@ -62,6 +62,7 @@ always @(addr) begin
         endcase
     end
 
+reg             despreadLock;
 wire    [17:0]  init_a, codeRestartCount_a, polyTaps_a, iOutTaps_a, qOutTaps_a, epoch_a;
 wire    [17:0]  init_b, codeRestartCount_b, polyTaps_b, iOutTaps_b, epoch_b;
 wire    [3:0]   corrLength_a,corrLength_b;
@@ -362,7 +363,6 @@ qSwapOnTime(
 //******************************* Acq State Machine ****************************
 
 reg             swapIQ;
-reg             despreadLock;
 
 wire    [15:0]  negLockCount = (16'hffff - lockCount);
 

@@ -106,9 +106,11 @@ always @(negedge wr0) begin
 always @(negedge wr1) begin
     if (cs) begin
         casex (addr)
+            `ifdef ADD_DESPREADER
             `DEMOD_CONTROL: begin
                 enableDespreader <= dataIn[15];
                 end
+            `endif
             `DEMOD_DACSELECT: begin
                 dac1Select <= dataIn[11:8];
                 end
@@ -152,7 +154,11 @@ reg [31:0]dataOut;
 always @* begin
     if (cs) begin
         casex (addr)
+            `ifdef ADD_DESPREADER
             `DEMOD_CONTROL:     dataOut <= {14'b0,bitsyncMode,enableDespreader,10'b0,demodMode};
+            `else
+            `DEMOD_CONTROL:     dataOut <= {14'b0,bitsyncMode,11'b0,demodMode};
+            `endif
             `DEMOD_DACSELECT:   dataOut <= {12'h0,dac2Select,4'h0,dac1Select,4'h0,dac0Select};
             `DEMOD_FALSELOCK:   dataOut <= {falseLockThreshold,falseLockAlpha};
             `ifdef ADD_DESPREADER

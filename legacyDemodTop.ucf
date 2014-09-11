@@ -375,7 +375,7 @@ NET "demod/ddc/hb0/evenSync*" TNM_NET = FFS syncGroup;
 NET "demod/ddc/hb0/syncOut*" TNM_NET = FFS syncGroup;
 NET "demod/ddc/firClockEn*" TNM_NET = FFS syncGroup;
 NET "demod/ddc/firClockEn*" TNM_NET = DSPS syncGroup;
-NET "demod/carrierOffsetEn*" TNM_NET = FFS syncGroup;
+#NET "demod/carrierOffsetEn*" TNM_NET = FFS syncGroup;
 NET "demod/ddc/syncOut*" TNM_NET = FFS syncGroup;
 NET "demod/ddc/syncOut*" TNM_NET = DSPS syncGroup;
 NET "demod/resampler/resamplerI/resampleDelay*" TNM_NET = FFS syncGroup;
@@ -385,7 +385,7 @@ NET "demod/resampler/resamplerQ/resampleDelay*" TNM_NET = FFS syncGroup;
 NET "demod/despreader/dsSlipI*" TNM_NET = FFS syncGroup;
 #NET "demod/despreader/dsSlipQ*" TNM_NET = FFS syncGroup;
 NET "demod/resampler/auCic/syncOut*" TNM_NET = FFS syncGroup;
-#NET "demod/carrierLoop/loopFilterEn*" TNM_NET = FFS syncGroup;
+NET "demod/carrierLoop/loopFilterEn*" TNM_NET = FFS syncGroup;
 NET "demod/fmDemod/cordic/enSR*" TNM_NET = FFS syncGroup;
 #NET "demod/fmDemod/cordic/enSR*" TNM_NET = DSPS syncGroup;
 NET "demod/bitsync/phaseState*" TNM_NET = FFS syncGroup;
@@ -419,12 +419,11 @@ TIMEGRP "clken" =  FFS(demod/dac0Sync*)
                    FFS(demod/ddc/hb0/evenSync*) 
                    FFS(demod/ddc/hb0/syncOut*)
                    FFS(demod/ddc/firClockEn*)
-#                   FFS(demod/carrierOffsetEn*)
                    FFS(demod/ddc/syncOut*)
                    FFS(demod/resampler/resamplerI/resampleDelay*)
                    FFS(demod/resampler/resamplerQ/resampleDelay*)
                    FFS(demod/resampler/auCic/syncOut*)
-#                   FFS(demod/carrierLoop/loopFilterEn*)
+                   FFS(demod/carrierLoop/loopFilterEn*)
                    FFS(demod/fmDemod/cordic/enSR*) 
                    FFS(demod/bitsync/phaseState*)
 #                   FFS(pcmSymEn*) FFS(pcmSym2xEn*) 
@@ -451,7 +450,7 @@ TIMEGRP "ddcPL" = FFS(demod/ddc/iCicIn*) FFS(demod/ddc/qCicIn*)
                   FFS(demod/ddc/iAgcIn*) FFS(demod/ddc/qAgcIn*)
                   FFS(demod/ddc/iHbIn*) FFS(demod/ddc/qHbIn*)
                   FFS(demod/ddc/iFirIn*) FFS(demod/ddc/qFirIn*)
-                  FFS(demod/ddc/iBB*) FFS(demod/ddc/qBB*);
+                  FFS(demod/ddc/iLeadIn*) FFS(demod/ddc/qLeadIn*);
 
 # AGC loop that can clock slower
 TIMEGRP "magloop" = FFS( demod/magLoop/lagAccum*) ;

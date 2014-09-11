@@ -6,7 +6,16 @@
 `define SYM_DEVIATION
 `define ADD_SOQPSK_TRELLIS
 //`define FM_FILTER
+
+`ifdef LEGACY_DEMOD
 `define ADD_DESPREADER
+`endif
+
+`ifdef SUBCARRIER_DEMOD
+`endif
+
+`ifdef TRELLIS_DEMOD
+`endif
 
 
 // Split the memory space for the different functions
