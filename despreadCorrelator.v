@@ -52,6 +52,7 @@ always @* rxReal = $itor($signed(rx))/(2**(InputBits-1));
            13:  mask <= 16'h3fff;
            14:  mask <= 16'h7fff;
            15:  mask <= 16'hffff;
+           default: mask <= 0;
         endcase
     end
 
@@ -214,22 +215,22 @@ end
 
 // This counts the number of despread chips that have the same polarity as the previous chip. 
 // It is used for detecting sync
-assign syncCount = (mask[ 0] ? {2'b0,(sum0[CorrBits-1]  ^ sum1[CorrBits-1])}  + {2'b0,(sum1[CorrBits-1]  ^ sum2[CorrBits-1])}  + {2'b0,(sum2[CorrBits-1]  ^ sum3[CorrBits-1])} : 0)
-                 + (mask[ 1] ? {2'b0,(sum3[CorrBits-1]  ^ sum4[CorrBits-1])}  + {2'b0,(sum4[CorrBits-1]  ^ sum5[CorrBits-1])}  + {2'b0,(sum5[CorrBits-1]  ^ sum6[CorrBits-1])}  + {2'b0,(sum6[CorrBits-1]  ^ sum7[CorrBits-1])}: 0)
-                 + (mask[ 2] ? {2'b0,(sum7[CorrBits-1]  ^ sum8[CorrBits-1])}  + {2'b0,(sum8[CorrBits-1]  ^ sum9[CorrBits-1])}  + {2'b0,(sum9[CorrBits-1]  ^ sum10[CorrBits-1])} + {2'b0,(sum10[CorrBits-1] ^ sum11[CorrBits-1])}: 0)
-                 + (mask[ 3] ? {2'b0,(sum11[CorrBits-1] ^ sum12[CorrBits-1])} + {2'b0,(sum12[CorrBits-1] ^ sum13[CorrBits-1])} + {2'b0,(sum13[CorrBits-1] ^ sum14[CorrBits-1])} + {2'b0,(sum14[CorrBits-1] ^ sum15[CorrBits-1])}: 0)
-                 + (mask[ 4] ? {2'b0,(sum15[CorrBits-1] ^ sum16[CorrBits-1])} + {2'b0,(sum16[CorrBits-1] ^ sum17[CorrBits-1])} + {2'b0,(sum17[CorrBits-1] ^ sum18[CorrBits-1])} + {2'b0,(sum18[CorrBits-1] ^ sum19[CorrBits-1])}: 0)
-                 + (mask[ 5] ? {2'b0,(sum19[CorrBits-1] ^ sum20[CorrBits-1])} + {2'b0,(sum20[CorrBits-1] ^ sum21[CorrBits-1])} + {2'b0,(sum21[CorrBits-1] ^ sum22[CorrBits-1])} + {2'b0,(sum22[CorrBits-1] ^ sum23[CorrBits-1])}: 0)
-                 + (mask[ 6] ? {2'b0,(sum23[CorrBits-1] ^ sum24[CorrBits-1])} + {2'b0,(sum24[CorrBits-1] ^ sum25[CorrBits-1])} + {2'b0,(sum25[CorrBits-1] ^ sum26[CorrBits-1])} + {2'b0,(sum26[CorrBits-1] ^ sum27[CorrBits-1])}: 0)
-                 + (mask[ 7] ? {2'b0,(sum27[CorrBits-1] ^ sum28[CorrBits-1])} + {2'b0,(sum28[CorrBits-1] ^ sum29[CorrBits-1])} + {2'b0,(sum29[CorrBits-1] ^ sum30[CorrBits-1])} + {2'b0,(sum30[CorrBits-1] ^ sum31[CorrBits-1])}: 0)
-                 + (mask[ 8] ? {2'b0,(sum31[CorrBits-1] ^ sum32[CorrBits-1])} + {2'b0,(sum32[CorrBits-1] ^ sum33[CorrBits-1])} + {2'b0,(sum33[CorrBits-1] ^ sum34[CorrBits-1])} + {2'b0,(sum34[CorrBits-1] ^ sum35[CorrBits-1])}: 0)
-                 + (mask[ 9] ? {2'b0,(sum35[CorrBits-1] ^ sum36[CorrBits-1])} + {2'b0,(sum36[CorrBits-1] ^ sum37[CorrBits-1])} + {2'b0,(sum37[CorrBits-1] ^ sum38[CorrBits-1])} + {2'b0,(sum38[CorrBits-1] ^ sum39[CorrBits-1])}: 0)
-                 + (mask[10] ? {2'b0,(sum39[CorrBits-1] ^ sum40[CorrBits-1])} + {2'b0,(sum40[CorrBits-1] ^ sum41[CorrBits-1])} + {2'b0,(sum41[CorrBits-1] ^ sum42[CorrBits-1])} + {2'b0,(sum42[CorrBits-1] ^ sum43[CorrBits-1])}: 0)
-                 + (mask[11] ? {2'b0,(sum43[CorrBits-1] ^ sum44[CorrBits-1])} + {2'b0,(sum44[CorrBits-1] ^ sum45[CorrBits-1])} + {2'b0,(sum45[CorrBits-1] ^ sum46[CorrBits-1])} + {2'b0,(sum46[CorrBits-1] ^ sum47[CorrBits-1])}: 0)
-                 + (mask[12] ? {2'b0,(sum47[CorrBits-1] ^ sum48[CorrBits-1])} + {2'b0,(sum48[CorrBits-1] ^ sum49[CorrBits-1])} + {2'b0,(sum49[CorrBits-1] ^ sum50[CorrBits-1])} + {2'b0,(sum50[CorrBits-1] ^ sum51[CorrBits-1])}: 0)
-                 + (mask[13] ? {2'b0,(sum51[CorrBits-1] ^ sum52[CorrBits-1])} + {2'b0,(sum52[CorrBits-1] ^ sum53[CorrBits-1])} + {2'b0,(sum53[CorrBits-1] ^ sum54[CorrBits-1])} + {2'b0,(sum54[CorrBits-1] ^ sum55[CorrBits-1])}: 0)
-                 + (mask[14] ? {2'b0,(sum55[CorrBits-1] ^ sum56[CorrBits-1])} + {2'b0,(sum56[CorrBits-1] ^ sum57[CorrBits-1])} + {2'b0,(sum57[CorrBits-1] ^ sum58[CorrBits-1])} + {2'b0,(sum58[CorrBits-1] ^ sum59[CorrBits-1])}: 0)
-                 + (mask[15] ? {2'b0,(sum59[CorrBits-1] ^ sum60[CorrBits-1])} + {2'b0,(sum60[CorrBits-1] ^ sum61[CorrBits-1])} + {2'b0,(sum61[CorrBits-1] ^ sum62[CorrBits-1])} + {2'b0,(sum62[CorrBits-1] ^ sum63[CorrBits-1])}: 0)
+assign syncCount = (mask[ 0] ? {5'b0,(sum0[CorrBits-1]  ^ sum1[CorrBits-1])}  + {5'b0,(sum1[CorrBits-1]  ^ sum2[CorrBits-1])}  + {5'b0,(sum2[CorrBits-1]  ^ sum3[CorrBits-1])} : 0)
+                 + (mask[ 1] ? {5'b0,(sum3[CorrBits-1]  ^ sum4[CorrBits-1])}  + {5'b0,(sum4[CorrBits-1]  ^ sum5[CorrBits-1])}  + {5'b0,(sum5[CorrBits-1]  ^ sum6[CorrBits-1])}  + {5'b0,(sum6[CorrBits-1]  ^ sum7[CorrBits-1])}: 0)
+                 + (mask[ 2] ? {5'b0,(sum7[CorrBits-1]  ^ sum8[CorrBits-1])}  + {5'b0,(sum8[CorrBits-1]  ^ sum9[CorrBits-1])}  + {5'b0,(sum9[CorrBits-1]  ^ sum10[CorrBits-1])} + {5'b0,(sum10[CorrBits-1] ^ sum11[CorrBits-1])}: 0)
+                 + (mask[ 3] ? {5'b0,(sum11[CorrBits-1] ^ sum12[CorrBits-1])} + {5'b0,(sum12[CorrBits-1] ^ sum13[CorrBits-1])} + {5'b0,(sum13[CorrBits-1] ^ sum14[CorrBits-1])} + {5'b0,(sum14[CorrBits-1] ^ sum15[CorrBits-1])}: 0)
+                 + (mask[ 4] ? {5'b0,(sum15[CorrBits-1] ^ sum16[CorrBits-1])} + {5'b0,(sum16[CorrBits-1] ^ sum17[CorrBits-1])} + {5'b0,(sum17[CorrBits-1] ^ sum18[CorrBits-1])} + {5'b0,(sum18[CorrBits-1] ^ sum19[CorrBits-1])}: 0)
+                 + (mask[ 5] ? {5'b0,(sum19[CorrBits-1] ^ sum20[CorrBits-1])} + {5'b0,(sum20[CorrBits-1] ^ sum21[CorrBits-1])} + {5'b0,(sum21[CorrBits-1] ^ sum22[CorrBits-1])} + {5'b0,(sum22[CorrBits-1] ^ sum23[CorrBits-1])}: 0)
+                 + (mask[ 6] ? {5'b0,(sum23[CorrBits-1] ^ sum24[CorrBits-1])} + {5'b0,(sum24[CorrBits-1] ^ sum25[CorrBits-1])} + {5'b0,(sum25[CorrBits-1] ^ sum26[CorrBits-1])} + {5'b0,(sum26[CorrBits-1] ^ sum27[CorrBits-1])}: 0)
+                 + (mask[ 7] ? {5'b0,(sum27[CorrBits-1] ^ sum28[CorrBits-1])} + {5'b0,(sum28[CorrBits-1] ^ sum29[CorrBits-1])} + {5'b0,(sum29[CorrBits-1] ^ sum30[CorrBits-1])} + {5'b0,(sum30[CorrBits-1] ^ sum31[CorrBits-1])}: 0)
+                 + (mask[ 8] ? {5'b0,(sum31[CorrBits-1] ^ sum32[CorrBits-1])} + {5'b0,(sum32[CorrBits-1] ^ sum33[CorrBits-1])} + {5'b0,(sum33[CorrBits-1] ^ sum34[CorrBits-1])} + {5'b0,(sum34[CorrBits-1] ^ sum35[CorrBits-1])}: 0)
+                 + (mask[ 9] ? {5'b0,(sum35[CorrBits-1] ^ sum36[CorrBits-1])} + {5'b0,(sum36[CorrBits-1] ^ sum37[CorrBits-1])} + {5'b0,(sum37[CorrBits-1] ^ sum38[CorrBits-1])} + {5'b0,(sum38[CorrBits-1] ^ sum39[CorrBits-1])}: 0)
+                 + (mask[10] ? {5'b0,(sum39[CorrBits-1] ^ sum40[CorrBits-1])} + {5'b0,(sum40[CorrBits-1] ^ sum41[CorrBits-1])} + {5'b0,(sum41[CorrBits-1] ^ sum42[CorrBits-1])} + {5'b0,(sum42[CorrBits-1] ^ sum43[CorrBits-1])}: 0)
+                 + (mask[11] ? {5'b0,(sum43[CorrBits-1] ^ sum44[CorrBits-1])} + {5'b0,(sum44[CorrBits-1] ^ sum45[CorrBits-1])} + {5'b0,(sum45[CorrBits-1] ^ sum46[CorrBits-1])} + {5'b0,(sum46[CorrBits-1] ^ sum47[CorrBits-1])}: 0)
+                 + (mask[12] ? {5'b0,(sum47[CorrBits-1] ^ sum48[CorrBits-1])} + {5'b0,(sum48[CorrBits-1] ^ sum49[CorrBits-1])} + {5'b0,(sum49[CorrBits-1] ^ sum50[CorrBits-1])} + {5'b0,(sum50[CorrBits-1] ^ sum51[CorrBits-1])}: 0)
+                 + (mask[13] ? {5'b0,(sum51[CorrBits-1] ^ sum52[CorrBits-1])} + {5'b0,(sum52[CorrBits-1] ^ sum53[CorrBits-1])} + {5'b0,(sum53[CorrBits-1] ^ sum54[CorrBits-1])} + {5'b0,(sum54[CorrBits-1] ^ sum55[CorrBits-1])}: 0)
+                 + (mask[14] ? {5'b0,(sum55[CorrBits-1] ^ sum56[CorrBits-1])} + {5'b0,(sum56[CorrBits-1] ^ sum57[CorrBits-1])} + {5'b0,(sum57[CorrBits-1] ^ sum58[CorrBits-1])} + {5'b0,(sum58[CorrBits-1] ^ sum59[CorrBits-1])}: 0)
+                 + (mask[15] ? {5'b0,(sum59[CorrBits-1] ^ sum60[CorrBits-1])} + {5'b0,(sum60[CorrBits-1] ^ sum61[CorrBits-1])} + {5'b0,(sum61[CorrBits-1] ^ sum62[CorrBits-1])} + {5'b0,(sum62[CorrBits-1] ^ sum63[CorrBits-1])}: 0)
                  ;                                                                                                                                                              
 /*
 chipscope_ila ila (

@@ -26,7 +26,9 @@ module dualDespreader (
     qSym2xEn,
     timingError,
     timingErrorEn,
-    despreadLock
+    despreadLock,
+    syncCount,
+    swapSyncCount
     );
 
 parameter SoftBits = 6;
@@ -52,6 +54,8 @@ output          qSym2xEn;
 output  [17:0]  timingError;
 output          timingErrorEn;
 output          despreadLock;
+output  [15:0]  syncCount;
+output  [15:0]  swapSyncCount;
 
 // Microprocessor interface
 reg cs;
@@ -66,6 +70,7 @@ reg             despreadLock;
 wire    [17:0]  init_a, codeRestartCount_a, polyTaps_a, iOutTaps_a, qOutTaps_a, epoch_a;
 wire    [17:0]  init_b, codeRestartCount_b, polyTaps_b, iOutTaps_b, epoch_b;
 wire    [3:0]   corrLength_a,corrLength_b;
+wire    [1:0]   despreadMode;
 wire    [6:0]   acqSyncThreshold,trkSyncThreshold;
 wire    [6:0]   syncThreshold = despreadLock ? trkSyncThreshold : acqSyncThreshold;
 wire    [15:0]  lockCount;
@@ -84,6 +89,7 @@ despreaderRegs regs(
     .iOutTaps_a(iOutTaps_a),
     .qOutTaps_a(qOutTaps_a),
     .corrLength_a(corrLength_a),
+    .goldEnableA(goldEnableA),
     .slip_a(slip_a),
     .epoch_a(epoch_a),
     .init_b(init_b),
@@ -91,8 +97,10 @@ despreaderRegs regs(
     .codeRestartCount_b(codeRestartCount_b),
     .iOutTaps_b(iOutTaps_b),
     .corrLength_b(corrLength_b),
+    .goldEnableB(goldEnableB),
     .slip_b(slip_b),
     .epoch_b(epoch_b),
+    .despreadMode(despreadMode),
     .acqSyncThreshold(acqSyncThreshold),
     .trkSyncThreshold(trkSyncThreshold),
     .lockCount(lockCount)
@@ -103,47 +111,7 @@ wire    iSampleEn = clkEn;
 wire    iOnTime = symEn;
 
 wire    qSampleEn = clkEn;
-//LWK wire    qOnTime = clkEn & !symEn;
 wire    qOnTime = symEn;
-
-/*
-reg     iOnTime;
-always @(posedge clk) begin
-    if (reset) begin
-        iOnTime <= 1;
-    end
-    else if (iSampleEn) begin
-        if (iOnTime) begin
-            iOnTime <= 0;
-        end
-        else begin
-            iOnTime <= 1;
-        end
-    end
-end
-
-reg     qOnTime;
-always @(posedge clk) begin
-    if (reset) begin
-        qOnTime <= 0;
-    end
-    else if (qSampleEn) begin
-        casex (demodMode) 
-            `MODE_OQPSK: begin
-                qOnTime <= iOnTime;
-            end
-            default: begin
-                if (qOnTime) begin
-                    qOnTime <= 0;
-                end
-                else begin
-                    qOnTime <= 1;
-                end
-            end
-        endcase
-    end
-end
-*/
 
 wire out_a;
 codes_gen codes_gen_a(
@@ -158,6 +126,7 @@ codes_gen codes_gen_a(
     .qOutTaps(qOutTaps_a),
     .iOut(iOut_a),
     .qOut(qOut_a),
+    .goldOut(goldOut_a),
     .codeEpoch(codeEpoch_a)
     );
 
@@ -172,45 +141,61 @@ codes_gen codes_gen_b(
     .restartCount(codeRestartCount_b),
     .iOutTaps(iOutTaps_b),
     .iOut(iOut_b),
+    .goldOut(goldOut_b),
     .codeEpoch(codeEpoch_b)
     );
 
-/*
-// Delay the Q output of the first generator for SQPN modes
-reg qDelay;
-always @ (posedge clk) begin
-    if (qSampleEn & qOnTime) begin
-        qDelay <= qOut_a;
-    end
-end
-*/
-
-// Select the PN code used for the I channel
+// Select the PN code used for the I and Q channel
 reg             iCode, qCode;
 reg             iEpoch, qEpoch;
 reg     [3:0]   iCorrLength, qCorrLength;
 always @* begin
-    casex (demodMode)
-        `MODE_OQPSK: begin
+    casex (despreadMode)
+        `DS_MODE_NASA_FWD: begin
+            iCode <= goldOut_a;
+            iCorrLength <= corrLength_a;
+            iEpoch <= codeEpoch_a;
+            qCode <= iOut_b;
+            qCorrLength <= corrLength_b;
+            qEpoch <= codeEpoch_b;
+        end
+        `DS_MODE_NASA_DG1_MODE1: begin
             iCode <= iOut_a;
             iCorrLength <= corrLength_a;
             iEpoch <= codeEpoch_a;
-            //LWK qCode <= qDelay;
             qCode <= qOut_a;
             qCorrLength <= corrLength_a;
             qEpoch <= codeEpoch_a;
         end
+        `DS_MODE_NASA_DG1_MODE2: begin
+            iCode <= goldOut_a;
+            iCorrLength <= corrLength_a;
+            iEpoch <= codeEpoch_a;
+            qCode <= goldOut_b;
+            qCorrLength <= corrLength_a;
+            qEpoch <= codeEpoch_b;
+        end
+        `DS_MODE_NASA_DG1_MODE3: begin
+            iCode <= iOut_a;
+            iCorrLength <= corrLength_a;
+            iEpoch <= codeEpoch_a;
+            // The q channels doesn't matter in this mode as it is not spread.
+            // We set values to keep the synthesizer from generating latches.
+            qCode <= iOut_a;
+            qCorrLength <= corrLength_a;
+            qEpoch <= iOut_a;
+        end
         default: begin
             iCode <= iOut_a;
             iCorrLength <= corrLength_a;
-            qCode <= iOut_b;
-            qCorrLength <= corrLength_b;
+            iEpoch <= codeEpoch_a;
+            qCode <= qOut_a;
+            qCorrLength <= corrLength_a;
+            qEpoch <= codeEpoch_a;
         end
     endcase
 end
 
-`define NEW_MAPPING
-`ifdef NEW_MAPPING
 // Map the inputs to soft decision bits
 reg     [SoftBits-1:0]   iSoft, iDelay;
 reg     [SoftBits-1:0]   qSoft, qDelay0, qDelay1;
@@ -236,47 +221,6 @@ always @(posedge clk) begin
     end
 end
 
-`else
-
-// Map the inputs to soft decision bits
-reg     [2:0]   iSoft;
-reg     [2:0]   qSoft;
-
-always @(posedge clk) begin
-    casex (iIn[17:14]) 
-        4'b011x:    iSoft <= 3'b011;
-        4'b0101:    iSoft <= 3'b011;
-        4'b0100:    iSoft <= 3'b010;
-        4'b0011:    iSoft <= 3'b010;
-        4'b0010:    iSoft <= 3'b001;
-        4'b0001:    iSoft <= 3'b001;
-        4'b0000:    iSoft <= 3'b000;
-        4'b1111:    iSoft <= 3'b000;
-        4'b1110:    iSoft <= 3'b111;
-        4'b1101:    iSoft <= 3'b111;
-        4'b1100:    iSoft <= 3'b110;
-        4'b1011:    iSoft <= 3'b110;
-        4'b1010:    iSoft <= 3'b101;
-        4'b100x:    iSoft <= 3'b101;
-    endcase
-    casex (qIn[17:14]) 
-        4'b011x:    qSoft = 3'b011;
-        4'b0101:    qSoft = 3'b011;
-        4'b0100:    qSoft = 3'b010;
-        4'b0011:    qSoft = 3'b010;
-        4'b0010:    qSoft = 3'b001;
-        4'b0001:    qSoft = 3'b001;
-        4'b0000:    qSoft = 3'b000;
-        4'b1111:    qSoft = 3'b000;
-        4'b1110:    qSoft = 3'b111;
-        4'b1101:    qSoft = 3'b111;
-        4'b1100:    qSoft = 3'b110;
-        4'b1011:    qSoft = 3'b110;
-        4'b1010:    qSoft = 3'b101;
-        4'b100x:    qSoft = 3'b101;
-    endcase
-end
-`endif
 
 //******************************* Despread Correlators *************************
 
@@ -320,8 +264,6 @@ qCorrOnTime(
     .syncCount(qSyncCount)
     );
 
-`define ADD_SWAP
-`ifdef ADD_SWAP
 // This correlator is used to detect an I/Q swap.
 wire    [17:0]  iSwapCorr;
 wire    [5:0]   iSwapSyncCount;
@@ -355,7 +297,6 @@ qSwapOnTime(
     .syncCount(qSwapSyncCount)
     );
 
-`endif
 
 
 
@@ -368,17 +309,25 @@ wire    [15:0]  negLockCount = (16'hffff - lockCount);
 
 reg     [15:0]  syncCount;
 wire    [6:0]   syncSum = {iSyncCount[5],iSyncCount} + {qSyncCount[5],qSyncCount};
-wire    [15:0]  syncUpdate = syncCount + {{9{syncThreshold[6]}},syncThreshold}
-                                       - {{9{syncSum[6]}},syncSum}; 
-wire            inSyncIndication = (!syncCount[15] && (syncCount > lockCount));
-wire            outOfSyncIndication = (syncCount[15] && (syncCount <= (16'hffff - lockCount)));
+wire    [15:0]  syncUpdate = {{9{syncThreshold[6]}},syncThreshold}
+                           - {{9{1'b0}},syncSum}; 
+wire            inSyncIndication = (!syncCount[15] 
+                                && (syncCount >= lockCount)
+                                && (!syncUpdate[15]));
+wire            outOfSyncIndication = (syncCount[15] 
+                                   && (syncCount <= negLockCount) 
+                                   && (syncUpdate[15]));
 
 reg     [15:0]  swapSyncCount;
 wire    [6:0]   swapSyncSum = {iSwapSyncCount[5],iSwapSyncCount} + {qSwapSyncCount[5],qSwapSyncCount};
-wire    [15:0]  swapSyncUpdate = swapSyncCount + {{9{syncThreshold[6]}},syncThreshold}
-                                               - {{9{swapSyncSum[6]}},swapSyncSum}; 
-wire            inSwapSyncIndication = (!swapSyncCount[15] && (swapSyncCount > lockCount));
-wire            outOfSwapSyncIndication = (swapSyncCount[15] && (swapSyncCount <= (16'hffff - lockCount)));
+wire    [15:0]  swapSyncUpdate = {{9{syncThreshold[6]}},syncThreshold}
+                               - {{9{1'b0}},swapSyncSum}; 
+wire            inSwapSyncIndication = (!swapSyncCount[15] 
+                                    && (swapSyncCount >= lockCount)
+                                    && (!swapSyncUpdate[15]));
+wire            outOfSwapSyncIndication = (swapSyncCount[15] 
+                                       && (swapSyncCount <= negLockCount) 
+                                       && (swapSyncUpdate[15]));
 
 
 `ifdef SIMULATE
@@ -398,7 +347,6 @@ real absCorrQReal;
 always @* absCorrQReal = $itor($signed(absCorrQ))/(2**17);
 `endif
 
-`ifdef ADD_SWAP
 wire    [17:0]  absCorrSwapI = iSwapCorr[17] ? -iSwapCorr : iSwapCorr;
 wire    [17:0]  absCorrSwapQ = qSwapCorr[17] ? -qSwapCorr : qSwapCorr;
 `ifdef SIMULATE
@@ -406,7 +354,6 @@ real absCorrSwapIReal;
 always @* absCorrSwapIReal = $itor($signed(absCorrSwapI))/(2**17);
 real absCorrSwapQReal;
 always @* absCorrSwapQReal = $itor($signed(absCorrSwapQ))/(2**17);
-`endif
 `endif
 
 reg     [1:0]           acqStateI;
@@ -437,6 +384,111 @@ always @(posedge clk) begin
             end
         end
         else if (qOnTime) begin
+            `define NEW_SM
+            `ifdef NEW_SM
+            case (acqStateI)
+                `DS_ACQ_SLIP: begin
+                    dsSlipI <= 0;
+                    dsSlipQ <= 0;
+                    acqStateI <= `DS_ACQ_TEST;
+                end
+                `DS_ACQ_TEST: begin
+                    if (despreadLock) begin
+                        if (swapIQ) begin
+                            if (outOfSwapSyncIndication) begin
+                                syncCount <= 0;
+                                swapSyncCount <= 0;
+                                dsSlipI <= 1;
+                                dsSlipQ <= 1;
+                                despreadLock <= 0;
+                                acqStateI <= `DS_ACQ_SLIP;
+                            end
+                            else if (inSwapSyncIndication) begin
+                                swapSyncCount <= lockCount;
+                            end
+                            else begin
+                                swapSyncCount <= swapSyncCount + swapSyncUpdate;
+                            end
+                            if (outOfSyncIndication) begin
+                                syncCount <= negLockCount;
+                            end
+                            else if (inSyncIndication) begin
+                                syncCount <= lockCount;
+                            end
+                            else begin
+                                syncCount <= syncCount + syncUpdate;
+                            end
+                        end
+                        else begin
+                            if (outOfSyncIndication) begin
+                                syncCount <= 0;
+                                swapSyncCount <= 0;
+                                dsSlipI <= 1;
+                                dsSlipQ <= 1;
+                                despreadLock <= 0;
+                                acqStateI <= `DS_ACQ_SLIP;
+                            end
+                            else if (inSyncIndication) begin
+                                syncCount <= lockCount;
+                            end
+                            else begin
+                                syncCount <= syncCount + syncUpdate;
+                            end
+                            if (outOfSwapSyncIndication) begin
+                                swapSyncCount <= negLockCount;
+                            end
+                            else if (inSwapSyncIndication) begin
+                                swapSyncCount <= lockCount;
+                            end
+                            else begin
+                                swapSyncCount <= swapSyncCount + swapSyncUpdate;
+                            end
+                        end
+                    end
+                    else if (inSyncIndication) begin
+                        syncCount <= lockCount;
+                        swapIQ <= 0;
+                        despreadLock <= 1;
+                    end
+                    else if (inSwapSyncIndication) begin
+                        swapSyncCount <= lockCount;
+                        swapIQ <= 1;
+                        despreadLock <= 1;
+                    end
+                    else begin
+                        if (outOfSyncIndication && outOfSwapSyncIndication) begin
+                            syncCount <= 0;
+                            swapSyncCount <= 0;
+                            dsSlipI <= 1;
+                            dsSlipQ <= 1;
+                            acqStateI <= `DS_ACQ_SLIP;
+                        end
+                        else begin
+                            if (outOfSyncIndication) begin
+                                syncCount <= negLockCount;
+                            end
+                            else begin
+                                syncCount <= syncCount + syncUpdate;
+                            end
+                            if (outOfSwapSyncIndication) begin
+                                swapSyncCount <= negLockCount;
+                            end
+                            else begin
+                                swapSyncCount <= swapSyncCount + swapSyncUpdate;
+                            end
+                        end
+                    end
+                end
+                default: begin
+                    syncCount <= 0;
+                    swapSyncCount <= 0;
+                    dsSlipI <= 1;
+                    dsSlipQ <= 1;
+                    despreadLock <= 0;
+                    acqStateI <= `DS_ACQ_SLIP;
+                end
+            endcase
+            `else
             case (acqStateI)
                 `DS_ACQ_SLIP: begin
                     dsSlipI <= 0;
@@ -469,8 +521,12 @@ always @(posedge clk) begin
                         acqStateI <= `DS_ACQ_SLIP;
                     end
                     else begin
-                        syncCount <= syncUpdate;
-                        swapSyncCount <= swapSyncUpdate;
+                        if (!outOfSyncIndication) begin
+                            syncCount <= syncCount + syncUpdate;
+                        end
+                        if (!outOfSwapSyncIndication) begin
+                            swapSyncCount <= swapSyncCount + swapSyncUpdate;
+                        end
                     end
                 end
                 default: begin
@@ -482,6 +538,7 @@ always @(posedge clk) begin
                     acqStateI <= `DS_ACQ_SLIP;
                 end
             endcase
+            `endif
         end
     end
 end

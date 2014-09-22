@@ -81,7 +81,7 @@ output          sdiOut;
 output          vt_txd;
 input           vt_rxd;
 
-parameter VER_NUMBER = 16'h0178;
+parameter VER_NUMBER = 16'h0179;
 
 
 `ifndef USE_VTERM

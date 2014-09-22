@@ -157,7 +157,7 @@ end
    real yn_real;
    real out_real;
    always @(yn or out) begin
-      yn_real <= $itor($signed(yn))/(2**(42-9));
+      yn_real <= $itor($signed(yn))/(2.0**(42-9));
       out_real <= $itor($signed(out))/(2**17);
    end
 `endif

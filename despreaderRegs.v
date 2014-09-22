@@ -23,6 +23,7 @@ module despreaderRegs (
     qOutTaps_a,
     corrLength_a,
     epoch_a,
+    goldEnableA,
     init_b,
     polyTaps_b,
     codeRestartCount_b,
@@ -30,6 +31,7 @@ module despreaderRegs (
     qOutTaps_b,
     corrLength_b,
     epoch_b,
+    goldEnableB,
     lockCount,
     acqSyncThreshold,
     trkSyncThreshold,
@@ -73,6 +75,9 @@ reg     [3:0]   corrLength_a;
 output  [17:0]  epoch_a;
 reg     [17:0]  epoch_a;
 
+output          goldEnableA;
+reg             goldEnableA;
+
 output  [17:0]  init_b;
 reg     [17:0]  init_b;
 
@@ -93,6 +98,9 @@ reg     [3:0]   corrLength_b;
 
 output  [17:0]  epoch_b;
 reg     [17:0]  epoch_b;
+
+output          goldEnableB;
+reg             goldEnableB;
 
 output  [15:0]  lockCount;
 reg     [15:0]  lockCount;
@@ -169,12 +177,14 @@ always @(negedge wr1) begin
             `DESPREAD_IOUTTAPS_A:       iOutTaps_a[15:8] <= din[15:8];
             `DESPREAD_QOUTTAPS_A:       qOutTaps_a[15:8] <= din[15:8];
             `DESPREAD_EPOCH_A:          epoch_a[15:8] <= din[15:8];
+            `DESPREAD_CONTROL_A:        goldEnableA <= din[15];
             `DESPREAD_INIT_B:           init_b[15:8] <= din[15:8];
             `DESPREAD_POLYTAPS_B:       polyTaps_b[15:8] <= din[15:8];
             `DESPREAD_RESTART_COUNT_B:  codeRestartCount_b[15:8] <= din[15:8];
             `DESPREAD_IOUTTAPS_B:       iOutTaps_b[15:8] <= din[15:8];
             `DESPREAD_QOUTTAPS_B:       qOutTaps_b[15:8] <= din[15:8];
             `DESPREAD_EPOCH_B:          epoch_b[15:8] <= din[15:8];
+            `DESPREAD_CONTROL_B:        goldEnableB <= din[15];
             `DESPREAD_SYNC_CONTROL:     trkSyncThreshold <= din[14:8];
             default: ;
             endcase
@@ -220,14 +230,14 @@ always @ (*) begin
         `DESPREAD_RESTART_COUNT_A:  dout = {14'b0,codeRestartCount_a};
         `DESPREAD_IOUTTAPS_A:       dout = {14'b0,iOutTaps_a};
         `DESPREAD_QOUTTAPS_A:       dout = {14'b0,qOutTaps_a};
-        `DESPREAD_CONTROL_A:        dout = {28'b0,corrLength_a};
+        `DESPREAD_CONTROL_A:        dout = {16'b0,goldEnableA,11'b0,corrLength_a};
         `DESPREAD_EPOCH_A:          dout = {14'b0,epoch_a};
         `DESPREAD_INIT_B:           dout = {14'b0,init_b};
         `DESPREAD_POLYTAPS_B:       dout = {14'b0,polyTaps_b};
         `DESPREAD_RESTART_COUNT_B:  dout = {14'b0,codeRestartCount_b};
         `DESPREAD_IOUTTAPS_B:       dout = {14'b0,iOutTaps_b};
         `DESPREAD_QOUTTAPS_B:       dout = {14'b0,qOutTaps_b};
-        `DESPREAD_CONTROL_B:        dout = {28'b0,corrLength_b};
+        `DESPREAD_CONTROL_B:        dout = {16'b0,goldEnableB,11'b0,corrLength_b};
         `DESPREAD_EPOCH_B:          dout = {14'b0,epoch_b};
         `DESPREAD_CONTROL:          dout = {manualSlip,15'b0,8'b0,6'b0,despreadMode};
         `DESPREAD_SYNC_CONTROL:     dout = {lockCount,1'b0,trkSyncThreshold,1'b0,acqSyncThreshold};

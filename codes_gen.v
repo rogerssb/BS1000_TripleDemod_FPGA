@@ -18,8 +18,17 @@ module codes_gen (
     input [17:0] qOutTaps,
     output iOut,
     output qOut,
+    output goldOut,
     output codeEpoch
     );
+/*
+This code generator works in two basic modes: single LFSR and Gold Code. In single
+LFSR mode, the one LFSR will generate two outputs with phases determined by the two
+output tap values, iOutTaps and qOutTaps. In Gold Code mode, one polynomial is 
+determined by polyTaps and the second by qOutTaps. The initial value of the second
+LFSR is set by iOutTaps.
+*/
+
 
 // Figure out a mask from the taps
 reg     [17:0]  mask;
@@ -43,28 +52,32 @@ always @* begin
         18'b00_0000_0000_0000_01xx: mask = 18'h00007;
         18'b00_0000_0000_0000_001x: mask = 18'h00003;
         18'b00_0000_0000_0000_0001: mask = 18'h00001;
+        default:                    mask = 18'h0;
     endcase
 end
 
-// Code Generator
-reg     [17:0]  code;
+// Code Generator(s)
+reg     [17:0]  code, secCode;
 reg     [17:0]  restartCounter;
 wire            restart = (restartCounter == 0);
-wire            sum;
+wire            sum, secSum;
 reg             codeEpoch_reg;
 assign          codeEpoch = codeEpoch_reg;
 always @ (posedge clk) begin
     if (reset) begin
         code <= init;
+        secCode <= iOutTaps;
         restartCounter <= restartCount;
         end
     else if (clkEn) begin
         if (restart) begin
             restartCounter <= restartCount;
             code <= init;
+            secCode <= iOutTaps;
             end
         else begin
             code <= {code[16:0],sum};
+            secCode <= {secCode[16:0],secSum};
             restartCounter <= restartCounter - 1;
             end
 
@@ -168,6 +181,39 @@ wire [1:0] qOutSum3 =
     qOutSum2[1] ^ qOutSum2[0]
     };
 
+
+
+// Gold Code Sum
+wire [8:0] secSum1 =
+    {
+    (secCode[17] & qOutTaps[17]) ^ (secCode[16] & qOutTaps[16]),
+    (secCode[15] & qOutTaps[15]) ^ (secCode[14] & qOutTaps[14]),
+    (secCode[13] & qOutTaps[13]) ^ (secCode[12] & qOutTaps[12]),
+    (secCode[11] & qOutTaps[11]) ^ (secCode[10] & qOutTaps[10]),
+    (secCode[9] & qOutTaps[9]) ^ (secCode[8] & qOutTaps[8]),
+    (secCode[7] & qOutTaps[7]) ^ (secCode[6] & qOutTaps[6]),
+    (secCode[5] & qOutTaps[5]) ^ (secCode[4] & qOutTaps[4]),
+    (secCode[3] & qOutTaps[3]) ^ (secCode[2] & qOutTaps[2]),
+    (secCode[1] & qOutTaps[1]) ^ (secCode[0] & qOutTaps[0])
+    };
+
+wire [3:0] secSum2 =
+    {
+    secSum1[8] ^ secSum1[7] ^ secSum1[6],
+    secSum1[5] ^ secSum1[4],
+    secSum1[3] ^ secSum1[2],
+    secSum1[1] ^ secSum1[0]
+    };
+
+wire [1:0] secSum3 =
+    {
+    secSum2[3] ^ secSum2[2],
+    secSum2[1] ^ secSum2[0]
+    };
+
+assign secSum = secSum3[1] ^ secSum3[0];
+
+
 reg qOut_reg;
 always @(posedge clk) begin
     if (clkEn) begin
@@ -175,6 +221,16 @@ always @(posedge clk) begin
     end
 end
 assign qOut = qOut_reg;
+
+
+reg goldOut_reg;
+always @(posedge clk) begin
+    if (clkEn) begin
+        goldOut_reg <= code[17] ^ secCode[17]; 
+    end
+end
+assign goldOut = goldOut_reg;
+
 
 
 

@@ -75,6 +75,7 @@
 `define DAC_AVGFREQ         4'b1010
 `define DAC_FREQERROR       4'b1011
 `define DAC_DS_CODE         4'b1100
+`define DAC_DS_LOCK         4'b1101
 `define DAC_TRELLIS_I       4'b1100
 `define DAC_TRELLIS_Q       4'b1101
 `define DAC_TRELLIS_PHERR   4'b1110
@@ -213,7 +214,8 @@
 `define DESPREAD_CONTROL_B          12'bxxxx_xx11_01xx
 `define DESPREAD_EPOCH_B            12'bxxxx_xx11_10xx
 `define DESPREAD_CONTROL            12'bxxxx_xx11_11xx
-`define MODE_NASA_FWD                   2'b00
-`define MODE_NASA_DG1_MODE1             2'b01
-`define MODE_NASA_DG1_MODE2             2'b10
+`define DS_MODE_NASA_FWD                   2'b00
+`define DS_MODE_NASA_DG1_MODE1             2'b01
+`define DS_MODE_NASA_DG1_MODE2             2'b10
+`define DS_MODE_NASA_DG1_MODE3             2'b11
 `endif

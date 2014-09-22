@@ -19,7 +19,7 @@
      <setting value="231" name="C2Width" />
     </settings>
     <views>
-     <view value="141177.305 ns,252844.303 ns,1573.883 ns,34149.504 ns,36471.298 ns" name="Last" />
+     <view value="0.000 ns,60509.999 ns,937.479 ns,59287.690 ns,32082.985 ns" name="Last" />
     </views>
     <groups>
      <group open="no" name="Rx" show="yes" >
@@ -199,7 +199,7 @@
        <signal interpolate="Step" radix="Real" name="outReal" scope="test.demod.resampler.resamplerI" />
       </signals>
      </group>
-     <group open="no" name="Despreader" show="yes" >
+     <group open="yes" name="Despreader" show="yes" >
       <signals>
        <signal radix="Decimal" name="CorrBits" scope="test.demod.despreader.iCorrOnTime" />
        <signal name="reset" scope="test.demod.despreader.iCorrOnTime" />
@@ -235,12 +235,10 @@
        <signal name="codeSR[0]" scope="test.demod.despreader.qSwapOnTime" />
        <signal name="corrSimReset" scope="test.demod.despreader" />
        <signal name="acqStateI[1:0]" scope="test.demod.despreader" />
-       <signal name="syncCount[15:0]" scope="test.demod.despreader" />
-       <signal name="swapSyncCount[15:0]" scope="test.demod.despreader" />
+       <signal interpolate="Step" radix="Real" name="syncCountReal" scope="test.demod.despreader" />
+       <signal interpolate="Step" radix="Real" name="swapSyncCountReal" scope="test.demod.despreader" />
        <signal name="despreadLock" scope="test.demod.despreader" />
        <signal name="swapIQ" scope="test.demod.despreader" />
-       <signal name="dwellCount[7:0]" scope="test.demod.despreader" />
-       <signal name="dwellCounter[7:0]" scope="test.demod.despreader" />
        <signal name="dsSlipI" scope="test.demod.despreader" />
        <signal name="dsSlipQ" scope="test.demod.despreader" />
        <signal name="syncCount[5:0]" scope="test.demod.despreader.iCorrOnTime" />
@@ -295,7 +293,7 @@
        <signal name="codeEpoch" scope="test.demod.despreader.codes_gen_a" />
       </signals>
      </group>
-     <group open="yes" name="New Group3" show="yes" >
+     <group open="no" name="New Group3" show="yes" >
       <signals>
        <signal name="bbClkEn" scope="test.scDemod.ddc" />
        <signal name="iBB[17:0]" scope="test.scDemod.ddc" />
@@ -336,7 +334,7 @@
    </includedirs>
    <explorer>
     <settings>
-     <setting value="test.scDemod.resampler.resamplerI.outReal" name="Scope" />
+     <setting value="test.pnGen" name="Scope" />
     </settings>
    </explorer>
    <sourcefiles>

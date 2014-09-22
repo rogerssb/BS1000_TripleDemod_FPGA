@@ -5,6 +5,7 @@
 //`define ADD_NOISE
 //`define BER_TEST
 //`define MATLAB_VECTORS
+//`define ADD_SC_BITSYNC
 
 `ifdef BER_TEST
 !control .savsim=1
@@ -61,7 +62,7 @@ wire [31:0] carrierLimit = carrierLimitInt;
 wire [31:0] sweepRate = 32'h00000000;
 
 real chipRateSps = SAMPLE_FREQ/modSampleDecimation/2.0;
-real chipRateSamples = 1/chipRateSps/`SAMPLE_PERIOD/2.0;
+real chipRateSamples = 1.0/chipRateSps/`SAMPLE_PERIOD/2.0;
 integer chipRateSamplesInt = chipRateSamples;
 wire [15:0]chipRateDivider = chipRateSamplesInt - 1;
 
@@ -136,9 +137,10 @@ codes_gen pnGen(
     .clkEn(posEdgeChipClk),
     .reset(reset),
     //.init(18'h0008f),
-    .init(18'h00063),
+    //.init(18'h00063),
+    .init(18'h000ff),
     .polyTaps(18'h008e),
-    .restartCount(18'h3ffff),
+    .restartCount(18'h000fe),
     .iOutTaps(18'h00080),  
     .qOutTaps(18'h00090),
     .iOut(iModChip),
@@ -507,6 +509,7 @@ decoder decoder
   .clk_inv()
   );
 
+`ifdef ADD_SC_BITSYNC
 reg scEn;
 initial scEn = 1;
 demod scDemod(
@@ -522,6 +525,7 @@ demod scDemod(
     .iBB(iSymData),
     .qBB(qSymData)
     );
+`endif
 
 //******************************************************************************
 //                        SDI Output Interface
@@ -715,7 +719,9 @@ initial begin
     `endif
     demod.ddc.hbReset = 1;
     demod.ddc.cicReset = 1;
+    `ifdef ADD_SC_BITSYNC
     scDemod.ddc.cicReset = 1;
+    `endif
     txInterpReset = 0;
     interpReset = 0;
     reset = 0;
@@ -741,7 +747,9 @@ initial begin
     qModInterpCS = 0;
 
     // Init the downcoverter register set
+    `ifdef ADD_SC_BITSYNC
     scEn = 1;
+    `endif
     write32(createAddress(`DEMODSPACE,`DEMOD_CONTROL),{14'bx,`MODE_SINGLE_RAIL,1'b0,10'bx,`MODE_QPSK});
     write32(createAddress(`DDCSPACE,`DDC_CONTROL), {28'h0,4'b1110});
     write32(createAddress(`DDCSPACE,`DDC_CENTER_FREQ), 0);
@@ -762,7 +770,9 @@ initial begin
     write32(createAddress(`CHAGCSPACE,`ALF_GAINS),32'h00180018);        // AGC Loop Gain
     write32(createAddress(`CHAGCSPACE,`ALF_ULIMIT),32'h4fffffff);       // AGC Upper limit
     write32(createAddress(`CHAGCSPACE,`ALF_LLIMIT),32'h00000000);       // AGC Lower limit
+    `ifdef ADD_SC_BITSYNC
     scEn = 0;
+    `endif
 
     // Init the mode
     `ifdef BPSK
@@ -843,8 +853,8 @@ initial begin
     write32(createAddress(`DESPREADSPACE, `DESPREAD_QOUTTAPS_A),32'h00000090);
     write32(createAddress(`DESPREADSPACE, `DESPREAD_EPOCH_A),32'h000000ff);
     write32(createAddress(`DESPREADSPACE, `DESPREAD_CONTROL_A),32'h00000001);
-    write32(createAddress(`DESPREADSPACE, `DESPREAD_SYNC_CONTROL),{16'h0007,1'bx,7'h5,1'bx,7'h3});
-    write32(createAddress(`DESPREADSPACE, `DESPREAD_CONTROL),{16'h0,8'h0,6'h0,`MODE_NASA_DG1_MODE1});
+    write32(createAddress(`DESPREADSPACE, `DESPREAD_SYNC_CONTROL),{16'h000f,1'bx,7'h6,1'bx,7'h3});
+    write32(createAddress(`DESPREADSPACE, `DESPREAD_CONTROL),{16'h0,8'h0,6'h0,`DS_MODE_NASA_DG1_MODE1});
 
 
 
@@ -853,7 +863,9 @@ initial begin
     reset = 0;
     demod.ddc.hbReset = 0;
     demod.ddc.cicReset = 0;
+    `ifdef ADD_SC_BITSYNC
     scDemod.ddc.cicReset = 0;
+    `endif
 
     // Force the carrier frequency to load. We have to do this because
     // the load is normally not done in FSK mode until you get symbol
@@ -937,14 +949,18 @@ initial begin
     write32(createAddress(`SDISPACE,`SDI_CONTROL),32'h00000082);
 
     #(1*100*chipRateSamplesInt*C) ;
+    `ifdef ADD_SC_BITSYNC
     scDemod.ddc.hbReset = 1;
     #(2*C) ;
     scDemod.ddc.hbReset = 0;
+    `endif
 
     #(1*100*chipRateSamplesInt*C) ;
+    `ifdef ADD_SC_BITSYNC
     scDemod.ddc.cicReset = 1;
     #(2*C) ;
     scDemod.ddc.cicReset = 0;
+    `endif
 
     // Wait for some data to pass thru
     #(1*100*chipRateSamplesInt*C) ;
@@ -953,9 +969,12 @@ initial begin
     `endif
     $stop;
 
+    `ifdef ADD_SC_BITSYNC
     scEn = 1;
     write32(createAddress(`BITSYNCSPACE,`LF_CONTROL),32'h00000000);  
     scEn = 0;
+    `endif
+
     //write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h0018000c);    
     //write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h001e0018);    
 
