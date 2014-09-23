@@ -68,7 +68,7 @@ always @(addr) begin
 
 reg             despreadLock;
 wire    [17:0]  init_a, codeRestartCount_a, polyTaps_a, iOutTaps_a, qOutTaps_a, epoch_a;
-wire    [17:0]  init_b, codeRestartCount_b, polyTaps_b, iOutTaps_b, epoch_b;
+wire    [17:0]  init_b, codeRestartCount_b, polyTaps_b, iOutTaps_b, qOutTaps_b, epoch_b;
 wire    [3:0]   corrLength_a,corrLength_b;
 wire    [1:0]   despreadMode;
 wire    [6:0]   acqSyncThreshold,trkSyncThreshold;
@@ -96,6 +96,7 @@ despreaderRegs regs(
     .polyTaps_b(polyTaps_b),
     .codeRestartCount_b(codeRestartCount_b),
     .iOutTaps_b(iOutTaps_b),
+    .qOutTaps_b(qOutTaps_b),
     .corrLength_b(corrLength_b),
     .goldEnableB(goldEnableB),
     .slip_b(slip_b),
@@ -103,8 +104,10 @@ despreaderRegs regs(
     .despreadMode(despreadMode),
     .acqSyncThreshold(acqSyncThreshold),
     .trkSyncThreshold(trkSyncThreshold),
-    .lockCount(lockCount)
+    .lockCount(lockCount),
+    .dsReset(dsReset)
     );
+
 
 
 wire    iSampleEn = clkEn;
@@ -113,11 +116,20 @@ wire    iOnTime = symEn;
 wire    qSampleEn = clkEn;
 wire    qOnTime = symEn;
 
+reg     dsResetI0,dsResetI1,dsResetEn;
+always @(posedge clk) begin
+    if (iSampleEn) begin
+        dsResetI0 <= dsReset;
+        dsResetI1 <= dsResetI0;
+        dsResetEn <= dsResetI0 & !dsResetI1;
+    end
+end
+
 wire out_a;
 codes_gen codes_gen_a(
     .clk(clk),
     .clkEn(iSampleEn & iOnTime & !dsSlipI),
-    .reset(reset),
+    .reset(reset | dsResetEn),
     .init(init_a),
     .epoch(epoch_a),
     .polyTaps(polyTaps_a),
@@ -134,12 +146,13 @@ wire out_b;
 codes_gen codes_gen_b(
     .clk(clk),
     .clkEn(qSampleEn & qOnTime & !dsSlipQ),
-    .reset(reset),
+    .reset(reset | dsResetEn),
     .init(init_b),
     .epoch(epoch_a),
     .polyTaps(polyTaps_b),
     .restartCount(codeRestartCount_b),
     .iOutTaps(iOutTaps_b),
+    .qOutTaps(qOutTaps_b),
     .iOut(iOut_b),
     .goldOut(goldOut_b),
     .codeEpoch(codeEpoch_b)
@@ -179,7 +192,7 @@ always @* begin
             iCode <= iOut_a;
             iCorrLength <= corrLength_a;
             iEpoch <= codeEpoch_a;
-            // The q channels doesn't matter in this mode as it is not spread.
+            // The q channel doesn't matter in this mode as it is not spread.
             // We set values to keep the synthesizer from generating latches.
             qCode <= iOut_a;
             qCorrLength <= corrLength_a;

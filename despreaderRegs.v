@@ -37,7 +37,8 @@ module despreaderRegs (
     trkSyncThreshold,
     manualSlip,
     slip_a,
-    slip_b
+    slip_b,
+    dsReset
     );
 
 input           cs;
@@ -120,6 +121,9 @@ reg             slip_a;
 output          slip_b;
 reg             slip_b;
 
+output          dsReset;
+reg             dsReset;
+
 always @(negedge wr3 or posedge slipped_a) begin
     if (slipped_a) begin
         slip_a <= 0;
@@ -186,6 +190,7 @@ always @(negedge wr1) begin
             `DESPREAD_EPOCH_B:          epoch_b[15:8] <= din[15:8];
             `DESPREAD_CONTROL_B:        goldEnableB <= din[15];
             `DESPREAD_SYNC_CONTROL:     trkSyncThreshold <= din[14:8];
+            `DESPREAD_CONTROL:          dsReset <= din[15];
             default: ;
             endcase
         end
@@ -239,7 +244,7 @@ always @ (*) begin
         `DESPREAD_QOUTTAPS_B:       dout = {14'b0,qOutTaps_b};
         `DESPREAD_CONTROL_B:        dout = {16'b0,goldEnableB,11'b0,corrLength_b};
         `DESPREAD_EPOCH_B:          dout = {14'b0,epoch_b};
-        `DESPREAD_CONTROL:          dout = {manualSlip,15'b0,8'b0,6'b0,despreadMode};
+        `DESPREAD_CONTROL:          dout = {manualSlip,15'b0,dsReset,7'b0,6'b0,despreadMode};
         `DESPREAD_SYNC_CONTROL:     dout = {lockCount,1'b0,trkSyncThreshold,1'b0,acqSyncThreshold};
         default:                    dout = 32'hx;
         endcase

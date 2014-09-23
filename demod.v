@@ -474,7 +474,7 @@ wire    [15:0]  dsSyncCount,dsSwapSyncCount;
 dualDespreader despreader(
     .clk(clk), 
     .clkEn(resampSync), .auClkEn(auResampSync),
-    .symEn(iSymEn),     .auSymEn(),
+    .symEn(iSymEn),     .auSymEn(qSymEn),
     .reset(reset),
     .wr0(wr0) , .wr1(wr1), .wr2(wr2), .wr3(wr3),
     .addr(addr),
@@ -715,11 +715,15 @@ always @(posedge clk) begin
         `ifdef ADD_DESPREADER
         `DAC_DS_CODE: begin
             dac0Data <= {iCode,17'h10000};
-            dac0Sync <= resampSync;
+            dac0Sync <= iSymEn;
             end
         `DAC_DS_LOCK: begin
             dac0Data <= {dsSyncCount[7:0],10'b0};
             dac0Sync <= resampSync;
+            end
+        `DAC_DS_EPOCH: begin
+            dac0Data <= {iEpoch,17'h10000};
+            dac0Sync <= iSymEn;
             end
         `endif
         default: begin
@@ -787,11 +791,15 @@ always @(posedge clk) begin
         `ifdef ADD_DESPREADER
         `DAC_DS_CODE: begin
             dac1Data <= {qCode,17'h10000};
-            dac1Sync <= 1'b1;
+            dac1Sync <= qSymEn;
             end
         `DAC_DS_LOCK: begin
             dac1Data <= {dsSwapSyncCount[7:0],10'b0};
             dac1Sync <= resampSync;
+            end
+        `DAC_DS_EPOCH: begin
+            dac1Data <= {qEpoch,17'h10000};
+            dac1Sync <= qSymEn;
             end
         `endif
         default: begin

@@ -76,6 +76,7 @@
 `define DAC_FREQERROR       4'b1011
 `define DAC_DS_CODE         4'b1100
 `define DAC_DS_LOCK         4'b1101
+`define DAC_DS_EPOCH        4'b1110
 `define DAC_TRELLIS_I       4'b1100
 `define DAC_TRELLIS_Q       4'b1101
 `define DAC_TRELLIS_PHERR   4'b1110
