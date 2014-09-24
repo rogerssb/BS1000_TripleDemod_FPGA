@@ -19,7 +19,7 @@
      <setting value="231" name="C2Width" />
     </settings>
     <views>
-     <view value="0.000 ns,60509.999 ns,936.160 ns,59287.690 ns,32082.985 ns" name="Last" />
+     <view value="0.000 ns,60509.999 ns,935.501 ns,59287.690 ns,32082.985 ns" name="Last" />
     </views>
     <groups>
      <group open="no" name="Rx" show="yes" >

@@ -7,8 +7,8 @@
 
 module dualDespreader (
     clk,
-    clkEn, auClkEn,
-    symEn, auSymEn,
+    clkEn, qClkEn,
+    symEn, qSymEn,
     reset,
     wr0, wr1, wr2, wr3,
     addr,
@@ -19,13 +19,7 @@ module dualDespreader (
     iCode, qCode,
     iEpoch, qEpoch,
     iDespread,
-    iSymEn,
-    iSym2xEn,
     qDespread,
-    qSymEn,
-    qSym2xEn,
-    timingError,
-    timingErrorEn,
     despreadLock,
     syncCount,
     swapSyncCount
@@ -34,8 +28,8 @@ module dualDespreader (
 parameter SoftBits = 6;
 
 input           clk;
-input           clkEn, auClkEn;
-input           symEn, auSymEn;
+input           clkEn, qClkEn;
+input           symEn, qSymEn;
 input           reset;
 input           wr0, wr1, wr2, wr3;
 input   [11:0]  addr;
@@ -46,13 +40,7 @@ output  [31:0]  dout;
 output          iCode, qCode;
 output          iEpoch,qEpoch;
 output  [17:0]  iDespread;
-output          iSymEn;
-output          iSym2xEn;
 output  [17:0]  qDespread;
-output          qSymEn;
-output          qSym2xEn;
-output  [17:0]  timingError;
-output          timingErrorEn;
 output          despreadLock;
 output  [15:0]  syncCount;
 output  [15:0]  swapSyncCount;
@@ -113,8 +101,8 @@ despreaderRegs regs(
 wire    iSampleEn = clkEn;
 wire    iOnTime = symEn;
 
-wire    qSampleEn = clkEn;
-wire    qOnTime = symEn;
+wire    qSampleEn = qClkEn;
+wire    qOnTime = qSymEn;
 
 reg     dsResetI0,dsResetI1,dsResetEn;
 always @(posedge clk) begin
@@ -245,6 +233,43 @@ wire corrReset = reset | corrSimReset;
 wire corrReset = reset;
 `endif
 
+// Select the correlator inputs
+reg     [SoftBits-1:0]  iOntimeIn,iSwapIn;
+reg     [SoftBits-1:0]  qOntimeIn,qSwapIn;
+always @* begin
+    casex (despreadMode) 
+        `DS_MODE_NASA_FWD: begin
+            iOntimeIn = iSoft;
+            iSwapIn = iSoft;
+        end
+        `DS_MODE_NASA_DG1_MODE1,
+        `DS_MODE_NASA_DG1_MODE2: begin
+            iOntimeIn = iDelay;
+            iSwapIn = iDelay;
+        end
+        default: begin
+            iOntimeIn = iSoft;
+            iSwapIn = iSoft;
+        end
+    endcase
+    casex (despreadMode) 
+        `DS_MODE_NASA_FWD: begin
+            qOntimeIn = qSoft;
+            qSwapIn = qSoft;
+        end
+        `DS_MODE_NASA_DG1_MODE1,
+        `DS_MODE_NASA_DG1_MODE2: begin
+            qOntimeIn = qSoft;
+            qSwapIn = qDelay1;
+        end
+        default: begin
+            qOntimeIn = qSoft;
+            qSwapIn = qSoft;
+        end
+    endcase
+end
+
+
 wire    [17:0]  iCorr;
 wire    [5:0]   iSyncCount;
 despreadCorrelator #(.CorrLength(64), .InputBits(SoftBits), .CorrBits(SoftBits+32))
@@ -255,7 +280,7 @@ iCorrOnTime(
     .onTime(iOnTime),
     .slip(dsSlipI),
     .codeBit(iCode),
-    .rx(iDelay),
+    .rx(iOntimeIn),
     .corrLength(iCorrLength),
     .despread(iCorr),
     .syncCount(iSyncCount)
@@ -271,7 +296,7 @@ qCorrOnTime(
     .onTime(qOnTime),
     .slip(dsSlipQ),
     .codeBit(qCode),
-    .rx(qSoft),
+    .rx(qOntimeIn),
     .corrLength(qCorrLength),
     .despread(qCorr),
     .syncCount(qSyncCount)
@@ -288,8 +313,8 @@ iSwapOnTime(
     .onTime(iOnTime),
     .slip(dsSlipI),
     .codeBit(qCode),
-    .rx(iDelay),
-    .corrLength(iCorrLength),
+    .rx(iSwapIn),
+    .corrLength(qCorrLength),
     .despread(iSwapCorr),
     .syncCount(iSwapSyncCount)
     );
@@ -304,8 +329,8 @@ qSwapOnTime(
     .onTime(qOnTime),
     .slip(dsSlipQ),
     .codeBit(iCode),
-    .rx(qDelay1),
-    .corrLength(qCorrLength),
+    .rx(qSwapIn),
+    .corrLength(iCorrLength),
     .despread(qSwapCorr),
     .syncCount(qSwapSyncCount)
     );
@@ -561,10 +586,10 @@ end
 reg     [17:0]  iDespread,qDespread;
 always @(posedge clk) begin
     if (clkEn) begin
-        iDespread <= swapIQ ? iSwapCorr : iCorr;
+        iDespread <= swapIQ ? qSwapCorr : iCorr;
     end
-    if (clkEn) begin
-        qDespread <= swapIQ ? qSwapCorr : qCorr;
+    if (qClkEn) begin
+        qDespread <= swapIQ ? iSwapCorr : qCorr;
     end
 end
 

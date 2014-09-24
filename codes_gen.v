@@ -226,7 +226,27 @@ assign qOut = qOut_reg;
 reg goldOut_reg;
 always @(posedge clk) begin
     if (clkEn) begin
-        goldOut_reg <= code[17] ^ secCode[17]; 
+        casex(polyTaps) 
+            18'b1x_xxxx_xxxx_xxxx_xxxx: goldOut_reg <= code[17] ^ secCode[17];
+            18'b01_xxxx_xxxx_xxxx_xxxx: goldOut_reg <= code[16] ^ secCode[16];
+            18'b00_1xxx_xxxx_xxxx_xxxx: goldOut_reg <= code[15] ^ secCode[15];
+            18'b00_01xx_xxxx_xxxx_xxxx: goldOut_reg <= code[14] ^ secCode[14];
+            18'b00_001x_xxxx_xxxx_xxxx: goldOut_reg <= code[13] ^ secCode[13];
+            18'b00_0001_xxxx_xxxx_xxxx: goldOut_reg <= code[12] ^ secCode[12];
+            18'b00_0000_1xxx_xxxx_xxxx: goldOut_reg <= code[11] ^ secCode[11];
+            18'b00_0000_01xx_xxxx_xxxx: goldOut_reg <= code[10] ^ secCode[10];
+            18'b00_0000_001x_xxxx_xxxx: goldOut_reg <= code[ 9] ^ secCode[ 9];
+            18'b00_0000_0001_xxxx_xxxx: goldOut_reg <= code[ 8] ^ secCode[ 8];
+            18'b00_0000_0000_1xxx_xxxx: goldOut_reg <= code[ 7] ^ secCode[ 7];
+            18'b00_0000_0000_01xx_xxxx: goldOut_reg <= code[ 6] ^ secCode[ 6];
+            18'b00_0000_0000_001x_xxxx: goldOut_reg <= code[ 5] ^ secCode[ 5];
+            18'b00_0000_0000_0001_xxxx: goldOut_reg <= code[ 4] ^ secCode[ 4];
+            18'b00_0000_0000_0000_1xxx: goldOut_reg <= code[ 3] ^ secCode[ 3];
+            18'b00_0000_0000_0000_01xx: goldOut_reg <= code[ 2] ^ secCode[ 2];
+            18'b00_0000_0000_0000_001x: goldOut_reg <= code[ 1] ^ secCode[ 1];
+            18'b00_0000_0000_0000_0001: goldOut_reg <= code[ 0] ^ secCode[ 0];
+            default:                    goldOut_reg <= code[17] ^ secCode[17];
+        endcase
     end
 end
 assign goldOut = goldOut_reg;

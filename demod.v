@@ -473,8 +473,8 @@ wire    [17:0]  iDsSymData,qDsSymData;
 wire    [15:0]  dsSyncCount,dsSwapSyncCount;
 dualDespreader despreader(
     .clk(clk), 
-    .clkEn(resampSync), .auClkEn(auResampSync),
-    .symEn(iSymEn),     .auSymEn(qSymEn),
+    .clkEn(resampSync), .qClkEn(qSym2xEn),
+    .symEn(iSymEn),     .qSymEn(qSymEn),
     .reset(reset),
     .wr0(wr0) , .wr1(wr1), .wr2(wr2), .wr3(wr3),
     .addr(addr),
