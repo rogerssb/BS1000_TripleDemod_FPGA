@@ -19,7 +19,7 @@
      <setting value="231" name="C2Width" />
     </settings>
     <views>
-     <view value="0.000 ns,60509.999 ns,935.501 ns,59287.690 ns,32082.985 ns" name="Last" />
+     <view value="0.000 ns,60509.999 ns,937.479 ns,43264.655 ns,32082.985 ns" name="Last" />
     </views>
     <groups>
      <group open="no" name="Rx" show="yes" >
@@ -334,7 +334,7 @@
    </includedirs>
    <explorer>
     <settings>
-     <setting value="test.pnGen" name="Scope" />
+     <setting value="test.demod.despreader.syncCount[15:0]" name="Scope" />
     </settings>
    </explorer>
    <sourcefiles>

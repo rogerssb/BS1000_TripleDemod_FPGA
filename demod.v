@@ -487,8 +487,8 @@ dualDespreader despreader(
     .iCode(iCode),.qCode(qCode),
     .iEpoch(iEpoch), .qEpoch(qEpoch),
     .despreadLock(despreadLock),
-    .syncCount(dsSyncCount),
-    .swapSyncCount(dsSwapSyncCount)
+    .scaledSyncCount(dsSyncCount),
+    .scaledSwapSyncCount(dsSwapSyncCount)
     );
 `endif
 
@@ -718,7 +718,7 @@ always @(posedge clk) begin
             dac0Sync <= iSymEn;
             end
         `DAC_DS_LOCK: begin
-            dac0Data <= {dsSyncCount[7:0],10'b0};
+            dac0Data <= {dsSyncCount,2'b0};
             dac0Sync <= resampSync;
             end
         `DAC_DS_EPOCH: begin
@@ -794,7 +794,7 @@ always @(posedge clk) begin
             dac1Sync <= qSymEn;
             end
         `DAC_DS_LOCK: begin
-            dac1Data <= {dsSwapSyncCount[7:0],10'b0};
+            dac1Data <= {dsSwapSyncCount,2'b0};
             dac1Sync <= resampSync;
             end
         `DAC_DS_EPOCH: begin

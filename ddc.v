@@ -450,11 +450,20 @@ cmpy18 leadMixer(
     .pImag(qLead)
     );
 
+reg     [17:0]  iLeadOut,qLeadOut;
 reg     [17:0]  iOut,qOut;
 always @(posedge clk) begin
     if (syncOut) begin
-        iOut <= iLead;
-        qOut <= qLead;
+        iLeadOut <= iLead;
+        qLeadOut <= qLead;
+        if (enableBasebandInputs) begin
+            iOut <= iLeadIn;
+            qOut <= qLeadIn;
+            end
+        else begin
+            iOut <= iLeadOut;
+            qOut <= qLeadOut;
+            end
         end
     end
 

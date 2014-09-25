@@ -21,8 +21,8 @@ module dualDespreader (
     iDespread,
     qDespread,
     despreadLock,
-    syncCount,
-    swapSyncCount
+    scaledSyncCount,
+    scaledSwapSyncCount
     );
 
 parameter SoftBits = 6;
@@ -42,8 +42,8 @@ output          iEpoch,qEpoch;
 output  [17:0]  iDespread;
 output  [17:0]  qDespread;
 output          despreadLock;
-output  [15:0]  syncCount;
-output  [15:0]  swapSyncCount;
+output  [15:0]  scaledSyncCount;
+output  [15:0]  scaledSwapSyncCount;
 
 // Microprocessor interface
 reg cs;
@@ -350,10 +350,10 @@ wire    [6:0]   syncSum = {iSyncCount[5],iSyncCount} + {qSyncCount[5],qSyncCount
 wire    [15:0]  syncUpdate = {{9{syncThreshold[6]}},syncThreshold}
                            - {{9{1'b0}},syncSum}; 
 wire            inSyncIndication = (!syncCount[15] 
-                                && (syncCount >= lockCount)
+                                && ((syncCount + syncUpdate) >= lockCount)
                                 && (!syncUpdate[15]));
 wire            outOfSyncIndication = (syncCount[15] 
-                                   && (syncCount <= negLockCount) 
+                                   && ((syncCount + syncUpdate) <= negLockCount) 
                                    && (syncUpdate[15]));
 
 reg     [15:0]  swapSyncCount;
@@ -361,10 +361,10 @@ wire    [6:0]   swapSyncSum = {iSwapSyncCount[5],iSwapSyncCount} + {qSwapSyncCou
 wire    [15:0]  swapSyncUpdate = {{9{syncThreshold[6]}},syncThreshold}
                                - {{9{1'b0}},swapSyncSum}; 
 wire            inSwapSyncIndication = (!swapSyncCount[15] 
-                                    && (swapSyncCount >= lockCount)
+                                    && ((swapSyncCount + swapSyncUpdate) >= lockCount)
                                     && (!swapSyncUpdate[15]));
 wire            outOfSwapSyncIndication = (swapSyncCount[15] 
-                                       && (swapSyncCount <= negLockCount) 
+                                       && ((swapSyncCount + swapSyncUpdate) <= negLockCount) 
                                        && (swapSyncUpdate[15]));
 
 
@@ -599,6 +599,85 @@ always @* iDespreadReal = $itor($signed(iDespread))/(2**17);
 real qDespreadReal;
 always @* qDespreadReal = $itor($signed(qDespread))/(2**17);
 `endif
+
+reg     [15:0]  scaledSyncCount;
+reg     [15:0]  scaledSwapSyncCount;
+always @(posedge clk) begin
+    if (clkEn) begin
+        `define SCALE_SYNCCOUNT
+        `ifdef SCALE_SYNCCOUNT
+        casex (lockCount)
+            16'b01xx_xxxx_xxxx_xxxx: begin
+                scaledSyncCount <= syncCount;
+                scaledSwapSyncCount <= swapSyncCount;
+                end
+            16'b001x_xxxx_xxxx_xxxx: begin
+                scaledSyncCount <=      {syncCount[14:0],1'b0};
+                scaledSwapSyncCount <=   {swapSyncCount[14:0],1'b0};
+                end
+            16'b0001_xxxx_xxxx_xxxx: begin
+                scaledSyncCount <=      {syncCount[13:0],2'b0};
+                scaledSwapSyncCount <=   {swapSyncCount[13:0],2'b0};
+                end
+            16'b0000_1xxx_xxxx_xxxx: begin
+                scaledSyncCount <=      {syncCount[12:0],3'b0};
+                scaledSwapSyncCount <=   {swapSyncCount[12:0],3'b0};
+                end
+            16'b0000_01xx_xxxx_xxxx: begin
+                scaledSyncCount <=      {syncCount[11:0],4'b0};
+                scaledSwapSyncCount <=   {swapSyncCount[11:0],4'b0};
+                end
+            16'b0000_001x_xxxx_xxxx: begin
+                scaledSyncCount <=      {syncCount[10:0],5'b0};
+                scaledSwapSyncCount <=   {swapSyncCount[10:0],5'b0};
+                end
+            16'b0000_0001_xxxx_xxxx: begin
+                scaledSyncCount <=      {syncCount[ 9:0],6'b0};
+                scaledSwapSyncCount <=   {swapSyncCount[ 9:0],6'b0};
+                end
+            16'b0000_0000_1xxx_xxxx: begin
+                scaledSyncCount <=      {syncCount[ 8:0],7'b0};
+                scaledSwapSyncCount <=   {swapSyncCount[ 8:0],7'b0};
+                end
+            16'b0000_0000_01xx_xxxx: begin
+                scaledSyncCount <=      {syncCount[ 7:0],8'b0};
+                scaledSwapSyncCount <=   {swapSyncCount[ 7:0],8'b0};
+                end
+            16'b0000_0000_001x_xxxx: begin
+                scaledSyncCount <=      {syncCount[ 6:0],9'b0};
+                scaledSwapSyncCount <=   {swapSyncCount[ 6:0],9'b0};
+                end
+            16'b0000_0000_0001_xxxx: begin
+                scaledSyncCount <=      {syncCount[ 5:0],10'b0};
+                scaledSwapSyncCount <=   {swapSyncCount[ 5:0],10'b0};
+                end
+            16'b0000_0000_0000_1xxx: begin
+                scaledSyncCount <=      {syncCount[ 4:0],11'b0};
+                scaledSwapSyncCount <=   {swapSyncCount[ 4:0],11'b0};
+                end
+            16'b0000_0000_0000_01xx: begin
+                scaledSyncCount <=      {syncCount[ 3:0],12'b0};
+                scaledSwapSyncCount <=   {swapSyncCount[ 3:0],12'b0};
+                end
+            16'b0000_0000_0000_001x: begin
+                scaledSyncCount <=      {syncCount[ 2:0],13'b0};
+                scaledSwapSyncCount <=   {swapSyncCount[ 2:0],13'b0};
+                end
+            16'b0000_0000_0000_0001: begin
+                scaledSyncCount <=      {syncCount[ 1:0],14'b0};
+                scaledSwapSyncCount <=   {swapSyncCount[ 1:0],14'b0};
+                end
+            default: begin
+                scaledSyncCount <=      syncCount;
+                scaledSwapSyncCount <=   swapSyncCount;
+                end
+        endcase
+        `else
+        scaledSyncCount <= {syncCount[7:0],8'b0};
+        scaledSwapSyncCount <= {swapSyncCount[7:0],8'b0};
+        `endif
+    end
+end
 
 
 endmodule
