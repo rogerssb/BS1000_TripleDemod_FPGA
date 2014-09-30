@@ -215,8 +215,9 @@
 `define DESPREAD_CONTROL_B          12'bxxxx_xx11_01xx
 `define DESPREAD_EPOCH_B            12'bxxxx_xx11_10xx
 `define DESPREAD_CONTROL            12'bxxxx_xx11_11xx
-`define DS_MODE_NASA_FWD                   2'b00
-`define DS_MODE_NASA_DG1_MODE1             2'b01
-`define DS_MODE_NASA_DG1_MODE2             2'b10
-`define DS_MODE_NASA_DG1_MODE3             2'b11
+`define DS_MODE_NASA_FWD                    3'b000
+`define DS_MODE_NASA_DG1_MODE1              3'b001
+`define DS_MODE_NASA_DG1_MODE2              3'b010
+`define DS_MODE_NASA_DG1_MODE3_SPREAD_I     3'b011
+`define DS_MODE_NASA_DG1_MODE3_SPREAD_Q     3'b100
 `endif

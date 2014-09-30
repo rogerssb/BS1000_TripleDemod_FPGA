@@ -854,7 +854,9 @@ initial begin
     write32(createAddress(`DESPREADSPACE, `DESPREAD_EPOCH_A),32'h000000ff);
     write32(createAddress(`DESPREADSPACE, `DESPREAD_CONTROL_A),32'h00000001);
     write32(createAddress(`DESPREADSPACE, `DESPREAD_SYNC_CONTROL),{16'h000f,1'bx,7'h6,1'bx,7'h3});
-    write32(createAddress(`DESPREADSPACE, `DESPREAD_CONTROL),{16'h0,8'h0,6'h0,`DS_MODE_NASA_DG1_MODE1});
+    write32(createAddress(`DESPREADSPACE, `DESPREAD_CONTROL),{16'h0,8'h0,5'h0,`DS_MODE_NASA_DG1_MODE1});
+    //write32(createAddress(`DESPREADSPACE, `DESPREAD_SYNC_CONTROL),{16'h000f,1'bx,7'h1,1'bx,7'h1});
+    //write32(createAddress(`DESPREADSPACE, `DESPREAD_CONTROL),{16'h0,8'h0,5'h0,`DS_MODE_NASA_DG1_MODE3_SPREAD_I});
 
 
 

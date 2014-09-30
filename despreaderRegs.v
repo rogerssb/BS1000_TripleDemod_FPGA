@@ -52,8 +52,8 @@ reg     [31:0]  dout;
 input           slipped_a;
 input           slipped_b;
 
-output  [1:0]   despreadMode;
-reg     [1:0]   despreadMode;
+output  [2:0]   despreadMode;
+reg     [2:0]   despreadMode;
 
 output  [17:0]  init_a;
 reg     [17:0]  init_a;
@@ -166,7 +166,7 @@ always @(negedge wr0) begin
             `DESPREAD_CONTROL_B:        corrLength_b[3:0] <= din[3:0];
             `DESPREAD_EPOCH_B:          epoch_b[7:0] <= din[7:0];
             `DESPREAD_SYNC_CONTROL:     acqSyncThreshold <= din[6:0];
-            `DESPREAD_CONTROL:          despreadMode <= din[1:0];
+            `DESPREAD_CONTROL:          despreadMode <= din[2:0];
             default: ;
             endcase
         end
@@ -244,7 +244,7 @@ always @ (*) begin
         `DESPREAD_QOUTTAPS_B:       dout = {14'b0,qOutTaps_b};
         `DESPREAD_CONTROL_B:        dout = {16'b0,goldEnableB,11'b0,corrLength_b};
         `DESPREAD_EPOCH_B:          dout = {14'b0,epoch_b};
-        `DESPREAD_CONTROL:          dout = {manualSlip,15'b0,dsReset,7'b0,6'b0,despreadMode};
+        `DESPREAD_CONTROL:          dout = {manualSlip,15'b0,dsReset,7'b0,5'b0,despreadMode};
         `DESPREAD_SYNC_CONTROL:     dout = {lockCount,1'b0,trkSyncThreshold,1'b0,acqSyncThreshold};
         default:                    dout = 32'hx;
         endcase

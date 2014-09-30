@@ -73,7 +73,7 @@ output  [17:0]  iTrellis;
 output  [17:0]  qTrellis;  
 output          legacyBit;
 
-parameter VER_NUMBER = 16'h017c;
+parameter VER_NUMBER = 16'h017d;
 
 wire    [11:0]  addr = {addr11,addr10,addr9,addr8,addr7,addr6,addr5,addr4,addr3,addr2,addr1,1'b0};
 wire            nWr = nWe;
@@ -246,8 +246,9 @@ demod demod(
     .iBit(iBit),
     .qSym2xEn(qSym2xEn),
     .qSymEn(qSymEn),
-    .qSymClk(auSymClk),
     .qBit(qBit),
+    .auSymClk(auSymClk),
+    .auBit(auBit),
     .timingLock(bitsyncLock),
     .carrierLock(carrierLock),
     .trellisSymSync(trellisSymSync),
@@ -356,7 +357,12 @@ always @(posedge clk) begin
     else begin
         iData <= iBit;
         end
-    qData <= qBit;
+    if (demodMode == `MODE_AUQPSK) begin
+        qData <= auBit;
+        end
+    else begin
+        qData <= qBit;
+        end
     dataSymEn <= iSymEn;
     dataSym2xEn <= iSym2xEn;
     end

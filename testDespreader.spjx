@@ -19,7 +19,7 @@
      <setting value="231" name="C2Width" />
     </settings>
     <views>
-     <view value="0.000 ns,60509.999 ns,937.479 ns,43264.655 ns,32082.985 ns" name="Last" />
+     <view value="30235.800 ns,63469.419 ns,468.409 ns,43264.655 ns,32082.985 ns" name="Last" />
     </views>
     <groups>
      <group open="no" name="Rx" show="yes" >
@@ -206,10 +206,8 @@
        <signal name="clk" scope="test.demod.despreader.iCorrOnTime" />
        <signal name="iSymEn" scope="test.demod.bitsync" />
        <signal interpolate="Step" radix="Real" name="symDataIReal" scope="test.demod.bitsync" />
-       <signal name="iSampleEn" scope="test.demod.despreader" />
-       <signal name="iOnTime" scope="test.demod.despreader" />
-       <signal name="qSampleEn" scope="test.demod.despreader" />
-       <signal name="qOnTime" scope="test.demod.despreader" />
+       <signal name="dsSampleEn" scope="test.demod.despreader" />
+       <signal name="dsSymEn" scope="test.demod.despreader" />
        <signal name="iCode" scope="test.demod.despreader" />
        <signal name="qCode" scope="test.demod.despreader" />
        <signal name="iDespread" scope="test.demod.despreader" />
@@ -234,7 +232,7 @@
        <signal interpolate="Step" radix="Real" name="rxSRReal" scope="test.demod.despreader.qSwapOnTime" />
        <signal name="codeSR[0]" scope="test.demod.despreader.qSwapOnTime" />
        <signal name="corrSimReset" scope="test.demod.despreader" />
-       <signal name="acqStateI[1:0]" scope="test.demod.despreader" />
+       <signal name="acqState[1:0]" scope="test.demod.despreader" />
        <signal interpolate="Step" radix="Real" name="syncCountReal" scope="test.demod.despreader" />
        <signal interpolate="Step" radix="Real" name="swapSyncCountReal" scope="test.demod.despreader" />
        <signal name="despreadLock" scope="test.demod.despreader" />

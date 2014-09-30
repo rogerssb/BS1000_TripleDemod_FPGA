@@ -16,6 +16,7 @@ module dualDespreader (
     iIn, qIn,
     demodMode,
     dout,
+    despreaderMode,
     iCode, qCode,
     iEpoch, qEpoch,
     iDespread,
@@ -37,6 +38,7 @@ input   [31:0]  din;
 input   [17:0]  iIn, qIn;
 input   [4:0]   demodMode;
 output  [31:0]  dout;
+output  [2:0]   despreaderMode;
 output          iCode, qCode;
 output          iEpoch,qEpoch;
 output  [17:0]  iDespread;
@@ -58,7 +60,7 @@ reg             despreadLock;
 wire    [17:0]  init_a, codeRestartCount_a, polyTaps_a, iOutTaps_a, qOutTaps_a, epoch_a;
 wire    [17:0]  init_b, codeRestartCount_b, polyTaps_b, iOutTaps_b, qOutTaps_b, epoch_b;
 wire    [3:0]   corrLength_a,corrLength_b;
-wire    [1:0]   despreadMode;
+wire    [2:0]   despreaderMode;
 wire    [6:0]   acqSyncThreshold,trkSyncThreshold;
 wire    [6:0]   syncThreshold = despreadLock ? trkSyncThreshold : acqSyncThreshold;
 wire    [15:0]  lockCount;
@@ -89,24 +91,30 @@ despreaderRegs regs(
     .goldEnableB(goldEnableB),
     .slip_b(slip_b),
     .epoch_b(epoch_b),
-    .despreadMode(despreadMode),
+    .despreadMode(despreaderMode),
     .acqSyncThreshold(acqSyncThreshold),
     .trkSyncThreshold(trkSyncThreshold),
     .lockCount(lockCount),
     .dsReset(dsReset)
     );
 
-
-
-wire    iSampleEn = clkEn;
-wire    iOnTime = symEn;
-
-wire    qSampleEn = qClkEn;
-wire    qOnTime = qSymEn;
+reg     dsSampleEn, dsSymEn;
+always @* begin
+    casex (despreaderMode) 
+        `DS_MODE_NASA_DG1_MODE3_SPREAD_Q: begin
+            dsSampleEn = qClkEn;
+            dsSymEn = qSymEn;
+        end
+        default: begin
+            dsSampleEn = clkEn;
+            dsSymEn = symEn;
+        end
+    endcase
+end
 
 reg     dsResetI0,dsResetI1,dsResetEn;
 always @(posedge clk) begin
-    if (iSampleEn) begin
+    if (dsSampleEn) begin
         dsResetI0 <= dsReset;
         dsResetI1 <= dsResetI0;
         dsResetEn <= dsResetI0 & !dsResetI1;
@@ -116,7 +124,7 @@ end
 wire out_a;
 codes_gen codes_gen_a(
     .clk(clk),
-    .clkEn(iSampleEn & iOnTime & !dsSlipI),
+    .clkEn(dsSampleEn & dsSymEn & !dsSlipI),
     .reset(reset | dsResetEn),
     .init(init_a),
     .epoch(epoch_a),
@@ -133,7 +141,7 @@ codes_gen codes_gen_a(
 wire out_b;
 codes_gen codes_gen_b(
     .clk(clk),
-    .clkEn(qSampleEn & qOnTime & !dsSlipQ),
+    .clkEn(dsSampleEn & dsSymEn & !dsSlipQ),
     .reset(reset | dsResetEn),
     .init(init_b),
     .epoch(epoch_a),
@@ -151,7 +159,7 @@ reg             iCode, qCode;
 reg             iEpoch, qEpoch;
 reg     [3:0]   iCorrLength, qCorrLength;
 always @* begin
-    casex (despreadMode)
+    casex (despreaderMode)
         `DS_MODE_NASA_FWD: begin
             iCode <= goldOut_a;
             iCorrLength <= corrLength_a;
@@ -176,15 +184,25 @@ always @* begin
             qCorrLength <= corrLength_a;
             qEpoch <= codeEpoch_b;
         end
-        `DS_MODE_NASA_DG1_MODE3: begin
+        `DS_MODE_NASA_DG1_MODE3_SPREAD_I: begin
             iCode <= iOut_a;
             iCorrLength <= corrLength_a;
             iEpoch <= codeEpoch_a;
             // The q channel doesn't matter in this mode as it is not spread.
             // We set values to keep the synthesizer from generating latches.
-            qCode <= iOut_a;
+            qCode <= qOut_a;
             qCorrLength <= corrLength_a;
-            qEpoch <= iOut_a;
+            qEpoch <= codeEpoch_a;
+        end
+        `DS_MODE_NASA_DG1_MODE3_SPREAD_Q: begin
+            // The i channel doesn't matter in this mode as it is not spread.
+            // We set values to keep the synthesizer from generating latches.
+            iCode <= iOut_a;
+            iCorrLength <= corrLength_a;
+            iEpoch <= codeEpoch_a;
+            qCode <= qOut_a;
+            qCorrLength <= corrLength_a;
+            qEpoch <= codeEpoch_a;
         end
         default: begin
             iCode <= iOut_a;
@@ -202,17 +220,18 @@ reg     [SoftBits-1:0]   iSoft, iDelay;
 reg     [SoftBits-1:0]   qSoft, qDelay0, qDelay1;
 
 always @(posedge clk) begin
-    if (iSampleEn) begin
+    if (dsSampleEn) begin
         iDelay <= iSoft;
-        qDelay0 <= qSoft;
-        qDelay1 <= qDelay0;
         if (iIn[17:(18-SoftBits)] == {1'b1,{(SoftBits-1){1'b0}}}) begin
             iSoft <= {1'b1,{(SoftBits-2){1'b0}},1'b1};
         end
         else begin
             iSoft <= iIn[17:(18-SoftBits)];
         end
-
+    end
+    if (dsSampleEn) begin
+        qDelay0 <= qSoft;
+        qDelay1 <= qDelay0;
         if (qIn[17:(18-SoftBits)] == {1'b1,{(SoftBits-1){1'b0}}}) begin
             qSoft <= {1'b1,{(SoftBits-2){1'b0}},1'b1};
         end
@@ -237,8 +256,9 @@ wire corrReset = reset;
 reg     [SoftBits-1:0]  iOntimeIn,iSwapIn;
 reg     [SoftBits-1:0]  qOntimeIn,qSwapIn;
 always @* begin
-    casex (despreadMode) 
-        `DS_MODE_NASA_FWD: begin
+    casex (despreaderMode) 
+        `DS_MODE_NASA_FWD,
+        `DS_MODE_NASA_DG1_MODE3_SPREAD_I: begin
             iOntimeIn = iSoft;
             iSwapIn = iSoft;
         end
@@ -252,8 +272,9 @@ always @* begin
             iSwapIn = iSoft;
         end
     endcase
-    casex (despreadMode) 
-        `DS_MODE_NASA_FWD: begin
+    casex (despreaderMode) 
+        `DS_MODE_NASA_FWD,
+        `DS_MODE_NASA_DG1_MODE3_SPREAD_Q: begin
             qOntimeIn = qSoft;
             qSwapIn = qSoft;
         end
@@ -275,9 +296,9 @@ wire    [5:0]   iSyncCount;
 despreadCorrelator #(.CorrLength(64), .InputBits(SoftBits), .CorrBits(SoftBits+32))
 iCorrOnTime(
     .clk(clk),
-    .clkEn(iSampleEn),
+    .clkEn(dsSampleEn),
     .reset(corrReset),
-    .onTime(iOnTime),
+    .onTime(dsSymEn),
     .slip(dsSlipI),
     .codeBit(iCode),
     .rx(iOntimeIn),
@@ -291,9 +312,9 @@ wire    [5:0]   qSyncCount;
 despreadCorrelator #(.CorrLength(64), .InputBits(SoftBits), .CorrBits(SoftBits+32)) 
 qCorrOnTime(
     .clk(clk),
-    .clkEn(qSampleEn),
+    .clkEn(dsSampleEn),
     .reset(corrReset),
-    .onTime(qOnTime),
+    .onTime(dsSymEn),
     .slip(dsSlipQ),
     .codeBit(qCode),
     .rx(qOntimeIn),
@@ -308,9 +329,9 @@ wire    [5:0]   iSwapSyncCount;
 despreadCorrelator #(.CorrLength(64), .InputBits(SoftBits), .CorrBits(SoftBits+32)) 
 iSwapOnTime(
     .clk(clk),
-    .clkEn(iSampleEn),
+    .clkEn(dsSampleEn),
     .reset(corrReset),
-    .onTime(iOnTime),
+    .onTime(dsSymEn),
     .slip(dsSlipI),
     .codeBit(qCode),
     .rx(iSwapIn),
@@ -324,9 +345,9 @@ wire    [5:0]   qSwapSyncCount;
 despreadCorrelator #(.CorrLength(64), .InputBits(SoftBits), .CorrBits(SoftBits+32)) 
 qSwapOnTime(
     .clk(clk),
-    .clkEn(qSampleEn),
+    .clkEn(dsSampleEn),
     .reset(corrReset),
-    .onTime(qOnTime),
+    .onTime(dsSymEn),
     .slip(dsSlipQ),
     .codeBit(iCode),
     .rx(qSwapIn),
@@ -346,7 +367,19 @@ reg             swapIQ;
 wire    [15:0]  negLockCount = (16'hffff - lockCount);
 
 reg     [15:0]  syncCount;
-wire    [6:0]   syncSum = {iSyncCount[5],iSyncCount} + {qSyncCount[5],qSyncCount};
+reg     [6:0]   syncSum;
+always @* begin
+    casex (despreaderMode) 
+        `DS_MODE_NASA_DG1_MODE3_SPREAD_I: 
+            // I only in this mode
+            syncSum = {iSyncCount[5],iSyncCount};
+        `DS_MODE_NASA_DG1_MODE3_SPREAD_Q:
+            // Q only in this mode
+            syncSum = {qSyncCount[5],qSyncCount};
+        default:
+            syncSum = {iSyncCount[5],iSyncCount} + {qSyncCount[5],qSyncCount};
+    endcase
+end
 wire    [15:0]  syncUpdate = {{9{syncThreshold[6]}},syncThreshold}
                            - {{9{1'b0}},syncSum}; 
 wire            inSyncIndication = (!syncCount[15] 
@@ -357,7 +390,19 @@ wire            outOfSyncIndication = (syncCount[15]
                                    && (syncUpdate[15]));
 
 reg     [15:0]  swapSyncCount;
-wire    [6:0]   swapSyncSum = {iSwapSyncCount[5],iSwapSyncCount} + {qSwapSyncCount[5],qSwapSyncCount};
+reg     [6:0]   swapSyncSum;
+always @* begin
+    casex (despreaderMode) 
+        `DS_MODE_NASA_DG1_MODE3_SPREAD_I:
+            // Force an out-of-swapSyncCondition.
+            swapSyncSum = 63;
+        `DS_MODE_NASA_DG1_MODE3_SPREAD_Q: 
+            // Force an out-of-swapSync condition.
+            swapSyncSum = 63;
+        default:
+            swapSyncSum = {iSwapSyncCount[5],iSwapSyncCount} + {qSwapSyncCount[5],qSwapSyncCount};
+    endcase
+end
 wire    [15:0]  swapSyncUpdate = {{9{syncThreshold[6]}},syncThreshold}
                                - {{9{1'b0}},swapSyncSum}; 
 wire            inSwapSyncIndication = (!swapSyncCount[15] 
@@ -394,7 +439,7 @@ real absCorrSwapQReal;
 always @* absCorrSwapQReal = $itor($signed(absCorrSwapQ))/(2**17);
 `endif
 
-reg     [1:0]           acqStateI;
+reg     [1:0]           acqState;
 `define DS_ACQ_SLIP     2'b00
 `define DS_ACQ_TEST     2'b01
 
@@ -406,11 +451,11 @@ always @(posedge clk) begin
         despreadLock <= 0;
         dsSlipI <= 0;
         dsSlipQ <= 0;
-        acqStateI <= `DS_ACQ_TEST;
+        acqState <= `DS_ACQ_TEST;
     end
-    else if (iSampleEn) begin
+    else if (dsSampleEn) begin
         if (manualSlip) begin
-            if (qOnTime) begin
+            if (dsSymEn) begin
                 if (slip_a) begin
                     dsSlipI <= 1;
                     dsSlipQ <= 1;
@@ -421,14 +466,12 @@ always @(posedge clk) begin
                 end
             end
         end
-        else if (qOnTime) begin
-            `define NEW_SM
-            `ifdef NEW_SM
-            case (acqStateI)
+        else if (dsSymEn) begin
+            case (acqState)
                 `DS_ACQ_SLIP: begin
                     dsSlipI <= 0;
                     dsSlipQ <= 0;
-                    acqStateI <= `DS_ACQ_TEST;
+                    acqState <= `DS_ACQ_TEST;
                 end
                 `DS_ACQ_TEST: begin
                     if (despreadLock) begin
@@ -439,7 +482,7 @@ always @(posedge clk) begin
                                 dsSlipI <= 1;
                                 dsSlipQ <= 1;
                                 despreadLock <= 0;
-                                acqStateI <= `DS_ACQ_SLIP;
+                                acqState <= `DS_ACQ_SLIP;
                             end
                             else if (inSwapSyncIndication) begin
                                 swapSyncCount <= lockCount;
@@ -464,7 +507,7 @@ always @(posedge clk) begin
                                 dsSlipI <= 1;
                                 dsSlipQ <= 1;
                                 despreadLock <= 0;
-                                acqStateI <= `DS_ACQ_SLIP;
+                                acqState <= `DS_ACQ_SLIP;
                             end
                             else if (inSyncIndication) begin
                                 syncCount <= lockCount;
@@ -499,7 +542,7 @@ always @(posedge clk) begin
                             swapSyncCount <= 0;
                             dsSlipI <= 1;
                             dsSlipQ <= 1;
-                            acqStateI <= `DS_ACQ_SLIP;
+                            acqState <= `DS_ACQ_SLIP;
                         end
                         else begin
                             if (outOfSyncIndication) begin
@@ -523,60 +566,9 @@ always @(posedge clk) begin
                     dsSlipI <= 1;
                     dsSlipQ <= 1;
                     despreadLock <= 0;
-                    acqStateI <= `DS_ACQ_SLIP;
+                    acqState <= `DS_ACQ_SLIP;
                 end
             endcase
-            `else
-            case (acqStateI)
-                `DS_ACQ_SLIP: begin
-                    dsSlipI <= 0;
-                    dsSlipQ <= 0;
-                    acqStateI <= `DS_ACQ_TEST;
-                end
-                `DS_ACQ_TEST: begin
-                    if (inSyncIndication) begin
-                        syncCount <= lockCount;
-                        swapSyncCount <= 0;
-                        if (!despreadLock) begin
-                            swapIQ <= 0;
-                            despreadLock <= 1;
-                        end
-                    end
-                    else if (inSwapSyncIndication) begin
-                        syncCount <= 0;
-                        swapSyncCount <= lockCount;
-                        if (!despreadLock) begin
-                            swapIQ <= 1;
-                            despreadLock <= 1;
-                        end
-                    end
-                    else if (outOfSyncIndication && outOfSwapSyncIndication) begin
-                        syncCount <= 0;
-                        swapSyncCount <= 0;
-                        dsSlipI <= 1;
-                        dsSlipQ <= 1;
-                        despreadLock <= 0;
-                        acqStateI <= `DS_ACQ_SLIP;
-                    end
-                    else begin
-                        if (!outOfSyncIndication) begin
-                            syncCount <= syncCount + syncUpdate;
-                        end
-                        if (!outOfSwapSyncIndication) begin
-                            swapSyncCount <= swapSyncCount + swapSyncUpdate;
-                        end
-                    end
-                end
-                default: begin
-                    syncCount <= 0;
-                    swapSyncCount <= 0;
-                    dsSlipI <= 1;
-                    dsSlipQ <= 1;
-                    despreadLock <= 0;
-                    acqStateI <= `DS_ACQ_SLIP;
-                end
-            endcase
-            `endif
         end
     end
 end
@@ -585,11 +577,21 @@ end
 
 reg     [17:0]  iDespread,qDespread;
 always @(posedge clk) begin
-    if (clkEn) begin
-        iDespread <= swapIQ ? qSwapCorr : iCorr;
-    end
-    if (qClkEn) begin
-        qDespread <= swapIQ ? iSwapCorr : qCorr;
+    if (dsSampleEn) begin
+        casex (despreaderMode)
+            `DS_MODE_NASA_DG1_MODE3_SPREAD_I: begin
+                iDespread <= iCorr;
+                qDespread <= iCorr;
+            end
+            `DS_MODE_NASA_DG1_MODE3_SPREAD_Q: begin
+                iDespread <= qCorr;
+                qDespread <= qCorr;
+            end
+            default: begin
+                iDespread <= swapIQ ? qSwapCorr : iCorr;
+                qDespread <= swapIQ ? iSwapCorr : qCorr;
+            end
+        endcase
     end
 end
 

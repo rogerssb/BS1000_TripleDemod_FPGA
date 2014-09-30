@@ -25,6 +25,7 @@ module bitsync(
     `endif
     iSym2xEn,
     iSymEn,
+    iSymClk,
     symDataI,
     bitDataI,
     qSym2xEn,
@@ -66,6 +67,7 @@ output  [15:0]  negDeviation;
 `endif
 output          iSym2xEn;
 output          iSymEn;
+output          iSymClk;
 output  [17:0]  symDataI;
 output          bitDataI;
 output          qSym2xEn;
@@ -1048,6 +1050,7 @@ always @(posedge sampleClk) begin
 // Clock Enables
 assign iSym2xEn = symTimes2Sync;
 assign iSymEn = symTimes2Sync & timingErrorEn;
+assign iSymClk = timingErrorEn;
 assign qSym2xEn = auEnable ? auResampSync : symTimes2Sync;
 assign qSymEn = auEnable ? (auResampSync & auTimingErrorEn) : (symTimes2Sync & timingErrorEn);
 assign qSymClk = auTimingErrorEn;

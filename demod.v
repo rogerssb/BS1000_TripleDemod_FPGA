@@ -13,12 +13,15 @@ module demod(
     iSym2xEn,
     iSymEn,
     iSymData,
+    iSymClk,
     iBit,
     qSym2xEn,
     qSymEn,
     qSymClk,
     qSymData,
     qBit,
+    auSymClk,
+    auBit,
     timingLock,
     carrierLock,
     trellisSymSync,
@@ -50,6 +53,7 @@ input   [17:0]  iBB;
 input   [17:0]  qBB;
 output          iSym2xEn;
 output          iSymEn;
+output          iSymClk;
 output          iBit;
 output [17:0]   iSymData;
 output          qSym2xEn;
@@ -57,6 +61,8 @@ output          qSymEn;
 output          qSymClk;
 output          qBit;
 output [17:0]   qSymData;
+output          auSymClk;
+output          auBit;
 output          timingLock;
 output          carrierLock;
 output          trellisSymSync;
@@ -469,6 +475,7 @@ dualResampler resampler(
 ******************************************************************************/
 wire    [17:0]  dsTimingError;
 wire    [31:0]  despreaderDout;
+wire    [2:0]   despreaderMode;
 wire    [17:0]  iDsSymData,qDsSymData;
 wire    [15:0]  dsSyncCount,dsSwapSyncCount;
 dualDespreader despreader(
@@ -482,6 +489,7 @@ dualDespreader despreader(
     .iIn(iResamp), .qIn(qResamp),
     .demodMode(demodMode),
     .dout(despreaderDout),
+    .despreaderMode(despreaderMode),
     .iDespread(iDsSymData),
     .qDespread(qDsSymData),
     .iCode(iCode),.qCode(qCode),
@@ -526,6 +534,7 @@ bitsync bitsync(
     `endif
     .iSym2xEn(iSym2xEn),
     .iSymEn(iSymEn),
+    .iSymClk(iSymClk),
     .symDataI(iBsSymData),
     .bitDataI(iBit),
     .qSym2xEn(qSym2xEn),
@@ -545,6 +554,8 @@ bitsync bitsync(
     );
 
 `ifdef ADD_DESPREADER
+reg             auSymClk;
+reg             auBit;
 reg     [17:0]  iSymData;
 reg     [17:0]  qSymData;
 reg     [17:0]  iTrellis,qTrellis;
@@ -556,6 +567,16 @@ always @* begin
         iTrellis = iDsSymData;
         qTrellis = qDsSymData;
         timingLock = despreadLock & bitsyncLock;
+        case (despreaderMode)
+            `DS_MODE_NASA_DG1_MODE3_SPREAD_Q: begin
+                auSymClk = iSymClk;
+                auBit = iBit;
+            end
+            default: begin
+                auSymClk = qSymClk;
+                auBit = qBit;
+            end
+        endcase
     end
     else begin
         iSymData = iBsSymData;
@@ -563,9 +584,13 @@ always @* begin
         iTrellis = iBsTrellis;
         qTrellis = qBsTrellis;
         timingLock = bitsyncLock;
+        auSymClk = qSymClk;
+        auBit = qBit;
     end
 end
 `else
+wire            auSymClk = qSymClk;
+wire            auBit = qBit;
 wire    [17:0]  iSymData = iBsSymData;
 wire    [17:0]  qSymData = qBsSymData;
 assign          iTrellis = iBsTrellis;
