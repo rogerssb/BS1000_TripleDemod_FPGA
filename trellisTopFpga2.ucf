@@ -456,6 +456,10 @@ TIMEGRP "dataBus" = PADS(data*);
 TIMEGRP "addrBus" = PADS(addr*);
 TIMEGRP "ctrlBus" = PADS(nCs*) PADS(nRd);
 
+NET "nWe*" TNM_NET = FFS writeEn;
+NET "wr0*" TNM_NET = FFS writeEn;
+NET "wr2*" TNM_NET = FFS writeEn;
+
 NET "clk*" TNM_NET = FFS clk;
 NET "clk*" TNM_NET = DSPS clk;
 NET "clk*" TNM_NET = RAMS clk;
@@ -466,6 +470,33 @@ TIMESPEC TS_clkToFFS =  FROM PADS(clk) TO FFS TIG;
 TIMESPEC TS_clkToDSPS = FROM PADS(clk) TO DSPS TIG;
 TIMESPEC TS_clkToRAMS = FROM PADS(clk) TO RAMS TIG;
 
+# Devices with clock enables than can run slower
+NET "sc/dac0Sync*" TNM_NET = FFS syncGroup;
+NET "sc/dac1Sync*" TNM_NET = FFS syncGroup;
+NET "sc/dac2Sync*" TNM_NET = FFS syncGroup;
+NET "sc/ddc/agcSync*" TNM_NET = FFS syncGroup;
+NET "sc/ddc/cic/cicI/syncOut*" TNM_NET = FFS syncGroup;
+NET "sc/ddc/cic/cicQ/syncOut*" TNM_NET = FFS syncGroup;
+NET "sc/ddc/cicClockEn*" TNM_NET = FFS syncGroup;
+NET "sc/ddc/hb/evenSync*" TNM_NET = FFS syncGroup;
+NET "sc/ddc/hb/syncOut*" TNM_NET = FFS syncGroup;
+NET "sc/ddc/hbClockEn*" TNM_NET = FFS syncGroup;
+NET "sc/ddc/hb0/evenSync*" TNM_NET = FFS syncGroup;
+NET "sc/ddc/hb0/syncOut*" TNM_NET = FFS syncGroup;
+NET "sc/ddc/firClockEn*" TNM_NET = FFS syncGroup;
+NET "sc/ddc/firClockEn*" TNM_NET = DSPS syncGroup;
+#NET "sc/carrierOffsetEn*" TNM_NET = FFS syncGroup;
+NET "sc/ddc/syncOut*" TNM_NET = FFS syncGroup;
+NET "sc/ddc/syncOut*" TNM_NET = DSPS syncGroup;
+NET "sc/resampler/resamplerI/resampleDelay*" TNM_NET = FFS syncGroup;
+NET "sc/resampler/resamplerQ/resampleDelay*" TNM_NET = FFS syncGroup;
+#NET "sc/resampler/resamplerI/resampleDelay*" TNM_NET = DSPS syncGroup;
+#NET "sc/resampler/resamplerQ/resampleDelay*" TNM_NET = DSPS syncGroup;
+NET "sc/resampler/auCic/syncOut*" TNM_NET = FFS syncGroup;
+NET "sc/carrierLoop/loopFilterEn*" TNM_NET = FFS syncGroup;
+NET "sc/fmDemod/cordic/enSR*" TNM_NET = FFS syncGroup;
+#NET "sc/fmDemod/cordic/enSR*" TNM_NET = DSPS syncGroup;
+NET "sc/bitsync/phaseState*" TNM_NET = FFS syncGroup;
 NET "pcmSymEn*" TNM_NET = FFS syncGroup;
 NET "pcmSym2xEn*" TNM_NET = FFS syncGroup;
 NET "soqpskSym2xEn*" TNM_NET = FFS syncGroup;
@@ -489,14 +520,48 @@ TIMEGRP "clken" =  FFS(pcmSymEn*) FFS(pcmSym2xEn*)
                    FFS(trellis/trellisCarrierLoop/sym2xEnSr*)
                    FFS(trellis/trellisCarrierLoop/symEnSr*)
 #                   FFS(trellis/trellisCarrierLoop/fmDemod/cordic/enSR*)
-                   FFS(trellis/symEnShift*);
+                   FFS(trellis/symEnShift*)
+                   FFS(sc/dac0Sync*) 
+                   FFS(sc/dac1Sync*) 
+                   FFS(sc/dac2Sync*)
+                   FFS(sc/ddc/agcSync*) 
+                   FFS(sc/ddc/cic/cicI/syncOut*) 
+                   FFS(sc/ddc/cic/cicQ/syncOut*)
+                   FFS(sc/ddc/cicClockEn*) 
+                   FFS(sc/ddc/hb/evenSync*) 
+                   FFS(sc/ddc/hb/syncOut*)
+                   FFS(sc/ddc/hbClockEn*) 
+                   FFS(sc/ddc/hb0/evenSync*) 
+                   FFS(sc/ddc/hb0/syncOut*)
+                   FFS(sc/ddc/firClockEn*)
+                   FFS(sc/ddc/syncOut*)
+                   FFS(sc/resampler/resamplerI/resampleDelay*)
+                   FFS(sc/resampler/resamplerQ/resampleDelay*)
+                   FFS(sc/resampler/auCic/syncOut*)
+                   FFS(sc/carrierLoop/loopFilterEn*)
+                   FFS(sc/fmDemod/cordic/enSR*) 
+                   FFS(sc/bitsync/phaseState*);
 
 # A group composed of clock-enabled flip-flops
 TIMEGRP "allEnables" = syncGroup EXCEPT clken ;
 
-#TIMESPEC TS_syncGroup = FROM "allEnables" TO "syncGroup" 46.67 MHz;
-TIMESPEC TS_syncGroup = FROM "syncGroup" TO "syncGroup" 46.67 MHz;
-TIMESPEC TS_clken = FROM "clken" TO FFS 10 ns;
+# DDC that can clock slower
+TIMEGRP "ddcPL" = FFS(sc/ddc/iCicIn*) FFS(sc/ddc/qCicIn*)
+                  FFS(sc/ddc/iAgcIn*) FFS(sc/ddc/qAgcIn*)
+                  FFS(sc/ddc/iHbIn*) FFS(sc/ddc/qHbIn*)
+                  FFS(sc/ddc/iFirIn*) FFS(sc/ddc/qFirIn*)
+                  FFS(sc/ddc/iLeadIn*) FFS(sc/ddc/qLeadIn*);
+
+# AGC loop that can clock slower
+TIMEGRP "magloop" = FFS( sc/magLoop/lagAccum*) ;
+
+# Slower clock timespecs. 
+TIMESPEC TS_syncGroup = FROM "allEnables" TO "syncGroup" 46.67 MHz PRIORITY 4;
+TIMESPEC TS_dacGroup = FROM "syncGroup" TO FFS(sc/dac*Data*) 46.67 MHz PRIORITY 3;
+TIMESPEC "TS_ddc1" = FROM "ddcPL" TO FFS 46.67 MHz PRIORITY 3;
+TIMESPEC "TS_ddc2" = FROM "ddcPL" TO DSPS 46.67 MHz PRIORITY 3;
+TIMESPEC TS_magloop = FROM "magloop" TO "magloop" 46.67 MHz PRIORITY 3;
+TIMESPEC TS_clken = FROM "clken" TO FFS 93.33 MHz PRIORITY 1;
 
 
 # Trellis ACS units that can clock slower.

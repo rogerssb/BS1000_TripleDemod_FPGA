@@ -81,7 +81,7 @@ input           symb_pll_vco;
 output          sdiOut;
 input           legacyBit_pad ;
 
-parameter VER_NUMBER = 16'h014A;
+parameter VER_NUMBER = 16'h017e;
 
 // 12 Jun 13
 // IOB reclocking of inputs to trellis
@@ -140,10 +140,42 @@ boot_manager bm(
     .data(dataIn[15 : 0])
     );
 
+reg     [1:0]   dac0_in_sel;
+reg     [1:0]   dac1_in_sel;
+reg     [1:0]   dac2_in_sel;
+reg             dec_in_sel;
+
+// MISC space writes
+always @(negedge wr0) begin
+    if (misc_en) begin
+        casex (addr)
+            `DAC_IN_SEL:
+                begin
+                dac0_in_sel <= dataIn[1:0];
+                dac1_in_sel <= dataIn[3:2];
+                dac2_in_sel <= dataIn[5:4];
+                end
+            default: ;
+            endcase
+        end
+    end
+
+always @(negedge wr2) begin
+    if (misc_en) begin
+        casex (addr)
+            `DEC_IN_SEL:
+                begin
+                dec_in_sel <= data[0];
+                end
+            default: ;
+            endcase
+        end
+    end
+
 // MISCSPACE Reads
 reg     [31:0]  misc_dout;
 reg rs;
-always @(addr or misc_en) begin
+always @* begin
   if(misc_en) begin
     casex (addr)
         `MISC_RESET: begin
@@ -153,6 +185,16 @@ always @(addr or misc_en) begin
         `MISC_VERSION: begin
             rs <= 0;
             misc_dout <= {VER_NUMBER,16'b0};
+            end
+        `DAC_IN_SEL:
+            begin
+            rs <= 0;
+            misc_dout <= {15'b0,dec_in_sel,10'b0,dac2_in_sel,dac1_in_sel,dac0_in_sel};
+            end
+        `DEC_IN_SEL:
+            begin
+            rs <= 0;
+            misc_dout <= {15'b0,dec_in_sel,10'b0,dac2_in_sel,dac1_in_sel,dac0_in_sel};
             end
         default: begin
             misc_dout <= 32'b0;
@@ -285,18 +327,19 @@ wire  pcmTrellisMode = (demodMode == `MODE_PCMTRELLIS);
 wire  soqpskTrellisMode = (demodMode == `MODE_SOQPSK);
 wire  trellisMode = pcmTrellisMode | soqpskTrellisMode;
 
-reg  legacyBit;
-reg  pcmSymEn,soqpskSymEn;
-reg  pcmSym2xEn,soqpskSym2xEn;
-reg [17:0]  iIn,qIn;
-reg  [13:0]demod0DataReg;
-reg  demod0SyncReg;
-reg  [17:0]demod1DataReg;
-reg  demod1SyncReg;
-reg  [17:0]demod2DataReg;
-reg  demod2SyncReg;
-reg  iBitReg,qBitReg;
-reg  dataSymEnReg,dataSym2xEnReg;
+reg             legacyBit;
+reg             pcmSymEn,soqpskSymEn;
+reg             pcmSym2xEn,soqpskSym2xEn;
+reg     [17:0]  iIn,qIn;
+reg     [13:0]  demod0DataReg;
+reg             demod0SyncReg;
+reg     [17:0]  demod1DataReg;
+reg             demod1SyncReg;
+reg     [17:0]  demod2DataReg;
+reg             demod2SyncReg;
+reg             iBitReg,qBitReg;
+reg             dataSymEnReg,dataSym2xEnReg;
+reg             auSymClkIn;
 
 always @(posedge clk) begin
     legacyBit <= trellisLegacyBit;
@@ -317,10 +360,57 @@ always @(posedge clk) begin
     qBitReg <= qData;
     dataSymEnReg <= dataSymEn ;
     dataSym2xEnReg <= dataSym2xEn ;
+    auSymClkIn <= auSymClk;
     end
 
 reg  trellisSymEn,trellisSym2xEn,trellisBit;
 wire trellisEn = (pcmTrellisMode || (demodMode == `MODE_SOQPSK));
+
+//******************************************************************************
+//                         Subcarrier Demod/Bitsync
+//******************************************************************************
+wire    [31:0]  sc_dout;
+wire    [17:0]  sc_dac0Data;
+wire    [17:0]  sc_dac1Data;
+wire    [17:0]  sc_dac2Data;
+wire            sc_auSymClk;
+wire            sc_iBit;
+wire            sc_iSym2xEn;
+wire            sc_iSymEn;
+wire            sc_qBit;
+wire            sc_qSym2xEn;
+wire            sc_qSymEn;
+
+demod sc(
+    .clk(clk),
+    .reset(reset),
+    .wr0(wr0),
+    .wr1(wr1),
+    .wr2(wr2),
+    .wr3(wr3),
+    .addr(addr),
+    .din(dataIn),
+    .dout(sc_dout),
+    .iRx({demod2DataReg,4'h0}),      // FPGA1 DAC2 output
+    .qRx(18'h0),
+    .bbClkEn(dataSymEnReg),
+    .iBB(iIn),
+    .qBB(qIn),
+    .dac0Data(sc_dac0Data),
+    .dac0Sync(sc_dac0Sync),
+    .dac1Data(sc_dac1Data),
+    .dac1Sync(sc_dac1Sync),
+    .dac2Data(sc_dac2Data),
+    .dac2Sync(sc_dac2Sync),
+    .iSym2xEn(sc_iSym2xEn),
+    .iSymEn(sc_iSymEn),
+    .iBit(sc_iBit),
+    .qSym2xEn(sc_qSym2xEn),
+    .qSymEn(sc_qSymEn),
+    .qSymClk(sc_auSymClk),
+    .qBit(sc_qBit)
+    );
+
 
 //******************************************************************************
 //                             PCM Trellis Decoder
@@ -417,54 +507,82 @@ reg  [17:0] interp0DataIn,interp1DataIn,interp2DataIn;
 reg         dac0Sync,dac1Sync,dac2Sync;
 
 always @(posedge clk) begin
-    if (trellisMode) begin
-        case (dac0Select)
-            `DAC_TRELLIS_I,
-            `DAC_TRELLIS_Q,
-            `DAC_TRELLIS_PHERR,
-            `DAC_TRELLIS_INDEX: begin
-                interp0DataIn <= trellis0Out;
-                dac0Sync <= trellis0Sync;
-                end
-            default: begin
-                interp0DataIn <= {demod0DataReg,4'h0};
-                dac0Sync <= demod0SyncReg;
-                end
-            endcase
-        case (dac1Select)
-            `DAC_TRELLIS_I,
-            `DAC_TRELLIS_Q,
-            `DAC_TRELLIS_PHERR,
-            `DAC_TRELLIS_INDEX: begin
-                interp1DataIn <= trellis1Out;
-                dac1Sync <= trellis1Sync;
-                end
-            default: begin
-                interp1DataIn <= {demod1DataReg,4'h0};
-                dac1Sync <= demod1SyncReg;
-                end
-            endcase
-        case (dac2Select)
-            `DAC_TRELLIS_I,
-            `DAC_TRELLIS_Q,
-            `DAC_TRELLIS_PHERR,
-            `DAC_TRELLIS_INDEX: begin
-                interp2DataIn <= trellis2Out;
-                dac2Sync <= trellis2Sync;
-                end
-            default: begin
-                interp2DataIn <= {demod2DataReg,4'h0};
-                dac2Sync <= demod2SyncReg;
-                end
-            endcase
+    if (dac0_in_sel == `DAC_IN_SEL_DEMOD) begin
+        if (trellisMode) begin
+            case (dac0Select)
+                `DAC_TRELLIS_I,
+                `DAC_TRELLIS_Q,
+                `DAC_TRELLIS_PHERR,
+                `DAC_TRELLIS_INDEX: begin
+                    interp0DataIn <= trellis0Out;
+                    dac0Sync <= trellis0Sync;
+                    end
+                default: begin
+                    interp0DataIn <= {demod0DataReg,4'h0};
+                    dac0Sync <= demod0SyncReg;
+                    end
+                endcase
+            end
+        else begin
+            interp0DataIn <= {demod0DataReg,4'h0};
+            dac0Sync <= demod0SyncReg;
+            end
         end
     else begin
-        interp0DataIn <= {demod0DataReg,4'h0};
-        dac0Sync <= demod0SyncReg;
-        interp1DataIn <= {demod1DataReg,4'h0};
-        dac1Sync <= demod1SyncReg;
-        interp2DataIn <= {demod2DataReg,4'h0};
-        dac2Sync <= demod2SyncReg;
+        interp0DataIn <= sc_dac0Data;
+        dac0Sync <= sc_dac0Sync;
+        end
+
+    if (dac1_in_sel == `DAC_IN_SEL_DEMOD) begin
+        if (trellisMode) begin
+            case (dac1Select)
+                `DAC_TRELLIS_I,
+                `DAC_TRELLIS_Q,
+                `DAC_TRELLIS_PHERR,
+                `DAC_TRELLIS_INDEX: begin
+                    interp1DataIn <= trellis1Out;
+                    dac1Sync <= trellis1Sync;
+                    end
+                default: begin
+                    interp1DataIn <= {demod1DataReg,4'h0};
+                    dac1Sync <= demod1SyncReg;
+                    end
+                endcase
+            end
+        else begin
+            interp1DataIn <= {demod1DataReg,4'h0};
+            dac1Sync <= demod1SyncReg;
+            end
+        end
+    else begin
+        interp1DataIn <= sc_dac1Data;
+        dac1Sync <= sc_dac1Sync;
+        end
+
+    if (dac2_in_sel == `DAC_IN_SEL_DEMOD) begin
+        if (trellisMode) begin
+            case (dac2Select)
+                `DAC_TRELLIS_I,
+                `DAC_TRELLIS_Q,
+                `DAC_TRELLIS_PHERR,
+                `DAC_TRELLIS_INDEX: begin
+                    interp2DataIn <= trellis2Out;
+                    dac2Sync <= trellis2Sync;
+                    end
+                default: begin
+                    interp2DataIn <= {demod2DataReg,4'h0};
+                    dac2Sync <= demod2SyncReg;
+                    end
+                endcase
+            end
+        else begin
+            interp2DataIn <= {demod2DataReg,4'h0};
+            dac2Sync <= demod2SyncReg;
+            end
+        end
+    else begin
+        interp2DataIn <= sc_dac2Data;
+        dac2Sync <= sc_dac2Sync;
         end
     end
 //******************************************************************************
@@ -587,10 +705,20 @@ wire decSymEn_wire = trellisEn ? trellisSymEn : dataSymEnReg ;
 wire decSym2xEn_wire = trellisEn ? trellisSym2xEn : dataSym2xEnReg ;
 
 always @(posedge clk) begin
-    iDec <= iDec_wire ;
-    qDec <= qDec_wire ;
-    decoderSymEn <= decSymEn_wire ;
-    decoderSym2xEn <= decSym2xEn_wire ;
+    if (dec_in_sel)
+        begin
+        iDec <= sc_iBit ;
+        qDec <= sc_qBit ;
+        decoderSymEn <= sc_iSymEn ;
+        decoderSym2xEn <= sc_iSym2xEn ;
+        end
+    else
+        begin
+        iDec <= iDec_wire ;
+        qDec <= qDec_wire ;
+        decoderSymEn <= decSymEn_wire ;
+        decoderSym2xEn <= decSym2xEn_wire ;
+        end
     end
 
 decoder decoder
@@ -681,11 +809,6 @@ always @(posedge clk) begin
     symb_pll_ref <= pllRef;
     end
 
-reg             auSymClkIn;
-always @(posedge clk) begin
-    auSymClkIn <= auSymClk;
-    end
-
 wire clkOut = bypass_fifo ? symbol_clk : symb_pll_out;
 wire cout = (clkOut) ^ !cout_inv;
 assign cout_i = cout;
@@ -715,6 +838,23 @@ always @(demodMode or qData or decQ) begin
 reg [15:0] rd_mux;
 always @(*) begin
   casex(addr)
+    `DEMODSPACE,
+    `DDCSPACE,
+    `DDCFIRSPACE,
+    `CICDECSPACE,
+    `BITSYNCSPACE,
+    `BITSYNCAUSPACE,
+    `CHAGCSPACE,
+    `RESAMPSPACE,
+    `CARRIERSPACE,
+    `CHAGCSPACE : begin
+      if (addr[1]) begin
+        rd_mux <= sc_dout[31:16];
+        end
+      else begin
+        rd_mux <= sc_dout[15:0];
+        end
+      end
     `DAC_SPACE : rd_mux <= dac_dout;
     `MISC_SPACE : begin
         if (addr[1]) begin
@@ -726,41 +866,41 @@ always @(*) begin
         end
     `DECODERSPACE: rd_mux <= decoder_dout;
     `PLLSPACE: rd_mux <= symb_pll_dout;
-   `INTERP0SPACE: begin
-      if (addr[1]) begin
-        rd_mux <= interp0Dout[31:16];
-        end
-      else begin
-        rd_mux <= interp0Dout[15:0];
-        end
-      end
-    `INTERP1SPACE: begin
-      if (addr[1]) begin
-        rd_mux <= interp1Dout[31:16];
-        end
-      else begin
-        rd_mux <= interp1Dout[15:0];
-        end
-      end
-    `INTERP2SPACE: begin
-      if (addr[1]) begin
-        rd_mux <= interp2Dout[31:16];
-        end
-      else begin
-        rd_mux <= interp2Dout[15:0];
-        end
-      end
-    `TRELLISLFSPACE,
-    `TRELLIS_SPACE: begin
-        if (addr[1]) begin
-            rd_mux <= trellisDout[31:16];
-            end
-        else begin
-            rd_mux <= trellisDout[15:0];
-            end
-        end
-
-    default : rd_mux <= 16'hxxxx;
+    `INTERP0SPACE: begin
+       if (addr[1]) begin
+         rd_mux <= interp0Dout[31:16];
+         end
+       else begin
+         rd_mux <= interp0Dout[15:0];
+         end
+       end
+     `INTERP1SPACE: begin
+       if (addr[1]) begin
+         rd_mux <= interp1Dout[31:16];
+         end
+       else begin
+         rd_mux <= interp1Dout[15:0];
+         end
+       end
+     `INTERP2SPACE: begin
+       if (addr[1]) begin
+         rd_mux <= interp2Dout[31:16];
+         end
+       else begin
+         rd_mux <= interp2Dout[15:0];
+         end
+       end
+     `TRELLISLFSPACE,
+     `TRELLIS_SPACE: begin
+         if (addr[1]) begin
+             rd_mux <= trellisDout[31:16];
+             end
+         else begin
+             rd_mux <= trellisDout[15:0];
+             end
+         end
+   
+     default : rd_mux <= 16'hxxxx;
     endcase
   end
 

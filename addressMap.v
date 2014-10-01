@@ -159,6 +159,8 @@
 `define MISC_VERSION    12'bxxxx_xxxx_001x
 `define MISC_CLOCK      12'bxxxx_xxxx_01xx
 `define DAC_IN_SEL      12'bxxxx_xxxx_100x
+`define DAC_IN_SEL_DEMOD    2'b00
+`define DAC_IN_SEL_SC       2'b01
 `define DEC_IN_SEL      12'bxxxx_xxxx_101x
 `define REBOOT_ADDR     12'bxxxx_xxxx_11xx
 
