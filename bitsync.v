@@ -8,6 +8,9 @@ module bitsync(
     symTimes2Sync,
     auResampSync,
     demodMode,
+    `ifdef ADD_DESPREADER
+    enableDespreader,
+    `endif
     bitsyncMode,
     wr0,wr1,wr2,wr3,
     addr,
@@ -50,6 +53,9 @@ input           reset;
 input           symTimes2Sync;
 input           auResampSync;
 input   [4:0]   demodMode;
+`ifdef ADD_DESPREADER
+input           enableDespreader;
+`endif
 input   [1:0]   bitsyncMode;
 input           wr0,wr1,wr2,wr3;
 input   [11:0]  addr;
@@ -150,6 +156,7 @@ always @(posedge sampleClk) begin
     end
 `endif
 
+`ifdef ADD_DESPREADER
 /******************************************************************************
                                Symbol Offset Deskew
 ******************************************************************************/
@@ -159,8 +166,14 @@ always @(posedge sampleClk) begin
         iSymDelay <= iFiltered;
         qSymDelay <= qFiltered;
         if (demodMode == `MODE_OQPSK) begin
-            iMF <= iSymDelay;
-            qMF <= qFiltered;
+            if (enableDespreader) begin
+                iMF <= iSymDelay;
+                qMF <= qFiltered;
+                end
+            else begin
+                iMF <= iFiltered;
+                qMF <= qSymDelay;
+                end
             end
         else if (demodMode == `MODE_SOQPSK) begin
             iMF <= iFiltered;
@@ -172,6 +185,26 @@ always @(posedge sampleClk) begin
             end
         end
     end
+`else
+/******************************************************************************
+                               Symbol Offset Deskew
+******************************************************************************/
+reg     [17:0]  iMF,qMF,qSymDelay;
+always @(posedge sampleClk) begin
+    if (symTimes2Sync) begin
+        iMF <= iFiltered;
+        qSymDelay <= qFiltered;
+        if ( (demodMode == `MODE_OQPSK)
+          || (demodMode == `MODE_SOQPSK)) begin
+            qMF <= qSymDelay;
+            end
+        else begin
+            qMF <= qFiltered;
+            end
+        end
+    end
+
+`endif
 
 wire fmTrellisModes = ( (demodMode == `MODE_MULTIH)
                      || (demodMode == `MODE_PCMTRELLIS)

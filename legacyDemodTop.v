@@ -73,7 +73,7 @@ output  [17:0]  iTrellis;
 output  [17:0]  qTrellis;  
 output          legacyBit;
 
-parameter VER_NUMBER = 16'h017d;
+parameter VER_NUMBER = 16'h017f;
 
 wire    [11:0]  addr = {addr11,addr10,addr9,addr8,addr7,addr6,addr5,addr4,addr3,addr2,addr1,1'b0};
 wire            nWr = nWe;

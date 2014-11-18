@@ -517,6 +517,9 @@ bitsync bitsync(
     .symTimes2Sync(resampSync),
     .auResampSync(auResampSync),
     .demodMode(demodMode),
+    `ifdef ADD_DESPREADER
+    .enableDespreader(enableDespreader),
+    `endif
     .bitsyncMode(bitsyncMode),
     .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
     .addr(addr),
