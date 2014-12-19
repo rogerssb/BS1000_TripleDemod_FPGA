@@ -190,10 +190,12 @@
 
 // Define the SDI registers
 `define SDI_CONTROL         12'bxxxx_xxxx_00xx
-`define SDI_MODE_DISABLED       2'b00
-`define SDI_MODE_CONSTELLATION  2'b01
-`define SDI_MODE_EYE            2'b10
-`define SDI_MODE_ARTM           2'b11
+`define SDI_MODE_DISABLED       3'b000
+`define SDI_MODE_CONSTELLATION  3'b001
+`define SDI_MODE_EYE            3'b010
+`define SDI_MODE_ARTM           3'b011
+`define SDI_MODE_IEPOCH         3'b100
+`define SDI_MODE_QEPOCH         3'b101
 `define SDI_ARTM_THRESHOLD  12'bxxxx_xxxx_01xx
 `define SDI_ARTM_COUNTS     12'bxxxx_xxxx_10xx
 

@@ -123,10 +123,10 @@ always @(
             oddOutQ = fifoQ[10];
             end
         default: begin
-            //oddOutI = fifoI[9];
-            //oddOutQ = fifoQ[9];
-            oddOutI = fifoI[10];
-            oddOutQ = fifoQ[10];
+            oddOutI = fifoI[9];
+            oddOutQ = fifoQ[9];
+            //oddOutI = fifoI[10];
+            //oddOutQ = fifoQ[10];
             end
         endcase
     end
@@ -210,7 +210,7 @@ module test;
 reg reset,clk;
 
 // Create the clocks
-parameter decimation = 9;
+parameter decimation = 10;
 parameter HC = 5;
 parameter C = 2*HC;
 reg clken;

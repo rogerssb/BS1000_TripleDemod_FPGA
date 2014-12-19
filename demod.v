@@ -35,6 +35,9 @@ module demod(
     dac2Sync,
     dac2Data,
     demodMode,
+    `ifdef ADD_DESPREADER
+    iEpoch,qEpoch,
+    `endif
     eyeSync,
     iEye,qEye,
     eyeOffset
@@ -75,6 +78,9 @@ output  [17:0]  dac1Data;
 output          dac2Sync;
 output  [17:0]  dac2Data;
 output  [4:0]   demodMode;
+`ifdef ADD_DESPREADER
+output          iEpoch, qEpoch;
+`endif
 output          eyeSync;
 output  [17:0]  iEye,qEye;
 output  [4:0]   eyeOffset;

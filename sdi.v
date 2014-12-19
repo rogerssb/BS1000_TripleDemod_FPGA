@@ -16,6 +16,9 @@ module sdi(
     iEye,qEye,
     eyeOffset,
     bitsyncLock, demodLock,
+    `ifdef ADD_DESPREADER
+    iEpoch, qEpoch,
+    `endif
     sdiOut
     );
 
@@ -33,6 +36,9 @@ input           eyeSync;
 input   [17:0]  iEye,qEye;
 input   [4:0]   eyeOffset;
 input           bitsyncLock, demodLock;
+`ifdef ADD_DESPREADER
+input           iEpoch, qEpoch;
+`endif
 output          sdiOut;
 
 
@@ -46,7 +52,7 @@ end
 
 wire            fifoFull;
 reg             sdiEnable;
-reg     [1:0]   sdiMode;
+reg     [2:0]   sdiMode;
 reg     [7:0]   artmThreshold;
 wire            sdiEnableReset = (fifoFull || reset);
 always @(negedge wr0 or posedge sdiEnableReset) begin
@@ -57,7 +63,7 @@ always @(negedge wr0 or posedge sdiEnableReset) begin
         casex (addr) 
             `SDI_CONTROL: begin
                 sdiEnable <= dataIn[7];
-                sdiMode <= dataIn[1:0];
+                sdiMode <= dataIn[2:0];
                 end     
             `SDI_ARTM_THRESHOLD: begin
                 artmThreshold[7:0] <= dataIn[7:0];
@@ -79,7 +85,7 @@ always @(addr or sdiSpace or
          ) begin
     casex(addr)
         `SDI_CONTROL:           begin
-                                sdiDout <= {fifoEmpty,29'b0,sdiMode};
+                                sdiDout <= {fifoEmpty,28'b0,sdiMode};
                                 holdCount <= 0;
                                 end
         `SDI_ARTM_THRESHOLD:    begin
@@ -347,7 +353,19 @@ artmSignalQuality artm(
 //                              Module Outputs
 //*****************************************************************************
 
+`ifdef ADD_DESPREADER
+reg sdiOut;
+always @* begin
+    casex (sdiMode)
+        `SDI_MODE_ARTM:     sdiOut = artmOut;
+        `SDI_MODE_IEPOCH:   sdiOut = iEpoch;
+        `SDI_MODE_QEPOCH:   sdiOut = qEpoch;
+        default:            sdiOut = uartOut;
+    endcase
+end
+`else
 assign sdiOut = (sdiMode == `SDI_MODE_ARTM) ? artmOut : uartOut ;
+`endif
 
 reg     [31:0]  dataOut;
 always @(addr or sdiDout or uartDout) begin
