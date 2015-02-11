@@ -81,7 +81,7 @@ input           symb_pll_vco;
 output          sdiOut;
 input           legacyBit_pad ;
 
-parameter VER_NUMBER = 16'h0181;
+parameter VER_NUMBER = 16'h0182;
 
 // 12 Jun 13
 // IOB reclocking of inputs to trellis
@@ -130,20 +130,11 @@ always @(addr) begin
 end
 wire misc_en = !nCs && misc_space;
 
-boot_manager bm(
-    .rst(reset),
-    .clk(clk),
-    .ena(misc_en),
-    .wr0(wr0),
-    .wr2(wr2),
-    .addr(addr),
-    .data(dataIn[15 : 0])
-    );
-
 reg     [1:0]   dac0_in_sel;
 reg     [1:0]   dac1_in_sel;
 reg     [1:0]   dac2_in_sel;
 reg             dec_in_sel;
+reg     [23:0]  boot_addr;
 
 // MISC space writes
 always @(negedge wr0) begin
@@ -154,6 +145,22 @@ always @(negedge wr0) begin
                 dac0_in_sel <= dataIn[1:0];
                 dac1_in_sel <= dataIn[3:2];
                 dac2_in_sel <= dataIn[5:4];
+                end
+            `REBOOT_ADDR:
+                begin
+                boot_addr[7:0] <= dataIn[7:0];
+                end
+            default: ;
+            endcase
+        end
+    end
+
+always @(negedge wr1) begin
+    if (misc_en) begin
+        casex (addr)
+            `REBOOT_ADDR:
+                begin
+                boot_addr[15:8] <= dataIn[15:8];
                 end
             default: ;
             endcase
@@ -166,6 +173,10 @@ always @(negedge wr2) begin
             `DEC_IN_SEL:
                 begin
                 dec_in_sel <= data[0];
+                end
+           `REBOOT_ADDR:
+                begin
+                boot_addr[23:16] <= dataIn[23:16];
                 end
             default: ;
             endcase
@@ -207,7 +218,51 @@ always @* begin
     end
 end
 
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Multi-boot
+// The reboot address is 24 bits. Writing the upper byte triggers a reboot.
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+reg reboot_decode;
+reg [7:0]reboot_decode_sync;
+reg reboot;
+
+always @*
+    begin
+    if (wr2 && misc_en)
+        begin
+        casex (addr)
+            `REBOOT_ADDR:
+                begin
+                reboot_decode <= 1'b1 ;
+                end
+            default: reboot_decode <= 1'b0 ;
+        endcase
+        end
+    else
+        begin
+        reboot_decode <= 1'b0 ;
+        end
+    end
+
+always @ (posedge clk)
+    begin
+    reboot_decode_sync <= {reboot_decode_sync[6:0],reboot_decode};
+    reboot <= (reboot_decode_sync[7:6] == 2'b10);
+    end
+
+multiboot multiboot
+    (
+    .addr(boot_addr),
+    .clk(clk),
+    .reset(reset),
+    .pulse(reboot)
+    );
+
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Processor controlled reset
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 reg rs0,rs1;
 reg [2:0]resetCount;
