@@ -187,6 +187,44 @@ NET "qData" LOC = E8;
 NET "iData" IOSTANDARD = LVCMOS33;
 NET "qData" IOSTANDARD = LVCMOS33;
 
+NET "iBB[0]" IOSTANDARD = LVCMOS33 | LOC = P3;
+NET "iBB[1]" IOSTANDARD = LVCMOS33 | LOC = P6;
+NET "iBB[2]" IOSTANDARD = LVCMOS33 | LOC = R2;
+NET "iBB[3]" IOSTANDARD = LVCMOS33 | LOC = R3;
+NET "iBB[4]" IOSTANDARD = LVCMOS33 | LOC = R5;
+NET "iBB[5]" IOSTANDARD = LVCMOS33 | LOC = T1;
+NET "iBB[6]" IOSTANDARD = LVCMOS33 | LOC = T3;
+NET "iBB[7]" IOSTANDARD = LVCMOS33 | LOC = T4;
+NET "iBB[8]" IOSTANDARD = LVCMOS33 | LOC = T5;
+NET "iBB[9]" IOSTANDARD = LVCMOS33 | LOC = T6;
+NET "iBB[10]" IOSTANDARD = LVCMOS33 | LOC = U1;
+NET "iBB[11]" IOSTANDARD = LVCMOS33 | LOC = U2;
+NET "iBB[12]" IOSTANDARD = LVCMOS33 | LOC = U3;
+NET "iBB[13]" IOSTANDARD = LVCMOS33 | LOC = U5;
+NET "iBB[14]" IOSTANDARD = LVCMOS33 | LOC = V1;
+NET "iBB[15]" IOSTANDARD = LVCMOS33 | LOC = V4;
+NET "iBB[16]" IOSTANDARD = LVCMOS33 | LOC = W3;
+NET "iBB[17]" IOSTANDARD = LVCMOS33 | LOC = Y1;
+
+NET "qBB[0]" IOSTANDARD = LVCMOS33 | LOC = B20;
+NET "qBB[1]" IOSTANDARD = LVCMOS33 | LOC = C4; 
+NET "qBB[2]" IOSTANDARD = LVCMOS33 | LOC = C5; 
+NET "qBB[3]" IOSTANDARD = LVCMOS33 | LOC = C6; 
+NET "qBB[4]" IOSTANDARD = LVCMOS33 | LOC = C7; 
+NET "qBB[5]" IOSTANDARD = LVCMOS33 | LOC = C8; 
+NET "qBB[6]" IOSTANDARD = LVCMOS33 | LOC = C10;
+NET "qBB[7]" IOSTANDARD = LVCMOS33 | LOC = C11;
+NET "qBB[8]" IOSTANDARD = LVCMOS33 | LOC = C14;
+NET "qBB[9]" IOSTANDARD = LVCMOS33 | LOC = C15;
+NET "qBB[10]" IOSTANDARD = LVCMOS33 | LOC = C16;
+NET "qBB[11]" IOSTANDARD = LVCMOS33 | LOC = C17;
+NET "qBB[12]" IOSTANDARD = LVCMOS33 | LOC = C19;
+NET "qBB[13]" IOSTANDARD = LVCMOS33 | LOC = D5; 
+NET "qBB[14]" IOSTANDARD = LVCMOS33 | LOC = D9; 
+NET "qBB[15]" IOSTANDARD = LVCMOS33 | LOC = D10;
+NET "qBB[16]" IOSTANDARD = LVCMOS33 | LOC = D13;
+NET "qBB[17]" IOSTANDARD = LVCMOS33 | LOC = D14;
+
 NET "auSymClk" LOC = E11;
 NET "auSymClk" IOSTANDARD = LVCMOS33;
 
@@ -313,44 +351,42 @@ NET "symb_pll_vco" CLOCK_DEDICATED_ROUTE = FALSE;
 NET "sdiOut" LOC = AB20;
 NET "sdiOut" IOSTANDARD = LVCMOS33;
 
+NET "reset" TIG;
 NET "nWe" TIG;
 NET "nCs" TIG;
-#NET "nRd" TIG;
-#NET "data<0>" TIG;
-#NET "data<1>" TIG;
-#NET "data<2>" TIG;
-#NET "data<3>" TIG;
-#NET "data<4>" TIG;
-#NET "data<5>" TIG;
-#NET "data<6>" TIG;
-#NET "data<7>" TIG;
-#NET "data<8>" TIG;
-#NET "data<9>" TIG;
-#NET "data<10>" TIG;
-#NET "data<11>" TIG;
-#NET "data<12>" TIG;
-#NET "data<13>" TIG;
-#NET "data<14>" TIG;
-#NET "data<15>" TIG;
+NET "nRd" TIG;
+NET "data<0>" TIG;
+NET "data<1>" TIG;
+NET "data<2>" TIG;
+NET "data<3>" TIG;
+NET "data<4>" TIG;
+NET "data<5>" TIG;
+NET "data<6>" TIG;
+NET "data<7>" TIG;
+NET "data<8>" TIG;
+NET "data<9>" TIG;
+NET "data<10>" TIG;
+NET "data<11>" TIG;
+NET "data<12>" TIG;
+NET "data<13>" TIG;
+NET "data<14>" TIG;
+NET "data<15>" TIG;
 NET "addr1" TIG;
-#NET "addr2" TIG;
-#NET "addr3" TIG;
-#NET "addr4" TIG;
-#NET "addr7" TIG;
-#NET "addr8" TIG;
-#NET "addr9" TIG;
-#NET "addr10" TIG;
-#NET "addr11" TIG;
-#NET "addr12" TIG;
+NET "addr2" TIG;
+NET "addr3" TIG;
+NET "addr4" TIG;
+NET "addr5" TIG;
+NET "addr6" TIG;
+NET "addr7" TIG;
+NET "addr8" TIG;
+NET "addr9" TIG;
+NET "addr10" TIG;
+NET "addr11" TIG;
+NET "addr12" TIG;
 
 TIMEGRP "dataBus" = PADS(data*);
 TIMEGRP "addrBus" = PADS(addr*);
 TIMEGRP "ctrlBus" = PADS(nCs*) PADS(nRd);
-
-
-NET "ck933*" TNM_NET = FFS ck933;
-NET "ck933*" TNM_NET = DSPS ck933;
-NET "ck933*" TNM_NET = RAMS ck933;
 
 NET "reset*" TNM_NET = reset;
 
@@ -358,25 +394,21 @@ NET "nWe*" TNM_NET = FFS writeEn;
 NET "wr0*" TNM_NET = FFS writeEn;
 NET "wr2*" TNM_NET = FFS writeEn;
 
-NET "symb_pll_vco" TNM_NET = FFS vco;
+NET "ck933*" TNM_NET = FFS ck933;
+NET "ck933*" TNM_NET = DSPS ck933;
+NET "ck933*" TNM_NET = RAMS ck933;
 
-NET "dac_control_ck*" TNM_NET = FFS dacRegs;
-
-TIMEGRP "pllFifo" = FFS(decoder_output_fifo/*);
-
-
-TIMESPEC TS_ck933 = PERIOD "ck933" 100 MHz HIGH 50%;
-TIMESPEC TS_vco   = PERIOD "vco" 50 MHz HIGH 50 %;
-
-#begin legacyV11 paste------------------------------
-
-TIMESPEC TS_clkToFFS = 	FROM PADS(ck933) TO FFS TIG;
+# The default clock rate
+TIMESPEC TS_clk = PERIOD "ck933" 93.33 MHz HIGH 50% PRIORITY 100;
+TIMESPEC TS_clkToFFS =  FROM PADS(ck933) TO FFS TIG;
 TIMESPEC TS_clkToDSPS = FROM PADS(ck933) TO DSPS TIG;
 TIMESPEC TS_clkToRAMS = FROM PADS(ck933) TO RAMS TIG;
 
-#NET "demod1/dac0Sync*" TNM_NET = FFS syncGroup;
-#NET "demod1/dac1Sync*" TNM_NET = FFS syncGroup;
-#NET "demod1/dac2Sync*" TNM_NET = FFS syncGroup;
+
+# Devices with clock enables than can run slower
+NET "demod1/dac0Sync*" TNM_NET = FFS syncGroup;
+NET "demod1/dac1Sync*" TNM_NET = FFS syncGroup;
+NET "demod1/dac2Sync*" TNM_NET = FFS syncGroup;
 NET "demod1/ddc/agcSync*" TNM_NET = FFS syncGroup;
 NET "demod1/ddc/cic/cicI/syncOut*" TNM_NET = FFS syncGroup;
 NET "demod1/ddc/cic/cicQ/syncOut*" TNM_NET = FFS syncGroup;
@@ -388,63 +420,88 @@ NET "demod1/ddc/hb0/evenSync*" TNM_NET = FFS syncGroup;
 NET "demod1/ddc/hb0/syncOut*" TNM_NET = FFS syncGroup;
 NET "demod1/ddc/firClockEn*" TNM_NET = FFS syncGroup;
 NET "demod1/ddc/firClockEn*" TNM_NET = DSPS syncGroup;
-NET "demod1/carrierOffsetEn*" TNM_NET = FFS syncGroup;
+#NET "demod1/carrierOffsetEn*" TNM_NET = FFS syncGroup;
 NET "demod1/ddc/syncOut*" TNM_NET = FFS syncGroup;
+NET "demod1/ddc/syncOut*" TNM_NET = DSPS syncGroup;
 NET "demod1/resampler/resamplerI/resampleDelay*" TNM_NET = FFS syncGroup;
 NET "demod1/resampler/resamplerQ/resampleDelay*" TNM_NET = FFS syncGroup;
 #NET "demod1/resampler/resamplerI/resampleDelay*" TNM_NET = DSPS syncGroup;
 #NET "demod1/resampler/resamplerQ/resampleDelay*" TNM_NET = DSPS syncGroup;
 NET "demod1/resampler/auCic/syncOut*" TNM_NET = FFS syncGroup;
-#NET "demod1/carrierLoop/loopFilterEn*" TNM_NET = FFS syncGroup;
+NET "demod1/carrierLoop/loopFilterEn*" TNM_NET = FFS syncGroup;
 NET "demod1/fmDemod/cordic/enSR*" TNM_NET = FFS syncGroup;
+#NET "demod1/fmDemod/cordic/enSR*" TNM_NET = DSPS syncGroup;
 NET "demod1/bitsync/phaseState*" TNM_NET = FFS syncGroup;
 
-TIMESPEC TS_syncGroup = FROM "syncGroup" TO "syncGroup" 20 ns;
+# A group composed of all the clock enables
+TIMEGRP "clken" =  FFS(demod1/dac0Sync*) 
+                   FFS(demod1/dac1Sync*) 
+                   FFS(demod1/dac2Sync*)
+                   FFS(demod1/ddc/agcSync*) 
+                   FFS(demod1/ddc/cic/cicI/syncOut*) 
+                   FFS(demod1/ddc/cic/cicQ/syncOut*)
+                   FFS(demod1/ddc/cicClockEn*) 
+                   FFS(demod1/ddc/hb/evenSync*) 
+                   FFS(demod1/ddc/hb/syncOut*)
+                   FFS(demod1/ddc/hbClockEn*) 
+                   FFS(demod1/ddc/hb0/evenSync*) 
+                   FFS(demod1/ddc/hb0/syncOut*)
+                   FFS(demod1/ddc/firClockEn*)
+                   FFS(demod1/ddc/syncOut*)
+                   FFS(demod1/resampler/resamplerI/resampleDelay*)
+                   FFS(demod1/resampler/resamplerQ/resampleDelay*)
+                   FFS(demod1/resampler/auCic/syncOut*)
+                   FFS(demod1/carrierLoop/loopFilterEn*)
+                   FFS(demod1/fmDemod/cordic/enSR*) 
+                   FFS(demod1/bitsync/phaseState*);
 
-#TIMEGRP "ddc0" = FFS(demod1/ddc/cic/cicI*) FFS(demod1/ddc/cic/cicQ*);
-#TIMEGRP "ddc2" = FFS(demod1/ddc/iOut*) FFS(demod1/ddc/qOut*);
-#TIMEGRP "ddc3" = FFS(demod1/ddc/dualFir/*) DSPS(demod1/ddc/dualFir/*);
-#TIMEGRP "ddc4" = FFS(demod1/ddc/qFirIn*) FFS(demod1/ddc/iFirIn*);
-#TIMEGRP "ddc" = "ddc0" "ddc1" "ddc2" "ddc3" "ddc4";
-#TIMESPEC TS_ddc0 = FROM "ddc" to "ddc" 20 ns;
-TIMEGRP "ddcPL0" = FFS(demod1/ddc/iCicIn*) FFS(demod1/ddc/qCicIn*);
-TIMEGRP "ddcPL1" = FFS(demod1/ddc/iAgcIn*) FFS(demod1/ddc/qAgcIn*);
-TIMEGRP "ddcPL2" = FFS(demod1/ddc/iHbIn*) FFS(demod1/ddc/qHbIn*);
-TIMEGRP "ddcPL3" = FFS(demod1/ddc/iFirIn*) FFS(demod1/ddc/qFirIn*);
-TIMEGRP "ddcPL4" = FFS(demod1/ddc/iBB*) FFS(demod1/ddc/qBB*);
-TIMEGRP "ddcPL" = "ddcPL0" "ddcPL1" "ddcPL2" "ddcPL3" "ddcPL4";
-TIMESPEC "TS_ddc1" = FROM "ddcPL" TO FFS 20 ns;
-TIMESPEC "TS_ddc2" = FROM "ddcPL" TO DSPS 20 ns;
-#NET "demod/resampler/auCic/syncOut*" TNM_NET = FFS ddcAuCIC;
-#TIMESPEC "TS_ddc2" = FROM "ddcAuCIC" TO "ddcAuCIC" 20 ns;
+# allEnables = All FFS that have a clock enable input
+TIMEGRP "allEnables" = syncGroup EXCEPT clken ;
 
+# DDC that can clock slower
+TIMEGRP "ddcPL" = FFS(demod1/ddc/iCicIn*) FFS(demod1/ddc/qCicIn*)
+                  FFS(demod1/ddc/iAgcIn*) FFS(demod1/ddc/qAgcIn*)
+                  FFS(demod1/ddc/iHbIn*) FFS(demod1/ddc/qHbIn*)
+                  FFS(demod1/ddc/iFirIn*) FFS(demod1/ddc/qFirIn*)
+                  FFS(demod1/ddc/iLeadIn*) FFS(demod1/ddc/qLeadIn*);
 
-#end legacyV11 paste---------------------------------------
+# AGC loop that can clock slower
+TIMEGRP "magloop" = FFS( demod1/magLoop/lagAccum*) ;
 
-#NET "demod1/ddc/hb0/fifomux*" TIG;
+# Slower clock timespecs. 
+TIMESPEC TS_syncGroup = FROM "allEnables" TO "syncGroup" 46.67 MHz PRIORITY 4;
+TIMESPEC TS_dacGroup = FROM "syncGroup" TO FFS(demod1/dac*Data*) 46.67 MHz PRIORITY 3;
+TIMESPEC "TS_ddc1" = FROM "ddcPL" TO FFS 46.67 MHz PRIORITY 3;
+TIMESPEC "TS_ddc2" = FROM "ddcPL" TO DSPS 46.67 MHz PRIORITY 3;
+TIMESPEC TS_magloop = FROM "magloop" TO "magloop" 46.67 MHz PRIORITY 3;
+TIMESPEC TS_clken = FROM "clken" TO FFS 93.33 MHz PRIORITY 1;
 
-TIMESPEC TS_reset = FROM FFS(reset*) to FFS 25 MHz;
+# Clocked Inputs
+OFFSET = IN 100 ns BEFORE "ck933" RISING;
+
+# Clocked Outputs
+OFFSET = OUT 100 ns AFTER "ck933" RISING;
 
 # The microprocessor registers. This needs to go last to keep uP registers being included
 # in fast constraints.
-TIMESPEC TS_nWe  = PERIOD "writeEn" 100 ns HIGH 50%;
-TIMESPEC TS_uP0  = FROM "writeEn" TO FFS 100 ns;
-TIMESPEC TS_uP1  = FROM "writeEn" TO DSPS 100 ns;
-TIMESPEC TS_uP2  = FROM "writeEn" TO RAMS 100 ns;
-TIMESPEC TS_uP3  = FROM "addrBus" TO "writeEn" 100 ns;
-TIMESPEC TS_uP4  = FROM "dataBus" TO "writeEn" 100 ns;
-TIMESPEC TS_uP5  = FROM "ctrlBus" TO "writeEn" 100 ns;
-TIMESPEC TS_uP6  = FROM "addrBus" TO "dataBus" 100 ns;
-TIMESPEC TS_uP7  = FROM "ctrlBus" TO "dataBus" 100 ns;
-TIMESPEC TS_uP8  = FROM "writeEn" TO "dataBus" 100 ns;
-TIMESPEC TS_uP9  = FROM "writeEn" TO PADS 100 ns;
-TIMESPEC TS_uP10 = FROM FFS TO "dataBus" 100 ns;
+NET "nWe*" TNM_NET = FFS writeEn;
+NET "wr0*" TNM_NET = FFS writeEn;
+NET "wr2*" TNM_NET = FFS writeEn;
+TIMESPEC TS_nWe = PERIOD "writeEn" 100 ns HIGH 50%;
+TIMESPEC TS_uP0 = FROM "writeEn" TO FFS 100 ns;
+TIMESPEC TS_uP1 = FROM "writeEn" TO DSPS 100 ns;
+TIMESPEC TS_uP2 = FROM "writeEn" TO RAMS 100 ns;
+TIMESPEC TS_uP3 = FROM "writeEn" TO PADS 100 ns;
 
-TIMESPEC TS_PADS = FROM PADS TO PADS 100 ns;
 
-TIMESPEC TS_dac0 = FROM dacRegs TO FFS 	100 ns;
+NET "symb_pll_vco" TNM_NET = FFS vco;
+TIMESPEC TS_vco   = PERIOD "vco" 50 MHz HIGH 50 %;
+
+NET "dac_control_ck*" TNM_NET = FFS dacRegs;
+TIMESPEC TS_dac0 = FROM dacRegs TO FFS  100 ns;
 TIMESPEC TS_dac1 = FROM dacRegs TO PADS 100 ns;
 
+TIMEGRP "pllFifo" = FFS(decoder_output_fifo/*);
 TIMESPEC TS_fifo = FROM pllFifo TO pllFifo 100 ns;
 
 

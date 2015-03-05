@@ -51,6 +51,8 @@ real carrierLimitHz = 25000.0;
 real carrierLimitNorm = carrierLimitHz * `SYSTEM_PERIOD * `TWO_POW_32;
 integer carrierLimitInt = carrierLimitNorm;
 wire [31:0] carrierLimit = carrierLimitInt;
+integer negCarrierLimitInt = -carrierLimitNorm;
+wire    [31:0]  negCarrierLimit = negCarrierLimitInt;
 
 wire [31:0] sweepRate = 32'hffff0000;
 //wire [31:0] sweepRate = 32'h0039c759;
@@ -510,11 +512,12 @@ initial begin
     write32(createAddress(`BITSYNCSPACE,`LF_LOCKDETECTOR), 32'h00308000);
 
     // Init the carrier loop filters
-    write32(createAddress(`CARRIERSPACE,`LF_CONTROL),1);    // Zero the error
-    write32(createAddress(`CARRIERSPACE,`LF_LEAD_LAG),32'h0014000b);   
-    write32(createAddress(`CARRIERSPACE,`LF_LIMIT), carrierLimit);
-    write32(createAddress(`CARRIERSPACE,`LF_LOOPDATA), sweepRate);
-    write32(createAddress(`CARRIERSPACE,`LF_LOCKDETECTOR), 32'h00308000);
+    write32(createAddress(`CARRIERSPACE,`CLF_CONTROL),1);    // Zero the error
+    write32(createAddress(`CARRIERSPACE,`CLF_LEAD_LAG),32'h0014000b);   
+    write32(createAddress(`CARRIERSPACE,`CLF_ULIMIT), carrierLimit);
+    write32(createAddress(`CARRIERSPACE,`CLF_LLIMIT), negCarrierLimit);
+    write32(createAddress(`CARRIERSPACE,`CLF_LOOPDATA), sweepRate);
+    write32(createAddress(`CARRIERSPACE,`CLF_LOCKDETECTOR), 32'h00308000);
 
     // Init the downcoverter register set
     write32(createAddress(`DDCSPACE,`DDC_CONTROL),5);
@@ -604,7 +607,7 @@ initial begin
     #(4*bitrateSamplesInt*C) ;
 
     // Enable the carrier loop, invert the error, and enable sweep
-    write32(createAddress(`CARRIERSPACE,`LF_CONTROL),2);  
+    write32(createAddress(`CARRIERSPACE,`CLF_CONTROL),2);  
 
     `ifdef ENABLE_AGC
     // Enable the AGC loop

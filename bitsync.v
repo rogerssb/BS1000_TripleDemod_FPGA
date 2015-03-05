@@ -8,6 +8,9 @@ module bitsync(
     symTimes2Sync,
     auResampSync,
     demodMode,
+    `ifdef ADD_DESPREADER
+    enableDespreader,
+    `endif
     bitsyncMode,
     wr0,wr1,wr2,wr3,
     addr,
@@ -25,6 +28,7 @@ module bitsync(
     `endif
     iSym2xEn,
     iSymEn,
+    iSymClk,
     symDataI,
     bitDataI,
     qSym2xEn,
@@ -48,7 +52,10 @@ input           sampleClk;
 input           reset;
 input           symTimes2Sync;
 input           auResampSync;
-input   [3:0]   demodMode;
+input   [4:0]   demodMode;
+`ifdef ADD_DESPREADER
+input           enableDespreader;
+`endif
 input   [1:0]   bitsyncMode;
 input           wr0,wr1,wr2,wr3;
 input   [11:0]  addr;
@@ -66,6 +73,7 @@ output  [15:0]  negDeviation;
 `endif
 output          iSym2xEn;
 output          iSymEn;
+output          iSymClk;
 output  [17:0]  symDataI;
 output          bitDataI;
 output          qSym2xEn;
@@ -148,6 +156,36 @@ always @(posedge sampleClk) begin
     end
 `endif
 
+`ifdef ADD_DESPREADER
+/******************************************************************************
+                               Symbol Offset Deskew
+******************************************************************************/
+reg     [17:0]  iMF,qMF,iSymDelay,qSymDelay;
+always @(posedge sampleClk) begin
+    if (symTimes2Sync) begin
+        iSymDelay <= iFiltered;
+        qSymDelay <= qFiltered;
+        if (demodMode == `MODE_OQPSK) begin
+            if (enableDespreader) begin
+                iMF <= iSymDelay;
+                qMF <= qFiltered;
+                end
+            else begin
+                iMF <= iFiltered;
+                qMF <= qSymDelay;
+                end
+            end
+        else if (demodMode == `MODE_SOQPSK) begin
+            iMF <= iFiltered;
+            qMF <= qSymDelay;
+            end
+        else begin
+            iMF <= iFiltered;
+            qMF <= qFiltered;
+            end
+        end
+    end
+`else
 /******************************************************************************
                                Symbol Offset Deskew
 ******************************************************************************/
@@ -165,6 +203,8 @@ always @(posedge sampleClk) begin
             end
         end
     end
+
+`endif
 
 wire fmTrellisModes = ( (demodMode == `MODE_MULTIH)
                      || (demodMode == `MODE_PCMTRELLIS)
@@ -629,7 +669,16 @@ always @(addr) begin
         endcase
     end
 wire    [15:0]  lockCount;
-wire            loopFilterEn = (symTimes2Sync & timingErrorEn);
+reg             loopFilterEn;
+reg     [11:0]  loopFilterError;
+always @* begin
+    casex (demodMode) 
+        default: begin
+            loopFilterError = timingError[18:7] + timingError[6];
+            loopFilterEn = (symTimes2Sync & timingErrorEn);
+        end
+    endcase
+end
 wire    [31:0]  bsDout;
 loopFilter sampleLoop(
     .clk(sampleClk),
@@ -640,7 +689,7 @@ loopFilter sampleLoop(
     .addr(addr),
     .din(din),
     .dout(bsDout),
-    .error(timingError[18:7] + timingError[6]),
+    .error(loopFilterError),
     .loopFreq(sampleFreq),
     .ctrl2(useCompFilter),
     .ctrl4(useSummer),
@@ -1034,6 +1083,7 @@ always @(posedge sampleClk) begin
 // Clock Enables
 assign iSym2xEn = symTimes2Sync;
 assign iSymEn = symTimes2Sync & timingErrorEn;
+assign iSymClk = timingErrorEn;
 assign qSym2xEn = auEnable ? auResampSync : symTimes2Sync;
 assign qSymEn = auEnable ? (auResampSync & auTimingErrorEn) : (symTimes2Sync & timingErrorEn);
 assign qSymClk = auTimingErrorEn;

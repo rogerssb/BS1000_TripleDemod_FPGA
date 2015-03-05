@@ -3,9 +3,19 @@
 `define ADDRESS_MAP
 
 //`define INTERNAL_ADAPT
-//`define SYM_DEVIATION
+`define SYM_DEVIATION
 `define ADD_SOQPSK_TRELLIS
 //`define FM_FILTER
+
+`ifdef LEGACY_DEMOD
+`define ADD_DESPREADER
+`endif
+
+`ifdef SUBCARRIER_DEMOD
+`endif
+
+`ifdef TRELLIS_DEMOD
+`endif
 
 
 // Split the memory space for the different functions
@@ -13,7 +23,7 @@
 `ifdef FM_FILTER
 `define VIDFIRSPACE     12'b0000_1xxx_xxxx
 `endif
-`define FMMODSPACE      12'b0001_xxxx_xxxx
+`define DESPREADSPACE   12'b0001_xxxx_xxxx
 `define DDCSPACE        12'b0010_0xxx_xxxx
 `define DDCFIRSPACE     12'b0010_1xxx_xxxx
 `define CICDECSPACE     12'b0011_xxxx_xxxx
@@ -37,17 +47,17 @@
 
 // Define the global radio memory map
 `define DEMOD_CONTROL   12'bxxxx_xxx0_00xx
-`define MODE_AM             4'b0000
-`define MODE_PM             4'b0001
-`define MODE_FM             4'b0010
-`define MODE_2FSK           4'b0011
-`define MODE_BPSK           4'b0100
-`define MODE_QPSK           4'b0101
-`define MODE_OQPSK          4'b0110
-`define MODE_AUQPSK         4'b0111
-`define MODE_PCMTRELLIS     4'b1000
-`define MODE_SOQPSK         4'b1001
-`define MODE_MULTIH         4'b1010
+`define MODE_AM             5'b00000
+`define MODE_PM             5'b00001
+`define MODE_FM             5'b00010
+`define MODE_2FSK           5'b00011
+`define MODE_BPSK           5'b00100
+`define MODE_QPSK           5'b00101
+`define MODE_OQPSK          5'b00110
+`define MODE_AUQPSK         5'b00111
+`define MODE_PCMTRELLIS     5'b01000
+`define MODE_SOQPSK         5'b01001
+`define MODE_MULTIH         5'b01010
 `define MODE_SINGLE_RAIL    2'b00
 `define MODE_DUAL_RAIL      2'b01
 `define MODE_IND_RAIL       2'b10
@@ -64,6 +74,9 @@
 `define DAC_FREQLOCK        4'b1001
 `define DAC_AVGFREQ         4'b1010
 `define DAC_FREQERROR       4'b1011
+`define DAC_DS_CODE         4'b1100
+`define DAC_DS_LOCK         4'b1101
+`define DAC_DS_EPOCH        4'b1110
 `define DAC_TRELLIS_I       4'b1100
 `define DAC_TRELLIS_Q       4'b1101
 `define DAC_TRELLIS_PHERR   4'b1110
@@ -146,6 +159,8 @@
 `define MISC_VERSION    12'bxxxx_xxxx_001x
 `define MISC_CLOCK      12'bxxxx_xxxx_01xx
 `define DAC_IN_SEL      12'bxxxx_xxxx_100x
+`define DAC_IN_SEL_DEMOD    2'b00
+`define DAC_IN_SEL_SC       2'b01
 `define DEC_IN_SEL      12'bxxxx_xxxx_101x
 `define REBOOT_ADDR     12'bxxxx_xxxx_11xx
 
@@ -175,14 +190,38 @@
 
 // Define the SDI registers
 `define SDI_CONTROL         12'bxxxx_xxxx_00xx
-`define SDI_MODE_DISABLED       2'b00
-`define SDI_MODE_CONSTELLATION  2'b01
-`define SDI_MODE_EYE            2'b10
-`define SDI_MODE_ARTM           2'b11
+`define SDI_MODE_DISABLED       3'b000
+`define SDI_MODE_CONSTELLATION  3'b001
+`define SDI_MODE_EYE            3'b010
+`define SDI_MODE_ARTM           3'b011
+`define SDI_MODE_IEPOCH         3'b100
+`define SDI_MODE_QEPOCH         3'b101
 `define SDI_ARTM_THRESHOLD  12'bxxxx_xxxx_01xx
 `define SDI_ARTM_COUNTS     12'bxxxx_xxxx_10xx
 
 // Define the UART registers
 `define UART_BAUD_DIV   12'bxxxx_xxxx_00xx
 
+// Define the Despreader registers
+`define DESPREAD_INIT_A             12'bxxxx_xx00_00xx
+`define DESPREAD_POLYTAPS_A         12'bxxxx_xx00_01xx
+`define DESPREAD_RESTART_COUNT_A    12'bxxxx_xx00_10xx
+`define DESPREAD_IOUTTAPS_A         12'bxxxx_xx00_11xx
+`define DESPREAD_QOUTTAPS_A         12'bxxxx_xx01_00xx
+`define DESPREAD_CONTROL_A          12'bxxxx_xx01_01xx
+`define DESPREAD_EPOCH_A            12'bxxxx_xx01_10xx
+`define DESPREAD_SYNC_CONTROL       12'bxxxx_xx01_11xx
+`define DESPREAD_INIT_B             12'bxxxx_xx10_00xx
+`define DESPREAD_POLYTAPS_B         12'bxxxx_xx10_01xx
+`define DESPREAD_RESTART_COUNT_B    12'bxxxx_xx10_10xx
+`define DESPREAD_IOUTTAPS_B         12'bxxxx_xx10_11xx
+`define DESPREAD_QOUTTAPS_B         12'bxxxx_xx11_00xx
+`define DESPREAD_CONTROL_B          12'bxxxx_xx11_01xx
+`define DESPREAD_EPOCH_B            12'bxxxx_xx11_10xx
+`define DESPREAD_CONTROL            12'bxxxx_xx11_11xx
+`define DS_MODE_NASA_FWD                    3'b000
+`define DS_MODE_NASA_DG1_MODE1              3'b001
+`define DS_MODE_NASA_DG1_MODE2              3'b010
+`define DS_MODE_NASA_DG1_MODE3_SPREAD_I     3'b011
+`define DS_MODE_NASA_DG1_MODE3_SPREAD_Q     3'b100
 `endif

@@ -31,7 +31,7 @@ input           wr0,wr1,wr2,wr3;
 input   [11:0]  addr;
 input   [31:0]  din;
 output  [31:0]  dout;
-input   [3:0]   demodMode;
+input   [4:0]   demodMode;
 input   [11:0]  phase;
 input   [11:0]  freq;
 input           highFreqOffset;
@@ -92,78 +92,65 @@ carrierLoopRegs loopRegs(
 /************************ Error Signal Source *********************************/
 
 // Determine the source of the error signal
-reg     [11:0]   modeError;
-reg             modeErrorEn;
-reg             sync;
-wire    [11:0]   bpskPhase = phase;
-wire    [11:0]   qpskPhase = phase - 12'h200;
+reg     [11:0]  modeError;
+reg             loopFilterEn;
+wire    [11:0]  bpskPhase = phase;
+wire    [11:0]  qpskPhase = phase - 12'h200;
 reg             enableCarrierLock;
-always @* begin
+always @(posedge clk) begin
     case (demodMode)
         `MODE_AM: begin
-            sync <= ddcSync;
+            loopFilterEn <= ddcSync;
             modeError <= 0;
-            modeErrorEn <= 1'b1;
             enableCarrierLock <= 0;
             end
         `MODE_PM: begin
-            sync <= ddcSync;
+            loopFilterEn <= ddcSync;
             modeError <= phase;
-            modeErrorEn <= 1'b1;
             enableCarrierLock <= 1;
             end
         `MODE_PCMTRELLIS: begin
-            sync <= resampSync;
+            loopFilterEn <= resampSync & offsetErrorEn;
             modeError <= offsetError;
-            modeErrorEn <= offsetErrorEn;
             enableCarrierLock <= 0;
-            //sync <= ddcSync;
+            //loopFilterEn <= ddcSync;
             //modeError <= freq;
-            //modeErrorEn <= 1'b1;
             //enableCarrierLock <= 0;
             end
         `MODE_MULTIH,
         `MODE_FM: begin
-            sync <= ddcSync;
+            loopFilterEn <= ddcSync;
             modeError <= freq;
-            modeErrorEn <= 1'b1;
             enableCarrierLock <= 0;
             end
         `MODE_2FSK: begin
-            //sync <= resampSync;
+            //loopFilterEn <= resampSync & offsetErrorEn;
             //modeError <= offsetError;
-            //modeErrorEn <= offsetErrorEn;
             //enableCarrierLock <= 0;
-            sync <= ddcSync;
+            loopFilterEn <= ddcSync;
             modeError <= freq;
-            modeErrorEn <= 1'b1;
             enableCarrierLock <= 0;
             end
         `MODE_BPSK: begin
-            sync <= ddcSync;
+            loopFilterEn <= ddcSync;
             modeError <= {bpskPhase[10:0],1'b1};
-            modeErrorEn <= 1'b1;
             enableCarrierLock <= 1;
             end
         `MODE_QPSK,
         `MODE_OQPSK,
         `MODE_SOQPSK,
         `MODE_AUQPSK: begin
-            sync <= ddcSync;
+            loopFilterEn <= ddcSync;
             modeError <= {qpskPhase[9:0],2'b10};
-            modeErrorEn <= 1'b1;
             enableCarrierLock <= 1;
             end
         default: begin
-            sync <= 1'b1;
+            loopFilterEn <= 1'b1;
             modeError <= 0;
-            modeErrorEn <= 1'b1;
             enableCarrierLock <= 1;
             end
         endcase
     end
-
-wire loopFilterEn = sync & modeErrorEn;
 
 `ifdef SIMULATE
 real modeErrorReal;

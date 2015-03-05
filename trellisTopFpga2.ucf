@@ -1,0 +1,621 @@
+NET "clk" LOC = Y11;
+NET "nWe" LOC = V12;
+NET "nWe" CLOCK_DEDICATED_ROUTE = FALSE;
+NET "nCs" LOC = V11;
+NET "nRd" LOC = U16;
+NET "data<0>" LOC = W8;
+NET "data<1>" LOC = W5;
+NET "data<2>" LOC = V16;
+NET "data<3>" LOC = U15;
+NET "data<4>" LOC = U14;
+NET "data<5>" LOC = U13;
+NET "data<6>" LOC = U12;
+NET "data<7>" LOC = U10;
+NET "data<8>" LOC = U9;
+NET "data<9>" LOC = U8;
+NET "data<10>" LOC = AB19;
+NET "data<11>" LOC = AB18;
+NET "data<12>" LOC = AB17;
+NET "data<13>" LOC = AB16;
+NET "data<14>" LOC = AB14;
+NET "data<15>" LOC = AB13;
+NET "dac_rst" LOC = T18;
+NET "dac_sdio" LOC = T17;
+NET "dac2_sclk" LOC = U20;
+NET "dac2_nCs" LOC = R22;
+NET "dac1_sclk" LOC = U19;
+NET "dac1_nCs" LOC = L22;
+NET "dac0_sclk" LOC = U18;
+NET "dac0_nCs" LOC = H17;
+NET "addr1" LOC = Y7;
+NET "addr2" LOC = Y6;
+NET "addr3" LOC = W18;
+NET "addr4" LOC = W13;
+NET "addr5" LOC = W10;
+NET "addr6" LOC = W9;
+NET "addr7" LOC = W4;
+NET "addr8" LOC = V15;
+NET "addr9" LOC = AB15;
+NET "addr10" LOC = AB11;
+NET "addr11" LOC = AB2;
+NET "addr12" LOC = AA6;
+NET "addr1" IOSTANDARD = "LVCMOS33";
+NET "addr2" IOSTANDARD = "LVCMOS33";
+NET "addr3" IOSTANDARD = "LVCMOS33";
+NET "addr4" IOSTANDARD = "LVCMOS33";
+NET "addr5" IOSTANDARD = "LVCMOS33";
+NET "addr6" IOSTANDARD = "LVCMOS33";
+NET "addr7" IOSTANDARD = "LVCMOS33";
+NET "addr8" IOSTANDARD = "LVCMOS33";
+NET "addr9" IOSTANDARD = "LVCMOS33";
+NET "addr10" IOSTANDARD = "LVCMOS33";
+NET "addr11" IOSTANDARD = "LVCMOS33";
+NET "addr12" IOSTANDARD = "LVCMOS33";
+NET "clk" IOSTANDARD = "LVCMOS33";
+NET "data<0>" IOSTANDARD = "LVCMOS33";
+NET "data<1>" IOSTANDARD = "LVCMOS33";
+NET "data<2>" IOSTANDARD = "LVCMOS33";
+NET "data<3>" IOSTANDARD = "LVCMOS33";
+NET "data<4>" IOSTANDARD = "LVCMOS33";
+NET "data<5>" IOSTANDARD = "LVCMOS33";
+NET "data<6>" IOSTANDARD = "LVCMOS33";
+NET "data<7>" IOSTANDARD = "LVCMOS33";
+NET "data<8>" IOSTANDARD = "LVCMOS33";
+NET "data<9>" IOSTANDARD = "LVCMOS33";
+NET "data<10>" IOSTANDARD = "LVCMOS33";
+NET "data<11>" IOSTANDARD = "LVCMOS33";
+NET "data<12>" IOSTANDARD = "LVCMOS33";
+NET "data<13>" IOSTANDARD = "LVCMOS33";
+NET "data<14>" IOSTANDARD = "LVCMOS33";
+NET "data<15>" IOSTANDARD = "LVCMOS33";
+NET "nCs" IOSTANDARD = "LVCMOS33";
+NET "nRd" IOSTANDARD = "LVCMOS33";
+NET "nWe" IOSTANDARD = "LVCMOS33";
+
+NET "demodMode<0>" LOC = A3;
+NET "demodMode<1>" LOC = A4;
+NET "demodMode<2>" LOC = A6;
+NET "demodMode<3>" LOC = A7;
+NET "demodMode<4>" LOC = B13;
+NET "demodMode<0>" IOSTANDARD = "LVCMOS33";
+NET "demodMode<1>" IOSTANDARD = "LVCMOS33";
+NET "demodMode<2>" IOSTANDARD = "LVCMOS33";
+NET "demodMode<3>" IOSTANDARD = "LVCMOS33";
+NET "demodMode<4>" IOSTANDARD = "LVCMOS33";
+
+NET "dac0Select<0>" LOC = A9;
+NET "dac0Select<1>" LOC = A10;
+NET "dac0Select<2>" LOC = A12;
+NET "dac0Select<3>" LOC = A15;
+NET "dac0Select<0>" IOSTANDARD = "LVCMOS33";
+NET "dac0Select<1>" IOSTANDARD = "LVCMOS33";
+NET "dac0Select<2>" IOSTANDARD = "LVCMOS33";
+NET "dac0Select<3>" IOSTANDARD = "LVCMOS33";
+NET "dac1Select<0>" LOC = A16;
+NET "dac1Select<1>" LOC = A17;
+NET "dac1Select<2>" LOC = A18;
+NET "dac1Select<3>" LOC = A19;
+NET "dac1Select<0>" IOSTANDARD = "LVCMOS33";
+NET "dac1Select<1>" IOSTANDARD = "LVCMOS33";
+NET "dac1Select<2>" IOSTANDARD = "LVCMOS33";
+NET "dac1Select<3>" IOSTANDARD = "LVCMOS33";
+NET "dac2Select<0>" LOC = A20;
+NET "dac2Select<1>" LOC = B3;
+NET "dac2Select<2>" LOC = B4;
+NET "dac2Select<3>" LOC = B6;
+NET "dac2Select<0>" IOSTANDARD = "LVCMOS33";
+NET "dac2Select<1>" IOSTANDARD = "LVCMOS33";
+NET "dac2Select<2>" IOSTANDARD = "LVCMOS33";
+NET "dac2Select<3>" IOSTANDARD = "LVCMOS33";
+
+NET "bsyncLockInput" LOC = B11;
+NET "bsyncLockInput" IOSTANDARD = "LVCMOS33";
+NET "demodLockInput" LOC = B17;
+NET "demodLockInput" IOSTANDARD = "LVCMOS33";
+
+NET "sdiInput" LOC = B19;
+NET "sdiInput" IOSTANDARD = "LVCMOS33";
+NET "sdiOut" LOC = AB20;
+NET "sdiOut" IOSTANDARD = "LVCMOS33";
+
+NET "demod0Data<0>" LOC = D1;
+NET "demod0Data<1>" LOC = D3;
+NET "demod0Data<2>" LOC = D4;
+NET "demod0Data<3>" LOC = E1;
+NET "demod0Data<4>" LOC = E3;
+NET "demod0Data<5>" LOC = E4;
+NET "demod0Data<6>" LOC = F1;
+NET "demod0Data<7>" LOC = F2;
+NET "demod0Data<8>" LOC = F3;
+NET "demod0Data<9>" LOC = F4;
+NET "demod0Data<10>" LOC = F5;
+NET "demod0Data<11>" LOC = G1;
+NET "demod0Data<12>" LOC = G3;
+NET "demod0Data<13>" LOC = G5;
+NET "demod0Data<0>" IOSTANDARD = "LVCMOS33";
+NET "demod0Data<1>" IOSTANDARD = "LVCMOS33";
+NET "demod0Data<2>" IOSTANDARD = "LVCMOS33";
+NET "demod0Data<3>" IOSTANDARD = "LVCMOS33";
+NET "demod0Data<4>" IOSTANDARD = "LVCMOS33";
+NET "demod0Data<5>" IOSTANDARD = "LVCMOS33";
+NET "demod0Data<6>" IOSTANDARD = "LVCMOS33";
+NET "demod0Data<7>" IOSTANDARD = "LVCMOS33";
+NET "demod0Data<8>" IOSTANDARD = "LVCMOS33";
+NET "demod0Data<9>" IOSTANDARD = "LVCMOS33";
+NET "demod0Data<10>" IOSTANDARD = "LVCMOS33";
+NET "demod0Data<11>" IOSTANDARD = "LVCMOS33";
+NET "demod0Data<12>" IOSTANDARD = "LVCMOS33";
+NET "demod0Data<13>" IOSTANDARD = "LVCMOS33";
+
+NET "demod1Data<0>" LOC = H1;
+NET "demod1Data<1>" LOC = H2;
+NET "demod1Data<2>" LOC = H3;
+NET "demod1Data<3>" LOC = H4;
+NET "demod1Data<4>" LOC = H6;
+NET "demod1Data<5>" LOC = J1;
+NET "demod1Data<6>" LOC = J3;
+NET "demod1Data<7>" LOC = J4;
+NET "demod1Data<8>" LOC = K1;
+NET "demod1Data<9>" LOC = K3;
+NET "demod1Data<10>" LOC = K4;
+NET "demod1Data<11>" LOC = K5;
+NET "demod1Data<12>" LOC = K6;
+NET "demod1Data<13>" LOC = L1;
+NET "demod1Data<0>" IOSTANDARD = "LVCMOS33";
+NET "demod1Data<1>" IOSTANDARD = "LVCMOS33";
+NET "demod1Data<2>" IOSTANDARD = "LVCMOS33";
+NET "demod1Data<3>" IOSTANDARD = "LVCMOS33";
+NET "demod1Data<4>" IOSTANDARD = "LVCMOS33";
+NET "demod1Data<5>" IOSTANDARD = "LVCMOS33";
+NET "demod1Data<6>" IOSTANDARD = "LVCMOS33";
+NET "demod1Data<7>" IOSTANDARD = "LVCMOS33";
+NET "demod1Data<8>" IOSTANDARD = "LVCMOS33";
+NET "demod1Data<9>" IOSTANDARD = "LVCMOS33";
+NET "demod1Data<10>" IOSTANDARD = "LVCMOS33";
+NET "demod1Data<11>" IOSTANDARD = "LVCMOS33";
+NET "demod1Data<12>" IOSTANDARD = "LVCMOS33";
+NET "demod1Data<13>" IOSTANDARD = "LVCMOS33";
+
+NET "demod2Data<0>" LOC = L5;
+NET "demod2Data<1>" LOC = L6;
+NET "demod2Data<2>" LOC = M1;
+NET "demod2Data<3>" LOC = M2;
+NET "demod2Data<4>" LOC = M3;
+NET "demod2Data<5>" LOC = M5;
+NET "demod2Data<6>" LOC = M6;
+NET "demod2Data<7>" LOC = N1;
+NET "demod2Data<8>" LOC = N3;
+NET "demod2Data<9>" LOC = N4;
+NET "demod2Data<10>" LOC = N5;
+NET "demod2Data<11>" LOC = N6;
+NET "demod2Data<12>" LOC = N7;
+NET "demod2Data<13>" LOC = P1;
+NET "demod2Data<0>" IOSTANDARD = "LVCMOS33";
+NET "demod2Data<1>" IOSTANDARD = "LVCMOS33";
+NET "demod2Data<2>" IOSTANDARD = "LVCMOS33";
+NET "demod2Data<3>" IOSTANDARD = "LVCMOS33";
+NET "demod2Data<4>" IOSTANDARD = "LVCMOS33";
+NET "demod2Data<5>" IOSTANDARD = "LVCMOS33";
+NET "demod2Data<6>" IOSTANDARD = "LVCMOS33";
+NET "demod2Data<7>" IOSTANDARD = "LVCMOS33";
+NET "demod2Data<8>" IOSTANDARD = "LVCMOS33";
+NET "demod2Data<9>" IOSTANDARD = "LVCMOS33";
+NET "demod2Data<10>" IOSTANDARD = "LVCMOS33";
+NET "demod2Data<11>" IOSTANDARD = "LVCMOS33";
+NET "demod2Data<12>" IOSTANDARD = "LVCMOS33";
+NET "demod2Data<13>" IOSTANDARD = "LVCMOS33";
+
+NET "demod0Sync"  LOC = F7;     #NET "interp0Sync"  LOC = F7;
+NET "demod1Sync"  LOC = F8; #NET "interp1Sync"  LOC = F8;
+NET "demod2Sync"  LOC = F9; #NET "interp2Sync"  LOC = F9;
+NET "demod0Sync"  IOSTANDARD = "LVCMOS33";
+NET "demod1Sync"  IOSTANDARD = "LVCMOS33";
+NET "demod2Sync"  IOSTANDARD = "LVCMOS33";
+
+NET "iSymData_pad<0>"  LOC = P3;
+NET "iSymData_pad<1>"  LOC = P6;
+NET "iSymData_pad<2>"  LOC = R2;
+NET "iSymData_pad<3>"  LOC = R3;
+NET "iSymData_pad<4>"  LOC = R5;
+NET "iSymData_pad<5>"  LOC = T1;
+NET "iSymData_pad<6>"  LOC = T3;
+NET "iSymData_pad<7>"  LOC = T4;
+NET "iSymData_pad<8>"  LOC = T5;
+NET "iSymData_pad<9>"  LOC = T6;
+NET "iSymData_pad<10>" LOC = U1;
+NET "iSymData_pad<11>" LOC = U2;
+NET "iSymData_pad<12>" LOC = U3;
+NET "iSymData_pad<13>" LOC = U5;
+NET "iSymData_pad<14>" LOC = V1;
+NET "iSymData_pad<15>" LOC = V4;
+NET "iSymData_pad<16>" LOC = W3;
+NET "iSymData_pad<17>" LOC = Y1;
+NET "iSymData_pad<0>"  IOSTANDARD = "LVCMOS33";
+NET "iSymData_pad<1>"  IOSTANDARD = "LVCMOS33";
+NET "iSymData_pad<2>"  IOSTANDARD = "LVCMOS33";
+NET "iSymData_pad<3>"  IOSTANDARD = "LVCMOS33";
+NET "iSymData_pad<4>"  IOSTANDARD = "LVCMOS33";
+NET "iSymData_pad<5>"  IOSTANDARD = "LVCMOS33";
+NET "iSymData_pad<6>"  IOSTANDARD = "LVCMOS33";
+NET "iSymData_pad<7>"  IOSTANDARD = "LVCMOS33";
+NET "iSymData_pad<8>"  IOSTANDARD = "LVCMOS33";
+NET "iSymData_pad<9>"  IOSTANDARD = "LVCMOS33";
+NET "iSymData_pad<10>" IOSTANDARD = "LVCMOS33";
+NET "iSymData_pad<11>" IOSTANDARD = "LVCMOS33";
+NET "iSymData_pad<12>" IOSTANDARD = "LVCMOS33";
+NET "iSymData_pad<13>" IOSTANDARD = "LVCMOS33";
+NET "iSymData_pad<14>" IOSTANDARD = "LVCMOS33";
+NET "iSymData_pad<15>" IOSTANDARD = "LVCMOS33";
+NET "iSymData_pad<16>" IOSTANDARD = "LVCMOS33";
+NET "iSymData_pad<17>" IOSTANDARD = "LVCMOS33";
+NET "qSymData_pad<0>"  LOC = B20;
+NET "qSymData_pad<1>"  LOC = C4;
+NET "qSymData_pad<2>"  LOC = C5;
+NET "qSymData_pad<3>"  LOC = C6;
+NET "qSymData_pad<4>"  LOC = C7;
+NET "qSymData_pad<5>"  LOC = C8;
+NET "qSymData_pad<6>"  LOC = C10;
+NET "qSymData_pad<7>"  LOC = C11;
+NET "qSymData_pad<8>"  LOC = C14;
+NET "qSymData_pad<9>"  LOC = C15;
+NET "qSymData_pad<10>" LOC = C16;
+NET "qSymData_pad<11>" LOC = C17;
+NET "qSymData_pad<12>" LOC = C19;
+NET "qSymData_pad<13>" LOC = D5;
+NET "qSymData_pad<14>" LOC = D9;
+NET "qSymData_pad<15>" LOC = D10;
+NET "qSymData_pad<16>" LOC = D13;
+NET "qSymData_pad<17>" LOC = D14;
+NET "qSymData_pad<0>"  IOSTANDARD = "LVCMOS33";
+NET "qSymData_pad<1>"  IOSTANDARD = "LVCMOS33";
+NET "qSymData_pad<2>"  IOSTANDARD = "LVCMOS33";
+NET "qSymData_pad<3>"  IOSTANDARD = "LVCMOS33";
+NET "qSymData_pad<4>"  IOSTANDARD = "LVCMOS33";
+NET "qSymData_pad<5>"  IOSTANDARD = "LVCMOS33";
+NET "qSymData_pad<6>"  IOSTANDARD = "LVCMOS33";
+NET "qSymData_pad<7>"  IOSTANDARD = "LVCMOS33";
+NET "qSymData_pad<8>"  IOSTANDARD = "LVCMOS33";
+NET "qSymData_pad<9>"  IOSTANDARD = "LVCMOS33";
+NET "qSymData_pad<10>" IOSTANDARD = "LVCMOS33";
+NET "qSymData_pad<11>" IOSTANDARD = "LVCMOS33";
+NET "qSymData_pad<12>" IOSTANDARD = "LVCMOS33";
+NET "qSymData_pad<13>" IOSTANDARD = "LVCMOS33";
+NET "qSymData_pad<14>" IOSTANDARD = "LVCMOS33";
+NET "qSymData_pad<15>" IOSTANDARD = "LVCMOS33";
+NET "qSymData_pad<16>" IOSTANDARD = "LVCMOS33";
+NET "qSymData_pad<17>" IOSTANDARD = "LVCMOS33";
+
+
+NET "iData" LOC = E7 | IOSTANDARD = "LVCMOS33";
+NET "qData" LOC = E8 | IOSTANDARD = "LVCMOS33";
+
+NET "legacyBit_pad" LOC = E10 |IOSTANDARD = "LVCMOS33";
+NET "auSymClk" LOC = E11;
+NET "auSymClk" IOSTANDARD = "LVCMOS33";
+
+NET "dac0_nCs" IOSTANDARD = "LVCMOS18";
+NET "dac0_sclk" IOSTANDARD = "LVCMOS18";
+NET "dac1_nCs" IOSTANDARD = "LVCMOS18";
+NET "dac1_sclk" IOSTANDARD = "LVCMOS18";
+NET "dac2_nCs" IOSTANDARD = "LVCMOS18";
+NET "dac2_sclk" IOSTANDARD = "LVCMOS18";
+NET "dac_rst" IOSTANDARD = "LVCMOS18";
+NET "dac_sdio" IOSTANDARD = "LVCMOS18";
+NET "dac0_clk" LOC = G22;
+NET "dac0_d<0>" LOC = G19;
+NET "dac0_d<1>" LOC = G18;
+NET "dac0_d<2>" LOC = G17;
+NET "dac0_d<3>" LOC = F22;
+NET "dac0_d<4>" LOC = F21;
+NET "dac0_d<5>" LOC = F20;
+NET "dac0_d<6>" LOC = F19;
+NET "dac0_d<7>" LOC = F18;
+NET "dac0_d<8>" LOC = E22;
+NET "dac0_d<9>" LOC = E20;
+NET "dac0_d<10>" LOC = E19;
+NET "dac0_d<11>" LOC = D22;
+NET "dac0_d<12>" LOC = D21;
+NET "dac0_d<13>" LOC = D20;
+NET "dac1_clk" LOC = L21;
+NET "dac1_d<0>" LOC = N17;
+NET "dac1_d<1>" LOC = L20;
+NET "dac1_d<2>" LOC = L17;
+NET "dac1_d<3>" LOC = K22;
+NET "dac1_d<4>" LOC = K20;
+NET "dac1_d<5>" LOC = K19;
+NET "dac1_d<6>" LOC = K18;
+NET "dac1_d<7>" LOC = K16;
+NET "dac1_d<8>" LOC = J20;
+NET "dac1_d<9>" LOC = J19;
+NET "dac1_d<10>" LOC = J17;
+NET "dac1_d<11>" LOC = H22;
+NET "dac1_d<12>" LOC = H20;
+NET "dac1_d<13>" LOC = H18;
+NET "dac2_clk" LOC = R20;
+NET "dac2_d<0>" LOC = R19;
+NET "dac2_d<1>" LOC = R18;
+NET "dac2_d<2>" LOC = P22;
+NET "dac2_d<3>" LOC = P19;
+NET "dac2_d<4>" LOC = P16;
+NET "dac2_d<5>" LOC = N22;
+NET "dac2_d<6>" LOC = N21;
+NET "dac2_d<7>" LOC = N20;
+NET "dac2_d<8>" LOC = N19;
+NET "dac2_d<9>" LOC = N18;
+NET "dac2_d<10>" LOC = M22;
+NET "dac2_d<11>" LOC = M20;
+NET "dac2_d<12>" LOC = M18;
+NET "dac2_d<13>" LOC = M17;
+NET "dac0_clk" IOSTANDARD = "LVCMOS18";
+NET "dac0_d<0>" IOSTANDARD = "LVCMOS18";
+NET "dac0_d<1>" IOSTANDARD = "LVCMOS18";
+NET "dac0_d<2>" IOSTANDARD = "LVCMOS18";
+NET "dac0_d<3>" IOSTANDARD = "LVCMOS18";
+NET "dac0_d<4>" IOSTANDARD = "LVCMOS18";
+NET "dac0_d<5>" IOSTANDARD = "LVCMOS18";
+NET "dac0_d<7>" IOSTANDARD = "LVCMOS18";
+NET "dac0_d<6>" IOSTANDARD = "LVCMOS18";
+NET "dac0_d<8>" IOSTANDARD = "LVCMOS18";
+NET "dac0_d<9>" IOSTANDARD = "LVCMOS18";
+NET "dac0_d<10>" IOSTANDARD = "LVCMOS18";
+NET "dac0_d<11>" IOSTANDARD = "LVCMOS18";
+NET "dac0_d<12>" IOSTANDARD = "LVCMOS18";
+NET "dac0_d<13>" IOSTANDARD = "LVCMOS18";
+NET "dac1_clk" IOSTANDARD = "LVCMOS18";
+NET "dac1_d<0>" IOSTANDARD = "LVCMOS18";
+NET "dac1_d<1>" IOSTANDARD = "LVCMOS18";
+NET "dac1_d<2>" IOSTANDARD = "LVCMOS18";
+NET "dac1_d<3>" IOSTANDARD = "LVCMOS18";
+NET "dac1_d<4>" IOSTANDARD = "LVCMOS18";
+NET "dac1_d<5>" IOSTANDARD = "LVCMOS18";
+NET "dac1_d<6>" IOSTANDARD = "LVCMOS18";
+NET "dac1_d<7>" IOSTANDARD = "LVCMOS18";
+NET "dac1_d<8>" IOSTANDARD = "LVCMOS18";
+NET "dac1_d<9>" IOSTANDARD = "LVCMOS18";
+NET "dac1_d<10>" IOSTANDARD = "LVCMOS18";
+NET "dac1_d<11>" IOSTANDARD = "LVCMOS18";
+NET "dac1_d<12>" IOSTANDARD = "LVCMOS18";
+NET "dac1_d<13>" IOSTANDARD = "LVCMOS18";
+NET "dac2_clk" IOSTANDARD = "LVCMOS18";
+NET "dac2_d<0>" IOSTANDARD = "LVCMOS18";
+NET "dac2_d<1>" IOSTANDARD = "LVCMOS18";
+NET "dac2_d<2>" IOSTANDARD = "LVCMOS18";
+NET "dac2_d<3>" IOSTANDARD = "LVCMOS18";
+NET "dac2_d<4>" IOSTANDARD = "LVCMOS18";
+NET "dac2_d<5>" IOSTANDARD = "LVCMOS18";
+NET "dac2_d<6>" IOSTANDARD = "LVCMOS18";
+NET "dac2_d<7>" IOSTANDARD = "LVCMOS18";
+NET "dac2_d<8>" IOSTANDARD = "LVCMOS18";
+NET "dac2_d<9>" IOSTANDARD = "LVCMOS18";
+NET "dac2_d<10>" IOSTANDARD = "LVCMOS18";
+NET "dac2_d<11>" IOSTANDARD = "LVCMOS18";
+NET "dac2_d<12>" IOSTANDARD = "LVCMOS18";
+NET "dac2_d<13>" IOSTANDARD = "LVCMOS18";
+NET "bsync_nLock" LOC = W22;
+NET "demod_nLock" LOC = Y21;
+NET "demod_nLock" IOSTANDARD = "LVCMOS18";
+NET "bsync_nLock" IOSTANDARD = "LVCMOS18";
+NET "bsync_nLock" DRIVE = 12;
+NET "demod_nLock" DRIVE = 12;
+NET "cout_i" LOC = T22;
+NET "cout_q" LOC = V20;
+NET "dout_i" LOC = T20;
+NET "dout_q" LOC = U22;
+NET "cout_i" IOSTANDARD = "LVCMOS18";
+NET "cout_q" IOSTANDARD = "LVCMOS18";
+NET "dout_i" IOSTANDARD = "LVCMOS18";
+NET "dout_q" IOSTANDARD = "LVCMOS18";
+NET "symb_pll_fbk" LOC = Y13;
+NET "symb_pll_ref" LOC = Y9;
+NET "symb_pll_vco" LOC = Y10;
+NET "symb_pll_fbk" IOSTANDARD = "LVCMOS33";
+NET "symb_pll_ref" IOSTANDARD = "LVCMOS33";
+NET "symb_pll_vco" IOSTANDARD = "LVCMOS33";
+NET "symb_pll_vco" CLOCK_DEDICATED_ROUTE = FALSE;
+
+NET "trellisSymSync_pad" LOC = D15  | IOSTANDARD = "LVCMOS33";
+NET "iSym2xEn_pad" LOC = D17 | IOSTANDARD = "LVCMOS33";
+
+NET "dataSymEn" LOC = D18 | IOSTANDARD = "LVCMOS33";
+NET "dataSym2xEn" LOC = D19 | IOSTANDARD = "LVCMOS33";
+
+NET "reset" TIG;
+NET "nWe" TIG;
+NET "nCs" TIG;
+NET "nRd" TIG;
+NET "data<0>" TIG;
+NET "data<1>" TIG;
+NET "data<2>" TIG;
+NET "data<3>" TIG;
+NET "data<4>" TIG;
+NET "data<5>" TIG;
+NET "data<6>" TIG;
+NET "data<7>" TIG;
+NET "data<8>" TIG;
+NET "data<9>" TIG;
+NET "data<10>" TIG;
+NET "data<11>" TIG;
+NET "data<12>" TIG;
+NET "data<13>" TIG;
+NET "data<14>" TIG;
+NET "data<15>" TIG;
+NET "addr1" TIG;
+NET "addr2" TIG;
+NET "addr3" TIG;
+NET "addr4" TIG;
+NET "addr5" TIG;
+NET "addr6" TIG;
+NET "addr7" TIG;
+NET "addr8" TIG;
+NET "addr9" TIG;
+NET "addr10" TIG;
+NET "addr11" TIG;
+NET "addr12" TIG;
+
+TIMEGRP "dataBus" = PADS(data*);
+TIMEGRP "addrBus" = PADS(addr*);
+TIMEGRP "ctrlBus" = PADS(nCs*) PADS(nRd);
+
+NET "nWe*" TNM_NET = FFS writeEn;
+NET "wr0*" TNM_NET = FFS writeEn;
+NET "wr2*" TNM_NET = FFS writeEn;
+
+NET "clk*" TNM_NET = FFS clk;
+NET "clk*" TNM_NET = DSPS clk;
+NET "clk*" TNM_NET = RAMS clk;
+
+# The default clock rate
+TIMESPEC TS_ck933 =             PERIOD "clk" 93.33 MHz HIGH 50%;
+TIMESPEC TS_clkToFFS =  FROM PADS(clk) TO FFS TIG;
+TIMESPEC TS_clkToDSPS = FROM PADS(clk) TO DSPS TIG;
+TIMESPEC TS_clkToRAMS = FROM PADS(clk) TO RAMS TIG;
+
+# Devices with clock enables than can run slower
+NET "sc/dac0Sync*" TNM_NET = FFS syncGroup;
+NET "sc/dac1Sync*" TNM_NET = FFS syncGroup;
+NET "sc/dac2Sync*" TNM_NET = FFS syncGroup;
+NET "sc/ddc/agcSync*" TNM_NET = FFS syncGroup;
+NET "sc/ddc/cic/cicI/syncOut*" TNM_NET = FFS syncGroup;
+NET "sc/ddc/cic/cicQ/syncOut*" TNM_NET = FFS syncGroup;
+NET "sc/ddc/cicClockEn*" TNM_NET = FFS syncGroup;
+NET "sc/ddc/hb/evenSync*" TNM_NET = FFS syncGroup;
+NET "sc/ddc/hb/syncOut*" TNM_NET = FFS syncGroup;
+NET "sc/ddc/hbClockEn*" TNM_NET = FFS syncGroup;
+NET "sc/ddc/hb0/evenSync*" TNM_NET = FFS syncGroup;
+NET "sc/ddc/hb0/syncOut*" TNM_NET = FFS syncGroup;
+NET "sc/ddc/firClockEn*" TNM_NET = FFS syncGroup;
+NET "sc/ddc/firClockEn*" TNM_NET = DSPS syncGroup;
+#NET "sc/carrierOffsetEn*" TNM_NET = FFS syncGroup;
+NET "sc/ddc/syncOut*" TNM_NET = FFS syncGroup;
+NET "sc/ddc/syncOut*" TNM_NET = DSPS syncGroup;
+NET "sc/resampler/resamplerI/resampleDelay*" TNM_NET = FFS syncGroup;
+NET "sc/resampler/resamplerQ/resampleDelay*" TNM_NET = FFS syncGroup;
+#NET "sc/resampler/resamplerI/resampleDelay*" TNM_NET = DSPS syncGroup;
+#NET "sc/resampler/resamplerQ/resampleDelay*" TNM_NET = DSPS syncGroup;
+NET "sc/resampler/auCic/syncOut*" TNM_NET = FFS syncGroup;
+NET "sc/carrierLoop/loopFilterEn*" TNM_NET = FFS syncGroup;
+NET "sc/fmDemod/cordic/enSR*" TNM_NET = FFS syncGroup;
+#NET "sc/fmDemod/cordic/enSR*" TNM_NET = DSPS syncGroup;
+NET "sc/bitsync/phaseState*" TNM_NET = FFS syncGroup;
+NET "pcmSymEn*" TNM_NET = FFS syncGroup;
+NET "pcmSym2xEn*" TNM_NET = FFS syncGroup;
+NET "soqpskSym2xEn*" TNM_NET = FFS syncGroup;
+NET "soqpsk/soqpskCarrierLoop/sym2xEnSr*" TNM_NET = FFS syncGroup;
+NET "trellis/viterbi_top/traceback/symEnDly*" TNM_NET = FFS syncGroup;
+#NET "trellis/viterbi_top/traceback/symEnSr2*" TNM_NET = FFS syncGroup;
+NET "soqpsk/soqpskViterbi/everyOtherSymEn*" TNM_NET = FFS syncGroup;
+NET "soqpsk/soqpskViterbi/everyOtherSymEn*" TNM_NET = DSPS syncGroup;
+NET "trellis/trellisCarrierLoop/sym2xEnSr*" TNM_NET = FFS syncGroup;
+NET "trellis/trellisCarrierLoop/symEnSr*" TNM_NET = FFS syncGroup;
+#NET "trellis/trellisCarrierLoop/fmDemod/cordic/enSR*" TNM_NET = FFS syncGroup;
+NET "trellis/symEnShift*" TNM_NET = FFS syncGroup;
+
+# A group composed of all the clock enables
+TIMEGRP "clken" =  FFS(pcmSymEn*) FFS(pcmSym2xEn*) 
+                   FFS(soqpskSym2xEn*)
+                   FFS(soqpsk/soqpskCarrierLoop/sym2xEnSr*)
+                   FFS(trellis/viterbi_top/traceback/symEnDly*)
+#                   FFS(trellis/viterbi_top/traceback/symEnSr2*)
+                   FFS(soqpsk/soqpskViterbi/everyOtherSymEn*)
+                   FFS(trellis/trellisCarrierLoop/sym2xEnSr*)
+                   FFS(trellis/trellisCarrierLoop/symEnSr*)
+#                   FFS(trellis/trellisCarrierLoop/fmDemod/cordic/enSR*)
+                   FFS(trellis/symEnShift*)
+                   FFS(sc/dac0Sync*) 
+                   FFS(sc/dac1Sync*) 
+                   FFS(sc/dac2Sync*)
+                   FFS(sc/ddc/agcSync*) 
+                   FFS(sc/ddc/cic/cicI/syncOut*) 
+                   FFS(sc/ddc/cic/cicQ/syncOut*)
+                   FFS(sc/ddc/cicClockEn*) 
+                   FFS(sc/ddc/hb/evenSync*) 
+                   FFS(sc/ddc/hb/syncOut*)
+                   FFS(sc/ddc/hbClockEn*) 
+                   FFS(sc/ddc/hb0/evenSync*) 
+                   FFS(sc/ddc/hb0/syncOut*)
+                   FFS(sc/ddc/firClockEn*)
+                   FFS(sc/ddc/syncOut*)
+                   FFS(sc/resampler/resamplerI/resampleDelay*)
+                   FFS(sc/resampler/resamplerQ/resampleDelay*)
+                   FFS(sc/resampler/auCic/syncOut*)
+                   FFS(sc/carrierLoop/loopFilterEn*)
+                   FFS(sc/fmDemod/cordic/enSR*) 
+                   FFS(sc/bitsync/phaseState*);
+
+# A group composed of clock-enabled flip-flops
+TIMEGRP "allEnables" = syncGroup EXCEPT clken ;
+
+# DDC that can clock slower
+TIMEGRP "ddcPL" = FFS(sc/ddc/iCicIn*) FFS(sc/ddc/qCicIn*)
+                  FFS(sc/ddc/iAgcIn*) FFS(sc/ddc/qAgcIn*)
+                  FFS(sc/ddc/iHbIn*) FFS(sc/ddc/qHbIn*)
+                  FFS(sc/ddc/iFirIn*) FFS(sc/ddc/qFirIn*)
+                  FFS(sc/ddc/iLeadIn*) FFS(sc/ddc/qLeadIn*);
+
+# AGC loop that can clock slower
+TIMEGRP "magloop" = FFS( sc/magLoop/lagAccum*) ;
+
+# Slower clock timespecs. 
+TIMESPEC TS_syncGroup = FROM "allEnables" TO "syncGroup" 46.67 MHz PRIORITY 4;
+TIMESPEC TS_dacGroup = FROM "syncGroup" TO FFS(sc/dac*Data*) 46.67 MHz PRIORITY 3;
+TIMESPEC "TS_ddc1" = FROM "ddcPL" TO FFS 46.67 MHz PRIORITY 3;
+TIMESPEC "TS_ddc2" = FROM "ddcPL" TO DSPS 46.67 MHz PRIORITY 3;
+TIMESPEC TS_magloop = FROM "magloop" TO "magloop" 46.67 MHz PRIORITY 3;
+TIMESPEC TS_clken = FROM "clken" TO FFS 93.33 MHz PRIORITY 1;
+
+
+# Trellis ACS units that can clock slower.
+TIMEGRP "acs" = FFS(trellis/viterbi_top/acs*);
+TIMEGRP "rotOut" = FFS(trellis/rotator/m*/reOut*) FFS(trellis/rotator/m*/imOut*);
+TIMEGRP "maxMetric" = FFS(trellis/viterbi_top/maxMetric/*);
+TIMEGRP "acsAcc" = FFS(trellis/viterbi_top/acs*/accumDecay/*);
+TIMESPEC TS_trellisAcs0 = FROM "acs" TO "acs" 23.33 MHz;
+TIMESPEC TS_trellisAcs1 = FROM "rotOut" TO "acs" 23.33 MHz;
+TIMESPEC TS_trellisAcs2 = FROM "acsAcc" TO "maxMetric" 30 ns;
+# SOQPSK ACS Units that can clock slower.
+TIMEGRP "soqpskMFs" = FFS(soqpsk/soqpskViterbi/everyOtherSymEn*) FFS(soqpsk/soqpskViterbi/mf1Acs*) FFS(soqpsk/soqpskViterbi/mfZ*);
+TIMEGRP "soqpskAcs" = FFS(soqpsk/soqpskViterbi/acs*) DSPS(soqpsk/soqpskViterbi/acs*);
+TIMEGRP "soqpskMetric" = FFS(soqpsk/soqpskViterbi/soqpskMaxMetric/index*);
+TIMEGRP "soqpskSymrate" = "soqpskMFs" "soqpskAcs" "soqpskMetric";
+TIMESPEC TS_soqpskSymrate = FROM "soqpskSymrate" TO "soqpskSymrate" 46.67 MHz;
+
+# Loop filters that can clock slower
+TIMEGRP "trellisLF" = FFS(trellis/trellisCarrierLoop/lagGain/*) 
+                      FFS(trellis/trellisCarrierLoop/leadGain/*) 
+                      FFS(trellis/trellisCarrierLoop/filterSum*) 
+                      FFS(trellis/trellisCarrierLoop/afcLoopFilter/*);
+TIMEGRP "soqpskLF" = FFS(soqpsk/soqpskCarrierLoop/lagGain/*) 
+                     FFS(soqpsk/soqpskCarrierLoop/leadGain/*) 
+                     FFS(soqpsk/soqpskCarrierLoop/filterSum*);
+#TIMEGRP "loopFilter" = "trellisLF" "soqpskLF" "carrierLF" "multihLF" "auBitsyncLF" "bitsyncLF" "agcLF";
+TIMEGRP "loopFilter" = "trellisLF" "soqpskLF";
+TIMESPEC TS_loopFilter = FROM "loopFilter" TO "loopFilter" 46.67 MHz;
+
+# Clocked Inputs
+OFFSET = IN 100 ns BEFORE "clk" RISING;
+
+# Clocked Outputs
+OFFSET = OUT 100 ns AFTER "clk" RISING;
+
+
+# The microprocessor registers. This needs to go last to keep uP registers being included 
+# in fast constraints.
+NET "nWe*" TNM_NET = FFS writeEn;
+NET "wr0*" TNM_NET = FFS writeEn;
+NET "wr2*" TNM_NET = FFS writeEn;
+TIMESPEC TS_nWe = PERIOD "writeEn" 100 ns HIGH 50%;
+TIMESPEC TS_uP0 = FROM "writeEn" TO FFS 100 ns;
+TIMESPEC TS_uP1 = FROM "writeEn" TO DSPS 100 ns;
+TIMESPEC TS_uP2 = FROM "writeEn" TO RAMS 100 ns;
+TIMESPEC TS_uP3 = FROM "writeEn" TO PADS 100 ns;
+
+NET "symb_pll_vco" TNM_NET = FFS vco;
+TIMESPEC TS_vco   = PERIOD "vco" 50 MHz HIGH 50 %;
+
+NET "dac_control_ck*" TNM_NET = FFS dacRegs;
+TIMESPEC TS_dac0 = FROM dacRegs TO FFS  100 ns;
+TIMESPEC TS_dac1 = FROM dacRegs TO PADS 100 ns;
+
+TIMEGRP "pllFifo" = FFS(decoder_output_fifo/*);
+TIMESPEC TS_fifo = FROM pllFifo TO pllFifo 100 ns;
+

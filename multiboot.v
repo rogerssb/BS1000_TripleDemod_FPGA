@@ -1,133 +1,74 @@
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//  multiboot.v                                                  Verne Stauffer
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//  December 01, 2012
-//  This is a rewrite of Scott Rogers' multiboot module to eliminate the
-//  potential for clock glitching and to provide support for both the Spartan-3
-//  and Spartan-6 families.
-//
-//  The maximum clock rate for the ICAP_SPARTAN6 primitive is 20 MHz.
-//  The spartan6 primitive does not by itself hold its input signals in the
-//  design. Therefore, I have routed the write enable and data lines to a
-//  chipscope instantiation to maintain these through synthesis.
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// multiboot.v
+// Verne Stauffer
+// January 30, 2015
 
-`timescale 1ns / 1ps
+module multiboot(clk, pulse, addr, reset);
 
-module multiboot
-    (
-    input [23:0] next_addr,
-    input clk,
-    input reboot
-    );
+input clk, pulse, reset;
+input [23:0] addr;
+reg [8:0] mem [31:0];
 
-`define SPARTAN3
-
-`ifdef SPARTAN3
-`define LAST_XFER_STATE 20
-`endif
-
-`ifdef SPARTAN6
-`define LAST_XFER_STATE 16
-`endif
-
-reg [4 : 0] state = `LAST_XFER_STATE + 1;
-always@(posedge clk) begin
-    if (reboot) state <= 0;
-    else if(state != `LAST_XFER_STATE + 3) state <= state + 5'd1;
-    end
-
-reg we = 1'b1;
 always @ (posedge clk) begin
-    if ((state >= 2) && (state <= `LAST_XFER_STATE - 1)) we <= 1'b0;
-    else we <= 1'b1;
+    if (pulse) begin
+        mem[0] = 9'h0ff;
+        mem[1] = 9'h0ff;
+        mem[2] = 9'h1aa;
+        mem[3] = 9'h199;
+        mem[4] = 9'h132;
+        mem[5] = 9'h161;
+        mem[6] = {1'b1,addr[15:8]};
+        mem[7] = {1'b1,addr[7:0]};
+        mem[8] = 9'h132;
+        mem[9] = 9'h181;
+        mem[10] = 9'h10b;
+        mem[11] = {1'b1,addr[23:16]};
+        mem[12] = 9'h130;
+        mem[13] = 9'h1a1;
+        mem[14] = 9'h100;
+        mem[15] = 9'h10e;
+        mem[16] = 9'h120;
+        mem[17] = 9'h100;
+        mem[18] = 9'h120;
+        mem[19] = 9'h100;
+        mem[20] = 9'h000;
+        mem[21] = 9'h000;
+        mem[22] = 9'h000;
+        mem[23] = 9'h000;
     end
+end
 
-`ifdef SPARTAN3
-reg [7 : 0] d;
-wire [7 : 0] I = {d[0],d[1],d[2],d[3],d[4],d[5],d[6],d[7]};
-always @* begin
-    case (state)
-        3: d = 8'hAA;
-        4: d = 8'h99;
-        5: d = 8'h32;
-        6: d = 8'h61;
-        7: d = next_addr[15: 8];
-        8: d = next_addr[7: 0];
-        9: d = 8'h32;
-        10: d = 8'h81;
-        11: d = 8'h0B;
-        12: d = next_addr[23:16];
-        13: d = 8'h30;
-        14: d = 8'hA1;
-        15: d = 8'h00;
-        16: d = 8'h0E;
-        17: d = 8'h20;
-        18: d = 8'h00;
-        19: d = 8'h20;
-        20: d = 8'h00;
-        default: d = 8'h00;
-        endcase
+// data writes
+reg [7 : 0] cnt;
+always @ (posedge clk)
+    if (reset) cnt <= 8'd255;
+    else if (pulse) cnt <= 8'd0;
+    else if (cnt < 8'd24) cnt <= cnt + 8'd1;
+
+reg [8:0] mem_bits;
+reg [7:0] i;
+reg ena;
+
+always @ (posedge clk) begin
+    if (reset) begin
+        mem_bits <= 9'd0;
+        i <= 8'd0;
+        ena <= 1'd1;
     end
+    else begin
+        mem_bits <= mem[cnt];
+        i <= mem_bits[7:0];
+        ena <= !mem_bits[8];
+    end
+end
 
 ICAP_SPARTAN3A icap
-	(
-	.BUSY(),
-	.O(),
-	.CE(we),
-	.CLK(clk),
-	.I(I),
-	.WRITE(we)
-	);
-`endif   //SPARTAN3
-
-`ifdef SPARTAN6
-reg [15 : 0] d;
-wire [15 : 0] I = {d[8],d[9],d[10],d[11],d[12],d[13],d[14],d[15],d[0],d[1],d[2],d[3],d[4],d[5],d[6],d[7]};
-always @* begin
-    case (state)
-        3: d = 16'hFFFF;
-        4: d = 16'hAA99;
-        5: d = 16'h5566;
-        6: d = 16'h3261;
-        7: d = next_addr[15: 0];
-        8: d = 16'h3281;
-        9: d = {8'h0B,next_addr[23 : 16]};
-        10: d = 16'h32A1;
-        11: d = 16'h0000;
-        12: d = 16'h32C1;
-        13: d = 16'h0B00;
-        14: d = 16'h30A1;
-        15: d = 16'h000E;
-        16: d = 16'h2000;
-        default: d = 16'h00;
-        endcase
-    end
-
-ICAP_SPARTAN6 icap
-	(
-	.BUSY(),
-	.O(),
-	.CE(we),
-	.CLK(clk),
-	.I(I),
-	.WRITE(we)
-	);
-
-wire [35 : 0] CONTROL;
-chipscope_ila ila (
-    .CONTROL(CONTROL), // INOUT BUS [35:0]
-    .CLK(clk), // IN
-    .DATA({I,I}), // IN BUS [31:0]
-    .TRIG0(we) // IN BUS [0:0]
-);
-
-chipscope_icon icon (
-    .CONTROL0(CONTROL) // INOUT BUS [35:0]
-);
-
-
-
-`endif //SPARTAN6
+    (
+    .BUSY(),
+    .O(),
+    .CE(ena),
+    .CLK(clk),
+    .I({i[0],i[1],i[2],i[3],i[4],i[5],i[6],i[7]}),
+    .WRITE(ena)
+    );
 
 endmodule

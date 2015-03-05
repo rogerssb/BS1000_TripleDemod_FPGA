@@ -28,6 +28,7 @@ module subcarriersTop (
     dac0Data,dac1Data,dac2Data,
     dataSymEn,dataSym2xEn,
     iData,qData,
+    iBB,qBB,
     auSymClk,
     bsyncLockInput,demodLockInput,
     sdiInput,
@@ -58,6 +59,7 @@ input   [3:0]   demodMode;
 input   [13:0]  dac0Data,dac1Data,dac2Data;
 input           dataSymEn,dataSym2xEn;
 input           iData,qData;
+input   [17:0]  iBB,qBB;
 input           auSymClk;
 input           bsyncLockInput,demodLockInput;
 input           sdiInput;
@@ -79,7 +81,7 @@ output          sdiOut;
 output          vt_txd;
 input           vt_rxd;
 
-parameter VER_NUMBER = 16'h0156;
+parameter VER_NUMBER = 16'h017c;
 
 
 `ifndef USE_VTERM
@@ -121,6 +123,7 @@ assign demod_nLock = demodLockInput;
 reg     [13:0]  demod0_dac0DataIn, demod0_dac1DataIn, demod0_dac2DataIn;
 reg             dataSymEnIn,dataSym2xEnIn;
 reg             iDataIn,qDataIn;
+reg     [17:0]  iBBIn,qBBIn;
 reg             auSymClkIn;
 always @(posedge ck933) begin
     demod0_dac0DataIn <= dac0Data;
@@ -130,6 +133,8 @@ always @(posedge ck933) begin
     dataSym2xEnIn <= dataSym2xEn;
     iDataIn <= iData;
     qDataIn <= qData;
+    iBBIn <= iBB;
+    qBBIn <= qBB;
     auSymClkIn <= auSymClk;
     end
 
@@ -425,6 +430,9 @@ demod demod1(
 //    .demodMode(demodMode),
     .iRx({demod0_dac2DataIn,4'h0}),      // FPGA1 DAC2 output
     .qRx(18'h0),
+    .bbClkEn(dataSymEnIn),
+    .iBB(iBBIn),
+    .qBB(qBBIn),
     .dac0Data(demod1_dac0Data),
 //    .dac0Select(demod1_dac0Select),
     .dac0Sync(demod1_dac0Sync),
