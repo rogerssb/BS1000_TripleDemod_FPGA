@@ -131,6 +131,8 @@ always @(posedge clk) begin
             modeError <= freq;
             enableCarrierLock <= 0;
             end
+        `MODE_UQPSK,
+        `MODE_AUQPSK,
         `MODE_BPSK: begin
             loopFilterEn <= ddcSync;
             modeError <= {bpskPhase[10:0],1'b1};
@@ -139,7 +141,7 @@ always @(posedge clk) begin
         `MODE_QPSK,
         `MODE_OQPSK,
         `MODE_SOQPSK,
-        `MODE_AUQPSK: begin
+        `MODE_AQPSK: begin
             loopFilterEn <= ddcSync;
             modeError <= {qpskPhase[9:0],2'b10};
             enableCarrierLock <= 1;

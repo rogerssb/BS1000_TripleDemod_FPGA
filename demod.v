@@ -195,7 +195,6 @@ always @* begin
 end
 
 wire    [11:0]   phase;
-wire    [11:0]   phaseError;
 wire    [11:0]   freq;
 wire    [11:0]   negFreq = ~freq + 1;
 wire    [11:0]   freqError;
@@ -211,7 +210,7 @@ fmDemod fmDemod(
     `endif
     .demodMode(demodMode),
     .phase(phase),
-    .phaseError(phaseError),
+    .phaseError(),
     .freq(freq),
     .freqError(freqError),
     .mag(mag),

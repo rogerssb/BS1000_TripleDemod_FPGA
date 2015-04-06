@@ -54,10 +54,12 @@
 `define MODE_BPSK           5'b00100
 `define MODE_QPSK           5'b00101
 `define MODE_OQPSK          5'b00110
-`define MODE_AUQPSK         5'b00111
+`define MODE_AQPSK          5'b00111
 `define MODE_PCMTRELLIS     5'b01000
 `define MODE_SOQPSK         5'b01001
 `define MODE_MULTIH         5'b01010
+`define MODE_AUQPSK         5'b01011
+`define MODE_UQPSK          5'b01100
 `define MODE_SINGLE_RAIL    2'b00
 `define MODE_DUAL_RAIL      2'b01
 `define MODE_IND_RAIL       2'b10

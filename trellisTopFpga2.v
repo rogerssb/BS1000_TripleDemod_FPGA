@@ -81,7 +81,7 @@ input           symb_pll_vco;
 output          sdiOut;
 input           legacyBit_pad ;
 
-parameter VER_NUMBER = 16'h0182;
+parameter VER_NUMBER = 16'h0185;
 
 // 12 Jun 13
 // IOB reclocking of inputs to trellis
@@ -870,6 +870,7 @@ assign cout_i = cout;
 reg cout_q;
 always @(demodMode or auSymClkIn or cout) begin
     case (demodMode)
+        `MODE_AQPSK,
         `MODE_AUQPSK:   cout_q = auSymClkIn;
         default:        cout_q = cout;
         endcase
@@ -883,6 +884,7 @@ always @(posedge clkOut)begin
 reg dout_q;
 always @(demodMode or qData or decQ) begin
     case (demodMode)
+        `MODE_AQPSK,
         `MODE_AUQPSK:   dout_q = qData;
         default:        dout_q = decQ;
         endcase

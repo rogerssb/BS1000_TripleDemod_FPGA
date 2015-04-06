@@ -73,7 +73,7 @@ output  [17:0]  iTrellis;
 output  [17:0]  qTrellis;  
 output          legacyBit;
 
-parameter VER_NUMBER = 16'h0180;
+parameter VER_NUMBER = 16'h0185;
 
 wire    [11:0]  addr = {addr11,addr10,addr9,addr8,addr7,addr6,addr5,addr4,addr3,addr2,addr1,1'b0};
 wire            nWr = nWe;
@@ -109,6 +109,43 @@ always @(posedge nWe or posedge clockCounterEn) begin
     else if (misc_en) begin
         casex (addr) 
             `MISC_CLOCK:        startClockCounter <= 1;
+            endcase
+        end
+    end
+
+reg     [23:0]  boot_addr;
+always @(negedge wr0) begin
+    if (misc_en) begin
+        casex (addr)
+            `REBOOT_ADDR:
+                begin
+                boot_addr[7:0] <= dataIn[7:0];
+                end
+            default: ;
+            endcase
+        end
+    end
+
+always @(negedge wr1) begin
+    if (misc_en) begin
+        casex (addr)
+            `REBOOT_ADDR:
+                begin
+                boot_addr[15:8] <= dataIn[15:8];
+                end
+            default: ;
+            endcase
+        end
+    end
+
+always @(negedge wr2) begin
+    if (misc_en) begin
+        casex (addr)
+           `REBOOT_ADDR:
+                begin
+                boot_addr[23:16] <= dataIn[23:16];
+                end
+            default: ;
             endcase
         end
     end
@@ -165,7 +202,49 @@ always @(posedge clk) begin
   end
 end
 
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Multi-boot
+// The reboot address is 24 bits. Writing the upper byte triggers a reboot.
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+reg reboot_decode;
+reg [7:0]reboot_decode_sync;
+reg reboot;
+
+always @*
+    begin
+    if (wr2 && misc_en)
+        begin
+        casex (addr)
+            `REBOOT_ADDR:
+                begin
+                reboot_decode <= 1'b1 ;
+                end
+            default: reboot_decode <= 1'b0 ;
+        endcase
+        end
+    else
+        begin
+        reboot_decode <= 1'b0 ;
+        end
+    end
+
+always @ (posedge clk)
+    begin
+    reboot_decode_sync <= {reboot_decode_sync[6:0],reboot_decode};
+    reboot <= (reboot_decode_sync[7:6] == 2'b10);
+    end
+
 reg reset;
+multiboot multiboot
+    (
+    .addr(boot_addr),
+    .clk(clk),
+    .reset(reset),
+    .pulse(reboot)
+    );
+
+
 reg rs0,rs1;
 reg [2:0]resetCount;
 always @(posedge clk or posedge rs) begin
@@ -351,6 +430,9 @@ assign demod_nLock = multihMode ? !multihDemodLock : !carrierLock;
 wire fmModes = ( (demodMode == `MODE_2FSK)
               || (demodMode == `MODE_FM)
                );
+wire aModes  = ( (demodMode == `MODE_AUQPSK)
+              || (demodMode == `MODE_AQPSK)
+               );
 reg  iData,qData;
 reg  dataSymEn,dataSym2xEn;
 always @(posedge clk) begin
@@ -360,7 +442,7 @@ always @(posedge clk) begin
     else begin
         iData <= iBit;
         end
-    if (demodMode == `MODE_AUQPSK) begin
+    if (aModes) begin
         qData <= auBit;
         end
     else begin
@@ -560,16 +642,5 @@ always @* begin
   end
 
 assign data = (!nCs & !nRd) ? rd_mux : 16'hzzzz;
-
-boot_manager bm(
-    .rst(reset),
-    .clk(clk),
-    .ena(misc_en),
-    .wr0(wr0),
-    .wr2(wr2),
-    .addr(addr),
-    .data(dataIn[15 : 0])
-    );
-
 
 endmodule

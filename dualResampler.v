@@ -88,12 +88,12 @@ cicDecimator auCic(
     .syncOut(auCicSyncOut)
     );
 
-wire            auEnable = (demodMode == `MODE_AUQPSK);
-wire    [31:0]  rqResampleRate =    auEnable ? auResampleRate : resampleRate;
-wire    [31:0]  rqFreqOffset =      auEnable ? auResamplerFreqOffset : resamplerFreqOffset;
-wire            rqOffsetEn =        auEnable ? auOffsetEn : offsetEn;
-wire    [17:0]  rqIn =              auEnable ? cicOut[47:30] : qIn;
-wire            rqSync =            auEnable ? auCicSyncOut : sync;
+wire            aEnable = ((demodMode == `MODE_AQPSK) || (demodMode == `MODE_AUQPSK));
+wire    [31:0]  rqResampleRate =    aEnable ? auResampleRate : resampleRate;
+wire    [31:0]  rqFreqOffset =      aEnable ? auResamplerFreqOffset : resamplerFreqOffset;
+wire            rqOffsetEn =        aEnable ? auOffsetEn : offsetEn;
+wire    [17:0]  rqIn =              aEnable ? cicOut[47:30] : qIn;
+wire            rqSync =            aEnable ? auCicSyncOut : sync;
 resampler resamplerQ( 
     .clk(clk), .reset(reset),
     .resetPhase(resetPhase),
@@ -107,7 +107,7 @@ resampler resamplerQ(
     .sampleOffset()
     );
 
-assign resetPhase = (syncOut ^ auSyncOut) && !auEnable;
+assign resetPhase = (syncOut ^ auSyncOut) && !aEnable;
 //assign resetPhase = 1'b0;
 
 endmodule

@@ -59,12 +59,14 @@ always @(posedge clk) begin
             `MODE_2FSK: begin
                 phaseError <= phase;
                 end
+            `MODE_UQPSK,
+            `MODE_AUQPSK,
             `MODE_BPSK: begin
                 phaseError <= {bpskPhase[10:0],1'b0};
                 end
             `MODE_QPSK,
             `MODE_OQPSK,
-            `MODE_AUQPSK: begin
+            `MODE_AQPSK: begin
                 phaseError <= {qpskPhase[9:0],2'b0};
                 end
             default: begin

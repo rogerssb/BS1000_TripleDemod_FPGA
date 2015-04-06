@@ -769,6 +769,7 @@ assign cout_i = cout;
 reg cout_q;
 always @(demodMode or qSymClk or cout or trellisSymEn) begin
     case (demodMode)
+        `MODE_AQPSK,
         `MODE_AUQPSK:   cout_q = qSymClk;
         `MODE_SOQPSK:   cout_q = trellisSymEn;
         default:       cout_q = cout;
@@ -784,6 +785,7 @@ always @(posedge symb_pll_out)begin
 reg dout_q;
 always @(demodMode or qBit or decQ or trellisBit) begin
     case (demodMode)
+        `MODE_AQPSK,
         `MODE_AUQPSK:   dout_q = qBit;
         `MODE_SOQPSK:   dout_q = trellisBit;
         default:       dout_q = decQ;

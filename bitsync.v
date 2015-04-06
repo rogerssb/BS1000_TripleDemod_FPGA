@@ -766,7 +766,7 @@ always @(sampleFreq) sampleFreqReal = ((sampleFreq > 2147483647.0) ? sampleFreq-
 **
 ******************************************************************************/
 
-wire auEnable = (demodMode == `MODE_AUQPSK);
+wire auEnable = ((demodMode == `MODE_AQPSK) || (demodMode == `MODE_AUQPSK));
 
 //****************************** Two Sample Sum *******************************
 reg     [17:0]  auDelay;
