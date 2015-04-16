@@ -12,6 +12,8 @@ module dualDecimator(
     syncOut
     );
 
+parameter RegSpace = `CICDECSPACE;
+
 input clk;
 input reset;
 input sync;
@@ -28,7 +30,7 @@ output  syncOut;
 reg cs;
 always @(addr) begin
     casex(addr)
-        `CICDECSPACE:       cs = 1;
+        RegSpace:           cs = 1;
         default:            cs = 0;
         endcase
     end

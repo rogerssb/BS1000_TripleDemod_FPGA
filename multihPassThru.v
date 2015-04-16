@@ -445,6 +445,7 @@ assign cout_i = cout;
 reg cout_q;
 always @(demodMode or auSymClkIn or cout) begin
     case (demodMode)
+        `MODE_AQPSK,
         `MODE_AUQPSK:   cout_q = auSymClkIn;
         default:        cout_q = cout;
         //default:        cout_q = decoder_cout;
@@ -459,6 +460,7 @@ always @(posedge symb_pll_out)begin
 reg dout_q;
 always @(demodMode or qDataIn or decQ) begin
     case (demodMode)
+        `MODE_AQPSK,
         `MODE_AUQPSK:   dout_q = qDataIn;
         default:        dout_q = decQ;
         endcase

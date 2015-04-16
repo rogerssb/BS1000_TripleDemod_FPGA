@@ -1,4 +1,5 @@
 `timescale 1ns / 10 ps
+`include ".\addressMap.v"
 
 module interpolate(
     clk, reset, clkEn,
@@ -11,6 +12,9 @@ module interpolate(
     dataOut
     );
 
+parameter RegSpace = `INTERP0SPACE;
+parameter FirRegSpace = `VIDFIR0SPACE;
+
 input clk;
 input reset;
 input clkEn;
@@ -22,15 +26,40 @@ output  [31:0]dout;
 input   [17:0]dataIn;
 output  [17:0]dataOut;
 
+// Chip select decodes
+reg interpCS;
+always @(addr) begin
+    casex (addr)
+        RegSpace: begin
+            interpCS <= 1;
+            end
+        default: begin
+            interpCS <= 0;
+            end
+        endcase
+    end
+reg firCS;
+always @(addr) begin
+    casex (addr)
+        FirRegSpace: begin
+            firCS <= 1;
+            end
+        default: begin
+            firCS <= 0;
+            end
+        endcase
+    end
+
 // Register interface
 wire    [17:0]  testValue;
 wire    [17:0]  mantissa;
 wire    [4:0]   exponent;
+wire    [31:0]  interpDout;
 interpRegs regs  (
-    .cs(cs),
+    .cs(interpCS),
     .addr(addr),
     .dataIn(din),
-    .dataOut(dout),
+    .dataOut(interpDout),
     .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
     .bypass(bypass),
     .test(test),
@@ -41,6 +70,8 @@ interpRegs regs  (
     .mantissa(mantissa)
     );
 
+
+// Generate reset for CIC 
 reg cicReset;
 reg bp0,bp1,bp2;
 always @(posedge clk) begin
@@ -57,6 +88,22 @@ always @(posedge clk) begin
         end
     end
 
+// Video FIR
+wire    [17:0]  firOut;
+wire    [31:0]  firDout;
+videoFir videoFir( 
+    .clk(clk), 
+    .reset(reset), 
+    .clkEn(clkEn),
+    .cs(firCS), 
+    .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+    .addr(addr),
+    .din(din),
+    .dout(firDout),
+    .videoIn(dataIn),
+    .videoOut(firOut)
+    );
+
 `define CIC_USE_MPYS
 `ifdef CIC_USE_MPYS
 // CIC Compensation
@@ -65,7 +112,7 @@ cicComp cicComp(
     .clk(clk),
     .reset(reset),
     .sync(clkEn),
-    .compIn(dataIn),
+    .compIn(firOut),
     .compOut(cicCompOut)
     );
 `else
@@ -76,7 +123,7 @@ cicCompensation cicComp(
     .nd(clkEn | reset),
     .clk(clk),
     .dout(lutDout),
-    .din(dataIn)
+    .din(firOut)
 );
 wire    [17:0]  cicCompOut = lutDout[26:9];
 `endif
@@ -174,5 +221,13 @@ always @(exponentAdjusted) expAdjReal = (exponentAdjusted[17] ? (exponentAdjuste
 always @(dataOut) interpReal = (dataOut[17] ? (dataOut - 262144.0) : dataOut)/131072.0;
 `endif
 
+reg [31:0]dout;
+always @* begin
+    casex (addr)
+        RegSpace :          dout <= interpDout;
+        FirRegSpace:        dout <= firDout;
+        default:            dout <= 32'bx;
+        endcase
+    end
 
 endmodule

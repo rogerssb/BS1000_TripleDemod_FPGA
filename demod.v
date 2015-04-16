@@ -130,6 +130,9 @@ demodRegs demodRegs(
     .despreadLock(despreadLock),
     .enableDespreader(enableDespreader),
     `endif
+    `ifdef ADD_SCPATH
+    .enableScPath(enableScPath),
+    `endif
     .bitsyncMode(bitsyncMode),
     .dac0Select(dac0Select),
     .dac1Select(dac1Select),
@@ -142,6 +145,9 @@ demodRegs demodRegs(
 /******************************************************************************
                                 Downconverter
 ******************************************************************************/
+`ifdef ADD_SCPATH
+wire    [17:0]  iLagOut,qLagOut;
+`endif
 wire    [17:0]  iDdc,qDdc;
 wire    [20:0]  nbAgcGain;
 wire    [31:0]  carrierFreqOffset;
@@ -160,6 +166,10 @@ ddc ddc(
     .bbClkEn(bbClkEn),
     .iBB(iBB), .qBB(qBB),
     .iIn(iRx), .qIn(qRx),
+    `ifdef ADD_SCPATH
+    .iLagOut(iLagOut), .qLagOut(qLagOut),
+    .lagClkEn(ddcLagClkEn),
+    `endif
     .syncOut(ddcSync),
     .iOut(iDdc), .qOut(qDdc)
     );
@@ -623,11 +633,98 @@ assign iEye = cordicModes ? iSymData : iResamp;
 assign qEye = cordicModes ? qSymData : qResamp;
 
 
+
+`ifdef ADD_SCPATH
+/******************************************************************************
+                                Downconverter
+******************************************************************************/
+wire    [17:0]  iScDdc,qScDdc;
+wire    [20:0]  scAgcGain;
+wire    [31:0]  scLeadFreq;
+wire    [31:0]  scDdcDout;
+scDdc scDdc(
+    .clk(clk), .reset(reset),
+    .wr0(wr0) , .wr1(wr1), .wr2(wr2), .wr3(wr3),
+    .addr(addr),
+    .din(din),
+    .dout(scDdcDout),
+    .scFreq(scLeadFreq),
+    .offsetEn(scOffsetEn),
+    .nbAgcGain(scAgcGain),
+    .bbClkEn(ddcLagClkEn),
+    .iBB(iLagOut), .qBB(qLagOut),
+    .iOut(iScDdc), .qOut(qScDdc),
+    .syncOut(scDdcSync)
+    );
+
+/******************************************************************************
+                            Narrowband Channel AGC
+******************************************************************************/
+wire    [31:0]  scAgcDout;
+channelAGC scChannelAGC(
+    .clk(clk), .reset(reset), .syncIn(scDdcSync),
+    .wr0(wr0) , .wr1(wr1), .wr2(wr2), .wr3(wr3),
+    .addr(addr),
+    .din(din),
+    .dout(scAgcDout),
+    .iIn(iScDdc),.qIn(qScDdc),
+    .agcGain(scAgcGain)
+    );
+
+
+/******************************************************************************
+                           Phase/Freq/Mag Detector
+******************************************************************************/
+wire    [11:0]   scPhase;
+wire    [11:0]   scFreq;
+wire    [11:0]   negScFreq = ~scFreq + 1;
+wire    [17:0]   scFM = {negScFreq,6'h0};
+fmDemod scDemod(
+    .clk(clk), .reset(reset), 
+    .sync(scDdcSync),
+    .iFm(iScDdc),.qFm(qScDdc),
+    .demodMode(demodMode),
+    .phase(scPhase),
+    .phaseError(),
+    .freq(scFreq),
+    .freqError(),
+    .mag(),
+    .syncOut(scDemodSync)
+    );
+
+/******************************************************************************
+                             AFC/Sweep/Costas Loop
+******************************************************************************/
+wire    [31:0]  scFreqDout;
+carrierLoop scCarrierLoop(
+    .clk(clk), .reset(reset),
+    .resampSync(),
+    .ddcSync(scDemodSync),
+    .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
+    .addr(addr),
+    .din(din),
+    .dout(scFreqDout),
+    .demodMode(demodMode),
+    .phase(phase),
+    .freq(freq),
+    .highFreqOffset(highFreqOffset),
+    .offsetError(),
+    .offsetErrorEn(),
+    .carrierFreqOffset(),
+    .carrierLeadFreq(scLeadFreq),
+    .carrierFreqEn(scOffsetEn),
+    .loopError(),
+    .carrierLock(scCarrierLock),
+    .lockCounter()
+    );
+
+`endif //ADD_SCPATH
+
 /******************************************************************************
                                DAC Output Mux
 ******************************************************************************/
 
-`ifdef FM_FILTER
+`ifdef ADD_VID_FILTER
 // Programmable FIR
 wire    [15:0]  c0c14, c1c13, c2c12, c3c11, c4c10, c5c9 , c6c8 , c7   ;
 reg             firspace;
@@ -859,6 +956,22 @@ always @(posedge clk) begin
             dac2Sync <= resampSync;
             end
         `DAC_FREQ: begin
+            `ifdef ADD_SCPATH
+            if (enableScPath) begin
+                dac2Data <= scFM;
+                dac2Sync <= scDemodSync;
+                end
+            else begin
+                if (fmMode) begin
+                    dac2Data <= fmVideo;
+                    dac2Sync <= ddcSync;
+                    end
+                else begin
+                    dac2Data <= fm;
+                    dac2Sync <= demodSync;
+                    end
+                end
+            `else
             if (fmMode) begin
                 dac2Data <= fmVideo;
                 dac2Sync <= ddcSync;
@@ -867,10 +980,22 @@ always @(posedge clk) begin
                 dac2Data <= fm;
                 dac2Sync <= demodSync;
                 end
+            `endif
             end
         `DAC_PHASE: begin
+            `ifdef ADD_SCPATH
+            if (enableScPath) begin
+                dac2Data <= {scPhase,6'b0};
+                dac2Sync <= scDemodSync;
+                end
+            else begin
+                dac2Data <= {phase,6'b0};
+                dac2Sync <= demodSync;
+                end
+            `else
             dac2Data <= {phase,6'b0};
             dac2Sync <= demodSync;
+            `endif
             end
         `DAC_MAG: begin
             //dac2Data <= {~mag[8],mag[7:0],9'b0};
@@ -928,6 +1053,13 @@ always @* begin
         `CICDECSPACE,
         `DDCFIRSPACE,
         `DDCSPACE:          dout <= ddcDout;
+        `ifdef ADD_SCPATH
+        `SCAGCSPACE:        dout <= scAgcDout;
+        `SCCICDECSPACE,
+        `SCDDCFIRSPACE,
+        `SCDDCSPACE:        dout <= scDdcDout;
+        `SCCARRIERSPACE:    dout <= scFreqDout;
+        `endif
         `RESAMPSPACE:       dout <= resampDout;
         `BITSYNCAUSPACE,
         `BITSYNCSPACE:      dout <= bitsyncDout;
@@ -935,5 +1067,7 @@ always @* begin
         default:            dout <= 32'bx;
         endcase
     end
+
+
 
 endmodule

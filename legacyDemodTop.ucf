@@ -389,20 +389,8 @@ NET "demod/carrierLoop/loopFilterEn*" TNM_NET = FFS syncGroup;
 NET "demod/fmDemod/cordic/enSR*" TNM_NET = FFS syncGroup;
 #NET "demod/fmDemod/cordic/enSR*" TNM_NET = DSPS syncGroup;
 NET "demod/bitsync/phaseState*" TNM_NET = FFS syncGroup;
-#NET "pcmSymEn*" TNM_NET = FFS syncGroup;
-#NET "pcmSym2xEn*" TNM_NET = FFS syncGroup;
-#NET "soqpskSym2xEn*" TNM_NET = FFS syncGroup;
-#NET "soqpsk/soqpskCarrierLoop/sym2xEnSr*" TNM_NET = FFS syncGroup;
 NET "multihSymEn*" TNM_NET = FFS syncGroup;
 NET "multihSym2xEn*" TNM_NET = FFS syncGroup;
-#NET "trellis/viterbi_top/traceback/symEnDly*" TNM_NET = FFS syncGroup;
-#NET "trellis/viterbi_top/traceback/symEnSr2*" TNM_NET = FFS syncGroup;
-#NET "soqpsk/soqpskViterbi/everyOtherSymEn*" TNM_NET = FFS syncGroup;
-#NET "soqpsk/soqpskViterbi/everyOtherSymEn*" TNM_NET = DSPS syncGroup;
-#NET "trellis/trellisCarrierLoop/sym2xEnSr*" TNM_NET = FFS syncGroup;
-#NET "trellis/trellisCarrierLoop/symEnSr*" TNM_NET = FFS syncGroup;
-#NET "trellis/trellisCarrierLoop/fmDemod/cordic/enSR*" TNM_NET = FFS syncGroup;
-#NET "trellis/symEnShift*" TNM_NET = FFS syncGroup;
 NET "multihPhaseErrorEnIn*" TNM_NET = FFS syncGroup;
 
 # A group composed of all the clock enables

@@ -1,0 +1,13 @@
+# Output products list for <multCicC0>
+multCicC0.asy
+multCicC0.gise
+multCicC0.ngc
+multCicC0.v
+multCicC0.veo
+multCicC0.xco
+multCicC0.xise
+multCicC0\doc\mult_gen_ds255.pdf
+multCicC0\doc\mult_gen_v11_2_readme.txt
+multCicC0\doc\mult_gen_v11_2_vinfo.html
+multCicC0_flist.txt
+multCicC0_xmdf.tcl

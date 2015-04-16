@@ -35,6 +35,7 @@ always @(posedge clk) begin
         end
     end
 
+`ifdef CIC_COMP_USE_MPY
 // Tap Mpy
 wire    [35:0]  tap0;
 mpy18x18PL1 mpy0(
@@ -60,10 +61,33 @@ mpy18x18PL1 mpy2(
     .b(coef2),
     .p(tap2)
     );
+wire    [19:0] finalSum = tap0[34:15] + tap1[34:15] + tap2[34:15];
 
+`else   // CIC_COMP_USE_MPY
+
+wire    [29:0]  mult0;
+multCicC0 multC0(
+    //.clk(clk), 
+    .a(sum0[18:1]),
+    .p(mult0)
+);
+wire    [32:0]  mult1;
+multCicC1 multC1(
+    //.clk(clk), 
+    .a(sum1[18:1]),
+    .p(mult1)
+);
+wire    [34:0]  mult2;
+multCicC2 multC2(
+    //.clk(clk), 
+    .a(midTap),
+    .p(mult2)
+);
+wire    [19:0] finalSum = {{5{mult0[29]}},mult0[29:15]} + {{2{mult1[32]}},mult1[32:15]} + mult2[34:15];
+
+`endif // CIC_COMP_USE_MPY
 
 // Final sum. Check for saturation.
-wire    [19:0] finalSum = tap0[34:15] + tap1[34:15] + tap2[34:15];
 reg     [17:0]  compOut;
 always @(posedge clk) begin
     if (reset) begin

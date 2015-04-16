@@ -23,6 +23,9 @@ module demodRegs(
     despreadLock,
     enableDespreader,
     `endif
+    `ifdef ADD_SCPATH
+    enableScPath,
+    `endif
     bitsyncMode,
     dac0Select,
     dac1Select,
@@ -59,6 +62,11 @@ reg     [4:0]   demodMode;
 `ifdef ADD_DESPREADER
 output          enableDespreader;
 reg             enableDespreader;
+`endif
+
+`ifdef ADD_SCPATH
+output          enableScPath;
+reg             enableScPath;
 `endif
 
 output  [1:0]   bitsyncMode;
@@ -107,9 +115,22 @@ always @(negedge wr1) begin
     if (cs) begin
         casex (addr)
             `ifdef ADD_DESPREADER
+            `ifdef ADD_SCPATH
+            `DEMOD_CONTROL: begin
+                enableScPath <= dataIn[14];
+                enableDespreader <= dataIn[15];
+                end
+            `else
             `DEMOD_CONTROL: begin
                 enableDespreader <= dataIn[15];
                 end
+            `endif
+            `else
+            `ifdef ADD_SCPATH
+            `DEMOD_CONTROL: begin
+                enableScPath <= dataIn[14];
+                end
+            `endif
             `endif
             `DEMOD_DACSELECT: begin
                 dac1Select <= dataIn[11:8];
@@ -155,9 +176,17 @@ always @* begin
     if (cs) begin
         casex (addr)
             `ifdef ADD_DESPREADER
+            `ifdef ADD_SCPATH
+            `DEMOD_CONTROL:     dataOut <= {14'b0,bitsyncMode,enableDespreader,enableScPath,9'b0,demodMode};
+            `else
             `DEMOD_CONTROL:     dataOut <= {14'b0,bitsyncMode,enableDespreader,10'b0,demodMode};
+            `endif
+            `else
+            `ifdef ADD_SCPATH
+            `DEMOD_CONTROL:     dataOut <= {14'b0,bitsyncMode,1'b0,enableScPath,9'b0,demodMode};
             `else
             `DEMOD_CONTROL:     dataOut <= {14'b0,bitsyncMode,11'b0,demodMode};
+            `endif
             `endif
             `DEMOD_DACSELECT:   dataOut <= {12'h0,dac2Select,4'h0,dac1Select,4'h0,dac0Select};
             `DEMOD_FALSELOCK:   dataOut <= {falseLockThreshold,falseLockAlpha};

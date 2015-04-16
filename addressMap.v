@@ -8,13 +8,18 @@
 //`define FM_FILTER
 
 `ifdef LEGACY_DEMOD
+`define CIC_COMP_USE_MPY
+`define USE_DDC_FIR
 `define ADD_DESPREADER
+`define ADD_SCPATH
 `endif
 
 `ifdef SUBCARRIER_DEMOD
+// `define CIC_COMP_USE_MPY
 `endif
 
 `ifdef TRELLIS_DEMOD
+`define CIC_COMP_USE_MPY
 `endif
 
 
@@ -24,19 +29,27 @@
 `define VIDFIRSPACE     12'b0000_1xxx_xxxx
 `endif
 `define DESPREADSPACE   12'b0001_xxxx_xxxx
-`define DDCSPACE        12'b0010_0xxx_xxxx
-`define DDCFIRSPACE     12'b0010_1xxx_xxxx
-`define CICDECSPACE     12'b0011_xxxx_xxxx
+`define DDCSPACE        12'b0010_00xx_xxxx
+`define DDCFIRSPACE     12'b0010_01xx_xxxx
+`define CICDECSPACE     12'b0010_10xx_xxxx
+`define SCDDCSPACE      12'b0011_00xx_xxxx
+`define SCDDCFIRSPACE   12'b0011_01xx_xxxx
+`define SCCICDECSPACE   12'b0011_10xx_xxxx
 `define BITSYNCSPACE    12'b0100_0xxx_xxxx
 `define BITSYNCAUSPACE  12'b0100_1xxx_xxxx
 `define DECODERSPACE    12'b0101_xxxx_xxxx
 `define PLLSPACE        12'b0110_xxxx_xxxx
-`define CHAGCSPACE      12'b0111_xxxx_xxxx
+`define CHAGCSPACE      12'b0111_0xxx_xxxx
+`define SCAGCSPACE      12'b0111_1xxx_xxxx
 `define RESAMPSPACE     12'b1000_xxxx_xxxx
-`define CARRIERSPACE    12'b1001_xxxx_xxxx
-`define INTERP0SPACE    12'b1010_xxxx_xxxx
-`define INTERP1SPACE    12'b1011_xxxx_xxxx
-`define INTERP2SPACE    12'b1100_xxxx_xxxx
+`define CARRIERSPACE    12'b1001_0xxx_xxxx
+`define SCCARRIERSPACE  12'b1001_1xxx_xxxx
+`define INTERP0SPACE    12'b1010_0xxx_xxxx
+`define VIDFIR0SPACE    12'b1010_1xxx_xxxx
+`define INTERP1SPACE    12'b1011_0xxx_xxxx
+`define VIDFIR1SPACE    12'b1011_1xxx_xxxx
+`define INTERP2SPACE    12'b1100_0xxx_xxxx
+`define VIDFIR2SPACE    12'b1100_1xxx_xxxx
 `define MISC_SPACE      12'b1101_0xxx_xxxx
 `define SUBCARR_TOP_SPACE      12'b1101_0xxx_xxxx   // same as MISC space
 `define SDISPACE        12'b1101_1xxx_xxxx
@@ -162,7 +175,8 @@
 `define MISC_CLOCK      12'bxxxx_xxxx_01xx
 `define DAC_IN_SEL      12'bxxxx_xxxx_100x
 `define DAC_IN_SEL_DEMOD    2'b00
-`define DAC_IN_SEL_SC       2'b01
+`define DAC_IN_SEL_SC0      2'b01
+`define DAC_IN_SEL_SC1      2'b10
 `define DEC_IN_SEL      12'bxxxx_xxxx_101x
 `define REBOOT_ADDR     12'bxxxx_xxxx_11xx
 

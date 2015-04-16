@@ -1,22 +1,19 @@
 `timescale 1ns / 10 ps
 `include ".\addressMap.v"
 
+`define USE_DDC_FIR
 
-module ddc( 
+module scDdc( 
     clk, reset,
     wr0,wr1,wr2,wr3,
     addr,
     din,
     dout,
-    ddcFreqOffset,
-    leadFreq,
+    scFreq,
     offsetEn,
     nbAgcGain,
+    iBB, qBB, 
     bbClkEn,
-    iBB, qBB,
-    iIn, qIn, 
-    iLagOut, qLagOut,
-    lagClkEn,
     syncOut,
     iOut, qOut
     );
@@ -27,18 +24,12 @@ input           wr0,wr1,wr2,wr3;
 input   [11:0]  addr;
 input   [31:0]  din;
 output  [31:0]  dout;
-input   [31:0]  ddcFreqOffset;
-input   [31:0]  leadFreq;
+input   [31:0]  scFreq;
 input           offsetEn;
 input   [20:0]  nbAgcGain;
-input           bbClkEn;
 input   [17:0]  iBB;
 input   [17:0]  qBB;
-input   [17:0]  iIn;
-input   [17:0]  qIn;
-output  [17:0]  iLagOut;
-output  [17:0]  qLagOut;
-output          lagClkEn;
+input           bbClkEn;
 output          syncOut;
 output  [17:0]  iOut;
 output  [17:0]  qOut;
@@ -49,11 +40,11 @@ reg ddcSpace;
 reg ddcFirSpace;
 always @(addr) begin
     casex(addr)
-        `DDCSPACE: begin
+        `SCDDCSPACE: begin
             ddcSpace    <= 1;
             ddcFirSpace <= 0;
             end
-        `DDCFIRSPACE: begin
+        `SCDDCFIRSPACE: begin
             ddcSpace    <= 0;
             ddcFirSpace <= 1;
             end
@@ -84,109 +75,6 @@ ddcRegs micro(
     );
 
 
-// Create the LO frequency
-reg [31:0] ddcFreq;
-reg [31:0] newOffset;
-always @(posedge clk) begin
-    if (reset) begin
-        newOffset <= 0;
-        end
-    else if (offsetEn) begin
-        newOffset <= ddcFreqOffset;
-        end
-    //ddcFreq <= ddcFreqOffset - ddcCenterFreq;
-    ddcFreq <= newOffset - ddcCenterFreq;
-    end
-
-
-// LO Generator
-wire    [17:0]iDds;
-wire    [17:0]qDds;
-dds dds ( 
-    .sclr(reset), 
-    .clk(clk), 
-    .ce(1'b1),
-    .we(1'b1), 
-    .data(ddcFreq), 
-    .sine(qDds), 
-    .cosine(iDds)
-    );
-`ifdef SIMULATE
-real iDdsReal;
-real qDdsReal;
-always @(iDds) iDdsReal = ((iDds > 131071.0) ? (iDds - 262144.0) : iDds)/131072.0;
-always @(qDds) qDdsReal = ((qDds > 131071.0) ? (qDds - 262144.0) : qDds)/131072.0;
-
-`endif
-
-
-// Complex Multiplier
-wire [17:0]iMix;
-wire [17:0]qMix;
-cmpy18 mixer( .clk(clk),
-              .reset(reset),
-              .aReal(iIn),
-              .aImag(qIn),
-              .bReal(iDds),
-              .bImag(qDds),
-              .pReal(iMix),
-              .pImag(qMix)
-              );
-`ifdef SIMULATE
-real iMixReal;
-real qMixReal;
-always @(iMix) iMixReal = ((iMix > 131071.0) ? (iMix - 262144.0) : iMix)/131072.0;
-always @(qMix) qMixReal = ((qMix > 131071.0) ? (qMix - 262144.0) : qMix)/131072.0;
-`endif
-
-
-// First Halfband Filters
-wire [17:0]iHb0,qHb0;
-`ifdef SIMULATE
-reg hbReset;
-halfbandDecimate hb0( 
-    .clk(clk), .reset(hbReset), .sync(1'b1),
-`else
-halfbandDecimate hb0( 
-    .clk(clk), .reset(reset), .sync(1'b1),
-`endif
-    .iIn(iMix),.qIn(qMix),
-    .iOut(iHb0),.qOut(qHb0),
-    .syncOut(hb0SyncOut)
-    );
-
-`ifdef SIMULATE
-real iHb0Real;
-real qHb0Real;
-always @(iHb0) iHb0Real = ((iHb0 > 131071.0) ? (iHb0 - 262144.0) : iHb0)/131072.0;
-always @(qHb0) qHb0Real = ((qHb0 > 131071.0) ? (qHb0 - 262144.0) : qHb0)/131072.0;
-`endif
-
-assign iLagOut = iHb0;
-assign qLagOut = qHb0;
-assign lagClkEn = hb0SyncOut;
-
-// Programmable Clock Decimation. Depends on external SAW filters for this to 
-// work without aliasing
-reg     [7:0]   adcDecimationCount;
-reg             adcClkEn;
-always @(posedge clk) begin
-    if (reset) begin
-        adcDecimationCount <= 0;
-        end
-    else if (hb0SyncOut) begin
-        if (adcDecimationCount == 0) begin
-            adcDecimationCount <= adcDecimation;
-            adcClkEn <= 1;
-            end
-        else begin
-            adcDecimationCount <= adcDecimationCount - 1;
-            adcClkEn <= 0;
-            end
-        end
-    end
-
-
 // If bypassing the CIC decimator, force its clock enable off to save power
 reg     [17:0]  iCicIn,qCicIn;
 reg             cicClockEn;
@@ -197,16 +85,9 @@ always @(posedge clk) begin
         qCicIn <= 0;
         end
     else begin
-        `define ADD_BB
-        `ifdef ADD_BB
-        cicClockEn <= (enableBasebandInputs ? bbClkEn : hb0SyncOut) & adcClkEn;
-        iCicIn <= (enableBasebandInputs ? iBB : iHb0);
-        qCicIn <= (enableBasebandInputs ? qBB : qHb0);
-        `else
-        cicClockEn <= hb0SyncOut & adcClkEn;
-        iCicIn <= iHb0;
-        qCicIn <= qHb0;
-        `endif
+        cicClockEn <= bbClkEn;
+        iCicIn <= iBB;
+        qCicIn <= qBB;
         end
     end
 
@@ -216,10 +97,10 @@ wire cicSyncOut;
 wire [31:0]cicDout;
 `ifdef SIMULATE
 reg cicReset;
-dualDecimator #(.RegSpace(`CICDECSPACE)) cic( 
+dualDecimator #(.RegSpace(`SCCICDECSPACE)) cic( 
     .clk(clk), .reset(cicReset), .sync(cicClockEn),
 `else
-dualDecimator #(.RegSpace(`CICDECSPACE)) cic( 
+dualDecimator #(.RegSpace(`SCCICDECSPACE)) cic( 
     .clk(clk), .reset(reset), .sync(cicClockEn),
 `endif
     .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
@@ -235,15 +116,9 @@ reg     [47:0]  iAgcIn,qAgcIn;
 reg             agcSync;
 always @(posedge clk) begin
     if (bypassCic) begin
-        `ifdef ADD_BB
-        iAgcIn <=   enableBasebandInputs ? {iBB,30'h0} : {iHb0,30'h0};
-        qAgcIn <=   enableBasebandInputs ? {qBB,30'h0} : {qHb0,30'h0};
-        agcSync <= (enableBasebandInputs ? bbClkEn : hb0SyncOut) & adcClkEn;
-        `else
-        iAgcIn <=  {iHb0,30'h0};
-        qAgcIn <=  {qHb0,30'h0};
-        agcSync <= hb0SyncOut & adcClkEn;
-        `endif
+        iAgcIn <=  {iBB,30'h0};
+        qAgcIn <=  {qBB,30'h0};
+        agcSync <= bbClkEn;
         end
     else begin
         iAgcIn <= iCic;
@@ -419,7 +294,7 @@ always @(posedge clk) begin
         newLead <= 0;
         end
     else if (offsetEn) begin
-        newLead <= leadFreq;
+        newLead <= scFreq;
         end
     end
 
@@ -431,7 +306,7 @@ dds leadDds (
     .clk(clk), 
     .ce(1'b1),
     .we(1'b1), 
-    //.data(leadFreq), 
+    //.data(scFreq), 
     .data(newLead), 
     .sine(qLeadDds), 
     .cosine(iLeadDds)
@@ -487,9 +362,9 @@ always @(qOut) qOutReal = ((qOut > 131071.0) ? (qOut - 262144.0) : qOut)/131072.
 reg [31:0]dout;
 always @(addr or cicDout or ddcDout or ddcFirDout) begin
     casex (addr)
-        `DDCSPACE:          dout <= ddcDout;
-        `DDCFIRSPACE:       dout <= ddcFirDout;
-        `CICDECSPACE:       dout <= cicDout;    
+        `SCDDCSPACE:        dout <= ddcDout;
+        `SCDDCFIRSPACE:     dout <= ddcFirDout;
+        `SCCICDECSPACE:     dout <= cicDout;    
         default:            dout <= 32'bx;
         endcase
     end
@@ -497,8 +372,8 @@ always @(addr or cicDout or ddcDout or ddcFirDout) begin
 reg [31:0]dout;
 always @(addr or cicDout or ddcDout) begin
     casex (addr)
-        `DDCSPACE:          dout <= ddcDout;
-        `CICDECSPACE:       dout <= cicDout;    
+        `SCDDCSPACE:        dout <= ddcDout;
+        `SCCICDECSPACE:     dout <= cicDout;    
         default:            dout <= 32'bx;
         endcase
     end
