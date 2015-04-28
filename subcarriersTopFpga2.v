@@ -72,13 +72,16 @@ output          sdiOut;
 
 parameter VER_NUMBER = 16'h0185;
 
-wire    [11:0]  addr = {addr11,addr10,addr9,addr8,addr7,addr6,addr5,addr4,addr3,addr2,addr1,1'b0};
+wire    [12:0]  addr = {addr12,addr11,addr10,addr9,addr8,addr7,addr6,addr5,addr4,addr3,addr2,addr1,1'b0};
 wire            nWr = nWe;
-wire            rd  = !nCs & !nRd;
-wire            wr0 = !nCs & !nWr & !addr1;
-wire            wr1 = !nCs & !nWr & !addr1;
-wire            wr2 = !nCs & !nWr & addr1;
-wire            wr3 = !nCs & !nWr & addr1;
+wire            sc0_wr0 = !nCs & !nWr & !addr12 & !addr1;
+wire            sc0_wr1 = !nCs & !nWr & !addr12 & !addr1;
+wire            sc0_wr2 = !nCs & !nWr & !addr12 &  addr1;
+wire            sc0_wr3 = !nCs & !nWr & !addr12 &  addr1;
+wire            sc1_wr0 = !nCs & !nWr &  addr12 & !addr1;
+wire            sc1_wr1 = !nCs & !nWr &  addr12 & !addr1;
+wire            sc1_wr2 = !nCs & !nWr &  addr12 &  addr1;
+wire            sc1_wr3 = !nCs & !nWr &  addr12 &  addr1;
 wire    [31:0]  dataIn = {data,data};
 //******************************************************************************
 //                               Pass Throughs
@@ -90,10 +93,10 @@ assign demod_nLock = demodLockInput;
 //******************************************************************************
 reg reset;
 reg misc_space;
-always @(addr) begin
+always @* begin
   casex(addr)
-    `MISC_SPACE: misc_space <= 1;
-    default:     misc_space <= 0;
+    `MISC_SPACE: misc_space = 1;
+    default:     misc_space = 0;
   endcase
 end
 wire misc_en = !nCs && misc_space;
@@ -105,7 +108,7 @@ reg             dec_in_sel;
 reg     [23:0]  boot_addr;
 
 // MISC space writes
-always @(negedge wr0) begin
+always @(negedge sc0_wr0) begin
     if (misc_en) begin
         casex (addr)
             `DAC_IN_SEL:
@@ -123,7 +126,7 @@ always @(negedge wr0) begin
         end
     end
 
-always @(negedge wr1) begin
+always @(negedge sc0_wr1) begin
     if (misc_en) begin
         casex (addr)
             `REBOOT_ADDR:
@@ -135,7 +138,7 @@ always @(negedge wr1) begin
         end
     end
 
-always @(negedge wr2) begin
+always @(negedge sc0_wr2) begin
     if (misc_en) begin
         casex (addr)
             `DEC_IN_SEL:
@@ -158,31 +161,35 @@ always @* begin
   if(misc_en) begin
     casex (addr)
         `MISC_RESET: begin
-            rs <= 1;
-            misc_dout <= 32'b0;
+            rs = 1;
+            misc_dout = 32'b0;
             end
         `MISC_VERSION: begin
-            rs <= 0;
-            misc_dout <= {VER_NUMBER,16'b0};
+            rs = 0;
+            misc_dout = {VER_NUMBER,16'b0};
             end
         `DAC_IN_SEL:
             begin
-            rs <= 0;
-            misc_dout <= {15'b0,dec_in_sel,10'b0,dac2_in_sel,dac1_in_sel,dac0_in_sel};
+            rs = 0;
+            misc_dout = {15'b0,dec_in_sel,10'b0,dac2_in_sel,dac1_in_sel,dac0_in_sel};
             end
         `DEC_IN_SEL:
             begin
-            rs <= 0;
-            misc_dout <= {15'b0,dec_in_sel,10'b0,dac2_in_sel,dac1_in_sel,dac0_in_sel};
+            rs = 0;
+            misc_dout = {15'b0,dec_in_sel,10'b0,dac2_in_sel,dac1_in_sel,dac0_in_sel};
+            end
+        `MISC_TYPE: begin
+            rs = 0;
+            misc_dout = {16'b0,`TWOCHANNEL_SCDEMOD_IMAGE};
             end
         default: begin
-            misc_dout <= 32'b0;
-            rs <= 0;
+            misc_dout = 32'b0;
+            rs = 0;
             end
     endcase
     end else begin
-        rs <= 0;
-        misc_dout <= 32'b0;
+        rs = 0;
+        misc_dout = 32'b0;
     end
 end
 
@@ -197,19 +204,19 @@ reg reboot;
 
 always @*
     begin
-    if (wr2 && misc_en)
+    if (sc0_wr2 && misc_en)
         begin
         casex (addr)
             `REBOOT_ADDR:
                 begin
-                reboot_decode <= 1'b1 ;
+                reboot_decode = 1'b1 ;
                 end
-            default: reboot_decode <= 1'b0 ;
+            default: reboot_decode = 1'b0 ;
         endcase
         end
     else
         begin
-        reboot_decode <= 1'b0 ;
+        reboot_decode = 1'b0 ;
         end
     end
 
@@ -259,10 +266,10 @@ always @(posedge clk or posedge rs) begin
 //                           DAC Serial Interface
 //******************************************************************************
 reg dac_space;
-always @(addr) begin
+always @* begin
   casex(addr)
-    `DAC_SPACE: dac_space <= 1;
-    default: dac_space <= 0;
+    `DAC_SPACE: dac_space = 1;
+    default:    dac_space = 0;
     endcase
 end
 wire dac_en = !nCs & dac_space;
@@ -320,7 +327,6 @@ assign sdiOut = sdiInput;
 //                              Demod Outputs
 //******************************************************************************
 
-reg     [17:0]  iIn,qIn;
 reg     [13:0]  demod0DataReg;
 reg             demod0SyncReg;
 reg     [17:0]  demod1DataReg;
@@ -358,25 +364,20 @@ wire            sc0_auSymClk;
 wire            sc0_iBit;
 wire            sc0_iSym2xEn;
 wire            sc0_iSymEn;
-wire            sc0_qBit;
-wire            sc0_qSym2xEn;
-wire            sc0_qSymEn;
 
 demod sc0(
     .clk(clk),
     .reset(reset),
-    .wr0(wr0),
-    .wr1(wr1),
-    .wr2(wr2),
-    .wr3(wr3),
+    .wr0(sc0_wr0),
+    .wr1(sc0_wr1),
+    .wr2(sc0_wr2),
+    .wr3(sc0_wr3),
     .addr(addr),
     .din(dataIn),
     .dout(sc0_dout),
     .iRx({demod2DataReg,4'h0}),      // FPGA1 DAC2 output
     .qRx(18'h0),
-    .bbClkEn(dataSymEnReg),
-    .iBB(iIn),
-    .qBB(qIn),
+    .bbClkEn(1'b0),
     .dac0Data(sc0_dac0Data),
     .dac0Sync(sc0_dac0Sync),
     .dac1Data(sc0_dac1Data),
@@ -385,12 +386,43 @@ demod sc0(
     .dac2Sync(sc0_dac2Sync),
     .iSym2xEn(sc0_iSym2xEn),
     .iSymEn(sc0_iSymEn),
-    .iBit(sc0_iBit),
-    .qSym2xEn(sc0_qSym2xEn),
-    .qSymEn(sc0_qSymEn),
-    .qSymClk(sc0_auSymClk),
-    .qBit(sc0_qBit)
+    .iBit(sc0_iBit)
     );
+
+reg sc0_decoder_space;
+always @* begin
+  casex(addr)
+    `SC0_DECODERSPACE:  sc0_decoder_space = 1;
+    default:            sc0_decoder_space = 0;
+  endcase
+end
+
+wire dec0_en = !nCs && sc0_decoder_space;
+wire    [15:0]  dec0_dout;
+pcmDecoder dec0
+  (
+  .rs(reset),
+  .en(dec0_en),
+  .wr0(sc0_wr0),
+  .wr1(sc0_wr1),
+  .addr(addr),
+  .din(data),
+  .dout(dec0_dout),
+  .clk(clk),
+  .symb_clk_en(sc0_iSymEn),         // symbol rate clock enable
+  .symb_clk_2x_en(sc0_iSym2xEn),    // 2x symbol rate clock enable
+  .symb(sc0_iBit),                  // data input,
+  .data_out(dec0_dataOut),          // data output
+  .clkEn_out(dec0_clkEnOut),        // clk output
+  .fifo_rs(),
+  .clk_inv(dec0_clk_inv),
+  .bypass_fifo(),
+  .symb_clk(dec0_symbol_clk)
+  );
+
+
+
+
 
 wire    [31:0]  sc1_dout;
 wire    [17:0]  sc1_dac0Data;
@@ -400,25 +432,20 @@ wire            sc1_auSymClk;
 wire            sc1_iBit;
 wire            sc1_iSym2xEn;
 wire            sc1_iSymEn;
-wire            sc1_qBit;
-wire            sc1_qSym2xEn;
-wire            sc1_qSymEn;
 
 demod sc1(
     .clk(clk),
     .reset(reset),
-    .wr0(wr0),
-    .wr1(wr1),
-    .wr2(wr2),
-    .wr3(wr3),
+    .wr0(sc1_wr0),
+    .wr1(sc1_wr1),
+    .wr2(sc1_wr2),
+    .wr3(sc1_wr3),
     .addr(addr),
     .din(dataIn),
     .dout(sc1_dout),
     .iRx({demod2DataReg,4'h0}),      // FPGA1 DAC2 output
     .qRx(18'h0),
-    .bbClkEn(dataSymEnReg),
-    .iBB(iIn),
-    .qBB(qIn),
+    .bbClkEn(1'b0),
     .dac0Data(sc1_dac0Data),
     .dac0Sync(sc1_dac0Sync),
     .dac1Data(sc1_dac1Data),
@@ -427,12 +454,50 @@ demod sc1(
     .dac2Sync(sc1_dac2Sync),
     .iSym2xEn(sc1_iSym2xEn),
     .iSymEn(sc1_iSymEn),
-    .iBit(sc1_iBit),
-    .qSym2xEn(sc1_qSym2xEn),
-    .qSymEn(sc1_qSymEn),
-    .qSymClk(sc1_auSymClk),
-    .qBit(sc1_qBit)
+    .iBit(sc1_iBit)
     );
+
+reg sc1_decoder_space;
+always @* begin
+  casex(addr)
+    `SC1_DECODERSPACE:  sc1_decoder_space = 1;
+    default:            sc1_decoder_space = 0;
+  endcase
+end
+
+wire dec1_en = !nCs && sc1_decoder_space;
+wire    [15:0]  dec1_dout;
+pcmDecoder dec1
+  (
+  .rs(reset),
+  .en(dec1_en),
+  .wr0(sc1_wr0),
+  .wr1(sc1_wr1),
+  .addr(addr),
+  .din(data),
+  .dout(dec1_dout),
+  .clk(clk),
+  .symb_clk_en(sc1_iSymEn),         // symbol rate clock enable
+  .symb_clk_2x_en(sc1_iSym2xEn),    // 2x symbol rate clock enable
+  .symb(sc1_iBit),                  // data input,
+  .data_out(dec1_dataOut),          // data output
+  .clkEn_out(dec1_clkEnOut),        // clk output
+  .fifo_rs(),
+  .clk_inv(dec1_clk_inv),
+  .bypass_fifo(),
+  .symb_clk(dec1_symbol_clk)
+  );
+
+//******************************************************************************
+//                           Data/Clk Output Muxes
+//******************************************************************************
+reg cout_i,cout_q,dout_i,dout_q;
+always @* begin
+    cout_i = dec0_symbol_clk ^ !dec0_clk_inv;
+    dout_i = dec0_dataOut;
+    cout_q = dec1_symbol_clk ^ !dec1_clk_inv;
+    dout_q = dec1_dataOut;
+    end
 
 
 
@@ -482,6 +547,8 @@ always @(posedge clk) begin
         dac2Sync <= sc1_dac2Sync;
         end
     end
+
+
 //******************************************************************************
 //                              Interpolators
 //******************************************************************************
@@ -490,7 +557,7 @@ wire    [17:0]  interp0DataOut;
 wire    [13:0]  dac0Out = interp0DataOut[17:4];
 interpolate #(.RegSpace(`INTERP0SPACE), .FirRegSpace(`VIDFIR0SPACE)) dac0Interp(
     .clk(clk), .reset(reset), .clkEn(dac0Sync),
-    .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+    .wr0(sc0_wr0), .wr1(sc0_wr1), .wr2(sc0_wr2), .wr3(sc0_wr3),
     .addr(addr),
     .din(dataIn),
     .dout(interp0Dout),
@@ -503,7 +570,7 @@ wire    [17:0]  interp1DataOut;
 wire    [13:0]  dac1Out = interp1DataOut[17:4];
 interpolate #(.RegSpace(`INTERP1SPACE), .FirRegSpace(`VIDFIR1SPACE)) dac1Interp(
     .clk(clk), .reset(reset), .clkEn(dac1Sync),
-    .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+    .wr0(sc0_wr0), .wr1(sc0_wr1), .wr2(sc0_wr2), .wr3(sc0_wr3),
     .addr(addr),
     .din(dataIn),
     .dout(interp1Dout),
@@ -511,18 +578,27 @@ interpolate #(.RegSpace(`INTERP1SPACE), .FirRegSpace(`VIDFIR1SPACE)) dac1Interp(
     .dataOut(interp1DataOut)
     );
 
+`ifdef ADD_DAC3_INTERP
 wire    [31:0]  interp2Dout;
 wire    [17:0]  interp2DataOut;
 wire    [13:0]  dac2Out = interp2DataOut[17:4];
 interpolate #(.RegSpace(`INTERP2SPACE), .FirRegSpace(`VIDFIR2SPACE)) dac2Interp(
     .clk(clk), .reset(reset), .clkEn(dac2Sync),
-    .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+    .wr0(sc0_wr0), .wr1(sc0_wr1), .wr2(sc0_wr2), .wr3(sc0_wr3),
     .addr(addr),
     .din(dataIn),
     .dout(interp2Dout),
     .dataIn(interp2DataIn),
     .dataOut(interp2DataOut)
     );
+`else
+reg     [13:0]  dac2Out;
+always @(posedge clk) begin
+    if (dac2Sync) begin
+        dac2Out = interp2DataIn[17:4];
+    end
+end
+`endif
 
 FDCE dac0_d_0  (.Q(dac0_d[0]),   .C(clk),  .CE(1'b1),  .CLR(1'b0), .D(dac0Out[0]));
 FDCE dac0_d_1  (.Q(dac0_d[1]),   .C(clk),  .CE(1'b1),  .CLR(1'b0), .D(dac0Out[1]));
@@ -571,163 +647,7 @@ FDCE dac2_d_11 (.Q(dac2_d[11]),  .C(clk),  .CE(1'b1),  .CLR(1'b0), .D(dac2Out[11
 FDCE dac2_d_12 (.Q(dac2_d[12]),  .C(clk),  .CE(1'b1),  .CLR(1'b0), .D(dac2Out[12]));
 FDCE dac2_d_13 (.Q(dac2_d[13]),  .C(clk),  .CE(1'b1),  .CLR(1'b0), .D(~dac2Out[13]));
 assign dac2_clk = clk;
-//******************************************************************************
-//                                 Decoder
-//******************************************************************************
-reg decoder_space;
-always @(addr) begin
-  casex(addr)
-    `DECODERSPACE: decoder_space <= 1;
-    default: decoder_space <= 0;
-  endcase
-end
 
-wire decoder_en = !nCs && decoder_space;
-wire [15:0]decoder_dout;
-wire decoder_dout_i,decoder_dout_q;
-wire decoder_cout;
-wire decoder_fifo_rs;
-wire cout_inv;
-
-reg iDec,qDec;
-reg decoderSymEn;
-reg decoderSym2xEn;
-
-wire iDec_wire = iBitReg ;
-wire qDec_wire = qBitReg ;
-wire decSymEn_wire = dataSymEnReg ;
-wire decSym2xEn_wire = dataSym2xEnReg ;
-
-always @(posedge clk) begin
-    if (dec_in_sel)
-        begin
-        iDec <= sc0_iBit ;
-        qDec <= sc0_qBit ;
-        decoderSymEn <= sc0_iSymEn ;
-        decoderSym2xEn <= sc0_iSym2xEn ;
-        end
-    else
-        begin
-        iDec <= iDec_wire ;
-        qDec <= qDec_wire ;
-        decoderSymEn <= decSymEn_wire ;
-        decoderSym2xEn <= decSym2xEn_wire ;
-        end
-    end
-
-decoder decoder
-  (
-  .rs(reset),
-  .en(decoder_en),
-  .wr0(wr0),
-  .wr1(wr1),
-  .addr(addr),
-  .din(data),
-  .dout(decoder_dout),
-  .clk(clk),
-  .symb_clk_en(decoderSymEn),       // symbol rate clock enable
-  .symb_clk_2x_en(decoderSym2xEn),  // 2x symbol rate clock enable
-  .symb_i(iDec),                    // input, i
-  .symb_q(qDec),                    // input, q
-  .dout_i(decoder_dout_i),          // output, i data
-  .dout_q(decoder_dout_q),          // output, q data
-  .cout(decoder_cout),              // output, i/q clock
-  .fifo_rs(decoder_fifo_rs),
-  .clk_inv(cout_inv),
-  .bypass_fifo(bypass_fifo),
-  .symb_clk(symbol_clk)
-  );
-//******************************************************************************
-//                   Decoder Output FIFO and Symbol Clock PLL
-//******************************************************************************
-wire decoder_fifo_dout_i,decoder_fifo_dout_q;
-wire decoder_fifo_empty,decoder_fifo_full;
-reg  decoder_fifoReadEn;
-wire symb_pll_out;
-
-decoder_output_fifo decoder_output_fifo
-  (
-  .din({decoder_dout_q,decoder_dout_i}),
-  .rd_clk(symb_pll_out),
-  .rd_en(decoder_fifoReadEn),
-  .rst(decoder_fifo_rs),
-  .wr_clk(clk),
-  .wr_en(decoder_cout),
-  .dout({decoder_fifo_dout_q,decoder_fifo_dout_i}),
-  .empty(decoder_fifo_empty),
-  .full(decoder_fifo_full),
-  .prog_full(decoder_fifoHalfFull)
-  );
-
-always @(posedge symb_pll_out) begin
-    if (decoder_fifo_rs) begin
-        decoder_fifoReadEn <= 0;
-        end
-    else if (decoder_fifoHalfFull) begin
-        decoder_fifoReadEn <= 1;
-        end
-    end
-
-reg pll_space;
-always @(addr) begin
-  casex(addr)
-    `PLLSPACE: pll_space <= 1;
-    default: pll_space <= 0;
-  endcase
-end
-
-wire symb_pll_en = !nCs && pll_space;
-wire [15:0]symb_pll_dout;
-
-symb_pll symb_pll
-  (
-  .rs(reset),
-  .en(symb_pll_en),
-  .wr0(wr0),
-  .wr1(wr1),
-  .wr2(wr2),
-  .wr3(wr3),
-  .a(addr),
-  .di(dataIn),
-  .do(symb_pll_dout),
-  .clk(clk),
-  .clk_en(decoder_cout),
-  .clk_ref(pllRef),           // output pad, comparator reference clock
-  .clk_vco(symb_pll_vco),     // input pad, vco output
-  .clk_fbk(symb_pll_fbk),     // output pad, comparator feedback clock
-  .clk_out(symb_pll_out)      // output, symbol clock
-  );
-
-reg symb_pll_ref;
-always @(posedge clk) begin
-    symb_pll_ref <= pllRef;
-    end
-
-wire clkOut = bypass_fifo ? symbol_clk : symb_pll_out;
-wire cout = (clkOut) ^ !cout_inv;
-assign cout_i = cout;
-reg cout_q;
-always @(demodMode or auSymClkIn or cout) begin
-    case (demodMode)
-        `MODE_AQPSK,
-        `MODE_AUQPSK:   cout_q = auSymClkIn;
-        default:        cout_q = cout;
-        endcase
-    end
-
-reg dout_i,decQ;
-always @(posedge clkOut)begin
-  dout_i <= bypass_fifo ? decoder_dout_i : decoder_fifo_dout_i;
-  decQ <= bypass_fifo ? decoder_dout_q : decoder_fifo_dout_q;
-  end
-reg dout_q;
-always @(demodMode or qData or decQ) begin
-    case (demodMode)
-        `MODE_AQPSK,
-        `MODE_AUQPSK:   dout_q = qData;
-        default:        dout_q = decQ;
-        endcase
-    end
 //******************************************************************************
 //                           Processor Read Data Mux
 //******************************************************************************
@@ -744,53 +664,70 @@ always @(*) begin
     `RESAMPSPACE,
     `CARRIERSPACE,
     `CHAGCSPACE : begin
-      if (addr[1]) begin
-        rd_mux <= sc0_dout[31:16];
+        if (addr12) begin
+            if (addr[1]) begin
+                rd_mux = sc1_dout[31:16];
+            end
+            else begin
+                rd_mux = sc1_dout[15:0];
+            end
         end
-      else begin
-        rd_mux <= sc0_dout[15:0];
+        else begin
+            if (addr[1]) begin
+                rd_mux = sc0_dout[31:16];
+            end
+            else begin
+                rd_mux = sc0_dout[15:0];
+            end
         end
       end
-    `DAC_SPACE : rd_mux <= dac_dout;
+    `DAC_SPACE : rd_mux = dac_dout;
     `MISC_SPACE : begin
         if (addr[1]) begin
-            rd_mux <= misc_dout[31:16];
+            rd_mux = misc_dout[31:16];
             end
         else begin
-            rd_mux <= misc_dout[15:0];
+            rd_mux = misc_dout[15:0];
             end
         end
-    `DECODERSPACE: rd_mux <= decoder_dout;
-    `PLLSPACE: rd_mux <= symb_pll_dout;
+    `DECODERSPACE: begin
+        if (addr12) begin
+            rd_mux = dec1_dout;
+        end
+        else begin
+            rd_mux = dec0_dout;
+        end
+    end
     `VIDFIR0SPACE,
     `INTERP0SPACE: begin
        if (addr[1]) begin
-         rd_mux <= interp0Dout[31:16];
+         rd_mux = interp0Dout[31:16];
          end
        else begin
-         rd_mux <= interp0Dout[15:0];
+         rd_mux = interp0Dout[15:0];
          end
        end
      `VIDFIR1SPACE,
      `INTERP1SPACE: begin
        if (addr[1]) begin
-         rd_mux <= interp1Dout[31:16];
+         rd_mux = interp1Dout[31:16];
          end
        else begin
-         rd_mux <= interp1Dout[15:0];
+         rd_mux = interp1Dout[15:0];
          end
        end
+`ifdef ADD_DAC3_INTERP
      `VIDFIR2SPACE,
      `INTERP2SPACE: begin
        if (addr[1]) begin
-         rd_mux <= interp2Dout[31:16];
+         rd_mux = interp2Dout[31:16];
          end
        else begin
-         rd_mux <= interp2Dout[15:0];
+         rd_mux = interp2Dout[15:0];
          end
        end
-   
-     default : rd_mux <= 16'hxxxx;
+`endif
+     default : rd_mux = 16'hxxxx;
     endcase
   end
 

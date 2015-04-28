@@ -22,7 +22,7 @@ output clk_fbk;       // pll comparator feedback clock
 output clk_out;       // filtered symbol clock
 
 input rs,en,wr0,wr1,wr2,wr3;  // processor interface signals
-input [11:0]a;
+input [12:0]a;
 input [31:0]di;
 output [15:0]do;
 
@@ -94,17 +94,17 @@ end
 // processor read --------------------------------------------------------------
 
 reg [15:0]do;
-always @(a or en or ref or fbk or vco or nco_step)begin
+always @* begin
   if(en)begin
     casex(a)
-      `SYMB_PLL_REF: do <= ref;
-      `SYMB_PLL_FBK: do <= fbk;
-      `SYMB_PLL_VCO: do <= vco;
-      `SYMB_PLL_NCO: do <= nco_step;
-      default: do <= 16'hxxxx;
+      `SYMB_PLL_REF: do = ref;
+      `SYMB_PLL_FBK: do = fbk;
+      `SYMB_PLL_VCO: do = vco;
+      `SYMB_PLL_NCO: do = nco_step;
+      default: do = 16'hxxxx;
     endcase
   end
-  else do <= 16'hxxxx;
+  else do = 16'hxxxx;
 end
 
 // test nco --------------------------------------------------------------------

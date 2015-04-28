@@ -10,7 +10,7 @@ module uartRegs(
     baudDiv
     );
 
-input   [11:0]addr;
+input   [12:0]addr;
 input   [31:0]dataIn;
 output  [31:0]dataOut;
 input   wr0,wr1,wr2,wr3;
@@ -20,10 +20,10 @@ reg     [15:0]  baudDiv;
 
     
 reg uartSpace;
-always @(addr) begin
+always @* begin
   casex(addr)
-    `UARTSPACE: uartSpace <= 1;
-    default:    uartSpace <= 0;
+    `UARTSPACE: uartSpace = 1;
+    default:    uartSpace = 0;
   endcase
 end
 
@@ -45,17 +45,15 @@ always @(negedge wr1) begin
     end
 
 reg [31:0]dataOut;
-always @(uartSpace or addr or
-         baudDiv
-         ) begin
+always @* begin
     if (uartSpace) begin
         casex (addr)
-            `UART_BAUD_DIV:     dataOut <= {16'b0,baudDiv};
-            default:            dataOut <= 32'h0;
+            `UART_BAUD_DIV:     dataOut = {16'b0,baudDiv};
+            default:            dataOut = 32'h0;
             endcase
         end
     else begin
-        dataOut <= 32'hx;
+        dataOut = 32'hx;
         end
     end
 endmodule

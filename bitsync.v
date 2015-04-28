@@ -58,7 +58,7 @@ input           enableDespreader;
 `endif
 input   [1:0]   bitsyncMode;
 input           wr0,wr1,wr2,wr3;
-input   [11:0]  addr;
+input   [12:0]  addr;
 input   [31:0]  din;
 output  [31:0]  dout;
 input   [17:0]  i,q;
@@ -662,10 +662,10 @@ always @* avgNegDevReal = $itor($signed(avgNegDeviation))/(2**17);
 //******************************** Loop Filter ********************************
 
 reg bitsyncSpace;
-always @(addr) begin
+always @* begin
     casex(addr)
-        `BITSYNCSPACE:  bitsyncSpace <= 1;
-        default:        bitsyncSpace <= 0;
+        `BITSYNCSPACE:  bitsyncSpace = 1;
+        default:        bitsyncSpace = 0;
         endcase
     end
 wire    [15:0]  lockCount;
@@ -851,10 +851,10 @@ always @(auTimingErr) auTimingErrorReal = ((auTimingErr > 131071.0) ? auTimingEr
 //******************************** Loop Filter ********************************
 
 reg auBitsyncSpace;
-always @(addr) begin
+always @* begin
     casex(addr)
-        `BITSYNCAUSPACE:    auBitsyncSpace <= 1;
-        default:            auBitsyncSpace <= 0;
+        `BITSYNCAUSPACE:    auBitsyncSpace = 1;
+        default:            auBitsyncSpace = 0;
         endcase
     end
 
@@ -977,13 +977,11 @@ always @(posedge sampleClk) begin
                                 uP dout mux
 ******************************************************************************/
 reg [31:0]dout;
-always @(addr or 
-         bsDout or
-         auDout) begin
+always @* begin
     casex (addr)
-        `BITSYNCSPACE:      dout <= bsDout;
-        `BITSYNCAUSPACE:    dout <= auDout;
-        default:            dout <= 32'bx;
+        `BITSYNCSPACE:      dout = bsDout;
+        `BITSYNCAUSPACE:    dout = auDout;
+        default:            dout = 32'bx;
         endcase
     end
 

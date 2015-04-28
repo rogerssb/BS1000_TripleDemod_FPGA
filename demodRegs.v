@@ -35,7 +35,7 @@ module demodRegs(
     amTC
     );
 
-input   [11:0]addr;
+input   [12:0]addr;
 input   [31:0]dataIn;
 output  [31:0]dataOut;
 input   cs;
@@ -177,36 +177,36 @@ always @* begin
         casex (addr)
             `ifdef ADD_DESPREADER
             `ifdef ADD_SCPATH
-            `DEMOD_CONTROL:     dataOut <= {14'b0,bitsyncMode,enableDespreader,enableScPath,9'b0,demodMode};
+            `DEMOD_CONTROL:     dataOut = {14'b0,bitsyncMode,enableDespreader,enableScPath,9'b0,demodMode};
             `else
-            `DEMOD_CONTROL:     dataOut <= {14'b0,bitsyncMode,enableDespreader,10'b0,demodMode};
+            `DEMOD_CONTROL:     dataOut = {14'b0,bitsyncMode,enableDespreader,10'b0,demodMode};
             `endif
             `else
             `ifdef ADD_SCPATH
-            `DEMOD_CONTROL:     dataOut <= {14'b0,bitsyncMode,1'b0,enableScPath,9'b0,demodMode};
+            `DEMOD_CONTROL:     dataOut = {14'b0,bitsyncMode,1'b0,enableScPath,9'b0,demodMode};
             `else
-            `DEMOD_CONTROL:     dataOut <= {14'b0,bitsyncMode,11'b0,demodMode};
+            `DEMOD_CONTROL:     dataOut = {14'b0,bitsyncMode,11'b0,demodMode};
             `endif
             `endif
-            `DEMOD_DACSELECT:   dataOut <= {12'h0,dac2Select,4'h0,dac1Select,4'h0,dac0Select};
-            `DEMOD_FALSELOCK:   dataOut <= {falseLockThreshold,falseLockAlpha};
+            `DEMOD_DACSELECT:   dataOut = {12'h0,dac2Select,4'h0,dac1Select,4'h0,dac0Select};
+            `DEMOD_FALSELOCK:   dataOut = {falseLockThreshold,falseLockAlpha};
             `ifdef ADD_DESPREADER
-            `DEMOD_STATUS:      dataOut <= {27'h0,despreadLock,
+            `DEMOD_STATUS:      dataOut = {27'h0,despreadLock,
             `else
-            `DEMOD_STATUS:      dataOut <= {28'h0,
+            `DEMOD_STATUS:      dataOut = {28'h0,
             `endif
-                                            auBitsyncLock,highFreqOffset,bitsyncLock,demodLock};
-            `DEMOD_AMTC:        dataOut <= {27'b0,amTC};
+                                           auBitsyncLock,highFreqOffset,bitsyncLock,demodLock};
+            `DEMOD_AMTC:        dataOut = {27'b0,amTC};
             `ifdef SYM_DEVIATION
-            `DEMOD_FSKDEV:      dataOut <= {16'b0,fskDeviation};
+            `DEMOD_FSKDEV:      dataOut = {16'b0,fskDeviation};
             `else
-            `DEMOD_FSKDEV:      dataOut <= {negDeviation,posDeviation};
+            `DEMOD_FSKDEV:      dataOut = {negDeviation,posDeviation};
             `endif
-            default:            dataOut <= 32'h0;
+            default:            dataOut = 32'h0;
             endcase
         end
     else begin
-        dataOut <= 32'hx;
+        dataOut = 32'hx;
         end
     end
 endmodule

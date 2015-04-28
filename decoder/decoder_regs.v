@@ -25,7 +25,7 @@ module decoder_regs
   q     // output, gpio bits
   );
 
-input [11:0]a;
+input [12:0]a;
 input [15:0]di;
 output [15:0]do;
 input wr0,wr1,en;
@@ -54,14 +54,14 @@ always @(negedge wr1) begin
 end
 
 reg [15:0]do;
-always @(a or en or d) begin
+always @* begin
   if(en) begin
     casex(a)
-      12'hxx0: do <= d;
-      default: do <= 16'hxxxx;
+      12'hxx0: do = d;
+      default: do = 16'hxxxx;
     endcase
   end
-  else do <= 16'hxxxx;
+  else do = 16'hxxxx;
 end
 
 endmodule

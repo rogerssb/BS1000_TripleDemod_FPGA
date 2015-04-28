@@ -39,7 +39,7 @@ input           legacyBit;
 input   [7:0]   phaseErrorIn;
 input           symEn_phErr;
 input           wr0,wr1,wr2,wr3;
-input   [11:0]  addr;
+input   [12:0]  addr;
 input   [31:0]  din;
 output  [31:0]  dout;
 output  [17:0]  iOut,qOut;
@@ -54,10 +54,10 @@ wire    [31:0]  carrierFreqOffset;
 /***************************** Control Registers ******************************/
 
 reg trellisSpace;
-always @(addr) begin
+always @* begin
     casex(addr)
-        `TRELLISLFSPACE:    trellisSpace <= 1;
-        default:            trellisSpace <= 0;
+        `TRELLISLFSPACE:    trellisSpace = 1;
+        default:            trellisSpace = 0;
         endcase
     end
 wire    [31:0]  dout;

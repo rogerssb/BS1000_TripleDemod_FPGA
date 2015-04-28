@@ -32,7 +32,7 @@ module loopRegs(
     syncThreshold
     );
 
-input   [11:0]addr;
+input   [12:0]addr;
 input   [31:0]dataIn;
 output  [31:0]dataOut;
 input   cs;

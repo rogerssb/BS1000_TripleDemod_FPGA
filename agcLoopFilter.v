@@ -15,7 +15,7 @@ module agcLoopFilter (
 input           clk, clkEn, reset;
 input           cs;
 input           wr0,wr1,wr2,wr3;
-input   [11:0]  addr;
+input   [12:0]  addr;
 input   [31:0]  din;
 output  [31:0]  dout;
 input   [7:0]   signalLevel;

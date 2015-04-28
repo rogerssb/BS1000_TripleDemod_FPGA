@@ -21,7 +21,7 @@ module scDdc(
 input           clk;
 input           reset;
 input           wr0,wr1,wr2,wr3;
-input   [11:0]  addr;
+input   [12:0]  addr;
 input   [31:0]  din;
 output  [31:0]  dout;
 input   [31:0]  scFreq;
@@ -38,19 +38,19 @@ output  [17:0]  qOut;
 // Microprocessor interface
 reg ddcSpace;
 reg ddcFirSpace;
-always @(addr) begin
+always @* begin
     casex(addr)
         `SCDDCSPACE: begin
-            ddcSpace    <= 1;
-            ddcFirSpace <= 0;
+            ddcSpace    = 1;
+            ddcFirSpace = 0;
             end
         `SCDDCFIRSPACE: begin
-            ddcSpace    <= 0;
-            ddcFirSpace <= 1;
+            ddcSpace    = 0;
+            ddcFirSpace = 1;
             end
         default:   begin
-            ddcSpace    <= 0;
-            ddcFirSpace <= 0;
+            ddcSpace    = 0;
+            ddcFirSpace = 0;
             end
         endcase
     end
@@ -360,21 +360,21 @@ always @(qOut) qOutReal = ((qOut > 131071.0) ? (qOut - 262144.0) : qOut)/131072.
 
 `ifdef USE_DDC_FIR
 reg [31:0]dout;
-always @(addr or cicDout or ddcDout or ddcFirDout) begin
+always @* begin
     casex (addr)
-        `SCDDCSPACE:        dout <= ddcDout;
-        `SCDDCFIRSPACE:     dout <= ddcFirDout;
-        `SCCICDECSPACE:     dout <= cicDout;    
-        default:            dout <= 32'bx;
+        `SCDDCSPACE:        dout = ddcDout;
+        `SCDDCFIRSPACE:     dout = ddcFirDout;
+        `SCCICDECSPACE:     dout = cicDout;    
+        default:            dout = 32'bx;
         endcase
     end
 `else
 reg [31:0]dout;
-always @(addr or cicDout or ddcDout) begin
+always @* begin
     casex (addr)
-        `SCDDCSPACE:        dout <= ddcDout;
-        `SCCICDECSPACE:     dout <= cicDout;    
-        default:            dout <= 32'bx;
+        `SCDDCSPACE:        dout = ddcDout;
+        `SCCICDECSPACE:     dout = cicDout;    
+        default:            dout = 32'bx;
         endcase
     end
 `endif

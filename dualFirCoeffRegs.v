@@ -25,7 +25,7 @@ module dualFirCoeffRegs
    c0, c1, c2, c3, c4, c5, c6, c7                   
    );
 
-   input   [11:0]addr;
+   input   [12:0]addr;
    input [31:0]  dataIn;
    output [31:0] dataOut;
    input         cs;
@@ -96,23 +96,22 @@ module dualFirCoeffRegs
    end
 
    reg [31:0]dataOut;
-   always @(addr or cs or
-            c0 or c1 or c2 or c3 or c4 or c5 or c6 or c7) begin
+   always @* begin
       if (cs) begin
          casex (addr)
-           `DDC_FIR_COEFF_0:    dataOut <= {c1, c0};
-           `DDC_FIR_COEFF_1:    dataOut <= {c1, c0};
-           `DDC_FIR_COEFF_2:    dataOut <= {c3, c2};
-           `DDC_FIR_COEFF_3:    dataOut <= {c3, c2};
-           `DDC_FIR_COEFF_4:    dataOut <= {c5, c4};
-           `DDC_FIR_COEFF_5:    dataOut <= {c5, c4};
-           `DDC_FIR_COEFF_6:    dataOut <= {c7, c6};
-           `DDC_FIR_COEFF_7:    dataOut <= {c7, c6};
-           default         :    dataOut <= 32'hx;
+           `DDC_FIR_COEFF_0:    dataOut = {c1, c0};
+           `DDC_FIR_COEFF_1:    dataOut = {c1, c0};
+           `DDC_FIR_COEFF_2:    dataOut = {c3, c2};
+           `DDC_FIR_COEFF_3:    dataOut = {c3, c2};
+           `DDC_FIR_COEFF_4:    dataOut = {c5, c4};
+           `DDC_FIR_COEFF_5:    dataOut = {c5, c4};
+           `DDC_FIR_COEFF_6:    dataOut = {c7, c6};
+           `DDC_FIR_COEFF_7:    dataOut = {c7, c6};
+           default         :    dataOut = 32'hx;
          endcase
       end
       else begin
-         dataOut <= 32'hx;
+         dataOut = 32'hx;
       end
    end
    

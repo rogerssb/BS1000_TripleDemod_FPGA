@@ -28,7 +28,7 @@ input           reset;
 input           ddcSync;
 input           resampSync;
 input           wr0,wr1,wr2,wr3;
-input   [11:0]  addr;
+input   [12:0]  addr;
 input   [31:0]  din;
 output  [31:0]  dout;
 input   [4:0]   demodMode;
@@ -48,10 +48,10 @@ output  [15:0]  lockCounter;
 /***************************** Control Registers ******************************/
 
 reg freqLoopSpace;
-always @(addr) begin
+always @* begin
     casex(addr)
-        `CARRIERSPACE:  freqLoopSpace <= 1;
-        default:        freqLoopSpace <= 0;
+        `CARRIERSPACE:  freqLoopSpace = 1;
+        default:        freqLoopSpace = 0;
         endcase
     end
 wire    [31:0]  dout;
@@ -323,7 +323,7 @@ carrierLoop loop(
     .ddcSync(sync),
     .resampSync(sync),
     .wr0(1'b0),.wr1(1'b0),.wr2(1'b0),.wr3(1'b0),
-    .addr(12'b0),
+    .addr(13'b0),
     .din(),
     .dout(),
     .demodMode(`MODE_PCMTRELLIS),

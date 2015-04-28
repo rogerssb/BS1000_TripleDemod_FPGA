@@ -13,7 +13,7 @@ module ddcRegs(addr,
                adcDecimation
                );
 
-input   [11:0]addr;
+input   [12:0]addr;
 input   [31:0]dataIn;
 output  [31:0]dataOut;
 input   cs;
@@ -88,14 +88,14 @@ reg [31:0]dataOut;
 always @* begin
     if (cs) begin
         casex (addr)
-            `DDC_CENTER_FREQ:   dataOut <= ddcCenterFreq;
-            `DDC_CONTROL:       dataOut <= {28'h0,enableBasebandInputs,bypassFir,bypassHb,bypassCic};
-            `DDC_DECIMATION:    dataOut <= {24'h0,adcDecimation};
-            default:            dataOut <= 32'h0;
+            `DDC_CENTER_FREQ:   dataOut = ddcCenterFreq;
+            `DDC_CONTROL:       dataOut = {28'h0,enableBasebandInputs,bypassFir,bypassHb,bypassCic};
+            `DDC_DECIMATION:    dataOut = {24'h0,adcDecimation};
+            default:            dataOut = 32'h0;
             endcase
         end
     else begin
-        dataOut <= 32'hx;
+        dataOut = 32'hx;
         end
     end
 endmodule

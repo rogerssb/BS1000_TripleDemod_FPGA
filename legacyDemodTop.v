@@ -75,7 +75,7 @@ output          legacyBit;
 
 parameter VER_NUMBER = 16'h0185;
 
-wire    [11:0]  addr = {addr11,addr10,addr9,addr8,addr7,addr6,addr5,addr4,addr3,addr2,addr1,1'b0};
+wire    [12:0]  addr = {addr12,addr11,addr10,addr9,addr8,addr7,addr6,addr5,addr4,addr3,addr2,addr1,1'b0};
 wire            nWr = nWe;
 wire            rd  = !nCs & !nRd;
 wire            wr0 = !nCs & !nWr & !addr1;
@@ -91,10 +91,10 @@ reg     [15:0]  rd_mux;
 //******************************************************************************
 
 reg misc_space;
-always @(addr) begin
+always @* begin
   casex(addr)
-    `MISC_SPACE: misc_space <= 1;
-    default:     misc_space <= 0;
+    `MISC_SPACE: misc_space = 1;
+    default:     misc_space = 0;
   endcase
 end
 wire misc_en = !nCs && misc_space;
@@ -154,29 +154,33 @@ always @(negedge wr2) begin
 reg     [31:0]  misc_dout;
 reg     [31:0]  clockCounterHold;
 reg rs;
-always @(addr or misc_en or nRd or clockCounterHold) begin
+always @* begin
   if(misc_en && !nRd) begin
     casex (addr)
             `MISC_RESET: begin
-                rs <= 1;
-                misc_dout <= 32'b0;
+                rs = 1;
+                misc_dout = 32'b0;
                 end
             `MISC_VERSION: begin
-                rs <= 0;
-                misc_dout <= {VER_NUMBER,16'b0};
+                rs = 0;
+                misc_dout = {VER_NUMBER,16'b0};
                 end
             `MISC_CLOCK: begin
-                rs <= 0;
-                misc_dout <= clockCounterHold;
+                rs = 0;
+                misc_dout = clockCounterHold;
+                end
+            `MISC_TYPE: begin
+                rs = 0;
+                misc_dout = {16'b0,`LEGACY_DEMOD_IMAGE};
                 end
             default: begin
-                misc_dout <= 32'b0;
-                rs <= 0;
+                misc_dout = 32'b0;
+                rs = 0;
                 end
     endcase
     end else begin
-        rs <= 0;
-        misc_dout <= 32'b0;
+        rs = 0;
+        misc_dout = 32'b0;
     end
 
 end
@@ -218,14 +222,14 @@ always @*
         casex (addr)
             `REBOOT_ADDR:
                 begin
-                reboot_decode <= 1'b1 ;
+                reboot_decode = 1'b1 ;
                 end
-            default: reboot_decode <= 1'b0 ;
+            default: reboot_decode = 1'b0 ;
         endcase
         end
     else
         begin
-        reboot_decode <= 1'b0 ;
+        reboot_decode = 1'b0 ;
         end
     end
 
@@ -458,27 +462,27 @@ always @(posedge clk) begin
 //******************************************************************************
 
 reg dac0CS,dac1CS,dac2CS;
-always @(addr) begin
+always @* begin
     casex (addr)
         `INTERP0SPACE: begin
-            dac0CS <= 1;
-            dac1CS <= 0;
-            dac2CS <= 0;
+            dac0CS = 1;
+            dac1CS = 0;
+            dac2CS = 0;
             end
         `INTERP1SPACE: begin
-            dac0CS <= 0;
-            dac1CS <= 1;
-            dac2CS <= 0;
+            dac0CS = 0;
+            dac1CS = 1;
+            dac2CS = 0;
             end
         `INTERP2SPACE: begin
-            dac0CS <= 0;
-            dac1CS <= 0;
-            dac2CS <= 1;
+            dac0CS = 0;
+            dac1CS = 0;
+            dac2CS = 1;
             end
         default: begin
-            dac0CS <= 0;
-            dac1CS <= 0;
-            dac2CS <= 0;
+            dac0CS = 0;
+            dac1CS = 0;
+            dac2CS = 0;
             end
         endcase
     end
@@ -600,44 +604,52 @@ always @* begin
     `CICDECSPACE,
     `BITSYNCSPACE,
     `BITSYNCAUSPACE,
-    `CHAGCSPACE,
     `RESAMPSPACE,
     `CARRIERSPACE,
+    `ifdef ADD_SCPATH
+    `SCDDCSPACE,
+    `SCDDCFIRSPACE,
+    `SCCICDECSPACE,
+    `SCAGCSPACE,
+    `SCCARRIERSPACE,
+    `INTERP2SPACE,
+    `VIDFIR2SPACE,
+    `endif
     `CHAGCSPACE : begin
       if (addr[1]) begin
-        rd_mux <= demodDout[31:16];
+        rd_mux = demodDout[31:16];
         end
       else begin
-        rd_mux <= demodDout[15:0];
+        rd_mux = demodDout[15:0];
         end
       end
     `TRELLISLFSPACE,
     `TRELLIS_SPACE: begin
          if (addr[1]) begin
-           rd_mux <= multihLoopDout[31:16];
+           rd_mux = multihLoopDout[31:16];
            end
          else begin
-           rd_mux <= multihLoopDout[15:0];
+           rd_mux = multihLoopDout[15:0];
            end
       end
     `MISC_SPACE : begin
         if (addr[1]) begin
-            rd_mux <= misc_dout[31:16];
+            rd_mux = misc_dout[31:16];
             end
         else begin
-            rd_mux <= misc_dout[15:0];
+            rd_mux = misc_dout[15:0];
             end
         end
     `UARTSPACE,
     `SDISPACE: begin
         if (addr[1]) begin
-            rd_mux <= sdiDout[31:16];
+            rd_mux = sdiDout[31:16];
             end
         else begin
-            rd_mux <= sdiDout[15:0];
+            rd_mux = sdiDout[15:0];
             end
         end
-    default : rd_mux <= 16'hxxxx;
+    default : rd_mux = 16'hxxxx;
     endcase
   end
 

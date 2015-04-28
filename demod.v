@@ -46,7 +46,7 @@ module demod(
 input           clk;
 input           reset;
 input           rd,wr0,wr1,wr2,wr3;
-input   [11:0]  addr;
+input   [12:0]  addr;
 input   [31:0]  din;
 output  [31:0]  dout;
 input   [17:0]  iRx;
@@ -91,10 +91,10 @@ output  [4:0]   eyeOffset;
 ******************************************************************************/
 // Microprocessor interface
 reg demodSpace;
-always @(addr) begin
+always @* begin
     casex(addr)
-        `DEMODSPACE: demodSpace <= 1;
-        default:     demodSpace <= 0;
+        `DEMODSPACE: demodSpace = 1;
+        default:     demodSpace = 0;
         endcase
     end
 `ifdef SYM_DEVIATION
@@ -516,11 +516,53 @@ dualDespreader despreader(
 `endif
 
 
-
-
 /******************************************************************************
                                 Bitsync Loop
 ******************************************************************************/
+
+`ifdef SUBCARRIER_DEMOD
+
+wire    [17:0]  iBsSymData,qBsSymData;
+wire    [17:0]  iBsTrellis,qBsTrellis;
+wire    [17:0]  bsError;
+wire    [15:0]  bsLockCounter;
+wire    [15:0]  auLockCounter;
+wire    [31:0]  bitsyncDout;
+singleRailBitsync bitsync(
+    .sampleClk(clk), .reset(reset),
+    .symTimes2Sync(resampSync),
+    .demodMode(demodMode),
+    .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
+    .addr(addr),
+    .din(din),
+    .dout(bitsyncDout),
+    .i(iResamp), .q(qResamp),
+    .offsetError(offsetError),
+    .offsetErrorEn(offsetErrorEn),
+    `ifdef SYM_DEVIATION
+    .fskDeviation(fskDeviation),
+    `else
+    .posDeviation(posDeviation),
+    .negDeviation(negDeviation),
+    `endif
+    .sym2xEn(iSym2xEn),
+    .symEn(iSymEn),
+    .symClk(iSymClk),
+    .symData(iSymData),
+    .bitData(iBit),
+    .sampleFreq(resamplerFreqOffset),
+    .bitsyncLock(bitsyncLock),
+    .lockCounter(bsLockCounter),
+    .bsError(bsError), .bsErrorEn(bsErrorEn)
+    );
+
+wire    [17:0]  qSymData = 0;
+assign          iTrellis = 0;
+assign          qTrellis = 0;
+wire            timingLock = bitsyncLock;
+
+`else  // SUBCARRIER_DEMOD
+
 wire    [17:0]  iBsSymData,qBsSymData;
 wire    [17:0]  iBsTrellis,qBsTrellis;
 wire    [17:0]  bsError;
@@ -632,6 +674,7 @@ assign cordicModes = ( (demodMode == `MODE_2FSK)
 assign iEye = cordicModes ? iSymData : iResamp;
 assign qEye = cordicModes ? qSymData : qResamp;
 
+`endif // SUBCARRIER_DEMOD
 
 
 `ifdef ADD_SCPATH
@@ -691,6 +734,33 @@ fmDemod scDemod(
     .mag(),
     .syncOut(scDemodSync)
     );
+reg     [17:0]  interpData;
+reg             scInterpClkEn;
+always @(posedge clk) begin
+    case (dac2Select)
+        `DAC_FREQ: begin
+            interpData <= scFM;
+            scInterpClkEn <= scDemodSync;
+            end
+        `DAC_PHASE: begin
+            interpData <= {scPhase,6'b0};
+            scInterpClkEn <= scDemodSync;
+            end
+        endcase
+    end
+wire    [31:0]  scInterpDout;
+wire    [17:0]  scInterpData;
+interpolate #(.RegSpace(`INTERP2SPACE), .FirRegSpace(`VIDFIR2SPACE)) scInterp(
+    .clk(clk), .reset(reset), .clkEn(scInterpClkEn),
+    .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+    .addr(addr),
+    .din(dataIn),
+    .dout(scInterpDout),
+    .dataIn(interpData),
+    .dataOut(scInterpData)
+    );
+
+
 
 /******************************************************************************
                              AFC/Sweep/Costas Loop
@@ -728,7 +798,7 @@ carrierLoop scCarrierLoop(
 // Programmable FIR
 wire    [15:0]  c0c14, c1c13, c2c12, c3c11, c4c10, c5c9 , c6c8 , c7   ;
 reg             firspace;
-always @(addr) begin
+always @* begin
     casex (addr)
         `VIDFIRSPACE: begin
             firspace = 1;
@@ -958,8 +1028,8 @@ always @(posedge clk) begin
         `DAC_FREQ: begin
             `ifdef ADD_SCPATH
             if (enableScPath) begin
-                dac2Data <= scFM;
-                dac2Sync <= scDemodSync;
+                dac2Data <= scInterpData;
+                dac2Sync <= 1'b1;
                 end
             else begin
                 if (fmMode) begin
@@ -985,8 +1055,8 @@ always @(posedge clk) begin
         `DAC_PHASE: begin
             `ifdef ADD_SCPATH
             if (enableScPath) begin
-                dac2Data <= {scPhase,6'b0};
-                dac2Sync <= scDemodSync;
+                dac2Data <= scInterpData;
+                dac2Sync <= 1'b1;
                 end
             else begin
                 dac2Data <= {phase,6'b0};
@@ -1042,29 +1112,35 @@ always @(posedge clk) begin
 reg [31:0]dout;
 always @* begin
     casex (addr)
-        `DEMODSPACE:        dout <= demodDout;
+        `DEMODSPACE:        dout = demodDout;
         `ifdef ADD_DESPREADER
-        `DESPREADSPACE:     dout <= despreaderDout;
+        `DESPREADSPACE:     dout = despreaderDout;
         `endif
         `ifdef FM_FILTER
-        `VIDFIRSPACE:       dout <= firDout;
+        `VIDFIRSPACE:       dout = firDout;
         `endif
-        `CHAGCSPACE:        dout <= nbAgcDout;
+        `CHAGCSPACE:        dout = nbAgcDout;
+        `ifdef ADD_SCPATH
         `CICDECSPACE,
         `DDCFIRSPACE,
-        `DDCSPACE:          dout <= ddcDout;
-        `ifdef ADD_SCPATH
-        `SCAGCSPACE:        dout <= scAgcDout;
+        `DDCSPACE:          dout = ddcDout;
+        `SCAGCSPACE:        dout = scAgcDout;
         `SCCICDECSPACE,
         `SCDDCFIRSPACE,
-        `SCDDCSPACE:        dout <= scDdcDout;
-        `SCCARRIERSPACE:    dout <= scFreqDout;
+        `SCDDCSPACE:        dout = scDdcDout;
+        `SCCARRIERSPACE:    dout = scFreqDout;
+        `INTERP2SPACE,
+        `VIDFIR2SPACE:      dout = scInterpDout;      
+        `else
+        `CICDECSPACE,
+        `DDCFIRSPACE,
+        `DDCSPACE:          dout = ddcDout;
         `endif
-        `RESAMPSPACE:       dout <= resampDout;
+        `RESAMPSPACE:       dout = resampDout;
         `BITSYNCAUSPACE,
-        `BITSYNCSPACE:      dout <= bitsyncDout;
-        `CARRIERSPACE:      dout <= freqDout;
-        default:            dout <= 32'bx;
+        `BITSYNCSPACE:      dout = bitsyncDout;
+        `CARRIERSPACE:      dout = freqDout;
+        default:            dout = 32'bx;
         endcase
     end
 

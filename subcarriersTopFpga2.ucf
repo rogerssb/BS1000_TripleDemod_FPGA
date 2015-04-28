@@ -379,10 +379,6 @@ TIMEGRP "dataBus" = PADS(data*);
 TIMEGRP "addrBus" = PADS(addr*);
 TIMEGRP "ctrlBus" = PADS(nCs*) PADS(nRd);
 
-NET "nWe*" TNM_NET = FFS writeEn;
-NET "wr0*" TNM_NET = FFS writeEn;
-NET "wr2*" TNM_NET = FFS writeEn;
-
 NET "clk*" TNM_NET = FFS clk;
 NET "clk*" TNM_NET = DSPS clk;
 NET "clk*" TNM_NET = RAMS clk;
@@ -398,12 +394,18 @@ NET "sc0/dac0Sync*" TNM_NET = FFS syncGroup;
 NET "sc0/dac1Sync*" TNM_NET = FFS syncGroup;
 NET "sc0/dac2Sync*" TNM_NET = FFS syncGroup;
 NET "sc0/ddc/agcSync*" TNM_NET = FFS syncGroup;
+NET "sc0/ddc/agcSync*" TNM_NET = DSPS syncGroup;
 NET "sc0/ddc/cic/cicI/syncOut*" TNM_NET = FFS syncGroup;
 NET "sc0/ddc/cic/cicQ/syncOut*" TNM_NET = FFS syncGroup;
+#NET "sc0/ddc/cic/cicI/syncOut*" TNM_NET = DSPS syncGroup;
+#NET "sc0/ddc/cic/cicQ/syncOut*" TNM_NET = DSPS syncGroup;
 NET "sc0/ddc/cicClockEn*" TNM_NET = FFS syncGroup;
+#NET "sc0/ddc/cicClockEn*" TNM_NET = DSPS syncGroup;
 NET "sc0/ddc/hb/evenSync*" TNM_NET = FFS syncGroup;
 NET "sc0/ddc/hb/syncOut*" TNM_NET = FFS syncGroup;
+#NET "sc0/ddc/hb/syncOut*" TNM_NET = DSPS syncGroup;
 NET "sc0/ddc/hbClockEn*" TNM_NET = FFS syncGroup;
+#NET "sc0/ddc/hbClockEn*" TNM_NET = DSPS syncGroup;
 NET "sc0/ddc/hb0/evenSync*" TNM_NET = FFS syncGroup;
 NET "sc0/ddc/hb0/syncOut*" TNM_NET = FFS syncGroup;
 #NET "sc0/ddc/firClockEn*" TNM_NET = FFS syncGroup;
@@ -424,6 +426,7 @@ NET "sc1/dac0Sync*" TNM_NET = FFS syncGroup;
 NET "sc1/dac1Sync*" TNM_NET = FFS syncGroup;
 NET "sc1/dac2Sync*" TNM_NET = FFS syncGroup;
 NET "sc1/ddc/agcSync*" TNM_NET = FFS syncGroup;
+NET "sc1/ddc/agcSync*" TNM_NET = DSPS syncGroup;
 NET "sc1/ddc/cic/cicI/syncOut*" TNM_NET = FFS syncGroup;
 NET "sc1/ddc/cic/cicQ/syncOut*" TNM_NET = FFS syncGroup;
 NET "sc1/ddc/cicClockEn*" TNM_NET = FFS syncGroup;
@@ -447,9 +450,9 @@ NET "sc1/fmDemod/cordic/enSR*" TNM_NET = FFS syncGroup;
 #NET "sc1/fmDemod/cordic/enSR*" TNM_NET = DSPS syncGroup;
 NET "sc1/bitsync/phaseState*" TNM_NET = FFS syncGroup;
 NET "dac0Sync*" TNM_NET = FFS syncGroup;
-#NET "dac0Sync*" TNM_NET = DSPS syncGroup;
+NET "dac0Sync*" TNM_NET = DSPS syncGroup;
 NET "dac1Sync*" TNM_NET = FFS syncGroup;
-#NET "dac1Sync*" TNM_NET = DSPS syncGroup;
+NET "dac1Sync*" TNM_NET = DSPS syncGroup;
 NET "dac2Sync*" TNM_NET = FFS syncGroup;
 #NET "dac2Sync*" TNM_NET = DSPS syncGroup;
 
@@ -458,7 +461,7 @@ TIMEGRP "clken" =  FFS(dac0Sync*) FFS(dac1Sync*) FFS(dac2Sync*)
                    FFS(sc0/dac0Sync*) 
                    FFS(sc0/dac1Sync*) 
                    FFS(sc0/dac2Sync*)
-                   FFS(sc0/ddc/agcSync*) 
+                   FFS(sc0/ddc/agcSync*)
                    FFS(sc0/ddc/cic/cicI/syncOut*) 
                    FFS(sc0/ddc/cic/cicQ/syncOut*)
                    FFS(sc0/ddc/cicClockEn*) 
@@ -478,7 +481,7 @@ TIMEGRP "clken" =  FFS(dac0Sync*) FFS(dac1Sync*) FFS(dac2Sync*)
                    FFS(sc1/dac0Sync*) 
                    FFS(sc1/dac1Sync*) 
                    FFS(sc1/dac2Sync*)
-                   FFS(sc1/ddc/agcSync*) 
+                   FFS(sc1/ddc/agcSync*)
                    FFS(sc1/ddc/cic/cicI/syncOut*) 
                    FFS(sc1/ddc/cic/cicQ/syncOut*)
                    FFS(sc1/ddc/cicClockEn*) 
@@ -501,13 +504,15 @@ TIMEGRP "allEnables" = syncGroup EXCEPT clken ;
 
 # DDC that can clock slower
 TIMEGRP "sc0_ddcPL" = FFS(sc0/ddc/iCicIn*) FFS(sc0/ddc/qCicIn*)
-                  FFS(sc0/ddc/cicCompI*) FFS(sc0/ddc/cicCompQ*)
+#                  FFS(sc0/ddc/cicCompI*) FFS(sc0/ddc/cicCompQ*)
+#                                 DSPS(sc0/ddc/cicCompI*) DSPS(sc0/ddc/cicCompQ*)
                   FFS(sc0/ddc/iAgcIn*) FFS(sc0/ddc/qAgcIn*)
                   FFS(sc0/ddc/iHbIn*) FFS(sc0/ddc/qHbIn*)
  #                 FFS(sc0/ddc/iFirIn*) FFS(sc0/ddc/qFirIn*)
                   FFS(sc0/ddc/iLeadIn*) FFS(sc0/ddc/qLeadIn*);
 TIMEGRP "sc1_ddcPL" = FFS(sc1/ddc/iCicIn*) FFS(sc1/ddc/qCicIn*)
-                  FFS(sc1/ddc/cicCompI*) FFS(sc1/ddc/cicCompQ*)
+#                  FFS(sc1/ddc/cicCompI*) FFS(sc1/ddc/cicCompQ*)
+#                                 DSPS(sc1/ddc/cicCompI*) DSPS(sc1/ddc/cicCompQ*)
                   FFS(sc1/ddc/iAgcIn*) FFS(sc1/ddc/qAgcIn*)
                   FFS(sc1/ddc/iHbIn*) FFS(sc1/ddc/qHbIn*)
  #                 FFS(sc1/ddc/iFirIn*) FFS(sc1/ddc/qFirIn*)
@@ -516,15 +521,22 @@ TIMEGRP "sc1_ddcPL" = FFS(sc1/ddc/iCicIn*) FFS(sc1/ddc/qCicIn*)
 # AGC loop that can clock slower
 TIMEGRP "magloop" = FFS( sc0/magLoop/lagAccum*) FFS( sc1/magLoop/lagAccum*) ;
 
+# Interp input regs that can clock slower
+TIMEGRP "interpInputs" = FFS(interp0DataIn*) FFS(interp1DataIn*) FFS(interp2DataIn*) ;
+
 # Slower clock timespecs. 
+TIMESPEC TS_interpInputs1 = FROM "interpInputs" TO FFS 46.67 MHz PRIORITY 5;
+TIMESPEC TS_interpInputs2 = FROM "interpInputs" TO DSPS 46.67 MHz PRIORITY 5;
 TIMESPEC TS_syncGroup = FROM "allEnables" TO "syncGroup" 46.67 MHz PRIORITY 4;
-TIMESPEC TS_dacGroup = FROM "syncGroup" TO FFS(sc0/dac*Data*) 46.67 MHz PRIORITY 3;
+TIMESPEC TS_sc0_dacGroup = FROM "syncGroup" TO FFS(sc0/dac*Data*) 46.67 MHz PRIORITY 3;
+TIMESPEC TS_sc1_dacGroup = FROM "syncGroup" TO FFS(sc1/dac*Data*) 46.67 MHz PRIORITY 3;
 TIMESPEC "TS_sc0_ddc1" = FROM "sc0_ddcPL" TO FFS 46.67 MHz PRIORITY 3;
 TIMESPEC "TS_sc0_ddc2" = FROM "sc0_ddcPL" TO DSPS 46.67 MHz PRIORITY 3;
 TIMESPEC "TS_sc1_ddc1" = FROM "sc1_ddcPL" TO FFS 46.67 MHz PRIORITY 3;
 TIMESPEC "TS_sc1_ddc2" = FROM "sc1_ddcPL" TO DSPS 46.67 MHz PRIORITY 3;
 TIMESPEC TS_magloop = FROM "magloop" TO "magloop" 46.67 MHz PRIORITY 3;
 TIMESPEC TS_clken = FROM "clken" TO FFS 93.33 MHz PRIORITY 1;
+#TIMESPEC TS_clken = FROM "clken" TO DSPS 93.33 MHz PRIORITY 2;
 
 # Clocked Inputs
 OFFSET = IN 100 ns BEFORE "clk" RISING;
@@ -536,21 +548,17 @@ OFFSET = OUT 100 ns AFTER "clk" RISING;
 # The microprocessor registers. This needs to go last to keep uP registers being included 
 # in fast constraints.
 NET "nWe*" TNM_NET = FFS writeEn;
-NET "wr0*" TNM_NET = FFS writeEn;
-NET "wr2*" TNM_NET = FFS writeEn;
+NET "sc0_wr0*" TNM_NET = FFS writeEn;
+NET "sc0_wr2*" TNM_NET = FFS writeEn;
+NET "sc1_wr0*" TNM_NET = FFS writeEn;
+NET "sc1_wr2*" TNM_NET = FFS writeEn;
 TIMESPEC TS_nWe = PERIOD "writeEn" 100 ns HIGH 50%;
 TIMESPEC TS_uP0 = FROM "writeEn" TO FFS 100 ns;
 TIMESPEC TS_uP1 = FROM "writeEn" TO DSPS 100 ns;
 TIMESPEC TS_uP2 = FROM "writeEn" TO RAMS 100 ns;
 TIMESPEC TS_uP3 = FROM "writeEn" TO PADS 100 ns;
 
-NET "symb_pll_vco" TNM_NET = FFS vco;
-TIMESPEC TS_vco   = PERIOD "vco" 50 MHz HIGH 50 %;
-
 NET "dac_control_ck*" TNM_NET = FFS dacRegs;
 TIMESPEC TS_dac0 = FROM dacRegs TO FFS  100 ns;
 TIMESPEC TS_dac1 = FROM dacRegs TO PADS 100 ns;
-
-TIMEGRP "pllFifo" = FFS(decoder_output_fifo/*);
-TIMESPEC TS_fifo = FROM pllFifo TO pllFifo 100 ns;
 

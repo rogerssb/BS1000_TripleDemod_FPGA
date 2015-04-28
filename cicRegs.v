@@ -13,7 +13,7 @@ module cicRegs(addr,
                cicShift
                );
 
-input   [11:0]addr;
+input   [12:0]addr;
 input   [31:0]dataIn;
 output  [31:0]dataOut;
 input   cs;
@@ -45,18 +45,16 @@ always @(negedge wr1) begin
     end
 
 reg [31:0]dataOut;
-always @(addr or cs or
-         cicShift or
-         cicDecimation) begin
+always @* begin
     if (cs) begin
         casex (addr)
-            `CIC_DECIMATION:    dataOut <= {17'b0,cicDecimation};
-            `CIC_SHIFT:         dataOut <= {26'b0,cicShift};
-            default:            dataOut <= 32'h0;
+            `CIC_DECIMATION:    dataOut = {17'b0,cicDecimation};
+            `CIC_SHIFT:         dataOut = {26'b0,cicShift};
+            default:            dataOut = 32'h0;
             endcase
         end
     else begin
-        dataOut <= 32'hx;
+        dataOut = 32'hx;
         end
     end
 endmodule

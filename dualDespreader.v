@@ -33,7 +33,7 @@ input           clkEn, qClkEn;
 input           symEn, qSymEn;
 input           reset;
 input           wr0, wr1, wr2, wr3;
-input   [11:0]  addr;
+input   [12:0]  addr;
 input   [31:0]  din;
 input   [17:0]  iIn, qIn;
 input   [4:0]   demodMode;
@@ -49,10 +49,10 @@ output  [15:0]  scaledSwapSyncCount;
 
 // Microprocessor interface
 reg cs;
-always @(addr) begin
+always @* begin
     casex(addr)
-        `DESPREADSPACE: cs <= 1;
-        default: cs <= 0;
+        `DESPREADSPACE: cs = 1;
+        default:        cs = 0;
         endcase
     end
 

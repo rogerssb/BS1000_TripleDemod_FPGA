@@ -1,4 +1,5 @@
 `timescale 1ns / 10 ps
+`include "addressMap.v"
 
 module cicComp( 
     clk, reset, sync,

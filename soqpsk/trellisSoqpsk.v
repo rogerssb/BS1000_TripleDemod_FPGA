@@ -41,7 +41,7 @@ module trellisSoqpsk
    input         clk,reset,symEn,sym2xEn;
    input [17:0]  iIn,qIn;
    input         wr0,wr1,wr2,wr3;
-   input [11:0]  addr;
+   input [12:0]  addr;
    input [31:0]  din;
    output [31:0] dout;
    input [3:0]   dac0Select,dac1Select,dac2Select;
@@ -389,10 +389,10 @@ always @(posedge clk) begin
 /************************ Trellis Register Definitions ************************/
 
 reg trellisSpace;
-always @(addr) begin
+always @* begin
     casex(addr)
-        `TRELLIS_SPACE: trellisSpace <= 1;
-        default:        trellisSpace <= 0;
+        `TRELLIS_SPACE: trellisSpace = 1;
+        default:        trellisSpace = 0;
         endcase
     end
 
@@ -406,28 +406,24 @@ always @(negedge wr0) begin
     end
 
 reg [31:0]trellisDout;
-always @(trellisSpace or addr
-         or decayFactor
-         ) begin
+always @* begin
     if (trellisSpace) begin
         casex (addr)
-            `TRELLIS_DECAY:     trellisDout <= {24'b0,decayFactor};
-            default:            trellisDout <= 32'hx;
+            `TRELLIS_DECAY:     trellisDout = {24'b0,decayFactor};
+            default:            trellisDout = 32'hx;
             endcase
         end
     else begin
-        trellisDout <= 32'hx;
+        trellisDout = 32'hx;
         end
     end
 
 reg [31:0]dout;
-always @(addr or 
-         trellisDout or trellisLoopDout
-         ) begin
+always @* begin
     casex (addr)
-        `TRELLIS_SPACE:     dout <= trellisDout;
-        `TRELLISLFSPACE:    dout <= trellisLoopDout;
-        default:            dout <= 32'hx;
+        `TRELLIS_SPACE:     dout = trellisDout;
+        `TRELLISLFSPACE:    dout = trellisLoopDout;
+        default:            dout = 32'hx;
         endcase
     end
 

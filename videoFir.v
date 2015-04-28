@@ -14,7 +14,7 @@ module videoFir
 
 input           clk,reset,clkEn;
 input           cs,wr0,wr1,wr2,wr3;
-input   [11:0]  addr;
+input   [12:0]  addr;
 input   [31:0]  din;
 output  [31:0]  dout;
 input   [17:0]  videoIn;

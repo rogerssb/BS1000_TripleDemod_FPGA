@@ -25,7 +25,7 @@ input           clk;
 input           reset;
 input           sync;
 input           wr0,wr1,wr2,wr3;
-input   [11:0]  addr;
+input   [12:0]  addr;
 input   [31:0]  din;
 output  [31:0]  dout;
 input   [4:0]   demodMode;
@@ -41,10 +41,10 @@ output          auSyncOut;
 
 // Microprocessor interface
 reg resampSpace;
-always @(addr) begin
+always @* begin
     casex(addr)
-        `RESAMPSPACE:   resampSpace <= 1;
-        default:        resampSpace <= 0;
+        `RESAMPSPACE:   resampSpace = 1;
+        default:        resampSpace = 0;
         endcase
     end
 wire    [31:0]  resampleRate;

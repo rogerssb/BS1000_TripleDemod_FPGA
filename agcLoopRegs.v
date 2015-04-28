@@ -18,7 +18,7 @@ module agcLoopRegs(
     integrator
     );
 
-input   [11:0]addr;
+input   [12:0]addr;
 input   [31:0]dataIn;
 output  [31:0]dataOut;
 input   cs;
@@ -108,27 +108,20 @@ always @(negedge wr3) begin
     end
 
 reg [31:0]dataOut;
-always @(addr or cs or
-         agcSetpoint or
-         invertError or zeroError or
-         posErrorGain or negErrorGain or
-         upperLimit or 
-         lowerLimit or
-         integrator
-         ) begin
+always @* begin
     if (cs) begin
         casex (addr)
-            `ALF_CONTROL:       dataOut <= {30'bx,invertError,zeroError};
-            `ALF_SETPOINT:      dataOut <= {24'bx,agcSetpoint};
-            `ALF_GAINS:         dataOut <= {11'bx,negErrorGain,11'bx,posErrorGain};
-            `ALF_ULIMIT:        dataOut <= upperLimit;
-            `ALF_LLIMIT:        dataOut <= lowerLimit;
-            `ALF_INTEGRATOR:    dataOut <= integrator;
-            default:            dataOut <= 32'hx;
+            `ALF_CONTROL:       dataOut = {30'bx,invertError,zeroError};
+            `ALF_SETPOINT:      dataOut = {24'bx,agcSetpoint};
+            `ALF_GAINS:         dataOut = {11'bx,negErrorGain,11'bx,posErrorGain};
+            `ALF_ULIMIT:        dataOut = upperLimit;
+            `ALF_LLIMIT:        dataOut = lowerLimit;
+            `ALF_INTEGRATOR:    dataOut = integrator;
+            default:            dataOut = 32'hx;
             endcase
         end
     else begin
-        dataOut <= 32'hx;
+        dataOut = 32'hx;
         end
     end
 

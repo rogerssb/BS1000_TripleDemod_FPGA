@@ -106,7 +106,7 @@ always @ (posedge clk) begin
     qIn <= qSymData;
     end
 
-wire    [11:0]  addr = {addr11,addr10,addr9,addr8,addr7,addr6,addr5,addr4,addr3,addr2,addr1,1'b0};
+wire    [12:0]  addr = {addr12, addr11,addr10,addr9,addr8,addr7,addr6,addr5,addr4,addr3,addr2,addr1,1'b0};
 wire            nWr = nWe;
 wire            rd  = !nCs & !nRd;
 wire            wr0 = !nCs & !nWr & !addr1;
@@ -124,10 +124,10 @@ assign demod_nLock = demodLockInput;
 //******************************************************************************
 reg reset;
 reg misc_space;
-always @(addr) begin
+always @* begin
   casex(addr)
-    `MISC_SPACE: misc_space <= 1;
-    default:     misc_space <= 0;
+    `MISC_SPACE: misc_space = 1;
+    default:     misc_space = 0;
   endcase
 end
 wire misc_en = !nCs && misc_space;
@@ -136,6 +136,8 @@ reg     [1:0]   dac0_in_sel;
 reg     [1:0]   dac1_in_sel;
 reg     [1:0]   dac2_in_sel;
 reg             dec_in_sel;
+reg             iOutMuxSel;
+reg             qOutMuxSel;
 reg     [23:0]  boot_addr;
 
 // MISC space writes
@@ -174,7 +176,9 @@ always @(negedge wr2) begin
         casex (addr)
             `DEC_IN_SEL:
                 begin
-                dec_in_sel <= data[0];
+                dec_in_sel <= dataIn[16];
+                iOutMuxSel <= dataIn[18];
+                qOutMuxSel <= dataIn[20];
                 end
            `REBOOT_ADDR:
                 begin
@@ -192,31 +196,37 @@ always @* begin
   if(misc_en) begin
     casex (addr)
         `MISC_RESET: begin
-            rs <= 1;
-            misc_dout <= 32'b0;
+            rs = 1;
+            misc_dout = 32'b0;
             end
         `MISC_VERSION: begin
-            rs <= 0;
-            misc_dout <= {VER_NUMBER,16'b0};
+            rs = 0;
+            misc_dout = {VER_NUMBER,16'b0};
             end
         `DAC_IN_SEL:
             begin
-            rs <= 0;
-            misc_dout <= {15'b0,dec_in_sel,10'b0,dac2_in_sel,dac1_in_sel,dac0_in_sel};
+            rs = 0;
+            misc_dout = {10'b0,qOutMuxSel,1'b0,iOutMuxSel,1'b0,dec_in_sel,
+                         10'b0,dac2_in_sel,dac1_in_sel,dac0_in_sel};
             end
         `DEC_IN_SEL:
             begin
-            rs <= 0;
-            misc_dout <= {15'b0,dec_in_sel,10'b0,dac2_in_sel,dac1_in_sel,dac0_in_sel};
+            rs = 0;
+            misc_dout = {10'b0,qOutMuxSel,1'b0,iOutMuxSel,1'b0,dec_in_sel,
+                         10'b0,dac2_in_sel,dac1_in_sel,dac0_in_sel};
+            end
+        `MISC_TYPE: begin
+            rs = 0;
+            misc_dout = {16'b0,`TRELLIS_DEMOD_IMAGE};
             end
         default: begin
-            misc_dout <= 32'b0;
-            rs <= 0;
+            misc_dout = 32'b0;
+            rs = 0;
             end
     endcase
     end else begin
-        rs <= 0;
-        misc_dout <= 32'b0;
+        rs = 0;
+        misc_dout = 32'b0;
     end
 end
 
@@ -236,14 +246,14 @@ always @*
         casex (addr)
             `REBOOT_ADDR:
                 begin
-                reboot_decode <= 1'b1 ;
+                reboot_decode = 1'b1 ;
                 end
-            default: reboot_decode <= 1'b0 ;
+            default: reboot_decode = 1'b0 ;
         endcase
         end
     else
         begin
-        reboot_decode <= 1'b0 ;
+        reboot_decode = 1'b0 ;
         end
     end
 
@@ -293,10 +303,10 @@ always @(posedge clk or posedge rs) begin
 //                           DAC Serial Interface
 //******************************************************************************
 reg dac_space;
-always @(addr) begin
+always @* begin
   casex(addr)
-    `DAC_SPACE: dac_space <= 1;
-    default: dac_space <= 0;
+    `DAC_SPACE: dac_space = 1;
+    default:    dac_space = 0;
     endcase
 end
 wire dac_en = !nCs & dac_space;
@@ -437,6 +447,38 @@ demod sc(
     .qSymClk(sc_auSymClk),
     .qBit(sc_qBit)
     );
+
+reg sc0_decoder_space;
+always @* begin
+  casex(addr)
+    `SC0_DECODERSPACE:  sc0_decoder_space = 1;
+    default:            sc0_decoder_space = 0;
+  endcase
+end
+
+wire dec0_en = !nCs && sc0_decoder_space;
+wire    [15:0]  sc_decoder_dout;
+pcmDecoder scDecoder (
+    .rs(reset),
+    .en(dec0_en),
+    .wr0(wr0),
+    .wr1(wr1),
+    .addr(addr),
+    .din(data),
+    .dout(sc_decoder_dout),
+    .clk(clk),
+    .symb_clk_en(sc_iSymEn),          // symbol rate clock enable
+    .symb_clk_2x_en(sc_iSym2xEn),     // 2x symbol rate clock enable
+    .symb(sc_iBit),                   // data input,
+    .data_out(sc_dataOut),            // data output
+    .clkEn_out(sc_clkEnOut),          // clk output
+    .fifo_rs(),
+    .clk_inv(sc_clk_inv),   
+    .bypass_fifo(),
+    .symb_clk(sc_symbol_clk)  
+    );
+wire sc_cout = (sc_symbol_clk) ^ !sc_clk_inv;
+
 
 
 //******************************************************************************
@@ -705,10 +747,10 @@ assign dac2_clk = clk;
 //                                 Decoder
 //******************************************************************************
 reg decoder_space;
-always @(addr) begin
+always @* begin
   casex(addr)
-    `DECODERSPACE: decoder_space <= 1;
-    default: decoder_space <= 0;
+    `DECODERSPACE:  decoder_space = 1;
+    default:        decoder_space = 0;
   endcase
 end
 
@@ -799,10 +841,10 @@ always @(posedge symb_pll_out) begin
     end
 
 reg pll_space;
-always @(addr) begin
+always @* begin
   casex(addr)
-    `PLLSPACE: pll_space <= 1;
-    default: pll_space <= 0;
+    `PLLSPACE:  pll_space = 1;
+    default:    pll_space = 0;
   endcase
 end
 
@@ -837,12 +879,17 @@ wire clkOut = bypass_fifo ? symbol_clk : symb_pll_out;
 wire cout = (clkOut) ^ !cout_inv;
 assign cout_i = cout;
 reg cout_q;
-always @(demodMode or auSymClkIn or cout) begin
-    case (demodMode)
-        `MODE_AQPSK,
-        `MODE_AUQPSK:   cout_q = auSymClkIn;
-        default:        cout_q = cout;
-        endcase
+always @* begin
+    if (qOutMuxSel) begin
+        cout_q = sc_cout;
+        end
+    else begin
+        case (demodMode)
+            `MODE_AQPSK,
+            `MODE_AUQPSK:   cout_q = auSymClkIn;
+            default:        cout_q = cout;
+            endcase
+        end
     end
 
 reg dout_i,decQ;
@@ -851,18 +898,28 @@ always @(posedge clkOut)begin
   decQ <= bypass_fifo ? decoder_dout_q : decoder_fifo_dout_q;
   end
 reg dout_q;
-always @(demodMode or qData or decQ) begin
-    case (demodMode)
-        `MODE_AQPSK,
-        `MODE_AUQPSK:   dout_q = qData;
-        default:        dout_q = decQ;
-        endcase
+always @* begin
+    if (qOutMuxSel) begin
+        dout_q = sc_dataOut;
+        end
+    else begin
+        case (demodMode)
+            `MODE_AQPSK,
+            `MODE_AUQPSK:   dout_q = qData;
+            default:        dout_q = decQ;
+            endcase
+        end
     end
+
+
+
+
+
 //******************************************************************************
 //                           Processor Read Data Mux
 //******************************************************************************
 reg [15:0] rd_mux;
-always @(*) begin
+always @* begin
   casex(addr)
     `DEMODSPACE,
     `DDCSPACE,
@@ -875,61 +932,62 @@ always @(*) begin
     `CARRIERSPACE,
     `CHAGCSPACE : begin
       if (addr[1]) begin
-        rd_mux <= sc_dout[31:16];
+        rd_mux = sc_dout[31:16];
         end
       else begin
-        rd_mux <= sc_dout[15:0];
+        rd_mux = sc_dout[15:0];
         end
       end
-    `DAC_SPACE : rd_mux <= dac_dout;
+    `DAC_SPACE : rd_mux = dac_dout;
     `MISC_SPACE : begin
         if (addr[1]) begin
-            rd_mux <= misc_dout[31:16];
+            rd_mux = misc_dout[31:16];
             end
         else begin
-            rd_mux <= misc_dout[15:0];
+            rd_mux = misc_dout[15:0];
             end
         end
-    `DECODERSPACE: rd_mux <= decoder_dout;
-    `PLLSPACE: rd_mux <= symb_pll_dout;
+    `DECODERSPACE: rd_mux = decoder_dout;
+    `SC0_DECODERSPACE: rd_mux = sc_decoder_dout;
+    `PLLSPACE: rd_mux = symb_pll_dout;
     `VIDFIR0SPACE,
     `INTERP0SPACE: begin
        if (addr[1]) begin
-         rd_mux <= interp0Dout[31:16];
+         rd_mux = interp0Dout[31:16];
          end
        else begin
-         rd_mux <= interp0Dout[15:0];
+         rd_mux = interp0Dout[15:0];
          end
        end
      `VIDFIR1SPACE,
      `INTERP1SPACE: begin
        if (addr[1]) begin
-         rd_mux <= interp1Dout[31:16];
+         rd_mux = interp1Dout[31:16];
          end
        else begin
-         rd_mux <= interp1Dout[15:0];
+         rd_mux = interp1Dout[15:0];
          end
        end
      `VIDFIR2SPACE,
      `INTERP2SPACE: begin
        if (addr[1]) begin
-         rd_mux <= interp2Dout[31:16];
+         rd_mux = interp2Dout[31:16];
          end
        else begin
-         rd_mux <= interp2Dout[15:0];
+         rd_mux = interp2Dout[15:0];
          end
        end
      `TRELLISLFSPACE,
      `TRELLIS_SPACE: begin
          if (addr[1]) begin
-             rd_mux <= trellisDout[31:16];
+             rd_mux = trellisDout[31:16];
              end
          else begin
-             rd_mux <= trellisDout[15:0];
+             rd_mux = trellisDout[15:0];
              end
          end
    
-     default : rd_mux <= 16'hxxxx;
+     default : rd_mux = 16'hxxxx;
     endcase
   end
 

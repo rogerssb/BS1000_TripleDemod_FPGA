@@ -27,7 +27,7 @@ module carrierLoopRegs(
     syncThreshold
     );
 
-input   [11:0]addr;
+input   [12:0]addr;
 input   [31:0]dataIn;
 output  [31:0]dataOut;
 input   cs;
@@ -173,29 +173,21 @@ always @(negedge wr3) begin
     end
 
 reg [31:0]dataOut;
-always @(addr or cs or
-         lockStatus or
-         ctrl2 or invertError or zeroError or clearAccum or ctrl4 or acqTrackControl or
-         lagExp or lagMan or leadExp or leadMan or
-         upperLimit or lowerLimit or
-         loopData or
-         lockCount or syncThreshold or
-         lagAccum
-         ) begin
+always @* begin
     if (cs) begin
         casex (addr)
-            `CLF_CONTROL:        dataOut <= {lockStatus,16'b0,6'b0,acqTrackControl,3'b0,ctrl4,clearAccum,ctrl2,invertError,zeroError};
-            `CLF_LEAD_LAG:       dataOut <= {leadMan,3'bx,leadExp,lagMan,3'bx,lagExp};
-            `CLF_ULIMIT:         dataOut <= upperLimit;
-            `CLF_LLIMIT:         dataOut <= lowerLimit;
-            `CLF_LOOPDATA:       dataOut <= loopData;
-            `CLF_LOCKDETECTOR:   dataOut <= {4'h0,syncThreshold,lockCount};
-            `CLF_INTEGRATOR:     dataOut <= lagAccum;
-            default:            dataOut <= 32'hx;
+            `CLF_CONTROL:        dataOut = {lockStatus,16'b0,6'b0,acqTrackControl,3'b0,ctrl4,clearAccum,ctrl2,invertError,zeroError};
+            `CLF_LEAD_LAG:       dataOut = {leadMan,3'bx,leadExp,lagMan,3'bx,lagExp};
+            `CLF_ULIMIT:         dataOut = upperLimit;
+            `CLF_LLIMIT:         dataOut = lowerLimit;
+            `CLF_LOOPDATA:       dataOut = loopData;
+            `CLF_LOCKDETECTOR:   dataOut = {4'h0,syncThreshold,lockCount};
+            `CLF_INTEGRATOR:     dataOut = lagAccum;
+            default:             dataOut = 32'hx;
             endcase
         end
     else begin
-        dataOut <= 32'hx;
+        dataOut = 32'hx;
         end
     end
 

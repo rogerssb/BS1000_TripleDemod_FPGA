@@ -20,7 +20,7 @@ input reset;
 input clkEn;
 input cs;
 input wr0,wr1,wr2,wr3;
-input   [11:0]addr;
+input   [12:0]addr;
 input   [31:0]din;
 output  [31:0]dout;
 input   [17:0]dataIn;
@@ -28,24 +28,24 @@ output  [17:0]dataOut;
 
 // Chip select decodes
 reg interpCS;
-always @(addr) begin
+always @* begin
     casex (addr)
         RegSpace: begin
-            interpCS <= 1;
+            interpCS = 1;
             end
         default: begin
-            interpCS <= 0;
+            interpCS = 0;
             end
         endcase
     end
 reg firCS;
-always @(addr) begin
+always @* begin
     casex (addr)
         FirRegSpace: begin
-            firCS <= 1;
+            firCS = 1;
             end
         default: begin
-            firCS <= 0;
+            firCS = 0;
             end
         endcase
     end
@@ -224,9 +224,9 @@ always @(dataOut) interpReal = (dataOut[17] ? (dataOut - 262144.0) : dataOut)/13
 reg [31:0]dout;
 always @* begin
     casex (addr)
-        RegSpace :          dout <= interpDout;
-        FirRegSpace:        dout <= firDout;
-        default:            dout <= 32'bx;
+        RegSpace :          dout = interpDout;
+        FirRegSpace:        dout = firDout;
+        default:            dout = 32'bx;
         endcase
     end
 

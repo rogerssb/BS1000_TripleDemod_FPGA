@@ -51,7 +51,7 @@ module dac_control
   soe     // output, serial bus data output enable
   );
 
-input [11:0]a;
+input [12:0]a;
 input [15:0]di;
 output [15:0]do;
 input wr,ck,en,sdi,rs;
@@ -109,16 +109,16 @@ end
 
 wire busy;
 reg [15:0]do,rd_buf;
-always @(a or en or rd_buf or busy or dac_sel) begin
+always @* begin
   if(en) begin
     casex(a)
-      `DAC_RDATA: do <= rd_buf;
-      `DAC_SELECT: do <= {14'bx,dac_sel};
-			`DAC_STATUS: do <= {15'bx,busy};
-      default: do <= 16'hxxxx;
+      `DAC_RDATA:   do = rd_buf;
+      `DAC_SELECT:  do = {14'bx,dac_sel};
+      `DAC_STATUS:  do = {15'bx,busy};
+      default:      do = 16'hxxxx;
     endcase
   end
-	else do <= 16'hxxxx;
+	else do = 16'hxxxx;
 end
 
 // This transfer state machine is built from a 24-bit shift register with a

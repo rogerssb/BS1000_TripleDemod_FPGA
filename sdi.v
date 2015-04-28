@@ -25,7 +25,7 @@ module sdi(
 input           clk;
 input           reset;
 input           wr0,wr1,wr2,wr3;
-input   [11:0]  addr;
+input   [12:0]  addr;
 input   [31:0]  dataIn;
 output  [31:0]  dataOut;
 input           iSymEn;
@@ -43,10 +43,10 @@ output          sdiOut;
 
 
 reg sdiSpace;
-always @(addr) begin
+always @* begin
   casex(addr)
-    `SDISPACE:      sdiSpace <= 1;
-    default:        sdiSpace <= 0;
+    `SDISPACE:      sdiSpace = 1;
+    default:        sdiSpace = 0;
   endcase
 end
 
@@ -77,28 +77,23 @@ wire    [10:0]  interiorCountOut;
 wire    [10:0]  exteriorCountOut;
 reg             holdCount;
 reg     [31:0]  sdiDout;
-always @(addr or sdiSpace or
-         sdiMode or
-         fifoEmpty or
-         artmThreshold or
-         interiorCountOut or exteriorCountOut
-         ) begin
+always @* begin
     casex(addr)
         `SDI_CONTROL:           begin
-                                sdiDout <= {fifoEmpty,28'b0,sdiMode};
-                                holdCount <= 0;
+                                sdiDout = {fifoEmpty,28'b0,sdiMode};
+                                holdCount = 0;
                                 end
         `SDI_ARTM_THRESHOLD:    begin
-                                sdiDout <= {24'b0,artmThreshold};
-                                holdCount <= 0;
+                                sdiDout = {24'b0,artmThreshold};
+                                holdCount = 0;
                                 end
         `SDI_ARTM_COUNTS:       begin
-                                sdiDout <= {5'b0,exteriorCountOut,5'b0,interiorCountOut};
-                                holdCount <= sdiSpace;
+                                sdiDout = {5'b0,exteriorCountOut,5'b0,interiorCountOut};
+                                holdCount = sdiSpace;
                                 end
         default:                begin
-                                sdiDout <= 32'hx;
-                                holdCount <= 0;
+                                sdiDout = 32'hx;
+                                holdCount = 0;
                                 end
         endcase
     end
@@ -368,11 +363,11 @@ assign sdiOut = (sdiMode == `SDI_MODE_ARTM) ? artmOut : uartOut ;
 `endif
 
 reg     [31:0]  dataOut;
-always @(addr or sdiDout or uartDout) begin
+always @* begin
     casex(addr)
-        `SDISPACE:      dataOut <= sdiDout;
-        `UARTSPACE:     dataOut <= uartDout;
-        default:        dataOut <= 32'hx;
+        `SDISPACE:      dataOut = sdiDout;
+        `UARTSPACE:     dataOut = uartDout;
+        default:        dataOut = 32'hx;
         endcase
     end
 

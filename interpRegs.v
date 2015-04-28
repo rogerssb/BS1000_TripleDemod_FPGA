@@ -18,7 +18,7 @@ module interpRegs(
     );
 
 input   cs;
-input   [11:0]addr;
+input   [12:0]addr;
 input   [31:0]dataIn;
 output  [31:0]dataOut;
 input   wr0,wr1,wr2,wr3;
@@ -86,15 +86,15 @@ reg [31:0]dataOut;
 always @* begin
     if (cs) begin
         casex (addr)
-            `INTERP_CONTROL:    dataOut <= {28'h0,bypassEQ,invert,test,bypass};
-            `INTERP_MANTISSA:   dataOut <= {14'bx,mantissa};
-            `INTERP_EXPONENT:   dataOut <= {27'bx,exponent};
-            `INTERP_TEST:       dataOut <= {14'b0,testValue};
-            default:            dataOut <= 32'hx;
+            `INTERP_CONTROL:    dataOut = {28'h0,bypassEQ,invert,test,bypass};
+            `INTERP_MANTISSA:   dataOut = {14'bx,mantissa};
+            `INTERP_EXPONENT:   dataOut = {27'bx,exponent};
+            `INTERP_TEST:       dataOut = {14'b0,testValue};
+            default:            dataOut = 32'hx;
             endcase
         end
     else begin
-        dataOut <= 32'hx;
+        dataOut = 32'hx;
         end
     end
 

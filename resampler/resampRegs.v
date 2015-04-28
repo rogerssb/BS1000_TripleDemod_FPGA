@@ -14,7 +14,7 @@ module resampRegs(
     auDecimation
     );
 
-input   [11:0]addr;
+input   [12:0]addr;
 input   [31:0]dataIn;
 output  [31:0]dataOut;
 input   cs;
@@ -76,21 +76,18 @@ always @(negedge wr3) begin
     end
 
 reg [31:0]dataOut;
-always @(addr or cs or
-         resampleRate or auResampleRate or
-         auDecimation or auShift
-         ) begin
+always @* begin
     if (cs) begin
         casex (addr)
-            `RESAMPLER_RATE:            dataOut <= resampleRate;
-            `RESAMPLER_AURATE:          dataOut <= auResampleRate;
-            `RESAMPLER_AUDECIMATION:    dataOut <= {17'b0,auDecimation};
-            `RESAMPLER_AUSHIFT:         dataOut <= {26'b0,auShift};
-            default:                    dataOut <= 32'hx;
+            `RESAMPLER_RATE:            dataOut = resampleRate;
+            `RESAMPLER_AURATE:          dataOut = auResampleRate;
+            `RESAMPLER_AUDECIMATION:    dataOut = {17'b0,auDecimation};
+            `RESAMPLER_AUSHIFT:         dataOut = {26'b0,auShift};
+            default:                    dataOut = 32'hx;
             endcase
         end
     else begin
-        dataOut <= 32'hx;
+        dataOut = 32'hx;
         end
     end
 endmodule
