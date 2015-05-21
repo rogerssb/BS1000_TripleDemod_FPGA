@@ -36,7 +36,7 @@ reg [15:0]q;
 always @(negedge wr0) begin
   if(en) begin
     casex (a)
-      12'hxx0: q[7:0] <= di[7:0];
+      `DEC_OPTIONS: q[7:0] <= di[7:0];
       default: ;
     endcase
   end
@@ -46,7 +46,7 @@ end
 always @(negedge wr1) begin
   if(en) begin
     casex (a)
-      12'hxx0: q[15:8] <= di[15:8];
+      `DEC_OPTIONS: q[15:8] <= di[15:8];
       default: ;
     endcase
   end
@@ -57,7 +57,7 @@ reg [15:0]do;
 always @* begin
   if(en) begin
     casex(a)
-      12'hxx0: do = d;
+      `DEC_OPTIONS: do = d;
       default: do = 16'hxxxx;
     endcase
   end

@@ -5,6 +5,7 @@
 //`define ADD_NOISE
 //`define BER_TEST
 //`define MATLAB_VECTORS
+`define TEST_SCPATH
 
 `ifdef BER_TEST
 !control .savsim=1
@@ -17,7 +18,7 @@ module test;
 
 reg reset,clk,we0,we1,we2,we3,rd;
 reg sync;
-reg [11:0]a;
+reg [12:0]a;
 reg [31:0]d;
 wire [31:0]dout;
 
@@ -141,7 +142,7 @@ fmMod fmMod(
     .clk(clk), .reset(reset), 
     .cs(fmModCS),
     .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
-    .addr(a),
+    .addr(a[11:0]),
     .din(d),
     .dout(dout),
     .fskMode(2'b00),
@@ -290,37 +291,11 @@ demod demod(
     .eyeOffset(eyeOffset)
     );
 
-reg dac0CS,dac1CS,dac2CS;
-always @(a) begin
-    casex (a)
-        `INTERP0SPACE: begin
-            dac0CS <= 1;
-            dac1CS <= 0;
-            dac2CS <= 0;
-            end
-        `INTERP1SPACE: begin
-            dac0CS <= 0;
-            dac1CS <= 1;
-            dac2CS <= 0;
-            end
-        `INTERP2SPACE: begin
-            dac0CS <= 0;
-            dac1CS <= 0;
-            dac2CS <= 1;
-            end
-        default: begin  
-            dac0CS <= 0;
-            dac1CS <= 0;
-            dac2CS <= 0;
-            end
-        endcase
-    end
 wire    [31:0]  dac0Dout;
 wire    [17:0]  dac0Data;
 reg             interpReset;
-interpolate dac0Interp(
+interpolate #(.RegSpace(`INTERP0SPACE), .FirRegSpace(`VIDFIR0SPACE)) dac0Interp(
     .clk(clk), .reset(interpReset), .clkEn(dac0Sync),
-    .cs(dac0CS),
     .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
     .addr(a),
     .din(d),
@@ -333,9 +308,8 @@ assign dac0_clk = clk;
 
 wire    [31:0]  dac1Dout;
 wire    [17:0]  dac1Data;
-interpolate dac1Interp(
+interpolate #(.RegSpace(`INTERP1SPACE), .FirRegSpace(`VIDFIR1SPACE)) dac1Interp(
     .clk(clk), .reset(interpReset), .clkEn(dac1Sync),
-    .cs(dac1CS),
     .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
     .addr(a),
     .din(d),
@@ -348,9 +322,8 @@ assign dac1_clk = clk;
 
 wire    [31:0]  dac2Dout;
 wire    [17:0]  dac2Data;
-interpolate dac2Interp(
+interpolate #(.RegSpace(`INTERP2SPACE), .FirRegSpace(`VIDFIR2SPACE)) dac2Interp(
     .clk(clk), .reset(interpReset), .clkEn(dac2Sync),
-    .cs(dac2CS),
     .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
     .addr(a),
     .din(d),
@@ -492,15 +465,15 @@ always @(negedge clk) begin
                                 uP Read/Write Functions
 ******************************************************************************/
 
-function [11:0] createAddress;
-    input [11:0] addrA;
-    input [11:0] addrB;
+function [12:0] createAddress;
+    input [12:0] addrA;
+    input [12:0] addrB;
     
     integer i;
-    reg [11:0]finalAddress;
+    reg [12:0]finalAddress;
 
     begin
-    for (i = 0; i < 12; i = i+1) begin
+    for (i = 0; i < 13; i = i+1) begin
         if (addrA[i] === 1'bx) begin
             finalAddress[i] = addrB[i];
             end
@@ -517,7 +490,7 @@ endfunction
 
 
 task write16;
-  input [11:0]addr;
+  input [12:0]addr;
   input [15:0]data;
   begin
 
@@ -540,7 +513,7 @@ task write16;
 endtask
 
 task write32;
-  input [11:0]addr;
+  input [12:0]addr;
   input [31:0]data;
   begin
     a = addr;
@@ -555,7 +528,7 @@ task write32;
 endtask
 
 task read32;
-  input [11:0]addr;
+  input [12:0]addr;
   begin
     a = addr;
     rd = 0;
@@ -623,6 +596,15 @@ initial begin
     write32(createAddress(`DDCSPACE,`DDC_CENTER_FREQ), carrierFreq);
     write32(createAddress(`DDCSPACE,`DDC_DECIMATION), 0);
 
+    write16(createAddress(`DDCFIRSPACE,`DDC_FIR_COEFF_0),16'h0123);
+    write16(createAddress(`DDCFIRSPACE,`DDC_FIR_COEFF_1),16'h1234);
+    write16(createAddress(`DDCFIRSPACE,`DDC_FIR_COEFF_2),16'h2345);
+    write16(createAddress(`DDCFIRSPACE,`DDC_FIR_COEFF_3),16'h3456);
+    write16(createAddress(`DDCFIRSPACE,`DDC_FIR_COEFF_4),16'h4567);
+    write16(createAddress(`DDCFIRSPACE,`DDC_FIR_COEFF_5),16'h5678);
+    write16(createAddress(`DDCFIRSPACE,`DDC_FIR_COEFF_6),16'h6789);
+    write16(createAddress(`DDCFIRSPACE,`DDC_FIR_COEFF_7),16'h789a);
+
     // Init the cicResampler register set
     write32(createAddress(`CICDECSPACE,`CIC_DECIMATION),cicDecimationInt-1);
     write32(createAddress(`CICDECSPACE,`CIC_SHIFT), 3); // log2(cicDecimation ^ 3)
@@ -633,6 +615,32 @@ initial begin
     write32(createAddress(`CHAGCSPACE,`ALF_GAINS),32'h00180018);        // AGC Loop Gain
     write32(createAddress(`CHAGCSPACE,`ALF_ULIMIT),32'h4fffffff);       // AGC Upper limit
     write32(createAddress(`CHAGCSPACE,`ALF_LLIMIT),32'h00000000);       // AGC Lower limit
+
+    `ifdef TEST_SCPATH
+    // Init the carrier loop filters
+    write32(createAddress(`SCCARRIERSPACE,`CLF_CONTROL),1);    // Zero the error
+    write32(createAddress(`SCCARRIERSPACE,`CLF_LEAD_LAG),32'h0000000c);   
+    write32(createAddress(`SCCARRIERSPACE,`CLF_ULIMIT), carrierLimit);
+    write32(createAddress(`SCCARRIERSPACE,`CLF_LLIMIT), -carrierLimit);
+    write32(createAddress(`SCCARRIERSPACE,`CLF_LOOPDATA), sweepRate);
+
+    // Init the downcoverter register set
+    write32(createAddress(`SCDDCSPACE,`DDC_CONTROL),5);
+    write32(createAddress(`SCDDCSPACE,`DDC_CENTER_FREQ), carrierFreq);
+    write32(createAddress(`SCDDCSPACE,`DDC_DECIMATION), 0);
+
+    // Init the cicResampler register set
+    write32(createAddress(`SCCICDECSPACE,`CIC_DECIMATION),cicDecimationInt-1);
+    write32(createAddress(`SCCICDECSPACE,`CIC_SHIFT), 3); // log2(cicDecimation ^ 3)
+
+    // Init the channel agc loop filter
+    write32(createAddress(`SCAGCSPACE,`ALF_CONTROL),1);                 // Zero the error
+    write32(createAddress(`SCAGCSPACE,`ALF_SETPOINT),32'h000000e0);     // AGC Setpoint
+    write32(createAddress(`SCAGCSPACE,`ALF_GAINS),32'h00180018);        // AGC Loop Gain
+    write32(createAddress(`SCAGCSPACE,`ALF_ULIMIT),32'h4fffffff);       // AGC Upper limit
+    write32(createAddress(`SCAGCSPACE,`ALF_LLIMIT),32'h00000000);       // AGC Lower limit
+
+    `endif
 
     // Set the DAC interpolator gains
     write32(createAddress(`DEMODSPACE, `DEMOD_DACSELECT), {12'h0,`DAC_FREQ,
@@ -647,6 +655,19 @@ initial begin
     write32(createAddress(`INTERP2SPACE, `INTERP_CONTROL),0);
     write32(createAddress(`INTERP2SPACE, `INTERP_EXPONENT), 8);
     write32(createAddress(`INTERP2SPACE, `INTERP_MANTISSA), 32'h00012000);
+    `ifdef TEST_SCPATH
+    write16(createAddress(`SCVIDFIRSPACE,`DDC_FIR_COEFF_0),16'h0);
+    write16(createAddress(`SCVIDFIRSPACE,`DDC_FIR_COEFF_1),16'h0);
+    write16(createAddress(`SCVIDFIRSPACE,`DDC_FIR_COEFF_2),16'h0);
+    write16(createAddress(`SCVIDFIRSPACE,`DDC_FIR_COEFF_3),16'h0);
+    write16(createAddress(`SCVIDFIRSPACE,`DDC_FIR_COEFF_4),16'h0);
+    write16(createAddress(`SCVIDFIRSPACE,`DDC_FIR_COEFF_5),16'h0);
+    write16(createAddress(`SCVIDFIRSPACE,`DDC_FIR_COEFF_6),16'h0);
+    write16(createAddress(`SCVIDFIRSPACE,`DDC_FIR_COEFF_7),16'h7fff);
+    write32(createAddress(`SCINTERPSPACE, `INTERP_CONTROL),0);
+    write32(createAddress(`SCINTERPSPACE, `INTERP_EXPONENT), 8);
+    write32(createAddress(`SCINTERPSPACE, `INTERP_MANTISSA), 32'h00012000);
+    `endif
 
     // Set the SDI baudrate
     write32(createAddress(`UARTSPACE, `UART_BAUD_DIV),99);
@@ -656,6 +677,9 @@ initial begin
     reset = 0;
     demod.ddc.hbReset = 0;
     demod.ddc.cicReset = 0;
+    `ifdef TEST_SCPATH
+    demod.scDdc.cicReset = 0;
+    `endif
 
     // Wait 9.5 bit periods
     #(19*bitrateSamplesInt*C) ;
@@ -684,17 +708,33 @@ initial begin
     #(4*bitrateSamplesInt*C) ;
 
     // Create a reset to clear the cic resampler
+    `ifdef TEST_SCPATH
+    demod.ddc.cicReset = 1;
+    demod.scDdc.cicReset = 1;
+    #(2*C) ;
+    demod.ddc.cicReset = 0;
+    demod.scDdc.cicReset = 0;
+    `else
     demod.ddc.cicReset = 1;
     #(2*C) ;
     demod.ddc.cicReset = 0;
+    `endif
 
     // Wait
     #(4*bitrateSamplesInt*C) ;
 
     // Create a reset to clear the cic resampler
+    `ifdef TEST_SCPATH
+    demod.ddc.cicReset = 1;
+    demod.scDdc.cicReset = 1;
+    #(2*C) ;
+    demod.ddc.cicReset = 0;
+    demod.scDdc.cicReset = 0;
+    `else
     demod.ddc.cicReset = 1;
     #(2*C) ;
     demod.ddc.cicReset = 0;
+    `endif
 
     // Wait 14 bit periods
     #(28*bitrateSamplesInt*C) ;
@@ -716,13 +756,24 @@ initial begin
     `ifdef ENABLE_AGC
     // Enable the AGC loop
     write32(createAddress(`CHAGCSPACE,`ALF_CONTROL),0);              
+    `ifdef TEST_SCPATH
+    write32(createAddress(`SCAGCSPACE,`ALF_CONTROL),0);              
+    `endif
     `endif
 
     // Enable the SDI in eye pattern mode
     write32(createAddress(`SDISPACE,`SDI_CONTROL),32'h00000082);
 
-
     // Wait for some data to pass thru
+    write32(createAddress(`INTERP0SPACE, `INTERP_CONTROL), 32'h9);
+    write32(createAddress(`INTERP1SPACE, `INTERP_CONTROL), 32'h9);
+    write32(createAddress(`INTERP0SPACE, `INTERP_CONTROL), 32'h8);
+    write32(createAddress(`INTERP1SPACE, `INTERP_CONTROL), 32'h8);
+    `ifdef TEST_SCPATH
+    write32(createAddress(`SCINTERPSPACE, `INTERP_CONTROL), 32'h9);
+    write32(createAddress(`SCINTERPSPACE, `INTERP_CONTROL), 32'h8);
+    `endif
+
     #(2*100*bitrateSamplesInt*C) ;
     `ifdef MATLAB_VECTORS
     $fclose(outfile);

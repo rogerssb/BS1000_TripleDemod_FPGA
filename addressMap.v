@@ -24,34 +24,31 @@
 
 
 // Split the memory space for the different functions
-`define DEMODSPACE          13'b0_0000_0xxx_xxxx
+`define DEMODSPACE          13'bx_0000_0xxx_xxxx
 `ifdef FM_FILTER
 `define VIDFIRSPACE         13'b0_0000_1xxx_xxxx
 `endif
 `define DESPREADSPACE       13'b0_0001_xxxx_xxxx
-`define DDCSPACE            13'b0_0010_00xx_xxxx
-`define DDCFIRSPACE         13'b0_0010_01xx_xxxx
-`define CICDECSPACE         13'b0_0010_10xx_xxxx
-`define SCDDCSPACE          13'b1_0010_00xx_xxxx
-`define SCDDCFIRSPACE       13'b1_0010_01xx_xxxx
-`define SCCICDECSPACE       13'b1_0010_10xx_xxxx
-`define BITSYNCSPACE        13'b0_0100_0xxx_xxxx
-`define BITSYNCAUSPACE      13'b0_0100_1xxx_xxxx
-`define DECODERSPACE        13'b0_0101_xxxx_xxxx
-`define SC0_DECODERSPACE    13'b0_0101_xxxx_xxxx
-`define SC1_DECODERSPACE    13'b1_0101_xxxx_xxxx
+`define DDCSPACE            13'bx_0010_00xx_xxxx
+`define DDCFIRSPACE         13'bx_0010_01xx_xxxx
+`define CICDECSPACE         13'bx_0010_10xx_xxxx
+`define BITSYNCSPACE        13'bx_0100_0xxx_xxxx
+`define BITSYNCAUSPACE      13'bx_0100_1xxx_xxxx
+`define DECODERSPACE        13'b0_0101_0xxx_xxxx
+`define SC0_DECODERSPACE    13'b0_0101_1xxx_xxxx
+`define SC1_DECODERSPACE    13'b1_0101_1xxx_xxxx
 `define PLLSPACE            13'b0_0110_xxxx_xxxx
-`define CHAGCSPACE          13'b0_0111_xxxx_xxxx
-`define SCAGCSPACE          13'b1_0111_xxxx_xxxx
-`define RESAMPSPACE         13'b0_1000_xxxx_xxxx
-`define CARRIERSPACE        13'b0_1001_xxxx_xxxx
-`define SCCARRIERSPACE      13'b1_1001_xxxx_xxxx
+`define CHAGCSPACE          13'bx_0111_xxxx_xxxx
+`define RESAMPSPACE         13'bx_1000_xxxx_xxxx
+`define CARRIERSPACE        13'bx_1001_xxxx_xxxx
 `define INTERP0SPACE        13'b0_1010_0xxx_xxxx
 `define VIDFIR0SPACE        13'b0_1010_1xxx_xxxx
 `define INTERP1SPACE        13'b0_1011_0xxx_xxxx
 `define VIDFIR1SPACE        13'b0_1011_1xxx_xxxx
 `define INTERP2SPACE        13'b0_1100_0xxx_xxxx
 `define VIDFIR2SPACE        13'b0_1100_1xxx_xxxx
+`define SCINTERPSPACE       13'b1_1100_0xxx_xxxx
+`define SCVIDFIRSPACE       13'b1_1100_1xxx_xxxx
 `define MISC_SPACE          13'b0_1101_0xxx_xxxx
 `define SUBCARR_TOP_SPACE   13'b0_1101_0xxx_xxxx   // same as MISC space
 `define SDISPACE            13'b0_1101_1xxx_xxxx
@@ -59,6 +56,11 @@
 `define TRELLIS_SPACE       13'b0_1110_1xxx_xxxx
 `define DAC_SPACE           13'b0_1111_0xxx_xxxx
 `define UARTSPACE           13'b0_1111_1xxx_xxxx
+`define SCDDCSPACE          13'b1_0010_00xx_xxxx
+`define SCDDCFIRSPACE       13'b1_0010_01xx_xxxx
+`define SCCICDECSPACE       13'b1_0010_10xx_xxxx
+`define SCAGCSPACE          13'b1_0111_xxxx_xxxx
+`define SCCARRIERSPACE      13'b1_1001_xxxx_xxxx
 
 // Define the global radio memory map
 `define DEMOD_CONTROL   13'bx_xxxx_xxx0_00xx
@@ -170,6 +172,8 @@
 `define INTERP_MANTISSA 13'bx_xxxx_xxxx_10xx
 `define INTERP_TEST     13'bx_xxxx_xxxx_11xx
 
+// Define the decoder memory map
+`define DEC_OPTIONS     13'bx_xxxx_xxxx_000x
 
 // Define the MISCELLANEOUS and subcarrier top level registers
 `define MISC_RESET      13'bx_xxxx_xxx0_000x

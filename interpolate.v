@@ -3,28 +3,28 @@
 
 module interpolate(
     clk, reset, clkEn,
-    cs,
     wr0, wr1, wr2, wr3,
     addr,
     din,
     dout,
     dataIn,
-    dataOut
+    dataOut,
+    clkEnOut
     );
 
 parameter RegSpace = `INTERP0SPACE;
 parameter FirRegSpace = `VIDFIR0SPACE;
 
-input clk;
-input reset;
-input clkEn;
-input cs;
-input wr0,wr1,wr2,wr3;
-input   [12:0]addr;
-input   [31:0]din;
-output  [31:0]dout;
-input   [17:0]dataIn;
-output  [17:0]dataOut;
+input           clk;
+input           reset;
+input           clkEn;
+input           wr0,wr1,wr2,wr3;
+input   [12:0]  addr;
+input   [31:0]  din;
+output  [31:0]  dout;
+input   [17:0]  dataIn;
+output  [17:0]  dataOut;
+output          clkEnOut;
 
 // Chip select decodes
 reg interpCS;
@@ -70,6 +70,17 @@ interpRegs regs  (
     .mantissa(mantissa)
     );
 
+reg     [17:0]  invertIn;
+always @(posedge clk) begin
+    if (clkEn) begin
+        if (invert) begin
+            invertIn <= -dataIn;
+            end
+        else begin
+            invertIn <= dataIn;
+            end
+        end
+    end
 
 // Generate reset for CIC 
 reg cicReset;
@@ -100,7 +111,7 @@ videoFir videoFir(
     .addr(addr),
     .din(din),
     .dout(firDout),
-    .videoIn(dataIn),
+    .videoIn(invertIn),
     .videoOut(firOut)
     );
 
@@ -138,7 +149,7 @@ reg     [17:0]  cicIn;
 always @(posedge clk) begin
     if (clkEn) begin
         if (bypassEQ) begin
-            cicIn <= dataIn;
+            cicIn <= invertIn;
             end
         else begin
             cicIn <= cicCompOut;
@@ -182,35 +193,30 @@ invSinc invSinc
 
 
 reg     [17:0]  dataOut;
+wire    [1:0]   bypassMode = {bypassEQ,bypass};
 always @(posedge clk) begin
     if (test) begin
         dataOut <= testValue;
         end
-    else if (bypass) begin
-        if (clkEn) begin
-            if (invert) begin
-                dataOut <= -dataIn;
-                end
-            else begin
-                dataOut <= dataIn;
-                end
-            end
-        end
-    else if (bypassEQ) begin
-        if (invert) begin
-            dataOut <= -scaledValue[33:16];
-            end
-        else begin
-            dataOut <= scaledValue[33:16];
-            end
-        end
     else begin
-        if (invert) begin
-            dataOut <= -invSincOut[24:7];
-            end
-        else begin
-            dataOut <= invSincOut[24:7];
-            end
+        case (bypassMode)
+            2'b00: begin
+                dataOut <= invSincOut[24:7];
+                end
+            2'b01: begin
+                if (clkEn) begin
+                    dataOut <= firOut;
+                    end
+                end
+            2'b10: begin
+                dataOut <= scaledValue[33:16];
+                end
+            2'b11: begin
+                if (clkEn) begin
+                    dataOut <= invertIn;
+                    end
+                end
+            endcase
         end
     end
 
@@ -220,6 +226,8 @@ real interpReal;
 always @(exponentAdjusted) expAdjReal = (exponentAdjusted[17] ? (exponentAdjusted - 262144.0) : exponentAdjusted)/131072.0;
 always @(dataOut) interpReal = (dataOut[17] ? (dataOut - 262144.0) : dataOut)/131072.0;
 `endif
+
+assign  clkEnOut = bypass ? clkEn : 1'b1;
 
 reg [31:0]dout;
 always @* begin

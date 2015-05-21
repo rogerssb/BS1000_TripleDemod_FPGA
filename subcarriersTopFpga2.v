@@ -25,7 +25,6 @@ module subcarriersTopFpga2 (
     cout_i,dout_i,
     cout_q,dout_q,
     bsync_nLock,demod_nLock,
-    symb_pll_ref,symb_pll_vco,symb_pll_fbk,
     sdiOut,
     demod0Data,demod0Sync,
     demod1Data,demod1Sync,
@@ -65,12 +64,10 @@ output          dac0_clk,dac1_clk,dac2_clk;
 output          cout_i,dout_i;
 output          cout_q,dout_q;
 output          bsync_nLock,demod_nLock;
-output          symb_pll_ref,symb_pll_fbk;
-input           symb_pll_vco;
 
 output          sdiOut;
 
-parameter VER_NUMBER = 16'h0185;
+parameter VER_NUMBER = 16'h0188;
 
 wire    [12:0]  addr = {addr12,addr11,addr10,addr9,addr8,addr7,addr6,addr5,addr4,addr3,addr2,addr1,1'b0};
 wire            nWr = nWe;
@@ -525,7 +522,7 @@ always @(posedge clk) begin
         interp1DataIn <= {demod1DataReg,4'h0};
         dac1Sync <= demod1SyncReg;
         end
-    else if (dac0_in_sel == `DAC_IN_SEL_SC0) begin
+    else if (dac1_in_sel == `DAC_IN_SEL_SC0) begin
         interp1DataIn <= sc0_dac1Data;
         dac1Sync <= sc0_dac1Sync;
         end
@@ -538,7 +535,7 @@ always @(posedge clk) begin
         interp2DataIn <= {demod2DataReg,4'h0};
         dac2Sync <= demod2SyncReg;
         end
-    else if (dac0_in_sel == `DAC_IN_SEL_SC0) begin
+    else if (dac2_in_sel == `DAC_IN_SEL_SC0) begin
         interp2DataIn <= sc0_dac2Data;
         dac2Sync <= sc0_dac2Sync;
         end
@@ -660,11 +657,10 @@ always @(*) begin
     `CICDECSPACE,
     `BITSYNCSPACE,
     `BITSYNCAUSPACE,
-    `CHAGCSPACE,
     `RESAMPSPACE,
     `CARRIERSPACE,
     `CHAGCSPACE : begin
-        if (addr12) begin
+        if (addr[12]) begin
             if (addr[1]) begin
                 rd_mux = sc1_dout[31:16];
             end
@@ -680,7 +676,7 @@ always @(*) begin
                 rd_mux = sc0_dout[15:0];
             end
         end
-      end
+    end
     `DAC_SPACE : rd_mux = dac_dout;
     `MISC_SPACE : begin
         if (addr[1]) begin
@@ -690,14 +686,12 @@ always @(*) begin
             rd_mux = misc_dout[15:0];
             end
         end
-    `DECODERSPACE: begin
-        if (addr12) begin
-            rd_mux = dec1_dout;
+    `SC0_DECODERSPACE: begin
+        rd_mux = dec0_dout;
         end
-        else begin
-            rd_mux = dec0_dout;
+    `SC1_DECODERSPACE: begin
+        rd_mux = dec1_dout;
         end
-    end
     `VIDFIR0SPACE,
     `INTERP0SPACE: begin
        if (addr[1]) begin

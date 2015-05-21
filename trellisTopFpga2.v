@@ -81,7 +81,7 @@ input           symb_pll_vco;
 output          sdiOut;
 input           legacyBit_pad ;
 
-parameter VER_NUMBER = 16'h0185;
+parameter VER_NUMBER = 16'h0188;
 
 // 12 Jun 13
 // IOB reclocking of inputs to trellis
@@ -206,13 +206,13 @@ always @* begin
         `DAC_IN_SEL:
             begin
             rs = 0;
-            misc_dout = {10'b0,qOutMuxSel,1'b0,iOutMuxSel,1'b0,dec_in_sel,
+            misc_dout = {11'b0,qOutMuxSel,1'b0,iOutMuxSel,1'b0,dec_in_sel,
                          10'b0,dac2_in_sel,dac1_in_sel,dac0_in_sel};
             end
         `DEC_IN_SEL:
             begin
             rs = 0;
-            misc_dout = {10'b0,qOutMuxSel,1'b0,iOutMuxSel,1'b0,dec_in_sel,
+            misc_dout = {11'b0,qOutMuxSel,1'b0,iOutMuxSel,1'b0,dec_in_sel,
                          10'b0,dac2_in_sel,dac1_in_sel,dac0_in_sel};
             end
         `MISC_TYPE: begin
@@ -372,9 +372,9 @@ reg             pcmSymEn,soqpskSymEn;
 reg             pcmSym2xEn,soqpskSym2xEn;
 reg     [13:0]  demod0DataReg;
 reg             demod0SyncReg;
-reg     [17:0]  demod1DataReg;
+reg     [13:0]  demod1DataReg;
 reg             demod1SyncReg;
-reg     [17:0]  demod2DataReg;
+reg     [13:0]  demod2DataReg;
 reg             demod2SyncReg;
 reg             iBitReg,qBitReg;
 reg             dataSymEnReg,dataSym2xEnReg;
@@ -442,9 +442,9 @@ demod sc(
     .iSym2xEn(sc_iSym2xEn),
     .iSymEn(sc_iSymEn),
     .iBit(sc_iBit),
-    .qSym2xEn(sc_qSym2xEn),
-    .qSymEn(sc_qSymEn),
-    .qSymClk(sc_auSymClk),
+    .qSym2xEn(),
+    .qSymEn(),
+    .qSymClk(),
     .qBit(sc_qBit)
     );
 
@@ -905,7 +905,7 @@ always @* begin
     else begin
         case (demodMode)
             `MODE_AQPSK,
-            `MODE_AUQPSK:   dout_q = qData;
+            `MODE_AUQPSK:   dout_q = qBitReg;
             default:        dout_q = decQ;
             endcase
         end

@@ -35,6 +35,11 @@ module demod(
     dac2Sync,
     dac2Data,
     demodMode,
+    `ifdef ADD_SCPATH
+    enableScPath,
+    iBBOut, qBBOut,
+    bbClkEnOut,
+    `endif
     `ifdef ADD_DESPREADER
     iEpoch,qEpoch,
     `endif
@@ -78,6 +83,11 @@ output  [17:0]  dac1Data;
 output          dac2Sync;
 output  [17:0]  dac2Data;
 output  [4:0]   demodMode;
+`ifdef ADD_SCPATH
+output          enableScPath;
+output  [17:0]  iBBOut, qBBOut;
+output          bbClkEnOut;
+`endif
 `ifdef ADD_DESPREADER
 output          iEpoch, qEpoch;
 `endif
@@ -167,8 +177,8 @@ ddc ddc(
     .iBB(iBB), .qBB(qBB),
     .iIn(iRx), .qIn(qRx),
     `ifdef ADD_SCPATH
-    .iLagOut(iLagOut), .qLagOut(qLagOut),
-    .lagClkEn(ddcLagClkEn),
+    .iLagOut(iBBOut), .qLagOut(qBBOut),
+    .lagClkEn(bbClkEnOut),
     `endif
     .syncOut(ddcSync),
     .iOut(iDdc), .qOut(qDdc)
@@ -496,7 +506,7 @@ wire    [15:0]  dsSyncCount,dsSwapSyncCount;
 dualDespreader despreader(
     .clk(clk), 
     .clkEn(resampSync), .qClkEn(qSym2xEn),
-    .symEn(iSymEn),     .qSymEn(qSymEn),
+    .symEn(iSymEn),   .qSymEn(qSymEn),
     .reset(reset),
     .wr0(wr0) , .wr1(wr1), .wr2(wr2), .wr3(wr3),
     .addr(addr),
@@ -614,6 +624,7 @@ bitsync bitsync(
     );
 
 `ifdef ADD_DESPREADER
+
 reg             auSymClk;
 reg             auBit;
 reg     [17:0]  iSymData;
@@ -648,7 +659,9 @@ always @* begin
         auBit = qBit;
     end
 end
-`else
+
+`else  // ADD_DESPREADER
+
 wire            auSymClk = qSymClk;
 wire            auBit = qBit;
 wire    [17:0]  iSymData = iBsSymData;
@@ -676,119 +689,6 @@ assign qEye = cordicModes ? qSymData : qResamp;
 
 `endif // SUBCARRIER_DEMOD
 
-
-`ifdef ADD_SCPATH
-/******************************************************************************
-                                Downconverter
-******************************************************************************/
-wire    [17:0]  iScDdc,qScDdc;
-wire    [20:0]  scAgcGain;
-wire    [31:0]  scLeadFreq;
-wire    [31:0]  scDdcDout;
-scDdc scDdc(
-    .clk(clk), .reset(reset),
-    .wr0(wr0) , .wr1(wr1), .wr2(wr2), .wr3(wr3),
-    .addr(addr),
-    .din(din),
-    .dout(scDdcDout),
-    .scFreq(scLeadFreq),
-    .offsetEn(scOffsetEn),
-    .nbAgcGain(scAgcGain),
-    .bbClkEn(ddcLagClkEn),
-    .iBB(iLagOut), .qBB(qLagOut),
-    .iOut(iScDdc), .qOut(qScDdc),
-    .syncOut(scDdcSync)
-    );
-
-/******************************************************************************
-                            Narrowband Channel AGC
-******************************************************************************/
-wire    [31:0]  scAgcDout;
-channelAGC scChannelAGC(
-    .clk(clk), .reset(reset), .syncIn(scDdcSync),
-    .wr0(wr0) , .wr1(wr1), .wr2(wr2), .wr3(wr3),
-    .addr(addr),
-    .din(din),
-    .dout(scAgcDout),
-    .iIn(iScDdc),.qIn(qScDdc),
-    .agcGain(scAgcGain)
-    );
-
-
-/******************************************************************************
-                           Phase/Freq/Mag Detector
-******************************************************************************/
-wire    [11:0]   scPhase;
-wire    [11:0]   scFreq;
-wire    [11:0]   negScFreq = ~scFreq + 1;
-wire    [17:0]   scFM = {negScFreq,6'h0};
-fmDemod scDemod(
-    .clk(clk), .reset(reset), 
-    .sync(scDdcSync),
-    .iFm(iScDdc),.qFm(qScDdc),
-    .demodMode(demodMode),
-    .phase(scPhase),
-    .phaseError(),
-    .freq(scFreq),
-    .freqError(),
-    .mag(),
-    .syncOut(scDemodSync)
-    );
-reg     [17:0]  interpData;
-reg             scInterpClkEn;
-always @(posedge clk) begin
-    case (dac2Select)
-        `DAC_FREQ: begin
-            interpData <= scFM;
-            scInterpClkEn <= scDemodSync;
-            end
-        `DAC_PHASE: begin
-            interpData <= {scPhase,6'b0};
-            scInterpClkEn <= scDemodSync;
-            end
-        endcase
-    end
-wire    [31:0]  scInterpDout;
-wire    [17:0]  scInterpData;
-interpolate #(.RegSpace(`INTERP2SPACE), .FirRegSpace(`VIDFIR2SPACE)) scInterp(
-    .clk(clk), .reset(reset), .clkEn(scInterpClkEn),
-    .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
-    .addr(addr),
-    .din(dataIn),
-    .dout(scInterpDout),
-    .dataIn(interpData),
-    .dataOut(scInterpData)
-    );
-
-
-
-/******************************************************************************
-                             AFC/Sweep/Costas Loop
-******************************************************************************/
-wire    [31:0]  scFreqDout;
-carrierLoop scCarrierLoop(
-    .clk(clk), .reset(reset),
-    .resampSync(),
-    .ddcSync(scDemodSync),
-    .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
-    .addr(addr),
-    .din(din),
-    .dout(scFreqDout),
-    .demodMode(demodMode),
-    .phase(phase),
-    .freq(freq),
-    .highFreqOffset(highFreqOffset),
-    .offsetError(),
-    .offsetErrorEn(),
-    .carrierFreqOffset(),
-    .carrierLeadFreq(scLeadFreq),
-    .carrierFreqEn(scOffsetEn),
-    .loopError(),
-    .carrierLock(scCarrierLock),
-    .lockCounter()
-    );
-
-`endif //ADD_SCPATH
 
 /******************************************************************************
                                DAC Output Mux
@@ -1026,22 +926,6 @@ always @(posedge clk) begin
             dac2Sync <= resampSync;
             end
         `DAC_FREQ: begin
-            `ifdef ADD_SCPATH
-            if (enableScPath) begin
-                dac2Data <= scInterpData;
-                dac2Sync <= 1'b1;
-                end
-            else begin
-                if (fmMode) begin
-                    dac2Data <= fmVideo;
-                    dac2Sync <= ddcSync;
-                    end
-                else begin
-                    dac2Data <= fm;
-                    dac2Sync <= demodSync;
-                    end
-                end
-            `else
             if (fmMode) begin
                 dac2Data <= fmVideo;
                 dac2Sync <= ddcSync;
@@ -1050,22 +934,10 @@ always @(posedge clk) begin
                 dac2Data <= fm;
                 dac2Sync <= demodSync;
                 end
-            `endif
             end
         `DAC_PHASE: begin
-            `ifdef ADD_SCPATH
-            if (enableScPath) begin
-                dac2Data <= scInterpData;
-                dac2Sync <= 1'b1;
-                end
-            else begin
-                dac2Data <= {phase,6'b0};
-                dac2Sync <= demodSync;
-                end
-            `else
             dac2Data <= {phase,6'b0};
             dac2Sync <= demodSync;
-            `endif
             end
         `DAC_MAG: begin
             //dac2Data <= {~mag[8],mag[7:0],9'b0};
@@ -1120,22 +992,9 @@ always @* begin
         `VIDFIRSPACE:       dout = firDout;
         `endif
         `CHAGCSPACE:        dout = nbAgcDout;
-        `ifdef ADD_SCPATH
         `CICDECSPACE,
         `DDCFIRSPACE,
         `DDCSPACE:          dout = ddcDout;
-        `SCAGCSPACE:        dout = scAgcDout;
-        `SCCICDECSPACE,
-        `SCDDCFIRSPACE,
-        `SCDDCSPACE:        dout = scDdcDout;
-        `SCCARRIERSPACE:    dout = scFreqDout;
-        `INTERP2SPACE,
-        `VIDFIR2SPACE:      dout = scInterpDout;      
-        `else
-        `CICDECSPACE,
-        `DDCFIRSPACE,
-        `DDCSPACE:          dout = ddcDout;
-        `endif
         `RESAMPSPACE:       dout = resampDout;
         `BITSYNCAUSPACE,
         `BITSYNCSPACE:      dout = bitsyncDout;

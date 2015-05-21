@@ -11,6 +11,8 @@ module channelAGC(
     agcGain
     );
 
+parameter RegSpace = `CHAGCSPACE;
+
 input           clk,reset,syncIn;
 input           wr0,wr1,wr2,wr3;
 input   [12:0]  addr;
@@ -145,7 +147,7 @@ end
 reg chAgcSpace;
 always @* begin
     casex(addr)
-        `CHAGCSPACE:        chAgcSpace = 1;
+        RegSpace:           chAgcSpace = 1;
         default:            chAgcSpace = 0;
         endcase
     end

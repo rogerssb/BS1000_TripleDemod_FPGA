@@ -73,7 +73,7 @@ output  [17:0]  iTrellis;
 output  [17:0]  qTrellis;  
 output          legacyBit;
 
-parameter VER_NUMBER = 16'h0185;
+parameter VER_NUMBER = 16'h0188;
 
 wire    [12:0]  addr = {addr12,addr11,addr10,addr9,addr8,addr7,addr6,addr5,addr4,addr3,addr2,addr1,1'b0};
 wire            nWr = nWe;
@@ -290,13 +290,15 @@ always @(posedge clk) begin
 wire    [17:0]  demod0Out,demod1Out,demod2Out;
 wire    [31:0]  demodDout;
 wire    [4:0]   demodMode;
-wire            pcmTrellisMode = (demodMode == `MODE_PCMTRELLIS);
-wire            soqpskTrellisMode = (demodMode == `MODE_SOQPSK);
 wire            multihMode = (demodMode == `MODE_MULTIH);
 
 wire    [3:0]   dac0Select,dac1Select,dac2Select;
 wire    [17:0]  iSymData,qSymData;
 wire            iBit,qBit;
+
+`ifdef ADD_SCPATH
+wire    [17:0]  iScPath,qScPath;
+`endif
 
 wire    [17:0]  iEye,qEye;
 wire    [4:0]   eyeOffset;
@@ -307,7 +309,7 @@ wire    [31:0]  avgDeviation;
 
 demod demod(
     .clk(clk), .reset(reset),
-    .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+    .wr0(wr0 & !addr12), .wr1(wr1 & !addr12), .wr2(wr2 & !addr12), .wr3(wr3 & !addr12),
     .addr(addr),
     .din(dataIn),
     .dout(demodDout),
@@ -337,6 +339,11 @@ demod demod(
     .trellisSymSync(trellisSymSync),
     .iTrellis(iSymData),
     .qTrellis(qSymData),
+    `ifdef ADD_SCPATH
+    .enableScPath(enableScPath),
+    .iBBOut(iScPath), .qBBOut(qScPath),
+    .bbClkEnOut(scPathClkEn),
+    `endif
     `ifdef ADD_DESPREADER
     .iEpoch(iEpoch), .qEpoch(qEpoch),
     `endif
@@ -346,6 +353,44 @@ demod demod(
     );
 
 assign bsync_nLock = !bitsyncLock;
+
+`ifdef ADD_SCPATH
+//******************************************************************************
+//                           Subcarrier Demod IF Path
+//******************************************************************************
+
+wire    [17:0]  scDemodOut;
+wire    [31:0]  scPathDout;
+scIfPath scIfPath(
+    .clk(clk), .reset(reset),
+    .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+    .addr(addr),
+    .din(dataIn),
+    .dout(scPathDout),
+    .bbClkEn(scPathClkEn),
+    .iBB(iScPath), .qBB(qScPath),
+    .demodMode(demodMode),
+    .scDemodOut(scDemodOut),
+    .scClkEn(scClkEn)
+    );
+
+`define ADD_SCINTERP
+`ifdef ADD_SCINTERP
+wire    [31:0]  scInterpDout;
+wire    [17:0]  interpData;
+interpolate #(.RegSpace(`INTERP2SPACE), .FirRegSpace(`VIDFIR2SPACE)) scInterp(
+    .clk(clk), .reset(reset), .clkEn(scClkEn),
+    .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+    .addr(addr),
+    .din(dataIn),
+    .dout(scInterpDout),
+    .dataIn(scDemodOut),
+    .dataOut(interpData),
+    .clkEnOut(interpClkEn)
+    );
+`endif
+
+`endif
 
 //******************************************************************************
 //                           MultiH Carrier Loop
@@ -461,32 +506,6 @@ always @(posedge clk) begin
 //                              DAC Outputs
 //******************************************************************************
 
-reg dac0CS,dac1CS,dac2CS;
-always @* begin
-    casex (addr)
-        `INTERP0SPACE: begin
-            dac0CS = 1;
-            dac1CS = 0;
-            dac2CS = 0;
-            end
-        `INTERP1SPACE: begin
-            dac0CS = 0;
-            dac1CS = 1;
-            dac2CS = 0;
-            end
-        `INTERP2SPACE: begin
-            dac0CS = 0;
-            dac1CS = 0;
-            dac2CS = 1;
-            end
-        default: begin
-            dac0CS = 0;
-            dac1CS = 0;
-            dac2CS = 0;
-            end
-        endcase
-    end
-
 reg     [17:0]  dac0Out,dac1Out,dac2Out;
 reg             dac0Sync,dac1Sync,dac2Sync;
 always @(posedge clk) begin
@@ -506,7 +525,20 @@ always @(posedge clk) begin
         dac1Out <= demod1Out;
         dac1Sync <= demod1Sync;
         end
+    `ifdef ADD_SCPATH
+    if (enableScPath) begin
+        `ifdef ADD_SCINTERP
+        dac2Out <= interpData;
+        dac2Sync <= 1'b1;
+        `else
+        dac2Out <= scDemodOut;
+        dac2Sync <= scClkEn;
+        `endif
+        end
+    else if (multihDac2En && multihMode) begin
+    `else
     if (multihDac2En && multihMode) begin
+    `endif
         dac2Out <= multihDac2Data;
         dac2Sync <= multihDac2Sync;
         end
@@ -546,6 +578,38 @@ FDCE dac1_d_11 (.Q(dac1_d[11]),  .C(clk),  .CE(dac1Sync),  .CLR(1'b0), .D(dac1Ou
 FDCE dac1_d_12 (.Q(dac1_d[12]),  .C(clk),  .CE(dac1Sync),  .CLR(1'b0), .D(dac1Out[16]));
 FDCE dac1_d_13 (.Q(dac1_d[13]),  .C(clk),  .CE(dac1Sync),  .CLR(1'b0), .D(dac1Out[17]));
 
+//`define USE_SC_INTERP
+`ifdef USE_SC_INTERP
+wire    [31:0]  interpDout;
+wire    [17:0]  interpData;
+interpolate #(.RegSpace(`INTERP2SPACE), .FirRegSpace(`VIDFIR2SPACE)) scInterp(
+    .clk(clk), .reset(reset), .clkEn(dac2Sync),
+    .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+    .addr(addr),
+    .din(dataIn),
+    .dout(scInterpDout),
+    .dataIn(dac2Out),
+    .dataOut(interpData),
+    .clkEnOut(interpClkEn)
+    );
+
+
+FDCE dac2_d_0  (.Q(dac2_d[0]),   .C(clk),  .CE(interpClkEn),  .CLR(1'b0), .D(interpData[4]));
+FDCE dac2_d_1  (.Q(dac2_d[1]),   .C(clk),  .CE(interpClkEn),  .CLR(1'b0), .D(interpData[5]));
+FDCE dac2_d_2  (.Q(dac2_d[2]),   .C(clk),  .CE(interpClkEn),  .CLR(1'b0), .D(interpData[6]));
+FDCE dac2_d_3  (.Q(dac2_d[3]),   .C(clk),  .CE(interpClkEn),  .CLR(1'b0), .D(interpData[7]));
+FDCE dac2_d_4  (.Q(dac2_d[4]),   .C(clk),  .CE(interpClkEn),  .CLR(1'b0), .D(interpData[8]));
+FDCE dac2_d_5  (.Q(dac2_d[5]),   .C(clk),  .CE(interpClkEn),  .CLR(1'b0), .D(interpData[9]));
+FDCE dac2_d_6  (.Q(dac2_d[6]),   .C(clk),  .CE(interpClkEn),  .CLR(1'b0), .D(interpData[10]));
+FDCE dac2_d_7  (.Q(dac2_d[7]),   .C(clk),  .CE(interpClkEn),  .CLR(1'b0), .D(interpData[11]));
+FDCE dac2_d_8  (.Q(dac2_d[8]),   .C(clk),  .CE(interpClkEn),  .CLR(1'b0), .D(interpData[12]));
+FDCE dac2_d_9  (.Q(dac2_d[9]),   .C(clk),  .CE(interpClkEn),  .CLR(1'b0), .D(interpData[13]));
+FDCE dac2_d_10 (.Q(dac2_d[10]),  .C(clk),  .CE(interpClkEn),  .CLR(1'b0), .D(interpData[14]));
+FDCE dac2_d_11 (.Q(dac2_d[11]),  .C(clk),  .CE(interpClkEn),  .CLR(1'b0), .D(interpData[15]));
+FDCE dac2_d_12 (.Q(dac2_d[12]),  .C(clk),  .CE(interpClkEn),  .CLR(1'b0), .D(interpData[16]));
+FDCE dac2_d_13 (.Q(dac2_d[13]),  .C(clk),  .CE(interpClkEn),  .CLR(1'b0), .D(interpData[17]));
+
+`else
 FDCE dac2_d_0  (.Q(dac2_d[0]),   .C(clk),  .CE(dac2Sync),  .CLR(1'b0), .D(dac2Out[4]));
 FDCE dac2_d_1  (.Q(dac2_d[1]),   .C(clk),  .CE(dac2Sync),  .CLR(1'b0), .D(dac2Out[5]));
 FDCE dac2_d_2  (.Q(dac2_d[2]),   .C(clk),  .CE(dac2Sync),  .CLR(1'b0), .D(dac2Out[6]));
@@ -560,7 +624,7 @@ FDCE dac2_d_10 (.Q(dac2_d[10]),  .C(clk),  .CE(dac2Sync),  .CLR(1'b0), .D(dac2Ou
 FDCE dac2_d_11 (.Q(dac2_d[11]),  .C(clk),  .CE(dac2Sync),  .CLR(1'b0), .D(dac2Out[15]));
 FDCE dac2_d_12 (.Q(dac2_d[12]),  .C(clk),  .CE(dac2Sync),  .CLR(1'b0), .D(dac2Out[16]));
 FDCE dac2_d_13 (.Q(dac2_d[13]),  .C(clk),  .CE(dac2Sync),  .CLR(1'b0), .D(dac2Out[17]));
-
+`endif
 
 //******************************************************************************
 //                        SDI Output Interface
@@ -606,23 +670,41 @@ always @* begin
     `BITSYNCAUSPACE,
     `RESAMPSPACE,
     `CARRIERSPACE,
+    `CHAGCSPACE : begin
+        if (!addr[12]) begin
+            if (addr[1]) begin
+                rd_mux = demodDout[31:16];
+                end
+            else begin
+                rd_mux = demodDout[15:0];
+                end
+            end
+        end
     `ifdef ADD_SCPATH
     `SCDDCSPACE,
     `SCDDCFIRSPACE,
     `SCCICDECSPACE,
     `SCAGCSPACE,
-    `SCCARRIERSPACE,
-    `INTERP2SPACE,
-    `VIDFIR2SPACE,
-    `endif
-    `CHAGCSPACE : begin
+    `SCCARRIERSPACE: begin
       if (addr[1]) begin
-        rd_mux = demodDout[31:16];
+        rd_mux = scPathDout[31:16];
         end
       else begin
-        rd_mux = demodDout[15:0];
+        rd_mux = scPathDout[15:0];
         end
       end
+    `endif
+    `ifdef USE_SC_INTERP
+    `INTERP2SPACE,
+    `VIDFIR2SPACE: begin
+      if (addr[1]) begin
+        rd_mux = scInterpDout[31:16];
+        end
+      else begin
+        rd_mux = scInterpDout[15:0];
+        end
+    end
+    `endif
     `TRELLISLFSPACE,
     `TRELLIS_SPACE: begin
          if (addr[1]) begin

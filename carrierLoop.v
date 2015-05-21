@@ -23,6 +23,8 @@ module carrierLoop(
     lockCounter
     );
 
+parameter RegSpace = `CARRIERSPACE;
+
 input           clk;
 input           reset;
 input           ddcSync;
@@ -50,7 +52,7 @@ output  [15:0]  lockCounter;
 reg freqLoopSpace;
 always @* begin
     casex(addr)
-        `CARRIERSPACE:  freqLoopSpace = 1;
+        RegSpace:       freqLoopSpace = 1;
         default:        freqLoopSpace = 0;
         endcase
     end

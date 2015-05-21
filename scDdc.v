@@ -37,21 +37,10 @@ output  [17:0]  qOut;
 
 // Microprocessor interface
 reg ddcSpace;
-reg ddcFirSpace;
 always @* begin
     casex(addr)
-        `SCDDCSPACE: begin
-            ddcSpace    = 1;
-            ddcFirSpace = 0;
-            end
-        `SCDDCFIRSPACE: begin
-            ddcSpace    = 0;
-            ddcFirSpace = 1;
-            end
-        default:   begin
-            ddcSpace    = 0;
-            ddcFirSpace = 0;
-            end
+        `SCDDCSPACE: ddcSpace    = 1;
+        default:     ddcSpace    = 0;
         endcase
     end
 
@@ -236,9 +225,8 @@ always @(posedge clk) begin
 
 wire    [31:0]  ddcFirDout;
 wire    [17:0]  iFir,qFir;
-dualFir dualFir ( 
+dualFir #(.RegSpace(`SCDDCFIRSPACE)) dualFir ( 
     .clk(clk), .reset(reset), .syncIn(firClockEn),
-    .cs(ddcFirSpace), 
     .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
     .addr(addr),
     .din(din),
