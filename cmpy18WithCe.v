@@ -1,3 +1,11 @@
+/******************************************************************************
+Copyright 2008-2015 Koos Technical Services, Inc. All Rights Reserved
+
+This source code is the Intellectual Property of Koos Technical Services,Inc. 
+(KTS) and is provided under a License Agreement which protects KTS' ownership and
+derivative rights in exchange for negotiated compensation.
+******************************************************************************/
+
 module cmpy18WithCe(clk,reset,ce,aReal,aImag,bReal,bImag,pReal,pImag);
 
 input clk;

@@ -1,3 +1,11 @@
+% /******************************************************************************
+% Copyright 2008-2015 Koos Technical Services, Inc. All Rights Reserved
+% 
+% This source code is the Intellectual Property of Koos Technical Services,Inc. 
+% (KTS) and is provided under a License Agreement which protects KTS' ownership and
+% derivative rights in exchange for negotiated compensation.
+% ******************************************************************************/
+
 % This generates the filter coefficients for the resampler. The resampler accepts an
 % input sample rate, fi, between of 2*fo > fi > fo, where fo is the output sample rate.
 
