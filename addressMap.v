@@ -187,12 +187,12 @@
 `define REBOOT_ADDR     13'bx_xxxx_xxx0_11xx
 `define MISC_TYPE       13'bx_xxxx_xxx1_000x
 // FPGA Image Types
-// NOTE: Multi H is listed as 0 because we don't want to rebuild the image to 
-// add the readback circuitry and it defaults to 0
-`define MULTIH_DEMOD_IMAGE          16'h0
-`define LEGACY_DEMOD_IMAGE          16'h1
-`define TRELLIS_DEMOD_IMAGE         16'h2
-`define TWOCHANNEL_SCDEMOD_IMAGE    16'h3
+// NOTE: Multi H is listed as 3 because we don't want to rebuild the image to 
+// add the readback circuitry and it defaults to 3
+`define LEGACY_DEMOD_IMAGE          16'h0
+`define TRELLIS_DEMOD_IMAGE         16'h1
+`define TWOCHANNEL_SCDEMOD_IMAGE    16'h2
+`define MULTIH_DEMOD_IMAGE          16'h3
 
 // Define the DAC control locations
 `define DAC_WDATA       13'bx_xxxx_xxxx_x00x
