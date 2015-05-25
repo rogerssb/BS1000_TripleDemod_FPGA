@@ -1,0 +1,61 @@
+BEGIN MODEL despreaderTop
+
+Net "legacyBit_pad" IOB = TRUE;
+Net "trellisSymSync_pad" IOB = TRUE ;
+Net "iSym2xEn_pad" IOB = TRUE ;
+Net "iSymData_pad<17>" IOB = TRUE ;
+Net "iSymData_pad<16>" IOB = TRUE ;
+Net "iSymData_pad<15>" IOB = TRUE ;
+Net "iSymData_pad<14>" IOB = TRUE ;
+Net "iSymData_pad<13>" IOB = TRUE ;
+Net "iSymData_pad<12>" IOB = TRUE ;
+Net "iSymData_pad<11>" IOB = TRUE ;
+Net "iSymData_pad<10>" IOB = TRUE ;
+Net "iSymData_pad<9>" IOB = TRUE ;
+Net "iSymData_pad<8>" IOB = TRUE ;
+Net "iSymData_pad<7>" IOB = TRUE ;
+Net "iSymData_pad<6>" IOB = TRUE ;
+Net "iSymData_pad<5>" IOB = TRUE ;
+Net "iSymData_pad<4>" IOB = TRUE ;
+Net "iSymData_pad<3>" IOB = TRUE ;
+Net "iSymData_pad<2>" IOB = TRUE ;
+Net "iSymData_pad<1>" IOB = TRUE ;
+Net "iSymData_pad<0>" IOB = TRUE ;
+Net "qSymData_pad<17>" IOB = TRUE ;
+Net "qSymData_pad<16>" IOB = TRUE ;
+Net "qSymData_pad<15>" IOB = TRUE ;
+Net "qSymData_pad<14>" IOB = TRUE ;
+Net "qSymData_pad<13>" IOB = TRUE ;
+Net "qSymData_pad<12>" IOB = TRUE ;
+Net "qSymData_pad<11>" IOB = TRUE ;
+Net "qSymData_pad<10>" IOB = TRUE ;
+Net "qSymData_pad<9>" IOB = TRUE ;
+Net "qSymData_pad<8>" IOB = TRUE ;
+Net "qSymData_pad<7>" IOB = TRUE ;
+Net "qSymData_pad<6>" IOB = TRUE ;
+Net "qSymData_pad<5>" IOB = TRUE ;
+Net "qSymData_pad<4>" IOB = TRUE ;
+Net "qSymData_pad<3>" IOB = TRUE ;
+Net "qSymData_pad<2>" IOB = TRUE ;
+Net "qSymData_pad<1>" IOB = TRUE ;
+Net "qSymData_pad<0>" IOB = TRUE ;
+
+NET "dataSymEn"   IOB = TRUE;
+NET "dataSym2xEn" IOB = TRUE;
+NET "iData"       IOB = TRUE;
+NET "qData"       IOB = TRUE;
+NET "auSymClk"    IOB = TRUE;
+
+NET "multihPhaseError<0>"  IOB = TRUE;
+NET "multihPhaseError<1>"  IOB = TRUE;
+NET "multihPhaseError<2>"  IOB = TRUE;
+NET "multihPhaseError<3>"  IOB = TRUE;
+NET "multihPhaseError<4>"  IOB = TRUE;
+NET "multihPhaseError<5>"  IOB = TRUE;
+NET "multihPhaseError<6>"  IOB = TRUE;
+NET "multihPhaseError<7>"  IOB = TRUE;
+
+NET "multihPhaseErrorEn"     IOB = TRUE;
+NET "multihPhaseErrorValid"  IOB = TRUE;
+
+END;

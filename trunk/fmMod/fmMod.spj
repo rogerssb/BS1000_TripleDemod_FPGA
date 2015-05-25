@@ -1,0 +1,79 @@
+[Options]
+DebugEnable=No
+SimFileSize=
+NoFloatWarn=Yes
+DigitalThreshold=
+[Settings]
+Version=Silvaco4.10.0.R
+LintOptionsFile=
+DisableCache=
+SimFile=
+[Spice]
+[DebugMode]
+CommandLine=+define+SIMULATE
+RecirculateTime=
+UseRecirculateTime=
+DiskSize=1000M
+[Analyzer]
+C0Width=147
+C1Width=58
+C2Width=80
+MinScale=
+MaxScale=
+SymbolFile=
+GotoSource=N
+[View]
+1=Last 0.000ns 600833.853ns 21268.455ns 439193.595ns 95546.177ns
+[LibraryFiles]
+0=..\..\..\Xilinx\10.1\ISE\verilog\src\unisims\{.v}
+[Plusargs]
+0=
+[Define]
+[Group0]
+Name="Default"
+0="test.fmMod.cicInterpolate : acc2Real" default Real AnalogDisplay AType=Step Scale=Auto
+1="test.fmMod.cicInterpolate : acc1Real" default Real AnalogDisplay AType=Step Scale=Auto
+2="test.fmMod.cicInterpolate : acc0Real" default Real AnalogDisplay AType=Step Scale=Auto
+3="test.fmMod.cicInterpolate : sum3Real" default Real AnalogDisplay AType=Step Scale=Auto
+4="test.fmMod.cicInterpolate : tap2Real" default Real AnalogDisplay AType=Step Scale=Auto
+5="test.fmMod.cicInterpolate : tap1Real" default Real AnalogDisplay AType=Step Scale=Auto
+6="test.fmMod.cicInterpolate : tap0Real" default Real AnalogDisplay AType=Step Scale=Auto
+7="test.fmMod.cicInterpolate : dOut[33:0]" default
+8="test.fmMod.cicInterpolate : tap0[19:0]" default
+9="test.fmMod.cicInterpolate : tap1[20:0]" default
+10="test.fmMod.cicInterpolate : tap2[21:0]" default
+11="test.fmMod.cicInterpolate : tap3[22:0]" default
+12="test.fmMod.cicInterpolate : dIn[17:0]" default
+13="test.fmMod.cicInterpolate : clk" default
+14="test.fmMod.cicInterpolate : clkEn" default
+15="test.fmMod.cicInterpolate : reset" default
+16="test.fmMod.cicInterpolate : dOut[33:0]" default
+17="test.fmMod : interpReal" default Real AnalogDisplay AType=Step Scale=Auto
+18="test.fmMod : bitrateDiv[15:0]" default
+19="test.dds : qDdsReal" default Real AnalogDisplay AType=Step Scale=Auto
+20="test.dds : iDdsReal" default Real AnalogDisplay AType=Step Scale=Auto
+21="test.fmMod : modSampleEn" default
+22="test.fmMod : modValue[7:0]" default
+23="test.fmMod : shapingFirOut[17:0]" default
+24="test.fmMod : shapedReal" default Real AnalogDisplay AType=Step Scale=Auto
+25="test.fmMod : modDataValid" default
+26="test.fmMod : modValue[1:0]" default
+27="test : deviationQ31[31:0]" default
+28="test.fmMod : modFreq[31:0]" default
+29="test.fmMod : modData" default
+30="test.fmMod : modClkOut" default
+31="test.fmMod : reset" default
+OpenGroup=Yes
+[Files]
+0=test.v
+1=fmMod.v
+2=micro.v
+3=..\dds.v
+4=..\coregen\shapingFir.v
+5=..\coregen\mpy18x18.v
+6=..\coregen\nco.v
+7=cicInterpolate.v
+8=shift34to18.v
+[GroupInfo]
+0=Default : 0 : 1 : 0
+[Bookmarks]

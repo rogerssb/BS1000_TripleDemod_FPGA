@@ -1,0 +1,16 @@
+# Output products list for <decoder_output_fifo>
+_xmsgs\
+decoder_output_fifo.asy
+decoder_output_fifo.gise
+decoder_output_fifo.ise
+decoder_output_fifo.ngc
+decoder_output_fifo.sym
+decoder_output_fifo.v
+decoder_output_fifo.veo
+decoder_output_fifo.xco
+decoder_output_fifo.xise
+decoder_output_fifo_flist.txt
+decoder_output_fifo_readme.txt
+decoder_output_fifo_xdb\tmp\
+decoder_output_fifo_xmdf.tcl
+fifo_generator_ug175.pdf

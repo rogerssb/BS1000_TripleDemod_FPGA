@@ -1,0 +1,13 @@
+# Output products list for <mult10x8>
+_xmsgs\
+mult10x8.gise
+mult10x8.ise
+mult10x8.ngc
+mult10x8.v
+mult10x8.veo
+mult10x8.xco
+mult10x8.xise
+mult10x8_flist.txt
+mult10x8_readme.txt
+mult10x8_xdb\tmp\
+mult10x8_xmdf.tcl

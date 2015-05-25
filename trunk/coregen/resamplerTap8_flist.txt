@@ -1,0 +1,11 @@
+# Output products list for <resamplerTap8>
+resamplerTap8.asy
+resamplerTap8.mif
+resamplerTap8.ngc
+resamplerTap8.sym
+resamplerTap8.v
+resamplerTap8.veo
+resamplerTap8.xco
+resamplerTap8_dist_mem_gen_v3_4_xst_1.ngc_xst.xrpt
+resamplerTap8_flist.txt
+resamplerTap8_xmdf.tcl

@@ -1,0 +1,10 @@
+# Output products list for <mult10x10>
+mult10x10.asy
+mult10x10.ngc
+mult10x10.sym
+mult10x10.v
+mult10x10.veo
+mult10x10.xco
+mult10x10_flist.txt
+mult10x10_mult_gen_v10_0_xst_1.ngc_xst.xrpt
+mult10x10_xmdf.tcl

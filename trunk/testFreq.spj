@@ -1,0 +1,52 @@
+[Options]
+DebugEnable=No
+NoFloatWarn=Yes
+[Settings]
+Version=Silvaco4.10.32.R
+VisualDebug=
+[Analyzer]
+SymbolFile=
+C0Width=165
+C1Width=58
+C2Width=99
+GotoSource=N
+[LibraryFiles]
+0=..\..\Xilinx\10.1\ISE\verilog\src\unisims\{.v}
+[View]
+1=Last 970626.384ns 971282.723ns 15.590ns 971229.894ns 970693.614ns
+[Files]
+0=vm_cordic.v
+1=testFreq.v
+2=.\coregen\dds.v
+3=lagGain12.v
+[Define]
+0=SIMULATE
+[Group0]
+Name="Default"
+0="test.lagGain : lagAccum[39:0]" default
+1="test : phase[11:0]" default
+2="test : phaseDiff[11:0]" default
+3="test : mag[12:0]" default
+4="test : x[13:0]" default
+5="test : y[13:0]" default
+6="test : freq[17:0]" default
+7="test : iDds[17:0]" default
+8="test : qDds[17:0]" default
+9="test : carrierFreq[31:0]" default
+10="test : clk" default
+11="test : clken" default
+12="test : freqOut[11:0]" default
+13="test : prevPhase[11:0]" default
+14="test : reset" default
+15="test : carrierFreqInt" default Decimal AnalogDisplay AType=PWL Scale=Auto
+16="test : carrierFreqHz" default Real AnalogDisplay AType=PWL Scale=Auto
+17="test : carrierFreqNorm" default Real AnalogDisplay AType=PWL Scale=Auto
+18="test : freqReal" default Real AnalogDisplay AType=Step Scale=Fixed MinScaleDbl=-0.001 MaxScaleDbl=0.001
+19="test : magReal" default Real AnalogDisplay AType=PWL Scale=Auto
+20="test : phaseReal" default Real AnalogDisplay AType=PWL Scale=Auto
+21="test : xReal" default Real AnalogDisplay AType=PWL Scale=Auto
+22="test : yReal" default Real AnalogDisplay AType=PWL Scale=Auto
+OpenGroup=Yes
+[GroupInfo]
+0=Default : 0 : 1 : 0
+[Bookmarks]

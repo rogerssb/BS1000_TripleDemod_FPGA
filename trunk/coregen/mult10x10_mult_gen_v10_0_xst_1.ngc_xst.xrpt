@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<document OS="nt" product="ISE" version="10.1.03">
+
+  <!--The data in this file is primarily intended for consumption by Xilinx tools.
+    The structure and the elements are likely to change over the next few releases.
+    This means code written to parse this file will need to be revisited each subsequent release.-->
+
+  <application stringID="Xst" timeStamp="Sat May 09 05:18:38 2009">
+    <section stringID="XST_HDL_SYNTHESIS_REPORT">
+      <item dataType="int" stringID="XST_ADDERSSUBTRACTORS" value="4"></item>
+      <item dataType="int" stringID="XST_REGISTERS" value="11"></item>
+      <item dataType="int" stringID="XST_XORS" value="55">
+        <item dataType="int" stringID="XST_1BIT_XOR2" value="55"/>
+      </item>
+    </section>
+    <section stringID="XST_ADVANCED_HDL_SYNTHESIS_REPORT">
+      <item dataType="int" stringID="XST_ADDERSSUBTRACTORS" value="4"></item>
+      <item dataType="int" stringID="XST_REGISTERS" value="174">
+        <item dataType="int" stringID="XST_FLIPFLOPS" value="174"/>
+      </item>
+      <item dataType="int" stringID="XST_XORS" value="55">
+        <item dataType="int" stringID="XST_1BIT_XOR2" value="55"/>
+      </item>
+    </section>
+    <section stringID="XST_FINAL_REGISTER_REPORT">
+      <item dataType="int" stringID="XST_REGISTERS" value="152">
+        <item dataType="int" stringID="XST_FLIPFLOPS" value="152"/>
+      </item>
+    </section>
+    <section stringID="XST_PARTITION_REPORT">
+      <section stringID="XST_PARTITION_IMPLEMENTATION_STATUS">
+        <section stringID="XST_NO_PARTITIONS_WERE_FOUND_IN_THIS_DESIGN"/>
+      </section>
+    </section>
+    <section stringID="XST_FINAL_REPORT">
+      <section stringID="XST_FINAL_RESULTS">
+        <item stringID="XST_TOP_LEVEL_OUTPUT_FILE_NAME" value="C:\modem\telemetry\coregen\tmp\_cg\mult10x10_mult_gen_v10_0_xst_1.ngc"/>
+        <item stringID="XST_OUTPUT_FORMAT" value="NGC"/>
+        <item stringID="XST_OPTIMIZATION_GOAL" value="SPEED"/>
+        <item stringID="XST_KEEP_HIERARCHY" value="no"/>
+      </section>
+      <section stringID="XST_DESIGN_STATISTICS">
+        <item stringID="XST_IOS" value="48"/>
+      </section>
+      <section stringID="XST_CELL_USAGE">
+        <item dataType="int" stringID="XST_BELS" value="384">
+          <item dataType="int" stringID="XST_GND" value="1"/>
+          <item dataType="int" stringID="XST_LUT2" value="57"/>
+          <item dataType="int" stringID="XST_LUT3" value="10"/>
+          <item dataType="int" stringID="XST_LUT4" value="45"/>
+          <item dataType="int" stringID="XST_MULTAND" value="55"/>
+          <item dataType="int" stringID="XST_MUXCY" value="103"/>
+          <item dataType="int" stringID="XST_VCC" value="1"/>
+          <item dataType="int" stringID="XST_XORCY" value="112"/>
+        </item>
+        <item dataType="int" stringID="XST_FLIPFLOPSLATCHES" value="152">
+          <item dataType="int" stringID="XST_FD" value="152"/>
+        </item>
+      </section>
+    </section>
+    <section stringID="XST_DEVICE_UTILIZATION_SUMMARY">
+      <item stringID="XST_SELECTED_DEVICE" value="3sd3400afg676-5"/>
+      <item AVAILABLE="23872" dataType="int" stringID="XST_NUMBER_OF_SLICES" value="112"/>
+      <item AVAILABLE="47744" dataType="int" stringID="XST_NUMBER_OF_SLICE_FLIP_FLOPS" value="152"/>
+      <item AVAILABLE="47744" dataType="int" stringID="XST_NUMBER_OF_4_INPUT_LUTS" value="112"/>
+      <item dataType="int" stringID="XST_NUMBER_OF_IOS" value="48"/>
+      <item AVAILABLE="469" dataType="int" stringID="XST_NUMBER_OF_BONDED_IOBS" value="0"/>
+    </section>
+    <section stringID="XST_PARTITION_RESOURCE_SUMMARY">
+      <section stringID="XST_NO_PARTITIONS_WERE_FOUND_IN_THIS_DESIGN"/>
+    </section>
+    <section stringID="XST_ERRORS_STATISTICS">
+      <item dataType="int" filtered="0" stringID="XST_NUMBER_OF_ERRORS" value="0"/>
+      <item dataType="int" filtered="0" stringID="XST_NUMBER_OF_WARNINGS" value="51"/>
+      <item dataType="int" filtered="0" stringID="XST_NUMBER_OF_INFOS" value="15"/>
+    </section>
+  </application>
+
+</document>

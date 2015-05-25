@@ -1,0 +1,10 @@
+# Output products list for <mpy18x18>
+mpy18x18.asy
+mpy18x18.ngc
+mpy18x18.sym
+mpy18x18.v
+mpy18x18.veo
+mpy18x18.xco
+mpy18x18_flist.txt
+mpy18x18_mult_gen_v10_0_xst_1.ngc_xst.xrpt
+mpy18x18_xmdf.tcl

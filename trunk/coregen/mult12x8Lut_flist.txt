@@ -1,0 +1,10 @@
+# Output products list for <mult12x8Lut>
+mult12x8Lut.asy
+mult12x8Lut.ngc
+mult12x8Lut.sym
+mult12x8Lut.v
+mult12x8Lut.veo
+mult12x8Lut.xco
+mult12x8Lut_flist.txt
+mult12x8Lut_mult_gen_v10_0_xst_1.ngc_xst.xrpt
+mult12x8Lut_xmdf.tcl
