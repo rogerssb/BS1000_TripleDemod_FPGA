@@ -73,7 +73,7 @@ output  [17:0]  iTrellis;
 output  [17:0]  qTrellis;  
 output          legacyBit;
 
-parameter VER_NUMBER = 16'h0189;
+parameter VER_NUMBER = 16'h018b;
 
 wire    [12:0]  addr = {addr12,addr11,addr10,addr9,addr8,addr7,addr6,addr5,addr4,addr3,addr2,addr1,1'b0};
 wire            nWr = nWe;
@@ -307,6 +307,7 @@ wire    [4:0]   eyeOffset;
 wire    [31:0]  avgDeviation;
 `endif
 
+wire    [17:0]  sdiDataI,sdiDataQ;
 demod demod(
     .clk(clk), .reset(reset),
     .wr0(wr0 & !addr12), .wr1(wr1 & !addr12), .wr2(wr2 & !addr12), .wr3(wr3 & !addr12),
@@ -326,9 +327,11 @@ demod demod(
     .dac1Data(demod1Out),
     .dac2Sync(demod2Sync),
     .dac2Data(demod2Out),
+    .iSymData(sdiDataI),
     .iSym2xEn(iSym2xEn),
     .iSymEn(iSymEn),
     .iBit(iBit),
+    .qSymData(sdiDataQ),
     .qSym2xEn(qSym2xEn),
     .qSymEn(qSymEn),
     .qBit(qBit),
@@ -642,9 +645,9 @@ sdi sdi(
     .dataIn(dataIn),
     .dataOut(sdiDout),
     .iSymEn(iSymEn),
-    .iSymData(iSymData),
+    .iSymData(sdiDataI),
     .qSymEn(qSymEn),
-    .qSymData(qSymData),
+    .qSymData(sdiDataQ),
     .eyeSync(eyeSync),
     .iEye(iEye),.qEye(qEye),
     .eyeOffset(eyeOffset),
