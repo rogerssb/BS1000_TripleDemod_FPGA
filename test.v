@@ -5,7 +5,7 @@
 //`define ADD_NOISE
 //`define BER_TEST
 //`define MATLAB_VECTORS
-`define TEST_SCPATH
+//`define TEST_SCPATH
 
 `ifdef BER_TEST
 !control .savsim=1
@@ -762,7 +762,7 @@ initial begin
     `endif
 
     // Enable the SDI in eye pattern mode
-    write32(createAddress(`SDISPACE,`SDI_CONTROL),32'h00000082);
+    write32(createAddress(`SDISPACE,`SDI_CONTROL),32'h00000081);
 
     // Wait for some data to pass thru
     write32(createAddress(`INTERP0SPACE, `INTERP_CONTROL), 32'h9);

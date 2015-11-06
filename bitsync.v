@@ -51,6 +51,7 @@ module bitsync(
     auBitsyncLock,
     auLockCounter,
     auIQSwap,
+    sdiSymEn,
     iTrellis,qTrellis,
     bsError,
     bsErrorEn
@@ -96,6 +97,7 @@ output  [15:0]  lockCounter;
 output          auBitsyncLock;
 output  [15:0]  auLockCounter;
 output          auIQSwap;
+output          sdiSymEn;
 output  [17:0]  iTrellis,qTrellis;
 output  [17:0]  bsError;
 output          bsErrorEn;
@@ -1089,6 +1091,7 @@ always @(posedge sampleClk) begin
 // Clock Enables
 assign iSym2xEn = symTimes2Sync;
 assign iSymEn = symTimes2Sync & timingErrorEn;
+assign sdiSymEn = symTimes2Sync & !timingErrorEn;
 assign iSymClk = timingErrorEn;
 assign qSym2xEn = auEnable ? auResampSync : symTimes2Sync;
 assign qSymEn = auEnable ? (auResampSync & auTimingErrorEn) : (symTimes2Sync & timingErrorEn);

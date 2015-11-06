@@ -151,10 +151,22 @@ always @(posedge clk) begin
 
 wire    [15:0]  iSym;
 reg             fifoReadEn;
-wire    [15:0]  iIn = (sdiMode == `SDI_MODE_CONSTELLATION) ? iSymData[17:2] : iEye[17:2];
-wire    [15:0]  qIn = (sdiMode == `SDI_MODE_CONSTELLATION) ? qSymData[17:2] : qEye[17:2];
-wire            wrEn = (sdiMode == `SDI_MODE_CONSTELLATION) ? iSymEn : (eyeEn && eyeSync);
 reg             fifoReset;
+reg     [15:0]  iIn,qIn;
+reg             wrEn;
+always @(posedge clk) begin
+    if (sdiMode == `SDI_MODE_CONSTELLATION) begin
+        iIn <= iSymData[17:2];
+        qIn <= qSymData[17:2];
+        wrEn <= iSymEn;
+    end
+    else begin
+        iIn <= iEye[17:2];
+        qIn <= qEye[17:2];
+        wrEn <= (eyeEn && eyeSync);
+    end
+end
+
 dataFifo iFifo (
     .srst(fifoReset), 
     .rd_en(fifoReadEn), 

@@ -73,7 +73,7 @@ output  [17:0]  iTrellis;
 output  [17:0]  qTrellis;  
 output          legacyBit;
 
-parameter VER_NUMBER = 16'h018b;
+parameter VER_NUMBER = 16'h0191;
 
 wire    [12:0]  addr = {addr12,addr11,addr10,addr9,addr8,addr7,addr6,addr5,addr4,addr3,addr2,addr1,1'b0};
 wire            nWr = nWe;
@@ -350,6 +350,7 @@ demod demod(
     `ifdef ADD_DESPREADER
     .iEpoch(iEpoch), .qEpoch(qEpoch),
     `endif
+    .sdiSymEn(sdiSymEn),
     .eyeSync(eyeSync),
     .iEye(iEye),.qEye(qEye),
     .eyeOffset(eyeOffset)
@@ -644,9 +645,9 @@ sdi sdi(
     .addr(addr),
     .dataIn(dataIn),
     .dataOut(sdiDout),
-    .iSymEn(iSymEn),
+    .iSymEn(sdiSymEn),
     .iSymData(sdiDataI),
-    .qSymEn(qSymEn),
+    .qSymEn(sdiSymEn),
     .qSymData(sdiDataQ),
     .eyeSync(eyeSync),
     .iEye(iEye),.qEye(qEye),

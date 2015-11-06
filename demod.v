@@ -51,6 +51,7 @@ module demod(
     `ifdef ADD_DESPREADER
     iEpoch,qEpoch,
     `endif
+    sdiSymEn,
     eyeSync,
     iEye,qEye,
     eyeOffset
@@ -99,6 +100,7 @@ output          bbClkEnOut;
 `ifdef ADD_DESPREADER
 output          iEpoch, qEpoch;
 `endif
+output          sdiSymEn;
 output          eyeSync;
 output  [17:0]  iEye,qEye;
 output  [4:0]   eyeOffset;
@@ -627,6 +629,7 @@ bitsync bitsync(
     .auBitsyncLock(auBitsyncLock),
     .auLockCounter(auLockCounter),
     .auIQSwap(auIQSwap),
+    .sdiSymEn(sdiSymEn),
     .iTrellis(iBsTrellis),.qTrellis(qBsTrellis),
     .bsError(bsError), .bsErrorEn(bsErrorEn)
     );
@@ -682,6 +685,8 @@ wire            timingLock = bitsyncLock;
 `ifdef SIMULATE
 real iTrellisReal;
 always @* iTrellisReal = $itor($signed(iTrellis))/(2.0**17);
+real iSymReal;
+always @* iSymReal = $itor($signed(iSymData))/(2.0**17);
 `endif
 
 assign trellisSymSync = iSymEn & resampSync;
