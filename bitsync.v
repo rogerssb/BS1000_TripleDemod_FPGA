@@ -1013,7 +1013,15 @@ reg             bitDataQ;
 always @(posedge sampleClk) begin
     if (symTimes2Sync) begin
         // Capture the I output sample
-        symDataI <= bbSRI[1];
+        if (fmModes) begin
+            symDataI <= freq;
+            end
+        else if (demodMode == `MODE_PM) begin
+            symDataI <= {phase,6'b0};
+            end
+        else begin
+            symDataI <= iMF;
+            end
         if (timingErrorEn) begin
             if (fmModes) begin
                 bitDataI <= ~bbSRI[1][17];
@@ -1034,8 +1042,16 @@ always @(posedge sampleClk) begin
     else begin
         if (symTimes2Sync) begin
             // Capture the Q output sample
+            if (fmModes) begin
+                symDataQ <= 0;
+                end
+            else if (demodMode == `MODE_PM) begin
+                symDataQ <= 0;
+                end
+            else begin
+                symDataQ <= qMF;
+                end
             if (demodMode == `MODE_MULTIH) begin
-                symDataQ <= bbSRQ[1];
                 if (timingErrorEn) begin
                     if (bbSRQ[1][17]) begin
                         bitDataQ <= (bbSRQ[1] < negMultihThreshold);
@@ -1046,7 +1062,6 @@ always @(posedge sampleClk) begin
                     end
                 end
             else begin
-                symDataQ <= bbSRQ[1];
                 if (timingErrorEn) begin
                     bitDataQ <= bbSRQ[1][17];
                     end
