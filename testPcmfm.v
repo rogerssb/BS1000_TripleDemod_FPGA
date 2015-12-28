@@ -2,7 +2,7 @@
 `timescale 1ns/100ps
 
 //`define ALDEC
-`define TRELLIS
+//`define TRELLIS
 
 `define ENABLE_AGC
 //`define ADD_NOISE
@@ -10,17 +10,17 @@
 //`define MATLAB_VECTORS
 
 `ifdef BER_TEST
-!control .savsim=1
-!mkeep (test
-!mexclude (test(demod
-!mexclude (test(trellis
+//!control .savsim=1
+//!mkeep (test
+//!mexclude (test(demod
+//!mexclude (test(trellis
 `endif
 
 module test;
 
 reg reset,clk,we0,we1,we2,we3,rd;
 reg sync;
-reg [11:0]a;
+reg [12:0]a;
 reg [31:0]d;
 wire [31:0]dout;
 
@@ -183,7 +183,7 @@ fmMod fmMod(
     .clk(clk), .reset(reset), 
     .cs(fmModCS),
     .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
-    .addr(a),
+    .addr(a[11:0]),
     .din(d),
     .dout(dout),
     .fskMode(2'b00),
@@ -329,7 +329,7 @@ assign qRx = qSignal + qNoise;
 /******************************************************************************
                             Instantiate the Demod
 ******************************************************************************/
-wire    [17:0]  dac0Out,dac1Out,dac2Out, iSymData, qSymData;
+wire    [17:0]  dac0Out,dac1Out,dac2Out, iSymData, qSymData, sdiDataI, sdiDataQ;
 demod demod( 
     .clk(clk), .reset(reset),
     .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
@@ -346,13 +346,26 @@ demod demod(
     .dac2Data(dac2Out),
     .iSymEn(symSync),
     .iSym2xEn(symTimes2Sync),
-//    .iSymData(iSymData),
-//    .qSymData(qSymData),
+    .iSymData(sdiDataI),
+    .qSymData(sdiDataQ),
+    .sdiSymEn(sdiSymEn),
     .trellisSymSync(trellisSymSync),
     .iTrellis(iSymData),
     .qTrellis(qSymData)                       
 
     );
+
+bepEstimate bep(
+  .clk(clk),
+  .reset(reset),
+  .wr0(we0),.wr1(we1),.wr2(we2),.wr3(we3),
+  .addr(a),
+  .dataIn(d),
+  .dataOut(),
+  .symEn(sdiSymEn),
+  .symData(sdiDataI)
+);
+
 
 reg dac0CS,dac1CS,dac2CS;
 always @(a) begin
@@ -382,9 +395,8 @@ always @(a) begin
 wire    [31:0]  dac0Dout;
 wire    [17:0]  dac0Data;
 reg             interpReset;
-interpolate dac0Interp(
+interpolate #(.RegSpace(`INTERP0SPACE), .FirRegSpace(`VIDFIR0SPACE)) dac0Interp(
     .clk(clk), .reset(interpReset), .clkEn(dac0Sync),
-    .cs(dac0CS),
     .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
     .addr(a),
     .din(d),
@@ -397,9 +409,8 @@ assign dac0_clk = clk;
 
 wire    [31:0]  dac1Dout;
 wire    [17:0]  dac1Data;
-interpolate dac1Interp(
+interpolate #(.RegSpace(`INTERP1SPACE), .FirRegSpace(`VIDFIR1SPACE))dac1Interp(
     .clk(clk), .reset(interpReset), .clkEn(dac1Sync),
-    .cs(dac1CS),
     .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
     .addr(a),
     .din(d),
@@ -412,9 +423,8 @@ assign dac1_clk = clk;
 
 wire    [31:0]  dac2Dout;
 wire    [17:0]  dac2Data;
-interpolate dac2Interp(
+interpolate #(.RegSpace(`INTERP2SPACE), .FirRegSpace(`VIDFIR2SPACE))dac2Interp(
     .clk(clk), .reset(interpReset), .clkEn(dac2Sync),
-    .cs(dac2CS),
     .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
     .addr(a),
     .din(d),
@@ -445,8 +455,8 @@ decoder decoder
   .fifo_rs(),
   .clk_inv()
   );
-`define TRELLIS
-`ifdef TRELLIS
+
+
 //******************************************************************************
 //                                 Trellis Decoder
 //******************************************************************************
@@ -462,7 +472,11 @@ always @(posedge clk) begin
 reg trellisReset;
 trellis trellis
   (
+`ifdef TRELLIS
    .clk          (clk),
+`else
+   .clk          (1'b0),
+`endif
    .reset        (trellisReset),
    .symEn        (symEn),
    .sym2xEn      (sym2xEn),
@@ -479,7 +493,6 @@ trellis trellis
    .decision     (decision),
    .symEnOut     (symEnTrellisOut)
    );
-`endif
                     
 /******************************************************************************
                        Delay Line for BER Testing
@@ -493,7 +506,11 @@ always @(posedge clk or reset) begin
         testZeroCount <= 5'b0;
         testSR <= MASK17;
         end
+    `ifdef TRELLIS
     else if (symEnTrellisOut) begin
+    `else
+    else if (symSync) begin
+    `endif
         if (testSR[0] | (testZeroCount == 5'b11111))
             begin
             testZeroCount <= 5'h0;
@@ -511,29 +528,46 @@ always @(posedge clk or reset) begin
 reg [127:0]delaySR;
 reg txDelay;
 always @(posedge clk) begin
+    `ifdef TRELLIS
     if (symEnTrellisOut) begin
         `ifdef IQ_MAG
         txDelay <= delaySR[19];
         `else
         txDelay <= delaySR[17];
         `endif  
+    `else
+    if (symSync) begin
+        txDelay <= delaySR[26];
+    `endif
         delaySR <= {delaySR[126:0],testData};
         end
     end
 
 reg testBits;  
 initial testBits = 0;
+reg     bitError;
 integer bitErrors;
 initial bitErrors = 0;
 integer testBitCount;
 initial testBitCount = 0;
 always @(posedge clk) begin
+    `ifdef TRELLIS
     if (symEnTrellisOut) begin
+    `else
+    if (symSync) begin
+    `endif
         if (testBits) begin
             testBitCount <= testBitCount + 1;
-            //if (demodBit != txDelay) begin
+            `ifdef TRELLIS
             if (decision != txDelay) begin
+            `else
+            if (demodBit != txDelay) begin
+            `endif
+                bitError <= 1;
                 bitErrors <= bitErrors + 1;
+                end
+            else begin
+                bitError <= 0;
                 end
             end
         end
@@ -566,15 +600,15 @@ always @(negedge clk) begin
                                 uP Read/Write Functions
 ******************************************************************************/
 
-function [11:0] createAddress;
-    input [11:0] addrA;
-    input [11:0] addrB;
+function [12:0] createAddress;
+    input [12:0] addrA;
+    input [12:0] addrB;
     
     integer i;
-    reg [11:0]finalAddress;
+    reg [12:0]finalAddress;
 
     begin
-    for (i = 0; i < 12; i = i+1) begin
+    for (i = 0; i < 13; i = i+1) begin
         if (addrA[i] === 1'bx) begin
             finalAddress[i] = addrB[i];
             end
@@ -591,7 +625,7 @@ endfunction
 
 
 task write16;
-  input [11:0]addr;
+  input [12:0]addr;
   input [15:0]data;
   begin
 
@@ -614,7 +648,7 @@ task write16;
 endtask
 
 task write32;
-  input [11:0]addr;
+  input [12:0]addr;
   input [31:0]data;
   begin
     a = addr;
@@ -629,7 +663,7 @@ task write32;
 endtask
 
 task read32;
-  input [11:0]addr;
+  input [12:0]addr;
   begin
     a = addr;
     rd = 0;
@@ -645,7 +679,7 @@ initial begin
     // The 11.5 is a fudge factor (should be 12 for the 2 bit shift) for the scaling 
     // down of the transmit waveform from full scale.
     // The 13.0 is to translate from SNR to EBNO which is 10log10(bitrate/bandwidth).
-    $initGaussPLI(1,8.0 + 11.5 - 7.0,131072.0);
+    $initGaussPLI(1,10.0 + 11.5 - 7.0,131072.0);
     `endif
     demod.ddc.hbReset = 1;
     demod.ddc.cicReset = 1;
@@ -737,6 +771,10 @@ initial begin
     write32(createAddress(`INTERP2SPACE, `INTERP_EXPONENT), 8);
     write32(createAddress(`INTERP2SPACE, `INTERP_MANTISSA), 32'h00012000);
 
+    // Bit Error Probability Estimator
+    write32(createAddress(`BEPSPACE, `BEP_BLOCK_SIZE),7);
+    write32(createAddress(`BEPSPACE, `BEP_MEAN_INVERSE),32'h0002_5b6e);
+
     reset = 1;
     #(2*C) ;
     reset = 0;
@@ -788,6 +826,11 @@ initial begin
     // Wait 2 bit periods
     #(10*bitrateSamplesInt*C) ;
 
+    // Clear the BEP estimate
+    bepEstimate.sum = 0;
+    bepEstimate.count = 1;
+
+    `ifdef TRELLIS
     // Create a reset to clear the accumulator in the trellis
     `ifndef IQ_MAG
     //trellis.viterbi_top.simReset = 1;
@@ -804,8 +847,8 @@ initial begin
     trellisReset = 1;
     #(2*bitrateSamplesInt*C) ;
     trellisReset = 0;
-
     `endif        
+    `endif
 
     // Enable the trellis carrier loop
     #(10*bitrateSamplesInt*C) ;

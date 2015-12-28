@@ -12,10 +12,12 @@
 `define USE_DDC_FIR
 `define ADD_DESPREADER
 `define ADD_SCPATH
+`define ADD_DQM
 `endif
 
 `ifdef TRELLIS_DEMOD
 `define CIC_COMP_USE_MPY
+`define ADD_DQM
 `endif
 
 `ifdef SUBCARRIER_DEMOD
@@ -32,6 +34,8 @@
 `define DDCSPACE            13'bx_0010_00xx_xxxx
 `define DDCFIRSPACE         13'bx_0010_01xx_xxxx
 `define CICDECSPACE         13'bx_0010_10xx_xxxx
+`define BEPSPACE            13'bx_0011_0xxx_xxxx
+`define BEPRAMSPACE         13'bx_0011_1xxx_xxxx
 `define BITSYNCSPACE        13'bx_0100_0xxx_xxxx
 `define BITSYNCAUSPACE      13'bx_0100_1xxx_xxxx
 `define DECODERSPACE        13'b0_0101_0xxx_xxxx
@@ -184,10 +188,14 @@
 `define DAC_IN_SEL_SC0      2'b01
 `define DAC_IN_SEL_SC1      2'b10
 `define DEC_IN_SEL      13'bx_xxxx_xxx0_101x
+`define OUT_MUX_SEL_DEMOD   2'b00
+`define OUT_MUX_SEL_SC0     2'b01
+`define OUT_MUX_SEL_SC1     2'b10
+`define OUT_MUX_SEL_DQM     2'b11
 `define REBOOT_ADDR     13'bx_xxxx_xxx0_11xx
 `define MISC_TYPE       13'bx_xxxx_xxx1_000x
 // FPGA Image Types
-// NOTE: Multi H is listed as 3 because we don't want to rebuild the image to 
+// NOTE: Multi H is listed as 3 because we don't want to rebuild the image to
 // add the readback circuitry and it defaults to 3
 `define LEGACY_DEMOD_IMAGE          16'h0
 `define TRELLIS_DEMOD_IMAGE         16'h1
@@ -255,3 +263,14 @@
 `define DS_MODE_NASA_DG1_MODE3_SPREAD_I     3'b011
 `define DS_MODE_NASA_DG1_MODE3_SPREAD_Q     3'b100
 `endif
+
+
+// define the data quality metric registers
+`define DQM_SPACE        `BEPSPACE
+`define DQM_BLOCK_SIZE   13'bx_xxxx_xxx0_000x
+`define DQM_FRAME_WORD_0 13'bx_xxxx_xxx0_001x
+`define DQM_FRAME_WORD_1 13'bx_xxxx_xxx0_010x
+`define DQM_FRAME_WORD_2 13'bx_xxxx_xxx0_011x
+`define BEP_BLOCK_SIZE   13'bx_xxxx_xxx1_000x
+`define BEP_ESTIMATE     13'bx_xxxx_xxx1_01xx
+`define BEP_MEAN_INVERSE 13'bx_xxxx_xxx1_10xx

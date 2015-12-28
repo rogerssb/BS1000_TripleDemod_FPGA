@@ -407,6 +407,8 @@ NET "demod/despreader/dsSlipI*" TNM_NET = FFS syncGroup;
 #NET "demod/despreader/dsSlipQ*" TNM_NET = FFS syncGroup;
 NET "demod/resampler/auCic/syncOut*" TNM_NET = FFS syncGroup;
 NET "demod/bitsync/phaseState*" TNM_NET = FFS syncGroup;
+NET "bep/clkEn*" TNM_NET = FFS syncGroup;
+NET "bep/clkEn*" TNM_NET = DSPS syncGroup;
 NET "multihSymEn*" TNM_NET = FFS syncGroup;
 NET "multihSym2xEn*" TNM_NET = FFS syncGroup;
 NET "multihPhaseErrorEnIn*" TNM_NET = FFS syncGroup;
@@ -448,6 +450,7 @@ TIMEGRP "clken" =  FFS(demod/dac0Sync*)
 #                   FFS(demod/despreader/iSampleEn*) FFS(demod/despreader/iOnTime*) FFS(demod/despreader/dsSlipI)
                    FFS(demod/despreader/dsSlipI)
 #                   FFS(demod/despreader/qSampleEn*) FFS(demod/despreader/qOnTime*) FFS(demod/despreader/dsSlipQ)
+                   FFS(bep/clkEn*)
                    FFS(multihPhaseErrorEnIn*);
 
 # allEnables = All FFS that have a clock enable input

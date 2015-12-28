@@ -25,7 +25,7 @@ input reset;
 input sync;
 input   [17:0]  iFm;
 input   [17:0]  qFm;
-input   [3:0]   demodMode;
+input   [4:0]   demodMode;
 output  [11:0]   phase;
 output  [11:0]   phaseError;
 output  [11:0]   freq;

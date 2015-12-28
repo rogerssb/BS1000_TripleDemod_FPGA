@@ -81,7 +81,7 @@ input           symb_pll_vco;
 output          sdiOut;
 input           legacyBit_pad ;
 
-parameter VER_NUMBER = 16'h0189;
+parameter VER_NUMBER = 16'h0194;
 
 // 12 Jun 13
 // IOB reclocking of inputs to trellis
@@ -137,7 +137,7 @@ reg     [1:0]   dac1_in_sel;
 reg     [1:0]   dac2_in_sel;
 reg             dec_in_sel;
 reg             iOutMuxSel;
-reg             qOutMuxSel;
+reg     [1:0]   qOutMuxSel;
 reg     [23:0]  boot_addr;
 
 // MISC space writes
@@ -178,7 +178,7 @@ always @(negedge wr2) begin
                 begin
                 dec_in_sel <= dataIn[16];
                 iOutMuxSel <= dataIn[18];
-                qOutMuxSel <= dataIn[20];
+                qOutMuxSel <= dataIn[21:20];
                 end
            `REBOOT_ADDR:
                 begin
@@ -206,13 +206,13 @@ always @* begin
         `DAC_IN_SEL:
             begin
             rs = 0;
-            misc_dout = {11'b0,qOutMuxSel,1'b0,iOutMuxSel,1'b0,dec_in_sel,
+            misc_dout = {10'b0,qOutMuxSel,1'b0,iOutMuxSel,1'b0,dec_in_sel,
                          10'b0,dac2_in_sel,dac1_in_sel,dac0_in_sel};
             end
         `DEC_IN_SEL:
             begin
             rs = 0;
-            misc_dout = {11'b0,qOutMuxSel,1'b0,iOutMuxSel,1'b0,dec_in_sel,
+            misc_dout = {10'b0,qOutMuxSel,1'b0,iOutMuxSel,1'b0,dec_in_sel,
                          10'b0,dac2_in_sel,dac1_in_sel,dac0_in_sel};
             end
         `MISC_TYPE: begin
@@ -809,13 +809,35 @@ decoder decoder
   .bypass_fifo(bypass_fifo),
   .symb_clk(symbol_clk)
   );
+ wire symb_pll_out;
+ `ifdef ADD_DQM
+//******************************************************************************
+//                   Data Quality Metric Encapsulation
+//******************************************************************************
+wire dqm_out_i;
+wire [31:0] dqmDout;
+dqm dqm (
+  .fifo_wclk(clk),
+  .fifo_rclk(symb_pll_out),
+  .fifo_wren(decoder_cout),
+  .fifo_data(decoder_dout_i),
+  .interrupt(dqm_interrupt),
+  .serial_out(dqm_out_i), // need to add this to the output selector
+  .addr(addr),
+  .data_in(dataIn),
+  .data_out(dqmDout),
+  .wr0(wr0),
+  .wr1(wr1),
+  .rst(decoder_fifo_rs)
+  );
+`endif
 //******************************************************************************
 //                   Decoder Output FIFO and Symbol Clock PLL
 //******************************************************************************
 wire decoder_fifo_dout_i,decoder_fifo_dout_q;
 wire decoder_fifo_empty,decoder_fifo_full;
 reg  decoder_fifoReadEn;
-wire symb_pll_out;
+
 
 decoder_output_fifo decoder_output_fifo
   (
@@ -880,9 +902,14 @@ wire cout = (clkOut) ^ !cout_inv;
 assign cout_i = cout;
 reg cout_q;
 always @* begin
-    if (qOutMuxSel) begin
+    if (qOutMuxSel == `OUT_MUX_SEL_SC0) begin
         cout_q = sc_cout;
         end
+    `ifdef ADD_DQM
+    else if (qOutMuxSel == `OUT_MUX_SEL_DQM) begin
+        cout_q = symb_pll_out;
+        end
+    `endif
     else begin
         case (demodMode)
             `MODE_AQPSK,
@@ -899,9 +926,14 @@ always @(posedge clkOut)begin
   end
 reg dout_q;
 always @* begin
-    if (qOutMuxSel) begin
+    if (qOutMuxSel == `OUT_MUX_SEL_SC0) begin
         dout_q = sc_dataOut;
         end
+    `ifdef ADD_DQM
+    else if (qOutMuxSel == `OUT_MUX_SEL_DQM) begin 
+        dout_q = dqm_out_i;
+        end
+    `endif
     else begin
         case (demodMode)
             `MODE_AQPSK,
@@ -986,7 +1018,16 @@ always @* begin
              rd_mux = trellisDout[15:0];
              end
          end
-   
+    `ifdef ADD_DQM
+      `DQM_SPACE: begin
+        if (addr[1]) begin
+          rd_mux = dqmDout[31:16];
+          end
+        else begin
+          rd_mux = dqmDout[15:0];
+          end
+        end
+    `endif
      default : rd_mux = 16'hxxxx;
     endcase
   end

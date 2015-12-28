@@ -73,7 +73,7 @@ output  [17:0]  iTrellis;
 output  [17:0]  qTrellis;  
 output          legacyBit;
 
-parameter VER_NUMBER = 16'h0193;
+parameter VER_NUMBER = 16'h0194;
 
 wire    [12:0]  addr = {addr12,addr11,addr10,addr9,addr8,addr7,addr6,addr5,addr4,addr3,addr2,addr1,1'b0};
 wire            nWr = nWe;
@@ -659,6 +659,24 @@ sdi sdi(
     .sdiOut(sdiOut)
     );
 
+`ifdef ADD_DQM
+//******************************************************************************
+//                       Bit Error Probability Estimation
+//******************************************************************************
+
+wire    [31:0]  bepDout;
+bepEstimate bep(
+  .clk(clk),
+  .reset(reset),
+  .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
+  .addr(addr),
+  .dataIn(dataIn),
+  .dataOut(bepDout),
+  .symEn(sdiSymEn),
+  .symData(sdiDataI)
+);
+`endif
+
 
 //******************************************************************************
 //                           Processor Read Data Mux
@@ -735,6 +753,17 @@ always @* begin
             rd_mux = sdiDout[15:0];
             end
         end
+    `ifdef ADD_DQM
+    `BEPRAMSPACE,
+    `BEPSPACE: begin
+        if (addr[1]) begin
+            rd_mux = bepDout[31:16];
+            end
+        else begin
+            rd_mux = bepDout[15:0];
+            end
+        end
+    `endif
     default : rd_mux = 16'hxxxx;
     endcase
   end
