@@ -81,7 +81,7 @@ input           symb_pll_vco;
 output          sdiOut;
 input           legacyBit_pad ;
 
-parameter VER_NUMBER = 16'h0194;
+parameter VER_NUMBER = 16'h0195;
 
 // 12 Jun 13
 // IOB reclocking of inputs to trellis
@@ -828,6 +828,8 @@ dqm dqm (
   .data_out(dqmDout),
   .wr0(wr0),
   .wr1(wr1),
+  .wr2(wr2),
+  .wr3(wr3),
   .rst(decoder_fifo_rs)
   );
 `endif
