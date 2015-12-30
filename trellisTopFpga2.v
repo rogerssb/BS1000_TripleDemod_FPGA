@@ -81,7 +81,7 @@ input           symb_pll_vco;
 output          sdiOut;
 input           legacyBit_pad ;
 
-parameter VER_NUMBER = 16'h0195;
+parameter VER_NUMBER = 16'h0196;
 
 // 12 Jun 13
 // IOB reclocking of inputs to trellis
@@ -358,7 +358,9 @@ assign dac1_sclk = dac_sck;
 assign dac2_sclk = dac_sck;
 assign dac_rst = reset;
 
-assign sdiOut = sdiInput;
+//assign sdiOut = sdiInput;
+wire dqm_interrupt;
+assign sdiOut = dqm_interrupt;
 
 //******************************************************************************
 //                              Demod Outputs
