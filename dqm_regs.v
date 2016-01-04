@@ -111,6 +111,9 @@ always @* begin
         end
       endcase
     end
+    else begin
+        data_out = 32'b0;
+    end
   end
 
 endmodule

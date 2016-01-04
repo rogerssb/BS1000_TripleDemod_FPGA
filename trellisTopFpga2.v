@@ -81,7 +81,7 @@ input           symb_pll_vco;
 output          sdiOut;
 input           legacyBit_pad ;
 
-parameter VER_NUMBER = 16'h0196;
+parameter VER_NUMBER = 16'h0197;
 
 // 12 Jun 13
 // IOB reclocking of inputs to trellis
@@ -923,11 +923,33 @@ always @* begin
         end
     end
 
-reg dout_i,decQ;
-always @(posedge clkOut)begin
-  dout_i <= bypass_fifo ? decoder_dout_i : decoder_fifo_dout_i;
-  decQ <= bypass_fifo ? decoder_dout_q : decoder_fifo_dout_q;
-  end
+    `define USE_NEW_OUTPUT_MUX
+    `ifdef USE_NEW_OUTPUT_MUX
+    reg     dout_bypass_fifo_i;
+    reg     dout_bypass_fifo_q;
+    always @(posedge symbol_clk) begin
+        dout_bypass_fifo_i <= decoder_dout_i;
+        dout_bypass_fifo_q <= decoder_dout_q;
+    end
+    reg     dout_fifo_i;
+    reg     dout_fifo_q;
+    always @(posedge symb_pll_out) begin
+        dout_fifo_i <= decoder_fifo_dout_i;
+        dout_fifo_q <= decoder_fifo_dout_q;
+    end
+    reg dout_i,decQ;
+    always @* begin
+        dout_i = bypass_fifo ? dout_bypass_fifo_i : dout_fifo_i;
+        decQ = bypass_fifo ? dout_bypass_fifo_q : dout_fifo_q;
+    end
+    `else
+    always @(posedge clkOut)begin
+        dout_i <= bypass_fifo ? decoder_dout_i : decoder_fifo_dout_i;
+        decQ <= bypass_fifo ? decoder_dout_q : decoder_fifo_dout_q;
+    end
+    `endif
+
+
 reg dout_q;
 always @* begin
     if (qOutMuxSel == `OUT_MUX_SEL_SC0) begin

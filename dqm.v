@@ -130,7 +130,7 @@ end
 reg [47:0] shift;
 always @ (posedge fifo_rclk) begin
   if (load_shift) begin
-    shift <= {frame_word_0,frame_word_1,frame_word_2};
+    shift <= {frame_word_0,frame_word_1,frame_word_sync_2};
   end
   else begin
     shift <= {shift[46:0],1'b0};
