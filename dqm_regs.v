@@ -32,7 +32,7 @@ always @* begin
     default: dqm_space = 0;
   endcase
 end
-wire frame_word_wren = dqm_space & wr0;
+wire frame_word_wren = dqm_space & wr2;
 
 always @(negedge wr0) begin
   if (dqm_space) begin

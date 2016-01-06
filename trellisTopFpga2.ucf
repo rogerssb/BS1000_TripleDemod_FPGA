@@ -620,6 +620,12 @@ TIMESPEC TS_uP3 = FROM "writeEn" TO PADS 100 ns;
 NET "symb_pll_vco" TNM_NET = FFS vco;
 TIMESPEC TS_vco   = PERIOD "vco" 50 MHz HIGH 50 %;
 
+#NET "symb_pll_out" TNM_NET = FFS pll;
+#TIMESPEC TS_pll = PERIOD "pll" 50 MHz HIGH 50 %;
+
+#NET "decoder/symb_clk" TNM_NET = FFS symClk;
+#TIMESPEC TS_symClk = PERIOD "symClk" 50 MHz HIGH 50 %;
+
 NET "dac_control_ck*" TNM_NET = FFS dacRegs;
 TIMESPEC TS_dac0 = FROM dacRegs TO FFS  100 ns;
 TIMESPEC TS_dac1 = FROM dacRegs TO PADS 100 ns;
