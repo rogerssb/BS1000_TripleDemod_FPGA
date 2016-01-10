@@ -7,6 +7,7 @@ module dqm (
   fifo_data,
   interrupt,
   serial_out,
+  gate,
   addr,
   data_in,
   data_out,
@@ -25,6 +26,7 @@ input fifo_wren;
 input fifo_data;
 output interrupt;
 output serial_out;
+output gate;
 input [12:0] addr;
 input [31:0] data_in;
 output [31:0] data_out;
@@ -147,6 +149,17 @@ reg fifo_rden_delay, interrupt;
 always @ (posedge fifo_rclk) begin
   fifo_rden_delay <= fifo_rden;
   interrupt <= !fifo_rden_delay & fifo_rden;
+end
+
+reg select;
+always @(posedge fifo_rclk)begin
+  select <= fifo_rden;
+end
+
+reg select_delay, gate;
+always @(negedge fifo_rclk)begin
+  select_delay <= select;
+  gate <= select_delay;
 end
 
 reg sim_full;

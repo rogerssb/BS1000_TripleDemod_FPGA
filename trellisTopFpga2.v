@@ -81,7 +81,7 @@ input           symb_pll_vco;
 output          sdiOut;
 input           legacyBit_pad ;
 
-parameter VER_NUMBER = 16'd409;
+parameter VER_NUMBER = 16'd410;
 
 // 12 Jun 13
 // IOB reclocking of inputs to trellis
@@ -816,7 +816,7 @@ decoder decoder
 //******************************************************************************
 //                   Data Quality Metric Encapsulation
 //******************************************************************************
-wire dqm_out_i;
+wire dqm_out;
 wire [31:0] dqmDout;
 dqm dqm (
   .fifo_wclk(clk),
@@ -824,7 +824,8 @@ dqm dqm (
   .fifo_wren(decoder_cout),
   .fifo_data(decoder_dout_i),
   .interrupt(dqm_interrupt),
-  .serial_out(dqm_out_i), // need to add this to the output selector
+  .serial_out(dqm_out), // need to add this to the output selector
+  .gate(clockGate),
   .addr(addr),
   .data_in(dataIn),
   .data_out(dqmDout),
@@ -911,7 +912,8 @@ always @* begin
         end
     `ifdef ADD_DQM
     else if (qOutMuxSel == `OUT_MUX_SEL_DQM) begin
-        cout_q = symb_pll_out;
+        cout_q = symb_pll_out ^ !cout_inv;
+        //cout_q = symb_pll_out & clockGate;
         end
     `endif
     else begin
@@ -948,6 +950,10 @@ always @* begin
         dout_i <= bypass_fifo ? decoder_dout_i : decoder_fifo_dout_i;
         decQ <= bypass_fifo ? decoder_dout_q : decoder_fifo_dout_q;
     end
+    reg dqmQ;
+    always @(posedge cout_q) begin
+        dqmQ <= dqm_out;
+    end
     //`endif
 
 
@@ -958,7 +964,7 @@ always @* begin
         end
     `ifdef ADD_DQM
     else if (qOutMuxSel == `OUT_MUX_SEL_DQM) begin 
-        dout_q = dqm_out_i;
+        dout_q = dqmQ;
         end
     `endif
     else begin
