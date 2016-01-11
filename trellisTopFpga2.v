@@ -81,7 +81,7 @@ input           symb_pll_vco;
 output          sdiOut;
 input           legacyBit_pad ;
 
-parameter VER_NUMBER = 16'd410;
+parameter VER_NUMBER = 16'd411;
 
 // 12 Jun 13
 // IOB reclocking of inputs to trellis
@@ -358,9 +358,9 @@ assign dac1_sclk = dac_sck;
 assign dac2_sclk = dac_sck;
 assign dac_rst = reset;
 
-//assign sdiOut = sdiInput;
-wire dqm_interrupt;
-assign sdiOut = dqm_interrupt;
+assign sdiOut = sdiInput;
+//wire dqm_interrupt;
+//assign sdiOut = dqm_interrupt;
 
 //******************************************************************************
 //                              Demod Outputs
@@ -950,11 +950,12 @@ always @* begin
         dout_i <= bypass_fifo ? decoder_dout_i : decoder_fifo_dout_i;
         decQ <= bypass_fifo ? decoder_dout_q : decoder_fifo_dout_q;
     end
+    `ifdef ADD_DQM
     reg dqmQ;
     always @(posedge cout_q) begin
         dqmQ <= dqm_out;
     end
-    //`endif
+    `endif
 
 
 reg dout_q;
