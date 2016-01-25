@@ -34,8 +34,8 @@
 `define DDCSPACE            13'bx_0010_00xx_xxxx
 `define DDCFIRSPACE         13'bx_0010_01xx_xxxx
 `define CICDECSPACE         13'bx_0010_10xx_xxxx
-`define BEPSPACE            13'bx_0011_0xxx_xxxx
-`define BEPRAMSPACE         13'bx_0011_1xxx_xxxx
+`define BEPSPACE            13'b0_0011_xxxx_xxxx
+`define BEPRAMSPACE         13'b1_0011_xxxx_xxxx
 `define BITSYNCSPACE        13'bx_0100_0xxx_xxxx
 `define BITSYNCAUSPACE      13'bx_0100_1xxx_xxxx
 `define DECODERSPACE        13'b0_0101_0xxx_xxxx

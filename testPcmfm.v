@@ -774,6 +774,7 @@ initial begin
     // Bit Error Probability Estimator
     write32(createAddress(`BEPSPACE, `BEP_BLOCK_SIZE),7);
     write32(createAddress(`BEPSPACE, `BEP_MEAN_INVERSE),32'h0002_5b6e);
+    //write32(createAddress(`BEPSPACE, `BEP_MEAN_INVERSE),32'h0002_b6db);
 
     reset = 1;
     #(2*C) ;

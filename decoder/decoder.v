@@ -271,15 +271,16 @@ wire    data_inv_q = data_inv ? !derand_out_q : derand_out_q ;
 wire        clk_sel;
 assign      cout = biphase ? biphase_en : (
                     clk_sel ? symb_clk_en : symb_clk_2x_en);
-reg         symb_clk;
+reg         symbol_clk;
 always @(posedge clk) begin
     if (symb_clk_en) begin
-        symb_clk <= 1;
+        symbol_clk <= 1;
         end
     else if (symb_clk_2x_en) begin
-        symb_clk <= ~symb_clk;
+        symbol_clk <= ~symbol_clk;
         end
     end
+assign symb_clk = clk_sel ? symbol_clk : symb_clk_2x_en;
 
 assign dout_i = data_inv_i ;
 assign dout_q = data_inv_q ;

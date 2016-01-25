@@ -623,7 +623,7 @@ TIMESPEC TS_vco   = PERIOD "vco" 50 MHz HIGH 50 %;
 NET "symb_pll_out" TNM_NET = FFS pll;
 TIMESPEC TS_pll = PERIOD "pll" 50 MHz HIGH 50 %;
 
-NET "decoder/symb_clk" TNM_NET = FFS symClk;
+NET "decoder/symbol_clk" TNM_NET = FFS symClk;
 TIMESPEC TS_symClk = PERIOD "symClk" 50 MHz HIGH 50 %;
 
 NET "dac_control_ck*" TNM_NET = FFS dacRegs;
