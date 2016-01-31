@@ -1,15 +1,21 @@
 `timescale 1ns/100ps
 `include "addressMap.v"
 
+//`define USE_SYMMETRIC_LUT
+`define USE_MAG_DETECTOR
+
 module bepEstimate(
-  input                   clk,
-  input                   reset,
-  input                   wr0,wr1,wr2,wr3,
-  input           [12:0]  addr,
-  input           [31:0]  dataIn,
-  output          [31:0]  dataOut,
-  input                   symEn,
-  input signed    [17:0]  symData
+  input                 clk,
+  input                 reset,
+  input                 wr0,wr1,wr2,wr3,
+  input         [12:0]  addr,
+  input         [31:0]  dataIn,
+  output        [31:0]  dataOut,
+  input                 symEn,
+  input signed  [17:0]  symData,
+  input signed  [17:0]  iData,  
+  input signed  [17:0]  qData,  
+  input                 sym2xEn
 );
 
 // Decode the two address spaces
@@ -30,6 +36,30 @@ always @* begin
   endcase
 end
 wire ram_en = ram_space;
+
+`ifdef USE_MAG_DETECTOR
+
+// Reclock the inputs to help with routing
+reg     signed  [17:0]  iBepData,qBepData;
+reg                     clkEn;
+always @(posedge clk) begin
+    clkEn <= sym2xEn;
+    iBepData <= iData;
+    qBepData <= qData;
+end
+
+wire    [16:0]  absSymData;
+complexMagEstimate absValue( 
+    .clk(clk), 
+    .reset(reset), 
+    .clkEn(clkEn),
+    .iIn(iBepData),.qIn(qBepData),
+    .complexMag(absSymData[16:1])
+);
+assign absSymData[0] = 1'b0;
+
+
+`else   //USE_MAG_DETECTOR
 
 // Reclock the inputs to help with routing
 reg     signed  [17:0]  bepData;
@@ -53,6 +83,13 @@ always @(posedge clk) begin
   end
 end
 
+`endif  //USE_MAG_DETECTOR
+
+`ifdef SIMULATE
+real mean;
+always @* mean = $itor(absSymData)/(2**17);
+`endif
+
 // Scale by the inverse of the mean
 reg         [15:0]  inverseMantissa;
 reg         [2:0]   inverseExponent;
@@ -64,6 +101,17 @@ mpy18x18WithCe mantissaMpy(
     .b({1'b0,inverseMantissa,1'b0}),
     .p(inverseProduct)
 );
+`ifdef USE_SYMMETRIC_LUT
+// Saturate the output as we shift with the exponent
+wire        [5:0]  llr;
+unsignedShiftAndSaturate33to6 exponentShift(
+    .clk(clk), 
+    .clkEn(clkEn),
+    .shift(inverseExponent),
+    .dIn(inverseProduct[34:1]),
+    .dOut(llr)
+);
+`else
 // Saturate the output as we shift with the exponent
 wire        [4:0]  llr;
 unsignedShiftAndSaturate33to5 exponentShift(
@@ -72,55 +120,72 @@ unsignedShiftAndSaturate33to5 exponentShift(
     .shift(inverseExponent),
     .dIn(inverseProduct[34:1]),
     .dOut(llr)
-    );
+);
+`endif
 
 // LUT memories
 wire [31:0]lut_out;
 bepLut0to7 dpram_wr0 (
-  .a(addr[6:2]),
-  .d(dataIn[7:0]),
-  .dpra(llr),
-  .clk(wr0),
-  .we(ram_en),
-  .qdpo_ce(clkEn),
-  .qdpo_clk(clk),
-  .qspo(),
-  .qdpo(lut_out[7:0])
+    `ifdef USE_SYMMETRIC_LUT
+    .a(addr[7:2]),
+    `else
+    .a(addr[6:2]),
+    `endif
+    .d(dataIn[7:0]),
+    .dpra(llr),
+    .clk(wr0),
+    .we(ram_en),
+    .qdpo_ce(clkEn),
+    .qdpo_clk(clk),
+    .qspo(),
+    .qdpo(lut_out[7:0])
 );
 
 bepLut8to15 dpram_wr1 (
-  .a(addr[6:2]),
-  .d(dataIn[15:8]),
-  .dpra(llr),
-  .clk(wr1),
-  .we(ram_en),
-  .qdpo_ce(clkEn),
-  .qdpo_clk(clk),
-  .qspo(),
-  .qdpo(lut_out[15:8])
+    `ifdef USE_SYMMETRIC_LUT
+    .a(addr[7:2]),
+    `else
+    .a(addr[6:2]),
+    `endif
+    .d(dataIn[15:8]),
+    .dpra(llr),
+    .clk(wr1),
+    .we(ram_en),
+    .qdpo_ce(clkEn),
+    .qdpo_clk(clk),
+    .qspo(),
+    .qdpo(lut_out[15:8])
 );
 
 bepLut16to23 dpram_wr2 (
-  .a(addr[6:2]),
-  .d(dataIn[23:16]),
-  .dpra(llr),
-  .clk(wr2),
-  .we(ram_en),
-  .qdpo_ce(clkEn),
-  .qdpo_clk(clk),
-  .qspo(),
-  .qdpo(lut_out[23:16])
+    `ifdef USE_SYMMETRIC_LUT
+    .a(addr[7:2]),
+    `else
+    .a(addr[6:2]),
+    `endif
+    .d(dataIn[23:16]),
+    .dpra(llr),
+    .clk(wr2),
+    .we(ram_en),
+    .qdpo_ce(clkEn),
+    .qdpo_clk(clk),
+    .qspo(),
+    .qdpo(lut_out[23:16])
 );
 
 bepLut24to31 dpram_wr3 (
-  .a(addr[6:2]),
-  .d(dataIn[31:24]),
-  .dpra(llr),
-  .clk(wr3),
-  .we(ram_en),
-  .qdpo_ce(clkEn),
-  .qdpo_clk(clk),
-  .qspo(),
+    `ifdef USE_SYMMETRIC_LUT
+    .a(addr[7:2]),
+    `else
+    .a(addr[6:2]),
+    `endif
+    .d(dataIn[31:24]),
+    .dpra(llr),
+    .clk(wr3),
+    .we(ram_en),
+    .qdpo_ce(clkEn),
+    .qdpo_clk(clk),
+    .qspo(),
   .qdpo(lut_out[31:24])
 );
 

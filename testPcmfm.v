@@ -5,7 +5,7 @@
 //`define TRELLIS
 
 `define ENABLE_AGC
-//`define ADD_NOISE
+`define ADD_NOISE
 //`define BER_TEST
 //`define MATLAB_VECTORS
 
@@ -363,7 +363,10 @@ bepEstimate bep(
   .dataIn(d),
   .dataOut(),
   .symEn(sdiSymEn),
-  .symData(sdiDataI)
+  .symData(sdiDataI),
+  .iData(iSymData),
+  .qData(qSymData),
+  .sym2xEn(symTimes2Sync)
 );
 
 
@@ -773,8 +776,8 @@ initial begin
 
     // Bit Error Probability Estimator
     write32(createAddress(`BEPSPACE, `BEP_BLOCK_SIZE),7);
-    write32(createAddress(`BEPSPACE, `BEP_MEAN_INVERSE),32'h0002_5b6e);
     //write32(createAddress(`BEPSPACE, `BEP_MEAN_INVERSE),32'h0002_b6db);
+    write32(createAddress(`BEPSPACE, `BEP_MEAN_INVERSE),32'h0002_ffff);
 
     reset = 1;
     #(2*C) ;
