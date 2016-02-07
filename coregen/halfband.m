@@ -4,7 +4,7 @@ fn = fs/2;
 taps = 35;
 order = taps-1;
 
-writeFile == 0;
+writeFile = 0;
 
 delta = 0.05;
 qf = remez(order,[0 0.25-delta 0.25+delta 0.5]/fn,[1 1 0 0]);

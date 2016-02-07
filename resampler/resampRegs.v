@@ -10,6 +10,71 @@ derivative rights in exchange for negotiated compensation.
 
 `include "addressMap.v"
 
+`ifdef USE_BUS_CLOCK
+
+module resamplerRegs(
+    busClk,
+    addr,
+    dataIn,
+    dataOut,
+    cs,
+    wr0, wr1, wr2, wr3,
+    resampleRate
+    );
+
+input           busClk;
+input   [12:0]  addr;
+input   [31:0]  dataIn;
+output  [31:0]  dataOut;
+input           cs;
+input           wr0,wr1,wr2,wr3;
+
+output  [31:0]  resampleRate;
+reg     [31:0]  resampleRate;
+
+always @(posedge busClk) begin
+    if (cs && wr0) begin
+        casex (addr)
+            `RESAMPLER_RATE: resampleRate[7:0] <= dataIn[7:0];
+            default: ;
+            endcase
+        end
+    if (cs && wr1) begin
+        casex (addr)
+            `RESAMPLER_RATE:   resampleRate[15:8] <= dataIn[15:8];
+            default:  ;
+            endcase
+        end
+    if (cs && wr2) begin
+        casex (addr)
+            `RESAMPLER_RATE:   resampleRate[23:16] <= dataIn[23:16];
+            default:  ;
+            endcase
+        end
+    if (cs && wr3) begin
+        casex (addr)
+            `RESAMPLER_RATE:   resampleRate[31:24] <= dataIn[31:24];
+            default:  ;
+            endcase
+        end
+    end
+
+reg [31:0]dataOut;
+always @* begin
+    if (cs) begin
+        casex (addr)
+            `RESAMPLER_RATE:            dataOut = resampleRate;
+            default:                    dataOut = 32'hx;
+            endcase
+        end
+    else begin
+        dataOut = 32'hx;
+        end
+    end
+endmodule
+
+`else   // USE_BUS_CLOCK
+
 module resampRegs(
     addr,
     dataIn,
@@ -99,3 +164,6 @@ always @* begin
         end
     end
 endmodule
+
+
+`endif // USE_BUS_CLOCK

@@ -201,17 +201,22 @@ reg     [17:0]  iMF,qMF,qSymDelay;
 always @(posedge sampleClk) begin
     if (symTimes2Sync) begin
         iMF <= iFiltered;
+        iSymDelay <= iFiltered;
         qSymDelay <= qFiltered;
-        if ( (demodMode == `MODE_OQPSK)
-          || (demodMode == `MODE_SOQPSK)) begin
+        if (demodMode == `MODE_OQPSK) begin
+            iMF <= iSymDelay;
+            qMF <= qFiltered;
+            end
+        else if (demodMode == `MODE_SOQPSK)) begin
+            iMF <= iFiltered;
             qMF <= qSymDelay;
             end
         else begin
+            iMF <= iFiltered;
             qMF <= qFiltered;
             end
         end
     end
-
 `endif
 
 wire fmTrellisModes = ( (demodMode == `MODE_MULTIH)
@@ -371,7 +376,7 @@ always @(posedge sampleClk) begin
             bbSRI[0] <= {phase,6'b0};
             bbSRQ[0] <= {phase,6'b0};
             end
-        else if (bitsyncMode == `MODE_DUAL_RAIL) begin
+        else if (bitsyncMode == `MODE_DUAL_CH) begin
             bbSRI[0] <= iMF;
             bbSRQ[0] <= qMF;
             end

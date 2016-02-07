@@ -82,6 +82,15 @@ wire    [17:0]  reciprocal;
 reciprocalLut lut(.a(resamplerPhaseInc[31:27]),.spo(reciprocal));
 wire    [35:0]  lutProduct;
 wire    [17:0]  additionalPhase = {8'h0,~phase[31:27],5'h00};
+`ifdef USE_VIVADO_CORES
+mpy18x18 offsetMpy (
+    .SCLR(1'b0),
+    .CLK(clk),
+    .A(additionalPhase),
+    .B(reciprocal),
+    .P(lutProduct)
+    );
+`else
 mpy18x18 offsetMpy (
     .sclr(1'b0),
     .clk(clk),
@@ -89,6 +98,7 @@ mpy18x18 offsetMpy (
     .b(reciprocal),
     .p(lutProduct)
     );
+`endif
 reg     [4:0]   newOffset;
 wire    [5:0]   roundedLutProduct = lutProduct[22:17] + {5'h0,lutProduct[16]};
 always @(posedge clk) begin
@@ -143,6 +153,15 @@ always @(inSR[0]) inReal = ((inSR[0] > 131071.0) ? (inSR[0] - 262144.0) : inSR[0
 wire    [17:0]  tap0Coef;
 resamplerTap0 tap0(.a(offset),.spo(tap0Coef));
 wire    [35:0]  i0Product;
+`ifdef USE_VIVADO_CORES
+mpy18x18 mpy0 (
+    .SCLR(1'b0),
+    .CLK(clk),
+    .A(inSR[0]),
+    .B(tap0Coef),
+    .P(i0Product)
+    );
+`else
 mpy18x18 mpy0 (
     .sclr(1'b0),
     .clk(clk),
@@ -150,10 +169,20 @@ mpy18x18 mpy0 (
     .b(tap0Coef),
     .p(i0Product)
     );
+`endif
 
 wire    [17:0]  tap1Coef;
 resamplerTap1 tap1(.a(offset),.spo(tap1Coef));
 wire    [35:0]  i1Product;
+`ifdef USE_VIVADO_CORES
+mpy18x18 mpy1 (
+    .SCLR(1'b0),
+    .CLK(clk),
+    .A(inSR[1]),
+    .B(tap1Coef),
+    .P(i1Product)
+    );
+`else
 mpy18x18 mpy1 (
     .sclr(1'b0),
     .clk(clk),
@@ -161,10 +190,20 @@ mpy18x18 mpy1 (
     .b(tap1Coef),
     .p(i1Product)
     );
+`endif
 
 wire    [17:0]  tap2Coef;
 resamplerTap2 tap2(.a(offset),.spo(tap2Coef));
 wire    [35:0]  i2Product;
+`ifdef USE_VIVADO_CORES
+mpy18x18 mpy2 (
+    .SCLR(1'b0),
+    .CLK(clk),
+    .A(inSR[2]),
+    .B(tap2Coef),
+    .P(i2Product)
+    );
+`else
 mpy18x18 mpy2 (
     .sclr(1'b0),
     .clk(clk),
@@ -172,10 +211,20 @@ mpy18x18 mpy2 (
     .b(tap2Coef),
     .p(i2Product)
     );
+`endif
 
 wire    [17:0]  tap3Coef;
 resamplerTap3 tap3(.a(offset),.spo(tap3Coef));
 wire    [35:0]  i3Product;
+`ifdef USE_VIVADO_CORES
+mpy18x18 mpy3 (
+    .SCLR(1'b0),
+    .CLK(clk),
+    .A(inSR[3]),
+    .B(tap3Coef),
+    .P(i3Product)
+    );
+`else
 mpy18x18 mpy3 (
     .sclr(1'b0),
     .clk(clk),
@@ -183,10 +232,20 @@ mpy18x18 mpy3 (
     .b(tap3Coef),
     .p(i3Product)
     );
+`endif
 
 wire    [17:0]  tap4Coef;
 resamplerTap4 tap4(.a(offset),.spo(tap4Coef));
 wire    [35:0]  i4Product;
+`ifdef USE_VIVADO_CORES
+mpy18x18 mpy4 (
+    .SCLR(1'b0),
+    .CLK(clk),
+    .A(inSR[4]),
+    .B(tap4Coef),
+    .P(i4Product)
+    );
+`else
 mpy18x18 mpy4 (
     .sclr(1'b0),
     .clk(clk),
@@ -194,10 +253,20 @@ mpy18x18 mpy4 (
     .b(tap4Coef),
     .p(i4Product)
     );
+`endif
 
 wire    [17:0]  tap5Coef;
 resamplerTap5 tap5(.a(offset),.spo(tap5Coef));
 wire    [35:0]  i5Product;
+`ifdef USE_VIVADO_CORES
+mpy18x18 mpy5 (
+    .SCLR(1'b0),
+    .CLK(clk),
+    .A(inSR[5]),
+    .B(tap5Coef),
+    .P(i5Product)
+    );
+`else
 mpy18x18 mpy5 (
     .sclr(1'b0),
     .clk(clk),
@@ -205,10 +274,20 @@ mpy18x18 mpy5 (
     .b(tap5Coef),
     .p(i5Product)
     );
+`endif
 
 wire    [17:0]  tap6Coef;
 resamplerTap6 tap6(.a(offset),.spo(tap6Coef));
 wire    [35:0]  i6Product;
+`ifdef USE_VIVADO_CORES
+mpy18x18 mpy6 (
+    .SCLR(1'b0),
+    .CLK(clk),
+    .A(inSR[6]),
+    .B(tap6Coef),
+    .P(i6Product)
+    );
+`else
 mpy18x18 mpy6 (
     .sclr(1'b0),
     .clk(clk),
@@ -216,10 +295,20 @@ mpy18x18 mpy6 (
     .b(tap6Coef),
     .p(i6Product)
     );
+`endif
 
 wire    [17:0]  tap7Coef;
 resamplerTap7 tap7(.a(offset),.spo(tap7Coef));
 wire    [35:0]  i7Product;
+`ifdef USE_VIVADO_CORES
+mpy18x18 mpy7 (
+    .SCLR(1'b0),
+    .CLK(clk),
+    .A(inSR[7]),
+    .B(tap7Coef),
+    .P(i7Product)
+    );
+`else
 mpy18x18 mpy7 (
     .sclr(1'b0),
     .clk(clk),
@@ -227,10 +316,20 @@ mpy18x18 mpy7 (
     .b(tap7Coef),
     .p(i7Product)
     );
+`endif
 
 wire    [17:0]  tap8Coef;
 resamplerTap8 tap8(.a(offset),.spo(tap8Coef));
 wire    [35:0]  i8Product;
+`ifdef USE_VIVADO_CORES
+mpy18x18 mpy8 (
+    .SCLR(1'b0),
+    .CLK(clk),
+    .A(inSR[8]),
+    .B(tap8Coef),
+    .P(i8Product)
+    );
+`else
 mpy18x18 mpy8 (
     .sclr(1'b0),
     .clk(clk),
@@ -238,6 +337,7 @@ mpy18x18 mpy8 (
     .b(tap8Coef),
     .p(i8Product)
     );
+`endif
 
 reg     [35:0]  i01,i23,i45,i67,i0123,i4567;
 reg     [35:0]  i8Delay1,i8Delay2,sum;

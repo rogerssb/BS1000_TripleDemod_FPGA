@@ -1,4 +1,3 @@
-
 `ifndef ADDRESS_MAP
 `define ADDRESS_MAP
 
@@ -22,6 +21,131 @@
 `define DDC_CIC_COMP_USE_MPY
 `endif
 
+`ifdef BITSYNC_BERT
+`define USE_BUS_CLOCK
+`define DF_CIC_COMP_USE_MPY
+`define BS_CIC_COMP_USE_MPY
+`endif
+
+
+
+`ifdef BITSYNC_BERT
+
+// Top level registers
+`define BITSYNC_BERT_SPACE  13'b0_00xx_000x_xxxx
+
+`define CH0_DECODERSPACE    13'b0_00xx_1000_xxxx
+`define CH1_DECODERSPACE    13'b0_00xx_1001_xxxx
+`define DUAL_DECODERSPACE   13'b0_00xx_1010_xxxx
+
+`define INTERP0SPACE        13'b0_00xx_0010_xxxx
+`define VIDFIR0SPACE        13'b0_00xx_0011_xxxx
+`define INTERP1SPACE        13'b0_00xx_0100_xxxx
+`define VIDFIR1SPACE        13'b0_00xx_0101_xxxx
+`define INTERP2SPACE        13'b0_00xx_0110_xxxx
+`define VIDFIR2SPACE        13'b0_00xx_0111_xxxx
+
+// Bitsync subsystem registers
+`define BITSYNC_TOP_SPACE   13'b0_01xx_0000_xxxx
+
+`define CH0_BITSYNCSPACE    13'b0_01x0_010x_xxxx
+`define BITSYNCSPACE        `CH0_BITSYNCSPACE
+`define CH0_RESAMPSPACE     13'b0_01x0_0110_xxxx
+`define CH0_DFSPACE         13'b0_01x0_0111_xxxx
+`define CH0_DFFIRSPACE      13'b0_01x0_1000_xxxx
+`define CH0_AGCSPACE        13'b0_01x0_1001_xxxx
+
+`define CH1_BITSYNCSPACE    13'b0_01x1_010x_xxxx
+`define BITSYNCAUSPACE      `CH1_BITSYNCSPACE
+`define CH1_RESAMPSPACE     13'b0_01x1_0110_xxxx
+`define CH1_DFSPACE         13'b0_01x1_0111_xxxx
+`define CH1_DFFIRSPACE      13'b0_01x1_1000_xxxx
+`define CH1_AGCSPACE        13'b0_01x1_1001_xxxx
+
+
+// BERT subsystem registers
+`define BERT_SPACE              13'b1_00xx_xxxx_xxxx
+
+`define BERT_POLY               13'bx_xxxx_x000_00xx
+`define POLARITY_HYSTERESIS     13'bx_xxxx_x001_01xx
+`define SLIP_LIMIT              13'bx_xxxx_x001_10xx
+`define SLIP_THRESHOLD          13'bx_xxxx_x001_11xx
+`define SLIP_RECOVERY           13'bx_xxxx_x010_00xx
+`define SYNC_THRESHOLD          13'bx_xxxx_x010_01xx
+`define SINGLE_TEST_LENGTH      13'bx_xxxx_x010_10xx
+`define SINGLE_TEST_ERRORS      13'bx_xxxx_x010_11xx
+`define CONTINUOUS_TEST_ERRORS  13'bx_xxxx_x011_00xx
+`define TEST_CONTROL            13'bx_xxxx_x011_01xx
+`define PNGEN_POLY              13'bx_xxxx_x011_10xx
+
+
+// Framesync subsystem registers
+
+// PN Generator subsystem registers
+
+
+// Define the system top level memory map
+`define SYS_RESET           13'bx_xxxx_xxx0_000x
+`define SYS_VERSION         13'bx_xxxx_xxx0_001x
+`define SYS_TYPE            13'bx_xxxx_xxx0_010x
+`define SYS_DAC_INPUT_SEL   13'bx_xxxx_xxx0_011x
+    `define SYS_DAC_INPUT_SEL_CH0   3'b000
+    `define SYS_DAC_INPUT_SEL_CH1   3'b001
+    `define SYS_DAC_INPUT_SEL_BERT  3'b010
+    `define SYS_DAC_INPUT_SEL_FS    3'b011
+    `define SYS_DAC_INPUT_SEL_PNGEN 3'b100
+`define SYS_CLOCK           13'bx_xxxx_xxx0_10xx
+`define SYS_REBOOT_ADDR     13'bx_xxxx_xxx0_11xx
+`define SYS_SUBSYSTEM_CTRL  13'bx_xxxx_xxx1_00xx
+`define SYS_OUTPUT_SEL      13'bx_xxxx_xxx1_01xx
+    `define SYS_OUTPUT_SEL_CH0_BS   4'b0000
+    `define SYS_OUTPUT_SEL_CH0_PCM  4'b0001
+    `define SYS_OUTPUT_SEL_CH1_BS   4'b0010
+    `define SYS_OUTPUT_SEL_CH1_PCM  4'b0011
+    `define SYS_OUTPUT_SEL_DUAL_BS  4'b0100
+    `define SYS_OUTPUT_SEL_DUAL_PCM 4'b0101
+    `define SYS_OUTPUT_SEL_PNGEN    4'b0110
+    `define SYS_OUTPUT_SEL_FS       4'b0111
+`define SYS_BERT_MUX_SEL    13'bx_xxxx_xxx1_10xx
+
+// Define bitsyncTopRegs memory map
+`define BS_TOP_CONTROL          13'bx_xxxx_xxxx_00xx
+`define MODE_SINGLE_CH              2'b00
+`define MODE_IND_CH                 2'b01
+`define MODE_DUAL_CH                2'b10
+`define MODE_OFFSET_CH              2'b11
+`define BS_TOP_CH0_DACSELECT    13'bx_xxxx_xxxx_01xx
+`define BS_TOP_CH1_DACSELECT    13'bx_xxxx_xxxx_10xx
+`define BS_DAC_ADC                  4'b0000
+`define BS_DAC_DC                   4'b0001
+`define BS_DAC_DF                   4'b0010
+`define BS_DAC_SYM                  4'b0011
+`define BS_DAC_AGC                  4'b0100
+`define BS_DAC_LOCK                 4'b0101
+`define BS_TOP_STATUS           13'bx_xxxx_xxxx_11xx
+
+// Define the Resampler memory map
+`define RESAMP_RATE         13'bx_xxxx_xxxx_00xx
+
+// Define the Decimating Filter memory map
+`define DF_CONTROL          13'bx_xxxx_xxxx_00xx
+`define DF_CIC_DECIMATION   13'bx_xxxx_xxxx_01xx
+`define DF_CIC_SHIFT        13'bx_xxxx_xxxx_10xx
+
+// Define the Decimating Filter Fir memory map
+`define DF_FIR_COEFF_0      13'bx_xxxx_xxxx_000x
+`define DF_FIR_COEFF_1      13'bx_xxxx_xxxx_001x
+`define DF_FIR_COEFF_2      13'bx_xxxx_xxxx_010x
+`define DF_FIR_COEFF_3      13'bx_xxxx_xxxx_011x
+`define DF_FIR_COEFF_4      13'bx_xxxx_xxxx_100x
+`define DF_FIR_COEFF_5      13'bx_xxxx_xxxx_101x
+`define DF_FIR_COEFF_6      13'bx_xxxx_xxxx_110x
+`define DF_FIR_COEFF_7      13'bx_xxxx_xxxx_111x
+
+
+
+
+`else  //BITSYNC_BERT
 
 // Split the memory space for the different functions
 `define DEMODSPACE          13'bx_0000_0xxx_xxxx
@@ -61,6 +185,8 @@
 `define SCCICDECSPACE       13'b1_0010_10xx_xxxx
 `define SCAGCSPACE          13'b1_0111_xxxx_xxxx
 `define SCCARRIERSPACE      13'b1_1001_xxxx_xxxx
+
+`endif  //BITSYNC_BERT
 
 // Define the global radio memory map
 `define DEMOD_CONTROL   13'bx_xxxx_xxx0_00xx
@@ -161,10 +287,10 @@
 `define CLF_LLIMIT       13'bx_xxxx_xxx1_10xx
 
 // Define the DDC memory map
-`define RESAMPLER_RATE          13'bx_xxxx_xxx0_00xx
-`define RESAMPLER_AURATE        13'bx_xxxx_xxx0_01xx
-`define RESAMPLER_AUDECIMATION  13'bx_xxxx_xxx0_10xx
-`define RESAMPLER_AUSHIFT       13'bx_xxxx_xxx0_11xx
+`define RESAMPLER_RATE          13'bx_xxxx_xxxx_00xx
+`define RESAMPLER_AURATE        13'bx_xxxx_xxxx_01xx
+`define RESAMPLER_AUDECIMATION  13'bx_xxxx_xxxx_10xx
+`define RESAMPLER_AUSHIFT       13'bx_xxxx_xxxx_11xx
 
 // Define the interpolator memory map
 `define INTERP_CONTROL  13'bx_xxxx_xxxx_00xx
@@ -193,6 +319,7 @@
 `define TRELLIS_DEMOD_IMAGE         16'h1
 `define TWOCHANNEL_SCDEMOD_IMAGE    16'h2
 `define MULTIH_DEMOD_IMAGE          16'h3
+`define BITSYNC_BERT_IMAGE          16'h4
 
 // Define the DAC control locations
 `define DAC_WDATA       13'bx_xxxx_xxxx_x00x
@@ -254,4 +381,11 @@
 `define DS_MODE_NASA_DG1_MODE2              3'b010
 `define DS_MODE_NASA_DG1_MODE3_SPREAD_I     3'b011
 `define DS_MODE_NASA_DG1_MODE3_SPREAD_Q     3'b100
+
+
+
+
+
+
+
 `endif

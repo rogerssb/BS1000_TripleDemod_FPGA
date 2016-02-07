@@ -44,11 +44,36 @@ always @(posedge clk) begin
     end
 
 // Tap Mpy
+`ifdef USE_VIVADO_CORES
+wire    [35:0]  tap0;
+mpy18x18WithCe mpy0(
+    .CLK(clk),
+    .CE(sync),
+    .A(sum0[18:1]),
+    .B(coef0),
+    .P(tap0)
+    );
+wire    [35:0]  tap1;
+mpy18x18WithCe mpy1(
+    .CLK(clk),
+    .CE(sync),
+    .A(sum1[18:1]),
+    .B(coef1),
+    .P(tap1)
+    );
+wire    [35:0]  tap2;
+mpy18x18WithCe mpy2(
+    .CLK(clk),
+    .CE(sync),
+    .A(midTap),
+    .B(coef2),
+    .P(tap2)
+    );
+`else
 wire    [35:0]  tap0;
 mpy18x18WithCe mpy0(
     .clk(clk),
     .ce(sync),
-    //.sclr(reset),
     .a(sum0[18:1]),
     .b(coef0),
     .p(tap0)
@@ -57,7 +82,6 @@ wire    [35:0]  tap1;
 mpy18x18WithCe mpy1(
     .clk(clk),
     .ce(sync),
-    //.sclr(reset),
     .a(sum1[18:1]),
     .b(coef1),
     .p(tap1)
@@ -66,11 +90,11 @@ wire    [35:0]  tap2;
 mpy18x18WithCe mpy2(
     .clk(clk),
     .ce(sync),
-    //.sclr(reset),
     .a(midTap),
     .b(coef2),
     .p(tap2)
     );
+`endif
 wire    [19:0] finalSum = tap0[34:15] + tap1[34:15] + tap2[34:15];
 
 

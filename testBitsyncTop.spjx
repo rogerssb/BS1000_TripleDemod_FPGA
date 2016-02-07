@@ -1,0 +1,141 @@
+<!DOCTYPE SilvacoProject>
+<project version="1" name="testBitsyncTop" >
+ <products>
+  <product name="SILOS" >
+   <settings>
+    <setting value="Silvaco4.14.3.R" name="Version" />
+    <setting value="Y" name="NoFloatWarn" />
+    <setting value="search" name="SystaskSearchOrder" />
+    <setting value="." name="SimFile" />
+    <setting value="N" name="VisualDebug" />
+   </settings>
+   <librarydirs>
+    <directory name="..\..\Xilinx\13.4\ISE_DS\ISE\verilog\src\unisims\{.v}" />
+   </librarydirs>
+   <plusdefines>
+    <define name="SIMULATE" />
+    <define name="BITSYNC_BERT" />
+   </plusdefines>
+   <includedirs>
+    <directory name="." />
+   </includedirs>
+   <analyzer>
+    <views>
+     <view value="0.000 ns,24035.985 ns,338.535 ns,740.664 ns,1175.445 ns" name="Last" />
+    </views>
+    <settings>
+     <setting value="163" name="C0Width" />
+     <setting value="117" name="C1Width" />
+     <setting value="151" name="C2Width" />
+     <setting value="N" name="GotoSource" />
+    </settings>
+    <groups>
+     <group open="yes" name="TX" show="yes" >
+      <signals>
+       <signal name="clk" scope="test" />
+       <signal name="clken" scope="test" />
+       <signal name="modClkEn" scope="test" />
+       <signal name="modBitEn" scope="test" />
+       <signal interpolate="Step" radix="Decimal" name="modClkCount" scope="test" />
+       <signal name="randData" scope="test" />
+       <signal interpolate="Step" radix="Real" name="txDataReal" scope="test" />
+       <signal interpolate="Step" radix="Real" name="txChannelReal" scope="test" />
+      </signals>
+     </group>
+     <group open="yes" name="RX" show="yes" >
+      <signals>
+       <signal radix="Real" name="bitrateBps" scope="test" />
+       <signal radix="Decimal" name="dfDecimation" scope="test" />
+       <signal name="dfControl" scope="test" />
+       <signal radix="Decimal" name="cicDecimationInt" scope="test" />
+       <signal name="bypassHb1" scope="test.bitsyncTop.df0" />
+       <signal name="bypassHb0" scope="test.bitsyncTop.df0" />
+       <signal name="bypassFir" scope="test.bitsyncTop.df0" />
+       <signal name="bypassCic" scope="test.bitsyncTop.df0" />
+       <signal interpolate="Step" radix="Real" name="hb0Real" scope="test.bitsyncTop.df0" />
+       <signal interpolate="Step" radix="Real" name="compReal" scope="test.bitsyncTop.df0" />
+       <signal interpolate="Step" radix="Real" name="agcReal" scope="test.bitsyncTop.df0" />
+       <signal interpolate="Step" radix="Real" name="hb1Real" scope="test.bitsyncTop.df0" />
+       <signal interpolate="Step" radix="Real" name="dfOutReal" scope="test.bitsyncTop.df0" />
+       <signal interpolate="Step" radix="Real" name="ch0MFReal" scope="test.bitsyncTop.dualBitsync" />
+      </signals>
+     </group>
+     <group open="yes" name="RESAMPLER" show="yes" >
+      <signals>
+       <signal name="ch0ResampleRate[31:0]" scope="test.bitsyncTop" />
+       <signal radix="Real" name="resamplerFreqSps" scope="test" />
+       <signal radix="Real" name="resamplerFreqNorm" scope="test" />
+       <signal radix="Decimal" name="resamplerFreqInt" scope="test" />
+       <signal name="\bbSRI[0] [17:0]" scope="test.bitsyncTop.dualBitsync" />
+       <signal interpolate="Step" radix="Real" name="inReal" scope="test.bitsyncTop.ch0Resamp" />
+       <signal interpolate="Step" radix="Real" name="outReal" scope="test.bitsyncTop.ch0Resamp" />
+       <signal interpolate="Step" radix="Real" name="ch0SampleFreqReal" scope="test.bitsyncTop.dualBitsync" />
+       <signal name="sync" scope="test.bitsyncTop.ch0Resamp" />
+       <signal name="resetPhase" scope="test.bitsyncTop.ch0Resamp" />
+       <signal name="resampleRate[31:0]" scope="test.bitsyncTop.ch0Resamp" />
+       <signal name="resamplerFreqOffset[31:0]" scope="test.bitsyncTop.ch0Resamp" />
+       <signal name="resamplerPhaseInc[31:0]" scope="test.bitsyncTop.ch0Resamp" />
+       <signal name="phase[31:0]" scope="test.bitsyncTop.ch0Resamp" />
+      </signals>
+     </group>
+     <group open="no" name="AGC" show="yes" >
+      <signals>
+       <signal name="ch0SymEn" scope="test.bitsyncTop.dualBitsync" />
+       <signal interpolate="Step" radix="Real" name="ch0SymDataReal" scope="test.bitsyncTop.dualBitsync" />
+       <signal interpolate="Step" radix="Real" name="magReal" scope="test.bitsyncTop.pcmAgcLoop0" />
+       <signal interpolate="Step" radix="Real" name="log2MagReal" scope="test.bitsyncTop.pcmAgcLoop0" />
+       <signal name="log2Mag[7:0]" scope="test.bitsyncTop.pcmAgcLoop0" />
+      </signals>
+     </group>
+    </groups>
+   </analyzer>
+   <explorer>
+    <settings>
+     <setting value="test.bitsyncTop.resampRegs.[12:0]addr" name="Scope" />
+    </settings>
+   </explorer>
+   <sourcefiles>
+    <file name="testBitsync.v" />
+    <file name="bitsyncTop.v" />
+    <file name="agcLoopFilter.v" />
+    <file name="agcLoopRegs.v" />
+    <file name="dualBitsync.v" />
+    <file name="bitsyncTopRegs.v" />
+    <file name="decimatingFilter.v" />
+    <file name="dfRegs.v" />
+    <file name="dualFirCoeffRegs.v" />
+    <file name="interpolate.v" />
+    <file name="interpRegs.v" />
+    <file name="log2.v" />
+    <file name="loopFilter.v" />
+    <file name="loopRegs.v" />
+    <file name="variableGain.v" />
+    <file name="videoFir.v" />
+    <file name="singleFir.v" />
+    <file name="cicCompMpy.v" />
+    <file name="cicInterpolate.v" />
+    <file name="shift48To18.v" />
+    <file name="shifter18to48.v" />
+    <file name=".\halfband\halfband.v" />
+    <file name=".\coregen\mpy18x18WithCe.v" />
+    <file name=".\coregen\mpy18x18.v" />
+    <file name=".\coregen\invSinc.v" />
+    <file name=".\coregen\reciprocalLut.v" />
+    <file name=".\coregen\resamplerTap0.v" />
+    <file name=".\coregen\resamplerTap1.v" />
+    <file name=".\coregen\resamplerTap2.v" />
+    <file name=".\coregen\resamplerTap3.v" />
+    <file name=".\coregen\resamplerTap4.v" />
+    <file name=".\coregen\resamplerTap5.v" />
+    <file name=".\coregen\resamplerTap6.v" />
+    <file name=".\coregen\resamplerTap7.v" />
+    <file name=".\coregen\resamplerTap8.v" />
+    <file name=".\coregen\halfbandEven.v" />
+    <file name="cicDecimator.v" />
+    <file name=".\resampler\resampRegs.v" />
+    <file name=".\resampler\resampler.v" />
+    <file name="pcmAgc.v" />
+   </sourcefiles>
+  </product>
+ </products>
+</project>

@@ -95,8 +95,21 @@ always @(posedge clk) begin
     ddcFreq <= newOffset - ddcCenterFreq;
     end
 
-
 // LO Generator
+`ifdef USE_VIVADO_CORES
+wire    [47:0]  m_axis;
+wire    [17:0]  iDds = m_axis[41:24];
+wire    [17:0]  qDds = m_axis[17:0];
+dds dds(
+  .aclk(clk),
+  .aclken(1'b1),
+  .aresetn(!reset),
+  .m_axis_data_tdata(m_axis),
+  .m_axis_data_tvalid(),
+  .s_axis_phase_tdata(ddcFreq),
+  .s_axis_phase_tvalid(1'b1)
+);
+`else
 wire    [17:0]iDds;
 wire    [17:0]qDds;
 dds dds ( 
@@ -108,12 +121,12 @@ dds dds (
     .sine(qDds), 
     .cosine(iDds)
     );
+`endif
 `ifdef SIMULATE
 real iDdsReal;
 real qDdsReal;
 always @(iDds) iDdsReal = ((iDds > 131071.0) ? (iDds - 262144.0) : iDds)/131072.0;
 always @(qDds) qDdsReal = ((qDds > 131071.0) ? (qDds - 262144.0) : qDds)/131072.0;
-
 `endif
 
 
@@ -428,6 +441,20 @@ always @(posedge clk) begin
     end
 
 // Lead Complex Mixer
+`ifdef USE_VIVADO_CORES
+wire    [47:0]  m_axis;
+wire    [17:0]  iLeadDds = lead_m_axis[41:24];
+wire    [17:0]  qLeadDds = lead_m_axis[17:0];
+dds dds(
+  .aclk(clk),
+  .aclken(1'b1),
+  .aresetn(!reset),
+  .m_axis_data_tdata(lead_m_axis),
+  .m_axis_data_tvalid(),
+  .s_axis_phase_tdata(newLead),
+  .s_axis_phase_tvalid(1'b1)
+);
+`else
 wire    [17:0]iLeadDds;
 wire    [17:0]qLeadDds;
 dds leadDds ( 
@@ -440,12 +467,12 @@ dds leadDds (
     .sine(qLeadDds), 
     .cosine(iLeadDds)
     );
+`endif
 `ifdef SIMULATE
 real iLeadDdsReal;
 real qLeadDdsReal;
 always @(iLeadDds) iLeadDdsReal = ((iLeadDds > 131071.0) ? (iLeadDds - 262144.0) : iLeadDds)/131072.0;
 always @(qLeadDds) qLeadDdsReal = ((qLeadDds > 131071.0) ? (qLeadDds - 262144.0) : qLeadDds)/131072.0;
-
 `endif
 
 

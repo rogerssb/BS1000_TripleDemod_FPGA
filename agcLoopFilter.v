@@ -11,6 +11,9 @@ derivative rights in exchange for negotiated compensation.
 
 module agcLoopFilter (
     clk, clkEn, reset, 
+    `ifdef USE_BUS_CLOCK
+    busClk,
+    `endif
     cs,
     wr0,wr1,wr2,wr3,
     addr,
@@ -21,6 +24,9 @@ module agcLoopFilter (
     );
 
 input           clk, clkEn, reset;
+`ifdef USE_BUS_CLOCK
+input           busClk;
+`endif
 input           cs;
 input           wr0,wr1,wr2,wr3;
 input   [12:0]  addr;
@@ -40,6 +46,9 @@ agcLoopRegs loopRegs(
     .addr(addr),
     .dataIn(din),
     .dataOut(dout),
+    `ifdef USE_BUS_CLOCK
+    .busClk(busClk),
+    `endif
     .cs(cs),
     .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
     .agcSetpoint(agcSetpoint),

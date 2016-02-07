@@ -8,10 +8,14 @@ derivative rights in exchange for negotiated compensation.
 
 
 `timescale 1ns/1ps
+`include "addressMap.v"
 
 module videoFir
   ( 
     clk, reset, clkEn,
+    `ifdef USE_BUS_CLOCK
+    busClk,
+    `endif
     cs, wr0, wr1, wr2, wr3,
     addr,
     din,
@@ -21,6 +25,9 @@ module videoFir
     );
 
 input           clk,reset,clkEn;
+`ifdef USE_BUS_CLOCK
+input           busClk;
+`endif
 input           cs,wr0,wr1,wr2,wr3;
 input   [12:0]  addr;
 input   [31:0]  din;
@@ -32,6 +39,9 @@ output  [17:0]  videoOut;
    wire [15:0]     c0c14, c1c13, c2c12, c3c11, c4c10, c5c9 , c6c8 , c7   ;
 
 dualFirCoeffRegs singleFirCoeffRegs (
+    `ifdef USE_BUS_CLOCK
+    .busClk(busClk),
+    `endif
     .addr    (addr   ),
     .dataIn  (din    ),
     .dataOut (dout   ),

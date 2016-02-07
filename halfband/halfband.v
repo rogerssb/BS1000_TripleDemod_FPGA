@@ -8,17 +8,20 @@ derivative rights in exchange for negotiated compensation.
 
 `timescale 1ns / 10 ps
 
-module halfbandDecimate( clk, reset, sync,
-                 iIn,qIn,
-                 iOut,qOut,
-                 syncOut
-                 );
+//************************ Single Channel Version *****************************
+
+module halfbandDecimate( 
+    clk, reset, sync,
+    din,
+    dout,
+    syncOut
+    );
 
 input clk;
 input reset;
 input sync;
-input  [17:0]iIn,qIn;
-output [17:0]iOut,qOut;
+input  [17:0]din;
+output [17:0]dout;
 output syncOut;
 
 reg evenSync;
@@ -32,24 +35,33 @@ always @(posedge clk) begin
     end
 
 // Even tap fir
-wire [32:0]evenOutI;
-wire [32:0]evenOutQ;
-halfbandEven evenFirI(
+`ifdef USE_VIVADO_CORES
+
+wire    [31:0]  evenOut;
+halfbandEven evenFir(
+    .aclk(clk),
+    .aclken(evenSync & sync),
+    .aresetn(!reset),
+    .s_axis_data_tvalid(1'b1),
+    .s_axis_data_tready(evenFirReady),
+    .s_axis_data_tdata({6'b0,din}),
+    .m_axis_data_tvalid(evenOutValid),
+    .m_axis_data_tuser(),
+    .m_axis_data_tdata(evenOut)
+);
+
+`else
+
+wire [32:0]evenOut;
+halfbandEven evenFir(
     .clk(clk),
     .nd((evenSync & sync) | reset),
     .rfd(),
     .rdy(),
-    .din(iIn),
-    .dout(evenOutI)
+    .din(din),
+    .dout(evenOut)
     );
-halfbandEven evenFirQ(
-    .clk(clk),
-    .nd((evenSync & sync) | reset),
-    .rfd(),
-    .rdy(),
-    .din(qIn),
-    .dout(evenOutQ)
-    );
+`endif
 
 // Odd tap delay and scale
 // Detect the input decimation
@@ -67,143 +79,104 @@ always @(posedge clk) begin
         end
     end
 
-`define ODD_DELAY  16
-reg [17:0]fifoI[`ODD_DELAY-1:0];
-reg [17:0]fifoQ[`ODD_DELAY-1:0];
+`define ODD_DELAY  32
+reg [17:0]fifo[`ODD_DELAY-1:0];
 always @(posedge clk) begin
     if (sync) begin
         if (!evenSync) begin
-            fifoI[0] <= iIn;
-            fifoI[1] <= fifoI[0];
-            fifoI[2] <= fifoI[1];
-            fifoI[3] <= fifoI[2];
-            fifoI[4] <= fifoI[3];
-            fifoI[5] <= fifoI[4];
-            fifoI[6] <= fifoI[5];
-            fifoI[7] <= fifoI[6];
-            fifoI[8] <= fifoI[7];
-            fifoI[9] <= fifoI[8];
-            fifoI[10] <= fifoI[9];
-            fifoI[11] <= fifoI[10];
-            fifoI[12] <= fifoI[11];
-            fifoI[13] <= fifoI[12];
-            fifoI[14] <= fifoI[13];
-            fifoI[15] <= fifoI[14];
-            fifoQ[0] <= qIn;
-            fifoQ[1] <= fifoQ[0];
-            fifoQ[2] <= fifoQ[1];
-            fifoQ[3] <= fifoQ[2];
-            fifoQ[4] <= fifoQ[3];
-            fifoQ[5] <= fifoQ[4];
-            fifoQ[6] <= fifoQ[5];
-            fifoQ[7] <= fifoQ[6];
-            fifoQ[8] <= fifoQ[7];
-            fifoQ[9] <= fifoQ[8];
-            fifoQ[10] <= fifoQ[9];
-            fifoQ[11] <= fifoQ[10];
-            fifoQ[12] <= fifoQ[11];
-            fifoQ[13] <= fifoQ[12];
-            fifoQ[14] <= fifoQ[13];
-            fifoQ[15] <= fifoQ[14];
+            fifo[0] <= din;
+            fifo[1] <= fifo[0];
+            fifo[2] <= fifo[1];
+            fifo[3] <= fifo[2];
+            fifo[4] <= fifo[3];
+            fifo[5] <= fifo[4];
+            fifo[6] <= fifo[5];
+            fifo[7] <= fifo[6];
+            fifo[8] <= fifo[7];
+            fifo[9] <= fifo[8];
+            fifo[10] <= fifo[9];
+            fifo[11] <= fifo[10];
+            fifo[12] <= fifo[11];
+            fifo[13] <= fifo[12];
+            fifo[14] <= fifo[13];
+            fifo[15] <= fifo[14];
+            fifo[16] <= fifo[15];
+            fifo[17] <= fifo[16];
+            fifo[18] <= fifo[17];
+            fifo[19] <= fifo[18];
+            fifo[20] <= fifo[19];
+            fifo[21] <= fifo[20];
+            fifo[22] <= fifo[21];
+            fifo[23] <= fifo[22];
+            fifo[24] <= fifo[23];
+            fifo[25] <= fifo[24];
             end
         end
     end
-reg [17:0]oddOutI,oddOutQ;
-always @(
-    fifoMux or 
-    fifoI[15] or fifoI[12] or fifoI[11] or fifoI[10] or fifoI[9] or
-    fifoQ[15] or fifoQ[12] or fifoQ[11] or fifoQ[10] or fifoQ[9]) begin
+reg [17:0]oddOut;
+`ifdef USE_VIVADO_CORES
+always @* begin
+    oddOut = fifo[24];
+end
+`else
+always @* begin
     case(fifoMux)
         0: begin
-            oddOutI = fifoI[15];
-            oddOutQ = fifoQ[15];
+            oddOut = fifo[15];
             end
         1: begin
-            oddOutI = fifoI[12];
-            oddOutQ = fifoQ[12];
+            oddOut = fifo[12];
             end
         2: begin
-            oddOutI = fifoI[11];
-            oddOutQ = fifoQ[11];
+            oddOut = fifo[11];
             end
         3,4,5: begin
-            oddOutI = fifoI[10];
-            oddOutQ = fifoQ[10];
+            oddOut = fifo[10];
             end
         default: begin
-            oddOutI = fifoI[9];
-            oddOutQ = fifoQ[9];
-            //oddOutI = fifoI[10];
-            //oddOutQ = fifoQ[10];
+            oddOut = fifo[9];
             end
         endcase
     end
-
-`ifdef OLD_HB
-// Add 'em up
-reg [17:0]iOut;
-reg [17:0]qOut;
-always @(posedge clk) begin
-    if (sync) begin
-        if (evenSync) begin
-            iOut <= evenOutI[27:10] + {{1{oddOutI[17]}},oddOutI[17:1]};
-            qOut <= evenOutQ[27:10] + {{1{oddOutQ[17]}},oddOutQ[17:1]};
-            //iOut <= evenOutI[26:9] + oddOutI;
-            //qOut <= evenOutQ[26:9] + oddOutQ;
-            end
-        end
-    end
-`else
-// Add 'em up
-wire    [18:0]  sumI = evenOutI[28:10] + {{2{oddOutI[17]}},oddOutI[17:1]};
-wire    [18:0]  sumQ = evenOutQ[28:10] + {{2{oddOutQ[17]}},oddOutQ[17:1]};
-reg     [17:0]  iData;
-reg     [17:0]  qData;
-always @(posedge clk) begin
-    if (sync) begin
-        if (evenSync) begin
-            if (sumI[18] & !sumI[17]) begin
-                iData <= 18'h20001;
-                end
-            else if (!sumI[18] & sumI[17]) begin
-                iData <= 18'h1ffff;
-                end
-            else begin
-                iData <= sumI[17:0];
-                end
-            if (sumQ[18] & !sumQ[17]) begin
-                qData <= 18'h20001;
-                end
-            else if (!sumQ[18] & sumQ[17]) begin
-                qData <= 18'h1ffff;
-                end
-            else begin
-                qData <= sumQ[17:0];
-                end
-            end
-        end
-    end
 `endif
 
-reg syncOut;
-reg     [17:0]  iOut;
-reg     [17:0]  qOut;
+// Add 'em up
+wire    [18:0]  sum = evenOut[28:10] + {{2{oddOut[17]}},oddOut[17:1]};
+reg     [17:0]  data;
 always @(posedge clk) begin
-    iOut <= iData;
-    qOut <= qData;
+    if (sync) begin
+        if (evenSync) begin
+            if (sum[18] & !sum[17]) begin
+                data <= 18'h20001;
+                end
+            else if (!sum[18] & sum[17]) begin
+                data <= 18'h1ffff;
+                end
+            else begin
+                data <= sum[17:0];
+                end
+            end
+        end
+    end
+
+reg             syncOut;
+reg     [17:0]  dout;
+always @(posedge clk) begin
+    dout <= data;
     syncOut <= evenSync & sync;
     end
 
 `ifdef SIMULATE
-real inIReal;
-real outIReal;
-real outQReal;
-always @(iIn) inIReal = ((iIn > 131071.0) ? (iIn - 262144.0) : iIn)/131072.0;
-always @(iOut) outIReal = ((iOut > 131071.0) ? (iOut - 262144.0) : iOut)/131072.0;
-always @(qOut) outQReal = ((qOut > 131071.0) ? (qOut - 262144.0) : qOut)/131072.0;
+real dinReal;
+always @* dinReal = $itor($signed(din))/(2**17);
+real doutReal;
+always @* doutReal = $itor($signed(dout))/(2**17);
 `endif
 
 endmodule
+
+
+//************************** Test Bench ***************************************
 
 //`define TEST_MODULE
 `ifdef TEST_MODULE
@@ -218,7 +191,7 @@ module test;
 reg reset,clk;
 
 // Create the clocks
-parameter decimation = 10;
+parameter decimation = 4;
 parameter HC = 5;
 parameter C = 2*HC;
 reg clken;
@@ -240,9 +213,9 @@ always @(posedge clk) begin
     end
 
 `define SAMPLE_PERIOD   (C*1e-9)
-`define TWO_POW_31      2147483648
-`define TWO_POW_32      4294967296
-`define TWO_POW_17      131072
+`define TWO_POW_31      2147483648.0
+`define TWO_POW_32      4294967296.0
+`define TWO_POW_17      131072.0
 
 // Instantiate the halfband filter
 reg     [17:0]hbIn;
@@ -257,11 +230,31 @@ halfbandDecimate hb ( .clk(clk), .reset(reset), .sync(sync),
 
 //Create a sinewave input
 real carrierFreqHz;
-real carrierFreqNorm = carrierFreqHz * `SAMPLE_PERIOD * `TWO_POW_32;
-integer carrierFreqInt = carrierFreqNorm;
+real carrierFreqNorm;
+always @* carrierFreqNorm = carrierFreqHz * `SAMPLE_PERIOD * `TWO_POW_32;
+integer carrierFreqInt;
+always @* carrierFreqInt = carrierFreqNorm;
 wire [31:0] freq = carrierFreqInt;
+
+`ifdef USE_VIVADO_CORES
+wire    [47:0]  m_axis;
+wire    [17:0]  sineOut = m_axis[41:24];
+wire    [17:0]  cosOut = m_axis[17:0];
+dds dds(
+  .aclk(clk),
+  .aclken(1'b1),
+  .aresetn(!reset),
+  .m_axis_data_tdata(m_axis),
+  .m_axis_data_tvalid(),
+  .s_axis_phase_tdata(freq),
+  .s_axis_phase_tvalid(1'b1)
+);
+`else
 wire [17:0]sineOut;
-dds dds(.sclr(reset), .clk(clk), .ce(1'b1), .we(1'b1), .data(freq), .sine(sineOut), .cosine());
+dds dds(
+    .sclr(reset), .clk(clk), .ce(1'b1), .we(1'b1), .data(freq), .sine(sineOut), .cosine()
+);
+`endif
 
 always @(posedge clk) begin
     if (sync) begin
@@ -281,7 +274,7 @@ initial begin
     #(10*C) ;
 
     reset = 1;
-    #(2*C) ;
+    #(2*C*decimation) ;
     reset = 0;
 
     #(64*C*decimation) ;
@@ -304,7 +297,7 @@ initial begin
 
     carrierFreqHz = 35e6/decimation;
 
-    #(64*C*decimation) ;
+    #(128*C*decimation) ;
 
     $stop;
 

@@ -67,9 +67,10 @@ input           iSym2xEn_pad ;
 input           iData,qData;
 
 output          dac_rst;
-output          dac0_nCs,dac0_sclk;
-output          dac1_nCs,dac1_sclk;
-output          dac2_nCs,dac2_sclk;
+output          dac_sclk;
+output          dac0_nCs;
+output          dac1_nCs;
+output          dac2_nCs;
 output  [13:0]  dac0_d,dac1_d,dac2_d;
 output          dac0_clk,dac1_clk,dac2_clk;
 output          cout_i,dout_i;

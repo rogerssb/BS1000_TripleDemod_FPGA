@@ -116,6 +116,16 @@ end
    
 
    wire [35:0] tap0, tap1, tap2, tap3, tap4, tap5, tap6, tap7;
+`ifdef USE_VIVADO_CORES
+   mpy18x18WithCe tap0mult (.CLK(clk), .A(         xnPn_14[18:1]), .B({c0c14,2'b0}), .CE(syncIn), .P(tap0));
+   mpy18x18WithCe tap1mult (.CLK(clk), .A(       xn_1Pn_13[18:1]), .B({c1c13,2'b0}), .CE(syncIn), .P(tap1));
+   mpy18x18WithCe tap2mult (.CLK(clk), .A(       xn_2Pn_12[18:1]), .B({c2c12,2'b0}), .CE(syncIn), .P(tap2));
+   mpy18x18WithCe tap3mult (.CLK(clk), .A(       xn_3Pn_11[18:1]), .B({c3c11,2'b0}), .CE(syncIn), .P(tap3));
+   mpy18x18WithCe tap4mult (.CLK(clk), .A(       xn_4Pn_10[18:1]), .B({c4c10,2'b0}), .CE(syncIn), .P(tap4));
+   mpy18x18WithCe tap5mult (.CLK(clk), .A(        xn_5Pn_9[18:1]), .B({c5c9, 2'b0}), .CE(syncIn), .P(tap5));
+   mpy18x18WithCe tap6mult (.CLK(clk), .A(        xn_6Pn_8[18:1]), .B({c6c8, 2'b0}), .CE(syncIn), .P(tap6));
+   mpy18x18WithCe tap7mult (.CLK(clk), .A({xn_7[17], xn_7[17:1]}), .B({c7,   2'b0}), .CE(syncIn), .P(tap7));
+`else
    mpy18x18WithCe tap0mult (.clk(clk), .a(         xnPn_14[18:1]), .b({c0c14,2'b0}), .ce(syncIn), .p(tap0));
    mpy18x18WithCe tap1mult (.clk(clk), .a(       xn_1Pn_13[18:1]), .b({c1c13,2'b0}), .ce(syncIn), .p(tap1));
    mpy18x18WithCe tap2mult (.clk(clk), .a(       xn_2Pn_12[18:1]), .b({c2c12,2'b0}), .ce(syncIn), .p(tap2));
@@ -124,6 +134,7 @@ end
    mpy18x18WithCe tap5mult (.clk(clk), .a(        xn_5Pn_9[18:1]), .b({c5c9, 2'b0}), .ce(syncIn), .p(tap5));
    mpy18x18WithCe tap6mult (.clk(clk), .a(        xn_6Pn_8[18:1]), .b({c6c8, 2'b0}), .ce(syncIn), .p(tap6));
    mpy18x18WithCe tap7mult (.clk(clk), .a({xn_7[17], xn_7[17:1]}), .b({c7,   2'b0}), .ce(syncIn), .p(tap7));
+`endif
    
    wire [42:0] yn = {{ 7{tap0[35]}},tap0} 
                + {{ 7{tap1[35]}},tap1}  

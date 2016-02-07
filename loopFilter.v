@@ -11,6 +11,9 @@ derivative rights in exchange for negotiated compensation.
 
 module loopFilter (
     clk, clkEn, reset, 
+    `ifdef USE_BUS_CLOCK
+    busClk,
+    `endif
     cs,
     wr0,wr1,wr2,wr3,
     addr,
@@ -27,6 +30,9 @@ module loopFilter (
     );
 
 input           clk, clkEn, reset;
+`ifdef USE_BUS_CLOCK
+input           busClk;
+`endif
 input           cs;
 input           wr0,wr1,wr2,wr3;
 input   [12:0]  addr;
@@ -50,6 +56,9 @@ wire    [31:0]  lowerLimit = -limit;
 wire    [31:0]  upperLimit = limit;
 reg     [31:0]  lagAccum;
 loopRegs micro(
+    `ifdef USE_BUS_CLOCK
+    .busClk(busClk),
+    `endif
     .addr(addr),
     .dataIn(din),
     .dataOut(dout),

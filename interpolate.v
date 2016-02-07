@@ -11,6 +11,9 @@ derivative rights in exchange for negotiated compensation.
 
 module interpolate(
     clk, reset, clkEn,
+    `ifdef USE_BUS_CLOCK
+    busClk,
+    `endif
     wr0, wr1, wr2, wr3,
     addr,
     din,
@@ -26,6 +29,9 @@ parameter FirRegSpace = `VIDFIR0SPACE;
 input           clk;
 input           reset;
 input           clkEn;
+`ifdef USE_BUS_CLOCK
+input           busClk;
+`endif
 input           wr0,wr1,wr2,wr3;
 input   [12:0]  addr;
 input   [31:0]  din;
@@ -64,6 +70,9 @@ wire    [17:0]  mantissa;
 wire    [4:0]   exponent;
 wire    [31:0]  interpDout;
 interpRegs regs  (
+    `ifdef USE_BUS_CLOCK
+    .busClk(busClk),
+    `endif
     .cs(interpCS),
     .addr(addr),
     .dataIn(din),
@@ -114,6 +123,9 @@ videoFir videoFir(
     .clk(clk), 
     .reset(reset), 
     .clkEn(clkEn),
+    `ifdef USE_BUS_CLOCK
+    .busClk(busClk),
+    `endif
     .cs(firCS), 
     .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
     .addr(addr),
@@ -127,7 +139,7 @@ videoFir videoFir(
 `ifdef CIC_USE_MPYS
 // CIC Compensation
 wire    [17:0]  cicCompOut;
-cicComp cicComp(
+cicCompMpy cicComp(
     .clk(clk),
     .reset(reset),
     .sync(clkEn),
@@ -181,6 +193,15 @@ shift48to18 cicGainAdjust(
     );
 
 wire [35:0]scaledValue;
+`ifdef USE_VIVADO_CORES
+mpy18x18 mantissaScaler (
+    .SCLR(cicReset),
+    .CLK(clk),
+    .A(exponentAdjusted),
+    .B(mantissa),
+    .P(scaledValue)
+    );
+`else
 mpy18x18 mantissaScaler (
     .sclr(cicReset),
     .clk(clk),
@@ -188,7 +209,18 @@ mpy18x18 mantissaScaler (
     .b(mantissa),
     .p(scaledValue)
     );
+`endif
 
+`ifdef USE_VIVADO_CORES
+wire [31:0] invSincOut;
+invSinc invSinc(
+    .aclk(clk), 
+    .s_axis_data_tvalid(1'b1), 
+    .s_axis_data_tready(), 
+    .s_axis_data_tdata(scaledValue[33:18]), 
+    .m_axis_data_tvalid(),
+    .m_axis_data_tdata(invSincOut));
+`else
 wire [29:0] invSincOut;
 invSinc invSinc
   (
@@ -198,7 +230,7 @@ invSinc invSinc
    .rdy(),
    .din(scaledValue[33:18]), // Bus [15 : 0]
    .dout(invSincOut)); // Bus [24 : 0]
-
+`endif
 
 reg     [17:0]  dataOut;
 wire    [1:0]   bypassMode = {bypassEQ,bypass};

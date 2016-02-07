@@ -215,6 +215,15 @@ always @(posedge clk) begin
         end
     end
 wire [35:0]scaledValue;
+`ifdef USE_VIVADO_CORES
+mpy18x18 gainScaler (
+    .SCLR(1'b0),
+    .CLK(clk),
+    .A(shift),
+    .B({2'b01,man1}),
+    .P(scaledValue)
+    );
+`else
 mpy18x18 gainScaler (
     .sclr(1'b0),
     .clk(clk),
@@ -222,6 +231,7 @@ mpy18x18 gainScaler (
     .b({2'b01,man1}),
     .p(scaledValue)
     );
+`endif
 
 reg     [17:0]  dout;
 always @(posedge clk) begin
