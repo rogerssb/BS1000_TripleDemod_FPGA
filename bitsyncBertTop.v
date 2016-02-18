@@ -69,7 +69,7 @@ output          fsDiffClkOut, fsDiffDataOut;
 
 output          ch0Lockn, ch1Lockn;
 
-parameter VER_NUMBER = 16'h0190;
+parameter VER_NUMBER = 16'd415;
 
 
 //******************************************************************************
