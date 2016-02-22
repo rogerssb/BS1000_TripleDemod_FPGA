@@ -27,7 +27,14 @@ module bitsyncBertTop (
     fsClkOut,fsDataOut,
     bsDiffClkOut, bsDiffDataOut,
     fsDiffClkOut, fsDiffDataOut,
-    ch0Lockn, ch1Lockn
+    ch0Lockn, ch1Lockn,
+    dacSCLK, dacMOSI, 
+    ch0SELn,
+    ch1SELn,
+    ch0HighImpedance,
+    ch0SingleEnded,
+    ch1HighImpedance,
+    ch1SingleEnded
     );
 
 input           sysClk;
@@ -67,7 +74,18 @@ output          encClkOut,encDataOut;
 output          bsDiffClkOut, bsDiffDataOut;
 output          fsDiffClkOut, fsDiffDataOut;
 
+// Lock indicators
 output          ch0Lockn, ch1Lockn;
+
+// Gain and Offset DAC interfaces
+output          ch0SELn, ch1SELn;
+output          dacSCLK, dacMOSI;
+
+// Input Impedance and Topology controls
+output          ch0HighImpedance;
+output          ch0SingleEnded;
+output          ch1HighImpedance;
+output          ch1SingleEnded;
 
 parameter VER_NUMBER = 16'd415;
 
@@ -154,6 +172,8 @@ bitsyncBertRegs topRegs(
     .versionNumber(VER_NUMBER),
     .bitsyncEnable(bitsyncEnable),
     .bertEnable(bertEnable),
+    .framesyncEnable(),
+    .pnGeneratorEnable(),
     .reset(reset),
     .reboot(reboot),
     .rebootAddress(boot_addr),
@@ -169,12 +189,12 @@ bitsyncBertRegs topRegs(
 );
 
 
-
-
 //******************************************************************************
 //                          Two Channel Bitsync
 //******************************************************************************
 wire    [17:0]  ch0SymData, ch1SymData;
+wire    [17:0]  ch0Gain,ch0Offset;
+wire    [17:0]  ch1Gain,ch1Offset;
 wire    [17:0]  ch0Dac0Data, ch0Dac1Data, ch0Dac2Data;
 wire    [17:0]  ch1Dac0Data, ch1Dac1Data, ch1Dac2Data;
 wire    [17:0]  iEye,qEye;
@@ -201,6 +221,10 @@ bitsyncTop bitsyncTop(
     .ch0Dac1Data(ch0Dac1Data),
     .ch0Dac2ClkEn(ch0Dac2ClkEn),
     .ch0Dac2Data(ch0Dac2Data),
+    .ch0HighImpedance(ch0HighImpedance),
+    .ch0SingleEnded(ch0SingleEnded),
+    .ch0Gain(ch0Gain),
+    .ch0Offset(ch0Offset),
     .ch1Lock(ch1Lock),
     .ch1Sym2xEn(ch1Sym2xEn),
     .ch1SymEn(ch1SymEn),
@@ -213,10 +237,38 @@ bitsyncTop bitsyncTop(
     .ch1Dac1Data(ch1Dac1Data),
     .ch1Dac2ClkEn(ch1Dac2ClkEn),
     .ch1Dac2Data(ch1Dac2Data),
+    .ch1HighImpedance(ch1HighImpedance),
+    .ch1SingleEnded(ch1SingleEnded),
+    .ch1Gain(ch1Gain),
+    .ch1Offset(ch1Offset),
     .eyeClkEn(eyeClkEn),
     .iEye(iEye),.qEye(qEye),
     .eyeOffset(eyeOffset)
     );
+
+//******************************************************************************
+//                          AGC/DC Offset DAC Interfaces
+//******************************************************************************
+mcp48xxInterface dacInterface (
+    .clk(clk),
+    .clkEn0(ch0SymEn),
+    .clkEn1(ch1SymEn),
+    .reset(reset),
+    .dac0GainSelA(1'b1),
+    .dac0GainSelB(1'b1),
+    .dac0ValueA(ch0Gain[17:6]),
+    .dac0ValueB(ch0Offset[17:6]),
+    .dac1GainSelA(1'b1),
+    .dac1GainSelB(1'b1),
+    .dac1ValueA(ch1Gain[17:6]),
+    .dac1ValueB(ch1Offset[17:6]),
+    .SCK(dacSCLK),
+    .SDI(dacMOSI),
+    .CS0n(ch0SELn),
+    .CS1n(ch1SELn)
+);
+
+
 
 //******************************************************************************
 //                                PCM Decoders

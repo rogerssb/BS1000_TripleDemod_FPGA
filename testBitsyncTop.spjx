@@ -21,7 +21,7 @@
    </includedirs>
    <analyzer>
     <views>
-     <view value="0.000 ns,24035.985 ns,338.535 ns,740.664 ns,1175.445 ns" name="Last" />
+     <view value="0.000 ns,30255.001 ns,468.740 ns,29786.881 ns,13200.295 ns" name="Last" />
     </views>
     <settings>
      <setting value="163" name="C0Width" />
@@ -30,7 +30,7 @@
      <setting value="N" name="GotoSource" />
     </settings>
     <groups>
-     <group open="yes" name="TX" show="yes" >
+     <group open="no" name="TX" show="yes" >
       <signals>
        <signal name="clk" scope="test" />
        <signal name="clken" scope="test" />
@@ -39,10 +39,15 @@
        <signal interpolate="Step" radix="Decimal" name="modClkCount" scope="test" />
        <signal name="randData" scope="test" />
        <signal interpolate="Step" radix="Real" name="txDataReal" scope="test" />
+       <signal interpolate="Step" radix="Real" name="txScaleFactor" scope="test" />
        <signal interpolate="Step" radix="Real" name="txChannelReal" scope="test" />
+       <signal name="ch0Gain[17:0]" scope="test" />
+       <signal interpolate="Step" radix="Real" name="agcGain" scope="test" />
+       <signal interpolate="Step" radix="Real" name="rxAgc" scope="test" />
+       <signal interpolate="Step" radix="Real" name="rxInputReal" scope="test" />
       </signals>
      </group>
-     <group open="yes" name="RX" show="yes" >
+     <group open="no" name="RX" show="yes" >
       <signals>
        <signal radix="Real" name="bitrateBps" scope="test" />
        <signal radix="Decimal" name="dfDecimation" scope="test" />
@@ -54,13 +59,13 @@
        <signal name="bypassCic" scope="test.bitsyncTop.df0" />
        <signal interpolate="Step" radix="Real" name="hb0Real" scope="test.bitsyncTop.df0" />
        <signal interpolate="Step" radix="Real" name="compReal" scope="test.bitsyncTop.df0" />
-       <signal interpolate="Step" radix="Real" name="agcReal" scope="test.bitsyncTop.df0" />
        <signal interpolate="Step" radix="Real" name="hb1Real" scope="test.bitsyncTop.df0" />
        <signal interpolate="Step" radix="Real" name="dfOutReal" scope="test.bitsyncTop.df0" />
        <signal interpolate="Step" radix="Real" name="ch0MFReal" scope="test.bitsyncTop.dualBitsync" />
+       <signal interpolate="Step" radix="Real" name="ch0SymDataReal" scope="test.bitsyncTop.dualBitsync" />
       </signals>
      </group>
-     <group open="yes" name="RESAMPLER" show="yes" >
+     <group open="no" name="RESAMPLER" show="yes" >
       <signals>
        <signal name="ch0ResampleRate[31:0]" scope="test.bitsyncTop" />
        <signal radix="Real" name="resamplerFreqSps" scope="test" />
@@ -78,27 +83,71 @@
        <signal name="phase[31:0]" scope="test.bitsyncTop.ch0Resamp" />
       </signals>
      </group>
-     <group open="no" name="AGC" show="yes" >
+     <group open="yes" name="AGC" show="yes" >
       <signals>
+       <signal name="chAgcSpace" scope="test.bitsyncTop.pcmAgcLoop0" />
+       <signal name="cs" scope="test.bitsyncTop.pcmAgcLoop0.lf.loopRegs" />
+       <signal name="wr0" scope="test.bitsyncTop.pcmAgcLoop0.lf.loopRegs" />
+       <signal name="wr1" scope="test.bitsyncTop.pcmAgcLoop0.lf.loopRegs" />
+       <signal name="wr2" scope="test.bitsyncTop.pcmAgcLoop0.lf.loopRegs" />
+       <signal name="wr3" scope="test.bitsyncTop.pcmAgcLoop0.lf.loopRegs" />
+       <signal name="dataIn[31:0]" scope="test.bitsyncTop.pcmAgcLoop0.lf.loopRegs" />
+       <signal name="agcSetpoint[16:0]" scope="test.bitsyncTop.pcmAgcLoop0.lf.loopRegs" />
+       <signal name="lowerLimit[31:0]" scope="test.bitsyncTop.pcmAgcLoop0.lf.loopRegs" />
+       <signal name="upperLimit[31:0]" scope="test.bitsyncTop.pcmAgcLoop0.lf.loopRegs" />
+       <signal name="negErrorGain[4:0]" scope="test.bitsyncTop.pcmAgcLoop0.lf.loopRegs" />
+       <signal name="posErrorGain[4:0]" scope="test.bitsyncTop.pcmAgcLoop0.lf.loopRegs" />
+       <signal name="invertError" scope="test.bitsyncTop.pcmAgcLoop0.lf.loopRegs" />
+       <signal name="zeroError" scope="test.bitsyncTop.pcmAgcLoop0.lf.loopRegs" />
        <signal name="ch0SymEn" scope="test.bitsyncTop.dualBitsync" />
        <signal interpolate="Step" radix="Real" name="ch0SymDataReal" scope="test.bitsyncTop.dualBitsync" />
        <signal interpolate="Step" radix="Real" name="magReal" scope="test.bitsyncTop.pcmAgcLoop0" />
-       <signal interpolate="Step" radix="Real" name="log2MagReal" scope="test.bitsyncTop.pcmAgcLoop0" />
-       <signal name="log2Mag[7:0]" scope="test.bitsyncTop.pcmAgcLoop0" />
+       <signal name="signalLevel[16:0]" scope="test.bitsyncTop.pcmAgcLoop0.lf" />
+       <signal name="agcSetpoint[16:0]" scope="test.bitsyncTop.pcmAgcLoop0.lf" />
+       <signal name="error[17:0]" scope="test.bitsyncTop.pcmAgcLoop0.lf" />
+       <signal name="loopError[17:0]" scope="test.bitsyncTop.pcmAgcLoop0.lf" />
+       <signal name="leadError[31:0]" scope="test.bitsyncTop.pcmAgcLoop0.lf" />
+       <signal name="integrator[31:0]" scope="test.bitsyncTop.pcmAgcLoop0.lf" />
+       <signal radix="Real" name="integratorReal" scope="test.bitsyncTop.pcmAgcLoop0.lf" />
+       <signal name="loopOutput[31:0]" scope="test.bitsyncTop.pcmAgcLoop0.lf" />
+      </signals>
+     </group>
+     <group open="no" name="MPC" show="yes" >
+      <signals>
+       <signal name="clk" scope="test.dacInterface" />
+       <signal name="clkEn1" scope="test.dacInterface" />
+       <signal name="clkEn0" scope="test.dacInterface" />
+       <signal name="spiState[3:0]" scope="test.dacInterface" />
+       <signal name="sckEnable" scope="test.dacInterface" />
+       <signal name="negEdgeSCK" scope="test.dacInterface" />
+       <signal name="posEdgeSCK" scope="test.dacInterface" />
+       <signal name="SDI" scope="test.dacInterface" />
+       <signal name="SCK" scope="test.dacInterface" />
+       <signal interpolate="Step" radix="Decimal" name="clkCount" scope="test.dacInterface" />
+       <signal name="CS1n" scope="test.dacInterface" />
+       <signal name="CS0n" scope="test.dacInterface" />
+      </signals>
+     </group>
+     <group open="no" name="MICRO" show="yes" >
+      <signals>
+       <signal name="a[12:0]" scope="test" />
+       <signal name="d[31:0]" scope="test" />
+       <signal name="we3" scope="test" />
+       <signal name="we2" scope="test" />
+       <signal name="we1" scope="test" />
+       <signal name="we0" scope="test" />
       </signals>
      </group>
     </groups>
    </analyzer>
    <explorer>
     <settings>
-     <setting value="test.bitsyncTop.resampRegs.[12:0]addr" name="Scope" />
+     <setting value="test.bitsyncTop.pcmAgcLoop0.lf" name="Scope" />
     </settings>
    </explorer>
    <sourcefiles>
     <file name="testBitsync.v" />
     <file name="bitsyncTop.v" />
-    <file name="agcLoopFilter.v" />
-    <file name="agcLoopRegs.v" />
     <file name="dualBitsync.v" />
     <file name="bitsyncTopRegs.v" />
     <file name="decimatingFilter.v" />
@@ -106,10 +155,8 @@
     <file name="dualFirCoeffRegs.v" />
     <file name="interpolate.v" />
     <file name="interpRegs.v" />
-    <file name="log2.v" />
     <file name="loopFilter.v" />
     <file name="loopRegs.v" />
-    <file name="variableGain.v" />
     <file name="videoFir.v" />
     <file name="singleFir.v" />
     <file name="cicCompMpy.v" />
@@ -135,6 +182,10 @@
     <file name=".\resampler\resampRegs.v" />
     <file name=".\resampler\resampler.v" />
     <file name="pcmAgc.v" />
+    <file name="dcLoopFilter.v" />
+    <file name="pcmAgcLoopFilter.v" />
+    <file name="pcmAgcLoopRegs.v" />
+    <file name="mcp48xxInterface.v" />
    </sourcefiles>
   </product>
  </products>

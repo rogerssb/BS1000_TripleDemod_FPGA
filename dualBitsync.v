@@ -692,7 +692,7 @@ assign ch1SymClk = asyncTimingErrorEn;
 
 `ifdef SIMULATE
 real ch0SymDataReal;
-always @(ch0SymData) ch0SymDataReal = (ch0SymData[17] ? ch0SymData - 262144.0 : ch0SymData)/131072.0;
+always @(ch0SymData) ch0SymDataReal = $itor($signed(ch0SymData))/(2**17);
 `endif
 
 endmodule

@@ -46,21 +46,21 @@
 `define VIDFIR2SPACE        13'b0_00xx_0111_xxxx
 
 // Bitsync subsystem registers
-`define BITSYNC_TOP_SPACE   13'b0_01xx_0000_xxxx
+`define BITSYNC_TOP_SPACE   13'b0_01xx_000x_xxxx
 
 `define CH0_BITSYNCSPACE    13'b0_01x0_010x_xxxx
 `define BITSYNCSPACE        `CH0_BITSYNCSPACE
 `define CH0_RESAMPSPACE     13'b0_01x0_0110_xxxx
 `define CH0_DFSPACE         13'b0_01x0_0111_xxxx
 `define CH0_DFFIRSPACE      13'b0_01x0_1000_xxxx
-`define CH0_AGCSPACE        13'b0_01x0_1001_xxxx
+`define CH0_AGCSPACE        13'b0_01x0_101x_xxxx
 
 `define CH1_BITSYNCSPACE    13'b0_01x1_010x_xxxx
 `define BITSYNCAUSPACE      `CH1_BITSYNCSPACE
 `define CH1_RESAMPSPACE     13'b0_01x1_0110_xxxx
 `define CH1_DFSPACE         13'b0_01x1_0111_xxxx
 `define CH1_DFFIRSPACE      13'b0_01x1_1000_xxxx
-`define CH1_AGCSPACE        13'b0_01x1_1001_xxxx
+`define CH1_AGCSPACE        13'b0_01x1_101x_xxxx
 
 
 // BERT subsystem registers
@@ -109,20 +109,24 @@
 `define SYS_BERT_MUX_SEL    13'bx_xxxx_xxx1_10xx
 
 // Define bitsyncTopRegs memory map
-`define BS_TOP_CONTROL          13'bx_xxxx_xxxx_00xx
+`define BS_TOP_CONTROL          13'bx_xxxx_xxx0_00xx
 `define MODE_SINGLE_CH              2'b00
 `define MODE_IND_CH                 2'b01
 `define MODE_DUAL_CH                2'b10
 `define MODE_OFFSET_CH              2'b11
-`define BS_TOP_CH0_DACSELECT    13'bx_xxxx_xxxx_01xx
-`define BS_TOP_CH1_DACSELECT    13'bx_xxxx_xxxx_10xx
+`define BS_TOP_CH0_CONTROL      13'bx_xxxx_xxx0_01xx
+`define BS_TOP_CH1_CONTROL      13'bx_xxxx_xxx0_10xx
 `define BS_DAC_ADC                  4'b0000
 `define BS_DAC_DC                   4'b0001
 `define BS_DAC_DF                   4'b0010
 `define BS_DAC_SYM                  4'b0011
 `define BS_DAC_AGC                  4'b0100
 `define BS_DAC_LOCK                 4'b0101
-`define BS_TOP_STATUS           13'bx_xxxx_xxxx_11xx
+`define BS_DC_REMOVAL_ENABLE       32'b1000_0000_0000_0000_0000_0000_0000_0000
+`define BS_HIGH_Z                  32'b0100_0000_0000_0000_0000_0000_0000_0000
+`define BS_SINGLE_ENDED            32'b0010_0000_0000_0000_0000_0000_0000_0000
+`define BS_TOP_STATUS           13'bx_xxxx_xxx0_11xx
+`define BS_TOP_DC_GAINS         13'bx_xxxx_xxx1_00xx
 
 // Define the Resampler memory map
 `define RESAMP_RATE         13'bx_xxxx_xxxx_00xx

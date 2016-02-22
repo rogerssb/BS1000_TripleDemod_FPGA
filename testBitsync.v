@@ -1,7 +1,7 @@
 `include "./addressMap.v"
 `timescale 1ns/100ps
 
-//`define ENABLE_AGC
+`define ENABLE_AGC
 //`define MATLAB_VECTORS
 
 module test;
@@ -193,18 +193,49 @@ interpolate #(.RegSpace(`INTERP0SPACE), .FirRegSpace(`VIDFIR0SPACE)) ch0Interpol
     .clkEnOut(txSampleEn)
 );
 
+//********************** Create an AGC element ********************************
+
+wire    [17:0]  ch0Gain;
+real ch0GainReal;
+always @* ch0GainReal = $itor(ch0Gain[17:6]);
+wire    [17:0]  ch1Gain;
+real agcGain;
+always @* agcGain = (10.0 ** (50*ch0GainReal/(2**12)/20));
+
+
+//********************** Create the input to the Bitsync **********************
+
 real txDataReal;
-real txScaleFactor;
 always @* txDataReal = $itor($signed(txData))/(2**17);
-wire [17:0]txChannel = txDataReal * txScaleFactor * (2.0**17);
+real txScaleFactor;
 real txChannelReal;
-always @* txChannelReal = $itor($signed(txChannel))/(2**17);
+always @* txChannelReal = txDataReal * txScaleFactor;
+real rxAgc;
+reg     [17:0]  rxInput;
+always @* begin
+    rxAgc = txChannelReal * agcGain;
+    if (rxAgc >= 1.0) begin
+        rxInput = 18'h1ffff;
+    end
+    else if (rxAgc <= -1.0) begin
+        rxInput = 18'h20001;
+    end
+    else begin
+        rxInput = rxAgc * (2.0**17);
+    end
+end
+
+real rxInputReal;
+always @* rxInputReal = $itor($signed(rxInput))/(2**17);
+
 
 /******************************************************************************
                             Instantiate the Demod
 ******************************************************************************/
 wire    [17:0]  dac0Out,dac1Out,dac2Out;
 wire    [17:0]  iSymData,qSymData;
+wire    [17:0]  ch0Offset;
+wire    [17:0]  ch1Offset;
 wire    [17:0]  iEye,qEye;
 wire    [4:0]   eyeOffset;
 bitsyncTop bitsyncTop( 
@@ -216,20 +247,24 @@ bitsyncTop bitsyncTop(
     .addr(a),
     .din(d),
     .dout(dout),
-    .rx0(txChannel), 
-    .rx1(txChannel),
+    .rx0(rxInput), 
+    .rx1(rxInput),
     .ch0Lock(),
     .ch0Sym2xEn(),
-    .ch0SymEn(),
+    .ch0SymEn(ch0SymEn),
     .ch0SymData(),
     .ch0SymClk(),
     .ch0Bit(),
+    .ch0Gain(ch0Gain),
+    .ch0Offset(ch0Offset),
     .ch1Lock(),
     .ch1Sym2xEn(),
-    .ch1SymEn(),
+    .ch1SymEn(ch1SymEn),
     .ch1SymClk(),
     .ch1SymData(),
     .ch1Bit(),
+    .ch1Gain(ch1Gain),
+    .ch1Offset(ch1Offset),
     .ch0Dac0ClkEn(dac0ClkEn),
     .ch0Dac0Data(dac0Out),
     .ch0Dac1ClkEn(dac1ClkEn),
@@ -292,6 +327,26 @@ interpolate #(.RegSpace(`INTERP2SPACE), .FirRegSpace(`VIDFIR2SPACE)) dac2Interp(
 );
 assign dac2_d = dac2Data[17:4];
 assign dac2_clk = clk;
+
+
+mcp48xxInterface dacInterface (
+    .clk(clk),
+    .clkEn0(ch0SymEn),
+    .clkEn1(ch1SymEn),
+    .reset(reset),
+    .dac0GainSelA(1'b1),
+    .dac0GainSelB(1'b1),
+    .dac0ValueA(ch0Gain[17:6]),
+    .dac0ValueB(ch0Offset[17:6]),
+    .dac1GainSelA(1'b1),
+    .dac1GainSelB(1'b1),
+    .dac1ValueA(ch1Gain[17:6]),
+    .dac1ValueB(ch1Offset[17:6]),
+    .SCK(dacSCLK),
+    .SDI(dacMOSI),
+    .CS0n(ch0SELn),
+    .CS1n(ch1SELn)
+);
 
 
 
@@ -484,7 +539,7 @@ initial begin
     we0 = 0; we1 = 0; we2 = 0; we3 = 0; 
     d = 32'hz;
     txRegCS = 0;
-    txScaleFactor = 0.5;
+    txScaleFactor = 0.125;
 
 
     // Turn on the clock
@@ -537,13 +592,15 @@ initial begin
 
     // Init the channel agc loop filter
     write32(createAddress(`CH0_AGCSPACE,`ALF_CONTROL),1);                 // Zero the error
-    write32(createAddress(`CH0_AGCSPACE,`ALF_SETPOINT),32'h000000f0);     // AGC Setpoint
+    write32(createAddress(`CH0_AGCSPACE,`ALF_SETPOINT),32'h00010000);     // AGC Setpoint
     write32(createAddress(`CH0_AGCSPACE,`ALF_GAINS),32'h001a001a);        // AGC Loop Gain
-    write32(createAddress(`CH0_AGCSPACE,`ALF_ULIMIT),32'h4fffffff);       // AGC Upper limit
+    write32(createAddress(`CH0_AGCSPACE,`ALF_ULIMIT),32'hffffffff);       // AGC Upper limit
     write32(createAddress(`CH0_AGCSPACE,`ALF_LLIMIT),32'h00000000);       // AGC Lower limit
+    bitsyncTop.pcmAgcLoop0.lf.integrator = 32'h4000_0000;
+    bitsyncTop.pcmAgcLoop1.lf.integrator = 32'h4000_0000;
 
     // Set the DAC interpolator gains
-    write32(createAddress(`BITSYNC_TOP_SPACE, `BS_TOP_CH0_DACSELECT), {12'h0,`BS_DAC_AGC,
+    write32(createAddress(`BITSYNC_TOP_SPACE, `BS_TOP_CH0_CONTROL  ), {12'h0,`BS_DAC_AGC,
                                                                         4'h0,`BS_DAC_SYM,
                                                                         4'h0,`BS_DAC_DF});
     write32(createAddress(`INTERP0SPACE, `INTERP_CONTROL),0);
@@ -589,7 +646,7 @@ initial begin
     write32(createAddress(`CH0_BITSYNCSPACE,`LF_CONTROL),32'h00000010);  
 
     // Wait
-    #(4*bitrateSamplesInt*C) ;
+    #(20*bitrateSamplesInt*C) ;
 
     `ifdef ENABLE_AGC
     // Enable the AGC loop
