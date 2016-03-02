@@ -137,7 +137,7 @@ real phaseReal;
 real phaseErrorReal;
 real freqReal;
 real freqErrorReal; 
-always @(mag) magReal   = mag/512.0;
+always @(mag) magReal   = mag/(2**13);
 always @(phase) phaseReal = (phase[11] ? (phase - 4096.0) : phase)/2048.0;
 always @(phaseError) phaseErrorReal = (phaseError[11] ? (phaseError - 4096.0) : phaseError)/2048.0;
 always @(freq) freqReal = (freq[11] ? (freq - 4096.0) : freq)/2048.0; 

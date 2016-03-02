@@ -196,6 +196,7 @@ always @* begin
             `DEMOD_CONTROL:     dataOut = {14'b0,bitsyncMode,11'b0,demodMode};
             `endif
             `endif
+
             `DEMOD_DACSELECT:   dataOut = {12'h0,dac2Select,4'h0,dac1Select,4'h0,dac0Select};
             `DEMOD_FALSELOCK:   dataOut = {falseLockThreshold,falseLockAlpha};
             `ifdef ADD_DESPREADER

@@ -1,0 +1,62 @@
+<!DOCTYPE SilvacoProject>
+<project version="1" name="testCmaModule" >
+ <products>
+  <product name="SILOS" >
+   <settings>
+    <setting value="Y" name="DebugEnable" />
+    <setting value="Silvaco4.14.3.R" name="Version" />
+    <setting value="Y" name="NoFloatWarn" />
+    <setting value="N" name="VisualDebug" />
+    <setting value="search" name="SystaskSearchOrder" />
+   </settings>
+   <analyzer>
+    <settings>
+     <setting value="N" name="GotoSource" />
+     <setting value="163" name="C0Width" />
+     <setting value="75" name="C1Width" />
+     <setting value="193" name="C2Width" />
+    </settings>
+    <views>
+     <view value="1736.025 ns,4263.150 ns,36.625 ns,1849.598 ns,2701.000 ns" name="Last" />
+    </views>
+    <groups>
+     <group open="yes" name="New Group1" show="yes" >
+      <signals>
+       <signal name="clk" scope="test" />
+       <signal name="clkEn" scope="test" />
+       <signal name="iIn[17:0]" scope="test.cma.tap2" />
+       <signal name="iOut[17:0]" scope="test.cma.tap2" />
+       <signal name="iSum[17:0]" scope="test.cma" />
+       <signal name="iInDelay[17:0]" scope="test.cma.tap2" />
+       <signal name="iError[17:0]" scope="test.cma.tap2" />
+       <signal name="iWeight[17:0]" scope="test.cma.tap2" />
+       <signal name="wtUpdate" scope="test.cma.tap2" />
+      </signals>
+     </group>
+    </groups>
+   </analyzer>
+   <plusdefines>
+    <define name="SIMULATE" />
+    <define name="TEST_MODULE" />
+   </plusdefines>
+   <librarydirs>
+    <directory name="..\..\Xilinx\13.4\ISE_DS\ISE\verilog\src\unisims\{.v}" />
+   </librarydirs>
+   <explorer>
+    <settings>
+     <setting value="test.cma.tap2" name="Scope" />
+    </settings>
+   </explorer>
+   <sourcefiles>
+    <file name="cma.v" />
+    <file name="tap.v" />
+    <file name="cmult18H.v" />
+    <file name="sum.v" />
+    <file name="add8.v" />
+    <file name="add2.v" />
+    <file name=".\coregen\mult10x10PL0.v" />
+    <file name=".\coregen\mult18x18PL0.v" />
+   </sourcefiles>
+  </product>
+ </products>
+</project>

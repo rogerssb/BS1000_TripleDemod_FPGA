@@ -12,6 +12,7 @@ module dqm (
   data_in,
   data_out,
   wr0, wr1, wr2, wr3,
+  frame_word_2,
   `ifdef DQM_CHIPSCOPE
   rst,
   clk
@@ -31,6 +32,7 @@ input [12:0] addr;
 input [31:0] data_in;
 output [31:0] data_out;
 input wr0, wr1, wr2, wr3;
+output  [15:0]  frame_word_2;
 input rst;
 `ifdef DQM_CHIPSCOPE
 input clk;
@@ -99,7 +101,7 @@ end
 reg select_delay, gate;
 always @(negedge fifo_rclk)begin
   select_delay <= select;
-  gate <= select;
+  gate <= select_delay;
 end
 
 wire fifo_dout;

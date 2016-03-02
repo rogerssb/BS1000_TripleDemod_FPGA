@@ -805,7 +805,8 @@ decoder decoder
   .symb_q(qDec),                    // input, q
   .dout_i(decoder_dout_i),          // output, i data
   .dout_q(decoder_dout_q),          // output, q data
-  .cout(decoder_cout),              // output, i/q clock
+  .outputClkEn(decoderClkEn),       // output, i/q output clock en
+  .pllClkEn(pllClkEn),              // output, PLL reference clock en
   .fifo_rs(decoder_fifo_rs),
   .clk_inv(cout_inv),
   .bypass_fifo(bypass_fifo),
@@ -816,16 +817,18 @@ decoder decoder
 //******************************************************************************
 //                   Data Quality Metric Encapsulation
 //******************************************************************************
-wire dqm_out;
-wire [31:0] dqmDout;
+wire            dqm_out;
+wire    [31:0]  dqmDout;
+wire    [15:0]  dqmValue;
 dqm dqm (
   .fifo_wclk(clk),
   .fifo_rclk(symb_pll_out),
-  .fifo_wren(decoder_cout),
+  .fifo_wren(decoderClkEn),
   .fifo_data(decoder_dout_i),
   .interrupt(dqm_interrupt),
   .serial_out(dqm_out), // need to add this to the output selector
   .gate(clockGate),
+  .frame_word_2(dqmValue),
   .addr(addr),
   .data_in(dataIn),
   .data_out(dqmDout),
@@ -851,7 +854,7 @@ decoder_output_fifo decoder_output_fifo
   .rd_en(decoder_fifoReadEn),
   .rst(decoder_fifo_rs),
   .wr_clk(clk),
-  .wr_en(decoder_cout),
+  .wr_en(decoderClkEn),
   .dout({decoder_fifo_dout_q,decoder_fifo_dout_i}),
   .empty(decoder_fifo_empty),
   .full(decoder_fifo_full),
@@ -890,7 +893,7 @@ symb_pll symb_pll
   .di(dataIn),
   .do(symb_pll_dout),
   .clk(clk),
-  .clk_en(decoder_cout),
+  .clk_en(decoderClkEn),
   .clk_ref(pllRef),           // output pad, comparator reference clock
   .clk_vco(symb_pll_vco),     // input pad, vco output
   .clk_fbk(symb_pll_fbk),     // output pad, comparator feedback clock
@@ -912,8 +915,8 @@ always @* begin
         end
     `ifdef ADD_DQM
     else if (qOutMuxSel == `OUT_MUX_SEL_DQM) begin
-        cout_q = symb_pll_out ^ !cout_inv;
-        //cout_q = symb_pll_out & clockGate;
+        //cout_q = symb_pll_out ^ !cout_inv;
+        cout_q = symb_pll_out & clockGate;
         end
     `endif
     else begin
@@ -952,7 +955,8 @@ always @* begin
     end
     `ifdef ADD_DQM
     reg dqmQ;
-    always @(posedge cout_q) begin
+    //always @(posedge cout_q) begin
+    always @(posedge symb_pll_out) begin
         dqmQ <= dqm_out;
     end
     `endif

@@ -5,7 +5,7 @@
 //`define TRELLIS
 
 `define ENABLE_AGC
-`define ADD_NOISE
+//`define ADD_NOISE
 //`define BER_TEST
 //`define MATLAB_VECTORS
 
@@ -261,14 +261,31 @@ real txScaleFactor;
  always @(iTx) iTxReal = (iTx[17] ? (iTx - 262144.0) : iTx)/131072.0;
  always @(qTx) qTxReal = (qTx[17] ? (qTx - 262144.0) : qTx)/131072.0;
 
+`ifdef TEST_CMA
+wire    signed  [17:0]  iCh,qCh;
+channelModel cm(
+    .clk(clk),
+    .reset(reset),
+    .iTx(iTx), .qTx(qTx),
+    .iCh(iCh), .qCh(qCh)
+    );
+real iChReal,qChReal;
+always @* iChReal = $itor(iCh)/(2**17);
+always @* qChReal = $itor(qCh)/(2**17);
+wire [17:0]iSignal = (2**17)*iChReal * txScaleFactor;
+wire [17:0]qSignal = (2**17)*qChReal * txScaleFactor;
+
+`else //TEST_CMA
 
 wire [17:0]iSignal = 131072.0*iTxReal * txScaleFactor;
 wire [17:0]qSignal = 131072.0*qTxReal * txScaleFactor;
 
+`endif
+
 reg  measureSNR;
 initial measureSNR = 0;
 reg     [17:0]iRx;
-wire    [17:0]qRx;
+reg     [17:0]qRx;
 real iSignalReal;
 real qSignalReal;
 real signalMagSquared;
@@ -304,11 +321,6 @@ always @(negedge clk) begin
         end
     end
 
-real iChReal;
-real qChReal;
-always @(iRx) iChReal = (iRx[17] ? (iRx - 262144.0) : iRx)/131072.0;
-always @(qRx)  qChReal = (qRx[17] ? (qRx - 262144.0) : qRx)/131072.0;
-     
 wire    [18:0]  iRxSum = {iSignal[17],iSignal} + {iNoise[17],iNoise};                    
 always @(iRxSum) begin
     if (iRxSum[18] & !iRxSum[17]) begin
@@ -321,7 +333,18 @@ always @(iRxSum) begin
         iRx = iRxSum[17:0];
         end
     end
-assign qRx = qSignal + qNoise;
+wire    [18:0]  qRxSum = {qSignal[17],qSignal} + {qNoise[17],qNoise};                    
+always @(qRxSum) begin
+    if (qRxSum[18] & !qRxSum[17]) begin
+        qRx = 18'h20001;
+        end
+    else if (!qRxSum[18] & qRxSum[17]) begin
+        qRx = 18'h1ffff;
+        end
+    else begin
+        qRx = qRxSum[17:0];
+        end
+    end
 
 
 
@@ -779,6 +802,12 @@ initial begin
     //write32(createAddress(`BEPSPACE, `BEP_MEAN_INVERSE),32'h0002_b6db);
     write32(createAddress(`BEPSPACE, `BEP_MEAN_INVERSE),32'h0002_ffff);
 
+    `ifdef TEST_CMA
+    write32(createAddress(`EQUALIZERSPACE, `EQ_STEP_SIZE),32'h0000_000e);
+    write32(createAddress(`EQUALIZERSPACE, `EQ_CMA_REFERENCE),32'h0000_4000);
+    write32(createAddress(`EQUALIZERSPACE, `EQ_CONTROL),32'h0000_0002);
+    `endif
+
     reset = 1;
     #(2*C) ;
     reset = 0;
@@ -863,6 +892,13 @@ initial begin
     write32(createAddress(`CHAGCSPACE,`ALF_CONTROL),0);              
     `endif
         
+    `ifdef TEST_CMA
+    // Wait for some data to pass thru
+    #(2*50*bitrateSamplesInt*C) ;
+    // Enable the equalizer
+    write32(createAddress(`EQUALIZERSPACE, `EQ_CONTROL),32'h0000_0001);
+    `endif
+
     // Wait for some data to pass thru
     #(2*50*bitrateSamplesInt*C) ;
     // Turn on the BERT

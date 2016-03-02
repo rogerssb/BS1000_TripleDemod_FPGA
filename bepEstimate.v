@@ -2,7 +2,7 @@
 `include "addressMap.v"
 
 //`define USE_SYMMETRIC_LUT
-`define USE_MAG_DETECTOR
+`define ADD_COMPLEX_DETECTOR
 
 module bepEstimate(
   input                 clk,
@@ -15,7 +15,8 @@ module bepEstimate(
   input signed  [17:0]  symData,
   input signed  [17:0]  iData,  
   input signed  [17:0]  qData,  
-  input                 sym2xEn
+  input                 sym2xEn,
+  output        [16:0]  absValue
 );
 
 // Decode the two address spaces
@@ -37,36 +38,23 @@ always @* begin
 end
 wire ram_en = ram_space;
 
-`ifdef USE_MAG_DETECTOR
-
-// Reclock the inputs to help with routing
-reg     signed  [17:0]  iBepData,qBepData;
-reg                     clkEn;
-always @(posedge clk) begin
-    clkEn <= sym2xEn;
-    iBepData <= iData;
-    qBepData <= qData;
-end
-
-wire    [16:0]  absSymData;
-complexMagEstimate absValue( 
-    .clk(clk), 
-    .reset(reset), 
-    .clkEn(clkEn),
-    .iIn(iBepData),.qIn(qBepData),
-    .complexMag(absSymData[16:1])
-);
-assign absSymData[0] = 1'b0;
-
-
-`else   //USE_MAG_DETECTOR
-
 // Reclock the inputs to help with routing
 reg     signed  [17:0]  bepData;
 reg                     clkEn;
+`ifdef ADD_COMPLEX_DETECTOR
+reg                     useComplex;
+reg     signed  [17:0]  iBepData,qBepData;
+`endif
 always @(posedge clk) begin
+    `ifdef ADD_COMPLEX_DETECTOR
+    clkEn <= useComplex ? sym2xEn : symEn;
+    bepData <= symData;
+    iBepData <= iData;
+    qBepData <= qData;
+    `else
     clkEn <= symEn;
     bepData <= symData;
+    `endif
 end
 
 // Take the absolute value
@@ -83,11 +71,29 @@ always @(posedge clk) begin
   end
 end
 
-`endif  //USE_MAG_DETECTOR
+`ifdef ADD_COMPLEX_DETECTOR
+
+wire    [15:0]  complexAbsValue;
+complexMagEstimate complexAbs( 
+    .clk(clk), 
+    .reset(reset), 
+    .clkEn(clkEn),
+    .iIn(iBepData),.qIn(qBepData),
+    .complexMag(complexAbsValue)
+);
+assign          absValue = useComplex ? {complexAbsValue,1'b0} : absSymData;
+
+`else    //ADD_COMPLEX_DETECTOR
+
+assign          absValue = absSymData;
+
+`endif   //ADD_COMPLEX_DETECTOR
+
+
 
 `ifdef SIMULATE
 real mean;
-always @* mean = $itor(absSymData)/(2**17);
+always @* mean = $itor(absValue)/(2**17);
 `endif
 
 // Scale by the inverse of the mean
@@ -97,7 +103,7 @@ wire        [35:0]  inverseProduct;
 mpy18x18WithCe mantissaMpy(
     .clk(clk),
     .ce(clkEn),
-    .a({1'b0,absSymData}),
+    .a({1'b0,absValue}),
     .b({1'b0,inverseMantissa,1'b0}),
     .p(inverseProduct)
 );
@@ -284,12 +290,28 @@ always @(negedge wr2) begin
   end
 end
 
+always @(negedge wr3) begin
+  if (bep_en) begin
+    casex (addr)
+      `BEP_BLOCK_SIZE: begin
+        useComplex <= dataIn[31];
+      end
+      default: ;
+    endcase
+  end
+end
+
+
 reg [31:0] read_mux;
 always @* begin
   if (bep_en) begin
     casex (addr)
       `BEP_BLOCK_SIZE: begin
+        `ifdef ADD_COMPLEX_DETECTOR
+        read_mux = {useComplex,23'b0, block_size};
+        `else
         read_mux = {24'b0, block_size};
+        `endif
       end
       `BEP_ESTIMATE: begin
         read_mux = estimate;
@@ -301,6 +323,9 @@ always @* begin
         read_mux = 32'b0;
       end
     endcase
+  end
+  else begin
+    read_mux = 32'b0;
   end
 end
 

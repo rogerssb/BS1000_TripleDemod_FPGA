@@ -509,7 +509,7 @@ always @(posedge clk) begin
 //******************************************************************************
 //                              DAC Outputs
 //******************************************************************************
-
+wire    [15:0]  bepLLR;
 reg     [17:0]  dac0Out,dac1Out,dac2Out;
 reg             dac0Sync,dac1Sync,dac2Sync;
 always @(posedge clk) begin
@@ -703,6 +703,9 @@ always @* begin
             else begin
                 rd_mux = demodDout[15:0];
                 end
+            end
+            else begin
+                rd_mux = 16'h0;
             end
         end
     `ifdef ADD_SCPATH

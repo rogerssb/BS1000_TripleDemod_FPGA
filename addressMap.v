@@ -15,6 +15,14 @@
 `define ADD_DQM
 `endif
 
+`ifdef LEGACY_CMA_DEMOD
+`define CIC_COMP_USE_MPY
+`define USE_DDC_FIR
+`define ADD_CMA
+//`define ADD_SCPATH
+//`define ADD_DQM
+`endif
+
 `ifdef TRELLIS_DEMOD
 `define CIC_COMP_USE_MPY
 `define ADD_DQM
@@ -31,10 +39,11 @@
 `define VIDFIRSPACE         13'b0_0000_1xxx_xxxx
 `endif
 `define DESPREADSPACE       13'b0_0001_xxxx_xxxx
+`define EQUALIZERSPACE      13'b0_0001_xxxx_xxxx    // same as DESPREADSPACE
 `define DDCSPACE            13'bx_0010_00xx_xxxx
 `define DDCFIRSPACE         13'bx_0010_01xx_xxxx
 `define CICDECSPACE         13'bx_0010_10xx_xxxx
-`define BEPSPACE            13'b0_0011_xxxx_xxxx
+`define BEPSPACE            13'b0_0011_0xxx_xxxx
 `define BEPRAMSPACE         13'b0_0011_1xxx_xxxx
 `define BITSYNCSPACE        13'bx_0100_0xxx_xxxx
 `define BITSYNCAUSPACE      13'bx_0100_1xxx_xxxx
@@ -67,50 +76,49 @@
 `define SCCARRIERSPACE      13'b1_1001_xxxx_xxxx
 
 // Define the global radio memory map
-`define DEMOD_CONTROL   13'bx_xxxx_xxx0_00xx
-`define MODE_AM             5'b00000
-`define MODE_PM             5'b00001
-`define MODE_FM             5'b00010
-`define MODE_2FSK           5'b00011
-`define MODE_BPSK           5'b00100
-`define MODE_QPSK           5'b00101
-`define MODE_OQPSK          5'b00110
-`define MODE_AQPSK          5'b00111
-`define MODE_PCMTRELLIS     5'b01000
-`define MODE_SOQPSK         5'b01001
-`define MODE_MULTIH         5'b01010
-`define MODE_AUQPSK         5'b01011
-`define MODE_UQPSK          5'b01100
-`define MODE_SINGLE_RAIL    2'b00
-`define MODE_DUAL_RAIL      2'b01
-`define MODE_IND_RAIL       2'b10
-`define DEMOD_DACSELECT 13'bx_xxxx_xxx0_01xx
-`define DAC_I               4'b0000
-`define DAC_Q               4'b0001
-`define DAC_ISYM            4'b0010
-`define DAC_QSYM            4'b0011
-`define DAC_FREQ            4'b0100
-`define DAC_PHASE           4'b0101
-`define DAC_MAG             4'b0110
-`define DAC_PHERROR         4'b0111
-`define DAC_BSLOCK          4'b1000
-`define DAC_FREQLOCK        4'b1001
-`define DAC_AVGFREQ         4'b1010
-`define DAC_FREQERROR       4'b1011
-`define DAC_DS_CODE         4'b1100
-`define DAC_DS_LOCK         4'b1101
-`define DAC_DS_EPOCH        4'b1110
-`define DAC_TRELLIS_I       4'b1100
-`define DAC_TRELLIS_Q       4'b1101
-`define DAC_TRELLIS_PHERR   4'b1110
-`define DAC_TRELLIS_INDEX   4'b1111
+`define DEMOD_CONTROL       13'bx_xxxx_xxx0_00xx
+`define MODE_AM                 5'b00000
+`define MODE_PM                 5'b00001
+`define MODE_FM                 5'b00010
+`define MODE_2FSK               5'b00011
+`define MODE_BPSK               5'b00100
+`define MODE_QPSK               5'b00101
+`define MODE_OQPSK              5'b00110
+`define MODE_AQPSK              5'b00111
+`define MODE_PCMTRELLIS         5'b01000
+`define MODE_SOQPSK             5'b01001
+`define MODE_MULTIH             5'b01010
+`define MODE_AUQPSK             5'b01011
+`define MODE_UQPSK              5'b01100
+`define MODE_SINGLE_RAIL        2'b00
+`define MODE_DUAL_RAIL          2'b01
+`define MODE_IND_RAIL           2'b10
+`define DEMOD_DACSELECT     13'bx_xxxx_xxx0_01xx
+`define DAC_I                   4'b0000
+`define DAC_Q                   4'b0001
+`define DAC_ISYM                4'b0010
+`define DAC_QSYM                4'b0011
+`define DAC_FREQ                4'b0100
+`define DAC_PHASE               4'b0101
+`define DAC_MAG                 4'b0110
+`define DAC_PHERROR             4'b0111
+`define DAC_BSLOCK              4'b1000
+`define DAC_FREQLOCK            4'b1001
+`define DAC_AVGFREQ             4'b1010
+`define DAC_FREQERROR           4'b1011
+`define DAC_DS_CODE             4'b1100
+`define DAC_DS_LOCK             4'b1101
+`define DAC_DS_EPOCH            4'b1110
+`define DAC_TRELLIS_I           4'b1100
+`define DAC_TRELLIS_Q           4'b1101
+`define DAC_TRELLIS_PHERR       4'b1110
+`define DAC_TRELLIS_INDEX       4'b1111
 `define DEMOD_FALSELOCK     13'bx_xxxx_xxx0_10xx
 `define DEMOD_STATUS        13'bx_xxxx_xxx0_11xx
 `define DEMOD_AMTC          13'bx_xxxx_xxx1_00xx
 `define DEMOD_FSKDEV        13'bx_xxxx_xxx1_010x
-`define EQUAL_STEP_EXPO     13'bx_xxxx_xxx1_011x
-`define EQUAL_CONTROL       13'bx_xxxx_xxx1_100x
-`define EQUAL_REF_LEVEL     13'bx_xxxx_xxx1_101x
+`define DEMOD_EQ_STEP_SIZE  13'bx_xxxx_xxx1_10xx
+`define DEMOD_EQ_REF_LEVEL  13'bx_xxxx_xxx1_11xx
 
 // Define the FM memory map
 `define FM_MOD_FREQ     13'bx_xxxx_xxxx_00xx
@@ -136,6 +144,11 @@
 // Define the CIC Decimator memory map
 `define CIC_DECIMATION  13'bx_xxxx_xxxx_00xx
 `define CIC_SHIFT       13'bx_xxxx_xxxx_01xx
+
+// Define the Equalizer memory map
+`define EQ_CONTROL          13'bx_xxxx_xxxx_00xx
+`define EQ_STEP_SIZE        13'bx_xxxx_xxxx_01xx
+`define EQ_CMA_REFERENCE    13'bx_xxxx_xxxx_10xx
 
 // Define the Loop Filter memory map
 `define LF_CONTROL      13'bx_xxxx_xxx0_00xx

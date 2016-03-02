@@ -11,27 +11,27 @@
 `timescale 1ns/100ps
 `include "addressMap.v"
 
-module decoder
-  (
-  rs,
-  en,
-  wr0,wr1,
-  addr,
-  din,
-  dout,
-  clk,
-  symb_clk_en,
-  symb_clk_2x_en,
-  symb_i,
-  symb_q,
-  dout_i,
-  dout_q,
-  cout,
-  fifo_rs,
-  clk_inv,
-  bypass_fifo,
-  symb_clk
-  );
+module decoder (
+    rs,
+    en,
+    wr0,wr1,
+    addr,
+    din,
+    dout,
+    clk,
+    symb_clk_en,
+    symb_clk_2x_en,
+    symb_i,
+    symb_q,
+    dout_i,
+    dout_q,
+    outputClkEn,
+    pllClkEn,
+    fifo_rs,
+    clk_inv,
+    bypass_fifo,
+    symb_clk
+);
 
 input rs,en,wr0,wr1;
 input clk,symb_clk_en,symb_clk_2x_en;
@@ -39,7 +39,8 @@ input [12:0]addr;
 input [15:0]din;
 output [15:0]dout;
 input  symb_i,symb_q;
-output dout_i,dout_q,cout;
+output dout_i,dout_q,outputClkEn;
+output pllClkEn;
 output fifo_rs;
 output clk_inv;
 output symb_clk;
@@ -269,8 +270,11 @@ wire    data_inv_q = data_inv ? !derand_out_q : derand_out_q ;
 //  );
 
 wire        clk_sel;
-assign      cout = biphase ? biphase_en : (
-                    clk_sel ? symb_clk_en : symb_clk_2x_en);
+assign      outputClkEn = biphase ? biphase_en : (
+                          clk_sel ? symb_clk_en : symb_clk_2x_en);
+assign      pllClkEn = biphase ? symb_clk_en : symb_clk_2x_en;
+
+
 reg         symbol_clk;
 always @(posedge clk) begin
     if (symb_clk_en) begin
@@ -388,7 +392,7 @@ reg [12:0]addr;
 reg [15:0]din;
 wire [15:0]dout;
 reg [2:0]symb_i,symb_q;
-wire dout_i,dout_q,cout;
+wire dout_i,dout_q,outputClkEn;
 wire fifo_rs;
 wire clk_inv;
 
@@ -407,7 +411,7 @@ decoder uut
   symb_q,
   dout_i,
   dout_q,
-  cout,
+  outputClkEn,
   fifo_rs,
   clk_inv
   );
