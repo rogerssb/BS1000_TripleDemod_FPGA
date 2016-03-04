@@ -1319,6 +1319,9 @@ always @* begin
         `ifdef FM_FILTER
         `VIDFIRSPACE:       dout = firDout;
         `endif
+        `ifdef ADD_CMA
+        `EQUALIZERSPACE:    dout = cmaDout;
+        `endif
         `CHAGCSPACE:        dout = nbAgcDout;
         `CICDECSPACE,
         `DDCFIRSPACE,

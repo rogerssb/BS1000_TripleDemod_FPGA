@@ -1,3 +1,11 @@
+/******************************************************************************
+Copyright 2008-2016 Koos Technical Services, Inc. All Rights Reserved
+
+This source code is the Intellectual Property of Koos Technical Services,Inc. 
+(KTS) and is provided under a License Agreement which protects KTS' ownership and
+derivative rights in exchange for negotiated compensation.
+******************************************************************************/
+
 `timescale 1ns/100ps
 module sum (
     t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,
