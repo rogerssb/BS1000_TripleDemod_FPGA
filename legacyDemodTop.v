@@ -12,7 +12,11 @@
 `include "addressMap.v"
 `include "defines.v"
 
+`ifdef ADD_CMA
+module legacyCmaTop (
+`else
 module legacyDemodTop (
+`endif
     clk,
     nWe,nRd,nCs,
     addr12,
@@ -73,7 +77,7 @@ output  [17:0]  iTrellis;
 output  [17:0]  qTrellis;  
 output          legacyBit;
 
-parameter VER_NUMBER = 16'd418;
+parameter VER_NUMBER = 16'd419;
 
 wire    [12:0]  addr = {addr12,addr11,addr10,addr9,addr8,addr7,addr6,addr5,addr4,addr3,addr2,addr1,1'b0};
 wire            nWr = nWe;
@@ -171,7 +175,11 @@ always @* begin
                 end
             `MISC_TYPE: begin
                 rs = 0;
+                `ifdef ADD_CMA
+                misc_dout = {16'b0,`LEGACY_CMA_IMAGE};
+                `else
                 misc_dout = {16'b0,`LEGACY_DEMOD_IMAGE};
+                `endif
                 end
             default: begin
                 misc_dout = 32'b0;

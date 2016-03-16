@@ -214,6 +214,8 @@
 `define TRELLIS_DEMOD_IMAGE         16'h1
 `define TWOCHANNEL_SCDEMOD_IMAGE    16'h2
 `define MULTIH_DEMOD_IMAGE          16'h3
+`define BITSYNC_BERT_IMAGE          16'h4
+`define LEGACY_CMA_IMAGE            16'h5
 
 // Define the DAC control locations
 `define DAC_WDATA       13'bx_xxxx_xxxx_x00x
