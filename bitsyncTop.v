@@ -54,7 +54,8 @@ module bitsyncTop(
     ch1Offset,
     eyeClkEn,
     iEye,qEye,
-    eyeOffset
+    eyeOffset,
+    test0,test1
     );
 
 
@@ -68,8 +69,8 @@ input                   wr0,wr1,wr2,wr3;
 input           [12:0]  addr;
 input           [31:0]  din;
 output          [31:0]  dout;
-input           [17:0]  rx0;
-input           [17:0]  rx1;
+input   signed  [17:0]  rx0;
+input   signed  [17:0]  rx1;
 output                  ch0Lock;
 output                  ch0Sym2xEn;
 output                  ch0SymEn;
@@ -91,7 +92,7 @@ output          [17:0]  ch0Dac2Data;
 output                  ch0HighImpedance;
 output                  ch0SingleEnded;
 output          [17:0]  ch0Gain;
-output  signed  [17:0]  ch0Offset;
+output          [17:0]  ch0Offset;
 output                  ch1Dac0ClkEn;
 output          [17:0]  ch1Dac0Data;
 output                  ch1Dac1ClkEn;
@@ -101,10 +102,11 @@ output          [17:0]  ch1Dac2Data;
 output                  ch1HighImpedance;
 output                  ch1SingleEnded;
 output          [17:0]  ch1Gain;
-output  signed  [17:0]  ch1Offset;
+output          [17:0]  ch1Offset;
 output                  eyeClkEn;
 output          [17:0]  iEye,qEye;
 output          [4:0]   eyeOffset;
+output                  test0,test1;
 
 
 /******************************************************************************
@@ -122,6 +124,7 @@ wire    [1:0]   bitsyncMode;
 wire    [3:0]   ch0Dac0Select, ch0Dac1Select, ch0Dac2Select;
 wire    [3:0]   ch1Dac0Select, ch1Dac1Select, ch1Dac2Select;
 wire    [4:0]   ch0DCGain,ch1DCGain;
+wire    [7:0]   ch0DCTest,ch1DCTest;
 wire    [31:0]  bitsyncTopDout;
 bitsyncTopRegs bitsyncTopRegs(
     `ifdef USE_BUS_CLOCK
@@ -142,13 +145,15 @@ bitsyncTopRegs bitsyncTopRegs(
     .ch0HighImpedance(ch0HighImpedance),
     .ch0SingleEnded(ch0SingleEnded),
     .ch0DCGain(ch0DCGain),
+    .ch0DCTest(ch0DCTest),
     .ch1Dac0Select(ch1Dac0Select),
     .ch1Dac1Select(ch1Dac1Select),
     .ch1Dac2Select(ch1Dac2Select),
     .ch1DCRemovalEnable(ch1DCRemovalEnable),
     .ch1HighImpedance(ch1HighImpedance),
     .ch1SingleEnded(ch1SingleEnded),
-    .ch1DCGain(ch1DCGain)
+    .ch1DCGain(ch1DCGain),
+    .ch1DCTest(ch1DCTest)
     );
 
 wire    asyncMode = (bitsyncMode == `MODE_IND_CH)
@@ -159,29 +164,27 @@ wire    asyncMode = (bitsyncMode == `MODE_IND_CH)
 ******************************************************************************/
 wire    [33:0]  ch0DCIn = {rx0,16'h0};
 wire    [39:0]  ch0DC;
+wire            ch0Sym2xEn;
 dcLoopFilter ch0DcLoop(
-    .clk(clk), .clkEn(ch0DCRemovalEnable), .reset(reset),
+    .clk(clk), .clkEn(ch0Sym2xEn), .reset(reset),
     .error(ch0DCIn),
     .lagExp(ch0DCGain),
-    //.limit(32'h07ffffff),
-    .limit(32'h3fffffff),
     .clearAccum(!ch0DCRemovalEnable),
     .lagAccum(ch0DC)
     );
-assign ch0Offset = $signed(ch0DC[39:22]);
+assign ch0Offset = (ch0DCTest != 0) ? {ch0DCTest,10'h0} : ch0DC[39:22];
 
 wire    [33:0]  ch1DCIn = {rx1,16'h0};
 wire    [39:0]  ch1DC;
+wire            ch1Sym2xEn;
 dcLoopFilter ch1DcLoop(
-    .clk(clk), .clkEn(ch1DCRemovalEnable), .reset(reset),
+    .clk(clk), .clkEn(ch1Sym2xEn), .reset(reset),
     .error(ch1DCIn),
     .lagExp(ch1DCGain),
-    //.limit(32'h07ffffff),
-    .limit(32'h3fffffff),
     .clearAccum(!ch1DCRemovalEnable),
     .lagAccum(ch1DC)
     );
-assign ch1Offset = $signed(ch1DC[39:22]);
+assign ch1Offset = (ch1DCTest != 0) ? {ch1DCTest,10'h0} : ch1DC[39:22];
 
 `ifdef SIMULATE
 real ch0DCReal;
@@ -358,6 +361,7 @@ assign qEye = resamp1Out;
                                AGC Loop Filters
 ******************************************************************************/
 
+wire    [16:0]  ch0Level;
 wire    [31:0]  agc0Dout;
 pcmAgcLoop #(.RegSpace(`CH0_AGCSPACE)) pcmAgcLoop0(
     .clk(clk), .reset(reset), .clkEn(ch0SymEn),
@@ -369,9 +373,11 @@ pcmAgcLoop #(.RegSpace(`CH0_AGCSPACE)) pcmAgcLoop0(
     .din(din),
     .dout(agc0Dout),
     .rx(ch0SymData),
+    .rxLevel(ch0Level),
     .agcGain(ch0Gain)
 );
 
+wire    [16:0]  ch1Level;
 wire    [31:0]  agc1Dout;
 pcmAgcLoop #(.RegSpace(`CH1_AGCSPACE)) pcmAgcLoop1(
     .clk(clk), .reset(reset), .clkEn(ch1SymEn),
@@ -383,6 +389,7 @@ pcmAgcLoop #(.RegSpace(`CH1_AGCSPACE)) pcmAgcLoop1(
     .din(din),
     .dout(agc1Dout),
     .rx(ch1SymData),
+    .rxLevel(ch1Level),
     .agcGain(ch1Gain)
 );
 
@@ -404,6 +411,14 @@ reg             ch1Dac2ClkEn;
 reg     [17:0]  ch1Dac2Data;
 always @(posedge clk) begin
     case (ch0Dac0Select)
+        `BS_DAC_ADC: begin
+            ch0Dac0Data <= rx0;
+            ch0Dac0ClkEn <= clkEn;
+            end
+        `BS_DAC_DC: begin
+            ch0Dac0Data <= ch0Offset;
+            ch0Dac0ClkEn <= ch0Sym2xEn;
+            end
         `BS_DAC_DF: begin
             ch0Dac0Data <= df0Out;
             ch0Dac0ClkEn <= df0ClkEn;
@@ -427,6 +442,14 @@ always @(posedge clk) begin
         endcase
 
     case (ch0Dac1Select)
+        `BS_DAC_ADC: begin
+            ch0Dac1Data <= rx0;
+            ch0Dac1ClkEn <= clkEn;
+            end
+        `BS_DAC_DC: begin
+            ch0Dac1Data <= ch0Offset;
+            ch0Dac1ClkEn <= ch0Sym2xEn;
+            end
         `BS_DAC_DF: begin
             ch0Dac1Data <= df0Out;
             ch0Dac1ClkEn <= df0ClkEn;
@@ -436,7 +459,7 @@ always @(posedge clk) begin
             ch0Dac1ClkEn <= ch0Sym2xEn;
             end
         `BS_DAC_AGC: begin
-            ch0Dac1Data <= ch0Gain;
+            ch0Dac1Data <= {1'b0,ch0Level};
             ch0Dac1ClkEn <= ch0SymEn;
             end
         `BS_DAC_LOCK: begin
@@ -450,6 +473,14 @@ always @(posedge clk) begin
         endcase
 
     case (ch0Dac2Select)
+        `BS_DAC_ADC: begin
+            ch0Dac2Data <= rx0;
+            ch0Dac2ClkEn <= clkEn;
+            end
+        `BS_DAC_DC: begin
+            ch0Dac2Data <= ch0Offset;
+            ch0Dac2ClkEn <= ch0Sym2xEn;
+            end
         `BS_DAC_DF: begin
             ch0Dac2Data <= df0Out;
             ch0Dac2ClkEn <= df0ClkEn;
@@ -475,6 +506,14 @@ always @(posedge clk) begin
 
 
     case (ch1Dac0Select)
+        `BS_DAC_ADC: begin
+            ch1Dac0Data <= rx1;
+            ch1Dac0ClkEn <= clkEn;
+            end
+        `BS_DAC_DC: begin
+            ch1Dac0Data <= ch1Offset;
+            ch1Dac0ClkEn <= ch1Sym2xEn;
+            end
         `BS_DAC_DF: begin
             ch1Dac0Data <= df1Out;
             ch1Dac0ClkEn <= df1ClkEn;
@@ -497,6 +536,14 @@ always @(posedge clk) begin
             end
         endcase
     case (ch1Dac1Select)
+        `BS_DAC_ADC: begin
+            ch1Dac1Data <= rx1;
+            ch1Dac1ClkEn <= clkEn;
+            end
+        `BS_DAC_DC: begin
+            ch1Dac1Data <= ch1Offset;
+            ch1Dac1ClkEn <= ch1Sym2xEn;
+            end
         `BS_DAC_DF: begin
             ch1Dac1Data <= df1Out;
             ch1Dac1ClkEn <= df1ClkEn;
@@ -506,7 +553,7 @@ always @(posedge clk) begin
             ch1Dac1ClkEn <= ch1Sym2xEn;
             end
         `BS_DAC_AGC: begin
-            ch1Dac1Data <= ch1Gain;
+            ch1Dac1Data <= {1'b0,ch1Level};
             ch1Dac1ClkEn <= ch1SymEn;
             end
         `BS_DAC_LOCK: begin
@@ -519,6 +566,14 @@ always @(posedge clk) begin
             end
         endcase
     case (ch1Dac2Select)
+        `BS_DAC_ADC: begin
+            ch1Dac2Data <= rx1;
+            ch1Dac2ClkEn <= clkEn;
+            end
+        `BS_DAC_DC: begin
+            ch1Dac2Data <= ch1Offset;
+            ch1Dac2ClkEn <= ch1Sym2xEn;
+            end
         `BS_DAC_DF: begin
             ch1Dac2Data <= df1Out;
             ch1Dac2ClkEn <= df1ClkEn;
@@ -564,6 +619,7 @@ always @* begin
         endcase
     end
 
-
+assign test0 = 1'b0;
+assign test1 = 1'b0;
 
 endmodule

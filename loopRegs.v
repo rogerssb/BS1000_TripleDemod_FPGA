@@ -20,8 +20,6 @@ module loopRegs(
     cs,
     wr0, wr1, wr2, wr3,
     lagAccum,
-    loopDataRead,
-    loopData1Read,
     lockStatus,
     invertError,
     zeroError,
@@ -54,9 +52,6 @@ input           wr0,wr1,wr2,wr3;
 input           lockStatus;
 
 input   [31:0]  lagAccum;
-
-input   [31:0]  loopDataRead;
-input   [31:0]  loopData1Read;
 
 output          invertError,zeroError,ctrl2,clearAccum,ctrl4;
 reg             invertError,zeroError,ctrl2,clearAccum,ctrl4;
@@ -211,9 +206,7 @@ always @* begin
             `LF_LIMIT:          dataOut = limit;
             `LF_LOOPDATA0:      dataOut = loopData;
             `LF_LOOPDATA1:      dataOut = loopData1;
-            //`LF_LOOPDATA0:      dataOut = loopDataRead;
             `LF_LEAD_LAG1:      dataOut = {leadMan1,3'bx,leadExp1,lagMan1,3'bx,lagExp1};
-            //`LF_LOOPDATA1:      dataOut = loopData1Read;
             `LF_LOCKDETECTOR:   dataOut = {4'h0,syncThreshold,lockCount};
             `LF_INTEGRATOR:     dataOut = lagAccum;
             default:            dataOut = 32'hx;
@@ -237,8 +230,6 @@ module loopRegs(
     cs,
     wr0, wr1, wr2, wr3,
     lagAccum,
-    loopDataRead,
-    loopData1Read,
     lockStatus,
     invertError,
     zeroError,
@@ -269,9 +260,6 @@ input   wr0,wr1,wr2,wr3;
 input           lockStatus;
 
 input   [31:0]  lagAccum;
-
-input   [31:0]  loopDataRead;
-input   [31:0]  loopData1Read;
 
 output          invertError,zeroError,ctrl2,clearAccum,ctrl4;
 reg             invertError,zeroError,ctrl2,clearAccum,ctrl4;
@@ -435,9 +423,7 @@ always @* begin
             `LF_LIMIT:          dataOut = limit;
             `LF_LOOPDATA0:      dataOut = loopData;
             `LF_LOOPDATA1:      dataOut = loopData1;
-            //`LF_LOOPDATA0:      dataOut = loopDataRead;
             `LF_LEAD_LAG1:      dataOut = {leadMan1,3'bx,leadExp1,lagMan1,3'bx,lagExp1};
-            //`LF_LOOPDATA1:      dataOut = loopData1Read;
             `LF_LOCKDETECTOR:   dataOut = {4'h0,syncThreshold,lockCount};
             `LF_INTEGRATOR:     dataOut = lagAccum;
             default:            dataOut = 32'hx;

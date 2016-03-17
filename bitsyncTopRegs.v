@@ -29,13 +29,15 @@ module bitsyncTopRegs(
     ch0HighImpedance,
     ch0SingleEnded,
     ch0DCGain,
+    ch0DCTest,
     ch1Dac0Select,
     ch1Dac1Select,
     ch1Dac2Select,
     ch1DCRemovalEnable,
     ch1HighImpedance,
     ch1SingleEnded,
-    ch1DCGain
+    ch1DCGain,
+    ch1DCTest
     );
 
 input           busClk;
@@ -72,6 +74,9 @@ reg             ch0SingleEnded;
 output  [4:0]   ch0DCGain;
 reg     [4:0]   ch0DCGain;
 
+output  [7:0]   ch0DCTest;
+reg     [7:0]   ch0DCTest;
+
 output  [3:0]   ch1Dac0Select;
 reg     [3:0]   ch1Dac0Select;
 
@@ -92,6 +97,9 @@ reg             ch1SingleEnded;
 
 output  [4:0]   ch1DCGain;
 reg     [4:0]   ch1DCGain;
+
+output  [7:0]   ch1DCTest;
+reg     [7:0]   ch1DCTest;
 
 always @(posedge busClk) begin
     if (cs && wr0) begin
@@ -133,6 +141,9 @@ always @(posedge busClk) begin
             `BS_TOP_CH1_CONTROL: begin
                 ch1Dac2Select <= dataIn[19:16];
                 end
+            `BS_TOP_DC_GAINS:    begin
+                ch0DCTest <= dataIn[23:16];
+                end
             default: ;
             endcase
         end
@@ -147,6 +158,9 @@ always @(posedge busClk) begin
                 ch1SingleEnded <= dataIn[29];
                 ch1HighImpedance <= dataIn[30];
                 ch1DCRemovalEnable <= dataIn[31];
+                end
+            `BS_TOP_DC_GAINS:    begin
+                ch1DCTest <= dataIn[31:24];
                 end
             default: ;
             endcase
@@ -168,7 +182,7 @@ always @* begin
                                                4'h0,ch1Dac0Select};
             `BS_TOP_STATUS:         dataOut = {28'h0,
                                                2'b0,ch1BitsyncLock,ch0BitsyncLock};
-            `BS_TOP_DC_GAINS:       dataOut = {16'h0,3'b0,ch1DCGain,3'b0,ch0DCGain};
+            `BS_TOP_DC_GAINS:       dataOut = {ch1DCTest,ch0DCTest,3'b0,ch1DCGain,3'b0,ch0DCGain};
             default:                dataOut = 32'h0;
             endcase
         end

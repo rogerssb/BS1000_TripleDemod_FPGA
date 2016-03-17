@@ -34,16 +34,31 @@
 // Top level registers
 `define BITSYNC_BERT_SPACE  13'b0_00xx_000x_xxxx
 
-`define CH0_DECODERSPACE    13'b0_00xx_1000_xxxx
-`define CH1_DECODERSPACE    13'b0_00xx_1001_xxxx
-`define DUAL_DECODERSPACE   13'b0_00xx_1010_xxxx
-
 `define INTERP0SPACE        13'b0_00xx_0010_xxxx
 `define VIDFIR0SPACE        13'b0_00xx_0011_xxxx
 `define INTERP1SPACE        13'b0_00xx_0100_xxxx
 `define VIDFIR1SPACE        13'b0_00xx_0101_xxxx
 `define INTERP2SPACE        13'b0_00xx_0110_xxxx
 `define VIDFIR2SPACE        13'b0_00xx_0111_xxxx
+`define CH0_DECODERSPACE    13'b0_00xx_1000_xxxx
+`define CH1_DECODERSPACE    13'b0_00xx_1001_xxxx
+`define DUAL_DECODERSPACE   13'b0_00xx_1010_xxxx
+
+`define PLLSPACE            13'b0_00xx_11xx_xxxx
+
+// PLL subsystem registers
+`define PLL0_BITS_0to31     13'bx_xxxx_xx00_00xx
+`define PLL0_BITS_68to99    13'bx_xxxx_xx00_01xx
+`define PLL0_BITS_100to131  13'bx_xxxx_xx00_10xx
+`define PLL0_BITS_XFER      13'bx_xxxx_xx00_11xx
+`define PLL1_BITS_0to31     13'bx_xxxx_xx01_00xx
+`define PLL1_BITS_68to99    13'bx_xxxx_xx01_01xx
+`define PLL1_BITS_100to131  13'bx_xxxx_xx01_10xx
+`define PLL0_BITS_XFER      13'bx_xxxx_xx00_11xx
+`define PLL2_BITS_0to31     13'bx_xxxx_xx10_00xx
+`define PLL2_BITS_68to99    13'bx_xxxx_xx10_01xx
+`define PLL2_BITS_100to131  13'bx_xxxx_xx10_10xx
+`define PLL0_BITS_XFER      13'bx_xxxx_xx00_11xx
 
 // Bitsync subsystem registers
 `define BITSYNC_TOP_SPACE   13'b0_01xx_000x_xxxx

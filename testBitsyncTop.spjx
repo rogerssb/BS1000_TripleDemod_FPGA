@@ -21,7 +21,7 @@
    </includedirs>
    <analyzer>
     <views>
-     <view value="0.000 ns,30255.001 ns,468.740 ns,29786.881 ns,13200.295 ns" name="Last" />
+     <view value="0.000 ns,7905.100 ns,722.079 ns,11043.927 ns,5815.000 ns" name="Last" />
     </views>
     <settings>
      <setting value="163" name="C0Width" />
@@ -38,6 +38,14 @@
        <signal name="modBitEn" scope="test" />
        <signal interpolate="Step" radix="Decimal" name="modClkCount" scope="test" />
        <signal name="randData" scope="test" />
+       <signal name="dataIn[17:0]" scope="test.ch0Interpolate" />
+       <signal name="firOut[17:0]" scope="test.ch0Interpolate" />
+       <signal name="cicCompOut[17:0]" scope="test.ch0Interpolate" />
+       <signal interpolate="Step" radix="Real" name="compReal" scope="test.ch0Interpolate" />
+       <signal name="reset" scope="test.ch0Interpolate.cicInterpolate" />
+       <signal name="dIn[17:0]" scope="test.ch0Interpolate.cicInterpolate" />
+       <signal name="acc2[47:0]" scope="test.ch0Interpolate.cicInterpolate" />
+       <signal radix="Real" name="expAdjReal" scope="test.ch0Interpolate" />
        <signal interpolate="Step" radix="Real" name="txDataReal" scope="test" />
        <signal interpolate="Step" radix="Real" name="txScaleFactor" scope="test" />
        <signal interpolate="Step" radix="Real" name="txChannelReal" scope="test" />
@@ -47,7 +55,7 @@
        <signal interpolate="Step" radix="Real" name="rxInputReal" scope="test" />
       </signals>
      </group>
-     <group open="no" name="RX" show="yes" >
+     <group open="yes" name="RX" show="yes" >
       <signals>
        <signal radix="Real" name="bitrateBps" scope="test" />
        <signal radix="Decimal" name="dfDecimation" scope="test" />
@@ -83,7 +91,7 @@
        <signal name="phase[31:0]" scope="test.bitsyncTop.ch0Resamp" />
       </signals>
      </group>
-     <group open="yes" name="AGC" show="yes" >
+     <group open="no" name="AGC" show="yes" >
       <signals>
        <signal name="chAgcSpace" scope="test.bitsyncTop.pcmAgcLoop0" />
        <signal name="cs" scope="test.bitsyncTop.pcmAgcLoop0.lf.loopRegs" />
@@ -112,7 +120,7 @@
        <signal name="loopOutput[31:0]" scope="test.bitsyncTop.pcmAgcLoop0.lf" />
       </signals>
      </group>
-     <group open="no" name="MPC" show="yes" >
+     <group open="yes" name="MPC" show="yes" >
       <signals>
        <signal name="clk" scope="test.dacInterface" />
        <signal name="clkEn1" scope="test.dacInterface" />
@@ -142,7 +150,7 @@
    </analyzer>
    <explorer>
     <settings>
-     <setting value="test.bitsyncTop.pcmAgcLoop0.lf" name="Scope" />
+     <setting value="test.ch0Interpolate" name="Scope" />
     </settings>
    </explorer>
    <sourcefiles>

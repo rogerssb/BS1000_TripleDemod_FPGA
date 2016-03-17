@@ -132,10 +132,13 @@ wire    rd = !fb_oen;
 //******************************************************************************
 //                             Reclock Inputs
 //******************************************************************************
-reg     [17:0]  adc0In, adc1In;
+reg             [13:0]  adc0Reg,adc1Reg;
+reg     signed  [17:0]  adc0In, adc1In;
 always @(posedge clk) begin
-    adc0In <= {adc0,4'b0};
-    adc1In <= {adc1,4'b0};
+    adc0Reg <= adc0;
+    adc1Reg <= adc1;
+    adc0In <= $signed({~adc0Reg[13],adc0Reg[12:0],4'b0});
+    adc1In <= $signed({~adc1Reg[13],adc1Reg[12:0],4'b0});
 end
 
 
@@ -243,7 +246,8 @@ bitsyncTop bitsyncTop(
     .ch1Offset(ch1Offset),
     .eyeClkEn(eyeClkEn),
     .iEye(iEye),.qEye(qEye),
-    .eyeOffset(eyeOffset)
+    .eyeOffset(eyeOffset),
+    .test0(test0), .test1(test1)
     );
 
 //******************************************************************************
@@ -497,6 +501,14 @@ assign dac1_nCs = 1'b1;
 assign dac2_nCs = 1'b1;
 assign dac_sdio = 1'b0;
 
+//`define TEST_OUTPUTS
+`ifdef TEST_OUTPUTS
+
+assign bsClkOut = test0;
+assign bsDataOut = test1;
+
+`else //TEST_OUTPUTS
+
 clockAndDataMux bsMux(
     .muxSelect(bsCoaxMuxSelect),
     .clk0(ch0ClkOut),
@@ -518,6 +530,8 @@ clockAndDataMux bsMux(
     .outputClk(bsClkOut),
     .outputData(bsDataOut)
 );
+
+`endif //TEST_OUTPUTS
 
 clockAndDataMux bsDiffMux(
     .muxSelect(bsRS422MuxSelect),
@@ -606,7 +620,6 @@ clockAndDataMux fsDiffMux(
     .outputClk(fsDiffClkOut),
     .outputData(fsDiffDataOut)
 );
-
 
 assign ch0Lockn = !ch0Lock;
 assign ch1Lockn = !ch1Lock;

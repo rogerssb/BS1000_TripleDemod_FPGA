@@ -24,13 +24,13 @@ module pcmAgcLoop(
     input           [31:0]  din,
     output          [31:0]  dout,
     input   signed  [17:0]  rx,
+    output  reg     [16:0]  rxLevel,
     output          [17:0]  agcGain
 );
 
     parameter RegSpace = `CH0_AGCSPACE;
 
     wire    signed  [17:0]   abs = rx[17] ? -rx : rx;
-    reg             [16:0]   rxLevel;
     always @(posedge clk) begin
         if (clkEn) begin
             rxLevel <= $unsigned(abs[16:0]);
