@@ -21,12 +21,12 @@
    </includedirs>
    <analyzer>
     <views>
-     <view value="0.000 ns,7905.100 ns,722.079 ns,11043.927 ns,5815.000 ns" name="Last" />
+     <view value="2645.655 ns,4868.551 ns,38.964 ns,4003.551 ns,1676.273 ns" name="Last" />
     </views>
     <settings>
      <setting value="163" name="C0Width" />
      <setting value="117" name="C1Width" />
-     <setting value="151" name="C2Width" />
+     <setting value="86" name="C2Width" />
      <setting value="N" name="GotoSource" />
     </settings>
     <groups>
@@ -55,7 +55,7 @@
        <signal interpolate="Step" radix="Real" name="rxInputReal" scope="test" />
       </signals>
      </group>
-     <group open="yes" name="RX" show="yes" >
+     <group open="no" name="RX" show="yes" >
       <signals>
        <signal radix="Real" name="bitrateBps" scope="test" />
        <signal radix="Decimal" name="dfDecimation" scope="test" />
@@ -120,7 +120,7 @@
        <signal name="loopOutput[31:0]" scope="test.bitsyncTop.pcmAgcLoop0.lf" />
       </signals>
      </group>
-     <group open="yes" name="MPC" show="yes" >
+     <group open="no" name="MPC" show="yes" >
       <signals>
        <signal name="clk" scope="test.dacInterface" />
        <signal name="clkEn1" scope="test.dacInterface" />
@@ -136,7 +136,7 @@
        <signal name="CS0n" scope="test.dacInterface" />
       </signals>
      </group>
-     <group open="no" name="MICRO" show="yes" >
+     <group open="yes" name="MICRO" show="yes" >
       <signals>
        <signal name="a[12:0]" scope="test" />
        <signal name="d[31:0]" scope="test" />
@@ -146,11 +146,28 @@
        <signal name="we0" scope="test" />
       </signals>
      </group>
+     <group open="yes" name="ICS307" show="yes" >
+      <signals>
+       <signal name="busClk" scope="test.pllIntfc" />
+       <signal name="SDI" scope="test.pllIntfc" />
+       <signal name="SCK" scope="test.pllIntfc" />
+       <signal name="EN2" scope="test.pllIntfc" />
+       <signal name="EN1" scope="test.pllIntfc" />
+       <signal name="EN0" scope="test.pllIntfc" />
+       <signal name="CS2" scope="test.pllIntfc" />
+       <signal name="CS1" scope="test.pllIntfc" />
+       <signal name="CS0" scope="test.pllIntfc" />
+       <signal name="spiState[3:0]" scope="test.pllIntfc" />
+       <signal name="sckEnable" scope="test.pllIntfc" />
+       <signal name="startPll0" scope="test.pllIntfc" />
+       <signal name="xferDone" scope="test.pllIntfc" />
+      </signals>
+     </group>
     </groups>
    </analyzer>
    <explorer>
     <settings>
-     <setting value="test.ch0Interpolate" name="Scope" />
+     <setting value="test.pllIntfc" name="Scope" />
     </settings>
    </explorer>
    <sourcefiles>
@@ -194,6 +211,9 @@
     <file name="pcmAgcLoopFilter.v" />
     <file name="pcmAgcLoopRegs.v" />
     <file name="mcp48xxInterface.v" />
+    <file name="log2.v" />
+    <file name="ics307Interface.v" />
+    <file name=".\xc7k160t-IP\jitterFifo\sim\jitterFifo.v" />
    </sourcefiles>
   </product>
  </products>

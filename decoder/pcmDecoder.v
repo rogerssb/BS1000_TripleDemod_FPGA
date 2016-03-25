@@ -5,6 +5,9 @@ module pcmDecoder
   (
   rs,
   en,
+  `ifdef USE_BUS_CLOCK
+  busClk,
+  `endif
   wr0,wr1,
   addr,
   din,
@@ -22,6 +25,9 @@ module pcmDecoder
   );
 
 input rs,en,wr0,wr1;
+`ifdef USE_BUS_CLOCK
+input   busClk;
+`endif
 input clk,symb_clk_en,symb_clk_2x_en;
 input [12:0]addr;
 input [15:0]din;
@@ -142,17 +148,19 @@ always @(posedge clk) begin
 //------------------------------------------------------------------------------
 
 wire [15:0]regs_q;
-decoder_regs decoder_regs
-  (
-  .wr0(wr0),
-  .wr1(wr1),
-  .a(addr),
-  .di(din[15:0]),
-  .do(dout[15:0]),
-  .en(en),
-  .d(regs_q),
-  .q(regs_q)
-  );
+decoder_regs decoder_regs(
+    `ifdef USE_BUS_CLOCK
+    .busClk(busClk),
+    `endif
+    .wr0(wr0),
+    .wr1(wr1),
+    .a(addr),
+    .di(din[15:0]),
+    .do(dout[15:0]),
+    .en(en),
+    .d(regs_q),
+    .q(regs_q)
+);
 
 assign {
     bypass_fifo,

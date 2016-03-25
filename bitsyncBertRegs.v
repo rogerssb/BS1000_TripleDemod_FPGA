@@ -212,11 +212,11 @@ reg [31:0]dataOut;
 always @* begin
     if (cs) begin
         casex (addr)
-            `SYS_SUBSYSTEM_CTRL: begin
-                dataOut = {28'b0,pnGeneratorEnable,framesyncEnable,bertEnable,bitsyncEnable};
-                end
             `SYS_VERSION: begin
                 dataOut = {versionNumber,16'b0};
+                end
+            `SYS_SUBSYSTEM_CTRL: begin
+                dataOut = {28'b0,pnGeneratorEnable,framesyncEnable,bertEnable,bitsyncEnable};
                 end
             `SYS_TYPE: begin
                 dataOut = {16'b0,`BITSYNC_BERT_IMAGE};

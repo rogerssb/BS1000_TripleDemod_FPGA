@@ -193,6 +193,13 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
+      <File Path="$PPRDIR/log2.v">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
       <File Path="$PPRDIR/decimatingFilter.v">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -345,6 +352,19 @@
         </FileInfo>
       </File>
       <File Path="$PPRDIR/mcp48xxInterface.v">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PPRDIR/xc7k160t-IP/jitterFifo/jitterFifo.dcp">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PPRDIR/ics307Interface.v">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
@@ -505,6 +525,13 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
+      <File Path="$PPRDIR/xc7k160t-IP/jitterFifo/jitterFifo_funcsim.v">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
       <File Path="$PPRDIR/testBitsync.v">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -539,6 +566,7 @@
         <Option Name="VerilogDir" Val="$PPRDIR/."/>
         <Option Name="SrcSet" Val="sources_1"/>
         <Option Name="XSimWcfgFile" Val="$PPRDIR/testBitsync.wcfg"/>
+        <Option Name="NLNetlistMode" Val="funcsim"/>
         <Define Name="SIMULATE"/>
         <Define Name="BITSYNC_BERT"/>
         <Define Name="USE_VIVADO_CORES"/>

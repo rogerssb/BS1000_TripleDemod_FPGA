@@ -22,6 +22,7 @@ module pcmAgcLoopRegs(
     agcSetpoint,
     invertError,
     zeroError,
+    useLinear,
     posErrorGain,
     negErrorGain,
     upperLimit,
@@ -39,8 +40,8 @@ input           wr0,wr1,wr2,wr3;
 output  [16:0]   agcSetpoint;
 reg     [16:0]   agcSetpoint;
 
-output          invertError,zeroError;
-reg             invertError,zeroError;
+output          invertError,zeroError,useLinear;
+reg             invertError,zeroError,useLinear;
 
 output  [4:0]   posErrorGain,negErrorGain;
 reg     [4:0]   posErrorGain,negErrorGain;
@@ -56,6 +57,7 @@ always @(posedge busClk) begin
             `ALF_CONTROL: begin
                 zeroError <= dataIn[0];
                 invertError <= dataIn[1];
+                useLinear <= dataIn[2];
                 end
             `ALF_SETPOINT: begin
                 agcSetpoint[7:0] <= dataIn[7:0];
@@ -120,7 +122,7 @@ reg [31:0]dataOut;
 always @* begin
     if (cs) begin
         casex (addr)
-            `ALF_CONTROL:       dataOut = {30'bx,invertError,zeroError};
+            `ALF_CONTROL:       dataOut = {29'bx,useLinear,invertError,zeroError};
             `ALF_SETPOINT:      dataOut = {15'bx,agcSetpoint};
             `ALF_GAINS:         dataOut = {11'bx,negErrorGain,11'bx,posErrorGain};
             `ALF_ULIMIT:        dataOut = upperLimit;

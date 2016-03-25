@@ -364,7 +364,7 @@ assign qEye = resamp1Out;
 wire    [16:0]  ch0Level;
 wire    [31:0]  agc0Dout;
 pcmAgcLoop #(.RegSpace(`CH0_AGCSPACE)) pcmAgcLoop0(
-    .clk(clk), .reset(reset), .clkEn(ch0SymEn),
+    .clk(clk), .reset(reset), .clkEn(df0ClkEn),
     `ifdef USE_BUS_CLOCK
     .busClk(busClk),
     `endif
@@ -372,7 +372,7 @@ pcmAgcLoop #(.RegSpace(`CH0_AGCSPACE)) pcmAgcLoop0(
     .addr(addr),
     .din(din),
     .dout(agc0Dout),
-    .rx(ch0SymData),
+    .rx(df0Out),
     .rxLevel(ch0Level),
     .agcGain(ch0Gain)
 );
@@ -380,7 +380,7 @@ pcmAgcLoop #(.RegSpace(`CH0_AGCSPACE)) pcmAgcLoop0(
 wire    [16:0]  ch1Level;
 wire    [31:0]  agc1Dout;
 pcmAgcLoop #(.RegSpace(`CH1_AGCSPACE)) pcmAgcLoop1(
-    .clk(clk), .reset(reset), .clkEn(ch1SymEn),
+    .clk(clk), .reset(reset), .clkEn(df1ClkEn),
     `ifdef USE_BUS_CLOCK
     .busClk(busClk),
     `endif
@@ -388,7 +388,7 @@ pcmAgcLoop #(.RegSpace(`CH1_AGCSPACE)) pcmAgcLoop1(
     .addr(addr),
     .din(din),
     .dout(agc1Dout),
-    .rx(ch1SymData),
+    .rx(df1Out),
     .rxLevel(ch1Level),
     .agcGain(ch1Gain)
 );

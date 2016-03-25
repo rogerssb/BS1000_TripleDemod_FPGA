@@ -15,6 +15,9 @@
 
 module decoder_regs
   (
+  `ifdef USE_BUS_CLOCK
+  busClk,
+  `endif
   wr0,   // input,  processor bus write strobe
   wr1,
   a,    // input, processor bus address
@@ -25,14 +28,36 @@ module decoder_regs
   q     // output, gpio bits
   );
 
+`ifdef USE_BUS_CLOCK
+input busClk;
+`endif
 input [12:0]a;
 input [15:0]di;
 output [15:0]do;
 input wr0,wr1,en;
 input [15:0]d;
-output [15:0]q;
 
+output [15:0]q;
 reg [15:0]q;
+
+`ifdef USE_BUS_CLK
+    always @(posedge busClk) begin
+        if(en && wr0) begin
+            casex (a)
+                `DEC_OPTIONS: q[7:0] <= di[7:0];
+                default: ;
+            endcase
+        end
+        if(en && wr1) begin
+            casex (a)
+                `DEC_OPTIONS: q[15:8] <= di[15:8];
+                default: ;
+            endcase
+        end
+    end
+
+`else   //USE_BUS_CLOCK
+
 always @(negedge wr0) begin
   if(en) begin
     casex (a)
@@ -52,6 +77,8 @@ always @(negedge wr1) begin
   end
   else q[15:8] <= q[15:8];
 end
+
+`endif //USE_BUS_CLOCK
 
 reg [15:0]do;
 always @* begin

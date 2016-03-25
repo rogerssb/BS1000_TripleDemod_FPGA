@@ -25,6 +25,7 @@ module pcmAgcLoopFilter (
     input           [31:0]  din,
     output          [31:0]  dout,
     input           [16:0]  signalLevel,
+    input           [7:0]   log2SignalLevel,
     output          [31:0]  loopOutput
 );
 
@@ -46,6 +47,7 @@ module pcmAgcLoopFilter (
         .agcSetpoint(agcSetpoint),
         .invertError(invertError),
         .zeroError(zeroError),
+        .useLinear(useLinear),
         .posErrorGain(posErrorGain),
         .negErrorGain(negErrorGain),
         .upperLimit(upperLimit),
@@ -56,18 +58,28 @@ module pcmAgcLoopFilter (
     /**************************** Adjust Error ************************************/
     reg     signed  [17:0]  loopError;
     wire    signed  [17:0]  error = $signed({1'b0,agcSetpoint}) - $signed({1'b0,signalLevel});
-    wire    signed  [17:0]  negError = -error;
+    wire    signed  [8:0]   log2Error = $signed({1'b0,agcSetpoint[7:0]}) - $signed({1'b0,log2SignalLevel});
     always @(posedge clk) begin 
         if (zeroError) begin
             loopError <= 18'h0;
             end
-        else if (invertError) begin
-            loopError <= negError;
+        else if (useLinear) begin
+            if (invertError) begin
+                loopError <= -error;
             end
-        else begin
-            loopError <= error;
+            else begin
+                loopError <= error;
             end
         end
+        else begin
+            if (invertError) begin
+                loopError <= {-log2Error,9'b0};
+            end
+            else begin
+                loopError <= {log2Error,9'b0};
+            end
+        end
+    end
 
 
 
@@ -124,7 +136,7 @@ always @(posedge clk) begin
     //            00<------|------------|-----80--------|---------|--------->ff
     // CASE1               LL                                     UL
     //
-    wire    signed  [32:0] sum = $signed({1'b0,integrator}) + {leadError[31],leadError};
+    wire    signed  [32:0] sum = $signed({1'b0,integrator}) + $signed({leadError[31],leadError});
     always @ (posedge clk or posedge reset) begin
         if (reset) begin
             integrator <= 0;

@@ -253,8 +253,8 @@ bitsyncTop bitsyncTop(
     .ch0Sym2xEn(),
     .ch0SymEn(ch0SymEn),
     .ch0SymData(),
-    .ch0SymClk(),
-    .ch0Bit(),
+    .ch0SymClk(pll0_OUT1),
+    .ch0Bit(ch0DataOut),
     .ch0Gain(ch0Gain),
     .ch0Offset(ch0Offset),
     .ch1Lock(),
@@ -348,6 +348,61 @@ mcp48xxInterface dacInterface (
     .CS1n(ch1SELn)
 );
 
+    // SPI interface to the PLLs
+    wire    [31:0]  pllDout;
+    ics307Interface pllIntfc (
+        .reset(reset),
+        .addr(a),
+        .dataIn(d),
+        .dataOut(pllDout),
+        `ifdef USE_BUS_CLOCK
+        .busClk(bc),
+        `endif
+        .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
+        .clk(clk),
+        .SCK(pll_SCK),
+        .SDI(pll_SDI),
+        .CS0(pll0_CS),
+        .CS1(pll1_CS),
+        .CS2(pll2_CS),
+        .EN0(pll0_PWDn),
+        .EN1(pll1_PWDn),
+        .EN2(pll2_PWDn)
+    );
+
+    //------------- PLL0 Data FIFO --------------------
+    reg             pll0_ReadEnable;
+    wire    [2:0]   pll0_Symbol;
+    wire            pll0_Reset;
+    jitterFifo pll0Fifo(
+        .rst(pll0_Reset | reset),
+        .wr_clk(clk),
+        .rd_clk(pll0_OUT1),
+        .din({ch0DataOut,2'b0}),
+        .wr_en(ch0SymEn),
+        .rd_en(pll0_ReadEnable),
+        .dout(pll0_Symbol),
+        .full(pll0_Full),
+        .empty(pll0_Empty),
+        .prog_full(pll0_HalfFull)
+    );
+    assign          pll0_FlagReset = (pll0_Full || (pll0_Empty & pll0_ReadEnable));
+    reg     [1:0]   pll0_ResetSR;
+    assign          pll0_Reset = (pll0_ResetSR == 2'b01);
+    always @(posedge pll0_OUT1) begin
+        if (reset) begin
+            pll0_ResetSR <= 2'b0;
+        end
+        else begin
+            pll0_ResetSR <= {pll0_ResetSR[0],pll0_FlagReset};
+        end
+        if (pll0_Reset | reset) begin
+            pll0_ReadEnable <= 0;
+        end
+        else if (pll0_HalfFull) begin
+            pll0_ReadEnable <= 1;
+        end
+    end
 
 
 `ifdef MATLAB_VECTORS
@@ -573,6 +628,12 @@ initial begin
     #(2*C) ;
     reset = 0;
 
+    // Init the PLLs
+    write32(createAddress(`PLLSPACE,`PLL0_BITS_0to31),32'h01234567);
+    write32(createAddress(`PLLSPACE,`PLL0_BITS_68to99),32'haaaa5555);
+    write32(createAddress(`PLLSPACE,`PLL0_BITS_100to131),32'ha5a5a5a5);
+    write16(createAddress(`PLLSPACE,`PLL0_XFER),16'h0);
+
     // Init the mode
     write32(createAddress(`BITSYNC_TOP_SPACE,`BS_TOP_CONTROL),{30'bx,`MODE_SINGLE_CH});
 
@@ -601,9 +662,9 @@ initial begin
 
     // Init the channel agc loop filter
     write32(createAddress(`CH0_AGCSPACE,`ALF_CONTROL),1);                 // Zero the error
-    write32(createAddress(`CH0_AGCSPACE,`ALF_SETPOINT),32'h00010000);     // AGC Setpoint
-    write32(createAddress(`CH0_AGCSPACE,`ALF_GAINS),32'h001a001a);        // AGC Loop Gain
-    write32(createAddress(`CH0_AGCSPACE,`ALF_ULIMIT),32'hffffffff);       // AGC Upper limit
+    write32(createAddress(`CH0_AGCSPACE,`ALF_SETPOINT),32'h0000fff0);     // AGC Setpoint
+    write32(createAddress(`CH0_AGCSPACE,`ALF_GAINS),32'h001c001c);        // AGC Loop Gain
+    write32(createAddress(`CH0_AGCSPACE,`ALF_ULIMIT),32'hff000000);       // AGC Upper limit
     write32(createAddress(`CH0_AGCSPACE,`ALF_LLIMIT),32'h00000000);       // AGC Lower limit
     bitsyncTop.pcmAgcLoop0.lf.integrator = 32'h4000_0000;
     bitsyncTop.pcmAgcLoop1.lf.integrator = 32'h4000_0000;

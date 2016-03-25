@@ -34,7 +34,21 @@ module bitsyncBertTop (
     ch0HighImpedance,
     ch0SingleEnded,
     ch1HighImpedance,
-    ch1SingleEnded
+    ch1SingleEnded,
+    pll_SCK,
+    pll_SDI,
+    pll0_CS,
+    pll0_REF,
+    pll0_OUT1,
+    pll0_PWDn,
+    pll1_CS,
+    pll1_REF,
+    pll1_OUT1,
+    pll1_PWDn,
+    pll2_CS,
+    pll2_REF,
+    pll2_OUT1,
+    pll2_PWDn
     );
 
 input           sysClk;
@@ -86,6 +100,22 @@ output          ch0HighImpedance;
 output          ch0SingleEnded;
 output          ch1HighImpedance;
 output          ch1SingleEnded;
+
+// PLL Interface Signals
+output          pll_SCK;
+output          pll_SDI;
+output          pll0_CS;
+output          pll0_REF;
+input           pll0_OUT1;
+output          pll0_PWDn;
+output          pll1_CS;
+output          pll1_REF;
+input           pll1_OUT1;
+output          pll1_PWDn;
+output          pll2_CS;
+output          pll2_REF;
+input           pll2_OUT1;
+output          pll2_PWDn;
 
 parameter VER_NUMBER = 16'd415;
 
@@ -277,34 +307,34 @@ mcp48xxInterface dacInterface (
 //******************************************************************************
 //                                PCM Decoders
 //******************************************************************************
-reg ch0DecoderSpace;
-always @* begin
-    casex(addr)
-        `CH0_DECODERSPACE:      ch0DecoderSpace = 1;
-        default:                ch0DecoderSpace = 0;
-        endcase
-    end
-wire    [15:0]  dec0Dout;
-pcmDecoder dec0
-  (
-  .clk(clk),
-  .rs(reset),
-  .en(ch0DecoderSpace),
-  .wr0(wr0),
-  .wr1(wr1),
-  .addr(addr),
-  .din(dataIn[15:0]),
-  .dout(dec0Dout),
-  .symb_clk_en(ch0SymEn),           // symbol rate clock enable
-  .symb_clk_2x_en(ch0Sym2xEn),      // 2x symbol rate clock enable
-  .symb(ch0DataOut),                // data input,
-  .data_out(ch0PcmData),            // data output
-  .clkEn_out(ch0PcmClkEn),          // clk output
-  .fifo_rs(),
-  .clk_inv(dec1_clk_inv),
-  .bypass_fifo(),
-  .symb_clk(dec1_symbol_clk)
-  );
+    reg ch0DecoderSpace;
+    always @* begin
+        casex(addr)
+            `CH0_DECODERSPACE:      ch0DecoderSpace = 1;
+            default:                ch0DecoderSpace = 0;
+            endcase
+        end
+    wire    [15:0]  dec0Dout;
+    pcmDecoder dec0 (
+        .clk(clk),
+        .rs(reset),
+        .busClk(fb_clk),
+        .en(ch0DecoderSpace),
+        .wr0(wr0),
+        .wr1(wr1),
+        .addr(addr),
+        .din(dataIn[15:0]),
+        .dout(dec0Dout),
+        .symb_clk_en(ch0SymEn),           // symbol rate clock enable
+        .symb_clk_2x_en(ch0Sym2xEn),      // 2x symbol rate clock enable
+        .symb(ch0DataOut),                // data input,
+        .data_out(ch0PcmData),            // data output
+        .clkEn_out(ch0PcmClkEn),          // clk output
+        .fifo_rs(fifoReset),
+        .clk_inv(dec1_clk_inv),
+        .bypass_fifo(),
+        .symb_clk(ch0PcmSymClk)
+    );
 
 
 
@@ -314,6 +344,108 @@ pcmDecoder dec0
 //******************************************************************************
 //                       Clock/Data Jitter Reduction
 //******************************************************************************
+
+    // SPI interface to the PLLs
+    wire    [31:0]  pllDout;
+    ics307Interface pllIntfc (
+        .reset(reset),
+        .busClk(fb_clk),
+        .addr(addr),
+        .dataIn(dataIn),
+        .dataOut(pllDout),
+        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .clk(clk),
+        .SCK(pll_SCK),
+        .SDI(pll_SDI),
+        .CS0(pll0_CS),
+        .CS1(pll1_CS),
+        .CS2(pll2_CS),
+        .EN0(pll0_PWDn),
+        .EN1(pll1_PWDn),
+        .EN2(pll2_PWDn)
+    );
+
+    //------------- PLL Reference Clocks --------------
+    assign          pll0_REF = ch0ClkOut;
+    assign          pll1_REF = ch1ClkOut;
+    assign          pll2_REF = ch0ClkOut;
+
+    //------------- PLL0 Data FIFO --------------------
+    reg             pll0_ReadEnable;
+    wire    [2:0]   pll0_Symbol;
+    wire            pll0_Reset;
+    jitterFifo pll0Fifo(
+        .rst(pll0_Reset | reset),
+        .wr_clk(clk),
+        .rd_clk(pll0_OUT1),
+        .din({ch0DataOut,2'b0}),
+        .wr_en(ch0SymEn),
+        .rd_en(pll0_ReadEnable),
+        .dout(pll0_Symbol),
+        .full(pll0_Full),
+        .empty(pll0_Empty),
+        .prog_full(pll0_HalfFull)
+    );
+    assign          pll0_FlagReset = (pll0_Full || (pll0_Empty & pll0_ReadEnable));
+    reg     [1:0]   pll0_ResetSR;
+    assign          pll0_Reset = (pll0_ResetSR == 2'b01);
+    always @(posedge pll0_OUT1) begin
+        if (reset) begin
+            pll0_ResetSR <= 2'b0;
+        end
+        else begin
+            pll0_ResetSR <= {pll0_ResetSR[0],pll0_FlagReset};
+        end
+        if (pll0_Reset | reset) begin
+            pll0_ReadEnable <= 0;
+        end
+        else if (pll0_HalfFull) begin
+            pll0_ReadEnable <= 1;
+        end
+    end
+
+    //------------- PLL1 Data FIFO --------------------
+    reg             pll1_ReadEnable;
+    wire    [2:0]   pll1_Symbol;
+    wire            pll1_Reset;
+    jitterFifo pll1Fifo(
+        .rst(pll1_Reset | reset),
+        .wr_clk(clk),
+        .rd_clk(pll1_OUT1),
+        .din({ch1DataOut,2'b0}),
+        .wr_en(ch1SymEn),
+        .rd_en(pll1_ReadEnable),
+        .dout(pll1_Symbol),
+        .full(pll1_Full),
+        .empty(pll1_Empty),
+        .prog_full(pll1_HalfFull)
+    );
+    assign          pll1_FlagReset = (pll1_Full || (pll1_Empty & pll1_ReadEnable));
+    reg     [1:0]   pll1_ResetSR;
+    assign          pll1_Reset = (pll1_ResetSR == 2'b01);
+    always @(posedge pll1_OUT1) begin
+        if (reset) begin
+            pll1_ResetSR <= 2'b0;
+        end
+        else begin
+            pll1_ResetSR <= {pll1_ResetSR[0],pll1_FlagReset};
+        end
+        if (pll1_Reset | reset) begin
+            pll1_ReadEnable <= 0;
+        end
+        else if (pll1_HalfFull) begin
+            pll1_ReadEnable <= 1;
+        end
+    end
+
+    //-------------- PLL Outputs ----------------------
+    assign          pll0_Data = pll0_Symbol[2];
+    assign          pll1_Data = pll1_Symbol[2];
+    assign          pll0_Clk = pll0_OUT1;
+    assign          pll1_Clk = pll1_OUT1;
+
+
+
 
 
 
@@ -392,7 +524,6 @@ always @(posedge clk) begin
 end
 wire    [31:0]  interp0Dout;
 wire    [17:0]  interp0DataOut;
-wire    [13:0]  dac0Out = interp0DataOut[17:4];
 interpolate #(.RegSpace(`INTERP0SPACE), .FirRegSpace(`VIDFIR0SPACE)) dac0Interp(
     .clk(clk), .reset(reset), .clkEn(interp0ClkEn),
     .busClk(fb_clk),
@@ -429,7 +560,6 @@ always @(posedge clk) begin
 end
 wire    [31:0]  interp1Dout;
 wire    [17:0]  interp1DataOut;
-wire    [13:0]  dac1Out = interp1DataOut[17:4];
 interpolate #(.RegSpace(`INTERP1SPACE), .FirRegSpace(`VIDFIR1SPACE)) dac1Interp(
     .clk(clk), .reset(reset), .clkEn(interp1ClkEn),
     .busClk(fb_clk),
@@ -466,7 +596,6 @@ always @(posedge clk) begin
 end
 wire    [31:0]  interp2Dout;
 wire    [17:0]  interp2DataOut;
-wire    [13:0]  dac2Out = interp2DataOut[17:4];
 interpolate #(.RegSpace(`INTERP2SPACE), .FirRegSpace(`VIDFIR2SPACE)) dac2Interp(
     .clk(clk), .reset(reset), .clkEn(interp2ClkEn),
     .busClk(fb_clk),
@@ -511,8 +640,10 @@ assign bsDataOut = test1;
 
 clockAndDataMux bsMux(
     .muxSelect(bsCoaxMuxSelect),
-    .clk0(ch0ClkOut),
-    .data0(ch0DataOut),
+    //.clk0(ch0ClkOut),
+    //.data0(ch0DataOut),
+    .clk0(pll0_Clk),
+    .data0(pll0_Data),
     .clk1(),
     .data1(),
     .clk2(ch1ClkOut),
@@ -557,8 +688,8 @@ clockAndDataMux bsDiffMux(
 
 clockAndDataMux encMux(
     .muxSelect(encCoaxMuxSelect),
-    .clk0(ch0ClkOut),
-    .data0(ch0DataOut),
+    .clk0(ch0PcmSymClk),
+    .data0(ch0PcmData),
     .clk1(),
     .data1(),
     .clk2(ch1ClkOut),
@@ -622,7 +753,8 @@ clockAndDataMux fsDiffMux(
 );
 
 assign ch0Lockn = !ch0Lock;
-assign ch1Lockn = !ch1Lock;
+//assign ch1Lockn = !ch1Lock;
+assign ch1Lockn = pll0_ReadEnable;
 
 //******************************************************************************
 //                           Processor Read Data Mux
@@ -693,6 +825,14 @@ always @* begin
                 end
             end
         `endif
+        `PLLSPACE: begin
+            if (addr[1]) begin
+                rd_mux = pllDout[31:16];
+                end
+            else begin
+                rd_mux = pllDout[15:0];
+                end
+            end
          default : rd_mux = 16'hxxxx;
         endcase
      end

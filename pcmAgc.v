@@ -39,8 +39,18 @@ module pcmAgcLoop(
 
 `ifdef SIMULATE
 real magReal;
-always @* magReal = $itor(rxLevel)/(2**17);
+always @* magReal = $itor($unsigned(rxLevel))/(2**17);
 `endif
+
+    // Convert the linear level to log base 2
+    wire    [7:0]   log2Mag;
+    log2 log2(
+        .clk(clk),
+        .reset(reset),
+        .syncIn(clkEn),
+        .linear(rxLevel[16:1]),
+        .log(log2Mag)
+    );
 
 
 // Run the loop filter
@@ -63,6 +73,7 @@ pcmAgcLoopFilter lf(
     .din(din),
     .dout(dout),
     .signalLevel(rxLevel),
+    .log2SignalLevel(log2Mag),
     .loopOutput(loopOutput)
     );
 
