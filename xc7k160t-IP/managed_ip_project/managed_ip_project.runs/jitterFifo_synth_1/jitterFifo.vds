@@ -1,0 +1,1323 @@
+#-----------------------------------------------------------
+# Vivado v2015.1 (64-bit)
+# SW Build 1215546 on Mon Apr 27 19:22:08 MDT 2015
+# IP Build 1209967 on Tue Apr 21 11:39:20 MDT 2015
+# Start of session at: Thu Mar 31 14:15:50 2016
+# Process ID: 12724
+# Log file: C:/modem/vivado/xc7k160t-IP/managed_ip_project/managed_ip_project.runs/jitterFifo_synth_1/jitterFifo.vds
+# Journal file: C:/modem/vivado/xc7k160t-IP/managed_ip_project/managed_ip_project.runs/jitterFifo_synth_1\vivado.jou
+#-----------------------------------------------------------
+source jitterFifo.tcl -notrace
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'C:/Xilinx/Vivado/2015.1/data/ip'.
+WARNING: [IP_Flow 19-3664] IP 'jitterFifo' generated file not found 'c:/modem/vivado/xc7k160t-IP/jitterFifo/jitterFifo.dcp'. Please regenerate to continue.
+WARNING: [IP_Flow 19-3664] IP 'jitterFifo' generated file not found 'c:/modem/vivado/xc7k160t-IP/jitterFifo/jitterFifo_stub.v'. Please regenerate to continue.
+WARNING: [IP_Flow 19-3664] IP 'jitterFifo' generated file not found 'c:/modem/vivado/xc7k160t-IP/jitterFifo/jitterFifo_stub.vhdl'. Please regenerate to continue.
+WARNING: [IP_Flow 19-3664] IP 'jitterFifo' generated file not found 'c:/modem/vivado/xc7k160t-IP/jitterFifo/jitterFifo_funcsim.v'. Please regenerate to continue.
+WARNING: [IP_Flow 19-3664] IP 'jitterFifo' generated file not found 'c:/modem/vivado/xc7k160t-IP/jitterFifo/jitterFifo_funcsim.vhdl'. Please regenerate to continue.
+Command: synth_design -top jitterFifo -part xc7k160tfbg676-1 -mode out_of_context
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xc7k160t'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7k160t'
+---------------------------------------------------------------------------------
+Starting RTL Elaboration : Time (s): cpu = 00:00:06 ; elapsed = 00:00:07 . Memory (MB): peak = 257.594 ; gain = 78.461
+---------------------------------------------------------------------------------
+INFO: [Synth 8-638] synthesizing module 'jitterFifo' [c:/modem/vivado/xc7k160t-IP/jitterFifo/synth/jitterFifo.vhd:74]
+	Parameter C_COMMON_CLOCK bound to: 0 - type: integer 
+	Parameter C_COUNT_TYPE bound to: 0 - type: integer 
+	Parameter C_DATA_COUNT_WIDTH bound to: 4 - type: integer 
+	Parameter C_DEFAULT_VALUE bound to: BlankString - type: string 
+	Parameter C_DIN_WIDTH bound to: 3 - type: integer 
+	Parameter C_DOUT_RST_VAL bound to: 0 - type: string 
+	Parameter C_DOUT_WIDTH bound to: 3 - type: integer 
+	Parameter C_ENABLE_RLOCS bound to: 0 - type: integer 
+	Parameter C_FAMILY bound to: kintex7 - type: string 
+	Parameter C_FULL_FLAGS_RST_VAL bound to: 0 - type: integer 
+	Parameter C_HAS_ALMOST_EMPTY bound to: 0 - type: integer 
+	Parameter C_HAS_ALMOST_FULL bound to: 0 - type: integer 
+	Parameter C_HAS_BACKUP bound to: 0 - type: integer 
+	Parameter C_HAS_DATA_COUNT bound to: 0 - type: integer 
+	Parameter C_HAS_INT_CLK bound to: 0 - type: integer 
+	Parameter C_HAS_MEMINIT_FILE bound to: 0 - type: integer 
+	Parameter C_HAS_OVERFLOW bound to: 0 - type: integer 
+	Parameter C_HAS_RD_DATA_COUNT bound to: 0 - type: integer 
+	Parameter C_HAS_RD_RST bound to: 0 - type: integer 
+	Parameter C_HAS_RST bound to: 1 - type: integer 
+	Parameter C_HAS_SRST bound to: 0 - type: integer 
+	Parameter C_HAS_UNDERFLOW bound to: 0 - type: integer 
+	Parameter C_HAS_VALID bound to: 0 - type: integer 
+	Parameter C_HAS_WR_ACK bound to: 0 - type: integer 
+	Parameter C_HAS_WR_DATA_COUNT bound to: 0 - type: integer 
+	Parameter C_HAS_WR_RST bound to: 0 - type: integer 
+	Parameter C_IMPLEMENTATION_TYPE bound to: 2 - type: integer 
+	Parameter C_INIT_WR_PNTR_VAL bound to: 0 - type: integer 
+	Parameter C_MEMORY_TYPE bound to: 2 - type: integer 
+	Parameter C_MIF_FILE_NAME bound to: BlankString - type: string 
+	Parameter C_OPTIMIZATION_MODE bound to: 0 - type: integer 
+	Parameter C_OVERFLOW_LOW bound to: 0 - type: integer 
+	Parameter C_PRELOAD_LATENCY bound to: 1 - type: integer 
+	Parameter C_PRELOAD_REGS bound to: 0 - type: integer 
+	Parameter C_PRIM_FIFO_TYPE bound to: 512x36 - type: string 
+	Parameter C_PROG_EMPTY_THRESH_ASSERT_VAL bound to: 2 - type: integer 
+	Parameter C_PROG_EMPTY_THRESH_NEGATE_VAL bound to: 3 - type: integer 
+	Parameter C_PROG_EMPTY_TYPE bound to: 0 - type: integer 
+	Parameter C_PROG_FULL_THRESH_ASSERT_VAL bound to: 8 - type: integer 
+	Parameter C_PROG_FULL_THRESH_NEGATE_VAL bound to: 7 - type: integer 
+	Parameter C_PROG_FULL_TYPE bound to: 1 - type: integer 
+	Parameter C_RD_DATA_COUNT_WIDTH bound to: 4 - type: integer 
+	Parameter C_RD_DEPTH bound to: 16 - type: integer 
+	Parameter C_RD_FREQ bound to: 1 - type: integer 
+	Parameter C_RD_PNTR_WIDTH bound to: 4 - type: integer 
+	Parameter C_UNDERFLOW_LOW bound to: 0 - type: integer 
+	Parameter C_USE_DOUT_RST bound to: 1 - type: integer 
+	Parameter C_USE_ECC bound to: 0 - type: integer 
+	Parameter C_USE_EMBEDDED_REG bound to: 0 - type: integer 
+	Parameter C_USE_PIPELINE_REG bound to: 0 - type: integer 
+	Parameter C_POWER_SAVING_MODE bound to: 0 - type: integer 
+	Parameter C_USE_FIFO16_FLAGS bound to: 0 - type: integer 
+	Parameter C_USE_FWFT_DATA_COUNT bound to: 0 - type: integer 
+	Parameter C_VALID_LOW bound to: 0 - type: integer 
+	Parameter C_WR_ACK_LOW bound to: 0 - type: integer 
+	Parameter C_WR_DATA_COUNT_WIDTH bound to: 4 - type: integer 
+	Parameter C_WR_DEPTH bound to: 16 - type: integer 
+	Parameter C_WR_FREQ bound to: 1 - type: integer 
+	Parameter C_WR_PNTR_WIDTH bound to: 4 - type: integer 
+	Parameter C_WR_RESPONSE_LATENCY bound to: 1 - type: integer 
+	Parameter C_MSGON_VAL bound to: 1 - type: integer 
+	Parameter C_ENABLE_RST_SYNC bound to: 1 - type: integer 
+	Parameter C_ERROR_INJECTION_TYPE bound to: 0 - type: integer 
+	Parameter C_SYNCHRONIZER_STAGE bound to: 2 - type: integer 
+	Parameter C_INTERFACE_TYPE bound to: 0 - type: integer 
+	Parameter C_AXI_TYPE bound to: 1 - type: integer 
+	Parameter C_HAS_AXI_WR_CHANNEL bound to: 1 - type: integer 
+	Parameter C_HAS_AXI_RD_CHANNEL bound to: 1 - type: integer 
+	Parameter C_HAS_SLAVE_CE bound to: 0 - type: integer 
+	Parameter C_HAS_MASTER_CE bound to: 0 - type: integer 
+	Parameter C_ADD_NGC_CONSTRAINT bound to: 0 - type: integer 
+	Parameter C_USE_COMMON_OVERFLOW bound to: 0 - type: integer 
+	Parameter C_USE_COMMON_UNDERFLOW bound to: 0 - type: integer 
+	Parameter C_USE_DEFAULT_SETTINGS bound to: 0 - type: integer 
+	Parameter C_AXI_ID_WIDTH bound to: 1 - type: integer 
+	Parameter C_AXI_ADDR_WIDTH bound to: 32 - type: integer 
+	Parameter C_AXI_DATA_WIDTH bound to: 64 - type: integer 
+	Parameter C_AXI_LEN_WIDTH bound to: 8 - type: integer 
+	Parameter C_AXI_LOCK_WIDTH bound to: 1 - type: integer 
+	Parameter C_HAS_AXI_ID bound to: 0 - type: integer 
+	Parameter C_HAS_AXI_AWUSER bound to: 0 - type: integer 
+	Parameter C_HAS_AXI_WUSER bound to: 0 - type: integer 
+	Parameter C_HAS_AXI_BUSER bound to: 0 - type: integer 
+	Parameter C_HAS_AXI_ARUSER bound to: 0 - type: integer 
+	Parameter C_HAS_AXI_RUSER bound to: 0 - type: integer 
+	Parameter C_AXI_ARUSER_WIDTH bound to: 1 - type: integer 
+	Parameter C_AXI_AWUSER_WIDTH bound to: 1 - type: integer 
+	Parameter C_AXI_WUSER_WIDTH bound to: 1 - type: integer 
+	Parameter C_AXI_BUSER_WIDTH bound to: 1 - type: integer 
+	Parameter C_AXI_RUSER_WIDTH bound to: 1 - type: integer 
+	Parameter C_HAS_AXIS_TDATA bound to: 1 - type: integer 
+	Parameter C_HAS_AXIS_TID bound to: 0 - type: integer 
+	Parameter C_HAS_AXIS_TDEST bound to: 0 - type: integer 
+	Parameter C_HAS_AXIS_TUSER bound to: 1 - type: integer 
+	Parameter C_HAS_AXIS_TREADY bound to: 1 - type: integer 
+	Parameter C_HAS_AXIS_TLAST bound to: 0 - type: integer 
+	Parameter C_HAS_AXIS_TSTRB bound to: 0 - type: integer 
+	Parameter C_HAS_AXIS_TKEEP bound to: 0 - type: integer 
+	Parameter C_AXIS_TDATA_WIDTH bound to: 8 - type: integer 
+	Parameter C_AXIS_TID_WIDTH bound to: 1 - type: integer 
+	Parameter C_AXIS_TDEST_WIDTH bound to: 1 - type: integer 
+	Parameter C_AXIS_TUSER_WIDTH bound to: 4 - type: integer 
+	Parameter C_AXIS_TSTRB_WIDTH bound to: 1 - type: integer 
+	Parameter C_AXIS_TKEEP_WIDTH bound to: 1 - type: integer 
+	Parameter C_WACH_TYPE bound to: 0 - type: integer 
+	Parameter C_WDCH_TYPE bound to: 0 - type: integer 
+	Parameter C_WRCH_TYPE bound to: 0 - type: integer 
+	Parameter C_RACH_TYPE bound to: 0 - type: integer 
+	Parameter C_RDCH_TYPE bound to: 0 - type: integer 
+	Parameter C_AXIS_TYPE bound to: 0 - type: integer 
+	Parameter C_IMPLEMENTATION_TYPE_WACH bound to: 1 - type: integer 
+	Parameter C_IMPLEMENTATION_TYPE_WDCH bound to: 1 - type: integer 
+	Parameter C_IMPLEMENTATION_TYPE_WRCH bound to: 1 - type: integer 
+	Parameter C_IMPLEMENTATION_TYPE_RACH bound to: 1 - type: integer 
+	Parameter C_IMPLEMENTATION_TYPE_RDCH bound to: 1 - type: integer 
+	Parameter C_IMPLEMENTATION_TYPE_AXIS bound to: 1 - type: integer 
+	Parameter C_APPLICATION_TYPE_WACH bound to: 0 - type: integer 
+	Parameter C_APPLICATION_TYPE_WDCH bound to: 0 - type: integer 
+	Parameter C_APPLICATION_TYPE_WRCH bound to: 0 - type: integer 
+	Parameter C_APPLICATION_TYPE_RACH bound to: 0 - type: integer 
+	Parameter C_APPLICATION_TYPE_RDCH bound to: 0 - type: integer 
+	Parameter C_APPLICATION_TYPE_AXIS bound to: 0 - type: integer 
+	Parameter C_PRIM_FIFO_TYPE_WACH bound to: 512x36 - type: string 
+	Parameter C_PRIM_FIFO_TYPE_WDCH bound to: 1kx36 - type: string 
+	Parameter C_PRIM_FIFO_TYPE_WRCH bound to: 512x36 - type: string 
+	Parameter C_PRIM_FIFO_TYPE_RACH bound to: 512x36 - type: string 
+	Parameter C_PRIM_FIFO_TYPE_RDCH bound to: 1kx36 - type: string 
+	Parameter C_PRIM_FIFO_TYPE_AXIS bound to: 1kx18 - type: string 
+	Parameter C_USE_ECC_WACH bound to: 0 - type: integer 
+	Parameter C_USE_ECC_WDCH bound to: 0 - type: integer 
+	Parameter C_USE_ECC_WRCH bound to: 0 - type: integer 
+	Parameter C_USE_ECC_RACH bound to: 0 - type: integer 
+	Parameter C_USE_ECC_RDCH bound to: 0 - type: integer 
+	Parameter C_USE_ECC_AXIS bound to: 0 - type: integer 
+	Parameter C_ERROR_INJECTION_TYPE_WACH bound to: 0 - type: integer 
+	Parameter C_ERROR_INJECTION_TYPE_WDCH bound to: 0 - type: integer 
+	Parameter C_ERROR_INJECTION_TYPE_WRCH bound to: 0 - type: integer 
+	Parameter C_ERROR_INJECTION_TYPE_RACH bound to: 0 - type: integer 
+	Parameter C_ERROR_INJECTION_TYPE_RDCH bound to: 0 - type: integer 
+	Parameter C_ERROR_INJECTION_TYPE_AXIS bound to: 0 - type: integer 
+	Parameter C_DIN_WIDTH_WACH bound to: 32 - type: integer 
+	Parameter C_DIN_WIDTH_WDCH bound to: 64 - type: integer 
+	Parameter C_DIN_WIDTH_WRCH bound to: 2 - type: integer 
+	Parameter C_DIN_WIDTH_RACH bound to: 32 - type: integer 
+	Parameter C_DIN_WIDTH_RDCH bound to: 64 - type: integer 
+	Parameter C_DIN_WIDTH_AXIS bound to: 1 - type: integer 
+	Parameter C_WR_DEPTH_WACH bound to: 16 - type: integer 
+	Parameter C_WR_DEPTH_WDCH bound to: 1024 - type: integer 
+	Parameter C_WR_DEPTH_WRCH bound to: 16 - type: integer 
+	Parameter C_WR_DEPTH_RACH bound to: 16 - type: integer 
+	Parameter C_WR_DEPTH_RDCH bound to: 1024 - type: integer 
+	Parameter C_WR_DEPTH_AXIS bound to: 1024 - type: integer 
+	Parameter C_WR_PNTR_WIDTH_WACH bound to: 4 - type: integer 
+	Parameter C_WR_PNTR_WIDTH_WDCH bound to: 10 - type: integer 
+	Parameter C_WR_PNTR_WIDTH_WRCH bound to: 4 - type: integer 
+	Parameter C_WR_PNTR_WIDTH_RACH bound to: 4 - type: integer 
+	Parameter C_WR_PNTR_WIDTH_RDCH bound to: 10 - type: integer 
+	Parameter C_WR_PNTR_WIDTH_AXIS bound to: 10 - type: integer 
+	Parameter C_HAS_DATA_COUNTS_WACH bound to: 0 - type: integer 
+	Parameter C_HAS_DATA_COUNTS_WDCH bound to: 0 - type: integer 
+	Parameter C_HAS_DATA_COUNTS_WRCH bound to: 0 - type: integer 
+	Parameter C_HAS_DATA_COUNTS_RACH bound to: 0 - type: integer 
+	Parameter C_HAS_DATA_COUNTS_RDCH bound to: 0 - type: integer 
+	Parameter C_HAS_DATA_COUNTS_AXIS bound to: 0 - type: integer 
+	Parameter C_HAS_PROG_FLAGS_WACH bound to: 0 - type: integer 
+	Parameter C_HAS_PROG_FLAGS_WDCH bound to: 0 - type: integer 
+	Parameter C_HAS_PROG_FLAGS_WRCH bound to: 0 - type: integer 
+	Parameter C_HAS_PROG_FLAGS_RACH bound to: 0 - type: integer 
+	Parameter C_HAS_PROG_FLAGS_RDCH bound to: 0 - type: integer 
+	Parameter C_HAS_PROG_FLAGS_AXIS bound to: 0 - type: integer 
+	Parameter C_PROG_FULL_TYPE_WACH bound to: 0 - type: integer 
+	Parameter C_PROG_FULL_TYPE_WDCH bound to: 0 - type: integer 
+	Parameter C_PROG_FULL_TYPE_WRCH bound to: 0 - type: integer 
+	Parameter C_PROG_FULL_TYPE_RACH bound to: 0 - type: integer 
+	Parameter C_PROG_FULL_TYPE_RDCH bound to: 0 - type: integer 
+	Parameter C_PROG_FULL_TYPE_AXIS bound to: 0 - type: integer 
+	Parameter C_PROG_FULL_THRESH_ASSERT_VAL_WACH bound to: 1023 - type: integer 
+	Parameter C_PROG_FULL_THRESH_ASSERT_VAL_WDCH bound to: 1023 - type: integer 
+	Parameter C_PROG_FULL_THRESH_ASSERT_VAL_WRCH bound to: 1023 - type: integer 
+	Parameter C_PROG_FULL_THRESH_ASSERT_VAL_RACH bound to: 1023 - type: integer 
+	Parameter C_PROG_FULL_THRESH_ASSERT_VAL_RDCH bound to: 1023 - type: integer 
+	Parameter C_PROG_FULL_THRESH_ASSERT_VAL_AXIS bound to: 1023 - type: integer 
+	Parameter C_PROG_EMPTY_TYPE_WACH bound to: 0 - type: integer 
+	Parameter C_PROG_EMPTY_TYPE_WDCH bound to: 0 - type: integer 
+	Parameter C_PROG_EMPTY_TYPE_WRCH bound to: 0 - type: integer 
+	Parameter C_PROG_EMPTY_TYPE_RACH bound to: 0 - type: integer 
+	Parameter C_PROG_EMPTY_TYPE_RDCH bound to: 0 - type: integer 
+	Parameter C_PROG_EMPTY_TYPE_AXIS bound to: 0 - type: integer 
+	Parameter C_PROG_EMPTY_THRESH_ASSERT_VAL_WACH bound to: 1022 - type: integer 
+	Parameter C_PROG_EMPTY_THRESH_ASSERT_VAL_WDCH bound to: 1022 - type: integer 
+	Parameter C_PROG_EMPTY_THRESH_ASSERT_VAL_WRCH bound to: 1022 - type: integer 
+	Parameter C_PROG_EMPTY_THRESH_ASSERT_VAL_RACH bound to: 1022 - type: integer 
+	Parameter C_PROG_EMPTY_THRESH_ASSERT_VAL_RDCH bound to: 1022 - type: integer 
+	Parameter C_PROG_EMPTY_THRESH_ASSERT_VAL_AXIS bound to: 1022 - type: integer 
+	Parameter C_REG_SLICE_MODE_WACH bound to: 0 - type: integer 
+	Parameter C_REG_SLICE_MODE_WDCH bound to: 0 - type: integer 
+	Parameter C_REG_SLICE_MODE_WRCH bound to: 0 - type: integer 
+	Parameter C_REG_SLICE_MODE_RACH bound to: 0 - type: integer 
+	Parameter C_REG_SLICE_MODE_RDCH bound to: 0 - type: integer 
+	Parameter C_REG_SLICE_MODE_AXIS bound to: 0 - type: integer 
+INFO: [Synth 8-3491] module 'fifo_generator_v12_0' declared at 'c:/modem/vivado/xc7k160t-IP/jitterFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0.vhd:127' bound to instance 'U0' of component 'fifo_generator_v12_0' [c:/modem/vivado/xc7k160t-IP/jitterFifo/synth/jitterFifo.vhd:531]
+INFO: [Synth 8-638] synthesizing module 'fifo_generator_v12_0' [c:/modem/vivado/xc7k160t-IP/jitterFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0.vhd:665]
+	Parameter C_COMMON_CLOCK bound to: 0 - type: integer 
+	Parameter C_COUNT_TYPE bound to: 0 - type: integer 
+	Parameter C_DATA_COUNT_WIDTH bound to: 4 - type: integer 
+	Parameter C_DEFAULT_VALUE bound to: BlankString - type: string 
+	Parameter C_DIN_WIDTH bound to: 3 - type: integer 
+	Parameter C_DOUT_RST_VAL bound to: 0 - type: string 
+	Parameter C_DOUT_WIDTH bound to: 3 - type: integer 
+	Parameter C_ENABLE_RLOCS bound to: 0 - type: integer 
+	Parameter C_FAMILY bound to: kintex7 - type: string 
+	Parameter C_FULL_FLAGS_RST_VAL bound to: 0 - type: integer 
+	Parameter C_HAS_ALMOST_EMPTY bound to: 0 - type: integer 
+	Parameter C_HAS_ALMOST_FULL bound to: 0 - type: integer 
+	Parameter C_HAS_BACKUP bound to: 0 - type: integer 
+	Parameter C_HAS_DATA_COUNT bound to: 0 - type: integer 
+	Parameter C_HAS_INT_CLK bound to: 0 - type: integer 
+	Parameter C_HAS_MEMINIT_FILE bound to: 0 - type: integer 
+	Parameter C_HAS_OVERFLOW bound to: 0 - type: integer 
+	Parameter C_HAS_RD_DATA_COUNT bound to: 0 - type: integer 
+	Parameter C_HAS_RD_RST bound to: 0 - type: integer 
+	Parameter C_HAS_RST bound to: 1 - type: integer 
+	Parameter C_HAS_SRST bound to: 0 - type: integer 
+	Parameter C_HAS_UNDERFLOW bound to: 0 - type: integer 
+	Parameter C_HAS_VALID bound to: 0 - type: integer 
+	Parameter C_HAS_WR_ACK bound to: 0 - type: integer 
+	Parameter C_HAS_WR_DATA_COUNT bound to: 0 - type: integer 
+	Parameter C_HAS_WR_RST bound to: 0 - type: integer 
+	Parameter C_IMPLEMENTATION_TYPE bound to: 2 - type: integer 
+	Parameter C_INIT_WR_PNTR_VAL bound to: 0 - type: integer 
+	Parameter C_MEMORY_TYPE bound to: 2 - type: integer 
+	Parameter C_MIF_FILE_NAME bound to: BlankString - type: string 
+	Parameter C_OPTIMIZATION_MODE bound to: 0 - type: integer 
+	Parameter C_OVERFLOW_LOW bound to: 0 - type: integer 
+	Parameter C_PRELOAD_LATENCY bound to: 1 - type: integer 
+	Parameter C_PRELOAD_REGS bound to: 0 - type: integer 
+	Parameter C_PRIM_FIFO_TYPE bound to: 512x36 - type: string 
+	Parameter C_PROG_EMPTY_THRESH_ASSERT_VAL bound to: 2 - type: integer 
+	Parameter C_PROG_EMPTY_THRESH_NEGATE_VAL bound to: 3 - type: integer 
+	Parameter C_PROG_EMPTY_TYPE bound to: 0 - type: integer 
+	Parameter C_PROG_FULL_THRESH_ASSERT_VAL bound to: 8 - type: integer 
+	Parameter C_PROG_FULL_THRESH_NEGATE_VAL bound to: 7 - type: integer 
+	Parameter C_PROG_FULL_TYPE bound to: 1 - type: integer 
+	Parameter C_RD_DATA_COUNT_WIDTH bound to: 4 - type: integer 
+	Parameter C_RD_DEPTH bound to: 16 - type: integer 
+	Parameter C_RD_FREQ bound to: 1 - type: integer 
+	Parameter C_RD_PNTR_WIDTH bound to: 4 - type: integer 
+	Parameter C_UNDERFLOW_LOW bound to: 0 - type: integer 
+	Parameter C_USE_DOUT_RST bound to: 1 - type: integer 
+	Parameter C_USE_ECC bound to: 0 - type: integer 
+	Parameter C_USE_EMBEDDED_REG bound to: 0 - type: integer 
+	Parameter C_USE_PIPELINE_REG bound to: 0 - type: integer 
+	Parameter C_POWER_SAVING_MODE bound to: 0 - type: integer 
+	Parameter C_USE_FIFO16_FLAGS bound to: 0 - type: integer 
+	Parameter C_USE_FWFT_DATA_COUNT bound to: 0 - type: integer 
+	Parameter C_VALID_LOW bound to: 0 - type: integer 
+	Parameter C_WR_ACK_LOW bound to: 0 - type: integer 
+	Parameter C_WR_DATA_COUNT_WIDTH bound to: 4 - type: integer 
+	Parameter C_WR_DEPTH bound to: 16 - type: integer 
+	Parameter C_WR_FREQ bound to: 1 - type: integer 
+	Parameter C_WR_PNTR_WIDTH bound to: 4 - type: integer 
+	Parameter C_WR_RESPONSE_LATENCY bound to: 1 - type: integer 
+	Parameter C_MSGON_VAL bound to: 1 - type: integer 
+	Parameter C_ENABLE_RST_SYNC bound to: 1 - type: integer 
+	Parameter C_ERROR_INJECTION_TYPE bound to: 0 - type: integer 
+	Parameter C_SYNCHRONIZER_STAGE bound to: 2 - type: integer 
+	Parameter C_INTERFACE_TYPE bound to: 0 - type: integer 
+	Parameter C_AXI_TYPE bound to: 1 - type: integer 
+	Parameter C_HAS_AXI_WR_CHANNEL bound to: 1 - type: integer 
+	Parameter C_HAS_AXI_RD_CHANNEL bound to: 1 - type: integer 
+	Parameter C_HAS_SLAVE_CE bound to: 0 - type: integer 
+	Parameter C_HAS_MASTER_CE bound to: 0 - type: integer 
+	Parameter C_ADD_NGC_CONSTRAINT bound to: 0 - type: integer 
+	Parameter C_USE_COMMON_OVERFLOW bound to: 0 - type: integer 
+	Parameter C_USE_COMMON_UNDERFLOW bound to: 0 - type: integer 
+	Parameter C_USE_DEFAULT_SETTINGS bound to: 0 - type: integer 
+	Parameter C_AXI_ID_WIDTH bound to: 1 - type: integer 
+	Parameter C_AXI_ADDR_WIDTH bound to: 32 - type: integer 
+	Parameter C_AXI_DATA_WIDTH bound to: 64 - type: integer 
+	Parameter C_AXI_LEN_WIDTH bound to: 8 - type: integer 
+	Parameter C_AXI_LOCK_WIDTH bound to: 1 - type: integer 
+	Parameter C_HAS_AXI_ID bound to: 0 - type: integer 
+	Parameter C_HAS_AXI_AWUSER bound to: 0 - type: integer 
+	Parameter C_HAS_AXI_WUSER bound to: 0 - type: integer 
+	Parameter C_HAS_AXI_BUSER bound to: 0 - type: integer 
+	Parameter C_HAS_AXI_ARUSER bound to: 0 - type: integer 
+	Parameter C_HAS_AXI_RUSER bound to: 0 - type: integer 
+	Parameter C_AXI_ARUSER_WIDTH bound to: 1 - type: integer 
+	Parameter C_AXI_AWUSER_WIDTH bound to: 1 - type: integer 
+	Parameter C_AXI_WUSER_WIDTH bound to: 1 - type: integer 
+	Parameter C_AXI_BUSER_WIDTH bound to: 1 - type: integer 
+	Parameter C_AXI_RUSER_WIDTH bound to: 1 - type: integer 
+	Parameter C_HAS_AXIS_TDATA bound to: 1 - type: integer 
+	Parameter C_HAS_AXIS_TID bound to: 0 - type: integer 
+	Parameter C_HAS_AXIS_TDEST bound to: 0 - type: integer 
+	Parameter C_HAS_AXIS_TUSER bound to: 1 - type: integer 
+	Parameter C_HAS_AXIS_TREADY bound to: 1 - type: integer 
+	Parameter C_HAS_AXIS_TLAST bound to: 0 - type: integer 
+	Parameter C_HAS_AXIS_TSTRB bound to: 0 - type: integer 
+	Parameter C_HAS_AXIS_TKEEP bound to: 0 - type: integer 
+	Parameter C_AXIS_TDATA_WIDTH bound to: 8 - type: integer 
+	Parameter C_AXIS_TID_WIDTH bound to: 1 - type: integer 
+	Parameter C_AXIS_TDEST_WIDTH bound to: 1 - type: integer 
+	Parameter C_AXIS_TUSER_WIDTH bound to: 4 - type: integer 
+	Parameter C_AXIS_TSTRB_WIDTH bound to: 1 - type: integer 
+	Parameter C_AXIS_TKEEP_WIDTH bound to: 1 - type: integer 
+	Parameter C_WACH_TYPE bound to: 0 - type: integer 
+	Parameter C_WDCH_TYPE bound to: 0 - type: integer 
+	Parameter C_WRCH_TYPE bound to: 0 - type: integer 
+	Parameter C_RACH_TYPE bound to: 0 - type: integer 
+	Parameter C_RDCH_TYPE bound to: 0 - type: integer 
+	Parameter C_AXIS_TYPE bound to: 0 - type: integer 
+	Parameter C_IMPLEMENTATION_TYPE_WACH bound to: 1 - type: integer 
+	Parameter C_IMPLEMENTATION_TYPE_WDCH bound to: 1 - type: integer 
+	Parameter C_IMPLEMENTATION_TYPE_WRCH bound to: 1 - type: integer 
+	Parameter C_IMPLEMENTATION_TYPE_RACH bound to: 1 - type: integer 
+	Parameter C_IMPLEMENTATION_TYPE_RDCH bound to: 1 - type: integer 
+	Parameter C_IMPLEMENTATION_TYPE_AXIS bound to: 1 - type: integer 
+	Parameter C_APPLICATION_TYPE_WACH bound to: 0 - type: integer 
+	Parameter C_APPLICATION_TYPE_WDCH bound to: 0 - type: integer 
+	Parameter C_APPLICATION_TYPE_WRCH bound to: 0 - type: integer 
+	Parameter C_APPLICATION_TYPE_RACH bound to: 0 - type: integer 
+	Parameter C_APPLICATION_TYPE_RDCH bound to: 0 - type: integer 
+	Parameter C_APPLICATION_TYPE_AXIS bound to: 0 - type: integer 
+	Parameter C_PRIM_FIFO_TYPE_WACH bound to: 512x36 - type: string 
+	Parameter C_PRIM_FIFO_TYPE_WDCH bound to: 1kx36 - type: string 
+	Parameter C_PRIM_FIFO_TYPE_WRCH bound to: 512x36 - type: string 
+	Parameter C_PRIM_FIFO_TYPE_RACH bound to: 512x36 - type: string 
+	Parameter C_PRIM_FIFO_TYPE_RDCH bound to: 1kx36 - type: string 
+	Parameter C_PRIM_FIFO_TYPE_AXIS bound to: 1kx18 - type: string 
+	Parameter C_USE_ECC_WACH bound to: 0 - type: integer 
+	Parameter C_USE_ECC_WDCH bound to: 0 - type: integer 
+	Parameter C_USE_ECC_WRCH bound to: 0 - type: integer 
+	Parameter C_USE_ECC_RACH bound to: 0 - type: integer 
+	Parameter C_USE_ECC_RDCH bound to: 0 - type: integer 
+	Parameter C_USE_ECC_AXIS bound to: 0 - type: integer 
+	Parameter C_ERROR_INJECTION_TYPE_WACH bound to: 0 - type: integer 
+	Parameter C_ERROR_INJECTION_TYPE_WDCH bound to: 0 - type: integer 
+	Parameter C_ERROR_INJECTION_TYPE_WRCH bound to: 0 - type: integer 
+	Parameter C_ERROR_INJECTION_TYPE_RACH bound to: 0 - type: integer 
+	Parameter C_ERROR_INJECTION_TYPE_RDCH bound to: 0 - type: integer 
+	Parameter C_ERROR_INJECTION_TYPE_AXIS bound to: 0 - type: integer 
+	Parameter C_DIN_WIDTH_WACH bound to: 32 - type: integer 
+	Parameter C_DIN_WIDTH_WDCH bound to: 64 - type: integer 
+	Parameter C_DIN_WIDTH_WRCH bound to: 2 - type: integer 
+	Parameter C_DIN_WIDTH_RACH bound to: 32 - type: integer 
+	Parameter C_DIN_WIDTH_RDCH bound to: 64 - type: integer 
+	Parameter C_DIN_WIDTH_AXIS bound to: 1 - type: integer 
+	Parameter C_WR_DEPTH_WACH bound to: 16 - type: integer 
+	Parameter C_WR_DEPTH_WDCH bound to: 1024 - type: integer 
+	Parameter C_WR_DEPTH_WRCH bound to: 16 - type: integer 
+	Parameter C_WR_DEPTH_RACH bound to: 16 - type: integer 
+	Parameter C_WR_DEPTH_RDCH bound to: 1024 - type: integer 
+	Parameter C_WR_DEPTH_AXIS bound to: 1024 - type: integer 
+	Parameter C_WR_PNTR_WIDTH_WACH bound to: 4 - type: integer 
+	Parameter C_WR_PNTR_WIDTH_WDCH bound to: 10 - type: integer 
+	Parameter C_WR_PNTR_WIDTH_WRCH bound to: 4 - type: integer 
+	Parameter C_WR_PNTR_WIDTH_RACH bound to: 4 - type: integer 
+	Parameter C_WR_PNTR_WIDTH_RDCH bound to: 10 - type: integer 
+	Parameter C_WR_PNTR_WIDTH_AXIS bound to: 10 - type: integer 
+	Parameter C_HAS_DATA_COUNTS_WACH bound to: 0 - type: integer 
+	Parameter C_HAS_DATA_COUNTS_WDCH bound to: 0 - type: integer 
+	Parameter C_HAS_DATA_COUNTS_WRCH bound to: 0 - type: integer 
+	Parameter C_HAS_DATA_COUNTS_RACH bound to: 0 - type: integer 
+	Parameter C_HAS_DATA_COUNTS_RDCH bound to: 0 - type: integer 
+	Parameter C_HAS_DATA_COUNTS_AXIS bound to: 0 - type: integer 
+	Parameter C_HAS_PROG_FLAGS_WACH bound to: 0 - type: integer 
+	Parameter C_HAS_PROG_FLAGS_WDCH bound to: 0 - type: integer 
+	Parameter C_HAS_PROG_FLAGS_WRCH bound to: 0 - type: integer 
+	Parameter C_HAS_PROG_FLAGS_RACH bound to: 0 - type: integer 
+	Parameter C_HAS_PROG_FLAGS_RDCH bound to: 0 - type: integer 
+	Parameter C_HAS_PROG_FLAGS_AXIS bound to: 0 - type: integer 
+	Parameter C_PROG_FULL_TYPE_WACH bound to: 0 - type: integer 
+	Parameter C_PROG_FULL_TYPE_WDCH bound to: 0 - type: integer 
+	Parameter C_PROG_FULL_TYPE_WRCH bound to: 0 - type: integer 
+	Parameter C_PROG_FULL_TYPE_RACH bound to: 0 - type: integer 
+	Parameter C_PROG_FULL_TYPE_RDCH bound to: 0 - type: integer 
+	Parameter C_PROG_FULL_TYPE_AXIS bound to: 0 - type: integer 
+	Parameter C_PROG_FULL_THRESH_ASSERT_VAL_WACH bound to: 1023 - type: integer 
+	Parameter C_PROG_FULL_THRESH_ASSERT_VAL_WDCH bound to: 1023 - type: integer 
+	Parameter C_PROG_FULL_THRESH_ASSERT_VAL_WRCH bound to: 1023 - type: integer 
+	Parameter C_PROG_FULL_THRESH_ASSERT_VAL_RACH bound to: 1023 - type: integer 
+	Parameter C_PROG_FULL_THRESH_ASSERT_VAL_RDCH bound to: 1023 - type: integer 
+	Parameter C_PROG_FULL_THRESH_ASSERT_VAL_AXIS bound to: 1023 - type: integer 
+	Parameter C_PROG_EMPTY_TYPE_WACH bound to: 0 - type: integer 
+	Parameter C_PROG_EMPTY_TYPE_WDCH bound to: 0 - type: integer 
+	Parameter C_PROG_EMPTY_TYPE_WRCH bound to: 0 - type: integer 
+	Parameter C_PROG_EMPTY_TYPE_RACH bound to: 0 - type: integer 
+	Parameter C_PROG_EMPTY_TYPE_RDCH bound to: 0 - type: integer 
+	Parameter C_PROG_EMPTY_TYPE_AXIS bound to: 0 - type: integer 
+	Parameter C_PROG_EMPTY_THRESH_ASSERT_VAL_WACH bound to: 1022 - type: integer 
+	Parameter C_PROG_EMPTY_THRESH_ASSERT_VAL_WDCH bound to: 1022 - type: integer 
+	Parameter C_PROG_EMPTY_THRESH_ASSERT_VAL_WRCH bound to: 1022 - type: integer 
+	Parameter C_PROG_EMPTY_THRESH_ASSERT_VAL_RACH bound to: 1022 - type: integer 
+	Parameter C_PROG_EMPTY_THRESH_ASSERT_VAL_RDCH bound to: 1022 - type: integer 
+	Parameter C_PROG_EMPTY_THRESH_ASSERT_VAL_AXIS bound to: 1022 - type: integer 
+	Parameter C_REG_SLICE_MODE_WACH bound to: 0 - type: integer 
+	Parameter C_REG_SLICE_MODE_WDCH bound to: 0 - type: integer 
+	Parameter C_REG_SLICE_MODE_WRCH bound to: 0 - type: integer 
+	Parameter C_REG_SLICE_MODE_RACH bound to: 0 - type: integer 
+	Parameter C_REG_SLICE_MODE_RDCH bound to: 0 - type: integer 
+	Parameter C_REG_SLICE_MODE_AXIS bound to: 0 - type: integer 
+INFO: [Synth 8-638] synthesizing module 'fifo_generator_v12_0_synth' [c:/modem/vivado/xc7k160t-IP/jitterFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:33314]
+	Parameter C_COMMON_CLOCK bound to: 0 - type: integer 
+	Parameter C_COUNT_TYPE bound to: 0 - type: integer 
+	Parameter C_DATA_COUNT_WIDTH bound to: 4 - type: integer 
+	Parameter C_DEFAULT_VALUE bound to: BlankString - type: string 
+	Parameter C_DIN_WIDTH bound to: 3 - type: integer 
+	Parameter C_DOUT_RST_VAL bound to: 0 - type: string 
+	Parameter C_DOUT_WIDTH bound to: 3 - type: integer 
+	Parameter C_ENABLE_RLOCS bound to: 0 - type: integer 
+	Parameter C_FAMILY bound to: kintex7 - type: string 
+	Parameter C_FULL_FLAGS_RST_VAL bound to: 0 - type: integer 
+	Parameter C_HAS_ALMOST_EMPTY bound to: 0 - type: integer 
+	Parameter C_HAS_ALMOST_FULL bound to: 0 - type: integer 
+	Parameter C_HAS_BACKUP bound to: 0 - type: integer 
+	Parameter C_HAS_DATA_COUNT bound to: 0 - type: integer 
+	Parameter C_HAS_INT_CLK bound to: 0 - type: integer 
+	Parameter C_HAS_MEMINIT_FILE bound to: 0 - type: integer 
+	Parameter C_HAS_OVERFLOW bound to: 0 - type: integer 
+	Parameter C_HAS_RD_DATA_COUNT bound to: 0 - type: integer 
+	Parameter C_HAS_RD_RST bound to: 0 - type: integer 
+	Parameter C_HAS_RST bound to: 1 - type: integer 
+	Parameter C_HAS_SRST bound to: 0 - type: integer 
+	Parameter C_HAS_UNDERFLOW bound to: 0 - type: integer 
+	Parameter C_HAS_VALID bound to: 0 - type: integer 
+	Parameter C_HAS_WR_ACK bound to: 0 - type: integer 
+	Parameter C_HAS_WR_DATA_COUNT bound to: 0 - type: integer 
+	Parameter C_HAS_WR_RST bound to: 0 - type: integer 
+	Parameter C_IMPLEMENTATION_TYPE bound to: 2 - type: integer 
+	Parameter C_INIT_WR_PNTR_VAL bound to: 0 - type: integer 
+	Parameter C_MEMORY_TYPE bound to: 2 - type: integer 
+	Parameter C_MIF_FILE_NAME bound to: BlankString - type: string 
+	Parameter C_OPTIMIZATION_MODE bound to: 0 - type: integer 
+	Parameter C_OVERFLOW_LOW bound to: 0 - type: integer 
+	Parameter C_PRELOAD_LATENCY bound to: 1 - type: integer 
+	Parameter C_PRELOAD_REGS bound to: 0 - type: integer 
+	Parameter C_PRIM_FIFO_TYPE bound to: 512x36 - type: string 
+	Parameter C_PROG_EMPTY_THRESH_ASSERT_VAL bound to: 2 - type: integer 
+	Parameter C_PROG_EMPTY_THRESH_NEGATE_VAL bound to: 3 - type: integer 
+	Parameter C_PROG_EMPTY_TYPE bound to: 0 - type: integer 
+	Parameter C_PROG_FULL_THRESH_ASSERT_VAL bound to: 8 - type: integer 
+	Parameter C_PROG_FULL_THRESH_NEGATE_VAL bound to: 7 - type: integer 
+	Parameter C_PROG_FULL_TYPE bound to: 1 - type: integer 
+	Parameter C_RD_DATA_COUNT_WIDTH bound to: 4 - type: integer 
+	Parameter C_RD_DEPTH bound to: 16 - type: integer 
+	Parameter C_RD_FREQ bound to: 1 - type: integer 
+	Parameter C_RD_PNTR_WIDTH bound to: 4 - type: integer 
+	Parameter C_UNDERFLOW_LOW bound to: 0 - type: integer 
+	Parameter C_USE_DOUT_RST bound to: 1 - type: integer 
+	Parameter C_USE_ECC bound to: 0 - type: integer 
+	Parameter C_USE_EMBEDDED_REG bound to: 0 - type: integer 
+	Parameter C_USE_PIPELINE_REG bound to: 0 - type: integer 
+	Parameter C_POWER_SAVING_MODE bound to: 0 - type: integer 
+	Parameter C_USE_FIFO16_FLAGS bound to: 0 - type: integer 
+	Parameter C_USE_FWFT_DATA_COUNT bound to: 0 - type: integer 
+	Parameter C_VALID_LOW bound to: 0 - type: integer 
+	Parameter C_WR_ACK_LOW bound to: 0 - type: integer 
+	Parameter C_WR_DATA_COUNT_WIDTH bound to: 4 - type: integer 
+	Parameter C_WR_DEPTH bound to: 16 - type: integer 
+	Parameter C_WR_FREQ bound to: 1 - type: integer 
+	Parameter C_WR_PNTR_WIDTH bound to: 4 - type: integer 
+	Parameter C_WR_RESPONSE_LATENCY bound to: 1 - type: integer 
+	Parameter C_MSGON_VAL bound to: 1 - type: integer 
+	Parameter C_ENABLE_RST_SYNC bound to: 1 - type: integer 
+	Parameter C_ERROR_INJECTION_TYPE bound to: 0 - type: integer 
+	Parameter C_SYNCHRONIZER_STAGE bound to: 2 - type: integer 
+	Parameter C_INTERFACE_TYPE bound to: 0 - type: integer 
+	Parameter C_AXI_TYPE bound to: 1 - type: integer 
+	Parameter C_HAS_AXI_WR_CHANNEL bound to: 1 - type: integer 
+	Parameter C_HAS_AXI_RD_CHANNEL bound to: 1 - type: integer 
+	Parameter C_HAS_SLAVE_CE bound to: 0 - type: integer 
+	Parameter C_HAS_MASTER_CE bound to: 0 - type: integer 
+	Parameter C_ADD_NGC_CONSTRAINT bound to: 0 - type: integer 
+	Parameter C_USE_COMMON_OVERFLOW bound to: 0 - type: integer 
+	Parameter C_USE_COMMON_UNDERFLOW bound to: 0 - type: integer 
+	Parameter C_USE_DEFAULT_SETTINGS bound to: 0 - type: integer 
+	Parameter C_AXI_ID_WIDTH bound to: 1 - type: integer 
+	Parameter C_AXI_ADDR_WIDTH bound to: 32 - type: integer 
+	Parameter C_AXI_DATA_WIDTH bound to: 64 - type: integer 
+	Parameter C_AXI_LEN_WIDTH bound to: 8 - type: integer 
+	Parameter C_AXI_LOCK_WIDTH bound to: 1 - type: integer 
+	Parameter C_HAS_AXI_ID bound to: 0 - type: integer 
+	Parameter C_HAS_AXI_AWUSER bound to: 0 - type: integer 
+	Parameter C_HAS_AXI_WUSER bound to: 0 - type: integer 
+	Parameter C_HAS_AXI_BUSER bound to: 0 - type: integer 
+	Parameter C_HAS_AXI_ARUSER bound to: 0 - type: integer 
+	Parameter C_HAS_AXI_RUSER bound to: 0 - type: integer 
+	Parameter C_AXI_ARUSER_WIDTH bound to: 1 - type: integer 
+	Parameter C_AXI_AWUSER_WIDTH bound to: 1 - type: integer 
+	Parameter C_AXI_WUSER_WIDTH bound to: 1 - type: integer 
+	Parameter C_AXI_BUSER_WIDTH bound to: 1 - type: integer 
+	Parameter C_AXI_RUSER_WIDTH bound to: 1 - type: integer 
+	Parameter C_HAS_AXIS_TDATA bound to: 1 - type: integer 
+	Parameter C_HAS_AXIS_TID bound to: 0 - type: integer 
+	Parameter C_HAS_AXIS_TDEST bound to: 0 - type: integer 
+	Parameter C_HAS_AXIS_TUSER bound to: 1 - type: integer 
+	Parameter C_HAS_AXIS_TREADY bound to: 1 - type: integer 
+	Parameter C_HAS_AXIS_TLAST bound to: 0 - type: integer 
+	Parameter C_HAS_AXIS_TSTRB bound to: 0 - type: integer 
+	Parameter C_HAS_AXIS_TKEEP bound to: 0 - type: integer 
+	Parameter C_AXIS_TDATA_WIDTH bound to: 8 - type: integer 
+	Parameter C_AXIS_TID_WIDTH bound to: 1 - type: integer 
+	Parameter C_AXIS_TDEST_WIDTH bound to: 1 - type: integer 
+	Parameter C_AXIS_TUSER_WIDTH bound to: 4 - type: integer 
+	Parameter C_AXIS_TSTRB_WIDTH bound to: 1 - type: integer 
+	Parameter C_AXIS_TKEEP_WIDTH bound to: 1 - type: integer 
+	Parameter C_WACH_TYPE bound to: 0 - type: integer 
+	Parameter C_WDCH_TYPE bound to: 0 - type: integer 
+	Parameter C_WRCH_TYPE bound to: 0 - type: integer 
+	Parameter C_RACH_TYPE bound to: 0 - type: integer 
+	Parameter C_RDCH_TYPE bound to: 0 - type: integer 
+	Parameter C_AXIS_TYPE bound to: 0 - type: integer 
+	Parameter C_IMPLEMENTATION_TYPE_WACH bound to: 1 - type: integer 
+	Parameter C_IMPLEMENTATION_TYPE_WDCH bound to: 1 - type: integer 
+	Parameter C_IMPLEMENTATION_TYPE_WRCH bound to: 1 - type: integer 
+	Parameter C_IMPLEMENTATION_TYPE_RACH bound to: 1 - type: integer 
+	Parameter C_IMPLEMENTATION_TYPE_RDCH bound to: 1 - type: integer 
+	Parameter C_IMPLEMENTATION_TYPE_AXIS bound to: 1 - type: integer 
+	Parameter C_APPLICATION_TYPE_WACH bound to: 0 - type: integer 
+	Parameter C_APPLICATION_TYPE_WDCH bound to: 0 - type: integer 
+	Parameter C_APPLICATION_TYPE_WRCH bound to: 0 - type: integer 
+	Parameter C_APPLICATION_TYPE_RACH bound to: 0 - type: integer 
+	Parameter C_APPLICATION_TYPE_RDCH bound to: 0 - type: integer 
+	Parameter C_APPLICATION_TYPE_AXIS bound to: 0 - type: integer 
+	Parameter C_PRIM_FIFO_TYPE_WACH bound to: 512x36 - type: string 
+	Parameter C_PRIM_FIFO_TYPE_WDCH bound to: 1kx36 - type: string 
+	Parameter C_PRIM_FIFO_TYPE_WRCH bound to: 512x36 - type: string 
+	Parameter C_PRIM_FIFO_TYPE_RACH bound to: 512x36 - type: string 
+	Parameter C_PRIM_FIFO_TYPE_RDCH bound to: 1kx36 - type: string 
+	Parameter C_PRIM_FIFO_TYPE_AXIS bound to: 1kx18 - type: string 
+	Parameter C_USE_ECC_WACH bound to: 0 - type: integer 
+	Parameter C_USE_ECC_WDCH bound to: 0 - type: integer 
+	Parameter C_USE_ECC_WRCH bound to: 0 - type: integer 
+	Parameter C_USE_ECC_RACH bound to: 0 - type: integer 
+	Parameter C_USE_ECC_RDCH bound to: 0 - type: integer 
+	Parameter C_USE_ECC_AXIS bound to: 0 - type: integer 
+	Parameter C_ERROR_INJECTION_TYPE_WACH bound to: 0 - type: integer 
+	Parameter C_ERROR_INJECTION_TYPE_WDCH bound to: 0 - type: integer 
+	Parameter C_ERROR_INJECTION_TYPE_WRCH bound to: 0 - type: integer 
+	Parameter C_ERROR_INJECTION_TYPE_RACH bound to: 0 - type: integer 
+	Parameter C_ERROR_INJECTION_TYPE_RDCH bound to: 0 - type: integer 
+	Parameter C_ERROR_INJECTION_TYPE_AXIS bound to: 0 - type: integer 
+	Parameter C_DIN_WIDTH_WACH bound to: 32 - type: integer 
+	Parameter C_DIN_WIDTH_WDCH bound to: 64 - type: integer 
+	Parameter C_DIN_WIDTH_WRCH bound to: 2 - type: integer 
+	Parameter C_DIN_WIDTH_RACH bound to: 32 - type: integer 
+	Parameter C_DIN_WIDTH_RDCH bound to: 64 - type: integer 
+	Parameter C_DIN_WIDTH_AXIS bound to: 1 - type: integer 
+	Parameter C_WR_DEPTH_WACH bound to: 16 - type: integer 
+	Parameter C_WR_DEPTH_WDCH bound to: 1024 - type: integer 
+	Parameter C_WR_DEPTH_WRCH bound to: 16 - type: integer 
+	Parameter C_WR_DEPTH_RACH bound to: 16 - type: integer 
+	Parameter C_WR_DEPTH_RDCH bound to: 1024 - type: integer 
+	Parameter C_WR_DEPTH_AXIS bound to: 1024 - type: integer 
+	Parameter C_WR_PNTR_WIDTH_WACH bound to: 4 - type: integer 
+	Parameter C_WR_PNTR_WIDTH_WDCH bound to: 10 - type: integer 
+	Parameter C_WR_PNTR_WIDTH_WRCH bound to: 4 - type: integer 
+	Parameter C_WR_PNTR_WIDTH_RACH bound to: 4 - type: integer 
+	Parameter C_WR_PNTR_WIDTH_RDCH bound to: 10 - type: integer 
+	Parameter C_WR_PNTR_WIDTH_AXIS bound to: 10 - type: integer 
+	Parameter C_HAS_DATA_COUNTS_WACH bound to: 0 - type: integer 
+	Parameter C_HAS_DATA_COUNTS_WDCH bound to: 0 - type: integer 
+	Parameter C_HAS_DATA_COUNTS_WRCH bound to: 0 - type: integer 
+	Parameter C_HAS_DATA_COUNTS_RACH bound to: 0 - type: integer 
+	Parameter C_HAS_DATA_COUNTS_RDCH bound to: 0 - type: integer 
+	Parameter C_HAS_DATA_COUNTS_AXIS bound to: 0 - type: integer 
+	Parameter C_HAS_PROG_FLAGS_WACH bound to: 0 - type: integer 
+	Parameter C_HAS_PROG_FLAGS_WDCH bound to: 0 - type: integer 
+	Parameter C_HAS_PROG_FLAGS_WRCH bound to: 0 - type: integer 
+	Parameter C_HAS_PROG_FLAGS_RACH bound to: 0 - type: integer 
+	Parameter C_HAS_PROG_FLAGS_RDCH bound to: 0 - type: integer 
+	Parameter C_HAS_PROG_FLAGS_AXIS bound to: 0 - type: integer 
+	Parameter C_PROG_FULL_TYPE_WACH bound to: 0 - type: integer 
+	Parameter C_PROG_FULL_TYPE_WDCH bound to: 0 - type: integer 
+	Parameter C_PROG_FULL_TYPE_WRCH bound to: 0 - type: integer 
+	Parameter C_PROG_FULL_TYPE_RACH bound to: 0 - type: integer 
+	Parameter C_PROG_FULL_TYPE_RDCH bound to: 0 - type: integer 
+	Parameter C_PROG_FULL_TYPE_AXIS bound to: 0 - type: integer 
+	Parameter C_PROG_FULL_THRESH_ASSERT_VAL_WACH bound to: 1023 - type: integer 
+	Parameter C_PROG_FULL_THRESH_ASSERT_VAL_WDCH bound to: 1023 - type: integer 
+	Parameter C_PROG_FULL_THRESH_ASSERT_VAL_WRCH bound to: 1023 - type: integer 
+	Parameter C_PROG_FULL_THRESH_ASSERT_VAL_RACH bound to: 1023 - type: integer 
+	Parameter C_PROG_FULL_THRESH_ASSERT_VAL_RDCH bound to: 1023 - type: integer 
+	Parameter C_PROG_FULL_THRESH_ASSERT_VAL_AXIS bound to: 1023 - type: integer 
+	Parameter C_PROG_EMPTY_TYPE_WACH bound to: 0 - type: integer 
+	Parameter C_PROG_EMPTY_TYPE_WDCH bound to: 0 - type: integer 
+	Parameter C_PROG_EMPTY_TYPE_WRCH bound to: 0 - type: integer 
+	Parameter C_PROG_EMPTY_TYPE_RACH bound to: 0 - type: integer 
+	Parameter C_PROG_EMPTY_TYPE_RDCH bound to: 0 - type: integer 
+	Parameter C_PROG_EMPTY_TYPE_AXIS bound to: 0 - type: integer 
+	Parameter C_PROG_EMPTY_THRESH_ASSERT_VAL_WACH bound to: 1022 - type: integer 
+	Parameter C_PROG_EMPTY_THRESH_ASSERT_VAL_WDCH bound to: 1022 - type: integer 
+	Parameter C_PROG_EMPTY_THRESH_ASSERT_VAL_WRCH bound to: 1022 - type: integer 
+	Parameter C_PROG_EMPTY_THRESH_ASSERT_VAL_RACH bound to: 1022 - type: integer 
+	Parameter C_PROG_EMPTY_THRESH_ASSERT_VAL_RDCH bound to: 1022 - type: integer 
+	Parameter C_PROG_EMPTY_THRESH_ASSERT_VAL_AXIS bound to: 1022 - type: integer 
+	Parameter C_REG_SLICE_MODE_WACH bound to: 0 - type: integer 
+	Parameter C_REG_SLICE_MODE_WDCH bound to: 0 - type: integer 
+	Parameter C_REG_SLICE_MODE_WRCH bound to: 0 - type: integer 
+	Parameter C_REG_SLICE_MODE_RACH bound to: 0 - type: integer 
+	Parameter C_REG_SLICE_MODE_RDCH bound to: 0 - type: integer 
+	Parameter C_REG_SLICE_MODE_AXIS bound to: 0 - type: integer 
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/jitterFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:33373]
+INFO: [Synth 8-638] synthesizing module 'fifo_generator_top' [c:/modem/vivado/xc7k160t-IP/jitterFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:32083]
+	Parameter C_FAMILY bound to: kintex7 - type: string 
+	Parameter C_COMMON_CLOCK bound to: 0 - type: integer 
+	Parameter C_MEMORY_TYPE bound to: 2 - type: integer 
+	Parameter C_IMPLEMENTATION_TYPE bound to: 2 - type: integer 
+	Parameter C_PRELOAD_REGS bound to: 0 - type: integer 
+	Parameter C_PRELOAD_LATENCY bound to: 1 - type: integer 
+	Parameter C_DIN_WIDTH bound to: 3 - type: integer 
+	Parameter C_WR_DEPTH bound to: 16 - type: integer 
+	Parameter C_WR_PNTR_WIDTH bound to: 4 - type: integer 
+	Parameter C_DOUT_WIDTH bound to: 3 - type: integer 
+	Parameter C_RD_DEPTH bound to: 16 - type: integer 
+	Parameter C_RD_PNTR_WIDTH bound to: 4 - type: integer 
+	Parameter C_PROG_FULL_TYPE bound to: 1 - type: integer 
+	Parameter C_PROG_FULL_THRESH_ASSERT_VAL bound to: 8 - type: integer 
+	Parameter C_PROG_FULL_THRESH_NEGATE_VAL bound to: 7 - type: integer 
+	Parameter C_PROG_EMPTY_TYPE bound to: 0 - type: integer 
+	Parameter C_PROG_EMPTY_THRESH_ASSERT_VAL bound to: 2 - type: integer 
+	Parameter C_PROG_EMPTY_THRESH_NEGATE_VAL bound to: 3 - type: integer 
+	Parameter C_USE_ECC bound to: 0 - type: integer 
+	Parameter C_ERROR_INJECTION_TYPE bound to: 0 - type: integer 
+	Parameter C_HAS_ALMOST_EMPTY bound to: 0 - type: integer 
+	Parameter C_HAS_ALMOST_FULL bound to: 0 - type: integer 
+	Parameter C_PRIM_FIFO_TYPE bound to: 512x36 - type: string 
+	Parameter C_FIFO_TYPE bound to: 0 - type: integer 
+	Parameter C_USE_SYNC_CLK bound to: 0 - type: integer 
+	Parameter C_BYTE_STRB_WIDTH bound to: 8 - type: integer 
+	Parameter C_USE_INPUT_CE bound to: 0 - type: integer 
+	Parameter C_USE_OUTPUT_CE bound to: 0 - type: integer 
+	Parameter C_INTERFACE_TYPE bound to: 0 - type: integer 
+	Parameter C_AXI_TYPE bound to: 0 - type: integer 
+	Parameter C_HAS_WR_RST bound to: 0 - type: integer 
+	Parameter C_HAS_RD_RST bound to: 0 - type: integer 
+	Parameter C_HAS_RST bound to: 1 - type: integer 
+	Parameter C_HAS_SRST bound to: 0 - type: integer 
+	Parameter C_DOUT_RST_VAL bound to: 0 - type: string 
+	Parameter C_HAS_VALID bound to: 0 - type: integer 
+	Parameter C_VALID_LOW bound to: 0 - type: integer 
+	Parameter C_HAS_UNDERFLOW bound to: 0 - type: integer 
+	Parameter C_UNDERFLOW_LOW bound to: 0 - type: integer 
+	Parameter C_HAS_WR_ACK bound to: 0 - type: integer 
+	Parameter C_WR_ACK_LOW bound to: 0 - type: integer 
+	Parameter C_HAS_OVERFLOW bound to: 0 - type: integer 
+	Parameter C_OVERFLOW_LOW bound to: 0 - type: integer 
+	Parameter C_HAS_DATA_COUNT bound to: 0 - type: integer 
+	Parameter C_DATA_COUNT_WIDTH bound to: 4 - type: integer 
+	Parameter C_HAS_RD_DATA_COUNT bound to: 0 - type: integer 
+	Parameter C_RD_DATA_COUNT_WIDTH bound to: 4 - type: integer 
+	Parameter C_USE_FWFT_DATA_COUNT bound to: 0 - type: integer 
+	Parameter C_HAS_WR_DATA_COUNT bound to: 0 - type: integer 
+	Parameter C_WR_DATA_COUNT_WIDTH bound to: 4 - type: integer 
+	Parameter C_FULL_FLAGS_RST_VAL bound to: 0 - type: integer 
+	Parameter C_USE_EMBEDDED_REG bound to: 0 - type: integer 
+	Parameter C_USE_PIPELINE_REG bound to: 0 - type: integer 
+	Parameter C_POWER_SAVING_MODE bound to: 0 - type: integer 
+	Parameter C_USE_DOUT_RST bound to: 1 - type: integer 
+	Parameter C_MSGON_VAL bound to: 1 - type: integer 
+	Parameter C_ENABLE_RST_SYNC bound to: 1 - type: integer 
+	Parameter C_SYNCHRONIZER_STAGE bound to: 2 - type: integer 
+	Parameter C_COUNT_TYPE bound to: 0 - type: integer 
+	Parameter C_DEFAULT_VALUE bound to: BlankString - type: string 
+	Parameter C_ENABLE_RLOCS bound to: 0 - type: integer 
+	Parameter C_HAS_BACKUP bound to: 0 - type: integer 
+	Parameter C_HAS_INT_CLK bound to: 0 - type: integer 
+	Parameter C_HAS_MEMINIT_FILE bound to: 0 - type: integer 
+	Parameter C_INIT_WR_PNTR_VAL bound to: 0 - type: integer 
+	Parameter C_MIF_FILE_NAME bound to: BlankString - type: string 
+	Parameter C_OPTIMIZATION_MODE bound to: 0 - type: integer 
+	Parameter C_RD_FREQ bound to: 1 - type: integer 
+	Parameter C_USE_FIFO16_FLAGS bound to: 0 - type: integer 
+	Parameter C_WR_FREQ bound to: 1 - type: integer 
+	Parameter C_WR_RESPONSE_LATENCY bound to: 1 - type: integer 
+INFO: [Synth 8-638] synthesizing module 'fifo_generator_ramfifo' [c:/modem/vivado/xc7k160t-IP/jitterFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:20531]
+	Parameter C_FAMILY bound to: kintex7 - type: string 
+	Parameter C_COMMON_CLOCK bound to: 0 - type: integer 
+	Parameter C_MEMORY_TYPE bound to: 2 - type: integer 
+	Parameter C_PRELOAD_REGS bound to: 0 - type: integer 
+	Parameter C_PRELOAD_LATENCY bound to: 1 - type: integer 
+	Parameter C_HAS_RST bound to: 1 - type: integer 
+	Parameter C_HAS_SRST bound to: 0 - type: integer 
+	Parameter C_DIN_WIDTH bound to: 3 - type: integer 
+	Parameter C_DOUT_WIDTH bound to: 3 - type: integer 
+	Parameter C_DOUT_RST_VAL bound to: 0 - type: string 
+	Parameter C_RD_DEPTH bound to: 16 - type: integer 
+	Parameter C_RD_PNTR_WIDTH bound to: 4 - type: integer 
+	Parameter C_WR_DEPTH bound to: 16 - type: integer 
+	Parameter C_WR_PNTR_WIDTH bound to: 4 - type: integer 
+	Parameter C_DEPTH_RATIO_WR bound to: 1 - type: integer 
+	Parameter C_DEPTH_RATIO_RD bound to: 1 - type: integer 
+	Parameter C_FULL_FLAGS_RST_VAL bound to: 0 - type: integer 
+	Parameter C_USE_EMBEDDED_REG bound to: 0 - type: integer 
+	Parameter C_USE_PIPELINE_REG bound to: 0 - type: integer 
+	Parameter C_MSGON_VAL bound to: 1 - type: integer 
+	Parameter C_HAS_ALMOST_EMPTY bound to: 0 - type: integer 
+	Parameter C_PROG_EMPTY_TYPE bound to: 0 - type: integer 
+	Parameter C_PROG_EMPTY_THRESH_ASSERT_VAL bound to: 2 - type: integer 
+	Parameter C_PROG_EMPTY_THRESH_NEGATE_VAL bound to: 3 - type: integer 
+	Parameter C_HAS_ALMOST_FULL bound to: 0 - type: integer 
+	Parameter C_PROG_FULL_TYPE bound to: 1 - type: integer 
+	Parameter C_PROG_FULL_THRESH_ASSERT_VAL bound to: 8 - type: integer 
+	Parameter C_PROG_FULL_THRESH_NEGATE_VAL bound to: 7 - type: integer 
+	Parameter C_HAS_VALID bound to: 0 - type: integer 
+	Parameter C_VALID_LOW bound to: 0 - type: integer 
+	Parameter C_HAS_UNDERFLOW bound to: 0 - type: integer 
+	Parameter C_UNDERFLOW_LOW bound to: 0 - type: integer 
+	Parameter C_HAS_WR_ACK bound to: 0 - type: integer 
+	Parameter C_WR_ACK_LOW bound to: 0 - type: integer 
+	Parameter C_HAS_OVERFLOW bound to: 0 - type: integer 
+	Parameter C_OVERFLOW_LOW bound to: 0 - type: integer 
+	Parameter C_HAS_DATA_COUNT bound to: 0 - type: integer 
+	Parameter C_DATA_COUNT_WIDTH bound to: 4 - type: integer 
+	Parameter C_HAS_RD_DATA_COUNT bound to: 0 - type: integer 
+	Parameter C_RD_DATA_COUNT_WIDTH bound to: 4 - type: integer 
+	Parameter C_HAS_WR_DATA_COUNT bound to: 0 - type: integer 
+	Parameter C_USE_FWFT_DATA_COUNT bound to: 0 - type: integer 
+	Parameter C_WR_DATA_COUNT_WIDTH bound to: 4 - type: integer 
+	Parameter C_USE_ECC bound to: 0 - type: integer 
+	Parameter C_USE_DOUT_RST bound to: 1 - type: integer 
+	Parameter C_ENABLE_RST_SYNC bound to: 1 - type: integer 
+	Parameter C_ERROR_INJECTION_TYPE bound to: 0 - type: integer 
+	Parameter C_SYNCHRONIZER_STAGE bound to: 2 - type: integer 
+	Parameter C_FIFO_TYPE bound to: 0 - type: integer 
+	Parameter C_BYTE_STRB_WIDTH bound to: 8 - type: integer 
+	Parameter C_USE_INPUT_CE bound to: 0 - type: integer 
+	Parameter C_USE_OUTPUT_CE bound to: 0 - type: integer 
+	Parameter C_USE_SYNC_CLK bound to: 0 - type: integer 
+	Parameter C_AXI_TYPE bound to: 0 - type: integer 
+INFO: [Synth 8-638] synthesizing module 'reset_blk_ramfifo' [c:/modem/vivado/xc7k160t-IP/jitterFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:12343]
+	Parameter C_FAMILY bound to: kintex7 - type: string 
+	Parameter C_MEMORY_TYPE bound to: 2 - type: integer 
+	Parameter C_COMMON_CLOCK bound to: 0 - type: integer 
+	Parameter C_HAS_RST bound to: 1 - type: integer 
+	Parameter C_HAS_SRST bound to: 0 - type: integer 
+	Parameter C_WR_RST_MAXFAN bound to: 2 - type: integer 
+	Parameter C_RD_RST_MAXFAN bound to: 3 - type: integer 
+	Parameter C_MSGON_VAL bound to: 1 - type: integer 
+	Parameter C_ENABLE_RST_SYNC bound to: 1 - type: integer 
+	Parameter C_FULL_FLAGS_RST_VAL bound to: 0 - type: integer 
+INFO: [Synth 8-5534] Detected attribute (* async_reg = "true" *) [c:/modem/vivado/xc7k160t-IP/jitterFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:12449]
+INFO: [Synth 8-5534] Detected attribute (* async_reg = "true" *) [c:/modem/vivado/xc7k160t-IP/jitterFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:12450]
+INFO: [Synth 8-5534] Detected attribute (* async_reg = "true" *) [c:/modem/vivado/xc7k160t-IP/jitterFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:12451]
+INFO: [Synth 8-5534] Detected attribute (* async_reg = "true" *) [c:/modem/vivado/xc7k160t-IP/jitterFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:12452]
+INFO: [Synth 8-256] done synthesizing module 'reset_blk_ramfifo' (1#1) [c:/modem/vivado/xc7k160t-IP/jitterFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:12343]
+INFO: [Synth 8-638] synthesizing module 'input_blk' [c:/modem/vivado/xc7k160t-IP/jitterFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:4020]
+	Parameter C_COMMON_CLOCK bound to: 0 - type: integer 
+	Parameter C_IMPLEMENTATION_TYPE bound to: 0 - type: integer 
+	Parameter C_DIN_WIDTH bound to: 3 - type: integer 
+	Parameter C_PKTFIFO_DATA_WIDTH bound to: 3 - type: integer 
+	Parameter C_DOUT_WIDTH bound to: 3 - type: integer 
+	Parameter C_HAS_INT_CLK bound to: 0 - type: integer 
+	Parameter C_PROG_EMPTY_TYPE bound to: 0 - type: integer 
+	Parameter C_PROG_FULL_TYPE bound to: 1 - type: integer 
+	Parameter C_DEPTH_RATIO_RD bound to: 1 - type: integer 
+	Parameter C_RD_PNTR_WIDTH bound to: 4 - type: integer 
+	Parameter C_WR_PNTR_WIDTH bound to: 4 - type: integer 
+	Parameter C_USE_EMBEDDED_REG bound to: 1 - type: integer 
+	Parameter C_ERROR_INJECTION_TYPE bound to: 0 - type: integer 
+	Parameter C_FIFO_TYPE bound to: 0 - type: integer 
+	Parameter C_BYTE_STRB_WIDTH bound to: 8 - type: integer 
+	Parameter C_USE_INPUT_CE bound to: 0 - type: integer 
+	Parameter C_USE_OUTPUT_CE bound to: 0 - type: integer 
+	Parameter C_USE_SYNC_CLK bound to: 0 - type: integer 
+INFO: [Synth 8-256] done synthesizing module 'input_blk' (2#1) [c:/modem/vivado/xc7k160t-IP/jitterFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:4020]
+INFO: [Synth 8-638] synthesizing module 'memory' [c:/modem/vivado/xc7k160t-IP/jitterFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:5654]
+	Parameter C_FAMILY bound to: kintex7 - type: string 
+	Parameter C_COMMON_CLOCK bound to: 0 - type: integer 
+	Parameter C_HAS_RST bound to: 1 - type: integer 
+	Parameter C_HAS_SRST bound to: 0 - type: integer 
+	Parameter C_DIN_WIDTH bound to: 3 - type: integer 
+	Parameter C_DOUT_WIDTH bound to: 3 - type: integer 
+	Parameter C_USE_DOUT_RST bound to: 1 - type: integer 
+	Parameter C_DOUT_RST_VAL bound to: 0 - type: string 
+	Parameter C_MEMORY_TYPE bound to: 2 - type: integer 
+	Parameter C_PRELOAD_LATENCY bound to: 1 - type: integer 
+	Parameter C_PRELOAD_REGS bound to: 0 - type: integer 
+	Parameter C_LARGER_DEPTH bound to: 16 - type: integer 
+	Parameter C_RD_DEPTH bound to: 16 - type: integer 
+	Parameter C_WR_DEPTH bound to: 16 - type: integer 
+	Parameter C_SMALLER_DATA_WIDTH bound to: 3 - type: integer 
+	Parameter C_RD_PNTR_WIDTH bound to: 4 - type: integer 
+	Parameter C_WR_PNTR_WIDTH bound to: 4 - type: integer 
+	Parameter C_DEPTH_RATIO_RD bound to: 1 - type: integer 
+	Parameter C_DEPTH_RATIO_WR bound to: 1 - type: integer 
+	Parameter C_USE_ECC bound to: 0 - type: integer 
+	Parameter C_USE_PIPELINE_REG bound to: 0 - type: integer 
+	Parameter C_USE_EMBEDDED_REG bound to: 0 - type: integer 
+	Parameter C_ERROR_INJECTION_TYPE bound to: 0 - type: integer 
+	Parameter C_FIFO_TYPE bound to: 0 - type: integer 
+INFO: [Synth 8-638] synthesizing module 'dmem' [c:/modem/vivado/xc7k160t-IP/jitterFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:5413]
+	Parameter C_HAS_RST bound to: 1 - type: integer 
+	Parameter C_HAS_SRST bound to: 0 - type: integer 
+	Parameter C_COMMON_CLOCK bound to: 1 - type: integer 
+	Parameter C_DIN_WIDTH bound to: 3 - type: integer 
+	Parameter C_DOUT_RST_VAL bound to: 0 - type: string 
+	Parameter C_DOUT_WIDTH bound to: 3 - type: integer 
+	Parameter C_LARGER_DEPTH bound to: 16 - type: integer 
+	Parameter C_DEPTH_RATIO_RD bound to: 1 - type: integer 
+	Parameter C_DEPTH_RATIO_WR bound to: 1 - type: integer 
+	Parameter C_RD_PNTR_WIDTH bound to: 4 - type: integer 
+	Parameter C_SMALLER_DATA_WIDTH bound to: 3 - type: integer 
+	Parameter C_WR_PNTR_WIDTH bound to: 4 - type: integer 
+	Parameter C_FIFO_TYPE bound to: 0 - type: integer 
+INFO: [Synth 8-5534] Detected attribute (* ram_style = "distributed" *) [c:/modem/vivado/xc7k160t-IP/jitterFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:5427]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/jitterFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:5442]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/jitterFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:5446]
+INFO: [Synth 8-256] done synthesizing module 'dmem' (3#1) [c:/modem/vivado/xc7k160t-IP/jitterFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:5413]
+INFO: [Synth 8-256] done synthesizing module 'memory' (4#1) [c:/modem/vivado/xc7k160t-IP/jitterFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:5654]
+INFO: [Synth 8-638] synthesizing module 'clk_x_pntrs' [c:/modem/vivado/xc7k160t-IP/jitterFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:13000]
+	Parameter C_HAS_RST bound to: 1 - type: integer 
+	Parameter C_RD_PNTR_WIDTH bound to: 4 - type: integer 
+	Parameter C_WR_PNTR_WIDTH bound to: 4 - type: integer 
+	Parameter C_MSGON_VAL bound to: 1 - type: integer 
+	Parameter C_SYNCHRONIZER_STAGE bound to: 2 - type: integer 
+INFO: [Synth 8-638] synthesizing module 'synchronizer_ff' [c:/modem/vivado/xc7k160t-IP/jitterFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:4787]
+	Parameter C_HAS_RST bound to: 1 - type: integer 
+	Parameter C_WIDTH bound to: 4 - type: integer 
+INFO: [Synth 8-5534] Detected attribute (* async_reg = "true" *) [c:/modem/vivado/xc7k160t-IP/jitterFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:4792]
+INFO: [Synth 8-256] done synthesizing module 'synchronizer_ff' (5#1) [c:/modem/vivado/xc7k160t-IP/jitterFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:4787]
+INFO: [Synth 8-256] done synthesizing module 'clk_x_pntrs' (6#1) [c:/modem/vivado/xc7k160t-IP/jitterFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:13000]
+INFO: [Synth 8-638] synthesizing module 'rd_logic' [c:/modem/vivado/xc7k160t-IP/jitterFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:19638]
+	Parameter C_COMMON_CLOCK bound to: 0 - type: integer 
+	Parameter C_HAS_ALMOST_EMPTY bound to: 0 - type: integer 
+	Parameter C_HAS_RD_DATA_COUNT bound to: 0 - type: integer 
+	Parameter C_USE_FWFT_DATA_COUNT bound to: 0 - type: integer 
+	Parameter C_HAS_DATA_COUNT bound to: 0 - type: integer 
+	Parameter C_HAS_RST bound to: 1 - type: integer 
+	Parameter C_HAS_SRST bound to: 0 - type: integer 
+	Parameter C_HAS_VALID bound to: 0 - type: integer 
+	Parameter C_VALID_LOW bound to: 0 - type: integer 
+	Parameter C_HAS_UNDERFLOW bound to: 0 - type: integer 
+	Parameter C_UNDERFLOW_LOW bound to: 0 - type: integer 
+	Parameter C_PRELOAD_LATENCY bound to: 1 - type: integer 
+	Parameter C_PRELOAD_REGS bound to: 0 - type: integer 
+	Parameter C_RD_DEPTH bound to: 16 - type: integer 
+	Parameter C_RD_PNTR_WIDTH bound to: 4 - type: integer 
+	Parameter C_WR_DEPTH bound to: 16 - type: integer 
+	Parameter C_WR_PNTR_WIDTH bound to: 4 - type: integer 
+	Parameter C_PROG_EMPTY_TYPE bound to: 0 - type: integer 
+	Parameter C_PROG_EMPTY_THRESH_ASSERT_VAL bound to: 2 - type: integer 
+	Parameter C_PROG_EMPTY_THRESH_NEGATE_VAL bound to: 3 - type: integer 
+	Parameter C_USE_EMBEDDED_REG bound to: 0 - type: integer 
+	Parameter C_FIFO_TYPE bound to: 0 - type: integer 
+INFO: [Synth 8-638] synthesizing module 'rd_bin_cntr' [c:/modem/vivado/xc7k160t-IP/jitterFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:8146]
+	Parameter C_HAS_RST bound to: 1 - type: integer 
+	Parameter C_HAS_SRST bound to: 0 - type: integer 
+	Parameter C_HAS_ALMOST_EMPTY bound to: 0 - type: integer 
+	Parameter C_PNTR_WIDTH bound to: 4 - type: integer 
+INFO: [Synth 8-256] done synthesizing module 'rd_bin_cntr' (7#1) [c:/modem/vivado/xc7k160t-IP/jitterFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:8146]
+INFO: [Synth 8-638] synthesizing module 'rd_status_flags_as' [c:/modem/vivado/xc7k160t-IP/jitterFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:8515]
+	Parameter C_HAS_RST bound to: 1 - type: integer 
+	Parameter C_RD_PNTR_WIDTH bound to: 4 - type: integer 
+	Parameter C_WR_PNTR_WIDTH bound to: 4 - type: integer 
+	Parameter C_HAS_ALMOST_EMPTY bound to: 0 - type: integer 
+INFO: [Synth 8-638] synthesizing module 'compare' [c:/modem/vivado/xc7k160t-IP/jitterFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:7530]
+	Parameter C_WIDTH bound to: 4 - type: integer 
+INFO: [Synth 8-256] done synthesizing module 'compare' (8#1) [c:/modem/vivado/xc7k160t-IP/jitterFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:7530]
+INFO: [Synth 8-256] done synthesizing module 'rd_status_flags_as' (9#1) [c:/modem/vivado/xc7k160t-IP/jitterFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:8515]
+INFO: [Synth 8-256] done synthesizing module 'rd_logic' (10#1) [c:/modem/vivado/xc7k160t-IP/jitterFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:19638]
+INFO: [Synth 8-638] synthesizing module 'wr_logic' [c:/modem/vivado/xc7k160t-IP/jitterFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:16199]
+	Parameter C_COMMON_CLOCK bound to: 0 - type: integer 
+	Parameter C_HAS_ALMOST_FULL bound to: 0 - type: integer 
+	Parameter C_HAS_WR_DATA_COUNT bound to: 0 - type: integer 
+	Parameter C_HAS_RD_DATA_COUNT bound to: 0 - type: integer 
+	Parameter C_HAS_RST bound to: 1 - type: integer 
+	Parameter C_HAS_SRST bound to: 0 - type: integer 
+	Parameter C_HAS_WR_ACK bound to: 0 - type: integer 
+	Parameter C_WR_ACK_LOW bound to: 0 - type: integer 
+	Parameter C_HAS_OVERFLOW bound to: 0 - type: integer 
+	Parameter C_OVERFLOW_LOW bound to: 0 - type: integer 
+	Parameter C_PRELOAD_LATENCY bound to: 1 - type: integer 
+	Parameter C_PRELOAD_REGS bound to: 0 - type: integer 
+	Parameter C_DEPTH_RATIO_RD bound to: 1 - type: integer 
+	Parameter C_DEPTH_RATIO_WR bound to: 1 - type: integer 
+	Parameter C_RD_PNTR_WIDTH bound to: 4 - type: integer 
+	Parameter C_WR_PNTR_WIDTH bound to: 4 - type: integer 
+	Parameter C_USE_FWFT_DATA_COUNT bound to: 0 - type: integer 
+	Parameter C_PROG_EMPTY_TYPE bound to: 0 - type: integer 
+	Parameter C_PROG_FULL_TYPE bound to: 1 - type: integer 
+	Parameter C_PROG_FULL_THRESH_ASSERT_VAL bound to: 8 - type: integer 
+	Parameter C_PROG_FULL_THRESH_NEGATE_VAL bound to: 7 - type: integer 
+	Parameter C_FULL_FLAGS_RST_VAL bound to: 0 - type: integer 
+INFO: [Synth 8-638] synthesizing module 'wr_bin_cntr' [c:/modem/vivado/xc7k160t-IP/jitterFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:7729]
+	Parameter C_HAS_RST bound to: 1 - type: integer 
+	Parameter C_HAS_SRST bound to: 0 - type: integer 
+	Parameter C_HAS_ALMOST_FULL bound to: 0 - type: integer 
+	Parameter C_PROG_EMPTY_TYPE bound to: 0 - type: integer 
+	Parameter C_PROG_FULL_TYPE bound to: 1 - type: integer 
+	Parameter C_PNTR_WIDTH bound to: 4 - type: integer 
+	Parameter C_COMMON_CLOCK bound to: 0 - type: integer 
+	Parameter C_WR_RD_RATIO bound to: 1 - type: integer 
+INFO: [Synth 8-256] done synthesizing module 'wr_bin_cntr' (11#1) [c:/modem/vivado/xc7k160t-IP/jitterFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:7729]
+INFO: [Synth 8-638] synthesizing module 'wr_status_flags_as' [c:/modem/vivado/xc7k160t-IP/jitterFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:13484]
+	Parameter C_RD_PNTR_WIDTH bound to: 4 - type: integer 
+	Parameter C_WR_PNTR_WIDTH bound to: 4 - type: integer 
+	Parameter C_HAS_RST bound to: 1 - type: integer 
+	Parameter C_HAS_ALMOST_FULL bound to: 0 - type: integer 
+	Parameter C_FULL_FLAGS_RST_VAL bound to: 0 - type: integer 
+INFO: [Synth 8-256] done synthesizing module 'wr_status_flags_as' (12#1) [c:/modem/vivado/xc7k160t-IP/jitterFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:13484]
+INFO: [Synth 8-638] synthesizing module 'wr_pf_as' [c:/modem/vivado/xc7k160t-IP/jitterFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:14183]
+	Parameter C_HAS_RST bound to: 1 - type: integer 
+	Parameter C_PRELOAD_LATENCY bound to: 1 - type: integer 
+	Parameter C_PRELOAD_REGS bound to: 0 - type: integer 
+	Parameter C_PROG_FULL_TYPE bound to: 1 - type: integer 
+	Parameter C_PROG_FULL_THRESH_ASSERT_VAL bound to: 8 - type: integer 
+	Parameter C_PROG_FULL_THRESH_NEGATE_VAL bound to: 7 - type: integer 
+	Parameter C_DEPTH_RATIO_RD bound to: 1 - type: integer 
+	Parameter C_DEPTH_RATIO_WR bound to: 1 - type: integer 
+	Parameter C_RD_PNTR_WIDTH bound to: 4 - type: integer 
+	Parameter C_WR_PNTR_WIDTH bound to: 4 - type: integer 
+	Parameter C_FULL_FLAGS_RST_VAL bound to: 0 - type: integer 
+INFO: [Synth 8-256] done synthesizing module 'wr_pf_as' (13#1) [c:/modem/vivado/xc7k160t-IP/jitterFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:14183]
+INFO: [Synth 8-256] done synthesizing module 'wr_logic' (14#1) [c:/modem/vivado/xc7k160t-IP/jitterFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:16199]
+INFO: [Synth 8-638] synthesizing module 'output_blk' [c:/modem/vivado/xc7k160t-IP/jitterFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:4460]
+	Parameter C_COMMON_CLOCK bound to: 0 - type: integer 
+	Parameter C_DATA_COUNT_WIDTH bound to: 4 - type: integer 
+	Parameter C_DIN_WIDTH bound to: 3 - type: integer 
+	Parameter C_DOUT_WIDTH bound to: 3 - type: integer 
+	Parameter C_PKTFIFO_DATA_WIDTH bound to: 3 - type: integer 
+	Parameter C_HAS_ALMOST_EMPTY bound to: 0 - type: integer 
+	Parameter C_HAS_ALMOST_FULL bound to: 0 - type: integer 
+	Parameter C_HAS_DATA_COUNT bound to: 0 - type: integer 
+	Parameter C_HAS_OVERFLOW bound to: 0 - type: integer 
+	Parameter C_HAS_RD_DATA_COUNT bound to: 0 - type: integer 
+	Parameter C_HAS_UNDERFLOW bound to: 0 - type: integer 
+	Parameter C_HAS_VALID bound to: 0 - type: integer 
+	Parameter C_HAS_WR_ACK bound to: 0 - type: integer 
+	Parameter C_HAS_WR_DATA_COUNT bound to: 0 - type: integer 
+	Parameter C_PROG_EMPTY_TYPE bound to: 0 - type: integer 
+	Parameter C_PROG_FULL_TYPE bound to: 1 - type: integer 
+	Parameter C_DEPTH_RATIO_WR bound to: 1 - type: integer 
+	Parameter C_RD_DATA_COUNT_WIDTH bound to: 4 - type: integer 
+	Parameter C_RD_PNTR_WIDTH bound to: 4 - type: integer 
+	Parameter C_WR_PNTR_WIDTH bound to: 4 - type: integer 
+	Parameter C_WR_DATA_COUNT_WIDTH bound to: 4 - type: integer 
+	Parameter C_USE_FWFT_DATA_COUNT bound to: 0 - type: integer 
+	Parameter C_USE_ECC bound to: 0 - type: integer 
+	Parameter C_FIFO_TYPE bound to: 0 - type: integer 
+	Parameter C_BYTE_STRB_WIDTH bound to: 8 - type: integer 
+INFO: [Synth 8-256] done synthesizing module 'output_blk' (15#1) [c:/modem/vivado/xc7k160t-IP/jitterFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:4460]
+INFO: [Synth 8-256] done synthesizing module 'fifo_generator_ramfifo' (16#1) [c:/modem/vivado/xc7k160t-IP/jitterFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:20531]
+INFO: [Synth 8-256] done synthesizing module 'fifo_generator_top' (17#1) [c:/modem/vivado/xc7k160t-IP/jitterFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:32083]
+INFO: [Synth 8-256] done synthesizing module 'fifo_generator_v12_0_synth' (18#1) [c:/modem/vivado/xc7k160t-IP/jitterFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:33314]
+INFO: [Synth 8-256] done synthesizing module 'fifo_generator_v12_0' (19#1) [c:/modem/vivado/xc7k160t-IP/jitterFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0.vhd:665]
+INFO: [Synth 8-256] done synthesizing module 'jitterFifo' (20#1) [c:/modem/vivado/xc7k160t-IP/jitterFifo/synth/jitterFifo.vhd:74]
+---------------------------------------------------------------------------------
+Finished RTL Elaboration : Time (s): cpu = 00:00:12 ; elapsed = 00:00:14 . Memory (MB): peak = 371.133 ; gain = 192.000
+---------------------------------------------------------------------------------
+
+Report Check Netlist: 
++------+------------------+-------+---------+-------+------------------+
+|      |Item              |Errors |Warnings |Status |Description       |
++------+------------------+-------+---------+-------+------------------+
+|1     |multi_driven_nets |      0|        0|Passed |Multi driven nets |
++------+------------------+-------+---------+-------+------------------+
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:12 ; elapsed = 00:00:14 . Memory (MB): peak = 371.133 ; gain = 192.000
+---------------------------------------------------------------------------------
+INFO: [Device 21-403] Loading part xc7k160tfbg676-1
+INFO: [Project 1-570] Preparing netlist for logic optimization
+
+Processing XDC Constraints
+Initializing timing engine
+Parsing XDC File [c:/modem/vivado/xc7k160t-IP/jitterFifo/jitterFifo_ooc.xdc] for cell 'U0'
+Finished Parsing XDC File [c:/modem/vivado/xc7k160t-IP/jitterFifo/jitterFifo_ooc.xdc] for cell 'U0'
+Parsing XDC File [c:/modem/vivado/xc7k160t-IP/jitterFifo/jitterFifo/jitterFifo.xdc] for cell 'U0'
+Finished Parsing XDC File [c:/modem/vivado/xc7k160t-IP/jitterFifo/jitterFifo/jitterFifo.xdc] for cell 'U0'
+Parsing XDC File [C:/modem/vivado/xc7k160t-IP/managed_ip_project/managed_ip_project.runs/jitterFifo_synth_1/dont_touch.xdc]
+Finished Parsing XDC File [C:/modem/vivado/xc7k160t-IP/managed_ip_project/managed_ip_project.runs/jitterFifo_synth_1/dont_touch.xdc]
+Parsing XDC File [c:/modem/vivado/xc7k160t-IP/jitterFifo/jitterFifo/jitterFifo_clocks.xdc] for cell 'U0'
+Finished Parsing XDC File [c:/modem/vivado/xc7k160t-IP/jitterFifo/jitterFifo/jitterFifo_clocks.xdc] for cell 'U0'
+INFO: [Project 1-236] Implementation specific constraints were found while reading constraint file [c:/modem/vivado/xc7k160t-IP/jitterFifo/jitterFifo/jitterFifo_clocks.xdc]. These constraints will be ignored for synthesis but will be used in implementation. Impacted constraints are listed in the file [.Xil/jitterFifo_propImpl.xdc].
+Resolution: To avoid this warning, move constraints listed in [.Xil/jitterFifo_propImpl.xdc] to another XDC file and exclude this new file from synthesis with the used_in_synthesis property (File Properties dialog in GUI) and re-run elaboration/synthesis.
+Completed Processing XDC Constraints
+
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.006 . Memory (MB): peak = 618.141 ; gain = 0.000
+---------------------------------------------------------------------------------
+Finished Constraint Validation : Time (s): cpu = 00:00:19 ; elapsed = 00:00:21 . Memory (MB): peak = 618.141 ; gain = 439.008
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Loading Part and Timing Information
+---------------------------------------------------------------------------------
+Loading part: xc7k160tfbg676-1
+---------------------------------------------------------------------------------
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:19 ; elapsed = 00:00:21 . Memory (MB): peak = 618.141 ; gain = 439.008
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying 'set_property' XDC Constraints
+---------------------------------------------------------------------------------
+Applied set_property DONT_TOUCH = true for U0. (constraint file  auto generated constraint, line ).
+---------------------------------------------------------------------------------
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:19 ; elapsed = 00:00:21 . Memory (MB): peak = 618.141 ; gain = 439.008
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:20 ; elapsed = 00:00:21 . Memory (MB): peak = 618.141 ; gain = 439.008
+---------------------------------------------------------------------------------
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+---------------------------------------------------------------------------------
+Start RTL Component Statistics 
+---------------------------------------------------------------------------------
+Detailed RTL Component Info : 
++---Adders : 
+	   2 Input      5 Bit       Adders := 1     
+	   2 Input      4 Bit       Adders := 2     
++---XORs : 
+	   2 Input      1 Bit         XORs := 22    
++---XORs : 
+	                4 Bit    Wide XORs := 2     
+	                3 Bit    Wide XORs := 2     
+	                2 Bit    Wide XORs := 2     
++---Registers : 
+	                5 Bit    Registers := 1     
+	                4 Bit    Registers := 13    
+	                3 Bit    Registers := 1     
+	                2 Bit    Registers := 1     
+	                1 Bit    Registers := 15    
++---Muxes : 
+	   2 Input      1 Bit        Muxes := 1     
+---------------------------------------------------------------------------------
+Finished RTL Component Statistics 
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start RTL Hierarchical Component Statistics 
+---------------------------------------------------------------------------------
+Hierarchical RTL Component report 
+Module reset_blk_ramfifo 
+Detailed RTL Component Info : 
++---Registers : 
+	                3 Bit    Registers := 1     
+	                2 Bit    Registers := 1     
+	                1 Bit    Registers := 10    
+Module synchronizer_ff 
+Detailed RTL Component Info : 
++---Registers : 
+	                4 Bit    Registers := 1     
+Module clk_x_pntrs 
+Detailed RTL Component Info : 
++---XORs : 
+	   2 Input      1 Bit         XORs := 6     
++---XORs : 
+	                4 Bit    Wide XORs := 2     
+	                3 Bit    Wide XORs := 2     
+	                2 Bit    Wide XORs := 2     
++---Registers : 
+	                4 Bit    Registers := 4     
+Module rd_bin_cntr 
+Detailed RTL Component Info : 
++---Adders : 
+	   2 Input      4 Bit       Adders := 1     
++---Registers : 
+	                4 Bit    Registers := 2     
+Module compare 
+Detailed RTL Component Info : 
++---XORs : 
+	   2 Input      1 Bit         XORs := 4     
+Module rd_status_flags_as 
+Detailed RTL Component Info : 
++---Registers : 
+	                1 Bit    Registers := 2     
+Module wr_bin_cntr 
+Detailed RTL Component Info : 
++---Adders : 
+	   2 Input      4 Bit       Adders := 1     
++---Registers : 
+	                4 Bit    Registers := 3     
+Module wr_status_flags_as 
+Detailed RTL Component Info : 
++---Registers : 
+	                1 Bit    Registers := 2     
+Module wr_pf_as 
+Detailed RTL Component Info : 
++---Adders : 
+	   2 Input      5 Bit       Adders := 1     
++---Registers : 
+	                5 Bit    Registers := 1     
+	                1 Bit    Registers := 1     
++---Muxes : 
+	   2 Input      1 Bit        Muxes := 1     
+---------------------------------------------------------------------------------
+Finished RTL Hierarchical Component Statistics
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Part Resource Summary
+---------------------------------------------------------------------------------
+Part Resources:
+DSPs: 600 (col length:100)
+BRAMs: 650 (col length: RAMB18 100 RAMB36 50)
+---------------------------------------------------------------------------------
+Finished Part Resource Summary
+---------------------------------------------------------------------------------
+Start Parallel Synthesis Optimization  : Time (s): cpu = 00:00:20 ; elapsed = 00:00:21 . Memory (MB): peak = 618.141 ; gain = 439.008
+---------------------------------------------------------------------------------
+Start Cross Boundary Optimization
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Cross Boundary Optimization : Time (s): cpu = 00:00:20 ; elapsed = 00:00:22 . Memory (MB): peak = 618.141 ; gain = 439.008
+---------------------------------------------------------------------------------
+Finished Parallel Reinference  : Time (s): cpu = 00:00:20 ; elapsed = 00:00:22 . Memory (MB): peak = 618.141 ; gain = 439.008
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+---------------------------------------------------------------------------------
+Start ROM, RAM, DSP and Shift Register Reporting
+---------------------------------------------------------------------------------
+
+Distributed RAM: 
++------------+------------------------------------------------------------------------+----------------+----------------------+--------------+----------------------------------------+
+|Module Name | RTL Object                                                             | Inference      | Size (Depth x Width) | Primitives   | Hierarchical Name                      | 
++------------+------------------------------------------------------------------------+----------------+----------------------+--------------+----------------------------------------+
+|jitterFifo  | inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm/RAM_reg | User Attribute | 16 x 3               | RAM32M x 1   | jitterFifo/fifo_generator_v12_0/ram__2 | 
++------------+------------------------------------------------------------------------+----------------+----------------------+--------------+----------------------------------------+
+
+Note: The table shows the Distributed RAMs at the current stage of the synthesis flow. Some Distributed RAMs may be reimplemented as non Distributed RAM primitives later in the synthesis flow. Multiple instantiated RAMs are reported only once. "Hierarchical Name" reflects the Distributed RAM name as it appears in the hierarchical module and only part of it is displayed.
+---------------------------------------------------------------------------------
+Finished ROM, RAM, DSP and Shift Register Reporting
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Area Optimization
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Area Optimization : Time (s): cpu = 00:00:20 ; elapsed = 00:00:22 . Memory (MB): peak = 618.141 ; gain = 439.008
+---------------------------------------------------------------------------------
+Finished Parallel Area Optimization  : Time (s): cpu = 00:00:20 ; elapsed = 00:00:22 . Memory (MB): peak = 618.141 ; gain = 439.008
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+Finished Parallel Synthesis Optimization  : Time (s): cpu = 00:00:20 ; elapsed = 00:00:22 . Memory (MB): peak = 618.141 ; gain = 439.008
+---------------------------------------------------------------------------------
+Start Timing Optimization
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying XDC Timing Constraints
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:30 ; elapsed = 00:00:32 . Memory (MB): peak = 618.141 ; gain = 439.008
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Timing Optimization : Time (s): cpu = 00:00:30 ; elapsed = 00:00:32 . Memory (MB): peak = 618.141 ; gain = 439.008
+---------------------------------------------------------------------------------
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+---------------------------------------------------------------------------------
+Start Technology Mapping
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Technology Mapping : Time (s): cpu = 00:00:30 ; elapsed = 00:00:32 . Memory (MB): peak = 618.141 ; gain = 439.008
+---------------------------------------------------------------------------------
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+---------------------------------------------------------------------------------
+Start IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished IO Insertion : Time (s): cpu = 00:00:31 ; elapsed = 00:00:33 . Memory (MB): peak = 618.141 ; gain = 439.008
+---------------------------------------------------------------------------------
+
+Report Check Netlist: 
++------+------------------+-------+---------+-------+------------------+
+|      |Item              |Errors |Warnings |Status |Description       |
++------+------------------+-------+---------+-------+------------------+
+|1     |multi_driven_nets |      0|        0|Passed |Multi driven nets |
++------+------------------+-------+---------+-------+------------------+
+---------------------------------------------------------------------------------
+Start Renaming Generated Instances
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:31 ; elapsed = 00:00:33 . Memory (MB): peak = 618.141 ; gain = 439.008
+---------------------------------------------------------------------------------
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+---------------------------------------------------------------------------------
+Start Rebuilding User Hierarchy
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:31 ; elapsed = 00:00:33 . Memory (MB): peak = 618.141 ; gain = 439.008
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Ports : Time (s): cpu = 00:00:31 ; elapsed = 00:00:33 . Memory (MB): peak = 618.141 ; gain = 439.008
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:31 ; elapsed = 00:00:33 . Memory (MB): peak = 618.141 ; gain = 439.008
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Writing Synthesis Report
+---------------------------------------------------------------------------------
+
+Report BlackBoxes: 
++-+--------------+----------+
+| |BlackBox name |Instances |
++-+--------------+----------+
++-+--------------+----------+
+
+Report Cell Usage: 
++------+-------+------+
+|      |Cell   |Count |
++------+-------+------+
+|1     |LUT1   |     2|
+|2     |LUT2   |    18|
+|3     |LUT3   |     5|
+|4     |LUT4   |    12|
+|5     |LUT6   |     4|
+|6     |RAM32M |     1|
+|7     |FDCE   |    56|
+|8     |FDPE   |    16|
+|9     |FDRE   |     4|
++------+-------+------+
+
+Report Instance Areas: 
++------+-----------------------------------------+---------------------------+------+
+|      |Instance                                 |Module                     |Cells |
++------+-----------------------------------------+---------------------------+------+
+|1     |top                                      |                           |   118|
+|2     |  U0                                     |fifo_generator_v12_0       |   118|
+|3     |    inst_fifo_gen                        |fifo_generator_v12_0_synth |   118|
+|4     |      \gconvfifo.rf                      |fifo_generator_top         |   118|
+|5     |        \grf.rf                          |fifo_generator_ramfifo     |   118|
+|6     |          \gntv_or_sync_fifo.gcx.clkx    |clk_x_pntrs                |    49|
+|7     |            \gsync_stage[1].rd_stg_inst  |synchronizer_ff            |     4|
+|8     |            \gsync_stage[1].wr_stg_inst  |synchronizer_ff_0          |     4|
+|9     |            \gsync_stage[2].rd_stg_inst  |synchronizer_ff_1          |     7|
+|10    |            \gsync_stage[2].wr_stg_inst  |synchronizer_ff_2          |     7|
+|11    |          \gntv_or_sync_fifo.gl0.rd      |rd_logic                   |    20|
+|12    |            \gras.rsts                   |rd_status_flags_as         |     4|
+|13    |            rpntr                        |rd_bin_cntr                |    16|
+|14    |          \gntv_or_sync_fifo.gl0.wr      |wr_logic                   |    26|
+|15    |            \gwas.gpf.wrpf               |wr_pf_as                   |     3|
+|16    |            \gwas.wsts                   |wr_status_flags_as         |     3|
+|17    |            wpntr                        |wr_bin_cntr                |    20|
+|18    |          \gntv_or_sync_fifo.mem         |memory                     |     4|
+|19    |            \gdm.dm                      |dmem                       |     4|
+|20    |          rstblk                         |reset_blk_ramfifo          |    19|
++------+-----------------------------------------+---------------------------+------+
+---------------------------------------------------------------------------------
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:31 ; elapsed = 00:00:33 . Memory (MB): peak = 618.141 ; gain = 439.008
+---------------------------------------------------------------------------------
+Synthesis finished with 0 errors, 0 critical warnings and 0 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:14 ; elapsed = 00:00:25 . Memory (MB): peak = 618.141 ; gain = 165.246
+Synthesis Optimization Complete : Time (s): cpu = 00:00:31 ; elapsed = 00:00:33 . Memory (MB): peak = 618.141 ; gain = 439.008
+INFO: [Project 1-571] Translating synthesized netlist
+INFO: [Netlist 29-17] Analyzing 1 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-570] Preparing netlist for logic optimization
+Parsing XDC File [c:/modem/vivado/xc7k160t-IP/jitterFifo/jitterFifo_ooc.xdc] for cell 'U0'
+Finished Parsing XDC File [c:/modem/vivado/xc7k160t-IP/jitterFifo/jitterFifo_ooc.xdc] for cell 'U0'
+Parsing XDC File [c:/modem/vivado/xc7k160t-IP/jitterFifo/jitterFifo/jitterFifo.xdc] for cell 'U0'
+Finished Parsing XDC File [c:/modem/vivado/xc7k160t-IP/jitterFifo/jitterFifo/jitterFifo.xdc] for cell 'U0'
+Parsing XDC File [c:/modem/vivado/xc7k160t-IP/jitterFifo/jitterFifo/jitterFifo_clocks.xdc] for cell 'U0'
+INFO: [Timing 38-35] Done setting XDC timing constraints. [c:/modem/vivado/xc7k160t-IP/jitterFifo/jitterFifo/jitterFifo_clocks.xdc:53]
+get_clocks: Time (s): cpu = 00:00:13 ; elapsed = 00:00:13 . Memory (MB): peak = 1037.375 ; gain = 419.234
+Finished Parsing XDC File [c:/modem/vivado/xc7k160t-IP/jitterFifo/jitterFifo/jitterFifo_clocks.xdc] for cell 'U0'
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+INFO: [Project 1-111] Unisim Transformation Summary:
+  A total of 1 instances were transformed.
+  RAM32M => RAM32M (RAMD32, RAMD32, RAMD32, RAMD32, RAMD32, RAMD32, RAMS32, RAMS32): 1 instances
+
+INFO: [Common 17-83] Releasing license: Synthesis
+63 Infos, 8 Warnings, 0 Critical Warnings and 0 Errors encountered.
+synth_design completed successfully
+synth_design: Time (s): cpu = 00:00:43 ; elapsed = 00:00:45 . Memory (MB): peak = 1037.375 ; gain = 831.488
+INFO: [Coretcl 2-1174] Renamed 19 cell refs.
+report_utilization: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.052 . Memory (MB): peak = 1037.375 ; gain = 0.000
+INFO: [Common 17-206] Exiting Vivado at Thu Mar 31 14:16:38 2016...

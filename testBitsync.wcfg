@@ -10,7 +10,7 @@
          </top_modules>
       </db_ref>
    </db_ref_list>
-   <WVObjectSize size="16" />
+   <WVObjectSize size="19" />
    <wvobject db_ref_id="1" fp_name="/test/clk" type="logic">
       <obj_property name="ElementShortName">clk</obj_property>
       <obj_property name="ObjectShortName">clk</obj_property>
@@ -219,32 +219,44 @@
          <obj_property name="ObjectShortName">loopError[17:0]</obj_property>
       </wvobject>
    </wvobject>
-   <wvobject db_ref_id="1" fp_name="/test/pll0_Reset" type="logic">
-      <obj_property name="ElementShortName">pll0_Reset</obj_property>
-      <obj_property name="ObjectShortName">pll0_Reset</obj_property>
-   </wvobject>
-   <wvobject db_ref_id="1" fp_name="/test/pll0_OUT1" type="logic">
-      <obj_property name="ElementShortName">pll0_OUT1</obj_property>
-      <obj_property name="ObjectShortName">pll0_OUT1</obj_property>
-   </wvobject>
-   <wvobject db_ref_id="1" fp_name="/test/pll0_ReadEnable" type="logic">
-      <obj_property name="ElementShortName">pll0_ReadEnable</obj_property>
-      <obj_property name="ObjectShortName">pll0_ReadEnable</obj_property>
-   </wvobject>
-   <wvobject db_ref_id="1" fp_name="/test/pll0_Symbol[2]" type="logic">
+   <wvobject db_ref_id="1" fp_name="/test/pll0Fifo/din[2]" type="logic">
       <obj_property name="ElementShortName">[2]</obj_property>
-      <obj_property name="ObjectShortName">pll0_Symbol[2]</obj_property>
+      <obj_property name="ObjectShortName">din[2]</obj_property>
    </wvobject>
-   <wvobject db_ref_id="1" fp_name="/test/pll0_Full" type="logic">
-      <obj_property name="ElementShortName">pll0_Full</obj_property>
-      <obj_property name="ObjectShortName">pll0_Full</obj_property>
+   <wvobject db_ref_id="1" fp_name="/test/pll0Fifo/dout[2]" type="logic">
+      <obj_property name="ElementShortName">[2]</obj_property>
+      <obj_property name="ObjectShortName">dout[2]</obj_property>
    </wvobject>
-   <wvobject db_ref_id="1" fp_name="/test/pll0_Empty" type="logic">
-      <obj_property name="ElementShortName">pll0_Empty</obj_property>
-      <obj_property name="ObjectShortName">pll0_Empty</obj_property>
+   <wvobject db_ref_id="1" fp_name="/test/pll0Fifo/empty" type="logic">
+      <obj_property name="ElementShortName">empty</obj_property>
+      <obj_property name="ObjectShortName">empty</obj_property>
    </wvobject>
-   <wvobject db_ref_id="1" fp_name="/test/pll0_HalfFull" type="logic">
-      <obj_property name="ElementShortName">pll0_HalfFull</obj_property>
-      <obj_property name="ObjectShortName">pll0_HalfFull</obj_property>
+   <wvobject db_ref_id="1" fp_name="/test/pll0Fifo/full" type="logic">
+      <obj_property name="ElementShortName">full</obj_property>
+      <obj_property name="ObjectShortName">full</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/test/pll0Fifo/prog_full" type="logic">
+      <obj_property name="ElementShortName">prog_full</obj_property>
+      <obj_property name="ObjectShortName">prog_full</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/test/pll0Fifo/rd_clk" type="logic">
+      <obj_property name="ElementShortName">rd_clk</obj_property>
+      <obj_property name="ObjectShortName">rd_clk</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/test/pll0Fifo/rd_en" type="logic">
+      <obj_property name="ElementShortName">rd_en</obj_property>
+      <obj_property name="ObjectShortName">rd_en</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/test/pll0Fifo/rst" type="logic">
+      <obj_property name="ElementShortName">rst</obj_property>
+      <obj_property name="ObjectShortName">rst</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/test/pll0Fifo/wr_clk" type="logic">
+      <obj_property name="ElementShortName">wr_clk</obj_property>
+      <obj_property name="ObjectShortName">wr_clk</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/test/pll0Fifo/wr_en" type="logic">
+      <obj_property name="ElementShortName">wr_en</obj_property>
+      <obj_property name="ObjectShortName">wr_en</obj_property>
    </wvobject>
 </wave_config>

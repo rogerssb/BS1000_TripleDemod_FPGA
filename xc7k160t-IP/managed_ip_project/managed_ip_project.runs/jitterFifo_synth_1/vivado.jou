@@ -1,0 +1,10 @@
+#-----------------------------------------------------------
+# Vivado v2015.1 (64-bit)
+# SW Build 1215546 on Mon Apr 27 19:22:08 MDT 2015
+# IP Build 1209967 on Tue Apr 21 11:39:20 MDT 2015
+# Start of session at: Thu Mar 31 14:15:50 2016
+# Process ID: 12724
+# Log file: C:/modem/vivado/xc7k160t-IP/managed_ip_project/managed_ip_project.runs/jitterFifo_synth_1/jitterFifo.vds
+# Journal file: C:/modem/vivado/xc7k160t-IP/managed_ip_project/managed_ip_project.runs/jitterFifo_synth_1\vivado.jou
+#-----------------------------------------------------------
+source jitterFifo.tcl -notrace

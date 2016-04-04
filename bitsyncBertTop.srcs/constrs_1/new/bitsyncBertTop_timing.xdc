@@ -77,7 +77,23 @@ set_output_delay -clock [get_clocks sysClk] -min -add_delay -2.000 [get_ports fs
 set_output_delay -clock [get_clocks sysClk] -max -add_delay 4.000 [get_ports fsDiffClkOut]
 set_output_delay -clock [get_clocks sysClk] -min -add_delay -2.000 [get_ports fsDiffDataOut]
 set_output_delay -clock [get_clocks sysClk] -max -add_delay 4.000 [get_ports fsDiffDataOut]
+set_output_delay -clock [get_clocks sysClk] -min -add_delay -2.500 [get_ports pll*_CS]
+set_output_delay -clock [get_clocks sysClk] -max -add_delay 2.500 [get_ports pll*_CS]
+set_output_delay -clock [get_clocks sysClk] -min -add_delay -2.500 [get_ports pll*_REF]
+set_output_delay -clock [get_clocks sysClk] -max -add_delay 2.500 [get_ports pll*_REF]
+set_output_delay -clock [get_clocks sysClk] -min -add_delay -2.500 [get_ports pll_SCK]
+set_output_delay -clock [get_clocks sysClk] -max -add_delay 2.500 [get_ports pll_SCK]
+set_output_delay -clock [get_clocks sysClk] -min -add_delay -2.500 [get_ports pll_SDI]
+set_output_delay -clock [get_clocks sysClk] -max -add_delay 2.500 [get_ports pll_SDI]
+set_output_delay -clock [get_clocks sysClk] -min -add_delay -10.000 [get_ports dacSCLK]
+set_output_delay -clock [get_clocks sysClk] -max -add_delay 15.000 [get_ports dacSCLK]
+set_output_delay -clock [get_clocks sysClk] -min -add_delay -10.000 [get_ports dacMOSI]
+set_output_delay -clock [get_clocks sysClk] -max -add_delay 15.000 [get_ports dacMOSI]
+set_output_delay -clock [get_clocks sysClk] -min -add_delay -10.000 [get_ports ch*SELn]
+set_output_delay -clock [get_clocks sysClk] -max -add_delay 15.000 [get_ports ch*SELn]
 
+set_false_path -from [all_registers] -to [get_ports fb_data*]
+set_false_path -from [all_registers] -to [get_ports fb_data*]
 set_false_path -from [all_registers] -to [get_ports fb_data*]
 set_false_path -from [all_registers] -to [get_ports fb_data*]
 set_false_path -from [get_ports fb_oen*] -to [get_ports fb_data*]
@@ -93,6 +109,9 @@ set_false_path -from [get_clocks fbClk] -to [get_ports fsDiffClkOut]
 set_false_path -from [get_clocks fbClk] -to [get_ports fsDiffDataOut]
 set_false_path -from [get_clocks sysClk] -to [get_ports ch0Lockn]
 set_false_path -from [get_clocks sysClk] -to [get_ports ch1Lockn]
+set_false_path -from [get_clocks fbClk] -to [get_ports pll*_PWDn]
+set_false_path -from [get_clocks fbClk] -to [get_ports ch*HighImpedance]
+set_false_path -from [get_clocks fbClk] -to [get_ports ch*SingleEnded]
 
 set_property BITSTREAM.CONFIG.CONFIGRATE 50 [current_design]
 
@@ -102,3 +121,10 @@ set_property CFGBVS VCCO [current_design]
 set_property BITSTREAM.CONFIG.SPI_BUSWIDTH 1 [current_design]
 
 set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets pll0_OUT1_IBUF]
+
+create_clock -period 25.000 -name pll0_OUT1 -waveform {0.000 12.500} [get_ports pll0_OUT1]
+create_clock -period 25.000 -name pll1_OUT1 -waveform {0.000 12.500} [get_ports pll1_OUT1]
+
+
+
+

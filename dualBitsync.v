@@ -107,7 +107,7 @@ always @(posedge sampleClk) begin
         ch0MF <= ch0Filtered;
         ch0SymDelay <= ch0Filtered;
         ch1SymDelay <= ch1Filtered;
-        if (bitsyncMode == `MODE_OFFSET_CH) begin
+        if (bitsyncMode == `BS_MODE_OFFSET_CH) begin
             ch0MF <= ch0SymDelay;
             ch1MF <= ch1Filtered;
             end
@@ -158,7 +158,7 @@ wire    [17:0]  negoffTimeQ = (~offTimeQ + 1);
 
 reg     [17:0]  timingErrorI;
 reg     [17:0]  timingErrorQ;
-wire    [18:0]  timingError = {timingErrorI[17],timingErrorI} + {timingErrorQ[17],timingErrorQ};
+wire    [17:0]  timingError = {timingErrorI[17],timingErrorI[17:1]} + {timingErrorQ[17],timingErrorQ[17:1]};
 assign timingErrorEn = (phaseState == ONTIME);
 
 wire    [11:0]  syncThreshold;
@@ -169,14 +169,6 @@ wire    [17:0]  negMultihThreshold = ~{syncThreshold,6'b0} + 1;
 reg  [17:0]dcError;
 wire offsetEn = (phaseState == OFFTIME);
 
-// Deviation variables
-reg  [17:0]deviation;
-`ifdef SYM_DEVIATION
-wire [17:0]absDeviation = deviation[17] ? (~deviation + 1) : deviation;
-`else
-wire [17:0]absDeviation = (~deviation + 1);
-`endif
-
 reg  stateMachineSlip;
 `ifdef ENABLE_SMSLIP
 wire slip = stateMachineSlip;
@@ -184,14 +176,19 @@ wire slip = stateMachineSlip;
 wire slip = 1'b0;
 `endif
 reg slipped;
-reg  [17:0]slipError;
-wire [17:0]absError = timingErrorI[17] ? (~timingErrorI + 1) : timingErrorI;
-wire [17:0]absSlipError = slipError[17] ? (~slipError + 1) : slipError;
-reg  [21:0]avgError;
-reg  [21:0]avgSlipError;
-reg  [3:0]avgCount;
-reg  dcErrorAvailable;
-reg  transition;
+reg     [17:0]  slipErrorI;
+reg     [17:0]  slipErrorQ;
+wire    [17:0]  slipError = {slipErrorI[17],slipErrorI[17:1]} + {slipErrorQ[17],slipErrorQ[17:1]};
+//wire    [17:0]  slipError = slipErrorI;
+wire    [17:0]  absError = timingError[17] ? (~timingError + 1) : timingError;
+wire    [17:0]  absSlipError = slipError[17] ? (~slipError + 1) : slipError;
+reg     [21:0]  avgError;
+reg     [21:0]  avgSlipError;
+reg     [3:0]   avgCount;
+reg             dcErrorAvailable;
+reg             transitionI,transitionQ;
+wire            transition = transitionI || transitionQ;
+//wire            transition = transitionI;
 
 always @(posedge sampleClk) begin
     if (reset) begin
@@ -208,8 +205,8 @@ always @(posedge sampleClk) begin
     else if (ch0ClkEn) begin
         // Shift register of baseband sample values
         casex (bitsyncMode)
-            `MODE_DUAL_CH,
-            `MODE_OFFSET_CH: begin
+            `BS_MODE_DUAL_CH,
+            `BS_MODE_OFFSET_CH: begin
                 bbSRI[0] <= ch0MF;
                 bbSRQ[0] <= ch1MF;
                 end
@@ -242,38 +239,40 @@ always @(posedge sampleClk) begin
                 // Is there a data transition on I?
                 if (earlySignI != lateSignI) begin
                     // Yes. Calculate DC offset error
-                    transition <= 1;
+                    transitionI <= 1;
 
                     // High to low transition?
                     if (earlySignI) begin
                         timingErrorI <= offTimeI;
-                        slipError <= lateOnTimeI;
+                        slipErrorI <= lateOnTimeI;
                         end
                     // Or low to high?
                     else begin
                         timingErrorI <= negoffTimeI;
-                        slipError <= earlyOnTimeI;
+                        slipErrorI <= earlyOnTimeI;
                         end
                     end
                 else begin
-                    transition <= 0;
+                    transitionI <= 0;
                     timingErrorI <= 18'h00;
-                    //deviation <= offTimeI;
-                    deviation <= earlyOnTimeI;
                     end
 
                 // Is there a data transition on Q?
                 if (earlySignQ != lateSignQ) begin
+                    transitionQ <= 1;
                     // High to low transition?
                     if (earlySignQ) begin
                         timingErrorQ <= offTimeQ;
+                        slipErrorQ <= lateOnTimeQ;
                         end
                     // Or low to high?
                     else begin
                         timingErrorQ <= negoffTimeQ;
+                        slipErrorQ <= earlyOnTimeQ;
                         end
                     end
                 else begin
+                    transitionQ <= 0;
                     timingErrorQ <= 18'h00;
                     end
                 end
@@ -318,11 +317,10 @@ always @(posedge sampleClk) begin
     end
 
 `ifdef SIMULATE
-wire    [17:0]  timingErr = timingError[18:1];
 real timingErrorReal;
 real ch0MFReal;
 real ch1MFReal;
-always @(timingErr) timingErrorReal = ((timingErr > 131071.0) ? timingErr - 262144.0 : timingErr)/131072.0;
+always @(timingError) timingErrorReal = ((timingError > 131071.0) ? timingError - 262144.0 : timingError)/131072.0;
 always @(ch0MF) ch0MFReal = (ch0MF[17] ? ch0MF - 262144.0 : ch0MF)/131072.0;
 always @(ch1MF) ch1MFReal = (ch1MF[17] ? ch1MF - 262144.0 : ch1MF)/131072.0;
 `endif
@@ -340,7 +338,7 @@ wire    [15:0]  lockCount;
 reg             loopFilterEn;
 reg     [11:0]  loopFilterError;
 always @* begin
-    loopFilterError = timingError[18:7] + timingError[6];
+    loopFilterError = timingError[17:6] + timingError[5];
     loopFilterEn = (ch0ClkEn & timingErrorEn);
     end
 wire    [31:0]  bsDout;
@@ -371,11 +369,11 @@ loopFilter sampleLoop(
 reg     [17:0]  bsError;
 reg             bsErrorEn;
 always @(posedge sampleClk) begin
-    bsError <= timingError[18:1] + timingError[0];
+    bsError <= timingError;
     bsErrorEn <= loopFilterEn;
     end
 `else
-assign bsError = timingError[18:1] + timingError[0];
+assign bsError = timingError;
 assign bsErrorEn = loopFilterEn;
 `endif
 
@@ -393,7 +391,7 @@ always @(posedge sampleClk) begin
         end
     else if (ch0ClkEn) begin
         if (slipState == TEST) begin
-            if (avgError[21:14] > {1'b0,avgSlipError[21:15]}) begin
+            if (avgError[21:12] > {2'b0,avgSlipError[21:14]}) begin
                 if (ch0LockCounter == (16'hffff-lockCount)) begin
                     ch0BitsyncLock <= 0;
                     ch0LockCounter <= 16'h0;
@@ -434,7 +432,7 @@ always @* ch0SampleFreqReal = $itor($signed(ch0SampleFreq))/(2**31);
 ******************************************************************************/
 
 
-wire asyncEnable = (bitsyncMode == `MODE_IND_RAIL);
+wire asyncEnable = (bitsyncMode == `BS_MODE_IND_CH);
 
 //****************************** Two Sample Sum *******************************
 reg     [17:0]  asyncDelay;

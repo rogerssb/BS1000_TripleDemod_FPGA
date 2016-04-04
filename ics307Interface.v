@@ -17,7 +17,10 @@ module ics307Interface #(parameter SysclkDivider = 2)
     output  reg             CS2,
     output                  EN0,
     output                  EN1,
-    output                  EN2
+    output                  EN2,
+    output  reg             pll0Reset,
+    output  reg             pll1Reset,
+    output  reg             pll2Reset
 );
 
     reg pllSpace;
@@ -48,6 +51,7 @@ module ics307Interface #(parameter SysclkDivider = 2)
                 end
                 `PLL0_CONTROL: begin
                     pll0Enable <= dataIn[0];
+                    pll0Reset <= dataIn[2];
                 end
                 `PLL1_BITS_0to31: begin
                     pll1Bits0to31[7:0] <= dataIn[7:0];
@@ -60,6 +64,7 @@ module ics307Interface #(parameter SysclkDivider = 2)
                 end
                 `PLL1_CONTROL: begin
                     pll1Enable <= dataIn[0];
+                    pll1Reset <= dataIn[2];
                 end
                 `PLL2_BITS_0to31: begin
                     pll2Bits0to31[7:0] <= dataIn[7:0];
@@ -72,6 +77,7 @@ module ics307Interface #(parameter SysclkDivider = 2)
                 end
                 `PLL2_CONTROL: begin
                     pll2Enable <= dataIn[0];
+                    pll2Reset <= dataIn[2];
                 end
                 default: ;
             endcase
@@ -181,15 +187,15 @@ module ics307Interface #(parameter SysclkDivider = 2)
                 `PLL0_BITS_0to31:       dataOut = pll0Bits0to31;
                 `PLL0_BITS_68to99:      dataOut = pll0Bits68to99;
                 `PLL0_BITS_100to131:    dataOut = pll0Bits100to131;
-                `PLL0_CONTROL:          dataOut = {30'b0,xferDone,pll0Enable};
+                `PLL0_CONTROL:          dataOut = {29'b0,pll0Reset,xferDone,pll0Enable};
                 `PLL1_BITS_0to31:       dataOut = pll1Bits0to31;
                 `PLL1_BITS_68to99:      dataOut = pll1Bits68to99;
                 `PLL1_BITS_100to131:    dataOut = pll1Bits100to131;
-                `PLL1_CONTROL:          dataOut = {31'b0,pll0Enable};
+                `PLL1_CONTROL:          dataOut = {29'b0,pll1Reset,1'b0,pll1Enable};
                 `PLL2_BITS_0to31:       dataOut = pll2Bits0to31;
                 `PLL2_BITS_68to99:      dataOut = pll2Bits68to99;
                 `PLL2_BITS_100to131:    dataOut = pll2Bits100to131;
-                `PLL2_CONTROL:          dataOut = {31'b0,pll0Enable};
+                `PLL2_CONTROL:          dataOut = {29'b0,pll2Reset,1'b0,pll2Enable};
                 default:                dataOut = 32'h0;
             endcase
         end
@@ -341,9 +347,12 @@ module ics307Interface #(parameter SysclkDivider = 2)
     end
 
     assign SDI = sr[131];
-    assign EN0 = pll0Enable;
-    assign EN1 = pll1Enable;
-    assign EN2 = pll2Enable;
+    //assign EN0 = pll0Enable;
+    //assign EN1 = pll1Enable;
+    //assign EN2 = pll2Enable;
+    assign EN0 = 1'b1;
+    assign EN1 = 1'b1;
+    assign EN2 = 1'b1;
 
 endmodule
 

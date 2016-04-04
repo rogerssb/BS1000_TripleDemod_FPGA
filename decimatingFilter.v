@@ -130,7 +130,7 @@ wire    [47:0]  cicOut;
 wire    [31:0]  cicDout;
 `ifdef SIMULATE
 cicDecimator cic( 
-    .clk(clk), .reset(dfReset), .sync(cicClkEn),
+    .clk(clk), .reset(dfReset || reset), .sync(cicClkEn),
 `else
 cicDecimator cic( 
     .clk(clk), .reset(reset), .sync(cicClkEn),

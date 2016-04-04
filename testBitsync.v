@@ -2,6 +2,7 @@
 `timescale 1ns/100ps
 
 `define ENABLE_AGC
+//`define ADD_FIFOS
 //`define MATLAB_VECTORS
 
 module test;
@@ -348,6 +349,7 @@ mcp48xxInterface dacInterface (
     .CS1n(ch1SELn)
 );
 
+    `ifdef ADD_FIFOS
     // SPI interface to the PLLs
     wire    [31:0]  pllDout;
     ics307Interface pllIntfc (
@@ -370,12 +372,30 @@ mcp48xxInterface dacInterface (
         .EN2(pll2_PWDn)
     );
 
+    //`define NEW_FIFO
+    `ifdef NEW_FIFO
+    reg             pllReset;
+    initial         pllReset = 1;
+
+    wire    [2:0]   pll0_Symbol;
+    jitterFifo pll0Fifo (
+        .reset(pllReset),
+        .inputClk(clk),
+        .inputClkEn(ch0SymEn),
+        .dataIn({ch0DataOut,2'b0}),
+        .outputClk(pll0_OUT1),
+        .outputClkEn(1'b1),
+        .dataOut(pll0_Symbol)
+    );
+
+    `else //NEW_FIFO
     //------------- PLL0 Data FIFO --------------------
+    reg             pllReset;
+    initial         pllReset = 1;
     reg             pll0_ReadEnable;
     wire    [2:0]   pll0_Symbol;
-    wire            pll0_Reset;
     jitterFifo pll0Fifo(
-        .rst(pll0_Reset | reset),
+        .rst(pllReset),
         .wr_clk(clk),
         .rd_clk(pll0_OUT1),
         .din({ch0DataOut,2'b0}),
@@ -386,23 +406,17 @@ mcp48xxInterface dacInterface (
         .empty(pll0_Empty),
         .prog_full(pll0_HalfFull)
     );
-    assign          pll0_FlagReset = (pll0_Full || (pll0_Empty & pll0_ReadEnable));
-    reg     [1:0]   pll0_ResetSR;
-    assign          pll0_Reset = (pll0_ResetSR == 2'b01);
     always @(posedge pll0_OUT1) begin
-        if (reset) begin
-            pll0_ResetSR <= 2'b0;
-        end
-        else begin
-            pll0_ResetSR <= {pll0_ResetSR[0],pll0_FlagReset};
-        end
-        if (pll0_Reset | reset) begin
+        if (pllReset) begin
             pll0_ReadEnable <= 0;
         end
         else if (pll0_HalfFull) begin
             pll0_ReadEnable <= 1;
         end
     end
+
+    `endif //NEW_FIFO
+    `endif
 
 
 `ifdef MATLAB_VECTORS
@@ -585,8 +599,7 @@ initial begin
     $initGaussPLI(1,8.0 + 11.5 - 13.0,131072.0);
     `endif
     bitsyncTop.df0.dfReset = 1;
-    bitsyncTop.df0.dfReset = 1;
-    bitsyncTop.df0.dfReset = 1;
+    bitsyncTop.df1.dfReset = 1;
     interpReset = 0;
     reset = 0;
     clk = 0;
@@ -628,14 +641,16 @@ initial begin
     #(2*C) ;
     reset = 0;
 
+    `ifdef ADD_FIFOS
     // Init the PLLs
     write32(createAddress(`PLLSPACE,`PLL0_BITS_0to31),32'h01234567);
     write32(createAddress(`PLLSPACE,`PLL0_BITS_68to99),32'haaaa5555);
     write32(createAddress(`PLLSPACE,`PLL0_BITS_100to131),32'ha5a5a5a5);
     write16(createAddress(`PLLSPACE,`PLL0_XFER),16'h0);
+    `endif
 
     // Init the mode
-    write32(createAddress(`BITSYNC_TOP_SPACE,`BS_TOP_CONTROL),{30'bx,`MODE_SINGLE_CH});
+    write32(createAddress(`BITSYNC_TOP_SPACE,`BS_TOP_CONTROL),{30'bx,`BS_MODE_DUAL_CH});
 
     // Init the sample rate loop filters
     write32(createAddress(`CH0_RESAMPSPACE,`RESAMPLER_RATE),resamplerFreqInt);
@@ -648,6 +663,9 @@ initial begin
     write32(createAddress(`CH0_DFSPACE,`DF_CONTROL),dfControl);
     write32(createAddress(`CH0_DFSPACE,`DF_CIC_DECIMATION),cicDecimationInt-1);
     write32(createAddress(`CH0_DFSPACE,`DF_CIC_SHIFT), 3); // log2(cicDecimation ^ 3)
+    write32(createAddress(`CH1_DFSPACE,`DF_CONTROL),dfControl);
+    write32(createAddress(`CH1_DFSPACE,`DF_CIC_DECIMATION),cicDecimationInt-1);
+    write32(createAddress(`CH1_DFSPACE,`DF_CIC_SHIFT), 3); // log2(cicDecimation ^ 3)
 
     write16(createAddress(`CH0_DFFIRSPACE,`DF_FIR_COEFF_0),16'h0123);
     write16(createAddress(`CH0_DFFIRSPACE,`DF_FIR_COEFF_1),16'h1234);
@@ -687,22 +705,31 @@ initial begin
     #(2*C) ;
     reset = 0;
     bitsyncTop.df0.dfReset = 0;
+    bitsyncTop.df1.dfReset = 0;
 
     // Wait 9.5 bit periods
     #(19*bitrateSamplesInt*C) ;
 
     // Create a reset to clear the halfband
     bitsyncTop.df0.dfReset = 1;
+    bitsyncTop.df1.dfReset = 1;
     #(2*C) ;
     bitsyncTop.df0.dfReset = 0;
+    #(1*C) ;
+    bitsyncTop.df1.dfReset = 0;
+    `ifdef ADD_FIFOS
+    pllReset = 0;
+    `endif
 
     // Wait
     #(4*bitrateSamplesInt*C) ;
 
     // Create a reset to clear the cic resampler
     bitsyncTop.df0.dfReset = 1;
+    bitsyncTop.df1.dfReset = 1;
     #(2*C) ;
     bitsyncTop.df0.dfReset = 0;
+    bitsyncTop.df1.dfReset = 0;
 
     // Wait 14 bit periods
     #(28*bitrateSamplesInt*C) ;

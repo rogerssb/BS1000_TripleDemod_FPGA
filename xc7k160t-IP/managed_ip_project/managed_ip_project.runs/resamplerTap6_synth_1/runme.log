@@ -1,0 +1,471 @@
+
+*** Running vivado
+    with args -log resamplerTap6.vds -m64 -mode batch -messageDb vivado.pb -notrace -source resamplerTap6.tcl
+
+WARNING: Default location for XILINX_VIVADO_HLS not found: 
+
+****** Vivado v2015.1 (64-bit)
+  **** SW Build 1215546 on Mon Apr 27 19:22:08 MDT 2015
+  **** IP Build 1209967 on Tue Apr 21 11:39:20 MDT 2015
+    ** Copyright 1986-2015 Xilinx, Inc. All Rights Reserved.
+
+source resamplerTap6.tcl -notrace
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'C:/Xilinx/Vivado/2015.1/data/ip'.
+WARNING: [IP_Flow 19-3664] IP 'resamplerTap6' generated file not found 'c:/modem/vivado/xc7k160t-IP/resamplerTap6/resamplerTap6.dcp'. Please regenerate to continue.
+WARNING: [IP_Flow 19-3664] IP 'resamplerTap6' generated file not found 'c:/modem/vivado/xc7k160t-IP/resamplerTap6/resamplerTap6_stub.v'. Please regenerate to continue.
+WARNING: [IP_Flow 19-3664] IP 'resamplerTap6' generated file not found 'c:/modem/vivado/xc7k160t-IP/resamplerTap6/resamplerTap6_stub.vhdl'. Please regenerate to continue.
+WARNING: [IP_Flow 19-3664] IP 'resamplerTap6' generated file not found 'c:/modem/vivado/xc7k160t-IP/resamplerTap6/resamplerTap6_funcsim.v'. Please regenerate to continue.
+WARNING: [IP_Flow 19-3664] IP 'resamplerTap6' generated file not found 'c:/modem/vivado/xc7k160t-IP/resamplerTap6/resamplerTap6_funcsim.vhdl'. Please regenerate to continue.
+Command: synth_design -top resamplerTap6 -part xc7k160tfbg676-1 -mode out_of_context
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xc7k160t'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7k160t'
+---------------------------------------------------------------------------------
+Starting RTL Elaboration : Time (s): cpu = 00:00:04 ; elapsed = 00:00:05 . Memory (MB): peak = 252.629 ; gain = 76.285
+---------------------------------------------------------------------------------
+INFO: [Synth 8-638] synthesizing module 'resamplerTap6' [c:/modem/vivado/xc7k160t-IP/resamplerTap6/synth/resamplerTap6.vhd:66]
+	Parameter C_FAMILY bound to: kintex7 - type: string 
+	Parameter C_ADDR_WIDTH bound to: 5 - type: integer 
+	Parameter C_DEFAULT_DATA bound to: 0 - type: string 
+	Parameter C_DEPTH bound to: 32 - type: integer 
+	Parameter C_HAS_CLK bound to: 0 - type: integer 
+	Parameter C_HAS_D bound to: 0 - type: integer 
+	Parameter C_HAS_DPO bound to: 0 - type: integer 
+	Parameter C_HAS_DPRA bound to: 0 - type: integer 
+	Parameter C_HAS_I_CE bound to: 0 - type: integer 
+	Parameter C_HAS_QDPO bound to: 0 - type: integer 
+	Parameter C_HAS_QDPO_CE bound to: 0 - type: integer 
+	Parameter C_HAS_QDPO_CLK bound to: 0 - type: integer 
+	Parameter C_HAS_QDPO_RST bound to: 0 - type: integer 
+	Parameter C_HAS_QDPO_SRST bound to: 0 - type: integer 
+	Parameter C_HAS_QSPO bound to: 0 - type: integer 
+	Parameter C_HAS_QSPO_CE bound to: 0 - type: integer 
+	Parameter C_HAS_QSPO_RST bound to: 0 - type: integer 
+	Parameter C_HAS_QSPO_SRST bound to: 0 - type: integer 
+	Parameter C_HAS_SPO bound to: 1 - type: integer 
+	Parameter C_HAS_WE bound to: 0 - type: integer 
+	Parameter C_MEM_INIT_FILE bound to: resamplerTap6.mif - type: string 
+	Parameter C_ELABORATION_DIR bound to: ./ - type: string 
+	Parameter C_MEM_TYPE bound to: 0 - type: integer 
+	Parameter C_PIPELINE_STAGES bound to: 0 - type: integer 
+	Parameter C_QCE_JOINED bound to: 0 - type: integer 
+	Parameter C_QUALIFY_WE bound to: 0 - type: integer 
+	Parameter C_READ_MIF bound to: 1 - type: integer 
+	Parameter C_REG_A_D_INPUTS bound to: 0 - type: integer 
+	Parameter C_REG_DPRA_INPUT bound to: 0 - type: integer 
+	Parameter C_SYNC_ENABLE bound to: 1 - type: integer 
+	Parameter C_WIDTH bound to: 18 - type: integer 
+	Parameter C_PARSER_TYPE bound to: 1 - type: integer 
+INFO: [Synth 8-3491] module 'dist_mem_gen_v8_0' declared at 'c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0.vhd:130' bound to instance 'U0' of component 'dist_mem_gen_v8_0' [c:/modem/vivado/xc7k160t-IP/resamplerTap6/synth/resamplerTap6.vhd:132]
+INFO: [Synth 8-638] synthesizing module 'dist_mem_gen_v8_0' [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0.vhd:186]
+	Parameter C_FAMILY bound to: kintex7 - type: string 
+	Parameter C_ADDR_WIDTH bound to: 5 - type: integer 
+	Parameter C_DEFAULT_DATA bound to: 0 - type: string 
+	Parameter C_DEPTH bound to: 32 - type: integer 
+	Parameter C_HAS_CLK bound to: 0 - type: integer 
+	Parameter C_HAS_D bound to: 0 - type: integer 
+	Parameter C_HAS_DPO bound to: 0 - type: integer 
+	Parameter C_HAS_DPRA bound to: 0 - type: integer 
+	Parameter C_HAS_I_CE bound to: 0 - type: integer 
+	Parameter C_HAS_QDPO bound to: 0 - type: integer 
+	Parameter C_HAS_QDPO_CE bound to: 0 - type: integer 
+	Parameter C_HAS_QDPO_CLK bound to: 0 - type: integer 
+	Parameter C_HAS_QDPO_RST bound to: 0 - type: integer 
+	Parameter C_HAS_QDPO_SRST bound to: 0 - type: integer 
+	Parameter C_HAS_QSPO bound to: 0 - type: integer 
+	Parameter C_HAS_QSPO_CE bound to: 0 - type: integer 
+	Parameter C_HAS_QSPO_RST bound to: 0 - type: integer 
+	Parameter C_HAS_QSPO_SRST bound to: 0 - type: integer 
+	Parameter C_HAS_SPO bound to: 1 - type: integer 
+	Parameter C_HAS_WE bound to: 0 - type: integer 
+	Parameter C_MEM_INIT_FILE bound to: resamplerTap6.mif - type: string 
+	Parameter C_ELABORATION_DIR bound to: ./ - type: string 
+	Parameter C_MEM_TYPE bound to: 0 - type: integer 
+	Parameter C_PIPELINE_STAGES bound to: 0 - type: integer 
+	Parameter C_QCE_JOINED bound to: 0 - type: integer 
+	Parameter C_QUALIFY_WE bound to: 0 - type: integer 
+	Parameter C_READ_MIF bound to: 1 - type: integer 
+	Parameter C_REG_A_D_INPUTS bound to: 0 - type: integer 
+	Parameter C_REG_DPRA_INPUT bound to: 0 - type: integer 
+	Parameter C_SYNC_ENABLE bound to: 1 - type: integer 
+	Parameter C_WIDTH bound to: 18 - type: integer 
+	Parameter C_PARSER_TYPE bound to: 1 - type: integer 
+INFO: [Synth 8-638] synthesizing module 'dist_mem_gen_v8_0_synth' [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0_vhsyn_rfs.vhd:2867]
+	Parameter C_FAMILY bound to: kintex7 - type: string 
+	Parameter C_ADDR_WIDTH bound to: 5 - type: integer 
+	Parameter C_DEFAULT_DATA bound to: 0 - type: string 
+	Parameter C_DEPTH bound to: 32 - type: integer 
+	Parameter C_HAS_CLK bound to: 0 - type: integer 
+	Parameter C_HAS_D bound to: 0 - type: integer 
+	Parameter C_HAS_DPO bound to: 0 - type: integer 
+	Parameter C_HAS_DPRA bound to: 0 - type: integer 
+	Parameter C_HAS_I_CE bound to: 0 - type: integer 
+	Parameter C_HAS_QDPO bound to: 0 - type: integer 
+	Parameter C_HAS_QDPO_CE bound to: 0 - type: integer 
+	Parameter C_HAS_QDPO_CLK bound to: 0 - type: integer 
+	Parameter C_HAS_QDPO_RST bound to: 0 - type: integer 
+	Parameter C_HAS_QDPO_SRST bound to: 0 - type: integer 
+	Parameter C_HAS_QSPO bound to: 0 - type: integer 
+	Parameter C_HAS_QSPO_CE bound to: 0 - type: integer 
+	Parameter C_HAS_QSPO_RST bound to: 0 - type: integer 
+	Parameter C_HAS_QSPO_SRST bound to: 0 - type: integer 
+	Parameter C_HAS_SPO bound to: 1 - type: integer 
+	Parameter C_HAS_WE bound to: 0 - type: integer 
+	Parameter C_MEM_INIT_FILE bound to: resamplerTap6.mif - type: string 
+	Parameter C_ELABORATION_DIR bound to: ./ - type: string 
+	Parameter C_MEM_TYPE bound to: 0 - type: integer 
+	Parameter C_PIPELINE_STAGES bound to: 0 - type: integer 
+	Parameter C_QCE_JOINED bound to: 0 - type: integer 
+	Parameter C_QUALIFY_WE bound to: 0 - type: integer 
+	Parameter C_READ_MIF bound to: 1 - type: integer 
+	Parameter C_REG_A_D_INPUTS bound to: 0 - type: integer 
+	Parameter C_REG_DPRA_INPUT bound to: 0 - type: integer 
+	Parameter C_SYNC_ENABLE bound to: 1 - type: integer 
+	Parameter C_WIDTH bound to: 18 - type: integer 
+	Parameter C_PARSER_TYPE bound to: 0 - type: integer 
+	Parameter c_addr_width bound to: 5 - type: integer 
+	Parameter c_depth bound to: 32 - type: integer 
+	Parameter c_width bound to: 18 - type: integer 
+	Parameter c_default_data bound to: 0 - type: string 
+	Parameter c_mem_init_file bound to: resamplerTap6.mif - type: string 
+	Parameter c_elaboration_dir bound to: ./ - type: string 
+	Parameter c_read_mif bound to: 1 - type: integer 
+	Parameter c_reg_a_d_inputs bound to: 0 - type: integer 
+	Parameter c_has_clk bound to: 0 - type: integer 
+	Parameter c_has_qspo_ce bound to: 0 - type: integer 
+	Parameter c_has_qspo_rst bound to: 0 - type: integer 
+	Parameter c_has_qspo_srst bound to: 0 - type: integer 
+	Parameter c_has_spo bound to: 1 - type: integer 
+	Parameter c_has_qspo bound to: 0 - type: integer 
+	Parameter c_sync_enable bound to: 1 - type: integer 
+	Parameter c_parser_type bound to: 0 - type: integer 
+INFO: [Synth 8-3491] module 'rom' declared at 'c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0_vhsyn_rfs.vhd:523' bound to instance 'rom_inst' of component 'rom' [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0_vhsyn_rfs.vhd:2888]
+INFO: [Synth 8-638] synthesizing module 'rom' [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0_vhsyn_rfs.vhd:551]
+	Parameter c_addr_width bound to: 5 - type: integer 
+	Parameter c_depth bound to: 32 - type: integer 
+	Parameter c_width bound to: 18 - type: integer 
+	Parameter c_default_data bound to: 0 - type: string 
+	Parameter c_mem_init_file bound to: resamplerTap6.mif - type: string 
+	Parameter c_elaboration_dir bound to: ./ - type: string 
+	Parameter c_read_mif bound to: 1 - type: integer 
+	Parameter c_reg_a_d_inputs bound to: 0 - type: integer 
+	Parameter c_has_clk bound to: 0 - type: integer 
+	Parameter c_has_qspo_ce bound to: 0 - type: integer 
+	Parameter c_has_qspo_rst bound to: 0 - type: integer 
+	Parameter c_has_qspo_srst bound to: 0 - type: integer 
+	Parameter c_has_spo bound to: 1 - type: integer 
+	Parameter c_has_qspo bound to: 0 - type: integer 
+	Parameter c_sync_enable bound to: 1 - type: integer 
+	Parameter c_parser_type bound to: 0 - type: integer 
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0_vhsyn_rfs.vhd:674]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0_vhsyn_rfs.vhd:678]
+INFO: [Synth 8-5534] Detected attribute (* rom_style = "distributed" *) [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0_vhsyn_rfs.vhd:745]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0_vhsyn_rfs.vhd:883]
+WARNING: [Synth 8-3848] Net qspo in module/entity rom does not have driver. [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0_vhsyn_rfs.vhd:548]
+INFO: [Synth 8-256] done synthesizing module 'rom' (1#1) [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0_vhsyn_rfs.vhd:551]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0_vhsyn_rfs.vhd:3054]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0_vhsyn_rfs.vhd:3060]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0_vhsyn_rfs.vhd:3065]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0_vhsyn_rfs.vhd:3071]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0_vhsyn_rfs.vhd:3077]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0_vhsyn_rfs.vhd:3082]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0_vhsyn_rfs.vhd:3087]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0_vhsyn_rfs.vhd:3092]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0_vhsyn_rfs.vhd:3100]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0_vhsyn_rfs.vhd:3105]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0_vhsyn_rfs.vhd:3113]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0_vhsyn_rfs.vhd:3118]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0_vhsyn_rfs.vhd:3126]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0_vhsyn_rfs.vhd:3134]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0_vhsyn_rfs.vhd:3142]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0_vhsyn_rfs.vhd:3147]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0_vhsyn_rfs.vhd:3152]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0_vhsyn_rfs.vhd:3157]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0_vhsyn_rfs.vhd:3165]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0_vhsyn_rfs.vhd:3170]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0_vhsyn_rfs.vhd:3179]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0_vhsyn_rfs.vhd:3184]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0_vhsyn_rfs.vhd:3189]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0_vhsyn_rfs.vhd:3194]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0_vhsyn_rfs.vhd:3199]
+WARNING: [Synth 8-3848] Net dpo in module/entity dist_mem_gen_v8_0_synth does not have driver. [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0_vhsyn_rfs.vhd:2859]
+WARNING: [Synth 8-3848] Net qdpo in module/entity dist_mem_gen_v8_0_synth does not have driver. [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0_vhsyn_rfs.vhd:2861]
+INFO: [Synth 8-256] done synthesizing module 'dist_mem_gen_v8_0_synth' (2#1) [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0_vhsyn_rfs.vhd:2867]
+WARNING: [Synth 8-3848] Net gnd_bus in module/entity dist_mem_gen_v8_0 does not have driver. [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0.vhd:214]
+WARNING: [Synth 8-3848] Net gnd in module/entity dist_mem_gen_v8_0 does not have driver. [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0.vhd:213]
+WARNING: [Synth 8-3848] Net vcc in module/entity dist_mem_gen_v8_0 does not have driver. [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0.vhd:215]
+INFO: [Synth 8-256] done synthesizing module 'dist_mem_gen_v8_0' (3#1) [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0.vhd:186]
+INFO: [Synth 8-256] done synthesizing module 'resamplerTap6' (4#1) [c:/modem/vivado/xc7k160t-IP/resamplerTap6/synth/resamplerTap6.vhd:66]
+---------------------------------------------------------------------------------
+Finished RTL Elaboration : Time (s): cpu = 00:00:06 ; elapsed = 00:00:07 . Memory (MB): peak = 287.738 ; gain = 111.395
+---------------------------------------------------------------------------------
+
+Report Check Netlist: 
++------+------------------+-------+---------+-------+------------------+
+|      |Item              |Errors |Warnings |Status |Description       |
++------+------------------+-------+---------+-------+------------------+
+|1     |multi_driven_nets |      0|        0|Passed |Multi driven nets |
++------+------------------+-------+---------+-------+------------------+
+WARNING: [Synth 8-3295] tying undriven pin \synth_options.dist_mem_inst :d[17] to constant 0 [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0.vhd:222]
+WARNING: [Synth 8-3295] tying undriven pin \synth_options.dist_mem_inst :d[16] to constant 0 [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0.vhd:222]
+WARNING: [Synth 8-3295] tying undriven pin \synth_options.dist_mem_inst :d[15] to constant 0 [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0.vhd:222]
+WARNING: [Synth 8-3295] tying undriven pin \synth_options.dist_mem_inst :d[14] to constant 0 [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0.vhd:222]
+WARNING: [Synth 8-3295] tying undriven pin \synth_options.dist_mem_inst :d[13] to constant 0 [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0.vhd:222]
+WARNING: [Synth 8-3295] tying undriven pin \synth_options.dist_mem_inst :d[12] to constant 0 [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0.vhd:222]
+WARNING: [Synth 8-3295] tying undriven pin \synth_options.dist_mem_inst :d[11] to constant 0 [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0.vhd:222]
+WARNING: [Synth 8-3295] tying undriven pin \synth_options.dist_mem_inst :d[10] to constant 0 [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0.vhd:222]
+WARNING: [Synth 8-3295] tying undriven pin \synth_options.dist_mem_inst :d[9] to constant 0 [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0.vhd:222]
+WARNING: [Synth 8-3295] tying undriven pin \synth_options.dist_mem_inst :d[8] to constant 0 [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0.vhd:222]
+WARNING: [Synth 8-3295] tying undriven pin \synth_options.dist_mem_inst :d[7] to constant 0 [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0.vhd:222]
+WARNING: [Synth 8-3295] tying undriven pin \synth_options.dist_mem_inst :d[6] to constant 0 [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0.vhd:222]
+WARNING: [Synth 8-3295] tying undriven pin \synth_options.dist_mem_inst :d[5] to constant 0 [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0.vhd:222]
+WARNING: [Synth 8-3295] tying undriven pin \synth_options.dist_mem_inst :d[4] to constant 0 [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0.vhd:222]
+WARNING: [Synth 8-3295] tying undriven pin \synth_options.dist_mem_inst :d[3] to constant 0 [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0.vhd:222]
+WARNING: [Synth 8-3295] tying undriven pin \synth_options.dist_mem_inst :d[2] to constant 0 [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0.vhd:222]
+WARNING: [Synth 8-3295] tying undriven pin \synth_options.dist_mem_inst :d[1] to constant 0 [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0.vhd:222]
+WARNING: [Synth 8-3295] tying undriven pin \synth_options.dist_mem_inst :d[0] to constant 0 [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0.vhd:222]
+WARNING: [Synth 8-3295] tying undriven pin \synth_options.dist_mem_inst :dpra[4] to constant 0 [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0.vhd:222]
+WARNING: [Synth 8-3295] tying undriven pin \synth_options.dist_mem_inst :dpra[3] to constant 0 [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0.vhd:222]
+WARNING: [Synth 8-3295] tying undriven pin \synth_options.dist_mem_inst :dpra[2] to constant 0 [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0.vhd:222]
+WARNING: [Synth 8-3295] tying undriven pin \synth_options.dist_mem_inst :dpra[1] to constant 0 [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0.vhd:222]
+WARNING: [Synth 8-3295] tying undriven pin \synth_options.dist_mem_inst :dpra[0] to constant 0 [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0.vhd:222]
+WARNING: [Synth 8-3295] tying undriven pin \synth_options.dist_mem_inst :clk to constant 0 [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0.vhd:222]
+WARNING: [Synth 8-3295] tying undriven pin \synth_options.dist_mem_inst :we to constant 0 [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0.vhd:222]
+WARNING: [Synth 8-3295] tying undriven pin \synth_options.dist_mem_inst :i_ce to constant 0 [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0.vhd:222]
+WARNING: [Synth 8-3295] tying undriven pin \synth_options.dist_mem_inst :qspo_ce to constant 0 [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0.vhd:222]
+WARNING: [Synth 8-3295] tying undriven pin \synth_options.dist_mem_inst :qdpo_ce to constant 0 [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0.vhd:222]
+WARNING: [Synth 8-3295] tying undriven pin \synth_options.dist_mem_inst :qdpo_clk to constant 0 [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0.vhd:222]
+WARNING: [Synth 8-3295] tying undriven pin \synth_options.dist_mem_inst :qspo_rst to constant 0 [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0.vhd:222]
+WARNING: [Synth 8-3295] tying undriven pin \synth_options.dist_mem_inst :qdpo_rst to constant 0 [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0.vhd:222]
+WARNING: [Synth 8-3295] tying undriven pin \synth_options.dist_mem_inst :qspo_srst to constant 0 [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0.vhd:222]
+WARNING: [Synth 8-3295] tying undriven pin \synth_options.dist_mem_inst :qdpo_srst to constant 0 [c:/modem/vivado/xc7k160t-IP/resamplerTap6/dist_mem_gen_v8_0/hdl/dist_mem_gen_v8_0.vhd:222]
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:06 ; elapsed = 00:00:07 . Memory (MB): peak = 287.738 ; gain = 111.395
+---------------------------------------------------------------------------------
+INFO: [Device 21-403] Loading part xc7k160tfbg676-1
+INFO: [Project 1-570] Preparing netlist for logic optimization
+
+Processing XDC Constraints
+Initializing timing engine
+Parsing XDC File [c:/modem/vivado/xc7k160t-IP/resamplerTap6/resamplerTap6_ooc.xdc] for cell 'U0'
+Finished Parsing XDC File [c:/modem/vivado/xc7k160t-IP/resamplerTap6/resamplerTap6_ooc.xdc] for cell 'U0'
+Parsing XDC File [C:/modem/vivado/xc7k160t-IP/managed_ip_project/managed_ip_project.runs/resamplerTap6_synth_1/dont_touch.xdc]
+Finished Parsing XDC File [C:/modem/vivado/xc7k160t-IP/managed_ip_project/managed_ip_project.runs/resamplerTap6_synth_1/dont_touch.xdc]
+Completed Processing XDC Constraints
+
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 517.988 ; gain = 0.000
+---------------------------------------------------------------------------------
+Finished Constraint Validation : Time (s): cpu = 00:00:12 ; elapsed = 00:00:14 . Memory (MB): peak = 517.988 ; gain = 341.645
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Loading Part and Timing Information
+---------------------------------------------------------------------------------
+Loading part: xc7k160tfbg676-1
+---------------------------------------------------------------------------------
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:12 ; elapsed = 00:00:14 . Memory (MB): peak = 517.988 ; gain = 341.645
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying 'set_property' XDC Constraints
+---------------------------------------------------------------------------------
+Applied set_property DONT_TOUCH = true for U0. (constraint file  C:/modem/vivado/xc7k160t-IP/managed_ip_project/managed_ip_project.runs/resamplerTap6_synth_1/dont_touch.xdc, line 9).
+---------------------------------------------------------------------------------
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:12 ; elapsed = 00:00:14 . Memory (MB): peak = 517.988 ; gain = 341.645
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:12 ; elapsed = 00:00:14 . Memory (MB): peak = 517.988 ; gain = 341.645
+---------------------------------------------------------------------------------
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+---------------------------------------------------------------------------------
+Start RTL Component Statistics 
+---------------------------------------------------------------------------------
+Detailed RTL Component Info : 
+---------------------------------------------------------------------------------
+Finished RTL Component Statistics 
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start RTL Hierarchical Component Statistics 
+---------------------------------------------------------------------------------
+Hierarchical RTL Component report 
+---------------------------------------------------------------------------------
+Finished RTL Hierarchical Component Statistics
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Part Resource Summary
+---------------------------------------------------------------------------------
+Part Resources:
+DSPs: 600 (col length:100)
+BRAMs: 650 (col length: RAMB18 100 RAMB36 50)
+---------------------------------------------------------------------------------
+Finished Part Resource Summary
+---------------------------------------------------------------------------------
+Start Parallel Synthesis Optimization  : Time (s): cpu = 00:00:12 ; elapsed = 00:00:14 . Memory (MB): peak = 517.988 ; gain = 341.645
+---------------------------------------------------------------------------------
+Start Cross Boundary Optimization
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Cross Boundary Optimization : Time (s): cpu = 00:00:13 ; elapsed = 00:00:14 . Memory (MB): peak = 517.988 ; gain = 341.645
+---------------------------------------------------------------------------------
+Finished Parallel Reinference  : Time (s): cpu = 00:00:13 ; elapsed = 00:00:14 . Memory (MB): peak = 517.988 ; gain = 341.645
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+---------------------------------------------------------------------------------
+Start ROM, RAM, DSP and Shift Register Reporting
+---------------------------------------------------------------------------------
+
+ROM:
++------------------+------------+---------------+----------------+
+|Module Name       | RTL Object | Depth x Width | Implemented As | 
++------------------+------------+---------------+----------------+
+|rom               | rom__1     | 32x18         | LUT            | 
+|dist_mem_gen_v8_0 | rom        | 32x18         | LUT            | 
++------------------+------------+---------------+----------------+
+
+---------------------------------------------------------------------------------
+Finished ROM, RAM, DSP and Shift Register Reporting
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Area Optimization
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Area Optimization : Time (s): cpu = 00:00:13 ; elapsed = 00:00:14 . Memory (MB): peak = 517.988 ; gain = 341.645
+---------------------------------------------------------------------------------
+Finished Parallel Area Optimization  : Time (s): cpu = 00:00:13 ; elapsed = 00:00:14 . Memory (MB): peak = 517.988 ; gain = 341.645
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+Finished Parallel Synthesis Optimization  : Time (s): cpu = 00:00:13 ; elapsed = 00:00:14 . Memory (MB): peak = 517.988 ; gain = 341.645
+---------------------------------------------------------------------------------
+Start Timing Optimization
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying XDC Timing Constraints
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:23 ; elapsed = 00:00:24 . Memory (MB): peak = 557.605 ; gain = 381.262
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Timing Optimization : Time (s): cpu = 00:00:23 ; elapsed = 00:00:24 . Memory (MB): peak = 557.605 ; gain = 381.262
+---------------------------------------------------------------------------------
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+---------------------------------------------------------------------------------
+Start Technology Mapping
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Technology Mapping : Time (s): cpu = 00:00:23 ; elapsed = 00:00:24 . Memory (MB): peak = 567.234 ; gain = 390.891
+---------------------------------------------------------------------------------
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+---------------------------------------------------------------------------------
+Start IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished IO Insertion : Time (s): cpu = 00:00:23 ; elapsed = 00:00:24 . Memory (MB): peak = 567.234 ; gain = 390.891
+---------------------------------------------------------------------------------
+
+Report Check Netlist: 
++------+------------------+-------+---------+-------+------------------+
+|      |Item              |Errors |Warnings |Status |Description       |
++------+------------------+-------+---------+-------+------------------+
+|1     |multi_driven_nets |      0|        0|Passed |Multi driven nets |
++------+------------------+-------+---------+-------+------------------+
+---------------------------------------------------------------------------------
+Start Renaming Generated Instances
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:23 ; elapsed = 00:00:24 . Memory (MB): peak = 567.234 ; gain = 390.891
+---------------------------------------------------------------------------------
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+---------------------------------------------------------------------------------
+Start Rebuilding User Hierarchy
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:23 ; elapsed = 00:00:24 . Memory (MB): peak = 567.234 ; gain = 390.891
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Ports : Time (s): cpu = 00:00:23 ; elapsed = 00:00:24 . Memory (MB): peak = 567.234 ; gain = 390.891
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:23 ; elapsed = 00:00:24 . Memory (MB): peak = 567.234 ; gain = 390.891
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Writing Synthesis Report
+---------------------------------------------------------------------------------
+
+Report BlackBoxes: 
++-+--------------+----------+
+| |BlackBox name |Instances |
++-+--------------+----------+
++-+--------------+----------+
+
+Report Cell Usage: 
++------+-----+------+
+|      |Cell |Count |
++------+-----+------+
+|1     |LUT1 |     1|
+|2     |LUT5 |    15|
++------+-----+------+
+
+Report Instance Areas: 
++------+---------+------------------+------+
+|      |Instance |Module            |Cells |
++------+---------+------------------+------+
+|1     |top      |                  |    16|
+|2     |  U0     |dist_mem_gen_v8_0 |    16|
++------+---------+------------------+------+
+---------------------------------------------------------------------------------
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:23 ; elapsed = 00:00:24 . Memory (MB): peak = 567.234 ; gain = 390.891
+---------------------------------------------------------------------------------
+Synthesis finished with 0 errors, 0 critical warnings and 0 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:13 ; elapsed = 00:00:17 . Memory (MB): peak = 567.234 ; gain = 131.617
+Synthesis Optimization Complete : Time (s): cpu = 00:00:23 ; elapsed = 00:00:25 . Memory (MB): peak = 567.234 ; gain = 390.891
+INFO: [Project 1-571] Translating synthesized netlist
+INFO: [Project 1-570] Preparing netlist for logic optimization
+Parsing XDC File [c:/modem/vivado/xc7k160t-IP/resamplerTap6/resamplerTap6_ooc.xdc] for cell 'U0'
+Finished Parsing XDC File [c:/modem/vivado/xc7k160t-IP/resamplerTap6/resamplerTap6_ooc.xdc] for cell 'U0'
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+INFO: [Common 17-83] Releasing license: Synthesis
+23 Infos, 72 Warnings, 0 Critical Warnings and 0 Errors encountered.
+synth_design completed successfully
+synth_design: Time (s): cpu = 00:00:23 ; elapsed = 00:00:24 . Memory (MB): peak = 567.234 ; gain = 361.867
+report_utilization: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.050 . Memory (MB): peak = 567.234 ; gain = 0.000
+INFO: [Common 17-206] Exiting Vivado at Thu May 28 15:19:22 2015...

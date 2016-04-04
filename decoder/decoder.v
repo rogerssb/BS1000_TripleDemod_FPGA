@@ -15,6 +15,9 @@ module decoder
   (
   rs,
   en,
+  `ifdef USE_BUS_CLOCK
+  busClk,
+  `endif
   wr0,wr1,
   addr,
   din,
@@ -34,6 +37,9 @@ module decoder
   );
 
 input rs,en,wr0,wr1;
+`ifdef USE_BUS_CLOCK
+input   busClk;
+`endif
 input clk,symb_clk_en,symb_clk_2x_en;
 input [12:0]addr;
 input [15:0]din;
@@ -289,8 +295,10 @@ assign dout_q = data_inv_q ;
 //------------------------------------------------------------------------------
 
 wire [15:0]regs_q;
-decoder_regs decoder_regs
-  (
+decoder_regs decoder_regs(
+    `ifdef USE_BUS_CLOCK
+    .busClk(busClk),
+    `endif
   .wr0(wr0),
   .wr1(wr1),
   .a(addr),
@@ -317,68 +325,8 @@ assign {
 
 endmodule
 
-/*
-//------------------------------------------------------------------------------
-//                                Peak detection
-//------------------------------------------------------------------------------
+`ifdef TEST_MODULE
 
-reg decayDelayed,decayPulse;
-always @(posedge clk) begin
-    decayDelayed <= decay;
-    decayPulse <= decay & ! decayDelayed;
-end
-PeakDetect PeakI(rs, clk, decayPulse, I_Video, posPeakI, negPeakI);
-PeakDetect PeakQ(rs, clk, decayPulse, Q_Video, posPeakQ, negPeakQ);
-
-//------------------------------------------------------------------------------
-//                             Signal Quality
-//------------------------------------------------------------------------------
-
-`ifdef ARTM_SIGQUAL
-
-// Create a signal quality metric from the iEnd/qEnd samples from the DCL
-
-reg [6:0]iEndSample,qEndSample;
-reg [6:0]iEndSat,qEndSat;
-always @(posedge symb_clk) begin
-    iEndSample <= iEnd;
-    qEndSample <= qEnd;
-end
-// wire    hold = (en && ((addr == `BS_POSPEAKI) || (addr == `BS_POSPEAKI)));
-
-wire [7:0] meanI, meanQ;
-
-dualRail dualRail(symb_clk, rs, sig_qual_hold, /*hold,asterisk_here/ demodLock, bitSyncLock,
-                tolerance, iEndSample, qEndSample, ck_45M, serialOut,
-                interiorCount,exteriorCount,
-                meanI,meanQ);
-
-assign sigQualData = 8'h00; // VS
-
-`else
-// define iEnd and qEnd, bitSyncLock and serialOut as outputs just to show up in UCF file
-wire    serialOut = ((|iEnd) | (|qEnd)), bitSyncLock = 1'b1;
-
-// Create a signal quality metric from the ADC samples
-
-reg [5:0]adcI;
-reg [4:0]absI;
-always @(posedge clk) begin
-    adcI <= I_ADC;
-    if (adcI[5]) begin
-        absI = adcI[4:0];
-    end
-    else begin
-        absI = ~adcI[4:0];
-    end
-end
-sigQual sigQual(clk,rs,absI,sigQualData);
-
-`endif
-*/
-
-
-/*
 module decoder_test;
 
 reg rs,en,wr0,wr1;
@@ -451,4 +399,5 @@ always @(posedge clk or posedge rs)begin
 end
 
 endmodule
-*/
+
+`endif

@@ -54,11 +54,13 @@ always @(posedge fb_clk) begin
     end
 
 reg cs;
+reg wr;
 reg rd;
 reg wr0,wr1,wr2,wr3;
 always @(posedge fb_clk) begin
     cs <= !fb_csn;
-    if (!fb_csn && !fb_wrn) begin
+    wr <= !fb_wrn;
+    if (cs && wr) begin
         wr0 <= !fb_ad[1];
         wr1 <= !fb_ad[1];
         wr2 <=  fb_ad[1];

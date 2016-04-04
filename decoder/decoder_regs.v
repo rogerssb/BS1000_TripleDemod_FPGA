@@ -40,7 +40,7 @@ input [15:0]d;
 output [15:0]q;
 reg [15:0]q;
 
-`ifdef USE_BUS_CLK
+`ifdef USE_BUS_CLOCK
     always @(posedge busClk) begin
         if(en && wr0) begin
             casex (a)

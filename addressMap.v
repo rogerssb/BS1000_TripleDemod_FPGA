@@ -40,9 +40,8 @@
 `define VIDFIR1SPACE        13'b0_00xx_0101_xxxx
 `define INTERP2SPACE        13'b0_00xx_0110_xxxx
 `define VIDFIR2SPACE        13'b0_00xx_0111_xxxx
-`define CH0_DECODERSPACE    13'b0_00xx_1000_xxxx
+`define DUAL_DECODERSPACE   13'b0_00xx_1000_xxxx
 `define CH1_DECODERSPACE    13'b0_00xx_1001_xxxx
-`define DUAL_DECODERSPACE   13'b0_00xx_1010_xxxx
 
 `define PLLSPACE            13'b0_00xx_11xx_xxxx
 
@@ -93,14 +92,15 @@
 `define SINGLE_TEST_LENGTH      13'bx_xxxx_x010_10xx
 `define SINGLE_TEST_ERRORS      13'bx_xxxx_x010_11xx
 `define CONTINUOUS_TEST_ERRORS  13'bx_xxxx_x011_00xx
-`define TEST_CONTROL            13'bx_xxxx_x011_01xx
-`define PNGEN_POLY              13'bx_xxxx_x011_10xx
+`define CONTINUOUS_TEST_BITS    13'bx_xxxx_x011_01xx
+`define TEST_CONTROL            13'bx_xxxx_x011_10xx
 
 
 // Framesync subsystem registers
 
 // PN Generator subsystem registers
 
+`define PNGEN_POLY              13'bx_xxxx_x011_11xx
 
 // Define the system top level memory map
 `define SYS_RESET           13'bx_xxxx_xxx0_000x
@@ -129,10 +129,10 @@
 
 // Define bitsyncTopRegs memory map
 `define BS_TOP_CONTROL          13'bx_xxxx_xxx0_00xx
-`define MODE_SINGLE_CH              2'b00
-`define MODE_IND_CH                 2'b01
-`define MODE_DUAL_CH                2'b10
-`define MODE_OFFSET_CH              2'b11
+    `define BS_MODE_SINGLE_CH       2'b00
+    `define BS_MODE_IND_CH          2'b01
+    `define BS_MODE_DUAL_CH         2'b10
+    `define BS_MODE_OFFSET_CH       2'b11
 `define BS_TOP_CH0_CONTROL      13'bx_xxxx_xxx0_01xx
 `define BS_TOP_CH1_CONTROL      13'bx_xxxx_xxx0_10xx
 `define BS_DAC_ADC                  4'b0000
@@ -226,9 +226,6 @@
 `define MODE_MULTIH         5'b01010
 `define MODE_AUQPSK         5'b01011
 `define MODE_UQPSK          5'b01100
-`define MODE_SINGLE_RAIL    2'b00
-`define MODE_DUAL_RAIL      2'b01
-`define MODE_IND_RAIL       2'b10
 `define DEMOD_DACSELECT 13'bx_xxxx_xxx0_01xx
 `define DAC_I               4'b0000
 `define DAC_Q               4'b0001

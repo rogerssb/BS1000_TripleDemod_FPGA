@@ -21,7 +21,7 @@
    </includedirs>
    <analyzer>
     <views>
-     <view value="2645.655 ns,4868.551 ns,38.964 ns,4003.551 ns,1676.273 ns" name="Last" />
+     <view value="26773.475 ns,30214.788 ns,60.321 ns,16634.971 ns,19480.426 ns" name="Last" />
     </views>
     <settings>
      <setting value="163" name="C0Width" />
@@ -71,6 +71,13 @@
        <signal interpolate="Step" radix="Real" name="dfOutReal" scope="test.bitsyncTop.df0" />
        <signal interpolate="Step" radix="Real" name="ch0MFReal" scope="test.bitsyncTop.dualBitsync" />
        <signal interpolate="Step" radix="Real" name="ch0SymDataReal" scope="test.bitsyncTop.dualBitsync" />
+       <signal name="hb0ClkEnOut" scope="test.bitsyncTop.df0" />
+       <signal name="cicClkEnOut" scope="test.bitsyncTop.df0" />
+       <signal name="hb1ClkEnOut" scope="test.bitsyncTop.df0" />
+       <signal name="hb0ClkEnOut" scope="test.bitsyncTop.df1" />
+       <signal name="cicClkEnOut" scope="test.bitsyncTop.df1" />
+       <signal name="hb1ClkEnOut" scope="test.bitsyncTop.df1" />
+       <signal name="dfSyncReset" scope="test.bitsyncTop" />
       </signals>
      </group>
      <group open="no" name="RESAMPLER" show="yes" >
@@ -136,7 +143,7 @@
        <signal name="CS0n" scope="test.dacInterface" />
       </signals>
      </group>
-     <group open="yes" name="MICRO" show="yes" >
+     <group open="no" name="MICRO" show="yes" >
       <signals>
        <signal name="a[12:0]" scope="test" />
        <signal name="d[31:0]" scope="test" />
@@ -146,7 +153,7 @@
        <signal name="we0" scope="test" />
       </signals>
      </group>
-     <group open="yes" name="ICS307" show="yes" >
+     <group open="no" name="ICS307" show="yes" >
       <signals>
        <signal name="busClk" scope="test.pllIntfc" />
        <signal name="SDI" scope="test.pllIntfc" />
@@ -163,11 +170,29 @@
        <signal name="xferDone" scope="test.pllIntfc" />
       </signals>
      </group>
+     <group open="yes" name="LOCK" show="yes" >
+      <signals>
+       <signal interpolate="Step" radix="Real" name="ch0SymDataReal" scope="test.bitsyncTop.dualBitsync" />
+       <signal name="ch0SymData[17:0]" scope="test.bitsyncTop.dualBitsync" />
+       <signal name="ch1SymData[17:0]" scope="test.bitsyncTop.dualBitsync" />
+       <signal name="timingErrorI[17:0]" scope="test.bitsyncTop.dualBitsync" />
+       <signal name="timingErrorQ[17:0]" scope="test.bitsyncTop.dualBitsync" />
+       <signal name="transitionI" scope="test.bitsyncTop.dualBitsync" />
+       <signal name="transitionQ" scope="test.bitsyncTop.dualBitsync" />
+       <signal radix="Wave" name="slipErrorI[17:0]" scope="test.bitsyncTop.dualBitsync" />
+       <signal name="slipErrorQ[17:0]" scope="test.bitsyncTop.dualBitsync" />
+       <signal name="slipError[17:0]" scope="test.bitsyncTop.dualBitsync" />
+       <signal name="avgError[21:0]" scope="test.bitsyncTop.dualBitsync" />
+       <signal name="avgSlipError[21:0]" scope="test.bitsyncTop.dualBitsync" />
+       <signal name="slipState[1:0]" scope="test.bitsyncTop.dualBitsync" />
+       <signal name="ch0LockCounter[15:0]" scope="test.bitsyncTop.dualBitsync" />
+      </signals>
+     </group>
     </groups>
    </analyzer>
    <explorer>
     <settings>
-     <setting value="test.pllIntfc" name="Scope" />
+     <setting value="test.bitsyncTop.dualBitsync.[17:0]slipError" name="Scope" />
     </settings>
    </explorer>
    <sourcefiles>
@@ -212,8 +237,6 @@
     <file name="pcmAgcLoopRegs.v" />
     <file name="mcp48xxInterface.v" />
     <file name="log2.v" />
-    <file name="ics307Interface.v" />
-    <file name=".\xc7k160t-IP\jitterFifo\sim\jitterFifo.v" />
    </sourcefiles>
   </product>
  </products>

@@ -55,6 +55,7 @@ module bitsyncTop(
     eyeClkEn,
     iEye,qEye,
     eyeOffset,
+    asyncMode,
     test0,test1
     );
 
@@ -106,6 +107,7 @@ output          [17:0]  ch1Offset;
 output                  eyeClkEn;
 output          [17:0]  iEye,qEye;
 output          [4:0]   eyeOffset;
+output                  asyncMode;
 output                  test0,test1;
 
 
@@ -156,8 +158,8 @@ bitsyncTopRegs bitsyncTopRegs(
     .ch1DCTest(ch1DCTest)
     );
 
-wire    asyncMode = (bitsyncMode == `MODE_IND_CH)
-                 || (bitsyncMode == `MODE_SINGLE_CH);
+assign  asyncMode = (bitsyncMode == `BS_MODE_IND_CH)
+                 || (bitsyncMode == `BS_MODE_SINGLE_CH);
 
 /******************************************************************************
                           DC Offset Removal Loop Filter
@@ -197,8 +199,9 @@ always @* ch0DCReal = $itor(ch0Offset)/(2**17);
 ******************************************************************************/
 wire    [17:0]  df0Out;
 wire    [31:0]  df0Dout;
+reg             dfSyncReset;
 decimatingFilter #(.RegSpace(`CH0_DFSPACE), .FirSpace(`CH0_DFFIRSPACE)) df0(
-    .clk(clk), .clkEn(clkEn), .reset(reset),
+    .clk(clk), .clkEn(clkEn), .reset(reset | dfSyncReset),
     `ifdef USE_BUS_CLOCK
     .busClk(busClk),
     `endif
@@ -214,7 +217,7 @@ decimatingFilter #(.RegSpace(`CH0_DFSPACE), .FirSpace(`CH0_DFFIRSPACE)) df0(
 wire    [17:0]  df1Out;
 wire    [31:0]  df1Dout;
 decimatingFilter #(.RegSpace(`CH1_DFSPACE), .FirSpace(`CH1_DFFIRSPACE)) df1(
-    .clk(clk), .clkEn(clkEn), .reset(reset),
+    .clk(clk), .clkEn(clkEn), .reset(reset | dfSyncReset),
     `ifdef USE_BUS_CLOCK
     .busClk(busClk),
     `endif
@@ -227,7 +230,20 @@ decimatingFilter #(.RegSpace(`CH1_DFSPACE), .FirSpace(`CH1_DFFIRSPACE)) df1(
     .dfOut(df1Out)
     );
 
-
+    // If in synchronous modes, make sure the clock enables are aligned
+    always @(posedge clk) begin
+        if (!asyncMode) begin
+            if ((df0ClkEn ^ df1ClkEn) && !dfSyncReset) begin
+                dfSyncReset <= 1;
+            end
+            else begin
+                dfSyncReset <= 0;
+            end
+        end
+        else begin
+            dfSyncReset <= 0;
+        end
+    end
 /******************************************************************************
                                   Resamplers
 ******************************************************************************/
@@ -270,7 +286,7 @@ resampler ch0Resamp(
 reg ch1ResampSpace;
 always @* begin
     casex(addr)
-        `CH0_RESAMPSPACE:   ch1ResampSpace = 1;
+        `CH1_RESAMPSPACE:   ch1ResampSpace = 1;
         default:            ch1ResampSpace = 0;
         endcase
     end
@@ -619,7 +635,7 @@ always @* begin
         endcase
     end
 
-assign test0 = 1'b0;
-assign test1 = 1'b0;
+assign test0 = resamp0ClkEn;
+assign test1 = resamp1ClkEn;
 
 endmodule

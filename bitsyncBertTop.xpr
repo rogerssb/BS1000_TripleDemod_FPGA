@@ -358,17 +358,24 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/xc7k160t-IP/jitterFifo/jitterFifo.dcp">
-        <FileInfo>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-        </FileInfo>
-      </File>
       <File Path="$PPRDIR/ics307Interface.v">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PPRDIR/decoder/decoder.v">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PPRDIR/xc7k160t-IP/jitterFifo/jitterFifo.dcp">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
         </FileInfo>
       </File>
       <File Path="$PPRDIR/defines.v">
@@ -525,15 +532,16 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/xc7k160t-IP/jitterFifo/jitterFifo_funcsim.v">
+      <File Path="$PPRDIR/testBitsync.v">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/testBitsync.v">
+      <File Path="$PPRDIR/xc7k160t-IP/jitterFifo/jitterFifo_funcsim.v">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
@@ -616,7 +624,7 @@
         <Step Id="phys_opt_design"/>
         <Step Id="route_design"/>
         <Step Id="post_route_phys_opt_design"/>
-        <Step Id="write_bitstream"/>
+        <Step Id="write_bitstream" PostStepTclHook="$PPRDIR/buildMcs.tcl"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
     </Run>
