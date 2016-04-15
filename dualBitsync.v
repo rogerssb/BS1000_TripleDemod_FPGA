@@ -683,8 +683,8 @@ always @(posedge sampleClk) begin
 assign ch0Sym2xEn = ch0ClkEn;
 assign ch0SymEn = ch0ClkEn & !timingErrorEn;
 assign ch0SymClk = timingErrorEn;
-assign ch1Sym2xEn = asyncEnable ? ch1ClkEn : ch0ClkEn;
-assign ch1SymEn = asyncEnable ? (ch1ClkEn & !asyncTimingErrorEn) : (ch0ClkEn & !timingErrorEn);
+assign ch1Sym2xEn = ch1ClkEn;
+assign ch1SymEn = ch1ClkEn & !asyncTimingErrorEn;
 assign ch1SymClk = asyncTimingErrorEn;
 
 

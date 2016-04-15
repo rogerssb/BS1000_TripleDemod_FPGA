@@ -4,6 +4,7 @@
 `define ENABLE_AGC
 //`define ADD_FIFOS
 //`define MATLAB_VECTORS
+`define ADD_BERT_TEST
 
 module test;
 
@@ -145,27 +146,16 @@ always @(posedge clk or posedge reset) begin
     end
 
 // Random data
-parameter PN17 = 16'h008e,
-          MASK17 = 16'h00ff;
+parameter PN17 = 16'h00b8,
+          MASK17 = 16'h0099;
 reg [15:0]sr;
-reg [4:0]zeroCount;
 reg  randData;
 always @(posedge clk or posedge reset) begin
     if (reset) begin
-        zeroCount <= 5'b0;
         sr <= MASK17;
         end
     else if (modBitEn) begin
-        if (sr[0] | (zeroCount == 5'b11111))
-            begin
-            zeroCount <= 5'h0;
-            sr <= {1'b0, sr[15:1]} ^ PN17;
-            end
-        else
-            begin
-            zeroCount <= zeroCount + 5'h1;
-            sr <= sr >> 1;
-            end
+        sr <= {sr[14:0], ^(PN17 & sr)};
         randData <= sr[0];
         end
     end
@@ -231,8 +221,9 @@ always @* rxInputReal = $itor($signed(rxInput))/(2**17);
 
 
 /******************************************************************************
-                            Instantiate the Demod
+                            Instantiate the Bitsync
 ******************************************************************************/
+
 wire    [17:0]  dac0Out,dac1Out,dac2Out;
 wire    [17:0]  iSymData,qSymData;
 wire    [17:0]  ch0Offset;
@@ -418,6 +409,32 @@ mcp48xxInterface dacInterface (
     `endif //NEW_FIFO
     `endif
 
+
+    `ifdef ADD_BERT_TEST
+    reg bertSpace;
+    always @* begin
+        casex(a)
+            `BERT_SPACE:            bertSpace = 1;
+            default:                bertSpace = 0;
+            endcase
+        end
+
+    reg bertReset;
+    initial bertReset = 0;
+    bert_top bert(          
+        .busClk(bc),
+        .cs(bertSpace),
+        .addr(a),
+        .dataIn(d),
+        .dataOut(),
+        .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
+        .reset(reset | bertReset),
+        .clk(clk),
+        .dclk(pll0_OUT1),
+        .din(ch0DataOut)
+    );
+
+    `endif
 
 `ifdef MATLAB_VECTORS
 /******************************************************************************
@@ -701,6 +718,17 @@ initial begin
     write32(createAddress(`INTERP2SPACE, `INTERP_EXPONENT), 8);
     write32(createAddress(`INTERP2SPACE, `INTERP_MANTISSA), 32'h00012000);
 
+    `ifdef ADD_BERT_TEST
+    write32(createAddress(`BERT_SPACE,`BERT_POLY), 32'h080000b8);
+    write16(createAddress(`BERT_SPACE,`POLARITY_THRESHOLD), 32'd64);
+    write16(createAddress(`BERT_SPACE,`SLIP_LIMIT), 32'd30);
+    write16(createAddress(`BERT_SPACE,`SLIP_THRESHOLD), 32'd20);
+    write16(createAddress(`BERT_SPACE,`SLIP_RECOVERY), 32'd4);
+    write16(createAddress(`BERT_SPACE,`SYNC_THRESHOLD), 32'd120);
+    write32(createAddress(`BERT_SPACE,`SINGLE_TEST_LENGTH), 32'd5000);
+    write32(createAddress(`BERT_SPACE,`TEST_CONTROL), 32'h0);
+    `endif
+
     reset = 1;
     #(2*C) ;
     reset = 0;
@@ -757,13 +785,23 @@ initial begin
     write32(createAddress(`INTERP1SPACE, `INTERP_CONTROL), 32'h8);
     write32(createAddress(`INTERP2SPACE, `INTERP_CONTROL), 32'h8);
 
+    `ifdef ADD_BERT_TEST
+    bertReset = 1;
+    #(2*bitrateSamplesInt*C) ;
+    bertReset = 0;
+
+    #(2*40*bitrateSamplesInt*C) ;
+
+    write32(createAddress(`BERT_SPACE,`TEST_CONTROL), 32'h4);
+    #(2*bitrateSamplesInt*C) ;
+    write32(createAddress(`BERT_SPACE,`TEST_CONTROL), 32'h0);
+    `endif
+
     #(2*100*bitrateSamplesInt*C) ;
     `ifdef MATLAB_VECTORS
     $fclose(outfile);
     `endif
     $stop;
-
-    write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h001e0018);    
 
     end
 

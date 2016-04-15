@@ -25,6 +25,7 @@
 `define USE_BUS_CLOCK
 `define DF_CIC_COMP_USE_MPY
 `define BS_CIC_COMP_USE_MPY
+`define ADD_BERT
 `endif
 
 
@@ -84,21 +85,23 @@
 `define BERT_SPACE              13'b1_00xx_xxxx_xxxx
 
 `define BERT_POLY               13'bx_xxxx_x000_00xx
-`define POLARITY_HYSTERESIS     13'bx_xxxx_x001_01xx
-`define SLIP_LIMIT              13'bx_xxxx_x001_10xx
-`define SLIP_THRESHOLD          13'bx_xxxx_x001_11xx
-`define SLIP_RECOVERY           13'bx_xxxx_x010_00xx
-`define SYNC_THRESHOLD          13'bx_xxxx_x010_01xx
-`define SINGLE_TEST_LENGTH      13'bx_xxxx_x010_10xx
-`define SINGLE_TEST_ERRORS      13'bx_xxxx_x010_11xx
-`define CONTINUOUS_TEST_ERRORS  13'bx_xxxx_x011_00xx
-`define CONTINUOUS_TEST_BITS    13'bx_xxxx_x011_01xx
-`define TEST_CONTROL            13'bx_xxxx_x011_10xx
+`define POLARITY_THRESHOLD      13'bx_xxxx_x000_01xx
+`define SLIP_LIMIT              13'bx_xxxx_x000_10xx
+`define SLIP_THRESHOLD          13'bx_xxxx_x000_11xx
+`define SLIP_RECOVERY           13'bx_xxxx_x001_00xx
+`define SYNC_THRESHOLD          13'bx_xxxx_x001_01xx
+`define SINGLE_TEST_LENGTH      13'bx_xxxx_x001_10xx
+`define SINGLE_TEST_ERRORS      13'bx_xxxx_x001_11xx
+`define SINGLE_TEST_COUNT       13'bx_xxxx_x010_00xx
+`define CONTINUOUS_TEST_ERRORS  13'bx_xxxx_x010_01xx
+`define CONTINUOUS_TEST_COUNT   13'bx_xxxx_x010_10xx
+`define TEST_CONTROL            13'bx_xxxx_x010_11xx
 
 
 // Framesync subsystem registers
 
 // PN Generator subsystem registers
+`define PNGEN_SPACE             13'b1_01xx_xxxx_xxxx
 
 `define PNGEN_POLY              13'bx_xxxx_x011_11xx
 
@@ -121,8 +124,8 @@
     `define SYS_OUTPUT_SEL_CH0_PCM  4'b0001
     `define SYS_OUTPUT_SEL_CH1_BS   4'b0010
     `define SYS_OUTPUT_SEL_CH1_PCM  4'b0011
-    `define SYS_OUTPUT_SEL_DUAL_BS  4'b0100
-    `define SYS_OUTPUT_SEL_DUAL_PCM 4'b0101
+    `define SYS_OUTPUT_SEL_SINGLE   4'b0100
+    `define SYS_OUTPUT_SEL_DIFF     4'b0101
     `define SYS_OUTPUT_SEL_PNGEN    4'b0110
     `define SYS_OUTPUT_SEL_FS       4'b0111
 `define SYS_BERT_MUX_SEL    13'bx_xxxx_xxx1_11xx

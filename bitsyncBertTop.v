@@ -14,6 +14,8 @@ module bitsyncBertTop (
     adc0, adc0_overflow,
     adc1, adc1_overflow,
     adc01_powerDown,
+    singleEndedClk, singleEndedData,
+    differentialClk, differentialData,
     dac_rst,
     dac_sclk,
     dac_sdio,
@@ -49,259 +51,265 @@ module bitsyncBertTop (
     pll2_REF,
     pll2_OUT1,
     pll2_PWDn
-    );
+);
 
-input           sysClk;
+    input           sysClk;
 
-// Flexbus connections
-input           fbClk;
-input           fb_ale;
-input           fb_csn;
-input           fb_oen;
-input           fb_wrn;
-input   [15:0]  fb_addr;
-inout   [15:0]  fb_data;
+    // Flexbus connections
+    input           fbClk;
+    input           fb_ale;
+    input           fb_csn;
+    input           fb_oen;
+    input           fb_wrn;
+    input   [15:0]  fb_addr;
+    inout   [15:0]  fb_data;
 
-// ADC Inputs
-input   [13:0]  adc0;
-input           adc0_overflow;
-input   [13:0]  adc1;
-input           adc1_overflow;
-output          adc01_powerDown;
+    // ADC Inputs
+    input   [13:0]  adc0;
+    input           adc0_overflow;
+    input   [13:0]  adc1;
+    input           adc1_overflow;
+    output          adc01_powerDown;
 
-// DAC configuration interface
-output          dac_rst;
-output          dac_sclk;
-inout           dac_sdio;
-output          dac0_nCs;
-output          dac1_nCs;
-output          dac2_nCs;
+    // Clock and data inputs
+    input           singleEndedClk;
+    input           singleEndedData;
+    input           differentialClk;
+    input           differentialData;
 
-// DAC datapath interface
-output  [13:0]  dac0_d,dac1_d,dac2_d;
-output          dac0_clk,dac1_clk,dac2_clk;
+    // DAC configuration interface
+    output          dac_rst;
+    output          dac_sclk;
+    inout           dac_sdio;
+    output          dac0_nCs;
+    output          dac1_nCs;
+    output          dac2_nCs;
 
-// Clock and data outputs
-output          bsClkOut,bsDataOut;
-output          fsClkOut,fsDataOut;
-output          encClkOut,encDataOut;
-output          bsDiffClkOut, bsDiffDataOut;
-output          fsDiffClkOut, fsDiffDataOut;
+    // DAC datapath interface
+    output  [13:0]  dac0_d,dac1_d,dac2_d;
+    output          dac0_clk,dac1_clk,dac2_clk;
 
-// Lock indicators
-output          ch0Lockn, ch1Lockn;
+    // Clock and data outputs
+    output          bsClkOut,bsDataOut;
+    output          fsClkOut,fsDataOut;
+    output          encClkOut,encDataOut;
+    output          bsDiffClkOut, bsDiffDataOut;
+    output          fsDiffClkOut, fsDiffDataOut;
 
-// Gain and Offset DAC interfaces
-output          ch0SELn, ch1SELn;
-output          dacSCLK, dacMOSI;
+    // Lock indicators
+    output          ch0Lockn, ch1Lockn;
 
-// Input Impedance and Topology controls
-output          ch0HighImpedance;
-output          ch0SingleEnded;
-output          ch1HighImpedance;
-output          ch1SingleEnded;
+    // Gain and Offset DAC interfaces
+    output          ch0SELn, ch1SELn;
+    output          dacSCLK, dacMOSI;
 
-// PLL Interface Signals
-output          pll_SCK;
-output          pll_SDI;
-output          pll0_CS;
-output          pll0_REF;
-input           pll0_OUT1;
-output          pll0_PWDn;
-output          pll1_CS;
-output          pll1_REF;
-input           pll1_OUT1;
-output          pll1_PWDn;
-output          pll2_CS;
-output          pll2_REF;
-input           pll2_OUT1;
-output          pll2_PWDn;
+    // Input Impedance and Topology controls
+    output          ch0HighImpedance;
+    output          ch0SingleEnded;
+    output          ch1HighImpedance;
+    output          ch1SingleEnded;
 
-parameter VER_NUMBER = 16'd422;
+    // PLL Interface Signals
+    output          pll_SCK;
+    output          pll_SDI;
+    output          pll0_CS;
+    output          pll0_REF;
+    input           pll0_OUT1;
+    output          pll0_PWDn;
+    output          pll1_CS;
+    output          pll1_REF;
+    input           pll1_OUT1;
+    output          pll1_PWDn;
+    output          pll2_CS;
+    output          pll2_REF;
+    input           pll2_OUT1;
+    output          pll2_PWDn;
+
+    parameter VER_NUMBER = 16'd422;
 
 
 //******************************************************************************
 //                          Clock Distribution
 //******************************************************************************
-systemClock systemClock (
-    .clk_in1(sysClk),
-    .clk_out1(clk),
-    .locked(clkLocked)
- );
+    systemClock systemClock (
+        .clk_in1(sysClk),
+        .clk_out1(clk),
+        .locked(clkLocked)
+     );
 
-flexbusClock flexbusClock (
-    .clk_in1(fbClk),
-    .clk_out1(fb_clk),
-    .locked(fbClkLocked)
-);
+    flexbusClock flexbusClock (
+        .clk_in1(fbClk),
+        .clk_out1(fb_clk),
+        .locked(fbClkLocked)
+    );
 
 
 
 /******************************************************************************
                              Bus Interface
 ******************************************************************************/
-wire    [12:0]  addr;
-wire    [31:0]  dataIn;
-flexbus flexbus(
-    .fb_clk(fb_clk),
-    .fb_ale(fb_ale),
-    .fb_csn(fb_csn),
-    .fb_wrn(fb_wrn),
-    .fb_ad({fb_data,fb_addr}),
-    .cs(cs),
-    .wr0(wr0),
-    .wr1(wr1),
-    .wr2(wr2),
-    .wr3(wr3),
-    .addr(addr[12:1]),
-    .dataIn(dataIn)
-);
-assign  addr[0] = 1'b0;
-wire    rd = !fb_oen;
+    wire    [12:0]  addr;
+    wire    [31:0]  dataIn;
+    flexbus flexbus(
+        .fb_clk(fb_clk),
+        .fb_ale(fb_ale),
+        .fb_csn(fb_csn),
+        .fb_wrn(fb_wrn),
+        .fb_ad({fb_data,fb_addr}),
+        .cs(cs),
+        .wr0(wr0),
+        .wr1(wr1),
+        .wr2(wr2),
+        .wr3(wr3),
+        .addr(addr[12:1]),
+        .dataIn(dataIn)
+    );
+    assign  addr[0] = 1'b0;
+    wire    rd = !fb_oen;
 
 //******************************************************************************
 //                             Reclock Inputs
 //******************************************************************************
-reg             [13:0]  adc0Reg,adc1Reg;
-reg     signed  [17:0]  adc0In, adc1In;
-always @(posedge clk) begin
-    adc0Reg <= adc0;
-    adc1Reg <= adc1;
-    adc0In <= $signed({~adc0Reg[13],adc0Reg[12:0],4'b0});
-    adc1In <= $signed({~adc1Reg[13],adc1Reg[12:0],4'b0});
-end
+    reg             [13:0]  adc0Reg,adc1Reg;
+    reg     signed  [17:0]  adc0In, adc1In;
+    always @(posedge clk) begin
+        adc0Reg <= adc0;
+        adc1Reg <= adc1;
+        adc0In <= $signed({~adc0Reg[13],adc0Reg[12:0],4'b0});
+        adc1In <= $signed({~adc1Reg[13],adc1Reg[12:0],4'b0});
+    end
 
 
 
 //******************************************************************************
 //                             Top Level Registers
 //******************************************************************************
-reg bsBertTopSpace;
-always @* begin
-    casex(addr)
-        `BITSYNC_BERT_SPACE:    bsBertTopSpace = 1;
-        default:                bsBertTopSpace = 0;
-        endcase
-    end
-wire    [23:0]  boot_addr;
-wire    [2:0]   dac0InputSelect;
-wire    [2:0]   dac1InputSelect;
-wire    [2:0]   dac2InputSelect;
-wire    [3:0]   bsCoaxMuxSelect;
-wire    [3:0]   bsRS422MuxSelect;
-wire    [3:0]   fsMuxSelect;
-wire    [3:0]   fsRS422MuxSelect;
-wire    [3:0]   encCoaxMuxSelect;
-wire    [3:0]   bertMuxSelect;
-wire    [31:0]  bsBertDout;
-bitsyncBertRegs topRegs(
-    .busClk(fb_clk),
-    .cs(bsBertTopSpace),
-    .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
-    .addr(addr),
-    .dataIn(dataIn),
-    .dataOut(bsBertDout),
-    .clk(clk),
-    .versionNumber(VER_NUMBER),
-    .bitsyncEnable(bitsyncEnable),
-    .bertEnable(bertEnable),
-    .framesyncEnable(),
-    .pnGeneratorEnable(),
-    .reset(reset),
-    .reboot(reboot),
-    .rebootAddress(boot_addr),
-    .dac0InputSelect(dac0InputSelect),
-    .dac1InputSelect(dac1InputSelect),
-    .dac2InputSelect(dac2InputSelect),
-    .bsCoaxMuxSelect(bsCoaxMuxSelect),
-    .bsRS422MuxSelect(bsRS422MuxSelect),
-    .fsMuxSelect(fsMuxSelect),
-    .fsRS422MuxSelect(fsRS422MuxSelect),
-    .encCoaxMuxSelect(encCoaxMuxSelect),
-    .bertMuxSelect(bertMuxSelect)
-);
+    reg bsBertTopSpace;
+    always @* begin
+        casex(addr)
+            `BITSYNC_BERT_SPACE:    bsBertTopSpace = 1;
+            default:                bsBertTopSpace = 0;
+            endcase
+        end
+    wire    [23:0]  boot_addr;
+    wire    [2:0]   dac0InputSelect;
+    wire    [2:0]   dac1InputSelect;
+    wire    [2:0]   dac2InputSelect;
+    wire    [3:0]   bsCoaxMuxSelect;
+    wire    [3:0]   bsRS422MuxSelect;
+    wire    [3:0]   fsMuxSelect;
+    wire    [3:0]   fsRS422MuxSelect;
+    wire    [3:0]   encCoaxMuxSelect;
+    wire    [3:0]   bertInputMuxSelect;
+    wire    [31:0]  bsBertDout;
+    bitsyncBertRegs topRegs(
+        .busClk(fb_clk),
+        .cs(bsBertTopSpace),
+        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .addr(addr),
+        .dataIn(dataIn),
+        .dataOut(bsBertDout),
+        .clk(clk),
+        .versionNumber(VER_NUMBER),
+        .bitsyncEnable(bitsyncEnable),
+        .bertEnable(bertEnable),
+        .framesyncEnable(),
+        .pnGeneratorEnable(),
+        .reset(reset),
+        .reboot(reboot),
+        .rebootAddress(boot_addr),
+        .dac0InputSelect(dac0InputSelect),
+        .dac1InputSelect(dac1InputSelect),
+        .dac2InputSelect(dac2InputSelect),
+        .bsCoaxMuxSelect(bsCoaxMuxSelect),
+        .bsRS422MuxSelect(bsRS422MuxSelect),
+        .fsMuxSelect(fsMuxSelect),
+        .fsRS422MuxSelect(fsRS422MuxSelect),
+        .encCoaxMuxSelect(encCoaxMuxSelect),
+        .bertMuxSelect(bertInputMuxSelect)
+    );
 
 
 //******************************************************************************
 //                          Two Channel Bitsync
 //******************************************************************************
-wire    [17:0]  ch0SymData, ch1SymData;
-wire    [17:0]  ch0Gain,ch0Offset;
-wire    [17:0]  ch1Gain,ch1Offset;
-wire    [17:0]  ch0Dac0Data, ch0Dac1Data, ch0Dac2Data;
-wire    [17:0]  ch1Dac0Data, ch1Dac1Data, ch1Dac2Data;
-wire    [17:0]  iEye,qEye;
-wire    [4:0]   eyeOffset;
-wire    [31:0]  bsDout;
-bitsyncTop bitsyncTop(
-    .clk(clk), .clkEn(bitsyncEnable), .reset(reset),
-    .busClk(fb_clk),
-    .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
-    .addr(addr),
-    .din(dataIn),
-    .dout(bsDout),
-    .rx0(adc0In), 
-    .rx1(adc1In),
-    .ch0Lock(ch0Lock),
-    .ch0Sym2xEn(ch0Sym2xEn),
-    .ch0SymEn(ch0SymEn),
-    .ch0SymData(ch0SymData),
-    .ch0SymClk(ch0ClkOut),
-    .ch0Bit(ch0DataOut),
-    .ch0Dac0ClkEn(ch0Dac0ClkEn),
-    .ch0Dac0Data(ch0Dac0Data),
-    .ch0Dac1ClkEn(ch0Dac1ClkEn),
-    .ch0Dac1Data(ch0Dac1Data),
-    .ch0Dac2ClkEn(ch0Dac2ClkEn),
-    .ch0Dac2Data(ch0Dac2Data),
-    .ch0HighImpedance(ch0HighImpedance),
-    .ch0SingleEnded(ch0SingleEnded),
-    .ch0Gain(ch0Gain),
-    .ch0Offset(ch0Offset),
-    .ch1Lock(ch1Lock),
-    .ch1Sym2xEn(ch1Sym2xEn),
-    .ch1SymEn(ch1SymEn),
-    .ch1SymData(ch1SymData),
-    .ch1SymClk(ch1ClkOut),
-    .ch1Bit(ch1DataOut),
-    .ch1Dac0ClkEn(ch1Dac0ClkEn),
-    .ch1Dac0Data(ch1Dac0Data),
-    .ch1Dac1ClkEn(ch1Dac1ClkEn),
-    .ch1Dac1Data(ch1Dac1Data),
-    .ch1Dac2ClkEn(ch1Dac2ClkEn),
-    .ch1Dac2Data(ch1Dac2Data),
-    .ch1HighImpedance(ch1HighImpedance),
-    .ch1SingleEnded(ch1SingleEnded),
-    .ch1Gain(ch1Gain),
-    .ch1Offset(ch1Offset),
-    .eyeClkEn(eyeClkEn),
-    .iEye(iEye),.qEye(qEye),
-    .eyeOffset(eyeOffset),
-    .asyncMode(asyncMode),
-    .test0(test0), .test1(test1)
-    );
+    wire    [17:0]  ch0SymData, ch1SymData;
+    wire    [17:0]  ch0Gain,ch0Offset;
+    wire    [17:0]  ch1Gain,ch1Offset;
+    wire    [17:0]  ch0Dac0Data, ch0Dac1Data, ch0Dac2Data;
+    wire    [17:0]  ch1Dac0Data, ch1Dac1Data, ch1Dac2Data;
+    wire    [17:0]  iEye,qEye;
+    wire    [4:0]   eyeOffset;
+    wire    [31:0]  bsDout;
+    bitsyncTop bitsyncTop(
+        .clk(clk), .clkEn(bitsyncEnable), .reset(reset),
+        .busClk(fb_clk),
+        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .addr(addr),
+        .din(dataIn),
+        .dout(bsDout),
+        .rx0(adc0In), 
+        .rx1(adc1In),
+        .ch0Lock(ch0Lock),
+        .ch0Sym2xEn(ch0Sym2xEn),
+        .ch0SymEn(ch0SymEn),
+        .ch0SymData(ch0SymData),
+        .ch0SymClk(ch0ClkOut),
+        .ch0Bit(ch0DataOut),
+        .ch0Dac0ClkEn(ch0Dac0ClkEn),
+        .ch0Dac0Data(ch0Dac0Data),
+        .ch0Dac1ClkEn(ch0Dac1ClkEn),
+        .ch0Dac1Data(ch0Dac1Data),
+        .ch0Dac2ClkEn(ch0Dac2ClkEn),
+        .ch0Dac2Data(ch0Dac2Data),
+        .ch0HighImpedance(ch0HighImpedance),
+        .ch0SingleEnded(ch0SingleEnded),
+        .ch0Gain(ch0Gain),
+        .ch0Offset(ch0Offset),
+        .ch1Lock(ch1Lock),
+        .ch1Sym2xEn(ch1Sym2xEn),
+        .ch1SymEn(ch1SymEn),
+        .ch1SymData(ch1SymData),
+        .ch1SymClk(ch1ClkOut),
+        .ch1Bit(ch1DataOut),
+        .ch1Dac0ClkEn(ch1Dac0ClkEn),
+        .ch1Dac0Data(ch1Dac0Data),
+        .ch1Dac1ClkEn(ch1Dac1ClkEn),
+        .ch1Dac1Data(ch1Dac1Data),
+        .ch1Dac2ClkEn(ch1Dac2ClkEn),
+        .ch1Dac2Data(ch1Dac2Data),
+        .ch1HighImpedance(ch1HighImpedance),
+        .ch1SingleEnded(ch1SingleEnded),
+        .ch1Gain(ch1Gain),
+        .ch1Offset(ch1Offset),
+        .eyeClkEn(eyeClkEn),
+        .iEye(iEye),.qEye(qEye),
+        .eyeOffset(eyeOffset),
+        .asyncMode(asyncMode),
+        .test0(test0), .test1(test1)
+        );
 
 //******************************************************************************
 //                          AGC/DC Offset DAC Interfaces
 //******************************************************************************
-mcp48xxInterface dacInterface (
-    .clk(clk),
-    .clkEn0(ch0SymEn),
-    .clkEn1(ch1SymEn),
-    .reset(reset),
-    .dac0GainSelA(1'b1),
-    .dac0GainSelB(1'b1),
-    .dac0ValueA(ch0Gain[17:6]),
-    .dac0ValueB(ch0Offset[17:6]),
-    .dac1GainSelA(1'b1),
-    .dac1GainSelB(1'b1),
-    .dac1ValueA(ch1Gain[17:6]),
-    .dac1ValueB(ch1Offset[17:6]),
-    .SCK(dacSCLK),
-    .SDI(dacMOSI),
-    .CS0n(ch0SELn),
-    .CS1n(ch1SELn)
-);
+    mcp48xxInterface dacInterface (
+        .clk(clk),
+        .clkEn0(ch0SymEn),
+        .clkEn1(asyncMode ? ch1SymEn : ch0SymEn),
+        .reset(reset),
+        .dac0GainSelA(1'b1),
+        .dac0GainSelB(1'b1),
+        .dac0ValueA(ch0Gain[17:6]),
+        .dac0ValueB(ch0Offset[17:6]),
+        .dac1GainSelA(1'b1),
+        .dac1GainSelB(1'b1),
+        .dac1ValueA(ch1Gain[17:6]),
+        .dac1ValueB(ch1Offset[17:6]),
+        .SCK(dacSCLK),
+        .SDI(dacMOSI),
+        .CS0n(ch0SELn),
+        .CS1n(ch1SELn)
+    );
 
 
 
@@ -374,7 +382,53 @@ mcp48xxInterface dacInterface (
 
 
 
+`ifdef ADD_BERT
+//******************************************************************************
+//                            Bit Error Rate Tester
+//******************************************************************************
+    clockAndDataMux bertMux(
+        .muxSelect(bertInputMuxSelect),
+        .clk0(ch0ClkOut),
+        .data0(ch0DataOut),
+        .clk1(pll0_Clk),
+        .data1(pll0_Data),
+        .clk2(ch1ClkOut),
+        .data2(ch1DataOut),
+        .clk3(pll1_Clk),
+        .data3(pll1_Data),
+        .clk4(singleEndedClk),
+        .data4(singleEndedData),
+        .clk5(differentialClk),
+        .data5(differentialData),
+        .clk6(1'b0),
+        .data6(1'b0),
+        .clk7(1'b0),
+        .data7(1'b0),
+        .outputClk(bertClk),
+        .outputData(bertData)
+    );
 
+    reg bertSpace;
+    always @* begin
+        casex(addr)
+            `BERT_SPACE:            bertSpace = 1;
+            default:                bertSpace = 0;
+            endcase
+        end
+    wire    [31:0]  bertDout;
+    bert_top bert(
+        .reset(reset),
+        .busClk(fb_clk),
+        .cs(bertSpace),
+        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .addr(addr),
+        .dataIn(dataIn),
+        .dataOut(bertDout),
+        .clk(clk),
+        .dclk(bertClk),
+        .din(bertData)
+    );
+`endif //ADD_BERT
 
 
 //******************************************************************************
@@ -383,7 +437,7 @@ mcp48xxInterface dacInterface (
 
     // SPI interface to the PLLs
     wire    [31:0]  pllDout;
-    ics307Interface pllIntfc (
+    ics307Interface #(.SysclkDivider(4)) pllIntfc (
         .reset(reset),
         .busClk(fb_clk),
         .addr(addr),
@@ -496,57 +550,6 @@ mcp48xxInterface dacInterface (
 
 
 
-
-
-`ifdef ADD_BERT
-//******************************************************************************
-//                          Bit Error Rate Tester
-//******************************************************************************
-
-bsBertOutputMux bsMux(
-    .muxSelect(bertMuxSelect),
-    .ch0BitsyncClk(ch0ClkOut),
-    .ch0BitsyncData(ch0DataOut),
-    .ch0DecoderClk(),
-    .ch0DecoderData(),
-    .ch1BitsyncClk(ch1ClkOut),
-    .ch1BitsyncData(ch1DataOut),
-    .ch1DecoderClk(),
-    .ch1DecoderData(),
-    .dualBitsyncClk(ch0ClkOut),
-    .dualBitsyncData(ch0DataOut),
-    .dualDecoderClk(),
-    .dualDecoderData(),
-    .pngenClk(),
-    .pngenData(),
-    .framesyncClk(),
-    .framesyncData(),
-    .outputClk(bertClkIn),
-    .outputData(bertDataIn)
-);
-
-reg bertSpace;
-always @* begin
-    casex(addr)
-        `BERT_SPACE:        bertSpace = 1;
-        default:            bertSpace = 0;
-        endcase
-    end
-wire    [31:0]  bertDout;
-bert bert_top (
-    .reset(reset),
-    .enable(bertEnable),
-    .busClk(fb_clk),
-    .cs(bertSpace),
-    .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
-    .addr(addr),
-    .dataIn(dataIn),
-    .dataOut(bertDout),
-    .clock(bertClkIn),
-    .data(bertDataIn),
-    );
-
-`endif
 
 
 //******************************************************************************
@@ -696,14 +699,14 @@ clockAndDataMux bsMux(
     .data2(ch1DataOut),
     .clk3(pll1_Clk),
     .data3(pll1_Data),
-    .clk4(ch0ClkOut),
-    .data4(ch0DataOut),
-    .clk5(pll0_Clk),
-    .data5(pll0_Data),
-    .clk6(),
-    .data6(),
-    .clk7(),
-    .data7(),
+    .clk4(1'b0),
+    .data4(1'b0),
+    .clk5(1'b0),
+    .data5(1'b0),
+    .clk6(1'b0),
+    .data6(1'b0),
+    .clk7(1'b0),
+    .data7(1'b0),
     .outputClk(bsClkOut),
     .outputData(bsDataOut)
 );
@@ -720,14 +723,14 @@ clockAndDataMux bsDiffMux(
     .data2(ch1DataOut),
     .clk3(pll1_Clk),
     .data3(pll1_Data),
-    .clk4(ch0ClkOut),
-    .data4(ch0DataOut),
-    .clk5(pll0_Clk),
-    .data5(pll0_Data),
-    .clk6(),
-    .data6(),
-    .clk7(),
-    .data7(),
+    .clk4(1'b0),
+    .data4(1'b0),
+    .clk5(1'b0),
+    .data5(1'b0),
+    .clk6(1'b0),
+    .data6(1'b0),
+    .clk7(1'b0),
+    .data7(1'b0),
     .outputClk(bsDiffClkOut),
     .outputData(bsDiffDataOut)
 );
@@ -742,14 +745,14 @@ clockAndDataMux encMux(
     .data2(ch1DataOut),
     .clk3(pll1_Clk),
     .data3(pll1_Data),
-    .clk4(ch0ClkOut),
-    .data4(ch0DataOut),
-    .clk5(pll0_Clk),
-    .data5(pll0_Data),
-    .clk6(),
-    .data6(),
-    .clk7(),
-    .data7(),
+    .clk4(1'b0),
+    .data4(1'b0),
+    .clk5(1'b0),
+    .data5(1'b0),
+    .clk6(1'b0),
+    .data6(1'b0),
+    .clk7(1'b0),
+    .data7(1'b0),
     .outputClk(encClkOut),
     .outputData(encDataOut)
 );
@@ -764,14 +767,14 @@ clockAndDataMux fsMux(
     .data2(ch1DataOut),
     .clk3(pll1_Clk),
     .data3(pll1_Data),
-    .clk4(ch0ClkOut),
-    .data4(ch0DataOut),
-    .clk5(pll0_Clk),
-    .data5(pll0_Data),
-    .clk6(),
-    .data6(),
-    .clk7(),
-    .data7(),
+    .clk4(1'b0),
+    .data4(1'b0),
+    .clk5(1'b0),
+    .data5(1'b0),
+    .clk6(1'b0),
+    .data6(1'b0),
+    .clk7(1'b0),
+    .data7(1'b0),
     .outputClk(fsClkOut),
     .outputData(fsDataOut)
 );
@@ -786,14 +789,14 @@ clockAndDataMux fsDiffMux(
     .data2(ch1DataOut),
     .clk3(pll1_Clk),
     .data3(pll1_Data),
-    .clk4(ch0ClkOut),
-    .data4(ch0DataOut),
-    .clk5(pll0_Clk),
-    .data5(pll0_Data),
-    .clk6(),
-    .data6(),
-    .clk7(),
-    .data7(),
+    .clk4(1'b0),
+    .data4(1'b0),
+    .clk5(1'b0),
+    .data5(1'b0),
+    .clk6(1'b0),
+    .data6(1'b0),
+    .clk7(1'b0),
+    .data7(1'b0),
     .outputClk(fsDiffClkOut),
     .outputData(fsDiffDataOut)
 );
@@ -807,6 +810,16 @@ assign ch1Lockn = !ch1Lock;
 reg [15:0] rd_mux;
 always @* begin
     casex(addr)
+        `ifdef ADD_BERT
+        `BERT_SPACE: begin
+            if (addr[1]) begin
+                rd_mux = bertDout[31:16];
+            end
+            else begin
+                rd_mux = bertDout[15:0];
+            end
+        end
+        `endif
         `BITSYNC_TOP_SPACE, 
         `CH0_DFSPACE,       
         `CH0_DFFIRSPACE,    
@@ -860,16 +873,6 @@ always @* begin
                 rd_mux = interp2Dout[15:0];
                 end
             end
-        `ifdef ADD_BERT
-        `BERT_SPACE: begin
-            if (addr[1]) begin
-                rd_mux = bertDout[31:16];
-                end
-            else begin
-                rd_mux = bertDout[15:0];
-                end
-            end
-        `endif
         `PLLSPACE: begin
             if (addr[1]) begin
                 rd_mux = pllDout[31:16];

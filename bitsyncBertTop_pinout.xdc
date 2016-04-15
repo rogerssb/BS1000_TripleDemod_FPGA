@@ -222,6 +222,11 @@ set_property PACKAGE_PIN F8 [get_ports pll2_REF]
 set_property PACKAGE_PIN G10 [get_ports pll2_OUT1]
 set_property PACKAGE_PIN F10 [get_ports pll2_PWDn]
 set_property PACKAGE_PIN C12 [get_ports sysClk]
+set_property PACKAGE_PIN J25 [get_ports singleEndedClk]
+set_property PACKAGE_PIN J24 [get_ports singleEndedData]
+set_property PACKAGE_PIN A13 [get_ports differentialClk]
+set_property PACKAGE_PIN C13 [get_ports differentialData]
+
 
 
 set_property DRIVE 12 [get_ports sysClk]
@@ -608,6 +613,13 @@ set_property SLEW SLOW [get_ports pll1_CS]
 set_property SLEW FAST [get_ports pll1_REF]
 set_property SLEW SLOW [get_ports pll2_CS]
 set_property SLEW FAST [get_ports pll2_REF]
+
+set_property IOSTANDARD LVCMOS33 [get_ports singleEndedClk]
+set_property IOSTANDARD LVCMOS33 [get_ports singleEndedData]
+set_property IOSTANDARD LVCMOS33 [get_ports differentialClk]
+set_property IOSTANDARD LVCMOS33 [get_ports differentialData]
+
+
 
 
 

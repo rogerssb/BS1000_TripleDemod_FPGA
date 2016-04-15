@@ -178,9 +178,9 @@ assign ch0Offset = (ch0DCTest != 0) ? {ch0DCTest,10'h0} : ch0DC[39:22];
 
 wire    [33:0]  ch1DCIn = {rx1,16'h0};
 wire    [39:0]  ch1DC;
-wire            ch1Sym2xEn;
+wire            ch1DCClkEn = asyncMode ? ch1Sym2xEn : ch0Sym2xEn;
 dcLoopFilter ch1DcLoop(
-    .clk(clk), .clkEn(ch1Sym2xEn), .reset(reset),
+    .clk(clk), .clkEn(ch1DCClkEn), .reset(reset),
     .error(ch1DCIn),
     .lagExp(ch1DCGain),
     .clearAccum(!ch1DCRemovalEnable),
@@ -528,7 +528,7 @@ always @(posedge clk) begin
             end
         `BS_DAC_DC: begin
             ch1Dac0Data <= ch1Offset;
-            ch1Dac0ClkEn <= ch1Sym2xEn;
+            ch1Dac0ClkEn <= ch1DCClkEn;
             end
         `BS_DAC_DF: begin
             ch1Dac0Data <= df1Out;
@@ -536,7 +536,7 @@ always @(posedge clk) begin
             end
         `BS_DAC_SYM: begin
             ch1Dac0Data <= ch1SymData;
-            ch1Dac0ClkEn <= ch1Sym2xEn;
+            ch1Dac0ClkEn <= asyncMode ? ch1Sym2xEn : ch0Sym2xEn;
             end
         `BS_DAC_AGC: begin
             ch1Dac0Data <= ch1Gain;
@@ -558,7 +558,7 @@ always @(posedge clk) begin
             end
         `BS_DAC_DC: begin
             ch1Dac1Data <= ch1Offset;
-            ch1Dac1ClkEn <= ch1Sym2xEn;
+            ch1Dac1ClkEn <= ch1DCClkEn;
             end
         `BS_DAC_DF: begin
             ch1Dac1Data <= df1Out;
@@ -566,7 +566,7 @@ always @(posedge clk) begin
             end
         `BS_DAC_SYM: begin
             ch1Dac1Data <= ch1SymData;
-            ch1Dac1ClkEn <= ch1Sym2xEn;
+            ch1Dac1ClkEn <= asyncMode ? ch1Sym2xEn : ch0Sym2xEn;
             end
         `BS_DAC_AGC: begin
             ch1Dac1Data <= {1'b0,ch1Level};
@@ -588,7 +588,7 @@ always @(posedge clk) begin
             end
         `BS_DAC_DC: begin
             ch1Dac2Data <= ch1Offset;
-            ch1Dac2ClkEn <= ch1Sym2xEn;
+            ch1Dac2ClkEn <= ch1DCClkEn;
             end
         `BS_DAC_DF: begin
             ch1Dac2Data <= df1Out;
@@ -596,7 +596,7 @@ always @(posedge clk) begin
             end
         `BS_DAC_SYM: begin
             ch1Dac2Data <= ch1SymData;
-            ch1Dac2ClkEn <= ch1Sym2xEn;
+            ch1Dac2ClkEn <= asyncMode ? ch1Sym2xEn : ch0Sym2xEn;
             end
         `BS_DAC_AGC: begin
             ch1Dac2Data <= ch1Gain;

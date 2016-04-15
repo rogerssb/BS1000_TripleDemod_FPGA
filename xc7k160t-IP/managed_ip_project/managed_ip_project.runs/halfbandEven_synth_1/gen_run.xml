@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <GenRun Id="halfbandEven_synth_1" LaunchPart="xc7k160tfbg676-1" LaunchTime="1432928587">
-  <File Type="RDS-DCP" Name="halfbandEven.dcp"/>
   <File Type="RUN-CONSTRS" Name="$PDATADIR/runs/halfbandEven_synth_1/constrs_in.xml"/>
-  <File Type="RDS-UTIL-PB" Name="halfbandEven_utilization_synth.pb"/>
+  <File Type="RDS-DCP" Name="halfbandEven.dcp"/>
   <File Type="RUN-SRCS" Name="$PDATADIR/runs/halfbandEven_synth_1/sources.xml"/>
-  <File Type="RDS-PROPCONSTRS" Name="halfbandEven_drc_synth.rpt"/>
-  <File Type="PA-TCL" Name="halfbandEven.tcl"/>
+  <File Type="RDS-UTIL-PB" Name="halfbandEven_utilization_synth.pb"/>
   <File Type="RUN-STRAT" Name="$PDATADIR/runs/halfbandEven_synth_1/halfbandEven_synth_1.psg"/>
+  <File Type="PA-TCL" Name="halfbandEven.tcl"/>
+  <File Type="RDS-PROPCONSTRS" Name="halfbandEven_drc_synth.rpt"/>
   <File Type="RDS-RDS" Name="halfbandEven.vds"/>
   <File Type="RDS-UTIL" Name="halfbandEven_utilization_synth.rpt"/>
   <File Type="VDS-TIMINGSUMMARY" Name="halfbandEven_timing_summary_synth.rpt"/>

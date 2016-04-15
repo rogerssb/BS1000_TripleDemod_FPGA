@@ -21,7 +21,7 @@
    </includedirs>
    <analyzer>
     <views>
-     <view value="26773.475 ns,30214.788 ns,60.321 ns,16634.971 ns,19480.426 ns" name="Last" />
+     <view value="13337.833 ns,40416.958 ns,474.656 ns,16634.971 ns,19480.426 ns" name="Last" />
     </views>
     <settings>
      <setting value="163" name="C0Width" />
@@ -170,7 +170,7 @@
        <signal name="xferDone" scope="test.pllIntfc" />
       </signals>
      </group>
-     <group open="yes" name="LOCK" show="yes" >
+     <group open="no" name="LOCK" show="yes" >
       <signals>
        <signal interpolate="Step" radix="Real" name="ch0SymDataReal" scope="test.bitsyncTop.dualBitsync" />
        <signal name="ch0SymData[17:0]" scope="test.bitsyncTop.dualBitsync" />
@@ -179,7 +179,7 @@
        <signal name="timingErrorQ[17:0]" scope="test.bitsyncTop.dualBitsync" />
        <signal name="transitionI" scope="test.bitsyncTop.dualBitsync" />
        <signal name="transitionQ" scope="test.bitsyncTop.dualBitsync" />
-       <signal radix="Wave" name="slipErrorI[17:0]" scope="test.bitsyncTop.dualBitsync" />
+       <signal name="slipErrorI[17:0]" scope="test.bitsyncTop.dualBitsync" />
        <signal name="slipErrorQ[17:0]" scope="test.bitsyncTop.dualBitsync" />
        <signal name="slipError[17:0]" scope="test.bitsyncTop.dualBitsync" />
        <signal name="avgError[21:0]" scope="test.bitsyncTop.dualBitsync" />
@@ -188,11 +188,28 @@
        <signal name="ch0LockCounter[15:0]" scope="test.bitsyncTop.dualBitsync" />
       </signals>
      </group>
+     <group open="yes" name="BERT" show="yes" >
+      <signals>
+       <signal name="clock" scope="test.bert" />
+       <signal name="enable" scope="test.bert" />
+       <signal name="data" scope="test.bert" />
+       <signal name="reset" scope="test.bert" />
+       <signal name="decision_count[7:0]" scope="test.bert.bert_sync_detect" />
+       <signal name="lfsr_enable" scope="test.bert.bert_correlator_1" />
+       <signal name="reload" scope="test.bert.bert_correlator_1" />
+       <signal name="code_bit" scope="test.bert.bert_correlator_1" />
+       <signal name="data_bit" scope="test.bert.bert_correlator_1" />
+       <signal name="lfsr_enable" scope="test.bert.bert_correlator_2" />
+       <signal name="reload" scope="test.bert.bert_correlator_2" />
+       <signal name="code_bit" scope="test.bert.bert_correlator_2" />
+       <signal name="data_bit" scope="test.bert.bert_correlator_2" />
+      </signals>
+     </group>
     </groups>
    </analyzer>
    <explorer>
     <settings>
-     <setting value="test.bitsyncTop.dualBitsync.[17:0]slipError" name="Scope" />
+     <setting value="test.bert.reset" name="Scope" />
     </settings>
    </explorer>
    <sourcefiles>
@@ -237,6 +254,18 @@
     <file name="pcmAgcLoopRegs.v" />
     <file name="mcp48xxInterface.v" />
     <file name="log2.v" />
+    <file name=".\bert\bert_correlator.v" />
+    <file name=".\bert\bert_counters.v" />
+    <file name=".\bert\bert_data_detect.v" />
+    <file name=".\bert\bert_error_insert.v" />
+    <file name=".\bert\bert_lfsr.v" />
+    <file name=".\bert\bert_polarity_detect.v" />
+    <file name=".\bert\bert_registers.v" />
+    <file name=".\bert\bert_slip_detect.v" />
+    <file name=".\bert\bert_sync_detect.v" />
+    <file name=".\bert\bert_top.v" />
+    <file name=".\xc7k160t-IP\fifo_1x16\fifo_1x16_funcsim.v" />
+    <file name=".\bert\bert_input_sync.v" />
    </sourcefiles>
   </product>
  </products>
