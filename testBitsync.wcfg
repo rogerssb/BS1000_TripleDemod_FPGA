@@ -303,7 +303,7 @@
       <wvobject db_ref_id="1" fp_name="/test/bert/bert_polarity_detect/count" type="array">
          <obj_property name="ElementShortName">count[7:0]</obj_property>
          <obj_property name="ObjectShortName">count[7:0]</obj_property>
-         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
          <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
          <obj_property name="CellHeight">100</obj_property>
       </wvobject>
@@ -322,6 +322,10 @@
       <wvobject db_ref_id="1" fp_name="/test/bert/bert_sync_detect/error" type="logic">
          <obj_property name="ElementShortName">error</obj_property>
          <obj_property name="ObjectShortName">error</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/test/bert/bert_sync_detect/insync" type="logic">
+         <obj_property name="ElementShortName">insync</obj_property>
+         <obj_property name="ObjectShortName">insync</obj_property>
       </wvobject>
       <wvobject db_ref_id="1" fp_name="/test/bert/bert_sync_detect/reload_recovery_count" type="array">
          <obj_property name="ElementShortName">reload_recovery_count[7:0]</obj_property>

@@ -44,9 +44,9 @@
 `define DUAL_DECODERSPACE   13'b0_00xx_1000_xxxx
 `define CH1_DECODERSPACE    13'b0_00xx_1001_xxxx
 
+// PLL subsystem registers
 `define PLLSPACE            13'b0_00xx_11xx_xxxx
 
-// PLL subsystem registers
 `define PLL0_BITS_0to31     13'bx_xxxx_xx00_00xx
 `define PLL0_BITS_68to99    13'bx_xxxx_xx00_01xx
 `define PLL0_BITS_100to131  13'bx_xxxx_xx00_10xx

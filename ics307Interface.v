@@ -260,7 +260,11 @@ module ics307Interface #(parameter SysclkDivider = 2)
               STROBE =      2'b10;
     integer         bitcount;
     reg     [131:0] srInit,sr;
+    reg     [2:0]   startSR0,startSR1,startSR2;
     always @(posedge clk) begin
+        startSR0 <= {startSR0[1:0],startPll0};
+        startSR1 <= {startSR1[1:0],startPll1};
+        startSR2 <= {startSR2[1:0],startPll2};
         if (reset) begin
             spiState <= WAIT;
             CS0 <= 0;
@@ -274,7 +278,7 @@ module ics307Interface #(parameter SysclkDivider = 2)
                 // Wait for a start signal
                 WAIT: begin
                     xferDone <= 0;
-                    if (startPll0) begin
+                    if (startSR0 == 3'b011) begin
                         spiState <= START;
                         srInit <= {
                             pll0Bits100to131,
@@ -283,7 +287,7 @@ module ics307Interface #(parameter SysclkDivider = 2)
                             pll0Bits0to31
                         };
                     end
-                    else if (startPll1) begin
+                    else if (startSR1 == 3'b011) begin
                         spiState <= START;
                         srInit <= {
                             pll1Bits100to131,
@@ -292,7 +296,7 @@ module ics307Interface #(parameter SysclkDivider = 2)
                             pll1Bits0to31
                         };
                     end
-                    else if (startPll2) begin
+                    else if (startSR2 == 3'b011) begin
                         spiState <= START;
                         srInit <= {
                             pll2Bits100to131,
