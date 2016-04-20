@@ -119,9 +119,11 @@ set_property CFGBVS VCCO [current_design]
 set_property BITSTREAM.CONFIG.SPI_BUSWIDTH 1 [current_design]
 
 set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets pll0_OUT1_IBUF]
+set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets pll2_OUT1_IBUF]
 
 create_clock -period 25.000 -name pll0_OUT1 -waveform {0.000 12.500} [get_ports pll0_OUT1]
 create_clock -period 25.000 -name pll1_OUT1 -waveform {0.000 12.500} [get_ports pll1_OUT1]
+create_clock -period 25.000 -name pll2_OUT1 -waveform {0.000 12.500} [get_ports pll2_OUT1]
 create_clock -period 25.000 -name differentialClk -waveform {0.000 12.500} [get_ports differentialClk]
 create_clock -period 25.000 -name singleEndedClk -waveform {0.000 12.500} [get_ports singleEndedClk]
 
@@ -147,6 +149,7 @@ set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks fbCl
 # set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks pll0_OUT1] -group [get_clocks -include_generated_clocks pll1_OUT1]
 # set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks pll0_OUT1] -group [get_clocks -include_generated_clocks sysClk]
 # set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks pll1_OUT1] -group [get_clocks -include_generated_clocks sysClk]
+
 
 
 

@@ -125,7 +125,7 @@ module bitsyncBertTop (
     input           pll2_OUT1;
     output          pll2_PWDn;
 
-    parameter VER_NUMBER = 16'd422;
+    parameter VER_NUMBER = 16'd425;
 
 
 //******************************************************************************
@@ -214,7 +214,7 @@ module bitsyncBertTop (
         .bitsyncEnable(bitsyncEnable),
         .bertEnable(bertEnable),
         .framesyncEnable(),
-        .pnGeneratorEnable(),
+        .pnGeneratorEnable(pngenEnable),
         .reset(reset),
         .reboot(reboot),
         .rebootAddress(boot_addr),
@@ -382,7 +382,6 @@ module bitsyncBertTop (
 
 
 
-`ifdef ADD_BERT
 //******************************************************************************
 //                            Bit Error Rate Tester
 //******************************************************************************
@@ -428,7 +427,25 @@ module bitsyncBertTop (
         .dclk(bertClk),
         .din(bertData)
     );
-`endif //ADD_BERT
+
+
+//******************************************************************************
+//                               PN Generator
+//******************************************************************************
+    wire    [31:0]  pngenDout;
+    pngenTop pngen(
+        .clk(clk),
+        .clkEn(pngenEnable),
+        .reset(reset),
+        .busClk(fb_clk),
+        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .addr(addr),
+        .din(dataIn),
+        .dout(pngenDout),
+        .pnClkEn(pnClkEn),
+        .pnBit(pnBit)
+    );
+
 
 
 //******************************************************************************
@@ -455,39 +472,13 @@ module bitsyncBertTop (
         .EN2(pll2_PWDn),
         .pll0Reset(pll0Reset),
         .pll1Reset(pll1Reset),
-        .pll2Reset()
+        .pll2Reset(pll2Reset)
     );
 
     //------------- PLL Reference Clocks --------------
     assign          pll0_REF = ch0SymEn;
     assign          pll1_REF = ch1SymEn;
-    assign          pll2_REF = ch0ClkOut;
-
-    //`define NEW_FIFO
-    `ifdef NEW_FIFO
-    wire    [2:0]   pll0_Symbol;
-    jitterFifo pll0Fifo (
-        .reset(reset),
-        .inputClk(clk),
-        .inputClkEn(dualPcmClkEn),
-        .dataIn({dualDataI,dualDataQ,1'b0}),
-        .outputClk(pll0_OUT1),
-        .outputClkEn(1'b1),
-        .dataOut(pll0_Symbol)
-    );
-
-    wire    [2:0]   pll1_Symbol;
-    jitterFifo pll1Fifo (
-        .reset(reset),
-        .inputClk(clk),
-        .inputClkEn(ch1PcmClkEn),
-        .dataIn({ch1PcmData,2'b0}),
-        .outputClk(pll1_OUT1),
-        .outputClkEn(1'b1),
-        .dataOut(pll1_Symbol)
-    );
-
-    `else //NEW_FIFO
+    assign          pll2_REF = pnClkEn;
 
     //------------- PLL0 Data FIFO --------------------
     reg             pll0_ReadEnable;
@@ -538,14 +529,37 @@ module bitsyncBertTop (
         end
     end
 
-    `endif //NEW_FIFO
+    //------------- PLL2 Data FIFO --------------------
+    reg             pll2_ReadEnable;
+    wire    [2:0]   pll2_Symbol;
+    jitterFifo pll2Fifo(
+        .rst(pll2Reset),
+        .wr_clk(clk),
+        .rd_clk(pll2_OUT1),
+        .din({pnBit,2'b0}),
+        .wr_en(pnClkEn),
+        .rd_en(pll2_ReadEnable),
+        .dout(pll2_Symbol),
+        .full(pll2_Full),
+        .empty(pll2_Empty),
+        .prog_full(pll2_HalfFull)
+    );
+    always @(posedge pll2_OUT1) begin
+        if (pll2Reset) begin
+            pll2_ReadEnable <= 0;
+        end
+        else if (pll2_HalfFull) begin
+            pll2_ReadEnable <= 1;
+        end
+    end
 
     //-------------- PLL Outputs ----------------------
     assign          pll0_Data = pll0_Symbol[2];
     assign          pll1_Data = asyncMode ? pll1_Symbol[2] : pll0_Symbol[1];
+    assign          pll2_Data = pll2_Symbol[2];
     assign          pll0_Clk = pll0_OUT1;
     assign          pll1_Clk = asyncMode ? pll1_OUT1 : pll0_OUT1;
-
+    assign          pll2_Clk = pll2_OUT1;
 
 
 
@@ -703,8 +717,8 @@ clockAndDataMux bsMux(
     .data4(1'b0),
     .clk5(1'b0),
     .data5(1'b0),
-    .clk6(1'b0),
-    .data6(1'b0),
+    .clk6(pll2_Clk),
+    .data6(pll2_Data),
     .clk7(1'b0),
     .data7(1'b0),
     .outputClk(bsClkOut),
@@ -727,8 +741,8 @@ clockAndDataMux bsDiffMux(
     .data4(1'b0),
     .clk5(1'b0),
     .data5(1'b0),
-    .clk6(1'b0),
-    .data6(1'b0),
+    .clk6(pll2_Clk),
+    .data6(pll2_Data),
     .clk7(1'b0),
     .data7(1'b0),
     .outputClk(bsDiffClkOut),
@@ -749,8 +763,8 @@ clockAndDataMux encMux(
     .data4(1'b0),
     .clk5(1'b0),
     .data5(1'b0),
-    .clk6(1'b0),
-    .data6(1'b0),
+    .clk6(pll2_Clk),
+    .data6(pll2_Data),
     .clk7(1'b0),
     .data7(1'b0),
     .outputClk(encClkOut),
@@ -771,8 +785,8 @@ clockAndDataMux fsMux(
     .data4(1'b0),
     .clk5(1'b0),
     .data5(1'b0),
-    .clk6(1'b0),
-    .data6(1'b0),
+    .clk6(pll2_Clk),
+    .data6(pll2_Data),
     .clk7(1'b0),
     .data7(1'b0),
     .outputClk(fsClkOut),
@@ -793,8 +807,8 @@ clockAndDataMux fsDiffMux(
     .data4(1'b0),
     .clk5(1'b0),
     .data5(1'b0),
-    .clk6(1'b0),
-    .data6(1'b0),
+    .clk6(pll2_Clk),
+    .data6(pll2_Data),
     .clk7(1'b0),
     .data7(1'b0),
     .outputClk(fsDiffClkOut),
@@ -810,7 +824,6 @@ assign ch1Lockn = !ch1Lock;
 reg [15:0] rd_mux;
 always @* begin
     casex(addr)
-        `ifdef ADD_BERT
         `BERT_SPACE: begin
             if (addr[1]) begin
                 rd_mux = bertDout[31:16];
@@ -819,7 +832,14 @@ always @* begin
                 rd_mux = bertDout[15:0];
             end
         end
-        `endif
+        `PNGEN_SPACE: begin
+            if (addr[1]) begin
+                rd_mux = pngenDout[31:16];
+            end
+            else begin
+                rd_mux = pngenDout[15:0];
+            end
+        end
         `BITSYNC_TOP_SPACE, 
         `CH0_DFSPACE,       
         `CH0_DFFIRSPACE,    

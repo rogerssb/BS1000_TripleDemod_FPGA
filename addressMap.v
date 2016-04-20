@@ -35,6 +35,31 @@
 // Top level registers
 `define BITSYNC_BERT_SPACE  13'b0_00xx_000x_xxxx
 
+// Define the system top level memory map
+`define SYS_RESET           13'bx_xxxx_xxx0_000x
+`define SYS_VERSION         13'bx_xxxx_xxx0_001x
+`define SYS_RSVD0           13'bx_xxxx_xxx0_01xx
+`define SYS_DAC_INPUT_SEL   13'bx_xxxx_xxx0_10xx
+    `define SYS_DAC_INPUT_SEL_CH0   3'b000
+    `define SYS_DAC_INPUT_SEL_CH1   3'b001
+    `define SYS_DAC_INPUT_SEL_BERT  3'b010
+    `define SYS_DAC_INPUT_SEL_FS    3'b011
+    `define SYS_DAC_INPUT_SEL_PNGEN 3'b100
+`define SYS_REBOOT_ADDR     13'bx_xxxx_xxx0_11xx
+`define SYS_TYPE            13'bx_xxxx_xxx1_000x
+`define SYS_RSVD1           13'bx_xxxx_xxx1_001x
+`define SYS_SUBSYSTEM_CTRL  13'bx_xxxx_xxx1_01xx
+`define SYS_OUTPUT_SEL      13'bx_xxxx_xxx1_10xx
+    `define SYS_OUTPUT_SEL_CH0_BS   4'b0000
+    `define SYS_OUTPUT_SEL_CH0_PCM  4'b0001
+    `define SYS_OUTPUT_SEL_CH1_BS   4'b0010
+    `define SYS_OUTPUT_SEL_CH1_PCM  4'b0011
+    `define SYS_OUTPUT_SEL_SINGLE   4'b0100
+    `define SYS_OUTPUT_SEL_DIFF     4'b0101
+    `define SYS_OUTPUT_SEL_PNGEN    4'b0110
+    `define SYS_OUTPUT_SEL_FS       4'b0111
+`define SYS_BERT_MUX_SEL    13'bx_xxxx_xxx1_11xx
+
 `define INTERP0SPACE        13'b0_00xx_0010_xxxx
 `define VIDFIR0SPACE        13'b0_00xx_0011_xxxx
 `define INTERP1SPACE        13'b0_00xx_0100_xxxx
@@ -82,7 +107,7 @@
 
 
 // BERT subsystem registers
-`define BERT_SPACE              13'b1_00xx_xxxx_xxxx
+`define BERT_SPACE              13'b0_10xx_xxxx_xxxx
 
 `define BERT_POLY               13'bx_xxxx_x000_00xx
 `define POLARITY_THRESHOLD      13'bx_xxxx_x000_01xx
@@ -98,37 +123,18 @@
 `define TEST_CONTROL            13'bx_xxxx_x010_11xx
 
 
+// PN Generator subsystem registers
+`define PNGEN_SPACE             13'b0_11xx_xxxx_xxxx
+
+`define PNGEN_POLY              13'bx_xxxx_xxxx_00xx
+`define PNGEN_RATE              13'bx_xxxx_xxxx_01xx
+
+
+
 // Framesync subsystem registers
 
-// PN Generator subsystem registers
-`define PNGEN_SPACE             13'b1_01xx_xxxx_xxxx
 
-`define PNGEN_POLY              13'bx_xxxx_x011_11xx
 
-// Define the system top level memory map
-`define SYS_RESET           13'bx_xxxx_xxx0_000x
-`define SYS_VERSION         13'bx_xxxx_xxx0_001x
-`define SYS_RSVD0           13'bx_xxxx_xxx0_01xx
-`define SYS_DAC_INPUT_SEL   13'bx_xxxx_xxx0_10xx
-    `define SYS_DAC_INPUT_SEL_CH0   3'b000
-    `define SYS_DAC_INPUT_SEL_CH1   3'b001
-    `define SYS_DAC_INPUT_SEL_BERT  3'b010
-    `define SYS_DAC_INPUT_SEL_FS    3'b011
-    `define SYS_DAC_INPUT_SEL_PNGEN 3'b100
-`define SYS_REBOOT_ADDR     13'bx_xxxx_xxx0_11xx
-`define SYS_TYPE            13'bx_xxxx_xxx1_000x
-`define SYS_RSVD1           13'bx_xxxx_xxx1_001x
-`define SYS_SUBSYSTEM_CTRL  13'bx_xxxx_xxx1_01xx
-`define SYS_OUTPUT_SEL      13'bx_xxxx_xxx1_10xx
-    `define SYS_OUTPUT_SEL_CH0_BS   4'b0000
-    `define SYS_OUTPUT_SEL_CH0_PCM  4'b0001
-    `define SYS_OUTPUT_SEL_CH1_BS   4'b0010
-    `define SYS_OUTPUT_SEL_CH1_PCM  4'b0011
-    `define SYS_OUTPUT_SEL_SINGLE   4'b0100
-    `define SYS_OUTPUT_SEL_DIFF     4'b0101
-    `define SYS_OUTPUT_SEL_PNGEN    4'b0110
-    `define SYS_OUTPUT_SEL_FS       4'b0111
-`define SYS_BERT_MUX_SEL    13'bx_xxxx_xxx1_11xx
 
 // Define bitsyncTopRegs memory map
 `define BS_TOP_CONTROL          13'bx_xxxx_xxx0_00xx

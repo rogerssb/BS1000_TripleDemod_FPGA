@@ -277,6 +277,11 @@ module ics307Interface #(parameter SysclkDivider = 2)
             casex (spiState)
                 // Wait for a start signal
                 WAIT: begin
+                    if (negEdgeSCK) begin
+                        CS0 <= 0;
+                        CS1 <= 0;
+                        CS2 <= 0;
+                    end
                     xferDone <= 0;
                     if (startSR0 == 3'b011) begin
                         spiState <= START;
@@ -319,9 +324,6 @@ module ics307Interface #(parameter SysclkDivider = 2)
                         sr <= {sr[130:0],1'b0};
                         if (bitcount == 0) begin
                             spiState <= STROBE;
-                            CS0 <= startPll0;
-                            CS1 <= startPll1;
-                            CS2 <= startPll2;
                             sckEnable <= 0;
                         end
                         else begin
@@ -332,9 +334,9 @@ module ics307Interface #(parameter SysclkDivider = 2)
                 STROBE: begin
                     if (negEdgeSCK) begin
                         spiState <= WAIT;
-                        CS0 <= 0;
-                        CS1 <= 0;
-                        CS2 <= 0;
+                        CS0 <= startPll0;
+                        CS1 <= startPll1;
+                        CS2 <= startPll2;
                         xferDone <= 1;
                     end
                 end

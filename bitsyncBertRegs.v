@@ -59,7 +59,7 @@ output          pnGeneratorEnable;
 reg             pnGeneratorEnable;
 
 output          reset;
-reg             reset;
+(* max_fanout = 1000 *) reg             reset;
 
 output          reboot;
 reg             reboot;
