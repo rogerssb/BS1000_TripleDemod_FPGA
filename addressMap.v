@@ -45,6 +45,8 @@
     `define SYS_DAC_INPUT_SEL_BERT  3'b010
     `define SYS_DAC_INPUT_SEL_FS    3'b011
     `define SYS_DAC_INPUT_SEL_PNGEN 3'b100
+    `define SYS_DAC_INPUT_SEL_DLL0  3'b101
+    `define SYS_DAC_INPUT_SEL_DLL1  3'b110
 `define SYS_REBOOT_ADDR     13'bx_xxxx_xxx0_11xx
 `define SYS_TYPE            13'bx_xxxx_xxx1_000x
 `define SYS_RSVD1           13'bx_xxxx_xxx1_001x
@@ -58,7 +60,8 @@
     `define SYS_OUTPUT_SEL_DIFF     4'b0101
     `define SYS_OUTPUT_SEL_PNGEN    4'b0110
     `define SYS_OUTPUT_SEL_FS       4'b0111
-`define SYS_BERT_MUX_SEL    13'bx_xxxx_xxx1_11xx
+`define SYS_BERT_MUX_SEL    13'bx_xxxx_xxx1_110x
+`define SYS_FRAMER_MUX_SEL  13'bx_xxxx_xxx1_111x
 
 `define INTERP0SPACE        13'b0_00xx_0010_xxxx
 `define VIDFIR0SPACE        13'b0_00xx_0011_xxxx
@@ -68,6 +71,14 @@
 `define VIDFIR2SPACE        13'b0_00xx_0111_xxxx
 `define DUAL_DECODERSPACE   13'b0_00xx_1000_xxxx
 `define CH1_DECODERSPACE    13'b0_00xx_1001_xxxx
+
+// Digital PLL subsystem registers
+`define DLL0SPACE           13'b0_00xx_1010_0xxx
+`define DLL1SPACE           13'b0_00xx_1010_1xxx
+`define DLL2SPACE           13'b0_00xx_1011_0xxx
+
+`define DLL_CENTER_FREQ     13'bx_xxxx_xxxx_x0xx
+`define DLL_GAINS           13'bx_xxxx_xxxx_x1xx
 
 // PLL subsystem registers
 `define PLLSPACE            13'b0_00xx_11xx_xxxx
@@ -132,6 +143,11 @@
 
 
 // Framesync subsystem registers
+`define FRAMER_SPACE            13'b1_00xx_xxxx_xxxx
+
+`define FRAMER_CONTROL          13'bx_xxxx_xxxx_00xx
+`define FRAMER_SYNCWORD         13'bx_xxxx_xxxx_01xx
+`define FRAMER_SYNCWORD_MASK    13'bx_xxxx_xxxx_10xx
 
 
 

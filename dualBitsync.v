@@ -100,20 +100,27 @@ always @(posedge sampleClk) begin
 /******************************************************************************
                                Symbol Offset Deskew
 ******************************************************************************/
-reg     [17:0]  ch0MF,ch1MF;
-reg     [17:0]  ch0SymDelay,ch1SymDelay;
-always @(posedge sampleClk) begin
-    if (ch0ClkEn) begin
-        ch0MF <= ch0Filtered;
-        ch0SymDelay <= ch0Filtered;
-        ch1SymDelay <= ch1Filtered;
-        if (bitsyncMode == `BS_MODE_OFFSET_CH) begin
-            ch0MF <= ch0SymDelay;
-            ch1MF <= ch1Filtered;
-            end
-        else begin
+    reg     [17:0]  ch0MF,ch1MF;
+    reg     [17:0]  ch0SymDelay,ch1SymDelay;
+    wire            delayCh0 = 1'b0;
+    always @(posedge sampleClk) begin
+        if (ch0ClkEn) begin
             ch0MF <= ch0Filtered;
-            ch1MF <= ch1Filtered;
+            ch0SymDelay <= ch0Filtered;
+            ch1SymDelay <= ch1Filtered;
+            if (bitsyncMode == `BS_MODE_OFFSET_CH) begin
+                if (delayCh0) begin
+                    ch0MF <= ch0SymDelay;
+                    ch1MF <= ch1Filtered;
+                end
+                else begin
+                    ch1MF <= ch0Filtered;
+                    ch0MF <= ch1SymDelay;
+                end
+            end
+            else begin
+                ch0MF <= ch0Filtered;
+                ch1MF <= ch1Filtered;
             end
         end
     end
@@ -173,7 +180,7 @@ reg  stateMachineSlip;
 `ifdef ENABLE_SMSLIP
 wire slip = stateMachineSlip;
 `else
-wire slip = 1'b0;
+wire  slip = 1'b0;
 `endif
 reg slipped;
 reg     [17:0]  slipErrorI;
@@ -391,7 +398,8 @@ always @(posedge sampleClk) begin
         end
     else if (ch0ClkEn) begin
         if (slipState == TEST) begin
-            if (avgError[21:12] > {2'b0,avgSlipError[21:14]}) begin
+            //if (avgError[21:12] > {2'b0,avgSlipError[21:14]}) begin
+            if (avgError[21:12] > {1'b0,avgSlipError[21:13]}) begin
                 if (ch0LockCounter == (16'hffff-lockCount)) begin
                     ch0BitsyncLock <= 0;
                     ch0LockCounter <= 16'h0;
@@ -681,10 +689,10 @@ always @(posedge sampleClk) begin
 
 // Clock Enables
 assign ch0Sym2xEn = ch0ClkEn;
-assign ch0SymEn = ch0ClkEn & !timingErrorEn;
+assign ch0SymEn = ch0ClkEn & timingErrorEn;
 assign ch0SymClk = timingErrorEn;
 assign ch1Sym2xEn = ch1ClkEn;
-assign ch1SymEn = ch1ClkEn & !asyncTimingErrorEn;
+assign ch1SymEn = ch1ClkEn & asyncTimingErrorEn;
 assign ch1SymClk = asyncTimingErrorEn;
 
 

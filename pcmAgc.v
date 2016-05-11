@@ -44,11 +44,12 @@ always @* magReal = $itor($unsigned(rxLevel))/(2**17);
 
     // Convert the linear level to log base 2
     wire    [7:0]   log2Mag;
+    wire    [15:0]  linear = rxLevel[16:1];
     log2 log2(
         .clk(clk),
         .reset(reset),
         .syncIn(clkEn),
-        .linear(rxLevel[16:1]),
+        .linear(linear),
         .log(log2Mag)
     );
 

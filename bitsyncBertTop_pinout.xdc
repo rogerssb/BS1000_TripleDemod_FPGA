@@ -226,6 +226,7 @@ set_property PACKAGE_PIN J25 [get_ports singleEndedClk]
 set_property PACKAGE_PIN J24 [get_ports singleEndedData]
 set_property PACKAGE_PIN A13 [get_ports differentialClk]
 set_property PACKAGE_PIN C13 [get_ports differentialData]
+set_property PACKAGE_PIN G25 [get_ports framesyncPulse]
 
 
 
@@ -618,6 +619,7 @@ set_property IOSTANDARD LVCMOS33 [get_ports singleEndedClk]
 set_property IOSTANDARD LVCMOS33 [get_ports singleEndedData]
 set_property IOSTANDARD LVCMOS33 [get_ports differentialClk]
 set_property IOSTANDARD LVCMOS33 [get_ports differentialData]
+set_property IOSTANDARD LVCMOS33 [get_ports framesyncPulse]
 
 
 

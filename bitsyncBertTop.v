@@ -29,6 +29,7 @@ module bitsyncBertTop (
     fsClkOut,fsDataOut,
     bsDiffClkOut, bsDiffDataOut,
     fsDiffClkOut, fsDiffDataOut,
+    framesyncPulse,
     ch0Lockn, ch1Lockn,
     dacSCLK, dacMOSI, 
     ch0SELn,
@@ -96,6 +97,9 @@ module bitsyncBertTop (
     output          bsDiffClkOut, bsDiffDataOut;
     output          fsDiffClkOut, fsDiffDataOut;
 
+    // Framer Outputs
+    output          framesyncPulse;
+
     // Lock indicators
     output          ch0Lockn, ch1Lockn;
 
@@ -125,7 +129,7 @@ module bitsyncBertTop (
     input           pll2_OUT1;
     output          pll2_PWDn;
 
-    parameter VER_NUMBER = 16'd425;
+    parameter VER_NUMBER = 16'd427;
 
 
 //******************************************************************************
@@ -168,7 +172,30 @@ module bitsyncBertTop (
     wire    rd = !fb_oen;
 
 //******************************************************************************
-//                             Reclock Inputs
+//                    Reclock Clock and Data Inputs
+//******************************************************************************
+clockAndDataInputSync seSync(
+  .wr_clk(singleEndedClk),
+  .din(singleEndedData),
+  .reset(reset),
+  .rd_clk(clk),
+  .enable(seClkEn),
+  .dout(seData)
+);
+
+clockAndDataInputSync diffSync(
+  .wr_clk(differentialClk),
+  .din(differentialData),
+  .reset(reset),
+  .rd_clk(clk),
+  .enable(diffClkEn),
+  .dout(diffData)
+);
+
+
+
+//******************************************************************************
+//                           Reclock ADC Inputs
 //******************************************************************************
     reg             [13:0]  adc0Reg,adc1Reg;
     reg     signed  [17:0]  adc0In, adc1In;
@@ -201,6 +228,7 @@ module bitsyncBertTop (
     wire    [3:0]   fsRS422MuxSelect;
     wire    [3:0]   encCoaxMuxSelect;
     wire    [3:0]   bertInputMuxSelect;
+    wire    [3:0]   framerInputMuxSelect;
     wire    [31:0]  bsBertDout;
     bitsyncBertRegs topRegs(
         .busClk(fb_clk),
@@ -213,7 +241,7 @@ module bitsyncBertTop (
         .versionNumber(VER_NUMBER),
         .bitsyncEnable(bitsyncEnable),
         .bertEnable(bertEnable),
-        .framesyncEnable(),
+        .framesyncEnable(framerEnable),
         .pnGeneratorEnable(pngenEnable),
         .reset(reset),
         .reboot(reboot),
@@ -226,13 +254,15 @@ module bitsyncBertTop (
         .fsMuxSelect(fsMuxSelect),
         .fsRS422MuxSelect(fsRS422MuxSelect),
         .encCoaxMuxSelect(encCoaxMuxSelect),
-        .bertMuxSelect(bertInputMuxSelect)
+        .bertMuxSelect(bertInputMuxSelect),
+        .framerMuxSelect(framerInputMuxSelect)
     );
 
 
 //******************************************************************************
 //                          Two Channel Bitsync
 //******************************************************************************
+    wire    [1:0]   rotation;
     wire    [17:0]  ch0SymData, ch1SymData;
     wire    [17:0]  ch0Gain,ch0Offset;
     wire    [17:0]  ch1Gain,ch1Offset;
@@ -250,6 +280,7 @@ module bitsyncBertTop (
         .dout(bsDout),
         .rx0(adc0In), 
         .rx1(adc1In),
+        .rotation(rotation),
         .ch0Lock(ch0Lock),
         .ch0Sym2xEn(ch0Sym2xEn),
         .ch0SymEn(ch0SymEn),
@@ -387,23 +418,23 @@ module bitsyncBertTop (
 //******************************************************************************
     clockAndDataMux bertMux(
         .muxSelect(bertInputMuxSelect),
-        .clk0(ch0ClkOut),
+        .clk0(ch0SymEn),
         .data0(ch0DataOut),
-        .clk1(pll0_Clk),
-        .data1(pll0_Data),
-        .clk2(ch1ClkOut),
+        .clk1(dualPcmClkEn),
+        .data1(dualDataI),
+        .clk2(ch1SymEn),
         .data2(ch1DataOut),
-        .clk3(pll1_Clk),
-        .data3(pll1_Data),
-        .clk4(singleEndedClk),
-        .data4(singleEndedData),
-        .clk5(differentialClk),
-        .data5(differentialData),
+        .clk3(ch1PcmClkEn),
+        .data3(ch1PcmData),
+        .clk4(seClkEn),
+        .data4(seData),
+        .clk5(diffClkEn),
+        .data5(diffData),
         .clk6(1'b0),
         .data6(1'b0),
         .clk7(1'b0),
         .data7(1'b0),
-        .outputClk(bertClk),
+        .outputClk(bertClkEn),
         .outputData(bertData)
     );
 
@@ -424,8 +455,8 @@ module bitsyncBertTop (
         .dataIn(dataIn),
         .dataOut(bertDout),
         .clk(clk),
-        .dclk(bertClk),
-        .din(bertData)
+        .enable(bertClkEn),
+        .data(bertData)
     );
 
 
@@ -447,10 +478,87 @@ module bitsyncBertTop (
     );
 
 
+//******************************************************************************
+//                               Framer
+//******************************************************************************
+    clockAndDataMux framerMux(
+        .muxSelect(framerInputMuxSelect),
+        .clk0(ch0SymEn),
+        .data0(ch0DataOut),
+        .clk1(dualPcmClkEn),
+        .data1(dualDataI),
+        .clk2(ch1SymEn),
+        .data2(ch1DataOut),
+        .clk3(ch1PcmClkEn),
+        .data3(ch1PcmData),
+        .clk4(seClkEn),
+        .data4(seData),
+        .clk5(diffClkEn),
+        .data5(diffData),
+        .clk6(1'b0),
+        .data6(1'b0),
+        .clk7(1'b0),
+        .data7(1'b0),
+        .outputClk(framerClkEn),
+        .outputData(framerData)
+    );
+
+    wire    [1:0]   framerRotation;
+    wire    [31:0]  framerDout;
+    framerTop framer(
+        .reset(reset),
+        .busClk(fb_clk),
+        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .addr(addr),
+        .din(dataIn),
+        .dout(framerDout),
+        .clk(clk),
+        .clkEn(framerClkEn),
+        .dataBitIn(framerData),
+        .rotation(framerRotation),
+        .framesyncPulse(framesyncPulse),
+        .framedBitOut(framerDataOut),
+        .framesync(framesync)
+    );
+
+    assign rotation = framerEnable ? framerRotation : 2'b0;
+
 
 //******************************************************************************
 //                       Clock/Data Jitter Reduction
 //******************************************************************************
+
+    wire    [7:0]   dll0PhaseError;
+    wire    [31:0]  dll0Dout;
+    digitalPLL #(.REG_SPACE(`DLL0SPACE)) dll0(
+        .clk(clk),
+        .reset(reset),
+        .busClk(fb_clk),
+        .addr(addr),
+        .dataIn(dataIn),
+        .dataOut(dll0Dout),
+        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .referenceClkEn(dualPcmClkEn),
+        .dllOutputClk(pll0_REF),
+        .dllOutputClkEn(),
+        .phaseError(dll0PhaseError)
+    );
+
+    wire    [7:0]   dll1PhaseError;
+    wire    [31:0]  dll1Dout;
+    digitalPLL #(.REG_SPACE(`DLL1SPACE)) dll1(
+        .clk(clk),
+        .reset(reset),
+        .busClk(fb_clk),
+        .addr(addr),
+        .dataIn(dataIn),
+        .dataOut(dll1Dout),
+        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .referenceClkEn(ch1SymEn),
+        .dllOutputClk(pll1_REF),
+        .dllOutputClkEn(),
+        .phaseError(dll1PhaseError)
+    );
 
     // SPI interface to the PLLs
     wire    [31:0]  pllDout;
@@ -476,8 +584,8 @@ module bitsyncBertTop (
     );
 
     //------------- PLL Reference Clocks --------------
-    assign          pll0_REF = ch0SymEn;
-    assign          pll1_REF = ch1SymEn;
+    //assign          pll0_REF = dualPcmClkEn;
+    //assign          pll1_REF = ch1SymEn;
     assign          pll2_REF = pnClkEn;
 
     //------------- PLL0 Data FIFO --------------------
@@ -580,6 +688,14 @@ always @(posedge clk) begin
         `SYS_DAC_INPUT_SEL_CH1: begin
             interp0DataIn <= ch1Dac0Data;
             interp0ClkEn <= ch1Dac0ClkEn;
+        end
+        `SYS_DAC_INPUT_SEL_DLL0: begin
+            interp0DataIn <= {1'b0,dll0PhaseError,9'b0};
+            interp0ClkEn <= 1'b1;
+        end
+        `SYS_DAC_INPUT_SEL_DLL1: begin
+            interp0DataIn <= {1'b0,dll1PhaseError,9'b0};
+            interp0ClkEn <= 1'b1;
         end
         default: begin
             interp0DataIn <= ch0Dac0Data;
@@ -719,8 +835,8 @@ clockAndDataMux bsMux(
     .data5(1'b0),
     .clk6(pll2_Clk),
     .data6(pll2_Data),
-    .clk7(1'b0),
-    .data7(1'b0),
+    .clk7(framerClkEn),
+    .data7(framerDataOut),
     .outputClk(bsClkOut),
     .outputData(bsDataOut)
 );
@@ -743,8 +859,8 @@ clockAndDataMux bsDiffMux(
     .data5(1'b0),
     .clk6(pll2_Clk),
     .data6(pll2_Data),
-    .clk7(1'b0),
-    .data7(1'b0),
+    .clk7(framerClkEn),
+    .data7(framerDataOut),
     .outputClk(bsDiffClkOut),
     .outputData(bsDiffDataOut)
 );
@@ -765,8 +881,8 @@ clockAndDataMux encMux(
     .data5(1'b0),
     .clk6(pll2_Clk),
     .data6(pll2_Data),
-    .clk7(1'b0),
-    .data7(1'b0),
+    .clk7(framerClkEn),
+    .data7(framerDataOut),
     .outputClk(encClkOut),
     .outputData(encDataOut)
 );
@@ -787,8 +903,8 @@ clockAndDataMux fsMux(
     .data5(1'b0),
     .clk6(pll2_Clk),
     .data6(pll2_Data),
-    .clk7(1'b0),
-    .data7(1'b0),
+    .clk7(framerClkEn),
+    .data7(framerDataOut),
     .outputClk(fsClkOut),
     .outputData(fsDataOut)
 );
@@ -809,8 +925,8 @@ clockAndDataMux fsDiffMux(
     .data5(1'b0),
     .clk6(pll2_Clk),
     .data6(pll2_Data),
-    .clk7(1'b0),
-    .data7(1'b0),
+    .clk7(framerClkEn),
+    .data7(framerDataOut),
     .outputClk(fsDiffClkOut),
     .outputData(fsDiffDataOut)
 );
@@ -838,6 +954,14 @@ always @* begin
             end
             else begin
                 rd_mux = pngenDout[15:0];
+            end
+        end
+        `FRAMER_SPACE: begin
+            if (addr[1]) begin
+                rd_mux = framerDout[31:16];
+            end
+            else begin
+                rd_mux = framerDout[15:0];
             end
         end
         `BITSYNC_TOP_SPACE, 
@@ -891,6 +1015,22 @@ always @* begin
                 end
             else begin
                 rd_mux = interp2Dout[15:0];
+                end
+            end
+        `DLL0SPACE: begin
+            if (addr[1]) begin
+                rd_mux = dll0Dout[31:16];
+                end
+            else begin
+                rd_mux = dll0Dout[15:0];
+                end
+            end
+        `DLL1SPACE: begin
+            if (addr[1]) begin
+                rd_mux = dll1Dout[31:16];
+                end
+            else begin
+                rd_mux = dll1Dout[15:0];
                 end
             end
         `PLLSPACE: begin

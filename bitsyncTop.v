@@ -20,6 +20,7 @@ module bitsyncTop(
     dout,
     rx0, 
     rx1,
+    rotation,
     ch0Lock,
     ch0Sym2xEn,
     ch0SymEn,
@@ -72,6 +73,7 @@ input           [31:0]  din;
 output          [31:0]  dout;
 input   signed  [17:0]  rx0;
 input   signed  [17:0]  rx1;
+input           [1:0]   rotation;
 output                  ch0Lock;
 output                  ch0Sym2xEn;
 output                  ch0SymEn;
@@ -353,12 +355,12 @@ dualBitsync dualBitsync(
     .ch0SymEn(ch0SymEn),
     .ch0SymClk(ch0SymClk),
     .ch0SymData(ch0SymData),
-    .ch0BitData(ch0Bit),
+    .ch0BitData(ch0BsBit),
     .ch1Sym2xEn(ch1Sym2xEn),
     .ch1SymEn(ch1SymEn),
     .ch1SymClk(ch1SymClk),
     .ch1SymData(ch1SymData),
-    .ch1BitData(ch1Bit),
+    .ch1BitData(ch1BsBit),
     .ch0SampleFreq(ch0ResamplerFreqOffset),
     .ch1SampleFreq(asyncResamplerFreqOffset),
     .ch0BitsyncLock(ch0Lock),
@@ -408,6 +410,67 @@ pcmAgcLoop #(.RegSpace(`CH1_AGCSPACE)) pcmAgcLoop1(
     .rxLevel(ch1Level),
     .agcGain(ch1Gain)
 );
+
+//******************************************************************************
+//                        QPSK/OQPSK Ambiguity Resolution
+//******************************************************************************
+    reg     ch0Bit,ch1Bit,qDelay;
+    always @(posedge clk) begin
+        if (bitsyncMode == `BS_MODE_DUAL_CH) begin
+            if (ch0SymEn) begin
+                case (rotation)
+                    0: begin
+                        ch0Bit <= ch0BsBit;
+                        ch1Bit <= ch1BsBit;
+                    end
+                    1: begin
+                        ch0Bit <= ch1BsBit;
+                        ch1Bit <= ~ch0BsBit;
+                    end
+                    2: begin
+                        ch0Bit <= ~ch0BsBit;
+                        ch1Bit <= ~ch1BsBit;
+                    end
+                    3: begin
+                        ch0Bit <= ~ch1BsBit;
+                        ch1Bit <= ch0BsBit;
+                    end
+                endcase
+            end
+        end
+        else if (bitsyncMode == `BS_MODE_OFFSET_CH) begin
+            if (ch0SymEn) begin
+                qDelay <= ch1BsBit;
+                case (rotation)
+                    0: begin
+                        ch0Bit <= ch0BsBit;
+                        ch1Bit <= ch1BsBit;
+                    end
+                    1: begin
+                        ch0Bit <= qDelay;
+                        ch1Bit <= ~ch0BsBit;
+                    end
+                    2: begin
+                        ch0Bit <= ~ch0BsBit;
+                        ch1Bit <= ~ch1BsBit;
+                    end
+                    3: begin
+                        ch0Bit <= ~qDelay;
+                        ch1Bit <= ch0BsBit;
+                    end
+                endcase
+            end
+        end
+        else begin
+            if (ch0SymEn) begin
+                ch0Bit <= ch0BsBit;
+            end
+            if (ch1SymEn) begin
+                ch1Bit <= ch1BsBit;
+            end
+        end
+    end
+
 
 /******************************************************************************
                                DAC Output Mux

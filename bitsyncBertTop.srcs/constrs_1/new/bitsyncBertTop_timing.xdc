@@ -120,6 +120,8 @@ set_property BITSTREAM.CONFIG.SPI_BUSWIDTH 1 [current_design]
 
 set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets pll0_OUT1_IBUF]
 set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets pll2_OUT1_IBUF]
+set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets singleEndedClk_IBUF]
+set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets differentialClk_IBUF]
 
 create_clock -period 25.000 -name pll0_OUT1 -waveform {0.000 12.500} [get_ports pll0_OUT1]
 create_clock -period 25.000 -name pll1_OUT1 -waveform {0.000 12.500} [get_ports pll1_OUT1]

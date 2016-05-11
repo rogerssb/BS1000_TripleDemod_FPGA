@@ -34,7 +34,8 @@ module bitsyncBertRegs(
     fsMuxSelect,
     bsRS422MuxSelect,
     fsRS422MuxSelect,
-    bertMuxSelect
+    bertMuxSelect,
+    framerMuxSelect
     );
 
 input           busClk;
@@ -93,6 +94,9 @@ reg     [3:0]   fsRS422MuxSelect;
 
 output  [3:0]   bertMuxSelect;
 reg     [3:0]   bertMuxSelect;
+
+output  [3:0]   framerMuxSelect;
+reg     [3:0]   framerMuxSelect;
 
 //****************************** Reset Pulse **********************************
 
@@ -198,6 +202,7 @@ always @(posedge busClk) begin
                                 fsMuxSelect <= dataIn[19:16];
                                 fsRS422MuxSelect <= dataIn[23:20];
                                 end
+            `SYS_FRAMER_MUX_SEL:framerMuxSelect <= dataIn[19:16];
             default: ;
         endcase
     end
@@ -234,7 +239,10 @@ always @* begin
                            bsRS422MuxSelect,bsCoaxMuxSelect};
                 end
             `SYS_BERT_MUX_SEL: begin
-                dataOut = {28'b0,bertMuxSelect};
+                dataOut = {12'b0,framerMuxSelect,12'b0,bertMuxSelect};
+                end
+            `SYS_FRAMER_MUX_SEL: begin
+                dataOut = {12'b0,framerMuxSelect,12'b0,bertMuxSelect};
                 end
             default: begin
                 dataOut = 32'b0;

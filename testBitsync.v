@@ -58,7 +58,7 @@ initial bitrateSamplesInt = bitrateSamples;
 
 // value = 2^ceiling(log2(R*R))/(R*R), where R = interpolation rate of the FM
 // modulator
-real interpolationGain = 3.4290;
+real interpolationGain = 1.77778;
 
 reg     [31:0]  dfControl;
 initial dfControl = (dfDecimation == 1) ? 32'h0000_000f :
@@ -188,7 +188,7 @@ interpolate #(.RegSpace(`INTERP0SPACE), .FirRegSpace(`VIDFIR0SPACE)) ch0Interpol
 
 wire    [17:0]  ch0Gain;
 real ch0GainReal;
-always @* ch0GainReal = $itor(ch0Gain[17:6]);
+always @* ch0GainReal = $itor($unsigned(ch0Gain[17:6]));
 wire    [17:0]  ch1Gain;
 real agcGain;
 always @* agcGain = (10.0 ** (50*ch0GainReal/(2**12)/20));
@@ -242,7 +242,7 @@ bitsyncTop bitsyncTop(
     .rx0(rxInput), 
     .rx1(rxInput),
     .ch0Lock(),
-    .ch0Sym2xEn(),
+    .ch0Sym2xEn(ch0Sym2xEn),
     .ch0SymEn(ch0SymEn),
     .ch0SymData(),
     .ch0SymClk(pll0_OUT1),
@@ -319,6 +319,19 @@ interpolate #(.RegSpace(`INTERP2SPACE), .FirRegSpace(`VIDFIR2SPACE)) dac2Interp(
 );
 assign dac2_d = dac2Data[17:4];
 assign dac2_clk = clk;
+
+    digitalPLL #(.REG_SPACE(`DLL0SPACE)) dll0(
+        .clk(clk),
+        .reset(reset),
+        .busClk(bc),
+        .addr(a),
+        .dataIn(d),
+        .dataOut(),
+        .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
+        .referenceClkEn(ch0SymEn),
+        .dllOutputClk(),
+        .dllOutputClkEn()
+    );
 
 
 mcp48xxInterface dacInterface (
@@ -430,8 +443,8 @@ mcp48xxInterface dacInterface (
         .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
         .reset(reset | bertReset),
         .clk(clk),
-        .dclk(pll0_OUT1),
-        .din(ch0DataOut)
+        .enable(ch0SymEn),
+        .data(ch0DataOut)
     );
 
     `endif
@@ -698,7 +711,7 @@ initial begin
     // Init the channel agc loop filter
     write32(createAddress(`CH0_AGCSPACE,`ALF_CONTROL),1);                 // Zero the error
     write32(createAddress(`CH0_AGCSPACE,`ALF_SETPOINT),32'h0000fff0);     // AGC Setpoint
-    write32(createAddress(`CH0_AGCSPACE,`ALF_GAINS),32'h001c001c);        // AGC Loop Gain
+    write32(createAddress(`CH0_AGCSPACE,`ALF_GAINS),32'h001a001a);        // AGC Loop Gain
     write32(createAddress(`CH0_AGCSPACE,`ALF_ULIMIT),32'hff000000);       // AGC Upper limit
     write32(createAddress(`CH0_AGCSPACE,`ALF_LLIMIT),32'h00000000);       // AGC Lower limit
     bitsyncTop.pcmAgcLoop0.lf.integrator = 32'h4000_0000;
@@ -728,6 +741,9 @@ initial begin
     write32(createAddress(`BERT_SPACE,`SINGLE_TEST_LENGTH), 32'd5000);
     write32(createAddress(`BERT_SPACE,`TEST_CONTROL), 32'h0);
     `endif
+
+    write32(createAddress(`DLL0SPACE,`DLL_CENTER_FREQ), 32'd178956970);
+    write32(createAddress(`DLL0SPACE,`DLL_GAINS),32'd7);
 
     reset = 1;
     #(2*C) ;
@@ -768,7 +784,7 @@ initial begin
     interpReset = 0;
 
     // Enable the sample rate loop with 2 sample summer
-    write32(createAddress(`CH0_BITSYNCSPACE,`LF_CONTROL),32'h00000010);  
+    //write32(createAddress(`CH0_BITSYNCSPACE,`LF_CONTROL),32'h00000010);  
 
     // Wait
     #(20*bitrateSamplesInt*C) ;

@@ -9,8 +9,8 @@ module bert_top (
   wr0, wr1, wr2, wr3,
   reset,
   clk,
-  dclk,
-  din
+  enable,
+  data
 );
 
 input busClk;
@@ -21,8 +21,8 @@ output [31:0] dataOut;
 input wr0, wr1, wr2, wr3;
 input reset;
 input clk;
-input dclk;
-input din;
+input enable;
+input data;
 
 
 // i/o register wiring
@@ -76,7 +76,6 @@ bert_registers bert_registers (
 // module wiring
 
 wire clock = clk;
-wire data, enable;
 wire no_data;
 wire error_insert;
 wire reload, lfsr_enable;
@@ -84,15 +83,6 @@ wire corr1_data_bit, corr1_code_bit;
 wire corr2_data_bit, corr2_code_bit;
 wire polarity_switch;
 wire slip_blackout;
-
-bert_input_sync bert_input_sync (
-  .wr_clk(dclk),                            //input
-  .din(din),                                //input
-  .reset(reset),                            //input
-  .rd_clk(clk),                             //input
-  .dout(data),                              //output
-  .enable(enable)                           //output
-);
 
 bert_data_detect bert_data_detect (
   .reset(reset),                            //input

@@ -10,7 +10,11 @@
          </top_modules>
       </db_ref>
    </db_ref_list>
-   <WVObjectSize size="9" />
+   <WVObjectSize size="13" />
+   <wave_markers>
+      <marker time="20165000000" label="" />
+      <marker time="39580097000" label="" />
+   </wave_markers>
    <wvobject db_ref_id="1" fp_name="/test/dfDecimationReal" type="other">
       <obj_property name="ElementShortName">dfDecimationReal</obj_property>
       <obj_property name="ObjectShortName">dfDecimationReal</obj_property>
@@ -26,6 +30,11 @@
    <wvobject db_ref_id="1" fp_name="/test/resamplerFreqSps" type="other">
       <obj_property name="ElementShortName">resamplerFreqSps</obj_property>
       <obj_property name="ObjectShortName">resamplerFreqSps</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/test/resamplerFreqInt" type="array">
+      <obj_property name="ElementShortName">resamplerFreqInt[31:0]</obj_property>
+      <obj_property name="ObjectShortName">resamplerFreqInt[31:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
    </wvobject>
    <wvobject fp_name="group155" type="group">
       <obj_property name="label">TX</obj_property>
@@ -66,11 +75,28 @@
          <obj_property name="ObjectShortName">ch0Gain[17:0]</obj_property>
          <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
          <obj_property name="CellHeight">100</obj_property>
-         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/test/agcGain" type="other">
+         <obj_property name="ElementShortName">agcGain</obj_property>
+         <obj_property name="ObjectShortName">agcGain</obj_property>
       </wvobject>
       <wvobject db_ref_id="1" fp_name="/test/rxAgc" type="other">
          <obj_property name="ElementShortName">rxAgc</obj_property>
          <obj_property name="ObjectShortName">rxAgc</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/test/rxInput" type="array">
+         <obj_property name="ElementShortName">rxInput[17:0]</obj_property>
+         <obj_property name="ObjectShortName">rxInput[17:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+         <obj_property name="CellHeight">100</obj_property>
+         <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
+         <obj_property name="AnalogYRangeMin">0.000000</obj_property>
+         <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
+         <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
+         <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
+         <obj_property name="AnalogHorizLine">0.000000</obj_property>
       </wvobject>
    </wvobject>
    <wvobject fp_name="group161" type="group">
@@ -155,10 +181,6 @@
          <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
          <obj_property name="AnalogHorizLine">0.000000</obj_property>
       </wvobject>
-      <wvobject db_ref_id="1" fp_name="/test/bitsyncTop/ch0Sym2xEn" type="logic">
-         <obj_property name="ElementShortName">ch0Sym2xEn</obj_property>
-         <obj_property name="ObjectShortName">ch0Sym2xEn</obj_property>
-      </wvobject>
       <wvobject db_ref_id="1" fp_name="/test/bitsyncTop/ch0SymData" type="array">
          <obj_property name="ElementShortName">ch0SymData[17:0]</obj_property>
          <obj_property name="ObjectShortName">ch0SymData[17:0]</obj_property>
@@ -171,19 +193,6 @@
          <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
          <obj_property name="AnalogHorizLine">0.000000</obj_property>
          <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-      </wvobject>
-      <wvobject db_ref_id="1" fp_name="/test/bitsyncTop/dualBitsync/ch0MF" type="array">
-         <obj_property name="ElementShortName">ch0MF[17:0]</obj_property>
-         <obj_property name="ObjectShortName">ch0MF[17:0]</obj_property>
-         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
-         <obj_property name="CellHeight">100</obj_property>
-         <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
-         <obj_property name="AnalogYRangeMin">0.000000</obj_property>
-         <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
-         <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
-         <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
-         <obj_property name="AnalogHorizLine">0.000000</obj_property>
       </wvobject>
       <wvobject db_ref_id="1" fp_name="/test/bitsyncTop/dualBitsync/ch1MF" type="array">
          <obj_property name="ElementShortName">ch1MF[17:0]</obj_property>
@@ -199,29 +208,173 @@
          <obj_property name="AnalogHorizLine">0.000000</obj_property>
       </wvobject>
    </wvobject>
+   <wvobject fp_name="group123" type="group">
+      <obj_property name="label">BITSYNC</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject db_ref_id="1" fp_name="/test/bitsyncTop/dualBitsync/ch0ClkEn" type="logic">
+         <obj_property name="ElementShortName">ch0ClkEn</obj_property>
+         <obj_property name="ObjectShortName">ch0ClkEn</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/test/bitsyncTop/dualBitsync/sampleLoop/error" type="array">
+         <obj_property name="ElementShortName">error[11:0]</obj_property>
+         <obj_property name="ObjectShortName">error[11:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+         <obj_property name="CellHeight">100</obj_property>
+         <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
+         <obj_property name="AnalogYRangeMin">0.000000</obj_property>
+         <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
+         <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
+         <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
+         <obj_property name="AnalogHorizLine">0.000000</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/test/bitsyncTop/dualBitsync/ch0MF" type="array">
+         <obj_property name="ElementShortName">ch0MF[17:0]</obj_property>
+         <obj_property name="ObjectShortName">ch0MF[17:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+         <obj_property name="CellHeight">100</obj_property>
+         <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
+         <obj_property name="AnalogYRangeMin">0.000000</obj_property>
+         <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
+         <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
+         <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
+         <obj_property name="AnalogHorizLine">0.000000</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/test/bitsyncTop/dualBitsync/offTimeI" type="array">
+         <obj_property name="ElementShortName">offTimeI[17:0]</obj_property>
+         <obj_property name="ObjectShortName">offTimeI[17:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+         <obj_property name="CellHeight">100</obj_property>
+         <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
+         <obj_property name="AnalogYRangeMin">0.000000</obj_property>
+         <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
+         <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
+         <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
+         <obj_property name="AnalogHorizLine">0.000000</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/test/bitsyncTop/dualBitsync/timingError" type="array">
+         <obj_property name="ElementShortName">timingError[17:0]</obj_property>
+         <obj_property name="ObjectShortName">timingError[17:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+         <obj_property name="CellHeight">100</obj_property>
+         <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
+         <obj_property name="AnalogYRangeMin">0.000000</obj_property>
+         <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
+         <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
+         <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
+         <obj_property name="AnalogHorizLine">0.000000</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/test/bitsyncTop/dualBitsync/ch0" type="array">
+         <obj_property name="ElementShortName">ch0[17:0]</obj_property>
+         <obj_property name="ObjectShortName">ch0[17:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+         <obj_property name="CellHeight">100</obj_property>
+         <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
+         <obj_property name="AnalogYRangeMin">0.000000</obj_property>
+         <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
+         <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
+         <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
+         <obj_property name="AnalogHorizLine">0.000000</obj_property>
+      </wvobject>
+   </wvobject>
    <wvobject fp_name="group65" type="group">
       <obj_property name="label">AGC</obj_property>
       <obj_property name="DisplayName">label</obj_property>
+      <wvobject db_ref_id="1" fp_name="/test/bitsyncTop/pcmAgcLoop0/rx" type="array">
+         <obj_property name="ElementShortName">rx[17:0]</obj_property>
+         <obj_property name="ObjectShortName">rx[17:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+         <obj_property name="CellHeight">100</obj_property>
+         <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
+         <obj_property name="AnalogYRangeMin">0.000000</obj_property>
+         <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
+         <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
+         <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
+         <obj_property name="AnalogHorizLine">0.000000</obj_property>
+      </wvobject>
       <wvobject db_ref_id="1" fp_name="/test/bitsyncTop/pcmAgcLoop0/abs" type="array">
          <obj_property name="ElementShortName">abs[17:0]</obj_property>
          <obj_property name="ObjectShortName">abs[17:0]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+         <obj_property name="CellHeight">100</obj_property>
+         <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
+         <obj_property name="AnalogYRangeMin">0.000000</obj_property>
+         <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
+         <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
+         <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
+         <obj_property name="AnalogHorizLine">0.000000</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/test/bitsyncTop/pcmAgcLoop0/rxLevel" type="array">
+         <obj_property name="ElementShortName">rxLevel[16:0]</obj_property>
+         <obj_property name="ObjectShortName">rxLevel[16:0]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/test/bitsyncTop/pcmAgcLoop0/linear" type="array">
+         <obj_property name="ElementShortName">linear[15:0]</obj_property>
+         <obj_property name="ObjectShortName">linear[15:0]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/test/bitsyncTop/pcmAgcLoop0/log2/linear" type="array">
+         <obj_property name="ElementShortName">linear[15:0]</obj_property>
+         <obj_property name="ObjectShortName">linear[15:0]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/test/bitsyncTop/pcmAgcLoop0/log2Mag" type="array">
+         <obj_property name="ElementShortName">log2Mag[7:0]</obj_property>
+         <obj_property name="ObjectShortName">log2Mag[7:0]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+         <obj_property name="CellHeight">100</obj_property>
+         <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
+         <obj_property name="AnalogYRangeMin">0.000000</obj_property>
+         <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
+         <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
+         <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
+         <obj_property name="AnalogHorizLine">0.000000</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/test/bitsyncTop/pcmAgcLoop0/lf/log2SignalLevel" type="array">
+         <obj_property name="ElementShortName">log2SignalLevel[7:0]</obj_property>
+         <obj_property name="ObjectShortName">log2SignalLevel[7:0]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
       </wvobject>
       <wvobject db_ref_id="1" fp_name="/test/bitsyncTop/pcmAgcLoop0/lf/agcSetpoint" type="array">
          <obj_property name="ElementShortName">agcSetpoint[16:0]</obj_property>
          <obj_property name="ObjectShortName">agcSetpoint[16:0]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/test/bitsyncTop/pcmAgcLoop0/lf/log2Error" type="array">
+         <obj_property name="ElementShortName">log2Error[8:0]</obj_property>
+         <obj_property name="ObjectShortName">log2Error[8:0]</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/test/bitsyncTop/pcmAgcLoop0/lf/loopError" type="array">
+         <obj_property name="DisplayName">label</obj_property>
+         <obj_property name="ElementShortName">loopError[17:0]</obj_property>
+         <obj_property name="ObjectShortName">loopError[17:0]</obj_property>
+         <obj_property name="label">loopError[17:10]</obj_property>
       </wvobject>
       <wvobject db_ref_id="1" fp_name="/test/bitsyncTop/pcmAgcLoop0/lf/loopError" type="array">
          <obj_property name="ElementShortName">loopError[17:0]</obj_property>
          <obj_property name="ObjectShortName">loopError[17:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+         <obj_property name="CellHeight">100</obj_property>
+         <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
+         <obj_property name="AnalogYRangeMin">0.000000</obj_property>
+         <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
+         <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
+         <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
+         <obj_property name="AnalogHorizLine">0.000000</obj_property>
       </wvobject>
    </wvobject>
    <wvobject fp_name="group52" type="group">
       <obj_property name="label">BERT</obj_property>
       <obj_property name="DisplayName">label</obj_property>
-      <wvobject db_ref_id="1" fp_name="/test/bertReset" type="logic">
-         <obj_property name="ElementShortName">bertReset</obj_property>
-         <obj_property name="ObjectShortName">bertReset</obj_property>
-      </wvobject>
       <wvobject db_ref_id="1" fp_name="/test/testData" type="logic">
          <obj_property name="ElementShortName">testData</obj_property>
          <obj_property name="ObjectShortName">testData</obj_property>
@@ -238,153 +391,48 @@
          <obj_property name="ElementShortName">ch0SymEn</obj_property>
          <obj_property name="ObjectShortName">ch0SymEn</obj_property>
       </wvobject>
-      <wvobject db_ref_id="1" fp_name="/test/bert/bert_input_sync/wr_clk" type="logic">
-         <obj_property name="ElementShortName">wr_clk</obj_property>
-         <obj_property name="ObjectShortName">wr_clk</obj_property>
-      </wvobject>
-      <wvobject db_ref_id="1" fp_name="/test/bert/bert_input_sync/din" type="logic">
-         <obj_property name="ElementShortName">din</obj_property>
-         <obj_property name="ObjectShortName">din</obj_property>
-      </wvobject>
-      <wvobject db_ref_id="1" fp_name="/test/bert/bert_input_sync/rd_clk" type="logic">
-         <obj_property name="ElementShortName">rd_clk</obj_property>
-         <obj_property name="ObjectShortName">rd_clk</obj_property>
-      </wvobject>
-      <wvobject db_ref_id="1" fp_name="/test/bert/bert_input_sync/enable" type="logic">
-         <obj_property name="ElementShortName">enable</obj_property>
-         <obj_property name="ObjectShortName">enable</obj_property>
-      </wvobject>
-      <wvobject db_ref_id="1" fp_name="/test/bert/bert_input_sync/dout" type="logic">
-         <obj_property name="ElementShortName">dout</obj_property>
-         <obj_property name="ObjectShortName">dout</obj_property>
-      </wvobject>
-      <wvobject db_ref_id="1" fp_name="/test/bert/corr1_data_bit" type="logic">
-         <obj_property name="ElementShortName">corr1_data_bit</obj_property>
-         <obj_property name="ObjectShortName">corr1_data_bit</obj_property>
-      </wvobject>
-      <wvobject db_ref_id="1" fp_name="/test/bert/corr1_code_bit" type="logic">
-         <obj_property name="ElementShortName">corr1_code_bit</obj_property>
-         <obj_property name="ObjectShortName">corr1_code_bit</obj_property>
-      </wvobject>
-      <wvobject db_ref_id="1" fp_name="/test/bert/bert_correlator_1/data_buffer" type="array">
-         <obj_property name="DisplayName">label</obj_property>
-         <obj_property name="ElementShortName">data_buffer[23:0]</obj_property>
-         <obj_property name="ObjectShortName">data_buffer[23:0]</obj_property>
-         <obj_property name="label">data_buffer[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="group76" type="group">
+      <obj_property name="label">FRAMER</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject fp_name="group105" type="group">
+      <obj_property name="label">DPLL</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject db_ref_id="1" fp_name="/test/dll0/centerFreq" type="array">
+         <obj_property name="ElementShortName">centerFreq[31:0]</obj_property>
+         <obj_property name="ObjectShortName">centerFreq[31:0]</obj_property>
          <obj_property name="Radix">HEXRADIX</obj_property>
       </wvobject>
-      <wvobject db_ref_id="1" fp_name="/test/bert/bert_correlator_1/bert_lfsr/data" type="array">
-         <obj_property name="DisplayName">label</obj_property>
-         <obj_property name="ElementShortName">data[23:0]</obj_property>
-         <obj_property name="ObjectShortName">data[23:0]</obj_property>
-         <obj_property name="label">data[7:0]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
+      <wvobject db_ref_id="1" fp_name="/test/dll0/referenceClkEn" type="logic">
+         <obj_property name="ElementShortName">referenceClkEn</obj_property>
+         <obj_property name="ObjectShortName">referenceClkEn</obj_property>
       </wvobject>
-      <wvobject db_ref_id="1" fp_name="/test/bert/corr2_data_bit" type="logic">
-         <obj_property name="ElementShortName">corr2_data_bit</obj_property>
-         <obj_property name="ObjectShortName">corr2_data_bit</obj_property>
-      </wvobject>
-      <wvobject db_ref_id="1" fp_name="/test/bert/corr2_code_bit" type="logic">
-         <obj_property name="ElementShortName">corr2_code_bit</obj_property>
-         <obj_property name="ObjectShortName">corr2_code_bit</obj_property>
-      </wvobject>
-      <wvobject db_ref_id="1" fp_name="/test/bert/polarity_correct_data" type="logic">
-         <obj_property name="ElementShortName">polarity_correct_data</obj_property>
-         <obj_property name="ObjectShortName">polarity_correct_data</obj_property>
-      </wvobject>
-      <wvobject db_ref_id="1" fp_name="/test/bert/polarity_correct_code" type="logic">
-         <obj_property name="ElementShortName">polarity_correct_code</obj_property>
-         <obj_property name="ObjectShortName">polarity_correct_code</obj_property>
-      </wvobject>
-      <wvobject db_ref_id="1" fp_name="/test/bert/sync_detect_data_enable" type="logic">
-         <obj_property name="ElementShortName">sync_detect_data_enable</obj_property>
-         <obj_property name="ObjectShortName">sync_detect_data_enable</obj_property>
-      </wvobject>
-      <wvobject db_ref_id="1" fp_name="/test/bert/bert_polarity_detect/count" type="array">
-         <obj_property name="ElementShortName">count[7:0]</obj_property>
-         <obj_property name="ObjectShortName">count[7:0]</obj_property>
-         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      <wvobject db_ref_id="1" fp_name="/test/dll0/phaseError" type="array">
+         <obj_property name="ElementShortName">phaseError[7:0]</obj_property>
+         <obj_property name="ObjectShortName">phaseError[7:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
          <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
          <obj_property name="CellHeight">100</obj_property>
+         <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
+         <obj_property name="AnalogYRangeMin">0.000000</obj_property>
+         <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
+         <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
+         <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
+         <obj_property name="AnalogHorizLine">0.000000</obj_property>
       </wvobject>
-      <wvobject db_ref_id="1" fp_name="/test/bert/bert_sync_detect/switch" type="logic">
-         <obj_property name="ElementShortName">switch</obj_property>
-         <obj_property name="ObjectShortName">switch</obj_property>
+      <wvobject db_ref_id="1" fp_name="/test/dll0/dllOutputClkEn" type="logic">
+         <obj_property name="ElementShortName">dllOutputClkEn</obj_property>
+         <obj_property name="ObjectShortName">dllOutputClkEn</obj_property>
       </wvobject>
-      <wvobject db_ref_id="1" fp_name="/test/bert/bert_sync_detect/reload" type="logic">
-         <obj_property name="ElementShortName">reload</obj_property>
-         <obj_property name="ObjectShortName">reload</obj_property>
+      <wvobject db_ref_id="1" fp_name="/test/dll0/dllOutputClk" type="logic">
+         <obj_property name="ElementShortName">dllOutputClk</obj_property>
+         <obj_property name="ObjectShortName">dllOutputClk</obj_property>
       </wvobject>
-      <wvobject db_ref_id="1" fp_name="/test/bert/enable" type="logic">
-         <obj_property name="ElementShortName">enable</obj_property>
-         <obj_property name="ObjectShortName">enable</obj_property>
-      </wvobject>
-      <wvobject db_ref_id="1" fp_name="/test/bert/bert_sync_detect/error" type="logic">
-         <obj_property name="ElementShortName">error</obj_property>
-         <obj_property name="ObjectShortName">error</obj_property>
-      </wvobject>
-      <wvobject db_ref_id="1" fp_name="/test/bert/bert_sync_detect/insync" type="logic">
-         <obj_property name="ElementShortName">insync</obj_property>
-         <obj_property name="ObjectShortName">insync</obj_property>
-      </wvobject>
-      <wvobject db_ref_id="1" fp_name="/test/bert/bert_sync_detect/reload_recovery_count" type="array">
-         <obj_property name="ElementShortName">reload_recovery_count[7:0]</obj_property>
-         <obj_property name="ObjectShortName">reload_recovery_count[7:0]</obj_property>
+      <wvobject db_ref_id="1" fp_name="/test/dll0/phaseInc" type="array">
+         <obj_property name="ElementShortName">phaseInc[31:0]</obj_property>
+         <obj_property name="ObjectShortName">phaseInc[31:0]</obj_property>
          <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject db_ref_id="1" fp_name="/test/bert/bert_sync_detect/count_clear" type="logic">
-         <obj_property name="ElementShortName">count_clear</obj_property>
-         <obj_property name="ObjectShortName">count_clear</obj_property>
-      </wvobject>
-      <wvobject db_ref_id="1" fp_name="/test/bert/bert_sync_detect/count" type="array">
-         <obj_property name="ElementShortName">count[7:0]</obj_property>
-         <obj_property name="ObjectShortName">count[7:0]</obj_property>
-         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
-         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
-         <obj_property name="CellHeight">100</obj_property>
-      </wvobject>
-      <wvobject db_ref_id="1" fp_name="/test/bert/bert_sync_detect/threshold" type="array">
-         <obj_property name="ElementShortName">threshold[7:0]</obj_property>
-         <obj_property name="ObjectShortName">threshold[7:0]</obj_property>
-         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
-      </wvobject>
-      <wvobject db_ref_id="1" fp_name="/test/bert/bert_counters/continuous_test_reset" type="logic">
-         <obj_property name="ElementShortName">continuous_test_reset</obj_property>
-         <obj_property name="ObjectShortName">continuous_test_reset</obj_property>
-      </wvobject>
-      <wvobject db_ref_id="1" fp_name="/test/bert/bert_counters/continuous_test_start" type="logic">
-         <obj_property name="ElementShortName">continuous_test_start</obj_property>
-         <obj_property name="ObjectShortName">continuous_test_start</obj_property>
-      </wvobject>
-      <wvobject db_ref_id="1" fp_name="/test/bert/continuous_test_start" type="logic">
-         <obj_property name="ElementShortName">continuous_test_start</obj_property>
-         <obj_property name="ObjectShortName">continuous_test_start</obj_property>
-      </wvobject>
-      <wvobject db_ref_id="1" fp_name="/test/bert/bert_counters/continuous_test_state" type="array">
-         <obj_property name="ElementShortName">continuous_test_state[1:0]</obj_property>
-         <obj_property name="ObjectShortName">continuous_test_state[1:0]</obj_property>
-      </wvobject>
-      <wvobject db_ref_id="1" fp_name="/test/bert/bert_counters/continuous_test_start_rise_edge" type="logic">
-         <obj_property name="ElementShortName">continuous_test_start_rise_edge</obj_property>
-         <obj_property name="ObjectShortName">continuous_test_start_rise_edge</obj_property>
-      </wvobject>
-      <wvobject db_ref_id="1" fp_name="/test/bert/bert_counters/continuous_test_start_fall_edge" type="logic">
-         <obj_property name="ElementShortName">continuous_test_start_fall_edge</obj_property>
-         <obj_property name="ObjectShortName">continuous_test_start_fall_edge</obj_property>
-      </wvobject>
-      <wvobject db_ref_id="1" fp_name="/test/bert/bert_counters/continuous_test_start_enable" type="logic">
-         <obj_property name="ElementShortName">continuous_test_start_enable</obj_property>
-         <obj_property name="ObjectShortName">continuous_test_start_enable</obj_property>
-      </wvobject>
-      <wvobject db_ref_id="1" fp_name="/test/bert/bert_counters/continuous_test_count" type="array">
-         <obj_property name="ElementShortName">continuous_test_count[31:0]</obj_property>
-         <obj_property name="ObjectShortName">continuous_test_count[31:0]</obj_property>
-         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
-      </wvobject>
-      <wvobject db_ref_id="1" fp_name="/test/bert/bert_counters/continuous_test_errors" type="array">
-         <obj_property name="ElementShortName">continuous_test_errors[31:0]</obj_property>
-         <obj_property name="ObjectShortName">continuous_test_errors[31:0]</obj_property>
-         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
       </wvobject>
    </wvobject>
 </wave_config>

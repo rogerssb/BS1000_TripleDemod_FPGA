@@ -207,7 +207,12 @@ always @ ( posedge clk )
             out_sel_i <= !demux_out ;
             out_sel_q <= demux_out ;
             end
-        else
+        else if (swap)
+            begin
+            out_sel_i <= dec_q ;
+            out_sel_q <= dec_i ;
+            end
+        else 
             begin
             out_sel_i <= dec_i ;
             out_sel_q <= dec_q ;
