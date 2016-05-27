@@ -507,7 +507,7 @@ always @(posedge clk) begin
             ch0Dac0ClkEn <= ch0Sym2xEn;
             end
         `BS_DAC_AGC: begin
-            ch0Dac0Data <= ch0Gain;
+            ch0Dac0Data <= {1'b0,ch0Gain[17:1]};
             ch0Dac0ClkEn <= ch0SymEn;
             end
         `BS_DAC_LOCK: begin
@@ -569,7 +569,7 @@ always @(posedge clk) begin
             ch0Dac2ClkEn <= ch0Sym2xEn;
             end
         `BS_DAC_AGC: begin
-            ch0Dac2Data <= ch0Gain;
+            ch0Dac2Data <= {1'b0,ch0Gain[17:1]};
             ch0Dac2ClkEn <= ch0SymEn;
             end
         `BS_DAC_LOCK: begin
@@ -602,7 +602,7 @@ always @(posedge clk) begin
             ch1Dac0ClkEn <= asyncMode ? ch1Sym2xEn : ch0Sym2xEn;
             end
         `BS_DAC_AGC: begin
-            ch1Dac0Data <= ch1Gain;
+            ch1Dac0Data <= {1'b0,ch1Gain[17:1]};
             ch1Dac0ClkEn <= ch1SymEn;
             end
         `BS_DAC_LOCK: begin
@@ -662,7 +662,7 @@ always @(posedge clk) begin
             ch1Dac2ClkEn <= asyncMode ? ch1Sym2xEn : ch0Sym2xEn;
             end
         `BS_DAC_AGC: begin
-            ch1Dac2Data <= ch1Gain;
+            ch1Dac2Data <= {1'b0,ch1Gain[17:1]};
             ch1Dac2ClkEn <= ch1SymEn;
             end
         `BS_DAC_LOCK: begin
