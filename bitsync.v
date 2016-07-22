@@ -197,7 +197,7 @@ always @(posedge sampleClk) begin
 /******************************************************************************
                                Symbol Offset Deskew
 ******************************************************************************/
-reg     [17:0]  iMF,qMF,qSymDelay;
+reg     [17:0]  iMF,qMF,iSymDelay,qSymDelay;
 always @(posedge sampleClk) begin
     if (symTimes2Sync) begin
         iMF <= iFiltered;

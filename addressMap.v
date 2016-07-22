@@ -148,6 +148,7 @@
 `define FRAMER_CONTROL          13'bx_xxxx_xxxx_00xx
 `define FRAMER_SYNCWORD         13'bx_xxxx_xxxx_01xx
 `define FRAMER_SYNCWORD_MASK    13'bx_xxxx_xxxx_10xx
+`define FRAMER_STATUS           13'bx_xxxx_xxxx_11xx
 
 
 

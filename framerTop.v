@@ -28,6 +28,7 @@ module framerTop(
         .addr(addr),
         .din(din),
         .dout(dout),
+        .framesync(framesync),
         .bitsPerWord(bitsPerWord),
         .wordsPerFrame(wordsPerFrame),
         .syncwordMask(syncwordMask),

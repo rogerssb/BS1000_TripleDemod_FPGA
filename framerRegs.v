@@ -7,6 +7,7 @@ module framerRegs(
     input               [12:0]  addr,
     input               [31:0]  din,
     output reg          [31:0]  dout,
+    input                       framesync,
     output reg          [4:0]   bitsPerWord,
     output reg          [15:0]  wordsPerFrame,
     output reg          [31:0]  syncwordMask,
@@ -68,6 +69,7 @@ module framerRegs(
                 `FRAMER_CONTROL:        dout = {wordsPerFrame,2'b0,syncThreshold,3'b0,bitsPerWord};
                 `FRAMER_SYNCWORD:       dout = syncword;
                 `FRAMER_SYNCWORD_MASK:  dout = syncwordMask;
+                `FRAMER_STATUS:         dout = {31'b0,framesync};
                 default:                dout = 32'hx;
             endcase
         end
