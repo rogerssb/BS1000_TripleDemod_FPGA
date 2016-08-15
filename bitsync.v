@@ -213,7 +213,6 @@ always @(posedge sampleClk) begin
             end
         end
     end
-
 `endif
 
 wire fmTrellisModes = ( (demodMode == `MODE_MULTIH)
@@ -658,9 +657,11 @@ assign negDeviation = avgNegDeviation[24:9];
 `endif
 
 `ifdef SIMULATE
-real avgOffsetReal = (avgOffsetError[24] ? avgOffsetError[24:7] - 262144.0 : avgOffsetError[24:7])/131072.0;
+real avgOffsetReal;
+always @* avgOffsetReal = (avgOffsetError[24] ? avgOffsetError[24:7] - 262144.0 : avgOffsetError[24:7])/131072.0;
 `ifdef SYM_DEVIATION
-real avgDevReal = (avgDeviation[24] ? avgDeviation[24:7] - 262144.0 : avgDeviation[24:7])/131072.0;
+real avgDevReal;
+always @* avgDevReal = (avgDeviation[24] ? avgDeviation[24:7] - 262144.0 : avgDeviation[24:7])/131072.0;
 `else
 real avgPosDevReal;
 always @* avgPosDevReal = $itor($signed(avgPosDeviation))/(2**17);

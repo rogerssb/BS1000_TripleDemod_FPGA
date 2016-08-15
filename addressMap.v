@@ -26,6 +26,7 @@
 `ifdef TRELLIS_DEMOD
 `define CIC_COMP_USE_MPY
 `define ADD_DQM
+`define ADD_VITERBI
 `endif
 
 `ifdef SUBCARRIER_DEMOD
@@ -51,6 +52,7 @@
 `define SC0_DECODERSPACE    13'b0_0101_1xxx_xxxx
 `define SC1_DECODERSPACE    13'b1_0101_1xxx_xxxx
 `define PLLSPACE            13'b0_0110_xxxx_xxxx
+`define VITERBISPACE        13'b1_0110_xxxx_xxxx
 `define CHAGCSPACE          13'bx_0111_xxxx_xxxx
 `define RESAMPSPACE         13'bx_1000_xxxx_xxxx
 `define CARRIERSPACE        13'bx_1001_xxxx_xxxx
@@ -201,6 +203,9 @@
 `define DAC_IN_SEL_SC0      2'b01
 `define DAC_IN_SEL_SC1      2'b10
 `define DEC_IN_SEL      13'bx_xxxx_xxx0_101x
+`define DEC_MUX_SEL_DEMOD   2'b00
+`define DEC_MUX_SEL_SC0     2'b01
+`define DEC_MUX_SEL_VITERBI 2'b10
 `define OUT_MUX_SEL_DEMOD   2'b00
 `define OUT_MUX_SEL_SC0     2'b01
 `define OUT_MUX_SEL_SC1     2'b10
@@ -277,15 +282,21 @@
 `define DS_MODE_NASA_DG1_MODE2              3'b010
 `define DS_MODE_NASA_DG1_MODE3_SPREAD_I     3'b011
 `define DS_MODE_NASA_DG1_MODE3_SPREAD_Q     3'b100
-`endif
 
 
 // define the data quality metric registers
-`define DQM_SPACE        `BEPSPACE
-`define DQM_BLOCK_SIZE   13'bx_xxxx_xxx0_000x
-`define DQM_FRAME_WORD_0 13'bx_xxxx_xxx0_001x
-`define DQM_FRAME_WORD_1 13'bx_xxxx_xxx0_010x
-`define DQM_FRAME_WORD_2 13'bx_xxxx_xxx0_011x
-`define BEP_BLOCK_SIZE   13'bx_xxxx_xxx1_000x
-`define BEP_ESTIMATE     13'bx_xxxx_xxx1_01xx
-`define BEP_MEAN_INVERSE 13'bx_xxxx_xxx1_10xx
+`define DQM_SPACE                   `BEPSPACE
+`define DQM_BLOCK_SIZE              13'bx_xxxx_xxx0_000x
+`define DQM_FRAME_WORD_0            13'bx_xxxx_xxx0_001x
+`define DQM_FRAME_WORD_1            13'bx_xxxx_xxx0_010x
+`define DQM_FRAME_WORD_2            13'bx_xxxx_xxx0_011x
+`define BEP_BLOCK_SIZE              13'bx_xxxx_xxx1_000x
+`define BEP_ESTIMATE                13'bx_xxxx_xxx1_01xx
+`define BEP_MEAN_INVERSE            13'bx_xxxx_xxx1_10xx
+
+// define the viterbi decoder registers
+`define VIT_INVERSE_MEAN            13'bx_xxxx_xxxx_00xx
+`define VIT_STATUS                  13'bx_xxxx_xxxx_01xx
+
+`endif //ADDRESS_MAP
+

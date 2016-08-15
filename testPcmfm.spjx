@@ -1,0 +1,385 @@
+<!DOCTYPE SilvacoProject>
+<project version="1" name="testPcmfm" >
+ <products>
+  <product name="SILOS" >
+   <analyzer>
+    <settings>
+     <setting value="N" name="GotoSource" />
+     <setting value="167" name="C0Width" />
+     <setting value="58" name="C1Width" />
+     <setting value="206" name="C2Width" />
+    </settings>
+    <views>
+     <view value="0.000 ns,37503.001 ns,1100.848 ns,123074.806 ns,41539.068 ns" name="Last" />
+    </views>
+    <groups>
+     <group open="no" name="Rx" show="yes" >
+      <signals>
+       <signal radix="Decimal" name="cicDecimationInt" scope="test" />
+       <signal name="resamplerFreqInt" scope="test" />
+       <signal interpolate="Step" radix="Real" name="iChReal" scope="test" />
+       <signal interpolate="Step" radix="Real" name="iSignalReal" scope="test" />
+       <signal interpolate="Step" radix="Real" name="iMixReal" scope="test.demod.ddc" />
+       <signal interpolate="Step" radix="Real" name="qMixReal" scope="test.demod.ddc" />
+       <signal interpolate="Step" radix="Real" name="iHb0Real" scope="test.demod.ddc" />
+       <signal interpolate="Step" radix="Real" name="qHb0Real" scope="test.demod.ddc" />
+       <signal interpolate="Step" radix="Real" name="iCicReal" scope="test.demod.ddc.cic" />
+       <signal interpolate="Step" radix="Real" name="qCicReal" scope="test.demod.ddc.cic" />
+       <signal interpolate="Step" radix="Real" name="iAgcReal" scope="test.demod.ddc" />
+       <signal interpolate="Step" radix="Real" name="qAgcReal" scope="test.demod.ddc" />
+       <signal interpolate="Step" radix="Real" name="iCompReal" scope="test.demod.ddc" />
+       <signal interpolate="Step" radix="Real" name="iHbReal" scope="test.demod.ddc" />
+       <signal interpolate="Step" radix="Real" name="qHbReal" scope="test.demod.ddc" />
+       <signal interpolate="Step" radix="Real" name="phaseReal" scope="test.demod.fmDemod" />
+       <signal interpolate="Step" radix="Real" name="iOutReal" scope="test.demod.resampler" />
+       <signal name="cicReset" scope="test.demod.ddc" />
+       <signal interpolate="Step" radix="Real" name="interpReal" scope="test.fmMod" />
+       <signal scale="fixed" maxscaledbl="0.5" interpolate="Step" minscaledbl="-0.5" radix="Real" name="freqReal" scope="test.demod.fmDemod" />
+       <signal interpolate="Step" radix="Real" name="magReal" scope="test.demod.fmDemod" />
+       <signal radix="Real" name="integratorReal" scope="test.demod.channelAGC.chAgcLoopFilter" />
+       <signal name="reset" scope="test.demod.resampler" />
+      </signals>
+     </group>
+     <group open="no" name="Tx" show="yes" >
+      <signals>
+       <signal name="clk" scope="test.fmMod" />
+       <signal name="reset" scope="test.fmMod" />
+       <signal name="modClk" scope="test.fmMod" />
+       <signal name="modData" scope="test.fmMod" />
+       <signal name="bitrateDiv[15:0]" scope="test.fmMod" />
+       <signal name="modValue[2:0]" scope="test.fmMod" />
+       <signal name="shapedReady" scope="test.fmMod" />
+       <signal name="cicOut[33:0]" scope="test.fmMod" />
+       <signal name="cicShift[4:0]" scope="test.fmMod" />
+       <signal interpolate="Step" radix="Real" name="shapedReal" scope="test.fmMod" />
+       <signal interpolate="Step" radix="Real" name="interpReal" scope="test.fmMod" />
+       <signal interpolate="Step" radix="Real" name="signalMagSquared" scope="test" />
+       <signal interpolate="Step" radix="Real" name="noiseMagSquared" scope="test" />
+       <signal interpolate="Step" radix="Decimal" name="txSampleCount" scope="test" />
+      </signals>
+     </group>
+     <group open="no" name="Micro" show="yes" >
+      <signals>
+       <signal name="addr[11:0]" scope="test.demod" />
+       <signal name="din[31:0]" scope="test.demod" />
+       <signal name="wr3" scope="test.demod" />
+       <signal name="wr2" scope="test.demod" />
+       <signal name="wr1" scope="test.demod" />
+       <signal name="wr0" scope="test.demod" />
+      </signals>
+     </group>
+     <group open="no" name="Bitsync" show="yes" >
+      <signals>
+       <signal radix="Decimal" name="cicDecimationInt" scope="test" />
+       <signal scale="fixed" maxscaledbl="1" interpolate="Step" minscaledbl="-1" radix="Real" name="inIReal" scope="test.demod.resampler" />
+       <signal interpolate="Step" radix="Real" name="iOutReal" scope="test.demod.resampler" />
+       <signal interpolate="Step" radix="Real" name="inQReal" scope="test.demod.resampler" />
+       <signal interpolate="Step" radix="Real" name="qOutReal" scope="test.demod.resampler" />
+       <signal interpolate="Step" radix="Real" name="timingErrorReal" scope="test.demod.bitsync" />
+       <signal scale="fixed" maxscaledbl="0.004" interpolate="Step" minscaledbl="-0.004" radix="Real" name="sampleFreqReal" scope="test.demod.bitsync" />
+       <signal name="resamplerFreqOffset[31:0]" scope="test.demod.resampler" />
+       <signal name="iSymData[17:0]" scope="test.demod" />
+       <signal name="qSymData[17:0]" scope="test.demod" />
+       <signal name="trellisSymSync" scope="test.demod" />
+       <signal name="symSync" scope="test.demod" />
+       <signal name="iResamp[17:0]" scope="test.demod" />
+       <signal name="iMF[17:0]" scope="test.demod.bitsync" />
+       <signal name="qMF[17:0]" scope="test.demod.bitsync" />
+       <signal name="phaseState" scope="test.demod.bitsync" />
+       <signal name="symTimes2Sync" scope="test.demod.bitsync" />
+       <signal name="zeroError" scope="test.demod.bitsync.sampleLoop" />
+       <signal name="\bbSRI[1] [17:0]" scope="test.demod.bitsync" />
+       <signal name="freq[17:0]" scope="test.demod.bitsync" />
+       <signal interpolate="Step" radix="Real" name="freqReal" scope="test.demod.bitsync" />
+       <signal interpolate="Step" radix="Real" name="phaseReal" scope="test.demod.bitsync" />
+       <signal name="offTimeI[7:0]" scope="test.demod.bitsync" />
+       <signal name="earlySignI" scope="test.demod.bitsync" />
+       <signal name="lateSignI" scope="test.demod.bitsync" />
+       <signal name="timingErrorEn" scope="test.demod.bitsync" />
+       <signal name="timingErrorI[17:0]" scope="test.demod.bitsync" />
+       <signal name="timingErrorQ[17:0]" scope="test.demod.bitsync" />
+       <signal name="timingError[18:0]" scope="test.demod.bitsync" />
+       <signal name="avgError[11:0]" scope="test.demod.bitsync" />
+       <signal name="avgSlipError[11:0]" scope="test.demod.bitsync" />
+       <signal name="slipState[1:0]" scope="test.demod.bitsync" />
+       <signal name="slip" scope="test.demod.bitsync" />
+      </signals>
+     </group>
+     <group open="no" name="Carrier" show="yes" >
+      <signals>
+       <signal name="freq[7:0]" scope="test.demod" />
+       <signal name="offsetErrorSum[8:0]" scope="test.demod.bitsync" />
+       <signal name="offsetError[7:0]" scope="test.demod.carrierLoop" />
+       <signal name="offsetErrorEn" scope="test.demod.carrierLoop" />
+       <signal interpolate="Step" radix="Real" name="carrierOffsetReal" scope="test" />
+       <signal interpolate="Step" radix="Real" name="carrierOffsetReal" scope="test.demod.carrierLoop" />
+       <signal name="lagError[31:0]" scope="test.demod.carrierLoop.lagGain" />
+       <signal name="lagAccum[31:0]" scope="test.demod.carrierLoop" />
+       <signal name="carrierInSync" scope="test.demod.carrierLoop.lagGain" />
+       <signal name="sweepOffset[31:0]" scope="test.demod.carrierLoop.lagGain" />
+       <signal name="sweepMag[31:0]" scope="test.demod.carrierLoop.lagGain" />
+       <signal name="sweepOffsetMag[31:0]" scope="test.demod.carrierLoop.lagGain" />
+      </signals>
+     </group>
+     <group open="no" name="DAC" show="yes" >
+      <signals>
+       <signal name="ddcSync" scope="test.demod" />
+       <signal name="resampSync" scope="test.demod" />
+       <signal name="symClk" scope="test.demod" />
+       <signal name="symSync" scope="test.demod" />
+       <signal name="symTimes2Sync" scope="test.demod" />
+       <signal name="cout" scope="test.decoder" />
+       <signal name="symb_i[2:0]" scope="test.decoder" />
+       <signal name="dout_i" scope="test.decoder" />
+       <signal name="clkEn" scope="test.dac0Interp" />
+       <signal name="dataIn[17:0]" scope="test.dac0Interp" />
+       <signal name="exponentAdjusted[17:0]" scope="test.dac0Interp" />
+       <signal radix="Real" name="expAdjReal" scope="test.dac0Interp" />
+       <signal interpolate="Step" radix="Real" name="interpReal" scope="test.dac0Interp" />
+       <signal interpolate="Step" radix="Real" name="interpReal" scope="test.dac1Interp" />
+       <signal interpolate="Step" radix="Real" name="interpReal" scope="test.dac2Interp" />
+      </signals>
+     </group>
+     <group open="no" name="Trellis" show="yes" >
+      <signals>
+       <signal name="trellisReset" scope="test" />
+       <signal name="symEn" scope="test.trellis.trellisCarrierLoop" />
+       <signal name="sym2xEn" scope="test.trellis.trellisCarrierLoop" />
+       <signal name="symEn_phErr" scope="test.trellis.trellisCarrierLoop" />
+       <signal name="phErrShft[7:0]" scope="test.trellis" />
+       <signal name="phaseError[7:0]" scope="test.trellis.trellisCarrierLoop" />
+       <signal name="phaseErrorAligned[7:0]" scope="test.trellis.trellisCarrierLoop" />
+       <signal name="iInput[17:0]" scope="test.trellis.trellisCarrierLoop" />
+       <signal name="iIn[17:0]" scope="test.trellis.trellisCarrierLoop" />
+       <signal interpolate="Step" radix="Real" name="iInReal" scope="test.trellis.trellisCarrierLoop" />
+       <signal interpolate="Step" radix="Real" name="qInReal" scope="test.trellis.trellisCarrierLoop" />
+       <signal interpolate="Step" radix="Real" name="freqReal" scope="test.trellis.trellisCarrierLoop" />
+       <signal name="accMetOut[11:0]" scope="test.trellis.viterbi_top.acs0" />
+       <signal name="p[11:0]" scope="test.trellis.viterbi_top.acs0.accumDecay" />
+       <signal name="sclr" scope="test.trellis.viterbi_top.acs0.accumDecay" />
+       <signal name="clk" scope="test.trellis.viterbi_top.acs0.accumDecay" />
+       <signal name="ce" scope="test.trellis.viterbi_top.acs0.accumDecay" />
+       <signal name="b[7:0]" scope="test.trellis.viterbi_top.acs0.accumDecay" />
+       <signal name="a[11:0]" scope="test.trellis.viterbi_top.acs0.accumDecay" />
+       <signal name="index[4:0]" scope="test.trellis" />
+       <signal name="idxDiff[5:0]" scope="test.trellis" />
+       <signal interpolate="Step" radix="Real" name="avgPosDelta" scope="test.trellis" />
+       <signal interpolate="Step" radix="Real" name="avgNegDelta" scope="test.trellis" />
+       <signal interpolate="Step" radix="Real" name="avgDelta" scope="test.trellis" />
+       <signal name="decision" scope="test.trellis" />
+       <signal name="txDelay" scope="test" />
+       <signal name="legacyBit" scope="test.trellis.trellisCarrierLoop" />
+       <signal name="legacyDelayed" scope="test.trellis" />
+       <signal name="bitErrorCount[15:0]" scope="test.trellis" />
+       <signal name="bitCount[15:0]" scope="test.trellis" />
+       <signal name="berRestarted" scope="test.trellis" />
+       <signal name="berRestart" scope="test.trellis" />
+       <signal name="testBits" scope="test" />
+       <signal interpolate="Step" radix="Decimal" name="testBitCount" scope="test" />
+       <signal interpolate="Step" radix="Decimal" name="bitErrors" scope="test" />
+       <signal name="wrAddr[1:0]" scope="test.trellis.bitFifo" />
+       <signal name="rdAddr[1:0]" scope="test.trellis.bitFifo" />
+       <signal name="outputEn" scope="test.trellis.bitFifo" />
+       <signal name="dout" scope="test.trellis.bitFifo" />
+       <signal name="depth[2:0]" scope="test.trellis.bitFifo" />
+       <signal name="symEn" scope="test.trellis" />
+       <signal name="sym2xEn" scope="test.trellis" />
+       <signal name="symEn_tbtDly" scope="test.trellis.viterbi_top" />
+       <signal name="deviationCorrection[31:0]" scope="test.trellis.trellisCarrierLoop" />
+       <signal name="breakLoop" scope="test.trellis.trellisCarrierLoop" />
+       <signal name="newOffset[31:0]" scope="test.trellis.trellisCarrierLoop" />
+       <signal name="magDecision" scope="test.trellis" />
+       <signal interpolate="Step" radix="Real" name="mag0" scope="test.trellis" />
+       <signal interpolate="Step" radix="Real" name="mag1" scope="test.trellis" />
+       <signal name="rotEna" scope="test.trellis" />
+       <signal name="devState[2:0]" scope="test.trellis" />
+       <signal name="cordicEn" scope="test.trellis" />
+       <signal name="devAvgEn" scope="test.trellis" />
+       <signal name="cordicPhase[11:0]" scope="test.trellis" />
+       <signal name="firstPhase[11:0]" scope="test.trellis" />
+       <signal name="phaseDiff[11:0]" scope="test.trellis" />
+       <signal name="fskDeviation[15:0]" scope="test.trellis" />
+       <signal interpolate="Step" radix="Real" name="diffReal" scope="test.trellis" />
+       <signal interpolate="Step" radix="Real" name="devReal" scope="test.trellis" />
+       <signal name="iMpy[17:0]" scope="test.trellis.trellisCarrierLoop" />
+       <signal name="sym2xEnDly" scope="test.trellis.trellisCarrierLoop" />
+       <signal name="symEnDly" scope="test.trellis.trellisCarrierLoop" />
+       <signal interpolate="Step" radix="Real" name="freqReal" scope="test.trellis.trellisCarrierLoop" />
+       <signal interpolate="Step" radix="Real" name="phErrReal" scope="test.trellis" />
+       <signal interpolate="Step" radix="Real" name="devErrorReal" scope="test.trellis.viterbi_top" />
+       <signal name="lagAccum[39:8]" scope="test.trellis.trellisCarrierLoop" />
+       <signal name="carrierFreqOffset[31:0]" scope="test.trellis.trellisCarrierLoop" />
+       <signal name="index[4:0]" scope="test.trellis.viterbi_top" />
+       <signal name="index_1d[4:0]" scope="test.trellis.viterbi_top" />
+       <signal name="out1Imag[9:0]" scope="test.trellis.viterbi_top" />
+       <signal name="out1Imag_1dly[9:0]" scope="test.trellis.viterbi_top" />
+       <signal name="out1Imag_2dly[9:0]" scope="test.trellis.viterbi_top" />
+      </signals>
+     </group>
+     <group open="yes" name="BEP" show="yes" >
+      <signals>
+       <signal name="symEn" scope="test.bep" />
+       <signal name="symData[17:0]" scope="test.bep" />
+       <signal name="sym2xEn" scope="test.bep" />
+       <signal name="iData[17:0]" scope="test.bep" />
+       <signal name="qData[17:0]" scope="test.bep" />
+       <signal name="absSymData[16:0]" scope="test.bep" />
+       <signal interpolate="Step" radix="Real" name="mean" scope="test.bep" />
+       <signal name="inverseMantissa[15:0]" scope="test.bep" />
+       <signal name="inverseExponent[4:0]" scope="test.bep" />
+       <signal name="inverseProduct[35:0]" scope="test.bep" />
+       <signal name="dIn[33:0]" scope="test.bep.exponentShift" />
+       <signal name="saturate" scope="test.bep.exponentShift" />
+       <signal name="llr[5:0]" scope="test.bep" />
+       <signal name="lut_out[31:0]" scope="test.bep" />
+       <signal name="count[15:0]" scope="test.bep" />
+       <signal name="sum[45:0]" scope="test.bep" />
+       <signal name="buffer[45:7]" scope="test.bep" />
+       <signal name="estimate[31:0]" scope="test.bep" />
+      </signals>
+     </group>
+     <group open="yes" name="BERT" show="yes" >
+      <signals>
+       <signal name="symSync" scope="test" />
+       <signal name="demodBit" scope="test" />
+       <signal name="txDelay" scope="test" />
+       <signal name="bitError" scope="test" />
+       <signal name="testBits" scope="test" />
+       <signal radix="Decimal" name="bitErrors" scope="test" />
+       <signal radix="Decimal" name="testBitCount" scope="test" />
+      </signals>
+     </group>
+     <group open="no" name="New Group2" show="no" />
+    </groups>
+   </analyzer>
+   <settings>
+    <setting value="C:\modem\fskRadio" name="OpenFileDir" />
+    <setting value="+define+SIMULATE" name="CommandLine" />
+    <setting value="Silvaco4.14.3.R" name="Version" />
+    <setting value="Y" name="NoFloatWarn" />
+    <setting value="5000M" name="DiskSize" />
+    <setting value="." name="SimFile" />
+    <setting value="search" name="SystaskSearchOrder" />
+   </settings>
+   <includedirs>
+    <directory name="." />
+   </includedirs>
+   <datafilters>
+    <exclude>
+     <modules>
+      <module name="test.dac1Interp" />
+      <module name="test.dac2Interp" />
+      <module name="test.decoder" />
+      <module name="test.trellis.f0" />
+      <module name="test.trellis.f1" />
+      <module name="test.trellis.rotator" />
+     </modules>
+    </exclude>
+   </datafilters>
+   <explorer>
+    <settings>
+     <setting value="test.bep.mean" name="Scope" />
+    </settings>
+   </explorer>
+   <plifiles>
+    <file name="gausspli.dll" />
+   </plifiles>
+   <librarydirs>
+    <directory name="..\..\Xilinx\10.1\ISE\verilog\src\unisims\{.v}" />
+   </librarydirs>
+   <sourcefiles>
+    <file name="testPcmfm.v" />
+    <file name="demod.v" />
+    <file name=".\fmMod\micro.v" />
+    <file name=".\coregen\shapingFir.v" />
+    <file name=".\coregen\mpy18x18.v" />
+    <file name=".\coregen\dds.v" />
+    <file name="demodRegs.v" />
+    <file name="shifter18to48.v" />
+    <file name=".\halfband\halfband.v" />
+    <file name=".\coregen\halfbandEven.v" />
+    <file name="variableGain.v" />
+    <file name=".\fmDemod\fmDemod.v" />
+    <file name="ddc.v" />
+    <file name=".\resampler\resampRegs.v" />
+    <file name=".\resampler\resampler.v" />
+    <file name=".\coregen\reciprocalLut.v" />
+    <file name=".\coregen\resamplerTap8.v" />
+    <file name=".\coregen\resamplerTap0.v" />
+    <file name=".\coregen\resamplerTap1.v" />
+    <file name=".\coregen\resamplerTap2.v" />
+    <file name=".\coregen\resamplerTap3.v" />
+    <file name=".\coregen\resamplerTap4.v" />
+    <file name=".\coregen\resamplerTap5.v" />
+    <file name="cicDecimator.v" />
+    <file name=".\coregen\resamplerTap6.v" />
+    <file name=".\coregen\resamplerTap7.v" />
+    <file name="loopRegs.v" />
+    <file name="lead.v" />
+    <file name="carrierLoop.v" />
+    <file name="lagGain.v" />
+    <file name="log2.v" />
+    <file name="channelAgc.v" />
+    <file name="agcLoopRegs.v" />
+    <file name="agcLoopFilter.v" />
+    <file name="cicRegs.v" />
+    <file name="cicComp.v" />
+    <file name="cicInterpolate.v" />
+    <file name="interpolate.v" />
+    <file name="interpRegs.v" />
+    <file name="shift48To18.v" />
+    <file name=".\decoder\mrk_spc_decode.v" />
+    <file name=".\decoder\biphase_to_nrz.v" />
+    <file name=".\decoder\decoder.v" />
+    <file name=".\decoder\decoder_regs.v" />
+    <file name=".\trellis\mfilter.v" />
+    <file name="cmpy18.v" />
+    <file name=".\trellis\trellis.v" />
+    <file name=".\trellis\trellisCarrierLoop.v" />
+    <file name=".\trellis\viteri_top.v" />
+    <file name=".\trellis\acs.v" />
+    <file name=".\trellis\comp4twosComp.v" />
+    <file name=".\trellis\rotator.v" />
+    <file name=".\trellis\rotMult.v" />
+    <file name=".\coregen\mult10x10.v" />
+    <file name="dualResampler.v" />
+    <file name="dualDecimator.v" />
+    <file name="ddcRegs.v" />
+    <file name="vm_cordic_fast.v" />
+    <file name="cmpy18Sat.v" />
+    <file name="bitFifo.v" />
+    <file name="lagGain12.v" />
+    <file name="leadGain12.v" />
+    <file name="bitsync.v" />
+    <file name="loopFilter.v" />
+    <file name="vm_cordic.v" />
+    <file name="dualFirCoeffRegs.v" />
+    <file name=".\fmMod\shift34to18.v" />
+    <file name="singleFir.v" />
+    <file name=".\coregen\mpy18x18WithCe.v" />
+    <file name="multihEQ.v" />
+    <file name=".\coregen\oneThird.v" />
+    <file name=".\coregen\invSinc.v" />
+    <file name=".\coregen\mult12x8Lut.v" />
+    <file name=".\trellis\traceBackTableLWK.v" />
+    <file name=".\trellis\bitLifo.v" />
+    <file name="carrierLoopRegs.v" />
+    <file name=".\fmMod\cicInterpolate.v" />
+    <file name=".\trellis\maxMetricEvenOdd.v" />
+    <file name=".\fmDemod\fmDemodWithCE.v" />
+    <file name=".\fmMod\fmMod.v" />
+    <file name=".\coregen\multCicC0.v" />
+    <file name=".\coregen\multCicC1.v" />
+    <file name=".\coregen\multCicC2.v" />
+    <file name="videoFir.v" />
+    <file name="bepEstimate.v" />
+    <file name=".\coregen\bepLut0to7.v" />
+    <file name=".\coregen\bepLut16to23.v" />
+    <file name=".\coregen\bepLut24to31.v" />
+    <file name=".\coregen\bepLut8to15.v" />
+    <file name="unsignedShiftAndSaturate33to5.v" />
+    <file name="complexMagEstimate.v" />
+   </sourcefiles>
+  </product>
+ </products>
+</project>

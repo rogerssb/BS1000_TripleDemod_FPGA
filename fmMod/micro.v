@@ -1,7 +1,5 @@
 `timescale 1ns/10ps
 
-`include "..\addressMap.v"
-
 module fmModRegs(cs,
                  addr,
                  dataIn,

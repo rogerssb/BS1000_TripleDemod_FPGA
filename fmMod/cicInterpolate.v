@@ -41,10 +41,14 @@ always @(posedge clk) begin
     end
 
 `ifdef SIMULATE
-real tap0Real = (tap0[19] ? tap0 - 1048576.0 : tap0)/524288.0;
-real tap1Real = (tap1[19] ? tap1 - 1048576.0 : tap1)/524288.0; 
-real tap2Real = (tap2[19] ? tap2 - 1048576.0 : tap2)/524288.0; 
-real sum3Real = (sum3[19] ? sum3 - 1048576.0 : sum3)/524288.0; 
+real tap0Real;
+always @* tap0Real = (tap0[19] ? tap0 - 1048576.0 : tap0)/524288.0;
+real tap1Real;
+always @* tap1Real = (tap1[19] ? tap1 - 1048576.0 : tap1)/524288.0; 
+real tap2Real;
+always @* tap2Real = (tap2[19] ? tap2 - 1048576.0 : tap2)/524288.0; 
+real sum3Real;
+always @* sum3Real = (sum3[19] ? sum3 - 1048576.0 : sum3)/524288.0; 
 `endif
 
 // Three stages of integration
@@ -64,11 +68,14 @@ always @(posedge clk) begin
 
 `ifdef SIMULATE
 wire [31:0]acc0Slice = acc0[33:2];
-real acc0Real = ((acc0Slice > 2147483647.0) ? acc0Slice-4294967296.0 : acc0Slice)/2147483648.0;
+real acc0Real;
+always @* acc0Real = ((acc0Slice > 2147483647.0) ? acc0Slice-4294967296.0 : acc0Slice)/2147483648.0;
 wire [31:0]acc1Slice = acc1[33:2];
-real acc1Real = ((acc1Slice > 2147483647.0) ? acc1Slice-4294967296.0 : acc1Slice)/2147483648.0;
+real acc1Real;
+always @* acc1Real = ((acc1Slice > 2147483647.0) ? acc1Slice-4294967296.0 : acc1Slice)/2147483648.0;
 wire [31:0]acc2Slice = acc2[33:2];
-real acc2Real = ((acc2Slice > 2147483647.0) ? acc2Slice-4294967296.0 : acc2Slice)/2147483648.0;
+real acc2Real;
+always @* acc2Real = ((acc2Slice > 2147483647.0) ? acc2Slice-4294967296.0 : acc2Slice)/2147483648.0;
 `endif
 
 // Final output

@@ -1,0 +1,59 @@
+<!DOCTYPE SilvacoProject>
+<project version="1" name="testSoftMapping" >
+ <products>
+  <product name="SILOS" >
+   <settings>
+    <setting value="Y" name="DebugEnable" />
+    <setting value="Silvaco4.14.3.R" name="Version" />
+    <setting value="Y" name="NoFloatWarn" />
+    <setting value="N" name="VisualDebug" />
+    <setting value="search" name="SystaskSearchOrder" />
+   </settings>
+   <analyzer>
+    <settings>
+     <setting value="N" name="GotoSource" />
+     <setting value="194" name="C0Width" />
+     <setting value="75" name="C1Width" />
+     <setting value="183" name="C2Width" />
+    </settings>
+    <views>
+     <view value="2700.433 ns,7526.523 ns,68.021 ns,4427.823 ns,0.000 ns" name="Last" />
+    </views>
+    <groups>
+     <group open="yes" name="New Group1" show="yes" >
+      <signals>
+       <signal name="testInput[17:0]" scope="test" />
+       <signal name="reset" scope="test" />
+       <signal name="mantissa[15:0]" scope="test" />
+       <signal name="exponent[2:0]" scope="test" />
+       <signal name="enableClk" scope="test" />
+       <signal name="clkEn" scope="test" />
+       <signal name="clk" scope="test" />
+       <signal name="signBit" scope="test.mapper" />
+       <signal name="inverseProduct[35:0]" scope="test.mapper" />
+       <signal name="dataBits[2:0]" scope="test.mapper" />
+       <signal name="satNeg" scope="test.mapper" />
+       <signal name="satPos" scope="test.mapper" />
+       <signal name="dOut[2:0]" scope="test.mapper" />
+      </signals>
+     </group>
+    </groups>
+   </analyzer>
+   <plusdefines>
+    <define name="TEST_MODULE" />
+   </plusdefines>
+   <sourcefiles>
+    <file name="softDecisionMapper.v" />
+    <file name=".\coregen\mpy18x18WithCe.v" />
+   </sourcefiles>
+   <librarydirs>
+    <directory name="..\..\Xilinx\13.4\ISE_DS\ISE\verilog\src\unisims\{.v}" />
+   </librarydirs>
+   <explorer>
+    <settings>
+     <setting value="test.mapper" name="Scope" />
+    </settings>
+   </explorer>
+  </product>
+ </products>
+</project>

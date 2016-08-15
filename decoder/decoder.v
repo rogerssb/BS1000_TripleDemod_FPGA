@@ -202,7 +202,7 @@ always @ ( posedge clk )
             out_sel_i <= !demux_out ;
             out_sel_q <= demux_out ;
             end
-        else
+        else if (symb_clk_en)
             begin
             out_sel_i <= dec_i ;
             out_sel_q <= dec_q ;

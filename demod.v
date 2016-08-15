@@ -326,9 +326,12 @@ always @(posedge clk) begin
     end
 
 `ifdef SIMULATE
-real    fmVideoReal = $itor($signed(fmVideo))/(2**17);
-real    iFilteredReal = $itor($signed(iFiltered))/(2**17);
-real    qFilteredReal = $itor($signed(qFiltered))/(2**17);
+real    fmVideoReal;
+always @* fmVideoReal = $itor($signed(fmVideo))/(2**17);
+real    iFilteredReal;
+always @* iFilteredReal = $itor($signed(iFiltered))/(2**17);
+real    qFilteredReal;
+always @* qFilteredReal = $itor($signed(qFiltered))/(2**17);
 real    iDdc0Real,qDdc0Real;
 real    term0Real,term1Real,diffReal;
 always @(posedge clk) begin

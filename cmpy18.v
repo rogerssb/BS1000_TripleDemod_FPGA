@@ -5,6 +5,7 @@ This source code is the Intellectual Property of Koos Technical Services,Inc.
 (KTS) and is provided under a License Agreement which protects KTS' ownership and
 derivative rights in exchange for negotiated compensation.
 ******************************************************************************/
+`timescale 1ns/100ps
 
 //`define UNITY_GAIN
 

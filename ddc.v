@@ -100,6 +100,7 @@ always @(posedge clk) begin
 wire    [17:0]iDds;
 wire    [17:0]qDds;
 dds dds ( 
+//dds4p0 dds ( 
     .sclr(reset), 
     .clk(clk), 
     .ce(1'b1),
@@ -431,6 +432,7 @@ always @(posedge clk) begin
 wire    [17:0]iLeadDds;
 wire    [17:0]qLeadDds;
 dds leadDds ( 
+//dds4p0 leadDds ( 
     .sclr(reset), 
     .clk(clk), 
     .ce(1'b1),
