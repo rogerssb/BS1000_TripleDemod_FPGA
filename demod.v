@@ -153,6 +153,7 @@ demodRegs demodRegs(
     `ifdef ADD_SCPATH
     .enableScPath(enableScPath),
     `endif
+    .oqpskIthenQ(oqpskIthenQ),
     .bitsyncMode(bitsyncMode),
     .dac0Select(dac0Select),
     .dac1Select(dac1Select),
@@ -648,6 +649,7 @@ bitsync bitsync(
     .symTimes2Sync(resampSync),
     .auResampSync(auResampSync),
     .demodMode(demodMode),
+    .oqpskIthenQ(oqpskIthenQ),
     `ifdef ADD_DESPREADER
     .enableDespreader(enableDespreader),
     `endif

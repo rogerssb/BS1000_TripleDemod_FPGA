@@ -464,8 +464,11 @@ NET "clk*" TNM_NET = FFS clk;
 NET "clk*" TNM_NET = DSPS clk;
 NET "clk*" TNM_NET = RAMS clk;
 
+NET "bootClk*" TNM_NET = FFS bootClk;
+
 # The default clock rate
-TIMESPEC TS_ck933 =             PERIOD "clk" 93.33 MHz HIGH 50%;
+TIMESPEC TS_ck933 =     PERIOD "clk" 93.33 MHz HIGH 50%;
+TIMESPEC TS_bootClk =   PERIOD "bootClk" 46.67 MHz HIGH 50%;
 TIMESPEC TS_clkToFFS =  FROM PADS(clk) TO FFS TIG;
 TIMESPEC TS_clkToDSPS = FROM PADS(clk) TO DSPS TIG;
 TIMESPEC TS_clkToRAMS = FROM PADS(clk) TO RAMS TIG;
@@ -504,6 +507,10 @@ NET "trellis/viterbi_top/traceback/symEnDly*" TNM_NET = FFS syncGroup;
 NET "trellis/trellisCarrierLoop/sym2xEnSr*" TNM_NET = FFS syncGroup;
 NET "trellis/trellisCarrierLoop/symEnSr*" TNM_NET = FFS syncGroup;
 #NET "trellis/trellisCarrierLoop/fmDemod/cordic/enSR*" TNM_NET = FFS syncGroup;
+NET "trellis/symEnOut*" TNM_NET = FFS syncGroup;
+#NET "trellis/symEnOut*" TNM_NET = DSPS syncGroup;
+NET "trellis/sym2xEnOut*" TNM_NET = FFS syncGroup;
+#NET "trellis/sym2xEnOut*" TNM_NET = DSPS syncGroup;
 NET "trellis/symEnShift*" TNM_NET = FFS syncGroup;
 NET "dac0Sync*" TNM_NET = FFS syncGroup;
 NET "dac0Sync*" TNM_NET = DSPS syncGroup;
@@ -514,6 +521,9 @@ NET "dac2Sync*" TNM_NET = DSPS syncGroup;
 NET "dataSymEnReg*" TNM_NET = FFS syncGroup;
 NET "dataSymEnReg*" TNM_NET = DSPS syncGroup;
 NET "dataSym2xEnReg*" TNM_NET = FFS syncGroup;
+#NET "vitSymEn*" TNM_NET = FFS syncGroup;
+#NET "vitSymEn*" TNM_NET = DSPS syncGroup;
+#NET "vitSym2xEn*" TNM_NET = FFS syncGroup;
 NET "viterbi/codeEn*" TNM_NET = FFS syncGroup;
 #NET "viterbi/symEnSR*" TNM_NET = FFS syncGroup;
 NET "decoderSymEn*" TNM_NET = FFS syncGroup;
@@ -527,6 +537,8 @@ TIMEGRP "clken" =  FFS(pcmSymEn*) FFS(pcmSym2xEn*)
                    FFS(trellis/trellisCarrierLoop/symEnSr*)
 #                   FFS(trellis/trellisCarrierLoop/fmDemod/cordic/enSR*)
                    FFS(trellis/symEnShift*)
+                   FFS(trellis/symEnOut*)
+                   FFS(trellis/sym2xEnOut*)
                    FFS(dac0Sync*) FFS(dac1Sync*) FFS(dac2Sync*)
                    FFS(sc/dac0Sync*) 
                    FFS(sc/dac1Sync*) 
@@ -548,8 +560,10 @@ TIMEGRP "clken" =  FFS(pcmSymEn*) FFS(pcmSym2xEn*)
                    FFS(sc/carrierLoop/loopFilterEn*)
                    FFS(sc/fmDemod/cordic/enSR*) 
                    FFS(sc/bitsync/phaseState*)
-				   FFS(dataSymEnReg*)
+                   FFS(dataSymEnReg*)
 				   FFS(dataSym2xEnReg*)
+#				   FFS(vitSymEn*)
+#				   FFS(vitSym2xEn*)
 				   FFS(viterbi/codeEn*)
 #				   FFS(viterbi/symEnSR*)
                    FFS(decoderSymEn)

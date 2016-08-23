@@ -150,7 +150,7 @@ module viterbi(
     always @(posedge clk) begin
         if (reset) begin
             singleRailState <= G1G2;
-            bpskState <= P0_G2G1;
+            bpskState <= P0_G1G2;
             qpskState <= P0_G1G2;
             oqpskState <= P0_G1G2;
         end
@@ -171,46 +171,44 @@ module viterbi(
                             default:    oqpskState <= P0_G1G2;
                         endcase
                     end
-                    else begin
-                        case (oqpskState)
-                            P0_G1G2: begin
-                                g1 <= iSoft;
-                                g2 <= qSoft;
-                            end
-                            P90_G1G2: begin
-                                g1 <= qSoft;
-                                g2 <= ~iSoft;
-                            end
-                            P180_G1G2: begin
-                                g1 <= ~iSoft;
-                                g2 <= ~qSoft;
-                            end
-                            P270_G1G2: begin
-                                g1 <= ~qSoft;
-                                g2 <= iSoft;
-                            end
-                            P0_G1G2_: begin
-                                g1 <= iSoft;
-                                g2 <= ~qSoft;
-                            end
-                            P90_G1G2_: begin
-                                g1 <= qSoft;
-                                g2 <= iSoft;
-                            end
-                            P180_G1G2_: begin
-                                g1 <= ~iSoft;
-                                g2 <= qSoft;
-                            end
-                            P270_G1G2_: begin
-                                g1 <= ~qSoft;
-                                g2 <= ~iSoft;
-                            end
-                            default: begin
-                                g1 <= iSoft;
-                                g2 <= qSoft;
-                            end
-                        endcase
-                    end
+                    case (oqpskState)
+                        P0_G1G2: begin
+                            g1 <= iSoft;
+                            g2 <= qSoft;
+                        end
+                        P90_G1G2: begin
+                            g1 <= qSoftDelay;
+                            g2 <= ~iSoft;
+                        end
+                        P180_G1G2: begin
+                            g1 <= ~iSoft;
+                            g2 <= ~qSoft;
+                        end
+                        P270_G1G2: begin
+                            g1 <= ~qSoftDelay;
+                            g2 <= iSoft;
+                        end
+                        P0_G1G2_: begin
+                            g1 <= iSoft;
+                            g2 <= ~qSoft;
+                        end
+                        P90_G1G2_: begin
+                            g1 <= qSoftDelay;
+                            g2 <= iSoft;
+                        end
+                        P180_G1G2_: begin
+                            g1 <= ~iSoft;
+                            g2 <= qSoft;
+                        end
+                        P270_G1G2_: begin
+                            g1 <= ~qSoftDelay;
+                            g2 <= ~iSoft;
+                        end
+                        default: begin
+                            g1 <= iSoft;
+                            g2 <= qSoft;
+                        end
+                    endcase
                  end
                  /*
                  Eight possible states based on 4 phase states and G2 inversion.
@@ -230,46 +228,44 @@ module viterbi(
                             default:    qpskState <= P0_G1G2;
                         endcase
                     end
-                    else begin
-                        case (qpskState)
-                            P0_G1G2: begin
-                                g1 <= iSoft;
-                                g2 <= qSoft;
-                            end
-                            P90_G1G2: begin
-                                g1 <= qSoft;
-                                g2 <= ~iSoft;
-                            end
-                            P180_G1G2: begin
-                                g1 <= ~iSoft;
-                                g2 <= ~qSoft;
-                            end
-                            P270_G1G2: begin
-                                g1 <= ~qSoft;
-                                g2 <= iSoft;
-                            end
-                            P0_G1G2_: begin
-                                g1 <= iSoft;
-                                g2 <= ~qSoft;
-                            end
-                            P90_G1G2_: begin
-                                g1 <= qSoft;
-                                g2 <= iSoft;
-                            end
-                            P180_G1G2_: begin
-                                g1 <= ~iSoft;
-                                g2 <= qSoft;
-                            end
-                            P270_G1G2_: begin
-                                g1 <= ~qSoft;
-                                g2 <= ~iSoft;
-                            end
-                            default: begin
-                                g1 <= iSoft;
-                                g2 <= qSoft;
-                            end
-                        endcase
-                    end
+                    case (qpskState)
+                        P0_G1G2: begin
+                            g1 <= iSoft;
+                            g2 <= qSoft;
+                        end
+                        P90_G1G2: begin
+                            g1 <= qSoft;
+                            g2 <= ~iSoft;
+                        end
+                        P180_G1G2: begin
+                            g1 <= ~iSoft;
+                            g2 <= ~qSoft;
+                        end
+                        P270_G1G2: begin
+                            g1 <= ~qSoft;
+                            g2 <= iSoft;
+                        end
+                        P0_G1G2_: begin
+                            g1 <= iSoft;
+                            g2 <= ~qSoft;
+                        end
+                        P90_G1G2_: begin
+                            g1 <= qSoft;
+                            g2 <= iSoft;
+                        end
+                        P180_G1G2_: begin
+                            g1 <= ~iSoft;
+                            g2 <= qSoft;
+                        end
+                        P270_G1G2_: begin
+                            g1 <= ~qSoft;
+                            g2 <= ~iSoft;
+                        end
+                        default: begin
+                            g1 <= iSoft;
+                            g2 <= qSoft;
+                        end
+                    endcase
                  end
                  /*
                  Eight possible states based on whether codeEn is lined up with
@@ -278,7 +274,7 @@ module viterbi(
                  */
                  `MODE_BPSK: begin
                     syncState <= bpskState;
-                    if (outOfSync) begin
+                    if (outOfSync & codeEn) begin
                         case (bpskState)
                             P0_G1G2:    bpskState <= P0_G2G1;
                             P0_G2G1:    bpskState <= P180_G1G2;
@@ -291,74 +287,62 @@ module viterbi(
                             default:    bpskState <= P0_G1G2;
                         endcase
                     end
-                    else begin
-                        case (bpskState)
-                            P0_G1G2: begin
-                                if (codeEn) begin
-                                    g1 <= iSoft;
-                                end
-                                else begin
-                                    g2 <= iSoft;
-                                end
+                    case (bpskState)
+                        P0_G1G2: begin
+                            if (codeEn) begin
+                                g1 <= iSoftDelay;
+                                g2 <= iSoft;
                             end
-                            P0_G2G1: begin
-                                if (codeEn) begin
-                                    g1 <= iSoftDelay;
-                                    g2 <= iSoft;
-                                end
+                        end
+                        P0_G2G1: begin
+                            if (!codeEn) begin
+                                g1 <= iSoftDelay;
+                                g2 <= iSoft;
                             end
-                            P0_G1G2_: begin
-                                if (codeEn) begin
-                                    g1 <= iSoft;
-                                end
-                                else begin
-                                    g2 <= ~iSoft;
-                                end
+                        end
+                        P0_G1G2_: begin
+                            if (codeEn) begin
+                                g1 <= iSoftDelay;
+                                g2 <= ~iSoft;
                             end
-                            P0_G2_G1: begin
-                                if (codeEn) begin
-                                    g1 <= iSoftDelay;
-                                    g2 <= ~iSoft;
-                                end
+                        end
+                        P0_G2_G1: begin
+                            if (!codeEn) begin
+                                g1 <= iSoftDelay;
+                                g2 <= ~iSoft;
                             end
-                            P180_G1G2: begin
-                                if (codeEn) begin
-                                    g1 <= ~iSoft;
-                                end
-                                else begin
-                                    g2 <= ~iSoft;
-                                end
+                        end
+                        P180_G1G2: begin
+                            if (codeEn) begin
+                                g1 <= ~iSoftDelay;
+                                g2 <= ~iSoft;
                             end
-                            P180_G2G1: begin
-                                if (codeEn) begin
-                                    g1 <= ~iSoftDelay;
-                                    g2 <= ~iSoft;
-                                end
+                        end
+                        P180_G2G1: begin
+                            if (!codeEn) begin
+                                g1 <= ~iSoftDelay;
+                                g2 <= ~iSoft;
                             end
-                            P180_G1G2_: begin
-                                if (codeEn) begin
-                                    g1 <= ~iSoft;
-                                end
-                                else begin
-                                    g2 <= iSoft;
-                                end
+                        end
+                        P180_G1G2_: begin
+                            if (codeEn) begin
+                                g1 <= ~iSoftDelay;
+                                g2 <= iSoft;
                             end
-                            P180_G2_G1: begin
-                                if (codeEn) begin
-                                    g1 <= ~iSoftDelay;
-                                    g2 <= iSoft;
-                                end
+                        end
+                        P180_G2_G1: begin
+                            if (!codeEn) begin
+                                g1 <= ~iSoftDelay;
+                                g2 <= iSoft;
                             end
-                            default: begin
-                                if (codeEn) begin
-                                    g1 <= iSoft;
-                                end
-                                else begin
-                                    g2 <= iSoft;
-                                end
+                        end
+                        default: begin
+                            if (codeEn) begin
+                                g1 <= iSoftDelay;
+                                g2 <= iSoft;
                             end
-                        endcase
-                    end
+                        end
+                    endcase
                  end
                  /*
                  FM/PM Modulations:

@@ -2,7 +2,7 @@
 `timescale 1ns/100ps
 
 //`define ALDEC
-//`define TRELLIS
+`define TRELLIS
 
 `define ENABLE_AGC
 //`define ADD_NOISE
@@ -866,19 +866,22 @@ initial begin
     `ifdef TRELLIS
     // Create a reset to clear the accumulator in the trellis
     `ifndef IQ_MAG
-    //trellis.viterbi_top.simReset = 1;
+    trellis.viterbi_top.simReset = 1;
     trellisReset = 1;
     #(2*bitrateSamplesInt*C) ;
-    //trellis.viterbi_top.simReset = 0;
+    trellis.viterbi_top.simReset = 0;
     trellisReset = 0;
     #(10*bitrateSamplesInt*C) ;
+    trellis.viterbi_top.simReset = 1;
     trellisReset = 1;
     #(2*bitrateSamplesInt*C) ;
-    //trellis.viterbi_top.simReset = 0;
+    trellis.viterbi_top.simReset = 0;
     trellisReset = 0;
     #(30*bitrateSamplesInt*C) ;
+    trellis.viterbi_top.simReset = 1;
     trellisReset = 1;
     #(2*bitrateSamplesInt*C) ;
+    trellis.viterbi_top.simReset = 0;
     trellisReset = 0;
     `endif        
     `endif

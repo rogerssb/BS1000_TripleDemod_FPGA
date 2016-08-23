@@ -27,6 +27,7 @@ module demodRegs(
     negDeviation,
     `endif
     demodMode,
+    oqpskIthenQ,
     `ifdef ADD_DESPREADER
     despreadLock,
     enableDespreader,
@@ -77,6 +78,9 @@ output          enableScPath;
 reg             enableScPath;
 `endif
 
+output          oqpskIthenQ;
+reg             oqpskIthenQ;
+
 output  [1:0]   bitsyncMode;
 reg     [1:0]   bitsyncMode;
 
@@ -125,17 +129,20 @@ always @(negedge wr1) begin
             `ifdef ADD_DESPREADER
             `ifdef ADD_SCPATH
             `DEMOD_CONTROL: begin
+                oqpskIthenQ <= dataIn[13];
                 enableScPath <= dataIn[14];
                 enableDespreader <= dataIn[15];
                 end
             `else
             `DEMOD_CONTROL: begin
+                oqpskIthenQ <= dataIn[13];
                 enableDespreader <= dataIn[15];
                 end
             `endif
             `else
             `ifdef ADD_SCPATH
             `DEMOD_CONTROL: begin
+                oqpskIthenQ <= dataIn[13];
                 enableScPath <= dataIn[14];
                 end
             `endif
@@ -185,15 +192,15 @@ always @* begin
         casex (addr)
             `ifdef ADD_DESPREADER
             `ifdef ADD_SCPATH
-            `DEMOD_CONTROL:     dataOut = {14'b0,bitsyncMode,enableDespreader,enableScPath,9'b0,demodMode};
+            `DEMOD_CONTROL:     dataOut = {14'b0,bitsyncMode,enableDespreader,enableScPath,oqpskIthenQ,8'b0,demodMode};
             `else
-            `DEMOD_CONTROL:     dataOut = {14'b0,bitsyncMode,enableDespreader,10'b0,demodMode};
+            `DEMOD_CONTROL:     dataOut = {14'b0,bitsyncMode,enableDespreader,1'b0,oqpskIthenQ,8'b0,demodMode};
             `endif
             `else
             `ifdef ADD_SCPATH
-            `DEMOD_CONTROL:     dataOut = {14'b0,bitsyncMode,1'b0,enableScPath,9'b0,demodMode};
+            `DEMOD_CONTROL:     dataOut = {14'b0,bitsyncMode,1'b0,enableScPath,oqpskIthenQ,8'b0,demodMode};
             `else
-            `DEMOD_CONTROL:     dataOut = {14'b0,bitsyncMode,11'b0,demodMode};
+            `DEMOD_CONTROL:     dataOut = {14'b0,bitsyncMode,2'b0,oqpskIthenQ,8'b0,demodMode};
             `endif
             `endif
 

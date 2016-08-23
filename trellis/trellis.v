@@ -53,8 +53,6 @@ output          symEnOut;
 output          sym2xEnOut;
 output          oneOrZeroPredecessor;
 
-wire                    decision;
-
 wire            symEn_phErr;
 reg     [7:0]   phErrShft;
 wire    [4:0]   indexDelta;
@@ -247,7 +245,7 @@ iqMagEst iqMagEst
     .qIn_0({out0Pt10Imag,8'b0}),
     .iIn_1({out1Pt10Real,8'b0}),
     .qIn_1({out1Pt10Imag,8'b0}),
-    .decision(decision)
+    .decision(magDecision)
     );
 
 `else
@@ -572,8 +570,8 @@ viterbi_top #(size, ROT_BITS)viterbi_top
   .index(index),
   .indexDelta(indexDelta),
   .symEn_index(symEn_index),
-  .decision(decision),
-  .symEn_tbtDly(symEnOut),
+  .decision(trellisDecision),
+  .symEn_tbtDly(trellisSymEnOut),
   `ifdef USE_LEAKY
   .phaseErrorReal(phaseErrorReal),
   `endif
@@ -587,9 +585,20 @@ viterbi_top #(size, ROT_BITS)viterbi_top
 // of the pre-existing line decoder. This design assumes at least 3 clocks between each 1x clock
 // enable.
 reg se0,sym2xEnOut;
+reg decision;
+reg symEnOut;
 always @(posedge clk) begin
+    `ifdef IQ_MAG
+    se0 <= rotEna;
+    sym2xEnOut <= se0 | rotEna;
+    symEnOut <= rotEna;
+    decision <= magDecision;
+    `else
     se0 <= symEnOut;
-    sym2xEnOut <= se0 | symEnOut;
+    sym2xEnOut <= se0 | trellisSymEnOut;
+    symEnOut <= trellisSymEnOut;
+    decision <= trellisDecision;
+    `endif
     end
 
 
@@ -738,7 +747,7 @@ bitFifo bitFifo(
     .reset(reset),
     .enIn(symEn),
     .enOut(symEnOut),
-    .din(legacySR[13]),
+    .din(legacySR[12]),
     .dout(legacyDelayed)
     );
 

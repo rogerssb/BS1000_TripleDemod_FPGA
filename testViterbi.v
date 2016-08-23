@@ -1234,6 +1234,7 @@ initial begin
     viterbi.vitReset = 1;
     #(2*2*bitrateSamplesInt*TC) ;
     viterbi.vitReset = 0;
+    //viterbi.codeEn = 1;
 
     `ifdef ENABLE_AGC
     // Enable the AGC loop

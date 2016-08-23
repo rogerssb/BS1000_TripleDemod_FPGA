@@ -81,7 +81,7 @@ input           symb_pll_vco;
 output          sdiOut;
 input           legacyBit_pad ;
 
-parameter VER_NUMBER = 16'd420;
+parameter VER_NUMBER = 16'd431;
 
 // 12 Jun 13
 // IOB reclocking of inputs to trellis
@@ -138,7 +138,6 @@ reg     [1:0]   dac2_in_sel;
 reg     [1:0]   dec_in_sel;
 reg             iOutMuxSel;
 reg     [1:0]   qOutMuxSel;
-reg             viterbiEnable;
 reg     [23:0]  boot_addr;
 
 // MISC space writes
@@ -190,18 +189,6 @@ always @(negedge wr2) begin
         end
     end
 
-always @(negedge wr3) begin
-    if (misc_en) begin
-        casex (addr)
-            `DEC_IN_SEL:
-                begin
-                viterbiEnable <= dataIn[31];
-                end
-            default: ;
-            endcase
-        end
-    end
-
 // MISCSPACE Reads
 reg     [31:0]  misc_dout;
 reg rs;
@@ -219,13 +206,13 @@ always @* begin
         `DAC_IN_SEL:
             begin
             rs = 0;
-            misc_dout = {viterbiEnable,9'b0,qOutMuxSel,1'b0,iOutMuxSel,dec_in_sel,
+            misc_dout = {10'b0,qOutMuxSel,1'b0,iOutMuxSel,dec_in_sel,
                          10'b0,dac2_in_sel,dac1_in_sel,dac0_in_sel};
             end
         `DEC_IN_SEL:
             begin
             rs = 0;
-            misc_dout = {viterbiEnable,9'b0,qOutMuxSel,1'b0,iOutMuxSel,dec_in_sel,
+            misc_dout = {10'b0,qOutMuxSel,1'b0,iOutMuxSel,dec_in_sel,
                          10'b0,dac2_in_sel,dac1_in_sel,dac0_in_sel};
             end
         `MISC_TYPE: begin
@@ -270,16 +257,24 @@ always @*
         end
     end
 
-always @ (posedge clk)
-    begin
-    reboot_decode_sync <= {reboot_decode_sync[6:0],reboot_decode};
-    reboot <= (reboot_decode_sync[7:6] == 2'b10);
+    reg bootClk;
+    always @ (posedge clk) begin
+        if (reset) begin
+            bootClk <= 0;
+        end
+        else begin
+            bootClk <= ~bootClk;
+        end
+    end
+    always @(posedge bootClk) begin
+        reboot_decode_sync <= {reboot_decode_sync[6:0],reboot_decode};
+        reboot <= (reboot_decode_sync[7:6] == 2'b10);
     end
 
 multiboot multiboot
     (
     .addr(boot_addr),
-    .clk(clk),
+    .clk(bootClk),
     .reset(reset),
     .pulse(reboot)
     );
@@ -729,6 +724,51 @@ assign dac2_clk = clk;
 //******************************************************************************
 //                          Viterbi Decoder
 //******************************************************************************
+    //`define VITERBI_ALT_TIMING
+    `ifdef VITERBI_ALT_TIMING
+    reg                     vitSymEn,vitSym2xEn;
+    reg     signed  [17:0]  iVit,qVit;
+    always @(posedge clk) begin
+        if (dataSym2xEnReg) begin
+            vitSymEn <= !dataSymEnReg;
+        end
+        else begin
+            vitSymEn <= 0;
+        end
+        vitSym2xEn <= dataSym2xEnReg;
+        iVit <= iIn;
+        qVit <= qIn;
+    end
+    wire    [31:0]  vitDout;
+    viterbi viterbi(
+        .clk(clk),
+        .clkEn(1'b1),
+        .reset(reset),
+        .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
+        .addr(addr),
+        .din(dataIn),
+        .dout(vitDout),
+        .demodMode(demodMode),
+        .symEn(vitSymEn),
+        .iSymData(iVit),
+        .qSymData(qVit),
+        .bitEnOut(viterbiBitEn),
+        .bitOut(viterbiBit),
+        .vitError()
+        );
+    reg viterbiSym2xEn;
+    always @* begin
+        case (demodMode)
+            `MODE_QPSK,
+            `MODE_OQPSK: begin
+                viterbiSym2xEn = vitSym2xEn;
+            end
+            default: begin
+                viterbiSym2xEn = vitSymEn;
+            end
+        endcase
+    end
+    `else
     wire    [31:0]  vitDout;
     viterbi viterbi(
         .clk(clk),
@@ -758,6 +798,7 @@ assign dac2_clk = clk;
             end
         endcase
     end
+    `endif
 `endif //ADD_VITERBI
 
 

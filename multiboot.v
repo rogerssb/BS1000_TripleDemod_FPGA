@@ -6,7 +6,7 @@ module multiboot(clk, pulse, addr, reset);
 
 input clk, pulse, reset;
 input [23:0] addr;
-reg [8:0] mem [31:0];
+reg [8:0] mem [23:0];
 
 always @ (posedge clk) begin
     if (pulse) begin

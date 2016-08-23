@@ -7,10 +7,10 @@
      <setting value="N" name="GotoSource" />
      <setting value="167" name="C0Width" />
      <setting value="58" name="C1Width" />
-     <setting value="206" name="C2Width" />
+     <setting value="120" name="C2Width" />
     </settings>
     <views>
-     <view value="0.000 ns,37503.001 ns,1100.848 ns,123074.806 ns,41539.068 ns" name="Last" />
+     <view value="35432.178 ns,37864.675 ns,42.638 ns,36184.738 ns,49483.117 ns" name="Last" />
     </views>
     <groups>
      <group open="no" name="Rx" show="yes" >
@@ -140,7 +140,7 @@
        <signal interpolate="Step" radix="Real" name="interpReal" scope="test.dac2Interp" />
       </signals>
      </group>
-     <group open="no" name="Trellis" show="yes" >
+     <group open="yes" name="Trellis" show="yes" >
       <signals>
        <signal name="trellisReset" scope="test" />
        <signal name="symEn" scope="test.trellis.trellisCarrierLoop" />
@@ -166,6 +166,8 @@
        <signal interpolate="Step" radix="Real" name="avgPosDelta" scope="test.trellis" />
        <signal interpolate="Step" radix="Real" name="avgNegDelta" scope="test.trellis" />
        <signal interpolate="Step" radix="Real" name="avgDelta" scope="test.trellis" />
+       <signal name="sym2xEnOut" scope="test.trellis" />
+       <signal name="symEnOut" scope="test.trellis" />
        <signal name="decision" scope="test.trellis" />
        <signal name="txDelay" scope="test" />
        <signal name="legacyBit" scope="test.trellis.trellisCarrierLoop" />
@@ -216,7 +218,7 @@
        <signal name="out1Imag_2dly[9:0]" scope="test.trellis.viterbi_top" />
       </signals>
      </group>
-     <group open="yes" name="BEP" show="yes" >
+     <group open="no" name="BEP" show="yes" >
       <signals>
        <signal name="symEn" scope="test.bep" />
        <signal name="symData[17:0]" scope="test.bep" />
@@ -278,7 +280,7 @@
    </datafilters>
    <explorer>
     <settings>
-     <setting value="test.bep.mean" name="Scope" />
+     <setting value="test.trellis" name="Scope" />
     </settings>
    </explorer>
    <plifiles>

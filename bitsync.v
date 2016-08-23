@@ -16,6 +16,7 @@ module bitsync(
     symTimes2Sync,
     auResampSync,
     demodMode,
+    oqpskIthenQ,
     `ifdef ADD_DESPREADER
     enableDespreader,
     `endif
@@ -62,6 +63,7 @@ input           reset;
 input           symTimes2Sync;
 input           auResampSync;
 input   [4:0]   demodMode;
+input           oqpskIthenQ;
 `ifdef ADD_DESPREADER
 input           enableDespreader;
 `endif
@@ -180,6 +182,10 @@ always @(posedge sampleClk) begin
                 iMF <= iSymDelay;
                 qMF <= qFiltered;
                 end
+            else if (oqpskIthenQ) begin
+                iMF <= iSymDelay;
+                qMF <= qFiltered;
+                end
             else begin
                 iMF <= iFiltered;
                 qMF <= qSymDelay;
@@ -199,16 +205,27 @@ always @(posedge sampleClk) begin
 /******************************************************************************
                                Symbol Offset Deskew
 ******************************************************************************/
-reg     [17:0]  iMF,qMF,qSymDelay;
+reg     [17:0]  iMF,qMF,iSymDelay,qSymDelay;
 always @(posedge sampleClk) begin
     if (symTimes2Sync) begin
-        iMF <= iFiltered;
+        iSymDelay <= iFiltered;
         qSymDelay <= qFiltered;
-        if ( (demodMode == `MODE_OQPSK)
-          || (demodMode == `MODE_SOQPSK)) begin
+        if (demodMode == `MODE_SOQPSK) begin
+            iMF <= iFiltered;
             qMF <= qSymDelay;
             end
+        else if (demodMode == `MODE_OQPSK) begin
+            if (oqpskIthenQ) begin
+                iMF <= iSymDelay;
+                qMF <= qFiltered;
+                end
+            else begin
+                iMF <= iFiltered;
+                qMF <= qSymDelay;
+                end
+            end
         else begin
+            iMF <= iFiltered;
             qMF <= qFiltered;
             end
         end
@@ -220,8 +237,10 @@ wire fmTrellisModes = ( (demodMode == `MODE_MULTIH)
                       );
 //wire fmTrellisModes = ( (demodMode == `MODE_PCMTRELLIS)
 //                      );
-assign iTrellis = fmTrellisModes ? iMF : i;
-assign qTrellis = fmTrellisModes ? qMF : q;
+//assign iTrellis = fmTrellisModes ? iMF : i;
+//assign qTrellis = fmTrellisModes ? qMF : q;
+assign iTrellis = iMF;
+assign qTrellis = qMF;
 
 //*********************** MF Frequency Discriminator **************************
 wire    [11:0]   phase;
