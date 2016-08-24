@@ -145,6 +145,10 @@ always @(negedge wr1) begin
                 oqpskIthenQ <= dataIn[13];
                 enableScPath <= dataIn[14];
                 end
+            `else
+            `DEMOD_CONTROL: begin
+                oqpskIthenQ <= dataIn[13];
+                end
             `endif
             `endif
             `DEMOD_DACSELECT: begin
