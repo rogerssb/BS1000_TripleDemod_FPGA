@@ -316,6 +316,7 @@ decoder_regs decoder_regs(
 
 assign {
     bypass_fifo,
+    rsvd0,
     mode,
     sign_mag,
     biphase,
@@ -326,7 +327,7 @@ assign {
     data_inv,
     clk_sel,
     clk_inv,
-    fifo_rs} = regs_q[12:0];
+    fifo_rs} = regs_q[13:0];
 
 endmodule
 
