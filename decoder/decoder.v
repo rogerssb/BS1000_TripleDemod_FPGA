@@ -67,6 +67,7 @@ biphase_to_nrz biphase_to_nrz
   .symb_i       (symb_i),
   .nrz_i        (nrz_i)
   ) ;
+wire            biphaseClkEn = (biphase_en & symb_clk_en);
 
 // nrz_i is delayed one biphase_en with respect to symb_q because of its path
 // through biphase_to_nrz. Here, the I/Q paths are resynchronized by injecting
@@ -270,21 +271,31 @@ wire    data_inv_q = data_inv ? !derand_out_q : derand_out_q ;
 //  );
 
 wire        clk_sel;
-assign      outputClkEn = biphase ? biphase_en : (
+assign      outputClkEn = biphase ? biphaseClkEn : (
                           clk_sel ? symb_clk_en : symb_clk_2x_en);
 assign      pllClkEn = biphase ? symb_clk_en : symb_clk_2x_en;
 
 
-reg         symbol_clk;
-always @(posedge clk) begin
-    if (symb_clk_en) begin
-        symbol_clk <= 1;
+    reg         symbol_clk;
+    always @(posedge clk) begin
+        if (biphase) begin
+            if (biphaseClkEn) begin
+                symbol_clk <= 1;
+            end
+            else if (symb_clk_en) begin
+                symbol_clk <= ~symbol_clk;
+            end
         end
-    else if (symb_clk_2x_en) begin
-        symbol_clk <= ~symbol_clk;
+        else begin
+            if (symb_clk_en) begin
+                symbol_clk <= 1;
+            end
+            else if (symb_clk_2x_en) begin
+                symbol_clk <= ~symbol_clk;
+            end
         end
     end
-assign symb_clk = clk_sel ? symbol_clk : symb_clk_2x_en;
+    assign symb_clk = clk_sel ? symbol_clk : symb_clk_2x_en;
 
 assign dout_i = data_inv_i ;
 assign dout_q = data_inv_q ;
