@@ -54,6 +54,7 @@ biphase_to_nrz biphase_to_nrz
   .symb_i       (symb),
   .nrz_i        (nrz)
   ) ;
+wire            biphaseClkEn = (biphase_en & symb_clk_en);
 
 reg             nrz_delay;
 always @ ( posedge clk or posedge rs )
@@ -124,17 +125,29 @@ wire    data_inv;
 wire    data_out = data_inv ? !derand_out : derand_out ;
 
 wire        clk_sel;
-assign      clkEn_out = biphase ? biphase_en : (
+assign      clkEn_out = biphase ? biphaseClkEn : (
                         clk_sel ? symb_clk_en : symb_clk_2x_en);
-reg         symb_clk;
-always @(posedge clk) begin
-    if (symb_clk_en) begin
-        symb_clk <= 1;
+
+    reg         symbol_clk;
+    always @(posedge clk) begin
+        if (biphase) begin
+            if (biphaseClkEn) begin
+                symbol_clk <= 1;
+            end
+            else if (symb_clk_en) begin
+                symbol_clk <= ~symbol_clk;
+            end
         end
-    else if (symb_clk_2x_en) begin
-        symb_clk <= ~symb_clk;
+        else begin
+            if (symb_clk_en) begin
+                symbol_clk <= 1;
+            end
+            else if (symb_clk_2x_en) begin
+                symbol_clk <= ~symbol_clk;
+            end
         end
     end
+    assign symb_clk = clk_sel ? symbol_clk : symb_clk_2x_en;
 
 
 //------------------------------------------------------------------------------
