@@ -1,3 +1,25 @@
+2015.4:
+ * Version 7.2 (Rev. 5)
+ * Correction to GUI reported Calculated Coefficients for Transpose Interpolation filters.
+ * Revision change in one or more subcores
+
+2015.3:
+ * Version 7.2 (Rev. 4)
+ * Add constraints file to suppress expected memory collision warnings during post-synthesis simulation.
+ * IP revision number added to HDL module, library, and include file names, to support designs with both locked and upgraded IP instances
+ * Correction to GUI reported latency estimate for polyphase interpolation configurations.
+ * Revision change in one or more subcores
+
+2015.2.1:
+ * Version 7.2 (Rev. 3)
+ * No changes
+
+2015.2:
+ * Version 7.2 (Rev. 3)
+ * Correction to the GUI reported startup latency for polyphase interpolation configurations.
+ * Correction for Halfband Decimation with Symmetric rounding on Ultrascale parts.
+ * Correction for Polyphase Interpolation with Convergent rounding where multiple DSP columns are required to support the data and/or coefficient width.
+
 2015.1:
  * Version 7.2 (Rev. 2)
  * Warning reduction.

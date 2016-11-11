@@ -51,7 +51,7 @@
 //     for further examples of how to use the FIR Compiler C model.
 //   o Unzip the appropriate platform specifc zip file and use the following example 
 //     command line to compile and link this TB:
-//     gcc -x c++ -I. -L. -lIp_fir_compiler_v7_2_bitacc_cmodel -Wl,-rpath,. -o tb_halfbandEven tb_halfbandEven.c
+//     gcc -x c++ -I. -L. -lIp_fir_compiler_v7_2_5_bitacc_cmodel -Wl,-rpath,. -o tb_halfbandEven tb_halfbandEven.c
 
 #include <stdio.h>
 #include "fir_compiler_v7_2_bitacc_cmodel.h"

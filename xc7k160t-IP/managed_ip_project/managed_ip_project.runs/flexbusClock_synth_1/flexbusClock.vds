@@ -1,38 +1,41 @@
 #-----------------------------------------------------------
-# Vivado v2015.1 (64-bit)
-# SW Build 1215546 on Mon Apr 27 19:22:08 MDT 2015
-# IP Build 1209967 on Tue Apr 21 11:39:20 MDT 2015
-# Start of session at: Tue Jun 23 15:11:52 2015
-# Process ID: 9936
+# Vivado v2015.4 (64-bit)
+# SW Build 1412921 on Wed Nov 18 09:43:45 MST 2015
+# IP Build 1412160 on Tue Nov 17 13:47:24 MST 2015
+# Start of session at: Sat Oct 29 14:45:54 2016
+# Process ID: 8484
+# Current directory: C:/modem/vivado/xc7k160t-IP/managed_ip_project/managed_ip_project.runs/flexbusClock_synth_1
+# Command line: vivado.exe -log flexbusClock.vds -mode batch -messageDb vivado.pb -notrace -source flexbusClock.tcl
 # Log file: C:/modem/vivado/xc7k160t-IP/managed_ip_project/managed_ip_project.runs/flexbusClock_synth_1/flexbusClock.vds
 # Journal file: C:/modem/vivado/xc7k160t-IP/managed_ip_project/managed_ip_project.runs/flexbusClock_synth_1\vivado.jou
 #-----------------------------------------------------------
 source flexbusClock.tcl -notrace
 INFO: [IP_Flow 19-234] Refreshing IP repositories
 INFO: [IP_Flow 19-1704] No user IP repositories specified
-INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'C:/Xilinx/Vivado/2015.1/data/ip'.
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'C:/Xilinx/Vivado/2015.4/data/ip'.
 WARNING: [IP_Flow 19-3664] IP 'flexbusClock' generated file not found 'c:/modem/vivado/xc7k160t-IP/flexbusClock/flexbusClock.dcp'. Please regenerate to continue.
 WARNING: [IP_Flow 19-3664] IP 'flexbusClock' generated file not found 'c:/modem/vivado/xc7k160t-IP/flexbusClock/flexbusClock_stub.v'. Please regenerate to continue.
 WARNING: [IP_Flow 19-3664] IP 'flexbusClock' generated file not found 'c:/modem/vivado/xc7k160t-IP/flexbusClock/flexbusClock_stub.vhdl'. Please regenerate to continue.
-WARNING: [IP_Flow 19-3664] IP 'flexbusClock' generated file not found 'c:/modem/vivado/xc7k160t-IP/flexbusClock/flexbusClock_funcsim.v'. Please regenerate to continue.
-WARNING: [IP_Flow 19-3664] IP 'flexbusClock' generated file not found 'c:/modem/vivado/xc7k160t-IP/flexbusClock/flexbusClock_funcsim.vhdl'. Please regenerate to continue.
+WARNING: [IP_Flow 19-3664] IP 'flexbusClock' generated file not found 'c:/modem/vivado/xc7k160t-IP/flexbusClock/flexbusClock_sim_netlist.v'. Please regenerate to continue.
+WARNING: [IP_Flow 19-3664] IP 'flexbusClock' generated file not found 'c:/modem/vivado/xc7k160t-IP/flexbusClock/flexbusClock_sim_netlist.vhdl'. Please regenerate to continue.
 Command: synth_design -top flexbusClock -part xc7k160tfbg676-1 -mode out_of_context
 Starting synth_design
 Attempting to get a license for feature 'Synthesis' and/or device 'xc7k160t'
 INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7k160t'
+INFO: [Common 17-1223] The version limit for your license is '2016.05' and will expire in -151 days. A version limit expiration means that, although you may be able to continue to use the current version of tools or IP with this license, you will not be eligible for any updates or new releases.
 ---------------------------------------------------------------------------------
-Starting RTL Elaboration : Time (s): cpu = 00:00:03 ; elapsed = 00:00:04 . Memory (MB): peak = 255.238 ; gain = 76.402
+Starting RTL Elaboration : Time (s): cpu = 00:00:12 ; elapsed = 00:00:15 . Memory (MB): peak = 292.105 ; gain = 120.242
 ---------------------------------------------------------------------------------
 INFO: [Synth 8-638] synthesizing module 'flexbusClock' [c:/modem/vivado/xc7k160t-IP/flexbusClock/flexbusClock.v:69]
 INFO: [Synth 8-638] synthesizing module 'flexbusClock_clk_wiz' [c:/modem/vivado/xc7k160t-IP/flexbusClock/flexbusClock_clk_wiz.v:67]
-INFO: [Synth 8-638] synthesizing module 'IBUF' [C:/Xilinx/Vivado/2015.1/scripts/rt/data/unisim_comp.v:10256]
+INFO: [Synth 8-638] synthesizing module 'IBUF' [C:/Xilinx/Vivado/2015.4/scripts/rt/data/unisim_comp.v:14145]
 	Parameter CAPACITANCE bound to: DONT_CARE - type: string 
 	Parameter IBUF_DELAY_VALUE bound to: 0 - type: string 
 	Parameter IBUF_LOW_PWR bound to: TRUE - type: string 
 	Parameter IFD_DELAY_VALUE bound to: AUTO - type: string 
 	Parameter IOSTANDARD bound to: DEFAULT - type: string 
-INFO: [Synth 8-256] done synthesizing module 'IBUF' (1#1) [C:/Xilinx/Vivado/2015.1/scripts/rt/data/unisim_comp.v:10256]
-INFO: [Synth 8-638] synthesizing module 'MMCME2_ADV' [C:/Xilinx/Vivado/2015.1/scripts/rt/data/unisim_comp.v:15999]
+INFO: [Synth 8-256] done synthesizing module 'IBUF' (1#1) [C:/Xilinx/Vivado/2015.4/scripts/rt/data/unisim_comp.v:14145]
+INFO: [Synth 8-638] synthesizing module 'MMCME2_ADV' [C:/Xilinx/Vivado/2015.4/scripts/rt/data/unisim_comp.v:20396]
 	Parameter BANDWIDTH bound to: OPTIMIZED - type: string 
 	Parameter CLKFBOUT_MULT_F bound to: 25.000000 - type: float 
 	Parameter CLKFBOUT_PHASE bound to: 0.000000 - type: float 
@@ -81,13 +84,13 @@ INFO: [Synth 8-638] synthesizing module 'MMCME2_ADV' [C:/Xilinx/Vivado/2015.1/sc
 	Parameter SS_MODE bound to: CENTER_HIGH - type: string 
 	Parameter SS_MOD_PERIOD bound to: 10000 - type: integer 
 	Parameter STARTUP_WAIT bound to: FALSE - type: string 
-INFO: [Synth 8-256] done synthesizing module 'MMCME2_ADV' (2#1) [C:/Xilinx/Vivado/2015.1/scripts/rt/data/unisim_comp.v:15999]
-INFO: [Synth 8-638] synthesizing module 'BUFG' [C:/Xilinx/Vivado/2015.1/scripts/rt/data/unisim_comp.v:607]
-INFO: [Synth 8-256] done synthesizing module 'BUFG' (3#1) [C:/Xilinx/Vivado/2015.1/scripts/rt/data/unisim_comp.v:607]
+INFO: [Synth 8-256] done synthesizing module 'MMCME2_ADV' (2#1) [C:/Xilinx/Vivado/2015.4/scripts/rt/data/unisim_comp.v:20396]
+INFO: [Synth 8-638] synthesizing module 'BUFG' [C:/Xilinx/Vivado/2015.4/scripts/rt/data/unisim_comp.v:607]
+INFO: [Synth 8-256] done synthesizing module 'BUFG' (3#1) [C:/Xilinx/Vivado/2015.4/scripts/rt/data/unisim_comp.v:607]
 INFO: [Synth 8-256] done synthesizing module 'flexbusClock_clk_wiz' (4#1) [c:/modem/vivado/xc7k160t-IP/flexbusClock/flexbusClock_clk_wiz.v:67]
 INFO: [Synth 8-256] done synthesizing module 'flexbusClock' (5#1) [c:/modem/vivado/xc7k160t-IP/flexbusClock/flexbusClock.v:69]
 ---------------------------------------------------------------------------------
-Finished RTL Elaboration : Time (s): cpu = 00:00:04 ; elapsed = 00:00:05 . Memory (MB): peak = 289.477 ; gain = 110.641
+Finished RTL Elaboration : Time (s): cpu = 00:00:13 ; elapsed = 00:00:17 . Memory (MB): peak = 328.371 ; gain = 156.508
 ---------------------------------------------------------------------------------
 
 Report Check Netlist: 
@@ -97,7 +100,7 @@ Report Check Netlist:
 |1     |multi_driven_nets |      0|        0|Passed |Multi driven nets |
 +------+------------------+-------+---------+-------+------------------+
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:04 ; elapsed = 00:00:05 . Memory (MB): peak = 289.477 ; gain = 110.641
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:14 ; elapsed = 00:00:17 . Memory (MB): peak = 328.371 ; gain = 156.508
 ---------------------------------------------------------------------------------
 INFO: [Netlist 29-17] Analyzing 2 Unisim elements for replacement
 INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
@@ -112,9 +115,9 @@ Parsing XDC File [c:/modem/vivado/xc7k160t-IP/flexbusClock/flexbusClock_board.xd
 Finished Parsing XDC File [c:/modem/vivado/xc7k160t-IP/flexbusClock/flexbusClock_board.xdc] for cell 'inst'
 Parsing XDC File [c:/modem/vivado/xc7k160t-IP/flexbusClock/flexbusClock.xdc] for cell 'inst'
 Finished Parsing XDC File [c:/modem/vivado/xc7k160t-IP/flexbusClock/flexbusClock.xdc] for cell 'inst'
-INFO: [Timing 38-2] Deriving generated clocks
 INFO: [Project 1-236] Implementation specific constraints were found while reading constraint file [c:/modem/vivado/xc7k160t-IP/flexbusClock/flexbusClock.xdc]. These constraints will be ignored for synthesis but will be used in implementation. Impacted constraints are listed in the file [.Xil/flexbusClock_propImpl.xdc].
 Resolution: To avoid this warning, move constraints listed in [.Xil/flexbusClock_propImpl.xdc] to another XDC file and exclude this new file from synthesis with the used_in_synthesis property (File Properties dialog in GUI) and re-run elaboration/synthesis.
+INFO: [Timing 38-2] Deriving generated clocks
 Parsing XDC File [C:/modem/vivado/xc7k160t-IP/managed_ip_project/managed_ip_project.runs/flexbusClock_synth_1/dont_touch.xdc]
 Finished Parsing XDC File [C:/modem/vivado/xc7k160t-IP/managed_ip_project/managed_ip_project.runs/flexbusClock_synth_1/dont_touch.xdc]
 Completed Processing XDC Constraints
@@ -122,26 +125,26 @@ Completed Processing XDC Constraints
 INFO: [Project 1-111] Unisim Transformation Summary:
 No Unisim elements were transformed.
 
-Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.100 . Memory (MB): peak = 525.184 ; gain = 0.000
+Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.027 . Memory (MB): peak = 552.695 ; gain = 0.000
 ---------------------------------------------------------------------------------
-Finished Constraint Validation : Time (s): cpu = 00:00:10 ; elapsed = 00:00:12 . Memory (MB): peak = 525.184 ; gain = 346.348
+Finished Constraint Validation : Time (s): cpu = 00:00:30 ; elapsed = 00:00:36 . Memory (MB): peak = 552.695 ; gain = 380.832
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Loading Part and Timing Information
 ---------------------------------------------------------------------------------
 Loading part: xc7k160tfbg676-1
 ---------------------------------------------------------------------------------
-Finished Loading Part and Timing Information : Time (s): cpu = 00:00:10 ; elapsed = 00:00:12 . Memory (MB): peak = 525.184 ; gain = 346.348
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:30 ; elapsed = 00:00:36 . Memory (MB): peak = 552.695 ; gain = 380.832
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Applying 'set_property' XDC Constraints
 ---------------------------------------------------------------------------------
 Applied set_property DONT_TOUCH = true for inst. (constraint file  auto generated constraint, line ).
 ---------------------------------------------------------------------------------
-Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:10 ; elapsed = 00:00:12 . Memory (MB): peak = 525.184 ; gain = 346.348
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:30 ; elapsed = 00:00:36 . Memory (MB): peak = 552.695 ; gain = 380.832
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:11 ; elapsed = 00:00:12 . Memory (MB): peak = 525.184 ; gain = 346.348
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:30 ; elapsed = 00:00:36 . Memory (MB): peak = 552.695 ; gain = 380.832
 ---------------------------------------------------------------------------------
 
 Report RTL Partitions: 
@@ -172,14 +175,14 @@ BRAMs: 650 (col length: RAMB18 100 RAMB36 50)
 ---------------------------------------------------------------------------------
 Finished Part Resource Summary
 ---------------------------------------------------------------------------------
-Start Parallel Synthesis Optimization  : Time (s): cpu = 00:00:11 ; elapsed = 00:00:12 . Memory (MB): peak = 525.184 ; gain = 346.348
+Start Parallel Synthesis Optimization  : Time (s): cpu = 00:00:31 ; elapsed = 00:00:36 . Memory (MB): peak = 552.695 ; gain = 380.832
 ---------------------------------------------------------------------------------
 Start Cross Boundary Optimization
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Cross Boundary Optimization : Time (s): cpu = 00:00:11 ; elapsed = 00:00:12 . Memory (MB): peak = 525.184 ; gain = 346.348
+Finished Cross Boundary Optimization : Time (s): cpu = 00:00:31 ; elapsed = 00:00:36 . Memory (MB): peak = 552.695 ; gain = 380.832
 ---------------------------------------------------------------------------------
-Finished Parallel Reinference  : Time (s): cpu = 00:00:11 ; elapsed = 00:00:12 . Memory (MB): peak = 525.184 ; gain = 346.348
+Finished Parallel Reinference  : Time (s): cpu = 00:00:31 ; elapsed = 00:00:36 . Memory (MB): peak = 552.695 ; gain = 380.832
 
 Report RTL Partitions: 
 +-+--------------+------------+----------+
@@ -190,16 +193,15 @@ Report RTL Partitions:
 Start Area Optimization
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Area Optimization : Time (s): cpu = 00:00:11 ; elapsed = 00:00:12 . Memory (MB): peak = 525.184 ; gain = 346.348
+Finished Area Optimization : Time (s): cpu = 00:00:31 ; elapsed = 00:00:36 . Memory (MB): peak = 552.695 ; gain = 380.832
 ---------------------------------------------------------------------------------
-Finished Parallel Area Optimization  : Time (s): cpu = 00:00:11 ; elapsed = 00:00:12 . Memory (MB): peak = 525.184 ; gain = 346.348
+Finished Parallel Area Optimization  : Time (s): cpu = 00:00:31 ; elapsed = 00:00:36 . Memory (MB): peak = 552.695 ; gain = 380.832
 
 Report RTL Partitions: 
 +-+--------------+------------+----------+
 | |RTL Partition |Replication |Instances |
 +-+--------------+------------+----------+
 +-+--------------+------------+----------+
-Finished Parallel Synthesis Optimization  : Time (s): cpu = 00:00:11 ; elapsed = 00:00:12 . Memory (MB): peak = 525.184 ; gain = 346.348
 ---------------------------------------------------------------------------------
 Start Timing Optimization
 ---------------------------------------------------------------------------------
@@ -207,10 +209,10 @@ Start Timing Optimization
 Start Applying XDC Timing Constraints
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:21 ; elapsed = 00:00:22 . Memory (MB): peak = 549.984 ; gain = 371.148
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:51 ; elapsed = 00:00:57 . Memory (MB): peak = 584.555 ; gain = 412.691
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Timing Optimization : Time (s): cpu = 00:00:21 ; elapsed = 00:00:22 . Memory (MB): peak = 549.984 ; gain = 371.148
+Finished Timing Optimization : Time (s): cpu = 00:00:51 ; elapsed = 00:00:57 . Memory (MB): peak = 584.555 ; gain = 412.691
 ---------------------------------------------------------------------------------
 
 Report RTL Partitions: 
@@ -222,16 +224,24 @@ Report RTL Partitions:
 Start Technology Mapping
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Technology Mapping : Time (s): cpu = 00:00:21 ; elapsed = 00:00:22 . Memory (MB): peak = 559.609 ; gain = 380.773
+Finished Technology Mapping : Time (s): cpu = 00:00:51 ; elapsed = 00:00:57 . Memory (MB): peak = 594.262 ; gain = 422.398
 ---------------------------------------------------------------------------------
+Finished Parallel Technology Mapping Optimization  : Time (s): cpu = 00:00:51 ; elapsed = 00:00:57 . Memory (MB): peak = 594.262 ; gain = 422.398
 
 Report RTL Partitions: 
 +-+--------------+------------+----------+
 | |RTL Partition |Replication |Instances |
 +-+--------------+------------+----------+
 +-+--------------+------------+----------+
+Finished Parallel Synthesis Optimization  : Time (s): cpu = 00:00:51 ; elapsed = 00:00:57 . Memory (MB): peak = 594.262 ; gain = 422.398
 ---------------------------------------------------------------------------------
 Start IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Flattening Before IO Insertion
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Final Netlist Cleanup
@@ -240,7 +250,7 @@ Start Final Netlist Cleanup
 Finished Final Netlist Cleanup
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished IO Insertion : Time (s): cpu = 00:00:21 ; elapsed = 00:00:23 . Memory (MB): peak = 559.609 ; gain = 380.773
+Finished IO Insertion : Time (s): cpu = 00:00:51 ; elapsed = 00:00:58 . Memory (MB): peak = 594.262 ; gain = 422.398
 ---------------------------------------------------------------------------------
 
 Report Check Netlist: 
@@ -253,7 +263,7 @@ Report Check Netlist:
 Start Renaming Generated Instances
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Instances : Time (s): cpu = 00:00:21 ; elapsed = 00:00:23 . Memory (MB): peak = 559.609 ; gain = 380.773
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:51 ; elapsed = 00:00:58 . Memory (MB): peak = 594.262 ; gain = 422.398
 ---------------------------------------------------------------------------------
 
 Report RTL Partitions: 
@@ -265,13 +275,25 @@ Report RTL Partitions:
 Start Rebuilding User Hierarchy
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:21 ; elapsed = 00:00:23 . Memory (MB): peak = 559.609 ; gain = 380.773
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:51 ; elapsed = 00:00:58 . Memory (MB): peak = 594.262 ; gain = 422.398
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Start Renaming Generated Ports : Time (s): cpu = 00:00:21 ; elapsed = 00:00:23 . Memory (MB): peak = 559.609 ; gain = 380.773
+Start Renaming Generated Ports
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Ports : Time (s): cpu = 00:00:21 ; elapsed = 00:00:23 . Memory (MB): peak = 559.609 ; gain = 380.773
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:51 ; elapsed = 00:00:58 . Memory (MB): peak = 594.262 ; gain = 422.398
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:52 ; elapsed = 00:00:58 . Memory (MB): peak = 594.262 ; gain = 422.398
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Nets
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Nets : Time (s): cpu = 00:00:52 ; elapsed = 00:00:58 . Memory (MB): peak = 594.262 ; gain = 422.398
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Writing Synthesis Report
@@ -300,11 +322,11 @@ Report Instance Areas:
 |2     |  inst   |flexbusClock_clk_wiz |     4|
 +------+---------+---------------------+------+
 ---------------------------------------------------------------------------------
-Finished Writing Synthesis Report : Time (s): cpu = 00:00:21 ; elapsed = 00:00:23 . Memory (MB): peak = 559.609 ; gain = 380.773
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:52 ; elapsed = 00:00:58 . Memory (MB): peak = 594.262 ; gain = 422.398
 ---------------------------------------------------------------------------------
 Synthesis finished with 0 errors, 0 critical warnings and 0 warnings.
-Synthesis Optimization Runtime : Time (s): cpu = 00:00:12 ; elapsed = 00:00:15 . Memory (MB): peak = 559.609 ; gain = 118.605
-Synthesis Optimization Complete : Time (s): cpu = 00:00:21 ; elapsed = 00:00:23 . Memory (MB): peak = 559.609 ; gain = 380.773
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:29 ; elapsed = 00:00:39 . Memory (MB): peak = 594.262 ; gain = 151.180
+Synthesis Optimization Complete : Time (s): cpu = 00:00:52 ; elapsed = 00:00:58 . Memory (MB): peak = 594.262 ; gain = 422.398
 INFO: [Project 1-571] Translating synthesized netlist
 INFO: [Netlist 29-17] Analyzing 2 Unisim elements for replacement
 INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
@@ -316,15 +338,15 @@ Finished Parsing XDC File [c:/modem/vivado/xc7k160t-IP/flexbusClock/flexbusClock
 Parsing XDC File [c:/modem/vivado/xc7k160t-IP/flexbusClock/flexbusClock.xdc] for cell 'inst'
 INFO: [Timing 38-35] Done setting XDC timing constraints. [c:/modem/vivado/xc7k160t-IP/flexbusClock/flexbusClock.xdc:56]
 INFO: [Timing 38-2] Deriving generated clocks [c:/modem/vivado/xc7k160t-IP/flexbusClock/flexbusClock.xdc:56]
-get_clocks: Time (s): cpu = 00:00:12 ; elapsed = 00:00:12 . Memory (MB): peak = 921.629 ; gain = 362.020
+get_clocks: Time (s): cpu = 00:00:13 ; elapsed = 00:00:14 . Memory (MB): peak = 952.668 ; gain = 358.406
 Finished Parsing XDC File [c:/modem/vivado/xc7k160t-IP/flexbusClock/flexbusClock.xdc] for cell 'inst'
 INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
 INFO: [Project 1-111] Unisim Transformation Summary:
 No Unisim elements were transformed.
 
 INFO: [Common 17-83] Releasing license: Synthesis
-30 Infos, 5 Warnings, 0 Critical Warnings and 0 Errors encountered.
+31 Infos, 5 Warnings, 0 Critical Warnings and 0 Errors encountered.
 synth_design completed successfully
-synth_design: Time (s): cpu = 00:00:33 ; elapsed = 00:00:34 . Memory (MB): peak = 921.629 ; gain = 716.332
-report_utilization: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.040 . Memory (MB): peak = 921.629 ; gain = 0.000
-INFO: [Common 17-206] Exiting Vivado at Tue Jun 23 15:12:28 2015...
+synth_design: Time (s): cpu = 00:01:02 ; elapsed = 00:01:07 . Memory (MB): peak = 952.668 ; gain = 738.484
+report_utilization: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.060 . Memory (MB): peak = 952.668 ; gain = 0.000
+INFO: [Common 17-206] Exiting Vivado at Sat Oct 29 14:47:09 2016...

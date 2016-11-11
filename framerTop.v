@@ -72,6 +72,7 @@ module framerTop(
             32'b00000000_00000000_00000000_000001xx: syncwordBits =  2;
             32'b00000000_00000000_00000000_0000001x: syncwordBits =  1;
             32'b00000000_00000000_00000000_00000001: syncwordBits =  0;
+	    default:                                     syncwordBits =  0;
         endcase       
     end               
 

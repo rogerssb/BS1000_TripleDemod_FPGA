@@ -1,3 +1,21 @@
+2015.4:
+ * Version 12.0 (Rev. 10)
+ * Revision change in one or more subcores
+
+2015.3:
+ * Version 12.0 (Rev. 9)
+ * IP revision number added to HDL module, library, and include file names, to support designs with both locked and upgraded IP instances
+ * Revision change in one or more subcores
+
+2015.2.1:
+ * Version 12.0 (Rev. 8)
+ * No changes
+
+2015.2:
+ * Version 12.0 (Rev. 8)
+ * Rephrased RTL to work around issue when simulating with Cadence IES.  No functional changes.
+ * Corrected output pipeline widths for some DSP48 multiplier configurations targeting UltraScale devices.
+
 2015.1:
  * Version 12.0 (Rev. 7)
  * Rephrased RTL to work around range checking issue when simulating with Vivado Simulator.  No functional changes.

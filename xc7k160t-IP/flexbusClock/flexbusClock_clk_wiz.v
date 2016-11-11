@@ -83,6 +83,7 @@ module flexbusClock_clk_wiz
 
   // Clocking PRIMITIVE
   //------------------------------------
+
   // Instantiation of the MMCM PRIMITIVE
   //    * Unused inputs are tied off
   //    * Unused outputs are labeled unused

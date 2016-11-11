@@ -784,7 +784,7 @@ initial begin
     interpReset = 0;
 
     // Enable the sample rate loop with 2 sample summer
-    //write32(createAddress(`CH0_BITSYNCSPACE,`LF_CONTROL),32'h00000010);  
+    write32(createAddress(`CH0_BITSYNCSPACE,`LF_CONTROL),32'h00000010);  
 
     // Wait
     #(20*bitrateSamplesInt*C) ;

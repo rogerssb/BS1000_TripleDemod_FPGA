@@ -56,6 +56,12 @@ module bitsyncTop(
     eyeClkEn,
     iEye,qEye,
     eyeOffset,
+    ch0VitBitEnOut,
+    ch0VitBitOut,
+    ch0VitSym2xEn,
+    ch1VitBitEnOut,
+    ch1VitBitOut,
+    ch1VitSym2xEn,
     asyncMode,
     test0,test1
     );
@@ -109,6 +115,12 @@ output          [17:0]  ch1Offset;
 output                  eyeClkEn;
 output          [17:0]  iEye,qEye;
 output          [4:0]   eyeOffset;
+output                  ch0VitBitEnOut;
+output                  ch0VitBitOut;
+output  reg             ch0VitSym2xEn;
+output                  ch1VitBitEnOut;
+output                  ch1VitBitOut;
+output  reg             ch1VitSym2xEn;
 output                  asyncMode;
 output                  test0,test1;
 
@@ -473,6 +485,45 @@ pcmAgcLoop #(.RegSpace(`CH1_AGCSPACE)) pcmAgcLoop1(
 
 
 /******************************************************************************
+                            Viterbi Decoders
+******************************************************************************/
+
+    wire    [31:0]  vitDout;
+    viterbi viterbi(
+        .clk(clk),
+        .clkEn(1'b1),
+        .reset(reset),
+        .busClk(busClk),
+        .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
+        .addr(addr),
+        .din(din),
+        .dout(vitDout),
+        .bitsyncMode(bitsyncMode),
+        .ch0SymEn(ch0SymEn),
+        .ch0SymData(ch0SymData),
+        .ch1SymEn(ch1SymEn),
+        .ch1SymData(ch1SymData),
+        .ch0BitEnOut(ch0VitBitEn),
+        .ch0BitOut(ch0VitBit),
+        .ch1BitEnOut(c1VitBitEn),
+        .ch1BitOut(ch1VitBit)
+        );
+    always @* begin
+        case (bitsyncMode)
+            `BS_MODE_DUAL_CH,
+            `BS_MODE_OFFSET_CH: begin
+                ch0VitSym2xEn = ch0Sym2xEn;
+                ch1VitSym2xEn = ch0Sym2xEn;
+            end
+            default: begin
+                ch0VitSym2xEn = ch0SymEn;
+                ch1VitSym2xEn = ch1SymEn;
+            end
+        endcase
+    end
+
+
+/******************************************************************************
                                DAC Output Mux
 ******************************************************************************/
 
@@ -684,6 +735,7 @@ reg [31:0]dout;
 always @* begin
     casex (addr)
         `BITSYNC_TOP_SPACE: dout = bitsyncTopDout;
+        `VITERBISPACE:      dout = vitDout;
         `CH0_DFSPACE,
         `CH0_DFFIRSPACE:    dout = df0Dout;
         `CH0_RESAMPSPACE:   dout = ch0ResampDout;

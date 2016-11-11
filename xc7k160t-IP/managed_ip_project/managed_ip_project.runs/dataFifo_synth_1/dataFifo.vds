@@ -1,27 +1,30 @@
 #-----------------------------------------------------------
-# Vivado v2015.1 (64-bit)
-# SW Build 1215546 on Mon Apr 27 19:22:08 MDT 2015
-# IP Build 1209967 on Tue Apr 21 11:39:20 MDT 2015
-# Start of session at: Thu May 28 14:44:35 2015
-# Process ID: 7020
+# Vivado v2015.4 (64-bit)
+# SW Build 1412921 on Wed Nov 18 09:43:45 MST 2015
+# IP Build 1412160 on Tue Nov 17 13:47:24 MST 2015
+# Start of session at: Fri Oct 28 16:42:32 2016
+# Process ID: 2476
+# Current directory: C:/modem/vivado/xc7k160t-IP/managed_ip_project/managed_ip_project.runs/dataFifo_synth_1
+# Command line: vivado.exe -log dataFifo.vds -mode batch -messageDb vivado.pb -notrace -source dataFifo.tcl
 # Log file: C:/modem/vivado/xc7k160t-IP/managed_ip_project/managed_ip_project.runs/dataFifo_synth_1/dataFifo.vds
 # Journal file: C:/modem/vivado/xc7k160t-IP/managed_ip_project/managed_ip_project.runs/dataFifo_synth_1\vivado.jou
 #-----------------------------------------------------------
 source dataFifo.tcl -notrace
 INFO: [IP_Flow 19-234] Refreshing IP repositories
 INFO: [IP_Flow 19-1704] No user IP repositories specified
-INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'C:/Xilinx/Vivado/2015.1/data/ip'.
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'C:/Xilinx/Vivado/2015.4/data/ip'.
 WARNING: [IP_Flow 19-3664] IP 'dataFifo' generated file not found 'c:/modem/vivado/xc7k160t-IP/dataFifo/dataFifo.dcp'. Please regenerate to continue.
 WARNING: [IP_Flow 19-3664] IP 'dataFifo' generated file not found 'c:/modem/vivado/xc7k160t-IP/dataFifo/dataFifo_stub.v'. Please regenerate to continue.
 WARNING: [IP_Flow 19-3664] IP 'dataFifo' generated file not found 'c:/modem/vivado/xc7k160t-IP/dataFifo/dataFifo_stub.vhdl'. Please regenerate to continue.
-WARNING: [IP_Flow 19-3664] IP 'dataFifo' generated file not found 'c:/modem/vivado/xc7k160t-IP/dataFifo/dataFifo_funcsim.v'. Please regenerate to continue.
-WARNING: [IP_Flow 19-3664] IP 'dataFifo' generated file not found 'c:/modem/vivado/xc7k160t-IP/dataFifo/dataFifo_funcsim.vhdl'. Please regenerate to continue.
+WARNING: [IP_Flow 19-3664] IP 'dataFifo' generated file not found 'c:/modem/vivado/xc7k160t-IP/dataFifo/dataFifo_sim_netlist.v'. Please regenerate to continue.
+WARNING: [IP_Flow 19-3664] IP 'dataFifo' generated file not found 'c:/modem/vivado/xc7k160t-IP/dataFifo/dataFifo_sim_netlist.vhdl'. Please regenerate to continue.
 Command: synth_design -top dataFifo -part xc7k160tfbg676-1 -mode out_of_context
 Starting synth_design
 Attempting to get a license for feature 'Synthesis' and/or device 'xc7k160t'
 INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7k160t'
+INFO: [Common 17-1223] The version limit for your license is '2016.05' and will expire in -150 days. A version limit expiration means that, although you may be able to continue to use the current version of tools or IP with this license, you will not be eligible for any updates or new releases.
 ---------------------------------------------------------------------------------
-Starting RTL Elaboration : Time (s): cpu = 00:00:06 ; elapsed = 00:00:09 . Memory (MB): peak = 258.207 ; gain = 80.707
+Starting RTL Elaboration : Time (s): cpu = 00:00:10 ; elapsed = 00:00:12 . Memory (MB): peak = 321.285 ; gain = 149.383
 ---------------------------------------------------------------------------------
 INFO: [Synth 8-638] synthesizing module 'dataFifo' [c:/modem/vivado/xc7k160t-IP/dataFifo/synth/dataFifo.vhd:72]
 	Parameter C_COMMON_CLOCK bound to: 1 - type: integer 
@@ -86,6 +89,7 @@ INFO: [Synth 8-638] synthesizing module 'dataFifo' [c:/modem/vivado/xc7k160t-IP/
 	Parameter C_WR_RESPONSE_LATENCY bound to: 1 - type: integer 
 	Parameter C_MSGON_VAL bound to: 1 - type: integer 
 	Parameter C_ENABLE_RST_SYNC bound to: 1 - type: integer 
+	Parameter C_EN_SAFETY_CKT bound to: 0 - type: integer 
 	Parameter C_ERROR_INJECTION_TYPE bound to: 0 - type: integer 
 	Parameter C_SYNCHRONIZER_STAGE bound to: 2 - type: integer 
 	Parameter C_INTERFACE_TYPE bound to: 0 - type: integer 
@@ -224,8 +228,8 @@ INFO: [Synth 8-638] synthesizing module 'dataFifo' [c:/modem/vivado/xc7k160t-IP/
 	Parameter C_REG_SLICE_MODE_RACH bound to: 0 - type: integer 
 	Parameter C_REG_SLICE_MODE_RDCH bound to: 0 - type: integer 
 	Parameter C_REG_SLICE_MODE_AXIS bound to: 0 - type: integer 
-INFO: [Synth 8-3491] module 'fifo_generator_v12_0' declared at 'c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0.vhd:127' bound to instance 'U0' of component 'fifo_generator_v12_0' [c:/modem/vivado/xc7k160t-IP/dataFifo/synth/dataFifo.vhd:528]
-INFO: [Synth 8-638] synthesizing module 'fifo_generator_v12_0' [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0.vhd:665]
+INFO: [Synth 8-3491] module 'fifo_generator_v13_0_1' declared at 'c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v13_0_1/hdl/fifo_generator_v13_0.vhd:137' bound to instance 'U0' of component 'fifo_generator_v13_0_1' [c:/modem/vivado/xc7k160t-IP/dataFifo/synth/dataFifo.vhd:529]
+INFO: [Synth 8-638] synthesizing module 'fifo_generator_v13_0_1' [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v13_0_1/hdl/fifo_generator_v13_0.vhd:676]
 	Parameter C_COMMON_CLOCK bound to: 1 - type: integer 
 	Parameter C_COUNT_TYPE bound to: 0 - type: integer 
 	Parameter C_DATA_COUNT_WIDTH bound to: 8 - type: integer 
@@ -288,6 +292,7 @@ INFO: [Synth 8-638] synthesizing module 'fifo_generator_v12_0' [c:/modem/vivado/
 	Parameter C_WR_RESPONSE_LATENCY bound to: 1 - type: integer 
 	Parameter C_MSGON_VAL bound to: 1 - type: integer 
 	Parameter C_ENABLE_RST_SYNC bound to: 1 - type: integer 
+	Parameter C_EN_SAFETY_CKT bound to: 0 - type: integer 
 	Parameter C_ERROR_INJECTION_TYPE bound to: 0 - type: integer 
 	Parameter C_SYNCHRONIZER_STAGE bound to: 2 - type: integer 
 	Parameter C_INTERFACE_TYPE bound to: 0 - type: integer 
@@ -426,7 +431,7 @@ INFO: [Synth 8-638] synthesizing module 'fifo_generator_v12_0' [c:/modem/vivado/
 	Parameter C_REG_SLICE_MODE_RACH bound to: 0 - type: integer 
 	Parameter C_REG_SLICE_MODE_RDCH bound to: 0 - type: integer 
 	Parameter C_REG_SLICE_MODE_AXIS bound to: 0 - type: integer 
-INFO: [Synth 8-638] synthesizing module 'fifo_generator_v12_0_synth' [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:33314]
+INFO: [Synth 8-638] synthesizing module 'fifo_generator_v13_0_1_synth' [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v13_0_1/hdl/fifo_generator_v13_0_vhsyn_rfs.vhd:33659]
 	Parameter C_COMMON_CLOCK bound to: 1 - type: integer 
 	Parameter C_COUNT_TYPE bound to: 0 - type: integer 
 	Parameter C_DATA_COUNT_WIDTH bound to: 8 - type: integer 
@@ -489,6 +494,7 @@ INFO: [Synth 8-638] synthesizing module 'fifo_generator_v12_0_synth' [c:/modem/v
 	Parameter C_WR_RESPONSE_LATENCY bound to: 1 - type: integer 
 	Parameter C_MSGON_VAL bound to: 1 - type: integer 
 	Parameter C_ENABLE_RST_SYNC bound to: 1 - type: integer 
+	Parameter C_EN_SAFETY_CKT bound to: 0 - type: integer 
 	Parameter C_ERROR_INJECTION_TYPE bound to: 0 - type: integer 
 	Parameter C_SYNCHRONIZER_STAGE bound to: 2 - type: integer 
 	Parameter C_INTERFACE_TYPE bound to: 0 - type: integer 
@@ -627,8 +633,30 @@ INFO: [Synth 8-638] synthesizing module 'fifo_generator_v12_0_synth' [c:/modem/v
 	Parameter C_REG_SLICE_MODE_RACH bound to: 0 - type: integer 
 	Parameter C_REG_SLICE_MODE_RDCH bound to: 0 - type: integer 
 	Parameter C_REG_SLICE_MODE_AXIS bound to: 0 - type: integer 
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:33373]
-INFO: [Synth 8-638] synthesizing module 'fifo_generator_top' [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:32083]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v13_0_1/hdl/fifo_generator_v13_0_vhsyn_rfs.vhd:33723]
+INFO: [Synth 8-638] synthesizing module 'reset_blk_ramfifo' [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v13_0_1/hdl/fifo_generator_v13_0_vhsyn_rfs.vhd:12376]
+	Parameter C_FAMILY bound to: kintex7 - type: string 
+	Parameter C_MEMORY_TYPE bound to: 1 - type: integer 
+	Parameter C_COMMON_CLOCK bound to: 1 - type: integer 
+	Parameter C_HAS_RST bound to: 1 - type: integer 
+	Parameter C_HAS_SRST bound to: 0 - type: integer 
+	Parameter C_WR_RST_MAXFAN bound to: 2 - type: integer 
+	Parameter C_RD_RST_MAXFAN bound to: 2 - type: integer 
+	Parameter C_MSGON_VAL bound to: 1 - type: integer 
+	Parameter C_ENABLE_RST_SYNC bound to: 1 - type: integer 
+	Parameter C_EN_SAFETY_CKT bound to: 0 - type: integer 
+	Parameter C_FULL_FLAGS_RST_VAL bound to: 1 - type: integer 
+INFO: [Synth 8-5534] Detected attribute (* async_reg = "true" *) [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v13_0_1/hdl/fifo_generator_v13_0_vhsyn_rfs.vhd:12483]
+INFO: [Synth 8-5534] Detected attribute (* async_reg = "true" *) [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v13_0_1/hdl/fifo_generator_v13_0_vhsyn_rfs.vhd:12484]
+INFO: [Synth 8-5534] Detected attribute (* async_reg = "true" *) [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v13_0_1/hdl/fifo_generator_v13_0_vhsyn_rfs.vhd:12485]
+INFO: [Synth 8-5534] Detected attribute (* async_reg = "true" *) [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v13_0_1/hdl/fifo_generator_v13_0_vhsyn_rfs.vhd:12486]
+INFO: [Synth 8-5534] Detected attribute (* async_reg = "true" *) [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v13_0_1/hdl/fifo_generator_v13_0_vhsyn_rfs.vhd:12803]
+INFO: [Synth 8-5534] Detected attribute (* async_reg = "true" *) [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v13_0_1/hdl/fifo_generator_v13_0_vhsyn_rfs.vhd:12804]
+INFO: [Synth 8-5534] Detected attribute (* async_reg = "true" *) [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v13_0_1/hdl/fifo_generator_v13_0_vhsyn_rfs.vhd:12805]
+INFO: [Synth 8-5534] Detected attribute (* async_reg = "true" *) [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v13_0_1/hdl/fifo_generator_v13_0_vhsyn_rfs.vhd:12806]
+INFO: [Synth 8-5534] Detected attribute (* async_reg = "true" *) [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v13_0_1/hdl/fifo_generator_v13_0_vhsyn_rfs.vhd:12807]
+INFO: [Synth 8-256] done synthesizing module 'reset_blk_ramfifo' (1#1) [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v13_0_1/hdl/fifo_generator_v13_0_vhsyn_rfs.vhd:12376]
+INFO: [Synth 8-638] synthesizing module 'fifo_generator_top' [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v13_0_1/hdl/fifo_generator_v13_0_vhsyn_rfs.vhd:32420]
 	Parameter C_FAMILY bound to: kintex7 - type: string 
 	Parameter C_COMMON_CLOCK bound to: 1 - type: integer 
 	Parameter C_MEMORY_TYPE bound to: 1 - type: integer 
@@ -686,6 +714,7 @@ INFO: [Synth 8-638] synthesizing module 'fifo_generator_top' [c:/modem/vivado/xc
 	Parameter C_USE_DOUT_RST bound to: 1 - type: integer 
 	Parameter C_MSGON_VAL bound to: 1 - type: integer 
 	Parameter C_ENABLE_RST_SYNC bound to: 1 - type: integer 
+	Parameter C_EN_SAFETY_CKT bound to: 0 - type: integer 
 	Parameter C_SYNCHRONIZER_STAGE bound to: 2 - type: integer 
 	Parameter C_COUNT_TYPE bound to: 0 - type: integer 
 	Parameter C_DEFAULT_VALUE bound to: BlankString - type: string 
@@ -700,7 +729,7 @@ INFO: [Synth 8-638] synthesizing module 'fifo_generator_top' [c:/modem/vivado/xc
 	Parameter C_USE_FIFO16_FLAGS bound to: 0 - type: integer 
 	Parameter C_WR_FREQ bound to: 1 - type: integer 
 	Parameter C_WR_RESPONSE_LATENCY bound to: 1 - type: integer 
-INFO: [Synth 8-638] synthesizing module 'fifo_generator_ramfifo' [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:20531]
+INFO: [Synth 8-638] synthesizing module 'fifo_generator_ramfifo' [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v13_0_1/hdl/fifo_generator_v13_0_vhsyn_rfs.vhd:20583]
 	Parameter C_FAMILY bound to: kintex7 - type: string 
 	Parameter C_COMMON_CLOCK bound to: 1 - type: integer 
 	Parameter C_MEMORY_TYPE bound to: 1 - type: integer 
@@ -754,20 +783,22 @@ INFO: [Synth 8-638] synthesizing module 'fifo_generator_ramfifo' [c:/modem/vivad
 	Parameter C_USE_INPUT_CE bound to: 0 - type: integer 
 	Parameter C_USE_OUTPUT_CE bound to: 0 - type: integer 
 	Parameter C_USE_SYNC_CLK bound to: 0 - type: integer 
+	Parameter C_EN_SAFETY_CKT bound to: 0 - type: integer 
 	Parameter C_AXI_TYPE bound to: 0 - type: integer 
-INFO: [Synth 8-638] synthesizing module 'reset_blk_ramfifo' [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:12343]
+INFO: [Synth 8-638] synthesizing module 'reset_blk_ramfifo__parameterized0' [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v13_0_1/hdl/fifo_generator_v13_0_vhsyn_rfs.vhd:12376]
 	Parameter C_FAMILY bound to: kintex7 - type: string 
 	Parameter C_MEMORY_TYPE bound to: 1 - type: integer 
 	Parameter C_COMMON_CLOCK bound to: 1 - type: integer 
 	Parameter C_HAS_RST bound to: 0 - type: integer 
 	Parameter C_HAS_SRST bound to: 1 - type: integer 
-	Parameter C_WR_RST_MAXFAN bound to: 2 - type: integer 
+	Parameter C_WR_RST_MAXFAN bound to: 3 - type: integer 
 	Parameter C_RD_RST_MAXFAN bound to: 3 - type: integer 
 	Parameter C_MSGON_VAL bound to: 1 - type: integer 
 	Parameter C_ENABLE_RST_SYNC bound to: 1 - type: integer 
+	Parameter C_EN_SAFETY_CKT bound to: 0 - type: integer 
 	Parameter C_FULL_FLAGS_RST_VAL bound to: 0 - type: integer 
-INFO: [Synth 8-256] done synthesizing module 'reset_blk_ramfifo' (1#1) [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:12343]
-INFO: [Synth 8-638] synthesizing module 'input_blk' [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:4020]
+INFO: [Synth 8-256] done synthesizing module 'reset_blk_ramfifo__parameterized0' (1#1) [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v13_0_1/hdl/fifo_generator_v13_0_vhsyn_rfs.vhd:12376]
+INFO: [Synth 8-638] synthesizing module 'input_blk' [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v13_0_1/hdl/fifo_generator_v13_0_vhsyn_rfs.vhd:3996]
 	Parameter C_COMMON_CLOCK bound to: 1 - type: integer 
 	Parameter C_IMPLEMENTATION_TYPE bound to: 0 - type: integer 
 	Parameter C_DIN_WIDTH bound to: 16 - type: integer 
@@ -786,8 +817,8 @@ INFO: [Synth 8-638] synthesizing module 'input_blk' [c:/modem/vivado/xc7k160t-IP
 	Parameter C_USE_INPUT_CE bound to: 0 - type: integer 
 	Parameter C_USE_OUTPUT_CE bound to: 0 - type: integer 
 	Parameter C_USE_SYNC_CLK bound to: 0 - type: integer 
-INFO: [Synth 8-256] done synthesizing module 'input_blk' (2#1) [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:4020]
-INFO: [Synth 8-638] synthesizing module 'memory' [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:5654]
+INFO: [Synth 8-256] done synthesizing module 'input_blk' (2#1) [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v13_0_1/hdl/fifo_generator_v13_0_vhsyn_rfs.vhd:3996]
+INFO: [Synth 8-638] synthesizing module 'memory' [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v13_0_1/hdl/fifo_generator_v13_0_vhsyn_rfs.vhd:5632]
 	Parameter C_FAMILY bound to: kintex7 - type: string 
 	Parameter C_COMMON_CLOCK bound to: 1 - type: integer 
 	Parameter C_HAS_RST bound to: 0 - type: integer 
@@ -811,6 +842,7 @@ INFO: [Synth 8-638] synthesizing module 'memory' [c:/modem/vivado/xc7k160t-IP/da
 	Parameter C_USE_PIPELINE_REG bound to: 0 - type: integer 
 	Parameter C_USE_EMBEDDED_REG bound to: 0 - type: integer 
 	Parameter C_ERROR_INJECTION_TYPE bound to: 0 - type: integer 
+	Parameter C_EN_SAFETY_CKT bound to: 0 - type: integer 
 	Parameter C_FIFO_TYPE bound to: 0 - type: integer 
 	Parameter C_FAMILY bound to: kintex7 - type: string 
 	Parameter C_XDEVICEFAMILY bound to: kintex7 - type: string 
@@ -874,13 +906,14 @@ INFO: [Synth 8-638] synthesizing module 'memory' [c:/modem/vivado/xc7k160t-IP/da
 	Parameter C_EN_RDADDRB_CHG bound to: 0 - type: integer 
 	Parameter C_EN_DEEPSLEEP_PIN bound to: 0 - type: integer 
 	Parameter C_EN_SHUTDOWN_PIN bound to: 0 - type: integer 
+	Parameter C_EN_SAFETY_CKT bound to: 0 - type: integer 
 	Parameter C_HAS_INJECTERR bound to: 0 - type: integer 
 	Parameter C_SIM_COLLISION_CHECK bound to: ALL - type: string 
 	Parameter C_COMMON_CLK bound to: 1 - type: integer 
 	Parameter C_DISABLE_WARN_BHV_COLL bound to: 0 - type: integer 
 	Parameter C_DISABLE_WARN_BHV_RANGE bound to: 0 - type: integer 
-INFO: [Synth 8-3491] module 'blk_mem_gen_v8_2' declared at 'c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2.vhd:123' bound to instance 'bmg' of component 'blk_mem_gen_v8_2' [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:6247]
-INFO: [Synth 8-638] synthesizing module 'blk_mem_gen_v8_2' [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2.vhd:264]
+INFO: [Synth 8-3491] module 'blk_mem_gen_v8_3_1' declared at 'c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3.vhd:133' bound to instance 'bmg' of component 'blk_mem_gen_v8_3_1' [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v13_0_1/hdl/fifo_generator_v13_0_vhsyn_rfs.vhd:6262]
+INFO: [Synth 8-638] synthesizing module 'blk_mem_gen_v8_3_1' [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3.vhd:277]
 	Parameter C_FAMILY bound to: kintex7 - type: string 
 	Parameter C_XDEVICEFAMILY bound to: kintex7 - type: string 
 	Parameter C_ELABORATION_DIR bound to: (null) - type: string 
@@ -949,11 +982,12 @@ INFO: [Synth 8-638] synthesizing module 'blk_mem_gen_v8_2' [c:/modem/vivado/xc7k
 	Parameter C_EN_RDADDRB_CHG bound to: 0 - type: integer 
 	Parameter C_EN_DEEPSLEEP_PIN bound to: 0 - type: integer 
 	Parameter C_EN_SHUTDOWN_PIN bound to: 0 - type: integer 
+	Parameter C_EN_SAFETY_CKT bound to: 0 - type: integer 
 	Parameter C_DISABLE_WARN_BHV_RANGE bound to: 0 - type: integer 
 	Parameter C_COUNT_36K_BRAM bound to: (null) - type: string 
 	Parameter C_COUNT_18K_BRAM bound to: (null) - type: string 
 	Parameter C_EST_POWER_SUMMARY bound to: (null) - type: string 
-INFO: [Synth 8-638] synthesizing module 'blk_mem_gen_v8_2_synth' [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:193449]
+INFO: [Synth 8-638] synthesizing module 'blk_mem_gen_v8_3_1_synth' [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:193780]
 	Parameter C_FAMILY bound to: kintex7 - type: string 
 	Parameter C_XDEVICEFAMILY bound to: kintex7 - type: string 
 	Parameter C_ELABORATION_DIR bound to: (null) - type: string 
@@ -1021,7 +1055,8 @@ INFO: [Synth 8-638] synthesizing module 'blk_mem_gen_v8_2_synth' [c:/modem/vivad
 	Parameter C_COMMON_CLK bound to: 1 - type: integer 
 	Parameter C_DISABLE_WARN_BHV_COLL bound to: 0 - type: integer 
 	Parameter C_DISABLE_WARN_BHV_RANGE bound to: 0 - type: integer 
-INFO: [Synth 8-638] synthesizing module 'blk_mem_gen_top' [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:192416]
+	Parameter C_EN_SAFETY_CKT bound to: 0 - type: integer 
+INFO: [Synth 8-638] synthesizing module 'blk_mem_gen_top' [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:192741]
 	Parameter C_SIM_DEVICE bound to: 7SERIES - type: string 
 	Parameter C_FAMILY bound to: virtex6 - type: string 
 	Parameter C_XDEVICEFAMILY bound to: kintex7 - type: string 
@@ -1091,22 +1126,23 @@ INFO: [Synth 8-638] synthesizing module 'blk_mem_gen_top' [c:/modem/vivado/xc7k1
 	Parameter C_DISABLE_WARN_BHV_COLL bound to: 0 - type: integer 
 	Parameter C_DISABLE_WARN_BHV_RANGE bound to: 0 - type: integer 
 	Parameter DOUBLING_RESOURCE_FIX bound to: 0 - type: integer 
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:4793]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:4793]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:4793]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:4793]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:4793]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:4793]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:4793]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:4793]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:4793]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:4793]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:4793]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:4793]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:4793]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:4793]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:4793]
-INFO: [Synth 8-638] synthesizing module 'blk_mem_input_block' [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:186860]
+	Parameter C_EN_SAFETY_CKT bound to: 0 - type: integer 
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:4803]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:4803]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:4803]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:4803]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:4803]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:4803]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:4803]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:4803]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:4803]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:4803]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:4803]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:4803]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:4803]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:4803]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:4803]
+INFO: [Synth 8-638] synthesizing module 'blk_mem_input_block' [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:187182]
 	Parameter C_FAMILY bound to: virtex6 - type: string 
 	Parameter C_MEM_TYPE bound to: 1 - type: integer 
 	Parameter C_HAS_RSTA bound to: 0 - type: integer 
@@ -1143,13 +1179,13 @@ INFO: [Synth 8-638] synthesizing module 'blk_mem_input_block' [c:/modem/vivado/x
 	Parameter C_USE_ECC bound to: 0 - type: integer 
 	Parameter C_USE_SOFTECC bound to: 0 - type: integer 
 	Parameter C_HAS_INJECTERR bound to: 0 - type: integer 
-INFO: [Synth 8-256] done synthesizing module 'blk_mem_input_block' (3#1) [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:186860]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:192945]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:192949]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:192953]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:192957]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:192971]
-INFO: [Synth 8-638] synthesizing module 'blk_mem_gen_generic_cstr' [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:184145]
+INFO: [Synth 8-256] done synthesizing module 'blk_mem_input_block' (3#1) [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:187182]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:193270]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:193274]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:193278]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:193282]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:193296]
+INFO: [Synth 8-638] synthesizing module 'blk_mem_gen_generic_cstr' [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:184458]
 	Parameter C_FAMILY bound to: virtex6 - type: string 
 	Parameter C_XDEVICEFAMILY bound to: kintex7 - type: string 
 	Parameter C_SIM_DEVICE bound to: 7SERIES - type: string 
@@ -1222,7 +1258,8 @@ INFO: [Synth 8-638] synthesizing module 'blk_mem_gen_generic_cstr' [c:/modem/viv
 	Parameter C_EN_RDADDRB_CHG bound to: 0 - type: integer 
 	Parameter C_SIM_COLLISION_CHECK bound to: ALL - type: string 
 	Parameter DOUBLING_RESOURCE_FIX bound to: 0 - type: integer 
-INFO: [Synth 8-638] synthesizing module 'blk_mem_gen_prim_width' [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:182845]
+	Parameter C_EN_SAFETY_CKT bound to: 0 - type: integer 
+INFO: [Synth 8-638] synthesizing module 'blk_mem_gen_prim_width' [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:182885]
 	Parameter C_SIM_DEVICE bound to: 7SERIES - type: string 
 	Parameter C_FAMILY bound to: virtex6 - type: string 
 	Parameter C_XDEVICEFAMILY bound to: kintex7 - type: string 
@@ -1279,7 +1316,8 @@ INFO: [Synth 8-638] synthesizing module 'blk_mem_gen_prim_width' [c:/modem/vivad
 	Parameter C_MEM_ADDR_WIDTH_A bound to: 8 - type: integer 
 	Parameter C_MEM_ADDR_WIDTH_B bound to: 8 - type: integer 
 	Parameter DOUBLING_RESOURCE_FIX bound to: 0 - type: integer 
-INFO: [Synth 8-638] synthesizing module 'blk_mem_gen_prim_wrapper' [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:6972]
+	Parameter C_EN_SAFETY_CKT bound to: 0 - type: integer 
+INFO: [Synth 8-638] synthesizing module 'blk_mem_gen_prim_wrapper' [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:6987]
 	Parameter C_SIM_DEVICE bound to: 7SERIES - type: string 
 	Parameter C_ELABORATION_DIR bound to: (null) - type: string 
 	Parameter C_ENABLE_32BIT_ADDRESS bound to: 0 - type: integer 
@@ -1336,7 +1374,7 @@ INFO: [Synth 8-638] synthesizing module 'blk_mem_gen_prim_wrapper' [c:/modem/viv
 	Parameter C_MEM_ADDR_WIDTH_A bound to: 8 - type: integer 
 	Parameter C_MEM_ADDR_WIDTH_B bound to: 8 - type: integer 
 	Parameter DOUBLING_RESOURCE_FIX bound to: 0 - type: integer 
-INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:16030]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:16048]
 	Parameter DOA_REG bound to: 0 - type: integer 
 	Parameter DOB_REG bound to: 0 - type: integer 
 	Parameter INITP_00 bound to: 256'b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 
@@ -1436,13 +1474,13 @@ INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/dataFi
 	Parameter WRITE_MODE_B bound to: READ_FIRST - type: string 
 	Parameter WRITE_WIDTH_A bound to: 0 - type: integer 
 	Parameter WRITE_WIDTH_B bound to: 36 - type: integer 
-INFO: [Synth 8-113] binding component instance 'ram' to cell 'RAMB18E1' [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:16073]
-INFO: [Synth 8-256] done synthesizing module 'blk_mem_gen_prim_wrapper' (4#1) [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:6972]
-INFO: [Synth 8-256] done synthesizing module 'blk_mem_gen_prim_width' (5#1) [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:182845]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:185631]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:185784]
-INFO: [Synth 8-256] done synthesizing module 'blk_mem_gen_generic_cstr' (6#1) [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:184145]
-INFO: [Synth 8-638] synthesizing module 'blk_mem_output_block' [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:187465]
+INFO: [Synth 8-113] binding component instance 'ram' to cell 'RAMB18E1' [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:16091]
+INFO: [Synth 8-256] done synthesizing module 'blk_mem_gen_prim_wrapper' (4#1) [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:6987]
+INFO: [Synth 8-256] done synthesizing module 'blk_mem_gen_prim_width' (5#1) [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:182885]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:185950]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:186103]
+INFO: [Synth 8-256] done synthesizing module 'blk_mem_gen_generic_cstr' (6#1) [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:184458]
+INFO: [Synth 8-638] synthesizing module 'blk_mem_output_block' [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:187787]
 	Parameter C_MEM_TYPE bound to: 1 - type: integer 
 	Parameter C_WRITE_WIDTH_A bound to: 16 - type: integer 
 	Parameter C_READ_WIDTH_A bound to: 16 - type: integer 
@@ -1453,12 +1491,12 @@ INFO: [Synth 8-638] synthesizing module 'blk_mem_output_block' [c:/modem/vivado/
 	Parameter C_HAS_SOFTECC_OUTPUT_REGS_B bound to: 0 - type: integer 
 	Parameter C_USE_SOFTECC bound to: 0 - type: integer 
 	Parameter C_USE_ECC bound to: 0 - type: integer 
-INFO: [Synth 8-256] done synthesizing module 'blk_mem_output_block' (7#1) [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:187465]
-INFO: [Synth 8-256] done synthesizing module 'blk_mem_gen_top' (8#1) [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:192416]
-INFO: [Synth 8-256] done synthesizing module 'blk_mem_gen_v8_2_synth' (9#1) [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:193449]
-INFO: [Synth 8-256] done synthesizing module 'blk_mem_gen_v8_2' (10#1) [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2.vhd:264]
-INFO: [Synth 8-256] done synthesizing module 'memory' (11#1) [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:5654]
-INFO: [Synth 8-638] synthesizing module 'rd_logic' [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:19638]
+INFO: [Synth 8-256] done synthesizing module 'blk_mem_output_block' (7#1) [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:187787]
+INFO: [Synth 8-256] done synthesizing module 'blk_mem_gen_top' (8#1) [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:192741]
+INFO: [Synth 8-256] done synthesizing module 'blk_mem_gen_v8_3_1_synth' (9#1) [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:193780]
+INFO: [Synth 8-256] done synthesizing module 'blk_mem_gen_v8_3_1' (10#1) [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3.vhd:277]
+INFO: [Synth 8-256] done synthesizing module 'memory' (11#1) [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v13_0_1/hdl/fifo_generator_v13_0_vhsyn_rfs.vhd:5632]
+INFO: [Synth 8-638] synthesizing module 'rd_logic' [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v13_0_1/hdl/fifo_generator_v13_0_vhsyn_rfs.vhd:19688]
 	Parameter C_COMMON_CLOCK bound to: 1 - type: integer 
 	Parameter C_HAS_ALMOST_EMPTY bound to: 0 - type: integer 
 	Parameter C_HAS_RD_DATA_COUNT bound to: 0 - type: integer 
@@ -1481,24 +1519,24 @@ INFO: [Synth 8-638] synthesizing module 'rd_logic' [c:/modem/vivado/xc7k160t-IP/
 	Parameter C_PROG_EMPTY_THRESH_NEGATE_VAL bound to: 3 - type: integer 
 	Parameter C_USE_EMBEDDED_REG bound to: 0 - type: integer 
 	Parameter C_FIFO_TYPE bound to: 0 - type: integer 
-INFO: [Synth 8-638] synthesizing module 'rd_bin_cntr' [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:8146]
+INFO: [Synth 8-638] synthesizing module 'rd_bin_cntr' [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v13_0_1/hdl/fifo_generator_v13_0_vhsyn_rfs.vhd:8178]
 	Parameter C_HAS_RST bound to: 0 - type: integer 
 	Parameter C_HAS_SRST bound to: 1 - type: integer 
 	Parameter C_HAS_ALMOST_EMPTY bound to: 0 - type: integer 
 	Parameter C_PNTR_WIDTH bound to: 8 - type: integer 
-INFO: [Synth 8-256] done synthesizing module 'rd_bin_cntr' (12#1) [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:8146]
-INFO: [Synth 8-638] synthesizing module 'rd_status_flags_ss' [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:8755]
+INFO: [Synth 8-256] done synthesizing module 'rd_bin_cntr' (12#1) [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v13_0_1/hdl/fifo_generator_v13_0_vhsyn_rfs.vhd:8178]
+INFO: [Synth 8-638] synthesizing module 'rd_status_flags_ss' [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v13_0_1/hdl/fifo_generator_v13_0_vhsyn_rfs.vhd:8787]
 	Parameter C_HAS_RST bound to: 0 - type: integer 
 	Parameter C_HAS_SRST bound to: 1 - type: integer 
 	Parameter C_RD_PNTR_WIDTH bound to: 8 - type: integer 
 	Parameter C_WR_PNTR_WIDTH bound to: 8 - type: integer 
 	Parameter C_HAS_ALMOST_EMPTY bound to: 0 - type: integer 
-INFO: [Synth 8-638] synthesizing module 'compare' [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:7530]
+INFO: [Synth 8-638] synthesizing module 'compare' [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v13_0_1/hdl/fifo_generator_v13_0_vhsyn_rfs.vhd:7562]
 	Parameter C_WIDTH bound to: 8 - type: integer 
-INFO: [Synth 8-256] done synthesizing module 'compare' (13#1) [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:7530]
-INFO: [Synth 8-256] done synthesizing module 'rd_status_flags_ss' (14#1) [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:8755]
-INFO: [Synth 8-256] done synthesizing module 'rd_logic' (15#1) [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:19638]
-INFO: [Synth 8-638] synthesizing module 'wr_logic' [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:16199]
+INFO: [Synth 8-256] done synthesizing module 'compare' (13#1) [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v13_0_1/hdl/fifo_generator_v13_0_vhsyn_rfs.vhd:7562]
+INFO: [Synth 8-256] done synthesizing module 'rd_status_flags_ss' (14#1) [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v13_0_1/hdl/fifo_generator_v13_0_vhsyn_rfs.vhd:8787]
+INFO: [Synth 8-256] done synthesizing module 'rd_logic' (15#1) [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v13_0_1/hdl/fifo_generator_v13_0_vhsyn_rfs.vhd:19688]
+INFO: [Synth 8-638] synthesizing module 'wr_logic' [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v13_0_1/hdl/fifo_generator_v13_0_vhsyn_rfs.vhd:16249]
 	Parameter C_COMMON_CLOCK bound to: 1 - type: integer 
 	Parameter C_HAS_ALMOST_FULL bound to: 0 - type: integer 
 	Parameter C_HAS_WR_DATA_COUNT bound to: 0 - type: integer 
@@ -1521,7 +1559,7 @@ INFO: [Synth 8-638] synthesizing module 'wr_logic' [c:/modem/vivado/xc7k160t-IP/
 	Parameter C_PROG_FULL_THRESH_ASSERT_VAL bound to: 254 - type: integer 
 	Parameter C_PROG_FULL_THRESH_NEGATE_VAL bound to: 253 - type: integer 
 	Parameter C_FULL_FLAGS_RST_VAL bound to: 0 - type: integer 
-INFO: [Synth 8-638] synthesizing module 'wr_bin_cntr' [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:7729]
+INFO: [Synth 8-638] synthesizing module 'wr_bin_cntr' [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v13_0_1/hdl/fifo_generator_v13_0_vhsyn_rfs.vhd:7761]
 	Parameter C_HAS_RST bound to: 0 - type: integer 
 	Parameter C_HAS_SRST bound to: 1 - type: integer 
 	Parameter C_HAS_ALMOST_FULL bound to: 0 - type: integer 
@@ -1530,8 +1568,8 @@ INFO: [Synth 8-638] synthesizing module 'wr_bin_cntr' [c:/modem/vivado/xc7k160t-
 	Parameter C_PNTR_WIDTH bound to: 8 - type: integer 
 	Parameter C_COMMON_CLOCK bound to: 1 - type: integer 
 	Parameter C_WR_RD_RATIO bound to: 1 - type: integer 
-INFO: [Synth 8-256] done synthesizing module 'wr_bin_cntr' (16#1) [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:7729]
-INFO: [Synth 8-638] synthesizing module 'wr_status_flags_ss' [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:13799]
+INFO: [Synth 8-256] done synthesizing module 'wr_bin_cntr' (16#1) [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v13_0_1/hdl/fifo_generator_v13_0_vhsyn_rfs.vhd:7761]
+INFO: [Synth 8-638] synthesizing module 'wr_status_flags_ss' [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v13_0_1/hdl/fifo_generator_v13_0_vhsyn_rfs.vhd:13849]
 	Parameter C_RD_PNTR_WIDTH bound to: 8 - type: integer 
 	Parameter C_WR_PNTR_WIDTH bound to: 8 - type: integer 
 	Parameter C_HAS_RST bound to: 0 - type: integer 
@@ -1540,9 +1578,9 @@ INFO: [Synth 8-638] synthesizing module 'wr_status_flags_ss' [c:/modem/vivado/xc
 	Parameter C_PROG_FULL_TYPE bound to: 0 - type: integer 
 	Parameter C_PROG_EMPTY_TYPE bound to: 0 - type: integer 
 	Parameter C_FULL_FLAGS_RST_VAL bound to: 0 - type: integer 
-INFO: [Synth 8-256] done synthesizing module 'wr_status_flags_ss' (17#1) [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:13799]
-INFO: [Synth 8-256] done synthesizing module 'wr_logic' (18#1) [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:16199]
-INFO: [Synth 8-638] synthesizing module 'output_blk' [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:4460]
+INFO: [Synth 8-256] done synthesizing module 'wr_status_flags_ss' (17#1) [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v13_0_1/hdl/fifo_generator_v13_0_vhsyn_rfs.vhd:13849]
+INFO: [Synth 8-256] done synthesizing module 'wr_logic' (18#1) [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v13_0_1/hdl/fifo_generator_v13_0_vhsyn_rfs.vhd:16249]
+INFO: [Synth 8-638] synthesizing module 'output_blk' [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v13_0_1/hdl/fifo_generator_v13_0_vhsyn_rfs.vhd:4436]
 	Parameter C_COMMON_CLOCK bound to: 1 - type: integer 
 	Parameter C_DATA_COUNT_WIDTH bound to: 8 - type: integer 
 	Parameter C_DIN_WIDTH bound to: 16 - type: integer 
@@ -1568,14 +1606,14 @@ INFO: [Synth 8-638] synthesizing module 'output_blk' [c:/modem/vivado/xc7k160t-I
 	Parameter C_USE_ECC bound to: 0 - type: integer 
 	Parameter C_FIFO_TYPE bound to: 0 - type: integer 
 	Parameter C_BYTE_STRB_WIDTH bound to: 8 - type: integer 
-INFO: [Synth 8-256] done synthesizing module 'output_blk' (19#1) [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:4460]
-INFO: [Synth 8-256] done synthesizing module 'fifo_generator_ramfifo' (20#1) [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:20531]
-INFO: [Synth 8-256] done synthesizing module 'fifo_generator_top' (21#1) [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:32083]
-INFO: [Synth 8-256] done synthesizing module 'fifo_generator_v12_0_synth' (22#1) [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd:33314]
-INFO: [Synth 8-256] done synthesizing module 'fifo_generator_v12_0' (23#1) [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v12_0/hdl/fifo_generator_v12_0.vhd:665]
+INFO: [Synth 8-256] done synthesizing module 'output_blk' (19#1) [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v13_0_1/hdl/fifo_generator_v13_0_vhsyn_rfs.vhd:4436]
+INFO: [Synth 8-256] done synthesizing module 'fifo_generator_ramfifo' (20#1) [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v13_0_1/hdl/fifo_generator_v13_0_vhsyn_rfs.vhd:20583]
+INFO: [Synth 8-256] done synthesizing module 'fifo_generator_top' (21#1) [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v13_0_1/hdl/fifo_generator_v13_0_vhsyn_rfs.vhd:32420]
+INFO: [Synth 8-256] done synthesizing module 'fifo_generator_v13_0_1_synth' (22#1) [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v13_0_1/hdl/fifo_generator_v13_0_vhsyn_rfs.vhd:33659]
+INFO: [Synth 8-256] done synthesizing module 'fifo_generator_v13_0_1' (23#1) [c:/modem/vivado/xc7k160t-IP/dataFifo/fifo_generator_v13_0_1/hdl/fifo_generator_v13_0.vhd:676]
 INFO: [Synth 8-256] done synthesizing module 'dataFifo' (24#1) [c:/modem/vivado/xc7k160t-IP/dataFifo/synth/dataFifo.vhd:72]
 ---------------------------------------------------------------------------------
-Finished RTL Elaboration : Time (s): cpu = 00:00:58 ; elapsed = 00:01:03 . Memory (MB): peak = 466.184 ; gain = 288.684
+Finished RTL Elaboration : Time (s): cpu = 00:01:47 ; elapsed = 00:01:50 . Memory (MB): peak = 504.117 ; gain = 332.215
 ---------------------------------------------------------------------------------
 
 Report Check Netlist: 
@@ -1584,48 +1622,48 @@ Report Check Netlist:
 +------+------------------+-------+---------+-------+------------------+
 |1     |multi_driven_nets |      0|        0|Passed |Multi driven nets |
 +------+------------------+-------+---------+-------+------------------+
-INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINA[35] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:183501]
-INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINA[34] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:183501]
-INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINA[33] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:183501]
-INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINA[32] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:183501]
-INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINA[31] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:183501]
-INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINA[26] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:183501]
-INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINA[25] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:183501]
-INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINA[24] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:183501]
-INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINA[23] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:183501]
-INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINA[22] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:183501]
-INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINA[17] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:183501]
-INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINA[16] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:183501]
-INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINA[15] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:183501]
-INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINA[14] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:183501]
-INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINA[13] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:183501]
-INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINA[8] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:183501]
-INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINA[7] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:183501]
-INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINA[6] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:183501]
-INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINA[5] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:183501]
-INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINA[4] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:183501]
-INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINB[35] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:183501]
-INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINB[34] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:183501]
-INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINB[33] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:183501]
-INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINB[32] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:183501]
-INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINB[31] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:183501]
-INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINB[26] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:183501]
-INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINB[25] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:183501]
-INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINB[24] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:183501]
-INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINB[23] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:183501]
-INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINB[22] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:183501]
-INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINB[17] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:183501]
-INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINB[16] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:183501]
-INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINB[15] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:183501]
-INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINB[14] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:183501]
-INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINB[13] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:183501]
-INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINB[8] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:183501]
-INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINB[7] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:183501]
-INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINB[6] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:183501]
-INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINB[5] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:183501]
-INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINB[4] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd:183501]
+INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINA[35] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:183803]
+INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINA[34] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:183803]
+INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINA[33] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:183803]
+INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINA[32] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:183803]
+INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINA[31] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:183803]
+INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINA[26] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:183803]
+INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINA[25] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:183803]
+INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINA[24] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:183803]
+INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINA[23] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:183803]
+INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINA[22] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:183803]
+INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINA[17] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:183803]
+INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINA[16] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:183803]
+INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINA[15] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:183803]
+INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINA[14] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:183803]
+INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINA[13] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:183803]
+INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINA[8] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:183803]
+INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINA[7] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:183803]
+INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINA[6] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:183803]
+INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINA[5] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:183803]
+INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINA[4] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:183803]
+INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINB[35] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:183803]
+INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINB[34] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:183803]
+INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINB[33] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:183803]
+INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINB[32] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:183803]
+INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINB[31] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:183803]
+INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINB[26] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:183803]
+INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINB[25] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:183803]
+INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINB[24] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:183803]
+INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINB[23] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:183803]
+INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINB[22] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:183803]
+INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINB[17] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:183803]
+INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINB[16] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:183803]
+INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINB[15] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:183803]
+INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINB[14] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:183803]
+INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINB[13] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:183803]
+INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINB[8] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:183803]
+INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINB[7] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:183803]
+INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINB[6] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:183803]
+INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINB[5] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:183803]
+INFO: [Synth 8-3295] tying undriven pin \prim_noinit.ram :DINB[4] to constant 0 [c:/modem/vivado/xc7k160t-IP/dataFifo/blk_mem_gen_v8_3_1/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd:183803]
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:58 ; elapsed = 00:01:03 . Memory (MB): peak = 466.184 ; gain = 288.684
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:01:47 ; elapsed = 00:01:51 . Memory (MB): peak = 504.117 ; gain = 332.215
 ---------------------------------------------------------------------------------
 INFO: [Netlist 29-17] Analyzing 1 Unisim elements for replacement
 INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
@@ -1645,26 +1683,26 @@ Completed Processing XDC Constraints
 INFO: [Project 1-111] Unisim Transformation Summary:
 No Unisim elements were transformed.
 
-Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.120 . Memory (MB): peak = 571.367 ; gain = 0.000
+Constraint Validation Runtime : Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.020 . Memory (MB): peak = 604.813 ; gain = 0.000
 ---------------------------------------------------------------------------------
-Finished Constraint Validation : Time (s): cpu = 00:01:07 ; elapsed = 00:01:17 . Memory (MB): peak = 571.367 ; gain = 393.867
+Finished Constraint Validation : Time (s): cpu = 00:01:58 ; elapsed = 00:02:02 . Memory (MB): peak = 604.813 ; gain = 432.910
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Loading Part and Timing Information
 ---------------------------------------------------------------------------------
 Loading part: xc7k160tfbg676-1
 ---------------------------------------------------------------------------------
-Finished Loading Part and Timing Information : Time (s): cpu = 00:01:07 ; elapsed = 00:01:17 . Memory (MB): peak = 571.367 ; gain = 393.867
+Finished Loading Part and Timing Information : Time (s): cpu = 00:01:58 ; elapsed = 00:02:02 . Memory (MB): peak = 604.813 ; gain = 432.910
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Applying 'set_property' XDC Constraints
 ---------------------------------------------------------------------------------
 Applied set_property DONT_TOUCH = true for U0. (constraint file  auto generated constraint, line ).
 ---------------------------------------------------------------------------------
-Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:01:07 ; elapsed = 00:01:17 . Memory (MB): peak = 571.367 ; gain = 393.867
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:01:58 ; elapsed = 00:02:02 . Memory (MB): peak = 604.813 ; gain = 432.910
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 2 : Time (s): cpu = 00:01:08 ; elapsed = 00:01:17 . Memory (MB): peak = 571.367 ; gain = 393.867
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:01:59 ; elapsed = 00:02:03 . Memory (MB): peak = 604.813 ; gain = 432.910
 ---------------------------------------------------------------------------------
 
 Report RTL Partitions: 
@@ -1682,7 +1720,8 @@ Detailed RTL Component Info :
 	   2 Input      1 Bit         XORs := 32    
 +---Registers : 
 	                8 Bit    Registers := 4     
-	                1 Bit    Registers := 4     
+	                2 Bit    Registers := 2     
+	                1 Bit    Registers := 17    
 +---Muxes : 
 	   2 Input      1 Bit        Muxes := 1     
 ---------------------------------------------------------------------------------
@@ -1692,6 +1731,11 @@ Finished RTL Component Statistics
 Start RTL Hierarchical Component Statistics 
 ---------------------------------------------------------------------------------
 Hierarchical RTL Component report 
+Module reset_blk_ramfifo 
+Detailed RTL Component Info : 
++---Registers : 
+	                2 Bit    Registers := 2     
+	                1 Bit    Registers := 13    
 Module rd_bin_cntr 
 Detailed RTL Component Info : 
 +---Adders : 
@@ -1730,14 +1774,14 @@ BRAMs: 650 (col length: RAMB18 100 RAMB36 50)
 ---------------------------------------------------------------------------------
 Finished Part Resource Summary
 ---------------------------------------------------------------------------------
-Start Parallel Synthesis Optimization  : Time (s): cpu = 00:01:08 ; elapsed = 00:01:17 . Memory (MB): peak = 571.367 ; gain = 393.867
+Start Parallel Synthesis Optimization  : Time (s): cpu = 00:01:59 ; elapsed = 00:02:03 . Memory (MB): peak = 604.813 ; gain = 432.910
 ---------------------------------------------------------------------------------
 Start Cross Boundary Optimization
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Cross Boundary Optimization : Time (s): cpu = 00:01:08 ; elapsed = 00:01:18 . Memory (MB): peak = 571.367 ; gain = 393.867
+Finished Cross Boundary Optimization : Time (s): cpu = 00:01:59 ; elapsed = 00:02:03 . Memory (MB): peak = 604.813 ; gain = 432.910
 ---------------------------------------------------------------------------------
-Finished Parallel Reinference  : Time (s): cpu = 00:01:08 ; elapsed = 00:01:18 . Memory (MB): peak = 571.367 ; gain = 393.867
+Finished Parallel Reinference  : Time (s): cpu = 00:01:59 ; elapsed = 00:02:03 . Memory (MB): peak = 604.813 ; gain = 432.910
 
 Report RTL Partitions: 
 +-+--------------+------------+----------+
@@ -1748,16 +1792,15 @@ Report RTL Partitions:
 Start Area Optimization
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Area Optimization : Time (s): cpu = 00:01:08 ; elapsed = 00:01:18 . Memory (MB): peak = 571.367 ; gain = 393.867
+Finished Area Optimization : Time (s): cpu = 00:01:59 ; elapsed = 00:02:03 . Memory (MB): peak = 604.813 ; gain = 432.910
 ---------------------------------------------------------------------------------
-Finished Parallel Area Optimization  : Time (s): cpu = 00:01:08 ; elapsed = 00:01:18 . Memory (MB): peak = 571.367 ; gain = 393.867
+Finished Parallel Area Optimization  : Time (s): cpu = 00:01:59 ; elapsed = 00:02:03 . Memory (MB): peak = 604.813 ; gain = 432.910
 
 Report RTL Partitions: 
 +-+--------------+------------+----------+
 | |RTL Partition |Replication |Instances |
 +-+--------------+------------+----------+
 +-+--------------+------------+----------+
-Finished Parallel Synthesis Optimization  : Time (s): cpu = 00:01:08 ; elapsed = 00:01:18 . Memory (MB): peak = 571.367 ; gain = 393.867
 ---------------------------------------------------------------------------------
 Start Timing Optimization
 ---------------------------------------------------------------------------------
@@ -1765,10 +1808,10 @@ Start Timing Optimization
 Start Applying XDC Timing Constraints
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Applying XDC Timing Constraints : Time (s): cpu = 00:01:18 ; elapsed = 00:01:29 . Memory (MB): peak = 577.902 ; gain = 400.402
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:02:13 ; elapsed = 00:02:18 . Memory (MB): peak = 611.914 ; gain = 440.012
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Timing Optimization : Time (s): cpu = 00:01:18 ; elapsed = 00:01:29 . Memory (MB): peak = 577.902 ; gain = 400.402
+Finished Timing Optimization : Time (s): cpu = 00:02:14 ; elapsed = 00:02:18 . Memory (MB): peak = 626.152 ; gain = 454.250
 ---------------------------------------------------------------------------------
 
 Report RTL Partitions: 
@@ -1779,17 +1822,31 @@ Report RTL Partitions:
 ---------------------------------------------------------------------------------
 Start Technology Mapping
 ---------------------------------------------------------------------------------
+WARNING: [Synth 8-3332] Sequential element (\inst_fifo_gen/reset_gen_cc.rstblk_cc/ngwrdrst.grst.g7serrst.wr_rst_asreg_d1_reg ) is unused and will be removed from module fifo_generator_v13_0_1.
+WARNING: [Synth 8-3332] Sequential element (\inst_fifo_gen/reset_gen_cc.rstblk_cc/ngwrdrst.grst.g7serrst.wr_rst_asreg_reg ) is unused and will be removed from module fifo_generator_v13_0_1.
+WARNING: [Synth 8-3332] Sequential element (\inst_fifo_gen/reset_gen_cc.rstblk_cc/ngwrdrst.grst.g7serrst.wr_rst_asreg_d2_reg ) is unused and will be removed from module fifo_generator_v13_0_1.
+WARNING: [Synth 8-3332] Sequential element (\inst_fifo_gen/reset_gen_cc.rstblk_cc/ngwrdrst.grst.g7serrst.rd_rst_asreg_d1_reg ) is unused and will be removed from module fifo_generator_v13_0_1.
+WARNING: [Synth 8-3332] Sequential element (\inst_fifo_gen/reset_gen_cc.rstblk_cc/ngwrdrst.grst.g7serrst.rd_rst_asreg_reg ) is unused and will be removed from module fifo_generator_v13_0_1.
+WARNING: [Synth 8-3332] Sequential element (\inst_fifo_gen/reset_gen_cc.rstblk_cc/ngwrdrst.grst.g7serrst.rd_rst_asreg_d2_reg ) is unused and will be removed from module fifo_generator_v13_0_1.
 ---------------------------------------------------------------------------------
-Finished Technology Mapping : Time (s): cpu = 00:01:19 ; elapsed = 00:01:29 . Memory (MB): peak = 598.871 ; gain = 421.371
+Finished Technology Mapping : Time (s): cpu = 00:02:14 ; elapsed = 00:02:18 . Memory (MB): peak = 634.504 ; gain = 462.602
 ---------------------------------------------------------------------------------
+Finished Parallel Technology Mapping Optimization  : Time (s): cpu = 00:02:14 ; elapsed = 00:02:18 . Memory (MB): peak = 634.504 ; gain = 462.602
 
 Report RTL Partitions: 
 +-+--------------+------------+----------+
 | |RTL Partition |Replication |Instances |
 +-+--------------+------------+----------+
 +-+--------------+------------+----------+
+Finished Parallel Synthesis Optimization  : Time (s): cpu = 00:02:14 ; elapsed = 00:02:18 . Memory (MB): peak = 634.504 ; gain = 462.602
 ---------------------------------------------------------------------------------
 Start IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Flattening Before IO Insertion
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Final Netlist Cleanup
@@ -1798,7 +1855,7 @@ Start Final Netlist Cleanup
 Finished Final Netlist Cleanup
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished IO Insertion : Time (s): cpu = 00:01:19 ; elapsed = 00:01:30 . Memory (MB): peak = 598.871 ; gain = 421.371
+Finished IO Insertion : Time (s): cpu = 00:02:14 ; elapsed = 00:02:19 . Memory (MB): peak = 634.504 ; gain = 462.602
 ---------------------------------------------------------------------------------
 
 Report Check Netlist: 
@@ -1811,7 +1868,7 @@ Report Check Netlist:
 Start Renaming Generated Instances
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Instances : Time (s): cpu = 00:01:19 ; elapsed = 00:01:30 . Memory (MB): peak = 598.871 ; gain = 421.371
+Finished Renaming Generated Instances : Time (s): cpu = 00:02:14 ; elapsed = 00:02:19 . Memory (MB): peak = 634.504 ; gain = 462.602
 ---------------------------------------------------------------------------------
 
 Report RTL Partitions: 
@@ -1823,13 +1880,25 @@ Report RTL Partitions:
 Start Rebuilding User Hierarchy
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Rebuilding User Hierarchy : Time (s): cpu = 00:01:19 ; elapsed = 00:01:30 . Memory (MB): peak = 598.871 ; gain = 421.371
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:02:14 ; elapsed = 00:02:19 . Memory (MB): peak = 634.504 ; gain = 462.602
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Start Renaming Generated Ports : Time (s): cpu = 00:01:19 ; elapsed = 00:01:30 . Memory (MB): peak = 598.871 ; gain = 421.371
+Start Renaming Generated Ports
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Ports : Time (s): cpu = 00:01:19 ; elapsed = 00:01:30 . Memory (MB): peak = 598.871 ; gain = 421.371
+Finished Renaming Generated Ports : Time (s): cpu = 00:02:14 ; elapsed = 00:02:19 . Memory (MB): peak = 634.504 ; gain = 462.602
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:02:14 ; elapsed = 00:02:19 . Memory (MB): peak = 634.504 ; gain = 462.602
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Nets
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Nets : Time (s): cpu = 00:02:14 ; elapsed = 00:02:19 . Memory (MB): peak = 634.504 ; gain = 462.602
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Writing Synthesis Report
@@ -1845,46 +1914,48 @@ Report Cell Usage:
 +------+---------+------+
 |      |Cell     |Count |
 +------+---------+------+
-|1     |LUT1     |     2|
-|2     |LUT2     |     9|
-|3     |LUT3     |     7|
-|4     |LUT4     |     8|
-|5     |LUT5     |     4|
+|1     |LUT1     |     3|
+|2     |LUT2     |     4|
+|3     |LUT3     |     6|
+|4     |LUT4     |     4|
+|5     |LUT5     |     9|
 |6     |LUT6     |    12|
 |7     |RAMB18E1 |     1|
-|8     |FDRE     |    34|
-|9     |FDSE     |     2|
+|8     |FDPE     |     7|
+|9     |FDRE     |    34|
+|10    |FDSE     |     2|
 +------+---------+------+
 
 Report Instance Areas: 
-+------+------------------------------------------------+---------------------------+------+
-|      |Instance                                        |Module                     |Cells |
-+------+------------------------------------------------+---------------------------+------+
-|1     |top                                             |                           |    79|
-|2     |  U0                                            |fifo_generator_v12_0       |    79|
-|3     |    inst_fifo_gen                               |fifo_generator_v12_0_synth |    79|
-|4     |      \gconvfifo.rf                             |fifo_generator_top         |    79|
-|5     |        \grf.rf                                 |fifo_generator_ramfifo     |    79|
-|6     |          \gntv_or_sync_fifo.gl0.rd             |rd_logic                   |    43|
-|7     |            \grss.rsts                          |rd_status_flags_ss         |     5|
-|8     |            rpntr                               |rd_bin_cntr                |    38|
-|9     |          \gntv_or_sync_fifo.gl0.wr             |wr_logic                   |    35|
-|10    |            \gwss.wsts                          |wr_status_flags_ss         |     3|
-|11    |            wpntr                               |wr_bin_cntr                |    32|
-|12    |          \gntv_or_sync_fifo.mem                |memory                     |     1|
-|13    |            \gbm.gbmg.gbmga.ngecc.bmg           |blk_mem_gen_v8_2           |     1|
-|14    |              inst_blk_mem_gen                  |blk_mem_gen_v8_2_synth     |     1|
-|15    |                \gnativebmg.native_blk_mem_gen  |blk_mem_gen_top            |     1|
-|16    |                  \valid.cstr                   |blk_mem_gen_generic_cstr   |     1|
-|17    |                    \ramloop[0].ram.r           |blk_mem_gen_prim_width     |     1|
-|18    |                      \prim_noinit.ram          |blk_mem_gen_prim_wrapper   |     1|
-+------+------------------------------------------------+---------------------------+------+
++------+------------------------------------------------+-----------------------------+------+
+|      |Instance                                        |Module                       |Cells |
++------+------------------------------------------------+-----------------------------+------+
+|1     |top                                             |                             |    82|
+|2     |  U0                                            |fifo_generator_v13_0_1       |    82|
+|3     |    inst_fifo_gen                               |fifo_generator_v13_0_1_synth |    82|
+|4     |      \gconvfifo.rf                             |fifo_generator_top           |    74|
+|5     |        \grf.rf                                 |fifo_generator_ramfifo       |    74|
+|6     |          \gntv_or_sync_fifo.gl0.rd             |rd_logic                     |    39|
+|7     |            \grss.rsts                          |rd_status_flags_ss           |     4|
+|8     |            rpntr                               |rd_bin_cntr                  |    35|
+|9     |          \gntv_or_sync_fifo.gl0.wr             |wr_logic                     |    34|
+|10    |            \gwss.wsts                          |wr_status_flags_ss           |     3|
+|11    |            wpntr                               |wr_bin_cntr                  |    31|
+|12    |          \gntv_or_sync_fifo.mem                |memory                       |     1|
+|13    |            \gbm.gbmg.gbmga.ngecc.bmg           |blk_mem_gen_v8_3_1           |     1|
+|14    |              inst_blk_mem_gen                  |blk_mem_gen_v8_3_1_synth     |     1|
+|15    |                \gnativebmg.native_blk_mem_gen  |blk_mem_gen_top              |     1|
+|16    |                  \valid.cstr                   |blk_mem_gen_generic_cstr     |     1|
+|17    |                    \ramloop[0].ram.r           |blk_mem_gen_prim_width       |     1|
+|18    |                      \prim_noinit.ram          |blk_mem_gen_prim_wrapper     |     1|
+|19    |      \reset_gen_cc.rstblk_cc                   |reset_blk_ramfifo            |     8|
++------+------------------------------------------------+-----------------------------+------+
 ---------------------------------------------------------------------------------
-Finished Writing Synthesis Report : Time (s): cpu = 00:01:19 ; elapsed = 00:01:30 . Memory (MB): peak = 598.871 ; gain = 421.371
+Finished Writing Synthesis Report : Time (s): cpu = 00:02:14 ; elapsed = 00:02:19 . Memory (MB): peak = 634.504 ; gain = 462.602
 ---------------------------------------------------------------------------------
-Synthesis finished with 0 errors, 0 critical warnings and 0 warnings.
-Synthesis Optimization Runtime : Time (s): cpu = 00:00:14 ; elapsed = 00:01:16 . Memory (MB): peak = 598.871 ; gain = 287.402
-Synthesis Optimization Complete : Time (s): cpu = 00:01:19 ; elapsed = 00:01:30 . Memory (MB): peak = 598.871 ; gain = 421.371
+Synthesis finished with 0 errors, 0 critical warnings and 6 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:21 ; elapsed = 00:02:07 . Memory (MB): peak = 634.504 ; gain = 294.230
+Synthesis Optimization Complete : Time (s): cpu = 00:02:15 ; elapsed = 00:02:19 . Memory (MB): peak = 634.504 ; gain = 462.602
 INFO: [Project 1-571] Translating synthesized netlist
 INFO: [Netlist 29-17] Analyzing 1 Unisim elements for replacement
 INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
@@ -1898,9 +1969,9 @@ INFO: [Project 1-111] Unisim Transformation Summary:
 No Unisim elements were transformed.
 
 INFO: [Common 17-83] Releasing license: Synthesis
-108 Infos, 28 Warnings, 0 Critical Warnings and 0 Errors encountered.
+120 Infos, 34 Warnings, 0 Critical Warnings and 0 Errors encountered.
 synth_design completed successfully
-synth_design: Time (s): cpu = 00:01:20 ; elapsed = 00:01:30 . Memory (MB): peak = 598.871 ; gain = 392.586
-INFO: [Coretcl 2-1174] Renamed 17 cell refs.
-report_utilization: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.140 . Memory (MB): peak = 598.871 ; gain = 0.000
-INFO: [Common 17-206] Exiting Vivado at Thu May 28 14:46:09 2015...
+synth_design: Time (s): cpu = 00:02:14 ; elapsed = 00:02:17 . Memory (MB): peak = 634.504 ; gain = 394.926
+INFO: [Coretcl 2-1174] Renamed 18 cell refs.
+report_utilization: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.030 . Memory (MB): peak = 634.504 ; gain = 0.000
+INFO: [Common 17-206] Exiting Vivado at Fri Oct 28 16:44:55 2016...

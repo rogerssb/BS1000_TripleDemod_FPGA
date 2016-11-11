@@ -21,7 +21,8 @@ module pcmDecoder
   fifo_rs,
   clk_inv,
   bypass_fifo,
-  symb_clk
+  symb_clk,
+  inputSelect
   );
 
 input rs,en,wr0,wr1;
@@ -38,6 +39,7 @@ output fifo_rs;
 output clk_inv;
 output symb_clk;
 output bypass_fifo;
+output inputSelect;
 
 //------------------------------------------------------------------------------
 //                          Biphase to NRZ Conversion
@@ -163,6 +165,7 @@ decoder_regs decoder_regs(
 );
 
 assign {
+    inputSelect,
     bypass_fifo,
     rsvd0,
     mode,
@@ -175,7 +178,7 @@ assign {
     data_inv,
     clk_sel,
     clk_inv,
-    fifo_rs} = regs_q[13:0];
+    fifo_rs} = regs_q[14:0];
 
 endmodule
 

@@ -1,4 +1,4 @@
--- (c) Copyright 1995-2015 Xilinx, Inc. All rights reserved.
+-- (c) Copyright 1995-2016 Xilinx, Inc. All rights reserved.
 -- 
 -- This file contains confidential and proprietary information
 -- of Xilinx, Inc. and is protected under U.S. and
@@ -47,14 +47,14 @@
 -- DO NOT MODIFY THIS FILE.
 
 -- IP VLNV: xilinx.com:ip:mult_gen:12.0
--- IP Revision: 7
+-- IP Revision: 10
 
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
 
-LIBRARY mult_gen_v12_0;
-USE mult_gen_v12_0.mult_gen_v12_0;
+LIBRARY mult_gen_v12_0_10;
+USE mult_gen_v12_0_10.mult_gen_v12_0_10;
 
 ENTITY oneThird IS
   PORT (
@@ -70,7 +70,7 @@ ARCHITECTURE oneThird_arch OF oneThird IS
   ATTRIBUTE DowngradeIPIdentifiedWarnings : string;
   ATTRIBUTE DowngradeIPIdentifiedWarnings OF oneThird_arch: ARCHITECTURE IS "yes";
 
-  COMPONENT mult_gen_v12_0 IS
+  COMPONENT mult_gen_v12_0_10 IS
     GENERIC (
       C_VERBOSITY : INTEGER;
       C_MODEL_TYPE : INTEGER;
@@ -101,13 +101,13 @@ ARCHITECTURE oneThird_arch OF oneThird IS
       SCLR : IN STD_LOGIC;
       P : OUT STD_LOGIC_VECTOR(21 DOWNTO 0)
     );
-  END COMPONENT mult_gen_v12_0;
+  END COMPONENT mult_gen_v12_0_10;
   ATTRIBUTE X_CORE_INFO : STRING;
-  ATTRIBUTE X_CORE_INFO OF oneThird_arch: ARCHITECTURE IS "mult_gen_v12_0,Vivado 2015.1";
+  ATTRIBUTE X_CORE_INFO OF oneThird_arch: ARCHITECTURE IS "mult_gen_v12_0_10,Vivado 2015.4";
   ATTRIBUTE CHECK_LICENSE_TYPE : STRING;
-  ATTRIBUTE CHECK_LICENSE_TYPE OF oneThird_arch : ARCHITECTURE IS "oneThird,mult_gen_v12_0,{}";
+  ATTRIBUTE CHECK_LICENSE_TYPE OF oneThird_arch : ARCHITECTURE IS "oneThird,mult_gen_v12_0_10,{}";
   ATTRIBUTE CORE_GENERATION_INFO : STRING;
-  ATTRIBUTE CORE_GENERATION_INFO OF oneThird_arch: ARCHITECTURE IS "oneThird,mult_gen_v12_0,{x_ipProduct=Vivado 2015.1,x_ipVendor=xilinx.com,x_ipLibrary=ip,x_ipName=mult_gen,x_ipVersion=12.0,x_ipCoreRevision=7,x_ipLanguage=VERILOG,x_ipSimLanguage=VERILOG,C_VERBOSITY=0,C_MODEL_TYPE=0,C_OPTIMIZE_GOAL=1,C_XDEVICEFAMILY=kintex7,C_HAS_CE=1,C_HAS_SCLR=1,C_LATENCY=1,C_A_WIDTH=12,C_A_TYPE=0,C_B_WIDTH=10,C_B_TYPE=1,C_OUT_HIGH=21,C_OUT_LOW=0,C_MULT_TYPE=2,C_CE_OVERRIDES_SCLR=0,C_CCM_IMP=0,C_B_VALUE=1010101011,C_HAS_ZERO_DETECT=0,C_ROUND_OUTPUT=0,C_ROUND_PT=0}";
+  ATTRIBUTE CORE_GENERATION_INFO OF oneThird_arch: ARCHITECTURE IS "oneThird,mult_gen_v12_0_10,{x_ipProduct=Vivado 2015.4,x_ipVendor=xilinx.com,x_ipLibrary=ip,x_ipName=mult_gen,x_ipVersion=12.0,x_ipCoreRevision=10,x_ipLanguage=VERILOG,x_ipSimLanguage=VERILOG,C_VERBOSITY=0,C_MODEL_TYPE=0,C_OPTIMIZE_GOAL=1,C_XDEVICEFAMILY=kintex7,C_HAS_CE=1,C_HAS_SCLR=1,C_LATENCY=1,C_A_WIDTH=12,C_A_TYPE=0,C_B_WIDTH=10,C_B_TYPE=1,C_OUT_HIGH=21,C_OUT_LOW=0,C_MULT_TYPE=2,C_CE_OVERRIDES_SCLR=0,C_CCM_IMP=0,C_B_VALUE=1010101011,C_HAS_ZERO_DETECT=0,C_ROUND_OUTPUT=0,C_ROUND_PT=0}";
   ATTRIBUTE X_INTERFACE_INFO : STRING;
   ATTRIBUTE X_INTERFACE_INFO OF CLK: SIGNAL IS "xilinx.com:signal:clock:1.0 clk_intf CLK";
   ATTRIBUTE X_INTERFACE_INFO OF A: SIGNAL IS "xilinx.com:signal:data:1.0 a_intf DATA";
@@ -115,7 +115,7 @@ ARCHITECTURE oneThird_arch OF oneThird IS
   ATTRIBUTE X_INTERFACE_INFO OF SCLR: SIGNAL IS "xilinx.com:signal:reset:1.0 sclr_intf RST";
   ATTRIBUTE X_INTERFACE_INFO OF P: SIGNAL IS "xilinx.com:signal:data:1.0 p_intf DATA";
 BEGIN
-  U0 : mult_gen_v12_0
+  U0 : mult_gen_v12_0_10
     GENERIC MAP (
       C_VERBOSITY => 0,
       C_MODEL_TYPE => 0,

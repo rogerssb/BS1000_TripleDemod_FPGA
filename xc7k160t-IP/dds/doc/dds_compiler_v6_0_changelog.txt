@@ -1,3 +1,21 @@
+2015.4:
+ * Version 6.0 (Rev. 11)
+ * Revision change in one or more subcores
+
+2015.3:
+ * Version 6.0 (Rev. 10)
+ * IP revision number added to HDL module, library, and include file names, to support designs with both locked and upgraded IP instances
+ * GUI PINC calculation when using System parameters in Rasterized Mode corrected
+ * Revision change in one or more subcores
+
+2015.2.1:
+ * Version 6.0 (Rev. 9)
+ * No changes
+
+2015.2:
+ * Version 6.0 (Rev. 9)
+ * Addition of MEX wrapper
+
 2015.1:
  * Version 6.0 (Rev. 8)
  * C model updated to increase maximum Frequency Resolution from 10kHz to 125MHz.

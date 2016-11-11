@@ -1,4 +1,4 @@
--- (c) Copyright 1995-2015 Xilinx, Inc. All rights reserved.
+-- (c) Copyright 1995-2016 Xilinx, Inc. All rights reserved.
 -- 
 -- This file contains confidential and proprietary information
 -- of Xilinx, Inc. and is protected under U.S. and
@@ -47,14 +47,14 @@
 -- DO NOT MODIFY THIS FILE.
 
 -- IP VLNV: xilinx.com:ip:mult_gen:12.0
--- IP Revision: 7
+-- IP Revision: 10
 
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
 
-LIBRARY mult_gen_v12_0;
-USE mult_gen_v12_0.mult_gen_v12_0;
+LIBRARY mult_gen_v12_0_10;
+USE mult_gen_v12_0_10.mult_gen_v12_0_10;
 
 ENTITY mpy18x18 IS
   PORT (
@@ -70,7 +70,7 @@ ARCHITECTURE mpy18x18_arch OF mpy18x18 IS
   ATTRIBUTE DowngradeIPIdentifiedWarnings : string;
   ATTRIBUTE DowngradeIPIdentifiedWarnings OF mpy18x18_arch: ARCHITECTURE IS "yes";
 
-  COMPONENT mult_gen_v12_0 IS
+  COMPONENT mult_gen_v12_0_10 IS
     GENERIC (
       C_VERBOSITY : INTEGER;
       C_MODEL_TYPE : INTEGER;
@@ -101,7 +101,7 @@ ARCHITECTURE mpy18x18_arch OF mpy18x18 IS
       SCLR : IN STD_LOGIC;
       P : OUT STD_LOGIC_VECTOR(35 DOWNTO 0)
     );
-  END COMPONENT mult_gen_v12_0;
+  END COMPONENT mult_gen_v12_0_10;
   ATTRIBUTE X_INTERFACE_INFO : STRING;
   ATTRIBUTE X_INTERFACE_INFO OF CLK: SIGNAL IS "xilinx.com:signal:clock:1.0 clk_intf CLK";
   ATTRIBUTE X_INTERFACE_INFO OF A: SIGNAL IS "xilinx.com:signal:data:1.0 a_intf DATA";
@@ -109,7 +109,7 @@ ARCHITECTURE mpy18x18_arch OF mpy18x18 IS
   ATTRIBUTE X_INTERFACE_INFO OF SCLR: SIGNAL IS "xilinx.com:signal:reset:1.0 sclr_intf RST";
   ATTRIBUTE X_INTERFACE_INFO OF P: SIGNAL IS "xilinx.com:signal:data:1.0 p_intf DATA";
 BEGIN
-  U0 : mult_gen_v12_0
+  U0 : mult_gen_v12_0_10
     GENERIC MAP (
       C_VERBOSITY => 0,
       C_MODEL_TYPE => 0,

@@ -1,9 +1,11 @@
 #-----------------------------------------------------------
-# Vivado v2015.1 (64-bit)
-# SW Build 1215546 on Mon Apr 27 19:22:08 MDT 2015
-# IP Build 1209967 on Tue Apr 21 11:39:20 MDT 2015
-# Start of session at: Thu May 28 15:21:55 2015
-# Process ID: 9204
+# Vivado v2015.4 (64-bit)
+# SW Build 1412921 on Wed Nov 18 09:43:45 MST 2015
+# IP Build 1412160 on Tue Nov 17 13:47:24 MST 2015
+# Start of session at: Fri Oct 28 22:07:26 2016
+# Process ID: 13708
+# Current directory: C:/modem/vivado/xc7k160t-IP/managed_ip_project/managed_ip_project.runs/resamplerTap8_synth_1
+# Command line: vivado.exe -log resamplerTap8.vds -mode batch -messageDb vivado.pb -notrace -source resamplerTap8.tcl
 # Log file: C:/modem/vivado/xc7k160t-IP/managed_ip_project/managed_ip_project.runs/resamplerTap8_synth_1/resamplerTap8.vds
 # Journal file: C:/modem/vivado/xc7k160t-IP/managed_ip_project/managed_ip_project.runs/resamplerTap8_synth_1\vivado.jou
 #-----------------------------------------------------------

@@ -1,7 +1,7 @@
 -- Copyright 1986-2015 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
--- Tool Version: Vivado v.2015.1 (win64) Build 1215546 Mon Apr 27 19:22:08 MDT 2015
--- Date        : Tue Jun 23 15:12:28 2015
+-- Tool Version: Vivado v.2015.4 (win64) Build 1412921 Wed Nov 18 09:43:45 MST 2015
+-- Date        : Sat Oct 29 14:47:09 2016
 -- Host        : Sherlock running 64-bit Service Pack 1  (build 7601)
 -- Command     : write_vhdl -force -mode synth_stub C:/modem/vivado/xc7k160t-IP/flexbusClock/flexbusClock_stub.vhdl
 -- Design      : flexbusClock

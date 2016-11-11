@@ -2,238 +2,245 @@
 *** Running vivado
     with args -log dds.vds -m64 -mode batch -messageDb vivado.pb -notrace -source dds.tcl
 
-WARNING: Default location for XILINX_VIVADO_HLS not found: 
 
-****** Vivado v2015.1 (64-bit)
-  **** SW Build 1215546 on Mon Apr 27 19:22:08 MDT 2015
-  **** IP Build 1209967 on Tue Apr 21 11:39:20 MDT 2015
+****** Vivado v2015.4 (64-bit)
+  **** SW Build 1412921 on Wed Nov 18 09:43:45 MST 2015
+  **** IP Build 1412160 on Tue Nov 17 13:47:24 MST 2015
     ** Copyright 1986-2015 Xilinx, Inc. All Rights Reserved.
 
 source dds.tcl -notrace
 INFO: [IP_Flow 19-234] Refreshing IP repositories
 INFO: [IP_Flow 19-1704] No user IP repositories specified
-INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'C:/Xilinx/Vivado/2015.1/data/ip'.
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'C:/Xilinx/Vivado/2015.4/data/ip'.
 WARNING: [IP_Flow 19-3664] IP 'dds' generated file not found 'c:/modem/vivado/xc7k160t-IP/dds/dds.dcp'. Please regenerate to continue.
 WARNING: [IP_Flow 19-3664] IP 'dds' generated file not found 'c:/modem/vivado/xc7k160t-IP/dds/dds_stub.v'. Please regenerate to continue.
 WARNING: [IP_Flow 19-3664] IP 'dds' generated file not found 'c:/modem/vivado/xc7k160t-IP/dds/dds_stub.vhdl'. Please regenerate to continue.
-WARNING: [IP_Flow 19-3664] IP 'dds' generated file not found 'c:/modem/vivado/xc7k160t-IP/dds/dds_funcsim.v'. Please regenerate to continue.
-WARNING: [IP_Flow 19-3664] IP 'dds' generated file not found 'c:/modem/vivado/xc7k160t-IP/dds/dds_funcsim.vhdl'. Please regenerate to continue.
+WARNING: [IP_Flow 19-3664] IP 'dds' generated file not found 'c:/modem/vivado/xc7k160t-IP/dds/dds_sim_netlist.v'. Please regenerate to continue.
+WARNING: [IP_Flow 19-3664] IP 'dds' generated file not found 'c:/modem/vivado/xc7k160t-IP/dds/dds_sim_netlist.vhdl'. Please regenerate to continue.
 Command: synth_design -top dds -part xc7k160tfbg676-1 -mode out_of_context
 Starting synth_design
 Attempting to get a license for feature 'Synthesis' and/or device 'xc7k160t'
 INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7k160t'
+INFO: [Common 17-1223] The version limit for your license is '2016.05' and will expire in -150 days. A version limit expiration means that, although you may be able to continue to use the current version of tools or IP with this license, you will not be eligible for any updates or new releases.
 ---------------------------------------------------------------------------------
-Starting RTL Elaboration : Time (s): cpu = 00:00:05 ; elapsed = 00:00:06 . Memory (MB): peak = 254.555 ; gain = 75.320
+Starting RTL Elaboration : Time (s): cpu = 00:00:09 ; elapsed = 00:00:11 . Memory (MB): peak = 295.684 ; gain = 123.473
 ---------------------------------------------------------------------------------
 INFO: [Synth 8-638] synthesizing module 'dds' [c:/modem/vivado/xc7k160t-IP/dds/synth/dds.vhd:71]
-INFO: [Synth 8-3491] module 'dds_compiler_v6_0' declared at 'c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0.vhd:112' bound to instance 'U0' of component 'dds_compiler_v6_0' [c:/modem/vivado/xc7k160t-IP/dds/synth/dds.vhd:173]
-INFO: [Synth 8-638] synthesizing module 'dds_compiler_v6_0' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0.vhd:222]
-INFO: [Synth 8-3491] module 'dds_compiler_v6_0_viv' declared at 'c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:45941' bound to instance 'i_synth' of component 'dds_compiler_v6_0_viv' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0.vhd:229]
-INFO: [Synth 8-638] synthesizing module 'dds_compiler_v6_0_viv' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:46065]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:2054]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:2480]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:1303]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:1308]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:1313]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:1318]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:1323]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:1328]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:1333]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:1345]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:1353]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:1360]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:1365]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:1370]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:1375]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:1380]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:1384]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:1388]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:1393]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:1398]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:1404]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:1417]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:1422]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:1426]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:1430]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:1437]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:1444]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:1449]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:1453]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:1458]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:1463]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:1470]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:1474]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:1478]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:1483]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:1487]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:1491]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:1495]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:1513]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:1543]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:1548]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:1557]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:1584]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:1600]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:1605]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:1608]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:1611]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:1614]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:1754]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:1787]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:1794]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:3134]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:3602]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:3617]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:3621]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:3626]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:2889]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:3023]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:581]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:584]
-INFO: [Synth 8-638] synthesizing module 'xbip_pipe_v3_0_viv' [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:299]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:581]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:584]
-INFO: [Synth 8-256] done synthesizing module 'xbip_pipe_v3_0_viv' (1#1) [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:299]
-INFO: [Synth 8-638] synthesizing module 'xbip_pipe_v3_0_viv__parameterized0' [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:299]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:581]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:584]
-INFO: [Synth 8-256] done synthesizing module 'xbip_pipe_v3_0_viv__parameterized0' (1#1) [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:299]
-INFO: [Synth 8-638] synthesizing module 'dds_compiler_v6_0_core' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:44811]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:2889]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:2054]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:2480]
-INFO: [Synth 8-638] synthesizing module 'dds_compiler_v6_0_rdy' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:44555]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:2889]
-INFO: [Synth 8-3491] module 'xbip_pipe_v3_0_viv' declared at 'c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:274' bound to instance 'i_rdy' of component 'xbip_pipe_v3_0_viv' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:44637]
-INFO: [Synth 8-638] synthesizing module 'xbip_pipe_v3_0_viv__parameterized2' [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:299]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:581]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:584]
-INFO: [Synth 8-256] done synthesizing module 'xbip_pipe_v3_0_viv__parameterized2' (1#1) [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:299]
-INFO: [Synth 8-256] done synthesizing module 'dds_compiler_v6_0_rdy' (2#1) [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:44555]
-INFO: [Synth 8-638] synthesizing module 'accum' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:40957]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:2889]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:3023]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:581]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:584]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:3023]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:581]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:584]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:41274]
-INFO: [Synth 8-3491] module 'xbip_pipe_v3_0_viv' declared at 'c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:274' bound to instance 'i_ph_inc_ctrl2dsp_speedup' of component 'xbip_pipe_v3_0_viv' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:41277]
-INFO: [Synth 8-638] synthesizing module 'xbip_pipe_v3_0_viv__parameterized4' [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:299]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:581]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:584]
-INFO: [Synth 8-256] done synthesizing module 'xbip_pipe_v3_0_viv__parameterized4' (2#1) [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:299]
-INFO: [Synth 8-3491] module 'xbip_pipe_v3_0_viv' declared at 'c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:274' bound to instance 'i_resync_ctrl2dsp_speedup' of component 'xbip_pipe_v3_0_viv' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:41291]
-INFO: [Synth 8-638] synthesizing module 'xbip_pipe_v3_0_viv__parameterized6' [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:299]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:581]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:584]
-INFO: [Synth 8-256] done synthesizing module 'xbip_pipe_v3_0_viv__parameterized6' (2#1) [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:299]
-INFO: [Synth 8-3491] module 'xbip_pipe_v3_0_viv' declared at 'c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:274' bound to instance 'i_phase_acc' of component 'xbip_pipe_v3_0_viv' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:41308]
-INFO: [Synth 8-638] synthesizing module 'xbip_pipe_v3_0_viv__parameterized8' [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:299]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:581]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:584]
-INFO: [Synth 8-256] done synthesizing module 'xbip_pipe_v3_0_viv__parameterized8' (2#1) [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:299]
-INFO: [Synth 8-3491] module 'pipe_add' declared at 'c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:37252' bound to instance 'i_accum' of component 'pipe_add' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:41338]
-INFO: [Synth 8-638] synthesizing module 'pipe_add' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:37269]
-INFO: [Synth 8-256] done synthesizing module 'pipe_add' (3#1) [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:37269]
-INFO: [Synth 8-256] done synthesizing module 'accum' (4#1) [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:40957]
-INFO: [Synth 8-3491] module 'dither_wrap' declared at 'c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:36880' bound to instance 'i_dither' of component 'dither_wrap' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:45271]
-INFO: [Synth 8-638] synthesizing module 'dither_wrap' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:36902]
-INFO: [Synth 8-256] done synthesizing module 'dither_wrap' (5#1) [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:36902]
-INFO: [Synth 8-3491] module 'xbip_pipe_v3_0_viv' declared at 'c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:274' bound to instance 'i_ph_adj_pipe' of component 'xbip_pipe_v3_0_viv' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:45324]
-INFO: [Synth 8-638] synthesizing module 'xbip_pipe_v3_0_viv__parameterized10' [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:299]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:581]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:584]
-INFO: [Synth 8-256] done synthesizing module 'xbip_pipe_v3_0_viv__parameterized10' (5#1) [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:299]
-INFO: [Synth 8-3491] module 'pipe_add' declared at 'c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:37252' bound to instance 'i_dither_add' of component 'pipe_add' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:45344]
-INFO: [Synth 8-3491] module 'xbip_pipe_v3_0_viv' declared at 'c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:274' bound to instance 'i_dither_pipe' of component 'xbip_pipe_v3_0_viv' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:45363]
-INFO: [Synth 8-638] synthesizing module 'xbip_pipe_v3_0_viv__parameterized12' [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:299]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:581]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:584]
-INFO: [Synth 8-256] done synthesizing module 'xbip_pipe_v3_0_viv__parameterized12' (5#1) [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:299]
-INFO: [Synth 8-3491] module 'xbip_pipe_v3_0_viv' declared at 'c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:274' bound to instance 'i_phase_final_speedup' of component 'xbip_pipe_v3_0_viv' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:45560]
-INFO: [Synth 8-638] synthesizing module 'xbip_pipe_v3_0_viv__parameterized14' [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:299]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:581]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:584]
-INFO: [Synth 8-256] done synthesizing module 'xbip_pipe_v3_0_viv__parameterized14' (5#1) [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:299]
-INFO: [Synth 8-3491] module 'sin_cos' declared at 'c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:37730' bound to instance 'i_rom' of component 'sin_cos' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:45632]
-INFO: [Synth 8-638] synthesizing module 'sin_cos' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:37764]
-INFO: [Synth 8-5534] Detected attribute (* rom_style = "distributed" *) [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:38071]
-INFO: [Synth 8-5534] Detected attribute (* rom_style = "block" *) [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:38072]
-INFO: [Synth 8-3491] module 'xbip_pipe_v3_0_viv' declared at 'c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:274' bound to instance 'i_addr_reg_c' of component 'xbip_pipe_v3_0_viv' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:38999]
-INFO: [Synth 8-638] synthesizing module 'xbip_pipe_v3_0_viv__parameterized16' [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:299]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:581]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:584]
-INFO: [Synth 8-256] done synthesizing module 'xbip_pipe_v3_0_viv__parameterized16' (5#1) [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:299]
-INFO: [Synth 8-3491] module 'xbip_pipe_v3_0_viv' declared at 'c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:274' bound to instance 'i_rom_reg_a' of component 'xbip_pipe_v3_0_viv' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:39090]
-INFO: [Synth 8-638] synthesizing module 'xbip_pipe_v3_0_viv__parameterized18' [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:299]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:581]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:584]
-INFO: [Synth 8-256] done synthesizing module 'xbip_pipe_v3_0_viv__parameterized18' (5#1) [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:299]
-INFO: [Synth 8-3491] module 'xbip_pipe_v3_0_viv' declared at 'c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:274' bound to instance 'i_rom_reg_b' of component 'xbip_pipe_v3_0_viv' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:39102]
-INFO: [Synth 8-638] synthesizing module 'xbip_pipe_v3_0_viv__parameterized20' [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:299]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:581]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:584]
-INFO: [Synth 8-256] done synthesizing module 'xbip_pipe_v3_0_viv__parameterized20' (5#1) [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:299]
-INFO: [Synth 8-3491] module 'xbip_pipe_v3_0_viv' declared at 'c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:274' bound to instance 'i_original_sin_ms' of component 'xbip_pipe_v3_0_viv' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:39248]
-INFO: [Synth 8-638] synthesizing module 'xbip_pipe_v3_0_viv__parameterized22' [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:299]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:581]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:584]
-INFO: [Synth 8-256] done synthesizing module 'xbip_pipe_v3_0_viv__parameterized22' (5#1) [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:299]
-INFO: [Synth 8-3491] module 'xbip_pipe_v3_0_viv' declared at 'c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:274' bound to instance 'i_original_sin_ls' of component 'xbip_pipe_v3_0_viv' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:39260]
-INFO: [Synth 8-638] synthesizing module 'xbip_pipe_v3_0_viv__parameterized24' [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:299]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:581]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:584]
+WARNING: [Synth 8-5640] Port 'debug_axi_pinc_in' is missing in component declaration [c:/modem/vivado/xc7k160t-IP/dds/synth/dds.vhd:75]
+WARNING: [Synth 8-5640] Port 'debug_axi_poff_in' is missing in component declaration [c:/modem/vivado/xc7k160t-IP/dds/synth/dds.vhd:75]
+WARNING: [Synth 8-5640] Port 'debug_axi_resync_in' is missing in component declaration [c:/modem/vivado/xc7k160t-IP/dds/synth/dds.vhd:75]
+WARNING: [Synth 8-5640] Port 'debug_axi_chan_in' is missing in component declaration [c:/modem/vivado/xc7k160t-IP/dds/synth/dds.vhd:75]
+WARNING: [Synth 8-5640] Port 'debug_core_nd' is missing in component declaration [c:/modem/vivado/xc7k160t-IP/dds/synth/dds.vhd:75]
+WARNING: [Synth 8-5640] Port 'debug_phase' is missing in component declaration [c:/modem/vivado/xc7k160t-IP/dds/synth/dds.vhd:75]
+WARNING: [Synth 8-5640] Port 'debug_phase_nd' is missing in component declaration [c:/modem/vivado/xc7k160t-IP/dds/synth/dds.vhd:75]
+INFO: [Synth 8-3491] module 'dds_compiler_v6_0_11' declared at 'c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0.vhd:122' bound to instance 'U0' of component 'dds_compiler_v6_0_11' [c:/modem/vivado/xc7k160t-IP/dds/synth/dds.vhd:173]
+INFO: [Synth 8-638] synthesizing module 'dds_compiler_v6_0_11' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0.vhd:232]
+INFO: [Synth 8-3491] module 'dds_compiler_v6_0_11_viv' declared at 'c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:45951' bound to instance 'i_synth' of component 'dds_compiler_v6_0_11_viv' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0.vhd:239]
+INFO: [Synth 8-638] synthesizing module 'dds_compiler_v6_0_11_viv' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:46075]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:2064]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:2490]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:1313]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:1318]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:1323]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:1328]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:1333]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:1338]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:1343]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:1355]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:1363]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:1370]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:1375]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:1380]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:1385]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:1390]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:1394]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:1398]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:1403]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:1408]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:1414]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:1427]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:1432]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:1436]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:1440]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:1447]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:1454]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:1459]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:1463]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:1468]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:1473]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:1480]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:1484]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:1488]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:1493]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:1497]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:1501]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:1505]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:1523]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:1553]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:1558]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:1567]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:1594]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:1610]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:1615]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:1618]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:1621]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:1624]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:1764]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:1797]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:1804]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:3144]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:3612]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:3627]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:3631]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:3636]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0_5/hdl/xbip_utils_v3_0_vh_rfs.vhd:2954]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:3033]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0_5/hdl/xbip_utils_v3_0_vh_rfs.vhd:594]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0_5/hdl/xbip_utils_v3_0_vh_rfs.vhd:597]
+INFO: [Synth 8-638] synthesizing module 'xbip_pipe_v3_0_1_viv' [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:309]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0_5/hdl/xbip_utils_v3_0_vh_rfs.vhd:594]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0_5/hdl/xbip_utils_v3_0_vh_rfs.vhd:597]
+INFO: [Synth 8-256] done synthesizing module 'xbip_pipe_v3_0_1_viv' (1#1) [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:309]
+INFO: [Synth 8-638] synthesizing module 'xbip_pipe_v3_0_1_viv__parameterized0' [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:309]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0_5/hdl/xbip_utils_v3_0_vh_rfs.vhd:594]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0_5/hdl/xbip_utils_v3_0_vh_rfs.vhd:597]
+INFO: [Synth 8-256] done synthesizing module 'xbip_pipe_v3_0_1_viv__parameterized0' (1#1) [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:309]
+INFO: [Synth 8-638] synthesizing module 'dds_compiler_v6_0_11_core' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:44821]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0_5/hdl/xbip_utils_v3_0_vh_rfs.vhd:2954]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:2064]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:2490]
+INFO: [Synth 8-638] synthesizing module 'dds_compiler_v6_0_11_rdy' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:44565]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0_5/hdl/xbip_utils_v3_0_vh_rfs.vhd:2954]
+INFO: [Synth 8-3491] module 'xbip_pipe_v3_0_1_viv' declared at 'c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:284' bound to instance 'i_rdy' of component 'xbip_pipe_v3_0_1_viv' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:44647]
+INFO: [Synth 8-638] synthesizing module 'xbip_pipe_v3_0_1_viv__parameterized2' [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:309]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0_5/hdl/xbip_utils_v3_0_vh_rfs.vhd:594]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0_5/hdl/xbip_utils_v3_0_vh_rfs.vhd:597]
+INFO: [Synth 8-256] done synthesizing module 'xbip_pipe_v3_0_1_viv__parameterized2' (1#1) [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:309]
+INFO: [Synth 8-256] done synthesizing module 'dds_compiler_v6_0_11_rdy' (2#1) [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:44565]
+INFO: [Synth 8-638] synthesizing module 'accum' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:40967]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0_5/hdl/xbip_utils_v3_0_vh_rfs.vhd:2954]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:3033]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0_5/hdl/xbip_utils_v3_0_vh_rfs.vhd:594]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0_5/hdl/xbip_utils_v3_0_vh_rfs.vhd:597]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:3033]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0_5/hdl/xbip_utils_v3_0_vh_rfs.vhd:594]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0_5/hdl/xbip_utils_v3_0_vh_rfs.vhd:597]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:41284]
+INFO: [Synth 8-3491] module 'xbip_pipe_v3_0_1_viv' declared at 'c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:284' bound to instance 'i_ph_inc_ctrl2dsp_speedup' of component 'xbip_pipe_v3_0_1_viv' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:41287]
+INFO: [Synth 8-638] synthesizing module 'xbip_pipe_v3_0_1_viv__parameterized4' [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:309]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0_5/hdl/xbip_utils_v3_0_vh_rfs.vhd:594]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0_5/hdl/xbip_utils_v3_0_vh_rfs.vhd:597]
+INFO: [Synth 8-256] done synthesizing module 'xbip_pipe_v3_0_1_viv__parameterized4' (2#1) [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:309]
+INFO: [Synth 8-3491] module 'xbip_pipe_v3_0_1_viv' declared at 'c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:284' bound to instance 'i_resync_ctrl2dsp_speedup' of component 'xbip_pipe_v3_0_1_viv' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:41301]
+INFO: [Synth 8-638] synthesizing module 'xbip_pipe_v3_0_1_viv__parameterized6' [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:309]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0_5/hdl/xbip_utils_v3_0_vh_rfs.vhd:594]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0_5/hdl/xbip_utils_v3_0_vh_rfs.vhd:597]
+INFO: [Synth 8-256] done synthesizing module 'xbip_pipe_v3_0_1_viv__parameterized6' (2#1) [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:309]
+INFO: [Synth 8-3491] module 'xbip_pipe_v3_0_1_viv' declared at 'c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:284' bound to instance 'i_phase_acc' of component 'xbip_pipe_v3_0_1_viv' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:41318]
+INFO: [Synth 8-638] synthesizing module 'xbip_pipe_v3_0_1_viv__parameterized8' [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:309]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0_5/hdl/xbip_utils_v3_0_vh_rfs.vhd:594]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0_5/hdl/xbip_utils_v3_0_vh_rfs.vhd:597]
+INFO: [Synth 8-256] done synthesizing module 'xbip_pipe_v3_0_1_viv__parameterized8' (2#1) [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:309]
+INFO: [Synth 8-3491] module 'pipe_add' declared at 'c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:37262' bound to instance 'i_accum' of component 'pipe_add' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:41348]
+INFO: [Synth 8-638] synthesizing module 'pipe_add' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:37279]
+INFO: [Synth 8-256] done synthesizing module 'pipe_add' (3#1) [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:37279]
+INFO: [Synth 8-256] done synthesizing module 'accum' (4#1) [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:40967]
+INFO: [Synth 8-3491] module 'dither_wrap' declared at 'c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:36890' bound to instance 'i_dither' of component 'dither_wrap' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:45281]
+INFO: [Synth 8-638] synthesizing module 'dither_wrap' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:36912]
+INFO: [Synth 8-256] done synthesizing module 'dither_wrap' (5#1) [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:36912]
+INFO: [Synth 8-3491] module 'xbip_pipe_v3_0_1_viv' declared at 'c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:284' bound to instance 'i_ph_adj_pipe' of component 'xbip_pipe_v3_0_1_viv' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:45334]
+INFO: [Synth 8-638] synthesizing module 'xbip_pipe_v3_0_1_viv__parameterized10' [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:309]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0_5/hdl/xbip_utils_v3_0_vh_rfs.vhd:594]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0_5/hdl/xbip_utils_v3_0_vh_rfs.vhd:597]
+INFO: [Synth 8-256] done synthesizing module 'xbip_pipe_v3_0_1_viv__parameterized10' (5#1) [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:309]
+INFO: [Synth 8-3491] module 'pipe_add' declared at 'c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:37262' bound to instance 'i_dither_add' of component 'pipe_add' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:45354]
+INFO: [Synth 8-3491] module 'xbip_pipe_v3_0_1_viv' declared at 'c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:284' bound to instance 'i_dither_pipe' of component 'xbip_pipe_v3_0_1_viv' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:45373]
+INFO: [Synth 8-638] synthesizing module 'xbip_pipe_v3_0_1_viv__parameterized12' [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:309]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0_5/hdl/xbip_utils_v3_0_vh_rfs.vhd:594]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0_5/hdl/xbip_utils_v3_0_vh_rfs.vhd:597]
+INFO: [Synth 8-256] done synthesizing module 'xbip_pipe_v3_0_1_viv__parameterized12' (5#1) [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:309]
+INFO: [Synth 8-3491] module 'xbip_pipe_v3_0_1_viv' declared at 'c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:284' bound to instance 'i_phase_final_speedup' of component 'xbip_pipe_v3_0_1_viv' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:45570]
+INFO: [Synth 8-638] synthesizing module 'xbip_pipe_v3_0_1_viv__parameterized14' [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:309]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0_5/hdl/xbip_utils_v3_0_vh_rfs.vhd:594]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0_5/hdl/xbip_utils_v3_0_vh_rfs.vhd:597]
+INFO: [Synth 8-256] done synthesizing module 'xbip_pipe_v3_0_1_viv__parameterized14' (5#1) [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:309]
+INFO: [Synth 8-3491] module 'sin_cos' declared at 'c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:37740' bound to instance 'i_rom' of component 'sin_cos' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:45642]
+INFO: [Synth 8-638] synthesizing module 'sin_cos' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:37774]
+INFO: [Synth 8-5534] Detected attribute (* rom_style = "distributed" *) [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:38081]
+INFO: [Synth 8-5534] Detected attribute (* rom_style = "block" *) [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:38082]
+INFO: [Synth 8-3491] module 'xbip_pipe_v3_0_1_viv' declared at 'c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:284' bound to instance 'i_addr_reg_c' of component 'xbip_pipe_v3_0_1_viv' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:39009]
+INFO: [Synth 8-638] synthesizing module 'xbip_pipe_v3_0_1_viv__parameterized16' [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:309]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0_5/hdl/xbip_utils_v3_0_vh_rfs.vhd:594]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0_5/hdl/xbip_utils_v3_0_vh_rfs.vhd:597]
+INFO: [Synth 8-256] done synthesizing module 'xbip_pipe_v3_0_1_viv__parameterized16' (5#1) [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:309]
+INFO: [Synth 8-3491] module 'xbip_pipe_v3_0_1_viv' declared at 'c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:284' bound to instance 'i_rom_reg_a' of component 'xbip_pipe_v3_0_1_viv' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:39100]
+INFO: [Synth 8-638] synthesizing module 'xbip_pipe_v3_0_1_viv__parameterized18' [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:309]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0_5/hdl/xbip_utils_v3_0_vh_rfs.vhd:594]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0_5/hdl/xbip_utils_v3_0_vh_rfs.vhd:597]
+INFO: [Synth 8-256] done synthesizing module 'xbip_pipe_v3_0_1_viv__parameterized18' (5#1) [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:309]
+INFO: [Synth 8-3491] module 'xbip_pipe_v3_0_1_viv' declared at 'c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:284' bound to instance 'i_rom_reg_b' of component 'xbip_pipe_v3_0_1_viv' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:39112]
+INFO: [Synth 8-638] synthesizing module 'xbip_pipe_v3_0_1_viv__parameterized20' [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:309]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0_5/hdl/xbip_utils_v3_0_vh_rfs.vhd:594]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0_5/hdl/xbip_utils_v3_0_vh_rfs.vhd:597]
+INFO: [Synth 8-256] done synthesizing module 'xbip_pipe_v3_0_1_viv__parameterized20' (5#1) [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:309]
+INFO: [Synth 8-3491] module 'xbip_pipe_v3_0_1_viv' declared at 'c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:284' bound to instance 'i_original_sin_ms' of component 'xbip_pipe_v3_0_1_viv' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:39258]
+INFO: [Synth 8-638] synthesizing module 'xbip_pipe_v3_0_1_viv__parameterized22' [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:309]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0_5/hdl/xbip_utils_v3_0_vh_rfs.vhd:594]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0_5/hdl/xbip_utils_v3_0_vh_rfs.vhd:597]
+INFO: [Synth 8-256] done synthesizing module 'xbip_pipe_v3_0_1_viv__parameterized22' (5#1) [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:309]
+INFO: [Synth 8-3491] module 'xbip_pipe_v3_0_1_viv' declared at 'c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:284' bound to instance 'i_original_sin_ls' of component 'xbip_pipe_v3_0_1_viv' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:39270]
+INFO: [Synth 8-638] synthesizing module 'xbip_pipe_v3_0_1_viv__parameterized24' [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:309]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0_5/hdl/xbip_utils_v3_0_vh_rfs.vhd:594]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/dds/xbip_utils_v3_0_5/hdl/xbip_utils_v3_0_vh_rfs.vhd:597]
 INFO: [Common 17-14] Message 'Synth 8-312' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
-INFO: [Synth 8-256] done synthesizing module 'xbip_pipe_v3_0_viv__parameterized24' (5#1) [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:299]
-INFO: [Synth 8-3491] module 'xbip_pipe_v3_0_viv' declared at 'c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:274' bound to instance 'i_original_cos_ms' of component 'xbip_pipe_v3_0_viv' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:39272]
-INFO: [Synth 8-638] synthesizing module 'xbip_pipe_v3_0_viv__parameterized26' [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:299]
-INFO: [Synth 8-256] done synthesizing module 'xbip_pipe_v3_0_viv__parameterized26' (5#1) [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:299]
-INFO: [Synth 8-3491] module 'xbip_pipe_v3_0_viv' declared at 'c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:274' bound to instance 'i_original_cos_ls' of component 'xbip_pipe_v3_0_viv' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:39284]
-INFO: [Synth 8-638] synthesizing module 'xbip_pipe_v3_0_viv__parameterized28' [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:299]
-INFO: [Synth 8-256] done synthesizing module 'xbip_pipe_v3_0_viv__parameterized28' (5#1) [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:299]
-INFO: [Synth 8-3491] module 'xbip_pipe_v3_0_viv' declared at 'c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:274' bound to instance 'i_cardinal_sin_ms' of component 'xbip_pipe_v3_0_viv' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:39303]
-INFO: [Synth 8-638] synthesizing module 'xbip_pipe_v3_0_viv__parameterized30' [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:299]
-INFO: [Synth 8-256] done synthesizing module 'xbip_pipe_v3_0_viv__parameterized30' (5#1) [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:299]
-INFO: [Synth 8-3491] module 'xbip_pipe_v3_0_viv' declared at 'c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:274' bound to instance 'i_cardinal_sin_ls' of component 'xbip_pipe_v3_0_viv' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:39315]
-INFO: [Synth 8-638] synthesizing module 'xbip_pipe_v3_0_viv__parameterized32' [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:299]
-INFO: [Synth 8-256] done synthesizing module 'xbip_pipe_v3_0_viv__parameterized32' (5#1) [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:299]
-INFO: [Synth 8-3491] module 'xbip_pipe_v3_0_viv' declared at 'c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:274' bound to instance 'i_cardinal_cos_ms' of component 'xbip_pipe_v3_0_viv' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:39327]
-INFO: [Synth 8-638] synthesizing module 'xbip_pipe_v3_0_viv__parameterized34' [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:299]
-INFO: [Synth 8-256] done synthesizing module 'xbip_pipe_v3_0_viv__parameterized34' (5#1) [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:299]
-INFO: [Synth 8-3491] module 'xbip_pipe_v3_0_viv' declared at 'c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:274' bound to instance 'i_cardinal_cos_ls' of component 'xbip_pipe_v3_0_viv' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:39339]
-INFO: [Synth 8-638] synthesizing module 'xbip_pipe_v3_0_viv__parameterized36' [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:299]
-INFO: [Synth 8-256] done synthesizing module 'xbip_pipe_v3_0_viv__parameterized36' (5#1) [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:299]
-INFO: [Synth 8-256] done synthesizing module 'sin_cos' (6#1) [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:37764]
-INFO: [Synth 8-3491] module 'xbip_pipe_v3_0_viv' declared at 'c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:274' bound to instance 'i_final_sin' of component 'xbip_pipe_v3_0_viv' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:45765]
-INFO: [Synth 8-638] synthesizing module 'xbip_pipe_v3_0_viv__parameterized38' [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:299]
-INFO: [Synth 8-256] done synthesizing module 'xbip_pipe_v3_0_viv__parameterized38' (6#1) [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:299]
-INFO: [Synth 8-3491] module 'xbip_pipe_v3_0_viv' declared at 'c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:274' bound to instance 'i_final_cos' of component 'xbip_pipe_v3_0_viv' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:45777]
-INFO: [Synth 8-638] synthesizing module 'xbip_pipe_v3_0_viv__parameterized40' [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:299]
-INFO: [Synth 8-256] done synthesizing module 'xbip_pipe_v3_0_viv__parameterized40' (6#1) [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:299]
-INFO: [Synth 8-3491] module 'xbip_pipe_v3_0_viv' declared at 'c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:274' bound to instance 'i_sin_op' of component 'xbip_pipe_v3_0_viv' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:45805]
-INFO: [Synth 8-638] synthesizing module 'xbip_pipe_v3_0_viv__parameterized42' [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:299]
-INFO: [Synth 8-256] done synthesizing module 'xbip_pipe_v3_0_viv__parameterized42' (6#1) [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:299]
-INFO: [Synth 8-3491] module 'xbip_pipe_v3_0_viv' declared at 'c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:274' bound to instance 'i_cos_op' of component 'xbip_pipe_v3_0_viv' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:45821]
-INFO: [Synth 8-638] synthesizing module 'xbip_pipe_v3_0_viv__parameterized44' [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:299]
-INFO: [Synth 8-256] done synthesizing module 'xbip_pipe_v3_0_viv__parameterized44' (6#1) [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0/hdl/xbip_pipe_v3_0_vh_rfs.vhd:299]
-WARNING: [Synth 8-3848] Net RFD in module/entity dds_compiler_v6_0_core does not have driver. [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:44799]
-WARNING: [Synth 8-3848] Net CHANNEL in module/entity dds_compiler_v6_0_core does not have driver. [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:44800]
-INFO: [Synth 8-256] done synthesizing module 'dds_compiler_v6_0_core' (7#1) [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:44811]
-WARNING: [Synth 8-3848] Net m_axis_data_tlast in module/entity dds_compiler_v6_0_viv does not have driver. [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:46022]
-WARNING: [Synth 8-3848] Net m_axis_data_tuser in module/entity dds_compiler_v6_0_viv does not have driver. [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:46023]
-WARNING: [Synth 8-3848] Net m_axis_phase_tdata in module/entity dds_compiler_v6_0_viv does not have driver. [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:46027]
-WARNING: [Synth 8-3848] Net m_axis_phase_tlast in module/entity dds_compiler_v6_0_viv does not have driver. [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:46028]
-WARNING: [Synth 8-3848] Net m_axis_phase_tuser in module/entity dds_compiler_v6_0_viv does not have driver. [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:46029]
-WARNING: [Synth 8-3848] Net s_phase_tlast in module/entity dds_compiler_v6_0_viv does not have driver. [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:46277]
-WARNING: [Synth 8-3848] Net dds_resync_in in module/entity dds_compiler_v6_0_viv does not have driver. [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:46250]
-WARNING: [Synth 8-3848] Net axi_phase_in in module/entity dds_compiler_v6_0_viv does not have driver. [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:46348]
-INFO: [Synth 8-256] done synthesizing module 'dds_compiler_v6_0_viv' (8#1) [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:46065]
-INFO: [Synth 8-256] done synthesizing module 'dds_compiler_v6_0' (9#1) [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0.vhd:222]
+INFO: [Synth 8-256] done synthesizing module 'xbip_pipe_v3_0_1_viv__parameterized24' (5#1) [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:309]
+INFO: [Synth 8-3491] module 'xbip_pipe_v3_0_1_viv' declared at 'c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:284' bound to instance 'i_original_cos_ms' of component 'xbip_pipe_v3_0_1_viv' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:39282]
+INFO: [Synth 8-638] synthesizing module 'xbip_pipe_v3_0_1_viv__parameterized26' [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:309]
+INFO: [Synth 8-256] done synthesizing module 'xbip_pipe_v3_0_1_viv__parameterized26' (5#1) [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:309]
+INFO: [Synth 8-3491] module 'xbip_pipe_v3_0_1_viv' declared at 'c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:284' bound to instance 'i_original_cos_ls' of component 'xbip_pipe_v3_0_1_viv' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:39294]
+INFO: [Synth 8-638] synthesizing module 'xbip_pipe_v3_0_1_viv__parameterized28' [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:309]
+INFO: [Synth 8-256] done synthesizing module 'xbip_pipe_v3_0_1_viv__parameterized28' (5#1) [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:309]
+INFO: [Synth 8-3491] module 'xbip_pipe_v3_0_1_viv' declared at 'c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:284' bound to instance 'i_cardinal_sin_ms' of component 'xbip_pipe_v3_0_1_viv' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:39313]
+INFO: [Synth 8-638] synthesizing module 'xbip_pipe_v3_0_1_viv__parameterized30' [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:309]
+INFO: [Synth 8-256] done synthesizing module 'xbip_pipe_v3_0_1_viv__parameterized30' (5#1) [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:309]
+INFO: [Synth 8-3491] module 'xbip_pipe_v3_0_1_viv' declared at 'c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:284' bound to instance 'i_cardinal_sin_ls' of component 'xbip_pipe_v3_0_1_viv' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:39325]
+INFO: [Synth 8-638] synthesizing module 'xbip_pipe_v3_0_1_viv__parameterized32' [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:309]
+INFO: [Synth 8-256] done synthesizing module 'xbip_pipe_v3_0_1_viv__parameterized32' (5#1) [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:309]
+INFO: [Synth 8-3491] module 'xbip_pipe_v3_0_1_viv' declared at 'c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:284' bound to instance 'i_cardinal_cos_ms' of component 'xbip_pipe_v3_0_1_viv' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:39337]
+INFO: [Synth 8-638] synthesizing module 'xbip_pipe_v3_0_1_viv__parameterized34' [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:309]
+INFO: [Synth 8-256] done synthesizing module 'xbip_pipe_v3_0_1_viv__parameterized34' (5#1) [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:309]
+INFO: [Synth 8-3491] module 'xbip_pipe_v3_0_1_viv' declared at 'c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:284' bound to instance 'i_cardinal_cos_ls' of component 'xbip_pipe_v3_0_1_viv' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:39349]
+INFO: [Synth 8-638] synthesizing module 'xbip_pipe_v3_0_1_viv__parameterized36' [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:309]
+INFO: [Synth 8-256] done synthesizing module 'xbip_pipe_v3_0_1_viv__parameterized36' (5#1) [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:309]
+INFO: [Synth 8-256] done synthesizing module 'sin_cos' (6#1) [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:37774]
+INFO: [Synth 8-3491] module 'xbip_pipe_v3_0_1_viv' declared at 'c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:284' bound to instance 'i_final_sin' of component 'xbip_pipe_v3_0_1_viv' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:45775]
+INFO: [Synth 8-638] synthesizing module 'xbip_pipe_v3_0_1_viv__parameterized38' [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:309]
+INFO: [Synth 8-256] done synthesizing module 'xbip_pipe_v3_0_1_viv__parameterized38' (6#1) [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:309]
+INFO: [Synth 8-3491] module 'xbip_pipe_v3_0_1_viv' declared at 'c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:284' bound to instance 'i_final_cos' of component 'xbip_pipe_v3_0_1_viv' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:45787]
+INFO: [Synth 8-638] synthesizing module 'xbip_pipe_v3_0_1_viv__parameterized40' [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:309]
+INFO: [Synth 8-256] done synthesizing module 'xbip_pipe_v3_0_1_viv__parameterized40' (6#1) [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:309]
+INFO: [Synth 8-3491] module 'xbip_pipe_v3_0_1_viv' declared at 'c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:284' bound to instance 'i_sin_op' of component 'xbip_pipe_v3_0_1_viv' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:45815]
+INFO: [Synth 8-638] synthesizing module 'xbip_pipe_v3_0_1_viv__parameterized42' [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:309]
+INFO: [Synth 8-256] done synthesizing module 'xbip_pipe_v3_0_1_viv__parameterized42' (6#1) [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:309]
+INFO: [Synth 8-3491] module 'xbip_pipe_v3_0_1_viv' declared at 'c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:284' bound to instance 'i_cos_op' of component 'xbip_pipe_v3_0_1_viv' [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:45831]
+INFO: [Synth 8-638] synthesizing module 'xbip_pipe_v3_0_1_viv__parameterized44' [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:309]
+INFO: [Synth 8-256] done synthesizing module 'xbip_pipe_v3_0_1_viv__parameterized44' (6#1) [c:/modem/vivado/xc7k160t-IP/dds/xbip_pipe_v3_0_1/hdl/xbip_pipe_v3_0_vh_rfs.vhd:309]
+WARNING: [Synth 8-3848] Net RFD in module/entity dds_compiler_v6_0_11_core does not have driver. [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:44809]
+WARNING: [Synth 8-3848] Net CHANNEL in module/entity dds_compiler_v6_0_11_core does not have driver. [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:44810]
+INFO: [Synth 8-256] done synthesizing module 'dds_compiler_v6_0_11_core' (7#1) [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:44821]
+WARNING: [Synth 8-3848] Net m_axis_data_tlast in module/entity dds_compiler_v6_0_11_viv does not have driver. [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:46032]
+WARNING: [Synth 8-3848] Net m_axis_data_tuser in module/entity dds_compiler_v6_0_11_viv does not have driver. [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:46033]
+WARNING: [Synth 8-3848] Net m_axis_phase_tdata in module/entity dds_compiler_v6_0_11_viv does not have driver. [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:46037]
+WARNING: [Synth 8-3848] Net m_axis_phase_tlast in module/entity dds_compiler_v6_0_11_viv does not have driver. [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:46038]
+WARNING: [Synth 8-3848] Net m_axis_phase_tuser in module/entity dds_compiler_v6_0_11_viv does not have driver. [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:46039]
+WARNING: [Synth 8-3848] Net s_phase_tlast in module/entity dds_compiler_v6_0_11_viv does not have driver. [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:46287]
+WARNING: [Synth 8-3848] Net dds_resync_in in module/entity dds_compiler_v6_0_11_viv does not have driver. [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:46260]
+WARNING: [Synth 8-3848] Net axi_phase_in in module/entity dds_compiler_v6_0_11_viv does not have driver. [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:46358]
+INFO: [Synth 8-256] done synthesizing module 'dds_compiler_v6_0_11_viv' (8#1) [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:46075]
+INFO: [Synth 8-256] done synthesizing module 'dds_compiler_v6_0_11' (9#1) [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0.vhd:232]
 INFO: [Synth 8-256] done synthesizing module 'dds' (10#1) [c:/modem/vivado/xc7k160t-IP/dds/synth/dds.vhd:71]
 ---------------------------------------------------------------------------------
-Finished RTL Elaboration : Time (s): cpu = 00:00:46 ; elapsed = 00:00:48 . Memory (MB): peak = 429.641 ; gain = 250.406
+Finished RTL Elaboration : Time (s): cpu = 00:01:30 ; elapsed = 00:01:33 . Memory (MB): peak = 468.848 ; gain = 296.637
 ---------------------------------------------------------------------------------
 
 Report Check Netlist: 
@@ -242,48 +249,48 @@ Report Check Netlist:
 +------+------------------+-------+---------+-------+------------------+
 |1     |multi_driven_nets |      0|        0|Passed |Multi driven nets |
 +------+------------------+-------+---------+-------+------------------+
-INFO: [Synth 8-3295] tying undriven pin \I_PHASEGEN.i_conventional_accum.i_fabric.i_dither_add.i_dither_add :B[6] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:45344]
-INFO: [Synth 8-3295] tying undriven pin \I_PHASEGEN.i_conventional_accum.i_fabric.i_dither_add.i_dither_add :B[5] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:45344]
-INFO: [Synth 8-3295] tying undriven pin \I_PHASEGEN.i_conventional_accum.i_fabric.i_dither_add.i_dither_add :B[4] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:45344]
-INFO: [Synth 8-3295] tying undriven pin \I_PHASEGEN.i_conventional_accum.i_fabric.i_dither_add.i_dither_add :B[3] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:45344]
-INFO: [Synth 8-3295] tying undriven pin \I_PHASEGEN.i_conventional_accum.i_fabric.i_dither_add.i_dither_add :B[2] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:45344]
-INFO: [Synth 8-3295] tying undriven pin \I_PHASEGEN.i_conventional_accum.i_fabric.i_dither_add.i_dither_add :B[1] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:45344]
-INFO: [Synth 8-3295] tying undriven pin \I_PHASEGEN.i_conventional_accum.i_fabric.i_dither_add.i_dither_add :B[0] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:45344]
-INFO: [Synth 8-3295] tying undriven pin i_dds:RESYNC_IN to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:47033]
-INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[31] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:47033]
-INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[30] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:47033]
-INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[29] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:47033]
-INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[28] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:47033]
-INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[27] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:47033]
-INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[26] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:47033]
-INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[25] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:47033]
-INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[24] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:47033]
-INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[23] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:47033]
-INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[22] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:47033]
-INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[21] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:47033]
-INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[20] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:47033]
-INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[19] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:47033]
-INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[18] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:47033]
-INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[17] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:47033]
-INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[16] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:47033]
-INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[15] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:47033]
-INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[14] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:47033]
-INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[13] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:47033]
-INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[12] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:47033]
-INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[11] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:47033]
-INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[10] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:47033]
-INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[9] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:47033]
-INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[8] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:47033]
-INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[7] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:47033]
-INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[6] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:47033]
-INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[5] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:47033]
-INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[4] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:47033]
-INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[3] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:47033]
-INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[2] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:47033]
-INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[1] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:47033]
-INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[0] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd:47033]
+INFO: [Synth 8-3295] tying undriven pin \I_PHASEGEN.i_conventional_accum.i_fabric.i_dither_add.i_dither_add :B[6] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:45354]
+INFO: [Synth 8-3295] tying undriven pin \I_PHASEGEN.i_conventional_accum.i_fabric.i_dither_add.i_dither_add :B[5] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:45354]
+INFO: [Synth 8-3295] tying undriven pin \I_PHASEGEN.i_conventional_accum.i_fabric.i_dither_add.i_dither_add :B[4] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:45354]
+INFO: [Synth 8-3295] tying undriven pin \I_PHASEGEN.i_conventional_accum.i_fabric.i_dither_add.i_dither_add :B[3] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:45354]
+INFO: [Synth 8-3295] tying undriven pin \I_PHASEGEN.i_conventional_accum.i_fabric.i_dither_add.i_dither_add :B[2] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:45354]
+INFO: [Synth 8-3295] tying undriven pin \I_PHASEGEN.i_conventional_accum.i_fabric.i_dither_add.i_dither_add :B[1] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:45354]
+INFO: [Synth 8-3295] tying undriven pin \I_PHASEGEN.i_conventional_accum.i_fabric.i_dither_add.i_dither_add :B[0] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:45354]
+INFO: [Synth 8-3295] tying undriven pin i_dds:RESYNC_IN to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:47043]
+INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[31] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:47043]
+INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[30] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:47043]
+INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[29] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:47043]
+INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[28] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:47043]
+INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[27] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:47043]
+INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[26] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:47043]
+INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[25] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:47043]
+INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[24] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:47043]
+INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[23] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:47043]
+INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[22] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:47043]
+INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[21] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:47043]
+INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[20] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:47043]
+INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[19] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:47043]
+INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[18] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:47043]
+INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[17] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:47043]
+INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[16] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:47043]
+INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[15] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:47043]
+INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[14] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:47043]
+INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[13] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:47043]
+INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[12] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:47043]
+INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[11] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:47043]
+INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[10] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:47043]
+INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[9] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:47043]
+INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[8] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:47043]
+INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[7] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:47043]
+INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[6] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:47043]
+INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[5] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:47043]
+INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[4] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:47043]
+INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[3] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:47043]
+INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[2] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:47043]
+INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[1] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:47043]
+INFO: [Synth 8-3295] tying undriven pin i_dds:PHASE_IN[0] to constant 0 [c:/modem/vivado/xc7k160t-IP/dds/dds_compiler_v6_0_11/hdl/dds_compiler_v6_0_vh_rfs.vhd:47043]
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:46 ; elapsed = 00:00:48 . Memory (MB): peak = 429.641 ; gain = 250.406
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:01:30 ; elapsed = 00:01:33 . Memory (MB): peak = 468.848 ; gain = 296.637
 ---------------------------------------------------------------------------------
 INFO: [Device 21-403] Loading part xc7k160tfbg676-1
 INFO: [Project 1-570] Preparing netlist for logic optimization
@@ -299,28 +306,28 @@ Completed Processing XDC Constraints
 INFO: [Project 1-111] Unisim Transformation Summary:
 No Unisim elements were transformed.
 
-Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.010 . Memory (MB): peak = 628.453 ; gain = 0.000
+Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.030 . Memory (MB): peak = 655.797 ; gain = 0.000
 ---------------------------------------------------------------------------------
-Finished Constraint Validation : Time (s): cpu = 00:00:53 ; elapsed = 00:00:55 . Memory (MB): peak = 628.453 ; gain = 449.219
+Finished Constraint Validation : Time (s): cpu = 00:01:41 ; elapsed = 00:01:45 . Memory (MB): peak = 655.797 ; gain = 483.586
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Loading Part and Timing Information
 ---------------------------------------------------------------------------------
 Loading part: xc7k160tfbg676-1
 ---------------------------------------------------------------------------------
-Finished Loading Part and Timing Information : Time (s): cpu = 00:00:53 ; elapsed = 00:00:55 . Memory (MB): peak = 628.453 ; gain = 449.219
+Finished Loading Part and Timing Information : Time (s): cpu = 00:01:41 ; elapsed = 00:01:45 . Memory (MB): peak = 655.797 ; gain = 483.586
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Applying 'set_property' XDC Constraints
 ---------------------------------------------------------------------------------
-Applied set_property DONT_TOUCH = true for U0. (constraint file  C:/modem/vivado/xc7k160t-IP/managed_ip_project/managed_ip_project.runs/dds_synth_1/dont_touch.xdc, line 9).
+Applied set_property DONT_TOUCH = true for U0. (constraint file  auto generated constraint, line ).
 ---------------------------------------------------------------------------------
-Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:53 ; elapsed = 00:00:55 . Memory (MB): peak = 628.453 ; gain = 449.219
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:01:41 ; elapsed = 00:01:45 . Memory (MB): peak = 655.797 ; gain = 483.586
 ---------------------------------------------------------------------------------
 INFO: [Synth 8-5547] Trying to map ROM "sin_cos_lut" into Block RAM due to explicit "ram_style" or "rom_style" specification
 INFO: [Synth 8-5547] Trying to map ROM "sin_cos_lut" into Block RAM due to explicit "ram_style" or "rom_style" specification
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:55 ; elapsed = 00:00:57 . Memory (MB): peak = 628.453 ; gain = 449.219
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:01:45 ; elapsed = 00:01:49 . Memory (MB): peak = 655.797 ; gain = 483.586
 ---------------------------------------------------------------------------------
 
 Report RTL Partitions: 
@@ -349,16 +356,16 @@ BRAMs: 650 (col length: RAMB18 100 RAMB36 50)
 ---------------------------------------------------------------------------------
 Finished Part Resource Summary
 ---------------------------------------------------------------------------------
-Start Parallel Synthesis Optimization  : Time (s): cpu = 00:00:55 ; elapsed = 00:00:58 . Memory (MB): peak = 628.453 ; gain = 449.219
+Start Parallel Synthesis Optimization  : Time (s): cpu = 00:01:45 ; elapsed = 00:01:49 . Memory (MB): peak = 655.797 ; gain = 483.586
 ---------------------------------------------------------------------------------
 Start Cross Boundary Optimization
 ---------------------------------------------------------------------------------
 INFO: [Synth 8-5547] Trying to map ROM "p_0_out" into Block RAM due to explicit "ram_style" or "rom_style" specification
 INFO: [Synth 8-5547] Trying to map ROM "p_0_out" into Block RAM due to explicit "ram_style" or "rom_style" specification
 ---------------------------------------------------------------------------------
-Finished Cross Boundary Optimization : Time (s): cpu = 00:00:59 ; elapsed = 00:01:01 . Memory (MB): peak = 628.453 ; gain = 449.219
+Finished Cross Boundary Optimization : Time (s): cpu = 00:01:51 ; elapsed = 00:01:55 . Memory (MB): peak = 655.797 ; gain = 483.586
 ---------------------------------------------------------------------------------
-Finished Parallel Reinference  : Time (s): cpu = 00:00:59 ; elapsed = 00:01:01 . Memory (MB): peak = 628.453 ; gain = 449.219
+Finished Parallel Reinference  : Time (s): cpu = 00:01:51 ; elapsed = 00:01:55 . Memory (MB): peak = 655.797 ; gain = 483.586
 
 Report RTL Partitions: 
 +-+--------------+------------+----------+
@@ -368,38 +375,8 @@ Report RTL Partitions:
 ---------------------------------------------------------------------------------
 Start Area Optimization
 ---------------------------------------------------------------------------------
----------------------------------------------------------------------------------
-Finished Area Optimization : Time (s): cpu = 00:00:59 ; elapsed = 00:01:02 . Memory (MB): peak = 628.453 ; gain = 449.219
----------------------------------------------------------------------------------
-Finished Parallel Area Optimization  : Time (s): cpu = 00:00:59 ; elapsed = 00:01:02 . Memory (MB): peak = 628.453 ; gain = 449.219
-
-Report RTL Partitions: 
-+-+--------------+------------+----------+
-| |RTL Partition |Replication |Instances |
-+-+--------------+------------+----------+
-+-+--------------+------------+----------+
-Finished Parallel Synthesis Optimization  : Time (s): cpu = 00:00:59 ; elapsed = 00:01:02 . Memory (MB): peak = 628.453 ; gain = 449.219
----------------------------------------------------------------------------------
-Start Timing Optimization
----------------------------------------------------------------------------------
----------------------------------------------------------------------------------
-Start Applying XDC Timing Constraints
----------------------------------------------------------------------------------
----------------------------------------------------------------------------------
-Finished Applying XDC Timing Constraints : Time (s): cpu = 00:01:09 ; elapsed = 00:01:12 . Memory (MB): peak = 628.453 ; gain = 449.219
----------------------------------------------------------------------------------
----------------------------------------------------------------------------------
-Finished Timing Optimization : Time (s): cpu = 00:01:10 ; elapsed = 00:01:12 . Memory (MB): peak = 632.410 ; gain = 453.176
----------------------------------------------------------------------------------
-
-Report RTL Partitions: 
-+-+--------------+------------+----------+
-| |RTL Partition |Replication |Instances |
-+-+--------------+------------+----------+
-+-+--------------+------------+----------+
----------------------------------------------------------------------------------
-Start Technology Mapping
----------------------------------------------------------------------------------
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (U0/i_synth/\has_s_phase.s_phase_tlast_checks.event_s_phase_tlast_unexpected_reg )
+INFO: [Synth 8-3332] Sequential element (\has_s_phase.s_phase_tlast_checks.event_s_phase_tlast_unexpected_reg ) is unused and will be removed from module dds_compiler_v6_0_11_viv.
 INFO: [Synth 8-3332] Sequential element (\i_medium_lfsr.lfsr_reg[34] ) is unused and will be removed from module dither_wrap.
 INFO: [Synth 8-3332] Sequential element (\i_medium_lfsr.lfsr_reg[33] ) is unused and will be removed from module dither_wrap.
 INFO: [Synth 8-3332] Sequential element (\i_medium_lfsr.lfsr_reg[32] ) is unused and will be removed from module dither_wrap.
@@ -416,9 +393,27 @@ INFO: [Synth 8-3332] Sequential element (\i_medium_lfsr.lfsr_reg[22] ) is unused
 INFO: [Synth 8-3332] Sequential element (\i_medium_lfsr.lfsr_reg[21] ) is unused and will be removed from module dither_wrap.
 INFO: [Synth 8-3332] Sequential element (\i_medium_lfsr.lfsr_reg[20] ) is unused and will be removed from module dither_wrap.
 INFO: [Synth 8-3332] Sequential element (\i_medium_lfsr.lfsr_reg[19] ) is unused and will be removed from module dither_wrap.
-INFO: [Synth 8-3332] Sequential element (\has_s_phase.s_phase_tlast_checks.event_s_phase_tlast_unexpected_reg ) is unused and will be removed from module dds_compiler_v6_0_viv.
 ---------------------------------------------------------------------------------
-Finished Technology Mapping : Time (s): cpu = 00:01:10 ; elapsed = 00:01:13 . Memory (MB): peak = 651.375 ; gain = 472.141
+Finished Area Optimization : Time (s): cpu = 00:01:51 ; elapsed = 00:01:55 . Memory (MB): peak = 655.797 ; gain = 483.586
+---------------------------------------------------------------------------------
+Finished Parallel Area Optimization  : Time (s): cpu = 00:01:51 ; elapsed = 00:01:55 . Memory (MB): peak = 655.797 ; gain = 483.586
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+---------------------------------------------------------------------------------
+Start Timing Optimization
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying XDC Timing Constraints
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:02:07 ; elapsed = 00:02:12 . Memory (MB): peak = 655.797 ; gain = 483.586
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Timing Optimization : Time (s): cpu = 00:02:07 ; elapsed = 00:02:12 . Memory (MB): peak = 667.047 ; gain = 494.836
 ---------------------------------------------------------------------------------
 
 Report RTL Partitions: 
@@ -427,7 +422,27 @@ Report RTL Partitions:
 +-+--------------+------------+----------+
 +-+--------------+------------+----------+
 ---------------------------------------------------------------------------------
+Start Technology Mapping
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Technology Mapping : Time (s): cpu = 00:02:08 ; elapsed = 00:02:13 . Memory (MB): peak = 685.672 ; gain = 513.461
+---------------------------------------------------------------------------------
+Finished Parallel Technology Mapping Optimization  : Time (s): cpu = 00:02:08 ; elapsed = 00:02:13 . Memory (MB): peak = 685.672 ; gain = 513.461
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+Finished Parallel Synthesis Optimization  : Time (s): cpu = 00:02:08 ; elapsed = 00:02:13 . Memory (MB): peak = 685.672 ; gain = 513.461
+---------------------------------------------------------------------------------
 Start IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Flattening Before IO Insertion
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Final Netlist Cleanup
@@ -436,7 +451,7 @@ Start Final Netlist Cleanup
 Finished Final Netlist Cleanup
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished IO Insertion : Time (s): cpu = 00:01:11 ; elapsed = 00:01:13 . Memory (MB): peak = 651.375 ; gain = 472.141
+Finished IO Insertion : Time (s): cpu = 00:02:09 ; elapsed = 00:02:14 . Memory (MB): peak = 685.672 ; gain = 513.461
 ---------------------------------------------------------------------------------
 
 Report Check Netlist: 
@@ -449,7 +464,7 @@ Report Check Netlist:
 Start Renaming Generated Instances
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Instances : Time (s): cpu = 00:01:11 ; elapsed = 00:01:13 . Memory (MB): peak = 651.375 ; gain = 472.141
+Finished Renaming Generated Instances : Time (s): cpu = 00:02:09 ; elapsed = 00:02:14 . Memory (MB): peak = 685.672 ; gain = 513.461
 ---------------------------------------------------------------------------------
 
 Report RTL Partitions: 
@@ -461,13 +476,25 @@ Report RTL Partitions:
 Start Rebuilding User Hierarchy
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Rebuilding User Hierarchy : Time (s): cpu = 00:01:11 ; elapsed = 00:01:13 . Memory (MB): peak = 651.375 ; gain = 472.141
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:02:09 ; elapsed = 00:02:14 . Memory (MB): peak = 685.672 ; gain = 513.461
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Start Renaming Generated Ports : Time (s): cpu = 00:01:11 ; elapsed = 00:01:13 . Memory (MB): peak = 651.375 ; gain = 472.141
+Start Renaming Generated Ports
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Ports : Time (s): cpu = 00:01:11 ; elapsed = 00:01:13 . Memory (MB): peak = 651.375 ; gain = 472.141
+Finished Renaming Generated Ports : Time (s): cpu = 00:02:09 ; elapsed = 00:02:14 . Memory (MB): peak = 685.672 ; gain = 513.461
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:02:09 ; elapsed = 00:02:14 . Memory (MB): peak = 685.672 ; gain = 513.461
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Nets
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Nets : Time (s): cpu = 00:02:09 ; elapsed = 00:02:14 . Memory (MB): peak = 685.672 ; gain = 513.461
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Writing Synthesis Report
@@ -480,36 +507,36 @@ Report BlackBoxes:
 +-+--------------+----------+
 
 Report Cell Usage: 
-+------+------------+------+
-|      |Cell        |Count |
-+------+------------+------+
-|1     |CARRY4      |    15|
-|2     |LUT1        |     3|
-|3     |LUT2        |    80|
-|4     |LUT3        |    51|
-|5     |LUT4        |    40|
-|6     |LUT5        |     8|
-|7     |LUT6        |    18|
-|8     |RAMB18E1_2  |     1|
-|9     |RAMB36E1_16 |     1|
-|10    |RAMB36E1_17 |     1|
-|11    |RAMB36E1_18 |     1|
-|12    |RAMB36E1_19 |     1|
-|13    |RAMB36E1_20 |     1|
-|14    |RAMB36E1_21 |     1|
-|15    |RAMB36E1_22 |     1|
-|16    |RAMB36E1_23 |     1|
-|17    |SRL16E      |     2|
-|18    |FDRE        |   272|
-+------+------------+------+
++------+-----------+------+
+|      |Cell       |Count |
++------+-----------+------+
+|1     |CARRY4     |    16|
+|2     |LUT1       |     3|
+|3     |LUT2       |    80|
+|4     |LUT3       |    47|
+|5     |LUT4       |    42|
+|6     |LUT5       |    11|
+|7     |LUT6       |    14|
+|8     |RAMB18E1   |     1|
+|9     |RAMB36E1   |     1|
+|10    |RAMB36E1_1 |     1|
+|11    |RAMB36E1_2 |     1|
+|12    |RAMB36E1_3 |     1|
+|13    |RAMB36E1_4 |     1|
+|14    |RAMB36E1_5 |     1|
+|15    |RAMB36E1_6 |     1|
+|16    |RAMB36E1_7 |     1|
+|17    |SRL16E     |     2|
+|18    |FDRE       |   272|
++------+-----------+------+
 ---------------------------------------------------------------------------------
-Finished Writing Synthesis Report : Time (s): cpu = 00:01:11 ; elapsed = 00:01:13 . Memory (MB): peak = 651.375 ; gain = 472.141
+Finished Writing Synthesis Report : Time (s): cpu = 00:02:09 ; elapsed = 00:02:14 . Memory (MB): peak = 685.672 ; gain = 513.461
 ---------------------------------------------------------------------------------
 Synthesis finished with 0 errors, 0 critical warnings and 0 warnings.
-Synthesis Optimization Runtime : Time (s): cpu = 00:00:20 ; elapsed = 00:01:07 . Memory (MB): peak = 651.375 ; gain = 246.621
-Synthesis Optimization Complete : Time (s): cpu = 00:01:11 ; elapsed = 00:01:14 . Memory (MB): peak = 651.375 ; gain = 472.141
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:32 ; elapsed = 00:02:02 . Memory (MB): peak = 685.672 ; gain = 280.578
+Synthesis Optimization Complete : Time (s): cpu = 00:02:09 ; elapsed = 00:02:15 . Memory (MB): peak = 685.672 ; gain = 513.461
 INFO: [Project 1-571] Translating synthesized netlist
-INFO: [Netlist 29-17] Analyzing 24 Unisim elements for replacement
+INFO: [Netlist 29-17] Analyzing 25 Unisim elements for replacement
 INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
 INFO: [Project 1-570] Preparing netlist for logic optimization
 Parsing XDC File [c:/modem/vivado/xc7k160t-IP/dds/dds_ooc.xdc] for cell 'U0'
@@ -519,9 +546,9 @@ INFO: [Project 1-111] Unisim Transformation Summary:
 No Unisim elements were transformed.
 
 INFO: [Common 17-83] Releasing license: Synthesis
-172 Infos, 115 Warnings, 0 Critical Warnings and 0 Errors encountered.
+174 Infos, 122 Warnings, 0 Critical Warnings and 0 Errors encountered.
 synth_design completed successfully
-synth_design: Time (s): cpu = 00:01:11 ; elapsed = 00:01:13 . Memory (MB): peak = 651.375 ; gain = 445.434
+synth_design: Time (s): cpu = 00:02:09 ; elapsed = 00:02:12 . Memory (MB): peak = 685.672 ; gain = 472.063
 INFO: [Coretcl 2-1174] Renamed 25 cell refs.
-report_utilization: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.050 . Memory (MB): peak = 651.375 ; gain = 0.000
-INFO: [Common 17-206] Exiting Vivado at Fri May 29 16:02:34 2015...
+report_utilization: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.040 . Memory (MB): peak = 685.672 ; gain = 0.000
+INFO: [Common 17-206] Exiting Vivado at Fri Oct 28 16:36:48 2016...

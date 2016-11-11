@@ -1,91 +1,96 @@
 #-----------------------------------------------------------
-# Vivado v2015.1 (64-bit)
-# SW Build 1215546 on Mon Apr 27 19:22:08 MDT 2015
-# IP Build 1209967 on Tue Apr 21 11:39:20 MDT 2015
-# Start of session at: Thu May 28 15:07:01 2015
-# Process ID: 3616
+# Vivado v2015.4 (64-bit)
+# SW Build 1412921 on Wed Nov 18 09:43:45 MST 2015
+# IP Build 1412160 on Tue Nov 17 13:47:24 MST 2015
+# Start of session at: Fri Oct 28 16:37:54 2016
+# Process ID: 11332
+# Current directory: C:/modem/vivado/xc7k160t-IP/managed_ip_project/managed_ip_project.runs/oneThird_synth_1
+# Command line: vivado.exe -log oneThird.vds -mode batch -messageDb vivado.pb -notrace -source oneThird.tcl
 # Log file: C:/modem/vivado/xc7k160t-IP/managed_ip_project/managed_ip_project.runs/oneThird_synth_1/oneThird.vds
 # Journal file: C:/modem/vivado/xc7k160t-IP/managed_ip_project/managed_ip_project.runs/oneThird_synth_1\vivado.jou
 #-----------------------------------------------------------
 source oneThird.tcl -notrace
 INFO: [IP_Flow 19-234] Refreshing IP repositories
 INFO: [IP_Flow 19-1704] No user IP repositories specified
-INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'C:/Xilinx/Vivado/2015.1/data/ip'.
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'C:/Xilinx/Vivado/2015.4/data/ip'.
 WARNING: [IP_Flow 19-3664] IP 'oneThird' generated file not found 'c:/modem/vivado/xc7k160t-IP/oneThird/oneThird.dcp'. Please regenerate to continue.
 WARNING: [IP_Flow 19-3664] IP 'oneThird' generated file not found 'c:/modem/vivado/xc7k160t-IP/oneThird/oneThird_stub.v'. Please regenerate to continue.
 WARNING: [IP_Flow 19-3664] IP 'oneThird' generated file not found 'c:/modem/vivado/xc7k160t-IP/oneThird/oneThird_stub.vhdl'. Please regenerate to continue.
-WARNING: [IP_Flow 19-3664] IP 'oneThird' generated file not found 'c:/modem/vivado/xc7k160t-IP/oneThird/oneThird_funcsim.v'. Please regenerate to continue.
-WARNING: [IP_Flow 19-3664] IP 'oneThird' generated file not found 'c:/modem/vivado/xc7k160t-IP/oneThird/oneThird_funcsim.vhdl'. Please regenerate to continue.
+WARNING: [IP_Flow 19-3664] IP 'oneThird' generated file not found 'c:/modem/vivado/xc7k160t-IP/oneThird/oneThird_sim_netlist.v'. Please regenerate to continue.
+WARNING: [IP_Flow 19-3664] IP 'oneThird' generated file not found 'c:/modem/vivado/xc7k160t-IP/oneThird/oneThird_sim_netlist.vhdl'. Please regenerate to continue.
 Command: synth_design -top oneThird -part xc7k160tfbg676-1 -mode out_of_context
 Starting synth_design
 Attempting to get a license for feature 'Synthesis' and/or device 'xc7k160t'
 INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7k160t'
+INFO: [Common 17-1223] The version limit for your license is '2016.05' and will expire in -150 days. A version limit expiration means that, although you may be able to continue to use the current version of tools or IP with this license, you will not be eligible for any updates or new releases.
 ---------------------------------------------------------------------------------
-Starting RTL Elaboration : Time (s): cpu = 00:00:06 ; elapsed = 00:00:06 . Memory (MB): peak = 252.805 ; gain = 76.211
+Starting RTL Elaboration : Time (s): cpu = 00:00:09 ; elapsed = 00:00:11 . Memory (MB): peak = 291.922 ; gain = 120.145
 ---------------------------------------------------------------------------------
 INFO: [Synth 8-638] synthesizing module 'oneThird' [c:/modem/vivado/xc7k160t-IP/oneThird/synth/oneThird.vhd:69]
-INFO: [Synth 8-3491] module 'mult_gen_v12_0' declared at 'c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0.vhd:106' bound to instance 'U0' of component 'mult_gen_v12_0' [c:/modem/vivado/xc7k160t-IP/oneThird/synth/oneThird.vhd:118]
-INFO: [Synth 8-638] synthesizing module 'mult_gen_v12_0' [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0.vhd:145]
-INFO: [Synth 8-3491] module 'mult_gen_v12_0_viv' declared at 'c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0_vh_rfs.vhd:20740' bound to instance 'i_mult' of component 'mult_gen_v12_0_viv' [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0.vhd:151]
-INFO: [Synth 8-638] synthesizing module 'mult_gen_v12_0_viv' [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0_vh_rfs.vhd:20789]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0_vh_rfs.vhd:852]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0_vh_rfs.vhd:853]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0_vh_rfs.vhd:860]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0_vh_rfs.vhd:874]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0_vh_rfs.vhd:881]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0_vh_rfs.vhd:891]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0_vh_rfs.vhd:900]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0_vh_rfs.vhd:905]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0_vh_rfs.vhd:914]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0_vh_rfs.vhd:924]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0_vh_rfs.vhd:935]
-INFO: [Synth 8-638] synthesizing module 'ccm' [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0_vh_rfs.vhd:18625]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0_vh_rfs.vhd:2212]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0_vh_rfs.vhd:2195]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0_vh_rfs.vhd:2344]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0_vh_rfs.vhd:2364]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0_vh_rfs.vhd:2373]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0_vh_rfs.vhd:2275]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0_vh_rfs.vhd:2344]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0_vh_rfs.vhd:2364]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0_vh_rfs.vhd:2758]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0_vh_rfs.vhd:2778]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0_vh_rfs.vhd:2863]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0_vh_rfs.vhd:2758]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0_vh_rfs.vhd:2778]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0_vh_rfs.vhd:2863]
-INFO: [Synth 8-638] synthesizing module 'ccm_operation' [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0_vh_rfs.vhd:15430]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0_vh_rfs.vhd:2373]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0_vh_rfs.vhd:2758]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0_vh_rfs.vhd:2778]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0_vh_rfs.vhd:2863]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0_vh_rfs.vhd:17083]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0_vh_rfs.vhd:17684]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0_vh_rfs.vhd:17838]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0_vh_rfs.vhd:17866]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0_vh_rfs.vhd:17867]
-INFO: [Synth 8-638] synthesizing module 'ccm_syncmem' [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0_vh_rfs.vhd:14685]
-INFO: [Synth 8-638] synthesizing module 'ccm_dist_mem' [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0_vh_rfs.vhd:14011]
-INFO: [Synth 8-5534] Detected attribute (* rom_style = "distributed" *) [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0_vh_rfs.vhd:14056]
-INFO: [Synth 8-256] done synthesizing module 'ccm_dist_mem' (1#1) [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0_vh_rfs.vhd:14011]
-INFO: [Synth 8-256] done synthesizing module 'ccm_syncmem' (2#1) [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0_vh_rfs.vhd:14685]
-INFO: [Synth 8-638] synthesizing module 'ccm_syncmem__parameterized0' [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0_vh_rfs.vhd:14685]
-INFO: [Synth 8-638] synthesizing module 'ccm_dist_mem__parameterized0' [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0_vh_rfs.vhd:14011]
-INFO: [Synth 8-256] done synthesizing module 'ccm_dist_mem__parameterized0' (2#1) [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0_vh_rfs.vhd:14011]
-INFO: [Synth 8-256] done synthesizing module 'ccm_syncmem__parameterized0' (2#1) [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0_vh_rfs.vhd:14685]
-INFO: [Synth 8-638] synthesizing module 'ccm_scaled_adder' [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0_vh_rfs.vhd:14920]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0_vh_rfs.vhd:15006]
-WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0_vh_rfs.vhd:15287]
-INFO: [Synth 8-256] done synthesizing module 'ccm_scaled_adder' (3#1) [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0_vh_rfs.vhd:14920]
-INFO: [Synth 8-638] synthesizing module 'delay_line' [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0_vh_rfs.vhd:4150]
-INFO: [Synth 8-256] done synthesizing module 'delay_line' (4#1) [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0_vh_rfs.vhd:4150]
-INFO: [Synth 8-256] done synthesizing module 'ccm_operation' (5#1) [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0_vh_rfs.vhd:15430]
-INFO: [Synth 8-256] done synthesizing module 'ccm' (6#1) [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0_vh_rfs.vhd:18625]
-INFO: [Synth 8-256] done synthesizing module 'mult_gen_v12_0_viv' (7#1) [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0_vh_rfs.vhd:20789]
-INFO: [Synth 8-256] done synthesizing module 'mult_gen_v12_0' (8#1) [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0/hdl/mult_gen_v12_0.vhd:145]
+WARNING: [Synth 8-5640] Port 'zero_detect' is missing in component declaration [c:/modem/vivado/xc7k160t-IP/oneThird/synth/oneThird.vhd:73]
+WARNING: [Synth 8-5640] Port 'pcasc' is missing in component declaration [c:/modem/vivado/xc7k160t-IP/oneThird/synth/oneThird.vhd:73]
+INFO: [Synth 8-3491] module 'mult_gen_v12_0_10' declared at 'c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0.vhd:116' bound to instance 'U0' of component 'mult_gen_v12_0_10' [c:/modem/vivado/xc7k160t-IP/oneThird/synth/oneThird.vhd:118]
+INFO: [Synth 8-638] synthesizing module 'mult_gen_v12_0_10' [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0.vhd:155]
+INFO: [Synth 8-3491] module 'mult_gen_v12_0_10_viv' declared at 'c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0_vh_rfs.vhd:20732' bound to instance 'i_mult' of component 'mult_gen_v12_0_10_viv' [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0.vhd:161]
+INFO: [Synth 8-638] synthesizing module 'mult_gen_v12_0_10_viv' [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0_vh_rfs.vhd:20781]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0_vh_rfs.vhd:862]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0_vh_rfs.vhd:863]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0_vh_rfs.vhd:870]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0_vh_rfs.vhd:884]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0_vh_rfs.vhd:891]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0_vh_rfs.vhd:901]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0_vh_rfs.vhd:910]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0_vh_rfs.vhd:915]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0_vh_rfs.vhd:924]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0_vh_rfs.vhd:934]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0_vh_rfs.vhd:945]
+INFO: [Synth 8-638] synthesizing module 'ccm' [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0_vh_rfs.vhd:18617]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0_vh_rfs.vhd:2222]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0_vh_rfs.vhd:2205]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0_vh_rfs.vhd:2354]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0_vh_rfs.vhd:2374]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0_vh_rfs.vhd:2383]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0_vh_rfs.vhd:2285]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0_vh_rfs.vhd:2354]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0_vh_rfs.vhd:2374]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0_vh_rfs.vhd:2768]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0_vh_rfs.vhd:2788]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0_vh_rfs.vhd:2873]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0_vh_rfs.vhd:2768]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0_vh_rfs.vhd:2788]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0_vh_rfs.vhd:2873]
+INFO: [Synth 8-638] synthesizing module 'ccm_operation' [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0_vh_rfs.vhd:15422]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0_vh_rfs.vhd:2383]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0_vh_rfs.vhd:2768]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0_vh_rfs.vhd:2788]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0_vh_rfs.vhd:2873]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0_vh_rfs.vhd:17075]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0_vh_rfs.vhd:17676]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0_vh_rfs.vhd:17830]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0_vh_rfs.vhd:17858]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0_vh_rfs.vhd:17859]
+INFO: [Synth 8-638] synthesizing module 'ccm_syncmem' [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0_vh_rfs.vhd:14677]
+INFO: [Synth 8-638] synthesizing module 'ccm_dist_mem' [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0_vh_rfs.vhd:14003]
+INFO: [Synth 8-5534] Detected attribute (* rom_style = "distributed" *) [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0_vh_rfs.vhd:14048]
+INFO: [Synth 8-256] done synthesizing module 'ccm_dist_mem' (1#1) [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0_vh_rfs.vhd:14003]
+INFO: [Synth 8-256] done synthesizing module 'ccm_syncmem' (2#1) [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0_vh_rfs.vhd:14677]
+INFO: [Synth 8-638] synthesizing module 'ccm_syncmem__parameterized0' [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0_vh_rfs.vhd:14677]
+INFO: [Synth 8-638] synthesizing module 'ccm_dist_mem__parameterized0' [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0_vh_rfs.vhd:14003]
+INFO: [Synth 8-256] done synthesizing module 'ccm_dist_mem__parameterized0' (2#1) [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0_vh_rfs.vhd:14003]
+INFO: [Synth 8-256] done synthesizing module 'ccm_syncmem__parameterized0' (2#1) [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0_vh_rfs.vhd:14677]
+INFO: [Synth 8-638] synthesizing module 'ccm_scaled_adder' [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0_vh_rfs.vhd:14912]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0_vh_rfs.vhd:14998]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0_vh_rfs.vhd:15279]
+INFO: [Synth 8-256] done synthesizing module 'ccm_scaled_adder' (3#1) [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0_vh_rfs.vhd:14912]
+INFO: [Synth 8-638] synthesizing module 'delay_line' [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0_vh_rfs.vhd:4160]
+INFO: [Synth 8-256] done synthesizing module 'delay_line' (4#1) [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0_vh_rfs.vhd:4160]
+INFO: [Synth 8-256] done synthesizing module 'ccm_operation' (5#1) [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0_vh_rfs.vhd:15422]
+INFO: [Synth 8-256] done synthesizing module 'ccm' (6#1) [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0_vh_rfs.vhd:18617]
+INFO: [Synth 8-256] done synthesizing module 'mult_gen_v12_0_10_viv' (7#1) [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0_vh_rfs.vhd:20781]
+INFO: [Synth 8-256] done synthesizing module 'mult_gen_v12_0_10' (8#1) [c:/modem/vivado/xc7k160t-IP/oneThird/mult_gen_v12_0_10/hdl/mult_gen_v12_0.vhd:155]
 INFO: [Synth 8-256] done synthesizing module 'oneThird' (9#1) [c:/modem/vivado/xc7k160t-IP/oneThird/synth/oneThird.vhd:69]
 ---------------------------------------------------------------------------------
-Finished RTL Elaboration : Time (s): cpu = 00:00:09 ; elapsed = 00:00:09 . Memory (MB): peak = 296.898 ; gain = 120.305
+Finished RTL Elaboration : Time (s): cpu = 00:00:16 ; elapsed = 00:00:18 . Memory (MB): peak = 336.383 ; gain = 164.605
 ---------------------------------------------------------------------------------
 
 Report Check Netlist: 
@@ -95,7 +100,7 @@ Report Check Netlist:
 |1     |multi_driven_nets |      0|        0|Passed |Multi driven nets |
 +------+------------------+-------+---------+-------+------------------+
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:09 ; elapsed = 00:00:10 . Memory (MB): peak = 296.898 ; gain = 120.305
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:16 ; elapsed = 00:00:18 . Memory (MB): peak = 336.383 ; gain = 164.605
 ---------------------------------------------------------------------------------
 INFO: [Device 21-403] Loading part xc7k160tfbg676-1
 INFO: [Project 1-570] Preparing netlist for logic optimization
@@ -111,28 +116,28 @@ Completed Processing XDC Constraints
 INFO: [Project 1-111] Unisim Transformation Summary:
 No Unisim elements were transformed.
 
-Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.010 . Memory (MB): peak = 601.023 ; gain = 0.000
+Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.018 . Memory (MB): peak = 628.457 ; gain = 0.000
 ---------------------------------------------------------------------------------
-Finished Constraint Validation : Time (s): cpu = 00:00:16 ; elapsed = 00:00:16 . Memory (MB): peak = 601.023 ; gain = 424.430
+Finished Constraint Validation : Time (s): cpu = 00:00:24 ; elapsed = 00:00:27 . Memory (MB): peak = 628.457 ; gain = 456.680
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Loading Part and Timing Information
 ---------------------------------------------------------------------------------
 Loading part: xc7k160tfbg676-1
 ---------------------------------------------------------------------------------
-Finished Loading Part and Timing Information : Time (s): cpu = 00:00:16 ; elapsed = 00:00:16 . Memory (MB): peak = 601.023 ; gain = 424.430
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:24 ; elapsed = 00:00:27 . Memory (MB): peak = 628.457 ; gain = 456.680
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Applying 'set_property' XDC Constraints
 ---------------------------------------------------------------------------------
-Applied set_property DONT_TOUCH = true for U0. (constraint file  C:/modem/vivado/xc7k160t-IP/managed_ip_project/managed_ip_project.runs/oneThird_synth_1/dont_touch.xdc, line 9).
+Applied set_property DONT_TOUCH = true for U0. (constraint file  auto generated constraint, line ).
 ---------------------------------------------------------------------------------
-Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:16 ; elapsed = 00:00:16 . Memory (MB): peak = 601.023 ; gain = 424.430
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:24 ; elapsed = 00:00:27 . Memory (MB): peak = 628.457 ; gain = 456.680
 ---------------------------------------------------------------------------------
 INFO: [Synth 8-5542] Attribute ram_style/rom_style = distributed specified for ROM  "ROM". This will be implemented in logic
 INFO: [Synth 8-5542] Attribute ram_style/rom_style = distributed specified for ROM  "ROM". This will be implemented in logic
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:16 ; elapsed = 00:00:16 . Memory (MB): peak = 601.023 ; gain = 424.430
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:25 ; elapsed = 00:00:27 . Memory (MB): peak = 628.457 ; gain = 456.680
 ---------------------------------------------------------------------------------
 
 Report RTL Partitions: 
@@ -161,16 +166,16 @@ BRAMs: 650 (col length: RAMB18 100 RAMB36 50)
 ---------------------------------------------------------------------------------
 Finished Part Resource Summary
 ---------------------------------------------------------------------------------
-Start Parallel Synthesis Optimization  : Time (s): cpu = 00:00:16 ; elapsed = 00:00:17 . Memory (MB): peak = 601.023 ; gain = 424.430
+Start Parallel Synthesis Optimization  : Time (s): cpu = 00:00:25 ; elapsed = 00:00:27 . Memory (MB): peak = 628.457 ; gain = 456.680
 ---------------------------------------------------------------------------------
 Start Cross Boundary Optimization
 ---------------------------------------------------------------------------------
 INFO: [Synth 8-5542] Attribute ram_style/rom_style = distributed specified for ROM  "p_0_out". This will be implemented in logic
 INFO: [Synth 8-5542] Attribute ram_style/rom_style = distributed specified for ROM  "p_0_out". This will be implemented in logic
 ---------------------------------------------------------------------------------
-Finished Cross Boundary Optimization : Time (s): cpu = 00:00:16 ; elapsed = 00:00:17 . Memory (MB): peak = 601.023 ; gain = 424.430
+Finished Cross Boundary Optimization : Time (s): cpu = 00:00:25 ; elapsed = 00:00:27 . Memory (MB): peak = 628.457 ; gain = 456.680
 ---------------------------------------------------------------------------------
-Finished Parallel Reinference  : Time (s): cpu = 00:00:16 ; elapsed = 00:00:17 . Memory (MB): peak = 601.023 ; gain = 424.430
+Finished Parallel Reinference  : Time (s): cpu = 00:00:25 ; elapsed = 00:00:27 . Memory (MB): peak = 628.457 ; gain = 456.680
 
 Report RTL Partitions: 
 +-+--------------+------------+----------+
@@ -180,17 +185,17 @@ Report RTL Partitions:
 ---------------------------------------------------------------------------------
 Start Area Optimization
 ---------------------------------------------------------------------------------
+INFO: [Synth 8-3332] Sequential element (\gCCM.iCCM/use_ccm_core.ccm_core/b0g2.b1g4.bg[1].use_adders.a1g[1].a2g.sa1/a1g[1].has_reg.o_tmp_reg[16] ) is unused and will be removed from module mult_gen_v12_0_10_viv.
 ---------------------------------------------------------------------------------
-Finished Area Optimization : Time (s): cpu = 00:00:16 ; elapsed = 00:00:17 . Memory (MB): peak = 601.023 ; gain = 424.430
+Finished Area Optimization : Time (s): cpu = 00:00:25 ; elapsed = 00:00:28 . Memory (MB): peak = 628.457 ; gain = 456.680
 ---------------------------------------------------------------------------------
-Finished Parallel Area Optimization  : Time (s): cpu = 00:00:16 ; elapsed = 00:00:17 . Memory (MB): peak = 601.023 ; gain = 424.430
+Finished Parallel Area Optimization  : Time (s): cpu = 00:00:25 ; elapsed = 00:00:28 . Memory (MB): peak = 628.457 ; gain = 456.680
 
 Report RTL Partitions: 
 +-+--------------+------------+----------+
 | |RTL Partition |Replication |Instances |
 +-+--------------+------------+----------+
 +-+--------------+------------+----------+
-Finished Parallel Synthesis Optimization  : Time (s): cpu = 00:00:16 ; elapsed = 00:00:17 . Memory (MB): peak = 601.023 ; gain = 424.430
 ---------------------------------------------------------------------------------
 Start Timing Optimization
 ---------------------------------------------------------------------------------
@@ -198,10 +203,10 @@ Start Timing Optimization
 Start Applying XDC Timing Constraints
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:26 ; elapsed = 00:00:27 . Memory (MB): peak = 601.023 ; gain = 424.430
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:36 ; elapsed = 00:00:39 . Memory (MB): peak = 628.457 ; gain = 456.680
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Timing Optimization : Time (s): cpu = 00:00:26 ; elapsed = 00:00:27 . Memory (MB): peak = 601.023 ; gain = 424.430
+Finished Timing Optimization : Time (s): cpu = 00:00:36 ; elapsed = 00:00:39 . Memory (MB): peak = 628.457 ; gain = 456.680
 ---------------------------------------------------------------------------------
 
 Report RTL Partitions: 
@@ -213,16 +218,24 @@ Report RTL Partitions:
 Start Technology Mapping
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Technology Mapping : Time (s): cpu = 00:00:26 ; elapsed = 00:00:27 . Memory (MB): peak = 601.023 ; gain = 424.430
+Finished Technology Mapping : Time (s): cpu = 00:00:36 ; elapsed = 00:00:39 . Memory (MB): peak = 628.457 ; gain = 456.680
 ---------------------------------------------------------------------------------
+Finished Parallel Technology Mapping Optimization  : Time (s): cpu = 00:00:36 ; elapsed = 00:00:39 . Memory (MB): peak = 628.457 ; gain = 456.680
 
 Report RTL Partitions: 
 +-+--------------+------------+----------+
 | |RTL Partition |Replication |Instances |
 +-+--------------+------------+----------+
 +-+--------------+------------+----------+
+Finished Parallel Synthesis Optimization  : Time (s): cpu = 00:00:36 ; elapsed = 00:00:39 . Memory (MB): peak = 628.457 ; gain = 456.680
 ---------------------------------------------------------------------------------
 Start IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Flattening Before IO Insertion
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Final Netlist Cleanup
@@ -231,7 +244,7 @@ Start Final Netlist Cleanup
 Finished Final Netlist Cleanup
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished IO Insertion : Time (s): cpu = 00:00:26 ; elapsed = 00:00:27 . Memory (MB): peak = 601.023 ; gain = 424.430
+Finished IO Insertion : Time (s): cpu = 00:00:36 ; elapsed = 00:00:39 . Memory (MB): peak = 628.457 ; gain = 456.680
 ---------------------------------------------------------------------------------
 
 Report Check Netlist: 
@@ -244,7 +257,7 @@ Report Check Netlist:
 Start Renaming Generated Instances
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Instances : Time (s): cpu = 00:00:26 ; elapsed = 00:00:27 . Memory (MB): peak = 601.023 ; gain = 424.430
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:36 ; elapsed = 00:00:39 . Memory (MB): peak = 628.457 ; gain = 456.680
 ---------------------------------------------------------------------------------
 
 Report RTL Partitions: 
@@ -256,13 +269,25 @@ Report RTL Partitions:
 Start Rebuilding User Hierarchy
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:26 ; elapsed = 00:00:27 . Memory (MB): peak = 601.023 ; gain = 424.430
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:36 ; elapsed = 00:00:39 . Memory (MB): peak = 628.457 ; gain = 456.680
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Start Renaming Generated Ports : Time (s): cpu = 00:00:26 ; elapsed = 00:00:27 . Memory (MB): peak = 601.023 ; gain = 424.430
+Start Renaming Generated Ports
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Ports : Time (s): cpu = 00:00:26 ; elapsed = 00:00:27 . Memory (MB): peak = 601.023 ; gain = 424.430
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:36 ; elapsed = 00:00:39 . Memory (MB): peak = 628.457 ; gain = 456.680
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:36 ; elapsed = 00:00:39 . Memory (MB): peak = 628.457 ; gain = 456.680
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Nets
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Nets : Time (s): cpu = 00:00:36 ; elapsed = 00:00:39 . Memory (MB): peak = 628.457 ; gain = 456.680
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Writing Synthesis Report
@@ -284,15 +309,15 @@ Report Cell Usage:
 |4     |LUT3   |     4|
 |5     |LUT4   |     4|
 |6     |LUT5   |     4|
-|7     |LUT6   |    19|
+|7     |LUT6   |    13|
 |8     |FDRE   |    22|
 +------+-------+------+
 ---------------------------------------------------------------------------------
-Finished Writing Synthesis Report : Time (s): cpu = 00:00:26 ; elapsed = 00:00:27 . Memory (MB): peak = 601.023 ; gain = 424.430
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:36 ; elapsed = 00:00:39 . Memory (MB): peak = 628.457 ; gain = 456.680
 ---------------------------------------------------------------------------------
 Synthesis finished with 0 errors, 0 critical warnings and 0 warnings.
-Synthesis Optimization Runtime : Time (s): cpu = 00:00:12 ; elapsed = 00:00:20 . Memory (MB): peak = 601.023 ; gain = 91.367
-Synthesis Optimization Complete : Time (s): cpu = 00:00:26 ; elapsed = 00:00:27 . Memory (MB): peak = 601.023 ; gain = 424.430
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:16 ; elapsed = 00:00:29 . Memory (MB): peak = 628.457 ; gain = 120.207
+Synthesis Optimization Complete : Time (s): cpu = 00:00:37 ; elapsed = 00:00:40 . Memory (MB): peak = 628.457 ; gain = 456.680
 INFO: [Project 1-571] Translating synthesized netlist
 INFO: [Netlist 29-17] Analyzing 4 Unisim elements for replacement
 INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
@@ -304,9 +329,9 @@ INFO: [Project 1-111] Unisim Transformation Summary:
 No Unisim elements were transformed.
 
 INFO: [Common 17-83] Releasing license: Synthesis
-43 Infos, 41 Warnings, 0 Critical Warnings and 0 Errors encountered.
+45 Infos, 43 Warnings, 0 Critical Warnings and 0 Errors encountered.
 synth_design completed successfully
-synth_design: Time (s): cpu = 00:00:26 ; elapsed = 00:00:26 . Memory (MB): peak = 601.023 ; gain = 395.492
+synth_design: Time (s): cpu = 00:00:35 ; elapsed = 00:00:36 . Memory (MB): peak = 628.457 ; gain = 414.922
 INFO: [Coretcl 2-1174] Renamed 5 cell refs.
-report_utilization: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.050 . Memory (MB): peak = 601.023 ; gain = 0.000
-INFO: [Common 17-206] Exiting Vivado at Thu May 28 15:07:30 2015...
+report_utilization: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.025 . Memory (MB): peak = 628.457 ; gain = 0.000
+INFO: [Common 17-206] Exiting Vivado at Fri Oct 28 16:38:36 2016...

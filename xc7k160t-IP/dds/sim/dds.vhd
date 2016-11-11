@@ -1,4 +1,4 @@
--- (c) Copyright 1995-2015 Xilinx, Inc. All rights reserved.
+-- (c) Copyright 1995-2016 Xilinx, Inc. All rights reserved.
 -- 
 -- This file contains confidential and proprietary information
 -- of Xilinx, Inc. and is protected under U.S. and
@@ -47,14 +47,14 @@
 -- DO NOT MODIFY THIS FILE.
 
 -- IP VLNV: xilinx.com:ip:dds_compiler:6.0
--- IP Revision: 8
+-- IP Revision: 11
 
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
 
-LIBRARY dds_compiler_v6_0;
-USE dds_compiler_v6_0.dds_compiler_v6_0;
+LIBRARY dds_compiler_v6_0_11;
+USE dds_compiler_v6_0_11.dds_compiler_v6_0_11;
 
 ENTITY dds IS
   PORT (
@@ -72,7 +72,7 @@ ARCHITECTURE dds_arch OF dds IS
   ATTRIBUTE DowngradeIPIdentifiedWarnings : string;
   ATTRIBUTE DowngradeIPIdentifiedWarnings OF dds_arch: ARCHITECTURE IS "yes";
 
-  COMPONENT dds_compiler_v6_0 IS
+  COMPONENT dds_compiler_v6_0_11 IS
     GENERIC (
       C_XDEVICEFAMILY : STRING;
       C_MODE_OF_OPERATION : INTEGER;
@@ -154,7 +154,7 @@ ARCHITECTURE dds_arch OF dds IS
       event_s_config_tlast_missing : OUT STD_LOGIC;
       event_s_config_tlast_unexpected : OUT STD_LOGIC
     );
-  END COMPONENT dds_compiler_v6_0;
+  END COMPONENT dds_compiler_v6_0_11;
   ATTRIBUTE X_INTERFACE_INFO : STRING;
   ATTRIBUTE X_INTERFACE_INFO OF aclk: SIGNAL IS "xilinx.com:signal:clock:1.0 aclk_intf CLK";
   ATTRIBUTE X_INTERFACE_INFO OF aclken: SIGNAL IS "xilinx.com:signal:clockenable:1.0 aclken_intf CE";
@@ -164,7 +164,7 @@ ARCHITECTURE dds_arch OF dds IS
   ATTRIBUTE X_INTERFACE_INFO OF m_axis_data_tvalid: SIGNAL IS "xilinx.com:interface:axis:1.0 M_AXIS_DATA TVALID";
   ATTRIBUTE X_INTERFACE_INFO OF m_axis_data_tdata: SIGNAL IS "xilinx.com:interface:axis:1.0 M_AXIS_DATA TDATA";
 BEGIN
-  U0 : dds_compiler_v6_0
+  U0 : dds_compiler_v6_0_11
     GENERIC MAP (
       C_XDEVICEFAMILY => "kintex7",
       C_MODE_OF_OPERATION => 0,

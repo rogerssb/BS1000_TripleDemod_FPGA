@@ -663,14 +663,14 @@ reg             ch1BitData;
 always @(posedge sampleClk) begin
     if (ch0ClkEn) begin
         // Capture the I output sample
-        ch0SymData <= bbSRI[1];
+        ch0SymData <= bbSRI[0];
         if (timingErrorEn) begin
             ch0BitData <= bbSRI[1][17];
             end
         end
     if (asyncEnable) begin
         if (ch1ClkEn) begin
-            ch1SymData <= asyncSR[1];
+            ch1SymData <= asyncSR[0];
             if (asyncTimingErrorEn) begin
                 ch1BitData <= asyncSR[1][17];
                 end
@@ -679,7 +679,7 @@ always @(posedge sampleClk) begin
     else begin
         if (ch0ClkEn) begin
             // Capture the Q output sample
-            ch1SymData <= bbSRQ[1];
+            ch1SymData <= bbSRQ[0];
             if (timingErrorEn) begin
                 ch1BitData <= bbSRQ[1][17];
                 end

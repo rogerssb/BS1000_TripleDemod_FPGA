@@ -102,6 +102,11 @@
 // Bitsync subsystem registers
 `define BITSYNC_TOP_SPACE   13'b0_01xx_000x_xxxx
 
+`define VITERBISPACE        13'b0_01xx_0010_0xxx
+`define VIT_INVERSE_MEAN       13'bx_xxxx_xxxx_00xx
+`define VIT_BER_TEST_LENGTH    13'bx_xxxx_xxxx_01xx
+`define VIT_STATUS             13'bx_xxxx_xxxx_10xx
+
 `define CH0_BITSYNCSPACE    13'b0_01x0_010x_xxxx
 `define BITSYNCSPACE        `CH0_BITSYNCSPACE
 `define CH0_RESAMPSPACE     13'b0_01x0_0110_xxxx

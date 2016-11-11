@@ -1,4 +1,4 @@
--- (c) Copyright 1995-2015 Xilinx, Inc. All rights reserved.
+-- (c) Copyright 1995-2016 Xilinx, Inc. All rights reserved.
 -- 
 -- This file contains confidential and proprietary information
 -- of Xilinx, Inc. and is protected under U.S. and
@@ -47,14 +47,14 @@
 -- DO NOT MODIFY THIS FILE.
 
 -- IP VLNV: xilinx.com:ip:fir_compiler:7.2
--- IP Revision: 2
+-- IP Revision: 5
 
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
 
-LIBRARY fir_compiler_v7_2;
-USE fir_compiler_v7_2.fir_compiler_v7_2;
+LIBRARY fir_compiler_v7_2_5;
+USE fir_compiler_v7_2_5.fir_compiler_v7_2_5;
 
 ENTITY invSinc IS
   PORT (
@@ -71,7 +71,7 @@ ARCHITECTURE invSinc_arch OF invSinc IS
   ATTRIBUTE DowngradeIPIdentifiedWarnings : string;
   ATTRIBUTE DowngradeIPIdentifiedWarnings OF invSinc_arch: ARCHITECTURE IS "yes";
 
-  COMPONENT fir_compiler_v7_2 IS
+  COMPONENT fir_compiler_v7_2_5 IS
     GENERIC (
       C_XDEVICEFAMILY : STRING;
       C_ELABORATION_DIR : STRING;
@@ -174,7 +174,7 @@ ARCHITECTURE invSinc_arch OF invSinc IS
       event_s_reload_tlast_missing : OUT STD_LOGIC;
       event_s_reload_tlast_unexpected : OUT STD_LOGIC
     );
-  END COMPONENT fir_compiler_v7_2;
+  END COMPONENT fir_compiler_v7_2_5;
   ATTRIBUTE X_INTERFACE_INFO : STRING;
   ATTRIBUTE X_INTERFACE_INFO OF aclk: SIGNAL IS "xilinx.com:signal:clock:1.0 aclk_intf CLK";
   ATTRIBUTE X_INTERFACE_INFO OF s_axis_data_tvalid: SIGNAL IS "xilinx.com:interface:axis:1.0 S_AXIS_DATA TVALID";
@@ -183,7 +183,7 @@ ARCHITECTURE invSinc_arch OF invSinc IS
   ATTRIBUTE X_INTERFACE_INFO OF m_axis_data_tvalid: SIGNAL IS "xilinx.com:interface:axis:1.0 M_AXIS_DATA TVALID";
   ATTRIBUTE X_INTERFACE_INFO OF m_axis_data_tdata: SIGNAL IS "xilinx.com:interface:axis:1.0 M_AXIS_DATA TDATA";
 BEGIN
-  U0 : fir_compiler_v7_2
+  U0 : fir_compiler_v7_2_5
     GENERIC MAP (
       C_XDEVICEFAMILY => "kintex7",
       C_ELABORATION_DIR => "./",

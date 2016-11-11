@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="bert_test_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="bert_test" />
+            <top_module name="glbl" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="30" />
+   <wvobject db_ref_id="1" fp_name="/bert_test/clock" type="logic">
+      <obj_property name="ElementShortName">clock</obj_property>
+      <obj_property name="ObjectShortName">clock</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/bert_test/reset" type="logic">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/bert_test/busClk" type="logic">
+      <obj_property name="ElementShortName">busClk</obj_property>
+      <obj_property name="ObjectShortName">busClk</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/bert_test/pngen_cs" type="logic">
+      <obj_property name="ElementShortName">pngen_cs</obj_property>
+      <obj_property name="ObjectShortName">pngen_cs</obj_property>
+   </wvobject>
+   <wvobject fp_name="group31" type="group">
+      <obj_property name="label">Micro</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject fp_name="group32" type="group">
+         <wvobject fp_name="group33" type="group">
+            <wvobject db_ref_id="1" fp_name="/bert_test/bert_cs" type="logic">
+               <obj_property name="ElementShortName">bert_cs</obj_property>
+               <obj_property name="ObjectShortName">bert_cs</obj_property>
+            </wvobject>
+            <wvobject db_ref_id="1" fp_name="/bert_test/addr" type="array">
+               <obj_property name="ElementShortName">addr[12:0]</obj_property>
+               <obj_property name="ObjectShortName">addr[12:0]</obj_property>
+            </wvobject>
+            <wvobject db_ref_id="1" fp_name="/bert_test/dataIn" type="array">
+               <obj_property name="ElementShortName">dataIn[31:0]</obj_property>
+               <obj_property name="ObjectShortName">dataIn[31:0]</obj_property>
+               <obj_property name="Radix">HEXRADIX</obj_property>
+            </wvobject>
+            <wvobject db_ref_id="1" fp_name="/bert_test/bert_top_dataOut" type="array">
+               <obj_property name="ElementShortName">bert_top_dataOut[31:0]</obj_property>
+               <obj_property name="ObjectShortName">bert_top_dataOut[31:0]</obj_property>
+               <obj_property name="Radix">HEXRADIX</obj_property>
+            </wvobject>
+            <wvobject db_ref_id="1" fp_name="/bert_test/pngen_top_dataOut" type="array">
+               <obj_property name="ElementShortName">pngen_top_dataOut[31:0]</obj_property>
+               <obj_property name="ObjectShortName">pngen_top_dataOut[31:0]</obj_property>
+               <obj_property name="Radix">HEXRADIX</obj_property>
+            </wvobject>
+            <wvobject db_ref_id="1" fp_name="/bert_test/dataOut" type="array">
+               <obj_property name="ElementShortName">dataOut[31:0]</obj_property>
+               <obj_property name="ObjectShortName">dataOut[31:0]</obj_property>
+               <obj_property name="Radix">HEXRADIX</obj_property>
+            </wvobject>
+            <wvobject db_ref_id="1" fp_name="/bert_test/wr0" type="logic">
+               <obj_property name="ElementShortName">wr0</obj_property>
+               <obj_property name="ObjectShortName">wr0</obj_property>
+            </wvobject>
+            <wvobject db_ref_id="1" fp_name="/bert_test/wr1" type="logic">
+               <obj_property name="ElementShortName">wr1</obj_property>
+               <obj_property name="ObjectShortName">wr1</obj_property>
+            </wvobject>
+            <wvobject db_ref_id="1" fp_name="/bert_test/wr2" type="logic">
+               <obj_property name="ElementShortName">wr2</obj_property>
+               <obj_property name="ObjectShortName">wr2</obj_property>
+            </wvobject>
+            <wvobject db_ref_id="1" fp_name="/bert_test/wr3" type="logic">
+               <obj_property name="ElementShortName">wr3</obj_property>
+               <obj_property name="ObjectShortName">wr3</obj_property>
+            </wvobject>
+         </wvobject>
+      </wvobject>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/bert_test/stop" type="logic">
+      <obj_property name="ElementShortName">stop</obj_property>
+      <obj_property name="ObjectShortName">stop</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/bert_test/bit_sel" type="array">
+      <obj_property name="ElementShortName">bit_sel[15:0]</obj_property>
+      <obj_property name="ObjectShortName">bit_sel[15:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/bert_test/polarity" type="logic">
+      <obj_property name="ElementShortName">polarity</obj_property>
+      <obj_property name="ObjectShortName">polarity</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/bert_test/pngen_clock" type="logic">
+      <obj_property name="ElementShortName">pngen_clock</obj_property>
+      <obj_property name="ObjectShortName">pngen_clock</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/bert_test/pngen_clock_divider" type="array">
+      <obj_property name="ElementShortName">pngen_clock_divider[3:0]</obj_property>
+      <obj_property name="ObjectShortName">pngen_clock_divider[3:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/bert_test/randData" type="logic">
+      <obj_property name="ElementShortName">randData</obj_property>
+      <obj_property name="ObjectShortName">randData</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/bert_test/pngen_data" type="logic">
+      <obj_property name="ElementShortName">pngen_data</obj_property>
+      <obj_property name="ObjectShortName">pngen_data</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/bert_test/pngen_data_shift" type="array">
+      <obj_property name="ElementShortName">pngen_data_shift[15:0]</obj_property>
+      <obj_property name="ObjectShortName">pngen_data_shift[15:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/bert_test/noise" type="array">
+      <obj_property name="ElementShortName">noise[31:0]</obj_property>
+      <obj_property name="ObjectShortName">noise[31:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/bert_test/noise_figure" type="array">
+      <obj_property name="ElementShortName">noise_figure[4:0]</obj_property>
+      <obj_property name="ObjectShortName">noise_figure[4:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/bert_test/noise_bit" type="logic">
+      <obj_property name="ElementShortName">noise_bit</obj_property>
+      <obj_property name="ObjectShortName">noise_bit</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/bert_test/din" type="logic">
+      <obj_property name="ElementShortName">din</obj_property>
+      <obj_property name="ObjectShortName">din</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/bert_test/tb_dataOut" type="array">
+      <obj_property name="ElementShortName">tb_dataOut[31:0]</obj_property>
+      <obj_property name="ObjectShortName">tb_dataOut[31:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/bert_test/enable" type="logic">
+      <obj_property name="ElementShortName">enable</obj_property>
+      <obj_property name="ObjectShortName">enable</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/bert_test/CLOCKS_PER_BIT" type="array">
+      <obj_property name="ElementShortName">CLOCKS_PER_BIT[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CLOCKS_PER_BIT[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/bert_test/BIT_TIME" type="array">
+      <obj_property name="ElementShortName">BIT_TIME[31:0]</obj_property>
+      <obj_property name="ObjectShortName">BIT_TIME[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/bert_test/DIVIDE_BIT" type="array">
+      <obj_property name="ElementShortName">DIVIDE_BIT[31:0]</obj_property>
+      <obj_property name="ObjectShortName">DIVIDE_BIT[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/bert_test/bert_top/bert_sync_detect/count" type="array">
+      <obj_property name="ElementShortName">count[7:0]</obj_property>
+      <obj_property name="ObjectShortName">count[7:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/bert_test/bert_top/bert_sync_detect/reload_recovery_count" type="array">
+      <obj_property name="ElementShortName">reload_recovery_count[7:0]</obj_property>
+      <obj_property name="ObjectShortName">reload_recovery_count[7:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/bert_test/bert_top/bert_sync_detect/reload" type="logic">
+      <obj_property name="ElementShortName">reload</obj_property>
+      <obj_property name="ObjectShortName">reload</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/bert_test/bert_top/polarity_switch" type="logic">
+      <obj_property name="ElementShortName">polarity_switch</obj_property>
+      <obj_property name="ObjectShortName">polarity_switch</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/bert_test/bert_top/polarity_correct_data" type="logic">
+      <obj_property name="ElementShortName">polarity_correct_data</obj_property>
+      <obj_property name="ObjectShortName">polarity_correct_data</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/bert_test/bert_top/polarity_correct_code" type="logic">
+      <obj_property name="ElementShortName">polarity_correct_code</obj_property>
+      <obj_property name="ObjectShortName">polarity_correct_code</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/bert_test/bert_top/bert_sync_detect/error" type="logic">
+      <obj_property name="ElementShortName">error</obj_property>
+      <obj_property name="ObjectShortName">error</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/bert_test/bert_top/bert_counters/single_test_errors" type="array">
+      <obj_property name="ElementShortName">single_test_errors[31:0]</obj_property>
+      <obj_property name="ObjectShortName">single_test_errors[31:0]</obj_property>
+   </wvobject>
+</wave_config>

@@ -4,12 +4,20 @@
 # IP: C:/modem/vivado/xc7k160t-IP/halfbandEven/halfbandEven.xci
 # IP: The module: 'halfbandEven' is the root of the design. Do not add the DONT_TOUCH constraint.
 
-# XDC: c:/modem/vivado/xc7k160t-IP/halfbandEven/halfbandEven_ooc.xdc
+# XDC: c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/constraints/fir_compiler_v7_2.xdc
 # XDC: The top module name and the constraint reference have the same name: 'halfbandEven'. Do not add the DONT_TOUCH constraint.
 set_property DONT_TOUCH TRUE [get_cells U0]
 
+# XDC: c:/modem/vivado/xc7k160t-IP/halfbandEven/halfbandEven_ooc.xdc
+# XDC: The top module name and the constraint reference have the same name: 'halfbandEven'. Do not add the DONT_TOUCH constraint.
+#dup# set_property DONT_TOUCH TRUE [get_cells U0]
+
 # IP: C:/modem/vivado/xc7k160t-IP/halfbandEven/halfbandEven.xci
 # IP: The module: 'halfbandEven' is the root of the design. Do not add the DONT_TOUCH constraint.
+
+# XDC: c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/constraints/fir_compiler_v7_2.xdc
+# XDC: The top module name and the constraint reference have the same name: 'halfbandEven'. Do not add the DONT_TOUCH constraint.
+#dup# set_property DONT_TOUCH TRUE [get_cells U0]
 
 # XDC: c:/modem/vivado/xc7k160t-IP/halfbandEven/halfbandEven_ooc.xdc
 # XDC: The top module name and the constraint reference have the same name: 'halfbandEven'. Do not add the DONT_TOUCH constraint.

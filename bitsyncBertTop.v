@@ -316,9 +316,15 @@ clockAndDataInputSync diffSync(
         .eyeClkEn(eyeClkEn),
         .iEye(iEye),.qEye(qEye),
         .eyeOffset(eyeOffset),
+        .ch0VitBitEnOut(ch0VitBitEn),
+        .ch0VitBitOut(ch0VitBit),
+        .ch0VitSym2xEn(ch0VitSym2xEn),
+        .ch1VitBitEnOut(c1VitBitEn),
+        .ch1VitBitOut(ch1VitBit),
+        .ch1VitSym2xEn(ch1VitSym2xEn),
         .asyncMode(asyncMode),
         .test0(test0), .test1(test1)
-        );
+    );
 
 //******************************************************************************
 //                          AGC/DC Offset DAC Interfaces
@@ -343,7 +349,6 @@ clockAndDataInputSync diffSync(
     );
 
 
-
 //******************************************************************************
 //                                PCM Decoders
 //******************************************************************************
@@ -353,6 +358,26 @@ clockAndDataInputSync diffSync(
             `DUAL_DECODERSPACE:     dualDecoderSpace = 1;
             default:                dualDecoderSpace = 0;
         endcase
+    end
+
+    wire                dualDecInputSelect;
+    reg                 dualCh0Input;
+    reg                 dualCh1Input;
+    reg                 dualSymEn;
+    reg                 dualSym2xEn;
+    always @(posedge clk) begin
+        if (dualDecInputSelect) begin
+            dualCh0Input <= ch0VitBit;
+            dualCh1Input <= ch1VitBit;
+            dualSymEn <= ch0VitBitEn;
+            dualSym2xEn <= ch0VitSym2xEn;
+        end
+        else begin
+            dualCh0Input <= ch0DataOut;
+            dualCh1Input <= ch1DataOut;
+            dualSymEn <= ch0SymEn;
+            dualSym2xEn <= ch0Sym2xEn;
+        end
     end
 
     wire    [15:0]  dualDecDout;
@@ -369,17 +394,18 @@ clockAndDataInputSync diffSync(
         .addr(addr),
         .din(dataIn[15:0]),
         .dout(dualDecDout),
-        .symb_clk_en(ch0SymEn),           // symbol rate clock enable
-        .symb_clk_2x_en(ch0Sym2xEn),      // 2x symbol rate clock enable
-        .symb_i(ch0DataOut),              // data input,
-        .symb_q(ch1DataOut),              // data input,
+        .symb_clk_en(dualSymEn),          // symbol rate clock enable
+        .symb_clk_2x_en(dualSym2xEn),     // 2x symbol rate clock enable
+        .symb_i(dualCh0Input),            // data input,
+        .symb_q(dualCh1Input),            // data input,
         .dout_i(dualDataI),
         .dout_q(dualDataQ),
         .cout(dualPcmClkEn),
         .fifo_rs(),
         .clk_inv(dualClkInvert),
         .bypass_fifo(),
-        .symb_clk(dualPcmSymClk)
+        .symb_clk(dualPcmSymClk),
+        .inputSelect(dualDecInputSelect)
     );
 
     reg ch1DecoderSpace;
@@ -387,8 +413,27 @@ clockAndDataInputSync diffSync(
         casex(addr)
             `CH1_DECODERSPACE:      ch1DecoderSpace = 1;
             default:                ch1DecoderSpace = 0;
-            endcase
+        endcase
+    end
+
+    wire                ch1DecInputSelect;
+    reg                 ch1DecInput;
+    reg                 ch1DecSymEn;
+    reg                 ch1DecSym2xEn;
+    always @(posedge clk) begin
+        if (ch1DecInputSelect) begin
+            ch1DecInput <= ch1VitBit;
+            ch1DecSymEn <= ch1VitBitEn;
+            ch1DecSym2xEn <= ch1BitSym2xEn;
         end
+        else begin
+            ch1DecInput <= ch1DataOut;
+            ch1DecSymEn <= ch1SymEn;
+            ch1DecSym2xEn <= ch1Sym2xEn;
+        end
+    end
+
+
     wire    [15:0]  ch1DecDout;
     pcmDecoder dec1 (
         .clk(clk),
@@ -400,15 +445,16 @@ clockAndDataInputSync diffSync(
         .addr(addr),
         .din(dataIn[15:0]),
         .dout(ch1DecDout),
-        .symb_clk_en(ch1SymEn),           // symbol rate clock enable
-        .symb_clk_2x_en(ch1Sym2xEn),      // 2x symbol rate clock enable
-        .symb(ch1DataOut),                // data input,
+        .symb_clk_en(ch1DecSymEn),        // symbol rate clock enable
+        .symb_clk_2x_en(ch1DecSym2xEn),   // 2x symbol rate clock enable
+        .symb(ch1DecInput),               // data input,
         .data_out(ch1PcmData),            // data output
         .clkEn_out(ch1PcmClkEn),          // clk output
         .fifo_rs(),
         .clk_inv(ch1ClkInvert),
         .bypass_fifo(),
-        .symb_clk(ch1PcmSymClk)
+        .symb_clk(ch1PcmSymClk),
+        .inputSelect(ch1DecInputSelect)
     );
 
 
@@ -1021,6 +1067,7 @@ always @* begin
             end
         end
         `BITSYNC_TOP_SPACE, 
+        `VITERBISPACE,
         `CH0_DFSPACE,       
         `CH0_DFFIRSPACE,    
         `CH0_RESAMPSPACE,

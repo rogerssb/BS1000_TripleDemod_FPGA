@@ -1,11 +1,11 @@
 Copyright 1986-2015 Xilinx, Inc. All Rights Reserved.
 -------------------------------------------------------------------------------------------------------------------
-| Tool Version : Vivado v.2015.1 (win64) Build 1215546 Mon Apr 27 19:22:08 MDT 2015
-| Date         : Fri May 29 15:44:00 2015
+| Tool Version : Vivado v.2015.4 (win64) Build 1412921 Wed Nov 18 09:43:45 MST 2015
+| Date         : Sat Oct 29 14:49:41 2016
 | Host         : Sherlock running 64-bit Service Pack 1  (build 7601)
 | Command      : report_utilization -file halfbandEven_utilization_synth.rpt -pb halfbandEven_utilization_synth.pb
 | Design       : halfbandEven
-| Device       : xc7k160t
+| Device       : 7k160tfbg676-1
 | Design State : Synthesized
 -------------------------------------------------------------------------------------------------------------------
 
@@ -30,15 +30,15 @@ Table of Contents
 +----------------------------+------+-------+-----------+-------+
 |          Site Type         | Used | Fixed | Available | Util% |
 +----------------------------+------+-------+-----------+-------+
-| Slice LUTs*                |  326 |     0 |    101400 |  0.32 |
-|   LUT as Logic             |   37 |     0 |    101400 |  0.04 |
+| Slice LUTs*                |  323 |     0 |    101400 |  0.32 |
+|   LUT as Logic             |   34 |     0 |    101400 |  0.03 |
 |   LUT as Memory            |  289 |     0 |     35000 |  0.83 |
 |     LUT as Distributed RAM |    0 |     0 |           |       |
 |     LUT as Shift Register  |  289 |     0 |           |       |
-| Slice Registers            |  570 |     0 |    202800 |  0.28 |
-|   Register as Flip Flop    |  570 |     0 |    202800 |  0.28 |
+| Slice Registers            |  572 |     0 |    202800 |  0.28 |
+|   Register as Flip Flop    |  572 |     0 |    202800 |  0.28 |
 |   Register as Latch        |    0 |     0 |    202800 |  0.00 |
-| F7 Muxes                   |    1 |     0 |     50700 | <0.01 |
+| F7 Muxes                   |    0 |     0 |     50700 |  0.00 |
 | F8 Muxes                   |    0 |     0 |     25350 |  0.00 |
 +----------------------------+------+-------+-----------+-------+
 * Warning! The Final LUT count, after physical optimizations and full implementation, is typically lower. Run opt_design after synthesis, if not already completed, for a more realistic count.
@@ -58,7 +58,7 @@ Table of Contents
 | 0     |          Yes |           - |            - |
 | 0     |          Yes |           - |          Set |
 | 0     |          Yes |           - |        Reset |
-| 8     |          Yes |         Set |            - |
+| 10    |          Yes |         Set |            - |
 | 562   |          Yes |       Reset |            - |
 +-------+--------------+-------------+--------------+
 
@@ -156,15 +156,14 @@ Table of Contents
 +----------+------+---------------------+
 | FDRE     |  562 |        Flop & Latch |
 | SRL16E   |  289 |  Distributed Memory |
-| LUT6     |   13 |                 LUT |
-| LUT2     |   13 |                 LUT |
+| LUT2     |   16 |                 LUT |
+| FDSE     |   10 |        Flop & Latch |
 | DSP48E1  |    9 |    Block Arithmetic |
-| FDSE     |    8 |        Flop & Latch |
-| LUT4     |    7 |                 LUT |
+| LUT5     |    8 |                 LUT |
+| LUT6     |    6 |                 LUT |
+| LUT4     |    5 |                 LUT |
 | LUT3     |    5 |                 LUT |
-| LUT5     |    4 |                 LUT |
-| LUT1     |    3 |                 LUT |
-| MUXF7    |    1 |               MuxFx |
+| LUT1     |    4 |                 LUT |
 +----------+------+---------------------+
 
 
