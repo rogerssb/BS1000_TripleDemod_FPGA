@@ -5,6 +5,7 @@
 //`define ADD_FIFOS
 //`define MATLAB_VECTORS
 `define ADD_BERT_TEST
+`define QPSK
 
 module test;
 
@@ -135,7 +136,11 @@ always @(posedge clk) begin
             end
         end
     end
+`ifdef QPSK
+wire            infoBitEn = modBitEn;
+`else
 wire            infoBitEn = (modBitEn & infoBitState);
+`endif
 
 // Alternating ones and zeros
 reg     [3:0]   altSR;
@@ -190,6 +195,15 @@ always @(posedge clk or posedge reset) begin
 wire            g1Bit = vitData ^ gSR[0] ^ gSR[1] ^ gSR[2]                   ^ gSR[5];
 wire            g2Bit = vitData          ^ gSR[1] ^ gSR[2]          ^ gSR[4] ^ gSR[5];
 
+`ifdef QPSK
+reg modDataI,modDataQ;
+always @(posedge clk) begin
+    if (modBitEn) begin
+        modDataI <= g1Bit;
+        modDataQ <= g2Bit;
+    end
+end
+`else
 reg modData;
 always @(posedge clk) begin
     if (modBitEn) begin
@@ -201,10 +215,41 @@ always @(posedge clk) begin
         end
     end
 end
+`endif
 
 
 //************************ Interpolate the Data *******************************
 
+`ifdef QPSK
+wire    [17:0]  txDataI;
+interpolate #(.RegSpace(`INTERP0SPACE), .FirRegSpace(`VIDFIR0SPACE)) ch0InterpolateI(
+    .clk(clk), .reset(reset), .clkEn(modClkEn),
+    `ifdef USE_BUS_CLOCK
+    .busClk(bc),
+    `endif
+    .wr0(we0 & txRegCS), .wr1(we1 & txRegCS), .wr2(we2 & txRegCS), .wr3(we3 & txRegCS),
+    .addr(a),
+    .din(d),
+    .dout(),
+    .dataIn({modDataI,17'h10000}),
+    .dataOut(txDataI),
+    .clkEnOut(txSampleEn)
+);
+wire    [17:0]  txDataQ;
+interpolate #(.RegSpace(`INTERP0SPACE), .FirRegSpace(`VIDFIR0SPACE)) ch0InterpolateQ(
+    .clk(clk), .reset(reset), .clkEn(modClkEn),
+    `ifdef USE_BUS_CLOCK
+    .busClk(bc),
+    `endif
+    .wr0(we0 & txRegCS), .wr1(we1 & txRegCS), .wr2(we2 & txRegCS), .wr3(we3 & txRegCS),
+    .addr(a),
+    .din(d),
+    .dout(),
+    .dataIn({modDataQ,17'h10000}),
+    .dataOut(txDataQ),
+    .clkEnOut(txSampleEn)
+);
+`else
 wire    [17:0]  txData;
 interpolate #(.RegSpace(`INTERP0SPACE), .FirRegSpace(`VIDFIR0SPACE)) ch0Interpolate(
     .clk(clk), .reset(reset), .clkEn(modClkEn),
@@ -219,6 +264,7 @@ interpolate #(.RegSpace(`INTERP0SPACE), .FirRegSpace(`VIDFIR0SPACE)) ch0Interpol
     .dataOut(txData),
     .clkEnOut(txSampleEn)
 );
+`endif
 
 //********************** Create an AGC element ********************************
 
@@ -232,6 +278,42 @@ always @* agcGain = (10.0 ** (50*ch0GainReal/(2**12)/20));
 
 //********************** Create the input to the Bitsync **********************
 
+`ifdef QPSK
+real txDataIReal;
+always @* txDataIReal = $itor($signed(txDataI))/(2**17);
+real txDataQReal;
+always @* txDataQReal = $itor($signed(txDataQ))/(2**17);
+real txScaleFactor;
+real txChannelIReal;
+always @* txChannelIReal = txDataIReal * txScaleFactor;
+real txChannelQReal;
+always @* txChannelQReal = txDataQReal * txScaleFactor;
+real rxAgcI,rxAgcQ;
+reg     [17:0]  rxInput0,rxInput1;
+always @* begin
+    rxAgcI = txChannelIReal * agcGain;
+    if (rxAgcI >= 1.0) begin
+        rxInput0 = 18'h1ffff;
+    end
+    else if (rxAgcI <= -1.0) begin
+        rxInput0 = 18'h20001;
+    end
+    else begin
+        rxInput0 = rxAgcI * (2.0**17);
+    end
+    rxAgcQ = txChannelQReal * agcGain;
+    if (rxAgcQ >= 1.0) begin
+        rxInput1 = 18'h1ffff;
+    end
+    else if (rxAgcQ <= -1.0) begin
+        rxInput1 = 18'h20001;
+    end
+    else begin
+        rxInput1 = rxAgcQ * (2.0**17);
+    end
+end
+
+`else
 real txDataReal;
 always @* txDataReal = $itor($signed(txData))/(2**17);
 real txScaleFactor;
@@ -254,6 +336,7 @@ end
 
 real rxInputReal;
 always @* rxInputReal = $itor($signed(rxInput))/(2**17);
+`endif
 
 
 /******************************************************************************
@@ -275,8 +358,13 @@ bitsyncTop bitsyncTop(
     .addr(a),
     .din(d),
     .dout(dout),
+    `ifdef QPSK
+    .rx0(rxInput0), 
+    .rx1(rxInput1),
+    `else
     .rx0(rxInput), 
     .rx1(rxInput),
+    `endif
     .ch0Lock(),
     .ch0Sym2xEn(ch0Sym2xEn),
     .ch0SymEn(ch0SymEn),
@@ -688,6 +776,24 @@ initial begin
 
     // Init the Tx data generator registers
     // Init the interpolator FIR
+    `ifdef QPSK
+    ch0InterpolateI.videoFir.singleFirCoeffRegs.c0 = 16'h0;
+    ch0InterpolateI.videoFir.singleFirCoeffRegs.c1 = 16'h0;
+    ch0InterpolateI.videoFir.singleFirCoeffRegs.c2 = 16'h0;
+    ch0InterpolateI.videoFir.singleFirCoeffRegs.c3 = 16'h0;
+    ch0InterpolateI.videoFir.singleFirCoeffRegs.c4 = 16'h0;
+    ch0InterpolateI.videoFir.singleFirCoeffRegs.c5 = 16'h0;
+    ch0InterpolateI.videoFir.singleFirCoeffRegs.c6 = 16'h0;
+    ch0InterpolateI.videoFir.singleFirCoeffRegs.c7 = 16'h7fff;
+    ch0InterpolateQ.videoFir.singleFirCoeffRegs.c0 = 16'h0;
+    ch0InterpolateQ.videoFir.singleFirCoeffRegs.c1 = 16'h0;
+    ch0InterpolateQ.videoFir.singleFirCoeffRegs.c2 = 16'h0;
+    ch0InterpolateQ.videoFir.singleFirCoeffRegs.c3 = 16'h0;
+    ch0InterpolateQ.videoFir.singleFirCoeffRegs.c4 = 16'h0;
+    ch0InterpolateQ.videoFir.singleFirCoeffRegs.c5 = 16'h0;
+    ch0InterpolateQ.videoFir.singleFirCoeffRegs.c6 = 16'h0;
+    ch0InterpolateQ.videoFir.singleFirCoeffRegs.c7 = 16'h7fff;
+    `else
     ch0Interpolate.videoFir.singleFirCoeffRegs.c0 = 16'h0;
     ch0Interpolate.videoFir.singleFirCoeffRegs.c1 = 16'h0;
     ch0Interpolate.videoFir.singleFirCoeffRegs.c2 = 16'h0;
@@ -696,6 +802,8 @@ initial begin
     ch0Interpolate.videoFir.singleFirCoeffRegs.c5 = 16'h0;
     ch0Interpolate.videoFir.singleFirCoeffRegs.c6 = 16'h0;
     ch0Interpolate.videoFir.singleFirCoeffRegs.c7 = 16'h7fff;
+    `endif
+
     // Init the interpolator
     txRegCS = 1;
     write32(createAddress(`INTERP0SPACE, `INTERP_CONTROL),1);
@@ -722,7 +830,11 @@ initial begin
     `endif
 
     // Init the mode
+    `ifdef QPSK
+    write32(createAddress(`BITSYNC_TOP_SPACE,`BS_TOP_CONTROL),{30'bx,`BS_MODE_DUAL_CH});
+    `else
     write32(createAddress(`BITSYNC_TOP_SPACE,`BS_TOP_CONTROL),{30'bx,`BS_MODE_IND_CH});
+    `endif
 
     // Init the sample rate loop filters
     write32(createAddress(`CH0_RESAMPSPACE,`RESAMPLER_RATE),resamplerFreqInt);

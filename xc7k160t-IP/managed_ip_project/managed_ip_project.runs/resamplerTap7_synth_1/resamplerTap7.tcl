@@ -15,6 +15,7 @@ set_property default_lib xil_defaultlib [current_project]
 set_property target_language Verilog [current_project]
 set_property vhdl_version vhdl_2k [current_fileset]
 read_ip C:/modem/vivado/xc7k160t-IP/resamplerTap7/resamplerTap7.xci
+set_property used_in_implementation false [get_files -all c:/modem/vivado/xc7k160t-IP/resamplerTap7/resamplerTap7.dcp]
 set_property is_locked true [get_files C:/modem/vivado/xc7k160t-IP/resamplerTap7/resamplerTap7.xci]
 
 read_xdc dont_touch.xdc

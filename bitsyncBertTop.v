@@ -129,7 +129,7 @@ module bitsyncBertTop (
     input           pll2_OUT1;
     output          pll2_PWDn;
 
-    parameter VER_NUMBER = 16'd430;
+    parameter VER_NUMBER = 16'd438;
 
 
 //******************************************************************************
@@ -316,11 +316,11 @@ clockAndDataInputSync diffSync(
         .eyeClkEn(eyeClkEn),
         .iEye(iEye),.qEye(qEye),
         .eyeOffset(eyeOffset),
-        .ch0VitBitEnOut(ch0VitBitEn),
-        .ch0VitBitOut(ch0VitBit),
+        .ch0VitBitEn(ch0VitBitEn),
+        .ch0VitBit(ch0VitBit),
         .ch0VitSym2xEn(ch0VitSym2xEn),
-        .ch1VitBitEnOut(c1VitBitEn),
-        .ch1VitBitOut(ch1VitBit),
+        .ch1VitBitEn(ch1VitBitEn),
+        .ch1VitBit(ch1VitBit),
         .ch1VitSym2xEn(ch1VitSym2xEn),
         .asyncMode(asyncMode),
         .test0(test0), .test1(test1)
@@ -424,7 +424,7 @@ clockAndDataInputSync diffSync(
         if (ch1DecInputSelect) begin
             ch1DecInput <= ch1VitBit;
             ch1DecSymEn <= ch1VitBitEn;
-            ch1DecSym2xEn <= ch1BitSym2xEn;
+            ch1DecSym2xEn <= ch1VitSym2xEn;
         end
         else begin
             ch1DecInput <= ch1DataOut;

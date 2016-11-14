@@ -56,11 +56,11 @@ module bitsyncTop(
     eyeClkEn,
     iEye,qEye,
     eyeOffset,
-    ch0VitBitEnOut,
-    ch0VitBitOut,
+    ch0VitBitEn,
+    ch0VitBit,
     ch0VitSym2xEn,
-    ch1VitBitEnOut,
-    ch1VitBitOut,
+    ch1VitBitEn,
+    ch1VitBit,
     ch1VitSym2xEn,
     asyncMode,
     test0,test1
@@ -115,11 +115,11 @@ output          [17:0]  ch1Offset;
 output                  eyeClkEn;
 output          [17:0]  iEye,qEye;
 output          [4:0]   eyeOffset;
-output                  ch0VitBitEnOut;
-output                  ch0VitBitOut;
+output                  ch0VitBitEn;
+output                  ch0VitBit;
 output  reg             ch0VitSym2xEn;
-output                  ch1VitBitEnOut;
-output                  ch1VitBitOut;
+output                  ch1VitBitEn;
+output                  ch1VitBit;
 output  reg             ch1VitSym2xEn;
 output                  asyncMode;
 output                  test0,test1;
@@ -505,7 +505,7 @@ pcmAgcLoop #(.RegSpace(`CH1_AGCSPACE)) pcmAgcLoop1(
         .ch1SymData(ch1SymData),
         .ch0BitEnOut(ch0VitBitEn),
         .ch0BitOut(ch0VitBit),
-        .ch1BitEnOut(c1VitBitEn),
+        .ch1BitEnOut(ch1VitBitEn),
         .ch1BitOut(ch1VitBit)
         );
     always @* begin
