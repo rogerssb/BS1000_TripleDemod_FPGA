@@ -152,6 +152,8 @@ set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks fbCl
 # set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks pll0_OUT1] -group [get_clocks -include_generated_clocks sysClk]
 # set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks pll1_OUT1] -group [get_clocks -include_generated_clocks sysClk]
 
+# set_multicycle_path -from [get_pins {dacInterface/sr_reg[15]/C}] -to [get_ports dacMOSI] 2
+
 
 
 

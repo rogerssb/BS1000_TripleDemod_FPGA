@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <GenRun Id="resamplerTap5_synth_1" LaunchPart="xc7k160tfbg676-1" LaunchTime="1479140644">
-  <File Type="RUN-CONSTRS" Name="$PDATADIR/runs/resamplerTap5_synth_1/constrs_in.xml"/>
   <File Type="RDS-DCP" Name="resamplerTap5.dcp"/>
-  <File Type="RUN-SRCS" Name="$PDATADIR/runs/resamplerTap5_synth_1/sources.xml"/>
+  <File Type="RUN-CONSTRS" Name="$PDATADIR/runs/resamplerTap5_synth_1/constrs_in.xml"/>
   <File Type="RDS-UTIL-PB" Name="resamplerTap5_utilization_synth.pb"/>
-  <File Type="RUN-STRAT" Name="$PDATADIR/runs/resamplerTap5_synth_1/resamplerTap5_synth_1.psg"/>
-  <File Type="PA-TCL" Name="resamplerTap5.tcl"/>
+  <File Type="RUN-SRCS" Name="$PDATADIR/runs/resamplerTap5_synth_1/sources.xml"/>
   <File Type="RDS-PROPCONSTRS" Name="resamplerTap5_drc_synth.rpt"/>
+  <File Type="PA-TCL" Name="resamplerTap5.tcl"/>
+  <File Type="RUN-STRAT" Name="$PDATADIR/runs/resamplerTap5_synth_1/resamplerTap5_synth_1.psg"/>
   <File Type="RDS-RDS" Name="resamplerTap5.vds"/>
   <File Type="RDS-UTIL" Name="resamplerTap5_utilization_synth.rpt"/>
   <File Type="VDS-TIMINGSUMMARY" Name="resamplerTap5_timing_summary_synth.rpt"/>

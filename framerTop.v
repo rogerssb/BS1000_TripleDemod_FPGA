@@ -300,6 +300,14 @@ module framerTop(
                         bitCount <= bitCount - 1;
                     end
                 end
+                default: begin
+                    syncState <= `OUT_OF_SYNC;
+                    syncCount <= 0;
+                    invertData <= 0;
+                    rotation <= 0;
+                    wordCount <= 0;
+                    bitCount <= 0;
+                end
             endcase
         end
     end

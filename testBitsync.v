@@ -5,6 +5,7 @@
 //`define ADD_FIFOS
 //`define MATLAB_VECTORS
 `define ADD_BERT_TEST
+`define ADD_PNGEN_TEST
 
 module test;
 
@@ -449,6 +450,29 @@ mcp48xxInterface dacInterface (
 
     `endif
 
+    `ifdef ADD_PNGEN_TEST
+    reg pngenSpace;
+    always @* begin
+        casex(a)
+            `PNGEN_SPACE:           pngenSpace = 1;
+            default:                pngenSpace = 0;
+            endcase
+        end
+
+    pngenTop pngen(
+        .clk(clk),
+        .clkEn(1'b1),
+        .reset(reset),
+        .busClk(bc),
+        .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
+        .addr(a),
+        .din(d),
+        .dout(),
+        .pnClkEn(pnClkEn),
+        .pnBit(pnBit)
+    );
+    `endif
+
 `ifdef MATLAB_VECTORS
 /******************************************************************************
                           Vector data for Matlab Analysis
@@ -741,6 +765,14 @@ initial begin
     write32(createAddress(`BERT_SPACE,`SINGLE_TEST_LENGTH), 32'd5000);
     write32(createAddress(`BERT_SPACE,`TEST_CONTROL), 32'h0);
     `endif
+
+    `ifdef ADD_PNGEN_TEST
+    write32(createAddress(`PNGEN_SPACE,`PNGEN_POLY), 32'h480000b8);// PN8, restart true
+    write32(createAddress(`PNGEN_SPACE,`PNGEN_RATE), 32'he0ea0ea); // 5.125 Mbps
+    write16(createAddress(`PNGEN_SPACE,`PNGEN_PCM_MODE),16'h00);   // NRZ-L
+    write32(createAddress(`PNGEN_SPACE,`PNGEN_POLY), 32'h080000b8);// PN8, restart false
+    `endif
+
 
     write32(createAddress(`DLL0SPACE,`DLL_CENTER_FREQ), 32'd178956970);
     write32(createAddress(`DLL0SPACE,`DLL_GAINS),32'd7);

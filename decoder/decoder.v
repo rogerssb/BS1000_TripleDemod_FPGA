@@ -282,8 +282,8 @@ wire    data_inv_q = data_inv ? !derand_out_q : derand_out_q ;
 //  );
 
 wire        clk_sel;
-assign      cout = biphase ? biphase_en : (
-                    clk_sel ? symb_clk_en : symb_clk_2x_en);
+assign      cout = biphase ? (biphase_en & symb_clk_en) 
+                           : (clk_sel ? symb_clk_en : symb_clk_2x_en);
 reg         symb_clk;
 always @(posedge clk) begin
     if (symb_clk_en) begin

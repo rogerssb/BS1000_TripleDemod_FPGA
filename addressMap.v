@@ -144,6 +144,13 @@
 
 `define PNGEN_POLY              13'bx_xxxx_xxxx_00xx
 `define PNGEN_RATE              13'bx_xxxx_xxxx_01xx
+`define PNGEN_PCM_MODE          13'bx_xxxx_xxxx_10xx
+    `define PNGEN_PCM_NRZL          3'b000
+    `define PNGEN_PCM_NRZM          3'b001
+    `define PNGEN_PCM_NRZS          3'b010
+    `define PNGEN_PCM_BIPL          3'b100
+    `define PNGEN_PCM_BIPM          3'b101
+    `define PNGEN_PCM_BIPS          3'b110
 
 
 

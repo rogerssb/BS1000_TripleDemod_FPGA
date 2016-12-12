@@ -129,7 +129,7 @@ module bitsyncBertTop (
     input           pll2_OUT1;
     output          pll2_PWDn;
 
-    parameter VER_NUMBER = 16'd438;
+    parameter VER_NUMBER = 16'd439;
 
 
 //******************************************************************************
@@ -528,6 +528,7 @@ clockAndDataInputSync diffSync(
         .din(dataIn),
         .dout(pngenDout),
         .pnClkEn(pnClkEn),
+        .nrzBit(pnNrzBit),
         .pnBit(pnBit)
     );
 
@@ -775,6 +776,7 @@ interpolate #(.RegSpace(`INTERP0SPACE), .FirRegSpace(`VIDFIR0SPACE)) dac0Interp(
     .din(dataIn),
     .dout(interp0Dout),
     .dataIn(interp0DataIn),
+    .clkEnOut(),
     .dataOut(interp0DataOut)
     );
 reg     [13:0]  dac0_d;
@@ -811,6 +813,7 @@ interpolate #(.RegSpace(`INTERP1SPACE), .FirRegSpace(`VIDFIR1SPACE)) dac1Interp(
     .din(dataIn),
     .dout(interp1Dout),
     .dataIn(interp1DataIn),
+    .clkEnOut(),
     .dataOut(interp1DataOut)
     );
 reg     [13:0]  dac1_d;
@@ -847,6 +850,7 @@ interpolate #(.RegSpace(`INTERP2SPACE), .FirRegSpace(`VIDFIR2SPACE)) dac2Interp(
     .din(dataIn),
     .dout(interp2Dout),
     .dataIn(interp2DataIn),
+    .clkEnOut(),
     .dataOut(interp2DataOut)
     );
 reg     [13:0]  dac2_d;
@@ -898,9 +902,9 @@ clockAndDataMux bsMux(
     .clk4(1'b0),
     .clkInvert4(1'b0),
     .data4(1'b0),
-    .clk5(1'b0),
+    .clk5(pnClkEn),
     .clkInvert5(1'b0),
-    .data5(1'b0),
+    .data5(pnNrzBit),
     .clk6(pll2_Clk),
     .clkInvert6(1'b0),
     .data6(pll2_Data),

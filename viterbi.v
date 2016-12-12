@@ -442,6 +442,7 @@ module viterbi(
         `endif
         .s_axis_data_tvalid(ch0VitEn),
         .s_axis_data_tdata({5'b0,ch0G2,5'b0,ch0G1}),
+        .s_axis_data_tready(),
         .s_axis_dstat_tvalid(ch0VitEn),
         .s_axis_dstat_tdata(berTestLength),
         .m_axis_data_tvalid(ch0VitRdy),
@@ -461,6 +462,7 @@ module viterbi(
         `endif
         .s_axis_data_tvalid(ch1VitEn),
         .s_axis_data_tdata({5'b0,ch1G2,5'b0,ch1G1}),
+        .s_axis_data_tready(),
         .s_axis_dstat_tvalid(ch1VitEn),
         .s_axis_dstat_tdata(berTestLength),
         .m_axis_data_tvalid(ch1VitRdy),

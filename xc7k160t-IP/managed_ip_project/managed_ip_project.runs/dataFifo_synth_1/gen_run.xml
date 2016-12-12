@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <GenRun Id="dataFifo_synth_1" LaunchPart="xc7k160tfbg676-1" LaunchTime="1477687350">
-  <File Type="RDS-DCP" Name="dataFifo.dcp"/>
   <File Type="RUN-CONSTRS" Name="$PDATADIR/runs/dataFifo_synth_1/constrs_in.xml"/>
-  <File Type="RDS-UTIL-PB" Name="dataFifo_utilization_synth.pb"/>
+  <File Type="RDS-DCP" Name="dataFifo.dcp"/>
   <File Type="RUN-SRCS" Name="$PDATADIR/runs/dataFifo_synth_1/sources.xml"/>
-  <File Type="RDS-PROPCONSTRS" Name="dataFifo_drc_synth.rpt"/>
-  <File Type="PA-TCL" Name="dataFifo.tcl"/>
+  <File Type="RDS-UTIL-PB" Name="dataFifo_utilization_synth.pb"/>
   <File Type="RUN-STRAT" Name="$PDATADIR/runs/dataFifo_synth_1/dataFifo_synth_1.psg"/>
+  <File Type="PA-TCL" Name="dataFifo.tcl"/>
+  <File Type="RDS-PROPCONSTRS" Name="dataFifo_drc_synth.rpt"/>
   <File Type="RDS-RDS" Name="dataFifo.vds"/>
   <File Type="RDS-UTIL" Name="dataFifo_utilization_synth.rpt"/>
   <File Type="VDS-TIMINGSUMMARY" Name="dataFifo_timing_summary_synth.rpt"/>

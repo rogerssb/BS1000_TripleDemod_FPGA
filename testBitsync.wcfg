@@ -12,10 +12,13 @@
    </db_ref_list>
    <zoom_setting>
       <ZoomStartTime time="0fs"></ZoomStartTime>
-      <ZoomEndTime time="51134809161fs"></ZoomEndTime>
-      <Cursor1Time time="40755000000fs"></Cursor1Time>
+      <ZoomEndTime time="21000000002fs"></ZoomEndTime>
+      <Cursor1Time time="10000000000fs"></Cursor1Time>
    </zoom_setting>
-   <WVObjectSize size="13" />
+   <WVObjectSize size="14" />
+   <wave_markers>
+      <marker time="6794918000" label="" />
+   </wave_markers>
    <wvobject db_ref_id="1" fp_name="/test/dfDecimationReal" type="other">
       <obj_property name="ElementShortName">dfDecimationReal</obj_property>
       <obj_property name="ObjectShortName">dfDecimationReal</obj_property>
@@ -412,7 +415,6 @@
    <wvobject fp_name="group105" type="group">
       <obj_property name="label">DPLL</obj_property>
       <obj_property name="DisplayName">label</obj_property>
-      <obj_property name="isExpanded"></obj_property>
       <wvobject db_ref_id="1" fp_name="/test/dll0/centerFreq" type="array">
          <obj_property name="ElementShortName">centerFreq[31:0]</obj_property>
          <obj_property name="ObjectShortName">centerFreq[31:0]</obj_property>
@@ -447,6 +449,35 @@
          <obj_property name="ElementShortName">phaseInc[31:0]</obj_property>
          <obj_property name="ObjectShortName">phaseInc[31:0]</obj_property>
          <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="group66" type="group">
+      <obj_property name="label">PNGEN</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject db_ref_id="1" fp_name="/test/pngen/pcmMode" type="array">
+         <obj_property name="ElementShortName">pcmMode[2:0]</obj_property>
+         <obj_property name="ObjectShortName">pcmMode[2:0]</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/test/pngen/pcmInvert" type="logic">
+         <obj_property name="ElementShortName">pcmInvert</obj_property>
+         <obj_property name="ObjectShortName">pcmInvert</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/test/pngen/infoClkEn" type="logic">
+         <obj_property name="ElementShortName">infoClkEn</obj_property>
+         <obj_property name="ObjectShortName">infoClkEn</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/test/pngen/pnClkEn" type="logic">
+         <obj_property name="ElementShortName">pnClkEn</obj_property>
+         <obj_property name="ObjectShortName">pnClkEn</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/test/pngen/everyOtherEn" type="logic">
+         <obj_property name="ElementShortName">everyOtherEn</obj_property>
+         <obj_property name="ObjectShortName">everyOtherEn</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/test/pngen/pnBit" type="logic">
+         <obj_property name="ElementShortName">pnBit</obj_property>
+         <obj_property name="ObjectShortName">pnBit</obj_property>
       </wvobject>
    </wvobject>
 </wave_config>
