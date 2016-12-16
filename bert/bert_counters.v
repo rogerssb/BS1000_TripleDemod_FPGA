@@ -217,14 +217,18 @@ always @ (posedge clock) begin
     if (continuous_test_start_enable) begin
       continuous_test_count <= 32'd0;
       continuous_test_errors <= 32'd0;
-      continuous_test_count_buffer <= continuous_test_count;
-      continuous_test_errors_buffer <= continuous_test_errors + next_error;
+      if (data_enable) begin
+          continuous_test_count_buffer <= continuous_test_count + 1;
+          continuous_test_errors_buffer <= continuous_test_errors + next_error;
+      end
+      else begin
+          continuous_test_count_buffer <= continuous_test_count;
+          continuous_test_errors_buffer <= continuous_test_errors;
+      end
     end
     else if (data_enable) begin
       continuous_test_count <= (continuous_test_count + 32'd1);
       continuous_test_errors <= continuous_test_errors + next_error;
-      continuous_test_count_buffer <= continuous_test_count_buffer;
-      continuous_test_errors_buffer <= continuous_test_errors_buffer;
     end
   end
 end
