@@ -226,25 +226,40 @@ always @ ( posedge clk )
 //                        Randomized NRZ-L Decoder
 //------------------------------------------------------------------------------
 
-reg     [14:0]  rand_nrz_shft ;
+reg     [22:0]  rand_nrz_shft ;
 wire            rand_nrz_shft_en = demux ? symb_clk_2x_en : symb_clk_en ;
 reg             rand_nrz_dec_out ;
+
+wire    [2:0]   derandMode = {derandomize2,derandomize1,derandomize0};
 
 always @ ( posedge clk or posedge rs )
     begin
     if ( rs )
         begin
-        rand_nrz_shft <= 15'h0 ;
+        rand_nrz_shft <= 23'h0 ;
         rand_nrz_dec_out <= 1'b0 ;
         end
     else if ( rand_nrz_shft_en )
         begin
-        rand_nrz_shft <= {rand_nrz_shft[13:0], out_sel_i} ;
-        rand_nrz_dec_out <= out_sel_i ^ (rand_nrz_shft[14]^rand_nrz_shft[13]) ;
+        rand_nrz_shft <= {rand_nrz_shft[21:0], out_sel_i} ;
+        case (derandMode)
+            `DEC_DERAND_MODE_RNRZ15:
+                rand_nrz_dec_out <= out_sel_i ^ (rand_nrz_shft[14]^rand_nrz_shft[13]) ;
+            `DEC_DERAND_MODE_RNRZ9:
+                rand_nrz_dec_out <= out_sel_i ^ (rand_nrz_shft[8]^rand_nrz_shft[4]) ;
+            `DEC_DERAND_MODE_RNRZ11:
+                rand_nrz_dec_out <= out_sel_i ^ (rand_nrz_shft[10]^rand_nrz_shft[8]) ;
+            `DEC_DERAND_MODE_RNRZ17:
+                rand_nrz_dec_out <= out_sel_i ^ (rand_nrz_shft[16]^rand_nrz_shft[13]) ;
+            `DEC_DERAND_MODE_RNRZ23:
+                rand_nrz_dec_out <= out_sel_i ^ (rand_nrz_shft[22]^rand_nrz_shft[17]) ;
+            default:
+                rand_nrz_dec_out <= out_sel_i ^ (rand_nrz_shft[14]^rand_nrz_shft[13]) ;
+        endcase
         end
     end
 
-wire    derandomize;
+wire    derandomize = (derandMode != `DEC_DERAND_MODE_OFF);
 wire    derand_out_i = derandomize ? rand_nrz_dec_out : out_sel_i ;
 wire    derand_out_q = derandomize ? rand_nrz_dec_out : out_sel_q ;
 
@@ -317,20 +332,21 @@ decoder_regs decoder_regs(
   );
 
 assign {
+    derandomize2,
     inputSelect,
     bypass_fifo,
-    rsvd0,
+    derandomize1,
     mode,
     sign_mag,
     biphase,
     swap,
     feher,
     demux,
-    derandomize,
+    derandomize0,
     data_inv,
     clk_sel,
     clk_inv,
-    fifo_rs} = regs_q[14:0];
+    fifo_rs} = regs_q[15:0];
 
 endmodule
 
