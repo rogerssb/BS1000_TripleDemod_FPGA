@@ -19,7 +19,7 @@ module pngenTop(
     wire        [23:0]  pnPolyTaps;
     wire        [4:0]   pnPolyLength;
     wire        [31:0]  pnClockRate;
-    wire        [2:0]   pcmMode;
+    wire        [3:0]   pcmMode;
     pngenRegs pngenRegs(
         .busClk(busClk),
         .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),

@@ -215,7 +215,7 @@ module framerTop(
     wire            endOfPayload = ((bitCount == 0) && (wordCount == 0));
     reg             detectedPolarity;
     integer         syncCount;
-        `define MAX_SYNC_COUNT 5
+        `define FRAMER_MAX_SYNC_COUNT 5
     always @(posedge clk) begin
         if (reset) begin
             syncState <= `OUT_OF_SYNC;
@@ -275,7 +275,7 @@ module framerTop(
                 `TEST_SYNC: begin
                     if (bitCount == 0) begin
                         if (syncDetected && !negPolarity) begin
-                            if (syncCount < `MAX_SYNC_COUNT) begin
+                            if (syncCount < `FRAMER_MAX_SYNC_COUNT) begin
                                 syncCount <= syncCount + 1;
                             end
                             else begin

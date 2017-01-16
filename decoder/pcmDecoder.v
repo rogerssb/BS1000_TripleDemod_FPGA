@@ -100,62 +100,117 @@ mrk_spc_decode mrk_spc_decode
 
 
 //------------------------------------------------------------------------------
+//                             Miller Decoding
+//------------------------------------------------------------------------------
+    wire            miller;
+    millerDecoder md(
+        .clk(clk),
+        .reset(rs),
+        .clkEn(1'b1),
+        .pcmEn(symb_clk_en),
+        .pcmMode({miller,1'b0,mode}),
+        .pcmBit(symb),
+        .nrzEn(millerBitEn),
+        .nrzBit(millerBit)
+    );
+
+//------------------------------------------------------------------------------
 //                        Randomized NRZ-L Decoder
 //------------------------------------------------------------------------------
 
-reg     [22:0]  rand_nrz_shft ;
-wire            rand_nrz_shft_en = symb_clk_en ;
-reg             rand_nrz_dec_out ;
-
-wire    [2:0]   derandMode = {derandomize2,derandomize1,derandomize0};
-
-always @ ( posedge clk or posedge rs )
-    begin
-    if ( rs )
-        begin
-        rand_nrz_shft <= 23'h0 ;
-        rand_nrz_dec_out <= 1'b0 ;
+    reg     [22:0]  rand_nrz_shft ;
+    reg             rand_nrz_shft_en;
+    always @* begin
+        if (miller) begin
+            rand_nrz_shft_en = (millerBitEn & symb_clk_en);
         end
-    else if ( rand_nrz_shft_en )
-        begin
-        rand_nrz_shft <= {rand_nrz_shft[21:0], dec} ;
-        case (derandMode)
-            `DEC_DERAND_MODE_RNRZ15:
-                rand_nrz_dec_out <= dec ^ (rand_nrz_shft[14]^rand_nrz_shft[13]) ;
-            `DEC_DERAND_MODE_RNRZ9:
-                rand_nrz_dec_out <= dec ^ (rand_nrz_shft[8]^rand_nrz_shft[4]) ;
-            `DEC_DERAND_MODE_RNRZ11:
-                rand_nrz_dec_out <= dec ^ (rand_nrz_shft[10]^rand_nrz_shft[8]) ;
-            `DEC_DERAND_MODE_RNRZ17:
-                rand_nrz_dec_out <= dec ^ (rand_nrz_shft[16]^rand_nrz_shft[13]) ;
-            `DEC_DERAND_MODE_RNRZ23:
-                rand_nrz_dec_out <= dec ^ (rand_nrz_shft[22]^rand_nrz_shft[17]) ;
-            default:
-                rand_nrz_dec_out <= dec ^ (rand_nrz_shft[14]^rand_nrz_shft[13]) ;
-        endcase
+        else if (biphase) begin
+            rand_nrz_shft_en = (biphase_en & symb_clk_en);
+        end
+        else begin
+            rand_nrz_shft_en = symb_clk_en;
+        end
+    end
+    reg             rand_nrz_dec_out ;
+
+    wire    [2:0]   derandMode = {derandomize2,derandomize1,derandomize0};
+
+    always @ ( posedge clk or posedge rs ) begin
+        if ( rs ) begin
+            rand_nrz_shft <= 23'h0 ;
+            rand_nrz_dec_out <= 1'b0 ;
+        end
+        else if ( rand_nrz_shft_en ) begin
+            rand_nrz_shft <= {rand_nrz_shft[21:0], dec} ;
+            case (derandMode)
+                `DEC_DERAND_MODE_RNRZ15:
+                    rand_nrz_dec_out <= dec ^ (rand_nrz_shft[14]^rand_nrz_shft[13]) ;
+                `DEC_DERAND_MODE_RNRZ9:
+                    rand_nrz_dec_out <= dec ^ (rand_nrz_shft[8]^rand_nrz_shft[4]) ;
+                `DEC_DERAND_MODE_RNRZ11:
+                    rand_nrz_dec_out <= dec ^ (rand_nrz_shft[10]^rand_nrz_shft[8]) ;
+                `DEC_DERAND_MODE_RNRZ17:
+                    rand_nrz_dec_out <= dec ^ (rand_nrz_shft[16]^rand_nrz_shft[13]) ;
+                `DEC_DERAND_MODE_RNRZ23:
+                    rand_nrz_dec_out <= dec ^ (rand_nrz_shft[22]^rand_nrz_shft[17]) ;
+                default:
+                    rand_nrz_dec_out <= dec ^ (rand_nrz_shft[14]^rand_nrz_shft[13]) ;
+            endcase
         end
     end
 
-wire    derandomize = (derandMode != `DEC_DERAND_MODE_OFF);
-wire    derand_out = derandomize ? rand_nrz_dec_out : dec ;
+    wire    derandomize = (derandMode != `DEC_DERAND_MODE_OFF);
+    wire    derand_out = derandomize ? rand_nrz_dec_out : dec ;
 
 //------------------------------------------------------------------------------
 //                     Output Formatting and Inversions
 //------------------------------------------------------------------------------
 
-wire    data_inv;
-wire    data_out = data_inv ? !derand_out : derand_out ;
+    wire    data_inv;
+    wire    data_out = data_inv ? !derand_out : derand_out ;
 
-wire        clk_sel;
-assign      clkEn_out = biphase ? (biphase_en & symb_clk_en)
-                                : (clk_sel ? symb_clk_en : symb_clk_2x_en);
-reg         symb_clk;
-always @(posedge clk) begin
-    if (symb_clk_en) begin
-        symb_clk <= 1;
+    wire        clk_sel;
+    reg         clkEn_out;
+    always @* begin
+        if (miller) begin
+            clkEn_out = (millerBitEn & symb_clk_en);
         end
-    else if (symb_clk_2x_en) begin
-        symb_clk <= ~symb_clk;
+        else if (biphase) begin
+            clkEn_out = (biphase_en & symb_clk_en);
+        end
+        else if (clk_sel) begin
+            clkEn_out = symb_clk_en;
+        end
+        else begin
+            clkEn_out = symb_clk_2x_en;
+        end
+    end
+
+    reg         symb_clk;
+    always @(posedge clk) begin
+        if (miller) begin
+            if (millerBitEn & symb_clk_en) begin
+                symb_clk <= 1;
+            end
+            else if (symb_clk_en) begin
+                symb_clk <= ~symb_clk;
+            end
+        end
+        else if (biphase) begin
+            if (biphase_en & symb_clk_en) begin
+                symb_clk <= 1;
+            end
+            else if (symb_clk_en) begin
+                symb_clk <= ~symb_clk;
+            end
+        end
+        else begin
+            if (symb_clk_en) begin
+                symb_clk <= 1;
+            end
+            else if (symb_clk_2x_en) begin
+                symb_clk <= ~symb_clk;
+            end
         end
     end
 
@@ -185,7 +240,7 @@ assign {
     bypass_fifo,
     derandomize1,
     mode,
-    sign_mag,
+    miller,
     biphase,
     swap,
     feher,
