@@ -21,7 +21,7 @@ module framerTop(
     wire        [15:0]  wordsPerFrame;
     wire        [31:0]  syncwordMask;
     wire        [31:0]  syncword;
-    wire signed [5:0]   syncThreshold;
+    wire signed [6:0]   syncThreshold;
     framerRegs framerRegs(
         .busClk(busClk),
         .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
@@ -98,7 +98,7 @@ module framerTop(
         end
     end
 
-    wire signed [2:0]   corr0;
+    wire signed [3:0]   corr0;
     fourBitCorrelator corrNibble0(
         .clk(clk),
         .data(corrSR[3:0]),
@@ -107,7 +107,7 @@ module framerTop(
         .correlation(corr0)
         );
 
-    wire signed [2:0]   corr1;
+    wire signed [3:0]   corr1;
     fourBitCorrelator corrNibble1(
         .clk(clk),
         .data(corrSR[7:4]),
@@ -116,7 +116,7 @@ module framerTop(
         .correlation(corr1)
         );
 
-    wire signed [2:0]   corr2;
+    wire signed [3:0]   corr2;
     fourBitCorrelator corrNibble2(
         .clk(clk),
         .data(corrSR[11:8]),
@@ -125,7 +125,7 @@ module framerTop(
         .correlation(corr2)
         );
 
-    wire signed [2:0]   corr3;
+    wire signed [3:0]   corr3;
     fourBitCorrelator corrNibble3(
         .clk(clk),
         .data(corrSR[15:12]),
@@ -134,7 +134,7 @@ module framerTop(
         .correlation(corr3)
         );
 
-    wire signed [2:0]   corr4;
+    wire signed [3:0]   corr4;
     fourBitCorrelator corrNibble4(
         .clk(clk),
         .data(corrSR[19:16]),
@@ -143,7 +143,7 @@ module framerTop(
         .correlation(corr4)
         );
 
-    wire signed [2:0]   corr5;
+    wire signed [3:0]   corr5;
     fourBitCorrelator corrNibble5(
         .clk(clk),
         .data(corrSR[23:20]),
@@ -152,7 +152,7 @@ module framerTop(
         .correlation(corr5)
         );
 
-    wire signed [2:0]   corr6;
+    wire signed [3:0]   corr6;
     fourBitCorrelator corrNibble6(
         .clk(clk),
         .data(corrSR[27:24]),
@@ -161,7 +161,7 @@ module framerTop(
         .correlation(corr6)
         );
 
-    wire signed [2:0]   corr7;
+    wire signed [3:0]   corr7;
     fourBitCorrelator corrNibble7(
         .clk(clk),
         .data(corrSR[31:28]),
@@ -171,14 +171,14 @@ module framerTop(
         );
 
 
-    wire signed [5:0]   bitSum = $signed({{3{corr0[2]}},corr0})
-                               + $signed({{3{corr1[2]}},corr1})
-                               + $signed({{3{corr2[2]}},corr2})
-                               + $signed({{3{corr3[2]}},corr3})
-                               + $signed({{3{corr4[2]}},corr4})
-                               + $signed({{3{corr5[2]}},corr5})
-                               + $signed({{3{corr6[2]}},corr6})
-                               + $signed({{3{corr7[2]}},corr7});
+    wire signed [6:0]   bitSum = $signed({{3{corr0[3]}},corr0})
+                               + $signed({{3{corr1[3]}},corr1})
+                               + $signed({{3{corr2[3]}},corr2})
+                               + $signed({{3{corr3[3]}},corr3})
+                               + $signed({{3{corr4[3]}},corr4})
+                               + $signed({{3{corr5[3]}},corr5})
+                               + $signed({{3{corr6[3]}},corr6})
+                               + $signed({{3{corr7[3]}},corr7});
 
     `ifdef SIMULATE
     real    correlation;
@@ -188,7 +188,7 @@ module framerTop(
     // Sync Detector
     reg syncDetected;
     reg negPolarity;
-    wire signed [5:0]   negSyncThreshold = -syncThreshold;
+    wire signed [6:0]   negSyncThreshold = -syncThreshold;
     always @(posedge clk) begin
         if (clkEn) begin
             if (bitSum > syncThreshold) begin
@@ -322,30 +322,57 @@ module fourBitCorrelator(
     input               [3:0]   data,
     input               [3:0]   pattern,
     input               [3:0]   mask,
-    output signed       [2:0]   correlation
+    output signed       [3:0]   correlation
     );
 
     wire        [3:0]   corr = (~(data ^ pattern)) & mask;
-    reg signed  [2:0]   corr_reg;
+    reg signed  [3:0]   corr_reg;
     assign correlation = corr_reg;
-    always @(corr) begin
-        case (corr)
-            4'b0000:    corr_reg <= -2;
-            4'b0001,
-            4'b0010,
-            4'b0100,
-            4'b1000:    corr_reg <= -1;
-            4'b0011,
-            4'b0101,
-            4'b1001,
-            4'b0110,
-            4'b1010,
-            4'b1100:    corr_reg <= 0;
-            4'b0111,
-            4'b1011,
-            4'b1101,
-            4'b1110:    corr_reg <= 1;
-            4'b1111:    corr_reg <= 2;
+    always @* begin
+        casex (mask)
+            4'b1xxx:
+                case (corr)
+                    4'b0000:    corr_reg <= -4;
+                    4'b0001,
+                    4'b0010,
+                    4'b0100,
+                    4'b1000:    corr_reg <= -2;
+                    4'b0011,
+                    4'b0101,
+                    4'b1001,
+                    4'b0110,
+                    4'b1010,
+                    4'b1100:    corr_reg <= 0;
+                    4'b0111,
+                    4'b1011,
+                    4'b1101,
+                    4'b1110:    corr_reg <= 2;
+                    4'b1111:    corr_reg <= 4;
+                endcase
+            4'b01xx:
+                casex (corr)
+                    4'bx000:    corr_reg <= -3;
+                    4'bx001,
+                    4'bx010,
+                    4'bx100:    corr_reg <= -1;
+                    4'bx011,
+                    4'bx101,
+                    4'bx110:    corr_reg <= 1;
+                    4'bx111:    corr_reg <= 3;
+                endcase
+            4'b001x:
+                casex (corr)
+                    4'bxx00:    corr_reg <= -2;
+                    4'bxx01,
+                    4'bxx10:    corr_reg <= 0;
+                    4'bxx11:    corr_reg <= 2;
+                endcase
+            4'b0001:
+                casex (corr)
+                    4'bxxx0:    corr_reg <= -1;
+                    4'bxxx1:    corr_reg <= 1;
+                endcase
+            default:            corr_reg <= 0;
         endcase
     end
 

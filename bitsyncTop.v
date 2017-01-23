@@ -484,6 +484,7 @@ pcmAgcLoop #(.RegSpace(`CH1_AGCSPACE)) pcmAgcLoop1(
     end
 
 
+`ifndef SIMULATE
 /******************************************************************************
                             Viterbi Decoders
 ******************************************************************************/
@@ -521,6 +522,7 @@ pcmAgcLoop #(.RegSpace(`CH1_AGCSPACE)) pcmAgcLoop1(
             end
         endcase
     end
+`endif
 
 
 /******************************************************************************
@@ -735,7 +737,9 @@ reg [31:0]dout;
 always @* begin
     casex (addr)
         `BITSYNC_TOP_SPACE: dout = bitsyncTopDout;
+`ifndef SIMULATE
         `VITERBISPACE:      dout = vitDout;
+`endif
         `CH0_DFSPACE,
         `CH0_DFFIRSPACE:    dout = df0Dout;
         `CH0_RESAMPSPACE:   dout = ch0ResampDout;

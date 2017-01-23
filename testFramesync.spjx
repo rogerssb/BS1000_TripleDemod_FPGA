@@ -21,12 +21,12 @@
    </includedirs>
    <analyzer>
     <views>
-     <view value="0.000 ns,46905.100 ns,889.580 ns,19771.180 ns,21059.005 ns" name="Last" />
+     <view value="12552.511 ns,87933.646 ns,1321.317 ns,73068.830 ns,49638.564 ns" name="Last" />
     </views>
     <settings>
      <setting value="163" name="C0Width" />
      <setting value="117" name="C1Width" />
-     <setting value="86" name="C2Width" />
+     <setting value="65" name="C2Width" />
      <setting value="N" name="GotoSource" />
     </settings>
     <groups>
@@ -37,6 +37,8 @@
        <signal name="modClkEn" scope="test" />
        <signal name="modBitEn" scope="test" />
        <signal interpolate="Step" radix="Decimal" name="modClkCount" scope="test" />
+       <signal name="loadFrameSync" scope="test" />
+       <signal name="framedData" scope="test" />
        <signal name="randData" scope="test" />
        <signal name="dataIn[17:0]" scope="test.ch0Interpolate" />
        <signal name="firOut[17:0]" scope="test.ch0Interpolate" />
@@ -207,6 +209,12 @@
      </group>
      <group open="yes" name="FRAMER" show="yes" >
       <signals>
+       <signal name="bitsPerWord[4:0]" scope="test.framer" />
+       <signal name="wordsPerFrame[15:0]" scope="test.framer" />
+       <signal interpolate="Step" radix="Real" name="ch0MFReal" scope="test.bitsyncTop.dualBitsync" />
+       <signal name="ch0BsBit" scope="test.bitsyncTop" />
+       <signal name="rotation[1:0]" scope="test.bitsyncTop" />
+       <signal name="ch0Bit" scope="test.bitsyncTop" />
        <signal name="loadFrameSync" scope="test" />
        <signal name="dataBitIn" scope="test.framer" />
        <signal name="clkEn" scope="test.framer" />
@@ -216,6 +224,11 @@
        <signal name="syncwordMask[31:0]" scope="test.framer" />
        <signal name="invertData" scope="test.framer" />
        <signal radix="Decimal" name="syncThreshold[5:0]" scope="test.framer" />
+       <signal name="corr3[3:0]" scope="test.framer" />
+       <signal name="corr4[2:0]" scope="test.framer" />
+       <signal name="corr6[2:0]" scope="test.framer" />
+       <signal name="corr5[2:0]" scope="test.framer" />
+       <signal name="corr7[2:0]" scope="test.framer" />
        <signal radix="Decimal" name="bitSum[5:0]" scope="test.framer" />
        <signal name="framesync" scope="test.framer" />
        <signal name="framedBitOut" scope="test.framer" />
@@ -229,7 +242,7 @@
    </analyzer>
    <explorer>
     <settings>
-     <setting value="test.framer" name="Scope" />
+     <setting value="test.framer.[15:0]wordsPerFrame" name="Scope" />
     </settings>
    </explorer>
    <sourcefiles>

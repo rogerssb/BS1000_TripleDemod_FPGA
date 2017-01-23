@@ -12,12 +12,12 @@ module framerRegs(
     output reg          [15:0]  wordsPerFrame,
     output reg          [31:0]  syncwordMask,
     output reg          [31:0]  syncword,
-    output      signed  [5:0]   syncThreshold
+    output      signed  [6:0]   syncThreshold
 );
 
     parameter RegSpace = `FRAMER_SPACE;
 
-    reg signed  [5:0]   syncThreshold_reg;
+    reg signed  [6:0]   syncThreshold_reg;
     assign              syncThreshold = syncThreshold_reg;
 
     reg framerSpace;
@@ -39,7 +39,7 @@ module framerRegs(
         end
         if (framerSpace && wr1) begin
             casex (addr)
-                `FRAMER_CONTROL:        syncThreshold_reg <= din[13:8];
+                `FRAMER_CONTROL:        syncThreshold_reg <= din[14:8];
                 `FRAMER_SYNCWORD:       syncword[15:8] <= din[15:8];
                 `FRAMER_SYNCWORD_MASK:  syncwordMask[15:8] <= din[15:8];
                 default: ;
@@ -66,7 +66,7 @@ module framerRegs(
     always @* begin
         if (framerSpace) begin
             casex (addr)
-                `FRAMER_CONTROL:        dout = {wordsPerFrame,2'b0,syncThreshold,3'b0,bitsPerWord};
+                `FRAMER_CONTROL:        dout = {wordsPerFrame,1'b0,syncThreshold,3'b0,bitsPerWord};
                 `FRAMER_SYNCWORD:       dout = syncword;
                 `FRAMER_SYNCWORD_MASK:  dout = syncwordMask;
                 `FRAMER_STATUS:         dout = {31'b0,framesync};

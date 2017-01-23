@@ -148,9 +148,13 @@ always @(posedge clk or posedge reset) begin
     // Random data
     parameter PN17 = 16'h00b8,
               MASK17 = 16'h0099,
-              FramesyncPattern = 32'h0123aa55,
-              BitsPerWord = 32,
-              WordsPerFrame = 4;
+              //FramesyncPattern = 32'h0123aa55,
+              //FramesyncLength = 16,
+              FramesyncPattern = 32'h7fd6,
+              FramesyncLength = 16,
+              BitsPerWord = 8,
+              WordsPerFrame = 30;
+    wire    [31:0]  framesyncMask = $rtoi((2**FramesyncLength)-1);
     wire    [4:0]   bitsPerWord = BitsPerWord-1;
     wire    [15:0]  wordsPerFrame = WordsPerFrame-1;
     reg     [15:0]  sr;
@@ -171,7 +175,7 @@ always @(posedge clk or posedge reset) begin
             end
             else if (fsBitCount == 0) begin
                 loadFrameSync <= 1;
-                fsBitCount <= 31;
+                fsBitCount <= FramesyncLength - 1;
             end
             else begin
                 fsBitCount <= fsBitCount - 1;
@@ -183,7 +187,7 @@ always @(posedge clk or posedge reset) begin
             else begin
                 sr <= {sr[14:0], ^(PN17 & sr)};
                 framedData <= sr[0];
-                fsSR <= FramesyncPattern;
+                fsSR <= {FramesyncPattern,{32-FramesyncLength{1'b0}}};
             end
         end
     end
@@ -265,6 +269,7 @@ bitsyncTop bitsyncTop(
     .dout(dout),
     .rx0(rxInput), 
     .rx1(rxInput),
+    .rotation(2'b00),
     .ch0Lock(),
     .ch0Sym2xEn(),
     .ch0SymEn(ch0SymEn),
@@ -663,7 +668,7 @@ initial begin
     //write32(createAddress(`FRAMER_SPACE,`FRAMER_CONTROL), 16'dWordsPerFrame,2'b0,6'd14,3'b0,5'dBitsPerWord);
     write32(createAddress(`FRAMER_SPACE,`FRAMER_CONTROL), {wordsPerFrame,2'b0,6'd14,3'b0,bitsPerWord});
     write32(createAddress(`FRAMER_SPACE,`FRAMER_SYNCWORD), FramesyncPattern);
-    write32(createAddress(`FRAMER_SPACE,`FRAMER_SYNCWORD_MASK), 32'hffff_ffff);
+    write32(createAddress(`FRAMER_SPACE,`FRAMER_SYNCWORD_MASK), framesyncMask);
 
     reset = 1;
     #(2*C) ;

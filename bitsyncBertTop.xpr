@@ -16,7 +16,7 @@
     <Option Name="CompiledLibDirRiviera" Val="$PCACHEDIR/compile_simlib/riviera"/>
     <Option Name="CompiledLibDirActivehdl" Val="$PCACHEDIR/compile_simlib/activehdl"/>
     <Option Name="BoardPart" Val=""/>
-    <Option Name="ActiveSimSet" Val="sim_1"/>
+    <Option Name="ActiveSimSet" Val="simFramer"/>
     <Option Name="DefaultLib" Val="xil_defaultlib"/>
     <Option Name="IPRepoPath" Val="$PPRDIR/xc7k160t-IP"/>
     <Option Name="EnableCoreContainer" Val="FALSE"/>
@@ -748,6 +748,7 @@
         <Option Name="TopLib" Val="xil_defaultlib"/>
         <Option Name="TopRTLFile" Val="$PPRDIR/testBitsync.v"/>
         <Option Name="VerilogDir" Val="$PPRDIR/."/>
+        <Option Name="SimMode" Val="post-implementation"/>
         <Option Name="SrcSet" Val="sources_1"/>
         <Option Name="XSimWcfgFile" Val="$PPRDIR/testBitsync.wcfg"/>
         <Option Name="NLNetlistMode" Val="funcsim"/>
@@ -775,6 +776,7 @@
         <Option Name="TopModule" Val="test"/>
         <Option Name="TopLib" Val="xil_defaultlib"/>
         <Option Name="VerilogDir" Val="$PPRDIR/."/>
+        <Option Name="SimMode" Val="post-implementation"/>
         <Option Name="SrcSet" Val="sources_1"/>
         <Define Name="SIMULATE"/>
         <Define Name="BITSYNC_BERT"/>
@@ -843,6 +845,31 @@
         <Option Name="UseBlackboxStub" Val="1"/>
         <Define Name="BITSYNC_BERT"/>
         <Define Name="USE_VIVADO_CORES"/>
+      </Config>
+    </FileSet>
+    <FileSet Name="simFramer" Type="SimulationSrcs" RelSrcDir="$PSRCDIR/simFramer">
+      <File Path="$PPRDIR/testFramesync.v">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PPRDIR/testFramesync.wcfg">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <Config>
+        <Option Name="DesignMode" Val="RTL"/>
+        <Option Name="TopModule" Val="test"/>
+        <Option Name="TopLib" Val="xil_defaultlib"/>
+        <Option Name="VerilogDir" Val="$PPRDIR/."/>
+        <Option Name="SrcSet" Val="sources_1"/>
+        <Option Name="XSimWcfgFile" Val="$PPRDIR/testFramesync.wcfg"/>
+        <Define Name="BITSYNC_BERT"/>
+        <Define Name="USE_VIVADO_CORES"/>
+        <Define Name="SIMULATE"/>
       </Config>
     </FileSet>
   </FileSets>
