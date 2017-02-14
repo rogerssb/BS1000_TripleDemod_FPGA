@@ -54,8 +54,15 @@ module bitsync(
     auIQSwap,
     sdiSymEn,
     iTrellis,qTrellis,
+    `ifdef ADD_SUPERBAUD_TED
+    bsError,
+    bsErrorEn,
+    tedOutput,
+    tedOutputEn
+    `else
     bsError,
     bsErrorEn
+    `endif
     );
 
 input           sampleClk;
@@ -103,6 +110,10 @@ output          sdiSymEn;
 output  [17:0]  iTrellis,qTrellis;
 output  [17:0]  bsError;
 output          bsErrorEn;
+`ifdef ADD_SUPERBAUD_TED
+output  signed  [17:0]  tedOutput;
+output                  tedOutputEn;
+`endif
 
 `define USE_COMP
 `ifdef USE_COMP
@@ -131,6 +142,9 @@ wire    [18:0]  iSum = useCompFilter ? ({iDelay[17],iDelay} + {iComp[17],iComp})
                                      : ({iDelay[17],iDelay} + {i[17],i});
 wire    [18:0]  qSum = useCompFilter ? ({qDelay[17],qDelay} + {qComp[17],qComp})
                                      : ({qDelay[17],qDelay} + {q[17],q});
+`ifdef ADD_SUPERBAUD_TED
+reg     signed  [17:0]  iTed,qTed;
+`endif
 always @(posedge sampleClk) begin
     if (symTimes2Sync) begin
         if (useCompFilter) begin
@@ -149,6 +163,10 @@ always @(posedge sampleClk) begin
             iFiltered <= iDelay;
             qFiltered <= qDelay;
             end
+        `ifdef ADD_SUPERBAUD_TED
+        iTed <= iSum[18:1];
+        qTed <= qSum[18:1];
+        `endif
         end
     end
 `else
@@ -241,6 +259,24 @@ wire fmTrellisModes = ( (demodMode == `MODE_MULTIH)
 //assign qTrellis = fmTrellisModes ? qMF : q;
 assign iTrellis = iMF;
 assign qTrellis = qMF;
+
+`ifdef ADD_SUPERBAUD_TED
+//********************** Multih Superbaud TED *********************************
+    multihSuperbaudTED ted(
+        .clk(sampleClk),
+        .symEn(iSymEn),
+        .sym2xEn(symTimes2Sync),
+        .reset(reset),
+        //.i(iTrellis),.q(qTrellis),
+        .i(iTed),.q(qTed),
+        .tedOutputEn(tedOutputEn),
+        .tedOutput(tedOutput)
+    );
+
+
+
+`endif
+
 
 //*********************** MF Frequency Discriminator **************************
 wire    [11:0]   phase;
@@ -703,6 +739,12 @@ reg             loopFilterEn;
 reg     [11:0]  loopFilterError;
 always @* begin
     casex (demodMode) 
+        `ifdef ADD_SUPERBAUD_TED
+        `MODE_MULTIH: begin
+            loopFilterError = tedOutput[17:6];
+            loopFilterEn = symTimes2Sync;
+        end
+        `endif
         default: begin
             loopFilterError = timingError[18:7] + timingError[6];
             loopFilterEn = (symTimes2Sync & timingErrorEn);

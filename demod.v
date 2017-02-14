@@ -628,7 +628,12 @@ singleRailBitsync bitsync(
     .sampleFreq(resamplerFreqOffset),
     .bitsyncLock(bitsyncLock),
     .lockCounter(bsLockCounter),
+    `ifdef ADD_SUPERBAUD_TED
+    .bsError(bsError), .bsErrorEn(bsErrorEn),
+    .tedOutput(tedOutput), .tedOutputEn(tedOutputEn)
+    `else
     .bsError(bsError), .bsErrorEn(bsErrorEn)
+    `endif
     );
 
 wire    [17:0]  qSymData = 0;
@@ -644,6 +649,9 @@ wire    [17:0]  bsError;
 wire    [15:0]  bsLockCounter;
 wire    [15:0]  auLockCounter;
 wire    [31:0]  bitsyncDout;
+    `ifdef ADD_SUPERBAUD_TED
+    wire    signed  [17:0]  tedOutput;
+    `endif
 bitsync bitsync(
     .sampleClk(clk), .reset(reset),
     .symTimes2Sync(resampSync),
@@ -687,7 +695,12 @@ bitsync bitsync(
     .auIQSwap(auIQSwap),
     .sdiSymEn(sdiSymEn),
     .iTrellis(iBsTrellis),.qTrellis(qBsTrellis),
+    `ifdef ADD_SUPERBAUD_TED
+    .bsError(bsError), .bsErrorEn(bsErrorEn),
+    .tedOutput(tedOutput), .tedOutputEn(tedOutputEn)
+    `else
     .bsError(bsError), .bsErrorEn(bsErrorEn)
+    `endif
     );
 
 `ifdef ADD_DESPREADER
@@ -1046,8 +1059,13 @@ always @(posedge clk) begin
             dac2Sync <= carrierOffsetEn;
             end
         `DAC_BSLOCK: begin
+            `ifdef ADD_SUPERBAUD_TED
+            dac2Data <= tedOutput;
+            dac2Sync <= tedOutputEn;
+            `else
             dac2Data <= bsError;
             dac2Sync <= bsErrorEn;
+            `endif
             end
         `DAC_FREQLOCK: begin
             dac2Data <= {freqLockCounter,2'b0};

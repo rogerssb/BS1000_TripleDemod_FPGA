@@ -1,0 +1,79 @@
+<!DOCTYPE SilvacoProject>
+<project version="1" name="multihSuperbaudTed" >
+ <products>
+  <product name="SILOS" >
+   <settings>
+    <setting value="Y" name="DebugEnable" />
+    <setting value="Silvaco4.14.3.R" name="Version" />
+    <setting value="Y" name="NoFloatWarn" />
+    <setting value="search" name="SystaskSearchOrder" />
+   </settings>
+   <librarydirs>
+    <directory name="..\..\Xilinx\13.4\ISE_DS\ISE\verilog\src\unisims\{.v}" />
+   </librarydirs>
+   <plusdefines>
+    <define name="TEST_MODULE" />
+   </plusdefines>
+   <explorer>
+    <settings>
+     <setting value="test.ted.[17:0]i" name="Scope" />
+    </settings>
+   </explorer>
+   <analyzer>
+    <views>
+     <view value="7013.158 ns,8263.367 ns,17.621 ns,7235.032 ns,8235.868 ns" name="Last" />
+    </views>
+    <settings>
+     <setting value="138" name="C0Width" />
+     <setting value="75" name="C1Width" />
+     <setting value="218" name="C2Width" />
+     <setting value="N" name="GotoSource" />
+    </settings>
+    <groups>
+     <group open="yes" name="New Group1" show="yes" >
+      <signals>
+       <signal name="clk" scope="test" />
+       <signal name="clken" scope="test" />
+       <signal name="reset" scope="test" />
+       <signal name="sym2xEnCount[7:0]" scope="test" />
+       <signal name="sym2xEn" scope="test" />
+       <signal name="symEn" scope="test" />
+       <signal radix="Decimal" name="sampleCount[5:0]" scope="test" />
+       <signal name="evenSample" scope="test" />
+       <signal name="iTestInput[17:0]" scope="test" />
+       <signal name="iDivSqrt2[34:0]" scope="test.ted" />
+       <signal name="iSqrt2[17:0]" scope="test.ted" />
+       <signal name="iRot[17:0]" scope="test.ted" />
+       <signal name="sampleCount[2:0]" scope="test.ted" />
+       <signal name="upperReal[17:0]" scope="test.ted" />
+       <signal name="upperImag[17:0]" scope="test.ted" />
+       <signal name="lowerReal[17:0]" scope="test.ted" />
+       <signal name="lowerImag[17:0]" scope="test.ted" />
+       <signal interpolate="Step" radix="Real" name="( $itor($signed(upperImag[17:0]))/(2**17) )" scope="test.ted" />
+       <signal name="qTestInput[17:0]" scope="test" />
+       <signal name="\dinSR[0] [17:0]" scope="test.ted.h1Real" />
+       <signal name="\dinSR[7] [17:0]" scope="test.ted.h1Real" />
+       <signal name="taps017and8[17:0]" scope="test.ted.h1Real" />
+       <signal interpolate="Step" radix="Real" name="( ($itor($signed(upperFilterReal[17:0])))/(2**17) )" scope="test.ted" />
+       <signal interpolate="Step" radix="Real" name="( $itor($signed(upperFilterImag[17:0]))/(2**17) )" scope="test.ted" />
+       <signal name="rdy" scope="test.ted.h1Imag" />
+       <signal interpolate="Step" radix="Real" name="( $itor($signed(lowerFilterReal[17:0]))/(2**17) )" scope="test.ted" />
+       <signal name="urliProduct[35:0]" scope="test.ted" />
+       <signal name="uilrProduct[35:0]" scope="test.ted" />
+       <signal name="tedTerm[17:0]" scope="test.ted" />
+       <signal name="tedAccum[17:0]" scope="test.ted" />
+       <signal name="tedOutputEn" scope="test.ted" />
+       <signal name="tedOutput[17:0]" scope="test.ted" />
+      </signals>
+     </group>
+    </groups>
+   </analyzer>
+   <sourcefiles>
+    <file name="multihSuperbaudTED.v" />
+    <file name=".\coregen\divSqrt2PL0.v" />
+    <file name=".\coregen\mpy18x18PL0.v" />
+    <file name="multihSuperbaudH1.v" />
+   </sourcefiles>
+  </product>
+ </products>
+</project>

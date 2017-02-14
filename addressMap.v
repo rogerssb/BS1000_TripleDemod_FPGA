@@ -10,9 +10,20 @@
 `ifdef LEGACY_DEMOD
 `define CIC_COMP_USE_MPY
 `define USE_DDC_FIR
-`define ADD_DESPREADER
+//`define ADD_DESPREADER
 `define ADD_SCPATH
 `define ADD_DQM
+`define ADD_SUPERBAUD_TED
+//`define ALTERNATE_PHASE
+`endif
+
+`ifdef LEGACY_DESPREAD_DEMOD
+`define CIC_COMP_USE_MPY
+`define USE_DDC_FIR
+`define ADD_DESPREADER
+`define ADD_SCPATH
+//`define ADD_DQM
+//`define ADD_SUPERBAUD_TED
 `endif
 
 `ifdef LEGACY_CMA_DEMOD

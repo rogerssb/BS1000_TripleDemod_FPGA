@@ -403,6 +403,8 @@ NET "demod/resampler/resamplerI/resampleDelay*" TNM_NET = FFS syncGroup;
 NET "demod/resampler/resamplerQ/resampleDelay*" TNM_NET = FFS syncGroup;
 #NET "demod/resampler/resamplerI/resampleDelay*" TNM_NET = DSPS syncGroup;
 #NET "demod/resampler/resamplerQ/resampleDelay*" TNM_NET = DSPS syncGroup;
+NET "demod/despreader/dsSlipI*" TNM_NET = FFS syncGroup;
+#NET "demod/despreader/dsSlipQ*" TNM_NET = FFS syncGroup;
 NET "demod/resampler/auCic/syncOut*" TNM_NET = FFS syncGroup;
 NET "demod/bitsync/phaseState*" TNM_NET = FFS syncGroup;
 #NET "demod/bitsync/phaseState*" TNM_NET = DSPS syncGroup;
@@ -446,6 +448,9 @@ TIMEGRP "clken" =  FFS(demod/dac0Sync*)
                    FFS(demod/resampler/auCic/syncOut*)
                    FFS(demod/bitsync/phaseState*)
                    FFS(multihSymEn*) FFS(multihSym2xEn*)
+#                   FFS(demod/despreader/iSampleEn*) FFS(demod/despreader/iOnTime*) FFS(demod/despreader/dsSlipI)
+                   FFS(demod/despreader/dsSlipI)
+#                   FFS(demod/despreader/qSampleEn*) FFS(demod/despreader/qOnTime*) FFS(demod/despreader/dsSlipQ)
                    FFS(bep/clkEn*)
                    FFS(multihPhaseErrorEnIn*);
 
@@ -467,6 +472,21 @@ TIMEGRP "scddcPL" = FFS(scIfPath/scDdc/iCicIn*) FFS(scIfPath/scDdc/qCicIn*)
 # AGC loop that can clock slower
 TIMEGRP "magloop" = FFS( demod/magLoop/lagAccum*) ;
 
+# Despreader that can clock slower
+#TIMEGRP "dsSR0" = FFS(demod/despreader/iCorrOnTime/rxSR*) FFS(demod/despreader/iCorrOnTime/codeSR*);
+#TIMEGRP "dsSR1" = FFS(demod/despreader/qCorrOnTime/rxSR*) FFS(demod/despreader/qCorrOnTime/codeSR*);
+TIMEGRP "dsSR1" = FFS(demod/despreader/qCorrOnTime/rxSR*);
+TIMEGRP "dsSR2" = FFS(demod/despreader/iSwapOnTime/rxSR*) FFS(demod/despreader/iSwapOnTime/codeSR*);
+TIMEGRP "dsSR3" = FFS(demod/despreader/qSwapOnTime/rxSR*) FFS(demod/despreader/qSwapOnTime/codeSR*);
+#TIMEGRP "dsSR" = "dsSR0" "dsSR1" "dsSR2" "dsSR3";
+TIMEGRP "dsSR" = "dsSR1" "dsSR2" "dsSR3";
+TIMEGRP "dsSum0" = FFS(demod/despreader/iCorrOnTime/sum*);
+TIMEGRP "dsSum1" = FFS(demod/despreader/qCorrOnTime/sum*);
+TIMEGRP "dsSum2" = FFS(demod/despreader/iSwapOnTime/sum*);
+TIMEGRP "dsSum3" = FFS(demod/despreader/qSwapOnTime/sum*);
+TIMEGRP "dsSum" = "dsSum0" "dsSum1" "dsSum2" "dsSum3";
+TIMEGRP "ds" = "dsSR" "dsSum";
+
 # Slower clock timespecs. 
 TIMESPEC TS_syncGroup = FROM "allEnables" TO "syncGroup" 46.67 MHz PRIORITY 4;
 TIMESPEC TS_dacGroup = FROM "syncGroup" TO FFS(demod/dac*Data*) 46.67 MHz PRIORITY 3;
@@ -475,6 +495,7 @@ TIMESPEC "TS_ddc2" = FROM "ddcPL" TO DSPS 46.67 MHz PRIORITY 3;
 TIMESPEC "TS_scddc1" = FROM "scddcPL" TO FFS 46.67 MHz PRIORITY 3;
 TIMESPEC "TS_scddc2" = FROM "scddcPL" TO DSPS 46.67 MHz PRIORITY 3;
 TIMESPEC TS_magloop = FROM "magloop" TO "magloop" 46.67 MHz PRIORITY 3;
+TIMESPEC TS_dsCorr = FROM "ds" TO "syncGroup" 11.67 MHz PRIORITY 2;
 TIMESPEC TS_clken = FROM "clken" TO FFS 93.33 MHz PRIORITY 1;
 
 # Clocked Inputs
