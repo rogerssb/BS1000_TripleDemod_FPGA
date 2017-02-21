@@ -207,6 +207,9 @@ NET "multiHSymEn" IOSTANDARD = "LVCMOS33";
 NET "multiHSym2xEn" LOC = D17;
 NET "multiHSym2xEn" IOSTANDARD = "LVCMOS33";
 
+NET "multiHSymEnEven" LOC = E16;
+NET "multiHSymEnEven" IOSTANDARD = "LVCMOS33";
+
 NET "iMultiH<0>"  LOC = P3;
 NET "iMultiH<1>"  LOC = P6;
 NET "iMultiH<2>"  LOC = R2;
@@ -508,18 +511,18 @@ NET "multih/viterbiMultiH/acsMulth*/rotator/symEnSr*" TNM_NET = FFS syncGroup;
 #TIMEGRP "fmDemod" = FFS(multih/trellisCarrierLoop/fmDemod/cordic/p*);
 TIMEGRP "slowGroup" = "syncGroup";
 
-TIMESPEC TS_ck933 = PERIOD "ck933" 100 MHz HIGH 50%;
-TIMESPEC TS_vco   = PERIOD "vco" 50 MHz HIGH 50 %;
+TIMESPEC TS_ck933 = PERIOD "ck933" 93.3333 MHz HIGH 50%;
+TIMESPEC TS_vco   = PERIOD "vco" 46.6667 MHz HIGH 50 %;
 
 #TIMESPEC TS_slowGroup = PERIOD "slowGroup" 50 MHz;
-TIMESPEC TS_symEn = FROM "mf" TO "mfPipe" 25 MHz;
-TIMESPEC TS_reset = FROM FFS(reset*) to FFS 25 MHz;
-TIMESPEC TS_rot = FROM "rot" TO "bestMetric" 25 MHz;
-TIMESPEC TS_phase = FROM "phaseError" TO "phaseError" 25 MHz;
-TIMESPEC TS_best = FROM "bestMetric" TO "bestMetric" 25 MHz;
-TIMESPEC TS_max = FROM "bestMetric" to "maxMetric" 25 MHz;
+TIMESPEC TS_symEn = FROM "mf" TO "mfPipe" 23.3333 MHz;
+TIMESPEC TS_reset = FROM FFS(reset*) to FFS 23.3333 MHz;
+TIMESPEC TS_rot = FROM "rot" TO "bestMetric" 23.3333 MHz;
+TIMESPEC TS_phase = FROM "phaseError" TO "phaseError" 23.3333 MHz;
+TIMESPEC TS_best = FROM "bestMetric" TO "bestMetric" 23.3333 MHz;
+TIMESPEC TS_max = FROM "bestMetric" to "maxMetric" 23.3333 MHz;
 #TIMESPEC TS_slowTb = FROM "slowTb" TO FFS(multih/viterbiMultiH/traceBackMultiH/tbMux*/cState*) 50 MHz;
-TIMESPEC TS_sync = FROM "sync" TO FFS 100 MHz;
+TIMESPEC TS_sync = FROM "sync" TO FFS 93.3333 MHz;
 
 
 # The microprocessor registers. This needs to go last to keep uP registers being included 

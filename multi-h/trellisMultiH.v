@@ -15,7 +15,7 @@
 
 module trellisMultiH
   (
-   clk,reset,symEnIn,sym2xEnIn,
+   clk,reset,symEnEvenIn,symEnIn,sym2xEnIn,
    iIn,qIn,
    wr0,wr1,wr2,wr3,
    addr,
@@ -38,10 +38,10 @@ module trellisMultiH
    parameter MF_BITS = 10;
    parameter ROT_BITS = 8;
 
-   input                    clk,reset,symEnIn,sym2xEnIn;
+   input                    clk,reset,symEnEvenIn,symEnIn,sym2xEnIn;
    input [17:0]             iIn,qIn;
    input                    wr0,wr1,wr2,wr3;
-   input [11:0]             addr;
+   input [12:0]             addr;
    input [31:0]             din;
    output [31:0]            dout;
    input [3:0]              dac0Select,dac1Select,dac2Select;
@@ -60,7 +60,7 @@ module trellisMultiH
    
    
 `ifndef ALDEC_SIM    // ALDEC_SIM is set as an env. var. in aldec duting simulation
-`define USE_SLIP     // We don't want to use slip in simulation
+//`define USE_SLIP     // We don't want to use slip in simulation
 `endif
 
 `ifdef USE_SLIP
@@ -90,10 +90,16 @@ always @(posedge clk) begin
         end
     end
 `else
-wire    [17:0]  slipI = iIn;
-wire    [17:0]  slipQ = qIn;
-wire            symEn = symEnIn;
-wire            sym2xEn = sym2xEnIn;
+reg     [17:0]  slipI,slipQ;
+reg             symEnEven,symEn,sym2xEn;
+always @(posedge clk) begin
+    // Reclock the inputs
+    slipI <= iIn;
+    slipQ <= qIn;
+    symEnEven <= symEnEvenIn;
+    symEn <= symEnIn;
+    sym2xEn <= sym2xEnIn;
+end
 `endif
 
 // Latching the incomming I and Q samples 
@@ -155,6 +161,7 @@ always @(posedge clk) begin
      (
       .clk                   (clk       ),
       .reset                 (reset     ),
+      .symEnEven             (symEnEven),
       .symEn                 (symEn     ),
       .sym2xEn               (sym2xEn   ),
       .i                     (iInLatch),
@@ -223,6 +230,7 @@ always @(posedge clk) begin
       .mf_m1p1_54Imag        (mf_m1p1_54Imag),
       .mf_m1m1_54Imag        (mf_m1m1_54Imag),
       .mf_m1m3_54Imag        (mf_m1m3_54Imag),
+      .symEnEvenOut          (symEnEvenRot  ),
       .symEnOut              (symEnRot      ), 
       .sym2xEnOut            (sym2xEnRot    )
       );   
@@ -278,6 +286,7 @@ viterbiMultiH /*#(MF_BITS, ROT_BITS)*/ viterbiMultiH
    (
     .clk                   (clk           ), 
     .reset                 (reset         ), 
+    .symEnEven             (symEnEvenRot  ),
     .symEn                 (symEnRot      ),
     .sym2xEn               (sym2xEnRot    ),
     `ifdef ALDEC_SIM
@@ -405,9 +414,9 @@ always @(negedge wr0 or posedge symbolSlipped) begin
 reg [31:0]dout;
 always @(trellisSpace or addr
          or decayFactor
-         or tbEnable
+         or tbEnable or symbolDelay
          `ifdef USE_SLIP
-         or symbolDelay or symbolSlip
+         or symbolSlip
          `endif
          ) begin
     if (trellisSpace) begin
@@ -415,6 +424,8 @@ always @(trellisSpace or addr
             `TRELLIS_DECAY:     dout <= {24'b0,decayFactor};
             `ifdef USE_SLIP
             `TRELLIS_CONTROL:   dout <= {29'b0,tbEnable,symbolDelay,symbolSlip};
+            `else 
+            `TRELLIS_CONTROL:   dout <= {29'b0,tbEnable,symbolDelay,1'b0};
             `endif
             default:            dout <= 32'hx;
             endcase

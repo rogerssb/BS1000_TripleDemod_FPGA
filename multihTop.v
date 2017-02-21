@@ -25,7 +25,7 @@ module multihTop (
     demodMode,
     dac0Select,dac1Select,dac2Select,
     dac0Data,dac1Data,dac2Data,
-    multiHSymEn,multiHSym2xEn,
+    multiHSymEn,multiHSym2xEn,multiHSymEnEven,
     iMultiH,qMultiH,
     dataSymEn,dataSym2xEn,
     iData,qData,
@@ -59,7 +59,7 @@ inout           dac_sdio;
 input   [3:0]   demodMode;
 input   [3:0]   dac0Select,dac1Select,dac2Select;
 input   [13:0]  dac0Data,dac1Data,dac2Data;
-input           multiHSymEn,multiHSym2xEn;
+input           multiHSymEn,multiHSym2xEn,multiHSymEnEven;
 input   [17:0]  iMultiH,qMultiH;
 input           dataSymEn,dataSym2xEn;
 input           iData,qData;
@@ -85,9 +85,9 @@ input           symb_pll_vco;
 
 output          sdiOut;
 
-parameter VER_NUMBER = 16'h0149;
+parameter VER_NUMBER = 16'd0445;
 
-wire    [11:0]  addr = {addr11,addr10,addr9,addr8,addr7,addr6,addr5,addr4,addr3,addr2,addr1,1'b0};
+wire    [12:0]  addr = {addr12,addr11,addr10,addr9,addr8,addr7,addr6,addr5,addr4,addr3,addr2,addr1,1'b0};
 
 //******************************************************************************
 //                               Pass Throughs
@@ -100,7 +100,7 @@ assign demod_nLock = demodLockInput;
 //******************************************************************************
 wire            multihMode = (demodMode == `MODE_MULTIH);
 reg     [13:0]  dac0DataIn, dac1DataIn, dac2DataIn;
-reg             multiHSymEnIn,multiHSym2xEnIn;
+reg             multiHSymEnIn,multiHSym2xEnIn,multiHSymEnEvenIn;
 reg     [17:0]  iMultiHIn,qMultiHIn;
 reg             dataSymEnIn,dataSym2xEnIn;
 reg             iDataIn,qDataIn;
@@ -109,6 +109,7 @@ always @(posedge ck933) begin
     dac0DataIn <= dac0Data;
     dac1DataIn <= dac1Data;
     dac2DataIn <= dac2Data;
+    multiHSymEnEvenIn <= multiHSymEnEven;
     multiHSymEnIn <= multiHSymEn;
     multiHSym2xEnIn <= multiHSym2xEn;
     iMultiHIn <= iMultiH;
@@ -269,6 +270,7 @@ trellisMultiH multih
     (
     .clk(ck933),
     .reset(reset),
+    .symEnEvenIn(multiHSymEnEvenIn & multihMode),
     .symEnIn(multiHSymEnIn & multihMode),
     .sym2xEnIn(multiHSym2xEnIn & multihMode),
     .iIn(iMultiHIn),
@@ -485,7 +487,8 @@ decoder decoder
   .symb_q(qDec),                    // input, q
   .dout_i(decoder_dout_i),          // output, i data
   .dout_q(decoder_dout_q),          // output, q data
-  .cout(decoder_cout),              // output, i/q clock
+  .outputClkEn(decoder_cout),       // output, i/q clock
+  .pllClkEn(),
   .fifo_rs(decoder_fifo_rs),
   .clk_inv(cout_inv),
   .bypass_fifo(bypass_fifo),

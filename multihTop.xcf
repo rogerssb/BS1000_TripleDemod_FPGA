@@ -41,6 +41,7 @@ Net "dac2Data<10>" IOB = TRUE;
 Net "dac2Data<11>" IOB = TRUE;
 Net "dac2Data<12>" IOB = TRUE;
 Net "dac2Data<13>" IOB = TRUE;
+Net "multiHSymEnEven" IOB = TRUE;
 Net "multiHSymEn" IOB = TRUE;
 Net "multiHSym2xEn" IOB = TRUE;
 Net "iMultiH<0>" IOB = TRUE;
