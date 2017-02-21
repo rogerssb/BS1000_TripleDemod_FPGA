@@ -96,6 +96,7 @@ NET "multihPhaseErrorEn"  IOB = TRUE;
 NET "multihPhaseErrorValid"   IOB = TRUE;
 
 
+NET "trellisSymEnEven"  IOB = TRUE;
 NET "trellisSymEn"      IOB = TRUE;
 NET "trellisSym2xEn"    IOB = TRUE;
 NET "iTrellis<0>"       IOB = TRUE;

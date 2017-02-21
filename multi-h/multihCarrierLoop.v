@@ -16,7 +16,8 @@
 //`define USE_AVERAGE_ERROR
            
 module multihCarrierLoop(
-    clk,reset,symEn,sym2xEn,
+    clk,reset,
+    symEnEven,symEn,sym2xEn,
     iIn,qIn,
     phaseError,
     phaseErrorEn,
@@ -36,12 +37,14 @@ module multihCarrierLoop(
     dac2En,
     demodLock,
     iOut,qOut,
+    symEnEvenOut,
     symEnOut,
     sym2xEnOut
     );
 
-input clk,reset,symEn,sym2xEn;
-input [17:0]iIn,qIn;
+input           clk,reset;
+input           symEnEven,symEn,sym2xEn;
+input   [17:0]  iIn,qIn;
 input   [7:0]   phaseError;
 input           phaseErrorEn;
 input           phaseErrorValid;
@@ -61,6 +64,7 @@ output  [17:0]  dac2Data;
 output          dac2En;
 output          demodLock;
 output  [17:0]  iOut,qOut;
+output          symEnEvenOut;
 output          symEnOut;
 output          sym2xEnOut;
 
@@ -252,11 +256,13 @@ always @(posedge clk) begin
         if (errorValid) begin
             if (absModeError > syncThreshold[7:0]) begin
                 if (lockCounter == (16'hffff - lockCount)) begin
+                    `ifndef ADD_SUPERBAUD_TED
                     // Declare out of lock condition. If we were previously out of lock,
                     // slip a symbol.
                     if (!demodLock) begin
                         symbolSlip <= 1;
                         end
+                    `endif
                     demodLock <= 0;
                     lockCounter <= 0;
                     end
@@ -374,6 +380,7 @@ cmpy18Sat cmpy18Sat(
 //`endif
 
 // Create a new set of clock enables to account for the delay through the complex multiplier
+reg [3:0] symEnEvenSr;  
 reg [3:0] symEnSr;
 reg [3:0] sym2xEnSr;
 always @(posedge clk) begin
@@ -382,6 +389,7 @@ always @(posedge clk) begin
         sym2xEnSr <= 0;
         end
     else begin
+        symEnEvenSr <= {symEnEvenSr[2:0], symEnEven};
         symEnSr <= {symEnSr[2:0], symEn};
         sym2xEnSr <= {sym2xEnSr[2:0], sym2xEn};
         end
@@ -389,6 +397,7 @@ always @(posedge clk) begin
 
 // Create a symbol slip state machine
 reg     [17:0]  slipI,slipQ;
+reg             symEnEvenOut;
 reg             symEnOut, sym2xEnOut;
 always @(posedge clk) begin
     if (reset) begin
@@ -410,6 +419,14 @@ always @(posedge clk) begin
             symbolSlipped <= 0;
             end
         end
+
+        `ifdef ADD_SUPERBAUD_TED
+        symEnEvenOut <= symEnEvenSr[3];
+        `else
+        if (symEnOut) begin
+            symEnEvenOut <= ~symEnEvenOut;
+        end
+        `endif
     end
 
 assign iOut = slipI;

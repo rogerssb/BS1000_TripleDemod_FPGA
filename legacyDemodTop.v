@@ -37,6 +37,7 @@ module legacyDemodTop (
     auSymClk,
     sdiOut,
     bsync_nLock,demod_nLock,
+    trellisSymEnEven,
     trellisSymEn,
     trellisSym2xEn,
     iTrellis,
@@ -71,13 +72,14 @@ output          auSymClk;
 output          bsync_nLock,demod_nLock;
 output          sdiOut;
 
+output          trellisSymEnEven;
 output          trellisSymEn;
 output          trellisSym2xEn;
 output  [17:0]  iTrellis;  
 output  [17:0]  qTrellis;  
 output          legacyBit;
 
-parameter VER_NUMBER = 16'd444;
+parameter VER_NUMBER = 16'd448;
 
 wire    [12:0]  addr = {addr12,addr11,addr10,addr9,addr8,addr7,addr6,addr5,addr4,addr3,addr2,addr1,1'b0};
 wire            nWr = nWe;
@@ -350,6 +352,9 @@ demod demod(
     .trellisSymSync(trellisSymSync),
     .iTrellis(iSymData),
     .qTrellis(qSymData),
+    `ifdef ADD_SUPERBAUD_TED
+    .multihSymEnEven(tedSymEnEven),
+    `endif
     `ifdef ADD_SCPATH
     .enableScPath(enableScPath),
     .iBBOut(iScPath), .qBBOut(qScPath),
@@ -409,10 +414,16 @@ interpolate #(.RegSpace(`INTERP2SPACE), .FirRegSpace(`VIDFIR2SPACE)) scInterp(
 //******************************************************************************
 
 // Signals originating in the legacy demod going to the multih carrier loop
+reg             multihSymEnEven;
 reg             multihSymEn;
 reg             multihSym2xEn;
 reg     [17:0]  iMultihIn,qMultihIn;
 always @(posedge clk) begin
+    `ifdef ADD_SUPERBAUD_TED
+    multihSymEnEven <= tedSymEnEven & multihMode;
+    `else
+    multihSymEnEven <= 1'b0;
+    `endif
     multihSymEn <= trellisSymSync & multihMode;
     multihSym2xEn <= iSym2xEn & multihMode;
     iMultihIn <= iSymData;
@@ -436,6 +447,7 @@ wire    [31:0]  multihLoopDout;
 multihCarrierLoop multihLoop(
     .clk(clk),
     .reset(reset),
+    .symEnEven(multihSymEnEven),
     .symEn(multihSymEn),
     .sym2xEn(multihSym2xEn),
     .iIn(iMultihIn),
@@ -463,17 +475,20 @@ multihCarrierLoop multihLoop(
     .demodLock(multihDemodLock),
     .iOut(iMultihLoop),
     .qOut(qMultihLoop),
+    .symEnEvenOut(multihLoopEnEven),
     .symEnOut(multihLoopEn),
     .sym2xEnOut(multihLoop2xEn)
     );
 
 
 // Output signals going to FPGA2
+reg             trellisSymEnEven;
 reg             trellisSymEn;
 reg             trellisSym2xEn;
 reg     [17:0]  iTrellis,qTrellis;
 reg             legacyBit;
 always @(posedge clk) begin
+    trellisSymEnEven <= multihMode ? multihLoopEnEven : 1'b0;
     trellisSymEn <=     multihMode ? multihLoopEn : trellisSymSync;
     trellisSym2xEn <=   multihMode ? multihLoop2xEn : iSym2xEn;
     iTrellis <=         multihMode ? iMultihLoop : iSymData;

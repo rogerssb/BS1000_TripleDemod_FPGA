@@ -5,7 +5,9 @@ module multihSuperbaudTED(
     input                       clk,symEn,sym2xEn,reset,
     input       signed  [17:0]  i,q,
     output                      tedOutputEn,
-    output      signed  [17:0]  tedOutput
+    output      signed  [17:0]  tedOutput,
+    output  reg                 syncPulse,
+    output  reg                 symEnEven
 );
 
     function signed [17:0] saturatedSum;
@@ -68,54 +70,6 @@ module multihSuperbaudTED(
     end
 
 
-
-
-    `ifdef TED_NEW_ROTATION
-
-    //------------------------ Upper and Lower Rotations ----------------------
-
-    // Rotation coefficient LUTs
-    tedPosRotationReal  posRealLut(
-    );
-    tedPosRotationImag  posImagLut(
-    );
-
-    // Rotation State Machine
-    reg             [2:0]   sampleCount;
-    reg     signed  [17:0]  upperReal,upperImag;
-    reg     signed  [17:0]  lowerReal,lowerImag;
-    always @(posedge clk) begin
-        // Create a counter to count the samples in a two symbol pairs.
-        if (reset) begin
-            sampleCount <= 0;
-            upperReal <= 0;
-            upperImag <= 0;
-            lowerReal <= 0;
-            lowerImag <= 0;
-        end
-        else if (sym2xEn) begin
-            `ifdef ALTERNATE_PHASE
-            if ((sampleCount[2:1] == 2'b11) && !symEn) begin
-            `else
-            if ((sampleCount[2:1] == 2'b11) && symEn) begin
-            `endif
-                sampleCount <= 0;
-            end
-            else begin
-                sampleCount <= sampleCount + 1;
-            end
-        end
-        // Use the sampleCount to form the rotations
-        if (sym2xEn) begin
-            upperReal <= rotPosReal;
-            upperImag <= rotPosImag;
-            lowerReal <= rotNegReal;
-            lowerImag <= rotNegImag;
-        end
-    end
-
-    `else   //TED_NEW_ROTATION
-
     //------------------------ Upper and Lower Rotations ----------------------
     //
     // We process the incoming samples as pairs of symbols under the assumption 
@@ -171,10 +125,12 @@ module multihSuperbaudTED(
             lowerImag <= 0;
         end
         else if (sym2xEn) begin
+            syncPulse <= (sampleCount == 0);
+            symEnEven <= sampleCount[1];
             `ifdef ALTERNATE_PHASE
-            if ((sampleCount[2:1] == 2'b11) && !symEn) begin
+            if ((sampleCount == 7) && !symEn) begin
             `else
-            if ((sampleCount[2:1] == 2'b11) && symEn) begin
+            if ((sampleCount == 7) && symEn) begin
             `endif
                 sampleCount <= 7;
             end
@@ -238,8 +194,6 @@ module multihSuperbaudTED(
             endcase
         end
     end
-
-    `endif  //TED_NEW_ROTATION
 
 
     //-------------------------- Upper and Lower Filters ----------------------

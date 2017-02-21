@@ -22,8 +22,6 @@
 `define USE_DDC_FIR
 `define ADD_DESPREADER
 `define ADD_SCPATH
-//`define ADD_DQM
-//`define ADD_SUPERBAUD_TED
 `endif
 
 `ifdef LEGACY_CMA_DEMOD

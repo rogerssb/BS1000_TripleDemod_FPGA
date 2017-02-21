@@ -35,6 +35,9 @@ module demod(
     trellisSymSync,
     iTrellis,
     qTrellis,
+    `ifdef ADD_SUPERBAUD_TED
+    multihSymEnEven,
+    `endif
     dac0Select,dac1Select,dac2Select,
     dac0Sync,
     dac0Data,
@@ -84,6 +87,9 @@ output          timingLock;
 output          carrierLock;
 output          trellisSymSync;
 output  [17:0]  iTrellis,qTrellis;
+`ifdef ADD_SUPERBAUD_TED
+output          multihSymEnEven;
+`endif
 output  [3:0]   dac0Select,dac1Select,dac2Select;
 output          dac0Sync;
 output  [17:0]  dac0Data;
@@ -697,7 +703,9 @@ bitsync bitsync(
     .iTrellis(iBsTrellis),.qTrellis(qBsTrellis),
     `ifdef ADD_SUPERBAUD_TED
     .bsError(bsError), .bsErrorEn(bsErrorEn),
-    .tedOutput(tedOutput), .tedOutputEn(tedOutputEn)
+    .tedOutput(tedOutput), .tedOutputEn(tedOutputEn),
+    .tedSyncPulse(tedSyncPulse),
+    .tedSymEnEven(multihSymEnEven)
     `else
     .bsError(bsError), .bsErrorEn(bsErrorEn)
     `endif

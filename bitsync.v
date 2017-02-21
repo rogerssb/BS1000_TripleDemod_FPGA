@@ -58,7 +58,9 @@ module bitsync(
     bsError,
     bsErrorEn,
     tedOutput,
-    tedOutputEn
+    tedOutputEn,
+    tedSyncPulse,
+    tedSymEnEven
     `else
     bsError,
     bsErrorEn
@@ -113,6 +115,8 @@ output          bsErrorEn;
 `ifdef ADD_SUPERBAUD_TED
 output  signed  [17:0]  tedOutput;
 output                  tedOutputEn;
+output                  tedSyncPulse;
+output                  tedSymEnEven;
 `endif
 
 `define USE_COMP
@@ -270,7 +274,9 @@ assign qTrellis = qMF;
         //.i(iTrellis),.q(qTrellis),
         .i(iTed),.q(qTed),
         .tedOutputEn(tedOutputEn),
-        .tedOutput(tedOutput)
+        .tedOutput(tedOutput),
+        .syncPulse(tedSyncPulse),
+        .symEnEven(tedSymEnEven)
     );
 
 
