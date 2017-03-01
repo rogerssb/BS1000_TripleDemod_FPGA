@@ -6,8 +6,9 @@
     <setting value="Silvaco4.14.3.R" name="Version" />
     <setting value="Y" name="NoFloatWarn" />
     <setting value="search" name="SystaskSearchOrder" />
-    <setting value="." name="SimFile" />
+    <setting value="./." name="SimFile" />
     <setting value="N" name="VisualDebug" />
+    <setting value="2000M" name="DiskSize" />
    </settings>
    <librarydirs>
     <directory name="..\..\Xilinx\13.4\ISE_DS\ISE\verilog\src\unisims\{.v}" />
@@ -21,12 +22,12 @@
    </includedirs>
    <analyzer>
     <views>
-     <view value="12552.511 ns,87933.646 ns,1321.317 ns,73068.830 ns,49638.564 ns" name="Last" />
+     <view value="0.000 ns,79225.100 ns,1320.387 ns,73068.830 ns,49638.564 ns" name="Last" />
     </views>
     <settings>
      <setting value="163" name="C0Width" />
      <setting value="117" name="C1Width" />
-     <setting value="65" name="C2Width" />
+     <setting value="151" name="C2Width" />
      <setting value="N" name="GotoSource" />
     </settings>
     <groups>

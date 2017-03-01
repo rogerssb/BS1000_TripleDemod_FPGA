@@ -35,7 +35,8 @@ module bitsyncBertRegs(
     bsRS422MuxSelect,
     fsRS422MuxSelect,
     bertMuxSelect,
-    framerMuxSelect
+    framerMuxSelect,
+    spareMuxSelect
     );
 
 input           busClk;
@@ -97,6 +98,9 @@ reg     [3:0]   bertMuxSelect;
 
 output  [3:0]   framerMuxSelect;
 reg     [3:0]   framerMuxSelect;
+
+output  [3:0]   spareMuxSelect;
+reg     [3:0]   spareMuxSelect;
 
 //****************************** Reset Pulse **********************************
 
@@ -190,7 +194,11 @@ always @(posedge busClk) begin
         casex (addr)
             `SYS_REBOOT_ADDR:   rebootAddress[15:8] <= dataIn[15:8];
             `SYS_DAC_INPUT_SEL: dac1InputSelect <= dataIn[10:8];
-            `SYS_OUTPUT_SEL:    encCoaxMuxSelect <= dataIn[11:8];
+            `SYS_OUTPUT_SEL:    begin
+                                encCoaxMuxSelect <= dataIn[11:8];
+                                spareMuxSelect <= dataIn[15:12];
+                                end
+
             default: ;
         endcase
     end
@@ -235,7 +243,7 @@ always @* begin
             `SYS_OUTPUT_SEL: begin
                 dataOut = {8'b0,
                            fsRS422MuxSelect,fsMuxSelect,
-                           4'b0,encCoaxMuxSelect,
+                           spareMuxSelect,encCoaxMuxSelect,
                            bsRS422MuxSelect,bsCoaxMuxSelect};
                 end
             `SYS_BERT_MUX_SEL: begin

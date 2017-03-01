@@ -12,7 +12,8 @@ module pngenTop(
     output      [31:0]  dout,
     output  reg         pnClkEn,
     output              nrzBit,
-    output              pnBit
+    output              pnBit,
+    output              pnClk
 );
 
 
@@ -37,6 +38,7 @@ module pngenTop(
 
     // Phase Accumulator
     reg     [31:0]  phase;
+    assign          pnClk = phase[31];
     wire    [32:0]  phaseSum = {1'b0,phase} + {1'b0,pnClockRate};
     reg             infoClkEn;
     reg             everyOtherEn;

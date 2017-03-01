@@ -848,6 +848,7 @@
       </Config>
     </FileSet>
     <FileSet Name="simFramer" Type="SimulationSrcs" RelSrcDir="$PSRCDIR/simFramer">
+      <Filter Type="Srcs"/>
       <File Path="$PPRDIR/testFramesync.v">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>

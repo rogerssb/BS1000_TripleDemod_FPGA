@@ -17,6 +17,11 @@ module framerTop(
     output              framesyncPulse
 );
 
+    reg         [1:0]   syncState;
+        `define OUT_OF_SYNC     2'b00
+        `define SKIP_PAYLOAD    2'b01
+        `define TEST_SYNC       2'b11
+    reg                 invertData;
     wire        [4:0]   bitsPerWord;
     wire        [15:0]  wordsPerFrame;
     wire        [31:0]  syncwordMask;
@@ -29,6 +34,8 @@ module framerTop(
         .din(din),
         .dout(dout),
         .framesync(framesync),
+        .syncState(syncState),
+        .invertData(invertData),
         .bitsPerWord(bitsPerWord),
         .wordsPerFrame(wordsPerFrame),
         .syncwordMask(syncwordMask),
@@ -77,7 +84,6 @@ module framerTop(
     end               
 
     // Polarity inversion
-    reg     invertData;
     reg     polarityCorrectedData;
     always @(posedge clk) begin
         if (clkEn) begin
@@ -206,14 +212,9 @@ module framerTop(
     end
 
     // Framesync State Machine
-    reg     [1:0]   syncState;
-        `define OUT_OF_SYNC     2'b00
-        `define SKIP_PAYLOAD    2'b01
-        `define TEST_SYNC       2'b11
     reg     [15:0]  wordCount;
     reg     [4:0]   bitCount;
     wire            endOfPayload = ((bitCount == 0) && (wordCount == 0));
-    reg             detectedPolarity;
     integer         syncCount;
         `define FRAMER_MAX_SYNC_COUNT 5
     always @(posedge clk) begin
@@ -287,6 +288,7 @@ module framerTop(
                         end
                         else if (syncCount == 0) begin
                             rotation <= rotation + 1;
+                            invertData <= 0;
                             syncState <= `OUT_OF_SYNC;
                         end
                         else begin

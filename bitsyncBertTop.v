@@ -29,7 +29,9 @@ module bitsyncBertTop (
     fsClkOut,fsDataOut,
     bsDiffClkOut, bsDiffDataOut,
     fsDiffClkOut, fsDiffDataOut,
-    framesyncPulse,
+    framer_Sync,
+    spareData,
+    spareClock,
     ch0Lockn, ch1Lockn,
     dacSCLK, dacMOSI, 
     ch0SELn,
@@ -98,7 +100,11 @@ module bitsyncBertTop (
     output          fsDiffClkOut, fsDiffDataOut;
 
     // Framer Outputs
-    output          framesyncPulse;
+    output          framer_Sync;
+
+    // Spare Outputs
+    output          spareData;
+    output          spareClock;
 
     // Lock indicators
     output          ch0Lockn, ch1Lockn;
@@ -129,7 +135,7 @@ module bitsyncBertTop (
     input           pll2_OUT1;
     output          pll2_PWDn;
 
-    parameter VER_NUMBER = 16'd443;
+    parameter VER_NUMBER = 16'd450;
 
 
 //******************************************************************************
@@ -229,6 +235,7 @@ clockAndDataInputSync diffSync(
     wire    [3:0]   encCoaxMuxSelect;
     wire    [3:0]   bertInputMuxSelect;
     wire    [3:0]   framerInputMuxSelect;
+    wire    [3:0]   spareMuxSelect;
     wire    [31:0]  bsBertDout;
     bitsyncBertRegs topRegs(
         .busClk(fb_clk),
@@ -255,7 +262,8 @@ clockAndDataInputSync diffSync(
         .fsRS422MuxSelect(fsRS422MuxSelect),
         .encCoaxMuxSelect(encCoaxMuxSelect),
         .bertMuxSelect(bertInputMuxSelect),
-        .framerMuxSelect(framerInputMuxSelect)
+        .framerMuxSelect(framerInputMuxSelect),
+        .spareMuxSelect(spareMuxSelect)
     );
 
 
@@ -529,62 +537,9 @@ clockAndDataInputSync diffSync(
         .dout(pngenDout),
         .pnClkEn(pnClkEn),
         .nrzBit(pnNrzBit),
-        .pnBit(pnBit)
+        .pnBit(pnBit),
+        .pnClk(pnClk)
     );
-
-
-//******************************************************************************
-//                               Framer
-//******************************************************************************
-    clockAndDataMux framerMux(
-        .muxSelect(framerInputMuxSelect),
-        .clk0(ch0SymEn),
-        .clkInvert0(1'b0),
-        .data0(ch0DataOut),
-        .clk1(dualPcmClkEn),
-        .clkInvert1(1'b0),
-        .data1(dualDataI),
-        .clk2(ch1SymEn),
-        .clkInvert2(1'b0),
-        .data2(ch1DataOut),
-        .clk3(ch1PcmClkEn),
-        .clkInvert3(1'b0),
-        .data3(ch1PcmData),
-        .clk4(seClkEn),
-        .clkInvert4(1'b0),
-        .data4(seData),
-        .clk5(diffClkEn),
-        .clkInvert5(1'b0),
-        .data5(diffData),
-        .clk6(1'b0),
-        .clkInvert6(1'b0),
-        .data6(1'b0),
-        .clk7(1'b0),
-        .clkInvert7(1'b0),
-        .data7(1'b0),
-        .outputClk(framerClkEn),
-        .outputData(framerData)
-    );
-
-    wire    [1:0]   framerRotation;
-    wire    [31:0]  framerDout;
-    framerTop framer(
-        .reset(reset),
-        .busClk(fb_clk),
-        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
-        .addr(addr),
-        .din(dataIn),
-        .dout(framerDout),
-        .clk(clk),
-        .clkEn(framerClkEn),
-        .dataBitIn(framerData),
-        .rotation(framerRotation),
-        .framesyncPulse(framesyncPulse),
-        .framedBitOut(framerDataOut),
-        .framesync(framesync)
-    );
-
-    assign rotation = framerEnable ? framerRotation : 2'b0;
 
 
 //******************************************************************************
@@ -732,6 +687,60 @@ clockAndDataInputSync diffSync(
     assign          pll1_Clk = asyncMode ? pll1_OUT1 : pll0_OUT1;
     assign          pll2_Clk = pll2_OUT1;
 
+
+
+//******************************************************************************
+//                               Framer
+//******************************************************************************
+    clockAndDataMux framerMux(
+        .muxSelect(framerInputMuxSelect),
+        .clk0(1'b0),
+        .clkInvert0(1'b0),
+        .data0(1'b0),
+        .clk1(pll0_Clk),
+        .clkInvert1(1'b0),
+        .data1(pll0_Data),
+        .clk2(1'b0),
+        .clkInvert2(1'b0),
+        .data2(1'b0),
+        .clk3(pll1_Clk),
+        .clkInvert3(1'b0),
+        .data3(pll1_Data),
+        .clk4(singleEndedClk),
+        .clkInvert4(1'b0),
+        .data4(singleEndedData),
+        .clk5(differentialClk),
+        .clkInvert5(1'b0),
+        .data5(differentialData),
+        .clk6(1'b0),
+        .clkInvert6(1'b0),
+        .data6(1'b0),
+        .clk7(1'b0),
+        .clkInvert7(1'b0),
+        .data7(1'b0),
+        .outputClk(framer_Clk),
+        .outputData(framerData)
+    );
+
+    wire    [1:0]   framerRotation;
+    wire    [31:0]  framerDout;
+    framerTop framer(
+        .reset(reset),
+        .busClk(fb_clk),
+        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .addr(addr),
+        .din(dataIn),
+        .dout(framerDout),
+        .clk(framer_Clk),
+        .clkEn(1'b1),
+        .dataBitIn(framerData),
+        .rotation(framerRotation),
+        .framesyncPulse(framer_Sync),
+        .framedBitOut(framer_Data),
+        .framesync(framesync)
+    );
+
+    assign rotation = framerEnable ? framerRotation : 2'b0;
 
 
 
@@ -902,15 +911,15 @@ clockAndDataMux bsMux(
     .clk4(1'b0),
     .clkInvert4(1'b0),
     .data4(1'b0),
-    .clk5(pnClkEn),
+    .clk5(pnClk),
     .clkInvert5(1'b0),
-    .data5(pnNrzBit),
+    .data5(pnBit),
     .clk6(pll2_Clk),
     .clkInvert6(1'b0),
     .data6(pll2_Data),
-    .clk7(framerClkEn),
+    .clk7(framer_Clk),
     .clkInvert7(1'b0),
-    .data7(framerDataOut),
+    .data7(framer_Data),
     .outputClk(bsClkOut),
     .outputData(bsDataOut)
 );
@@ -934,15 +943,15 @@ clockAndDataMux bsDiffMux(
     .clk4(1'b0),
     .clkInvert4(1'b0),
     .data4(1'b0),
-    .clk5(1'b0),
+    .clk5(pnClk),
     .clkInvert5(1'b0),
-    .data5(1'b0),
+    .data5(pnBit),
     .clk6(pll2_Clk),
     .clkInvert6(1'b0),
     .data6(pll2_Data),
-    .clk7(framerClkEn),
+    .clk7(framer_Clk),
     .clkInvert7(1'b0),
-    .data7(framerDataOut),
+    .data7(framer_Data),
     .outputClk(bsDiffClkOut),
     .outputData(bsDiffDataOut)
 );
@@ -964,15 +973,15 @@ clockAndDataMux encMux(
     .clk4(1'b0),
     .clkInvert4(1'b0),
     .data4(1'b0),
-    .clk5(1'b0),
+    .clk5(pnClk),
     .clkInvert5(1'b0),
-    .data5(1'b0),
+    .data5(pnBit),
     .clk6(pll2_Clk),
     .clkInvert6(1'b0),
     .data6(pll2_Data),
-    .clk7(framerClkEn),
+    .clk7(framer_Clk),
     .clkInvert7(1'b0),
-    .data7(framerDataOut),
+    .data7(framer_Data),
     .outputClk(encClkOut),
     .outputData(encDataOut)
 );
@@ -994,15 +1003,15 @@ clockAndDataMux fsMux(
     .clk4(1'b0),
     .clkInvert4(1'b0),
     .data4(1'b0),
-    .clk5(1'b0),
+    .clk5(pnClk),
     .clkInvert5(1'b0),
-    .data5(1'b0),
+    .data5(pnBit),
     .clk6(pll2_Clk),
     .clkInvert6(1'b0),
     .data6(pll2_Data),
-    .clk7(framerClkEn),
+    .clk7(framer_Clk),
     .clkInvert7(1'b0),
-    .data7(framerDataOut),
+    .data7(framer_Data),
     .outputClk(fsClkOut),
     .outputData(fsDataOut)
 );
@@ -1024,17 +1033,47 @@ clockAndDataMux fsDiffMux(
     .clk4(1'b0),
     .clkInvert4(1'b0),
     .data4(1'b0),
-    .clk5(1'b0),
+    .clk5(pnClk),
     .clkInvert5(1'b0),
-    .data5(1'b0),
+    .data5(pnBit),
     .clk6(pll2_Clk),
     .clkInvert6(1'b0),
     .data6(pll2_Data),
-    .clk7(framerClkEn),
+    .clk7(framer_Clk),
     .clkInvert7(1'b0),
-    .data7(framerDataOut),
+    .data7(framer_Data),
     .outputClk(fsDiffClkOut),
     .outputData(fsDiffDataOut)
+);
+
+clockAndDataMux spareMux(
+    .muxSelect(spareMuxSelect),
+    .clk0(ch0ClkOut),
+    .clkInvert0(dualClkInvert),
+    .data0(ch0DataOut),
+    .clk1(pll0_Clk),
+    .clkInvert1(dualClkInvert),
+    .data1(pll0_Data),
+    .clk2(ch1ClkOut),
+    .clkInvert2(ch1ClkInvert),
+    .data2(ch1DataOut),
+    .clk3(pll1_Clk),
+    .clkInvert3(ch1ClkInvert),
+    .data3(pll1_Data),
+    .clk4(1'b0),
+    .clkInvert4(1'b0),
+    .data4(1'b0),
+    .clk5(pnClk),
+    .clkInvert5(1'b0),
+    .data5(pnBit),
+    .clk6(pll2_Clk),
+    .clkInvert6(1'b0),
+    .data6(pll2_Data),
+    .clk7(framer_Clk),
+    .clkInvert7(1'b0),
+    .data7(framer_Data),
+    .outputClk(spareClock),
+    .outputData(spareData)
 );
 
 assign ch0Lockn = !ch0Lock;
