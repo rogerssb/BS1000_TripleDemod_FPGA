@@ -13,7 +13,8 @@ module pngenRegs(
     output  reg [31:0]  pnClockRate,
     output  reg [3:0]   pcmMode,
     output  reg         pcmInvert,
-    output  reg         pnRestart
+    output  reg         pnRestart,
+    output  reg         injectError
 );
 
     parameter RegSpace = `PNGEN_SPACE;
@@ -42,6 +43,7 @@ module pngenRegs(
             casex (addr)
                 `PNGEN_POLY:    pnPolyTaps[15:8] <= din[15:8];
                 `PNGEN_RATE:    pnClockRate[15:8] <= din[15:8];
+                `PNGEN_PCM_MODE: injectError <= din[15];
                 default: ;
             endcase
         end
@@ -70,7 +72,7 @@ module pngenRegs(
             casex (addr)
                 `PNGEN_POLY:    dout = {pnPolyMode, pnRestart, 1'b0, pnPolyLength, pnPolyTaps};
                 `PNGEN_RATE:    dout = pnClockRate;
-                `PNGEN_PCM_MODE:dout = {24'b0,pcmInvert,3'b0,pcmMode};
+                `PNGEN_PCM_MODE:dout = {16'b0,injectError,7'b0,pcmInvert,3'b0,pcmMode};
                 default:        dout = 32'hx;
             endcase
         end

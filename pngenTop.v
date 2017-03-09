@@ -11,7 +11,7 @@ module pngenTop(
     input       [31:0]  din,
     output      [31:0]  dout,
     output  reg         pnClkEn,
-    output              nrzBit,
+    output  reg         nrzBit,
     output              pnBit,
     output              pnClk
 );
@@ -33,7 +33,8 @@ module pngenTop(
         .pnClockRate(pnClockRate),
         .pcmMode(pcmMode),
         .pcmInvert(pcmInvert),
-        .pnRestart(pnRestart)
+        .pnRestart(pnRestart),
+        .injectError(injectError)
     );
 
     // Phase Accumulator
@@ -117,9 +118,22 @@ module pngenTop(
         .reload(1'b0),
         .load_data(24'b0),
         .data(),
-        .serial(nrzBit)
+        .serial(errorFreeNrzBit)
     );
 
+    // Circuit to inject a bit error.
+    reg     [2:0]   injectSR;
+    always @(posedge clk) begin
+        if (infoClkEn) begin
+            injectSR <= {injectSR[1:0],injectError};
+            if (injectSR == 3'b011) begin
+                nrzBit <= ~errorFreeNrzBit;
+            end
+            else begin
+                nrzBit <= errorFreeNrzBit;
+            end
+        end
+    end
 
     // PCM Encoder
     pngenPcmEncoder pn_enc(

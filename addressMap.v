@@ -71,12 +71,17 @@
 `define VIDFIR2SPACE        13'b0_00xx_0111_xxxx
 `define DUAL_DECODERSPACE   13'b0_00xx_1000_xxxx
 `define CH1_DECODERSPACE    13'b0_00xx_1001_xxxx
+`define DEC_CONTROL         13'bx_xxxx_xxxx_00xx
     `define DEC_DERAND_MODE_OFF     3'b000
     `define DEC_DERAND_MODE_RNRZ15  3'b001
     `define DEC_DERAND_MODE_RNRZ9   3'b010
     `define DEC_DERAND_MODE_RNRZ11  3'b011
     `define DEC_DERAND_MODE_RNRZ17  3'b100
     `define DEC_DERAND_MODE_RNRZ23  3'b101
+    `define DEC_CLK_PHASE_0         2'b00
+    `define DEC_CLK_PHASE_180       2'b01
+    `define DEC_CLK_PHASE_90        2'b10
+    `define DEC_CLK_PHASE_270       2'b11
 
 // Digital PLL subsystem registers
 `define DLL0SPACE           13'b0_00xx_1010_0xxx

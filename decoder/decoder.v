@@ -11,47 +11,56 @@
 `timescale 1ns/100ps
 `include "addressMap.v"
 
-module decoder
-  (
-  rs,
-  en,
-  `ifdef USE_BUS_CLOCK
-  busClk,
-  `endif
-  wr0,wr1,
-  addr,
-  din,
-  dout,
-  clk,
-  symb_clk_en,
-  symb_clk_2x_en,
-  symb_i,
-  symb_q,
-  dout_i,
-  dout_q,
-  cout,
-  fifo_rs,
-  clk_inv,
-  bypass_fifo,
-  symb_clk,
-  inputSelect
-  );
+module decoder (
+    input                   rs,
+    input                   en,
+    `ifdef USE_BUS_CLOCK
+    input                   busClk,
+    `endif
+    input                   wr0,wr1,wr2,wr3,
+    input           [12:0]  addr,
+    input           [31:0]  din,
+    output          [31:0]  dout,
+    input                   clk,
+    input                   symb_clk_en,
+    input                   symb_clk_2x_en,
+    input                   symb_i,
+    input                   symb_q,
+    output                  dout_i,
+    output                  dout_q,
+    output reg              cout,
+    output                  fifo_rs,
+    output          [1:0]   clkPhase,
+    output                  bypass_fifo,
+    output                  symb_clk,
+    output                  inputSelect
+);
 
-input rs,en,wr0,wr1;
-`ifdef USE_BUS_CLOCK
-input   busClk;
-`endif
-input clk,symb_clk_en,symb_clk_2x_en;
-input [12:0]addr;
-input [15:0]din;
-output [15:0]dout;
-input  symb_i,symb_q;
-output dout_i,dout_q,cout;
-output fifo_rs;
-output clk_inv;
-output symb_clk;
-output bypass_fifo;
-output inputSelect;
+    wire            [1:0]   mode;
+    wire            [2:0]   derandMode;
+    decoderRegs decoderRegs(
+        `ifdef USE_BUS_CLOCK
+        .busClk(busClk),
+        `endif
+        .cs(en),
+        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .addr(addr),
+        .dataIn(din),
+        .dataOut(dout),
+        .fifoReset(fifo_rs),
+        .clkPhase(clkPhase),
+        .clkSelect(clk_sel),
+        .dataInvert(data_inv),
+        .derandomize(derandMode),
+        .demuxEnable(demux),
+        .feherEnable(feher),
+        .iqSwap(swap),
+        .biphaseEnable(biphase),
+        .millerEnable(miller),
+        .mode(mode),
+        .bypassFifo(bypass_fifo),
+        .inputSelect(inputSelect)
+    );
 
 //------------------------------------------------------------------------------
 //                          Biphase to NRZ Conversion
@@ -61,7 +70,7 @@ output inputSelect;
 // is enabled or not. This module introduces one symb_clk_en delay into the I
 // path.
 
-wire            biphase, biphase_en ;
+wire            biphase_en ;
 wire            nrz_i ;
 
 biphase_to_nrz biphase_to_nrz
@@ -107,7 +116,6 @@ always @ ( posedge clk or posedge rs )
 //------------------------------------------------------------------------------
 
 wire            dec_i;
-wire    [1:0]   mode;
 mrk_spc_decode mrk_spc_decode_i
   (
   .rs           (rs),
@@ -138,8 +146,6 @@ mrk_spc_decode mrk_spc_decode_q
 //------------------------------------------------------------------------------
 //                             Miller Decoding
 //------------------------------------------------------------------------------
-    
-    wire            miller;
     millerDecoder md(
         .clk(clk),
         .reset(rs),
@@ -174,7 +180,6 @@ always @ ( posedge clk )
     end
 
 reg             demux_out;
-wire            swap ;
 always @ ( posedge clk )
     begin
     if ( symb_clk_2x_en )
@@ -212,7 +217,6 @@ always @ ( posedge clk )
 //------------------------------------------------------------------------------
 
 reg             out_sel_i, out_sel_q ;
-wire            feher, demux ;
 always @ ( posedge clk )
     begin
     if ( symb_clk_2x_en )
@@ -268,8 +272,6 @@ always @ ( posedge clk )
 
     reg             rand_nrz_dec_out ;
 
-    wire    [2:0]   derandMode = {derandomize2,derandomize1,derandomize0};
-
     always @ ( posedge clk or posedge rs ) begin
         if ( rs ) begin
             rand_nrz_shft <= 23'h0 ;
@@ -302,12 +304,9 @@ always @ ( posedge clk )
 //                     Output Formatting and Inversions
 //------------------------------------------------------------------------------
 
-    wire    data_inv;
     wire    data_inv_i = data_inv ? !derand_out_i : derand_out_i ;
     wire    data_inv_q = data_inv ? !derand_out_q : derand_out_q ;
 
-    wire        clk_sel;
-    reg         cout;
     always @* begin
         if (miller) begin
             cout = (millerBitEn & symb_clk_en);
@@ -358,38 +357,6 @@ always @ ( posedge clk )
 //------------------------------------------------------------------------------
 //                                 Registers
 //------------------------------------------------------------------------------
-
-wire [15:0]regs_q;
-decoder_regs decoder_regs(
-    `ifdef USE_BUS_CLOCK
-    .busClk(busClk),
-    `endif
-  .wr0(wr0),
-  .wr1(wr1),
-  .a(addr),
-  .di(din[15:0]),
-  .do(dout[15:0]),
-  .en(en),
-  .d(regs_q),
-  .q(regs_q)
-  );
-
-assign {
-    derandomize2,
-    inputSelect,
-    bypass_fifo,
-    derandomize1,
-    mode,
-    miller,
-    biphase,
-    swap,
-    feher,
-    demux,
-    derandomize0,
-    data_inv,
-    clk_sel,
-    clk_inv,
-    fifo_rs} = regs_q[15:0];
 
 endmodule
 

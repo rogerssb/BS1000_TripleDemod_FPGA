@@ -135,7 +135,7 @@ module bitsyncBertTop (
     input           pll2_OUT1;
     output          pll2_PWDn;
 
-    parameter VER_NUMBER = 16'd450;
+    parameter VER_NUMBER = 16'd451;
 
 
 //******************************************************************************
@@ -388,7 +388,10 @@ clockAndDataInputSync diffSync(
         end
     end
 
-    wire    [15:0]  dualDecDout;
+    wire    [31:0]  dualDecDout;
+    wire    [1:0]   dualClkPhase;
+    wire            dualClkInvert   = dualClkPhase[0];
+    wire            dualClk90       = dualClkPhase[1];
     decoder dualDecoder
     (
         .clk(clk),
@@ -399,8 +402,10 @@ clockAndDataInputSync diffSync(
         `endif
         .wr0(wr0),
         .wr1(wr1),
+        .wr2(wr2),
+        .wr3(wr3),
         .addr(addr),
-        .din(dataIn[15:0]),
+        .din(dataIn),
         .dout(dualDecDout),
         .symb_clk_en(dualSymEn),          // symbol rate clock enable
         .symb_clk_2x_en(dualSym2xEn),     // 2x symbol rate clock enable
@@ -410,7 +415,7 @@ clockAndDataInputSync diffSync(
         .dout_q(dualDataQ),
         .cout(dualPcmClkEn),
         .fifo_rs(),
-        .clk_inv(dualClkInvert),
+        .clkPhase(dualClkPhase),
         .bypass_fifo(),
         .symb_clk(dualPcmSymClk),
         .inputSelect(dualDecInputSelect)
@@ -442,7 +447,10 @@ clockAndDataInputSync diffSync(
     end
 
 
-    wire    [15:0]  ch1DecDout;
+    wire    [31:0]  ch1DecDout;
+    wire    [1:0]   ch1ClkPhase;
+    wire            ch1ClkInvert   = ch1ClkPhase[0];
+    wire            ch1Clk90       = ch1ClkPhase[1];
     pcmDecoder dec1 (
         .clk(clk),
         .rs(reset),
@@ -450,8 +458,10 @@ clockAndDataInputSync diffSync(
         .en(ch1DecoderSpace),
         .wr0(wr0),
         .wr1(wr1),
+        .wr2(wr2),
+        .wr3(wr3),
         .addr(addr),
-        .din(dataIn[15:0]),
+        .din(dataIn),
         .dout(ch1DecDout),
         .symb_clk_en(ch1DecSymEn),        // symbol rate clock enable
         .symb_clk_2x_en(ch1DecSym2xEn),   // 2x symbol rate clock enable
@@ -459,7 +469,7 @@ clockAndDataInputSync diffSync(
         .data_out(ch1PcmData),            // data output
         .clkEn_out(ch1PcmClkEn),          // clk output
         .fifo_rs(),
-        .clk_inv(ch1ClkInvert),
+        .clkPhase(ch1ClkPhase),
         .bypass_fifo(),
         .symb_clk(ch1PcmSymClk),
         .inputSelect(ch1DecInputSelect)
@@ -606,13 +616,40 @@ clockAndDataInputSync diffSync(
     //assign          pll1_REF = ch1SymEn;
     assign          pll2_REF = pnClkEn;
 
+    //------------- PLL Clock Dividers
+    // Make a Gray-coded divider
+    reg     [1:0]   pll0Divider;
+    wire            pll0ReadClk = pll0Divider[0];
+    wire            pll090Clk   = pll0Divider[1];
+    always @(posedge pll0_OUT1) begin
+        case (pll0Divider)
+            2'b00:      pll0Divider <= 2'b01;
+            2'b01:      pll0Divider <= 2'b11;
+            2'b11:      pll0Divider <= 2'b10;
+            2'b10:      pll0Divider <= 2'b00;
+            default:    pll0Divider <= 2'b00;
+        endcase
+    end
+    reg     [1:0]   pll1Divider;
+    wire            pll1ReadClk = pll1Divider[0];
+    wire            pll190Clk   = pll1Divider[1];
+    always @(posedge pll1_OUT1) begin
+        case (pll1Divider)
+            2'b00:      pll1Divider <= 2'b01;
+            2'b01:      pll1Divider <= 2'b11;
+            2'b11:      pll1Divider <= 2'b10;
+            2'b10:      pll1Divider <= 2'b00;
+            default:    pll1Divider <= 2'b00;
+        endcase
+    end
+
     //------------- PLL0 Data FIFO --------------------
     reg             pll0_ReadEnable;
     wire    [2:0]   pll0_Symbol;
     jitterFifo pll0Fifo(
         .rst(pll0Reset),
         .wr_clk(clk),
-        .rd_clk(pll0_OUT1),
+        .rd_clk(pll0ReadClk),
         .din({dualDataI,dualDataQ,1'b0}),
         .wr_en(dualPcmClkEn),
         .rd_en(pll0_ReadEnable),
@@ -621,7 +658,7 @@ clockAndDataInputSync diffSync(
         .empty(pll0_Empty),
         .prog_full(pll0_HalfFull)
     );
-    always @(posedge pll0_OUT1) begin
+    always @(posedge pll0ReadClk) begin
         if (pll0Reset) begin
             pll0_ReadEnable <= 0;
         end
@@ -637,7 +674,7 @@ clockAndDataInputSync diffSync(
     jitterFifo pll1Fifo(
         .rst(pll1Reset),
         .wr_clk(clk),
-        .rd_clk(pll1_OUT1),
+        .rd_clk(pll1ReadClk),
         .din({ch1PcmData,2'b0}),
         .wr_en(ch1PcmClkEn),
         .rd_en(pll1_ReadEnable),
@@ -646,7 +683,7 @@ clockAndDataInputSync diffSync(
         .empty(pll1_Empty),
         .prog_full(pll1_HalfFull)
     );
-    always @(posedge pll1_OUT1) begin
+    always @(posedge pll1ReadClk) begin
         if (pll1Reset) begin
             pll1_ReadEnable <= 0;
         end
@@ -680,11 +717,32 @@ clockAndDataInputSync diffSync(
     end
 
     //-------------- PLL Outputs ----------------------
-    assign          pll0_Data = pll0_Symbol[2];
-    assign          pll1_Data = asyncMode ? pll1_Symbol[2] : pll0_Symbol[1];
+    reg             pll0_Clk, pll0_Data, sync_Data;
+    always @(posedge pll0_OUT1) begin
+        pll0_Data <= pll0_Symbol[2];
+        sync_Data <= pll0_Symbol[1];
+        case (dualClkPhase)
+            `DEC_CLK_PHASE_0:   pll0_Clk <= pll0ReadClk;
+            `DEC_CLK_PHASE_90:  pll0_Clk <= pll090Clk;
+            `DEC_CLK_PHASE_180: pll0_Clk <= !pll0ReadClk;
+            `DEC_CLK_PHASE_270: pll0_Clk <= !pll090Clk;
+        endcase
+    end
+
+    reg             async_Clk, async_Data;
+    always @(posedge pll1_OUT1) begin
+        async_Data <= pll1_Symbol[2];
+        case (ch1ClkPhase)
+            `DEC_CLK_PHASE_0:   async_Clk <= pll1ReadClk;
+            `DEC_CLK_PHASE_90:  async_Clk <= pll190Clk;
+            `DEC_CLK_PHASE_180: async_Clk <= !pll1ReadClk;
+            `DEC_CLK_PHASE_270: async_Clk <= !pll190Clk;
+        endcase
+    end
+    assign          pll1_Data = asyncMode ? async_Data : sync_Data;
+    assign          pll1_Clk = asyncMode ? async_Clk : pll0_Clk;
+
     assign          pll2_Data = pll2_Symbol[2];
-    assign          pll0_Clk = pll0_OUT1;
-    assign          pll1_Clk = asyncMode ? pll1_OUT1 : pll0_OUT1;
     assign          pll2_Clk = pll2_OUT1;
 
 
@@ -897,16 +955,16 @@ assign bsDataOut = pll0_Reset;
 clockAndDataMux bsMux(
     .muxSelect(bsCoaxMuxSelect),
     .clk0(ch0ClkOut),
-    .clkInvert0(dualClkInvert),
+    .clkInvert0(1'b0),
     .data0(ch0DataOut),
     .clk1(pll0_Clk),
-    .clkInvert1(dualClkInvert),
+    .clkInvert1(1'b0),
     .data1(pll0_Data),
     .clk2(ch1ClkOut),
-    .clkInvert2(ch1ClkInvert),
+    .clkInvert2(1'b0),
     .data2(ch1DataOut),
     .clk3(pll1_Clk),
-    .clkInvert3(ch1ClkInvert),
+    .clkInvert3(1'b0),
     .data3(pll1_Data),
     .clk4(1'b0),
     .clkInvert4(1'b0),
@@ -929,16 +987,16 @@ clockAndDataMux bsMux(
 clockAndDataMux bsDiffMux(
     .muxSelect(bsRS422MuxSelect),
     .clk0(ch0ClkOut),
-    .clkInvert0(dualClkInvert),
+    .clkInvert0(1'b0),
     .data0(ch0DataOut),
     .clk1(pll0_Clk),
-    .clkInvert1(dualClkInvert),
+    .clkInvert1(1'b0),
     .data1(pll0_Data),
     .clk2(ch1ClkOut),
-    .clkInvert2(ch1ClkInvert),
+    .clkInvert2(1'b0),
     .data2(ch1DataOut),
     .clk3(pll1_Clk),
-    .clkInvert3(ch1ClkInvert),
+    .clkInvert3(1'b0),
     .data3(pll1_Data),
     .clk4(1'b0),
     .clkInvert4(1'b0),
@@ -959,16 +1017,16 @@ clockAndDataMux bsDiffMux(
 clockAndDataMux encMux(
     .muxSelect(encCoaxMuxSelect),
     .clk0(ch0ClkOut),
-    .clkInvert0(dualClkInvert),
+    .clkInvert0(1'b0),
     .data0(ch0DataOut),
     .clk1(pll0_Clk),
-    .clkInvert1(dualClkInvert),
+    .clkInvert1(1'b0),
     .data1(pll0_Data),
     .clk2(ch1ClkOut),
-    .clkInvert2(ch1ClkInvert),
+    .clkInvert2(1'b0),
     .data2(ch1DataOut),
     .clk3(pll1_Clk),
-    .clkInvert3(ch1ClkInvert),
+    .clkInvert3(1'b0),
     .data3(pll1_Data),
     .clk4(1'b0),
     .clkInvert4(1'b0),
@@ -989,16 +1047,16 @@ clockAndDataMux encMux(
 clockAndDataMux fsMux(
     .muxSelect(fsMuxSelect),
     .clk0(ch0ClkOut),
-    .clkInvert0(dualClkInvert),
+    .clkInvert0(1'b0),
     .data0(ch0DataOut),
     .clk1(pll0_Clk),
-    .clkInvert1(dualClkInvert),
+    .clkInvert1(1'b0),
     .data1(pll0_Data),
     .clk2(ch1ClkOut),
-    .clkInvert2(ch1ClkInvert),
+    .clkInvert2(1'b0),
     .data2(ch1DataOut),
     .clk3(pll1_Clk),
-    .clkInvert3(ch1ClkInvert),
+    .clkInvert3(1'b0),
     .data3(pll1_Data),
     .clk4(1'b0),
     .clkInvert4(1'b0),
@@ -1019,16 +1077,16 @@ clockAndDataMux fsMux(
 clockAndDataMux fsDiffMux(
     .muxSelect(fsRS422MuxSelect),
     .clk0(ch0ClkOut),
-    .clkInvert0(dualClkInvert),
+    .clkInvert0(1'b0),
     .data0(ch0DataOut),
     .clk1(pll0_Clk),
-    .clkInvert1(dualClkInvert),
+    .clkInvert1(1'b0),
     .data1(pll0_Data),
     .clk2(ch1ClkOut),
-    .clkInvert2(ch1ClkInvert),
+    .clkInvert2(1'b0),
     .data2(ch1DataOut),
     .clk3(pll1_Clk),
-    .clkInvert3(ch1ClkInvert),
+    .clkInvert3(1'b0),
     .data3(pll1_Data),
     .clk4(1'b0),
     .clkInvert4(1'b0),
@@ -1049,16 +1107,16 @@ clockAndDataMux fsDiffMux(
 clockAndDataMux spareMux(
     .muxSelect(spareMuxSelect),
     .clk0(ch0ClkOut),
-    .clkInvert0(dualClkInvert),
+    .clkInvert0(1'b0),
     .data0(ch0DataOut),
     .clk1(pll0_Clk),
-    .clkInvert1(dualClkInvert),
+    .clkInvert1(1'b0),
     .data1(pll0_Data),
     .clk2(ch1ClkOut),
-    .clkInvert2(ch1ClkInvert),
+    .clkInvert2(1'b0),
     .data2(ch1DataOut),
     .clk3(pll1_Clk),
-    .clkInvert3(ch1ClkInvert),
+    .clkInvert3(1'b0),
     .data3(pll1_Data),
     .clk4(1'b0),
     .clkInvert4(1'b0),
@@ -1188,10 +1246,20 @@ always @* begin
                 end
             end
         `DUAL_DECODERSPACE: begin
-            rd_mux = dualDecDout;
+            if (addr[1]) begin
+                rd_mux = dualDecDout[31:16];
+                end
+            else begin
+                rd_mux = dualDecDout[15:0];
+                end
             end
         `CH1_DECODERSPACE: begin
-            rd_mux = ch1DecDout;
+            if (addr[1]) begin
+                rd_mux = ch1DecDout[31:16];
+                end
+            else begin
+                rd_mux = ch1DecDout[15:0];
+                end
             end
          default : rd_mux = 16'hxxxx;
         endcase
