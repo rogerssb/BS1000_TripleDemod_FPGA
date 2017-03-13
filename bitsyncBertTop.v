@@ -135,7 +135,7 @@ module bitsyncBertTop (
     input           pll2_OUT1;
     output          pll2_PWDn;
 
-    parameter VER_NUMBER = 16'd451;
+    parameter VER_NUMBER = 16'd453;
 
 
 //******************************************************************************
