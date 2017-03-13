@@ -5,7 +5,7 @@
 //`define ADD_FIFOS
 //`define MATLAB_VECTORS
 `define ADD_BERT_TEST
-`define QPSK
+//`define QPSK
 
 module test;
 

@@ -11,9 +11,9 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="0fs"></ZoomStartTime>
-      <ZoomEndTime time="332535000001fs"></ZoomEndTime>
-      <Cursor1Time time="332535000000fs"></Cursor1Time>
+      <ZoomStartTime time="322055000000fs"></ZoomStartTime>
+      <ZoomEndTime time="325420000001fs"></ZoomEndTime>
+      <Cursor1Time time="324855000000fs"></Cursor1Time>
    </zoom_setting>
    <WVObjectSize size="14" />
    <wvobject db_ref_id="1" fp_name="/test/dfDecimationReal" type="other">
@@ -468,6 +468,18 @@
       <wvobject db_ref_id="1" fp_name="/test/bitsyncTop/viterbi/ch0SyncState" type="array">
          <obj_property name="ElementShortName">ch0SyncState[2:0]</obj_property>
          <obj_property name="ObjectShortName">ch0SyncState[2:0]</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/test/bitsyncTop/ch0VitSym2xEn" type="logic">
+         <obj_property name="ElementShortName">ch0VitSym2xEn</obj_property>
+         <obj_property name="ObjectShortName">ch0VitSym2xEn</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/test/bitsyncTop/ch0VitBitEn" type="logic">
+         <obj_property name="ElementShortName">ch0VitBitEn</obj_property>
+         <obj_property name="ObjectShortName">ch0VitBitEn</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/test/bitsyncTop/ch0VitBit" type="logic">
+         <obj_property name="ElementShortName">ch0VitBit</obj_property>
+         <obj_property name="ObjectShortName">ch0VitBit</obj_property>
       </wvobject>
    </wvobject>
    <wvobject fp_name="group52" type="group">

@@ -34,6 +34,7 @@ module pngenTop(
         .pcmMode(pcmMode),
         .pcmInvert(pcmInvert),
         .pnRestart(pnRestart),
+        .inject1E3Errors(inject1E3Errors),
         .injectError(injectError)
     );
 
@@ -123,10 +124,20 @@ module pngenTop(
 
     // Circuit to inject a bit error.
     reg     [2:0]   injectSR;
+    reg     [9:0]   injectBitCount;
+    reg             inject1E3Error;
     always @(posedge clk) begin
         if (infoClkEn) begin
+            if (injectBitCount > 0) begin
+                injectBitCount <= injectBitCount - 1;
+                inject1E3Error <= 0;
+            end
+            else begin
+                injectBitCount <= 10'd999;
+                inject1E3Error <= inject1E3Errors;
+            end
             injectSR <= {injectSR[1:0],injectError};
-            if (injectSR == 3'b011) begin
+            if ((injectSR == 3'b011) || inject1E3Error) begin
                 nrzBit <= ~errorFreeNrzBit;
             end
             else begin

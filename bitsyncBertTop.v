@@ -293,7 +293,7 @@ clockAndDataInputSync diffSync(
         .ch0Sym2xEn(ch0Sym2xEn),
         .ch0SymEn(ch0SymEn),
         .ch0SymData(ch0SymData),
-        .ch0SymClk(ch0ClkOut),
+        .ch0SymClk(ch0SymClk),
         .ch0Bit(ch0DataOut),
         .ch0Dac0ClkEn(ch0Dac0ClkEn),
         .ch0Dac0Data(ch0Dac0Data),
@@ -309,7 +309,7 @@ clockAndDataInputSync diffSync(
         .ch1Sym2xEn(ch1Sym2xEn),
         .ch1SymEn(ch1SymEn),
         .ch1SymData(ch1SymData),
-        .ch1SymClk(ch1ClkOut),
+        .ch1SymClk(ch1SymClk),
         .ch1Bit(ch1DataOut),
         .ch1Dac0ClkEn(ch1Dac0ClkEn),
         .ch1Dac0Data(ch1Dac0Data),
@@ -327,9 +327,11 @@ clockAndDataInputSync diffSync(
         .ch0VitBitEn(ch0VitBitEn),
         .ch0VitBit(ch0VitBit),
         .ch0VitSym2xEn(ch0VitSym2xEn),
+        .ch0VitSymClk(ch0VitSymClk),
         .ch1VitBitEn(ch1VitBitEn),
         .ch1VitBit(ch1VitBit),
         .ch1VitSym2xEn(ch1VitSym2xEn),
+        .ch1VitSymClk(ch1VitSymClk),
         .asyncMode(asyncMode),
         .test0(test0), .test1(test1)
     );
@@ -373,18 +375,21 @@ clockAndDataInputSync diffSync(
     reg                 dualCh1Input;
     reg                 dualSymEn;
     reg                 dualSym2xEn;
+    reg                 dualSymClk;
     always @(posedge clk) begin
         if (dualDecInputSelect) begin
             dualCh0Input <= ch0VitBit;
             dualCh1Input <= ch1VitBit;
             dualSymEn <= ch0VitBitEn;
             dualSym2xEn <= ch0VitSym2xEn;
+            dualSymClk <= ch0VitSymClk;
         end
         else begin
             dualCh0Input <= ch0DataOut;
             dualCh1Input <= ch1DataOut;
             dualSymEn <= ch0SymEn;
             dualSym2xEn <= ch0Sym2xEn;
+            dualSymClk <= ch0SymClk;
         end
     end
 
@@ -433,16 +438,19 @@ clockAndDataInputSync diffSync(
     reg                 ch1DecInput;
     reg                 ch1DecSymEn;
     reg                 ch1DecSym2xEn;
+    reg                 ch1DecSymClk;
     always @(posedge clk) begin
         if (ch1DecInputSelect) begin
             ch1DecInput <= ch1VitBit;
             ch1DecSymEn <= ch1VitBitEn;
             ch1DecSym2xEn <= ch1VitSym2xEn;
+            ch1DecSymClk <= ch1VitSymClk;
         end
         else begin
             ch1DecInput <= ch1DataOut;
             ch1DecSymEn <= ch1SymEn;
             ch1DecSym2xEn <= ch1Sym2xEn;
+            ch1DecSymClk <= ch1SymClk;
         end
     end
 
@@ -482,15 +490,15 @@ clockAndDataInputSync diffSync(
 //******************************************************************************
     clockAndDataMux bertMux(
         .muxSelect(bertInputMuxSelect),
-        .clk0(ch0SymEn),
+        .clk0(dualSymEn),
         .clkInvert0(1'b0),
-        .data0(ch0DataOut),
+        .data0(dualCh0Input),
         .clk1(dualPcmClkEn),
         .clkInvert1(1'b0),
         .data1(dualDataI),
-        .clk2(ch1SymEn),
+        .clk2(ch1DecSymEn),
         .clkInvert2(1'b0),
-        .data2(ch1DataOut),
+        .data2(ch1DecInput),
         .clk3(ch1PcmClkEn),
         .clkInvert3(1'b0),
         .data3(ch1PcmData),
@@ -582,7 +590,7 @@ clockAndDataInputSync diffSync(
         .dataIn(dataIn),
         .dataOut(dll1Dout),
         .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
-        .referenceClkEn(ch1SymEn),
+        .referenceClkEn(ch1PcmClkEn),
         .dllOutputClk(pll1_REF),
         .dllOutputClkEn(),
         .phaseError(dll1PhaseError)
@@ -954,15 +962,15 @@ assign bsDataOut = pll0_Reset;
 
 clockAndDataMux bsMux(
     .muxSelect(bsCoaxMuxSelect),
-    .clk0(ch0ClkOut),
+    .clk0(dualSymClk),
     .clkInvert0(1'b0),
-    .data0(ch0DataOut),
+    .data0(dualCh0Input),
     .clk1(pll0_Clk),
     .clkInvert1(1'b0),
     .data1(pll0_Data),
-    .clk2(ch1ClkOut),
+    .clk2(ch1DecSymClk),
     .clkInvert2(1'b0),
-    .data2(ch1DataOut),
+    .data2(ch1DecInput),
     .clk3(pll1_Clk),
     .clkInvert3(1'b0),
     .data3(pll1_Data),
@@ -986,15 +994,15 @@ clockAndDataMux bsMux(
 
 clockAndDataMux bsDiffMux(
     .muxSelect(bsRS422MuxSelect),
-    .clk0(ch0ClkOut),
+    .clk0(dualSymClk),
     .clkInvert0(1'b0),
-    .data0(ch0DataOut),
+    .data0(dualCh0Input),
     .clk1(pll0_Clk),
     .clkInvert1(1'b0),
     .data1(pll0_Data),
-    .clk2(ch1ClkOut),
+    .clk2(ch1DecSymClk),
     .clkInvert2(1'b0),
-    .data2(ch1DataOut),
+    .data2(ch1DecInput),
     .clk3(pll1_Clk),
     .clkInvert3(1'b0),
     .data3(pll1_Data),
@@ -1016,15 +1024,15 @@ clockAndDataMux bsDiffMux(
 
 clockAndDataMux encMux(
     .muxSelect(encCoaxMuxSelect),
-    .clk0(ch0ClkOut),
+    .clk0(dualSymClk),
     .clkInvert0(1'b0),
-    .data0(ch0DataOut),
+    .data0(dualCh0Input),
     .clk1(pll0_Clk),
     .clkInvert1(1'b0),
     .data1(pll0_Data),
-    .clk2(ch1ClkOut),
+    .clk2(ch1DecSymClk),
     .clkInvert2(1'b0),
-    .data2(ch1DataOut),
+    .data2(ch1DecInput),
     .clk3(pll1_Clk),
     .clkInvert3(1'b0),
     .data3(pll1_Data),
@@ -1046,15 +1054,15 @@ clockAndDataMux encMux(
 
 clockAndDataMux fsMux(
     .muxSelect(fsMuxSelect),
-    .clk0(ch0ClkOut),
+    .clk0(dualSymClk),
     .clkInvert0(1'b0),
-    .data0(ch0DataOut),
+    .data0(dualCh0Input),
     .clk1(pll0_Clk),
     .clkInvert1(1'b0),
     .data1(pll0_Data),
-    .clk2(ch1ClkOut),
+    .clk2(ch1DecSymClk),
     .clkInvert2(1'b0),
-    .data2(ch1DataOut),
+    .data2(ch1DecInput),
     .clk3(pll1_Clk),
     .clkInvert3(1'b0),
     .data3(pll1_Data),
@@ -1076,15 +1084,15 @@ clockAndDataMux fsMux(
 
 clockAndDataMux fsDiffMux(
     .muxSelect(fsRS422MuxSelect),
-    .clk0(ch0ClkOut),
+    .clk0(dualSymClk),
     .clkInvert0(1'b0),
-    .data0(ch0DataOut),
+    .data0(dualCh0Input),
     .clk1(pll0_Clk),
     .clkInvert1(1'b0),
     .data1(pll0_Data),
-    .clk2(ch1ClkOut),
+    .clk2(ch1DecSymClk),
     .clkInvert2(1'b0),
-    .data2(ch1DataOut),
+    .data2(ch1DecInput),
     .clk3(pll1_Clk),
     .clkInvert3(1'b0),
     .data3(pll1_Data),
@@ -1106,15 +1114,15 @@ clockAndDataMux fsDiffMux(
 
 clockAndDataMux spareMux(
     .muxSelect(spareMuxSelect),
-    .clk0(ch0ClkOut),
+    .clk0(dualSymClk),
     .clkInvert0(1'b0),
-    .data0(ch0DataOut),
+    .data0(dualCh0Input),
     .clk1(pll0_Clk),
     .clkInvert1(1'b0),
     .data1(pll0_Data),
-    .clk2(ch1ClkOut),
+    .clk2(ch1DecSymClk),
     .clkInvert2(1'b0),
-    .data2(ch1DataOut),
+    .data2(ch1DecInput),
     .clk3(pll1_Clk),
     .clkInvert3(1'b0),
     .data3(pll1_Data),

@@ -59,9 +59,11 @@ module bitsyncTop(
     ch0VitBitEn,
     ch0VitBit,
     ch0VitSym2xEn,
+    ch0VitSymClk,
     ch1VitBitEn,
     ch1VitBit,
     ch1VitSym2xEn,
+    ch1VitSymClk,
     asyncMode,
     test0,test1
     );
@@ -118,9 +120,11 @@ output          [4:0]   eyeOffset;
 output                  ch0VitBitEn;
 output                  ch0VitBit;
 output  reg             ch0VitSym2xEn;
+output  reg             ch0VitSymClk;
 output                  ch1VitBitEn;
 output                  ch1VitBit;
 output  reg             ch1VitSym2xEn;
+output  reg             ch1VitSymClk;
 output                  asyncMode;
 output                  test0,test1;
 
@@ -484,7 +488,7 @@ pcmAgcLoop #(.RegSpace(`CH1_AGCSPACE)) pcmAgcLoop1(
     end
 
 
-`ifndef SIMULATE
+//`ifndef SIMULATE
 /******************************************************************************
                             Viterbi Decoders
 ******************************************************************************/
@@ -522,7 +526,22 @@ pcmAgcLoop #(.RegSpace(`CH1_AGCSPACE)) pcmAgcLoop1(
             end
         endcase
     end
-`endif
+    always @(posedge clk) begin
+        if (reset) begin
+            ch0VitSymClk <= 0;
+        end
+        else if (ch0VitSym2xEn) begin
+            ch0VitSymClk <= !ch0VitSymClk;
+        end
+        if (reset) begin
+            ch1VitSymClk <= 0;
+        end
+        else if (ch1VitSym2xEn) begin
+            ch1VitSymClk <= !ch1VitSymClk;
+        end
+    end
+
+//`endif
 
 
 /******************************************************************************
