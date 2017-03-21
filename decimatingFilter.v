@@ -7,7 +7,7 @@ derivative rights in exchange for negotiated compensation.
 ******************************************************************************/
 
 `timescale 1ns / 10 ps
-`include ".\addressMap.v"
+`include "addressMap.v"
 
 
 module decimatingFilter( 
@@ -130,16 +130,16 @@ wire    [47:0]  cicOut;
 wire    [31:0]  cicDout;
 `ifdef SIMULATE
 cicDecimator cic( 
-    .clk(clk), .reset(dfReset || reset), .sync(cicClkEn),
+    .clk(clk), .reset(dfReset || reset), .clkEn(cicClkEn),
 `else
 cicDecimator cic( 
-    .clk(clk), .reset(reset), .sync(cicClkEn),
+    .clk(clk), .reset(reset), .clkEn(cicClkEn),
 `endif
     .gainShift(cicShift),
     .decimation(cicDecimation),
     .in(cicIn),
     .out(cicOut),
-    .syncOut(cicClkEnOut)
+    .clkEnOut(cicClkEnOut)
     );
 
 // CIC Compensation

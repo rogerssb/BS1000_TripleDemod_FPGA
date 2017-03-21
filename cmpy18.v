@@ -5,101 +5,94 @@ This source code is the Intellectual Property of Koos Technical Services,Inc.
 (KTS) and is provided under a License Agreement which protects KTS' ownership and
 derivative rights in exchange for negotiated compensation.
 ******************************************************************************/
+`timescale 1ns/100ps
 
 //`define UNITY_GAIN
 
 
 module cmpy18(
-    clk,
-    reset,
-    aReal,aImag,
-    bReal,bImag,
-    pReal,pImag
+    input                       clk,
+    input                       reset,
+    input       signed  [17:0]  aReal,aImag,
+    input       signed  [17:0]  bReal,bImag,
+    output  reg signed  [17:0]  pReal,pImag
+);
+
+
+    // Complex Multiplier
+    //RxR
+    wire signed [35:0]  productRxR;
+    mpy18x18PL1 mpyRxR(
+        .clk(clk), 
+        .sclr(reset),
+        .a(aReal), 
+        .b(bReal), 
+        .p(productRxR)
     );
 
-input clk;
-input reset;
-input [17:0]aReal;
-input [17:0]aImag;
-input [17:0]bReal;
-input [17:0]bImag;
-output [17:0]pReal;
-output [17:0]pImag;
+    //IxI
+    wire signed [35:0]  productIxI;
+    mpy18x18PL1 mpyIxI(
+        .clk(clk), 
+        .sclr(reset),
+        .a(aImag), 
+        .b(bImag), 
+        .p(productIxI)
+    );
 
-// Complex Multiplier
-//RxR
-wire [35:0]productRxR;
-mpy18x18 mpyRxR(.clk(clk), 
-                .sclr(reset),
-                .a(aReal), 
-                .b(bReal), 
-                .p(productRxR)
-                );
+    //RxI
+    wire signed [35:0]  productRxI;
+    mpy18x18PL1 mpyRxI(
+        .clk(clk), 
+        .sclr(reset),
+        .a(aReal), 
+        .b(bImag), 
+        .p(productRxI)
+    );
 
-//IxI
-wire [35:0]productIxI;
-mpy18x18 mpyIxI(.clk(clk), 
-                .sclr(reset),
-                .a(aImag), 
-                .b(bImag), 
-                .p(productIxI)
-                );
+    //IxR
+    wire signed [35:0]  productIxR;
+    mpy18x18PL1 mpyIxR(
+        .clk(clk), 
+        .sclr(reset),
+        .a(aImag), 
+        .b(bReal), 
+        .p(productIxR)
+    );
 
-//RxI
-wire [35:0]productRxI;
-mpy18x18 mpyRxI(.clk(clk), 
-                .sclr(reset),
-                .a(aReal), 
-                .b(bImag), 
-                .p(productRxI)
-                );
+    wire signed [35:0]  realSum = {productRxR[34],productRxR[34:0]} - {productIxI[34],productIxI[34:0]};
+    wire signed [35:0]  imagSum = {productRxI[34],productRxI[34:0]} + {productIxR[34],productIxR[34:0]};
 
-//IxR
-wire [35:0]productIxR;
-mpy18x18 mpyIxR(.clk(clk), 
-                .sclr(reset),
-                .a(aImag), 
-                .b(bReal), 
-                .p(productIxR)
-                );
+    `ifdef UNITY_GAIN
 
-wire [35:0]realSum = {productRxR[34],productRxR[34:0]} - {productIxI[34],productIxI[34:0]};
-wire [35:0]imagSum = {productRxI[34],productRxI[34:0]} + {productIxR[34],productIxR[34:0]};
-
-`ifdef UNITY_GAIN
-
-reg [17:0]pReal;
-reg [17:0]pImag;
-always @(posedge clk) begin
-    if (realSum[35] & !realSum[34]) begin
-        pReal <= 18'h20001;
+    always @(posedge clk) begin
+        if (realSum[35] & !realSum[34]) begin
+            pReal <= 18'h20001;
         end
-    else if (!realSum[35] & realSum[34]) begin
-        pReal <= 18'h1ffff;
+        else if (!realSum[35] & realSum[34]) begin
+            pReal <= 18'h1ffff;
         end
-    else begin
-        pReal <= realSum[34:17];
+        else begin
+            pReal <= realSum[34:17];
         end
-    if (imagSum[35] & !imagSum[34]) begin
-        pImag <= 18'h20001;
+        if (imagSum[35] & !imagSum[34]) begin
+            pImag <= 18'h20001;
         end
-    else if (!imagSum[35] & imagSum[34]) begin
-        pImag <= 18'h1ffff;
+        else if (!imagSum[35] & imagSum[34]) begin
+            pImag <= 18'h1ffff;
         end
-    else begin
-        pImag <= imagSum[34:17];
+        else begin
+            pImag <= imagSum[34:17];
         end
     end
 
-`else
+    `else
 
-reg [17:0]pReal;
-reg [17:0]pImag;
-always @(posedge clk) begin
-    pReal <= realSum[35:18];
-    pImag <= imagSum[35:18];
+    always @(posedge clk) begin
+        pReal <= realSum[35:18];
+        pImag <= imagSum[35:18];
     end
 
-`endif
+    `endif
 
 endmodule

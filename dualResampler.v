@@ -10,115 +10,103 @@ derivative rights in exchange for negotiated compensation.
 `include "addressMap.v"
 
 module dualResampler( 
-    clk, reset, sync,
-    wr0, wr1, wr2, wr3,
-    addr,
-    din,
-    dout,
-    demodMode,
-    resamplerFreqOffset,
-    auResamplerFreqOffset,
-    offsetEn,
-    auOffsetEn,
-    iIn,
-    qIn,
-    iOut,
-    qOut,
-    syncOut,
-    sampleOffset,
-    auSyncOut
+    input                   clk, reset, clkEn,
+    input                   wr0, wr1, wr2, wr3,
+    input           [12:0]  addr,
+    input           [31:0]  din,
+    output          [31:0]  dout,
+    input           [4:0]   demodMode,
+    input           [31:0]  resamplerFreqOffset,
+    input           [31:0]  auResamplerFreqOffset,
+    input                   offsetEn,
+    input                   auOffsetEn,
+    input   signed  [17:0]  iIn,
+    input   signed  [17:0]  qIn,
+    output  signed  [17:0]  iOut,
+    output  signed  [17:0]  qOut,
+    output                  clkEnOut,
+    output          [4:0]   sampleOffset,
+    output                  auClkEnOut
     );
 
-input           clk;
-input           reset;
-input           sync;
-input           wr0,wr1,wr2,wr3;
-input   [12:0]  addr;
-input   [31:0]  din;
-output  [31:0]  dout;
-input   [4:0]   demodMode;
-input   [31:0]  resamplerFreqOffset;
-input   [31:0]  auResamplerFreqOffset;
-input           offsetEn;
-input           auOffsetEn;
-input   [17:0]  iIn,qIn;
-output  [17:0]  iOut,qOut;
-output          syncOut;
-output  [4:0]   sampleOffset;
-output          auSyncOut;
-
-// Microprocessor interface
-reg resampSpace;
-always @* begin
-    casex(addr)
-        `RESAMPSPACE:   resampSpace = 1;
-        default:        resampSpace = 0;
-        endcase
-    end
-wire    [31:0]  resampleRate;
-// au - Asymmetric Unbalanced QPSK support
-wire    [31:0]  auResampleRate;
-wire    [5:0]   auShift;
-wire    [14:0]  auDecimation;
-resampRegs resampRegs(
-    .addr(addr),
-    .dataIn(din),
-    .dataOut(dout),
-    .cs(resampSpace),
-    .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
-    .resampleRate(resampleRate),
-    .auResampleRate(auResampleRate),
-    .auShift(auShift),
-    .auDecimation(auDecimation)
-     );
-
-
-resampler resamplerI( 
-    .clk(clk), .reset(reset), 
-    .resetPhase(resetPhase),
-    .sync(sync),
-    .resampleRate(resampleRate),
-    .resamplerFreqOffset(resamplerFreqOffset),
-    .offsetEn(offsetEn),
-    .in(iIn),
-    .out(iOut),
-    .syncOut(syncOut),
-    .sampleOffset(sampleOffset)
+    // Microprocessor interface
+    reg resampSpace;
+    always @* begin
+        casex(addr)
+            `RESAMPSPACE:   resampSpace = 1;
+            default:        resampSpace = 0;
+            endcase
+        end
+    wire    [31:0]  resampleRate;
+    // au - Asymmetric Unbalanced QPSK support
+    wire    [31:0]  auResampleRate;
+    wire    [5:0]   auShift;
+    wire    [14:0]  auDecimation;
+    resampRegs resampRegs(
+        .addr(addr),
+        .dataIn(din),
+        .dataOut(dout),
+        .cs(resampSpace),
+        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .resampleRate(resampleRate),
+        .auResampleRate(auResampleRate),
+        .auShift(auShift),
+        .auDecimation(auDecimation)
     );
 
-wire    [47:0]  cicOut;
-cicDecimator auCic( 
-    .clk(clk), .reset(reset), .sync(sync),
-    .gainShift(auShift),
-    .decimation(auDecimation),
-    .in(qIn),
-    .out(cicOut),
-    .syncOut(auCicSyncOut)
+    resampler resamplerI( 
+        .clk(clk), .reset(reset), 
+        .resetPhase(resetPhase),
+        .clkEn(clkEn),
+        .resampleRate(resampleRate),
+        .resamplerFreqOffset(resamplerFreqOffset),
+        .offsetEn(offsetEn),
+        .in(iIn),
+        .out(iOut),
+        .clkEnOut(clkEnOut),
+        .sampleOffset(sampleOffset)
     );
 
-wire            aEnable = ((demodMode == `MODE_AQPSK) || (demodMode == `MODE_AUQPSK));
-wire    [31:0]  rqResampleRate =    aEnable ? auResampleRate : resampleRate;
-wire    [31:0]  rqFreqOffset =      aEnable ? auResamplerFreqOffset : resamplerFreqOffset;
-wire            rqOffsetEn =        aEnable ? auOffsetEn : offsetEn;
-wire    [17:0]  rqIn =              aEnable ? cicOut[47:30] : qIn;
-wire            rqSync =            aEnable ? auCicSyncOut : sync;
-resampler resamplerQ( 
-    .clk(clk), .reset(reset),
-    .resetPhase(resetPhase),
-    .sync(rqSync),
-    .resampleRate(rqResampleRate),
-    .resamplerFreqOffset(rqFreqOffset),
-    .offsetEn(rqOffsetEn),
-    .in(rqIn),
-    .out(qOut),
-    .syncOut(auSyncOut),
-    .sampleOffset()
+    wire    [47:0]  cicOut;
+    cicDecimator auCic( 
+        .clk(clk), .reset(reset), .clkEn(clkEn),
+        .gainShift(auShift),
+        .decimation(auDecimation),
+        .in(qIn),
+        .out(cicOut),
+        .clkEnOut(auCicSyncOut)
     );
 
-assign resetPhase = (syncOut ^ auSyncOut) && !aEnable;
-//assign resetPhase = 1'b0;
+    wire                    aEnable = ((demodMode == `MODE_AQPSK) || (demodMode == `MODE_AUQPSK));
+    wire            [31:0]  rqResampleRate =    aEnable ? auResampleRate : resampleRate;
+    wire            [31:0]  rqFreqOffset =      aEnable ? auResamplerFreqOffset : resamplerFreqOffset;
+    wire                    rqOffsetEn =        aEnable ? auOffsetEn : offsetEn;
+    wire    signed  [17:0]  rqIn =              aEnable ? $signed(cicOut[47:30]) : qIn;
+    wire                    rqSync =            aEnable ? auCicSyncOut : clkEn;
+    resampler resamplerQ( 
+        .clk(clk), .reset(reset),
+        .resetPhase(resetPhase),
+        .clkEn(rqSync),
+        .resampleRate(rqResampleRate),
+        .resamplerFreqOffset(rqFreqOffset),
+        .offsetEn(rqOffsetEn),
+        .in(rqIn),
+        .out(qOut),
+        .clkEnOut(auClkEnOut),
+        .sampleOffset()
+    );
+
+    assign resetPhase = (clkEnOut ^ auClkEnOut) && !aEnable;
 
 endmodule
+
+
+
+
+
+
+
+
 
 //`define TEST_MODULE
 `ifdef TEST_MODULE
@@ -126,62 +114,64 @@ endmodule
 //`define RAMP_TEST
 `define SINEWAVE_TEST
 //`define IMPULSE_TEST
-//`define MATLAB_VECTORS
+`define MATLAB_VECTORS
 
 `timescale 1ns/100ps
 
 module test;
 
 reg reset,clk;
+reg [4:0]   demodMode;
 
 // Create the clocks
 parameter SAMPLE_FREQ = 9.333333e6;
 parameter HC = 1e9/SAMPLE_FREQ/2;
 parameter C = 2*HC;
-parameter syncDecimation = 2;
+parameter clkEnDecimation = 2;
 reg clken;
 always #HC clk = clk^clken;
 
-reg sync;
-reg [3:0]syncCount;
+reg clkEn;
+reg [3:0]clkEnCount;
 always @(posedge clk) begin
-    if (syncCount == 0) begin
-        syncCount <= syncDecimation-1;
-        sync <= 1;
+    if (clkEnCount == 0) begin
+        clkEnCount <= clkEnDecimation-1;
+        clkEn <= 1;
         end
     else begin
-        syncCount <= syncCount - 1;
-        sync <= 0;
+        clkEnCount <= clkEnCount - 1;
+        clkEn <= 0;
         end
-    //sync <= ~sync;
-    //sync <= 1;
+    //clkEn <= ~clkEn;
+    //clkEn <= 1;
     end
 
 `define SAMPLE_PERIOD   (C*1e-9)
-`define TWO_POW_31      2147483648
-`define TWO_POW_32      4294967296
-`define TWO_POW_17      131072
+`define TWO_POW_31      (2.0**31)
+`define TWO_POW_32      (2.0**32)
+`define TWO_POW_17      (2.0**17)
 
 // Instantiate the halfband filter
-reg     [17:0]iIn,qIn;
-wire    [17:0]iOut,qOut;
-wire    [31:0]resamplerFreq;
+reg     signed  [17:0]  iIn,qIn;
+wire    signed  [17:0]  iOut,qOut;
+wire            [31:0]  resamplerFreq;
 dualResampler resampler( 
-    .clk(clk), .reset(reset), .sync(sync),
+    .clk(clk), .reset(reset), .clkEn(clkEn),
+    .demodMode(demodMode),
     .resamplerFreqOffset(resamplerFreq),
     .offsetEn(1'b1),
     .iIn(iIn),
     .qIn(qIn),
-    .iOut(),
-    .qOut(),
-    .syncOut()
+    .iOut(iOut),
+    .qOut(qOut),
+    .clkEnOut(clkEnOut)
     );
 
 `ifdef RAMP_TEST
 
 //Create a triangle wave input
 real resamplerFreqHz;
-real resamplerFreqNorm = resamplerFreqHz * `SAMPLE_PERIOD * `TWO_POW_32 * syncDecimation;
+real resamplerFreqNorm = resamplerFreqHz * `SAMPLE_PERIOD * `TWO_POW_32 * clkEnDecimation;
 integer resamplerFreqInt = (resamplerFreqNorm >= `TWO_POW_31) ? (resamplerFreqNorm - `TWO_POW_32) : resamplerFreqNorm;
 assign resamplerFreq = resamplerFreqInt;
 
@@ -195,7 +185,7 @@ always @(posedge clk) begin
     if (reset) begin
         rampCounter <= 0;
         end
-    else if (sync) begin
+    else if (clkEn) begin
         rampCounter <= rampCounter + rampInc;
         end
     iIn <= (rampCounter[31] ^ rampCounter[30]) ? {rampCounter[31],~rampCounter[29:13]} : {rampCounter[31],rampCounter[29:13]};
@@ -203,7 +193,8 @@ always @(posedge clk) begin
     end
 
 `ifdef SIMULATE
-real iInReal = ((iIn > 131071.0) ? (iIn - 262144.0) : iIn)/131072.0;
+real iInReal;
+always @* iInReal = $itor(iIn)/(2**17);
 `endif
 
 `ifdef MATLAB_VECTORS
@@ -234,8 +225,8 @@ always @(negedge clk) begin
 
 initial begin
     reset = 0;
-    sync = 1;
-    syncCount = 0;
+    clkEn = 1;
+    clkEnCount = 0;
     clk = 0;
     resampler.resampRegs.resampleRate = 32'h0;
     rampFreqHz = 1e6;
@@ -264,18 +255,46 @@ initial begin
 
 //Create a sinewave input
 real carrierFreqHz;
-real carrierFreqNorm = carrierFreqHz * `SAMPLE_PERIOD * `TWO_POW_32;
-integer carrierFreqInt = carrierFreqNorm;
+real carrierFreqNorm;
+always @* carrierFreqNorm = carrierFreqHz * `SAMPLE_PERIOD * `TWO_POW_32;
+integer carrierFreqInt;
+always @* carrierFreqInt = $rtoi(carrierFreqNorm);
 wire [31:0] freq = carrierFreqInt;
 
 real resamplerFreqHz;
-real resamplerFreqNorm = resamplerFreqHz * `SAMPLE_PERIOD * `TWO_POW_32 * syncDecimation;
-integer resamplerFreqInt = (resamplerFreqNorm >= `TWO_POW_31) ? (resamplerFreqNorm - `TWO_POW_32) : resamplerFreqNorm;
+real resamplerFreqNorm;
+always @* resamplerFreqNorm = resamplerFreqHz * `SAMPLE_PERIOD * `TWO_POW_32 * clkEnDecimation;
+integer resamplerFreqInt;
+always @* resamplerFreqInt = $rtoi((resamplerFreqNorm >= `TWO_POW_31) ? (resamplerFreqNorm - `TWO_POW_32) : resamplerFreqNorm);
 assign resamplerFreq = resamplerFreqInt;
 
+`ifdef USE_VIVADO_CORES
+wire            [47:0]  m_axis;
+wire    signed  [17:0]  cosineOut = m_axis[41:24];
+wire    signed  [17:0]  sineOut = m_axis[17:0];
+reg                     ddsreset;
+dds dds(
+  .aclk(clk),
+  .aclken(clkEn),
+  .aresetn(!ddsreset),
+  .m_axis_data_tdata(m_axis),
+  .m_axis_data_tvalid(),
+  .s_axis_phase_tdata(freq),
+  .s_axis_phase_tvalid(1'b1)
+);
+`else
 wire [17:0]sineOut,cosineOut;
 reg ddsreset;
-dds dds(.sclr(ddsreset), .clk(clk), .we(1'b1), .data(freq), .sine(sineOut), .cosine(cosineOut));
+dds dds(
+    .sclr(ddsreset), 
+    .clk(clk), 
+    .ce(clkEn),
+    .we(1'b1), 
+    .data(freq), 
+    .sine(sineOut), 
+    .cosine(cosineOut)
+);
+`endif
 
 always @(posedge clk) begin
     //iIn <= {cosineOut[17],cosineOut[17:1]};
@@ -285,7 +304,8 @@ always @(posedge clk) begin
     end
 
 `ifdef SIMULATE
-real iInReal = ((iIn > 131071.0) ? (iIn - 262144.0) : iIn)/131072.0;
+real iInReal;
+always @* iInReal = $itor(iIn)/(2**17);
 `endif
 
 `ifdef MATLAB_VECTORS
@@ -301,8 +321,8 @@ initial begin
     vectorCount = 0;
     end
 always @(negedge clk) begin
-    if (resampler.syncOut && saveVectors) begin
-        $fwrite(outfile,"%f\n",resampler.iOutReal);
+    if (resampler.clkEnOut && saveVectors) begin
+        $fwrite(outfile,"%f\n",resampler.resamplerI.outReal);
     //if (saveVectors) begin
     //    $fwrite(outfile,"%f\n",iInReal);
         vectorCount <= vectorCount + 1;
@@ -317,11 +337,12 @@ always @(negedge clk) begin
 initial begin
     reset = 0;
     ddsreset = 0;
-    sync = 1;
-    syncCount = 0;
+    clkEn = 1;
+    clkEnCount = 0;
     clk = 0;
+    demodMode = `MODE_2FSK;
     resampler.resampRegs.resampleRate = 32'h0;
-    //resamplerFreqHz = 23.0/32.0/syncDecimation*10e6;
+    //resamplerFreqHz = 23.0/32.0/clkEnDecimation*10e6;
     resamplerFreqHz = 2400000.0;
     carrierFreqHz = resamplerFreqHz/4.0 + resamplerFreqHz/512.0;
 
@@ -360,8 +381,8 @@ assign resamplerFreq = resamplerPhaseInc;
 
 initial begin
     reset = 0;
-    sync = 1;
-    syncCount = 0;
+    clkEn = 1;
+    clkEnCount = 0;
     clk = 0;
     resampler.resampRegs.resampleRate = 32'h0;
     resamplerPhaseInc = 0;
@@ -878,11 +899,12 @@ integer i,j;
 initial i = 0;
 initial j = 0;
 real impulse[0:287];
-wire defined = !(resampler.iOut === 18'hxxxxx);
-integer index = (i+j);
+wire defined = !(resampler.resamplerI.out === 18'hxxxxx);
+integer index;
+always @* index = (i+j);
 always @(negedge clk) begin
-    if (defined && (resampler.resample)) begin
-        impulse[index] <= resampler.iOutReal;
+    if (defined && (resampler.resamplerI.resample)) begin
+        impulse[index] <= resampler.resamplerI.outReal;
         if (i == 256) begin
             i <= 0;
             j <= j + 1;

@@ -6,7 +6,7 @@ This source code is the Intellectual Property of Koos Technical Services,Inc.
 derivative rights in exchange for negotiated compensation.
 ******************************************************************************/
 
-`include "./addressMap.v"
+`include "addressMap.v"
 `timescale 1ns / 10 ps
 
 module demod(
@@ -35,6 +35,9 @@ module demod(
     trellisSymSync,
     iTrellis,
     qTrellis,
+    `ifdef ADD_SUPERBAUD_TED
+    multihSymEnEven,
+    `endif
     dac0Select,dac1Select,dac2Select,
     dac0Sync,
     dac0Data,
@@ -51,6 +54,7 @@ module demod(
     `ifdef ADD_DESPREADER
     iEpoch,qEpoch,
     `endif
+    sdiSymEn,
     eyeSync,
     iEye,qEye,
     eyeOffset
@@ -83,6 +87,9 @@ output          timingLock;
 output          carrierLock;
 output          trellisSymSync;
 output  [17:0]  iTrellis,qTrellis;
+`ifdef ADD_SUPERBAUD_TED
+output          multihSymEnEven;
+`endif
 output  [3:0]   dac0Select,dac1Select,dac2Select;
 output          dac0Sync;
 output  [17:0]  dac0Data;
@@ -99,6 +106,7 @@ output          bbClkEnOut;
 `ifdef ADD_DESPREADER
 output          iEpoch, qEpoch;
 `endif
+output          sdiSymEn;
 output          eyeSync;
 output  [17:0]  iEye,qEye;
 output  [4:0]   eyeOffset;
@@ -151,6 +159,7 @@ demodRegs demodRegs(
     `ifdef ADD_SCPATH
     .enableScPath(enableScPath),
     `endif
+    .oqpskIthenQ(oqpskIthenQ),
     .bitsyncMode(bitsyncMode),
     .dac0Select(dac0Select),
     .dac1Select(dac1Select),
@@ -207,6 +216,57 @@ channelAGC channelAGC(
     );
 
 
+`ifdef ADD_CMA
+/******************************************************************************
+                                 CMA Equalizer
+******************************************************************************/
+    reg cmaSpace;
+    always @* begin
+        casex(addr)
+            `EQUALIZERSPACE:    cmaSpace = 1;
+            default:            cmaSpace = 0;
+        endcase
+    end
+    wire    signed  [2:0]   stepSizeExponent;
+    wire            [15:0]  cmaReference;
+    wire            [31:0]  cmaDout;
+    cmaRegs cmaRegs(
+        .addr(addr),
+        .dataIn(din),
+        .dataOut(cmaDout),
+        .cs(cmaSpace),
+        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .enableEqualizer(enableEqualizer),
+        .resetEqualizer(resetEqualizer),
+        .eqStepSizeExponent(stepSizeExponent),
+        .cmaReference(cmaReference)
+    );
+
+    wire    signed  [17:0]  iCma;
+    wire    signed  [17:0]  qCma;
+    cma cma(
+        .clk(clk),        
+        .clkEn(ddcSync),      
+        .reset(reset),
+        .wtReset(resetEqualizer),
+        .stepExpo(stepSizeExponent),   
+        .refLevel(cmaReference),   
+        .iIn(iDdc),        
+        .qIn(qDdc),
+        .iOut(iCma),       
+        .qOut(qCma)
+    ); 
+
+    wire    signed  [17:0]  iFiltered = enableEqualizer ? iCma : iDdc;
+    wire    signed  [17:0]  qFiltered = enableEqualizer ? qCma : qDdc;
+
+`else //ADD_CMA
+
+    wire    signed  [17:0]  iFiltered = iDdc;
+    wire    signed  [17:0]  qFiltered = qDdc;
+
+`endif //ADD_CMA
+
 /******************************************************************************
                            Phase/Freq/Mag Detector
 ******************************************************************************/
@@ -216,8 +276,8 @@ always @* begin
     casex (demodMode) 
         default: begin
             fmDemodClkEn = ddcSync;
-            iFm = iDdc;
-            qFm = qDdc;
+            iFm = iFiltered;
+            qFm = qFiltered;
         end
     endcase
 end
@@ -234,7 +294,7 @@ fmDemod fmDemod(
     .iFm(iFm),.qFm(qFm),
     `else
     .sync(ddcSync),
-    .iFm(iDdc),.qFm(qDdc),
+    .iFm(iFiltered),.qFm(qFiltered),
     `endif
     .demodMode(demodMode),
     .phase(phase),
@@ -252,14 +312,14 @@ mpy18x18WithCe mult1(
     .clk(clk),
     .ce(ddcSync),
     .a(qDdc0),
-    .b(iDdc),
+    .b(iFiltered),
     .p(term1)
     );
 mpy18x18WithCe mult2(
     .clk(clk),
     .ce(ddcSync),
     .a(iDdc0),
-    .b(qDdc),
+    .b(qFiltered),
     .p(term2)
     );
 
@@ -267,23 +327,26 @@ wire    [35:0]  diff = term2 - term1;
 wire    [17:0]  fmVideo = diff[34:17];
 always @(posedge clk) begin
     if (ddcSync) begin
-        iDdc0 <= iDdc;
-        qDdc0 <= qDdc;
+        iDdc0 <= iFiltered;
+        qDdc0 <= qFiltered;
         end
     end
 
 `ifdef SIMULATE
-real    fmVideoReal = $itor($signed(fmVideo))/(2**17);
-real    iDdcReal = $itor($signed(iDdc))/(2**17);
-real    qDdcReal = $itor($signed(qDdc))/(2**17);
+real    fmVideoReal;
+always @* fmVideoReal = $itor($signed(fmVideo))/(2**17);
+real    iFilteredReal;
+always @* iFilteredReal = $itor($signed(iFiltered))/(2**17);
+real    qFilteredReal;
+always @* qFilteredReal = $itor($signed(qFiltered))/(2**17);
 real    iDdc0Real,qDdc0Real;
 real    term0Real,term1Real,diffReal;
 always @(posedge clk) begin
     if (ddcSync) begin
-        iDdc0Real <= iDdcReal;
-        qDdc0Real <= qDdcReal;
-        term0Real <= iDdcReal*qDdc0Real;
-        term1Real <= qDdcReal*iDdc0Real;
+        iDdc0Real <= iFilteredReal;
+        qDdc0Real <= qFilteredReal;
+        term0Real <= iFilteredReal*qDdc0Real;
+        term1Real <= qFilteredReal*iDdc0Real;
         diffReal <= term1Real - term0Real;
         end
     end
@@ -326,7 +389,7 @@ reg     [17:0]  averageFreq;
 wire    [17:0]  oneMinusFalseLockAlpha = (18'h20000 + ~{falseLockAlpha,2'b0});
 wire    [35:0]  alpha;
 reg     [17:0]  freqSample;
-mpy18x18 mpyFLD0(
+mpy18x18PL1 mpyFLD0(
     .clk(clk),
     .sclr(reset),
     .a(freqSample),
@@ -335,7 +398,7 @@ mpy18x18 mpyFLD0(
     );
 wire    [35:0]  oneMinusAlpha;
 wire    [35:0]  alphaSum = alpha + oneMinusAlpha;
-mpy18x18 mpyFLD1(
+mpy18x18PL1 mpyFLD1(
     .clk(clk),
     .sclr(reset),
     .a(averageFreq),
@@ -347,7 +410,7 @@ mpy18x18 mpyFLD1(
 reg     [17:0]  averageAbsFreq;
 wire    [35:0]  absAlpha;
 reg     [17:0]  absFreqSample;
-mpy18x18 mpyFLD2(
+mpy18x18PL1 mpyFLD2(
     .clk(clk),
     .sclr(reset),
     .a(absFreqSample),
@@ -356,7 +419,7 @@ mpy18x18 mpyFLD2(
     );
 wire    [35:0]  oneMinusAbsAlpha;
 wire    [35:0]  absAlphaSum = absAlpha + oneMinusAbsAlpha;
-mpy18x18 mpyFLD3(
+mpy18x18PL1 mpyFLD3(
     .clk(clk),
     .sclr(reset),
     .a(averageAbsFreq),
@@ -462,12 +525,12 @@ reg     [17:0]  iResampIn,qResampIn;
 always @(posedge clk) begin
     if (ddcSync) begin
         if (auIQSwap) begin
-            iResampIn <= qDdc;
-            qResampIn <= iDdc;
+            iResampIn <= qFiltered;
+            qResampIn <= iFiltered;
             end
         else begin
-            iResampIn <= iDdc;
-            qResampIn <= qDdc;
+            iResampIn <= iFiltered;
+            qResampIn <= qFiltered;
             end
         end
     end
@@ -571,7 +634,12 @@ singleRailBitsync bitsync(
     .sampleFreq(resamplerFreqOffset),
     .bitsyncLock(bitsyncLock),
     .lockCounter(bsLockCounter),
+    `ifdef ADD_SUPERBAUD_TED
+    .bsError(bsError), .bsErrorEn(bsErrorEn),
+    .tedOutput(tedOutput), .tedOutputEn(tedOutputEn)
+    `else
     .bsError(bsError), .bsErrorEn(bsErrorEn)
+    `endif
     );
 
 wire    [17:0]  qSymData = 0;
@@ -587,11 +655,15 @@ wire    [17:0]  bsError;
 wire    [15:0]  bsLockCounter;
 wire    [15:0]  auLockCounter;
 wire    [31:0]  bitsyncDout;
+    `ifdef ADD_SUPERBAUD_TED
+    wire    signed  [17:0]  tedOutput;
+    `endif
 bitsync bitsync(
     .sampleClk(clk), .reset(reset),
     .symTimes2Sync(resampSync),
     .auResampSync(auResampSync),
     .demodMode(demodMode),
+    .oqpskIthenQ(oqpskIthenQ),
     `ifdef ADD_DESPREADER
     .enableDespreader(enableDespreader),
     `endif
@@ -627,8 +699,16 @@ bitsync bitsync(
     .auBitsyncLock(auBitsyncLock),
     .auLockCounter(auLockCounter),
     .auIQSwap(auIQSwap),
+    .sdiSymEn(sdiSymEn),
     .iTrellis(iBsTrellis),.qTrellis(qBsTrellis),
+    `ifdef ADD_SUPERBAUD_TED
+    .bsError(bsError), .bsErrorEn(bsErrorEn),
+    .tedOutput(tedOutput), .tedOutputEn(tedOutputEn),
+    .tedSyncPulse(tedSyncPulse),
+    .tedSymEnEven(multihSymEnEven)
+    `else
     .bsError(bsError), .bsErrorEn(bsErrorEn)
+    `endif
     );
 
 `ifdef ADD_DESPREADER
@@ -682,6 +762,8 @@ wire            timingLock = bitsyncLock;
 `ifdef SIMULATE
 real iTrellisReal;
 always @* iTrellisReal = $itor($signed(iTrellis))/(2.0**17);
+real iSymReal;
+always @* iSymReal = $itor($signed(iSymData))/(2.0**17);
 `endif
 
 assign trellisSymSync = iSymEn & resampSync;
@@ -751,6 +833,274 @@ singleFir interpFir(
     .out        (firOut)
     );
 `endif
+
+`define NEW_DAC_MUX
+`ifdef NEW_DAC_MUX
+    reg     [17:0]  iResampInReg,qResampInReg,fmVideoReg,averageFreqReg,averageAbsFreqReg;
+    reg     [17:0]  iSymDataReg,qSymDataReg;
+    `ifdef ADD_DESPREADER
+    reg     [17:0]  dsSyncCountReg,dsSwapSyncCountReg;
+    `endif
+    reg     [17:0]  fmReg,phaseReg,magAccumReg,freqErrorReg;
+    always @(posedge clk) begin
+        if (ddcSync) begin
+            iResampInReg <= iResampIn;
+            qResampInReg <= qResampIn;
+            fmVideoReg <= fmVideo;
+            averageFreqReg <= averageFreq;
+            averageAbsFreqReg <= averageAbsFreq;
+        end
+        if (resampSync) begin
+            iSymDataReg <= iSymData;
+            qSymDataReg <= qSymData;
+            `ifdef ADD_DESPREADER
+            dsSyncCountReg <= {dsSyncCount,2'b0};
+            dsSwapSyncCountReg <= {dsSwapSyncCount,2'b0};
+            `endif
+        end
+        if (demodSync) begin
+            fmReg <= fm;
+            phaseReg <= {phase,6'b0};
+            magAccumReg <= {~magAccum[38],magAccum[37:21]};
+            freqErrorReg <= {freqError,6'h0};
+        end
+    end
+wire fmMode = (demodMode == `MODE_FM);
+reg             dac0Sync;
+reg     [17:0]  dac0Data;
+reg             dac1Sync;
+reg     [17:0]  dac1Data;
+reg             dac2Sync;
+reg     [17:0]  dac2Data;
+always @(posedge clk) begin
+    case (dac0Select)
+        `DAC_I: begin
+            dac0Data <= iResampInReg;
+            dac0Sync <= ddcSync;
+            end
+        `DAC_Q: begin
+            dac0Data <= qResampInReg;
+            dac0Sync <= ddcSync;
+            end
+        `DAC_ISYM: begin
+            dac0Data <= iSymDataReg;
+            dac0Sync <= resampSync;
+            end
+        `DAC_QSYM: begin
+            dac0Data <= qSymDataReg;
+            dac0Sync <= resampSync;
+            end
+        `DAC_FREQ: begin
+            `ifdef FM_FILTER
+            dac0Data <= firOut;
+            `else
+            if (fmMode) begin
+                dac0Data <= fmVideoReg;
+                dac0Sync <= ddcSync;
+                end
+            else begin
+                dac0Data <= fmReg;
+                dac0Sync <= demodSync;
+                end
+            `endif
+            end
+        `DAC_PHASE: begin
+            dac0Data <= phaseReg;
+            dac0Sync <= demodSync;
+            end
+        `DAC_MAG: begin
+            dac0Data <= magAccumReg;
+            dac0Sync <= demodSync;
+            end
+        `DAC_PHERROR: begin
+            dac0Data <= {demodLoopError,6'h0};
+            dac0Sync <= carrierOffsetEn;
+            end
+        `DAC_BSLOCK: begin
+            dac0Data <= {auLockCounter,2'b0};
+            dac0Sync <= 1'b1;
+            end
+        `DAC_FREQLOCK: begin
+            dac0Data <= {freqLockCounter,2'b0};
+            dac0Sync <= 1'b1;
+            end
+        `DAC_AVGFREQ: begin
+            dac0Data <= averageFreqReg;
+            dac0Sync <= ddcSync;
+            end
+        `DAC_FREQERROR: begin
+            dac0Data <= freqErrorReg;
+            dac0Sync <= demodSync;
+            end
+        `ifdef ADD_DESPREADER
+        `DAC_DS_CODE: begin
+            dac0Data <= {iCode,17'h10000};
+            dac0Sync <= iSymEn;
+            end
+        `DAC_DS_LOCK: begin
+            dac0Data <= dsSyncCountReg;
+            dac0Sync <= resampSync;
+            end
+        `DAC_DS_EPOCH: begin
+            dac0Data <= {iEpoch,17'h10000};
+            dac0Sync <= iSymEn;
+            end
+        `endif
+        default: begin
+            dac0Data <= iResampInReg;
+            dac0Sync <= ddcSync;
+            end
+        endcase
+
+    case (dac1Select)
+        `DAC_I: begin
+            dac1Data <= iResampInReg;
+            dac1Sync <= ddcSync;
+            end
+        `DAC_Q: begin
+            dac1Data <= qResampInReg;
+            dac1Sync <= ddcSync;
+            end
+        `DAC_ISYM: begin
+            dac1Data <= iSymDataReg;
+            dac1Sync <= resampSync;
+            end
+        `DAC_QSYM: begin
+            dac1Data <= qSymDataReg;
+            dac1Sync <= resampSync;
+            end
+        `DAC_FREQ: begin
+            if (fmMode) begin
+                dac1Data <= fmVideoReg;
+                dac1Sync <= ddcSync;
+                end
+            else begin
+                dac1Data <= fmReg;
+                dac1Sync <= demodSync;
+                end
+            end
+        `DAC_PHASE: begin
+            dac1Data <= phaseReg;
+            dac1Sync <= demodSync;
+            end
+        `DAC_MAG: begin
+            dac1Data <= magAccumReg;
+            dac1Sync <= demodSync;
+            end
+        `DAC_PHERROR: begin
+            dac1Data <= {demodLoopError,6'h0};
+            dac1Sync <= carrierOffsetEn;
+            end
+        `DAC_BSLOCK: begin
+            dac1Data <= {bsLockCounter,2'b0};
+            dac1Sync <= 1'b1;
+            end
+        `DAC_FREQLOCK: begin
+            dac1Data <= {freqLockCounter,2'b0};
+            dac1Sync <= 1'b1;
+            end
+        `DAC_AVGFREQ: begin
+            dac1Data <= averageAbsFreqReg;
+            dac1Sync <= ddcSync;
+            end
+        `DAC_FREQERROR: begin
+            dac1Data <= freqErrorReg;
+            dac1Sync <= demodSync;
+            end
+        `ifdef ADD_DESPREADER
+        `DAC_DS_CODE: begin
+            dac1Data <= {qCode,17'h10000};
+            dac1Sync <= qSymEn;
+            end
+        `DAC_DS_LOCK: begin
+            dac1Data <= dsSwapSyncCountReg;
+            dac1Sync <= resampSync;
+            end
+        `DAC_DS_EPOCH: begin
+            dac1Data <= {qEpoch,17'h10000};
+            dac1Sync <= qSymEn;
+            end
+        `endif
+        default: begin
+            dac1Data <= iResampInReg;
+            dac1Sync <= ddcSync;
+            end
+        endcase
+
+    case (dac2Select)
+        `DAC_I: begin
+            dac2Data <= iResampInReg;
+            dac2Sync <= ddcSync;
+            end
+        `DAC_Q: begin
+            dac2Data <= qResampInReg;
+            dac2Sync <= ddcSync;
+            end
+        `DAC_ISYM: begin
+            dac2Data <= iSymDataReg;
+            dac2Sync <= resampSync;
+            end
+        `DAC_QSYM: begin
+            dac2Data <= qSymDataReg;
+            dac2Sync <= resampSync;
+            end
+        `DAC_FREQ: begin
+            if (fmMode) begin
+                dac2Data <= fmVideoReg;
+                dac2Sync <= ddcSync;
+                end
+            else begin
+                dac2Data <= fmReg;
+                dac2Sync <= demodSync;
+                end
+            end
+        `DAC_PHASE: begin
+            dac2Data <= phaseReg;
+            dac2Sync <= demodSync;
+            end
+        `DAC_MAG: begin
+            dac2Data <= magAccumReg;
+            dac2Sync <= demodSync;
+            end
+        `DAC_PHERROR: begin
+            dac2Data <= {demodLoopError,6'h0};
+            dac2Sync <= carrierOffsetEn;
+            end
+        `DAC_BSLOCK: begin
+            `ifdef ADD_SUPERBAUD_TED
+            dac2Data <= tedOutput;
+            dac2Sync <= tedOutputEn;
+            `else
+            dac2Data <= bsError;
+            dac2Sync <= bsErrorEn;
+            `endif
+            end
+        `DAC_FREQLOCK: begin
+            dac2Data <= {freqLockCounter,2'b0};
+            dac2Sync <= 1'b1;
+            end
+        `DAC_AVGFREQ: begin
+            dac2Data <= averageFreqReg;
+            dac2Sync <= ddcSync;
+            end
+        `DAC_FREQERROR: begin
+            dac2Data <= freqErrorReg;
+            dac2Sync <= demodSync;
+            end
+        `ifdef ADD_DESPREADER
+        `DAC_DS_CODE: begin
+            dac2Data <= {iEpoch,17'h10000};
+            dac2Sync <= 1'b1;
+            end
+        `endif
+        default: begin
+            dac2Data <= iResampInReg;
+            dac2Sync <= ddcSync;
+            end
+        endcase
+    end
+
+`else //NEW_DAC_MUX
 
 wire fmMode = (demodMode == `MODE_FM);
 reg             dac0Sync;
@@ -985,6 +1335,7 @@ always @(posedge clk) begin
         endcase
 
     end
+`endif //NEW_DAC_MUX
 
 /******************************************************************************
                                 uP dout mux
@@ -998,6 +1349,9 @@ always @* begin
         `endif
         `ifdef FM_FILTER
         `VIDFIRSPACE:       dout = firDout;
+        `endif
+        `ifdef ADD_CMA
+        `EQUALIZERSPACE:    dout = cmaDout;
         `endif
         `CHAGCSPACE:        dout = nbAgcDout;
         `CICDECSPACE,

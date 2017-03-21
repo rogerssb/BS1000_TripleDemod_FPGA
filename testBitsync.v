@@ -709,7 +709,7 @@ initial begin
     // Init the sample rate loop filters
     write32(createAddress(`CH0_RESAMPSPACE,`RESAMPLER_RATE),resamplerFreqInt);
     write32(createAddress(`CH0_BITSYNCSPACE,`LF_CONTROL),1);    // Zero the error
-    write32(createAddress(`CH0_BITSYNCSPACE,`LF_LEAD_LAG),32'h001c0014);    
+    write32(createAddress(`CH0_BITSYNCSPACE,`LF_LEAD_LAG),32'h001a0010);    
     //write32(createAddress(`CH0_BITSYNCSPACE,`LF_LEAD_LAG),32'h0014000c);    
     write32(createAddress(`CH0_BITSYNCSPACE,`LF_LIMIT), resamplerLimitInt);    
 
@@ -807,8 +807,8 @@ initial begin
     bitsyncTop.df0.dfReset = 0;
     bitsyncTop.df1.dfReset = 0;
 
-    // Wait 14 bit periods
-    #(28*bitrateSamplesInt*C) ;
+    // Wait 21 bit periods
+    #(42*bitrateSamplesInt*C) ;
 
     // Create a reset to clear the interpolators
     interpReset = 1;

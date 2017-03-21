@@ -182,9 +182,17 @@ assign  asyncMode = (bitsyncMode == `BS_MODE_IND_CH)
 /******************************************************************************
                           DC Offset Removal Loop Filter
 ******************************************************************************/
-wire    [33:0]  ch0DCIn = {rx0,16'h0};
-wire    [39:0]  ch0DC;
-wire            ch0Sym2xEn;
+//`define USE_MEAN_DC
+
+`ifdef USE_MEAN_DC
+wire    signed  [17:0]  ch0DcError;
+wire            [33:0]  ch0DCIn = {rx0,16'h0};
+`else
+wire    signed  [17:0]  ch0DcError;
+wire            [33:0]  ch0DCIn = ch0TransitionsDetected ? {ch0DcError,16'h0} : {rx0,16'h0};
+`endif
+wire            [39:0]  ch0DC;
+wire                    ch0Sym2xEn;
 dcLoopFilter ch0DcLoop(
     .clk(clk), .clkEn(ch0Sym2xEn), .reset(reset),
     .error(ch0DCIn),
@@ -194,9 +202,15 @@ dcLoopFilter ch0DcLoop(
     );
 assign ch0Offset = (ch0DCTest != 0) ? {ch0DCTest,10'h0} : ch0DC[39:22];
 
-wire    [33:0]  ch1DCIn = {rx1,16'h0};
-wire    [39:0]  ch1DC;
-wire            ch1DCClkEn = asyncMode ? ch1Sym2xEn : ch0Sym2xEn;
+`ifdef USE_MEAN_DC
+wire    signed  [17:0]  ch1DcError;
+wire            [33:0]  ch1DCIn = {rx1,16'h0};
+`else
+wire    signed  [17:0]  ch1DcError;
+wire            [33:0]  ch1DCIn = ch1TransitionsDetected ? {ch1DcError,16'h0} : {rx1,16'h0};
+`endif
+wire            [39:0]  ch1DC;
+wire                    ch1DCClkEn = asyncMode ? ch1Sym2xEn : ch0Sym2xEn;
 dcLoopFilter ch1DcLoop(
     .clk(clk), .clkEn(ch1DCClkEn), .reset(reset),
     .error(ch1DCIn),
@@ -291,13 +305,13 @@ wire    [17:0]  resamp0Out;
 resampler ch0Resamp( 
     .clk(clk), .reset(reset), 
     .resetPhase(resetPhase),
-    .sync(df0ClkEn),
+    .clkEn(df0ClkEn),
     .resampleRate(ch0ResampleRate),
     .resamplerFreqOffset(ch0ResamplerFreqOffset),
     .offsetEn(1'b1),
     .in(df0Out),
     .out(resamp0Out),
-    .syncOut(resamp0ClkEn),
+    .clkEnOut(resamp0ClkEn),
     .sampleOffset(eyeOffset)
     );
 
@@ -329,13 +343,13 @@ wire    [17:0]  resamp1Out;
 resampler ch1Resamp( 
     .clk(clk), .reset(reset), 
     .resetPhase(resetPhase),
-    .sync(df1ClkEn),
+    .clkEn(df1ClkEn),
     .resampleRate(ch1ResamplerRate),
     .resamplerFreqOffset(ch1ResamplerFreqOffset),
     .offsetEn(1'b1),
     .in(df1Out),
     .out(resamp1Out),
-    .syncOut(resamp1ClkEn),
+    .clkEnOut(resamp1ClkEn),
     .sampleOffset()
     );
 
@@ -383,7 +397,11 @@ dualBitsync dualBitsync(
     .ch0LockCounter(ch0LockCounter),
     .ch1BitsyncLock(ch1Lock),
     .ch1LockCounter(ch1LockCounter),
-    .bsError(bsError), .bsErrorEn(bsErrorEn)
+    .bsError(bsError), .bsErrorEn(bsErrorEn),
+    .ch0DcError(ch0DcError),
+    .ch0TransitionsDetected(ch0TransitionsDetected),
+    .ch1DcError(ch1DcError),
+    .ch1TransitionsDetected(ch1TransitionsDetected) 
     );
 
 

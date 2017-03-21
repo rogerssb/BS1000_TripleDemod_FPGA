@@ -10,118 +10,88 @@ derivative rights in exchange for negotiated compensation.
 `include "addressMap.v"
 
 module cicComp( 
-    clk, reset, sync,
-    compIn,
-    compOut
+    input                       clk, reset, clkEn,
+    input       signed  [17:0]  compIn,
+    output  reg signed  [17:0]  compOut
     );
 
-input clk;
-input reset;
-input sync;
-input  [17:0]compIn;
-output [17:0]compOut;
+    `include "cicCompCoefs.h"
 
-`include "cicCompCoefs.h"
-
-// Data shift register
-reg     [17:0]sr0,sr1,sr2,sr3,sr4,sr5,sr6,sr7;
-reg     [17:0]midTap;
-reg     [18:0]sum0,sum1;
-always @(posedge clk) begin
-    if (sync) begin
-        sr0 <= compIn;
-        sr1 <= sr0;
-        sr2 <= sr1;
-        sr3 <= sr2;
-        sr4 <= sr3;
-        sr5 <= sr4;
-        sr6 <= sr5;
-        sr7 <= sr6;
-        // Add the symmetric taps
-        sum0 <= {compIn[17],compIn} + {sr7[17],sr7};
-        sum1 <= {sr1[17],sr1} + {sr5[17],sr5};
-        midTap <= sr3;
+    // Data shift register
+    reg signed  [17:0]sr0,sr1,sr2,sr3,sr4,sr5,sr6,sr7;
+    reg signed  [17:0]midTap;
+    reg signed  [18:0]sum0,sum1;
+    always @(posedge clk) begin
+        if (clkEn) begin
+            sr0 <= compIn;
+            sr1 <= sr0;
+            sr2 <= sr1;
+            sr3 <= sr2;
+            sr4 <= sr3;
+            sr5 <= sr4;
+            sr6 <= sr5;
+            sr7 <= sr6;
+            // Add the symmetric taps
+            sum0 <= $signed({compIn[17],compIn}) + $signed({sr7[17],sr7});
+            sum1 <= $signed({sr1[17],sr1}) + $signed({sr5[17],sr5});
+            midTap <= sr3;
         end
     end
 
-`ifdef CIC_COMP_USE_MPY
-// Tap Mpy
-wire    [35:0]  tap0;
-mpy18x18PL1 mpy0(
-    .clk(clk),
-    .sclr(reset),
-    .a(sum0[18:1]),
-    .b(coef0),
-    .p(tap0)
+    // Tap Mpy
+    wire    signed  [35:0]  tap0;
+    mpy18x18PL1 mpy0(
+        .clk(clk),
+        .sclr(reset),
+        .a(sum0[18:1]),
+        .b(coef0),
+        .p(tap0)
     );
-wire    [35:0]  tap1;
-mpy18x18PL1 mpy1(
-    .clk(clk),
-    .sclr(reset),
-    .a(sum1[18:1]),
-    .b(coef1),
-    .p(tap1)
+    wire    signed  [35:0]  tap1;
+    mpy18x18PL1 mpy1(
+        .clk(clk),
+        .sclr(reset),
+        .a(sum1[18:1]),
+        .b(coef1),
+        .p(tap1)
     );
-wire    [35:0]  tap2;
-mpy18x18PL1 mpy2(
-    .clk(clk),
-    .sclr(reset),
-    .a(midTap),
-    .b(coef2),
-    .p(tap2)
+    wire    signed  [35:0]  tap2;
+    mpy18x18PL1 mpy2(
+        .clk(clk),
+        .sclr(reset),
+        .a(midTap),
+        .b(coef2),
+        .p(tap2)
     );
-wire    [19:0] finalSum = tap0[34:15] + tap1[34:15] + tap2[34:15];
+    wire    [19:0] finalSum = $signed(tap0[34:15]) 
+                            + $signed(tap1[34:15]) 
+                            + $signed(tap2[34:15]);
 
-`else   // CIC_COMP_USE_MPY
-
-wire    [29:0]  mult0;
-multCicC0 multC0(
-    //.clk(clk), 
-    .a(sum0[18:1]),
-    .p(mult0)
-);
-wire    [32:0]  mult1;
-multCicC1 multC1(
-    //.clk(clk), 
-    .a(sum1[18:1]),
-    .p(mult1)
-);
-wire    [34:0]  mult2;
-multCicC2 multC2(
-    //.clk(clk), 
-    .a(midTap),
-    .p(mult2)
-);
-wire    [19:0] finalSum = {{5{mult0[29]}},mult0[29:15]} + {{2{mult1[32]}},mult1[32:15]} + mult2[34:15];
-
-`endif // CIC_COMP_USE_MPY
-
-// Final sum. Check for saturation.
-reg     [17:0]  compOut;
-always @(posedge clk) begin
-    if (reset) begin
-        compOut <= 0;
+    // Final sum. Check for saturation.
+    always @(posedge clk) begin
+        if (reset) begin
+            compOut <= 0;
         end
-    else if (sync) begin
-        if (!finalSum[19] && finalSum[18]) begin
-            compOut <= 18'h1ffff;
+        else if (clkEn) begin
+            if (!finalSum[19] && finalSum[18]) begin
+                compOut <= $signed(18'h1ffff);
             end
-        else if (finalSum[19] && !finalSum[18]) begin
-            compOut <= 18'h20001;
+            else if (finalSum[19] && !finalSum[18]) begin
+                compOut <= $signed(18'h20001);
             end
-        else begin
-            compOut <= finalSum[18:1];
+            else begin
+                compOut <= $signed(finalSum[18:1]);
             end
         end
     end
 
 
-`ifdef SIMULATE
-real inReal;
-real outReal;
-always @(compIn) inReal = ((compIn > 131071.0) ? (compIn - 262144.0) : compIn)/131072.0;
-always @(compOut) outReal = ((compOut > 131071.0) ? (compOut - 262144.0) : compOut)/131072.0;
-`endif
+    `ifdef SIMULATE
+    real inReal;
+    real outReal;
+    always @* inReal = $itor(compIn)/(2**17);
+    always @* outReal = $itor(compOut)/(2**17);
+    `endif
 
 endmodule
 
@@ -179,7 +149,7 @@ always @(posedge clk) begin
 
 wire    [17:0]  dout;
 cicComp cicComp( 
-    .clk(clk), .reset(reset), .sync(clkEn),
+    .clk(clk), .reset(reset), .clkEn(clkEn),
     .compIn(din),
     .compOut(dout)
     );

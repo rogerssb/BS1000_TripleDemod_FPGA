@@ -10,285 +10,263 @@ derivative rights in exchange for negotiated compensation.
 `include ".\addressMap.v"
 
 module carrierLoop(
-    clk, reset, 
-    ddcSync,
-    resampSync,
-    wr0,wr1,wr2,wr3,
-    addr,
-    din,
-    dout,
-    demodMode,
-    phase,
-    freq,
-    highFreqOffset,
-    offsetError,
-    offsetErrorEn,
-    carrierFreqOffset,
-    carrierLeadFreq,
-    carrierFreqEn,
-    loopError,
-    carrierLock,
-    lockCounter
+    input                       clk, reset, 
+    input                       ddcClkEn,
+    input                       resampClkEn,
+    input                       wr0,wr1,wr2,wr3,
+    input               [12:0]  addr,
+    input               [31:0]  din,
+    output              [31:0]  dout,
+    input               [4:0]   demodMode,
+    input       signed  [11:0]  phase,
+    input       signed  [11:0]  freq,
+    input                       highFreqOffset,
+    input       signed  [31:0]  offsetError,
+    input                       offsetErrorEn,
+    output      signed  [31:0]  carrierFreqOffset,
+    output      signed  [31:0]  carrierLeadFreq,
+    output                      carrierFreqEn,
+    output      signed  [11:0]  loopError,
+    output                      carrierLock,
+    output              [15:0]  lockCounter
     );
 
-parameter RegSpace = `CARRIERSPACE;
-
-input           clk;
-input           reset;
-input           ddcSync;
-input           resampSync;
-input           wr0,wr1,wr2,wr3;
-input   [12:0]  addr;
-input   [31:0]  din;
-output  [31:0]  dout;
-input   [4:0]   demodMode;
-input   [11:0]  phase;
-input   [11:0]  freq;
-input           highFreqOffset;
-input   [11:0]  offsetError;
-input           offsetErrorEn;
-output  [31:0]  carrierFreqOffset;
-output  [31:0]  carrierLeadFreq;
-output          carrierFreqEn;
-output  [11:0]   loopError;
-output          carrierLock;
-output  [15:0]  lockCounter;
+    parameter RegSpace = `CARRIERSPACE;
 
 
-/***************************** Control Registers ******************************/
+    /***************************** Control Registers ******************************/
 
-reg freqLoopSpace;
-always @* begin
-    casex(addr)
-        RegSpace:       freqLoopSpace = 1;
-        default:        freqLoopSpace = 0;
-        endcase
-    end
-wire    [31:0]  dout;
-wire    [1:0]   acqTrackControl;
-wire    [4:0]   leadExp;
-wire    [4:0]   lagExp;
-wire    [31:0]  upperLimit;
-wire    [31:0]  lowerLimit;
-wire    [31:0]  loopOffset;
-wire    [31:0]  sweepOffsetMag;
-wire    [15:0]  lockCount;
-wire    [11:0]  syncThreshold;
-wire    [39:0]  lagAccum;
-carrierLoopRegs loopRegs(
-    .cs(freqLoopSpace),
-    .addr(addr),
-    .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
-    .lagAccum(lagAccum[39:8]),
-    .dataIn(din),
-    .dataOut(dout),
-    .invertError(invertError),
-    .zeroError(zeroError),
-    .ctrl2(sweepEnable),
-    .clearAccum(clearAccum),
-    .acqTrackControl(acqTrackControl),
-    .leadMan(),
-    .leadExp(leadExp),
-    .lagMan(),
-    .lagExp(lagExp),
-    .upperLimit(upperLimit),
-    .lowerLimit(lowerLimit),
-    .loopData(sweepOffsetMag),
-    .lockCount(lockCount),
-    .syncThreshold(syncThreshold)
-    );
-
-
-/************************ Error Signal Source *********************************/
-
-// Determine the source of the error signal
-reg     [11:0]  modeError;
-reg             loopFilterEn;
-wire    [11:0]  bpskPhase = phase;
-wire    [11:0]  qpskPhase = phase - 12'h200;
-reg             enableCarrierLock;
-always @(posedge clk) begin
-    case (demodMode)
-        `MODE_AM: begin
-            loopFilterEn <= ddcSync;
-            modeError <= 0;
-            enableCarrierLock <= 0;
-            end
-        `MODE_PM: begin
-            loopFilterEn <= ddcSync;
-            modeError <= phase;
-            enableCarrierLock <= 1;
-            end
-        `MODE_PCMTRELLIS: begin
-            loopFilterEn <= resampSync & offsetErrorEn;
-            modeError <= offsetError;
-            enableCarrierLock <= 0;
-            //loopFilterEn <= ddcSync;
-            //modeError <= freq;
-            //enableCarrierLock <= 0;
-            end
-        `MODE_MULTIH,
-        `MODE_FM: begin
-            loopFilterEn <= ddcSync;
-            modeError <= freq;
-            enableCarrierLock <= 0;
-            end
-        `MODE_2FSK: begin
-            //loopFilterEn <= resampSync & offsetErrorEn;
-            //modeError <= offsetError;
-            //enableCarrierLock <= 0;
-            loopFilterEn <= ddcSync;
-            modeError <= freq;
-            enableCarrierLock <= 0;
-            end
-        `MODE_UQPSK,
-        `MODE_AUQPSK,
-        `MODE_BPSK: begin
-            loopFilterEn <= ddcSync;
-            modeError <= {bpskPhase[10:0],1'b1};
-            enableCarrierLock <= 1;
-            end
-        `MODE_QPSK,
-        `MODE_OQPSK,
-        `MODE_SOQPSK,
-        `MODE_AQPSK: begin
-            loopFilterEn <= ddcSync;
-            modeError <= {qpskPhase[9:0],2'b10};
-            enableCarrierLock <= 1;
-            end
-        default: begin
-            loopFilterEn <= 1'b1;
-            modeError <= 0;
-            enableCarrierLock <= 1;
-            end
+    reg freqLoopSpace;
+    always @* begin
+        casex(addr)
+            RegSpace:       freqLoopSpace = 1;
+            default:        freqLoopSpace = 0;
         endcase
     end
 
-`ifdef SIMULATE
-real modeErrorReal;
-always @(modeError) modeErrorReal = (modeError[11] ? modeError - 4096.0 : modeError)/2048.0;
-real avgErrorReal;
-always @(posedge clk) begin
-    if (reset) begin
-        avgErrorReal <= 0.0;
+    wire            [31:0]  dout;
+    wire            [1:0]   acqTrackControl;
+    wire            [4:0]   leadExp;
+    wire            [4:0]   lagExp;
+    wire    signed  [31:0]  upperLimit;
+    wire    signed  [31:0]  lowerLimit;
+    wire            [31:0]  loopOffset;
+    wire            [31:0]  sweepOffsetMag;
+    wire            [15:0]  lockCount;
+    wire            [11:0]  syncThreshold;
+    wire    signed  [39:0]  lagAccum;
+    carrierLoopRegs loopRegs(
+        .cs(freqLoopSpace),
+        .addr(addr),
+        .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
+        .lagAccum(lagAccum[39:8]),
+        .dataIn(din),
+        .dataOut(dout),
+        .invertError(invertError),
+        .zeroError(zeroError),
+        .ctrl2(sweepEnable),
+        .clearAccum(clearAccum),
+        .acqTrackControl(acqTrackControl),
+        .leadMan(),
+        .leadExp(leadExp),
+        .lagMan(),
+        .lagExp(lagExp),
+        .upperLimit(upperLimit),
+        .lowerLimit(lowerLimit),
+        .loopData(sweepOffsetMag),
+        .lockCount(lockCount),
+        .syncThreshold(syncThreshold)
+        );
+
+
+    /************************ Error Signal Source *********************************/
+
+    // Determine the source of the error signal
+    reg     signed  [11:0]  modeError;
+    reg                     loopFilterEn;
+    wire    signed  [11:0]  bpskPhase = phase;
+    wire    signed  [11:0]  qpskPhase = phase - $signed(12'h200);
+    reg                     enableCarrierLock;
+    always @(posedge clk) begin
+        case (demodMode)
+            `MODE_AM: begin
+                loopFilterEn <= ddcClkEn;
+                modeError <= 0;
+                enableCarrierLock <= 0;
+                end
+            `MODE_PM: begin
+                loopFilterEn <= ddcClkEn;
+                modeError <= phase;
+                enableCarrierLock <= 1;
+                end
+            `MODE_PCMTRELLIS: begin
+                loopFilterEn <= resampClkEn & offsetErrorEn;
+                modeError <= offsetError;
+                enableCarrierLock <= 0;
+                //loopFilterEn <= ddcClkEn;
+                //modeError <= freq;
+                //enableCarrierLock <= 0;
+                end
+            `MODE_MULTIH,
+            `MODE_FM: begin
+                loopFilterEn <= ddcClkEn;
+                modeError <= freq;
+                enableCarrierLock <= 0;
+                end
+            `MODE_2FSK: begin
+                //loopFilterEn <= resampClkEn & offsetErrorEn;
+                //modeError <= offsetError;
+                //enableCarrierLock <= 0;
+                loopFilterEn <= ddcClkEn;
+                modeError <= freq;
+                enableCarrierLock <= 0;
+                end
+            `MODE_UQPSK,
+            `MODE_AUQPSK,
+            `MODE_BPSK: begin
+                loopFilterEn <= ddcClkEn;
+                modeError <= {bpskPhase[10:0],1'b1};
+                enableCarrierLock <= 1;
+                end
+            `MODE_QPSK,
+            `MODE_OQPSK,
+            `MODE_SOQPSK,
+            `MODE_AQPSK: begin
+                loopFilterEn <= ddcClkEn;
+                modeError <= {qpskPhase[9:0],2'b10};
+                enableCarrierLock <= 1;
+                end
+            default: begin
+                loopFilterEn <= 1'b1;
+                modeError <= 0;
+                enableCarrierLock <= 1;
+                end
+        endcase
+    end
+
+    `ifdef SIMULATE
+    real modeErrorReal;
+    always @(modeError) modeErrorReal = $itor(modeError)/(2**11);
+    real avgErrorReal;
+    always @(posedge clk) begin
+        if (reset) begin
+            avgErrorReal <= 0.0;
         end
-    else if (loopFilterEn) begin
-        avgErrorReal <= (0.999 * avgErrorReal) + (0.001 * modeErrorReal);
+        else if (loopFilterEn) begin
+            avgErrorReal <= (0.999 * avgErrorReal) + (0.001 * modeErrorReal);
         end
     end
-`endif
+    `endif
 
 
-/**************************** Adjust Error ************************************/
-reg     [11:0]   loopError;
-wire    [11:0]   negModeError = ~modeError + 1;
-reg             carrierLock;
-wire            breakLoop = (zeroError || (sweepEnable && highFreqOffset));
-always @(posedge clk) begin 
-    if (loopFilterEn) begin
-        if (breakLoop) begin
-            loopError <= 12'h0;
+    /**************************** Adjust Error ************************************/
+    reg     signed  [11:0]  loopError;
+    wire    signed  [11:0]  negModeError = -modeError;
+    reg                     carrierLock;
+    wire                    breakLoop = (zeroError || (sweepEnable && highFreqOffset));
+    always @(posedge clk) begin 
+        if (loopFilterEn) begin
+            if (breakLoop) begin
+                loopError <= 12'h0;
             end
-        else if (invertError) begin
-            loopError <= negModeError;
+            else if (invertError) begin
+                loopError <= negModeError;
             end
-        else begin
-            loopError <= modeError;
+            else begin
+                loopError <= modeError;
             end
         end
     end
 
 
-/***************************** Loop Filter ************************************/
+    /***************************** Loop Filter ************************************/
 
-// Instantiate the lead/lag filter gain path
-wire    [39:0]  leadError;
-leadGain12 leadGain (
-    .clk(clk), .clkEn(loopFilterEn), .reset(reset), 
-    .error(loopError),
-    .leadExp(leadExp),
-    .acqTrackControl(acqTrackControl),
-    .track(carrierLock),
-    .leadError(leadError)
-    );
+    // Instantiate the lead/lag filter gain path
+    wire    signed  [39:0]  leadError;
+    leadGain12 leadGain (
+        .clk(clk), .clkEn(loopFilterEn), .reset(reset), 
+        .error(loopError),
+        .leadExp(leadExp),
+        .acqTrackControl(acqTrackControl),
+        .track(carrierLock),
+        .leadError(leadError)
+        );
 
-lagGain12 lagGain (
-    .clk(clk), .clkEn(loopFilterEn), .reset(reset), 
-    .error(loopError),
-    .lagExp(lagExp),
-    .upperLimit(upperLimit),
-    .lowerLimit(lowerLimit),
-    .sweepEnable(sweepEnable),
-    .sweepRateMag(sweepOffsetMag),
-    .clearAccum(clearAccum),
-    .carrierInSync(carrierLock && !highFreqOffset),
-    .acqTrackControl(acqTrackControl),
-    .track(carrierLock),
-    .lagAccum(lagAccum)
-    );
+    lagGain12 lagGain (
+        .clk(clk), .clkEn(loopFilterEn), .reset(reset), 
+        .error(loopError),
+        .lagExp(lagExp),
+        .upperLimit(upperLimit),
+        .lowerLimit(lowerLimit),
+        .sweepEnable(sweepEnable),
+        .sweepRateMag(sweepOffsetMag),
+        .clearAccum(clearAccum),
+        .carrierInSync(carrierLock && !highFreqOffset),
+        .acqTrackControl(acqTrackControl),
+        .track(carrierLock),
+        .lagAccum(lagAccum)
+        );
 
 
-// Final filter output
-reg [39:0]filterSum;
-always @(posedge clk) begin
-    if (reset) begin
-        filterSum <= 0;
+    // Final filter output
+    reg signed  [39:0]  filterSum;
+    always @(posedge clk) begin
+        if (reset) begin
+            filterSum <= 0;
         end
-    else if (loopFilterEn) begin
-        filterSum <= lagAccum + leadError;
+        else if (loopFilterEn) begin
+            filterSum <= lagAccum + leadError;
         end
     end
 
-/******************************* Lock Detector ********************************/
+    /******************************* Lock Detector ********************************/
 
-reg     [11:0]  absModeError;
-reg     [15:0]  lockCounter;
-wire    [16:0]  lockPlus = {1'b0,lockCounter} + 17'h00001;
-wire    [16:0]  lockMinus = {1'b0,lockCounter} + 17'h1ffff;
-always @(posedge clk) begin
-    if (reset || !enableCarrierLock) begin
-        lockCounter <= 0;
-        carrierLock <= 1;
-        end
-    else if (loopFilterEn) begin
-        absModeError <= modeError[11] ? negModeError : modeError;
-        if (absModeError > syncThreshold) begin
-            if (lockCounter == (16'hffff - lockCount)) begin
-                carrierLock <= 0;
-                lockCounter <= 0;
+    reg     [11:0]  absModeError;
+    reg     [15:0]  lockCounter;
+    wire    [16:0]  lockPlus = {1'b0,lockCounter} + 17'h00001;
+    wire    [16:0]  lockMinus = {1'b0,lockCounter} + 17'h1ffff;
+    always @(posedge clk) begin
+        if (reset || !enableCarrierLock) begin
+            lockCounter <= 0;
+            carrierLock <= 1;
+            end
+        else if (loopFilterEn) begin
+            absModeError <= $unsigned(modeError[11] ? negModeError : modeError);
+            if (absModeError > syncThreshold) begin
+                if (lockCounter == (16'hffff - lockCount)) begin
+                    carrierLock <= 0;
+                    lockCounter <= 0;
+                    end
+                else begin
+                    lockCounter <= lockMinus[15:0];
+                    end
                 end
             else begin
-                lockCounter <= lockMinus[15:0];
-                end
-            end
-        else begin
-            if (lockCounter == lockCount) begin
-                carrierLock <= 1;
-                lockCounter <= 0;
-                end
-            else begin
-                lockCounter <= lockPlus[15:0];
+                if (lockCounter == lockCount) begin
+                    carrierLock <= 1;
+                    lockCounter <= 0;
+                    end
+                else begin
+                    lockCounter <= lockPlus[15:0];
+                    end
                 end
             end
         end
-    end
 
 
-// Final Outputs
-//assign carrierFreqOffset = filterSum[39:8];
-assign carrierFreqOffset = lagAccum[39:8] + lagAccum[7];
-//assign carrierLeadFreq = leadError[39:8];
-assign carrierLeadFreq = leadError[39:8] + leadError[7];
-assign carrierFreqEn = loopFilterEn;
+    // Final Outputs
+    assign carrierFreqOffset = $signed(lagAccum[39:8] + lagAccum[7]);
+    assign carrierLeadFreq = $signed(leadError[39:8] + leadError[7]);
+    assign carrierFreqEn = loopFilterEn;
 
-`ifdef SIMULATE
-real carrierOffsetReal;
-real lagAccumReal; 
-integer lockCounterInt;
-always @(carrierFreqOffset) carrierOffsetReal = ((carrierFreqOffset > 2147483647.0) ? carrierFreqOffset-4294967296.0 : carrierFreqOffset)/2147483648.0;
-always @(lagAccum[39:8]) lagAccumReal = ((lagAccum[39:8] > 2147483647.0) ? lagAccum[39:8]-4294967296.0 : lagAccum[39:8])/2147483648.0; 
-always @(lockCounter) lockCounterInt = lockCounter;
-`endif
+    `ifdef SIMULATE
+    real carrierOffsetReal;
+    real lagAccumReal; 
+    integer lockCounterInt;
+    always @(carrierFreqOffset) carrierOffsetReal = $itor(carrierFreqOffset)/(2**31);
+    always @(lagAccum[39:8]) lagAccumReal = $itor($signed(lagAccum[39:8]))/(2**31);
+    always @(lockCounter) lockCounterInt = lockCounter;
+    `endif
 
 endmodule
 
@@ -330,8 +308,8 @@ reg     [11:0]  noise;
 carrierLoop loop(
     .clk(clk), 
     .reset(reset), 
-    .ddcSync(sync),
-    .resampSync(sync),
+    .ddcClkEn(sync),
+    .resampClkEn(sync),
     .wr0(1'b0),.wr1(1'b0),.wr2(1'b0),.wr3(1'b0),
     .addr(13'b0),
     .din(),

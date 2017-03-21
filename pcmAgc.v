@@ -48,7 +48,7 @@ always @* magReal = $itor($unsigned(rxLevel))/(2**17);
     log2 log2(
         .clk(clk),
         .reset(reset),
-        .syncIn(clkEn),
+        .clkEn(clkEn),
         .linear(linear),
         .log(log2Mag)
     );

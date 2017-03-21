@@ -7,32 +7,20 @@ derivative rights in exchange for negotiated compensation.
 ******************************************************************************/
 
 `timescale 1ns / 10 ps
-`include ".\addressMap.v"
+`include "addressMap.v"
 
 module dualDecimator( 
-    clk, reset, sync,
-    wr0, wr1, wr2, wr3,
-    addr,
-    din,
-    dout,
-    inI,inQ,
-    outI,outQ,
-    syncOut
+    input                       clk, reset, clkEn,
+    input                       wr0, wr1, wr2, wr3,
+    input               [12:0]  addr,
+    input               [31:0]  din,
+    output              [31:0]  dout,
+    input       signed  [17:0]  inI,inQ,
+    output  reg signed  [47:0]  outI,outQ,
+    output  reg                 clkEnOut
     );
 
 parameter RegSpace = `CICDECSPACE;
-
-input clk;
-input reset;
-input sync;
-input wr0,wr1,wr2,wr3;
-input [12:0]addr;
-input [31:0]din;
-output [31:0]dout;
-input  [17:0]inI,inQ;
-output [47:0]outI,outQ;
-output  syncOut;
-
 
 // Register interface
 reg cs;
@@ -56,21 +44,21 @@ cicRegs regs (
     );
 
 cicDecimator cicI( 
-    .clk(clk), .reset(reset), .sync(sync),
+    .clk(clk), .reset(reset), .clkEn(clkEn),
     .gainShift(cicShift),
     .decimation(cicDecimation),
     .in(inI),
     .out(outI),
-    .syncOut(syncOut)
+    .clkEnOut(clkEnOut)
     );
 
 cicDecimator cicQ( 
-    .clk(clk), .reset(reset), .sync(sync),
+    .clk(clk), .reset(reset), .clkEn(clkEn),
     .gainShift(cicShift),
     .decimation(cicDecimation),
     .in(inQ),
     .out(outQ),
-    .syncOut()
+    .clkEnOut()
     );
 
 

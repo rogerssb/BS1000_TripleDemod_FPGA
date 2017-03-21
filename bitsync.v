@@ -12,234 +12,244 @@ derivative rights in exchange for negotiated compensation.
 `define ENABLE_SLIP
 
 module bitsync(
-    sampleClk, reset, 
-    symTimes2Sync,
-    auResampSync,
-    demodMode,
+    input                       clk, reset, 
+    input                       sym2xClkEn,
+    input                       auResampClkEn,
+    input               [4:0]   demodMode,
+    input                       oqpskIthenQ,
     `ifdef ADD_DESPREADER
-    enableDespreader,
+    input                       enableDespreader,
     `endif
-    bitsyncMode,
-    wr0,wr1,wr2,wr3,
-    addr,
-    din,
-    dout,
-    i,q,
-    au,
-    offsetError,
-    offsetErrorEn,
+    input               [1:0]   bitsyncMode,
+    input                       wr0,wr1,wr2,wr3,
+    input               [12:0]  addr,
+    input               [31:0]  din,
+    output              [31:0]  dout,
+    input       signed  [17:0]  i,q,
+    input       signed  [17:0]  au,
+    output  reg signed  [17:0]  offsetError,
+    output  reg                 offsetErrorEn,
     `ifdef SYM_DEVIATION
-    fskDeviation,
+    output              [15:0]  fskDeviation,
     `else
-    posDeviation,
-    negDeviation,
+    output              [15:0]  posDeviation,
+    output              [15:0]  negDeviation,
     `endif
-    iSym2xEn,
-    iSymEn,
-    iSymClk,
-    symDataI,
-    bitDataI,
-    qSym2xEn,
-    qSymEn,
-    qSymClk,
-    symDataQ,
-    bitDataQ,
-    sampleFreq,
-    auSampleFreq,
-    bitsyncLock,
-    lockCounter,
-    auBitsyncLock,
-    auLockCounter,
-    auIQSwap,
-    iTrellis,qTrellis,
-    bsError,
-    bsErrorEn
-    );
+    output                      iSym2xEn,
+    output                      iSymEn,
+    output                      iSymClk,
+    output  reg signed  [17:0]  symDataI,
+    output  reg                 bitDataI,
+    output                      qSym2xEn,
+    output                      qSymEn,
+    output                      qSymClk,
+    output  reg signed  [17:0]  symDataQ,
+    output  reg                 bitDataQ,
+    output              [31:0]  sampleFreq,
+    output              [31:0]  auSampleFreq,
+    output  reg                 bitsyncLock,
+    output  reg         [15:0]  lockCounter,
+    output  reg                 auBitsyncLock,
+    output  reg         [15:0]  auLockCounter,
+    output  reg                 auIQSwap,
+    output                      sdiSymEn,
+    output      signed  [17:0]  iTrellis,qTrellis,
+    `ifdef ADD_SUPERBAUD_TED
+    output      signed  [17:0]  bsError,
+    output                      bsErrorEn,
+    output      signed  [17:0]  tedOutput,
+    output                      tedOutputEn,
+    output                      tedSyncPulse,
+    output                      tedSymEnEven
+    `else
+    output      signed  [17:0]  bsError,
+    output                      bsErrorEn
+    `endif
+);
 
-input           sampleClk;
-input           reset;
-input           symTimes2Sync;
-input           auResampSync;
-input   [4:0]   demodMode;
-`ifdef ADD_DESPREADER
-input           enableDespreader;
-`endif
-input   [1:0]   bitsyncMode;
-input           wr0,wr1,wr2,wr3;
-input   [12:0]  addr;
-input   [31:0]  din;
-output  [31:0]  dout;
-input   [17:0]  i,q;
-input   [17:0]  au;
-output  [17:0]  offsetError;
-output          offsetErrorEn;
-`ifdef SYM_DEVIATION
-output  [15:0]  fskDeviation;
-`else
-output  [15:0]  posDeviation;
-output  [15:0]  negDeviation;
-`endif
-output          iSym2xEn;
-output          iSymEn;
-output          iSymClk;
-output  [17:0]  symDataI;
-output          bitDataI;
-output          qSym2xEn;
-output          qSymEn;
-output          qSymClk;
-output  [17:0]  symDataQ;
-output          bitDataQ;
-output  [31:0]  sampleFreq;
-output  [31:0]  auSampleFreq;
-output          bitsyncLock;
-output  [15:0]  lockCounter;
-output          auBitsyncLock;
-output  [15:0]  auLockCounter;
-output          auIQSwap;
-output  [17:0]  iTrellis,qTrellis;
-output  [17:0]  bsError;
-output          bsErrorEn;
+    `define USE_COMP
+    `ifdef USE_COMP
 
-`define USE_COMP
-`ifdef USE_COMP
-
-wire    [17:0]  iComp,qComp;
-cicComp cicCompI(
-    .clk(sampleClk), 
-    .reset(reset),
-    .sync(symTimes2Sync), 
-    .compIn(i),
-    .compOut(iComp)
+    wire    signed  [17:0]  iComp,qComp;
+    cicComp cicCompI(
+        .clk(clk), 
+        .reset(reset),
+        .sync(sym2xClkEn), 
+        .compIn(i),
+        .compOut(iComp)
     );
-cicComp cicCompQ(
-    .clk(sampleClk), 
-    .reset(reset),
-    .sync(symTimes2Sync), 
-    .compIn(q),
-    .compOut(qComp)
+    cicComp cicCompQ(
+        .clk(clk), 
+        .reset(reset),
+        .sync(sym2xClkEn), 
+        .compIn(q),
+        .compOut(qComp)
     );
-//****************************** Two Sample Sum *******************************
-wire            useCompFilter;
-wire            useSummer;
-reg     [17:0]  iDelay,qDelay;
-reg     [17:0]  iFiltered,qFiltered;
-wire    [18:0]  iSum = useCompFilter ? ({iDelay[17],iDelay} + {iComp[17],iComp}) 
-                                     : ({iDelay[17],iDelay} + {i[17],i});
-wire    [18:0]  qSum = useCompFilter ? ({qDelay[17],qDelay} + {qComp[17],qComp})
-                                     : ({qDelay[17],qDelay} + {q[17],q});
-always @(posedge sampleClk) begin
-    if (symTimes2Sync) begin
-        if (useCompFilter) begin
-            iDelay <= iComp;
-            qDelay <= qComp;
+    //****************************** Two Sample Sum *******************************
+    wire                    useCompFilter;
+    wire                    useSummer;
+    reg     signed  [17:0]  iDelay,qDelay;
+    reg     signed  [17:0]  iFiltered,qFiltered;
+    wire    signed  [18:0]  iSum = useCompFilter ? ({iDelay[17],iDelay} + {iComp[17],iComp}) 
+                                                 : ({iDelay[17],iDelay} + {i[17],i});
+    wire    signed  [18:0]  qSum = useCompFilter ? ({qDelay[17],qDelay} + {qComp[17],qComp})
+                                                 : ({qDelay[17],qDelay} + {q[17],q});
+    `ifdef ADD_SUPERBAUD_TED
+    reg     signed  [17:0]  iTed,qTed;
+    `endif
+    always @(posedge clk) begin
+        if (sym2xClkEn) begin
+            if (useCompFilter) begin
+                iDelay <= iComp;
+                qDelay <= qComp;
             end
-        else begin
+            else begin
+                iDelay <= i;
+                qDelay <= q;
+            end
+            if (useSummer) begin
+                iFiltered <= iSum[18:1];
+                qFiltered <= qSum[18:1];
+            end
+            else begin
+                iFiltered <= iDelay;
+                qFiltered <= qDelay;
+            end
+            `ifdef ADD_SUPERBAUD_TED
+            iTed <= iSum[18:1];
+            qTed <= qSum[18:1];
+            `endif
+        end
+    end
+
+    `else   //USE_COMP
+
+    //****************************** Two Sample Sum *******************************
+    reg     signed  [17:0]  iDelay,qDelay;
+    reg     signed  [17:0]  iFiltered,qFiltered;
+    wire    signed  [18:0]  iSum = {iDelay[17],iDelay} + {i[17],i};
+    wire    signed  [18:0]  qSum = {qDelay[17],qDelay} + {q[17],q};
+    always @(posedge clk) begin
+        if (sym2xClkEn) begin
             iDelay <= i;
             qDelay <= q;
-            end
-        if (useSummer) begin
             iFiltered <= iSum[18:1];
             qFiltered <= qSum[18:1];
-            end
-        else begin
-            iFiltered <= iDelay;
-            qFiltered <= qDelay;
-            end
         end
     end
-`else
 
-//****************************** Two Sample Sum *******************************
-reg     [17:0]  iDelay,qDelay;
-reg     [17:0]  iFiltered,qFiltered;
-wire    [18:0]  iSum = {iDelay[17],iDelay} + {i[17],i};
-wire    [18:0]  qSum = {qDelay[17],qDelay} + {q[17],q};
-always @(posedge sampleClk) begin
-    if (symTimes2Sync) begin
-        iDelay <= i;
-        qDelay <= q;
-        iFiltered <= iSum[18:1];
-        qFiltered <= qSum[18:1];
-        end
-    end
-`endif
+    `endif  //USE_COMP
 
-`ifdef ADD_DESPREADER
-/******************************************************************************
-                               Symbol Offset Deskew
-******************************************************************************/
-reg     [17:0]  iMF,qMF,iSymDelay,qSymDelay;
-always @(posedge sampleClk) begin
-    if (symTimes2Sync) begin
-        iSymDelay <= iFiltered;
-        qSymDelay <= qFiltered;
-        if (demodMode == `MODE_OQPSK) begin
-            if (enableDespreader) begin
-                iMF <= iSymDelay;
-                qMF <= qFiltered;
+    `ifdef ADD_DESPREADER
+    /******************************************************************************
+                                   Symbol Offset Deskew
+    ******************************************************************************/
+    reg signed  [17:0]  iMF,qMF,iSymDelay,qSymDelay;
+    always @(posedge clk) begin
+        if (sym2xClkEn) begin
+            iSymDelay <= iFiltered;
+            qSymDelay <= qFiltered;
+            if (demodMode == `MODE_OQPSK) begin
+                if (enableDespreader) begin
+                    iMF <= iSymDelay;
+                    qMF <= qFiltered;
                 end
-            else begin
+                else if (oqpskIthenQ) begin
+                    iMF <= iSymDelay;
+                    qMF <= qFiltered;
+                end
+                else begin
+                    iMF <= iFiltered;
+                    qMF <= qSymDelay;
+                end
+            end
+            else if (demodMode == `MODE_SOQPSK) begin
                 iMF <= iFiltered;
                 qMF <= qSymDelay;
+            end
+            else begin
+                iMF <= iFiltered;
+                qMF <= qFiltered;
+            end
+        end
+    end
+
+    `else   //ADD_DESPREADER
+
+    /******************************************************************************
+                                   Symbol Offset Deskew
+    ******************************************************************************/
+    reg signed  [17:0]  iMF,qMF,iSymDelay,qSymDelay;
+    always @(posedge clk) begin
+        if (sym2xClkEn) begin
+            iSymDelay <= iFiltered;
+            qSymDelay <= qFiltered;
+            if (demodMode == `MODE_SOQPSK) begin
+                iMF <= iFiltered;
+                qMF <= qSymDelay;
+            end
+            else if (demodMode == `MODE_OQPSK) begin
+                if (oqpskIthenQ) begin
+                    iMF <= iSymDelay;
+                    qMF <= qFiltered;
+                end
+                else begin
+                    iMF <= iFiltered;
+                    qMF <= qSymDelay;
                 end
             end
-        else if (demodMode == `MODE_SOQPSK) begin
-            iMF <= iFiltered;
-            qMF <= qSymDelay;
-            end
-        else begin
-            iMF <= iFiltered;
-            qMF <= qFiltered;
+            else begin
+                iMF <= iFiltered;
+                qMF <= qFiltered;
             end
         end
     end
-`else
-/******************************************************************************
-                               Symbol Offset Deskew
-******************************************************************************/
-reg     [17:0]  iMF,qMF,iSymDelay,qSymDelay;
-always @(posedge sampleClk) begin
-    if (symTimes2Sync) begin
-        iMF <= iFiltered;
-        iSymDelay <= iFiltered;
-        qSymDelay <= qFiltered;
-        if (demodMode == `MODE_OQPSK) begin
-            iMF <= iSymDelay;
-            qMF <= qFiltered;
-            end
-        else if (demodMode == `MODE_SOQPSK)) begin
-            iMF <= iFiltered;
-            qMF <= qSymDelay;
-            end
-        else begin
-            iMF <= iFiltered;
-            qMF <= qFiltered;
-            end
-        end
-    end
-`endif
+
+    `endif  //ADD_DESPREADER
 
 wire fmTrellisModes = ( (demodMode == `MODE_MULTIH)
                      || (demodMode == `MODE_PCMTRELLIS)
                       );
 //wire fmTrellisModes = ( (demodMode == `MODE_PCMTRELLIS)
 //                      );
-assign iTrellis = fmTrellisModes ? iMF : i;
-assign qTrellis = fmTrellisModes ? qMF : q;
+//assign iTrellis = fmTrellisModes ? iMF : i;
+//assign qTrellis = fmTrellisModes ? qMF : q;
+assign iTrellis = iMF;
+assign qTrellis = qMF;
+
+`ifdef ADD_SUPERBAUD_TED
+//********************** Multih Superbaud TED *********************************
+    multihSuperbaudTED ted(
+        .clk(clk),
+        .symEn(iSymEn),
+        .sym2xEn(sym2xClkEn),
+        .reset(reset),
+        //.i(iTrellis),.q(qTrellis),
+        .i(iTed),.q(qTed),
+        .tedOutputEn(tedOutputEn),
+        .tedOutput(tedOutput),
+        .syncPulse(tedSyncPulse),
+        .symEnEven(tedSymEnEven)
+    );
+
+
+
+`endif
+
 
 //*********************** MF Frequency Discriminator **************************
 wire    [11:0]   phase;
 vm_cordic cordic(
-    .clk(sampleClk),
-    .ena(symTimes2Sync),
+    .clk(clk),
+    .ena(sym2xClkEn),
     .x(iMF[17:4]),.y(qMF[17:4]),
     .p(phase)
     );
 reg [11:0]freqOut;
 reg [11:0]prevPhase;
 wire [11:0]phaseDiff = phase - prevPhase;
-always @(posedge sampleClk) begin
-    if (symTimes2Sync) begin
+always @(posedge clk) begin
+    if (sym2xClkEn) begin
         if (phaseDiff == 12'h800) begin
             freqOut <= 0;
             end
@@ -252,8 +262,8 @@ always @(posedge sampleClk) begin
 
 wire    [11:0]  eqFreq;
 multihEQ multihEQ (
-    .clk(sampleClk), 
-    .sync(symTimes2Sync), 
+    .clk(clk), 
+    .sync(sym2xClkEn), 
     .reset(reset),
     .din(freqOut),
     .dout(eqFreq)
@@ -354,7 +364,7 @@ wire fmModes = ( (demodMode == `MODE_2FSK)
               || (demodMode == `MODE_PCMTRELLIS)
               || (demodMode == `MODE_FM)
                );
-always @(posedge sampleClk) begin
+always @(posedge clk) begin
     if (reset) begin
         phaseState <= ONTIME;
         slipState <= AVERAGE;
@@ -366,7 +376,7 @@ always @(posedge sampleClk) begin
         avgError <= 0;
         avgSlipError <= 0;
         end
-    else if (symTimes2Sync) begin
+    else if (sym2xClkEn) begin
         // Shift register of baseband sample values
         if (fmModes) begin
             bbSRI[0] <= freq;
@@ -544,15 +554,15 @@ reg     [17:0]  iMF0;
 reg     [17:0]  qMF0;
 wire    [35:0]  term1,term2;
 mpy18x18WithCe mult1(
-    .clk(sampleClk),
-    .ce(symTimes2Sync),
+    .clk(clk),
+    .ce(sym2xClkEn),
     .a(qMF0),
     .b(iMF),
     .p(term1)
     );
 mpy18x18WithCe mult2(
-    .clk(sampleClk),
-    .ce(symTimes2Sync),
+    .clk(clk),
+    .ce(sym2xClkEn),
     .a(iMF0),
     .b(qMF),
     .p(term2)
@@ -560,8 +570,8 @@ mpy18x18WithCe mult2(
 
 wire    [35:0]  diff = term2 - term1;
 wire    [17:0]  mpyFreq = diff[34:17];
-always @(posedge sampleClk) begin
-    if (symTimes2Sync) begin
+always @(posedge clk) begin
+    if (sym2xClkEn) begin
         iMF0 <= iMF;
         qMF0 <= qMF;
         end
@@ -571,8 +581,8 @@ reg     [17:0]  prevMidSample;
 reg     [17:0]  afcError;
 reg             prevSign;
 reg             bitTransition;
-always @(posedge sampleClk) begin
-    if (symTimes2Sync) begin
+always @(posedge clk) begin
+    if (sym2xClkEn) begin
         if (timingErrorEn) begin
             if (prevSign != mpyFreq[17]) begin
                 bitTransition <= 1;
@@ -619,7 +629,7 @@ reg     [24:0]  avgNegDeviation;
 `endif
 reg     [24:0]  avgOffsetError;
 //assign          offsetError = avgOffsetError[24:7];
-always @(posedge sampleClk) begin
+always @(posedge clk) begin
     if (reset) begin
         avgOffsetError <= 0;
         `ifdef SYM_DEVIATION
@@ -629,7 +639,7 @@ always @(posedge sampleClk) begin
         avgNegDeviation <= 0;
         `endif
         end
-    else if (symTimes2Sync) begin
+    else if (sym2xClkEn) begin
         if (offsetEn && dcErrorAvailable) begin
             avgOffsetError <= (avgOffsetError - {{7{avgOffsetError[24]}},avgOffsetError[24:7]})
                             + {{7{dcError[17]}},dcError};
@@ -661,9 +671,11 @@ assign negDeviation = avgNegDeviation[24:9];
 `endif
 
 `ifdef SIMULATE
-real avgOffsetReal = (avgOffsetError[24] ? avgOffsetError[24:7] - 262144.0 : avgOffsetError[24:7])/131072.0;
+real avgOffsetReal;
+always @* avgOffsetReal = (avgOffsetError[24] ? avgOffsetError[24:7] - 262144.0 : avgOffsetError[24:7])/131072.0;
 `ifdef SYM_DEVIATION
-real avgDevReal = (avgDeviation[24] ? avgDeviation[24:7] - 262144.0 : avgDeviation[24:7])/131072.0;
+real avgDevReal;
+always @* avgDevReal = (avgDeviation[24] ? avgDeviation[24:7] - 262144.0 : avgDeviation[24:7])/131072.0;
 `else
 real avgPosDevReal;
 always @* avgPosDevReal = $itor($signed(avgPosDeviation))/(2**17);
@@ -686,15 +698,21 @@ reg             loopFilterEn;
 reg     [11:0]  loopFilterError;
 always @* begin
     casex (demodMode) 
+        `ifdef ADD_SUPERBAUD_TED
+        `MODE_MULTIH: begin
+            loopFilterError = tedOutput[17:6];
+            loopFilterEn = sym2xClkEn;
+        end
+        `endif
         default: begin
             loopFilterError = timingError[18:7] + timingError[6];
-            loopFilterEn = (symTimes2Sync & timingErrorEn);
+            loopFilterEn = (sym2xClkEn & timingErrorEn);
         end
     endcase
 end
 wire    [31:0]  bsDout;
 loopFilter sampleLoop(
-    .clk(sampleClk),
+    .clk(clk),
     .clkEn(loopFilterEn),
     .reset(reset),
     .cs(bitsyncSpace),
@@ -716,7 +734,7 @@ loopFilter sampleLoop(
 `ifdef RECLOCK_BSERROR
 reg     [17:0]  bsError;
 reg             bsErrorEn;
-always @(posedge sampleClk) begin
+always @(posedge clk) begin
     bsError <= timingError[18:1] + timingError[0];
     bsErrorEn <= loopFilterEn;
     end
@@ -732,12 +750,12 @@ reg     [15:0]  lockCounter;
 wire    [16:0]  lockPlus = {1'b0,lockCounter} + 17'h00001;
 wire    [16:0]  lockMinus = {1'b0,lockCounter} + 17'h1ffff;
 reg             bitsyncLock;
-always @(posedge sampleClk) begin
+always @(posedge clk) begin
     if (reset) begin
         lockCounter <= 0;
         bitsyncLock <= 0;
         end
-    else if (symTimes2Sync) begin
+    else if (sym2xClkEn) begin
         if (slipState == TEST) begin
             if (avgError[21:14] > {1'b0,avgSlipError[21:15]}) begin
                 if (lockCounter == (16'hffff-lockCount)) begin
@@ -785,8 +803,8 @@ wire auEnable = ((demodMode == `MODE_AQPSK) || (demodMode == `MODE_AUQPSK));
 reg     [17:0]  auDelay;
 reg     [17:0]  auMF;
 wire    [18:0]  auSum = {auDelay[17],auDelay} + {au[17],au};
-always @(posedge sampleClk) begin
-    if (auResampSync) begin
+always @(posedge clk) begin
+    if (auResampClkEn) begin
         auDelay <= au;
         auMF <= auSum[18:1];
         end
@@ -815,12 +833,12 @@ wire auTimingErrorEn = (auPhaseState == ONTIME);
 
 reg  [17:0]auOnTimeLevel;
 reg  auTransition;
-always @(posedge sampleClk) begin
+always @(posedge clk) begin
     if (!auEnable) begin
         auPhaseState <= ONTIME;
         auOffTimeLevel <= 0;
         end
-    else if (auResampSync) begin
+    else if (auResampClkEn) begin
         // Shift register of baseband sample values
         auSR[0] <= auMF;
         auSR[1] <= auSR[0];
@@ -874,9 +892,9 @@ always @* begin
 wire    [31:0]  auDout;
 wire    [15:0]  auLockCount;
 wire    [11:0]   auSyncThreshold;
-wire            auLoopFilterEn = (auResampSync & auTimingErrorEn);
+wire            auLoopFilterEn = (auResampClkEn & auTimingErrorEn);
 loopFilter auSampleLoop(
-    .clk(sampleClk),
+    .clk(clk),
     .clkEn(auLoopFilterEn),
     .reset(reset),
     .cs(auBitsyncSpace),
@@ -906,7 +924,7 @@ wire    [17:0]  auOnTimeMag = auOnTimeLevel[17] ? (~auOnTimeLevel + 1) : auOnTim
 reg     [21:0]  avgAuOffTimeMag;
 reg     [21:0]  avgAuOnTimeMag;
 reg     [3:0]   auAvgCount;
-always @(posedge sampleClk) begin
+always @(posedge clk) begin
     if (!auEnable) begin
         auAvgState <= AVERAGE;
         auLockCounter <= 0;
@@ -917,7 +935,7 @@ always @(posedge sampleClk) begin
         auIQSwap <= 0;
         auSwapCounter <= auSwapCount;
         end
-    else if (auResampSync) begin
+    else if (auResampClkEn) begin
         // Averaging state machine
         case (auAvgState)
             AVERAGE: begin
@@ -977,10 +995,10 @@ always @(posedge sampleClk) begin
     end
 
 //************************** I/Q Swap State Machine ***************************
-always @(posedge sampleClk) begin
+always @(posedge clk) begin
     if (!auEnable ) begin
         end
-    else if (auResampSync) begin
+    else if (auResampClkEn) begin
         
         end
     end
@@ -1013,10 +1031,18 @@ reg             bitDataQ;
 
 `define ENABLE_MULTIH
 `ifdef ENABLE_MULTIH
-always @(posedge sampleClk) begin
-    if (symTimes2Sync) begin
+always @(posedge clk) begin
+    if (sym2xClkEn) begin
         // Capture the I output sample
-        symDataI <= bbSRI[1];
+        if (fmModes) begin
+            symDataI <= freq;
+            end
+        else if (demodMode == `MODE_PM) begin
+            symDataI <= {phase,6'b0};
+            end
+        else begin
+            symDataI <= iMF;
+            end
         if (timingErrorEn) begin
             if (fmModes) begin
                 bitDataI <= ~bbSRI[1][17];
@@ -1027,7 +1053,7 @@ always @(posedge sampleClk) begin
             end
         end
     if (auEnable) begin
-        if (auResampSync) begin
+        if (auResampClkEn) begin
             symDataQ <= auSR[1];
             if (auTimingErrorEn) begin
                 bitDataQ <= auSR[1][17];
@@ -1035,10 +1061,18 @@ always @(posedge sampleClk) begin
             end
         end
     else begin
-        if (symTimes2Sync) begin
+        if (sym2xClkEn) begin
             // Capture the Q output sample
+            if (fmModes) begin
+                symDataQ <= 0;
+                end
+            else if (demodMode == `MODE_PM) begin
+                symDataQ <= 0;
+                end
+            else begin
+                symDataQ <= qMF;
+                end
             if (demodMode == `MODE_MULTIH) begin
-                symDataQ <= bbSRQ[1];
                 if (timingErrorEn) begin
                     if (bbSRQ[1][17]) begin
                         bitDataQ <= (bbSRQ[1] < negMultihThreshold);
@@ -1049,7 +1083,6 @@ always @(posedge sampleClk) begin
                     end
                 end
             else begin
-                symDataQ <= bbSRQ[1];
                 if (timingErrorEn) begin
                     bitDataQ <= bbSRQ[1][17];
                     end
@@ -1058,8 +1091,8 @@ always @(posedge sampleClk) begin
         end
     end
 `else
-always @(posedge sampleClk) begin
-    if (symTimes2Sync) begin
+always @(posedge clk) begin
+    if (sym2xClkEn) begin
         // Capture the I output sample
         symDataI <= bbSRI[1];
         if (timingErrorEn) begin
@@ -1072,7 +1105,7 @@ always @(posedge sampleClk) begin
             end
         end
     if (auEnable) begin
-        if (auResampSync) begin
+        if (auResampClkEn) begin
             symDataQ <= auSR[1];
             if (auTimingErrorEn) begin
                 bitDataQ <= auSR[1][17];
@@ -1080,7 +1113,7 @@ always @(posedge sampleClk) begin
             end
         end
     else begin
-        if (symTimes2Sync) begin
+        if (sym2xClkEn) begin
             // Capture the Q output sample
             symDataQ <= bbSRQ[1];
             if (timingErrorEn) begin
@@ -1092,11 +1125,12 @@ always @(posedge sampleClk) begin
 `endif
 
 // Clock Enables
-assign iSym2xEn = symTimes2Sync;
-assign iSymEn = symTimes2Sync & timingErrorEn;
+assign iSym2xEn = sym2xClkEn;
+assign iSymEn = sym2xClkEn & timingErrorEn;
+assign sdiSymEn = sym2xClkEn & !timingErrorEn;
 assign iSymClk = timingErrorEn;
-assign qSym2xEn = auEnable ? auResampSync : symTimes2Sync;
-assign qSymEn = auEnable ? (auResampSync & auTimingErrorEn) : (symTimes2Sync & timingErrorEn);
+assign qSym2xEn = auEnable ? auResampClkEn : sym2xClkEn;
+assign qSymEn = auEnable ? (auResampClkEn & auTimingErrorEn) : (sym2xClkEn & timingErrorEn);
 assign qSymClk = auTimingErrorEn;
 
 

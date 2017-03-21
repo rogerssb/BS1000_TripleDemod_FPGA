@@ -10,6 +10,7 @@ derivative rights in exchange for negotiated compensation.
 `timescale 1ns/1ps
 
 `define ENABLE_SLIP
+//`define USE_GARDNER_TED
 
 module dualBitsync(
     sampleClk, reset, 
@@ -41,7 +42,11 @@ module dualBitsync(
     ch1BitsyncLock,
     ch1LockCounter,
     bsError,
-    bsErrorEn
+    bsErrorEn,
+    ch0DcError,
+    ch0TransitionsDetected,
+    ch1DcError,
+    ch1TransitionsDetected
     );
 
 input           sampleClk;
@@ -75,6 +80,10 @@ output          ch1BitsyncLock;
 output  [15:0]  ch1LockCounter;
 output  [17:0]  bsError;
 output          bsErrorEn;
+output  reg signed  [17:0]  ch0DcError;
+output  reg                 ch0TransitionsDetected;
+output      signed  [17:0]  ch1DcError;
+output                      ch1TransitionsDetected;
 
 //****************************** Two Sample Sum *******************************
 wire            useSummer;
@@ -140,16 +149,40 @@ parameter TEST =     2'b01;
 parameter SLIP0 =    2'b11;
 parameter SLIP1 =    2'b10;
 
-// Fifo of baseband inputs
-reg [17:0]bbSRI[3:0];
-reg [17:0]bbSRQ[3:0];
+    // Fifo of baseband inputs
+    reg     signed  [17:0]  ch0Input;
+    reg     signed  [17:0]  ch1Input;
+    always @* begin
+        casex (bitsyncMode)
+            `BS_MODE_DUAL_CH,
+            `BS_MODE_OFFSET_CH: begin
+                ch0Input = ch0MF;
+                ch1Input = ch1MF;
+            end
+            default: begin
+                ch0Input = ch0MF;
+                ch1Input = ch0MF;
+            end
+        endcase
+    end
+    reg     signed  [17:0]  bbSRI[2:0];
+    reg     signed  [17:0]  bbSRQ[2:0];
+    always @(posedge sampleClk) begin
+        if (ch0ClkEn) begin
+            bbSRI[0] <= ch0Input;
+            bbSRI[1] <= bbSRI[0];
+            bbSRI[2] <= bbSRI[1];
+            bbSRQ[0] <= ch1Input;
+            bbSRQ[1] <= bbSRQ[0];
+            bbSRQ[2] <= bbSRQ[1];
+        end
+    end
 
 // Timing error variables
 wire            earlySignI = bbSRI[2][17];
 wire    [17:0]  absEarlyI = earlySignI ? (~bbSRI[2] + 1) : bbSRI[2];
 wire            lateSignI = bbSRI[0][17];
 wire    [17:0]  absLateI = lateSignI ? (~bbSRI[0] + 1) : bbSRI[0];
-wire    [17:0]  prevOffTimeI = bbSRI[3];
 wire    [17:0]  earlyOnTimeI = bbSRI[2];
 wire    [17:0]  offTimeI = bbSRI[1];
 wire    [17:0]  lateOnTimeI = bbSRI[0];
@@ -162,6 +195,38 @@ wire    [17:0]  earlyOnTimeQ = bbSRQ[2];
 wire    [17:0]  lateOnTimeQ = bbSRQ[0];
 wire    [17:0]  offTimeQ = bbSRQ[1];
 wire    [17:0]  negoffTimeQ = (~offTimeQ + 1);
+
+    `ifdef USE_GARDNER_TED
+    //wire    signed  [17:0]  ch0SymDiff = {earlyOnTimeI[17],earlyOnTimeI[17:1]}
+    //                                   - {lateOnTimeI[17],lateOnTimeI[17:1]};
+    wire    signed  [17:0]  ch0SymDiff = {bbSRI[1][17],bbSRI[1][17:1]}
+                                       - {ch0Input[17],ch0Input[17:1]};
+    wire    signed  [35:0]  gardnerProductI;
+    wire    signed  [17:0]  gardnerTimingErrorI = gardnerProductI[34:17];
+    mpy18x18WithCE gardnerMpyI(
+        .clk(sampleClk),
+        .ce(ch0ClkEn),
+        .a(ch0SymDiff),
+        //.b(offTimeI),
+        .b(bbSRI[0]),
+        .p(gardnerProductI)
+    );
+    //wire    signed  [17:0]  ch1SymDiff = {earlyOnTimeQ[17],earlyOnTimeQ[17:1]}
+    //                                   - {lateOnTimeQ[17],lateOnTimeQ[17:1]};
+    wire    signed  [17:0]  ch1SymDiff = {bbSRQ[1][17],bbSRQ[1][17:1]}
+                                       - {ch1Input[17],ch1Input[17:1]};
+    wire    signed  [35:0]  gardnerProductQ;
+    wire    signed  [17:0]  gardnerTimingErrorQ = gardnerProductQ[34:17];
+    mpy18x18WithCE gardnerMpyQ(
+        .clk(sampleClk),
+        .ce(ch0ClkEn),
+        .a(ch1SymDiff),
+        //.b(offTimeQ),
+        .b(bbSRQ[0]),
+        .p(gardnerProductQ)
+    );
+    `endif
+
 
 reg     [17:0]  timingErrorI;
 reg     [17:0]  timingErrorQ;
@@ -180,7 +245,8 @@ reg  stateMachineSlip;
 `ifdef ENABLE_SMSLIP
 wire slip = stateMachineSlip;
 `else
-wire  slip = 1'b0;
+//wire  slip = 1'b0;
+reg             slip;
 `endif
 reg slipped;
 reg     [17:0]  slipErrorI;
@@ -192,10 +258,10 @@ wire    [17:0]  absSlipError = slipError[17] ? (~slipError + 1) : slipError;
 reg     [21:0]  avgError;
 reg     [21:0]  avgSlipError;
 reg     [3:0]   avgCount;
-reg             dcErrorAvailable;
-reg             transitionI,transitionQ;
-wire            transition = transitionI || transitionQ;
-//wire            transition = transitionI;
+reg                 transitionI,transitionQ;
+reg     [7:0]       ch0TransitionCount;
+wire                transition = transitionI || transitionQ;
+reg signed  [17:0]  ch1SyncDcError;
 
 always @(posedge sampleClk) begin
     if (reset) begin
@@ -208,25 +274,10 @@ always @(posedge sampleClk) begin
         avgCount <= 15;
         avgError <= 0;
         avgSlipError <= 0;
+        ch0TransitionCount <= 0;
+        ch0TransitionsDetected <= 0;
         end
     else if (ch0ClkEn) begin
-        // Shift register of baseband sample values
-        casex (bitsyncMode)
-            `BS_MODE_DUAL_CH,
-            `BS_MODE_OFFSET_CH: begin
-                bbSRI[0] <= ch0MF;
-                bbSRQ[0] <= ch1MF;
-                end
-            default: begin
-                bbSRI[0] <= ch0MF;
-                bbSRQ[0] <= ch0MF;
-                end
-            endcase
-        bbSRI[1] <= bbSRI[0];
-        bbSRI[2] <= bbSRI[1];
-        bbSRI[3] <= bbSRI[2];
-        bbSRQ[1] <= bbSRQ[0];
-        bbSRQ[2] <= bbSRQ[1];
         case (phaseState)
             ONTIME: begin
                 `ifdef ENABLE_SLIP
@@ -243,47 +294,136 @@ always @(posedge sampleClk) begin
                 end
             OFFTIME: begin
                 phaseState <= ONTIME;
+
+                `ifdef USE_GARDNER_TED
+
+                // Is there a data transition on I?
+                if (earlySignI != lateSignI) begin
+
+                    // Yes. Use the gardner output
+                    transitionI <= 1;
+                    timingErrorI <= gardnerTimingErrorI;
+
+                    // Calculate DC offset error
+                    ch0TransitionsDetected <= 1;
+                    ch0TransitionCount <= 255;
+                    //ch0DcError <= {earlyOnTimeI[17],earlyOnTimeI[17:1]} 
+                    //            + {lateOnTimeI[17],lateOnTimeI[17:1]};
+                    ch0DcError <= earlyOnTimeI;
+
+                    // High to low transition?
+                    if (earlySignI) begin
+                        slipErrorI <= lateOnTimeI;
+                    end
+                    // Or low to high?
+                    else begin
+                        slipErrorI <= earlyOnTimeI;
+                    end
+                end
+                else begin
+                    transitionI <= 0;
+                    timingErrorI <= 0;
+                    ch0DcError <= 0;
+                    if (ch0TransitionCount > 0) begin
+                        ch0TransitionCount <= ch0TransitionCount - 1;
+                    end
+                    else begin
+                        ch0TransitionsDetected <= 0;
+                    end
+                end
+
+
+                // Is there a data transition on Q?
+                if (earlySignQ != lateSignQ) begin
+                    // Yes. Use the gardner output.
+                    transitionQ <= 1;
+                    timingErrorQ <= gardnerTimingErrorQ;
+
+                    // Calculate DC offset error
+                    //ch1SyncDcError <= {earlyOnTimeQ[17],earlyOnTimeQ[17:1]} 
+                    //                + {lateOnTimeQ[17],lateOnTimeQ[17:1]};
+                    ch1SyncDcError <= earlyOnTimeQ[17];
+
+                    // High to low transition?
+                    if (earlySignQ) begin
+                        slipErrorQ <= lateOnTimeQ;
+                    end
+                    // Or low to high?
+                    else begin
+                        slipErrorQ <= earlyOnTimeQ;
+                    end
+                end
+                else begin
+                    transitionQ <= 0;
+                    timingErrorQ <= 0;
+                    ch1SyncDcError <= 0;
+                end
+
+                `else // USE_GARDNER_TED
+
                 // Is there a data transition on I?
                 if (earlySignI != lateSignI) begin
                     // Yes. Calculate DC offset error
                     transitionI <= 1;
+                    ch0TransitionsDetected <= 1;
+                    ch0TransitionCount <= 255;
+                    //ch0DcError <= {earlyOnTimeI[17],earlyOnTimeI[17:1]} 
+                    //            + {lateOnTimeI[17],lateOnTimeI[17:1]};
+                    ch0DcError <= earlyOnTimeI;
 
+                    // Calculate the timing error
                     // High to low transition?
                     if (earlySignI) begin
                         timingErrorI <= offTimeI;
                         slipErrorI <= lateOnTimeI;
-                        end
+                    end
                     // Or low to high?
                     else begin
                         timingErrorI <= negoffTimeI;
                         slipErrorI <= earlyOnTimeI;
-                        end
                     end
+                end
                 else begin
                     transitionI <= 0;
-                    timingErrorI <= 18'h00;
+                    ch0DcError <= 0;
+                    if (ch0TransitionCount > 0) begin
+                        ch0TransitionCount <= ch0TransitionCount - 1;
                     end
+                    else begin
+                        ch0TransitionsDetected <= 0;
+                    end
+                    timingErrorI <= 18'h00;
+                end
 
                 // Is there a data transition on Q?
                 if (earlySignQ != lateSignQ) begin
                     transitionQ <= 1;
+                    //ch1SyncDcError <= {earlyOnTimeQ[17],earlyOnTimeQ[17:1]} 
+                    //                + {lateOnTimeQ[17],lateOnTimeQ[17:1]};
+                    ch1SyncDcError <= earlyOnTimeQ[17];
+
                     // High to low transition?
                     if (earlySignQ) begin
                         timingErrorQ <= offTimeQ;
                         slipErrorQ <= lateOnTimeQ;
-                        end
+                    end
                     // Or low to high?
                     else begin
                         timingErrorQ <= negoffTimeQ;
                         slipErrorQ <= earlyOnTimeQ;
-                        end
-                    end
-                else begin
-                    transitionQ <= 0;
-                    timingErrorQ <= 18'h00;
                     end
                 end
-            endcase
+                else begin
+                    transitionQ <= 0;
+                    ch1SyncDcError <= 0;
+                    timingErrorQ <= 18'h00;
+                end
+
+                `endif //USE_GARDNER_TED
+
+            end
+        endcase
+
         // Slip state machine
         case (slipState)
             AVERAGE: begin
@@ -395,6 +535,7 @@ always @(posedge sampleClk) begin
     if (reset) begin
         ch0LockCounter <= 0;
         ch0BitsyncLock <= 0;
+        slip <= 0;
         end
     else if (ch0ClkEn) begin
         if (slipState == TEST) begin
@@ -403,23 +544,27 @@ always @(posedge sampleClk) begin
                 if (ch0LockCounter == (16'hffff-lockCount)) begin
                     ch0BitsyncLock <= 0;
                     ch0LockCounter <= 16'h0;
-                    end
+                    slip <= 1;
+                end
                 else begin
                     ch0LockCounter <= lockMinus[15:0];
-                    end
                 end
+            end
             else begin
                 if (ch0LockCounter == lockCount) begin
                     ch0BitsyncLock <= 1;
                     ch0LockCounter <= 16'h0;
-                    end
+                end
                 else begin
                     ch0LockCounter <= lockPlus[15:0];
-                    end
                 end
             end
         end
+        else begin
+            slip <= 0;
+        end
     end
+end
 
 
 `ifdef SIMULATE
@@ -475,12 +620,45 @@ reg  [17:0]asyncOffTimeLevel;
 wire asyncTimingErrorEn = (asyncPhaseState == ONTIME);
 
 reg  [17:0]asyncOnTimeLevel;
-reg  asyncTransition;
+
+    `ifdef USE_GARDNER_TED
+    //wire    signed  [17:0]  asyncSymDiff = {asyncEarlyOnTime[17],asyncEarlyOnTime[17:1]}
+    //                                     - {asyncLateOnTime[17],asyncLateOnTime[17:1]};
+    wire    signed  [17:0]  asyncSymDiff = {asyncSR[1][17],asyncSR[1][17:1]}
+                                         - {asyncMF[17],asyncMF[17:1]};
+    wire    signed  [35:0]  gardnerProduct;
+    wire    signed  [17:0]  gardnerTimingError = gardnerProduct[34:17];
+    mpy18x18WithCE gardnerMpy(
+        .clk(sampleClk),
+        .ce(ch1ClkEn),
+        .a(asyncSymDiff),
+        //.b(asyncOffTime),
+        .b(asyncSR[0]),
+        .p(gardnerProduct)
+    );
+    reg     signed  [11:0]  asyncTimingError;
+    `else
+    wire    [11:0]  asyncTimingError = asyncOffTimeLevel[17:6] + asyncOffTimeLevel[5];
+    `endif
+
+reg                 asyncTransition;
+reg                 asyncTransitionsDetected;
+reg     [7:0]       asyncTransitionCount;
+assign ch1TransitionsDetected = asyncEnable ? asyncTransitionsDetected : ch0TransitionsDetected;
+reg signed  [17:0]  asyncDcError;
+assign ch1DcError = asyncEnable ? asyncDcError : ch1SyncDcError;
+
+reg                 asyncSlip;
+reg                 asyncSlipped;
+
 always @(posedge sampleClk) begin
     if (!asyncEnable) begin
         asyncPhaseState <= ONTIME;
         asyncOffTimeLevel <= 0;
-        end
+        asyncTransitionCount <= 0;
+        asyncTransitionsDetected <= 0;
+        asyncSlipped <= 0;
+    end
     else if (ch1ClkEn) begin
         // Shift register of baseband sample values
         asyncSR[0] <= asyncMF;
@@ -488,38 +666,64 @@ always @(posedge sampleClk) begin
         asyncSR[2] <= asyncSR[1];
         case (asyncPhaseState)
             ONTIME: begin
-                asyncPhaseState <= OFFTIME;
+                if (asyncSlip && ~asyncSlipped) begin
+                    asyncPhaseState <= ONTIME;
+                    end
+                else begin
+                    asyncPhaseState <= OFFTIME;
+                    end
+                asyncSlipped <= asyncSlip;
                 end
             OFFTIME: begin
                 asyncPhaseState <= ONTIME;
-                // Is there a data transition on I?
+
+
+                // Is there a data transition?
                 if (asyncEarlySign != asyncLateSign) begin
                     // Yes. 
                     asyncTransition <= 1;
+                    `ifdef USE_GARDNER_TED
+                    asyncTimingError <= gardnerTimingError[17:6];
+                    `endif
+                    //asyncDcError <= {asyncEarlyOnTime[17],asyncEarlyOnTime[17:1]}
+                    //              + {asyncLateOnTime[17],asyncLateOnTime[17:1]};
+                    asyncDcError <= asyncEarlyOnTime;
+                    asyncTransitionsDetected <= 1;
+                    asyncTransitionCount <= 255;
+
                     // High to low transition?
                     if (asyncEarlySign) begin
                         asyncOffTimeLevel <= asyncOffTime;
                         asyncOnTimeLevel <= asyncLateOnTime;
-                        end
+                    end
                     // Or low to high?
                     else begin
                         asyncOffTimeLevel <= negAsyncOffTime;
                         asyncOnTimeLevel <= asyncEarlyOnTime;
-                        end
-                    end
-                else begin
-                    asyncTransition <= 0;
-                    asyncOffTimeLevel <= 18'h00;
                     end
                 end
-            endcase
-        end
+                else begin
+                    asyncTransition <= 0;
+                    `ifdef USE_GARDNER_TED
+                    asyncTimingError <= 0;
+                    `endif
+                    asyncDcError <= 0;
+                    if (asyncTransitionCount > 0) begin
+                        asyncTransitionCount <= asyncTransitionCount - 1;
+                    end
+                    else begin
+                        asyncTransitionsDetected <= 0;
+                    end
+                    asyncOffTimeLevel <= 18'h00;
+                end
+            end
+        endcase
     end
+end
 
 `ifdef SIMULATE
-wire    [17:0]  asyncTimingErr = asyncOffTimeLevel;
 real asyncTimingErrorReal;
-always @(asyncTimingErr) asyncTimingErrorReal = ((asyncTimingErr > 131071.0) ? asyncTimingErr - 262144.0 : asyncTimingErr)/131072.0;
+always @* asyncTimingErrorReal = $itor(asyncTimingError)/(2**11);
 `endif
 
 //******************************** Loop Filter ********************************
@@ -548,7 +752,7 @@ loopFilter asyncSampleLoop(
     .addr(addr),
     .din(din),
     .dout(asyncDout),
-    .error(asyncOffTimeLevel[17:6] + asyncOffTimeLevel[5]),
+    .error(asyncTimingError),
     .loopFreq(ch1SampleFreq),
     .lockCount(asyncLockCount),
     .syncThreshold(asyncSyncThreshold)
@@ -580,6 +784,7 @@ always @(posedge sampleClk) begin
         avgAuOnTimeMag <= 0;
         asyncIQSwap <= 0;
         asyncSwapCounter <= asyncSwapCount;
+        asyncSlip <= 0;
         end
     else if (ch1ClkEn) begin
         // Averaging state machine
@@ -614,23 +819,27 @@ always @(posedge sampleClk) begin
                 if (asyncLockCounter == (16'hffff - asyncLockCount)) begin
                     ch1BitsyncLock <= 0;
                     asyncLockCounter <= 16'h0;
-                    end
+                    asyncSlip <= 1;
+                end
                 else begin
                     asyncLockCounter <= asyncLockMinus[15:0];
-                    end
                 end
+            end
             else begin
                 if (asyncLockCounter == asyncLockCount) begin
                     ch1BitsyncLock <= 1;
                     asyncLockCounter <= 16'h0;
-                    end
+                end
                 else begin
                     asyncLockCounter <= asyncLockPlus[15:0];
-                    end
                 end
             end
         end
+        else begin
+            asyncSlip <= 0;
+        end
     end
+end
 
 assign ch1LockCounter = asyncLockCounter;
 

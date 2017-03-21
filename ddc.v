@@ -7,7 +7,7 @@ derivative rights in exchange for negotiated compensation.
 ******************************************************************************/
 
 `timescale 1ns / 10 ps
-`include ".\addressMap.v"
+`include "addressMap.v"
 
 
 module ddc( 
@@ -100,7 +100,7 @@ always @(posedge clk) begin
 wire    [47:0]  m_axis;
 wire    [17:0]  iDds = m_axis[41:24];
 wire    [17:0]  qDds = m_axis[17:0];
-dds dds(
+dds6p0 dds(
   .aclk(clk),
   .aclken(1'b1),
   .aresetn(!reset),
@@ -154,15 +154,15 @@ always @(qMix) qMixReal = ((qMix > 131071.0) ? (qMix - 262144.0) : qMix)/131072.
 wire [17:0]iHb0,qHb0;
 `ifdef SIMULATE
 reg hbReset;
-halfbandDecimate hb0( 
-    .clk(clk), .reset(hbReset), .sync(1'b1),
+dualHalfbandDecimate hb0( 
+    .clk(clk), .reset(hbReset), .clkEn(1'b1),
 `else
-halfbandDecimate hb0( 
-    .clk(clk), .reset(reset), .sync(1'b1),
+dualHalfbandDecimate hb0( 
+    .clk(clk), .reset(reset), .clkEn(1'b1),
 `endif
     .iIn(iMix),.qIn(qMix),
     .iOut(iHb0),.qOut(qHb0),
-    .syncOut(hb0SyncOut)
+    .clkEnOut(hb0SyncOut)
     );
 
 `ifdef SIMULATE
@@ -335,15 +335,15 @@ always @(posedge clk) begin
 
 // Second Halfband Filter
 wire [17:0]iHb,qHb;
-halfbandDecimate hb( 
+dualHalfbandDecimate hb( 
 `ifdef SIMULATE
-    .clk(clk), .reset(cicReset), .sync(hbClockEn),
+    .clk(clk), .reset(cicReset), .clkEn(hbClockEn),
 `else
-    .clk(clk), .reset(reset), .sync(hbClockEn),
+    .clk(clk), .reset(reset), .clkEn(hbClockEn),
 `endif
     .iIn(iHbIn),.qIn(qHbIn),
     .iOut(iHb),.qOut(qHb),
-    .syncOut(hbSyncOut)
+    .clkEnOut(hbSyncOut)
     );
 
 `ifdef SIMULATE
@@ -445,7 +445,7 @@ always @(posedge clk) begin
 wire    [47:0]  m_axis;
 wire    [17:0]  iLeadDds = lead_m_axis[41:24];
 wire    [17:0]  qLeadDds = lead_m_axis[17:0];
-dds dds(
+dds6p0 dds(
   .aclk(clk),
   .aclken(1'b1),
   .aresetn(!reset),
@@ -458,6 +458,7 @@ dds dds(
 wire    [17:0]iLeadDds;
 wire    [17:0]qLeadDds;
 dds leadDds ( 
+//dds4p0 leadDds ( 
     .sclr(reset), 
     .clk(clk), 
     .ce(1'b1),

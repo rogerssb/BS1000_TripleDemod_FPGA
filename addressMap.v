@@ -9,8 +9,11 @@
 `ifdef LEGACY_DEMOD
 `define CIC_COMP_USE_MPY
 `define USE_DDC_FIR
-`define ADD_DESPREADER
+//`define ADD_DESPREADER
 `define ADD_SCPATH
+`define ADD_DQM
+`define ADD_SUPERBAUD_TED
+//`define ALTERNATE_PHASE
 `endif
 
 `ifdef TRELLIS_DEMOD
@@ -28,7 +31,15 @@
 `define ADD_BERT
 `endif
 
-
+`ifdef SEMCO_DEMOD
+`define USE_VIVADO_CORES
+`define USE_DDC_FIR
+//`define ADD_DESPREADER
+`define ADD_SCPATH
+//`define ADD_CMA
+`define ADD_DQM
+`define ADD_SUPERBAUD_TED
+`endif
 
 `ifdef BITSYNC_BERT
 
@@ -229,15 +240,19 @@
 `define VIDFIRSPACE         13'b0_0000_1xxx_xxxx
 `endif
 `define DESPREADSPACE       13'b0_0001_xxxx_xxxx
+`define EQUALIZERSPACE      13'b0_0001_xxxx_xxxx    // same as DESPREADSPACE
 `define DDCSPACE            13'bx_0010_00xx_xxxx
 `define DDCFIRSPACE         13'bx_0010_01xx_xxxx
 `define CICDECSPACE         13'bx_0010_10xx_xxxx
+`define BEPSPACE            13'b0_0011_0xxx_xxxx
+`define BEPRAMSPACE         13'b0_0011_1xxx_xxxx
 `define BITSYNCSPACE        13'bx_0100_0xxx_xxxx
 `define BITSYNCAUSPACE      13'bx_0100_1xxx_xxxx
 `define DECODERSPACE        13'b0_0101_0xxx_xxxx
 `define SC0_DECODERSPACE    13'b0_0101_1xxx_xxxx
 `define SC1_DECODERSPACE    13'b1_0101_1xxx_xxxx
 `define PLLSPACE            13'b0_0110_xxxx_xxxx
+`define VITERBISPACE        13'b1_0110_xxxx_xxxx
 `define CHAGCSPACE          13'bx_0111_xxxx_xxxx
 `define RESAMPSPACE         13'bx_1000_xxxx_xxxx
 `define CARRIERSPACE        13'bx_1001_xxxx_xxxx
@@ -262,23 +277,29 @@
 `define SCAGCSPACE          13'b1_0111_xxxx_xxxx
 `define SCCARRIERSPACE      13'b1_1001_xxxx_xxxx
 
+
+// define the viterbi decoder registers
+`define VIT_INVERSE_MEAN            13'bx_xxxx_xxxx_00xx
+`define VIT_STATUS                  13'bx_xxxx_xxxx_01xx
+
+
 `endif  //BITSYNC_BERT
 
 // Define the global radio memory map
 `define DEMOD_CONTROL   13'bx_xxxx_xxx0_00xx
-`define MODE_AM             5'b00000
-`define MODE_PM             5'b00001
-`define MODE_FM             5'b00010
-`define MODE_2FSK           5'b00011
-`define MODE_BPSK           5'b00100
-`define MODE_QPSK           5'b00101
-`define MODE_OQPSK          5'b00110
-`define MODE_AQPSK          5'b00111
-`define MODE_PCMTRELLIS     5'b01000
-`define MODE_SOQPSK         5'b01001
-`define MODE_MULTIH         5'b01010
-`define MODE_AUQPSK         5'b01011
-`define MODE_UQPSK          5'b01100
+    `define MODE_AM             5'b00000
+    `define MODE_PM             5'b00001
+    `define MODE_FM             5'b00010
+    `define MODE_2FSK           5'b00011
+    `define MODE_BPSK           5'b00100
+    `define MODE_QPSK           5'b00101
+    `define MODE_OQPSK          5'b00110
+    `define MODE_AQPSK          5'b00111
+    `define MODE_PCMTRELLIS     5'b01000
+    `define MODE_SOQPSK         5'b01001
+    `define MODE_MULTIH         5'b01010
+    `define MODE_AUQPSK         5'b01011
+    `define MODE_UQPSK          5'b01100
 `define DEMOD_DACSELECT 13'bx_xxxx_xxx0_01xx
 `define DAC_I               4'b0000
 `define DAC_Q               4'b0001
@@ -303,9 +324,8 @@
 `define DEMOD_STATUS        13'bx_xxxx_xxx0_11xx
 `define DEMOD_AMTC          13'bx_xxxx_xxx1_00xx
 `define DEMOD_FSKDEV        13'bx_xxxx_xxx1_010x
-`define EQUAL_STEP_EXPO     13'bx_xxxx_xxx1_011x
-`define EQUAL_CONTROL       13'bx_xxxx_xxx1_100x
-`define EQUAL_REF_LEVEL     13'bx_xxxx_xxx1_101x
+`define DEMOD_EQ_STEP_SIZE  13'bx_xxxx_xxx1_10xx
+`define DEMOD_EQ_REF_LEVEL  13'bx_xxxx_xxx1_11xx
 
 // Define the FM memory map
 `define FM_MOD_FREQ     13'bx_xxxx_xxxx_00xx
@@ -331,6 +351,10 @@
 // Define the CIC Decimator memory map
 `define CIC_DECIMATION  13'bx_xxxx_xxxx_00xx
 `define CIC_SHIFT       13'bx_xxxx_xxxx_01xx
+// Define the Equalizer memory map
+`define EQ_CONTROL          13'bx_xxxx_xxxx_00xx
+`define EQ_STEP_SIZE        13'bx_xxxx_xxxx_01xx
+`define EQ_CMA_REFERENCE    13'bx_xxxx_xxxx_10xx
 
 // Define the Loop Filter memory map
 `define LF_CONTROL      13'bx_xxxx_xxx0_00xx
@@ -383,6 +407,13 @@
 `define DAC_IN_SEL_SC0      2'b01
 `define DAC_IN_SEL_SC1      2'b10
 `define DEC_IN_SEL      13'bx_xxxx_xxx0_101x
+`define DEC_MUX_SEL_DEMOD   2'b00
+`define DEC_MUX_SEL_SC0     2'b01
+`define DEC_MUX_SEL_VITERBI 2'b10
+`define OUT_MUX_SEL_DEMOD   2'b00
+`define OUT_MUX_SEL_SC0     2'b01
+`define OUT_MUX_SEL_SC1     2'b10
+`define OUT_MUX_SEL_DQM     2'b11
 `define REBOOT_ADDR     13'bx_xxxx_xxx0_11xx
 `define MISC_TYPE       13'bx_xxxx_xxx1_000x
 // FPGA Image Types
@@ -393,6 +424,7 @@
 `define TWOCHANNEL_SCDEMOD_IMAGE    16'h2
 `define MULTIH_DEMOD_IMAGE          16'h3
 `define BITSYNC_BERT_IMAGE          16'h4
+`define LEGACY_CMA_IMAGE            16'h5
 
 // Define the DAC control locations
 `define DAC_WDATA       13'bx_xxxx_xxxx_x00x
@@ -456,9 +488,15 @@
 `define DS_MODE_NASA_DG1_MODE3_SPREAD_Q     3'b100
 
 
+// define the data quality metric registers
+`define DQM_SPACE                   `BEPSPACE
+`define DQM_BLOCK_SIZE              13'bx_xxxx_xxx0_000x
+`define DQM_FRAME_WORD_0            13'bx_xxxx_xxx0_001x
+`define DQM_FRAME_WORD_1            13'bx_xxxx_xxx0_010x
+`define DQM_FRAME_WORD_2            13'bx_xxxx_xxx0_011x
+`define BEP_BLOCK_SIZE              13'bx_xxxx_xxx1_000x
+`define BEP_ESTIMATE                13'bx_xxxx_xxx1_01xx
+`define BEP_MEAN_INVERSE            13'bx_xxxx_xxx1_10xx
 
+`endif //ADDRESS_MAP
 
-
-
-
-`endif
