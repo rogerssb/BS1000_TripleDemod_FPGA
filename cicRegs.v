@@ -10,6 +10,9 @@ derivative rights in exchange for negotiated compensation.
 `include "addressMap.v"
 
 module cicRegs(
+    `ifdef USE_BUS_CLOCK
+    input           busClk,
+    `endif
     input           cs,
     input           wr0, wr1, wr2, wr3,
     input       [12:0]  addr,
@@ -19,8 +22,13 @@ module cicRegs(
     output  reg [5:0]   cicShift
 );
 
+    `ifdef USE_BUS_CLOCK
+    always @(posedge busClk) begin
+        if (cs & wr0) begin
+    `else
     always @(negedge wr0) begin
         if (cs) begin
+    `endif
             casex (addr)
                 `CIC_DECIMATION:    cicDecimation[7:0] <= dataIn[7:0];
                 `CIC_SHIFT:         cicShift <= dataIn[5:0];
@@ -29,8 +37,13 @@ module cicRegs(
         end
     end
 
+    `ifdef USE_BUS_CLOCK
+    always @(posedge busClk) begin
+        if (cs & wr1) begin
+    `else
     always @(negedge wr1) begin
         if (cs) begin
+    `endif
             casex (addr)
                 `CIC_DECIMATION:    cicDecimation[14:8] <= dataIn[14:8];
                 default: ;

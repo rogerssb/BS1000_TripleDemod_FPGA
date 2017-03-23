@@ -11,6 +11,9 @@ derivative rights in exchange for negotiated compensation.
 `include ".\addressMap.v"
 
 module carrierLoopRegs(
+    `ifdef USE_BUS_CLOCK
+    input                       busClk,
+    `endif
     input                       cs,
     input                       wr0, wr1, wr2, wr3,
     input               [12:0]  addr,
@@ -35,8 +38,13 @@ module carrierLoopRegs(
     output  reg         [11:0]  syncThreshold
 );
 
+    `ifdef USE_BUS_CLOCK
+    always @(posedge busClk) begin
+        if (cs & wr0) begin
+    `else
     always @(negedge wr0) begin
         if (cs) begin
+    `endif
             casex (addr)
                 `CLF_CONTROL: begin
                     zeroError <= dataIn[0];
@@ -65,8 +73,13 @@ module carrierLoopRegs(
         end
     end
 
+    `ifdef USE_BUS_CLOCK
+    always @(posedge busClk) begin
+        if (cs & wr1) begin
+    `else
     always @(negedge wr1) begin
         if (cs) begin
+    `endif
             casex (addr)
                 `CLF_CONTROL: begin
                     acqTrackControl <= dataIn[9:8];
@@ -91,8 +104,13 @@ module carrierLoopRegs(
         end
     end
 
+    `ifdef USE_BUS_CLOCK
+    always @(posedge busClk) begin
+        if (cs & wr2) begin
+    `else
     always @(negedge wr2) begin
         if (cs) begin
+    `endif
             casex (addr)
                 `CLF_LEAD_LAG: begin
                    leadExp <= dataIn[20:16];
@@ -114,8 +132,13 @@ module carrierLoopRegs(
         end
     end
 
+    `ifdef USE_BUS_CLOCK
+    always @(posedge busClk) begin
+        if (cs & wr3) begin
+    `else
     always @(negedge wr3) begin
         if (cs) begin
+    `endif
             casex (addr)
                 `CLF_LEAD_LAG: begin
                    leadMan <= dataIn[31:24];
@@ -155,7 +178,5 @@ module carrierLoopRegs(
             dataOut = 32'hx;
         end
     end
-
-
 
 endmodule

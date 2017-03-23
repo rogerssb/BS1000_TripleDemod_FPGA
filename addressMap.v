@@ -35,7 +35,7 @@
 `define USE_VIVADO_CORES
 `define USE_DDC_FIR
 //`define ADD_DESPREADER
-`define ADD_SCPATH
+//`define ADD_SCPATH
 //`define ADD_CMA
 `define ADD_DQM
 `define ADD_SUPERBAUD_TED
@@ -265,6 +265,7 @@
 `define SCINTERPSPACE       13'b1_1100_0xxx_xxxx
 `define SCVIDFIRSPACE       13'b1_1100_1xxx_xxxx
 `define MISC_SPACE          13'b0_1101_0xxx_xxxx
+`define SEMCO_TOP_SPACE     13'b0_1101_0xxx_xxxx   // same as MISC space
 `define SUBCARR_TOP_SPACE   13'b0_1101_0xxx_xxxx   // same as MISC space
 `define SDISPACE            13'b0_1101_1xxx_xxxx
 `define TRELLISLFSPACE      13'b0_1110_0xxx_xxxx

@@ -10,106 +10,55 @@ derivative rights in exchange for negotiated compensation.
 `timescale 1ns / 10 ps
 
 module demod(
-    clk, reset,
-    rd, wr0,wr1,wr2,wr3,
-    addr,
-    din,
-    dout,
-    iRx, qRx,
-    bbClkEn,
-    iBB, qBB,
-    iSym2xEn,
-    iSymEn,
-    iSymData,
-    iSymClk,
-    iBit,
-    qSym2xEn,
-    qSymEn,
-    qSymClk,
-    qSymData,
-    qBit,
-    auSymClk,
-    auBit,
-    timingLock,
-    carrierLock,
-    trellisSymSync,
-    iTrellis,
-    qTrellis,
+    input                   clk, reset,
+    input                   rd, wr0,wr1,wr2,wr3,
+    input           [12:0]  addr,
+    input           [31:0]  din,
+    output          [31:0]  dout,
+    input   signed  [17:0]  iRx, qRx,
+    input                   bbClkEn,
+    input   signed  [17:0]  iBB, qBB,
+    output                  iSym2xEn,
+    output                  iSymEn,
+    output  signed  [17:0]  iSymData,
+    output                  iSymClk,
+    output                  iBit,
+    output                  qSym2xEn,
+    output                  qSymEn,
+    output                  qSymClk,
+    output  signed  [17:0]  qSymData,
+    output                  qBit,
+    output                  auSymClk,
+    output                  auBit,
+    output                  timingLock,
+    output                  carrierLock,
+    output                  trellisSymEn,
+    output  signed  [17:0]  iTrellis,
+    output  signed  [17:0]  qTrellis,
     `ifdef ADD_SUPERBAUD_TED
-    multihSymEnEven,
+    output                  multihSymEnEven,
     `endif
-    dac0Select,dac1Select,dac2Select,
-    dac0Sync,
-    dac0Data,
-    dac1Sync,
-    dac1Data,
-    dac2Sync,
-    dac2Data,
-    demodMode,
+    output          [3:0]   dac0Select,dac1Select,dac2Select,
+    output                  dac0Sync,
+    output  signed  [17:0]  dac0Data,
+    output                  dac1Sync,
+    output  signed  [17:0]  dac1Data,
+    output                  dac2Sync,
+    output  signed  [17:0]  dac2Data,
+    output          [4:0]   demodMode,
     `ifdef ADD_SCPATH
-    enableScPath,
-    iBBOut, qBBOut,
-    bbClkEnOut,
+    output                  enableScPath,
+    output  signed  [17:0]  iBBOut, qBBOut,
+    output                  bbClkEnOut,
     `endif
     `ifdef ADD_DESPREADER
-    iEpoch,qEpoch,
+    output                  iEpoch,qEpoch,
     `endif
-    sdiSymEn,
-    eyeSync,
-    iEye,qEye,
-    eyeOffset
-    );
-
-input           clk;
-input           reset;
-input           rd,wr0,wr1,wr2,wr3;
-input   [12:0]  addr;
-input   [31:0]  din;
-output  [31:0]  dout;
-input   [17:0]  iRx;
-input   [17:0]  qRx;
-input           bbClkEn;
-input   [17:0]  iBB;
-input   [17:0]  qBB;
-output          iSym2xEn;
-output          iSymEn;
-output          iSymClk;
-output          iBit;
-output [17:0]   iSymData;
-output          qSym2xEn;
-output          qSymEn;
-output          qSymClk;
-output          qBit;
-output [17:0]   qSymData;
-output          auSymClk;
-output          auBit;
-output          timingLock;
-output          carrierLock;
-output          trellisSymSync;
-output  [17:0]  iTrellis,qTrellis;
-`ifdef ADD_SUPERBAUD_TED
-output          multihSymEnEven;
-`endif
-output  [3:0]   dac0Select,dac1Select,dac2Select;
-output          dac0Sync;
-output  [17:0]  dac0Data;
-output          dac1Sync;
-output  [17:0]  dac1Data;
-output          dac2Sync;
-output  [17:0]  dac2Data;
-output  [4:0]   demodMode;
-`ifdef ADD_SCPATH
-output          enableScPath;
-output  [17:0]  iBBOut, qBBOut;
-output          bbClkEnOut;
-`endif
-`ifdef ADD_DESPREADER
-output          iEpoch, qEpoch;
-`endif
-output          sdiSymEn;
-output          eyeSync;
-output  [17:0]  iEye,qEye;
-output  [4:0]   eyeOffset;
+    output                  sdiSymEn,
+    output                  eyeSync,
+    output  signed  [17:0]  iEye,qEye,
+    output          [4:0]   eyeOffset
+);
 
 
 /******************************************************************************
@@ -123,13 +72,7 @@ always @* begin
         default:     demodSpace = 0;
         endcase
     end
-`ifdef SYM_DEVIATION
 wire    [15:0]  fskDeviation;
-`else
-wire    [15:0]  posDeviation;
-wire    [15:0]  negDeviation;
-`endif
-wire    [1:0]   bitsyncMode;
 wire    [15:0]  falseLockAlpha;
 wire    [15:0]  falseLockThreshold;
 wire    [4:0]   amTC;
@@ -145,12 +88,7 @@ demodRegs demodRegs(
     .bitsyncLock(bitsyncLock),
     .auBitsyncLock(auBitsyncLock),
     .demodLock(carrierLock),
-    `ifdef SYM_DEVIATION
     .fskDeviation(fskDeviation),
-    `else
-    .posDeviation(posDeviation),
-    .negDeviation(negDeviation),
-    `endif
     .demodMode(demodMode),
     `ifdef ADD_DESPREADER
     .despreadLock(despreadLock),
@@ -160,7 +98,6 @@ demodRegs demodRegs(
     .enableScPath(enableScPath),
     `endif
     .oqpskIthenQ(oqpskIthenQ),
-    .bitsyncMode(bitsyncMode),
     .dac0Select(dac0Select),
     .dac1Select(dac1Select),
     .dac2Select(dac2Select),
@@ -667,7 +604,6 @@ bitsync bitsync(
     `ifdef ADD_DESPREADER
     .enableDespreader(enableDespreader),
     `endif
-    .bitsyncMode(bitsyncMode),
     .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
     .addr(addr),
     .din(din),
@@ -766,7 +702,7 @@ real iSymReal;
 always @* iSymReal = $itor($signed(iSymData))/(2.0**17);
 `endif
 
-assign trellisSymSync = iSymEn & resampSync;
+assign trellisSymEn = iSymEn & resampSync;
 
 assign eyeSync = resampSync;
 assign cordicModes = ( (demodMode == `MODE_2FSK)
