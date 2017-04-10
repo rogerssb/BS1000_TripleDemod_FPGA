@@ -98,7 +98,7 @@ module viterbi(
     wire    [2:0]   ch1Soft;
     softDecisionMapper ch1Map(
         .clk(clk), 
-        .clkEn(ch0SoftEn),
+        .clkEn(ch1SoftEn),
         .reset(reset),
         .inverseMeanMantissa(invMeanMantissa),
         .inverseMeanExponent(invMeanExponent),

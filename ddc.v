@@ -12,6 +12,9 @@ derivative rights in exchange for negotiated compensation.
 
 module ddc( 
     clk, reset,
+    `ifdef USE_BUS_CLOCK
+    busClk,
+    `endif
     wr0,wr1,wr2,wr3,
     addr,
     din,
@@ -31,6 +34,9 @@ module ddc(
 
 input           clk;
 input           reset;
+`ifdef USE_BUS_CLOCK
+input           busClk;
+`endif
 input           wr0,wr1,wr2,wr3;
 input   [12:0]  addr;
 input   [31:0]  din;
@@ -68,6 +74,9 @@ ddcRegs micro(
     .addr(addr),
     .dataIn(din),
     .dataOut(ddcDout),
+    `ifdef USE_BUS_CLOCK
+    .busClk(busClk),
+    `endif
     .cs(ddcSpace),
     .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
     .bypassCic(bypassCic),
@@ -227,18 +236,21 @@ wire [31:0]cicDout;
 `ifdef SIMULATE
 reg cicReset;
 dualDecimator #(.RegSpace(`CICDECSPACE)) cic( 
-    .clk(clk), .reset(cicReset), .sync(cicClockEn),
+    .clk(clk), .reset(cicReset), .clkEn(cicClockEn),
 `else
 dualDecimator #(.RegSpace(`CICDECSPACE)) cic( 
-    .clk(clk), .reset(reset), .sync(cicClockEn),
+    .clk(clk), .reset(reset), .clkEn(cicClockEn),
 `endif
+    `ifdef USE_BUS_CLOCK
+    .busClk(busClk),
+    `endif
     .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
     .addr(addr),
     .din(din),
     .dout(cicDout),
     .inI(iCicIn),.inQ(qCicIn),
     .outI(iCic),.outQ(qCic),
-    .syncOut(cicSyncOut)
+    .clkEnOut(cicSyncOut)
     );
 
 reg     [47:0]  iAgcIn,qAgcIn;
@@ -292,7 +304,7 @@ cicComp cicCompI(
 `endif
     .clk(clk), 
     .reset(reset),
-    .sync(agcSync), 
+    .clkEn(agcSync), 
     .compIn(iAgc),
     .compOut(iComp)
     );
@@ -303,7 +315,7 @@ cicComp cicCompQ(
 `endif
     .clk(clk), 
     .reset(reset),
-    .sync(agcSync), 
+    .clkEn(agcSync), 
     .compIn(qAgc),
     .compOut(qComp)
     );
@@ -380,7 +392,10 @@ always @(posedge clk) begin
 wire    [31:0]  ddcFirDout;
 wire    [17:0]  iFir,qFir;
 dualFir #(.RegSpace(`DDCFIRSPACE)) dualFir ( 
-    .clk(clk), .reset(reset), .syncIn(firClockEn),
+    .clk(clk), .reset(reset), .clkEn(firClockEn),
+    `ifdef USE_BUS_CLOCK
+    .busClk(busClk),
+    `endif
     .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
     .addr(addr),
     .din(din),
@@ -442,10 +457,10 @@ always @(posedge clk) begin
 
 // Lead Complex Mixer
 `ifdef USE_VIVADO_CORES
-wire    [47:0]  m_axis;
+wire    [47:0]  lead_m_axis;
 wire    [17:0]  iLeadDds = lead_m_axis[41:24];
 wire    [17:0]  qLeadDds = lead_m_axis[17:0];
-dds6p0 dds(
+dds6p0 leadDds(
   .aclk(clk),
   .aclken(1'b1),
   .aresetn(!reset),

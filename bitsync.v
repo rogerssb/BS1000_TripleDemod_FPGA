@@ -20,10 +20,13 @@ module bitsync(
     `ifdef ADD_DESPREADER
     input                       enableDespreader,
     `endif
+    `ifdef USE_BUS_CLOCK
+    input                       busClk,
+    `endif
     input                       wr0,wr1,wr2,wr3,
     input               [12:0]  addr,
     input               [31:0]  din,
-    output              [31:0]  dout,
+    output  reg         [31:0]  dout,
     input       signed  [17:0]  i,q,
     input       signed  [17:0]  au,
     output      signed  [17:0]  offsetError,
@@ -49,15 +52,15 @@ module bitsync(
     output                      sdiSymEn,
     output      signed  [17:0]  iTrellis,qTrellis,
     `ifdef ADD_SUPERBAUD_TED
-    output      signed  [17:0]  bsError,
-    output                      bsErrorEn,
+    output  reg signed  [17:0]  bsError,
+    output  reg                 bsErrorEn,
     output      signed  [17:0]  tedOutput,
     output                      tedOutputEn,
     output                      tedSyncPulse,
     output                      tedSymEnEven
     `else
-    output      signed  [17:0]  bsError,
-    output                      bsErrorEn
+    output  reg signed  [17:0]  bsError,
+    output  reg                 bsErrorEn
     `endif
 );
 
@@ -68,14 +71,14 @@ module bitsync(
     cicComp cicCompI(
         .clk(clk), 
         .reset(reset),
-        .sync(sym2xClkEn), 
+        .clkEn(sym2xClkEn), 
         .compIn(i),
         .compOut(iComp)
     );
     cicComp cicCompQ(
         .clk(clk), 
         .reset(reset),
-        .sync(sym2xClkEn), 
+        .clkEn(sym2xClkEn), 
         .compIn(q),
         .compOut(qComp)
     );
@@ -225,11 +228,12 @@ module bitsync(
 
 
     //*********************** MF Frequency Discriminator **************************
-    wire    [11:0]   phase;
+    wire    signed  [11:0]   phase;
     vm_cordic cordic(
         .clk(clk),
         .ena(sym2xClkEn),
         .x(iMF[17:4]),.y(qMF[17:4]),
+        .m(),
         .p(phase)
         );
     reg     signed  [11:0]  freqOut;
@@ -257,7 +261,7 @@ module bitsync(
     always @(phase) phaseReal = $itor(phase)/(2**11);
     `endif
 
-//******************************* Phase Error Detector ************************
+//***************************** Timing Error Detector *************************
 
 // State machine:
 //      Based on two clocks per symbol. Similar to Gardner detector but uses
@@ -337,11 +341,9 @@ module bitsync(
     wire    signed  [18:0]  timingError = timingErrorI + timingErrorQ;
     assign                  timingErrorEn = (tedState == ONTIME);
 
-    `ifndef ADD_SUPERBAUD_TED
-    wire    [11:0]  syncThreshold;
-    wire    [17:0]  multihThreshold = {syncThreshold,6'b0};
-    wire    [17:0]  negMultihThreshold = ~{syncThreshold,6'b0} + 1;
-    `endif
+    wire            [11:0]  syncThreshold;
+    wire    signed  [17:0]  multihThreshold = $signed({syncThreshold,6'b0});
+    wire    signed  [17:0]  negMultihThreshold = -multihThreshold;
 
     // DC Offset error variables
     reg     signed  [18:0]  dcError;
@@ -448,7 +450,7 @@ module bitsync(
 
                             // Calculate DC offset error
                             transitionCount <= 255;
-                            dcError <= earlyOnTime + lateOnTime;
+                            dcError <= earlyOnTimeI + lateOnTimeI;
 
                             // Now, timing error
                             // High to low transition?
@@ -583,7 +585,7 @@ module bitsync(
             avgOffsetError <= 0;
             end
         else if (sym2xClkEn) begin
-            if (offsetEn && dcErrorAvailable) begin
+            if (offsetEn && transition) begin
                 avgOffsetError <= (avgOffsetError - {{7{avgOffsetError[24]}},avgOffsetError[24:7]})
                                 + {{7{dcError[17]}},dcError};
             end
@@ -626,6 +628,9 @@ module bitsync(
         .clk(clk),
         .clkEn(loopFilterEn),
         .reset(reset),
+        `ifdef USE_BUS_CLOCK
+        .busClk(busClk),
+        `endif
         .cs(bitsyncSpace),
         .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
         .addr(addr),
@@ -643,8 +648,6 @@ module bitsync(
 
     `define RECLOCK_BSERROR
     `ifdef RECLOCK_BSERROR
-    reg     signed  [17:0]  bsError;
-    reg                     bsErrorEn;
     always @(posedge clk) begin
         bsError <= $signed(timingError[18:1] + timingError[0]);
         bsErrorEn <= loopFilterEn;
@@ -657,10 +660,8 @@ module bitsync(
 
     //************************** Lock Detector ************************************
 
-    reg     [15:0]  lockCounter;
     wire    [16:0]  lockPlus = {1'b0,lockCounter} + 17'h00001;
     wire    [16:0]  lockMinus = {1'b0,lockCounter} + 17'h1ffff;
-    reg             bitsyncLock;
     always @(posedge clk) begin
         if (reset) begin
             lockCounter <= 0;
@@ -828,13 +829,16 @@ module bitsync(
     end
 
     wire    [31:0]  auDout;
-    wire    [15:0]  auLockCount;
     wire    [11:0]  auSyncThreshold;
+    wire    [15:0]  auLockCount;
     wire            auLoopFilterEn = (auResampClkEn & auTimingErrorEn);
     loopFilter auSampleLoop(
         .clk(clk),
         .clkEn(auLoopFilterEn),
         .reset(reset),
+        `ifdef USE_BUS_CLOCK
+        .busClk(busClk),
+        `endif
         .cs(auBitsyncSpace),
         .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
         .addr(addr),
@@ -842,6 +846,10 @@ module bitsync(
         .dout(auDout),
         .error(auOffTimeLevel[17:6] + auOffTimeLevel[5]),
         .loopFreq(auSampleFreq),
+        .ctrl2(),
+        .ctrl4(),
+        .satPos(),
+        .satNeg(),
         .lockCount(auLockCount),
         .syncThreshold(auSyncThreshold)
     );
@@ -852,11 +860,8 @@ module bitsync(
     reg             [1:0]   auAvgState;
     wire            [7:0]   auSwapCount = auSyncThreshold[7:0];
     reg             [7:0]   auSwapCounter;
-    reg                     auIQSwap;
-    reg             [15:0]  auLockCounter;
     wire            [16:0]  auLockPlus = {1'b0,auLockCounter} + 17'h00001;
     wire            [16:0]  auLockMinus = {1'b0,auLockCounter} + 17'h1ffff;
-    reg                     auBitsyncLock;
     wire    signed  [17:0]  auOffTimeMag = auOffTimeLevel[17] ? -auOffTimeLevel : auOffTimeLevel;
     wire    signed  [17:0]  auOnTimeMag = auOnTimeLevel[17] ? -auOnTimeLevel : auOnTimeLevel;
     reg     signed  [21:0]  avgAuOffTimeMag;
@@ -950,7 +955,6 @@ module bitsync(
     /******************************************************************************
                                     uP dout mux
     ******************************************************************************/
-    reg     [31:0]  dout;
     always @* begin
         casex (addr)
             `BITSYNCSPACE:      dout = bsDout;
@@ -966,11 +970,6 @@ module bitsync(
                                Recovered Clock and Data 
     ******************************************************************************/
 
-
-    reg     signed  [17:0]  symDataI;
-    reg     signed  [17:0]  symDataQ;
-    reg                     bitDataI;
-    reg                     bitDataQ;
 
     `define ENABLE_MULTIH
     `ifdef ENABLE_MULTIH

@@ -11,7 +11,10 @@ derivative rights in exchange for negotiated compensation.
 
 module dualFir
   ( 
-    clk, reset, syncIn,
+    clk, reset, clkEn,
+    `ifdef USE_BUS_CLOCK
+    busClk,
+    `endif
     wr0, wr1, wr2, wr3,
     addr,
     din,
@@ -22,7 +25,10 @@ module dualFir
 
 parameter RegSpace = `DDCFIRSPACE;
 
-input           clk,reset,syncIn;
+input           clk,reset,clkEn;
+`ifdef USE_BUS_CLOCK
+input           busClk;
+`endif
 input           wr0,wr1,wr2,wr3;
 input   [12:0]  addr;
 input   [31:0]  din;
@@ -45,6 +51,9 @@ dualFirCoeffRegs dualFirCoeffRegs (
     .addr    (addr   ),
     .dataIn  (din    ),
     .dataOut (dout   ),
+    `ifdef USE_BUS_CLOCK
+    .busClk(busClk),
+    `endif
     .cs      (cs ),
     .wr0     (wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
     .c0      (c0c14  ), 
@@ -61,7 +70,7 @@ dualFirCoeffRegs dualFirCoeffRegs (
 singleFir iFir(
     .clk        (clk),
     .reset      (reset),
-    .syncIn     (syncIn),
+    .clkEn      (clkEn),
     .c0c14      (c0c14  ), 
     .c1c13      (c1c13  ), 
     .c2c12      (c2c12  ), 
@@ -76,7 +85,7 @@ singleFir iFir(
 singleFir qFir(
     .clk        (clk),
     .reset      (reset),
-    .syncIn     (syncIn),
+    .clkEn      (clkEn),
     .c0c14      (c0c14  ), 
     .c1c13      (c1c13  ), 
     .c2c12      (c2c12  ), 

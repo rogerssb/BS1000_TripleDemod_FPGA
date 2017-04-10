@@ -17,7 +17,7 @@ module cicRegs(
     input           wr0, wr1, wr2, wr3,
     input       [12:0]  addr,
     input       [31:0]  dataIn,
-    output      [31:0]  dataOut,
+    output  reg [31:0]  dataOut,
     output  reg [14:0]  cicDecimation,
     output  reg [5:0]   cicShift
 );
@@ -51,7 +51,6 @@ module cicRegs(
         end
     end
 
-    reg [31:0]dataOut;
     always @* begin
         if (cs) begin
             casex (addr)

@@ -127,7 +127,6 @@ module demodRegs(
         end
     end
 
-    reg [31:0]dataOut;
     always @* begin
         if (cs) begin
             casex (addr)
@@ -253,7 +252,6 @@ module demodRegs(
         end
     end
 
-    reg [31:0]dataOut;
     always @* begin
         if (cs) begin
             casex (addr)

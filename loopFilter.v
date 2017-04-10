@@ -45,6 +45,7 @@ module loopFilter (
         .dataOut(dout),
         .cs(cs),
         .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .lockStatus(1'b0),
         .lagAccum(lagAccum),
         .invertError(invertError),
         .zeroError(zeroError),
@@ -173,7 +174,7 @@ module loopFilter (
     // CASE3                                            LL        UL
     //
     wire    signed  [31:0] sum = lagAccum + lagError;
-    always @ (posedge clk or posedge reset) begin
+    always @ (posedge clk) begin
         if (reset) begin
             lagAccum <= 0;
         end

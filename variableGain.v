@@ -10,7 +10,7 @@ derivative rights in exchange for negotiated compensation.
 `include "addressMap.v"
 
 module variableGain (
-    input                       clk, clkEn, reset, 
+    input                       clk, clkEn,
     input               [4:0]   exponent,
     input               [15:0]  mantissa,
     input       signed  [47:0]  din,

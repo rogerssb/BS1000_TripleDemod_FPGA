@@ -33,11 +33,11 @@ encoded as 1.42857/2 * 65536 = 46811 = 0xb6db.
     // Scale by the inverse of the mean
     wire        [35:0]  inverseProduct;
     mpy18x18WithCe mantissaMpy(
-        .CLK(clk),
-        .CE(clkEn),
-        .A(dIn),
-        .B({1'b0,inverseMeanMantissa,1'b0}),
-        .P(inverseProduct)
+        .clk(clk),
+        .ce(clkEn),
+        .a(dIn),
+        .b({1'b0,inverseMeanMantissa,1'b0}),
+        .p(inverseProduct)
     );
 
     reg                 signBit;

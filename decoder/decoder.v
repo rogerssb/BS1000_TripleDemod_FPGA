@@ -28,7 +28,7 @@ module decoder (
     input                   symb_q,
     output                  dout_i,
     output                  dout_q,
-    output reg              cout,
+    output reg              outputClkEn,
     output                  fifo_rs,
     output          [1:0]   clkPhase,
     output                  bypass_fifo,
@@ -83,6 +83,7 @@ biphase_to_nrz biphase_to_nrz
   .symb_i       (symb_i),
   .nrz_i        (nrz_i)
   ) ;
+wire            biphaseClkEn = (biphase_en & symb_clk_en);
 
 // nrz_i is delayed one biphase_en with respect to symb_q because of its path
 // through biphase_to_nrz. Here, the I/Q paths are resynchronized by injecting
@@ -241,7 +242,7 @@ always @ ( posedge clk )
             out_sel_i <= millerBit ;
             out_sel_q <= millerBit ;
             end
-        else 
+        else if (symb_clk_en) 
             begin
             out_sel_i <= dec_i ;
             out_sel_q <= dec_q ;
@@ -309,16 +310,16 @@ always @ ( posedge clk )
 
     always @* begin
         if (miller) begin
-            cout = (millerBitEn & symb_clk_en);
+            outputClkEn = (millerBitEn & symb_clk_en);
         end
         else if (biphase) begin
-            cout = (biphase_en & symb_clk_en);
+            outputClkEn = (biphase_en & symb_clk_en);
         end
         else if (clk_sel) begin
-            cout = symb_clk_en;
+            outputClkEn = symb_clk_en;
         end
         else begin
-            cout = symb_clk_2x_en;
+            outputClkEn = symb_clk_2x_en;
         end
     end
 
@@ -370,7 +371,7 @@ reg [12:0]addr;
 reg [15:0]din;
 wire [15:0]dout;
 reg [2:0]symb_i,symb_q;
-wire dout_i,dout_q,cout;
+wire dout_i,dout_q,outputClkEn;
 wire fifo_rs;
 wire clk_inv;
 
@@ -389,7 +390,7 @@ decoder uut
   symb_q,
   dout_i,
   dout_q,
-  cout,
+  outputClkEn,
   fifo_rs,
   clk_inv
   );

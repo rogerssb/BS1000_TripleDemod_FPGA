@@ -163,7 +163,7 @@ module lagGain12 (
 
 
     wire    signed  [39:0]  sum = lagAccum + lagError + $signed({{8{sweepOffset[31]}},sweepOffset});
-    always @ (posedge clk or posedge reset) begin
+    always @ (posedge clk) begin
         if (reset) begin
             lagAccum <= 0;
         end

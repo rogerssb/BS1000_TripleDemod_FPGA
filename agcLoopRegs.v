@@ -16,7 +16,7 @@ module agcLoopRegs(
     input               busClk,
     input       [12:0]  addr,
     input       [31:0]  dataIn,
-    output      [31:0]  dataOut,
+    output  reg [31:0]  dataOut,
     input               cs,
     input               wr0, wr1, wr2, wr3,
     output  reg [7:0]   agcSetpoint,
@@ -93,7 +93,6 @@ module agcLoopRegs(
         end
     end
 
-    reg [31:0]dataOut;
     always @* begin
         if (cs) begin
             casex (addr)

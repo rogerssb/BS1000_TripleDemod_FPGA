@@ -8,7 +8,7 @@ derivative rights in exchange for negotiated compensation.
 
 `timescale 1ns/10ps
 
-`include ".\addressMap.v"
+`include "addressMap.v"
 
 module ddcRegs(
     `ifdef USE_BUS_CLOCK
@@ -55,8 +55,8 @@ module ddcRegs(
         if (cs & wr1) begin
     `else
     always @(negedge wr1) begin
-    `endif
         if (cs) begin
+    `endif
             casex (addr)
                 `DDC_CENTER_FREQ:   ddcCenterFreq[15:8] <= dataIn[15:8];
                 default:  ;
@@ -69,8 +69,8 @@ module ddcRegs(
         if (cs & wr2) begin
     `else
     always @(negedge wr2) begin
-    `endif
         if (cs) begin
+    `endif
             casex (addr)
                 `DDC_CENTER_FREQ:   ddcCenterFreq[23:16] <= dataIn[23:16];
                 default:  ;
@@ -83,8 +83,8 @@ module ddcRegs(
         if (cs & wr3) begin
     `else
     always @(negedge wr3) begin
-    `endif
         if (cs) begin
+    `endif
             casex (addr)
                 `DDC_CENTER_FREQ:   ddcCenterFreq[31:24] <= dataIn[31:24];
                 default:  ;
@@ -92,7 +92,6 @@ module ddcRegs(
         end
     end
 
-    reg [31:0]dataOut;
     always @* begin
         if (cs) begin
             casex (addr)

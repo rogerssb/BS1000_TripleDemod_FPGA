@@ -13,6 +13,9 @@ module carrierLoop(
     input                       clk, reset, 
     input                       ddcClkEn,
     input                       resampClkEn,
+    `ifdef USE_BUS_CLOCK
+    input                       busClk,
+    `endif
     input                       wr0,wr1,wr2,wr3,
     input               [12:0]  addr,
     input               [31:0]  din,
@@ -21,14 +24,14 @@ module carrierLoop(
     input       signed  [11:0]  phase,
     input       signed  [11:0]  freq,
     input                       highFreqOffset,
-    input       signed  [31:0]  offsetError,
+    input       signed  [11:0]  offsetError,
     input                       offsetErrorEn,
     output      signed  [31:0]  carrierFreqOffset,
     output      signed  [31:0]  carrierLeadFreq,
     output                      carrierFreqEn,
-    output      signed  [11:0]  loopError,
-    output                      carrierLock,
-    output              [15:0]  lockCounter
+    output  reg signed  [11:0]  loopError,
+    output  reg                 carrierLock,
+    output  reg         [15:0]  lockCounter
     );
 
     parameter RegSpace = `CARRIERSPACE;
@@ -44,7 +47,6 @@ module carrierLoop(
         endcase
     end
 
-    wire            [31:0]  dout;
     wire            [1:0]   acqTrackControl;
     wire            [4:0]   leadExp;
     wire            [4:0]   lagExp;
@@ -58,14 +60,19 @@ module carrierLoop(
     carrierLoopRegs loopRegs(
         .cs(freqLoopSpace),
         .addr(addr),
+        `ifdef USE_BUS_CLOCK
+        .busClk(busClk),
+        `endif
         .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
         .lagAccum(lagAccum[39:8]),
+        .lockStatus(carrierLock),
         .dataIn(din),
         .dataOut(dout),
         .invertError(invertError),
         .zeroError(zeroError),
         .ctrl2(sweepEnable),
         .clearAccum(clearAccum),
+        .ctrl4(),
         .acqTrackControl(acqTrackControl),
         .leadMan(),
         .leadExp(leadExp),
@@ -160,9 +167,7 @@ module carrierLoop(
 
 
     /**************************** Adjust Error ************************************/
-    reg     signed  [11:0]  loopError;
     wire    signed  [11:0]  negModeError = -modeError;
-    reg                     carrierLock;
     wire                    breakLoop = (zeroError || (sweepEnable && highFreqOffset));
     always @(posedge clk) begin 
         if (loopFilterEn) begin
@@ -222,7 +227,6 @@ module carrierLoop(
     /******************************* Lock Detector ********************************/
 
     reg     [11:0]  absModeError;
-    reg     [15:0]  lockCounter;
     wire    [16:0]  lockPlus = {1'b0,lockCounter} + 17'h00001;
     wire    [16:0]  lockMinus = {1'b0,lockCounter} + 17'h1ffff;
     always @(posedge clk) begin

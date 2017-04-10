@@ -41,7 +41,6 @@ module fmDemod(
 
     wire    signed  [11:0]   bpskPhase = phase;
     wire    signed  [11:0]   qpskPhase = phase - $signed(12'h200);
-    reg     signed  [11:0]   phaseError;
     always @(posedge clk) begin
         if (clkEnOut) begin
             case (demodMode)

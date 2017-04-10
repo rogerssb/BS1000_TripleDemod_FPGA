@@ -8,7 +8,7 @@ derivative rights in exchange for negotiated compensation.
 
 `timescale 1ns/10ps
 
-`include ".\addressMap.v"
+`include "addressMap.v"
 
 module decoderRegs #(parameter ADDR_BITS = 13) (
     `ifdef USE_BUS_CLOCK
@@ -34,68 +34,90 @@ module decoderRegs #(parameter ADDR_BITS = 13) (
     output  reg             inputSelect
 );
 
-//************************** General Registers ********************************
+    //************************** General Registers ********************************
 
-always @(posedge busClk) begin 
-    if (cs && wr0) begin
-        casex (addr)
-            `DEC_CONTROL: begin
-                fifoReset <= dataIn[0];
-                clkPhase[0] <= dataIn[1];
-                clkSelect <= dataIn[2];
-                dataInvert <= dataIn[3];
-                derandomize[0] <= dataIn[4];
-                demuxEnable <= dataIn[5];
-                feherEnable <= dataIn[6];
-                iqSwap <= dataIn[7];
-            end
-            default: ;
-        endcase
+    `ifdef USE_BUS_CLOCK
+    always @(posedge busClk) begin 
+        if (cs && wr0) begin
+    `else
+    always @(negedge wr0) begin
+        if (cs) begin
+    `endif
+            casex (addr)
+                `DEC_CONTROL: begin
+                    fifoReset <= dataIn[0];
+                    clkPhase[0] <= dataIn[1];
+                    clkSelect <= dataIn[2];
+                    dataInvert <= dataIn[3];
+                    derandomize[0] <= dataIn[4];
+                    demuxEnable <= dataIn[5];
+                    feherEnable <= dataIn[6];
+                    iqSwap <= dataIn[7];
+                end
+                default: ;
+            endcase
+        end
     end
-    if (cs && wr1) begin
-        casex (addr)
-            `DEC_CONTROL: begin
-                biphaseEnable <= dataIn[8];
-                millerEnable <= dataIn[9];
-                mode <= dataIn[11:10];
-                derandomize[1] <= dataIn[12];
-                bypassFifo <= dataIn[13];
-                inputSelect <= dataIn[14];
-                derandomize[2] <= dataIn[15];
-            end
-            default: ;
-        endcase
-    end
-    if (cs && wr2) begin
-        casex (addr)
-            `DEC_CONTROL: begin
-                clkPhase[1] <= dataIn[16];
-            end
-            default: ;
-        endcase
-    end
-end
 
-always @* begin
-    if (cs) begin
-        casex (addr)
-            `DEC_CONTROL: begin
-                dataOut = { 15'h0,clkPhase[1],
-                            derandomize[2], inputSelect, bypassFifo, derandomize[1],
-                            mode, millerEnable, biphaseEnable,
-                            iqSwap, feherEnable, demuxEnable, derandomize[0],
-                            dataInvert, clkSelect, clkPhase[0], fifoReset
-                };
+
+    `ifdef USE_BUS_CLOCK
+    always @(posedge busClk) begin 
+        if (cs && wr1) begin
+    `else
+    always @(negedge wr1) begin
+        if (cs) begin
+    `endif
+            casex (addr)
+                `DEC_CONTROL: begin
+                    biphaseEnable <= dataIn[8];
+                    millerEnable <= dataIn[9];
+                    mode <= dataIn[11:10];
+                    derandomize[1] <= dataIn[12];
+                    bypassFifo <= dataIn[13];
+                    inputSelect <= dataIn[14];
+                    derandomize[2] <= dataIn[15];
                 end
-            default: begin
-                dataOut = 32'b0;
+                default: ;
+            endcase
+        end
+    end
+
+    `ifdef USE_BUS_CLOCK
+    always @(posedge busClk) begin 
+        if (cs && wr2) begin
+    `else
+    always @(negedge wr2) begin
+        if (cs) begin
+    `endif
+            casex (addr)
+                `DEC_CONTROL: begin
+                    clkPhase[1] <= dataIn[16];
                 end
-        endcase
+                default: ;
+            endcase
+        end
     end
-    else begin
-        dataOut = 32'hx;
+
+    always @* begin
+        if (cs) begin
+            casex (addr)
+                `DEC_CONTROL: begin
+                    dataOut = { 15'h0,clkPhase[1],
+                                derandomize[2], inputSelect, bypassFifo, derandomize[1],
+                                mode, millerEnable, biphaseEnable,
+                                iqSwap, feherEnable, demuxEnable, derandomize[0],
+                                dataInvert, clkSelect, clkPhase[0], fifoReset
+                    };
+                    end
+                default: begin
+                    dataOut = 32'b0;
+                    end
+            endcase
+        end
+        else begin
+            dataOut = 32'hx;
+        end
     end
-end
 
 
 endmodule

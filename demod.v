@@ -10,54 +10,57 @@ derivative rights in exchange for negotiated compensation.
 `timescale 1ns / 10 ps
 
 module demod(
-    input                   clk, reset,
-    input                   rd, wr0,wr1,wr2,wr3,
-    input           [12:0]  addr,
-    input           [31:0]  din,
-    output          [31:0]  dout,
-    input   signed  [17:0]  iRx, qRx,
-    input                   bbClkEn,
-    input   signed  [17:0]  iBB, qBB,
-    output                  iSym2xEn,
-    output                  iSymEn,
-    output  signed  [17:0]  iSymData,
-    output                  iSymClk,
-    output                  iBit,
-    output                  qSym2xEn,
-    output                  qSymEn,
-    output                  qSymClk,
-    output  signed  [17:0]  qSymData,
-    output                  qBit,
-    output                  auSymClk,
-    output                  auBit,
-    output                  timingLock,
-    output                  carrierLock,
-    output                  trellisSymEn,
-    output  signed  [17:0]  iTrellis,
-    output  signed  [17:0]  qTrellis,
-    `ifdef ADD_SUPERBAUD_TED
-    output                  multihSymEnEven,
+    input                       clk, reset,
+    `ifdef USE_BUS_CLOCK
+    input                       busClk,
     `endif
-    output          [3:0]   dac0Select,dac1Select,dac2Select,
-    output                  dac0Sync,
-    output  signed  [17:0]  dac0Data,
-    output                  dac1Sync,
-    output  signed  [17:0]  dac1Data,
-    output                  dac2Sync,
-    output  signed  [17:0]  dac2Data,
-    output          [4:0]   demodMode,
+    input                       wr0,wr1,wr2,wr3,
+    input               [12:0]  addr,
+    input               [31:0]  din,
+    output  reg         [31:0]  dout,
+    input       signed  [17:0]  iRx, qRx,
+    input                       bbClkEn,
+    input       signed  [17:0]  iBB, qBB,
+    output                      iSym2xEn,
+    output                      iSymEn,
+    output      signed  [17:0]  iSymData,
+    output                      iSymClk,
+    output                      iBit,
+    output                      qSym2xEn,
+    output                      qSymEn,
+    output                      qSymClk,
+    output      signed  [17:0]  qSymData,
+    output                      qBit,
+    output                      auSymClk,
+    output                      auBit,
+    output                      timingLock,
+    output                      carrierLock,
+    output                      trellisSymEn,
+    output      signed  [17:0]  iTrellis,
+    output      signed  [17:0]  qTrellis,
+    `ifdef ADD_SUPERBAUD_TED
+    output                      multihSymEnEven,
+    `endif
+    output              [3:0]   dac0Select,dac1Select,dac2Select,
+    output  reg                 dac0Sync,
+    output  reg signed  [17:0]  dac0Data,
+    output  reg                 dac1Sync,
+    output  reg signed  [17:0]  dac1Data,
+    output  reg                 dac2Sync,
+    output  reg signed  [17:0]  dac2Data,
+    output              [4:0]   demodMode,
     `ifdef ADD_SCPATH
-    output                  enableScPath,
-    output  signed  [17:0]  iBBOut, qBBOut,
-    output                  bbClkEnOut,
+    output                      enableScPath,
+    output      signed  [17:0]  iBBOut, qBBOut,
+    output                      bbClkEnOut,
     `endif
     `ifdef ADD_DESPREADER
-    output                  iEpoch,qEpoch,
+    output                      iEpoch,qEpoch,
     `endif
-    output                  sdiSymEn,
-    output                  eyeSync,
-    output  signed  [17:0]  iEye,qEye,
-    output          [4:0]   eyeOffset
+    output                      sdiSymEn,
+    output                      eyeSync,
+    output      signed  [17:0]  iEye,qEye,
+    output              [4:0]   eyeOffset
 );
 
 
@@ -82,6 +85,9 @@ demodRegs demodRegs(
     .addr(addr),
     .dataIn(din),
     .dataOut(demodDout),
+    `ifdef USE_BUS_CLOCK
+    .busClk(busClk),
+    `endif
     .cs(demodSpace),
     .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
     .highFreqOffset(highFreqOffset),
@@ -119,6 +125,9 @@ wire    [31:0]  carrierLeadFreq;
 wire    [31:0]  ddcDout;
 ddc ddc(
     .clk(clk), .reset(reset),
+    `ifdef USE_BUS_CLOCK
+    .busClk(busClk),
+    `endif
     .wr0(wr0) , .wr1(wr1), .wr2(wr2), .wr3(wr3),
     .addr(addr),
     .din(din),
@@ -133,6 +142,9 @@ ddc ddc(
     `ifdef ADD_SCPATH
     .iLagOut(iBBOut), .qLagOut(qBBOut),
     .lagClkEn(bbClkEnOut),
+    `else
+    .iLagOut(), .qLagOut(),
+    .lagClkEn(),
     `endif
     .syncOut(ddcSync),
     .iOut(iDdc), .qOut(qDdc)
@@ -143,7 +155,10 @@ ddc ddc(
 ******************************************************************************/
 wire    [31:0]  nbAgcDout;
 channelAGC channelAGC(
-    .clk(clk), .reset(reset), .syncIn(ddcSync),
+    .clk(clk), .reset(reset), .clkEn(ddcSync),
+    `ifdef USE_BUS_CLOCK
+    .busClk(busClk),
+    `endif
     .wr0(wr0) , .wr1(wr1), .wr2(wr2), .wr3(wr3),
     .addr(addr),
     .din(din),
@@ -172,6 +187,9 @@ channelAGC channelAGC(
         .dataIn(din),
         .dataOut(cmaDout),
         .cs(cmaSpace),
+        `ifdef USE_BUS_CLOCK
+        .busClk(busClk),
+        `endif
         .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
         .enableEqualizer(enableEqualizer),
         .resetEqualizer(resetEqualizer),
@@ -227,10 +245,10 @@ wire    [12:0]   mag;
 fmDemod fmDemod(
     .clk(clk), .reset(reset), 
     `ifdef ADD_DESPREADER
-    .sync(fmDemodClkEn),
+    .clkEn(fmDemodClkEn),
     .iFm(iFm),.qFm(qFm),
     `else
-    .sync(ddcSync),
+    .clkEn(ddcSync),
     .iFm(iFiltered),.qFm(qFiltered),
     `endif
     .demodMode(demodMode),
@@ -239,7 +257,7 @@ fmDemod fmDemod(
     .freq(freq),
     .freqError(freqError),
     .mag(mag),
-    .syncOut(demodSync)
+    .clkEnOut(demodSync)
     );
 
 reg     [17:0]  iDdc0;
@@ -311,6 +329,8 @@ lagGain12 magLoop(
     .lowerLimit(32'h00000000),
     .clearAccum(1'b0),
     .sweepEnable(1'b0),
+    .sweepRateMag(32'h0),
+    .carrierInSync(1'b0),
     .acqTrackControl(2'b0),
     .track(1'b0),
     .lagAccum(magAccum)
@@ -434,8 +454,11 @@ wire    [11:0]  rndOffsetError = offsetError[17:6] + offsetError[5];
 //    end
 carrierLoop carrierLoop(
     .clk(clk), .reset(reset),
-    .resampSync(resampSync),
-    .ddcSync(demodSync),
+    .resampClkEn(resampSync),
+    .ddcClkEn(demodSync),
+    `ifdef USE_BUS_CLOCK
+    .busClk(busClk),
+    `endif
     .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
     .addr(addr),
     .din(din),
@@ -480,7 +503,10 @@ wire    [31:0]  resamplerFreqOffset;
 wire    [31:0]  auResamplerFreqOffset;
 wire    [31:0]  resampDout;
 dualResampler resampler(
-    .clk(clk), .reset(reset), .sync(ddcSync),
+    .clk(clk), .reset(reset), .clkEn(ddcSync),
+    `ifdef USE_BUS_CLOCK
+    .busClk(busClk),
+    `endif
     .wr0(wr0) , .wr1(wr1), .wr2(wr2), .wr3(wr3),
     .addr(addr),
     .din(din),
@@ -494,9 +520,9 @@ dualResampler resampler(
     .qIn(qResampIn),
     .iOut(iResamp),
     .qOut(qResamp),
-    .syncOut(resampSync),
+    .clkEnOut(resampSync),
     .sampleOffset(eyeOffset),
-    .auSyncOut(auResampSync)
+    .auClkEnOut(auResampSync)
     );
 
 
@@ -516,6 +542,9 @@ dualDespreader despreader(
     .clkEn(resampSync), .qClkEn(qSym2xEn),
     .symEn(iSymEn),   .qSymEn(qSymEn),
     .reset(reset),
+    `ifdef USE_BUS_CLOCK
+    .busClk(busClk),
+    `endif
     .wr0(wr0) , .wr1(wr1), .wr2(wr2), .wr3(wr3),
     .addr(addr),
     .din(din),
@@ -550,6 +579,9 @@ singleRailBitsync bitsync(
     .sampleClk(clk), .reset(reset),
     .symTimes2Sync(resampSync),
     .demodMode(demodMode),
+    `ifdef USE_BUS_CLOCK
+    .busClk(busClk),
+    `endif
     .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
     .addr(addr),
     .din(din),
@@ -596,13 +628,16 @@ wire    [31:0]  bitsyncDout;
     wire    signed  [17:0]  tedOutput;
     `endif
 bitsync bitsync(
-    .sampleClk(clk), .reset(reset),
-    .symTimes2Sync(resampSync),
-    .auResampSync(auResampSync),
+    .clk(clk), .reset(reset),
+    .sym2xClkEn(resampSync),
+    .auResampClkEn(auResampSync),
     .demodMode(demodMode),
     .oqpskIthenQ(oqpskIthenQ),
     `ifdef ADD_DESPREADER
     .enableDespreader(enableDespreader),
+    `endif
+    `ifdef USE_BUS_CLOCK
+    .busClk(busClk),
     `endif
     .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
     .addr(addr),
@@ -686,13 +721,13 @@ end
 
 `else  // ADD_DESPREADER
 
-wire            auSymClk = qSymClk;
-wire            auBit = qBit;
-wire    [17:0]  iSymData = iBsSymData;
-wire    [17:0]  qSymData = qBsSymData;
+assign          auSymClk = qSymClk;
+assign          auBit = qBit;
+assign          iSymData = iBsSymData;
+assign          qSymData = qBsSymData;
 assign          iTrellis = iBsTrellis;
 assign          qTrellis = qBsTrellis;
-wire            timingLock = bitsyncLock;
+assign          timingLock = bitsyncLock;
 `endif
 
 `ifdef SIMULATE
@@ -740,6 +775,9 @@ dualFirCoeffRegs firCoeffRegs (
     .addr    (addr   ),
     .dataIn  (din    ),
     .dataOut (firDout),
+    `ifdef USE_BUS_CLOCK
+    .busClk(busClk),
+    `endif
     .cs      (firspace),
     .wr0     (wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
     .c0      (c0c14  ), 
@@ -802,12 +840,7 @@ singleFir interpFir(
         end
     end
 wire fmMode = (demodMode == `MODE_FM);
-reg             dac0Sync;
-reg     [17:0]  dac0Data;
-reg             dac1Sync;
-reg     [17:0]  dac1Data;
-reg             dac2Sync;
-reg     [17:0]  dac2Data;
+
 always @(posedge clk) begin
     case (dac0Select)
         `DAC_I: begin
@@ -1276,7 +1309,6 @@ always @(posedge clk) begin
 /******************************************************************************
                                 uP dout mux
 ******************************************************************************/
-reg [31:0]dout;
 always @* begin
     casex (addr)
         `DEMODSPACE:        dout = demodDout;

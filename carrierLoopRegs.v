@@ -160,7 +160,6 @@ module carrierLoopRegs(
         end
     end
 
-    reg [31:0]dataOut;
     always @* begin
         if (cs) begin
             casex (addr)

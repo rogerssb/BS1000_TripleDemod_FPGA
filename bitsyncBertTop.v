@@ -135,7 +135,7 @@ module bitsyncBertTop (
     input           pll2_OUT1;
     output          pll2_PWDn;
 
-    parameter VER_NUMBER = 16'd454;
+    parameter VER_NUMBER = 16'd456;
 
 
 //******************************************************************************
@@ -418,7 +418,7 @@ clockAndDataInputSync diffSync(
         .symb_q(dualCh1Input),            // data input,
         .dout_i(dualDataI),
         .dout_q(dualDataQ),
-        .cout(dualPcmClkEn),
+        .outputClkEn(dualPcmClkEn),
         .fifo_rs(),
         .clkPhase(dualClkPhase),
         .bypass_fifo(),

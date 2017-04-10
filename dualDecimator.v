@@ -11,13 +11,16 @@ derivative rights in exchange for negotiated compensation.
 
 module dualDecimator( 
     input                       clk, reset, clkEn,
+    `ifdef USE_BUS_CLOCK
+    input                       busClk,
+    `endif
     input                       wr0, wr1, wr2, wr3,
     input               [12:0]  addr,
     input               [31:0]  din,
     output              [31:0]  dout,
     input       signed  [17:0]  inI,inQ,
-    output  reg signed  [47:0]  outI,outQ,
-    output  reg                 clkEnOut
+    output      signed  [47:0]  outI,outQ,
+    output                      clkEnOut
     );
 
 parameter RegSpace = `CICDECSPACE;
@@ -38,6 +41,9 @@ cicRegs regs (
     .addr(addr),
     .dataIn(din),
     .dataOut(dout),
+    `ifdef USE_BUS_CLOCK
+    .busClk(busClk),
+    `endif
     .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
     .cicDecimation(cicDecimation),
     .cicShift(cicShift)

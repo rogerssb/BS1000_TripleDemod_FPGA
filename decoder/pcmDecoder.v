@@ -20,7 +20,7 @@ module pcmDecoder (
     output                  fifo_rs,
     output          [1:0]   clkPhase,
     output                  bypass_fifo,
-    output reg              symb_clk,
+    output                  symb_clk,
     output                  inputSelect
 );
 
@@ -71,6 +71,7 @@ biphase_to_nrz biphase_to_nrz
   .symb_i       (symb),
   .nrz_i        (nrz)
   ) ;
+wire            biphaseClkEn = (biphase_en & symb_clk_en);
 
 reg             nrz_delay;
 always @ ( posedge clk or posedge rs )
@@ -188,33 +189,35 @@ mrk_spc_decode mrk_spc_decode
         end
     end
 
+    reg symbol_clk;
     always @(posedge clk) begin
         if (miller) begin
             if (millerBitEn & symb_clk_en) begin
-                symb_clk <= 1;
+                symbol_clk <= 1;
             end
             else if (symb_clk_en) begin
-                symb_clk <= ~symb_clk;
+                symbol_clk <= ~symbol_clk;
             end
         end
         else if (biphase) begin
             if (biphase_en & symb_clk_en) begin
-                symb_clk <= 1;
+                symbol_clk <= 1;
             end
             else if (symb_clk_en) begin
-                symb_clk <= ~symb_clk;
+                symbol_clk <= ~symbol_clk;
             end
         end
         else begin
             if (symb_clk_en) begin
-                symb_clk <= 1;
+                symbol_clk <= 1;
             end
             else if (symb_clk_2x_en) begin
-                symb_clk <= ~symb_clk;
+                symbol_clk <= ~symbol_clk;
             end
         end
     end
 
+    assign symb_clk = clk_sel ? symbol_clk : symb_clk_2x_en;
 
 endmodule
 

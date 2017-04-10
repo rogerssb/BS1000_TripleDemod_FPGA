@@ -7,6 +7,7 @@ derivative rights in exchange for negotiated compensation.
 ******************************************************************************/
 
 `timescale 1ns / 10 ps
+`include "addressMap.v"
 
 //************************ Two Channel Version ********************************
 
@@ -39,7 +40,8 @@ module dualHalfbandDecimate(
         .s_axis_data_tready(evenFirIReady),
         .s_axis_data_tdata({6'b0,iIn}),
         .m_axis_data_tvalid(evenOutIValid),
-        .m_axis_data_tdata(evenOutI)
+        .m_axis_data_tdata(evenOutI),
+        .m_axis_data_tuser()
     );
     wire    signed  [31:0]  evenOutQ;
     halfbandEven evenFirQ(
@@ -50,7 +52,8 @@ module dualHalfbandDecimate(
         .s_axis_data_tready(evenFirQReady),
         .s_axis_data_tdata({6'b0,qIn}),
         .m_axis_data_tvalid(evenOutQValid),
-        .m_axis_data_tdata(evenOutQ)
+        .m_axis_data_tdata(evenOutQ),
+        .m_axis_data_tuser()
     );
 
     `else
@@ -94,6 +97,7 @@ module dualHalfbandDecimate(
     `define ODD_DELAY  25
     reg signed  [17:0]  fifoI[`ODD_DELAY-1:0];
     reg signed  [17:0]  fifoQ[`ODD_DELAY-1:0];
+    integer i;
     always @(posedge clk) begin
         if (clkEn) begin
             if (!clkEnEven) begin

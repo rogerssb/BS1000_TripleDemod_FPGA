@@ -11,6 +11,9 @@ derivative rights in exchange for negotiated compensation.
 
 module dualResampler( 
     input                   clk, reset, clkEn,
+    `ifdef USE_BUS_CLOCK
+    input                   busClk,
+    `endif
     input                   wr0, wr1, wr2, wr3,
     input           [12:0]  addr,
     input           [31:0]  din,
@@ -42,7 +45,10 @@ module dualResampler(
     wire    [31:0]  auResampleRate;
     wire    [5:0]   auShift;
     wire    [14:0]  auDecimation;
-    resampRegs resampRegs(
+    resamplerRegs resampRegs(
+        `ifdef USE_BUS_CLOCK
+        .busClk(busClk),
+        `endif
         .addr(addr),
         .dataIn(din),
         .dataOut(dout),

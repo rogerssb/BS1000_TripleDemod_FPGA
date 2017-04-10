@@ -151,7 +151,7 @@ cicComp cicComp(
 `endif
     .clk(clk), 
     .reset(reset),
-    .sync(cicClkEnOut), 
+    .clkEn(cicClkEnOut), 
     .compIn(cicOut[47:30]),
     .compOut(compOut)
     );

@@ -11,6 +11,9 @@ derivative rights in exchange for negotiated compensation.
 
 module channelAGC( 
     input                       clk, reset, clkEn,
+    `ifdef USE_BUS_CLOCK
+    input                       busClk,
+    `endif
     input                       wr0, wr1, wr2, wr3,
     input               [12:0]  addr,
     input               [31:0]  din,
@@ -144,6 +147,9 @@ module channelAGC(
     wire    [31:0]loopOutput;
     agcLoopFilter chAgcLoopFilter(
         .clk(clk), .reset(reset), .clkEn(clkEn),
+        `ifdef USE_BUS_CLOCK
+        .busClk(busClk),
+        `endif
         .cs(chAgcSpace),
         .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
         .addr(addr),
