@@ -135,7 +135,7 @@ module bitsyncBertTop (
     input           pll2_OUT1;
     output          pll2_PWDn;
 
-    parameter VER_NUMBER = 16'd456;
+    parameter VER_NUMBER = 16'd457;
 
 
 //******************************************************************************
@@ -564,38 +564,6 @@ clockAndDataInputSync diffSync(
 //                       Clock/Data Jitter Reduction
 //******************************************************************************
 
-    wire    [7:0]   dll0PhaseError;
-    wire    [31:0]  dll0Dout;
-    digitalPLL #(.REG_SPACE(`DLL0SPACE)) dll0(
-        .clk(clk),
-        .reset(reset),
-        .busClk(fb_clk),
-        .addr(addr),
-        .dataIn(dataIn),
-        .dataOut(dll0Dout),
-        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
-        .referenceClkEn(dualPcmClkEn),
-        .dllOutputClk(pll0_REF),
-        .dllOutputClkEn(),
-        .phaseError(dll0PhaseError)
-    );
-
-    wire    [7:0]   dll1PhaseError;
-    wire    [31:0]  dll1Dout;
-    digitalPLL #(.REG_SPACE(`DLL1SPACE)) dll1(
-        .clk(clk),
-        .reset(reset),
-        .busClk(fb_clk),
-        .addr(addr),
-        .dataIn(dataIn),
-        .dataOut(dll1Dout),
-        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
-        .referenceClkEn(ch1PcmClkEn),
-        .dllOutputClk(pll1_REF),
-        .dllOutputClkEn(),
-        .phaseError(dll1PhaseError)
-    );
-
     // SPI interface to the PLLs
     wire    [31:0]  pllDout;
     ics307Interface #(.SysclkDivider(4)) pllIntfc (
@@ -618,6 +586,142 @@ clockAndDataInputSync diffSync(
         .pll1Reset(pll1Reset),
         .pll2Reset(pll2Reset)
     );
+
+
+    wire    [7:0]   dll0PhaseError;
+    wire    [31:0]  dll0Dout;
+    digitalPLL #(.REG_SPACE(`DLL0SPACE)) dll0(
+        .clk(clk),
+        .reset(reset),
+        .busClk(fb_clk),
+        .addr(addr),
+        .dataIn(dataIn),
+        .dataOut(dll0Dout),
+        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .referenceClkEn(dualPcmClkEn),
+        .dllOutputClk(dll0OutClk),
+        .filteredRefClk(pll0_REF),
+        .phaseError(dll0PhaseError)
+    );
+
+    wire    [7:0]   dll1PhaseError;
+    wire    [31:0]  dll1Dout;
+    digitalPLL #(.REG_SPACE(`DLL1SPACE)) dll1(
+        .clk(clk),
+        .reset(reset),
+        .busClk(fb_clk),
+        .addr(addr),
+        .dataIn(dataIn),
+        .dataOut(dll1Dout),
+        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .referenceClkEn(ch1PcmClkEn),
+        .dllOutputClk(dll1OutClk),
+        .filteredRefClk(pll1_REF),
+        .phaseError(dll1PhaseError)
+    );
+
+    //------------- DLL Clock Dividers
+    // Make a Gray-coded divider
+    reg     [1:0]   dll0Divider;
+    wire            dll0ReadClk = dll0Divider[0];
+    wire            dll090Clk   = dll0Divider[1];
+    always @(posedge dll0OutClk) begin
+        case (dll0Divider)
+            2'b00:      dll0Divider <= 2'b01;
+            2'b01:      dll0Divider <= 2'b11;
+            2'b11:      dll0Divider <= 2'b10;
+            2'b10:      dll0Divider <= 2'b00;
+            default:    dll0Divider <= 2'b00;
+        endcase
+    end
+    reg     [1:0]   dll1Divider;
+    wire            dll1ReadClk = dll1Divider[0];
+    wire            dll190Clk   = dll1Divider[1];
+    always @(posedge dll1OutClk) begin
+        case (dll1Divider)
+            2'b00:      dll1Divider <= 2'b01;
+            2'b01:      dll1Divider <= 2'b11;
+            2'b11:      dll1Divider <= 2'b10;
+            2'b10:      dll1Divider <= 2'b00;
+            default:    dll1Divider <= 2'b00;
+        endcase
+    end
+
+    //------------- DLL0 Data FIFO --------------------
+    reg             dll0_ReadEnable;
+    wire    [2:0]   dll0_Symbol;
+    jitterFifo dll0Fifo(
+        .rst(pll0Reset),
+        .wr_clk(clk),
+        .rd_clk(dll0ReadClk),
+        .din({dualDataI,dualDataQ,1'b0}),
+        .wr_en(dualPcmClkEn),
+        .rd_en(dll0_ReadEnable),
+        .dout(dll0_Symbol),
+        .full(dll0_Full),
+        .empty(dll0_Empty),
+        .prog_full(dll0_HalfFull)
+    );
+    always @(posedge dll0ReadClk) begin
+        if (pll0Reset) begin
+            dll0_ReadEnable <= 0;
+        end
+        else if (dll0_HalfFull) begin
+            dll0_ReadEnable <= 1;
+        end
+    end
+
+
+    //------------- DLL1 Data FIFO --------------------
+    reg             dll1_ReadEnable;
+    wire    [2:0]   dll1_Symbol;
+    jitterFifo dll1Fifo(
+        .rst(pll1Reset),
+        .wr_clk(clk),
+        .rd_clk(dll1ReadClk),
+        .din({ch1PcmData,2'b0}),
+        .wr_en(ch1PcmClkEn),
+        .rd_en(dll1_ReadEnable),
+        .dout(dll1_Symbol),
+        .full(dll1_Full),
+        .empty(dll1_Empty),
+        .prog_full(dll1_HalfFull)
+    );
+    always @(posedge dll1ReadClk) begin
+        if (pll1Reset) begin
+            dll1_ReadEnable <= 0;
+        end
+        else if (dll1_HalfFull) begin
+            dll1_ReadEnable <= 1;
+        end
+    end
+
+    //-------------- DLL Outputs ----------------------
+    reg             dll0_Clk, dll0_Data, dllSync_Data;
+    always @(posedge dll0OutClk) begin
+        dll0_Data <= dll0_Symbol[2];
+        dllSync_Data <= dll0_Symbol[1];
+        case (dualClkPhase)
+            `DEC_CLK_PHASE_0:   dll0_Clk <= dll0ReadClk;
+            `DEC_CLK_PHASE_90:  dll0_Clk <= dll090Clk;
+            `DEC_CLK_PHASE_180: dll0_Clk <= !dll0ReadClk;
+            `DEC_CLK_PHASE_270: dll0_Clk <= !dll090Clk;
+        endcase
+    end
+
+    reg             dllAsync_Clk, dllAsync_Data;
+    always @(posedge dll1OutClk) begin
+        dllAsync_Data <= dll1_Symbol[2];
+        case (ch1ClkPhase)
+            `DEC_CLK_PHASE_0:   dllAsync_Clk <= dll1ReadClk;
+            `DEC_CLK_PHASE_90:  dllAsync_Clk <= dll190Clk;
+            `DEC_CLK_PHASE_180: dllAsync_Clk <= !dll1ReadClk;
+            `DEC_CLK_PHASE_270: dllAsync_Clk <= !dll190Clk;
+        endcase
+    end
+    assign          dll1_Data = asyncMode ? dllAsync_Data : dllSync_Data;
+    assign          dll1_Clk = asyncMode ? dllAsync_Clk : dll0_Clk;
+
 
     //------------- PLL Reference Clocks --------------
     //assign          pll0_REF = dualPcmClkEn;
@@ -760,15 +864,15 @@ clockAndDataInputSync diffSync(
 //******************************************************************************
     clockAndDataMux framerMux(
         .muxSelect(framerInputMuxSelect),
-        .clk0(1'b0),
+        .clk0(dll0_Clk),
         .clkInvert0(1'b0),
-        .data0(1'b0),
+        .data0(dll0_Data),
         .clk1(pll0_Clk),
         .clkInvert1(1'b0),
         .data1(pll0_Data),
-        .clk2(1'b0),
+        .clk2(dll1_Clk),
         .clkInvert2(1'b0),
-        .data2(1'b0),
+        .data2(dll1_Data),
         .clk3(pll1_Clk),
         .clkInvert3(1'b0),
         .data3(pll1_Data),
@@ -962,9 +1066,9 @@ assign bsDataOut = pll0_Reset;
 
 clockAndDataMux bsMux(
     .muxSelect(bsCoaxMuxSelect),
-    .clk0(dualSymClk),
+    .clk0(dll0_Clk),
     .clkInvert0(1'b0),
-    .data0(dualCh0Input),
+    .data0(dll0_Data),
     .clk1(pll0_Clk),
     .clkInvert1(1'b0),
     .data1(pll0_Data),
@@ -994,9 +1098,9 @@ clockAndDataMux bsMux(
 
 clockAndDataMux bsDiffMux(
     .muxSelect(bsRS422MuxSelect),
-    .clk0(dualSymClk),
+    .clk0(dll0_Clk),
     .clkInvert0(1'b0),
-    .data0(dualCh0Input),
+    .data0(dll0_Data),
     .clk1(pll0_Clk),
     .clkInvert1(1'b0),
     .data1(pll0_Data),
@@ -1024,9 +1128,9 @@ clockAndDataMux bsDiffMux(
 
 clockAndDataMux encMux(
     .muxSelect(encCoaxMuxSelect),
-    .clk0(dualSymClk),
+    .clk0(dll0_Clk),
     .clkInvert0(1'b0),
-    .data0(dualCh0Input),
+    .data0(dll0_Data),
     .clk1(pll0_Clk),
     .clkInvert1(1'b0),
     .data1(pll0_Data),
@@ -1054,9 +1158,9 @@ clockAndDataMux encMux(
 
 clockAndDataMux fsMux(
     .muxSelect(fsMuxSelect),
-    .clk0(dualSymClk),
+    .clk0(dll0_Clk),
     .clkInvert0(1'b0),
-    .data0(dualCh0Input),
+    .data0(dll0_Data),
     .clk1(pll0_Clk),
     .clkInvert1(1'b0),
     .data1(pll0_Data),
@@ -1084,9 +1188,9 @@ clockAndDataMux fsMux(
 
 clockAndDataMux fsDiffMux(
     .muxSelect(fsRS422MuxSelect),
-    .clk0(dualSymClk),
+    .clk0(dll0_Clk),
     .clkInvert0(1'b0),
-    .data0(dualCh0Input),
+    .data0(dll0_Data),
     .clk1(pll0_Clk),
     .clkInvert1(1'b0),
     .data1(pll0_Data),
@@ -1114,9 +1218,9 @@ clockAndDataMux fsDiffMux(
 
 clockAndDataMux spareMux(
     .muxSelect(spareMuxSelect),
-    .clk0(dualSymClk),
+    .clk0(dll0_Clk),
     .clkInvert0(1'b0),
-    .data0(dualCh0Input),
+    .data0(dll0_Data),
     .clk1(pll0_Clk),
     .clkInvert1(1'b0),
     .data1(pll0_Data),

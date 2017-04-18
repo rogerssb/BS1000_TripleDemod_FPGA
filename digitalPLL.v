@@ -11,7 +11,7 @@ module digitalPLL(
     input                   wr0, wr1, wr2, wr3,
     input                   referenceClkEn,
     output  reg             dllOutputClk,
-    output  reg             dllOutputClkEn,
+    output                  filteredRefClk,
     output  reg     [7:0]   phaseError
 );
 
@@ -28,6 +28,7 @@ module digitalPLL(
 
     reg     [31:0]  centerFreq;
     reg     [4:0]   loopGain;
+    reg     [7:0]   feedbackDivider;
     always @(posedge busClk) begin
         if (dllSpace && wr0) begin
             casex (addr)
@@ -53,6 +54,9 @@ module digitalPLL(
                 `DLL_CENTER_FREQ: begin
                     centerFreq[23:16] <= dataIn[23:16];
                 end   
+                `DLL_OUTPUT_DIV: begin
+                    feedbackDivider <= dataIn[23:16];
+                end
                 default: ;
             endcase
         end
@@ -70,7 +74,8 @@ module digitalPLL(
         if (dllSpace) begin
             casex (addr)
                 `DLL_CENTER_FREQ:       dataOut = centerFreq;
-                `DLL_GAINS:             dataOut = {27'b0,loopGain};
+                `DLL_GAINS:             dataOut = {8'b0,feedbackDivider,11'b0,loopGain};
+                `DLL_OUTPUT_DIV:        dataOut = {8'b0,feedbackDivider,11'b0,loopGain};
                 default:                dataOut = 32'h0;
             endcase
         end
@@ -96,18 +101,68 @@ module digitalPLL(
             clkSR <= {clkSR[0],phaseSum[31]};
         end
         dllOutputClk <= phase[31];
-        dllOutputClkEn <= (clkSR == 2'b10);
     end
+
+    `define ADD_DIVIDER
+    `ifdef  ADD_DIVIDER
+
+    reg             feedbackClkEn;
+    reg             vcoClkEn;
+    reg     [7:0]   feedbackCounter;
+    always @(posedge clk) begin
+        vcoClkEn <= (clkSR == 2'b10);
+        if (reset) begin
+            feedbackCounter <= feedbackDivider-1;
+        end
+        else if (vcoClkEn) begin
+            if (feedbackCounter > 0) begin
+                feedbackCounter <= feedbackCounter - 1;
+            end
+            else begin
+                feedbackCounter <= feedbackDivider-1;
+            end
+        end
+        feedbackClkEn <= (clkSR == 2'b10) && (feedbackCounter == 0);
+    end
+
+    reg     [6:0]   outputCounter;
+    wire    [6:0]   outputDivider = feedbackDivider[7:1] - 1;
+    reg             div2Clock;
+    always @(posedge dllOutputClk) begin
+        if (reset) begin
+            outputCounter <= outputDivider;
+            div2Clock <= 0;
+        end
+        else if (outputCounter > 0) begin
+            outputCounter <= outputCounter - 1;
+        end
+        else begin
+            outputCounter <= outputDivider;
+            div2Clock <= ~div2Clock;
+        end
+    end
+    assign filteredRefClk = (outputDivider == 7'h7f) ? dllOutputClk : div2Clock;
+
+    `else   //ADD_DIVIDER
+
+    reg             feedbackClkEn;
+    always @(posedge clk) begin
+        feedbackClkEn <= (clkSR == 2'b10);
+    end
+    assign filteredRefClk = dllOutputClk;
+
+    `endif //ADD_DIVIDER
+
 
     // Phase Comparator
     always @(posedge clk) begin
         if (reset) begin
             phaseError <= 0;
         end
-        else if (referenceClkEn & !dllOutputClkEn) begin
+        else if (referenceClkEn & !feedbackClkEn) begin
             phaseError <= phaseError - 1;
         end
-        else if (dllOutputClkEn & !referenceClkEn) begin
+        else if (feedbackClkEn & !referenceClkEn) begin
             phaseError <= phaseError + 1;
         end
     end

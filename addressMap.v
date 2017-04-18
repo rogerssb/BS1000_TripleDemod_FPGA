@@ -100,7 +100,8 @@
 `define DLL1SPACE           13'b0_00xx_1010_1xxx
 `define DLL2SPACE           13'b0_00xx_1011_0xxx
     `define DLL_CENTER_FREQ     13'bx_xxxx_xxxx_x0xx
-    `define DLL_GAINS           13'bx_xxxx_xxxx_x1xx
+    `define DLL_GAINS           13'bx_xxxx_xxxx_x10x
+    `define DLL_OUTPUT_DIV      13'bx_xxxx_xxxx_x11x
 
 // PLL subsystem registers
 `define PLLSPACE            13'b0_00xx_11xx_xxxx
@@ -273,7 +274,8 @@
 `define DLL1SPACE           13'b0_00xx_1010_1xxx
 `define DLL2SPACE           13'b0_00xx_1011_0xxx
     `define DLL_CENTER_FREQ     13'bx_xxxx_xxxx_x0xx
-    `define DLL_GAINS           13'bx_xxxx_xxxx_x1xx
+    `define DLL_GAINS           13'bx_xxxx_xxxx_x10x
+    `define DLL_OUTPUT_DIV      13'bx_xxxx_xxxx_x11x
 
 // PLL subsystem registers
 `define PLLSPACE            13'b0_00xx_11xx_xxxx
@@ -293,11 +295,11 @@
     `define PLL2_CONTROL        13'bx_xxxx_xx10_110x
     `define PLL2_XFER           13'bx_xxxx_xx10_111x
 
-// Demod subsystem registers
+// Legacy Demod subsystem registers
 `define DEMODSPACE          13'b0_01xx_000x_xxxx
 `define DDCSPACE            13'b0_01xx_0010_xxxx
-`define DDCFIRSPACE         13'b0x01xx_0011_xxxx
-`define CICDECSPACE         13'b0x01xx_0100_xxxx
+`define DDCFIRSPACE         13'b0_01xx_0011_xxxx
+`define CICDECSPACE         13'b0_01xx_0100_xxxx
 `define RESAMPSPACE         13'b0_01xx_0101_xxxx
 `define BITSYNCSPACE        13'b0_01xx_011x_xxxx
 `define BITSYNCAUSPACE      13'b0_01xx_100x_xxxx
