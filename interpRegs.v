@@ -23,6 +23,7 @@ module interpRegs(
     output  reg                 test,
     output  reg                 invert,
     output  reg                 bypassEQ,
+    output  reg         [3:0]   source,
     output  reg signed  [17:0]  testValue,
     output  reg         [4:0]   exponent,
     output  reg         [17:0]  mantissa
@@ -73,6 +74,7 @@ module interpRegs(
         if (cs) begin
     `endif
             casex (addr)
+                `INTERP_SOURCE:     source[3:0] <= dataIn[19:16];
                 `INTERP_MANTISSA:   mantissa[17:16] <= dataIn[17:16];
                 `INTERP_TEST:       testValue[17:16] <= dataIn[17:16];
                 default:  ;
@@ -83,7 +85,8 @@ module interpRegs(
     always @* begin
         if (cs) begin
             casex (addr)
-                `INTERP_CONTROL:    dataOut = {28'h0,bypassEQ,invert,test,bypass};
+                `INTERP_CONTROL:    dataOut = {12'h0,source,12'h0,bypassEQ,invert,test,bypass};
+                `INTERP_SOURCE:     dataOut = {12'h0,source,12'h0,bypassEQ,invert,test,bypass};
                 `INTERP_MANTISSA:   dataOut = {14'bx,mantissa};
                 `INTERP_EXPONENT:   dataOut = {27'bx,exponent};
                 `INTERP_TEST:       dataOut = {14'b0,testValue};

@@ -296,15 +296,30 @@
     `define PLL2_XFER           13'bx_xxxx_xx10_111x
 
 // Legacy Demod subsystem registers
-`define DEMODSPACE          13'b0_01xx_000x_xxxx
-`define DDCSPACE            13'b0_01xx_0010_xxxx
-`define DDCFIRSPACE         13'b0_01xx_0011_xxxx
-`define CICDECSPACE         13'b0_01xx_0100_xxxx
-`define RESAMPSPACE         13'b0_01xx_0101_xxxx
-`define BITSYNCSPACE        13'b0_01xx_011x_xxxx
-`define BITSYNCAUSPACE      13'b0_01xx_100x_xxxx
-`define CHAGCSPACE          13'b0_01xx_101x_xxxx
-`define CARRIERSPACE        13'b0_01xx_110x_xxxx
+`define DEMODSPACE          13'b0_0100_000x_xxxx
+`define DDCSPACE            13'b0_0100_0010_xxxx
+`define DDCFIRSPACE         13'b0_0100_0011_xxxx
+`define CICDECSPACE         13'b0_0100_0100_0xxx
+`define RESAMPSPACE         13'b0_0100_0101_xxxx
+`define BITSYNCSPACE        13'b0_0100_011x_xxxx
+`define BITSYNCAUSPACE      13'b0_0100_100x_xxxx
+`define CHAGCSPACE          13'b0_0100_101x_xxxx
+`define CARRIERSPACE        13'b0_0100_110x_xxxx
+`define EQUALIZERSPACE      13'b0_0100_1110_xxxx
+`define TRELLIS_SPACE       13'b0_0100_1111_xxxx
+`define TRELLISLFSPACE      13'b0_0101_000x_xxxx
+`define MULTIH_SPACE        13'b0_0101_0010_xxxx
+`define MULTIHLFSPACE       13'b0_0101_010x_xxxx
+
+// Clock and Data subsystem registers
+`define CandD0SPACE           13'b0_10xx_0000_xxxx
+`define CandD1SPACE           13'b0_10xx_0001_xxxx
+`define CandD2SPACE           13'b0_10xx_0010_xxxx
+    `define CandD_CONTROL         13'bx_xxxx_xxxx_00xx
+        `define CandD_CLK_PHASE_0     2'b00
+        `define CandD_CLK_PHASE_90    2'b01
+        `define CandD_CLK_PHASE_180   2'b10
+        `define CandD_CLK_PHASE_270   2'b11
 
 `else  // Old demod builds
 //------------------------------ Old Demod ------------------------------------
@@ -466,7 +481,17 @@
 `define RESAMPLER_AUSHIFT       13'bx_xxxx_xxxx_11xx
 
 // Define the interpolator memory map
-`define INTERP_CONTROL  13'bx_xxxx_xxxx_00xx
+`define INTERP_CONTROL  13'bx_xxxx_xxxx_000x
+`define INTERP_SOURCE   13'bx_xxxx_xxxx_001x
+    `define INTERP_SOURCE_BITS      4
+    `define INTERP_SOURCE_OFFSET    0
+        `define DAC_SRC_DEMOD           0
+        `define DAC_SRC_IFPATH          1
+        `define DAC_SRC_SCDEMOD0        2
+        `define DAC_SRC_SCDEMOD1        3
+        `define DAC_SRC_FMTRELLIS       4
+        `define DAC_SRC_SOQTRELLIS      5
+        `define DAC_SRC_MULTIHTRELLIS   6
 `define INTERP_EXPONENT 13'bx_xxxx_xxxx_01xx
 `define INTERP_MANTISSA 13'bx_xxxx_xxxx_10xx
 `define INTERP_TEST     13'bx_xxxx_xxxx_11xx
@@ -493,7 +518,7 @@
 `define REBOOT_ADDR     13'bx_xxxx_xxx0_11xx
 `define MISC_TYPE       13'bx_xxxx_xxx1_000x
 // FPGA Image Types
-// NOTE: Multi H is listed as 3 because we don't want to rebuild the image to 
+// NOTE: Multi H is listed as 3 because we don't want to rebuild the image to
 // add the readback circuitry and it defaults to 3
 `define LEGACY_DEMOD_IMAGE          16'h0
 `define TRELLIS_DEMOD_IMAGE         16'h1

@@ -1,0 +1,32 @@
+Vivado Simulator 2016.4
+Time resolution is 1 ps
+WARNING: This core is supplied with a behavioral model. To model cycle-accurate behavior you must run timing simulation.
+WARNING: This core is supplied with a behavioral model. To model cycle-accurate behavior you must run timing simulation.
+WARNING: This core is supplied with a behavioral model. To model cycle-accurate behavior you must run timing simulation.
+WARNING: This core is supplied with a behavioral model. To model cycle-accurate behavior you must run timing simulation.
+WARNING: This core is supplied with a behavioral model. To model cycle-accurate behavior you must run timing simulation.
+WARNING: This core is supplied with a behavioral model. To model cycle-accurate behavior you must run timing simulation.
+WARNING: This core is supplied with a behavioral model. To model cycle-accurate behavior you must run timing simulation.
+WARNING: This core is supplied with a behavioral model. To model cycle-accurate behavior you must run timing simulation.
+WARNING: This core is supplied with a behavioral model. To model cycle-accurate behavior you must run timing simulation.
+WARNING: This core is supplied with a behavioral model. To model cycle-accurate behavior you must run timing simulation.
+WARNING: This core is supplied with a behavioral model. To model cycle-accurate behavior you must run timing simulation.
+WARNING: This core is supplied with a behavioral model. To model cycle-accurate behavior you must run timing simulation.
+WARNING: This core is supplied with a behavioral model. To model cycle-accurate behavior you must run timing simulation.
+WARNING: This core is supplied with a behavioral model. To model cycle-accurate behavior you must run timing simulation.
+WARNING: This core is supplied with a behavioral model. To model cycle-accurate behavior you must run timing simulation.
+WARNING: This core is supplied with a behavioral model. To model cycle-accurate behavior you must run timing simulation.
+WARNING: This core is supplied with a behavioral model. To model cycle-accurate behavior you must run timing simulation.
+WARNING: This core is supplied with a behavioral model. To model cycle-accurate behavior you must run timing simulation.
+WARNING: This core is supplied with a behavioral model. To model cycle-accurate behavior you must run timing simulation.
+WARNING: This core is supplied with a behavioral model. To model cycle-accurate behavior you must run timing simulation.
+Bitrate = 2916666.656250:
+
+	CIC decimate by           4
+
+	HB  enabled
+
+Warning: WARNING : aresetn must be asserted or deasserted for a minimum of 2 cycles
+Time: 3920400 ps  Iteration: 1  Process: /test/demod/ddc/dds/U0/i_synth/has_aresetn/check_reset  File: /wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd
+Warning: WARNING : aresetn must be asserted or deasserted for a minimum of 2 cycles
+Time: 3920400 ps  Iteration: 1  Process: /test/demod/ddc/leadDds/U0/i_synth/has_aresetn/check_reset  File: /wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd

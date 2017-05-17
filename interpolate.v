@@ -19,6 +19,7 @@ module interpolate(
     input               [31:0]  din,
     output  reg         [31:0]  dout,
     input       signed  [17:0]  dataIn,
+    output              [3:0]   dacSource,
     output  reg signed  [17:0]  dataOut,
     output                      clkEnOut
 );
@@ -68,6 +69,7 @@ module interpolate(
         .test(test),
         .invert(invert),
         .bypassEQ(bypassEQ),
+        .source(dacSource),
         .testValue(testValue),
         .exponent(exponent),
         .mantissa(mantissa)
