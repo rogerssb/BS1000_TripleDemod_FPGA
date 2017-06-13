@@ -31,6 +31,10 @@
 `define ADD_BERT
 `endif
 
+`ifdef TRIPLE_DEMOD
+`define SEMCO_DEMOD
+`endif
+
 `ifdef SEMCO_DEMOD
 `define USE_BUS_CLOCK
 `define USE_VIVADO_CORES

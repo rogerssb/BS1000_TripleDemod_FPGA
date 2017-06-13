@@ -33,7 +33,7 @@ module bitsyncBertTop (
     spareData,
     spareClock,
     ch0Lockn, ch1Lockn,
-    dacSCLK, dacMOSI, 
+    dacSCLK, dacMOSI,
     ch0SELn,
     ch1SELn,
     ch0HighImpedance,
@@ -135,7 +135,7 @@ module bitsyncBertTop (
     input           pll2_OUT1;
     output          pll2_PWDn;
 
-    parameter VER_NUMBER = 16'd457;
+    parameter VER_NUMBER = 16'd459;
 
 
 //******************************************************************************
@@ -205,13 +205,17 @@ clockAndDataInputSync diffSync(
 //******************************************************************************
     reg             [13:0]  adc0Reg,adc1Reg;
     reg     signed  [17:0]  adc0In, adc1In;
+    reg             [1:0]   adc0OverflowSR,adc1OverflowSR;
+    wire                    adc0Overflow = adc0OverflowSR[1];
+    wire                    adc1Overflow = adc1OverflowSR[1];
     always @(posedge clk) begin
         adc0Reg <= adc0;
         adc1Reg <= adc1;
         adc0In <= $signed({~adc0Reg[13],adc0Reg[12:0],4'b0});
         adc1In <= $signed({~adc1Reg[13],adc1Reg[12:0],4'b0});
+        adc0OverflowSR <= {adc0OverflowSR[0],adc0_overflow};
+        adc1OverflowSR <= {adc1OverflowSR[0],adc1_overflow};
     end
-
 
 
 //******************************************************************************
@@ -286,8 +290,10 @@ clockAndDataInputSync diffSync(
         .addr(addr),
         .din(dataIn),
         .dout(bsDout),
-        .rx0(adc0In), 
+        .rx0(adc0In),
+        .rx0Saturated(adc0Overflow),
         .rx1(adc1In),
+        .rx1Saturated(adc1Overflow),
         .rotation(rotation),
         .ch0Lock(ch0Lock),
         .ch0Sym2xEn(ch0Sym2xEn),
@@ -1279,17 +1285,17 @@ always @* begin
                 rd_mux = framerDout[15:0];
             end
         end
-        `BITSYNC_TOP_SPACE, 
+        `BITSYNC_TOP_SPACE,
         `VITERBISPACE,
-        `CH0_DFSPACE,       
-        `CH0_DFFIRSPACE,    
+        `CH0_DFSPACE,
+        `CH0_DFFIRSPACE,
         `CH0_RESAMPSPACE,
-        `CH0_BITSYNCSPACE,  
-        `CH0_AGCSPACE,      
-        `CH1_DFSPACE,       
-        `CH1_DFFIRSPACE,    
+        `CH0_BITSYNCSPACE,
+        `CH0_AGCSPACE,
+        `CH1_DFSPACE,
+        `CH1_DFFIRSPACE,
         `CH1_RESAMPSPACE,
-        `CH1_BITSYNCSPACE,  
+        `CH1_BITSYNCSPACE,
         `CH1_AGCSPACE: begin
             if (addr[1]) begin
                 rd_mux = bsDout[31:16];

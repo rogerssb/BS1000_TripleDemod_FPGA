@@ -1,7 +1,7 @@
 /******************************************************************************
 Copyright 2008-2015 Koos Technical Services, Inc. All Rights Reserved
 
-This source code is the Intellectual Property of Koos Technical Services,Inc. 
+This source code is the Intellectual Property of Koos Technical Services,Inc.
 (KTS) and is provided under a License Agreement which protects KTS' ownership and
 derivative rights in exchange for negotiated compensation.
 ******************************************************************************/
@@ -18,8 +18,10 @@ module bitsyncTop(
     addr,
     din,
     dout,
-    rx0, 
+    rx0,
+    rx0Saturated,
     rx1,
+    rx1Saturated,
     rotation,
     ch0Lock,
     ch0Sym2xEn,
@@ -80,7 +82,9 @@ input           [12:0]  addr;
 input           [31:0]  din;
 output          [31:0]  dout;
 input   signed  [17:0]  rx0;
+input                   rx0Saturated;
 input   signed  [17:0]  rx1;
+input                   rx1Saturated;
 input           [1:0]   rotation;
 output                  ch0Lock;
 output                  ch0Sym2xEn;
@@ -189,7 +193,8 @@ wire    signed  [17:0]  ch0DcError;
 wire            [33:0]  ch0DCIn = {rx0,16'h0};
 `else
 wire    signed  [17:0]  ch0DcError;
-wire            [33:0]  ch0DCIn = ch0TransitionsDetected ? {ch0DcError,16'h0} : {rx0,16'h0};
+wire            [33:0]  ch0DCIn = (ch0TransitionsDetected && !rx0Saturated) ? {ch0DcError,16'h0}
+                                                                            : {rx0,16'h0};
 `endif
 wire            [39:0]  ch0DC;
 wire                    ch0Sym2xEn;
@@ -207,7 +212,8 @@ wire    signed  [17:0]  ch1DcError;
 wire            [33:0]  ch1DCIn = {rx1,16'h0};
 `else
 wire    signed  [17:0]  ch1DcError;
-wire            [33:0]  ch1DCIn = ch1TransitionsDetected ? {ch1DcError,16'h0} : {rx1,16'h0};
+wire            [33:0]  ch1DCIn = (ch1TransitionsDetected && !rx1Saturated) ? {ch1DcError,16'h0}
+                                                                            : {rx1,16'h0};
 `endif
 wire            [39:0]  ch1DC;
 wire                    ch1DCClkEn = asyncMode ? ch1Sym2xEn : ch0Sym2xEn;
@@ -302,8 +308,8 @@ resamplerRegs ch0ResampRegs(
 
 wire    [31:0]  ch0ResamplerFreqOffset;
 wire    [17:0]  resamp0Out;
-resampler ch0Resamp( 
-    .clk(clk), .reset(reset), 
+resampler ch0Resamp(
+    .clk(clk), .reset(reset),
     .resetPhase(resetPhase),
     .clkEn(df0ClkEn),
     .resampleRate(ch0ResampleRate),
@@ -340,8 +346,8 @@ wire    [31:0]  asyncResamplerFreqOffset;
 wire    [31:0]  ch1ResamplerRate =       asyncMode ? ch1ResampleRate : ch0ResampleRate;
 wire    [31:0]  ch1ResamplerFreqOffset = asyncMode ? asyncResamplerFreqOffset : ch0ResamplerFreqOffset;
 wire    [17:0]  resamp1Out;
-resampler ch1Resamp( 
-    .clk(clk), .reset(reset), 
+resampler ch1Resamp(
+    .clk(clk), .reset(reset),
     .resetPhase(resetPhase),
     .clkEn(df1ClkEn),
     .resampleRate(ch1ResamplerRate),
@@ -379,7 +385,7 @@ dualBitsync dualBitsync(
     .addr(addr),
     .din(din),
     .dout(bitsyncDout),
-    .ch0(resamp0Out), 
+    .ch0(resamp0Out),
     .ch1(resamp1Out),
     .ch0Sym2xEn(ch0Sym2xEn),
     .ch0SymEn(ch0SymEn),
@@ -401,7 +407,7 @@ dualBitsync dualBitsync(
     .ch0DcError(ch0DcError),
     .ch0TransitionsDetected(ch0TransitionsDetected),
     .ch1DcError(ch1DcError),
-    .ch1TransitionsDetected(ch1TransitionsDetected) 
+    .ch1TransitionsDetected(ch1TransitionsDetected)
     );
 
 
