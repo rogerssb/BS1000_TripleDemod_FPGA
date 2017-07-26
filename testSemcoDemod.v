@@ -1,8 +1,8 @@
 `timescale 1ns/100ps
 `include "addressMap.v"
 
-//`define FM_TEST
-`define SOQPSK_TEST
+`define FM_TEST
+//`define SOQPSK_TEST
 
 `define ENABLE_AGC
 
@@ -76,7 +76,7 @@ module test;
     initial                 ifSample = 0;
     always @(posedge clk) begin
         if (!enableInput) begin
-            ifSample <= 0; 
+            ifSample <= 0;
         end
         else if (clkEnable) begin
             if (ifSampleFloat >= 1.0) begin
@@ -94,7 +94,11 @@ module test;
 
 
     //************************** uP Interface *********************************
-    `include "upBusTasks.v"
+    `ifdef USE_SPI_CONFIG
+        `include "upSpiTasks.v"
+    `else
+        `include "upBusTasks.v"
+    `endif
 
     real bitrateBps;
     initial bitrateBps = (`SAMPLE_FREQ/ifSamplesPerBit);
@@ -131,7 +135,7 @@ module test;
         `endif
     end
 
-    real resamplerFreqSps;  
+    real resamplerFreqSps;
     always @(bitrateBps) begin
         `ifdef SOQPSK_TEST
         resamplerFreqSps = bitrateBps;
@@ -183,7 +187,7 @@ module test;
 
     `else //NEW_DDC_SETTINGS
 
-    real resamplerFreqSps;  
+    real resamplerFreqSps;
     always @(bitrateBps) resamplerFreqSps = 2.0*bitrateBps;
     real    ddcOutputFreq;
     real    cicDecimationReal;
@@ -239,10 +243,10 @@ module test;
     real resamplerFreqNorm;
     initial resamplerFreqNorm = resamplerFreqSps/(ddcOutputFreq)*(2.0**32);
     integer resamplerFreqInt;
-    initial resamplerFreqInt = $rtoi((resamplerFreqNorm >= (2.0**31)) ? (resamplerFreqNorm - (2.0**32)) 
+    initial resamplerFreqInt = $rtoi((resamplerFreqNorm >= (2.0**31)) ? (resamplerFreqNorm - (2.0**32))
                                                                       : resamplerFreqNorm);
     integer resamplerLimitInt;
-    always @(resamplerFreqSps) begin 
+    always @(resamplerFreqSps) begin
       resamplerLimitInt = $rtoi(0.001*resamplerFreqSps/`SAMPLE_FREQ * (2.0**32));
     end
 
@@ -264,23 +268,23 @@ module test;
         write32(createAddress(`RESAMPSPACE,`RESAMPLER_RATE),resamplerFreqInt);
         write32(createAddress(`BITSYNCSPACE,`LF_CONTROL),1);    // Zero the error
         `ifdef FM_TEST
-        write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h001a0010);    
+        write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h001a0010);
         `elsif SOQPSK_TEST
-        write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h001a0010);    
+        write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h001a0010);
         `endif
-        write32(createAddress(`BITSYNCSPACE,`LF_LIMIT), resamplerLimitInt);    
+        write32(createAddress(`BITSYNCSPACE,`LF_LIMIT), resamplerLimitInt);
 
         // Init the carrier loop filters
         `ifdef FM_TEST
         // Setup for AFC
-        write32(createAddress(`CARRIERSPACE,`LF_CONTROL),1);    // Zero the error
-        write32(createAddress(`CARRIERSPACE,`LF_LEAD_LAG),32'h00000012);   
-        write32(createAddress(`CARRIERSPACE,`LF_ULIMIT),  carrierLimit);
-        write32(createAddress(`CARRIERSPACE,`LF_LLIMIT), -carrierLimit);
-        write32(createAddress(`CARRIERSPACE,`LF_LOOPDATA0), sweepRate);
+        write32(createAddress(`CARRIERSPACE,`CLF_CONTROL),1);    // Zero the error
+        write32(createAddress(`CARRIERSPACE,`CLF_LEAD_LAG),32'h00000012);
+        write32(createAddress(`CARRIERSPACE,`CLF_ULIMIT),  carrierLimit);
+        write32(createAddress(`CARRIERSPACE,`CLF_LLIMIT), -carrierLimit);
+        write32(createAddress(`CARRIERSPACE,`CLF_LOOPDATA), sweepRate);
         `elsif SOQPSK_TEST
         write32(createAddress(`CARRIERSPACE,`CLF_CONTROL),1);    // Zero the error
-        write32(createAddress(`CARRIERSPACE,`CLF_LEAD_LAG),32'h18180808);   
+        write32(createAddress(`CARRIERSPACE,`CLF_LEAD_LAG),32'h18180808);
         write32(createAddress(`CARRIERSPACE,`CLF_ULIMIT),  carrierLimit);
         write32(createAddress(`CARRIERSPACE,`CLF_LLIMIT), -carrierLimit);
         write32(createAddress(`CARRIERSPACE,`CLF_LOOPDATA), sweepRate);
@@ -289,8 +293,8 @@ module test;
         `ifdef TRELLIS
         // Init the trellis carrier loop
         write32(createAddress(`TRELLISLFSPACE,`LF_CONTROL),13);    // Forces the lag acc and the error term to be zero
-        write32(createAddress(`TRELLISLFSPACE,`LF_LEAD_LAG),32'h0015_0005);   
-        write32(createAddress(`TRELLISLFSPACE,`LF_LIMIT),32'h0100_0000);   
+        write32(createAddress(`TRELLISLFSPACE,`LF_LEAD_LAG),32'h0015_0005);
+        write32(createAddress(`TRELLISLFSPACE,`LF_LIMIT),32'h0100_0000);
         //write32(createAddress(`TRELLISLFSPACE,`LF_LOOPDATA0),32'h0333_3333);
         //write32(createAddress(`TRELLISLFSPACE,`LF_LOOPDATA0),32'h0666_6666);
         write32(createAddress(`TRELLISLFSPACE,`LF_LOOPDATA0),32'h0100_0000);
@@ -298,9 +302,9 @@ module test;
 
         write32(createAddress(`TRELLIS_SPACE,`TRELLIS_DECAY),217);
         `endif
-                        
+
         // Init the downcoverter register set
-        write32(createAddress(`DDCSPACE,`DDC_CONTROL),ddcControl); 
+        write32(createAddress(`DDCSPACE,`DDC_CONTROL),ddcControl);
         write32(createAddress(`DDCSPACE,`DDC_CENTER_FREQ), carrierFreq);
         write32(createAddress(`DDCSPACE,`DDC_DECIMATION), 0);
 
@@ -381,7 +385,7 @@ module test;
         repeat (14*`CLOCKS_PER_BIT) @ (posedge clk) ;
 
         // Enable the sample rate loop without 2 sample summer
-        write32(createAddress(`BITSYNCSPACE,`LF_CONTROL),32'h0000_0000);  
+        write32(createAddress(`BITSYNCSPACE,`LF_CONTROL),32'h0000_0000);
 
         // Wait 5 bit periods
         repeat (5*`CLOCKS_PER_BIT) @ (posedge clk) ;
@@ -412,7 +416,7 @@ module test;
         #(2*bitrateSamplesInt*C) ;
         trellis.viterbi_top.simReset = 0;
         trellisReset = 0;
-        `endif        
+        `endif
         `endif
 
         // Enable the trellis carrier loop
@@ -421,10 +425,10 @@ module test;
 
         `ifdef ENABLE_AGC
         // Enable the AGC loop
-        write32(createAddress(`CHAGCSPACE,`ALF_CONTROL),0);              
+        write32(createAddress(`CHAGCSPACE,`ALF_CONTROL),0);
         `endif
-        
-        `ifdef SOQPSK_TEST    
+
+        `ifdef SOQPSK_TEST
         write32(createAddress(`CARRIERSPACE,`CLF_CONTROL),2);
         `endif
 
@@ -454,9 +458,29 @@ module test;
 
 
     //******************************* UUT *************************************
+    `ifdef USE_SPI_CONFIG
+    spiBusInterface spi(
+        .clk(clk),
+        .reset(reset),
+        .spiClk(bc),
+        .spiCS(spiCS),
+        .spiDataIn(spiDataIn),
+        .spiDataOut(),
+        .busClk(),
+        .cs(cs),
+        .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
+        .addr(a),
+        .dataIn(d),
+        .dataOut()
+    );
+
+    `endif
+
+
+
     wire    [17:0]  dac0Out,dac1Out,dac2Out, iSymData, qSymData, sdiDataI, sdiDataQ;
     wire    [31:0]  dout;
-    demod demod( 
+    demod demod(
         .clk(clk), .reset(reset),
         .busClk(bc),
         .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
@@ -478,7 +502,7 @@ module test;
         .sdiSymEn(sdiSymEn),
         .trellisSymEn(trellisSymEn),
         .iTrellis(iSymData),
-        .qTrellis(qSymData)                       
+        .qTrellis(qSymData)
     );
 
 

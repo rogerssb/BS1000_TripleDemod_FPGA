@@ -1,7 +1,7 @@
 /******************************************************************************
 Copyright 2008-2015 Koos Technical Services, Inc. All Rights Reserved
 
-This source code is the Intellectual Property of Koos Technical Services,Inc. 
+This source code is the Intellectual Property of Koos Technical Services,Inc.
 (KTS) and is provided under a License Agreement which protects KTS' ownership and
 derivative rights in exchange for negotiated compensation.
 ******************************************************************************/
@@ -59,7 +59,7 @@ module semcoTopRegs(
             end
         end
     end
-    always @(posedge busClk) begin 
+    always @(posedge busClk) begin
         if (cs && wr0) begin
             casex (addr)
                 `SYS_RESET:    rs <= 1;
@@ -102,7 +102,7 @@ module semcoTopRegs(
 
     //************************** General Registers ********************************
 
-    always @(posedge busClk) begin 
+    always @(posedge busClk) begin
         if (cs && wr0) begin
             casex (addr)
                 `SYS_REBOOT_ADDR:   rebootAddress[7:0] <= dataIn[7:0];
@@ -138,6 +138,7 @@ module semcoTopRegs(
     always @* begin
         if (cs) begin
             casex (addr)
+                `SYS_RESET,
                 `SYS_VERSION: begin
                     dataOut = {versionNumber,16'b0};
                     end
@@ -157,7 +158,7 @@ module semcoTopRegs(
                     dataOut = {24'b0,
                                ch1MuxSelect,ch0MuxSelect};
                     end
-                default: begin   
+                default: begin
                     dataOut = 32'b0;
                     end
             endcase

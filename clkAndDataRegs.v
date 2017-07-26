@@ -17,7 +17,8 @@ module clkAndDataRegs(
     output  reg [31:0]  dataOut,
     input               wr0, wr1, wr2, wr3,
     output  reg [2:0]   source,
-    output  reg [1:0]   clkPhase
+    output  reg [1:0]   clkPhase,
+    output  reg         clkReset
 );
 
     parameter RegSpace = `CandD0SPACE;
@@ -50,13 +51,21 @@ module clkAndDataRegs(
                 default: ;
             endcase
         end
+        if (cs && wr3) begin
+            casex (addr)
+                `CandD_CONTROL:   begin
+                    clkReset <= dataIn[31];
+                end
+                default: ;
+            endcase
+        end
     end
 
     always @* begin
         if (cs) begin
             casex (addr)
                 `CandD_CONTROL: begin
-                    dataOut = {16'b0,6'b0,clkPhase,5'b0,source};
+                    dataOut = {clkReset,15'b0,6'b0,clkPhase,5'b0,source};
                 end
                 default: begin
                     dataOut = 32'b0;

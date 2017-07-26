@@ -2,7 +2,15 @@
 `include "addressMap.v"
 
 module semcoDemodTop (
-    input               sysClk,
+
+    `ifdef TRIPLE_DEMOD
+
+    input               spiClk,
+    input               spiCSn,
+    input               spiDataIn,
+    inout               spiDataOut,
+
+    `else   //TRIPLE_DEMOD
 
     // Flexbus connections
     input               fbClk,
@@ -13,10 +21,13 @@ module semcoDemodTop (
     input       [15:0]  fb_addr,
     inout       [15:0]  fb_data,
 
+    `endif //TRIPLE_DEMOD
+
     // ADC Inputs
     input       [13:0]  adc0,
     input               adc0_overflow,
     output              adc01_powerDown,
+    input               adc0Clock,
 
     // DAC configuration interface
     output              dac_rst,
@@ -24,11 +35,19 @@ module semcoDemodTop (
     output              dac_sdio,
     output              dac0_nCs,
     output              dac1_nCs,
+    `ifndef TRIPLE_DEMOD
     output              dac2_nCs,
+    `endif
 
     // DAC datapath interface
-    output  reg [13:0]  dac0_d,dac1_d,dac2_d,
-    output              dac0_clk,dac1_clk,dac2_clk,
+    output              dac0_clk,
+    output  reg [13:0]  dac0_d,
+    output              dac1_clk,
+    output  reg [13:0]  dac1_d,
+    `ifndef TRIPLE_DEMOD
+    output              dac2_clk,
+    output  reg [13:0]  dac2_d,
+    `endif
 
     // Clock and data outputs
     output              ch0ClkOut,ch0DataOut,
@@ -36,6 +55,26 @@ module semcoDemodTop (
 
     // Lock indicators
     output              lockLed0n, lockLed1n,
+
+    `ifdef TRIPLE_DEMOD
+
+    // PLL Interface Signals
+    output              pll0_REF,
+    input               pll0_OUT1,
+    output              pll1_REF,
+    input               pll1_OUT1,
+
+    // AM ADC Interface
+    input               amAdcDataIn,
+    output              amAdcClk,
+    output              amAdcCSn,
+
+    // AM DAC Interface
+    output              amDacDataOut,
+    output              amDacClk,
+    output              amDacCSn
+
+    `else   //TRIPLE_DEMOD
 
     // PLL Interface Signals
     output              pll_SCK,
@@ -52,6 +91,9 @@ module semcoDemodTop (
     output              pll2_REF,
     input               pll2_OUT1,
     output              pll2_PWDn
+
+    `endif //TRIPLE_DEMOD
+
 );
 
     parameter VER_NUMBER = 16'd454;
@@ -61,26 +103,68 @@ module semcoDemodTop (
 //                          Clock Distribution
 //******************************************************************************
     systemClock systemClock (
-        .clk_in1(sysClk),
+        .clk_in1(adc0Clock),
         .clk_out1(clk),
         .locked(clkLocked)
      );
 
+    `ifdef TRIPLE_DEMOD
+    BUFG spiBufg(
+        .I(spiClk),
+    //    .O(spiBufgClk)
+        .O(busClk)
+    );
+    //spiBusClock spiBusClock (
+    //    .clk_in1(spiBufgClk),
+    //    .clk_out1(busClk),
+    //    .locked(spiClkLocked)
+    //);
+
+    `else //TRIPLE_DEMOD
     flexbusClock flexbusClock (
         .clk_in1(fbClk),
-        .clk_out1(fb_clk),
+        .clk_out1(busClk),
         .locked(fbClkLocked)
     );
+    `endif //TRIPLE_DEMOD
 
 
 
-/******************************************************************************
-                             Bus Interface
-******************************************************************************/
+    `ifdef TRIPLE_DEMOD
+    /******************************************************************************
+                                 SPI Config Interface
+    ******************************************************************************/
+    wire    [12:0]  addr;
+    wire    [31:0]  dataIn;
+    reg     [31:0]  rd_mux;
+    spiBusInterface spi(
+        .clk(clk),
+        .reset(reset),
+        .spiClk(busClk),
+        .spiCS(!spiCSn),
+        .spiDataIn(spiDataIn),
+        .spiDataOut(spiOut),
+        .spiDataOE(spiDataOE),
+        .cs(cs),
+        .wr0(wr0),
+        .wr1(wr1),
+        .wr2(wr2),
+        .wr3(wr3),
+        .addr(addr),
+        .dataIn(dataIn),
+        .dataOut(rd_mux)
+    );
+    assign spiDataOut = spiDataOE ? spiOut : 1'bz;
+
+    `else //TRIPLE_DEMOD
+
+    /******************************************************************************
+                                 Bus Interface
+    ******************************************************************************/
     wire    [12:0]  addr;
     wire    [31:0]  dataIn;
     flexbus flexbus(
-        .fb_clk(fb_clk),
+        .fb_clk(busClk),
         .fb_ale(fb_ale),
         .fb_csn(fb_csn),
         .fb_wrn(fb_wrn),
@@ -95,6 +179,8 @@ module semcoDemodTop (
     );
     assign  addr[0] = 1'b0;
     wire    rd = !fb_oen;
+
+    `endif //TRIPLE_DEMOD
 
 //******************************************************************************
 //                           Reclock ADC Inputs
@@ -126,14 +212,14 @@ module semcoDemodTop (
     wire    [2:0]   dac2InputSelect;
     wire    [3:0]   ch0MuxSelect;
     wire    [3:0]   ch1MuxSelect;
-    wire    [31:0]  bsBertDout;
+    wire    [31:0]  semcoTopDout;
     semcoTopRegs topRegs(
-        .busClk(fb_clk),
+        .busClk(busClk),
         .cs(semcoTopSpace),
         .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
         .addr(addr),
         .dataIn(dataIn),
-        .dataOut(bsBertDout),
+        .dataOut(semcoTopDout),
         .clk(clk),
         .versionNumber(VER_NUMBER),
         .reset(reset),
@@ -166,7 +252,7 @@ module semcoDemodTop (
     demod demod(
         .clk(clk), .reset(reset),
         `ifdef USE_BUS_CLOCK
-        .busClk(fb_clk),
+        .busClk(busClk),
         `endif
         .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
         .addr(addr),
@@ -250,7 +336,7 @@ module semcoDemodTop (
         .rs(reset),
         .en(dualDecoderSpace),
         `ifdef USE_BUS_CLOCK
-        .busClk(fb_clk),
+        .busClk(busClk),
         `endif
         .wr0(wr0),
         .wr1(wr1),
@@ -297,7 +383,7 @@ module semcoDemodTop (
     pcmDecoder dec1 (
         .clk(clk),
         .rs(reset),
-        .busClk(fb_clk),
+        .busClk(busClk),
         .en(ch1DecoderSpace),
         .wr0(wr0),
         .wr1(wr1),
@@ -324,11 +410,16 @@ module semcoDemodTop (
 //                       Clock/Data Jitter Reduction
 //******************************************************************************
 
+    `ifdef TRIPLE_DEMOD
+
+
+    `else //TRIPLE_DEMOD
+
     // SPI interface to the PLLs
     wire    [31:0]  pllDout;
     ics307Interface #(.SysclkDivider(4)) pllIntfc (
         .reset(reset),
-        .busClk(fb_clk),
+        .busClk(busClk),
         .addr(addr),
         .dataIn(dataIn),
         .dataOut(pllDout),
@@ -347,6 +438,7 @@ module semcoDemodTop (
         .pll2Reset(pll2Reset)
     );
 
+    `endif //TRIPLE_DEMOD
 
     //----------------------- Channel 0 Jitter Attenuation --------------------
 
@@ -355,13 +447,14 @@ module semcoDemodTop (
     wire    [1:0]   clkAndDataPhase0;
     wire    [31:0]  clkAndData0Dout;
     clkAndDataRegs #(.RegSpace(`CandD0SPACE)) clkAndDataRegs0(
-        .busClk(fb_clk),
+        .busClk(busClk),
         .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
         .addr(addr),
         .dataIn(dataIn),
         .dataOut(clkAndData0Dout),
         .source(clkAndDataSource0),
-        .clkPhase(clkAndDataPhase0)
+        .clkPhase(clkAndDataPhase0),
+        .clkReset(clkReset0)
     );
 
     // Clock and Data Source Selection
@@ -381,8 +474,8 @@ module semcoDemodTop (
     wire    [31:0]  dll0Dout;
     digitalPLL #(.REG_SPACE(`DLL0SPACE)) dll0(
         .clk(clk),
-        .reset(reset),
-        .busClk(fb_clk),
+        .reset(clkReset0),
+        .busClk(busClk),
         .addr(addr),
         .dataIn(dataIn),
         .dataOut(dll0Dout),
@@ -411,7 +504,7 @@ module semcoDemodTop (
     reg             dll0_ReadEnable;
     wire    [2:0]   dll0_Symbol;
     jitterFifo dll0Fifo(
-        .rst(pll0Reset),
+        .rst(clkReset0),
         .wr_clk(clk),
         .rd_clk(dll0ReadClk),
         .din(clkAndDataSource0Data),
@@ -423,7 +516,7 @@ module semcoDemodTop (
         .prog_full(dll0_HalfFull)
     );
     always @(posedge dll0ReadClk) begin
-        if (pll0Reset) begin
+        if (clkReset0) begin
             dll0_ReadEnable <= 0;
         end
         else if (dll0_HalfFull) begin
@@ -444,7 +537,7 @@ module semcoDemodTop (
         endcase
     end
 
-    // Second stage - This uses an external PLL. The reference input to the 
+    // Second stage - This uses an external PLL. The reference input to the
     //  PLL is the DLL output.
 
     // Make a Gray-coded divider
@@ -465,7 +558,7 @@ module semcoDemodTop (
     reg             pll0_ReadEnable;
     wire    [2:0]   pll0_Symbol;
     jitterFifo pll0Fifo(
-        .rst(pll0Reset),
+        .rst(clkReset0),
         .wr_clk(clk),
         .rd_clk(pll0ReadClk),
         .din({dualDataI,dualDataQ,1'b0}),
@@ -477,7 +570,7 @@ module semcoDemodTop (
         .prog_full(pll0_HalfFull)
     );
     always @(posedge pll0ReadClk) begin
-        if (pll0Reset) begin
+        if (clkReset0) begin
             pll0_ReadEnable <= 0;
         end
         else if (pll0_HalfFull) begin
@@ -506,13 +599,14 @@ module semcoDemodTop (
     wire    [1:0]   clkAndDataPhase1;
     wire    [31:0]  clkAndData1Dout;
     clkAndDataRegs #(.RegSpace(`CandD1SPACE)) clkAndDataRegs1(
-        .busClk(fb_clk),
+        .busClk(busClk),
         .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
         .addr(addr),
         .dataIn(dataIn),
         .dataOut(clkAndData1Dout),
         .source(clkAndDataSource1),
-        .clkPhase(clkAndDataPhase1)
+        .clkPhase(clkAndDataPhase1),
+        .clkReset(clkReset1)
     );
 
     // Clock and Data Source Selection
@@ -532,8 +626,8 @@ module semcoDemodTop (
     wire    [31:0]  dll1Dout;
     digitalPLL #(.REG_SPACE(`DLL1SPACE)) dll1(
         .clk(clk),
-        .reset(reset),
-        .busClk(fb_clk),
+        .reset(clkReset1),
+        .busClk(busClk),
         .addr(addr),
         .dataIn(dataIn),
         .dataOut(dll1Dout),
@@ -561,7 +655,7 @@ module semcoDemodTop (
     reg             dll1_ReadEnable;
     wire    [2:0]   dll1_Symbol;
     jitterFifo dll1Fifo(
-        .rst(pll1Reset),
+        .rst(clkReset1),
         .wr_clk(clk),
         .rd_clk(dll1ReadClk),
         .din(clkAndDataSource1Data),
@@ -573,7 +667,7 @@ module semcoDemodTop (
         .prog_full(dll1_HalfFull)
     );
     always @(posedge dll1ReadClk) begin
-        if (pll1Reset) begin
+        if (clkReset1) begin
             dll1_ReadEnable <= 0;
         end
         else if (dll1_HalfFull) begin
@@ -613,7 +707,7 @@ module semcoDemodTop (
     reg             pll1_ReadEnable;
     wire    [2:0]   pll1_Symbol;
     jitterFifo pll1Fifo(
-        .rst(pll1Reset),
+        .rst(clkReset1),
         .wr_clk(clk),
         .rd_clk(pll1ReadClk),
         .din(clkAndDataSource1Data),
@@ -625,7 +719,7 @@ module semcoDemodTop (
         .prog_full(pll1_HalfFull)
     );
     always @(posedge pll1ReadClk) begin
-        if (pll1Reset) begin
+        if (clkReset1) begin
             pll1_ReadEnable <= 0;
         end
         else if (pll1_HalfFull) begin
@@ -675,7 +769,7 @@ module semcoDemodTop (
     wire    [17:0]  interp0DataOut;
     interpolate #(.RegSpace(`INTERP0SPACE), .FirRegSpace(`VIDFIR0SPACE)) dac0Interp(
         .clk(clk), .reset(reset), .clkEn(interp0ClkEn),
-        .busClk(fb_clk),
+        .busClk(busClk),
         .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
         .addr(addr),
         .din(dataIn),
@@ -685,10 +779,18 @@ module semcoDemodTop (
         .clkEnOut(),
         .dataOut(interp0DataOut)
         );
+    `define TEST_DACS
+    `ifdef TEST_DACS
+    wire    signed  [11:0]  amDataIn;
+    always @(posedge clk) begin
+        dac0_d <= {~amDataIn[11],amDataIn[10:0],2'b0};
+    end
+    `else
     always @(posedge clk) begin
         dac0_d[12:0] <= interp0DataOut[16:4];
         dac0_d[13] <= ~interp0DataOut[17];
     end
+    `endif
 
     reg     [17:0]  interp1DataIn;
     reg             interp1ClkEn;
@@ -709,7 +811,7 @@ module semcoDemodTop (
     wire    [17:0]  interp1DataOut;
     interpolate #(.RegSpace(`INTERP1SPACE), .FirRegSpace(`VIDFIR1SPACE)) dac1Interp(
         .clk(clk), .reset(reset), .clkEn(interp1ClkEn),
-        .busClk(fb_clk),
+        .busClk(busClk),
         .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
         .addr(addr),
         .din(dataIn),
@@ -719,11 +821,18 @@ module semcoDemodTop (
         .clkEnOut(),
         .dataOut(interp1DataOut)
         );
+    `ifdef TEST_DACS
+    always @(posedge clk) begin
+        dac1_d <= adc0Reg;
+    end
+    `else
     always @(posedge clk) begin
         dac1_d[12:0] <= interp1DataOut[16:4];
         dac1_d[13] <= ~interp1DataOut[17];
     end
+    `endif
 
+    `ifndef TRIPLE_DEMOD
     reg     [17:0]  interp2DataIn;
     reg             interp2ClkEn;
     wire    [3:0]   dac2Source;
@@ -743,7 +852,7 @@ module semcoDemodTop (
     wire    [17:0]  interp2DataOut;
     interpolate #(.RegSpace(`INTERP2SPACE), .FirRegSpace(`VIDFIR2SPACE)) dac2Interp(
         .clk(clk), .reset(reset), .clkEn(interp2ClkEn),
-        .busClk(fb_clk),
+        .busClk(busClk),
         .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
         .addr(addr),
         .din(dataIn),
@@ -753,15 +862,25 @@ module semcoDemodTop (
         .clkEnOut(),
         .dataOut(interp2DataOut)
         );
+    `ifdef TEST_DACS
+    always @(posedge clk) begin
+        dac2_d <= adc0Reg;
+    end
+    `else
     always @(posedge clk) begin
         dac2_d[12:0] <= interp2DataOut[16:4];
         dac2_d[13] <= ~interp2DataOut[17];
     end
+    `endif  //TEST_DACS
+
+    `endif //not TRIPLE_DEMOD
 
 
     assign dac0_clk = clk;
     assign dac1_clk = clk;
+    `ifndef TRIPLE_DEMOD
     assign dac2_clk = clk;
+    `endif
 
 //******************************************************************************
 //                               Output Assignments
@@ -806,7 +925,6 @@ module semcoDemodTop (
         .outputData(ch0DataOut)
     );
 
-
     clockAndDataMux ch1Mux(
         .muxSelect(ch1MuxSelect),
         .clk0(dualSymClk),
@@ -841,9 +959,94 @@ module semcoDemodTop (
     assign lockLed0n = !demodTimingLock;
     assign lockLed1n = !demodCarrierLock;
 
-//******************************************************************************
-//                           Processor Read Data Mux
-//******************************************************************************
+    `ifdef TRIPLE_DEMOD
+
+    //******************************************************************************
+    //                           AM ADC Interface
+    //******************************************************************************
+    //wire    signed  [11:0]  amDataIn;
+    ad7476Interface amAdc(
+        .clk(clk),
+        .reset(reset),
+        .spiDin(amAdcDataIn),
+        .spiClk(amAdcClk),
+        .spiCSn(amAdcCSn),
+        .adcData(amDataIn),
+        .adcDataEn(amDataEn)
+    );
+
+    //******************************************************************************
+    //                           AM DAC Interface
+    //******************************************************************************
+    max5352Interface amDac(
+        .clk(clk),
+        .reset(reset),
+        .dacDataEn(amDataEn),
+        .dacData(amDataIn),
+        .spiDout(amDacDataOut),
+        .spiClk(amDacClk),
+        .spiCSn(amDacCSn)
+    );
+
+    `endif //TRIPLE_DEMOD
+
+
+    `ifdef TRIPLE_DEMOD
+
+    //******************************************************************************
+    //                           Processor Read Data Mux
+    //******************************************************************************
+    always @* begin
+        casex(addr)
+            `SEMCO_TOP_SPACE:   rd_mux = semcoTopDout;
+
+            `DEMODSPACE,
+            `ifdef ADD_DESPREADER
+            `DESPREADSPACE,
+            `endif
+            `DDCSPACE,
+            `DDCFIRSPACE,
+            `CICDECSPACE,
+            `BITSYNCSPACE,
+            `BITSYNCAUSPACE,
+            `RESAMPSPACE,
+            `CARRIERSPACE,
+            `CHAGCSPACE :       rd_mux = demodDout;
+
+            `ifdef ADD_SCPATH
+            `SCDDCSPACE,
+            `SCDDCFIRSPACE,
+            `SCCICDECSPACE,
+            `SCAGCSPACE,
+            `SCCARRIERSPACE:    rd_mux = scPathDout;
+            end
+            `endif
+
+            `VIDFIR0SPACE,
+            `INTERP0SPACE:      rd_mux = interp0Dout;
+
+            `VIDFIR1SPACE,
+            `INTERP1SPACE:      rd_mux = interp1Dout;
+
+            `DLL0SPACE:         rd_mux = dll0Dout;
+            `DLL1SPACE:         rd_mux = dll1Dout;
+
+            `DUAL_DECODERSPACE: rd_mux = dualDecDout;
+
+            `CH1_DECODERSPACE:  rd_mux = ch1DecDout;
+
+            `CandD0SPACE:       rd_mux = clkAndData0Dout;
+            `CandD1SPACE:       rd_mux = clkAndData1Dout;
+
+             default :          rd_mux = 16'hxxxx;
+        endcase
+    end
+
+    `else //TRIPLE_DEMOD
+
+    //******************************************************************************
+    //                           Processor Read Data Mux
+    //******************************************************************************
     reg [15:0] rd_mux;
     always @* begin
         casex(addr)
@@ -968,6 +1171,8 @@ module semcoDemodTop (
          end
 
     assign fb_data = (cs & rd) ? rd_mux : 16'hzzzz;
+
+    `endif //TRIPLE_DEMOD
 
 endmodule
 

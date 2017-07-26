@@ -1,7 +1,7 @@
 /******************************************************************************
 Copyright 2008-2015 Koos Technical Services, Inc. All Rights Reserved
 
-This source code is the Intellectual Property of Koos Technical Services,Inc. 
+This source code is the Intellectual Property of Koos Technical Services,Inc.
 (KTS) and is provided under a License Agreement which protects KTS' ownership and
 derivative rights in exchange for negotiated compensation.
 ******************************************************************************/
@@ -12,7 +12,7 @@ derivative rights in exchange for negotiated compensation.
 `define ENABLE_SLIP
 
 module bitsync(
-    input                       clk, reset, 
+    input                       clk, reset,
     input                       sym2xClkEn,
     input                       auResampClkEn,
     input               [4:0]   demodMode,
@@ -69,16 +69,16 @@ module bitsync(
 
     wire    signed  [17:0]  iComp,qComp;
     cicComp cicCompI(
-        .clk(clk), 
+        .clk(clk),
         .reset(reset),
-        .clkEn(sym2xClkEn), 
+        .clkEn(sym2xClkEn),
         .compIn(i),
         .compOut(iComp)
     );
     cicComp cicCompQ(
-        .clk(clk), 
+        .clk(clk),
         .reset(reset),
-        .clkEn(sym2xClkEn), 
+        .clkEn(sym2xClkEn),
         .compIn(q),
         .compOut(qComp)
     );
@@ -87,7 +87,7 @@ module bitsync(
     wire                    useSummer;
     reg     signed  [17:0]  iDelay,qDelay;
     reg     signed  [17:0]  iFiltered,qFiltered;
-    wire    signed  [18:0]  iSum = useCompFilter ? ({iDelay[17],iDelay} + {iComp[17],iComp}) 
+    wire    signed  [18:0]  iSum = useCompFilter ? ({iDelay[17],iDelay} + {iComp[17],iComp})
                                                  : ({iDelay[17],iDelay} + {i[17],i});
     wire    signed  [18:0]  qSum = useCompFilter ? ({qDelay[17],qDelay} + {qComp[17],qComp})
                                                  : ({qDelay[17],qDelay} + {q[17],q});
@@ -480,7 +480,7 @@ module bitsync(
                             timingErrorI <= 0;
 
                             // We capture deviation samples whenever there
-                            // is not a transition. 
+                            // is not a transition.
                             deviation <= earlyOnTimeI;
                         end
                         // Is there a data transition on Q?
@@ -601,7 +601,7 @@ module bitsync(
     reg     signed  [11:0]  loopFilterError;
     reg                     loopFilterEn;
     always @* begin
-        casex (demodMode) 
+        casex (demodMode)
             `ifdef ADD_SUPERBAUD_TED
             `MODE_MULTIH: begin
                 loopFilterError = $signed(tedOutput[17:6]);
@@ -707,7 +707,7 @@ module bitsync(
     //*****************************************************************************
     /*
     **  This creates a second bitsync that is completely independent of the primary
-    **  bitsync given above. This allows the data and clock from a QPSK signal which 
+    **  bitsync given above. This allows the data and clock from a QPSK signal which
     **  has two bitstreams which are unrelated in terms of bitrate to be recovered
     **  and output on the two clock/data outputs.
     **
@@ -789,7 +789,7 @@ module bitsync(
                     auTedState <= ONTIME;
                     // Is there a data transition on I?
                     if (auEarlySign != auLateSign) begin
-                        // Yes. 
+                        // Yes.
                         auTransition <= 1;
                         // High to low transition?
                         if (auEarlySign) begin
@@ -898,6 +898,12 @@ module bitsync(
                     avgAuOnTimeMag <= 0;
                     auAvgState <= AVERAGE;
                 end
+                default: begin
+                    auAvgCount <= 15;
+                    avgAuOffTimeMag <= 0;
+                    avgAuOnTimeMag <= 0;
+                    auAvgState <= AVERAGE;
+                end
             endcase
             if (auAvgState == TEST) begin
                 // Test if the on time sample average is less than 1/2 the off time sample average
@@ -905,7 +911,7 @@ module bitsync(
                 if (avgAuOnTimeMag < {1'b0,avgAuOffTimeMag[21:1]}) begin
                     // Are we out of lock?
                     if (auLockCounter == (16'hffff - auLockCount)) begin
-                        // Yes. Update the status flag and force a slip on the 
+                        // Yes. Update the status flag and force a slip on the
                         // assumed timing.
                         auBitsyncLock <= 0;
                         auLockCounter <= 16'h0;
@@ -966,7 +972,7 @@ module bitsync(
 
 
     /******************************************************************************
-                               Recovered Clock and Data 
+                               Recovered Clock and Data
     ******************************************************************************/
 
 

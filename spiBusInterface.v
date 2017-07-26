@@ -7,8 +7,8 @@ module spiBusInterface(
     input                   spiClk,
     input                   spiCS,
     input                   spiDataIn,
-    output                  spiDataOut,
-    output                  busClk,
+    output  reg             spiDataOut,
+    output                  spiDataOE,
     output  reg             cs,
     output  reg             wr0,wr1,wr2,wr3,
     output  reg [12:0]      addr,
@@ -40,131 +40,99 @@ module spiBusInterface(
         `define SPI_SIZE_16     2'b01
         `define SPI_SIZE_32     2'b11
     wire                    spiAddr1 = spiSR[0];
-    assign                  spiDataOut = spiSR[31];
-    always @(posedge spiClk or posedge reset) begin
-        if (reset) begin
-        end
-        else begin
-            case (spiState)
-                `SPI_IDLE: begin
-                    if (spiCS) begin
-                        spiSR <= {spiSR[30:0],spiDataIn};
-                        spiBitcount <= spiBitcount - 1;
-                        spiWrite <= spiDataIn;
-                        spiState <= `SPI_CTRL;
+    assign                  spiDataOE = !spiWrite && (spiState != `SPI_IDLE);
+    //assign                  spiDataOut = spiSR[31];
+    always @(posedge spiClk) begin
+        spiDataOut <= spiSR[31];
+        case (spiState)
+            `SPI_IDLE: begin
+                if (spiCS) begin
+                    spiSR <= {spiSR[30:0],spiDataIn};
+                    spiBitcount <= spiBitcount - 1;
+                    spiWrite <= spiDataIn;
+                    spiState <= `SPI_CTRL;
+                end
+                else begin
+                    spiSR <= {spiSR[30:0],spiDataIn};
+                    spiBitcount <= 15;
+                end
+            end
+            `SPI_CTRL: begin
+                if (!spiCS) begin
+                    cs <= 0;
+                    wr0 <= 0;
+                    wr1 <= 0;
+                    wr2 <= 0;
+                    wr3 <= 0;
+                    spiState <= `SPI_IDLE;
+                end
+                else if (spiBitcount == 0) begin
+                    addr <= {spiSR[11:0],spiDataIn};
+                    if (spiWrite) begin
+                        case (spiXferSize)
+                            `SPI_SIZE_16: begin
+                                wr0 <= !spiAddr1;
+                                wr1 <= !spiAddr1;
+                                wr2 <=  spiAddr1;
+                                wr3 <=  spiAddr1;
+                                spiSR <= {spiSR[30:0],spiDataIn};
+                                spiBitcount <= 15;
+                                spiState <= `SPI_WR16;
+                            end
+                            default: begin
+                                wr0 <= 1;
+                                wr1 <= 1;
+                                wr2 <= 1;
+                                wr3 <= 1;
+                                spiSR <= {spiSR[30:0],spiDataIn};
+                                spiBitcount <= 31;
+                                spiState <= `SPI_WR32;
+                            end
+                        endcase
                     end
                     else begin
-                        spiSR <= {spiSR[30:0],spiDataIn};
-                        spiBitcount <= 15;
-                    end
-                end
-                `SPI_CTRL: begin
-                    if (spiBitcount == 0) begin
-                        addr <= {spiSR[11:0],spiDataIn};
-                        if (spiWrite) begin
-                            case (spiXferSize)
-                                `SPI_SIZE_16: begin
-                                    wr0 <= !spiAddr1;
-                                    wr1 <= !spiAddr1;
-                                    wr2 <=  spiAddr1;
-                                    wr3 <=  spiAddr1;
-                                    spiSR <= {spiSR[30:0],spiDataIn};
-                                    spiBitcount <= 15;
-                                    spiState <= `SPI_WR16;
-                                end
-                                default: begin
-                                    wr0 <= 1;
-                                    wr1 <= 1;
-                                    wr2 <= 1;
-                                    wr3 <= 1;
-                                    spiSR <= {spiSR[30:0],spiDataIn};
-                                    spiBitcount <= 31;
-                                    spiState <= `SPI_WR32;
-                                end
-                            endcase
-                        end
-                        else begin
-                            case (spiXferSize)
-                                `SPI_SIZE_16: begin
-                                    if (spiAddr1) begin
-                                        spiSR <= dataOut;
-                                    end
-                                    else begin
-                                        spiSR <= {dataOut[15:0],16'b0};
-                                    end
-                                    spiBitcount <= 15;
-                                    spiState <= `SPI_RD16;
-                                end
-                                default: begin
+                        case (spiXferSize)
+                            `SPI_SIZE_16: begin
+                                if (spiAddr1) begin
                                     spiSR <= dataOut;
-                                    spiBitcount <= 31;
-                                    spiState <= `SPI_RD32;
                                 end
-                            endcase
-                        end
-                    end
-                    else if (spiBitcount == 1) begin
-                        // A read doesn't need the two LSBs of the address
-                        // We take advantage of that by starting the
-                        // read cycle two clocks early so the data is
-                        // available to load in the SR.
-                        if (!spiWrite) begin
-                            cs <= 1;
-                            wr0 <= 0;
-                            wr1 <= 0;
-                            wr2 <= 0;
-                            wr3 <= 0;
-                            addr <= {spiSR[10:0],2'b00};
-                        end
-                        spiBitcount <= spiBitcount - 1;
-                        spiSR <= {spiSR[30:0],spiDataIn};
-                    end
-                    else begin
-                        spiBitcount <= spiBitcount - 1;
-                        spiSR <= {spiSR[30:0],spiDataIn};
+                                else begin
+                                    spiSR <= {dataOut[15:0],16'b0};
+                                end
+                                spiBitcount <= 15;
+                                spiState <= `SPI_RD16;
+                            end
+                            default: begin
+                                spiSR <= dataOut;
+                                spiBitcount <= 31;
+                                spiState <= `SPI_RD32;
+                            end
+                        endcase
                     end
                 end
-                `SPI_WR16: begin
-                    if (spiBitcount == 0) begin
+                else if (spiBitcount == 1) begin
+                    // A read doesn't need the two LSBs of the address
+                    // We take advantage of that by starting the
+                    // read cycle two clocks early so the data is
+                    // available to load in the SR.
+                    if (!spiWrite) begin
                         cs <= 1;
-                        dataIn <= {16'b0,spiSR[14:0],spiDataIn};
-                        spiState <= `SPI_FINISH;
+                        wr0 <= 0;
+                        wr1 <= 0;
+                        wr2 <= 0;
+                        wr3 <= 0;
+                        addr <= {spiSR[10:0],2'b00};
                     end
-                    else begin
-                        spiBitcount <= spiBitcount - 1;
-                        spiSR <= {spiSR[30:0],spiDataIn};
-                    end
+                    spiBitcount <= spiBitcount - 1;
+                    spiSR <= {spiSR[30:0],spiDataIn};
                 end
-                `SPI_WR32: begin
-                    if (spiBitcount == 0) begin
-                        cs <= 1;
-                        dataIn <= {spiSR[30:0],spiDataIn};
-                        spiState <= `SPI_FINISH;
-                    end
-                    else begin
-                        spiBitcount <= spiBitcount - 1;
-                        spiSR <= {spiSR[30:0],spiDataIn};
-                    end
+                else begin
+                    spiBitcount <= spiBitcount - 1;
+                    spiSR <= {spiSR[30:0],spiDataIn};
                 end
-                `SPI_RD16: begin
-                    if (spiBitcount == 0) begin
-                        spiState <= `SPI_FINISH;
-                    end
-                    else begin
-                        spiBitcount <= spiBitcount - 1;
-                        spiSR <= {spiSR[30:0],1'b0};
-                    end
-                end
-                `SPI_RD32: begin
-                    if (spiBitcount == 0) begin
-                        spiState <= `SPI_FINISH;
-                    end
-                    else begin
-                        spiBitcount <= spiBitcount - 1;
-                        spiSR <= {spiSR[30:0],1'b0};
-                    end
-                end
-                `SPI_FINISH: begin
+            end
+            `SPI_WR16: begin
+                if (!spiCS) begin
                     cs <= 0;
                     wr0 <= 0;
                     wr1 <= 0;
@@ -172,7 +140,18 @@ module spiBusInterface(
                     wr3 <= 0;
                     spiState <= `SPI_IDLE;
                 end
-                default: begin
+                else if (spiBitcount == 0) begin
+                    cs <= 1;
+                    dataIn <= {16'b0,spiSR[14:0],spiDataIn};
+                    spiState <= `SPI_FINISH;
+                end
+                else begin
+                    spiBitcount <= spiBitcount - 1;
+                    spiSR <= {spiSR[30:0],spiDataIn};
+                end
+            end
+            `SPI_WR32: begin
+                if (!spiCS) begin
                     cs <= 0;
                     wr0 <= 0;
                     wr1 <= 0;
@@ -180,8 +159,67 @@ module spiBusInterface(
                     wr3 <= 0;
                     spiState <= `SPI_IDLE;
                 end
-            endcase
-        end
+                else if (spiBitcount == 0) begin
+                    cs <= 1;
+                    dataIn <= {spiSR[30:0],spiDataIn};
+                    spiState <= `SPI_FINISH;
+                end
+                else begin
+                    spiBitcount <= spiBitcount - 1;
+                    spiSR <= {spiSR[30:0],spiDataIn};
+                end
+            end
+            `SPI_RD16: begin
+                if (!spiCS) begin
+                    cs <= 0;
+                    wr0 <= 0;
+                    wr1 <= 0;
+                    wr2 <= 0;
+                    wr3 <= 0;
+                    spiState <= `SPI_IDLE;
+                end
+                else if (spiBitcount == 0) begin
+                    spiState <= `SPI_FINISH;
+                end
+                else begin
+                    spiBitcount <= spiBitcount - 1;
+                    spiSR <= {spiSR[30:0],1'b0};
+                end
+            end
+            `SPI_RD32: begin
+                if (!spiCS) begin
+                    cs <= 0;
+                    wr0 <= 0;
+                    wr1 <= 0;
+                    wr2 <= 0;
+                    wr3 <= 0;
+                    spiState <= `SPI_IDLE;
+                end
+                else if (spiBitcount == 0) begin
+                    spiState <= `SPI_FINISH;
+                end
+                else begin
+                    spiBitcount <= spiBitcount - 1;
+                    spiSR <= {spiSR[30:0],1'b0};
+                end
+            end
+            `SPI_FINISH: begin
+                cs <= 0;
+                wr0 <= 0;
+                wr1 <= 0;
+                wr2 <= 0;
+                wr3 <= 0;
+                spiState <= `SPI_IDLE;
+            end
+            default: begin
+                cs <= 0;
+                wr0 <= 0;
+                wr1 <= 0;
+                wr2 <= 0;
+                wr3 <= 0;
+                spiState <= `SPI_IDLE;
+            end
+        endcase
     end
 
     assign busClk = spiClk;
@@ -281,7 +319,6 @@ module test;
         .spiCS(spiCS),
         .spiDataIn(spiData),
         .spiDataOut(),
-        .busClk(),
         .cs(),
         .wr0(),.wr1(),.wr2(),.wr3(),
         .addr(),

@@ -1,6 +1,6 @@
 Vivado Simulator 2016.4
 Copyright 1986-1999, 2001-2016 Xilinx, Inc. All Rights Reserved.
-Running: C:/Xilinx/Vivado/2016.4/bin/unwrapped/win64.o/xelab.exe -wto 0027b497f38f46a7b40b8158d1351c26 --debug typical --relax --mt 2 -d SEMCO_DEMOD= -d SIMULATE= -L xbip_utils_v3_0_7 -L axi_utils_v2_0_3 -L xbip_pipe_v3_0_3 -L xbip_bram18k_v3_0_3 -L mult_gen_v12_0_12 -L xbip_dsp48_wrapper_v3_0_4 -L xbip_dsp48_addsub_v3_0_3 -L xbip_dsp48_multadd_v3_0_3 -L dds_compiler_v6_0_13 -L xil_defaultlib -L fir_compiler_v7_2_7 -L fifo_generator_v13_1_3 -L dist_mem_gen_v8_0_11 -L unisims_ver -L unimacro_ver -L secureip -L xpm --snapshot test_behav xil_defaultlib.test xil_defaultlib.glbl -log elaborate.log 
+Running: C:/Xilinx/Vivado/2016.4/bin/unwrapped/win64.o/xelab.exe -wto 0027b497f38f46a7b40b8158d1351c26 --debug typical --relax --mt 2 -d SEMCO_DEMOD= -d SIMULATE= -d USE_SPI_CONFIG= -L xbip_utils_v3_0_7 -L axi_utils_v2_0_3 -L xbip_pipe_v3_0_3 -L xbip_bram18k_v3_0_3 -L mult_gen_v12_0_12 -L xbip_dsp48_wrapper_v3_0_4 -L xbip_dsp48_addsub_v3_0_3 -L xbip_dsp48_multadd_v3_0_3 -L dds_compiler_v6_0_13 -L xil_defaultlib -L fir_compiler_v7_2_7 -L fifo_generator_v13_1_3 -L dist_mem_gen_v8_0_11 -L unisims_ver -L unimacro_ver -L secureip -L xpm --snapshot test_behav xil_defaultlib.test xil_defaultlib.glbl -log elaborate.log 
 Using 2 slave threads.
 Starting static elaboration
 WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1957]
@@ -46,6 +46,7 @@ Compiling package fir_compiler_v7_2_7.components
 Compiling package ieee.vital_timing
 Compiling package ieee.vital_primitives
 Compiling package unisim.vpkg
+Compiling module xil_defaultlib.spiBusInterface
 Compiling module xil_defaultlib.demodRegs
 Compiling module xil_defaultlib.ddcRegs
 Compiling architecture synth of entity xbip_pipe_v3_0_3.xbip_pipe_v3_0_3_viv [\xbip_pipe_v3_0_3_viv(c_latency=...]

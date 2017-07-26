@@ -5,5 +5,5 @@ set_property BITSTREAM.CONFIG.SPI_BUSWIDTH 1 [current_design]
 
 set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets pll0_OUT1_IBUF]
 
-set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks fbClk] -group [get_clocks -include_generated_clocks sysClk]
+set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks busClk] -group [get_clocks -include_generated_clocks sysClk]
 

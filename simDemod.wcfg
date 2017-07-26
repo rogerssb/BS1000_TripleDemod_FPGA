@@ -11,13 +11,13 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="57385262042fs"></ZoomStartTime>
-      <ZoomEndTime time="114770524085fs"></ZoomEndTime>
-      <Cursor1Time time="228301200000fs"></Cursor1Time>
+      <ZoomStartTime time="0fs"></ZoomStartTime>
+      <ZoomEndTime time="178545600001fs"></ZoomEndTime>
+      <Cursor1Time time="178545600000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="175"></NameColumnWidth>
-      <ValueColumnWidth column_width="142"></ValueColumnWidth>
+      <ValueColumnWidth column_width="140"></ValueColumnWidth>
    </column_width_setting>
    <WVObjectSize size="25" />
    <wave_markers>
@@ -78,7 +78,6 @@
    <wvobject fp_name="group57" type="group">
       <obj_property name="label">Settings</obj_property>
       <obj_property name="DisplayName">label</obj_property>
-      <obj_property name="isExpanded"></obj_property>
       <wvobject fp_name="/test/CLOCK_FREQ" type="other">
          <obj_property name="ElementShortName">CLOCK_FREQ</obj_property>
          <obj_property name="ObjectShortName">CLOCK_FREQ</obj_property>
@@ -207,6 +206,23 @@
    <wvobject fp_name="group58" type="group">
       <obj_property name="label">Micro</obj_property>
       <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/test/spiCS" type="logic">
+         <obj_property name="ElementShortName">spiCS</obj_property>
+         <obj_property name="ObjectShortName">spiCS</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/bc" type="logic">
+         <obj_property name="ElementShortName">bc</obj_property>
+         <obj_property name="ObjectShortName">bc</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/spiDataIn" type="logic">
+         <obj_property name="ElementShortName">spiDataIn</obj_property>
+         <obj_property name="ObjectShortName">spiDataIn</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/cs" type="logic">
+         <obj_property name="ElementShortName">cs</obj_property>
+         <obj_property name="ObjectShortName">cs</obj_property>
+      </wvobject>
       <wvobject fp_name="/test/wr0" type="logic">
          <obj_property name="ElementShortName">wr0</obj_property>
          <obj_property name="ObjectShortName">wr0</obj_property>
@@ -235,7 +251,6 @@
    <wvobject fp_name="group59" type="group">
       <obj_property name="label">DDC</obj_property>
       <obj_property name="DisplayName">label</obj_property>
-      <obj_property name="isExpanded"></obj_property>
       <wvobject fp_name="/test/demod/ddc/micro/cs" type="logic">
          <obj_property name="ElementShortName">cs</obj_property>
          <obj_property name="ObjectShortName">cs</obj_property>
@@ -388,7 +403,6 @@
    <wvobject fp_name="group73" type="group">
       <obj_property name="label">Bitsync</obj_property>
       <obj_property name="DisplayName">label</obj_property>
-      <obj_property name="isExpanded"></obj_property>
       <wvobject fp_name="/test/demod/bitsync/sampleLoop/zeroError" type="logic">
          <obj_property name="ElementShortName">zeroError</obj_property>
          <obj_property name="ObjectShortName">zeroError</obj_property>
@@ -525,7 +539,6 @@
    <wvobject fp_name="group72" type="group">
       <obj_property name="label">Carrier</obj_property>
       <obj_property name="DisplayName">label</obj_property>
-      <obj_property name="isExpanded"></obj_property>
       <wvobject fp_name="/test/demod/carrierLoop/loopError" type="array">
          <obj_property name="ElementShortName">loopError[11:0]</obj_property>
          <obj_property name="ObjectShortName">loopError[11:0]</obj_property>
