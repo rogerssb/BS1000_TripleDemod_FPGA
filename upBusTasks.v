@@ -14,7 +14,7 @@
     function [ADDR_BITS-1:0] createAddress;
         input [ADDR_BITS-1:0] addrA;
         input [ADDR_BITS-1:0] addrB;
-        
+
         integer i;
         reg [ADDR_BITS-1:0]finalAddress;
 
@@ -37,7 +37,7 @@
 
     `ifdef USE_BUS_CLOCK
 
-    reg     bc;
+    reg     busClk;
 
     task write16;
       input [12:0]addr;
@@ -45,34 +45,34 @@
       begin
 
         a = addr;
-        bc = 1;
+        busClk = 1;
         if (addr[1]) begin
             d[31:16] = data;
             #20 ;
-                bc = 0;
+                busClk = 0;
                 wr2 = 1; wr3 = 1;
             #20 ;
-                bc = 1;
+                busClk = 1;
             #20 ;
-                bc = 0;
-                wr2 = 0; wr3 = 0; 
+                busClk = 0;
+                wr2 = 0; wr3 = 0;
             end
         else begin
             d[15:0] = data;
             #20 ;
-                bc = 0;
+                busClk = 0;
                 wr0 = 1; wr1 = 1;
             #20 ;
-                bc = 1;
+                busClk = 1;
             #20 ;
-                bc = 0;
-                wr0 = 0; wr1 = 0; 
+                busClk = 0;
+                wr0 = 0; wr1 = 0;
             end
         #20 ;
-            bc = 1;  
+            busClk = 1;
             d = 32'hz;
         #20 ;
-            bc = 0;
+            busClk = 0;
         #20 ;
       end
     endtask
@@ -84,20 +84,20 @@
         a = addr;
         d = data;
 
-             bc = 1;
+             busClk = 1;
         #20  ;
-             bc = 0;
+             busClk = 0;
              wr0 = 1; wr1 = 1; wr2 = 1; wr3 = 1;
         #20  ;
-             bc = 1;
+             busClk = 1;
         #20  ;
-             bc = 0;
-             wr0 = 0; wr1 = 0; wr2 = 0; wr3 = 0; 
+             busClk = 0;
+             wr0 = 0; wr1 = 0; wr2 = 0; wr3 = 0;
         #20  ;
-             bc = 1;
+             busClk = 1;
              d = 32'hz;
         #20  ;
-             bc = 0;
+             busClk = 0;
         #20  ;
       end
     endtask
@@ -113,14 +113,14 @@
         if (addr[1]) begin
             d[31:16] = data;
             #100 wr2 = 1; wr3 = 1;
-            #100 wr2 = 0; wr3 = 0; 
+            #100 wr2 = 0; wr3 = 0;
             end
         else begin
             d[15:0] = data;
             #100 wr0 = 1; wr1 = 1;
-            #100 wr0 = 0; wr1 = 0; 
+            #100 wr0 = 0; wr1 = 0;
             end
-        #100  
+        #100
         d = 32'hz;
         #200;
       end
@@ -133,7 +133,7 @@
         a = addr;
         d = data;
         #100 wr0 = 1; wr1 = 1; wr2 = 1; wr3 = 1;
-        #100 wr0 = 0; wr1 = 0; wr2 = 0; wr3 = 0; 
+        #100 wr0 = 0; wr1 = 0; wr2 = 0; wr3 = 0;
         #100
         d = 32'hz;
         #200;

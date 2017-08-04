@@ -28,6 +28,7 @@
             bcCount <= bcCount - 1;
         end
     end
+    wire    busClk = (bc & spiCS);
 
     function [ADDR_BITS-1:0] createAddress;
         input [ADDR_BITS-1:0] addrA;

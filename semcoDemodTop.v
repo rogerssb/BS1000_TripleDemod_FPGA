@@ -779,7 +779,7 @@ module semcoDemodTop (
         .clkEnOut(),
         .dataOut(interp0DataOut)
         );
-    `define TEST_DACS
+    //`define TEST_DACS
     `ifdef TEST_DACS
     wire    signed  [11:0]  amDataIn;
     always @(posedge clk) begin
@@ -956,15 +956,17 @@ module semcoDemodTop (
     );
 
 
-    assign lockLed0n = !demodTimingLock;
-    assign lockLed1n = !demodCarrierLock;
+    //assign lockLed0n = !demodTimingLock;
+    //assign lockLed1n = !demodCarrierLock;
+    assign lockLed0n = busClk;
+    assign lockLed1n = spiCSn;
 
     `ifdef TRIPLE_DEMOD
 
     //******************************************************************************
     //                           AM ADC Interface
     //******************************************************************************
-    //wire    signed  [11:0]  amDataIn;
+    wire    signed  [11:0]  amDataIn;
     ad7476Interface amAdc(
         .clk(clk),
         .reset(reset),

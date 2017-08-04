@@ -462,11 +462,11 @@ module test;
     spiBusInterface spi(
         .clk(clk),
         .reset(reset),
-        .spiClk(bc),
+        .spiClk(busClk),
         .spiCS(spiCS),
         .spiDataIn(spiDataIn),
         .spiDataOut(),
-        .busClk(),
+        .spiDataOE(spiDataOE),
         .cs(cs),
         .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
         .addr(a),
@@ -482,7 +482,7 @@ module test;
     wire    [31:0]  dout;
     demod demod(
         .clk(clk), .reset(reset),
-        .busClk(bc),
+        .busClk(busClk),
         .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
         .addr(a),
         .din(d),
