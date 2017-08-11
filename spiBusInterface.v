@@ -124,6 +124,23 @@ module spiBusInterface(
                             endcase
                         end
                     end
+                    else if (spiBitcount == 2) begin
+                        // A read doesn't need the two LSBs of the address
+                        // We take advantage of that by starting the
+                        // read cycle two clocks early so the data is
+                        // available to load in the SR.
+                        if (!spiWrite) begin
+                            cs <= 1;
+                            wr0 <= 0;
+                            wr1 <= 0;
+                            wr2 <= 0;
+                            wr3 <= 0;
+                            addr <= {spiSR[9:0],spiDataIn,2'b00};
+                        end
+                        spiBitcount <= spiBitcount - 1;
+                        spiSR <= {spiSR[30:0],spiDataIn};
+                    end
+                    /*
                     else if (spiBitcount == 1) begin
                         // A read doesn't need the two LSBs of the address
                         // We take advantage of that by starting the
@@ -140,6 +157,7 @@ module spiBusInterface(
                         spiBitcount <= spiBitcount - 1;
                         spiSR <= {spiSR[30:0],spiDataIn};
                     end
+                    */
                     else begin
                         spiBitcount <= spiBitcount - 1;
                         spiSR <= {spiSR[30:0],spiDataIn};
@@ -238,6 +256,31 @@ module spiBusInterface(
             endcase
         end
     end
+
+    /*
+    reg             [31:0]  spiOutSR;
+    assign                  spiDataOut = spiOutSR[31];
+    always @(negedge spiClk) begin
+        if (spiBitcount == 0) begin
+            case (spiXferSize)
+                `SPI_SIZE_16: begin
+                    if (spiAddr1) begin
+                        spiOutSR <= dataOut;
+                    end
+                    else begin
+                        spiOutSR <= {dataOut[15:0],16'b0};
+                    end
+                end
+                default: begin
+                    spiOutSR <= dataOut;
+                end
+            endcase
+        end
+        else begin
+            spiOutSR <= {spiOutSR[30:0],1'b0};
+        end
+    end
+    */
 
     // dataIn mux
     always @* begin

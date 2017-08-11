@@ -11,13 +11,13 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="18450300000fs"></ZoomStartTime>
-      <ZoomEndTime time="21014300001fs"></ZoomEndTime>
-      <Cursor1Time time="10012300000fs"></Cursor1Time>
+      <ZoomStartTime time="18515120250fs"></ZoomStartTime>
+      <ZoomEndTime time="21083120251fs"></ZoomEndTime>
+      <Cursor1Time time="20885000000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="175"></NameColumnWidth>
-      <ValueColumnWidth column_width="138"></ValueColumnWidth>
+      <ValueColumnWidth column_width="136"></ValueColumnWidth>
    </column_width_setting>
    <WVObjectSize size="4" />
    <wvobject fp_name="/test/HC" type="array">
@@ -140,6 +140,10 @@
       <wvobject fp_name="/test/spi/spiBitcount" type="array">
          <obj_property name="ElementShortName">spiBitcount[5:0]</obj_property>
          <obj_property name="ObjectShortName">spiBitcount[5:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/spi/spiOutSR" type="array">
+         <obj_property name="ElementShortName">spiOutSR[31:0]</obj_property>
+         <obj_property name="ObjectShortName">spiOutSR[31:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/test/spi/cs" type="logic">
          <obj_property name="ElementShortName">cs</obj_property>

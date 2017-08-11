@@ -482,9 +482,29 @@ module semcoDemodTop (
         .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
         .referenceClkEn(clkAndDataSource0ClkEn),
         .dllOutputClk(dll0OutClk),
-        .filteredRefClk(pll0_REF),
+        //.filteredRefClk(pll0_REF),
+        .filteredRefClk(),
         .phaseError(dll0PhaseError)
     );
+
+    reg [7:0]   refDivider;
+    reg         pll0Ref;
+    assign      pll0_REF = pll0Ref;
+    always @(posedge clk) begin
+        if (reset) begin
+            refDivider <= 0;
+            pll0Ref <= 0;
+        end
+        else begin
+            if (refDivider > 0) begin
+                refDivider <= refDivider - 1;
+            end
+            else begin
+                refDivider <= 25;
+                pll0Ref <= ~pll0Ref;
+            end
+        end
+    end
 
     // Make a Gray-coded divider to create four phase clock
     reg     [1:0]   dll0Divider;
@@ -956,10 +976,10 @@ module semcoDemodTop (
     );
 
 
-    //assign lockLed0n = !demodTimingLock;
-    //assign lockLed1n = !demodCarrierLock;
-    assign lockLed0n = busClk;
-    assign lockLed1n = spiCSn;
+    assign lockLed0n = !demodTimingLock;
+    assign lockLed1n = !demodCarrierLock;
+    //assign lockLed0n = busClk;
+    //assign lockLed1n = spiCSn;
 
     `ifdef TRIPLE_DEMOD
 
