@@ -27,7 +27,11 @@ module semcoDemodTop (
     input       [13:0]  adc0,
     input               adc0_overflow,
     output              adc01_powerDown,
+    `ifdef TRIPLE_DEMOD
     input               adc0Clock,
+    `else // TRIPLE_DEMOD
+    input               sysClk,
+    `endif // TRIPLE_DEMOD
 
     // DAC configuration interface
     output              dac_rst,
@@ -72,7 +76,17 @@ module semcoDemodTop (
     // AM DAC Interface
     output              amDacDataOut,
     output              amDacClk,
-    output              amDacCSn
+    output              amDacCSn,
+
+    // Video Switch SPI Interface
+    output              switch0SpiClk,
+    output              switch0SpiDout,
+    output              switch0SpiCS0n,
+    output              switch0SpiCS1n,
+    output              switch1SpiClk,
+    output              switch1SpiDout,
+    output              switch1SpiCS0n,
+    output              switch1SpiCS1n
 
     `else   //TRIPLE_DEMOD
 
@@ -102,13 +116,13 @@ module semcoDemodTop (
 //******************************************************************************
 //                          Clock Distribution
 //******************************************************************************
+    `ifdef TRIPLE_DEMOD
     systemClock systemClock (
         .clk_in1(adc0Clock),
         .clk_out1(clk),
         .locked(clkLocked)
      );
 
-    `ifdef TRIPLE_DEMOD
     BUFG spiBufg(
         .I(spiClk),
     //    .O(spiBufgClk)
@@ -121,6 +135,12 @@ module semcoDemodTop (
     //);
 
     `else //TRIPLE_DEMOD
+    systemClock systemClock (
+        .clk_in1(sysClk),
+        .clk_out1(clk),
+        .locked(clkLocked)
+     );
+
     flexbusClock flexbusClock (
         .clk_in1(fbClk),
         .clk_out1(busClk),
@@ -228,8 +248,8 @@ module semcoDemodTop (
         .dac0InputSelect(dac0InputSelect),
         .dac1InputSelect(dac1InputSelect),
         .dac2InputSelect(dac2InputSelect),
-        .ch0MuxSelect(ch0MuxSelect),
-        .ch1MuxSelect(ch1MuxSelect)
+        .ch0MuxSelect(),
+        .ch1MuxSelect()
     );
 
 
@@ -442,324 +462,121 @@ module semcoDemodTop (
 
     //----------------------- Channel 0 Jitter Attenuation --------------------
 
-    // Configuration Regs
-    wire    [2:0]   clkAndDataSource0;
-    wire    [1:0]   clkAndDataPhase0;
-    wire    [31:0]  clkAndData0Dout;
-    clkAndDataRegs #(.RegSpace(`CandD0SPACE)) clkAndDataRegs0(
+    wire    [3:0]   cAndD0SourceSelect;
+    reg             cAndD0ClkEn;
+    reg     [2:0]   cAndD0DataIn;
+    always @* begin
+        casex (cAndD0SourceSelect)
+            `CandD_SRC_LEGACY_I: begin
+                cAndD0ClkEn = iDemodSymEn;
+                cAndD0DataIn = {iDemodBit,qDemodBit,1'b0};
+            end
+            `CandD_SRC_LEGACY_Q: begin
+                cAndD0ClkEn = qDemodSymEn;
+                cAndD0DataIn = {qDemodBit,1'b0,1'b0};
+            end
+            //`CandD_SRC_PCMTRELLIS:
+            //`CandD_SRC_MULTIH:
+            //`CandD_SRC_STC:
+            //`CandD_SRC_PNGEN:
+            `CandD_SRC_DEC0_CH0: begin
+                cAndD0ClkEn = dualPcmClkEn;
+                cAndD0DataIn = {dualDataI,dualDataQ,1'b0};
+            end
+            `CandD_SRC_DEC0_CH1: begin
+                cAndD0ClkEn = ch1PcmClkEn;
+                cAndD0DataIn = {ch1PcmData,1'b0,1'b0};
+            end
+            //`CandD_SRC_DEC1_CH0: begin
+            //    cAndD0ClkEn = ch1PcmClkEn;
+            //    cAndD0DataIn = {dualDataQ,dualDataI,1'b0};
+            //end
+            //`CandD_SRC_DEC1_CH1:
+            //`CandD_SRC_DEC2_CH0:
+            //`CandD_SRC_DEC2_CH1:
+            //`CandD_SRC_DEC3_CH0:
+            //`CandD_SRC_DEC3_CH1:
+            default:   begin
+            end
+        endcase
+    end
+
+    wire    [2:0]   cAndD0DataOut;
+    wire    [31:0]  cAndD0Dout;
+    clkAndDataOutput #(.RegSpace(`CandD0SPACE)) cAndD0 (
+        .clk(clk), .reset(reset),
         .busClk(busClk),
         .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
         .addr(addr),
         .dataIn(dataIn),
-        .dataOut(clkAndData0Dout),
-        .source(clkAndDataSource0),
-        .clkPhase(clkAndDataPhase0),
-        .clkReset(clkReset0)
+        .dataOut(cAndD0Dout),
+        .clkEnIn(cAndD0ClkEn),
+        .din(cAndD0DataIn),
+        .pllOutputClk(pll0_OUT1),
+        .sourceSelect(cAndD0SourceSelect),
+        .pllReferenceClk(pll0_REF),
+        .outputClk(ch0ClkOut),
+        .outputData(ch0DataOut)
     );
-
-    // Clock and Data Source Selection
-    reg     [2:0]   clkAndDataSource0Data;
-    reg             clkAndDataSource0ClkEn;
-    always @(posedge clk) begin
-        case (clkAndDataSource0)
-            default: begin
-                clkAndDataSource0ClkEn <= dualPcmClkEn;
-                clkAndDataSource0Data <= {dualDataI,dualDataQ,1'b0};
-            end
-        endcase
-    end
-
-    // First stage attenuation using a Digital PLL
-    wire    [7:0]   dll0PhaseError;
-    wire    [31:0]  dll0Dout;
-    digitalPLL #(.REG_SPACE(`DLL0SPACE)) dll0(
-        .clk(clk),
-        .reset(clkReset0),
-        .busClk(busClk),
-        .addr(addr),
-        .dataIn(dataIn),
-        .dataOut(dll0Dout),
-        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
-        .referenceClkEn(clkAndDataSource0ClkEn),
-        .dllOutputClk(dll0OutClk),
-        //.filteredRefClk(pll0_REF),
-        .filteredRefClk(),
-        .phaseError(dll0PhaseError)
-    );
-
-    reg [7:0]   refDivider;
-    reg         pll0Ref;
-    assign      pll0_REF = pll0Ref;
-    always @(posedge clk) begin
-        if (reset) begin
-            refDivider <= 0;
-            pll0Ref <= 0;
-        end
-        else begin
-            if (refDivider > 0) begin
-                refDivider <= refDivider - 1;
-            end
-            else begin
-                refDivider <= 25;
-                pll0Ref <= ~pll0Ref;
-            end
-        end
-    end
-
-    // Make a Gray-coded divider to create four phase clock
-    reg     [1:0]   dll0Divider;
-    wire            dll0ReadClk = dll0Divider[0];
-    wire            dll090Clk   = dll0Divider[1];
-    always @(posedge dll0OutClk) begin
-        case (dll0Divider)
-            2'b00:      dll0Divider <= 2'b01;
-            2'b01:      dll0Divider <= 2'b11;
-            2'b11:      dll0Divider <= 2'b10;
-            2'b10:      dll0Divider <= 2'b00;
-            default:    dll0Divider <= 2'b00;
-        endcase
-    end
-
-    // First stage jitter attenuation FIFO
-    reg             dll0_ReadEnable;
-    wire    [2:0]   dll0_Symbol;
-    jitterFifo dll0Fifo(
-        .rst(clkReset0),
-        .wr_clk(clk),
-        .rd_clk(dll0ReadClk),
-        .din(clkAndDataSource0Data),
-        .wr_en(clkAndDataSource0ClkEn),
-        .rd_en(dll0_ReadEnable),
-        .dout(dll0_Symbol),
-        .full(dll0_Full),
-        .empty(dll0_Empty),
-        .prog_full(dll0_HalfFull)
-    );
-    always @(posedge dll0ReadClk) begin
-        if (clkReset0) begin
-            dll0_ReadEnable <= 0;
-        end
-        else if (dll0_HalfFull) begin
-            dll0_ReadEnable <= 1;
-        end
-    end
-
-    // First stage final data output
-    reg             dll0_Clk, dll0_Data, dllSync_Data;
-    always @(posedge dll0OutClk) begin
-        dll0_Data <= dll0_Symbol[2];
-        dllSync_Data <= dll0_Symbol[1];
-        case (clkAndDataPhase0)
-            `DEC_CLK_PHASE_0:   dll0_Clk <= dll0ReadClk;
-            `DEC_CLK_PHASE_90:  dll0_Clk <= dll090Clk;
-            `DEC_CLK_PHASE_180: dll0_Clk <= !dll0ReadClk;
-            `DEC_CLK_PHASE_270: dll0_Clk <= !dll090Clk;
-        endcase
-    end
-
-    // Second stage - This uses an external PLL. The reference input to the
-    //  PLL is the DLL output.
-
-    // Make a Gray-coded divider
-    reg     [1:0]   pll0Divider;
-    wire            pll0ReadClk = pll0Divider[0];
-    wire            pll090Clk   = pll0Divider[1];
-    always @(posedge pll0_OUT1) begin
-        case (pll0Divider)
-            2'b00:      pll0Divider <= 2'b01;
-            2'b01:      pll0Divider <= 2'b11;
-            2'b11:      pll0Divider <= 2'b10;
-            2'b10:      pll0Divider <= 2'b00;
-            default:    pll0Divider <= 2'b00;
-        endcase
-    end
-
-    // Second stage jitter attenuation FIFO
-    reg             pll0_ReadEnable;
-    wire    [2:0]   pll0_Symbol;
-    jitterFifo pll0Fifo(
-        .rst(clkReset0),
-        .wr_clk(clk),
-        .rd_clk(pll0ReadClk),
-        .din({dualDataI,dualDataQ,1'b0}),
-        .wr_en(clkAndDataSource0ClkEn),
-        .rd_en(pll0_ReadEnable),
-        .dout(pll0_Symbol),
-        .full(pll0_Full),
-        .empty(pll0_Empty),
-        .prog_full(pll0_HalfFull)
-    );
-    always @(posedge pll0ReadClk) begin
-        if (clkReset0) begin
-            pll0_ReadEnable <= 0;
-        end
-        else if (pll0_HalfFull) begin
-            pll0_ReadEnable <= 1;
-        end
-    end
-
-    // Second stage final data output
-    reg             pll0_Clk, pll0_Data, sync_Data;
-    always @(posedge pll0_OUT1) begin
-        pll0_Data <= pll0_Symbol[2];
-        sync_Data <= pll0_Symbol[1];
-        case (clkAndDataPhase0)
-            `DEC_CLK_PHASE_0:   pll0_Clk <= pll0ReadClk;
-            `DEC_CLK_PHASE_90:  pll0_Clk <= pll090Clk;
-            `DEC_CLK_PHASE_180: pll0_Clk <= !pll0ReadClk;
-            `DEC_CLK_PHASE_270: pll0_Clk <= !pll090Clk;
-        endcase
-    end
-
 
     //----------------------- Channel 1 Jitter Attenuation --------------------
 
-    // Configuration Regs
-    wire    [2:0]   clkAndDataSource1;
-    wire    [1:0]   clkAndDataPhase1;
-    wire    [31:0]  clkAndData1Dout;
-    clkAndDataRegs #(.RegSpace(`CandD1SPACE)) clkAndDataRegs1(
-        .busClk(busClk),
-        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
-        .addr(addr),
-        .dataIn(dataIn),
-        .dataOut(clkAndData1Dout),
-        .source(clkAndDataSource1),
-        .clkPhase(clkAndDataPhase1),
-        .clkReset(clkReset1)
-    );
-
-    // Clock and Data Source Selection
-    reg     [2:0]   clkAndDataSource1Data;
-    reg             clkAndDataSource1ClkEn;
-    always @(posedge clk) begin
-        case (clkAndDataSource1)
-            default: begin
-                clkAndDataSource1ClkEn <= ch1PcmClkEn;
-                clkAndDataSource1Data <= {ch1PcmData,2'b0};
+    wire    [3:0]   cAndD1SourceSelect;
+    reg             cAndD1ClkEn;
+    reg     [2:0]   cAndD1DataIn;
+    always @* begin
+        casex (cAndD1SourceSelect)
+            `CandD_SRC_LEGACY_I: begin
+                cAndD1ClkEn = iDemodSymEn;
+                cAndD1DataIn = {iDemodBit,qDemodBit,1'b0};
+            end
+            `CandD_SRC_LEGACY_Q: begin
+                cAndD1ClkEn = qDemodSymEn;
+                cAndD1DataIn = {qDemodBit,1'b0,1'b0};
+            end
+            //`CandD_SRC_PCMTRELLIS:
+            //`CandD_SRC_MULTIH:
+            //`CandD_SRC_STC:
+            //`CandD_SRC_PNGEN:
+            `CandD_SRC_DEC0_CH0: begin
+                cAndD1ClkEn = dualPcmClkEn;
+                cAndD1DataIn = {dualDataI,dualDataQ,1'b0};
+            end
+            `CandD_SRC_DEC0_CH1: begin
+                cAndD1ClkEn = ch1PcmClkEn;
+                cAndD1DataIn = {ch1PcmData,1'b0,1'b0};
+            end
+            //`CandD_SRC_DEC1_CH0: begin
+            //    cAndD1ClkEn = ch1PcmClkEn;
+            //    cAndD1DataIn = {dualDataQ,dualDataI,1'b0};
+            //end
+            //`CandD_SRC_DEC1_CH1:
+            //`CandD_SRC_DEC2_CH0:
+            //`CandD_SRC_DEC2_CH1:
+            //`CandD_SRC_DEC3_CH0:
+            //`CandD_SRC_DEC3_CH1:
+            default:   begin
             end
         endcase
     end
 
-    // First stage attenuation using a Digital PLL
-    wire    [7:0]   dll1PhaseError;
-    wire    [31:0]  dll1Dout;
-    digitalPLL #(.REG_SPACE(`DLL1SPACE)) dll1(
-        .clk(clk),
-        .reset(clkReset1),
+    wire    [2:0]   cAndD1DataOut;
+    wire    [31:0]  cAndD1Dout;
+    clkAndDataOutput #(.RegSpace(`CandD1SPACE)) cAndD1 (
+        .clk(clk), .reset(reset),
         .busClk(busClk),
+        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
         .addr(addr),
         .dataIn(dataIn),
-        .dataOut(dll1Dout),
-        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
-        .referenceClkEn(clkAndDataSource1ClkEn),
-        .dllOutputClk(dll1OutClk),
-        .filteredRefClk(pll1_REF),
-        .phaseError(dll1PhaseError)
+        .dataOut(cAndD1Dout),
+        .clkEnIn(cAndD1ClkEn),
+        .din(cAndD1DataIn),
+        .pllOutputClk(pll1_OUT1),
+        .sourceSelect(cAndD1SourceSelect),
+        .pllReferenceClk(pll1_REF),
+        .outputClk(ch1ClkOut),
+        .outputData(ch1DataOut)
     );
-
-    // Make a Gray-coded divider to create a four-phase clock
-    reg     [1:0]   dll1Divider;
-    wire            dll1ReadClk = dll1Divider[0];
-    wire            dll190Clk   = dll1Divider[1];
-    always @(posedge dll1OutClk) begin
-        case (dll1Divider)
-            2'b00:      dll1Divider <= 2'b01;
-            2'b01:      dll1Divider <= 2'b11;
-            2'b11:      dll1Divider <= 2'b10;
-            2'b10:      dll1Divider <= 2'b00;
-            default:    dll1Divider <= 2'b00;
-        endcase
-    end
-    // First stage jitter attenuation FIFO
-    reg             dll1_ReadEnable;
-    wire    [2:0]   dll1_Symbol;
-    jitterFifo dll1Fifo(
-        .rst(clkReset1),
-        .wr_clk(clk),
-        .rd_clk(dll1ReadClk),
-        .din(clkAndDataSource1Data),
-        .wr_en(clkAndDataSource1ClkEn),
-        .rd_en(dll1_ReadEnable),
-        .dout(dll1_Symbol),
-        .full(dll1_Full),
-        .empty(dll1_Empty),
-        .prog_full(dll1_HalfFull)
-    );
-    always @(posedge dll1ReadClk) begin
-        if (clkReset1) begin
-            dll1_ReadEnable <= 0;
-        end
-        else if (dll1_HalfFull) begin
-            dll1_ReadEnable <= 1;
-        end
-    end
-
-    // First stage final data output
-    reg             dllAsync_Clk, dllAsync_Data;
-    always @(posedge dll1OutClk) begin
-        dllAsync_Data <= dll1_Symbol[2];
-        case (clkAndDataPhase1)
-            `DEC_CLK_PHASE_0:   dllAsync_Clk <= dll1ReadClk;
-            `DEC_CLK_PHASE_90:  dllAsync_Clk <= dll190Clk;
-            `DEC_CLK_PHASE_180: dllAsync_Clk <= !dll1ReadClk;
-            `DEC_CLK_PHASE_270: dllAsync_Clk <= !dll190Clk;
-        endcase
-    end
-    assign          dll1_Data = asyncMode ? dllAsync_Data : dllSync_Data;
-    assign          dll1_Clk = asyncMode ? dllAsync_Clk : dll0_Clk;
-
-    // Make a Gray-coded divider
-    reg     [1:0]   pll1Divider;
-    wire            pll1ReadClk = pll1Divider[0];
-    wire            pll190Clk   = pll1Divider[1];
-    always @(posedge pll1_OUT1) begin
-        case (pll1Divider)
-            2'b00:      pll1Divider <= 2'b01;
-            2'b01:      pll1Divider <= 2'b11;
-            2'b11:      pll1Divider <= 2'b10;
-            2'b10:      pll1Divider <= 2'b00;
-            default:    pll1Divider <= 2'b00;
-        endcase
-    end
-
-    // Second stage jitter attenuation FIFO
-    reg             pll1_ReadEnable;
-    wire    [2:0]   pll1_Symbol;
-    jitterFifo pll1Fifo(
-        .rst(clkReset1),
-        .wr_clk(clk),
-        .rd_clk(pll1ReadClk),
-        .din(clkAndDataSource1Data),
-        .wr_en(clkAndDataSource1ClkEn),
-        .rd_en(pll1_ReadEnable),
-        .dout(pll1_Symbol),
-        .full(pll1_Full),
-        .empty(pll1_Empty),
-        .prog_full(pll1_HalfFull)
-    );
-    always @(posedge pll1ReadClk) begin
-        if (clkReset1) begin
-            pll1_ReadEnable <= 0;
-        end
-        else if (pll1_HalfFull) begin
-            pll1_ReadEnable <= 1;
-        end
-    end
-
-    // Second stage final data output
-    reg             async_Clk, async_Data;
-    always @(posedge pll1_OUT1) begin
-        async_Data <= pll1_Symbol[2];
-        case (clkAndDataPhase1)
-            `DEC_CLK_PHASE_0:   async_Clk <= pll1ReadClk;
-            `DEC_CLK_PHASE_90:  async_Clk <= pll190Clk;
-            `DEC_CLK_PHASE_180: async_Clk <= !pll1ReadClk;
-            `DEC_CLK_PHASE_270: async_Clk <= !pll190Clk;
-        endcase
-    end
-    assign          pll1_Data = asyncMode ? async_Data : sync_Data;
-    assign          pll1_Clk = asyncMode ? async_Clk : pll0_Clk;
 
     assign          pll2_REF = 1'b0;
     assign          pll2_Data = 1'b0;
@@ -801,9 +618,10 @@ module semcoDemodTop (
         );
     //`define TEST_DACS
     `ifdef TEST_DACS
-    wire    signed  [11:0]  amDataIn;
     always @(posedge clk) begin
-        dac0_d <= {~amDataIn[11],amDataIn[10:0],2'b0};
+        //dac0_d <= adc0Reg;
+        dac0_d[12:0] <= interp0DataIn[16:4];
+        dac0_d[13] <= ~interp0DataIn[17];
     end
     `else
     always @(posedge clk) begin
@@ -843,7 +661,9 @@ module semcoDemodTop (
         );
     `ifdef TEST_DACS
     always @(posedge clk) begin
-        dac1_d <= adc0Reg;
+        //dac1_d <= adc0Reg;
+        dac1_d[12:0] <= interp0DataIn[16:4];
+        dac1_d[13] <= ~interp0DataIn[17];
     end
     `else
     always @(posedge clk) begin
@@ -884,7 +704,9 @@ module semcoDemodTop (
         );
     `ifdef TEST_DACS
     always @(posedge clk) begin
-        dac2_d <= adc0Reg;
+        //dac2_d <= adc0Reg;
+        dac2_d[12:0] <= interp2DataIn[16:4];
+        dac2_d[13] <= ~interp2DataIn[17];
     end
     `else
     always @(posedge clk) begin
@@ -914,67 +736,6 @@ module semcoDemodTop (
     assign dac1_nCs = 1'b1;
     assign dac2_nCs = 1'b1;
     assign dac_sdio = 1'b0;
-
-    clockAndDataMux ch0Mux(
-        .muxSelect(ch0MuxSelect),
-        .clk0(dualSymClk),
-        .clkInvert0(1'b0),
-        .data0(dualCh0Input),
-        .clk1(pll0_Clk),
-        .clkInvert1(1'b0),
-        .data1(pll0_Data),
-        .clk2(ch1DecSymClk),
-        .clkInvert2(1'b0),
-        .data2(ch1DecInput),
-        .clk3(pll1_Clk),
-        .clkInvert3(1'b0),
-        .data3(pll1_Data),
-        .clk4(1'b0),
-        .clkInvert4(1'b0),
-        .data4(1'b0),
-        .clk5(1'b0),
-        .clkInvert5(1'b0),
-        .data5(1'b0),
-        .clk6(1'b0),
-        .clkInvert6(1'b0),
-        .data6(1'b0),
-        .clk7(1'b0),
-        .clkInvert7(1'b0),
-        .data7(1'b0),
-        .outputClk(ch0ClkOut),
-        .outputData(ch0DataOut)
-    );
-
-    clockAndDataMux ch1Mux(
-        .muxSelect(ch1MuxSelect),
-        .clk0(dualSymClk),
-        .clkInvert0(1'b0),
-        .data0(dualCh0Input),
-        .clk1(pll0_Clk),
-        .clkInvert1(1'b0),
-        .data1(pll0_Data),
-        .clk2(ch1DecSymClk),
-        .clkInvert2(1'b0),
-        .data2(ch1DecInput),
-        .clk3(pll1_Clk),
-        .clkInvert3(1'b0),
-        .data3(pll1_Data),
-        .clk4(1'b0),
-        .clkInvert4(1'b0),
-        .data4(1'b0),
-        .clk5(1'b0),
-        .clkInvert5(1'b0),
-        .data5(1'b0),
-        .clk6(1'b0),
-        .clkInvert6(1'b0),
-        .data6(1'b0),
-        .clk7(1'b0),
-        .clkInvert7(1'b0),
-        .data7(1'b0),
-        .outputClk(ch1ClkOut),
-        .outputData(ch1DataOut)
-    );
-
 
     assign lockLed0n = !demodTimingLock;
     assign lockLed1n = !demodCarrierLock;
@@ -1009,6 +770,33 @@ module semcoDemodTop (
         .spiClk(amDacClk),
         .spiCSn(amDacCSn)
     );
+
+    //******************************************************************************
+    //                          Video Switch Interface
+    //******************************************************************************
+    wire    [31:0]  vidSwitchDout;
+    videoFilterSwitch #(.SysclkDivider(32)) vidSwitch (
+        .clk(clk),
+        .reset(reset),
+        .busClk(busClk),
+        .addr(addr),
+        .dataIn(dataIn),
+        .dataOut(vidSwitchDout),
+        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .sclk(switchSpiClk),
+        .sdo(switchSpiDout),
+        .cs0(sw0Cs),
+        .cs1(sw1Cs)
+    );
+    assign switch0SpiClk =  switchSpiClk;
+    assign switch0SpiDout = switchSpiDout;
+    assign switch0SpiCS0n = !sw0Cs;
+    assign switch0SpiCS1n = !sw1Cs;
+    assign switch1SpiClk =  switchSpiClk;
+    assign switch1SpiDout = switchSpiDout;
+    assign switch1SpiCS0n = !sw0Cs;
+    assign switch1SpiCS1n = !sw1Cs;
+
 
     `endif //TRIPLE_DEMOD
 
@@ -1060,6 +848,8 @@ module semcoDemodTop (
             `CandD0SPACE:       rd_mux = clkAndData0Dout;
             `CandD1SPACE:       rd_mux = clkAndData1Dout;
 
+            `VIDSWITCHSPACE:    rd_mux = vidSwitchDout;
+
              default :          rd_mux = 16'hxxxx;
         endcase
     end
@@ -1072,6 +862,14 @@ module semcoDemodTop (
     reg [15:0] rd_mux;
     always @* begin
         casex(addr)
+            `SEMCO_TOP_SPACE:   begin
+                if (addr[1]) begin
+                    rd_mux = semcoTopDout[31:16];
+                end
+                else begin
+                    rd_mux = semcoTopDout[15:0];
+                end
+            end
             `DEMODSPACE,
             `ifdef ADD_DESPREADER
             `DESPREADSPACE,
@@ -1132,23 +930,25 @@ module semcoDemodTop (
                     rd_mux = interp2Dout[15:0];
                     end
                 end
-            `DLL0SPACE: begin
+            `CandD0SPACE: begin
                 if (addr[1]) begin
-                    rd_mux = dll0Dout[31:16];
+                    rd_mux = cAndD0Dout[31:16];
                     end
                 else begin
-                    rd_mux = dll0Dout[15:0];
+                    rd_mux = cAndD0Dout[15:0];
                     end
                 end
-            `DLL1SPACE: begin
+            `CandD1SPACE: begin
                 if (addr[1]) begin
-                    rd_mux = dll1Dout[31:16];
+                    rd_mux = cAndD1Dout[31:16];
                     end
                 else begin
-                    rd_mux = dll1Dout[15:0];
+                    rd_mux = cAndD1Dout[15:0];
                     end
                 end
-            `PLLSPACE: begin
+            `PLL0SPACE,
+            `PLL1SPACE,
+            `PLL2SPACE: begin
                 if (addr[1]) begin
                     rd_mux = pllDout[31:16];
                     end
@@ -1174,18 +974,18 @@ module semcoDemodTop (
                 end
             `CandD0SPACE: begin
                 if (addr[1]) begin
-                    rd_mux = clkAndData0Dout[31:16];
+                    rd_mux = cAndD0Dout[31:16];
                     end
                 else begin
-                    rd_mux = clkAndData0Dout[15:0];
+                    rd_mux = cAndD0Dout[15:0];
                     end
                 end
             `CandD1SPACE: begin
                 if (addr[1]) begin
-                    rd_mux = clkAndData1Dout[31:16];
+                    rd_mux = cAndD1Dout[31:16];
                     end
                 else begin
-                    rd_mux = clkAndData1Dout[15:0];
+                    rd_mux = cAndD1Dout[15:0];
                     end
                 end
              default : rd_mux = 16'hxxxx;

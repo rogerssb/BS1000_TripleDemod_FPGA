@@ -23,11 +23,21 @@ module ics307Interface #(parameter SysclkDivider = 2)
     output  reg             pll2Reset
 );
 
-    reg pllSpace;
+    reg pll0Space;
+    reg pll1Space;
+    reg pll2Space;
     always @* begin
         casex(addr)
-            `PLLSPACE:  pllSpace = 1;
-            default:    pllSpace = 0;
+            `PLL0SPACE: pll0Space = 1;
+            default:    pll0Space = 0;
+        endcase
+        casex(addr)
+            `PLL1SPACE: pll1Space = 1;
+            default:    pll1Space = 0;
+        endcase
+        casex(addr)
+            `PLL2SPACE: pll2Space = 1;
+            default:    pll2Space = 0;
         endcase
     end
 
@@ -38,11 +48,11 @@ module ics307Interface #(parameter SysclkDivider = 2)
     reg     [31:0]  pll2Bits0to31,pll2Bits68to99,pll2Bits100to131;
     reg             pll2Enable;
     always @(posedge busClk) begin
-        if (pllSpace && wr0) begin
+        if (pll0Space && wr0) begin
             casex (addr)
                 `PLL0_BITS_0to31: begin
                     pll0Bits0to31[7:0] <= dataIn[7:0];
-                end   
+                end
                 `PLL0_BITS_68to99: begin
                     pll0Bits68to99[7:0] <= dataIn[7:0];
                 end
@@ -53,9 +63,14 @@ module ics307Interface #(parameter SysclkDivider = 2)
                     pll0Enable <= dataIn[0];
                     pll0Reset <= dataIn[2];
                 end
+                default: ;
+            endcase
+        end
+        if (pll1Space && wr0) begin
+            casex (addr)
                 `PLL1_BITS_0to31: begin
                     pll1Bits0to31[7:0] <= dataIn[7:0];
-                end   
+                end
                 `PLL1_BITS_68to99: begin
                     pll1Bits68to99[7:0] <= dataIn[7:0];
                 end
@@ -66,9 +81,14 @@ module ics307Interface #(parameter SysclkDivider = 2)
                     pll1Enable <= dataIn[0];
                     pll1Reset <= dataIn[2];
                 end
+                default: ;
+            endcase
+        end
+        if (pll2Space && wr0) begin
+            casex (addr)
                 `PLL2_BITS_0to31: begin
                     pll2Bits0to31[7:0] <= dataIn[7:0];
-                end   
+                end
                 `PLL2_BITS_68to99: begin
                     pll2Bits68to99[7:0] <= dataIn[7:0];
                 end
@@ -82,29 +102,40 @@ module ics307Interface #(parameter SysclkDivider = 2)
                 default: ;
             endcase
         end
-        if (pllSpace && wr1) begin
+
+        if (pll0Space && wr1) begin
             casex (addr)
                 `PLL0_BITS_0to31: begin
                     pll0Bits0to31[15:8] <= dataIn[15:8];
-                end   
+                end
                 `PLL0_BITS_68to99: begin
                     pll0Bits68to99[15:8] <= dataIn[15:8];
                 end
                 `PLL0_BITS_100to131: begin
                     pll0Bits100to131[15:8] <= dataIn[15:8];
                 end
+                default: ;
+            endcase
+        end
+        if (pll1Space && wr1) begin
+            casex (addr)
                 `PLL1_BITS_0to31: begin
                     pll1Bits0to31[15:8] <= dataIn[15:8];
-                end   
+                end
                 `PLL1_BITS_68to99: begin
                     pll1Bits68to99[15:8] <= dataIn[15:8];
                 end
                 `PLL1_BITS_100to131: begin
                     pll1Bits100to131[15:8] <= dataIn[15:8];
                 end
+                default: ;
+            endcase
+        end
+        if (pll2Space && wr1) begin
+            casex (addr)
                 `PLL2_BITS_0to31: begin
                     pll2Bits0to31[15:8] <= dataIn[15:8];
-                end   
+                end
                 `PLL2_BITS_68to99: begin
                     pll2Bits68to99[15:8] <= dataIn[15:8];
                 end
@@ -114,29 +145,39 @@ module ics307Interface #(parameter SysclkDivider = 2)
                 default: ;
             endcase
         end
-        if (pllSpace && wr2) begin
+        if (pll0Space && wr2) begin
             casex (addr)
                 `PLL0_BITS_0to31: begin
                     pll0Bits0to31[23:16] <= dataIn[23:16];
-                end   
+                end
                 `PLL0_BITS_68to99: begin
                     pll0Bits68to99[23:16] <= dataIn[23:16];
                 end
                 `PLL0_BITS_100to131: begin
                     pll0Bits100to131[23:16] <= dataIn[23:16];
                 end
+                default: ;
+            endcase
+        end
+        if (pll1Space && wr2) begin
+            casex (addr)
                 `PLL1_BITS_0to31: begin
                     pll1Bits0to31[23:16] <= dataIn[23:16];
-                end   
+                end
                 `PLL1_BITS_68to99: begin
                     pll1Bits68to99[23:16] <= dataIn[23:16];
                 end
                 `PLL1_BITS_100to131: begin
                     pll1Bits100to131[23:16] <= dataIn[23:16];
                 end
+                default: ;
+            endcase
+        end
+        if (pll2Space && wr2) begin
+            casex (addr)
                 `PLL2_BITS_0to31: begin
                     pll2Bits0to31[23:16] <= dataIn[23:16];
-                end   
+                end
                 `PLL2_BITS_68to99: begin
                     pll2Bits68to99[23:16] <= dataIn[23:16];
                 end
@@ -146,29 +187,39 @@ module ics307Interface #(parameter SysclkDivider = 2)
                 default: ;
             endcase
         end
-        if (pllSpace && wr3) begin
+        if (pll0Space && wr3) begin
             casex (addr)
                 `PLL0_BITS_0to31: begin
                     pll0Bits0to31[31:24] <= dataIn[31:24];
-                end   
+                end
                 `PLL0_BITS_68to99: begin
                     pll0Bits68to99[31:24] <= dataIn[31:24];
                 end
                 `PLL0_BITS_100to131: begin
                     pll0Bits100to131[31:24] <= dataIn[31:24];
                 end
+                default: ;
+            endcase
+        end
+        if (pll1Space && wr3) begin
+            casex (addr)
                 `PLL1_BITS_0to31: begin
                     pll1Bits0to31[31:24] <= dataIn[31:24];
-                end   
+                end
                 `PLL1_BITS_68to99: begin
                     pll1Bits68to99[31:24] <= dataIn[31:24];
                 end
                 `PLL1_BITS_100to131: begin
                     pll1Bits100to131[31:24] <= dataIn[31:24];
                 end
+                default: ;
+            endcase
+        end
+        if (pll2Space && wr3) begin
+            casex (addr)
                 `PLL2_BITS_0to31: begin
                     pll2Bits0to31[31:24] <= dataIn[31:24];
-                end   
+                end
                 `PLL2_BITS_68to99: begin
                     pll2Bits68to99[31:24] <= dataIn[31:24];
                 end
@@ -182,20 +233,30 @@ module ics307Interface #(parameter SysclkDivider = 2)
 
     reg             xferDone;
     always @* begin
-        if (pllSpace) begin
+        if (pll0Space) begin
             casex (addr)
                 `PLL0_BITS_0to31:       dataOut = pll0Bits0to31;
                 `PLL0_BITS_68to99:      dataOut = pll0Bits68to99;
                 `PLL0_BITS_100to131:    dataOut = pll0Bits100to131;
                 `PLL0_CONTROL:          dataOut = {29'b0,pll0Reset,xferDone,pll0Enable};
+                default:                dataOut = 32'h0;
+            endcase
+        end
+        else if (pll1Space) begin
+            casex (addr)
                 `PLL1_BITS_0to31:       dataOut = pll1Bits0to31;
                 `PLL1_BITS_68to99:      dataOut = pll1Bits68to99;
                 `PLL1_BITS_100to131:    dataOut = pll1Bits100to131;
-                `PLL1_CONTROL:          dataOut = {29'b0,pll1Reset,1'b0,pll1Enable};
+                `PLL1_CONTROL:          dataOut = {29'b0,pll1Reset,xferDone,pll1Enable};
+                default:                dataOut = 32'h0;
+            endcase
+        end
+        else if (pll2Space) begin
+            casex (addr)
                 `PLL2_BITS_0to31:       dataOut = pll2Bits0to31;
                 `PLL2_BITS_68to99:      dataOut = pll2Bits68to99;
                 `PLL2_BITS_100to131:    dataOut = pll2Bits100to131;
-                `PLL2_CONTROL:          dataOut = {29'b0,pll2Reset,1'b0,pll2Enable};
+                `PLL2_CONTROL:          dataOut = {29'b0,pll2Reset,xferDone,pll2Enable};
                 default:                dataOut = 32'h0;
             endcase
         end
@@ -213,14 +274,24 @@ module ics307Interface #(parameter SysclkDivider = 2)
             startPll1 <= 0;
             startPll2 <= 0;
         end
-        else if (pllSpace && wr3) begin
+        else if (pll0Space && wr3) begin
             casex (addr)
                 `PLL0_XFER: begin
                     startPll0 <= 1;
                 end
+                default: ;
+            endcase
+        end
+        else if (pll1Space && wr3) begin
+            casex (addr)
                 `PLL1_XFER: begin
                     startPll1 <= 1;
                 end
+                default: ;
+            endcase
+        end
+        else if (pll2Space && wr3) begin
+            casex (addr)
                 `PLL2_XFER: begin
                     startPll2 <= 1;
                 end

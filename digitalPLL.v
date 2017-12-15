@@ -1,6 +1,8 @@
 `timescale 1ns/10ps
 `include "addressMap.v"
 
+`ifdef BITSYNC_BERT
+
 module digitalPLL(
     input                   clk,
     input                   reset,
@@ -34,10 +36,10 @@ module digitalPLL(
             casex (addr)
                 `DLL_CENTER_FREQ: begin
                     centerFreq[7:0] <= dataIn[7:0];
-                end   
-                `DLL_GAINS: begin      
+                end
+                `DLL_GAINS: begin
                     loopGain[4:0] <= dataIn[4:0];
-                end   
+                end
                 default: ;
             endcase
         end
@@ -45,7 +47,7 @@ module digitalPLL(
             casex (addr)
                 `DLL_CENTER_FREQ: begin
                     centerFreq[15:8] <= dataIn[15:8];
-                end   
+                end
                 default: ;
             endcase
         end
@@ -53,7 +55,7 @@ module digitalPLL(
             casex (addr)
                 `DLL_CENTER_FREQ: begin
                     centerFreq[23:16] <= dataIn[23:16];
-                end   
+                end
                 `DLL_OUTPUT_DIV: begin
                     feedbackDivider <= dataIn[23:16];
                 end
@@ -64,7 +66,7 @@ module digitalPLL(
             casex (addr)
                 `DLL_CENTER_FREQ: begin
                     centerFreq[31:24] <= dataIn[31:24];
-                end   
+                end
                 default: ;
             endcase
         end
@@ -84,7 +86,23 @@ module digitalPLL(
         end
     end
 
+`else //BITSYNC_BERT
 
+module digitalPLL(
+    input                   clk,
+    input                   reset,
+    input           [31:0]  centerFreq,
+    input           [4:0]   loopGain,
+    input           [7:0]   feedbackDivider,
+    input                   referenceClkEn,
+    output  reg             dllOutputClk,
+    output                  filteredRefClk,
+    output  reg     [7:0]   phaseError
+);
+
+
+
+`endif // BITSYNC_BERT
 
     // NCO
     reg     [31:0]  phase;

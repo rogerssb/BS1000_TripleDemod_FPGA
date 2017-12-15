@@ -273,31 +273,54 @@
         `define PNGEN_PCM_MDMM          4'b1010
         `define PNGEN_PCM_MDMS          4'b1011
 
-// Digital PLL subsystem registers
-`define DLL0SPACE           13'b0_00xx_1010_0xxx
-`define DLL1SPACE           13'b0_00xx_1010_1xxx
-`define DLL2SPACE           13'b0_00xx_1011_0xxx
-    `define DLL_CENTER_FREQ     13'bx_xxxx_xxxx_x0xx
-    `define DLL_GAINS           13'bx_xxxx_xxxx_x10x
-    `define DLL_OUTPUT_DIV      13'bx_xxxx_xxxx_x11x
-
 // PLL subsystem registers
-`define PLLSPACE            13'b0_00xx_11xx_xxxx
-    `define PLL0_BITS_0to31     13'bx_xxxx_xx00_00xx
-    `define PLL0_BITS_68to99    13'bx_xxxx_xx00_01xx
-    `define PLL0_BITS_100to131  13'bx_xxxx_xx00_10xx
-    `define PLL0_CONTROL        13'bx_xxxx_xx00_110x
-    `define PLL0_XFER           13'bx_xxxx_xx00_111x
-    `define PLL1_BITS_0to31     13'bx_xxxx_xx01_00xx
-    `define PLL1_BITS_68to99    13'bx_xxxx_xx01_01xx
-    `define PLL1_BITS_100to131  13'bx_xxxx_xx01_10xx
-    `define PLL1_CONTROL        13'bx_xxxx_xx01_110x
-    `define PLL1_XFER           13'bx_xxxx_xx01_111x
-    `define PLL2_BITS_0to31     13'bx_xxxx_xx10_00xx
-    `define PLL2_BITS_68to99    13'bx_xxxx_xx10_01xx
-    `define PLL2_BITS_100to131  13'bx_xxxx_xx10_10xx
-    `define PLL2_CONTROL        13'bx_xxxx_xx10_110x
-    `define PLL2_XFER           13'bx_xxxx_xx10_111x
+`define PLL0SPACE           13'b0_00xx_1010_xxxx
+`define PLL1SPACE           13'b0_00xx_1100_xxxx
+`define PLL2SPACE           13'b0_00xx_1110_xxxx
+    `define PLL0_BITS_0to31     13'bx_xxxx_xxxx_00xx
+    `define PLL0_BITS_68to99    13'bx_xxxx_xxxx_01xx
+    `define PLL0_BITS_100to131  13'bx_xxxx_xxxx_10xx
+    `define PLL0_CONTROL        13'bx_xxxx_xxxx_110x
+    `define PLL0_XFER           13'bx_xxxx_xxxx_111x
+    `define PLL1_BITS_0to31     13'bx_xxxx_xxxx_00xx
+    `define PLL1_BITS_68to99    13'bx_xxxx_xxxx_01xx
+    `define PLL1_BITS_100to131  13'bx_xxxx_xxxx_10xx
+    `define PLL1_CONTROL        13'bx_xxxx_xxxx_110x
+    `define PLL1_XFER           13'bx_xxxx_xxxx_111x
+    `define PLL2_BITS_0to31     13'bx_xxxx_xxxx_00xx
+    `define PLL2_BITS_68to99    13'bx_xxxx_xxxx_01xx
+    `define PLL2_BITS_100to131  13'bx_xxxx_xxxx_10xx
+    `define PLL2_CONTROL        13'bx_xxxx_xxxx_110x
+    `define PLL2_XFER           13'bx_xxxx_xxxx_111x
+
+// Clock and Data subsystem registers
+`define CandD0SPACE         13'b0_00xx_1011_xxxx
+`define CandD1SPACE         13'b0_00xx_1101_xxxx
+`define CandD2SPACE         13'b0_00xx_1111_xxxx
+    `define CandD_CONTROL           13'bx_xxxx_xxxx_00xx
+        `define CandD_SRC_LEGACY_I      4'b0000
+        `define CandD_SRC_LEGACY_Q      4'b0001
+        `define CandD_SRC_PCMTRELLIS    4'b0010
+        `define CandD_SRC_MULTIH        4'b0011
+        `define CandD_SRC_STC           4'b0100
+        `define CandD_SRC_PNGEN         4'b0101
+        `define CandD_SRC_RSVD0         4'b0110
+        `define CandD_SRC_RSVD1         4'b0111
+        `define CandD_SRC_DEC0_CH0      4'b1000
+        `define CandD_SRC_DEC0_CH1      4'b1001
+        `define CandD_SRC_DEC1_CH0      4'b1010
+        `define CandD_SRC_DEC1_CH1      4'b1011
+        `define CandD_SRC_DEC2_CH0      4'b1100
+        `define CandD_SRC_DEC2_CH1      4'b1101
+        `define CandD_SRC_DEC3_CH0      4'b1110
+        `define CandD_SRC_DEC3_CH1      4'b1111
+        `define CandD_CLK_PHASE_0       2'b00
+        `define CandD_CLK_PHASE_90      2'b01
+        `define CandD_CLK_PHASE_180     2'b10
+        `define CandD_CLK_PHASE_270     2'b11
+    `define CandD_DLL_CENTER_FREQ   13'bx_xxxx_xxxx_01xx
+    `define CandD_DLL_GAINS         13'bx_xxxx_xxxx_100x
+    `define CandD_DLL_FDBK_DIV      13'bx_xxxx_xxxx_101x
 
 // Legacy Demod subsystem registers
 `define DEMODSPACE          13'b0_0100_000x_xxxx
@@ -315,15 +338,10 @@
 `define MULTIH_SPACE        13'b0_0101_0010_xxxx
 `define MULTIHLFSPACE       13'b0_0101_010x_xxxx
 
-// Clock and Data subsystem registers
-`define CandD0SPACE           13'b0_10xx_0000_xxxx
-`define CandD1SPACE           13'b0_10xx_0001_xxxx
-`define CandD2SPACE           13'b0_10xx_0010_xxxx
-    `define CandD_CONTROL         13'bx_xxxx_xxxx_00xx
-        `define CandD_CLK_PHASE_0     2'b00
-        `define CandD_CLK_PHASE_90    2'b01
-        `define CandD_CLK_PHASE_180   2'b10
-        `define CandD_CLK_PHASE_270   2'b11
+// Video Switch Control registers
+`define VIDSWITCHSPACE      13'b0_10xx_0100_xxxx
+    `define VIDSWITCH0          13'bx_xxxx_xxxx_00xx
+    `define VIDSWITCH1          13'bx_xxxx_xxxx_01xx
 
 `else  // Old demod builds
 //------------------------------ Old Demod ------------------------------------
