@@ -13,10 +13,10 @@ derivative rights in exchange for negotiated compensation.
 module clkAndDataRegs(
     input               busClk,
     input       [12:0]  addr,
-    input       [31:0]  dataIn,
-    output  reg [31:0]  dataOut,
+    input       [31:0]  din,
+    output  reg [31:0]  dout,
     input               wr0, wr1, wr2, wr3,
-    output  reg [2:0]   source,
+    output  reg [3:0]   source,
     output  reg [1:0]   clkPhase,
     output  reg         finalOutputSelect,
     output  reg         clkReset,
@@ -42,13 +42,13 @@ module clkAndDataRegs(
         if (cs && wr0) begin
             casex (addr)
                 `CandD_CONTROL:   begin
-                    source <= dataIn[2:0];
+                    source <= din[3:0];
                 end
                 `CandD_DLL_CENTER_FREQ: begin
-                    dllCenterFreq[7:0] <= dataIn[7:0];
+                    dllCenterFreq[7:0] <= din[7:0];
                 end
                 `CandD_DLL_GAINS: begin
-                    dllLoopGain <= dataIn[4:0];
+                    dllLoopGain <= din[4:0];
                 end
                 default: ;
             endcase
@@ -56,10 +56,10 @@ module clkAndDataRegs(
         if (cs && wr1) begin
             casex (addr)
                 `CandD_CONTROL:   begin
-                    clkPhase <= dataIn[9:8];
+                    clkPhase <= din[9:8];
                 end
                 `CandD_DLL_CENTER_FREQ: begin
-                    dllCenterFreq[15:8] <= dataIn[15:8];
+                    dllCenterFreq[15:8] <= din[15:8];
                 end
                 default: ;
             endcase
@@ -67,10 +67,10 @@ module clkAndDataRegs(
         if (cs && wr2) begin
             casex (addr)
                 `CandD_DLL_CENTER_FREQ: begin
-                    dllCenterFreq[23:16] <= dataIn[23:16];
+                    dllCenterFreq[23:16] <= din[23:16];
                 end
                 `CandD_DLL_FDBK_DIV: begin
-                    dllFeedbackDivider <= dataIn[23:16];
+                    dllFeedbackDivider <= din[23:16];
                 end
                 default: ;
             endcase
@@ -78,11 +78,11 @@ module clkAndDataRegs(
         if (cs && wr3) begin
             casex (addr)
                 `CandD_CONTROL:   begin
-                    finalOutputSelect <= dataIn[24];
-                    clkReset <= dataIn[31];
+                    finalOutputSelect <= din[24];
+                    clkReset <= din[31];
                 end
                 `CandD_DLL_CENTER_FREQ: begin
-                    dllCenterFreq[31:24] <= dataIn[31:24];
+                    dllCenterFreq[31:24] <= din[31:24];
                 end
                 default: ;
             endcase
@@ -93,29 +93,29 @@ module clkAndDataRegs(
         if (cs) begin
             casex (addr)
                 `CandD_CONTROL: begin
-                    dataOut = {clkReset,6'b0,finalOutputSelect,
+                    dout = {clkReset,6'b0,finalOutputSelect,
                                8'b0,
                                6'b0,clkPhase,
-                               5'b0,source};
+                               4'b0,source};
                 end
                 `CandD_DLL_CENTER_FREQ: begin
-                    dataOut = dllCenterFreq;
+                    dout = dllCenterFreq;
                 end
                 `CandD_DLL_GAINS: begin
-                    dataOut = {8'b0,dllFeedbackDivider,
+                    dout = {8'b0,dllFeedbackDivider,
                                11'b0,dllLoopGain};
                 end
                 `CandD_DLL_FDBK_DIV: begin
-                    dataOut = {8'b0,dllFeedbackDivider,
+                    dout = {8'b0,dllFeedbackDivider,
                                11'b0,dllLoopGain};
                 end
                 default: begin
-                    dataOut = 32'b0;
+                    dout = 32'b0;
                 end
             endcase
         end
         else begin
-            dataOut = 32'hx;
+            dout = 32'hx;
         end
     end
 

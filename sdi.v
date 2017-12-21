@@ -53,28 +53,44 @@ end
 wire            fifoFull;
 reg             sdiEnable;
 reg     [2:0]   sdiMode;
+`ifdef USE_ARTM
 reg     [7:0]   artmThreshold;
+`endif
 wire            sdiEnableReset = (fifoFull || reset);
 always @(negedge wr0 or posedge sdiEnableReset) begin
     if (sdiEnableReset) begin
         sdiEnable <= 0;
         end
     else if (sdiSpace) begin
-        casex (addr) 
+        casex (addr)
             `SDI_CONTROL: begin
                 sdiEnable <= dataIn[7];
+                end
+            default: ;
+            endcase
+        end
+    end
+always @(negedge wr0) begin
+    if (sdiSpace) begin
+        casex (addr)
+            `SDI_CONTROL: begin
                 sdiMode <= dataIn[2:0];
-                end     
+                end
+`ifdef USE_ARTM
             `SDI_ARTM_THRESHOLD: begin
                 artmThreshold[7:0] <= dataIn[7:0];
                 end
+`endif
+            default: ;
             endcase
         end
     end
 
 wire            fifoEmpty;
+`ifdef USE_ARTM
 wire    [10:0]  interiorCountOut;
 wire    [10:0]  exteriorCountOut;
+`endif
 reg             holdCount;
 reg     [31:0]  sdiDout;
 always @* begin
@@ -83,6 +99,7 @@ always @* begin
                                 sdiDout = {fifoEmpty,28'b0,sdiMode};
                                 holdCount = 0;
                                 end
+`ifdef USE_ARTM
         `SDI_ARTM_THRESHOLD:    begin
                                 sdiDout = {24'b0,artmThreshold};
                                 holdCount = 0;
@@ -91,6 +108,7 @@ always @* begin
                                 sdiDout = {5'b0,exteriorCountOut,5'b0,interiorCountOut};
                                 holdCount = sdiSpace;
                                 end
+`endif
         default:                begin
                                 sdiDout = 32'hx;
                                 holdCount = 0;
@@ -156,24 +174,24 @@ wire    [15:0]  qIn = (sdiMode == `SDI_MODE_CONSTELLATION) ? qSymData[17:2] : qE
 wire            wrEn = (sdiMode == `SDI_MODE_CONSTELLATION) ? iSymEn : (eyeEn && eyeSync);
 reg             fifoReset;
 dataFifo iFifo (
-    .srst(fifoReset), 
-    .rd_en(fifoReadEn), 
-    .wr_en(wrEn && fifoEn), 
-    .full(fifoFull), 
-    .empty(fifoEmpty), 
-    .clk(clk), 
-    .dout(iSym), 
+    .srst(fifoReset),
+    .rd_en(fifoReadEn),
+    .wr_en(wrEn && fifoEn),
+    .full(fifoFull),
+    .empty(fifoEmpty),
+    .clk(clk),
+    .dout(iSym),
     .din(iIn)
     );
 wire    [15:0]  qSym;
 dataFifo qFifo (
-    .srst(fifoReset), 
-    .rd_en(fifoReadEn), 
-    .wr_en(wrEn && fifoEn), 
-    .full(), 
-    .empty(), 
-    .clk(clk), 
-    .dout(qSym), 
+    .srst(fifoReset),
+    .rd_en(fifoReadEn),
+    .wr_en(wrEn && fifoEn),
+    .full(),
+    .empty(),
+    .clk(clk),
+    .dout(qSym),
     .din(qIn)
     );
 
@@ -184,7 +202,7 @@ parameter MUX_IDLE =        4'b0000,
           MUX_CLSB =        4'b0010,
           MUX_CLSB_WAIT =   4'b0110,
           MUX_IMSB =        4'b0111,
-          MUX_IMSB_WAIT =   4'b0101,    
+          MUX_IMSB_WAIT =   4'b0101,
           MUX_ILSB =        4'b0100,
           MUX_ILSB_WAIT =   4'b1100,
           MUX_QMSB =        4'b1101,
@@ -205,7 +223,7 @@ always @(posedge clk) begin
         uartCount <= 0;
         end
     else begin
-        case (muxState) 
+        case (muxState)
             MUX_IDLE: begin
                 fifoReset <= 0;
                 if (!fifoEn && !fifoEmpty && uartDataNeeded) begin
@@ -327,6 +345,7 @@ uartTx uartTx(
     );
 
 
+`ifdef USE_ARTM
 //*****************************************************************************
 //                               ARTM Mode
 //*****************************************************************************
@@ -335,19 +354,21 @@ artmSignalQuality artm(
     .reset(reset),
     .hold(holdCount),
     .demodLock(demodLock),
-    .bitSyncLock(bitsyncLock),
     .symEnable(iSymEn),
     .iSymData(iSymData), .qSymData(qSymData),
     .threshold(artmThreshold),
     .interiorCountOut(interiorCountOut),
     .exteriorCountOut(exteriorCountOut),
-    .serialOut(artmOut)
+    .serialOut(artmOut),
+    .meanI(), .meanQ()
     );
+`endif
 
 //*****************************************************************************
 //                              Module Outputs
 //*****************************************************************************
 
+`ifdef USE_ARTM
 `ifdef ADD_DESPREADER
 reg sdiOut;
 always @* begin
@@ -360,6 +381,20 @@ always @* begin
 end
 `else
 assign sdiOut = (sdiMode == `SDI_MODE_ARTM) ? artmOut : uartOut ;
+`endif
+`else //USE_ARTM
+`ifdef ADD_DESPREADER
+reg sdiOut;
+always @* begin
+    casex (sdiMode)
+        `SDI_MODE_IEPOCH:   sdiOut = iEpoch;
+        `SDI_MODE_QEPOCH:   sdiOut = qEpoch;
+        default:            sdiOut = uartOut;
+    endcase
+end
+`else
+assign sdiOut = uartOut ;
+`endif
 `endif
 
 reg     [31:0]  dataOut;

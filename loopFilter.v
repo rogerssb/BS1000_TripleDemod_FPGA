@@ -1,7 +1,7 @@
 /******************************************************************************
 Copyright 2008-2015 Koos Technical Services, Inc. All Rights Reserved
 
-This source code is the Intellectual Property of Koos Technical Services,Inc. 
+This source code is the Intellectual Property of Koos Technical Services,Inc.
 (KTS) and is provided under a License Agreement which protects KTS' ownership and
 derivative rights in exchange for negotiated compensation.
 ******************************************************************************/
@@ -10,7 +10,7 @@ derivative rights in exchange for negotiated compensation.
 `include ".\addressMap.v"
 
 module loopFilter (
-    input                       clk, clkEn, reset, 
+    input                       clk, clkEn, reset,
     `ifdef USE_BUS_CLOCK
     input                       busClk,
     `endif
@@ -53,15 +53,23 @@ module loopFilter (
         .clearAccum(clearAccum),
         .ctrl4(ctrl4),
         .leadExp(lead),
+        .leadMan(),
         .lagExp(lag),
+        .lagMan(),
         .limit(limit),
+        .loopData(),
+        .leadExp1(),
+        .leadMan1(),
+        .lagExp1(),
+        .lagMan1(),
+        .loopData1(),
         .lockCount(lockCount),
         .syncThreshold(syncThreshold)
     );
 
     /**************************** Adjust Error ************************************/
     reg     signed  [11:0]  loopError;
-    always @(posedge clk) begin 
+    always @(posedge clk) begin
         if (zeroError) begin
             loopError <= 12'h0;
         end
@@ -97,7 +105,7 @@ module loopFilter (
                   5'h08: leadError <= $signed({{23{loopError[11]}},loopError[11:3]});
                   5'h09: leadError <= $signed({{22{loopError[11]}},loopError[11:2]});
                   5'h0A: leadError <= $signed({{21{loopError[11]}},loopError[11:1]});
-                  5'h0B: leadError <= $signed({{20{loopError[11]}},loopError});      
+                  5'h0B: leadError <= $signed({{20{loopError[11]}},loopError});
                   5'h0C: leadError <= $signed({{19{loopError[11]}},loopError, 1'b0});
                   5'h0D: leadError <= $signed({{18{loopError[11]}},loopError, 2'b0});
                   5'h0E: leadError <= $signed({{17{loopError[11]}},loopError, 3'b0});
@@ -142,7 +150,7 @@ module loopFilter (
                   5'h08: lagError <= $signed({{23{loopError[11]}},loopError[11:3]});
                   5'h09: lagError <= $signed({{22{loopError[11]}},loopError[11:2]});
                   5'h0A: lagError <= $signed({{21{loopError[11]}},loopError[11:1]});
-                  5'h0B: lagError <= $signed({{20{loopError[11]}},loopError});      
+                  5'h0B: lagError <= $signed({{20{loopError[11]}},loopError});
                   5'h0C: lagError <= $signed({{19{loopError[11]}},loopError, 1'b0});
                   5'h0D: lagError <= $signed({{18{loopError[11]}},loopError, 2'b0});
                   5'h0E: lagError <= $signed({{17{loopError[11]}},loopError, 3'b0});

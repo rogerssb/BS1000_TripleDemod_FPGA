@@ -6,8 +6,8 @@ module clkAndDataOutput(
     input               clk, reset,
     input               busClk,
     input       [12:0]  addr,
-    input       [31:0]  dataIn,
-    output  reg [31:0]  dataOut,
+    input       [31:0]  din,
+    output      [31:0]  dout,
     input               wr0, wr1, wr2, wr3,
     input               clkEnIn,
     input       [2:0]   dataIn,
@@ -21,18 +21,17 @@ module clkAndDataOutput(
     parameter RegSpace = `CandD0SPACE;
 
     // Configuration Regs
-    wire    [3:0]   sourceSelect;
     wire    [1:0]   clkPhase;
     wire    [31:0]  dllCenterFreq;
     wire    [4:0]   dllLoopGain;
     wire    [7:0]   dllFeedbackDivider;
     wire    [31:0]  clkAndDataDout;
-    clkAndDataRegs #(.RegSpace(`CandD0SPACE)) cAndDRegs(
+    clkAndDataRegs #(.RegSpace(RegSpace)) cAndDRegs(
         .busClk(busClk),
         .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
         .addr(addr),
-        .dataIn(dataIn),
-        .dataOut(clkAndDataDout),
+        .din(din),
+        .dout(dout),
         .source(sourceSelect),
         .clkPhase(clkPhase),
         .clkReset(clkReset),
@@ -78,7 +77,7 @@ module clkAndDataOutput(
         .rst(clkReset),
         .wr_clk(clk),
         .rd_clk(dllReadClk),
-        .din(clkAndDataSource0Data),
+        .din(dataIn),
         .wr_en(clkEnIn),
         .rd_en(dll_ReadEnable),
         .dout(dll_Symbol),
@@ -132,7 +131,7 @@ module clkAndDataOutput(
         .rst(clkReset),
         .wr_clk(clk),
         .rd_clk(pllReadClk),
-        .din({dualDataI,dualDataQ,1'b0}),
+        .din(dataIn),
         .wr_en(clkEnIn),
         .rd_en(pll_ReadEnable),
         .dout(pll_Symbol),

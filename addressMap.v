@@ -337,6 +337,8 @@
 `define TRELLISLFSPACE      13'b0_0101_000x_xxxx
 `define MULTIH_SPACE        13'b0_0101_0010_xxxx
 `define MULTIHLFSPACE       13'b0_0101_010x_xxxx
+`define SDISPACE            13'b0_0101_0110_xxxx
+`define UARTSPACE           13'b0_0101_0111_xxxx
 
 // Video Switch Control registers
 `define VIDSWITCHSPACE      13'b0_10xx_0100_xxxx

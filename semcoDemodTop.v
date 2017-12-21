@@ -60,6 +60,8 @@ module semcoDemodTop (
     // Lock indicators
     output              lockLed0n, lockLed1n,
 
+    // SDI Output
+    output              sdiOut,
     `ifdef TRIPLE_DEMOD
 
     // PLL Interface Signals
@@ -497,6 +499,8 @@ module semcoDemodTop (
             //`CandD_SRC_DEC3_CH0:
             //`CandD_SRC_DEC3_CH1:
             default:   begin
+                cAndD0ClkEn = iDemodSymEn;
+                cAndD0DataIn = {iDemodBit,qDemodBit,1'b0};
             end
         endcase
     end
@@ -508,16 +512,17 @@ module semcoDemodTop (
         .busClk(busClk),
         .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
         .addr(addr),
-        .dataIn(dataIn),
-        .dataOut(cAndD0Dout),
+        .din(dataIn),
+        .dout(cAndD0Dout),
         .clkEnIn(cAndD0ClkEn),
-        .din(cAndD0DataIn),
+        .dataIn(cAndD0DataIn),
         .pllOutputClk(pll0_OUT1),
         .sourceSelect(cAndD0SourceSelect),
         .pllReferenceClk(pll0_REF),
         .outputClk(ch0ClkOut),
-        .outputData(ch0DataOut)
+        .outputData(cAndD0DataOut)
     );
+    assign ch0DataOut = cAndD0DataOut[2];
 
     //----------------------- Channel 1 Jitter Attenuation --------------------
 
@@ -556,6 +561,8 @@ module semcoDemodTop (
             //`CandD_SRC_DEC3_CH0:
             //`CandD_SRC_DEC3_CH1:
             default:   begin
+                cAndD1ClkEn = iDemodSymEn;
+                cAndD1DataIn = {iDemodBit,qDemodBit,1'b0};
             end
         endcase
     end
@@ -567,16 +574,17 @@ module semcoDemodTop (
         .busClk(busClk),
         .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
         .addr(addr),
-        .dataIn(dataIn),
-        .dataOut(cAndD1Dout),
+        .din(dataIn),
+        .dout(cAndD1Dout),
         .clkEnIn(cAndD1ClkEn),
-        .din(cAndD1DataIn),
+        .dataIn(cAndD1DataIn),
         .pllOutputClk(pll1_OUT1),
         .sourceSelect(cAndD1SourceSelect),
         .pllReferenceClk(pll1_REF),
         .outputClk(ch1ClkOut),
-        .outputData(ch1DataOut)
+        .outputData(cAndD1DataOut)
     );
+    assign ch1DataOut = cAndD1DataOut[2];
 
     assign          pll2_REF = 1'b0;
     assign          pll2_Data = 1'b0;
@@ -725,6 +733,35 @@ module semcoDemodTop (
     `endif
 
 //******************************************************************************
+//                        SDI Output Interface
+//******************************************************************************
+
+wire    [31:0]  sdiDout;
+sdi sdi(
+    .clk(clk),
+    .reset(reset),
+    .wr0(wr0),
+    .wr1(wr1),
+    .wr2(wr2),
+    .wr3(wr3),
+    .addr(addr),
+    .dataIn(dataIn),
+    .dataOut(sdiDout),
+    .iSymEn(iDemodSymEn),
+    .iSymData(iTrellis),
+    .qSymEn(qDemodSymEn),
+    .qSymData(qTrellis),
+    .eyeSync(demodEyeClkEn),
+    .iEye(iDemodEye),.qEye(qDemodEye),
+    .eyeOffset(demodEyeOffset),
+    .bitsyncLock(demodTimingLock), .demodLock(demodCarrierLock),
+    `ifdef ADD_DESPREADER
+    .iEpoch(iEpoch), .qEpoch(qEpoch),
+    `endif
+    .sdiOut(sdiOut)
+    );
+
+//******************************************************************************
 //                               Output Assignments
 //******************************************************************************
 
@@ -739,8 +776,6 @@ module semcoDemodTop (
 
     assign lockLed0n = !demodTimingLock;
     assign lockLed1n = !demodCarrierLock;
-    //assign lockLed0n = busClk;
-    //assign lockLed1n = spiCSn;
 
     `ifdef TRIPLE_DEMOD
 
@@ -889,6 +924,15 @@ module semcoDemodTop (
                     rd_mux = demodDout[15:0];
                 end
             end
+            `UARTSPACE,
+            `SDISPACE: begin
+                if (addr[1]) begin
+                    rd_mux = sdiDout[31:16];
+                end
+                else begin
+                    rd_mux = sdiDout[15:0];
+                end
+            end
             `ifdef ADD_SCPATH
             `SCDDCSPACE,
             `SCDDCFIRSPACE,
@@ -907,45 +951,45 @@ module semcoDemodTop (
             `INTERP0SPACE: begin
                 if (addr[1]) begin
                     rd_mux = interp0Dout[31:16];
-                    end
+                end
                 else begin
                     rd_mux = interp0Dout[15:0];
-                    end
                 end
+            end
              `VIDFIR1SPACE,
              `INTERP1SPACE: begin
                 if (addr[1]) begin
                     rd_mux = interp1Dout[31:16];
-                    end
+                end
                 else begin
                     rd_mux = interp1Dout[15:0];
-                    end
                 end
+            end
              `VIDFIR2SPACE,
              `INTERP2SPACE: begin
                 if (addr[1]) begin
                     rd_mux = interp2Dout[31:16];
-                    end
+                end
                 else begin
                     rd_mux = interp2Dout[15:0];
-                    end
                 end
+            end
             `CandD0SPACE: begin
                 if (addr[1]) begin
                     rd_mux = cAndD0Dout[31:16];
-                    end
+                end
                 else begin
                     rd_mux = cAndD0Dout[15:0];
-                    end
                 end
+            end
             `CandD1SPACE: begin
                 if (addr[1]) begin
                     rd_mux = cAndD1Dout[31:16];
-                    end
+                end
                 else begin
                     rd_mux = cAndD1Dout[15:0];
-                    end
                 end
+            end
             `PLL0SPACE,
             `PLL1SPACE,
             `PLL2SPACE: begin
@@ -970,22 +1014,6 @@ module semcoDemodTop (
                     end
                 else begin
                     rd_mux = ch1DecDout[15:0];
-                    end
-                end
-            `CandD0SPACE: begin
-                if (addr[1]) begin
-                    rd_mux = cAndD0Dout[31:16];
-                    end
-                else begin
-                    rd_mux = cAndD0Dout[15:0];
-                    end
-                end
-            `CandD1SPACE: begin
-                if (addr[1]) begin
-                    rd_mux = cAndD1Dout[31:16];
-                    end
-                else begin
-                    rd_mux = cAndD1Dout[15:0];
                     end
                 end
              default : rd_mux = 16'hxxxx;

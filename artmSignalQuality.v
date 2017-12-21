@@ -10,7 +10,6 @@ module artmSignalQuality(
     reset,
     hold,
     demodLock,
-    bitSyncLock,
     symEnable,
     iSymData, qSymData,
     threshold,
@@ -21,7 +20,7 @@ module artmSignalQuality(
     );
 
 
-input sysClk, reset, hold, demodLock, bitSyncLock;
+input sysClk, reset, hold, demodLock;
 
 input           symEnable;
 input   [17:0]  iSymData,qSymData;
@@ -41,26 +40,26 @@ reg     [5:0]   absI,absQ;
 always @(posedge sysClk) begin
     if (symEnable) begin
         // Saturate inputs at +/- (2^17)-1
-        if (iSymData == 18'h20000) begin 
+        if (iSymData == 18'h20000) begin
             iEndSat <= 18'h20001;
             end
         else begin
             iEndSat <= iSymData;
             end
-        if (qSymData == 18'h20000) begin    
+        if (qSymData == 18'h20000) begin
             qEndSat <= 18'h20001;
             end
         else begin
             qEndSat <= qSymData;
             end
         // Absolute value
-        if (iEndSat[17]) begin                
+        if (iEndSat[17]) begin
             absI <= iNegEndSat[16:11];
             end
         else begin
             absI <= iEndSat[16:11];
             end
-        if (qEndSat[17]) begin                          
+        if (qEndSat[17]) begin
             absQ <= qNegEndSat[16:11];
             end
         else begin
@@ -243,6 +242,7 @@ always @ (posedge sysClk or posedge reset) begin
         shifter <= 0;
         uartState <= UART_IDLE;
         uartDataAvailable <= 1'b0;
+        delayCount <= 0;
         end
     else if (uartBitBoundary && uartCharBoundary) begin
         casex (uartState)
@@ -274,7 +274,6 @@ always @ (posedge sysClk or posedge reset) begin
                 uartState <= UART_INTLSB;
                 end
             UART_STATUS: begin
-            //    shifter <= {STOP, 6'b0, demodLock, bitSyncLock, START};
                 shifter <= demodLock ? {STOP, 8'h16, START} : {STOP, 8'h00, START};
                         uartState <= UART_INTMSB;
                 end
@@ -292,6 +291,7 @@ always @ (posedge sysClk or posedge reset) begin
             default: begin
                 shifter <= 10'b0000000000;
                 uartState <= UART_IDLE;
+                delayCount <= 0;
                 end
             endcase
         end
