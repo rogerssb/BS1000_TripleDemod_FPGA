@@ -1,7 +1,7 @@
 /******************************************************************************
 Copyright 2008-2015 Koos Technical Services, Inc. All Rights Reserved
 
-This source code is the Intellectual Property of Koos Technical Services,Inc. 
+This source code is the Intellectual Property of Koos Technical Services,Inc.
 (KTS) and is provided under a License Agreement which protects KTS' ownership and
 derivative rights in exchange for negotiated compensation.
 ******************************************************************************/
@@ -46,9 +46,9 @@ module vm_cordic_fast(clk,ena,x,y,m,p,enOut);
 
     // equations for the initial rotation +/- pi/2
     //
-    //  x' = (-d)(y)     
+    //  x' = (-d)(y)
     //
-    //  y' = (d)(x)     
+    //  y' = (d)(x)
     //
     //  z' = z + (d)(pi/2)     where d = +1 if y<0, -1 otherwise
 
@@ -86,7 +86,7 @@ module vm_cordic_fast(clk,ena,x,y,m,p,enOut);
     wire [n:0] ny0 = ~y0 +1;
 
     always @(posedge clk)begin
-        if(yi[n])begin  
+        if(yi[n])begin
             x0 <= xi + {{0{nyi[n]}},nyi[n:0]};
             y0 <= yi + {{0{xi[n]}},xi[n:0]};
             z0 <= zi + atan_k0;
@@ -106,7 +106,7 @@ module vm_cordic_fast(clk,ena,x,y,m,p,enOut);
     wire [n:0] ny1 = ~y1 +1;
 
     always @(posedge clk)begin
-        if(y0[n])begin 
+        if(y0[n])begin
             x1 <= x0 + {{1{ny0[n]}},ny0[n:1]};
             y1 <= y0 + {{1{x0[n]}},x0[n:1]};
             z1 <= z0 + atan_k1;
@@ -126,7 +126,7 @@ module vm_cordic_fast(clk,ena,x,y,m,p,enOut);
     wire [n:0] ny2 = ~y2 +1;
 
     always @(posedge clk)begin
-        if(y1[n])begin 
+        if(y1[n])begin
             x2 <= x1 + {{2{ny1[n]}},ny1[n:2]};
             y2 <= y1 + {{2{x1[n]}},x1[n:2]};
             z2 <= z1 + atan_k2;
@@ -146,7 +146,7 @@ module vm_cordic_fast(clk,ena,x,y,m,p,enOut);
     wire [n:0] ny3 = ~y3 +1;
 
     always @(posedge clk)begin
-        if(y2[n])begin 
+        if(y2[n])begin
             x3 <= x2 + {{3{ny2[n]}},ny2[n:3]};
             y3 <= y2 + {{3{x2[n]}},x2[n:3]};
             z3 <= z2 + atan_k3;
@@ -166,7 +166,7 @@ module vm_cordic_fast(clk,ena,x,y,m,p,enOut);
     wire [n:0] ny4 = ~y4 +1;
 
     always @(posedge clk)begin
-        if(y3[n])begin 
+        if(y3[n])begin
             x4 <= x3 + {{4{ny3[n]}},ny3[n:4]};
             y4 <= y3 + {{4{x3[n]}},x3[n:4]};
             z4 <= z3 + atan_k4;
@@ -186,7 +186,7 @@ module vm_cordic_fast(clk,ena,x,y,m,p,enOut);
     wire [n:0] ny5 = ~y5 +1;
 
     always @(posedge clk)begin
-        if(y4[n])begin 
+        if(y4[n])begin
             x5 <= x4 + {{5{ny4[n]}},ny4[n:5]};
             y5 <= y4 + {{5{x4[n]}},x4[n:5]};
             z5 <= z4 + atan_k5;
@@ -206,7 +206,7 @@ module vm_cordic_fast(clk,ena,x,y,m,p,enOut);
     wire [n:0] ny6 = ~y6 +1;
 
     always @(posedge clk)begin
-        if(y5[n])begin 
+        if(y5[n])begin
             x6 <= x5 + {{6{ny5[n]}},ny5[n:6]};
             y6 <= y5 + {{6{x5[n]}},x5[n:6]};
             z6 <= z5 + atan_k6;
@@ -226,7 +226,7 @@ module vm_cordic_fast(clk,ena,x,y,m,p,enOut);
     wire [n:0] ny7 = ~y7 +1;
 
     always @(posedge clk)begin
-        if(y6[n])begin 
+        if(y6[n])begin
             x7 <= x6 + {{7{ny6[n]}},ny6[n:7]};
             y7 <= y6 + {{7{x6[n]}},x6[n:7]};
             z7 <= z6 + atan_k7;
@@ -246,7 +246,7 @@ module vm_cordic_fast(clk,ena,x,y,m,p,enOut);
     wire [n:0] ny8 = ~y8 +1;
 
     always @(posedge clk)begin
-        if(y7[n])begin 
+        if(y7[n])begin
             x8 <= x7 + {{8{ny7[n]}},ny7[n:8]};
             y8 <= y7 + {{8{x7[n]}},x7[n:8]};
             z8 <= z7 + atan_k8;
@@ -266,7 +266,7 @@ module vm_cordic_fast(clk,ena,x,y,m,p,enOut);
     wire [n:0] ny9 = ~y9 +1;
 
     always @(posedge clk)begin
-        if(y8[n])begin 
+        if(y8[n])begin
             x9 <= x8 + {{9{ny8[n]}},ny8[n:9]};
             y9 <= y8 + {{9{x8[n]}},x8[n:9]};
             z9 <= z8 + atan_k9;
@@ -286,7 +286,7 @@ module vm_cordic_fast(clk,ena,x,y,m,p,enOut);
     wire [n:0] ny10 = ~y10 +1;
 
     always @(posedge clk)begin
-        if(y9[n])begin 
+        if(y9[n])begin
             x10 <= x9 + {{10{ny9[n]}},ny9[n:10]};
             y10 <= y9 + {{10{x9[n]}},x9[n:10]};
             z10 <= z9 + atan_k10;
@@ -306,7 +306,7 @@ module vm_cordic_fast(clk,ena,x,y,m,p,enOut);
     wire [n:0] ny11 = ~y11 +1;
 
     always @(posedge clk)begin
-        if(y10[n])begin 
+        if(y10[n])begin
             x11 <= x10 + {{11{ny10[n]}},ny10[n:11]};
             y11 <= y10 + {{11{x10[n]}},x10[n:11]};
             z11 <= z10 + atan_k11;
@@ -334,7 +334,7 @@ module vm_cordic_fast(clk,ena,x,y,m,p,enOut);
 
 endmodule
 
-`ifdef SELFTEST
+`ifdef SELFTEST_FAST
 module test ();
 
 parameter n = 14;
@@ -347,13 +347,13 @@ always  #5 clk = !clk;
 // LO Generator
 wire    [17:0]iDds;
 wire    [17:0]qDds;
-dds dds ( 
-    .sclr(reset), 
-    .clk(clk), 
+dds dds (
+    .sclr(reset),
+    .clk(clk),
     .ce(1'b1),
-    .we(1'b1), 
-    .data(32'h00200000), 
-    .sine(qDds), 
+    .we(1'b1),
+    .data(32'h00200000),
+    .sine(qDds),
     .cosine(iDds)
     );
 
@@ -380,7 +380,7 @@ initial begin
     reset = 0;
     #(1024*1024*10) ;
     $stop;
-    
+
     end
 
 endmodule

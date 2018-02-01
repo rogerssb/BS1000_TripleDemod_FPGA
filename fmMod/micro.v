@@ -1,6 +1,6 @@
 `timescale 1ns/10ps
 
-`include "..\addressMap.v"
+`include "./addressMap.v"
 
 module fmModRegs(cs,
                  addr,
@@ -81,11 +81,11 @@ always @(negedge wr3) begin
 
 reg [31:0]dataOut;
 always @(cs or addr or
-         carrierFreq or 
+         carrierFreq or
          deviation or
          bitrateDiv or
          modClkSel or
-         cicShift) 
+         cicShift)
     begin
     if (cs) begin
         casex (addr)

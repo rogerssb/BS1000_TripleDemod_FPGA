@@ -39,35 +39,35 @@ always #HC clk = clk^clken;
 
 real carrierFreqHz;
 real carrierFreqNorm;
-initial begin 
+initial begin
   carrierFreqHz = 23333333.3;
   carrierFreqNorm = carrierFreqHz * `SAMPLE_PERIOD * `TWO_POW_32;
-end                 
+end
 
 integer carrierFreqInt;
-initial begin 
-  carrierFreqInt = carrierFreqNorm; 
+initial begin
+  carrierFreqInt = carrierFreqNorm;
 end
 wire [31:0] carrierFreq = carrierFreqInt;
 
 real carrierOffsetFreqHz;
 real carrierOffsetFreqNorm;
 integer carrierOffsetFreqInt;
-initial begin 
+initial begin
   carrierOffsetFreqHz = 0.0;
   carrierOffsetFreqNorm = carrierOffsetFreqHz * `SAMPLE_PERIOD * `TWO_POW_32;
   carrierOffsetFreqInt = carrierOffsetFreqNorm;
-end                 
+end
 wire [31:0] carrierOffsetFreq = carrierOffsetFreqInt;
 
 real carrierLimitHz;
 real carrierLimitNorm;
 integer carrierLimitInt;
-initial begin 
+initial begin
   carrierLimitHz = 60000.0;
   carrierLimitNorm = carrierLimitHz * `SAMPLE_PERIOD * `TWO_POW_32;
   carrierLimitInt = carrierLimitNorm;
-end                 
+end
 wire [31:0] carrierLimit = carrierLimitInt;
 
 wire [31:0] sweepRate = 32'h00000000;
@@ -82,9 +82,9 @@ end
 wire [15:0]bitrateDivider = bitrateSamplesInt - 1;
 real actualBitrateBps;
 initial begin
-  actualBitrateBps = SAMPLE_FREQ/bitrateSamplesInt/2.0;          
+  actualBitrateBps = SAMPLE_FREQ/bitrateSamplesInt/2.0;
 end
-                    
+
 // value = 2^ceiling(log2(R*R))/(R*R), where R = interpolation rate of the FM
 // modulator
 real interpolationGain = 1.28;
@@ -93,7 +93,7 @@ real interpolationGain = 1.28;
 real deviationHz;
 real deviationNorm;
 integer deviationInt;
-initial begin 
+initial begin
   deviationHz = 2*0.350 * actualBitrateBps;
   deviationNorm = deviationHz * `SAMPLE_PERIOD * `TWO_POW_32;
   deviationInt = deviationNorm*interpolationGain;
@@ -117,7 +117,7 @@ initial resamplerFreqInt = (resamplerFreqNorm >= `TWO_POW_31) ? (resamplerFreqNo
 //integer resamplerFreqInt = resamplerFreqNorm;
 real resamplerLimitNorm;
 integer resamplerLimitInt;
-initial begin 
+initial begin
   resamplerLimitNorm = 0.001*resamplerFreqSps/SAMPLE_FREQ * `TWO_POW_32;
   resamplerLimitInt = resamplerLimitNorm;
 end
@@ -179,8 +179,8 @@ wire    [31:0]fmModFreq;
 reg     fmModCS;
 reg     enableTx;
 initial enableTx = 0;
-fmMod fmMod( 
-    .clk(clk), .reset(reset), 
+fmMod fmMod(
+    .clk(clk), .reset(reset),
     .cs(fmModCS),
     .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
     .addr(a),
@@ -195,50 +195,69 @@ fmMod fmMod(
     );
 `define USE_BASEBAND
 `ifdef USE_BASEBAND
+
+`ifdef USE_VIVADO_CORES
+wire    [47:0]  m_axis;
+wire    [17:0]  iTx = m_axis[17:0];
+wire    [17:0]  qTx;
+dds6p0 iqDds(
+  .aclk(clk),
+  .aclken(1'b1),
+  .aresetn(!reset),
+  .m_axis_data_tdata(m_axis),
+  .m_axis_data_tvalid(),
+  .s_axis_phase_tdata(fmModFreq),
+  .s_axis_phase_tvalid(1'b1)
+);
+assign qTx = 18'h0;
+`else
 wire    [17:0]iTx,qTx;
-dds iqDds ( 
-    .sclr(reset), 
-    .clk(clk), 
+dds iqDds (
+    .sclr(reset),
+    .clk(clk),
     .ce(1'b1),
-    .we(1'b1), 
-    .data(fmModFreq), 
-    .sine(), 
+    .we(1'b1),
+    .data(fmModFreq),
+    .sine(),
     .cosine(iTx)
     );
 assign qTx = 18'h0;
-`else
+`endif //USE_VIVADO_CORES
+
+`else //USE_BASEBAND
+
 wire    [17:0]  iBB,qBB;
-dds iqDds ( 
-    .sclr(reset), 
-    .clk(clk), 
+dds iqDds (
+    .sclr(reset),
+    .clk(clk),
     .ce(1'b1),
-    .we(1'b1), 
-    .data(fmModFreq), 
-    .sine(qBB), 
+    .we(1'b1),
+    .data(fmModFreq),
+    .sine(qBB),
     .cosine(iBB)
     );
 wire    [17:0]  iLO,qLO;
 dds carrierDds (
-    .sclr(reset), 
-    .clk(clk), 
+    .sclr(reset),
+    .clk(clk),
     .ce(1'b1),
-    .we(1'b1), 
-    .data(carrierFreq), 
-    .sine(qLO), 
+    .we(1'b1),
+    .data(carrierFreq),
+    .sine(qLO),
     .cosine(iLO)
     );
 wire [35:0]productI;
-mpy18x18 mpyI(.clk(clk), 
+mpy18x18 mpyI(.clk(clk),
                 .sclr(reset),
-                .a(iBB), 
-                .b(iLO), 
+                .a(iBB),
+                .b(iLO),
                 .p(productI)
                 );
 wire [35:0]productQ;
-mpy18x18 mpyQ(.clk(clk), 
+mpy18x18 mpyQ(.clk(clk),
                 .sclr(reset),
-                .a(qBB), 
-                .b(qLO), 
+                .a(qBB),
+                .b(qLO),
                 .p(productQ)
                 );
 wire [35:0]carrierSum = productI + productQ;
@@ -282,7 +301,7 @@ always @(qSignal)  qSignalReal = (qSignal[17] ? (qSignal - 262144.0) : qSignal)/
 always @(iNoise)  iNoiseReal = (iNoise[17] ? (iNoise - 262144.0) : iNoise)/131072.0;
 always @(qNoise)  qNoiseReal = (qNoise[17] ? (qNoise - 262144.0) : qNoise)/131072.0;
 
-                    
+
 always @(negedge clk) begin
     `ifdef ADD_NOISE
     iNoise <= $gaussPLI();
@@ -308,8 +327,8 @@ real iChReal;
 real qChReal;
 always @(iRx) iChReal = (iRx[17] ? (iRx - 262144.0) : iRx)/131072.0;
 always @(qRx)  qChReal = (qRx[17] ? (qRx - 262144.0) : qRx)/131072.0;
-     
-wire    [18:0]  iRxSum = {iSignal[17],iSignal} + {iNoise[17],iNoise};                    
+
+wire    [18:0]  iRxSum = {iSignal[17],iSignal} + {iNoise[17],iNoise};
 always @(iRxSum) begin
     if (iRxSum[18] & !iRxSum[17]) begin
         iRx = 18'h20001;
@@ -330,7 +349,7 @@ assign qRx = qSignal + qNoise;
                             Instantiate the Demod
 ******************************************************************************/
 wire    [17:0]  dac0Out,dac1Out,dac2Out, iSymData, qSymData;
-demod demod( 
+demod demod(
     .clk(clk), .reset(reset),
     .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
     .addr(a),
@@ -350,7 +369,7 @@ demod demod(
 //    .qSymData(qSymData),
     .trellisSymSync(trellisSymSync),
     .iTrellis(iSymData),
-    .qTrellis(qSymData)                       
+    .qTrellis(qSymData)
 
     );
 
@@ -372,7 +391,7 @@ always @(a) begin
             dac1CS <= 0;
             dac2CS <= 1;
             end
-        default: begin  
+        default: begin
             dac0CS <= 0;
             dac1CS <= 0;
             dac2CS <= 0;
@@ -485,7 +504,7 @@ trellisCarrierLoop tcl(
     );
 
 `endif
-                    
+
 `ifdef MATLAB_VECTORS
 /******************************************************************************
                           Vector data for Matlab Analysis
@@ -515,7 +534,7 @@ always @(negedge clk) begin
 function [11:0] createAddress;
     input [11:0] addrA;
     input [11:0] addrB;
-    
+
     integer i;
     reg [11:0]finalAddress;
 
@@ -546,14 +565,14 @@ task write16;
     if (addr[1]) begin
         d[31:16] = data;
         #100 we2 = 1; we3 = 1;
-        #100 we2 = 0; we3 = 0; 
+        #100 we2 = 0; we3 = 0;
         end
     else begin
         d[15:0] = data;
         #100 we0 = 1; we1 = 1;
-        #100 we0 = 0; we1 = 0; 
+        #100 we0 = 0; we1 = 0;
         end
-    #100  
+    #100
     d = 32'hz;
     #200;
   end
@@ -567,7 +586,7 @@ task write32;
     d = data;
     rd = 0;
     #100 we0 = 1; we1 = 1; we2 = 1; we3 = 1;
-    #100 we0 = 0; we1 = 0; we2 = 0; we3 = 0; 
+    #100 we0 = 0; we1 = 0; we2 = 0; we3 = 0;
     #100
     d = 32'hz;
     #200;
@@ -588,7 +607,7 @@ endtask
 initial begin
 
     `ifdef ADD_NOISE
-    // The 11.5 is a fudge factor (should be 12 for the 2 bit shift) for the scaling 
+    // The 11.5 is a fudge factor (should be 12 for the 2 bit shift) for the scaling
     // down of the transmit waveform from full scale.
     // The 13.0 is to translate from SNR to EBNO which is 10log10(bitrate/bandwidth).
     $initGaussPLI(1,8.0 + 11.5 - 7.0,131072.0);
@@ -600,7 +619,7 @@ initial begin
     sync = 1;
     clk = 0;
     rd = 0;
-    we0 = 0; we1 = 0; we2 = 0; we3 = 0; 
+    we0 = 0; we1 = 0; we2 = 0; we3 = 0;
     d = 32'hz;
     fmModCS = 0;
     txScaleFactor = 0.25;
@@ -632,20 +651,20 @@ initial begin
     // Init the sample rate loop filters
     write32(createAddress(`RESAMPSPACE,`RESAMPLER_RATE),resamplerFreqInt);
     write32(createAddress(`BITSYNCSPACE,`LF_CONTROL),1);    // Zero the error
-    write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h001b0016);    
-    //write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h0014000c);    
-    write32(createAddress(`BITSYNCSPACE,`LF_LIMIT), resamplerLimitInt);    
+    write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h001b0016);
+    //write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h0014000c);
+    write32(createAddress(`BITSYNCSPACE,`LF_LIMIT), resamplerLimitInt);
 
     // Init the carrier loop filters
     write32(createAddress(`CARRIERSPACE,`LF_CONTROL),1);    // Zero the error
-    write32(createAddress(`CARRIERSPACE,`LF_LEAD_LAG),32'h00000012);   
+    write32(createAddress(`CARRIERSPACE,`LF_LEAD_LAG),32'h00000012);
     write32(createAddress(`CARRIERSPACE,`LF_LIMIT), carrierLimit);
     write32(createAddress(`CARRIERSPACE,`LF_LOOPDATA0), sweepRate);
 
     // Init the trellis carrier loop
     write32(createAddress(`TRELLISLFSPACE,`LF_CONTROL),32'h19);    // Forces the lag acc and the error term to be zero
-    write32(createAddress(`TRELLISLFSPACE,`LF_LEAD_LAG),32'h0015_0005);   
-    write32(createAddress(`TRELLISLFSPACE,`LF_LIMIT),32'h0100_0000);   
+    write32(createAddress(`TRELLISLFSPACE,`LF_LEAD_LAG),32'h0015_0005);
+    write32(createAddress(`TRELLISLFSPACE,`LF_LIMIT),32'h0100_0000);
     write32(createAddress(`TRELLISLFSPACE,`LF_LOOPDATA0),32'h0ccc_cccc);
     write32(createAddress(`TRELLISLFSPACE,`LF_LOOPDATA1),32'hf333_3333);
     //write32(createAddress(`TRELLISLFSPACE,`LF_LOOPDATA0),32'h0);
@@ -727,7 +746,7 @@ initial begin
     interpReset = 0;
 
     // Enable the sample rate loop without 2 sample summer
-    write32(createAddress(`BITSYNCSPACE,`LF_CONTROL),32'h0000_0000);  
+    write32(createAddress(`BITSYNCSPACE,`LF_CONTROL),32'h0000_0000);
 
     // Wait 2 bit periods
     #(10*bitrateSamplesInt*C) ;
@@ -749,7 +768,7 @@ initial begin
     #(2*bitrateSamplesInt*C) ;
     trellisReset = 0;
 
-    `endif        
+    `endif
 
     // Enable the trellis carrier loop
     #(10*bitrateSamplesInt*C) ;
@@ -757,9 +776,9 @@ initial begin
 
     `ifdef ENABLE_AGC
     // Enable the AGC loop
-    write32(createAddress(`CHAGCSPACE,`ALF_CONTROL),0);              
+    write32(createAddress(`CHAGCSPACE,`ALF_CONTROL),0);
     `endif
-        
+
     // Wait for some data to pass thru
     #(2*50*bitrateSamplesInt*C) ;
     // Turn on the BERT

@@ -481,7 +481,7 @@ module bitsync(
 
                             // We capture deviation samples whenever there
                             // is not a transition.
-                            deviation <= earlyOnTimeI;
+                            deviation <= lateOnTimeI;
                         end
                         // Is there a data transition on Q?
                         if (earlySignQ != lateSignQ) begin
@@ -570,7 +570,7 @@ module bitsync(
         end
         else if (sym2xClkEn) begin
             // Only use deviations isolated from a transition.
-            if (offsetEn && (noTransitionCount > 1)) begin
+            if (offsetEn && (noTransitionCount > 0) && (earlySignI == lateSignI)) begin
                 avgDeviation <= (avgDeviation - {{7{avgDeviation[24]}},avgDeviation[24:7]})
                               + {{7{absDeviation[17]}},absDeviation};
             end

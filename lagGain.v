@@ -1,7 +1,7 @@
 /******************************************************************************
 Copyright 2008-2015 Koos Technical Services, Inc. All Rights Reserved
 
-This source code is the Intellectual Property of Koos Technical Services,Inc. 
+This source code is the Intellectual Property of Koos Technical Services,Inc.
 (KTS) and is provided under a License Agreement which protects KTS' ownership and
 derivative rights in exchange for negotiated compensation.
 ******************************************************************************/
@@ -9,7 +9,7 @@ derivative rights in exchange for negotiated compensation.
 `timescale 1ns / 10 ps
 
 module lagGain (
-    clk, clkEn, reset, 
+    clk, clkEn, reset,
     error,
     lagExp,
     limit,
@@ -48,37 +48,37 @@ always @(posedge clk) begin
             end
         case(lagExp)
             5'h00: lagError[38:0] <= 39'h0;
-            5'h01: lagError[38:0] <= {{30{error[7]}},error[6:0], 2'b0};  
-            5'h02: lagError[38:0] <= {{29{error[7]}},error[6:0], 3'b0};  
-            5'h03: lagError[38:0] <= {{28{error[7]}},error[6:0], 4'b0};  
-            5'h04: lagError[38:0] <= {{27{error[7]}},error[6:0], 5'b0};  
-            5'h05: lagError[38:0] <= {{26{error[7]}},error[6:0], 6'b0};  
-            5'h06: lagError[38:0] <= {{25{error[7]}},error[6:0], 7'b0};  
-            5'h07: lagError[38:0] <= {{24{error[7]}},error[6:0], 8'b0};  
-            5'h08: lagError[38:0] <= {{23{error[7]}},error[6:0], 9'b0};  
-            5'h09: lagError[38:0] <= {{22{error[7]}},error[6:0],10'b0}; 
-            5'h0A: lagError[38:0] <= {{21{error[7]}},error[6:0],11'b0}; 
-            5'h0B: lagError[38:0] <= {{20{error[7]}},error[6:0],12'b0}; 
-            5'h0C: lagError[38:0] <= {{19{error[7]}},error[6:0],13'b0}; 
-            5'h0D: lagError[38:0] <= {{18{error[7]}},error[6:0],14'b0}; 
-            5'h0E: lagError[38:0] <= {{17{error[7]}},error[6:0],15'b0}; 
-            5'h0F: lagError[38:0] <= {{16{error[7]}},error[6:0],16'b0}; 
-            5'h10: lagError[38:0] <= {{15{error[7]}},error[6:0],17'b0}; 
-            5'h11: lagError[38:0] <= {{14{error[7]}},error[6:0],18'b0}; 
-            5'h12: lagError[38:0] <= {{13{error[7]}},error[6:0],19'b0}; 
-            5'h13: lagError[38:0] <= {{12{error[7]}},error[6:0],20'b0}; 
-            5'h14: lagError[38:0] <= {{11{error[7]}},error[6:0],21'b0}; 
-            5'h15: lagError[38:0] <= {{10{error[7]}},error[6:0],22'b0}; 
-            5'h16: lagError[38:0] <= {{09{error[7]}},error[6:0],23'b0}; 
-            5'h17: lagError[38:0] <= {{08{error[7]}},error[6:0],24'b0}; 
-            5'h18: lagError[38:0] <= {{07{error[7]}},error[6:0],25'b0}; 
-            5'h19: lagError[38:0] <= {{06{error[7]}},error[6:0],26'b0}; 
-            5'h1A: lagError[38:0] <= {{05{error[7]}},error[6:0],27'b0}; 
-            5'h1B: lagError[38:0] <= {{04{error[7]}},error[6:0],28'b0}; 
-            5'h1C: lagError[38:0] <= {{03{error[7]}},error[6:0],29'b0}; 
-            5'h1D: lagError[38:0] <= {{02{error[7]}},error[6:0],30'b0}; 
-            5'h1E: lagError[38:0] <= {{01{error[7]}},error[6:0],31'b0}; 
-            5'h1F: lagError[38:0] <= {error[6:0],32'b0};                
+            5'h01: lagError[38:0] <= {{30{error[7]}},error[6:0], 2'b0};
+            5'h02: lagError[38:0] <= {{29{error[7]}},error[6:0], 3'b0};
+            5'h03: lagError[38:0] <= {{28{error[7]}},error[6:0], 4'b0};
+            5'h04: lagError[38:0] <= {{27{error[7]}},error[6:0], 5'b0};
+            5'h05: lagError[38:0] <= {{26{error[7]}},error[6:0], 6'b0};
+            5'h06: lagError[38:0] <= {{25{error[7]}},error[6:0], 7'b0};
+            5'h07: lagError[38:0] <= {{24{error[7]}},error[6:0], 8'b0};
+            5'h08: lagError[38:0] <= {{23{error[7]}},error[6:0], 9'b0};
+            5'h09: lagError[38:0] <= {{22{error[7]}},error[6:0],10'b0};
+            5'h0A: lagError[38:0] <= {{21{error[7]}},error[6:0],11'b0};
+            5'h0B: lagError[38:0] <= {{20{error[7]}},error[6:0],12'b0};
+            5'h0C: lagError[38:0] <= {{19{error[7]}},error[6:0],13'b0};
+            5'h0D: lagError[38:0] <= {{18{error[7]}},error[6:0],14'b0};
+            5'h0E: lagError[38:0] <= {{17{error[7]}},error[6:0],15'b0};
+            5'h0F: lagError[38:0] <= {{16{error[7]}},error[6:0],16'b0};
+            5'h10: lagError[38:0] <= {{15{error[7]}},error[6:0],17'b0};
+            5'h11: lagError[38:0] <= {{14{error[7]}},error[6:0],18'b0};
+            5'h12: lagError[38:0] <= {{13{error[7]}},error[6:0],19'b0};
+            5'h13: lagError[38:0] <= {{12{error[7]}},error[6:0],20'b0};
+            5'h14: lagError[38:0] <= {{11{error[7]}},error[6:0],21'b0};
+            5'h15: lagError[38:0] <= {{10{error[7]}},error[6:0],22'b0};
+            5'h16: lagError[38:0] <= {{09{error[7]}},error[6:0],23'b0};
+            5'h17: lagError[38:0] <= {{08{error[7]}},error[6:0],24'b0};
+            5'h18: lagError[38:0] <= {{07{error[7]}},error[6:0],25'b0};
+            5'h19: lagError[38:0] <= {{06{error[7]}},error[6:0],26'b0};
+            5'h1A: lagError[38:0] <= {{05{error[7]}},error[6:0],27'b0};
+            5'h1B: lagError[38:0] <= {{04{error[7]}},error[6:0],28'b0};
+            5'h1C: lagError[38:0] <= {{03{error[7]}},error[6:0],29'b0};
+            5'h1D: lagError[38:0] <= {{02{error[7]}},error[6:0],30'b0};
+            5'h1E: lagError[38:0] <= {{01{error[7]}},error[6:0],31'b0};
+            5'h1F: lagError[38:0] <= {error[6:0],32'b0};
             endcase
         end
     end
@@ -97,7 +97,7 @@ reg             hitUpperLimit,hitLowerLimit;
 always @ (posedge clk) begin
     if (clkEn) begin
         if (sweepEnable) begin
-            case (sweepState) 
+            case (sweepState)
                 SWEEP_OFF: begin
                     if (carrierInSync) begin
                         sweepState <= SWEEP_OFF;
@@ -164,6 +164,8 @@ wire    [39:0]  sum = lagAccum + lagError + {{8{sweepOffset[31]}},sweepOffset};
 always @ (posedge clk or posedge reset) begin
     if (reset) begin
         lagAccum <= 0;
+        hitLowerLimit <= 0;
+        hitUpperLimit <= 0;
         end
     else if (clearAccum) begin
         lagAccum <= 0;
@@ -226,7 +228,7 @@ always @ (posedge clk or posedge reset) begin
             sweepOffsetMag <= sweepRateMag;
             sweepMag <= sweepRateMag;
             end
-    
+
         // Test the upper and lower limits on the accumulator.
         // Have we reached the upper limit?
         else if ( (!sum[39] && !upperLimit[31])              // both positive
@@ -247,7 +249,7 @@ always @ (posedge clk or posedge reset) begin
                 // Save the new sweep direction
                 sweepMag <= negSweepOffsetMag;
                 end
-            else begin  
+            else begin
                 // No. Stop sweeping.
                 sweepOffset <= 0;
                 end
@@ -271,7 +273,7 @@ always @ (posedge clk or posedge reset) begin
                 // Save the new sweep direction.
                 sweepMag <= sweepOffsetMag;
                 end
-            else begin  
+            else begin
                 // No. Stop sweeping.
                 sweepOffset <= 0;
                 end

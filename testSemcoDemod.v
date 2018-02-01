@@ -67,8 +67,11 @@ module test;
                 end
             end
             else begin
-                enableInput <= 0;
+                //enableInput <= 0;
                 $display("Out of if samples");
+                $fclose(fp_if);
+                fp_if = $fopen(`TEST_DATA,"r");
+                x <= $fscanf(fp_if,"%f",ifSampleFloat);
             end
         end
     end
@@ -304,9 +307,23 @@ module test;
         `endif
 
         // Init the downcoverter register set
+        //`define USE_0p1_FIR
+        `ifdef USE_0p1_FIR
+        ddcControl = ddcControl & ~32'h00000004;
+        write16(createAddress(`DDCFIRSPACE,`DDC_FIR_COEFF_0),-46);
+        write16(createAddress(`DDCFIRSPACE,`DDC_FIR_COEFF_1),-228);
+        write16(createAddress(`DDCFIRSPACE,`DDC_FIR_COEFF_2),-428);
+        write16(createAddress(`DDCFIRSPACE,`DDC_FIR_COEFF_3),-87);
+        write16(createAddress(`DDCFIRSPACE,`DDC_FIR_COEFF_4),1487);
+        write16(createAddress(`DDCFIRSPACE,`DDC_FIR_COEFF_5),4302);
+        write16(createAddress(`DDCFIRSPACE,`DDC_FIR_COEFF_6),7178);
+        write16(createAddress(`DDCFIRSPACE,`DDC_FIR_COEFF_7),8409);
+        `endif
         write32(createAddress(`DDCSPACE,`DDC_CONTROL),ddcControl);
         write32(createAddress(`DDCSPACE,`DDC_CENTER_FREQ), carrierFreq);
         write32(createAddress(`DDCSPACE,`DDC_DECIMATION), 0);
+
+
 
         // Init the cicResampler register set
         write32(createAddress(`CICDECSPACE,`CIC_DECIMATION),cicDecimation-1);

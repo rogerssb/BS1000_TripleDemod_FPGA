@@ -229,9 +229,6 @@ module semcoDemodTop (
     end
 
     wire    [23:0]  boot_addr;
-    wire    [2:0]   dac0InputSelect;
-    wire    [2:0]   dac1InputSelect;
-    wire    [2:0]   dac2InputSelect;
     wire    [3:0]   ch0MuxSelect;
     wire    [3:0]   ch1MuxSelect;
     wire    [31:0]  semcoTopDout;
@@ -247,9 +244,9 @@ module semcoDemodTop (
         .reset(reset),
         .reboot(reboot),
         .rebootAddress(boot_addr),
-        .dac0InputSelect(dac0InputSelect),
-        .dac1InputSelect(dac1InputSelect),
-        .dac2InputSelect(dac2InputSelect),
+        .dac0InputSelect(),
+        .dac1InputSelect(),
+        .dac2InputSelect(),
         .ch0MuxSelect(),
         .ch1MuxSelect()
     );
@@ -268,6 +265,7 @@ module semcoDemodTop (
     wire asyncMode = ( (demodMode == `MODE_AQPSK)
                     || (demodMode == `MODE_AUQPSK)
                     );
+    wire pcmTrellisMode = (demodMode == `MODE_PCMTRELLIS);
     wire    signed  [17:0]  iDemodEye,qDemodEye;
     wire            [4:0]   demodEyeOffset;
     wire            [31:0]  demodDout;
@@ -328,6 +326,52 @@ module semcoDemodTop (
     );
 
 //******************************************************************************
+//                        PCMFM Trellis Decoder
+//******************************************************************************
+
+    reg                     pcmSymEn;
+    reg                     pcmSym2xEn;
+    reg     signed  [17:0]  iPcmIn,qPcmIn;
+    always @(posedge clk) begin
+        pcmSymEn <= trellisSymEn & pcmTrellisMode;
+        pcmSym2xEn <= iDemodSym2xEn & pcmTrellisMode;
+        iPcmIn <= iTrellis;
+        qPcmIn <= qTrellis;
+    end
+
+    wire            [17:0]  pcmDac0Data;
+    wire            [17:0]  pcmDac1Data;
+    wire            [17:0]  pcmDac2Data;
+    wire            [31:0]  trellisDout;
+    trellis pcmTrellis(
+        .clk(clk), .reset(reset),
+        `ifdef USE_BUS_CLOCK
+        .busClk(busClk),
+        `endif
+        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .addr(addr),
+        .din(dataIn),
+        .dout(trellisDout),
+        .symEn(pcmSymEn),
+        .sym2xEn(pcmSym2xEn),
+        .iIn(iPcmIn),.qIn(qPcmIn),
+        .legacyBit(iDemodBit),
+        .dac0Select(demodDac0Select),
+        .dac1Select(demodDac1Select),
+        .dac2Select(demodDac2Select),
+        .dac0ClkEn(pcmDac0ClkEn),
+        .dac0Data(pcmDac0Data),
+        .dac1ClkEn(pcmDac1ClkEn),
+        .dac1Data(pcmDac1Data),
+        .dac2ClkEn(pcmDac2ClkEn),
+        .dac2Data(pcmDac2Data),
+        .decision(pcmTrellisBit),
+        .symEnOut(pcmTrellisSymEnOut),
+        .sym2xEnOut(pcmTrellisSym2xEnOut),
+        .oneOrZeroPredecessor()
+    );
+
+//******************************************************************************
 //                                PCM Decoders
 //******************************************************************************
     reg dualDecoderSpace;
@@ -342,13 +386,19 @@ module semcoDemodTop (
     reg                 dualCh1Input;
     reg                 dualSymEn;
     reg                 dualSym2xEn;
-    reg                 dualSymClk;
     always @(posedge clk) begin
-        dualCh0Input <= iDemodBit;
-        dualCh1Input <= qDemodBit;
-        dualSymEn <= iDemodSymEn;
-        dualSym2xEn <= iDemodSym2xEn;
-        dualSymClk <= iDemodSymClk;
+        if (pcmTrellisMode) begin
+            dualCh0Input <= pcmTrellisBit;
+            dualCh1Input <= pcmTrellisBit;
+            dualSymEn <= pcmTrellisSymEnOut;
+            dualSym2xEn <= pcmTrellisSym2xEnOut;
+        end
+        else begin
+            dualCh0Input <= iDemodBit;
+            dualCh1Input <= qDemodBit;
+            dualSymEn <= iDemodSymEn;
+            dualSym2xEn <= iDemodSym2xEn;
+        end
     end
 
     wire    [31:0]  dualDecDout;
@@ -477,7 +527,10 @@ module semcoDemodTop (
                 cAndD0ClkEn = qDemodSymEn;
                 cAndD0DataIn = {qDemodBit,1'b0,1'b0};
             end
-            //`CandD_SRC_PCMTRELLIS:
+            `CandD_SRC_PCMTRELLIS: begin
+                cAndD0ClkEn = pcmTrellisSymEnOut;
+                cAndD0DataIn = {pcmTrellisBit,pcmTrellisBit,1'b0};
+            end
             //`CandD_SRC_MULTIH:
             //`CandD_SRC_STC:
             //`CandD_SRC_PNGEN:
@@ -539,7 +592,10 @@ module semcoDemodTop (
                 cAndD1ClkEn = qDemodSymEn;
                 cAndD1DataIn = {qDemodBit,1'b0,1'b0};
             end
-            //`CandD_SRC_PCMTRELLIS:
+            `CandD_SRC_PCMTRELLIS: begin
+                cAndD1ClkEn = pcmTrellisSymEnOut;
+                cAndD1DataIn = {pcmTrellisBit,pcmTrellisBit,1'b0};
+            end
             //`CandD_SRC_MULTIH:
             //`CandD_SRC_STC:
             //`CandD_SRC_PNGEN:
@@ -604,6 +660,10 @@ module semcoDemodTop (
                 interp0DataIn <= demodDac0Data;
                 interp0ClkEn <= demodDac0ClkEn;
             end
+            `DAC_SRC_FMTRELLIS: begin
+                interp0DataIn <= pcmDac0Data;
+                interp0ClkEn <= pcmDac0ClkEn;
+            end
             default: begin
                 interp0DataIn <= demodDac0Data;
                 interp0ClkEn <= demodDac0ClkEn;
@@ -647,6 +707,10 @@ module semcoDemodTop (
                 interp1DataIn <= demodDac1Data;
                 interp1ClkEn <= demodDac1ClkEn;
             end
+            `DAC_SRC_FMTRELLIS: begin
+                interp1DataIn <= pcmDac1Data;
+                interp1ClkEn <= pcmDac1ClkEn;
+            end
             default: begin
                 interp1DataIn <= demodDac1Data;
                 interp1ClkEn <= demodDac1ClkEn;
@@ -685,10 +749,14 @@ module semcoDemodTop (
     reg             interp2ClkEn;
     wire    [3:0]   dac2Source;
     always @(posedge clk) begin
-        case (dac1Source)
+        case (dac2Source)
             `DAC_SRC_DEMOD: begin
                 interp2DataIn <= demodDac2Data;
                 interp2ClkEn <= demodDac2ClkEn;
+            end
+            `DAC_SRC_FMTRELLIS: begin
+                interp2DataIn <= pcmDac2Data;
+                interp2ClkEn <= pcmDac2ClkEn;
             end
             default: begin
                 interp2DataIn <= demodDac2Data;
@@ -767,11 +835,11 @@ sdi sdi(
 
     assign adc01_powerDown = 1'b0;
 
-    assign dac_rst = 1'b0;
+    assign dac_rst = 1'b1;
     assign dac_sclk = 1'b0;
-    assign dac0_nCs = 1'b1;
-    assign dac1_nCs = 1'b1;
-    assign dac2_nCs = 1'b1;
+    assign dac0_nCs = 1'b0;
+    assign dac1_nCs = 1'b0;
+    assign dac2_nCs = 1'b0;
     assign dac_sdio = 1'b0;
 
     assign lockLed0n = !demodTimingLock;
@@ -922,6 +990,15 @@ sdi sdi(
                 end
                 else begin
                     rd_mux = demodDout[15:0];
+                end
+            end
+            `TRELLIS_SPACE,
+            `TRELLISLFSPACE: begin
+                if (addr[1]) begin
+                    rd_mux = trellisDout[31:16];
+                end
+                else begin
+                    rd_mux = trellisDout[15:0];
                 end
             end
             `UARTSPACE,

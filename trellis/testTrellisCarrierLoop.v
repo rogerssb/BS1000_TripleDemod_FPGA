@@ -17,13 +17,13 @@ module test;
 
 reg reset,clk,we0,we1,we2,we3,rd;
 reg sync;
-reg [11:0]a;
+reg [12:0]a;
 reg [31:0]d;
 wire [31:0]dout;
 
 // Create the clocks
-//parameter SAMPLE_FREQ = 9.333333e6;
-parameter SAMPLE_FREQ = 10e6;
+parameter SAMPLE_FREQ = 93.333333e6;
+//parameter SAMPLE_FREQ = 10e6;
 parameter HC = 1e9/SAMPLE_FREQ/2;
 parameter C = 2*HC;
 reg clken;
@@ -37,56 +37,86 @@ parameter modSampleDecimation = 2;
 parameter modCicShift = 2;          // log2(modSampleDecimation^2)
 parameter ddcDecimation = 2;
 
-real carrierFreqHz = 0.0;
-real carrierFreqNorm = carrierFreqHz * `SAMPLE_PERIOD * `TWO_POW_32;
-integer carrierFreqInt = carrierFreqNorm;
+real carrierFreqHz;
+real carrierFreqNorm;
+initial begin
+  carrierFreqHz = 0.0;
+  carrierFreqNorm = carrierFreqHz * `SAMPLE_PERIOD * `TWO_POW_32;
+end
+integer carrierFreqInt;
+initial begin
+  carrierFreqInt = carrierFreqNorm;
+end
 wire [31:0] carrierFreq = carrierFreqInt;
 
-real carrierOffsetFreqHz = 0.0;
-real carrierOffsetFreqNorm = carrierOffsetFreqHz * `SAMPLE_PERIOD * `TWO_POW_32;
-integer carrierOffsetFreqInt = carrierOffsetFreqNorm;
+real carrierOffsetFreqHz;
+real carrierOffsetFreqNorm;
+integer carrierOffsetFreqInt;
+initial begin
+  carrierOffsetFreqHz = 0.0;
+  carrierOffsetFreqNorm = carrierOffsetFreqHz * `SAMPLE_PERIOD * `TWO_POW_32;
+  carrierOffsetFreqInt = carrierOffsetFreqNorm;
+end
 wire [31:0] carrierOffsetFreq = carrierOffsetFreqInt;
 
-real carrierLimitHz = 60000.0;
-real carrierLimitNorm = carrierLimitHz * `SAMPLE_PERIOD * `TWO_POW_32;
-integer carrierLimitInt = carrierLimitNorm;
+real carrierLimitHz;
+real carrierLimitNorm;
+integer carrierLimitInt;
+initial begin
+  carrierLimitHz = 60000.0;
+  carrierLimitNorm = carrierLimitHz * `SAMPLE_PERIOD * `TWO_POW_32;
+  carrierLimitInt = carrierLimitNorm;
+end
 wire [31:0] carrierLimit = carrierLimitInt;
 
 wire [31:0] sweepRate = 32'h00000000;
 
-real bitrateBps = SAMPLE_FREQ/modSampleDecimation/2.0;
-real bitrateSamples = 1/bitrateBps/`SAMPLE_PERIOD/2.0;
-integer bitrateSamplesInt = bitrateSamples;
+real bitrateBps;
+initial bitrateBps = SAMPLE_FREQ/modSampleDecimation/2.0;
+real bitrateSamples;
+initial bitrateSamples = 1/bitrateBps/`SAMPLE_PERIOD/2.0;
+integer bitrateSamplesInt;
+initial bitrateSamplesInt = bitrateSamples;
 wire [15:0]bitrateDivider = bitrateSamplesInt - 1;
 
 // value = 2^ceiling(log2(R*R))/(R*R), where R = interpolation rate of the FM
 // modulator
-real interpolationGain = 1.28;
+real interpolationGain;
+initial interpolationGain = 1.28;
 
-//real deviationHz = 0*0.35 * bitrateBps;
-real deviationHz = 2*0.350 * bitrateBps;
-real deviationNorm = deviationHz * `SAMPLE_PERIOD * `TWO_POW_32;
-integer deviationInt = deviationNorm*interpolationGain;
+real deviationHz;
+real deviationNorm;
+integer deviationInt;
+initial begin
+  deviationHz = 2*0.350 * bitrateBps;
+  deviationNorm = deviationHz * `SAMPLE_PERIOD * `TWO_POW_32;
+  deviationInt = deviationNorm*interpolationGain;
+end
 wire [31:0]deviationQ31 = deviationInt;
 wire [17:0]deviation = deviationQ31[31:14];
 
 real cicDecimation;
 initial cicDecimation = (ddcDecimation == 1) ? 1 :
                         (ddcDecimation == 2) ? 1 :
-                        (ddcDecimation == 3) ? 3 : 
+                        (ddcDecimation == 3) ? 3 :
                                                ddcDecimation/2;
 integer cicDecimationInt;
 initial cicDecimationInt = cicDecimation;
 
-real resamplerFreqSps = 2*bitrateBps;     // 2 samples per symbol
-real resamplerFreqNorm = (ddcDecimation == 1) ? resamplerFreqSps/(SAMPLE_FREQ) * `TWO_POW_32 :
-                         (ddcDecimation == 2) ? resamplerFreqSps/(SAMPLE_FREQ/2.0) * `TWO_POW_32 : 
-                         (ddcDecimation == 3) ? resamplerFreqSps/(SAMPLE_FREQ/3.0) * `TWO_POW_32 :  
-                                                resamplerFreqSps/(SAMPLE_FREQ/cicDecimationInt/2.0) * `TWO_POW_32;
-integer resamplerFreqInt = (resamplerFreqNorm >= `TWO_POW_31) ? (resamplerFreqNorm - `TWO_POW_32) : resamplerFreqNorm;
+real resamplerFreqSps;
+initial resamplerFreqSps = 2*bitrateBps;     // 2 samples per symbol
+real resamplerFreqNorm;
+initial resamplerFreqNorm = (ddcDecimation == 1) ? resamplerFreqSps/(SAMPLE_FREQ) * `TWO_POW_32 :
+                            (ddcDecimation == 2) ? resamplerFreqSps/(SAMPLE_FREQ/2.0) * `TWO_POW_32 :
+                            (ddcDecimation == 3) ? resamplerFreqSps/(SAMPLE_FREQ/3.0) * `TWO_POW_32 :
+                                                   resamplerFreqSps/(SAMPLE_FREQ/cicDecimationInt/2.0) * `TWO_POW_32;
+integer resamplerFreqInt;
+initial resamplerFreqInt = (resamplerFreqNorm >= `TWO_POW_31) ? (resamplerFreqNorm - `TWO_POW_32) : resamplerFreqNorm;
 
-real resamplerLimitNorm = 0.001*resamplerFreqSps/SAMPLE_FREQ * `TWO_POW_32;
-integer resamplerLimitInt = resamplerLimitNorm;
+real resamplerLimitNorm;
+initial resamplerLimitNorm = 0.001*resamplerFreqSps/SAMPLE_FREQ * `TWO_POW_32;
+integer resamplerLimitInt;
+initial resamplerLimitInt = resamplerLimitNorm;
 
 /******************************************************************************
                             Create a bit stream
@@ -137,11 +167,11 @@ wire    [31:0]fmModFreq;
 reg     fmModCS;
 reg     enableTx;
 initial enableTx = 0;
-fmMod fmMod( 
-    .clk(clk), .reset(reset), 
+fmMod fmMod(
+    .clk(clk), .reset(reset),
     .cs(fmModCS),
     .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
-    .addr(a),
+    .addr(a[11:0]),
     .din(d),
     .dout(dout),
     .fskMode(2'b00),
@@ -153,50 +183,68 @@ fmMod fmMod(
     );
 `define USE_BASEBAND
 `ifdef USE_BASEBAND
+
+`ifdef USE_VIVADO_CORES
+wire    [47:0]  m_axis;
+wire    [17:0]  iTx = m_axis[17:0];
+wire    [17:0]  qTx = m_axis[41:24];
+dds6p0 iqDds(
+  .aclk(clk),
+  .aclken(1'b1),
+  .aresetn(!reset),
+  .m_axis_data_tdata(m_axis),
+  .m_axis_data_tvalid(),
+  .s_axis_phase_tdata(fmModFreq),
+  .s_axis_phase_tvalid(1'b1)
+);
+`else
 wire    [17:0]iTx,qTx;
-dds iqDds ( 
-    .sclr(reset), 
-    .clk(clk), 
+dds iqDds (
+    .sclr(reset),
+    .clk(clk),
     .ce(1'b1),
-    .we(1'b1), 
-    .data(fmModFreq), 
-    .sine(qTx), 
+    .we(1'b1),
+    .data(fmModFreq),
+    .sine(qTx),
     .cosine(iTx)
     );
 //assign qTx = 18'h0;
-`else
+`endif //USE_VIVADO_CORES
+
+`else //USE_BASEBAND
+
 wire    [17:0]  iBB,qBB;
-dds iqDds ( 
-    .sclr(reset), 
-    .clk(clk), 
+dds iqDds (
+    .sclr(reset),
+    .clk(clk),
     .ce(1'b1),
-    .we(1'b1), 
-    .data(fmModFreq), 
-    .sine(qBB), 
+    .we(1'b1),
+    .data(fmModFreq),
+    .sine(qBB),
     .cosine(iBB)
     );
 wire    [17:0]  iLO,qLO;
 dds carrierDds (
-    .sclr(reset), 
-    .clk(clk), 
+    .sclr(reset),
+    .clk(clk),
     .ce(1'b1),
-    .we(1'b1), 
-    .data(carrierFreq), 
-    .sine(qLO), 
+    .we(1'b1),
+    .data(carrierFreq),
+    .sine(qLO),
     .cosine(iLO)
     );
 wire [35:0]productI;
-mpy18x18 mpyI(.clk(clk), 
+mpy18x18 mpyI(.clk(clk),
                 .sclr(reset),
-                .a(iBB), 
-                .b(iLO), 
+                .a(iBB),
+                .b(iLO),
                 .p(productI)
                 );
 wire [35:0]productQ;
-mpy18x18 mpyQ(.clk(clk), 
+mpy18x18 mpyQ(.clk(clk),
                 .sclr(reset),
-                .a(qBB), 
-                .b(qLO), 
+                .a(qBB),
+                .b(qLO),
                 .p(productQ)
                 );
 wire [35:0]carrierSum = productI + productQ;
@@ -213,8 +261,10 @@ always @(posedge clk) begin
                             Channel Model
 ******************************************************************************/
 
-real iTxReal = (iTx[17] ? (iTx - 262144.0) : iTx)/131072.0;
-real qTxReal = (qTx[17] ? (qTx - 262144.0) : qTx)/131072.0;
+real iTxReal;
+always @* iTxReal = (iTx[17] ? (iTx - 262144.0) : iTx)/131072.0;
+real qTxReal;
+always @* qTxReal = (qTx[17] ? (qTx - 262144.0) : qTx)/131072.0;
 real txScaleFactor;
 
 wire [17:0]iSignal = 131072.0*iTxReal * txScaleFactor;
@@ -223,14 +273,18 @@ wire [17:0]qSignal = 131072.0*qTxReal * txScaleFactor;
 reg  measureSNR;
 initial measureSNR = 0;
 wire    [17:0]iRx,qRx;
-real iSignalReal = (iSignal[17] ? (iSignal - 262144.0) : iSignal)/131072.0;
-real qSignalReal = (qSignal[17] ? (qSignal - 262144.0) : qSignal)/131072.0;
+real iSignalReal;
+always @* iSignalReal = (iSignal[17] ? (iSignal - 262144.0) : iSignal)/131072.0;
+real qSignalReal;
+always @* qSignalReal = (qSignal[17] ? (qSignal - 262144.0) : qSignal)/131072.0;
 real signalMagSquared;
 real noiseMagSquared;
 integer txSampleCount;
 reg [17:0]iNoise,qNoise;
-real iNoiseReal = (iNoise[17] ? (iNoise - 262144.0) : iNoise)/131072.0;
-real qNoiseReal = (qNoise[17] ? (qNoise - 262144.0) : qNoise)/131072.0;
+real iNoiseReal;
+always @* iNoiseReal = (iNoise[17] ? (iNoise - 262144.0) : iNoise)/131072.0;
+real qNoiseReal;
+always @* qNoiseReal = (qNoise[17] ? (qNoise - 262144.0) : qNoise)/131072.0;
 always @(negedge clk) begin
     `ifdef ADD_NOISE
     iNoise <= $gaussPLI();
@@ -251,8 +305,10 @@ always @(negedge clk) begin
         end
     end
 
-real iChReal = (iRx[17] ? (iRx - 262144.0) : iRx)/131072.0;
-real qChReal = (qRx[17] ? (qRx - 262144.0) : qRx)/131072.0;
+real iChReal;
+always @* iChReal = (iRx[17] ? (iRx - 262144.0) : iRx)/131072.0;
+real qChReal;
+always @* qChReal = (qRx[17] ? (qRx - 262144.0) : qRx)/131072.0;
 assign iRx = iSignal + iNoise;
 assign qRx = qSignal + qNoise;
 
@@ -312,8 +368,6 @@ trellisCarrierLoop tcl(
     .iOut(),.qOut(),
     .symEnDly(),
     .sym2xEnDly(),
-    .freq(),
-    .afcError(),
     .lockCounter()
     );
 
@@ -343,15 +397,15 @@ always @(negedge clk) begin
                                 uP Read/Write Functions
 ******************************************************************************/
 
-function [11:0] createAddress;
-    input [11:0] addrA;
-    input [11:0] addrB;
-    
+function [12:0] createAddress;
+    input [12:0] addrA;
+    input [12:0] addrB;
+
     integer i;
-    reg [11:0]finalAddress;
+    reg [12:0]finalAddress;
 
     begin
-    for (i = 0; i < 12; i = i+1) begin
+    for (i = 0; i < 13; i = i+1) begin
         if (addrA[i] === 1'bx) begin
             finalAddress[i] = addrB[i];
             end
@@ -368,7 +422,7 @@ endfunction
 
 
 task write16;
-  input [11:0]addr;
+  input [12:0]addr;
   input [15:0]data;
   begin
 
@@ -377,28 +431,28 @@ task write16;
     if (addr[1]) begin
         d[31:16] = data;
         #100 we2 = 1; we3 = 1;
-        #100 we2 = 0; we3 = 0; 
+        #100 we2 = 0; we3 = 0;
         end
     else begin
         d[15:0] = data;
         #100 we0 = 1; we1 = 1;
-        #100 we0 = 0; we1 = 0; 
+        #100 we0 = 0; we1 = 0;
         end
-    #100  
+    #100
     d = 32'hz;
     #200;
   end
 endtask
 
 task write32;
-  input [11:0]addr;
+  input [12:0]addr;
   input [31:0]data;
   begin
     a = addr;
     d = data;
     rd = 0;
     #100 we0 = 1; we1 = 1; we2 = 1; we3 = 1;
-    #100 we0 = 0; we1 = 0; we2 = 0; we3 = 0; 
+    #100 we0 = 0; we1 = 0; we2 = 0; we3 = 0;
     #100
     d = 32'hz;
     #200;
@@ -406,7 +460,7 @@ task write32;
 endtask
 
 task read32;
-  input [11:0]addr;
+  input [12:0]addr;
   begin
     a = addr;
     rd = 0;
@@ -421,7 +475,7 @@ initial begin
     reset = 0;
     clk = 0;
     rd = 0;
-    we0 = 0; we1 = 0; we2 = 0; we3 = 0; 
+    we0 = 0; we1 = 0; we2 = 0; we3 = 0;
     d = 32'hz;
     fmModCS = 0;
     txScaleFactor = 0.707;

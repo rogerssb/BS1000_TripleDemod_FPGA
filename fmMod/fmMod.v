@@ -5,7 +5,7 @@
 `define FMMOD_MODE_4FSK       2'b10
 `define FMMOD_MODE_SHAPED4FSK 2'b11
 
-module fmMod( 
+module fmMod(
     clk, reset,
     cs,
     wr0, wr1, wr2, wr3,
@@ -70,12 +70,12 @@ always @(posedge clk) begin
             modClkOut <= ~modClkOut;
             casex (fskMode)
                 `FMMOD_MODE_2FSK,
-                `FMMOD_MODE_SHAPED2FSK: 
+                `FMMOD_MODE_SHAPED2FSK:
                     begin
                     modSampleEn <= 1;
                     end
                 `FMMOD_MODE_4FSK,
-                `FMMOD_MODE_SHAPED4FSK: 
+                `FMMOD_MODE_SHAPED4FSK:
                     begin
                     if (!modClkOut) begin
                         modSampleEn <= 1;
@@ -115,7 +115,7 @@ always @(posedge clk) begin
                         end
                     end
                 end
-            `FMMOD_MODE_SHAPED2FSK: 
+            `FMMOD_MODE_SHAPED2FSK:
                 begin
                 if (modSampleEn) begin
                     if (modClk) begin
@@ -146,7 +146,7 @@ always @(posedge clk) begin
                         end
                     end
                 end
-            `FMMOD_MODE_SHAPED4FSK: 
+            `FMMOD_MODE_SHAPED4FSK:
                 begin
                 if (modSampleEn) begin
                     bitSR <= {bitSR[0],modData};
@@ -168,18 +168,7 @@ always @(posedge clk) begin
         end
     end
 
-// Run the samples through the shaping filter
-wire [17:0]shapingFirOut;
-shapingFir modFir(
-    .clk(clk), 
-    .nd(modSampleEn),
-    .rfd(),
-    .rdy(shapedReady),
-    .din(modValue),
-    .dout(shapingFirOut)
-    );
-wire shaped = fskMode[0];
-wire [17:0]shapedOutput = shaped ? {shapingFirOut[10:0],7'b0} : {modValue,15'b0};
+wire [17:0]shapedOutput = {modValue,15'b0};
 
 `ifdef SIMULATE
 real shapedReal;
@@ -189,7 +178,7 @@ always @(shapedOutput) shapedReal = ((shapedOutput > 131071.0) ? (shapedOutput -
 // CIC Interpolation Filter
 wire [33:0]cicOut;
 fmInterpolate fmInterpolate(
-    .clk(clk), .reset(reset), .clkEn(shapedReady),
+    .clk(clk), .reset(reset), .clkEn(modSampleEn),
     .dIn(shapedOutput),
     .dOut(cicOut)
     );

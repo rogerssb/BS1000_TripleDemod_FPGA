@@ -3,33 +3,33 @@
 
 // two's complement adder
 // This added adds 2, two's comp. numbers of different number of bits
-// the "b" side of the added is 4 bits wider than the a side, so the result it then: sizeof(a) + 4bits + 1carry out 
+// the "b" side of the added is 4 bits wider than the a side, so the result it then: sizeof(a) + 4bits + 1carry out
 module adder2s (a, b, sum);
    parameter             size = 8;
    input [size-1:0]      a;
    input [(size-1)+4:0]  b;
    output [size-1+4:0]   sum;
-   
+
    wire [(size-1)+4:0]   sum;
    wire [size+4:0]       tmpSum;
    wire [size+4:0]       aExt = {a[size-1],a[size-1],a[size-1],a[size-1],a[size-1], a};
    wire [size+4:0]       bExt = {b[(size-1)+4], b};
 
    assign tmpSum = aExt + bExt;
-   assign sum = tmpSum[size+4-1:0];    // slicing off the MSB (watchout for the sign bit) 
-   
+   assign sum = tmpSum[size+4-1:0];    // slicing off the MSB (watchout for the sign bit)
+
 endmodule
-            
+
 
 module comp (a, b, bLarger);
    parameter                 size = 8;
    input [(size-1)+4: 0]     a, b;
    output                    bLarger;
    reg                       bLarger;
-   
-   always @(a or b) 
+
+   always @(a or b)
      begin
-        case ({a[(size-1)+4], b[(size-1)+4]}) // Checking the sign bit 
+        case ({a[(size-1)+4], b[(size-1)+4]}) // Checking the sign bit
           2'b00: begin // both pos
              bLarger <= (b > a) ? 1 : 0;
           end
@@ -44,16 +44,16 @@ module comp (a, b, bLarger);
           end
         endcase
      end
-endmodule                                                    
+endmodule
 
-   
+
 module mux_2_1 (a, b, sel, y);
    parameter               size = 8;
    input [size-1:0]        a, b;
    input                   sel;
    output [size-1:0]       y;
    reg [size-1:0]          y;
-   
+
    always @ (sel or a or b) begin
       if (sel == 0) begin
          y <= a;
@@ -62,11 +62,11 @@ module mux_2_1 (a, b, sel, y);
          y <= b;
       end
    end
-   
-endmodule         
-            
 
-module acs 
+endmodule
+
+
+module acs
   (
    clk, reset, symEn,
    `ifdef USE_DECAY
@@ -92,50 +92,50 @@ module acs
    output                selOut;
    input                 normalizeIn;
    output                normalizeOut;
-     
+
    input [ROT_BITS-1:0]  out0PtImag, out1PtImag;
    output [ROT_BITS-1:0] outImag;
    output [ROT_BITS-1:0] outReal;
 
- 
-         
+
+
    `ifdef USE_DECAY
    wire [(size-1)+4:0]   accMetOut;
    `else
    reg  [(size-1)+4:0]   accMetOut;
    `endif
    reg  [(size-1)+4:0]   accTemp;
-   
+
    wire [(size-1)+4:0]   add1, add2;
    wire [(size-1)+4:0]   muxOut;
    wire                  bLarger;
    reg                   selOut;
    reg [ROT_BITS-1:0]    outImag;
    wire [ROT_BITS-1:0]   outImagAsync;
-   
+
    wire [ROT_BITS-1:0] outRealAsync;
    reg [ROT_BITS-1:0] outReal;
- 
+
    // First we add the accumulatior metric with the matchfilter output
    adder2s #(size) adder2s_1
      (
       .a          (out1PtReal[(ROT_BITS-1):(ROT_BITS-size)]),
       .b          (accMet1   ),
       .sum        (add1      )
-      );   
-   
+      );
+
    adder2s #(size) adder2s_2
      (
       .a          (out0PtReal[(ROT_BITS-1):(ROT_BITS-size)]),
       .b          (accMet2   ),
       .sum        (add2      )
-      );   
+      );
 
    // Compare
    comp #(size) comparator
      (
-      .a          (add1   ), 
-      .b          (add2   ), 
+      .a          (add1   ),
+      .b          (add2   ),
       .bLarger    (bLarger)
       );
 
@@ -143,24 +143,24 @@ module acs
    mux_2_1 #(size+4) selector
      (
       .a         (add1       ),
-      .b         (add2       ), 
-      .sel       (bLarger    ), 
+      .b         (add2       ),
+      .sel       (bLarger    ),
       .y         (muxOut     )
       );
 
    mux_2_1 #(ROT_BITS) selectorImag
      (
       .a         (out1PtImag   ),
-      .b         (out0PtImag   ), 
-      .sel       (bLarger      ), 
+      .b         (out0PtImag   ),
+      .sel       (bLarger      ),
       .y         (outImagAsync )
       );
 
    mux_2_1 #(ROT_BITS) selectorReal
      (
       .a         (out1PtReal   ),
-      .b         (out0PtReal   ), 
-      .sel       (bLarger      ), 
+      .b         (out0PtReal   ),
+      .sel       (bLarger      ),
       .y         (outRealAsync )
       );
 
@@ -178,7 +178,7 @@ module acs
          end
       end
 `endif
-   
+
    // subtracting of a constant and saturate all neg numbers to zero to bring down the acc and prevent it from overflowing
 
    wire [(size-1)+4:0]  accTempSum = muxOut - 512;
@@ -195,14 +195,25 @@ module acs
 
 wire    [12:0]  decayOut;
 assign          accMetOut = decayOut[12:1] + decayOut[0];
+`ifdef USE_VIVADO_CORES
 mult12x8Lut accumDecay(
-    .ce(symEn), 
-    .clk(clk), 
+    .CE(symEn),
+    .CLK(clk),
+    .SCLR(reset),
+    .A(normalizeIn ? accTemp : muxOut),
+    .B(decayFactor),
+    .P(decayOut)
+    );
+`else
+mult12x8Lut accumDecay(
+    .ce(symEn),
+    .clk(clk),
     .sclr(reset),
-    .a(normalizeIn ? accTemp : muxOut), 
-    .b(decayFactor), 
+    .a(normalizeIn ? accTemp : muxOut),
+    .b(decayFactor),
     .p(decayOut)
     );
+`endif
 
 `ifdef USE_DELAYED_NORM
    reg normalizeOut;
@@ -215,7 +226,7 @@ mult12x8Lut accumDecay(
          end
       end
 `endif
-   
+
 `else
    always @(posedge clk)
      if (reset) begin
@@ -229,7 +240,7 @@ mult12x8Lut accumDecay(
            accMetOut <= muxOut;
         end
      end
-`endif   
+`endif
 
    always @(posedge clk)
      if (reset) begin
@@ -242,5 +253,5 @@ mult12x8Lut accumDecay(
         outImag <= outImagAsync;
         outReal <= outRealAsync;
      end
-   
+
 endmodule

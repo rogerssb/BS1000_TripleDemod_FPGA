@@ -1,7 +1,7 @@
 /******************************************************************************
 Copyright 2008-2015 Koos Technical Services, Inc. All Rights Reserved
 
-This source code is the Intellectual Property of Koos Technical Services,Inc. 
+This source code is the Intellectual Property of Koos Technical Services,Inc.
 (KTS) and is provided under a License Agreement which protects KTS' ownership and
 derivative rights in exchange for negotiated compensation.
 ******************************************************************************/
@@ -41,9 +41,9 @@ module vm_cordic(clk,ena,x,y,m,p);
 
     // equations for the initial rotation +/- pi/2
     //
-    //  x' = (-d)(y)     
+    //  x' = (-d)(y)
     //
-    //  y' = (d)(x)     
+    //  y' = (d)(x)
     //
     //  z' = z + (d)(pi/2)     where d = +1 if y<0, -1 otherwise
 
@@ -86,7 +86,7 @@ module vm_cordic(clk,ena,x,y,m,p);
     always @(posedge clk)begin
         if(ena)begin
 
-            if(yi[n])begin  
+            if(yi[n])begin
                 x0 <= xi + {{0{nyi[n]}},nyi[n:0]};
                 y0 <= yi + {{0{xi[n]}},xi[n:0]};
                 z0 <= zi + atan_k0;
@@ -109,7 +109,7 @@ module vm_cordic(clk,ena,x,y,m,p);
     always @(posedge clk)begin
         if(ena)begin
 
-            if(y0[n])begin 
+            if(y0[n])begin
                 x1 <= x0 + {{1{ny0[n]}},ny0[n:1]};
                 y1 <= y0 + {{1{x0[n]}},x0[n:1]};
                 z1 <= z0 + atan_k1;
@@ -132,7 +132,7 @@ module vm_cordic(clk,ena,x,y,m,p);
     always @(posedge clk)begin
         if(ena)begin
 
-            if(y1[n])begin 
+            if(y1[n])begin
                 x2 <= x1 + {{2{ny1[n]}},ny1[n:2]};
                 y2 <= y1 + {{2{x1[n]}},x1[n:2]};
                 z2 <= z1 + atan_k2;
@@ -155,7 +155,7 @@ module vm_cordic(clk,ena,x,y,m,p);
     always @(posedge clk)begin
         if(ena)begin
 
-            if(y2[n])begin 
+            if(y2[n])begin
                 x3 <= x2 + {{3{ny2[n]}},ny2[n:3]};
                 y3 <= y2 + {{3{x2[n]}},x2[n:3]};
                 z3 <= z2 + atan_k3;
@@ -178,7 +178,7 @@ module vm_cordic(clk,ena,x,y,m,p);
     always @(posedge clk)begin
         if(ena)begin
 
-            if(y3[n])begin 
+            if(y3[n])begin
                 x4 <= x3 + {{4{ny3[n]}},ny3[n:4]};
                 y4 <= y3 + {{4{x3[n]}},x3[n:4]};
                 z4 <= z3 + atan_k4;
@@ -201,7 +201,7 @@ module vm_cordic(clk,ena,x,y,m,p);
     always @(posedge clk)begin
         if(ena)begin
 
-            if(y4[n])begin 
+            if(y4[n])begin
                 x5 <= x4 + {{5{ny4[n]}},ny4[n:5]};
                 y5 <= y4 + {{5{x4[n]}},x4[n:5]};
                 z5 <= z4 + atan_k5;
@@ -224,7 +224,7 @@ module vm_cordic(clk,ena,x,y,m,p);
     always @(posedge clk)begin
         if(ena)begin
 
-            if(y5[n])begin 
+            if(y5[n])begin
                 x6 <= x5 + {{6{ny5[n]}},ny5[n:6]};
                 y6 <= y5 + {{6{x5[n]}},x5[n:6]};
                 z6 <= z5 + atan_k6;
@@ -247,7 +247,7 @@ module vm_cordic(clk,ena,x,y,m,p);
     always @(posedge clk)begin
         if(ena)begin
 
-            if(y6[n])begin 
+            if(y6[n])begin
                 x7 <= x6 + {{7{ny6[n]}},ny6[n:7]};
                 y7 <= y6 + {{7{x6[n]}},x6[n:7]};
                 z7 <= z6 + atan_k7;
@@ -269,7 +269,7 @@ module vm_cordic(clk,ena,x,y,m,p);
 
     always @(posedge clk)begin
         if(ena)begin
-            if(y7[n])begin 
+            if(y7[n])begin
                 x8 <= x7 + {{8{ny7[n]}},ny7[n:8]};
                 y8 <= y7 + {{8{x7[n]}},x7[n:8]};
                 z8 <= z7 + atan_k8;
@@ -291,7 +291,7 @@ module vm_cordic(clk,ena,x,y,m,p);
 
     always @(posedge clk)begin
         if(ena)begin
-            if(y8[n])begin 
+            if(y8[n])begin
                 x9 <= x8 + {{9{ny8[n]}},ny8[n:9]};
                 y9 <= y8 + {{9{x8[n]}},x8[n:9]};
                 z9 <= z8 + atan_k9;
@@ -313,7 +313,7 @@ module vm_cordic(clk,ena,x,y,m,p);
 
     always @(posedge clk)begin
         if(ena)begin
-            if(y9[n])begin 
+            if(y9[n])begin
                 x10 <= x9 + {{10{ny9[n]}},ny9[n:10]};
                 y10 <= y9 + {{10{x9[n]}},x9[n:10]};
                 z10 <= z9 + atan_k10;
@@ -335,7 +335,7 @@ module vm_cordic(clk,ena,x,y,m,p);
 
     always @(posedge clk)begin
         if(ena)begin
-            if(y10[n])begin 
+            if(y10[n])begin
                 x11 <= x10 + {{11{ny10[n]}},ny10[n:11]};
                 y11 <= y10 + {{11{x10[n]}},x10[n:11]};
                 z11 <= z10 + atan_k11;
@@ -375,26 +375,47 @@ initial clk = 0;
 always  #5 clk = !clk;
 
 // LO Generator
+`ifdef USE_VIVADO_CORES
+wire    [47:0]  m_axis;
+wire    [17:0]  qDds = m_axis[41:24];
+wire    [17:0]  iDds = m_axis[17:0];
+dds6p0 dds(
+  .aclk(clk),
+  .aclken(1'b1),
+  .aresetn(!reset),
+  .m_axis_data_tdata(m_axis),
+  .m_axis_data_tvalid(),
+  .s_axis_phase_tdata(32'h0020_0000),
+  //.s_axis_phase_tdata(32'hffe0_0000),
+  .s_axis_phase_tvalid(1'b1)
+);
+assign qTx = 18'h0;
+`else
 wire    [17:0]iDds;
 wire    [17:0]qDds;
-dds dds ( 
-    .sclr(reset), 
-    .clk(clk), 
+dds dds (
+    .sclr(reset),
+    .clk(clk),
     .ce(1'b1),
-    .we(1'b1), 
-    .data(32'h00200000), 
-    .sine(qDds), 
+    .we(1'b1),
+    .data(32'h0020_0000),
+    .sine(qDds),
     .cosine(iDds)
     );
+`endif
 
 wire    [n-1:0]  x = iDds[17:(17-n+1)];
 wire    [n-1:0]  y = qDds[17:(17-n+1)];
-real xReal = (x[n-1] ? x - 16384.0 : x)/8192.0;
-real yReal = (y[n-1] ? y - 16384.0 : y)/8192.0;
+real xReal;
+always @* xReal = (x[n-1] ? x - 16384.0 : x)/8192.0;
+real yReal;
+always @* yReal = (y[n-1] ? y - 16384.0 : y)/8192.0;
 wire [n-2:0]mag;
 wire [n-3:0]phase;
-real magReal = mag/8192.0;
-real phaseReal = (phase[n-3] ? phase - 4096.0 : phase)/2048.0;
+real magReal;
+always @* magReal = mag/8192.0;
+real phaseReal;
+always @* phaseReal = (phase[n-3] ? phase - 4096.0 : phase)/2048.0;
 vm_cordic #(n) uut(
     .clk(clk),
     .ena(1'b1),
@@ -410,7 +431,7 @@ initial begin
     reset = 0;
     #(1024*1024*10) ;
     $stop;
-    
+
     end
 
 endmodule

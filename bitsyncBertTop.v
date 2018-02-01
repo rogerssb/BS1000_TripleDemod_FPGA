@@ -1055,12 +1055,13 @@ assign dac2_clk = clk;
 
 assign adc01_powerDown = 1'b0;
 
-assign dac_rst = 1'b0;
+assign dac_rst = 1'b1;
 assign dac_sclk = 1'b0;
-assign dac0_nCs = 1'b1;
-assign dac1_nCs = 1'b1;
-assign dac2_nCs = 1'b1;
+assign dac0_nCs = 1'b0;
+assign dac1_nCs = 1'b0;
+assign dac2_nCs = 1'b0;
 assign dac_sdio = 1'b0;
+
 
 //`define TEST_OUTPUTS
 `ifdef TEST_OUTPUTS

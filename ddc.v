@@ -1,7 +1,7 @@
 /******************************************************************************
 Copyright 2008-2015 Koos Technical Services, Inc. All Rights Reserved
 
-This source code is the Intellectual Property of Koos Technical Services,Inc. 
+This source code is the Intellectual Property of Koos Technical Services,Inc.
 (KTS) and is provided under a License Agreement which protects KTS' ownership and
 derivative rights in exchange for negotiated compensation.
 ******************************************************************************/
@@ -10,7 +10,7 @@ derivative rights in exchange for negotiated compensation.
 `include "addressMap.v"
 
 
-module ddc( 
+module ddc(
     clk, reset,
     `ifdef USE_BUS_CLOCK
     busClk,
@@ -25,7 +25,7 @@ module ddc(
     nbAgcGain,
     bbClkEn,
     iBB, qBB,
-    iIn, qIn, 
+    iIn, qIn,
     iLagOut, qLagOut,
     lagClkEn,
     syncOut,
@@ -107,8 +107,8 @@ always @(posedge clk) begin
 // LO Generator
 `ifdef USE_VIVADO_CORES
 wire    [47:0]  m_axis;
-wire    [17:0]  iDds = m_axis[41:24];
-wire    [17:0]  qDds = m_axis[17:0];
+wire    [17:0]  qDds = m_axis[41:24];
+wire    [17:0]  iDds = m_axis[17:0];
 dds6p0 dds(
   .aclk(clk),
   .aclken(1'b1),
@@ -121,13 +121,13 @@ dds6p0 dds(
 `else
 wire    [17:0]iDds;
 wire    [17:0]qDds;
-dds dds ( 
-    .sclr(reset), 
-    .clk(clk), 
+dds dds (
+    .sclr(reset),
+    .clk(clk),
     .ce(1'b1),
-    .we(1'b1), 
-    .data(ddcFreq), 
-    .sine(qDds), 
+    .we(1'b1),
+    .data(ddcFreq),
+    .sine(qDds),
     .cosine(iDds)
     );
 `endif
@@ -163,10 +163,10 @@ always @(qMix) qMixReal = ((qMix > 131071.0) ? (qMix - 262144.0) : qMix)/131072.
 wire [17:0]iHb0,qHb0;
 `ifdef SIMULATE
 reg hbReset;
-dualHalfbandDecimate hb0( 
+dualHalfbandDecimate hb0(
     .clk(clk), .reset(hbReset), .clkEn(1'b1),
 `else
-dualHalfbandDecimate hb0( 
+dualHalfbandDecimate hb0(
     .clk(clk), .reset(reset), .clkEn(1'b1),
 `endif
     .iIn(iMix),.qIn(qMix),
@@ -185,7 +185,7 @@ assign iLagOut = iHb0;
 assign qLagOut = qHb0;
 assign lagClkEn = hb0SyncOut;
 
-// Programmable Clock Decimation. Depends on external SAW filters for this to 
+// Programmable Clock Decimation. Depends on external SAW filters for this to
 // work without aliasing
 reg     [7:0]   adcDecimationCount;
 reg             adcClkEn;
@@ -209,7 +209,7 @@ always @(posedge clk) begin
 // If bypassing the CIC decimator, force its clock enable off to save power
 reg     [17:0]  iCicIn,qCicIn;
 reg             cicClockEn;
-always @(posedge clk) begin      
+always @(posedge clk) begin
     if (bypassCic) begin
         cicClockEn <= 0;
         iCicIn <= 0;
@@ -235,10 +235,10 @@ wire cicSyncOut;
 wire [31:0]cicDout;
 `ifdef SIMULATE
 reg cicReset;
-dualDecimator #(.RegSpace(`CICDECSPACE)) cic( 
+dualDecimator #(.RegSpace(`CICDECSPACE)) cic(
     .clk(clk), .reset(cicReset), .clkEn(cicClockEn),
 `else
-dualDecimator #(.RegSpace(`CICDECSPACE)) cic( 
+dualDecimator #(.RegSpace(`CICDECSPACE)) cic(
     .clk(clk), .reset(reset), .clkEn(cicClockEn),
 `endif
     `ifdef USE_BUS_CLOCK
@@ -302,9 +302,9 @@ cicCompMpy cicCompI(
 `else
 cicComp cicCompI(
 `endif
-    .clk(clk), 
+    .clk(clk),
     .reset(reset),
-    .clkEn(agcSync), 
+    .clkEn(agcSync),
     .compIn(iAgc),
     .compOut(iComp)
     );
@@ -313,9 +313,9 @@ cicCompMpy cicCompQ(
 `else
 cicComp cicCompQ(
 `endif
-    .clk(clk), 
+    .clk(clk),
     .reset(reset),
-    .clkEn(agcSync), 
+    .clkEn(agcSync),
     .compIn(qAgc),
     .compOut(qComp)
     );
@@ -332,7 +332,7 @@ wire    [17:0]  qMux = bypassCic ? qAgc : qComp;
 // If bypassing the second halfband, force its clock enable off to save power
 reg     [17:0]  iHbIn,qHbIn;
 reg             hbClockEn;
-always @(posedge clk) begin      
+always @(posedge clk) begin
     if (bypassHb) begin
         hbClockEn <= 0;
         iHbIn <= 0;
@@ -347,7 +347,7 @@ always @(posedge clk) begin
 
 // Second Halfband Filter
 wire [17:0]iHb,qHb;
-dualHalfbandDecimate hb( 
+dualHalfbandDecimate hb(
 `ifdef SIMULATE
     .clk(clk), .reset(cicReset), .clkEn(hbClockEn),
 `else
@@ -391,7 +391,7 @@ always @(posedge clk) begin
 
 wire    [31:0]  ddcFirDout;
 wire    [17:0]  iFir,qFir;
-dualFir #(.RegSpace(`DDCFIRSPACE)) dualFir ( 
+dualFir #(.RegSpace(`DDCFIRSPACE)) dualFir (
     .clk(clk), .reset(reset), .clkEn(firClockEn),
     `ifdef USE_BUS_CLOCK
     .busClk(busClk),
@@ -458,8 +458,8 @@ always @(posedge clk) begin
 // Lead Complex Mixer
 `ifdef USE_VIVADO_CORES
 wire    [47:0]  lead_m_axis;
-wire    [17:0]  iLeadDds = lead_m_axis[41:24];
-wire    [17:0]  qLeadDds = lead_m_axis[17:0];
+wire    [17:0]  qLeadDds = lead_m_axis[41:24];
+wire    [17:0]  iLeadDds = lead_m_axis[17:0];
 dds6p0 leadDds(
   .aclk(clk),
   .aclken(1'b1),
@@ -472,15 +472,15 @@ dds6p0 leadDds(
 `else
 wire    [17:0]iLeadDds;
 wire    [17:0]qLeadDds;
-dds leadDds ( 
-//dds4p0 leadDds ( 
-    .sclr(reset), 
-    .clk(clk), 
+dds leadDds (
+//dds4p0 leadDds (
+    .sclr(reset),
+    .clk(clk),
     .ce(1'b1),
-    .we(1'b1), 
-    //.data(leadFreq), 
-    .data(newLead), 
-    .sine(qLeadDds), 
+    .we(1'b1),
+    //.data(leadFreq),
+    .data(newLead),
+    .sine(qLeadDds),
     .cosine(iLeadDds)
     );
 `endif
@@ -494,7 +494,7 @@ always @(qLeadDds) qLeadDdsReal = ((qLeadDds > 131071.0) ? (qLeadDds - 262144.0)
 
 // Complex Multiplier
 wire    [17:0]  iLead,qLead;
-cmpy18 leadMixer( 
+cmpy18 leadMixer(
     .clk(clk),
     .reset(reset),
     .aReal(iLeadIn),
@@ -536,7 +536,7 @@ always @* begin
     casex (addr)
         `DDCSPACE:          dout = ddcDout;
         `DDCFIRSPACE:       dout = ddcFirDout;
-        `CICDECSPACE:       dout = cicDout;    
+        `CICDECSPACE:       dout = cicDout;
         default:            dout = 32'bx;
         endcase
     end
@@ -545,11 +545,11 @@ reg [31:0]dout;
 always @* begin
     casex (addr)
         `DDCSPACE:          dout = ddcDout;
-        `CICDECSPACE:       dout = cicDout;    
+        `CICDECSPACE:       dout = cicDout;
         default:            dout = 32'bx;
         endcase
     end
 `endif
 
 endmodule
-                     
+

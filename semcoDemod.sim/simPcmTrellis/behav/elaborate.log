@@ -1,0 +1,60 @@
+Vivado Simulator 2016.4
+Copyright 1986-1999, 2001-2016 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2016.4/bin/unwrapped/win64.o/xelab.exe -wto 0027b497f38f46a7b40b8158d1351c26 --debug typical --relax --mt 2 -d SEMCO_DEMOD= -d SIMULATE= -d BYPASS_TRELLIS_CARRIER_LOOP= -d USE_VIVADO_CORES= -L xbip_utils_v3_0_7 -L axi_utils_v2_0_3 -L xbip_pipe_v3_0_3 -L xbip_bram18k_v3_0_3 -L mult_gen_v12_0_12 -L xbip_dsp48_wrapper_v3_0_4 -L xbip_dsp48_addsub_v3_0_3 -L xbip_dsp48_multadd_v3_0_3 -L dds_compiler_v6_0_13 -L xil_defaultlib -L fir_compiler_v7_2_7 -L fifo_generator_v13_1_3 -L dist_mem_gen_v8_0_11 -L unisims_ver -L unimacro_ver -L secureip -L xpm --snapshot test_behav xil_defaultlib.test xil_defaultlib.glbl -log elaborate.log 
+Using 2 slave threads.
+Starting static elaboration
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling package std.standard
+Compiling package std.textio
+Compiling package ieee.std_logic_1164
+Compiling package ieee.numeric_std
+Compiling package mult_gen_v12_0_12.mult_gen_v12_0_12_viv_comp
+Compiling package xbip_utils_v3_0_7.xbip_utils_v3_0_7_pkg
+Compiling package mult_gen_v12_0_12.mult_gen_v12_0_12_pkg
+Compiling package ieee.std_logic_arith
+Compiling package ieee.std_logic_signed
+Compiling package unisim.vcomponents
+Compiling package ieee.std_logic_unsigned
+Compiling package ieee.vital_timing
+Compiling package ieee.vital_primitives
+Compiling package unisim.vpkg
+Compiling module xil_defaultlib.mpy18x18PL1
+Compiling module xil_defaultlib.cmpy18
+Compiling module xil_defaultlib.mfilter(reC0=18'b011011010010001...
+Compiling module xil_defaultlib.mfilter(reC0=18'b011011010010001...
+Compiling architecture lut2_v of entity unisim.LUT2 [\LUT2(init="1000")(0,3)\]
+Compiling architecture mult_and_v of entity unisim.MULT_AND [mult_and_default]
+Compiling architecture muxcy_v of entity unisim.MUXCY [muxcy_default]
+Compiling architecture xorcy_v of entity unisim.XORCY [xorcy_default]
+Compiling architecture xilinx of entity mult_gen_v12_0_12.op_resize [\op_resize(ai_width=10,bi_width=...]
+Compiling architecture xilinx of entity mult_gen_v12_0_12.luts [\luts(c_xdevicefamily="kintex7",...]
+Compiling architecture xilinx of entity mult_gen_v12_0_12.mult_gen_v12_0_12_viv [\mult_gen_v12_0_12_viv(c_verbosi...]
+Compiling architecture xilinx of entity mult_gen_v12_0_12.mult_gen_v12_0_12 [\mult_gen_v12_0_12(c_xdevicefami...]
+Compiling architecture mult10x10_arch of entity xil_defaultlib.mult10x10 [mult10x10_default]
+Compiling module xil_defaultlib.rotMult
+Compiling module xil_defaultlib.rotator(ROT_BITS=10)
+Compiling module xil_defaultlib.adder2s(size=8)
+Compiling module xil_defaultlib.comp(size=8)
+Compiling module xil_defaultlib.mux_2_1(size=12)
+Compiling module xil_defaultlib.mux_2_1(size=10)
+Compiling architecture xilinx of entity mult_gen_v12_0_12.op_resize [\op_resize(ai_width=12,bi_width=...]
+Compiling architecture xilinx of entity mult_gen_v12_0_12.luts [\luts(c_xdevicefamily="kintex7",...]
+Compiling architecture xilinx of entity mult_gen_v12_0_12.mult_gen_v12_0_12_viv [\mult_gen_v12_0_12_viv(c_verbosi...]
+Compiling architecture xilinx of entity mult_gen_v12_0_12.mult_gen_v12_0_12 [\mult_gen_v12_0_12(c_xdevicefami...]
+Compiling architecture mult12x8lut_arch of entity xil_defaultlib.mult12x8Lut [mult12x8lut_default]
+Compiling module xil_defaultlib.acs(size=8,ROT_BITS=10)
+Compiling module xil_defaultlib.comp4twosComp(size=12)
+Compiling module xil_defaultlib.comp4twosComp(size=12,indexOffse...
+Compiling module xil_defaultlib.comp4twosComp(size=12,indexOffse...
+Compiling module xil_defaultlib.maxMetricEvenOdd
+Compiling module xil_defaultlib.bitLifo
+Compiling module xil_defaultlib.traceBackTableDeeper_default
+Compiling module xil_defaultlib.viterbi_top(size=8,ROT_BITS=10)
+Compiling module xil_defaultlib.bitFifo
+Compiling module xil_defaultlib.trellis
+Compiling module xil_defaultlib.test
+Compiling module xil_defaultlib.glbl
+Built simulation snapshot test_behav

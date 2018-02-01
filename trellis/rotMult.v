@@ -16,6 +16,39 @@ input clk,ena;
 input [9:0]a,b,c,d;
 output [9:0]reOut0,imOut0,reOut1,imOut1;
 
+`ifdef USE_VIVADO_CORES
+// (a + bi)(c + di) = (ac - bd) + (bc + ad)i
+
+wire [19:0]axc;
+mult10x10 mult_axc(
+        .CLK(clk),
+        .A(a), // Bus [9 : 0]
+        .B(c), // Bus [9 : 0]
+        .P(axc)); // Bus [19 : 0]
+
+wire [19:0]bxd;
+mult10x10 mult_bxd(
+        .CLK(clk),
+        .A(b), // Bus [9 : 0]
+        .B(d), // Bus [9 : 0]
+        .P(bxd)); // Bus [19 : 0]
+
+wire [19:0]bxc;
+mult10x10 mult_bxc(
+        .CLK(clk),
+        .A(b), // Bus [9 : 0]
+        .B(c), // Bus [9 : 0]
+        .P(bxc)); // Bus [19 : 0]
+
+wire [19:0]axd;
+mult10x10 mult_axd(
+        .CLK(clk),
+        .A(a), // Bus [9 : 0]
+        .B(d), // Bus [9 : 0]
+        .P(axd)); // Bus [19 : 0]
+
+`else // USE_VIVADO_CORES
+
 // (a + bi)(c + di) = (ac - bd) + (bc + ad)i
 
 wire [19:0]axc;
@@ -45,6 +78,7 @@ mult10x10 mult_axd(
         .a(a), // Bus [9 : 0]
         .b(d), // Bus [9 : 0]
         .p(axd)); // Bus [19 : 0]
+`endif
 
 wire [20:0]sumR = {axc[19],axc[19:0]} - {bxd[19],bxd[19:0]};
 wire [20:0]sumI = {bxc[19],bxc[19:0]} + {axd[19],axd[19:0]};

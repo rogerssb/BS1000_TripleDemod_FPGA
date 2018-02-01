@@ -1,7 +1,7 @@
 `timescale 1ns / 10 ps
 `include "..\addressMap.v"
 
-module fmInterpolate( 
+module fmInterpolate(
     clk, reset, clkEn,
     dIn,
     dOut
@@ -40,13 +40,6 @@ always @(posedge clk) begin
         end
     end
 
-`ifdef SIMULATE
-real tap0Real = (tap0[19] ? tap0 - 1048576.0 : tap0)/524288.0;
-real tap1Real = (tap1[19] ? tap1 - 1048576.0 : tap1)/524288.0; 
-real tap2Real = (tap2[19] ? tap2 - 1048576.0 : tap2)/524288.0; 
-real sum3Real = (sum3[19] ? sum3 - 1048576.0 : sum3)/524288.0; 
-`endif
-
 // Three stages of integration
 reg     [33:0]  acc0,acc1,acc2;
 always @(posedge clk) begin
@@ -61,15 +54,6 @@ always @(posedge clk) begin
         acc2 <= acc2 + acc1;
         end
     end
-
-`ifdef SIMULATE
-wire [31:0]acc0Slice = acc0[33:2];
-real acc0Real = ((acc0Slice > 2147483647.0) ? acc0Slice-4294967296.0 : acc0Slice)/2147483648.0;
-wire [31:0]acc1Slice = acc1[33:2];
-real acc1Real = ((acc1Slice > 2147483647.0) ? acc1Slice-4294967296.0 : acc1Slice)/2147483648.0;
-wire [31:0]acc2Slice = acc2[33:2];
-real acc2Real = ((acc2Slice > 2147483647.0) ? acc2Slice-4294967296.0 : acc2Slice)/2147483648.0;
-`endif
 
 // Final output
 assign dOut = acc2;

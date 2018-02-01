@@ -1,7 +1,7 @@
 /******************************************************************************
 Copyright 2008-2015 Koos Technical Services, Inc. All Rights Reserved
 
-This source code is the Intellectual Property of Koos Technical Services,Inc. 
+This source code is the Intellectual Property of Koos Technical Services,Inc.
 (KTS) and is provided under a License Agreement which protects KTS' ownership and
 derivative rights in exchange for negotiated compensation.
 ******************************************************************************/
@@ -23,40 +23,40 @@ module cmpy18(
     //RxR
     wire signed [35:0]  productRxR;
     mpy18x18PL1 mpyRxR(
-        .clk(clk), 
+        .clk(clk),
         .sclr(reset),
-        .a(aReal), 
-        .b(bReal), 
+        .a(aReal),
+        .b(bReal),
         .p(productRxR)
     );
 
     //IxI
     wire signed [35:0]  productIxI;
     mpy18x18PL1 mpyIxI(
-        .clk(clk), 
+        .clk(clk),
         .sclr(reset),
-        .a(aImag), 
-        .b(bImag), 
+        .a(aImag),
+        .b(bImag),
         .p(productIxI)
     );
 
     //RxI
     wire signed [35:0]  productRxI;
     mpy18x18PL1 mpyRxI(
-        .clk(clk), 
+        .clk(clk),
         .sclr(reset),
-        .a(aReal), 
-        .b(bImag), 
+        .a(aReal),
+        .b(bImag),
         .p(productRxI)
     );
 
     //IxR
     wire signed [35:0]  productIxR;
     mpy18x18PL1 mpyIxR(
-        .clk(clk), 
+        .clk(clk),
         .sclr(reset),
-        .a(aImag), 
-        .b(bReal), 
+        .a(aImag),
+        .b(bReal),
         .p(productIxR)
     );
 

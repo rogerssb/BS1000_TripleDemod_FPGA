@@ -1,0 +1,35 @@
+<!DOCTYPE SilvacoProject>
+<project version="1" name="testTrellisCarrierLoop" >
+ <products>
+  <product name="SILOS" >
+   <settings>
+    <setting value="Y" name="DebugEnable" />
+    <setting value="Silvaco4.14.3.R" name="Version" />
+    <setting value="search" name="SystaskSearchOrder" />
+   </settings>
+   <librarydirs>
+    <directory name="..\..\..\Xilinx\10.1\ISE\verilog\src\unisims\{.v}" />
+   </librarydirs>
+   <includedirs>
+    <directory name=".." />
+   </includedirs>
+   <plusdefines>
+    <define name="SIMULATE" />
+   </plusdefines>
+   <sourcefiles>
+    <file name="testTrellisCarrierLoop.v" />
+    <file name="trellisCarrierLoop.v" />
+    <file name="..\cmpy18.v" />
+    <file name="..\cmpy18Sat.v" />
+    <file name="..\cmpy18WithCe.v" />
+    <file name="..\loopFilter.v" />
+    <file name="..\loopRegs.v" />
+    <file name="..\fmMod\cicInterpolate.v" />
+    <file name="..\fmMod\fmMod.v" />
+    <file name="..\fmMod\micro.v" />
+    <file name="..\fmMod\shift34to18.v" />
+    <file name="..\coregen\shapingFir.v" />
+   </sourcefiles>
+  </product>
+ </products>
+</project>

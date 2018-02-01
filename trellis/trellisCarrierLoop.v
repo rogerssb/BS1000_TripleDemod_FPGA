@@ -9,10 +9,11 @@
 //-----------------------------------------------------------------------------
 
 `timescale 1ns/1ps
-`include "./addressMap.v"
+`include "addressMap.v"
 `define USE_LEGACY
+//`define USE_SR
 //`define USE_MPY_FM_DISC
-           
+
 module trellisCarrierLoop(
     clk,reset,
     symEn,
@@ -21,6 +22,9 @@ module trellisCarrierLoop(
     legacyBit,
     phaseErrorIn,
     symEn_phErr,
+    `ifdef USE_BUS_CLOCK
+    busClk,
+    `endif
     wr0,wr1,wr2,wr3,
     addr,
     din,dout,
@@ -38,6 +42,9 @@ input   [17:0]  iIn,qIn;
 input           legacyBit;
 input   [7:0]   phaseErrorIn;
 input           symEn_phErr;
+`ifdef USE_BUS_CLOCK
+input           busClk;
+`endif
 input           wr0,wr1,wr2,wr3;
 input   [12:0]  addr;
 input   [31:0]  din;
@@ -74,19 +81,31 @@ wire    [39:0]  afcAccum;
 `ifdef INTERNAL_ADAPT
 reg     [31:0]  posDevAccum,negDevAccum;
 `endif
+`ifdef USE_SR
+wire    [7:0]   leadMan;
+wire    [2:0]   srIndex = leadMan[2:0];
+`endif
 loopRegs loopRegs(
+    `ifdef USE_BUS_CLOCK
+    .busClk(busClk),
+    `endif
     .cs(trellisSpace),
     .addr(addr),
     .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
     .lagAccum(lagAccum[39:8]),
     .dataIn(din),
     .dataOut(dout),
+    .lockStatus(1'b0),
     .invertError(invertError),
     .zeroError(zeroError),
     .ctrl2(clearAFC),
     .clearAccum(clearAccum),
     .ctrl4(manualDeviation),
+    `ifdef USE_SR
+    .leadMan(leadMan),
+    `else
     .leadMan(),
+    `endif
     .leadExp(leadExp),
     .lagMan(),
     .lagExp(lagExp),
@@ -102,8 +121,7 @@ loopRegs loopRegs(
     .leadExp1(),
     .lagMan1(),
     .lagExp1(afcGain),
-    .loopData1(negDevCorrection),
-    .loopData1Read(afcAccum[39:8])
+    .loopData1(negDevCorrection)
     );
 
 
@@ -122,7 +140,7 @@ phaseFifo phaseFifo(
         );
 wire loopFilterEn = symEn;
 
-`else 
+`else
 
 wire    [7:0]   phaseError = phaseErrorIn;
 wire            loopFilterEn = symEn_phErr;
@@ -135,7 +153,7 @@ reg     [7:0]   loopError;
 wire    [7:0]   negPhaseError = ~phaseError + 1;
 reg             carrierLock;
 wire            breakLoop = zeroError;
-always @(posedge clk) begin 
+always @(posedge clk) begin
     if (loopFilterEn) begin
         if (breakLoop) begin
             loopError <= 8'h0;
@@ -155,23 +173,23 @@ always @(posedge clk) begin
 // Instantiate the lead/lag filter gain path
 wire    [39:0]  leadError;
 leadGain leadGain (
-    .clk(clk), .clkEn(loopFilterEn), .reset(reset), 
+    .clk(clk), .clkEn(loopFilterEn), .reset(reset),
     .error(loopError),
     .leadExp(leadExp),
     .leadError(leadError)
     );
 
 lagGain lagGain (
-    .clk(clk), .clkEn(loopFilterEn), .reset(reset), 
+    .clk(clk), .clkEn(loopFilterEn), .reset(reset),
     .error(loopError),
     .lagExp(lagExp),
     .limit(limit),
     .sweepEnable(1'b0),
+    .sweepRateMag(32'b0),
     .clearAccum(clearAccum),
     .carrierInSync(carrierLock),
     .lagAccum(lagAccum)
     );
-
 
 // Final filter output
 reg [39:0]filterSum;
@@ -223,10 +241,10 @@ assign carrierFreqEn = loopFilterEn;
 
 `ifdef SIMULATE
 real carrierOffsetReal;
-real lagAccumReal; 
+real lagAccumReal;
 integer lockCounterInt;
 always @(carrierFreqOffset) carrierOffsetReal = ((carrierFreqOffset > 2147483647.0) ? carrierFreqOffset-4294967296.0 : carrierFreqOffset)/2147483648.0;
-always @(lagAccum) lagAccumReal = ((lagAccum[39:8] > 2147483647.0) ? lagAccum[39:8]-4294967296.0 : lagAccum[39:8])/2147483648.0; 
+always @(lagAccum) lagAccumReal = ((lagAccum[39:8] > 2147483647.0) ? lagAccum[39:8]-4294967296.0 : lagAccum[39:8])/2147483648.0;
 always @(lockCounter) lockCounterInt = lockCounter;
 `endif
 
@@ -282,7 +300,7 @@ always @(posedge clk) begin
                 posDevAccum <= `MAX_POS_DEVIATION;
                 end
             else begin
-                posDevAccum <= posDevAccum + {{16{posDeltaError[4]}},posDeltaError,11'b0}; 
+                posDevAccum <= posDevAccum + {{16{posDeltaError[4]}},posDeltaError,11'b0};
                 end
             end
         end
@@ -348,10 +366,10 @@ wire [31:0] ddsFreq = newOffset + deviationCorrection;
 
 wire ddsReset = reset;
 
-`else                             
+`else
 
 // s-curve testing
-reg resetWithPhaseOffset=0;     
+reg resetWithPhaseOffset=0;
 reg [31:0] newOffset;
 reg set;
 always @(posedge clk) begin
@@ -361,13 +379,13 @@ always @(posedge clk) begin
       set <= 0;
    end
    else begin
-      resetWithPhaseOffset <= 0; // release the reset                                                                                                                   
+      resetWithPhaseOffset <= 0; // release the reset
           //newOffset <= 32'h60000000; //do a one time write of 4000_0000 to rotate pi/2  (i.e. set the initial phase)
       newOffset <= 32'h00000000; //do a one time write of 4000_0000 to rotate pi/2  (i.e. set the initial phase)
           set <= 1;
       if (set) begin
-         //newOffset <= 32'h01000000; // this value will change the constate freq out of the dds 
-                 newOffset <= 32'h00000000; // this value will change the constate freq out of the dds 
+         //newOffset <= 32'h01000000; // this value will change the constate freq out of the dds
+                 newOffset <= 32'h00000000; // this value will change the constate freq out of the dds
       end
    end
 end
@@ -451,28 +469,70 @@ always @(posedge clk) begin
     end
 //wire    [17:0]  iInput = iIns[31];
 //wire    [17:0]  qInput = qIns[31];
-wire    [17:0]  iInput = iIns[28];
-wire    [17:0]  qInput = qIns[28];
+`ifdef USE_SR
+    reg     [17:0] iInput,qInput;
+    always @* begin
+        case (srIndex)
+            0: iInput = iIns[20];
+            1: iInput = iIns[21];
+            2: iInput = iIns[22];
+            3: iInput = iIns[23];
+            4: iInput = iIns[24];
+            5: iInput = iIns[25];
+            6: iInput = iIns[26];
+            7: iInput = iIns[27];
+        endcase
+        case (srIndex)
+            0: qInput = qIns[20];
+            1: qInput = qIns[21];
+            2: qInput = qIns[22];
+            3: qInput = qIns[23];
+            4: qInput = qIns[24];
+            5: qInput = qIns[25];
+            6: qInput = qIns[26];
+            7: qInput = qIns[27];
+        endcase
+    end
+`else
+    wire    [17:0]  iInput = iIns[27];
+    wire    [17:0]  qInput = qIns[27];
+    //wire    [17:0]  iInput = iIns[28];
+    //wire    [17:0]  qInput = qIns[28];
+`endif
 
 `else
 wire    [17:0]  iInput = iIn;
 wire    [17:0]  qInput = qIn;
 `endif
 
+`ifdef USE_VIVADO_CORES
+wire    [47:0]  m_axis;
+wire    [17:0]  bImag = m_axis[41:24];
+wire    [17:0]  bReal = m_axis[17:0];
+dds6p0 dds(
+  .aclk(clk),
+  .aclken(sym2xEn),
+  .aresetn(!ddsReset),
+  .m_axis_data_tdata(m_axis),
+  .m_axis_data_tvalid(),
+  .s_axis_phase_tdata(ddsFreq),
+  .s_axis_phase_tvalid(1'b1)
+);
+`else //USE_VIVADO_CORES
 wire [17:0]bReal,bImag;
-wire    [17:0]  iMpy,qMpy;
 dds dds(
   .clk(clk),
   .sclr(ddsReset),
   .ce(sym2xEn),
   .we(1'b1),
   .data(ddsFreq), // Bus [31 : 0]
-  .cosine(bReal), // Bus [17 : 0] 
-  .sine(bImag)); // Bus [17 : 0] 
+  .cosine(bReal), // Bus [17 : 0]
+  .sine(bImag)); // Bus [17 : 0]
+`endif //USE_VIVADO_CORES
 
 `ifdef SIMULATE
 wire    [11:0]  signalFreq;
-fmDemodWithCE signalDemod( 
+fmDemodWithCE signalDemod(
     .clk(clk), .reset(reset), .sync(sym2xEn),
     .iFm(iInput),.qFm(qInput),
     .demodMode(`MODE_2FSK),
@@ -481,7 +541,7 @@ fmDemodWithCE signalDemod(
 assign dac0Output = signalFreq;
 
 wire    [11:0]  corrFreq;
-fmDemodWithCE corrDemod( 
+fmDemodWithCE corrDemod(
     .clk(clk), .reset(reset), .sync(sym2xEn),
     .iFm(bReal),.qFm(bImag),
     .demodMode(`MODE_2FSK),
@@ -494,7 +554,17 @@ real            corrFreqReal;
 always @* corrFreqReal = $itor($signed(corrFreq))/(2**11);
 `endif
 
-cmpy18Sat cmpy18Sat(clk,reset,iInput,qInput,bReal,bImag,iMpy,qMpy);
+wire    [17:0]  iMpy,qMpy;
+cmpy18Sat cmpy18Sat(
+    .clk(clk),
+    .reset(reset),
+    .aReal(iInput),
+    .aImag(qInput),
+    .bReal(bReal),
+    .bImag(bImag),
+    .pReal(iMpy),
+    .pImag(qMpy)
+);
 
 reg [7:0] symEnSr;
 reg [7:0] sym2xEnSr;
@@ -577,6 +647,7 @@ vm_cordic cordic(
     .clk(clk),
     .ena(sym2xEnDly),
     .x(iOut[17:4]),.y(qOut[17:4]),
+    .m(),
     .p(phase)
     );
 reg     [11:0]  freq;
@@ -650,9 +721,9 @@ assign dac1Output = afcError;
 
 // AFC Loop Filter
 lagGain12 afcLoopFilter (
-    .clk(clk), 
-    .clkEn(symEnDly), 
-    .reset(reset), 
+    .clk(clk),
+    .clkEn(symEnDly),
+    .reset(reset),
     .error(afcError),
     .lagExp(afcGain),
     .upperLimit(32'h0d000000),
