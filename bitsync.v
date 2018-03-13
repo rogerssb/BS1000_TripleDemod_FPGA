@@ -516,8 +516,8 @@ module bitsync(
                 AVERAGE: begin
                     stateMachineSlip <= 0;
                     if (timingErrorEn && transition) begin
-                        avgError <= avgError + absError;
-                        avgSlipError <= avgSlipError + absSlipError;
+                    avgError <= avgError + absError;
+                    avgSlipError <= avgSlipError + absSlipError;
                         if (avgCount == 0) begin
                             slipState <= TEST;
                         end
@@ -673,7 +673,7 @@ module bitsync(
                     if (lockCounter == (16'hffff-lockCount)) begin
                         bitsyncLock <= 0;
                         lockCounter <= 16'h0;
-                        slip <= 1;
+                        //slip <= 1;
                     end
                     else begin
                         lockCounter <= lockMinus[15:0];
@@ -690,7 +690,7 @@ module bitsync(
                 end
             end
             else begin
-                slip <= 0;
+                //slip <= 0;
             end
         end
     end

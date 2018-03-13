@@ -7,7 +7,7 @@ module spiBusInterface(
     input                   spiClk,
     input                   spiCS,
     input                   spiDataIn,
-    output                  spiDataOut,
+    output  reg             spiDataOut,
     output                  spiDataOE,
     output  reg             cs,
     output  reg             wr0,wr1,wr2,wr3,
@@ -41,7 +41,7 @@ module spiBusInterface(
         `define SPI_SIZE_32     2'b11
     wire                    spiAddr1 = spiSR[0];
     assign                  spiDataOE = !spiWrite && (spiState != `SPI_IDLE);
-    assign                  spiDataOut = spiSR[31];
+    //assign                  spiDataOut = spiSR[31];
     always @(posedge spiClk or negedge spiCS) begin
         if (!spiCS) begin
             cs <= 0;
@@ -257,30 +257,9 @@ module spiBusInterface(
         end
     end
 
-    /*
-    reg             [31:0]  spiOutSR;
-    assign                  spiDataOut = spiOutSR[31];
     always @(negedge spiClk) begin
-        if (spiBitcount == 0) begin
-            case (spiXferSize)
-                `SPI_SIZE_16: begin
-                    if (spiAddr1) begin
-                        spiOutSR <= dataOut;
-                    end
-                    else begin
-                        spiOutSR <= {dataOut[15:0],16'b0};
-                    end
-                end
-                default: begin
-                    spiOutSR <= dataOut;
-                end
-            endcase
-        end
-        else begin
-            spiOutSR <= {spiOutSR[30:0],1'b0};
-        end
+        spiDataOut <= spiSR[31];
     end
-    */
 
     // dataIn mux
     always @* begin
@@ -358,24 +337,24 @@ module test;
                     // WR16
                     if (spiSize == `SPI_SIZE_16) begin
                         spiSR <= {spiWrite,spiSize,spiAddr,16'h0123,16'hx};
-                        shiftCount <= 31;
+                        shiftCount <= 32;
                     end
                     // WR32
                     else begin
                         spiSR <= {spiWrite,spiSize,spiAddr,32'h76543210};
-                        shiftCount <= 47;
+                        shiftCount <= 48;
                     end
                 end
                 else begin
                     // RD16
                     if (spiSize == `SPI_SIZE_16) begin
                         spiSR <= {spiWrite,spiSize,spiAddr,32'hx};
-                        shiftCount <= 31;
+                        shiftCount <= 32;
                     end
                     // RD32
                     else begin
                         spiSR <= {spiWrite,spiSize,spiAddr,32'hx};
-                        shiftCount <= 47;
+                        shiftCount <= 48;
                     end
                 end
             end

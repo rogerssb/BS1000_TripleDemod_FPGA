@@ -895,9 +895,15 @@ maxMetric #(ROT_BITS) maxMetric1 (
 
     `ifdef USE_BUS_CLOCK
     always @(posedge busClk or posedge berRestarted) begin
+        if (berRestarted) begin
+            berRestart <= 0;
+        end
+        else if (trellisSpace && wr2) begin
+            berRestart <= 1;
+        end
+    end
     `else
     always @(negedge wr2 or posedge berRestarted) begin
-    `endif
         if (berRestarted) begin
             berRestart <= 0;
         end
@@ -905,6 +911,7 @@ maxMetric #(ROT_BITS) maxMetric1 (
             berRestart <= 1;
         end
     end
+    `endif
 
     reg [31:0]trellisDout;
     always @* begin

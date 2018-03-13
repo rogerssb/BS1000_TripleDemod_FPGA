@@ -17,36 +17,36 @@ module acsMultH
    parameter             ACS_BITS = 8;
    parameter             MF_BITS = 10;
    parameter             ROT_BITS = 8;
-   parameter             ENABLE_DEBUG_PRINTOUT=0;  // Turnes on the debug display printout. You can look at induvidual ASC outputs by turning  
-   
+   parameter             ENABLE_DEBUG_PRINTOUT=0;  // Turnes on the debug display printout. You can look at induvidual ASC outputs by turning
+
    input                 clk, reset;
    input                 symEn, sym2xEn, symEnEven;
    input                 symEnEvenRot;
    input [MF_BITS-1:0]   iMfInRot, qMfInRot;
    input [ACS_BITS-1:0]  accMetMuxOut_0, accMetMuxOut_1, accMetMuxOut_2, accMetMuxOut_3;
-   
+
 
    output [1:0]          selOut;
    input                 normalizeIn;
    output                normalizeOut;
-   output [ACS_BITS-1:0] accMetOut;     
+   output [ACS_BITS-1:0] accMetOut;
    output [ROT_BITS-1:0] iOut;
    output [ROT_BITS-1:0] qOut;
    output                symEnOut, sym2xEnOut;
 
-   
-   wire                  symEnRot, sym2xEnRot;
-   wire                  symEnOut = symEnRot;    
-   wire                  sym2xEnOut = sym2xEnRot;    
 
-   // Some control singnals  
+   wire                  symEnRot, sym2xEnRot;
+   wire                  symEnOut = symEnRot;
+   wire                  sym2xEnOut = sym2xEnRot;
+
+   // Some control singnals
    reg [1:0]             inputMuxSel; // starts to count to 3, resets to 0 at symEn
    always @(posedge clk)
      begin
         if (reset) begin
            inputMuxSel <= 3; //0;
         end
-        else begin 
+        else begin
            if (symEn) begin
               inputMuxSel <= 0;
            end
@@ -64,7 +64,7 @@ module acsMultH
         if (reset) begin
            inputMuxSelAcs <= 0;
         end
-        else begin 
+        else begin
            if (symEnRot) begin
               inputMuxSelAcs <= 0;
            end
@@ -79,15 +79,15 @@ module acsMultH
    wire [4:0]           tilt;
    tilt tiltModule
      (
-      .clk       (clk        ), 
-      .reset     (reset      ), 
+      .clk       (clk        ),
+      .reset     (reset      ),
       .symEn     (symEn      ),
       .tilt      (tilt       ),
       .symEnEven (symEnEven  )
       );
 
-   
-   // Selects the amount of rotation bases on the matlab signal theta(n-2), here called ROT_45/54_?. 
+
+   // Selects the amount of rotation bases on the matlab signal theta(n-2), here called ROT_45/54_?.
    reg [4:0]            rotSel;
    reg [MF_BITS-1:0]    iMfInRotR, qMfInRotR;
    reg                  symEnRotIn, sym2xEnRotIn;
@@ -96,10 +96,10 @@ module acsMultH
      begin
         iMfInRotR <= iMfInRot; // lining up the I and Q with rotSel
         qMfInRotR <= qMfInRot;
-        symEnRotIn <= symEn;  
+        symEnRotIn <= symEn;
         sym2xEnRotIn <= sym2xEn;
         if (~symEnEvenRot) begin
-           case(inputMuxSel) 
+           case(inputMuxSel)
              0: begin
                 rotSel <= 32 - (tilt + (ROT_45_0<<1));
              end
@@ -115,7 +115,7 @@ module acsMultH
            endcase // case(inputMuxSel)
         end
         else begin
-           case(inputMuxSel) 
+           case(inputMuxSel)
              0: begin
                 rotSel <= 32 - (tilt + (ROT_54_0<<1));
              end
@@ -134,21 +134,21 @@ module acsMultH
 
 
    // Adding a pipeline delay before the rotator
-   
-   
+
+
    wire [ROT_BITS-1:0] iOutRot, qOutRot;
    rot8x8 rotator
      (
-      .clk        (clk        ), 
-      .reset      (reset      ), 
-      .symEn      (symEnRotIn  ), 
-      .sym2xEn    (sym2xEnRotIn), 
-      .i          (iMfInRotR[MF_BITS-1:MF_BITS-ROT_BITS] ),    
+      .clk        (clk        ),
+      .reset      (reset      ),
+      .symEn      (symEnRotIn  ),
+      .sym2xEn    (sym2xEnRotIn),
+      .i          (iMfInRotR[MF_BITS-1:MF_BITS-ROT_BITS] ),
       .q          (qMfInRotR[MF_BITS-1:MF_BITS-ROT_BITS] ),
       .angle      (rotSel     ),
-      .symEnOut   (symEnRot   ),   
-      .sym2xEnOut (sym2xEnRot ),   
-      .iOut       (iOutRot    ),   
+      .symEnOut   (symEnRot   ),
+      .sym2xEnOut (sym2xEnRot ),
+      .iOut       (iOutRot    ),
       .qOut       (qOutRot    )
       );
 
@@ -164,33 +164,33 @@ module acsMultH
 `define LWK
 `ifdef LWK
    // Going from a serial stream out of the rotator to parallel
-   reg [ROT_BITS-1:0] iOutRot_0, iOutRot_1, iOutRot_2, iOutRot_3, 
+   reg [ROT_BITS-1:0] iOutRot_0, iOutRot_1, iOutRot_2, iOutRot_3,
                        qOutRot_0, qOutRot_1, qOutRot_2, qOutRot_3;
    always @(posedge clk) begin
-        case(inputMuxSelAcs) 
+        case(inputMuxSelAcs)
           0: begin
              iOutRot_0 <= iOutRot;
              qOutRot_0 <= qOutRot;
-          end                              
-          1: begin                         
+          end
+          1: begin
              iOutRot_1 <= iOutRot;
              qOutRot_1 <= qOutRot;
-          end                              
-          2: begin                         
+          end
+          2: begin
              iOutRot_2 <= iOutRot;
              qOutRot_2 <= qOutRot;
-          end                              
-          3: begin                         
-             iOutRot_3 <= iOutRot; 
+          end
+          3: begin
+             iOutRot_3 <= iOutRot;
              qOutRot_3 <= qOutRot;
           end
         endcase
      end
 
    // Latching the I and Q at the symbol rate
-   reg [ROT_BITS-1:0] iOutRot_0r, iOutRot_1r, iOutRot_2r, iOutRot_3r, 
+   reg [ROT_BITS-1:0] iOutRot_0r, iOutRot_1r, iOutRot_2r, iOutRot_3r,
                       qOutRot_0r, qOutRot_1r, qOutRot_2r, qOutRot_3r;
-   reg [ROT_BITS-1:0] iOutRot_0rr, iOutRot_1rr, iOutRot_2rr, iOutRot_3rr, 
+   reg [ROT_BITS-1:0] iOutRot_0rr, iOutRot_1rr, iOutRot_2rr, iOutRot_3rr,
                       qOutRot_0rr, qOutRot_1rr, qOutRot_2rr, qOutRot_3rr;
    always @(posedge clk) begin
       if (reset) begin
@@ -202,38 +202,38 @@ module acsMultH
          qOutRot_1r <= qOutRot_1;  qOutRot_1rr <= qOutRot_1r;
          iOutRot_2r <= iOutRot_2;  iOutRot_2rr <= iOutRot_2r;
          qOutRot_2r <= qOutRot_2;  qOutRot_2rr <= qOutRot_2r;
-         iOutRot_3r <= iOutRot;    iOutRot_3rr <= iOutRot_3r;  
-         qOutRot_3r <= qOutRot;    qOutRot_3rr <= qOutRot_3r;  
+         iOutRot_3r <= iOutRot;    iOutRot_3rr <= iOutRot_3r;
+         qOutRot_3r <= qOutRot;    qOutRot_3rr <= qOutRot_3r;
       end
    end
 `else
    // Going from a serial stream out of the rotator to parallel
-   reg [ROT_BITS-1:0] iOutRot_0, iOutRot_1, iOutRot_2, iOutRot_3, 
+   reg [ROT_BITS-1:0] iOutRot_0, iOutRot_1, iOutRot_2, iOutRot_3,
                        qOutRot_0, qOutRot_1, qOutRot_2, qOutRot_3;
    always @(inputMuxSelAcs or iOutRot or qOutRot)
      begin
-        case(inputMuxSelAcs) 
+        case(inputMuxSelAcs)
           0: begin
              iOutRot_0 <= iOutRot;
              qOutRot_0 <= qOutRot;
-          end                              
-          1: begin                         
+          end
+          1: begin
              iOutRot_1 <= iOutRot;
              qOutRot_1 <= qOutRot;
-          end                              
-          2: begin                         
+          end
+          2: begin
              iOutRot_2 <= iOutRot;
              qOutRot_2 <= qOutRot;
-          end                              
-          3: begin                         
-             iOutRot_3 <= iOutRot; 
+          end
+          3: begin
+             iOutRot_3 <= iOutRot;
              qOutRot_3 <= qOutRot;
           end
         endcase
      end
 
    // Latching the I and Q at the symbol rate
-   reg [ROT_BITS-1:0] iOutRot_0r, iOutRot_1r, iOutRot_2r, iOutRot_3r, 
+   reg [ROT_BITS-1:0] iOutRot_0r, iOutRot_1r, iOutRot_2r, iOutRot_3r,
                       qOutRot_0r, qOutRot_1r, qOutRot_2r, qOutRot_3r;
    always @(posedge clk) begin
       if (reset) begin
@@ -245,14 +245,14 @@ module acsMultH
          qOutRot_1r <= qOutRot_1;
          iOutRot_2r <= iOutRot_2;
          qOutRot_2r <= qOutRot_2;
-         iOutRot_3r <= iOutRot_3; 
+         iOutRot_3r <= iOutRot_3;
          qOutRot_3r <= qOutRot_3;
       end
    end
 `endif
 
    // ************* 4 parallel adders ****************
-        
+
    // 2-comp adder: Adds a vector of width 8 and one of 12.
    wire [ACS_BITS-1:0]    aExt0 = {{(ACS_BITS-ROT_BITS){iOutRot_0r[ROT_BITS-1]}}, iOutRot_0r};
    wire [ACS_BITS-1:0]    bExt0 = accMetMuxOut_0;
@@ -294,12 +294,12 @@ module acsMultH
 `endif
 
 
-   
+
    // ************* maxMetric compare and sel *****************
-   
+
    wire [ACS_BITS-1:0]    bestMetric;
    wire [5:0]             select;
-   compSel  #(ACS_BITS, 0) compSel
+   compSel  #(.size(ACS_BITS), .indexOffset(0)) compSel
      (
       .clk    (clk),
       .ce     (symEnRot),
@@ -312,7 +312,7 @@ module acsMultH
       .normalize(normalizeIn),
       .maxVal (bestMetric)
       );
-        
+
 `ifdef SIMULATE
    real                   bestMetric_real;
    always @(bestMetric) begin
@@ -320,7 +320,7 @@ module acsMultH
    end
 `endif
 
-   // ** Selecting the winning rotated metrics for phase error correction ** 
+   // ** Selecting the winning rotated metrics for phase error correction **
    reg [1:0]              selOut;
    reg [ROT_BITS-1:0]     iOut;
    reg [ROT_BITS-1:0]     qOut;
@@ -348,11 +348,15 @@ module acsMultH
               iOut <= iOutRot_3rr;
               qOut <= qOutRot_3rr;
            end
+           default: begin
+              iOut <= iOut;
+              qOut <= qOut;
+           end
          endcase
       end
-   
-   
-   
+
+
+
    // --------- Normalization and forget factor -------------
    reg normalizeOut;
    always @(bestMetric[ACS_BITS-1:ACS_BITS-2] or normalizeIn) begin
@@ -363,9 +367,9 @@ module acsMultH
          normalizeOut <= 0;
       end
    end
-   
+
 assign accMetOut = bestMetric;
-   
+
 endmodule
 
-   
+

@@ -6,17 +6,17 @@
 
 `timescale 1 ns/1 ps
 
-module dsp48_mac 
+module dsp48_mac
   (
-   sclr, 
-   clk, 
-   a, 
-   b, 
+   sclr,
+   clk,
+   a,
+   b,
    acc,
-   accClr, 
+   accClr,
    p
    );
-   
+
    input            sclr;
    input            clk;
    input [17 : 0]   a;
@@ -24,7 +24,7 @@ module dsp48_mac
    input            acc;
    input            accClr;
    output [47 : 0]  p;
-   
+
    wire [7:0]       OPMODE = {4'b0000, acc, 3'b001}; // OPMODE sets up the operation of the DSP48A block. The acc input
                                                      // turns on the output accumulator
 
@@ -44,7 +44,7 @@ DSP48A #(
 .OPMODEREG  (1), // Enable=1/disable=0 OPMODE input pipeline register
 .PREG       (1), // Enable=1/disable=0 P output pipeline register
 .RSTTYPE    ("SYNC") // Specify reset type, "SYNC" or "ASYNC"
-) 
+)
 
 DSP48A_inst (
 .BCOUT       (/*NC*/    ), // 18-bit B port cascade output
@@ -66,7 +66,7 @@ DSP48A_inst (
 .CLK         (clk       ), // Clock input
 .D           (18'b0    ), // 18-bit B pre-adder data input
 .OPMODE      (OPMODE    ), // 8-bit operation mode input
-.PCIN        (/*NC*/    ), // 48-bit P cascade input
+.PCIN        (48'h0     ), // 48-bit P cascade input
 .RSTA        (sclr      ), // 1-bit reset input for A input pipeline registers
 .RSTB        (sclr      ), // 1-bit reset input for B input pipeline registers
 .RSTC        (sclr      ), // 1-bit reset input for C input pipeline registers

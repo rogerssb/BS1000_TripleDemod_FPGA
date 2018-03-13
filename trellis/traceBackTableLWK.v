@@ -20,7 +20,7 @@ module traceBackTableDeeper(clk, reset, symEn,
    parameter          SR_BITS=4;
 
    input              clk,reset,symEn;
-   input [19:0]       sel;   // 20 induvidual decision. 0 or 1 tell us if we trace + or - 7 modulo 20 
+   input [19:0]       sel;   // 20 induvidual decision. 0 or 1 tell us if we trace + or - 7 modulo 20
    input [4:0]        index; // pointer to the state which has the maximum metric
    output             decision;
    output             symEnDly;
@@ -46,10 +46,10 @@ module traceBackTableDeeper(clk, reset, symEn,
    reg [SR_DEPTH:0]   tbtSr19;
    reg [4:0]          tbState;
 
-   
+
    // 3bits x 20 states trace-back shift-register
    // This block is running at the symEn rate.
-   // The input "sel" is stable for the whole symbol 
+   // The input "sel" is stable for the whole symbol
    always @(posedge clk)
      begin
         if (reset) begin
@@ -98,10 +98,10 @@ module traceBackTableDeeper(clk, reset, symEn,
               tbtSr18 <= {tbtSr18[SR_DEPTH-1:0], sel[18]};
               tbtSr19 <= {tbtSr19[SR_DEPTH-1:0], sel[19]};
            end
-        end 
+        end
      end
 
-   
+
    // state Machine counter
    reg      [SR_BITS-1:0]   stageCnt;       // Traceback Stage Counter
    reg      [SR_BITS-1:0]   symEnCount;     // Number of symEn during tracing
@@ -164,9 +164,9 @@ module traceBackTableDeeper(clk, reset, symEn,
            `ifdef USE_FIRST_STATE
            case (index)
              0 : begin // We are in the "0-th" trellis state
-                if (sel[0]==0) 
-                  tbState <= 7; // sel=0 makes us jump +7 modulo 20.  
-                else 
+                if (sel[0]==0)
+                  tbState <= 7; // sel=0 makes us jump +7 modulo 20.
+                else
                   tbState <= 13;  // sel=1,   jump -7 modulo 20
                 end
              1 : if (sel[1 ]==0) tbState <= 8 ;  else tbState <= 14;
@@ -188,17 +188,18 @@ module traceBackTableDeeper(clk, reset, symEn,
              17: if (sel[17]==0) tbState <= 4 ;  else tbState <= 10;
              18: if (sel[18]==0) tbState <= 5 ;  else tbState <= 11;
              19: if (sel[19]==0) tbState <= 6 ;  else tbState <= 12;
+             default: tbState <= 0;
            endcase
            `else
            tbState <= index;  // loading in the starting max metric index at the trace back update rate
            `endif
         end
-        else begin    
+        else begin
            case (tbState)
              0 : begin // We are in the "0-th" trellis state
-                if (tbt0==0) 
-                  tbState <= 7; // sel=0 makes us jump +7 modulo 20.  
-                else 
+                if (tbt0==0)
+                  tbState <= 7; // sel=0 makes us jump +7 modulo 20.
+                else
                   tbState <= 13;  // sel=1,   jump -7 modulo 20
                 end
              1 : if (tbt1==0) tbState <= 8 ;  else tbState <= 14;
@@ -220,6 +221,7 @@ module traceBackTableDeeper(clk, reset, symEn,
              17: if (tbt17==0) tbState <= 4 ;  else tbState <= 10;
              18: if (tbt18==0) tbState <= 5 ;  else tbState <= 11;
              19: if (tbt19==0) tbState <= 6 ;  else tbState <= 12;
+             default: tbState <= 0;
            endcase
         end
      end
@@ -229,13 +231,13 @@ module traceBackTableDeeper(clk, reset, symEn,
     //wire    [3:0]   decisionIndex = tbIndex + (newTrace ? 0 : symEn);
     wire    [SR_BITS-1:0]   symEnOutputs = symEnCount + symEn;
     wire    symEnOut = ((stageCnt >= (lastStage-symEnOutputs)) && tracing);
-         
+
     //always @(posedge clk) begin
     always @(tbState or
              tbt0  or tbt1  or tbt2  or tbt3  or tbt4  or
              tbt5  or tbt6  or tbt7  or tbt8  or tbt9  or
              tbt10 or tbt11 or tbt12 or tbt13 or tbt14 or
-             tbt15 or tbt16 or tbt17 or tbt18 or tbt19 
+             tbt15 or tbt16 or tbt17 or tbt18 or tbt19
              ) begin
         case (tbState)
                 0:  begin tbDecision <=  tbt0; end

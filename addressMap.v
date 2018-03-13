@@ -43,7 +43,9 @@
 //`define ADD_SCPATH
 //`define ADD_CMA
 //`define ADD_DQM
+`define ADD_MULTIH
 `define ADD_SUPERBAUD_TED
+`define EMBED_MULTIH_CARRIER_LOOP
 `endif
 
 `ifdef BITSYNC_BERT
@@ -383,6 +385,8 @@
 `define SDISPACE            13'b0_1101_1xxx_xxxx
 `define TRELLISLFSPACE      13'b0_1110_0xxx_xxxx
 `define TRELLIS_SPACE       13'b0_1110_1xxx_xxxx
+`define MULTIHLFSPACE       13'b0_1110_0xxx_xxxx   // saame as TRELLIS space
+`define MULTIH_SPACE        13'b0_1110_1xxx_xxxx
 `define DAC_SPACE           13'b0_1111_0xxx_xxxx
 `define UARTSPACE           13'b0_1111_1xxx_xxxx
 `define SCDDCSPACE          13'b1_0010_00xx_xxxx

@@ -28,7 +28,7 @@ module semcoDemodTop (
     input               adc0_overflow,
     output              adc01_powerDown,
     `ifdef TRIPLE_DEMOD
-    input               adc0Clock,
+    input               adc0Clk,
     `else // TRIPLE_DEMOD
     input               sysClk,
     `endif // TRIPLE_DEMOD
@@ -62,6 +62,7 @@ module semcoDemodTop (
 
     // SDI Output
     output              sdiOut,
+
     `ifdef TRIPLE_DEMOD
 
     // PLL Interface Signals
@@ -80,15 +81,11 @@ module semcoDemodTop (
     output              amDacClk,
     output              amDacCSn,
 
-    // Video Switch SPI Interface
-    output              switch0SpiClk,
-    output              switch0SpiDout,
-    output              switch0SpiCS0n,
-    output              switch0SpiCS1n,
-    output              switch1SpiClk,
-    output              switch1SpiDout,
-    output              switch1SpiCS0n,
-    output              switch1SpiCS1n
+    // Video Switch Select Lines
+    output      [1:0]   video0InSelect,
+    output      [1:0]   video0OutSelect,
+    output      [1:0]   video1InSelect,
+    output      [1:0]   video1OutSelect
 
     `else   //TRIPLE_DEMOD
 
@@ -120,7 +117,7 @@ module semcoDemodTop (
 //******************************************************************************
     `ifdef TRIPLE_DEMOD
     systemClock systemClock (
-        .clk_in1(adc0Clock),
+        .clk_in1(adc0Clk),
         .clk_out1(clk),
         .locked(clkLocked)
      );
@@ -266,6 +263,7 @@ module semcoDemodTop (
                     || (demodMode == `MODE_AUQPSK)
                     );
     wire pcmTrellisMode = (demodMode == `MODE_PCMTRELLIS);
+    wire multihMode = (demodMode == `MODE_MULTIH);
     wire    signed  [17:0]  iDemodEye,qDemodEye;
     wire            [4:0]   demodEyeOffset;
     wire            [31:0]  demodDout;
@@ -371,6 +369,47 @@ module semcoDemodTop (
         .oneOrZeroPredecessor()
     );
 
+`ifdef ADD_MULTIH
+//******************************************************************************
+//                          Multih Trellis Decoder
+//******************************************************************************
+    wire    [1:0]   multihBit;
+    wire    [17:0]  multih0Out,multih1Out,multih2Out;
+    wire    [31:0]  multihDout;
+    trellisMultiH multih (
+        .clk(clk),
+        .reset(reset),
+        .symEnEvenIn(trellisSymEnEven & multihMode),
+        .symEnIn(trellisSymEn & multihMode),
+        .sym2xEnIn(iDemodSym2xEn & multihMode),
+        .iIn(iTrellis),
+        .qIn(qTrellis),
+        `ifdef USE_BUS_CLOCK
+        .busClk(busClk),
+        `endif
+        .wr0(wr0),
+        .wr1(wr1),
+        .wr2(wr2),
+        .wr3(wr3),
+        .addr(addr),
+        .din(dataIn),
+        .dout(multihDout),
+        .dac0Select(demodDac0Select),
+        .dac1Select(demodDac1Select),
+        .dac2Select(demodDac2Select),
+        .dac0ClkEn(multih0ClkEn),
+        .dac0Data(multih0Out),
+        .dac1ClkEn(multih1ClkEn),
+        .dac1Data(multih1Out),
+        .dac2ClkEn(multih2ClkEn),
+        .dac2Data(multih2Out),
+        .symEnOut(multihSymEnOut),
+        .sym2xEnOut(multihSym2xEnOut),
+        .decision(multihBit)
+    );
+
+`endif //ADD_MULTIH
+
 //******************************************************************************
 //                                PCM Decoders
 //******************************************************************************
@@ -393,6 +432,14 @@ module semcoDemodTop (
             dualSymEn <= pcmTrellisSymEnOut;
             dualSym2xEn <= pcmTrellisSym2xEnOut;
         end
+        `ifdef ADD_MULTIH
+        else if (multihMode) begin
+            dualCh0Input <= multihBit[0];
+            dualCh1Input <= multihBit[1];
+            dualSymEn <= multihSymEnOut;
+            dualSym2xEn <= multihSym2xEnOut;
+        end
+        `endif
         else begin
             dualCh0Input <= iDemodBit;
             dualCh1Input <= qDemodBit;
@@ -877,29 +924,11 @@ sdi sdi(
     //******************************************************************************
     //                          Video Switch Interface
     //******************************************************************************
-    wire    [31:0]  vidSwitchDout;
-    videoFilterSwitch #(.SysclkDivider(32)) vidSwitch (
-        .clk(clk),
-        .reset(reset),
-        .busClk(busClk),
-        .addr(addr),
-        .dataIn(dataIn),
-        .dataOut(vidSwitchDout),
-        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
-        .sclk(switchSpiClk),
-        .sdo(switchSpiDout),
-        .cs0(sw0Cs),
-        .cs1(sw1Cs)
-    );
-    assign switch0SpiClk =  switchSpiClk;
-    assign switch0SpiDout = switchSpiDout;
-    assign switch0SpiCS0n = !sw0Cs;
-    assign switch0SpiCS1n = !sw1Cs;
-    assign switch1SpiClk =  switchSpiClk;
-    assign switch1SpiDout = switchSpiDout;
-    assign switch1SpiCS0n = !sw0Cs;
-    assign switch1SpiCS1n = !sw1Cs;
 
+    assign video0InSelect = 2'b11;
+    assign video1InSelect = 2'b11;
+    assign video0OutSelect = 2'b11;
+    assign video1OutSelect = 2'b11;
 
     `endif //TRIPLE_DEMOD
 
@@ -941,17 +970,14 @@ sdi sdi(
             `VIDFIR1SPACE,
             `INTERP1SPACE:      rd_mux = interp1Dout;
 
-            `DLL0SPACE:         rd_mux = dll0Dout;
-            `DLL1SPACE:         rd_mux = dll1Dout;
-
             `DUAL_DECODERSPACE: rd_mux = dualDecDout;
 
             `CH1_DECODERSPACE:  rd_mux = ch1DecDout;
 
-            `CandD0SPACE:       rd_mux = clkAndData0Dout;
-            `CandD1SPACE:       rd_mux = clkAndData1Dout;
+            `CandD0SPACE:       rd_mux = cAndD0Dout;
+            `CandD1SPACE:       rd_mux = cAndD1Dout;
 
-            `VIDSWITCHSPACE:    rd_mux = vidSwitchDout;
+            //`VIDSWITCHSPACE:    rd_mux = vidSwitchDout;
 
              default :          rd_mux = 16'hxxxx;
         endcase
@@ -992,6 +1018,17 @@ sdi sdi(
                     rd_mux = demodDout[15:0];
                 end
             end
+            `ifdef ADD_MULTIH
+            `MULTIH_SPACE,
+            `MULTIHLFSPACE: begin
+                if (addr[1]) begin
+                    rd_mux = multihDout[31:16];
+                end
+                else begin
+                    rd_mux = multihDout[15:0];
+                end
+            end
+            `endif //ADD_MULTIH
             `TRELLIS_SPACE,
             `TRELLISLFSPACE: begin
                 if (addr[1]) begin
@@ -1001,6 +1038,7 @@ sdi sdi(
                     rd_mux = trellisDout[15:0];
                 end
             end
+
             `UARTSPACE,
             `SDISPACE: begin
                 if (addr[1]) begin

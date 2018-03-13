@@ -1,7 +1,7 @@
 /******************************************************************************
 Copyright 2008-2015 Koos Technical Services, Inc. All Rights Reserved
 
-This source code is the Intellectual Property of Koos Technical Services,Inc. 
+This source code is the Intellectual Property of Koos Technical Services,Inc.
 (KTS) and is provided under a License Agreement which protects KTS' ownership and
 derivative rights in exchange for negotiated compensation.
 ******************************************************************************/
@@ -9,7 +9,7 @@ derivative rights in exchange for negotiated compensation.
 `timescale 1ns / 10 ps
 `include "addressMap.v"
 
-module dualResampler( 
+module dualResampler(
     input                   clk, reset, clkEn,
     `ifdef USE_BUS_CLOCK
     input                   busClk,
@@ -60,8 +60,8 @@ module dualResampler(
         .auDecimation(auDecimation)
     );
 
-    resampler resamplerI( 
-        .clk(clk), .reset(reset), 
+    resampler resamplerI(
+        .clk(clk), .reset(reset),
         .resetPhase(resetPhase),
         .clkEn(clkEn),
         .resampleRate(resampleRate),
@@ -74,7 +74,7 @@ module dualResampler(
     );
 
     wire    [47:0]  cicOut;
-    cicDecimator auCic( 
+    cicDecimator auCic(
         .clk(clk), .reset(reset), .clkEn(clkEn),
         .gainShift(auShift),
         .decimation(auDecimation),
@@ -89,7 +89,7 @@ module dualResampler(
     wire                    rqOffsetEn =        aEnable ? auOffsetEn : offsetEn;
     wire    signed  [17:0]  rqIn =              aEnable ? $signed(cicOut[47:30]) : qIn;
     wire                    rqSync =            aEnable ? auCicSyncOut : clkEn;
-    resampler resamplerQ( 
+    resampler resamplerQ(
         .clk(clk), .reset(reset),
         .resetPhase(resetPhase),
         .clkEn(rqSync),
@@ -115,12 +115,12 @@ endmodule
 
 
 //`define TEST_MODULE
-`ifdef TEST_MODULE
+`ifdef TEST_RESAMPLER
 
 //`define RAMP_TEST
 `define SINEWAVE_TEST
 //`define IMPULSE_TEST
-`define MATLAB_VECTORS
+//`define MATLAB_VECTORS
 
 `timescale 1ns/100ps
 
@@ -161,7 +161,7 @@ always @(posedge clk) begin
 reg     signed  [17:0]  iIn,qIn;
 wire    signed  [17:0]  iOut,qOut;
 wire            [31:0]  resamplerFreq;
-dualResampler resampler( 
+dualResampler resampler(
     .clk(clk), .reset(reset), .clkEn(clkEn),
     .demodMode(demodMode),
     .resamplerFreqOffset(resamplerFreq),
@@ -279,7 +279,7 @@ wire            [47:0]  m_axis;
 wire    signed  [17:0]  cosineOut = m_axis[41:24];
 wire    signed  [17:0]  sineOut = m_axis[17:0];
 reg                     ddsreset;
-dds dds(
+dds6p0 dds(
   .aclk(clk),
   .aclken(clkEn),
   .aresetn(!ddsreset),
@@ -292,12 +292,12 @@ dds dds(
 wire [17:0]sineOut,cosineOut;
 reg ddsreset;
 dds dds(
-    .sclr(ddsreset), 
-    .clk(clk), 
+    .sclr(ddsreset),
+    .clk(clk),
     .ce(clkEn),
-    .we(1'b1), 
-    .data(freq), 
-    .sine(sineOut), 
+    .we(1'b1),
+    .data(freq),
+    .sine(sineOut),
     .cosine(cosineOut)
 );
 `endif
@@ -356,14 +356,13 @@ initial begin
     clken=1;
     #(10*C) ;
 
+    reset = 1;
     ddsreset = 1;
-    #(2*C) ;
+    #(20*C) ;
+    reset = 0;
     ddsreset = 0;
     #(2*C) ;
 
-    reset = 1;
-    #(2*C) ;
-    reset = 0;
 
     #(4096*C) ;
 
@@ -406,7 +405,7 @@ initial begin
     // Clock in 9 zeros
     #(9*C) ;
 
-    // Set resampleFreq to clock in a value that will allow 9 consecutive clocks to 
+    // Set resampleFreq to clock in a value that will allow 9 consecutive clocks to
     // generate all the offset zero outputs.
     resamplerPhaseInc = 32'hf8000009;
     #(1*C) ;

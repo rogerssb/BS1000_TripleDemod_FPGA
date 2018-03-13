@@ -9,58 +9,68 @@
 //-----------------------------------------------------------------------------
 
 `timescale 1ns/1ps
-`include "./addressMap.v"
+`include "addressMap.v"
 
 //`define BYPASS_LOOP
 //`define USE_FRACTIONAL_DELAY
 //`define USE_AVERAGE_ERROR
-           
+
 module multihCarrierLoop(
-    clk,reset,symEn,sym2xEn,
+    clk,reset,
+    symEnEven,symEn,sym2xEn,
     iIn,qIn,
     phaseError,
     phaseErrorEn,
     phaseErrorValid,
+    `ifdef USE_BUS_CLOCK
+    busClk,
+    `endif
     wr0,wr1,wr2,wr3,
     addr,
     din,dout,
     dac0Select,dac1Select,dac2Select,
-    dac0Sync,
+    dac0ClkEn,
     dac0Data,
     dac0En,
-    dac1Sync,
+    dac1ClkEn,
     dac1Data,
     dac1En,
-    dac2Sync,
+    dac2ClkEn,
     dac2Data,
     dac2En,
     demodLock,
     iOut,qOut,
+    symEnEvenOut,
     symEnOut,
     sym2xEnOut
     );
 
-input clk,reset,symEn,sym2xEn;
+input           clk,reset;
+input           symEnEven,symEn,sym2xEn;
 input [17:0]iIn,qIn;
 input   [7:0]   phaseError;
 input           phaseErrorEn;
 input           phaseErrorValid;
+`ifdef USE_BUS_CLOCK
+input           busClk;
+`endif
 input wr0,wr1,wr2,wr3;
 input [12:0]addr;
 input [31:0]din;
 output [31:0]dout;
 input   [3:0]   dac0Select,dac1Select,dac2Select;
-output          dac0Sync;
+output          dac0ClkEn;
 output  [17:0]  dac0Data;
 output          dac0En;
-output          dac1Sync;
+output          dac1ClkEn;
 output  [17:0]  dac1Data;
 output          dac1En;
-output          dac2Sync;
+output          dac2ClkEn;
 output  [17:0]  dac2Data;
 output          dac2En;
 output          demodLock;
 output  [17:0]  iOut,qOut;
+output          symEnEvenOut;
 output          symEnOut;
 output          sym2xEnOut;
 
@@ -71,7 +81,7 @@ wire    [31:0]  carrierFreqOffset;
 reg trellisSpace;
 always @* begin
     casex(addr)
-        `TRELLISLFSPACE:    trellisSpace = 1;
+        `MULTIHLFSPACE:     trellisSpace = 1;
         default:            trellisSpace = 0;
         endcase
     end
@@ -95,6 +105,9 @@ wire    [28:0]  unused;
 loopRegs loopRegs(
     .cs(trellisSpace),
     .addr(addr),
+    `ifdef USE_BUS_CLOCK
+    .busClk(busClk),
+    `endif
     .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
     .lagAccum(lagAccum[39:8]),
     .dataIn(din),
@@ -102,7 +115,9 @@ loopRegs loopRegs(
     .lockStatus(demodLock),
     .invertError(invertError),
     .zeroError(zeroError),
+    .ctrl2(),
     .clearAccum(clearAccum),
+    .ctrl4(),
     .leadMan(),
     .leadExp(leadExp),
     .lagMan(),
@@ -114,7 +129,12 @@ loopRegs loopRegs(
     .loopData({unused,averageSelect}),
     `endif
     .lockCount(lockCount),
-    .syncThreshold(syncThreshold)
+    .syncThreshold(syncThreshold),
+    .leadMan1(),
+    .leadExp1(),
+    .lagMan1(),
+    .lagExp1(),
+    .loopData1()
     );
 
 
@@ -123,7 +143,7 @@ loopRegs loopRegs(
 reg     [15:0]  shiftError;
 reg     [7:0]   avgCount;
 always @(phaseError or averageSelect) begin
-    case (averageSelect) 
+    case (averageSelect)
         0: begin avgCount <= 0;   shiftError <= {phaseError,8'b0}; end
         1: begin avgCount <= 1;   shiftError <= {{1{phaseError[7]}},phaseError,7'b0}; end
         2: begin avgCount <= 3;   shiftError <= {{2{phaseError[7]}},phaseError,6'b0}; end
@@ -176,7 +196,7 @@ always @(posedge clk) begin
 wire            loopFilterEn = phaseErrorEn;
 reg     [7:0]   loopError;
 wire    [7:0]   negPhaseError = ~phaseError + 1;
-always @(posedge clk) begin 
+always @(posedge clk) begin
     if (loopFilterEn) begin
         if (zeroError) begin
             loopError <= 0;
@@ -196,18 +216,19 @@ always @(posedge clk) begin
 // Instantiate the lead/lag filter gain path
 wire    [39:0]  leadError;
 leadGain leadGain (
-    .clk(clk), .clkEn(loopFilterEn), .reset(reset), 
+    .clk(clk), .clkEn(loopFilterEn), .reset(reset),
     .error(loopError),
     .leadExp(leadExp),
     .leadError(leadError)
     );
 
 lagGain lagGain (
-    .clk(clk), .clkEn(loopFilterEn), .reset(reset), 
+    .clk(clk), .clkEn(loopFilterEn), .reset(reset),
     .error(loopError),
     .lagExp(lagExp),
     .limit(limit),
     .sweepEnable(1'b0),
+    .sweepRateMag(32'b0),
     .clearAccum(clearAccum),
     .carrierInSync(demodLock),
     .lagAccum(lagAccum)
@@ -252,11 +273,13 @@ always @(posedge clk) begin
         if (errorValid) begin
             if (absModeError > syncThreshold[7:0]) begin
                 if (lockCounter == (16'hffff - lockCount)) begin
+                    `ifndef ADD_SUPERBAUD_TED
                     // Declare out of lock condition. If we were previously out of lock,
                     // slip a symbol.
                     if (!demodLock) begin
                         symbolSlip <= 1;
                         end
+                    `endif
                     demodLock <= 0;
                     lockCounter <= 0;
                     end
@@ -280,10 +303,10 @@ always @(posedge clk) begin
 
 `ifdef SIMULATE
 real carrierOffsetReal;
-real lagAccumReal; 
+real lagAccumReal;
 integer lockCounterInt;
 always @(carrierFreqOffset) carrierOffsetReal = ((carrierFreqOffset > 2147483647.0) ? carrierFreqOffset-4294967296.0 : carrierFreqOffset)/2147483648.0;
-always @(lagAccum) lagAccumReal = ((lagAccum[39:8] > 2147483647.0) ? lagAccum[39:8]-4294967296.0 : lagAccum[39:8])/2147483648.0; 
+always @(lagAccum) lagAccumReal = ((lagAccum[39:8] > 2147483647.0) ? lagAccum[39:8]-4294967296.0 : lagAccum[39:8])/2147483648.0;
 always @(lockCounter) lockCounterInt = lockCounter;
 `endif
 
@@ -311,7 +334,20 @@ always @(posedge clk) begin
 
 wire ddsReset = reset;
 
-
+`ifdef USE_VIVADO_CORES
+wire    [47:0]  m_axis;
+wire    [17:0]  bImag = m_axis[41:24];
+wire    [17:0]  bReal = m_axis[17:0];
+dds6p0 dds(
+  .aclk(clk),
+  .aclken(sym2xEn),
+  .aresetn(!ddsReset),
+  .m_axis_data_tdata(m_axis),
+  .m_axis_data_tvalid(),
+  .s_axis_phase_tdata(newOffset),
+  .s_axis_phase_tvalid(1'b1)
+);
+`else //USE_VIVADO_CORES
 wire [17:0]bReal,bImag;
 dds dds(
   .clk(clk),
@@ -319,8 +355,9 @@ dds dds(
   .ce(sym2xEn),
   .we(1'b1),
   .data(newOffset), // Bus [31 : 0]
-  .cosine(bReal), // Bus [17 : 0] 
-  .sine(bImag)); // Bus [17 : 0] 
+  .cosine(bReal), // Bus [17 : 0]
+  .sine(bImag)); // Bus [17 : 0]
+`endif //USE_VIVADO_CORES
 
 //`ifdef BYPASS_LOOP
 //wire    [17:0]  iMpy,qMpy;
@@ -334,14 +371,14 @@ dds dds(
 
 `ifdef USE_FRACTIONAL_DELAY
 wire    [17:0]  iDelay;
-fractionalDelay delayI( 
+fractionalDelay delayI(
     .clk(clk), .reset(reset), .sync(sym2xEn),
     .sampleOffset(sampleOffset),
     .in(iIn),
     .out(iDelay)
     );
 wire    [17:0]  qDelay;
-fractionalDelay delayQ( 
+fractionalDelay delayQ(
     .clk(clk), .reset(reset), .sync(sym2xEn),
     .sampleOffset(sampleOffset),
     .in(qIn),
@@ -374,6 +411,7 @@ cmpy18Sat cmpy18Sat(
 //`endif
 
 // Create a new set of clock enables to account for the delay through the complex multiplier
+reg [3:0] symEnEvenSr;
 reg [3:0] symEnSr;
 reg [3:0] sym2xEnSr;
 always @(posedge clk) begin
@@ -382,6 +420,7 @@ always @(posedge clk) begin
         sym2xEnSr <= 0;
         end
     else begin
+        symEnEvenSr <= {symEnEvenSr[2:0], symEnEven};
         symEnSr <= {symEnSr[2:0], symEn};
         sym2xEnSr <= {sym2xEnSr[2:0], sym2xEn};
         end
@@ -389,6 +428,7 @@ always @(posedge clk) begin
 
 // Create a symbol slip state machine
 reg     [17:0]  slipI,slipQ;
+reg             symEnEvenOut;
 reg             symEnOut, sym2xEnOut;
 always @(posedge clk) begin
     if (reset) begin
@@ -410,6 +450,13 @@ always @(posedge clk) begin
             symbolSlipped <= 0;
             end
         end
+        `ifdef ADD_SUPERBAUD_TED
+        symEnEvenOut <= symEnEvenSr[3];
+        `else
+        if (symEnOut) begin
+            symEnEvenOut <= ~symEnEvenOut;
+        end
+        `endif
     end
 
 assign iOut = slipI;
@@ -427,13 +474,13 @@ always @(iIn) iInReal = (iIn[17] ? iIn - 272144.0 : iIn)/131072.0;
 //                               DAC Output Mux
 //******************************************************************************
 
-reg             dac0Sync;
+reg             dac0ClkEn;
 reg     [17:0]  dac0Data;
 reg             dac0En;
-reg             dac1Sync;
+reg             dac1ClkEn;
 reg     [17:0]  dac1Data;
 reg             dac1En;
-reg             dac2Sync;
+reg             dac2ClkEn;
 reg     [17:0]  dac2Data;
 reg             dac2En;
 always @(posedge clk) begin
@@ -443,88 +490,88 @@ always @(posedge clk) begin
         dac2En <= 0;
         end
     else begin
-        case (dac0Select) 
+        case (dac0Select)
             `DAC_I: begin
                 dac0Data <= iIn;
-                dac0Sync <= sym2xEn;
+                dac0ClkEn <= sym2xEn;
                 dac0En <= 1;
                 end
             `DAC_Q: begin
                 dac0Data <= qOut;
-                dac0Sync <= sym2xEnOut;
+                dac0ClkEn <= sym2xEnOut;
                 dac0En <= 1;
                 end
             `DAC_PHERROR: begin
                 dac0Data <= {absModeError,10'b0};
-                dac0Sync <= 1;
+                dac0ClkEn <= 1;
                 dac0En <= 1;
                 end
             `DAC_FREQLOCK: begin
                 dac0Data <= {lockCounter,2'b0};
-                dac0Sync <= 1;
+                dac0ClkEn <= 1;
                 dac0En <= 1;
                 end
             default: begin
                 dac0Data <= {phaseError,10'b0};
-                dac0Sync <= 1;
+                dac0ClkEn <= 1;
                 dac0En <= 0;
                 end
             endcase
 
-        case (dac1Select) 
+        case (dac1Select)
             `DAC_I: begin
                 dac1Data <= iOut;
-                dac1Sync <= sym2xEnOut;
+                dac1ClkEn <= sym2xEnOut;
                 dac1En <= 1;
                 end
             `DAC_Q: begin
                 dac1Data <= qIn;
-                dac1Sync <= sym2xEn;
+                dac1ClkEn <= sym2xEn;
                 dac1En <= 1;
                 end
             `DAC_PHERROR: begin
                 dac1Data <= {phaseError,10'b0};
-                dac1Sync <= 1;
+                dac1ClkEn <= 1;
                 dac1En <= 1;
                 end
             `DAC_FREQLOCK: begin
                 dac1Data <= {1'b0,symbolSlip,16'b0};
-                dac1Sync <= 1;
+                dac1ClkEn <= 1;
                 dac1En <= 1;
                 end
             default: begin
                 dac1Data <= {phaseError,10'b0};
-                dac1Sync <= 1;
+                dac1ClkEn <= 1;
                 dac1En <= 0;
                 end
             endcase
 
-        case (dac2Select) 
+        case (dac2Select)
             `DAC_I: begin
                 dac2Data <= iIn;
-                dac2Sync <= sym2xEn;
+                dac2ClkEn <= sym2xEn;
                 dac2En <= 1;
                 end
             `DAC_Q: begin
                 dac2Data <= qIn;
-                dac2Sync <= sym2xEn;
+                dac2ClkEn <= sym2xEn;
                 dac2En <= 1;
                 end
             `DAC_PHERROR: begin
                 if (loopFilterEn) begin
                    dac2Data <= {loopError,10'b0};
                    end
-                dac2Sync <= loopFilterEn;
+                dac2ClkEn <= loopFilterEn;
                 dac2En <= 1;
                 end
             `DAC_FREQLOCK: begin
                 dac2Data <= {1'b0,errorValid,16'b0};
-                dac2Sync <= 1;
+                dac2ClkEn <= 1;
                 dac2En <= 1;
                 end
             default: begin
                 dac2Data <= {loopError,10'b0};
-                dac2Sync <= loopFilterEn;
+                dac2ClkEn <= loopFilterEn;
                 dac2En <= 0;
                 end
             endcase
