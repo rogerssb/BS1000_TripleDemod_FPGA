@@ -1,7 +1,7 @@
 /******************************************************************************
 Copyright 2008-2015 Koos Technical Services, Inc. All Rights Reserved
 
-This source code is the Intellectual Property of Koos Technical Services,Inc. 
+This source code is the Intellectual Property of Koos Technical Services,Inc.
 (KTS) and is provided under a License Agreement which protects KTS' ownership and
 derivative rights in exchange for negotiated compensation.
 ******************************************************************************/
@@ -14,6 +14,7 @@ module interpolate(
     `ifdef USE_BUS_CLOCK
     input                       busClk,
     `endif
+    input                       cs,
     input                       wr0, wr1, wr2, wr3,
     input               [12:0]  addr,
     input               [31:0]  din,
@@ -32,7 +33,7 @@ module interpolate(
     always @* begin
         casex (addr)
             RegSpace: begin
-                interpCS = 1;
+                interpCS = cs;
             end
             default: begin
                 interpCS = 0;
@@ -43,7 +44,7 @@ module interpolate(
     always @* begin
         casex (addr)
             FirRegSpace: begin
-                firCS = 1;
+                firCS = cs;
             end
             default: begin
                 firCS = 0;
@@ -87,7 +88,7 @@ module interpolate(
         end
     end
 
-    // Generate reset for CIC 
+    // Generate reset for CIC
     reg cicReset;
     reg bp0,bp1,bp2;
     always @(posedge clk) begin
@@ -107,14 +108,14 @@ module interpolate(
     // Video FIR
     wire    signed  [17:0]  firOut;
     wire            [31:0]  firDout;
-    videoFir videoFir( 
-        .clk(clk), 
-        .reset(reset), 
+    videoFir videoFir(
+        .clk(clk),
+        .reset(reset),
         .clkEn(clkEn),
         `ifdef USE_BUS_CLOCK
         .busClk(busClk),
         `endif
-        .cs(firCS), 
+        .cs(firCS),
         .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
         .addr(addr),
         .din(din),
@@ -202,10 +203,10 @@ module interpolate(
     `ifdef USE_VIVADO_CORES
     wire    signed  [31:0] invSincOut;
     invSinc invSinc(
-        .aclk(clk), 
-        .s_axis_data_tvalid(1'b1), 
-        .s_axis_data_tready(), 
-        .s_axis_data_tdata(scaledValue[33:18]), 
+        .aclk(clk),
+        .s_axis_data_tvalid(1'b1),
+        .s_axis_data_tready(),
+        .s_axis_data_tdata(scaledValue[33:18]),
         .m_axis_data_tvalid(),
         .m_axis_data_tdata(invSincOut)
     );
@@ -216,9 +217,9 @@ module interpolate(
        .nd(1'b1),
        .rfd(),
        .rdy(),
-       .din(scaledValue[33:18]), 
+       .din(scaledValue[33:18]),
        .dout(invSincOut)
-    ); 
+    );
     `endif
 
     wire    [1:0]   bypassMode = {bypassEQ,bypass};

@@ -1,7 +1,7 @@
 /******************************************************************************
 Copyright 2008-2015 Koos Technical Services, Inc. All Rights Reserved
 
-This source code is the Intellectual Property of Koos Technical Services,Inc. 
+This source code is the Intellectual Property of Koos Technical Services,Inc.
 (KTS) and is provided under a License Agreement which protects KTS' ownership and
 derivative rights in exchange for negotiated compensation.
 ******************************************************************************/
@@ -19,7 +19,11 @@ module ddcRegs(
     input               [12:0]  addr,
     input               [31:0]  dataIn,
     output  reg         [31:0]  dataOut,
+    `ifdef SIMULATE
+    output  reg         [31:0]  ddcCenterFreq,
+    `else
     output  reg signed  [31:0]  ddcCenterFreq,
+    `endif
     output  reg                 bypassCic, bypassHb,bypassFir,
     output  reg                 enableBasebandInputs,
     output  reg         [7:0]   adcDecimation

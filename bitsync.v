@@ -23,6 +23,7 @@ module bitsync(
     `ifdef USE_BUS_CLOCK
     input                       busClk,
     `endif
+    input                       cs,
     input                       wr0,wr1,wr2,wr3,
     input               [12:0]  addr,
     input               [31:0]  din,
@@ -618,7 +619,7 @@ module bitsync(
     reg bitsyncSpace;
     always @* begin
         casex(addr)
-            `BITSYNCSPACE:  bitsyncSpace = 1;
+            `BITSYNCSPACE:  bitsyncSpace = cs;
             default:        bitsyncSpace = 0;
         endcase
     end
@@ -822,7 +823,7 @@ module bitsync(
     reg auBitsyncSpace;
     always @* begin
         casex(addr)
-            `BITSYNCAUSPACE:    auBitsyncSpace = 1;
+            `BITSYNCAUSPACE:    auBitsyncSpace = cs;
             default:            auBitsyncSpace = 0;
         endcase
     end

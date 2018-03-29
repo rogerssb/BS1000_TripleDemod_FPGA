@@ -220,7 +220,7 @@ module semcoDemodTop (
     reg semcoTopSpace;
     always @* begin
         casex(addr)
-            `SEMCO_TOP_SPACE:       semcoTopSpace = 1;
+            `SEMCO_TOP_SPACE:       semcoTopSpace = cs;
             default:                semcoTopSpace = 0;
         endcase
     end
@@ -272,6 +272,7 @@ module semcoDemodTop (
         `ifdef USE_BUS_CLOCK
         .busClk(busClk),
         `endif
+        .cs(cs),
         .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
         .addr(addr),
         .din(dataIn),
@@ -346,6 +347,7 @@ module semcoDemodTop (
         `ifdef USE_BUS_CLOCK
         .busClk(busClk),
         `endif
+        .cs(cs),
         .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
         .addr(addr),
         .din(dataIn),
@@ -387,6 +389,7 @@ module semcoDemodTop (
         `ifdef USE_BUS_CLOCK
         .busClk(busClk),
         `endif
+        .cs(cs),
         .wr0(wr0),
         .wr1(wr1),
         .wr2(wr2),
@@ -416,7 +419,7 @@ module semcoDemodTop (
     reg dualDecoderSpace;
     always @* begin
         casex(addr)
-            `DUAL_DECODERSPACE:     dualDecoderSpace = 1;
+            `DUAL_DECODERSPACE:     dualDecoderSpace = cs;
             default:                dualDecoderSpace = 0;
         endcase
     end
@@ -481,7 +484,7 @@ module semcoDemodTop (
     reg ch1DecoderSpace;
     always @* begin
         casex(addr)
-            `CH1_DECODERSPACE:      ch1DecoderSpace = 1;
+            `CH1_DECODERSPACE:      ch1DecoderSpace = cs;
             default:                ch1DecoderSpace = 0;
         endcase
     end
@@ -542,6 +545,7 @@ module semcoDemodTop (
         .addr(addr),
         .dataIn(dataIn),
         .dataOut(pllDout),
+        .cs(cs),
         .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
         .clk(clk),
         .SCK(pll_SCK),
@@ -610,6 +614,7 @@ module semcoDemodTop (
     clkAndDataOutput #(.RegSpace(`CandD0SPACE)) cAndD0 (
         .clk(clk), .reset(reset),
         .busClk(busClk),
+        .cs(cs),
         .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
         .addr(addr),
         .din(dataIn),
@@ -675,6 +680,7 @@ module semcoDemodTop (
     clkAndDataOutput #(.RegSpace(`CandD1SPACE)) cAndD1 (
         .clk(clk), .reset(reset),
         .busClk(busClk),
+        .cs(cs),
         .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
         .addr(addr),
         .din(dataIn),
@@ -711,6 +717,10 @@ module semcoDemodTop (
                 interp0DataIn <= pcmDac0Data;
                 interp0ClkEn <= pcmDac0ClkEn;
             end
+            `DAC_SRC_MULTIHTRELLIS: begin
+                interp0DataIn <= multih0Out;
+                interp0ClkEn <= multih0ClkEn;
+            end
             default: begin
                 interp0DataIn <= demodDac0Data;
                 interp0ClkEn <= demodDac0ClkEn;
@@ -722,6 +732,7 @@ module semcoDemodTop (
     interpolate #(.RegSpace(`INTERP0SPACE), .FirRegSpace(`VIDFIR0SPACE)) dac0Interp(
         .clk(clk), .reset(reset), .clkEn(interp0ClkEn),
         .busClk(busClk),
+        .cs(cs),
         .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
         .addr(addr),
         .din(dataIn),
@@ -758,6 +769,10 @@ module semcoDemodTop (
                 interp1DataIn <= pcmDac1Data;
                 interp1ClkEn <= pcmDac1ClkEn;
             end
+            `DAC_SRC_MULTIHTRELLIS: begin
+                interp1DataIn <= multih1Out;
+                interp1ClkEn <= multih1ClkEn;
+            end
             default: begin
                 interp1DataIn <= demodDac1Data;
                 interp1ClkEn <= demodDac1ClkEn;
@@ -769,6 +784,7 @@ module semcoDemodTop (
     interpolate #(.RegSpace(`INTERP1SPACE), .FirRegSpace(`VIDFIR1SPACE)) dac1Interp(
         .clk(clk), .reset(reset), .clkEn(interp1ClkEn),
         .busClk(busClk),
+        .cs(cs),
         .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
         .addr(addr),
         .din(dataIn),
@@ -805,6 +821,10 @@ module semcoDemodTop (
                 interp2DataIn <= pcmDac2Data;
                 interp2ClkEn <= pcmDac2ClkEn;
             end
+            `DAC_SRC_MULTIHTRELLIS: begin
+                interp2DataIn <= multih2Out;
+                interp2ClkEn <= multih2ClkEn;
+            end
             default: begin
                 interp2DataIn <= demodDac2Data;
                 interp2ClkEn <= demodDac2ClkEn;
@@ -816,6 +836,7 @@ module semcoDemodTop (
     interpolate #(.RegSpace(`INTERP2SPACE), .FirRegSpace(`VIDFIR2SPACE)) dac2Interp(
         .clk(clk), .reset(reset), .clkEn(interp2ClkEn),
         .busClk(busClk),
+        .cs(cs),
         .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
         .addr(addr),
         .din(dataIn),
@@ -954,6 +975,17 @@ sdi sdi(
             `RESAMPSPACE,
             `CARRIERSPACE,
             `CHAGCSPACE :       rd_mux = demodDout;
+
+            `ifdef ADD_MULTIH
+            `MULTIH_SPACE,
+            `MULTIHLFSPACE:     rd_mux = multihDout;
+            `endif //ADD_MULTIH
+
+            `TRELLIS_SPACE,
+            `TRELLISLFSPACE:    rd_mux = trellisDout;
+
+            `UARTSPACE,
+            `SDISPACE:          rd_mux = sdiDout;
 
             `ifdef ADD_SCPATH
             `SCDDCSPACE,

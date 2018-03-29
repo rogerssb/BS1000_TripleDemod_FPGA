@@ -41,7 +41,6 @@ module spiBusInterface(
         `define SPI_SIZE_32     2'b11
     wire                    spiAddr1 = spiSR[0];
     assign                  spiDataOE = !spiWrite && (spiState != `SPI_IDLE);
-    //assign                  spiDataOut = spiSR[31];
     always @(posedge spiClk or negedge spiCS) begin
         if (!spiCS) begin
             cs <= 0;
@@ -51,38 +50,38 @@ module spiBusInterface(
             wr2 <= 0;
             wr3 <= 0;
             spiWrite <= 0;
-            //spiDataOut <= 0;
             spiSR <= 0;
             spiBitcount <= 15;
             spiState <= `SPI_IDLE;
         end
         else begin
-            //spiDataOut <= spiSR[31];
             case (spiState)
                 `SPI_IDLE: begin
-                    if (spiCS) begin
-                        spiSR <= {spiSR[30:0],spiDataIn};
-                        spiBitcount <= spiBitcount - 1;
-                        spiWrite <= spiDataIn;
-                        spiState <= `SPI_CTRL;
-                    end
-                    else begin
-                        spiSR <= {spiSR[30:0],spiDataIn};
-                        spiBitcount <= 15;
-                    end
+                    spiSR <= {spiSR[30:0],spiDataIn};
+                    spiBitcount <= spiBitcount - 1;
+                    spiWrite <= spiDataIn;
+                    spiState <= `SPI_CTRL;
                 end
                 `SPI_CTRL: begin
-                    if (!spiCS) begin
-                        cs <= 0;
-                        wr0 <= 0;
-                        wr1 <= 0;
-                        wr2 <= 0;
-                        wr3 <= 0;
-                        spiState <= `SPI_IDLE;
+                    if (spiBitcount == 2) begin
+                        // A read doesn't need the two LSBs of the address
+                        // We take advantage of that by starting the
+                        // read cycle two clocks early so the data is
+                        // available to load in the SR.
+                        if (!spiWrite) begin
+                            cs <= 1;
+                            wr0 <= 0;
+                            wr1 <= 0;
+                            wr2 <= 0;
+                            wr3 <= 0;
+                            addr <= {spiSR[9:0],spiDataIn,2'b00};
+                        end
+                        spiBitcount <= spiBitcount - 1;
+                        spiSR <= {spiSR[30:0],spiDataIn};
                     end
                     else if (spiBitcount == 0) begin
-                        addr <= {spiSR[11:0],spiDataIn};
                         if (spiWrite) begin
+                            addr <= {spiSR[11:0],spiDataIn};
                             case (spiXferSize)
                                 `SPI_SIZE_16: begin
                                     wr0 <= !spiAddr1;
@@ -124,55 +123,13 @@ module spiBusInterface(
                             endcase
                         end
                     end
-                    else if (spiBitcount == 2) begin
-                        // A read doesn't need the two LSBs of the address
-                        // We take advantage of that by starting the
-                        // read cycle two clocks early so the data is
-                        // available to load in the SR.
-                        if (!spiWrite) begin
-                            cs <= 1;
-                            wr0 <= 0;
-                            wr1 <= 0;
-                            wr2 <= 0;
-                            wr3 <= 0;
-                            addr <= {spiSR[9:0],spiDataIn,2'b00};
-                        end
-                        spiBitcount <= spiBitcount - 1;
-                        spiSR <= {spiSR[30:0],spiDataIn};
-                    end
-                    /*
-                    else if (spiBitcount == 1) begin
-                        // A read doesn't need the two LSBs of the address
-                        // We take advantage of that by starting the
-                        // read cycle two clocks early so the data is
-                        // available to load in the SR.
-                        if (!spiWrite) begin
-                            cs <= 1;
-                            wr0 <= 0;
-                            wr1 <= 0;
-                            wr2 <= 0;
-                            wr3 <= 0;
-                            addr <= {spiSR[10:0],2'b00};
-                        end
-                        spiBitcount <= spiBitcount - 1;
-                        spiSR <= {spiSR[30:0],spiDataIn};
-                    end
-                    */
                     else begin
                         spiBitcount <= spiBitcount - 1;
                         spiSR <= {spiSR[30:0],spiDataIn};
                     end
                 end
                 `SPI_WR16: begin
-                    if (!spiCS) begin
-                        cs <= 0;
-                        wr0 <= 0;
-                        wr1 <= 0;
-                        wr2 <= 0;
-                        wr3 <= 0;
-                        spiState <= `SPI_IDLE;
-                    end
-                    else if (spiBitcount == 1) begin
+                    if (spiBitcount == 1) begin
                         cs <= 1;
                         spiBitcount <= spiBitcount - 1;
                         spiSR <= {spiSR[30:0],spiDataIn};
@@ -184,15 +141,7 @@ module spiBusInterface(
                     end
                 end
                 `SPI_WR32: begin
-                    if (!spiCS) begin
-                        cs <= 0;
-                        wr0 <= 0;
-                        wr1 <= 0;
-                        wr2 <= 0;
-                        wr3 <= 0;
-                        spiState <= `SPI_IDLE;
-                    end
-                    else if (spiBitcount == 1) begin
+                    if (spiBitcount == 1) begin
                         cs <= 1;
                         spiBitcount <= spiBitcount - 1;
                         spiSR <= {spiSR[30:0],spiDataIn};
@@ -204,15 +153,7 @@ module spiBusInterface(
                     end
                 end
                 `SPI_RD16: begin
-                    if (!spiCS) begin
-                        cs <= 0;
-                        wr0 <= 0;
-                        wr1 <= 0;
-                        wr2 <= 0;
-                        wr3 <= 0;
-                        spiState <= `SPI_IDLE;
-                    end
-                    else if (spiBitcount == 0) begin
+                    if (spiBitcount == 0) begin
                         spiState <= `SPI_FINISH;
                     end
                     else begin
@@ -221,15 +162,7 @@ module spiBusInterface(
                     end
                 end
                 `SPI_RD32: begin
-                    if (!spiCS) begin
-                        cs <= 0;
-                        wr0 <= 0;
-                        wr1 <= 0;
-                        wr2 <= 0;
-                        wr3 <= 0;
-                        spiState <= `SPI_IDLE;
-                    end
-                    else if (spiBitcount == 0) begin
+                    if (spiBitcount == 0) begin
                         spiState <= `SPI_FINISH;
                     end
                     else begin
@@ -323,6 +256,7 @@ module test;
     reg             spiWrite;
     reg     [1:0]   spiSize;
     reg     [12:0]  spiAddr;
+    reg     [31:0]  spiWriteData;
     always @(posedge clk or posedge reset) begin
         if (reset) begin
             shiftCount <= 0;
@@ -336,12 +270,12 @@ module test;
                 if (spiWrite) begin
                     // WR16
                     if (spiSize == `SPI_SIZE_16) begin
-                        spiSR <= {spiWrite,spiSize,spiAddr,16'h0123,16'hx};
+                        spiSR <= {spiWrite,spiSize,spiAddr,spiWriteData};
                         shiftCount <= 32;
                     end
                     // WR32
                     else begin
-                        spiSR <= {spiWrite,spiSize,spiAddr,32'h76543210};
+                        spiSR <= {spiWrite,spiSize,spiAddr,spiWriteData};
                         shiftCount <= 48;
                     end
                 end
@@ -376,6 +310,28 @@ module test;
         end
     end
 
+    wire    cs;
+    wire    wr0,wr1,wr2,wr3;
+    wire    [12:0]  addr;
+    wire    [31:0]  dataIn;
+    wire    [31:0]  dataOut;
+    ddcRegs ddc(
+        .busClk(spiClk),
+        .cs(cs),
+        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .addr(addr),
+        .dataIn(dataIn),
+        .dataOut(dataOut),
+        .ddcCenterFreq(),
+        .bypassCic(),
+        .bypassHb(),
+        .bypassFir(),
+        .enableBasebandInputs(),
+        .adcDecimation()
+    );
+
+
+
     // UUT
     reg     [31:0]  readData;
     spiBusInterface spi(
@@ -385,11 +341,12 @@ module test;
         .spiCS(spiCS),
         .spiDataIn(spiData),
         .spiDataOut(),
-        .cs(),
-        .wr0(),.wr1(),.wr2(),.wr3(),
-        .addr(),
-        .dataIn(),
-        .dataOut(readData)
+        .cs(cs),
+        .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
+        .addr(addr),
+        .dataIn(dataIn),
+        .dataOut(dataOut)
+        //.dataOut(readData)
     );
 
     initial begin
@@ -407,7 +364,8 @@ module test;
         // Write 16
         spiWrite = 1;
         spiSize = `SPI_SIZE_16;
-        spiAddr = 13'h0120;
+        spiAddr = 13'h0000;
+        spiWriteData = 32'h01234567;
         @(posedge spiClkEn) ;
         spiStart <= 1;
         @(posedge spiClkEn) ;
@@ -419,7 +377,8 @@ module test;
         // Write 16
         spiWrite = 1;
         spiSize = `SPI_SIZE_16;
-        spiAddr = 13'h0122;
+        spiAddr = 13'h0002;
+        spiWriteData = 32'h76543210;
         @(negedge spiClkEn) ;
         spiStart <= 1;
         @(negedge spiClkEn) ;
@@ -431,7 +390,8 @@ module test;
         // Write 32
         spiWrite = 1;
         spiSize = `SPI_SIZE_32;
-        spiAddr = 13'h0124;
+        spiAddr = 13'h0000;
+        spiWriteData = 32'ha5a55a5a;
         @(negedge spiClkEn) ;
         spiStart <= 1;
         @(negedge spiClkEn) ;
@@ -443,7 +403,7 @@ module test;
         // Read 16
         spiWrite = 0;
         spiSize = `SPI_SIZE_16;
-        spiAddr = 13'h0120;
+        spiAddr = 13'h0000;
         @(negedge spiClkEn) ;
         readData <= 32'h01234567;
         spiStart <= 1;
@@ -456,7 +416,7 @@ module test;
         // Read 16
         spiWrite = 0;
         spiSize = `SPI_SIZE_16;
-        spiAddr = 13'h0122;
+        spiAddr = 13'h0002;
         @(negedge spiClkEn) ;
         readData <= 32'h01234567;
         spiStart <= 1;
@@ -469,7 +429,7 @@ module test;
         // Read 32
         spiWrite = 0;
         spiSize = `SPI_SIZE_32;
-        spiAddr = 13'h0124;
+        spiAddr = 13'h0000;
         @(negedge spiClkEn) ;
         readData <= 32'h76543210;
         spiStart <= 1;

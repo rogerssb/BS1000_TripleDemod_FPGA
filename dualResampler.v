@@ -14,6 +14,7 @@ module dualResampler(
     `ifdef USE_BUS_CLOCK
     input                   busClk,
     `endif
+    input                   cs,
     input                   wr0, wr1, wr2, wr3,
     input           [12:0]  addr,
     input           [31:0]  din,
@@ -36,7 +37,7 @@ module dualResampler(
     reg resampSpace;
     always @* begin
         casex(addr)
-            `RESAMPSPACE:   resampSpace = 1;
+            `RESAMPSPACE:   resampSpace = cs;
             default:        resampSpace = 0;
             endcase
         end

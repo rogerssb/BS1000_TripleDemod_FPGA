@@ -20,6 +20,7 @@ module trellis(
     input                       sym2xEn,
     input       signed  [17:0]  iIn,qIn,
     input                       legacyBit,
+    input                       cs,
     input                       wr0,wr1,wr2,wr3,
     input               [12:0]  addr,
     input               [31:0]  din,
@@ -85,6 +86,7 @@ module trellis(
         `ifdef USE_BUS_CLOCK
         .busClk(busClk),
         `endif
+        .cs(cs),
         .wr0(wr0),
         .wr1(wr1),
         .wr2(wr2),
@@ -872,7 +874,7 @@ maxMetric #(ROT_BITS) maxMetric1 (
     reg trellisSpace;
     always @* begin
         casex(addr)
-            `TRELLIS_SPACE: trellisSpace = 1;
+            `TRELLIS_SPACE: trellisSpace = cs;
             default:        trellisSpace = 0;
         endcase
     end

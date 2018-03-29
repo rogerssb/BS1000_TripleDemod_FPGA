@@ -1,7 +1,7 @@
 /******************************************************************************
 Copyright 2008-2015 Koos Technical Services, Inc. All Rights Reserved
 
-This source code is the Intellectual Property of Koos Technical Services,Inc. 
+This source code is the Intellectual Property of Koos Technical Services,Inc.
 (KTS) and is provided under a License Agreement which protects KTS' ownership and
 derivative rights in exchange for negotiated compensation.
 ******************************************************************************/
@@ -12,9 +12,10 @@ derivative rights in exchange for negotiated compensation.
 `define ENABLE_SLIP
 
 module singleRailBitsync(
-    sampleClk, reset, 
+    sampleClk, reset,
     symTimes2Sync,
     demodMode,
+    cs,
     wr0,wr1,wr2,wr3,
     addr,
     din,
@@ -73,16 +74,16 @@ output          bsErrorEn;
 
 wire    [17:0]  iComp,qComp;
 cicComp cicCompI(
-    .clk(sampleClk), 
+    .clk(sampleClk),
     .reset(reset),
-    .sync(symTimes2Sync), 
+    .sync(symTimes2Sync),
     .compIn(i),
     .compOut(iComp)
     );
 cicComp cicCompQ(
-    .clk(sampleClk), 
+    .clk(sampleClk),
     .reset(reset),
-    .sync(symTimes2Sync), 
+    .sync(symTimes2Sync),
     .compIn(q),
     .compOut(qComp)
     );
@@ -91,7 +92,7 @@ wire            useCompFilter;
 wire            useSummer;
 reg     [17:0]  iDelay,qDelay;
 reg     [17:0]  iFiltered,qFiltered;
-wire    [18:0]  iSum = useCompFilter ? ({iDelay[17],iDelay} + {iComp[17],iComp}) 
+wire    [18:0]  iSum = useCompFilter ? ({iDelay[17],iDelay} + {iComp[17],iComp})
                                      : ({iDelay[17],iDelay} + {i[17],i});
 wire    [18:0]  qSum = useCompFilter ? ({qDelay[17],qDelay} + {qComp[17],qComp})
                                      : ({qDelay[17],qDelay} + {q[17],q});
@@ -432,7 +433,7 @@ always @* avgNegDevReal = $itor($signed(avgNegDeviation))/(2**17);
 reg bitsyncSpace;
 always @* begin
     casex(addr)
-        `BITSYNCSPACE:  bitsyncSpace = 1;
+        `BITSYNCSPACE:  bitsyncSpace = cs;
         default:        bitsyncSpace = 0;
         endcase
     end
@@ -440,7 +441,7 @@ wire    [15:0]  lockCount;
 reg             loopFilterEn;
 reg     [11:0]  loopFilterError;
 always @* begin
-    casex (demodMode) 
+    casex (demodMode)
         default: begin
             loopFilterError = timingError[17:6] + timingError[5];
             loopFilterEn = (symTimes2Sync & timingErrorEn);
@@ -538,7 +539,7 @@ always @* begin
 
 
 /******************************************************************************
-                           Recovered Clock and Data 
+                           Recovered Clock and Data
 ******************************************************************************/
 
 

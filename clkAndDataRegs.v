@@ -15,6 +15,7 @@ module clkAndDataRegs(
     input       [12:0]  addr,
     input       [31:0]  din,
     output  reg [31:0]  dout,
+    input               cs,
     input               wr0, wr1, wr2, wr3,
     output  reg [3:0]   source,
     output  reg [1:0]   clkPhase,
@@ -27,11 +28,11 @@ module clkAndDataRegs(
 
     parameter RegSpace = `CandD0SPACE;
 
-    reg cs;
+    reg cAndDSpace;
     always @* begin
         casex(addr)
-            RegSpace:               cs = 1;
-            default:                cs = 0;
+            RegSpace:               cAndDSpace = cs;
+            default:                cAndDSpace = 0;
         endcase
     end
 
@@ -39,7 +40,7 @@ module clkAndDataRegs(
     //************************** General Registers ********************************
 
     always @(posedge busClk) begin
-        if (cs && wr0) begin
+        if (cAndDSpace && wr0) begin
             casex (addr)
                 `CandD_CONTROL:   begin
                     source <= din[3:0];
@@ -53,7 +54,7 @@ module clkAndDataRegs(
                 default: ;
             endcase
         end
-        if (cs && wr1) begin
+        if (cAndDSpace && wr1) begin
             casex (addr)
                 `CandD_CONTROL:   begin
                     clkPhase <= din[9:8];
@@ -64,7 +65,7 @@ module clkAndDataRegs(
                 default: ;
             endcase
         end
-        if (cs && wr2) begin
+        if (cAndDSpace && wr2) begin
             casex (addr)
                 `CandD_DLL_CENTER_FREQ: begin
                     dllCenterFreq[23:16] <= din[23:16];
@@ -75,7 +76,7 @@ module clkAndDataRegs(
                 default: ;
             endcase
         end
-        if (cs && wr3) begin
+        if (cAndDSpace && wr3) begin
             casex (addr)
                 `CandD_CONTROL:   begin
                     finalOutputSelect <= din[24];
@@ -90,7 +91,7 @@ module clkAndDataRegs(
     end
 
     always @* begin
-        if (cs) begin
+        if (cAndDSpace) begin
             casex (addr)
                 `CandD_CONTROL: begin
                     dout = {clkReset,6'b0,finalOutputSelect,

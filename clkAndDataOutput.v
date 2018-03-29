@@ -8,6 +8,7 @@ module clkAndDataOutput(
     input       [12:0]  addr,
     input       [31:0]  din,
     output      [31:0]  dout,
+    input               cs,
     input               wr0, wr1, wr2, wr3,
     input               clkEnIn,
     input       [2:0]   dataIn,
@@ -28,6 +29,7 @@ module clkAndDataOutput(
     wire    [31:0]  clkAndDataDout;
     clkAndDataRegs #(.RegSpace(RegSpace)) cAndDRegs(
         .busClk(busClk),
+        .cs(cs),
         .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
         .addr(addr),
         .din(din),

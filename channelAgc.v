@@ -1,7 +1,7 @@
 /******************************************************************************
 Copyright 2008-2015 Koos Technical Services, Inc. All Rights Reserved
 
-This source code is the Intellectual Property of Koos Technical Services,Inc. 
+This source code is the Intellectual Property of Koos Technical Services,Inc.
 (KTS) and is provided under a License Agreement which protects KTS' ownership and
 derivative rights in exchange for negotiated compensation.
 ******************************************************************************/
@@ -9,11 +9,12 @@ derivative rights in exchange for negotiated compensation.
 `timescale 1ns/1ps
 `include "./addressMap.v"
 
-module channelAGC( 
+module channelAGC(
     input                       clk, reset, clkEn,
     `ifdef USE_BUS_CLOCK
     input                       busClk,
     `endif
+    input                       cs,
     input                       wr0, wr1, wr2, wr3,
     input               [12:0]  addr,
     input               [31:0]  din,
@@ -26,16 +27,16 @@ module channelAGC(
 
 
     // Uses a min/max approximation based on the following equation:
-    // 
+    //
     //      Mag = Alpha*Max + Beta*Min,
     //
     // where Max = max(abs(I),abs(q), Min = min(abs(I),abs(Q)), and Alpha and Beta
     // are two constants. The following table gives a list of possible values for
     // Alpha and Beta.
-    // 
+    //
     //     =====================================================================
     //                  Alpha * Max + Beta * Min Magnitude Estimator
-    // 
+    //
     //     Name                  Alpha           Beta       Avg Err   RMS   Peak
     //                                                      (linear)  (dB)  (dB)
     //     ---------------------------------------------------------------------
@@ -74,7 +75,7 @@ module channelAGC(
                 min <= absI[16:0];
             end
         end
-    end    
+    end
 
     // Now, calculate the instantaneous level approximation
     wire [35:0]maxTerm,minTerm;
@@ -84,10 +85,10 @@ module channelAGC(
     wire [17:0]maxWeight = 125886;
     `endif
     mpy18x18PL1 mpyMax(
-        .clk(clk), 
+        .clk(clk),
         .sclr(reset),
-        .a({1'b0,max}), 
-        .b(maxWeight), 
+        .a({1'b0,max}),
+        .b(maxWeight),
         .p(maxTerm)
     );
     `ifdef SIMULATE
@@ -96,10 +97,10 @@ module channelAGC(
     wire [17:0]minWeight = 52144;
     `endif
     mpy18x18PL1 mpyMin(
-        .clk(clk), 
+        .clk(clk),
         .sclr(reset),
-        .a({1'b0,min}), 
-        .b(minWeight), 
+        .a({1'b0,min}),
+        .b(minWeight),
         .p(minTerm)
     );
 
@@ -140,7 +141,7 @@ module channelAGC(
     reg chAgcSpace;
     always @* begin
         casex(addr)
-            RegSpace:           chAgcSpace = 1;
+            RegSpace:           chAgcSpace = cs;
             default:            chAgcSpace = 0;
             endcase
         end

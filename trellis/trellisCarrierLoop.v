@@ -25,6 +25,7 @@ module trellisCarrierLoop(
     `ifdef USE_BUS_CLOCK
     busClk,
     `endif
+    cs,
     wr0,wr1,wr2,wr3,
     addr,
     din,dout,
@@ -45,6 +46,7 @@ input           symEn_phErr;
 `ifdef USE_BUS_CLOCK
 input           busClk;
 `endif
+input           cs;
 input           wr0,wr1,wr2,wr3;
 input   [12:0]  addr;
 input   [31:0]  din;
@@ -63,7 +65,7 @@ wire    [31:0]  carrierFreqOffset;
 reg trellisSpace;
 always @* begin
     casex(addr)
-        `TRELLISLFSPACE:    trellisSpace = 1;
+        `TRELLISLFSPACE:    trellisSpace = cs;
         default:            trellisSpace = 0;
         endcase
     end
@@ -674,7 +676,8 @@ always @(posedge clk) begin
         prevPhase <= phase;
         end
     end
-assign dac0Output = freq;
+//assign dac0Output = freq;
+assign dac0Output = deviationCorrection[31:20];
 `endif //USE_MPY_FM_DISC
 
 `define USE_MIDSAMPLES

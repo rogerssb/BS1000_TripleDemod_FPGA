@@ -8,6 +8,7 @@ module ics307Interface #(parameter SysclkDivider = 2)
     input           [12:0]  addr,
     input           [31:0]  dataIn,
     output  reg     [31:0]  dataOut,
+    input                   cs,
     input                   wr0, wr1, wr2, wr3,
     input                   clk,
     output  reg             SCK,
@@ -28,15 +29,15 @@ module ics307Interface #(parameter SysclkDivider = 2)
     reg pll2Space;
     always @* begin
         casex(addr)
-            `PLL0SPACE: pll0Space = 1;
+            `PLL0SPACE: pll0Space = cs;
             default:    pll0Space = 0;
         endcase
         casex(addr)
-            `PLL1SPACE: pll1Space = 1;
+            `PLL1SPACE: pll1Space = cs;
             default:    pll1Space = 0;
         endcase
         casex(addr)
-            `PLL2SPACE: pll2Space = 1;
+            `PLL2SPACE: pll2Space = cs;
             default:    pll2Space = 0;
         endcase
     end

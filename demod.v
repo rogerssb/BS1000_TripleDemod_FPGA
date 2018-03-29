@@ -1,7 +1,7 @@
 /******************************************************************************
 Copyright 2008-2015 Koos Technical Services, Inc. All Rights Reserved
 
-This source code is the Intellectual Property of Koos Technical Services,Inc. 
+This source code is the Intellectual Property of Koos Technical Services,Inc.
 (KTS) and is provided under a License Agreement which protects KTS' ownership and
 derivative rights in exchange for negotiated compensation.
 ******************************************************************************/
@@ -14,6 +14,7 @@ module demod(
     `ifdef USE_BUS_CLOCK
     input                       busClk,
     `endif
+    input                       cs,
     input                       wr0,wr1,wr2,wr3,
     input               [12:0]  addr,
     input               [31:0]  din,
@@ -71,7 +72,7 @@ module demod(
 reg demodSpace;
 always @* begin
     casex(addr)
-        `DEMODSPACE: demodSpace = 1;
+        `DEMODSPACE: demodSpace = cs;
         default:     demodSpace = 0;
         endcase
     end
@@ -128,6 +129,7 @@ ddc ddc(
     `ifdef USE_BUS_CLOCK
     .busClk(busClk),
     `endif
+    .cs(cs),
     .wr0(wr0) , .wr1(wr1), .wr2(wr2), .wr3(wr3),
     .addr(addr),
     .din(din),
@@ -159,6 +161,7 @@ channelAGC channelAGC(
     `ifdef USE_BUS_CLOCK
     .busClk(busClk),
     `endif
+    .cs(cs),
     .wr0(wr0) , .wr1(wr1), .wr2(wr2), .wr3(wr3),
     .addr(addr),
     .din(din),
@@ -175,7 +178,7 @@ channelAGC channelAGC(
     reg cmaSpace;
     always @* begin
         casex(addr)
-            `EQUALIZERSPACE:    cmaSpace = 1;
+            `EQUALIZERSPACE:    cmaSpace = cs;
             default:            cmaSpace = 0;
         endcase
     end
@@ -200,17 +203,17 @@ channelAGC channelAGC(
     wire    signed  [17:0]  iCma;
     wire    signed  [17:0]  qCma;
     cma cma(
-        .clk(clk),        
-        .clkEn(ddcSync),      
+        .clk(clk),
+        .clkEn(ddcSync),
         .reset(reset),
         .wtReset(resetEqualizer),
-        .stepExpo(stepSizeExponent),   
-        .refLevel(cmaReference),   
-        .iIn(iDdc),        
+        .stepExpo(stepSizeExponent),
+        .refLevel(cmaReference),
+        .iIn(iDdc),
         .qIn(qDdc),
-        .iOut(iCma),       
+        .iOut(iCma),
         .qOut(qCma)
-    ); 
+    );
 
     wire    signed  [17:0]  iFiltered = enableEqualizer ? iCma : iDdc;
     wire    signed  [17:0]  qFiltered = enableEqualizer ? qCma : qDdc;
@@ -228,7 +231,7 @@ channelAGC channelAGC(
 reg     [17:0]  iFm,qFm;
 reg             fmDemodClkEn;
 always @* begin
-    casex (demodMode) 
+    casex (demodMode)
         default: begin
             fmDemodClkEn = ddcSync;
             iFm = iFiltered;
@@ -243,7 +246,7 @@ wire    [11:0]   negFreq = ~freq + 1;
 wire    [11:0]   freqError;
 wire    [12:0]   mag;
 fmDemod fmDemod(
-    .clk(clk), .reset(reset), 
+    .clk(clk), .reset(reset),
     `ifdef ADD_DESPREADER
     .clkEn(fmDemodClkEn),
     .iFm(iFm),.qFm(qFm),
@@ -459,6 +462,7 @@ carrierLoop carrierLoop(
     `ifdef USE_BUS_CLOCK
     .busClk(busClk),
     `endif
+    .cs(cs),
     .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
     .addr(addr),
     .din(din),
@@ -507,6 +511,7 @@ dualResampler resampler(
     `ifdef USE_BUS_CLOCK
     .busClk(busClk),
     `endif
+    .cs(cs),
     .wr0(wr0) , .wr1(wr1), .wr2(wr2), .wr3(wr3),
     .addr(addr),
     .din(din),
@@ -538,13 +543,14 @@ wire    [2:0]   despreaderMode;
 wire    [17:0]  iDsSymData,qDsSymData;
 wire    [15:0]  dsSyncCount,dsSwapSyncCount;
 dualDespreader despreader(
-    .clk(clk), 
+    .clk(clk),
     .clkEn(resampSync), .qClkEn(qSym2xEn),
     .symEn(iSymEn),   .qSymEn(qSymEn),
     .reset(reset),
     `ifdef USE_BUS_CLOCK
     .busClk(busClk),
     `endif
+    .cs(cs),
     .wr0(wr0) , .wr1(wr1), .wr2(wr2), .wr3(wr3),
     .addr(addr),
     .din(din),
@@ -582,6 +588,7 @@ singleRailBitsync bitsync(
     `ifdef USE_BUS_CLOCK
     .busClk(busClk),
     `endif
+    .cs(cs),
     .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
     .addr(addr),
     .din(din),
@@ -639,6 +646,7 @@ bitsync bitsync(
     `ifdef USE_BUS_CLOCK
     .busClk(busClk),
     `endif
+    .cs(cs),
     .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
     .addr(addr),
     .din(din),
@@ -762,7 +770,7 @@ reg             firspace;
 always @* begin
     casex (addr)
         `VIDFIRSPACE: begin
-            firspace = 1;
+            firspace = cs;
             end
         default: begin
             firspace = 0;
@@ -780,13 +788,13 @@ dualFirCoeffRegs firCoeffRegs (
     `endif
     .cs      (firspace),
     .wr0     (wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
-    .c0      (c0c14  ), 
-    .c1      (c1c13  ), 
-    .c2      (c2c12  ), 
-    .c3      (c3c11  ), 
-    .c4      (c4c10  ), 
-    .c5      (c5c9   ), 
-    .c6      (c6c8   ), 
+    .c0      (c0c14  ),
+    .c1      (c1c13  ),
+    .c2      (c2c12  ),
+    .c3      (c3c11  ),
+    .c4      (c4c10  ),
+    .c5      (c5c9   ),
+    .c6      (c6c8   ),
     .c7      (c7     )
     );
 
@@ -795,13 +803,13 @@ singleFir interpFir(
     .clk        (clk),
     .reset      (reset),
     .syncIn     (demodSync),
-    .c0c14      (c0c14  ), 
-    .c1c13      (c1c13  ), 
-    .c2c12      (c2c12  ), 
-    .c3c11      (c3c11  ), 
-    .c4c10      (c4c10  ), 
-    .c5c9       (c5c9   ), 
-    .c6c8       (c6c8   ), 
+    .c0c14      (c0c14  ),
+    .c1c13      (c1c13  ),
+    .c2c12      (c2c12  ),
+    .c3c11      (c3c11  ),
+    .c4c10      (c4c10  ),
+    .c5c9       (c5c9   ),
+    .c6c8       (c6c8   ),
     .c7         (c7     ),
     .in         (fm),
     .out        (firOut)

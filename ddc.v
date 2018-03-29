@@ -15,6 +15,7 @@ module ddc(
     `ifdef USE_BUS_CLOCK
     busClk,
     `endif
+    cs,
     wr0,wr1,wr2,wr3,
     addr,
     din,
@@ -37,6 +38,7 @@ input           reset;
 `ifdef USE_BUS_CLOCK
 input           busClk;
 `endif
+input           cs;
 input           wr0,wr1,wr2,wr3;
 input   [12:0]  addr;
 input   [31:0]  din;
@@ -62,7 +64,7 @@ output  [17:0]  qOut;
 reg ddcSpace;
 always @* begin
     casex(addr)
-        `DDCSPACE:  ddcSpace    = 1;
+        `DDCSPACE:  ddcSpace    = cs;
         default:    ddcSpace    = 0;
         endcase
     end
@@ -244,6 +246,7 @@ dualDecimator #(.RegSpace(`CICDECSPACE)) cic(
     `ifdef USE_BUS_CLOCK
     .busClk(busClk),
     `endif
+    .cs(cs),
     .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
     .addr(addr),
     .din(din),
@@ -396,6 +399,7 @@ dualFir #(.RegSpace(`DDCFIRSPACE)) dualFir (
     `ifdef USE_BUS_CLOCK
     .busClk(busClk),
     `endif
+    .cs(cs),
     .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
     .addr(addr),
     .din(din),

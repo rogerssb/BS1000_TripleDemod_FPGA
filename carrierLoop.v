@@ -1,7 +1,7 @@
 /******************************************************************************
 Copyright 2008-2015 Koos Technical Services, Inc. All Rights Reserved
 
-This source code is the Intellectual Property of Koos Technical Services,Inc. 
+This source code is the Intellectual Property of Koos Technical Services,Inc.
 (KTS) and is provided under a License Agreement which protects KTS' ownership and
 derivative rights in exchange for negotiated compensation.
 ******************************************************************************/
@@ -10,12 +10,13 @@ derivative rights in exchange for negotiated compensation.
 `include ".\addressMap.v"
 
 module carrierLoop(
-    input                       clk, reset, 
+    input                       clk, reset,
     input                       ddcClkEn,
     input                       resampClkEn,
     `ifdef USE_BUS_CLOCK
     input                       busClk,
     `endif
+    input                       cs,
     input                       wr0,wr1,wr2,wr3,
     input               [12:0]  addr,
     input               [31:0]  din,
@@ -42,7 +43,7 @@ module carrierLoop(
     reg freqLoopSpace;
     always @* begin
         casex(addr)
-            RegSpace:       freqLoopSpace = 1;
+            RegSpace:       freqLoopSpace = cs;
             default:        freqLoopSpace = 0;
         endcase
     end
@@ -169,7 +170,7 @@ module carrierLoop(
     /**************************** Adjust Error ************************************/
     wire    signed  [11:0]  negModeError = -modeError;
     wire                    breakLoop = (zeroError || (sweepEnable && highFreqOffset));
-    always @(posedge clk) begin 
+    always @(posedge clk) begin
         if (loopFilterEn) begin
             if (breakLoop) begin
                 loopError <= 12'h0;
@@ -189,7 +190,7 @@ module carrierLoop(
     // Instantiate the lead/lag filter gain path
     wire    signed  [39:0]  leadError;
     leadGain12 leadGain (
-        .clk(clk), .clkEn(loopFilterEn), .reset(reset), 
+        .clk(clk), .clkEn(loopFilterEn), .reset(reset),
         .error(loopError),
         .leadExp(leadExp),
         .acqTrackControl(acqTrackControl),
@@ -198,7 +199,7 @@ module carrierLoop(
         );
 
     lagGain12 lagGain (
-        .clk(clk), .clkEn(loopFilterEn), .reset(reset), 
+        .clk(clk), .clkEn(loopFilterEn), .reset(reset),
         .error(loopError),
         .lagExp(lagExp),
         .upperLimit(upperLimit),
@@ -265,7 +266,7 @@ module carrierLoop(
 
     `ifdef SIMULATE
     real carrierOffsetReal;
-    real lagAccumReal; 
+    real lagAccumReal;
     integer lockCounterInt;
     always @(carrierFreqOffset) carrierOffsetReal = $itor(carrierFreqOffset)/(2**31);
     always @(lagAccum[39:8]) lagAccumReal = $itor($signed(lagAccum[39:8]))/(2**31);
@@ -310,8 +311,8 @@ always @(posedge clk) begin
 // Instantiate the carrier loop filter
 reg     [11:0]  noise;
 carrierLoop loop(
-    .clk(clk), 
-    .reset(reset), 
+    .clk(clk),
+    .reset(reset),
     .ddcClkEn(sync),
     .resampClkEn(sync),
     .wr0(1'b0),.wr1(1'b0),.wr2(1'b0),.wr3(1'b0),

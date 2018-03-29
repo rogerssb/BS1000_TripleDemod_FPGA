@@ -10,6 +10,7 @@ module dualDespreader (
     clkEn, qClkEn,
     symEn, qSymEn,
     reset,
+    cs,
     wr0, wr1, wr2, wr3,
     addr,
     din,
@@ -32,6 +33,7 @@ input           clk;
 input           clkEn, qClkEn;
 input           symEn, qSymEn;
 input           reset;
+input           cs;
 input           wr0, wr1, wr2, wr3;
 input   [12:0]  addr;
 input   [31:0]  din;
@@ -48,11 +50,11 @@ output  [15:0]  scaledSyncCount;
 output  [15:0]  scaledSwapSyncCount;
 
 // Microprocessor interface
-reg cs;
+reg despreadSpace;
 always @* begin
     casex(addr)
-        `DESPREADSPACE: cs = 1;
-        default:        cs = 0;
+        `DESPREADSPACE: despreadSpace = cs;
+        default:        despreadSpace = 0;
         endcase
     end
 
@@ -70,7 +72,7 @@ despreaderRegs regs(
     .din(din),
     .dout(dout),
     .slipped_a(dsSlipI),.slipped_b(dsSlipQ),
-    .cs(cs),
+    .cs(despreadSpace),
     .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
     .manualSlip(manualSlip),
     .init_a(init_a),
@@ -100,7 +102,7 @@ despreaderRegs regs(
 
 reg     dsSampleEn, dsSymEn;
 always @* begin
-    casex (despreaderMode) 
+    casex (despreaderMode)
         `DS_MODE_NASA_DG1_MODE3_SPREAD_Q: begin
             dsSampleEn = qClkEn;
             dsSymEn = qSymEn;
@@ -256,7 +258,7 @@ wire corrReset = reset;
 reg     [SoftBits-1:0]  iOntimeIn,iSwapIn;
 reg     [SoftBits-1:0]  qOntimeIn,qSwapIn;
 always @* begin
-    casex (despreaderMode) 
+    casex (despreaderMode)
         `DS_MODE_NASA_FWD,
         `DS_MODE_NASA_DG1_MODE3_SPREAD_I: begin
             iOntimeIn = iSoft;
@@ -272,7 +274,7 @@ always @* begin
             iSwapIn = iSoft;
         end
     endcase
-    casex (despreaderMode) 
+    casex (despreaderMode)
         `DS_MODE_NASA_FWD,
         `DS_MODE_NASA_DG1_MODE3_SPREAD_Q: begin
             qOntimeIn = qSoft;
@@ -309,7 +311,7 @@ iCorrOnTime(
 
 wire    [17:0]  qCorr;
 wire    [5:0]   qSyncCount;
-despreadCorrelator #(.CorrLength(64), .InputBits(SoftBits), .CorrBits(SoftBits+32)) 
+despreadCorrelator #(.CorrLength(64), .InputBits(SoftBits), .CorrBits(SoftBits+32))
 qCorrOnTime(
     .clk(clk),
     .clkEn(dsSampleEn),
@@ -326,7 +328,7 @@ qCorrOnTime(
 // This correlator is used to detect an I/Q swap.
 wire    [17:0]  iSwapCorr;
 wire    [5:0]   iSwapSyncCount;
-despreadCorrelator #(.CorrLength(64), .InputBits(SoftBits), .CorrBits(SoftBits+32)) 
+despreadCorrelator #(.CorrLength(64), .InputBits(SoftBits), .CorrBits(SoftBits+32))
 iSwapOnTime(
     .clk(clk),
     .clkEn(dsSampleEn),
@@ -342,7 +344,7 @@ iSwapOnTime(
 
 wire    [17:0]  qSwapCorr;
 wire    [5:0]   qSwapSyncCount;
-despreadCorrelator #(.CorrLength(64), .InputBits(SoftBits), .CorrBits(SoftBits+32)) 
+despreadCorrelator #(.CorrLength(64), .InputBits(SoftBits), .CorrBits(SoftBits+32))
 qSwapOnTime(
     .clk(clk),
     .clkEn(dsSampleEn),
@@ -369,8 +371,8 @@ wire    [15:0]  negLockCount = (16'hffff - lockCount);
 reg     [15:0]  syncCount;
 reg     [6:0]   syncSum;
 always @* begin
-    casex (despreaderMode) 
-        `DS_MODE_NASA_DG1_MODE3_SPREAD_I: 
+    casex (despreaderMode)
+        `DS_MODE_NASA_DG1_MODE3_SPREAD_I:
             // I only in this mode
             syncSum = {iSyncCount[5],iSyncCount};
         `DS_MODE_NASA_DG1_MODE3_SPREAD_Q:
@@ -381,22 +383,22 @@ always @* begin
     endcase
 end
 wire    [15:0]  syncUpdate = {{9{syncThreshold[6]}},syncThreshold}
-                           - {{9{1'b0}},syncSum}; 
-wire            inSyncIndication = (!syncCount[15] 
+                           - {{9{1'b0}},syncSum};
+wire            inSyncIndication = (!syncCount[15]
                                 && ((syncCount + syncUpdate) >= lockCount)
                                 && (!syncUpdate[15]));
-wire            outOfSyncIndication = (syncCount[15] 
-                                   && ((syncCount + syncUpdate) <= negLockCount) 
+wire            outOfSyncIndication = (syncCount[15]
+                                   && ((syncCount + syncUpdate) <= negLockCount)
                                    && (syncUpdate[15]));
 
 reg     [15:0]  swapSyncCount;
 reg     [6:0]   swapSyncSum;
 always @* begin
-    casex (despreaderMode) 
+    casex (despreaderMode)
         `DS_MODE_NASA_DG1_MODE3_SPREAD_I:
             // Force an out-of-swapSyncCondition.
             swapSyncSum = 63;
-        `DS_MODE_NASA_DG1_MODE3_SPREAD_Q: 
+        `DS_MODE_NASA_DG1_MODE3_SPREAD_Q:
             // Force an out-of-swapSync condition.
             swapSyncSum = 63;
         default:
@@ -404,12 +406,12 @@ always @* begin
     endcase
 end
 wire    [15:0]  swapSyncUpdate = {{9{syncThreshold[6]}},syncThreshold}
-                               - {{9{1'b0}},swapSyncSum}; 
-wire            inSwapSyncIndication = (!swapSyncCount[15] 
+                               - {{9{1'b0}},swapSyncSum};
+wire            inSwapSyncIndication = (!swapSyncCount[15]
                                     && ((swapSyncCount + swapSyncUpdate) >= lockCount)
                                     && (!swapSyncUpdate[15]));
-wire            outOfSwapSyncIndication = (swapSyncCount[15] 
-                                       && ((swapSyncCount + swapSyncUpdate) <= negLockCount) 
+wire            outOfSwapSyncIndication = (swapSyncCount[15]
+                                       && ((swapSyncCount + swapSyncUpdate) <= negLockCount)
                                        && (swapSyncUpdate[15]));
 
 
