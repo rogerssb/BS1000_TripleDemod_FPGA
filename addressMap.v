@@ -45,7 +45,9 @@
 //`define ADD_DQM
 `define ADD_MULTIH
 `define ADD_SUPERBAUD_TED
+`ifndef SIMULATE
 `define EMBED_MULTIH_CARRIER_LOOP
+`endif
 `endif
 
 `ifdef BITSYNC_BERT

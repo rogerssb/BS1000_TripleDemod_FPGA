@@ -4,6 +4,8 @@
 module sdi(
     clk,
     reset,
+    busClk,
+    cs,
     wr0,wr1,wr2,wr3,
     addr,
     dataIn,
@@ -24,6 +26,8 @@ module sdi(
 
 input           clk;
 input           reset;
+input           busClk;
+input           cs;
 input           wr0,wr1,wr2,wr3;
 input   [12:0]  addr;
 input   [31:0]  dataIn;
@@ -45,7 +49,7 @@ output          sdiOut;
 reg sdiSpace;
 always @* begin
   casex(addr)
-    `SDISPACE:      sdiSpace = 1;
+    `SDISPACE:      sdiSpace = cs;
     default:        sdiSpace = 0;
   endcase
 end
@@ -57,11 +61,11 @@ reg     [2:0]   sdiMode;
 reg     [7:0]   artmThreshold;
 `endif
 wire            sdiEnableReset = (fifoFull || reset);
-always @(negedge wr0 or posedge sdiEnableReset) begin
+always @(posedge busClk or posedge sdiEnableReset) begin
     if (sdiEnableReset) begin
         sdiEnable <= 0;
         end
-    else if (sdiSpace) begin
+    else if (sdiSpace && wr0) begin
         casex (addr)
             `SDI_CONTROL: begin
                 sdiEnable <= dataIn[7];
@@ -70,8 +74,8 @@ always @(negedge wr0 or posedge sdiEnableReset) begin
             endcase
         end
     end
-always @(negedge wr0) begin
-    if (sdiSpace) begin
+always @(posedge busClk) begin
+    if (sdiSpace && wr0) begin
         casex (addr)
             `SDI_CONTROL: begin
                 sdiMode <= dataIn[2:0];
@@ -320,6 +324,8 @@ always @(posedge clk) begin
 wire    [15:0]  baudDiv;
 wire    [31:0]  uartDout;
 uartRegs uartRegs(
+    .busClk(busClk),
+    .cs(cs),
     .addr(addr),
     .dataIn(dataIn),
     .dataOut(uartDout),

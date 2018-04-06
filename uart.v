@@ -3,6 +3,8 @@
 
 
 module uartRegs(
+    busClk,
+    cs,
     addr,
     dataIn,
     dataOut,
@@ -10,6 +12,8 @@ module uartRegs(
     baudDiv
     );
 
+input   busClk;
+input   cs;
 input   [12:0]addr;
 input   [31:0]dataIn;
 output  [31:0]dataOut;
@@ -18,27 +22,27 @@ input   wr0,wr1,wr2,wr3;
 output  [15:0]  baudDiv;
 reg     [15:0]  baudDiv;
 
-    
+
 reg uartSpace;
 always @* begin
   casex(addr)
-    `UARTSPACE: uartSpace = 1;
+    `UARTSPACE: uartSpace = cs;
     default:    uartSpace = 0;
   endcase
 end
 
 
-always @(negedge wr0) begin
-    if (uartSpace) begin
-        casex (addr) 
+always @(posedge busClk) begin
+    if (uartSpace & wr0) begin
+        casex (addr)
             `UART_BAUD_DIV: baudDiv[7:0] = dataIn[7:0];
             endcase
         end
     end
 
-always @(negedge wr1) begin
-    if (uartSpace) begin
-        casex (addr) 
+always @(posedge busClk) begin
+    if (uartSpace & wr1) begin
+        casex (addr)
             `UART_BAUD_DIV: baudDiv[15:8] = dataIn[15:8];
             endcase
         end
@@ -125,7 +129,7 @@ always @(posedge clk) begin
         uartOutput <= 1;
         end
     else if (baudEn) begin
-        case (txState) 
+        case (txState)
             UARTTX_IDLE: begin
                 if (dataAvailable) begin
                     txState <= UARTTX_START;

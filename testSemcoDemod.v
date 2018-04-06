@@ -97,7 +97,7 @@ module test;
 
 
     //************************** uP Interface *********************************
-    `ifdef USE_SPI_CONFIG
+    `ifdef TRIPLE_DEMOD
         `include "upSpiTasks.v"
     `else
         `include "upBusTasks.v"
@@ -363,6 +363,8 @@ module test;
         write32(createAddress(`EQUALIZERSPACE, `EQ_CONTROL),32'h0000_0002);
         `endif
 
+        write32(createAddress(`UARTSPACE,`UART_BAUD_DIV),32'h0000000f);
+
         reset = 1;
         repeat (2) @ (posedge clk) ;
         reset = 0;
@@ -463,6 +465,12 @@ module test;
         write32(createAddress(`TRELLIS_SPACE,`LF_CONTROL),32'h0);
         `endif
 
+        // Enable the SDI in eye pattern mode
+        write32(createAddress(`SDISPACE,`SDI_CONTROL),32'h00000081);
+        repeat (50*`CLOCKS_PER_BIT) @ (posedge clk) ;
+        read32(createAddress(`SDISPACE,`SDI_CONTROL));
+
+
         // Run the demod
         repeat (200000*`CLOCKS_PER_BIT) @ (posedge clk) ;
 
@@ -475,7 +483,7 @@ module test;
 
 
     //******************************* UUT *************************************
-    `ifdef USE_SPI_CONFIG
+    `ifdef TRIPLE_DEMOD
     spiBusInterface spi(
         .clk(clk),
         .reset(reset),
@@ -496,10 +504,12 @@ module test;
 
 
     wire    [17:0]  dac0Out,dac1Out,dac2Out, iSymData, qSymData, sdiDataI, sdiDataQ;
+    wire    [17:0]  iEye,qEye;
     wire    [31:0]  dout;
     demod demod(
         .clk(clk), .reset(reset),
         .busClk(busClk),
+        .cs(cs),
         .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
         .addr(a),
         .din(d),
@@ -519,7 +529,30 @@ module test;
         .sdiSymEn(sdiSymEn),
         .trellisSymEn(trellisSymEn),
         .iTrellis(iSymData),
-        .qTrellis(qSymData)
+        .qTrellis(qSymData),
+        .eyeSync(eyeClkEn),
+        .iEye(iEye), .qEye(qEye),
+        .eyeOffset()
+    );
+
+    sdi sdi(
+        .clk(clk),
+        .reset(reset),
+        .busClk(busClk),
+        .cs(cs),
+        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .addr(a),
+        .dataIn(d),
+        .dataOut(),
+        .iSymEn(symSync),
+        .iSymData(sdiDataI),
+        .qSymEn(symSync),
+        .qSymData(sdiDataQ),
+        .eyeSync(),
+        .iEye(), .qEye(),
+        .eyeOffset(),
+        .bitsyncLock(), .demodLock(),
+        .sdiOut()
     );
 
 

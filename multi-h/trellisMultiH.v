@@ -505,9 +505,11 @@ module trellisMultiH
         if (trellisSpace) begin
             dout = trellisDout;
         end
+        `ifdef EMBED_MULTIH_CARRIER_LOOP
         else begin
             dout = loopDout;
         end
+        `endif
     end
 
 
@@ -533,10 +535,17 @@ always @(posedge clk) begin
             dac0Data <= {1'b0,index,11'b0};
             dac0ClkEn <= symEnOut;
             end
+        `ifdef EMBED_MULTIH_CARRIER_LOOP
         default: begin
             dac0Data <= loopDac0Data;
             dac0ClkEn <= loopDac0ClkEn;
             end
+        `else
+        default: begin
+            dac0Data <= 0;
+            dac0ClkEn <= 0;
+            end
+        `endif
         endcase
 
     case (dac1Select)
@@ -560,10 +569,17 @@ always @(posedge clk) begin
             dac1Data <= {1'b0,index,11'b0};
             dac1ClkEn <= symEnOut;
             end
+        `ifdef EMBED_MULTIH_CARRIER_LOOP
         default: begin
             dac1Data <= loopDac1Data;
             dac1ClkEn <= loopDac1ClkEn;
             end
+        `else
+        default: begin
+            dac0Data <= 0;
+            dac0ClkEn <= 0;
+            end
+        `endif
         endcase
 
     case (dac2Select)
@@ -583,10 +599,17 @@ always @(posedge clk) begin
             dac2Data <= {1'b0,index,11'b0};
             dac2ClkEn <= symEnOut;
             end
+        `ifdef EMBED_MULTIH_CARRIER_LOOP
         default: begin
             dac2Data <= loopDac2Data;
             dac2ClkEn <= loopDac2ClkEn;
             end
+        `else
+        default: begin
+            dac0Data <= 0;
+            dac0ClkEn <= 0;
+            end
+        `endif
         endcase
 
     end

@@ -15,7 +15,7 @@ module test;
    reg        clk,reset;
    reg        clkDiv2;
    reg [79:0] din, dinH;
-   reg        symEn,sym2xEn;
+   reg        symEnEven,symEn,sym2xEn;
 
 `include "mfiltCoeff.v"
 
@@ -186,6 +186,7 @@ module test;
      (
       .clk                 (clk     ),
       .reset               (reset   ),
+      .symEnEvenIn         (symEnEven),
       .symEnIn             (symEn   ),
       .sym2xEnIn           (sym2xEn ),
       .iIn                 (dinH[57:40]),
@@ -205,8 +206,13 @@ module test;
       .decision            (decision  ),
       .phaseError          (phaseError),
       .symEnOut            (symEnOut  ),
-      .sym2xEnOut          (sym2xEnOut) 
-   );			   
+      .sym2xEnOut          (sym2xEnOut)
+   );
+   initial begin
+        trellisMultiH.decayFactor = 8'hff;
+        trellisMultiH.symbolDelay = 1;
+        trellisMultiH.tbEnable = 1;
+   end
 
 // `define COMPARE_AGAINST_SYN
  `ifdef COMPARE_AGAINST_SYN
@@ -265,14 +271,15 @@ reg [15:0] bitIndex;
 
 reg [4:0] rotSel;	
 
-initial begin 
-	rotSel = 0;
+reg cntEna;
+initial begin
+        rotSel = 0;
     cntEna = 0;
     #250 cntEna = 1;
     end
 
 reg [4:0]cnt; initial cnt = 20;
-reg cntEna;
+
 
 	
 // Random data
@@ -299,6 +306,7 @@ always @(negedge clk or posedge reset) begin
     randData <= sr[0];
     end
 
+reg simBit;
 reg [23:0] delaySr;
 always @(posedge clk) begin
 	delaySr <= {delaySr[22:0], simBit};
@@ -329,12 +337,17 @@ always @(posedge clk)begin
       cnt <= cnt +1;
    end
 end
-   
-   
-reg simBit;	
+
+
 always @(posedge clk)begin
-   if (reset) begin indexH <= 0; dinH <= 0; symEn <= 0; sym2xEn <= 0;end
-   else if(cntEna) begin 
+    if (reset) begin
+        indexH <= 0;
+        dinH <= 0;
+        symEnEven <= 0;
+        symEn <= 0;
+        sym2xEn <= 0;
+    end
+    else if(cntEna) begin
       case(cnt)
         0: begin
            symEn <= 1;
@@ -345,11 +358,12 @@ always @(posedge clk)begin
         end
         //6: begin
         9: begin
-           symEn <= 1;
-           sym2xEn <= 1;
-           rotSel <= rotSel + 1;
-           dinH <= readMem[indexH];
-           indexH <= indexH + 1;
+            symEnEven <= 1;
+            symEn <= 1;
+            sym2xEn <= 1;
+            rotSel <= rotSel + 1;
+            dinH <= readMem[indexH];
+            indexH <= indexH + 1;
         end
         //2,8: begin
         2,11: begin
@@ -359,11 +373,12 @@ always @(posedge clk)begin
            indexH <= indexH + 1;
         end
         default: begin
-           symEn <= 0;
-           sym2xEn <= 0;
-           dinH <= dinH;
-           //dinH <= 0;
-           //din <= 0;
+            symEnEven <= 0;
+            symEn <= 0;
+            sym2xEn <= 0;
+            dinH <= dinH;
+            //dinH <= 0;
+            //din <= 0;
         end
       endcase
    end
@@ -415,7 +430,8 @@ end
 //`define RANDOM_LONG_ATT_SOME_NOISE
 //`define RANDOM_LONG_ATT_10dB_NOISE
 //`define RANDOM_LONG_ATT_10dB_NOISE_2
-   
+
+  integer bitError;
 integer file1,file2;
 initial begin
   //uut.soqpskTop.simReset = 1;
@@ -487,9 +503,8 @@ end
 
 
 
-   
-  // BERT 
-  integer bitError;
+
+  // BERT
 /* -----\/----- EXCLUDED -----\/-----
   reg acsDecision;
   reg [15:0] bertSr;

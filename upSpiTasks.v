@@ -2,6 +2,8 @@
 
     // SPI Signals
     reg     spiCS,spiDataIn;
+    initial spiCS = 0;
+    initial spiDataIn = 0;
 
     // Processor bus controls
     wire    cs;
@@ -106,6 +108,35 @@
             // 16 bits of data
             for (i = 31; i >= 0; i = i - 1) begin
                 spiDataIn = data[i];
+                @(negedge bc) ;
+            end
+            spiCS = 0;
+
+            repeat (10) @(negedge bc) ;
+        end
+    endtask
+
+    task read32;
+        input [12:0]addr;
+        begin: t1
+            integer i;
+
+            @(negedge bc) ;
+            spiCS = 1;
+            spiDataIn = 1'b0;   // Read cycle
+            @(negedge bc) ;
+            spiDataIn = 1'b1;   // Xfer Size = 32 bits
+            @(negedge bc) ;
+            spiDataIn = 1'b1;
+            @(negedge bc) ;
+            // Address field
+            for (i = 12; i >= 0; i = i - 1) begin
+                spiDataIn = addr[i];
+                @(negedge bc) ;
+            end
+            // 16 bits of data
+            for (i = 31; i >= 0; i = i - 1) begin
+                spiDataIn = 1'bx;
                 @(negedge bc) ;
             end
             spiCS = 0;

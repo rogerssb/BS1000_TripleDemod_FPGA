@@ -109,7 +109,7 @@ module semcoDemodTop (
 
 );
 
-    parameter VER_NUMBER = 16'd454;
+    parameter VER_NUMBER = 16'd468;
 
 
 //******************************************************************************
@@ -876,6 +876,8 @@ wire    [31:0]  sdiDout;
 sdi sdi(
     .clk(clk),
     .reset(reset),
+    .busClk(busClk),
+    .cs(cs),
     .wr0(wr0),
     .wr1(wr1),
     .wr2(wr2),
@@ -1011,7 +1013,7 @@ sdi sdi(
 
             //`VIDSWITCHSPACE:    rd_mux = vidSwitchDout;
 
-             default :          rd_mux = 16'hxxxx;
+             default :          rd_mux = 32'hxxxx;
         endcase
     end
 

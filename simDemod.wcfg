@@ -11,15 +11,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="859825200000fs"></ZoomStartTime>
-      <ZoomEndTime time="873525200001fs"></ZoomEndTime>
-      <Cursor1Time time="871225200000fs"></Cursor1Time>
+      <ZoomStartTime time="291779700000fs"></ZoomStartTime>
+      <ZoomEndTime time="304679700001fs"></ZoomEndTime>
+      <Cursor1Time time="302529700000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="175"></NameColumnWidth>
-      <ValueColumnWidth column_width="132"></ValueColumnWidth>
+      <ValueColumnWidth column_width="130"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="25" />
+   <WVObjectSize size="26" />
    <wave_markers>
       <marker time="98906400000" label="" />
    </wave_markers>
@@ -206,9 +206,14 @@
    <wvobject fp_name="group58" type="group">
       <obj_property name="label">Micro</obj_property>
       <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
       <wvobject fp_name="/test/busClk" type="logic">
          <obj_property name="ElementShortName">busClk</obj_property>
          <obj_property name="ObjectShortName">busClk</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/spi/cs" type="logic">
+         <obj_property name="ElementShortName">cs</obj_property>
+         <obj_property name="ObjectShortName">cs</obj_property>
       </wvobject>
       <wvobject fp_name="/test/wr0" type="logic">
          <obj_property name="ElementShortName">wr0</obj_property>
@@ -233,6 +238,14 @@
       <wvobject fp_name="/test/d" type="array">
          <obj_property name="ElementShortName">d[31:0]</obj_property>
          <obj_property name="ObjectShortName">d[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/spi/spiDataOut" type="logic">
+         <obj_property name="ElementShortName">spiDataOut</obj_property>
+         <obj_property name="ObjectShortName">spiDataOut</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/sdi/dataOut" type="array">
+         <obj_property name="ElementShortName">dataOut[31:0]</obj_property>
+         <obj_property name="ObjectShortName">dataOut[31:0]</obj_property>
       </wvobject>
    </wvobject>
    <wvobject fp_name="group59" type="group">
@@ -390,7 +403,6 @@
    <wvobject fp_name="group73" type="group">
       <obj_property name="label">Bitsync</obj_property>
       <obj_property name="DisplayName">label</obj_property>
-      <obj_property name="isExpanded"></obj_property>
       <wvobject fp_name="/test/demod/bitsync/sampleLoop/zeroError" type="logic">
          <obj_property name="ElementShortName">zeroError</obj_property>
          <obj_property name="ObjectShortName">zeroError</obj_property>
@@ -637,6 +649,71 @@
       <wvobject fp_name="/test/demod/carrierLoop/avgErrorReal" type="other">
          <obj_property name="ElementShortName">avgErrorReal</obj_property>
          <obj_property name="ObjectShortName">avgErrorReal</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="group122" type="group">
+      <obj_property name="label">SDI</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/test/sdi/baudEn" type="logic">
+         <obj_property name="ElementShortName">baudEn</obj_property>
+         <obj_property name="ObjectShortName">baudEn</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/sdi/sdiMode" type="array">
+         <obj_property name="ElementShortName">sdiMode[2:0]</obj_property>
+         <obj_property name="ObjectShortName">sdiMode[2:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/sdi/sdiEnable" type="logic">
+         <obj_property name="ElementShortName">sdiEnable</obj_property>
+         <obj_property name="ObjectShortName">sdiEnable</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/sdi/fifoEn" type="logic">
+         <obj_property name="ElementShortName">fifoEn</obj_property>
+         <obj_property name="ObjectShortName">fifoEn</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/sdi/muxState" type="array">
+         <obj_property name="ElementShortName">muxState[3:0]</obj_property>
+         <obj_property name="ObjectShortName">muxState[3:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/sdi/uartDataAvailable" type="logic">
+         <obj_property name="ElementShortName">uartDataAvailable</obj_property>
+         <obj_property name="ObjectShortName">uartDataAvailable</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/sdi/uartDataNeeded" type="logic">
+         <obj_property name="ElementShortName">uartDataNeeded</obj_property>
+         <obj_property name="ObjectShortName">uartDataNeeded</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/sdi/sdiOut" type="logic">
+         <obj_property name="ElementShortName">sdiOut</obj_property>
+         <obj_property name="ObjectShortName">sdiOut</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/sdi/iFifo/srst" type="logic">
+         <obj_property name="ElementShortName">srst</obj_property>
+         <obj_property name="ObjectShortName">srst</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/sdi/iFifo/din" type="array">
+         <obj_property name="ElementShortName">din[15:0]</obj_property>
+         <obj_property name="ObjectShortName">din[15:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/sdi/iFifo/wr_en" type="logic">
+         <obj_property name="ElementShortName">wr_en</obj_property>
+         <obj_property name="ObjectShortName">wr_en</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/sdi/iFifo/rd_en" type="logic">
+         <obj_property name="ElementShortName">rd_en</obj_property>
+         <obj_property name="ObjectShortName">rd_en</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/sdi/iFifo/dout" type="array">
+         <obj_property name="ElementShortName">dout[15:0]</obj_property>
+         <obj_property name="ObjectShortName">dout[15:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/sdi/iFifo/full" type="logic">
+         <obj_property name="ElementShortName">full</obj_property>
+         <obj_property name="ObjectShortName">full</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/sdi/iFifo/empty" type="logic">
+         <obj_property name="ElementShortName">empty</obj_property>
+         <obj_property name="ObjectShortName">empty</obj_property>
       </wvobject>
    </wvobject>
 </wave_config>

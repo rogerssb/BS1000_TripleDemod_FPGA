@@ -5,7 +5,7 @@ set_property PACKAGE_PIN A17 [get_ports adc01_powerDown]
 # set_property PACKAGE_PIN B17 [get_ports ADC_OE_n]
 # set_property PACKAGE_PIN A19 [get_ports ADC_CS_n]
 
-set_property PACKAGE_PIN D18 [get_ports adc0Clk]
+set_property PACKAGE_PIN E18 [get_ports adc0Clk]
 # On Rev2 change to E18
 set_property PACKAGE_PIN D15 [get_ports adc0_overflow]
 set_property PACKAGE_PIN D16 [get_ports {adc0[13]}]
@@ -21,7 +21,7 @@ set_property PACKAGE_PIN G17 [get_ports {adc0[4]}]
 set_property PACKAGE_PIN F18 [get_ports {adc0[3]}]
 set_property PACKAGE_PIN F17 [get_ports {adc0[2]}]
 set_property PACKAGE_PIN E17 [get_ports {adc0[1]}]
-set_property PACKAGE_PIN E18 [get_ports {adc0[0]}]
+set_property PACKAGE_PIN D18 [get_ports {adc0[0]}]
 # On Rev2 change to D18
 
 set_property PACKAGE_PIN F10 [get_ports dac_sclk]
@@ -69,9 +69,9 @@ set_property PACKAGE_PIN AD21 [get_ports ch0DataOut]
 set_property PACKAGE_PIN Y21 [get_ports ch1ClkOut]
 set_property PACKAGE_PIN AD23 [get_ports ch1DataOut]
 
-set_property PACKAGE_PIN Y26 [get_ports pll0_OUT1]
+set_property PACKAGE_PIN Y22 [get_ports pll0_OUT1]
 # On Rev2 change to Y22
-set_property PACKAGE_PIN AB24 [get_ports pll1_OUT1]
+set_property PACKAGE_PIN y23 [get_ports pll1_OUT1]
 # On Rev2 change to Y23
 set_property PACKAGE_PIN Y25 [get_ports pll0_REF]
 set_property PACKAGE_PIN AA23 [get_ports pll1_REF]
@@ -79,7 +79,7 @@ set_property PACKAGE_PIN AA23 [get_ports pll1_REF]
 set_property PACKAGE_PIN AB25 [get_ports spiCSn]
 set_property PACKAGE_PIN W24 [get_ports spiDataOut]
 set_property PACKAGE_PIN W23 [get_ports spiDataIn]
-set_property PACKAGE_PIN AA24 [get_ports spiClk]
+set_property PACKAGE_PIN AC23 [get_ports spiClk]
 # On Rev2 change to AC23
 
 set_property PACKAGE_PIN V22 [get_ports amAdcClk]
@@ -141,8 +141,8 @@ set_property PACKAGE_PIN Y20 [get_ports amDacDataOut]
 # set_property PACKAGE_PIN L18 [get_ports {MonData[1]}]
 # set_property PACKAGE_PIN L17 [get_ports {MonData[0]}]
 
-set_property PACKAGE_PIN AC21 [get_ports {lockLed0n}]
-set_property PACKAGE_PIN AB21 [get_ports {lockLed1n}]
+set_property PACKAGE_PIN AB21 [get_ports {lockLed0n}]
+set_property PACKAGE_PIN AC21 [get_ports {lockLed1n}]
 
 set_property PACKAGE_PIN W21 [get_ports {video1OutSelect[1]}]
 set_property PACKAGE_PIN V21 [get_ports {video1OutSelect[0]}]
@@ -383,11 +383,11 @@ set_property CONFIG_VOLTAGE 3.3 [current_design]
 
 #[Place 30-876] Port 'adcClk'  is assigned to PACKAGE_PIN 'D18'  which can only be used as the N side of a differential clock input.
 #Please use the following constraint(s) to pass this DRC check:
-set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets {systemClock/inst/clk_in1_systemClock}]
-set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets spiClk_IBUF]
+# set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets {systemClock/inst/clk_in1_systemClock}]
+# set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets spiClk_IBUF]
 # set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets BS_PllOut_IBUF]
-set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets pll0_OUT1_IBUF]
-set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets pll1_OUT1_IBUF]
+# set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets pll0_OUT1_IBUF]
+# set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets pll1_OUT1_IBUF]
 # set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets dac1_clk_OBUF]
 
 set_property BITSTREAM.CONFIG.CONFIGRATE 66 [current_design]
