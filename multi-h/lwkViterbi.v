@@ -550,6 +550,7 @@ module viterbiMultiH
            qOut40r <= 0;
            qOut48r <= 0;
            qOut56r <= 0;
+           phaseErrorValid <= 0;
         end
         else if (symEnAcs) begin
            case (index)

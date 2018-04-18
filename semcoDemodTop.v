@@ -109,7 +109,7 @@ module semcoDemodTop (
 
 );
 
-    parameter VER_NUMBER = 16'd468;
+    parameter VER_NUMBER = 16'd469;
 
 
 //******************************************************************************
@@ -120,18 +120,28 @@ module semcoDemodTop (
         .clk_in1(adc0Clk),
         .clk_out1(clk),
         .locked(clkLocked)
-     );
+    );
+
+
+    `define ADD_FRANKS_KLUDGE
+    `ifdef ADD_FRANKS_KLUDGE
+    reg spiClk0,spiClk1;
+    always @(posedge clk) begin
+        spiClk0 <= spiClk;
+        spiClk1 <= spiClk0;
+    end
+    BUFG spiBufg(
+        .I(spiClk1),
+        .O(busClk)
+    );
+
+    `else //ADD_FRANKS_KLUDGE
 
     BUFG spiBufg(
         .I(spiClk),
-    //    .O(spiBufgClk)
         .O(busClk)
     );
-    //spiBusClock spiBusClock (
-    //    .clk_in1(spiBufgClk),
-    //    .clk_out1(busClk),
-    //    .locked(spiClkLocked)
-    //);
+    `endif //ADD_FRANKS_KLUDGE
 
     `else //TRIPLE_DEMOD
     systemClock systemClock (
@@ -948,10 +958,29 @@ sdi sdi(
     //                          Video Switch Interface
     //******************************************************************************
 
-    assign video0InSelect = 2'b11;
-    assign video1InSelect = 2'b11;
-    assign video0OutSelect = 2'b11;
-    assign video1OutSelect = 2'b11;
+    wire    [1:0]   vid0Select;
+    wire    [1:0]   vid1Select;
+    wire    [31:0]  vsDout;
+    vidSwitchRegs vsregs(
+        .busClk(busClk),
+        .cs(cs),
+        .wr0(wr0),
+        .wr1(wr1),
+        .wr2(wr2),
+        .wr3(wr3),
+        .addr(addr),
+        .din(dataIn),
+        .dout(vsDout),
+        .vid0Select(vid0Select),
+        .vid1Select(vid1Select),
+        .vid2Select(),
+        .vid3Select()
+    );
+
+    assign video0InSelect = vid0Select;
+    assign video1InSelect = vid1Select;
+    assign video0OutSelect = vid0Select;
+    assign video1OutSelect = vid1Select;
 
     `endif //TRIPLE_DEMOD
 
@@ -1011,7 +1040,7 @@ sdi sdi(
             `CandD0SPACE:       rd_mux = cAndD0Dout;
             `CandD1SPACE:       rd_mux = cAndD1Dout;
 
-            //`VIDSWITCHSPACE:    rd_mux = vidSwitchDout;
+            `VIDSWITCHSPACE:    rd_mux = vsDout;
 
              default :          rd_mux = 32'hxxxx;
         endcase

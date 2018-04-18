@@ -345,9 +345,8 @@
 `define UARTSPACE           13'b0_0101_0111_xxxx
 
 // Video Switch Control registers
-`define VIDSWITCHSPACE      13'b0_10xx_0100_xxxx
-    `define VIDSWITCH0          13'bx_xxxx_xxxx_00xx
-    `define VIDSWITCH1          13'bx_xxxx_xxxx_01xx
+`define VIDSWITCHSPACE      13'b0_1000_0000_xxxx
+    `define VIDSWITCH_CONTROL   13'bx_xxxx_xxxx_00xx
 
 `else  // Old demod builds
 //------------------------------ Old Demod ------------------------------------

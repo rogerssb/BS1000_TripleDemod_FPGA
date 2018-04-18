@@ -31,20 +31,20 @@ module test;
    mfilt # (18'h0_00_01, 18'h2, 18'h3, 18'h4,
             18'h5      , 18'h6, 18'h7, 18'h8) uut_mfilt
      (
-      .clk     (clk       ), 
-      .reset   (reset     ), 
-      .symEn   (symEn     ), 
+      .clk     (clk       ),
+      .reset   (reset     ),
+      .symEn   (symEn     ),
       .sym2xEn (sym2xEn   ),
-      //.i       (din[57:40]),    
-      //.q       (din[17:0] ),    
-      .i       (dinH[57:40]),    
-      .q       (dinH[17:0] ),    
-      .mf0IOut (          ),   
+      //.i       (din[57:40]),
+      //.q       (din[17:0] ),
+      .i       (dinH[57:40]),
+      .q       (dinH[17:0] ),
+      .mf0IOut (          ),
       .mf0QOut (          ),
-      .mf1IOut (          ),   
+      .mf1IOut (          ),
       .mf1QOut (          )
       );
-   
+
    mfiltBank uut_mfiltBank
      (
       .clk     (clk       ),
@@ -53,9 +53,9 @@ module test;
       .sym2xEn (sym2xEn   ),
       //.i       (din[57:40]),
       //.q       (din[17:0] )
-      .i       (dinH[57:40]),    
+      .i       (dinH[57:40]),
       .q       (dinH[17:0] )
-      );   
+      );
 `endif
 
 
@@ -63,7 +63,7 @@ module test;
 //`define SIM_ROT
 `ifdef SIM_ROT
 
-   // Latching the incomming I and Q samples 
+   // Latching the incomming I and Q samples
    reg [9:0]  iInLatch,
                qInLatch;
    always @(posedge clk)
@@ -78,16 +78,16 @@ module test;
 
    rotator uut_rot
      (
-      .clk     (clk       ), 
-      .reset   (reset     ), 
-      .symEn   (symEn     ), 
-      .sym2xEn (sym2xEn   ), 
-      .i       (iInLatch  ),    
+      .clk     (clk       ),
+      .reset   (reset     ),
+      .symEn   (symEn     ),
+      .sym2xEn (sym2xEn   ),
+      .i       (iInLatch  ),
       .q       (qInLatch  ),
-      //.i       (dinH[57:40]),    
+      //.i       (dinH[57:40]),
       //.q       (dinH[17:0] ),
       .sel     (rotSel    ),
-      .iOut    (          ),   
+      .iOut    (          ),
       .qOut    (          )
       );
 `endif
@@ -96,15 +96,15 @@ module test;
    wire [4:0] tilt;
    tilt uut_tilt
      (
-      .clk   (clk  ), 
-      .reset (reset), 
+      .clk   (clk  ),
+      .reset (reset),
       .symEn (symEn),
       .tilt  (tilt )
       );
 
 /* -----\/----- EXCLUDED -----\/-----
 
-   acsMultH acsMultH 
+   acsMultH acsMultH
      (
       .clk               (clk    ),
       .reset             (reset  ),
@@ -175,7 +175,7 @@ module test;
    wire [11:0] accMet_54_2 = accMetOut;
    wire [11:0] accMet_54_3 = accMetOut;
 `endif //  `ifdef SIM_ACS
-   
+
 `define FULL_TRELLIS
 `ifdef FULL_TRELLIS
    wire [1:0]  decision;
@@ -231,17 +231,17 @@ module test;
       .decision            (decisionSyn  ),
       .phaseError          (phaseErrorSyn),
       .symEnOut            (symEnOutSyn  ),
-      .sym2xEnOut          (sym2xEnOutSyn) 
-      );			   
-   
+      .sym2xEnOut          (sym2xEnOutSyn)
+      );
+
    always @(posedge clk) begin
       if (reset) begin
       end
       else if (sym2xEn) begin
-         if (decision != decisionSyn ) begin 
+         if (decision != decisionSyn ) begin
             $display("\tDecision missmatch %d\t%d", decision, decisionSyn);
          end
-         if (phaseError != phaseErrorSyn ) begin 
+         if (phaseError != phaseErrorSyn ) begin
             $display("\tphaseError missmatch %d\t%d", phaseError, phaseErrorSyn);
          end
       end
@@ -249,27 +249,27 @@ module test;
  `endif
 
 `endif
-   
-   
-      
+
+
+
    wire       testDec1;
-   
+
    initial clk = 0;
    initial clkDiv2 = 0;
    initial reset = 0;
-   
-   always #4 clk = !clk; 
-   always @(posedge clk) clkDiv2 = !clkDiv2; 
-   
+
+   always #4 clk = !clk;
+   always @(posedge clk) clkDiv2 = !clkDiv2;
+
 
 
 reg [79:0] readMem[3000:0];
 reg [0:0] readMemResult[100:0];
 //reg [1:0] index;
-reg [15:0] index;  
-reg [15:0] bitIndex;  
+reg [15:0] index;
+reg [15:0] bitIndex;
 
-reg [4:0] rotSel;	
+reg [4:0] rotSel;
 
 reg cntEna;
 initial begin
@@ -281,7 +281,7 @@ initial begin
 reg [4:0]cnt; initial cnt = 20;
 
 
-	
+
 // Random data
 parameter  PN17 = 16'h008e,
            MASK17 = 16'h00ff;
@@ -309,7 +309,7 @@ always @(negedge clk or posedge reset) begin
 reg simBit;
 reg [23:0] delaySr;
 always @(posedge clk) begin
-	delaySr <= {delaySr[22:0], simBit};
+        delaySr <= {delaySr[22:0], simBit};
 end
 reg [15:0]symEnShift;
 //always @(posedge clk)symEnShift <= {symEnShift[14:0],(sym2xEnDly_mult2 && !symEnDly_mult2)};
@@ -318,11 +318,11 @@ always @(posedge clk)symEnShift <= {symEnShift[14:0],(sym2xEn && !symEn)};
 wire rotEnaTb = symEnShift[4];
 
 
-   reg resultDly; 
+   reg resultDly;
    always @(posedge clk) begin
       if (rotEnaTb) begin //should be the symEn comming out of the last module who is produsing the decision bit
-	 resultDly <= delaySr[23];
-      end	
+         resultDly <= delaySr[23];
+      end
    end
 
 integer indexH;
@@ -382,7 +382,7 @@ always @(posedge clk)begin
         end
       endcase
    end
-end	 
+end
 
 
 always @(posedge clk)begin
@@ -403,24 +403,24 @@ always @(posedge clk)begin
       din[57:40] <= 18'h0_00_00;   // I
       din[17:0]  <= 18'h0_00_00;   // Q
    end
-end	 
+end
 
-   
+
 /* -----\/----- EXCLUDED -----\/-----
 integer indexH;
 initial indexH=0;
 always @(posedge clk)begin
-	if(cntEn) begin
-	dinH <= readMem[indexH];
-	indexH <= indexH + 1;
-	end
+        if(cntEn) begin
+        dinH <= readMem[indexH];
+        indexH <= indexH + 1;
+        end
 end
  -----/\----- EXCLUDED -----/\----- */
 
-	
+
 //`define ALL_PLUS_3
-//`define MULTI_H_ROT_TEST  
-//`define MULTI_H_ROT_TEST_2  
+//`define MULTI_H_ROT_TEST
+//`define MULTI_H_ROT_TEST_2
 //`define RANDOM
 //`define RANDOM_ATT
 //`define RANDOM_LONG
@@ -435,16 +435,11 @@ end
 integer file1,file2;
 initial begin
   //uut.soqpskTop.simReset = 1;
-   #100 reset = !reset;
-   #100 reset = !reset;
-   #125 reset = !reset;
-   #475 reset = !reset;
-
   index = 0;
   bitIndex = 0;
   bitError = 0;
   din = 0;
-  
+
 `ifdef MULTI_H_ROT_TEST
       $readmemh("C:/projects/semco/svn_checkout_folder/multi-h/mult-h-rot-test.hex", readMem);
 `endif
@@ -452,12 +447,12 @@ initial begin
 `ifdef MULTI_H_ROT_TEST_2
       $readmemh("C:/projects/semco/svn_checkout_folder/multi-h/mult-h-rot-test2.hex", readMem);
 `endif
-      
+
 `ifdef ALL_PLUS_3
 //      $readmemh("P:/semco/matlab_sim_results/multi-h/incNum.hex", readMem);
       $readmemh("P:/semco/matlab_sim_results/multi-h/mfinputsAllPlus3.hex", readMem);
 `endif
-            
+
 `ifdef RANDOM
       $readmemh("P:/semco/matlab_sim_results/multi-h/mfinputsRandom.hex", readMem);
 `endif
@@ -495,9 +490,12 @@ initial begin
       $readmemh("P:/semco/matlab_sim_results/multi-h/10dB_with_saved_winning_rotation/multi-h-input.hex", readMem);
 `endif
 
+   #100 reset = !reset;
+   #100 reset = !reset;
+   #125 reset = !reset;
+   #475 reset = !reset;
 
 
-   
 end
 
 
@@ -508,41 +506,41 @@ end
 /* -----\/----- EXCLUDED -----\/-----
   reg acsDecision;
   reg [15:0] bertSr;
-  
+
   always @(posedge clk) begin
-	  if (sym2xEn) begin	
-		  bertSr <= {bertSr[14:0], simBit};
-		  acsDecision <= testDec1;
-		  //if (acsDecision != bertSr[6]) begin		  // without carrier loop
-		  if (decision != bertSr[11]) begin			  // with carrierloop
-			  bitError <= bitError + 1;
-		  end
-	  end
+          if (sym2xEn) begin
+                  bertSr <= {bertSr[14:0], simBit};
+                  acsDecision <= testDec1;
+                  //if (acsDecision != bertSr[6]) begin           // without carrier loop
+                  if (decision != bertSr[11]) begin                       // with carrierloop
+                          bitError <= bitError + 1;
+                  end
+          end
   end
  -----/\----- EXCLUDED -----/\----- */
-  
-			  
 
 
-  
+
+
+
 //integer file3;
 //initial file3 = $fopen("resultDly.dat") ;
 //
 //   always @(posedge clk)begin
-//        if (rotEnaTb) begin 
+//        if (rotEnaTb) begin
 //           $fdisplay(file3, "%b", resultDly);
 //        end
 //   end
-// 
+//
 //integer file4;
 //initial file4 = $fopen("din.dat") ;
 //
 //   always @(posedge clk)begin
-//        if (sym2xEn) begin 
+//        if (sym2xEn) begin
 //           $fdisplay(file4, "%h_%h", din[79:40],din[39:0]);
 //        end
 //   end
-  
-  
- 
+
+
+
 endmodule
