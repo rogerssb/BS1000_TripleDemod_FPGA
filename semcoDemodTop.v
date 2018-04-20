@@ -83,9 +83,9 @@ module semcoDemodTop (
 
     // Video Switch Select Lines
     output      [1:0]   video0InSelect,
-    output      [1:0]   video0OutSelect,
+    output reg  [1:0]   video0OutSelect,
     output      [1:0]   video1InSelect,
-    output      [1:0]   video1OutSelect
+    output reg  [1:0]   video1OutSelect
 
     `else   //TRIPLE_DEMOD
 
@@ -109,7 +109,7 @@ module semcoDemodTop (
 
 );
 
-    parameter VER_NUMBER = 16'd469;
+    parameter VER_NUMBER = 16'd470;
 
 
 //******************************************************************************
@@ -979,8 +979,40 @@ sdi sdi(
 
     assign video0InSelect = vid0Select;
     assign video1InSelect = vid1Select;
-    assign video0OutSelect = vid0Select;
-    assign video1OutSelect = vid1Select;
+
+    //This is to fix an error on the board layout
+    always @* begin
+        case (vid0Select)
+            2'b00: begin
+                video0OutSelect = 2'b00;
+            end
+            2'b01: begin
+                video0OutSelect = 2'b10;
+            end
+            2'b10: begin
+                video0OutSelect = 2'b01;
+            end
+            2'b11: begin
+                video0OutSelect = 2'b11;
+            end
+        endcase
+    end
+    always @* begin
+        case (vid1Select)
+            2'b00: begin
+                video1OutSelect = 2'b00;
+            end
+            2'b01: begin
+                video1OutSelect = 2'b10;
+            end
+            2'b10: begin
+                video1OutSelect = 2'b01;
+            end
+            2'b11: begin
+                video1OutSelect = 2'b11;
+            end
+        endcase
+    end
 
     `endif //TRIPLE_DEMOD
 
