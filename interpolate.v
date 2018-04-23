@@ -21,7 +21,7 @@ module interpolate(
     output  reg         [31:0]  dout,
     input       signed  [17:0]  dataIn,
     output              [3:0]   dacSource,
-    output  reg signed  [17:0]  dataOut,
+    output      signed  [17:0]  dataOut,
     output                      clkEnOut
 );
 
@@ -54,8 +54,10 @@ module interpolate(
 
     // Register interface
     wire    signed  [17:0]  testValue;
-    wire            [17:0]  mantissa;
-    wire            [4:0]   exponent;
+    wire            [17:0]  cicMantissa;
+    wire            [4:0]   cicExponent;
+    wire            [15:0]  gainMantissa;
+    wire            [4:0]   gainExponent;
     wire            [31:0]  interpDout;
     interpRegs regs  (
         `ifdef USE_BUS_CLOCK
@@ -72,8 +74,10 @@ module interpolate(
         .bypassEQ(bypassEQ),
         .source(dacSource),
         .testValue(testValue),
-        .exponent(exponent),
-        .mantissa(mantissa)
+        .cicExponent(cicExponent),
+        .cicMantissa(cicMantissa),
+        .gainExponent(gainExponent),
+        .gainMantissa(gainMantissa)
     );
 
     reg     signed  [17:0]  invertIn;
@@ -176,7 +180,7 @@ module interpolate(
     wire    signed  [17:0]  exponentAdjusted;
     shift48to18 cicGainAdjust(
         .clk(clk), .clkEn(1'b1),
-        .shift(exponent),
+        .shift(cicExponent),
         .dIn(cicOut),
         .dOut(exponentAdjusted)
     );
@@ -187,7 +191,7 @@ module interpolate(
         .sclr(cicReset),
         .clk(clk),
         .a(exponentAdjusted),
-        .b(mantissa),
+        .b(cicMantissa),
         .p(scaledValue)
         );
     `else
@@ -195,7 +199,7 @@ module interpolate(
         .sclr(cicReset),
         .clk(clk),
         .a(exponentAdjusted),
-        .b(mantissa),
+        .b(cicMantissa),
         .p(scaledValue)
         );
     `endif
@@ -222,32 +226,47 @@ module interpolate(
     );
     `endif
 
-    wire    [1:0]   bypassMode = {bypassEQ,bypass};
+    wire        [1:0]   bypassMode = {bypassEQ,bypass};
+    reg signed  [17:0]  muxOut;
     always @(posedge clk) begin
         if (test) begin
-            dataOut <= testValue;
+            muxOut <= testValue;
         end
         else begin
             case (bypassMode)
                 2'b00: begin
-                    dataOut <= $signed(invSincOut[24:7]);
+                    muxOut <= $signed(invSincOut[24:7]);
                 end
                 2'b01: begin
                     if (clkEn) begin
-                        dataOut <= firOut;
+                        muxOut <= firOut;
                     end
                 end
                 2'b10: begin
-                    dataOut <= $signed(scaledValue[33:16]);
+                    muxOut <= $signed(scaledValue[33:16]);
                 end
                 2'b11: begin
                     if (clkEn) begin
-                        dataOut <= invertIn;
+                        muxOut <= invertIn;
                     end
                 end
             endcase
         end
     end
+
+    `define USE_VGAIN
+    `ifdef USE_VGAIN
+    wire    signed  [47:0]  vgInput = {{16{muxOut[17]}},muxOut,14'b0};
+    variableGain videoGain(
+        .clk(clk), .clkEn(1'b1),
+        .exponent(gainExponent),
+        .mantissa(gainMantissa),
+        .din(vgInput),
+        .dout(dataOut)
+    );
+    `else
+    assign dataOut = muxOut;
+    `endif
 
     `ifdef SIMULATE
     real expAdjReal;

@@ -244,13 +244,6 @@
         `define SYS_OUTPUT_SEL_CH1_BS   4'b0010
         `define SYS_OUTPUT_SEL_CH1_PCM  4'b0011
 
-`define INTERP0SPACE        13'b0_00xx_0010_xxxx
-`define VIDFIR0SPACE        13'b0_00xx_0011_xxxx
-`define INTERP1SPACE        13'b0_00xx_0100_xxxx
-`define VIDFIR1SPACE        13'b0_00xx_0101_xxxx
-`define INTERP2SPACE        13'b0_00xx_0110_xxxx
-`define VIDFIR2SPACE        13'b0_00xx_0111_xxxx
-
 `define DUAL_DECODERSPACE   13'b0_00xx_1000_xxxx
 `define CH1_DECODERSPACE    13'b0_00xx_1001_xxxx
     `define DEC_CONTROL         13'bx_xxxx_xxxx_00xx
@@ -344,8 +337,16 @@
 `define SDISPACE            13'b0_0101_0110_xxxx
 `define UARTSPACE           13'b0_0101_0111_xxxx
 
+// Video Interpolators and FIRs
+`define INTERP0SPACE        13'b0_1000_0000_xxxx
+`define VIDFIR0SPACE        13'b0_1000_0001_xxxx
+`define INTERP1SPACE        13'b0_1000_0010_xxxx
+`define VIDFIR1SPACE        13'b0_1000_0011_xxxx
+`define INTERP2SPACE        13'b0_1000_0100_xxxx
+`define VIDFIR2SPACE        13'b0_1000_0101_xxxx
+
 // Video Switch Control registers
-`define VIDSWITCHSPACE      13'b0_1000_0000_xxxx
+`define VIDSWITCHSPACE      13'b0_1000_1000_xxxx
     `define VIDSWITCH_CONTROL   13'bx_xxxx_xxxx_00xx
 
 `else  // Old demod builds
@@ -510,10 +511,9 @@
 `define RESAMPLER_AUSHIFT       13'bx_xxxx_xxxx_11xx
 
 // Define the interpolator memory map
-`define INTERP_CONTROL  13'bx_xxxx_xxxx_000x
-`define INTERP_SOURCE   13'bx_xxxx_xxxx_001x
+`define INTERP_CONTROL          13'bx_xxxx_xxxx_000x
     `define INTERP_SOURCE_BITS      4
-    `define INTERP_SOURCE_OFFSET    0
+    `define INTERP_SOURCE_OFFSET    8
         `define DAC_SRC_DEMOD           0
         `define DAC_SRC_IFPATH          1
         `define DAC_SRC_SCDEMOD0        2
@@ -521,9 +521,11 @@
         `define DAC_SRC_FMTRELLIS       4
         `define DAC_SRC_SOQTRELLIS      5
         `define DAC_SRC_MULTIHTRELLIS   6
-`define INTERP_EXPONENT 13'bx_xxxx_xxxx_01xx
-`define INTERP_MANTISSA 13'bx_xxxx_xxxx_10xx
-`define INTERP_TEST     13'bx_xxxx_xxxx_11xx
+`define INTERP_GAIN_MANTISSA    13'bx_xxxx_xxxx_001x
+`define INTERP_CIC_EXPONENT     13'bx_xxxx_xxxx_010x
+`define INTERP_GAIN_EXPONENT    13'bx_xxxx_xxxx_011x
+`define INTERP_CIC_MANTISSA     13'bx_xxxx_xxxx_10xx
+`define INTERP_TEST             13'bx_xxxx_xxxx_11xx
 
 // Define the decoder memory map
 `define DEC_OPTIONS     13'bx_xxxx_xxxx_000x

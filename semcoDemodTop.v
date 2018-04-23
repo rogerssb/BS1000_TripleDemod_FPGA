@@ -109,7 +109,7 @@ module semcoDemodTop (
 
 );
 
-    parameter VER_NUMBER = 16'd470;
+    parameter VER_NUMBER = 16'd471;
 
 
 //******************************************************************************
