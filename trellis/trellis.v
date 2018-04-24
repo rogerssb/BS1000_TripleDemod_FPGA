@@ -34,7 +34,8 @@ module trellis(
     output  reg signed  [17:0]  dac2Data,
     output                      decision,
     output                      symEnOut,
-    output  reg                 sym2xEnOut,
+    //output  reg                 sym2xEnOut,
+    output                      sym2xEnOut,
     output                      oneOrZeroPredecessor
 );
 
@@ -595,9 +596,10 @@ module trellis(
     // of the pre-existing line decoder. This design assumes at least 3 clocks between each 1x clock
     // enable.
     reg se0;
+    assign  sym2xEnOut = se0 | symEnOut;
     always @(posedge clk) begin
         se0 <= symEnOut;
-        sym2xEnOut <= se0 | symEnOut;
+        //sym2xEnOut <= se0 | symEnOut;
     end
 
 
@@ -782,6 +784,10 @@ maxMetric #(ROT_BITS) maxMetric1 (
 
     always @(posedge clk) begin
         case (dac0Select)
+            `DAC_I: begin
+                dac0Data <= {1'b0,symEnOut,16'b0};
+                dac0ClkEn <= 1'b1;
+            end
             `DAC_TRELLIS_I: begin
                 dac0Data <= carrierLoopIOut;
                 dac0ClkEn <= sym2xEnDly;
@@ -809,6 +815,10 @@ maxMetric #(ROT_BITS) maxMetric1 (
         endcase
 
         case (dac1Select)
+            `DAC_I: begin
+                dac1Data <= {1'b0,sym2xEnOut,16'b0};
+                dac1ClkEn <= 1'b1;
+            end
             `DAC_TRELLIS_I: begin
                 dac1Data <= carrierLoopIOut;
                 dac1ClkEn <= sym2xEnDly;

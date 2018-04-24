@@ -77,7 +77,6 @@ module interpRegs(
         if (cs) begin
     `endif
             casex (addr)
-                `INTERP_CONTROL:        gainMantissa[7:0] <= dataIn[23:16];
                 `INTERP_GAIN_MANTISSA:  gainMantissa[7:0] <= dataIn[23:16];
                 `INTERP_CIC_MANTISSA:   cicMantissa[17:16] <= dataIn[17:16];
                 `INTERP_GAIN_EXPONENT:  gainExponent[4:0] <= dataIn[23:16];
@@ -95,7 +94,6 @@ module interpRegs(
         if (cs) begin
     `endif
             casex (addr)
-                `INTERP_CONTROL:        gainMantissa[15:8] <= dataIn[31:24];
                 `INTERP_GAIN_MANTISSA:  gainMantissa[15:8] <= dataIn[31:24];
                 default:  ;
             endcase
