@@ -11,44 +11,52 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="144237600000fs"></ZoomStartTime>
-      <ZoomEndTime time="1011592800001fs"></ZoomEndTime>
-      <Cursor1Time time="867033600000fs"></Cursor1Time>
+      <ZoomStartTime time="1462980000fs"></ZoomStartTime>
+      <ZoomEndTime time="4058980001fs"></ZoomEndTime>
+      <Cursor1Time time="111000000000fs"></Cursor1Time>
    </zoom_setting>
-   <WVObjectSize size="26" />
-   <wvobject db_ref_id="1" fp_name="/test/SAMPLE_FREQ" type="other">
+   <column_width_setting>
+      <NameColumnWidth column_width="175"></NameColumnWidth>
+      <ValueColumnWidth column_width="122"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="34" />
+   <wvobject fp_name="/test/SAMPLE_FREQ" type="other">
       <obj_property name="ElementShortName">SAMPLE_FREQ</obj_property>
       <obj_property name="ObjectShortName">SAMPLE_FREQ</obj_property>
    </wvobject>
-   <wvobject db_ref_id="1" fp_name="/test/HC" type="other">
+   <wvobject fp_name="/test/HC" type="other">
       <obj_property name="ElementShortName">HC</obj_property>
       <obj_property name="ObjectShortName">HC</obj_property>
    </wvobject>
-   <wvobject db_ref_id="1" fp_name="/test/C" type="other">
+   <wvobject fp_name="/test/C" type="other">
       <obj_property name="ElementShortName">C</obj_property>
       <obj_property name="ObjectShortName">C</obj_property>
    </wvobject>
-   <wvobject db_ref_id="1" fp_name="/test/reset" type="logic">
+   <wvobject fp_name="/test/reset" type="logic">
       <obj_property name="ElementShortName">reset</obj_property>
       <obj_property name="ObjectShortName">reset</obj_property>
    </wvobject>
-   <wvobject db_ref_id="1" fp_name="/test/clk" type="logic">
+   <wvobject fp_name="/test/clk" type="logic">
       <obj_property name="ElementShortName">clk</obj_property>
       <obj_property name="ObjectShortName">clk</obj_property>
    </wvobject>
-   <wvobject db_ref_id="1" fp_name="/test/clken" type="logic">
+   <wvobject fp_name="/test/clken" type="logic">
       <obj_property name="ElementShortName">clken</obj_property>
       <obj_property name="ObjectShortName">clken</obj_property>
    </wvobject>
-   <wvobject db_ref_id="1" fp_name="/test/clkEn" type="logic">
+   <wvobject fp_name="/test/clkEn" type="logic">
       <obj_property name="ElementShortName">clkEn</obj_property>
       <obj_property name="ObjectShortName">clkEn</obj_property>
    </wvobject>
-   <wvobject db_ref_id="1" fp_name="/test/clkEnCount" type="array">
+   <wvobject fp_name="/test/clkEnCount" type="array">
       <obj_property name="ElementShortName">clkEnCount[3:0]</obj_property>
       <obj_property name="ObjectShortName">clkEnCount[3:0]</obj_property>
    </wvobject>
-   <wvobject db_ref_id="1" fp_name="/test/iIn" type="array">
+   <wvobject fp_name="/test/rampCounter" type="array">
+      <obj_property name="ElementShortName">rampCounter[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rampCounter[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/iIn" type="array">
       <obj_property name="ElementShortName">iIn[17:0]</obj_property>
       <obj_property name="ObjectShortName">iIn[17:0]</obj_property>
       <obj_property name="CellHeight">100</obj_property>
@@ -64,7 +72,7 @@
       <obj_property name="radix_fractionWidth">17</obj_property>
       <obj_property name="radix_otherWidth">0</obj_property>
    </wvobject>
-   <wvobject db_ref_id="1" fp_name="/test/qIn" type="array">
+   <wvobject fp_name="/test/qIn" type="array">
       <obj_property name="ElementShortName">qIn[17:0]</obj_property>
       <obj_property name="ObjectShortName">qIn[17:0]</obj_property>
       <obj_property name="CellHeight">100</obj_property>
@@ -80,47 +88,63 @@
       <obj_property name="radix_fractionWidth">17</obj_property>
       <obj_property name="radix_otherWidth">0</obj_property>
    </wvobject>
-   <wvobject db_ref_id="1" fp_name="/test/resampler/resamplerI/phase" type="array">
+   <wvobject fp_name="/test/resampler/resamplerI/phase" type="array">
       <obj_property name="ElementShortName">phase[31:0]</obj_property>
       <obj_property name="ObjectShortName">phase[31:0]</obj_property>
    </wvobject>
-   <wvobject db_ref_id="1" fp_name="/test/resampler/resamplerI/resample" type="logic">
+   <wvobject fp_name="/test/resampler/resamplerI/resample" type="logic">
       <obj_property name="ElementShortName">resample</obj_property>
       <obj_property name="ObjectShortName">resample</obj_property>
    </wvobject>
-   <wvobject db_ref_id="1" fp_name="/test/resampler/resamplerI/additionalPhase" type="array">
+   <wvobject fp_name="/test/resampler/resamplerI/additionalPhase" type="array">
       <obj_property name="ElementShortName">additionalPhase[17:0]</obj_property>
       <obj_property name="ObjectShortName">additionalPhase[17:0]</obj_property>
    </wvobject>
-   <wvobject db_ref_id="1" fp_name="/test/resampler/resamplerI/reciprocal" type="array">
+   <wvobject fp_name="/test/resampler/resamplerI/reciprocal" type="array">
       <obj_property name="ElementShortName">reciprocal[17:0]</obj_property>
       <obj_property name="ObjectShortName">reciprocal[17:0]</obj_property>
    </wvobject>
-   <wvobject db_ref_id="1" fp_name="/test/resampler/resamplerI/lutProduct" type="array">
+   <wvobject fp_name="/test/resampler/resamplerI/lutProduct" type="array">
       <obj_property name="ElementShortName">lutProduct[35:0]</obj_property>
       <obj_property name="ObjectShortName">lutProduct[35:0]</obj_property>
    </wvobject>
-   <wvobject db_ref_id="1" fp_name="/test/resampler/resamplerI/offset" type="array">
+   <wvobject fp_name="/test/resampler/resamplerI/offset" type="array">
       <obj_property name="ElementShortName">offset[4:0]</obj_property>
       <obj_property name="ObjectShortName">offset[4:0]</obj_property>
    </wvobject>
-   <wvobject db_ref_id="1" fp_name="/test/resampler/resamplerI/i0123" type="array">
+   <wvobject fp_name="/test/resampler/resamplerI/in" type="array">
+      <obj_property name="ElementShortName">in[17:0]</obj_property>
+      <obj_property name="ObjectShortName">in[17:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/resampler/resamplerI/i0Product" type="array">
+      <obj_property name="ElementShortName">i0Product[35:0]</obj_property>
+      <obj_property name="ObjectShortName">i0Product[35:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/resampler/resamplerI/i01" type="array">
+      <obj_property name="ElementShortName">i01[35:0]</obj_property>
+      <obj_property name="ObjectShortName">i01[35:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/resampler/resamplerI/i0123" type="array">
       <obj_property name="ElementShortName">i0123[35:0]</obj_property>
       <obj_property name="ObjectShortName">i0123[35:0]</obj_property>
    </wvobject>
-   <wvobject db_ref_id="1" fp_name="/test/resampler/resamplerI/i4567" type="array">
+   <wvobject fp_name="/test/resampler/resamplerI/i4567" type="array">
       <obj_property name="ElementShortName">i4567[35:0]</obj_property>
       <obj_property name="ObjectShortName">i4567[35:0]</obj_property>
    </wvobject>
-   <wvobject db_ref_id="1" fp_name="/test/resampler/resamplerI/i8Delay2" type="array">
+   <wvobject fp_name="/test/resampler/resamplerI/i8Delay2" type="array">
       <obj_property name="ElementShortName">i8Delay2[35:0]</obj_property>
       <obj_property name="ObjectShortName">i8Delay2[35:0]</obj_property>
    </wvobject>
-   <wvobject db_ref_id="1" fp_name="/test/resampler/resamplerI/resampleDelay[4]" type="logic">
-      <obj_property name="ElementShortName">[4]</obj_property>
-      <obj_property name="ObjectShortName">resampleDelay[4]</obj_property>
+   <wvobject fp_name="/test/resampler/resamplerI/sum" type="array">
+      <obj_property name="ElementShortName">sum[35:0]</obj_property>
+      <obj_property name="ObjectShortName">sum[35:0]</obj_property>
    </wvobject>
-   <wvobject db_ref_id="1" fp_name="/test/iOut" type="array">
+   <wvobject fp_name="/test/resampler/resamplerI/resampleDelay[3]" type="logic">
+      <obj_property name="ElementShortName">[3]</obj_property>
+      <obj_property name="ObjectShortName">[3]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/iOut" type="array">
       <obj_property name="ElementShortName">iOut[17:0]</obj_property>
       <obj_property name="ObjectShortName">iOut[17:0]</obj_property>
       <obj_property name="CellHeight">100</obj_property>
@@ -136,11 +160,11 @@
       <obj_property name="radix_fractionWidth">17</obj_property>
       <obj_property name="radix_otherWidth">0</obj_property>
    </wvobject>
-   <wvobject db_ref_id="1" fp_name="/test/resampler/clkEnOut" type="logic">
+   <wvobject fp_name="/test/resampler/clkEnOut" type="logic">
       <obj_property name="ElementShortName">clkEnOut</obj_property>
       <obj_property name="ObjectShortName">clkEnOut</obj_property>
    </wvobject>
-   <wvobject db_ref_id="1" fp_name="/test/qOut" type="array">
+   <wvobject fp_name="/test/qOut" type="array">
       <obj_property name="ElementShortName">qOut[17:0]</obj_property>
       <obj_property name="ObjectShortName">qOut[17:0]</obj_property>
       <obj_property name="CellHeight">100</obj_property>
@@ -156,15 +180,27 @@
       <obj_property name="radix_fractionWidth">17</obj_property>
       <obj_property name="radix_otherWidth">0</obj_property>
    </wvobject>
-   <wvobject db_ref_id="1" fp_name="/test/resampler/clkEnOut" type="logic">
+   <wvobject fp_name="/test/resampler/clkEnOut" type="logic">
       <obj_property name="ElementShortName">clkEnOut</obj_property>
       <obj_property name="ObjectShortName">clkEnOut</obj_property>
    </wvobject>
-   <wvobject db_ref_id="1" fp_name="/test/resamplerFreq" type="array">
+   <wvobject fp_name="/test/resamplerFreqHz" type="other">
+      <obj_property name="ElementShortName">resamplerFreqHz</obj_property>
+      <obj_property name="ObjectShortName">resamplerFreqHz</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/resamplerFreqNorm" type="other">
+      <obj_property name="ElementShortName">resamplerFreqNorm</obj_property>
+      <obj_property name="ObjectShortName">resamplerFreqNorm</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/resamplerFreqInt" type="array">
+      <obj_property name="ElementShortName">resamplerFreqInt[31:0]</obj_property>
+      <obj_property name="ObjectShortName">resamplerFreqInt[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/resamplerFreq" type="array">
       <obj_property name="ElementShortName">resamplerFreq[31:0]</obj_property>
       <obj_property name="ObjectShortName">resamplerFreq[31:0]</obj_property>
    </wvobject>
-   <wvobject db_ref_id="1" fp_name="/test/clkEnDecimation" type="array">
+   <wvobject fp_name="/test/clkEnDecimation" type="array">
       <obj_property name="ElementShortName">clkEnDecimation[31:0]</obj_property>
       <obj_property name="ObjectShortName">clkEnDecimation[31:0]</obj_property>
    </wvobject>

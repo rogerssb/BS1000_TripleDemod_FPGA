@@ -111,10 +111,17 @@ always @(posedge clk) begin
 wire    [47:0]  m_axis;
 wire    [17:0]  qDds = m_axis[41:24];
 wire    [17:0]  iDds = m_axis[17:0];
+`ifdef SIMULATE
+reg ddsSimReset;
+initial ddsSimReset = 0;
+wire ddsReset = ddsSimReset || reset;
+`else
+wire ddsReset = reset;
+`endif
 dds6p0 dds(
   .aclk(clk),
   .aclken(1'b1),
-  .aresetn(!reset),
+  .aresetn(!ddsReset),
   .m_axis_data_tdata(m_axis),
   .m_axis_data_tvalid(),
   .s_axis_phase_tdata(ddcFreq),
@@ -467,7 +474,7 @@ wire    [17:0]  iLeadDds = lead_m_axis[17:0];
 dds6p0 leadDds(
   .aclk(clk),
   .aclken(1'b1),
-  .aresetn(!reset),
+  .aresetn(!ddsReset),
   .m_axis_data_tdata(lead_m_axis),
   .m_axis_data_tvalid(),
   .s_axis_phase_tdata(newLead),

@@ -1,4 +1,4 @@
-`include "./addressMap.v"
+`include "addressMap.v"
 `timescale 1ns/100ps
 
 `define ENABLE_AGC
@@ -17,14 +17,18 @@
 
 module test;
 
-reg reset,clk,we0,we1,we2,we3,rd;
-reg sync;
-reg [11:0]a;
-reg [31:0]d;
-wire [31:0]dout;
+    reg reset,clk;
+    reg sync;
+    wire [31:0]dout;
+
+    `ifdef TRIPLE_DEMOD
+        `include "upSpiTasks.v"
+    `else
+        `include "upBusTasks.v"
+    `endif
 
 // Create the clocks
-parameter adcDecimation = 2;
+parameter adcDecimation = 1;
 parameter SYSTEM_FREQ = 9.333333e6;
 parameter SAMPLE_FREQ = SYSTEM_FREQ/adcDecimation;
 parameter HC = 1e9/SYSTEM_FREQ/2;
@@ -37,43 +41,62 @@ always #HC clk = clk^clken;
 `define TWO_POW_17      131072.0
 
 
-real carrierFreqHz = 2333333.3;
-real carrierFreqNorm = carrierFreqHz * `SYSTEM_PERIOD * `TWO_POW_32;
-integer carrierFreqInt = carrierFreqNorm;
+real carrierFreqHz;
+initial carrierFreqHz = 2333333.3;
+real carrierFreqNorm;
+initial carrierFreqNorm = carrierFreqHz * `SYSTEM_PERIOD * `TWO_POW_32;
+integer carrierFreqInt;
+initial carrierFreqInt = carrierFreqNorm;
 wire [31:0] carrierFreq = carrierFreqInt;
 
-real carrierOffsetFreqHz = 0000.0;
-real carrierOffsetFreqNorm = carrierOffsetFreqHz * `SYSTEM_PERIOD * `TWO_POW_32;
-integer carrierOffsetFreqInt = carrierOffsetFreqNorm;
+real carrierOffsetFreqHz;
+initial carrierOffsetFreqHz = 0000.0;
+real carrierOffsetFreqNorm;
+initial carrierOffsetFreqNorm = carrierOffsetFreqHz * `SYSTEM_PERIOD * `TWO_POW_32;
+integer carrierOffsetFreqInt;
+initial carrierOffsetFreqInt = carrierOffsetFreqNorm;
 wire [31:0] carrierOffsetFreq = carrierOffsetFreqInt;
 
-real carrierLimitHz = 25000.0;
-real carrierLimitNorm = carrierLimitHz * `SYSTEM_PERIOD * `TWO_POW_32;
-integer carrierLimitInt = carrierLimitNorm;
+real carrierLimitHz;
+initial carrierLimitHz = 25000.0;
+real carrierLimitNorm;
+initial carrierLimitNorm = carrierLimitHz * `SYSTEM_PERIOD * `TWO_POW_32;
+integer carrierLimitInt;
+initial carrierLimitInt = carrierLimitNorm;
 wire [31:0] carrierLimit = carrierLimitInt;
-integer negCarrierLimitInt = -carrierLimitNorm;
+integer negCarrierLimitInt;
+initial negCarrierLimitInt = -carrierLimitNorm;
 wire    [31:0]  negCarrierLimit = negCarrierLimitInt;
 
 wire [31:0] sweepRate = 32'hffff0000;
 //wire [31:0] sweepRate = 32'h0039c759;
 
-real bitrateBps = 600000.0/adcDecimation;
-real bitrateSamples = 1/bitrateBps/`SYSTEM_PERIOD/2.0;
-integer bitrateSamplesInt = bitrateSamples;
+real bitrateBps;
+initial bitrateBps = 600000.0/adcDecimation;
+real bitrateSamples;
+initial bitrateSamples = 1/bitrateBps/`SYSTEM_PERIOD/2.0;
+integer bitrateSamplesInt;
+initial bitrateSamplesInt = bitrateSamples;
 wire [15:0]bitrateDivider = bitrateSamplesInt - 1;
-real actualBitrateBps = SYSTEM_FREQ/bitrateSamplesInt/2.0;
+real actualBitrateBps;
+initial actualBitrateBps = SYSTEM_FREQ/bitrateSamplesInt/2.0;
 
 integer cicDecimationInt = 3;
 
 
-real resamplerFreqSps = 2*actualBitrateBps;     // 2 samples per symbol
+real resamplerFreqSps;
+initial resamplerFreqSps = 2*actualBitrateBps;     // 2 samples per symbol
 //real resamplerFreqNorm = resamplerFreqSps/(SAMPLE_FREQ/cicDecimationInt/2.0) * `TWO_POW_32;
-real resamplerFreqNorm = resamplerFreqSps/(SAMPLE_FREQ/2.0/2.0) * `TWO_POW_32;
-integer resamplerFreqInt = (resamplerFreqNorm >= `TWO_POW_31) ? (resamplerFreqNorm - `TWO_POW_32) : resamplerFreqNorm;
+real resamplerFreqNorm;
+initial resamplerFreqNorm = resamplerFreqSps/(SAMPLE_FREQ/2.0/2.0) * `TWO_POW_32;
+integer resamplerFreqInt;
+initial resamplerFreqInt = (resamplerFreqNorm >= `TWO_POW_31) ? (resamplerFreqNorm - `TWO_POW_32) : resamplerFreqNorm;
 //integer resamplerFreqInt = resamplerFreqNorm;
 
-real resamplerLimitNorm = 0.01*resamplerFreqNorm;
-integer resamplerLimitInt = resamplerLimitNorm;
+real resamplerLimitNorm;
+initial resamplerLimitNorm = 0.01*resamplerFreqNorm;
+integer resamplerLimitInt;
+initial resamplerLimitInt = resamplerLimitNorm;
 
 /******************************************************************************
                             Create a bit stream
@@ -142,28 +165,43 @@ always @(negedge modClk or posedge reset) begin
 wire    [17:0]  iBB,qBB;
 assign iBB = {randData,17'h10000};
 assign qBB = 18'h0;
+`ifdef USE_VIVADO_CORES
+wire    [47:0]  m_axis;
+wire    [17:0]  qLO = m_axis[41:24];
+wire    [17:0]  iLO = m_axis[17:0];
+dds6p0 dds(
+  .aclk(clk),
+  .aclken(1'b1),
+  .aresetn(!reset),
+  .m_axis_data_tdata(m_axis),
+  .m_axis_data_tvalid(),
+  .s_axis_phase_tdata(carrierFreq + carrierOffsetFreq),
+  .s_axis_phase_tvalid(1'b1)
+);
+`else
 wire    [17:0]  iLO,qLO;
 dds carrierDds (
-    .sclr(reset), 
-    .clk(clk), 
+    .sclr(reset),
+    .clk(clk),
     .ce(1'b1),
-    .we(1'b1), 
-    .data(carrierFreq + carrierOffsetFreq), 
-    .sine(qLO), 
+    .we(1'b1),
+    .data(carrierFreq + carrierOffsetFreq),
+    .sine(qLO),
     .cosine(iLO)
     );
+`endif
 wire [35:0]productI;
-mpy18x18 mpyI(.clk(clk), 
+mpy18x18 mpyI(.clk(clk),
                 .sclr(reset),
-                .a(iBB), 
-                .b(iLO), 
+                .a(iBB),
+                .b(iLO),
                 .p(productI)
                 );
 wire [35:0]productQ;
-mpy18x18 mpyQ(.clk(clk), 
+mpy18x18 mpyQ(.clk(clk),
                 .sclr(reset),
-                .a(qBB), 
-                .b(qLO), 
+                .a(qBB),
+                .b(qLO),
                 .p(productQ)
                 );
 wire [35:0]carrierSum = productI + productQ;
@@ -179,8 +217,10 @@ always @(posedge clk) begin
                             Channel Model
 ******************************************************************************/
 
-real iTxReal = (iTx[17] ? (iTx - 262144.0) : iTx)/131072.0;
-real qTxReal = (qTx[17] ? (qTx - 262144.0) : qTx)/131072.0;
+real iTxReal;
+always @* iTxReal = (iTx[17] ? (iTx - 262144.0) : iTx)/131072.0;
+real qTxReal;
+always @* qTxReal = (qTx[17] ? (qTx - 262144.0) : qTx)/131072.0;
 real txScaleFactor;
 
 wire [17:0]iSignal = 131072.0*iTxReal * txScaleFactor;
@@ -189,14 +229,18 @@ wire [17:0]qSignal = 131072.0*qTxReal * txScaleFactor;
 reg  measureSNR;
 initial measureSNR = 0;
 wire    [17:0]iRx,qRx;
-real iSignalReal = (iSignal[17] ? (iSignal - 262144.0) : iSignal)/131072.0;
-real qSignalReal = (qSignal[17] ? (qSignal - 262144.0) : qSignal)/131072.0;
+real iSignalReal;
+always @* iSignalReal = (iSignal[17] ? (iSignal - 262144.0) : iSignal)/131072.0;
+real qSignalReal;
+always @* qSignalReal = (qSignal[17] ? (qSignal - 262144.0) : qSignal)/131072.0;
 real signalMagSquared;
 real noiseMagSquared;
 integer txSampleCount;
 reg [17:0]iNoise,qNoise;
-real iNoiseReal = (iNoise[17] ? (iNoise - 262144.0) : iNoise)/131072.0;
-real qNoiseReal = (qNoise[17] ? (qNoise - 262144.0) : qNoise)/131072.0;
+real iNoiseReal;
+always @* iNoiseReal = (iNoise[17] ? (iNoise - 262144.0) : iNoise)/131072.0;
+real qNoiseReal;
+always @* qNoiseReal = (qNoise[17] ? (qNoise - 262144.0) : qNoise)/131072.0;
 always @(negedge clk) begin
     `ifdef ADD_NOISE
     iNoise <= $gaussPLI();
@@ -217,8 +261,10 @@ always @(negedge clk) begin
         end
     end
 
-real iChReal = (iRx[17] ? (iRx - 262144.0) : iRx)/131072.0;
-real qChReal = (qRx[17] ? (qRx - 262144.0) : qRx)/131072.0;
+real iChReal;
+always @* iChReal = (iRx[17] ? (iRx - 262144.0) : iRx)/131072.0;
+real qChReal;
+always @* qChReal = (qRx[17] ? (qRx - 262144.0) : qRx)/131072.0;
 assign iRx = iSignal + iNoise;
 assign qRx = qSignal + qNoise;
 
@@ -229,9 +275,11 @@ assign qRx = qSignal + qNoise;
                             Instantiate the Demod
 ******************************************************************************/
 wire    [17:0]  dac0Out,dac1Out,dac2Out;
-demod demod( 
+demod demod(
     .clk(clk), .reset(reset),
-    .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
+    .cs(cs),
+    .busClk(busClk),
+    .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
     .addr(a),
     .din(d),
     .dout(dout),
@@ -255,38 +303,12 @@ always @(posedge clk) begin
         end
     end
 
-reg dac0CS,dac1CS,dac2CS;
-always @(a) begin
-    casex (a)
-        `INTERP0SPACE: begin
-            dac0CS <= 1;
-            dac1CS <= 0;
-            dac2CS <= 0;
-            end
-        `INTERP1SPACE: begin
-            dac0CS <= 0;
-            dac1CS <= 1;
-            dac2CS <= 0;
-            end
-        `INTERP2SPACE: begin
-            dac0CS <= 0;
-            dac1CS <= 0;
-            dac2CS <= 1;
-            end
-        default: begin  
-            dac0CS <= 0;
-            dac1CS <= 0;
-            dac2CS <= 0;
-            end
-        endcase
-    end
 wire    [31:0]  dac0Dout;
 wire    [17:0]  dac0Data;
 reg             interpReset;
 interpolate dac0Interp(
     .clk(clk), .reset(interpReset), .clkEn(dac0Sync),
-    .cs(dac0CS),
-    .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
+    .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
     .addr(a),
     .din(d),
     .dout(dac0Dout),
@@ -300,8 +322,7 @@ wire    [31:0]  dac1Dout;
 wire    [17:0]  dac1Data;
 interpolate dac1Interp(
     .clk(clk), .reset(interpReset), .clkEn(dac1Sync),
-    .cs(dac1CS),
-    .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
+    .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
     .addr(a),
     .din(d),
     .dout(dac1Dout),
@@ -315,8 +336,7 @@ wire    [31:0]  dac2Dout;
 wire    [17:0]  dac2Data;
 interpolate dac2Interp(
     .clk(clk), .reset(interpReset), .clkEn(dac2Sync),
-    .cs(dac2CS),
-    .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
+    .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
     .addr(a),
     .din(d),
     .dout(dac2Dout),
@@ -401,83 +421,10 @@ always @(negedge clk) begin
                                 uP Read/Write Functions
 ******************************************************************************/
 
-function [11:0] createAddress;
-    input [11:0] addrA;
-    input [11:0] addrB;
-    
-    integer i;
-    reg [11:0]finalAddress;
-
-    begin
-    for (i = 0; i < 12; i = i+1) begin
-        if (addrA[i] === 1'bx) begin
-            finalAddress[i] = addrB[i];
-            end
-        else if (addrB[i] === 1'bx) begin
-            finalAddress[i] = addrA[i];
-            end
-        else begin
-            finalAddress[i] = addrA[i] | addrB[i];
-            end
-        end
-    createAddress = finalAddress;
-    end
-endfunction
-
-
-task write16;
-  input [11:0]addr;
-  input [15:0]data;
-  begin
-
-    a = addr;
-    rd = 0;
-    if (addr[1]) begin
-        d[31:16] = data;
-        #100 we2 = 1; we3 = 1;
-        #100 we2 = 0; we3 = 0; 
-        end
-    else begin
-        d[15:0] = data;
-        #100 we0 = 1; we1 = 1;
-        #100 we0 = 0; we1 = 0; 
-        end
-    #100  
-    d = 32'hz;
-    #200;
-  end
-endtask
-
-task write32;
-  input [11:0]addr;
-  input [31:0]data;
-  begin
-    a = addr;
-    d = data;
-    rd = 0;
-    #100 we0 = 1; we1 = 1; we2 = 1; we3 = 1;
-    #100 we0 = 0; we1 = 0; we2 = 0; we3 = 0; 
-    #100
-    d = 32'hz;
-    #200;
-  end
-endtask
-
-task read32;
-  input [11:0]addr;
-  begin
-    a = addr;
-    rd = 0;
-    #100 rd = 1;
-    #100 rd = 0;
-    #200;
-  end
-endtask
-
 initial begin
 
     `ifdef ADD_NOISE
-    // The 11.5 is a fudge factor (should be 12 for the 2 bit shift) for the scaling 
+    // The 11.5 is a fudge factor (should be 12 for the 2 bit shift) for the scaling
     // down of the transmit waveform from full scale.
     // The 13.0 is to translate from SNR to EBNO which is 10log10(bitrate/bandwidth).
     $initGaussPLI(1,8.0 + 11.5 - 13.0,131072.0);
@@ -488,10 +435,7 @@ initial begin
     modReset = 0;
     reset = 0;
     sync = 1;
-    clk = 0;
-    rd = 0;
-    we0 = 0; we1 = 0; we2 = 0; we3 = 0; 
-    d = 32'hz;
+    clk = 1;
     txScaleFactor = 0.25;
 
     // Turn on the clock
@@ -506,14 +450,14 @@ initial begin
     //resamplerFreqInt = 32'h8000eff9;
     write32(createAddress(`RESAMPSPACE,`RESAMPLER_RATE),resamplerFreqInt);
     write32(createAddress(`BITSYNCSPACE,`LF_CONTROL),1);    // Zero the error
-    write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h001a000d);    
-    //write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h0014000c);    
-    write32(createAddress(`BITSYNCSPACE,`LF_LIMIT), resamplerLimitInt);    
+    write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h001a000d);
+    //write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h0014000c);
+    write32(createAddress(`BITSYNCSPACE,`LF_LIMIT), resamplerLimitInt);
     write32(createAddress(`BITSYNCSPACE,`LF_LOCKDETECTOR), 32'h00308000);
 
     // Init the carrier loop filters
     write32(createAddress(`CARRIERSPACE,`CLF_CONTROL),1);    // Zero the error
-    write32(createAddress(`CARRIERSPACE,`CLF_LEAD_LAG),32'h0014000b);   
+    write32(createAddress(`CARRIERSPACE,`CLF_LEAD_LAG),32'h0014000b);
     write32(createAddress(`CARRIERSPACE,`CLF_ULIMIT), carrierLimit);
     write32(createAddress(`CARRIERSPACE,`CLF_LLIMIT), negCarrierLimit);
     write32(createAddress(`CARRIERSPACE,`CLF_LOOPDATA), sweepRate);
@@ -531,7 +475,7 @@ initial begin
     // Init the channel agc loop filter
     write32(createAddress(`CHAGCSPACE,`ALF_CONTROL),1);                 // Zero the error
     write32(createAddress(`CHAGCSPACE,`ALF_SETPOINT),32'h000000e8);     // AGC Setpoint
-    write32(createAddress(`CHAGCSPACE,`ALF_GAINS),32'h00180018);        // AGC Loop Gain
+    write32(createAddress(`CHAGCSPACE,`ALF_GAINS),32'h001a001a);        // AGC Loop Gain
     write32(createAddress(`CHAGCSPACE,`ALF_ULIMIT),32'h4fffffff);       // AGC Upper limit
     write32(createAddress(`CHAGCSPACE,`ALF_LLIMIT),32'h00000000);       // AGC Lower limit
 
@@ -540,14 +484,14 @@ initial begin
                                                            4'h0,`DAC_Q,
                                                            4'h0,`DAC_I});
     write32(createAddress(`INTERP0SPACE, `INTERP_CONTROL),0);
-    write32(createAddress(`INTERP0SPACE, `INTERP_EXPONENT), 6);
-    write32(createAddress(`INTERP0SPACE, `INTERP_MANTISSA), 32'h0001c71c);
+    write16(createAddress(`INTERP0SPACE, `INTERP_CIC_EXPONENT), 6);
+    write32(createAddress(`INTERP0SPACE, `INTERP_CIC_MANTISSA), 32'h0001c71c);
     write32(createAddress(`INTERP1SPACE, `INTERP_CONTROL),0);
-    write32(createAddress(`INTERP1SPACE, `INTERP_EXPONENT), 6);
-    write32(createAddress(`INTERP1SPACE, `INTERP_MANTISSA), 32'h0001c71c);
-    write32(createAddress(`INTERP2SPACE, `INTERP_CONTROL),1);
-    write32(createAddress(`INTERP2SPACE, `INTERP_EXPONENT), 6);
-    write32(createAddress(`INTERP2SPACE, `INTERP_MANTISSA), 32'h0001c71c);
+    write16(createAddress(`INTERP1SPACE, `INTERP_CIC_EXPONENT), 6);
+    write32(createAddress(`INTERP1SPACE, `INTERP_CIC_MANTISSA), 32'h0001c71c);
+    //write32(createAddress(`INTERP2SPACE, `INTERP_CONTROL),1);
+    //write32(createAddress(`INTERP2SPACE, `INTERP_CIC_EXPONENT), 6);
+    //write32(createAddress(`INTERP2SPACE, `INTERP_CIC_MANTISSA), 32'h0001c71c);
 
     reset = 1;
     #(2*C) ;
@@ -601,18 +545,28 @@ initial begin
     interpReset = 0;
 
     // Enable the sample rate loop
-    write32(createAddress(`BITSYNCSPACE,`LF_CONTROL),0);  
+    write32(createAddress(`BITSYNCSPACE,`LF_CONTROL),0);
 
     // Wait 2 bit periods
     #(4*bitrateSamplesInt*C) ;
 
     // Enable the carrier loop, invert the error, and enable sweep
-    write32(createAddress(`CARRIERSPACE,`CLF_CONTROL),2);  
+    write32(createAddress(`CARRIERSPACE,`CLF_CONTROL),2);
 
     `ifdef ENABLE_AGC
     // Enable the AGC loop
-    write32(createAddress(`CHAGCSPACE,`ALF_CONTROL),0);              
+    write32(createAddress(`CHAGCSPACE,`ALF_CONTROL),0);
     `endif
+
+    // Create a reset to clear the carrier LO phase
+    demod.ddc.ddsSimReset = 1;
+    #(2*C) ;
+    demod.ddc.ddsSimReset = 0;
+
+    sr = 15'h1;
+    demod.bitsync.sampleLoop.lagAccum = 32'h0;
+    demod.resampler.resamplerI.phase = 32'h0;
+    demod.resampler.resamplerQ.phase = 32'h0;
 
     // Wait for some data to pass thru
     #(2*100*bitrateSamplesInt*C) ;

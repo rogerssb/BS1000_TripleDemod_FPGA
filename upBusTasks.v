@@ -1,5 +1,8 @@
     parameter ADDR_BITS = 13;
 
+    reg     cs;
+    initial cs = 1;
+
     reg     wr0,wr1,wr2,wr3;
     initial begin
         wr0 = 0; wr1 = 0; wr2 = 0; wr3 = 0;

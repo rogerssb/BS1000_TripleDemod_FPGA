@@ -509,6 +509,10 @@ module trellisMultiH
         else begin
             dout = loopDout;
         end
+        `else
+        else begin
+            dout = 32'hx;
+        end
         `endif
     end
 

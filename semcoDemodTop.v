@@ -56,6 +56,8 @@ module semcoDemodTop (
     // Clock and data outputs
     output              ch0ClkOut,ch0DataOut,
     output              ch1ClkOut,ch1DataOut,
+    output              ch2ClkOut,ch2DataOut,
+    output              ch3ClkOut,ch3DataOut,
 
     // Lock indicators
     output              lockLed0n, lockLed1n,
@@ -109,7 +111,7 @@ module semcoDemodTop (
 
 );
 
-    parameter VER_NUMBER = 16'd472;
+    parameter VER_NUMBER = 16'd473;
 
 
 //******************************************************************************
@@ -416,6 +418,11 @@ module semcoDemodTop (
         .dac1Data(multih1Out),
         .dac2ClkEn(multih2ClkEn),
         .dac2Data(multih2Out),
+        `ifndef EMBED_MULTIH_CARRIER_LOOP
+        .phaseError(),
+        .phaseErrorEn(),
+        .phaseErrorValid(),
+        `endif
         .symEnOut(multihSymEnOut),
         .sym2xEnOut(multihSym2xEnOut),
         .decision(multihBit)
@@ -600,13 +607,13 @@ module semcoDemodTop (
                 cAndD0DataIn = {dualDataI,dualDataQ,1'b0};
             end
             `CandD_SRC_DEC0_CH1: begin
+                cAndD0ClkEn = dualPcmClkEn;
+                cAndD0DataIn = {dualDataQ,dualDataI,1'b0};
+            end
+            `CandD_SRC_DEC1_CH0: begin
                 cAndD0ClkEn = ch1PcmClkEn;
                 cAndD0DataIn = {ch1PcmData,1'b0,1'b0};
             end
-            //`CandD_SRC_DEC1_CH0: begin
-            //    cAndD0ClkEn = ch1PcmClkEn;
-            //    cAndD0DataIn = {dualDataQ,dualDataI,1'b0};
-            //end
             //`CandD_SRC_DEC1_CH1:
             //`CandD_SRC_DEC2_CH0:
             //`CandD_SRC_DEC2_CH1:
@@ -638,6 +645,8 @@ module semcoDemodTop (
         .outputData(cAndD0DataOut)
     );
     assign ch0DataOut = cAndD0DataOut[2];
+    assign ch2ClkOut = ch0ClkOut;
+    assign ch2DataOut = cAndD0DataOut[2];
 
     //----------------------- Channel 1 Jitter Attenuation --------------------
 
@@ -666,13 +675,13 @@ module semcoDemodTop (
                 cAndD1DataIn = {dualDataI,dualDataQ,1'b0};
             end
             `CandD_SRC_DEC0_CH1: begin
+                cAndD1ClkEn = dualPcmClkEn;
+                cAndD1DataIn = {dualDataQ,dualDataI,1'b0};
+            end
+            `CandD_SRC_DEC1_CH0: begin
                 cAndD1ClkEn = ch1PcmClkEn;
                 cAndD1DataIn = {ch1PcmData,1'b0,1'b0};
             end
-            //`CandD_SRC_DEC1_CH0: begin
-            //    cAndD1ClkEn = ch1PcmClkEn;
-            //    cAndD1DataIn = {dualDataQ,dualDataI,1'b0};
-            //end
             //`CandD_SRC_DEC1_CH1:
             //`CandD_SRC_DEC2_CH0:
             //`CandD_SRC_DEC2_CH1:
@@ -704,6 +713,8 @@ module semcoDemodTop (
         .outputData(cAndD1DataOut)
     );
     assign ch1DataOut = cAndD1DataOut[2];
+    assign ch3ClkOut = ch1ClkOut;
+    assign ch3DataOut = cAndD1DataOut[2];
 
     assign          pll2_REF = 1'b0;
     assign          pll2_Data = 1'b0;

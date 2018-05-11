@@ -19,6 +19,13 @@ module test;
 
 `include "mfiltCoeff.v"
 
+`define USE_UP_BUS
+
+`ifdef USE_UP_BUS
+    `include "addressMap.v"
+    `include "upBusTasks.v"
+`endif
+
 //`define SIM_MFILT
 `ifdef SIM_MFILT
   // mfilt # (C0_0, C0_1, C0_2, C0_3, C1_0, C1_1, C1_2, C1_3) uut_mfilt
@@ -184,35 +191,42 @@ module test;
    wire        sym2xEnOut;
    trellisMultiH trellisMultiH
      (
-      .clk                 (clk     ),
-      .reset               (reset   ),
-      .symEnEvenIn         (symEnEven),
-      .symEnIn             (symEn   ),
-      .sym2xEnIn           (sym2xEn ),
-      .iIn                 (dinH[57:40]),
-      .qIn                 (dinH[17:0] ),
-      /* -----\/----- EXCLUDED -----\/-----
-      wr0,wr1,wr2,wr3,
-      addr,
-      din,dout,
-      dac0Select,dac1Select,dac2Select,
-      dac0Sync,
-      dac0Data,
-      dac1Sync,
-      dac1Data,
-      dac2Sync,
-      dac2Data,
-      -----/\----- EXCLUDED -----/\----- */
-      .decision            (decision  ),
-      .phaseError          (phaseError),
-      .symEnOut            (symEnOut  ),
-      .sym2xEnOut          (sym2xEnOut)
+        .clk                 (clk     ),
+        .reset               (reset   ),
+        .symEnEvenIn         (symEnEven),
+        .symEnIn             (symEn   ),
+        .sym2xEnIn           (sym2xEn ),
+        .iIn                 (dinH[57:40]),
+        .qIn                 (dinH[17:0] ),
+        `ifdef USE_UP_BUS
+        .busClk(busClk),
+        .cs(cs),
+        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .addr(a),
+        .din(d),
+        .dout(),
+        `endif
+        /* -----\/----- EXCLUDED -----\/-----
+        dac0Select,dac1Select,dac2Select,
+        dac0Sync,
+        dac0Data,
+        dac1Sync,
+        dac1Data,
+        dac2Sync,
+        dac2Data,
+        -----/\----- EXCLUDED -----/\----- */
+        .decision            (decision  ),
+        .phaseError          (phaseError),
+        .symEnOut            (symEnOut  ),
+        .sym2xEnOut          (sym2xEnOut)
    );
+   `ifndef USE_UP_BUS
    initial begin
         trellisMultiH.decayFactor = 8'hff;
         trellisMultiH.symbolDelay = 1;
         trellisMultiH.tbEnable = 1;
    end
+   `endif
 
 // `define COMPARE_AGAINST_SYN
  `ifdef COMPARE_AGAINST_SYN
@@ -489,6 +503,12 @@ initial begin
 `ifdef RANDOM_LONG_ATT_10dB_NOISE_2
       $readmemh("P:/semco/matlab_sim_results/multi-h/10dB_with_saved_winning_rotation/multi-h-input.hex", readMem);
 `endif
+
+   #100 reset = 1;
+   #100 reset = 0;
+
+   write32(createAddress(`MULTIH_SPACE,`TRELLIS_DECAY),255);
+   write32(createAddress(`MULTIH_SPACE,`TRELLIS_CONTROL),32'h6);
 
    #100 reset = !reset;
    #100 reset = !reset;

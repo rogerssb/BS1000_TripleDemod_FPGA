@@ -341,14 +341,14 @@ module test;
                                                                4'h0,`DAC_Q,
                                                                4'h0,`DAC_I});
         write32(createAddress(`INTERP0SPACE, `INTERP_CONTROL),0);
-        write32(createAddress(`INTERP0SPACE, `INTERP_EXPONENT), 8);
-        write32(createAddress(`INTERP0SPACE, `INTERP_MANTISSA), 32'h00012000);
+        write32(createAddress(`INTERP0SPACE, `INTERP_CIC_EXPONENT), 8);
+        write32(createAddress(`INTERP0SPACE, `INTERP_CIC_MANTISSA), 32'h00012000);
         write32(createAddress(`INTERP1SPACE, `INTERP_CONTROL),0);
-        write32(createAddress(`INTERP1SPACE, `INTERP_EXPONENT), 8);
-        write32(createAddress(`INTERP1SPACE, `INTERP_MANTISSA), 32'h00012000);
+        write32(createAddress(`INTERP1SPACE, `INTERP_CIC_EXPONENT), 8);
+        write32(createAddress(`INTERP1SPACE, `INTERP_CIC_MANTISSA), 32'h00012000);
         write32(createAddress(`INTERP2SPACE, `INTERP_CONTROL),1);
-        write32(createAddress(`INTERP2SPACE, `INTERP_EXPONENT), 8);
-        write32(createAddress(`INTERP2SPACE, `INTERP_MANTISSA), 32'h00012000);
+        write32(createAddress(`INTERP2SPACE, `INTERP_CIC_EXPONENT), 8);
+        write32(createAddress(`INTERP2SPACE, `INTERP_CIC_MANTISSA), 32'h00012000);
 
         `ifdef ADD_DQM
         // Bit Error Probability Estimator

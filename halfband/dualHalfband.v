@@ -1,7 +1,7 @@
 /******************************************************************************
 Copyright 2008-2015 Koos Technical Services, Inc. All Rights Reserved
 
-This source code is the Intellectual Property of Koos Technical Services,Inc. 
+This source code is the Intellectual Property of Koos Technical Services,Inc.
 (KTS) and is provided under a License Agreement which protects KTS' ownership and
 derivative rights in exchange for negotiated compensation.
 ******************************************************************************/
@@ -11,7 +11,7 @@ derivative rights in exchange for negotiated compensation.
 
 //************************ Two Channel Version ********************************
 
-module dualHalfbandDecimate( 
+module dualHalfbandDecimate(
     input                       clk, reset, clkEn,
     input       signed  [17:0]  iIn,qIn,
     output  reg signed  [17:0]  iOut,qOut,
@@ -23,8 +23,8 @@ module dualHalfbandDecimate(
         if (reset) begin
             clkEnEven <= 0;
         end
-        else if (clkEn) begin  
-            clkEnEven <= ~clkEnEven;    
+        else if (clkEn) begin
+            clkEnEven <= ~clkEnEven;
         end
     end
 
@@ -197,8 +197,8 @@ endmodule
 //`define TEST_MODULE
 `ifdef TEST_MODULE
 
-`define SINEWAVE_TEST
-//`define IMPULSE_TEST
+//`define SINEWAVE_TEST
+`define IMPULSE_TEST
 
 `timescale 1ns/100ps
 
@@ -207,7 +207,7 @@ module test;
 reg reset,clk;
 
 // Create the clocks
-parameter decimation = 4;
+parameter decimation = 7;
 parameter HC = 5;
 parameter C = 2*HC;
 reg clken;
@@ -236,9 +236,9 @@ always @(posedge clk) begin
 // Instantiate the halfband filter
 reg     [17:0]hbIn;
 wire    [17:0]hbOut;
-halfbandDecimate hb ( .clk(clk), .reset(reset), .clkEn(clkEn),
-                      .iIn(hbIn),
-                      .iOut(hbOut),
+dualHalfbandDecimate hb ( .clk(clk), .reset(reset), .clkEn(clkEn),
+                      .iIn(hbIn), .qIn(hbIn),
+                      .iOut(hbOut), .qOut(),
                       .clkEnOut()
                     );
 
@@ -256,7 +256,7 @@ wire [31:0] freq = carrierFreqInt;
 wire    [47:0]  m_axis;
 wire    [17:0]  sineOut = m_axis[41:24];
 wire    [17:0]  cosOut = m_axis[17:0];
-dds dds(
+dds6p0 dds(
   .aclk(clk),
   .aclken(1'b1),
   .aresetn(!reset),
@@ -279,7 +279,7 @@ always @(posedge clk) begin
     end
 
 initial begin
-    reset = 0;
+    reset = 1;
     clkEn = 1;
     clkEnCount = 0;
     clk = 0;
@@ -351,7 +351,7 @@ initial begin
     clkEn = 1;
     clkEnCount = 0;
     clk = 0;
-    bitCount = 0;       
+    bitCount = 0;
 
     // Turn on the clock
     clken=1;
