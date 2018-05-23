@@ -111,7 +111,7 @@ module semcoDemodTop (
 
 );
 
-    parameter VER_NUMBER = 16'd473;
+    parameter VER_NUMBER = 16'd474;
 
 
 //******************************************************************************
@@ -428,6 +428,26 @@ module semcoDemodTop (
         .decision(multihBit)
     );
 
+    //`define BYPASS_MULTIH_DECODER
+    `ifdef BYPASS_MULTIH_DECODER
+    reg multihDataOut;
+    reg multihClkOut;
+    always @(posedge clk) begin
+        if (multihSym2xEnOut) begin
+            multihClkOut <= 1;
+            if (multihSymEnOut) begin
+                multihDataOut <= multihBit[1];
+            end
+            else begin
+                multihDataOut <= multihBit[0];
+            end
+        end
+        else begin
+            multihClkOut <= 0;
+        end
+    end
+    `endif
+
 `endif //ADD_MULTIH
 
 //******************************************************************************
@@ -694,6 +714,13 @@ module semcoDemodTop (
         endcase
     end
 
+    `ifdef BYPASS_MULTIH_DECODER
+    wire    [31:0]  cAndD1Dout = 32'h0;
+    assign ch1DataOut = multihDataOut;
+    assign ch1ClkOut = multihClkOut;
+    assign ch3DataOut = multihDataOut;
+    assign ch3ClkOut = multihClkOut;
+    `else
     wire    [2:0]   cAndD1DataOut;
     wire    [31:0]  cAndD1Dout;
     clkAndDataOutput #(.RegSpace(`CandD1SPACE)) cAndD1 (
@@ -715,6 +742,7 @@ module semcoDemodTop (
     assign ch1DataOut = cAndD1DataOut[2];
     assign ch3ClkOut = ch1ClkOut;
     assign ch3DataOut = cAndD1DataOut[2];
+    `endif
 
     assign          pll2_REF = 1'b0;
     assign          pll2_Data = 1'b0;

@@ -440,7 +440,7 @@ always @(posedge clk) begin
         // Reclock the inputs
         slipI <= iMpy;
         slipQ <= qMpy;
-        sym2xEnOut <= sym2xEnSr[3];
+        sym2xEnOut <= sym2xEnSr[1];
 
         // Create a gated version of symEn.
         if (symEnSr[3] && symbolSlip) begin
@@ -448,12 +448,12 @@ always @(posedge clk) begin
             symbolSlipped <= 1;
             end
         else begin
-            symEnOut <= symEnSr[3];
+            symEnOut <= symEnSr[1];
             symbolSlipped <= 0;
             end
         end
         `ifdef ADD_SUPERBAUD_TED
-        symEnEvenOut <= symEnEvenSr[3];
+        symEnEvenOut <= symEnEvenSr[1];
         `else
         if (symEnOut) begin
             symEnEvenOut <= ~symEnEvenOut;
@@ -463,6 +463,37 @@ always @(posedge clk) begin
 
 assign iOut = slipI;
 assign qOut = slipQ;
+
+
+    wire    signed  [11:0]   phase;
+    vm_cordic cordic(
+        .clk(clk),
+        .ena(sym2xEnOut),
+        .x(iOut[17:4]),.y(qOut[17:4]),
+        //.ena(sym2xEn),
+        //.x(iIn[17:4]),.y(qIn[17:4]),
+        .m(),
+        .p(phase)
+        );
+    reg     signed  [11:0]  freqOut;
+    reg     signed  [11:0]  prevPhase;
+    wire    signed  [11:0]  phaseDiff = phase - prevPhase;
+    always @(posedge clk) begin
+        if (sym2xEnOut) begin
+        //if (sym2xEn) begin
+            if (phaseDiff == 12'h800) begin
+                freqOut <= 0;
+            end
+            else begin
+            freqOut <= phaseDiff;
+            end
+            prevPhase <= phase;
+        end
+    end
+
+    wire    signed  [17:0]  freq = $signed({freqOut,6'b0});
+
+
 
 
 `ifdef SIMULATE
@@ -503,6 +534,15 @@ always @(posedge clk) begin
                 dac0ClkEn <= sym2xEnOut;
                 dac0En <= 1;
                 end
+            `DAC_FREQ: begin
+                dac0Data <= freq;
+                dac0ClkEn <= sym2xEnOut;
+                //dac0Data <= freq;
+                //dac0ClkEn <= sym2xEn;
+                //dac0Data <= {1'b0,sym2xEnOut,16'b0};
+                //dac0ClkEn <= 1;
+                dac0En <= 1;
+                end
             `DAC_PHERROR: begin
                 dac0Data <= {absModeError,10'b0};
                 dac0ClkEn <= 1;
@@ -531,6 +571,12 @@ always @(posedge clk) begin
                 dac1ClkEn <= sym2xEn;
                 dac1En <= 1;
                 end
+            `DAC_FREQ: begin
+                dac1Data <= {1'b0,symEnOut,16'b0};
+                //dac1Data <= {1'b0,symEn,16'b0};
+                dac1ClkEn <= 1;
+                dac1En <= 1;
+                end
             `DAC_PHERROR: begin
                 dac1Data <= {phaseError,10'b0};
                 dac1ClkEn <= 1;
@@ -557,6 +603,12 @@ always @(posedge clk) begin
             `DAC_Q: begin
                 dac2Data <= qIn;
                 dac2ClkEn <= sym2xEn;
+                dac2En <= 1;
+                end
+            `DAC_FREQ: begin
+                dac2Data <= {1'b0,symEnEvenOut,16'b0};
+                //dac2Data <= {1'b0,symEnEven,16'b0};
+                dac2ClkEn <= 1;
                 dac2En <= 1;
                 end
             `DAC_PHERROR: begin

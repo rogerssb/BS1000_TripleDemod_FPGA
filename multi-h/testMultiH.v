@@ -507,7 +507,7 @@ initial begin
    #100 reset = 1;
    #100 reset = 0;
 
-   write32(createAddress(`MULTIH_SPACE,`TRELLIS_DECAY),255);
+   write32(createAddress(`MULTIH_SPACE,`TRELLIS_DECAY),252);
    write32(createAddress(`MULTIH_SPACE,`TRELLIS_CONTROL),32'h6);
 
    #100 reset = !reset;
