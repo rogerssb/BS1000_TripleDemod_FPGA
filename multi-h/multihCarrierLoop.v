@@ -413,18 +413,19 @@ cmpy18Sat cmpy18Sat(
 //`endif
 
 // Create a new set of clock enables to account for the delay through the complex multiplier
-reg [3:0] symEnEvenSr;
-reg [3:0] symEnSr;
-reg [3:0] sym2xEnSr;
+reg [1:0] symEnEvenSr;
+reg [1:0] symEnSr;
+reg [1:0] sym2xEnSr;
 always @(posedge clk) begin
     if (reset) begin
+        symEnEvenSr <= 0;
         symEnSr <= 0;
         sym2xEnSr <= 0;
         end
     else begin
-        symEnEvenSr <= {symEnEvenSr[2:0], symEnEven};
-        symEnSr <= {symEnSr[2:0], symEn};
-        sym2xEnSr <= {sym2xEnSr[2:0], sym2xEn};
+        symEnEvenSr <= {symEnEvenSr[0:0], symEnEven};
+        symEnSr <= {symEnSr[0:0], symEn};
+        sym2xEnSr <= {sym2xEnSr[0:0], sym2xEn};
         end
     end
 
@@ -443,7 +444,7 @@ always @(posedge clk) begin
         sym2xEnOut <= sym2xEnSr[1];
 
         // Create a gated version of symEn.
-        if (symEnSr[3] && symbolSlip) begin
+        if (symEnSr[1] && symbolSlip) begin
             symEnOut <= 0;
             symbolSlipped <= 1;
             end

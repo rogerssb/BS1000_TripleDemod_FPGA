@@ -111,7 +111,7 @@ module semcoDemodTop (
 
 );
 
-    parameter VER_NUMBER = 16'd474;
+    parameter VER_NUMBER = 16'd475;
 
 
 //******************************************************************************
@@ -422,6 +422,8 @@ module semcoDemodTop (
         .phaseError(),
         .phaseErrorEn(),
         .phaseErrorValid(),
+        `else
+        .multihCarrierLock(multihCarrierLock),
         `endif
         .symEnOut(multihSymEnOut),
         .sym2xEnOut(multihSym2xEnOut),
@@ -447,6 +449,10 @@ module semcoDemodTop (
         end
     end
     `endif
+
+wire    timingLock = demodTimingLock;
+wire    carrierLock = multihMode ? multihCarrierLock : demodCarrierLock;
+`else //ADD_MULTIH
 
 `endif //ADD_MULTIH
 
@@ -941,7 +947,7 @@ sdi sdi(
     .eyeSync(demodEyeClkEn),
     .iEye(iDemodEye),.qEye(qDemodEye),
     .eyeOffset(demodEyeOffset),
-    .bitsyncLock(demodTimingLock), .demodLock(demodCarrierLock),
+    .bitsyncLock(timingLock), .demodLock(carrierLock),
     `ifdef ADD_DESPREADER
     .iEpoch(iEpoch), .qEpoch(qEpoch),
     `endif
@@ -961,8 +967,8 @@ sdi sdi(
     assign dac2_nCs = 1'b0;
     assign dac_sdio = 1'b0;
 
-    assign lockLed0n = !demodTimingLock;
-    assign lockLed1n = !demodCarrierLock;
+    assign lockLed0n = !timingLock;
+    assign lockLed1n = !carrierLock;
 
     `ifdef TRIPLE_DEMOD
 

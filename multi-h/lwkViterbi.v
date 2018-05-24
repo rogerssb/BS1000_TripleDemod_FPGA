@@ -518,23 +518,6 @@ module viterbiMultiH
 `endif
 
    // Compute the phase Error
-   reg [ROT_BITS-1:0]    qOut0r, qOut49r, qOut34r, qOut19r, qOut4r, qOut53r, qOut38r, qOut23r,
-                         qOut8r, qOut57r, qOut42r, qOut27r, qOut12r, qOut61r, qOut46r, qOut31r,
-                         qOut16r, qOut1r, qOut50r, qOut35r, qOut20r, qOut5r, qOut54r, qOut39r,
-                         qOut24r, qOut9r, qOut58r, qOut43r, qOut28r, qOut13r, qOut62r, qOut47r,
-                         qOut32r, qOut17r, qOut2r, qOut51r, qOut36r, qOut21r, qOut6r, qOut55r,
-                         qOut40r, qOut25r, qOut10r, qOut59r, qOut44r, qOut29r, qOut14r, qOut63r,
-                         qOut48r, qOut33r, qOut18r, qOut3r, qOut52r, qOut37r, qOut22r, qOut7r,
-                         qOut56r, qOut41r, qOut26r, qOut11r, qOut60r, qOut45r, qOut30r, qOut15r;
-   reg [ROT_BITS-1:0]    qOut0rr, qOut49rr, qOut34rr, qOut19rr, qOut4rr, qOut53rr, qOut38rr, qOut23rr,
-                         qOut8rr, qOut57rr, qOut42rr, qOut27rr, qOut12rr, qOut61rr, qOut46rr, qOut31rr,
-                         qOut16rr, qOut1rr, qOut50rr, qOut35rr, qOut20rr, qOut5rr, qOut54rr, qOut39rr,
-                         qOut24rr, qOut9rr, qOut58rr, qOut43rr, qOut28rr, qOut13rr, qOut62rr, qOut47rr,
-                         qOut32rr, qOut17rr, qOut2rr, qOut51rr, qOut36rr, qOut21rr, qOut6rr, qOut55rr,
-                         qOut40rr, qOut25rr, qOut10rr, qOut59rr, qOut44rr, qOut29rr, qOut14rr, qOut63rr,
-                         qOut48rr, qOut33rr, qOut18rr, qOut3rr, qOut52rr, qOut37rr, qOut22rr, qOut7rr,
-                         qOut56rr, qOut41rr, qOut26rr, qOut11rr, qOut60rr, qOut45rr, qOut30rr, qOut15rr;
-
    reg phaseErrorValid;
     always @(posedge clk)
      begin
@@ -542,14 +525,6 @@ module viterbiMultiH
            phaseError0 <= 0;
            phaseError1 <= 0;
            phaseError2 <= 0;
-           qOut0r  <= 0;
-           qOut8r  <= 0;
-           qOut16r <= 0;
-           qOut24r <= 0;
-           qOut32r <= 0;
-           qOut40r <= 0;
-           qOut48r <= 0;
-           qOut56r <= 0;
            phaseErrorValid <= 0;
         end
         else if (symEnAcs) begin
@@ -562,10 +537,19 @@ module viterbiMultiH
              5 :      begin  phaseError1 <= qOut5 ; end
              6 :      begin  phaseError1 <= qOut6 ; end
              7 :      begin  phaseError1 <= qOut7 ; end
+             8 :      begin  phaseError1 <= qOut8 ; end
+             9 :      begin  phaseError1 <= qOut9 ; end
+            10 :      begin  phaseError1 <= qOut10 ; end
+            11 :      begin  phaseError1 <= qOut11 ; end
+            12 :      begin  phaseError1 <= qOut12 ; end
+            13 :      begin  phaseError1 <= qOut13 ; end
+            14 :      begin  phaseError1 <= qOut14 ; end
+            15 :      begin  phaseError1 <= qOut15 ; end
              // default: begin  phaseError1 <= phaseError1; phaseErrorValid <= 0; end
              default: begin  phaseError1 <= 0; end
            endcase
-           phaseErrorValid <= (index[5:3] == 3'b000);
+           //phaseErrorValid <= (index[5:3] == 3'b000);
+           phaseErrorValid <= (index[5:4] == 2'b00);
         end
      end
 

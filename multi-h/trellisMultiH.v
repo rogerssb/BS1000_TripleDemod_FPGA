@@ -42,6 +42,8 @@ module trellisMultiH
     output  signed  [ROT_BITS-1:0]  phaseError,
     output                          phaseErrorEn,
     output                          phaseErrorValid,
+    `else
+    output                          multihCarrierLock,
     `endif
     output                          symEnOut,
     output                          sym2xEnOut
@@ -163,7 +165,7 @@ module trellisMultiH
         .dac2ClkEn(loopDac2ClkEn),
         .dac2Data(loopDac2Data),
         .dac2En(loopDac2En),
-        .demodLock(multihDemodLock),
+        .demodLock(multihCarrierLock),
         .iOut(iLoop),
         .qOut(qLoop),
         .symEnEvenOut(symEnEvenLoop),

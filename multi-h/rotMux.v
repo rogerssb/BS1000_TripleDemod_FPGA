@@ -1,30 +1,30 @@
 `timescale 1ns/1ps
-module rotMux 
+module rotMux
   (
    clk, reset, symEn, sym2xEn, symEnEven,
-   mfI_45_0, mfI_45_1, mfI_45_2, mfI_45_3, 
-   mfI_54_0, mfI_54_1, mfI_54_2, mfI_54_3, 
-   mfQ_45_0, mfQ_45_1, mfQ_45_2, mfQ_45_3, 
+   mfI_45_0, mfI_45_1, mfI_45_2, mfI_45_3,
+   mfI_54_0, mfI_54_1, mfI_54_2, mfI_54_3,
+   mfQ_45_0, mfQ_45_1, mfQ_45_2, mfQ_45_3,
    mfQ_54_0, mfQ_54_1, mfQ_54_2, mfQ_54_3,
    iMfInRot, qMfInRot,
    symEnOut, sym2xEnOut, symEnEvenOut
    );
    parameter             MF_BITS = 8;
-   
+
    input                 clk, reset;
    input                 symEn, sym2xEn, symEnEven;
-   input [MF_BITS-1:0]   mfI_45_0, mfI_45_1, mfI_45_2, mfI_45_3, 
-                         mfI_54_0, mfI_54_1, mfI_54_2, mfI_54_3, 
-                         mfQ_45_0, mfQ_45_1, mfQ_45_2, mfQ_45_3, 
+   input [MF_BITS-1:0]   mfI_45_0, mfI_45_1, mfI_45_2, mfI_45_3,
+                         mfI_54_0, mfI_54_1, mfI_54_2, mfI_54_3,
+                         mfQ_45_0, mfQ_45_1, mfQ_45_2, mfQ_45_3,
                          mfQ_54_0, mfQ_54_1, mfQ_54_2, mfQ_54_3;
    output [MF_BITS-1:0]  iMfInRot, qMfInRot;
    output                symEnOut, sym2xEnOut, symEnEvenOut;
-   
-// re-clock the Match Filter inputs to improve the fan-out on the register to register timing 
-// from the matchfiter output to the imput of the ACS 
-reg [MF_BITS-1:0]     mfI_45_0r, mfI_45_1r, mfI_45_2r, mfI_45_3r, 
-                        mfI_54_0r, mfI_54_1r, mfI_54_2r, mfI_54_3r, 
-                        mfQ_45_0r, mfQ_45_1r, mfQ_45_2r, mfQ_45_3r, 
+
+// re-clock the Match Filter inputs to improve the fan-out on the register to register timing
+// from the matchfiter output to the imput of the ACS
+reg [MF_BITS-1:0]     mfI_45_0r, mfI_45_1r, mfI_45_2r, mfI_45_3r,
+                        mfI_54_0r, mfI_54_1r, mfI_54_2r, mfI_54_3r,
+                        mfQ_45_0r, mfQ_45_1r, mfQ_45_2r, mfQ_45_3r,
                         mfQ_54_0r, mfQ_54_1r, mfQ_54_2r, mfQ_54_3r;
 always @(posedge clk) begin
     if (reset) begin
@@ -65,13 +65,13 @@ always @(posedge clk) begin
     end
 end
 
-// Some control singnals  
+// Some control singnals
 reg [1:0]             inputMuxSel; // starts to count to 3, resets to 0 at symEn
 always @(posedge clk) begin
     if (reset) begin
         inputMuxSel <= 3; //0;
     end
-    else begin 
+    else begin
         if (symEn) begin
             inputMuxSel <= 0;
         end
@@ -84,21 +84,21 @@ always @(posedge clk) begin
 end
 
 
-// four 4to1 input muxes on the match filter inputs. 
+// four 4to1 input muxes on the match filter inputs.
 reg [MF_BITS-1:0]    mfI45MuxOut, mfI54MuxOut,
                     mfQ45MuxOut, mfQ54MuxOut;
-always @(inputMuxSel or 
+always @(inputMuxSel or
         mfI_45_0r or mfI_54_0r or
-        mfI_45_1r or mfI_54_1r or 
-        mfI_45_2r or mfI_54_2r or 
-        mfI_45_3r or mfI_54_3r or 
+        mfI_45_1r or mfI_54_1r or
+        mfI_45_2r or mfI_54_2r or
+        mfI_45_3r or mfI_54_3r or
         mfQ_45_0r or mfQ_54_0r or
-        mfQ_45_1r or mfQ_54_1r or 
-        mfQ_45_2r or mfQ_54_2r or 
-        mfQ_45_3r or mfQ_54_3r) 
+        mfQ_45_1r or mfQ_54_1r or
+        mfQ_45_2r or mfQ_54_2r or
+        mfQ_45_3r or mfQ_54_3r)
 
     begin
-    case(inputMuxSel) 
+    case(inputMuxSel)
         0: begin
             mfI45MuxOut <= mfI_45_0r;
             mfI54MuxOut <= mfI_54_0r;
@@ -141,9 +141,9 @@ always @(posedge clk) begin
 //    end
 end
 
-   reg [5:0] symEnSr;
-   reg [5:0] sym2xEnSr;
-   reg [5:0] symEnEvenSr;
+   reg symEnSr;
+   reg sym2xEnSr;
+   reg symEnEvenSr;
    always @(posedge clk) begin
       if (reset) begin
          symEnSr <= 0;
@@ -151,14 +151,14 @@ end
          symEnEvenSr <= 0;
       end
       else begin
-         symEnSr <= {symEnSr[4:0], symEn};
-         sym2xEnSr <= {sym2xEnSr[4:0], sym2xEn};
-         symEnEvenSr <= {symEnEvenSr[4:0], symEnEven};
+         symEnSr <= symEn;
+         sym2xEnSr <= sym2xEn;
+         symEnEvenSr <= symEnEven;
       end
    end
 
-   wire symEnOut = symEnSr[0];    
-   wire sym2xEnOut = sym2xEnSr[0];    
-   wire symEnEvenOut = symEnEvenSr[0];    
-   
+   wire symEnOut = symEnSr;
+   wire sym2xEnOut = sym2xEnSr;
+   wire symEnEvenOut = symEnEvenSr;
+
 endmodule
