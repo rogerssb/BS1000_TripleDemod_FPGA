@@ -466,6 +466,7 @@ assign iOut = slipI;
 assign qOut = slipQ;
 
 
+    `ifdef ADD_FM_DISC
     wire    signed  [11:0]   phase;
     vm_cordic cordic(
         .clk(clk),
@@ -493,6 +494,7 @@ assign qOut = slipQ;
     end
 
     wire    signed  [17:0]  freq = $signed({freqOut,6'b0});
+    `endif //ADD_FM_DISC
 
 
 
@@ -535,6 +537,7 @@ always @(posedge clk) begin
                 dac0ClkEn <= sym2xEnOut;
                 dac0En <= 1;
                 end
+            `ifdef ADD_FM_DISC
             `DAC_FREQ: begin
                 dac0Data <= freq;
                 dac0ClkEn <= sym2xEnOut;
@@ -544,6 +547,7 @@ always @(posedge clk) begin
                 //dac0ClkEn <= 1;
                 dac0En <= 1;
                 end
+            `endif
             `DAC_PHERROR: begin
                 dac0Data <= {absModeError,10'b0};
                 dac0ClkEn <= 1;
@@ -572,12 +576,14 @@ always @(posedge clk) begin
                 dac1ClkEn <= sym2xEn;
                 dac1En <= 1;
                 end
+            `ifdef ADD_FM_DISC
             `DAC_FREQ: begin
                 dac1Data <= {1'b0,symEnOut,16'b0};
                 //dac1Data <= {1'b0,symEn,16'b0};
                 dac1ClkEn <= 1;
                 dac1En <= 1;
                 end
+            `endif
             `DAC_PHERROR: begin
                 dac1Data <= {phaseError,10'b0};
                 dac1ClkEn <= 1;
@@ -606,12 +612,14 @@ always @(posedge clk) begin
                 dac2ClkEn <= sym2xEn;
                 dac2En <= 1;
                 end
+            `ifdef ADD_FM_DISC
             `DAC_FREQ: begin
                 dac2Data <= {1'b0,symEnEvenOut,16'b0};
                 //dac2Data <= {1'b0,symEnEven,16'b0};
                 dac2ClkEn <= 1;
                 dac2En <= 1;
                 end
+            `endif
             `DAC_PHERROR: begin
                 if (loopFilterEn) begin
                    dac2Data <= {loopError,10'b0};

@@ -995,7 +995,7 @@ module bitsync(
             end
             if (timingErrorEn) begin
                 if (fmModes) begin
-                    bitDataI <= ~bbSRI[1][17];
+                    bitDataI <= bbSRI[1][17];
                 end
                 else begin
                     bitDataI <= bbSRI[1][17];
@@ -1054,7 +1054,7 @@ module bitsync(
             symDataI <= bbSRI[1];
             if (timingErrorEn) begin
                 if (fmModes) begin
-                    bitDataI <= ~bbSRI[1][17];
+                    bitDataI <= bbSRI[1][17];
                 end
                 else begin
                     bitDataI <= bbSRI[1][17];

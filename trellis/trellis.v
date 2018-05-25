@@ -253,8 +253,9 @@ module trellis(
         .qIn_0({out0Pt10Imag,8'b0}),
         .iIn_1({out1Pt10Real,8'b0}),
         .qIn_1({out1Pt10Imag,8'b0}),
-        .decision(decision)
+        .decision(magDecision)
         );
+    assign decision = !magDecision;
 
     `else //IQ_MAG
 
@@ -579,7 +580,7 @@ module trellis(
         .index(index),
         .indexDelta(indexDelta),
         .symEn_index(symEn_index),
-        .decision(decision),
+        .decision(vitDecision),
         .symEn_tbtDly(symEnOut),
         `ifdef USE_LEAKY
         .phaseErrorReal(phaseErrorReal),
@@ -590,6 +591,7 @@ module trellis(
         .symEn_phErr(symEn_phErr),
         .oneOrZeroPredecessor(oneOrZeroPredecessor)
     );
+    assign decision = !vitDecision;
 
 
     // This is a kludge to create a 2x clock enable from the 1x clock enable to satisfy the design
@@ -769,7 +771,7 @@ maxMetric #(ROT_BITS) maxMetric1 (
         else if ((symEnOut) && (bitCount != 0)) begin
             berRestarted <= 0;
             bitCount <= bitCount - 1;
-            if (legacyDelayed != decision) begin
+            if (legacyDelayed != !decision) begin
                 bitErrorCount <= bitErrorCount + 1;
                 end
             end

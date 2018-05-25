@@ -85,12 +85,10 @@ wire [20:0]sumI = {bxc[19],bxc[19:0]} + {axd[19],axd[19:0]};
 
 // align the outputs
 
-`define LWK
-`ifdef LWK
-reg [9:0]enaDelay;
+reg [5:0]enaDelay;
 reg [9:0]re0,im0,reOut0,imOut0,reOut1,imOut1;
 always @(posedge clk)begin
-  enaDelay <= {enaDelay[8:0],ena};
+  enaDelay <= {enaDelay[4:0],ena};
   if(enaDelay[4])begin
     if (sumR[20] && (sumR[19:18] != 2'b11)) begin
         re0 <= 10'h201;
@@ -134,22 +132,5 @@ always @(posedge clk)begin
         end
     end
   end
-`else
-reg [9:0]enaDelay;
-reg [9:0]re0,im0,reOut0,imOut0,reOut1,imOut1;
-always @(posedge clk)begin
-  enaDelay <= {enaDelay[8:0],ena};
-  if(enaDelay[4])begin
-    re0 <= sumR[20:11];
-    im0 <= sumI[20:11];
-    end
-  else if(enaDelay[5])begin
-    reOut0 <= re0;
-    imOut0 <= im0;
-    reOut1 <= sumR[20:11];
-    imOut1 <= sumI[20:11];
-    end
-  end
-`endif
 
 endmodule
