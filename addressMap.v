@@ -48,6 +48,7 @@
 `ifndef SIMULATE
 `define EMBED_MULTIH_CARRIER_LOOP
 `endif
+`define ADD_SPI_GATEWAY
 `endif
 
 `ifdef BITSYNC_BERT
@@ -243,6 +244,14 @@
         `define SYS_OUTPUT_SEL_CH0_PCM  4'b0001
         `define SYS_OUTPUT_SEL_CH1_BS   4'b0010
         `define SYS_OUTPUT_SEL_CH1_PCM  4'b0011
+
+`define SPIGW_SPACE         13'b0_00xx_0010_xxxx
+    `define SPIGW_CYCLE32       13'bx_xxxx_xxxx_00xx
+    `define SPIGW_CYCLE16       13'bx_xxxx_xxxx_010x
+    `define SPIGW_RSVD0         13'bx_xxxx_xxxx_011x
+    `define SPIGW_CYCLE8        13'bx_xxxx_xxxx_100x
+    `define SPIGW_RSVD1         13'bx_xxxx_xxxx_101x
+    `define SPIGW_CONTROL       13'bx_xxxx_xxxx_11xx
 
 `define DUAL_DECODERSPACE   13'b0_00xx_1000_xxxx
 `define CH1_DECODERSPACE    13'b0_00xx_1001_xxxx

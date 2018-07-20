@@ -59,12 +59,6 @@ module semcoDemodTop (
     output              ch2ClkOut,ch2DataOut,
     output              ch3ClkOut,ch3DataOut,
 
-    // Lock indicators
-    output              lockLed0n, lockLed1n,
-
-    // SDI Output
-    output              sdiOut,
-
     `ifdef TRIPLE_DEMOD
 
     // PLL Interface Signals
@@ -87,7 +81,7 @@ module semcoDemodTop (
     output      [1:0]   video0InSelect,
     output reg  [1:0]   video0OutSelect,
     output      [1:0]   video1InSelect,
-    output reg  [1:0]   video1OutSelect
+    output reg  [1:0]   video1OutSelect,
 
     `else   //TRIPLE_DEMOD
 
@@ -105,9 +99,22 @@ module semcoDemodTop (
     output              pll2_CS,
     output              pll2_REF,
     input               pll2_OUT1,
-    output              pll2_PWDn
+    output              pll2_PWDn,
 
     `endif //TRIPLE_DEMOD
+
+    `ifdef ADD_SPI_GATEWAY
+    //output              spiFlashCK, //Output through the STARTUPE2 primitive
+    output              spiFlashCSn,
+    output              spiFlashMOSI,
+    input               spiFlashMISO,
+    `endif
+
+    // Lock indicators
+    output              lockLed0n, lockLed1n,
+
+    // SDI Output
+    output              sdiOut
 
 );
 
@@ -212,6 +219,53 @@ module semcoDemodTop (
     wire    rd = !fb_oen;
 
     `endif //TRIPLE_DEMOD
+
+    `ifdef ADD_SPI_GATEWAY
+    /******************************************************************************
+                               SPI Flash Interface
+    ******************************************************************************/
+    reg spiGatewaySpace;
+    always @* begin
+        casex(addr)
+            `SPIGW_SPACE:   spiGatewaySpace = cs;
+            default:        spiGatewaySpace = 0;
+        endcase
+    end
+    wire            [31:0]  spiGatewayDout;
+    spiGateway spiGw(
+        .clk(clk),
+        .reset(reset),
+        .busClk(busClk),
+        .cs(spiGatewaySpace),
+        .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
+        .addr(addr),
+        .dataIn(dataIn),
+        .dataOut(spiGatewayDout),
+        .spiClk(spiFlashCK),
+        .spiCS(spiFlashCS),
+        .spiDataIn(spiFlashMISO),
+        .spiDataOut(spiFlashMOSI)
+    );
+    assign spiFlashCSn = ~spiFlashCS;
+
+    STARTUPE2 startupe2(
+        .CFGCLK(),
+        .CFGMCLK(),
+        .EOS(),
+        .PREQ(),
+        .CLK(1'b0),
+        .GSR(1'b0),
+        .GTS(1'b0),
+        .KEYCLEARB(1'b0),
+        .PACK(1'b0),
+        .USRCCLKO(spiFlashCK),
+        .USRCCLKTS(1'b0),
+        .USRDONEO(1'b1),
+        .USRDONETS(1'b0)
+    );
+    `endif
+
+
 
 //******************************************************************************
 //                           Reclock ADC Inputs
@@ -1071,6 +1125,10 @@ sdi sdi(
         casex(addr)
             `SEMCO_TOP_SPACE:   rd_mux = semcoTopDout;
 
+            `ifdef ADD_SPI_GATEWAY
+            `SPIGW_SPACE:       rd_mux = spiGatewayDout;
+            `endif
+
             `DEMODSPACE,
             `ifdef ADD_DESPREADER
             `DESPREADSPACE,
@@ -1139,6 +1197,17 @@ sdi sdi(
                     rd_mux = semcoTopDout[15:0];
                 end
             end
+            `ifdef ADD_SPI_GATEWAY
+            `SPIGW_SPACE:       begin
+                if (addr[1]) begin
+                    rd_mux = spiGatewayDout[31:16];
+                end
+                else begin
+                    rd_mux = spiGatewayDout[15:0];
+                end
+            end
+            `endif
+
             `DEMODSPACE,
             `ifdef ADD_DESPREADER
             `DESPREADSPACE,

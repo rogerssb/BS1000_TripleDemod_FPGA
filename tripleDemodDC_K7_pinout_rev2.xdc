@@ -88,6 +88,10 @@ set_property PACKAGE_PIN W23 [get_ports spiDataIn]
 set_property PACKAGE_PIN AC23 [get_ports spiClk]
 # On Rev2 change to AC23
 
+set_property PACKAGE_PIN C23 [get_ports spiFlashCSn]
+set_property PACKAGE_PIN B24 [get_ports spiFlashMOSI]
+set_property PACKAGE_PIN A25 [get_ports spiFlashMISO]
+
 set_property PACKAGE_PIN V22 [get_ports amAdcClk]
 set_property PACKAGE_PIN U21 [get_ports amAdcDataIn]
 set_property PACKAGE_PIN U22 [get_ports amAdcCSn]
@@ -363,6 +367,14 @@ set_property IOSTANDARD LVCMOS33 [get_ports spiDataIn]
 set_property IOSTANDARD LVCMOS33 [get_ports spiDataOut]
 set_property DRIVE 12 [get_ports spiDataOut]
 set_property SLEW SLOW [get_ports spiDataOut]
+
+set_property IOSTANDARD LVCMOS33 [get_ports spiFlashCSn]
+set_property IOSTANDARD LVCMOS33 [get_ports spiFlashMOSI]
+set_property IOSTANDARD LVCMOS33 [get_ports spiFlashMISO]
+set_property DRIVE 12 [get_ports spiFlashCSn]
+set_property DRIVE 12 [get_ports spiFlashMOSI]
+set_property SLEW SLOW [get_ports spiFlashCSn]
+set_property SLEW SLOW [get_ports spiFlashMOSI]
 
 set_property IOSTANDARD LVCMOS33 [get_ports amAdcDataIn]
 set_property IOSTANDARD LVCMOS33 [get_ports amAdcClk]

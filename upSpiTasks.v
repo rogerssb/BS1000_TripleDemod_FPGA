@@ -81,7 +81,7 @@
             end
             spiCS = 0;
 
-            repeat (10) @(negedge bc) ;
+            repeat (2) @(negedge bc) ;
         end
     endtask
 
@@ -112,7 +112,7 @@
             end
             spiCS = 0;
 
-            repeat (10) @(negedge bc) ;
+            repeat (2) @(negedge bc) ;
         end
     endtask
 
@@ -141,7 +141,7 @@
             end
             spiCS = 0;
 
-            repeat (10) @(negedge bc) ;
+            repeat (2) @(negedge bc) ;
         end
     endtask
 

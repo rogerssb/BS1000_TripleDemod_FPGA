@@ -1,0 +1,76 @@
+<!DOCTYPE SilvacoProject>
+<project version="1" name="testSpiGateway" >
+ <products>
+  <product name="SILOS" >
+   <settings>
+    <setting value="Silvaco4.14.3.R" name="Version" />
+    <setting value="Y" name="NoFloatWarn" />
+    <setting value="search" name="SystaskSearchOrder" />
+   </settings>
+   <sourcefiles>
+    <file name="testSpiGateway.v" />
+    <file name="spiBusInterface.v" />
+    <file name="spiGateway.v" />
+   </sourcefiles>
+   <includedirs>
+    <directory name="." />
+   </includedirs>
+   <plusdefines>
+    <define name="TRIPLE_DEMOD" />
+   </plusdefines>
+   <analyzer>
+    <views>
+     <view value="0.00 ns,49442.39 ns,971.19 ns,28871.28 ns,40731.92 ns" name="Last" />
+    </views>
+    <settings>
+     <setting value="151" name="C0Width" />
+     <setting value="75" name="C1Width" />
+     <setting value="65" name="C2Width" />
+     <setting value="N" name="GotoSource" />
+    </settings>
+    <groups>
+     <group open="yes" name="New Group1" show="yes" >
+      <signals>
+       <signal interpolate="Step" radix="Decimal" name="testState" scope="test" />
+       <signal name="spiDataOut" scope="test.uut" />
+       <signal name="spiCS" scope="test.uut" />
+       <signal name="spiClk" scope="test.uut" />
+       <signal name="dataOut[31:0]" scope="test.uut" />
+       <signal name="wr3" scope="test.uut" />
+       <signal name="wr2" scope="test.uut" />
+       <signal name="wr1" scope="test.uut" />
+       <signal name="wr0" scope="test.uut" />
+       <signal name="spiDataIn" scope="test.uut" />
+       <signal name="reset" scope="test.uut" />
+       <signal name="cs" scope="test.uut" />
+       <signal name="clk" scope="test.uut" />
+       <signal name="busClk" scope="test.uut" />
+       <signal name="dataIn[31:0]" scope="test.uut" />
+       <signal name="addr[12:0]" scope="test.uut" />
+       <signal name="spiClkCount" scope="test.uut" />
+       <signal name="spiClkNegEdgeEn" scope="test.uut" />
+       <signal name="spiClkPosEdgeEn" scope="test.uut" />
+       <signal name="spiClk" scope="test.uut" />
+       <signal name="spiCycleComplete" scope="test.uut" />
+       <signal name="spiCycle" scope="test.uut" />
+       <signal name="spiCycleSR[1:0]" scope="test.uut" />
+       <signal name="spiCycleEn" scope="test.uut" />
+       <signal name="spiStartCycle" scope="test.uut" />
+       <signal name="spiStartEn" scope="test.uut" />
+       <signal name="spiStopEn" scope="test.uut" />
+       <signal name="spiStopCycle" scope="test.uut" />
+       <signal name="spiState[1:0]" scope="test.uut" />
+       <signal name="spiBitcount[5:0]" scope="test.uut" />
+       <signal name="spiTxSR[31:0]" scope="test.uut" />
+      </signals>
+     </group>
+    </groups>
+   </analyzer>
+   <explorer>
+    <settings>
+     <setting value="test.uut" name="Scope" />
+    </settings>
+   </explorer>
+  </product>
+ </products>
+</project>
