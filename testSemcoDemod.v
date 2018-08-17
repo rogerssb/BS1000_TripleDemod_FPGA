@@ -1,8 +1,9 @@
 `timescale 1ns/100ps
 `include "addressMap.v"
 
-`define FM_TEST
+//`define FM_TEST
 //`define SOQPSK_TEST
+`define LDPC_TEST
 
 `define ENABLE_AGC
 
@@ -10,6 +11,8 @@
     `define TEST_DATA "c:/modem/vivado/testData/pcmfmTestData.txt"
 `elsif SOQPSK_TEST
     `define TEST_DATA "c:/modem/vivado/testData/soqpskTestData.txt"
+`elsif LDPC_TEST
+    `define TEST_DATA "c:/modem/vivado/testData/ldpcSyncWaveform.txt"
 `endif
 
 module test;
@@ -69,9 +72,9 @@ module test;
             else begin
                 //enableInput <= 0;
                 $display("Out of if samples");
-                $fclose(fp_if);
-                fp_if = $fopen(`TEST_DATA,"r");
-                x <= $fscanf(fp_if,"%f",ifSampleFloat);
+                #1 $fclose(fp_if);
+                #1 fp_if = $fopen(`TEST_DATA,"r");
+                #1 x <= $fscanf(fp_if,"%f",ifSampleFloat);
             end
         end
     end
@@ -265,6 +268,8 @@ module test;
         write32(createAddress(`DEMODSPACE,`DEMOD_CONTROL),{16'bx,13'bx,`MODE_2FSK});
         `elsif SOQPSK_TEST
         write32(createAddress(`DEMODSPACE,`DEMOD_CONTROL),{16'bx,13'bx,`MODE_OQPSK});
+        `elsif LDPC_TEST
+        write32(createAddress(`DEMODSPACE,`DEMOD_CONTROL),{16'bx,13'bx,`MODE_OQPSK});
         `endif
 
         // Init the sample rate loop filters
@@ -273,6 +278,8 @@ module test;
         `ifdef FM_TEST
         write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h001a0010);
         `elsif SOQPSK_TEST
+        write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h001a0010);
+        `elsif LDPC_TEST
         write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h001a0010);
         `endif
         write32(createAddress(`BITSYNCSPACE,`LF_LIMIT), resamplerLimitInt);
@@ -286,6 +293,12 @@ module test;
         write32(createAddress(`CARRIERSPACE,`CLF_LLIMIT), -carrierLimit);
         write32(createAddress(`CARRIERSPACE,`CLF_LOOPDATA), sweepRate);
         `elsif SOQPSK_TEST
+        write32(createAddress(`CARRIERSPACE,`CLF_CONTROL),1);    // Zero the error
+        write32(createAddress(`CARRIERSPACE,`CLF_LEAD_LAG),32'h18180808);
+        write32(createAddress(`CARRIERSPACE,`CLF_ULIMIT),  carrierLimit);
+        write32(createAddress(`CARRIERSPACE,`CLF_LLIMIT), -carrierLimit);
+        write32(createAddress(`CARRIERSPACE,`CLF_LOOPDATA), sweepRate);
+        `elsif LDPC_TEST
         write32(createAddress(`CARRIERSPACE,`CLF_CONTROL),1);    // Zero the error
         write32(createAddress(`CARRIERSPACE,`CLF_LEAD_LAG),32'h18180808);
         write32(createAddress(`CARRIERSPACE,`CLF_ULIMIT),  carrierLimit);
@@ -349,6 +362,18 @@ module test;
         write32(createAddress(`INTERP2SPACE, `INTERP_CONTROL),1);
         write32(createAddress(`INTERP2SPACE, `INTERP_CIC_EXPONENT), 8);
         write32(createAddress(`INTERP2SPACE, `INTERP_CIC_MANTISSA), 32'h00012000);
+
+        `ifdef ADD_LDPC
+        // Set for inverse of 0.45 which is a smidge less than the AGC setpoint of 0.5 to
+        // account for shaping filter losses.
+        //write32(createAddress(`LDPCSPACE, `LDPC_INVERSE_MEAN), 32'h00018e39);
+        write32(createAddress(`LDPCSPACE, `LDPC_INVERSE_MEAN), 32'h00028000);
+        write32(createAddress(`LDPCSPACE, `LDPC_CONTROL),{1'b0,4'b0,11'd62,
+                                                          12'b0,`LDPC_CODE_LENGTH_1024,1'b0,`LDPC_RATE_4_5});
+        // Set the run bit
+        // write32(createAddress(`LDPCSPACE, `LDPC_CONTROL),{1'b1,4'b0,11'd62,
+        //                                                  12'b0,`LDPC_CODE_LENGTH_1024,1'b0,`LDPC_RATE_4_5});
+        `endif
 
         `ifdef ADD_DQM
         // Bit Error Probability Estimator
@@ -502,7 +527,9 @@ module test;
     `endif
 
 
-
+    `ifdef LDPC_TEST
+    wire    signed  [17:0]  iLdpc,qLdpc;
+    `endif
     wire    [17:0]  dac0Out,dac1Out,dac2Out, iSymData, qSymData, sdiDataI, sdiDataQ;
     wire    [17:0]  iEye,qEye;
     wire    [31:0]  dout;
@@ -521,19 +548,43 @@ module test;
         .dac1Data(dac1Out),
         .dac2Sync(dac2Sync),
         .dac2Data(dac2Out),
-        .iSymEn(symSync),
+        .iSymEn(iSymEn),
         .iSym2xEn(sym2xEn),
         .iSymData(sdiDataI),
         .iBit(demodBit),
+        .qSymEn(qSymEn),
         .qSymData(sdiDataQ),
         .sdiSymEn(sdiSymEn),
         .trellisSymEn(trellisSymEn),
         .iTrellis(iSymData),
         .qTrellis(qSymData),
+        `ifdef LDPC_TEST
+        .iLdpcSymEn(iLdpcSymEn),.qLdpcSymEn(qLdpcSymEn),
+        .iLdpc(iLdpc),
+        .qLdpc(qLdpc),
+        `endif
         .eyeSync(eyeClkEn),
         .iEye(iEye), .qEye(qEye),
         .eyeOffset()
     );
+
+    `ifdef LDPC_TEST
+    ldpc ldpc(
+        .clk(clk), .clkEn(sym2xEn), .reset(reset),
+        .busClk(busClk),
+        .cs(cs),
+        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .addr(a),
+        .din(d),
+        .dout(),
+        .iSymEn(iLdpcSymEn),
+        .iSymData(iLdpc),
+        .qSymEn(qLdpcSymEn),
+        .qSymData(qLdpc),
+        .ldpcBitEnOut(),
+        .ldpcBitOut()
+    );
+    `endif
 
     sdi sdi(
         .clk(clk),
@@ -544,9 +595,9 @@ module test;
         .addr(a),
         .dataIn(d),
         .dataOut(),
-        .iSymEn(symSync),
+        .iSymEn(iSymEn),
         .iSymData(sdiDataI),
-        .qSymEn(symSync),
+        .qSymEn(iSymEn),
         .qSymData(sdiDataQ),
         .eyeSync(),
         .iEye(), .qEye(),

@@ -39,6 +39,11 @@ module demod(
     output                      trellisSymEn,
     output      signed  [17:0]  iTrellis,
     output      signed  [17:0]  qTrellis,
+    `ifdef ADD_LDPC
+    output                      iLdpcSymEn,qLdpcSymEn,
+    output      signed  [17:0]  iLdpc,
+    output      signed  [17:0]  qLdpc,
+    `endif
     `ifdef ADD_SUPERBAUD_TED
     output                      multihSymEnEven,
     `endif
@@ -680,6 +685,10 @@ bitsync bitsync(
     .auIQSwap(auIQSwap),
     .sdiSymEn(sdiSymEn),
     .iTrellis(iBsTrellis),.qTrellis(qBsTrellis),
+    `ifdef ADD_LDPC
+    .iLdpcSymEn(iLdpcSymEn),.qLdpcSymEn(qLdpcSymEn),
+    .iLdpc(iLdpc), .qLdpc(qLdpc),
+    `endif
     `ifdef ADD_SUPERBAUD_TED
     .bsError(bsError), .bsErrorEn(bsErrorEn),
     .tedOutput(tedOutput), .tedOutputEn(tedOutputEn),

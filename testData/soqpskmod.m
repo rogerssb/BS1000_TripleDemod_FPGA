@@ -7,7 +7,7 @@
 %## U - Upsample multiple over X, i.e. the samples per bit time
 %## SOQPSK_TG - if non-zero use the TG waveform, otherwise MIL square pulse
 
-function y = soqpskmod(X, U, SOQPSK_TG)
+function y = soqpskmod(X, U, SOQPSK_TG, FeherDiffEncode)
     if nargin < 3
         usage('y = soqpskmod(X,U,SOQPSK_TG)');
     end
@@ -19,12 +19,12 @@ function y = soqpskmod(X, U, SOQPSK_TG)
     % combined to for a differntial precoder whose only state is the sign state
     % We show both here with a test for which one to use
     FourStateEncoder = 1;
+    DiffEncode = 0;
     if FourStateEncoder == 1
         % double differential encode followed by ternary encode
         % diff encode the bits
-        d = zeros(1, numPoints);
-        FeherDiffEncode = 1;
         if FeherDiffEncode == 1
+            d = zeros(1, numPoints);
             for i = 2:numPoints
                 if mod(i,2)
                     d(i) = xor(X(i), ~d(i-1));
@@ -32,11 +32,14 @@ function y = soqpskmod(X, U, SOQPSK_TG)
                     d(i) = xor(X(i), d(i-1));
                 end %if
             end
-        else
+        elseif DiffEncode
+            d = zeros(1, numPoints);
             for i = 3:numPoints
                 d(i) = xor(X(i), d(i-2));
             end %for
-        end %if Feher
+        else 
+            d = cast(X,'double');
+        end %if FeherDiffEncode
     
         % precode to ternary
         for i=3:numPoints

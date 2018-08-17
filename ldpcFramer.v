@@ -1,0 +1,402 @@
+`timescale 1ns / 10 ps
+`include "addressMap.v"
+
+module ldpcFramer(
+    input                   clk,
+    input                   clkEn,
+    input                   reset,
+    input                   dataBitIn,
+    input                   codeLength4096,
+    input           [1:0]   codeRate,
+    input  signed   [10:0]  syncThreshold,
+    output reg      [1:0]   rotation,
+    output          [1:0]   frameSyncState,
+    output reg              frameSync,
+    output reg              codewordEn
+);
+
+    `define BITS_PER_WORD   64
+    reg         [7:0]  wordsPerFrame;
+    always @* begin
+        case (codeRate)
+            `LDPC_RATE_1_2:
+                if (codeLength4096) begin
+                    wordsPerFrame = 128;
+                end
+                else begin
+                    wordsPerFrame = 32;
+                end
+            `LDPC_RATE_2_3:
+                if (codeLength4096) begin
+                    wordsPerFrame = 96;
+                end
+                else begin
+                    wordsPerFrame = 24;
+                end
+            `LDPC_RATE_4_5:
+                if (codeLength4096) begin
+                    wordsPerFrame = 80;
+                end
+                else begin
+                    wordsPerFrame = 20;
+                end
+            default: wordsPerFrame = 32;
+        endcase
+    end
+
+    // Shift register used in correlator
+    reg [63:0]corrSR;
+    always @(posedge clk) begin
+        if (clkEn) begin
+            corrSR <= {corrSR[62:0],dataBitIn};
+        end
+    end
+
+    wire [63:0] syncword = 64'hFCB8_8938_D8D7_6A4F;
+
+    wire signed [3:0]   corr0;
+    fourBitCorrelator corrNibble0(
+        .clk(clk),
+        .data(corrSR[3:0]),
+        .pattern(syncword[3:0]),
+        .correlation(corr0)
+        );
+
+    wire signed [3:0]   corr1;
+    fourBitCorrelator corrNibble1(
+        .clk(clk),
+        .data(corrSR[7:4]),
+        .pattern(syncword[7:4]),
+        .correlation(corr1)
+        );
+
+    wire signed [3:0]   corr2;
+    fourBitCorrelator corrNibble2(
+        .clk(clk),
+        .data(corrSR[11:8]),
+        .pattern(syncword[11:8]),
+        .correlation(corr2)
+        );
+
+    wire signed [3:0]   corr3;
+    fourBitCorrelator corrNibble3(
+        .clk(clk),
+        .data(corrSR[15:12]),
+        .pattern(syncword[15:12]),
+        .correlation(corr3)
+        );
+
+    wire signed [3:0]   corr4;
+    fourBitCorrelator corrNibble4(
+        .clk(clk),
+        .data(corrSR[19:16]),
+        .pattern(syncword[19:16]),
+        .correlation(corr4)
+        );
+
+    wire signed [3:0]   corr5;
+    fourBitCorrelator corrNibble5(
+        .clk(clk),
+        .data(corrSR[23:20]),
+        .pattern(syncword[23:20]),
+        .correlation(corr5)
+        );
+
+    wire signed [3:0]   corr6;
+    fourBitCorrelator corrNibble6(
+        .clk(clk),
+        .data(corrSR[27:24]),
+        .pattern(syncword[27:24]),
+        .correlation(corr6)
+        );
+
+    wire signed [3:0]   corr7;
+    fourBitCorrelator corrNibble7(
+        .clk(clk),
+        .data(corrSR[31:28]),
+        .pattern(syncword[31:28]),
+        .correlation(corr7)
+        );
+
+    wire signed [3:0]   corr8;
+    fourBitCorrelator corrNibble8(
+        .clk(clk),
+        .data(corrSR[35:32]),
+        .pattern(syncword[35:32]),
+        .correlation(corr8)
+        );
+
+    wire signed [3:0]   corr9;
+    fourBitCorrelator corrNibble9(
+        .clk(clk),
+        .data(corrSR[39:36]),
+        .pattern(syncword[39:36]),
+        .correlation(corr9)
+        );
+
+    wire signed [3:0]   corr10;
+    fourBitCorrelator corrNibble10(
+        .clk(clk),
+        .data(corrSR[43:40]),
+        .pattern(syncword[43:40]),
+        .correlation(corr10)
+        );
+
+    wire signed [3:0]   corr11;
+    fourBitCorrelator corrNibble11(
+        .clk(clk),
+        .data(corrSR[47:44]),
+        .pattern(syncword[47:44]),
+        .correlation(corr11)
+        );
+
+    wire signed [3:0]   corr12;
+    fourBitCorrelator corrNibble12(
+        .clk(clk),
+        .data(corrSR[51:48]),
+        .pattern(syncword[51:48]),
+        .correlation(corr12)
+        );
+
+    wire signed [3:0]   corr13;
+    fourBitCorrelator corrNibble13(
+        .clk(clk),
+        .data(corrSR[55:52]),
+        .pattern(syncword[55:52]),
+        .correlation(corr13)
+        );
+
+    wire signed [3:0]   corr14;
+    fourBitCorrelator corrNibble14(
+        .clk(clk),
+        .data(corrSR[59:56]),
+        .pattern(syncword[59:56]),
+        .correlation(corr14)
+        );
+
+    wire signed [3:0]   corr15;
+    fourBitCorrelator corrNibble15(
+        .clk(clk),
+        .data(corrSR[63:60]),
+        .pattern(syncword[63:60]),
+        .correlation(corr15)
+        );
+
+    wire signed [8:0]   bitSum = $signed({{5{corr0[3]}},corr0})
+                               + $signed({{5{corr1[3]}},corr1})
+                               + $signed({{5{corr2[3]}},corr2})
+                               + $signed({{5{corr3[3]}},corr3})
+                               + $signed({{5{corr4[3]}},corr4})
+                               + $signed({{5{corr5[3]}},corr5})
+                               + $signed({{5{corr6[3]}},corr6})
+                               + $signed({{5{corr7[3]}},corr7})
+                               + $signed({{5{corr8[3]}},corr8})
+                               + $signed({{5{corr9[3]}},corr9})
+                               + $signed({{5{corr10[3]}},corr10})
+                               + $signed({{5{corr11[3]}},corr11})
+                               + $signed({{5{corr12[3]}},corr12})
+                               + $signed({{5{corr13[3]}},corr13})
+                               + $signed({{5{corr14[3]}},corr14})
+                               + $signed({{5{corr15[3]}},corr15});
+
+    // Remember the last 192 bit sums to calculate the long syncword correlation
+    integer i;
+    reg signed  [8:0]   bitSumSR    [0:191];
+    always @(posedge clk) begin
+        if (clkEn) begin
+            if (codeLength4096) begin
+                bitSumSR[0] <= bitSum;
+            end
+            else begin
+                bitSumSR[0] <= 0;
+            end
+            for (i = 1; i < 192; i = i + 1) begin
+                bitSumSR[i] <= bitSumSR[i-1];
+            end
+        end
+    end
+    wire signed [10:0]  longBitSum = $signed({{2{bitSum[8]}},bitSum})
+                                   + $signed({{2{bitSumSR[63][8]}},bitSumSR[63]})
+                                   - $signed({{2{bitSumSR[127][8]}},bitSumSR[127]})
+                                   + $signed({{2{bitSumSR[191][8]}},bitSumSR[191]});
+
+    `ifdef SIMULATE
+    real    correlation;
+    always @* correlation = $itor(longBitSum);
+    `endif
+
+    // Sync Detector
+    reg syncDetected;
+    reg negPolarity;
+    wire signed [10:0]   negSyncThreshold = -syncThreshold;
+    always @(posedge clk) begin
+        if (clkEn) begin
+            if (longBitSum > syncThreshold) begin
+                syncDetected <= 1;
+                negPolarity <= 0;
+            end
+            else if (longBitSum < negSyncThreshold) begin
+                syncDetected <= 1;
+                negPolarity <= 1;
+            end
+            else begin
+                syncDetected <= 0;
+            end
+        end
+    end
+
+    // Framesync State Machine
+    reg         [1:0]   syncState;
+        `define OUT_OF_SYNC     2'b00
+        `define SKIP_PAYLOAD    2'b01
+        `define TEST_SYNC       2'b11
+    assign          frameSyncState = syncState;
+    reg     [6:0]   wordCount;
+    reg     [5:0]   bitCount;
+    wire            endOfPayload = ((bitCount == 0) && (wordCount == 0));
+    integer         syncCount;
+        `ifdef SIMULATE
+        `define FRAMER_MAX_SYNC_COUNT 2
+        `else
+        `define FRAMER_MAX_SYNC_COUNT 5
+        `endif
+    always @(posedge clk) begin
+        if (reset) begin
+            syncState <= `OUT_OF_SYNC;
+            frameSync <= 0;
+            codewordEn <= 0;
+            bitCount <= `BITS_PER_WORD-1;
+            wordCount <= 20;
+            rotation <= 0;
+        end
+        else if (clkEn) begin
+            case (syncState)
+                `OUT_OF_SYNC: begin
+                    frameSync <= 0;
+                    // Have we found a syncword?
+                    if (syncDetected) begin
+                        bitCount <= `BITS_PER_WORD-1;
+                        wordCount <= wordsPerFrame-1;
+                        rotation <= {negPolarity ^ rotation[1],rotation[0]};
+                        syncCount <= 1;
+                        syncState <= `SKIP_PAYLOAD;
+                    end
+                    // Do we need to try another rotation?
+                    else if (endOfPayload) begin
+                        bitCount <= `BITS_PER_WORD-1;
+                        wordCount <= wordsPerFrame-1;
+                        rotation <= rotation + 1;
+                    end
+                    // Then keep looking
+                    else if (bitCount == 0) begin
+                        bitCount <= `BITS_PER_WORD-1;
+                        if (wordCount == 0) begin
+                            wordCount <= wordsPerFrame-1;
+                        end
+                        else begin
+                            wordCount <= wordCount - 1;
+                        end
+                    end
+                    else begin
+                        bitCount <= bitCount - 1;
+                    end
+                end
+                `SKIP_PAYLOAD: begin
+                    if (endOfPayload) begin
+                        bitCount <= `BITS_PER_WORD-1;
+                        syncState <= `TEST_SYNC;
+                    end
+                    else if (bitCount == 0) begin
+                        bitCount <= `BITS_PER_WORD-1;
+                        if (wordCount == 0) begin
+                            wordCount <= wordsPerFrame-1;
+                        end
+                        else begin
+                            wordCount <= wordCount - 1;
+                        end
+                    end
+                    else begin
+                        bitCount <= bitCount - 1;
+                    end
+                end
+                `TEST_SYNC: begin
+                    if (bitCount == 0) begin
+                        if (syncDetected && !negPolarity) begin
+                            if (syncCount < `FRAMER_MAX_SYNC_COUNT) begin
+                                syncCount <= syncCount + 1;
+                                codewordEn <= frameSync;
+                            end
+                            else begin
+                                codewordEn <= 1;
+                                frameSync <= 1;
+                            end
+                            bitCount <= `BITS_PER_WORD-1;
+                            wordCount <= wordsPerFrame-1;
+                            syncState <= `SKIP_PAYLOAD;
+                        end
+                        else if (syncCount == 0) begin
+                            rotation <= rotation + 1;
+                            codewordEn <= 0;
+                            syncState <= `OUT_OF_SYNC;
+                        end
+                        else begin
+                            syncCount <= syncCount - 1;
+                            bitCount <= `BITS_PER_WORD-1;
+                            wordCount <= wordsPerFrame-1;
+                            codewordEn <= frameSync;
+                            syncState <= `SKIP_PAYLOAD;
+                        end
+                    end
+                    else begin
+                        bitCount <= bitCount - 1;
+                    end
+                end
+                default: begin
+                    syncState <= `OUT_OF_SYNC;
+                    frameSync <= 0;
+                    codewordEn <= 0;
+                    syncCount <= 0;
+                    rotation <= 0;
+                    wordCount <= 0;
+                    bitCount <= 0;
+                end
+            endcase
+        end
+    end
+
+endmodule
+
+module fourBitCorrelator(
+    input                       clk,
+    input               [3:0]   data,
+    input               [3:0]   pattern,
+    output signed       [3:0]   correlation
+    );
+
+    wire        [3:0]   corr = (~(data ^ pattern));
+    reg signed  [3:0]   corr_reg;
+    assign correlation = corr_reg;
+    always @* begin
+        case (corr)
+            4'b0000:    corr_reg <= -4;
+            4'b0001,
+            4'b0010,
+            4'b0100,
+            4'b1000:    corr_reg <= -2;
+            4'b0011,
+            4'b0101,
+            4'b1001,
+            4'b0110,
+            4'b1010,
+            4'b1100:    corr_reg <= 0;
+            4'b0111,
+            4'b1011,
+            4'b1101,
+            4'b1110:    corr_reg <= 2;
+            4'b1111:    corr_reg <= 4;
+        endcase
+    end
+
+endmodule
+
+

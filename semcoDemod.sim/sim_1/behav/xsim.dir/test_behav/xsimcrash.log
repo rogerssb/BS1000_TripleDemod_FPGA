@@ -1,39 +1,42 @@
-Unable to capture context for thread 32008 in process 33056, can not generate back trace
-Unable to capture context for thread 31592 in process 33056, can not generate back trace
-Exception at PC 0x000007FEAAA6BB93
+Unable to capture context for thread 68696 in process 44480, can not generate back trace
+Unable to capture context for thread 15660 in process 44480, can not generate back trace
+Unable to capture context for thread 75288 in process 44480, can not generate back trace
+Exception at PC 0x000007FEFCABA06D
+Unable to capture context for thread 68696 in process 44480, can not generate back trace
+Unable to capture context for thread 75288 in process 44480, can not generate back trace
+Exception at PC 0x000007FE9D33BB93
 Printing stacktrace...
 
-Exception at PC 0x000007FEFCFDA06D
-Exception at PC 0x000007FEFCFDA06D
-Exception at PC 0x000007FEFCFDA06D
-Exception at PC 0x000007FEFCFDA06D
-Exception at PC 0x000007FEFCFDA06D
-Exception at PC 0x000007FEFCFDA06D
-[0]  [0x000007FEAAA6BB93]
-[1]  [0x000007FEAAA6BB93]
-[2]  [0x000007FEAAA6B4A1]
-[3]  [0x000007FEAAA6B3EF]
-[4]  [0x000007FEAAA519FE]
-[5]  [0x000007FEAAA50ED1]
-[6]  [0x000007FEAAA50D76]
-[7]  [0x000007FEAA9F79F6]
-[8]  [0x000007FEAA9E7AFB]
-[9]  [0x000007FEAAB0E90A]
-[10]  [0x000007FEAAB29F87]
-[11]  [0x000007FEAAB2A05F]
-[12] (BaseThreadInitThunk+0xd) [0x0000000076EC59CD]
-[13] (RtlUserThreadStart+0x1d) [0x000000007712383D]
+Exception at PC 0x000007FEFCABA06D
+Exception at PC 0x000007FEFCABA06D
+Exception at PC 0x000007FEFCABA06D
+Exception at PC 0x000007FEFCABA06D
+Exception at PC 0x000007FEFCABA06D
+Exception at PC 0x000007FEFCABA06D
+[0]  [0x000007FE9D33BB93]
+[1]  [0x000007FE9D33BB93]
+[2]  [0x000007FE9D33B4A1]
+[3]  [0x000007FE9D33B3EF]
+[4]  [0x000007FE9D3219FE]
+[5]  [0x000007FE9D320ED1]
+[6]  [0x000007FE9D320D76]
+[7]  [0x000007FE9D2C79F6]
+[8]  [0x000007FE9D2B7AFB]
+[9]  [0x000007FE9D3DE90A]
+[10]  [0x000007FE9D3F9F87]
+[11]  [0x000007FE9D3FA05F]
+[12] (BaseThreadInitThunk+0xd) [0x0000000076CA59CD]
+[13] (RtlUserThreadStart+0x1d) [0x0000000076E0383D]
 Done
-Exception at PC 0x000007FEFCFDA06D
-Exception at PC 0x000007FEFCFDA06D
-Exception at PC 0x000007FEFCFDA06D
-Exception at PC 0x000007FEFCFDA06D
-Exception at PC 0x000007FEFCFDA06D
-Exception at PC 0x000007FEFCFDA06D
-Exception at PC 0x000007FEFCFDA06D
-Exception at PC 0x000007FEFCFDA06D
-Exception at PC 0x000007FEFCFDA06D
-Exception at PC 0x000007FEFCFDA06D
-Exception at PC 0x000007FEFCFDA06D
-Exception at PC 0x000007FEFCFDA06D
-Exception at PC 0x000007FEFCFDA06D
+Exception at PC 0x000007FEFCABA06D
+Exception at PC 0x000007FEFCABA06D
+Exception at PC 0x000007FEFCABA06D
+Exception at PC 0x000007FEFCABA06D
+Exception at PC 0x000007FEFCABA06D
+Exception at PC 0x000007FEFCABA06D
+Exception at PC 0x000007FEFCABA06D
+Exception at PC 0x000007FEFCABA06D
+Exception at PC 0x000007FEFCABA06D
+Exception at PC 0x000007FEFCABA06D
+Exception at PC 0x000007FEFCABA06D
+Exception at PC 0x000007FEFCABA06D

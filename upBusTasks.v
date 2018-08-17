@@ -143,6 +143,8 @@
       end
     endtask
 
+    `endif  //USE_BUS_CLOCK
+
     task read32;
       input [ADDR_BITS-1:0]addr;
       begin
@@ -151,4 +153,3 @@
       end
     endtask
 
-    `endif  //USE_BUS_CLOCK

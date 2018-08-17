@@ -186,6 +186,20 @@ Compiling module xil_defaultlib.loopRegs
 Compiling module xil_defaultlib.loopFilter
 Compiling module xil_defaultlib.bitsync
 Compiling module xil_defaultlib.demod
+Compiling module xil_defaultlib.ldpcRegs
+Compiling module xil_defaultlib.ldpcDecisionMapper(OUTBITS=3)
+Compiling module xil_defaultlib.fourBitCorrelator
+Compiling module xil_defaultlib.ldpcFramer
+Compiling module xil_defaultlib.ldpc
+Compiling module fifo_generator_v13_1_3.fifo_generator_v13_1_3_bhv_ver_s...
+Compiling module fifo_generator_v13_1_3.fifo_generator_v13_1_3_CONV_VER(...
+Compiling module fifo_generator_v13_1_3.fifo_generator_vlog_beh(C_COMMON...
+Compiling module fifo_generator_v13_1_3.fifo_generator_v13_1_3(C_COMMON_...
+Compiling module xil_defaultlib.dataFifo
+Compiling module xil_defaultlib.uartRegs
+Compiling module xil_defaultlib.uartBaudGen
+Compiling module xil_defaultlib.uartTx
+Compiling module xil_defaultlib.sdi
 Compiling module xil_defaultlib.test
 Compiling module xil_defaultlib.glbl
 Built simulation snapshot test_behav

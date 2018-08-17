@@ -42,6 +42,7 @@
 //`define ADD_DESPREADER
 //`define ADD_SCPATH
 //`define ADD_CMA
+`define ADD_LDPC
 //`define ADD_DQM
 `define ADD_MULTIH
 `define ADD_SUPERBAUD_TED
@@ -252,6 +253,17 @@
     `define SPIGW_CYCLE8        13'bx_xxxx_xxxx_100x
     `define SPIGW_RSVD1         13'bx_xxxx_xxxx_101x
     `define SPIGW_CONTROL       13'bx_xxxx_xxxx_11xx
+
+`define LDPCSPACE           13'b0_00xx_0011_xxxx
+    `define LDPC_CONTROL        13'bx_xxxx_xxxx_00xx
+        `define LDPC_RATE_1_2           2'b00
+        `define LDPC_RATE_2_3           2'b01
+        `define LDPC_RATE_4_5           2'b11
+        `define LDPC_CODE_LENGTH_1024   1'b0
+        `define LDPC_CODE_LENGTH_4096   1'b1
+    `define LDPC_INVERSE_MEAN   13'bx_xxxx_xxxx_01xx
+    `define LDPC_RSVD0          13'bx_xxxx_xxxx_10xx
+    `define LDPC_STATUS         13'bx_xxxx_xxxx_11xx
 
 `define DUAL_DECODERSPACE   13'b0_00xx_1000_xxxx
 `define CH1_DECODERSPACE    13'b0_00xx_1001_xxxx

@@ -17,7 +17,8 @@ bitsIn = pngen(O,NBITS);
 
 lenBitsIn = length(bitsIn)
 
-z = soqpskmod(bitsIn, U, 1);
+FeherDiffEncode = 1;
+z = soqpskmod(bitsIn, U, 1, FeherDiffEncode);
 
 % get the middle portion to avoid the startup and ending transistions
 midSectionStart = PHASE_ROLLOVER*U*(2^O-1)

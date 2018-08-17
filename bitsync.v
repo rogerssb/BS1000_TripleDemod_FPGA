@@ -52,6 +52,10 @@ module bitsync(
     output  reg                 auIQSwap,
     output                      sdiSymEn,
     output      signed  [17:0]  iTrellis,qTrellis,
+    `ifdef ADD_LDPC
+    output                      iLdpcSymEn,qLdpcSymEn,
+    output  reg signed  [17:0]  iLdpc,qLdpc,
+    `endif
     `ifdef ADD_SUPERBAUD_TED
     output  reg signed  [17:0]  bsError,
     output  reg                 bsErrorEn,
@@ -148,6 +152,10 @@ module bitsync(
             iSymDelay <= iFiltered;
             qSymDelay <= qFiltered;
             if (demodMode == `MODE_OQPSK) begin
+                `ifdef ADD_LDPC
+                iLdpc <= iFiltered;
+                qLdpc <= qFiltered;
+                `endif
                 if (enableDespreader) begin
                     iMF <= iSymDelay;
                     qMF <= qFiltered;
@@ -187,6 +195,10 @@ module bitsync(
                 qMF <= qSymDelay;
             end
             else if (demodMode == `MODE_OQPSK) begin
+                `ifdef ADD_LDPC
+                iLdpc <= iFiltered;
+                qLdpc <= qFiltered;
+                `endif
                 if (oqpskIthenQ) begin
                     iMF <= iSymDelay;
                     qMF <= qFiltered;
@@ -1092,6 +1104,11 @@ module bitsync(
     assign qSym2xEn = auEnable ? auResampClkEn : sym2xClkEn;
     assign qSymEn = auEnable ? (auResampClkEn & auTimingErrorEn) : (sym2xClkEn & timingErrorEn);
     assign qSymClk = auTimingErrorEn;
+
+    `ifdef ADD_LDPC
+    assign iLdpcSymEn = sym2xClkEn & timingErrorEn;
+    assign qLdpcSymEn = sym2xClkEn & !timingErrorEn;
+    `endif
 
 
     `ifdef SIMULATE

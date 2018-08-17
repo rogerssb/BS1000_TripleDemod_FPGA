@@ -101,33 +101,33 @@ INFO: [VRFC 10-2458] undeclared symbol zeroError, assumed default net type wire 
 INFO: [VRFC 10-2458] undeclared symbol clearAccum, assumed default net type wire [C:/modem/vivado/loopFilter.v:53]
 INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/bitsync.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module bitsync
-INFO: [VRFC 10-2458] undeclared symbol timingErrorEn, assumed default net type wire [C:/modem/vivado/bitsync.v:341]
-INFO: [VRFC 10-2458] undeclared symbol satPos, assumed default net type wire [C:/modem/vivado/bitsync.v:642]
-INFO: [VRFC 10-2458] undeclared symbol satNeg, assumed default net type wire [C:/modem/vivado/bitsync.v:643]
+INFO: [VRFC 10-2458] undeclared symbol timingErrorEn, assumed default net type wire [C:/modem/vivado/bitsync.v:354]
+INFO: [VRFC 10-2458] undeclared symbol satPos, assumed default net type wire [C:/modem/vivado/bitsync.v:655]
+INFO: [VRFC 10-2458] undeclared symbol satNeg, assumed default net type wire [C:/modem/vivado/bitsync.v:656]
 INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/demodRegs.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module demodRegs
 INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/ddc.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module ddc
-INFO: [VRFC 10-2458] undeclared symbol bypassCic, assumed default net type wire [C:/modem/vivado/ddc.v:82]
-INFO: [VRFC 10-2458] undeclared symbol bypassHb, assumed default net type wire [C:/modem/vivado/ddc.v:83]
-INFO: [VRFC 10-2458] undeclared symbol bypassFir, assumed default net type wire [C:/modem/vivado/ddc.v:85]
-INFO: [VRFC 10-2458] undeclared symbol enableBasebandInputs, assumed default net type wire [C:/modem/vivado/ddc.v:87]
-INFO: [VRFC 10-2458] undeclared symbol hb0SyncOut, assumed default net type wire [C:/modem/vivado/ddc.v:174]
-INFO: [VRFC 10-2458] undeclared symbol hbSyncOut, assumed default net type wire [C:/modem/vivado/ddc.v:358]
+INFO: [VRFC 10-2458] undeclared symbol bypassCic, assumed default net type wire [C:/modem/vivado/ddc.v:84]
+INFO: [VRFC 10-2458] undeclared symbol bypassHb, assumed default net type wire [C:/modem/vivado/ddc.v:85]
+INFO: [VRFC 10-2458] undeclared symbol bypassFir, assumed default net type wire [C:/modem/vivado/ddc.v:87]
+INFO: [VRFC 10-2458] undeclared symbol enableBasebandInputs, assumed default net type wire [C:/modem/vivado/ddc.v:89]
+INFO: [VRFC 10-2458] undeclared symbol hb0SyncOut, assumed default net type wire [C:/modem/vivado/ddc.v:183]
+INFO: [VRFC 10-2458] undeclared symbol hbSyncOut, assumed default net type wire [C:/modem/vivado/ddc.v:368]
 INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/channelAgc.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module channelAGC
 INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/fmDemod.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module fmDemod
 INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/carrierLoop.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module carrierLoop
-INFO: [VRFC 10-2458] undeclared symbol invertError, assumed default net type wire [C:/modem/vivado/carrierLoop.v:71]
-INFO: [VRFC 10-2458] undeclared symbol zeroError, assumed default net type wire [C:/modem/vivado/carrierLoop.v:72]
-INFO: [VRFC 10-2458] undeclared symbol sweepEnable, assumed default net type wire [C:/modem/vivado/carrierLoop.v:73]
-INFO: [VRFC 10-2458] undeclared symbol clearAccum, assumed default net type wire [C:/modem/vivado/carrierLoop.v:74]
+INFO: [VRFC 10-2458] undeclared symbol invertError, assumed default net type wire [C:/modem/vivado/carrierLoop.v:72]
+INFO: [VRFC 10-2458] undeclared symbol zeroError, assumed default net type wire [C:/modem/vivado/carrierLoop.v:73]
+INFO: [VRFC 10-2458] undeclared symbol sweepEnable, assumed default net type wire [C:/modem/vivado/carrierLoop.v:74]
+INFO: [VRFC 10-2458] undeclared symbol clearAccum, assumed default net type wire [C:/modem/vivado/carrierLoop.v:75]
 INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/dualResampler.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module dualResampler
-INFO: [VRFC 10-2458] undeclared symbol resetPhase, assumed default net type wire [C:/modem/vivado/dualResampler.v:65]
-INFO: [VRFC 10-2458] undeclared symbol auCicSyncOut, assumed default net type wire [C:/modem/vivado/dualResampler.v:83]
+INFO: [VRFC 10-2458] undeclared symbol resetPhase, assumed default net type wire [C:/modem/vivado/dualResampler.v:66]
+INFO: [VRFC 10-2458] undeclared symbol auCicSyncOut, assumed default net type wire [C:/modem/vivado/dualResampler.v:84]
 INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/decoder/biphase_to_nrz.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module biphase_to_nrz
 INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/decoder/mrk_spc_decode.v" into library xil_defaultlib
@@ -159,18 +159,18 @@ INFO: [VRFC 10-2458] undeclared symbol millerBitEn, assumed default net type wir
 INFO: [VRFC 10-2458] undeclared symbol millerBit, assumed default net type wire [C:/modem/vivado/decoder/decoder.v:158]
 INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/demod.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module demod
-INFO: [VRFC 10-2458] undeclared symbol bitsyncLock, assumed default net type wire [C:/modem/vivado/demod.v:94]
-INFO: [VRFC 10-2458] undeclared symbol auBitsyncLock, assumed default net type wire [C:/modem/vivado/demod.v:95]
-INFO: [VRFC 10-2458] undeclared symbol oqpskIthenQ, assumed default net type wire [C:/modem/vivado/demod.v:106]
-INFO: [VRFC 10-2458] undeclared symbol carrierOffsetEn, assumed default net type wire [C:/modem/vivado/demod.v:137]
-INFO: [VRFC 10-2458] undeclared symbol ddcSync, assumed default net type wire [C:/modem/vivado/demod.v:149]
-INFO: [VRFC 10-2458] undeclared symbol demodSync, assumed default net type wire [C:/modem/vivado/demod.v:260]
-INFO: [VRFC 10-2458] undeclared symbol resampSync, assumed default net type wire [C:/modem/vivado/demod.v:457]
-INFO: [VRFC 10-2458] undeclared symbol auResampSync, assumed default net type wire [C:/modem/vivado/demod.v:525]
-INFO: [VRFC 10-2458] undeclared symbol bsErrorEn, assumed default net type wire [C:/modem/vivado/demod.v:676]
-INFO: [VRFC 10-2458] undeclared symbol tedOutputEn, assumed default net type wire [C:/modem/vivado/demod.v:677]
-INFO: [VRFC 10-2458] undeclared symbol tedSyncPulse, assumed default net type wire [C:/modem/vivado/demod.v:678]
-INFO: [VRFC 10-2458] undeclared symbol cordicModes, assumed default net type wire [C:/modem/vivado/demod.v:743]
+INFO: [VRFC 10-2458] undeclared symbol bitsyncLock, assumed default net type wire [C:/modem/vivado/demod.v:100]
+INFO: [VRFC 10-2458] undeclared symbol auBitsyncLock, assumed default net type wire [C:/modem/vivado/demod.v:101]
+INFO: [VRFC 10-2458] undeclared symbol oqpskIthenQ, assumed default net type wire [C:/modem/vivado/demod.v:112]
+INFO: [VRFC 10-2458] undeclared symbol carrierOffsetEn, assumed default net type wire [C:/modem/vivado/demod.v:144]
+INFO: [VRFC 10-2458] undeclared symbol ddcSync, assumed default net type wire [C:/modem/vivado/demod.v:156]
+INFO: [VRFC 10-2458] undeclared symbol demodSync, assumed default net type wire [C:/modem/vivado/demod.v:268]
+INFO: [VRFC 10-2458] undeclared symbol resampSync, assumed default net type wire [C:/modem/vivado/demod.v:465]
+INFO: [VRFC 10-2458] undeclared symbol auResampSync, assumed default net type wire [C:/modem/vivado/demod.v:535]
+INFO: [VRFC 10-2458] undeclared symbol bsErrorEn, assumed default net type wire [C:/modem/vivado/demod.v:693]
+INFO: [VRFC 10-2458] undeclared symbol tedOutputEn, assumed default net type wire [C:/modem/vivado/demod.v:694]
+INFO: [VRFC 10-2458] undeclared symbol tedSyncPulse, assumed default net type wire [C:/modem/vivado/demod.v:695]
+INFO: [VRFC 10-2458] undeclared symbol cordicModes, assumed default net type wire [C:/modem/vivado/demod.v:760]
 INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/decoder/pcmDecoder.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module pcmDecoder
 INFO: [VRFC 10-2458] undeclared symbol clk_sel, assumed default net type wire [C:/modem/vivado/decoder/pcmDecoder.v:40]
@@ -188,58 +188,58 @@ INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/ics307Interface.v" 
 INFO: [VRFC 10-311] analyzing module ics307Interface
 INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/interpolate.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module interpolate
-INFO: [VRFC 10-2458] undeclared symbol bypass, assumed default net type wire [C:/modem/vivado/interpolate.v:68]
-INFO: [VRFC 10-2458] undeclared symbol test, assumed default net type wire [C:/modem/vivado/interpolate.v:69]
-INFO: [VRFC 10-2458] undeclared symbol invert, assumed default net type wire [C:/modem/vivado/interpolate.v:70]
-INFO: [VRFC 10-2458] undeclared symbol bypassEQ, assumed default net type wire [C:/modem/vivado/interpolate.v:71]
+INFO: [VRFC 10-2458] undeclared symbol bypass, assumed default net type wire [C:/modem/vivado/interpolate.v:71]
+INFO: [VRFC 10-2458] undeclared symbol test, assumed default net type wire [C:/modem/vivado/interpolate.v:72]
+INFO: [VRFC 10-2458] undeclared symbol invert, assumed default net type wire [C:/modem/vivado/interpolate.v:73]
+INFO: [VRFC 10-2458] undeclared symbol bypassEQ, assumed default net type wire [C:/modem/vivado/interpolate.v:74]
 INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/flexbus.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module flexbus
 INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoTopRegs.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module semcoTopRegs
 INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemodTop.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module semcoDemodTop
-INFO: [VRFC 10-2458] undeclared symbol clk, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:142]
-INFO: [VRFC 10-2458] undeclared symbol clkLocked, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:143]
-INFO: [VRFC 10-2458] undeclared symbol busClk, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:148]
-INFO: [VRFC 10-2458] undeclared symbol fbClkLocked, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:149]
-INFO: [VRFC 10-2458] undeclared symbol cs, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:194]
-INFO: [VRFC 10-2458] undeclared symbol wr0, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:195]
-INFO: [VRFC 10-2458] undeclared symbol wr1, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:196]
-INFO: [VRFC 10-2458] undeclared symbol wr2, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:197]
-INFO: [VRFC 10-2458] undeclared symbol wr3, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:198]
-INFO: [VRFC 10-2458] undeclared symbol reset, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:244]
-INFO: [VRFC 10-2458] undeclared symbol reboot, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:245]
-INFO: [VRFC 10-2458] undeclared symbol iDemodSym2xEn, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:284]
-INFO: [VRFC 10-2458] undeclared symbol iDemodSymEn, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:285]
-INFO: [VRFC 10-2458] undeclared symbol iDemodSymClk, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:287]
-INFO: [VRFC 10-2458] undeclared symbol iDemodBit, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:288]
-INFO: [VRFC 10-2458] undeclared symbol qDemodSym2xEn, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:289]
-INFO: [VRFC 10-2458] undeclared symbol qDemodSymEn, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:290]
-INFO: [VRFC 10-2458] undeclared symbol qDemodSymClk, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:291]
-INFO: [VRFC 10-2458] undeclared symbol qDemodBit, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:293]
-INFO: [VRFC 10-2458] undeclared symbol auDemodSymClk, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:294]
-INFO: [VRFC 10-2458] undeclared symbol auDemodBit, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:295]
-INFO: [VRFC 10-2458] undeclared symbol demodTimingLock, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:296]
-INFO: [VRFC 10-2458] undeclared symbol demodCarrierLock, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:297]
-INFO: [VRFC 10-2458] undeclared symbol trellisSymEn, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:298]
-INFO: [VRFC 10-2458] undeclared symbol trellisSymEnEven, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:302]
-INFO: [VRFC 10-2458] undeclared symbol demodDac0ClkEn, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:307]
-INFO: [VRFC 10-2458] undeclared symbol demodDac1ClkEn, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:309]
-INFO: [VRFC 10-2458] undeclared symbol demodDac2ClkEn, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:311]
-INFO: [VRFC 10-2458] undeclared symbol demodSdiSymEn, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:322]
-INFO: [VRFC 10-2458] undeclared symbol demodEyeClkEn, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:323]
-INFO: [VRFC 10-2458] undeclared symbol pcmDac0ClkEn, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:362]
-INFO: [VRFC 10-2458] undeclared symbol pcmDac1ClkEn, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:364]
-INFO: [VRFC 10-2458] undeclared symbol pcmDac2ClkEn, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:366]
-INFO: [VRFC 10-2458] undeclared symbol pcmTrellisBit, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:368]
-INFO: [VRFC 10-2458] undeclared symbol pcmTrellisSymEnOut, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:369]
-INFO: [VRFC 10-2458] undeclared symbol pcmTrellisSym2xEnOut, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:370]
-INFO: [VRFC 10-2458] undeclared symbol dualDataI, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:424]
-INFO: [VRFC 10-2458] undeclared symbol dualDataQ, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:425]
-INFO: [VRFC 10-2458] undeclared symbol dualPcmClkEn, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:426]
-INFO: [VRFC 10-2458] undeclared symbol dualPcmSymClk, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:430]
-INFO: [VRFC 10-2458] undeclared symbol dualDecInputSelect, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:431]
-INFO: [VRFC 10-2458] undeclared symbol ch1PcmData, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:470]
+INFO: [VRFC 10-2458] undeclared symbol clk, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:158]
+INFO: [VRFC 10-2458] undeclared symbol clkLocked, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:159]
+INFO: [VRFC 10-2458] undeclared symbol busClk, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:164]
+INFO: [VRFC 10-2458] undeclared symbol fbClkLocked, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:165]
+INFO: [VRFC 10-2458] undeclared symbol cs, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:210]
+INFO: [VRFC 10-2458] undeclared symbol wr0, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:211]
+INFO: [VRFC 10-2458] undeclared symbol wr1, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:212]
+INFO: [VRFC 10-2458] undeclared symbol wr2, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:213]
+INFO: [VRFC 10-2458] undeclared symbol wr3, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:214]
+INFO: [VRFC 10-2458] undeclared symbol reset, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:237]
+INFO: [VRFC 10-2458] undeclared symbol spiFlashCK, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:244]
+INFO: [VRFC 10-2458] undeclared symbol spiFlashCS, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:245]
+INFO: [VRFC 10-2458] undeclared symbol reboot, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:308]
+INFO: [VRFC 10-2458] undeclared symbol iDemodSym2xEn, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:352]
+INFO: [VRFC 10-2458] undeclared symbol iDemodSymEn, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:353]
+INFO: [VRFC 10-2458] undeclared symbol iDemodSymClk, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:355]
+INFO: [VRFC 10-2458] undeclared symbol iDemodBit, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:356]
+INFO: [VRFC 10-2458] undeclared symbol qDemodSym2xEn, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:357]
+INFO: [VRFC 10-2458] undeclared symbol qDemodSymEn, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:358]
+INFO: [VRFC 10-2458] undeclared symbol qDemodSymClk, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:359]
+INFO: [VRFC 10-2458] undeclared symbol qDemodBit, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:361]
+INFO: [VRFC 10-2458] undeclared symbol auDemodSymClk, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:362]
+INFO: [VRFC 10-2458] undeclared symbol auDemodBit, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:363]
+INFO: [VRFC 10-2458] undeclared symbol demodTimingLock, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:364]
+INFO: [VRFC 10-2458] undeclared symbol demodCarrierLock, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:365]
+INFO: [VRFC 10-2458] undeclared symbol trellisSymEn, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:366]
+INFO: [VRFC 10-2458] undeclared symbol iLdpcSymEn, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:370]
+INFO: [VRFC 10-2458] undeclared symbol qLdpcSymEn, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:370]
+INFO: [VRFC 10-2458] undeclared symbol trellisSymEnEven, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:375]
+INFO: [VRFC 10-2458] undeclared symbol demodDac0ClkEn, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:380]
+INFO: [VRFC 10-2458] undeclared symbol demodDac1ClkEn, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:382]
+INFO: [VRFC 10-2458] undeclared symbol demodDac2ClkEn, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:384]
+INFO: [VRFC 10-2458] undeclared symbol demodSdiSymEn, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:395]
+INFO: [VRFC 10-2458] undeclared symbol demodEyeClkEn, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:396]
+INFO: [VRFC 10-2458] undeclared symbol pcmDac0ClkEn, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:436]
+INFO: [VRFC 10-2458] undeclared symbol pcmDac1ClkEn, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:438]
+INFO: [VRFC 10-2458] undeclared symbol pcmDac2ClkEn, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:440]
+INFO: [VRFC 10-2458] undeclared symbol pcmTrellisBit, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:442]
+INFO: [VRFC 10-2458] undeclared symbol pcmTrellisSymEnOut, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:443]
+INFO: [VRFC 10-2458] undeclared symbol pcmTrellisSym2xEnOut, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:444]
+INFO: [VRFC 10-2458] undeclared symbol multih0ClkEn, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:477]
+INFO: [VRFC 10-2458] undeclared symbol multih1ClkEn, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:479]
 INFO: [Common 17-14] Message 'VRFC 10-2458' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
 INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/clkAndDataRegs.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module clkAndDataRegs
@@ -284,6 +284,50 @@ INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/lead.v" into librar
 INFO: [VRFC 10-311] analyzing module leadGain
 INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/lagGain.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module lagGain
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/multi-h/acsMuxMpy.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module acsMuxMpy
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/multi-h/lwkAcs.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module acsMultH
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/multi-h/mfilt.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mfilt
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/multi-h/trellisMultiH.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module trellisMultiH
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/multi-h/tbMux.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module tbMux
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/multi-h/mfiltBank.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mfiltBank
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/multi-h/traceBackMultiH.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module traceBackMultiH
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/multi-h/multihCarrierLoop.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module multihCarrierLoop
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/multi-h/compSel.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module compSel
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/multi-h/comp4twosCompMultiH.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module comp4twosCompMultiH
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/multi-h/tiltPhaseAcc.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module tilt
+INFO: [VRFC 10-311] analyzing module tiltPhaseAcc
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/multi-h/lwkViterbi.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module viterbiMultiH
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/multi-h/rotMux.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module rotMux
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/multi-h/rot8x8.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module rot8x8
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/multi-h/maxMetricMultiH.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module maxMetricMultiH
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/multi-h/vivadoMac.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module dsp48_mac
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/ldpc.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module ldpc
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/ldpcFramer.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module ldpcFramer
+INFO: [VRFC 10-311] analyzing module fourBitCorrelator
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/ldpcRegs.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module ldpcRegs
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/spiGateway.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module spiGateway
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/ldpcDecisionMapper.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module ldpcDecisionMapper
 INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/testSemcoDemod.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module test
 INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.sim/sim_1/behav/glbl.v" into library xil_defaultlib
@@ -304,3 +348,7 @@ INFO: [VRFC 10-163] Analyzing VHDL file "C:/modem/vivado/semcoDemod.srcs/sources
 INFO: [VRFC 10-307] analyzing entity mult12x8Lut
 INFO: [VRFC 10-163] Analyzing VHDL file "C:/modem/vivado/semcoDemod.srcs/sources_1/ip/mult10x10/sim/mult10x10.vhd" into library xil_defaultlib
 INFO: [VRFC 10-307] analyzing entity mult10x10
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/modem/vivado/semcoDemod.srcs/sources_1/ip/mult8x8/sim/mult8x8.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity mult8x8
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/modem/vivado/semcoDemod.srcs/sources_1/ip/decayMpy10x8/sim/decayMpy10x8.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity decayMpy10x8

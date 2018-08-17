@@ -14,3 +14,7 @@ INFO: [VRFC 10-163] Analyzing VHDL file "C:/modem/vivado/semcoDemod.srcs/sources
 INFO: [VRFC 10-307] analyzing entity mult12x8Lut
 INFO: [VRFC 10-163] Analyzing VHDL file "C:/modem/vivado/semcoDemod.srcs/sources_1/ip/mult10x10/sim/mult10x10.vhd" into library xil_defaultlib
 INFO: [VRFC 10-307] analyzing entity mult10x10
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/modem/vivado/semcoDemod.srcs/sources_1/ip/mult8x8/sim/mult8x8.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity mult8x8
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/modem/vivado/semcoDemod.srcs/sources_1/ip/decayMpy10x8/sim/decayMpy10x8.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity decayMpy10x8

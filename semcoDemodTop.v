@@ -118,7 +118,7 @@ module semcoDemodTop (
 
 );
 
-    parameter VER_NUMBER = 16'd476;
+    parameter VER_NUMBER = 16'd478;
 
 
 //******************************************************************************
@@ -322,6 +322,9 @@ module semcoDemodTop (
     wire    signed  [17:0]  iDemodSymData;
     wire    signed  [17:0]  qDemodSymData;
     wire    signed  [17:0]  iTrellis,qTrellis;
+    `ifdef ADD_LDPC
+    wire    signed  [17:0]  iLdpc,qLdpc;
+    `endif
     wire    signed  [3:0]   demodDac0Select,demodDac1Select,demodDac2Select;
     wire    signed  [17:0]  demodDac0Data,demodDac1Data,demodDac2Data;
     wire    signed  [4:0]   demodMode;
@@ -363,6 +366,11 @@ module semcoDemodTop (
         .trellisSymEn(trellisSymEn),
         .iTrellis(iTrellis),
         .qTrellis(qTrellis),
+        `ifdef ADD_LDPC
+        .iLdpcSymEn(iLdpcSymEn),.qLdpcSymEn(qLdpcSymEn),
+        .iLdpc(iLdpc),
+        .qLdpc(qLdpc),
+        `endif
         `ifdef ADD_SUPERBAUD_TED
         .multihSymEnEven(trellisSymEnEven),
         `endif
@@ -504,9 +512,16 @@ module semcoDemodTop (
     end
     `endif
 
-wire    timingLock = demodTimingLock;
-wire    carrierLock = multihMode ? multihCarrierLock : demodCarrierLock;
+    `ifndef EMBED_MULTIH_CARRIER_LOOP
+    wire multihCarrierLock = 1'b1;
+    `endif
+
+    wire    timingLock = demodTimingLock;
+    wire    carrierLock = multihMode ? multihCarrierLock : demodCarrierLock;
 `else //ADD_MULTIH
+
+    wire    timingLock = demodTimingLock;
+    wire    carrierLock = demodCarrierLock;
 
 `endif //ADD_MULTIH
 
@@ -1130,6 +1145,9 @@ sdi sdi(
             `endif
 
             `DEMODSPACE,
+            `ifdef ADD_CMA
+            `EQUALIZERSPACE,
+            `endif
             `ifdef ADD_DESPREADER
             `DESPREADSPACE,
             `endif
@@ -1209,6 +1227,9 @@ sdi sdi(
             `endif
 
             `DEMODSPACE,
+            `ifdef ADD_CMA
+            `EQUALIZERSPACE,
+            `endif
             `ifdef ADD_DESPREADER
             `DESPREADSPACE,
             `endif
