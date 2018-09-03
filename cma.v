@@ -20,8 +20,6 @@ module cma(
     output  signed  [17:0]  qOut
 );
 
-`define NUM_TAPS_16
-
 parameter pipeDelay = 5;
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -136,40 +134,6 @@ cmaTap #(18'h00000) tap12(.iIn(iSR[12]), .qIn(qSR[12]), .iInDelay(iSR[12+pipeDel
 cmaTap #(18'h00000) tap13(.iIn(iSR[13]), .qIn(qSR[13]), .iInDelay(iSR[13+pipeDelay]), .qInDelay(qSR[13+pipeDelay]), .iOut(iTap13), .qOut(qTap13), .clk(clk), .clkEn(clkEn), .reset(reset), .wtUpdate(wtUpdate), .wtReset(wtReset), .iError(iError), .qError(qError), .wtOvf(wtOvf[13]));
 cmaTap #(18'h00000) tap14(.iIn(iSR[14]), .qIn(qSR[14]), .iInDelay(iSR[14+pipeDelay]), .qInDelay(qSR[14+pipeDelay]), .iOut(iTap14), .qOut(qTap14), .clk(clk), .clkEn(clkEn), .reset(reset), .wtUpdate(wtUpdate), .wtReset(wtReset), .iError(iError), .qError(qError), .wtOvf(wtOvf[14]));
 cmaTap #(18'h00000) tap15(.iIn(iSR[15]), .qIn(qSR[15]), .iInDelay(iSR[15+pipeDelay]), .qInDelay(qSR[15+pipeDelay]), .iOut(iTap15), .qOut(qTap15), .clk(clk), .clkEn(clkEn), .reset(reset), .wtUpdate(wtUpdate), .wtReset(wtReset), .iError(iError), .qError(qError), .wtOvf(wtOvf[15]));
-`ifndef NUM_TAPS_16
-cmaTap #(18'h00000) tap16(.iIn(iSR[16]), .qIn(qSR[16]), .iInDelay(iSR[16+pipeDelay]), .qInDelay(qSR[16+pipeDelay]), .iOut(iTap16), .qOut(qTap16), .clk(clk), .clkEn(clkEn), .reset(reset), .wtUpdate(wtUpdate), .wtReset(wtReset), .iError(iError), .qError(qError), .wtOvf(wtOvf[16]));
-cmaTap #(18'h00000) tap17(.iIn(iSR[17]), .qIn(qSR[17]), .iInDelay(iSR[17+pipeDelay]), .qInDelay(qSR[17+pipeDelay]), .iOut(iTap17), .qOut(qTap17), .clk(clk), .clkEn(clkEn), .reset(reset), .wtUpdate(wtUpdate), .wtReset(wtReset), .iError(iError), .qError(qError), .wtOvf(wtOvf[17]));
-`ifndef NUM_TAPS_18
-cmaTap #(18'h00000) tap18(.iIn(iSR[18]), .qIn(qSR[18]), .iInDelay(iSR[18+pipeDelay]), .qInDelay(qSR[18+pipeDelay]), .iOut(iTap18), .qOut(qTap18), .clk(clk), .clkEn(clkEn), .reset(reset), .wtUpdate(wtUpdate), .wtReset(wtReset), .iError(iError), .qError(qError), .wtOvf(wtOvf[18]));
-cmaTap #(18'h00000) tap19(.iIn(iSR[19]), .qIn(qSR[19]), .iInDelay(iSR[19+pipeDelay]), .qInDelay(qSR[19+pipeDelay]), .iOut(iTap19), .qOut(qTap19), .clk(clk), .clkEn(clkEn), .reset(reset), .wtUpdate(wtUpdate), .wtReset(wtReset), .iError(iError), .qError(qError), .wtOvf(wtOvf[19]));
-`ifndef NUM_TAPS_20
-cmaTap #(18'h00000) tap20(.iIn(iSR[20]), .qIn(qSR[20]), .iInDelay(iSR[20+pipeDelay]), .qInDelay(qSR[20+pipeDelay]), .iOut(iTap20), .qOut(qTap20), .clk(clk), .clkEn(clkEn), .reset(reset), .wtUpdate(wtUpdate), .wtReset(wtReset), .iError(iError), .qError(qError), .wtOvf(wtOvf[20]));
-cmaTap #(18'h00000) tap21(.iIn(iSR[21]), .qIn(qSR[21]), .iInDelay(iSR[21+pipeDelay]), .qInDelay(qSR[21+pipeDelay]), .iOut(iTap21), .qOut(qTap21), .clk(clk), .clkEn(clkEn), .reset(reset), .wtUpdate(wtUpdate), .wtReset(wtReset), .iError(iError), .qError(qError), .wtOvf(wtOvf[21]));
-`ifndef NUM_TAPS_22
-cmaTap #(18'h00000) tap22(.iIn(iSR[22]), .qIn(qSR[22]), .iInDelay(iSR[22+pipeDelay]), .qInDelay(qSR[22+pipeDelay]), .iOut(iTap22), .qOut(qTap22), .clk(clk), .clkEn(clkEn), .reset(reset), .wtUpdate(wtUpdate), .wtReset(wtReset), .iError(iError), .qError(qError), .wtOvf(wtOvf[22]));
-cmaTap #(18'h00000) tap23(.iIn(iSR[23]), .qIn(qSR[23]), .iInDelay(iSR[23+pipeDelay]), .qInDelay(qSR[23+pipeDelay]), .iOut(iTap23), .qOut(qTap23), .clk(clk), .clkEn(clkEn), .reset(reset), .wtUpdate(wtUpdate), .wtReset(wtReset), .iError(iError), .qError(qError), .wtOvf(wtOvf[23]));
-`ifndef NUM_TAPS_24
-cmaTap #(18'h00000) tap24(.iIn(iSR[24]), .qIn(qSR[24]), .iInDelay(iSR[24+pipeDelay]), .qInDelay(qSR[24+pipeDelay]), .iOut(iTap24), .qOut(qTap24), .clk(clk), .clkEn(clkEn), .reset(reset), .wtUpdate(wtUpdate), .wtReset(wtReset), .iError(iError), .qError(qError), .wtOvf(wtOvf[24]));
-cmaTap #(18'h00000) tap25(.iIn(iSR[25]), .qIn(qSR[25]), .iInDelay(iSR[25+pipeDelay]), .qInDelay(qSR[25+pipeDelay]), .iOut(iTap25), .qOut(qTap25), .clk(clk), .clkEn(clkEn), .reset(reset), .wtUpdate(wtUpdate), .wtReset(wtReset), .iError(iError), .qError(qError), .wtOvf(wtOvf[25]));
-`ifndef NUM_TAPS_26
-cmaTap #(18'h00000) tap26(.iIn(iSR[26]), .qIn(qSR[26]), .iInDelay(iSR[26+pipeDelay]), .qInDelay(qSR[26+pipeDelay]), .iOut(iTap26), .qOut(qTap26), .clk(clk), .clkEn(clkEn), .reset(reset), .wtUpdate(wtUpdate), .wtReset(wtReset), .iError(iError), .qError(qError), .wtOvf(wtOvf[26]));
-cmaTap #(18'h00000) tap27(.iIn(iSR[27]), .qIn(qSR[27]), .iInDelay(iSR[27+pipeDelay]), .qInDelay(qSR[27+pipeDelay]), .iOut(iTap27), .qOut(qTap27), .clk(clk), .clkEn(clkEn), .reset(reset), .wtUpdate(wtUpdate), .wtReset(wtReset), .iError(iError), .qError(qError), .wtOvf(wtOvf[27]));
-`ifndef NUM_TAPS_28
-cmaTap #(18'h00000) tap28(.iIn(iSR[28]), .qIn(qSR[28]), .iInDelay(iSR[28+pipeDelay]), .qInDelay(qSR[28+pipeDelay]), .iOut(iTap28), .qOut(qTap28), .clk(clk), .clkEn(clkEn), .reset(reset), .wtUpdate(wtUpdate), .wtReset(wtReset), .iError(iError), .qError(qError), .wtOvf(wtOvf[28]));
-cmaTap #(18'h00000) tap29(.iIn(iSR[29]), .qIn(qSR[29]), .iInDelay(iSR[29+pipeDelay]), .qInDelay(qSR[29+pipeDelay]), .iOut(iTap29), .qOut(qTap29), .clk(clk), .clkEn(clkEn), .reset(reset), .wtUpdate(wtUpdate), .wtReset(wtReset), .iError(iError), .qError(qError), .wtOvf(wtOvf[29]));
-`endif //NUM_TAPS_28
-`endif //NUM_TAPS_26
-`endif //NUM_TAPS_24
-`endif //NUM_TAPS_22
-`endif //NUM_TAPS_20
-`endif //NUM_TAPS_18
-`endif //NUM_TAPS_16
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Tap Output Summations
-// Two pipeline delays
-// these ifdefs support changing the number of summer inputs but it
-// assumes unconnected inputs are forced to zero which appears to be the case
-// with both the Aldec simulator and ISE 13.4
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 wire    signed  [17:0] iSum;
 cmaSum iTapSum (
@@ -180,10 +144,6 @@ cmaSum iTapSum (
     .t4(iTap4),.t5(iTap5),.t6(iTap6),.t7(iTap7),
     .t8(iTap8),.t9(iTap9),.t10(iTap10),.t11(iTap11),
     .t12(iTap12),.t13(iTap13),.t14(iTap14),.t15(iTap15),
-    .t16(),.t17(),.t18(),.t19(),
-    .t20(),.t21(),.t22(),.t23(),
-    .t24(),.t25(),.t26(),.t27(),
-    .t28(),.t29(),.t30(),.t31(),
     .S(),.qS(iSum)
 );
 
@@ -196,24 +156,20 @@ cmaSum qTapSum (
     .t4(qTap4),.t5(qTap5),.t6(qTap6),.t7(qTap7),
     .t8(qTap8),.t9(qTap9),.t10(qTap10),.t11(qTap11),
     .t12(qTap12),.t13(qTap13),.t14(qTap14),.t15(qTap15),
-    .t16(),.t17(),.t18(),.t19(),
-    .t20(),.t21(),.t22(),.t23(),
-    .t24(),.t25(),.t26(),.t27(),
-    .t28(),.t29(),.t30(),.t31(),
     .S(),.qS(qSum)
 );
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Magnitude
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-wire [35:0]iSumSqr = $signed(iSum) * $signed(iSum);
-wire [35:0]qSumSqr = $signed(qSum) * $signed(qSum);
-wire [17:0]mag = limitAdd2(iSumSqr[35:17] + qSumSqr[35:17]);
+wire signed [35:0]  iSumSqr = $signed(iSum) * $signed(iSum);
+wire signed [35:0]  qSumSqr = $signed(qSum) * $signed(qSum);
+wire        [17:0]  mag = limitAdd2(iSumSqr[35:17] + qSumSqr[35:17]);
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Error
 // One pipeline delay
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-wire [17:0] diff = limitAdd2({{3{refLevel[15]}},refLevel[15:0]} - {mag[17],mag});
+wire [17:0] diff = limitAdd2({{2{refLevel[15]}},refLevel[15:0],1'b0} - {mag[17],mag});
 
 reg [17:0] diff_reg,iSum_reg,qSum_reg;
 always @ (posedge clk) begin
@@ -235,8 +191,8 @@ always @ (posedge clk) begin
 // Also, the diff, isum and qsum reg names above are not being preserved so
 // these may be absorbed into the Mmult as well.
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-wire [35:0]iErrMult = $signed(iSum_reg) * $signed(diff_reg);
-wire [35:0]qErrMult = $signed(qSum_reg) * $signed(diff_reg);
+wire signed [35:0]iErrMult = $signed(iSum_reg) * $signed(diff_reg);
+wire signed [35:0]qErrMult = $signed(qSum_reg) * $signed(diff_reg);
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Scaling
 // stepExpo is treated as signed 2's complement
@@ -306,7 +262,7 @@ always @* qCmaReal = $itor(qOut)/(2**17);
 endmodule
 
 
-`ifdef TEST_MODULE
+`ifdef TEST_CMA_MODULE
 
 module test;
 
@@ -335,7 +291,7 @@ module test;
     // Create an impulse to drive the filter with
     integer bitCount;
     reg     signed  [17:0]  iIn;
-    wire    signed  [17:0]  qIn = 18'h0;
+    wire    signed  [17:0]  qIn = 18'h38000;
     always @(posedge clk) begin
         if (clkEn) begin
             if (bitCount == 5) begin

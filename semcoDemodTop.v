@@ -639,6 +639,40 @@ module semcoDemodTop (
     );
 
 
+`ifdef ADD_LDPC
+//******************************************************************************
+//                              LDPC Decoder
+//******************************************************************************
+    wire            [17:0]  ldpcDac0Data;
+    wire            [17:0]  ldpcDac1Data;
+    wire            [17:0]  ldpcDac2Data;
+    wire            [31:0]  ldpcDout;
+    ldpc ldpc(
+        .clk(clk), .clkEn(iDemodSym2xEn), .reset(reset),
+        .busClk(busClk),
+        .cs(cs),
+        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .addr(addr),
+        .din(dataIn),
+        .dout(ldpcDout),
+        .iSymEn(iLdpcSymEn),
+        .iSymData(iLdpc),
+        .qSymEn(qLdpcSymEn),
+        .qSymData(qLdpc),
+        .dac0Select(demodDac0Select),
+        .dac1Select(demodDac1Select),
+        .dac2Select(demodDac2Select),
+        .dac0ClkEn(ldpcDac0ClkEn),
+        .dac0Data(ldpcDac0Data),
+        .dac1ClkEn(ldpcDac1ClkEn),
+        .dac1Data(ldpcDac1Data),
+        .dac2ClkEn(ldpcDac2ClkEn),
+        .dac2Data(ldpcDac2Data),
+        .ldpcBitEnOut(ldpcBitEnOut),
+        .ldpcBitOut(ldpcBitOut)
+    );
+`endif
+
 
 //******************************************************************************
 //                       Clock/Data Jitter Reduction
@@ -697,6 +731,10 @@ module semcoDemodTop (
             //`CandD_SRC_MULTIH:
             //`CandD_SRC_STC:
             //`CandD_SRC_PNGEN:
+            `CandD_SRC_LDPC: begin
+                cAndD0ClkEn = ldpcBitEnOut;
+                cAndD0DataIn = {ldpcBitOut,2'b0};
+            end
             `CandD_SRC_DEC0_CH0: begin
                 cAndD0ClkEn = dualPcmClkEn;
                 cAndD0DataIn = {dualDataI,dualDataQ,1'b0};
@@ -765,6 +803,10 @@ module semcoDemodTop (
             //`CandD_SRC_MULTIH:
             //`CandD_SRC_STC:
             //`CandD_SRC_PNGEN:
+            `CandD_SRC_LDPC: begin
+                cAndD1ClkEn = ldpcBitEnOut;
+                cAndD1DataIn = {ldpcBitOut,2'b0};
+            end
             `CandD_SRC_DEC0_CH0: begin
                 cAndD1ClkEn = dualPcmClkEn;
                 cAndD1DataIn = {dualDataI,dualDataQ,1'b0};
@@ -845,6 +887,10 @@ module semcoDemodTop (
                 interp0DataIn <= multih0Out;
                 interp0ClkEn <= multih0ClkEn;
             end
+            `DAC_SRC_LDPC: begin
+                interp0DataIn <= ldpcDac0Data;
+                interp0ClkEn <= ldpcDac0ClkEn;
+            end
             default: begin
                 interp0DataIn <= demodDac0Data;
                 interp0ClkEn <= demodDac0ClkEn;
@@ -897,6 +943,10 @@ module semcoDemodTop (
                 interp1DataIn <= multih1Out;
                 interp1ClkEn <= multih1ClkEn;
             end
+            `DAC_SRC_LDPC: begin
+                interp1DataIn <= ldpcDac1Data;
+                interp1ClkEn <= ldpcDac1ClkEn;
+            end
             default: begin
                 interp1DataIn <= demodDac1Data;
                 interp1ClkEn <= demodDac1ClkEn;
@@ -948,6 +998,10 @@ module semcoDemodTop (
             `DAC_SRC_MULTIHTRELLIS: begin
                 interp2DataIn <= multih2Out;
                 interp2ClkEn <= multih2ClkEn;
+            end
+            `DAC_SRC_LDPC: begin
+                interp2DataIn <= ldpcDac2Data;
+                interp2ClkEn <= ldpcDac2ClkEn;
             end
             default: begin
                 interp2DataIn <= demodDac2Data;
@@ -1144,6 +1198,10 @@ sdi sdi(
             `SPIGW_SPACE:       rd_mux = spiGatewayDout;
             `endif
 
+            `ifdef ADD_LDPC
+            `LDPCSPACE:         rd_mux = ldpcDout;
+            `endif
+
             `DEMODSPACE,
             `ifdef ADD_CMA
             `EQUALIZERSPACE,
@@ -1222,6 +1280,17 @@ sdi sdi(
                 end
                 else begin
                     rd_mux = spiGatewayDout[15:0];
+                end
+            end
+            `endif
+
+            `ifdef ADD_LDPC
+            `LDPCSPACE:         begin
+                if (addr[1]) begin
+                    rd_mux = ldpcDout[31:16];
+                end
+                else begin
+                    rd_mux = ldpcDout[15:0];
                 end
             end
             `endif

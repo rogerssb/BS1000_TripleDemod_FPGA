@@ -12,7 +12,8 @@
 `elsif SOQPSK_TEST
     `define TEST_DATA "c:/modem/vivado/testData/soqpskTestData.txt"
 `elsif LDPC_TEST
-    `define TEST_DATA "c:/modem/vivado/testData/ldpcSyncWaveform.txt"
+    `define TEST_DATA "c:/modem/vivado/testData/ldpcWaveform_1024_4_5.txt"
+    //`define TEST_DATA "c:/modem/vivado/testData/ldpcSyncWaveform.txt"
 `endif
 
 module test;
@@ -72,8 +73,7 @@ module test;
             else begin
                 //enableInput <= 0;
                 $display("Out of if samples");
-                #1 $fclose(fp_if);
-                #1 fp_if = $fopen(`TEST_DATA,"r");
+                $rewind(fp_if);
                 #1 x <= $fscanf(fp_if,"%f",ifSampleFloat);
             end
         end
@@ -367,7 +367,9 @@ module test;
         // Set for inverse of 0.45 which is a smidge less than the AGC setpoint of 0.5 to
         // account for shaping filter losses.
         //write32(createAddress(`LDPCSPACE, `LDPC_INVERSE_MEAN), 32'h00018e39);
-        write32(createAddress(`LDPCSPACE, `LDPC_INVERSE_MEAN), 32'h00028000);
+        //write32(createAddress(`LDPCSPACE, `LDPC_INVERSE_MEAN), 32'h00028000);
+        write32(createAddress(`LDPCSPACE, `LDPC_INVERSE_MEAN), 32'h00048000);
+        //write32(createAddress(`LDPCSPACE, `LDPC_INVERSE_MEAN), 32'h0000d200);
         write32(createAddress(`LDPCSPACE, `LDPC_CONTROL),{1'b0,4'b0,11'd62,
                                                           12'b0,`LDPC_CODE_LENGTH_1024,1'b0,`LDPC_RATE_4_5});
         // Set the run bit

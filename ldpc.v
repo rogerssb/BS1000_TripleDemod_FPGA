@@ -3,22 +3,27 @@
 `include "addressMap.v"
 
 module ldpc #(parameter LDPCBITS = 3) (
-    input                   clk,clkEn,reset,
-    input                   busClk,
-    input                   cs,
-    input                   wr0,wr1,wr2,wr3,
-    input           [12:0]  addr,
-    input           [31:0]  din,
-    output          [31:0]  dout,
-    input                   iSymEn,
-    input   signed  [17:0]  iSymData,
-    input                   qSymEn,
-    input   signed  [17:0]  qSymData,
-    output                  ldpcBitEnOut,
-    output                  ldpcBitOut
+    input                       clk,clkEn,reset,
+    input                       busClk,
+    input                       cs,
+    input                       wr0,wr1,wr2,wr3,
+    input               [12:0]  addr,
+    input               [31:0]  din,
+    output              [31:0]  dout,
+    input                       iSymEn,
+    input       signed  [17:0]  iSymData,
+    input                       qSymEn,
+    input       signed  [17:0]  qSymData,
+    input               [3:0]   dac0Select,dac1Select,dac2Select,
+    output  reg                 dac0ClkEn,
+    output  reg signed  [17:0]  dac0Data,
+    output  reg                 dac1ClkEn,
+    output  reg signed  [17:0]  dac1Data,
+    output  reg                 dac2ClkEn,
+    output  reg signed  [17:0]  dac2Data,
+    output                      ldpcBitEnOut,
+    output                      ldpcBitOut
     );
-
-    `define VITERBI_SYMEN_DELAY 19
 
     reg ldpcSpace;
     always @* begin
@@ -35,6 +40,7 @@ module ldpc #(parameter LDPCBITS = 3) (
     wire            inSync;
     wire    [1:0]   syncState;
     wire    [1:0]   rotation;
+    wire    [15:0]  outputEnClkDiv;
     `define LDPC_0_DEGREES      2'b00
     `define LDPC_90_DEGREES     2'b01
     `define LDPC_180_DEGREES    2'b10
@@ -54,7 +60,8 @@ module ldpc #(parameter LDPCBITS = 3) (
         .codeLength4096(codeLength4096),
         .codeRate(codeRate),
         .syncThreshold(syncThreshold),
-        .ldpcRun(ldpcRun)
+        .ldpcRun(ldpcRun),
+        .outputEnClkDiv(outputEnClkDiv)
     );
 
     // Clock enables.
@@ -84,6 +91,7 @@ module ldpc #(parameter LDPCBITS = 3) (
     );
 
     // Recover a soft decision bit stream
+    // NOTE: The bit inversion causes a numeric inversion
     reg signed  [LDPCBITS-1:0] bitSoft;
     always @(posedge clk) begin
         if (clkEn) begin
@@ -97,29 +105,31 @@ module ldpc #(parameter LDPCBITS = 3) (
                     end
                 `LDPC_90_DEGREES:
                     if (iSoftEn) begin
-                        bitSoft <= qSoft;
+                        bitSoft <= ~iSoft;
                     end
                     else if (qSoftEn) begin
-                        bitSoft <= -iSoft;
+                        bitSoft <= qSoft;
                     end
                 `LDPC_180_DEGREES:
                     if (iSoftEn) begin
-                        bitSoft <= -iSoft;
+                        bitSoft <= ~iSoft;
                     end
                     else if (qSoftEn) begin
-                        bitSoft <= -qSoft;
+                        bitSoft <= ~qSoft;
                     end
                 `LDPC_270_DEGREES:
                     if (iSoftEn) begin
-                        bitSoft <= -qSoft;
+                        bitSoft <= iSoft;
                     end
                     else if (qSoftEn) begin
-                        bitSoft <= iSoft;
+                        bitSoft <= ~qSoft;
                     end
             endcase
         end
     end
 
+    wire    signed  [17:0]  correlation;
+    wire    signed  [17:0]  sprtSyncCount;
     ldpcFramer ldpcf(
         .clk(clk),
         .clkEn(clkEn),
@@ -129,8 +139,11 @@ module ldpc #(parameter LDPCBITS = 3) (
         .codeRate(codeRate),
         .syncThreshold(syncThreshold),
         .rotation(rotation),
+        .frameSyncState(syncState),
         .frameSync(inSync),
-        .codewordEn(codewordEn)
+        .codewordEn(codewordEn),
+        .correlation(correlation),
+        .sprtSyncCount(sprtSyncCount)
     );
 
     // Create the LDPC decoder interface
@@ -145,5 +158,77 @@ module ldpc #(parameter LDPCBITS = 3) (
         end
     end
 
+    /*
+    ldpcDecoder ldpcd(
+        .clk(clk),
+        .softEn(clkEn),
+        .codewordEn(codewordEn),
+        .softDecision(softDecision),
+        .codeLength4096(codeLength4096),
+        .codeRate(codeRate),
+        .outputEnClkDiv(outputEnClkDiv),
+        .outputBitEn(ldpcBitEnOut),
+        .outputBit(ldpcBitOut)
+    );
+    */
+    assign ldpcBitEnOut = (clkEn & codewordEn);
+    assign ldpcBitOut = softDecision[LDPCBITS];
+
+    always @(posedge clk) begin
+        case (dac0Select)
+            `DAC_I: begin
+                dac0Data <= {softDecision,{(18-LDPCBITS){1'b0}}};
+                dac0ClkEn <= clkEn;
+            end
+            `DAC_LDPC_CORR: begin
+                dac0Data <= correlation;
+                dac0ClkEn <= clkEn;
+            end
+            `DAC_LDPC_SPRT: begin
+                dac0Data <= sprtSyncCount;
+                dac0ClkEn <= clkEn;
+            end
+            default: begin
+                dac0Data <= {softDecision,{(18-LDPCBITS){1'b0}}};
+                dac0ClkEn <= clkEn;
+            end
+        endcase
+        case (dac1Select)
+            `DAC_I: begin
+                dac1Data <= {softDecision,{(18-LDPCBITS){1'b0}}};
+                dac1ClkEn <= clkEn;
+            end
+            `DAC_LDPC_CORR: begin
+                dac1Data <= correlation;
+                dac1ClkEn <= clkEn;
+            end
+            `DAC_LDPC_SPRT: begin
+                dac1Data <= sprtSyncCount;
+                dac1ClkEn <= clkEn;
+            end
+            default: begin
+                dac1Data <= {softDecision,{(18-LDPCBITS){1'b0}}};
+                dac1ClkEn <= clkEn;
+            end
+        endcase
+        case (dac2Select)
+            `DAC_I: begin
+                dac2Data <= {softDecision,{(18-LDPCBITS){1'b0}}};
+                dac2ClkEn <= clkEn;
+            end
+            `DAC_LDPC_CORR: begin
+                dac2Data <= correlation;
+                dac2ClkEn <= clkEn;
+            end
+            `DAC_LDPC_SPRT: begin
+                dac2Data <= sprtSyncCount;
+                dac2ClkEn <= clkEn;
+            end
+            default: begin
+                dac2Data <= {softDecision,{(18-LDPCBITS){1'b0}}};
+                dac2ClkEn <= clkEn;
+            end
+        endcase
+    end
 endmodule
 

@@ -54,8 +54,8 @@ function y = soqpskmod(X, U, SOQPSK_TG, FeherDiffEncode)
         end
     end
     
-    d
-    alpha
+    d ;
+    alpha ;
 
     % Upsample it to get impulse responses
     impulse = upsample(alpha, U);
@@ -93,7 +93,7 @@ function y = soqpskmod(X, U, SOQPSK_TG, FeherDiffEncode)
         gainAdjust = 1/(2*dcGain);
         g = g*gainAdjust;
         
-        g
+        g;
         %figure;
         %plot(cpiece, 'b*');
         %hold on;

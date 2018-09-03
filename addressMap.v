@@ -262,7 +262,7 @@
         `define LDPC_CODE_LENGTH_1024   1'b0
         `define LDPC_CODE_LENGTH_4096   1'b1
     `define LDPC_INVERSE_MEAN   13'bx_xxxx_xxxx_01xx
-    `define LDPC_RSVD0          13'bx_xxxx_xxxx_10xx
+    `define LDPC_OUTPUT_CLK_DIV 13'bx_xxxx_xxxx_10xx
     `define LDPC_STATUS         13'bx_xxxx_xxxx_11xx
 
 `define DUAL_DECODERSPACE   13'b0_00xx_1000_xxxx
@@ -322,8 +322,8 @@
         `define CandD_SRC_MULTIH        4'b0011
         `define CandD_SRC_STC           4'b0100
         `define CandD_SRC_PNGEN         4'b0101
-        `define CandD_SRC_RSVD0         4'b0110
-        `define CandD_SRC_RSVD1         4'b0111
+        `define CandD_SRC_LDPC          4'b0110
+        `define CandD_SRC_RSVD0         4'b0111
         `define CandD_SRC_DEC0_CH0      4'b1000
         `define CandD_SRC_DEC0_CH1      4'b1001
         `define CandD_SRC_DEC1_CH0      4'b1010
@@ -455,6 +455,8 @@
 `define DAC_FREQLOCK        4'b1001
 `define DAC_AVGFREQ         4'b1010
 `define DAC_FREQERROR       4'b1011
+`define DAC_LDPC_CORR       4'b1100
+`define DAC_LDPC_SPRT       4'b1101
 `define DAC_DS_CODE         4'b1100
 `define DAC_DS_LOCK         4'b1101
 `define DAC_DS_EPOCH        4'b1110
@@ -542,6 +544,7 @@
         `define DAC_SRC_FMTRELLIS       4
         `define DAC_SRC_SOQTRELLIS      5
         `define DAC_SRC_MULTIHTRELLIS   6
+        `define DAC_SRC_LDPC            7
 `define INTERP_GAIN_MANTISSA    13'bx_xxxx_xxxx_001x
 `define INTERP_CIC_EXPONENT     13'bx_xxxx_xxxx_010x
 `define INTERP_GAIN_EXPONENT    13'bx_xxxx_xxxx_011x

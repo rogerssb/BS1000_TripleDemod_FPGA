@@ -328,6 +328,20 @@ INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/spiGateway.v" into 
 INFO: [VRFC 10-311] analyzing module spiGateway
 INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/ldpcDecisionMapper.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module ldpcDecisionMapper
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/cmaRegs.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module cmaRegs
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/cma.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module cma
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/cmaTap.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module cmaTap
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/cmaSum.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module cmaSum
+INFO: [VRFC 10-311] analyzing module add8Taps
+INFO: [VRFC 10-311] analyzing module add2Taps
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/cmpy18WithCePL1.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module cmpy18WithCePL1
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/multiplier.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module multiplier
 INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/testSemcoDemod.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module test
 INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.sim/sim_1/behav/glbl.v" into library xil_defaultlib

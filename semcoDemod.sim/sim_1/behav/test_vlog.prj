@@ -110,6 +110,12 @@ verilog xil_defaultlib  "../../../ldpcFramer.v" -i "../../../" --include "../../
 verilog xil_defaultlib  "../../../ldpcRegs.v" -i "../../../" --include "../../../semcoDemod.srcs/sources_1/ip/flexbusClock" --include "../../../semcoDemod.srcs/sources_1/ip/systemClock" -d "SEMCO_DEMOD=" -d "SIMULATE="
 verilog xil_defaultlib  "../../../spiGateway.v" -i "../../../" --include "../../../semcoDemod.srcs/sources_1/ip/flexbusClock" --include "../../../semcoDemod.srcs/sources_1/ip/systemClock" -d "SEMCO_DEMOD=" -d "SIMULATE="
 verilog xil_defaultlib  "../../../ldpcDecisionMapper.v" -i "../../../" --include "../../../semcoDemod.srcs/sources_1/ip/flexbusClock" --include "../../../semcoDemod.srcs/sources_1/ip/systemClock" -d "SEMCO_DEMOD=" -d "SIMULATE="
+verilog xil_defaultlib  "../../../cmaRegs.v" -i "../../../" --include "../../../semcoDemod.srcs/sources_1/ip/flexbusClock" --include "../../../semcoDemod.srcs/sources_1/ip/systemClock" -d "SEMCO_DEMOD=" -d "SIMULATE="
+verilog xil_defaultlib  "../../../cma.v" -i "../../../" --include "../../../semcoDemod.srcs/sources_1/ip/flexbusClock" --include "../../../semcoDemod.srcs/sources_1/ip/systemClock" -d "SEMCO_DEMOD=" -d "SIMULATE="
+verilog xil_defaultlib  "../../../cmaTap.v" -i "../../../" --include "../../../semcoDemod.srcs/sources_1/ip/flexbusClock" --include "../../../semcoDemod.srcs/sources_1/ip/systemClock" -d "SEMCO_DEMOD=" -d "SIMULATE="
+verilog xil_defaultlib  "../../../cmaSum.v" -i "../../../" --include "../../../semcoDemod.srcs/sources_1/ip/flexbusClock" --include "../../../semcoDemod.srcs/sources_1/ip/systemClock" -d "SEMCO_DEMOD=" -d "SIMULATE="
+verilog xil_defaultlib  "../../../cmpy18WithCePL1.v" -i "../../../" --include "../../../semcoDemod.srcs/sources_1/ip/flexbusClock" --include "../../../semcoDemod.srcs/sources_1/ip/systemClock" -d "SEMCO_DEMOD=" -d "SIMULATE="
+verilog xil_defaultlib  "../../../multiplier.v" -i "../../../" --include "../../../semcoDemod.srcs/sources_1/ip/flexbusClock" --include "../../../semcoDemod.srcs/sources_1/ip/systemClock" -d "SEMCO_DEMOD=" -d "SIMULATE="
 verilog xil_defaultlib  "../../../testSemcoDemod.v" -i "../../../" --include "../../../semcoDemod.srcs/sources_1/ip/flexbusClock" --include "../../../semcoDemod.srcs/sources_1/ip/systemClock" -d "SEMCO_DEMOD=" -d "SIMULATE="
 
 # compile glbl module

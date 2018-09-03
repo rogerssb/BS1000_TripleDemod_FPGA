@@ -7,7 +7,7 @@ module ldpcDecisionMapper #(parameter OUTBITS = 3) (
     input               [15:0]          inverseMeanMantissa,
     input               [2:0]           inverseMeanExponent,
     input       signed  [17:0]          dIn,
-    output reg  signed  [OUTBITS-1:0]   dOut
+    output      signed  [OUTBITS-1:0]   dOut
 );
 /*
 This function normalizes an input by the expected RMS value of the input to a
@@ -42,6 +42,8 @@ encoded as 1.42857/2 * 65536 = 46811 = 0xb6db.
     reg                         signBit;
     reg                         satPos,satNeg;
     reg signed  [OUTBITS-1:0]   dataBits;
+    reg signed  [OUTBITS-1:0]   mapOut;
+    assign                      dOut = mapOut;
     always @(posedge clk) begin
         if (clkEn) begin
             signBit <= dIn[17];
@@ -91,13 +93,13 @@ encoded as 1.42857/2 * 65536 = 46811 = 0xb6db.
             end
             // Final output
             if (satPos) begin
-                dOut <= (1 << (OUTBITS-1)) - 1;
+                mapOut <= (1 << (OUTBITS-1)) - 1;
             end
             else if (satNeg) begin
-                dOut <= -(1 << (OUTBITS-1));
+                mapOut <= -(1 << (OUTBITS-1));
             end
             else begin
-                dOut <= dataBits;
+                mapOut <= dataBits;
             end
         end
     end
@@ -160,7 +162,7 @@ module test;
 
     reg         [15:0]  mantissa;
     reg         [2:0]   exponent;
-    softDecisionMapper mapper(
+    ldpcDecisionMapper mapper(
         .clk(clk),
         .clkEn(clkEn),
         .reset(reset),
@@ -176,7 +178,7 @@ module test;
         exponent = 1;
 
         mantissa = 16'h8000;
-        exponent = 2;
+        exponent = 3;
 
         #(10*C) ;
         reset = 0;

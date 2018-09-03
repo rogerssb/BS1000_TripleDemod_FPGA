@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="test_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="test" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="1144575355fs"></ZoomStartTime>
+      <ZoomEndTime time="2171084929fs"></ZoomEndTime>
+      <Cursor1Time time="2000000000fs"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="175"></NameColumnWidth>
+      <ValueColumnWidth column_width="120"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="36" />
+   <wvobject fp_name="/test/reset" type="logic">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/clk" type="logic">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/clken" type="logic">
+      <obj_property name="ElementShortName">clken</obj_property>
+      <obj_property name="ObjectShortName">clken</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/clkEn" type="logic">
+      <obj_property name="ElementShortName">clkEn</obj_property>
+      <obj_property name="ObjectShortName">clkEn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/clkEnCount" type="array">
+      <obj_property name="ElementShortName">clkEnCount[7:0]</obj_property>
+      <obj_property name="ObjectShortName">clkEnCount[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/bitCount" type="array">
+      <obj_property name="ElementShortName">bitCount[31:0]</obj_property>
+      <obj_property name="ObjectShortName">bitCount[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/iIn" type="array">
+      <obj_property name="ElementShortName">iIn[17:0]</obj_property>
+      <obj_property name="ObjectShortName">iIn[17:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/qIn" type="array">
+      <obj_property name="ElementShortName">qIn[17:0]</obj_property>
+      <obj_property name="ObjectShortName">qIn[17:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/stepSize" type="array">
+      <obj_property name="ElementShortName">stepSize[2:0]</obj_property>
+      <obj_property name="ObjectShortName">stepSize[2:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/wtReset" type="logic">
+      <obj_property name="ElementShortName">wtReset</obj_property>
+      <obj_property name="ObjectShortName">wtReset</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/decimation" type="array">
+      <obj_property name="ElementShortName">decimation[31:0]</obj_property>
+      <obj_property name="ObjectShortName">decimation[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/HC" type="array">
+      <obj_property name="ElementShortName">HC[31:0]</obj_property>
+      <obj_property name="ObjectShortName">HC[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/C" type="array">
+      <obj_property name="ElementShortName">C[31:0]</obj_property>
+      <obj_property name="ObjectShortName">C[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/cma/tap2/iIn" type="array">
+      <obj_property name="ElementShortName">iIn[17:0]</obj_property>
+      <obj_property name="ObjectShortName">iIn[17:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/cma/tap2/iInDelay" type="array">
+      <obj_property name="ElementShortName">iInDelay[17:0]</obj_property>
+      <obj_property name="ObjectShortName">iInDelay[17:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/cma/tap2/iOut" type="array">
+      <obj_property name="ElementShortName">iOut[17:0]</obj_property>
+      <obj_property name="ObjectShortName">iOut[17:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/cma/tap2/cmpy/arMinusAi" type="array">
+      <obj_property name="ElementShortName">arMinusAi[18:0]</obj_property>
+      <obj_property name="ObjectShortName">arMinusAi[18:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/cma/tap2/cmpy/brMinusBi" type="array">
+      <obj_property name="ElementShortName">brMinusBi[18:0]</obj_property>
+      <obj_property name="ObjectShortName">brMinusBi[18:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/cma/tap2/cmpy/prTerm1" type="array">
+      <obj_property name="ElementShortName">prTerm1[35:0]</obj_property>
+      <obj_property name="ObjectShortName">prTerm1[35:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/cma/tap2/cmpy/commonTerm" type="array">
+      <obj_property name="ElementShortName">commonTerm[35:0]</obj_property>
+      <obj_property name="ObjectShortName">commonTerm[35:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/cma/tap2/cmpy/prSum" type="array">
+      <obj_property name="ElementShortName">prSum[36:0]</obj_property>
+      <obj_property name="ObjectShortName">prSum[36:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/cma/iSum" type="array">
+      <obj_property name="ElementShortName">iSum[17:0]</obj_property>
+      <obj_property name="ObjectShortName">iSum[17:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/cma/iSum" type="array">
+      <obj_property name="ElementShortName">iSum[17:0]</obj_property>
+      <obj_property name="ObjectShortName">iSum[17:0]</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">17</obj_property>
+      <obj_property name="radix_otherWidth">0</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/cma/iSumSqr" type="array">
+      <obj_property name="ElementShortName">iSumSqr[35:0]</obj_property>
+      <obj_property name="ObjectShortName">iSumSqr[35:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/cma/iSumSqr" type="array">
+      <obj_property name="ElementShortName">iSumSqr[35:0]</obj_property>
+      <obj_property name="ObjectShortName">iSumSqr[35:0]</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">34</obj_property>
+      <obj_property name="radix_otherWidth">0</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/cma/qSum" type="array">
+      <obj_property name="ElementShortName">qSum[17:0]</obj_property>
+      <obj_property name="ObjectShortName">qSum[17:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/cma/qSum" type="array">
+      <obj_property name="ElementShortName">qSum[17:0]</obj_property>
+      <obj_property name="ObjectShortName">qSum[17:0]</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">17</obj_property>
+      <obj_property name="radix_otherWidth">0</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/cma/qSumSqr" type="array">
+      <obj_property name="ElementShortName">qSumSqr[35:0]</obj_property>
+      <obj_property name="ObjectShortName">qSumSqr[35:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/cma/qSumSqr" type="array">
+      <obj_property name="ElementShortName">qSumSqr[35:0]</obj_property>
+      <obj_property name="ObjectShortName">qSumSqr[35:0]</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">34</obj_property>
+      <obj_property name="radix_otherWidth">0</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/cma/mag" type="array">
+      <obj_property name="ElementShortName">mag[17:0]</obj_property>
+      <obj_property name="ObjectShortName">mag[17:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/cma/mag" type="array">
+      <obj_property name="ElementShortName">mag[17:0]</obj_property>
+      <obj_property name="ObjectShortName">mag[17:0]</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">UNSIGNEDFIXEDPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">17</obj_property>
+      <obj_property name="radix_otherWidth">0</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/cma/diff" type="array">
+      <obj_property name="ElementShortName">diff[17:0]</obj_property>
+      <obj_property name="ObjectShortName">diff[17:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/cma/iErrMult" type="array">
+      <obj_property name="ElementShortName">iErrMult[35:0]</obj_property>
+      <obj_property name="ObjectShortName">iErrMult[35:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/cma/tap2/iError" type="array">
+      <obj_property name="ElementShortName">iError[17:0]</obj_property>
+      <obj_property name="ObjectShortName">iError[17:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/cma/tap2/iWeight" type="array">
+      <obj_property name="ElementShortName">iWeight[17:0]</obj_property>
+      <obj_property name="ObjectShortName">iWeight[17:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/cma/tap2/wtUpdate" type="logic">
+      <obj_property name="ElementShortName">wtUpdate</obj_property>
+      <obj_property name="ObjectShortName">wtUpdate</obj_property>
+   </wvobject>
+</wave_config>

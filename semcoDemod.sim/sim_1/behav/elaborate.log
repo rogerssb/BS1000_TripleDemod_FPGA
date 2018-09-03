@@ -201,5 +201,6 @@ Compiling module xil_defaultlib.uartBaudGen
 Compiling module xil_defaultlib.uartTx
 Compiling module xil_defaultlib.sdi
 Compiling module xil_defaultlib.test
+WARNING: [XSIM 43-3373] "C:/modem/vivado/testSemcoDemod.v" Line 76. System function $rewind is used as system task. This system function should have a LHS e.g. x=$rewind().
 Compiling module xil_defaultlib.glbl
 Built simulation snapshot test_behav

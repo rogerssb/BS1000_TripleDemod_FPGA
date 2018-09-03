@@ -17,7 +17,8 @@ module ldpcRegs(
     output  reg         [10:0]  syncThreshold,
     output  reg         [15:0]  inverseMeanMantissa,
     output  reg         [2:0]   inverseMeanExponent,
-    output  reg                 ldpcRun
+    output  reg                 ldpcRun,
+    output  reg         [15:0]  outputEnClkDiv
 );
 
     always @(posedge busClk) begin
@@ -29,6 +30,9 @@ module ldpcRegs(
                 end
                 `LDPC_INVERSE_MEAN: begin
                     inverseMeanMantissa[7:0] <= dataIn[7:0];
+                end
+                `LDPC_OUTPUT_CLK_DIV: begin
+                    outputEnClkDiv[7:0] <= dataIn[7:0];
                 end
                 default: ;
             endcase
@@ -55,6 +59,9 @@ module ldpcRegs(
                 `LDPC_INVERSE_MEAN: begin
                     inverseMeanExponent <= dataIn[18:16];
                 end
+                `LDPC_OUTPUT_CLK_DIV: begin
+                    outputEnClkDiv[15:8] <= dataIn[15:8];
+                end
                 default: ;
             endcase
         end
@@ -77,6 +84,7 @@ module ldpcRegs(
             casex (addr)
                 `LDPC_CONTROL:          dataOut = {ldpcRun,4'b0,syncThreshold,12'b0,codeLength4096,1'b0,codeRate};
                 `LDPC_INVERSE_MEAN:     dataOut = {13'h0,inverseMeanExponent,inverseMeanMantissa};
+                `LDPC_OUTPUT_CLK_DIV:   dataOut = {16'h0,outputEnClkDiv};
                 `LDPC_STATUS:           dataOut = {inSync,15'h0,
                                                    6'b0,rotation,6'b0,syncState};
                 default:                dataOut = 32'h0;

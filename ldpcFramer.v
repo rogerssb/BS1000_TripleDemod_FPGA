@@ -12,35 +12,47 @@ module ldpcFramer(
     output reg      [1:0]   rotation,
     output          [1:0]   frameSyncState,
     output reg              frameSync,
-    output reg              codewordEn
+    output reg              codewordEn,
+    output signed   [17:0]  correlation,
+    output          [17:0]  sprtSyncCount
 );
 
     `define BITS_PER_WORD   64
-    reg         [7:0]  wordsPerFrame;
+    reg         [2:0]   syncWords;
+    reg         [7:0]   wordsPerFrame;
     always @* begin
         case (codeRate)
             `LDPC_RATE_1_2:
                 if (codeLength4096) begin
                     wordsPerFrame = 128;
+                    syncWords = 4;
                 end
                 else begin
                     wordsPerFrame = 32;
+                    syncWords = 1;
                 end
             `LDPC_RATE_2_3:
                 if (codeLength4096) begin
                     wordsPerFrame = 96;
+                    syncWords = 4;
                 end
                 else begin
                     wordsPerFrame = 24;
+                    syncWords = 1;
                 end
             `LDPC_RATE_4_5:
                 if (codeLength4096) begin
                     wordsPerFrame = 80;
+                    syncWords = 4;
                 end
                 else begin
                     wordsPerFrame = 20;
+                    syncWords = 1;
                 end
-            default: wordsPerFrame = 32;
+            default: begin
+                wordsPerFrame = 32;
+                syncWords = 1;
+            end
         endcase
     end
 
@@ -220,10 +232,8 @@ module ldpcFramer(
                                    - $signed({{2{bitSumSR[127][8]}},bitSumSR[127]})
                                    + $signed({{2{bitSumSR[191][8]}},bitSumSR[191]});
 
-    `ifdef SIMULATE
-    real    correlation;
-    always @* correlation = $itor(longBitSum);
-    `endif
+    assign correlation = codeLength4096 ? $signed({longBitSum,7'b0})
+                                        : $signed({bitSum,9'b0});
 
     // Sync Detector
     reg syncDetected;
@@ -254,12 +264,13 @@ module ldpcFramer(
     reg     [6:0]   wordCount;
     reg     [5:0]   bitCount;
     wire            endOfPayload = ((bitCount == 0) && (wordCount == 0));
-    integer         syncCount;
+    reg     [2:0]   syncCount;
         `ifdef SIMULATE
         `define FRAMER_MAX_SYNC_COUNT 2
         `else
         `define FRAMER_MAX_SYNC_COUNT 5
         `endif
+    assign sprtSyncCount = {1'b0,syncCount,14'b0};
     always @(posedge clk) begin
         if (reset) begin
             syncState <= `OUT_OF_SYNC;
@@ -284,18 +295,13 @@ module ldpcFramer(
                     // Do we need to try another rotation?
                     else if (endOfPayload) begin
                         bitCount <= `BITS_PER_WORD-1;
-                        wordCount <= wordsPerFrame-1;
+                        wordCount <= wordsPerFrame + syncWords - 1;
                         rotation <= rotation + 1;
                     end
                     // Then keep looking
                     else if (bitCount == 0) begin
                         bitCount <= `BITS_PER_WORD-1;
-                        if (wordCount == 0) begin
-                            wordCount <= wordsPerFrame-1;
-                        end
-                        else begin
-                            wordCount <= wordCount - 1;
-                        end
+                        wordCount <= wordCount - 1;
                     end
                     else begin
                         bitCount <= bitCount - 1;
