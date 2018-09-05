@@ -91,7 +91,8 @@ module ldpc #(parameter LDPCBITS = 3) (
     );
 
     // Recover a soft decision bit stream
-    // NOTE: The bit inversion causes a numeric inversion
+    // NOTE: The bit inversion causes a numeric inversion because we're using
+    // a mid-rise quantizer
     reg signed  [LDPCBITS-1:0] bitSoft;
     always @(posedge clk) begin
         if (clkEn) begin

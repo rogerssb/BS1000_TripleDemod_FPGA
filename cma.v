@@ -23,8 +23,8 @@ module cma(
 parameter pipeDelay = 5;
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-function [17:0]limitAdd2;
-    input [18:0]in;
+function signed [17:0]  limitAdd2;
+    input signed    [18:0]  in;
     if (in[18] && !in[17]) begin
         limitAdd2 = 18'h20001;
         `ifdef SIMULATE
@@ -37,7 +37,7 @@ function [17:0]limitAdd2;
         $display ("mag or error limited");
         `endif
         end
-    else limitAdd2 = in[17:0];
+    else limitAdd2 = $signed(in[17:0]);
 endfunction
 
 
@@ -164,12 +164,12 @@ cmaSum qTapSum (
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 wire signed [35:0]  iSumSqr = $signed(iSum) * $signed(iSum);
 wire signed [35:0]  qSumSqr = $signed(qSum) * $signed(qSum);
-wire        [17:0]  mag = limitAdd2(iSumSqr[35:17] + qSumSqr[35:17]);
+wire signed [17:0]  mag = limitAdd2(iSumSqr[35:17] + qSumSqr[35:17]);
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Error
 // One pipeline delay
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-wire [17:0] diff = limitAdd2({{2{refLevel[15]}},refLevel[15:0],1'b0} - {mag[17],mag});
+wire signed [17:0] diff = limitAdd2($signed({2'b0,refLevel[15:0],1'b0}) - $signed({1'b0,mag}));
 
 reg [17:0] diff_reg,iSum_reg,qSum_reg;
 always @ (posedge clk) begin
