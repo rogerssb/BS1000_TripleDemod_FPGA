@@ -1,45 +1,39 @@
-Unable to capture context for thread 60544 in process 60776, can not generate back trace
-Unable to capture context for thread 58940 in process 60776, can not generate back trace
-Unable to capture context for thread 56316 in process 60776, can not generate back trace
-Unable to capture context for thread 60912 in process 60776, can not generate back trace
-Unable to capture context for thread 60644 in process 60776, can not generate back trace
-Exception at PC 0x000007FEFD7AA06D
-Unable to capture context for thread 60544 in process 60776, can not generate back trace
-Unable to capture context for thread 58940 in process 60776, can not generate back trace
-Unable to capture context for thread 56316 in process 60776, can not generate back trace
-Exception at PC 0x000007FE9ADDBB93
+Unable to capture context for thread 15820 in process 15944, can not generate back trace
+Unable to capture context for thread 10152 in process 15944, can not generate back trace
+Exception at PC 0x000007FE9D1CBB93
 Printing stacktrace...
 
-Exception at PC 0x000007FEFD7AA06D
-Exception at PC 0x000007FEFD7AA06D
-Exception at PC 0x000007FEFD7AA06D
-Exception at PC 0x000007FEFD7AA06D
-Exception at PC 0x000007FEFD7AA06D
-Exception at PC 0x000007FEFD7AA06D
-Exception at PC 0x000007FEFD7AA06D
-[0]  [0x000007FE9ADDBB93]
-[1]  [0x000007FE9ADDBB93]
-[2]  [0x000007FE9ADDB4A1]
-[3]  [0x000007FE9ADDB3EF]
-[4]  [0x000007FE9ADC19FE]
-[5]  [0x000007FE9ADC0ED1]
-[6]  [0x000007FE9ADC0D76]
-[7]  [0x000007FE9AD679F6]
-[8]  [0x000007FE9AD57AFB]
-[9]  [0x000007FE9AE7E90A]
-[10]  [0x000007FE9AE99F87]
-[11]  [0x000007FE9AE9A05F]
-[12] (BaseThreadInitThunk+0xd) [0x00000000779B59CD]
-[13] (RtlUserThreadStart+0x1d) [0x0000000077C1383D]
+Exception at PC 0x000007FEFCDDA06D
+Exception at PC 0x000007FEFCDDA06D
+Exception at PC 0x000007FEFCDDA06D
+Exception at PC 0x000007FEFCDDA06D
+Exception at PC 0x000007FEFCDDA06D
+Exception at PC 0x000007FEFCDDA06D
+Exception at PC 0x000007FEFCDDA06D
+Exception at PC 0x000007FEFCDDA06D
+[0]  [0x000007FE9D1CBB93]
+[1]  [0x000007FE9D1CBB93]
+[2]  [0x000007FE9D1CB4A1]
+[3]  [0x000007FE9D1CB3EF]
+[4]  [0x000007FE9D1B19FE]
+[5]  [0x000007FE9D1B0ED1]
+[6]  [0x000007FE9D1B0D76]
+[7]  [0x000007FE9D1579F6]
+[8]  [0x000007FE9D147AFB]
+[9]  [0x000007FE9D26E90A]
+[10]  [0x000007FE9D289F87]
+[11]  [0x000007FE9D28A05F]
+[12] (BaseThreadInitThunk+0xd) [0x00000000770E59CD]
+[13] (RtlUserThreadStart+0x1d) [0x000000007724383D]
 Done
-Exception at PC 0x000007FEFD7AA06D
-Exception at PC 0x000007FEFD7AA06D
-Exception at PC 0x000007FEFD7AA06D
-Exception at PC 0x000007FEFD7AA06D
-Exception at PC 0x000007FEFD7AA06D
-Exception at PC 0x000007FEFD7AA06D
-Exception at PC 0x000007FEFD7AA06D
-Exception at PC 0x000007FEFD7AA06D
-Exception at PC 0x000007FEFD7AA06D
-Exception at PC 0x000007FEFD7AA06D
-Exception at PC 0x000007FEFD7AA06D
+Exception at PC 0x000007FEFCDDA06D
+Exception at PC 0x000007FEFCDDA06D
+Exception at PC 0x000007FEFCDDA06D
+Exception at PC 0x000007FEFCDDA06D
+Exception at PC 0x000007FEFCDDA06D
+Exception at PC 0x000007FEFCDDA06D
+Exception at PC 0x000007FEFCDDA06D
+Exception at PC 0x000007FEFCDDA06D
+Exception at PC 0x000007FEFCDDA06D
+Exception at PC 0x000007FEFCDDA06D
+Exception at PC 0x000007FEFCDDA06D

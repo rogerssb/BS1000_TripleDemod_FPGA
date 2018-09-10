@@ -12,8 +12,10 @@ module ldpcRegs(
     input                       inSync,
     input               [1:0]   syncState,
     input               [1:0]   rotation,
+    input                       ldpcReady,
     output  reg                 codeLength4096,
     output  reg         [1:0]   codeRate,
+    output  reg         [1:0]   derandMode,
     output  reg         [10:0]  syncThreshold,
     output  reg         [15:0]  inverseMeanMantissa,
     output  reg         [2:0]   inverseMeanExponent,
@@ -27,6 +29,7 @@ module ldpcRegs(
                 `LDPC_CONTROL:  begin
                     codeRate <= dataIn[1:0];
                     codeLength4096 <= dataIn[3];
+                    derandMode <= dataIn[5:4];
                 end
                 `LDPC_INVERSE_MEAN: begin
                     inverseMeanMantissa[7:0] <= dataIn[7:0];
@@ -82,10 +85,10 @@ module ldpcRegs(
     always @* begin
         if (cs) begin
             casex (addr)
-                `LDPC_CONTROL:          dataOut = {ldpcRun,4'b0,syncThreshold,12'b0,codeLength4096,1'b0,codeRate};
+                `LDPC_CONTROL:          dataOut = {ldpcRun,4'b0,syncThreshold,10'b0,derandMode,codeLength4096,1'b0,codeRate};
                 `LDPC_INVERSE_MEAN:     dataOut = {13'h0,inverseMeanExponent,inverseMeanMantissa};
                 `LDPC_OUTPUT_CLK_DIV:   dataOut = {16'h0,outputEnClkDiv};
-                `LDPC_STATUS:           dataOut = {inSync,15'h0,
+                `LDPC_STATUS:           dataOut = {inSync,ldpcReady,14'h0,
                                                    6'b0,rotation,6'b0,syncState};
                 default:                dataOut = 32'h0;
             endcase

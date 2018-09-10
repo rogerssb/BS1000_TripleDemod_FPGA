@@ -42,7 +42,7 @@
 //`define ADD_DESPREADER
 //`define ADD_SCPATH
 //`define ADD_CMA
-`define ADD_LDPC
+//`define ADD_LDPC
 //`define ADD_DQM
 `define ADD_MULTIH
 `define ADD_SUPERBAUD_TED
@@ -261,6 +261,7 @@
         `define LDPC_RATE_4_5           2'b11
         `define LDPC_CODE_LENGTH_1024   1'b0
         `define LDPC_CODE_LENGTH_4096   1'b1
+        `define LDPC_DERAND_NONE        2'b00
     `define LDPC_INVERSE_MEAN   13'bx_xxxx_xxxx_01xx
     `define LDPC_OUTPUT_CLK_DIV 13'bx_xxxx_xxxx_10xx
     `define LDPC_STATUS         13'bx_xxxx_xxxx_11xx

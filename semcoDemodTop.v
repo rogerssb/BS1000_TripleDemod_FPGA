@@ -118,7 +118,7 @@ module semcoDemodTop (
 
 );
 
-    parameter VER_NUMBER = 16'd478;
+    parameter VER_NUMBER = 16'd481;
 
 
 //******************************************************************************
@@ -647,7 +647,7 @@ module semcoDemodTop (
     wire            [17:0]  ldpcDac1Data;
     wire            [17:0]  ldpcDac2Data;
     wire            [31:0]  ldpcDout;
-    ldpc ldpc(
+    ldpc #(.LDPCBITS(7)) ldpc(
         .clk(clk), .clkEn(iDemodSym2xEn), .reset(reset),
         .busClk(busClk),
         .cs(cs),
@@ -731,10 +731,12 @@ module semcoDemodTop (
             //`CandD_SRC_MULTIH:
             //`CandD_SRC_STC:
             //`CandD_SRC_PNGEN:
+            `ifdef ADD_LDPC
             `CandD_SRC_LDPC: begin
                 cAndD0ClkEn = ldpcBitEnOut;
                 cAndD0DataIn = {ldpcBitOut,2'b0};
             end
+            `endif
             `CandD_SRC_DEC0_CH0: begin
                 cAndD0ClkEn = dualPcmClkEn;
                 cAndD0DataIn = {dualDataI,dualDataQ,1'b0};
@@ -803,10 +805,12 @@ module semcoDemodTop (
             //`CandD_SRC_MULTIH:
             //`CandD_SRC_STC:
             //`CandD_SRC_PNGEN:
+            `ifdef ADD_LDPC
             `CandD_SRC_LDPC: begin
                 cAndD1ClkEn = ldpcBitEnOut;
                 cAndD1DataIn = {ldpcBitOut,2'b0};
             end
+            `endif
             `CandD_SRC_DEC0_CH0: begin
                 cAndD1ClkEn = dualPcmClkEn;
                 cAndD1DataIn = {dualDataI,dualDataQ,1'b0};
@@ -887,10 +891,12 @@ module semcoDemodTop (
                 interp0DataIn <= multih0Out;
                 interp0ClkEn <= multih0ClkEn;
             end
+            `ifdef ADD_LDPC
             `DAC_SRC_LDPC: begin
                 interp0DataIn <= ldpcDac0Data;
                 interp0ClkEn <= ldpcDac0ClkEn;
             end
+            `endif
             default: begin
                 interp0DataIn <= demodDac0Data;
                 interp0ClkEn <= demodDac0ClkEn;
@@ -943,10 +949,12 @@ module semcoDemodTop (
                 interp1DataIn <= multih1Out;
                 interp1ClkEn <= multih1ClkEn;
             end
+            `ifdef ADD_LDPC
             `DAC_SRC_LDPC: begin
                 interp1DataIn <= ldpcDac1Data;
                 interp1ClkEn <= ldpcDac1ClkEn;
             end
+            `endif
             default: begin
                 interp1DataIn <= demodDac1Data;
                 interp1ClkEn <= demodDac1ClkEn;
@@ -999,10 +1007,12 @@ module semcoDemodTop (
                 interp2DataIn <= multih2Out;
                 interp2ClkEn <= multih2ClkEn;
             end
+            `ifdef ADD_LDPC
             `DAC_SRC_LDPC: begin
                 interp2DataIn <= ldpcDac2Data;
                 interp2ClkEn <= ldpcDac2ClkEn;
             end
+            `endif
             default: begin
                 interp2DataIn <= demodDac2Data;
                 interp2ClkEn <= demodDac2ClkEn;

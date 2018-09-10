@@ -1,6 +1,6 @@
 Vivado Simulator 2016.4
 Copyright 1986-1999, 2001-2016 Xilinx, Inc. All Rights Reserved.
-Running: C:/Xilinx/Vivado/2016.4/bin/unwrapped/win64.o/xelab.exe -wto 0027b497f38f46a7b40b8158d1351c26 --debug typical --relax --mt 2 -d SEMCO_DEMOD= -d SIMULATE= -L xbip_utils_v3_0_7 -L axi_utils_v2_0_3 -L xbip_pipe_v3_0_3 -L xbip_bram18k_v3_0_3 -L mult_gen_v12_0_12 -L xbip_dsp48_wrapper_v3_0_4 -L xbip_dsp48_addsub_v3_0_3 -L xbip_dsp48_multadd_v3_0_3 -L dds_compiler_v6_0_13 -L xil_defaultlib -L fir_compiler_v7_2_7 -L fifo_generator_v13_1_3 -L dist_mem_gen_v8_0_11 -L unisims_ver -L unimacro_ver -L secureip -L xpm --snapshot test_behav xil_defaultlib.test xil_defaultlib.glbl -log elaborate.log 
+Running: C:/Xilinx/Vivado/2016.4/bin/unwrapped/win64.o/xelab.exe -wto 0027b497f38f46a7b40b8158d1351c26 --debug typical --relax --mt 2 -d SEMCO_DEMOD= -d SIMULATE= -L xbip_utils_v3_0_7 -L axi_utils_v2_0_3 -L xbip_pipe_v3_0_3 -L xbip_bram18k_v3_0_3 -L mult_gen_v12_0_12 -L xbip_dsp48_wrapper_v3_0_4 -L xbip_dsp48_addsub_v3_0_3 -L xbip_dsp48_multadd_v3_0_3 -L dds_compiler_v6_0_13 -L xil_defaultlib -L fir_compiler_v7_2_7 -L fifo_generator_v13_1_3 -L dist_mem_gen_v8_0_11 -L floating_point_v7_1_3 -L blk_mem_gen_v8_3_4 -L c_reg_fd_v12_0_3 -L xbip_addsub_v3_0_3 -L c_addsub_v12_0_10 -L util_vector_logic_v2_0 -L unisims_ver -L unimacro_ver -L secureip -L xpm --snapshot test_behav xil_defaultlib.test xil_defaultlib.glbl -log elaborate.log 
 Using 2 slave threads.
 Starting static elaboration
 WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1957]
@@ -15,6 +15,9 @@ WARNING: [VRFC 10-516] comparison between unequal length arrays always returns F
 WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1949]
 WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1950]
 WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1951]
+WARNING: [VRFC 10-278] actual bit length 15 differs from formal bit length 1 for port buff_ready [C:/modem/vivado/ldpc.v:188]
+WARNING: [VRFC 10-1783] select index 30 into current_contents is out of bounds [C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/bd/design_2/ipshared/59b0/simulation/blk_mem_gen_v8_3.v:2414]
+WARNING: [VRFC 10-1783] select index 62 into current_contents is out of bounds [C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/bd/design_2/ipshared/59b0/simulation/blk_mem_gen_v8_3.v:2415]
 Completed static elaboration
 Starting simulation data flow analysis
 Completed simulation data flow analysis
@@ -46,6 +49,19 @@ Compiling package fir_compiler_v7_2_7.components
 Compiling package ieee.vital_timing
 Compiling package ieee.vital_primitives
 Compiling package unisim.vpkg
+Compiling package floating_point_v7_1_3.floating_point_v7_1_3_viv_comp
+Compiling package floating_point_v7_1_3.floating_point_v7_1_3_consts
+Compiling package floating_point_v7_1_3.floating_point_v7_1_3_exp_table_...
+Compiling package mult_gen_v12_0_12.mult_gen_v12_0_12_pkg
+Compiling package floating_point_v7_1_3.floating_point_v7_1_3_pkg
+Compiling package floating_point_v7_1_3.flt_utils
+Compiling package floating_point_v7_1_3.vt2mutils
+Compiling package floating_point_v7_1_3.vt2mcomps
+Compiling package c_addsub_v12_0_10.c_addsub_v12_0_10_viv_comp
+Compiling package xbip_addsub_v3_0_3.xbip_addsub_v3_0_3_viv_comp
+Compiling package c_addsub_v12_0_10.c_addsub_v12_0_10_pkg
+Compiling package c_addsub_v12_0_10.c_addsub_v12_0_10_pkg_legacy
+Compiling package c_reg_fd_v12_0_3.c_reg_fd_v12_0_3_viv_comp
 Compiling module xil_defaultlib.demodRegs
 Compiling module xil_defaultlib.ddcRegs
 Compiling architecture synth of entity xbip_pipe_v3_0_3.xbip_pipe_v3_0_3_viv [\xbip_pipe_v3_0_3_viv(c_latency=...]
@@ -187,10 +203,323 @@ Compiling module xil_defaultlib.loopFilter
 Compiling module xil_defaultlib.bitsync
 Compiling module xil_defaultlib.demod
 Compiling module xil_defaultlib.ldpcRegs
-Compiling module xil_defaultlib.ldpcDecisionMapper(OUTBITS=3)
+Compiling module xil_defaultlib.ldpcDecisionMapper(OUTBITS=7)
 Compiling module xil_defaultlib.fourBitCorrelator
 Compiling module xil_defaultlib.ldpcFramer
-Compiling module xil_defaultlib.ldpc
+Compiling architecture imp of entity util_vector_logic_v2_0.util_vector_logic [\util_vector_logic(c_operation="...]
+Compiling architecture design_2_data_ce_mux_1_arch of entity xil_defaultlib.design_2_data_ce_mux_1 [design_2_data_ce_mux_1_default]
+Compiling module xil_defaultlib.HLSLdpcLogDecScalbkb_ram
+Compiling module xil_defaultlib.HLSLdpcLogDecScalbkb(DataWidth=1...
+Compiling module xil_defaultlib.HLSLdpcLogDecScaldEe_ram
+Compiling module xil_defaultlib.HLSLdpcLogDecScaldEe(DataWidth=1...
+Compiling module xil_defaultlib.HLSLdpcLogDecScaleOg_ram
+Compiling module xil_defaultlib.HLSLdpcLogDecScaleOg(DataWidth=1...
+Compiling architecture synth of entity xbip_pipe_v3_0_3.xbip_pipe_v3_0_3_viv [\xbip_pipe_v3_0_3_viv(c_has_ce=1...]
+Compiling architecture rtl of entity floating_point_v7_1_3.delay [\delay(width=2,length=0)\]
+Compiling architecture dsp48e1_v of entity unisim.DSP48E1 [\DSP48E1(acascreg=0,adreg=0,alum...]
+Compiling architecture rtl of entity floating_point_v7_1_3.dsp48e1_wrapper [\dsp48e1_wrapper(a_width=19,b_wi...]
+Compiling architecture synth of entity xbip_pipe_v3_0_3.xbip_pipe_v3_0_3_viv [\xbip_pipe_v3_0_3_viv(c_has_ce=1...]
+Compiling architecture rtl of entity floating_point_v7_1_3.delay [\delay(width=7,length=0)\]
+Compiling architecture synth of entity xbip_pipe_v3_0_3.xbip_pipe_v3_0_3_viv [\xbip_pipe_v3_0_3_viv(c_has_ce=1...]
+Compiling architecture rtl of entity floating_point_v7_1_3.delay [\delay(width=4,length=0)\]
+Compiling architecture synth of entity xbip_pipe_v3_0_3.xbip_pipe_v3_0_3_viv [\xbip_pipe_v3_0_3_viv(c_has_ce=1...]
+Compiling architecture rtl of entity floating_point_v7_1_3.delay [\delay(length=0)\]
+Compiling architecture synth of entity xbip_pipe_v3_0_3.xbip_pipe_v3_0_3_viv [\xbip_pipe_v3_0_3_viv(c_has_ce=1...]
+Compiling architecture rtl of entity floating_point_v7_1_3.delay [\delay(width=16,length=0)\]
+Compiling architecture synth of entity xbip_pipe_v3_0_3.xbip_pipe_v3_0_3_viv [\xbip_pipe_v3_0_3_viv(c_has_ce=1...]
+Compiling architecture rtl of entity floating_point_v7_1_3.delay [\delay(width=17,length=0)\]
+Compiling architecture synth of entity xbip_pipe_v3_0_3.xbip_pipe_v3_0_3_viv [\xbip_pipe_v3_0_3_viv(c_has_ce=1...]
+Compiling architecture rtl of entity floating_point_v7_1_3.delay [\delay(width=25,length=0)\]
+Compiling architecture dsp48e1_v of entity unisim.DSP48E1 [\DSP48E1(acascreg=0,adreg=0,alum...]
+Compiling architecture rtl of entity floating_point_v7_1_3.dsp48e1_wrapper [\dsp48e1_wrapper(a_width=17,b_wi...]
+Compiling architecture dsp48e1_v of entity unisim.DSP48E1 [\DSP48E1(acascreg=0,adreg=0,alum...]
+Compiling architecture rtl of entity floating_point_v7_1_3.dsp48e1_wrapper [\dsp48e1_wrapper(a_width=17,b_wi...]
+Compiling architecture synth of entity xbip_pipe_v3_0_3.xbip_pipe_v3_0_3_viv [\xbip_pipe_v3_0_3_viv(c_latency=...]
+Compiling architecture rtl of entity floating_point_v7_1_3.delay [delay_default]
+Compiling architecture dsp48e1_v of entity unisim.DSP48E1 [\DSP48E1(acascreg=0,adreg=0,alum...]
+Compiling architecture rtl of entity floating_point_v7_1_3.dsp48e1_wrapper [\dsp48e1_wrapper(a_width=17,b_wi...]
+Compiling architecture synth of entity xbip_pipe_v3_0_3.xbip_pipe_v3_0_3_viv [\xbip_pipe_v3_0_3_viv(c_has_ce=1...]
+Compiling architecture rtl of entity floating_point_v7_1_3.delay [\delay(width=19,length=0)\]
+Compiling architecture dsp48e1_v of entity unisim.DSP48E1 [\DSP48E1(acascreg=0,adreg=0,alum...]
+Compiling architecture rtl of entity floating_point_v7_1_3.dsp48e1_wrapper [\dsp48e1_wrapper(a_width=19,b_wi...]
+Compiling architecture dsp48e1_v of entity unisim.DSP48E1 [\DSP48E1(adreg=0,alumodereg=0,ca...]
+Compiling architecture rtl of entity floating_point_v7_1_3.dsp48e1_wrapper [\dsp48e1_wrapper(a_width=19,b_wi...]
+Compiling architecture dsp48e1_v of entity unisim.DSP48E1 [\DSP48E1(acascreg=0,adreg=0,alum...]
+Compiling architecture rtl of entity floating_point_v7_1_3.dsp48e1_wrapper [\dsp48e1_wrapper(a_width=19,b_wi...]
+Compiling architecture dsp48e1_v of entity unisim.DSP48E1 [\DSP48E1(adreg=0,alumodereg=0,ca...]
+Compiling architecture rtl of entity floating_point_v7_1_3.dsp48e1_wrapper [\dsp48e1_wrapper(a_width=19,b_wi...]
+Compiling architecture synth of entity xbip_pipe_v3_0_3.xbip_pipe_v3_0_3_viv [\xbip_pipe_v3_0_3_viv(c_latency=...]
+Compiling architecture rtl of entity floating_point_v7_1_3.delay [\delay(width=17)\]
+Compiling architecture dsp48e1_v of entity unisim.DSP48E1 [\DSP48E1(acascreg=0,adreg=0,alum...]
+Compiling architecture rtl of entity floating_point_v7_1_3.dsp48e1_wrapper [\dsp48e1_wrapper(a_width=19,b_wi...]
+Compiling architecture struct of entity floating_point_v7_1_3.fix_mult_dsp48e1_dbl [\fix_mult_dsp48e1_dbl(mult_usage...]
+Compiling architecture rtl of entity floating_point_v7_1_3.fix_mult [\fix_mult(c_xdevicefamily="virte...]
+Compiling architecture muxcy_v of entity unisim.MUXCY [muxcy_default]
+Compiling architecture xorcy_v of entity unisim.XORCY [xorcy_default]
+Compiling architecture synth of entity xbip_pipe_v3_0_3.xbip_pipe_v3_0_3_viv [\xbip_pipe_v3_0_3_viv(c_has_ce=1...]
+Compiling architecture rtl of entity floating_point_v7_1_3.delay [\delay(width=11,length=0,fast_in...]
+Compiling architecture struct of entity floating_point_v7_1_3.carry_chain [\carry_chain(c_xdevicefamily="vi...]
+Compiling architecture synth of entity xbip_pipe_v3_0_3.xbip_pipe_v3_0_3_viv [\xbip_pipe_v3_0_3_viv(c_has_ce=1...]
+Compiling architecture rtl of entity floating_point_v7_1_3.delay [\delay(width=64,length=0)\]
+Compiling architecture synth of entity xbip_pipe_v3_0_3.xbip_pipe_v3_0_3_viv [\xbip_pipe_v3_0_3_viv(c_has_ce=1...]
+Compiling architecture rtl of entity floating_point_v7_1_3.delay [\delay(width=9,length=0)\]
+Compiling architecture struct of entity floating_point_v7_1_3.carry_chain [\carry_chain(c_xdevicefamily="vi...]
+Compiling architecture synth of entity floating_point_v7_1_3.compare_eq_im [\compare_eq_im(c_xdevicefamily="...]
+Compiling architecture synth of entity xbip_pipe_v3_0_3.xbip_pipe_v3_0_3_viv [\xbip_pipe_v3_0_3_viv(c_has_ce=1...]
+Compiling architecture rtl of entity floating_point_v7_1_3.delay [\delay(length=0,fast_input=true)...]
+Compiling architecture rtl of entity floating_point_v7_1_3.special_detect [\special_detect(c_xdevicefamily=...]
+Compiling architecture synth of entity xbip_pipe_v3_0_3.xbip_pipe_v3_0_3_viv [\xbip_pipe_v3_0_3_viv(c_latency=...]
+Compiling architecture rtl of entity floating_point_v7_1_3.delay [\delay(length=2)\]
+Compiling architecture synth of entity xbip_pipe_v3_0_3.xbip_pipe_v3_0_3_viv [\xbip_pipe_v3_0_3_viv(c_latency=...]
+Compiling architecture rtl of entity floating_point_v7_1_3.delay [\delay(width=2,length=2,fast_inp...]
+Compiling architecture synth of entity xbip_pipe_v3_0_3.xbip_pipe_v3_0_3_viv [\xbip_pipe_v3_0_3_viv(c_latency=...]
+Compiling architecture rtl of entity floating_point_v7_1_3.delay [\delay(length=2,fast_input=true)...]
+Compiling architecture synth of entity xbip_pipe_v3_0_3.xbip_pipe_v3_0_3_viv [\xbip_pipe_v3_0_3_viv(c_latency=...]
+Compiling architecture rtl of entity floating_point_v7_1_3.delay [\delay(width=4,length=2,fast_inp...]
+Compiling architecture synth of entity xbip_pipe_v3_0_3.xbip_pipe_v3_0_3_viv [\xbip_pipe_v3_0_3_viv(c_latency=...]
+Compiling architecture rtl of entity floating_point_v7_1_3.delay [\delay(width=11,length=2)\]
+Compiling architecture synth of entity xbip_pipe_v3_0_3.xbip_pipe_v3_0_3_viv [\xbip_pipe_v3_0_3_viv(c_has_ce=1...]
+Compiling architecture rtl of entity floating_point_v7_1_3.delay [\delay(width=3,length=0,fast_inp...]
+Compiling architecture synth of entity xbip_pipe_v3_0_3.xbip_pipe_v3_0_3_viv [\xbip_pipe_v3_0_3_viv(c_has_ce=1...]
+Compiling architecture rtl of entity floating_point_v7_1_3.delay [\delay(width=4,length=0,fast_inp...]
+Compiling architecture synth of entity xbip_pipe_v3_0_3.xbip_pipe_v3_0_3_viv [\xbip_pipe_v3_0_3_viv(c_has_ce=1...]
+Compiling architecture rtl of entity floating_point_v7_1_3.delay [\delay(width=14,length=0)\]
+Compiling architecture rtl of entity floating_point_v7_1_3.flt_mult_exp [\flt_mult_exp(c_xdevicefamily="v...]
+Compiling architecture synth of entity xbip_pipe_v3_0_3.xbip_pipe_v3_0_3_viv [\xbip_pipe_v3_0_3_viv(c_has_ce=1...]
+Compiling architecture rtl of entity floating_point_v7_1_3.delay [\delay(width=11,length=0)\]
+Compiling architecture synth of entity xbip_pipe_v3_0_3.xbip_pipe_v3_0_3_viv [\xbip_pipe_v3_0_3_viv(c_has_ce=1...]
+Compiling architecture rtl of entity floating_point_v7_1_3.delay [\delay(width=48,length=0)\]
+Compiling architecture synth of entity xbip_pipe_v3_0_3.xbip_pipe_v3_0_3_viv [\xbip_pipe_v3_0_3_viv(c_has_ce=1...]
+Compiling architecture rtl of entity floating_point_v7_1_3.delay [\delay(width=18,length=0)\]
+Compiling architecture dsp48e1_v of entity unisim.DSP48E1 [\DSP48E1(acascreg=0,adreg=0,alum...]
+Compiling architecture rtl of entity floating_point_v7_1_3.dsp48e1_wrapper [\dsp48e1_wrapper(b_width=18,c_wi...]
+Compiling architecture synth of entity xbip_pipe_v3_0_3.xbip_pipe_v3_0_3_viv [\xbip_pipe_v3_0_3_viv(c_has_ce=1...]
+Compiling architecture rtl of entity floating_point_v7_1_3.delay [\delay(width=8,length=0)\]
+Compiling architecture struct of entity floating_point_v7_1_3.carry_chain [\carry_chain(c_xdevicefamily="vi...]
+Compiling architecture synth of entity xbip_pipe_v3_0_3.xbip_pipe_v3_0_3_viv [\xbip_pipe_v3_0_3_viv(c_has_ce=1...]
+Compiling architecture rtl of entity floating_point_v7_1_3.delay [\delay(width=28,length=0)\]
+Compiling architecture synth of entity xbip_pipe_v3_0_3.xbip_pipe_v3_0_3_viv [\xbip_pipe_v3_0_3_viv(c_has_ce=1...]
+Compiling architecture rtl of entity floating_point_v7_1_3.delay [\delay(width=29,length=0)\]
+Compiling architecture synth of entity xbip_pipe_v3_0_3.xbip_pipe_v3_0_3_viv [\xbip_pipe_v3_0_3_viv(c_has_ce=1...]
+Compiling architecture rtl of entity floating_point_v7_1_3.delay [\delay(width=54,length=0,fast_in...]
+Compiling architecture synth of entity xbip_pipe_v3_0_3.xbip_pipe_v3_0_3_viv [\xbip_pipe_v3_0_3_viv(c_has_ce=1...]
+Compiling architecture rtl of entity floating_point_v7_1_3.delay [\delay(width=3,length=0)\]
+Compiling architecture synth of entity xbip_pipe_v3_0_3.xbip_pipe_v3_0_3_viv [\xbip_pipe_v3_0_3_viv(c_has_ce=1...]
+Compiling architecture rtl of entity floating_point_v7_1_3.delay [\delay(width=2,length=0,fast_inp...]
+Compiling architecture struct of entity floating_point_v7_1_3.carry_chain [\carry_chain(c_xdevicefamily="vi...]
+Compiling architecture rtl of entity floating_point_v7_1_3.flt_round_bit [\flt_round_bit(c_xdevicefamily="...]
+Compiling architecture rtl of entity floating_point_v7_1_3.renorm_and_round_logic [\renorm_and_round_logic(c_xdevic...]
+Compiling architecture rtl of entity floating_point_v7_1_3.flt_mult_round [\flt_mult_round(c_xdevicefamily=...]
+Compiling architecture synth of entity floating_point_v7_1_3.flt_dec_op_lat [\flt_dec_op_lat(c_xdevicefamily=...]
+Compiling architecture rtl of entity floating_point_v7_1_3.flt_mult [\flt_mult(c_xdevicefamily="virte...]
+Compiling architecture synth of entity xbip_pipe_v3_0_3.xbip_pipe_v3_0_3_viv [\xbip_pipe_v3_0_3_viv(c_latency=...]
+Compiling architecture xilinx of entity floating_point_v7_1_3.floating_point_v7_1_3_viv [\floating_point_v7_1_3_viv(c_xde...]
+Compiling architecture xilinx of entity floating_point_v7_1_3.floating_point_v7_1_3 [\floating_point_v7_1_3(c_xdevice...]
+Compiling architecture hlsldpclogdecscaledmin_ap_dmul_3_max_dsp_64_arch of entity xil_defaultlib.HLSLdpcLogDecScaledMin_ap_dmul_3_max_dsp_64 [hlsldpclogdecscaledmin_ap_dmul_3...]
+Compiling module xil_defaultlib.HLSLdpcLogDecScalfYi(ID=1)
+Compiling architecture synth of entity xbip_pipe_v3_0_3.xbip_pipe_v3_0_3_viv [\xbip_pipe_v3_0_3_viv(c_has_ce=1...]
+Compiling architecture rtl of entity floating_point_v7_1_3.delay [\delay(width=32,length=0)\]
+Compiling architecture struct of entity floating_point_v7_1_3.carry_chain [\carry_chain(c_xdevicefamily="vi...]
+Compiling architecture synth of entity xbip_pipe_v3_0_3.xbip_pipe_v3_0_3_viv [\xbip_pipe_v3_0_3_viv(c_latency=...]
+Compiling architecture rtl of entity floating_point_v7_1_3.delay [\delay(width=4,fast_input=true)\]
+Compiling architecture rtl of entity floating_point_v7_1_3.mux4 [\mux4(c_xdevicefamily="virtex7",...]
+Compiling architecture synth of entity xbip_pipe_v3_0_3.xbip_pipe_v3_0_3_viv [\xbip_pipe_v3_0_3_viv(c_latency=...]
+Compiling architecture rtl of entity floating_point_v7_1_3.delay [\delay(width=2)\]
+Compiling architecture rtl of entity floating_point_v7_1_3.mux4 [\mux4(c_xdevicefamily="virtex7",...]
+Compiling architecture synth of entity xbip_pipe_v3_0_3.xbip_pipe_v3_0_3_viv [\xbip_pipe_v3_0_3_viv(c_has_ce=1...]
+Compiling architecture rtl of entity floating_point_v7_1_3.delay [\delay(width=8,length=0,fast_inp...]
+Compiling architecture struct of entity floating_point_v7_1_3.carry_chain [\carry_chain(c_xdevicefamily="vi...]
+Compiling architecture rtl of entity floating_point_v7_1_3.lead_zero_encode [\lead_zero_encode(c_xdevicefamil...]
+Compiling architecture synth of entity xbip_pipe_v3_0_3.xbip_pipe_v3_0_3_viv [\xbip_pipe_v3_0_3_viv(c_latency=...]
+Compiling architecture rtl of entity floating_point_v7_1_3.delay [\delay(width=32)\]
+Compiling architecture rtl of entity floating_point_v7_1_3.shift_msb_first [\shift_msb_first(a_width=32,dist...]
+Compiling architecture synth of entity xbip_pipe_v3_0_3.xbip_pipe_v3_0_3_viv [\xbip_pipe_v3_0_3_viv(c_has_ce=1...]
+Compiling architecture rtl of entity floating_point_v7_1_3.delay [\delay(width=26,length=0)\]
+Compiling architecture struct of entity floating_point_v7_1_3.carry_chain [\carry_chain(c_xdevicefamily="vi...]
+Compiling architecture synth of entity xbip_pipe_v3_0_3.xbip_pipe_v3_0_3_viv [\xbip_pipe_v3_0_3_viv(c_has_ce=1...]
+Compiling architecture rtl of entity floating_point_v7_1_3.delay [\delay(width=27,length=0)\]
+Compiling architecture struct of entity floating_point_v7_1_3.carry_chain [\carry_chain(c_xdevicefamily="vi...]
+Compiling architecture synth of entity xbip_pipe_v3_0_3.xbip_pipe_v3_0_3_viv [\xbip_pipe_v3_0_3_viv(c_has_ce=1...]
+Compiling architecture rtl of entity floating_point_v7_1_3.delay [\delay(width=54,length=0)\]
+Compiling architecture rtl of entity floating_point_v7_1_3.renorm_and_round_logic [\renorm_and_round_logic(c_xdevic...]
+Compiling architecture synth of entity floating_point_v7_1_3.fix_to_flt_conv_exp [\fix_to_flt_conv_exp(c_xdevicefa...]
+Compiling architecture synth of entity floating_point_v7_1_3.flt_dec_op [\flt_dec_op(c_xdevicefamily="vir...]
+Compiling architecture struct of entity floating_point_v7_1_3.fix_to_flt_conv [\fix_to_flt_conv(c_xdevicefamily...]
+Compiling architecture xilinx of entity floating_point_v7_1_3.floating_point_v7_1_3_viv [\floating_point_v7_1_3_viv(c_xde...]
+Compiling architecture xilinx of entity floating_point_v7_1_3.floating_point_v7_1_3 [\floating_point_v7_1_3(c_xdevice...]
+Compiling architecture hlsldpclogdecscaledmin_ap_sitodp_2_no_dsp_32_arch of entity xil_defaultlib.HLSLdpcLogDecScaledMin_ap_sitodp_2_no_dsp_32 [hlsldpclogdecscaledmin_ap_sitodp...]
+Compiling module xil_defaultlib.HLSLdpcLogDecScalg8j(ID=1)
+Compiling module xil_defaultlib.HLSLdpcLogDecScalhbi_DSP48_0
+Compiling module xil_defaultlib.HLSLdpcLogDecScalhbi(ID=1,NUM_ST...
+Compiling module xil_defaultlib.HLSLdpcLogDecScaledMin(ap_ST_fsm...
+Compiling architecture design_2_hlsldpclogdecscaledmin_0_0_arch of entity xil_defaultlib.design_2_HLSLdpcLogDecScaledMin_0_0 [design_2_hlsldpclogdecscaledmin_...]
+Compiling module xil_defaultlib.LDPC_CTRL
+Compiling module xil_defaultlib.design_2_LDPC_CTRL_0_0
+Compiling module xil_defaultlib.xlconstant(CONST_VAL=1'b1)
+Compiling module xil_defaultlib.design_2_xlconstant_0_0
+Compiling module xil_defaultlib.LDPC_buff
+Compiling module xil_defaultlib.design_2_LDPC_buff_0_upgraded_ip...
+Compiling architecture rtl of entity c_addsub_v12_0_10.c_addsub_v12_0_10_lut6_legacy [\c_addsub_v12_0_10_lut6_legacy(c...]
+Compiling architecture synth of entity c_addsub_v12_0_10.c_addsub_v12_0_10_fabric_legacy [\c_addsub_v12_0_10_fabric_legacy...]
+Compiling architecture synth of entity c_addsub_v12_0_10.c_addsub_v12_0_10_legacy [\c_addsub_v12_0_10_legacy(c_fami...]
+Compiling architecture synth of entity c_addsub_v12_0_10.c_addsub_v12_0_10_viv [\c_addsub_v12_0_10_viv(c_xdevice...]
+Compiling architecture xilinx of entity c_addsub_v12_0_10.c_addsub_v12_0_10 [\c_addsub_v12_0_10(c_xdevicefami...]
+Compiling architecture design_2_address_mux_1_arch of entity xil_defaultlib.design_2_address_mux_1 [design_2_address_mux_1_default]
+Compiling architecture structural of entity c_reg_fd_v12_0_3.c_reg_fd_v12_0_3_viv [\c_reg_fd_v12_0_3_viv(c_sync_pri...]
+Compiling architecture rtl of entity c_addsub_v12_0_10.c_addsub_v12_0_10_lut6_legacy [\c_addsub_v12_0_10_lut6_legacy(c...]
+Compiling architecture synth of entity c_addsub_v12_0_10.c_addsub_v12_0_10_fabric_legacy [\c_addsub_v12_0_10_fabric_legacy...]
+Compiling architecture synth of entity c_addsub_v12_0_10.c_addsub_v12_0_10_legacy [\c_addsub_v12_0_10_legacy(c_fami...]
+Compiling architecture synth of entity c_addsub_v12_0_10.c_addsub_v12_0_10_viv [\c_addsub_v12_0_10_viv(c_xdevice...]
+Compiling architecture xilinx of entity c_addsub_v12_0_10.c_addsub_v12_0_10 [\c_addsub_v12_0_10(c_xdevicefami...]
+Compiling architecture design_2_c_addsub_0_1_arch of entity xil_defaultlib.design_2_c_addsub_0_1 [design_2_c_addsub_0_1_default]
+Compiling module unisims_ver.IBUF
+Compiling module unisims_ver.MMCME2_ADV(CLKFBOUT_MULT_F=10.0,...
+Compiling module unisims_ver.BUFG
+Compiling module xil_defaultlib.design_2_clk_wiz_0_0_clk_wiz
+Compiling module xil_defaultlib.design_2_clk_wiz_0_0
+Compiling architecture imp of entity util_vector_logic_v2_0.util_vector_logic [\util_vector_logic(c_size=1)(1,3...]
+Compiling architecture design_2_util_vector_logic_0_0_arch of entity xil_defaultlib.design_2_util_vector_logic_0_0 [design_2_util_vector_logic_0_0_d...]
+Compiling architecture design_2_data_ce_mux_0_arch of entity xil_defaultlib.design_2_data_ce_mux_0 [design_2_data_ce_mux_0_default]
+Compiling architecture rtl of entity c_addsub_v12_0_10.c_addsub_v12_0_10_lut6_legacy [\c_addsub_v12_0_10_lut6_legacy(c...]
+Compiling architecture synth of entity c_addsub_v12_0_10.c_addsub_v12_0_10_fabric_legacy [\c_addsub_v12_0_10_fabric_legacy...]
+Compiling architecture synth of entity c_addsub_v12_0_10.c_addsub_v12_0_10_legacy [\c_addsub_v12_0_10_legacy(c_fami...]
+Compiling architecture synth of entity c_addsub_v12_0_10.c_addsub_v12_0_10_viv [\c_addsub_v12_0_10_viv(c_xdevice...]
+Compiling architecture xilinx of entity c_addsub_v12_0_10.c_addsub_v12_0_10 [\c_addsub_v12_0_10(c_xdevicefami...]
+Compiling architecture design_2_address_mux_0_arch of entity xil_defaultlib.design_2_address_mux_0 [design_2_address_mux_0_default]
+Compiling architecture rtl of entity c_addsub_v12_0_10.c_addsub_v12_0_10_lut6_legacy [\c_addsub_v12_0_10_lut6_legacy(c...]
+Compiling architecture synth of entity c_addsub_v12_0_10.c_addsub_v12_0_10_fabric_legacy [\c_addsub_v12_0_10_fabric_legacy...]
+Compiling architecture synth of entity c_addsub_v12_0_10.c_addsub_v12_0_10_legacy [\c_addsub_v12_0_10_legacy(c_fami...]
+Compiling architecture synth of entity c_addsub_v12_0_10.c_addsub_v12_0_10_viv [\c_addsub_v12_0_10_viv(c_xdevice...]
+Compiling architecture xilinx of entity c_addsub_v12_0_10.c_addsub_v12_0_10 [\c_addsub_v12_0_10(c_xdevicefami...]
+Compiling architecture design_2_data_mux_0_arch of entity xil_defaultlib.design_2_data_mux_0 [design_2_data_mux_0_default]
+Compiling architecture design_2_dec_raw_ce_mux0_1_arch of entity xil_defaultlib.design_2_dec_raw_ce_mux0_1 [design_2_dec_raw_ce_mux0_1_defau...]
+Compiling architecture design_2_dec_dec_ce_mux2_0_arch of entity xil_defaultlib.design_2_dec_dec_ce_mux2_0 [design_2_dec_dec_ce_mux2_0_defau...]
+Compiling architecture design_2_raw_ce_mux2_1_arch of entity xil_defaultlib.design_2_raw_ce_mux2_1 [design_2_raw_ce_mux2_1_default]
+Compiling architecture design_2_dec_raw_ce_mux0_0_arch of entity xil_defaultlib.design_2_dec_raw_ce_mux0_0 [design_2_dec_raw_ce_mux0_0_defau...]
+Compiling module blk_mem_gen_v8_3_4.blk_mem_gen_v8_3_4_output_stage(...
+Compiling module blk_mem_gen_v8_3_4.blk_mem_gen_v8_3_4_output_stage(...
+Compiling module blk_mem_gen_v8_3_4.blk_mem_gen_v8_3_4_softecc_outpu...
+Compiling module blk_mem_gen_v8_3_4.blk_mem_gen_v8_3_4_mem_module(C_...
+Compiling module blk_mem_gen_v8_3_4.blk_mem_axi_regs_fwd_v8_3(C_DATA...
+Compiling module blk_mem_gen_v8_3_4.blk_mem_gen_v8_3_4(C_FAMILY="kin...
+Compiling module xil_defaultlib.design_2_blk_mem_gen_0_4
+Compiling module xil_defaultlib.design_2_decode_data_0_0
+Compiling architecture structural of entity c_reg_fd_v12_0_3.c_reg_fd_v12_0_3_viv [\c_reg_fd_v12_0_3_viv(c_width=16...]
+Compiling architecture rtl of entity c_addsub_v12_0_10.c_addsub_v12_0_10_lut6_legacy [\c_addsub_v12_0_10_lut6_legacy(c...]
+Compiling architecture synth of entity c_addsub_v12_0_10.c_addsub_v12_0_10_fabric_legacy [\c_addsub_v12_0_10_fabric_legacy...]
+Compiling architecture synth of entity c_addsub_v12_0_10.c_addsub_v12_0_10_legacy [\c_addsub_v12_0_10_legacy(c_fami...]
+Compiling architecture synth of entity c_addsub_v12_0_10.c_addsub_v12_0_10_viv [\c_addsub_v12_0_10_viv(c_xdevice...]
+Compiling architecture xilinx of entity c_addsub_v12_0_10.c_addsub_v12_0_10 [\c_addsub_v12_0_10(c_xdevicefami...]
+Compiling architecture design_2_c_addsub_2_0_arch of entity xil_defaultlib.design_2_c_addsub_2_0 [design_2_c_addsub_2_0_default]
+Compiling module blk_mem_gen_v8_3_4.blk_mem_gen_v8_3_4_output_stage(...
+Compiling module blk_mem_gen_v8_3_4.blk_mem_gen_v8_3_4_output_stage(...
+Compiling module blk_mem_gen_v8_3_4.blk_mem_gen_v8_3_4_softecc_outpu...
+Compiling module blk_mem_gen_v8_3_4.blk_mem_gen_v8_3_4_mem_module(C_...
+Compiling module blk_mem_gen_v8_3_4.blk_mem_gen_v8_3_4(C_FAMILY="kin...
+Compiling module xil_defaultlib.design_2_blk_mem_gen_0_1
+Compiling architecture design_2_c_addsub_3_1_arch of entity xil_defaultlib.design_2_c_addsub_3_1 [design_2_c_addsub_3_1_default]
+Compiling module blk_mem_gen_v8_3_4.blk_mem_gen_v8_3_4_mem_module(C_...
+Compiling module blk_mem_gen_v8_3_4.blk_mem_gen_v8_3_4(C_FAMILY="kin...
+Compiling module xil_defaultlib.design_2_blk_mem_gen_0_2
+Compiling architecture design_2_c_addsub_0_0_arch of entity xil_defaultlib.design_2_c_addsub_0_0 [design_2_c_addsub_0_0_default]
+Compiling module blk_mem_gen_v8_3_4.blk_mem_gen_v8_3_4_mem_module(C_...
+Compiling module blk_mem_gen_v8_3_4.blk_mem_gen_v8_3_4(C_FAMILY="kin...
+Compiling module xil_defaultlib.design_2_blk_mem_gen_0_5
+Compiling architecture design_2_c_addsub_9_0_arch of entity xil_defaultlib.design_2_c_addsub_9_0 [design_2_c_addsub_9_0_default]
+Compiling architecture design_2_c_addsub_3_0_arch of entity xil_defaultlib.design_2_c_addsub_3_0 [design_2_c_addsub_3_0_default]
+Compiling architecture design_2_c_addsub_6_0_arch of entity xil_defaultlib.design_2_c_addsub_6_0 [design_2_c_addsub_6_0_default]
+Compiling architecture design_2_c_addsub_4_0_arch of entity xil_defaultlib.design_2_c_addsub_4_0 [design_2_c_addsub_4_0_default]
+Compiling architecture design_2_c_addsub_5_0_arch of entity xil_defaultlib.design_2_c_addsub_5_0 [design_2_c_addsub_5_0_default]
+Compiling architecture structural of entity c_reg_fd_v12_0_3.c_reg_fd_v12_0_3_viv [\c_reg_fd_v12_0_3_viv(c_width=2,...]
+Compiling architecture rtl of entity c_addsub_v12_0_10.c_addsub_v12_0_10_lut6_legacy [\c_addsub_v12_0_10_lut6_legacy(c...]
+Compiling architecture synth of entity c_addsub_v12_0_10.c_addsub_v12_0_10_fabric_legacy [\c_addsub_v12_0_10_fabric_legacy...]
+Compiling architecture synth of entity c_addsub_v12_0_10.c_addsub_v12_0_10_legacy [\c_addsub_v12_0_10_legacy(c_fami...]
+Compiling architecture synth of entity c_addsub_v12_0_10.c_addsub_v12_0_10_viv [\c_addsub_v12_0_10_viv(c_xdevice...]
+Compiling architecture xilinx of entity c_addsub_v12_0_10.c_addsub_v12_0_10 [\c_addsub_v12_0_10(c_xdevicefami...]
+Compiling architecture design_2_c_addsub_8_1_arch of entity xil_defaultlib.design_2_c_addsub_8_1 [design_2_c_addsub_8_1_default]
+Compiling architecture design_2_raw_ce_mux2_0_arch of entity xil_defaultlib.design_2_raw_ce_mux2_0 [design_2_raw_ce_mux2_0_default]
+Compiling architecture design_2_data_ce_mux_2_arch of entity xil_defaultlib.design_2_data_ce_mux_2 [design_2_data_ce_mux_2_default]
+Compiling module blk_mem_gen_v8_3_4.blk_mem_gen_v8_3_4_output_stage(...
+Compiling module blk_mem_gen_v8_3_4.blk_mem_gen_v8_3_4_output_stage(...
+Compiling module blk_mem_gen_v8_3_4.blk_mem_gen_v8_3_4_softecc_outpu...
+Compiling module blk_mem_gen_v8_3_4.blk_mem_gen_v8_3_4_mem_module(C_...
+Compiling module blk_mem_gen_v8_3_4.blk_mem_gen_v8_3_4(C_FAMILY="kin...
+Compiling module xil_defaultlib.design_2_blk_mem_gen_0_3
+Compiling module xil_defaultlib.design_2_raw_data_0_0
+Compiling module xil_defaultlib.new_setupLDPC_newbkb_rom
+Compiling module xil_defaultlib.new_setupLDPC_newbkb(DataWidth=1...
+Compiling module xil_defaultlib.new_setupLDPC_newcud_rom
+Compiling module xil_defaultlib.new_setupLDPC_newcud(DataWidth=1...
+Compiling module xil_defaultlib.new_setupLDPC_newdEe_rom
+Compiling module xil_defaultlib.new_setupLDPC_newdEe(DataWidth=1...
+Compiling module xil_defaultlib.new_setupLDPC_neweOg_rom
+Compiling module xil_defaultlib.new_setupLDPC_neweOg(DataWidth=1...
+Compiling module xil_defaultlib.new_setupLDPC_newfYi_rom
+Compiling module xil_defaultlib.new_setupLDPC_newfYi(DataWidth=1...
+Compiling module xil_defaultlib.new_setupLDPC_newg8j_rom
+Compiling module xil_defaultlib.new_setupLDPC_newg8j(DataWidth=1...
+Compiling module xil_defaultlib.new_setupLDPC_newhbi_rom
+Compiling module xil_defaultlib.new_setupLDPC_newhbi(DataWidth=1...
+Compiling module xil_defaultlib.new_setupLDPC_newibs_rom
+Compiling module xil_defaultlib.new_setupLDPC_newibs(DataWidth=1...
+Compiling module xil_defaultlib.new_setupLDPC_newjbC_rom
+Compiling module xil_defaultlib.new_setupLDPC_newjbC(DataWidth=1...
+Compiling module xil_defaultlib.new_setupLDPC_newkbM_rom
+Compiling module xil_defaultlib.new_setupLDPC_newkbM(DataWidth=1...
+Compiling module xil_defaultlib.new_setupLDPC_newlbW_rom
+Compiling module xil_defaultlib.new_setupLDPC_newlbW(DataWidth=1...
+Compiling module xil_defaultlib.new_setupLDPC_newmb6_rom
+Compiling module xil_defaultlib.new_setupLDPC_newmb6(DataWidth=1...
+Compiling module xil_defaultlib.new_setupLDPC_newncg_rom
+Compiling module xil_defaultlib.new_setupLDPC_newncg(DataWidth=1...
+Compiling module xil_defaultlib.new_setupLDPC_newocq_rom
+Compiling module xil_defaultlib.new_setupLDPC_newocq(DataWidth=1...
+Compiling module xil_defaultlib.new_setupLDPC_newpcA_rom
+Compiling module xil_defaultlib.new_setupLDPC_newpcA(DataWidth=1...
+Compiling module xil_defaultlib.new_setupLDPC_newqcK_rom
+Compiling module xil_defaultlib.new_setupLDPC_newqcK(DataWidth=1...
+Compiling module xil_defaultlib.new_setupLDPC_newrcU_rom
+Compiling module xil_defaultlib.new_setupLDPC_newrcU(DataWidth=1...
+Compiling module xil_defaultlib.new_setupLDPC_newsc4_rom
+Compiling module xil_defaultlib.new_setupLDPC_newsc4(DataWidth=1...
+Compiling module xil_defaultlib.new_setupLDPC_delta_ram
+Compiling module xil_defaultlib.new_setupLDPC_delta(DataWidth=16...
+Compiling module xil_defaultlib.setupLDPC_mac_muludo_DSP48_0
+Compiling module xil_defaultlib.setupLDPC_mac_muludo(ID=1,NUM_ST...
+Compiling module xil_defaultlib.setupLDPC_mac_mulvdy_DSP48_1
+Compiling module xil_defaultlib.setupLDPC_mac_mulvdy(ID=1,NUM_ST...
+Compiling module xil_defaultlib.setupLDPC_mac_mulwdI_DSP48_2
+Compiling module xil_defaultlib.setupLDPC_mac_mulwdI(ID=1,NUM_ST...
+Compiling module xil_defaultlib.setupLDPC_mac_mulxdS_DSP48_3
+Compiling module xil_defaultlib.setupLDPC_mac_mulxdS(ID=1,NUM_ST...
+Compiling module xil_defaultlib.setupLDPC_mac_mulyd2_DSP48_4
+Compiling module xil_defaultlib.setupLDPC_mac_mulyd2(ID=1,NUM_ST...
+Compiling module xil_defaultlib.setupLDPC_mac_mulzec_DSP48_5
+Compiling module xil_defaultlib.setupLDPC_mac_mulzec(ID=1,NUM_ST...
+Compiling module xil_defaultlib.setupLDPC_mac_mulAem_DSP48_6
+Compiling module xil_defaultlib.setupLDPC_mac_mulAem(ID=1,NUM_ST...
+Compiling module xil_defaultlib.setupLDPC_mac_mulBew_DSP48_7
+Compiling module xil_defaultlib.setupLDPC_mac_mulBew(ID=1,NUM_ST...
+Compiling module xil_defaultlib.setupLDPC_mac_mulCeG_DSP48_8
+Compiling module xil_defaultlib.setupLDPC_mac_mulCeG(ID=1,NUM_ST...
+Compiling module xil_defaultlib.setupLDPC_mac_mulDeQ_DSP48_9
+Compiling module xil_defaultlib.setupLDPC_mac_mulDeQ(ID=1,NUM_ST...
+Compiling module xil_defaultlib.setupLDPC_mac_mulEe0_DSP48_10
+Compiling module xil_defaultlib.setupLDPC_mac_mulEe0(ID=1,NUM_ST...
+Compiling module xil_defaultlib.new_setupLDPC
+Compiling module xil_defaultlib.setupLDPC
+Compiling module xil_defaultlib.design_2_setupLDPC_0_0
+Compiling architecture design_2_c_addsub_8_0_arch of entity xil_defaultlib.design_2_c_addsub_8_0 [design_2_c_addsub_8_0_default]
+Compiling architecture design_2_c_addsub_0_2_arch of entity xil_defaultlib.design_2_c_addsub_0_2 [design_2_c_addsub_0_2_default]
+Compiling architecture design_2_util_vector_logic_0_1_arch of entity xil_defaultlib.design_2_util_vector_logic_0_1 [design_2_util_vector_logic_0_1_d...]
+Compiling module xil_defaultlib.xlconstant(CONST_VAL=1'b0)
+Compiling module xil_defaultlib.design_2_xlconstant_0_1
+Compiling module xil_defaultlib.design_2_xlconstant_1_0
+Compiling module xil_defaultlib.design_2_xlconstant_2_0
+Compiling module xil_defaultlib.design_2
+Compiling module xil_defaultlib.design_2_wrapper
+Compiling module xil_defaultlib.ldpcDecoder
+Compiling module xil_defaultlib.ldpc(LDPCBITS=7)
 Compiling module fifo_generator_v13_1_3.fifo_generator_v13_1_3_bhv_ver_s...
 Compiling module fifo_generator_v13_1_3.fifo_generator_v13_1_3_CONV_VER(...
 Compiling module fifo_generator_v13_1_3.fifo_generator_vlog_beh(C_COMMON...
@@ -201,6 +530,6 @@ Compiling module xil_defaultlib.uartBaudGen
 Compiling module xil_defaultlib.uartTx
 Compiling module xil_defaultlib.sdi
 Compiling module xil_defaultlib.test
-WARNING: [XSIM 43-3373] "C:/modem/vivado/testSemcoDemod.v" Line 76. System function $rewind is used as system task. This system function should have a LHS e.g. x=$rewind().
+WARNING: [XSIM 43-3373] "C:/modem/vivado/testSemcoDemod.v" Line 80. System function $rewind is used as system task. This system function should have a LHS e.g. x=$rewind().
 Compiling module xil_defaultlib.glbl
 Built simulation snapshot test_behav

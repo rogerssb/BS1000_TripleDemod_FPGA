@@ -58,7 +58,11 @@ module test;
 
     integer                 fp_if;
     real                    ifSampleFloat;
+    `ifdef LDPC_TEST
+    parameter               ifSamplesPerBit = 128;
+    `else
     parameter               ifSamplesPerBit = 32;
+    `endif
     `define CLOCKS_PER_BIT  (ifSamplesPerBit*CLOCK_DECIMATION)
     initial begin
         fp_if = $fopen(`TEST_DATA,"r");
@@ -367,14 +371,11 @@ module test;
         // Set for inverse of 0.45 which is a smidge less than the AGC setpoint of 0.5 to
         // account for shaping filter losses.
         //write32(createAddress(`LDPCSPACE, `LDPC_INVERSE_MEAN), 32'h00018e39);
-        //write32(createAddress(`LDPCSPACE, `LDPC_INVERSE_MEAN), 32'h00028000);
-        write32(createAddress(`LDPCSPACE, `LDPC_INVERSE_MEAN), 32'h00048000);
+        write32(createAddress(`LDPCSPACE, `LDPC_INVERSE_MEAN), 32'h00028000);
+        //write32(createAddress(`LDPCSPACE, `LDPC_INVERSE_MEAN), 32'h00048000);
         //write32(createAddress(`LDPCSPACE, `LDPC_INVERSE_MEAN), 32'h0000d200);
         write32(createAddress(`LDPCSPACE, `LDPC_CONTROL),{1'b0,4'b0,11'd62,
-                                                          12'b0,`LDPC_CODE_LENGTH_1024,1'b0,`LDPC_RATE_4_5});
-        // Set the run bit
-        // write32(createAddress(`LDPCSPACE, `LDPC_CONTROL),{1'b1,4'b0,11'd62,
-        //                                                  12'b0,`LDPC_CODE_LENGTH_1024,1'b0,`LDPC_RATE_4_5});
+                                                          10'b0,`LDPC_DERAND_NONE,`LDPC_CODE_LENGTH_1024,1'b0,`LDPC_RATE_4_5});
         `endif
 
         `ifdef ADD_DQM
@@ -413,6 +414,12 @@ module test;
 
         // Wait 2.0 bit periods
         repeat (2*`CLOCKS_PER_BIT) @ (posedge clk) ;
+
+        `ifdef ADD_LDPC
+        // Set the run bit
+        write32(createAddress(`LDPCSPACE, `LDPC_CONTROL),{1'b1,4'b0,11'd62,
+                                                          10'b0,`LDPC_DERAND_NONE,`LDPC_CODE_LENGTH_1024,1'b0,`LDPC_RATE_4_5});
+        `endif
 
         // Create a reset to clear the halfband
         demod.ddc.hbReset = 1;
@@ -497,7 +504,6 @@ module test;
         repeat (50*`CLOCKS_PER_BIT) @ (posedge clk) ;
         read32(createAddress(`SDISPACE,`SDI_CONTROL));
 
-
         // Run the demod
         repeat (200000*`CLOCKS_PER_BIT) @ (posedge clk) ;
 
@@ -571,7 +577,7 @@ module test;
     );
 
     `ifdef LDPC_TEST
-    ldpc ldpc(
+    ldpc #(.LDPCBITS(7)) ldpc(
         .clk(clk), .clkEn(sym2xEn), .reset(reset),
         .busClk(busClk),
         .cs(cs),

@@ -36,6 +36,7 @@ module ldpc #(parameter LDPCBITS = 3) (
     wire    [15:0]  invMeanMantissa;
     wire    [2:0]   invMeanExponent;
     wire    [1:0]   codeRate;
+    wire    [1:0]   derandMode;
     wire    [10:0]  syncThreshold;
     wire            inSync;
     wire    [1:0]   syncState;
@@ -55,10 +56,12 @@ module ldpc #(parameter LDPCBITS = 3) (
         .inSync(inSync),
         .syncState(syncState),
         .rotation(rotation),
+        .ldpcReady(ldpcReady),
         .inverseMeanMantissa(invMeanMantissa),
         .inverseMeanExponent(invMeanExponent),
         .codeLength4096(codeLength4096),
         .codeRate(codeRate),
+        .derandMode(derandMode),
         .syncThreshold(syncThreshold),
         .ldpcRun(ldpcRun),
         .outputEnClkDiv(outputEnClkDiv)
@@ -135,6 +138,8 @@ module ldpc #(parameter LDPCBITS = 3) (
         .clk(clk),
         .clkEn(clkEn),
         .reset(reset),
+        .ldpcRun(ldpcRun),
+        .ldpcReady(ldpcReady),
         .dataBitIn(bitSoft[LDPCBITS-1]),
         .codeLength4096(codeLength4096),
         .codeRate(codeRate),
@@ -148,6 +153,7 @@ module ldpc #(parameter LDPCBITS = 3) (
     );
 
     // Create the LDPC decoder interface
+    reg signed  [LDPCBITS-1:0]  bitSoftDelayed;
     reg signed  [LDPCBITS:0]    softDecision;
     always @(posedge clk) begin
         if (reset) begin
@@ -155,25 +161,42 @@ module ldpc #(parameter LDPCBITS = 3) (
         else if (clkEn) begin
             // Line up the soft decisions with the codewordEnable
             // and add an LSB of 1 to create a mid-rise quantizer
-            softDecision <= $signed({bitSoft,1'b1});
+            bitSoftDelayed <= bitSoft;
+            softDecision <= $signed({bitSoftDelayed,1'b1});
         end
     end
 
-    /*
-    ldpcDecoder ldpcd(
-        .clk(clk),
-        .softEn(clkEn),
-        .codewordEn(codewordEn),
-        .softDecision(softDecision),
-        .codeLength4096(codeLength4096),
-        .codeRate(codeRate),
-        .outputEnClkDiv(outputEnClkDiv),
-        .outputBitEn(ldpcBitEnOut),
-        .outputBit(ldpcBitOut)
-    );
-    */
+    `ifdef USE_FAKE_LDPC_DECODER
+
     assign ldpcBitEnOut = (clkEn & codewordEn);
     assign ldpcBitOut = softDecision[LDPCBITS];
+
+    `else // USE_FAKE_LDPC_DECODER
+
+    wire    [13:0] junk;
+    ldpcDecoder ldpcd (
+        .clock_rtl(clk),
+        .reset_rtl(reset),
+        .LDPC_RUN(ldpcRun),
+        .deran_sel(derandMode),
+        .clk_div(outputEnClkDiv),
+        .BLOCK_RATE(codeRate),
+        .BLOCK_SIZE({codeLength4096,~codeLength4096}),
+        .sync(codewordEn),
+        .write_clk_en(clkEn),
+        .data_in(softDecision),
+        .buff_ready({junk,ldpcReady}),
+        .read_clk_en(ldpcBitEnOut),
+        .DECODE_OUT(ldpcBitOut),
+        .DECODE_OUT_VALID(),
+        .ERR_CODE(),
+        .LDPC_MODE(),
+        .cnt(),
+        .full(),
+        .overrun()
+    );
+
+    `endif //USE_FAKE_LDPC_DECODER
 
     always @(posedge clk) begin
         case (dac0Select)

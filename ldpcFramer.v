@@ -5,6 +5,8 @@ module ldpcFramer(
     input                   clk,
     input                   clkEn,
     input                   reset,
+    input                   ldpcRun,
+    input                   ldpcReady,
     input                   dataBitIn,
     input                   codeLength4096,
     input           [1:0]   codeRate,
@@ -272,7 +274,7 @@ module ldpcFramer(
         `endif
     assign sprtSyncCount = {1'b0,syncCount,14'b0};
     always @(posedge clk) begin
-        if (reset) begin
+        if (reset || !ldpcRun) begin
             syncState <= `OUT_OF_SYNC;
             frameSync <= 0;
             codewordEn <= 0;
@@ -310,6 +312,7 @@ module ldpcFramer(
                 `SKIP_PAYLOAD: begin
                     if (endOfPayload) begin
                         bitCount <= `BITS_PER_WORD-1;
+                        codewordEn <= 0;
                         syncState <= `TEST_SYNC;
                     end
                     else if (bitCount == 0) begin
@@ -333,8 +336,8 @@ module ldpcFramer(
                                 codewordEn <= frameSync;
                             end
                             else begin
-                                codewordEn <= 1;
-                                frameSync <= 1;
+                                codewordEn <= ldpcReady;
+                                frameSync <= ldpcReady;
                             end
                             bitCount <= `BITS_PER_WORD-1;
                             wordCount <= wordsPerFrame-1;
@@ -343,6 +346,7 @@ module ldpcFramer(
                         else if (syncCount == 0) begin
                             rotation <= rotation + 1;
                             codewordEn <= 0;
+                            frameSync <= 0;
                             syncState <= `OUT_OF_SYNC;
                         end
                         else begin
