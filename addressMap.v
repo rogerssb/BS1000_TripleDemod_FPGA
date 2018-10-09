@@ -42,7 +42,7 @@
 //`define ADD_DESPREADER
 //`define ADD_SCPATH
 //`define ADD_CMA
-//`define ADD_LDPC
+`define ADD_LDPC
 //`define ADD_DQM
 `define ADD_MULTIH
 `define ADD_SUPERBAUD_TED
@@ -458,6 +458,7 @@
 `define DAC_FREQERROR       4'b1011
 `define DAC_LDPC_CORR       4'b1100
 `define DAC_LDPC_SPRT       4'b1101
+`define DAC_LDPC_CTRL       4'b1110
 `define DAC_DS_CODE         4'b1100
 `define DAC_DS_LOCK         4'b1101
 `define DAC_DS_EPOCH        4'b1110

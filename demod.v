@@ -199,6 +199,7 @@ channelAGC channelAGC(
         .busClk(busClk),
         `endif
         .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .wtOvf(cmaWeightOverflow),
         .enableEqualizer(enableEqualizer),
         .resetEqualizer(resetEqualizer),
         .eqStepSizeExponent(stepSizeExponent),
@@ -216,6 +217,7 @@ channelAGC channelAGC(
         .refLevel(cmaReference),
         .iIn(iDdc),
         .qIn(qDdc),
+        .weightOverflow(cmaWeightOverflow),
         .iOut(iCma),
         .qOut(qCma)
     );

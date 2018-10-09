@@ -1,11 +1,12 @@
 `timescale 1ns/100ps
 `include "addressMap.v"
 
-//`define FM_TEST
+`define FM_TEST
 //`define SOQPSK_TEST
-`define LDPC_TEST
+//`define LDPC_TEST
 
 `define ENABLE_AGC
+`define TEST_CMA
 
 `ifdef FM_TEST
     `define TEST_DATA "c:/modem/vivado/testData/pcmfmTestData.txt"
@@ -386,9 +387,11 @@ module test;
         `endif
 
         `ifdef TEST_CMA
-        write32(createAddress(`EQUALIZERSPACE, `EQ_STEP_SIZE),32'h0000_000e);
-        write32(createAddress(`EQUALIZERSPACE, `EQ_CMA_REFERENCE),32'h0000_4000);
+        write32(createAddress(`EQUALIZERSPACE, `EQ_STEP_SIZE),32'h0000_0006);
+        write32(createAddress(`EQUALIZERSPACE, `EQ_CMA_REFERENCE),32'h0000_2000);
         write32(createAddress(`EQUALIZERSPACE, `EQ_CONTROL),32'h0000_0002);
+        `else
+        write32(createAddress(`EQUALIZERSPACE, `EQ_CONTROL),32'h0000_0000);
         `endif
 
         write32(createAddress(`UARTSPACE,`UART_BAUD_DIV),32'h0000000f);

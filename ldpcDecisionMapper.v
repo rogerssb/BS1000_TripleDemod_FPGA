@@ -35,11 +35,11 @@ encoded as 1.42857/2 * 65536 = 46811 = 0xb6db.
         .clk(clk),
         .ce(clkEn),
         .a(dIn),
-        .b({1'b0,inverseMeanMantissa,1'b0}),
+        .b($signed({1'b0,1'b1,inverseMeanMantissa})),
         .p(inverseProduct)
     );
 
-    reg                         signBit;
+    reg                         signBit,signBitDelayed;
     reg                         satPos,satNeg;
     reg signed  [OUTBITS-1:0]   dataBits;
     reg signed  [OUTBITS-1:0]   mapOut;
@@ -47,6 +47,7 @@ encoded as 1.42857/2 * 65536 = 46811 = 0xb6db.
     always @(posedge clk) begin
         if (clkEn) begin
             signBit <= dIn[17];
+            signBitDelayed = signBit;
             // Extract bits to use if its not saturated
             case (inverseMeanExponent)
                 0:          dataBits <= inverseProduct[34:(34-(OUTBITS-1))];
@@ -62,7 +63,7 @@ encoded as 1.42857/2 * 65536 = 46811 = 0xb6db.
 
             // Detect saturation
             // Is the product negative?
-            if (signBit) begin
+            if (signBitDelayed) begin
                 satPos <= 0;
                 case (inverseMeanExponent)
                     0:          satNeg <= (inverseProduct[35:34] != 2'h3);
@@ -105,7 +106,7 @@ encoded as 1.42857/2 * 65536 = 46811 = 0xb6db.
     end
 endmodule
 
-`ifdef TEST_MODULE
+`ifdef TEST_LDPC_MAPPER
 
 module test;
 
@@ -149,19 +150,33 @@ module test;
         end
     end
 
+    reg         [15:0]  mantissa;
+    reg         [2:0]   exponent;
     reg signed  [17:0]  testInput;
+    real                testInputReal;
+    always @*           testInputReal = $itor(testInput)/(2**17);
     always @(posedge clk) begin
         if (reset) begin
-            testInput <= 18'h20000;
+            testInput <= 18'h20800;
             //testInput <= 18'h0b333;
         end
         else if (clkEn) begin
+            if (testInput == 18'h1f800) begin
+                if (mantissa == 16'hf000) begin
+                    exponent <= exponent + 1;
+                    mantissa <= 16'h0000;
+                end
+                else begin
+                    mantissa <= mantissa + 16'h1000;
+                end
+            end
             testInput <= testInput + 18'h1000;
         end
     end
 
-    reg         [15:0]  mantissa;
-    reg         [2:0]   exponent;
+    wire signed [2:0]   testOutput;
+    real                testOutputReal;
+    always @*           testOutputReal = $itor(testOutput)/(2**2);
     ldpcDecisionMapper mapper(
         .clk(clk),
         .clkEn(clkEn),
@@ -169,16 +184,12 @@ module test;
         .inverseMeanMantissa(mantissa),
         .inverseMeanExponent(exponent),
         .dIn(testInput),
-        .dOut()
+        .dOut(testOutput)
     );
 
     initial begin
-        // Set for inverse of 0.35
-        mantissa = 16'hb6db;
-        exponent = 1;
-
-        mantissa = 16'h8000;
-        exponent = 3;
+        mantissa = 16'h0000;
+        exponent = 0;
 
         #(10*C) ;
         reset = 0;
@@ -188,7 +199,7 @@ module test;
         #(10*C) ;
         reset = 0;
 
-        #(64*CLOCK_DECIMATION*C) ;
+        #(2*64*64*CLOCK_DECIMATION*C) ;
         $stop;
 
     end

@@ -20,7 +20,8 @@ module ldpcRegs(
     output  reg         [15:0]  inverseMeanMantissa,
     output  reg         [2:0]   inverseMeanExponent,
     output  reg                 ldpcRun,
-    output  reg         [15:0]  outputEnClkDiv
+    output  reg         [15:0]  outputEnClkDiv,
+    output  reg                 invertData
 );
 
     always @(posedge busClk) begin
@@ -30,6 +31,7 @@ module ldpcRegs(
                     codeRate <= dataIn[1:0];
                     codeLength4096 <= dataIn[3];
                     derandMode <= dataIn[5:4];
+                    invertData <= dataIn[7];
                 end
                 `LDPC_INVERSE_MEAN: begin
                     inverseMeanMantissa[7:0] <= dataIn[7:0];
@@ -48,6 +50,9 @@ module ldpcRegs(
                 `LDPC_INVERSE_MEAN: begin
                     inverseMeanMantissa[15:8] <= dataIn[15:8];
                 end
+                `LDPC_OUTPUT_CLK_DIV: begin
+                    outputEnClkDiv[15:8] <= dataIn[15:8];
+                end
                 default:  ;
             endcase
         end
@@ -61,9 +66,6 @@ module ldpcRegs(
                 end
                 `LDPC_INVERSE_MEAN: begin
                     inverseMeanExponent <= dataIn[18:16];
-                end
-                `LDPC_OUTPUT_CLK_DIV: begin
-                    outputEnClkDiv[15:8] <= dataIn[15:8];
                 end
                 default: ;
             endcase
@@ -85,7 +87,10 @@ module ldpcRegs(
     always @* begin
         if (cs) begin
             casex (addr)
-                `LDPC_CONTROL:          dataOut = {ldpcRun,4'b0,syncThreshold,10'b0,derandMode,codeLength4096,1'b0,codeRate};
+                `LDPC_CONTROL:          dataOut = {ldpcRun,4'b0,syncThreshold,
+                                                   8'b0,
+                                                   invertData,1'b0,derandMode,
+                                                   codeLength4096,1'b0,codeRate};
                 `LDPC_INVERSE_MEAN:     dataOut = {13'h0,inverseMeanExponent,inverseMeanMantissa};
                 `LDPC_OUTPUT_CLK_DIV:   dataOut = {16'h0,outputEnClkDiv};
                 `LDPC_STATUS:           dataOut = {inSync,ldpcReady,14'h0,

@@ -263,7 +263,7 @@ module ldpcFramer(
         `define SKIP_PAYLOAD    2'b01
         `define TEST_SYNC       2'b11
     assign          frameSyncState = syncState;
-    reg     [6:0]   wordCount;
+    reg     [7:0]   wordCount;
     reg     [5:0]   bitCount;
     wire            endOfPayload = ((bitCount == 0) && (wordCount == 0));
     reg     [2:0]   syncCount;
@@ -279,7 +279,7 @@ module ldpcFramer(
             frameSync <= 0;
             codewordEn <= 0;
             bitCount <= `BITS_PER_WORD-1;
-            wordCount <= 20;
+            wordCount <= wordsPerFrame + syncWords;
             rotation <= 0;
         end
         else if (clkEn) begin
@@ -297,7 +297,7 @@ module ldpcFramer(
                     // Do we need to try another rotation?
                     else if (endOfPayload) begin
                         bitCount <= `BITS_PER_WORD-1;
-                        wordCount <= wordsPerFrame + syncWords - 1;
+                        wordCount <= wordsPerFrame + syncWords;
                         rotation <= rotation + 1;
                     end
                     // Then keep looking

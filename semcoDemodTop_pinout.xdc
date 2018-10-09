@@ -131,6 +131,10 @@ set_property PACKAGE_PIN G10 [get_ports pll2_OUT1]
 set_property PACKAGE_PIN F10 [get_ports pll2_PWDn]
 set_property PACKAGE_PIN C12 [get_ports sysClk]
 
+set_property PACKAGE_PIN C23 [get_ports spiFlashCSn]
+set_property PACKAGE_PIN B24 [get_ports spiFlashMOSI]
+set_property PACKAGE_PIN A25 [get_ports spiFlashMISO]
+
 
 
 set_property IOSTANDARD LVCMOS18 [get_ports {adc0[0]}]
@@ -439,6 +443,14 @@ set_property SLEW SLOW [get_ports pll1_CS]
 set_property SLEW FAST [get_ports pll1_REF]
 set_property SLEW SLOW [get_ports pll2_CS]
 set_property SLEW FAST [get_ports pll2_REF]
+
+set_property IOSTANDARD LVCMOS33 [get_ports spiFlashCSn]
+set_property IOSTANDARD LVCMOS33 [get_ports spiFlashMOSI]
+set_property IOSTANDARD LVCMOS33 [get_ports spiFlashMISO]
+set_property DRIVE 12 [get_ports spiFlashCSn]
+set_property DRIVE 12 [get_ports spiFlashMOSI]
+set_property SLEW SLOW [get_ports spiFlashCSn]
+set_property SLEW SLOW [get_ports spiFlashMOSI]
 
 
 

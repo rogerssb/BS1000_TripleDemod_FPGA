@@ -16,6 +16,7 @@ module cma(
     input           [15:0]  refLevel,
     input   signed  [17:0]  iIn,
     input   signed  [17:0]  qIn,
+    output                  weightOverflow,
     output  signed  [17:0]  iOut,
     output  signed  [17:0]  qOut
 );
@@ -120,12 +121,12 @@ always @ (posedge clk) begin
 
 cmaTap #(18'h00000) tap0(.iIn(iSR[0]),   .qIn(qSR[0]),  .iInDelay(iSR[0+pipeDelay]),  .qInDelay(qSR[0+pipeDelay]),  .iOut(iTap0),  .qOut(qTap0),  .clk(clk), .clkEn(clkEn), .reset(reset), .wtUpdate(wtUpdate), .wtReset(wtReset), .iError(iError), .qError(qError), .wtOvf(wtOvf[0]));
 cmaTap #(18'h00000) tap1(.iIn(iSR[1]),   .qIn(qSR[1]),  .iInDelay(iSR[1+pipeDelay]),  .qInDelay(qSR[1+pipeDelay]),  .iOut(iTap1),  .qOut(qTap1),  .clk(clk), .clkEn(clkEn), .reset(reset), .wtUpdate(wtUpdate), .wtReset(wtReset), .iError(iError), .qError(qError), .wtOvf(wtOvf[1]));
-cmaTap #(18'h1FFFF) tap2(.iIn(iSR[2]),   .qIn(qSR[2]),  .iInDelay(iSR[2+pipeDelay]),  .qInDelay(qSR[2+pipeDelay]),  .iOut(iTap2),  .qOut(qTap2),  .clk(clk), .clkEn(clkEn), .reset(reset), .wtUpdate(wtUpdate), .wtReset(wtReset), .iError(iError), .qError(qError), .wtOvf(wtOvf[2]));
+cmaTap #(18'h00000) tap2(.iIn(iSR[2]),   .qIn(qSR[2]),  .iInDelay(iSR[2+pipeDelay]),  .qInDelay(qSR[2+pipeDelay]),  .iOut(iTap2),  .qOut(qTap2),  .clk(clk), .clkEn(clkEn), .reset(reset), .wtUpdate(wtUpdate), .wtReset(wtReset), .iError(iError), .qError(qError), .wtOvf(wtOvf[2]));
 cmaTap #(18'h00000) tap3(.iIn(iSR[3]),   .qIn(qSR[3]),  .iInDelay(iSR[3+pipeDelay]),  .qInDelay(qSR[3+pipeDelay]),  .iOut(iTap3),  .qOut(qTap3),  .clk(clk), .clkEn(clkEn), .reset(reset), .wtUpdate(wtUpdate), .wtReset(wtReset), .iError(iError), .qError(qError), .wtOvf(wtOvf[3]));
 cmaTap #(18'h00000) tap4(.iIn(iSR[4]),   .qIn(qSR[4]),  .iInDelay(iSR[4+pipeDelay]),  .qInDelay(qSR[4+pipeDelay]),  .iOut(iTap4),  .qOut(qTap4),  .clk(clk), .clkEn(clkEn), .reset(reset), .wtUpdate(wtUpdate), .wtReset(wtReset), .iError(iError), .qError(qError), .wtOvf(wtOvf[4]));
 cmaTap #(18'h00000) tap5(.iIn(iSR[5]),   .qIn(qSR[5]),  .iInDelay(iSR[5+pipeDelay]),  .qInDelay(qSR[5+pipeDelay]),  .iOut(iTap5),  .qOut(qTap5),  .clk(clk), .clkEn(clkEn), .reset(reset), .wtUpdate(wtUpdate), .wtReset(wtReset), .iError(iError), .qError(qError), .wtOvf(wtOvf[5]));
 cmaTap #(18'h00000) tap6(.iIn(iSR[6]),   .qIn(qSR[6]),  .iInDelay(iSR[6+pipeDelay]),  .qInDelay(qSR[6+pipeDelay]),  .iOut(iTap6),  .qOut(qTap6),  .clk(clk), .clkEn(clkEn), .reset(reset), .wtUpdate(wtUpdate), .wtReset(wtReset), .iError(iError), .qError(qError), .wtOvf(wtOvf[6]));
-cmaTap #(18'h00000) tap7(.iIn(iSR[7]),   .qIn(qSR[7]),  .iInDelay(iSR[7+pipeDelay]),  .qInDelay(qSR[7+pipeDelay]),  .iOut(iTap7),  .qOut(qTap7),  .clk(clk), .clkEn(clkEn), .reset(reset), .wtUpdate(wtUpdate), .wtReset(wtReset), .iError(iError), .qError(qError), .wtOvf(wtOvf[7]));
+cmaTap #(18'h1ffff) tap7(.iIn(iSR[7]),   .qIn(qSR[7]),  .iInDelay(iSR[7+pipeDelay]),  .qInDelay(qSR[7+pipeDelay]),  .iOut(iTap7),  .qOut(qTap7),  .clk(clk), .clkEn(clkEn), .reset(reset), .wtUpdate(wtUpdate), .wtReset(wtReset), .iError(iError), .qError(qError), .wtOvf(wtOvf[7]));
 cmaTap #(18'h00000) tap8(.iIn(iSR[8]),   .qIn(qSR[8]),  .iInDelay(iSR[8+pipeDelay]),  .qInDelay(qSR[8+pipeDelay]),  .iOut(iTap8),  .qOut(qTap8),  .clk(clk), .clkEn(clkEn), .reset(reset), .wtUpdate(wtUpdate), .wtReset(wtReset), .iError(iError), .qError(qError), .wtOvf(wtOvf[8]));
 cmaTap #(18'h00000) tap9(.iIn(iSR[9]),   .qIn(qSR[9]),  .iInDelay(iSR[9+pipeDelay]),  .qInDelay(qSR[9+pipeDelay]),  .iOut(iTap9),  .qOut(qTap9),  .clk(clk), .clkEn(clkEn), .reset(reset), .wtUpdate(wtUpdate), .wtReset(wtReset), .iError(iError), .qError(qError), .wtOvf(wtOvf[9]));
 cmaTap #(18'h00000) tap10(.iIn(iSR[10]), .qIn(qSR[10]), .iInDelay(iSR[10+pipeDelay]), .qInDelay(qSR[10+pipeDelay]), .iOut(iTap10), .qOut(qTap10), .clk(clk), .clkEn(clkEn), .reset(reset), .wtUpdate(wtUpdate), .wtReset(wtReset), .iError(iError), .qError(qError), .wtOvf(wtOvf[10]));
@@ -134,6 +135,13 @@ cmaTap #(18'h00000) tap12(.iIn(iSR[12]), .qIn(qSR[12]), .iInDelay(iSR[12+pipeDel
 cmaTap #(18'h00000) tap13(.iIn(iSR[13]), .qIn(qSR[13]), .iInDelay(iSR[13+pipeDelay]), .qInDelay(qSR[13+pipeDelay]), .iOut(iTap13), .qOut(qTap13), .clk(clk), .clkEn(clkEn), .reset(reset), .wtUpdate(wtUpdate), .wtReset(wtReset), .iError(iError), .qError(qError), .wtOvf(wtOvf[13]));
 cmaTap #(18'h00000) tap14(.iIn(iSR[14]), .qIn(qSR[14]), .iInDelay(iSR[14+pipeDelay]), .qInDelay(qSR[14+pipeDelay]), .iOut(iTap14), .qOut(qTap14), .clk(clk), .clkEn(clkEn), .reset(reset), .wtUpdate(wtUpdate), .wtReset(wtReset), .iError(iError), .qError(qError), .wtOvf(wtOvf[14]));
 cmaTap #(18'h00000) tap15(.iIn(iSR[15]), .qIn(qSR[15]), .iInDelay(iSR[15+pipeDelay]), .qInDelay(qSR[15+pipeDelay]), .iOut(iTap15), .qOut(qTap15), .clk(clk), .clkEn(clkEn), .reset(reset), .wtUpdate(wtUpdate), .wtReset(wtReset), .iError(iError), .qError(qError), .wtOvf(wtOvf[15]));
+
+assign weightOverflow = wtOvf[ 0] | wtOvf[ 1] | wtOvf[ 2] | wtOvf[ 3]
+                      | wtOvf[ 4] | wtOvf[ 5] | wtOvf[ 6] | wtOvf[ 7]
+                      | wtOvf[ 8] | wtOvf[ 9] | wtOvf[10] | wtOvf[11]
+                      //| wtOvf[12] | wtOvf[13] | wtOvf[14] | wtOvf[15];
+                      | wtOvf[12] | wtOvf[13] | wtOvf[14];
+
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 wire    signed  [17:0] iSum;
 cmaSum iTapSum (
@@ -143,7 +151,8 @@ cmaSum iTapSum (
     .t0(iTap0),.t1(iTap1),.t2(iTap2),.t3(iTap3),
     .t4(iTap4),.t5(iTap5),.t6(iTap6),.t7(iTap7),
     .t8(iTap8),.t9(iTap9),.t10(iTap10),.t11(iTap11),
-    .t12(iTap12),.t13(iTap13),.t14(iTap14),.t15(iTap15),
+    //.t12(iTap12),.t13(iTap13),.t14(iTap14),.t15(iTap15),
+    .t12(iTap12),.t13(iTap13),.t14(iTap14),.t15(18'h0),
     .S(),.qS(iSum)
 );
 
@@ -155,7 +164,8 @@ cmaSum qTapSum (
     .t0(qTap0),.t1(qTap1),.t2(qTap2),.t3(qTap3),
     .t4(qTap4),.t5(qTap5),.t6(qTap6),.t7(qTap7),
     .t8(qTap8),.t9(qTap9),.t10(qTap10),.t11(qTap11),
-    .t12(qTap12),.t13(qTap13),.t14(qTap14),.t15(qTap15),
+    //.t12(qTap12),.t13(qTap13),.t14(qTap14),.t15(qTap15),
+    .t12(qTap12),.t13(qTap13),.t14(qTap14),.t15(18'h0),
     .S(),.qS(qSum)
 );
 
@@ -164,7 +174,7 @@ cmaSum qTapSum (
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 wire signed [35:0]  iSumSqr = $signed(iSum) * $signed(iSum);
 wire signed [35:0]  qSumSqr = $signed(qSum) * $signed(qSum);
-wire signed [17:0]  mag = limitAdd2(iSumSqr[35:17] + qSumSqr[35:17]);
+wire signed [17:0]  mag = limitAdd2(iSumSqr[34:16] + qSumSqr[34:16]);
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Error
 // One pipeline delay
@@ -205,20 +215,100 @@ always @* begin
     qSign = qErrMult[34];
     case (stepExpo)
         3'b011: begin // 8.0
-            iErrStep = {iSign,iErrMult[30:14]};
-            qErrStep = {qSign,qErrMult[30:14]};
+            casex ({iSign,iErrMult[34:31]})
+                5'b11111,
+                5'b00000: iErrStep = {iSign,iErrMult[30:14]};
+                default:    if (iSign) begin
+                                iErrStep = 18'h20001;
+                            end
+                            else begin
+                                iErrStep = 18'h1ffff;
+                            end
+
+            endcase
+            casex ({qSign,qErrMult[34:31]})
+                5'b11111,
+                5'b00000: qErrStep = {qSign,qErrMult[30:14]};
+                default:    if (qSign) begin
+                                qErrStep = 18'h20001;
+                            end
+                            else begin
+                                qErrStep = 18'h1ffff;
+                            end
+
+            endcase
             end
         3'b010: begin // 4.0
-            iErrStep = {iSign,iErrMult[31:15]};
-            qErrStep = {qSign,qErrMult[31:15]};
+            casex ({iSign,iErrMult[34:32]})
+                4'b1111,
+                4'b0000: iErrStep = {iSign,iErrMult[31:15]};
+                default:    if (iSign) begin
+                                iErrStep = 18'h20001;
+                            end
+                            else begin
+                                iErrStep = 18'h1ffff;
+                            end
+
+            endcase
+            casex ({qSign,qErrMult[34:32]})
+                4'b1111,
+                4'b0000: qErrStep = {qSign,qErrMult[31:15]};
+                default:    if (qSign) begin
+                                qErrStep = 18'h20001;
+                            end
+                            else begin
+                                qErrStep = 18'h1ffff;
+                            end
+
+            endcase
             end
         3'b001: begin // 2.0
-            iErrStep = {iSign,iErrMult[32:16]};
-            qErrStep = {qSign,qErrMult[32:16]};
+            casex ({iSign,iErrMult[34:33]})
+                3'b111,
+                3'b000: iErrStep = {iSign,iErrMult[32:16]};
+                default:    if (iSign) begin
+                                iErrStep = 18'h20001;
+                            end
+                            else begin
+                                iErrStep = 18'h1ffff;
+                            end
+
+            endcase
+            casex ({qSign,qErrMult[34:33]})
+                3'b111,
+                3'b000: qErrStep = {qSign,qErrMult[32:16]};
+                default:    if (qSign) begin
+                                qErrStep = 18'h20001;
+                            end
+                            else begin
+                                qErrStep = 18'h1ffff;
+                            end
+
+            endcase
             end
         3'b000: begin // 1.0
-            iErrStep = {iSign,iErrMult[33:17]};
-            qErrStep = {qSign,qErrMult[33:17]};
+            casex ({iSign,iErrMult[34]})
+                2'b11,
+                2'b00: iErrStep = {iSign,iErrMult[33:17]};
+                default:    if (iSign) begin
+                                iErrStep = 18'h20001;
+                            end
+                            else begin
+                                iErrStep = 18'h1ffff;
+                            end
+
+            endcase
+            casex ({qSign,qErrMult[34]})
+                2'b11,
+                2'b00: qErrStep = {qSign,qErrMult[33:17]};
+                default:    if (qSign) begin
+                                qErrStep = 18'h20001;
+                            end
+                            else begin
+                                qErrStep = 18'h1ffff;
+                            end
+
+            endcase
                 end
         3'b111: begin // 0.5
             iErrStep = {{1{iSign}},iErrMult[34:18]};

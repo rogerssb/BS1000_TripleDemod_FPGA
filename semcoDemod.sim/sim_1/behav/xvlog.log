@@ -30,119 +30,119 @@ INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.srcs/sou
 INFO: [VRFC 10-311] analyzing module systemClock
 INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.srcs/sources_1/ip/dataFifo/sim/dataFifo.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module dataFifo
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/731e/hdl/verilog/HLSLdpcLogDecScalbkb.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/c2ed/hdl/verilog/HLSLdpcLogDecScalbkb.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module HLSLdpcLogDecScalbkb_ram
 INFO: [VRFC 10-311] analyzing module HLSLdpcLogDecScalbkb
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/731e/hdl/verilog/HLSLdpcLogDecScaldEe.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/c2ed/hdl/verilog/HLSLdpcLogDecScaldEe.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module HLSLdpcLogDecScaldEe_ram
 INFO: [VRFC 10-311] analyzing module HLSLdpcLogDecScaldEe
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/731e/hdl/verilog/HLSLdpcLogDecScaledMin.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/c2ed/hdl/verilog/HLSLdpcLogDecScaledMin.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module HLSLdpcLogDecScaledMin
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/731e/hdl/verilog/HLSLdpcLogDecScaleOg.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/c2ed/hdl/verilog/HLSLdpcLogDecScaleOg.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module HLSLdpcLogDecScaleOg_ram
 INFO: [VRFC 10-311] analyzing module HLSLdpcLogDecScaleOg
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/731e/hdl/verilog/HLSLdpcLogDecScalfYi.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/c2ed/hdl/verilog/HLSLdpcLogDecScalfYi.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module HLSLdpcLogDecScalfYi
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/731e/hdl/verilog/HLSLdpcLogDecScalg8j.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/c2ed/hdl/verilog/HLSLdpcLogDecScalg8j.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module HLSLdpcLogDecScalg8j
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/731e/hdl/verilog/HLSLdpcLogDecScalhbi.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/c2ed/hdl/verilog/HLSLdpcLogDecScalhbi.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module HLSLdpcLogDecScalhbi_DSP48_0
 INFO: [VRFC 10-311] analyzing module HLSLdpcLogDecScalhbi
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/0f41/hdl/verilog/new_setupLDPC.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/edd2/hdl/verilog/new_setupLDPC.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module new_setupLDPC
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/0f41/hdl/verilog/new_setupLDPC_delta.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/edd2/hdl/verilog/new_setupLDPC_delta.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module new_setupLDPC_delta_ram
 INFO: [VRFC 10-311] analyzing module new_setupLDPC_delta
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/0f41/hdl/verilog/new_setupLDPC_newbkb.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/edd2/hdl/verilog/new_setupLDPC_newbkb.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module new_setupLDPC_newbkb_rom
 INFO: [VRFC 10-311] analyzing module new_setupLDPC_newbkb
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/0f41/hdl/verilog/new_setupLDPC_newcud.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/edd2/hdl/verilog/new_setupLDPC_newcud.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module new_setupLDPC_newcud_rom
 INFO: [VRFC 10-311] analyzing module new_setupLDPC_newcud
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/0f41/hdl/verilog/new_setupLDPC_newdEe.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/edd2/hdl/verilog/new_setupLDPC_newdEe.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module new_setupLDPC_newdEe_rom
 INFO: [VRFC 10-311] analyzing module new_setupLDPC_newdEe
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/0f41/hdl/verilog/new_setupLDPC_neweOg.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/edd2/hdl/verilog/new_setupLDPC_neweOg.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module new_setupLDPC_neweOg_rom
 INFO: [VRFC 10-311] analyzing module new_setupLDPC_neweOg
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/0f41/hdl/verilog/new_setupLDPC_newfYi.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/edd2/hdl/verilog/new_setupLDPC_newfYi.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module new_setupLDPC_newfYi_rom
 INFO: [VRFC 10-311] analyzing module new_setupLDPC_newfYi
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/0f41/hdl/verilog/new_setupLDPC_newg8j.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/edd2/hdl/verilog/new_setupLDPC_newg8j.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module new_setupLDPC_newg8j_rom
 INFO: [VRFC 10-311] analyzing module new_setupLDPC_newg8j
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/0f41/hdl/verilog/new_setupLDPC_newhbi.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/edd2/hdl/verilog/new_setupLDPC_newhbi.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module new_setupLDPC_newhbi_rom
 INFO: [VRFC 10-311] analyzing module new_setupLDPC_newhbi
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/0f41/hdl/verilog/new_setupLDPC_newibs.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/edd2/hdl/verilog/new_setupLDPC_newibs.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module new_setupLDPC_newibs_rom
 INFO: [VRFC 10-311] analyzing module new_setupLDPC_newibs
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/0f41/hdl/verilog/new_setupLDPC_newjbC.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/edd2/hdl/verilog/new_setupLDPC_newjbC.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module new_setupLDPC_newjbC_rom
 INFO: [VRFC 10-311] analyzing module new_setupLDPC_newjbC
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/0f41/hdl/verilog/new_setupLDPC_newkbM.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/edd2/hdl/verilog/new_setupLDPC_newkbM.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module new_setupLDPC_newkbM_rom
 INFO: [VRFC 10-311] analyzing module new_setupLDPC_newkbM
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/0f41/hdl/verilog/new_setupLDPC_newlbW.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/edd2/hdl/verilog/new_setupLDPC_newlbW.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module new_setupLDPC_newlbW_rom
 INFO: [VRFC 10-311] analyzing module new_setupLDPC_newlbW
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/0f41/hdl/verilog/new_setupLDPC_newmb6.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/edd2/hdl/verilog/new_setupLDPC_newmb6.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module new_setupLDPC_newmb6_rom
 INFO: [VRFC 10-311] analyzing module new_setupLDPC_newmb6
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/0f41/hdl/verilog/new_setupLDPC_newncg.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/edd2/hdl/verilog/new_setupLDPC_newncg.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module new_setupLDPC_newncg_rom
 INFO: [VRFC 10-311] analyzing module new_setupLDPC_newncg
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/0f41/hdl/verilog/new_setupLDPC_newocq.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/edd2/hdl/verilog/new_setupLDPC_newocq.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module new_setupLDPC_newocq_rom
 INFO: [VRFC 10-311] analyzing module new_setupLDPC_newocq
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/0f41/hdl/verilog/new_setupLDPC_newpcA.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/edd2/hdl/verilog/new_setupLDPC_newpcA.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module new_setupLDPC_newpcA_rom
 INFO: [VRFC 10-311] analyzing module new_setupLDPC_newpcA
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/0f41/hdl/verilog/new_setupLDPC_newqcK.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/edd2/hdl/verilog/new_setupLDPC_newqcK.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module new_setupLDPC_newqcK_rom
 INFO: [VRFC 10-311] analyzing module new_setupLDPC_newqcK
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/0f41/hdl/verilog/new_setupLDPC_newrcU.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/edd2/hdl/verilog/new_setupLDPC_newrcU.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module new_setupLDPC_newrcU_rom
 INFO: [VRFC 10-311] analyzing module new_setupLDPC_newrcU
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/0f41/hdl/verilog/new_setupLDPC_newsc4.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/edd2/hdl/verilog/new_setupLDPC_newsc4.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module new_setupLDPC_newsc4_rom
 INFO: [VRFC 10-311] analyzing module new_setupLDPC_newsc4
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/0f41/hdl/verilog/setupLDPC.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/edd2/hdl/verilog/setupLDPC.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module setupLDPC
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/0f41/hdl/verilog/setupLDPC_mac_mulAem.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/edd2/hdl/verilog/setupLDPC_mac_mulAem.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module setupLDPC_mac_mulAem_DSP48_6
 INFO: [VRFC 10-311] analyzing module setupLDPC_mac_mulAem
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/0f41/hdl/verilog/setupLDPC_mac_mulBew.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/edd2/hdl/verilog/setupLDPC_mac_mulBew.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module setupLDPC_mac_mulBew_DSP48_7
 INFO: [VRFC 10-311] analyzing module setupLDPC_mac_mulBew
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/0f41/hdl/verilog/setupLDPC_mac_mulCeG.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/edd2/hdl/verilog/setupLDPC_mac_mulCeG.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module setupLDPC_mac_mulCeG_DSP48_8
 INFO: [VRFC 10-311] analyzing module setupLDPC_mac_mulCeG
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/0f41/hdl/verilog/setupLDPC_mac_mulDeQ.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/edd2/hdl/verilog/setupLDPC_mac_mulDeQ.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module setupLDPC_mac_mulDeQ_DSP48_9
 INFO: [VRFC 10-311] analyzing module setupLDPC_mac_mulDeQ
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/0f41/hdl/verilog/setupLDPC_mac_mulEe0.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/edd2/hdl/verilog/setupLDPC_mac_mulEe0.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module setupLDPC_mac_mulEe0_DSP48_10
 INFO: [VRFC 10-311] analyzing module setupLDPC_mac_mulEe0
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/0f41/hdl/verilog/setupLDPC_mac_muludo.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/edd2/hdl/verilog/setupLDPC_mac_muludo.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module setupLDPC_mac_muludo_DSP48_0
 INFO: [VRFC 10-311] analyzing module setupLDPC_mac_muludo
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/0f41/hdl/verilog/setupLDPC_mac_mulvdy.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/edd2/hdl/verilog/setupLDPC_mac_mulvdy.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module setupLDPC_mac_mulvdy_DSP48_1
 INFO: [VRFC 10-311] analyzing module setupLDPC_mac_mulvdy
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/0f41/hdl/verilog/setupLDPC_mac_mulwdI.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/edd2/hdl/verilog/setupLDPC_mac_mulwdI.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module setupLDPC_mac_mulwdI_DSP48_2
 INFO: [VRFC 10-311] analyzing module setupLDPC_mac_mulwdI
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/0f41/hdl/verilog/setupLDPC_mac_mulxdS.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/edd2/hdl/verilog/setupLDPC_mac_mulxdS.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module setupLDPC_mac_mulxdS_DSP48_3
 INFO: [VRFC 10-311] analyzing module setupLDPC_mac_mulxdS
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/0f41/hdl/verilog/setupLDPC_mac_mulyd2.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/edd2/hdl/verilog/setupLDPC_mac_mulyd2.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module setupLDPC_mac_mulyd2_DSP48_4
 INFO: [VRFC 10-311] analyzing module setupLDPC_mac_mulyd2
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/0f41/hdl/verilog/setupLDPC_mac_mulzec.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/edd2/hdl/verilog/setupLDPC_mac_mulzec.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module setupLDPC_mac_mulzec_DSP48_5
 INFO: [VRFC 10-311] analyzing module setupLDPC_mac_mulzec
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.srcs/sources_1/ip/ldpcDecoder_3/ldpc test.srcs/sources_1/bd/design_2/ip/design_2_setupLDPC_0_0/sim/design_2_setupLDPC_0_0.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.srcs/sources_1/ip/ldpcDecoder_5/ldpc test.srcs/sources_1/bd/design_2/ip/design_2_setupLDPC_0_0/sim/design_2_setupLDPC_0_0.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module design_2_setupLDPC_0_0
 INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/bd/design_2/ipshared/59b0/simulation/blk_mem_gen_v8_3.v" into library blk_mem_gen_v8_3_4
 INFO: [VRFC 10-311] analyzing module STATE_LOGIC_v8_3
@@ -159,47 +159,47 @@ INFO: [VRFC 10-311] analyzing module blk_mem_gen_v8_3_4_output_stage
 INFO: [VRFC 10-311] analyzing module blk_mem_gen_v8_3_4_softecc_output_reg_stage
 INFO: [VRFC 10-311] analyzing module blk_mem_gen_v8_3_4_mem_module
 INFO: [VRFC 10-311] analyzing module blk_mem_gen_v8_3_4
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.srcs/sources_1/ip/ldpcDecoder_3/ldpc test.srcs/sources_1/bd/design_2/ip/design_2_blk_mem_gen_0_1/sim/design_2_blk_mem_gen_0_1.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.srcs/sources_1/ip/ldpcDecoder_5/ldpc test.srcs/sources_1/bd/design_2/ip/design_2_blk_mem_gen_0_1/sim/design_2_blk_mem_gen_0_1.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module design_2_blk_mem_gen_0_1
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.srcs/sources_1/ip/ldpcDecoder_3/ldpc test.srcs/sources_1/bd/design_2/ip/design_2_blk_mem_gen_0_2/sim/design_2_blk_mem_gen_0_2.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.srcs/sources_1/ip/ldpcDecoder_5/ldpc test.srcs/sources_1/bd/design_2/ip/design_2_blk_mem_gen_0_2/sim/design_2_blk_mem_gen_0_2.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module design_2_blk_mem_gen_0_2
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.srcs/sources_1/ip/ldpcDecoder_3/ldpc test.srcs/sources_1/bd/design_2/ip/design_2_blk_mem_gen_0_3/sim/design_2_blk_mem_gen_0_3.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.srcs/sources_1/ip/ldpcDecoder_5/ldpc test.srcs/sources_1/bd/design_2/ip/design_2_blk_mem_gen_0_3/sim/design_2_blk_mem_gen_0_3.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module design_2_blk_mem_gen_0_3
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.srcs/sources_1/ip/ldpcDecoder_3/ldpc test.srcs/sources_1/bd/design_2/ip/design_2_raw_data_0_0/sim/design_2_raw_data_0_0.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.srcs/sources_1/ip/ldpcDecoder_5/ldpc test.srcs/sources_1/bd/design_2/ip/design_2_raw_data_0_0/sim/design_2_raw_data_0_0.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module design_2_raw_data_0_0
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.srcs/sources_1/ip/ldpcDecoder_3/ldpc test.srcs/sources_1/bd/design_2/ip/design_2_blk_mem_gen_0_4/sim/design_2_blk_mem_gen_0_4.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.srcs/sources_1/ip/ldpcDecoder_5/ldpc test.srcs/sources_1/bd/design_2/ip/design_2_blk_mem_gen_0_4/sim/design_2_blk_mem_gen_0_4.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module design_2_blk_mem_gen_0_4
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.srcs/sources_1/ip/ldpcDecoder_3/ldpc test.srcs/sources_1/bd/design_2/ip/design_2_decode_data_0_0/sim/design_2_decode_data_0_0.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.srcs/sources_1/ip/ldpcDecoder_5/ldpc test.srcs/sources_1/bd/design_2/ip/design_2_decode_data_0_0/sim/design_2_decode_data_0_0.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module design_2_decode_data_0_0
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.srcs/sources_1/ip/ldpcDecoder_3/ldpc test.srcs/sources_1/bd/design_2/ip/design_2_clk_wiz_0_0/design_2_clk_wiz_0_0_clk_wiz.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.srcs/sources_1/ip/ldpcDecoder_5/ldpc test.srcs/sources_1/bd/design_2/ip/design_2_clk_wiz_0_0/design_2_clk_wiz_0_0_clk_wiz.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module design_2_clk_wiz_0_0_clk_wiz
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.srcs/sources_1/ip/ldpcDecoder_3/ldpc test.srcs/sources_1/bd/design_2/ip/design_2_clk_wiz_0_0/design_2_clk_wiz_0_0.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.srcs/sources_1/ip/ldpcDecoder_5/ldpc test.srcs/sources_1/bd/design_2/ip/design_2_clk_wiz_0_0/design_2_clk_wiz_0_0.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module design_2_clk_wiz_0_0
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/2552/hdl/verilog/LDPC_CTRL.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/0673/hdl/verilog/LDPC_CTRL.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module LDPC_CTRL
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.srcs/sources_1/ip/ldpcDecoder_3/ldpc test.srcs/sources_1/bd/design_2/ip/design_2_LDPC_CTRL_0_0/sim/design_2_LDPC_CTRL_0_0.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.srcs/sources_1/ip/ldpcDecoder_5/ldpc test.srcs/sources_1/bd/design_2/ip/design_2_LDPC_CTRL_0_0/sim/design_2_LDPC_CTRL_0_0.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module design_2_LDPC_CTRL_0_0
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.srcs/sources_1/ip/ldpcDecoder_3/ldpc test.srcs/sources_1/bd/design_2/ipshared/e147/xlconstant.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.srcs/sources_1/ip/ldpcDecoder_5/ldpc test.srcs/sources_1/bd/design_2/ipshared/e147/xlconstant.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module xlconstant
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.srcs/sources_1/ip/ldpcDecoder_3/ldpc test.srcs/sources_1/bd/design_2/ip/design_2_xlconstant_0_0/sim/design_2_xlconstant_0_0.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.srcs/sources_1/ip/ldpcDecoder_5/ldpc test.srcs/sources_1/bd/design_2/ip/design_2_xlconstant_0_0/sim/design_2_xlconstant_0_0.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module design_2_xlconstant_0_0
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.srcs/sources_1/ip/ldpcDecoder_3/ldpc test.srcs/sources_1/bd/design_2/ip/design_2_xlconstant_0_1/sim/design_2_xlconstant_0_1.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.srcs/sources_1/ip/ldpcDecoder_5/ldpc test.srcs/sources_1/bd/design_2/ip/design_2_xlconstant_0_1/sim/design_2_xlconstant_0_1.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module design_2_xlconstant_0_1
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/7a50/hdl/verilog/LDPC_buff.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.ip_user_files/ipstatic/ldpc test.srcs/sources_1/ipshared/0b0e/hdl/verilog/LDPC_buff.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module LDPC_buff
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.srcs/sources_1/ip/ldpcDecoder_3/ldpc test.srcs/sources_1/bd/design_2/ip/design_2_LDPC_buff_0_upgraded_ipi_0/sim/design_2_LDPC_buff_0_upgraded_ipi_0.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.srcs/sources_1/ip/ldpcDecoder_5/ldpc test.srcs/sources_1/bd/design_2/ip/design_2_LDPC_buff_0_upgraded_ipi_0/sim/design_2_LDPC_buff_0_upgraded_ipi_0.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module design_2_LDPC_buff_0_upgraded_ipi_0
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.srcs/sources_1/ip/ldpcDecoder_3/ldpc test.srcs/sources_1/bd/design_2/ip/design_2_xlconstant_1_0/sim/design_2_xlconstant_1_0.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.srcs/sources_1/ip/ldpcDecoder_5/ldpc test.srcs/sources_1/bd/design_2/ip/design_2_xlconstant_1_0/sim/design_2_xlconstant_1_0.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module design_2_xlconstant_1_0
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.srcs/sources_1/ip/ldpcDecoder_3/ldpc test.srcs/sources_1/bd/design_2/ip/design_2_blk_mem_gen_0_5/sim/design_2_blk_mem_gen_0_5.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.srcs/sources_1/ip/ldpcDecoder_5/ldpc test.srcs/sources_1/bd/design_2/ip/design_2_blk_mem_gen_0_5/sim/design_2_blk_mem_gen_0_5.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module design_2_blk_mem_gen_0_5
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.srcs/sources_1/ip/ldpcDecoder_3/ldpc test.srcs/sources_1/bd/design_2/ip/design_2_xlconstant_2_0/sim/design_2_xlconstant_2_0.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.srcs/sources_1/ip/ldpcDecoder_5/ldpc test.srcs/sources_1/bd/design_2/ip/design_2_xlconstant_2_0/sim/design_2_xlconstant_2_0.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module design_2_xlconstant_2_0
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.srcs/sources_1/ip/ldpcDecoder_3/ldpc test.srcs/sources_1/bd/design_2/hdl/design_2.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.srcs/sources_1/ip/ldpcDecoder_5/ldpc test.srcs/sources_1/bd/design_2/hdl/design_2.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module design_2
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.srcs/sources_1/ip/ldpcDecoder_3/ldpc test.srcs/sources_1/bd/design_2/hdl/design_2_wrapper.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.srcs/sources_1/ip/ldpcDecoder_5/ldpc test.srcs/sources_1/bd/design_2/hdl/design_2_wrapper.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module design_2_wrapper
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.srcs/sources_1/ip/ldpcDecoder_3/sim/ldpcDecoder.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/semcoDemod.srcs/sources_1/ip/ldpcDecoder_5/sim/ldpcDecoder.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module ldpcDecoder
 INFO: [VRFC 10-2263] Analyzing Verilog file "C:/modem/vivado/mpy18x18WithCe.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module mpy18x18WithCe
@@ -335,6 +335,8 @@ INFO: [VRFC 10-2458] undeclared symbol auBitsyncLock, assumed default net type w
 INFO: [VRFC 10-2458] undeclared symbol oqpskIthenQ, assumed default net type wire [C:/modem/vivado/demod.v:112]
 INFO: [VRFC 10-2458] undeclared symbol carrierOffsetEn, assumed default net type wire [C:/modem/vivado/demod.v:144]
 INFO: [VRFC 10-2458] undeclared symbol ddcSync, assumed default net type wire [C:/modem/vivado/demod.v:156]
+INFO: [VRFC 10-2458] undeclared symbol enableEqualizer, assumed default net type wire [C:/modem/vivado/demod.v:202]
+INFO: [VRFC 10-2458] undeclared symbol resetEqualizer, assumed default net type wire [C:/modem/vivado/demod.v:203]
 INFO: [VRFC 10-2458] undeclared symbol demodSync, assumed default net type wire [C:/modem/vivado/demod.v:268]
 INFO: [VRFC 10-2458] undeclared symbol resampSync, assumed default net type wire [C:/modem/vivado/demod.v:465]
 INFO: [VRFC 10-2458] undeclared symbol auResampSync, assumed default net type wire [C:/modem/vivado/demod.v:535]
@@ -395,8 +397,6 @@ INFO: [VRFC 10-2458] undeclared symbol auDemodBit, assumed default net type wire
 INFO: [VRFC 10-2458] undeclared symbol demodTimingLock, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:364]
 INFO: [VRFC 10-2458] undeclared symbol demodCarrierLock, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:365]
 INFO: [VRFC 10-2458] undeclared symbol trellisSymEn, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:366]
-INFO: [VRFC 10-2458] undeclared symbol iLdpcSymEn, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:370]
-INFO: [VRFC 10-2458] undeclared symbol qLdpcSymEn, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:370]
 INFO: [VRFC 10-2458] undeclared symbol trellisSymEnEven, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:375]
 INFO: [VRFC 10-2458] undeclared symbol demodDac0ClkEn, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:380]
 INFO: [VRFC 10-2458] undeclared symbol demodDac1ClkEn, assumed default net type wire [C:/modem/vivado/semcoDemodTop.v:382]

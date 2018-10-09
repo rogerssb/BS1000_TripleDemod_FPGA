@@ -11,15 +11,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="2941858000000fs"></ZoomStartTime>
-      <ZoomEndTime time="4247858000001fs"></ZoomEndTime>
-      <Cursor1Time time="4007167200000fs"></Cursor1Time>
+      <ZoomStartTime time="156211800000fs"></ZoomStartTime>
+      <ZoomEndTime time="162781800001fs"></ZoomEndTime>
+      <Cursor1Time time="161686800000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="198"></NameColumnWidth>
-      <ValueColumnWidth column_width="91"></ValueColumnWidth>
+      <ValueColumnWidth column_width="83"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="29" />
+   <WVObjectSize size="30" />
    <wave_markers>
       <marker time="62434800000" label="" />
    </wave_markers>
@@ -705,561 +705,127 @@
    <wvobject fp_name="group206" type="group">
       <obj_property name="label">setupLDPC</obj_property>
       <obj_property name="DisplayName">label</obj_property>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/setupLDPC_0/inst/ap_clk" type="logic">
-         <obj_property name="ElementShortName">ap_clk</obj_property>
-         <obj_property name="ObjectShortName">ap_clk</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/setupLDPC_0/inst/ap_rst" type="logic">
-         <obj_property name="ElementShortName">ap_rst</obj_property>
-         <obj_property name="ObjectShortName">ap_rst</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/setupLDPC_0/inst/ap_start" type="logic">
-         <obj_property name="ElementShortName">ap_start</obj_property>
-         <obj_property name="ObjectShortName">ap_start</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/setupLDPC_0/inst/size_V" type="array">
-         <obj_property name="ElementShortName">size_V[1:0]</obj_property>
-         <obj_property name="ObjectShortName">size_V[1:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/setupLDPC_0/inst/rate_V" type="array">
-         <obj_property name="ElementShortName">rate_V[1:0]</obj_property>
-         <obj_property name="ObjectShortName">rate_V[1:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/setupLDPC_0/inst/pMaxIterations_V" type="array">
-         <obj_property name="ElementShortName">pMaxIterations_V[15:0]</obj_property>
-         <obj_property name="ObjectShortName">pMaxIterations_V[15:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/setupLDPC_0/inst/etaIndexM_V_address0" type="array">
-         <obj_property name="ElementShortName">etaIndexM_V_address0[15:0]</obj_property>
-         <obj_property name="ObjectShortName">etaIndexM_V_address0[15:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/setupLDPC_0/inst/etaIndexM_V_d0" type="array">
-         <obj_property name="ElementShortName">etaIndexM_V_d0[15:0]</obj_property>
-         <obj_property name="ObjectShortName">etaIndexM_V_d0[15:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/setupLDPC_0/inst/etaIndexN_V_address0" type="array">
-         <obj_property name="ElementShortName">etaIndexN_V_address0[15:0]</obj_property>
-         <obj_property name="ObjectShortName">etaIndexN_V_address0[15:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/setupLDPC_0/inst/etaIndexN_V_d0" type="array">
-         <obj_property name="ElementShortName">etaIndexN_V_d0[15:0]</obj_property>
-         <obj_property name="ObjectShortName">etaIndexN_V_d0[15:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/setupLDPC_0/inst/lambdaIndexM_V_address0" type="array">
-         <obj_property name="ElementShortName">lambdaIndexM_V_address0[15:0]</obj_property>
-         <obj_property name="ObjectShortName">lambdaIndexM_V_address0[15:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/setupLDPC_0/inst/lambdaIndexM_V_d0" type="array">
-         <obj_property name="ElementShortName">lambdaIndexM_V_d0[15:0]</obj_property>
-         <obj_property name="ObjectShortName">lambdaIndexM_V_d0[15:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/setupLDPC_0/inst/ap_done" type="logic">
-         <obj_property name="ElementShortName">ap_done</obj_property>
-         <obj_property name="ObjectShortName">ap_done</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/setupLDPC_0/inst/ap_idle" type="logic">
-         <obj_property name="ElementShortName">ap_idle</obj_property>
-         <obj_property name="ObjectShortName">ap_idle</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/setupLDPC_0/inst/ap_ready" type="logic">
-         <obj_property name="ElementShortName">ap_ready</obj_property>
-         <obj_property name="ObjectShortName">ap_ready</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/setupLDPC_0/inst/nR_M_V" type="array">
-         <obj_property name="ElementShortName">nR_M_V[15:0]</obj_property>
-         <obj_property name="ObjectShortName">nR_M_V[15:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/setupLDPC_0/inst/nR_M_V_ap_vld" type="logic">
-         <obj_property name="ElementShortName">nR_M_V_ap_vld</obj_property>
-         <obj_property name="ObjectShortName">nR_M_V_ap_vld</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/setupLDPC_0/inst/etaIndexM_M_V" type="array">
-         <obj_property name="ElementShortName">etaIndexM_M_V[15:0]</obj_property>
-         <obj_property name="ObjectShortName">etaIndexM_M_V[15:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/setupLDPC_0/inst/etaIndexM_M_V_ap_vld" type="logic">
-         <obj_property name="ElementShortName">etaIndexM_M_V_ap_vld</obj_property>
-         <obj_property name="ObjectShortName">etaIndexM_M_V_ap_vld</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/setupLDPC_0/inst/pCodeM_V" type="array">
-         <obj_property name="ElementShortName">pCodeM_V[15:0]</obj_property>
-         <obj_property name="ObjectShortName">pCodeM_V[15:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/setupLDPC_0/inst/pCodeM_V_ap_vld" type="logic">
-         <obj_property name="ElementShortName">pCodeM_V_ap_vld</obj_property>
-         <obj_property name="ObjectShortName">pCodeM_V_ap_vld</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/setupLDPC_0/inst/pMaxIterations_V_ap_vld" type="logic">
-         <obj_property name="ElementShortName">pMaxIterations_V_ap_vld</obj_property>
-         <obj_property name="ObjectShortName">pMaxIterations_V_ap_vld</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/setupLDPC_0/inst/numbits_V" type="array">
-         <obj_property name="ElementShortName">numbits_V[15:0]</obj_property>
-         <obj_property name="ObjectShortName">numbits_V[15:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/setupLDPC_0/inst/numbits_V_ap_vld" type="logic">
-         <obj_property name="ElementShortName">numbits_V_ap_vld</obj_property>
-         <obj_property name="ObjectShortName">numbits_V_ap_vld</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/setupLDPC_0/inst/etaIndexM_V_ce0" type="logic">
-         <obj_property name="ElementShortName">etaIndexM_V_ce0</obj_property>
-         <obj_property name="ObjectShortName">etaIndexM_V_ce0</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/setupLDPC_0/inst/etaIndexM_V_we0" type="logic">
-         <obj_property name="ElementShortName">etaIndexM_V_we0</obj_property>
-         <obj_property name="ObjectShortName">etaIndexM_V_we0</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/setupLDPC_0/inst/etaIndexN_V_ce0" type="logic">
-         <obj_property name="ElementShortName">etaIndexN_V_ce0</obj_property>
-         <obj_property name="ObjectShortName">etaIndexN_V_ce0</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/setupLDPC_0/inst/etaIndexN_V_we0" type="logic">
-         <obj_property name="ElementShortName">etaIndexN_V_we0</obj_property>
-         <obj_property name="ObjectShortName">etaIndexN_V_we0</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/setupLDPC_0/inst/lambdaIndexM_V_ce0" type="logic">
-         <obj_property name="ElementShortName">lambdaIndexM_V_ce0</obj_property>
-         <obj_property name="ObjectShortName">lambdaIndexM_V_ce0</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/setupLDPC_0/inst/lambdaIndexM_V_we0" type="logic">
-         <obj_property name="ElementShortName">lambdaIndexM_V_we0</obj_property>
-         <obj_property name="ObjectShortName">lambdaIndexM_V_we0</obj_property>
-      </wvobject>
    </wvobject>
    <wvobject fp_name="group158" type="group">
       <obj_property name="label">LDPC_CTRL</obj_property>
       <obj_property name="DisplayName">label</obj_property>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/LDPC_CTRL_0/inst/ap_clk" type="logic">
-         <obj_property name="ElementShortName">ap_clk</obj_property>
-         <obj_property name="ObjectShortName">ap_clk</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/LDPC_CTRL_0/inst/ap_rst" type="logic">
-         <obj_property name="ElementShortName">ap_rst</obj_property>
-         <obj_property name="ObjectShortName">ap_rst</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/LDPC_CTRL_0/inst/ap_start" type="logic">
-         <obj_property name="ElementShortName">ap_start</obj_property>
-         <obj_property name="ObjectShortName">ap_start</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/LDPC_CTRL_0/inst/block_V" type="array">
-         <obj_property name="ElementShortName">block_V[1:0]</obj_property>
-         <obj_property name="ObjectShortName">block_V[1:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/LDPC_CTRL_0/inst/code_V" type="array">
-         <obj_property name="ElementShortName">code_V[1:0]</obj_property>
-         <obj_property name="ObjectShortName">code_V[1:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/LDPC_CTRL_0/inst/run" type="logic">
-         <obj_property name="ElementShortName">run</obj_property>
-         <obj_property name="ObjectShortName">run</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/LDPC_CTRL_0/inst/init_done" type="logic">
-         <obj_property name="ElementShortName">init_done</obj_property>
-         <obj_property name="ObjectShortName">init_done</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/LDPC_CTRL_0/inst/init_ready" type="logic">
-         <obj_property name="ElementShortName">init_ready</obj_property>
-         <obj_property name="ObjectShortName">init_ready</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/LDPC_CTRL_0/inst/ap_done" type="logic">
-         <obj_property name="ElementShortName">ap_done</obj_property>
-         <obj_property name="ObjectShortName">ap_done</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/LDPC_CTRL_0/inst/ap_idle" type="logic">
-         <obj_property name="ElementShortName">ap_idle</obj_property>
-         <obj_property name="ObjectShortName">ap_idle</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/LDPC_CTRL_0/inst/ap_ready" type="logic">
-         <obj_property name="ElementShortName">ap_ready</obj_property>
-         <obj_property name="ObjectShortName">ap_ready</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/LDPC_CTRL_0/inst/init_start" type="logic">
-         <obj_property name="ElementShortName">init_start</obj_property>
-         <obj_property name="ObjectShortName">init_start</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/LDPC_CTRL_0/inst/init_start_ap_vld" type="logic">
-         <obj_property name="ElementShortName">init_start_ap_vld</obj_property>
-         <obj_property name="ObjectShortName">init_start_ap_vld</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/LDPC_CTRL_0/inst/buff_start" type="logic">
-         <obj_property name="ElementShortName">buff_start</obj_property>
-         <obj_property name="ObjectShortName">buff_start</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/LDPC_CTRL_0/inst/buff_start_ap_vld" type="logic">
-         <obj_property name="ElementShortName">buff_start_ap_vld</obj_property>
-         <obj_property name="ObjectShortName">buff_start_ap_vld</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/LDPC_CTRL_0/inst/status_V" type="array">
-         <obj_property name="ElementShortName">status_V[1:0]</obj_property>
-         <obj_property name="ObjectShortName">status_V[1:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/LDPC_CTRL_0/inst/status_V_ap_vld" type="logic">
-         <obj_property name="ElementShortName">status_V_ap_vld</obj_property>
-         <obj_property name="ObjectShortName">status_V_ap_vld</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/LDPC_CTRL_0/inst/err_code" type="array">
-         <obj_property name="ElementShortName">err_code[15:0]</obj_property>
-         <obj_property name="ObjectShortName">err_code[15:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/LDPC_CTRL_0/inst/err_code_ap_vld" type="logic">
-         <obj_property name="ElementShortName">err_code_ap_vld</obj_property>
-         <obj_property name="ObjectShortName">err_code_ap_vld</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/LDPC_CTRL_0/inst/size_V" type="array">
-         <obj_property name="ElementShortName">size_V[1:0]</obj_property>
-         <obj_property name="ObjectShortName">size_V[1:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/LDPC_CTRL_0/inst/size_V_ap_vld" type="logic">
-         <obj_property name="ElementShortName">size_V_ap_vld</obj_property>
-         <obj_property name="ObjectShortName">size_V_ap_vld</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/LDPC_CTRL_0/inst/rate_V" type="array">
-         <obj_property name="ElementShortName">rate_V[1:0]</obj_property>
-         <obj_property name="ObjectShortName">rate_V[1:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/LDPC_CTRL_0/inst/rate_V_ap_vld" type="logic">
-         <obj_property name="ElementShortName">rate_V_ap_vld</obj_property>
-         <obj_property name="ObjectShortName">rate_V_ap_vld</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/LDPC_CTRL_0/inst/ap_CS_fsm" type="array">
-         <obj_property name="ElementShortName">ap_CS_fsm[0:0]</obj_property>
-         <obj_property name="ObjectShortName">ap_CS_fsm[0:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/LDPC_CTRL_0/inst/ap_CS_fsm_state1" type="array">
-         <obj_property name="ElementShortName">ap_CS_fsm_state1[0:0]</obj_property>
-         <obj_property name="ObjectShortName">ap_CS_fsm_state1[0:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/LDPC_CTRL_0/inst/state" type="array">
-         <obj_property name="ElementShortName">state[15:0]</obj_property>
-         <obj_property name="ObjectShortName">state[15:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/LDPC_CTRL_0/inst/ap_NS_fsm" type="array">
-         <obj_property name="ElementShortName">ap_NS_fsm[0:0]</obj_property>
-         <obj_property name="ObjectShortName">ap_NS_fsm[0:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/LDPC_CTRL_0/inst/ap_ST_fsm_state1" type="logic">
-         <obj_property name="ElementShortName">ap_ST_fsm_state1</obj_property>
-         <obj_property name="ObjectShortName">ap_ST_fsm_state1</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/LDPC_CTRL_0/inst/ap_const_lv32_0" type="array">
-         <obj_property name="ElementShortName">ap_const_lv32_0[31:0]</obj_property>
-         <obj_property name="ObjectShortName">ap_const_lv32_0[31:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/LDPC_CTRL_0/inst/ap_const_lv16_3" type="array">
-         <obj_property name="ElementShortName">ap_const_lv16_3[15:0]</obj_property>
-         <obj_property name="ObjectShortName">ap_const_lv16_3[15:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/LDPC_CTRL_0/inst/ap_const_lv16_2" type="array">
-         <obj_property name="ElementShortName">ap_const_lv16_2[15:0]</obj_property>
-         <obj_property name="ObjectShortName">ap_const_lv16_2[15:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/LDPC_CTRL_0/inst/ap_const_lv16_1" type="array">
-         <obj_property name="ElementShortName">ap_const_lv16_1[15:0]</obj_property>
-         <obj_property name="ObjectShortName">ap_const_lv16_1[15:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/LDPC_CTRL_0/inst/ap_const_lv16_0" type="array">
-         <obj_property name="ElementShortName">ap_const_lv16_0[15:0]</obj_property>
-         <obj_property name="ObjectShortName">ap_const_lv16_0[15:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/LDPC_CTRL_0/inst/ap_const_lv2_0" type="array">
-         <obj_property name="ElementShortName">ap_const_lv2_0[1:0]</obj_property>
-         <obj_property name="ObjectShortName">ap_const_lv2_0[1:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/LDPC_CTRL_0/inst/ap_const_lv2_1" type="array">
-         <obj_property name="ElementShortName">ap_const_lv2_1[1:0]</obj_property>
-         <obj_property name="ObjectShortName">ap_const_lv2_1[1:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/LDPC_CTRL_0/inst/ap_const_lv2_2" type="array">
-         <obj_property name="ElementShortName">ap_const_lv2_2[1:0]</obj_property>
-         <obj_property name="ObjectShortName">ap_const_lv2_2[1:0]</obj_property>
-      </wvobject>
    </wvobject>
    <wvobject fp_name="group105" type="group">
       <obj_property name="label">LDPC</obj_property>
       <obj_property name="DisplayName">label</obj_property>
-      <obj_property name="isExpanded"></obj_property>
-      <wvobject fp_name="/test/ldpc/ldpcRun" type="logic">
-         <obj_property name="ElementShortName">ldpcRun</obj_property>
-         <obj_property name="ObjectShortName">ldpcRun</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcReady" type="logic">
-         <obj_property name="ElementShortName">ldpcReady</obj_property>
-         <obj_property name="ObjectShortName">ldpcReady</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/BLOCK_RATE" type="array">
-         <obj_property name="ElementShortName">BLOCK_RATE[1:0]</obj_property>
-         <obj_property name="ObjectShortName">BLOCK_RATE[1:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/BLOCK_SIZE" type="array">
-         <obj_property name="ElementShortName">BLOCK_SIZE[1:0]</obj_property>
-         <obj_property name="ObjectShortName">BLOCK_SIZE[1:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/deran_sel" type="array">
-         <obj_property name="ElementShortName">deran_sel[1:0]</obj_property>
-         <obj_property name="ObjectShortName">deran_sel[1:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/LDPC_MODE" type="array">
-         <obj_property name="ElementShortName">LDPC_MODE[1:0]</obj_property>
-         <obj_property name="ObjectShortName">LDPC_MODE[1:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/reset_rtl" type="logic">
-         <obj_property name="ElementShortName">reset_rtl</obj_property>
-         <obj_property name="ObjectShortName">reset_rtl</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/clk" type="logic">
-         <obj_property name="ElementShortName">clk</obj_property>
-         <obj_property name="ObjectShortName">clk</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/clkEn" type="logic">
-         <obj_property name="ElementShortName">clkEn</obj_property>
-         <obj_property name="ObjectShortName">clkEn</obj_property>
-      </wvobject>
       <wvobject fp_name="group371" type="group">
          <obj_property name="label">softMapper</obj_property>
          <obj_property name="DisplayName">label</obj_property>
          <obj_property name="isExpanded"></obj_property>
-         <wvobject fp_name="/test/ldpc/iSymEn" type="logic">
-            <obj_property name="ElementShortName">iSymEn</obj_property>
-            <obj_property name="ObjectShortName">iSymEn</obj_property>
-         </wvobject>
-         <wvobject fp_name="/test/ldpc/iSymData" type="array">
-            <obj_property name="ElementShortName">iSymData[17:0]</obj_property>
-            <obj_property name="ObjectShortName">iSymData[17:0]</obj_property>
-            <obj_property name="Radix">REALRADIX</obj_property>
-            <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
-            <obj_property name="radix_fractionWidth">17</obj_property>
-            <obj_property name="radix_otherWidth">0</obj_property>
-            <obj_property name="CellHeight">100</obj_property>
-            <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
-            <obj_property name="AnalogYRangeMin">0.000000</obj_property>
-            <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
-            <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
-            <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
-            <obj_property name="AnalogHorizLine">0.000000</obj_property>
-            <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
-         </wvobject>
-         <wvobject fp_name="/test/ldpc/iSymData" type="array">
-            <obj_property name="ElementShortName">iSymData[17:0]</obj_property>
-            <obj_property name="ObjectShortName">iSymData[17:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/test/ldpc/qSymData" type="array">
-            <obj_property name="ElementShortName">qSymData[17:0]</obj_property>
-            <obj_property name="ObjectShortName">qSymData[17:0]</obj_property>
-            <obj_property name="Radix">REALRADIX</obj_property>
-            <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
-            <obj_property name="radix_fractionWidth">17</obj_property>
-            <obj_property name="radix_otherWidth">0</obj_property>
-            <obj_property name="CellHeight">100</obj_property>
-            <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
-            <obj_property name="AnalogYRangeMin">0.000000</obj_property>
-            <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
-            <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
-            <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
-            <obj_property name="AnalogHorizLine">0.000000</obj_property>
-            <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
-         </wvobject>
-         <wvobject fp_name="/test/ldpc/iMap/inverseProduct" type="array">
-            <obj_property name="DisplayName">label</obj_property>
-            <obj_property name="ElementShortName">inverseProduct[35:0]</obj_property>
-            <obj_property name="ObjectShortName">inverseProduct[35:0]</obj_property>
-            <obj_property name="label">inverseProduct[34:17]</obj_property>
-            <obj_property name="Radix">REALRADIX</obj_property>
-            <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
-            <obj_property name="radix_fractionWidth">32</obj_property>
-            <obj_property name="radix_otherWidth">0</obj_property>
-         </wvobject>
-         <wvobject fp_name="/test/ldpc/iMap/inverseProduct" type="array">
-            <obj_property name="DisplayName">label</obj_property>
-            <obj_property name="ElementShortName">inverseProduct[35:0]</obj_property>
-            <obj_property name="ObjectShortName">inverseProduct[35:0]</obj_property>
-            <obj_property name="label">inverseProduct[34:17]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/test/ldpc/iMap/satPos" type="logic">
-            <obj_property name="ElementShortName">satPos</obj_property>
-            <obj_property name="ObjectShortName">satPos</obj_property>
-         </wvobject>
-         <wvobject fp_name="/test/ldpc/iMap/satNeg" type="logic">
-            <obj_property name="ElementShortName">satNeg</obj_property>
-            <obj_property name="ObjectShortName">satNeg</obj_property>
-         </wvobject>
-         <wvobject fp_name="/test/ldpc/iSoftEn" type="logic">
-            <obj_property name="ElementShortName">iSoftEn</obj_property>
-            <obj_property name="ObjectShortName">iSoftEn</obj_property>
-         </wvobject>
-         <wvobject fp_name="/test/ldpc/iSoft" type="array">
-            <obj_property name="ElementShortName">iSoft[6:0]</obj_property>
-            <obj_property name="ObjectShortName">iSoft[6:0]</obj_property>
-            <obj_property name="CellHeight">100</obj_property>
-            <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
-            <obj_property name="AnalogYRangeMin">0.000000</obj_property>
-            <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
-            <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
-            <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
-            <obj_property name="AnalogHorizLine">0.000000</obj_property>
-            <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
-            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-            <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
-            <obj_property name="radix_fractionWidth">2</obj_property>
-            <obj_property name="radix_otherWidth">0</obj_property>
-         </wvobject>
-         <wvobject fp_name="/test/ldpc/qSymEn" type="logic">
-            <obj_property name="ElementShortName">qSymEn</obj_property>
-            <obj_property name="ObjectShortName">qSymEn</obj_property>
-         </wvobject>
-         <wvobject fp_name="/test/ldpc/qSymData" type="array">
-            <obj_property name="ElementShortName">qSymData[17:0]</obj_property>
-            <obj_property name="ObjectShortName">qSymData[17:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/test/ldpc/qSoftEn" type="logic">
-            <obj_property name="ElementShortName">qSoftEn</obj_property>
-            <obj_property name="ObjectShortName">qSoftEn</obj_property>
-         </wvobject>
-         <wvobject fp_name="/test/ldpc/qSoft" type="array">
-            <obj_property name="ElementShortName">qSoft[6:0]</obj_property>
-            <obj_property name="ObjectShortName">qSoft[6:0]</obj_property>
-            <obj_property name="CellHeight">100</obj_property>
-            <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
-            <obj_property name="AnalogYRangeMin">0.000000</obj_property>
-            <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
-            <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
-            <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
-            <obj_property name="AnalogHorizLine">0.000000</obj_property>
-            <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
-            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-         </wvobject>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/invMeanMantissa" type="array">
-         <obj_property name="ElementShortName">invMeanMantissa[15:0]</obj_property>
-         <obj_property name="ObjectShortName">invMeanMantissa[15:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/invMeanExponent" type="array">
-         <obj_property name="ElementShortName">invMeanExponent[2:0]</obj_property>
-         <obj_property name="ObjectShortName">invMeanExponent[2:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/codeRate" type="array">
-         <obj_property name="ElementShortName">codeRate[1:0]</obj_property>
-         <obj_property name="ObjectShortName">codeRate[1:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/syncThreshold" type="array">
-         <obj_property name="ElementShortName">syncThreshold[10:0]</obj_property>
-         <obj_property name="ObjectShortName">syncThreshold[10:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/codeLength4096" type="logic">
-         <obj_property name="ElementShortName">codeLength4096</obj_property>
-         <obj_property name="ObjectShortName">codeLength4096</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/iSoft" type="array">
-         <obj_property name="ElementShortName">iSoft[6:0]</obj_property>
-         <obj_property name="ObjectShortName">iSoft[6:0]</obj_property>
-         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/qSoft" type="array">
-         <obj_property name="ElementShortName">qSoft[6:0]</obj_property>
-         <obj_property name="ObjectShortName">qSoft[6:0]</obj_property>
-         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/bitSoft[2]" type="logic">
-         <obj_property name="ElementShortName">[2]</obj_property>
-         <obj_property name="ObjectShortName">[2]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/bitSoft" type="array">
-         <obj_property name="ElementShortName">bitSoft[6:0]</obj_property>
-         <obj_property name="ObjectShortName">bitSoft[6:0]</obj_property>
-         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcf/longBitSum" type="array">
-         <obj_property name="ElementShortName">longBitSum[10:0]</obj_property>
-         <obj_property name="ObjectShortName">longBitSum[10:0]</obj_property>
-         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-         <obj_property name="CellHeight">100</obj_property>
-         <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
-         <obj_property name="AnalogYRangeMin">0.000000</obj_property>
-         <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
-         <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
-         <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
-         <obj_property name="AnalogHorizLine">0.000000</obj_property>
-         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcf/syncDetected" type="logic">
-         <obj_property name="ElementShortName">syncDetected</obj_property>
-         <obj_property name="ObjectShortName">syncDetected</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcf/negPolarity" type="logic">
-         <obj_property name="ElementShortName">negPolarity</obj_property>
-         <obj_property name="ObjectShortName">negPolarity</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/inSync" type="logic">
-         <obj_property name="ElementShortName">inSync</obj_property>
-         <obj_property name="ObjectShortName">inSync</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcf/bitCount" type="array">
-         <obj_property name="ElementShortName">bitCount[5:0]</obj_property>
-         <obj_property name="ObjectShortName">bitCount[5:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcf/wordCount" type="array">
-         <obj_property name="ElementShortName">wordCount[6:0]</obj_property>
-         <obj_property name="ObjectShortName">wordCount[6:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcf/syncState" type="array">
-         <obj_property name="ElementShortName">syncState[1:0]</obj_property>
-         <obj_property name="ObjectShortName">syncState[1:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcf/rotation" type="array">
-         <obj_property name="ElementShortName">rotation[1:0]</obj_property>
-         <obj_property name="ObjectShortName">rotation[1:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/clkEn" type="logic">
-         <obj_property name="ElementShortName">clkEn</obj_property>
-         <obj_property name="ObjectShortName">clkEn</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/codewordEn" type="logic">
-         <obj_property name="ElementShortName">codewordEn</obj_property>
-         <obj_property name="ObjectShortName">codewordEn</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/softDecision" type="array">
-         <obj_property name="ElementShortName">softDecision[7:0]</obj_property>
-         <obj_property name="ObjectShortName">softDecision[7:0]</obj_property>
-         <obj_property name="CellHeight">100</obj_property>
-         <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
-         <obj_property name="AnalogYRangeMin">0.000000</obj_property>
-         <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
-         <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
-         <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
-         <obj_property name="AnalogHorizLine">0.000000</obj_property>
-         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
-         <obj_property name="Radix">REALRADIX</obj_property>
-         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
-         <obj_property name="radix_fractionWidth">1</obj_property>
-         <obj_property name="radix_otherWidth">0</obj_property>
       </wvobject>
    </wvobject>
    <wvobject fp_name="group225" type="group">
       <obj_property name="label">LDPC Status</obj_property>
       <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject fp_name="group262" type="group">
+      <obj_property name="label">EQ</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
       <obj_property name="isExpanded"></obj_property>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/cnt" type="array">
-         <obj_property name="ElementShortName">cnt[31:0]</obj_property>
-         <obj_property name="ObjectShortName">cnt[31:0]</obj_property>
+      <wvobject fp_name="/test/demod/enableEqualizer" type="logic">
+         <obj_property name="ElementShortName">enableEqualizer</obj_property>
+         <obj_property name="ObjectShortName">enableEqualizer</obj_property>
       </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/full" type="array">
-         <obj_property name="ElementShortName">full[0:0]</obj_property>
-         <obj_property name="ObjectShortName">full[0:0]</obj_property>
+      <wvobject fp_name="/test/demod/ddc/iOut" type="array">
+         <obj_property name="ElementShortName">iOut[17:0]</obj_property>
+         <obj_property name="ObjectShortName">iOut[17:0]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">17</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+         <obj_property name="CellHeight">100</obj_property>
+         <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
+         <obj_property name="AnalogYRangeMin">0.000000</obj_property>
+         <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
+         <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
+         <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
+         <obj_property name="AnalogHorizLine">0.000000</obj_property>
+         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
       </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/overrun" type="array">
-         <obj_property name="ElementShortName">overrun[0:0]</obj_property>
-         <obj_property name="ObjectShortName">overrun[0:0]</obj_property>
+      <wvobject fp_name="/test/demod/ddc/qOut" type="array">
+         <obj_property name="ElementShortName">qOut[17:0]</obj_property>
+         <obj_property name="ObjectShortName">qOut[17:0]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">17</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+         <obj_property name="CellHeight">100</obj_property>
+         <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
+         <obj_property name="AnalogYRangeMin">0.000000</obj_property>
+         <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
+         <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
+         <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
+         <obj_property name="AnalogHorizLine">0.000000</obj_property>
+         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
       </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/LDPC_buff_0_upgraded_ipi/numbits_V" type="array">
-         <obj_property name="ElementShortName">numbits_V[15:0]</obj_property>
-         <obj_property name="ObjectShortName">numbits_V[15:0]</obj_property>
+      <wvobject fp_name="/test/demod/cma/mag" type="array">
+         <obj_property name="ElementShortName">mag[17:0]</obj_property>
+         <obj_property name="ObjectShortName">mag[17:0]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">17</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+         <obj_property name="CellHeight">100</obj_property>
+         <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
+         <obj_property name="AnalogYRangeMin">0.000000</obj_property>
+         <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
+         <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
+         <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
+         <obj_property name="AnalogHorizLine">0.000000</obj_property>
+         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
       </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/LDPC_buff_0_upgraded_ipi/decode_start" type="array">
-         <obj_property name="ElementShortName">decode_start[0:0]</obj_property>
-         <obj_property name="ObjectShortName">decode_start[0:0]</obj_property>
+      <wvobject fp_name="/test/demod/cma/diff" type="array">
+         <obj_property name="ElementShortName">diff[17:0]</obj_property>
+         <obj_property name="ObjectShortName">diff[17:0]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">17</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+         <obj_property name="CellHeight">100</obj_property>
+         <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
+         <obj_property name="AnalogYRangeMin">0.000000</obj_property>
+         <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
+         <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
+         <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
+         <obj_property name="AnalogHorizLine">0.000000</obj_property>
+         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
       </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/LDPC_buff_0_upgraded_ipi/decode_done" type="array">
-         <obj_property name="ElementShortName">decode_done[0:0]</obj_property>
-         <obj_property name="ObjectShortName">decode_done[0:0]</obj_property>
+      <wvobject fp_name="/test/demod/iResampIn" type="array">
+         <obj_property name="ElementShortName">iResampIn[17:0]</obj_property>
+         <obj_property name="ObjectShortName">iResampIn[17:0]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">17</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+         <obj_property name="CellHeight">100</obj_property>
+         <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
+         <obj_property name="AnalogYRangeMin">0.000000</obj_property>
+         <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
+         <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
+         <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
+         <obj_property name="AnalogHorizLine">0.000000</obj_property>
+         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/demod/qResampIn" type="array">
+         <obj_property name="ElementShortName">qResampIn[17:0]</obj_property>
+         <obj_property name="ObjectShortName">qResampIn[17:0]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">17</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+         <obj_property name="CellHeight">100</obj_property>
+         <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
+         <obj_property name="AnalogYRangeMin">0.000000</obj_property>
+         <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
+         <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
+         <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
+         <obj_property name="AnalogHorizLine">0.000000</obj_property>
+         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
       </wvobject>
    </wvobject>
 </wave_config>

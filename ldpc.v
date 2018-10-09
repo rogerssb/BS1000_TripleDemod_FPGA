@@ -64,7 +64,8 @@ module ldpc #(parameter LDPCBITS = 3) (
         .derandMode(derandMode),
         .syncThreshold(syncThreshold),
         .ldpcRun(ldpcRun),
-        .outputEnClkDiv(outputEnClkDiv)
+        .outputEnClkDiv(outputEnClkDiv),
+        .invertData(invertData)
     );
 
     // Clock enables.
@@ -161,7 +162,7 @@ module ldpc #(parameter LDPCBITS = 3) (
         else if (clkEn) begin
             // Line up the soft decisions with the codewordEnable
             // and add an LSB of 1 to create a mid-rise quantizer
-            bitSoftDelayed <= bitSoft;
+            bitSoftDelayed <= invertData ? ~bitSoft : bitSoft;
             softDecision <= $signed({bitSoftDelayed,1'b1});
         end
     end
@@ -173,7 +174,8 @@ module ldpc #(parameter LDPCBITS = 3) (
 
     `else // USE_FAKE_LDPC_DECODER
 
-    wire    [13:0] junk;
+    wire    [15:0]  ldpcWriteAddr;
+    wire    [7:0]   iterationNumber;
     ldpcDecoder ldpcd (
         .clock_rtl(clk),
         .reset_rtl(reset),
@@ -185,10 +187,16 @@ module ldpc #(parameter LDPCBITS = 3) (
         .sync(codewordEn),
         .write_clk_en(clkEn),
         .data_in(softDecision),
-        .buff_ready({junk,ldpcReady}),
-        .read_clk_en(ldpcBitEnOut),
+        .buff_ready(ldpcReady),
         .DECODE_OUT(ldpcBitOut),
-        .DECODE_OUT_VALID(),
+        .DECODE_OUT_VALID(ldpcBitEnOut),
+        .cur_write_pos_V(ldpcWriteAddr),
+        .Iteration_Number(iterationNumber),
+        .read_clk_en(),
+        .iteration_step(),
+        .cur_read_pos_V(),
+        .deran_data(),
+        .deran_data_ap_vld(),
         .ERR_CODE(),
         .LDPC_MODE(),
         .cnt(),
@@ -204,12 +212,20 @@ module ldpc #(parameter LDPCBITS = 3) (
                 dac0Data <= {softDecision,{(18-LDPCBITS){1'b0}}};
                 dac0ClkEn <= clkEn;
             end
+            `DAC_Q: begin
+                dac0Data <= {1'b0,ldpcBitEnOut,16'b0};
+                dac0ClkEn <= 1'b1;
+            end
             `DAC_LDPC_CORR: begin
                 dac0Data <= correlation;
                 dac0ClkEn <= clkEn;
             end
             `DAC_LDPC_SPRT: begin
                 dac0Data <= sprtSyncCount;
+                dac0ClkEn <= clkEn;
+            end
+            `DAC_LDPC_CTRL: begin
+                dac0Data <= {1'b0,codewordEn,16'b0};
                 dac0ClkEn <= clkEn;
             end
             default: begin
@@ -222,12 +238,20 @@ module ldpc #(parameter LDPCBITS = 3) (
                 dac1Data <= {softDecision,{(18-LDPCBITS){1'b0}}};
                 dac1ClkEn <= clkEn;
             end
+            `DAC_Q: begin
+                dac1Data <= {1'b0,ldpcBitOut,16'b0};
+                dac1ClkEn <= 1'b1;
+            end
             `DAC_LDPC_CORR: begin
                 dac1Data <= correlation;
                 dac1ClkEn <= clkEn;
             end
             `DAC_LDPC_SPRT: begin
                 dac1Data <= sprtSyncCount;
+                dac1ClkEn <= clkEn;
+            end
+            `DAC_LDPC_CTRL: begin
+                dac1Data <= {1'b0,iterationNumber[2:0],14'b0};
                 dac1ClkEn <= clkEn;
             end
             default: begin
@@ -246,6 +270,10 @@ module ldpc #(parameter LDPCBITS = 3) (
             end
             `DAC_LDPC_SPRT: begin
                 dac2Data <= sprtSyncCount;
+                dac2ClkEn <= clkEn;
+            end
+            `DAC_LDPC_CTRL: begin
+                dac2Data <= {1'b0,ldpcWriteAddr[11:0],5'b0};
                 dac2ClkEn <= clkEn;
             end
             default: begin

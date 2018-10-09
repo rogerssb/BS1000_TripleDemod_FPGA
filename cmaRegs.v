@@ -19,6 +19,7 @@ module cmaRegs(
     output  reg         [31:0]  dataOut,
     input                       cs,
     input                       wr0, wr1, wr2, wr3,
+    input                       wtOvf,
     output  reg                 enableEqualizer,
     output  reg                 resetEqualizer,
     output  reg         [2:0]   eqStepSizeExponent,
@@ -59,7 +60,8 @@ module cmaRegs(
     always @* begin
         if (cs) begin
             casex (addr)
-                `EQ_CONTROL:        dataOut = {30'h0,resetEqualizer,enableEqualizer};
+                `EQ_CONTROL:        dataOut = {wtOvf,29'h0,resetEqualizer,enableEqualizer};
+                //`EQ_CONTROL:        dataOut = {30'h0,resetEqualizer,enableEqualizer};
                 `EQ_STEP_SIZE:      dataOut = {29'h0,eqStepSizeExponent};
                 `EQ_CMA_REFERENCE:  dataOut = {16'h0,cmaReference};
                 default:            dataOut = 32'h0;
