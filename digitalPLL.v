@@ -95,6 +95,7 @@ module digitalPLL(
     input           [4:0]   loopGain,
     input           [7:0]   feedbackDivider,
     input                   referenceClkEn,
+    output  reg             feedbackClkEn,
     output  reg             dllOutputClk,
     output                  filteredRefClk,
     output  reg     [7:0]   phaseError
@@ -124,7 +125,6 @@ module digitalPLL(
     `define ADD_DIVIDER
     `ifdef  ADD_DIVIDER
 
-    reg             feedbackClkEn;
     reg             vcoClkEn;
     reg     [7:0]   feedbackCounter;
     always @(posedge clk) begin
@@ -163,7 +163,6 @@ module digitalPLL(
 
     `else   //ADD_DIVIDER
 
-    reg             feedbackClkEn;
     always @(posedge clk) begin
         feedbackClkEn <= (clkSR == 2'b10);
     end
@@ -173,15 +172,32 @@ module digitalPLL(
 
 
     // Phase Comparator
+    `define DLL_INVERT
     always @(posedge clk) begin
         if (reset) begin
             phaseError <= 0;
         end
         else if (referenceClkEn & !feedbackClkEn) begin
-            phaseError <= phaseError - 1;
+            `ifdef DLL_INVERT
+            if ( phaseError[7] || (!phaseError[7] && (phaseError < 8'h7f) ) ) begin
+                phaseError <= phaseError + 1;
+            end
+            `else
+            if ( !phaseError[7] || (phaseError[7] && (phaseError > 8'h81) ) ) begin
+                phaseError <= phaseError - 1;
+            end
+            `endif
         end
         else if (feedbackClkEn & !referenceClkEn) begin
-            phaseError <= phaseError + 1;
+            `ifdef DLL_INVERT
+            if ( !phaseError[7] || (phaseError[7] && (phaseError > 8'h81) ) ) begin
+                phaseError <= phaseError - 1;
+            end
+            `else
+            if ( phaseError[7] || (!phaseError[7] && (phaseError < 8'h7f) ) ) begin
+                phaseError <= phaseError + 1;
+            end
+            `endif
         end
     end
 

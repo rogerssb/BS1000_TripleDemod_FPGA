@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="test_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="test" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="4043592400000fs"></ZoomStartTime>
+      <ZoomEndTime time="6687592400001fs"></ZoomEndTime>
+      <Cursor1Time time="5243592400000fs"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="198"></NameColumnWidth>
+      <ValueColumnWidth column_width="75"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="28" />
+   <wave_markers>
+      <marker time="1154033600000" label="" />
+      <marker time="5580748800000" label="" />
+   </wave_markers>
+   <wvobject fp_name="/test/clken" type="logic">
+      <obj_property name="ElementShortName">clken</obj_property>
+      <obj_property name="ObjectShortName">clken</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/clkCount" type="array">
+      <obj_property name="ElementShortName">clkCount[31:0]</obj_property>
+      <obj_property name="ObjectShortName">clkCount[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/enableInput" type="logic">
+      <obj_property name="ElementShortName">enableInput</obj_property>
+      <obj_property name="ObjectShortName">enableInput</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/x" type="array">
+      <obj_property name="ElementShortName">x[31:0]</obj_property>
+      <obj_property name="ObjectShortName">x[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/fp_IBB" type="array">
+      <obj_property name="ElementShortName">fp_IBB[31:0]</obj_property>
+      <obj_property name="ObjectShortName">fp_IBB[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/fp_QBB" type="array">
+      <obj_property name="ElementShortName">fp_QBB[31:0]</obj_property>
+      <obj_property name="ObjectShortName">fp_QBB[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/iSampleFloat" type="other">
+      <obj_property name="ElementShortName">iSampleFloat</obj_property>
+      <obj_property name="ObjectShortName">iSampleFloat</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/qSampleFloat" type="other">
+      <obj_property name="ElementShortName">qSampleFloat</obj_property>
+      <obj_property name="ObjectShortName">qSampleFloat</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/cs" type="logic">
+      <obj_property name="ElementShortName">cs</obj_property>
+      <obj_property name="ObjectShortName">cs</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/wr0" type="logic">
+      <obj_property name="ElementShortName">wr0</obj_property>
+      <obj_property name="ObjectShortName">wr0</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/wr1" type="logic">
+      <obj_property name="ElementShortName">wr1</obj_property>
+      <obj_property name="ObjectShortName">wr1</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/wr2" type="logic">
+      <obj_property name="ElementShortName">wr2</obj_property>
+      <obj_property name="ObjectShortName">wr2</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/wr3" type="logic">
+      <obj_property name="ElementShortName">wr3</obj_property>
+      <obj_property name="ObjectShortName">wr3</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/a" type="array">
+      <obj_property name="ElementShortName">a[12:0]</obj_property>
+      <obj_property name="ObjectShortName">a[12:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/d" type="array">
+      <obj_property name="ElementShortName">d[31:0]</obj_property>
+      <obj_property name="ObjectShortName">d[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/busClk" type="logic">
+      <obj_property name="ElementShortName">busClk</obj_property>
+      <obj_property name="ObjectShortName">busClk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/sampleCount" type="array">
+      <obj_property name="ElementShortName">sampleCount[31:0]</obj_property>
+      <obj_property name="ObjectShortName">sampleCount[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/reset" type="logic">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/clk" type="logic">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/clkEnable" type="logic">
+      <obj_property name="ElementShortName">clkEnable</obj_property>
+      <obj_property name="ObjectShortName">clkEnable</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/iSelect" type="logic">
+      <obj_property name="ElementShortName">iSelect</obj_property>
+      <obj_property name="ObjectShortName">iSelect</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/iSymEn" type="logic">
+      <obj_property name="ElementShortName">iSymEn</obj_property>
+      <obj_property name="ObjectShortName">iSymEn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/qSymEn" type="logic">
+      <obj_property name="ElementShortName">qSymEn</obj_property>
+      <obj_property name="ObjectShortName">qSymEn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/iSample" type="array">
+      <obj_property name="ElementShortName">iSample[17:0]</obj_property>
+      <obj_property name="ObjectShortName">iSample[17:0]</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">17</obj_property>
+      <obj_property name="radix_otherWidth">0</obj_property>
+      <obj_property name="CellHeight">100</obj_property>
+      <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
+      <obj_property name="AnalogYRangeMin">0.000000</obj_property>
+      <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
+      <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
+      <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
+      <obj_property name="AnalogHorizLine">0.000000</obj_property>
+      <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/qSample" type="array">
+      <obj_property name="ElementShortName">qSample[17:0]</obj_property>
+      <obj_property name="ObjectShortName">qSample[17:0]</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">17</obj_property>
+      <obj_property name="radix_otherWidth">0</obj_property>
+      <obj_property name="CellHeight">100</obj_property>
+      <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
+      <obj_property name="AnalogYRangeMin">0.000000</obj_property>
+      <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
+      <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
+      <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
+      <obj_property name="AnalogHorizLine">0.000000</obj_property>
+      <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+   </wvobject>
+   <wvobject fp_name="group33" type="group">
+      <obj_property name="label">LDPC</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/test/ldpc/ldpcd/BLOCK_RATE" type="array">
+         <obj_property name="ElementShortName">BLOCK_RATE[1:0]</obj_property>
+         <obj_property name="ObjectShortName">BLOCK_RATE[1:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/ldpc/ldpcd/BLOCK_SIZE" type="array">
+         <obj_property name="ElementShortName">BLOCK_SIZE[1:0]</obj_property>
+         <obj_property name="ObjectShortName">BLOCK_SIZE[1:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/ldpc/ldpcRun" type="logic">
+         <obj_property name="ElementShortName">ldpcRun</obj_property>
+         <obj_property name="ObjectShortName">ldpcRun</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/ldpc/ldpcReady" type="logic">
+         <obj_property name="ElementShortName">ldpcReady</obj_property>
+         <obj_property name="ObjectShortName">ldpcReady</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/ldpc/codewordEn" type="logic">
+         <obj_property name="ElementShortName">codewordEn</obj_property>
+         <obj_property name="ObjectShortName">codewordEn</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/ldpc/codeLength4096" type="logic">
+         <obj_property name="ElementShortName">codeLength4096</obj_property>
+         <obj_property name="ObjectShortName">codeLength4096</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/ldpc/codeRate" type="array">
+         <obj_property name="ElementShortName">codeRate[1:0]</obj_property>
+         <obj_property name="ObjectShortName">codeRate[1:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/ldpc/derandMode" type="array">
+         <obj_property name="ElementShortName">derandMode[1:0]</obj_property>
+         <obj_property name="ObjectShortName">derandMode[1:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/ldpc/iSoft" type="array">
+         <obj_property name="ElementShortName">iSoft[6:0]</obj_property>
+         <obj_property name="ObjectShortName">iSoft[6:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/ldpc/qSoft" type="array">
+         <obj_property name="ElementShortName">qSoft[6:0]</obj_property>
+         <obj_property name="ObjectShortName">qSoft[6:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/ldpc/softDecision" type="array">
+         <obj_property name="ElementShortName">softDecision[7:0]</obj_property>
+         <obj_property name="ObjectShortName">softDecision[7:0]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">1</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+         <obj_property name="CellHeight">100</obj_property>
+         <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
+         <obj_property name="AnalogYRangeMin">0.000000</obj_property>
+         <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
+         <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
+         <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
+         <obj_property name="AnalogHorizLine">0.000000</obj_property>
+         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/ldpc/softDecision" type="array">
+         <obj_property name="ElementShortName">softDecision[7:0]</obj_property>
+         <obj_property name="ObjectShortName">softDecision[7:0]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">1</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+         <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
+         <obj_property name="AnalogYRangeMin">0.000000</obj_property>
+         <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
+         <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
+         <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
+         <obj_property name="AnalogHorizLine">0.000000</obj_property>
+         <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/ldpc/ldpcf/longBitSum" type="array">
+         <obj_property name="ElementShortName">longBitSum[10:0]</obj_property>
+         <obj_property name="ObjectShortName">longBitSum[10:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         <obj_property name="CellHeight">100</obj_property>
+         <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_FIXED</obj_property>
+         <obj_property name="AnalogYRangeMin">-64.000000</obj_property>
+         <obj_property name="AnalogYRRangeMax">64.000000</obj_property>
+         <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
+         <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
+         <obj_property name="AnalogHorizLine">0.000000</obj_property>
+         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/ldpc/ldpcf/syncDetected" type="logic">
+         <obj_property name="ElementShortName">syncDetected</obj_property>
+         <obj_property name="ObjectShortName">syncDetected</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/ldpc/ldpcf/negPolarity" type="logic">
+         <obj_property name="ElementShortName">negPolarity</obj_property>
+         <obj_property name="ObjectShortName">negPolarity</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/ldpc/ldpcf/syncState" type="array">
+         <obj_property name="ElementShortName">syncState[1:0]</obj_property>
+         <obj_property name="ObjectShortName">syncState[1:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/ldpc/ldpcf/bitCount" type="array">
+         <obj_property name="ElementShortName">bitCount[5:0]</obj_property>
+         <obj_property name="ObjectShortName">bitCount[5:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/ldpc/ldpcf/wordCount" type="array">
+         <obj_property name="ElementShortName">wordCount[7:0]</obj_property>
+         <obj_property name="ObjectShortName">wordCount[7:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/ldpc/ldpcf/rotation" type="array">
+         <obj_property name="ElementShortName">rotation[1:0]</obj_property>
+         <obj_property name="ObjectShortName">rotation[1:0]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="group85" type="group">
+      <obj_property name="label">LDPC CTRL</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/test/ldpc/ldpcd/sync" type="array">
+         <obj_property name="ElementShortName">sync[0:0]</obj_property>
+         <obj_property name="ObjectShortName">sync[0:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/ldpc/ldpcd/write_clk_en" type="array">
+         <obj_property name="ElementShortName">write_clk_en[0:0]</obj_property>
+         <obj_property name="ObjectShortName">write_clk_en[0:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/ldpc/ldpcd/LDPC_RUN" type="logic">
+         <obj_property name="ElementShortName">LDPC_RUN</obj_property>
+         <obj_property name="ObjectShortName">LDPC_RUN</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/ldpc/ldpcReady" type="logic">
+         <obj_property name="ElementShortName">ldpcReady</obj_property>
+         <obj_property name="ObjectShortName">ldpcReady</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/decode_start_lat_S" type="array">
+         <obj_property name="ElementShortName">decode_start_lat_S[0:0]</obj_property>
+         <obj_property name="ObjectShortName">decode_start_lat_S[0:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/ldpc/ldpcd/cur_write_pos_V" type="array">
+         <obj_property name="ElementShortName">cur_write_pos_V[15:0]</obj_property>
+         <obj_property name="ObjectShortName">cur_write_pos_V[15:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/LDPC_Out_0/inst/cur_read_pos_V" type="array">
+         <obj_property name="ElementShortName">cur_read_pos_V[15:0]</obj_property>
+         <obj_property name="ObjectShortName">cur_read_pos_V[15:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/ldpc/dll/referenceClkEn" type="logic">
+         <obj_property name="ElementShortName">referenceClkEn</obj_property>
+         <obj_property name="ObjectShortName">referenceClkEn</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/LDPC_Out_0/inst/out_count" type="array">
+         <obj_property name="ElementShortName">out_count[15:0]</obj_property>
+         <obj_property name="ObjectShortName">out_count[15:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/ldpc/ldpcd/cur_read_pos_V" type="array">
+         <obj_property name="ElementShortName">cur_read_pos_V[15:0]</obj_property>
+         <obj_property name="ObjectShortName">cur_read_pos_V[15:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/ldpc/ldpcd/inst/design_2_i/Iteration_Number" type="array">
+         <obj_property name="ElementShortName">Iteration_Number[7:0]</obj_property>
+         <obj_property name="ObjectShortName">Iteration_Number[7:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/ldpc/ldpcd/DECODE_OUT_VALID" type="logic">
+         <obj_property name="ElementShortName">DECODE_OUT_VALID</obj_property>
+         <obj_property name="ObjectShortName">DECODE_OUT_VALID</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/ldpc/ldpcd/DECODE_OUT" type="array">
+         <obj_property name="ElementShortName">DECODE_OUT[0:0]</obj_property>
+         <obj_property name="ObjectShortName">DECODE_OUT[0:0]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="group56" type="group">
+      <obj_property name="label">LDPC DLL</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/test/ldpc/dll/clk" type="logic">
+         <obj_property name="ElementShortName">clk</obj_property>
+         <obj_property name="ObjectShortName">clk</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/ldpc/dll/reset" type="logic">
+         <obj_property name="ElementShortName">reset</obj_property>
+         <obj_property name="ObjectShortName">reset</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/ldpc/dll/centerFreq" type="array">
+         <obj_property name="ElementShortName">centerFreq[31:0]</obj_property>
+         <obj_property name="ObjectShortName">centerFreq[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/ldpc/dll/loopGain" type="array">
+         <obj_property name="ElementShortName">loopGain[4:0]</obj_property>
+         <obj_property name="ObjectShortName">loopGain[4:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/ldpc/dll/feedbackDivider" type="array">
+         <obj_property name="ElementShortName">feedbackDivider[7:0]</obj_property>
+         <obj_property name="ObjectShortName">feedbackDivider[7:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/ldpc/dll/referenceClkEn" type="logic">
+         <obj_property name="ElementShortName">referenceClkEn</obj_property>
+         <obj_property name="ObjectShortName">referenceClkEn</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/ldpc/dll/feedbackClkEn" type="logic">
+         <obj_property name="ElementShortName">feedbackClkEn</obj_property>
+         <obj_property name="ObjectShortName">feedbackClkEn</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/ldpc/dll/dllOutputClk" type="logic">
+         <obj_property name="ElementShortName">dllOutputClk</obj_property>
+         <obj_property name="ObjectShortName">dllOutputClk</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/ldpc/dll/phaseError" type="array">
+         <obj_property name="ElementShortName">phaseError[7:0]</obj_property>
+         <obj_property name="ObjectShortName">phaseError[7:0]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">7</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+         <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
+         <obj_property name="AnalogYRangeMin">0.000000</obj_property>
+         <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
+         <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
+         <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
+         <obj_property name="AnalogHorizLine">0.000000</obj_property>
+         <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/ldpc/dll/phaseError" type="array">
+         <obj_property name="ElementShortName">phaseError[7:0]</obj_property>
+         <obj_property name="ObjectShortName">phaseError[7:0]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">7</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+         <obj_property name="CellHeight">100</obj_property>
+         <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
+         <obj_property name="AnalogYRangeMin">0.000000</obj_property>
+         <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
+         <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
+         <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
+         <obj_property name="AnalogHorizLine">0.000000</obj_property>
+         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+      </wvobject>
+   </wvobject>
+</wave_config>

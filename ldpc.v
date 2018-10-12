@@ -41,11 +41,14 @@ module ldpc #(parameter LDPCBITS = 3) (
     wire            inSync;
     wire    [1:0]   syncState;
     wire    [1:0]   rotation;
+        `define LDPC_0_DEGREES      2'b00
+        `define LDPC_90_DEGREES     2'b01
+        `define LDPC_180_DEGREES    2'b10
+        `define LDPC_270_DEGREES    2'b11
     wire    [15:0]  outputEnClkDiv;
-    `define LDPC_0_DEGREES      2'b00
-    `define LDPC_90_DEGREES     2'b01
-    `define LDPC_180_DEGREES    2'b10
-    `define LDPC_270_DEGREES    2'b11
+    wire    [31:0]  dllCenterFreq;
+    wire    [4:0]   dllLoopGain;
+    wire    [7:0]   dllFeedbackDivider;
     ldpcRegs lregs(
         .busClk(busClk),
         .cs(ldpcSpace),
@@ -65,7 +68,10 @@ module ldpc #(parameter LDPCBITS = 3) (
         .syncThreshold(syncThreshold),
         .ldpcRun(ldpcRun),
         .outputEnClkDiv(outputEnClkDiv),
-        .invertData(invertData)
+        .invertData(invertData),
+        .dllCenterFreq(dllCenterFreq),
+        .dllLoopGain(dllLoopGain),
+        .dllFeedbackDivider(dllFeedbackDivider)
     );
 
     // Clock enables.
@@ -190,6 +196,9 @@ module ldpc #(parameter LDPCBITS = 3) (
         .buff_ready(ldpcReady),
         .DECODE_OUT(ldpcBitOut),
         .DECODE_OUT_VALID(ldpcBitEnOut),
+        .rd_clk_in(dllClkEn),
+        //.rd_clk_in(clkEnOut),
+        .rd_clk_out(clkEnOut),
         .cur_write_pos_V(ldpcWriteAddr),
         .Iteration_Number(iterationNumber),
         .read_clk_en(),
@@ -203,6 +212,22 @@ module ldpc #(parameter LDPCBITS = 3) (
         .full(),
         .overrun()
     );
+
+    // First stage attenuation using a Digital PLL
+    wire    [7:0]   dllPhaseError;
+    digitalPLL dll(
+        .clk(clk),
+        .reset(!ldpcReady),
+        .centerFreq(dllCenterFreq),
+        .loopGain(dllLoopGain),
+        .feedbackDivider(dllFeedbackDivider),
+        .referenceClkEn(clkEnOut),
+        .feedbackClkEn(dllClkEn),
+        .dllOutputClk(),
+        .filteredRefClk(pllReferenceClk),
+        .phaseError()
+    );
+
 
     `endif //USE_FAKE_LDPC_DECODER
 

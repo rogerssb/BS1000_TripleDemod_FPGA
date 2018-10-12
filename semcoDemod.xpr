@@ -18,9 +18,9 @@
     <Option Name="CompiledLibDirActivehdl" Val="$PCACHEDIR/compile_simlib/activehdl"/>
     <Option Name="BoardPart" Val=""/>
     <Option Name="SourceMgmtMode" Val="DisplayOnly"/>
-    <Option Name="ActiveSimSet" Val="simLdpcMapper"/>
+    <Option Name="ActiveSimSet" Val="simLdpc"/>
     <Option Name="DefaultLib" Val="xil_defaultlib"/>
-    <Option Name="IPRepoPath" Val="$PPRDIR/ldpcDecoder"/>
+    <Option Name="IPRepoPath" Val="$PPRDIR/ldpcDecoder/ldpc test"/>
     <Option Name="IPOutputRepo" Val="$PCACHEDIR/ip"/>
     <Option Name="IPCachePermission" Val="read"/>
     <Option Name="IPCachePermission" Val="write"/>
@@ -30,20 +30,20 @@
     <Option Name="IPStaticSourceDir" Val="$PPRDIR/semcoDemod.ip_user_files/ipstatic"/>
     <Option Name="EnableBDX" Val="FALSE"/>
     <Option Name="DSANumComputeUnits" Val="16"/>
-    <Option Name="WTXSimLaunchSim" Val="437"/>
+    <Option Name="WTXSimLaunchSim" Val="497"/>
     <Option Name="WTModelSimLaunchSim" Val="0"/>
     <Option Name="WTQuestaLaunchSim" Val="0"/>
     <Option Name="WTIesLaunchSim" Val="0"/>
     <Option Name="WTVcsLaunchSim" Val="0"/>
     <Option Name="WTRivieraLaunchSim" Val="0"/>
     <Option Name="WTActivehdlLaunchSim" Val="0"/>
-    <Option Name="WTXSimExportSim" Val="55"/>
-    <Option Name="WTModelSimExportSim" Val="55"/>
-    <Option Name="WTQuestaExportSim" Val="55"/>
-    <Option Name="WTIesExportSim" Val="55"/>
-    <Option Name="WTVcsExportSim" Val="55"/>
-    <Option Name="WTRivieraExportSim" Val="55"/>
-    <Option Name="WTActivehdlExportSim" Val="55"/>
+    <Option Name="WTXSimExportSim" Val="64"/>
+    <Option Name="WTModelSimExportSim" Val="64"/>
+    <Option Name="WTQuestaExportSim" Val="64"/>
+    <Option Name="WTIesExportSim" Val="64"/>
+    <Option Name="WTVcsExportSim" Val="64"/>
+    <Option Name="WTRivieraExportSim" Val="64"/>
+    <Option Name="WTActivehdlExportSim" Val="64"/>
     <Option Name="GenerateIPUpgradeLog" Val="TRUE"/>
     <Option Name="XSimRadix" Val="hex"/>
     <Option Name="XSimTimeUnit" Val="ns"/>
@@ -1473,29 +1473,14 @@
         <Option Name="VerilogDir" Val="$PPRDIR/."/>
         <Option Name="TransportPathDelay" Val="0"/>
         <Option Name="TransportIntDelay" Val="0"/>
-        <Option Name="SimMode" Val="post-implementation"/>
         <Option Name="SrcSet" Val="sources_1"/>
         <Option Name="XSimWcfgFile" Val="$PPRDIR/simLdpc.wcfg"/>
         <Define Name="SEMCO_DEMOD"/>
         <Define Name="SIMULATE"/>
       </Config>
     </FileSet>
-    <FileSet Name="ldpcDecoder" Type="BlockSrcs" RelSrcDir="$PSRCDIR/ldpcDecoder">
-      <File Path="$PSRCDIR/sources_1/ip/ldpcDecoder_9/ldpcDecoder.xci">
-        <FileInfo>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <Config>
-        <Option Name="TopModule" Val="ldpcDecoder"/>
-        <Option Name="VerilogDir" Val="$PPRDIR/."/>
-        <Option Name="UseBlackboxStub" Val="1"/>
-        <Define Name="SEMCO_DEMOD"/>
-      </Config>
-    </FileSet>
     <FileSet Name="simLdpcMapper" Type="SimulationSrcs" RelSrcDir="$PSRCDIR/simLdpcMapper">
+      <Filter Type="Srcs"/>
       <File Path="$PPRDIR/testLdpcMapper.wcfg">
         <FileInfo>
           <Attr Name="UsedIn" Val="simulation"/>
@@ -1513,6 +1498,21 @@
         <Define Name="SEMCO_DEMOD"/>
         <Define Name="SIMULATE"/>
         <Define Name="TEST_LDPC_MAPPER"/>
+      </Config>
+    </FileSet>
+    <FileSet Name="ldpcDecoder" Type="BlockSrcs" RelSrcDir="$PSRCDIR/ldpcDecoder">
+      <File Path="$PSRCDIR/sources_1/ip/ldpcDecoder_16/ldpcDecoder.xci">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <Config>
+        <Option Name="TopModule" Val="ldpcDecoder"/>
+        <Option Name="VerilogDir" Val="$PPRDIR/."/>
+        <Option Name="UseBlackboxStub" Val="1"/>
+        <Define Name="SEMCO_DEMOD"/>
       </Config>
     </FileSet>
   </FileSets>
@@ -1713,7 +1713,9 @@
     </Run>
     <Run Id="ldpcDecoder_synth_1" Type="Ft3:Synth" SrcSet="ldpcDecoder" Part="xc7k160tfbg676-1" ConstrsSet="ldpcDecoder" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/ldpcDecoder_synth_1" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2016"/>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2016">
+          <Desc>Vivado Synthesis Defaults</Desc>
+        </StratHandle>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
@@ -2052,7 +2054,9 @@
     </Run>
     <Run Id="ldpcDecoder_impl_1" Type="Ft2:EntireDesign" Part="xc7k160tfbg676-1" ConstrsSet="ldpcDecoder" Description="Default settings for Implementation." SynthRun="ldpcDecoder_synth_1" IncludeInArchive="false">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2016"/>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2016">
+          <Desc>Default settings for Implementation.</Desc>
+        </StratHandle>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>

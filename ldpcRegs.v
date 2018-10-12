@@ -21,7 +21,10 @@ module ldpcRegs(
     output  reg         [2:0]   inverseMeanExponent,
     output  reg                 ldpcRun,
     output  reg         [15:0]  outputEnClkDiv,
-    output  reg                 invertData
+    output  reg                 invertData,
+    output  reg         [31:0]  dllCenterFreq,
+    output  reg         [4:0]   dllLoopGain,
+    output  reg         [7:0]   dllFeedbackDivider
 );
 
     always @(posedge busClk) begin
@@ -39,6 +42,12 @@ module ldpcRegs(
                 `LDPC_OUTPUT_CLK_DIV: begin
                     outputEnClkDiv[7:0] <= dataIn[7:0];
                 end
+                `LDPC_DLL_CENTER_FREQ: begin
+                    dllCenterFreq[7:0] <= dataIn[7:0];
+                end
+                `LDPC_DLL_GAINS: begin
+                    dllLoopGain <= dataIn[4:0];
+                end
                 default: ;
             endcase
         end
@@ -52,6 +61,9 @@ module ldpcRegs(
                 end
                 `LDPC_OUTPUT_CLK_DIV: begin
                     outputEnClkDiv[15:8] <= dataIn[15:8];
+                end
+                `LDPC_DLL_CENTER_FREQ: begin
+                    dllCenterFreq[15:8] <= dataIn[15:8];
                 end
                 default:  ;
             endcase
@@ -67,6 +79,12 @@ module ldpcRegs(
                 `LDPC_INVERSE_MEAN: begin
                     inverseMeanExponent <= dataIn[18:16];
                 end
+                `LDPC_DLL_CENTER_FREQ: begin
+                    dllCenterFreq[23:16] <= dataIn[23:16];
+                end
+                `LDPC_DLL_FDBK_DIV: begin
+                    dllFeedbackDivider <= dataIn[23:16];
+                end
                 default: ;
             endcase
         end
@@ -78,6 +96,9 @@ module ldpcRegs(
                 `LDPC_CONTROL:  begin
                     syncThreshold[10:8] <= dataIn[26:24];
                     ldpcRun <= dataIn[31];
+                end
+                `LDPC_DLL_CENTER_FREQ: begin
+                    dllCenterFreq[31:24] <= dataIn[31:24];
                 end
                 default: ;
             endcase
@@ -95,6 +116,11 @@ module ldpcRegs(
                 `LDPC_OUTPUT_CLK_DIV:   dataOut = {16'h0,outputEnClkDiv};
                 `LDPC_STATUS:           dataOut = {inSync,ldpcReady,14'h0,
                                                    6'b0,rotation,6'b0,syncState};
+                `LDPC_DLL_CENTER_FREQ:  dataOut = dllCenterFreq;
+                `LDPC_DLL_GAINS:        dataOut = {8'b0,dllFeedbackDivider,
+                                                   11'b0,dllLoopGain};
+                `LDPC_DLL_FDBK_DIV:     dataOut = {8'b0,dllFeedbackDivider,
+                                                   11'b0,dllLoopGain};
                 default:                dataOut = 32'h0;
             endcase
         end

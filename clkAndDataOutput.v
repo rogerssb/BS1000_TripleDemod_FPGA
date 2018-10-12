@@ -45,7 +45,6 @@ module clkAndDataOutput(
 
     // First stage attenuation using a Digital PLL
     wire    [7:0]   dllPhaseError;
-    wire    [31:0]  dllDout;
     digitalPLL dll(
         .clk(clk),
         .reset(clkReset),
@@ -53,6 +52,7 @@ module clkAndDataOutput(
         .loopGain(dllLoopGain),
         .feedbackDivider(dllFeedbackDivider),
         .referenceClkEn(clkEnIn),
+        .feedbackClkEn(),
         .dllOutputClk(dllOutputClk),
         .filteredRefClk(pllReferenceClk),
         .phaseError(dllPhaseError)

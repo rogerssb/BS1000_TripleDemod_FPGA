@@ -1,0 +1,57 @@
+<!DOCTYPE SilvacoProject>
+<project version="1" name="testLdpcMapper" >
+ <products>
+  <product name="SILOS" >
+   <settings>
+    <setting value="Silvaco4.14.3.R" name="Version" />
+    <setting value="N" name="VisualDebug" />
+    <setting value="search" name="SystaskSearchOrder" />
+   </settings>
+   <plusdefines>
+    <define name="SIMULATE" />
+    <define name="TEST_MODULE" />
+   </plusdefines>
+   <includedirs>
+    <directory name="." />
+   </includedirs>
+   <analyzer>
+    <settings>
+     <setting value="N" name="GotoSource" />
+     <setting value="145" name="C0Width" />
+     <setting value="75" name="C1Width" />
+     <setting value="188" name="C2Width" />
+    </settings>
+    <views>
+     <view value="0.0 ns,119336.9 ns,1631.4 ns,54733.4 ns,63624.6 ns" name="Last" />
+    </views>
+    <groups>
+     <group open="yes" name="New Group1" show="yes" >
+      <signals>
+       <signal name="reset" scope="test.mapper" />
+       <signal name="clkEn" scope="test.mapper" />
+       <signal name="clk" scope="test.mapper" />
+       <signal name="inverseMeanExponent[2:0]" scope="test.mapper" />
+       <signal name="dIn[17:0]" scope="test.mapper" />
+       <signal interpolate="Step" radix="Real" name="testInputReal" scope="test" />
+       <signal name="inverseMeanMantissa[15:0]" scope="test.mapper" />
+       <signal name="inverseProduct[35:0]" scope="test.mapper" />
+       <signal name="signBit" scope="test.mapper" />
+       <signal name="dataBits[2:0]" scope="test.mapper" />
+       <signal name="dOut[2:0]" scope="test.mapper" />
+       <signal interpolate="Step" radix="Real" name="testOutputReal" scope="test" />
+      </signals>
+     </group>
+    </groups>
+   </analyzer>
+   <sourcefiles>
+    <file name="ldpcDecisionMapper.v" />
+    <file name="mpy18x18WithCe.v" />
+   </sourcefiles>
+   <explorer>
+    <settings>
+     <setting value="test.testOutputReal" name="Scope" />
+    </settings>
+   </explorer>
+  </product>
+ </products>
+</project>
