@@ -20,6 +20,9 @@ module cmaRegs(
     input                       cs,
     input                       wr0, wr1, wr2, wr3,
     input                       wtOvf,
+    `ifdef ADD_CMA_DISPLAY
+    input               [15:0]  maxWeightMag,
+    `endif
     output  reg                 enableEqualizer,
     output  reg                 resetEqualizer,
     output  reg         [2:0]   eqStepSizeExponent,
@@ -63,7 +66,11 @@ module cmaRegs(
                 `EQ_CONTROL:        dataOut = {wtOvf,29'h0,resetEqualizer,enableEqualizer};
                 //`EQ_CONTROL:        dataOut = {30'h0,resetEqualizer,enableEqualizer};
                 `EQ_STEP_SIZE:      dataOut = {29'h0,eqStepSizeExponent};
+                `ifdef ADD_CMA_DISPLAY
+                `EQ_CMA_REFERENCE:  dataOut = {maxWeightMag,cmaReference};
+                `else
                 `EQ_CMA_REFERENCE:  dataOut = {16'h0,cmaReference};
+                `endif
                 default:            dataOut = 32'h0;
             endcase
         end

@@ -11,17 +11,17 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="156211800000fs"></ZoomStartTime>
-      <ZoomEndTime time="162781800001fs"></ZoomEndTime>
-      <Cursor1Time time="161686800000fs"></Cursor1Time>
+      <ZoomStartTime time="62425300000fs"></ZoomStartTime>
+      <ZoomEndTime time="129025300001fs"></ZoomEndTime>
+      <Cursor1Time time="117925300000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="198"></NameColumnWidth>
-      <ValueColumnWidth column_width="83"></ValueColumnWidth>
+      <ValueColumnWidth column_width="65"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="30" />
+   <WVObjectSize size="31" />
    <wave_markers>
-      <marker time="62434800000" label="" />
+      <marker time="35140000000" label="" />
    </wave_markers>
    <wvobject fp_name="/test/reset" type="logic">
       <obj_property name="ElementShortName">reset</obj_property>
@@ -321,6 +321,10 @@
       <wvobject fp_name="/test/demod/channelAGC/chAgcLoopFilter/zeroError" type="logic">
          <obj_property name="ElementShortName">zeroError</obj_property>
          <obj_property name="ObjectShortName">zeroError</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/demod/ddc/nbAgcGain" type="array">
+         <obj_property name="ElementShortName">nbAgcGain[20:0]</obj_property>
+         <obj_property name="ObjectShortName">nbAgcGain[20:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/test/demod/ddc/iAgc" type="array">
          <obj_property name="ElementShortName">iAgc[17:0]</obj_property>
@@ -731,9 +735,9 @@
          <obj_property name="ElementShortName">enableEqualizer</obj_property>
          <obj_property name="ObjectShortName">enableEqualizer</obj_property>
       </wvobject>
-      <wvobject fp_name="/test/demod/ddc/iOut" type="array">
-         <obj_property name="ElementShortName">iOut[17:0]</obj_property>
-         <obj_property name="ObjectShortName">iOut[17:0]</obj_property>
+      <wvobject fp_name="/test/demod/iDdc" type="array">
+         <obj_property name="ElementShortName">iDdc[17:0]</obj_property>
+         <obj_property name="ObjectShortName">iDdc[17:0]</obj_property>
          <obj_property name="Radix">REALRADIX</obj_property>
          <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
          <obj_property name="radix_fractionWidth">17</obj_property>
@@ -747,9 +751,9 @@
          <obj_property name="AnalogHorizLine">0.000000</obj_property>
          <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
       </wvobject>
-      <wvobject fp_name="/test/demod/ddc/qOut" type="array">
-         <obj_property name="ElementShortName">qOut[17:0]</obj_property>
-         <obj_property name="ObjectShortName">qOut[17:0]</obj_property>
+      <wvobject fp_name="/test/demod/qDdc" type="array">
+         <obj_property name="ElementShortName">qDdc[17:0]</obj_property>
+         <obj_property name="ObjectShortName">qDdc[17:0]</obj_property>
          <obj_property name="Radix">REALRADIX</obj_property>
          <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
          <obj_property name="radix_fractionWidth">17</obj_property>
@@ -767,7 +771,7 @@
          <obj_property name="ElementShortName">mag[17:0]</obj_property>
          <obj_property name="ObjectShortName">mag[17:0]</obj_property>
          <obj_property name="Radix">REALRADIX</obj_property>
-         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_realType">UNSIGNEDFIXEDPOINTRADIX</obj_property>
          <obj_property name="radix_fractionWidth">17</obj_property>
          <obj_property name="radix_otherWidth">0</obj_property>
          <obj_property name="CellHeight">100</obj_property>
@@ -778,6 +782,16 @@
          <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
          <obj_property name="AnalogHorizLine">0.000000</obj_property>
          <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/demod/cma/refLevel" type="array">
+         <obj_property name="DisplayName">label</obj_property>
+         <obj_property name="ElementShortName">refLevel[15:0]</obj_property>
+         <obj_property name="ObjectShortName">refLevel[15:0]</obj_property>
+         <obj_property name="label">{1&apos;b0,refLevel[15:0]}</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">UNSIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">16</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
       </wvobject>
       <wvobject fp_name="/test/demod/cma/diff" type="array">
          <obj_property name="ElementShortName">diff[17:0]</obj_property>
@@ -795,9 +809,13 @@
          <obj_property name="AnalogHorizLine">0.000000</obj_property>
          <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
       </wvobject>
-      <wvobject fp_name="/test/demod/iResampIn" type="array">
-         <obj_property name="ElementShortName">iResampIn[17:0]</obj_property>
-         <obj_property name="ObjectShortName">iResampIn[17:0]</obj_property>
+      <wvobject fp_name="/test/demod/cma/weightOverflow" type="logic">
+         <obj_property name="ElementShortName">weightOverflow</obj_property>
+         <obj_property name="ObjectShortName">weightOverflow</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/demod/cma/tap7/iWeight" type="array">
+         <obj_property name="ElementShortName">iWeight[17:0]</obj_property>
+         <obj_property name="ObjectShortName">iWeight[17:0]</obj_property>
          <obj_property name="Radix">REALRADIX</obj_property>
          <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
          <obj_property name="radix_fractionWidth">17</obj_property>
@@ -811,9 +829,221 @@
          <obj_property name="AnalogHorizLine">0.000000</obj_property>
          <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
       </wvobject>
-      <wvobject fp_name="/test/demod/qResampIn" type="array">
-         <obj_property name="ElementShortName">qResampIn[17:0]</obj_property>
-         <obj_property name="ObjectShortName">qResampIn[17:0]</obj_property>
+      <wvobject fp_name="/test/demod/cma/tap7/qWeight" type="array">
+         <obj_property name="ElementShortName">qWeight[17:0]</obj_property>
+         <obj_property name="ObjectShortName">qWeight[17:0]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">17</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+         <obj_property name="CellHeight">100</obj_property>
+         <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
+         <obj_property name="AnalogYRangeMin">0.000000</obj_property>
+         <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
+         <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
+         <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
+         <obj_property name="AnalogHorizLine">0.000000</obj_property>
+         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/demod/cma/iSum" type="array">
+         <obj_property name="ElementShortName">iSum[17:0]</obj_property>
+         <obj_property name="ObjectShortName">iSum[17:0]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">17</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+         <obj_property name="CellHeight">100</obj_property>
+         <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
+         <obj_property name="AnalogYRangeMin">0.000000</obj_property>
+         <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
+         <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
+         <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
+         <obj_property name="AnalogHorizLine">0.000000</obj_property>
+         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/demod/cma/iSumSqr" type="array">
+         <obj_property name="ElementShortName">iSumSqr[35:0]</obj_property>
+         <obj_property name="ObjectShortName">iSumSqr[35:0]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">34</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/demod/iCma" type="array">
+         <obj_property name="ElementShortName">iCma[17:0]</obj_property>
+         <obj_property name="ObjectShortName">iCma[17:0]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">17</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+         <obj_property name="CellHeight">100</obj_property>
+         <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
+         <obj_property name="AnalogYRangeMin">0.000000</obj_property>
+         <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
+         <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
+         <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
+         <obj_property name="AnalogHorizLine">0.000000</obj_property>
+         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/demod/qCma" type="array">
+         <obj_property name="ElementShortName">qCma[17:0]</obj_property>
+         <obj_property name="ObjectShortName">qCma[17:0]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">17</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+         <obj_property name="CellHeight">100</obj_property>
+         <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
+         <obj_property name="AnalogYRangeMin">0.000000</obj_property>
+         <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
+         <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
+         <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
+         <obj_property name="AnalogHorizLine">0.000000</obj_property>
+         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/demod/cma/video" type="array">
+         <obj_property name="ElementShortName">video[17:0]</obj_property>
+         <obj_property name="ObjectShortName">video[17:0]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">17</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+         <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
+         <obj_property name="AnalogYRangeMin">0.000000</obj_property>
+         <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
+         <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
+         <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
+         <obj_property name="AnalogHorizLine">0.000000</obj_property>
+         <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/demod/cma/video" type="array">
+         <obj_property name="ElementShortName">video[17:0]</obj_property>
+         <obj_property name="ObjectShortName">video[17:0]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">17</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+         <obj_property name="CellHeight">100</obj_property>
+         <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
+         <obj_property name="AnalogYRangeMin">0.000000</obj_property>
+         <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
+         <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
+         <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
+         <obj_property name="AnalogHorizLine">0.000000</obj_property>
+         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/dac2Interp/videoGain/dataBits" type="array">
+         <obj_property name="ElementShortName">dataBits[17:0]</obj_property>
+         <obj_property name="ObjectShortName">dataBits[17:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/dac2Interp/videoGain/shift" type="array">
+         <obj_property name="ElementShortName">shift[17:0]</obj_property>
+         <obj_property name="ObjectShortName">shift[17:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/dac2Interp/videoGain/mantissa" type="array">
+         <obj_property name="ElementShortName">mantissa[15:0]</obj_property>
+         <obj_property name="ObjectShortName">mantissa[15:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/dac2Interp/videoGain/scaledValue" type="array">
+         <obj_property name="ElementShortName">scaledValue[35:0]</obj_property>
+         <obj_property name="ObjectShortName">scaledValue[35:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/dac2Interp/dataOut" type="array">
+         <obj_property name="ElementShortName">dataOut[17:0]</obj_property>
+         <obj_property name="ObjectShortName">dataOut[17:0]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="group129" type="group">
+      <obj_property name="label">Video</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/test/interpReset" type="logic">
+         <obj_property name="ElementShortName">interpReset</obj_property>
+         <obj_property name="ObjectShortName">interpReset</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/dac0Interp/dataIn" type="array">
+         <obj_property name="ElementShortName">dataIn[17:0]</obj_property>
+         <obj_property name="ObjectShortName">dataIn[17:0]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">17</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+         <obj_property name="CellHeight">100</obj_property>
+         <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
+         <obj_property name="AnalogYRangeMin">0.000000</obj_property>
+         <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
+         <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
+         <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
+         <obj_property name="AnalogHorizLine">0.000000</obj_property>
+         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/dac0Interp/dataOut" type="array">
+         <obj_property name="ElementShortName">dataOut[17:0]</obj_property>
+         <obj_property name="ObjectShortName">dataOut[17:0]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">17</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+         <obj_property name="CellHeight">100</obj_property>
+         <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
+         <obj_property name="AnalogYRangeMin">0.000000</obj_property>
+         <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
+         <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
+         <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
+         <obj_property name="AnalogHorizLine">0.000000</obj_property>
+         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/dac1Interp/dataIn" type="array">
+         <obj_property name="ElementShortName">dataIn[17:0]</obj_property>
+         <obj_property name="ObjectShortName">dataIn[17:0]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">17</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+         <obj_property name="CellHeight">100</obj_property>
+         <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
+         <obj_property name="AnalogYRangeMin">0.000000</obj_property>
+         <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
+         <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
+         <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
+         <obj_property name="AnalogHorizLine">0.000000</obj_property>
+         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/dac1Interp/dataOut" type="array">
+         <obj_property name="ElementShortName">dataOut[17:0]</obj_property>
+         <obj_property name="ObjectShortName">dataOut[17:0]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">17</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+         <obj_property name="CellHeight">100</obj_property>
+         <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
+         <obj_property name="AnalogYRangeMin">0.000000</obj_property>
+         <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
+         <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
+         <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
+         <obj_property name="AnalogHorizLine">0.000000</obj_property>
+         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/dac2Interp/dataIn" type="array">
+         <obj_property name="ElementShortName">dataIn[17:0]</obj_property>
+         <obj_property name="ObjectShortName">dataIn[17:0]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">17</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+         <obj_property name="CellHeight">100</obj_property>
+         <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
+         <obj_property name="AnalogYRangeMin">0.000000</obj_property>
+         <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
+         <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
+         <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
+         <obj_property name="AnalogHorizLine">0.000000</obj_property>
+         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/dac2Interp/dataOut" type="array">
+         <obj_property name="ElementShortName">dataOut[17:0]</obj_property>
+         <obj_property name="ObjectShortName">dataOut[17:0]</obj_property>
          <obj_property name="Radix">REALRADIX</obj_property>
          <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
          <obj_property name="radix_fractionWidth">17</obj_property>

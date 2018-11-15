@@ -118,7 +118,7 @@ module semcoDemodTop (
 
 );
 
-    parameter VER_NUMBER = 16'd481;
+    parameter VER_NUMBER = 16'd484;
 
 
 //******************************************************************************
@@ -887,10 +887,12 @@ module semcoDemodTop (
                 interp0DataIn <= pcmDac0Data;
                 interp0ClkEn <= pcmDac0ClkEn;
             end
+            `ifdef ADD_MULTIH
             `DAC_SRC_MULTIHTRELLIS: begin
                 interp0DataIn <= multih0Out;
                 interp0ClkEn <= multih0ClkEn;
             end
+            `endif
             `ifdef ADD_LDPC
             `DAC_SRC_LDPC: begin
                 interp0DataIn <= ldpcDac0Data;
@@ -945,10 +947,12 @@ module semcoDemodTop (
                 interp1DataIn <= pcmDac1Data;
                 interp1ClkEn <= pcmDac1ClkEn;
             end
+            `ifdef ADD_MULTIH
             `DAC_SRC_MULTIHTRELLIS: begin
                 interp1DataIn <= multih1Out;
                 interp1ClkEn <= multih1ClkEn;
             end
+            `endif
             `ifdef ADD_LDPC
             `DAC_SRC_LDPC: begin
                 interp1DataIn <= ldpcDac1Data;
@@ -1003,10 +1007,12 @@ module semcoDemodTop (
                 interp2DataIn <= pcmDac2Data;
                 interp2ClkEn <= pcmDac2ClkEn;
             end
+            `ifdef ADD_MULTIH
             `DAC_SRC_MULTIHTRELLIS: begin
                 interp2DataIn <= multih2Out;
                 interp2ClkEn <= multih2ClkEn;
             end
+            `endif
             `ifdef ADD_LDPC
             `DAC_SRC_LDPC: begin
                 interp2DataIn <= ldpcDac2Data;

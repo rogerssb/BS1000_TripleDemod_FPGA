@@ -8,29 +8,25 @@ derivative rights in exchange for negotiated compensation.
 
 `timescale 1ns/100ps
 module cmaTap (
-    clk, // input
-    clkEn, // input
-    reset, // input
-    wtUpdate, // input
-    wtReset, // input
-    iIn, // input [17 : 0]
-    qIn, // input [17 : 0]
-    iInDelay, // input [17 : 0]
-    qInDelay, // input [17 : 0]
-    iError, // input [17 : 0]
-    qError, // input [17 : 0]
-    wtOvf,   // output
-    iOut, // output [17 : 0]
-    qOut); // output [17 : 0]
+    input                       clk,
+    input                       clkEn,
+    input                       reset,
+    input                       wtUpdate,
+    input                       wtReset,
+    input       signed  [17:0]  iIn,
+    input       signed  [17:0]  qIn,
+    input       signed  [17:0]  iInDelay,
+    input       signed  [17:0]  qInDelay,
+    input       signed  [17:0]  iError,
+    input       signed  [17:0]  qError,
+    output  reg                 wtOvf,
+    output  reg signed  [17:0]  iWeight,qWeight,
+    output      signed  [17:0]  iOut,
+    output      signed  [17:0]  qOut
+);
 
-input               clk,clkEn,reset,wtUpdate,wtReset;
-input signed [17:0] iIn,qIn;
-input signed [17:0] iInDelay,qInDelay;
-input signed [17:0] iError,qError;
-output              wtOvf;
-output [17:0]       iOut,qOut;
+parameter initWeight = 17'h0;
 
-parameter initWeight = "";
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 function chkOvf;
     input [19:0] in;
@@ -76,8 +72,8 @@ endfunction
 // tapReal = xReal*wReal - xImag*wImag;
 // tapImag = xReal*wImag + xImag*wReal;
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-reg signed [17:0] iWeight,qWeight;
 cmpy18WithCePL1 cmpy(
+//cmpy18Times8WithCePL1 cmpy(
     .clk(clk),
     .clkEn(clkEn),
     .reset(reset),
@@ -128,25 +124,27 @@ multiplier #(.AWIDTH(10), .BWIDTH(10), .PLSTAGES(0)) inst_4(
     .p(p4)
 );
 
-wire [19 : 0] iWeightWire = {{2{iWeight[17]}},iWeight} + {{2{p1[18]}},p1[18:1]} + {{2{p2[18]}},p2[18:1]};
-wire [19 : 0] qWeightWire = {{2{qWeight[17]}},qWeight} - {{2{p3[18]}},p3[18:1]} + {{2{p4[18]}},p4[18:1]};
+//wire [19 : 0] iWeightWire = {{2{iWeight[17]}},iWeight} + {{2{p1[18]}},p1[18:1]} + {{2{p2[18]}},p2[18:1]};
+//wire [19 : 0] qWeightWire = {{2{qWeight[17]}},qWeight} - {{2{p3[18]}},p3[18:1]} + {{2{p4[18]}},p4[18:1]};
+wire [19 : 0] iWeightWire = {{2{iWeight[17]}},iWeight} + {{1{p1[19]}},p1[19:1]} + {{1{p2[19]}},p2[19:1]};
+wire [19 : 0] qWeightWire = {{2{qWeight[17]}},qWeight} - {{1{p3[19]}},p3[19:1]} + {{1{p4[19]}},p4[19:1]};
 
-reg  wtOvf;
-always @(posedge clk) begin
-    if (reset || wtReset) begin
-        iWeight <= initWeight;
-        qWeight <= 0;
-        wtOvf <= 1'b0;
-        end
-    else if (clkEn) begin
-        wtOvf <= chkOvf(iWeightWire) || chkOvf(qWeightWire);
-        if (chkOvf(iWeightWire) || chkOvf(qWeightWire)) begin
+    always @(posedge clk) begin
+        if (reset || wtReset) begin
             iWeight <= initWeight;
             qWeight <= 0;
+            wtOvf <= 1'b0;
         end
-        else if (wtUpdate) begin
-            iWeight <= limitAdd3(iWeightWire);
-            qWeight <= limitAdd3(qWeightWire);
+        else if (clkEn) begin
+            wtOvf <= chkOvf(iWeightWire) || chkOvf(qWeightWire);
+            //if (chkOvf(iWeightWire) || chkOvf(qWeightWire)) begin
+            //    iWeight <= initWeight;
+            //    qWeight <= 0;
+            //end
+            //else if (wtUpdate) begin
+            if (wtUpdate) begin
+                iWeight <= limitAdd3(iWeightWire);
+                qWeight <= limitAdd3(qWeightWire);
             end
         end
     end

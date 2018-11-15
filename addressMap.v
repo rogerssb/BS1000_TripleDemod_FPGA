@@ -41,8 +41,8 @@
 `define USE_DDC_FIR
 //`define ADD_DESPREADER
 //`define ADD_SCPATH
-//`define ADD_CMA
-`define ADD_LDPC
+`define ADD_CMA
+//`define ADD_LDPC
 //`define ADD_DQM
 `define ADD_MULTIH
 `define ADD_SUPERBAUD_TED
@@ -50,6 +50,10 @@
 `define EMBED_MULTIH_CARRIER_LOOP
 `endif
 `define ADD_SPI_GATEWAY
+`endif
+
+`ifdef ADD_CMA
+    `define ADD_CMA_DISPLAY
 `endif
 
 `ifdef BITSYNC_BERT

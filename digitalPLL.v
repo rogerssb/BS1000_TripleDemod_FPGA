@@ -183,9 +183,9 @@ module digitalPLL(
                 phaseError <= phaseError + 1;
             end
             `else
-            if ( !phaseError[7] || (phaseError[7] && (phaseError > 8'h81) ) ) begin
+            //if ( !phaseError[7] || (phaseError[7] && (phaseError > 8'h81) ) ) begin
                 phaseError <= phaseError - 1;
-            end
+            //end
             `endif
         end
         else if (feedbackClkEn & !referenceClkEn) begin
@@ -194,9 +194,9 @@ module digitalPLL(
                 phaseError <= phaseError - 1;
             end
             `else
-            if ( phaseError[7] || (!phaseError[7] && (phaseError < 8'h7f) ) ) begin
+            //if ( phaseError[7] || (!phaseError[7] && (phaseError < 8'h7f) ) ) begin
                 phaseError <= phaseError + 1;
-            end
+            //end
             `endif
         end
     end

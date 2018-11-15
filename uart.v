@@ -36,17 +36,19 @@ always @(posedge busClk) begin
     if (uartSpace & wr0) begin
         casex (addr)
             `UART_BAUD_DIV: baudDiv[7:0] = dataIn[7:0];
-            endcase
-        end
+            default: ;
+        endcase
     end
+end
 
 always @(posedge busClk) begin
     if (uartSpace & wr1) begin
         casex (addr)
             `UART_BAUD_DIV: baudDiv[15:8] = dataIn[15:8];
-            endcase
-        end
+            default: ;
+        endcase
     end
+end
 
 reg [31:0]dataOut;
 always @* begin
@@ -54,12 +56,13 @@ always @* begin
         casex (addr)
             `UART_BAUD_DIV:     dataOut = {16'b0,baudDiv};
             default:            dataOut = 32'h0;
-            endcase
-        end
+        endcase
+    end
     else begin
         dataOut = 32'hx;
-        end
     end
+end
+
 endmodule
 
 

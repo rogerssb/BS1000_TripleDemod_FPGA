@@ -1,7 +1,7 @@
 /******************************************************************************
 Copyright 2008-2015 Koos Technical Services, Inc. All Rights Reserved
 
-This source code is the Intellectual Property of Koos Technical Services,Inc. 
+This source code is the Intellectual Property of Koos Technical Services,Inc.
 (KTS) and is provided under a License Agreement which protects KTS' ownership and
 derivative rights in exchange for negotiated compensation.
 ******************************************************************************/
@@ -24,7 +24,7 @@ module variableGain (
     reg signed  [17:0]  shift;
     always @(posedge clk) begin
         if (clkEn) begin
-            case (exponent) 
+            case (exponent)
                  0: dataBits <= $signed(din[47:30]);
                  1: dataBits <= $signed(din[46:29]);
                  2: dataBits <= $signed(din[45:28]);
@@ -144,7 +144,7 @@ module variableGain (
                     satPos <= !sign && (din[46:27] !=  20'h0);
                     satNeg <=  sign && (din[46:27] !=  20'hfffff);
                     end
-               21: begin                                   
+               21: begin
                     satPos <= !sign && (din[46:26] !=  21'h0);
                     satNeg <=  sign && (din[46:26] !=  21'h1fffff);
                     end
@@ -228,19 +228,36 @@ module variableGain (
         );
     `endif
 
+    //`define VGAIN_NEW_SCALING
+    `ifdef VGAIN_NEW_SCALING
     always @(posedge clk) begin
         if (clkEn) begin
-            if (scaledValue[35] && (scaledValue[34:33] != 2'b11)) begin
+            if (scaledValue[35] && !scaledValue[34]) begin
                 dout <= $signed(18'h20001);
             end
-            else if (!scaledValue[35] && (scaledValue[34:33] != 2'b00)) begin
+            else if (!scaledValue[35] && scaledValue[34]) begin
                 dout <= $signed(18'h1ffff);
             end
             else begin
-                dout <= $signed(scaledValue[33:16]);
+                dout <= $signed(scaledValue[34:17]);
             end
         end
     end
+    `else
+    always @(posedge clk) begin
+        if (clkEn) begin
+            if (scaledValue[35] && (scaledValue[34:33] != 2'b11)) begin
+                dout <= 18'h20001;
+            end
+            else if (!scaledValue[35] && (scaledValue[34:33] != 2'b00)) begin
+                dout <= 18'h1ffff;
+            end
+            else begin
+                dout <= scaledValue[33:16];
+            end
+        end
+    end
+    `endif
 
 
 

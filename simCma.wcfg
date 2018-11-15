@@ -11,15 +11,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="3831666666fs"></ZoomStartTime>
-      <ZoomEndTime time="5233666667fs"></ZoomEndTime>
-      <Cursor1Time time="5000000000fs"></Cursor1Time>
+      <ZoomStartTime time="1198153743fs"></ZoomStartTime>
+      <ZoomEndTime time="3360369252fs"></ZoomEndTime>
+      <Cursor1Time time="3000000000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="175"></NameColumnWidth>
-      <ValueColumnWidth column_width="116"></ValueColumnWidth>
+      <ValueColumnWidth column_width="110"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="36" />
+   <WVObjectSize size="43" />
    <wave_markers>
       <marker time="1549500000" label="" />
    </wave_markers>
@@ -74,26 +74,6 @@
    <wvobject fp_name="/test/C" type="array">
       <obj_property name="ElementShortName">C[31:0]</obj_property>
       <obj_property name="ObjectShortName">C[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/test/cma/tap2/iIn" type="array">
-      <obj_property name="ElementShortName">iIn[17:0]</obj_property>
-      <obj_property name="ObjectShortName">iIn[17:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/test/cma/tap2/iInDelay" type="array">
-      <obj_property name="ElementShortName">iInDelay[17:0]</obj_property>
-      <obj_property name="ObjectShortName">iInDelay[17:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/test/cma/tap2/iOut" type="array">
-      <obj_property name="ElementShortName">iOut[17:0]</obj_property>
-      <obj_property name="ObjectShortName">iOut[17:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/test/cma/tap2/qIn" type="array">
-      <obj_property name="ElementShortName">qIn[17:0]</obj_property>
-      <obj_property name="ObjectShortName">qIn[17:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/test/cma/tap2/qOut" type="array">
-      <obj_property name="ElementShortName">qOut[17:0]</obj_property>
-      <obj_property name="ObjectShortName">qOut[17:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/test/cma/iSum" type="array">
       <obj_property name="ElementShortName">iSum[17:0]</obj_property>
@@ -167,24 +147,72 @@
       <obj_property name="ElementShortName">iErrMult[35:0]</obj_property>
       <obj_property name="ObjectShortName">iErrMult[35:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/test/cma/tap2/iError" type="array">
+   <wvobject fp_name="/test/cma/tap7/wtUpdate" type="logic">
+      <obj_property name="ElementShortName">wtUpdate</obj_property>
+      <obj_property name="ObjectShortName">wtUpdate</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/cma/tap7/wtReset" type="logic">
+      <obj_property name="ElementShortName">wtReset</obj_property>
+      <obj_property name="ObjectShortName">wtReset</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/cma/tap7/iIn" type="array">
+      <obj_property name="ElementShortName">iIn[17:0]</obj_property>
+      <obj_property name="ObjectShortName">iIn[17:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/cma/tap7/qIn" type="array">
+      <obj_property name="ElementShortName">qIn[17:0]</obj_property>
+      <obj_property name="ObjectShortName">qIn[17:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/cma/tap7/iInDelay" type="array">
+      <obj_property name="ElementShortName">iInDelay[17:0]</obj_property>
+      <obj_property name="ObjectShortName">iInDelay[17:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/cma/tap7/qInDelay" type="array">
+      <obj_property name="ElementShortName">qInDelay[17:0]</obj_property>
+      <obj_property name="ObjectShortName">qInDelay[17:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/cma/tap7/iError" type="array">
       <obj_property name="ElementShortName">iError[17:0]</obj_property>
       <obj_property name="ObjectShortName">iError[17:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/test/cma/tap2/iWeight" type="array">
-      <obj_property name="ElementShortName">iWeight[17:0]</obj_property>
-      <obj_property name="ObjectShortName">iWeight[17:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/test/cma/tap2/qError" type="array">
+   <wvobject fp_name="/test/cma/tap7/qError" type="array">
       <obj_property name="ElementShortName">qError[17:0]</obj_property>
       <obj_property name="ObjectShortName">qError[17:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/test/cma/tap2/qWeight" type="array">
+   <wvobject fp_name="/test/cma/tap7/p1" type="array">
+      <obj_property name="ElementShortName">p1[19:0]</obj_property>
+      <obj_property name="ObjectShortName">p1[19:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/cma/tap7/p2" type="array">
+      <obj_property name="ElementShortName">p2[19:0]</obj_property>
+      <obj_property name="ObjectShortName">p2[19:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/cma/tap7/p3" type="array">
+      <obj_property name="ElementShortName">p3[19:0]</obj_property>
+      <obj_property name="ObjectShortName">p3[19:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/cma/tap7/p4" type="array">
+      <obj_property name="ElementShortName">p4[19:0]</obj_property>
+      <obj_property name="ObjectShortName">p4[19:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/cma/tap7/wtOvf" type="logic">
+      <obj_property name="ElementShortName">wtOvf</obj_property>
+      <obj_property name="ObjectShortName">wtOvf</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/cma/tap7/iWeight" type="array">
+      <obj_property name="ElementShortName">iWeight[17:0]</obj_property>
+      <obj_property name="ObjectShortName">iWeight[17:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/cma/tap7/qWeight" type="array">
       <obj_property name="ElementShortName">qWeight[17:0]</obj_property>
       <obj_property name="ObjectShortName">qWeight[17:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/test/cma/tap2/wtUpdate" type="logic">
-      <obj_property name="ElementShortName">wtUpdate</obj_property>
-      <obj_property name="ObjectShortName">wtUpdate</obj_property>
+   <wvobject fp_name="/test/cma/tap7/iOut" type="array">
+      <obj_property name="ElementShortName">iOut[17:0]</obj_property>
+      <obj_property name="ObjectShortName">iOut[17:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/cma/tap7/qOut" type="array">
+      <obj_property name="ElementShortName">qOut[17:0]</obj_property>
+      <obj_property name="ObjectShortName">qOut[17:0]</obj_property>
    </wvobject>
 </wave_config>

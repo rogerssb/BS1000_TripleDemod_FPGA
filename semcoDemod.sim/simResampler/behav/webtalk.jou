@@ -1,0 +1,12 @@
+#-----------------------------------------------------------
+# Webtalk v2016.4 (64-bit)
+# SW Build 1733598 on Wed Dec 14 22:35:39 MST 2016
+# IP Build 1731160 on Wed Dec 14 23:47:21 MST 2016
+# Start of session at: Fri Feb 02 15:27:27 2018
+# Process ID: 33504
+# Current directory: C:/modem/vivado/semcoDemod.sim/simResampler/behav
+# Command line: wbtcv.exe -mode batch -source C:/modem/vivado/semcoDemod.sim/simResampler/behav/xsim.dir/test_behav/webtalk/xsim_webtalk.tcl -notrace
+# Log file: C:/modem/vivado/semcoDemod.sim/simResampler/behav/webtalk.log
+# Journal file: C:/modem/vivado/semcoDemod.sim/simResampler/behav\webtalk.jou
+#-----------------------------------------------------------
+source C:/modem/vivado/semcoDemod.sim/simResampler/behav/xsim.dir/test_behav/webtalk/xsim_webtalk.tcl -notrace

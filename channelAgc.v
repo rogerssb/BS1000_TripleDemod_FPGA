@@ -105,6 +105,7 @@ module channelAGC(
     );
 
     wire    [16:0]  sum = maxTerm[34:18] + minTerm[34:18];
+    //wire    [16:0]  sum = maxTerm[35:19] + minTerm[35:19];
     reg     [15:0]  rxLevel;
     always @(posedge clk) begin
         if (clkEn) begin

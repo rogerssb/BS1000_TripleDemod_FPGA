@@ -1,0 +1,9 @@
+Vivado Simulator 2016.4
+Time resolution is 1 ps
+Block Memory Generator module test.ldpc.ldpcd.inst.design_2_i.decode_data_0.inst.native_mem_module.blk_mem_gen_v8_3_4_inst is using a behavioral model for simulation which will not precisely model memory collision behavior.
+Block Memory Generator module test.ldpc.ldpcd.inst.design_2_i.decode_data_1.inst.native_mem_module.blk_mem_gen_v8_3_4_inst is using a behavioral model for simulation which will not precisely model memory collision behavior.
+Block Memory Generator module test.ldpc.ldpcd.inst.design_2_i.etaIndexM.inst.native_mem_module.blk_mem_gen_v8_3_4_inst is using a behavioral model for simulation which will not precisely model memory collision behavior.
+Block Memory Generator module test.ldpc.ldpcd.inst.design_2_i.etaIndexN.inst.native_mem_module.blk_mem_gen_v8_3_4_inst is using a behavioral model for simulation which will not precisely model memory collision behavior.
+Block Memory Generator module test.ldpc.ldpcd.inst.design_2_i.lambdaIndexM.inst.native_mem_module.blk_mem_gen_v8_3_4_inst is using a behavioral model for simulation which will not precisely model memory collision behavior.
+Block Memory Generator module test.ldpc.ldpcd.inst.design_2_i.raw_data_0.inst.native_mem_module.blk_mem_gen_v8_3_4_inst is using a behavioral model for simulation which will not precisely model memory collision behavior.
+Block Memory Generator module test.ldpc.ldpcd.inst.design_2_i.raw_data_1.inst.native_mem_module.blk_mem_gen_v8_3_4_inst is using a behavioral model for simulation which will not precisely model memory collision behavior.

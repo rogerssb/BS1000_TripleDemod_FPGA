@@ -1,4 +1,6 @@
 `timescale 1ns/1ps
+`include "addressMap.v"
+
 module acsMuxMpy (
     decayFactor,
     symEnEven,

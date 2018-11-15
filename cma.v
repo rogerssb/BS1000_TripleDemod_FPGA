@@ -7,18 +7,24 @@ derivative rights in exchange for negotiated compensation.
 ******************************************************************************/
 
 `timescale 1ns/100ps
+`include "addressMap.v"
+
 module cma(
-    input                   clk,
-    input                   clkEn,
-    input                   reset,
-    input                   wtReset,
-    input           [2:0]   stepExpo,
-    input           [15:0]  refLevel,
-    input   signed  [17:0]  iIn,
-    input   signed  [17:0]  qIn,
-    output                  weightOverflow,
-    output  signed  [17:0]  iOut,
-    output  signed  [17:0]  qOut
+    input                       clk,
+    input                      clkEn,
+    input                       reset,
+    input                       wtReset,
+    input               [2:0]   stepExpo,
+    input               [15:0]  refLevel,
+    input       signed  [17:0]  iIn,
+    input       signed  [17:0]  qIn,
+    output                      weightOverflow,
+    `ifdef ADD_CMA_DISPLAY
+    output  reg         [15:0]  maxMag,
+    output  reg signed  [17:0]  video,
+    `endif
+    output      signed  [17:0]  iOut,
+    output      signed  [17:0]  qOut
 );
 
 parameter pipeDelay = 5;
@@ -84,7 +90,7 @@ always @(posedge clk) begin
         iSR[27] <= iSR[26]; qSR[27] <= qSR[26]; iSR[28] <= iSR[27]; qSR[28] <= qSR[27];
         iSR[29] <= iSR[28]; qSR[29] <= qSR[28]; iSR[30] <= iSR[29]; qSR[30] <= qSR[29];
         iSR[31] <= iSR[30]; qSR[31] <= qSR[30]; iSR[32] <= iSR[31]; qSR[32] <= qSR[31];
-                iSR[33] <= iSR[32]; qSR[33] <= qSR[32];
+        iSR[33] <= iSR[32]; qSR[33] <= qSR[32];
         end
     end
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -95,52 +101,248 @@ wire        [15 : 0]    wtOvf;
 reg signed  [17 : 0]    iError,qError;
 wire signed [17 : 0]    iTap0,iTap1,iTap2,iTap3,iTap4,iTap5,iTap6,iTap7,iTap8,iTap9,iTap10,iTap11,iTap12,iTap13,iTap14,iTap15,iTap16,iTap17,iTap18,iTap19,iTap20,iTap21,iTap22,iTap23,iTap24,iTap25,iTap26,iTap27,iTap28,iTap29;
 wire signed [17 : 0]    qTap0,qTap1,qTap2,qTap3,qTap4,qTap5,qTap6,qTap7,qTap8,qTap9,qTap10,qTap11,qTap12,qTap13,qTap14,qTap15,qTap16,qTap17,qTap18,qTap19,qTap20,qTap21,qTap22,qTap23,qTap24,qTap25,qTap26,qTap27,qTap28,qTap29;
+    wire    signed  [17:0]  iWeight [14:0];
+    wire    signed  [17:0]  qWeight [14:0];
 
-reg [2:0]updateCount;
-always @(posedge clk) begin
-    if (reset) begin
-        updateCount <= pipeDelay;
-        end
-    else if (clkEn) begin
-        if (updateCount == 3'h0) begin
+    reg [2:0]updateCount;
+    always @(posedge clk) begin
+        if (reset) begin
             updateCount <= pipeDelay;
+        end
+        else if (clkEn) begin
+            if (updateCount == 3'h0) begin
+                updateCount <= pipeDelay;
             end
+            else begin
+                updateCount <= updateCount - 3'h1;
+            end
+        end
+    end
+
+    reg wtUpdate;
+    always @ (posedge clk) begin
+        if (reset) begin
+            wtUpdate <= 0;
+        end
+        else if (clkEn) begin
+            wtUpdate <= updateCount == 3'b0;
+        end
+    end
+
+    cmaTap #(18'h00000) tap0(
+        .clk(clk), .clkEn(clkEn), .reset(reset),
+        .wtUpdate(wtUpdate), .wtReset(wtReset),
+        .iIn(iSR[0]),                   .qIn(qSR[0]),
+        .iInDelay(iSR[0+pipeDelay]),    .qInDelay(qSR[0+pipeDelay]),
+        .iError(iError),                .qError(qError),
+        .iOut(iTap0),                   .qOut(qTap0),
+        .iWeight(iWeight[0]),           .qWeight(qWeight[0]),
+        .wtOvf(wtOvf[0])
+    );
+    cmaTap #(18'h00000) tap1(
+        .clk(clk), .clkEn(clkEn), .reset(reset),
+        .wtUpdate(wtUpdate), .wtReset(wtReset),
+        .iIn(iSR[1]),                   .qIn(qSR[1]),
+        .iInDelay(iSR[1+pipeDelay]),    .qInDelay(qSR[1+pipeDelay]),
+        .iError(iError),                .qError(qError),
+        .iOut(iTap1),                   .qOut(qTap1),
+        .iWeight(iWeight[1]),           .qWeight(qWeight[1]),
+        .wtOvf(wtOvf[1])
+    );
+    cmaTap #(18'h00000) tap2(
+        .clk(clk), .clkEn(clkEn), .reset(reset),
+        .wtUpdate(wtUpdate), .wtReset(wtReset),
+        .iIn(iSR[2]),                   .qIn(qSR[2]),
+        .iInDelay(iSR[2+pipeDelay]),    .qInDelay(qSR[2+pipeDelay]),
+        .iError(iError),                .qError(qError),
+        .iOut(iTap2),                   .qOut(qTap2),
+        .iWeight(iWeight[2]),           .qWeight(qWeight[2]),
+        .wtOvf(wtOvf[2])
+    );
+    cmaTap #(18'h00000) tap3(
+        .clk(clk), .clkEn(clkEn), .reset(reset),
+        .wtUpdate(wtUpdate), .wtReset(wtReset),
+        .iIn(iSR[3]),                   .qIn(qSR[3]),
+        .iInDelay(iSR[3+pipeDelay]),    .qInDelay(qSR[3+pipeDelay]),
+        .iError(iError),                .qError(qError),
+        .iOut(iTap3),                   .qOut(qTap3),
+        .iWeight(iWeight[3]),           .qWeight(qWeight[3]),
+        .wtOvf(wtOvf[3])
+    );
+    cmaTap #(18'h00000) tap4(
+        .clk(clk), .clkEn(clkEn), .reset(reset),
+        .wtUpdate(wtUpdate), .wtReset(wtReset),
+        .iIn(iSR[4]),                   .qIn(qSR[4]),
+        .iInDelay(iSR[4+pipeDelay]),    .qInDelay(qSR[4+pipeDelay]),
+        .iError(iError),                .qError(qError),
+        .iOut(iTap4),                   .qOut(qTap4),
+        .iWeight(iWeight[4]),           .qWeight(qWeight[4]),
+        .wtOvf(wtOvf[4])
+    );
+    cmaTap #(18'h00000) tap5(
+        .clk(clk), .clkEn(clkEn), .reset(reset),
+        .wtUpdate(wtUpdate), .wtReset(wtReset),
+        .iIn(iSR[5]),                   .qIn(qSR[5]),
+        .iInDelay(iSR[5+pipeDelay]),    .qInDelay(qSR[5+pipeDelay]),
+        .iError(iError),                .qError(qError),
+        .iOut(iTap5),                   .qOut(qTap5),
+        .iWeight(iWeight[5]),           .qWeight(qWeight[5]),
+        .wtOvf(wtOvf[5])
+    );
+    cmaTap #(18'h00000) tap6(
+        .clk(clk), .clkEn(clkEn), .reset(reset),
+        .wtUpdate(wtUpdate), .wtReset(wtReset),
+        .iIn(iSR[6]),                   .qIn(qSR[6]),
+        .iInDelay(iSR[6+pipeDelay]),    .qInDelay(qSR[6+pipeDelay]),
+        .iError(iError),                .qError(qError),
+        .iOut(iTap6),                   .qOut(qTap6),
+        .iWeight(iWeight[6]),           .qWeight(qWeight[6]),
+        .wtOvf(wtOvf[6])
+    );
+    cmaTap #(18'h0ffff) tap7(
+        .clk(clk), .clkEn(clkEn), .reset(reset),
+        .wtUpdate(wtUpdate), .wtReset(wtReset),
+        .iIn(iSR[7]),                   .qIn(qSR[7]),
+        .iInDelay(iSR[7+pipeDelay]),    .qInDelay(qSR[7+pipeDelay]),
+        .iError(iError),                .qError(qError),
+        .iOut(iTap7),                   .qOut(qTap7),
+        .iWeight(iWeight[7]),           .qWeight(qWeight[7]),
+        .wtOvf(wtOvf[7])
+    );
+    cmaTap #(18'h00000) tap8(
+        .clk(clk), .clkEn(clkEn), .reset(reset),
+        .wtUpdate(wtUpdate), .wtReset(wtReset),
+        .iIn(iSR[8]),                   .qIn(qSR[8]),
+        .iInDelay(iSR[8+pipeDelay]),    .qInDelay(qSR[8+pipeDelay]),
+        .iError(iError),                .qError(qError),
+        .iOut(iTap8),                   .qOut(qTap8),
+        .iWeight(iWeight[8]),           .qWeight(qWeight[8]),
+        .wtOvf(wtOvf[8])
+    );
+    cmaTap #(18'h00000) tap9(
+        .clk(clk), .clkEn(clkEn), .reset(reset),
+        .wtUpdate(wtUpdate), .wtReset(wtReset),
+        .iIn(iSR[9]),                   .qIn(qSR[9]),
+        .iInDelay(iSR[9+pipeDelay]),    .qInDelay(qSR[9+pipeDelay]),
+        .iError(iError),                .qError(qError),
+        .iOut(iTap9),                   .qOut(qTap9),
+        .iWeight(iWeight[9]),           .qWeight(qWeight[9]),
+        .wtOvf(wtOvf[9])
+    );
+    cmaTap #(18'h00000) tap10(
+        .clk(clk), .clkEn(clkEn), .reset(reset),
+        .wtUpdate(wtUpdate), .wtReset(wtReset),
+        .iIn(iSR[10]),                   .qIn(qSR[10]),
+        .iInDelay(iSR[10+pipeDelay]),    .qInDelay(qSR[10+pipeDelay]),
+        .iError(iError),                .qError(qError),
+        .iOut(iTap10),                   .qOut(qTap10),
+        .iWeight(iWeight[10]),           .qWeight(qWeight[10]),
+        .wtOvf(wtOvf[10])
+    );
+    cmaTap #(18'h00000) tap11(
+        .clk(clk), .clkEn(clkEn), .reset(reset),
+        .wtUpdate(wtUpdate), .wtReset(wtReset),
+        .iIn(iSR[11]),                   .qIn(qSR[11]),
+        .iInDelay(iSR[11+pipeDelay]),    .qInDelay(qSR[11+pipeDelay]),
+        .iError(iError),                .qError(qError),
+        .iOut(iTap11),                   .qOut(qTap11),
+        .iWeight(iWeight[11]),           .qWeight(qWeight[11]),
+        .wtOvf(wtOvf[11])
+    );
+    cmaTap #(18'h00000) tap12(
+        .clk(clk), .clkEn(clkEn), .reset(reset),
+        .wtUpdate(wtUpdate), .wtReset(wtReset),
+        .iIn(iSR[12]),                   .qIn(qSR[12]),
+        .iInDelay(iSR[12+pipeDelay]),    .qInDelay(qSR[12+pipeDelay]),
+        .iError(iError),                .qError(qError),
+        .iOut(iTap12),                   .qOut(qTap12),
+        .iWeight(iWeight[12]),           .qWeight(qWeight[12]),
+        .wtOvf(wtOvf[12])
+    );
+    cmaTap #(18'h00000) tap13(
+        .clk(clk), .clkEn(clkEn), .reset(reset),
+        .wtUpdate(wtUpdate), .wtReset(wtReset),
+        .iIn(iSR[13]),                   .qIn(qSR[13]),
+        .iInDelay(iSR[13+pipeDelay]),    .qInDelay(qSR[13+pipeDelay]),
+        .iError(iError),                .qError(qError),
+        .iOut(iTap13),                   .qOut(qTap13),
+        .iWeight(iWeight[13]),           .qWeight(qWeight[13]),
+        .wtOvf(wtOvf[13])
+    );
+    cmaTap #(18'h00000) tap14(
+        .clk(clk), .clkEn(clkEn), .reset(reset),
+        .wtUpdate(wtUpdate), .wtReset(wtReset),
+        .iIn(iSR[14]),                   .qIn(qSR[14]),
+        .iInDelay(iSR[14+pipeDelay]),    .qInDelay(qSR[14+pipeDelay]),
+        .iError(iError),                .qError(qError),
+        .iOut(iTap14),                   .qOut(qTap14),
+        .iWeight(iWeight[14]),           .qWeight(qWeight[14]),
+        .wtOvf(wtOvf[14])
+    );
+    /*
+    cmaTap #(18'h00000) tap15(
+        .clk(clk), .clkEn(clkEn), .reset(reset),
+        .wtUpdate(wtUpdate), .wtReset(wtReset),
+        .iIn(iSR[15]),                   .qIn(qSR[15]),
+        .iInDelay(iSR[15+pipeDelay]),    .qInDelay(qSR[15+pipeDelay]),
+        .iError(iError),                .qError(qError),
+        .iOut(iTap15),                   .qOut(qTap15),
+        .iWeight(iWeight[15]),           .qWeight(qWeight[15]),
+        .wtOvf(wtOvf[15])
+    );
+    */
+
+    assign weightOverflow = wtOvf[ 0] | wtOvf[ 1] | wtOvf[ 2] | wtOvf[ 3]
+                          | wtOvf[ 4] | wtOvf[ 5] | wtOvf[ 6] | wtOvf[ 7]
+                          | wtOvf[ 8] | wtOvf[ 9] | wtOvf[10] | wtOvf[11]
+                          //| wtOvf[12] | wtOvf[13] | wtOvf[14] | wtOvf[15];
+                          | wtOvf[12] | wtOvf[13] | wtOvf[14];
+
+`ifdef ADD_CMA_DISPLAY
+//---------------------------- Weight Display ---------------------------------
+
+    reg         [3:0]   tapCount;
+    reg         [3:0]   delayCount;
+    wire        [15:0]  wtMag;
+    reg         [15:0]  wtMax;
+    reg signed  [17:0]  iMag,qMag;
+    always @(posedge clk) begin
+        if (reset) begin
+            tapCount <= 0;
+            delayCount <= 0;
+            maxMag <= 0;
+        end
         else begin
-            updateCount <= updateCount - 3'h1;
+            delayCount <= delayCount + 1;
+            if (delayCount == 0) begin
+                tapCount <= tapCount + 1;
+                iMag <= iWeight[tapCount];
+                qMag <= qWeight[tapCount];
+                //iMag <= iWeight[7];
+                //qMag <= qWeight[7];
+                if (tapCount == 2) begin
+                    video <= $signed(18'h20001);
+                    wtMax <= 0;
+                    maxMag <= wtMax;
+                end
+                else begin
+                    video <= $signed({1'b0,wtMag,1'b0});
+                    if (wtMax < wtMag) begin
+                        wtMax <= wtMag;
+                    end
+                end
             end
         end
     end
 
-reg wtUpdate;
-always @ (posedge clk) begin
-          if (reset) wtUpdate <= 0;
-          else if (clkEn) begin
-        wtUpdate <= updateCount == 3'b0;
-        end
-    end
+    cmagEstimate cmag(
+        .clk(clk), .reset(reset), .clkEn(delayCount == 0),
+        .iIn(iMag),.qIn(qMag),
+        .magnitude(wtMag)
+    );
+`endif  //ADD_CMA_DISPLAY
 
-cmaTap #(18'h00000) tap0(.iIn(iSR[0]),   .qIn(qSR[0]),  .iInDelay(iSR[0+pipeDelay]),  .qInDelay(qSR[0+pipeDelay]),  .iOut(iTap0),  .qOut(qTap0),  .clk(clk), .clkEn(clkEn), .reset(reset), .wtUpdate(wtUpdate), .wtReset(wtReset), .iError(iError), .qError(qError), .wtOvf(wtOvf[0]));
-cmaTap #(18'h00000) tap1(.iIn(iSR[1]),   .qIn(qSR[1]),  .iInDelay(iSR[1+pipeDelay]),  .qInDelay(qSR[1+pipeDelay]),  .iOut(iTap1),  .qOut(qTap1),  .clk(clk), .clkEn(clkEn), .reset(reset), .wtUpdate(wtUpdate), .wtReset(wtReset), .iError(iError), .qError(qError), .wtOvf(wtOvf[1]));
-cmaTap #(18'h00000) tap2(.iIn(iSR[2]),   .qIn(qSR[2]),  .iInDelay(iSR[2+pipeDelay]),  .qInDelay(qSR[2+pipeDelay]),  .iOut(iTap2),  .qOut(qTap2),  .clk(clk), .clkEn(clkEn), .reset(reset), .wtUpdate(wtUpdate), .wtReset(wtReset), .iError(iError), .qError(qError), .wtOvf(wtOvf[2]));
-cmaTap #(18'h00000) tap3(.iIn(iSR[3]),   .qIn(qSR[3]),  .iInDelay(iSR[3+pipeDelay]),  .qInDelay(qSR[3+pipeDelay]),  .iOut(iTap3),  .qOut(qTap3),  .clk(clk), .clkEn(clkEn), .reset(reset), .wtUpdate(wtUpdate), .wtReset(wtReset), .iError(iError), .qError(qError), .wtOvf(wtOvf[3]));
-cmaTap #(18'h00000) tap4(.iIn(iSR[4]),   .qIn(qSR[4]),  .iInDelay(iSR[4+pipeDelay]),  .qInDelay(qSR[4+pipeDelay]),  .iOut(iTap4),  .qOut(qTap4),  .clk(clk), .clkEn(clkEn), .reset(reset), .wtUpdate(wtUpdate), .wtReset(wtReset), .iError(iError), .qError(qError), .wtOvf(wtOvf[4]));
-cmaTap #(18'h00000) tap5(.iIn(iSR[5]),   .qIn(qSR[5]),  .iInDelay(iSR[5+pipeDelay]),  .qInDelay(qSR[5+pipeDelay]),  .iOut(iTap5),  .qOut(qTap5),  .clk(clk), .clkEn(clkEn), .reset(reset), .wtUpdate(wtUpdate), .wtReset(wtReset), .iError(iError), .qError(qError), .wtOvf(wtOvf[5]));
-cmaTap #(18'h00000) tap6(.iIn(iSR[6]),   .qIn(qSR[6]),  .iInDelay(iSR[6+pipeDelay]),  .qInDelay(qSR[6+pipeDelay]),  .iOut(iTap6),  .qOut(qTap6),  .clk(clk), .clkEn(clkEn), .reset(reset), .wtUpdate(wtUpdate), .wtReset(wtReset), .iError(iError), .qError(qError), .wtOvf(wtOvf[6]));
-cmaTap #(18'h1ffff) tap7(.iIn(iSR[7]),   .qIn(qSR[7]),  .iInDelay(iSR[7+pipeDelay]),  .qInDelay(qSR[7+pipeDelay]),  .iOut(iTap7),  .qOut(qTap7),  .clk(clk), .clkEn(clkEn), .reset(reset), .wtUpdate(wtUpdate), .wtReset(wtReset), .iError(iError), .qError(qError), .wtOvf(wtOvf[7]));
-cmaTap #(18'h00000) tap8(.iIn(iSR[8]),   .qIn(qSR[8]),  .iInDelay(iSR[8+pipeDelay]),  .qInDelay(qSR[8+pipeDelay]),  .iOut(iTap8),  .qOut(qTap8),  .clk(clk), .clkEn(clkEn), .reset(reset), .wtUpdate(wtUpdate), .wtReset(wtReset), .iError(iError), .qError(qError), .wtOvf(wtOvf[8]));
-cmaTap #(18'h00000) tap9(.iIn(iSR[9]),   .qIn(qSR[9]),  .iInDelay(iSR[9+pipeDelay]),  .qInDelay(qSR[9+pipeDelay]),  .iOut(iTap9),  .qOut(qTap9),  .clk(clk), .clkEn(clkEn), .reset(reset), .wtUpdate(wtUpdate), .wtReset(wtReset), .iError(iError), .qError(qError), .wtOvf(wtOvf[9]));
-cmaTap #(18'h00000) tap10(.iIn(iSR[10]), .qIn(qSR[10]), .iInDelay(iSR[10+pipeDelay]), .qInDelay(qSR[10+pipeDelay]), .iOut(iTap10), .qOut(qTap10), .clk(clk), .clkEn(clkEn), .reset(reset), .wtUpdate(wtUpdate), .wtReset(wtReset), .iError(iError), .qError(qError), .wtOvf(wtOvf[10]));
-cmaTap #(18'h00000) tap11(.iIn(iSR[11]), .qIn(qSR[11]), .iInDelay(iSR[11+pipeDelay]), .qInDelay(qSR[11+pipeDelay]), .iOut(iTap11), .qOut(qTap11), .clk(clk), .clkEn(clkEn), .reset(reset), .wtUpdate(wtUpdate), .wtReset(wtReset), .iError(iError), .qError(qError), .wtOvf(wtOvf[11]));
-cmaTap #(18'h00000) tap12(.iIn(iSR[12]), .qIn(qSR[12]), .iInDelay(iSR[12+pipeDelay]), .qInDelay(qSR[12+pipeDelay]), .iOut(iTap12), .qOut(qTap12), .clk(clk), .clkEn(clkEn), .reset(reset), .wtUpdate(wtUpdate), .wtReset(wtReset), .iError(iError), .qError(qError), .wtOvf(wtOvf[12]));
-cmaTap #(18'h00000) tap13(.iIn(iSR[13]), .qIn(qSR[13]), .iInDelay(iSR[13+pipeDelay]), .qInDelay(qSR[13+pipeDelay]), .iOut(iTap13), .qOut(qTap13), .clk(clk), .clkEn(clkEn), .reset(reset), .wtUpdate(wtUpdate), .wtReset(wtReset), .iError(iError), .qError(qError), .wtOvf(wtOvf[13]));
-cmaTap #(18'h00000) tap14(.iIn(iSR[14]), .qIn(qSR[14]), .iInDelay(iSR[14+pipeDelay]), .qInDelay(qSR[14+pipeDelay]), .iOut(iTap14), .qOut(qTap14), .clk(clk), .clkEn(clkEn), .reset(reset), .wtUpdate(wtUpdate), .wtReset(wtReset), .iError(iError), .qError(qError), .wtOvf(wtOvf[14]));
-cmaTap #(18'h00000) tap15(.iIn(iSR[15]), .qIn(qSR[15]), .iInDelay(iSR[15+pipeDelay]), .qInDelay(qSR[15+pipeDelay]), .iOut(iTap15), .qOut(qTap15), .clk(clk), .clkEn(clkEn), .reset(reset), .wtUpdate(wtUpdate), .wtReset(wtReset), .iError(iError), .qError(qError), .wtOvf(wtOvf[15]));
 
-assign weightOverflow = wtOvf[ 0] | wtOvf[ 1] | wtOvf[ 2] | wtOvf[ 3]
-                      | wtOvf[ 4] | wtOvf[ 5] | wtOvf[ 6] | wtOvf[ 7]
-                      | wtOvf[ 8] | wtOvf[ 9] | wtOvf[10] | wtOvf[11]
-                      //| wtOvf[12] | wtOvf[13] | wtOvf[14] | wtOvf[15];
-                      | wtOvf[12] | wtOvf[13] | wtOvf[14];
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 wire    signed  [17:0] iSum;
@@ -211,8 +413,8 @@ wire signed [35:0]qErrMult = $signed(qSum_reg) * $signed(diff_reg);
 reg [17:0]iErrStep,qErrStep;
 reg iSign,qSign;
 always @* begin
-    iSign = iErrMult[34];
-    qSign = qErrMult[34];
+    iSign = iErrMult[35];
+    qSign = qErrMult[35];
     case (stepExpo)
         3'b011: begin // 8.0
             casex ({iSign,iErrMult[34:31]})
@@ -378,13 +580,20 @@ module test;
         end
     end
 
+    // Pipeline delay through the CMA unit
+    parameter pipeDelay = 5;
+
     // Create an impulse to drive the filter with
     integer bitCount;
     reg     signed  [17:0]  iIn;
-    wire    signed  [17:0]  qIn = 18'h38000;
+    //wire    signed  [17:0]  qIn = 18'h38000;
+    wire    signed  [17:0]  qIn = 18'h0;
     always @(posedge clk) begin
+        if (reset) begin
+            bitCount <= pipeDelay-4;
+        end
         if (clkEn) begin
-            if (bitCount == 5) begin
+            if (bitCount == (pipeDelay)) begin
                 bitCount <= 0;
             end
             else begin
@@ -400,7 +609,7 @@ module test;
     end
 
 reg     signed  [2:0]   stepSize;
-cma cma(
+cma #(.pipeDelay(pipeDelay)) cma(
     .clk(clk),
     .clkEn(clkEn),
     .reset(reset),

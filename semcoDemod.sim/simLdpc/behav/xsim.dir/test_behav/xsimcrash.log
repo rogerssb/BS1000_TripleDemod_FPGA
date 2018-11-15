@@ -1,0 +1,41 @@
+Unable to capture context for thread 21216 in process 19792, can not generate back trace
+Unable to capture context for thread 17912 in process 19792, can not generate back trace
+Unable to capture context for thread 20100 in process 19792, can not generate back trace
+Exception at PC 0x000007FE96CBBB93
+Printing stacktrace...
+
+Unable to capture context for thread 20100 in process 19792, can not generate back trace
+Exception at PC 0x000007FEFCCEBDED
+Exception at PC 0x000007FEFCCEBDED
+Exception at PC 0x000007FEFCCEBDED
+Exception at PC 0x000007FEFCCEBDED
+Exception at PC 0x000007FEFCCEBDED
+Exception at PC 0x000007FEFCCEBDED
+[0]  [0x000007FE96CBBB93]
+[1]  [0x000007FE96CBBB93]
+[2]  [0x000007FE96CBB4A1]
+[3]  [0x000007FE96CBB3EF]
+[4]  [0x000007FE96CA19FE]
+[5]  [0x000007FE96CA0ED1]
+[6]  [0x000007FE96CA0D76]
+[7]  [0x000007FE96C479F6]
+[8]  [0x000007FE96C37AFB]
+[9]  [0x000007FE96D5E90A]
+[10]  [0x000007FE96D79F87]
+[11]  [0x000007FE96D7A05F]
+[12] (BaseThreadInitThunk+0xd) [0x00000000770159CD]
+[13] (RtlUserThreadStart+0x1d) [0x000000007717385D]
+Done
+Exception at PC 0x000007FEFCCEBDED
+Exception at PC 0x000007FEFCCEBDED
+Exception at PC 0x000007FEFCCEBDED
+Exception at PC 0x000007FEFCCEBDED
+Exception at PC 0x000007FEFCCEBDED
+Exception at PC 0x000007FEFCCEBDED
+Exception at PC 0x000007FEFCCEBDED
+Exception at PC 0x000007FEFCCEBDED
+Exception at PC 0x000007FEFCCEBDED
+Exception at PC 0x000007FEFCCEBDED
+Exception at PC 0x000007FEFCCEBDED
+Exception at PC 0x000007FEFCCEBDED
+Exception at PC 0x000007FEFCCEBDED

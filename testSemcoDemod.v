@@ -26,6 +26,9 @@ module test;
     reg     reset;
     initial reset = 0;
 
+    reg     interpReset;
+    initial interpReset = 0;
+
     // Create the clocks
     reg     clk;
     initial clk = 1;
@@ -83,6 +86,9 @@ module test;
             end
         end
     end
+    real                    ifSampleScaled;
+    real                    sampleScaleFactor;
+    initial                 sampleScaleFactor = 0.25;
     reg     signed  [17:0]  ifSample;
     initial                 ifSample = 0;
     always @(posedge clk) begin
@@ -90,14 +96,15 @@ module test;
             ifSample <= 0;
         end
         else if (clkEnable) begin
-            if (ifSampleFloat >= 1.0) begin
+            ifSampleScaled <= ifSampleFloat * sampleScaleFactor;
+            if (ifSampleScaled >= 1.0) begin
                 ifSample <= $signed(18'h1ffff);
             end
-            else if (ifSampleFloat <= -1.0) begin
+            else if (ifSampleScaled <= -1.0) begin
                 ifSample <= $signed(18'h20001);
             end
             else begin
-                ifSample <= $rtoi((2**17)*ifSampleFloat);
+                ifSample <= $rtoi((2**17)*ifSampleScaled);
             end
         end
     end
@@ -355,17 +362,23 @@ module test;
         write32(createAddress(`CHAGCSPACE,`ALF_LLIMIT),32'h00000000);       // AGC Lower limit
 
         // Set the DAC interpolator gains
-        write32(createAddress(`DEMODSPACE, `DEMOD_DACSELECT), {12'h0,`DAC_FREQ,
+        write32(createAddress(`DEMODSPACE, `DEMOD_DACSELECT), {12'h0,`DAC_MAG,
                                                                4'h0,`DAC_Q,
                                                                4'h0,`DAC_I});
-        write32(createAddress(`INTERP0SPACE, `INTERP_CONTROL),0);
-        write32(createAddress(`INTERP0SPACE, `INTERP_CIC_EXPONENT), 8);
+        write16(createAddress(`INTERP0SPACE, `INTERP_CONTROL),16'h8);
+        write16(createAddress(`INTERP0SPACE, `INTERP_GAIN_MANTISSA),16'hffff);
+        write16(createAddress(`INTERP0SPACE, `INTERP_GAIN_EXPONENT),16'h10);
+        write16(createAddress(`INTERP0SPACE, `INTERP_CIC_EXPONENT), 16'd6);
         write32(createAddress(`INTERP0SPACE, `INTERP_CIC_MANTISSA), 32'h00012000);
-        write32(createAddress(`INTERP1SPACE, `INTERP_CONTROL),0);
-        write32(createAddress(`INTERP1SPACE, `INTERP_CIC_EXPONENT), 8);
+        write16(createAddress(`INTERP1SPACE, `INTERP_CONTROL),16'h8);
+        write16(createAddress(`INTERP1SPACE, `INTERP_GAIN_MANTISSA),16'hffff);
+        write16(createAddress(`INTERP1SPACE, `INTERP_GAIN_EXPONENT),16'h10);
+        write16(createAddress(`INTERP1SPACE, `INTERP_CIC_EXPONENT), 16'd6);
         write32(createAddress(`INTERP1SPACE, `INTERP_CIC_MANTISSA), 32'h00012000);
-        write32(createAddress(`INTERP2SPACE, `INTERP_CONTROL),1);
-        write32(createAddress(`INTERP2SPACE, `INTERP_CIC_EXPONENT), 8);
+        write16(createAddress(`INTERP2SPACE, `INTERP_CONTROL),16'h9);
+        write16(createAddress(`INTERP2SPACE, `INTERP_GAIN_MANTISSA),16'hffff);
+        write16(createAddress(`INTERP2SPACE, `INTERP_GAIN_EXPONENT),16'h10);
+        write16(createAddress(`INTERP2SPACE, `INTERP_CIC_EXPONENT), 16'd8);
         write32(createAddress(`INTERP2SPACE, `INTERP_CIC_MANTISSA), 32'h00012000);
 
         `ifdef ADD_LDPC
@@ -387,8 +400,8 @@ module test;
         `endif
 
         `ifdef TEST_CMA
-        write32(createAddress(`EQUALIZERSPACE, `EQ_STEP_SIZE),32'h0000_0006);
-        write32(createAddress(`EQUALIZERSPACE, `EQ_CMA_REFERENCE),32'h0000_2000);
+        write32(createAddress(`EQUALIZERSPACE, `EQ_STEP_SIZE),32'h0000_0000);
+        write32(createAddress(`EQUALIZERSPACE, `EQ_CMA_REFERENCE),32'h0000_199a);
         write32(createAddress(`EQUALIZERSPACE, `EQ_CONTROL),32'h0000_0002);
         `else
         write32(createAddress(`EQUALIZERSPACE, `EQ_CONTROL),32'h0000_0000);
@@ -439,6 +452,11 @@ module test;
 
         // Wait 14 bit periods
         repeat (14*`CLOCKS_PER_BIT) @ (posedge clk) ;
+
+        // Create a reset to clear the interpolators
+        interpReset = 1;
+        repeat (2*`CLOCKS_PER_BIT) @ (posedge clk) ;
+        interpReset = 0;
 
         // Enable the sample rate loop without 2 sample summer
         write32(createAddress(`BITSYNCSPACE,`LF_CONTROL),32'h0000_0000);
@@ -578,6 +596,48 @@ module test;
         .iEye(iEye), .qEye(qEye),
         .eyeOffset()
     );
+
+    wire    [31:0]  dac0Dout;
+    wire    [17:0]  dac0Data;
+    interpolate #(.RegSpace(`INTERP0SPACE), .FirRegSpace(`VIDFIR0SPACE)) dac0Interp(
+        .clk(clk), .reset(interpReset), .clkEn(dac0Sync),
+        .busClk(busClk),
+        .cs(cs),
+        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .addr(a),
+        .din(d),
+        .dout(dac0Dout),
+        .dataIn(dac0Out),
+        .dataOut(dac0Data)
+        );
+
+    wire    [31:0]  dac1Dout;
+    wire    [17:0]  dac1Data;
+    interpolate #(.RegSpace(`INTERP1SPACE), .FirRegSpace(`VIDFIR1SPACE)) dac1Interp(
+        .clk(clk), .reset(interpReset), .clkEn(dac1Sync),
+        .busClk(busClk),
+        .cs(cs),
+        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .addr(a),
+        .din(d),
+        .dout(dac1Dout),
+        .dataIn(dac1Out),
+        .dataOut(dac1Data)
+        );
+
+    wire    [31:0]  dac2Dout;
+    wire    [17:0]  dac2Data;
+    interpolate #(.RegSpace(`INTERP2SPACE), .FirRegSpace(`VIDFIR2SPACE)) dac2Interp(
+        .clk(clk), .reset(interpReset), .clkEn(dac2Sync),
+        .busClk(busClk),
+        .cs(cs),
+        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .addr(a),
+        .din(d),
+        .dout(dac2Dout),
+        .dataIn(dac2Out),
+        .dataOut(dac2Data)
+        );
 
     `ifdef LDPC_TEST
     ldpc #(.LDPCBITS(7)) ldpc(
