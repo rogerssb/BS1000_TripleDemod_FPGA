@@ -27,6 +27,6 @@ Bitrate = 2916666.656250:
 	HB  enabled
 
 Warning: WARNING : aresetn must be asserted or deasserted for a minimum of 2 cycles
-Time: 5119200 ps  Iteration: 1  Process: /test/demod/ddc/dds/U0/i_synth/has_aresetn/check_reset  File: /wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd
+Time: 5475600 ps  Iteration: 1  Process: /test/demod/ddc/dds/U0/i_synth/has_aresetn/check_reset  File: /wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd
 Warning: WARNING : aresetn must be asserted or deasserted for a minimum of 2 cycles
-Time: 5119200 ps  Iteration: 1  Process: /test/demod/ddc/leadDds/U0/i_synth/has_aresetn/check_reset  File: /wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd
+Time: 5475600 ps  Iteration: 1  Process: /test/demod/ddc/leadDds/U0/i_synth/has_aresetn/check_reset  File: /wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/dds_compiler_v6_0/hdl/dds_compiler_v6_0_vh_rfs.vhd

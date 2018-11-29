@@ -2,13 +2,13 @@
 # Webtalk v2016.4 (64-bit)
 # SW Build 1733598 on Wed Dec 14 22:35:39 MST 2016
 # IP Build 1731160 on Wed Dec 14 23:47:21 MST 2016
-# Start of session at: Thu Nov 01 13:41:25 2018
-# Process ID: 21744
+# Start of session at: Mon Nov 19 14:35:59 2018
+# Process ID: 19272
 # Current directory: C:/modem/vivado/semcoDemod.sim/simLdpc/behav
 # Command line: wbtcv.exe -mode batch -source C:/modem/vivado/semcoDemod.sim/simLdpc/behav/xsim.dir/test_behav/webtalk/xsim_webtalk.tcl -notrace
 # Log file: C:/modem/vivado/semcoDemod.sim/simLdpc/behav/webtalk.log
 # Journal file: C:/modem/vivado/semcoDemod.sim/simLdpc/behav\webtalk.jou
 #-----------------------------------------------------------
 source C:/modem/vivado/semcoDemod.sim/simLdpc/behav/xsim.dir/test_behav/webtalk/xsim_webtalk.tcl -notrace
-INFO: [Common 17-186] 'C:/modem/vivado/semcoDemod.sim/simLdpc/behav/xsim.dir/test_behav/webtalk/usage_statistics_ext_xsim.xml' has been successfully sent to Xilinx on Thu Nov 01 13:41:27 2018. For additional details about this file, please refer to the WebTalk help file at C:/Xilinx/Vivado/2016.4/doc/webtalk_introduction.html.
-INFO: [Common 17-206] Exiting Webtalk at Thu Nov 01 13:41:27 2018...
+INFO: [Common 17-186] 'C:/modem/vivado/semcoDemod.sim/simLdpc/behav/xsim.dir/test_behav/webtalk/usage_statistics_ext_xsim.xml' has been successfully sent to Xilinx on Mon Nov 19 14:36:01 2018. For additional details about this file, please refer to the WebTalk help file at C:/Xilinx/Vivado/2016.4/doc/webtalk_introduction.html.
+INFO: [Common 17-206] Exiting Webtalk at Mon Nov 19 14:36:01 2018...

@@ -1,24 +1,40 @@
-Unable to capture context for thread 23464 in process 24188, can not generate back trace
-Unable to capture context for thread 20504 in process 24188, can not generate back trace
-Exception at PC 0x000007FEA774BB93
+Unable to capture context for thread 16448 in process 16304, can not generate back trace
+Unable to capture context for thread 10368 in process 16304, can not generate back trace
+Unable to capture context for thread 15600 in process 16304, can not generate back trace
+Exception at PC 0x000007FE9DC4BB93
 Printing stacktrace...
 
-Exception at PC 0x000007FEFCF5BDED
-Exception at PC 0x000007FEFCF5BDED
-Exception at PC 0x000007FEFCF5BDED
-Exception at PC 0x000007FEFCF5BDED
-Exception at PC 0x000007FEFCF5BDED
-Exception at PC 0x000007FEFCF5BDED
-Exception at PC 0x000007FEFCF5BDED
-Exception at PC 0x000007FEFCF5BDED
-Exception at PC 0x000007FEFCF5BDED
-Exception at PC 0x000007FEFCF5BDED
-Exception at PC 0x000007FEFCF5BDED
-Exception at PC 0x000007FEFCF5BDED
-Exception at PC 0x000007FEFCF5BDED
-Exception at PC 0x000007FEFCF5BDED
-Exception at PC 0x000007FEFCF5BDED
-Exception at PC 0x000007FEFCF5BDED
-Exception at PC 0x000007FEFCF5BDED
-Exception at PC 0x000007FEFCF5BDED
-Exception at PC 0x000007FEFCF5BDED
+Exception at PC 0x000007FEFCA4BDED
+Exception at PC 0x000007FEFCA4BDED
+Exception at PC 0x000007FEFCA4BDED
+Exception at PC 0x000007FEFCA4BDED
+Exception at PC 0x000007FEFCA4BDED
+Exception at PC 0x000007FEFCA4BDED
+Exception at PC 0x000007FEFCA4BDED
+[0]  [0x000007FE9DC4BB93]
+[1]  [0x000007FE9DC4BB93]
+[2]  [0x000007FE9DC4B4A1]
+[3]  [0x000007FE9DC4B3EF]
+[4]  [0x000007FE9DC319FE]
+[5]  [0x000007FE9DC30ED1]
+[6]  [0x000007FE9DC30D76]
+[7]  [0x000007FE9DBD79F6]
+[8]  [0x000007FE9DBC7AFB]
+[9]  [0x000007FE9DCEE90A]
+[10]  [0x000007FE9DD09F87]
+[11]  [0x000007FE9DD0A05F]
+[12] (BaseThreadInitThunk+0xd) [0x0000000076D059CD]
+[13] (RtlUserThreadStart+0x1d) [0x0000000076E6385D]
+Done
+Exception at PC 0x000007FEFCA4BDED
+Exception at PC 0x000007FEFCA4BDED
+Exception at PC 0x000007FEFCA4BDED
+Exception at PC 0x000007FEFCA4BDED
+Exception at PC 0x000007FEFCA4BDED
+Exception at PC 0x000007FEFCA4BDED
+Exception at PC 0x000007FEFCA4BDED
+Exception at PC 0x000007FEFCA4BDED
+Exception at PC 0x000007FEFCA4BDED
+Exception at PC 0x000007FEFCA4BDED
+Exception at PC 0x000007FEFCA4BDED
+Exception at PC 0x000007FEFCA4BDED

@@ -1,9 +1,10 @@
 `timescale 1ns/100ps
 `include "addressMap.v"
 
-`define FM_TEST
+//`define FM_TEST
 //`define SOQPSK_TEST
 //`define LDPC_TEST
+`define AQPSK_TEST
 
 `define ENABLE_AGC
 `define TEST_CMA
@@ -15,6 +16,8 @@
 `elsif LDPC_TEST
     `define TEST_DATA "c:/modem/vivado/testData/ldpcWaveform_1024_4_5.txt"
     //`define TEST_DATA "c:/modem/vivado/testData/ldpcSyncWaveform.txt"
+`elsif AQPSK_TEST
+    `define TEST_DATA "c:/modem/vivado/testData/soqpskTestData.txt"
 `endif
 
 module test;
@@ -282,6 +285,8 @@ module test;
         write32(createAddress(`DEMODSPACE,`DEMOD_CONTROL),{16'bx,13'bx,`MODE_OQPSK});
         `elsif LDPC_TEST
         write32(createAddress(`DEMODSPACE,`DEMOD_CONTROL),{16'bx,13'bx,`MODE_OQPSK});
+        `elsif AQPSK_TEST
+        write32(createAddress(`DEMODSPACE,`DEMOD_CONTROL),{16'bx,13'bx,`MODE_AQPSK});
         `endif
 
         // Init the sample rate loop filters
@@ -293,6 +298,11 @@ module test;
         write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h001a0010);
         `elsif LDPC_TEST
         write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h001a0010);
+        `elsif AQPSK_TEST
+        write32(createAddress(`BITSYNCAUSPACE,`LF_CONTROL),1);    // Zero the error
+        write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h001a0010);
+        write32(createAddress(`BITSYNCAUSPACE,`LF_LEAD_LAG),32'h001a0010);
+        write32(createAddress(`BITSYNCAUSPACE,`LF_LEAD_LAG),32'h001a0010);
         `endif
         write32(createAddress(`BITSYNCSPACE,`LF_LIMIT), resamplerLimitInt);
 
@@ -311,6 +321,12 @@ module test;
         write32(createAddress(`CARRIERSPACE,`CLF_LLIMIT), -carrierLimit);
         write32(createAddress(`CARRIERSPACE,`CLF_LOOPDATA), sweepRate);
         `elsif LDPC_TEST
+        write32(createAddress(`CARRIERSPACE,`CLF_CONTROL),1);    // Zero the error
+        write32(createAddress(`CARRIERSPACE,`CLF_LEAD_LAG),32'h18180808);
+        write32(createAddress(`CARRIERSPACE,`CLF_ULIMIT),  carrierLimit);
+        write32(createAddress(`CARRIERSPACE,`CLF_LLIMIT), -carrierLimit);
+        write32(createAddress(`CARRIERSPACE,`CLF_LOOPDATA), sweepRate);
+        `elsif AQPSK_TEST
         write32(createAddress(`CARRIERSPACE,`CLF_CONTROL),1);    // Zero the error
         write32(createAddress(`CARRIERSPACE,`CLF_LEAD_LAG),32'h18180808);
         write32(createAddress(`CARRIERSPACE,`CLF_ULIMIT),  carrierLimit);
@@ -460,6 +476,10 @@ module test;
 
         // Enable the sample rate loop without 2 sample summer
         write32(createAddress(`BITSYNCSPACE,`LF_CONTROL),32'h0000_0000);
+        `ifdef AQPSK_TEST
+        write32(createAddress(`BITSYNCAUSPACE,`LF_CONTROL),32'h0000_0000);
+        `endif
+
 
         // Wait 5 bit periods
         repeat (5*`CLOCKS_PER_BIT) @ (posedge clk) ;

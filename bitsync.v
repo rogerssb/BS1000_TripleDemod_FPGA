@@ -921,14 +921,14 @@ module bitsync(
             if (auAvgState == TEST) begin
                 // Test if the on time sample average is less than 1/2 the off time sample average
                 // This is an indication that we are out of lock.
-                if (avgAuOnTimeMag < {1'b0,avgAuOffTimeMag[21:1]}) begin
+                if (avgAuOffTimeMag[21:14] > {1'b0,avgAuOnTimeMag[21:15]}) begin
                     // Are we out of lock?
                     if (auLockCounter == (16'hffff - auLockCount)) begin
                         // Yes. Update the status flag and force a slip on the
                         // assumed timing.
                         auBitsyncLock <= 0;
                         auLockCounter <= 16'h0;
-                        auSlip <= 1;
+                        //auSlip <= 1;
                         // Is the higher rate channel locked?
                         if (bitsyncLock) begin
                             // Yes. Is it time to force an I/Q swap?

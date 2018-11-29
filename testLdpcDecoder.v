@@ -199,7 +199,7 @@ module test;
         //write32(createAddress(`LDPCSPACE, `LDPC_INVERSE_MEAN), 32'h00028000);
         //write32(createAddress(`LDPCSPACE, `LDPC_INVERSE_MEAN), 32'h00048000);
         write32(createAddress(`LDPCSPACE, `LDPC_INVERSE_MEAN), 32'h00008000);
-        write32(createAddress(`LDPCSPACE, `LDPC_OUTPUT_CLK_DIV),32'd83);
+        write32(createAddress(`LDPCSPACE, `LDPC_OUTPUT_CLK_DIV),32'd70);
         write32(createAddress(`LDPCSPACE, `LDPC_DLL_CENTER_FREQ),32'd51130563);
         write16(createAddress(`LDPCSPACE, `LDPC_DLL_GAINS),16'h0018);
         write16(createAddress(`LDPCSPACE, `LDPC_DLL_FDBK_DIV),16'd1);
