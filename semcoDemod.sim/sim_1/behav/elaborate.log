@@ -1,6 +1,6 @@
 Vivado Simulator 2016.4
 Copyright 1986-1999, 2001-2016 Xilinx, Inc. All Rights Reserved.
-Running: C:/Xilinx/Vivado/2016.4/bin/unwrapped/win64.o/xelab.exe -wto 0027b497f38f46a7b40b8158d1351c26 --debug typical --relax --mt 2 -d SEMCO_DEMOD= -d SIMULATE= -L xbip_utils_v3_0_7 -L axi_utils_v2_0_3 -L xbip_pipe_v3_0_3 -L xbip_bram18k_v3_0_3 -L mult_gen_v12_0_12 -L xbip_dsp48_wrapper_v3_0_4 -L xbip_dsp48_addsub_v3_0_3 -L xbip_dsp48_multadd_v3_0_3 -L dds_compiler_v6_0_13 -L xil_defaultlib -L fir_compiler_v7_2_7 -L fifo_generator_v13_1_3 -L dist_mem_gen_v8_0_11 -L blk_mem_gen_v8_3_4 -L c_reg_fd_v12_0_3 -L xbip_addsub_v3_0_3 -L c_addsub_v12_0_10 -L util_vector_logic_v2_0 -L unisims_ver -L unimacro_ver -L secureip -L xpm --snapshot test_behav xil_defaultlib.test xil_defaultlib.glbl -log elaborate.log 
+Running: C:/Xilinx/Vivado/2016.4/bin/unwrapped/win64.o/xelab.exe -wto 0027b497f38f46a7b40b8158d1351c26 --debug typical --relax --mt 2 -d SEMCO_DEMOD= -d SIMULATE= -L xbip_utils_v3_0_7 -L axi_utils_v2_0_3 -L xbip_pipe_v3_0_3 -L xbip_bram18k_v3_0_3 -L mult_gen_v12_0_12 -L xbip_dsp48_wrapper_v3_0_4 -L xbip_dsp48_addsub_v3_0_3 -L xbip_dsp48_multadd_v3_0_3 -L dds_compiler_v6_0_13 -L xil_defaultlib -L fir_compiler_v7_2_7 -L fifo_generator_v13_1_3 -L dist_mem_gen_v8_0_11 -L blk_mem_gen_v8_3_5 -L blk_mem_gen_v8_3_4 -L c_reg_fd_v12_0_3 -L xbip_addsub_v3_0_3 -L c_addsub_v12_0_10 -L util_vector_logic_v2_0 -L unisims_ver -L unimacro_ver -L secureip -L xpm --snapshot test_behav xil_defaultlib.test xil_defaultlib.glbl -log elaborate.log 
 Using 2 slave threads.
 Starting static elaboration
 WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1957]
@@ -27,8 +27,113 @@ WARNING: [VRFC 10-516] comparison between unequal length arrays always returns F
 WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1949]
 WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1950]
 WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1951]
+WARNING: [VRFC 10-1783] select index -1 into tmp_dout is out of bounds [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/fifo_generator_v13_1/simulation/fifo_generator_vlog_beh.v:7570]
+WARNING: [VRFC 10-1783] select index -1 into tmp_dout is out of bounds [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/fifo_generator_v13_1/simulation/fifo_generator_vlog_beh.v:7572]
+WARNING: [VRFC 10-597] element index -1 into num_read_words_dc is out of bounds [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/fifo_generator_v13_1/simulation/fifo_generator_vlog_beh.v:8146]
+WARNING: [VRFC 10-597] element index -1 into num_write_words_dc is out of bounds [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/fifo_generator_v13_1/simulation/fifo_generator_vlog_beh.v:8196]
 Completed static elaboration
 Starting simulation data flow analysis
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
+INFO: [Common 17-14] Message 'XSIM 43-4099' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
 Completed simulation data flow analysis
 Time Resolution for simulation is 1ps
 Compiling package std.standard
@@ -160,6 +265,16 @@ Compiling module xil_defaultlib.log2
 Compiling module xil_defaultlib.agcLoopRegs
 Compiling module xil_defaultlib.agcLoopFilter
 Compiling module xil_defaultlib.channelAGC
+Compiling module xil_defaultlib.cmaRegs
+Compiling module xil_defaultlib.cmpy18WithCePL1
+Compiling module xil_defaultlib.multiplier(AWIDTH=10,BWIDTH=10)
+Compiling module xil_defaultlib.cmaTap(initWeight=18'b0)
+Compiling module xil_defaultlib.cmaTap(initWeight=18'b0111111111...
+Compiling module xil_defaultlib.cmagEstimate
+Compiling module xil_defaultlib.add8Taps
+Compiling module xil_defaultlib.add2Taps
+Compiling module xil_defaultlib.cmaSum
+Compiling module xil_defaultlib.cma
 Compiling module xil_defaultlib.vm_cordic_fast_default
 Compiling module xil_defaultlib.fmDemod
 Compiling module xil_defaultlib.lagGain12
@@ -260,6 +375,16 @@ Compiling module xil_defaultlib.uartRegs
 Compiling module xil_defaultlib.uartBaudGen
 Compiling module xil_defaultlib.uartTx
 Compiling module xil_defaultlib.sdi
+Compiling module xil_defaultlib.dqmRegs
+Compiling module xil_defaultlib.mseEstimate_default
+Compiling module fifo_generator_v13_1_3.fifo_generator_v13_1_3_bhv_ver_s...
+Compiling module fifo_generator_v13_1_3.fifo_generator_v13_1_3_bhv_ver_p...
+Compiling module fifo_generator_v13_1_3.fifo_generator_v13_1_3_CONV_VER(...
+Compiling module fifo_generator_v13_1_3.fifo_generator_vlog_beh(C_COMMON...
+Compiling module fifo_generator_v13_1_3.fifo_generator_v13_1_3(C_COMMON_...
+Compiling module xil_defaultlib.dqmFifo
+Compiling module xil_defaultlib.dqmFramer
+Compiling module xil_defaultlib.dqm
 Compiling module xil_defaultlib.test
 WARNING: [XSIM 43-3373] "C:/modem/vivado/testSemcoDemod.v" Line 87. System function $rewind is used as system task. This system function should have a LHS e.g. x=$rewind().
 Compiling module xil_defaultlib.glbl

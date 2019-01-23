@@ -43,8 +43,8 @@
 //`define ADD_SCPATH
 `define ADD_CMA
 //`define ADD_LDPC
-//`define ADD_DQM
-`define ADD_MULTIH
+`define ADD_DQM
+//`define ADD_MULTIH
 `define ADD_SUPERBAUD_TED
 `ifndef SIMULATE
 `define EMBED_MULTIH_CARRIER_LOOP
@@ -331,7 +331,7 @@
         `define CandD_SRC_STC           4'b0100
         `define CandD_SRC_PNGEN         4'b0101
         `define CandD_SRC_LDPC          4'b0110
-        `define CandD_SRC_RSVD0         4'b0111
+        `define CandD_SRC_DQM           4'b0111
         `define CandD_SRC_DEC0_CH0      4'b1000
         `define CandD_SRC_DEC0_CH1      4'b1001
         `define CandD_SRC_DEC1_CH0      4'b1010
@@ -365,6 +365,31 @@
 `define MULTIHLFSPACE       13'b0_0101_010x_xxxx
 `define SDISPACE            13'b0_0101_0110_xxxx
 `define UARTSPACE           13'b0_0101_0111_xxxx
+`define DQMSPACE            13'b0_0101_1000_xxxx
+    `define DQM_SYNC_WORD       16'hfac4
+    `define DQM_MSE_CONTROL     13'bx_xxxx_xxxx_00xx
+    `define DQM_LOG10MSE        13'bx_xxxx_xxxx_01xx
+        `define DQM_LOG10MSE_OFFSET 13'bx_xxxx_xxxx_011x
+    `define DQM_CLKS_PER_BIT    13'bx_xxxx_xxxx_100x
+    `define DQM_PAYLOAD_SIZE    13'bx_xxxx_xxxx_101x
+    `define DQM_SRC_SELECT      13'bx_xxxx_xxxx_11xx
+        `define DQM_SRC_LEGACY_I    4'b0000
+        `define DQM_SRC_LEGACY_Q    4'b0001
+        `define DQM_SRC_PCMTRELLIS  4'b0010
+        `define DQM_SRC_MULTIH      4'b0011
+        `define DQM_SRC_STC         4'b0100
+        `define DQM_SRC_PNGEN       4'b0101
+        `define DQM_SRC_LDPC        4'b0110
+        `define DQM_SRC_RSVD0       4'b0111
+        `define DQM_SRC_DEC0_CH0    4'b1000
+        `define DQM_SRC_DEC0_CH1    4'b1001
+        `define DQM_SRC_DEC1_CH0    4'b1010
+        `define DQM_SRC_DEC1_CH1    4'b1011
+        `define DQM_SRC_DEC2_CH0    4'b1100
+        `define DQM_SRC_DEC2_CH1    4'b1101
+        `define DQM_SRC_DEC3_CH0    4'b1110
+        `define DQM_SRC_DEC3_CH1    4'b1111
+`define DQMLUTSPACE         13'b0_0110_xxxx_xxxx
 
 // Video Interpolators and FIRs
 `define INTERP0SPACE        13'b0_1000_0000_xxxx
@@ -430,6 +455,16 @@
 // define the viterbi decoder registers
 `define VIT_INVERSE_MEAN            13'bx_xxxx_xxxx_00xx
 `define VIT_STATUS                  13'bx_xxxx_xxxx_01xx
+
+// define the data quality metric registers
+`define DQM_SPACE                   `BEPSPACE
+`define DQM_BLOCK_SIZE              13'bx_xxxx_xxx0_000x
+`define DQM_FRAME_WORD_0            13'bx_xxxx_xxx0_001x
+`define DQM_FRAME_WORD_1            13'bx_xxxx_xxx0_010x
+`define DQM_FRAME_WORD_2            13'bx_xxxx_xxx0_011x
+`define BEP_BLOCK_SIZE              13'bx_xxxx_xxx1_000x
+`define BEP_ESTIMATE                13'bx_xxxx_xxx1_01xx
+`define BEP_MEAN_INVERSE            13'bx_xxxx_xxx1_10xx
 
 `endif  // Different demod builds address space definitions
 
@@ -654,15 +689,6 @@
 `define DS_MODE_NASA_DG1_MODE3_SPREAD_Q     3'b100
 
 
-// define the data quality metric registers
-`define DQM_SPACE                   `BEPSPACE
-`define DQM_BLOCK_SIZE              13'bx_xxxx_xxx0_000x
-`define DQM_FRAME_WORD_0            13'bx_xxxx_xxx0_001x
-`define DQM_FRAME_WORD_1            13'bx_xxxx_xxx0_010x
-`define DQM_FRAME_WORD_2            13'bx_xxxx_xxx0_011x
-`define BEP_BLOCK_SIZE              13'bx_xxxx_xxx1_000x
-`define BEP_ESTIMATE                13'bx_xxxx_xxx1_01xx
-`define BEP_MEAN_INVERSE            13'bx_xxxx_xxx1_10xx
 
 `endif //ADDRESS_MAP
 

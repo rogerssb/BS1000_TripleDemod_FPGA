@@ -118,7 +118,7 @@ module semcoDemodTop (
 
 );
 
-    parameter VER_NUMBER = 16'd485;
+    parameter VER_NUMBER = 16'd486;
 
 
 //******************************************************************************
@@ -322,6 +322,7 @@ module semcoDemodTop (
     wire    signed  [17:0]  iDemodSymData;
     wire    signed  [17:0]  qDemodSymData;
     wire    signed  [17:0]  iTrellis,qTrellis;
+    wire            [12:0]  mag;
     `ifdef ADD_LDPC
     wire    signed  [17:0]  iLdpc,qLdpc;
     `endif
@@ -384,6 +385,8 @@ module semcoDemodTop (
         .dac2Sync(demodDac2ClkEn),
         .dac2Data(demodDac2Data),
         .demodMode(demodMode),
+        .mag(mag),
+        .magClkEn(magClkEn),
         `ifdef ADD_SCPATH
         output                  enableScPath,
         output  signed  [17:0]  iBBOut, qBBOut,
@@ -674,6 +677,56 @@ module semcoDemodTop (
 `endif
 
 
+`ifdef ADD_DQM
+/******************************************************************************
+                                    DQM
+******************************************************************************/
+    wire    [3:0]   dqmSourceSelect;
+    reg             dqmBitEnIn;
+    reg             dqmBitIn;
+    always @(posedge clk) begin
+        casex (dqmSourceSelect)
+            `DQM_SRC_PCMTRELLIS: begin
+                dqmBitEnIn <= pcmTrellisSymEnOut;
+                dqmBitIn <= pcmTrellisBit;
+            end
+            `DQM_SRC_DEC0_CH0: begin
+                dqmBitEnIn <= dualPcmClkEn;
+                dqmBitIn <= dualDataI;
+            end
+            default: begin
+                dqmBitEnIn <= dualPcmClkEn;
+                dqmBitIn <= dualDataI;
+            end
+        endcase
+    end
+
+
+
+    wire    [31:0]  dqmDout;
+    dqm dqm(
+        .clk(clk),
+        .reset(reset),
+        `ifdef USE_BUS_CLOCK
+        .busClk(busClk),
+        `endif
+        .cs(cs),
+        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .addr(addr),
+        .din(dataIn),
+        .dout(dqmDout),
+        .bitClkEn(dqmBitEnIn),
+        .payloadBit(dqmBitIn),
+        .magClkEn(magClkEn),
+        .mag(mag),
+        .sourceSelect(dqmSourceSelect),
+        .dqmBitEn(dqmBitEn),
+        .dqmBit(dqmBit)
+    );
+
+`endif //ADD_DQM
+
+
 //******************************************************************************
 //                       Clock/Data Jitter Reduction
 //******************************************************************************
@@ -735,6 +788,12 @@ module semcoDemodTop (
             `CandD_SRC_LDPC: begin
                 cAndD0ClkEn = ldpcBitEnOut;
                 cAndD0DataIn = {ldpcBitOut,2'b0};
+            end
+            `endif
+            `ifdef ADD_DQM
+            `CandD_SRC_DQM: begin
+                cAndD0ClkEn = dqmBitEn;
+                cAndD0DataIn = {dqmBit,2'b0};
             end
             `endif
             `CandD_SRC_DEC0_CH0: begin
@@ -809,6 +868,12 @@ module semcoDemodTop (
             `CandD_SRC_LDPC: begin
                 cAndD1ClkEn = ldpcBitEnOut;
                 cAndD1DataIn = {ldpcBitOut,2'b0};
+            end
+            `endif
+            `ifdef ADD_DQM
+            `CandD_SRC_DQM: begin
+                cAndD1ClkEn = dqmBitEn;
+                cAndD1DataIn = {dqmBit,2'b0};
             end
             `endif
             `CandD_SRC_DEC0_CH0: begin
@@ -1218,6 +1283,11 @@ sdi sdi(
             `LDPCSPACE:         rd_mux = ldpcDout;
             `endif
 
+            `ifdef ADD_DQM
+            `DQMLUTSPACE,
+            `DQMSPACE:          rd_mux = dqmDout;
+            `endif
+
             `DEMODSPACE,
             `ifdef ADD_CMA
             `EQUALIZERSPACE,
@@ -1307,6 +1377,18 @@ sdi sdi(
                 end
                 else begin
                     rd_mux = ldpcDout[15:0];
+                end
+            end
+            `endif
+
+            `ifdef ADD_DQM
+            `DQMLUTSPACE,
+            `DQMSPACE:         begin
+                if (addr[1]) begin
+                    rd_mux = dqmDout[31:16];
+                end
+                else begin
+                    rd_mux = dqmDout[15:0];
                 end
             end
             `endif

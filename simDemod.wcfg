@@ -11,15 +11,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="62425300000fs"></ZoomStartTime>
-      <ZoomEndTime time="129025300001fs"></ZoomEndTime>
-      <Cursor1Time time="117925300000fs"></Cursor1Time>
+      <ZoomStartTime time="107132400000fs"></ZoomStartTime>
+      <ZoomEndTime time="109724400001fs"></ZoomEndTime>
+      <Cursor1Time time="107492400000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="198"></NameColumnWidth>
-      <ValueColumnWidth column_width="65"></ValueColumnWidth>
+      <NameColumnWidth column_width="179"></NameColumnWidth>
+      <ValueColumnWidth column_width="120"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="31" />
+   <WVObjectSize size="32" />
    <wave_markers>
       <marker time="35140000000" label="" />
    </wave_markers>
@@ -230,6 +230,14 @@
          <obj_property name="ElementShortName">d[31:0]</obj_property>
          <obj_property name="ObjectShortName">d[31:0]</obj_property>
       </wvobject>
+      <wvobject fp_name="/test/demod/dout" type="array">
+         <obj_property name="ElementShortName">dout[31:0]</obj_property>
+         <obj_property name="ObjectShortName">dout[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/dout" type="array">
+         <obj_property name="ElementShortName">dout[31:0]</obj_property>
+         <obj_property name="ObjectShortName">dout[31:0]</obj_property>
+      </wvobject>
       <wvobject fp_name="/test/sdi/dataOut" type="array">
          <obj_property name="ElementShortName">dataOut[31:0]</obj_property>
          <obj_property name="ObjectShortName">dataOut[31:0]</obj_property>
@@ -389,6 +397,236 @@
          <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
          <obj_property name="AnalogHorizLine">0.000000</obj_property>
          <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="group137" type="group">
+      <obj_property name="label">DQM</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/test/dqm/dqmm/clk" type="logic">
+         <obj_property name="ElementShortName">clk</obj_property>
+         <obj_property name="ObjectShortName">clk</obj_property>
+      </wvobject>
+      <wvobject fp_name="group309" type="group">
+         <obj_property name="label">DQMFramer</obj_property>
+         <obj_property name="DisplayName">label</obj_property>
+         <obj_property name="isExpanded"></obj_property>
+         <wvobject fp_name="/test/dqm/clksPerBit" type="array">
+            <obj_property name="ElementShortName">clksPerBit[15:0]</obj_property>
+            <obj_property name="ObjectShortName">clksPerBit[15:0]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/test/dqm/payloadSize" type="array">
+            <obj_property name="ElementShortName">payloadSize[13:0]</obj_property>
+            <obj_property name="ObjectShortName">payloadSize[13:0]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/test/dqm/dqmf/payloadBitCount" type="array">
+            <obj_property name="ElementShortName">payloadBitCount[13:0]</obj_property>
+            <obj_property name="ObjectShortName">payloadBitCount[13:0]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/test/dqm/dqmf/payloadBitEn" type="logic">
+            <obj_property name="ElementShortName">payloadBitEn</obj_property>
+            <obj_property name="ObjectShortName">payloadBitEn</obj_property>
+         </wvobject>
+         <wvobject fp_name="/test/dqm/dqmf/payloadBit" type="logic">
+            <obj_property name="ElementShortName">payloadBit</obj_property>
+            <obj_property name="ObjectShortName">payloadBit</obj_property>
+         </wvobject>
+         <wvobject fp_name="/test/dqm/dqmf/divClkEn" type="logic">
+            <obj_property name="ElementShortName">divClkEn</obj_property>
+            <obj_property name="ObjectShortName">divClkEn</obj_property>
+         </wvobject>
+         <wvobject fp_name="/test/dqm/dqmStartOfFrame" type="logic">
+            <obj_property name="ElementShortName">dqmStartOfFrame</obj_property>
+            <obj_property name="ObjectShortName">dqmStartOfFrame</obj_property>
+         </wvobject>
+         <wvobject fp_name="/test/dqm/dqmf/dqmState" type="array">
+            <obj_property name="ElementShortName">dqmState[1:0]</obj_property>
+            <obj_property name="ObjectShortName">dqmState[1:0]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/test/dqm/dqmf/pingWriteSelect" type="logic">
+            <obj_property name="ElementShortName">pingWriteSelect</obj_property>
+            <obj_property name="ObjectShortName">pingWriteSelect</obj_property>
+         </wvobject>
+         <wvobject fp_name="/test/dqm/dqmf/pingWriteEnable" type="logic">
+            <obj_property name="ElementShortName">pingWriteEnable</obj_property>
+            <obj_property name="ObjectShortName">pingWriteEnable</obj_property>
+         </wvobject>
+         <wvobject fp_name="/test/dqm/dqmf/pongWriteEnable" type="logic">
+            <obj_property name="ElementShortName">pongWriteEnable</obj_property>
+            <obj_property name="ObjectShortName">pongWriteEnable</obj_property>
+         </wvobject>
+         <wvobject fp_name="/test/dqm/dqmf/pingReadSelect" type="logic">
+            <obj_property name="ElementShortName">pingReadSelect</obj_property>
+            <obj_property name="ObjectShortName">pingReadSelect</obj_property>
+         </wvobject>
+         <wvobject fp_name="/test/dqm/dqmf/pingReadEnable" type="logic">
+            <obj_property name="ElementShortName">pingReadEnable</obj_property>
+            <obj_property name="ObjectShortName">pingReadEnable</obj_property>
+         </wvobject>
+         <wvobject fp_name="/test/dqm/dqmf/pongReadEnable" type="logic">
+            <obj_property name="ElementShortName">pongReadEnable</obj_property>
+            <obj_property name="ObjectShortName">pongReadEnable</obj_property>
+         </wvobject>
+         <wvobject fp_name="/test/dqm/dqmf/pingFifoEmpty" type="logic">
+            <obj_property name="ElementShortName">pingFifoEmpty</obj_property>
+            <obj_property name="ObjectShortName">pingFifoEmpty</obj_property>
+         </wvobject>
+         <wvobject fp_name="/test/dqm/dqmf/pongFifoEmpty" type="logic">
+            <obj_property name="ElementShortName">pongFifoEmpty</obj_property>
+            <obj_property name="ObjectShortName">pongFifoEmpty</obj_property>
+         </wvobject>
+         <wvobject fp_name="/test/dqm/dqmf/dqmBitEn" type="logic">
+            <obj_property name="ElementShortName">dqmBitEn</obj_property>
+            <obj_property name="ObjectShortName">dqmBitEn</obj_property>
+         </wvobject>
+         <wvobject fp_name="/test/dqm/dqmf/dqmBit" type="logic">
+            <obj_property name="ElementShortName">dqmBit</obj_property>
+            <obj_property name="ObjectShortName">dqmBit</obj_property>
+         </wvobject>
+      </wvobject>
+      <wvobject fp_name="group310" type="group">
+         <obj_property name="label">MSE</obj_property>
+         <obj_property name="DisplayName">label</obj_property>
+         <wvobject fp_name="/test/demod/channelAGC/rxLevel" type="array">
+            <obj_property name="ElementShortName">rxLevel[15:0]</obj_property>
+            <obj_property name="ObjectShortName">rxLevel[15:0]</obj_property>
+            <obj_property name="Radix">REALRADIX</obj_property>
+            <obj_property name="radix_realType">UNSIGNEDFIXEDPOINTRADIX</obj_property>
+            <obj_property name="radix_fractionWidth">16</obj_property>
+            <obj_property name="radix_otherWidth">0</obj_property>
+         </wvobject>
+         <wvobject fp_name="/test/dqm/dqmm/magClkEn" type="logic">
+            <obj_property name="ElementShortName">magClkEn</obj_property>
+            <obj_property name="ObjectShortName">magClkEn</obj_property>
+         </wvobject>
+         <wvobject fp_name="/test/dqm/dqmm/mag" type="array">
+            <obj_property name="ElementShortName">mag[12:0]</obj_property>
+            <obj_property name="ObjectShortName">mag[12:0]</obj_property>
+            <obj_property name="Radix">REALRADIX</obj_property>
+            <obj_property name="radix_realType">UNSIGNEDFIXEDPOINTRADIX</obj_property>
+            <obj_property name="radix_fractionWidth">12</obj_property>
+            <obj_property name="radix_otherWidth">0</obj_property>
+         </wvobject>
+         <wvobject fp_name="/test/dqm/dqmm/meanMag" type="array">
+            <obj_property name="ElementShortName">meanMag[15:0]</obj_property>
+            <obj_property name="ObjectShortName">meanMag[15:0]</obj_property>
+            <obj_property name="Radix">REALRADIX</obj_property>
+            <obj_property name="radix_realType">UNSIGNEDFIXEDPOINTRADIX</obj_property>
+            <obj_property name="radix_fractionWidth">16</obj_property>
+            <obj_property name="radix_otherWidth">0</obj_property>
+         </wvobject>
+         <wvobject fp_name="/test/dqm/dqmm/diff" type="array">
+            <obj_property name="ElementShortName">diff[17:0]</obj_property>
+            <obj_property name="ObjectShortName">diff[17:0]</obj_property>
+            <obj_property name="Radix">REALRADIX</obj_property>
+            <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+            <obj_property name="radix_fractionWidth">17</obj_property>
+            <obj_property name="radix_otherWidth">0</obj_property>
+         </wvobject>
+         <wvobject fp_name="/test/dqm/dqmm/diff" type="array">
+            <obj_property name="ElementShortName">diff[17:0]</obj_property>
+            <obj_property name="ObjectShortName">diff[17:0]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/test/dqm/dqmm/avgLength" type="array">
+            <obj_property name="ElementShortName">avgLength[15:0]</obj_property>
+            <obj_property name="ObjectShortName">avgLength[15:0]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/test/dqm/dqmm/avgCount" type="array">
+            <obj_property name="ElementShortName">avgCount[15:0]</obj_property>
+            <obj_property name="ObjectShortName">avgCount[15:0]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/test/dqm/dqmm/startAverage" type="logic">
+            <obj_property name="ElementShortName">startAverage</obj_property>
+            <obj_property name="ObjectShortName">startAverage</obj_property>
+         </wvobject>
+         <wvobject fp_name="/test/dqm/dqmm/avgComplete" type="logic">
+            <obj_property name="ElementShortName">avgComplete</obj_property>
+            <obj_property name="ObjectShortName">avgComplete</obj_property>
+         </wvobject>
+         <wvobject fp_name="/test/dqm/dqmm/diffSquared" type="array">
+            <obj_property name="ElementShortName">diffSquared[35:0]</obj_property>
+            <obj_property name="ObjectShortName">diffSquared[35:0]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/test/dqm/dqmm/diffTotal" type="array">
+            <obj_property name="ElementShortName">diffTotal[47:0]</obj_property>
+            <obj_property name="ObjectShortName">diffTotal[47:0]</obj_property>
+            <obj_property name="Radix">REALRADIX</obj_property>
+            <obj_property name="radix_realType">UNSIGNEDFIXEDPOINTRADIX</obj_property>
+            <obj_property name="radix_fractionWidth">34</obj_property>
+            <obj_property name="radix_otherWidth">0</obj_property>
+         </wvobject>
+         <wvobject fp_name="/test/dqm/dqmm/diffTotal" type="array">
+            <obj_property name="ElementShortName">diffTotal[47:0]</obj_property>
+            <obj_property name="ObjectShortName">diffTotal[47:0]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+            <obj_property name="radix_realType">UNSIGNEDFIXEDPOINTRADIX</obj_property>
+            <obj_property name="radix_fractionWidth">34</obj_property>
+            <obj_property name="radix_otherWidth">0</obj_property>
+         </wvobject>
+         <wvobject fp_name="/test/dqm/dqmm/initialX" type="array">
+            <obj_property name="ElementShortName">initialX[5:0]</obj_property>
+            <obj_property name="ObjectShortName">initialX[5:0]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/test/dqm/dqmm/initialLogX" type="array">
+            <obj_property name="ElementShortName">initialLogX[10:0]</obj_property>
+            <obj_property name="ObjectShortName">initialLogX[10:0]</obj_property>
+            <obj_property name="Radix">REALRADIX</obj_property>
+            <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+            <obj_property name="radix_fractionWidth">7</obj_property>
+            <obj_property name="radix_otherWidth">0</obj_property>
+         </wvobject>
+         <wvobject fp_name="/test/dqm/dqmm/xScale" type="array">
+            <obj_property name="ElementShortName">xScale[0:5][6:0]</obj_property>
+            <obj_property name="ObjectShortName">xScale[0:5][6:0]</obj_property>
+            <obj_property name="Radix">REALRADIX</obj_property>
+            <obj_property name="radix_realType">UNSIGNEDFIXEDPOINTRADIX</obj_property>
+            <obj_property name="radix_fractionWidth">6</obj_property>
+            <obj_property name="radix_otherWidth">0</obj_property>
+         </wvobject>
+         <wvobject fp_name="/test/dqm/dqmm/logXScale" type="array">
+            <obj_property name="ElementShortName">logXScale[0:5][10:0]</obj_property>
+            <obj_property name="ObjectShortName">logXScale[0:5][10:0]</obj_property>
+            <obj_property name="Radix">REALRADIX</obj_property>
+            <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+            <obj_property name="radix_fractionWidth">7</obj_property>
+            <obj_property name="radix_otherWidth">0</obj_property>
+         </wvobject>
+         <wvobject fp_name="/test/dqm/dqmm/currentX" type="array">
+            <obj_property name="ElementShortName">currentX[0:6][12:0]</obj_property>
+            <obj_property name="ObjectShortName">currentX[0:6][12:0]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/test/dqm/dqmm/currentLogX" type="array">
+            <obj_property name="ElementShortName">currentLogX[0:6][10:0]</obj_property>
+            <obj_property name="ObjectShortName">currentLogX[0:6][10:0]</obj_property>
+            <obj_property name="Radix">REALRADIX</obj_property>
+            <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+            <obj_property name="radix_fractionWidth">7</obj_property>
+            <obj_property name="radix_otherWidth">0</obj_property>
+         </wvobject>
+         <wvobject fp_name="/test/dqm/dqmm/possibleX" type="array">
+            <obj_property name="ElementShortName">possibleX[0:5][12:0]</obj_property>
+            <obj_property name="ObjectShortName">possibleX[0:5][12:0]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/test/dqm/dqmm/possibleOverflow" type="array">
+            <obj_property name="ElementShortName">possibleOverflow[0:5]</obj_property>
+            <obj_property name="ObjectShortName">possibleOverflow[0:5]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/test/dqm/dqmm/log10MseOffset" type="array">
+            <obj_property name="ElementShortName">log10MseOffset[15:0]</obj_property>
+            <obj_property name="ObjectShortName">log10MseOffset[15:0]</obj_property>
+            <obj_property name="Radix">REALRADIX</obj_property>
+            <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+            <obj_property name="radix_fractionWidth">7</obj_property>
+            <obj_property name="radix_otherWidth">0</obj_property>
+         </wvobject>
+         <wvobject fp_name="/test/dqm/dqmm/log10MSE" type="array">
+            <obj_property name="ElementShortName">log10MSE[15:0]</obj_property>
+            <obj_property name="ObjectShortName">log10MSE[15:0]</obj_property>
+            <obj_property name="Radix">REALRADIX</obj_property>
+            <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+            <obj_property name="radix_fractionWidth">7</obj_property>
+            <obj_property name="radix_otherWidth">0</obj_property>
+         </wvobject>
       </wvobject>
    </wvobject>
    <wvobject fp_name="group73" type="group">
@@ -730,11 +968,6 @@
    <wvobject fp_name="group262" type="group">
       <obj_property name="label">EQ</obj_property>
       <obj_property name="DisplayName">label</obj_property>
-      <obj_property name="isExpanded"></obj_property>
-      <wvobject fp_name="/test/demod/enableEqualizer" type="logic">
-         <obj_property name="ElementShortName">enableEqualizer</obj_property>
-         <obj_property name="ObjectShortName">enableEqualizer</obj_property>
-      </wvobject>
       <wvobject fp_name="/test/demod/iDdc" type="array">
          <obj_property name="ElementShortName">iDdc[17:0]</obj_property>
          <obj_property name="ObjectShortName">iDdc[17:0]</obj_property>
@@ -754,171 +987,6 @@
       <wvobject fp_name="/test/demod/qDdc" type="array">
          <obj_property name="ElementShortName">qDdc[17:0]</obj_property>
          <obj_property name="ObjectShortName">qDdc[17:0]</obj_property>
-         <obj_property name="Radix">REALRADIX</obj_property>
-         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
-         <obj_property name="radix_fractionWidth">17</obj_property>
-         <obj_property name="radix_otherWidth">0</obj_property>
-         <obj_property name="CellHeight">100</obj_property>
-         <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
-         <obj_property name="AnalogYRangeMin">0.000000</obj_property>
-         <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
-         <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
-         <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
-         <obj_property name="AnalogHorizLine">0.000000</obj_property>
-         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/demod/cma/mag" type="array">
-         <obj_property name="ElementShortName">mag[17:0]</obj_property>
-         <obj_property name="ObjectShortName">mag[17:0]</obj_property>
-         <obj_property name="Radix">REALRADIX</obj_property>
-         <obj_property name="radix_realType">UNSIGNEDFIXEDPOINTRADIX</obj_property>
-         <obj_property name="radix_fractionWidth">17</obj_property>
-         <obj_property name="radix_otherWidth">0</obj_property>
-         <obj_property name="CellHeight">100</obj_property>
-         <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
-         <obj_property name="AnalogYRangeMin">0.000000</obj_property>
-         <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
-         <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
-         <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
-         <obj_property name="AnalogHorizLine">0.000000</obj_property>
-         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/demod/cma/refLevel" type="array">
-         <obj_property name="DisplayName">label</obj_property>
-         <obj_property name="ElementShortName">refLevel[15:0]</obj_property>
-         <obj_property name="ObjectShortName">refLevel[15:0]</obj_property>
-         <obj_property name="label">{1&apos;b0,refLevel[15:0]}</obj_property>
-         <obj_property name="Radix">REALRADIX</obj_property>
-         <obj_property name="radix_realType">UNSIGNEDFIXEDPOINTRADIX</obj_property>
-         <obj_property name="radix_fractionWidth">16</obj_property>
-         <obj_property name="radix_otherWidth">0</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/demod/cma/diff" type="array">
-         <obj_property name="ElementShortName">diff[17:0]</obj_property>
-         <obj_property name="ObjectShortName">diff[17:0]</obj_property>
-         <obj_property name="Radix">REALRADIX</obj_property>
-         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
-         <obj_property name="radix_fractionWidth">17</obj_property>
-         <obj_property name="radix_otherWidth">0</obj_property>
-         <obj_property name="CellHeight">100</obj_property>
-         <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
-         <obj_property name="AnalogYRangeMin">0.000000</obj_property>
-         <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
-         <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
-         <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
-         <obj_property name="AnalogHorizLine">0.000000</obj_property>
-         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/demod/cma/weightOverflow" type="logic">
-         <obj_property name="ElementShortName">weightOverflow</obj_property>
-         <obj_property name="ObjectShortName">weightOverflow</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/demod/cma/tap7/iWeight" type="array">
-         <obj_property name="ElementShortName">iWeight[17:0]</obj_property>
-         <obj_property name="ObjectShortName">iWeight[17:0]</obj_property>
-         <obj_property name="Radix">REALRADIX</obj_property>
-         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
-         <obj_property name="radix_fractionWidth">17</obj_property>
-         <obj_property name="radix_otherWidth">0</obj_property>
-         <obj_property name="CellHeight">100</obj_property>
-         <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
-         <obj_property name="AnalogYRangeMin">0.000000</obj_property>
-         <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
-         <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
-         <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
-         <obj_property name="AnalogHorizLine">0.000000</obj_property>
-         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/demod/cma/tap7/qWeight" type="array">
-         <obj_property name="ElementShortName">qWeight[17:0]</obj_property>
-         <obj_property name="ObjectShortName">qWeight[17:0]</obj_property>
-         <obj_property name="Radix">REALRADIX</obj_property>
-         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
-         <obj_property name="radix_fractionWidth">17</obj_property>
-         <obj_property name="radix_otherWidth">0</obj_property>
-         <obj_property name="CellHeight">100</obj_property>
-         <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
-         <obj_property name="AnalogYRangeMin">0.000000</obj_property>
-         <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
-         <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
-         <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
-         <obj_property name="AnalogHorizLine">0.000000</obj_property>
-         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/demod/cma/iSum" type="array">
-         <obj_property name="ElementShortName">iSum[17:0]</obj_property>
-         <obj_property name="ObjectShortName">iSum[17:0]</obj_property>
-         <obj_property name="Radix">REALRADIX</obj_property>
-         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
-         <obj_property name="radix_fractionWidth">17</obj_property>
-         <obj_property name="radix_otherWidth">0</obj_property>
-         <obj_property name="CellHeight">100</obj_property>
-         <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
-         <obj_property name="AnalogYRangeMin">0.000000</obj_property>
-         <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
-         <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
-         <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
-         <obj_property name="AnalogHorizLine">0.000000</obj_property>
-         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/demod/cma/iSumSqr" type="array">
-         <obj_property name="ElementShortName">iSumSqr[35:0]</obj_property>
-         <obj_property name="ObjectShortName">iSumSqr[35:0]</obj_property>
-         <obj_property name="Radix">REALRADIX</obj_property>
-         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
-         <obj_property name="radix_fractionWidth">34</obj_property>
-         <obj_property name="radix_otherWidth">0</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/demod/iCma" type="array">
-         <obj_property name="ElementShortName">iCma[17:0]</obj_property>
-         <obj_property name="ObjectShortName">iCma[17:0]</obj_property>
-         <obj_property name="Radix">REALRADIX</obj_property>
-         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
-         <obj_property name="radix_fractionWidth">17</obj_property>
-         <obj_property name="radix_otherWidth">0</obj_property>
-         <obj_property name="CellHeight">100</obj_property>
-         <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
-         <obj_property name="AnalogYRangeMin">0.000000</obj_property>
-         <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
-         <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
-         <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
-         <obj_property name="AnalogHorizLine">0.000000</obj_property>
-         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/demod/qCma" type="array">
-         <obj_property name="ElementShortName">qCma[17:0]</obj_property>
-         <obj_property name="ObjectShortName">qCma[17:0]</obj_property>
-         <obj_property name="Radix">REALRADIX</obj_property>
-         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
-         <obj_property name="radix_fractionWidth">17</obj_property>
-         <obj_property name="radix_otherWidth">0</obj_property>
-         <obj_property name="CellHeight">100</obj_property>
-         <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
-         <obj_property name="AnalogYRangeMin">0.000000</obj_property>
-         <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
-         <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
-         <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
-         <obj_property name="AnalogHorizLine">0.000000</obj_property>
-         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/demod/cma/video" type="array">
-         <obj_property name="ElementShortName">video[17:0]</obj_property>
-         <obj_property name="ObjectShortName">video[17:0]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
-         <obj_property name="radix_fractionWidth">17</obj_property>
-         <obj_property name="radix_otherWidth">0</obj_property>
-         <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
-         <obj_property name="AnalogYRangeMin">0.000000</obj_property>
-         <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
-         <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
-         <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
-         <obj_property name="AnalogHorizLine">0.000000</obj_property>
-         <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/demod/cma/video" type="array">
-         <obj_property name="ElementShortName">video[17:0]</obj_property>
-         <obj_property name="ObjectShortName">video[17:0]</obj_property>
          <obj_property name="Radix">REALRADIX</obj_property>
          <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
          <obj_property name="radix_fractionWidth">17</obj_property>
@@ -956,7 +1024,6 @@
    <wvobject fp_name="group129" type="group">
       <obj_property name="label">Video</obj_property>
       <obj_property name="DisplayName">label</obj_property>
-      <obj_property name="isExpanded"></obj_property>
       <wvobject fp_name="/test/interpReset" type="logic">
          <obj_property name="ElementShortName">interpReset</obj_property>
          <obj_property name="ObjectShortName">interpReset</obj_property>

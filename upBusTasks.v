@@ -105,6 +105,30 @@
       end
     endtask
 
+    task read32;
+        input [ADDR_BITS-1:0]addr;
+        begin
+            a = addr;
+            busClk = 1;
+        #20 ;
+            busClk = 0;
+        #20 ;
+            busClk = 1;
+        #20 ;
+            busClk = 0;
+        #20 ;
+            busClk = 1;
+        #20 ;
+            busClk = 0;
+        #20 ;
+            busClk = 1;
+        #20 ;
+            busClk = 0;
+        #20 ;
+        end
+    endtask
+
+
     `else  // USE_BUS_CLOCK
 
     task write16;
@@ -143,8 +167,6 @@
       end
     endtask
 
-    `endif  //USE_BUS_CLOCK
-
     task read32;
       input [ADDR_BITS-1:0]addr;
       begin
@@ -152,4 +174,7 @@
         #200;
       end
     endtask
+
+
+    `endif  //USE_BUS_CLOCK
 

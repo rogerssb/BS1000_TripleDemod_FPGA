@@ -10,6 +10,9 @@ set_output_delay -clock [get_clocks adc0Clk] -max -add_delay 3.400 [get_ports {d
 set_output_delay -clock [get_clocks adc0Clk] -min -add_delay -0.100 [get_ports {dac1_d[*]}]
 set_output_delay -clock [get_clocks adc0Clk] -max -add_delay 3.400 [get_ports {dac1_d[*]}]
 
+set_multicycle_path 4 -setup -from [get_pins -hierarchical -regexp {.*dqm/dqmm/diffTotal_reg.*/C$}] -to [get_pins -hierarchical -regexp {.*dqm/dqmm/.*/D$}]
+set_multicycle_path 3 -hold -from [get_pins -hierarchical -regexp {.*dqm/dqmm/diffTotal_reg.*/C$}] -to [get_pins -hierarchical -regexp {.*dqm/dqmm/.*/D$}]
+
 set_multicycle_path 4 -setup -from [get_pins -hierarchical -regexp {.*pcmTrellis/viterbi_top/acs.*/C$}] -to [get_pins -hierarchical -regexp {.*pcmTrellis/viterbi_top/maxMetric/.*/D$}]
 set_multicycle_path 3 -hold -from [get_pins -hierarchical -regexp {.*pcmTrellis/viterbi_top/acs.*/C$}] -to [get_pins -hierarchical -regexp {.*pcmTrellis/viterbi_top/maxMetric/.*/D$}]
 

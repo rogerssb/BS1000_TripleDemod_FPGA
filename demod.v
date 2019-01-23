@@ -55,6 +55,8 @@ module demod(
     output  reg                 dac2Sync,
     output  reg signed  [17:0]  dac2Data,
     output              [4:0]   demodMode,
+    output              [12:0]  mag,
+    output                      magClkEn,
     `ifdef ADD_SCPATH
     output                      enableScPath,
     output      signed  [17:0]  iBBOut, qBBOut,
@@ -264,7 +266,6 @@ wire    [11:0]   phase;
 wire    [11:0]   freq;
 wire    [11:0]   negFreq = ~freq + 1;
 wire    [11:0]   freqError;
-wire    [12:0]   mag;
 fmDemod fmDemod(
     .clk(clk), .reset(reset),
     `ifdef ADD_DESPREADER
@@ -282,6 +283,7 @@ fmDemod fmDemod(
     .mag(mag),
     .clkEnOut(demodSync)
     );
+assign magClkEn = demodSync;
 
 reg     [17:0]  iDdc0;
 reg     [17:0]  qDdc0;

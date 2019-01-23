@@ -1,13 +1,13 @@
 `timescale 1ns/100ps
 `include "addressMap.v"
 
-//`define FM_TEST
+`define FM_TEST
 //`define SOQPSK_TEST
 //`define LDPC_TEST
-`define AQPSK_TEST
+//`define AQPSK_TEST
 
 `define ENABLE_AGC
-`define TEST_CMA
+//`define TEST_CMA
 
 `ifdef FM_TEST
     `define TEST_DATA "c:/modem/vivado/testData/pcmfmTestData.txt"
@@ -91,7 +91,7 @@ module test;
     end
     real                    ifSampleScaled;
     real                    sampleScaleFactor;
-    initial                 sampleScaleFactor = 0.25;
+    initial                 sampleScaleFactor = 0.5;
     reg     signed  [17:0]  ifSample;
     initial                 ifSample = 0;
     always @(posedge clk) begin
@@ -409,10 +409,12 @@ module test;
         `endif
 
         `ifdef ADD_DQM
-        // Bit Error Probability Estimator
-        write32(createAddress(`BEPSPACE, `BEP_BLOCK_SIZE),7);
-        //write32(createAddress(`BEPSPACE, `BEP_MEAN_INVERSE),32'h0002_b6db);
-        write32(createAddress(`BEPSPACE, `BEP_MEAN_INVERSE),32'h0002_ffff);
+        // MSE Estimator
+        write16(createAddress(`DQMSPACE, `DQM_LOG10MSE_OFFSET),-16'sd250);
+        write32(createAddress(`DQMSPACE, `DQM_MSE_CONTROL),{16'd255,16'd23253});
+        write16(createAddress(`DQMSPACE, `DQM_CLKS_PER_BIT),15);
+        write16(createAddress(`DQMSPACE, `DQM_PAYLOAD_SIZE),127);
+        read16(createAddress(`DQMSPACE,  `DQM_CLKS_PER_BIT));
         `endif
 
         `ifdef TEST_CMA
@@ -484,11 +486,13 @@ module test;
         // Wait 5 bit periods
         repeat (5*`CLOCKS_PER_BIT) @ (posedge clk) ;
 
+        /*
         `ifdef ADD_DQM
         // Clear the BEP estimate
         bepEstimate.sum = 0;
         bepEstimate.count = 1;
         `endif
+        */
 
         `ifdef TRELLIS
         // Create a reset to clear the accumulator in the trellis
@@ -579,6 +583,7 @@ module test;
     `ifdef LDPC_TEST
     wire    signed  [17:0]  iLdpc,qLdpc;
     `endif
+    wire    [12:0]  mag;
     wire    [17:0]  dac0Out,dac1Out,dac2Out, iSymData, qSymData, sdiDataI, sdiDataQ;
     wire    [17:0]  iEye,qEye;
     wire    [31:0]  dout;
@@ -607,6 +612,8 @@ module test;
         .trellisSymEn(trellisSymEn),
         .iTrellis(iSymData),
         .qTrellis(qSymData),
+        .mag(mag),
+        .magClkEn(magClkEn),
         `ifdef LDPC_TEST
         .iLdpcSymEn(iLdpcSymEn),.qLdpcSymEn(qLdpcSymEn),
         .iLdpc(iLdpc),
@@ -696,6 +703,52 @@ module test;
         .bitsyncLock(), .demodLock(),
         .sdiOut()
     );
+
+`ifdef ADD_DQM
+/******************************************************************************
+                                    DQM
+******************************************************************************/
+    wire    [3:0]   dqmSourceSelect;
+    reg             dqmBitEnIn;
+    reg             dqmBitIn;
+    always @(posedge clk) begin
+        casex (dqmSourceSelect)
+            `DQM_SRC_DEC0_CH0: begin
+                dqmBitEnIn <= iSymEn;
+                dqmBitIn <= demodBit;
+            end
+            default: begin
+                dqmBitEnIn <= iSymEn;
+                dqmBitIn <= demodBit;
+            end
+        endcase
+    end
+
+
+
+    wire    [31:0]  dqmDout;
+    dqm dqm(
+        .clk(clk),
+        .reset(reset),
+        .addr(a),
+        .din(d),
+        .dout(),
+        .cs(cs),
+        `ifdef USE_BUS_CLOCK
+        .busClk(busClk),
+        `endif
+        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .bitClkEn(dqmBitEnIn),
+        .payloadBit(dqmBitIn),
+        .magClkEn(magClkEn),
+        .mag(mag),
+        .sourceSelect(dqmSourceSelect),
+        .dqmBitEn(dqmBitEn),
+        .dqmBit(dqmBit)
+    );
+
+`endif //ADD_DQM
+
 
 
 
