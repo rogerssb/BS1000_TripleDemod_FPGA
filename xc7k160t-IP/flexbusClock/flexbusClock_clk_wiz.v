@@ -1,3 +1,4 @@
+
 // file: flexbusClock.v
 // 
 // (c) Copyright 2008 - 2013 Xilinx, Inc. All rights reserved.
@@ -55,7 +56,7 @@
 //  Output     Output      Phase    Duty Cycle   Pk-to-Pk     Phase
 //   Clock     Freq (MHz)  (degrees)    (%)     Jitter (ps)  Error (ps)
 //----------------------------------------------------------------------------
-// CLK_OUT1____40.000______0.000______50.0______232.099____191.950
+// clk_out1____40.000______0.000______50.0______232.099____191.950
 //
 //----------------------------------------------------------------------------
 // Input Clock   Freq (MHz)    Input Jitter (UI)
@@ -65,20 +66,21 @@
 `timescale 1ps/1ps
 
 module flexbusClock_clk_wiz 
+
  (// Clock in ports
-  input         clk_in1,
   // Clock out ports
   output        clk_out1,
   // Status and control signals
-  output        locked
+  output        locked,
+  input         clk_in1
  );
-
   // Input buffering
   //------------------------------------
+wire clk_in1_flexbusClock;
+wire clk_in2_flexbusClock;
   IBUF clkin1_ibufg
    (.O (clk_in1_flexbusClock),
     .I (clk_in1));
-
 
 
   // Clocking PRIMITIVE
@@ -87,6 +89,15 @@ module flexbusClock_clk_wiz
   // Instantiation of the MMCM PRIMITIVE
   //    * Unused inputs are tied off
   //    * Unused outputs are labeled unused
+
+  wire        clk_out1_flexbusClock;
+  wire        clk_out2_flexbusClock;
+  wire        clk_out3_flexbusClock;
+  wire        clk_out4_flexbusClock;
+  wire        clk_out5_flexbusClock;
+  wire        clk_out6_flexbusClock;
+  wire        clk_out7_flexbusClock;
+
   wire [15:0] do_unused;
   wire        drdy_unused;
   wire        psdone_unused;
@@ -163,10 +174,10 @@ module flexbusClock_clk_wiz
     .PWRDWN              (1'b0),
     .RST                 (1'b0));
 
-
   assign locked = locked_int;
-
-  // Output buffering
+// Clock Monitor clock assigning
+//--------------------------------------
+ // Output buffering
   //-----------------------------------
 
   BUFG clkf_buf

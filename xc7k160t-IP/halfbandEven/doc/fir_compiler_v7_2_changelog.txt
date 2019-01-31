@@ -1,3 +1,31 @@
+2016.4:
+ * Version 7.2 (Rev. 7)
+ * No changes
+
+2016.3:
+ * Version 7.2 (Rev. 7)
+ * General: Support for Spartan7 devices
+ * Revision change in one or more subcores
+
+2016.2:
+ * Version 7.2 (Rev. 6)
+ * No changes
+
+2016.1:
+ * Version 7.2 (Rev. 6)
+ * Fix for error in Sysgen parameter propagation.
+ * Enabled DSP48 ADREG/DREG but gate CEAD/CED to address power DRC.
+ * Fix in common c model utilities package for handling of arrays of real types in Matlab
+ * Revision change in one or more subcores
+
+2015.4.2:
+ * Version 7.2 (Rev. 5)
+ * No changes
+
+2015.4.1:
+ * Version 7.2 (Rev. 5)
+ * No changes
+
 2015.4:
  * Version 7.2 (Rev. 5)
  * Correction to GUI reported Calculated Coefficients for Transpose Interpolation filters.
@@ -96,7 +124,7 @@
  * Native Vivado Release
  * There have been no functional or interface changes to this IP.  The version number has changed to support unique versioning in Vivado starting with 2013.1.
 
-(c) Copyright 2002 - 2015 Xilinx, Inc. All rights reserved.
+(c) Copyright 2002 - 2016 Xilinx, Inc. All rights reserved.
 
 This file contains confidential and proprietary information
 of Xilinx, Inc. and is protected under U.S. and

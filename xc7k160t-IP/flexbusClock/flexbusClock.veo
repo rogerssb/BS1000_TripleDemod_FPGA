@@ -1,3 +1,4 @@
+
 // 
 // (c) Copyright 2008 - 2013 Xilinx, Inc. All rights reserved.
 // 
@@ -54,7 +55,7 @@
 //  Output     Output      Phase    Duty Cycle   Pk-to-Pk     Phase
 //   Clock     Freq (MHz)  (degrees)    (%)     Jitter (ps)  Error (ps)
 //----------------------------------------------------------------------------
-// CLK_OUT1____40.000______0.000______50.0______232.099____191.950
+// clk_out1____40.000______0.000______50.0______232.099____191.950
 //
 //----------------------------------------------------------------------------
 // Input Clock   Freq (MHz)    Input Jitter (UI)
@@ -69,10 +70,10 @@
 
   flexbusClock instance_name
    (
-   // Clock in ports
-    .clk_in1(clk_in1),      // input clk_in1
     // Clock out ports
     .clk_out1(clk_out1),     // output clk_out1
     // Status and control signals
-    .locked(locked));      // output locked
+    .locked(locked),       // output locked
+   // Clock in ports
+    .clk_in1(clk_in1));      // input clk_in1
 // INST_TAG_END ------ End INSTANTIATION Template ---------

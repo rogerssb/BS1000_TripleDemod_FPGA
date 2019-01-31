@@ -67,3 +67,4 @@ set_false_path -from [get_cells -hierarchical -filter {NAME =~ *rstblk*/*rst_reg
 
 
 ################################################################################
+

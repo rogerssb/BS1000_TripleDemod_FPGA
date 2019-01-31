@@ -1,3 +1,4 @@
+
 # file: flexbusClock.xdc
 # 
 # (c) Copyright 2008 - 2013 Xilinx, Inc. All rights reserved.
@@ -56,4 +57,4 @@ create_clock -period 25.0 [get_ports clk_in1]
 set_input_jitter [get_clocks -of_objects [get_ports clk_in1]] 0.25
 
 
-
+set_property PHASESHIFT_MODE WAVEFORM [get_cells -hierarchical *adv*]

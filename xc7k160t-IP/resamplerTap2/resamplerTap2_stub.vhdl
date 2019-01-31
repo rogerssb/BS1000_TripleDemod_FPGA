@@ -1,7 +1,7 @@
--- Copyright 1986-2015 Xilinx, Inc. All Rights Reserved.
+-- Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
--- Tool Version: Vivado v.2015.4 (win64) Build 1412921 Wed Nov 18 09:43:45 MST 2015
--- Date        : Mon Mar 13 11:20:31 2017
+-- Tool Version: Vivado v.2016.4 (win64) Build 1733598 Wed Dec 14 22:35:39 MST 2016
+-- Date        : Thu Jan 31 06:54:10 2019
 -- Host        : Sherlock running 64-bit Service Pack 1  (build 7601)
 -- Command     : write_vhdl -force -mode synth_stub C:/modem/vivado/xc7k160t-IP/resamplerTap2/resamplerTap2_stub.vhdl
 -- Design      : resamplerTap2
@@ -25,6 +25,6 @@ attribute black_box_pad_pin : string;
 attribute syn_black_box of stub : architecture is true;
 attribute black_box_pad_pin of stub : architecture is "a[4:0],spo[17:0]";
 attribute x_core_info : string;
-attribute x_core_info of stub : architecture is "dist_mem_gen_v8_0_9,Vivado 2015.4";
+attribute x_core_info of stub : architecture is "dist_mem_gen_v8_0_11,Vivado 2016.4";
 begin
 end;

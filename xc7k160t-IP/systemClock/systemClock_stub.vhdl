@@ -1,7 +1,7 @@
--- Copyright 1986-2015 Xilinx, Inc. All Rights Reserved.
+-- Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
--- Tool Version: Vivado v.2015.4 (win64) Build 1412921 Wed Nov 18 09:43:45 MST 2015
--- Date        : Thu Dec 08 13:35:54 2016
+-- Tool Version: Vivado v.2016.4 (win64) Build 1733598 Wed Dec 14 22:35:39 MST 2016
+-- Date        : Thu Jan 31 06:49:53 2019
 -- Host        : Sherlock running 64-bit Service Pack 1  (build 7601)
 -- Command     : write_vhdl -force -mode synth_stub C:/modem/vivado/xc7k160t-IP/systemClock/systemClock_stub.vhdl
 -- Design      : systemClock
@@ -13,9 +13,9 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity systemClock is
   Port ( 
-    clk_in1 : in STD_LOGIC;
     clk_out1 : out STD_LOGIC;
-    locked : out STD_LOGIC
+    locked : out STD_LOGIC;
+    clk_in1 : in STD_LOGIC
   );
 
 end systemClock;
@@ -24,6 +24,6 @@ architecture stub of systemClock is
 attribute syn_black_box : boolean;
 attribute black_box_pad_pin : string;
 attribute syn_black_box of stub : architecture is true;
-attribute black_box_pad_pin of stub : architecture is "clk_in1,clk_out1,locked";
+attribute black_box_pad_pin of stub : architecture is "clk_out1,locked,clk_in1";
 begin
 end;

@@ -3,137 +3,86 @@
 `include "defines.v"
 
 module bitsyncBertTop (
-    sysClk,
-    fbClk,
-    fb_ale,
-    fb_csn,
-    fb_oen,
-    fb_wrn,
-    fb_addr,
-    fb_data,
-    adc0, adc0_overflow,
-    adc1, adc1_overflow,
-    adc01_powerDown,
-    singleEndedClk, singleEndedData,
-    differentialClk, differentialData,
-    dac_rst,
-    dac_sclk,
-    dac_sdio,
-    dac0_nCs,
-    dac1_nCs,
-    dac2_nCs,
-    dac0_d,dac1_d,dac2_d,
-    dac0_clk,dac1_clk,dac2_clk,
-    bsClkOut,bsDataOut,
-    encClkOut,encDataOut,
-    fsClkOut,fsDataOut,
-    bsDiffClkOut, bsDiffDataOut,
-    fsDiffClkOut, fsDiffDataOut,
-    framer_Sync,
-    spareData,
-    spareClock,
-    ch0Lockn, ch1Lockn,
-    dacSCLK, dacMOSI,
-    ch0SELn,
-    ch1SELn,
-    ch0HighImpedance,
-    ch0SingleEnded,
-    ch1HighImpedance,
-    ch1SingleEnded,
-    pll_SCK,
-    pll_SDI,
-    pll0_CS,
-    pll0_REF,
-    pll0_OUT1,
-    pll0_PWDn,
-    pll1_CS,
-    pll1_REF,
-    pll1_OUT1,
-    pll1_PWDn,
-    pll2_CS,
-    pll2_REF,
-    pll2_OUT1,
-    pll2_PWDn
-);
-
-    input           sysClk;
+    input           sysClk,
 
     // Flexbus connections
-    input           fbClk;
-    input           fb_ale;
-    input           fb_csn;
-    input           fb_oen;
-    input           fb_wrn;
-    input   [15:0]  fb_addr;
-    inout   [15:0]  fb_data;
+    input           fbClk,
+    input           fb_ale,
+    input           fb_csn,
+    input           fb_oen,
+    input           fb_wrn,
+    input   [15:0]  fb_addr,
+    inout   [15:0]  fb_data,
 
     // ADC Inputs
-    input   [13:0]  adc0;
-    input           adc0_overflow;
-    input   [13:0]  adc1;
-    input           adc1_overflow;
-    output          adc01_powerDown;
+    input   [13:0]  adc0,
+    input           adc0_overflow,
+    input   [13:0]  adc1,
+    input           adc1_overflow,
+    output          adc01_powerDown,
 
     // Clock and data inputs
-    input           singleEndedClk;
-    input           singleEndedData;
-    input           differentialClk;
-    input           differentialData;
+    input           singleEndedClk,
+    input           singleEndedData,
+    input           differentialClk,
+    input           differentialData,
 
     // DAC configuration interface
-    output          dac_rst;
-    output          dac_sclk;
-    inout           dac_sdio;
-    output          dac0_nCs;
-    output          dac1_nCs;
-    output          dac2_nCs;
+    output          dac_rst,
+    output          dac_sclk,
+    inout           dac_sdio,
+    output          dac0_nCs,
+    output          dac1_nCs,
+    output          dac2_nCs,
 
     // DAC datapath interface
-    output  [13:0]  dac0_d,dac1_d,dac2_d;
-    output          dac0_clk,dac1_clk,dac2_clk;
+    output reg  [13:0]  dac0_d,dac1_d,dac2_d,
+    output              dac0_clk,dac1_clk,dac2_clk,
 
     // Clock and data outputs
-    output          bsClkOut,bsDataOut;
-    output          fsClkOut,fsDataOut;
-    output          encClkOut,encDataOut;
-    output          bsDiffClkOut, bsDiffDataOut;
-    output          fsDiffClkOut, fsDiffDataOut;
+    output          bsClkOut,bsDataOut,
+    output          fsClkOut,fsDataOut,
+    output          encClkOut,encDataOut,
+    output          bsDiffClkOut, bsDiffDataOut,
+    output          fsDiffClkOut, fsDiffDataOut,
 
     // Framer Outputs
-    output          framer_Sync;
+    output          framer_Sync,
 
     // Spare Outputs
-    output          spareData;
-    output          spareClock;
+    output          spareData,
+    output          spareClock,
 
     // Lock indicators
-    output          ch0Lockn, ch1Lockn;
+    output          ch0Lockn, ch1Lockn,
 
     // Gain and Offset DAC interfaces
-    output          ch0SELn, ch1SELn;
-    output          dacSCLK, dacMOSI;
+    output          ch0SELn, ch1SELn,
+    output          dacSCLK, dacMOSI,
 
     // Input Impedance and Topology controls
-    output          ch0HighImpedance;
-    output          ch0SingleEnded;
-    output          ch1HighImpedance;
-    output          ch1SingleEnded;
+    output          ch0HighImpedance,
+    output          ch0SingleEnded,
+    output          ch1HighImpedance,
+    output          ch1SingleEnded,
 
     // PLL Interface Signals
-    output          pll_SCK;
-    output          pll_SDI;
-    output          pll0_CS;
-    output          pll0_REF;
-    input           pll0_OUT1;
-    output          pll0_PWDn;
-    output          pll1_CS;
-    output          pll1_REF;
-    input           pll1_OUT1;
-    output          pll1_PWDn;
-    output          pll2_CS;
-    output          pll2_REF;
-    input           pll2_OUT1;
-    output          pll2_PWDn;
+    output          pll_SCK,
+    output          pll_SDI,
+    output          pll0_CS,
+    output          pll0_REF,
+    input           pll0_OUT1,
+    output          pll0_PWDn,
+    output          pll1_CS,
+    output          pll1_REF,
+    input           pll1_OUT1,
+    output          pll1_PWDn,
+    output          pll2_CS,
+    output          pll2_REF,
+    input           pll2_OUT1,
+    output          pll2_PWDn
+
+);
 
     parameter VER_NUMBER = 16'd459;
 
@@ -224,7 +173,7 @@ clockAndDataInputSync diffSync(
     reg bsBertTopSpace;
     always @* begin
         casex(addr)
-            `BITSYNC_BERT_SPACE:    bsBertTopSpace = 1;
+            `BITSYNC_BERT_SPACE:    bsBertTopSpace = cs;
             default:                bsBertTopSpace = 0;
             endcase
         end
@@ -286,6 +235,7 @@ clockAndDataInputSync diffSync(
     bitsyncTop bitsyncTop(
         .clk(clk), .clkEn(bitsyncEnable), .reset(reset),
         .busClk(fb_clk),
+        .cs(cs),
         .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
         .addr(addr),
         .din(dataIn),
@@ -371,7 +321,7 @@ clockAndDataInputSync diffSync(
     reg dualDecoderSpace;
     always @* begin
         casex(addr)
-            `DUAL_DECODERSPACE:     dualDecoderSpace = 1;
+            `DUAL_DECODERSPACE:     dualDecoderSpace = cs;
             default:                dualDecoderSpace = 0;
         endcase
     end
@@ -435,7 +385,7 @@ clockAndDataInputSync diffSync(
     reg ch1DecoderSpace;
     always @* begin
         casex(addr)
-            `CH1_DECODERSPACE:      ch1DecoderSpace = 1;
+            `CH1_DECODERSPACE:      ch1DecoderSpace = cs;
             default:                ch1DecoderSpace = 0;
         endcase
     end
@@ -527,7 +477,7 @@ clockAndDataInputSync diffSync(
     reg bertSpace;
     always @* begin
         casex(addr)
-            `BERT_SPACE:            bertSpace = 1;
+            `BERT_SPACE:            bertSpace = cs;
             default:                bertSpace = 0;
             endcase
         end
@@ -578,6 +528,7 @@ clockAndDataInputSync diffSync(
         .addr(addr),
         .dataIn(dataIn),
         .dataOut(pllDout),
+        .cs(cs),
         .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
         .clk(clk),
         .SCK(pll_SCK),
@@ -593,6 +544,111 @@ clockAndDataInputSync diffSync(
         .pll2Reset(pll2Reset)
     );
 
+    `ifdef USE_DEMOD_CandD
+
+    //----------------------- Channel 0 Jitter Attenuation --------------------
+
+    wire    [3:0]   cAndD0SourceSelect;
+    reg             cAndD0ClkEn;
+    reg     [2:0]   cAndD0DataIn;
+    always @* begin
+        cAndD0ClkEn = dualPcmClkEn;
+        cAndD0DataIn = {dualDataI,dualDataQ,1'b0};
+    end
+
+    wire    [2:0]   cAndD0DataOut;
+    wire    [31:0]  cAndD0Dout;
+    clkAndDataOutput #(.RegSpace(`CandD0SPACE)) cAndD0 (
+        .clk(clk), .reset(reset),
+        .busClk(fb_clk),
+        .cs(cs),
+        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .addr(addr),
+        .din(dataIn),
+        .dout(cAndD0Dout),
+        .clkEnIn(cAndD0ClkEn),
+        .dataIn(cAndD0DataIn),
+        .pllOutputClk(pll0_OUT1),
+        .sourceSelect(cAndD0SourceSelect),
+        .pllReferenceClk(pll0_REF),
+        .outputClk(cAndD0ClkOut),
+        .outputData(cAndD0DataOut)
+    );
+
+    //----------------------- Channel 1 Jitter Attenuation --------------------
+
+    wire    [3:0]   cAndD1SourceSelect;
+    reg             cAndD1ClkEn;
+    reg     [2:0]   cAndD1DataIn;
+    always @* begin
+        cAndD1ClkEn = ch1PcmClkEn;
+        cAndD1DataIn = {ch1PcmData,2'b0};
+    end
+
+    wire    [2:0]   cAndD1DataOut;
+    wire    [31:0]  cAndD1Dout;
+    clkAndDataOutput #(.RegSpace(`CandD1SPACE)) cAndD1 (
+        .clk(clk), .reset(reset),
+        .busClk(fb_clk),
+        .cs(cs),
+        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .addr(addr),
+        .din(dataIn),
+        .dout(cAndD1Dout),
+        .clkEnIn(cAndD1ClkEn),
+        .dataIn(cAndD1DataIn),
+        .pllOutputClk(pll1_OUT1),
+        .sourceSelect(cAndD1SourceSelect),
+        .pllReferenceClk(pll1_REF),
+        .outputClk(cAndD1ClkOut),
+        .outputData(cAndD1DataOut)
+    );
+
+    //----------------------- Channel 2 Jitter Attenuation --------------------
+
+    wire    [3:0]   cAndD2SourceSelect;
+    reg             cAndD2ClkEn;
+    reg     [2:0]   cAndD2DataIn;
+    always @* begin
+        cAndD2ClkEn = pnClkEn;
+        cAndD2DataIn = {pnBit,2'b0};
+    end
+
+    wire    [2:0]   cAndD2DataOut;
+    wire    [31:0]  cAndD2Dout;
+    clkAndDataOutput #(.RegSpace(`CandD2SPACE)) cAndD2 (
+        .clk(clk), .reset(reset),
+        .busClk(fb_clk),
+        .cs(cs),
+        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .addr(addr),
+        .din(dataIn),
+        .dout(cAndD2Dout),
+        .clkEnIn(cAndD2ClkEn),
+        .dataIn(cAndD2DataIn),
+        .pllOutputClk(pll2_OUT1),
+        .sourceSelect(cAndD2SourceSelect),
+        .pllReferenceClk(pll2_REF),
+        .outputClk(cAndD2ClkOut),
+        .outputData(cAndD2DataOut)
+    );
+
+    //-------------------------- Final Assignments ----------------------------
+
+    assign pll0_Data = cAndD0DataOut[2];
+    assign pll0_Clk = cAndD0ClkOut;
+    assign dll0_Data = cAndD0DataOut[2];
+    assign dll0_Clk = cAndD0ClkOut;
+
+    assign pll1_Data = asyncMode ? cAndD1DataOut[2] : cAndD0DataOut[1];
+    assign pll1_Clk = asyncMode ? cAndD1ClkOut : cAndD0ClkOut;
+    assign dll1_Data = asyncMode ? cAndD1DataOut[2] : cAndD0DataOut[1];
+    assign dll1_Clk = asyncMode ? cAndD1ClkOut : cAndD0ClkOut;
+
+    assign pll2_Data = cAndD2DataOut[2];
+    assign pll2_Clk = cAndD2ClkOut;
+
+    `else // USE_DEMOD_CandD
 
     wire    [7:0]   dll0PhaseError;
     wire    [31:0]  dll0Dout;
@@ -863,6 +919,7 @@ clockAndDataInputSync diffSync(
     assign          pll2_Data = pll2_Symbol[2];
     assign          pll2_Clk = pll2_OUT1;
 
+    `endif //USE_DEMOD_CandD
 
 
 //******************************************************************************
@@ -925,142 +982,147 @@ clockAndDataInputSync diffSync(
 //******************************************************************************
 //                              Interpolators
 //******************************************************************************
-reg     [17:0]  interp0DataIn;
-reg             interp0ClkEn;
-always @(posedge clk) begin
-    case (dac0InputSelect)
-        `SYS_DAC_INPUT_SEL_CH0: begin
-            interp0DataIn <= ch0Dac0Data;
-            interp0ClkEn <= ch0Dac0ClkEn;
-        end
-        `SYS_DAC_INPUT_SEL_CH1: begin
-            interp0DataIn <= ch1Dac0Data;
-            interp0ClkEn <= ch1Dac0ClkEn;
-        end
-        `SYS_DAC_INPUT_SEL_DLL0: begin
-            interp0DataIn <= {1'b0,dll0PhaseError,9'b0};
-            interp0ClkEn <= 1'b1;
-        end
-        `SYS_DAC_INPUT_SEL_DLL1: begin
-            interp0DataIn <= {1'b0,dll1PhaseError,9'b0};
-            interp0ClkEn <= 1'b1;
-        end
-        default: begin
-            interp0DataIn <= ch0Dac0Data;
-            interp0ClkEn <= ch0Dac0ClkEn;
-        end
-    endcase
-end
-wire    [31:0]  interp0Dout;
-wire    [17:0]  interp0DataOut;
-interpolate #(.RegSpace(`INTERP0SPACE), .FirRegSpace(`VIDFIR0SPACE)) dac0Interp(
-    .clk(clk), .reset(reset), .clkEn(interp0ClkEn),
-    .busClk(fb_clk),
-    .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
-    .addr(addr),
-    .din(dataIn),
-    .dout(interp0Dout),
-    .dataIn(interp0DataIn),
-    .clkEnOut(),
-    .dataOut(interp0DataOut)
-    );
-reg     [13:0]  dac0_d;
-always @(posedge clk) begin
-    dac0_d[12:0] <= interp0DataOut[16:4];
-    dac0_d[13] <= ~interp0DataOut[17];
-end
+    reg     [17:0]  interp0DataIn;
+    reg             interp0ClkEn;
+    always @(posedge clk) begin
+        case (dac0InputSelect)
+            `SYS_DAC_INPUT_SEL_CH0: begin
+                interp0DataIn <= ch0Dac0Data;
+                interp0ClkEn <= ch0Dac0ClkEn;
+            end
+            `SYS_DAC_INPUT_SEL_CH1: begin
+                interp0DataIn <= ch1Dac0Data;
+                interp0ClkEn <= ch1Dac0ClkEn;
+            end
+            /*
+            `SYS_DAC_INPUT_SEL_DLL0: begin
+                interp0DataIn <= {1'b0,dll0PhaseError,9'b0};
+                interp0ClkEn <= 1'b1;
+            end
+            `SYS_DAC_INPUT_SEL_DLL1: begin
+                interp0DataIn <= {1'b0,dll1PhaseError,9'b0};
+                interp0ClkEn <= 1'b1;
+            end
+            */
+            default: begin
+                interp0DataIn <= ch0Dac0Data;
+                interp0ClkEn <= ch0Dac0ClkEn;
+            end
+        endcase
+    end
+    wire    [31:0]  interp0Dout;
+    wire    [17:0]  interp0DataOut;
+    interpolate #(.RegSpace(`INTERP0SPACE), .FirRegSpace(`VIDFIR0SPACE)) dac0Interp(
+        .clk(clk), .reset(reset), .clkEn(interp0ClkEn),
+        .busClk(fb_clk),
+        .cs(cs),
+        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .addr(addr),
+        .din(dataIn),
+        .dout(interp0Dout),
+        .dataIn(interp0DataIn),
+        .dacSource(),
+        .clkEnOut(),
+        .dataOut(interp0DataOut)
+        );
+    always @(posedge clk) begin
+        dac0_d[12:0] <= interp0DataOut[16:4];
+        dac0_d[13] <= ~interp0DataOut[17];
+    end
 
-reg     [17:0]  interp1DataIn;
-reg             interp1ClkEn;
-always @(posedge clk) begin
-    case (dac1InputSelect)
-        `SYS_DAC_INPUT_SEL_CH0: begin
-            interp1DataIn <= ch0Dac1Data;
-            interp1ClkEn <= ch0Dac1ClkEn;
-        end
-        `SYS_DAC_INPUT_SEL_CH1: begin
-            interp1DataIn <= ch1Dac1Data;
-            interp1ClkEn <= ch1Dac1ClkEn;
-        end
-        default: begin
-            interp1DataIn <= ch0Dac1Data;
-            interp1ClkEn <= ch0Dac1ClkEn;
-        end
-    endcase
-end
-wire    [31:0]  interp1Dout;
-wire    [17:0]  interp1DataOut;
-interpolate #(.RegSpace(`INTERP1SPACE), .FirRegSpace(`VIDFIR1SPACE)) dac1Interp(
-    .clk(clk), .reset(reset), .clkEn(interp1ClkEn),
-    .busClk(fb_clk),
-    .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
-    .addr(addr),
-    .din(dataIn),
-    .dout(interp1Dout),
-    .dataIn(interp1DataIn),
-    .clkEnOut(),
-    .dataOut(interp1DataOut)
-    );
-reg     [13:0]  dac1_d;
-always @(posedge clk) begin
-    dac1_d[12:0] <= interp1DataOut[16:4];
-    dac1_d[13] <= ~interp1DataOut[17];
-end
+    reg     [17:0]  interp1DataIn;
+    reg             interp1ClkEn;
+    always @(posedge clk) begin
+        case (dac1InputSelect)
+            `SYS_DAC_INPUT_SEL_CH0: begin
+                interp1DataIn <= ch0Dac1Data;
+                interp1ClkEn <= ch0Dac1ClkEn;
+            end
+            `SYS_DAC_INPUT_SEL_CH1: begin
+                interp1DataIn <= ch1Dac1Data;
+                interp1ClkEn <= ch1Dac1ClkEn;
+            end
+            default: begin
+                interp1DataIn <= ch0Dac1Data;
+                interp1ClkEn <= ch0Dac1ClkEn;
+            end
+        endcase
+    end
+    wire    [31:0]  interp1Dout;
+    wire    [17:0]  interp1DataOut;
+    interpolate #(.RegSpace(`INTERP1SPACE), .FirRegSpace(`VIDFIR1SPACE)) dac1Interp(
+        .clk(clk), .reset(reset), .clkEn(interp1ClkEn),
+        .busClk(fb_clk),
+        .cs(cs),
+        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .addr(addr),
+        .din(dataIn),
+        .dout(interp1Dout),
+        .dataIn(interp1DataIn),
+        .dacSource(),
+        .clkEnOut(),
+        .dataOut(interp1DataOut)
+        );
+    always @(posedge clk) begin
+        dac1_d[12:0] <= interp1DataOut[16:4];
+        dac1_d[13] <= ~interp1DataOut[17];
+    end
 
-reg     [17:0]  interp2DataIn;
-reg             interp2ClkEn;
-always @(posedge clk) begin
-    case (dac2InputSelect)
-        `SYS_DAC_INPUT_SEL_CH0: begin
-            interp2DataIn <= ch0Dac2Data;
-            interp2ClkEn <= ch0Dac2ClkEn;
-        end
-        `SYS_DAC_INPUT_SEL_CH1: begin
-            interp2DataIn <= ch1Dac2Data;
-            interp2ClkEn <= ch1Dac2ClkEn;
-        end
-        default: begin
-            interp2DataIn <= ch0Dac2Data;
-            interp2ClkEn <= ch0Dac2ClkEn;
-        end
-    endcase
-end
-wire    [31:0]  interp2Dout;
-wire    [17:0]  interp2DataOut;
-interpolate #(.RegSpace(`INTERP2SPACE), .FirRegSpace(`VIDFIR2SPACE)) dac2Interp(
-    .clk(clk), .reset(reset), .clkEn(interp2ClkEn),
-    .busClk(fb_clk),
-    .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
-    .addr(addr),
-    .din(dataIn),
-    .dout(interp2Dout),
-    .dataIn(interp2DataIn),
-    .clkEnOut(),
-    .dataOut(interp2DataOut)
-    );
-reg     [13:0]  dac2_d;
-always @(posedge clk) begin
-    dac2_d[12:0] <= interp2DataOut[16:4];
-    dac2_d[13] <= ~interp2DataOut[17];
-end
+    reg     [17:0]  interp2DataIn;
+    reg             interp2ClkEn;
+    always @(posedge clk) begin
+        case (dac2InputSelect)
+            `SYS_DAC_INPUT_SEL_CH0: begin
+                interp2DataIn <= ch0Dac2Data;
+                interp2ClkEn <= ch0Dac2ClkEn;
+            end
+            `SYS_DAC_INPUT_SEL_CH1: begin
+                interp2DataIn <= ch1Dac2Data;
+                interp2ClkEn <= ch1Dac2ClkEn;
+            end
+            default: begin
+                interp2DataIn <= ch0Dac2Data;
+                interp2ClkEn <= ch0Dac2ClkEn;
+            end
+        endcase
+    end
+    wire    [31:0]  interp2Dout;
+    wire    [17:0]  interp2DataOut;
+    interpolate #(.RegSpace(`INTERP2SPACE), .FirRegSpace(`VIDFIR2SPACE)) dac2Interp(
+        .clk(clk), .reset(reset), .clkEn(interp2ClkEn),
+        .busClk(fb_clk),
+        .cs(cs),
+        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .addr(addr),
+        .din(dataIn),
+        .dout(interp2Dout),
+        .dataIn(interp2DataIn),
+        .dacSource(),
+        .clkEnOut(),
+        .dataOut(interp2DataOut)
+        );
+    always @(posedge clk) begin
+        dac2_d[12:0] <= interp2DataOut[16:4];
+        dac2_d[13] <= ~interp2DataOut[17];
+    end
 
 
-assign dac0_clk = clk;
-assign dac1_clk = clk;
-assign dac2_clk = clk;
+    assign dac0_clk = clk;
+    assign dac1_clk = clk;
+    assign dac2_clk = clk;
 
 //******************************************************************************
 //                               Output Assignments
 //******************************************************************************
 
-assign adc01_powerDown = 1'b0;
+    assign adc01_powerDown = 1'b0;
 
-assign dac_rst = 1'b1;
-assign dac_sclk = 1'b0;
-assign dac0_nCs = 1'b0;
-assign dac1_nCs = 1'b0;
-assign dac2_nCs = 1'b0;
-assign dac_sdio = 1'b0;
+    assign dac_rst = 1'b1;
+    assign dac_sclk = 1'b0;
+    assign dac0_nCs = 1'b0;
+    assign dac1_nCs = 1'b0;
+    assign dac2_nCs = 1'b0;
+    assign dac_sdio = 1'b0;
 
 
 //`define TEST_OUTPUTS
@@ -1340,6 +1402,44 @@ always @* begin
                 rd_mux = interp2Dout[15:0];
                 end
             end
+        `ifdef USE_DEMOD_CandD
+        `CandD0SPACE: begin
+            if (addr[1]) begin
+                rd_mux = cAndD0Dout[31:16];
+            end
+            else begin
+                rd_mux = cAndD0Dout[15:0];
+            end
+        end
+        `CandD1SPACE: begin
+            if (addr[1]) begin
+                rd_mux = cAndD1Dout[31:16];
+            end
+            else begin
+                rd_mux = cAndD1Dout[15:0];
+            end
+        end
+        `CandD2SPACE: begin
+            if (addr[1]) begin
+                rd_mux = cAndD2Dout[31:16];
+            end
+            else begin
+                rd_mux = cAndD2Dout[15:0];
+            end
+        end
+        `PLL0SPACE,
+        `PLL1SPACE,
+        `PLL2SPACE: begin
+            if (addr[1]) begin
+                rd_mux = pllDout[31:16];
+                end
+            else begin
+                rd_mux = pllDout[15:0];
+                end
+            end
+
+        `else //USE_DEMOD_CandD
+
         `DLL0SPACE: begin
             if (addr[1]) begin
                 rd_mux = dll0Dout[31:16];
@@ -1364,6 +1464,9 @@ always @* begin
                 rd_mux = pllDout[15:0];
                 end
             end
+
+        `endif //USE_DEMOD_CandD
+
         `DUAL_DECODERSPACE: begin
             if (addr[1]) begin
                 rd_mux = dualDecDout[31:16];

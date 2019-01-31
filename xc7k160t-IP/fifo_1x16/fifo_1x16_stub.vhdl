@@ -1,7 +1,7 @@
--- Copyright 1986-2015 Xilinx, Inc. All Rights Reserved.
+-- Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
--- Tool Version: Vivado v.2015.4 (win64) Build 1412921 Wed Nov 18 09:43:45 MST 2015
--- Date        : Sat Oct 29 14:46:53 2016
+-- Tool Version: Vivado v.2016.4 (win64) Build 1733598 Wed Dec 14 22:35:39 MST 2016
+-- Date        : Thu Jan 31 06:46:24 2019
 -- Host        : Sherlock running 64-bit Service Pack 1  (build 7601)
 -- Command     : write_vhdl -force -mode synth_stub C:/modem/vivado/xc7k160t-IP/fifo_1x16/fifo_1x16_stub.vhdl
 -- Design      : fifo_1x16
@@ -34,6 +34,6 @@ attribute black_box_pad_pin : string;
 attribute syn_black_box of stub : architecture is true;
 attribute black_box_pad_pin of stub : architecture is "rst,wr_clk,rd_clk,din[0:0],wr_en,rd_en,dout[0:0],full,empty,rd_data_count[3:0],wr_data_count[3:0]";
 attribute x_core_info : string;
-attribute x_core_info of stub : architecture is "fifo_generator_v13_0_1,Vivado 2015.4";
+attribute x_core_info of stub : architecture is "fifo_generator_v13_1_3,Vivado 2016.4";
 begin
 end;

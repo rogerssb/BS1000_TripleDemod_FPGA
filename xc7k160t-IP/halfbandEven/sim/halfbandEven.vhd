@@ -1,4 +1,4 @@
--- (c) Copyright 1995-2017 Xilinx, Inc. All rights reserved.
+-- (c) Copyright 1995-2019 Xilinx, Inc. All rights reserved.
 -- 
 -- This file contains confidential and proprietary information
 -- of Xilinx, Inc. and is protected under U.S. and
@@ -47,14 +47,14 @@
 -- DO NOT MODIFY THIS FILE.
 
 -- IP VLNV: xilinx.com:ip:fir_compiler:7.2
--- IP Revision: 5
+-- IP Revision: 7
 
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
 
-LIBRARY fir_compiler_v7_2_5;
-USE fir_compiler_v7_2_5.fir_compiler_v7_2_5;
+LIBRARY fir_compiler_v7_2_7;
+USE fir_compiler_v7_2_7.fir_compiler_v7_2_7;
 
 ENTITY halfbandEven IS
   PORT (
@@ -71,10 +71,9 @@ ENTITY halfbandEven IS
 END halfbandEven;
 
 ARCHITECTURE halfbandEven_arch OF halfbandEven IS
-  ATTRIBUTE DowngradeIPIdentifiedWarnings : string;
+  ATTRIBUTE DowngradeIPIdentifiedWarnings : STRING;
   ATTRIBUTE DowngradeIPIdentifiedWarnings OF halfbandEven_arch: ARCHITECTURE IS "yes";
-
-  COMPONENT fir_compiler_v7_2_5 IS
+  COMPONENT fir_compiler_v7_2_7 IS
     GENERIC (
       C_XDEVICEFAMILY : STRING;
       C_ELABORATION_DIR : STRING;
@@ -177,7 +176,7 @@ ARCHITECTURE halfbandEven_arch OF halfbandEven IS
       event_s_reload_tlast_missing : OUT STD_LOGIC;
       event_s_reload_tlast_unexpected : OUT STD_LOGIC
     );
-  END COMPONENT fir_compiler_v7_2_5;
+  END COMPONENT fir_compiler_v7_2_7;
   ATTRIBUTE X_INTERFACE_INFO : STRING;
   ATTRIBUTE X_INTERFACE_INFO OF aresetn: SIGNAL IS "xilinx.com:signal:reset:1.0 aresetn_intf RST";
   ATTRIBUTE X_INTERFACE_INFO OF aclk: SIGNAL IS "xilinx.com:signal:clock:1.0 aclk_intf CLK";
@@ -189,7 +188,7 @@ ARCHITECTURE halfbandEven_arch OF halfbandEven IS
   ATTRIBUTE X_INTERFACE_INFO OF m_axis_data_tuser: SIGNAL IS "xilinx.com:interface:axis:1.0 M_AXIS_DATA TUSER";
   ATTRIBUTE X_INTERFACE_INFO OF m_axis_data_tdata: SIGNAL IS "xilinx.com:interface:axis:1.0 M_AXIS_DATA TDATA";
 BEGIN
-  U0 : fir_compiler_v7_2_5
+  U0 : fir_compiler_v7_2_7
     GENERIC MAP (
       C_XDEVICEFAMILY => "kintex7",
       C_ELABORATION_DIR => "./",

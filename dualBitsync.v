@@ -1,7 +1,7 @@
 /******************************************************************************
 Copyright 2008-2015 Koos Technical Services, Inc. All Rights Reserved
 
-This source code is the Intellectual Property of Koos Technical Services,Inc. 
+This source code is the Intellectual Property of Koos Technical Services,Inc.
 (KTS) and is provided under a License Agreement which protects KTS' ownership and
 derivative rights in exchange for negotiated compensation.
 ******************************************************************************/
@@ -13,13 +13,14 @@ derivative rights in exchange for negotiated compensation.
 //`define USE_GARDNER_TED
 
 module dualBitsync(
-    sampleClk, reset, 
+    sampleClk, reset,
     ch0ClkEn,
     ch1ClkEn,
     bitsyncMode,
     `ifdef USE_BUS_CLOCK
     busClk,
     `endif
+    cs,
     wr0,wr1,wr2,wr3,
     addr,
     din,
@@ -57,6 +58,7 @@ input   [1:0]   bitsyncMode;
 `ifdef USE_BUS_CLOCK
 input           busClk;
 `endif
+input           cs;
 input           wr0,wr1,wr2,wr3;
 input   [12:0]  addr;
 input   [31:0]  din;
@@ -307,7 +309,7 @@ always @(posedge sampleClk) begin
                     // Calculate DC offset error
                     ch0TransitionsDetected <= 1;
                     ch0TransitionCount <= 255;
-                    //ch0DcError <= {earlyOnTimeI[17],earlyOnTimeI[17:1]} 
+                    //ch0DcError <= {earlyOnTimeI[17],earlyOnTimeI[17:1]}
                     //            + {lateOnTimeI[17],lateOnTimeI[17:1]};
                     ch0DcError <= earlyOnTimeI;
 
@@ -340,7 +342,7 @@ always @(posedge sampleClk) begin
                     timingErrorQ <= gardnerTimingErrorQ;
 
                     // Calculate DC offset error
-                    //ch1SyncDcError <= {earlyOnTimeQ[17],earlyOnTimeQ[17:1]} 
+                    //ch1SyncDcError <= {earlyOnTimeQ[17],earlyOnTimeQ[17:1]}
                     //                + {lateOnTimeQ[17],lateOnTimeQ[17:1]};
                     ch1SyncDcError <= earlyOnTimeQ[17];
 
@@ -367,7 +369,7 @@ always @(posedge sampleClk) begin
                     transitionI <= 1;
                     ch0TransitionsDetected <= 1;
                     ch0TransitionCount <= 255;
-                    //ch0DcError <= {earlyOnTimeI[17],earlyOnTimeI[17:1]} 
+                    //ch0DcError <= {earlyOnTimeI[17],earlyOnTimeI[17:1]}
                     //            + {lateOnTimeI[17],lateOnTimeI[17:1]};
                     ch0DcError <= earlyOnTimeI;
 
@@ -398,7 +400,7 @@ always @(posedge sampleClk) begin
                 // Is there a data transition on Q?
                 if (earlySignQ != lateSignQ) begin
                     transitionQ <= 1;
-                    //ch1SyncDcError <= {earlyOnTimeQ[17],earlyOnTimeQ[17:1]} 
+                    //ch1SyncDcError <= {earlyOnTimeQ[17],earlyOnTimeQ[17:1]}
                     //                + {lateOnTimeQ[17],lateOnTimeQ[17:1]};
                     ch1SyncDcError <= earlyOnTimeQ[17];
 
@@ -477,7 +479,7 @@ always @(ch1MF) ch1MFReal = (ch1MF[17] ? ch1MF - 262144.0 : ch1MF)/131072.0;
 reg bitsyncSpace;
 always @* begin
     casex(addr)
-        `BITSYNCSPACE:  bitsyncSpace = 1;
+        `BITSYNCSPACE:  bitsyncSpace = cs;
         default:        bitsyncSpace = 0;
         endcase
     end
@@ -578,7 +580,7 @@ always @* ch0SampleFreqReal = $itor($signed(ch0SampleFreq))/(2**31);
 //*****************************************************************************
 /*
 **  This creates a second bitsync that is completely independent of the primary
-**  bitsync given above. This allows the data and clock from a QPSK signal which 
+**  bitsync given above. This allows the data and clock from a QPSK signal which
 **  has two bitstreams which are unrelated in terms of bitrate to be recovered
 **  and output on the two clock/data outputs.
 **
@@ -680,7 +682,7 @@ always @(posedge sampleClk) begin
 
                 // Is there a data transition?
                 if (asyncEarlySign != asyncLateSign) begin
-                    // Yes. 
+                    // Yes.
                     asyncTransition <= 1;
                     `ifdef USE_GARDNER_TED
                     asyncTimingError <= gardnerTimingError[17:6];
@@ -731,7 +733,7 @@ always @* asyncTimingErrorReal = $itor(asyncTimingError)/(2**11);
 reg asyncBitsyncSpace;
 always @* begin
     casex(addr)
-        `BITSYNCAUSPACE:    asyncBitsyncSpace = 1;
+        `BITSYNCAUSPACE:    asyncBitsyncSpace = cs;
         default:            asyncBitsyncSpace = 0;
         endcase
     end
@@ -754,6 +756,10 @@ loopFilter asyncSampleLoop(
     .dout(asyncDout),
     .error(asyncTimingError),
     .loopFreq(ch1SampleFreq),
+    .ctrl2(),
+    .ctrl4(),
+    .satPos(),
+    .satNeg(),
     .lockCount(asyncLockCount),
     .syncThreshold(asyncSyncThreshold)
     );
@@ -860,7 +866,7 @@ always @* begin
 
 
 /******************************************************************************
-                           Recovered Clock and Data 
+                           Recovered Clock and Data
 ******************************************************************************/
 
 

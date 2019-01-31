@@ -1,93 +1,6 @@
 `timescale 1ns/10ps
 `include "addressMap.v"
 
-`ifdef BITSYNC_BERT
-
-module digitalPLL(
-    input                   clk,
-    input                   reset,
-    input                   busClk,
-    input           [12:0]  addr,
-    input           [31:0]  dataIn,
-    output  reg     [31:0]  dataOut,
-    input                   wr0, wr1, wr2, wr3,
-    input                   referenceClkEn,
-    output  reg             dllOutputClk,
-    output                  filteredRefClk,
-    output  reg     [7:0]   phaseError
-);
-
-    parameter REG_SPACE = `DLL0SPACE;
-
-    // Processor Interface
-    reg dllSpace;
-    always @* begin
-        casex(addr)
-            REG_SPACE:  dllSpace = 1;
-            default:    dllSpace = 0;
-        endcase
-    end
-
-    reg     [31:0]  centerFreq;
-    reg     [4:0]   loopGain;
-    reg     [7:0]   feedbackDivider;
-    always @(posedge busClk) begin
-        if (dllSpace && wr0) begin
-            casex (addr)
-                `DLL_CENTER_FREQ: begin
-                    centerFreq[7:0] <= dataIn[7:0];
-                end
-                `DLL_GAINS: begin
-                    loopGain[4:0] <= dataIn[4:0];
-                end
-                default: ;
-            endcase
-        end
-        if (dllSpace && wr1) begin
-            casex (addr)
-                `DLL_CENTER_FREQ: begin
-                    centerFreq[15:8] <= dataIn[15:8];
-                end
-                default: ;
-            endcase
-        end
-        if (dllSpace && wr2) begin
-            casex (addr)
-                `DLL_CENTER_FREQ: begin
-                    centerFreq[23:16] <= dataIn[23:16];
-                end
-                `DLL_OUTPUT_DIV: begin
-                    feedbackDivider <= dataIn[23:16];
-                end
-                default: ;
-            endcase
-        end
-        if (dllSpace && wr3) begin
-            casex (addr)
-                `DLL_CENTER_FREQ: begin
-                    centerFreq[31:24] <= dataIn[31:24];
-                end
-                default: ;
-            endcase
-        end
-    end
-
-    always @* begin
-        if (dllSpace) begin
-            casex (addr)
-                `DLL_CENTER_FREQ:       dataOut = centerFreq;
-                `DLL_GAINS:             dataOut = {8'b0,feedbackDivider,11'b0,loopGain};
-                `DLL_OUTPUT_DIV:        dataOut = {8'b0,feedbackDivider,11'b0,loopGain};
-                default:                dataOut = 32'h0;
-            endcase
-        end
-        else begin
-            dataOut = 32'hx;
-        end
-    end
-
-`else //BITSYNC_BERT
-
 module digitalPLL(
     input                   clk,
     input                   reset,
@@ -102,8 +15,6 @@ module digitalPLL(
 );
 
 
-
-`endif // BITSYNC_BERT
 
     // NCO
     reg     [31:0]  phase;

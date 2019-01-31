@@ -1,3 +1,4 @@
+
 // file: systemClock.v
 // 
 // (c) Copyright 2008 - 2013 Xilinx, Inc. All rights reserved.
@@ -55,7 +56,7 @@
 //  Output     Output      Phase    Duty Cycle   Pk-to-Pk     Phase
 //   Clock     Freq (MHz)  (degrees)    (%)     Jitter (ps)  Error (ps)
 //----------------------------------------------------------------------------
-// CLK_OUT1____93.333______0.000______50.0______130.411_____98.325
+// clk_out1____93.333______0.000______50.0______130.411_____98.325
 //
 //----------------------------------------------------------------------------
 // Input Clock   Freq (MHz)    Input Jitter (UI)
@@ -65,20 +66,21 @@
 `timescale 1ps/1ps
 
 module systemClock_clk_wiz 
+
  (// Clock in ports
-  input         clk_in1,
   // Clock out ports
   output        clk_out1,
   // Status and control signals
-  output        locked
+  output        locked,
+  input         clk_in1
  );
-
   // Input buffering
   //------------------------------------
+wire clk_in1_systemClock;
+wire clk_in2_systemClock;
   IBUF clkin1_ibufg
    (.O (clk_in1_systemClock),
     .I (clk_in1));
-
 
 
   // Clocking PRIMITIVE
@@ -87,6 +89,15 @@ module systemClock_clk_wiz
   // Instantiation of the MMCM PRIMITIVE
   //    * Unused inputs are tied off
   //    * Unused outputs are labeled unused
+
+  wire        clk_out1_systemClock;
+  wire        clk_out2_systemClock;
+  wire        clk_out3_systemClock;
+  wire        clk_out4_systemClock;
+  wire        clk_out5_systemClock;
+  wire        clk_out6_systemClock;
+  wire        clk_out7_systemClock;
+
   wire [15:0] do_unused;
   wire        drdy_unused;
   wire        psdone_unused;
@@ -163,10 +174,10 @@ module systemClock_clk_wiz
     .PWRDWN              (1'b0),
     .RST                 (1'b0));
 
-
   assign locked = locked_int;
-
-  // Output buffering
+// Clock Monitor clock assigning
+//--------------------------------------
+ // Output buffering
   //-----------------------------------
 
   BUFG clkf_buf

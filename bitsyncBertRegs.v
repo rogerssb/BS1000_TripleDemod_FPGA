@@ -1,7 +1,7 @@
 /******************************************************************************
 Copyright 2008-2015 Koos Technical Services, Inc. All Rights Reserved
 
-This source code is the Intellectual Property of Koos Technical Services,Inc. 
+This source code is the Intellectual Property of Koos Technical Services,Inc.
 (KTS) and is provided under a License Agreement which protects KTS' ownership and
 derivative rights in exchange for negotiated compensation.
 ******************************************************************************/
@@ -109,6 +109,10 @@ reg     [2:0]   resetCount;
 always @(posedge clk or posedge rs) begin
     if (rs) begin
         rs0 <= 1;
+        rs1 <= 0;
+        rs2 <= 0;
+        resetCount <= 0;
+        reset <= 0;
     end
     else begin
         rs1 <= rs0;
@@ -127,7 +131,7 @@ always @(posedge clk or posedge rs) begin
         end
     end
 end
-always @(posedge busClk) begin 
+always @(posedge busClk) begin
     if (cs && wr0) begin
         casex (addr)
             `SYS_RESET:    rs <= 1;
@@ -171,7 +175,7 @@ always @ (posedge clk)
 
 //************************** General Registers ********************************
 
-always @(posedge busClk) begin 
+always @(posedge busClk) begin
     if (cs && wr0) begin
         casex (addr)
             `SYS_SUBSYSTEM_CTRL: begin

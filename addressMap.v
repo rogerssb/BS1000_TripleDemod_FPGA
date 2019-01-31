@@ -29,6 +29,8 @@
 `define DF_CIC_COMP_USE_MPY
 `define BS_CIC_COMP_USE_MPY
 `define ADD_BERT
+`define USE_DEMOD_CandD
+//`define ADD_TURBO
 `endif
 
 `ifdef TRIPLE_DEMOD
@@ -41,10 +43,10 @@
 `define USE_DDC_FIR
 //`define ADD_DESPREADER
 //`define ADD_SCPATH
-`define ADD_CMA
+//`define ADD_CMA
 //`define ADD_LDPC
 `define ADD_DQM
-`define ADD_MULTIH
+//`define ADD_MULTIH
 `define ADD_SUPERBAUD_TED
 `ifndef SIMULATE
 `define EMBED_MULTIH_CARRIER_LOOP
@@ -109,6 +111,59 @@
     `define DEC_CLK_PHASE_90        2'b10
     `define DEC_CLK_PHASE_270       2'b11
 
+`ifdef USE_DEMOD_CandD
+
+// Clock and Data subsystem registers
+`define CandD0SPACE         13'b0_00xx_1011_xxxx
+`define CandD1SPACE         13'b0_00xx_1101_xxxx
+`define CandD2SPACE         13'b0_00xx_1111_xxxx
+    `define CandD_CONTROL           13'bx_xxxx_xxxx_00xx
+        `define CandD_SRC_LEGACY_I      4'b0000
+        `define CandD_SRC_LEGACY_Q      4'b0001
+        `define CandD_SRC_PCMTRELLIS    4'b0010
+        `define CandD_SRC_MULTIH        4'b0011
+        `define CandD_SRC_STC           4'b0100
+        `define CandD_SRC_PNGEN         4'b0101
+        `define CandD_SRC_LDPC          4'b0110
+        `define CandD_SRC_DQM           4'b0111
+        `define CandD_SRC_DEC0_CH0      4'b1000
+        `define CandD_SRC_DEC0_CH1      4'b1001
+        `define CandD_SRC_DEC1_CH0      4'b1010
+        `define CandD_SRC_DEC1_CH1      4'b1011
+        `define CandD_SRC_DEC2_CH0      4'b1100
+        `define CandD_SRC_DEC2_CH1      4'b1101
+        `define CandD_SRC_DEC3_CH0      4'b1110
+        `define CandD_SRC_DEC3_CH1      4'b1111
+        `define CandD_CLK_PHASE_0       2'b00
+        `define CandD_CLK_PHASE_90      2'b01
+        `define CandD_CLK_PHASE_180     2'b10
+        `define CandD_CLK_PHASE_270     2'b11
+    `define CandD_DLL_CENTER_FREQ   13'bx_xxxx_xxxx_01xx
+    `define CandD_DLL_GAINS         13'bx_xxxx_xxxx_100x
+    `define CandD_DLL_FDBK_DIV      13'bx_xxxx_xxxx_101x
+
+// PLL subsystem registers
+`define PLL0SPACE           13'b0_00xx_1010_xxxx
+`define PLL1SPACE           13'b0_00xx_1100_xxxx
+`define PLL2SPACE           13'b0_00xx_1110_xxxx
+    `define PLL0_BITS_0to31     13'bx_xxxx_xxxx_00xx
+    `define PLL0_BITS_68to99    13'bx_xxxx_xxxx_01xx
+    `define PLL0_BITS_100to131  13'bx_xxxx_xxxx_10xx
+    `define PLL0_CONTROL        13'bx_xxxx_xxxx_110x
+    `define PLL0_XFER           13'bx_xxxx_xxxx_111x
+    `define PLL1_BITS_0to31     13'bx_xxxx_xxxx_00xx
+    `define PLL1_BITS_68to99    13'bx_xxxx_xxxx_01xx
+    `define PLL1_BITS_100to131  13'bx_xxxx_xxxx_10xx
+    `define PLL1_CONTROL        13'bx_xxxx_xxxx_110x
+    `define PLL1_XFER           13'bx_xxxx_xxxx_111x
+    `define PLL2_BITS_0to31     13'bx_xxxx_xxxx_00xx
+    `define PLL2_BITS_68to99    13'bx_xxxx_xxxx_01xx
+    `define PLL2_BITS_100to131  13'bx_xxxx_xxxx_10xx
+    `define PLL2_CONTROL        13'bx_xxxx_xxxx_110x
+    `define PLL2_XFER           13'bx_xxxx_xxxx_111x
+
+`else //USE_DEMOD_CandD
+
 // Digital PLL subsystem registers
 `define DLL0SPACE           13'b0_00xx_1010_0xxx
 `define DLL1SPACE           13'b0_00xx_1010_1xxx
@@ -134,6 +189,8 @@
     `define PLL2_BITS_100to131  13'bx_xxxx_xx10_10xx
     `define PLL2_CONTROL        13'bx_xxxx_xx10_110x
     `define PLL2_XFER           13'bx_xxxx_xx10_111x
+
+`endif //USE_DEMOD_CandD
 
 // Bitsync subsystem registers
 `define BITSYNC_TOP_SPACE   13'b0_01xx_000x_xxxx

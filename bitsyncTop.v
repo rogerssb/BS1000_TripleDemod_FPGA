@@ -14,6 +14,7 @@ module bitsyncTop(
     `ifdef USE_BUS_CLOCK
     busClk,
     `endif
+    cs,
     wr0,wr1,wr2,wr3,
     addr,
     din,
@@ -77,6 +78,7 @@ input                   reset;
 `ifdef USE_BUS_CLOCK
 input                   busClk;
 `endif
+input                   cs;
 input                   wr0,wr1,wr2,wr3;
 input           [12:0]  addr;
 input           [31:0]  din;
@@ -140,7 +142,7 @@ output                  test0,test1;
 reg bitsyncTopSpace;
 always @* begin
     casex(addr)
-        `BITSYNC_TOP_SPACE: bitsyncTopSpace = 1;
+        `BITSYNC_TOP_SPACE: bitsyncTopSpace = cs;
         default:            bitsyncTopSpace = 0;
         endcase
     end
@@ -288,7 +290,7 @@ decimatingFilter #(.RegSpace(`CH1_DFSPACE), .FirSpace(`CH1_DFFIRSPACE)) df1(
 reg ch0ResampSpace;
 always @* begin
     casex(addr)
-        `CH0_RESAMPSPACE:   ch0ResampSpace = 1;
+        `CH0_RESAMPSPACE:   ch0ResampSpace = cs;
         default:            ch0ResampSpace = 0;
         endcase
     end
@@ -303,7 +305,10 @@ resamplerRegs ch0ResampRegs(
     .dataOut(ch0ResampDout),
     .cs(ch0ResampSpace),
     .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
-    .resampleRate(ch0ResampleRate)
+    .resampleRate(ch0ResampleRate),
+    .auResampleRate(),
+    .auShift(),
+    .auDecimation()
      );
 
 wire    [31:0]  ch0ResamplerFreqOffset;
@@ -324,7 +329,7 @@ resampler ch0Resamp(
 reg ch1ResampSpace;
 always @* begin
     casex(addr)
-        `CH1_RESAMPSPACE:   ch1ResampSpace = 1;
+        `CH1_RESAMPSPACE:   ch1ResampSpace = cs;
         default:            ch1ResampSpace = 0;
         endcase
     end
@@ -339,7 +344,10 @@ resamplerRegs ch1ResampRegs(
     .dataOut(ch1ResampDout),
     .cs(ch1ResampSpace),
     .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
-    .resampleRate(ch1ResampleRate)
+    .resampleRate(ch1ResampleRate),
+    .auResampleRate(),
+    .auShift(),
+    .auDecimation()
      );
 
 wire    [31:0]  asyncResamplerFreqOffset;
@@ -381,6 +389,7 @@ dualBitsync dualBitsync(
     `ifdef USE_BUS_CLOCK
     .busClk(busClk),
     `endif
+    .cs(cs),
     .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
     .addr(addr),
     .din(din),

@@ -1,4 +1,4 @@
-// (c) Copyright 1995-2016 Xilinx, Inc. All rights reserved.
+// (c) Copyright 1995-2019 Xilinx, Inc. All rights reserved.
 // 
 // This file contains confidential and proprietary information
 // of Xilinx, Inc. and is protected under U.S. and
@@ -47,8 +47,8 @@
 // DO NOT MODIFY THIS FILE.
 
 
-// IP VLNV: xilinx.com:ip:fifo_generator:12.0
-// IP Revision: 4
+// IP VLNV: xilinx.com:ip:fifo_generator:13.1
+// IP Revision: 3
 
 `timescale 1ns/1ps
 
@@ -85,8 +85,9 @@ output wire full;
 output wire empty;
 output wire prog_full;
 
-  fifo_generator_v12_0 #(
+  fifo_generator_v13_1_3 #(
     .C_COMMON_CLOCK(0),
+    .C_SELECT_XPM(0),
     .C_COUNT_TYPE(0),
     .C_DATA_COUNT_WIDTH(4),
     .C_DEFAULT_VALUE("BlankString"),
@@ -148,6 +149,7 @@ output wire prog_full;
     .C_WR_RESPONSE_LATENCY(1),
     .C_MSGON_VAL(1),
     .C_ENABLE_RST_SYNC(1),
+    .C_EN_SAFETY_CKT(0),
     .C_ERROR_INJECTION_TYPE(0),
     .C_SYNCHRONIZER_STAGE(2),
     .C_INTERFACE_TYPE(0),
@@ -226,7 +228,7 @@ output wire prog_full;
     .C_ERROR_INJECTION_TYPE_RACH(0),
     .C_ERROR_INJECTION_TYPE_RDCH(0),
     .C_ERROR_INJECTION_TYPE_AXIS(0),
-    .C_DIN_WIDTH_WACH(32),
+    .C_DIN_WIDTH_WACH(1),
     .C_DIN_WIDTH_WDCH(64),
     .C_DIN_WIDTH_WRCH(2),
     .C_DIN_WIDTH_RACH(32),
