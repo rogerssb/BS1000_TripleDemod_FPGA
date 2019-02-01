@@ -500,14 +500,6 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PSRCDIR/sources_1/imports/resamplerTap0.coe">
-        <FileInfo>
-          <Attr Name="ImportPath" Val="$PPRDIR/xc7k160t-IP/resamplerTap0.coe"/>
-          <Attr Name="ImportTime" Val="1432555300"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
       <File Path="$PPRDIR/xc7k160t-IP/reciprocalLut.coe">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
