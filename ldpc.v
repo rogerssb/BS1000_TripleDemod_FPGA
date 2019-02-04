@@ -202,7 +202,6 @@ module ldpc #(parameter LDPCBITS = 3) (
         .cur_write_pos_V(ldpcWriteAddr),
         .Iteration_Number(iterationNumber),
         .read_clk_en(),
-        .iteration_step(),
         .cur_read_pos_V(),
         .deran_data(),
         .deran_data_ap_vld(),
