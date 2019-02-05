@@ -821,7 +821,7 @@ always @(posedge sampleClk) begin
                 end
             endcase
         if (asyncAvgState == TEST) begin
-            if (avgAuOffTimeMag[21:14] > {1'b0,avgAuOnTimeMag[21:15]}) begin
+            if (avgAuOffTimeMag[21:12] > {1'b0,avgAuOnTimeMag[21:13]}) begin
                 if (asyncLockCounter == (16'hffff - asyncLockCount)) begin
                     ch1BitsyncLock <= 0;
                     asyncLockCounter <= 16'h0;

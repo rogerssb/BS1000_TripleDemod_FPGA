@@ -84,7 +84,7 @@ module bitsyncBertTop (
 
 );
 
-    parameter VER_NUMBER = 16'd491;
+    parameter VER_NUMBER = 16'd492;
 
 
 //******************************************************************************
