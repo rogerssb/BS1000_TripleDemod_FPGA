@@ -725,7 +725,7 @@ always @(posedge clk) begin
             ch1Dac1ClkEn <= clkEn;
             end
         `BS_DAC_DC: begin
-            ch1Dac1Data <= ch1Offset;
+            ch1Dac1Data <= ch1DCIn[33:16];
             ch1Dac1ClkEn <= ch1DCClkEn;
             end
         `BS_DAC_DF: begin
