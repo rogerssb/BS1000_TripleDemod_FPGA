@@ -367,27 +367,38 @@ clockAndDataInputSync diffSync(
         endcase
     end
 
-    wire                dualDecInputSelect;
+    wire        [1:0]   dualDecInputSelect;
     reg                 dualCh0Input;
     reg                 dualCh1Input;
     reg                 dualSymEn;
     reg                 dualSym2xEn;
-    reg                 dualSymClk;
     always @(posedge clk) begin
-        if (dualDecInputSelect) begin
-            dualCh0Input <= ch0VitBit;
-            dualCh1Input <= ch1VitBit;
-            dualSymEn <= ch0VitBitEn;
-            dualSym2xEn <= ch0VitSym2xEn;
-            dualSymClk <= ch0VitSymClk;
-        end
-        else begin
-            dualCh0Input <= ch0DataOut;
-            dualCh1Input <= ch1DataOut;
-            dualSymEn <= ch0SymEn;
-            dualSym2xEn <= ch0Sym2xEn;
-            dualSymClk <= ch0SymClk;
-        end
+        case (dualDecInputSelect)
+            `DEC_INPUT_BS: begin
+                dualCh0Input <= ch0DataOut;
+                dualCh1Input <= ch1DataOut;
+                dualSymEn <= ch0SymEn;
+                dualSym2xEn <= ch0Sym2xEn;
+            end
+            `DEC_INPUT_VITERBI: begin
+                dualCh0Input <= ch0VitBit;
+                dualCh1Input <= ch1VitBit;
+                dualSymEn <= ch0VitBitEn;
+                dualSym2xEn <= ch0VitSym2xEn;
+            end
+            `DEC_INPUT_TURBO: begin
+                dualCh0Input <= turboBit;
+                dualCh1Input <= turboBit;
+                dualSymEn <= turboBitEn;
+                dualSym2xEn <= turboBitEn;
+            end
+            default: begin
+                dualCh0Input <= ch0DataOut;
+                dualCh1Input <= ch1DataOut;
+                dualSymEn <= ch0SymEn;
+                dualSym2xEn <= ch0Sym2xEn;
+            end
+        endcase
     end
 
     wire    [31:0]  dualDecDout;
@@ -431,24 +442,33 @@ clockAndDataInputSync diffSync(
         endcase
     end
 
-    wire                ch1DecInputSelect;
+    wire        [1:0]   ch1DecInputSelect;
     reg                 ch1DecInput;
     reg                 ch1DecSymEn;
     reg                 ch1DecSym2xEn;
-    reg                 ch1DecSymClk;
     always @(posedge clk) begin
-        if (ch1DecInputSelect) begin
-            ch1DecInput <= ch1VitBit;
-            ch1DecSymEn <= ch1VitBitEn;
-            ch1DecSym2xEn <= ch1VitSym2xEn;
-            ch1DecSymClk <= ch1VitSymClk;
-        end
-        else begin
-            ch1DecInput <= ch1DataOut;
-            ch1DecSymEn <= ch1SymEn;
-            ch1DecSym2xEn <= ch1Sym2xEn;
-            ch1DecSymClk <= ch1SymClk;
-        end
+        case (dualDecInputSelect)
+            `DEC_INPUT_BS: begin
+                ch1DecInput <= ch1DataOut;
+                ch1DecSymEn <= ch1SymEn;
+                ch1DecSym2xEn <= ch1Sym2xEn;
+            end
+            `DEC_INPUT_VITERBI: begin
+                ch1DecInput <= ch1VitBit;
+                ch1DecSymEn <= ch1VitBitEn;
+                ch1DecSym2xEn <= ch1VitSym2xEn;
+            end
+            `DEC_INPUT_TURBO: begin
+                ch1DecInput <= turboBit;
+                ch1DecSymEn <= turboBitEn;
+                ch1DecSym2xEn <= turboBitEn;
+            end
+            default: begin
+                ch1DecInput <= ch1DataOut;
+                ch1DecSymEn <= ch1SymEn;
+                ch1DecSym2xEn <= ch1Sym2xEn;
+            end
+        endcase
     end
 
 
@@ -1218,9 +1238,9 @@ clockAndDataMux bsMux(
     .clk1(pll0_Clk),
     .clkInvert1(1'b0),
     .data1(pll0_Data),
-    .clk2(ch1DecSymClk),
+    .clk2(dll1_Clk),
     .clkInvert2(1'b0),
-    .data2(ch1DecInput),
+    .data2(dll1_Data),
     .clk3(pll1_Clk),
     .clkInvert3(1'b0),
     .data3(pll1_Data),
@@ -1250,9 +1270,9 @@ clockAndDataMux bsDiffMux(
     .clk1(pll0_Clk),
     .clkInvert1(1'b0),
     .data1(pll0_Data),
-    .clk2(ch1DecSymClk),
+    .clk2(dll1_Clk),
     .clkInvert2(1'b0),
-    .data2(ch1DecInput),
+    .data2(dll1_Data),
     .clk3(pll1_Clk),
     .clkInvert3(1'b0),
     .data3(pll1_Data),
@@ -1280,9 +1300,9 @@ clockAndDataMux encMux(
     .clk1(pll0_Clk),
     .clkInvert1(1'b0),
     .data1(pll0_Data),
-    .clk2(ch1DecSymClk),
+    .clk2(dll1_Clk),
     .clkInvert2(1'b0),
-    .data2(ch1DecInput),
+    .data2(dll1_Data),
     .clk3(pll1_Clk),
     .clkInvert3(1'b0),
     .data3(pll1_Data),
@@ -1310,9 +1330,9 @@ clockAndDataMux fsMux(
     .clk1(pll0_Clk),
     .clkInvert1(1'b0),
     .data1(pll0_Data),
-    .clk2(ch1DecSymClk),
+    .clk2(dll1_Clk),
     .clkInvert2(1'b0),
-    .data2(ch1DecInput),
+    .data2(dll1_Data),
     .clk3(pll1_Clk),
     .clkInvert3(1'b0),
     .data3(pll1_Data),
@@ -1340,9 +1360,9 @@ clockAndDataMux fsDiffMux(
     .clk1(pll0_Clk),
     .clkInvert1(1'b0),
     .data1(pll0_Data),
-    .clk2(ch1DecSymClk),
+    .clk2(dll1_Clk),
     .clkInvert2(1'b0),
-    .data2(ch1DecInput),
+    .data2(dll1_Data),
     .clk3(pll1_Clk),
     .clkInvert3(1'b0),
     .data3(pll1_Data),
@@ -1370,9 +1390,9 @@ clockAndDataMux spareMux(
     .clk1(pll0_Clk),
     .clkInvert1(1'b0),
     .data1(pll0_Data),
-    .clk2(ch1DecSymClk),
+    .clk2(dll1_Clk),
     .clkInvert2(1'b0),
-    .data2(ch1DecInput),
+    .data2(dll1_Data),
     .clk3(pll1_Clk),
     .clkInvert3(1'b0),
     .data3(pll1_Data),

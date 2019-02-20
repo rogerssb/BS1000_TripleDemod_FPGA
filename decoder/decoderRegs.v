@@ -1,7 +1,7 @@
 /******************************************************************************
 Copyright 2008-2015 Koos Technical Services, Inc. All Rights Reserved
 
-This source code is the Intellectual Property of Koos Technical Services,Inc. 
+This source code is the Intellectual Property of Koos Technical Services,Inc.
 (KTS) and is provided under a License Agreement which protects KTS' ownership and
 derivative rights in exchange for negotiated compensation.
 ******************************************************************************/
@@ -30,14 +30,13 @@ module decoderRegs #(parameter ADDR_BITS = 13) (
     output  reg             biphaseEnable,
     output  reg             millerEnable,
     output  reg     [1:0]   mode,
-    output  reg             bypassFifo,
-    output  reg             inputSelect
+    output  reg     [1:0]   inputSelect
 );
 
     //************************** General Registers ********************************
 
     `ifdef USE_BUS_CLOCK
-    always @(posedge busClk) begin 
+    always @(posedge busClk) begin
         if (cs && wr0) begin
     `else
     always @(negedge wr0) begin
@@ -61,7 +60,7 @@ module decoderRegs #(parameter ADDR_BITS = 13) (
 
 
     `ifdef USE_BUS_CLOCK
-    always @(posedge busClk) begin 
+    always @(posedge busClk) begin
         if (cs && wr1) begin
     `else
     always @(negedge wr1) begin
@@ -73,8 +72,7 @@ module decoderRegs #(parameter ADDR_BITS = 13) (
                     millerEnable <= dataIn[9];
                     mode <= dataIn[11:10];
                     derandomize[1] <= dataIn[12];
-                    bypassFifo <= dataIn[13];
-                    inputSelect <= dataIn[14];
+                    inputSelect <= dataIn[14:13];
                     derandomize[2] <= dataIn[15];
                 end
                 default: ;
@@ -83,7 +81,7 @@ module decoderRegs #(parameter ADDR_BITS = 13) (
     end
 
     `ifdef USE_BUS_CLOCK
-    always @(posedge busClk) begin 
+    always @(posedge busClk) begin
         if (cs && wr2) begin
     `else
     always @(negedge wr2) begin
@@ -103,7 +101,7 @@ module decoderRegs #(parameter ADDR_BITS = 13) (
             casex (addr)
                 `DEC_CONTROL: begin
                     dataOut = { 15'h0,clkPhase[1],
-                                derandomize[2], inputSelect, bypassFifo, derandomize[1],
+                                derandomize[2], inputSelect, derandomize[1],
                                 mode, millerEnable, biphaseEnable,
                                 iqSwap, feherEnable, demuxEnable, derandomize[0],
                                 dataInvert, clkSelect, clkPhase[0], fifoReset

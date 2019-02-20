@@ -111,6 +111,9 @@
     `define DEC_CLK_PHASE_180       2'b01
     `define DEC_CLK_PHASE_90        2'b10
     `define DEC_CLK_PHASE_270       2'b11
+    `define DEC_INPUT_BS            2'b00
+    `define DEC_INPUT_TURBO         2'b01
+    `define DEC_INPUT_VITERBI       2'b10
 
 `ifdef USE_DEMOD_CandD
 
