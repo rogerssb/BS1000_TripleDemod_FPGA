@@ -37,13 +37,13 @@
     <Option Name="WTVcsLaunchSim" Val="0"/>
     <Option Name="WTRivieraLaunchSim" Val="0"/>
     <Option Name="WTActivehdlLaunchSim" Val="0"/>
-    <Option Name="WTXSimExportSim" Val="75"/>
-    <Option Name="WTModelSimExportSim" Val="75"/>
-    <Option Name="WTQuestaExportSim" Val="75"/>
-    <Option Name="WTIesExportSim" Val="75"/>
-    <Option Name="WTVcsExportSim" Val="75"/>
-    <Option Name="WTRivieraExportSim" Val="75"/>
-    <Option Name="WTActivehdlExportSim" Val="75"/>
+    <Option Name="WTXSimExportSim" Val="77"/>
+    <Option Name="WTModelSimExportSim" Val="77"/>
+    <Option Name="WTQuestaExportSim" Val="77"/>
+    <Option Name="WTIesExportSim" Val="77"/>
+    <Option Name="WTVcsExportSim" Val="77"/>
+    <Option Name="WTRivieraExportSim" Val="77"/>
+    <Option Name="WTActivehdlExportSim" Val="77"/>
     <Option Name="GenerateIPUpgradeLog" Val="TRUE"/>
     <Option Name="XSimRadix" Val="hex"/>
     <Option Name="XSimTimeUnit" Val="ns"/>
@@ -1590,7 +1590,7 @@
       </Config>
     </FileSet>
     <FileSet Name="ldpcDecoder" Type="BlockSrcs" RelSrcDir="$PSRCDIR/ldpcDecoder">
-      <File Path="$PSRCDIR/sources_1/ip/ldpcDecoder_23/ldpcDecoder.xci">
+      <File Path="$PSRCDIR/sources_1/ip/ldpcDecoder_25/ldpcDecoder.xci">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>

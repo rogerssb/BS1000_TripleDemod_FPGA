@@ -67,7 +67,7 @@ module bitsyncTop(
     ch1VitBit,
     ch1VitSym2xEn,
     ch1VitSymClk,
-    asyncMode,
+    bitsyncMode,
     test0,test1
     );
 
@@ -131,7 +131,7 @@ output                  ch1VitBitEn;
 output                  ch1VitBit;
 output  reg             ch1VitSym2xEn;
 output  reg             ch1VitSymClk;
-output                  asyncMode;
+output          [1:0]   bitsyncMode;
 output                  test0,test1;
 
 
@@ -146,7 +146,6 @@ always @* begin
         default:            bitsyncTopSpace = 0;
         endcase
     end
-wire    [1:0]   bitsyncMode;
 wire    [3:0]   ch0Dac0Select, ch0Dac1Select, ch0Dac2Select;
 wire    [3:0]   ch1Dac0Select, ch1Dac1Select, ch1Dac2Select;
 wire    [4:0]   ch0DCGain,ch1DCGain;
@@ -182,7 +181,7 @@ bitsyncTopRegs bitsyncTopRegs(
     .ch1DCTest(ch1DCTest)
     );
 
-assign  asyncMode = (bitsyncMode == `BS_MODE_IND_CH)
+wire    asyncMode = (bitsyncMode == `BS_MODE_IND_CH)
                  || (bitsyncMode == `BS_MODE_SINGLE_CH);
 
 /******************************************************************************
@@ -725,7 +724,7 @@ always @(posedge clk) begin
             ch1Dac1ClkEn <= clkEn;
             end
         `BS_DAC_DC: begin
-            ch1Dac1Data <= ch1Offset;
+            ch1Dac1Data <= ch1DCIn[33:16];
             ch1Dac1ClkEn <= ch1DCClkEn;
             end
         `BS_DAC_DF: begin

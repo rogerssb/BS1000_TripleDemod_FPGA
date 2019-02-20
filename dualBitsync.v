@@ -505,10 +505,10 @@ loopFilter sampleLoop(
     .dout(bsDout),
     .error(loopFilterError),
     .loopFreq(ch0SampleFreq),
-    .ctrl2(useMatchedFilter),
+    .ctrl2(),
     .ctrl4(useSummer),
-    .satPos(satPos),
-    .satNeg(satNeg),
+    .satPos(),
+    .satNeg(),
     .lockCount(lockCount),
     .syncThreshold(syncThreshold)
     );
