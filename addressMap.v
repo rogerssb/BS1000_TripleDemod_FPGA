@@ -30,7 +30,7 @@
 `define BS_CIC_COMP_USE_MPY
 `define ADD_BERT
 `define USE_DEMOD_CandD
-//`define ADD_TURBO
+`define ADD_TURBO
 `endif
 
 `ifdef TRIPLE_DEMOD
@@ -74,6 +74,7 @@
         `define SYS_DAC_INPUT_SEL_PNGEN 3'b100
         `define SYS_DAC_INPUT_SEL_DLL0  3'b101
         `define SYS_DAC_INPUT_SEL_DLL1  3'b110
+        `define SYS_DAC_INPUT_SEL_TURBO 3'b111
     `define SYS_REBOOT_ADDR     13'bx_xxxx_xxx0_11xx
     `define SYS_TYPE            13'bx_xxxx_xxx1_000x
     `define SYS_RSVD1           13'bx_xxxx_xxx1_001x
@@ -125,7 +126,7 @@
         `define CandD_SRC_STC           4'b0100
         `define CandD_SRC_PNGEN         4'b0101
         `define CandD_SRC_LDPC          4'b0110
-        `define CandD_SRC_DQM           4'b0111
+        `define CandD_SRC_TURBO         4'b0111
         `define CandD_SRC_DEC0_CH0      4'b1000
         `define CandD_SRC_DEC0_CH1      4'b1001
         `define CandD_SRC_DEC1_CH0      4'b1010
@@ -278,11 +279,28 @@
         `define PNGEN_PCM_MDMS          4'b1011
 
 // Framesync subsystem registers
-`define FRAMER_SPACE            13'b1_00xx_xxxx_xxxx
+`define FRAMER_SPACE            13'b1_00xx_0000_xxxx
     `define FRAMER_CONTROL          13'bx_xxxx_xxxx_00xx
     `define FRAMER_SYNCWORD         13'bx_xxxx_xxxx_01xx
     `define FRAMER_SYNCWORD_MASK    13'bx_xxxx_xxxx_10xx
     `define FRAMER_STATUS           13'bx_xxxx_xxxx_11xx
+
+// Dual MSE subsystem registers
+`define DMSE_SPACE              13'b1_00xx_0001_xxxx
+    `define DMSE_CH0_MEAN           13'bx_xxxx_xxxx_000x
+    `define DMSE_CH0_AVG_LENGTH     13'bx_xxxx_xxxx_001x
+    `define DMSE_CH0_MSE            13'bx_xxxx_xxxx_010x
+    `define DMSE_CH0_MSE_OFFSET     13'bx_xxxx_xxxx_011x
+    `define DMSE_CH1_MEAN           13'bx_xxxx_xxxx_100x
+    `define DMSE_CH1_AVG_LENGTH     13'bx_xxxx_xxxx_101x
+    `define DMSE_CH1_MSE            13'bx_xxxx_xxxx_110x
+    `define DMSE_CH1_MSE_OFFSET     13'bx_xxxx_xxxx_111x
+
+`define TURBOSPACE              13'b1_00xx_0010_xxxx
+    `define TURBO_CONTROL           13'bx_xxxx_xxxx_00xx
+    `define TURBO_INVERSE_MEAN      13'bx_xxxx_xxxx_01xx
+    `define TURBO_OUTPUT_CLK_DIV    13'bx_xxxx_xxxx_10xx
+    `define TURBO_DAC_SELECT        13'bx_xxxx_xxxx_11xx
 
 
 `elsif SEMCO_DEMOD

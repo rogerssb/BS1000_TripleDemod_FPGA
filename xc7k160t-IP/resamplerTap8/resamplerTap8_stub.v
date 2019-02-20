@@ -1,12 +1,12 @@
 // Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2016.4 (win64) Build 1733598 Wed Dec 14 22:35:39 MST 2016
-// Date        : Thu Jan 31 06:50:56 2019
+// Date        : Thu Feb 14 11:23:03 2019
 // Host        : Sherlock running 64-bit Service Pack 1  (build 7601)
 // Command     : write_verilog -force -mode synth_stub C:/modem/vivado/xc7k160t-IP/resamplerTap8/resamplerTap8_stub.v
 // Design      : resamplerTap8
 // Purpose     : Stub declaration of top-level module interface
-// Device      : xc7k160tfbg676-1
+// Device      : xc7k325tffg676-1
 // --------------------------------------------------------------------------------
 
 // This empty module with port declaration file causes synthesis tools to infer a black box for IP.

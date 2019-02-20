@@ -231,6 +231,9 @@ clockAndDataInputSync diffSync(
     wire    [17:0]  ch1Dac0Data, ch1Dac1Data, ch1Dac2Data;
     wire    [17:0]  iEye,qEye;
     wire    [4:0]   eyeOffset;
+    wire    [1:0]   bitsyncMode;
+    wire            asyncMode = (bitsyncMode == `BS_MODE_IND_CH)
+                             || (bitsyncMode == `BS_MODE_SINGLE_CH);
     wire    [31:0]  bsDout;
     bitsyncTop bitsyncTop(
         .clk(clk), .clkEn(bitsyncEnable), .reset(reset),
@@ -288,9 +291,47 @@ clockAndDataInputSync diffSync(
         .ch1VitBit(ch1VitBit),
         .ch1VitSym2xEn(ch1VitSym2xEn),
         .ch1VitSymClk(ch1VitSymClk),
-        .asyncMode(asyncMode),
+        .bitsyncMode(bitsyncMode),
         .test0(test0), .test1(test1)
     );
+
+
+`ifdef ADD_TURBO
+/******************************************************************************
+                                Turbo Decoder
+*******************************************************************************/
+    wire    signed  [17:0]  turboDac0Data;
+    wire    signed  [17:0]  turboDac1Data;
+    wire    signed  [17:0]  turboDac2Data;
+    wire            [31:0]  turboDout;
+    turbo #(.TURBOBITS(5)) turbo (
+        .clk(clk),
+        .clkEn(ch0Sym2xEn),
+        .reset(reset),
+        .busClk(busClk),
+        .cs(cs),
+        .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
+        .addr(addr),
+        .din(dataIn),
+        .dout(turboDout),
+        .bitsyncMode(bitsyncMode),
+        .iSymEn(ch0SymEn),
+        .iSymData(ch0SymData),
+        .qSymEn(ch1SymEn),
+        .qSymData(ch1SymData),
+        .dac0ClkEn(turboDac0ClkEn),
+        .dac0Data(turboDac0Data),
+        .dac1ClkEn(turboDac1ClkEn),
+        .dac1Data(turboDac1Data),
+        .dac2ClkEn(turboDac2ClkEn),
+        .dac2Data(turboDac2Data),
+        .turboBitEnOut(turboBitEn),
+        .turboBitOut(turboBit)
+    );
+
+`endif
+
+
 
 //******************************************************************************
 //                          AGC/DC Offset DAC Interfaces
@@ -552,8 +593,16 @@ clockAndDataInputSync diffSync(
     reg             cAndD0ClkEn;
     reg     [2:0]   cAndD0DataIn;
     always @* begin
-        cAndD0ClkEn = dualPcmClkEn;
-        cAndD0DataIn = {dualDataI,dualDataQ,1'b0};
+        case (cAndD0SourceSelect)
+            `CandD_SRC_TURBO: begin
+                cAndD0ClkEn = turboBitEn;
+                cAndD0DataIn = {turboBit,2'b0};
+            end
+            default: begin
+                cAndD0ClkEn = dualPcmClkEn;
+                cAndD0DataIn = {dualDataI,dualDataQ,1'b0};
+            end
+        endcase
     end
 
     wire    [2:0]   cAndD0DataOut;
@@ -581,8 +630,16 @@ clockAndDataInputSync diffSync(
     reg             cAndD1ClkEn;
     reg     [2:0]   cAndD1DataIn;
     always @* begin
-        cAndD1ClkEn = ch1PcmClkEn;
-        cAndD1DataIn = {ch1PcmData,2'b0};
+        case (cAndD1SourceSelect)
+            `CandD_SRC_TURBO: begin
+                cAndD1ClkEn = turboBitEn;
+                cAndD1DataIn = {turboBit,2'b0};
+            end
+            default: begin
+                cAndD1ClkEn = ch1PcmClkEn;
+                cAndD1DataIn = {ch1PcmData,2'b0};
+            end
+        endcase
     end
 
     wire    [2:0]   cAndD1DataOut;
@@ -610,8 +667,16 @@ clockAndDataInputSync diffSync(
     reg             cAndD2ClkEn;
     reg     [2:0]   cAndD2DataIn;
     always @* begin
-        cAndD2ClkEn = pnClkEn;
-        cAndD2DataIn = {pnBit,2'b0};
+        case (cAndD2SourceSelect)
+            `CandD_SRC_TURBO: begin
+                cAndD2ClkEn = turboBitEn;
+                cAndD2DataIn = {turboBit,2'b0};
+            end
+            default: begin
+                cAndD2ClkEn = pnClkEn;
+                cAndD2DataIn = {pnBit,2'b0};
+            end
+        endcase
     end
 
     wire    [2:0]   cAndD2DataOut;
@@ -1004,6 +1069,10 @@ clockAndDataInputSync diffSync(
                 interp0ClkEn <= 1'b1;
             end
             */
+            `SYS_DAC_INPUT_SEL_TURBO: begin
+                interp0DataIn <= turboDac0Data;
+                interp0ClkEn <= turboDac0ClkEn;
+            end
             default: begin
                 interp0DataIn <= ch0Dac0Data;
                 interp0ClkEn <= ch0Dac0ClkEn;
@@ -1042,6 +1111,10 @@ clockAndDataInputSync diffSync(
                 interp1DataIn <= ch1Dac1Data;
                 interp1ClkEn <= ch1Dac1ClkEn;
             end
+            `SYS_DAC_INPUT_SEL_TURBO: begin
+                interp1DataIn <= turboDac1Data;
+                interp1ClkEn <= turboDac1ClkEn;
+            end
             default: begin
                 interp1DataIn <= ch0Dac1Data;
                 interp1ClkEn <= ch0Dac1ClkEn;
@@ -1079,6 +1152,10 @@ clockAndDataInputSync diffSync(
             `SYS_DAC_INPUT_SEL_CH1: begin
                 interp2DataIn <= ch1Dac2Data;
                 interp2ClkEn <= ch1Dac2ClkEn;
+            end
+            `SYS_DAC_INPUT_SEL_TURBO: begin
+                interp2DataIn <= turboDac2Data;
+                interp2ClkEn <= turboDac2ClkEn;
             end
             default: begin
                 interp2DataIn <= ch0Dac2Data;
