@@ -591,9 +591,8 @@ module semcoDemodTop (
         .outputClkEn(dualPcmClkEn),
         .fifo_rs(),
         .clkPhase(),
-        .bypass_fifo(),
         .symb_clk(dualPcmSymClk),
-        .inputSelect(dualDecInputSelect)
+        .inputSelect()
     );
 
     reg ch1DecoderSpace;
@@ -636,9 +635,8 @@ module semcoDemodTop (
         .clkEn_out(ch1PcmClkEn),          // clk output
         .fifo_rs(),
         .clkPhase(),
-        .bypass_fifo(),
         .symb_clk(ch1PcmSymClk),
-        .inputSelect(ch1DecInputSelect)
+        .inputSelect()
     );
 
 

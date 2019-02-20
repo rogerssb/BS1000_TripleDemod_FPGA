@@ -31,9 +31,8 @@ module decoder (
     output reg              outputClkEn,
     output                  fifo_rs,
     output          [1:0]   clkPhase,
-    output                  bypass_fifo,
     output                  symb_clk,
-    output                  inputSelect
+    output          [1:0]   inputSelect
 );
 
     wire            [1:0]   mode;
@@ -58,7 +57,6 @@ module decoder (
         .biphaseEnable(biphase),
         .millerEnable(miller),
         .mode(mode),
-        .bypassFifo(bypass_fifo),
         .inputSelect(inputSelect)
     );
 
@@ -242,7 +240,7 @@ always @ ( posedge clk )
             out_sel_i <= millerBit ;
             out_sel_q <= millerBit ;
             end
-        else if (symb_clk_en) 
+        else if (symb_clk_en)
             begin
             out_sel_i <= dec_i ;
             out_sel_q <= dec_q ;
