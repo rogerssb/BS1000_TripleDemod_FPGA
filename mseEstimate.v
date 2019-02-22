@@ -76,7 +76,11 @@ module mseEstimate
             end
             else begin
                 avgCount <= avgCount - 1;
+                `ifdef BITSYNC_BERT
+                diff <= $signed({1'b0,mag,4'b0}) - $signed({1'b0,meanMag,1'b0});
+                `else
                 diff <= $signed({mag,5'b0}) - $signed({1'b0,meanMag,1'b0});
+                `endif
                 diffAccum <= diffAccum + diffSquared;
             end
         end

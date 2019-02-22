@@ -76,7 +76,7 @@ initial cicDecimation = (dfDecimation == 1) ? 1 :
                         (dfDecimation == 2) ? 1 :
                         (dfDecimation == 3) ? 3 :
                         (dfDecimation == 4) ? 1 :
-                        (dfDecimation == 5) ? 5 : 
+                        (dfDecimation == 5) ? 5 :
                         (dfDecimation == 6) ? 3 :
                                                dfDecimation/4;
 integer cicDecimationInt;
@@ -89,8 +89,8 @@ real    resamplerFreqNorm;
 initial resamplerFreqNorm = resamplerFreqSps/(SAMPLE_FREQ/dfDecimationReal)*(2.0**32);
 /*
 real resamplerFreqNorm = (dfDecimation == 1) ? resamplerFreqSps/(SAMPLE_FREQ) * `TWO_POW_32 :
-                         (dfDecimation == 2) ? resamplerFreqSps/(SAMPLE_FREQ/2.0) * `TWO_POW_32 : 
-                         (dfDecimation == 3) ? resamplerFreqSps/(SAMPLE_FREQ/3.0) * `TWO_POW_32 :  
+                         (dfDecimation == 2) ? resamplerFreqSps/(SAMPLE_FREQ/2.0) * `TWO_POW_32 :
+                         (dfDecimation == 3) ? resamplerFreqSps/(SAMPLE_FREQ/3.0) * `TWO_POW_32 :
                                                 resamplerFreqSps/(SAMPLE_FREQ/dfDecimationInt/2.0) * `TWO_POW_32;
 */
 integer resamplerFreqInt;
@@ -176,7 +176,8 @@ interpolate #(.RegSpace(`INTERP0SPACE), .FirRegSpace(`VIDFIR0SPACE)) ch0Interpol
     `ifdef USE_BUS_CLOCK
     .busClk(bc),
     `endif
-    .wr0(we0 & txRegCS), .wr1(we1 & txRegCS), .wr2(we2 & txRegCS), .wr3(we3 & txRegCS),
+    .cs(txRegCS),
+    .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
     .addr(a),
     .din(d),
     .dout(),
@@ -225,49 +226,72 @@ always @* rxInputReal = $itor($signed(rxInput))/(2**17);
                             Instantiate the Bitsync
 ******************************************************************************/
 
-wire    [17:0]  dac0Out,dac1Out,dac2Out;
-wire    [17:0]  iSymData,qSymData;
-wire    [17:0]  ch0Offset;
-wire    [17:0]  ch1Offset;
-wire    [17:0]  iEye,qEye;
-wire    [4:0]   eyeOffset;
-bitsyncTop bitsyncTop( 
-    .clk(clk), .clkEn(1'b1), .reset(reset),
-    `ifdef USE_BUS_CLOCK
-    .busClk(bc),
-    `endif
-    .wr0(we0 & !txRegCS), .wr1(we1 & !txRegCS), .wr2(we2 & !txRegCS), .wr3(we3 & !txRegCS),
-    .addr(a),
-    .din(d),
-    .dout(dout),
-    .rx0(rxInput), 
-    .rx1(rxInput),
-    .ch0Lock(),
-    .ch0Sym2xEn(ch0Sym2xEn),
-    .ch0SymEn(ch0SymEn),
-    .ch0SymData(),
-    .ch0SymClk(pll0_OUT1),
-    .ch0Bit(ch0DataOut),
-    .ch0Gain(ch0Gain),
-    .ch0Offset(ch0Offset),
-    .ch1Lock(),
-    .ch1Sym2xEn(),
-    .ch1SymEn(ch1SymEn),
-    .ch1SymClk(),
-    .ch1SymData(),
-    .ch1Bit(),
-    .ch1Gain(ch1Gain),
-    .ch1Offset(ch1Offset),
-    .ch0Dac0ClkEn(dac0ClkEn),
-    .ch0Dac0Data(dac0Out),
-    .ch0Dac1ClkEn(dac1ClkEn),
-    .ch0Dac1Data(dac1Out),
-    .ch0Dac2ClkEn(dac2ClkEn),
-    .ch0Dac2Data(dac2Out),
-    .eyeClkEn(eyeSync),
-    .iEye(iEye),.qEye(qEye),
-    .eyeOffset(eyeOffset)
-);
+    wire            [17:0]  dac0Out,dac1Out,dac2Out;
+    wire    signed  [17:0]  ch0SymData,ch1SymData;
+    wire    signed  [17:0]  ch0Offset;
+    wire    signed  [17:0]  ch1Offset;
+    wire    signed  [17:0]  iEye,qEye;
+    wire            [4:0]   eyeOffset;
+    bitsyncTop bitsyncTop(
+        .clk(clk), .clkEn(1'b1), .reset(reset),
+        `ifdef USE_BUS_CLOCK
+        .busClk(bc),
+        `endif
+        .cs(!txRegCS),
+        .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
+        .addr(a),
+        .din(d),
+        .dout(dout),
+        .rx0(rxInput),
+        .rx1(rxInput),
+        .ch0Lock(),
+        .ch0Sym2xEn(ch0Sym2xEn),
+        .ch0SymEn(ch0SymEn),
+        .ch0SymData(ch0SymData),
+        .ch0SymClk(pll0_OUT1),
+        .ch0Bit(ch0DataOut),
+        .ch0Gain(ch0Gain),
+        .ch0Offset(ch0Offset),
+        .ch1Lock(),
+        .ch1Sym2xEn(),
+        .ch1SymEn(ch1SymEn),
+        .ch1SymClk(),
+        .ch1SymData(),
+        .ch1Bit(),
+        .ch1Gain(ch1Gain),
+        .ch1Offset(ch1Offset),
+        .ch0Dac0ClkEn(dac0ClkEn),
+        .ch0Dac0Data(dac0Out),
+        .ch0Dac1ClkEn(dac1ClkEn),
+        .ch0Dac1Data(dac1Out),
+        .ch0Dac2ClkEn(dac2ClkEn),
+        .ch0Dac2Data(dac2Out),
+        .eyeClkEn(eyeSync),
+        .iEye(iEye),.qEye(qEye),
+        .eyeOffset(eyeOffset)
+    );
+
+
+    wire    signed  [17:0]  negCh0SymData = -ch0SymData;
+    wire            [12:0]  ch0Mag = ch0SymData[17] ? negCh0SymData[16:4] : ch0SymData[16:4];
+    wire    signed  [17:0]  negCh1SymData = -ch1SymData;
+    wire            [12:0]  ch1Mag = ch1SymData[17] ? negCh1SymData[16:4] : ch1SymData[16:4];
+    wire            [31:0]  mseDout;
+    dualMseEstimate mse (
+        .clk(clk),
+        .reset(reset),
+        .busClk(bc),
+        .cs(!txRegCS),
+        .wr0(we0),.wr1(we1),.wr2(we2),.wr3(we3),
+        .addr(a),
+        .din(d),
+        .dout(),
+        .ch0MagClkEn(ch0SymEn),
+        .ch0Mag(ch0Mag),
+        .ch1MagClkEn(ch1SymEn),
+        .ch1Mag(ch1Mag)
+    );
+
 
 wire    [31:0]  dac0Dout;
 wire    [17:0]  dac0Data;
@@ -277,6 +301,7 @@ interpolate #(.RegSpace(`INTERP0SPACE), .FirRegSpace(`VIDFIR0SPACE)) dac0Interp(
     `ifdef USE_BUS_CLOCK
     .busClk(bc),
     `endif
+    .cs(!txRegCS),
     .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
     .addr(a),
     .din(d),
@@ -294,6 +319,7 @@ interpolate #(.RegSpace(`INTERP1SPACE), .FirRegSpace(`VIDFIR1SPACE)) dac1Interp(
     `ifdef USE_BUS_CLOCK
     .busClk(bc),
     `endif
+    .cs(!txRegCS),
     .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
     .addr(a),
     .din(d),
@@ -311,6 +337,7 @@ interpolate #(.RegSpace(`INTERP2SPACE), .FirRegSpace(`VIDFIR2SPACE)) dac2Interp(
     `ifdef USE_BUS_CLOCK
     .busClk(bc),
     `endif
+    .cs(!txRegCS),
     .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
     .addr(a),
     .din(d),
@@ -321,17 +348,17 @@ interpolate #(.RegSpace(`INTERP2SPACE), .FirRegSpace(`VIDFIR2SPACE)) dac2Interp(
 assign dac2_d = dac2Data[17:4];
 assign dac2_clk = clk;
 
-    digitalPLL #(.REG_SPACE(`DLL0SPACE)) dll0(
+    digitalPLL dll0 (
         .clk(clk),
         .reset(reset),
-        .busClk(bc),
-        .addr(a),
-        .dataIn(d),
-        .dataOut(),
-        .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
+        .centerFreq(32'd178956970),
+        .loopGain(32'd7),
+        .feedbackDivider(4),
         .referenceClkEn(ch0SymEn),
+        .feedbackClkEn(),
         .dllOutputClk(),
-        .dllOutputClkEn()
+        .filteredRefClk(),
+        .phaseError()
     );
 
 
@@ -428,14 +455,14 @@ mcp48xxInterface dacInterface (
     reg bertSpace;
     always @* begin
         casex(a)
-            `BERT_SPACE:            bertSpace = 1;
+            `BERT_SPACE:            bertSpace = !txRegCS;
             default:                bertSpace = 0;
             endcase
         end
 
     reg bertReset;
     initial bertReset = 0;
-    bert_top bert(          
+    bert_top bert(
         .busClk(bc),
         .cs(bertSpace),
         .addr(a),
@@ -454,7 +481,7 @@ mcp48xxInterface dacInterface (
     reg pngenSpace;
     always @* begin
         casex(a)
-            `PNGEN_SPACE:           pngenSpace = 1;
+            `PNGEN_SPACE:           pngenSpace = !txRegCS;
             default:                pngenSpace = 0;
             endcase
         end
@@ -502,7 +529,7 @@ always @(negedge clk) begin
 function [12:0] createAddress;
     input [12:0] addrA;
     input [12:0] addrB;
-    
+
     integer i;
     reg [12:0]finalAddress;
 
@@ -542,7 +569,7 @@ task write16;
             bc = 1;
         #20 ;
             bc = 0;
-            we2 = 0; we3 = 0; 
+            we2 = 0; we3 = 0;
         end
     else begin
         d[15:0] = data;
@@ -553,10 +580,10 @@ task write16;
             bc = 1;
         #20 ;
             bc = 0;
-            we0 = 0; we1 = 0; 
+            we0 = 0; we1 = 0;
         end
     #20 ;
-        bc = 1;  
+        bc = 1;
         d = 32'hz;
     #20 ;
         bc = 0;
@@ -580,7 +607,7 @@ task write32;
          bc = 1;
     #20  ;
          bc = 0;
-         we0 = 0; we1 = 0; we2 = 0; we3 = 0; 
+         we0 = 0; we1 = 0; we2 = 0; we3 = 0;
     #20  ;
          bc = 1;
          d = 32'hz;
@@ -602,14 +629,14 @@ task write16;
     if (addr[1]) begin
         d[31:16] = data;
         #100 we2 = 1; we3 = 1;
-        #100 we2 = 0; we3 = 0; 
+        #100 we2 = 0; we3 = 0;
         end
     else begin
         d[15:0] = data;
         #100 we0 = 1; we1 = 1;
-        #100 we0 = 0; we1 = 0; 
+        #100 we0 = 0; we1 = 0;
         end
-    #100  
+    #100
     d = 32'hz;
     #200;
   end
@@ -623,7 +650,7 @@ task write32;
     d = data;
     rd = 0;
     #100 we0 = 1; we1 = 1; we2 = 1; we3 = 1;
-    #100 we0 = 0; we1 = 0; we2 = 0; we3 = 0; 
+    #100 we0 = 0; we1 = 0; we2 = 0; we3 = 0;
     #100
     d = 32'hz;
     #200;
@@ -647,7 +674,7 @@ endtask
 initial begin
 
     `ifdef ADD_NOISE
-    // The 11.5 is a fudge factor (should be 12 for the 2 bit shift) for the scaling 
+    // The 11.5 is a fudge factor (should be 12 for the 2 bit shift) for the scaling
     // down of the transmit waveform from full scale.
     // The 13.0 is to translate from SNR to EBNO which is 10log10(bitrate/bandwidth).
     $initGaussPLI(1,8.0 + 11.5 - 13.0,131072.0);
@@ -658,7 +685,7 @@ initial begin
     reset = 0;
     clk = 0;
     rd = 0;
-    we0 = 0; we1 = 0; we2 = 0; we3 = 0; 
+    we0 = 0; we1 = 0; we2 = 0; we3 = 0;
     d = 32'hz;
     txRegCS = 0;
     txScaleFactor = 0.125;
@@ -680,11 +707,11 @@ initial begin
     ch0Interpolate.videoFir.singleFirCoeffRegs.c7 = 16'h7fff;
     // Init the interpolator
     txRegCS = 1;
-    write32(createAddress(`INTERP0SPACE, `INTERP_CONTROL),1);
-    write32(createAddress(`INTERP0SPACE, `INTERP_EXPONENT), modInterpExponent);
-    write32(createAddress(`INTERP0SPACE, `INTERP_MANTISSA), modInterpMantissa);
-    write32(createAddress(`INTERP0SPACE, `INTERP_CONTROL),0);
-    txRegCS = 0;
+    write16(createAddress(`INTERP0SPACE, `INTERP_CONTROL),9);
+    write16(createAddress(`INTERP0SPACE, `INTERP_CIC_EXPONENT), modInterpExponent);
+    write32(createAddress(`INTERP0SPACE, `INTERP_CIC_MANTISSA), modInterpMantissa);
+    write16(createAddress(`INTERP0SPACE, `INTERP_GAIN_MANTISSA),0);
+    write16(createAddress(`INTERP0SPACE, `INTERP_GAIN_EXPONENT),16);
     // Reset to start the transmitter
     #(16*C) ;
     reset = 1;
@@ -694,6 +721,12 @@ initial begin
     reset = 1;
     #(2*C) ;
     reset = 0;
+    #(4*bitrateSamplesInt*C) ;
+    reset = 1;
+    #(2*C) ;
+    reset = 0;
+    write16(createAddress(`INTERP0SPACE, `INTERP_CONTROL),8);
+    txRegCS = 0;
 
     `ifdef ADD_FIFOS
     // Init the PLLs
@@ -709,9 +742,9 @@ initial begin
     // Init the sample rate loop filters
     write32(createAddress(`CH0_RESAMPSPACE,`RESAMPLER_RATE),resamplerFreqInt);
     write32(createAddress(`CH0_BITSYNCSPACE,`LF_CONTROL),1);    // Zero the error
-    write32(createAddress(`CH0_BITSYNCSPACE,`LF_LEAD_LAG),32'h001a0010);    
-    //write32(createAddress(`CH0_BITSYNCSPACE,`LF_LEAD_LAG),32'h0014000c);    
-    write32(createAddress(`CH0_BITSYNCSPACE,`LF_LIMIT), resamplerLimitInt);    
+    write32(createAddress(`CH0_BITSYNCSPACE,`LF_LEAD_LAG),32'h001a0010);
+    //write32(createAddress(`CH0_BITSYNCSPACE,`LF_LEAD_LAG),32'h0014000c);
+    write32(createAddress(`CH0_BITSYNCSPACE,`LF_LIMIT), resamplerLimitInt);
 
     // Init the downcoverter register set
     write32(createAddress(`CH0_DFSPACE,`DF_CONTROL),dfControl);
@@ -734,7 +767,7 @@ initial begin
 
     // Init the channel agc loop filter
     write32(createAddress(`CH0_AGCSPACE,`ALF_CONTROL),1);                 // Zero the error
-    write32(createAddress(`CH0_AGCSPACE,`ALF_SETPOINT),32'h0000fff0);     // AGC Setpoint
+    write32(createAddress(`CH0_AGCSPACE,`ALF_SETPOINT),32'h0000ffe0);     // AGC Setpoint
     write32(createAddress(`CH0_AGCSPACE,`ALF_GAINS),32'h001a001a);        // AGC Loop Gain
     write32(createAddress(`CH0_AGCSPACE,`ALF_ULIMIT),32'hff000000);       // AGC Upper limit
     write32(createAddress(`CH0_AGCSPACE,`ALF_LLIMIT),32'h00000000);       // AGC Lower limit
@@ -746,14 +779,14 @@ initial begin
                                                                         4'h0,`BS_DAC_SYM,
                                                                         4'h0,`BS_DAC_DF});
     write32(createAddress(`INTERP0SPACE, `INTERP_CONTROL),0);
-    write32(createAddress(`INTERP0SPACE, `INTERP_EXPONENT), 8);
-    write32(createAddress(`INTERP0SPACE, `INTERP_MANTISSA), 32'h00012000);
+    write32(createAddress(`INTERP0SPACE, `INTERP_CIC_EXPONENT), 8);
+    write32(createAddress(`INTERP0SPACE, `INTERP_CIC_MANTISSA), 32'h00012000);
     write32(createAddress(`INTERP1SPACE, `INTERP_CONTROL),0);
-    write32(createAddress(`INTERP1SPACE, `INTERP_EXPONENT), 8);
-    write32(createAddress(`INTERP1SPACE, `INTERP_MANTISSA), 32'h00012000);
+    write32(createAddress(`INTERP1SPACE, `INTERP_CIC_EXPONENT), 8);
+    write32(createAddress(`INTERP1SPACE, `INTERP_CIC_MANTISSA), 32'h00012000);
     write32(createAddress(`INTERP2SPACE, `INTERP_CONTROL),0);
-    write32(createAddress(`INTERP2SPACE, `INTERP_EXPONENT), 8);
-    write32(createAddress(`INTERP2SPACE, `INTERP_MANTISSA), 32'h00012000);
+    write32(createAddress(`INTERP2SPACE, `INTERP_CIC_EXPONENT), 8);
+    write32(createAddress(`INTERP2SPACE, `INTERP_CIC_MANTISSA), 32'h00012000);
 
     `ifdef ADD_BERT_TEST
     write32(createAddress(`BERT_SPACE,`BERT_POLY), 32'h080000b8);
@@ -773,9 +806,10 @@ initial begin
     write32(createAddress(`PNGEN_SPACE,`PNGEN_POLY), 32'h080000b8);// PN8, restart false
     `endif
 
+    write16(createAddress(`DMSE_SPACE,`DMSE_CH0_AVG_LENGTH),16'd255);
+    write16(createAddress(`DMSE_SPACE,`DMSE_CH0_MEAN),16'd21627);
+    write16(createAddress(`DMSE_SPACE,`DMSE_CH0_MSE_OFFSET),16'd0);
 
-    write32(createAddress(`DLL0SPACE,`DLL_CENTER_FREQ), 32'd178956970);
-    write32(createAddress(`DLL0SPACE,`DLL_GAINS),32'd7);
 
     reset = 1;
     #(2*C) ;
@@ -816,14 +850,14 @@ initial begin
     interpReset = 0;
 
     // Enable the sample rate loop with 2 sample summer
-    write32(createAddress(`CH0_BITSYNCSPACE,`LF_CONTROL),32'h00000010);  
+    write32(createAddress(`CH0_BITSYNCSPACE,`LF_CONTROL),32'h00000010);
 
     // Wait
     #(20*bitrateSamplesInt*C) ;
 
     `ifdef ENABLE_AGC
     // Enable the AGC loop
-    write32(createAddress(`CH0_AGCSPACE,`ALF_CONTROL),0);              
+    write32(createAddress(`CH0_AGCSPACE,`ALF_CONTROL),0);
     `endif
 
     // Wait for some data to pass thru

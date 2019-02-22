@@ -19,9 +19,8 @@ module pcmDecoder (
     output reg              clkEn_out,
     output                  fifo_rs,
     output          [1:0]   clkPhase,
-    output                  bypass_fifo,
     output                  symb_clk,
-    output                  inputSelect
+    output          [1:0]   inputSelect
 );
 
     wire            [1:0]   mode;
@@ -46,7 +45,6 @@ module pcmDecoder (
         .biphaseEnable(biphase),
         .millerEnable(miller),
         .mode(mode),
-        .bypassFifo(bypass_fifo),
         .inputSelect(inputSelect)
     );
 

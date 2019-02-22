@@ -296,6 +296,32 @@ clockAndDataInputSync diffSync(
     );
 
 
+`ifdef ADD_MSE
+/******************************************************************************
+                       Mean Squared Error Estimate
+*******************************************************************************/
+    wire    signed  [17:0]  negCh0SymData = -ch0SymData;
+    wire            [12:0]  ch0Mag = ch0SymData[17] ? negCh0SymData[16:4] : ch0SymData[16:4];
+    wire    signed  [17:0]  negCh1SymData = -ch1SymData;
+    wire            [12:0]  ch1Mag = ch1SymData[17] ? negCh1SymData[16:4] : ch1SymData[16:4];
+    wire            [31:0]  mseDout;
+    dualMseEstimate mse (
+        .clk(clk),
+        .reset(reset),
+        .busClk(fb_clk),
+        .cs(cs),
+        .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
+        .addr(addr),
+        .din(dataIn),
+        .dout(mseDout),
+        .ch0MagClkEn(ch0SymEn),
+        .ch0Mag(ch0Mag),
+        .ch1MagClkEn(ch1SymEn),
+        .ch1Mag(ch1Mag)
+    );
+`endif
+
+
 `ifdef ADD_TURBO
 /******************************************************************************
                                 Turbo Decoder
@@ -308,7 +334,7 @@ clockAndDataInputSync diffSync(
         .clk(clk),
         .clkEn(ch0Sym2xEn),
         .reset(reset),
-        .busClk(busClk),
+        .busClk(fb_clk),
         .cs(cs),
         .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
         .addr(addr),
@@ -386,12 +412,14 @@ clockAndDataInputSync diffSync(
                 dualSymEn <= ch0VitBitEn;
                 dualSym2xEn <= ch0VitSym2xEn;
             end
+            `ifdef ADD_TURBO
             `DEC_INPUT_TURBO: begin
                 dualCh0Input <= turboBit;
                 dualCh1Input <= turboBit;
                 dualSymEn <= turboBitEn;
                 dualSym2xEn <= turboBitEn;
             end
+            `endif
             default: begin
                 dualCh0Input <= ch0DataOut;
                 dualCh1Input <= ch1DataOut;
@@ -429,7 +457,6 @@ clockAndDataInputSync diffSync(
         .outputClkEn(dualPcmClkEn),
         .fifo_rs(),
         .clkPhase(dualClkPhase),
-        .bypass_fifo(),
         .symb_clk(dualPcmSymClk),
         .inputSelect(dualDecInputSelect)
     );
@@ -458,11 +485,13 @@ clockAndDataInputSync diffSync(
                 ch1DecSymEn <= ch1VitBitEn;
                 ch1DecSym2xEn <= ch1VitSym2xEn;
             end
+            `ifdef ADD_TURBO
             `DEC_INPUT_TURBO: begin
                 ch1DecInput <= turboBit;
                 ch1DecSymEn <= turboBitEn;
                 ch1DecSym2xEn <= turboBitEn;
             end
+            `endif
             default: begin
                 ch1DecInput <= ch1DataOut;
                 ch1DecSymEn <= ch1SymEn;
@@ -495,7 +524,6 @@ clockAndDataInputSync diffSync(
         .clkEn_out(ch1PcmClkEn),          // clk output
         .fifo_rs(),
         .clkPhase(ch1ClkPhase),
-        .bypass_fifo(),
         .symb_clk(ch1PcmSymClk),
         .inputSelect(ch1DecInputSelect)
     );
@@ -614,10 +642,12 @@ clockAndDataInputSync diffSync(
     reg     [2:0]   cAndD0DataIn;
     always @* begin
         case (cAndD0SourceSelect)
+            `ifdef ADD_TURBO
             `CandD_SRC_TURBO: begin
                 cAndD0ClkEn = turboBitEn;
                 cAndD0DataIn = {turboBit,2'b0};
             end
+            `endif
             default: begin
                 cAndD0ClkEn = dualPcmClkEn;
                 cAndD0DataIn = {dualDataI,dualDataQ,1'b0};
@@ -651,10 +681,12 @@ clockAndDataInputSync diffSync(
     reg     [2:0]   cAndD1DataIn;
     always @* begin
         case (cAndD1SourceSelect)
+            `ifdef ADD_TURBO
             `CandD_SRC_TURBO: begin
                 cAndD1ClkEn = turboBitEn;
                 cAndD1DataIn = {turboBit,2'b0};
             end
+            `endif
             default: begin
                 cAndD1ClkEn = ch1PcmClkEn;
                 cAndD1DataIn = {ch1PcmData,2'b0};
@@ -688,10 +720,12 @@ clockAndDataInputSync diffSync(
     reg     [2:0]   cAndD2DataIn;
     always @* begin
         case (cAndD2SourceSelect)
+            `ifdef ADD_TURBO
             `CandD_SRC_TURBO: begin
                 cAndD2ClkEn = turboBitEn;
                 cAndD2DataIn = {turboBit,2'b0};
             end
+            `endif
             default: begin
                 cAndD2ClkEn = pnClkEn;
                 cAndD2DataIn = {pnBit,2'b0};
@@ -1089,10 +1123,12 @@ clockAndDataInputSync diffSync(
                 interp0ClkEn <= 1'b1;
             end
             */
+            `ifdef ADD_TURBO
             `SYS_DAC_INPUT_SEL_TURBO: begin
                 interp0DataIn <= turboDac0Data;
                 interp0ClkEn <= turboDac0ClkEn;
             end
+            `endif
             default: begin
                 interp0DataIn <= ch0Dac0Data;
                 interp0ClkEn <= ch0Dac0ClkEn;
@@ -1131,10 +1167,12 @@ clockAndDataInputSync diffSync(
                 interp1DataIn <= ch1Dac1Data;
                 interp1ClkEn <= ch1Dac1ClkEn;
             end
+            `ifdef ADD_TURBO
             `SYS_DAC_INPUT_SEL_TURBO: begin
                 interp1DataIn <= turboDac1Data;
                 interp1ClkEn <= turboDac1ClkEn;
             end
+            `endif
             default: begin
                 interp1DataIn <= ch0Dac1Data;
                 interp1ClkEn <= ch0Dac1ClkEn;
@@ -1173,10 +1211,12 @@ clockAndDataInputSync diffSync(
                 interp2DataIn <= ch1Dac2Data;
                 interp2ClkEn <= ch1Dac2ClkEn;
             end
+            `ifdef ADD_TURBO
             `SYS_DAC_INPUT_SEL_TURBO: begin
                 interp2DataIn <= turboDac2Data;
                 interp2ClkEn <= turboDac2ClkEn;
             end
+            `endif
             default: begin
                 interp2DataIn <= ch0Dac2Data;
                 interp2ClkEn <= ch0Dac2ClkEn;
@@ -1421,6 +1461,26 @@ assign ch1Lockn = !ch1Lock;
 reg [15:0] rd_mux;
 always @* begin
     casex(addr)
+        `ifdef ADD_MSE
+        `DMSE_SPACE: begin
+            if (addr[1]) begin
+                rd_mux = mseDout[31:16];
+            end
+            else begin
+                rd_mux = mseDout[15:0];
+            end
+        end
+        `endif
+        `ifdef ADD_TURBO
+        `TURBOSPACE: begin
+            if (addr[1]) begin
+                rd_mux = turboDout[31:16];
+            end
+            else begin
+                rd_mux = turboDout[15:0];
+            end
+        end
+        `endif
         `BERT_SPACE: begin
             if (addr[1]) begin
                 rd_mux = bertDout[31:16];
