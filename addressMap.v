@@ -30,7 +30,8 @@
 `define BS_CIC_COMP_USE_MPY
 `define ADD_BERT
 `define USE_DEMOD_CandD
-`define ADD_TURBO
+//`define ADD_TURBO
+`define ADD_MSE
 `endif
 
 `ifdef TRIPLE_DEMOD
@@ -43,10 +44,10 @@
 `define USE_DDC_FIR
 //`define ADD_DESPREADER
 //`define ADD_SCPATH
-//`define ADD_CMA
-`define ADD_LDPC
+`define ADD_CMA
+//`define ADD_LDPC
 `define ADD_DQM
-//`define ADD_MULTIH
+`define ADD_MULTIH
 `define ADD_SUPERBAUD_TED
 `ifndef SIMULATE
 `define EMBED_MULTIH_CARRIER_LOOP

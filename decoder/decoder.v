@@ -264,6 +264,9 @@ always @ ( posedge clk )
         else if (demux) begin
             rand_nrz_shft_en = symb_clk_2x_en;
         end
+        else if (feher) begin
+            rand_nrz_shft_en = symb_clk_2x_en;
+        end
         else begin
             rand_nrz_shft_en = symb_clk_en;
         end
