@@ -414,7 +414,7 @@ module test;
         write32(createAddress(`DQMSPACE, `DQM_MSE_CONTROL),{16'd255,16'd23253});
         write16(createAddress(`DQMSPACE, `DQM_CLKS_PER_BIT),15);
         write16(createAddress(`DQMSPACE, `DQM_PAYLOAD_SIZE),127);
-        read16(createAddress(`DQMSPACE,  `DQM_CLKS_PER_BIT));
+        //read16(createAddress(`DQMSPACE,  `DQM_CLKS_PER_BIT));
         `endif
 
         `ifdef TEST_CMA
@@ -460,8 +460,8 @@ module test;
         repeat (2) @ (posedge clk) ;
         demod.ddc.hbReset = 0;
 
-        // Wait 2 bit periods
-        repeat (2*`CLOCKS_PER_BIT) @ (posedge clk) ;
+        // Wait 4 bit periods
+        repeat (4*`CLOCKS_PER_BIT) @ (posedge clk) ;
 
         // Create a reset to clear the cic resampler
         demod.ddc.cicReset = 1;

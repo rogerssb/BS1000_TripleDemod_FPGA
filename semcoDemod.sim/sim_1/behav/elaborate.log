@@ -1,254 +1,152 @@
 Vivado Simulator 2016.4
 Copyright 1986-1999, 2001-2016 Xilinx, Inc. All Rights Reserved.
-Running: C:/Xilinx/Vivado/2016.4/bin/unwrapped/win64.o/xelab.exe -wto 0027b497f38f46a7b40b8158d1351c26 --debug typical --relax --mt 2 -d SEMCO_DEMOD= -d SIMULATE= -L xbip_utils_v3_0_7 -L axi_utils_v2_0_3 -L xbip_pipe_v3_0_3 -L xbip_bram18k_v3_0_3 -L mult_gen_v12_0_12 -L xbip_dsp48_wrapper_v3_0_4 -L xbip_dsp48_addsub_v3_0_3 -L xbip_dsp48_multadd_v3_0_3 -L dds_compiler_v6_0_13 -L xil_defaultlib -L fir_compiler_v7_2_7 -L fifo_generator_v13_1_3 -L dist_mem_gen_v8_0_11 -L blk_mem_gen_v8_3_5 -L blk_mem_gen_v8_3_4 -L c_reg_fd_v12_0_3 -L xbip_addsub_v3_0_3 -L c_addsub_v12_0_10 -L util_vector_logic_v2_0 -L unisims_ver -L unimacro_ver -L secureip -L xpm --snapshot test_behav xil_defaultlib.test xil_defaultlib.glbl -log elaborate.log 
+Running: C:/Xilinx/Vivado/2016.4/bin/unwrapped/win64.o/xelab.exe -wto 0027b497f38f46a7b40b8158d1351c26 --debug typical --relax --mt 2 -d SEMCO_DEMOD= -d SIMULATE= -L xil_defaultlib -L blk_mem_gen_v8_3_5 -L blk_mem_gen_v8_3_4 -L xbip_utils_v3_0_7 -L c_reg_fd_v12_0_3 -L xbip_dsp48_wrapper_v3_0_4 -L xbip_pipe_v3_0_3 -L xbip_dsp48_addsub_v3_0_3 -L xbip_addsub_v3_0_3 -L c_addsub_v12_0_10 -L util_vector_logic_v2_0 -L unisims_ver -L unimacro_ver -L secureip -L xpm --snapshot test_behav xil_defaultlib.test xil_defaultlib.glbl -log elaborate.log 
 Using 2 slave threads.
 Starting static elaboration
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1957]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1958]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1959]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1949]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1950]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1951]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1957]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1958]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1959]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1949]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1950]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1951]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1957]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1958]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1959]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1949]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1950]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1951]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1957]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1958]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1959]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1949]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1950]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1951]
-WARNING: [VRFC 10-1783] select index -1 into tmp_dout is out of bounds [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/fifo_generator_v13_1/simulation/fifo_generator_vlog_beh.v:7570]
-WARNING: [VRFC 10-1783] select index -1 into tmp_dout is out of bounds [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/fifo_generator_v13_1/simulation/fifo_generator_vlog_beh.v:7572]
-WARNING: [VRFC 10-597] element index -1 into num_read_words_dc is out of bounds [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/fifo_generator_v13_1/simulation/fifo_generator_vlog_beh.v:8146]
-WARNING: [VRFC 10-597] element index -1 into num_write_words_dc is out of bounds [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/fifo_generator_v13_1/simulation/fifo_generator_vlog_beh.v:8196]
+WARNING: [VRFC 10-1783] select index 30 into current_contents is out of bounds [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/blk_mem_gen_v8_3/simulation/blk_mem_gen_v8_3.v:2419]
+WARNING: [VRFC 10-1783] select index 62 into current_contents is out of bounds [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/blk_mem_gen_v8_3/simulation/blk_mem_gen_v8_3.v:2420]
 Completed static elaboration
 Starting simulation data flow analysis
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-WARNING: [XSIM 43-4099] "C:/modem/vivado/multiplier.v" Line 1. Module multiplier(AWIDTH=10,BWIDTH=10) doesn't have a timescale but at least one module in design has a timescale.
-INFO: [Common 17-14] Message 'XSIM 43-4099' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
 Completed simulation data flow analysis
 Time Resolution for simulation is 1ps
-Compiling package std.standard
-Compiling package std.textio
-Compiling package ieee.std_logic_1164
-Compiling package ieee.numeric_std
-Compiling package xbip_utils_v3_0_7.xbip_utils_v3_0_7_pkg
-Compiling package xbip_utils_v3_0_7.xcc_utils_v3_0
-Compiling package dds_compiler_v6_0_13.dds_compiler_v6_0_13_viv_comp
-Compiling package ieee.std_logic_arith
-Compiling package ieee.std_logic_signed
-Compiling package dds_compiler_v6_0_13.pkg_dds_compiler_v6_0_13
-Compiling package dds_compiler_v6_0_13.dds_compiler_v6_0_13_hdl_comps
-Compiling package xbip_pipe_v3_0_3.xbip_pipe_v3_0_3_viv_comp
-Compiling package axi_utils_v2_0_3.axi_utils_v2_0_3_pkg
-Compiling package ieee.math_real
-Compiling package axi_utils_v2_0_3.global_util_pkg
-Compiling package axi_utils_v2_0_3.axi_utils_comps
-Compiling package unisim.vcomponents
-Compiling package ieee.std_logic_unsigned
-Compiling package dds_compiler_v6_0_13.pkg_betas
-Compiling package dds_compiler_v6_0_13.pkg_alphas
-Compiling package fir_compiler_v7_2_7.fir_compiler_v7_2_7_viv_comp
-Compiling package ieee.std_logic_textio
-Compiling package fir_compiler_v7_2_7.globals_pkg
-Compiling package fir_compiler_v7_2_7.components
-Compiling package ieee.vital_timing
-Compiling package ieee.vital_primitives
-Compiling package unisim.vpkg
 Compiling module xil_defaultlib.demodRegs
 Compiling module xil_defaultlib.ddcRegs
-Compiling architecture synth of entity xbip_pipe_v3_0_3.xbip_pipe_v3_0_3_viv [\xbip_pipe_v3_0_3_viv(c_latency=...]
-Compiling architecture synth of entity xbip_pipe_v3_0_3.xbip_pipe_v3_0_3_viv [\xbip_pipe_v3_0_3_viv(c_latency=...]
-Compiling architecture synth of entity dds_compiler_v6_0_13.dds_compiler_v6_0_13_rdy [\dds_compiler_v6_0_13_rdy(c_has_...]
-Compiling architecture synth of entity dds_compiler_v6_0_13.dither_wrap [\dither_wrap(ci_phase_err_width=...]
-Compiling architecture synth of entity xbip_pipe_v3_0_3.xbip_pipe_v3_0_3_viv [\xbip_pipe_v3_0_3_viv(c_has_ce=1...]
-Compiling architecture synth of entity xbip_pipe_v3_0_3.xbip_pipe_v3_0_3_viv [\xbip_pipe_v3_0_3_viv(c_latency=...]
-Compiling architecture synth of entity xbip_pipe_v3_0_3.xbip_pipe_v3_0_3_viv [\xbip_pipe_v3_0_3_viv(c_has_ce=1...]
-Compiling architecture synth of entity xbip_pipe_v3_0_3.xbip_pipe_v3_0_3_viv [\xbip_pipe_v3_0_3_viv(c_has_ce=1...]
-Compiling architecture synth of entity xbip_pipe_v3_0_3.xbip_pipe_v3_0_3_viv [\xbip_pipe_v3_0_3_viv(c_latency=...]
-Compiling architecture synth of entity dds_compiler_v6_0_13.pipe_add [\pipe_add(c_width=32,c_seg_width...]
-Compiling architecture synth of entity dds_compiler_v6_0_13.accum [\accum(c_xdevicefamily="kintex7"...]
-Compiling architecture synth of entity xbip_pipe_v3_0_3.xbip_pipe_v3_0_3_viv [\xbip_pipe_v3_0_3_viv(c_latency=...]
-Compiling architecture synth of entity xbip_pipe_v3_0_3.xbip_pipe_v3_0_3_viv [\xbip_pipe_v3_0_3_viv(c_latency=...]
-Compiling architecture synth of entity xbip_pipe_v3_0_3.xbip_pipe_v3_0_3_viv [\xbip_pipe_v3_0_3_viv(c_latency=...]
-Compiling architecture synth of entity xbip_pipe_v3_0_3.xbip_pipe_v3_0_3_viv [\xbip_pipe_v3_0_3_viv(c_latency=...]
-Compiling architecture synth of entity dds_compiler_v6_0_13.sin_cos [\sin_cos(c_xdevicefamily="kintex...]
-Compiling architecture synth of entity xbip_pipe_v3_0_3.xbip_pipe_v3_0_3_viv [\xbip_pipe_v3_0_3_viv(c_has_ce=1...]
-Compiling architecture synth of entity xbip_pipe_v3_0_3.xbip_pipe_v3_0_3_viv [\xbip_pipe_v3_0_3_viv(c_has_ce=1...]
-Compiling architecture synth of entity dds_compiler_v6_0_13.dds_compiler_v6_0_13_core [\dds_compiler_v6_0_13_core(c_xde...]
-Compiling architecture synth of entity dds_compiler_v6_0_13.dds_compiler_v6_0_13_viv [\dds_compiler_v6_0_13_viv(c_xdev...]
-Compiling architecture xilinx of entity dds_compiler_v6_0_13.dds_compiler_v6_0_13 [\dds_compiler_v6_0_13(c_xdevicef...]
-Compiling architecture dds6p0_arch of entity xil_defaultlib.dds6p0 [dds6p0_default]
+Compiling module unisims_ver.GND
+Compiling module unisims_ver.VCC
+Compiling module unisims_ver.x_lut1_mux2
+Compiling module unisims_ver.LUT1
+Compiling module unisims_ver.sffsrce_fdre
+Compiling module unisims_ver.FDRE
+Compiling module unisims_ver.x_lut2_mux4
+Compiling module unisims_ver.LUT2
+Compiling module xil_defaultlib.dds6p0_xbip_pipe_v3_0_3_viv__par...
+Compiling module unisims_ver.x_lut3_mux4
+Compiling module unisims_ver.x_lut3_mux4_reduced_0
+Compiling module unisims_ver.LUT3
+Compiling module unisims_ver.CARRY4
+Compiling module xil_defaultlib.dds6p0_xbip_pipe_v3_0_3_viv__par...
+Compiling module unisims_ver.LUT4
+Compiling module xil_defaultlib.dds6p0_pipe_add_1
+Compiling module xil_defaultlib.dds6p0_accum
+Compiling module xil_defaultlib.dds6p0_dither_wrap
+Compiling module xil_defaultlib.dds6p0_pipe_add
+Compiling module xil_defaultlib.dds6p0_xbip_pipe_v3_0_3_viv__par...
+Compiling module unisims_ver.SRL16E
+Compiling module xil_defaultlib.dds6p0_xbip_pipe_v3_0_3_viv__par...
+Compiling module unisims_ver.RB36_INTERNAL_VLOG(DOA_REG=1,DOB...
+Compiling module unisims_ver.RAMB36E1(DOA_REG=1,DOB_REG=1,INI...
+Compiling module unisims_ver.RB36_INTERNAL_VLOG(DOA_REG=1,DOB...
+Compiling module unisims_ver.RAMB36E1(DOA_REG=1,DOB_REG=1,INI...
+Compiling module unisims_ver.RB36_INTERNAL_VLOG(DOA_REG=1,DOB...
+Compiling module unisims_ver.RAMB36E1(DOA_REG=1,DOB_REG=1,INI...
+Compiling module unisims_ver.RB36_INTERNAL_VLOG(DOA_REG=1,DOB...
+Compiling module unisims_ver.RAMB36E1(DOA_REG=1,DOB_REG=1,INI...
+Compiling module unisims_ver.RB36_INTERNAL_VLOG(DOA_REG=1,DOB...
+Compiling module unisims_ver.RAMB36E1(DOA_REG=1,DOB_REG=1,INI...
+Compiling module unisims_ver.RB36_INTERNAL_VLOG(DOA_REG=1,DOB...
+Compiling module unisims_ver.RAMB36E1(DOA_REG=1,DOB_REG=1,INI...
+Compiling module unisims_ver.RB36_INTERNAL_VLOG(DOA_REG=1,DOB...
+Compiling module unisims_ver.RAMB36E1(DOA_REG=1,DOB_REG=1,INI...
+Compiling module unisims_ver.RB36_INTERNAL_VLOG(DOA_REG=1,DOB...
+Compiling module unisims_ver.RAMB36E1(DOA_REG=1,DOB_REG=1,INI...
+Compiling module unisims_ver.RB18_INTERNAL_VLOG(DOA_REG=1,DOB...
+Compiling module unisims_ver.RAMB18E1(DOA_REG=1,DOB_REG=1,INI...
+Compiling module xil_defaultlib.dds6p0_xbip_pipe_v3_0_3_viv__par...
+Compiling module xil_defaultlib.dds6p0_xbip_pipe_v3_0_3_viv__par...
+Compiling module xil_defaultlib.dds6p0_xbip_pipe_v3_0_3_viv__par...
+Compiling module xil_defaultlib.dds6p0_xbip_pipe_v3_0_3_viv__par...
+Compiling module xil_defaultlib.dds6p0_xbip_pipe_v3_0_3_viv__par...
+Compiling module xil_defaultlib.dds6p0_xbip_pipe_v3_0_3_viv__par...
+Compiling module xil_defaultlib.dds6p0_xbip_pipe_v3_0_3_viv__par...
+Compiling module xil_defaultlib.dds6p0_xbip_pipe_v3_0_3_viv__par...
+Compiling module unisims_ver.LUT5
+Compiling module unisims_ver.LUT6
+Compiling module xil_defaultlib.dds6p0_xbip_pipe_v3_0_3_viv__par...
+Compiling module xil_defaultlib.dds6p0_xbip_pipe_v3_0_3_viv__par...
+Compiling module xil_defaultlib.dds6p0_sin_cos
+Compiling module xil_defaultlib.dds6p0_xbip_pipe_v3_0_3_viv__par...
+Compiling module unisims_ver.FDRE(INIT=1'b1)
+Compiling module xil_defaultlib.dds6p0_dds_compiler_v6_0_13_rdy
+Compiling module xil_defaultlib.dds6p0_dds_compiler_v6_0_13_core
+Compiling module xil_defaultlib.dds6p0_xbip_pipe_v3_0_3_viv
+Compiling module xil_defaultlib.dds6p0_xbip_pipe_v3_0_3_viv_0
+Compiling module xil_defaultlib.dds6p0_dds_compiler_v6_0_13_viv
+Compiling module xil_defaultlib.dds6p0_dds_compiler_v6_0_13
+Compiling module xil_defaultlib.dds6p0
 Compiling module xil_defaultlib.mpy18x18PL1
 Compiling module xil_defaultlib.cmpy18
-Compiling architecture xilinx of entity axi_utils_v2_0_3.glb_srl_fifo [\glb_srl_fifo(width=18,has_ifx=t...]
-Compiling architecture xilinx of entity axi_utils_v2_0_3.glb_ifx_slave [\glb_ifx_slave(width=18,has_ifx=...]
-Compiling architecture synth of entity fir_compiler_v7_2_7.cntrl_delay [\cntrl_delay(c_delay_len=0,c_mem...]
-Compiling architecture synth of entity fir_compiler_v7_2_7.sp_mem [\sp_mem(c_xdevicefamily="kintex7...]
-Compiling architecture synth of entity fir_compiler_v7_2_7.sp_mem [\sp_mem(c_xdevicefamily="kintex7...]
-Compiling architecture synth of entity fir_compiler_v7_2_7.filt_mem [\filt_mem(c_xdevicefamily="kinte...]
-Compiling architecture synth of entity fir_compiler_v7_2_7.sp_mem [\sp_mem(c_xdevicefamily="kintex7...]
-Compiling architecture synth of entity fir_compiler_v7_2_7.sp_mem [\sp_mem(c_xdevicefamily="kintex7...]
-Compiling architecture synth of entity fir_compiler_v7_2_7.filt_mem [\filt_mem(c_xdevicefamily="kinte...]
-Compiling architecture synth of entity fir_compiler_v7_2_7.sp_mem [\sp_mem(c_xdevicefamily="kintex7...]
-Compiling architecture synth of entity fir_compiler_v7_2_7.sp_mem [\sp_mem(c_xdevicefamily="kintex7...]
-Compiling architecture synth of entity fir_compiler_v7_2_7.filt_mem [\filt_mem(c_xdevicefamily="kinte...]
-Compiling architecture synth of entity fir_compiler_v7_2_7.sp_mem [\sp_mem(c_xdevicefamily="kintex7...]
-Compiling architecture synth of entity fir_compiler_v7_2_7.sp_mem [\sp_mem(c_xdevicefamily="kintex7...]
-Compiling architecture synth of entity fir_compiler_v7_2_7.filt_mem [\filt_mem(c_xdevicefamily="kinte...]
-Compiling architecture synth of entity fir_compiler_v7_2_7.sp_mem [\sp_mem(c_xdevicefamily="kintex7...]
-Compiling architecture synth of entity fir_compiler_v7_2_7.filt_mem [\filt_mem(c_xdevicefamily="kinte...]
-Compiling architecture synth of entity fir_compiler_v7_2_7.buff [\buff(c_xdevicefamily="kintex7",...]
-Compiling architecture synth of entity fir_compiler_v7_2_7.delay [\delay(c_delay_len=8,c_xdevicefa...]
-Compiling architecture synth of entity fir_compiler_v7_2_7.delay [\delay(c_delay_len=7,c_xdevicefa...]
-Compiling architecture synth of entity fir_compiler_v7_2_7.delay [\delay(c_delay_len=6,c_xdevicefa...]
-Compiling architecture synth of entity fir_compiler_v7_2_7.delay [\delay(c_delay_len=5,c_xdevicefa...]
-Compiling architecture synth of entity fir_compiler_v7_2_7.delay [\delay(c_delay_len=4,c_xdevicefa...]
-Compiling architecture synth of entity fir_compiler_v7_2_7.delay [\delay(c_delay_len=3,c_xdevicefa...]
-Compiling architecture synth of entity fir_compiler_v7_2_7.delay [\delay(c_delay_len=2,c_xdevicefa...]
-Compiling architecture synth of entity fir_compiler_v7_2_7.delay [\delay(c_delay_len=0,c_xdevicefa...]
-Compiling architecture synth of entity fir_compiler_v7_2_7.buff [\buff(c_xdevicefamily="kintex7",...]
-Compiling architecture synth of entity fir_compiler_v7_2_7.delay [\delay(c_delay_len=0,c_xdevicefa...]
-Compiling architecture synth of entity fir_compiler_v7_2_7.delay [\delay(c_delay_len=0,c_xdevicefa...]
-Compiling architecture dsp48e1_v of entity unisim.DSP48E1 [\DSP48E1(mask="11111111111111111...]
-Compiling architecture synth of entity fir_compiler_v7_2_7.calc [\calc(c_xdevicefamily="kintex7",...]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1957]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1958]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1959]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1949]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1950]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1951]
-Compiling architecture synth of entity fir_compiler_v7_2_7.addsub_mult_add [\addsub_mult_add(c_xdevicefamily...]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1957]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1958]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1959]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1949]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1950]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1951]
-Compiling architecture synth of entity fir_compiler_v7_2_7.delay [\delay(c_delay_len=0,c_xdevicefa...]
-Compiling architecture synth of entity fir_compiler_v7_2_7.addsub_mult_add [\addsub_mult_add(c_xdevicefamily...]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1957]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1958]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1959]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1949]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1950]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1951]
-Compiling architecture synth of entity fir_compiler_v7_2_7.delay [\delay(c_delay_len=1,c_xdevicefa...]
-Compiling architecture synth of entity fir_compiler_v7_2_7.delay [\delay(c_delay_len=1,c_xdevicefa...]
-Compiling architecture synth of entity fir_compiler_v7_2_7.delay [\delay(c_delay_len=1,c_xdevicefa...]
-Compiling architecture synth of entity fir_compiler_v7_2_7.delay [\delay(c_delay_len=13,c_xdevicef...]
-Compiling architecture synth of entity fir_compiler_v7_2_7.single_rate [\single_rate(c_xdevicefamily="ki...]
-Compiling architecture synth of entity fir_compiler_v7_2_7.fir_compiler_v7_2_7_viv [\fir_compiler_v7_2_7_viv(c_xdevi...]
-Compiling architecture xilinx of entity fir_compiler_v7_2_7.fir_compiler_v7_2_7 [\fir_compiler_v7_2_7(c_xdevicefa...]
-Compiling architecture halfbandeven_arch of entity xil_defaultlib.halfbandEven [halfbandeven_default]
+Compiling module xil_defaultlib.halfbandEven_delay__parameterize...
+Compiling module xil_defaultlib.halfbandEven_buff
+Compiling module xil_defaultlib.halfbandEven_delay__parameterize...
+Compiling module xil_defaultlib.halfbandEven_delay__parameterize...
+Compiling module xil_defaultlib.halfbandEven_buff_0
+Compiling module xil_defaultlib.halfbandEven_delay__parameterize...
+Compiling module xil_defaultlib.halfbandEven_delay__parameterize...
+Compiling module xil_defaultlib.halfbandEven_buff_1
+Compiling module xil_defaultlib.halfbandEven_delay__parameterize...
+Compiling module xil_defaultlib.halfbandEven_delay__parameterize...
+Compiling module xil_defaultlib.halfbandEven_buff_2
+Compiling module xil_defaultlib.halfbandEven_delay__parameterize...
+Compiling module xil_defaultlib.halfbandEven_delay__parameterize...
+Compiling module xil_defaultlib.halfbandEven_buff_3
+Compiling module xil_defaultlib.halfbandEven_delay__parameterize...
+Compiling module xil_defaultlib.halfbandEven_delay__parameterize...
+Compiling module xil_defaultlib.halfbandEven_buff_4
+Compiling module xil_defaultlib.halfbandEven_delay__parameterize...
+Compiling module xil_defaultlib.halfbandEven_delay__parameterize...
+Compiling module xil_defaultlib.halfbandEven_buff_5
+Compiling module xil_defaultlib.halfbandEven_delay__parameterize...
+Compiling module xil_defaultlib.halfbandEven_delay__parameterize...
+Compiling module xil_defaultlib.halfbandEven_buff_6
+Compiling module xil_defaultlib.halfbandEven_delay
+Compiling module xil_defaultlib.halfbandEven_delay__parameterize...
+Compiling module xil_defaultlib.halfbandEven_buff_7
+Compiling module xil_defaultlib.halfbandEven_delay__parameterize...
+Compiling module xil_defaultlib.halfbandEven_buff__parameterized...
+Compiling module xil_defaultlib.halfbandEven_delay__parameterize...
+Compiling module xil_defaultlib.halfbandEven_buff__parameterized...
+Compiling module xil_defaultlib.halfbandEven_delay__parameterize...
+Compiling module xil_defaultlib.halfbandEven_buff__parameterized...
+Compiling module xil_defaultlib.halfbandEven_delay__parameterize...
+Compiling module xil_defaultlib.halfbandEven_buff__parameterized...
+Compiling module xil_defaultlib.halfbandEven_delay__parameterize...
+Compiling module xil_defaultlib.halfbandEven_buff__parameterized...
+Compiling module xil_defaultlib.halfbandEven_delay__parameterize...
+Compiling module xil_defaultlib.halfbandEven_buff__parameterized...
+Compiling module xil_defaultlib.halfbandEven_delay__parameterize...
+Compiling module xil_defaultlib.halfbandEven_buff__parameterized...
+Compiling module xil_defaultlib.halfbandEven_delay__parameterize...
+Compiling module xil_defaultlib.halfbandEven_buff__parameterized...
+Compiling module unisims_ver.DSP48E1(MASK=48'b111111111111111...
+Compiling module xil_defaultlib.halfbandEven_calc_23
+Compiling module xil_defaultlib.halfbandEven_addsub_mult_add
+Compiling module xil_defaultlib.halfbandEven_calc_22
+Compiling module xil_defaultlib.halfbandEven_addsub_mult_add_8
+Compiling module xil_defaultlib.halfbandEven_calc_21
+Compiling module xil_defaultlib.halfbandEven_addsub_mult_add_9
+Compiling module xil_defaultlib.halfbandEven_calc_20
+Compiling module xil_defaultlib.halfbandEven_addsub_mult_add_10
+Compiling module xil_defaultlib.halfbandEven_calc_19
+Compiling module xil_defaultlib.halfbandEven_addsub_mult_add_11
+Compiling module xil_defaultlib.halfbandEven_calc_18
+Compiling module xil_defaultlib.halfbandEven_addsub_mult_add_12
+Compiling module xil_defaultlib.halfbandEven_calc_17
+Compiling module xil_defaultlib.halfbandEven_addsub_mult_add_13
+Compiling module xil_defaultlib.halfbandEven_calc_16
+Compiling module xil_defaultlib.halfbandEven_addsub_mult_add_14
+Compiling module xil_defaultlib.halfbandEven_calc
+Compiling module xil_defaultlib.halfbandEven_addsub_mult_add__pa...
+Compiling module xil_defaultlib.halfbandEven_delay__parameterize...
+Compiling module xil_defaultlib.halfbandEven_delay_15
+Compiling module unisims_ver.sffsrce_fdse
+Compiling module unisims_ver.FDSE
+Compiling module xil_defaultlib.halfbandEven_delay__parameterize...
+Compiling module xil_defaultlib.halfbandEven_glb_srl_fifo
+Compiling module xil_defaultlib.halfbandEven_glb_ifx_slave
+Compiling module xil_defaultlib.halfbandEven_single_rate
+Compiling module xil_defaultlib.halfbandEven_fir_compiler_v7_2_7...
+Compiling module xil_defaultlib.halfbandEven_fir_compiler_v7_2_7
+Compiling module xil_defaultlib.halfbandEven
 Compiling module xil_defaultlib.dualHalfbandDecimate
 Compiling module xil_defaultlib.cicRegs
 Compiling module xil_defaultlib.shifter18to48
@@ -265,16 +163,6 @@ Compiling module xil_defaultlib.log2
 Compiling module xil_defaultlib.agcLoopRegs
 Compiling module xil_defaultlib.agcLoopFilter
 Compiling module xil_defaultlib.channelAGC
-Compiling module xil_defaultlib.cmaRegs
-Compiling module xil_defaultlib.cmpy18WithCePL1
-Compiling module xil_defaultlib.multiplier(AWIDTH=10,BWIDTH=10)
-Compiling module xil_defaultlib.cmaTap(initWeight=18'b0)
-Compiling module xil_defaultlib.cmaTap(initWeight=18'b0111111111...
-Compiling module xil_defaultlib.cmagEstimate
-Compiling module xil_defaultlib.add8Taps
-Compiling module xil_defaultlib.add2Taps
-Compiling module xil_defaultlib.cmaSum
-Compiling module xil_defaultlib.cma
 Compiling module xil_defaultlib.vm_cordic_fast_default
 Compiling module xil_defaultlib.fmDemod
 Compiling module xil_defaultlib.lagGain12
@@ -282,25 +170,27 @@ Compiling module xil_defaultlib.carrierLoopRegs
 Compiling module xil_defaultlib.leadGain12
 Compiling module xil_defaultlib.carrierLoop
 Compiling module xil_defaultlib.resamplerRegs
-Compiling module dist_mem_gen_v8_0_11.dist_mem_gen_v8_0_11(C_FAMILY="k...
+Compiling module xil_defaultlib.reciprocalLut_dist_mem_gen_v8_0_...
 Compiling module xil_defaultlib.reciprocalLut
-Compiling module dist_mem_gen_v8_0_11.dist_mem_gen_v8_0_11(C_FAMILY="k...
+Compiling module xil_defaultlib.resamplerTap0_dist_mem_gen_v8_0_...
 Compiling module xil_defaultlib.resamplerTap0
-Compiling module dist_mem_gen_v8_0_11.dist_mem_gen_v8_0_11(C_FAMILY="k...
+Compiling module xil_defaultlib.resamplerTap1_dist_mem_gen_v8_0_...
 Compiling module xil_defaultlib.resamplerTap1
-Compiling module dist_mem_gen_v8_0_11.dist_mem_gen_v8_0_11(C_FAMILY="k...
+Compiling module xil_defaultlib.resamplerTap2_dist_mem_gen_v8_0_...
 Compiling module xil_defaultlib.resamplerTap2
-Compiling module dist_mem_gen_v8_0_11.dist_mem_gen_v8_0_11(C_FAMILY="k...
+Compiling module xil_defaultlib.resamplerTap3_dist_mem_gen_v8_0_...
 Compiling module xil_defaultlib.resamplerTap3
-Compiling module dist_mem_gen_v8_0_11.dist_mem_gen_v8_0_11(C_FAMILY="k...
+Compiling module xil_defaultlib.resamplerTap4_rom
+Compiling module xil_defaultlib.resamplerTap4_dist_mem_gen_v8_0_...
+Compiling module xil_defaultlib.resamplerTap4_dist_mem_gen_v8_0_...
 Compiling module xil_defaultlib.resamplerTap4
-Compiling module dist_mem_gen_v8_0_11.dist_mem_gen_v8_0_11(C_FAMILY="k...
+Compiling module xil_defaultlib.resamplerTap5_dist_mem_gen_v8_0_...
 Compiling module xil_defaultlib.resamplerTap5
-Compiling module dist_mem_gen_v8_0_11.dist_mem_gen_v8_0_11(C_FAMILY="k...
+Compiling module xil_defaultlib.resamplerTap6_dist_mem_gen_v8_0_...
 Compiling module xil_defaultlib.resamplerTap6
-Compiling module dist_mem_gen_v8_0_11.dist_mem_gen_v8_0_11(C_FAMILY="k...
+Compiling module xil_defaultlib.resamplerTap7_dist_mem_gen_v8_0_...
 Compiling module xil_defaultlib.resamplerTap7
-Compiling module dist_mem_gen_v8_0_11.dist_mem_gen_v8_0_11(C_FAMILY="k...
+Compiling module xil_defaultlib.resamplerTap8_dist_mem_gen_v8_0_...
 Compiling module xil_defaultlib.resamplerTap8
 Compiling module xil_defaultlib.resampler
 Compiling module xil_defaultlib.dualResampler
@@ -318,58 +208,74 @@ Compiling module xil_defaultlib.videoFir
 Compiling module xil_defaultlib.cicCompMpy
 Compiling module xil_defaultlib.cicInterpolate
 Compiling module xil_defaultlib.shift48to18
-Compiling architecture xilinx of entity axi_utils_v2_0_3.glb_srl_fifo [\glb_srl_fifo(width=16,has_ifx=t...]
-Compiling architecture xilinx of entity axi_utils_v2_0_3.glb_ifx_slave [\glb_ifx_slave(width=16,has_ifx=...]
-Compiling architecture synth of entity fir_compiler_v7_2_7.sp_mem [\sp_mem(c_xdevicefamily="kintex7...]
-Compiling architecture synth of entity fir_compiler_v7_2_7.sp_mem [\sp_mem(c_xdevicefamily="kintex7...]
-Compiling architecture synth of entity fir_compiler_v7_2_7.filt_mem [\filt_mem(c_xdevicefamily="kinte...]
-Compiling architecture synth of entity fir_compiler_v7_2_7.sp_mem [\sp_mem(c_xdevicefamily="kintex7...]
-Compiling architecture synth of entity fir_compiler_v7_2_7.sp_mem [\sp_mem(c_xdevicefamily="kintex7...]
-Compiling architecture synth of entity fir_compiler_v7_2_7.filt_mem [\filt_mem(c_xdevicefamily="kinte...]
-Compiling architecture synth of entity fir_compiler_v7_2_7.sp_mem [\sp_mem(c_xdevicefamily="kintex7...]
-Compiling architecture synth of entity fir_compiler_v7_2_7.sp_mem [\sp_mem(c_xdevicefamily="kintex7...]
-Compiling architecture synth of entity fir_compiler_v7_2_7.filt_mem [\filt_mem(c_xdevicefamily="kinte...]
-Compiling architecture synth of entity fir_compiler_v7_2_7.buff [\buff(c_xdevicefamily="kintex7",...]
-Compiling architecture synth of entity fir_compiler_v7_2_7.delay [\delay(c_delay_len=5,c_xdevicefa...]
-Compiling architecture synth of entity fir_compiler_v7_2_7.delay [\delay(c_delay_len=4,c_xdevicefa...]
-Compiling architecture synth of entity fir_compiler_v7_2_7.delay [\delay(c_delay_len=3,c_xdevicefa...]
-Compiling architecture synth of entity fir_compiler_v7_2_7.delay [\delay(c_delay_len=2,c_xdevicefa...]
-Compiling architecture synth of entity fir_compiler_v7_2_7.delay [\delay(c_delay_len=0,c_xdevicefa...]
-Compiling architecture synth of entity fir_compiler_v7_2_7.buff [\buff(c_xdevicefamily="kintex7",...]
-Compiling architecture synth of entity fir_compiler_v7_2_7.calc [\calc(c_xdevicefamily="kintex7",...]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1957]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1958]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1959]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1949]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1950]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1951]
-Compiling architecture synth of entity fir_compiler_v7_2_7.addsub_mult_add [\addsub_mult_add(c_xdevicefamily...]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1957]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1958]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1959]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1949]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1950]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1951]
-Compiling architecture synth of entity fir_compiler_v7_2_7.addsub_mult_add [\addsub_mult_add(c_xdevicefamily...]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1957]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1958]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1959]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1949]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1950]
-WARNING: [VRFC 10-516] comparison between unequal length arrays always returns FALSE [/wrk/2016.4/nightly/2016_12_14_1733598/packages/customer/vivado/data/ip/xilinx/xbip_utils_v3_0/hdl/xbip_utils_v3_0_vh_rfs.vhd:1951]
-Compiling architecture synth of entity fir_compiler_v7_2_7.delay [\delay(c_delay_len=1,c_xdevicefa...]
-Compiling architecture synth of entity fir_compiler_v7_2_7.delay [\delay(c_delay_len=10,c_xdevicef...]
-Compiling architecture synth of entity fir_compiler_v7_2_7.single_rate [\single_rate(c_xdevicefamily="ki...]
-Compiling architecture synth of entity fir_compiler_v7_2_7.fir_compiler_v7_2_7_viv [\fir_compiler_v7_2_7_viv(c_xdevi...]
-Compiling architecture xilinx of entity fir_compiler_v7_2_7.fir_compiler_v7_2_7 [\fir_compiler_v7_2_7(c_xdevicefa...]
-Compiling architecture invsinc_arch of entity xil_defaultlib.invSinc [invsinc_default]
+Compiling module xil_defaultlib.invSinc_delay__parameterized3_17
+Compiling module xil_defaultlib.invSinc_buff
+Compiling module xil_defaultlib.invSinc_delay__parameterized4
+Compiling module xil_defaultlib.invSinc_delay__parameterized3_16
+Compiling module xil_defaultlib.invSinc_buff_0
+Compiling module xil_defaultlib.invSinc_delay__parameterized5
+Compiling module xil_defaultlib.invSinc_delay__parameterized3_15
+Compiling module xil_defaultlib.invSinc_buff_1
+Compiling module xil_defaultlib.invSinc_delay__parameterized6
+Compiling module xil_defaultlib.invSinc_delay__parameterized3_14
+Compiling module xil_defaultlib.invSinc_buff_2
+Compiling module xil_defaultlib.invSinc_delay__parameterized7
+Compiling module xil_defaultlib.invSinc_delay__parameterized3
+Compiling module xil_defaultlib.invSinc_buff_3
+Compiling module xil_defaultlib.invSinc_delay
+Compiling module xil_defaultlib.invSinc_delay__parameterized10
+Compiling module xil_defaultlib.invSinc_buff__parameterized0
+Compiling module xil_defaultlib.invSinc_delay__parameterized11
+Compiling module xil_defaultlib.invSinc_buff__parameterized1
+Compiling module xil_defaultlib.invSinc_delay__parameterized12
+Compiling module xil_defaultlib.invSinc_buff__parameterized2
+Compiling module xil_defaultlib.invSinc_delay__parameterized13
+Compiling module xil_defaultlib.invSinc_buff__parameterized3
+Compiling module xil_defaultlib.invSinc_delay__parameterized14
+Compiling module xil_defaultlib.invSinc_buff__parameterized4
+Compiling module xil_defaultlib.invSinc_calc_13
+Compiling module xil_defaultlib.invSinc_addsub_mult_add
+Compiling module xil_defaultlib.invSinc_calc_12
+Compiling module xil_defaultlib.invSinc_addsub_mult_add_4
+Compiling module xil_defaultlib.invSinc_calc_11
+Compiling module xil_defaultlib.invSinc_addsub_mult_add_5
+Compiling module xil_defaultlib.invSinc_calc_10
+Compiling module xil_defaultlib.invSinc_addsub_mult_add_6
+Compiling module xil_defaultlib.invSinc_calc_9
+Compiling module xil_defaultlib.invSinc_addsub_mult_add_7
+Compiling module xil_defaultlib.invSinc_calc
+Compiling module xil_defaultlib.invSinc_addsub_mult_add__paramet...
+Compiling module xil_defaultlib.invSinc_delay__parameterized0
+Compiling module xil_defaultlib.invSinc_delay_8
+Compiling module xil_defaultlib.invSinc_delay__parameterized27
+Compiling module xil_defaultlib.invSinc_glb_srl_fifo
+Compiling module xil_defaultlib.invSinc_glb_ifx_slave
+Compiling module xil_defaultlib.invSinc_single_rate
+Compiling module xil_defaultlib.invSinc_fir_compiler_v7_2_7_viv
+Compiling module xil_defaultlib.invSinc_fir_compiler_v7_2_7
+Compiling module xil_defaultlib.invSinc
 Compiling module xil_defaultlib.interpolate
 Compiling module xil_defaultlib.interpolate(RegSpace=13'b0100000...
 Compiling module xil_defaultlib.interpolate(RegSpace=13'b0100001...
-Compiling module fifo_generator_v13_1_3.fifo_generator_v13_1_3_bhv_ver_s...
-Compiling module fifo_generator_v13_1_3.fifo_generator_v13_1_3_CONV_VER(...
-Compiling module fifo_generator_v13_1_3.fifo_generator_vlog_beh(C_COMMON...
-Compiling module fifo_generator_v13_1_3.fifo_generator_v13_1_3(C_COMMON_...
+Compiling module xil_defaultlib.dataFifo_rd_status_flags_ss
+Compiling module xil_defaultlib.dataFifo_rd_bin_cntr
+Compiling module xil_defaultlib.dataFifo_rd_logic
+Compiling module xil_defaultlib.dataFifo_wr_status_flags_ss
+Compiling module xil_defaultlib.dataFifo_wr_bin_cntr
+Compiling module xil_defaultlib.dataFifo_wr_logic
+Compiling module unisims_ver.RB18_INTERNAL_VLOG(DOA_REG=0,DOB...
+Compiling module unisims_ver.RAMB18E1(RAM_MODE="SDP",READ_WID...
+Compiling module xil_defaultlib.dataFifo_blk_mem_gen_prim_wrappe...
+Compiling module xil_defaultlib.dataFifo_blk_mem_gen_prim_width
+Compiling module xil_defaultlib.dataFifo_blk_mem_gen_generic_cst...
+Compiling module xil_defaultlib.dataFifo_blk_mem_gen_top
+Compiling module xil_defaultlib.dataFifo_blk_mem_gen_v8_3_5_synt...
+Compiling module xil_defaultlib.dataFifo_blk_mem_gen_v8_3_5
+Compiling module xil_defaultlib.dataFifo_memory
+Compiling module xil_defaultlib.dataFifo_fifo_generator_ramfifo
+Compiling module xil_defaultlib.dataFifo_fifo_generator_top
+Compiling module xil_defaultlib.dataFifo_fifo_generator_v13_1_3_...
+Compiling module xil_defaultlib.dataFifo_fifo_generator_v13_1_3
 Compiling module xil_defaultlib.dataFifo
 Compiling module xil_defaultlib.uartRegs
 Compiling module xil_defaultlib.uartBaudGen
@@ -377,11 +283,38 @@ Compiling module xil_defaultlib.uartTx
 Compiling module xil_defaultlib.sdi
 Compiling module xil_defaultlib.dqmRegs
 Compiling module xil_defaultlib.mseEstimate_default
-Compiling module fifo_generator_v13_1_3.fifo_generator_v13_1_3_bhv_ver_s...
-Compiling module fifo_generator_v13_1_3.fifo_generator_v13_1_3_bhv_ver_p...
-Compiling module fifo_generator_v13_1_3.fifo_generator_v13_1_3_CONV_VER(...
-Compiling module fifo_generator_v13_1_3.fifo_generator_vlog_beh(C_COMMON...
-Compiling module fifo_generator_v13_1_3.fifo_generator_v13_1_3(C_COMMON_...
+Compiling module blk_mem_gen_v8_3_5.blk_mem_gen_v8_3_5_output_stage(...
+Compiling module blk_mem_gen_v8_3_5.blk_mem_gen_v8_3_5_output_stage(...
+Compiling module blk_mem_gen_v8_3_5.blk_mem_gen_v8_3_5_softecc_outpu...
+Compiling module blk_mem_gen_v8_3_5.blk_mem_gen_v8_3_5_mem_module(C_...
+Compiling module blk_mem_gen_v8_3_5.blk_mem_axi_regs_fwd_v8_3(C_DATA...
+Compiling module blk_mem_gen_v8_3_5.blk_mem_gen_v8_3_5(C_FAMILY="kin...
+Compiling module xil_defaultlib.dqmLut
+Compiling module xil_defaultlib.dqmLookupTable(regSpace=13'b0110...
+Compiling module xil_defaultlib.dqmFifo_rd_fwft
+Compiling module xil_defaultlib.dqmFifo_compare_1
+Compiling module xil_defaultlib.dqmFifo_compare_2
+Compiling module xil_defaultlib.dqmFifo_rd_status_flags_ss
+Compiling module xil_defaultlib.dqmFifo_rd_bin_cntr
+Compiling module xil_defaultlib.dqmFifo_rd_logic
+Compiling module xil_defaultlib.dqmFifo_compare
+Compiling module xil_defaultlib.dqmFifo_compare_0
+Compiling module xil_defaultlib.dqmFifo_wr_status_flags_ss
+Compiling module xil_defaultlib.dqmFifo_wr_bin_cntr
+Compiling module xil_defaultlib.dqmFifo_wr_logic
+Compiling module unisims_ver.RB18_INTERNAL_VLOG(DOA_REG=0,DOB...
+Compiling module unisims_ver.RAMB18E1(READ_WIDTH_A=1,READ_WID...
+Compiling module xil_defaultlib.dqmFifo_blk_mem_gen_prim_wrapper
+Compiling module xil_defaultlib.dqmFifo_blk_mem_gen_prim_width
+Compiling module xil_defaultlib.dqmFifo_blk_mem_gen_generic_cstr
+Compiling module xil_defaultlib.dqmFifo_blk_mem_gen_top
+Compiling module xil_defaultlib.dqmFifo_blk_mem_gen_v8_3_5_synth
+Compiling module xil_defaultlib.dqmFifo_blk_mem_gen_v8_3_5
+Compiling module xil_defaultlib.dqmFifo_memory
+Compiling module xil_defaultlib.dqmFifo_fifo_generator_ramfifo
+Compiling module xil_defaultlib.dqmFifo_fifo_generator_top
+Compiling module xil_defaultlib.dqmFifo_fifo_generator_v13_1_3_s...
+Compiling module xil_defaultlib.dqmFifo_fifo_generator_v13_1_3
 Compiling module xil_defaultlib.dqmFifo
 Compiling module xil_defaultlib.dqmFramer
 Compiling module xil_defaultlib.dqm

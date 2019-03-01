@@ -170,7 +170,7 @@ module dqmFramer #(parameter VERSION=4'd0)
             `DQM_STATE_WAIT:    dqmBit <= headerSR[47];
             `DQM_STATE_HEADER:  dqmBit <= headerSR[47];
             `DQM_STATE_PAYLOAD: dqmBit <= pingReadSelect ? pingPayloadBit
-                                                            : pingPayloadBit;
+                                                            : pongPayloadBit;
         endcase
         case (dqmState)
             `DQM_STATE_WAIT:        dqmBitEn = divClkEn;
