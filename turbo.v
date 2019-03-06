@@ -3,7 +3,7 @@
 `include "addressMap.v"
 
 module turbo #(parameter TURBOBITS = 3) (
-    input                       clk,clkEn,reset,
+    input                       clk93, clk31, clkEn,reset,
     input                       busClk,
     input                       cs,
     input                       wr0,wr1,wr2,wr3,
@@ -67,7 +67,7 @@ module turbo #(parameter TURBOBITS = 3) (
     // Soft Decision Mapper
     wire    signed  [TURBOBITS-1:0]  iSoft;
     ldpcDecisionMapper #(.OUTBITS(TURBOBITS)) iMap(
-        .clk(clk),
+        .clk(clk93),
         .clkEn(iSoftEn),
         .reset(reset),
         .inverseMeanMantissa(invMeanMantissa),
@@ -77,7 +77,7 @@ module turbo #(parameter TURBOBITS = 3) (
     );
     wire    signed  [TURBOBITS-1:0]  qSoft;
     ldpcDecisionMapper #(.OUTBITS(TURBOBITS)) qMap(
-        .clk(clk),
+        .clk(clk93),
         .clkEn(qSoftEn),
         .reset(reset),
         .inverseMeanMantissa(invMeanMantissa),
@@ -91,7 +91,7 @@ module turbo #(parameter TURBOBITS = 3) (
     // a mid-rise quantizer
     reg signed  [TURBOBITS-1:0] bitSoft;
     reg signed  [TURBOBITS-1:0] qSoftDelayed;
-    always @(posedge clk) begin
+    always @(posedge clk93) begin
         if (clkEn) begin
             case (bitsyncMode)
                 // BPSK or FSK. Use i channel only
@@ -130,7 +130,8 @@ module turbo #(parameter TURBOBITS = 3) (
 
     wire    [3:0]   iterationNumber;
     TurboDecoder #(.DATA_WIDTH(TURBOBITS+1)) turbod (
-        .clk(clk),
+        .clk93(clk93),
+		  .clk31(clk31),
         .Reset(reset),
         .bitsyncMode(bitsyncMode),
         .ch0En(iSoftEn),
@@ -149,11 +150,12 @@ module turbo #(parameter TURBOBITS = 3) (
         .SyncOut(),
         .uHat(),
         .ValidOut(),
+		  .BitClk(),
         .BitOut(turboBitOut),
         .BitOutEn(turboBitEnOut)
     );
 
-    always @(posedge clk) begin
+    always @(posedge clk93) begin
         case (dac0Select)
             `DAC_I: begin
                 dac0Data <= {{iSoft,1'b1},{(18-TURBOBITS-1){1'b0}}};

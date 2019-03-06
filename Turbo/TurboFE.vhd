@@ -98,6 +98,11 @@ ARCHITECTURE rtl OF TurboFE IS
    SIGNAL   DeRand         : SfixPci;
    SIGNAL   DeRandValid,
             RandomBit      : std_logic := '0';
+signal   InCount,
+         DeRandCnt,
+         OutCount         : integer := 0;
+signal   InShift,
+         OutShift          :SLV16;
 
 BEGIN
 
@@ -107,14 +112,32 @@ BEGIN
    begin
       if (rising_edge(Clk)) then
          if (ce) then
-            if (SyncIn = '1') then
+            if (SyncIn) then
                DeRand     <= (others=>'0');
                DeRandValid <= '0';
+         InCount <= 0;
             elsif (ValidIn) then
-               DeRand <= resize(r, DeRand) xor RandomBit;
+               DeRand <= resize(-r, DeRand) when RandomBit else resize(r, DeRand);
                DeRandValid <= '1';
+         InShift <= InShift(14 downto 0) & DataIn(DataIn'left);
+         InCount <= InCount + 1;
             else
                DeRandValid <= '0';
+            end if;
+         end if;
+
+         if (SyncIn) then
+            DeRandCnt <= 0;
+         elsif (DeRandValid and ce) then
+            DeRandCnt <= DeRandCnt + 1;
+         end if;
+
+         if (ce) then
+            if (SyncIn) then
+               OutCount <= 0;
+            elsif (ValidOut) then
+               OutCount <= OutCount + 1;
+               OutShift <= OutShift(OutShift'left-1 downto 0) & PCIA(0)(PCIA(0)'left);
             end if;
          end if;
       end if;

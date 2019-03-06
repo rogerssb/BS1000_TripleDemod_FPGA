@@ -221,6 +221,7 @@ BEGIN
             PCIB       <= (others=>(others=>'0'));
             FirstRound <= '0';
             Rate2Phase <= '1';
+            ValidOut   <= '0';
          elsif (ce) then
             if (ValidIn) then
                if (RateCntr < Rate-1) then

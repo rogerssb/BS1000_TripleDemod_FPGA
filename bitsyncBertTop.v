@@ -90,19 +90,40 @@ module bitsyncBertTop (
 //******************************************************************************
 //                          Clock Distribution
 //******************************************************************************
+
+
     systemClock systemClock (
         .clk_in1(sysClk),
-        .clk_out1(clk),
+        .clk93(clk_93),
+        .clk31(clk_31),
         .locked(clkLocked)
      );
 
+   BUFG SysClkBufg (
+      .I(clk_93),
+      .O(clk)
+  );
+
+   BUFG Clk31Bufg (
+      .I(clk_31),
+      .O(clk31)
+   );
+
     flexbusClock flexbusClock (
         .clk_in1(fbClk),
-        .clk_out1(fb_clk),
+        .clk_out1(fb_Clk),
         .locked(fbClkLocked)
     );
 
+   BUFG flexBufg (
+      .I(fb_Clk),
+      .O(fb_clk)
+   );
 
+   BUFG pllOneBufg (
+      .I(pll1_OUT1),
+      .O(pll1_OUT1Bufg)
+   );
 
 /******************************************************************************
                              Bus Interface
@@ -331,7 +352,8 @@ clockAndDataInputSync diffSync(
     wire    signed  [17:0]  turboDac2Data;
     wire            [31:0]  turboDout;
     turbo #(.TURBOBITS(5)) turbo (
-        .clk(clk),
+        .clk93(clk),
+		  .clk31(clk31),
         .clkEn(ch0Sym2xEn),
         .reset(reset),
         .busClk(fb_clk),
@@ -706,7 +728,7 @@ clockAndDataInputSync diffSync(
         .dout(cAndD1Dout),
         .clkEnIn(cAndD1ClkEn),
         .dataIn(cAndD1DataIn),
-        .pllOutputClk(pll1_OUT1),
+        .pllOutputClk(pll1_OUT1Bufg),
         .sourceSelect(cAndD1SourceSelect),
         .pllReferenceClk(pll1_REF),
         .outputClk(cAndD1ClkOut),
@@ -926,7 +948,7 @@ clockAndDataInputSync diffSync(
     reg     [1:0]   pll1Divider;
     wire            pll1ReadClk = pll1Divider[0];
     wire            pll190Clk   = pll1Divider[1];
-    always @(posedge pll1_OUT1) begin
+    always @(posedge pll1_OUT1Bufg) begin
         case (pll1Divider)
             2'b00:      pll1Divider <= 2'b01;
             2'b01:      pll1Divider <= 2'b11;
@@ -1023,7 +1045,7 @@ clockAndDataInputSync diffSync(
     end
 
     reg             async_Clk, async_Data;
-    always @(posedge pll1_OUT1) begin
+    always @(posedge pll1_OUT1Bufg) begin
         async_Data <= pll1_Symbol[2];
         case (ch1ClkPhase)
             `DEC_CLK_PHASE_0:   async_Clk <= pll1ReadClk;

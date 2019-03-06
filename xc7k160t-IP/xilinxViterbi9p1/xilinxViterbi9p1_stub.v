@@ -1,18 +1,19 @@
-// Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+// Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
-// Tool Version: Vivado v.2016.4 (win64) Build 1733598 Wed Dec 14 22:35:39 MST 2016
-// Date        : Thu Feb 14 11:23:17 2019
-// Host        : Sherlock running 64-bit Service Pack 1  (build 7601)
-// Command     : write_verilog -force -mode synth_stub C:/modem/vivado/xc7k160t-IP/xilinxViterbi9p1/xilinxViterbi9p1_stub.v
+// Tool Version: Vivado v.2017.2 (win64) Build 1909853 Thu Jun 15 18:39:09 MDT 2017
+// Date        : Wed Feb 27 13:34:46 2019
+// Host        : SEMCO1039 running 64-bit major release  (build 9200)
+// Command     : write_verilog -force -mode synth_stub
+//               C:/Semco/Vivado/BS1000_Demod_vivado2017/xc7k160t-IP/xilinxViterbi9p1/xilinxViterbi9p1_stub.v
 // Design      : xilinxViterbi9p1
 // Purpose     : Stub declaration of top-level module interface
-// Device      : xc7k325tffg676-1
+// Device      : xc7k325tffg676-2
 // --------------------------------------------------------------------------------
 
 // This empty module with port declaration file causes synthesis tools to infer a black box for IP.
 // The synthesis directives are for Synopsys Synplify support to prevent IO buffer insertion.
 // Please paste the declaration into a Verilog source file or add the file as an additional source.
-(* x_core_info = "viterbi_v9_1_7,Vivado 2016.4" *)
+(* x_core_info = "viterbi_v9_1_7,Vivado 2017.2" *)
 module xilinxViterbi9p1(aclk, aresetn, s_axis_data_tdata, 
   s_axis_data_tvalid, s_axis_data_tready, m_axis_data_tdata, m_axis_data_tvalid, 
   s_axis_dstat_tdata, s_axis_dstat_tvalid, m_axis_dstat_tdata, m_axis_dstat_tvalid)

@@ -30,7 +30,7 @@
 `define BS_CIC_COMP_USE_MPY
 `define ADD_BERT
 `define USE_DEMOD_CandD
-//`define ADD_TURBO
+`define ADD_TURBO
 `define ADD_MSE
 `endif
 
@@ -300,11 +300,12 @@
     `define DMSE_CH1_MSE            13'bx_xxxx_xxxx_110x
     `define DMSE_CH1_MSE_OFFSET     13'bx_xxxx_xxxx_111x
 
-`define TURBOSPACE              13'b1_00xx_0010_xxxx
-    `define TURBO_CONTROL           13'bx_xxxx_xxxx_00xx
-    `define TURBO_INVERSE_MEAN      13'bx_xxxx_xxxx_01xx
-    `define TURBO_OUTPUT_CLK_DIV    13'bx_xxxx_xxxx_10xx
-    `define TURBO_DAC_SELECT        13'bx_xxxx_xxxx_11xx
+`define TURBOSPACE              13'b1_00xx_001x_xxxx
+    `define TURBO_CONTROL           13'bx_xxxx_xxx0_00xx
+    `define TURBO_INVERSE_MEAN      13'bx_xxxx_xxx0_01xx
+    `define TURBO_OUTPUT_CLK_DIV    13'bx_xxxx_xxx0_10xx
+    `define TURBO_DAC_SELECT        13'bx_xxxx_xxx0_11xx
+    `define TURBO_ASM_PARMS         13'bx_xxxx_xxx1_00xx
 
 
 `elsif SEMCO_DEMOD

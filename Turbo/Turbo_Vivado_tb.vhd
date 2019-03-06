@@ -66,13 +66,15 @@ end TurboVivado_tb;
 architecture rtl of TurboVivado_tb is
 
   -- Define Components
+
    Component TurboDecoder IS
       GENERIC(
          FILE_LOC    : string := "TurboCodes/";
          DATA_WIDTH  : positive := 8
       );
       PORT(
-         Clk,                             -- 93.3MHz Clock. I divide this by three for internal processing
+         Clk93,                             -- 93.3MHz Clock. I divide this by three for internal processing
+         Clk31,
          Reset,
          ch0En,
          ch1En          : IN  std_logic;  -- Valid data is active.
@@ -83,7 +85,7 @@ architecture rtl of TurboVivado_tb is
          Rate,                                               -- (2, 3, 4 or 6) skip 5
          Frame          : IN  std_logic_vector(2 downto 0);  -- 1784*(1,2,4 or 5) skip 3
          ClkPerBit      : IN  std_logic_vector(15 downto 0); -- Data spreading count. Slightly less than 93.3/BR out
-         AsmFrameParm   : IN  std_logic_vector(31 downto 0); -- ASM Frame Sync Parameters FlyWheel(4:0), Verifies(4:0), OOL_BET(4:0), IL_BET(4:0), BitSlips(1:0)
+--         AsmFrameParm   : IN  std_logic_vector(31 downto 0); -- ASM Frame Sync Parameters FlyWheel(4:0), Verifies(4:0), OOL_BET(4:0), IL_BET(4:0), BitSlips(1:0)
          IterationCntr  : OUT std_logic_vector(3 downto 0);  -- test point, Current Iteration
          DataOut        : OUT std_logic_vector(SfixSova'length-1 downto 0); -- test point, soft data output
          Magnitude      : OUT std_logic_vector(SfixSova'length downto 0); -- test point, signal magnitude
@@ -138,7 +140,7 @@ architecture rtl of TurboVivado_tb is
    END COMPONENT;
 
    constant DF_WIDTH       : integer := SfixTurboIn'length;
-   constant SIGNAL_AMP     : real := 0.125;
+   constant SIGNAL_AMP     : real := 0.25;
    constant FRAME_SIZE     : int_array(0 to 5) := (0, 1*1784, 2*1784, 3*1784, 4*1784, 5*1784);
    constant OOL_BET        : vector_of_slvs(0 to 6)(4 downto 0) := (5x"00", 5x"00", 5x"10", 5x"14", 5x"18", 5x"00", 5x"1c");
    constant IL_BET         : vector_of_slvs(0 to 6)(4 downto 0) := (5x"00", 5x"00", 5x"10", 5x"14", 5x"18", 5x"00", 5x"1c");
@@ -163,6 +165,7 @@ architecture rtl of TurboVivado_tb is
    signal   RateOut        : integer range 0 to 6;
    signal   RateVio,
             FrameVio       : std_logic_vector(2 downto 0);
+   signal   Clk31          : std_logic_vector(2 downto 0) := "001";
    signal   ItersVio       : std_logic_vector(3 downto 0);
    signal   ClkPerBitVio,
             ClkPerBitOut   : std_logic_vector(15 downto 0);
@@ -283,13 +286,15 @@ begin
          probe_out5 => Div2Vio,
          probe_out6 => ClkRateVio,
          probe_out7 => ClkPerBitVio,
-         probe_out8 => AsmVio
+         probe_out8 => open
    );
 
    clk_process : process(ClkPll)
    begin
       if (rising_edge(ClkPll)) then
          reset    <= reset(4 downto 0) & ResetVio(0);
+
+         Clk31 <= Clk31(1 downto 0) & Clk31(2);
 
          GainDbg <= GainVio;
          NoiseGain <= resize(Noise * Gain, NoiseGain);
@@ -310,6 +315,7 @@ begin
             PRN_BitOut <= PRN_BitOut(13 downto 0) & BitOut;
             BitOutErr  <= PRN_BitOut(14) xor PRN_BitOut(13) xor BitOut;
          end if;
+
       end if;
    end process;
 
@@ -334,16 +340,15 @@ begin
    Sum            <= resize(Data + NoiseGain, Sum, fixed_saturate, fixed_truncate);
    IterationsOut  <= Iterations when ControlSel else ItersVio;
    Gain           <= GainIn     when ControlSel else to_sfixed(GainDbg, Gain);
-   AsmOut         <= (5x"08" & 5x"03" & OOL_BET(RateOut) & IL_BET(RateOut) & 2x"2") when ControlSel else AsmVio;
-                  -- Flywheel Verifies OOL_BET  IL_BIT   BitSlips
-                  --   01_000   0_0011   1000_0   100_00       10    => 103842
+
    TurboDecTop : TurboDecoder
       GENERIC MAP(
          FILE_LOC       => FILE_LOC,
          DATA_WIDTH     => DF_WIDTH
          )
       PORT MAP(
-         Clk            => ClkPll,
+         Clk93          => ClkPll,
+         Clk31          => Clk31(2),
          reset          => resetBufg,
          ch0En          => ValidIn,
          ch1En          => '0',
@@ -353,7 +358,7 @@ begin
          Rate           => std_logic_vector(to_unsigned(RateOut,3)),
          Frame          => std_logic_vector(to_unsigned(FrameOut,3)),
          ClkPerBit      => ClkPerBitOut,
-         AsmFrameParm   => 10x"0" & AsmOut,
+--         AsmFrameParm   => 10x"0" & AsmOut,
          Iterations     => IterationsOut,
          IterationCntr  => IterationCntr,
          DataOut        => DataOut,

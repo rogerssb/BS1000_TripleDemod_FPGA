@@ -128,12 +128,21 @@ ARCHITECTURE rtl OF TurboASM IS
    signal   BitSlips_u     : integer range 0 to 3;
    signal   DataEvenDly,
             DataOddDly     : vector_of_slvs(3 downto 0)(DATA_WIDTH-1 downto 0);
+   signal   Data0Dly,
+            Data1Dly       : std_logic_vector(DATA_WIDTH-1 downto 0);
    signal   ValidPipe0,
             ValidPipe1,
+            ValidPipe2,
             ValidPipeDly,
+            Valid0Dly,
+            Valid1Dly,
             MaxFound,
             EvenIn,
             SwapEvenOdd    : std_logic;
+
+   attribute MARK_DEBUG : string;
+   attribute MARK_DEBUG of MaxCount, TotalBits, Mode,SyncOut,
+                        InvertOdd, InvertEven, ValidOut, DataOut : signal is "true";
 
 BEGIN
 
@@ -179,6 +188,10 @@ BEGIN
             SyncEven(i) <= SYNC_WORD(Rate_u)(2*i);
             SyncOdd(i)  <= SYNC_WORD(Rate_u)(2*i+1);
          end loop;
+         Data0Dly <= Data0;
+         Data1Dly <= Data1;
+         Valid0Dly <= Valid0;
+         Valid1Dly <= Valid1;
          if (Reset) then
             Mode        <= SEARCHING;
             SearchEven  <= 96x"0";
@@ -189,33 +202,36 @@ BEGIN
             MaxCount    <= CountBits(Rate_u) - BET;
             Index       <= 0;
             MaxIndex    <= 0;
+            DataEvenDly <= (others=>(others=>'0'));
+            DataOddDly  <= (others=>(others=>'0'));
             MaxFound    <= '0';
-            ValidPipe0   <= '0';
+            ValidPipe0  <= '0';
             ValidPipe1  <= '0';
+            ValidPipe2  <= '0';
             SyncOut     <= '0';
             SyncTime    <= FrameLen - 7;
             SwapEvenOdd <= '0';
             InvertOdd   <= '0';
             InvertEven  <= '0';
-            EvenIn       <= '1';  -- start at 0 which is an even number
+            EvenIn      <= '1';  -- start at 0 which is an even number
          else
-            if (Valid0 or Valid1) then
+            if (Valid0Dly or Valid1Dly) then
                SearchEven_v := SearchEven;
                SearchOdd_v  := SearchOdd;
                ValidPipe0 <= '1';
                if (ModMode(1) = '0') then   -- treat independent mode as a single stream
-                  if (Valid0) then
+                  if (Valid0Dly) then
                      EvenIn <= not EvenIn;
                      ValidEven_v := EvenIn;     -- ignore valid1 and its data
-                     DataEven_v  := Data0;
+                     DataEven_v  := Data0Dly;
                      ValidOdd_v := not EvenIn;
-                     DataOdd_v  := Data0;
+                     DataOdd_v  := Data0Dly;
                   end if;
                elsif (ModMode(1) = '1') then   -- QPSK data is ambiguous
-                  ValidEven_v := Valid0;     -- both valids should be high
-                  DataEven_v  := Data0;      -- I and Q are valid
-                  ValidOdd_v := Valid1;
-                  DataOdd_v  := Data1;
+                  ValidEven_v := Valid0Dly;     -- both valids should be high
+                  DataEven_v  := Data0Dly;      -- I and Q are valid
+                  ValidOdd_v := Valid1Dly;
+                  DataOdd_v  := Data1Dly;
                end if;
                if (ValidEven_v) then   -- shift in sign bits for binary correlation
                   SearchEven_v := SearchEven_v(94 downto 0) & not DataEven_v(DataEven_v'left); -- negative is '0'
@@ -273,8 +289,9 @@ BEGIN
                ValidPipe0 <= '0';
             end if;
             ValidPipe1 <= ValidPipe0;
+            ValidPipe2 <= ValidPipe1;
 
-            if (ValidPipe1) then
+            if (ValidPipe2) then
                if (FrameCnt = BitSlips_u + 1) then -- start verify over ±BitSlips of FrameCnt = 0
                   MaxIndex <= 0;
                   MaxFound <= '0';
@@ -377,12 +394,12 @@ BEGIN
          end if;
 
          if (FrameCnt = SyncTime) then
-            SyncOut <= '1';
+            SyncOut <= ValidOut;
          else
             SyncOut <= '0';
          end if;
 
-         ValidPipeDly <= ValidPipe1 and ModMode(1);
+         ValidPipeDly <= ValidPipe2 and ModMode(1);
 
          ValidOut <= ValidPipe1 or ValidPipeDly;
          if (FrameCnt(0) xor SwapEvenOdd) then  -- not sure why but the arrays are swapped, zero is an even number

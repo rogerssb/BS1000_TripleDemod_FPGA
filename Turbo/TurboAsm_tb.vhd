@@ -107,7 +107,7 @@ architecture rtl of TurboAsm_tb is
    signal   BitCntr,
             FrameCnt    : integer := 0;
    signal   SyncPattern : std_logic_vector(0 to 63) := SYNC_2;
-   signal   ValidData   : std_logic_vector(3 downto 0) := "0001";
+   signal   ValidData   : std_logic_vector(5 downto 0) := "000001";
    SIGNAL   PRN         : std_logic_vector(14 downto 0) := (others=>'1');
    signal   NoiseSlv    : slv12;
    signal   Sum,
@@ -130,7 +130,7 @@ begin
    begin
       if (rising_edge(Clk)) then
          reset    <= '0';
-         if (ValidData(3)) then
+         if (ValidData(ValidData'left)) then
             if (OutCntr = 1784 * Frame * Rate + Rate * 4 - 6) then   -- change sync pattern before needed to send it for settling time
                -- Should verify on first pass,
                -- lock on 5,
@@ -198,7 +198,7 @@ begin
                NoiseGain <= to_sfixed(0.0, 3, -8);
             end if;
          end if;
-         ValidData <= ValidData(2 downto 0) & ValidData(3);
+         ValidData <= ValidData(ValidData'left-1 downto 0) & ValidData(ValidData'left);
          Noise     <= resize(to_sfixed(NoiseSlv, Noise) * NoiseGain, Noise);
          Sum       <= resize(Data + Noise, Sum, fixed_saturate, fixed_truncate);
       end if;

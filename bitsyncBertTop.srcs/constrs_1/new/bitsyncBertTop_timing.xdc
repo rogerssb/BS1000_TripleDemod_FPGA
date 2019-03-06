@@ -6,13 +6,10 @@ create_clock -period 25.000 -name differentialClk -waveform {0.000 12.500} [get_
 create_clock -period 25.000 -name singleEndedClk -waveform {0.000 12.500} [get_ports singleEndedClk]
 #create_generated_clock -name {pll0Divider_reg_n_0_[0]} -source [get_ports pll0_OUT1] -divide_by 4 [get_pins {pll0Divider_reg[0]/Q}]
 #create_generated_clock -name {pll1Divider_reg_n_0_[0]} -source [get_ports pll1_OUT1] -divide_by 4 [get_pins {pll1Divider_reg[0]/Q}]
-create_generated_clock -name cAndD0/dll/dllOutputClk -source [get_pins systemClock/inst/mmcm_adv_inst/CLKOUT0] -divide_by 1 [get_pins cAndD0/dll/dllOutputClk_reg/Q]
 create_generated_clock -name {cAndD0/dllDivider_reg_n_0_[0]} -source [get_pins cAndD0/dll/dllOutputClk_reg/Q] -divide_by 4 [get_pins {cAndD0/dllDivider_reg[0]/Q}]
 create_generated_clock -name {cAndD0/pllDivider_reg_n_0_[0]} -source [get_ports pll0_OUT1] -divide_by 4 [get_pins {cAndD0/pllDivider_reg[0]/Q}]
-create_generated_clock -name cAndD1/dll/dllOutputClk -source [get_pins systemClock/inst/mmcm_adv_inst/CLKOUT0] -divide_by 1 [get_pins cAndD1/dll/dllOutputClk_reg/Q]
 create_generated_clock -name {cAndD1/dllDivider_reg_n_0_[0]} -source [get_pins cAndD1/dll/dllOutputClk_reg/Q] -divide_by 4 [get_pins {cAndD1/dllDivider_reg[0]/Q}]
 create_generated_clock -name {cAndD1/pllDivider_reg_n_0_[0]} -source [get_ports pll1_OUT1] -divide_by 4 [get_pins {cAndD1/pllDivider_reg[0]/Q}]
-create_generated_clock -name cAndD2/dll/dllOutputClk -source [get_pins systemClock/inst/mmcm_adv_inst/CLKOUT0] -divide_by 1 [get_pins cAndD2/dll/dllOutputClk_reg/Q]
 create_generated_clock -name {cAndD2/dllDivider_reg_n_0_[0]} -source [get_pins cAndD2/dll/dllOutputClk_reg/Q] -divide_by 4 [get_pins {cAndD2/dllDivider_reg[0]/Q}]
 create_generated_clock -name {cAndD2/pllDivider_reg_n_0_[0]} -source [get_ports pll2_OUT1] -divide_by 4 [get_pins {cAndD2/pllDivider_reg[0]/Q}]
 
@@ -136,11 +133,7 @@ set_property BITSTREAM.CONFIG.SPI_BUSWIDTH 1 [current_design]
 set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets pll0_OUT1_IBUF]
 set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets pll2_OUT1_IBUF]
 set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets singleEndedClk_IBUF]
-set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets singleEndedClk_IBUF_BUFG]
 set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets differentialClk_IBUF]
-set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets differentialClk_IBUF_BUFG]
-
-
 
 
 
@@ -169,12 +162,15 @@ set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks pll2
 
 
 
+set_false_path -from [get_pins {cAndD1/dllData_reg[2]/C}] -to [get_ports spareData]
+set_false_path -from [get_pins {dacInterface/sr_reg[15]/C}] -to [get_ports dacMOSI]
+set_false_path -from [get_pins dacInterface/SCK_reg/C] -to [get_ports dacSCLK]
+set_false_path -from [get_pins dacInterface/CS0n_reg/C] -to [get_ports ch0SELn]
+set_false_path -from [get_pins dacInterface/CS1n_reg/C] -to [get_ports ch1SELn]
 
 
 
-
-
-set_false_path -from [all_registers] -to [get_ports fb_data*]
+set_false_path -from [list] -to [get_ports fb_data*]
 set_false_path -from [get_ports fb_oen*] -to [get_ports fb_data*]
 set_false_path -from [get_clocks fbClk] -to [get_ports bsClkOut]
 set_false_path -from [get_clocks fbClk] -to [get_ports bsDataOut]
@@ -191,6 +187,7 @@ set_false_path -from [get_clocks sysClk] -to [get_ports ch1Lockn]
 set_false_path -from [get_clocks fbClk] -to [get_ports pll*_PWDn]
 set_false_path -from [get_clocks fbClk] -to [get_ports ch*HighImpedance]
 set_false_path -from [get_clocks fbClk] -to [get_ports ch*SingleEnded]
+
 
 
 

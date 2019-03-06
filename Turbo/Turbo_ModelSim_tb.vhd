@@ -42,7 +42,7 @@ entity TurboModelSim_tb is
       Frame       : integer := 1;   -- 1, 2, 4 or 5
       ClkRate     : natural := 120 / Rate * 2;
       ClkPerBit   : std_logic_vector(15 downto 0) := std_logic_vector(to_unsigned(ClkRate * 2, 16));
-      GainIn      : sfixed(3 downto -8) := to_sfixed(0.0, 3, -8); -- 3.0 is equivalent to 1.2dB of matlab noise. Note, gain is not log dBs
+      GainIn      : sfixed(3 downto -8) := to_sfixed(0.90, 3, -8); -- 0.9 @ 0.25 SigAmp rate 2 is marginal
       FILE_LOC    : string := "../";
       Iterations  : std_logic_vector(3 downto 0) := x"A"
    );
@@ -66,7 +66,6 @@ architecture rtl of TurboModelSim_tb is
       Port (
          Clk93,
          ClkPll      : IN Std_logic;
-
          SClk,
          MOSI,
          CS,

@@ -148,7 +148,6 @@ ARCHITECTURE rtl OF TurboEncode IS
 
 BEGIN
 
--- DataRamAB is currently non block memory
 -- Need external data source with 2x clock based on both edges of incoming data clock. Only works for rate = 2;
 
    State <= 1 when (Counter < FRAME_SIZE(Frame)) else 2;

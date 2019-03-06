@@ -55,7 +55,8 @@
 //  Output     Output      Phase    Duty Cycle   Pk-to-Pk     Phase
 //   Clock     Freq (MHz)  (degrees)    (%)     Jitter (ps)  Error (ps)
 //----------------------------------------------------------------------------
-// clk_out1____93.333______0.000______50.0______130.411_____98.325
+// ___clk93____93.333______0.000______50.0______122.736_____91.947
+// ___clk31____31.111______0.000______33.3______150.933_____91.947
 //
 //----------------------------------------------------------------------------
 // Input Clock   Freq (MHz)    Input Jitter (UI)
@@ -71,7 +72,8 @@
   systemClock instance_name
    (
     // Clock out ports
-    .clk_out1(clk_out1),     // output clk_out1
+    .clk93(clk93),     // output clk93
+    .clk31(clk31),     // output clk31
     // Status and control signals
     .locked(locked),       // output locked
    // Clock in ports
