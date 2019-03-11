@@ -128,6 +128,7 @@ module turbo #(parameter TURBOBITS = 3) (
         end
     end
 
+    `ifdef ADD_TURBOD
     wire    [3:0]   iterationNumber;
     TurboDecoder #(.DATA_WIDTH(TURBOBITS+1)) turbod (
         .clk(clk),
@@ -152,6 +153,7 @@ module turbo #(parameter TURBOBITS = 3) (
         .BitOut(turboBitOut),
         .BitOutEn(turboBitEnOut)
     );
+    `endif
 
     always @(posedge clk) begin
         case (dac0Select)
