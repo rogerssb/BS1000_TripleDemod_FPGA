@@ -37,13 +37,13 @@
     <Option Name="WTVcsLaunchSim" Val="0"/>
     <Option Name="WTRivieraLaunchSim" Val="0"/>
     <Option Name="WTActivehdlLaunchSim" Val="0"/>
-    <Option Name="WTXSimExportSim" Val="79"/>
-    <Option Name="WTModelSimExportSim" Val="79"/>
-    <Option Name="WTQuestaExportSim" Val="79"/>
-    <Option Name="WTIesExportSim" Val="79"/>
-    <Option Name="WTVcsExportSim" Val="79"/>
-    <Option Name="WTRivieraExportSim" Val="79"/>
-    <Option Name="WTActivehdlExportSim" Val="79"/>
+    <Option Name="WTXSimExportSim" Val="81"/>
+    <Option Name="WTModelSimExportSim" Val="81"/>
+    <Option Name="WTQuestaExportSim" Val="81"/>
+    <Option Name="WTIesExportSim" Val="81"/>
+    <Option Name="WTVcsExportSim" Val="81"/>
+    <Option Name="WTRivieraExportSim" Val="81"/>
+    <Option Name="WTActivehdlExportSim" Val="81"/>
     <Option Name="GenerateIPUpgradeLog" Val="TRUE"/>
     <Option Name="XSimRadix" Val="hex"/>
     <Option Name="XSimTimeUnit" Val="ns"/>
@@ -881,13 +881,6 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PSRCDIR/sources_1/ip/ldpcDecoder_28/ldpcDecoder.xci">
-        <FileInfo>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
       <Config>
         <Option Name="DesignMode" Val="RTL"/>
         <Option Name="TopModule" Val="semcoDemodTop"/>
@@ -1596,6 +1589,21 @@
         <Define Name="SEMCO_DEMOD"/>
       </Config>
     </FileSet>
+    <FileSet Name="ldpcDecoder" Type="BlockSrcs" RelSrcDir="$PSRCDIR/ldpcDecoder">
+      <File Path="$PSRCDIR/sources_1/ip/ldpcDecoder_30/ldpcDecoder.xci">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <Config>
+        <Option Name="TopModule" Val="ldpcDecoder"/>
+        <Option Name="VerilogDir" Val="$PPRDIR/."/>
+        <Option Name="UseBlackboxStub" Val="1"/>
+        <Define Name="SEMCO_DEMOD"/>
+      </Config>
+    </FileSet>
   </FileSets>
   <Simulators>
     <Simulator Name="XSim">
@@ -1795,6 +1803,16 @@
     <Run Id="dds6p0_synth_1" Type="Ft3:Synth" SrcSet="dds6p0" Part="xc7k160tfbg676-1" ConstrsSet="dds6p0" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/dds6p0_synth_1" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2016"/>
+        <Step Id="synth_design"/>
+      </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+    </Run>
+    <Run Id="ldpcDecoder_synth_1" Type="Ft3:Synth" SrcSet="ldpcDecoder" Part="xc7k160tfbg676-1" ConstrsSet="ldpcDecoder" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/ldpcDecoder_synth_1" IncludeInArchive="true">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2016">
+          <Desc>Vivado Synthesis Defaults</Desc>
+        </StratHandle>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
@@ -2134,6 +2152,23 @@
     <Run Id="dds6p0_impl_1" Type="Ft2:EntireDesign" Part="xc7k160tfbg676-1" ConstrsSet="dds6p0" Description="Default settings for Implementation." SynthRun="dds6p0_synth_1" IncludeInArchive="false">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2016"/>
+        <Step Id="init_design"/>
+        <Step Id="opt_design"/>
+        <Step Id="power_opt_design"/>
+        <Step Id="place_design"/>
+        <Step Id="post_place_power_opt_design"/>
+        <Step Id="phys_opt_design"/>
+        <Step Id="route_design"/>
+        <Step Id="post_route_phys_opt_design"/>
+        <Step Id="write_bitstream"/>
+      </Strategy>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+    </Run>
+    <Run Id="ldpcDecoder_impl_1" Type="Ft2:EntireDesign" Part="xc7k160tfbg676-1" ConstrsSet="ldpcDecoder" Description="Default settings for Implementation." SynthRun="ldpcDecoder_synth_1" IncludeInArchive="false">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2016">
+          <Desc>Default settings for Implementation.</Desc>
+        </StratHandle>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>

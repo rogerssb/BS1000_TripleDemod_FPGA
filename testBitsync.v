@@ -230,6 +230,7 @@ always @* rxInputReal = $itor($signed(rxInput))/(2**17);
     wire    signed  [17:0]  ch0SymData,ch1SymData;
     wire    signed  [17:0]  ch0Offset;
     wire    signed  [17:0]  ch1Offset;
+    wire            [1:0]   bitsyncMode;
     wire    signed  [17:0]  iEye,qEye;
     wire            [4:0]   eyeOffset;
     bitsyncTop bitsyncTop(
@@ -266,10 +267,50 @@ always @* rxInputReal = $itor($signed(rxInput))/(2**17);
         .ch0Dac1Data(dac1Out),
         .ch0Dac2ClkEn(dac2ClkEn),
         .ch0Dac2Data(dac2Out),
+        .bitsyncMode(bitsyncMode),
         .eyeClkEn(eyeSync),
         .iEye(iEye),.qEye(qEye),
         .eyeOffset(eyeOffset)
     );
+
+
+`ifdef ADD_TURBO
+/******************************************************************************
+                                Turbo Decoder
+*******************************************************************************/
+    wire    signed  [17:0]  turboDac0Data;
+    wire    signed  [17:0]  turboDac1Data;
+    wire    signed  [17:0]  turboDac2Data;
+    wire            [31:0]  turboDout;
+    turbo #(.TURBOBITS(5)) turbo (
+        .clk(clk),
+        .clkEn(ch0Sym2xEn),
+        .reset(reset),
+        `ifdef USE_BUS_CLOCK
+        .busClk(bc),
+        `endif
+        .cs(!txRegCS),
+        .wr0(we0),.wr1(we1),.wr2(we2),.wr3(we3),
+        .addr(a),
+        .din(d),
+        .dout(turboDout),
+        .bitsyncMode(bitsyncMode),
+        .iSymEn(ch0SymEn),
+        .iSymData(ch0SymData),
+        .qSymEn(ch1SymEn),
+        .qSymData(ch1SymData),
+        .dac0ClkEn(turboDac0ClkEn),
+        .dac0Data(turboDac0Data),
+        .dac1ClkEn(turboDac1ClkEn),
+        .dac1Data(turboDac1Data),
+        .dac2ClkEn(turboDac2ClkEn),
+        .dac2Data(turboDac2Data),
+        .turboBitEnOut(turboBitEn),
+        .turboBitOut(turboBit)
+    );
+
+`endif
+
 
 
     wire    signed  [17:0]  negCh0SymData = -ch0SymData;
@@ -810,6 +851,11 @@ initial begin
     write16(createAddress(`DMSE_SPACE,`DMSE_CH0_MEAN),16'd21627);
     write16(createAddress(`DMSE_SPACE,`DMSE_CH0_MSE_OFFSET),16'd0);
 
+
+    `ifdef ADD_TURBO
+    write32(createAddress(`TURBOSPACE, `TURBO_INVERSE_MEAN), 32'h00008000);
+    write32(createAddress(`TURBOSPACE, `TURBO_DAC_SELECT), 32'h00000000);
+    `endif
 
     reset = 1;
     #(2*C) ;
