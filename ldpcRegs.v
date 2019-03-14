@@ -21,6 +21,7 @@ module ldpcRegs(
     output  reg         [2:0]   inverseMeanExponent,
     output  reg                 ldpcRun,
     output  reg         [15:0]  outputEnClkDiv,
+    output  reg         [15:0]  maxIterations,
     output  reg                 invertData,
     output  reg         [31:0]  dllCenterFreq,
     output  reg         [4:0]   dllLoopGain,
@@ -79,6 +80,9 @@ module ldpcRegs(
                 `LDPC_INVERSE_MEAN: begin
                     inverseMeanExponent <= dataIn[18:16];
                 end
+                `LDPC_OUTPUT_CLK_DIV: begin
+                    maxIterations[7:0] <= dataIn[23:16];
+                end
                 `LDPC_DLL_CENTER_FREQ: begin
                     dllCenterFreq[23:16] <= dataIn[23:16];
                 end
@@ -97,6 +101,9 @@ module ldpcRegs(
                     syncThreshold[10:8] <= dataIn[26:24];
                     ldpcRun <= dataIn[31];
                 end
+                `LDPC_OUTPUT_CLK_DIV: begin
+                    maxIterations[15:8] <= dataIn[31:24];
+                end
                 `LDPC_DLL_CENTER_FREQ: begin
                     dllCenterFreq[31:24] <= dataIn[31:24];
                 end
@@ -113,7 +120,7 @@ module ldpcRegs(
                                                    invertData,1'b0,derandMode,
                                                    codeLength4096,1'b0,codeRate};
                 `LDPC_INVERSE_MEAN:     dataOut = {13'h0,inverseMeanExponent,inverseMeanMantissa};
-                `LDPC_OUTPUT_CLK_DIV:   dataOut = {16'h0,outputEnClkDiv};
+                `LDPC_OUTPUT_CLK_DIV:   dataOut = {maxIterations,outputEnClkDiv};
                 `LDPC_STATUS:           dataOut = {inSync,ldpcReady,14'h0,
                                                    6'b0,rotation,6'b0,syncState};
                 `LDPC_DLL_CENTER_FREQ:  dataOut = dllCenterFreq;

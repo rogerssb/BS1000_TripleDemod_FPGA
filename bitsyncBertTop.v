@@ -94,32 +94,34 @@ module bitsyncBertTop (
 
     systemClock systemClock (
         .clk_in1(sysClk),
-        .clk93(clk_93),
-        .clk31(clk_31),
+        .reset(1'b0),
+        .clk93(clk),
+        .clk31(clk31),
         .locked(clkLocked)
      );
-
+/*
    BUFG SysClkBufg (
       .I(clk_93),
       .O(clk)
   );
 
    BUFG Clk31Bufg (
-      .I(clk_31),
+      .I(clk31NoBuf),
       .O(clk31)
    );
-
+*/
     flexbusClock flexbusClock (
         .clk_in1(fbClk),
+        .reset(1'b0),
         .clk_out1(fb_Clk),
         .locked(fbClkLocked)
     );
-
+/*
    BUFG flexBufg (
       .I(fb_Clk),
       .O(fb_clk)
    );
-
+*/
    BUFG pllOneBufg (
       .I(pll1_OUT1),
       .O(pll1_OUT1Bufg)
