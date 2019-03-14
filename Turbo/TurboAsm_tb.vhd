@@ -31,8 +31,6 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
-use work.fixed_pkg.all;
-use work.semco_pkg.all;
 
 entity TurboAsm_tb is
 end TurboAsm_tb;
@@ -42,16 +40,16 @@ architecture rtl of TurboAsm_tb is
   -- Define Components
 
    COMPONENT TurboASM IS
-      GENERIC(
-         DATA_WIDTH  : positive := SfixPci'length
+/*      GENERIC(
+         DATA_WIDTH  : positive := 6
       );
-   PORT (
+*/ PORT (
       Clk,
       Reset,
       Valid0,
       Valid1         : IN  std_logic;
       Data0,               -- Data0 is first in SOQPSK mode but both show together
-      Data1          : IN  std_logic_vector(DATA_WIDTH-1 downto 0);  -- soft decision bit sync output
+      Data1          : IN  std_logic_vector(6-1 downto 0);  -- soft decision bit sync output
       Frame,
       Rate           : IN  std_logic_vector(2 downto 0);
       ModMode,               -- 00 = BPSK, 01 = dual independent, ignore as 00, 10 = QPSK, 11 = SOQPSK
@@ -64,10 +62,10 @@ architecture rtl of TurboAsm_tb is
       InvertOdd,
       InvertEven,
       ValidOut       : OUT std_logic;
-      DataOut        : OUT std_logic_vector(DATA_WIDTH-1 downto 0)  -- soft decision invert corrected data
+      DataOut        : OUT std_logic_vector(6-1 downto 0)  -- soft decision invert corrected data
    );
    END COMPONENT TurboASM;
-
+/*
    component TurboDF_Rom IS
       PORT(
          Clk,
@@ -76,7 +74,8 @@ architecture rtl of TurboAsm_tb is
          ReNoise        : OUT SLV12
       );
    END COMPONENT TurboDF_Rom;
-
+*/
+   constant DATA_WIDTH     : integer := 6;
    constant SYNC_2         : std_logic_vector(0 to 63)  := x"034776C7272895B0";
    constant SYNC_3         : std_logic_vector(0 to 95)  := x"25D5C0CE8990F6C9461BF79C";
    constant SYNC_4         : std_logic_vector(0 to 127) := X"034776C7272895B0FCB88938D8F76A4F";
@@ -84,14 +83,14 @@ architecture rtl of TurboAsm_tb is
    constant Rate           : integer := 2;   -- 2, 3, 4 or 6
    constant Frame          : integer := 1;   -- 1, 2, 4 or 5
    constant BitSlip        : integer := 3;  -- -3 to 3
-   constant SIGNAL_AMP     : real := 0.125;
+   constant SIGNAL_AMP     : std_logic_vector(DATA_WIDTH-1 downto 0) := "001000";
 
    type     mode_t         is (VALID, INVERT_BOTH, INVERT_ODD, INVERT_EVEN, FLYWHEEL);
 
    signal   Mode        : mode_t := VALID;
-   signal   ModMode     : std_logic_vector(1 downto 0) := "00";   -- start is single stream BPSK mode
-   signal   Clk,
-            reset       : std_logic := '1';
+   signal   ModMode     : std_logic_vector(1 downto 0) := "00";   -- start in single stream BPSK mode
+   signal   Clk         : std_logic := '1';
+   signal   reset       : std_logic_vector(66 downto 0) := (others=>'1');
    signal   InvertOdd,
             InvertEven,
             InvertOddIn,
@@ -102,26 +101,26 @@ architecture rtl of TurboAsm_tb is
             ValidOut,
             SyncOut     : std_logic := '0';
    signal   OutCntr,
-            InCntr      : signed(13 downto 0) := (5 downto 1=>'1', others=>'0');
+            InCntr      : signed(13 downto 0) := "00110110000001"; --(5 downto 1=>'1', others=>'0');
    signal   Slip        : integer := 0;  -- -3 to 3
    signal   BitCntr,
             FrameCnt    : integer := 0;
    signal   SyncPattern : std_logic_vector(0 to 63) := SYNC_2;
-   signal   ValidData   : std_logic_vector(5 downto 0) := "000001";
+   signal   ValidData   : std_logic_vector(13 downto 0) := (0=>'1', others=>'0');
    SIGNAL   PRN         : std_logic_vector(14 downto 0) := (others=>'1');
-   signal   NoiseSlv    : slv12;
+   signal   NoiseSlv    : std_logic_vector(11 downto 0);
    signal   Sum,
-            Data        : sfixed(0 downto SfixPci'right);
-   signal   NoiseGain,
-            NoiseSum    : sfixed(3 downto -8);
-   signal   Noise       : sfixed(0 downto -11);
+            Data        : std_logic_vector(DATA_WIDTH-1 downto 0);
+--   signal   NoiseGain,
+--            NoiseSum    : sfixed(3 downto -8);
+--   signal   Noise       : sfixed(0 downto -11);
    signal   DataOut,
             Expected    : std_logic_vector(Sum'length-1 downto 0);
 
 begin
 
    process begin
-      wait for 2.5 ns;
+      wait for 5 ns;
       Clk <= not Clk;
    end process;
 
@@ -129,7 +128,7 @@ begin
    clk_process : process(Clk)
    begin
       if (rising_edge(Clk)) then
-         reset    <= '0';
+         reset <= reset(reset'left-1 downto 0) & '0';
          if (ValidData(ValidData'left)) then
             if (OutCntr = 1784 * Frame * Rate + Rate * 4 - 6) then   -- change sync pattern before needed to send it for settling time
                -- Should verify on first pass,
@@ -143,36 +142,52 @@ begin
                   Mode         <= INVERT_BOTH;
                   InvertOddIn  <= '1';
                   InvertEvenIn <= '1';
-               elsif (FrameCnt = 6) then
+               elsif (FrameCnt = 8) then
                   SyncPattern <= (others=>'0'); -- should start flywheeil
                   Mode        <= FLYWHEEL;
-               elsif (FrameCnt = 8) then
-                  SyncPattern <= SYNC_2 xor x"AAAAAAAAAAAAAAAA";  -- should resync and invert odds
-                   InvertEvenIn <= '0';
-                   Mode         <= INVERT_ODD;
-               elsif (FrameCnt = 10) then
-                  InvertOddIn  <= '0';
-                  InvertEvenIn <= '1';
-                  Mode         <= INVERT_EVEN;
-                  SyncPattern <= SYNC_2 xor x"5555555555555555";  -- should invert evens
-               elsif (FrameCnt = 16) then
-                  SyncPattern <= (others=>'0');
-                  Mode        <= FLYWHEEL;
-               elsif (FrameCnt = 24) then
-                  InvertOddIn  <= '0';
-                  InvertEvenIn <= '0';
-                  Mode         <= VALID;
-                  SyncPattern  <= SYNC_2;
+               elsif (ModMode(1)) then
+                  if (FrameCnt = 10) then
+                     SyncPattern <= SYNC_2 xor x"AAAAAAAAAAAAAAAA";  -- should resync and invert odds
+                      InvertEvenIn <= '0';
+                      Mode         <= INVERT_ODD;
+                  elsif (FrameCnt = 12) then
+                     InvertOddIn  <= '0';
+                     InvertEvenIn <= '1';
+                     Mode         <= INVERT_EVEN;
+                     SyncPattern <= SYNC_2 xor x"5555555555555555";  -- should invert evens
+                  elsif (FrameCnt = 18) then
+                     SyncPattern <= (others=>'0');
+                     Mode        <= FLYWHEEL;
+                  elsif (FrameCnt = 24) then
+                     InvertOddIn  <= '0';
+                     InvertEvenIn <= '0';
+                     Mode         <= VALID;
+                     SyncPattern  <= SYNC_2;
+                  end if;
+               else
+                  if (FrameCnt = 12) then
+                     InvertOddIn  <= '0';
+                     InvertEvenIn <= '0';
+                     Mode         <= VALID;
+                     SyncPattern  <= SYNC_2;
+                  elsif (FrameCnt = 18) then
+                     SyncPattern <= (others=>'0');
+                     Mode        <= FLYWHEEL;
+                  elsif (FrameCnt = 24) then
+                     InvertOddIn  <= '0';
+                     InvertEvenIn <= '0';
+                     Mode         <= VALID;
+                     SyncPattern  <= SYNC_2;
+                  end if;
                end if;
                OutCntr <= OutCntr + 1;
                if (OutCntr(0)) then
-                  Data    <= to_sfixed(std_logic_vector(OutCntr(Data'length-1 downto 0)) xor InvertOddIn, Data);
+                  Data <= std_logic_vector(OutCntr(Data'length-1 downto 0)) xor InvertOddIn;
                else
-                  Data    <= to_sfixed(std_logic_vector(OutCntr(Data'length-1 downto 0)) xor InvertEvenIn, Data);
+                  Data <= std_logic_vector(OutCntr(Data'length-1 downto 0)) xor InvertEvenIn;
                end if;
-               PRN     <= PRN(13 downto 0) & (PRN(14) xor PRN(13));
-               NoiseGain <= to_sfixed(0.0, 3, -8);
-               NoiseSum <= (others=>'0');
+               PRN <= PRN(13 downto 0) & (PRN(14) xor PRN(13));
+ --              NoiseGain <= to_sfixed(0.0, 3, -8);
             elsif (OutCntr = 1784 * Frame * Rate + Rate * 4 - Slip) then   -- adjust Slip over BitSlip range, usually 0
                if (BitCntr < SyncPattern'length - 1) then
                   BitCntr <= BitCntr + 1;
@@ -183,24 +198,23 @@ begin
                   SyncIn  <= '1';
                   FrameCnt <= FrameCnt + 1;
                end if;
-               Data  <= to_sfixed(SIGNAL_AMP, Data)  when SyncPattern(BitCntr) else to_sfixed(-SIGNAL_AMP, Data);
-               NoiseGain <= to_sfixed(0.0, 3, -8);
-               NoiseSum <= resize(NoiseSum + abs(Noise), NoiseSum);
+               Data  <= SIGNAL_AMP when SyncPattern(BitCntr) else not SIGNAL_AMP;
+       --        NoiseGain <= to_sfixed(0.0, 3, -8);
             else
                SyncIn  <= '0';
                OutCntr <= OutCntr + 1;
                if (OutCntr(0)) then
-                  Data    <= to_sfixed(std_logic_vector(OutCntr(Data'length-1 downto 0)) xor InvertOddIn, Data);
+                  Data    <= std_logic_vector(OutCntr(Data'length-1 downto 0)) xor InvertOddIn;
                else
-                  Data    <= to_sfixed(std_logic_vector(OutCntr(Data'length-1 downto 0)) xor InvertEvenIn, Data);
+                  Data    <= std_logic_vector(OutCntr(Data'length-1 downto 0)) xor InvertEvenIn;
                end if;
-               PRN     <= PRN(13 downto 0) & (PRN(14) xor PRN(13));
-               NoiseGain <= to_sfixed(0.0, 3, -8);
+               PRN <= PRN(13 downto 0) & (PRN(14) xor PRN(13));
+       --        NoiseGain <= to_sfixed(0.0, 3, -8);
             end if;
          end if;
          ValidData <= ValidData(ValidData'left-1 downto 0) & ValidData(ValidData'left);
-         Noise     <= resize(to_sfixed(NoiseSlv, Noise) * NoiseGain, Noise);
-         Sum       <= resize(Data + Noise, Sum, fixed_saturate, fixed_truncate);
+ --        Noise     <= NoiseSlv, Noise) * NoiseGain, Noise);
+         Sum       <= Data;-- + Noise;
       end if;
    end process;
 
@@ -211,7 +225,7 @@ begin
             InCntr <= (others=>'0');   -- at which point Verified will fail.
          elsif (ValidOut) then
             InCntr <= InCntr + 1;
-            if (DataOut = Expected) or (InCntr >= 1784 * Frame * Rate + Rate * 4 - 1) then    -- skip over ASM
+            if (DataOut = Expected) or (InCntr >= 1784 * Frame * Rate + Rate * 4 - 7) then    -- skip over ASM
                Verified <= '1';
             else
                Verified <= '0';
@@ -221,38 +235,39 @@ begin
    end process OutputProc;
 
    Expected <= std_logic_vector(InCntr(Sum'length-1 downto 0));
-
+/*
    DF_Rom : TurboDF_Rom
       PORT MAP(
          Clk      => Clk,
-         Reset    => reset,
+         Reset    => reset(1),
          CountEn  => ValidData(3),
          ReNoise  => NoiseSlv
       );
-
+*/
 
    Top : TurboASM
-      GENERIC map(
+/*      GENERIC map(
          DATA_WIDTH  => Sum'length
-      )
+      )*/
       PORT MAP (
          Clk         => Clk,
-         Reset       => reset,
-         Valid0     => ValidData(3),
-         Valid1     => ValidData(3),
-         Data0       => to_slv(Sum),
-         Data1       => to_slv(Sum),
+         Reset       => reset(reset'left),
+         Valid0      => ValidData(3),
+         Valid1      => ValidData(0),
+         Data0       => Sum,
+         Data1       => Sum,
          ModMode     => ModMode,
-         Rate        => std_logic_vector(to_unsigned(Rate,3)),
-         Frame       => std_logic_vector(to_unsigned(Frame,3)),
+         Rate        => std_logic_vector(to_unsigned(Rate, 3)),
+         Frame       => std_logic_vector(to_unsigned(Frame, 3)),
          BitSlips    => 2x"3",
          IL_BET      => 5x"08",
          OOL_BET     => 5x"10",
          Verifies    => 5x"3",
          FlyWheels   => 5x"4",
-         SyncOut     => SyncOut,
+
          InvertEven  => InvertEven,
          InvertOdd   => InvertOdd,
+         SyncOut     => SyncOut,
          DataOut     => DataOut,
          ValidOut    => ValidOut
    );

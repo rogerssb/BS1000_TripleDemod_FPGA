@@ -40,38 +40,8 @@ set_output_delay -clock [get_clocks sysClk] -min -add_delay -0.100 [get_ports {d
 set_output_delay -clock [get_clocks sysClk] -max -add_delay 3.400 [get_ports {dac2_d[*]}]
 set_output_delay -clock [get_clocks fbClk] -min -add_delay -0.500 [get_ports {fb_data[*]}]
 set_output_delay -clock [get_clocks fbClk] -max -add_delay 15.500 [get_ports {fb_data[*]}]
-set_output_delay -clock [get_clocks virtual_clock] -min -add_delay 1.000 [get_ports {fb_data[0]}]
-set_output_delay -clock [get_clocks virtual_clock] -max -add_delay 1.000 [get_ports {fb_data[0]}]
-set_output_delay -clock [get_clocks virtual_clock] -min -add_delay 1.000 [get_ports {fb_data[1]}]
-set_output_delay -clock [get_clocks virtual_clock] -max -add_delay 1.000 [get_ports {fb_data[1]}]
-set_output_delay -clock [get_clocks virtual_clock] -min -add_delay 1.000 [get_ports {fb_data[2]}]
-set_output_delay -clock [get_clocks virtual_clock] -max -add_delay 1.000 [get_ports {fb_data[2]}]
-set_output_delay -clock [get_clocks virtual_clock] -min -add_delay 1.000 [get_ports {fb_data[3]}]
-set_output_delay -clock [get_clocks virtual_clock] -max -add_delay 1.000 [get_ports {fb_data[3]}]
-set_output_delay -clock [get_clocks virtual_clock] -min -add_delay 1.000 [get_ports {fb_data[4]}]
-set_output_delay -clock [get_clocks virtual_clock] -max -add_delay 1.000 [get_ports {fb_data[4]}]
-set_output_delay -clock [get_clocks virtual_clock] -min -add_delay 1.000 [get_ports {fb_data[5]}]
-set_output_delay -clock [get_clocks virtual_clock] -max -add_delay 1.000 [get_ports {fb_data[5]}]
-set_output_delay -clock [get_clocks virtual_clock] -min -add_delay 1.000 [get_ports {fb_data[6]}]
-set_output_delay -clock [get_clocks virtual_clock] -max -add_delay 1.000 [get_ports {fb_data[6]}]
-set_output_delay -clock [get_clocks virtual_clock] -min -add_delay 1.000 [get_ports {fb_data[7]}]
-set_output_delay -clock [get_clocks virtual_clock] -max -add_delay 1.000 [get_ports {fb_data[7]}]
-set_output_delay -clock [get_clocks virtual_clock] -min -add_delay 1.000 [get_ports {fb_data[8]}]
-set_output_delay -clock [get_clocks virtual_clock] -max -add_delay 1.000 [get_ports {fb_data[8]}]
-set_output_delay -clock [get_clocks virtual_clock] -min -add_delay 1.000 [get_ports {fb_data[9]}]
-set_output_delay -clock [get_clocks virtual_clock] -max -add_delay 1.000 [get_ports {fb_data[9]}]
-set_output_delay -clock [get_clocks virtual_clock] -min -add_delay 1.000 [get_ports {fb_data[10]}]
-set_output_delay -clock [get_clocks virtual_clock] -max -add_delay 1.000 [get_ports {fb_data[10]}]
-set_output_delay -clock [get_clocks virtual_clock] -min -add_delay 1.000 [get_ports {fb_data[11]}]
-set_output_delay -clock [get_clocks virtual_clock] -max -add_delay 1.000 [get_ports {fb_data[11]}]
-set_output_delay -clock [get_clocks virtual_clock] -min -add_delay 1.000 [get_ports {fb_data[12]}]
-set_output_delay -clock [get_clocks virtual_clock] -max -add_delay 1.000 [get_ports {fb_data[12]}]
-set_output_delay -clock [get_clocks virtual_clock] -min -add_delay 1.000 [get_ports {fb_data[13]}]
-set_output_delay -clock [get_clocks virtual_clock] -max -add_delay 1.000 [get_ports {fb_data[13]}]
-set_output_delay -clock [get_clocks virtual_clock] -min -add_delay 1.000 [get_ports {fb_data[14]}]
-set_output_delay -clock [get_clocks virtual_clock] -max -add_delay 1.000 [get_ports {fb_data[14]}]
-set_output_delay -clock [get_clocks virtual_clock] -min -add_delay 1.000 [get_ports {fb_data[15]}]
-set_output_delay -clock [get_clocks virtual_clock] -max -add_delay 1.000 [get_ports {fb_data[15]}]
+set_output_delay -clock [get_clocks virtual_clock] -min -add_delay 1.000 [get_ports {fb_data[*]}]
+set_output_delay -clock [get_clocks virtual_clock] -max -add_delay 1.000 [get_ports {fb_data[*]}]
 set_output_delay -clock [get_clocks sysClk] -min -add_delay -2.000 [get_ports bsClkOut]
 set_output_delay -clock [get_clocks sysClk] -max -add_delay 4.000 [get_ports bsClkOut]
 set_output_delay -clock [get_clocks sysClk] -min -add_delay -2.000 [get_ports bsDataOut]
@@ -137,28 +107,10 @@ set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets differentialClk_IBUF]
 
 
 
-set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks fbClk] -group [get_clocks -include_generated_clocks sysClk]
-set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks differentialClk] -group [get_clocks -include_generated_clocks sysClk]
-set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks singleEndedClk] -group [get_clocks -include_generated_clocks sysClk]
-set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks pll0_OUT1] -group [get_clocks -include_generated_clocks sysClk]
-set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks pll1_OUT1] -group [get_clocks -include_generated_clocks sysClk]
-set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks pll2_OUT1] -group [get_clocks -include_generated_clocks sysClk]
-# set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks fbClk] -group [get_clocks -include_generated_clocks singleEndedClk]
-# set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks fbClk] -group [get_clocks -include_generated_clocks differentialClk]
-# set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks fbClk] -group [get_clocks -include_generated_clocks pll0_OUT1]
-# set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks fbClk] -group [get_clocks -include_generated_clocks pll1_OUT1]
-# set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks singleEndedClk] -group [get_clocks -include_generated_clocks differentialClk]
-# set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks singleEndedClk] -group [get_clocks -include_generated_clocks pll0_OUT1]
-# set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks singleEndedClk] -group [get_clocks -include_generated_clocks pll1_OUT1]
-# set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks singleEndedClk] -group [get_clocks -include_generated_clocks sysClk]
-# set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks differentialClk] -group [get_clocks -include_generated_clocks pll0_OUT1]
-# set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks differentialClk] -group [get_clocks -include_generated_clocks pll1_OUT1]
-# set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks differentialClk] -group [get_clocks -include_generated_clocks sysClk]
-# set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks pll0_OUT1] -group [get_clocks -include_generated_clocks pll1_OUT1]
-# set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks pll0_OUT1] -group [get_clocks -include_generated_clocks sysClk]
-# set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks pll1_OUT1] -group [get_clocks -include_generated_clocks sysClk]
+set_multicycle_path -setup -from [get_pins turbo/turbod/ASM/*/C] -to [get_pins turbo/turbod/ASM/Count*/D] 2
+set_multicycle_path -hold -from [get_pins turbo/turbod/ASM/*/C] -to [get_pins turbo/turbod/ASM/Count*/D] 1
 
-# set_multicycle_path -from [get_pins {dacInterface/sr_reg[15]/C}] -to [get_ports dacMOSI] 2
+set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks fbClk] -group [get_clocks -include_generated_clocks sysClk] -group [get_clocks -include_generated_clocks differentialClk] -group [get_clocks -include_generated_clocks singleEndedClk] -group [get_clocks -include_generated_clocks pll0_OUT1] -group [get_clocks -include_generated_clocks pll1_OUT1] -group [get_clocks -include_generated_clocks pll2_OUT1] -group [get_clocks -include_generated_clocks virtual_clock]
 
 
 
@@ -170,7 +122,6 @@ set_false_path -from [get_pins dacInterface/CS1n_reg/C] -to [get_ports ch1SELn]
 
 
 
-set_false_path -from [list] -to [get_ports fb_data*]
 set_false_path -from [get_ports fb_oen*] -to [get_ports fb_data*]
 set_false_path -from [get_clocks fbClk] -to [get_ports bsClkOut]
 set_false_path -from [get_clocks fbClk] -to [get_ports bsDataOut]
@@ -188,6 +139,5 @@ set_false_path -from [get_clocks fbClk] -to [get_ports pll*_PWDn]
 set_false_path -from [get_clocks fbClk] -to [get_ports ch*HighImpedance]
 set_false_path -from [get_clocks fbClk] -to [get_ports ch*SingleEnded]
 
-
-
+set_false_path -from [get_pins systemClock/inst/plle2_adv_inst/CLKOUT1] -to [get_pins {turbo/turbod/FifoValid31_reg/D turbo/turbod/FifoValid_reg/D turbo/turbod/Reset31_reg/D}]
 

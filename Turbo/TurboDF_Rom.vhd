@@ -35,7 +35,6 @@ Dependencies:
 LIBRARY IEEE;
 USE IEEE.std_logic_1164.ALL;
 USE IEEE.numeric_std.ALL;
-use work.semco_pkg.ALL;
 
 ENTITY TurboDF_Rom IS
    PORT(
@@ -46,7 +45,7 @@ ENTITY TurboDF_Rom IS
 --      Frame          : IN  natural range 0 to 6;
 --      Addr           : IN  std_logic_vector(16 downto 0);
 --      ReOut          : OUT SLV2;
-      ReNoise        : OUT SLV12
+      ReNoise        : OUT STD_LOGIC_VECTOR(11 downto 0)
    );
 END TurboDF_Rom;
 
@@ -195,7 +194,7 @@ ARCHITECTURE rtl OF TurboDF_Rom IS
             ReData4,
             ReData5     : vector_of_slvs(6 downto 0)(1 downto 0);
 */
-   SIGNAL   Noise_I     : SLV12;
+   SIGNAL   Noise_I     : STD_LOGIC_VECTOR(11 DOWNTO 0);
    SIGNAL   NoiseCntr   : unsigned(12 downto 0) := (others=>'0');
 
 BEGIN
@@ -203,14 +202,14 @@ BEGIN
    ClkProcess : process(Clk)
    begin
       if (rising_edge(Clk)) then
-         if (Reset) then
+         if (Reset = '1') then
             NoiseCntr   <= (others=>'0');
  --            ReOut       <= "00";
                ReNoise     <= (others=>'0');
          else
 --          ReOut <= ReData1(Rate) when (Frame = 1) else ReData2(Rate) when (Frame = 2) else ReData4(Rate) when (Frame = 4) else ReData5(Rate);
             ReNoise <= Noise_I;
-            if (CountEn) then
+            if (CountEn = '1') then
                if (NoiseCntr < 7185) then
                   NoiseCntr <= NoiseCntr + 1;
                else

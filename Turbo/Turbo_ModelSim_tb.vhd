@@ -42,7 +42,7 @@ entity TurboModelSim_tb is
       Frame       : integer := 1;   -- 1, 2, 4 or 5
       ClkRate     : natural := 120 / Rate * 2;
       ClkPerBit   : std_logic_vector(15 downto 0) := std_logic_vector(to_unsigned(ClkRate * 2, 16));
-      GainIn      : sfixed(3 downto -8) := to_sfixed(0.90, 3, -8); -- 0.9 @ 0.25 SigAmp rate 2 is marginal
+      GainIn      : sfixed(3 downto -8) := to_sfixed(0.00, 3, -8); -- 0.9 @ 0.25 SigAmp rate 2 is marginal
       FILE_LOC    : string := "../";
       Iterations  : std_logic_vector(3 downto 0) := x"A"
    );
@@ -65,7 +65,9 @@ architecture rtl of TurboModelSim_tb is
       );
       Port (
          Clk93,
-         ClkPll      : IN Std_logic;
+         ClkPll,
+         TurboClk,
+         TurboData   : IN Std_logic;
          SClk,
          MOSI,
          CS,
@@ -131,6 +133,8 @@ begin
    Port MAP(
       Clk93       => Clk,
       ClkPll      => clk2,
+      TurboClk    => '0',
+      TurboData   => '0',
       SClk        => SClk,
       MOSI        => MOSI,
       CS          => CS,

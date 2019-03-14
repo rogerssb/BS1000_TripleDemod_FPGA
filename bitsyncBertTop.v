@@ -113,7 +113,7 @@ module bitsyncBertTop (
     flexbusClock flexbusClock (
         .clk_in1(fbClk),
         .reset(1'b0),
-        .clk_out1(fb_Clk),
+        .clk_out1(fb_clk),
         .locked(fbClkLocked)
     );
 /*
@@ -355,7 +355,7 @@ clockAndDataInputSync diffSync(
     wire            [31:0]  turboDout;
     turbo #(.TURBOBITS(5)) turbo (
         .clk93(clk),
-		  .clk31(clk31),
+        .clk31(clk31),
         .clkEn(ch0Sym2xEn),
         .reset(reset),
         .busClk(fb_clk),

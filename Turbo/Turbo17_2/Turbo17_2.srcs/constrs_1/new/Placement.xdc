@@ -8,6 +8,8 @@ set_property PACKAGE_PIN J8 [get_ports SClk]
 set_property PACKAGE_PIN F10 [get_ports PD_n]
 set_property PACKAGE_PIN F23 [get_ports BitOut]
 set_property PACKAGE_PIN G24 [get_ports BitClk]
+set_property PACKAGE_PIN J24 [get_ports TurboClk]
+set_property PACKAGE_PIN J25 [get_ports TurboData]
 
 set_property CONFIG_VOLTAGE 3.3 [current_design]
 set_property CFGBVS VCCO [current_design]
@@ -22,6 +24,8 @@ set_property IOSTANDARD LVCMOS33 [get_ports PD_n]
 set_property IOSTANDARD LVCMOS33 [get_ports SClk]
 set_property IOSTANDARD LVCMOS33 [get_ports BitOut]
 set_property IOSTANDARD LVCMOS33 [get_ports BitClk]
+set_property IOSTANDARD LVCMOS33 [get_ports TurboClk]
+set_property IOSTANDARD LVCMOS33 [get_ports TurboData]
 
 
 

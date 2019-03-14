@@ -61,7 +61,7 @@ PACKAGE Semco_pkg IS
    subtype INT32f          is sfixed(31 downto 0);
    subtype uFix16_7        is ufixed(8 downto -7);
    subtype uFix16_15       is ufixed(0 downto -15);
-   subtype SfixTurboIn    is sfixed(0 downto -3);
+   subtype SfixTurboIn    is sfixed(0 downto -5);     -- set to -TURBO_BITS in turbo.v
    subtype SfixPci        is sfixed(2 downto SfixTurboIn'right);
    subtype SfixSova       is sfixed(SfixPci'left+6 downto SfixPci'right);
 

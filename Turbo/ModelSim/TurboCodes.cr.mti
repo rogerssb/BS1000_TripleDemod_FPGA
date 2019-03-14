@@ -8,8 +8,8 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Loading package fixed_pkg
 -- Loading package MATH_REAL
 -- Loading package Semco_pkg
--- Compiling entity TurboDecoder31
--- Compiling architecture rtl of TurboDecoder31
+-- Compiling entity TurboDecoder
+-- Compiling architecture rtl of TurboDecoder
 
 } {} {}} C:/Semco/Vivado/BS1000_Demod_vivado2017/Turbo/Turbo17_2/Turbo17_2.srcs/sources_1/ip/TurboVio/TurboVio_sim_netlist.vhdl {1 vcom\ -work\ work\ -2002\ -explicit\ -stats=none\ C:/Semco/Vivado/BS1000_Demod_vivado2017/Turbo/Turbo17_2/Turbo17_2.srcs/sources_1/ip/TurboVio/TurboVio_sim_netlist.vhdl\nModel\ Technology\ ModelSim\ PE\ vcom\ 10.5c\ Compiler\ 2016.07\ Jul\ 21\ 2016\n--\ Loading\ package\ STANDARD\n--\ Loading\ package\ TEXTIO\n--\ Loading\ package\ std_logic_1164\n--\ Compiling\ entity\ TurboVio_vio_v3_0_16_decoder\n--\ Compiling\ architecture\ STRUCTURE\ of\ TurboVio_vio_v3_0_16_decoder\n--\ Compiling\ entity\ TurboVio_vio_v3_0_16_probe_out_one\n--\ Compiling\ architecture\ STRUCTURE\ of\ TurboVio_vio_v3_0_16_probe_out_one\n--\ Compiling\ entity\ \\TurboVio_vio_v3_0_16_probe_out_one__parameterized0\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\TurboVio_vio_v3_0_16_probe_out_one__parameterized0\\\n--\ Compiling\ entity\ \\TurboVio_vio_v3_0_16_probe_out_one__parameterized1\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\TurboVio_vio_v3_0_16_probe_out_one__parameterized1\\\n--\ Compiling\ entity\ \\TurboVio_vio_v3_0_16_probe_out_one__parameterized2\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\TurboVio_vio_v3_0_16_probe_out_one__parameterized2\\\n--\ Compiling\ entity\ \\TurboVio_vio_v3_0_16_probe_out_one__parameterized3\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\TurboVio_vio_v3_0_16_probe_out_one__parameterized3\\\n--\ Compiling\ entity\ \\TurboVio_vio_v3_0_16_probe_out_one__parameterized4\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\TurboVio_vio_v3_0_16_probe_out_one__parameterized4\\\n--\ Compiling\ entity\ \\TurboVio_vio_v3_0_16_probe_out_one__parameterized5\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\TurboVio_vio_v3_0_16_probe_out_one__parameterized5\\\n--\ Compiling\ entity\ \\TurboVio_vio_v3_0_16_probe_out_one__parameterized6\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\TurboVio_vio_v3_0_16_probe_out_one__parameterized6\\\n--\ Compiling\ entity\ \\TurboVio_vio_v3_0_16_probe_out_one__parameterized7\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\TurboVio_vio_v3_0_16_probe_out_one__parameterized7\\\n--\ Compiling\ entity\ TurboVio_vio_v3_0_16_probe_width\n--\ Compiling\ architecture\ STRUCTURE\ of\ TurboVio_vio_v3_0_16_probe_width\n--\ Compiling\ entity\ TurboVio_xsdbs_v1_0_2_xsdbs\n--\ Compiling\ architecture\ STRUCTURE\ of\ TurboVio_xsdbs_v1_0_2_xsdbs\n--\ Compiling\ entity\ TurboVio_vio_v3_0_16_probe_out_all\n--\ Compiling\ architecture\ STRUCTURE\ of\ TurboVio_vio_v3_0_16_probe_out_all\n--\ Loading\ entity\ TurboVio_vio_v3_0_16_probe_out_one\n--\ Loading\ entity\ \\TurboVio_vio_v3_0_16_probe_out_one__parameterized0\\\n--\ Loading\ entity\ \\TurboVio_vio_v3_0_16_probe_out_one__parameterized1\\\n--\ Loading\ entity\ \\TurboVio_vio_v3_0_16_probe_out_one__parameterized2\\\n--\ Loading\ entity\ \\TurboVio_vio_v3_0_16_probe_out_one__parameterized3\\\n--\ Loading\ entity\ \\TurboVio_vio_v3_0_16_probe_out_one__parameterized4\\\n--\ Loading\ entity\ \\TurboVio_vio_v3_0_16_probe_out_one__parameterized5\\\n--\ Loading\ entity\ \\TurboVio_vio_v3_0_16_probe_out_one__parameterized6\\\n--\ Loading\ entity\ \\TurboVio_vio_v3_0_16_probe_out_one__parameterized7\\\n--\ Compiling\ entity\ TurboVio_vio_v3_0_16_vio\n--\ Compiling\ architecture\ STRUCTURE\ of\ TurboVio_vio_v3_0_16_vio\n--\ Loading\ entity\ TurboVio_vio_v3_0_16_decoder\n--\ Loading\ entity\ TurboVio_vio_v3_0_16_probe_out_all\n--\ Loading\ entity\ TurboVio_vio_v3_0_16_probe_width\n--\ Loading\ entity\ TurboVio_xsdbs_v1_0_2_xsdbs\n--\ Compiling\ entity\ TurboVio\n--\ Compiling\ architecture\ STRUCTURE\ of\ TurboVio\n--\ Loading\ entity\ TurboVio_vio_v3_0_16_vio\n\n {} {}} {C:\Semco\Vivado\BS1000_Demod_vivado2017\Turbo/RandomCcsds.vhd} {1 {vcom -work work -2008 -explicit -check_synthesis -stats=none C:/Semco/Vivado/BS1000_Demod_vivado2017/Turbo/RandomCcsds.vhd
 Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
@@ -26,11 +26,19 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Loading package TEXTIO
 -- Loading package std_logic_1164
 -- Loading package NUMERIC_STD
--- Loading package fixed_pkg
--- Loading package MATH_REAL
--- Loading package Semco_pkg
 -- Compiling entity TurboAsm_tb
 -- Compiling architecture rtl of TurboAsm_tb
+
+} {} {}} {C:\Semco\Vivado\BS1000_Demod_vivado2017\Turbo/Turbo_ModelSim_tb.vhd} {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/BS1000_Demod_vivado2017/Turbo/Turbo_ModelSim_tb.vhd
+Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package MATH_REAL
+-- Loading package fixed_pkg
+-- Compiling entity TurboModelSim_tb
+-- Compiling architecture rtl of TurboModelSim_tb
 
 } {} {}} C:/Semco/Vivado/TurboCodes/TurboFE.vhd {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/TurboCodes/TurboFE.vhd
 Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
@@ -44,6 +52,15 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Compiling entity TurboFE
 -- Compiling architecture rtl of TurboFE
 
+} {} {}} {C:\Semco\Vivado\BS1000_Demod_vivado2017\Turbo/TurboDF_Rom.vhd} {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/BS1000_Demod_vivado2017/Turbo/TurboDF_Rom.vhd
+Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity TurboDF_Rom
+-- Compiling architecture rtl of TurboDF_Rom
+
 } {} {}} C:/Semco/Vivado/BS1000_Demod_vivado2017/Turbo/Turbo17_2/Turbo17_2.srcs/sources_1/ip/NoiseI/NoiseI_sim_netlist.vhdl {1 vcom\ -work\ work\ -2002\ -explicit\ -stats=none\ C:/Semco/Vivado/BS1000_Demod_vivado2017/Turbo/Turbo17_2/Turbo17_2.srcs/sources_1/ip/NoiseI/NoiseI_sim_netlist.vhdl\nModel\ Technology\ ModelSim\ PE\ vcom\ 10.5c\ Compiler\ 2016.07\ Jul\ 21\ 2016\n--\ Loading\ package\ STANDARD\n--\ Loading\ package\ TEXTIO\n--\ Loading\ package\ std_logic_1164\n--\ Compiling\ entity\ NoiseI_blk_mem_gen_mux\n--\ Compiling\ architecture\ STRUCTURE\ of\ NoiseI_blk_mem_gen_mux\n--\ Compiling\ entity\ NoiseI_blk_mem_gen_prim_wrapper_init\n--\ Compiling\ architecture\ STRUCTURE\ of\ NoiseI_blk_mem_gen_prim_wrapper_init\n--\ Compiling\ entity\ \\NoiseI_blk_mem_gen_prim_wrapper_init__parameterized0\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\NoiseI_blk_mem_gen_prim_wrapper_init__parameterized0\\\n--\ Compiling\ entity\ \\NoiseI_blk_mem_gen_prim_wrapper_init__parameterized1\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\NoiseI_blk_mem_gen_prim_wrapper_init__parameterized1\\\n--\ Compiling\ entity\ NoiseI_blk_mem_gen_prim_width\n--\ Compiling\ architecture\ STRUCTURE\ of\ NoiseI_blk_mem_gen_prim_width\n--\ Loading\ entity\ NoiseI_blk_mem_gen_prim_wrapper_init\n--\ Compiling\ entity\ \\NoiseI_blk_mem_gen_prim_width__parameterized0\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\NoiseI_blk_mem_gen_prim_width__parameterized0\\\n--\ Loading\ entity\ \\NoiseI_blk_mem_gen_prim_wrapper_init__parameterized0\\\n--\ Compiling\ entity\ \\NoiseI_blk_mem_gen_prim_width__parameterized1\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\NoiseI_blk_mem_gen_prim_width__parameterized1\\\n--\ Loading\ entity\ \\NoiseI_blk_mem_gen_prim_wrapper_init__parameterized1\\\n--\ Compiling\ entity\ NoiseI_blk_mem_gen_generic_cstr\n--\ Compiling\ architecture\ STRUCTURE\ of\ NoiseI_blk_mem_gen_generic_cstr\n--\ Loading\ entity\ NoiseI_blk_mem_gen_mux\n--\ Loading\ entity\ NoiseI_blk_mem_gen_prim_width\n--\ Loading\ entity\ \\NoiseI_blk_mem_gen_prim_width__parameterized0\\\n--\ Loading\ entity\ \\NoiseI_blk_mem_gen_prim_width__parameterized1\\\n--\ Compiling\ entity\ NoiseI_blk_mem_gen_top\n--\ Compiling\ architecture\ STRUCTURE\ of\ NoiseI_blk_mem_gen_top\n--\ Loading\ entity\ NoiseI_blk_mem_gen_generic_cstr\n--\ Compiling\ entity\ NoiseI_blk_mem_gen_v8_3_6_synth\n--\ Compiling\ architecture\ STRUCTURE\ of\ NoiseI_blk_mem_gen_v8_3_6_synth\n--\ Loading\ entity\ NoiseI_blk_mem_gen_top\n--\ Compiling\ entity\ NoiseI_blk_mem_gen_v8_3_6\n--\ Compiling\ architecture\ STRUCTURE\ of\ NoiseI_blk_mem_gen_v8_3_6\n--\ Loading\ entity\ NoiseI_blk_mem_gen_v8_3_6_synth\n--\ Compiling\ entity\ NoiseI\n--\ Compiling\ architecture\ STRUCTURE\ of\ NoiseI\n--\ Loading\ entity\ NoiseI_blk_mem_gen_v8_3_6\n\n {} {}} {C:\Semco\Vivado\BS1000_Demod_vivado2017\Turbo/SovaMex.vhd} {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/BS1000_Demod_vivado2017/Turbo/SovaMex.vhd
 Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Loading package STANDARD
@@ -55,18 +72,6 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Loading package Semco_pkg
 -- Compiling entity SovaMex
 -- Compiling architecture rtl of SovaMex
-
-} {} {}} {C:\Semco\Vivado\BS1000_Demod_vivado2017\Turbo/TurboDF_Rom.vhd} {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/BS1000_Demod_vivado2017/Turbo/TurboDF_Rom.vhd
-Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
--- Loading package STANDARD
--- Loading package TEXTIO
--- Loading package std_logic_1164
--- Loading package NUMERIC_STD
--- Loading package fixed_pkg
--- Loading package MATH_REAL
--- Loading package Semco_pkg
--- Compiling entity TurboDF_Rom
--- Compiling architecture rtl of TurboDF_Rom
 
 } {} {}} C:/Semco/Vivado/TurboCodes/TurboDec.vhd {1 {vcom -work work -2008 -explicit -check_synthesis -stats=none C:/Semco/Vivado/TurboCodes/TurboDec.vhd
 Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
@@ -93,18 +98,6 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Compiling entity TurboVivado_tb
 -- Compiling architecture rtl of TurboVivado_tb
 
-} {} {}} {C:\Semco\Vivado\BS1000_Demod_vivado2017\Turbo/TurboASM.vhd} {1 {vcom -work work -2008 -explicit -check_synthesis -stats=none C:/Semco/Vivado/BS1000_Demod_vivado2017/Turbo/TurboASM.vhd
-Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
--- Loading package STANDARD
--- Loading package TEXTIO
--- Loading package std_logic_1164
--- Loading package NUMERIC_STD
--- Loading package fixed_pkg
--- Loading package MATH_REAL
--- Loading package Semco_pkg
--- Compiling entity TurboASM
--- Compiling architecture rtl of TurboASM
-
 } {} {}} C:/Semco/Vivado/TurboCodes/TurboEncode.vhd {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/TurboCodes/TurboEncode.vhd
 Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Loading package STANDARD
@@ -116,6 +109,23 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Loading package Semco_pkg
 -- Compiling entity TurboEncode
 -- Compiling architecture rtl of TurboEncode
+
+} {} {}} C:/Semco/Vivado/BS1000_Demod_vivado2017/Turbo/TurboAsm/TurboAsm.sim/sim_1/synth/func/TurboAsm_tb_func_synth.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Semco/Vivado/BS1000_Demod_vivado2017/Turbo/TurboAsm/TurboAsm.sim/sim_1/synth/func/TurboAsm_tb_func_synth.vhd
+Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity TurboASM
+-- Compiling architecture STRUCTURE of TurboASM
+
+} {} {}} {C:\Semco\Vivado\BS1000_Demod_vivado2017\Turbo/TurboASM.vhd} {1 {vcom -work work -2008 -explicit -check_synthesis -stats=none C:/Semco/Vivado/BS1000_Demod_vivado2017/Turbo/TurboASM.vhd
+Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity TurboASM
+-- Compiling architecture rtl of TurboASM
 
 } {} {}} C:/Semco/Vivado/ROM_Natural.vhd {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/ROM_Natural.vhd
 Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
@@ -198,7 +208,7 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Compiling entity TurboEncode
 -- Compiling architecture rtl of TurboEncode
 
-} {} {}} C:/Semco/Vivado/TurboCodes/Turbo17_2/Turbo17_2.srcs/sources_1/ip/NoiseI/NoiseI_sim_netlist.vhdl {1 vcom\ -work\ work\ -2002\ -explicit\ -stats=none\ C:/Semco/Vivado/TurboCodes/Turbo17_2/Turbo17_2.srcs/sources_1/ip/NoiseI/NoiseI_sim_netlist.vhdl\nModel\ Technology\ ModelSim\ PE\ vcom\ 10.5c\ Compiler\ 2016.07\ Jul\ 21\ 2016\n--\ Loading\ package\ STANDARD\n--\ Loading\ package\ TEXTIO\n--\ Loading\ package\ std_logic_1164\n--\ Compiling\ entity\ NoiseI_blk_mem_gen_mux\n--\ Compiling\ architecture\ STRUCTURE\ of\ NoiseI_blk_mem_gen_mux\n--\ Compiling\ entity\ NoiseI_blk_mem_gen_prim_wrapper_init\n--\ Compiling\ architecture\ STRUCTURE\ of\ NoiseI_blk_mem_gen_prim_wrapper_init\n--\ Compiling\ entity\ \\NoiseI_blk_mem_gen_prim_wrapper_init__parameterized0\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\NoiseI_blk_mem_gen_prim_wrapper_init__parameterized0\\\n--\ Compiling\ entity\ \\NoiseI_blk_mem_gen_prim_wrapper_init__parameterized1\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\NoiseI_blk_mem_gen_prim_wrapper_init__parameterized1\\\n--\ Compiling\ entity\ NoiseI_blk_mem_gen_prim_width\n--\ Compiling\ architecture\ STRUCTURE\ of\ NoiseI_blk_mem_gen_prim_width\n--\ Loading\ entity\ NoiseI_blk_mem_gen_prim_wrapper_init\n--\ Compiling\ entity\ \\NoiseI_blk_mem_gen_prim_width__parameterized0\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\NoiseI_blk_mem_gen_prim_width__parameterized0\\\n--\ Loading\ entity\ \\NoiseI_blk_mem_gen_prim_wrapper_init__parameterized0\\\n--\ Compiling\ entity\ \\NoiseI_blk_mem_gen_prim_width__parameterized1\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\NoiseI_blk_mem_gen_prim_width__parameterized1\\\n--\ Loading\ entity\ \\NoiseI_blk_mem_gen_prim_wrapper_init__parameterized1\\\n--\ Compiling\ entity\ NoiseI_blk_mem_gen_generic_cstr\n--\ Compiling\ architecture\ STRUCTURE\ of\ NoiseI_blk_mem_gen_generic_cstr\n--\ Loading\ entity\ NoiseI_blk_mem_gen_mux\n--\ Loading\ entity\ NoiseI_blk_mem_gen_prim_width\n--\ Loading\ entity\ \\NoiseI_blk_mem_gen_prim_width__parameterized0\\\n--\ Loading\ entity\ \\NoiseI_blk_mem_gen_prim_width__parameterized1\\\n--\ Compiling\ entity\ NoiseI_blk_mem_gen_top\n--\ Compiling\ architecture\ STRUCTURE\ of\ NoiseI_blk_mem_gen_top\n--\ Loading\ entity\ NoiseI_blk_mem_gen_generic_cstr\n--\ Compiling\ entity\ NoiseI_blk_mem_gen_v8_3_6_synth\n--\ Compiling\ architecture\ STRUCTURE\ of\ NoiseI_blk_mem_gen_v8_3_6_synth\n--\ Loading\ entity\ NoiseI_blk_mem_gen_top\n--\ Compiling\ entity\ NoiseI_blk_mem_gen_v8_3_6\n--\ Compiling\ architecture\ STRUCTURE\ of\ NoiseI_blk_mem_gen_v8_3_6\n--\ Loading\ entity\ NoiseI_blk_mem_gen_v8_3_6_synth\n--\ Compiling\ entity\ NoiseI\n--\ Compiling\ architecture\ STRUCTURE\ of\ NoiseI\n--\ Loading\ entity\ NoiseI_blk_mem_gen_v8_3_6\n\n {} {}} C:/Semco/Vivado/BS1000_Demod_vivado2017/bitsyncBertTop.srcs/sources_1/ip/vioAsm/vioAsm_sim_netlist.vhdl {1 vcom\ -work\ work\ -2002\ -explicit\ -stats=none\ C:/Semco/Vivado/BS1000_Demod_vivado2017/bitsyncBertTop.srcs/sources_1/ip/vioAsm/vioAsm_sim_netlist.vhdl\nModel\ Technology\ ModelSim\ PE\ vcom\ 10.5c\ Compiler\ 2016.07\ Jul\ 21\ 2016\n--\ Loading\ package\ STANDARD\n--\ Loading\ package\ TEXTIO\n--\ Loading\ package\ std_logic_1164\n--\ Compiling\ entity\ vioAsm_vio_v3_0_16_decoder\n--\ Compiling\ architecture\ STRUCTURE\ of\ vioAsm_vio_v3_0_16_decoder\n--\ Compiling\ entity\ vioAsm_vio_v3_0_16_probe_out_one\n--\ Compiling\ architecture\ STRUCTURE\ of\ vioAsm_vio_v3_0_16_probe_out_one\n--\ Compiling\ entity\ \\vioAsm_vio_v3_0_16_probe_out_one__parameterized0\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\vioAsm_vio_v3_0_16_probe_out_one__parameterized0\\\n--\ Compiling\ entity\ \\vioAsm_vio_v3_0_16_probe_out_one__parameterized1\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\vioAsm_vio_v3_0_16_probe_out_one__parameterized1\\\n--\ Compiling\ entity\ \\vioAsm_vio_v3_0_16_probe_out_one__parameterized2\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\vioAsm_vio_v3_0_16_probe_out_one__parameterized2\\\n--\ Compiling\ entity\ \\vioAsm_vio_v3_0_16_probe_out_one__parameterized2_0\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\vioAsm_vio_v3_0_16_probe_out_one__parameterized2_0\\\n--\ Compiling\ entity\ vioAsm_vio_v3_0_16_probe_width\n--\ Compiling\ architecture\ STRUCTURE\ of\ vioAsm_vio_v3_0_16_probe_width\n--\ Compiling\ entity\ vioAsm_xsdbs_v1_0_2_xsdbs\n--\ Compiling\ architecture\ STRUCTURE\ of\ vioAsm_xsdbs_v1_0_2_xsdbs\n--\ Compiling\ entity\ vioAsm_vio_v3_0_16_probe_out_all\n--\ Compiling\ architecture\ STRUCTURE\ of\ vioAsm_vio_v3_0_16_probe_out_all\n--\ Loading\ entity\ vioAsm_vio_v3_0_16_probe_out_one\n--\ Loading\ entity\ \\vioAsm_vio_v3_0_16_probe_out_one__parameterized0\\\n--\ Loading\ entity\ \\vioAsm_vio_v3_0_16_probe_out_one__parameterized1\\\n--\ Loading\ entity\ \\vioAsm_vio_v3_0_16_probe_out_one__parameterized2\\\n--\ Loading\ entity\ \\vioAsm_vio_v3_0_16_probe_out_one__parameterized2_0\\\n--\ Compiling\ entity\ vioAsm_vio_v3_0_16_vio\n--\ Compiling\ architecture\ STRUCTURE\ of\ vioAsm_vio_v3_0_16_vio\n--\ Loading\ entity\ vioAsm_vio_v3_0_16_decoder\n--\ Loading\ entity\ vioAsm_vio_v3_0_16_probe_out_all\n--\ Loading\ entity\ vioAsm_vio_v3_0_16_probe_width\n--\ Loading\ entity\ vioAsm_xsdbs_v1_0_2_xsdbs\n--\ Compiling\ entity\ vioAsm\n--\ Compiling\ architecture\ STRUCTURE\ of\ vioAsm\n--\ Loading\ entity\ vioAsm_vio_v3_0_16_vio\n\n {} {}} C:/Semco/Vivado/BS1000_Demod_vivado2017/Turbo/fixed_pkg_2008Bishop.vhd {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/BS1000_Demod_vivado2017/Turbo/fixed_pkg_2008Bishop.vhd
+} {} {}} C:/Semco/Vivado/TurboCodes/Turbo17_2/Turbo17_2.srcs/sources_1/ip/NoiseI/NoiseI_sim_netlist.vhdl {1 vcom\ -work\ work\ -2002\ -explicit\ -stats=none\ C:/Semco/Vivado/TurboCodes/Turbo17_2/Turbo17_2.srcs/sources_1/ip/NoiseI/NoiseI_sim_netlist.vhdl\nModel\ Technology\ ModelSim\ PE\ vcom\ 10.5c\ Compiler\ 2016.07\ Jul\ 21\ 2016\n--\ Loading\ package\ STANDARD\n--\ Loading\ package\ TEXTIO\n--\ Loading\ package\ std_logic_1164\n--\ Compiling\ entity\ NoiseI_blk_mem_gen_mux\n--\ Compiling\ architecture\ STRUCTURE\ of\ NoiseI_blk_mem_gen_mux\n--\ Compiling\ entity\ NoiseI_blk_mem_gen_prim_wrapper_init\n--\ Compiling\ architecture\ STRUCTURE\ of\ NoiseI_blk_mem_gen_prim_wrapper_init\n--\ Compiling\ entity\ \\NoiseI_blk_mem_gen_prim_wrapper_init__parameterized0\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\NoiseI_blk_mem_gen_prim_wrapper_init__parameterized0\\\n--\ Compiling\ entity\ \\NoiseI_blk_mem_gen_prim_wrapper_init__parameterized1\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\NoiseI_blk_mem_gen_prim_wrapper_init__parameterized1\\\n--\ Compiling\ entity\ NoiseI_blk_mem_gen_prim_width\n--\ Compiling\ architecture\ STRUCTURE\ of\ NoiseI_blk_mem_gen_prim_width\n--\ Loading\ entity\ NoiseI_blk_mem_gen_prim_wrapper_init\n--\ Compiling\ entity\ \\NoiseI_blk_mem_gen_prim_width__parameterized0\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\NoiseI_blk_mem_gen_prim_width__parameterized0\\\n--\ Loading\ entity\ \\NoiseI_blk_mem_gen_prim_wrapper_init__parameterized0\\\n--\ Compiling\ entity\ \\NoiseI_blk_mem_gen_prim_width__parameterized1\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\NoiseI_blk_mem_gen_prim_width__parameterized1\\\n--\ Loading\ entity\ \\NoiseI_blk_mem_gen_prim_wrapper_init__parameterized1\\\n--\ Compiling\ entity\ NoiseI_blk_mem_gen_generic_cstr\n--\ Compiling\ architecture\ STRUCTURE\ of\ NoiseI_blk_mem_gen_generic_cstr\n--\ Loading\ entity\ NoiseI_blk_mem_gen_mux\n--\ Loading\ entity\ NoiseI_blk_mem_gen_prim_width\n--\ Loading\ entity\ \\NoiseI_blk_mem_gen_prim_width__parameterized0\\\n--\ Loading\ entity\ \\NoiseI_blk_mem_gen_prim_width__parameterized1\\\n--\ Compiling\ entity\ NoiseI_blk_mem_gen_top\n--\ Compiling\ architecture\ STRUCTURE\ of\ NoiseI_blk_mem_gen_top\n--\ Loading\ entity\ NoiseI_blk_mem_gen_generic_cstr\n--\ Compiling\ entity\ NoiseI_blk_mem_gen_v8_3_6_synth\n--\ Compiling\ architecture\ STRUCTURE\ of\ NoiseI_blk_mem_gen_v8_3_6_synth\n--\ Loading\ entity\ NoiseI_blk_mem_gen_top\n--\ Compiling\ entity\ NoiseI_blk_mem_gen_v8_3_6\n--\ Compiling\ architecture\ STRUCTURE\ of\ NoiseI_blk_mem_gen_v8_3_6\n--\ Loading\ entity\ NoiseI_blk_mem_gen_v8_3_6_synth\n--\ Compiling\ entity\ NoiseI\n--\ Compiling\ architecture\ STRUCTURE\ of\ NoiseI\n--\ Loading\ entity\ NoiseI_blk_mem_gen_v8_3_6\n\n {} {}} C:/Semco/Vivado/BS1000_Demod_vivado2017/bitsyncBertTop.srcs/sources_1/ip/vioAsm/vioAsm_sim_netlist.vhdl {1 vcom\ -work\ work\ -2002\ -explicit\ -stats=none\ C:/Semco/Vivado/BS1000_Demod_vivado2017/bitsyncBertTop.srcs/sources_1/ip/vioAsm/vioAsm_sim_netlist.vhdl\nModel\ Technology\ ModelSim\ PE\ vcom\ 10.5c\ Compiler\ 2016.07\ Jul\ 21\ 2016\n--\ Loading\ package\ STANDARD\n--\ Loading\ package\ TEXTIO\n--\ Loading\ package\ std_logic_1164\n--\ Compiling\ entity\ vioAsm_vio_v3_0_16_decoder\n--\ Compiling\ architecture\ STRUCTURE\ of\ vioAsm_vio_v3_0_16_decoder\n--\ Compiling\ entity\ vioAsm_vio_v3_0_16_probe_out_one\n--\ Compiling\ architecture\ STRUCTURE\ of\ vioAsm_vio_v3_0_16_probe_out_one\n--\ Compiling\ entity\ \\vioAsm_vio_v3_0_16_probe_out_one__parameterized0\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\vioAsm_vio_v3_0_16_probe_out_one__parameterized0\\\n--\ Compiling\ entity\ \\vioAsm_vio_v3_0_16_probe_out_one__parameterized1\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\vioAsm_vio_v3_0_16_probe_out_one__parameterized1\\\n--\ Compiling\ entity\ \\vioAsm_vio_v3_0_16_probe_out_one__parameterized2\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\vioAsm_vio_v3_0_16_probe_out_one__parameterized2\\\n--\ Compiling\ entity\ \\vioAsm_vio_v3_0_16_probe_out_one__parameterized2_0\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\vioAsm_vio_v3_0_16_probe_out_one__parameterized2_0\\\n--\ Compiling\ entity\ \\vioAsm_vio_v3_0_16_probe_out_one__parameterized3\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\vioAsm_vio_v3_0_16_probe_out_one__parameterized3\\\n--\ Compiling\ entity\ vioAsm_vio_v3_0_16_probe_width\n--\ Compiling\ architecture\ STRUCTURE\ of\ vioAsm_vio_v3_0_16_probe_width\n--\ Compiling\ entity\ vioAsm_xsdbs_v1_0_2_xsdbs\n--\ Compiling\ architecture\ STRUCTURE\ of\ vioAsm_xsdbs_v1_0_2_xsdbs\n--\ Compiling\ entity\ vioAsm_vio_v3_0_16_probe_out_all\n--\ Compiling\ architecture\ STRUCTURE\ of\ vioAsm_vio_v3_0_16_probe_out_all\n--\ Loading\ entity\ vioAsm_vio_v3_0_16_probe_out_one\n--\ Loading\ entity\ \\vioAsm_vio_v3_0_16_probe_out_one__parameterized0\\\n--\ Loading\ entity\ \\vioAsm_vio_v3_0_16_probe_out_one__parameterized1\\\n--\ Loading\ entity\ \\vioAsm_vio_v3_0_16_probe_out_one__parameterized2\\\n--\ Loading\ entity\ \\vioAsm_vio_v3_0_16_probe_out_one__parameterized2_0\\\n--\ Loading\ entity\ \\vioAsm_vio_v3_0_16_probe_out_one__parameterized3\\\n--\ Compiling\ entity\ vioAsm_vio_v3_0_16_vio\n--\ Compiling\ architecture\ STRUCTURE\ of\ vioAsm_vio_v3_0_16_vio\n--\ Loading\ entity\ vioAsm_vio_v3_0_16_decoder\n--\ Loading\ entity\ vioAsm_vio_v3_0_16_probe_out_all\n--\ Loading\ entity\ vioAsm_vio_v3_0_16_probe_width\n--\ Loading\ entity\ vioAsm_xsdbs_v1_0_2_xsdbs\n--\ Compiling\ entity\ vioAsm\n--\ Compiling\ architecture\ STRUCTURE\ of\ vioAsm\n--\ Loading\ entity\ vioAsm_vio_v3_0_16_vio\n\n {} {}} C:/Semco/Vivado/BS1000_Demod_vivado2017/Turbo/fixed_pkg_2008Bishop.vhd {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/BS1000_Demod_vivado2017/Turbo/fixed_pkg_2008Bishop.vhd
 Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Loading package STANDARD
 -- Loading package TEXTIO
@@ -209,6 +219,18 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Loading package std_logic_textio
 -- Compiling package body fixed_pkg
 -- Loading package fixed_pkg
+
+} {} {}} C:/Semco/Vivado/BS1000_Demod_vivado2017/Turbo/Semco_pkg.vhd {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/BS1000_Demod_vivado2017/Turbo/Semco_pkg.vhd
+Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package fixed_pkg
+-- Loading package MATH_REAL
+-- Compiling package Semco_pkg
+-- Compiling package body Semco_pkg
+-- Loading package Semco_pkg
 
 } {} {}} {C:\Semco\Vivado\BS1000_Demod_vivado2017\Turbo/DecodeTurboInit.vhd} {1 {vcom -work work -2008 -explicit -check_synthesis -stats=none C:/Semco/Vivado/BS1000_Demod_vivado2017/Turbo/DecodeTurboInit.vhd
 Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
@@ -242,18 +264,6 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Loading package NUMERIC_STD
 -- Compiling entity RandomCcsds
 -- Compiling architecture rtl of RandomCcsds
-
-} {} {}} C:/Semco/Vivado/BS1000_Demod_vivado2017/Turbo/Semco_pkg.vhd {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/BS1000_Demod_vivado2017/Turbo/Semco_pkg.vhd
-Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
--- Loading package STANDARD
--- Loading package TEXTIO
--- Loading package std_logic_1164
--- Loading package NUMERIC_STD
--- Loading package fixed_pkg
--- Loading package MATH_REAL
--- Compiling package Semco_pkg
--- Compiling package body Semco_pkg
--- Loading package Semco_pkg
 
 } {} {}} C:/Semco/Vivado/TurboCodes/Turbo_ModelSim_tb.vhd {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/TurboCodes/Turbo_ModelSim_tb.vhd
 Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016

@@ -115,6 +115,9 @@ wire clk_in2_flexbusClock;
   wire        clkfbstopped_unused;
   wire        clkinstopped_unused;
   wire        reset_high;
+  (* KEEP = "TRUE" *) 
+  (* ASYNC_REG = "TRUE" *)
+  reg  [7 :0] seq_reg1 = 0;
 
   PLLE2_ADV
   #(.BANDWIDTH            ("OPTIMIZED"),
@@ -169,9 +172,18 @@ wire clk_in2_flexbusClock;
 
 
 
-  BUFG clkout1_buf
+
+  BUFGCE clkout1_buf
    (.O   (clk_out1),
+    .CE  (seq_reg1[7]),
     .I   (clk_out1_flexbusClock));
+
+  BUFH clkout1_buf_en
+   (.O   (clk_out1_flexbusClock_en_clk),
+    .I   (clk_out1_flexbusClock));
+  always @(posedge clk_out1_flexbusClock_en_clk)
+        seq_reg1 <= {seq_reg1[6:0],locked_int};
+
 
 
 

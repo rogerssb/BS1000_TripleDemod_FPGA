@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <GenRun Id="SovaMex_synth_1" LaunchPart="xc7k325tffg676-2" LaunchTime="1550783068">
-  <File Type="RDS-PROPCONSTRS" Name="SovaMex_drc_synth.rpt"/>
   <File Type="PA-TCL" Name="SovaMex.tcl"/>
+  <File Type="RDS-PROPCONSTRS" Name="SovaMex_drc_synth.rpt"/>
   <File Type="RDS-RDS" Name="SovaMex.vds"/>
   <File Type="RDS-UTIL" Name="SovaMex_utilization_synth.rpt"/>
   <File Type="RDS-UTIL-PB" Name="SovaMex_utilization_synth.pb"/>

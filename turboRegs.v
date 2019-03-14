@@ -10,7 +10,6 @@ module turboRegs(
     input               [31:0]  dataIn,
     input                       overflow,
     output  reg         [31:0]  dataOut,
-    input                       fifoOverflow,
     output  reg         [2:0]   codeRate,
     output  reg         [2:0]   codeLength,
     output  reg         [3:0]   maxIterations,
@@ -20,19 +19,8 @@ module turboRegs(
     output  reg         [3:0]   dac0Select,
     output  reg         [3:0]   dac1Select,
     output  reg         [3:0]   dac2Select,
-    output              [1:0]   bitSlips,
-    output              [4:0]   inLockBet,
-    output              [4:0]   ooLockBet,
-    output              [4:0]   verifies,
-    output              [4:0]   flywheels
+    output  reg         [31:0]  asmParms
 );
-
-    reg                 [31:0]  asmParms;
-    assign                      flywheels = asmParms[4:0];
-    assign                      inLockBet = asmParms[12:8];
-    assign                      ooLockBet = asmParms[20:16];
-    assign                      verifies = asmParms[28:24];
-    assign                      bitSlips = asmParms[31:30];
 
     always @(posedge busClk) begin
         if (cs & wr0) begin
@@ -52,7 +40,7 @@ module turboRegs(
                 end
                 `TURBO_ASM_PARMS: begin
                     asmParms[7:0] <= dataIn[7:0];
-                end
+                 end
                 default: ;
             endcase
         end
@@ -75,7 +63,7 @@ module turboRegs(
                 end
                 `TURBO_ASM_PARMS: begin
                     asmParms[15:8] <= dataIn[15:8];
-                end
+                 end
                 default:  ;
             endcase
         end
@@ -92,7 +80,7 @@ module turboRegs(
                 end
                 `TURBO_ASM_PARMS: begin
                     asmParms[23:16] <= dataIn[23:16];
-                end
+                 end
                 default: ;
             endcase
         end
@@ -103,7 +91,7 @@ module turboRegs(
             casex (addr)
                 `TURBO_ASM_PARMS: begin
                     asmParms[31:24] <= dataIn[31:24];
-                end
+                 end
                 default: ;
             endcase
         end
@@ -112,7 +100,7 @@ module turboRegs(
     always @* begin
         if (cs) begin
             casex (addr)
-                `TURBO_CONTROL:         dataOut = {15'b0, fifoOverflow,
+                `TURBO_CONTROL:         dataOut = {15'b0, overflow,
                                                    4'b0,maxIterations,
                                                    1'b0,codeLength,1'b0,codeRate};
                 `TURBO_INVERSE_MEAN:    dataOut = {13'h0,inverseMeanExponent,inverseMeanMantissa};
@@ -121,7 +109,7 @@ module turboRegs(
                                                    4'b0,dac2Select,
                                                    4'b0,dac1Select,
                                                    4'b0,dac0Select};
-                `TURBO_ASM_PARMS:       dataOut = asmParms;
+                `TURBO_ASM_PARMS:       dataOut = asmParms[31:0];
                 default:                dataOut = 32'h0;
             endcase
         end

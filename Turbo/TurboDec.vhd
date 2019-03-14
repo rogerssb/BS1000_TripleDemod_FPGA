@@ -53,14 +53,14 @@ USE work.Semco_pkg.ALL;
 ENTITY TurboDecoder IS
       GENERIC(
          FILE_LOC    : string := "./";
-         DATA_WIDTH  : positive := 8
+         DATA_WIDTH  : positive := 6
       );
    PORT(
-      Clk93,                             -- 93.3MHz Clock. I divide this by three for internal processing
-      Clk31,
+      Clk93,                              -- 93.3MHz Clock from MMCB bufg
+      Clk31,                              -- 31.1MHz Clock from MMCM bufg, Used for Sova processing
       Reset,
       ch0En,
-      ch1En          : IN  std_logic;  -- Valid data is active.
+      ch1En          : IN  std_logic;     -- Valid data is active.
       Ch0Data,
       Ch1Data        : IN  std_logic_vector(DATA_WIDTH-1 downto 0);  -- soft decision bit sync output
       Iterations     : IN  std_logic_vector(3 downto 0);  -- usually 10, upto 15
@@ -68,13 +68,18 @@ ENTITY TurboDecoder IS
       Rate,                                               -- (2, 3, 4 or 6) skip 5
       Frame          : IN  std_logic_vector(2 downto 0);  -- 1784*(1,2,4 or 5) skip 3
       ClkPerBit      : IN  std_logic_vector(15 downto 0); -- Data spreading count. Slightly less than 93.3/BR out
- --     AsmFrameParm   : IN  std_logic_vector(31 downto 0); -- ASM Frame Sync Parameters FlyWheel(4:0), Verifies(4:0), OOL_BET(4:0), IL_BET(4:0), BitSlips(1:0)
-      IterationCntr  : OUT std_logic_vector(3 downto 0);  -- test point, Current Iteration
+      BitSlips       : IN  STD_LOGIC_VECTOR(1 DOWNTO 0);  -- default 3
+      IL_BET         : IN  STD_LOGIC_VECTOR(4 DOWNTO 0);  -- default 20
+      OOL_BET        : IN  STD_LOGIC_VECTOR(4 DOWNTO 0);  -- default 10
+      Verifies       : IN  STD_LOGIC_VECTOR(4 DOWNTO 0);  -- default 3
+      FlyWheels      : IN  STD_LOGIC_VECTOR(4 DOWNTO 0);  -- default 3
+      IterationCntr  : OUT std_logic_vector(3 downto 0);  -- test point, Current Iteration output
       DataOut        : OUT std_logic_vector(SfixSova'length-1 downto 0); -- test point, soft data output
-      Magnitude      : OUT std_logic_vector(SfixSova'length downto 0); -- test point, signal magnitude
+      Magnitude      : OUT std_logic_vector(SfixSova'length downto 0);   -- test point, signal magnitude
       uHat,                                               -- test point, Bit Out per iteration. used to see progress
       SyncOut,                                            -- test point, one cycle end of iteration
       ValidOut,                                           -- test point, uHat valid
+      FifoOverflow,                                       -- Status, data rate is too high, Clear with Rate = 0
       BitOut,                                             -- actual data output
       BitClk,                                             -- spread 50% duty cycle gated clock output
       BitOutEn      : OUT std_logic                       -- bit en spread over ClkPerBit time
@@ -96,7 +101,7 @@ ARCHITECTURE rtl OF TurboDecoder IS
          Data0,               -- Data0 is first in SOQPSK mode but both show together
          Data1          : IN  std_logic_vector(DATA_WIDTH-1 downto 0);  -- soft decision bit sync output
          Frame,
-         Rate           : IN  std_logic_vector(2 downto 0);
+         Rate           : IN  integer range 0 to 7;
          ModMode,               -- 00 = BPSK, 01 = dual independent, ignore as 00, 10 = QPSK, 11 = SOQPSK
          BitSlips       : IN  std_logic_vector(1 downto 0);
          IL_BET,                                             -- In Lock Bit Error Threshold. Allowed number of invalid bits
@@ -171,7 +176,8 @@ ARCHITECTURE rtl OF TurboDecoder IS
          probe_out1 : OUT STD_LOGIC_VECTOR(4 DOWNTO 0);
          probe_out2 : OUT STD_LOGIC_VECTOR(4 DOWNTO 0);
          probe_out3 : OUT STD_LOGIC_VECTOR(4 DOWNTO 0);
-         probe_out4 : OUT STD_LOGIC_VECTOR(4 DOWNTO 0)
+         probe_out4 : OUT STD_LOGIC_VECTOR(4 DOWNTO 0);
+         probe_out5 : OUT STD_LOGIC_VECTOR(15 DOWNTO 0)
       );
    END COMPONENT;
 
@@ -198,6 +204,8 @@ ARCHITECTURE rtl OF TurboDecoder IS
    SIGNAL   DataAsm,
             FifoData       : std_logic_vector(DATA_WIDTH-1 downto 0);
    SIGNAL   FifoRdCount    : std_logic_vector(14 downto 0);
+   SIGNAL   BerCount,
+            BerCntr        : unsigned(15 downto 0);
    SIGNAL   FrameCntr,
             PciaCntr,
             SovaIndexA,
@@ -212,6 +220,7 @@ ARCHITECTURE rtl OF TurboDecoder IS
    SIGNAL   SovaIndex      : STD_LOGIC_VECTOR(13 downto 0);
    SIGNAL   SovaReset,
             Div31By2,
+            Reset93,
             Reset31,
             Empty,
             FifoReadEn,
@@ -220,6 +229,7 @@ ARCHITECTURE rtl OF TurboDecoder IS
             FifoSyncIn,
             ValidAsm,
             SyncAsm,
+            Overflow,
             ValidFE,
             PreValidOut0,
             PreValidOut1,
@@ -272,22 +282,51 @@ ARCHITECTURE rtl OF TurboDecoder IS
             BitOutSlv      : std_logic_vector(0 to 0);
    signal   FrameLast      : integer range FRAME_SIZE(1) - 1 to FRAME_SIZE(5) + 4;
 
-   signal   BitSlips       : STD_LOGIC_VECTOR(1 DOWNTO 0);
-   signal   IL_BET         : STD_LOGIC_VECTOR(4 DOWNTO 0);
-   signal   OOL_BET        : STD_LOGIC_VECTOR(4 DOWNTO 0);
-   signal   Verifies       : STD_LOGIC_VECTOR(4 DOWNTO 0);
-   signal   FlyWheels      : STD_LOGIC_VECTOR(4 DOWNTO 0);
+   signal   ClksPerBit,
+            ClksPerBitVio  : STD_LOGIC_VECTOR(15 DOWNTO 0);
 
+   signal   BitSlipsVio,
+            BitSlipsAsm    : STD_LOGIC_VECTOR(1 DOWNTO 0);
+   signal   IL_BETVio,
+            IL_BETAsm,
+            OOL_BETVio,
+            OOL_BETAsm,
+            VerifiesVio,
+            VerifiesAsm,
+            FlyWheelsVio,
+            FlyWheelsAsm   : STD_LOGIC_VECTOR(4 DOWNTO 0);
+   signal   BitOutErr      : std_logic;
+   signal   PRN_BitOut,
+            PRN_Shift      : std_logic_vector(5 downto 0);
 
-   signal   PCI01      : STD_LOGIC_VECTOR(0 to SfixPci'length*2-1);
-   signal   EuI_Slv        : STD_LOGIC_VECTOR(SfixSova'length-1 downto 0);
    attribute MARK_DEBUG : string;
-   attribute MARK_DEBUG of Ch0Data, ch0En, BitOut, BitOutEn, PCI01,
-             SovaReady, SovaActiveA, SovaActiveB, EuI_Slv, EuO, SovaValidOut, uHatB : signal is "true";
+   attribute MARK_DEBUG of BitOut, BitOutEn, BitOutErr, SyncOut, IterationCntr,
+             BerCount, BerCntr, ClksPerBit : signal is "true";
 
 BEGIN
-EuI_Slv <= to_slv(EuI);
-PCI01   <= PCI(0 to sfixPci'length*2-1);
+
+BitErrProc : process(Clk93)
+begin
+   if (rising_edge(Clk93)) then
+      if (Reset93) then
+         PRN_BitOut <= (others=>'0');
+      elsif(BitOutEn) then
+         PRN_BitOut <= PRN_BitOut(4 downto 0) & BitOut;
+         BitOutErr  <= PRN_BitOut(5) xor PRN_BitOut(4) xor BitOut;
+      end if;
+
+      if (SyncOut or Reset93) then
+         BerCntr <= (others=>'0');
+         BerCount <= BerCntr;
+      elsif (ValidOut) then
+         PRN_Shift <= PRN_Shift(4 downto 0) & uHat;
+         if (PRN_Shift(5) xor PRN_Shift(4) xor uHat) then
+            BerCntr <= BerCntr + 1;
+         end if;
+      end if;
+
+   end if;
+end process;
 
    Rate_u    <= to_integer(unsigned(Rate));
    Frame_u   <= to_integer(unsigned(Frame));
@@ -298,10 +337,11 @@ PCI01   <= PCI(0 to sfixPci'length*2-1);
    DivBy3Proc : process(Clk93)
    begin
       if (rising_edge(Clk93)) then
+         Reset93 <= Reset;    -- Reset needs to be synchronouse
          if (Reset) then
-            Reset31    <= '1';
+            Reset31 <= '1';
          elsif(Clk31) then
-            Reset31    <= '0';
+            Reset31 <= Reset;
          end if;
       end if;
    end process DivBy3Proc;
@@ -309,13 +349,20 @@ PCI01   <= PCI(0 to sfixPci'length*2-1);
    VioAsm_u : vioAsm
       PORT MAP (
          clk        => Clk93,
-         probe_out0 => BitSlips,
-         probe_out1 => IL_BET,
-         probe_out2 => OOL_BET,
-         probe_out3 => Verifies,
-         probe_out4 => FlyWheels
-      )
-   ;
+         probe_out0 => BitSlipsVio,
+         probe_out1 => IL_BETVio,
+         probe_out2 => OOL_BETVio,
+         probe_out3 => VerifiesVio,
+         probe_out4 => FlyWheelsVio,
+         probe_out5 => ClksPerBitVio
+      );
+
+   ClksPerBit   <= ClksPerBitVio when (or(ClksPerBitVio)) else ClkPerBit;
+   BitSlipsAsm  <= BitSlipsVio   when (or(ClksPerBitVio)) else BitSlips;
+   IL_BETAsm    <= IL_BETVio     when (or(ClksPerBitVio)) else IL_BET;
+   OOL_BETAsm   <= OOL_BETVio    when (or(ClksPerBitVio)) else OOL_BET;
+   VerifiesAsm  <= VerifiesVio   when (or(ClksPerBitVio)) else Verifies;
+   FlyWheelsAsm <= FlyWheelsVio  when (or(ClksPerBitVio)) else FlyWheels;
 
    ASM : TurboASM
       GENERIC MAP (
@@ -323,19 +370,19 @@ PCI01   <= PCI(0 to sfixPci'length*2-1);
       )
       PORT MAP(
          Clk         => Clk93,
-         Reset       => Reset,
+         Reset       => Reset93,
          Valid0      => ch0En,
          Valid1      => ch1En,
          Data0       => ch0Data,
          Data1       => ch1Data,
-         Rate        => Rate,
-         Frame       => Frame,
+         Rate        => Rate_u,
+         Frame       => Frame_u,
          ModMode     => BitSyncMode,
-         BitSlips    => BitSlips,
-         IL_BET      => IL_BET,
-         OOL_BET     => OOL_BET,
-         Verifies    => Verifies,
-         FlyWheels   => FlyWheels,
+         BitSlips    => BitSlipsAsm,
+         IL_BET      => IL_BETAsm,
+         OOL_BET     => OOL_BETAsm,
+         Verifies    => VerifiesAsm,
+         FlyWheels   => FlyWheelsAsm,
          InvertOdd   => open,
          InvertEven  => open,
          SyncOut     => SyncAsm,
@@ -355,6 +402,12 @@ PCI01   <= PCI(0 to sfixPci'length*2-1);
             FifoValid31 <= '0';
          end if;
          FifoValid  <= not Empty and FifoReadEn and Div31By2 and Clk31;
+
+         if (Rate_u = 0) then
+            FifoOverflow <= '0';
+         elsif (Overflow) then
+            FifoOverflow <= '1';
+         end if;
       end if;
    end process FifoDelayProc;
 
@@ -371,7 +424,7 @@ PCI01   <= PCI(0 to sfixPci'length*2-1);
       WAKEUP_TIME              => 0                 --positive integer; 0 or 2;
    )
    port map (
-      rst              => Reset,
+      rst              => Reset93,
       wr_clk           => Clk93,
       wr_en            => ValidDly(ValidDly'left),
       din              => InputDly(InputDly'left),
@@ -379,6 +432,7 @@ PCI01   <= PCI(0 to sfixPci'length*2-1);
       dout             => FifoOut,
       empty            => open,
       rd_data_count    => FifoRdCount,
+      overflow         => Overflow,
       sleep            => '0',
       injectsbiterr    => '0',
       injectdbiterr    => '0'
@@ -408,7 +462,7 @@ PCI01   <= PCI(0 to sfixPci'length*2-1);
          ce          => '1',
          SyncIn      => FifoSyncIn or NextFrame,
          ValidIn     => FifoValid31 and not FifoSyncIn,
-         Rate        => to_integer(unsigned(Rate)),
+         Rate        => Rate_u,
          DataIn      => FifoData,
          PCIA        => PCIA,
          PCIB        => PCIB,
@@ -435,7 +489,7 @@ PCI01   <= PCI(0 to sfixPci'length*2-1);
    FifoReadEnProcess : process(Clk93)
    begin
       if (rising_edge(Clk93)) then
-         if (Reset) then
+         if (Reset93) then
             FifoReadEn     <= '1';
          elsif ((FifoSyncIn and not FrameFull) or NextFrame) then   -- if SyncIn and not busy, or continue NextFrame
             FifoReadEn     <= '1';
@@ -450,7 +504,7 @@ PCI01   <= PCI(0 to sfixPci'length*2-1);
       variable PCIB_Concat : std_logic_vector(SfixPci'length*4 -1 downto 0);
    begin
       if (rising_edge(Clk31)) then
-         if (Reset or (FifoSyncIn and not FrameFull) or NextFrame) then   -- if SyncIn and not busy, or continue NextFrame
+         if (Reset31 or (FifoSyncIn and not FrameFull) or NextFrame) then   -- if SyncIn and not busy, or continue NextFrame
             FrameCntr      <= 0;
             PciaCntr       <= 0;
             IT_Addr        <= 0;
@@ -606,7 +660,7 @@ PCI01   <= PCI(0 to sfixPci'length*2-1);
          EuI      => to_slv(EuI),                  -- EuIA,
          PCI      => PCI,                          -- PCIA_Read,
          peC      => eC,                           -- eCA,
-         Frame    => Frame,
+         Frame    => std_logic_vector(to_unsigned(Frame_u, 3)),
          InReady  => SovaReady,                    -- SovaReadyA,
          IndexOut => SovaIndex,                    -- SovaIndexA,
          ValidOut => SovaValidOut,                 -- SovaValidOutA,
@@ -626,7 +680,7 @@ PCI01   <= PCI(0 to sfixPci'length*2-1);
             end if;
          end if;
 
-         if (Reset) then
+         if (Reset93) then
             ValidOutDly <= '0';
             SyncOutDly  <= '0';
          else
@@ -634,20 +688,20 @@ PCI01   <= PCI(0 to sfixPci'length*2-1);
             SyncOutDly  <= SyncOut31;
          end if;
 
-         if (Reset) then
+         if (Reset93) then
             OutCntr  <= FrameLast;
             BitOutEn <= '0';
             BitCntr  <= 0;
          elsif ((BitSync = '1') and (BitCntr = 0)) then
             OutCntr  <= 0;
             BitOutEn <= '1';
-            BitCntr  <= to_integer(unsigned(ClkPerBit));
+            BitCntr  <= to_integer(unsigned(ClksPerBit));
          elsif (BitCntr > 0) then
             BitCntr  <= BitCntr - 1;
             BitOutEn <= '0';
          else        -- when done, BitCntr and OutCntr will be zero with BitOutEn = '0'
             if (OutCntr < FRAME_SIZE(Frame_u) - 1) then
-               BitCntr <= to_integer(unsigned(ClkPerBit));
+               BitCntr <= to_integer(unsigned(ClksPerBit));
                OutCntr  <= OutCntr + 1;
                BitOutEn <= '1';
             else
@@ -656,7 +710,7 @@ PCI01   <= PCI(0 to sfixPci'length*2-1);
          end if;
 
          if (BitOutEn) then
-            ClkOutCnt  <= to_integer(unsigned(ClkPerBit)) / 2;
+            ClkOutCnt  <= to_integer(unsigned(ClksPerBit)) / 2;
             BitClk     <= '0';
          elsif (ClkOutCnt > 0) then
             ClkOutCnt <= ClkOutCnt - 1;

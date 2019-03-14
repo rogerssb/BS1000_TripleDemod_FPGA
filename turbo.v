@@ -3,7 +3,7 @@
 `include "addressMap.v"
 
 module turbo #(parameter TURBOBITS = 3) (
-    input                       clk93, clk31, clkEn,reset,
+    input                       clk93, clk31, clkEn, reset,
     input                       busClk,
     input                       cs,
     input                       wr0,wr1,wr2,wr3,
@@ -42,11 +42,7 @@ module turbo #(parameter TURBOBITS = 3) (
     wire    [3:0]   dac0Select;
     wire    [3:0]   dac1Select;
     wire    [3:0]   dac2Select;
-    wire    [1:0]   bitSlips;
-    wire    [4:0]   inLockBet;
-    wire    [4:0]   ooLockBet;
-    wire    [4:0]   verifies;
-    wire    [4:0]   flywheels;
+    wire    [31:0]  asmParms;
     turboRegs tregs(
         .busClk(busClk),
         .cs(turboSpace),
@@ -54,7 +50,7 @@ module turbo #(parameter TURBOBITS = 3) (
         .addr(addr),
         .dataIn(din),
         .dataOut(dout),
-        .fifoOverflow(fifoOverflow),
+        .overflow(overflow),
         .inverseMeanMantissa(invMeanMantissa),
         .inverseMeanExponent(invMeanExponent),
         .codeRate(codeRate),
@@ -64,11 +60,7 @@ module turbo #(parameter TURBOBITS = 3) (
         .dac0Select(dac0Select),
         .dac1Select(dac1Select),
         .dac2Select(dac2Select),
-        .bitSlips(bitSlips),
-        .inLockBet(inLockBet),
-        .ooLockBet(ooLockBet),
-        .verifies(verifies),
-        .flywheels(flywheels)
+        .asmParms(asmParms)
     );
 
     // Clock enables.
@@ -139,11 +131,9 @@ module turbo #(parameter TURBOBITS = 3) (
         end
     end
 
-    `ifdef ADD_TURBOD
-    wire    [3:0]   iterationNumber;
     TurboDecoder #(.DATA_WIDTH(TURBOBITS+1)) turbod (
-        .Clk93(clk),
-        .Clk31(clk31),
+        .clk93(clk93),
+        .clk31(clk31),
         .Reset(reset),
         .bitsyncMode(bitsyncMode),
         .ch0En(iSoftEn),
@@ -156,19 +146,22 @@ module turbo #(parameter TURBOBITS = 3) (
         .Rate(codeRate),
         .Frame(codeLength),
         .ClkPerBit(outputEnClkDiv),
-        .BitSlips(bitSlips),
-        .IterationCntr(iterationNumber),
+        .FlyWheels(asmParms[4:0]),
+        .IL_BET(asmParms[12:8]),
+        .OOL_BET(asmParms[20:16]),
+        .Verifies(asmParms[28:24]),
+        .BitSlips(asmParms[31:30]),
+        .IterationCntr(),
         .DataOut(),
         .Magnitude(),
         .SyncOut(),
         .uHat(),
         .ValidOut(),
-        .FifoOverflow(fifoOverflow),
-        .BitOut(turboBitOut),
+        .FifoOverflow(overflow),
         .BitClk(),
+        .BitOut(turboBitOut),
         .BitOutEn(turboBitEnOut)
     );
-    `endif
 
     always @(posedge clk93) begin
         case (dac0Select)

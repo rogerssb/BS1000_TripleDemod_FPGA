@@ -116,6 +116,12 @@ wire clk_in2_systemClock;
   wire        clkfbstopped_unused;
   wire        clkinstopped_unused;
   wire        reset_high;
+  (* KEEP = "TRUE" *) 
+  (* ASYNC_REG = "TRUE" *)
+  reg  [7 :0] seq_reg1 = 0;
+  (* KEEP = "TRUE" *) 
+  (* ASYNC_REG = "TRUE" *)
+  reg  [7 :0] seq_reg2 = 0;
 
   PLLE2_ADV
   #(.BANDWIDTH            ("OPTIMIZED"),
@@ -173,14 +179,32 @@ wire clk_in2_systemClock;
 
 
 
-  BUFG clkout1_buf
+
+  BUFGCE clkout1_buf
    (.O   (clk93),
+    .CE  (seq_reg1[7]),
     .I   (clk93_systemClock));
 
+  BUFH clkout1_buf_en
+   (.O   (clk93_systemClock_en_clk),
+    .I   (clk93_systemClock));
+  always @(posedge clk93_systemClock_en_clk)
+        seq_reg1 <= {seq_reg1[6:0],locked_int};
 
-  BUFG clkout2_buf
+
+  BUFGCE clkout2_buf
    (.O   (clk31),
+    .CE  (seq_reg2[7]),
     .I   (clk31_systemClock));
+ 
+  BUFH clkout2_buf_en
+   (.O   (clk31_systemClock_en_clk),
+    .I   (clk31_systemClock));
+ 
+  always @(posedge clk31_systemClock_en_clk)
+        seq_reg2 <= {seq_reg2[6:0],locked_int};
+
+
 
 
 

@@ -50,14 +50,16 @@ entity TurboVivado_tb is
       );
       Port (
          Clk93,
-         ClkPll      : IN Std_logic;
+         ClkPll,
+         TurboClk,
+         TurboData   : IN Std_logic;
 
-         Pll3Ref,
+         Pll3Ref,    -- Tied to Clk93 for PLL3 reference input
          SClk,
          MOSI,
          CS,
          PD_n,
-         Pll2Ref,
+         Pll2Ref,    -- Tied to ClkPll as test point on U23-1
          BitClk,
          BitOut      : OUT std_logic
       );
@@ -70,7 +72,7 @@ architecture rtl of TurboVivado_tb is
    Component TurboDecoder IS
       GENERIC(
          FILE_LOC    : string := "TurboCodes/";
-         DATA_WIDTH  : positive := 8
+         DATA_WIDTH  : positive := SfixTurboIn'length
       );
       PORT(
          Clk93,                             -- 93.3MHz Clock. I divide this by three for internal processing
@@ -79,7 +81,7 @@ architecture rtl of TurboVivado_tb is
          ch0En,
          ch1En          : IN  std_logic;  -- Valid data is active.
          Ch0Data,
-         Ch1Data        : IN  std_logic_vector(DATA_WIDTH-1 downto 0);  -- soft decision bit sync output
+         Ch1Data        : IN  std_logic_vector(17 downto 0);  --DATA_WIDTH-1 FZ soft decision bit sync output
          Iterations     : IN  std_logic_vector(3 downto 0);  -- usually 10, upto 15
          BitSyncMode    : IN  std_logic_vector(1 downto 0);  -- 00 single, 01 individual, 10 QPSK, 11 OQPSK
          Rate,                                               -- (2, 3, 4 or 6) skip 5
@@ -181,16 +183,20 @@ architecture rtl of TurboVivado_tb is
             AsmOut         : std_logic_vector(21 downto 0);
    signal   SyncEnc,
             ValidIn,
+            ValidInt,
+            DataInt,
             SyncOut,
             SyncAsm,
             InvertOdd,
             InvertEven,
             resetBufg,
+            TurboClkDly,
             uHat,
             DataIn,
             BitOutEn,
             BitOutErr,
             ValidOut       : std_logic := '0';
+   signal   Probe8         : STD_LOGIC_VECTOR(21 DOWNTO 0);
    signal   ResetVio       : std_logic_vector(0 downto 0);
    signal   BerCntr,
             BerCount       : integer := 0;
@@ -265,19 +271,33 @@ begin
          FILE_LOC    => FILE_LOC
       )
       PORT MAP (
-         Clk      => ClkPll,
+         Clk      => Clk93, -- Pll,
          reset    => resetBufg,
          Rate     => RateOut,
          Frame    => FrameOut,
          ClkRate  => ClkRateOut,
          SyncOut  => SyncEnc,
-         ValidOut => ValidIn,
-         DataOut  => DataIn
+         ValidOut => ValidInt,
+         DataOut  => DataInt
    );
+
+   TurboProc : process(Clk93) -- Pll
+   begin
+      if (rising_edge(Clk93)) then
+         TurboClkDly <= TurboClk;
+         if (Probe8(0) = '1') and (ControlSel) then
+            ValidIn  <= TurboClk and not TurboClkDly; -- rising edge detect
+            DataIn   <= TurboData;
+         else
+            ValidIn  <= ValidInt;
+            DataIn   <= DataInt;
+          end if;
+      end if;
+   end process;
 
     Vio : TurboVio
       PORT MAP (
-         clk => ClkPll,
+         clk => Clk93, -- Pll,
          probe_out0 => ItersVio,
          probe_out1 => ResetVio,
          probe_out2 => GainVio,
@@ -286,12 +306,12 @@ begin
          probe_out5 => Div2Vio,
          probe_out6 => ClkRateVio,
          probe_out7 => ClkPerBitVio,
-         probe_out8 => open
+         probe_out8 => Probe8
    );
 
-   clk_process : process(ClkPll)
+   clk_process : process(Clk93) -- Pll
    begin
-      if (rising_edge(ClkPll)) then
+      if (rising_edge(Clk93)) then
          reset    <= reset(4 downto 0) & ResetVio(0);
 
          Clk31 <= Clk31(1 downto 0) & Clk31(2);
@@ -327,7 +347,7 @@ begin
 
    DF_Rom : TurboDF_Rom
       PORT MAP(
-         Clk      => ClkPll,
+         Clk      => Clk93, -- Pll,
          Reset    => resetBufg,
          CountEn  => ValidIn,
          ReNoise  => NoiseSlv
@@ -347,13 +367,13 @@ begin
          DATA_WIDTH     => DF_WIDTH
          )
       PORT MAP(
-         Clk93          => ClkPll,
+         Clk93          => Clk93, -- Pll,
          Clk31          => Clk31(2),
          reset          => resetBufg,
          ch0En          => ValidIn,
          ch1En          => '0',
-         Ch0Data        => to_slv(Sum),
-         Ch1Data        => to_slv(Data),
+         Ch0Data        => to_slv(Sum) & 12x"0",
+         Ch1Data        => to_slv(Data) & 12x"0",
          BitSyncMode    => "00",
          Rate           => std_logic_vector(to_unsigned(RateOut,3)),
          Frame          => std_logic_vector(to_unsigned(FrameOut,3)),
