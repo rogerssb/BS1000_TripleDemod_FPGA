@@ -42,6 +42,11 @@ module turbo #(parameter TURBOBITS = 3) (
     wire    [3:0]   dac0Select;
     wire    [3:0]   dac1Select;
     wire    [3:0]   dac2Select;
+    wire    [1:0]   bitSlips;
+    wire    [4:0]   inLockBet;
+    wire    [4:0]   ooLockBet;
+    wire    [4:0]   verifies;
+    wire    [4:0]   flywheels;
     turboRegs tregs(
         .busClk(busClk),
         .cs(turboSpace),
@@ -49,6 +54,7 @@ module turbo #(parameter TURBOBITS = 3) (
         .addr(addr),
         .dataIn(din),
         .dataOut(dout),
+        .fifoOverflow(fifoOverflow),
         .inverseMeanMantissa(invMeanMantissa),
         .inverseMeanExponent(invMeanExponent),
         .codeRate(codeRate),
@@ -57,7 +63,12 @@ module turbo #(parameter TURBOBITS = 3) (
         .outputEnClkDiv(outputEnClkDiv),
         .dac0Select(dac0Select),
         .dac1Select(dac1Select),
-        .dac2Select(dac2Select)
+        .dac2Select(dac2Select),
+        .bitSlips(bitSlips),
+        .inLockBet(inLockBet),
+        .ooLockBet(ooLockBet),
+        .verifies(verifies),
+        .flywheels(flywheels)
     );
 
     // Clock enables.
@@ -131,7 +142,8 @@ module turbo #(parameter TURBOBITS = 3) (
     `ifdef ADD_TURBOD
     wire    [3:0]   iterationNumber;
     TurboDecoder #(.DATA_WIDTH(TURBOBITS+1)) turbod (
-        .clk(clk),
+        .Clk93(clk),
+        .Clk31(clk31),
         .Reset(reset),
         .bitsyncMode(bitsyncMode),
         .ch0En(iSoftEn),
@@ -144,13 +156,16 @@ module turbo #(parameter TURBOBITS = 3) (
         .Rate(codeRate),
         .Frame(codeLength),
         .ClkPerBit(outputEnClkDiv),
+        .BitSlips(bitSlips),
         .IterationCntr(iterationNumber),
         .DataOut(),
         .Magnitude(),
         .SyncOut(),
         .uHat(),
         .ValidOut(),
+        .FifoOverflow(fifoOverflow),
         .BitOut(turboBitOut),
+        .BitClk(),
         .BitOutEn(turboBitEnOut)
     );
     `endif

@@ -11,15 +11,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="145473333333fs"></ZoomStartTime>
-      <ZoomEndTime time="210473333334fs"></ZoomEndTime>
-      <Cursor1Time time="199640000000fs"></Cursor1Time>
+      <ZoomStartTime time="49701000000fs"></ZoomStartTime>
+      <ZoomEndTime time="51099000001fs"></ZoomEndTime>
+      <Cursor1Time time="51965000000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="179"></NameColumnWidth>
-      <ValueColumnWidth column_width="116"></ValueColumnWidth>
+      <ValueColumnWidth column_width="114"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="15" />
+   <WVObjectSize size="16" />
    <wave_markers>
       <marker time="6794918000" label="" />
    </wave_markers>
@@ -620,7 +620,6 @@
    <wvobject fp_name="group93" type="group">
       <obj_property name="label">MSE</obj_property>
       <obj_property name="DisplayName">label</obj_property>
-      <obj_property name="isExpanded"></obj_property>
       <wvobject fp_name="/test/mse/clk" type="logic">
          <obj_property name="ElementShortName">clk</obj_property>
          <obj_property name="ObjectShortName">clk</obj_property>
@@ -724,6 +723,79 @@
          <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
          <obj_property name="radix_fractionWidth">7</obj_property>
          <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="group113" type="group">
+      <obj_property name="label">Turbo</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/test/turbo/bitsyncMode" type="array">
+         <obj_property name="ElementShortName">bitsyncMode[1:0]</obj_property>
+         <obj_property name="ObjectShortName">bitsyncMode[1:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/turbo/iSymEn" type="logic">
+         <obj_property name="ElementShortName">iSymEn</obj_property>
+         <obj_property name="ObjectShortName">iSymEn</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/turbo/iSymData" type="array">
+         <obj_property name="ElementShortName">iSymData[17:0]</obj_property>
+         <obj_property name="ObjectShortName">iSymData[17:0]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">17</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+         <obj_property name="CellHeight">100</obj_property>
+         <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
+         <obj_property name="AnalogYRangeMin">0.000000</obj_property>
+         <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
+         <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
+         <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
+         <obj_property name="AnalogHorizLine">0.000000</obj_property>
+         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/turbo/invMeanMantissa" type="array">
+         <obj_property name="ElementShortName">invMeanMantissa[15:0]</obj_property>
+         <obj_property name="ObjectShortName">invMeanMantissa[15:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/turbo/invMeanExponent" type="array">
+         <obj_property name="ElementShortName">invMeanExponent[2:0]</obj_property>
+         <obj_property name="ObjectShortName">invMeanExponent[2:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/turbo/iSoftEn" type="logic">
+         <obj_property name="ElementShortName">iSoftEn</obj_property>
+         <obj_property name="ObjectShortName">iSoftEn</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/turbo/iSoft" type="array">
+         <obj_property name="ElementShortName">iSoft[4:0]</obj_property>
+         <obj_property name="ObjectShortName">iSoft[4:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/turbo/bitSoft" type="array">
+         <obj_property name="ElementShortName">bitSoft[4:0]</obj_property>
+         <obj_property name="ObjectShortName">bitSoft[4:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/turbo/dac0Select" type="array">
+         <obj_property name="ElementShortName">dac0Select[3:0]</obj_property>
+         <obj_property name="ObjectShortName">dac0Select[3:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/turbo/dac0ClkEn" type="logic">
+         <obj_property name="ElementShortName">dac0ClkEn</obj_property>
+         <obj_property name="ObjectShortName">dac0ClkEn</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/turbo/dac0Data" type="array">
+         <obj_property name="ElementShortName">dac0Data[17:0]</obj_property>
+         <obj_property name="ObjectShortName">dac0Data[17:0]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">17</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+         <obj_property name="CellHeight">100</obj_property>
+         <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
+         <obj_property name="AnalogYRangeMin">0.000000</obj_property>
+         <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
+         <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
+         <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
+         <obj_property name="AnalogHorizLine">0.000000</obj_property>
+         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
       </wvobject>
    </wvobject>
 </wave_config>

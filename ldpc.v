@@ -46,6 +46,7 @@ module ldpc #(parameter LDPCBITS = 3) (
         `define LDPC_180_DEGREES    2'b10
         `define LDPC_270_DEGREES    2'b11
     wire    [15:0]  outputEnClkDiv;
+    wire    [15:0]  maxIterations;
     wire    [31:0]  dllCenterFreq;
     wire    [4:0]   dllLoopGain;
     wire    [7:0]   dllFeedbackDivider;
@@ -68,6 +69,7 @@ module ldpc #(parameter LDPCBITS = 3) (
         .syncThreshold(syncThreshold),
         .ldpcRun(ldpcRun),
         .outputEnClkDiv(outputEnClkDiv),
+        .maxIterations(maxIterations),
         .invertData(invertData),
         .dllCenterFreq(dllCenterFreq),
         .dllLoopGain(dllLoopGain),
@@ -201,6 +203,7 @@ module ldpc #(parameter LDPCBITS = 3) (
         .rd_clk_out(clkEnOut),
         .cur_write_pos_V(ldpcWriteAddr),
         .Iteration_Number(iterationNumber),
+        .pMaxIterations(maxIterations),
         .read_clk_en(),
         .cur_read_pos_V(),
         .deran_data(),
