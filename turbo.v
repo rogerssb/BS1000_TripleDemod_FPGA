@@ -138,10 +138,10 @@ module turbo #(parameter TURBOBITS = 3) (
         .bitsyncMode(bitsyncMode),
         .ch0En(iSoftEn),
         // Add an LSB of 1 to create a mid-rise quantizer
-        .ch0Data({iSoft,1'b1}),
+        .ch0Data({iSymData[17:13],1'b1}),
         .ch1En(qSoftEn),
         // Add an LSB of 1 to create a mid-rise quantizer
-        .ch1Data({qSoft,1'b1}),
+        .ch1Data({qSymData[17:13],1'b1}),
         .Iterations(maxIterations),
         .Rate(codeRate),
         .Frame(codeLength),
