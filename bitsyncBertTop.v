@@ -97,6 +97,7 @@ module bitsyncBertTop (
         .reset(1'b0),
         .clk93(clk),
         .clk31(clk31),
+        .clk31Logic(clk31Logic),
         .locked(clkLocked)
      );
 /*
@@ -356,6 +357,7 @@ clockAndDataInputSync diffSync(
     turbo #(.TURBOBITS(5)) turbo (
         .clk93(clk),
         .clk31(clk31),
+        .clk31Logic(clk31Logic),
         .clkEn(ch0Sym2xEn),
         .reset(reset),
         .busClk(fb_clk),

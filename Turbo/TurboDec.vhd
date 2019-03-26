@@ -58,6 +58,7 @@ ENTITY TurboDecoder IS
    PORT(
       Clk93,                              -- 93.3MHz Clock from MMCB bufg
       Clk31,                              -- 31.1MHz Clock from MMCM bufg, Used for Sova processing
+      Clk31Logic,                         -- 31.1MHZ Clock from MMCM delayed slightly for setup/hold
       Reset,
       ch0En,
       ch1En          : IN  std_logic;     -- Valid data is active.
@@ -77,8 +78,6 @@ ENTITY TurboDecoder IS
       DataOut        : OUT std_logic_vector(SfixSova'length-1 downto 0); -- test point, soft data output
       Magnitude      : OUT std_logic_vector(SfixSova'length downto 0);   -- test point, signal magnitude
       uHat,                                               -- test point, Bit Out per iteration. used to see progress
-      SyncOut,                                            -- test point, one cycle end of iteration
-      ValidOut,                                           -- test point, uHat valid
       FifoOverflow,                                       -- Status, data rate is too high, Clear with Rate = 0
       BitOut,                                             -- actual data output
       BitClk,                                             -- spread 50% duty cycle gated clock output
@@ -101,7 +100,7 @@ ARCHITECTURE rtl OF TurboDecoder IS
          Data0,               -- Data0 is first in SOQPSK mode but both show together
          Data1          : IN  std_logic_vector(DATA_WIDTH-1 downto 0);  -- soft decision bit sync output
          Frame,
-         Rate           : IN  integer range 0 to 7;
+         Rate           : IN  std_logic_vector(2 downto 0);
          ModMode,               -- 00 = BPSK, 01 = dual independent, ignore as 00, 10 = QPSK, 11 = SOQPSK
          BitSlips       : IN  std_logic_vector(1 downto 0);
          IL_BET,                                             -- In Lock Bit Error Threshold. Allowed number of invalid bits
@@ -169,18 +168,6 @@ ARCHITECTURE rtl OF TurboDecoder IS
    );
    END COMPONENT SovaMex;
 
-   COMPONENT vioAsm
-      PORT (
-         clk : IN STD_LOGIC;
-         probe_out0 : OUT STD_LOGIC_VECTOR(1 DOWNTO 0);
-         probe_out1 : OUT STD_LOGIC_VECTOR(4 DOWNTO 0);
-         probe_out2 : OUT STD_LOGIC_VECTOR(4 DOWNTO 0);
-         probe_out3 : OUT STD_LOGIC_VECTOR(4 DOWNTO 0);
-         probe_out4 : OUT STD_LOGIC_VECTOR(4 DOWNTO 0);
-         probe_out5 : OUT STD_LOGIC_VECTOR(15 DOWNTO 0)
-      );
-   END COMPONENT;
-
    -- constants
    constant FRAME_SIZE  : int_array(0 to 5) := (1784, 1*1784, 2*1784, 3*1784, 4*1784, 5*1784);
    constant ZERO_PACK_LAST_4 : integer := 4;
@@ -238,7 +225,7 @@ ARCHITECTURE rtl OF TurboDecoder IS
             SyncOut31,
             SyncOutDly,
             ValidOut31,
-            ValidOutDly,
+            DoneIter,
             FrameFull,
             SovaActiveA,
             SovaActiveB,
@@ -281,31 +268,17 @@ ARCHITECTURE rtl OF TurboDecoder IS
    signal   uHatRamSlv,
             BitOutSlv      : std_logic_vector(0 to 0);
    signal   FrameLast      : integer range FRAME_SIZE(1) - 1 to FRAME_SIZE(5) + 4;
-
-   signal   ClksPerBit,
-            ClksPerBitVio  : STD_LOGIC_VECTOR(15 DOWNTO 0);
-
-   signal   BitSlipsVio,
-            BitSlipsAsm    : STD_LOGIC_VECTOR(1 DOWNTO 0);
-   signal   IL_BETVio,
-            IL_BETAsm,
-            OOL_BETVio,
-            OOL_BETAsm,
-            VerifiesVio,
-            VerifiesAsm,
-            FlyWheelsVio,
-            FlyWheelsAsm   : STD_LOGIC_VECTOR(4 DOWNTO 0);
    signal   BitOutErr      : std_logic;
    signal   PRN_BitOut,
             PRN_Shift      : std_logic_vector(5 downto 0);
 
    attribute MARK_DEBUG : string;
-   attribute MARK_DEBUG of BitOut, BitOutEn, BitOutErr, SyncOut, IterationCntr,
-             BerCount, BerCntr, ClksPerBit : signal is "true";
+   attribute MARK_DEBUG of BitOut, BitOutEn, BitOutErr, SyncOut31, IterationCntr,
+             BerCount, BerCntr, ClkPerBit : signal is "true";
 
 BEGIN
 
-BitErrProc : process(Clk93)
+BitOutProc : process(Clk93)
 begin
    if (rising_edge(Clk93)) then
       if (Reset93) then
@@ -314,17 +287,21 @@ begin
          PRN_BitOut <= PRN_BitOut(4 downto 0) & BitOut;
          BitOutErr  <= PRN_BitOut(5) xor PRN_BitOut(4) xor BitOut;
       end if;
+   end if;
+end process;
 
-      if (SyncOut or Reset93) then
+BitErrProc : process(Clk31)
+begin
+   if (rising_edge(Clk31)) then
+      if (SyncOut31 or Reset31) then
          BerCntr <= (others=>'0');
          BerCount <= BerCntr;
-      elsif (ValidOut) then
+      elsif (ValidOut31) then
          PRN_Shift <= PRN_Shift(4 downto 0) & uHat;
          if (PRN_Shift(5) xor PRN_Shift(4) xor uHat) then
             BerCntr <= BerCntr + 1;
          end if;
       end if;
-
    end if;
 end process;
 
@@ -340,29 +317,11 @@ end process;
          Reset93 <= Reset;    -- Reset needs to be synchronouse
          if (Reset) then
             Reset31 <= '1';
-         elsif(Clk31) then
+         elsif(Clk31Logic) then
             Reset31 <= Reset;
          end if;
       end if;
    end process DivBy3Proc;
-
-   VioAsm_u : vioAsm
-      PORT MAP (
-         clk        => Clk93,
-         probe_out0 => BitSlipsVio,
-         probe_out1 => IL_BETVio,
-         probe_out2 => OOL_BETVio,
-         probe_out3 => VerifiesVio,
-         probe_out4 => FlyWheelsVio,
-         probe_out5 => ClksPerBitVio
-      );
-
-   ClksPerBit   <= ClksPerBitVio when (or(ClksPerBitVio)) else ClkPerBit;
-   BitSlipsAsm  <= BitSlipsVio   when (or(ClksPerBitVio)) else BitSlips;
-   IL_BETAsm    <= IL_BETVio     when (or(ClksPerBitVio)) else IL_BET;
-   OOL_BETAsm   <= OOL_BETVio    when (or(ClksPerBitVio)) else OOL_BET;
-   VerifiesAsm  <= VerifiesVio   when (or(ClksPerBitVio)) else Verifies;
-   FlyWheelsAsm <= FlyWheelsVio  when (or(ClksPerBitVio)) else FlyWheels;
 
    ASM : TurboASM
       GENERIC MAP (
@@ -375,14 +334,14 @@ end process;
          Valid1      => ch1En,
          Data0       => ch0Data,
          Data1       => ch1Data,
-         Rate        => Rate_u,
-         Frame       => Frame_u,
+         Rate        => Rate,
+         Frame       => Frame,
          ModMode     => BitSyncMode,
-         BitSlips    => BitSlipsAsm,
-         IL_BET      => IL_BETAsm,
-         OOL_BET     => OOL_BETAsm,
-         Verifies    => VerifiesAsm,
-         FlyWheels   => FlyWheelsAsm,
+         BitSlips    => BitSlips,
+         IL_BET      => IL_BET,
+         OOL_BET     => OOL_BET,
+         Verifies    => Verifies,
+         FlyWheels   => FlyWheels,
          InvertOdd   => open,
          InvertEven  => open,
          SyncOut     => SyncAsm,
@@ -396,12 +355,12 @@ end process;
          InputDly <= InputDly(InputDly'left-1 downto 0) & (DataAsm & SyncAsm);   -- concat Sync to data so both arrive together
          ValidDly <= ValidDly(ValidDly'left-1 downto 0) & (ValidAsm or SyncAsm); -- write the sync to fifo to clear on output side
 
-         if (not Empty and FifoReadEn and Div31By2 and Clk31) then
+         if (not Empty and FifoReadEn and Div31By2 and Clk31Logic) then
             FifoValid31  <= '1';
-         elsif (Clk31) then
+         elsif (Clk31Logic) then
             FifoValid31 <= '0';
          end if;
-         FifoValid  <= not Empty and FifoReadEn and Div31By2 and Clk31;
+         FifoValid  <= not Empty and FifoReadEn and Div31By2 and Clk31Logic;
 
          if (Rate_u = 0) then
             FifoOverflow <= '0';
@@ -476,7 +435,7 @@ end process;
          FILE_LOC    => FILE_LOC
       )
       PORT MAP(
-         Clk      => Clk31,
+         Clk      => Clk93,
          ce       => FrameFull,
          Reset    => NextFrame,
          IT_Addr  => IT_Addr,
@@ -520,6 +479,7 @@ end process;
             SyncOut31      <= '0';
             PreValidOut0   <= '0';
             PreValidOut1   <= '0';
+            DoneIter       <= '0';
          else
             if (ValidFE and not FrameFull) then  -- ignore trailing data
                for n in 0 to 15 loop
@@ -541,6 +501,7 @@ end process;
 
             if (SovaIndexAB = FrameLast - 4) then
                PciaCntr <= 0; -- preset for next iteration
+               DoneIter <= '1';
             elsif (SovaIndexAB = FrameLast) then
                if (SovaActiveA) then     -- done first loop, run second
                   if (IterationCntr_u = Iterations_u) then -- Iterations - 1, we're done
@@ -552,7 +513,8 @@ end process;
                      SovaActiveA <= '0';
                      SovaActiveB <= '1';
                   end if;
-                  SyncOut31  <= '1';
+                  SyncOut31  <= DoneIter;  -- only high for one tick.
+                  DoneIter   <= '0';
                else  -- if SovaActiveB               -- next iteration
                   SovaActiveA  <= '1';
                   SovaActiveB  <= '0';
@@ -562,6 +524,8 @@ end process;
                end if;
             elsif (FrameFull and SovaReady) then
                PciaCntr <= PciaCntr + 1;
+               SyncOut31 <= '0';
+            else
                SyncOut31 <= '0';
             end if;
 
@@ -681,27 +645,19 @@ end process;
          end if;
 
          if (Reset93) then
-            ValidOutDly <= '0';
-            SyncOutDly  <= '0';
-         else
-            ValidOutDly <= ValidOut31;
-            SyncOutDly  <= SyncOut31;
-         end if;
-
-         if (Reset93) then
             OutCntr  <= FrameLast;
             BitOutEn <= '0';
             BitCntr  <= 0;
          elsif ((BitSync = '1') and (BitCntr = 0)) then
             OutCntr  <= 0;
             BitOutEn <= '1';
-            BitCntr  <= to_integer(unsigned(ClksPerBit));
+            BitCntr  <= to_integer(unsigned(ClkPerBit));
          elsif (BitCntr > 0) then
             BitCntr  <= BitCntr - 1;
             BitOutEn <= '0';
          else        -- when done, BitCntr and OutCntr will be zero with BitOutEn = '0'
             if (OutCntr < FRAME_SIZE(Frame_u) - 1) then
-               BitCntr <= to_integer(unsigned(ClksPerBit));
+               BitCntr <= to_integer(unsigned(ClkPerBit));
                OutCntr  <= OutCntr + 1;
                BitOutEn <= '1';
             else
@@ -710,18 +666,17 @@ end process;
          end if;
 
          if (BitOutEn) then
-            ClkOutCnt  <= to_integer(unsigned(ClksPerBit)) / 2;
+            ClkOutCnt  <= to_integer(unsigned(ClkPerBit)) / 2;
             BitClk     <= '0';
          elsif (ClkOutCnt > 0) then
             ClkOutCnt <= ClkOutCnt - 1;
          else
             BitClk <= '1';
          end if;
+
+         DataOut  <= to_slv(EuIAReg);
+
       end if;
    end process Clk93Proc;
-
-   DataOut  <= to_slv(EuIAReg);
-   SyncOut  <= SyncOut31 and not SyncOutDly;   -- resync outputs to main input clock
-   ValidOut <= ValidOut31 and not ValidOutDly;
 
 END rtl;

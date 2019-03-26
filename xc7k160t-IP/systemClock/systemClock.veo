@@ -55,8 +55,9 @@
 //  Output     Output      Phase    Duty Cycle   Pk-to-Pk     Phase
 //   Clock     Freq (MHz)  (degrees)    (%)     Jitter (ps)  Error (ps)
 //----------------------------------------------------------------------------
-// ___clk93____93.333______0.000______50.0______122.736_____91.947
-// ___clk31____31.111______0.000______33.3______150.933_____91.947
+// ___clk93____93.333______0.000______50.0______144.319____111.217
+// ___clk31____31.111______0.000______33.3______178.044____111.217
+// clk31Logic____31.111_____66.667______33.3______178.044____111.217
 //
 //----------------------------------------------------------------------------
 // Input Clock   Freq (MHz)    Input Jitter (UI)
@@ -74,7 +75,9 @@
     // Clock out ports
     .clk93(clk93),     // output clk93
     .clk31(clk31),     // output clk31
+    .clk31Logic(clk31Logic),     // output clk31Logic
     // Status and control signals
+    .reset(reset), // input reset
     .locked(locked),       // output locked
    // Clock in ports
     .clk_in1(clk_in1));      // input clk_in1

@@ -58,6 +58,7 @@
 //----------------------------------------------------------------------------
 // ___clk93____93.333______0.000______50.0______144.319____111.217
 // ___clk31____31.111______0.000______33.3______178.044____111.217
+// clk31Logic____31.111_____66.667______33.3______178.044____111.217
 //
 //----------------------------------------------------------------------------
 // Input Clock   Freq (MHz)    Input Jitter (UI)
@@ -72,6 +73,7 @@ module systemClock_clk_wiz
   // Clock out ports
   output        clk93,
   output        clk31,
+  output        clk31Logic,
   // Status and control signals
   input         reset,
   output        locked,
@@ -95,7 +97,7 @@ wire clk_in2_systemClock;
 
   wire        clk93_systemClock;
   wire        clk31_systemClock;
-  wire        clk_out3_systemClock;
+  wire        clk31Logic_systemClock;
   wire        clk_out4_systemClock;
   wire        clk_out5_systemClock;
   wire        clk_out6_systemClock;
@@ -108,7 +110,6 @@ wire clk_in2_systemClock;
   wire        clkfbout_systemClock;
   wire        clkfbout_buf_systemClock;
   wire        clkfboutb_unused;
-   wire clkout2_unused;
    wire clkout3_unused;
    wire clkout4_unused;
   wire        clkout5_unused;
@@ -122,6 +123,9 @@ wire clk_in2_systemClock;
   (* KEEP = "TRUE" *) 
   (* ASYNC_REG = "TRUE" *)
   reg  [7 :0] seq_reg2 = 0;
+  (* KEEP = "TRUE" *) 
+  (* ASYNC_REG = "TRUE" *)
+  reg  [7 :0] seq_reg3 = 0;
 
   PLLE2_ADV
   #(.BANDWIDTH            ("OPTIMIZED"),
@@ -136,6 +140,9 @@ wire clk_in2_systemClock;
     .CLKOUT1_DIVIDE       (27),
     .CLKOUT1_PHASE        (0.000),
     .CLKOUT1_DUTY_CYCLE   (0.333),
+    .CLKOUT2_DIVIDE       (27),
+    .CLKOUT2_PHASE        (66.667),
+    .CLKOUT2_DUTY_CYCLE   (0.333),
     .CLKIN1_PERIOD        (10.714))
   plle2_adv_inst
     // Output clocks
@@ -143,7 +150,7 @@ wire clk_in2_systemClock;
     .CLKFBOUT            (clkfbout_systemClock),
     .CLKOUT0             (clk93_systemClock),
     .CLKOUT1             (clk31_systemClock),
-    .CLKOUT2             (clkout2_unused),
+    .CLKOUT2             (clk31Logic_systemClock),
     .CLKOUT3             (clkout3_unused),
     .CLKOUT4             (clkout4_unused),
     .CLKOUT5             (clkout5_unused),
@@ -203,6 +210,19 @@ wire clk_in2_systemClock;
  
   always @(posedge clk31_systemClock_en_clk)
         seq_reg2 <= {seq_reg2[6:0],locked_int};
+
+
+  BUFGCE clkout3_buf
+   (.O   (clk31Logic),
+    .CE  (seq_reg3[7]),
+    .I   (clk31Logic_systemClock));
+ 
+  BUFH clkout3_buf_en
+   (.O   (clk31Logic_systemClock_en_clk),
+    .I   (clk31Logic_systemClock));
+ 
+  always @(posedge clk31Logic_systemClock_en_clk)
+        seq_reg3 <= {seq_reg3[6:0],locked_int};
 
 
 

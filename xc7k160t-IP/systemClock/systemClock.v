@@ -58,6 +58,7 @@
 //----------------------------------------------------------------------------
 // ___clk93____93.333______0.000______50.0______144.319____111.217
 // ___clk31____31.111______0.000______33.3______178.044____111.217
+// clk31Logic____31.111_____66.667______33.3______178.044____111.217
 //
 //----------------------------------------------------------------------------
 // Input Clock   Freq (MHz)    Input Jitter (UI)
@@ -66,13 +67,14 @@
 
 `timescale 1ps/1ps
 
-(* CORE_GENERATION_INFO = "systemClock,clk_wiz_v5_4_1_0,{component_name=systemClock,use_phase_alignment=true,use_min_o_jitter=false,use_max_i_jitter=false,use_dyn_phase_shift=false,use_inclk_switchover=false,use_dyn_reconfig=false,enable_axi=0,feedback_source=FDBK_AUTO,PRIMITIVE=PLL,num_out_clk=2,clkin1_period=10.714,clkin2_period=10.000,use_power_down=false,use_reset=true,use_locked=true,use_inclk_stopped=false,feedback_type=SINGLE,CLOCK_MGR_TYPE=NA,manual_override=false}" *)
+(* CORE_GENERATION_INFO = "systemClock,clk_wiz_v5_4_1_0,{component_name=systemClock,use_phase_alignment=true,use_min_o_jitter=false,use_max_i_jitter=false,use_dyn_phase_shift=false,use_inclk_switchover=false,use_dyn_reconfig=false,enable_axi=0,feedback_source=FDBK_AUTO,PRIMITIVE=PLL,num_out_clk=3,clkin1_period=10.714,clkin2_period=10.000,use_power_down=false,use_reset=true,use_locked=true,use_inclk_stopped=false,feedback_type=SINGLE,CLOCK_MGR_TYPE=NA,manual_override=false}" *)
 
 module systemClock 
  (
   // Clock out ports
   output        clk93,
   output        clk31,
+  output        clk31Logic,
   // Status and control signals
   input         reset,
   output        locked,
@@ -85,6 +87,7 @@ module systemClock
   // Clock out ports  
   .clk93(clk93),
   .clk31(clk31),
+  .clk31Logic(clk31Logic),
   // Status and control signals               
   .reset(reset), 
   .locked(locked),

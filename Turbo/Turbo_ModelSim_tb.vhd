@@ -38,11 +38,11 @@ use work.fixed_pkg.all;
 entity TurboModelSim_tb is
    GENERIC
    (
-      Rate        : integer := 2;   -- 2, 3, 4 or 6
+      Rate        : integer := 6;   -- 2, 3, 4 or 6
       Frame       : integer := 1;   -- 1, 2, 4 or 5
       ClkRate     : natural := 120 / Rate * 2;
       ClkPerBit   : std_logic_vector(15 downto 0) := std_logic_vector(to_unsigned(ClkRate * 2, 16));
-      GainIn      : sfixed(3 downto -8) := to_sfixed(0.00, 3, -8); -- 0.9 @ 0.25 SigAmp rate 2 is marginal
+      GainIn      : sfixed(3 downto -8) := to_sfixed(0.0, 3, -8); -- 0.9 @ 0.25 SigAmp rate 2 is marginal
       FILE_LOC    : string := "../";
       Iterations  : std_logic_vector(3 downto 0) := x"A"
    );

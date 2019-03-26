@@ -139,5 +139,5 @@ set_false_path -from [get_clocks fbClk] -to [get_ports pll*_PWDn]
 set_false_path -from [get_clocks fbClk] -to [get_ports ch*HighImpedance]
 set_false_path -from [get_clocks fbClk] -to [get_ports ch*SingleEnded]
 
-set_false_path -from [get_pins systemClock/inst/plle2_adv_inst/CLKOUT1] -to [get_pins {turbo/turbod/FifoValid31_reg/D turbo/turbod/FifoValid_reg/D turbo/turbod/Reset31_reg/D}]
+#set_false_path -from [get_pins systemClock/inst/plle2_adv_inst/CLKOUT1] -to [get_pins {turbo/turbod/FifoValid31_reg/D turbo/turbod/FifoValid_reg/D turbo/turbod/Reset31_reg/D}]
 

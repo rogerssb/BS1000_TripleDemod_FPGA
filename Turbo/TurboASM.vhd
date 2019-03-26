@@ -131,9 +131,9 @@ ARCHITECTURE rtl OF TurboASM IS
             CountPosEvenOdd,
             CountNegEvenOdd,
             CountPosOddOdd,
-            CountNegOddOdd,
-            MaxCount,
-            TotalBits      : natural range 0 to 96;  -- just test points
+            CountNegOddOdd : natural range 0 to 96;
+   signal   MaxCount,
+            TotalBits      : natural range 0 to 192;
    signal   Index,
             MaxIndex       : natural range 0 to 15;
    signal   BitSlips_u     : integer range 0 to 3;

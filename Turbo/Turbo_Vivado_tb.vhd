@@ -77,28 +77,65 @@ architecture rtl of TurboVivado_tb is
       PORT(
          Clk93,                             -- 93.3MHz Clock. I divide this by three for internal processing
          Clk31,
+         Clk31Logic,
          Reset,
          ch0En,
          ch1En          : IN  std_logic;  -- Valid data is active.
          Ch0Data,
-         Ch1Data        : IN  std_logic_vector(17 downto 0);  --DATA_WIDTH-1 FZ soft decision bit sync output
+         Ch1Data        : IN  std_logic_vector(DATA_WIDTH-1 downto 0);  -- soft decision bit sync output
          Iterations     : IN  std_logic_vector(3 downto 0);  -- usually 10, upto 15
          BitSyncMode    : IN  std_logic_vector(1 downto 0);  -- 00 single, 01 individual, 10 QPSK, 11 OQPSK
          Rate,                                               -- (2, 3, 4 or 6) skip 5
          Frame          : IN  std_logic_vector(2 downto 0);  -- 1784*(1,2,4 or 5) skip 3
          ClkPerBit      : IN  std_logic_vector(15 downto 0); -- Data spreading count. Slightly less than 93.3/BR out
---         AsmFrameParm   : IN  std_logic_vector(31 downto 0); -- ASM Frame Sync Parameters FlyWheel(4:0), Verifies(4:0), OOL_BET(4:0), IL_BET(4:0), BitSlips(1:0)
+         BitSlips       : IN  STD_LOGIC_VECTOR(1 DOWNTO 0);  -- default 3
+         IL_BET         : IN  STD_LOGIC_VECTOR(4 DOWNTO 0);  -- default 20
+         OOL_BET        : IN  STD_LOGIC_VECTOR(4 DOWNTO 0);  -- default 10
+         Verifies       : IN  STD_LOGIC_VECTOR(4 DOWNTO 0);  -- default 3
+         FlyWheels      : IN  STD_LOGIC_VECTOR(4 DOWNTO 0);  -- default 3
          IterationCntr  : OUT std_logic_vector(3 downto 0);  -- test point, Current Iteration
          DataOut        : OUT std_logic_vector(SfixSova'length-1 downto 0); -- test point, soft data output
          Magnitude      : OUT std_logic_vector(SfixSova'length downto 0); -- test point, signal magnitude
          uHat,                                               -- test point, Bit Out per iteration. used to see progress
-         SyncOut,                                            -- test point, one cycle end of iteration
-         ValidOut,                                           -- test point, uHat valid
          BitOut,                                             -- actual data output
          BitClk,                                             -- spread 50% duty cycle gated clock output
          BitOutEn      : OUT std_logic                       -- bit en spread over ClkPerBit time
       );
       END Component TurboDecoder;
+
+   Component TurboDecoder1 IS
+      GENERIC(
+         FILE_LOC    : string := "TurboCodes/";
+         DATA_WIDTH  : positive := SfixTurboIn'length
+      );
+      PORT(
+         Clk93,                             -- 93.3MHz Clock. I divide this by three for internal processing
+         Clk31,
+         Clk31Logic,
+         Reset,
+         ch0En,
+         ch1En          : IN  std_logic;  -- Valid data is active.
+         Ch0Data,
+         Ch1Data        : IN  std_logic_vector(DATA_WIDTH-1 downto 0);  -- soft decision bit sync output
+         Iterations     : IN  std_logic_vector(3 downto 0);  -- usually 10, upto 15
+         BitSyncMode    : IN  std_logic_vector(1 downto 0);  -- 00 single, 01 individual, 10 QPSK, 11 OQPSK
+         Rate,                                               -- (2, 3, 4 or 6) skip 5
+         Frame          : IN  std_logic_vector(2 downto 0);  -- 1784*(1,2,4 or 5) skip 3
+         ClkPerBit      : IN  std_logic_vector(15 downto 0); -- Data spreading count. Slightly less than 93.3/BR out
+         BitSlips       : IN  STD_LOGIC_VECTOR(1 DOWNTO 0);  -- default 3
+         IL_BET         : IN  STD_LOGIC_VECTOR(4 DOWNTO 0);  -- default 20
+         OOL_BET        : IN  STD_LOGIC_VECTOR(4 DOWNTO 0);  -- default 10
+         Verifies       : IN  STD_LOGIC_VECTOR(4 DOWNTO 0);  -- default 3
+         FlyWheels      : IN  STD_LOGIC_VECTOR(4 DOWNTO 0);  -- default 3
+         IterationCntr  : OUT std_logic_vector(3 downto 0);  -- test point, Current Iteration
+         DataOut        : OUT std_logic_vector(SfixSova'length-1 downto 0); -- test point, soft data output
+         Magnitude      : OUT std_logic_vector(SfixSova'length downto 0); -- test point, signal magnitude
+         uHat,                                               -- test point, Bit Out per iteration. used to see progress
+         BitOut,                                             -- actual data output
+         BitClk,                                             -- spread 50% duty cycle gated clock output
+         BitOutEn      : OUT std_logic                       -- bit en spread over ClkPerBit time
+      );
+      END Component TurboDecoder1;
 
    COMPONENT TurboEncode IS
       GENERIC
@@ -142,7 +179,7 @@ architecture rtl of TurboVivado_tb is
    END COMPONENT;
 
    constant DF_WIDTH       : integer := SfixTurboIn'length;
-   constant SIGNAL_AMP     : real := 0.25;
+   constant SIGNAL_AMP     : real := 0.995;
    constant FRAME_SIZE     : int_array(0 to 5) := (0, 1*1784, 2*1784, 3*1784, 4*1784, 5*1784);
    constant OOL_BET        : vector_of_slvs(0 to 6)(4 downto 0) := (5x"00", 5x"00", 5x"10", 5x"14", 5x"18", 5x"00", 5x"1c");
    constant IL_BET         : vector_of_slvs(0 to 6)(4 downto 0) := (5x"00", 5x"00", 5x"10", 5x"14", 5x"18", 5x"00", 5x"1c");
@@ -185,23 +222,17 @@ architecture rtl of TurboVivado_tb is
             ValidIn,
             ValidInt,
             DataInt,
-            SyncOut,
             SyncAsm,
             InvertOdd,
             InvertEven,
             resetBufg,
             TurboClkDly,
+            Clk31Logic,
             uHat,
             DataIn,
-            BitOutEn,
-            BitOutErr,
-            ValidOut       : std_logic := '0';
+            BitOutEn       : std_logic := '0';
    signal   Probe8         : STD_LOGIC_VECTOR(21 DOWNTO 0);
    signal   ResetVio       : std_logic_vector(0 downto 0);
-   signal   BerCntr,
-            BerCount       : integer := 0;
-   signal   PRN_Shift,
-            PRN_BitOut     : std_logic_vector(14 downto 0);
    signal   DataSlv        : SLV2;
    signal   Noise          : sfixed(0 downto -11);
    signal   Sum,
@@ -209,16 +240,7 @@ architecture rtl of TurboVivado_tb is
             Data           : SfixTurboIn;
    signal   NoiseSlv       : SLV12;
 
-   signal   BerCntrDbg, BerCountDbg : unsigned(9 downto 0);
-
-   attribute mark_debug : string;
-   attribute mark_debug of BerCntrDbg, BerCountDbg : signal is "true";
-   attribute mark_debug of SyncOut, BitClk, BitOut, BitOutErr : signal is "true";
-
 begin
-
-   BerCntrDbg  <= to_unsigned(BerCntr, 10);
-   BerCountDbg <= to_unsigned(BerCount, 10);
 
 /*
    The test bench is run on the BS1000 bit sync card but only uses the 93MHz ref,
@@ -286,7 +308,7 @@ begin
       if (rising_edge(Clk93)) then
          TurboClkDly <= TurboClk;
          if (Probe8(0) = '1') and (ControlSel) then
-            ValidIn  <= TurboClk and not TurboClkDly; -- rising edge detect
+            ValidIn  <= TurboClk and not TurboClkDly; -- rising edge detect on external data
             DataIn   <= TurboData;
          else
             ValidIn  <= ValidInt;
@@ -319,23 +341,6 @@ begin
          GainDbg <= GainVio;
          NoiseGain <= resize(Noise * Gain, NoiseGain);
 
-         if (SyncOut or resetBufg) then
-            BerCntr <= 0;
-            BerCount <= BerCntr;
-         elsif (ValidOut) then
-            PRN_Shift <= PRN_Shift(13 downto 0) & uHat;
-            if (PRN_Shift(14) xor PRN_Shift(13) xor uHat) then
-               BerCntr <= BerCntr + 1;
-            end if;
-         end if;
-
-         if (resetBufg) then
-            PRN_BitOut <= (others=>'0');
-         elsif(BitOutEn) then
-            PRN_BitOut <= PRN_BitOut(13 downto 0) & BitOut;
-            BitOutErr  <= PRN_BitOut(14) xor PRN_BitOut(13) xor BitOut;
-         end if;
-
       end if;
    end process;
 
@@ -360,6 +365,7 @@ begin
    Sum            <= resize(Data + NoiseGain, Sum, fixed_saturate, fixed_truncate);
    IterationsOut  <= Iterations when ControlSel else ItersVio;
    Gain           <= GainIn     when ControlSel else to_sfixed(GainDbg, Gain);
+   Clk31Logic     <= Clk31(2) after 2 ns;
 
    TurboDecTop : TurboDecoder
       GENERIC MAP(
@@ -369,26 +375,61 @@ begin
       PORT MAP(
          Clk93          => Clk93, -- Pll,
          Clk31          => Clk31(2),
+         Clk31Logic     => Clk31Logic,
          reset          => resetBufg,
          ch0En          => ValidIn,
          ch1En          => '0',
-         Ch0Data        => to_slv(Sum) & 12x"0",
-         Ch1Data        => to_slv(Data) & 12x"0",
+         Ch0Data        => to_slv(Sum),
+         Ch1Data        => to_slv(Data),
          BitSyncMode    => "00",
          Rate           => std_logic_vector(to_unsigned(RateOut,3)),
          Frame          => std_logic_vector(to_unsigned(FrameOut,3)),
          ClkPerBit      => ClkPerBitOut,
---         AsmFrameParm   => 10x"0" & AsmOut,
+         BitSlips       => 2x"3",
+         IL_BET         => 5x"08",
+         OOL_BET        => 5x"10",
+         Verifies       => 5x"3",
+         FlyWheels      => 5x"3",
          Iterations     => IterationsOut,
          IterationCntr  => IterationCntr,
          DataOut        => DataOut,
          Magnitude      => Magnitude,
-         ValidOut       => ValidOut,
          uHat           => uHat,
-         SyncOut        => SyncOut,
          BitOut         => BitOut,
          BitClk         => BitClk,
          BitOutEn       => BitOutEn
       );
 
+   TurboDecTop1 : TurboDecoder1
+      GENERIC MAP(
+         FILE_LOC       => FILE_LOC,
+         DATA_WIDTH     => DF_WIDTH
+         )
+      PORT MAP(
+         Clk93          => Clk93, -- Pll,
+         Clk31          => Clk31(2),
+         Clk31Logic     => Clk31Logic,
+         reset          => resetBufg,
+         ch0En          => ValidIn,
+         ch1En          => '0',
+         Ch0Data        => to_slv(Sum),
+         Ch1Data        => to_slv(Data),
+         BitSyncMode    => "00",
+         Rate           => std_logic_vector(to_unsigned(RateOut,3)),
+         Frame          => std_logic_vector(to_unsigned(FrameOut,3)),
+         ClkPerBit      => ClkPerBitOut,
+         BitSlips       => 2x"3",
+         IL_BET         => 5x"08",
+         OOL_BET        => 5x"10",
+         Verifies       => 5x"3",
+         FlyWheels      => 5x"3",
+         Iterations     => IterationsOut,
+         IterationCntr  => open,
+         DataOut        => open,
+         Magnitude      => open,
+         uHat           => open,
+         BitOut         => open,
+         BitClk         => open,
+         BitOutEn       => open
+      );
 end rtl;

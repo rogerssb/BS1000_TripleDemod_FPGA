@@ -3,7 +3,7 @@
 `include "addressMap.v"
 
 module turbo #(parameter TURBOBITS = 3) (
-    input                       clk93, clk31, clkEn, reset,
+    input                       clk93, clk31, clk31Logic, clkEn, reset,
     input                       busClk,
     input                       cs,
     input                       wr0,wr1,wr2,wr3,
@@ -134,6 +134,7 @@ module turbo #(parameter TURBOBITS = 3) (
     TurboDecoder #(.DATA_WIDTH(TURBOBITS+1)) turbod (
         .clk93(clk93),
         .clk31(clk31),
+        .clk31Logic(clk31Logic),
         .Reset(reset),
         .bitsyncMode(bitsyncMode),
         .ch0En(iSoftEn),
@@ -151,14 +152,7 @@ module turbo #(parameter TURBOBITS = 3) (
         .OOL_BET(asmParms[20:16]),
         .Verifies(asmParms[28:24]),
         .BitSlips(asmParms[31:30]),
-        .IterationCntr(),
-        .DataOut(),
-        .Magnitude(),
-        .SyncOut(),
-        .uHat(),
-        .ValidOut(),
         .FifoOverflow(overflow),
-        .BitClk(),
         .BitOut(turboBitOut),
         .BitOutEn(turboBitEnOut)
     );

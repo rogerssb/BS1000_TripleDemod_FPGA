@@ -116,7 +116,7 @@ ARCHITECTURE rtl OF TurboEncode IS
    constant B           : natural := 1;
 
   -- Signals
-   SIGNAL   PRN            : std_logic_vector(14 downto 0);
+   SIGNAL   PRN            : std_logic_vector(5 downto 0);  -- do PRN6 (63) to match Arb Gen
    SIGNAL   AsmShift       : std_logic_vector(0 to 191);
    SIGNAL   EncoderA,
             EncoderB       : std_logic_vector(4 downto 1);
@@ -258,11 +258,11 @@ BEGIN
             end if;
 
             if (or(Filling)) then         -- fill next framne during sync
-               PRN <= PRN(13 downto 0) & (PRN(14) xor PRN(13));
+               PRN <= PRN(PRN'left-1 downto 0) & (PRN(PRN'left) xor PRN(PRN'left-1));
 --               if (UsingIn) then
---                  DataRamA(Counter) <= PRN(14);
+--                  DataRamA(Counter) <= PRN(PRN'left);
 --               else
---                  DataRamB(Counter) <= PRN(14);
+--                  DataRamB(Counter) <= PRN(PRN'left);
 --               end if;
                if (Counter < FRAME_SIZE(Frame) - 1) then
                   Counter <= Counter + 1;
@@ -298,7 +298,7 @@ BEGIN
          WrAddr      => Counter,
          RdAddrA     => Counter,
          RdAddrB     => IT_Data,
-         WrData      => PRN(14 downto 14),
+         WrData      => PRN(PRN'left downto PRN'left),
          RdOutA      => DataBitA(0 downto 0),
          RdOutB      => DataBitB(0 downto 0)
    );
@@ -318,7 +318,7 @@ BEGIN
          WrAddr      => Counter,
          RdAddrA     => Counter,
          RdAddrB     => IT_Data,
-         WrData      => PRN(14 downto 14),
+         WrData      => PRN(PRN'left downto PRN'left),
          RdOutA      => DataBitA(1 downto 1),
          RdOutB      => DataBitB(1 downto 1)
    );
