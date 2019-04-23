@@ -25,6 +25,8 @@ module ldpc #(parameter LDPCBITS = 3) (
     output                      ldpcBitOut
     );
 
+    //`define LDPC_2X
+
     reg ldpcSpace;
     always @* begin
         casex(addr)
@@ -182,9 +184,22 @@ module ldpc #(parameter LDPCBITS = 3) (
 
     `else // USE_FAKE_LDPC_DECODER
 
+    `ifdef LDPC_2X
+     ldpcClkDoubler ldpcc (
+        .clk_in1(clk),
+        .reset(reset),
+        .locked(locked),
+        .clk_out1(clk2x)
+     );
+    `endif
+
     wire    [15:0]  ldpcWriteAddr;
     wire    [7:0]   iterationNumber;
+    wire    [7:0]   iterationNumberB;
     ldpcDecoder ldpcd (
+        `ifdef LDPC_2X
+        .clock_2x(clk2x),
+        `endif
         .clock_rtl(clk),
         .reset_rtl(reset),
         .LDPC_RUN(ldpcRun),
@@ -203,6 +218,7 @@ module ldpc #(parameter LDPCBITS = 3) (
         .rd_clk_out(clkEnOut),
         .cur_write_pos_V(ldpcWriteAddr),
         .Iteration_Number(iterationNumber),
+        .Decoder_B_Iterations(iterationNumberB),
         .pMaxIterations(maxIterations),
         .read_clk_en(),
         .cur_read_pos_V(),
@@ -211,6 +227,7 @@ module ldpc #(parameter LDPCBITS = 3) (
         .ERR_CODE(),
         .LDPC_MODE(),
         .cnt(),
+        .cnt_B(),
         .full(),
         .overrun()
     );
@@ -300,7 +317,7 @@ module ldpc #(parameter LDPCBITS = 3) (
                 dac2ClkEn <= clkEn;
             end
             `DAC_LDPC_CTRL: begin
-                dac2Data <= {1'b0,ldpcWriteAddr[11:0],5'b0};
+                dac2Data <= {1'b0,iterationNumberB[2:0],14'b0};
                 dac2ClkEn <= clkEn;
             end
             default: begin

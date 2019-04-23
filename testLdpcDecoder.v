@@ -2,7 +2,8 @@
 `include "addressMap.v"
 
     //`define ROTATE_90
-    `define FIXED_CODEWORD
+    //`define FIXED_CODEWORD
+    `define TEST_4096
 
     `ifdef FIXED_CODEWORD
         `ifdef ROTATE_90
@@ -14,11 +15,20 @@
         `endif
     `else //FIXED_CODEWORD
         `ifdef ROTATE_90
-        `define TEST_DATA_Q "c:/modem/vivado/testData/ldpcTestWaveform_I_1024_4_5.txt"
-        `define TEST_DATA_I "c:/modem/vivado/testData/ldpcTestWaveform_Q_1024_4_5.txt"
+        `define TEST_DATA_Q "c:/modem/vivado/testData/ldpcSimWaveform_I_1024_4_5.txt"
+        `define TEST_DATA_I "c:/modem/vivado/testData/ldpcSimWaveform_Q_1024_4_5.txt"
         `else
-        `define TEST_DATA_I "c:/modem/vivado/testData/ldpcTestWaveform_I_1024_4_5.txt"
-        `define TEST_DATA_Q "c:/modem/vivado/testData/ldpcTestWaveform_Q_1024_4_5.txt"
+            `ifdef TEST_4096
+                `define TEST_DATA_I "c:/modem/vivado/testData/ldpcSimWaveform_I_4096_4_5.txt"
+                `define TEST_DATA_Q "c:/modem/vivado/testData/ldpcSimWaveform_Q_4096_4_5.txt"
+                `define CODE_LENGTH `LDPC_CODE_LENGTH_4096
+                `define SYNC_THRESHOLD 11'd250
+            `else
+                `define TEST_DATA_I "c:/modem/vivado/testData/ldpcSimWaveform_I_1024_4_5.txt"
+                `define TEST_DATA_Q "c:/modem/vivado/testData/ldpcSimWaveform_Q_1024_4_5.txt"
+                `define CODE_LENGTH `LDPC_CODE_LENGTH_1024
+                `define SYNC_THRESHOLD 11'd62
+            `endif
         `endif
     `endif //FIXED_CODEWORD
 
@@ -52,9 +62,9 @@ module test;
         `endif
     `else //FIXED_CODEWORD
         `ifdef ROTATE_90
-        initial iSelect = 0;
-        `else
         initial iSelect = 1;
+        `else
+        initial iSelect = 0;
         `endif
     `endif //FIXED_CODEWORD
     reg     iSymEn,qSymEn;
@@ -110,7 +120,7 @@ module test;
             else begin
                 //enableInput <= 0;
                 $display("Out of if samples");
-                $rewind(fp_IBB);
+                x <= $rewind(fp_IBB);
                 #1 x <= $fscanf(fp_IBB,"%f",iSampleFloat);
             end
             if (! $feof(fp_QBB)) begin
@@ -121,7 +131,7 @@ module test;
             else begin
                 //enableInput <= 0;
                 $display("Out of if samples");
-                $rewind(fp_QBB);
+                x <= $rewind(fp_QBB);
                 #1 x <= $fscanf(fp_QBB,"%f",qSampleFloat);
             end
         end
@@ -203,14 +213,14 @@ module test;
         write32(createAddress(`LDPCSPACE, `LDPC_DLL_CENTER_FREQ),32'd51130563);
         write16(createAddress(`LDPCSPACE, `LDPC_DLL_GAINS),16'h0018);
         write16(createAddress(`LDPCSPACE, `LDPC_DLL_FDBK_DIV),16'd1);
-        write32(createAddress(`LDPCSPACE, `LDPC_CONTROL),{1'b0,4'b0,11'd62,
-                                                          10'b0,`LDPC_DERAND_NONE,`LDPC_CODE_LENGTH_1024,1'b0,`LDPC_RATE_4_5});
+        write32(createAddress(`LDPCSPACE, `LDPC_CONTROL),{1'b0,4'b0,`SYNC_THRESHOLD,
+                                                          10'b0,`LDPC_DERAND_NONE,`CODE_LENGTH,1'b0,`LDPC_RATE_4_5});
         // Wait 2 bit periods
         repeat (2*`CLOCKS_PER_BIT) @ (posedge clk) ;
 
         // Set the run bit
-        write32(createAddress(`LDPCSPACE, `LDPC_CONTROL),{1'b1,4'b0,11'd62,
-                                                          10'b0,`LDPC_DERAND_NONE,`LDPC_CODE_LENGTH_1024,1'b0,`LDPC_RATE_4_5});
+        write32(createAddress(`LDPCSPACE, `LDPC_CONTROL),{1'b1,4'b0,`SYNC_THRESHOLD,
+                                                          10'b0,`LDPC_DERAND_NONE,`CODE_LENGTH,1'b0,`LDPC_RATE_4_5});
         // Run the demod
         repeat (200000*`CLOCKS_PER_BIT) @ (posedge clk) ;
 

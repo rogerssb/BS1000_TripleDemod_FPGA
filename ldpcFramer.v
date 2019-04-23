@@ -230,24 +230,27 @@ module ldpcFramer(
         end
     end
     wire signed [10:0]  longBitSum = $signed({{2{bitSum[8]}},bitSum})
-                                   + $signed({{2{bitSumSR[63][8]}},bitSumSR[63]})
-                                   - $signed({{2{bitSumSR[127][8]}},bitSumSR[127]})
+                                   - $signed({{2{bitSumSR[63][8]}},bitSumSR[63]})
+                                   + $signed({{2{bitSumSR[127][8]}},bitSumSR[127]})
                                    + $signed({{2{bitSumSR[191][8]}},bitSumSR[191]});
 
     assign correlation = codeLength4096 ? $signed({longBitSum,7'b0})
                                         : $signed({bitSum,9'b0});
 
     // Sync Detector
+    wire    signed  [10:0] syncBitSum;
+    assign syncBitSum = codeLength4096 ? longBitSum
+                                       : $signed({{2{bitSum[8]}},bitSum});
     reg syncDetected;
     reg negPolarity;
     wire signed [10:0]   negSyncThreshold = -syncThreshold;
     always @(posedge clk) begin
         if (clkEn) begin
-            if (longBitSum > syncThreshold) begin
+            if (syncBitSum > syncThreshold) begin
                 syncDetected <= 1;
                 negPolarity <= 0;
             end
-            else if (longBitSum < negSyncThreshold) begin
+            else if (syncBitSum < negSyncThreshold) begin
                 syncDetected <= 1;
                 negPolarity <= 1;
             end
@@ -312,6 +315,7 @@ module ldpcFramer(
                 `SKIP_PAYLOAD: begin
                     if (endOfPayload) begin
                         bitCount <= `BITS_PER_WORD-1;
+                        wordCount <= syncWords-1;
                         codewordEn <= 0;
                         syncState <= `TEST_SYNC;
                     end
@@ -330,31 +334,36 @@ module ldpcFramer(
                 end
                 `TEST_SYNC: begin
                     if (bitCount == 0) begin
-                        if (syncDetected && !negPolarity) begin
-                            if (syncCount < `FRAMER_MAX_SYNC_COUNT) begin
-                                syncCount <= syncCount + 1;
-                                codewordEn <= frameSync;
+                        bitCount <= `BITS_PER_WORD-1;
+                        if (wordCount == 0) begin
+                            if (syncDetected && !negPolarity) begin
+                                if (syncCount < `FRAMER_MAX_SYNC_COUNT) begin
+                                    syncCount <= syncCount + 1;
+                                    codewordEn <= frameSync;
+                                end
+                                else begin
+                                    codewordEn <= ldpcReady;
+                                    frameSync <= ldpcReady;
+                                end
+                                wordCount <= wordsPerFrame-1;
+                                syncState <= `SKIP_PAYLOAD;
+                            end
+                            else if (syncCount == 0) begin
+                                wordCount <= wordsPerFrame + syncWords;
+                                rotation <= rotation + 1;
+                                codewordEn <= 0;
+                                frameSync <= 0;
+                                syncState <= `OUT_OF_SYNC;
                             end
                             else begin
-                                codewordEn <= ldpcReady;
-                                frameSync <= ldpcReady;
+                                syncCount <= syncCount - 1;
+                                wordCount <= wordsPerFrame-1;
+                                codewordEn <= frameSync;
+                                syncState <= `SKIP_PAYLOAD;
                             end
-                            bitCount <= `BITS_PER_WORD-1;
-                            wordCount <= wordsPerFrame-1;
-                            syncState <= `SKIP_PAYLOAD;
-                        end
-                        else if (syncCount == 0) begin
-                            rotation <= rotation + 1;
-                            codewordEn <= 0;
-                            frameSync <= 0;
-                            syncState <= `OUT_OF_SYNC;
                         end
                         else begin
-                            syncCount <= syncCount - 1;
-                            bitCount <= `BITS_PER_WORD-1;
-                            wordCount <= wordsPerFrame-1;
-                            codewordEn <= frameSync;
-                            syncState <= `SKIP_PAYLOAD;
+                            wordCount <= wordCount - 1;
                         end
                     end
                     else begin

@@ -338,7 +338,7 @@
     `define SPIGW_RSVD1         13'bx_xxxx_xxxx_101x
     `define SPIGW_CONTROL       13'bx_xxxx_xxxx_11xx
 
-`define LDPCSPACE           13'b0_00xx_010x_xxxx
+`define LDPCSPACE               13'b0_00xx_010x_xxxx
     `define LDPC_CONTROL            13'bx_xxxx_xxx0_00xx
         `define LDPC_RATE_1_2           2'b00
         `define LDPC_RATE_2_3           2'b01
@@ -352,6 +352,13 @@
     `define LDPC_DLL_CENTER_FREQ    13'bx_xxxx_xxx1_00xx
     `define LDPC_DLL_GAINS          13'bx_xxxx_xxx1_010x
     `define LDPC_DLL_FDBK_DIV       13'bx_xxxx_xxx1_011x
+
+`define FMMODSPACE              13'b0_00xx_011x_xxxx
+    `define FM_MOD_FREQ         12'bxxxx_xxx0_00xx
+    `define FM_MOD_DEV          12'bxxxx_xxx0_01xx
+    `define FM_MOD_BITRATE      12'bxxxx_xxx0_10xx
+    `define FM_MOD_CIC          12'bxxxx_xxx0_11xx
+
 
 `define DUAL_DECODERSPACE   13'b0_00xx_1000_xxxx
 `define CH1_DECODERSPACE    13'b0_00xx_1001_xxxx
