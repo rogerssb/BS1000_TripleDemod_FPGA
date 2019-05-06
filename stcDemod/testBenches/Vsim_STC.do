@@ -1,0 +1,1 @@
+vsim -voptargs="+acc" -t 1ps -L unisims_ver stc_Tb glbl

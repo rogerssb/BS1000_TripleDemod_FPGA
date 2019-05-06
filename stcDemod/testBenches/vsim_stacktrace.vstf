@@ -1,0 +1,125 @@
+# Current time Fri Mar 31 09:03:05 2017
+# ModelSim PE Stack Trace
+# Program = vsim
+# Id = "10.5c"
+# Version = "2016.07"
+# Date = "Jul 21 2016"
+# Platform = win32pe
+# Signature = 0c4b3f48b753105122c56716278fbcc6
+# 0    0x74146b2e: 'fdopen + 0x844' in 'c:\windows\system32\msvcr120.dll'
+# 1    0x741b4aaf: 'vsnprintf_l + 0x81' in 'c:\windows\system32\msvcr120.dll'
+# 2    0x741b4a29: 'vsnprintf + 0x16' in 'c:\windows\system32\msvcr120.dll'
+# 3    0x0129a124: '<unknown (@0x129a124)>'
+# 4    0x004c13d2: '<unknown (@0x4c13d2)>'
+# End of Stack Trace
+
+
+# Current time Fri Mar 31 09:03:57 2017
+# ModelSim PE Stack Trace
+# Program = vsim
+# Id = "10.5c"
+# Version = "2016.07"
+# Date = "Jul 21 2016"
+# Platform = win32pe
+# Signature = 0c4b3f48b753105122c56716278fbcc6
+# 0    0x74146b2e: 'fdopen + 0x844' in 'c:\windows\system32\msvcr120.dll'
+# 1    0x741b4aaf: 'vsnprintf_l + 0x81' in 'c:\windows\system32\msvcr120.dll'
+# 2    0x741b4a29: 'vsnprintf + 0x16' in 'c:\windows\system32\msvcr120.dll'
+# 3    0x0129a124: '<unknown (@0x129a124)>'
+# 4    0x004c13d2: '<unknown (@0x4c13d2)>'
+# End of Stack Trace
+
+
+# Current time Sun Apr 02 17:29:57 2017
+# ModelSim PE Stack Trace
+# Program = vsim
+# Id = "10.5c"
+# Version = "2016.07"
+# Date = "Jul 21 2016"
+# Platform = win32pe
+# Signature = 0c4b3f48b753105122c56716278fbcc6
+# 0    0x74146b2e: 'fdopen + 0x844' in 'c:\windows\system32\msvcr120.dll'
+# 1    0x741b4aaf: 'vsnprintf_l + 0x81' in 'c:\windows\system32\msvcr120.dll'
+# 2    0x741b4a29: 'vsnprintf + 0x16' in 'c:\windows\system32\msvcr120.dll'
+# 3    0x0129a124: '<unknown (@0x129a124)>'
+# 4    0x004c13d2: '<unknown (@0x4c13d2)>'
+# End of Stack Trace
+
+
+# Current time Sun Apr 02 21:41:09 2017
+# ModelSim PE Stack Trace
+# Program = vsim
+# Id = "10.5c"
+# Version = "2016.07"
+# Date = "Jul 21 2016"
+# Platform = win32pe
+# Signature = 0c4b3f48b753105122c56716278fbcc6
+# 0    0x74146b2e: 'fdopen + 0x844' in 'c:\windows\system32\msvcr120.dll'
+# 1    0x741b4aaf: 'vsnprintf_l + 0x81' in 'c:\windows\system32\msvcr120.dll'
+# 2    0x741b4a29: 'vsnprintf + 0x16' in 'c:\windows\system32\msvcr120.dll'
+# 3    0x0129a124: '<unknown (@0x129a124)>'
+# 4    0x004c13d2: '<unknown (@0x4c13d2)>'
+# End of Stack Trace
+
+
+# Current time Tue Apr 04 14:18:33 2017
+# ModelSim PE Stack Trace
+# Program = vsim
+# Id = "10.5c"
+# Version = "2016.07"
+# Date = "Jul 21 2016"
+# Platform = win32pe
+# Signature = 0c4b3f48b753105122c56716278fbcc6
+# 0    0x73c76b2e: 'fdopen + 0x844' in 'c:\windows\system32\msvcr120.dll'
+# 1    0x73ce4aaf: 'vsnprintf_l + 0x81' in 'c:\windows\system32\msvcr120.dll'
+# 2    0x73ce4a29: 'vsnprintf + 0x16' in 'c:\windows\system32\msvcr120.dll'
+# 3    0x0129a124: '<unknown (@0x129a124)>'
+# 4    0x004c13d2: '<unknown (@0x4c13d2)>'
+# End of Stack Trace
+
+
+# Current time Fri Apr 07 18:03:31 2017
+# ModelSim PE Stack Trace
+# Program = vsim
+# Id = "10.5c"
+# Version = "2016.07"
+# Date = "Jul 21 2016"
+# Platform = win32pe
+# Signature = 0c4b3f48b753105122c56716278fbcc6
+# 0    0x73e36b2e: 'fdopen + 0x844' in 'c:\windows\system32\msvcr120.dll'
+# 1    0x73ea4aaf: 'vsnprintf_l + 0x81' in 'c:\windows\system32\msvcr120.dll'
+# 2    0x73ea4a29: 'vsnprintf + 0x16' in 'c:\windows\system32\msvcr120.dll'
+# 3    0x0129a124: '<unknown (@0x129a124)>'
+# 4    0x004c13d2: '<unknown (@0x4c13d2)>'
+# End of Stack Trace
+
+
+# Current time Fri Apr 14 23:19:07 2017
+# ModelSim PE Stack Trace
+# Program = vsim
+# Id = "10.5c"
+# Version = "2016.07"
+# Date = "Jul 21 2016"
+# Platform = win32pe
+# Signature = 0c4b3f48b753105122c56716278fbcc6
+# 0    0x0088c50b: '<unknown (@0x88c50b)>'
+# 1    0x007c53d8: '<unknown (@0x7c53d8)>'
+# End of Stack Trace
+
+
+# Current time Thu Apr 18 20:38:32 2019
+# ModelSim PE Stack Trace
+# Program = vsim
+# Id = "10.5c"
+# Version = "2016.07"
+# Date = "Jul 21 2016"
+# Platform = win32pe
+# Signature = 0c4b3f48b753105122c56716278fbcc6
+# 0    0x730057d0: 'islower + 0x802' in 'c:\windows\system32\msvcr120.dll'
+# 1    0x73074dff: 'vsnprintf_l + 0x81' in 'c:\windows\system32\msvcr120.dll'
+# 2    0x73074d79: 'vsnprintf + 0x16' in 'c:\windows\system32\msvcr120.dll'
+# 3    0x0129a124: '<unknown (@0x129a124)>'
+# 4    0x004c13d2: '<unknown (@0x4c13d2)>'
+# End of Stack Trace
+
+

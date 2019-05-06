@@ -1,0 +1,115 @@
+[Options]
+DebugEnable=No
+NoFloatWarn=Yes
+DigitalThreshold=
+[Settings]
+Version=Silvaco4.10.0.R
+[Analyzer]
+C0Width=58
+C1Width=58
+C2Width=58
+GotoSource=N
+MinScale=
+MaxScale=
+[Spice]
+[LibraryFiles]
+0=..\..\..\Xilinx\10.1\ISE\verilog\src\unisims\{.v}
+[DebugMode]
+CommandLine=+define+SIMULATE
+[View]
+1=Last 60842.374ns 68733.514ns 187.438ns 61388.975ns 65737.537ns
+[Plusargs]
+0=memsave+test.impulse
+[Group1]
+Name="SR"
+0="test.resampler : \iSR[0] [17:0]" default
+1="test.resampler : \iSR[1] [17:0]" default
+2="test.resampler : \iSR[2] [17:0]" default
+3="test.resampler : \iSR[3] [17:0]" default
+4="test.resampler : \iSR[4] [17:0]" default
+5="test.resampler : \iSR[5] [17:0]" default
+6="test.resampler : \iSR[6] [17:0]" default
+7="test.resampler : \iSR[7] [17:0]" default
+8="test.resampler : \iSR[8] [17:0]" default
+OpenGroup=
+[Group2]
+Name="COEFS"
+0="test.resampler : tap0Coef[17:0]" default
+1="test.resampler : tap1Coef[17:0]" default
+2="test.resampler : tap2Coef[17:0]" default
+3="test.resampler : tap3Coef[17:0]" default
+4="test.resampler : tap4Coef[17:0]" default
+5="test.resampler : tap5Coef[17:0]" default
+6="test.resampler : tap6Coef[17:0]" default
+7="test.resampler : tap7Coef[17:0]" default
+8="test.resampler : tap8Coef[17:0]" default
+OpenGroup=
+[IncDirs]
+0=..
+[Files]
+0=resampler.v
+1=..\coregen\mpy18x18.v
+2=..\coregen\resamplerTap0.v
+3=..\coregen\resamplerTap1.v
+4=..\coregen\resamplerTap2.v
+5=..\coregen\resamplerTap3.v
+6=..\coregen\resamplerTap4.v
+7=..\coregen\resamplerTap5.v
+8=..\coregen\resamplerTap6.v
+9=..\coregen\reciprocalLut.v
+10=..\coregen\nco.v
+[Define]
+0=TEST_MODULE
+[Group3]
+Name="resampler"
+0="test.resampler : iSum[35:0]" default
+1="test.resampler : i4567[35:0]" default Unknown
+2="test.resampler : i67[35:0]" default Unknown
+3="test.resampler : i1Product[35:0]" default
+4="test.resampler : i2Product[35:0]" default
+5="test.resampler : i3Product[35:0]" default
+6="test.resampler : i4Product[35:0]" default
+7="test.resampler : i5Product[35:0]" default
+8="test.resampler : i6Product[35:0]" default
+9="test.resampler : i7Product[35:0]" default Unknown
+10="test.resampler : i8Product[35:0]" default Unknown
+11="test.resampler : resampleDelay[5:0]" default
+OpenGroup=Yes
+[Group0]
+Name="Default"
+0="test.resampler : clk" default
+1="test.resampler : iOut[17:0]" default
+2="test : resamplerFreqInt" default Decimal AnalogDisplay AType=PWL Scale=Auto
+3="test : resamplerFreqNorm" default Real AnalogDisplay AType=PWL Scale=Auto
+4="test : vectorCount" default Decimal AnalogDisplay AType=Step Scale=Auto
+5="test : saveVectors" default Unknown
+6="test.resampler : iOutReal" default Real AnalogDisplay AType=Step Scale=Auto
+7="test.resampler : inIReal" default Real AnalogDisplay AType=Step Scale=Auto
+8="test.resampler : iSum[35:0]" default
+9="test.resampler : i0123[35:0]" default
+10="test.resampler : i01[35:0]" default
+11="test.resampler : i0Product[35:0]" default
+12="test.resampler : \iSR[0] [17:0]" default
+13="test.resampler : offset[4:0]" default
+14="test.resampler : resampleDelay[8]" default
+15="test.resampler : lutProduct[22:17]" default
+16="test.resampler.offsetMpy : a[17:0]" default
+17="test.resampler : reciprocal[17:0]" default
+18="test.resampler.lut : a[4:0]" default
+19="test.resampler : offsetInt" default Decimal AnalogDisplay AType=Step Scale=Auto
+20="test.resampler : newOffset[4:0]" default
+21="test.resampler : oldOffset[4:0]" default Unknown
+22="test.resampler : phaseSum[31:0]" default
+23="test.resampler : phase[31:0]" default
+24="test.resampler : resamplerPhaseInc[31:0]" default
+25="test.resampler : resampleDelay[6]" default
+26="test.resampler : resample" default
+27="test.resampler : reset" default
+28="test.resampler : sync" default
+OpenGroup=Yes
+[GroupInfo]
+0=Default : 0 : 1 : 0
+1=SR : 1 : 1 : 0
+2=COEFS : 2 : 1 : 0
+3=resampler : 3 : 1 : 0
+[Bookmarks]
