@@ -11,15 +11,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="100322100000fs"></ZoomStartTime>
-      <ZoomEndTime time="187289100001fs"></ZoomEndTime>
-      <Cursor1Time time="172794600000fs"></Cursor1Time>
+      <ZoomStartTime time="12804299999fs"></ZoomStartTime>
+      <ZoomEndTime time="99771300001fs"></ZoomEndTime>
+      <Cursor1Time time="85276800000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="179"></NameColumnWidth>
-      <ValueColumnWidth column_width="118"></ValueColumnWidth>
+      <ValueColumnWidth column_width="116"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="32" />
+   <WVObjectSize size="46" />
    <wave_markers>
       <marker time="35140000000" label="" />
    </wave_markers>
@@ -442,7 +442,6 @@
    <wvobject fp_name="group137" type="group">
       <obj_property name="label">DQM</obj_property>
       <obj_property name="DisplayName">label</obj_property>
-      <obj_property name="isExpanded"></obj_property>
       <wvobject fp_name="/test/dqm/dqmm/clk" type="logic">
          <obj_property name="ElementShortName">clk</obj_property>
          <obj_property name="ObjectShortName">clk</obj_property>
@@ -987,19 +986,78 @@
    <wvobject fp_name="group206" type="group">
       <obj_property name="label">setupLDPC</obj_property>
       <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
    </wvobject>
    <wvobject fp_name="group158" type="group">
       <obj_property name="label">LDPC_CTRL</obj_property>
       <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
    </wvobject>
    <wvobject fp_name="group105" type="group">
       <obj_property name="label">LDPC</obj_property>
       <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
       <wvobject fp_name="group371" type="group">
          <obj_property name="label">softMapper</obj_property>
          <obj_property name="DisplayName">label</obj_property>
          <obj_property name="isExpanded"></obj_property>
       </wvobject>
+   </wvobject>
+   <wvobject fp_name="/test/ldpc/ldpcf/clk" type="logic">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/ldpc/ldpcf/clkEn" type="logic">
+      <obj_property name="ElementShortName">clkEn</obj_property>
+      <obj_property name="ObjectShortName">clkEn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/ldpc/ldpcf/reset" type="logic">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/ldpc/ldpcf/ldpcRun" type="logic">
+      <obj_property name="ElementShortName">ldpcRun</obj_property>
+      <obj_property name="ObjectShortName">ldpcRun</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/ldpc/ldpcf/ldpcReady" type="logic">
+      <obj_property name="ElementShortName">ldpcReady</obj_property>
+      <obj_property name="ObjectShortName">ldpcReady</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/ldpc/ldpcf/dataBitIn" type="logic">
+      <obj_property name="ElementShortName">dataBitIn</obj_property>
+      <obj_property name="ObjectShortName">dataBitIn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/ldpc/ldpcf/codeLength4096" type="logic">
+      <obj_property name="ElementShortName">codeLength4096</obj_property>
+      <obj_property name="ObjectShortName">codeLength4096</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/ldpc/ldpcf/rotation" type="array">
+      <obj_property name="ElementShortName">rotation[1:0]</obj_property>
+      <obj_property name="ObjectShortName">rotation[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/ldpc/ldpcf/frameSyncState" type="array">
+      <obj_property name="ElementShortName">frameSyncState[1:0]</obj_property>
+      <obj_property name="ObjectShortName">frameSyncState[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/ldpc/ldpcf/frameSync" type="logic">
+      <obj_property name="ElementShortName">frameSync</obj_property>
+      <obj_property name="ObjectShortName">frameSync</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/ldpc/ldpcf/codewordEn" type="logic">
+      <obj_property name="ElementShortName">codewordEn</obj_property>
+      <obj_property name="ObjectShortName">codewordEn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/ldpc/ldpcf/correlation" type="array">
+      <obj_property name="ElementShortName">correlation[17:0]</obj_property>
+      <obj_property name="ObjectShortName">correlation[17:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/ldpc/ldpcf/codeRate" type="array">
+      <obj_property name="ElementShortName">codeRate[1:0]</obj_property>
+      <obj_property name="ObjectShortName">codeRate[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/ldpc/ldpcf/syncThreshold" type="array">
+      <obj_property name="ElementShortName">syncThreshold[10:0]</obj_property>
+      <obj_property name="ObjectShortName">syncThreshold[10:0]</obj_property>
    </wvobject>
    <wvobject fp_name="group225" type="group">
       <obj_property name="label">LDPC Status</obj_property>

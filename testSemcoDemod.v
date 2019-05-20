@@ -1,9 +1,9 @@
 `timescale 1ns/100ps
 `include "addressMap.v"
 
-`define FM_TEST
+//`define FM_TEST
 //`define SOQPSK_TEST
-//`define LDPC_TEST
+`define LDPC_TEST
 //`define AQPSK_TEST
 
 `define ENABLE_AGC
