@@ -245,6 +245,7 @@ always @* rxInputReal = $itor($signed(rxInput))/(2**17);
         .dout(dout),
         .rx0(rxInput),
         .rx1(rxInput),
+        .rotation(2'b00),
         .ch0Lock(),
         .ch0Sym2xEn(ch0Sym2xEn),
         .ch0SymEn(ch0SymEn),
@@ -311,6 +312,39 @@ always @* rxInputReal = $itor($signed(rxInput))/(2**17);
 
 `endif
 
+    reg ch0DecoderSpace;
+    always @* begin
+        casex(a)
+            `DUAL_DECODERSPACE:     ch0DecoderSpace = !txRegCS;
+            default:                ch0DecoderSpace = 0;
+        endcase
+    end
+
+    wire    [1:0]   ch0ClkPhase;
+    wire            ch0ClkInvert   = ch0ClkPhase[0];
+    wire            ch0Clk90       = ch0ClkPhase[1];
+    pcmDecoder dec (
+        .clk(clk),
+        .reset(reset),
+        .busClk(bc),
+        .en(ch0DecoderSpace),
+        .wr0(we0),
+        .wr1(we1),
+        .wr2(we2),
+        .wr3(we3),
+        .addr(a),
+        .din(d),
+        .dout(),
+        .symb_clk_en(ch0SymEn),           // symbol rate clock enable
+        .symb_clk_2x_en(ch0Sym2xEn),      // 2x symbol rate clock enable
+        .symb(ch0DataOut),                // data input,
+        .data_out(ch0PcmData),            // data output
+        .clkEn_out(ch0PcmClkEn),          // clk output
+        .fifo_reset(),
+        .clkPhase(ch0ClkPhase),
+        .symb_clk(ch0PcmSymClk),
+        .inputSelect()
+    );
 
 
     wire    signed  [17:0]  negCh0SymData = -ch0SymData;
@@ -856,6 +890,8 @@ initial begin
     write32(createAddress(`TURBOSPACE, `TURBO_INVERSE_MEAN), 32'h00008000);
     write32(createAddress(`TURBOSPACE, `TURBO_DAC_SELECT), 32'h00000000);
     `endif
+
+    write32(createAddress(`DUAL_DECODERSPACE, `DEC_CONTROL), 32'h00400004);
 
     reset = 1;
     #(2*C) ;

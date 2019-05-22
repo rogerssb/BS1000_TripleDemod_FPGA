@@ -30,7 +30,8 @@ module decoderRegs #(parameter ADDR_BITS = 13) (
     output  reg             biphaseEnable,
     output  reg             millerEnable,
     output  reg     [1:0]   mode,
-    output  reg     [1:0]   inputSelect
+    output  reg     [1:0]   inputSelect,
+    output  reg     [3:0]   pcmEncoderMode
 );
 
     //************************** General Registers ********************************
@@ -90,6 +91,7 @@ module decoderRegs #(parameter ADDR_BITS = 13) (
             casex (addr)
                 `DEC_CONTROL: begin
                     clkPhase[1] <= dataIn[16];
+                    pcmEncoderMode <= dataIn[23:20];
                 end
                 default: ;
             endcase
@@ -100,11 +102,13 @@ module decoderRegs #(parameter ADDR_BITS = 13) (
         if (cs) begin
             casex (addr)
                 `DEC_CONTROL: begin
-                    dataOut = { 15'h0,clkPhase[1],
-                                derandomize[2], inputSelect, derandomize[1],
-                                mode, millerEnable, biphaseEnable,
-                                iqSwap, feherEnable, demuxEnable, derandomize[0],
-                                dataInvert, clkSelect, clkPhase[0], fifoReset
+                    dataOut = {
+                        8'h0,
+                        pcmEncoderMode,3'b0,clkPhase[1],
+                        derandomize[2], inputSelect, derandomize[1],
+                        mode, millerEnable, biphaseEnable,
+                        iqSwap, feherEnable, demuxEnable, derandomize[0],
+                        dataInvert, clkSelect, clkPhase[0], fifoReset
                     };
                     end
                 default: begin
