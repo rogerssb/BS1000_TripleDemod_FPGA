@@ -142,7 +142,7 @@ BEGIN
             RdOutB         => open
          );
 
-      Output <= to_sfixed(FifoOut(DATA_WIDTH-1 downto 0), Output) when (LengthMet = '1') else (others=>'0');
+      Output <= to_sfixed(FifoOut, Output) when (LengthMet = '1') else (others=>'0');
 
    else generate
       process (clk)

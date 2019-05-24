@@ -70,13 +70,14 @@ ENTITY TurboDecoder IS
       Frame          : IN  std_logic_vector(2 downto 0);  -- 1784*(1,2,4 or 5) skip 3
       ClkPerBit      : IN  std_logic_vector(15 downto 0); -- Data spreading count. Slightly less than 93.3/BR out
       BitSlips       : IN  STD_LOGIC_VECTOR(1 DOWNTO 0);  -- default 3
-      IL_BET         : IN  STD_LOGIC_VECTOR(4 DOWNTO 0);  -- default 20
-      OOL_BET        : IN  STD_LOGIC_VECTOR(4 DOWNTO 0);  -- default 10
+      IL_BET         : IN  STD_LOGIC_VECTOR(4 DOWNTO 0);  -- default 8
+      OOL_BET        : IN  STD_LOGIC_VECTOR(4 DOWNTO 0);  -- default 16
       Verifies       : IN  STD_LOGIC_VECTOR(4 DOWNTO 0);  -- default 3
       FlyWheels      : IN  STD_LOGIC_VECTOR(4 DOWNTO 0);  -- default 3
       IterationCntr  : OUT std_logic_vector(3 downto 0);  -- test point, Current Iteration output
       DataOut        : OUT std_logic_vector(SfixSova'length-1 downto 0); -- test point, soft data output
       Magnitude      : OUT std_logic_vector(SfixSova'length downto 0);   -- test point, signal magnitude
+      LockMode       : OUT std_logic_vector(1 downto 0);
       uHat,                                               -- test point, Bit Out per iteration. used to see progress
       FifoOverflow,                                       -- Status, data rate is too high, Clear with Rate = 0
       BitOut,                                             -- actual data output
@@ -111,6 +112,7 @@ ARCHITECTURE rtl OF TurboDecoder IS
          InvertOdd,
          InvertEven,
          ValidOut       : OUT std_logic;
+         LockMode       : OUT std_logic_vector(1 downto 0);
          DataOut        : OUT std_logic_vector(DATA_WIDTH-1 downto 0)  -- soft decision invert corrected data
    );   END Component TurboASM;
 
@@ -344,6 +346,7 @@ end process;
          FlyWheels   => FlyWheels,
          InvertOdd   => open,
          InvertEven  => open,
+         LockMode    => LockMode,
          SyncOut     => SyncAsm,
          ValidOut    => ValidAsm,
          DataOut     => DataAsm

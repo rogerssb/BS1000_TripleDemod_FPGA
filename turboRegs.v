@@ -9,6 +9,7 @@ module turboRegs(
     input               [12:0]  addr,
     input               [31:0]  dataIn,
     input                       overflow,
+    input               [1:0]   lockMode,
     output  reg         [31:0]  dataOut,
     output  reg         [2:0]   codeRate,
     output  reg         [2:0]   codeLength,
@@ -100,7 +101,7 @@ module turboRegs(
     always @* begin
         if (cs) begin
             casex (addr)
-                `TURBO_CONTROL:         dataOut = {15'b0, overflow,
+                `TURBO_CONTROL:         dataOut = {13'b0, lockMode, overflow,
                                                    4'b0,maxIterations,
                                                    1'b0,codeLength,1'b0,codeRate};
                 `TURBO_INVERSE_MEAN:    dataOut = {13'h0,inverseMeanExponent,inverseMeanMantissa};

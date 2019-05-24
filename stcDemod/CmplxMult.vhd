@@ -170,8 +170,8 @@ BEGIN
              end if;
               -- pipeline level 5, add partials
             if (ValidDly(4)) then
-               RealValue <= resize(MultRDly + Mult0DlyA, RealValue);
-               ImagValue <= resize(MultIDly + Mult0DlyB, ImagValue);
+               RealValue <= resize(MultRDly + Mult0DlyA, RealValue, FIXED_SATURATE, FIXED_TRUNCATE);  -- tends to overflow at highest levels
+               ImagValue <= resize(MultIDly + Mult0DlyB, ImagValue, FIXED_SATURATE, FIXED_TRUNCATE);
                FullSizeR <= resize(MultRDly + Mult0DlyA, FullSizeR);
                FullSizeI <= resize(MultIDly + Mult0DlyB, FullSizeI);
             end if;
@@ -192,7 +192,7 @@ BEGIN
    ReOut <= RealValue when (not ByPass and ReadyIn) else ReDly;
    ImOut <= ImagValue when (not ByPass and ReadyIn) else ImDly;
    StartOut <= StartDly(5) when (not ByPass and ReadyIn) else StartDly(6) ;
-   ValidOut <= ValidDly(5) when (not ByPass and ReadyIn) else ValidDly(6) ;
+   ValidOut <= ValidDly(5) when (not ByPass and ReadyIn) else (ValidDly(6) and ReadyIn) ;
 
 END rtl;
 

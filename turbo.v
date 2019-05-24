@@ -43,6 +43,7 @@ module turbo #(parameter TURBOBITS = 3) (
     wire    [3:0]   dac1Select;
     wire    [3:0]   dac2Select;
     wire    [31:0]  asmParms;
+    wire    [1:0]   lockMode;
     turboRegs tregs(
         .busClk(busClk),
         .cs(turboSpace),
@@ -60,7 +61,8 @@ module turbo #(parameter TURBOBITS = 3) (
         .dac0Select(dac0Select),
         .dac1Select(dac1Select),
         .dac2Select(dac2Select),
-        .asmParms(asmParms)
+        .asmParms(asmParms),
+        .lockMode(lockMode)
     );
 
     // Clock enables.
@@ -152,6 +154,7 @@ module turbo #(parameter TURBOBITS = 3) (
         .OOL_BET(asmParms[20:16]),
         .Verifies(asmParms[28:24]),
         .BitSlips(asmParms[31:30]),
+        .LockMode(lockMode),
         .FifoOverflow(overflow),
         .BitOut(turboBitOut),
         .BitOutEn(turboBitEnOut)

@@ -705,6 +705,13 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
+      <File Path="$PPRDIR/pcmEncoder.v">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
       <Config>
         <Option Name="DesignMode" Val="RTL"/>
         <Option Name="TopModule" Val="bitsyncBertTop"/>
@@ -735,12 +742,13 @@
       </File>
       <File Path="$PSRCDIR/constrs_1/new/bitsyncBertTopDebug.xdc">
         <FileInfo>
+          <Attr Name="UserDisabled" Val="1"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
         </FileInfo>
       </File>
       <Config>
-        <Option Name="TargetConstrsFile" Val="$PSRCDIR/constrs_1/new/bitsyncBertTopDebug.xdc"/>
+        <Option Name="TargetConstrsFile" Val="$PSRCDIR/constrs_1/new/bitsyncBertTop_timing.xdc"/>
         <Option Name="ConstrsType" Val="XDC"/>
       </Config>
     </FileSet>
@@ -782,6 +790,7 @@
       </File>
       <File Path="$PPRDIR/testFramesync.v">
         <FileInfo>
+          <Attr Name="UserDisabled" Val="1"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
@@ -1089,22 +1098,6 @@
         <Define Name="USE_VIVADO_CORES"/>
       </Config>
     </FileSet>
-    <FileSet Name="vioAsm" Type="BlockSrcs" RelSrcDir="$PSRCDIR/vioAsm">
-      <File Path="$PSRCDIR/sources_1/ip/vioAsm/vioAsm.xci">
-        <FileInfo>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <Config>
-        <Option Name="TopModule" Val="vioAsm"/>
-        <Option Name="VerilogDir" Val="$PPRDIR/."/>
-        <Option Name="UseBlackboxStub" Val="1"/>
-        <Define Name="BITSYNC_BERT"/>
-        <Define Name="USE_VIVADO_CORES"/>
-      </Config>
-    </FileSet>
     <FileSet Name="constrs_standalone" Type="Constrs" RelSrcDir="$PSRCDIR/constrs_standalone">
       <File Path="$PSRCDIR/constrs_standalone/new/Temp.xdc">
         <FileInfo>
@@ -1297,15 +1290,6 @@
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
     </Run>
     <Run Id="resamplerTap2_synth_1" Type="Ft3:Synth" SrcSet="resamplerTap2" Part="xc7k325tffg676-2" ConstrsSet="resamplerTap2" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/resamplerTap2_synth_1" IncludeInArchive="true">
-      <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2017"/>
-        <Step Id="synth_design"/>
-      </Strategy>
-      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
-      <ReportStrategy/>
-      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
-    </Run>
-    <Run Id="vioAsm_synth_1" Type="Ft3:Synth" SrcSet="vioAsm" Part="xc7k325tffg676-2" ConstrsSet="vioAsm" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/vioAsm_synth_1" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2017"/>
         <Step Id="synth_design"/>
@@ -1583,22 +1567,6 @@
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
     </Run>
     <Run Id="resamplerTap2_impl_1" Type="Ft2:EntireDesign" Part="xc7k325tffg676-2" ConstrsSet="resamplerTap2" Description="Default settings for Implementation." SynthRun="resamplerTap2_synth_1" IncludeInArchive="false">
-      <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2017"/>
-        <Step Id="init_design"/>
-        <Step Id="opt_design"/>
-        <Step Id="power_opt_design"/>
-        <Step Id="place_design"/>
-        <Step Id="post_place_power_opt_design"/>
-        <Step Id="phys_opt_design"/>
-        <Step Id="route_design"/>
-        <Step Id="post_route_phys_opt_design"/>
-        <Step Id="write_bitstream"/>
-      </Strategy>
-      <ReportStrategy/>
-      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
-    </Run>
-    <Run Id="vioAsm_impl_1" Type="Ft2:EntireDesign" Part="xc7k325tffg676-2" ConstrsSet="vioAsm" Description="Default settings for Implementation." SynthRun="vioAsm_synth_1" IncludeInArchive="false">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2017"/>
         <Step Id="init_design"/>

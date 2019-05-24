@@ -119,14 +119,12 @@ ARCHITECTURE rtl OF PilotSync IS
    SIGNAL   SyncError            : sfixed(1 downto -16);
    SIGNAL   SyncSum              : sfixed(10 downto -16);
 
-   signal   SyncErrorIla         : sfixed(17 downto 0);
    signal   SyncSumIla           : sfixed(10 downto 0);
    signal   ReadR_Ila, ReadI_Ila : sfixed(17 downto 0);
 
    attribute mark_debug : string;
    attribute mark_debug of SampleCount     : signal is "true";
    attribute mark_debug of StartOut        : signal is "true";
-   attribute mark_debug of SyncErrorIla    : signal is "true";
    attribute mark_debug of SyncSumIla      : signal is "true";
    attribute mark_debug of ReadR_Ila       : signal is "true";
    attribute mark_debug of ReadI_Ila       : signal is "true";
@@ -137,7 +135,6 @@ BEGIN
    IlaProcess : process(clk)
    begin
       if (rising_edge(clk)) then
-         SyncErrorIla <= SyncError;
          SyncSumIla   <= SyncSum(10 downto 0);
          ReadR_Ila    <= ReadR;
          ReadI_Ila    <= ReadI;
@@ -150,7 +147,7 @@ BEGIN
    ClkProcess: process (clk)
    begin
       if (rising_edge(clk)) then
-         if (reset = '1') then
+         if (reset) then
             WrAddr         <= (others=>'0');
             RdAddr         <= (others=>'0');
             SyncSum        <= (others=>'0');
@@ -225,7 +222,7 @@ BEGIN
              end if;
          elsif (ReadCount > 0) then
             SyncError   <= resize(Abs(ReadR - ReadI), SyncError);
-            SyncSum     <= resize(SyncSum + abs(SyncError), SyncSum);
+            SyncSum     <= resize(SyncSum + SyncError, SyncSum);
             ReadCount   <= ReadCount - 1;
             if (ReadCount = 1) then
                PilotLocked <= '1' when SyncSum < 10 else '0';

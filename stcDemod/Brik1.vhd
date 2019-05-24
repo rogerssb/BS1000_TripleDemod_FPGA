@@ -78,7 +78,7 @@ ARCHITECTURE rtl OF Brik1 IS
          ImIn           : IN  FLOAT_1_18;
          PilotIndex     : OUT ufixed(10 downto 0);
          PilotMag,
-         Threshold      : OUT sfixed(10 downto -7);
+         Threshold      : OUT ufixed(10 downto -7);
          ReOut,
          ImOut          : OUT FLOAT_1_18;
          PilotFound,
@@ -113,7 +113,7 @@ ARCHITECTURE rtl OF Brik1 IS
             PilotImagOut      : Float_1_18;
    SIGNAL   PilotIndex        : ufixed(10 downto 0);
    SIGNAL   PilotMag,
-            Threshold         : sfixed(11 downto -6);
+            Threshold         : ufixed(11 downto -6);
 
 BEGIN
 

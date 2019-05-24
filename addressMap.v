@@ -30,7 +30,7 @@
 `define BS_CIC_COMP_USE_MPY
 `define ADD_BERT
 `define USE_DEMOD_CandD
-//`define ADD_TURBO
+`define ADD_TURBO
 `define ADD_MSE
 `endif
 

@@ -51,7 +51,7 @@ ENTITY OverlapAddAbs IS
       ImIn           : IN  sfixed(IN_WIDTH+IN_BINPT-1 downto IN_BINPT);
       ValidIn,
       StartIn        : IN  std_logic;     -- Start is just delayed in sync
-      AbsOut         : OUT sfixed(OUT_WIDTH+OUT_BINPT-1 downto OUT_BINPT);
+      AbsOut         : OUT ufixed(OUT_WIDTH+OUT_BINPT-1 downto OUT_BINPT);
       ValidOut,
       StartOut       : OUT std_logic
    );
@@ -60,49 +60,47 @@ END OverlapAddAbs;
 
 ARCHITECTURE rtl OF OverlapAddAbs IS
 
-   COMPONENT DelayLine IS
-      GENERIC (
-         LENGTH      : natural := 4096;
-         DATA_WIDTH  : natural := 16;
-         BINPT       : natural := 15;
-         ADDR_WIDTH  : natural := 12;  -- longest delay is 4096
-         RAM_TYPE    : string  := "block"  -- or "distributed"
-      );
-      PORT(
-         clk            : IN  std_logic;
-         reset          : IN  std_logic;
-         ce             : IN  std_logic;
-         Input          : IN  sfixed(DATA_WIDTH-BINPT-1 downto -BINPT);
-         Output         : OUT sfixed(DATA_WIDTH-BINPT-1 downto -BINPT)
-      );
-   END COMPONENT DelayLine;
-
    CONSTANT IN_LEFT     : integer := ReIn'left;
    CONSTANT IN_RIGHT    : integer := ReIn'right;
-   CONSTANT LATENCY     : natural := 2;
+   CONSTANT DELAY       : integer := 511;
+
+   type DelayLine is array (natural range <>) of sfixed(IN_LEFT downto IN_RIGHT);
 
   -- Signals
-   SIGNAL   ReDlyLine,
-            ImDlyLine,
-            ReDly,
+   SIGNAL   ReDly,
             ImDly       : sfixed(IN_LEFT downto IN_RIGHT);
    SIGNAL   A0,
             B0          : sfixed(IN_LEFT+1 downto IN_RIGHT); -- same width but 2x higher range
    SIGNAL   MultR,
             MultI,
             MultRDly,
-            MultIDly    : sfixed(2*A0'left+1 downto 2*A0'right);
+            MultIDly    : ufixed(2*A0'left+1 downto 2*A0'right);
    SIGNAL   ValidDly,
             StartDly    : std_logic_vector(4 downto 1);
-   SIGNAL   Count       : integer range 0 to 2048;
+   SIGNAL   Count       : integer range 0 to 1023;
    SIGNAL   OverFlow    : std_logic;
-   SIGNAL   FullSize    : sfixed(2*A0'left+2 downto OUT_BINPT);
+   SIGNAL   FullSize    : ufixed(2*A0'left+2 downto OUT_BINPT);
+   SIGNAL   ReDlyLine,
+            ImDlyLine   : DelayLine(DELAY downto 0);
+
+   SIGNAL   ReInIla, ImInIla, ReDlyIla, ImDlyIla   : slv18;
+   signal   A0Ila, B0Ila : std_logic_vector(A0'length-1 downto 0);
+   signal   MultRIla, MultIIla : std_logic_vector(MultR'length-1 downto 0);
 
    attribute mark_debug : string;
-   attribute mark_debug of OverFlow    : signal is "true";
-
+   attribute mark_debug of ReInIla, ImInIla, ReDlyIla, ImDlyIla, A0Ila, B0Ila,
+               MultRIla, MultIIla, OverFlow    : signal is "true";
 
 BEGIN
+
+ReInIla   <= to_slv(ReIn);
+ImInIla   <= to_slv(ImIn);
+ReDlyIla  <= to_slv(ReDly);
+ImDlyIla  <= to_slv(ImDly);
+A0Ila     <= to_slv(A0);
+B0Ila     <= to_slv(B0);
+MultRIla  <= to_slv(MultR);
+MultIIla  <= to_slv(MultI);
 
    ClkProcess : process(clk)
    begin
@@ -123,19 +121,23 @@ BEGIN
             Count       <= 0;
          elsif (ce) then
             if (ValidIn) then
+               ReDlyLine <= ReDlyLine(ReDlyLine'left-1 downto 0) & ReIn;
+               ImDlyLine <= ImDlyLine(ImDlyLine'left-1 downto 0) & ImIn;
                -- pipeline level 1, latch inputs
                A0 <= ReIn + ReDly;
                B0 <= ImIn + ImDly;
-               ReDly <= ReDlyLine;
-               ImDly <= ImDlyLine;
-               Count <= Count + 1;
+               ReDly <= ReDlyLine(DELAY);
+               ImDly <= ImDlyLine(DELAY);
+               if (Count < 1023) then
+                  Count <= Count + 1;
+               end if;
             else
                Count <= 0;
             end if;
                -- pipeline level 2, multiply latched inputs
             if (ValidDly(1)) then
-               MultR     <= A0 * A0;
-               MultI     <= B0 * B0;
+               MultR     <= ufixed(A0 * A0);
+               MultI     <= ufixed(B0 * B0);
             end if;
                -- pipeline level 3, just pipeline out of DSP48
             if (ValidDly(2)) then
@@ -156,40 +158,6 @@ BEGIN
 
    StartOut <= StartDly(4);
    ValidOut <= ValidDly(4);
-
-   -- Save the last 512 samples, then retrieve them for the first 512 of next packet
-   DelayReal : DelayLine
-      GENERIC MAP(
-         LENGTH      => 512 - LATENCY,
-         DATA_WIDTH  => 18,
-         BINPT       => 17,
-         ADDR_WIDTH  => 9,
-         RAM_TYPE    => "distributed"
-
-      )
-      PORT MAP(
-         clk      => clk,
-         reset    => reset,
-         ce       => ce and ValidIn,
-         Input    => ReIn,
-         Output   => ReDlyLine
-      );
-
-   DelayImag : DelayLine
-      GENERIC MAP(
-         LENGTH      => 512 - LATENCY,
-         DATA_WIDTH  => 18,
-         BINPT       => 17,
-         ADDR_WIDTH  => 9,
-         RAM_TYPE    => "distributed"
-      )
-      PORT MAP(
-         clk      => clk,
-         reset    => reset,
-         ce       => ce and ValidIn,
-         Input    => ImIn,
-         Output   => ImDlyLine
-      );
 
 END rtl;
 

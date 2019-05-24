@@ -65,6 +65,7 @@ ENTITY TurboASM IS
       InvertOdd,
       InvertEven,
       ValidOut       : OUT std_logic;
+      LockMode       : OUT std_logic_vector(1 downto 0);
       DataOut        : OUT std_logic_vector(DATA_WIDTH-1 downto 0)  -- soft decision invert corrected data
    );
 END TurboASM;
@@ -166,7 +167,7 @@ BEGIN
    FlyWheels_u <= to_integer(unsigned(FlyWheels));
    Rate_u      <= to_integer(unsigned(Rate));
    Frame_u     <= to_integer(unsigned(Frame));
-
+   LockMode    <= std_logic_vector(to_unsigned(mode_t'pos(Mode),2));
    BET <= to_integer(unsigned(OOL_BET)) when (Mode = SEARCHING) or (Mode = VERIFY) else to_integer(unsigned(IL_BET));
 
    FrameLen <= to_signed(FRAME_LEN(Rate_u, Frame_u), FrameLen'length);

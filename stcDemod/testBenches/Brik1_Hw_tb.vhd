@@ -50,9 +50,13 @@ use work.Semco_pkg.all;
 use work.fixed_pkg.all;
 
 entity Brik1_Hw_tb is
+   GENERIC (SIM_MODE : boolean := false);
    PORT (
       Clk93    : IN  std_logic;
-      LED      : OUT std_logic
+      Power0In,
+      Power1In : IN  sfixed(0 downto -17);
+      BS_LED,
+      DemodLED : OUT std_logic
    );
 end Brik1_Hw_tb;
 
@@ -176,7 +180,8 @@ architecture rtl of Brik1_Hw_tb is
          probe_out7     : OUT std_logic_vector(17 downto 0);
          probe_out8     : OUT std_logic_vector(11 downto 0);
          probe_out9     : OUT std_logic_vector(11 downto 0);
-         probe_out10    : OUT std_logic_vector(7 downto 0)
+         probe_out10    : OUT std_logic_vector(7 downto 0);
+         probe_out11    : OUT std_logic_vector(17 downto 0)
       );
    END COMPONENT Vio_0;
 
@@ -197,22 +202,19 @@ architecture rtl of Brik1_Hw_tb is
             clk,
             clk2x,
             Locked,
-            PhaseValid           : std_logic := '1';
-
-   SIGNAL   PilotPacket,
-            StartOut,
-            DataValid_o          : std_logic := '0';
-   SIGNAL   DataValid            : SLV8 := x"01";
+            PhaseValid           : std_logic;
+   SIGNAL   StartOut,
+            DataValid_o          : std_logic;
+   SIGNAL   DataValid            : SLV8;
    SIGNAL   RdAddr_i,
             RdAddr0_i,
-            RdAddr1_i            : natural range 0 to 13311 := 0;  -- start just before next pilot
-   SIGNAL   Dones                : SLV4 := x"0";
+            RdAddr1_i            : natural range 0 to 13311;
+   SIGNAL   RdAddr0_v,
+            RdAddr1_v            : integer range 0-2048-128 to 13311+2047+127 := 0;
    SIGNAL   RealRead,
             ImagRead             : vector_of_slvs(0 to 2)(17 downto 0);
-   signal   Variables            : RecordType := c_RecordType;
-   SIGNAL   Ratio,
-            OneMinusRatio,
-            H0r,
+   signal   Variables            : RecordType;
+   SIGNAL   H0r,
             H0i,
             H1r,
             H1i,
@@ -238,16 +240,19 @@ architecture rtl of Brik1_Hw_tb is
             Frequency1,
             Power0,
             Power1,
+            Power0Slv,
+            Power1Slv,
+            NoiseGainSlv,
             Phase0,
             Phase1,
             NoiseGain            : std_logic_vector(17 downto 0);
    SIGNAL   DeltaT_slv,
             MiscBits,
             Errors               : SLV8;
+   SIGNAL   LedCount             : UINT32;
 
    attribute mark_debug : string;
-   attribute mark_debug of RdAddr0_i, RdAddr1_i,
-            H0r, H0i, H1r, H1i,
+   attribute mark_debug of RdAddr_i, RdAddr0_i, RdAddr1_i,
             Phase0R, Phase0I, Phase1R, Phase1I,
             ResampleR_s, ResampleI_s            : signal is "true";
 
@@ -256,17 +261,15 @@ begin
    Clocks : clk_wiz_0
       port map (
          clk93    => Clk93,
-         reset    => MiscBits(7),
+         reset    => '0',
          clkX1    => clk,
          clkX2    => clk2x,
          locked   => Locked
       );
 
-   reset <= not locked;
-
    Vio_u : Vio_0
       PORT MAP (
-         clk        => clk,
+         clk        => clk2x,
          probe_in0  => Errors,
          probe_out0 => Frequency0,
          probe_out1 => Frequency1,
@@ -278,15 +281,24 @@ begin
          probe_out7 => NoiseGain,
          probe_out8 => PilotSyncOffset,
          probe_out9 => Offset,
-         probe_out10 => MiscBits
+         probe_out10 => MiscBits,
+         probe_out11 => open
       );
 
    ErrorProc : process (clk2x)
    begin
       if (rising_edge(clk2x)) then
+         reset <= (not locked) or MiscBits(7);
          if (reset) then
             Errors <= x"00";
+            LedCount <= x"00000000";
          else
+            if (LedCount < 186666666) then
+               LedCount <= LedCount + 1;
+            else
+               LedCount <= x"00000000";
+            end if;
+            DemodLED <= '1' when (LedCount < 93333333) else '0';
             if (<< signal Brik1u.PD_u.OverflowIFft : std_logic >> ) then
                Errors(0) <= '1';
             end if;
@@ -306,14 +318,11 @@ begin
                Errors(5) <= '1';
             end if;
          end if;
-         LED <= or(Errors);
+         BS_LED <= or(Errors);
       end if;
    end process;
 
    reg_process : process (clk)
-      variable RdAddr_v,
-               RdAddr0_v,
-               RdAddr1_v   : integer range -100 to 13400;
       variable Offset_v    : integer range -2048 to 2047;
       variable DeltaT_v    : integer range -128 to 127;
       variable Power0_v,
@@ -322,41 +331,54 @@ begin
                Noise_v     : sfixed(0 downto -17);
    begin
       if (rising_edge(clk)) then
-         DataValid <= DataValid(DataValid'left-1 downto 0) & DataValid(DataValid'left);
-         if (DataValid(0)) then
-            if (RdAddr_i < 13311) then
-               RdAddr_v := RdAddr_i + 1;
-            else
-               RdAddr_v := 0;
+         if (reset) then
+            DataValid <= x"01";
+            RdAddr_i <= 12800;
+         else
+            DataValid <= DataValid(DataValid'left-1 downto 0) & DataValid(DataValid'left);
+            if (DataValid(0)) then
+               if (RdAddr_i < 13311) then
+                  RdAddr_i <= RdAddr_i + 1;
+               else
+                  RdAddr_i <= 0;
+               end if;
             end if;
          end if;
          DeltaT_v  := to_integer(signed(DeltaT_slv));    -- add ±4 then check for overflow
          Offset_v  := to_integer(signed(Offset));
-         RdAddr0_v := RdAddr_v + Offset_v;
+         RdAddr0_v <= RdAddr_i + Offset_v;
          if (RdAddr0_v > 13311) then
-            RdAddr0_v := RdAddr0_v - 13311;
+            RdAddr0_i <= RdAddr0_v - 13312;
          elsif (RdAddr0_v < 0) then
-            RdAddr0_v := RdAddr0_v + 13311;
+            RdAddr0_i <= RdAddr0_v + 13312;
+         else
+            RdAddr0_i <= RdAddr0_v;
          end if;
 
-         RdAddr1_v := RdAddr0_v + DeltaT_v;
+         RdAddr1_v <= RdAddr_i + Offset_v + DeltaT_v;
          if (RdAddr1_v > 13311) then
-            RdAddr1_v := RdAddr1_v - 13311;
+            RdAddr1_i <= RdAddr1_v - 13312;
          elsif (RdAddr1_v < 0) then
-            RdAddr1_v := RdAddr1_v + 13311;
+            RdAddr1_i <= RdAddr1_v + 13312;
+         else
+            RdAddr1_i <= RdAddr1_v;
          end if;
-         RdAddr_i  <= RdAddr_v;
-         RdAddr0_i <= RdAddr0_v;
-         RdAddr1_i <= RdAddr1_v;
 
-         NoiseGain_v := to_sfixed(NoiseGain, NoiseGain_v);
+         Power0Slv    <= Power0;
+         Power1Slv    <= Power1;
+         NoiseGainSlv <= NoiseGain;
+         NoiseGain_v := to_sfixed(NoiseGainSlv, NoiseGain_v);
          Noise_v     := resize(to_sfixed(RealRead(2), Noise_v) * NoiseGain_v, Noise_v);
+         if (SIM_MODE) then
+            Power0_v := Power0In;
+            Power1_v := Power1In;
+         else
+            Power0_v := to_sfixed(Power0Slv, Power0_v);
+            Power1_v := to_sfixed(Power1Slv, Power1_v);
+         end if;
 
-         Power0_v := to_sfixed(Power0, Power0_v);
-         Power1_v := to_sfixed(Power1, Power1_v);
-
-         ResampleR_s <= resize((Chan0r * Power0_v) + (Chan1r * Power1_v) + Noise_v, ResampleR_s);
-         ResampleI_s <= resize((Chan0i * Power0_v) + (Chan1i * Power1_v) + Noise_v, ResampleI_s);
+         ResampleR_s <= resize((Chan0r * Power0_v) + (Chan1r * Power1_v) + Noise_v, ResampleR_s, fixed_saturate, fixed_truncate);
+         ResampleI_s <= resize((Chan0i * Power0_v) + (Chan1i * Power1_v) + Noise_v, ResampleI_s, fixed_saturate, fixed_truncate);
       end if;
    end process reg_process;
 
@@ -481,9 +503,9 @@ begin
    DDS0 : dds_sin_cos
       PORT MAP (
          aclk                 => clk,
-         aresetn              => MiscBits(7),
+         aresetn              => not reset,
          s_axis_config_tvalid => DataValid(0),
-         s_axis_config_tdata  => (63 downto 18+32=> Phase0(Phase0'left)) & Phase0 & (31 downto 18=> Frequency0(Frequency0'left)) & Frequency0,
+         s_axis_config_tdata  => (63 downto 18+32=> Phase0(Phase0'left)) & Phase0 & (31 downto 18=> Frequency0(Frequency0'left)) & Frequency0, -- sign extend phase and freq values
          m_axis_data_tvalid   => open,
          m_axis_data_tdata    => SinCosData0,
          m_axis_phase_tvalid  => open,
@@ -496,7 +518,7 @@ begin
    DDS1 : dds_sin_cos
       PORT MAP (
          aclk                 => clk,
-         aresetn              => MiscBits(7),
+         aresetn              => not reset,
          s_axis_config_tvalid => DataValid(0),
          s_axis_config_tdata  => (63 downto 18+32=> Phase1(Phase1'left)) & Phase1 & (31 downto 18=> Frequency1(Frequency1'left)) & Frequency1,
          m_axis_data_tvalid   => open,
@@ -563,7 +585,7 @@ begin
 
    Brik1u : Brik1
       generic map (
-         SIM_MODE    => false
+         SIM_MODE    => SIM_MODE
       )
       port map(
          clk            => clk,
