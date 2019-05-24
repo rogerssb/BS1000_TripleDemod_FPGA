@@ -2,7 +2,7 @@
 `include "addressMap.v"
 
 module pcmDecoder (
-    input                   rs,
+    input                   reset,
     input                   en,
     `ifdef USE_BUS_CLOCK
     input                   busClk,
@@ -17,7 +17,7 @@ module pcmDecoder (
     input                   symb,
     output                  data_out,
     output reg              clkEn_out,
-    output                  fifo_rs,
+    output                  fifo_reset,
     output          [1:0]   clkPhase,
     output                  symb_clk,
     output          [1:0]   inputSelect
@@ -25,6 +25,7 @@ module pcmDecoder (
 
     wire            [1:0]   mode;
     wire            [2:0]   derandMode;
+    wire            [3:0]   pcmEncoderMode;
     decoderRegs decoderRegs(
         `ifdef USE_BUS_CLOCK
         .busClk(busClk),
@@ -34,7 +35,7 @@ module pcmDecoder (
         .addr(addr),
         .dataIn(din),
         .dataOut(dout),
-        .fifoReset(fifo_rs),
+        .fifoReset(fifo_reset),
         .clkPhase(clkPhase),
         .clkSelect(clk_sel),
         .dataInvert(data_inv),
@@ -45,7 +46,8 @@ module pcmDecoder (
         .biphaseEnable(biphase),
         .millerEnable(miller),
         .mode(mode),
-        .inputSelect(inputSelect)
+        .inputSelect(inputSelect),
+        .pcmEncoderMode(pcmEncoderMode)
     );
 
 //------------------------------------------------------------------------------
@@ -61,7 +63,7 @@ wire            nrz ;
 
 biphase_to_nrz biphase_to_nrz
   (
-  .rs           (rs),
+  .rs           (reset),
   .clk          (clk),
   .symb_clk_en  (symb_clk_en),
   .biphase_en   (biphase_en),
@@ -72,9 +74,9 @@ biphase_to_nrz biphase_to_nrz
 wire            biphaseClkEn = (biphase_en & symb_clk_en);
 
 reg             nrz_delay;
-always @ ( posedge clk or posedge rs )
+always @ ( posedge clk or posedge reset )
     begin
-    if ( rs )
+    if ( reset )
         begin
         nrz_delay <= 0;
         end
@@ -94,7 +96,7 @@ always @ ( posedge clk or posedge rs )
 wire            dec;
 mrk_spc_decode mrk_spc_decode
   (
-  .rs           (rs),
+  .rs           (reset),
   .din          (nrz),
   .last_din     (nrz_delay),
   .clk          (clk),
@@ -111,7 +113,7 @@ mrk_spc_decode mrk_spc_decode
 //------------------------------------------------------------------------------
     millerDecoder md(
         .clk(clk),
-        .reset(rs),
+        .reset(reset),
         .clkEn(1'b1),
         .pcmEn(symb_clk_en),
         .pcmMode({miller,1'b0,mode}),
@@ -139,8 +141,8 @@ mrk_spc_decode mrk_spc_decode
     end
     reg             rand_nrz_dec_out ;
 
-    always @ ( posedge clk or posedge rs ) begin
-        if ( rs ) begin
+    always @ ( posedge clk or posedge reset ) begin
+        if ( reset ) begin
             rand_nrz_shft <= 23'h0 ;
             rand_nrz_dec_out <= 1'b0 ;
         end
@@ -170,24 +172,68 @@ mrk_spc_decode mrk_spc_decode
 //                     Output Formatting and Inversions
 //------------------------------------------------------------------------------
 
-    assign  data_out = data_inv ? !derand_out : derand_out ;
+    assign  data_inverse = data_inv ? !derand_out : derand_out ;
 
+//------------------------------------------------------------------------------
+//                               Output Formatting
+//------------------------------------------------------------------------------
+
+    reg     pcmSymClkEn;
+    reg     pcmSym2xClkEn;
     always @* begin
         if (miller) begin
-            clkEn_out = (millerBitEn & symb_clk_en);
+            pcmSymClkEn = (millerBitEn & symb_clk_en);
+            case (pcmEncoderMode)
+                `PNGEN_PCM_NRZL,
+                `PNGEN_PCM_NRZM,
+                `PNGEN_PCM_NRZS: begin
+                    pcmSym2xClkEn = (millerBitEn & symb_clk_en);
+                    clkEn_out = (millerBitEn & symb_clk_en);
+                end
+                default: begin
+                    pcmSym2xClkEn = symb_clk_en;
+                    clkEn_out = symb_clk_en;
+                end
+            endcase
         end
         else if (biphase) begin
-            clkEn_out = (biphase_en & symb_clk_en);
+            pcmSymClkEn = (biphase_en & symb_clk_en);
+            case (pcmEncoderMode)
+                `PNGEN_PCM_NRZL,
+                `PNGEN_PCM_NRZM,
+                `PNGEN_PCM_NRZS: begin
+                    pcmSym2xClkEn = (biphase_en & symb_clk_en);
+                    clkEn_out = (biphase_en & symb_clk_en);
+                end
+                default: begin
+                    pcmSym2xClkEn = symb_clk_en;
+                    clkEn_out = symb_clk_en;
+                end
+            endcase
         end
         else if (clk_sel) begin
-            clkEn_out = symb_clk_en;
+            pcmSymClkEn = symb_clk_en;
+            case (pcmEncoderMode)
+                `PNGEN_PCM_NRZL,
+                `PNGEN_PCM_NRZM,
+                `PNGEN_PCM_NRZS: begin
+                    pcmSym2xClkEn = symb_clk_en;
+                    clkEn_out = symb_clk_en;
+                end
+                default: begin
+                    pcmSym2xClkEn = symb_clk_2x_en;
+                    clkEn_out = symb_clk_2x_en;
+                end
+            endcase
         end
         else begin
             clkEn_out = symb_clk_2x_en;
+            pcmSymClkEn = symb_clk_2x_en;
+            pcmSym2xClkEn = symb_clk_2x_en;
         end
     end
 
-    reg symbol_clk;
+    reg         symbol_clk;
     always @(posedge clk) begin
         if (miller) begin
             if (millerBitEn & symb_clk_en) begin
@@ -214,8 +260,22 @@ mrk_spc_decode mrk_spc_decode
             end
         end
     end
-
     assign symb_clk = clk_sel ? symbol_clk : symb_clk_2x_en;
+
+    pcmEncoder pcmEnc(
+        .clk(clk),
+        .reset(reset),
+        .clkEn(1'b1),
+        .sym2xClkEn(pcmSym2xClkEn),
+        .symClkEn(pcmSymClkEn),
+        .pcmMode(pcmEncoderMode),
+        .pcmInvert(1'b0),
+        .nrzBit(data_inverse),
+        .pcmBit(pcmEncData)
+    );
+
+    assign data_out = pcmEncData ;
+
 
 endmodule
 
@@ -223,19 +283,19 @@ endmodule
 `ifdef TEST_MODULE
 module decoder_test;
 
-reg rs,en,wr0,wr1;
+reg reset,en,wr0,wr1;
 reg clk,symb_clk_en,symb_clk_2x_en;
 reg [11:0]addr;
 reg [15:0]din;
 wire [15:0]dout;
 reg [2:0]symb_i,symb_q;
 wire dout_i,dout_q,clk_out;
-wire fifo_rs;
+wire fifo_reset;
 wire clk_inv;
 
 decoder uut
   (
-  rs,
+  reset,
   en,
   wr0,wr1,
   addr,
@@ -249,12 +309,12 @@ decoder uut
   dout_i,
   dout_q,
   clk_out,
-  fifo_rs,
+  fifo_reset,
   clk_inv
   );
 
 initial begin
-  rs = 0;
+  reset = 0;
   en = 0;
   wr0 = 0;
   wr1 = 0;
@@ -268,8 +328,8 @@ initial begin
 
   uut.decoder_regs.q = 16'h0004;
 
-  #100 rs = !rs;
-  #100 rs = !rs;
+  #100 reset = !reset;
+  #100 reset = !reset;
 end
 
 always #5 clk = !clk;
@@ -277,8 +337,8 @@ always #5 clk = !clk;
 //set symb_clk_en rate at 4 MHz
 
 reg [4:0]symb_divider;
-always @(posedge clk or posedge rs)begin
-  if(rs)begin
+always @(posedge clk or posedge reset)begin
+  if(reset)begin
     symb_divider <= 0;
     symb_clk_en <= 0;
     end

@@ -84,7 +84,7 @@ module bitsyncBertTop (
 
 );
 
-    parameter VER_NUMBER = 16'd493;
+    parameter VER_NUMBER = 16'd517;
 
 
 //******************************************************************************
@@ -462,7 +462,7 @@ clockAndDataInputSync diffSync(
     decoder dualDecoder
     (
         .clk(clk),
-        .rs(reset),
+        .reset(reset),
         .en(dualDecoderSpace),
         `ifdef USE_BUS_CLOCK
         .busClk(fb_clk),
@@ -481,7 +481,7 @@ clockAndDataInputSync diffSync(
         .dout_i(dualDataI),
         .dout_q(dualDataQ),
         .outputClkEn(dualPcmClkEn),
-        .fifo_rs(),
+        .fifo_reset(),
         .clkPhase(dualClkPhase),
         .symb_clk(dualPcmSymClk),
         .inputSelect(dualDecInputSelect)
@@ -533,7 +533,7 @@ clockAndDataInputSync diffSync(
     wire            ch1Clk90       = ch1ClkPhase[1];
     pcmDecoder dec1 (
         .clk(clk),
-        .rs(reset),
+        .reset(reset),
         .busClk(fb_clk),
         .en(ch1DecoderSpace),
         .wr0(wr0),
@@ -548,7 +548,7 @@ clockAndDataInputSync diffSync(
         .symb(ch1DecInput),               // data input,
         .data_out(ch1PcmData),            // data output
         .clkEn_out(ch1PcmClkEn),          // clk output
-        .fifo_rs(),
+        .fifo_reset(),
         .clkPhase(ch1ClkPhase),
         .symb_clk(ch1PcmSymClk),
         .inputSelect(ch1DecInputSelect)

@@ -30,7 +30,7 @@
 `define BS_CIC_COMP_USE_MPY
 `define ADD_BERT
 `define USE_DEMOD_CandD
-`define ADD_TURBO
+//`define ADD_TURBO
 `define ADD_MSE
 `endif
 
@@ -47,7 +47,7 @@
 //`define ADD_CMA
 `define ADD_LDPC
 `define ADD_DQM
-//`define ADD_MULTIH
+`define ADD_MULTIH
 `define ADD_SUPERBAUD_TED
 `ifndef SIMULATE
 `define EMBED_MULTIH_CARRIER_LOOP
@@ -601,12 +601,6 @@
 `define DEMOD_FSKDEV        13'bx_xxxx_xxx1_010x
 `define DEMOD_EQ_STEP_SIZE  13'bx_xxxx_xxx1_10xx
 `define DEMOD_EQ_REF_LEVEL  13'bx_xxxx_xxx1_11xx
-
-// Define the FM memory map
-`define FM_MOD_FREQ     13'bx_xxxx_xxxx_00xx
-`define FM_MOD_DEV      13'bx_xxxx_xxxx_01xx
-`define FM_MOD_BITRATE  13'bx_xxxx_xxxx_10xx
-`define FM_MOD_CIC      13'bx_xxxx_xxxx_11xx
 
 // Define the DDC memory map
 `define DDC_CENTER_FREQ 13'bx_xxxx_xxxx_00xx

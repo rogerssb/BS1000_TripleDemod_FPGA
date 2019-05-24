@@ -13,6 +13,10 @@ create_generated_clock -name {cAndD1/pllDivider_reg_n_0_[0]} -source [get_ports 
 create_generated_clock -name {cAndD2/dllDivider_reg_n_0_[0]} -source [get_pins cAndD2/dll/dllOutputClk_reg/Q] -divide_by 4 [get_pins {cAndD2/dllDivider_reg[0]/Q}]
 create_generated_clock -name {cAndD2/pllDivider_reg_n_0_[0]} -source [get_ports pll2_OUT1] -divide_by 4 [get_pins {cAndD2/pllDivider_reg[0]/Q}]
 
+set_multicycle_path -setup 4 -from [get_pins -hierarchical -regexp {.*mse/mse./diffTotal_reg.*/C$}] -to [get_pins -hierarchical -regexp {.*mse/mse./.*/D$}]
+set_multicycle_path -hold  3 -from [get_pins -hierarchical -regexp {.*mse/mse./diffTotal_reg.*/C$}] -to [get_pins -hierarchical -regexp {.*mse/mse./.*/D$}]
+
+
 set_input_delay -clock [get_clocks sysClk] -min -add_delay 1.800 [get_ports {adc0[*]}]
 set_input_delay -clock [get_clocks sysClk] -max -add_delay 5.400 [get_ports {adc0[*]}]
 set_input_delay -clock [get_clocks sysClk] -min -add_delay 1.800 [get_ports {adc1[*]}]
