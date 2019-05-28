@@ -68,7 +68,7 @@
        <signal name="wr0" scope="test.demod" />
       </signals>
      </group>
-     <group open="no" name="Bitsync" show="yes" >
+     <group open="yes" name="Bitsync" show="yes" >
       <signals>
        <signal radix="Decimal" name="cicDecimationInt" scope="test" />
        <signal scale="fixed" maxscaledbl="1" interpolate="Step" minscaledbl="-1" radix="Real" name="inIReal" scope="test.demod.resampler" />
@@ -140,7 +140,7 @@
        <signal interpolate="Step" radix="Real" name="interpReal" scope="test.dac2Interp" />
       </signals>
      </group>
-     <group open="yes" name="Trellis" show="yes" >
+     <group open="no" name="Trellis" show="yes" >
       <signals>
        <signal name="trellisReset" scope="test" />
        <signal name="symEn" scope="test.trellis.trellisCarrierLoop" />

@@ -229,6 +229,9 @@ channelAGC channelAGC(
     end
     wire    signed  [2:0]   stepSizeExponent;
     wire            [15:0]  cmaReference;
+    `ifdef ADD_CMA_DISPLAY
+    wire            [15:0]  maxWtMag;
+    `endif
     wire            [31:0]  cmaDout;
     cmaRegs cmaRegs(
         .addr(addr),
@@ -236,6 +239,10 @@ channelAGC channelAGC(
         .dataOut(cmaDout),
         .cs(cmaSpace),
         .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .wtOvf(cmaWeightOverflow),
+        `ifdef ADD_CMA_DISPLAY
+        .maxWeightMag(maxWtMag),
+        `endif
         .enableEqualizer(enableEqualizer),
         .resetEqualizer(resetEqualizer),
         .eqStepSizeExponent(stepSizeExponent),
@@ -244,6 +251,9 @@ channelAGC channelAGC(
 
     wire    signed  [17:0]  iCma;
     wire    signed  [17:0]  qCma;
+    `ifdef ADD_CMA_DISPLAY
+    wire    signed  [17:0]  cmaWeightVideo;
+    `endif
     cma cma(
         .clk(clk),        
         .clkEn(ddcSync),      
@@ -253,6 +263,11 @@ channelAGC channelAGC(
         .refLevel(cmaReference),   
         .iIn(iDdc),        
         .qIn(qDdc),
+        .weightOverflow(cmaWeightOverflow),
+        `ifdef ADD_CMA_DISPLAY
+        .maxMag(maxWtMag),
+        .video(cmaWeightVideo),
+        `endif
         .iOut(iCma),       
         .qOut(qCma)
     ); 

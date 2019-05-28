@@ -42,7 +42,7 @@ module legacyDemodTop (
     trellisSym2xEn,
     iTrellis,
     qTrellis,
-    legacyBit     
+    legacyBit
     );
 
 input           nWe;
@@ -75,11 +75,11 @@ output          sdiOut;
 output          trellisSymEnEven;
 output          trellisSymEn;
 output          trellisSym2xEn;
-output  [17:0]  iTrellis;  
-output  [17:0]  qTrellis;  
+output  [17:0]  iTrellis;
+output  [17:0]  qTrellis;
 output          legacyBit;
 
-parameter VER_NUMBER = 16'd448;
+parameter VER_NUMBER = 16'd520;
 
 wire    [12:0]  addr = {addr12,addr11,addr10,addr9,addr8,addr7,addr6,addr5,addr4,addr3,addr2,addr1,1'b0};
 wire            nWr = nWe;
@@ -113,7 +113,7 @@ always @(posedge nWe or posedge clockCounterEn) begin
         startClockCounter <= 0;
         end
     else if (misc_en) begin
-        casex (addr) 
+        casex (addr)
             `MISC_CLOCK:        startClockCounter <= 1;
             endcase
         end

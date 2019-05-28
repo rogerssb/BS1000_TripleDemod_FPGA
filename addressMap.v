@@ -42,6 +42,10 @@
 `define DDC_CIC_COMP_USE_MPY
 `endif
 
+`ifdef ADD_CMA
+    `define ADD_CMA_DISPLAY
+`endif
+
 
 // Split the memory space for the different functions
 `define DEMODSPACE          13'bx_0000_0xxx_xxxx

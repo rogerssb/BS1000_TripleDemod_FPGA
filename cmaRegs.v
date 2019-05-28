@@ -16,6 +16,10 @@ module cmaRegs(
     output  reg         [31:0]  dataOut,
     input                       cs,
     input                       wr0, wr1, wr2, wr3,
+    input                       wtOvf,
+    `ifdef ADD_CMA_DISPLAY
+    input               [15:0]  maxWeightMag,
+    `endif
     output  reg                 enableEqualizer,
     output  reg                 resetEqualizer,
     output  reg         [2:0]   eqStepSizeExponent,

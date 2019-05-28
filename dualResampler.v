@@ -1,7 +1,7 @@
 /******************************************************************************
 Copyright 2008-2015 Koos Technical Services, Inc. All Rights Reserved
 
-This source code is the Intellectual Property of Koos Technical Services,Inc. 
+This source code is the Intellectual Property of Koos Technical Services,Inc.
 (KTS) and is provided under a License Agreement which protects KTS' ownership and
 derivative rights in exchange for negotiated compensation.
 ******************************************************************************/
@@ -9,7 +9,7 @@ derivative rights in exchange for negotiated compensation.
 `timescale 1ns / 10 ps
 `include "addressMap.v"
 
-module dualResampler( 
+module dualResampler(
     clk, reset, sync,
     wr0, wr1, wr2, wr3,
     addr,
@@ -73,8 +73,8 @@ resampRegs resampRegs(
      );
 
 
-resampler resamplerI( 
-    .clk(clk), .reset(reset), 
+resampler resamplerI(
+    .clk(clk), .reset(reset),
     .resetPhase(resetPhase),
     .sync(sync),
     .resampleRate(resampleRate),
@@ -87,7 +87,7 @@ resampler resamplerI(
     );
 
 wire    [47:0]  cicOut;
-cicDecimator auCic( 
+cicDecimator auCic(
     .clk(clk), .reset(reset), .sync(sync),
     .gainShift(auShift),
     .decimation(auDecimation),
@@ -102,7 +102,7 @@ wire    [31:0]  rqFreqOffset =      aEnable ? auResamplerFreqOffset : resamplerF
 wire            rqOffsetEn =        aEnable ? auOffsetEn : offsetEn;
 wire    [17:0]  rqIn =              aEnable ? cicOut[47:30] : qIn;
 wire            rqSync =            aEnable ? auCicSyncOut : sync;
-resampler resamplerQ( 
+resampler resamplerQ(
     .clk(clk), .reset(reset),
     .resetPhase(resetPhase),
     .sync(rqSync),
@@ -123,8 +123,8 @@ endmodule
 //`define TEST_MODULE
 `ifdef TEST_MODULE
 
-//`define RAMP_TEST
-`define SINEWAVE_TEST
+`define RAMP_TEST
+//`define SINEWAVE_TEST
 //`define IMPULSE_TEST
 //`define MATLAB_VECTORS
 
@@ -133,12 +133,14 @@ endmodule
 module test;
 
 reg reset,clk;
+reg [4:0]   demodMode;
 
 // Create the clocks
 parameter SAMPLE_FREQ = 9.333333e6;
 parameter HC = 1e9/SAMPLE_FREQ/2;
 parameter C = 2*HC;
 parameter syncDecimation = 2;
+parameter DC = syncDecimation*C;
 reg clken;
 always #HC clk = clk^clken;
 
@@ -166,8 +168,9 @@ always @(posedge clk) begin
 reg     [17:0]iIn,qIn;
 wire    [17:0]iOut,qOut;
 wire    [31:0]resamplerFreq;
-dualResampler resampler( 
+dualResampler resampler(
     .clk(clk), .reset(reset), .sync(sync),
+    .demodMode(demodMode),
     .resamplerFreqOffset(resamplerFreq),
     .offsetEn(1'b1),
     .iIn(iIn),
@@ -186,16 +189,18 @@ integer resamplerFreqInt = (resamplerFreqNorm >= `TWO_POW_31) ? (resamplerFreqNo
 assign resamplerFreq = resamplerFreqInt;
 
 real rampFreqHz;
-real rampFreqNorm = rampFreqHz * `SAMPLE_PERIOD * `TWO_POW_32;
+real rampFreqNorm = rampFreqHz * `SAMPLE_PERIOD * `TWO_POW_32 * syncDecimation;
 integer rampFreqInt = rampFreqNorm;
 wire [31:0] rampInc = rampFreqInt;
 
-reg [31:0]rampCounter;
+reg     [31:0]  rampCounter;
+reg             rampEnable;
+initial         rampEnable = 0;
 always @(posedge clk) begin
     if (reset) begin
         rampCounter <= 0;
         end
-    else if (sync) begin
+    else if (sync & rampEnable) begin
         rampCounter <= rampCounter + rampInc;
         end
     iIn <= (rampCounter[31] ^ rampCounter[30]) ? {rampCounter[31],~rampCounter[29:13]} : {rampCounter[31],rampCounter[29:13]};
@@ -203,7 +208,8 @@ always @(posedge clk) begin
     end
 
 `ifdef SIMULATE
-real iInReal = ((iIn > 131071.0) ? (iIn - 262144.0) : iIn)/131072.0;
+real iInReal;
+always @* iInReal = ((iIn > 131071.0) ? (iIn - 262144.0) : iIn)/131072.0;
 `endif
 
 `ifdef MATLAB_VECTORS
@@ -238,8 +244,8 @@ initial begin
     syncCount = 0;
     clk = 0;
     resampler.resampRegs.resampleRate = 32'h0;
-    rampFreqHz = 1e6;
-    resamplerFreqHz = 23.0/32.0*10e6;
+    rampFreqHz = 1e6/syncDecimation;
+    resamplerFreqHz = 7.0*rampFreqHz;
 
     // Turn on the clock
     clken=1;
@@ -248,6 +254,9 @@ initial begin
     reset = 1;
     #(2*C) ;
     reset = 0;
+
+    #(1*DC) ;
+    rampEnable = 1;
 
     #(1024*C) ;
 
@@ -275,7 +284,7 @@ assign resamplerFreq = resamplerFreqInt;
 
 wire [17:0]sineOut,cosineOut;
 reg ddsreset;
-dds dds(.sclr(ddsreset), .clk(clk), .we(1'b1), .data(freq), .sine(sineOut), .cosine(cosineOut));
+dds dds(.sclr(ddsreset), .clk(clk), .ce(sync), .we(1'b1), .data(freq), .sine(sineOut), .cosine(cosineOut));
 
 always @(posedge clk) begin
     //iIn <= {cosineOut[17],cosineOut[17:1]};
@@ -302,7 +311,7 @@ initial begin
     end
 always @(negedge clk) begin
     if (resampler.syncOut && saveVectors) begin
-        $fwrite(outfile,"%f\n",resampler.iOutReal);
+        $fwrite(outfile,"%f\n",resampler.resamplerI.outReal);
     //if (saveVectors) begin
     //    $fwrite(outfile,"%f\n",iInReal);
         vectorCount <= vectorCount + 1;
@@ -320,6 +329,7 @@ initial begin
     sync = 1;
     syncCount = 0;
     clk = 0;
+    demodMode = `MODE_2FSK;
     resampler.resampRegs.resampleRate = 32'h0;
     //resamplerFreqHz = 23.0/32.0/syncDecimation*10e6;
     resamplerFreqHz = 2400000.0;
@@ -329,14 +339,12 @@ initial begin
     clken=1;
     #(10*C) ;
 
+    reset = 1;
     ddsreset = 1;
-    #(2*C) ;
+    #(20*C) ;
+    reset = 0;
     ddsreset = 0;
     #(2*C) ;
-
-    reset = 1;
-    #(2*C) ;
-    reset = 0;
 
     #(4096*C) ;
 
@@ -377,491 +385,491 @@ initial begin
     reset = 0;
 
     // Clock in 9 zeros
-    #(9*C) ;
+    #(9*DC) ;
 
-    // Set resampleFreq to clock in a value that will allow 9 consecutive clocks to 
+    // Set resampleFreq to clock in a value that will allow 9 consecutive clocks to
     // generate all the offset zero outputs.
     resamplerPhaseInc = 32'hf8000009;
-    #(1*C) ;
+    #(1*DC) ;
 
     // Set resampleFreq to rollover on every clock but leave the offset alone.
     resamplerPhaseInc = 32'hffffffff;
     // Clock in an impulse
     iIn = 18'h1ffff;
     qIn = 18'h1ffff;
-    #(1*C) ;
+    #(1*DC) ;
     // Clock 7 times to produce each of the 9 outputs for an offset of zero.
     iIn = 18'h0;
     qIn = 18'h0;
-    #(7*C) ;
+    #(7*DC) ;
 
     // Set resamplerPhaseInc to get to next offset
     resamplerPhaseInc = 32'hf8000008;
-    #(1*C) ;
+    #(1*DC) ;
 
     // Set resampleFreq to rollover on every clock but leave the offset alone.
     resamplerPhaseInc = 32'hffffffff;
     // Clock in an impulse
     iIn = 18'h1ffff;
     qIn = 18'h1ffff;
-    #(1*C) ;
+    #(1*DC) ;
     // Clock 7 times to produce each of the 9 outputs for an offset of zero.
     iIn = 18'h0;
     qIn = 18'h0;
-    #(7*C) ;
+    #(7*DC) ;
 
     // Set resamplerPhaseInc to get to next offset
     resamplerPhaseInc = 32'hf8000008;
-    #(1*C) ;
+    #(1*DC) ;
 
     // Set resampleFreq to rollover on every clock but leave the offset alone.
     resamplerPhaseInc = 32'hffffffff;
     // Clock in an impulse
     iIn = 18'h1ffff;
     qIn = 18'h1ffff;
-    #(1*C) ;
+    #(1*DC) ;
     // Clock 7 times to produce each of the 9 outputs for an offset of zero.
     iIn = 18'h0;
     qIn = 18'h0;
-    #(7*C) ;
+    #(7*DC) ;
 
     // Set resamplerPhaseInc to get to next offset
     resamplerPhaseInc = 32'hf8000008;
-    #(1*C) ;
+    #(1*DC) ;
 
     // Set resampleFreq to rollover on every clock but leave the offset alone.
     resamplerPhaseInc = 32'hffffffff;
     // Clock in an impulse
     iIn = 18'h1ffff;
     qIn = 18'h1ffff;
-    #(1*C) ;
+    #(1*DC) ;
     // Clock 7 times.
     iIn = 18'h0;
     qIn = 18'h0;
-    #(7*C) ;
+    #(7*DC) ;
 
     // Set resamplerPhaseInc to get to next offset
     resamplerPhaseInc = 32'hf8000008;
-    #(1*C) ;
+    #(1*DC) ;
 
     // Set resampleFreq to rollover on every clock but leave the offset alone.
     resamplerPhaseInc = 32'hffffffff;
     // Clock in an impulse
     iIn = 18'h1ffff;
     qIn = 18'h1ffff;
-    #(1*C) ;
+    #(1*DC) ;
     // Clock 7 times to produce each of the 9 outputs for an offset of zero.
     iIn = 18'h0;
     qIn = 18'h0;
-    #(7*C) ;
+    #(7*DC) ;
 
     // Set resamplerPhaseInc to get to next offset
     resamplerPhaseInc = 32'hf8000008;
-    #(1*C) ;
+    #(1*DC) ;
 
     // Set resampleFreq to rollover on every clock but leave the offset alone.
     resamplerPhaseInc = 32'hffffffff;
     // Clock in an impulse
     iIn = 18'h1ffff;
     qIn = 18'h1ffff;
-    #(1*C) ;
+    #(1*DC) ;
     // Clock 7 times to produce each of the 9 outputs for an offset of zero.
     iIn = 18'h0;
     qIn = 18'h0;
-    #(7*C) ;
+    #(7*DC) ;
 
     // Set resamplerPhaseInc to get to next offset
     resamplerPhaseInc = 32'hf8000008;
-    #(1*C) ;
+    #(1*DC) ;
 
     // Set resampleFreq to rollover on every clock but leave the offset alone.
     resamplerPhaseInc = 32'hffffffff;
     // Clock in an impulse
     iIn = 18'h1ffff;
     qIn = 18'h1ffff;
-    #(1*C) ;
+    #(1*DC) ;
     // Clock 7 times to produce each of the 9 outputs for an offset of zero.
     iIn = 18'h0;
     qIn = 18'h0;
-    #(7*C) ;
+    #(7*DC) ;
 
     // Set resamplerPhaseInc to get to next offset
     resamplerPhaseInc = 32'hf8000008;
-    #(1*C) ;
+    #(1*DC) ;
 
     // Set resampleFreq to rollover on every clock but leave the offset alone.
     resamplerPhaseInc = 32'hffffffff;
     // Clock in an impulse
     iIn = 18'h1ffff;
     qIn = 18'h1ffff;
-    #(1*C) ;
+    #(1*DC) ;
     // Clock 7 times to produce each of the 9 outputs for an offset of zero.
     iIn = 18'h0;
     qIn = 18'h0;
-    #(7*C) ;
+    #(7*DC) ;
 
     // Set resamplerPhaseInc to get to next offset
     resamplerPhaseInc = 32'hf8000008;
-    #(1*C) ;
+    #(1*DC) ;
 
     // Set resampleFreq to rollover on every clock but leave the offset alone.
     resamplerPhaseInc = 32'hffffffff;
     // Clock in an impulse
     iIn = 18'h1ffff;
     qIn = 18'h1ffff;
-    #(1*C) ;
+    #(1*DC) ;
     // Clock 7 times to produce each of the 9 outputs for an offset of zero.
     iIn = 18'h0;
     qIn = 18'h0;
-    #(7*C) ;
+    #(7*DC) ;
 
     // Set resamplerPhaseInc to get to next offset
     resamplerPhaseInc = 32'hf8000008;
-    #(1*C) ;
+    #(1*DC) ;
 
     // Set resampleFreq to rollover on every clock but leave the offset alone.
     resamplerPhaseInc = 32'hffffffff;
     // Clock in an impulse
     iIn = 18'h1ffff;
     qIn = 18'h1ffff;
-    #(1*C) ;
+    #(1*DC) ;
     // Clock 7 times to produce each of the 9 outputs for an offset of zero.
     iIn = 18'h0;
     qIn = 18'h0;
-    #(7*C) ;
+    #(7*DC) ;
 
     // Set resamplerPhaseInc to get to next offset
     resamplerPhaseInc = 32'hf8000008;
-    #(1*C) ;
+    #(1*DC) ;
 
     // Set resampleFreq to rollover on every clock but leave the offset alone.
     resamplerPhaseInc = 32'hffffffff;
     // Clock in an impulse
     iIn = 18'h1ffff;
     qIn = 18'h1ffff;
-    #(1*C) ;
+    #(1*DC) ;
     // Clock 7 times to produce each of the 9 outputs for an offset of zero.
     iIn = 18'h0;
     qIn = 18'h0;
-    #(7*C) ;
+    #(7*DC) ;
 
     // Set resamplerPhaseInc to get to next offset
     resamplerPhaseInc = 32'hf8000008;
-    #(1*C) ;
+    #(1*DC) ;
 
     // Set resampleFreq to rollover on every clock but leave the offset alone.
     resamplerPhaseInc = 32'hffffffff;
     // Clock in an impulse
     iIn = 18'h1ffff;
     qIn = 18'h1ffff;
-    #(1*C) ;
+    #(1*DC) ;
     // Clock 7 times to produce each of the 9 outputs for an offset of zero.
     iIn = 18'h0;
     qIn = 18'h0;
-    #(7*C) ;
+    #(7*DC) ;
 
     // Set resamplerPhaseInc to get to next offset
     resamplerPhaseInc = 32'hf8000008;
-    #(1*C) ;
+    #(1*DC) ;
 
     // Set resampleFreq to rollover on every clock but leave the offset alone.
     resamplerPhaseInc = 32'hffffffff;
     // Clock in an impulse
     iIn = 18'h1ffff;
     qIn = 18'h1ffff;
-    #(1*C) ;
+    #(1*DC) ;
     // Clock 7 times to produce each of the 9 outputs for an offset of zero.
     iIn = 18'h0;
     qIn = 18'h0;
-    #(7*C) ;
+    #(7*DC) ;
 
     // Set resamplerPhaseInc to get to next offset
     resamplerPhaseInc = 32'hf8000008;
-    #(1*C) ;
+    #(1*DC) ;
 
     // Set resampleFreq to rollover on every clock but leave the offset alone.
     resamplerPhaseInc = 32'hffffffff;
     // Clock in an impulse
     iIn = 18'h1ffff;
     qIn = 18'h1ffff;
-    #(1*C) ;
+    #(1*DC) ;
     // Clock 7 times to produce each of the 9 outputs for an offset of zero.
     iIn = 18'h0;
     qIn = 18'h0;
-    #(7*C) ;
+    #(7*DC) ;
 
     // Set resamplerPhaseInc to get to next offset
     resamplerPhaseInc = 32'hf8000008;
-    #(1*C) ;
+    #(1*DC) ;
 
     // Set resampleFreq to rollover on every clock but leave the offset alone.
     resamplerPhaseInc = 32'hffffffff;
     // Clock in an impulse
     iIn = 18'h1ffff;
     qIn = 18'h1ffff;
-    #(1*C) ;
+    #(1*DC) ;
     // Clock 7 times to produce each of the 9 outputs for an offset of zero.
     iIn = 18'h0;
     qIn = 18'h0;
-    #(7*C) ;
+    #(7*DC) ;
 
     // Set resamplerPhaseInc to get to next offset
     resamplerPhaseInc = 32'hf8000008;
-    #(1*C) ;
+    #(1*DC) ;
 
     // Set resampleFreq to rollover on every clock but leave the offset alone.
     resamplerPhaseInc = 32'hffffffff;
     // Clock in an impulse
     iIn = 18'h1ffff;
     qIn = 18'h1ffff;
-    #(1*C) ;
+    #(1*DC) ;
     // Clock 7 times to produce each of the 9 outputs for an offset of zero.
     iIn = 18'h0;
     qIn = 18'h0;
-    #(7*C) ;
+    #(7*DC) ;
 
     // Set resamplerPhaseInc to get to next offset
     resamplerPhaseInc = 32'hf8000008;
-    #(1*C) ;
+    #(1*DC) ;
 
     // Set resampleFreq to rollover on every clock but leave the offset alone.
     resamplerPhaseInc = 32'hffffffff;
     // Clock in an impulse
     iIn = 18'h1ffff;
     qIn = 18'h1ffff;
-    #(1*C) ;
+    #(1*DC) ;
     // Clock 7 times to produce each of the 9 outputs for an offset of zero.
     iIn = 18'h0;
     qIn = 18'h0;
-    #(7*C) ;
+    #(7*DC) ;
 
     // Set resamplerPhaseInc to get to next offset
     resamplerPhaseInc = 32'hf8000008;
-    #(1*C) ;
+    #(1*DC) ;
 
     // Set resampleFreq to rollover on every clock but leave the offset alone.
     resamplerPhaseInc = 32'hffffffff;
     // Clock in an impulse
     iIn = 18'h1ffff;
     qIn = 18'h1ffff;
-    #(1*C) ;
+    #(1*DC) ;
     // Clock 7 times to produce each of the 9 outputs for an offset of zero.
     iIn = 18'h0;
     qIn = 18'h0;
-    #(7*C) ;
+    #(7*DC) ;
 
     // Set resamplerPhaseInc to get to next offset
     resamplerPhaseInc = 32'hf8000008;
-    #(1*C) ;
+    #(1*DC) ;
 
     // Set resampleFreq to rollover on every clock but leave the offset alone.
     resamplerPhaseInc = 32'hffffffff;
     // Clock in an impulse
     iIn = 18'h1ffff;
     qIn = 18'h1ffff;
-    #(1*C) ;
+    #(1*DC) ;
     // Clock 7 times to produce each of the 9 outputs for an offset of zero.
     iIn = 18'h0;
     qIn = 18'h0;
-    #(7*C) ;
+    #(7*DC) ;
 
     // Set resamplerPhaseInc to get to next offset
     resamplerPhaseInc = 32'hf8000008;
-    #(1*C) ;
+    #(1*DC) ;
 
     // Set resampleFreq to rollover on every clock but leave the offset alone.
     resamplerPhaseInc = 32'hffffffff;
     // Clock in an impulse
     iIn = 18'h1ffff;
     qIn = 18'h1ffff;
-    #(1*C) ;
+    #(1*DC) ;
     // Clock 7 times to produce each of the 9 outputs for an offset of zero.
     iIn = 18'h0;
     qIn = 18'h0;
-    #(7*C) ;
+    #(7*DC) ;
 
     // Set resamplerPhaseInc to get to next offset
     resamplerPhaseInc = 32'hf8000008;
-    #(1*C) ;
+    #(1*DC) ;
 
     // Set resampleFreq to rollover on every clock but leave the offset alone.
     resamplerPhaseInc = 32'hffffffff;
     // Clock in an impulse
     iIn = 18'h1ffff;
     qIn = 18'h1ffff;
-    #(1*C) ;
+    #(1*DC) ;
     // Clock 7 times to produce each of the 9 outputs for an offset of zero.
     iIn = 18'h0;
     qIn = 18'h0;
-    #(7*C) ;
+    #(7*DC) ;
 
     // Set resamplerPhaseInc to get to next offset
     resamplerPhaseInc = 32'hf8000008;
-    #(1*C) ;
+    #(1*DC) ;
 
     // Set resampleFreq to rollover on every clock but leave the offset alone.
     resamplerPhaseInc = 32'hffffffff;
     // Clock in an impulse
     iIn = 18'h1ffff;
     qIn = 18'h1ffff;
-    #(1*C) ;
+    #(1*DC) ;
     // Clock 7 times to produce each of the 9 outputs for an offset of zero.
     iIn = 18'h0;
     qIn = 18'h0;
-    #(7*C) ;
+    #(7*DC) ;
 
     // Set resamplerPhaseInc to get to next offset
     resamplerPhaseInc = 32'hf8000008;
-    #(1*C) ;
+    #(1*DC) ;
 
     // Set resampleFreq to rollover on every clock but leave the offset alone.
     resamplerPhaseInc = 32'hffffffff;
     // Clock in an impulse
     iIn = 18'h1ffff;
     qIn = 18'h1ffff;
-    #(1*C) ;
+    #(1*DC) ;
     // Clock 7 times to produce each of the 9 outputs for an offset of zero.
     iIn = 18'h0;
     qIn = 18'h0;
-    #(7*C) ;
+    #(7*DC) ;
 
     // Set resamplerPhaseInc to get to next offset
     resamplerPhaseInc = 32'hf8000008;
-    #(1*C) ;
+    #(1*DC) ;
 
     // Set resampleFreq to rollover on every clock but leave the offset alone.
     resamplerPhaseInc = 32'hffffffff;
     // Clock in an impulse
     iIn = 18'h1ffff;
     qIn = 18'h1ffff;
-    #(1*C) ;
+    #(1*DC) ;
     // Clock 7 times to produce each of the 9 outputs for an offset of zero.
     iIn = 18'h0;
     qIn = 18'h0;
-    #(7*C) ;
+    #(7*DC) ;
 
     // Set resamplerPhaseInc to get to next offset
     resamplerPhaseInc = 32'hf8000008;
-    #(1*C) ;
+    #(1*DC) ;
 
     // Set resampleFreq to rollover on every clock but leave the offset alone.
     resamplerPhaseInc = 32'hffffffff;
     // Clock in an impulse
     iIn = 18'h1ffff;
     qIn = 18'h1ffff;
-    #(1*C) ;
+    #(1*DC) ;
     // Clock 7 times to produce each of the 9 outputs for an offset of zero.
     iIn = 18'h0;
     qIn = 18'h0;
-    #(7*C) ;
+    #(7*DC) ;
 
     // Set resamplerPhaseInc to get to next offset
     resamplerPhaseInc = 32'hf8000008;
-    #(1*C) ;
+    #(1*DC) ;
 
     // Set resampleFreq to rollover on every clock but leave the offset alone.
     resamplerPhaseInc = 32'hffffffff;
     // Clock in an impulse
     iIn = 18'h1ffff;
     qIn = 18'h1ffff;
-    #(1*C) ;
+    #(1*DC) ;
     // Clock 7 times to produce each of the 9 outputs for an offset of zero.
     iIn = 18'h0;
     qIn = 18'h0;
-    #(7*C) ;
+    #(7*DC) ;
 
     // Set resamplerPhaseInc to get to next offset
     resamplerPhaseInc = 32'hf8000008;
-    #(1*C) ;
+    #(1*DC) ;
 
     // Set resampleFreq to rollover on every clock but leave the offset alone.
     resamplerPhaseInc = 32'hffffffff;
     // Clock in an impulse
     iIn = 18'h1ffff;
     qIn = 18'h1ffff;
-    #(1*C) ;
+    #(1*DC) ;
     // Clock 7 times to produce each of the 9 outputs for an offset of zero.
     iIn = 18'h0;
     qIn = 18'h0;
-    #(7*C) ;
+    #(7*DC) ;
 
     // Set resamplerPhaseInc to get to next offset
     resamplerPhaseInc = 32'hf8000008;
-    #(1*C) ;
+    #(1*DC) ;
 
     // Set resampleFreq to rollover on every clock but leave the offset alone.
     resamplerPhaseInc = 32'hffffffff;
     // Clock in an impulse
     iIn = 18'h1ffff;
     qIn = 18'h1ffff;
-    #(1*C) ;
+    #(1*DC) ;
     // Clock 7 times to produce each of the 9 outputs for an offset of zero.
     iIn = 18'h0;
     qIn = 18'h0;
-    #(7*C) ;
+    #(7*DC) ;
 
     // Set resamplerPhaseInc to get to next offset
     resamplerPhaseInc = 32'hf8000008;
-    #(1*C) ;
+    #(1*DC) ;
 
     // Set resampleFreq to rollover on every clock but leave the offset alone.
     resamplerPhaseInc = 32'hffffffff;
     // Clock in an impulse
     iIn = 18'h1ffff;
     qIn = 18'h1ffff;
-    #(1*C) ;
+    #(1*DC) ;
     // Clock 7 times to produce each of the 9 outputs for an offset of zero.
     iIn = 18'h0;
     qIn = 18'h0;
-    #(7*C) ;
+    #(7*DC) ;
 
     // Set resamplerPhaseInc to get to next offset
     resamplerPhaseInc = 32'hf8000008;
-    #(1*C) ;
+    #(1*DC) ;
 
     // Set resampleFreq to rollover on every clock but leave the offset alone.
     resamplerPhaseInc = 32'hffffffff;
     // Clock in an impulse
     iIn = 18'h1ffff;
     qIn = 18'h1ffff;
-    #(1*C) ;
+    #(1*DC) ;
     // Clock 7 times to produce each of the 9 outputs for an offset of zero.
     iIn = 18'h0;
     qIn = 18'h0;
-    #(7*C) ;
+    #(7*DC) ;
 
     // Set resamplerPhaseInc to get to next offset
     resamplerPhaseInc = 32'hf8000008;
-    #(1*C) ;
+    #(1*DC) ;
 
     // Set resampleFreq to rollover on every clock but leave the offset alone.
     resamplerPhaseInc = 32'hffffffff;
     // Clock in an impulse
     iIn = 18'h1ffff;
     qIn = 18'h1ffff;
-    #(1*C) ;
+    #(1*DC) ;
     // Clock 7 times to produce each of the 9 outputs for an offset of zero.
     iIn = 18'h0;
     qIn = 18'h0;
-    #(7*C) ;
+    #(7*DC) ;
 
     // Set resamplerPhaseInc to get to next offset
     resamplerPhaseInc = 32'hf8000018;
-    #(1*C) ;
+    #(1*DC) ;
 
     // Set resampleFreq to rollover on every clock but leave the offset alone.
     resamplerPhaseInc = 32'hffffffff;
     // Clock in an impulse
     iIn = 18'h1ffff;
     qIn = 18'h1ffff;
-    #(1*C) ;
+    #(1*DC) ;
     // Clock 7 times to produce each of the 9 outputs for an offset of zero.
     iIn = 18'h0;
     qIn = 18'h0;
-    #(7*C) ;
+    #(7*DC) ;
 
     // Clock a few more times to get all the outputs
-    #(9*C) ;
+    #(9*DC) ;
 
     saveVectors = 1;
     #(1*C) ;
@@ -878,11 +886,11 @@ integer i,j;
 initial i = 0;
 initial j = 0;
 real impulse[0:287];
-wire defined = !(resampler.iOut === 18'hxxxxx);
+wire defined = !(resampler.resamplerI.out === 18'hxxxxx);
 integer index = (i+j);
 always @(negedge clk) begin
-    if (defined && (resampler.resample)) begin
-        impulse[index] <= resampler.iOutReal;
+    if (defined && (resampler.resamplerI.resample)) begin
+        impulse[index] <= resampler.resamplerI.outReal;
         if (i == 256) begin
             i <= 0;
             j <= j + 1;

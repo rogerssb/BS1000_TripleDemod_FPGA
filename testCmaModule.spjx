@@ -3,7 +3,6 @@
  <products>
   <product name="SILOS" >
    <settings>
-    <setting value="Y" name="DebugEnable" />
     <setting value="Silvaco4.14.3.R" name="Version" />
     <setting value="Y" name="NoFloatWarn" />
     <setting value="N" name="VisualDebug" />
@@ -14,10 +13,10 @@
      <setting value="N" name="GotoSource" />
      <setting value="163" name="C0Width" />
      <setting value="75" name="C1Width" />
-     <setting value="193" name="C2Width" />
+     <setting value="74" name="C2Width" />
     </settings>
     <views>
-     <view value="1736.025 ns,4263.150 ns,36.625 ns,1849.598 ns,2701.000 ns" name="Last" />
+     <view value="4772.000 ns,6674.976 ns,34.257 ns,1945.797 ns,2701.000 ns" name="Last" />
     </views>
     <groups>
      <group open="yes" name="New Group1" show="yes" >
@@ -26,11 +25,22 @@
        <signal name="clkEn" scope="test" />
        <signal name="iIn[17:0]" scope="test.cma.tap2" />
        <signal name="iOut[17:0]" scope="test.cma.tap2" />
-       <signal name="iSum[17:0]" scope="test.cma" />
        <signal name="iInDelay[17:0]" scope="test.cma.tap2" />
+       <signal name="iSum[17:0]" scope="test.cma" />
+       <signal name="iSumSqr[35:0]" scope="test.cma" />
+       <signal name="qSum[17:0]" scope="test.cma" />
+       <signal name="qSumSqr[35:0]" scope="test.cma" />
+       <signal name="mag[17:0]" scope="test.cma" />
+       <signal name="refLevel[15:0]" scope="test.cma" />
+       <signal name="diff[17:0]" scope="test.cma" />
+       <signal name="iErrMult[35:0]" scope="test.cma" />
        <signal name="iError[17:0]" scope="test.cma.tap2" />
        <signal name="iWeight[17:0]" scope="test.cma.tap2" />
+       <signal name="qError[17:0]" scope="test.cma.tap2" />
+       <signal name="qWeight[17:0]" scope="test.cma.tap2" />
        <signal name="wtUpdate" scope="test.cma.tap2" />
+       <signal name="wtReset" scope="test" />
+       <signal radix="Decimal" name="mag[17:0]" scope="test.cma" />
       </signals>
      </group>
     </groups>
@@ -44,7 +54,7 @@
    </librarydirs>
    <explorer>
     <settings>
-     <setting value="test.cma.tap2" name="Scope" />
+     <setting value="test.cma.tap2.[17:0]qError" name="Scope" />
     </settings>
    </explorer>
    <sourcefiles>

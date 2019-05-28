@@ -1,7 +1,7 @@
 /******************************************************************************
 Copyright 2008-2015 Koos Technical Services, Inc. All Rights Reserved
 
-This source code is the Intellectual Property of Koos Technical Services,Inc. 
+This source code is the Intellectual Property of Koos Technical Services,Inc.
 (KTS) and is provided under a License Agreement which protects KTS' ownership and
 derivative rights in exchange for negotiated compensation.
 ******************************************************************************/
@@ -26,8 +26,8 @@ always @(posedge clk) begin
     if (reset) begin
         evenSync <= 0;
         end
-    else if (sync) begin  
-        evenSync <= ~evenSync;    
+    else if (sync) begin
+        evenSync <= ~evenSync;
         end
     end
 
@@ -110,7 +110,7 @@ always @(posedge clk) begin
     end
 reg [17:0]oddOutI,oddOutQ;
 always @(
-    fifoMux or 
+    fifoMux or
     fifoI[15] or fifoI[12] or fifoI[11] or fifoI[10] or fifoI[9] or
     fifoQ[15] or fifoQ[12] or fifoQ[11] or fifoQ[10] or fifoQ[9]) begin
     case(fifoMux)
@@ -208,8 +208,8 @@ endmodule
 //`define TEST_MODULE
 `ifdef TEST_MODULE
 
-`define SINEWAVE_TEST
-//`define IMPULSE_TEST
+//`define SINEWAVE_TEST
+`define IMPULSE_TEST
 
 `timescale 1ns/100ps
 
@@ -218,7 +218,7 @@ module test;
 reg reset,clk;
 
 // Create the clocks
-parameter decimation = 10;
+parameter decimation = 7;
 parameter HC = 5;
 parameter C = 2*HC;
 reg clken;
@@ -248,8 +248,8 @@ always @(posedge clk) begin
 reg     [17:0]hbIn;
 wire    [17:0]hbOut;
 halfbandDecimate hb ( .clk(clk), .reset(reset), .sync(sync),
-                      .iIn(hbIn),
-                      .iOut(hbOut),
+                      .iIn(hbIn), .qIn(hbIn),
+                      .iOut(hbOut), .qOut(),
                       .syncOut()
                     );
 
@@ -270,7 +270,7 @@ always @(posedge clk) begin
     end
 
 initial begin
-    reset = 0;
+    reset = 1;
     sync = 1;
     syncCount = 0;
     clk = 0;
@@ -281,7 +281,7 @@ initial begin
     #(10*C) ;
 
     reset = 1;
-    #(2*C) ;
+    #(2*C*decimation) ;
     reset = 0;
 
     #(64*C*decimation) ;
@@ -342,7 +342,7 @@ initial begin
     sync = 1;
     syncCount = 0;
     clk = 0;
-    bitCount = 0;       
+    bitCount = 0;
 
     // Turn on the clock
     clken=1;

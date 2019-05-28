@@ -19,12 +19,12 @@ module test;
 
 reg reset,clk,we0,we1,we2,we3,rd;
 reg sync;
-reg [11:0]a;
+reg [12:0]a;
 reg [31:0]d;
 wire [31:0]dout;
 
 // Create the clocks
-parameter adcDecimation = 2;
+parameter adcDecimation = 1;
 parameter SYSTEM_FREQ = 9.333333e6;
 parameter SAMPLE_FREQ = SYSTEM_FREQ/adcDecimation;
 parameter HC = 1e9/SYSTEM_FREQ/2;
@@ -144,26 +144,26 @@ assign iBB = {randData,17'h10000};
 assign qBB = 18'h0;
 wire    [17:0]  iLO,qLO;
 dds carrierDds (
-    .sclr(reset), 
-    .clk(clk), 
+    .sclr(reset),
+    .clk(clk),
     .ce(1'b1),
-    .we(1'b1), 
-    .data(carrierFreq + carrierOffsetFreq), 
-    .sine(qLO), 
+    .we(1'b1),
+    .data(carrierFreq + carrierOffsetFreq),
+    .sine(qLO),
     .cosine(iLO)
     );
 wire [35:0]productI;
-mpy18x18 mpyI(.clk(clk), 
+mpy18x18 mpyI(.clk(clk),
                 .sclr(reset),
-                .a(iBB), 
-                .b(iLO), 
+                .a(iBB),
+                .b(iLO),
                 .p(productI)
                 );
 wire [35:0]productQ;
-mpy18x18 mpyQ(.clk(clk), 
+mpy18x18 mpyQ(.clk(clk),
                 .sclr(reset),
-                .a(qBB), 
-                .b(qLO), 
+                .a(qBB),
+                .b(qLO),
                 .p(productQ)
                 );
 wire [35:0]carrierSum = productI + productQ;
@@ -229,7 +229,7 @@ assign qRx = qSignal + qNoise;
                             Instantiate the Demod
 ******************************************************************************/
 wire    [17:0]  dac0Out,dac1Out,dac2Out;
-demod demod( 
+demod demod(
     .clk(clk), .reset(reset),
     .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
     .addr(a),
@@ -255,37 +255,11 @@ always @(posedge clk) begin
         end
     end
 
-reg dac0CS,dac1CS,dac2CS;
-always @(a) begin
-    casex (a)
-        `INTERP0SPACE: begin
-            dac0CS <= 1;
-            dac1CS <= 0;
-            dac2CS <= 0;
-            end
-        `INTERP1SPACE: begin
-            dac0CS <= 0;
-            dac1CS <= 1;
-            dac2CS <= 0;
-            end
-        `INTERP2SPACE: begin
-            dac0CS <= 0;
-            dac1CS <= 0;
-            dac2CS <= 1;
-            end
-        default: begin  
-            dac0CS <= 0;
-            dac1CS <= 0;
-            dac2CS <= 0;
-            end
-        endcase
-    end
 wire    [31:0]  dac0Dout;
 wire    [17:0]  dac0Data;
 reg             interpReset;
 interpolate dac0Interp(
     .clk(clk), .reset(interpReset), .clkEn(dac0Sync),
-    .cs(dac0CS),
     .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
     .addr(a),
     .din(d),
@@ -300,7 +274,6 @@ wire    [31:0]  dac1Dout;
 wire    [17:0]  dac1Data;
 interpolate dac1Interp(
     .clk(clk), .reset(interpReset), .clkEn(dac1Sync),
-    .cs(dac1CS),
     .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
     .addr(a),
     .din(d),
@@ -315,7 +288,6 @@ wire    [31:0]  dac2Dout;
 wire    [17:0]  dac2Data;
 interpolate dac2Interp(
     .clk(clk), .reset(interpReset), .clkEn(dac2Sync),
-    .cs(dac2CS),
     .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
     .addr(a),
     .din(d),
@@ -404,7 +376,7 @@ always @(negedge clk) begin
 function [11:0] createAddress;
     input [11:0] addrA;
     input [11:0] addrB;
-    
+
     integer i;
     reg [11:0]finalAddress;
 
@@ -435,14 +407,14 @@ task write16;
     if (addr[1]) begin
         d[31:16] = data;
         #100 we2 = 1; we3 = 1;
-        #100 we2 = 0; we3 = 0; 
+        #100 we2 = 0; we3 = 0;
         end
     else begin
         d[15:0] = data;
         #100 we0 = 1; we1 = 1;
-        #100 we0 = 0; we1 = 0; 
+        #100 we0 = 0; we1 = 0;
         end
-    #100  
+    #100
     d = 32'hz;
     #200;
   end
@@ -456,7 +428,7 @@ task write32;
     d = data;
     rd = 0;
     #100 we0 = 1; we1 = 1; we2 = 1; we3 = 1;
-    #100 we0 = 0; we1 = 0; we2 = 0; we3 = 0; 
+    #100 we0 = 0; we1 = 0; we2 = 0; we3 = 0;
     #100
     d = 32'hz;
     #200;
@@ -477,7 +449,7 @@ endtask
 initial begin
 
     `ifdef ADD_NOISE
-    // The 11.5 is a fudge factor (should be 12 for the 2 bit shift) for the scaling 
+    // The 11.5 is a fudge factor (should be 12 for the 2 bit shift) for the scaling
     // down of the transmit waveform from full scale.
     // The 13.0 is to translate from SNR to EBNO which is 10log10(bitrate/bandwidth).
     $initGaussPLI(1,8.0 + 11.5 - 13.0,131072.0);
@@ -488,9 +460,9 @@ initial begin
     modReset = 0;
     reset = 0;
     sync = 1;
-    clk = 0;
+    clk = 1;
     rd = 0;
-    we0 = 0; we1 = 0; we2 = 0; we3 = 0; 
+    we0 = 0; we1 = 0; we2 = 0; we3 = 0;
     d = 32'hz;
     txScaleFactor = 0.25;
 
@@ -506,14 +478,14 @@ initial begin
     //resamplerFreqInt = 32'h8000eff9;
     write32(createAddress(`RESAMPSPACE,`RESAMPLER_RATE),resamplerFreqInt);
     write32(createAddress(`BITSYNCSPACE,`LF_CONTROL),1);    // Zero the error
-    write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h001a000d);    
-    //write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h0014000c);    
-    write32(createAddress(`BITSYNCSPACE,`LF_LIMIT), resamplerLimitInt);    
+    write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h001a000d);
+    //write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h0014000c);
+    write32(createAddress(`BITSYNCSPACE,`LF_LIMIT), resamplerLimitInt);
     write32(createAddress(`BITSYNCSPACE,`LF_LOCKDETECTOR), 32'h00308000);
 
     // Init the carrier loop filters
     write32(createAddress(`CARRIERSPACE,`CLF_CONTROL),1);    // Zero the error
-    write32(createAddress(`CARRIERSPACE,`CLF_LEAD_LAG),32'h0014000b);   
+    write32(createAddress(`CARRIERSPACE,`CLF_LEAD_LAG),32'h0014000b);
     write32(createAddress(`CARRIERSPACE,`CLF_ULIMIT), carrierLimit);
     write32(createAddress(`CARRIERSPACE,`CLF_LLIMIT), negCarrierLimit);
     write32(createAddress(`CARRIERSPACE,`CLF_LOOPDATA), sweepRate);
@@ -531,7 +503,7 @@ initial begin
     // Init the channel agc loop filter
     write32(createAddress(`CHAGCSPACE,`ALF_CONTROL),1);                 // Zero the error
     write32(createAddress(`CHAGCSPACE,`ALF_SETPOINT),32'h000000e8);     // AGC Setpoint
-    write32(createAddress(`CHAGCSPACE,`ALF_GAINS),32'h00180018);        // AGC Loop Gain
+    write32(createAddress(`CHAGCSPACE,`ALF_GAINS),32'h001a001a);        // AGC Loop Gain
     write32(createAddress(`CHAGCSPACE,`ALF_ULIMIT),32'h4fffffff);       // AGC Upper limit
     write32(createAddress(`CHAGCSPACE,`ALF_LLIMIT),32'h00000000);       // AGC Lower limit
 
@@ -601,18 +573,29 @@ initial begin
     interpReset = 0;
 
     // Enable the sample rate loop
-    write32(createAddress(`BITSYNCSPACE,`LF_CONTROL),0);  
+    write32(createAddress(`BITSYNCSPACE,`LF_CONTROL),0);
 
     // Wait 2 bit periods
     #(4*bitrateSamplesInt*C) ;
 
     // Enable the carrier loop, invert the error, and enable sweep
-    write32(createAddress(`CARRIERSPACE,`CLF_CONTROL),2);  
+    write32(createAddress(`CARRIERSPACE,`CLF_CONTROL),2);
 
     `ifdef ENABLE_AGC
     // Enable the AGC loop
-    write32(createAddress(`CHAGCSPACE,`ALF_CONTROL),0);              
+    write32(createAddress(`CHAGCSPACE,`ALF_CONTROL),0);
     `endif
+
+    // Create a reset to clear the carrier LO phase
+    #(1*C) ;
+    demod.ddc.ddsSimReset = 1;
+    #(2*C) ;
+    demod.ddc.ddsSimReset = 0;
+
+    sr = 15'h1;
+    demod.bitsync.sampleLoop.lagAccum = 32'h0;
+    demod.resampler.resamplerI.phase = 32'h0;
+    demod.resampler.resamplerQ.phase = 32'h0;
 
     // Wait for some data to pass thru
     #(2*100*bitrateSamplesInt*C) ;
