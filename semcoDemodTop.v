@@ -570,7 +570,7 @@ module semcoDemodTop (
     decoder dualDecoder
     (
         .clk(clk),
-        .rs(reset),
+        .reset(reset),
         .en(dualDecoderSpace),
         `ifdef USE_BUS_CLOCK
         .busClk(busClk),
@@ -589,7 +589,7 @@ module semcoDemodTop (
         .dout_i(dualDataI),
         .dout_q(dualDataQ),
         .outputClkEn(dualPcmClkEn),
-        .fifo_rs(),
+        .fifo_reset(),
         .clkPhase(),
         .symb_clk(dualPcmSymClk),
         .inputSelect()
@@ -618,7 +618,7 @@ module semcoDemodTop (
     wire    [31:0]  ch1DecDout;
     pcmDecoder dec1 (
         .clk(clk),
-        .rs(reset),
+        .reset(reset),
         .busClk(busClk),
         .en(ch1DecoderSpace),
         .wr0(wr0),
@@ -633,7 +633,7 @@ module semcoDemodTop (
         .symb(ch1DecInput),               // data input,
         .data_out(ch1PcmData),            // data output
         .clkEn_out(ch1PcmClkEn),          // clk output
-        .fifo_rs(),
+        .fifo_reset(),
         .clkPhase(),
         .symb_clk(ch1PcmSymClk),
         .inputSelect()
