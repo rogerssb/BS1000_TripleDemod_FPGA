@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="test_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="test" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="299666666fs"></ZoomStartTime>
+      <ZoomEndTime time="1665666667fs"></ZoomEndTime>
+      <Cursor1Time time="11000000000fs"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="175"></NameColumnWidth>
+      <ValueColumnWidth column_width="134"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="31" />
+   <wvobject fp_name="/test/clk" type="logic">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/reset" type="logic">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/clkDiv2" type="logic">
+      <obj_property name="ElementShortName">clkDiv2</obj_property>
+      <obj_property name="ObjectShortName">clkDiv2</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/din" type="array">
+      <obj_property name="ElementShortName">din[79:0]</obj_property>
+      <obj_property name="ObjectShortName">din[79:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/symEn" type="logic">
+      <obj_property name="ElementShortName">symEn</obj_property>
+      <obj_property name="ObjectShortName">symEn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/sym2xEn" type="logic">
+      <obj_property name="ElementShortName">sym2xEn</obj_property>
+      <obj_property name="ObjectShortName">sym2xEn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/readMemResult" type="array">
+      <obj_property name="ElementShortName">readMemResult[10001:0][0:0]</obj_property>
+      <obj_property name="ObjectShortName">readMemResult[10001:0][0:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/index" type="array">
+      <obj_property name="ElementShortName">index[15:0]</obj_property>
+      <obj_property name="ObjectShortName">index[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/bitIndex" type="array">
+      <obj_property name="ElementShortName">bitIndex[15:0]</obj_property>
+      <obj_property name="ObjectShortName">bitIndex[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/cntEna" type="logic">
+      <obj_property name="ElementShortName">cntEna</obj_property>
+      <obj_property name="ObjectShortName">cntEna</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/cnt" type="array">
+      <obj_property name="ElementShortName">cnt[31:0]</obj_property>
+      <obj_property name="ObjectShortName">cnt[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/sr" type="array">
+      <obj_property name="ElementShortName">sr[15:0]</obj_property>
+      <obj_property name="ObjectShortName">sr[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/zeroCount" type="array">
+      <obj_property name="ElementShortName">zeroCount[4:0]</obj_property>
+      <obj_property name="ObjectShortName">zeroCount[4:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/randData" type="logic">
+      <obj_property name="ElementShortName">randData</obj_property>
+      <obj_property name="ObjectShortName">randData</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/delaySr" type="array">
+      <obj_property name="ElementShortName">delaySr[23:0]</obj_property>
+      <obj_property name="ObjectShortName">delaySr[23:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/simBit" type="logic">
+      <obj_property name="ElementShortName">simBit</obj_property>
+      <obj_property name="ObjectShortName">simBit</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/symEnShift" type="array">
+      <obj_property name="ElementShortName">symEnShift[15:0]</obj_property>
+      <obj_property name="ObjectShortName">symEnShift[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/rotEnaTb" type="logic">
+      <obj_property name="ElementShortName">rotEnaTb</obj_property>
+      <obj_property name="ObjectShortName">rotEnaTb</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/resultDly" type="logic">
+      <obj_property name="ElementShortName">resultDly</obj_property>
+      <obj_property name="ObjectShortName">resultDly</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/bitError" type="array">
+      <obj_property name="ElementShortName">bitError[31:0]</obj_property>
+      <obj_property name="ObjectShortName">bitError[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/bertIndex" type="array">
+      <obj_property name="ElementShortName">bertIndex[31:0]</obj_property>
+      <obj_property name="ObjectShortName">bertIndex[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/file1" type="array">
+      <obj_property name="ElementShortName">file1[31:0]</obj_property>
+      <obj_property name="ObjectShortName">file1[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/file2" type="array">
+      <obj_property name="ElementShortName">file2[31:0]</obj_property>
+      <obj_property name="ObjectShortName">file2[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/acsDecision" type="logic">
+      <obj_property name="ElementShortName">acsDecision</obj_property>
+      <obj_property name="ObjectShortName">acsDecision</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/bertSr" type="array">
+      <obj_property name="ElementShortName">bertSr[31:0]</obj_property>
+      <obj_property name="ObjectShortName">bertSr[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/decision" type="logic">
+      <obj_property name="ElementShortName">decision</obj_property>
+      <obj_property name="ObjectShortName">decision</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/bertSr[3]" type="logic">
+      <obj_property name="ElementShortName">[3]</obj_property>
+      <obj_property name="ObjectShortName">[3]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/symEn_tbtDly" type="logic">
+      <obj_property name="ElementShortName">symEn_tbtDly</obj_property>
+      <obj_property name="ObjectShortName">symEn_tbtDly</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/testDec1" type="logic">
+      <obj_property name="ElementShortName">testDec1</obj_property>
+      <obj_property name="ObjectShortName">testDec1</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/PN17" type="array">
+      <obj_property name="ElementShortName">PN17[15:0]</obj_property>
+      <obj_property name="ObjectShortName">PN17[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/MASK17" type="array">
+      <obj_property name="ElementShortName">MASK17[15:0]</obj_property>
+      <obj_property name="ObjectShortName">MASK17[15:0]</obj_property>
+   </wvobject>
+</wave_config>
