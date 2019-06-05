@@ -350,6 +350,28 @@ module stcDemodTop (
 
 
 //******************************************************************************
+//                                 STC Demod
+//******************************************************************************
+    wire    signed  [17:0]  stcDac0Data;
+    wire                    stcDac0ClkEn;
+    wire    signed  [17:0]  stcDac1Data;
+    wire                    stcDac1ClkEn;
+    wire    signed  [17:0]  stcDac2Data;
+    wire                    stcDac2ClkEn;
+    wire                    stcBitEnOut;
+    wire                    stcBit;
+
+    assign stcDac0Data = 0;
+    assign stcDac0ClkEn = 1'b0;
+    assign stcDac1Data = 0;
+    assign stcDac1ClkEn = 1'b0;
+    assign stcDac2Data = 0;
+    assign stcDac2ClkEn = 1'b0;
+    assign stcBitEnOut = 1'b0;
+    assign stcBit = 1'b0;
+
+
+//******************************************************************************
 //                       Clock/Data Jitter Reduction
 //******************************************************************************
 
@@ -391,53 +413,13 @@ module stcDemodTop (
     reg     [2:0]   cAndD0DataIn;
     always @* begin
         casex (cAndD0SourceSelect)
-            `CandD_SRC_LEGACY_I: begin
-                cAndD0ClkEn = iDemodSymEn;
-                cAndD0DataIn = {iDemodBit,qDemodBit,1'b0};
+            `CandD_SRC_STC: begin
+                cAndD0ClkEn = stcBitEnOut;
+                cAndD0DataIn = {stcBit,2'b0};
             end
-            `CandD_SRC_LEGACY_Q: begin
-                cAndD0ClkEn = qDemodSymEn;
-                cAndD0DataIn = {qDemodBit,1'b0,1'b0};
-            end
-            `CandD_SRC_PCMTRELLIS: begin
-                cAndD0ClkEn = pcmTrellisSymEnOut;
-                cAndD0DataIn = {pcmTrellisBit,pcmTrellisBit,1'b0};
-            end
-            //`CandD_SRC_MULTIH:
-            //`CandD_SRC_STC:
-            //`CandD_SRC_PNGEN:
-            `ifdef ADD_LDPC
-            `CandD_SRC_LDPC: begin
-                cAndD0ClkEn = ldpcBitEnOut;
-                cAndD0DataIn = {ldpcBitOut,2'b0};
-            end
-            `endif
-            `ifdef ADD_DQM
-            `CandD_SRC_DQM: begin
-                cAndD0ClkEn = dqmBitEn;
-                cAndD0DataIn = {dqmBit,2'b0};
-            end
-            `endif
-            `CandD_SRC_DEC0_CH0: begin
-                cAndD0ClkEn = dualPcmClkEn;
-                cAndD0DataIn = {dualDataI,dualDataQ,1'b0};
-            end
-            `CandD_SRC_DEC0_CH1: begin
-                cAndD0ClkEn = dualPcmClkEn;
-                cAndD0DataIn = {dualDataQ,dualDataI,1'b0};
-            end
-            `CandD_SRC_DEC1_CH0: begin
-                cAndD0ClkEn = ch1PcmClkEn;
-                cAndD0DataIn = {ch1PcmData,1'b0,1'b0};
-            end
-            //`CandD_SRC_DEC1_CH1:
-            //`CandD_SRC_DEC2_CH0:
-            //`CandD_SRC_DEC2_CH1:
-            //`CandD_SRC_DEC3_CH0:
-            //`CandD_SRC_DEC3_CH1:
             default:   begin
-                cAndD0ClkEn = iDemodSymEn;
-                cAndD0DataIn = {iDemodBit,qDemodBit,1'b0};
+                cAndD0ClkEn = stcBitEnOut;
+                cAndD0DataIn = {stcBit,2'b0};
             end
         endcase
     end
@@ -471,53 +453,13 @@ module stcDemodTop (
     reg     [2:0]   cAndD1DataIn;
     always @* begin
         casex (cAndD1SourceSelect)
-            `CandD_SRC_LEGACY_I: begin
-                cAndD1ClkEn = iDemodSymEn;
-                cAndD1DataIn = {iDemodBit,qDemodBit,1'b0};
+            `CandD_SRC_STC: begin
+                cAndD1ClkEn = stcBitEnOut;
+                cAndD1DataIn = {stcBit,2'b0};
             end
-            `CandD_SRC_LEGACY_Q: begin
-                cAndD1ClkEn = qDemodSymEn;
-                cAndD1DataIn = {qDemodBit,1'b0,1'b0};
-            end
-            `CandD_SRC_PCMTRELLIS: begin
-                cAndD1ClkEn = pcmTrellisSymEnOut;
-                cAndD1DataIn = {pcmTrellisBit,pcmTrellisBit,1'b0};
-            end
-            //`CandD_SRC_MULTIH:
-            //`CandD_SRC_STC:
-            //`CandD_SRC_PNGEN:
-            `ifdef ADD_LDPC
-            `CandD_SRC_LDPC: begin
-                cAndD1ClkEn = ldpcBitEnOut;
-                cAndD1DataIn = {ldpcBitOut,2'b0};
-            end
-            `endif
-            `ifdef ADD_DQM
-            `CandD_SRC_DQM: begin
-                cAndD1ClkEn = dqmBitEn;
-                cAndD1DataIn = {dqmBit,2'b0};
-            end
-            `endif
-            `CandD_SRC_DEC0_CH0: begin
-                cAndD1ClkEn = dualPcmClkEn;
-                cAndD1DataIn = {dualDataI,dualDataQ,1'b0};
-            end
-            `CandD_SRC_DEC0_CH1: begin
-                cAndD1ClkEn = dualPcmClkEn;
-                cAndD1DataIn = {dualDataQ,dualDataI,1'b0};
-            end
-            `CandD_SRC_DEC1_CH0: begin
-                cAndD1ClkEn = ch1PcmClkEn;
-                cAndD1DataIn = {ch1PcmData,1'b0,1'b0};
-            end
-            //`CandD_SRC_DEC1_CH1:
-            //`CandD_SRC_DEC2_CH0:
-            //`CandD_SRC_DEC2_CH1:
-            //`CandD_SRC_DEC3_CH0:
-            //`CandD_SRC_DEC3_CH1:
             default:   begin
-                cAndD1ClkEn = iDemodSymEn;
-                cAndD1DataIn = {iDemodBit,qDemodBit,1'b0};
+                cAndD1ClkEn = stcBitEnOut;
+                cAndD1DataIn = {stcBit,2'b0};
             end
         endcase
     end
@@ -562,22 +504,10 @@ module stcDemodTop (
                 interp0DataIn <= demodDac0Data;
                 interp0ClkEn <= demodDac0ClkEn;
             end
-            `DAC_SRC_FMTRELLIS: begin
-                interp0DataIn <= pcmDac0Data;
-                interp0ClkEn <= pcmDac0ClkEn;
+            `DAC_SRC_STC: begin
+                interp0DataIn <= stcDac0Data;
+                interp0ClkEn <= stcDac0ClkEn;
             end
-            `ifdef ADD_MULTIH
-            `DAC_SRC_MULTIHTRELLIS: begin
-                interp0DataIn <= multih0Out;
-                interp0ClkEn <= multih0ClkEn;
-            end
-            `endif
-            `ifdef ADD_LDPC
-            `DAC_SRC_LDPC: begin
-                interp0DataIn <= ldpcDac0Data;
-                interp0ClkEn <= ldpcDac0ClkEn;
-            end
-            `endif
             default: begin
                 interp0DataIn <= demodDac0Data;
                 interp0ClkEn <= demodDac0ClkEn;
@@ -622,22 +552,10 @@ module stcDemodTop (
                 interp1DataIn <= demodDac1Data;
                 interp1ClkEn <= demodDac1ClkEn;
             end
-            `DAC_SRC_FMTRELLIS: begin
-                interp1DataIn <= pcmDac1Data;
-                interp1ClkEn <= pcmDac1ClkEn;
+            `DAC_SRC_STC: begin
+                interp1DataIn <= stcDac1Data;
+                interp1ClkEn <= stcDac1ClkEn;
             end
-            `ifdef ADD_MULTIH
-            `DAC_SRC_MULTIHTRELLIS: begin
-                interp1DataIn <= multih1Out;
-                interp1ClkEn <= multih1ClkEn;
-            end
-            `endif
-            `ifdef ADD_LDPC
-            `DAC_SRC_LDPC: begin
-                interp1DataIn <= ldpcDac1Data;
-                interp1ClkEn <= ldpcDac1ClkEn;
-            end
-            `endif
             default: begin
                 interp1DataIn <= demodDac1Data;
                 interp1ClkEn <= demodDac1ClkEn;
@@ -682,22 +600,10 @@ module stcDemodTop (
                 interp2DataIn <= demodDac2Data;
                 interp2ClkEn <= demodDac2ClkEn;
             end
-            `DAC_SRC_FMTRELLIS: begin
-                interp2DataIn <= pcmDac2Data;
-                interp2ClkEn <= pcmDac2ClkEn;
+            `DAC_SRC_STC: begin
+                interp2DataIn <= stcDac2Data;
+                interp2ClkEn <= stcDac2ClkEn;
             end
-            `ifdef ADD_MULTIH
-            `DAC_SRC_MULTIHTRELLIS: begin
-                interp2DataIn <= multih2Out;
-                interp2ClkEn <= multih2ClkEn;
-            end
-            `endif
-            `ifdef ADD_LDPC
-            `DAC_SRC_LDPC: begin
-                interp2DataIn <= ldpcDac2Data;
-                interp2ClkEn <= ldpcDac2ClkEn;
-            end
-            `endif
             default: begin
                 interp2DataIn <= demodDac2Data;
                 interp2ClkEn <= demodDac2ClkEn;
@@ -754,8 +660,8 @@ module stcDemodTop (
     assign dac2_nCs = 1'b0;
     assign dac_sdio = 1'b0;
 
-    assign lockLed0n = !timingLock;
-    assign lockLed1n = !carrierLock;
+    assign lockLed0n = 1'b1;
+    assign lockLed1n = 1'b1;
 
     `ifdef TRIPLE_DEMOD
 

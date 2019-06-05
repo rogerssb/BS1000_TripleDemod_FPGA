@@ -32,89 +32,89 @@ module stcDownconverter(
 );
 
 
-/******************************************************************************
-                                Global Registers
-******************************************************************************/
-// Microprocessor interface
-reg demodSpace;
-always @* begin
-    casex(addr)
-        `DEMODSPACE: demodSpace = cs;
-        default:     demodSpace = 0;
-        endcase
-    end
-wire    [31:0]  demodDout;
-demodRegs demodRegs(
-    .addr(addr),
-    .dataIn(din),
-    .dataOut(demodDout),
-    `ifdef USE_BUS_CLOCK
-    .busClk(busClk),
-    `endif
-    .cs(demodSpace),
-    .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
-    .highFreqOffset(),
-    .bitsyncLock(),
-    .auBitsyncLock(),
-    .demodLock(),
-    .fskDeviation(),
-    .demodMode(demodMode),
-    .oqpskIthenQ(),
-    .dac0Select(dac0Select),
-    .dac1Select(dac1Select),
-    .dac2Select(dac2Select),
-    .falseLockAlpha(),
-    .falseLockThreshold(),
-    .amTC()
+    /******************************************************************************
+                                    Global Registers
+    ******************************************************************************/
+    // Microprocessor interface
+    reg demodSpace;
+    always @* begin
+        casex(addr)
+            `DEMODSPACE: demodSpace = cs;
+            default:     demodSpace = 0;
+            endcase
+        end
+    wire    [31:0]  demodDout;
+    demodRegs demodRegs(
+        .addr(addr),
+        .dataIn(din),
+        .dataOut(demodDout),
+        `ifdef USE_BUS_CLOCK
+        .busClk(busClk),
+        `endif
+        .cs(demodSpace),
+        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .highFreqOffset(),
+        .bitsyncLock(),
+        .auBitsyncLock(),
+        .demodLock(),
+        .fskDeviation(),
+        .demodMode(demodMode),
+        .oqpskIthenQ(),
+        .dac0Select(dac0Select),
+        .dac1Select(dac1Select),
+        .dac2Select(dac2Select),
+        .falseLockAlpha(),
+        .falseLockThreshold(),
+        .amTC()
     );
 
-/******************************************************************************
-                                Downconverter
-******************************************************************************/
-wire    [17:0]  iDdc,qDdc;
-wire    [20:0]  nbAgcGain;
-wire    [31:0]  carrierFreqOffset;
-wire    [31:0]  carrierLeadFreq;
-wire    [31:0]  ddcDout;
-ddc ddc(
-    .clk(clk), .reset(reset),
-    `ifdef USE_BUS_CLOCK
-    .busClk(busClk),
-    `endif
-    .cs(cs),
-    .wr0(wr0) , .wr1(wr1), .wr2(wr2), .wr3(wr3),
-    .addr(addr),
-    .din(din),
-    .dout(ddcDout),
-    .ddcFreqOffset(carrierFreqOffset),
-    .leadFreq(carrierLeadFreq),
-    .offsetEn(carrierOffsetEn),
-    .nbAgcGain(nbAgcGain),
-    .bbClkEn(1'b0),
-    .iBB(18'h0), .qBB(18'h0),
-    .iIn(iRx), .qIn(qRx),
-    .iLagOut(), .qLagOut(),
-    .lagClkEn(),
-    .syncOut(ddcSync),
-    .iOut(iDdc), .qOut(qDdc)
+    /******************************************************************************
+                                    Downconverter
+    ******************************************************************************/
+    wire    [17:0]  iDdc,qDdc;
+    wire    [20:0]  nbAgcGain;
+    wire    [31:0]  carrierFreqOffset;
+    wire    [31:0]  carrierLeadFreq;
+    wire    [31:0]  ddcDout;
+    ddc ddc(
+        .clk(clk), .reset(reset),
+        `ifdef USE_BUS_CLOCK
+        .busClk(busClk),
+        `endif
+        .cs(cs),
+        .wr0(wr0) , .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .addr(addr),
+        .din(din),
+        .dout(ddcDout),
+        .ddcFreqOffset(carrierFreqOffset),
+        .leadFreq(carrierLeadFreq),
+        .offsetEn(carrierOffsetEn),
+        .nbAgcGain(nbAgcGain),
+        .bbClkEn(1'b0),
+        .iBB(18'h0), .qBB(18'h0),
+        .iIn(iRx), .qIn(qRx),
+        .iLagOut(), .qLagOut(),
+        .lagClkEn(),
+        .syncOut(ddcSync),
+        .iOut(iDdc), .qOut(qDdc)
     );
 
-/******************************************************************************
-                            Narrowband Channel AGC
-******************************************************************************/
-wire    [31:0]  nbAgcDout;
-channelAGC channelAGC(
-    .clk(clk), .reset(reset), .clkEn(ddcSync),
-    `ifdef USE_BUS_CLOCK
-    .busClk(busClk),
-    `endif
-    .cs(cs),
-    .wr0(wr0) , .wr1(wr1), .wr2(wr2), .wr3(wr3),
-    .addr(addr),
-    .din(din),
-    .dout(nbAgcDout),
-    .iIn(iDdc),.qIn(qDdc),
-    .agcGain(nbAgcGain)
+    /******************************************************************************
+                                Narrowband Channel AGC
+    ******************************************************************************/
+    wire    [31:0]  nbAgcDout;
+    channelAGC channelAGC(
+        .clk(clk), .reset(reset), .clkEn(ddcSync),
+        `ifdef USE_BUS_CLOCK
+        .busClk(busClk),
+        `endif
+        .cs(cs),
+        .wr0(wr0) , .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .addr(addr),
+        .din(din),
+        .dout(nbAgcDout),
+        .iIn(iDdc),.qIn(qDdc),
+        .agcGain(nbAgcGain)
     );
 
 
@@ -122,67 +122,68 @@ channelAGC channelAGC(
     wire    signed  [17:0]  qFiltered = qDdc;
 
 
-/******************************************************************************
-                           Phase/Freq/Mag Detector
-******************************************************************************/
-reg     [17:0]  iFm,qFm;
-reg             fmDemodClkEn;
-always @* begin
-    fmDemodClkEn = ddcSync;
-    iFm = iFiltered;
-    qFm = qFiltered;
-end
+    /******************************************************************************
+                               Phase/Freq/Mag Detector
+    ******************************************************************************/
+    reg     [17:0]  iFm,qFm;
+    reg             fmDemodClkEn;
+    always @* begin
+        fmDemodClkEn = ddcSync;
+        iFm = iFiltered;
+        qFm = qFiltered;
+    end
 
-wire    [11:0]   phase;
-wire    [11:0]   freq;
-wire    [11:0]   negFreq = ~freq + 1;
-wire    [11:0]   freqError;
-fmDemod fmDemod(
-    .clk(clk), .reset(reset),
-    .clkEn(ddcSync),
-    .iFm(iFiltered),.qFm(qFiltered),
-    .demodMode(demodMode),
-    .phase(phase),
-    .phaseError(),
-    .freq(freq),
-    .freqError(freqError),
-    .mag(mag),
-    .clkEnOut(demodSync)
+    wire    [12:0]  mag;
+    wire    [11:0]  phase;
+    wire    [11:0]  freq;
+    wire    [11:0]  negFreq = ~freq + 1;
+    wire    [11:0]  freqError;
+    fmDemod fmDemod(
+        .clk(clk), .reset(reset),
+        .clkEn(ddcSync),
+        .iFm(iFiltered),.qFm(qFiltered),
+        .demodMode(demodMode),
+        .phase(phase),
+        .phaseError(),
+        .freq(freq),
+        .freqError(freqError),
+        .mag(mag),
+        .clkEnOut(demodSync)
     );
 
-/******************************************************************************
-                             AFC/Sweep/Costas Loop
-******************************************************************************/
-wire    [17:0]  offsetError;
-wire            offsetErrorEn;
-wire    [11:0]  demodLoopError;
-wire    [15:0]  freqLockCounter;
-wire    [31:0]  freqDout;
-wire    [11:0]  rndOffsetError = offsetError[17:6] + offsetError[5];
-carrierLoop carrierLoop(
-    .clk(clk), .reset(reset),
-    .resampClkEn(resampSync),
-    .ddcClkEn(demodSync),
-    `ifdef USE_BUS_CLOCK
-    .busClk(busClk),
-    `endif
-    .cs(cs),
-    .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
-    .addr(addr),
-    .din(din),
-    .dout(freqDout),
-    .demodMode(demodMode),
-    .phase(phase),
-    .freq(freq),
-    .highFreqOffset(highFreqOffset),
-    .offsetError(12'h0),
-    .offsetErrorEn(1'b0),
-    .carrierFreqOffset(carrierFreqOffset),
-    .carrierLeadFreq(carrierLeadFreq),
-    .carrierFreqEn(carrierOffsetEn),
-    .loopError(demodLoopError),
-    .carrierLock(carrierLock),
-    .lockCounter(freqLockCounter)
+    /******************************************************************************
+                                 AFC/Sweep/Costas Loop
+    ******************************************************************************/
+    wire    [17:0]  offsetError;
+    wire            offsetErrorEn;
+    wire    [11:0]  demodLoopError;
+    wire    [15:0]  freqLockCounter;
+    wire    [31:0]  freqDout;
+    wire    [11:0]  rndOffsetError = offsetError[17:6] + offsetError[5];
+    carrierLoop carrierLoop(
+        .clk(clk), .reset(reset),
+        .resampClkEn(resampSync),
+        .ddcClkEn(demodSync),
+        `ifdef USE_BUS_CLOCK
+        .busClk(busClk),
+        `endif
+        .cs(cs),
+        .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
+        .addr(addr),
+        .din(din),
+        .dout(freqDout),
+        .demodMode(demodMode),
+        .phase(phase),
+        .freq(freq),
+        .highFreqOffset(highFreqOffset),
+        .offsetError(12'h0),
+        .offsetErrorEn(1'b0),
+        .carrierFreqOffset(carrierFreqOffset),
+        .carrierLeadFreq(carrierLeadFreq),
+        .carrierFreqEn(carrierOffsetEn),
+        .loopError(demodLoopError),
+        .carrierLock(carrierLock),
+        .lockCounter(freqLockCounter)
     );
 
     /******************************************************************************
@@ -195,35 +196,34 @@ carrierLoop carrierLoop(
         qResampIn <= qFiltered;
     end
 
-/******************************************************************************
-                                  Resampler
-******************************************************************************/
-wire    [17:0]  iStc,qStc;
-wire    [31:0]  resamplerFreqOffset;
-wire    [31:0]  auResamplerFreqOffset;
-wire    [31:0]  resampDout;
-dualResampler resampler(
-    .clk(clk), .reset(reset), .clkEn(ddcSync),
-    `ifdef USE_BUS_CLOCK
-    .busClk(busClk),
-    `endif
-    .cs(cs),
-    .wr0(wr0) , .wr1(wr1), .wr2(wr2), .wr3(wr3),
-    .addr(addr),
-    .din(din),
-    .dout(resampDout),
-    .demodMode(demodMode),
-    .resamplerFreqOffset(32'h0),
-    .auResamplerFreqOffset(32'h0),
-    .offsetEn(1'b1),
-    .auOffsetEn(1'b1),
-    .iIn(iResampIn),
-    .qIn(qResampIn),
-    .iOut(iStc),
-    .qOut(qStc),
-    .clkEnOut(resampSync),
-    .sampleOffset(),
-    .auClkEnOut()
+    /******************************************************************************
+                                      Resampler
+    ******************************************************************************/
+    wire    [31:0]  resamplerFreqOffset;
+    wire    [31:0]  auResamplerFreqOffset;
+    wire    [31:0]  resampDout;
+    dualResampler resampler(
+        .clk(clk), .reset(reset), .clkEn(ddcSync),
+        `ifdef USE_BUS_CLOCK
+        .busClk(busClk),
+        `endif
+        .cs(cs),
+        .wr0(wr0) , .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .addr(addr),
+        .din(din),
+        .dout(resampDout),
+        .demodMode(demodMode),
+        .resamplerFreqOffset(32'h0),
+        .auResamplerFreqOffset(32'h0),
+        .offsetEn(1'b1),
+        .auOffsetEn(1'b1),
+        .iIn(iResampIn),
+        .qIn(qResampIn),
+        .iOut(iStc),
+        .qOut(qStc),
+        .clkEnOut(resampSync),
+        .sampleOffset(),
+        .auClkEnOut()
     );
 
 
@@ -235,9 +235,9 @@ dualResampler resampler(
 ******************************************************************************/
 
 
-    reg     [17:0]  iResampInReg,qResampInReg,fmVideoReg,averageFreqReg,averageAbsFreqReg;
+    reg     [17:0]  iResampInReg,qResampInReg;
     reg     [17:0]  iSymDataReg,qSymDataReg;
-    reg     [17:0]  fmReg,phaseReg,magAccumReg,freqErrorReg;
+    reg     [17:0]  freqReg,phaseReg,magReg,freqErrorReg;
     always @(posedge clk) begin
         if (ddcSync) begin
             iResampInReg <= iResampIn;
@@ -250,7 +250,7 @@ dualResampler resampler(
         if (demodSync) begin
             freqReg <= {freq,6'b0};
             phaseReg <= {phase,6'b0};
-            magAccumReg <= {~magAccum[38],magAccum[37:21]};
+            magReg <= {1'b0,mag,4'b0};
             freqErrorReg <= {freqError,6'h0};
         end
     end
@@ -283,7 +283,7 @@ always @(posedge clk) begin
             dac0Sync <= demodSync;
             end
         `DAC_MAG: begin
-            dac0Data <= magAccumReg;
+            dac0Data <= magReg;
             dac0Sync <= demodSync;
             end
         default: begin
@@ -318,7 +318,7 @@ always @(posedge clk) begin
             dac1Sync <= demodSync;
             end
         `DAC_MAG: begin
-            dac1Data <= magAccumReg;
+            dac1Data <= magReg;
             dac1Sync <= demodSync;
             end
         default: begin
@@ -353,7 +353,7 @@ always @(posedge clk) begin
             dac2Sync <= demodSync;
             end
         `DAC_MAG: begin
-            dac2Data <= magAccumReg;
+            dac2Data <= magReg;
             dac2Sync <= demodSync;
             end
         default: begin

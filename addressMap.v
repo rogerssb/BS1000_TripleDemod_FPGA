@@ -534,53 +534,11 @@
     `define SPIGW_RSVD1         13'bx_xxxx_xxxx_101x
     `define SPIGW_CONTROL       13'bx_xxxx_xxxx_11xx
 
-`define LDPCSPACE               13'b0_00xx_010x_xxxx
-    `define LDPC_CONTROL            13'bx_xxxx_xxx0_00xx
-        `define LDPC_RATE_1_2           2'b00
-        `define LDPC_RATE_2_3           2'b01
-        `define LDPC_RATE_4_5           2'b11
-        `define LDPC_CODE_LENGTH_1024   1'b0
-        `define LDPC_CODE_LENGTH_4096   1'b1
-        `define LDPC_DERAND_NONE        2'b00
-    `define LDPC_INVERSE_MEAN       13'bx_xxxx_xxx0_01xx
-    `define LDPC_OUTPUT_CLK_DIV     13'bx_xxxx_xxx0_10xx
-    `define LDPC_STATUS             13'bx_xxxx_xxx0_11xx
-    `define LDPC_DLL_CENTER_FREQ    13'bx_xxxx_xxx1_00xx
-    `define LDPC_DLL_GAINS          13'bx_xxxx_xxx1_010x
-    `define LDPC_DLL_FDBK_DIV       13'bx_xxxx_xxx1_011x
-
 `define FMMODSPACE              13'b0_00xx_011x_xxxx
     `define FM_MOD_FREQ         12'bxxxx_xxx0_00xx
     `define FM_MOD_DEV          12'bxxxx_xxx0_01xx
     `define FM_MOD_BITRATE      12'bxxxx_xxx0_10xx
     `define FM_MOD_CIC          12'bxxxx_xxx0_11xx
-
-
-`define DUAL_DECODERSPACE   13'b0_00xx_1000_xxxx
-`define CH1_DECODERSPACE    13'b0_00xx_1001_xxxx
-    `define DEC_CONTROL         13'bx_xxxx_xxxx_00xx
-        `define DEC_DERAND_MODE_OFF     3'b000
-        `define DEC_DERAND_MODE_RNRZ15  3'b001
-        `define DEC_DERAND_MODE_RNRZ9   3'b010
-        `define DEC_DERAND_MODE_RNRZ11  3'b011
-        `define DEC_DERAND_MODE_RNRZ17  3'b100
-        `define DEC_DERAND_MODE_RNRZ23  3'b101
-        `define DEC_CLK_PHASE_0         2'b00
-        `define DEC_CLK_PHASE_180       2'b01
-        `define DEC_CLK_PHASE_90        2'b10
-        `define DEC_CLK_PHASE_270       2'b11
-        // These are used to define the PCM decoder modes and are
-        // shared with the PN Generator which is not used in this build
-        `define PNGEN_PCM_NRZL          4'b0000
-        `define PNGEN_PCM_NRZM          4'b0001
-        `define PNGEN_PCM_NRZS          4'b0010
-        `define PNGEN_PCM_BIPL          4'b0100
-        `define PNGEN_PCM_BIPM          4'b0101
-        `define PNGEN_PCM_BIPS          4'b0110
-        `define PNGEN_PCM_DMM           4'b1000
-        `define PNGEN_PCM_DMS           4'b1001
-        `define PNGEN_PCM_MDMM          4'b1010
-        `define PNGEN_PCM_MDMS          4'b1011
 
 // PLL subsystem registers
 `define PLL0SPACE           13'b0_00xx_1010_xxxx
@@ -637,42 +595,8 @@
 `define DDCFIRSPACE         13'b0_0100_0011_xxxx
 `define CICDECSPACE         13'b0_0100_0100_0xxx
 `define RESAMPSPACE         13'b0_0100_0101_xxxx
-`define BITSYNCSPACE        13'b0_0100_011x_xxxx
-`define BITSYNCAUSPACE      13'b0_0100_100x_xxxx
 `define CHAGCSPACE          13'b0_0100_101x_xxxx
 `define CARRIERSPACE        13'b0_0100_110x_xxxx
-`define EQUALIZERSPACE      13'b0_0100_1110_xxxx
-`define TRELLIS_SPACE       13'b0_0100_1111_xxxx
-`define TRELLISLFSPACE      13'b0_0101_000x_xxxx
-`define MULTIH_SPACE        13'b0_0101_0010_xxxx
-`define MULTIHLFSPACE       13'b0_0101_010x_xxxx
-`define SDISPACE            13'b0_0101_0110_xxxx
-`define UARTSPACE           13'b0_0101_0111_xxxx
-`define DQMSPACE            13'b0_0101_1000_xxxx
-    `define DQM_SYNC_WORD       16'hfac4
-    `define DQM_MSE_CONTROL     13'bx_xxxx_xxxx_00xx
-    `define DQM_LOG10MSE        13'bx_xxxx_xxxx_01xx
-        `define DQM_LOG10MSE_OFFSET 13'bx_xxxx_xxxx_011x
-    `define DQM_CLKS_PER_BIT    13'bx_xxxx_xxxx_100x
-    `define DQM_PAYLOAD_SIZE    13'bx_xxxx_xxxx_101x
-    `define DQM_SRC_SELECT      13'bx_xxxx_xxxx_11xx
-        `define DQM_SRC_LEGACY_I    4'b0000
-        `define DQM_SRC_LEGACY_Q    4'b0001
-        `define DQM_SRC_PCMTRELLIS  4'b0010
-        `define DQM_SRC_MULTIH      4'b0011
-        `define DQM_SRC_STC         4'b0100
-        `define DQM_SRC_PNGEN       4'b0101
-        `define DQM_SRC_LDPC        4'b0110
-        `define DQM_SRC_RSVD0       4'b0111
-        `define DQM_SRC_DEC0_CH0    4'b1000
-        `define DQM_SRC_DEC0_CH1    4'b1001
-        `define DQM_SRC_DEC1_CH0    4'b1010
-        `define DQM_SRC_DEC1_CH1    4'b1011
-        `define DQM_SRC_DEC2_CH0    4'b1100
-        `define DQM_SRC_DEC2_CH1    4'b1101
-        `define DQM_SRC_DEC3_CH0    4'b1110
-        `define DQM_SRC_DEC3_CH1    4'b1111
-`define DQMLUTSPACE         13'b0_0110_xxxx_xxxx
 
 // Video Interpolators and FIRs
 `define INTERP0SPACE        13'b0_1000_0000_xxxx
@@ -910,6 +834,7 @@
         `define DAC_SRC_SOQTRELLIS      5
         `define DAC_SRC_MULTIHTRELLIS   6
         `define DAC_SRC_LDPC            7
+        `define DAC_SRC_STC             8
 `define INTERP_GAIN_MANTISSA    13'bx_xxxx_xxxx_001x
 `define INTERP_CIC_EXPONENT     13'bx_xxxx_xxxx_010x
 `define INTERP_GAIN_EXPONENT    13'bx_xxxx_xxxx_011x
