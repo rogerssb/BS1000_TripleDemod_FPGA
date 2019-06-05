@@ -46,13 +46,15 @@ use ieee.std_logic_1164.all;
 use ieee.std_logic_textio.all;
 use ieee.numeric_std.all;
 use ieee.math_real.all;
+Library UNISIM;
+use UNISIM.vcomponents.all;
 use work.Semco_pkg.all;
 use work.fixed_pkg.all;
 
 entity Brik1_Hw_tb is
    GENERIC (SIM_MODE : boolean := false);
    PORT (
-      Clk93    : IN  std_logic;
+      Clk93In  : IN  std_logic;
       Power0In,
       Power1In : IN  sfixed(0 downto -17);
       BS_LED,
@@ -189,8 +191,8 @@ architecture rtl of Brik1_Hw_tb is
       port (
          clk93,
          reset        : in     std_logic;
-         clkX1,
-         clkX2,
+         ClkX1,
+         ClkX4,
          locked       : out    std_logic
       );
    end component;
@@ -198,9 +200,10 @@ architecture rtl of Brik1_Hw_tb is
 --                       CONSTANT DEFINITIONS
 -------------------------------------------------------------------------------
 
-   signal   reset,
-            clk,
-            clk2x,
+   signal   Reset,
+            ResetBufg,
+            Clk93,
+            ClkXn,
             Locked,
             PhaseValid           : std_logic;
    SIGNAL   StartOut,
@@ -225,11 +228,13 @@ architecture rtl of Brik1_Hw_tb is
             ResampleR_s,
             ResampleI_s,
             RealOut,
-            ImagOut              : sfixed(0 downto -17);
+            ImagOut,
+            BitRateAcc,
+            BitRate              : sfixed(0 downto -17);
    SIGNAL   Phase0R,
             Phase0I,
             Phase1R,
-            Phase1I               : sfixed(0 downto -15);
+            Phase1I              : sfixed(0 downto -15);
    SIGNAL   PhaseData0,
             SinCosData0,
             PhaseData1,
@@ -260,16 +265,16 @@ begin
 
    Clocks : clk_wiz_0
       port map (
-         clk93    => Clk93,
+         clk93    => Clk93In,
          reset    => '0',
-         clkX1    => clk,
-         clkX2    => clk2x,
+         ClkX1    => Clk93,
+         ClkX4    => ClkXn,
          locked   => Locked
       );
 
    Vio_u : Vio_0
       PORT MAP (
-         clk        => clk2x,
+         clk        => ClkXn,
          probe_in0  => Errors,
          probe_out0 => Frequency0,
          probe_out1 => Frequency1,
@@ -285,11 +290,11 @@ begin
          probe_out11 => open
       );
 
-   ErrorProc : process (clk2x)
+   ErrorProc : process (ClkXn)
    begin
-      if (rising_edge(clk2x)) then
-         reset <= (not locked) or MiscBits(7);
-         if (reset) then
+      if (rising_edge(ClkXn)) then
+         Reset <= (not locked) or MiscBits(7);
+         if (Reset) then
             Errors <= x"00";
             LedCount <= x"00000000";
          else
@@ -307,9 +312,13 @@ begin
             end if;
             if (<< signal Brik1u.PD_u.Cntr0Abs.Overflow  : std_logic >>) then
                Errors(2) <= '1';
+            else
+               Errors(2) <= '0';
             end if;
             if (<< signal Brik1u.PD_u.Cntr1Abs.Overflow  : std_logic >>) then
                Errors(3) <= '1';
+            else
+               Errors(3) <= '0';
             end if;
             if (<< signal Brik1u.PD_u.H0Cntr_x_Fft.Overflow  : std_logic >>) then
                Errors(4) <= '1';
@@ -322,20 +331,26 @@ begin
       end if;
    end process;
 
-   reg_process : process (clk)
+   reg_process : process (Clk93)
       variable Offset_v    : integer range -2048 to 2047;
       variable DeltaT_v    : integer range -128 to 127;
       variable Power0_v,
                Power1_v,
                NoiseGain_v,
-               Noise_v     : sfixed(0 downto -17);
+               Noise_v,
+               BitRate_v   : sfixed(0 downto -17);
    begin
-      if (rising_edge(clk)) then
-         if (reset) then
-            DataValid <= x"01";
-            RdAddr_i <= 12800;
+      if (rising_edge(Clk93)) then
+         if (Reset) then
+            DataValid <= x"80";
+            BitRateAcc  <= to_sfixed(0, BitRateAcc);
+            BitRate     <= to_sfixed(83.2/93.3, BitRate);
+            RdAddr_i    <= 12800;
          else
-            DataValid <= DataValid(DataValid'left-1 downto 0) & DataValid(DataValid'left);
+--            DataValid <= DataValid(DataValid'left-1 downto 0) & DataValid(DataValid'left);
+            BitRate_v := resize(BitRateAcc + BitRate, BitRateAcc);
+            BitRateAcc <= BitRate_v;
+            DataValid(0) <= BitRate_v(0) xor BitRateAcc(0);
             if (DataValid(0)) then
                if (RdAddr_i < 13311) then
                   RdAddr_i <= RdAddr_i + 1;
@@ -393,9 +408,9 @@ begin
          LATENCY     => 1
       )
       PORT MAP(
-         clk         => clk,
+         clk         => Clk93,
          ce          => '1',
-         reset       => reset,
+         reset       => Reset,
          WrEn        => '0',
          WrAddr      => 0,
          RdAddrA     => 0,
@@ -416,9 +431,9 @@ begin
          LATENCY     => 1
       )
       PORT MAP(
-         clk         => clk,
+         clk         => Clk93,
          ce          => '1',
-         reset       => reset,
+         reset       => Reset,
          WrEn        => '0',
          WrAddr      => 0,
          RdAddrA     => 0,
@@ -439,9 +454,9 @@ begin
          LATENCY     => 1
       )
       PORT MAP(
-         clk         => clk,
+         clk         => Clk93,
          ce          => '1',
-         reset       => reset,
+         reset       => Reset,
          WrEn        => '0',
          WrAddr      => 0,
          RdAddrA     => 0,
@@ -462,9 +477,9 @@ begin
          LATENCY     => 1
       )
       PORT MAP(
-         clk         => clk,
+         clk         => Clk93,
          ce          => '1',
-         reset       => reset,
+         reset       => Reset,
          WrEn        => '0',
          WrAddr      => 0,
          RdAddrA     => 0,
@@ -485,9 +500,9 @@ begin
          LATENCY     => 1
       )
       PORT MAP(
-         clk         => clk,
+         clk         => Clk93,
          ce          => '1',
-         reset       => reset,
+         reset       => Reset,
          WrEn        => '0',
          WrAddr      => 0,
          RdAddrA     => 0,
@@ -502,8 +517,8 @@ begin
 
    DDS0 : dds_sin_cos
       PORT MAP (
-         aclk                 => clk,
-         aresetn              => not reset,
+         aclk                 => Clk93,
+         aresetn              => not Reset,
          s_axis_config_tvalid => DataValid(0),
          s_axis_config_tdata  => (63 downto 18+32=> Phase0(Phase0'left)) & Phase0 & (31 downto 18=> Frequency0(Frequency0'left)) & Frequency0, -- sign extend phase and freq values
          m_axis_data_tvalid   => open,
@@ -517,8 +532,8 @@ begin
 
    DDS1 : dds_sin_cos
       PORT MAP (
-         aclk                 => clk,
-         aresetn              => not reset,
+         aclk                 => Clk93,
+         aresetn              => not Reset,
          s_axis_config_tvalid => DataValid(0),
          s_axis_config_tdata  => (63 downto 18+32=> Phase1(Phase1'left)) & Phase1 & (31 downto 18=> Frequency1(Frequency1'left)) & Frequency1,
          m_axis_data_tvalid   => open,
@@ -543,8 +558,8 @@ begin
          OUT_BINPT   => Chan0r'right
       )
       PORT MAP (
-         clk         => clk,
-         reset       => reset,
+         clk         => Clk93,
+         reset       => Reset,
          ce          => '1',
          ValidIn     => DataValid(0),
          StartIn     => '0',
@@ -567,8 +582,8 @@ begin
          OUT_BINPT   => Chan1r'right
       )
       PORT MAP(
-         clk         => clk,
-         reset       => reset,
+         clk         => Clk93,
+         reset       => Reset,
          ce          => '1',
          ValidIn     => DataValid(0),
          StartIn     => '0',
@@ -583,16 +598,22 @@ begin
          StartOut    => open
    );
 
+   ResetBuf  : BUFG
+      port map (
+         I => Reset,
+         O => ResetBufg
+   );
+
    Brik1u : Brik1
       generic map (
          SIM_MODE    => SIM_MODE
       )
       port map(
-         clk            => clk,
-         clk2x          => clk2x,
+         clk            => Clk93,
+         clk2x          => ClkXn,
          ce             => '1',
-         reset          => reset,
-         reset2x        => reset,
+         reset          => ResetBufg,
+         reset2x        => ResetBufg,
          Variables      => Variables,
          ResampleR      => ResampleR_s,
          ResampleI      => ResampleI_s,

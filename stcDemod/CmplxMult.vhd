@@ -48,8 +48,8 @@ ENTITY CmplxMult IS
    GENERIC (
       IN_LEFT     : integer := 8;
       IN_RIGHT    : integer := -9;
-      OUT_LEFT    : integer := 14;
-      OUT_BINPT  : integer := -3
+      OUT_LEFT    : integer := 15;
+      OUT_BINPT  : integer := -2
    );
    PORT(
       clk,
@@ -137,7 +137,7 @@ BEGIN
             FullSizeR   <= (others=>'0');
             FullSizeI   <= (others=>'0');
             ByPass      <= '0';
-            OverFlow    <= '1';
+            OverFlow    <= '0';
          elsif (ce) then
             if (ValidIn) then
                -- pipeline level 1, latch inputs

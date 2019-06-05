@@ -786,18 +786,6 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Compiling entity PD_Fft_Fifo
 -- Compiling architecture rtl of PD_Fft_Fifo
 
-} {} {}} C:/Semco/Vivado/BS1000_Demod_vivado2017/STC_StandAlone/STC_StandAlone.srcs/sources_1/ip/fft_1k/demo_tb/tb_fft_1k.vhd {2 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/BS1000_Demod_vivado2017/STC_StandAlone/STC_StandAlone.srcs/sources_1/ip/fft_1k/demo_tb/tb_fft_1k.vhd
-Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
--- Loading package STANDARD
--- Loading package TEXTIO
--- Loading package std_logic_1164
--- Loading package NUMERIC_STD
--- Loading package MATH_REAL
--- Compiling entity tb_fft_1k
--- Compiling architecture tb of tb_fft_1k
-** Warning: C:/Semco/Vivado/BS1000_Demod_vivado2017/STC_StandAlone/STC_StandAlone.srcs/sources_1/ip/fft_1k/demo_tb/tb_fft_1k.vhd(188): (vcom-1236) Shared variables must be of a protected type.
--- Loading entity fft_1k
-
 } {} {}} C:/Semco/STCinfo/system_generator_projects/Source_HDL/stageSetup.v {1 {vlog -work work -stats=none C:/Semco/STCinfo/system_generator_projects/Source_HDL/stageSetup.v
 Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
 -- Compiling module stageSetup
@@ -1166,6 +1154,19 @@ Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
 Top level modules:
 	frameAlignment
 
+} {} {}} C:/Semco/Vivado/BS1000_Demod_vivado2017/STC_StandAlone/STC_StandAlone.srcs/sources_1/ip/fft_1k/fft_1k_sim_netlist.vhdl {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/BS1000_Demod_vivado2017/STC_StandAlone/STC_StandAlone.srcs/sources_1/ip/fft_1k/fft_1k_sim_netlist.vhdl
+Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
+-- Loading package STANDARD
+-- Compiling entity fft_1k_xfft_v9_0_12
+-- Loading package STANDARD
+-- Compiling architecture STRUCTURE of fft_1k_xfft_v9_0_12
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading entity fft_1k_xfft_v9_0_12
+-- Compiling entity fft_1k
+-- Compiling architecture STRUCTURE of fft_1k
+-- Loading entity fft_1k_xfft_v9_0_12
+
 } {} {}} {C:\Semco\Vivado\BS1000_Demod_vivado2017\stcDemod/Vivado/stcDemod.srcs/sources_1/ip/Ram512x50DP3/Ram512x50DP3_sim_netlist.vhdl} {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/BS1000_Demod_vivado2017/stcDemod/Vivado/stcDemod.srcs/sources_1/ip/Ram512x50DP3/Ram512x50DP3_sim_netlist.vhdl
 Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Loading package STANDARD
@@ -1203,19 +1204,6 @@ Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
 Top level modules:
 	twoPortDistMem64x18
 	glbl
-
-} {} {}} C:/Semco/Vivado/BS1000_Demod_vivado2017/STC_StandAlone/STC_StandAlone.srcs/sources_1/ip/fft_1k/fft_1k_sim_netlist.vhdl {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/BS1000_Demod_vivado2017/STC_StandAlone/STC_StandAlone.srcs/sources_1/ip/fft_1k/fft_1k_sim_netlist.vhdl
-Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
--- Loading package STANDARD
--- Compiling entity fft_1k_xfft_v9_0_12
--- Loading package STANDARD
--- Compiling architecture STRUCTURE of fft_1k_xfft_v9_0_12
--- Loading package TEXTIO
--- Loading package std_logic_1164
--- Loading entity fft_1k_xfft_v9_0_12
--- Compiling entity fft_1k
--- Compiling architecture STRUCTURE of fft_1k
--- Loading entity fft_1k_xfft_v9_0_12
 
 } {} {}} C:/Semco/STCinfo/system_generator_projects/Source_HDL/PD_Decide.vhd {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/STCinfo/system_generator_projects/Source_HDL/PD_Decide.vhd
 Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
@@ -1409,18 +1397,6 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Loading package MATH_REAL
 -- Compiling entity detection_filter
 -- Compiling architecture rtl of detection_filter
-
-} {} {}} C:/Semco/Vivado/BS1000_Demod_vivado2017/stcDemod/testBenches/STC_HW_TB.vhd {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/BS1000_Demod_vivado2017/stcDemod/testBenches/STC_HW_TB.vhd
-Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
--- Loading package STANDARD
--- Loading package TEXTIO
--- Loading package std_logic_1164
--- Loading package NUMERIC_STD
--- Loading package fixed_pkg
--- Loading package MATH_REAL
--- Loading package Semco_pkg
--- Compiling entity STC_HW_TB
--- Compiling architecture rtl of STC_HW_TB
 
 } {} {}} {C:\Semco\Vivado\BS1000_Demod_vivado2017\stcDemod/SinvLuts.vhd} {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/BS1000_Demod_vivado2017/stcDemod/SinvLuts.vhd
 Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
@@ -1816,6 +1792,18 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Loading package Semco_pkg
 -- Compiling entity PilotTemplates
 -- Compiling architecture rtl of PilotTemplates
+
+} {} {}} {C:\Semco\Vivado\BS1000_Demod_vivado2017\stcDemod/OverlapAddAbs.vhd} {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/BS1000_Demod_vivado2017/stcDemod/OverlapAddAbs.vhd
+Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package fixed_pkg
+-- Loading package MATH_REAL
+-- Loading package Semco_pkg
+-- Compiling entity OverlapAddAbs
+-- Compiling architecture rtl of OverlapAddAbs
 
 } {} {}} C:/Semco/stcDemod/Interpolator.vhd {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/stcDemod/Interpolator.vhd
 Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016

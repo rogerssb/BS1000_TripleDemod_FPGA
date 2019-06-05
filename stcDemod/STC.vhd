@@ -59,20 +59,7 @@ END STC;
 
 
 ARCHITECTURE rtl OF STC IS
-/*
-   COMPONENT Clk_93_x2
-      port
-         (
-        Reset,
-        clk_in1,
-        clk_186_ce,
-        clk_373_ce      : in     std_logic;
-        clk_186,
-        clk_373,
-        locked           : out    std_logic
-      );
-   END COMPONENT;
-*/
+
    COMPONENT vio_0
       PORT (
          Clk : IN STD_LOGIC;
@@ -254,21 +241,7 @@ BEGIN
          ValidIla    <= ValidInBrik2Dly;
       end if;
    end process;
-/*
-   Clks : Clk_93_x2
-      port map (
-         -- Clock in ports
-         clk_in1     => Clk93In, --adc_dco,
-         -- Status and control signals
-         Reset       => '0',--reset_in,
-         locked      => Locked,
-         clk_186_ce  => CE,
-         clk_373_ce  => CE,
-         -- Clock out ports
-         clk_186     => Clk,
-         clk_373     => Clk2x
-   );
-*/
+
    Clk   <= Clk186;
    Clk2x <= Clk373;
    CE    <= '1';     -- no need to strobe CE at this point.

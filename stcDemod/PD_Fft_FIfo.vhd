@@ -174,7 +174,7 @@ BEGIN
          RELATED_CLOCKS          => 0,                --positive integer; 0 or 1
          WRITE_DATA_WIDTH        => 2*ReIn'length,    --positive integer
          WR_DATA_COUNT_WIDTH     => 10,               --positive integer
-         PROG_FULL_THRESH        => WORDS,            --positive integer
+         PROG_FULL_THRESH        => WORDS-1,          --positive integer
          FULL_RESET_VALUE        => 0,                --positive integer; 0 or 1;
          READ_MODE               => "fwft",           --string; "std" or "fwft";
          FIFO_READ_LATENCY       => 1,                --positive integer;

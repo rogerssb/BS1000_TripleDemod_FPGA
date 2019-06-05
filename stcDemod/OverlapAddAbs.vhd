@@ -83,24 +83,24 @@ ARCHITECTURE rtl OF OverlapAddAbs IS
    SIGNAL   ReDlyLine,
             ImDlyLine   : DelayLine(DELAY downto 0);
 
-   SIGNAL   ReInIla, ImInIla, ReDlyIla, ImDlyIla   : slv18;
-   signal   A0Ila, B0Ila : std_logic_vector(A0'length-1 downto 0);
-   signal   MultRIla, MultIIla : std_logic_vector(MultR'length-1 downto 0);
+--   SIGNAL   ReInIla, ImInIla, ReDlyIla, ImDlyIla   : slv18;
+--   signal   A0Ila, B0Ila : std_logic_vector(A0'length-1 downto 0);
+--   signal   MultRIla, MultIIla : std_logic_vector(MultR'length-1 downto 0);
 
-   attribute mark_debug : string;
-   attribute mark_debug of ReInIla, ImInIla, ReDlyIla, ImDlyIla, A0Ila, B0Ila,
-               MultRIla, MultIIla, OverFlow    : signal is "true";
+--   attribute mark_debug : string;
+--   attribute mark_debug of ReInIla, ImInIla, ReDlyIla, ImDlyIla, A0Ila, B0Ila,
+--               MultRIla, MultIIla, OverFlow    : signal is "true";
 
 BEGIN
 
-ReInIla   <= to_slv(ReIn);
-ImInIla   <= to_slv(ImIn);
-ReDlyIla  <= to_slv(ReDly);
-ImDlyIla  <= to_slv(ImDly);
-A0Ila     <= to_slv(A0);
-B0Ila     <= to_slv(B0);
-MultRIla  <= to_slv(MultR);
-MultIIla  <= to_slv(MultI);
+-- ReInIla   <= to_slv(ReIn);
+-- ImInIla   <= to_slv(ImIn);
+-- ReDlyIla  <= to_slv(ReDly);
+-- ImDlyIla  <= to_slv(ImDly);
+-- A0Ila     <= to_slv(A0);
+-- B0Ila     <= to_slv(B0);
+-- MultRIla  <= to_slv(MultR);
+-- MultIIla  <= to_slv(MultI);
 
    ClkProcess : process(clk)
    begin
@@ -119,6 +119,7 @@ MultIIla  <= to_slv(MultI);
             StartDly    <= (others=>'0');
             FullSize    <= (others=>'0');
             Count       <= 0;
+            OverFlow    <= '0';
          elsif (ce) then
             if (ValidIn) then
                ReDlyLine <= ReDlyLine(ReDlyLine'left-1 downto 0) & ReIn;
