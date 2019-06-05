@@ -22,7 +22,7 @@ module stcMod(
 
     // Register interface
     reg fmModSpace;
-    always @(addr) begin
+    always @* begin
         casex(addr)
             `FMMODSPACE: fmModSpace = cs;
             default:     fmModSpace = 0;

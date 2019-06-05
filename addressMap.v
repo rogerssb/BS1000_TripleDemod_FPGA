@@ -66,6 +66,13 @@
 `define ADD_SPI_GATEWAY
 `endif
 
+`ifdef STC_MOD
+`define USE_BUS_CLOCK
+`define USE_VIVADO_CORES
+`define USE_DDC_FIR
+`define ADD_SPI_GATEWAY
+`endif
+
 `ifdef BITSYNC_BERT
 
 // Top level registers
@@ -679,6 +686,50 @@
 `define VIDSWITCHSPACE      13'b0_1000_1000_xxxx
     `define VIDSWITCH_CONTROL   13'bx_xxxx_xxxx_00xx
 
+`elsif STC_MOD
+
+//-------------------------------- STC Mod ------------------------------------
+
+// Top level registers
+`define STC_MOD_SPACE       13'b0_00xx_000x_xxxx
+    // Define the system top level memory map
+    `define SYS_RESET           13'bx_xxxx_xxx0_000x
+    `define SYS_VERSION         13'bx_xxxx_xxx0_001x
+    `define SYS_STCMOD_H0REAL   13'bx_xxxx_xxx0_01xx
+    `define SYS_STCMOD_H0IMAG   13'bx_xxxx_xxx0_10xx
+    `define SYS_REBOOT_ADDR     13'bx_xxxx_xxx0_11xx
+    `define SYS_TYPE            13'bx_xxxx_xxx1_000x
+    `define SYS_STCMOD_CONTROL  13'bx_xxxx_xxx1_001x
+    `define SYS_STCMOD_PNPOLY   13'bx_xxxx_xxx1_01xx
+    `define SYS_STCMOD_H1REAL   13'bx_xxxx_xxx1_10xx
+    `define SYS_STCMOD_H1IMAG   13'bx_xxxx_xxx1_11xx
+
+`define FMMODSPACE              13'b0_00xx_011x_xxxx
+    `define FM_MOD_FREQ         12'bxxxx_xxx0_00xx
+    `define FM_MOD_DEV          12'bxxxx_xxx0_01xx
+    `define FM_MOD_BITRATE      12'bxxxx_xxx0_10xx
+    `define FM_MOD_CIC          12'bxxxx_xxx0_11xx
+
+// Video Interpolators and FIRs
+`define INTERP0SPACE        13'b0_1000_0000_xxxx
+`define VIDFIR0SPACE        13'b0_1000_0001_xxxx
+`define INTERP1SPACE        13'b0_1000_0010_xxxx
+`define VIDFIR1SPACE        13'b0_1000_0011_xxxx
+`define INTERP2SPACE        13'b0_1000_0100_xxxx
+`define VIDFIR2SPACE        13'b0_1000_0101_xxxx
+    `define DAC_SRC_CH0_FM          4'b0000
+    `define DAC_SRC_CH0_I           4'b0001
+    `define DAC_SRC_CH0_Q           4'b0010
+    `define DAC_SRC_CH1_FM          4'b0011
+    `define DAC_SRC_CH1_I           4'b0100
+    `define DAC_SRC_CH1_Q           4'b0101
+    `define DAC_SRC_TX_I            4'b0110
+    `define DAC_SRC_TX_Q            4'b0111
+
+// Video Switch Control registers
+`define VIDSWITCHSPACE      13'b0_1000_1000_xxxx
+    `define VIDSWITCH_CONTROL   13'bx_xxxx_xxxx_00xx
+
 `else  // Old demod builds
 //------------------------------ Old Demod ------------------------------------
 
@@ -896,6 +947,8 @@
 `define BITSYNC_BERT_IMAGE          16'h4
 `define LEGACY_CMA_IMAGE            16'h5
 `define SEMCO_DEMOD_IMAGE           16'h6
+`define STC_DEMOD_IMAGE             16'h7
+`define STC_MOD_IMAGE               16'h8
 
 // Define the DAC control locations
 `define DAC_WDATA       13'bx_xxxx_xxxx_x00x

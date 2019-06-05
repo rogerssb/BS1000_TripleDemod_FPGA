@@ -169,8 +169,8 @@ module dualSoqpskMod(
                 deviation1 <= 0;
             end
             else if (deviationClkEn) begin
-                deviation0 <= $signed({firOut0[15:0],2'b0});
-                deviation1 <= $signed({firOut1[15:0],2'b0});
+                deviation0 <= $signed({firOut0[16:0],1'b0});
+                deviation1 <= $signed({firOut1[16:0],1'b0});
             end
         end
     end

@@ -10,7 +10,8 @@ module stcFramer
     input                       payloadBit,
     output  reg                 payloadBitEn,
     output                      stcBit0,
-    output                      stcBit1
+    output                      stcBit1,
+    output                      stcFrameSync
 );
 
 //`define STC_PAYLOAD_BITS    3200
@@ -99,6 +100,7 @@ module stcFramer
 
     assign stcBit0 = (stcState == `STC_PILOT) ? pilot0SR[127] : payload0SR[3];
     assign stcBit1 = (stcState == `STC_PILOT) ? pilot1SR[127] : payload1SR[3];
+    assign stcFrameSync = (stcState == `STC_PILOT);
 
 endmodule
 
