@@ -534,11 +534,13 @@
     `define SPIGW_RSVD1         13'bx_xxxx_xxxx_101x
     `define SPIGW_CONTROL       13'bx_xxxx_xxxx_11xx
 
-`define FMMODSPACE              13'b0_00xx_011x_xxxx
-    `define FM_MOD_FREQ         12'bxxxx_xxx0_00xx
-    `define FM_MOD_DEV          12'bxxxx_xxx0_01xx
-    `define FM_MOD_BITRATE      12'bxxxx_xxx0_10xx
-    `define FM_MOD_CIC          12'bxxxx_xxx0_11xx
+`define STC_DEMOD_SPACE     13'b0_00xx_0011_xxxx
+
+`define FMMODSPACE          13'b0_00xx_011x_xxxx
+    `define FM_MOD_FREQ         13'bxxxx_xxx0_00xx
+    `define FM_MOD_DEV          13'bxxxx_xxx0_01xx
+    `define FM_MOD_BITRATE      13'bxxxx_xxx0_10xx
+    `define FM_MOD_CIC          13'bxxxx_xxx0_11xx
 
 // PLL subsystem registers
 `define PLL0SPACE           13'b0_00xx_1010_xxxx

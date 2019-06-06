@@ -11,13 +11,13 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="4020000000fs"></ZoomStartTime>
-      <ZoomEndTime time="11200000001fs"></ZoomEndTime>
-      <Cursor1Time time="10000000000fs"></Cursor1Time>
+      <ZoomStartTime time="2666666666fs"></ZoomStartTime>
+      <ZoomEndTime time="12666666667fs"></ZoomEndTime>
+      <Cursor1Time time="11000000000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="198"></NameColumnWidth>
-      <ValueColumnWidth column_width="59"></ValueColumnWidth>
+      <NameColumnWidth column_width="195"></NameColumnWidth>
+      <ValueColumnWidth column_width="58"></ValueColumnWidth>
    </column_width_setting>
    <WVObjectSize size="19" />
    <wvobject fp_name="/test/reset" type="logic">
@@ -191,18 +191,6 @@
          <obj_property name="ElementShortName">pnBit</obj_property>
          <obj_property name="ObjectShortName">pnBit</obj_property>
       </wvobject>
-      <wvobject fp_name="/test/pnPolyTaps" type="array">
-         <obj_property name="ElementShortName">pnPolyTaps[23:0]</obj_property>
-         <obj_property name="ObjectShortName">pnPolyTaps[23:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/pnPolyLength" type="array">
-         <obj_property name="ElementShortName">pnPolyLength[4:0]</obj_property>
-         <obj_property name="ObjectShortName">pnPolyLength[4:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/poly" type="array">
-         <obj_property name="ElementShortName">poly[23:0]</obj_property>
-         <obj_property name="ObjectShortName">poly[23:0]</obj_property>
-      </wvobject>
    </wvobject>
    <wvobject fp_name="group62" type="group">
       <obj_property name="label">StcMod</obj_property>
@@ -283,6 +271,11 @@
          <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
          <obj_property name="AnalogHorizLine">0.000000</obj_property>
          <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/stcMod/dualMod/firTdata0" type="array">
+         <obj_property name="ElementShortName">firTdata0[15:0]</obj_property>
+         <obj_property name="ObjectShortName">firTdata0[15:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
       </wvobject>
       <wvobject fp_name="/test/stcMod/cicIn0" type="array">
          <obj_property name="ElementShortName">cicIn0[17:0]</obj_property>

@@ -232,6 +232,7 @@ module test;
         .serial(pnBit)
     );
 
+
     stcFramer stcf (
         .clk(clk),
         .clkEn(posEdgeModClkEn),

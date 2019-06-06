@@ -120,7 +120,7 @@ module dualSoqpskMod(
         .m_axis_data_tuser(),
         .m_axis_data_tdata(firTdata0)
     );
-    wire    signed  [17:0]  firOut0 = {firTdata0[13:0],4'b0};
+    wire    signed  [17:0]  firOut0 = {{2{firTdata0[15]}},firTdata0};
 
     wire    [15:0]  firTdata1;
     soqpskFir modFir1(
@@ -134,7 +134,7 @@ module dualSoqpskMod(
         .m_axis_data_tuser(),
         .m_axis_data_tdata(firTdata1)
     );
-    wire    signed  [17:0]  firOut1 = {firTdata1[13:0],4'b0};
+    wire    signed  [17:0]  firOut1 = {{2{firTdata1[15]}},firTdata1};
 
     `else
 
@@ -169,8 +169,8 @@ module dualSoqpskMod(
                 deviation1 <= 0;
             end
             else if (deviationClkEn) begin
-                deviation0 <= $signed({firOut0[16:0],1'b0});
-                deviation1 <= $signed({firOut1[16:0],1'b0});
+                deviation0 <= $signed({firOut0[12:0],5'b0});
+                deviation1 <= $signed({firOut1[12:0],5'b0});
             end
         end
     end
