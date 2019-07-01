@@ -40,7 +40,7 @@ library std;
 use std.textio.all;
 use work.fixed_pkg.all;
 USE IEEE.math_real.all;
-USE work.Semco_pkg.ALL;
+use work.Semco_pkg.ALL;
 
 ENTITY  ComputeMetric is
    port (
@@ -59,7 +59,7 @@ ENTITY  ComputeMetric is
       SsInvR3,
       SsInvI3        : IN  sfixed(-7 downto -24);   -- 18 bit version
       Xr,
-      Xi             : IN  FLOAT_1_LP;
+      Xi             : IN  FLOAT_1_18;
       Result         : OUT FLOAT_256_HP;
       Done           : OUT Std_logic
    );
@@ -156,11 +156,11 @@ ARCHITECTURE rtl OF ComputeMetric IS
    SIGNAL   NormOut           : FLOAT_256_HP;
    SIGNAL   PilotCount        : integer range 0 to PILOT_LENGTH_4 / 2 + DELAY + 3;
    SIGNAL   XrDelay,
-            XiDelay           : FLOAT_ARRAY_1_LP(DELAY23-1 downto 0);
-   SIGNAL   Sig0R             : SIG_ARRAY := InitSigFromFile("C:\Semco\Vivado\BS1000_Demod_vivado2017\stcDemod\sourceData\s0_lut_r.slv");
-   SIGNAL   Sig0I             : SIG_ARRAY := InitSigFromFile("C:\Semco\Vivado\BS1000_Demod_vivado2017\stcDemod\sourceData\s0_lut_i.slv");
-   SIGNAL   Sig1R             : SIG_ARRAY := InitSigFromFile("C:\Semco\Vivado\BS1000_Demod_vivado2017\stcDemod\sourceData\s1_lut_r.slv");
-   SIGNAL   Sig1I             : SIG_ARRAY := InitSigFromFile("C:\Semco\Vivado\BS1000_Demod_vivado2017\stcDemod\sourceData\s1_lut_i.slv");
+            XiDelay           : FLOAT_ARRAY_1_18(DELAY23-1 downto 0);
+   SIGNAL   Sig0R             : SIG_ARRAY := InitSigFromFile("C:\Semco\Vivado\Demods\stcDemod\sourceData\s0_lut_r.slv");
+   SIGNAL   Sig0I             : SIG_ARRAY := InitSigFromFile("C:\Semco\Vivado\Demods\stcDemod\sourceData\s0_lut_i.slv");
+   SIGNAL   Sig1R             : SIG_ARRAY := InitSigFromFile("C:\Semco\Vivado\Demods\stcDemod\sourceData\s1_lut_r.slv");
+   SIGNAL   Sig1I             : SIG_ARRAY := InitSigFromFile("C:\Semco\Vivado\Demods\stcDemod\sourceData\s1_lut_i.slv");
 
 BEGIN
 

@@ -56,7 +56,6 @@ entity PilotDetect is
          reset2x,
          ce,
          ValidIn        : IN  std_logic;
-         Variables      : IN  RecordType;
          ReIn,
          ImIn           : IN  FLOAT_1_18;
          PilotIndex     : OUT ufixed(10 downto 0);
@@ -80,18 +79,10 @@ architecture rtl of PilotDetect is
          reset          : IN  std_logic;
          ce             : IN  std_logic;
          Count          : IN  natural range 0 to 1023;
-         H0NegR,
-         H0NegI,
-         H1NegR,
-         H1NegI,
          H0CntrR,
          H0CntrI,
          H1CntrR,
-         H1CntrI,
-         H0PosR,
-         H0PosI,
-         H1PosR,
-         H1PosI         : OUT Float_256_LP
+         H1CntrI         : OUT Float_256_LP
       );
    END COMPONENT PilotTemplates;
 
@@ -300,7 +291,6 @@ architecture rtl of PilotDetect is
             H1CntrR,
             H1CntrI           : FLOAT_256_LP;
    SIGNAL   Count,
---            PacketOffset,
             Index0,
             Index1,
             MaxIndex          : natural range 0 to 1023;
@@ -320,10 +310,6 @@ architecture rtl of PilotDetect is
    SIGNAL   SampleCount       : natural range 0 to 163830;
 
 -- ILAs
-   SIGNAL   iFftOnesHi,
-            iFftOnesLo,
-            iFftZerosHi,
-            iFftZerosLo       : natural range 0 to 31;
    SIGNAL   PilotMag_Ila,
             Threshold_Ila,
             Peak1_Ila,
@@ -333,9 +319,8 @@ architecture rtl of PilotDetect is
             Resets2X          : SLV18;
 
    attribute mark_debug : string;
-   attribute mark_debug of PilotMag_Ila, PilotFound, Threshold_Ila, Peak1_Ila,
-                           Peak2_Ila, PilotIndex, OverflowFft, OverflowIFft, iFftOnesHi, iFftOnesLo, iFftZerosHi,
-                           iFftZerosLo, iFftCntr0Slv, AbsCntr0_Ila, AbsCntr1_Ila : signal is "true";
+   attribute mark_debug of PilotMag_Ila, PilotFound, Threshold_Ila, Peak1_Ila, Peak2_Ila,
+             PilotIndex, OverflowFft, OverflowIFft, AbsCntr0_Ila, AbsCntr1_Ila : signal is "true";
 begin
 
    IlaProcess : process(clk)
@@ -358,8 +343,7 @@ begin
    end process Ila2XProcess;
 
 
-   -- provide an option of flipping the frequency spectrum by inverting I (Conjugate).
-   Conjugate_u : process(clk)
+   LatchInputs : process(clk)
    begin
       if (rising_edge(clk)) then
          Resets1X <= (others=>Reset);
@@ -369,11 +353,7 @@ begin
          elsif (ce) then
             if (ValidIn) then
                ReInDly <= ReIn;
-               if (Variables.MiscBits(Conjugate)) then
-                  ImInDly <= not ImIn;
-               else
-                  ImInDly <= ImIn;
-               end if;
+               ImInDly <= ImIn;
             end if;
             ValidInDly <= ValidIn;
          end if;
@@ -488,23 +468,13 @@ begin
          reset    => Resets2X(4),
          ce       => ce,
          Count    => Count,
-         H0NegR   => open,
-         H0NegI   => open,
-         H1NegR   => open,
-         H1NegI   => open,
          H0CntrR  => H0CntrR,
          H0CntrI  => H0CntrI,
          H1CntrR  => H1CntrR,
-         H1CntrI  => H1CntrI,
-         H0PosR   => open,
-         H0PosI   => open,
-         H1PosR   => open,
-         H1PosI   => open
+         H1CntrI  => H1CntrI
       );
 
-
-
-   -- Do same for center (no offset frequency)
+   -- Complex multiply FFT output by H0's FFT
    H0Cntr_x_Fft : CmplxMult
       GENERIC MAP (
          IN_LEFT     => FftR'left,
@@ -565,10 +535,6 @@ begin
             Lo1          <= (iFftCntr0Slv(31 downto IFFT_TOP_R) ?= IFFT_ALL_ONES);
             Lo0          <= (iFftCntr0Slv(31 downto IFFT_TOP_R) ?= IFFT_ALL_ZEROS);
             OverflowIFft <= not ( (Lo1 or Lo0) and (Hi1 or Hi0) );
-            iFftOnesHi   <= count_ones( iFftCntr0Slv(31 downto IFFT_TOP_R) );
-            iFftOnesLo   <= count_ones( iFftCntr0Slv(63 downto IFFT_TOP_I) );
-            iFftZerosHi  <= count_zeros(iFftCntr0Slv(31 downto IFFT_TOP_R) );
-            iFftZerosLo  <= count_zeros(iFftCntr0Slv(63 downto IFFT_TOP_I) );
          end if;
       end if;
    end process;

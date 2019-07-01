@@ -36,7 +36,7 @@ LIBRARY IEEE;
 USE IEEE.std_logic_1164.ALL;
 USE IEEE.numeric_std.ALL;
 use work.fixed_pkg.all;
-USE work.Semco_pkg.ALL;
+use work.Semco_pkg.ALL;
 
 ENTITY PilotTemplates IS
    PORT(
@@ -44,18 +44,18 @@ ENTITY PilotTemplates IS
       reset          : IN  std_logic;
       ce             : IN  std_logic;
       Count          : IN  natural range 0 to 1023;
-      H0NegR,
-      H0NegI,
-      H1NegR,
-      H1NegI,
+--      H0NegR,
+--      H0NegI,
+--      H1NegR,
+--      H1NegI,
+--      H0PosR,
+--      H0PosI,
+--      H1PosR,
+--      H1PosI,
       H0CntrR,
       H0CntrI,
       H1CntrR,
-      H1CntrI,
-      H0PosR,
-      H0PosI,
-      H1PosR,
-      H1PosI         : OUT FLOAT_256_LP
+      H1CntrI        : OUT FLOAT_256_LP
    );
 END PilotTemplates;
 
@@ -87,38 +87,38 @@ ARCHITECTURE rtl OF PilotTemplates IS
    END COMPONENT RAM_2Reads_1Write;
 
   -- Signals
-  SIGNAL H0NegRslv,
+  SIGNAL /*H0NegRslv,
          H0NegIslv,
          H1NegRslv,
          H1NegIslv,
-         H0CntrRslv,
-         H0CntrIslv,
-         H1CntrRslv,
-         H1CntrIslv,
          H0PosRslv,
          H0PosIslv,
          H1PosRslv,
-         H1PosIslv      : SLV18;
+         H1PosIslv,*/
+         H0CntrRslv,
+         H0CntrIslv,
+         H1CntrRslv,
+         H1CntrIslv               : SLV18;
 
 BEGIN
 
-   H0NegR  <= to_sfixed(H0NegRslv,  H0NegR);
-   H0NegI  <= to_sfixed(H0NegIslv,  H0NegI);
-   H1NegR  <= to_sfixed(H1NegRslv,  H1NegR);
-   H1NegI  <= to_sfixed(H1NegIslv,  H1NegI);
    H0CntrR <= to_sfixed(H0CntrRslv, H0CntrR);
    H0CntrI <= to_sfixed(H0CntrIslv, H0CntrI);
    H1CntrR <= to_sfixed(H1CntrRslv, H1CntrR);
    H1CntrI <= to_sfixed(H1CntrIslv, H1CntrI);
-   H0PosR  <= to_sfixed(H0PosRslv,  H0PosR);
-   H0PosI  <= to_sfixed(H0PosIslv,  H0PosI);
-   H1PosR  <= to_sfixed(H1PosRslv,  H1PosR);
-   H1PosI  <= to_sfixed(H1PosIslv,  H1PosI);
-
+   --   H0NegR  <= to_sfixed(H0NegRslv,  H0NegR);
+   --   H0NegI  <= to_sfixed(H0NegIslv,  H0NegI);
+   --   H1NegR  <= to_sfixed(H1NegRslv,  H1NegR);
+   --   H1NegI  <= to_sfixed(H1NegIslv,  H1NegI);
+   --   H0PosR  <= to_sfixed(H0PosRslv,  H0PosR);
+   --   H0PosI  <= to_sfixed(H0PosIslv,  H0PosI);
+   --   H1PosR  <= to_sfixed(H1PosRslv,  H1PosR);
+   --   H1PosI  <= to_sfixed(H1PosIslv,  H1PosI);
+/*
    -- -66KHz FFT of H0/1/R/I
    H0NegR_u : RAM_2Reads_1Write
       GENERIC MAP(
-         FILENAME    => "C:\Semco\Vivado\BS1000_Demod_vivado2017\stcDemod\sourceData\neg_h0_r_pt9.slv",
+         FILENAME    => "C:\Semco\Vivado\Demods\stcDemod\sourceData\neg_h0_r_pt9.slv",
          DATA_WIDTH  => FLOAT_256_LP'length,
          BINPT       => FLOAT_256_LP'right,
          ADDR_WIDTH  => 10,
@@ -140,7 +140,7 @@ BEGIN
       );
    H0NegI_u : RAM_2Reads_1Write
       GENERIC MAP(
-         FILENAME    => "C:\Semco\Vivado\BS1000_Demod_vivado2017\stcDemod\sourceData\Neg_h0_I_pt9.slv",
+         FILENAME    => "C:\Semco\Vivado\Demods\stcDemod\sourceData\Neg_h0_I_pt9.slv",
          DATA_WIDTH  => FLOAT_256_LP'length,
          BINPT       => FLOAT_256_LP'right,
          ADDR_WIDTH  => 10,
@@ -162,7 +162,7 @@ BEGIN
       );
    H1NegR_u : RAM_2Reads_1Write
       GENERIC MAP(
-         FILENAME    => "C:\Semco\Vivado\BS1000_Demod_vivado2017\stcDemod\sourceData\Neg_h1_R_pt9.slv",
+         FILENAME    => "C:\Semco\Vivado\Demods\stcDemod\sourceData\Neg_h1_R_pt9.slv",
          DATA_WIDTH  => FLOAT_256_LP'length,
          BINPT       => FLOAT_256_LP'right,
          ADDR_WIDTH  => 10,
@@ -184,7 +184,7 @@ BEGIN
       );
    H1NegI_u : RAM_2Reads_1Write
       GENERIC MAP(
-         FILENAME    => "C:\Semco\Vivado\BS1000_Demod_vivado2017\stcDemod\sourceData\Neg_h1_I_pt9.slv",
+         FILENAME    => "C:\Semco\Vivado\Demods\stcDemod\sourceData\Neg_h1_I_pt9.slv",
          DATA_WIDTH  => FLOAT_256_LP'length,
          BINPT       => FLOAT_256_LP'right,
          ADDR_WIDTH  => 10,
@@ -204,11 +204,11 @@ BEGIN
          RdOutA      => H1NegIslv,
          RdOutB      => open
       );
-
+*/
    -- 0KHz FFT of H0/1/R/I
    H0CntrR_u : RAM_2Reads_1Write
       GENERIC MAP(
-         FILENAME    => "C:\Semco\Vivado\BS1000_Demod_vivado2017\stcDemod\sourceData\Center_h0_R_pt9.slv",
+         FILENAME    => "C:\Semco\Vivado\Demods\stcDemod\sourceData\Center_h0_R_pt9.slv",
          DATA_WIDTH  => FLOAT_256_LP'length,
          BINPT       => FLOAT_256_LP'right,
          ADDR_WIDTH  => 10,
@@ -230,7 +230,7 @@ BEGIN
       );
    H0CntrI_u : RAM_2Reads_1Write
       GENERIC MAP(
-         FILENAME    => "C:\Semco\Vivado\BS1000_Demod_vivado2017\stcDemod\sourceData\Center_h0_I_pt9.slv",
+         FILENAME    => "C:\Semco\Vivado\Demods\stcDemod\sourceData\Center_h0_I_pt9.slv",
          DATA_WIDTH  => FLOAT_256_LP'length,
          BINPT       => FLOAT_256_LP'right,
          ADDR_WIDTH  => 10,
@@ -252,7 +252,7 @@ BEGIN
       );
    H1CntrR_u : RAM_2Reads_1Write
       GENERIC MAP(
-         FILENAME    => "C:\Semco\Vivado\BS1000_Demod_vivado2017\stcDemod\sourceData\Center_h1_R_pt9.slv",
+         FILENAME    => "C:\Semco\Vivado\Demods\stcDemod\sourceData\Center_h1_R_pt9.slv",
          DATA_WIDTH  => FLOAT_256_LP'length,
          BINPT       => FLOAT_256_LP'right,
          ADDR_WIDTH  => 10,
@@ -274,7 +274,7 @@ BEGIN
       );
    H1CntrI_u : RAM_2Reads_1Write
       GENERIC MAP(
-         FILENAME    => "C:\Semco\Vivado\BS1000_Demod_vivado2017\stcDemod\sourceData\Center_h1_I_pt9.slv",
+         FILENAME    => "C:\Semco\Vivado\Demods\stcDemod\sourceData\Center_h1_I_pt9.slv",
          DATA_WIDTH  => FLOAT_256_LP'length,
          BINPT       => FLOAT_256_LP'right,
          ADDR_WIDTH  => 10,
@@ -294,11 +294,11 @@ BEGIN
          RdOutA      => H1CntrIslv,
          RdOutB      => open
       );
-
+/*
    -- +66KHz FFT of H0/1/R/I
    H0PosR_u : RAM_2Reads_1Write
       GENERIC MAP(
-         FILENAME    => "C:\Semco\Vivado\BS1000_Demod_vivado2017\stcDemod\sourceData\Pos_h0_R_pt9.slv",
+         FILENAME    => "C:\Semco\Vivado\Demods\stcDemod\sourceData\Pos_h0_R_pt9.slv",
          DATA_WIDTH  => FLOAT_256_LP'length,
          BINPT       => FLOAT_256_LP'right,
          ADDR_WIDTH  => 10,
@@ -320,7 +320,7 @@ BEGIN
       );
    H0PosI_u : RAM_2Reads_1Write
       GENERIC MAP(
-         FILENAME    => "C:\Semco\Vivado\BS1000_Demod_vivado2017\stcDemod\sourceData\Pos_h0_I_pt9.slv",
+         FILENAME    => "C:\Semco\Vivado\Demods\stcDemod\sourceData\Pos_h0_I_pt9.slv",
          DATA_WIDTH  => FLOAT_256_LP'length,
          BINPT       => FLOAT_256_LP'right,
          ADDR_WIDTH  => 10,
@@ -342,7 +342,7 @@ BEGIN
       );
    H1PosR_u : RAM_2Reads_1Write
       GENERIC MAP(
-         FILENAME    => "C:\Semco\Vivado\BS1000_Demod_vivado2017\stcDemod\sourceData\Pos_h1_R_pt9.slv",
+         FILENAME    => "C:\Semco\Vivado\Demods\stcDemod\sourceData\Pos_h1_R_pt9.slv",
          DATA_WIDTH  => FLOAT_256_LP'length,
          BINPT       => FLOAT_256_LP'right,
          ADDR_WIDTH  => 10,
@@ -364,7 +364,7 @@ BEGIN
       );
    H1PosI_u : RAM_2Reads_1Write
       GENERIC MAP(
-         FILENAME    => "C:\Semco\Vivado\BS1000_Demod_vivado2017\stcDemod\sourceData\Pos_h1_I_pt9.slv",
+         FILENAME    => "C:\Semco\Vivado\Demods\stcDemod\sourceData\Pos_h1_I_pt9.slv",
          DATA_WIDTH  => FLOAT_256_LP'length,
          BINPT       => FLOAT_256_LP'right,
          ADDR_WIDTH  => 10,
@@ -384,51 +384,6 @@ BEGIN
          RdOutA      => H1PosIslv,
          RdOutB      => open
       );
-
-/*
-   Minus66KHz : SinCosLut
-     PORT MAP(
-       aclk                   => clk,
-       aclken                 => ce,
-       aresetn                => not reset,
-       s_axis_phase_tvalid    => ValidIn,
-       s_axis_phase_tdata     => to_slv(not PhaseAcc(0 downto -15)),
-       m_axis_data_tvalid     => ValidCos,
-       m_axis_data_tdata      => tdata1
-     );
-
-   Pos66KHz : SinCosLut
-     PORT MAP(
-       aclk                   => clk,
-       aclken                 => ce,
-       aresetn                => not reset,
-       s_axis_phase_tvalid    => ValidIn,
-       s_axis_phase_tdata     => to_slv(PhaseAcc(0 downto -15)),
-       m_axis_data_tvalid     => open,
-       m_axis_data_tdata      => tdata2
-     );
-
-   Ar <= to_sfixed(tdata1(17 downto 0) , Ar);
-   Ai <= to_sfixed(tdata1(41 downto 24), Ai);
-   Br <= to_sfixed(tdata2(17 downto 0) , Br);
-   Bi <= to_sfixed(tdata2(41 downto 24), Bi);
-
-   Mult : CmplxMult
-      PORT MAP(
-         clk         => clk,
-         reset       => reset,
-         ce          => ce,
-         ReInA       => Ar,
-         ImInA       => Ai,
-         ReInB       => Br,
-         ImInB       => Bi,
-         ValidIn     => ValidCos,
-         StartIn     => Start,
-         ReOut       => Cr,
-         ImOut       => Ci,
-         ValidOut    => ValidMult,
-         StartOut    => StartMult
-      );
-
 */
+
 END rtl;

@@ -37,46 +37,40 @@ LIBRARY IEEE;
 USE IEEE.std_logic_1164.ALL;
 USE IEEE.numeric_std.ALL;
 use work.fixed_pkg.all;
-USE work.Semco_pkg.ALL;
+use work.Semco_pkg.ALL;
 
 ENTITY STC IS
+   GENERIC (
+         SIM_MODE    : boolean := false
+      );
    PORT(
       ResampleR,
       ResampleI         : IN  SLV18;
       ClocksPerBit      : IN  SLV16;
+      PilotOffset       : IN  natural range 0 to 4095;
+      DacSelect         : IN  SLV4;
       Clk93,
       Clk186,
-      Clk373,
       ValidIn           : IN  std_logic;
       ClkOut,                 -- FireBerd Clock Output
       DataOut,                -- FireBerd Data Output
-      OverRange,              -- A/D input over range
+      Dac0ClkEn,
+      Dac1ClkEn,
+      Dac2ClkEn,
       PilotFound,             -- Pilot Found LED
-      PilotLocked,            -- Pilot locked LED
-      Blink             : OUT std_logic   -- I'm alive Blinking LED
+      PilotLocked       : OUT std_logic;   -- I'm alive Blinking LED
+      Dac0Data,
+      Dac1Data,
+      Dac2Data          : OUT SLV18
    );
 END STC;
 
 
 ARCHITECTURE rtl OF STC IS
 
-   COMPONENT vio_0
-      PORT (
-         Clk : IN STD_LOGIC;
-         probe_out0 : OUT SLV18;
-         probe_out1 : OUT SLV18;
-         probe_out2 : OUT SLV18;
-         probe_out3 : OUT SLV18;
-         probe_out4 : OUT SLV18;
-         probe_out5 : OUT SLV18;
-         probe_out6 : OUT STD_LOGIC_VECTOR(11 DOWNTO 0);
-         probe_out7 : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
-         probe_out8 : OUT SLV18;
-         probe_out9 : out SLV32
-      );
-   END COMPONENT vio_0;
-
    COMPONENT Brik1
+      GENERIC (SIM_MODE : boolean := false
+      );
       PORT(
          Clk,
          Clk2x,
@@ -99,6 +93,7 @@ ARCHITECTURE rtl OF STC IS
    COMPONENT Brik2
       PORT(
          Clk,
+         Clk2x,
          Reset,
          CE             : IN  std_logic;
          Variables      : IN  RecordType;
@@ -159,13 +154,12 @@ ARCHITECTURE rtl OF STC IS
    END COMPONENT FireberdDrive;
 
   -- Signals
+   SIGNAL   ResetSrc          : SLV8 := x"FF";
    SIGNAL   CE,
             Clk,
+            Clk2x,
             Reset,
             Reset2x,
-            ResetSrc,
-            Clk2x,
-
             StartInBrik2,
             ValidInBrik2,
             StartInBrik2Dly,
@@ -176,22 +170,10 @@ ARCHITECTURE rtl OF STC IS
             TrellisOutEn,
             TrellisStart,
             TrellisSkip,
-            Locked,
-            adc_dco           : std_logic;
-   SIGNAL   a2d_data          : std_logic_vector(15 downto 0);
-   SIGNAL   FinalMetric,
-            FreqResolution,
-            OneOverFreqRes,
-            OneOverFreqAmb,
-            IndexP125K,
-            IndexN125K,
-            TSample           : SLV18;
-   SIGNAL   MiscBits          : SLV8;
-   SIGNAL   ResampleRatio     : SLV32;
+            Locked            : std_logic;
+   SIGNAL   FinalMetric       : SLV18;
    SIGNAL   TrellisBitsRaw,
             TrellisBits       : std_logic_vector(3 downto 0);
-   SIGNAL   PilotSyncOffset   : std_logic_vector(11 downto 0);
-   signal   LedFlash          : unsigned(27 downto 0);
    SIGNAL   Variables         : RecordType := c_RecordType;
    SIGNAL   InRBrik2,
             InIBrik2,
@@ -211,23 +193,15 @@ ARCHITECTURE rtl OF STC IS
 
 -- todo, remove
    signal   InRBrik2Ila,
-            InIBrik2Ila       : sfixed(17 downto 0);
+            InIBrik2Ila       : SLV18;
    signal   StartIla,
             ValidIla          : std_logic;
    signal   TrellisCount      : natural range 0 to 3300;
+   signal   PilotOffsetI      : integer range -7 to 7 := 0;
 
    attribute mark_debug : string;
-   attribute mark_debug of TrellisBits       : signal is "true";
-   attribute mark_debug of TrellisOutEn      : signal is "true";
-   attribute mark_debug of TrellisStart      : signal is "true";
-   attribute mark_debug of TrellisCount      : signal is "true";
-   attribute mark_debug of TrellisSkip       : signal is "true";
-   attribute mark_debug of DataOut           : signal is "true";
-   attribute mark_debug of ClkOut            : signal is "true";
-   attribute mark_debug of StartIla          : signal is "true";
-   attribute mark_debug of ValidIla          : signal is "true";
-   attribute mark_debug of InRBrik2Ila       : signal is "true";
-   attribute mark_debug of InIBrik2Ila       : signal is "true";
+   attribute mark_debug of TrellisBits, TrellisOutEn, TrellisStart, TrellisCount, TrellisSkip,
+                  DataOut, ClkOut, StartIla, ValidIla, InRBrik2Ila, InIBrik2Ila       : signal is "true";
 
 BEGIN
 
@@ -235,61 +209,43 @@ BEGIN
    process(Clk)
    begin
       if (rising_edge(Clk)) then
-         InRBrik2Ila <= InRBrik2Dly;
-         InIBrik2Ila <= InIBrik2Dly;
+         InRBrik2Ila <= to_slv(InRBrik2Dly);
+         InIBrik2Ila <= to_slv(InIBrik2Dly);
          StartIla    <= StartInBrik2Dly;
          ValidIla    <= ValidInBrik2Dly;
       end if;
    end process;
 
-   Clk   <= Clk186;
-   Clk2x <= Clk373;
+   Clk   <= Clk93;
+   Clk2x <= Clk186;
    CE    <= '1';     -- no need to strobe CE at this point.
-   Blink <= LedFlash(LedFlash'left);
-   ResetSrc <= '0'; -- routes better without Reset
+   Variables.PilotSyncOffset <= PilotOffset + PilotOffsetI;
+
+   ResetProcess : process(Clk)
+   begin
+      if(rising_edge(Clk)) then
+         ResetSrc <= ResetSrc(6 downto 0) & '0';
+         Reset    <= ResetSrc(7);
+   --         if (StartInBrik2) then
+   --            PilotOffsetI <= PilotOffsetI + 1;
+   --         end if;
+      end if;
+   end process;
 
    Reset2xProcess : process(Clk2x)
    begin
       if(rising_edge(Clk2x)) then
-         Reset2x <= ResetSrc;
+         Reset2x <= ResetSrc(7);
       end if;
    end process;
-
-   ValidProcess : process(Clk) is
-   begin
-      if(rising_edge(Clk)) then
-         Reset <= ResetSrc;
-         LedFlash <= LedFlash + 1;
-         Variables.FreqResolution   <= to_sfixed(FreqResolution,  10, -7);    -- x04F58
-         Variables.OneOverFreqRes   <= to_sfixed(OneOverFreqRes, -6,  -23);   -- x0CE7D
-         Variables.OneOverFreqAmb   <= to_sfixed(OneOverFreqAmb, -10, -27);   -- x0A7C5
-         Variables.IndexP125K       <= to_sfixed(IndexP125K,      12, -5);    -- x16256
-         Variables.IndexN125K       <= to_sfixed(IndexN125K,      12, -5);    -- x09D69
-         Variables.TSample          <= to_sfixed(TSample,        -24, -41);   -- x0CE7D
-         Variables.PilotSyncOffset  <= to_ufixed(PilotSyncOffset, Variables.PilotSyncOffset); -- x5FF
-         Variables.MiscBits         <= MiscBits;   -- bit 0 needs to be high for live radio data
-      end if;
-   end process ValidProcess;
-
-   conjugate_u : vio_0
-      PORT MAP (
-         Clk => Clk,
-         probe_out0 => FreqResolution,
-         probe_out1 => OneOverFreqRes,
-         probe_out2 => OneOverFreqAmb,
-         probe_out3 => IndexP125K,
-         probe_out4 => IndexN125K,
-         probe_out5 => TSample,
-         probe_out6 => PilotSyncOffset,
-         probe_out7 => MiscBits,
-         probe_out8 => open,
-         probe_out9 => ResampleRatio
-      );
 
    ResampleR_s <= to_sfixed(ResampleR, ResampleR_s);
    ResampleI_s <= to_sfixed(ResampleI, ResampleI_s);
 
    Brik1_u : Brik1
+      generic map (
+         SIM_MODE    => SIM_MODE
+      )
       PORT MAP(
          Clk         => Clk,
          Clk2x       => Clk2x,
@@ -328,12 +284,13 @@ BEGIN
    Brik2_u : Brik2
       PORT MAP(
          Clk            => Clk,
+         Clk2x          => Clk2x,
          Reset          => Reset,
          CE             => CE,
          Variables      => Variables,
          StartIn        => StartInBrik2Dly,
          ValidIn        => ValidInBrik2Dly,
-         FreqIn         => to_sfixed(FreqResolution & 7x"00", Float_zero_128K), --TODO, remove line
+         FreqIn         => (others=>'0'), --to_sfixed(FreqResolution & 7x"00", Float_zero_128K), --TODO, remove line
          InR            => to_slv(InRBrik2Dly),
          InI            => to_slv(InIBrik2Dly),
          TrellisEn      => TrellisEn,
@@ -351,7 +308,7 @@ BEGIN
 
    Trellis_u : TrellisDetector
       PORT MAP (
-         Clk                  => Clk,
+         Clk                  => Clk2x,
          clkEn                => CE,
          Reset                => Reset,
          sampleEn             => TrellisEn,
@@ -386,6 +343,7 @@ BEGIN
             elsif (TrellisOutEnRaw) then
                TrellisSkip <= '0';
             end if;
+
             if (TrellisOutEn = '1') and (TrellisCount < 3300) then
                TrellisCount <= TrellisCount + 1;
             end if;
@@ -408,5 +366,32 @@ BEGIN
          ClkOut         => ClkOut
       );
 
+   process(Clk)
+   begin
+      if (rising_edge(Clk)) then
+         if (DacSelect = x"0") then
+            Dac0Data    <= to_slv(InRBrik2);
+            Dac1Data    <= to_slv(InIBrik2);
+            Dac2Data    <= 18x"1FFFF" when (StartInBrik2) else 18x"0";
+            Dac0ClkEn   <= ValidInBrik2;
+            Dac1ClkEn   <= ValidInBrik2;
+            Dac2ClkEn   <= ValidInBrik2;
+         elsif (DacSelect = x"1") then
+            Dac0Data    <= to_slv(InterpO_R0);
+            Dac1Data    <= to_slv(InterpO_I0);
+            Dac2Data    <= 18x"1FFFF" when (TrellisStart) else 18x"0";
+            Dac0ClkEn   <= TrellisEn;
+            Dac1ClkEn   <= TrellisEn;
+            Dac2ClkEn   <= TrellisEn;
+         else -- if (DacSelect = x"2") then
+            Dac0Data    <= to_slv(InterpO_R1);
+            Dac1Data    <= to_slv(InterpO_I1);
+            Dac2Data    <= 18x"1FFFF" when (TrellisStart) else 18x"0";
+            Dac0ClkEn   <= TrellisEn;
+            Dac1ClkEn   <= TrellisEn;
+            Dac2ClkEn   <= TrellisEn;
+         end if;
+      end if;
+   end process;
 
 END rtl;

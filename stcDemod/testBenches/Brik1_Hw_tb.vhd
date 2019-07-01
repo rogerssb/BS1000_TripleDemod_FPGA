@@ -55,6 +55,7 @@ entity Brik1_Hw_tb is
    GENERIC (SIM_MODE : boolean := false);
    PORT (
       Clk93In  : IN  std_logic;
+      BitRate,
       Power0In,
       Power1In : IN  sfixed(0 downto -17);
       BS_LED,
@@ -87,6 +88,31 @@ architecture rtl of Brik1_Hw_tb is
          StartOut       : OUT std_logic
       );
    end COMPONENT Brik1;
+
+   COMPONENT STC IS
+      GENERIC (SIM_MODE : boolean := false
+      );
+      PORT(
+         ResampleR,
+         ResampleI         : IN  SLV18;
+         ClocksPerBit      : IN  SLV16;
+         PilotOffset       : IN  natural range 0 to 4095;
+         DacSelect         : IN  SLV4;
+         Clk93,
+         Clk186,
+         ValidIn           : IN  std_logic;
+         ClkOut,                 -- FireBerd Clock Output
+         DataOut,                -- FireBerd Data Output
+         Dac0ClkEn,
+         Dac1ClkEn,
+         Dac2ClkEn,
+         PilotFound,             -- Pilot Found LED
+         PilotLocked       : OUT std_logic;   -- I'm alive Blinking LED
+         Dac0Data,
+         Dac1Data,
+         Dac2Data          : OUT SLV18
+      );
+   END COMPONENT STC;
 
    COMPONENT CmplxMult IS
       GENERIC (
@@ -192,7 +218,7 @@ architecture rtl of Brik1_Hw_tb is
          clk93,
          reset        : in     std_logic;
          ClkX1,
-         ClkX4,
+         ClkXn,
          locked       : out    std_logic
       );
    end component;
@@ -208,7 +234,7 @@ architecture rtl of Brik1_Hw_tb is
             PhaseValid           : std_logic;
    SIGNAL   StartOut,
             DataValid_o          : std_logic;
-   SIGNAL   DataValid            : SLV8;
+   SIGNAL   DataValid            : SLV8 := x"00";
    SIGNAL   RdAddr_i,
             RdAddr0_i,
             RdAddr1_i            : natural range 0 to 13311;
@@ -229,19 +255,18 @@ architecture rtl of Brik1_Hw_tb is
             ResampleI_s,
             RealOut,
             ImagOut,
-            BitRateAcc,
-            BitRate              : sfixed(0 downto -17);
+            BitRateAcc           : sfixed(0 downto -17);
    SIGNAL   Phase0R,
             Phase0I,
             Phase1R,
             Phase1I              : sfixed(0 downto -15);
-   SIGNAL   PhaseData0,
-            SinCosData0,
-            PhaseData1,
+   SIGNAL   SinCosData0,
             SinCosData1          : std_logic_vector(31 downto 0);
    SIGNAL   Offset,
-            PilotSyncOffset      : std_logic_vector(11 downto 0); -- := 1535;
-   SIGNAL   Frequency0,
+            PilotSyncOffset      : SLV12; -- := 1535;
+   SIGNAL   BitRateVio,
+            BitRateSlv,
+            Frequency0,
             Frequency1,
             Power0,
             Power1,
@@ -257,9 +282,7 @@ architecture rtl of Brik1_Hw_tb is
    SIGNAL   LedCount             : UINT32;
 
    attribute mark_debug : string;
-   attribute mark_debug of RdAddr_i, RdAddr0_i, RdAddr1_i,
-            Phase0R, Phase0I, Phase1R, Phase1I,
-            ResampleR_s, ResampleI_s            : signal is "true";
+   attribute mark_debug of RdAddr_i, RealOut, ImagOut, DataValid_o, StartOut : signal is "true";
 
 begin
 
@@ -268,7 +291,7 @@ begin
          clk93    => Clk93In,
          reset    => '0',
          ClkX1    => Clk93,
-         ClkX4    => ClkXn,
+         ClkXn    => ClkXn,
          locked   => Locked
       );
 
@@ -287,7 +310,7 @@ begin
          probe_out8 => PilotSyncOffset,
          probe_out9 => Offset,
          probe_out10 => MiscBits,
-         probe_out11 => open
+         probe_out11 => BitRateSlv
       );
 
    ErrorProc : process (ClkXn)
@@ -304,27 +327,35 @@ begin
                LedCount <= x"00000000";
             end if;
             DemodLED <= '1' when (LedCount < 93333333) else '0';
-            if (<< signal Brik1u.PD_u.OverflowIFft : std_logic >> ) then
+            if (<< signal UUTu.Brik1_u.PD_u.OverflowIFft : std_logic >> ) then
                Errors(0) <= '1';
+            else
+               Errors(0) <= '0';
             end if;
-            if (<< signal Brik1u.PD_u.OverflowFft  : std_logic >>) then
+            if (<< signal UUTu.Brik1_u.PD_u.OverflowFft  : std_logic >>) then
                Errors(1) <= '1';
+            else
+               Errors(1) <= '0';
             end if;
-            if (<< signal Brik1u.PD_u.Cntr0Abs.Overflow  : std_logic >>) then
+            if (<< signal UUTu.Brik1_u.PD_u.Cntr0Abs.Overflow  : std_logic >>) then
                Errors(2) <= '1';
             else
                Errors(2) <= '0';
             end if;
-            if (<< signal Brik1u.PD_u.Cntr1Abs.Overflow  : std_logic >>) then
+            if (<< signal UUTu.Brik1_u.PD_u.Cntr1Abs.Overflow  : std_logic >>) then
                Errors(3) <= '1';
             else
                Errors(3) <= '0';
             end if;
-            if (<< signal Brik1u.PD_u.H0Cntr_x_Fft.Overflow  : std_logic >>) then
+            if (<< signal UUTu.Brik1_u.PD_u.H0Cntr_x_Fft.Overflow  : std_logic >>) then
                Errors(4) <= '1';
+            else
+               Errors(4) <= '0';
             end if;
-            if (<< signal Brik1u.PD_u.H1Cntr_x_Fft.Overflow  : std_logic >>) then
+            if (<< signal UUTu.Brik1_u.PD_u.H1Cntr_x_Fft.Overflow  : std_logic >>) then
                Errors(5) <= '1';
+            else
+               Errors(5) <= '0';
             end if;
          end if;
          BS_LED <= or(Errors);
@@ -342,15 +373,18 @@ begin
    begin
       if (rising_edge(Clk93)) then
          if (Reset) then
-            DataValid <= x"80";
+            DataValid <= x"00";
             BitRateAcc  <= to_sfixed(0, BitRateAcc);
-            BitRate     <= to_sfixed(83.2/93.3, BitRate);
             RdAddr_i    <= 12800;
          else
---            DataValid <= DataValid(DataValid'left-1 downto 0) & DataValid(DataValid'left);
-            BitRate_v := resize(BitRateAcc + BitRate, BitRateAcc);
+            if (SIM_MODE) then
+               BitRate_v := resize(BitRateAcc + BitRate, BitRateAcc);
+            else
+               BitRateVio <= BitRateSlv;
+               BitRate_v := resize(BitRateAcc + to_sfixed(BitRateVio, BitRate_v), BitRateAcc);
+            end if;
             BitRateAcc <= BitRate_v;
-            DataValid(0) <= BitRate_v(0) xor BitRateAcc(0);
+            DataValid <= DataValid(DataValid'left-1 downto 0) & (BitRate_v(0) xor BitRateAcc(0));
             if (DataValid(0)) then
                if (RdAddr_i < 13311) then
                   RdAddr_i <= RdAddr_i + 1;
@@ -513,18 +547,18 @@ begin
       );
 
    Variables.MiscBits(CONJUGATE) <= '0';
-   Variables.PilotSyncOffset <= to_ufixed(PilotSyncOffset, 11, 0);
+   Variables.PilotSyncOffset <= to_integer(unsigned(PilotSyncOffset));
 
    DDS0 : dds_sin_cos
       PORT MAP (
          aclk                 => Clk93,
          aresetn              => not Reset,
-         s_axis_config_tvalid => DataValid(0),
+         s_axis_config_tvalid => DataValid(0),  -- Freq/Phase offset may be delayed relative to simulation
          s_axis_config_tdata  => (63 downto 18+32=> Phase0(Phase0'left)) & Phase0 & (31 downto 18=> Frequency0(Frequency0'left)) & Frequency0, -- sign extend phase and freq values
          m_axis_data_tvalid   => open,
          m_axis_data_tdata    => SinCosData0,
          m_axis_phase_tvalid  => open,
-         m_axis_phase_tdata   => PhaseData0
+         m_axis_phase_tdata   => open
    );
 
    Phase0R <= to_sfixed(SinCosData0(15 downto 0), Phase0R);
@@ -539,7 +573,7 @@ begin
          m_axis_data_tvalid   => open,
          m_axis_data_tdata    => SinCosData1,
          m_axis_phase_tvalid  => open,
-         m_axis_phase_tdata   => PhaseData1
+         m_axis_phase_tdata   => open
    );
 
    Phase1R <= to_sfixed(SinCosData1(15 downto 0), Phase1R);
@@ -561,7 +595,7 @@ begin
          clk         => Clk93,
          reset       => Reset,
          ce          => '1',
-         ValidIn     => DataValid(0),
+         ValidIn     => DataValid(2),
          StartIn     => '0',
          ReadyIn     => '1',
          ReInA       => H0r,
@@ -585,7 +619,7 @@ begin
          clk         => Clk93,
          reset       => Reset,
          ce          => '1',
-         ValidIn     => DataValid(0),
+         ValidIn     => DataValid(2),
          StartIn     => '0',
          ReadyIn     => '1',
          ReInA       => H1r,
@@ -603,8 +637,8 @@ begin
          I => Reset,
          O => ResetBufg
    );
-
-   Brik1u : Brik1
+/*
+   UUTu : Brik1
       generic map (
          SIM_MODE    => SIM_MODE
       )
@@ -624,6 +658,31 @@ begin
          ImagOut        => ImagOut,
          ValidOut       => DataValid_o,
          startout       => StartOut
+   );
+*/
+   UUTu : STC
+      generic map (
+         SIM_MODE    => SIM_MODE
+      )
+      PORT MAP(
+         ResampleR      => to_slv(ResampleR_s),
+         ResampleI      => to_slv(ResampleI_s),
+         ClocksPerBit   => x"1000",
+         PilotOffset    => 2561,
+         DacSelect      => x"0",
+         Clk93          => Clk93,
+         Clk186         => ClkXn,
+         ValidIn        => PhaseValid,
+         ClkOut         => open,
+         DataOut        => open,
+         Dac0ClkEn      => open,
+         Dac1ClkEn      => open,
+         Dac2ClkEn      => open,
+         PilotFound     => open,
+         PilotLocked    => open,
+         Dac0Data       => open,
+         Dac1Data       => open,
+         Dac2Data       => open
    );
 
 end rtl;

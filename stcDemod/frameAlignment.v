@@ -8,7 +8,8 @@ module frameAlignment
     input                   clk,
     input                   clkEn,
     input                   reset,
-    input                   start,
+    input                   startOfFrame,       // start of frame, not start of trellis activiy
+    input                   startOfTrellis,     // Estimates are complete, start Trellis process
     input                   valid,
     input   signed  [17:0]  dinReal,
     input   signed  [17:0]  dinImag,
@@ -22,22 +23,17 @@ module frameAlignment
     //------------------------------ Sample Counter ---------------------------
 
     reg             [14:0]  sampleCount;
-    reg                     frameStart;
     always @(posedge clk) begin
         if (reset) begin
-            frameStart <= 0;
+            sampleCount <= 0;
         end
         else if (clkEn) begin
-            if (start) begin
-                frameStart <= 1;
+            if (startOfFrame) begin
                 sampleCount <= START_OFFSET;
             end
-            else if (valid & frameStart) begin
+            else if (valid) begin
                 if (sampleCount < `SAMPLES_PER_FRAME) begin
                     sampleCount <= sampleCount + 1;
-                end
-                else begin
-                    frameStart <= 0;
                 end
             end
         end
@@ -45,11 +41,11 @@ module frameAlignment
 
     //------------------------- Sample FIFO -----------------------------------
 
-    wire                    fifoWrEn = (clkEn && valid && (sampleCount >= (`PILOT_SAMPLES_PER_FRAME-4)));
+    wire                    fifoWrEn = (clkEn && valid && (sampleCount >= (`PILOT_SAMPLES_PER_FRAME-9)));
     reg                     fifoRdEn;
     fifoBuiltin512x18 fifoReal(
         .clk(clk),
-        .rst(reset),
+        .rst(startOfFrame),
         .din(dinReal),
         .wr_en(fifoWrEn),
         .rd_en(fifoRdEn),
@@ -60,7 +56,7 @@ module frameAlignment
     );
     fifoBuiltin512x18 fifoImag(
         .clk(clk),
-        .rst(reset),
+        .rst(startOfFrame),
         .din(dinImag),
         .wr_en(fifoWrEn),
         .rd_en(fifoRdEn),
@@ -77,22 +73,33 @@ module frameAlignment
         `define WAIT_DECIMATION     1'b1
     reg             [2:0]   decimationCount;
     reg             [14:0]  outputCount;
+    reg             [8:0]   trellisInitCnt;
     always @(posedge clk) begin
         if (reset) begin
             outputState <= `WAIT_VALID;
             fifoRdEn <= 0;
+            outputCount <= 0;
+            interpolate <= 0;
         end
         else if (clkEn) begin
-            if (start) begin
+            if (startOfFrame) begin
                 decimationCount <= CLKS_PER_OUTPUT-1;
                 outputCount <= 0;
                 outputState <= `WAIT_VALID;
                 fifoRdEn <= 0;
+                trellisInitCnt <= 130;
             end
             else begin
+                if (startOfTrellis) begin
+                    trellisInitCnt <= 128;
+                end
+                else if ((trellisInitCnt < 130) && (trellisInitCnt > 0)) begin
+                    trellisInitCnt <= trellisInitCnt - 1;
+                end
+
                 case (outputState)
                     `WAIT_VALID:  begin
-                        if (fifoOutputValid) begin
+                        if ((fifoOutputValid == 1'b1) && (trellisInitCnt == 0)) begin
                             fifoRdEn <= 1;
                             if (CLKS_PER_OUTPUT > 1) begin
                                 decimationCount <= decimationCount - 1;

@@ -39,7 +39,7 @@ library std;
 use std.textio.all;
 use work.fixed_pkg.all;
 USE IEEE.math_real.all;
-USE work.Semco_pkg.ALL;
+use work.Semco_pkg.ALL;
 
 ENTITY ROM_2D IS
    GENERIC(

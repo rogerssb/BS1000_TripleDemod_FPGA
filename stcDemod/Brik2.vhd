@@ -66,11 +66,12 @@ library std;
 use std.textio.all;
 use work.fixed_pkg.all;
 USE IEEE.math_real.all;
-USE work.Semco_pkg.ALL;
+use work.Semco_pkg.ALL;
 
 ENTITY Brik2 IS
    PORT(
       clk,
+      clk2x,
       reset,
       ce             : IN  std_logic;
       Variables      : IN  RecordType;
@@ -128,7 +129,7 @@ ARCHITECTURE rtl OF Brik2 IS
          StartIn,
          ValidIn        : IN  std_logic;
          Rr,
-         Ri             : IN  FLOAT_1_LP;
+         Ri             : IN  FLOAT_1_18;
          Tau0Est,
          Tau1Est,
          H0EstR,
@@ -148,7 +149,7 @@ ARCHITECTURE rtl OF Brik2 IS
          reset,
          StartIn        : IN  std_logic;
          Xr,
-         Xi             : IN  FLOAT_1_LP;
+         Xi             : IN  FLOAT_1_18;
          Tau0Est,
          Tau1Est        : OUT STC_Parm;
          Tau0Ndx,
@@ -222,10 +223,13 @@ ARCHITECTURE rtl OF Brik2 IS
          ena      : IN STD_LOGIC;
          wea      : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
          addra    : IN STD_LOGIC_VECTOR(13 DOWNTO 0);
-         dina     : IN SLV18;
+         dina,
+         dinb     : IN SLV18;
          clkb,
+         web,
          enb      : IN STD_LOGIC;
          addrb    : IN STD_LOGIC_VECTOR(13 DOWNTO 0);
+         douta,
          doutb    : OUT SLV18
       );
    END COMPONENT;
@@ -281,12 +285,14 @@ ARCHITECTURE rtl OF Brik2 IS
    CONSTANT PILOT_OFFSET      : positive := 3;
    CONSTANT TRELLIS_WAIT      : positive := 24;
 
+   CONSTANT TimeViaDF         : boolean := false;
+
    -- Signals
    SIGNAL   AcqTrack          : AcqTrack_t;
    SIGNAL   FreqR,
             FreqI,
             TimeR,
-            TimeI             : FLOAT_1_LP;
+            TimeI             : FLOAT_1_18;
    SIGNAL   FreqRslv,
             FreqIslv,
             TimeRslv,
@@ -318,6 +324,8 @@ ARCHITECTURE rtl OF Brik2 IS
             StartMix,
             StartDF,
             FirstPass,
+            StartTimeChan,
+            ValidTimeChan,
             ValidFreq,
             ValidMixer,
             ValidSinCos,
@@ -348,6 +356,8 @@ ARCHITECTURE rtl OF Brik2 IS
             MixI,
             DF_R,
             DF_I,
+            TimeChanR,
+            TimeChanI,
             H0Mag,
             H1Mag,
             Tau0EstTE,
@@ -386,7 +396,7 @@ ARCHITECTURE rtl OF Brik2 IS
             Tau1EstA          : sfixed(3 downto -17);
 
 -- TODO remove test points
-   signal   Freq_Ila          : sfixed(24 downto 0);
+   signal   Freq_Ila          : std_logic_vector(24 downto 0);
    signal   H0Mag_Ila,
             H1Mag_Ila,
             Tau0Est_Ila,
@@ -395,60 +405,41 @@ ARCHITECTURE rtl OF Brik2 IS
             H0EstI_Ila,
             H1EstR_Ila,
             H1EstI_Ila,
-            InterpO_R0_Ila,
-            InterpO_I0_Ila,
-            InterpO_R1_Ila,
-            InterpO_I1_Ila,
             DF_R_Ila,
             DF_I_Ila,
             Mu0_Ila,
-            Mu1_Ila           : sfixed(17 downto 0);  -- remove fractions for ILA, doesn't like negatives
+            Mu1_Ila           : SLV18;  -- remove fractions for ILA, doesn't like negatives
    SIGNAL   ValidDF_ILA       : std_logic;
 
    attribute mark_debug : string;
-   attribute mark_debug of Freq_Ila    : signal is "true";
-   attribute mark_debug of DF_R_Ila    : signal is "true";
-   attribute mark_debug of DF_I_Ila    : signal is "true";
-   attribute mark_debug of H0Mag_Ila   : signal is "true";
-   attribute mark_debug of H1Mag_Ila   : signal is "true";
-   attribute mark_debug of H0EstR_Ila  : signal is "true";
-   attribute mark_debug of H0EstI_Ila  : signal is "true";
-   attribute mark_debug of H1EstR_Ila  : signal is "true";
-   attribute mark_debug of H1EstI_Ila  : signal is "true";
-   attribute mark_debug of Tau0Est_Ila : signal is "true";
-   attribute mark_debug of Tau1Est_Ila : signal is "true";
-   attribute mark_debug of Mu0_Ila     : signal is "true";
-   attribute mark_debug of Mu1_Ila     : signal is "true";
-   attribute mark_debug of ValidDF_ILA : signal is "true";
-   attribute mark_debug of FreqEstDone : signal is "true";
-   attribute mark_debug of TimeEstDone : signal is "true";
-   attribute mark_debug of ChanEstDone : signal is "true";
-   attribute mark_debug of StartTime   : signal is "true";
-   attribute mark_debug of Interpolate : signal is "true";
+   attribute mark_debug of DF_R_Ila, DF_I_Ila, H0Mag_Ila, H0EstR_Ila, H0EstI_Ila,
+                           Tau0Est_Ila, Mu0_Ila, ValidDF_ILA, TimeEstDone, ChanEstDone,
+                           StartTime, Interpolate, RdInterpAddr0Slv, InterpRamR0, InterpRamI0,
+                           InterpO_R0, InterpO_I0, InterpEn, TrellisEn, TrellisStart : signal is "true";
 
 BEGIN
 
    IlaProcess : process(clk)
    begin
       if (rising_edge(clk)) then
-         H0Mag_Ila      <= H0Mag;
-         H1Mag_Ila      <= H1Mag;
-         Tau0Est_Ila    <= Tau0Est;
-         Tau1Est_Ila    <= Tau1Est;
-         H0EstR_Ila     <= H0EstR;
-         H0EstI_Ila     <= H0EstI;
-         H1EstR_Ila     <= H1EstR;
-         H1EstI_Ila     <= H1EstI;
-         DF_R_Ila       <= DF_R;
-         DF_I_Ila       <= DF_I;
-         Mu0_Ila        <= Mu0;
-         Mu1_Ila        <= Mu1;
+         H0Mag_Ila      <= to_slv(H0Mag);
+         H1Mag_Ila      <= to_slv(H1Mag);
+         Tau0Est_Ila    <= to_slv(Tau0Est);
+         Tau1Est_Ila    <= to_slv(Tau1Est);
+         H0EstR_Ila     <= to_slv(H0EstR);
+         H0EstI_Ila     <= to_slv(H0EstI);
+         H1EstR_Ila     <= to_slv(H1EstR);
+         H1EstI_Ila     <= to_slv(H1EstI);
+         DF_R_Ila       <= to_slv(DF_R);
+         DF_I_Ila       <= to_slv(DF_I);
+         Mu0_Ila        <= to_slv(Mu0);
+         Mu1_Ila        <= to_slv(Mu1);
+--         Freq_Ila       <= to_slv(Freq);
          ValidDF_ILA    <= ValidDFreg;
-         Freq_Ila       <= Freq;
       end if;
    end process IlaProcess;
 -- end of test points TODO
-
+/*
    -- At FreqCount x100-101 the R and I sync pulses are mirrored to each other after possible phase shift
    FreqFifoProcess : process(clk)
    begin
@@ -513,6 +504,14 @@ BEGIN
          AcqTrack       => AcqTrack,
          Done           => FreqEstDone
       );
+*/
+   FreqProcess : process(Clk)
+   begin
+      if (rising_edge(Clk)) then
+         FreqEstDone <= StartIn;   --
+      end if;
+   end process;
+/*
 
    -- Time and Channel processing
    SinCos_u : SinCosLut
@@ -578,14 +577,14 @@ BEGIN
          end if;
       end if;
    end process MixProcess;
-
+*/
    DetectFilt : DetectionFilter
       PORT MAP (
          aclk                 => clk,
          aclken               => ce,
          aresetn              => not reset,
-         s_axis_data_tvalid   => ValidMixer,
-         s_axis_data_tdata    => 6x"00" & to_slv(MixI) & 6x"00"& to_slv(MixR),
+         s_axis_data_tvalid   => ValidIn,
+         s_axis_data_tdata    => 6x"00" & to_slv(InI) & 6x"00"& to_slv(InR),
          s_axis_data_tready   => open,
          m_axis_data_tvalid   => ValidDF,
          m_axis_data_tdata    => DF_DataOut
@@ -603,7 +602,7 @@ BEGIN
             DF_R        <= to_sfixed(DF_DataOut(17 downto 0), DF_R);
             DF_I        <= to_sfixed(DF_DataOut(24+17 downto 24), DF_I);
             ValidDFreg  <= ValidDF;
-            if (StartMix) then
+            if (StartIn) then
                StartDF_Out <= (0 => '1', others=>'0');
             elsif (ValidDFreg) then
                StartDF_Out <= StartDF_Out(StartDF_Delay-2 downto 0) & '0';
@@ -613,6 +612,13 @@ BEGIN
    end process DF_Process;
 
    StartDF <= StartDF_Out(StartDF_Delay-1);
+   InR_sf <= to_sfixed(InR, InR_sf);
+   InI_sf <= to_sfixed(InI, InI_sf);
+
+   StartTimeChan <= StartDF when (TimeViaDF) else StartIn;
+   ValidTimeChan <= ValidDFreg when (TimeViaDF) else ValidIn or StartIn;
+   TimeChanR     <= DF_R when (TimeViaDF) else InR_sf;
+   TimeChanI     <= DF_I when (TimeViaDF) else InI_sf;
 
    TimeProcess : process(clk)  -- Time and channel want last half of pilot
    begin
@@ -623,14 +629,14 @@ BEGIN
             StartTime  <= '0';
             WrAddr      <= 0;
          elsif (ce) then
-            if (StartDF and ValidDFreg and not TimeActive) then   -- could occur when ValidDF is skipping samples
+            if (StartTimeChan and ValidTimeChan and not TimeActive) then   -- could occur when ValidDF is skipping samples
                TimeCount   <= 0;    -- TimeCount starts after DF is primed
                WrAddr      <= 0;
                TimeActive  <= '1';
              elsif (TimeEstDone) then  -- just needs cleared before next packet
                TimeActive <= '0';
             end if;
-            if (ValidDFreg) then
+            if (ValidTimeChan) then
                if (TimeCount < PILOT_SIZE + PILOT_OFFSET) then
                   TimeCount <= TimeCount + 1;
                end if;
@@ -639,12 +645,12 @@ BEGIN
                end if;
             end if;                             -- TODO, PILOT_OFFSET - 3 = 0, yields (TimeCount = PILOT_SIZE)?
             -- Given enough time, Calc freq, then time, then channel else wait for next frame TODO
-            StartTime <= FreqEstDone when (Variables.MiscBits(START_TIME)) else '1' when (TimeCount = PILOT_SIZE + PILOT_OFFSET - 3) else '0';  -- wait till input buffer is full
+            StartTime <= /*FreqEstDone when (Variables.MiscBits(START_TIME)) else */ '1' when (TimeCount = PILOT_SIZE + PILOT_OFFSET - 3) else '0';  -- wait till input buffer is full
          end if;
       end if;
    end process TimeProcess;
                                  -- start early for negative Ndx offsets
-   FirstPass   <= ValidDFreg when (TimeCount >= TIME_DEPTH + PILOT_OFFSET - 2) and (TimeCount < PILOT_SIZE + PILOT_OFFSET - 2) else '0';
+   FirstPass   <= ValidTimeChan when (TimeCount >= TIME_DEPTH + PILOT_OFFSET - 2) and (TimeCount < PILOT_SIZE + PILOT_OFFSET - 2) else '0';
    TimeRead    <= TimeRdAddr when TimeActive else ChanRdAddr;
    TimeR       <= resize(to_sfixed(TimeRslv, PARM_ZERO), TimeR);
    TimeI       <= resize(to_sfixed(TimeIslv, PARM_ZERO), TimeR);
@@ -652,8 +658,8 @@ BEGIN
    RepeatR_u : RAM_2Reads_1Write
       GENERIC MAP(
          FILENAME    => "",
-         DATA_WIDTH  => DF_R'length,
-         BINPT       => DF_R'right,
+         DATA_WIDTH  => TimeChanR'length,
+         BINPT       => TimeChanR'right,
          ADDR_WIDTH  => 8,
          FILE_IS_SLV => false,
          LATENCY     => 1,
@@ -667,7 +673,7 @@ BEGIN
          WrAddr      => WrAddr,
          RdAddrA     => TimeRead,
          RdAddrB     => 0,
-         WrData      => to_slv(DF_R),
+         WrData      => to_slv(TimeChanR),
          RdOutA      => TimeRslv,
          RdOutB      => open
       );
@@ -675,8 +681,8 @@ BEGIN
    RepeatI_u : RAM_2Reads_1Write
       GENERIC MAP(
          FILENAME    => "",
-         DATA_WIDTH  => DF_I'length,
-         BINPT       => DF_I'right,
+         DATA_WIDTH  => TimeChanI'length,
+         BINPT       => TimeChanI'right,
          ADDR_WIDTH  => 8,
          LATENCY     => 1,
          FILE_IS_SLV => false,
@@ -690,7 +696,7 @@ BEGIN
          WrAddr      => WrAddr,
          RdAddrA     => TimeRead,
          RdAddrB     => 0,
-         WrData      => to_slv(DF_I),
+         WrData      => to_slv(TimeChanI),
          RdOutA      => TimeIslv,
          RdOutB      => open
       );
@@ -762,7 +768,7 @@ BEGIN
             ValidCount     <= 0;
             WrInterpAddr   <= (others=>'0');
          elsif (ce) then
-            if (StartDF = '1') then -- DF is valid for new frame
+            if (StartDF) then -- DF is valid for new frame
                ValidCount <= 1;
             elsif (ValidCount > 0) then
                if (ValidDFreg) then
@@ -786,9 +792,9 @@ BEGIN
    -- Interpolate on the fourth sample.
    -- The system then waits for TrellisEn to go high signifying the interpolation is complete.
 
-   InterpRead : process(clk)
+   InterpRead : process(clk2x)
    begin
-      if (rising_edge(clk)) then
+      if (rising_edge(clk2x)) then
          if (reset) then
             TrellisStarter <= '0';
             TrellisStart   <= '0';
@@ -877,8 +883,8 @@ BEGIN
                   InterpCount <= 0;
                else
                   InterpCount  <= InterpCount + 1;
-                  RdInterpAddr   <= RdInterpAddr + 1;
-                  InterpEn       <= '1';
+                  RdInterpAddr <= RdInterpAddr + 1;
+                  InterpEn     <= '1';
                end if;
             else
                InterpEn    <= '0';
@@ -917,9 +923,12 @@ BEGIN
          wea      => WrInterpRam,
          addra    => WrInterpAddrSlv,
          dina     => to_slv(DF_R),
-         clkb     => clk,
+         douta    => open,
+         clkb     => clk2x,
          enb      => ReadInterp,
+         web      => '0',
          addrb    => RdInterpAddr0Slv,
+         dinb     => (others=>'0'),
          doutb    => InterpRamR0
    );
 
@@ -930,9 +939,12 @@ BEGIN
          wea      => WrInterpRam,
          addra    => WrInterpAddrSlv,
          dina     => to_slv(DF_I),
-         clkb     => clk,
+         douta    => open,
+         clkb     => clk2x,
          enb      => ReadInterp,
+         web      => '0',
          addrb    => RdInterpAddr0Slv,
+         dinb     => (others=>'0'),
          doutb    => InterpRamI0
    );
 
@@ -943,9 +955,12 @@ BEGIN
          wea      => WrInterpRam,
          addra    => WrInterpAddrSlv,
          dina     => to_slv(DF_R),
-         clkb     => clk,
+         douta    => open,
+         clkb     => clk2x,
          enb      => ReadInterp,
+         web      => '0',
          addrb    => RdInterpAddr1Slv,
+         dinb     => (others=>'0'),
          doutb    => InterpRamR1
    );
 
@@ -956,15 +971,18 @@ BEGIN
          wea      => WrInterpRam,
          addra    => WrInterpAddrSlv,
          dina     => to_slv(DF_I),
-         clkb     => clk,
+         douta    => open,
+         clkb     => clk2x,
          enb      => ReadInterp,
+         web      => '0',
          addrb    => RdInterpAddr1Slv,
+         dinb     => (others=>'0'),
          doutb    => InterpRamI1
    );
 
   InterpR0 : interpolator
       PORT MAP (
-         clk         => clk,
+         clk         => clk2x,
          ce          => ce,
          reset       => reset,
          Interpolate => Interpolate,
@@ -977,7 +995,7 @@ BEGIN
 
    InterpI0 : interpolator
       PORT MAP (
-         clk         => clk,
+         clk         => clk2x,
          ce          => ce,
          reset       => reset,
          Interpolate => Interpolate,
@@ -990,7 +1008,7 @@ BEGIN
 
    InterpR1 : interpolator
       PORT MAP (
-         clk         => clk,
+         clk         => clk2x,
          ce          => ce,
          reset       => reset,
          Interpolate => Interpolate,
@@ -1003,7 +1021,7 @@ BEGIN
 
    InterpI1 : interpolator
       PORT MAP (
-         clk         => clk,
+         clk         => clk2x,
          ce          => ce,
          reset       => reset,
          Interpolate => Interpolate,

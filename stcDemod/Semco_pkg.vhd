@@ -33,6 +33,7 @@ PACKAGE Semco_pkg IS
 
    subtype SLV4            is std_logic_vector(3 downto 0);
    subtype SLV8            is std_logic_vector(7 downto 0);
+   subtype SLV12           is std_logic_vector(11 downto 0);
    subtype SLV16           is std_logic_vector(15 downto 0);
    subtype SLV18           is std_logic_vector(17 downto 0);
    subtype SLV32           is std_logic_vector(31 downto 0);
@@ -200,7 +201,7 @@ PACKAGE Semco_pkg IS
          IndexP125K        : sfixed(12 downto -5);    --:= to_sfixed(125000.0/FREQ_RESOLUTION - 1.0 + FN/2.0, 12, -5);
          IndexN125K        : sfixed(12 downto -5);    --:= to_sfixed(-125000.0/FREQ_RESOLUTION - 1.0 + FN/2.0, 12, -5);
          TSample           : sfixed(-24 downto -41);  --:= to_sfixed(TSAMPLE_4, -27, -44);
-         PilotSyncOffset   : ufixed(11 downto 0);
+         PilotSyncOffset   : natural range 0 to 4095;
          ResampleRatio     : SLV32;                   --:=to_slv(to_ufixed(FREQ_SAMP / A2D_SAMPLE_RATE, 0, -31)); 0.44571428571428571428571428571429 for 10Mb
          MiscBits          : SLV8;
          Probe8            : SLV18;
@@ -222,7 +223,7 @@ PACKAGE Semco_pkg IS
                               IndexP125K        => to_sfixed(125000.0/FREQ_RESOLUTION - 1.0 + FN/2.0, 12, -5),
                               IndexN125K        => to_sfixed(-125000.0/FREQ_RESOLUTION - 1.0 + FN/2.0, 12, -5),
                               TSample           => to_sfixed(TSAMPLE_4, -24, -41),
-                              PilotSyncOffset   => to_ufixed(1013, 11, 0),
+                              PilotSyncOffset   => 2560,
                               ResampleRatio     => to_slv(to_ufixed(FREQ_SAMP / DDC_RATE, -1, -32)),
                               MiscBits          => 8x"07",
                               Probe8            => 18x"00015");

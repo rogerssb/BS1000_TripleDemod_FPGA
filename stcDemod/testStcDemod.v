@@ -46,10 +46,10 @@ module test;
     integer                 fp_sampleReal,fp_sampleImag,fp_start,fp_valid;
     real                    sampleReal,sampleImag,sampleStart,sampleValid;
     initial begin
-        fp_sampleReal = $fopen("c:/modem/telemetry/stcDemod/test_data/Brik1_out_r_0.txt","r");
-        fp_sampleImag = $fopen("c:/modem/telemetry/stcDemod/test_data/Brik1_out_i_0.txt","r");
-        fp_start =      $fopen("c:/modem/telemetry/stcDemod/test_data/Brik1_out_s_0.txt","r");
-        fp_valid =      $fopen("c:/modem/telemetry/stcDemod/test_data/Brik1_out_v_0.txt","r");
+        fp_sampleReal = $fopen("C:/Semco/STCinfo/RealTimeC/SpaceTimeCodeInC/SpaceTimeCodeInC/Iseed12345678R_0Hz_50dB_50Percent.txt","r");
+        fp_sampleImag = $fopen("C:/Semco/STCinfo/RealTimeC/SpaceTimeCodeInC/SpaceTimeCodeInC/Iseed12345678I_0Hz_50dB_50Percent.txt","r");
+        fp_start =      $fopen("C:/Semco/STCinfo/RealTimeC/SpaceTimeCodeInC/SpaceTimeCodeInC/Iseed12345678S_0Hz_50dB_50Percent.txt","r");
+        fp_valid =      $fopen("C:/Semco/STCinfo/RealTimeC/SpaceTimeCodeInC/SpaceTimeCodeInC/Iseed12345678V_0Hz_50dB_50Percent.txt","r");
     end
     always @(posedge clk) begin
         if (clkEnable) begin
@@ -97,7 +97,7 @@ module test;
     reg                     inputStart,inputValid;
     always @(posedge clk) begin
         if (!enableInput) begin
-            inputSampleReal <= 0; 
+            inputSampleReal <= 0;
         end
         else if (clkEnable) begin
             if (sampleReal >= 1.0) begin
@@ -111,7 +111,7 @@ module test;
             end
         end
         if (!enableInput) begin
-            inputSampleImag <= 0; 
+            inputSampleImag <= 0;
         end
         else if (clkEnable) begin
             if (sampleImag >= 1.0) begin
@@ -125,7 +125,7 @@ module test;
             end
         end
         if (!enableInput) begin
-            inputStart <= 0; 
+            inputStart <= 0;
         end
         else if (clkEnable) begin
             if (sampleStart > 0.0) begin
@@ -136,7 +136,7 @@ module test;
             end
         end
         if (!enableInput) begin
-            inputValid <= 0; 
+            inputValid <= 0;
         end
         else if (clkEnable) begin
             if (sampleValid > 0.0) begin
@@ -153,37 +153,49 @@ module test;
     //----------------------- Detection Filter --------------------------------
     wire            [39:0]  dfReal_tdata;
     wire    signed  [17:0]  dfRealOutput = dfReal_tdata[37:20];
-    detectionFilter dfReal(
-        .aclk(clk), 
-        .aclken(clkEnable), 
-        .aresetn(!reset), 
-        .s_axis_data_tvalid(inputValid), 
-        .s_axis_data_tready(), 
-        .s_axis_data_tdata({6'b0,inputSampleReal}), 
-        .m_axis_data_tvalid(dfValid), 
+    detectionFilterX1 dfReal(
+        .aclk(clk),
+        .aclken(clkEnable),
+        .aresetn(!reset),
+        .s_axis_data_tvalid(inputValid),
+        .s_axis_data_tready(),
+        .s_axis_data_tdata({6'b0,inputSampleReal}),
+        .m_axis_data_tvalid(dfValid),
         .m_axis_data_tdata(dfReal_tdata)
     );
     wire            [39:0]  dfImag_tdata;
     wire    signed  [17:0]  dfImagOutput = dfImag_tdata[37:20];
-    detectionFilter dfImag(
-        .aclk(clk), 
-        .aclken(clkEnable), 
-        .aresetn(!reset), 
-        .s_axis_data_tvalid(inputValid), 
-        .s_axis_data_tready(), 
-        .s_axis_data_tdata({6'b0,inputSampleImag}), 
-        .m_axis_data_tvalid(), 
+    detectionFilterX1 dfImag(
+        .aclk(clk),
+        .aclken(clkEnable),
+        .aresetn(!reset),
+        .s_axis_data_tvalid(inputValid),
+        .s_axis_data_tready(),
+        .s_axis_data_tdata({6'b0,inputSampleImag}),
+        .m_axis_data_tvalid(),
         .m_axis_data_tdata(dfImag_tdata)
     );
 
+
+    //-------------------------- Estimators -----------------------------------
+
+    `define USE_FIXED_ESTIMATES
+    `ifdef USE_FIXED_ESTIMATES
+    reg     signed  [17:0]  h0EstReal,h0EstImag;
+    reg     signed  [17:0]  h1EstReal,h1EstImag;
+    reg     signed  [5:0]   deltaTauEst;
+    reg             [17:0]  ch0Mu,ch1Mu;
+    `else
+    `endif
+
     //------------------------- Start Pulse Alignment -------------------------
     /*
-    The start pulse coming from the pilot detector falls between 512 sample 
+    The start pulse coming from the pilot detector falls between 512 sample
     bursts. It indicates that the first sample of the next burst is a specific
-    sample relative to the start of the pilot samples. This sample's index is 
+    sample relative to the start of the pilot samples. This sample's index is
     defined by START_OFFSET. The alignment module does three things:
 
-    1) It creates an interpolate signal that is aligned with the first sample 
+    1) It creates an interpolate signal that is aligned with the first sample
         of the block of 4 samples that define a bit period. This signal is used
         by the interpolate blocks.
     2) It buffers the sample burst and places idle time between the samples
@@ -192,14 +204,45 @@ module test;
         the pilot and staying true for the duration of the frame.
     */
     wire    signed  [17:0]  faReal,faImag;
+    reg             [14:0]  sampleInFrame;
+
+    wire    startOfTrellis = (sampleInFrame == 600);
+
+    always @(posedge clk) begin
+        if (inputStart) begin
+            sampleInFrame <= 0;
+            h0EstReal   <= 18'h0;  // -0.5 + j0.0
+            h0EstImag   <= 18'h0;
+            h1EstReal   <= 18'h0;  //-0.50 + j0.0
+            h1EstImag   <= 18'h0;
+            deltaTauEst <= 6'h0;
+            ch0Mu       <= 18'h0;
+            ch1Mu       <= 18'h0;
+        end
+        else if (dfValid) begin
+            sampleInFrame <= sampleInFrame + 1;
+        end
+
+        if (startOfTrellis) begin
+            h0EstReal   <= 18'h30000;  // -0.5 + j0.0
+            h0EstImag   <= 18'h00000;
+            h1EstReal   <= 18'h30000;  //-0.50 + j0.0
+            h1EstImag   <= 18'h00000;
+            deltaTauEst <= 6'h00;
+            ch0Mu       <= 18'h00000;
+            ch1Mu       <= 18'h00000;
+        end
+    end
+
     frameAlignment #(
-        .START_OFFSET(0), 
-        .CLKS_PER_OUTPUT(4)) 
+        .START_OFFSET(0),
+        .CLKS_PER_OUTPUT(4))
     fa(
         .clk(clk),
         .clkEn(clkEnable),
         .reset(reset),
-        .start(inputStart),
+        .startOfFrame(inputStart),
+        .startOfTrellis(startOfTrellis),
         .valid(dfValid),
         .dinReal(dfRealOutput),
         .dinImag(dfImagOutput),
@@ -209,32 +252,13 @@ module test;
         .doutImag(faImag)
     );
 
-
-    //-------------------------- Estimators -----------------------------------
-
-    `define USE_FIXED_ESTIMATES
-    `ifdef USE_FIXED_ESTIMATES
-    wire    signed  [17:0]  h0EstReal,h0EstImag;
-    assign                  h0EstReal = 18'h10000;  // 1.0 + j0.0
-    assign                  h0EstImag = 18'h00000;  
-    wire    signed  [17:0]  h1EstReal,h1EstImag;
-    assign                  h1EstReal = 18'h10000;  // 1.0 + j0.0
-    assign                  h1EstImag = 18'h00000;
-    wire    signed  [5:0]   deltaTauEst;
-    assign                  deltaTauEst = 6'h00;
-    wire            [17:0]  ch0Mu,ch1Mu;
-    assign                  ch0Mu = 18'h00000;
-    assign                  ch1Mu = 18'h00000;
-    `else
-    `endif
-
     //------------------------- Interpolators ---------------------------------
 
     wire    signed      [17:0]  sample0r;
     interpolator ch0r(
         .clk(clk),
         .clkEn(1'b1),
-        .reset(reset),
+        .reset(startOfTrellis),
         .interpolate(faClkEn & interpolate),
         .mu(ch0Mu),
         .inputEn(faClkEn),
@@ -246,7 +270,7 @@ module test;
     interpolator ch0i(
         .clk(clk),
         .clkEn(1'b1),
-        .reset(reset),
+        .reset(startOfTrellis),
         .interpolate(faClkEn & interpolate),
         .mu(ch0Mu),
         .inputEn(faClkEn),
@@ -259,7 +283,7 @@ module test;
     interpolator ch1r(
         .clk(clk),
         .clkEn(1'b1),
-        .reset(reset),
+        .reset(startOfTrellis),
         .interpolate(faClkEn & interpolate),
         .mu(ch1Mu),
         .inputEn(faClkEn),
@@ -271,7 +295,7 @@ module test;
     interpolator ch1i(
         .clk(clk),
         .clkEn(1'b1),
-        .reset(reset),
+        .reset(startOfTrellis),
         .interpolate(faClkEn & interpolate),
         .mu(ch1Mu),
         .inputEn(faClkEn),
@@ -285,15 +309,15 @@ module test;
 
     wire                [3:0]   tdBits;
     trellisDetector td(
-        .clk(clk), 
+        .clk(clk),
         .clkEn(1'b1),
         .reset(reset),
         .sampleEn(interpOutEn),
-        .startFrame(inputStart),
-        .in0Real(sample0r), .in0Imag(sample0i), 
+        .startFrame(startOfTrellis),
+        .in0Real(sample0r), .in0Imag(sample0i),
         .in1Real(sample1r), .in1Imag(sample1i),
         .deltaTauEst(deltaTauEst),
-        .h0EstReal(h0EstReal), .h0EstImag(h0EstImag), 
+        .h0EstReal(h0EstReal), .h0EstImag(h0EstImag),
         .h1EstReal(h1EstReal), .h1EstImag(h1EstImag),
         .finalMetricOutputEn(),
         .finalMetric(),
@@ -334,7 +358,6 @@ module test;
 
     integer         sampleCount;
     initial         sampleCount = 0;
-    wire    [31:0]  sampleCountWire = sampleCount;
     always @(posedge clk) begin
         if (enableInput) begin
             if (clkEnable) begin

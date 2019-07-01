@@ -39,7 +39,7 @@ library std;
 use std.textio.all;
 use work.fixed_pkg.all;
 USE IEEE.math_real.all;
-USE work.Semco_pkg.ALL;
+use work.Semco_pkg.ALL;
 
 ENTITY SinvLuts IS
    PORT(
@@ -72,7 +72,7 @@ ARCHITECTURE rtl OF SinvLuts IS
 
    COMPONENT ROM_2D IS
       GENERIC(
-      FILENAME    : string    := "C:\Semco\Vivado\BS1000_Demod_vivado2017\stcDemod\sourceData\sinv_lut_i.slv";
+      FILENAME    : string    := "C:\Semco\Vivado\Demods\stcDemod\sourceData\sinv_lut_i.slv";
       DATA_WIDTH  : positive  := 18;
       LEFT        : integer   := -7;
       RIGHT       : integer   := -24;
@@ -104,7 +104,7 @@ BEGIN
 
    RamSinvR0 : ROM_2D
       GENERIC MAP(
-         FILENAME    => "C:\Semco\Vivado\BS1000_Demod_vivado2017\stcDemod\sourceData\sinv_lut_r_pt31.slv",
+         FILENAME    => "C:\Semco\Vivado\Demods\stcDemod\sourceData\sinv_lut_r_pt31.slv",
          Index       => 0
       )
       PORT MAP(
@@ -119,7 +119,7 @@ BEGIN
 
    RamSinvR1 : ROM_2D
       GENERIC MAP(
-         FILENAME    => "C:\Semco\Vivado\BS1000_Demod_vivado2017\stcDemod\sourceData\sinv_lut_r_pt31.slv",
+         FILENAME    => "C:\Semco\Vivado\Demods\stcDemod\sourceData\sinv_lut_r_pt31.slv",
          Index       => 1
       )
       PORT MAP(
@@ -134,7 +134,7 @@ BEGIN
 
    RamSinvR3 : ROM_2D
       GENERIC MAP(
-         FILENAME    => "C:\Semco\Vivado\BS1000_Demod_vivado2017\stcDemod\sourceData\sinv_lut_r_pt31.slv",
+         FILENAME    => "C:\Semco\Vivado\Demods\stcDemod\sourceData\sinv_lut_r_pt31.slv",
          Index       => 3
       )
       PORT MAP(
@@ -149,7 +149,7 @@ BEGIN
 
    RamSinvI1 : ROM_2D
       GENERIC MAP(
-         FILENAME    => "C:\Semco\Vivado\BS1000_Demod_vivado2017\stcDemod\sourceData\sinv_lut_i_pt31.slv",
+         FILENAME    => "C:\Semco\Vivado\Demods\stcDemod\sourceData\sinv_lut_i_pt31.slv",
          Index       => 1
       )
       PORT MAP(

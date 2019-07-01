@@ -36,7 +36,7 @@ LIBRARY IEEE;
 USE IEEE.std_logic_1164.ALL;
 USE IEEE.numeric_std.ALL;
 use work.fixed_pkg.all;
-USE work.Semco_pkg.ALL;
+use work.Semco_pkg.ALL;
 
 ENTITY Brik1 IS
     GENERIC (SIM_MODE : boolean := false
@@ -73,7 +73,6 @@ ARCHITECTURE rtl OF Brik1 IS
          reset2x,
          ce,
          ValidIn        : IN  std_logic;
-         Variables      : IN  RecordType;
          ReIn,
          ImIn           : IN  FLOAT_1_18;
          PilotIndex     : OUT ufixed(10 downto 0);
@@ -128,7 +127,6 @@ BEGIN
          reset2x        => reset2x,
          ce             => ce,
          ValidIn        => ValidIn,
-         Variables      => Variables,
          ReIn           => ResampleR,
          ImIn           => ResampleI,
          -- outputs

@@ -49,8 +49,8 @@ USE IEEE.std_logic_1164.ALL;
 USE IEEE.numeric_std.ALL;
 Library xpm;
 use xpm.vcomponents.all;
-USE work.fixed_pkg.ALL;
-USE work.Semco_pkg.ALL;
+use work.fixed_pkg.ALL;
+use work.Semco_pkg.ALL;
 
 ENTITY PD_Fft_Fifo IS
       GENERIC(
@@ -168,7 +168,7 @@ BEGIN
 
    Clk2xFifo : xpm_fifo_async
       generic map (
-         FIFO_MEMORY_TYPE        => "auto",          --string; "auto", "block", "distributed", or "ultra" ;
+         FIFO_MEMORY_TYPE        => "block",          --string; "auto", "block", "distributed", or "ultra" ;
          ECC_MODE                => "no_ecc",         --string; "no_ecc" or "en_ecc";
          FIFO_WRITE_DEPTH        => WORDS*2,          --positive integer
          RELATED_CLOCKS          => 0,                --positive integer; 0 or 1
@@ -248,7 +248,7 @@ BEGIN
 
    Clk1xFifo : xpm_fifo_async
       generic map (
-         FIFO_MEMORY_TYPE        => "auto",           --string; "auto", "block", "distributed", or "ultra" ;
+         FIFO_MEMORY_TYPE        => "block",           --string; "auto", "block", "distributed", or "ultra" ;
          ECC_MODE                => "no_ecc",         --string; "no_ecc" or "en_ecc";
          FIFO_WRITE_DEPTH        => WORDS*2,          --positive integer
          RELATED_CLOCKS          => 0,                --positive integer; 0 or 1

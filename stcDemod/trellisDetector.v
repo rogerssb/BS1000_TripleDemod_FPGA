@@ -13,7 +13,7 @@ trellisDetector
         inputEn - clock enable used for all inputs
         startFrame - indicates the start of a new frame. This is used to indicate
             a new set of input samples and parameter estimates are available for
-            processing
+            processing. Need valid Estimates and 128 clocks before the first sampleEn.
         in0Real,in0Imag - complex valued inputs from the Detection Filter that
             have been resampled to align with the tau0 estimate. Encoded as a signed 18
             bit, Q17 fractional number pair. The boundary between blocks of 3204

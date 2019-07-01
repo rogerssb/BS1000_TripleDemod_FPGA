@@ -40,7 +40,7 @@ USE IEEE.std_logic_1164.ALL;
 USE IEEE.numeric_std.ALL;
 USE IEEE.math_real.ALL;
 use work.fixed_pkg.all;
-USE work.Semco_pkg.ALL;
+use work.Semco_pkg.ALL;
 
 ENTITY DFT IS
       GENERIC(

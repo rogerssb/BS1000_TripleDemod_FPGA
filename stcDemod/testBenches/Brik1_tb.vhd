@@ -162,8 +162,7 @@ architecture rtl of Brik1_tb is
             ResampleI_s,
             RealOut,
             ImagOut              : FLOAT_1_18;
-   SIGNAL   PilotSyncOffset      : ufixed(11 downto -3) := to_ufixed(1535, 11, -3);
-   SIGNAL   Increment            : ufixed(0 downto -3) := "0000"; --to_ufixed(0.125, 0, -3);
+   SIGNAL   PilotSyncOffset      : natural range 0 to 2047 := 1535;
 /*
    -- Brik2
    signal   InRBrik2Dly,
@@ -239,7 +238,7 @@ begin
                RdAddr_i <= RdAddr_i + 1;
             else
                RdAddr_i <= 0;
-               PilotSyncOffset <= resize(PilotSyncOffset + Increment, PilotSyncOffset);
+               PilotSyncOffset <= PilotSyncOffset + 1;
             end if;
          end if;
 
@@ -336,7 +335,7 @@ begin
       );
    Variables.MiscBits(CONJUGATE) <= '0';
    Variables.MiscBits(RESAMP_DIS) <= C_READ; -- Set high to use C program IQ data
-   Variables.PilotSyncOffset <= PilotSyncOffset(11 downto 0);
+   Variables.PilotSyncOffset <= PilotSyncOffset;
 
    OneMinusRatio  <= resize(1.0 - Ratio, OneMinusRatio);
    H0r            <= to_sfixed(RealRead(0), ResampleR_s);

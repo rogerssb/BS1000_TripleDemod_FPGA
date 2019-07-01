@@ -39,7 +39,7 @@ USE IEEE.numeric_std.ALL;
 library std;
 use std.textio.all;
 use work.fixed_pkg.all;
-USE work.Semco_pkg.ALL;
+use work.Semco_pkg.ALL;
 Library UNISIM;
 use UNISIM.vcomponents.all;
 

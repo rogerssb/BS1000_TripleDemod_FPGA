@@ -16,12 +16,18 @@ Company:     Semco Inc.
 Module Name: PilotSync.vhd
 Description: Waits for PilotPulseIn, then latches IndexIn. IndexIn derives an
 offset of the data stream relative to the pilot position. Subtracting the IndexIn
-from 2*512+512 gives the length of delay line needed between Resampler output and
-Brik1 output. The second 512 value allows the data packet following the StartOut
+from 4*512+512 gives the length of delay line needed between Resampler output and
+Brik1 output due to process latency. The second 512 value allows the data packet following the StartOut
 to contain the full 512 samples needed for FreqEst. The last 256 samples feed the
 timing and channel estimates.
 To reduce false Pilots, the PilotPulse is gated at between 13300 to 13324 of the
 typical 13312 samples between frames.
+
+To determine proper alignment with no Freq/Phase perturbations, the recovered
+Real and Imag are captured and compared. The two pilot components are mirror
+images of each other, so by reading back the Imag part backward we can sum the
+difference between the two readings for an indication of proper lock. Also when
+properly aligned, the Taus should go to zero.
 
 ARGUMENTS :
 
@@ -44,7 +50,7 @@ LIBRARY IEEE;
 USE IEEE.std_logic_1164.ALL;
 USE IEEE.numeric_std.ALL;
 use work.fixed_pkg.all;
-USE work.Semco_pkg.ALL;
+use work.Semco_pkg.ALL;
 
 ENTITY PilotSync IS
    PORT(
@@ -123,12 +129,7 @@ ARCHITECTURE rtl OF PilotSync IS
    signal   ReadR_Ila, ReadI_Ila : sfixed(17 downto 0);
 
    attribute mark_debug : string;
-   attribute mark_debug of SampleCount     : signal is "true";
-   attribute mark_debug of StartOut        : signal is "true";
-   attribute mark_debug of SyncSumIla      : signal is "true";
-   attribute mark_debug of ReadR_Ila       : signal is "true";
-   attribute mark_debug of ReadI_Ila       : signal is "true";
-   attribute mark_debug of IndexOut        : signal is "true";
+   attribute mark_debug of SampleCount, StartOut, SyncSumIla, ReadR_Ila, ReadI_Ila, IndexOut : signal is "true";
 
 BEGIN
 
@@ -154,7 +155,7 @@ BEGIN
             SyncError      <= (others=>'0');
             ReadCount      <= (others=>'0');
             PilotCount     <= (others=>'0');
-            IndexOut       <= to_ufixed(290, IndexOut);
+            IndexOut       <= to_ufixed(0, IndexOut);    -- was 290
             WaitCount_i    <= 0;
             SampleCount    <= 0;
             PacketCount_i  <= 512;
@@ -319,7 +320,7 @@ BEGIN
          RdOutB      => PilotCaptureI_slv
       );
 
-   InvRdCount  <= 511 - ReadCount;
+   InvRdCount  <= 510 - ReadCount;
    ReadR       <= to_sfixed(PilotCaptureR_slv, ReadR);
    ReadI       <= to_sfixed(PilotCaptureI_slv, ReadI);
 

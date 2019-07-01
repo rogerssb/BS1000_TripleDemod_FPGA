@@ -42,7 +42,7 @@ USE IEEE.std_logic_1164.ALL;
 USE IEEE.std_logic_textio.all;
 USE IEEE.numeric_std.ALL;
 use work.fixed_pkg.all;
-USE work.Semco_pkg.ALL;
+use work.Semco_pkg.ALL;
 
 ENTITY TimingEstimate IS
    PORT(
@@ -51,7 +51,7 @@ ENTITY TimingEstimate IS
       reset,
       StartIn        : IN  std_logic;
       Xr,
-      Xi             : IN  FLOAT_1_LP;
+      Xi             : IN  FLOAT_1_18;
       Tau0Est,
       Tau1Est        : OUT STC_Parm;
       Tau0Ndx,
@@ -71,7 +71,7 @@ ARCHITECTURE rtl OF TimingEstimate IS
          reset,
          StartIn        : IN  std_logic;
          Xr,
-         Xi             : IN  FLOAT_1_LP;
+         Xi             : IN  FLOAT_1_18;
          IndexX,
          IndexY         : IN  integer range 0 to SEARCH_LENGTH;
          SsInvR0,    -- ±.005
@@ -250,31 +250,13 @@ ARCHITECTURE rtl OF TimingEstimate IS
             SsInvR3D,
             SsInvI3D          : sfixed(-7 downto -24);
 
-/*
-   signal   ResultsCM_Ila0,
-            ResultsCM_Ila1,
-            ResultsCM_Ila2,
-            ResultsCM_Ila3     : std_logic_vector(24 downto 0);
+
    attribute mark_debug : string;
-   attribute mark_debug of ResultsCM_Ila0    : signal is "true";
-   attribute mark_debug of ResultsCM_Ila1    : signal is "true";
-   attribute mark_debug of ResultsCM_Ila2    : signal is "true";
-   attribute mark_debug of ResultsCM_Ila3    : signal is "true";
-   attribute mark_debug of Done              : signal is "true";
-*/
+   attribute mark_debug of StartIn, Xr, Xi, RdAddr, Mode, PipeLine, Done : signal is "true";
+
 
 BEGIN
-/*
-   IlaProcess : process(clk)
-      begin
-      if (rising_edge(clk)) then
-         ResultsCM_Ila0 <= to_slv(ResultsCM(0));
-         ResultsCM_Ila1 <= to_slv(ResultsCM(1));
-         ResultsCM_Ila2 <= to_slv(ResultsCM(2));
-         ResultsCM_Ila3 <= to_slv(ResultsCM(3));
-      end if;
-   end process;
-*/
+
    process (clk)
    begin
       if (rising_edge(clk)) then
