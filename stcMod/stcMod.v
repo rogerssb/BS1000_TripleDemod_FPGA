@@ -113,6 +113,19 @@ module stcMod(
         end
     end
 
+    `ifdef TEST_SOQPSK_FIR
+    // Integrate the phase shift caused by the interpolated FIR outputs
+    reg     signed  [31:0]  phaseAccum0;
+    always @(posedge clk) begin
+        if (reset) begin
+            phaseAccum0 <= 0;
+        end
+        else if (clkEn) begin
+            phaseAccum0 <= phaseAccum0 + {{14{stcDev0[17]}},stcDev0};
+        end
+    end
+    `endif
+
     `ifdef SIMULATE
     real devReal;
     wire    [17:0]  deviation = cicIn0;
@@ -168,8 +181,21 @@ module stcMod(
         .shift(cicShift),
         .dIn(cicOut1),
         .dOut(interpOut1)
-    );
+    );               
 
+
+    `ifdef TEST_SOQPSK_FIR
+    // Integrate the phase shift caused by the interpolated FIR outputs
+    reg     signed  [31:0]  phaseAccum;
+    always @(posedge clk) begin
+        if (reset) begin
+            phaseAccum <= 0;
+        end
+        else if (clkEn) begin
+            phaseAccum <= phaseAccum + {{14{interpOut0[17]}},interpOut0};
+        end
+    end
+    `endif
 
     `ifdef SIMULATE
     real interpReal;

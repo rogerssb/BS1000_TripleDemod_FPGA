@@ -14,8 +14,8 @@ module stcFramer
     output                      stcFrameSync
 );
 
-//`define STC_PAYLOAD_BITS    3200
-`define STC_PAYLOAD_BITS    256
+`define STC_PAYLOAD_BITS    3200
+//`define STC_PAYLOAD_BITS    256
 `define STC_PILOT_BITS      128
 `define STC_PILOT0          128'ha88d_9ad4_dc40_4947_e292_023b_2b59_b115
 `define STC_PILOT1          128'he3c7_7761_f070_36be_7d6c_0e0f_86ee_e3c7

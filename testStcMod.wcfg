@@ -11,12 +11,12 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="2666666666fs"></ZoomStartTime>
-      <ZoomEndTime time="12666666667fs"></ZoomEndTime>
-      <Cursor1Time time="11000000000fs"></Cursor1Time>
+      <ZoomStartTime time="10367400000fs"></ZoomStartTime>
+      <ZoomEndTime time="10512600001fs"></ZoomEndTime>
+      <Cursor1Time time="10422000000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="195"></NameColumnWidth>
+      <NameColumnWidth column_width="191"></NameColumnWidth>
       <ValueColumnWidth column_width="58"></ValueColumnWidth>
    </column_width_setting>
    <WVObjectSize size="19" />
@@ -86,10 +86,6 @@
       <wvobject fp_name="/test/bitrateBps" type="other">
          <obj_property name="ElementShortName">bitrateBps</obj_property>
          <obj_property name="ObjectShortName">bitrateBps</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/interpolationGain" type="other">
-         <obj_property name="ElementShortName">interpolationGain</obj_property>
-         <obj_property name="ObjectShortName">interpolationGain</obj_property>
       </wvobject>
       <wvobject fp_name="/test/devScaleFactor" type="other">
          <obj_property name="ElementShortName">devScaleFactor</obj_property>
@@ -272,6 +268,10 @@
          <obj_property name="AnalogHorizLine">0.000000</obj_property>
          <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
       </wvobject>
+      <wvobject fp_name="/test/stcMod/dualMod/firClkEn" type="logic">
+         <obj_property name="ElementShortName">firClkEn</obj_property>
+         <obj_property name="ObjectShortName">firClkEn</obj_property>
+      </wvobject>
       <wvobject fp_name="/test/stcMod/dualMod/firTdata0" type="array">
          <obj_property name="ElementShortName">firTdata0[15:0]</obj_property>
          <obj_property name="ObjectShortName">firTdata0[15:0]</obj_property>
@@ -293,12 +293,134 @@
          <obj_property name="AnalogHorizLine">0.000000</obj_property>
          <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
       </wvobject>
-      <wvobject fp_name="/test/stcMod/modWaveform0" type="array">
-         <obj_property name="ElementShortName">modWaveform0[17:0]</obj_property>
-         <obj_property name="ObjectShortName">modWaveform0[17:0]</obj_property>
+      <wvobject fp_name="/test/stcMod/cicClkEn" type="logic">
+         <obj_property name="ElementShortName">cicClkEn</obj_property>
+         <obj_property name="ObjectShortName">cicClkEn</obj_property>
+      </wvobject>
+      <wvobject fp_name="vbus100" type="vbus">
+         <obj_property name="label">cicIn[17:5]</obj_property>
+         <obj_property name="DisplayName">label</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         <wvobject fp_name="/test/stcMod/cicIn0[17]" type="logic">
+            <obj_property name="ElementShortName">[17]</obj_property>
+            <obj_property name="ObjectShortName">[17]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/test/stcMod/cicIn0[16]" type="logic">
+            <obj_property name="ElementShortName">[16]</obj_property>
+            <obj_property name="ObjectShortName">[16]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/test/stcMod/cicIn0[15]" type="logic">
+            <obj_property name="ElementShortName">[15]</obj_property>
+            <obj_property name="ObjectShortName">[15]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/test/stcMod/cicIn0[14]" type="logic">
+            <obj_property name="ElementShortName">[14]</obj_property>
+            <obj_property name="ObjectShortName">[14]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/test/stcMod/cicIn0[13]" type="logic">
+            <obj_property name="ElementShortName">[13]</obj_property>
+            <obj_property name="ObjectShortName">[13]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/test/stcMod/cicIn0[12]" type="logic">
+            <obj_property name="ElementShortName">[12]</obj_property>
+            <obj_property name="ObjectShortName">[12]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/test/stcMod/cicIn0[11]" type="logic">
+            <obj_property name="ElementShortName">[11]</obj_property>
+            <obj_property name="ObjectShortName">[11]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/test/stcMod/cicIn0[10]" type="logic">
+            <obj_property name="ElementShortName">[10]</obj_property>
+            <obj_property name="ObjectShortName">[10]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/test/stcMod/cicIn0[9]" type="logic">
+            <obj_property name="ElementShortName">[9]</obj_property>
+            <obj_property name="ObjectShortName">[9]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/test/stcMod/cicIn0[8]" type="logic">
+            <obj_property name="ElementShortName">[8]</obj_property>
+            <obj_property name="ObjectShortName">[8]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/test/stcMod/cicIn0[7]" type="logic">
+            <obj_property name="ElementShortName">[7]</obj_property>
+            <obj_property name="ObjectShortName">[7]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/test/stcMod/cicIn0[6]" type="logic">
+            <obj_property name="ElementShortName">[6]</obj_property>
+            <obj_property name="ObjectShortName">[6]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/test/stcMod/cicIn0[5]" type="logic">
+            <obj_property name="ElementShortName">[5]</obj_property>
+            <obj_property name="ObjectShortName">[5]</obj_property>
+         </wvobject>
+      </wvobject>
+      <wvobject fp_name="/test/stcMod/phaseAccum0" type="array">
+         <obj_property name="ElementShortName">phaseAccum0[31:0]</obj_property>
+         <obj_property name="ObjectShortName">phaseAccum0[31:0]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">31</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/stcMod/cicOut0" type="array">
+         <obj_property name="ElementShortName">cicOut0[33:0]</obj_property>
+         <obj_property name="ObjectShortName">cicOut0[33:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/stcMod/interpOut0" type="array">
+         <obj_property name="ElementShortName">interpOut0[17:0]</obj_property>
+         <obj_property name="ObjectShortName">interpOut0[17:0]</obj_property>
          <obj_property name="Radix">REALRADIX</obj_property>
          <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
          <obj_property name="radix_fractionWidth">17</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+         <obj_property name="CellHeight">100</obj_property>
+         <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
+         <obj_property name="AnalogYRangeMin">0.000000</obj_property>
+         <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
+         <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
+         <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
+         <obj_property name="AnalogHorizLine">0.000000</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/stcMod/interpOut0" type="array">
+         <obj_property name="ElementShortName">interpOut0[17:0]</obj_property>
+         <obj_property name="ObjectShortName">interpOut0[17:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/stcMod/phaseAccum" type="array">
+         <obj_property name="ElementShortName">phaseAccum[31:0]</obj_property>
+         <obj_property name="ObjectShortName">phaseAccum[31:0]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">31</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/stcMod/phaseAccum" type="array">
+         <obj_property name="ElementShortName">phaseAccum[31:0]</obj_property>
+         <obj_property name="ObjectShortName">phaseAccum[31:0]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">31</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/stcMod/devMantissa" type="array">
+         <obj_property name="ElementShortName">devMantissa[17:0]</obj_property>
+         <obj_property name="ObjectShortName">devMantissa[17:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/stcMod/scaledOut0" type="array">
+         <obj_property name="ElementShortName">scaledOut0[35:0]</obj_property>
+         <obj_property name="ObjectShortName">scaledOut0[35:0]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">34</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/stcMod/fmModFreq0" type="array">
+         <obj_property name="ElementShortName">fmModFreq0[31:0]</obj_property>
+         <obj_property name="ObjectShortName">fmModFreq0[31:0]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">31</obj_property>
          <obj_property name="radix_otherWidth">0</obj_property>
          <obj_property name="CellHeight">100</obj_property>
          <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
@@ -312,26 +434,10 @@
       <wvobject fp_name="/test/stcMod/fmModFreq0" type="array">
          <obj_property name="ElementShortName">fmModFreq0[31:0]</obj_property>
          <obj_property name="ObjectShortName">fmModFreq0[31:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/stcMod/modWaveform1" type="array">
-         <obj_property name="ElementShortName">modWaveform1[17:0]</obj_property>
-         <obj_property name="ObjectShortName">modWaveform1[17:0]</obj_property>
          <obj_property name="Radix">REALRADIX</obj_property>
          <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
-         <obj_property name="radix_fractionWidth">17</obj_property>
+         <obj_property name="radix_fractionWidth">31</obj_property>
          <obj_property name="radix_otherWidth">0</obj_property>
-         <obj_property name="CellHeight">100</obj_property>
-         <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
-         <obj_property name="AnalogYRangeMin">0.000000</obj_property>
-         <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
-         <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
-         <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
-         <obj_property name="AnalogHorizLine">0.000000</obj_property>
-         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/stcMod/fmModFreq1" type="array">
-         <obj_property name="ElementShortName">fmModFreq1[31:0]</obj_property>
-         <obj_property name="ObjectShortName">fmModFreq1[31:0]</obj_property>
       </wvobject>
    </wvobject>
    <wvobject fp_name="group68" type="group">

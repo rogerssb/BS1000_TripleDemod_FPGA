@@ -43,6 +43,41 @@ module dualSoqpskMod(
 `endif
 
     // Encode the bit streams
+    `ifdef TEST_SOQPSK_FIR
+
+    reg         [3:0]   impulseCount;
+    reg         [1:0]   ternData0,ternData1;
+    reg                 ternDataEn;
+    always @(posedge clk) begin
+        if (reset) begin
+            impulseCount <= 15;
+            ternData0 <= 2'b01;
+            ternData1 <= 2'b01;
+            ternDataEn <= 1;
+        end
+        else if (clkEn) begin
+            if (posEdgeModClkEn) begin
+                ternDataEn <= 1;
+                if (impulseCount == 0) begin
+                    impulseCount <= 15;
+                    ternData0 <= 2'b01;
+                    ternData1 <= 2'b01;
+                end
+                else begin
+                    impulseCount <= impulseCount - 1;
+                    ternData0 <= 2'b00;
+                    ternData1 <= 2'b00;
+                end
+            end
+            else begin
+                ternDataEn <= 0;
+                ternData0 <= 2'b00;
+                ternData1 <= 2'b00;
+            end
+        end
+    end
+
+    `else // TEST_SOQPSK_FIR
     wire    [1:0]   ternData0;
     soqpsk_ternary_encoder ternEnc0 (
         .clock(clk),
@@ -63,6 +98,7 @@ module dualSoqpskMod(
         .data_out(ternData1),
         .data_valid()
     ) ;
+    `endif // TEST_SOQSK_FIR
 
     // Turn bit stream into carrier deviation samples interpolated to two samples
     // per bit.
@@ -120,7 +156,7 @@ module dualSoqpskMod(
         .m_axis_data_tuser(),
         .m_axis_data_tdata(firTdata0)
     );
-    wire    signed  [17:0]  firOut0 = {{2{firTdata0[15]}},firTdata0};
+    wire    signed  [17:0]  firOut0 = {{1{firTdata0[15]}},firTdata0,1'b0};
 
     wire    [15:0]  firTdata1;
     soqpskFir modFir1(
@@ -134,7 +170,7 @@ module dualSoqpskMod(
         .m_axis_data_tuser(),
         .m_axis_data_tdata(firTdata1)
     );
-    wire    signed  [17:0]  firOut1 = {{2{firTdata1[15]}},firTdata1};
+    wire    signed  [17:0]  firOut1 = {{1{firTdata1[15]}},firTdata1,1'b0};
 
     `else
 

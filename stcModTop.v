@@ -62,7 +62,7 @@ module stcModTop (
     output              adc01_powerDown
 );
 
-    parameter VER_NUMBER = 16'd2;
+    parameter VER_NUMBER = 16'd539;
 
 
 //******************************************************************************
