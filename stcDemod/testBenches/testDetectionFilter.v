@@ -1,4 +1,4 @@
-`include "defines.v"
+`include "stcDefines.vh"
 `timescale 1ns/100ps
 
 module test;
@@ -93,7 +93,7 @@ module test;
     reg                     inputStart,inputValid;
     always @(posedge clk) begin
         if (!enableInput) begin
-            inputSampleReal <= 0; 
+            inputSampleReal <= 0;
         end
         else if (clkEnable) begin
             if (sampleReal >= 1.0) begin
@@ -107,7 +107,7 @@ module test;
             end
         end
         if (!enableInput) begin
-            inputSampleImag <= 0; 
+            inputSampleImag <= 0;
         end
         else if (clkEnable) begin
             if (sampleImag >= 1.0) begin
@@ -121,7 +121,7 @@ module test;
             end
         end
         if (!enableInput) begin
-            inputStart <= 0; 
+            inputStart <= 0;
         end
         else if (clkEnable) begin
             if (sampleStart > 0.0) begin
@@ -132,7 +132,7 @@ module test;
             end
         end
         if (!enableInput) begin
-            inputValid <= 0; 
+            inputValid <= 0;
         end
         else if (clkEnable) begin
             if (sampleValid > 0.0) begin

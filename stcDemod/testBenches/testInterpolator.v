@@ -1,4 +1,4 @@
-`include "defines.v"
+`include "stcDefines.vh"
 `timescale 1ns/100ps
 
 module test;
@@ -35,7 +35,7 @@ module test;
         end
     end
 
-    reg     startFrame;         // Used to start a frame 
+    reg     startFrame;         // Used to start a frame
     initial startFrame = 0;
 
     reg     sampleEn;           // Used to enable a sample input

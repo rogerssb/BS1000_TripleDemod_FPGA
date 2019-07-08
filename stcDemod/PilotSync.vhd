@@ -59,7 +59,7 @@ ENTITY PilotSync IS
       ce,
       PilotPulseIn,
       ValidIn        : IN STD_LOGIC;
-      Variables      : IN  RecordType;   -- for resampler and PilotDetect
+      PilotSyncOffset : IN natural range 0 to 4095;
       IndexIn        : IN ufixed(10 DOWNTO 0);
       RealIn,
       ImagIn         : IN  Float_1_18;
@@ -226,7 +226,7 @@ BEGIN
             SyncSum     <= resize(SyncSum + SyncError, SyncSum);
             ReadCount   <= ReadCount - 1;
             if (ReadCount = 1) then
-               PilotLocked <= '1' when SyncSum < 10 else '0';
+               PilotLocked <= '1' when SyncSum < 100 else '0';
             end if;
          end if;
 
@@ -235,7 +235,7 @@ BEGIN
    end process ClkProcess;
 
    WrAddr_i <= to_integer(WrAddr);
-   RdAddr_i <= to_integer(resize(RdAddr - Variables.PilotSyncOffset + IndexOut, RdAddr));
+   RdAddr_i <= to_integer(resize(RdAddr - PilotSyncOffset + IndexOut, RdAddr));
 
    PilotSync_r_u : RAM_2Reads_1Write
       GENERIC MAP(
@@ -291,7 +291,7 @@ BEGIN
          clk         => clk,
          ce          => ce,
          reset       => reset,
-         WrEn        => ValidOut,
+         WrEn        => PilotPacket,
          WrAddr      => to_integer(PilotCount),
          RdAddrA     => 0,
          RdAddrB     => to_integer(ReadCount),
@@ -311,7 +311,7 @@ BEGIN
          clk         => clk,
          ce          => ce,
          reset       => reset,
-         WrEn        => ValidOut,
+         WrEn        => PilotPacket,
          WrAddr      => to_integer(PilotCount),
          RdAddrA     => 0,
          RdAddrB     => to_integer(InvRdCount),

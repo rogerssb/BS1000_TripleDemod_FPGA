@@ -1,4 +1,4 @@
-`include "defines.v"
+`include "stcDefines.vh"
 `timescale 1ns/100ps
 
 `define USE_WIDE_OUTPUT

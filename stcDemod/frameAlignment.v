@@ -1,70 +1,113 @@
 `timescale 1ns/100ps
-//`include "addressMap.v"
-`include "defines.v"
+`include "stcDefines.vh"
 
 module frameAlignment
     #(parameter START_OFFSET = 0,
       parameter CLKS_PER_OUTPUT = 4) (
     input                   clk,
-    input                   clkEn,
-    input                   reset,
-    input                   startOfFrame,       // start of frame, not start of trellis activiy
-    input                   startOfTrellis,     // Estimates are complete, start Trellis process
-    input                   valid,
+                            clk2x,
+                            clkEn,
+                            reset,
+                            startOfFrame,       // start of frame, not start of trellis activiy
+                            estimatesDone,     // Estimates are complete, start Trellis process
+                            valid,
     input   signed  [17:0]  dinReal,
-    input   signed  [17:0]  dinImag,
+                            dinImag,
+    input           [11:0]  sampleOut,
     output                  clkEnOut,
     output  reg             interpolate,
+                            myStartOfTrellis,
     output  signed  [17:0]  doutReal,
-    output  signed  [17:0]  doutImag
+                            doutImag
 );
 
 
     //------------------------------ Sample Counter ---------------------------
 
-    reg             [14:0]  sampleCount;
-    always @(posedge clk) begin
+    reg             [14:0]  sampleCount, wrAddr, rdAddr, sofAddress;
+    reg                     estimatesReady, sofDetected, frameActive;
+    always @(posedge clk2x) begin
         if (reset) begin
             sampleCount <= 0;
+            myStartOfTrellis <= 0;
+            sofDetected      <= 0;
+            estimatesReady   <= 0;
+            sofAddress       <= 0;
         end
         else if (clkEn) begin
             if (startOfFrame) begin
                 sampleCount <= START_OFFSET;
             end
-            else if (valid) begin
+            else if (valid && clk) begin    // valid is clk wide, not 2x
                 if (sampleCount < `SAMPLES_PER_FRAME) begin
                     sampleCount <= sampleCount + 1;
                 end
             end
+
+            if (estimatesDone) begin
+                estimatesReady <= 1;
+            end
+            else if (myStartOfTrellis) begin
+                estimatesReady <= 0;
+            end
+            if (startOfFrame) begin
+                sofDetected <= 1;
+                sofAddress  <= wrAddr;  // capture address of first sample of next frame. SOF goes active between packets, so wrAddr is inactive
+            end
+            else if (myStartOfTrellis) begin
+                sofDetected <= 0;
+            end
+            myStartOfTrellis <= (estimatesReady & sofDetected & ~frameActive & ~myStartOfTrellis); // wait till current frame is done. Check own output for one clock cycle
         end
     end
 
     //------------------------- Sample FIFO -----------------------------------
 
-    wire                    fifoWrEn = (clkEn && valid && (sampleCount >= (`PILOT_SAMPLES_PER_FRAME-9)));
+    wire                    fifoWrEn = (clkEn && valid && clk && (sampleCount >= (`PILOT_SAMPLES_PER_FRAME-9)));
     reg                     fifoRdEn;
-    fifoBuiltin512x18 fifoReal(
-        .clk(clk),
-        .rst(startOfFrame),
-        .din(dinReal),
-        .wr_en(fifoWrEn),
-        .rd_en(fifoRdEn),
-        .dout(doutReal),
-        .full(),
-        .empty(),
-        .valid(fifoOutputValid)
+    wire    [35:0]          fifoRdData;
+
+    wire    empty = (wrAddr == rdAddr);
+    reg     full;
+    always @(posedge clk2x) begin
+        if (reset) begin
+            rdAddr <= 0;
+            wrAddr <= 0;
+            full   <= 0;
+        end
+        else if (clkEn) begin
+            if (fifoWrEn) begin
+                wrAddr <= wrAddr + 1;
+                full <= ((wrAddr == rdAddr - 1) && ~fifoRdEn);
+            end
+            if (myStartOfTrellis) begin
+                rdAddr <= sofAddress;  // skip any extraneous input data at first sync
+            end
+            else if (fifoRdEn) begin
+                rdAddr <= rdAddr + 1;
+            end
+        end
+    end
+
+    RAM_2Reads_1WriteVerWrap #(
+      .DATA_WIDTH  (36),
+      .ADDR_WIDTH  (15),
+      .LATENCY     (1) )
+    fifoRealImag(
+        .clk(clk2x),
+        .ce(clkEn),
+        .reset(reset),
+        .WrEn(fifoWrEn),
+        .WrAddr(wrAddr),
+        .RdAddrA(rdAddr),
+        .RdAddrB(15'h0),
+        .WrData({dinReal, dinImag}),
+        .RdOutA(fifoRdData),
+        .RdOutB()
     );
-    fifoBuiltin512x18 fifoImag(
-        .clk(clk),
-        .rst(startOfFrame),
-        .din(dinImag),
-        .wr_en(fifoWrEn),
-        .rd_en(fifoRdEn),
-        .dout(doutImag),
-        .full(),
-        .empty(),
-        .valid()
-    );
+    wire    fifoOutputValid = ~empty;
+    assign  doutReal        = fifoRdData[35:18];
+    assign  doutImag        = fifoRdData[17:0];
 
     //-------------------------- Output State Machine -------------------------
 
@@ -72,64 +115,60 @@ module frameAlignment
         `define WAIT_VALID          1'b0
         `define WAIT_DECIMATION     1'b1
     reg             [2:0]   decimationCount;
-    reg             [14:0]  outputCount;
-    reg             [8:0]   trellisInitCnt;
-    always @(posedge clk) begin
-        if (reset) begin
+    reg             [1:0]   outputCount;
+    reg             [8:0]   trellisInitCnt, interpCount;
+    always @(posedge clk2x) begin
+        if (reset || ((rdAddr == sofAddress-1) && (trellisInitCnt == 0)) || (!sofDetected && (sampleOut == `DATA_SAMPLES_PER_FRAME))) begin  // if we read up to the Start of Next frame, halt processing
             outputState <= `WAIT_VALID;
-            fifoRdEn <= 0;
-            outputCount <= 0;
-            interpolate <= 0;
+            decimationCount <= CLKS_PER_OUTPUT-1;
+            fifoRdEn        <= 0;
+            outputCount     <= 0;
+            interpolate     <= 0;
+            trellisInitCnt  <= 130; // inactive state
+            frameActive     <= 0;
         end
         else if (clkEn) begin
-            if (startOfFrame) begin
-                decimationCount <= CLKS_PER_OUTPUT-1;
-                outputCount <= 0;
-                outputState <= `WAIT_VALID;
-                fifoRdEn <= 0;
-                trellisInitCnt <= 130;
+            if (myStartOfTrellis) begin
+                trellisInitCnt <= 128;
+                frameActive    <= 1;
             end
-            else begin
-                if (startOfTrellis) begin
-                    trellisInitCnt <= 128;
-                end
-                else if ((trellisInitCnt < 130) && (trellisInitCnt > 0)) begin
-                    trellisInitCnt <= trellisInitCnt - 1;
-                end
+            else if ((trellisInitCnt < 130) && (trellisInitCnt > 0)) begin
+                trellisInitCnt <= trellisInitCnt - 1;
+            end
 
-                case (outputState)
-                    `WAIT_VALID:  begin
-                        if ((fifoOutputValid == 1'b1) && (trellisInitCnt == 0)) begin
-                            fifoRdEn <= 1;
-                            if (CLKS_PER_OUTPUT > 1) begin
-                                decimationCount <= decimationCount - 1;
-                                outputState <= `WAIT_DECIMATION;
-                            end
-                        end
-                        else begin
-                            fifoRdEn <= 0;
-                        end
-                    end
-                    `WAIT_DECIMATION: begin
-                        fifoRdEn <= 0;
-                        if (decimationCount > 0) begin
+            case (outputState)
+                `WAIT_VALID:  begin
+                    if ((fifoOutputValid == 1'b1) && (trellisInitCnt == 0)) begin
+                        fifoRdEn <= 1;
+                        if (CLKS_PER_OUTPUT > 1) begin
                             decimationCount <= decimationCount - 1;
-                        end
-                        else begin
-                            decimationCount <= CLKS_PER_OUTPUT-1;
-                            outputState <= `WAIT_VALID;
+                            outputState <= `WAIT_DECIMATION;
                         end
                     end
-                    default: begin
-                        outputState <= `WAIT_VALID;
-                        decimationCount <= CLKS_PER_OUTPUT-1;
+                    else begin
                         fifoRdEn <= 0;
                     end
-                endcase
-            end
+                end
+                `WAIT_DECIMATION: begin
+                    fifoRdEn <= 0;
+                    if (decimationCount > 0) begin
+                        decimationCount <= decimationCount - 1;
+                    end
+                    else begin
+                        decimationCount <= CLKS_PER_OUTPUT-1;
+                        outputState <= `WAIT_VALID;
+                    end
+                end
+                default: begin
+                    outputState <= `WAIT_VALID;
+                    decimationCount <= CLKS_PER_OUTPUT-1;
+                    fifoRdEn <= 0;
+                end
+            endcase
+
             if (clkEnOut) begin
                 outputCount <= outputCount + 1;
-                interpolate <= (outputCount[1:0] == 2'b10);
+                interpolate <= (outputCount == 2'b10);
             end
         end
     end

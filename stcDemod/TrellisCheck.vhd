@@ -48,7 +48,7 @@ ENTITY TrellisCheck IS
       clk,
       reset,
       TrellisOutEn,
-      TrellisStart      : IN  std_logic;
+      EstimatesDone      : IN  std_logic;
       TrellisBits       : IN std_logic_vector(3 downto 0);
       Pass              : OUT std_logic
    );
@@ -81,7 +81,7 @@ ARCHITECTURE rtl OF TrellisCheck IS
    SIGNAL   HexData,
             Delay1         : std_logic_vector(3 downto 0) := x"0";
    SIGNAL   RomCntr        : natural range 0 to 1023 := 0;
-   SIGNAL   HexOut         : MyRam := InitRam("C:\Semco\STCinfo\RealTimeC\SpaceTimeCodeInC\SpaceTimeCodeInC\HexOut.txt");
+   SIGNAL   HexOut         : MyRam := InitRam("C:\Semco\STCinfo\RealTimeC\SpaceTimeCodeInC\SpaceTimeCodeInC\HexOutLive.txt");
 
 BEGIN
 
@@ -91,11 +91,11 @@ BEGIN
          if (reset) then
             RomCntr  <= 0;
             Pass     <= '0';
-         elsif (TrellisStart) then
+         elsif (EstimatesDone) then
             RomCntr  <= 0;
          elsif (TrellisOutEn) then
             RomCntr <= RomCntr + 1;
-            if (Delay1 = TrellisBits) or (RomCntr <= 1) then  -- first and last nibble are junk
+            if (Delay1 = TrellisBits) then
                Pass <= '1';
             else
                Pass <= '0';

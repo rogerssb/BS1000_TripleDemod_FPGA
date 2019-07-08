@@ -58,6 +58,7 @@ entity Brik1_Hw_tb is
       BitRate,
       Power0In,
       Power1In : IN  sfixed(0 downto -17);
+      PilotSyncOffset : IN SLV12;
       BS_LED,
       DemodLED : OUT std_logic
    );
@@ -67,50 +68,28 @@ architecture rtl of Brik1_Hw_tb is
 
   -- Define Components
 
-   COMPONENT Brik1 is
-      GENERIC (SIM_MODE : boolean := false
-      );
-      PORT (
-         clk,
-         clk2x,
-         reset,
-         reset2x,
-         ce,
-         ValidIn        : IN  std_logic;
-         Variables      : IN  RecordType;   -- for pilotSync and PilotDetect
-         ResampleR,
-         ResampleI      : IN  Float_1_18;
-         RealOut,
-         ImagOut        : OUT Float_1_18;
-         ValidOut,
-         PilotFound,
-         PilotLocked,
-         StartOut       : OUT std_logic
-      );
-   end COMPONENT Brik1;
-
    COMPONENT STC IS
       GENERIC (SIM_MODE : boolean := false
       );
       PORT(
-         ResampleR,
-         ResampleI         : IN  SLV18;
-         ClocksPerBit      : IN  SLV16;
-         PilotOffset       : IN  natural range 0 to 4095;
-         DacSelect         : IN  SLV4;
-         Clk93,
-         Clk186,
-         ValidIn           : IN  std_logic;
-         ClkOut,                 -- FireBerd Clock Output
-         DataOut,                -- FireBerd Data Output
-         Dac0ClkEn,
-         Dac1ClkEn,
-         Dac2ClkEn,
-         PilotFound,             -- Pilot Found LED
-         PilotLocked       : OUT std_logic;   -- I'm alive Blinking LED
-         Dac0Data,
-         Dac1Data,
-         Dac2Data          : OUT SLV18
+      ResampleR,
+      ResampleI         : IN  SLV18;
+      ClocksPerBit      : IN  SLV16;
+      PilotSyncOffset   : IN  SLV12;
+      DacSelect         : IN  SLV4;
+      Clk93,
+      Clk186,
+      ValidIn           : IN  std_logic;
+      DataOut,                            -- Trellis Data Output
+      ClkOutEn,                           -- Trellis Clock Output
+      PilotFound,                         -- Pilot Found LED
+      PilotLocked,
+      Dac0ClkEn,
+      Dac1ClkEn,
+      Dac2ClkEn         : OUT std_logic;
+      Dac0Data,
+      Dac1Data,
+      Dac2Data          : OUT SLV18
       );
    END COMPONENT STC;
 
@@ -242,7 +221,6 @@ architecture rtl of Brik1_Hw_tb is
             RdAddr1_v            : integer range 0-2048-128 to 13311+2047+127 := 0;
    SIGNAL   RealRead,
             ImagRead             : vector_of_slvs(0 to 2)(17 downto 0);
-   signal   Variables            : RecordType;
    SIGNAL   H0r,
             H0i,
             H1r,
@@ -263,7 +241,8 @@ architecture rtl of Brik1_Hw_tb is
    SIGNAL   SinCosData0,
             SinCosData1          : std_logic_vector(31 downto 0);
    SIGNAL   Offset,
-            PilotSyncOffset      : SLV12; -- := 1535;
+            PilotSyncOffsetIn,
+            PilotSyncOffsetSlv   : SLV12; -- := 1535;
    SIGNAL   BitRateVio,
             BitRateSlv,
             Frequency0,
@@ -307,7 +286,7 @@ begin
          probe_out5 => Power0,
          probe_out6 => Power1,
          probe_out7 => NoiseGain,
-         probe_out8 => PilotSyncOffset,
+         probe_out8 => PilotSyncOffsetSlv,
          probe_out9 => Offset,
          probe_out10 => MiscBits,
          probe_out11 => BitRateSlv
@@ -327,32 +306,32 @@ begin
                LedCount <= x"00000000";
             end if;
             DemodLED <= '1' when (LedCount < 93333333) else '0';
-            if (<< signal UUTu.Brik1_u.PD_u.OverflowIFft : std_logic >> ) then
+            if (<< signal UUTu.PD_u.OverflowIFft : std_logic >> ) then
                Errors(0) <= '1';
             else
                Errors(0) <= '0';
             end if;
-            if (<< signal UUTu.Brik1_u.PD_u.OverflowFft  : std_logic >>) then
+            if (<< signal UUTu.PD_u.OverflowFft  : std_logic >>) then
                Errors(1) <= '1';
             else
                Errors(1) <= '0';
             end if;
-            if (<< signal UUTu.Brik1_u.PD_u.Cntr0Abs.Overflow  : std_logic >>) then
+            if (<< signal UUTu.PD_u.Cntr0Abs.Overflow  : std_logic >>) then
                Errors(2) <= '1';
             else
                Errors(2) <= '0';
             end if;
-            if (<< signal UUTu.Brik1_u.PD_u.Cntr1Abs.Overflow  : std_logic >>) then
+            if (<< signal UUTu.PD_u.Cntr1Abs.Overflow  : std_logic >>) then
                Errors(3) <= '1';
             else
                Errors(3) <= '0';
             end if;
-            if (<< signal UUTu.Brik1_u.PD_u.H0Cntr_x_Fft.Overflow  : std_logic >>) then
+            if (<< signal UUTu.PD_u.H0Cntr_x_Fft.Overflow  : std_logic >>) then
                Errors(4) <= '1';
             else
                Errors(4) <= '0';
             end if;
-            if (<< signal UUTu.Brik1_u.PD_u.H1Cntr_x_Fft.Overflow  : std_logic >>) then
+            if (<< signal UUTu.PD_u.H1Cntr_x_Fft.Overflow  : std_logic >>) then
                Errors(5) <= '1';
             else
                Errors(5) <= '0';
@@ -546,9 +525,6 @@ begin
          RdOutB      => RealRead(2)
       );
 
-   Variables.MiscBits(CONJUGATE) <= '0';
-   Variables.PilotSyncOffset <= to_integer(unsigned(PilotSyncOffset));
-
    DDS0 : dds_sin_cos
       PORT MAP (
          aclk                 => Clk93,
@@ -637,29 +613,9 @@ begin
          I => Reset,
          O => ResetBufg
    );
-/*
-   UUTu : Brik1
-      generic map (
-         SIM_MODE    => SIM_MODE
-      )
-      port map(
-         clk            => Clk93,
-         clk2x          => ClkXn,
-         ce             => '1',
-         reset          => ResetBufg,
-         reset2x        => ResetBufg,
-         Variables      => Variables,
-         ResampleR      => ResampleR_s,
-         ResampleI      => ResampleI_s,
-         validin        => PhaseValid,
-         PilotFound     => open,
-         PilotLocked    => open,
-         RealOut        => RealOut,
-         ImagOut        => ImagOut,
-         ValidOut       => DataValid_o,
-         startout       => StartOut
-   );
-*/
+
+   PilotSyncOffsetIn <= PilotSyncOffset when SIM_MODE else PilotSyncOffsetSlv;
+
    UUTu : STC
       generic map (
          SIM_MODE    => SIM_MODE
@@ -668,21 +624,21 @@ begin
          ResampleR      => to_slv(ResampleR_s),
          ResampleI      => to_slv(ResampleI_s),
          ClocksPerBit   => x"1000",
-         PilotOffset    => 2561,
+         PilotSyncOffset => PilotSyncOffsetIn,
          DacSelect      => x"0",
          Clk93          => Clk93,
          Clk186         => ClkXn,
          ValidIn        => PhaseValid,
-         ClkOut         => open,
          DataOut        => open,
+         ClkOutEn       => open,
+         PilotFound     => open,
+         PilotLocked    => open,
          Dac0ClkEn      => open,
          Dac1ClkEn      => open,
          Dac2ClkEn      => open,
-         PilotFound     => open,
-         PilotLocked    => open,
          Dac0Data       => open,
          Dac1Data       => open,
          Dac2Data       => open
-   );
+      );
 
 end rtl;

@@ -1,4 +1,4 @@
-`include "defines.v"
+`include "stcDefines.vh"
 `timescale 1ns/100ps
 
 module test;
@@ -35,7 +35,7 @@ module test;
         end
     end
 
-    reg     startFrame;         // Used to start a frame 
+    reg     startFrame;         // Used to start a frame
     initial startFrame = 0;
 
     //*********************** File Input Test Vectors *************************
@@ -209,10 +209,10 @@ module test;
         .reset(reset),
         .sampleEn(sampleEn),
         .startFrame(startFrame),
-        .in0Real(s0r), .in0Imag(s0i), 
+        .in0Real(s0r), .in0Imag(s0i),
         .in1Real(s1r), .in1Imag(s1i),
         .deltaTauEst(tau),
-        .h0EstReal(h0r), .h0EstImag(h0i), 
+        .h0EstReal(h0r), .h0EstImag(h0i),
         .h1EstReal(h1r), .h1EstImag(h1i)
     );
 

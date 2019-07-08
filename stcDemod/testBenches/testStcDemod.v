@@ -1,4 +1,4 @@
-`include "defines.v"
+`include "stcDefines.vh"
 `timescale 1ns/100ps
 
 
@@ -97,7 +97,7 @@ module test;
     reg                     inputStart,inputValid;
     always @(posedge clk) begin
         if (!enableInput) begin
-            inputSampleReal <= 0; 
+            inputSampleReal <= 0;
         end
         else if (clkEnable) begin
             if (sampleReal >= 1.0) begin
@@ -111,7 +111,7 @@ module test;
             end
         end
         if (!enableInput) begin
-            inputSampleImag <= 0; 
+            inputSampleImag <= 0;
         end
         else if (clkEnable) begin
             if (sampleImag >= 1.0) begin
@@ -125,7 +125,7 @@ module test;
             end
         end
         if (!enableInput) begin
-            inputStart <= 0; 
+            inputStart <= 0;
         end
         else if (clkEnable) begin
             if (sampleStart > 0.0) begin
@@ -136,7 +136,7 @@ module test;
             end
         end
         if (!enableInput) begin
-            inputValid <= 0; 
+            inputValid <= 0;
         end
         else if (clkEnable) begin
             if (sampleValid > 0.0) begin
@@ -154,25 +154,25 @@ module test;
     wire            [39:0]  dfReal_tdata;
     wire    signed  [17:0]  dfRealOutput = dfReal_tdata[37:20];
     detectionFilter dfReal(
-        .aclk(clk), 
-        .aclken(clkEnable), 
-        .aresetn(!reset), 
-        .s_axis_data_tvalid(inputValid), 
-        .s_axis_data_tready(), 
-        .s_axis_data_tdata({6'b0,inputSampleReal}), 
-        .m_axis_data_tvalid(dfValid), 
+        .aclk(clk),
+        .aclken(clkEnable),
+        .aresetn(!reset),
+        .s_axis_data_tvalid(inputValid),
+        .s_axis_data_tready(),
+        .s_axis_data_tdata({6'b0,inputSampleReal}),
+        .m_axis_data_tvalid(dfValid),
         .m_axis_data_tdata(dfReal_tdata)
     );
     wire            [39:0]  dfImag_tdata;
     wire    signed  [17:0]  dfImagOutput = dfImag_tdata[37:20];
     detectionFilter dfImag(
-        .aclk(clk), 
-        .aclken(clkEnable), 
-        .aresetn(!reset), 
-        .s_axis_data_tvalid(inputValid), 
-        .s_axis_data_tready(), 
-        .s_axis_data_tdata({6'b0,inputSampleImag}), 
-        .m_axis_data_tvalid(), 
+        .aclk(clk),
+        .aclken(clkEnable),
+        .aresetn(!reset),
+        .s_axis_data_tvalid(inputValid),
+        .s_axis_data_tready(),
+        .s_axis_data_tdata({6'b0,inputSampleImag}),
+        .m_axis_data_tvalid(),
         .m_axis_data_tdata(dfImag_tdata)
     );
 
@@ -182,7 +182,7 @@ module test;
     `ifdef USE_FIXED_ESTIMATES
     wire    signed  [17:0]  h0EstReal,h0EstImag;
     assign                  h0EstReal = 18'h10000;  // 1.0 + j0.0
-    assign                  h0EstImag = 18'h00000;  
+    assign                  h0EstImag = 18'h00000;
     wire    signed  [17:0]  h1EstReal,h1EstImag;
     assign                  h1EstReal = 18'h00000;  // 0.0 + j0.0
     assign                  h1EstImag = 18'h00000;
@@ -239,12 +239,12 @@ module test;
 
     //------------------------- Start Pulse Alignment -------------------------
     /*
-    The start pulse coming from the pilot detector falls between 512 sample 
+    The start pulse coming from the pilot detector falls between 512 sample
     bursts. It indicates that the first sample of the next burst is a specific
-    sample relative to the start of the pilot samples. This sample's index is 
+    sample relative to the start of the pilot samples. This sample's index is
     defined by START_OFFSET. The alignment module does three things:
 
-    1) It creates an interpolate signal that is aligned with the first sample 
+    1) It creates an interpolate signal that is aligned with the first sample
         of the block of 4 samples that define a bit period. This signal is used
         by the interpolate blocks.
     2) It buffers the sample burst and places idle time between the samples
@@ -254,8 +254,8 @@ module test;
     */
     wire    signed  [17:0]  faReal,faImag;
     frameAlignment #(
-        .START_OFFSET(0), 
-        .CLKS_PER_OUTPUT(4)) 
+        .START_OFFSET(0),
+        .CLKS_PER_OUTPUT(4))
     fa(
         .clk(clk),
         .clkEn(clkEnable),
@@ -328,15 +328,15 @@ module test;
 
     wire                [3:0]   tdBits;
     trellisDetector td(
-        .clk(clk), 
+        .clk(clk),
         .clkEn(1'b1),
         .reset(reset),
         .sampleEn(interpOutEn),
         .startFrame(inputStart),
-        .in0Real(sample0r), .in0Imag(sample0i), 
+        .in0Real(sample0r), .in0Imag(sample0i),
         .in1Real(sample1r), .in1Imag(sample1i),
         .deltaTauEst(deltaTauEst),
-        .h0EstReal(h0EstReal), .h0EstImag(h0EstImag), 
+        .h0EstReal(h0EstReal), .h0EstImag(h0EstImag),
         .h1EstReal(h1EstReal), .h1EstImag(h1EstImag),
         .finalMetricOutputEn(),
         .finalMetric(),

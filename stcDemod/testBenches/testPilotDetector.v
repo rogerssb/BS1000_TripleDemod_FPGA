@@ -1,4 +1,4 @@
-`include "defines.v"
+`include "stcDefines.vh"
 `timescale 1ns/100ps
 
 module test;
@@ -62,7 +62,7 @@ module test;
     initial                 ifSample = 0;
     always @(posedge clk) begin
         if (!enableInput) begin
-            ifSample <= 0; 
+            ifSample <= 0;
         end
         else if (clkEnable) begin
             if (ifSampleReal >= 1.0) begin
@@ -86,7 +86,7 @@ module test;
         .a2d_data(ifSample),
         .fe_real(feReal),
         .fe_imag(feImag),
-        .fe_valid(feValid)  
+        .fe_valid(feValid)
     );
 
     wire            [8:0]   pilotIndex;

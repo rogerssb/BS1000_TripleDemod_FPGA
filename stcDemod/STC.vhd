@@ -47,18 +47,18 @@ ENTITY STC IS
       ResampleR,
       ResampleI         : IN  SLV18;
       ClocksPerBit      : IN  SLV16;
-      PilotOffset       : IN  natural range 0 to 4095;
+      PilotSyncOffset   : IN  SLV12;
       DacSelect         : IN  SLV4;
       Clk93,
       Clk186,
       ValidIn           : IN  std_logic;
-      ClkOut,                 -- FireBerd Clock Output
-      DataOut,                -- FireBerd Data Output
+      DataOut,                            -- Trellis Data Output
+      ClkOutEn,                           -- Trellis Clock Output
+      PilotFound,                         -- Pilot Found LED
+      PilotLocked,
       Dac0ClkEn,
       Dac1ClkEn,
-      Dac2ClkEn,
-      PilotFound,             -- Pilot Found LED
-      PilotLocked       : OUT std_logic;   -- I'm alive Blinking LED
+      Dac2ClkEn         : OUT std_logic;
       Dac0Data,
       Dac1Data,
       Dac2Data          : OUT SLV18
@@ -68,76 +68,89 @@ END STC;
 
 ARCHITECTURE rtl OF STC IS
 
-   COMPONENT Brik1
-      GENERIC (SIM_MODE : boolean := false
-      );
+   COMPONENT PilotDetect is
+    GENERIC (SIM_MODE : boolean := false
+   );
       PORT(
-         Clk,
-         Clk2x,
-         Reset,
-         Reset2x,
-         CE,
-         validin        : IN  std_logic;
-         Variables      : IN  RecordType;
-         ResampleR,
-         ResampleI      : IN  Float_1_18;
-         realout,
-         imagout        : OUT Float_1_18;
-         validout,
+         clk,
+         clk2x,
+         reset,
+         reset2x,
+         ce,
+         ValidIn        : IN  std_logic;
+         ReIn,
+         ImIn           : IN  FLOAT_1_18;
+         PilotIndex     : OUT ufixed(10 downto 0);
+         PilotMag,
+         Threshold      : OUT ufixed(10 downto -7);
+         ReOut,
+         ImOut          : OUT FLOAT_1_18;
          PilotFound,
-         PilotLocked,
-         startout       : OUT std_logic
+         ValidOut,
+         StartOut       : OUT std_logic
       );
-   END COMPONENT Brik1;
+   end COMPONENT PilotDetect;
+
+   COMPONENT pilotsync
+      PORT (
+         clk,
+         reset,
+         ce,
+         PilotPulseIn,
+         ValidIn        : IN STD_LOGIC;
+         PilotSyncOffset : IN  natural range 0 to 4095;
+         IndexIn        : IN ufixed(10 DOWNTO 0);
+         RealIn,
+         ImagIn         : IN  Float_1_18;
+         RealOut,
+         ImagOut        : OUT Float_1_18;
+         StartOut,
+         ValidOut,
+         PilotLocked    : OUT STD_LOGIC
+      );
+   END COMPONENT;
 
    COMPONENT Brik2
       PORT(
-         Clk,
-         Clk2x,
-         Reset,
-         CE             : IN  std_logic;
-         Variables      : IN  RecordType;
+         clk,
+         reset,
+         ce             : IN  std_logic;
          StartIn,
          ValidIn        : IN  std_logic;
-         FreqIn         : IN  Float_128k; -- TODO remove line
          InR,
          InI            : IN  SLV18;
-         TrellisEn,
-         TrellisStart   : OUT std_logic;
+         EstimatesDone   : OUT std_logic;
          H0EstR,
          H0EstI,
          H1EstR,
-         H1EstI,
-         InterpO_R0,
-         InterpO_I0,
-         InterpO_R1,
-         InterpO_I1     : OUT STC_PARM;
+         H1EstI         : OUT STC_PARM;
+         Mu0,
+         Mu1            : OUT FLOAT_1_18;
          DeltaTauEst    : OUT sfixed(0 downto -5)
       );
    END COMPONENT Brik2;
 
-   COMPONENT TrellisDetector is
+   COMPONENT trellisProcess
       PORT (
-         Clk,
-         clkEn,
-         Reset,
-         sampleEn,
-         startFrame              : std_logic;
-         h0EstReal,
-         h0EstImag,
-         h1EstReal,
-         h1EstImag,
-         in0Real,
-         in0Imag,
-         in1Real,
-         in1Imag              : IN  SLV18;
-         deltaTauEst          : IN  std_logic_vector(5 downto 0);
-         finalMetricOutputEn,
-         outputEn             : OUT std_logic;
-         finalMetric          : OUT SLV18;
-         outputBits           : OUT std_logic_vector(3 downto 0)
-      );
-   END COMPONENT TrellisDetector;
+       clk,
+       reset,
+       frameStart,
+       inputValid       : IN  std_logic;
+       dinReal,
+       dinImag,
+       h0EstRealIn,
+       h0EstImagIn,
+       h1EstRealIn,
+       h1EstImagIn,
+       ch0MuIn,
+       ch1MuIn          : IN  SLV18;
+       deltaTauEstIn    : IN  std_logic_vector(5 downto 0);
+       sample0r,
+       sample0i         : OUT SLV18;
+       outputEn         : OUT std_logic;
+       outputBits       : OUT SLV4
+   );
+   END COMPONENT TrellisProcess;
 
    COMPONENT FireberdDrive IS
       PORT(
@@ -160,48 +173,48 @@ ARCHITECTURE rtl OF STC IS
             Clk2x,
             Reset,
             Reset2x,
-            StartInBrik2,
-            ValidInBrik2,
+            StartOutPS,
+            ValidOutPS,
             StartInBrik2Dly,
             ValidInBrik2Dly,
-            TrellisEn,
-            finalMetricOutputEn,
-            TrellisOutEnRaw,
             TrellisOutEn,
-            TrellisStart,
-            TrellisSkip,
-            Locked            : std_logic;
-   SIGNAL   FinalMetric       : SLV18;
+            EstimatesDone     : std_logic;
    SIGNAL   TrellisBitsRaw,
             TrellisBits       : std_logic_vector(3 downto 0);
-   SIGNAL   Variables         : RecordType := c_RecordType;
-   SIGNAL   InRBrik2,
-            InIBrik2,
+   SIGNAL   RealOutPS,
+            ImagOutPS,
             InRBrik2Dly,
             InIBrik2Dly,
             H0EstR,
             H0EstI,
             H1EstR,
-            H1EstI,
-            InterpO_R0,
-            InterpO_I0,
-            InterpO_R1,
-            InterpO_I1        : STC_PARM;
+            H1EstI            : STC_PARM;
    SIGNAL   ResampleR_s,
-            ResampleI_s       : Float_1_18;
+            ResampleI_s,
+            Ch0Mu,
+            Ch1Mu             : Float_1_18;
    SIGNAL   DeltaTauEst       : sfixed(0 downto -5);
 
+   SIGNAL   PilotPulse,
+            PilotValidOut     : std_logic;
+   SIGNAL   PilotRealOut,
+            PilotImagOut      : Float_1_18;
+   SIGNAL   PilotIndex        : ufixed(10 downto 0);
+   SIGNAL   PilotMag,
+            Threshold         : ufixed(11 downto -6);
+
 -- todo, remove
-   signal   InRBrik2Ila,
+   signal   sample0r,
+            sample0i,
+            InRBrik2Ila,
             InIBrik2Ila       : SLV18;
    signal   StartIla,
             ValidIla          : std_logic;
    signal   TrellisCount      : natural range 0 to 3300;
-   signal   PilotOffsetI      : integer range -7 to 7 := 0;
 
    attribute mark_debug : string;
-   attribute mark_debug of TrellisBits, TrellisOutEn, TrellisStart, TrellisCount, TrellisSkip,
-                  DataOut, ClkOut, StartIla, ValidIla, InRBrik2Ila, InIBrik2Ila       : signal is "true";
+   attribute mark_debug of TrellisBits, TrellisOutEn, EstimatesDone, TrellisCount,
+                  DataOut, ClkOutEn, StartIla, ValidIla, InRBrik2Ila, InIBrik2Ila       : signal is "true";
 
 BEGIN
 
@@ -219,16 +232,12 @@ BEGIN
    Clk   <= Clk93;
    Clk2x <= Clk186;
    CE    <= '1';     -- no need to strobe CE at this point.
-   Variables.PilotSyncOffset <= PilotOffset + PilotOffsetI;
 
    ResetProcess : process(Clk)
    begin
       if(rising_edge(Clk)) then
          ResetSrc <= ResetSrc(6 downto 0) & '0';
          Reset    <= ResetSrc(7);
-   --         if (StartInBrik2) then
-   --            PilotOffsetI <= PilotOffsetI + 1;
-   --         end if;
       end if;
    end process;
 
@@ -242,156 +251,144 @@ BEGIN
    ResampleR_s <= to_sfixed(ResampleR, ResampleR_s);
    ResampleI_s <= to_sfixed(ResampleI, ResampleI_s);
 
-   Brik1_u : Brik1
-      generic map (
-         SIM_MODE    => SIM_MODE
+   PD_u : pilotdetect
+      GENERIC MAP (
+         SIM_MODE => SIM_MODE
       )
-      PORT MAP(
-         Clk         => Clk,
-         Clk2x       => Clk2x,
-         Reset       => Reset,
-         Reset2x     => Reset2x,
-         CE          => CE,
-         Variables   => Variables,
-         ResampleR   => ResampleR_s,
-         ResampleI   => ResampleI_s,
-         validin     => ValidIn,
-         realout     => InRBrik2,
-         imagout     => InIBrik2,
-         validout    => ValidInBrik2,
-         startout    => StartInBrik2,
-         PilotFound  => PilotFound,
-         PilotLocked => PilotLocked
-      );
+      PORT MAP (
+         clk            => Clk,
+         clk2x          => Clk2x,
+         reset          => Reset,
+         reset2x        => Reset2x,
+         ce             => Ce,
+         ValidIn        => ValidIn,
+         ReIn           => ResampleR_s,
+         ImIn           => ResampleI_s,
+         -- outputs
+         PilotMag       => PilotMag,
+         PilotFound     => PilotFound,
+         PilotIndex     => PilotIndex,
+         Threshold      => Threshold,
+         ReOut          => PilotRealOut,
+         ImOut          => PilotImagOut,
+         ValidOut       => PilotValidOut,
+         StartOut       => PilotPulse
+   );
 
-   InterBrikClk : process(Clk) is
+   PS_u : pilotsync
+      PORT MAP (
+         clk            => Clk,
+         ce             => CE,
+         reset          => reset,
+         PilotSyncOffset => to_integer(unsigned(PilotSyncOffset)),
+         PilotPulseIn   => PilotPulse,
+         ValidIn        => PilotValidOut,
+         IndexIn        => PilotIndex,
+         RealIn         => PilotRealOut,
+         ImagIn         => PilotImagOut,
+         RealOut        => RealOutPS,
+         ImagOut        => ImagOutPS,
+         StartOut       => StartOutPS,
+         ValidOut       => ValidOutPS,
+         PilotLocked    => PilotLocked
+   );
+
+   InterBrikClk : process(Clk2x) is
    begin
-      if(rising_edge(Clk)) then
+      if(rising_edge(Clk2x)) then
          if (Reset) then
             StartInBrik2Dly <= '0';
             ValidInBrik2Dly <= '0';
             InRBrik2Dly     <= (others=>'0');
             InIBrik2Dly     <= (others=>'0');
          else
-            StartInBrik2Dly <= StartInBrik2;
-            ValidInBrik2Dly <= ValidInBrik2;
-            InRBrik2Dly     <= InRBrik2;
-            InIBrik2Dly     <= InIBrik2;
+            StartInBrik2Dly <= StartOutPS;
+            ValidInBrik2Dly <= ValidOutPS;
+            InRBrik2Dly     <= RealOutPS;
+            InIBrik2Dly     <= ImagOutPS;
          end if;
       end if;
    end process InterBrikClk;
 
    Brik2_u : Brik2
       PORT MAP(
-         Clk            => Clk,
-         Clk2x          => Clk2x,
+         Clk            => Clk2x,
          Reset          => Reset,
          CE             => CE,
-         Variables      => Variables,
          StartIn        => StartInBrik2Dly,
          ValidIn        => ValidInBrik2Dly,
-         FreqIn         => (others=>'0'), --to_sfixed(FreqResolution & 7x"00", Float_zero_128K), --TODO, remove line
          InR            => to_slv(InRBrik2Dly),
          InI            => to_slv(InIBrik2Dly),
-         TrellisEn      => TrellisEn,
-         TrellisStart   => TrellisStart,
+         EstimatesDone   => EstimatesDone,
          H0EstR         => H0EstR,
          H0EstI         => H0EstI,
          H1EstR         => H1EstR,
          H1EstI         => H1EstI,
-         InterpO_R0     => InterpO_R0,
-         InterpO_I0     => InterpO_I0,
-         InterpO_R1     => InterpO_R1,
-         InterpO_I1     => InterpO_I1,
-         DeltaTauEst    => DeltaTauEst
+         DeltaTauEst    => DeltaTauEst,
+         Mu0            => Ch0Mu,
+         Mu1            => Ch1Mu
       );
 
-   Trellis_u : TrellisDetector
+   Trellis_u : trellisProcess
       PORT MAP (
-         Clk                  => Clk2x,
-         clkEn                => CE,
-         Reset                => Reset,
-         sampleEn             => TrellisEn,
-         startFrame           => trellisStart,
-         h0EstReal            => to_slv(H0EstR),
-         h0EstImag            => to_slv(H0EstI),
-         h1EstReal            => to_slv(H1EstR),
-         h1EstImag            => to_slv(H1EstI),
-         in0Real              => to_slv(InterpO_R0),
-         in0Imag              => to_slv(InterpO_I0),
-         in1Real              => to_slv(InterpO_R1),
-         in1Imag              => to_slv(InterpO_I1),
-         deltaTauEst          => to_slv(DeltaTauEst),
-         finalMetricOutputEn  => FinalMetricOutputEn,
-         outputEn             => TrellisOutEnRaw,
-         finalMetric          => FinalMetric,
-         outputBits           => TrellisBitsRaw
+         clk                  => Clk2x,
+         reset                => Reset,
+         frameStart           => StartInBrik2Dly,
+         inputValid           => ValidInBrik2Dly,
+         dinReal              => to_slv(InRBrik2Dly),
+         dinImag              => to_slv(InIBrik2Dly),
+         h0EstRealIn          => to_slv(H0EstR),
+         h0EstImagIn          => to_slv(H0EstI),
+         h1EstRealIn          => to_slv(H1EstR),
+         h1EstImagIn          => to_slv(H1EstI),
+         ch0MuIn              => to_slv(Ch0Mu),
+         ch1MuIn              => to_slv(Ch1Mu),
+         deltaTauEstIn        => to_slv(DeltaTauEst),
+         sample0r             => sample0r,
+         sample0i             => sample0i,
+         outputEn             => TrellisOutEn,
+         outputBits           => TrellisBits
       );
 
-   TrellisProcess : process(Clk)
-   begin
-      if (rising_edge(Clk)) then
-         if (Reset) then
-            TrellisSkip  <= '0';
-            TrellisOutEn <= '0';
-            TrellisBits  <= x"0";
-            TrellisCount <= 0;
-         elsif (CE) then
-            if (TrellisStart) then  -- ignore the first trellis output
-               TrellisSkip <= '1';
-               TrellisCount <= 0;
-            elsif (TrellisOutEnRaw) then
-               TrellisSkip <= '0';
-            end if;
-
-            if (TrellisOutEn = '1') and (TrellisCount < 3300) then
-               TrellisCount <= TrellisCount + 1;
-            end if;
-            TrellisOutEn <= TrellisOutEnRaw and not TrellisSkip;
-            TrellisBits  <= TrellisBitsRaw;
-         end if;
-      end if;
-   end process TrellisProcess;
-
-   FD : FireberdDrive
+   FD : fireberdDrive
       PORT MAP(
-         Clk            => Clk,
+         Clk            => Clk2x,
          Reset          => Reset,
          CE             => CE,
          ClocksPerBit   => ClocksPerBit,
-         MsbFirst       => Variables.MiscBits(MSB_FIRST),
+         MsbFirst       => '1',
          ValidIn        => TrellisOutEn,
          RecoveredData  => TrellisBits,
          DataOut        => DataOut,
-         ClkOut         => ClkOut
+         ClkOut         => ClkOutEn
       );
 
-   process(Clk)
+   DacOutputs : process(Clk2x)
    begin
-      if (rising_edge(Clk)) then
+      if (rising_edge(Clk2x)) then
          if (DacSelect = x"0") then
-            Dac0Data    <= to_slv(InRBrik2);
-            Dac1Data    <= to_slv(InIBrik2);
-            Dac2Data    <= 18x"1FFFF" when (StartInBrik2) else 18x"0";
-            Dac0ClkEn   <= ValidInBrik2;
-            Dac1ClkEn   <= ValidInBrik2;
-            Dac2ClkEn   <= ValidInBrik2;
+            Dac0Data    <= to_slv(InRBrik2Dly);
+            Dac1Data    <= to_slv(InIBrik2Dly);
+            Dac2Data    <= 18x"1FFFF" when (StartInBrik2Dly) else 18x"0";
+            Dac0ClkEn   <= ValidInBrik2Dly;
+            Dac1ClkEn   <= ValidInBrik2Dly;
+            Dac2ClkEn   <= ValidInBrik2Dly;
          elsif (DacSelect = x"1") then
-            Dac0Data    <= to_slv(InterpO_R0);
-            Dac1Data    <= to_slv(InterpO_I0);
-            Dac2Data    <= 18x"1FFFF" when (TrellisStart) else 18x"0";
-            Dac0ClkEn   <= TrellisEn;
-            Dac1ClkEn   <= TrellisEn;
-            Dac2ClkEn   <= TrellisEn;
+            Dac0Data    <= sample0r;
+            Dac1Data    <= sample0i;
+            Dac2Data    <= 18x"1FFFF" when (EstimatesDone) else 18x"0";
+            Dac0ClkEn   <= '1';
+            Dac1ClkEn   <= '1';
+            Dac2ClkEn   <= '1';
          else -- if (DacSelect = x"2") then
-            Dac0Data    <= to_slv(InterpO_R1);
-            Dac1Data    <= to_slv(InterpO_I1);
-            Dac2Data    <= 18x"1FFFF" when (TrellisStart) else 18x"0";
-            Dac0ClkEn   <= TrellisEn;
-            Dac1ClkEn   <= TrellisEn;
-            Dac2ClkEn   <= TrellisEn;
+            Dac0Data    <= (TrellisBits & 14x"0");
+            Dac1Data    <= sample0r;
+            Dac2Data    <= 18x"1FFFF" when (EstimatesDone) else 18x"0";
+            Dac0ClkEn   <= TrellisOutEn;
+            Dac1ClkEn   <= TrellisOutEn;
+            Dac2ClkEn   <= TrellisOutEn;
          end if;
       end if;
-   end process;
+   end process DacOutputs;
 
 END rtl;

@@ -1,4 +1,4 @@
-`include "defines.v"
+`include "stcDefines.vh"
 `timescale 1ns/100ps
 
 
@@ -7,7 +7,7 @@
 
 module test;
     parameter CLOCK_FREQ = 186.6666667e6;
-    parameter HC = 1e9/CLOCK_FREQ/2;
+    parameter HC = 1e9/CLOCK_FREQ/4;
     parameter C = 2*HC;
     parameter CLOCK_DECIMATION = 1;
 
@@ -15,10 +15,11 @@ module test;
     initial reset = 0;
 
     // Create the clocks
-    reg     clk;
+    reg     clk, clk2x;
     initial clk = 1;
+    initial clk2x = 1;
     reg     clken;
-    always #HC clk = clk^clken;
+    always #HC clk2x = clk2x^clken;
     `define CLOCK_PERIOD   (C*1e-9)
 
 
@@ -26,7 +27,8 @@ module test;
     initial clkEnable = 0;
     integer clkCount;
     initial clkCount = 0;
-    always @(posedge clk) begin
+    always @(posedge clk2x) begin
+        clk <= !clk;
         if (clkCount == CLOCK_DECIMATION-1) begin
             clkCount <= 0;
             clkEnable <= 1;
@@ -151,31 +153,19 @@ module test;
     //******************************* UUT *************************************
 
     //----------------------- Detection Filter --------------------------------
-    wire            [39:0]  dfReal_tdata;
-    wire    signed  [17:0]  dfRealOutput = dfReal_tdata[37:20];
-    detectionFilterX1 dfReal(
+    wire            [47:0]  df_tdata;
+    wire    signed  [17:0]  dfRealOutput = df_tdata[17+24:24],
+                            dfImagOutput = df_tdata[17:0];
+    DetectionFilter df (
+        .aresetn(!reset),
         .aclk(clk),
         .aclken(clkEnable),
-        .aresetn(!reset),
-        .s_axis_data_tvalid(inputValid),
-        .s_axis_data_tready(),
-        .s_axis_data_tdata({6'b0,inputSampleReal}),
-        .m_axis_data_tvalid(dfValid),
-        .m_axis_data_tdata(dfReal_tdata)
+        .s_axis_data_tvalid(inputValid),                                        // input wire s_axis_data_tvalid
+        .s_axis_data_tready(),                                                  // output wire s_axis_data_tready
+        .s_axis_data_tdata({6'b0, inputSampleReal, 6'b0, inputSampleImag}),     // input wire [47 : 0] s_axis_data_tdata
+        .m_axis_data_tvalid(dfValid),                                           // output wire m_axis_data_tvalid
+        .m_axis_data_tdata(df_tdata)                                            // output wire [47 : 0] m_axis_data_tdata
     );
-    wire            [39:0]  dfImag_tdata;
-    wire    signed  [17:0]  dfImagOutput = dfImag_tdata[37:20];
-    detectionFilterX1 dfImag(
-        .aclk(clk),
-        .aclken(clkEnable),
-        .aresetn(!reset),
-        .s_axis_data_tvalid(inputValid),
-        .s_axis_data_tready(),
-        .s_axis_data_tdata({6'b0,inputSampleImag}),
-        .m_axis_data_tvalid(),
-        .m_axis_data_tdata(dfImag_tdata)
-    );
-
 
     //-------------------------- Estimators -----------------------------------
 
@@ -205,25 +195,27 @@ module test;
     */
     wire    signed  [17:0]  faReal,faImag;
     reg             [14:0]  sampleInFrame;
+    reg             [11:0]  sampleOut;
 
-    wire    startOfTrellis = (sampleInFrame == 600);
+    wire    estimatesDone = (sampleInFrame == 5600);
+    wire    myStartOfTrellis;
 
     always @(posedge clk) begin
         if (inputStart) begin
             sampleInFrame <= 0;
-            h0EstReal   <= 18'h0;  // -0.5 + j0.0
-            h0EstImag   <= 18'h0;
-            h1EstReal   <= 18'h0;  //-0.50 + j0.0
-            h1EstImag   <= 18'h0;
-            deltaTauEst <= 6'h0;
-            ch0Mu       <= 18'h0;
-            ch1Mu       <= 18'h0;
+//            h0EstReal   <= 18'h0;  // -0.5 + j0.0
+//            h0EstImag   <= 18'h0;
+//            h1EstReal   <= 18'h0;  //-0.50 + j0.0
+//            h1EstImag   <= 18'h0;
+//            deltaTauEst <= 6'h0;
+//            ch0Mu       <= 18'h0;
+//            ch1Mu       <= 18'h0;
         end
         else if (dfValid) begin
             sampleInFrame <= sampleInFrame + 1;
         end
 
-        if (startOfTrellis) begin
+        if (estimatesDone) begin
             h0EstReal   <= 18'h30000;  // -0.5 + j0.0
             h0EstImag   <= 18'h00000;
             h1EstReal   <= 18'h30000;  //-0.50 + j0.0
@@ -239,14 +231,17 @@ module test;
         .CLKS_PER_OUTPUT(4))
     fa(
         .clk(clk),
+        .clk2x(clk2x),
         .clkEn(clkEnable),
         .reset(reset),
         .startOfFrame(inputStart),
-        .startOfTrellis(startOfTrellis),
+        .estimatesDone(estimatesDone),
+        .sampleOut(sampleOut),
         .valid(dfValid),
         .dinReal(dfRealOutput),
         .dinImag(dfImagOutput),
         .clkEnOut(faClkEn),
+        .myStartOfTrellis(myStartOfTrellis),
         .interpolate(interpolate),
         .doutReal(faReal),
         .doutImag(faImag)
@@ -256,9 +251,9 @@ module test;
 
     wire    signed      [17:0]  sample0r;
     interpolator ch0r(
-        .clk(clk),
+        .clk(clk2x),
         .clkEn(1'b1),
-        .reset(startOfTrellis),
+        .reset(myStartOfTrellis),
         .interpolate(faClkEn & interpolate),
         .mu(ch0Mu),
         .inputEn(faClkEn),
@@ -268,9 +263,9 @@ module test;
     );
     wire    signed      [17:0]  sample0i;
     interpolator ch0i(
-        .clk(clk),
+        .clk(clk2x),
         .clkEn(1'b1),
-        .reset(startOfTrellis),
+        .reset(myStartOfTrellis),
         .interpolate(faClkEn & interpolate),
         .mu(ch0Mu),
         .inputEn(faClkEn),
@@ -281,9 +276,9 @@ module test;
 
     wire    signed      [17:0]  sample1r;
     interpolator ch1r(
-        .clk(clk),
+        .clk(clk2x),
         .clkEn(1'b1),
-        .reset(startOfTrellis),
+        .reset(myStartOfTrellis),
         .interpolate(faClkEn & interpolate),
         .mu(ch1Mu),
         .inputEn(faClkEn),
@@ -293,9 +288,9 @@ module test;
     );
     wire    signed      [17:0]  sample1i;
     interpolator ch1i(
-        .clk(clk),
+        .clk(clk2x),
         .clkEn(1'b1),
-        .reset(startOfTrellis),
+        .reset(myStartOfTrellis),
         .interpolate(faClkEn & interpolate),
         .mu(ch1Mu),
         .inputEn(faClkEn),
@@ -309,11 +304,11 @@ module test;
 
     wire                [3:0]   tdBits;
     trellisDetector td(
-        .clk(clk),
+        .clk(clk2x),
         .clkEn(1'b1),
         .reset(reset),
         .sampleEn(interpOutEn),
-        .startFrame(startOfTrellis),
+        .startFrame(myStartOfTrellis),
         .in0Real(sample0r), .in0Imag(sample0i),
         .in1Real(sample1r), .in1Imag(sample1i),
         .deltaTauEst(deltaTauEst),
@@ -326,7 +321,14 @@ module test;
     );
     `endif
 
-
+    always @(posedge clk2x) begin
+        if (myStartOfTrellis) begin
+            sampleOut <= 0;
+        end
+        else if (tdOutEn) begin
+            sampleOut <= sampleOut+ 1;
+        end
+    end
 
 
     //**************************** Startup ************************************

@@ -1,11 +1,11 @@
-`include "defines.v"
+`include "stcDefines.vh"
 `timescale 1ns/100ps
 /*
 *******************************************************************************
 stageSetup
 *******************************************************************************
     Inputs:
-        clk - system clock. 
+        clk - system clock.
         reset - synchronous clear
         clkEn - clock enable used for all inputs
         start - indicates the start of a new frame. This is used to indicate
@@ -14,10 +14,10 @@ stageSetup
         positiveTau - boolean flag indicating the delta tau estimate was positive
         tauIndex - 5-bit unsigned integer indicating 1/32 fractions of a bit
             interval.
-        h0EstReal,h0EstIMag - complex valued input representing the estimate of 
-            the channel 0 gain. Encoded as a signed 18 bit, Q17 fractional number pair. 
+        h0EstReal,h0EstIMag - complex valued input representing the estimate of
+            the channel 0 gain. Encoded as a signed 18 bit, Q17 fractional number pair.
             There is a new estimate available with each startFrame.
-        h1EstReal,h1EstIMag - complex valued input representing the estimate of 
+        h1EstReal,h1EstIMag - complex valued input representing the estimate of
             the channel 1 gain. Encoded as a signed 18 bit, Q17 fractional number pair.
             There is a new estimate available with each startFrame.
     Outputs:
@@ -59,7 +59,7 @@ module stageSetup (
         reg     [3:0]       msbs;
         reg     [5:0]       lsbs;
         if (positiveTau) begin
-            case (stage) 
+            case (stage)
                 0:      msbs = { inputBits[3], inputBits[2],~inputBits[1], inputBits[0]};
                 1:      msbs = { inputBits[2],~inputBits[1], inputBits[0],         1'b0};
                 2:      msbs = { inputBits[3],~inputBits[2], inputBits[1], inputBits[0]};
@@ -70,22 +70,22 @@ module stageSetup (
                 7:      msbs = { inputBits[3], inputBits[2],~inputBits[1], inputBits[0]};
                 default:msbs = 4'b0;
             endcase
-            case (stage) 
+            case (stage)
                 0:      lsbs = {1'b0,tauIndex};
                 1:      lsbs = 6'h0;
                 2:      lsbs = {1'b0,tauIndex};
                 3:      lsbs = 6'h0;
                 4:      lsbs = {1'b0,tauIndex};
-                5:      lsbs = 6'h0;          
+                5:      lsbs = 6'h0;
                 6:      lsbs = {1'b0,tauIndex};
-                7:      lsbs = 6'h0;          
+                7:      lsbs = 6'h0;
                 default:lsbs = 6'h0;
             endcase
             // 33*msbs + lsbs
             samp0_romAddr = {1'b0,msbs,5'b0} + {6'b0,msbs} + {4'b0,lsbs};
         end
         else begin
-            case (stage) 
+            case (stage)
                 0:      msbs = { inputBits[3], inputBits[2],~inputBits[1], inputBits[0]};
                 1:      msbs = { inputBits[3], inputBits[2],~inputBits[1], inputBits[0]};
                 2:      msbs = { inputBits[3],~inputBits[2], inputBits[1],         1'b0};
@@ -96,14 +96,14 @@ module stageSetup (
                 7:      msbs = { inputBits[4], inputBits[3], inputBits[2],~inputBits[1]};
                 default:msbs = 4'b0;
             endcase
-            case (stage) 
+            case (stage)
                 0:      lsbs = 6'h0;
                 1:      lsbs = revTauIndex;
-                2:      lsbs = 6'h0;      
+                2:      lsbs = 6'h0;
                 3:      lsbs = revTauIndex;
-                4:      lsbs = 6'h0;      
+                4:      lsbs = 6'h0;
                 5:      lsbs = revTauIndex;
-                6:      lsbs = 6'h0;      
+                6:      lsbs = 6'h0;
                 7:      lsbs = revTauIndex;
                 default:lsbs = 6'h0;
             endcase
@@ -125,7 +125,7 @@ module stageSetup (
         reg     [3:0]       msbs;
         reg     [5:0]       lsbs;
         if (positiveTau) begin
-            case (stage) 
+            case (stage)
                 0:      msbs = { inputBits[1], inputBits[0], inputBits[3],~inputBits[2]};
                 1:      msbs = { inputBits[1], inputBits[0], inputBits[3],~inputBits[2]};
                 2:      msbs = { inputBits[1], inputBits[4],~inputBits[3],         1'b0};
@@ -136,14 +136,14 @@ module stageSetup (
                 7:      msbs = {~inputBits[4], inputBits[1], inputBits[0], inputBits[3]};
                 default:msbs = 4'b0;
             endcase
-            case (stage) 
+            case (stage)
                 0:      lsbs = 6'h0;
                 1:      lsbs = revTauIndex;
-                2:      lsbs = 6'h0;      
+                2:      lsbs = 6'h0;
                 3:      lsbs = revTauIndex;
-                4:      lsbs = 6'h0;      
+                4:      lsbs = 6'h0;
                 5:      lsbs = revTauIndex;
-                6:      lsbs = 6'h0;      
+                6:      lsbs = 6'h0;
                 7:      lsbs = revTauIndex;
                 default:lsbs = 6'h0;
             endcase
@@ -151,7 +151,7 @@ module stageSetup (
             samp1_romAddr = {1'b0,msbs,5'b0} + {6'b0,msbs} + {4'b0,lsbs};
         end
         else begin
-            case (stage) 
+            case (stage)
                 0:      msbs = { inputBits[1], inputBits[0], inputBits[3],~inputBits[2]};
                 1:      msbs = { inputBits[0], inputBits[3],~inputBits[2],         1'b0};
                 2:      msbs = { inputBits[1], inputBits[4],~inputBits[3], inputBits[0]};
@@ -162,15 +162,15 @@ module stageSetup (
                 7:      msbs = { inputBits[1], inputBits[0], inputBits[3], inputBits[2]};
                 default:msbs = 4'b0;
             endcase
-            case (stage) 
+            case (stage)
                 0:      lsbs = {1'b0,tauIndex};
                 1:      lsbs = 6'h0;
                 2:      lsbs = {1'b0,tauIndex};
                 3:      lsbs = 6'h0;
                 4:      lsbs = {1'b0,tauIndex};
-                5:      lsbs = 6'h0;          
+                5:      lsbs = 6'h0;
                 6:      lsbs = {1'b0,tauIndex};
-                7:      lsbs = 6'h0;          
+                7:      lsbs = 6'h0;
                 default:lsbs = 6'h0;
             endcase
             // 33*msbs + lsbs
@@ -521,7 +521,7 @@ module stageSetup (
         .s_axis_b_tvalid(romDataValid),
         .s_axis_b_tdata({6'bx,h0EstImag,6'bx,h0EstReal}),
         .m_axis_dout_tvalid(temp0Valid),
-        .m_axis_dout_tdata({waste01,temp0Imag,waste00,temp0Real}) 
+        .m_axis_dout_tdata({waste01,temp0Imag,waste00,temp0Real})
     );
     wire    signed  [36:0]  temp1Real,temp1Imag;
     wire            [2:0]   waste10,waste11;
@@ -533,7 +533,7 @@ module stageSetup (
         .s_axis_b_tvalid(romDataValid),
         .s_axis_b_tdata({6'bx,h1EstImag,6'bx,h1EstReal}),
         .m_axis_dout_tvalid(temp1Valid),
-        .m_axis_dout_tdata({waste11,temp1Imag,waste10,temp1Real}) 
+        .m_axis_dout_tdata({waste11,temp1Imag,waste10,temp1Real})
     );
     reg     signed  [37:0]  sumReal,sumImag;
     reg                     sumValid;
@@ -568,5 +568,5 @@ module stageSetup (
     assign stageOutputValid = refValid;
     assign refReal = satSumReal;
     assign refImag = satSumImag;
-    
+
 endmodule

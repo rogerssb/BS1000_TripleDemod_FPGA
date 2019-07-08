@@ -1,3 +1,6 @@
+`ifndef _stcDefine_vh_
+`define _stcDefine_vh_
+
 `define SAMPLES_PER_BIT         4
 `define PILOT_BITS_PER_FRAME    (128)
 `define DATA_BITS_PER_FRAME     (25*128)
@@ -6,3 +9,5 @@
 `define SAMPLES_PER_FRAME       (`SAMPLES_PER_BIT * `TOTAL_BITS_PER_FRAME)
 `define PILOT_SAMPLES_PER_FRAME (`SAMPLES_PER_BIT * `PILOT_BITS_PER_FRAME)
 `define DATA_SAMPLES_PER_FRAME  (`SAMPLES_PER_BIT * `DATA_BITS_PER_FRAME)
+
+ `endif
