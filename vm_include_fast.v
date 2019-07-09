@@ -1,22 +1,22 @@
 /******************************************************************************
 Copyright 2008-2015 Koos Technical Services, Inc. All Rights Reserved
 
-This source code is the Intellectual Property of Koos Technical Services,Inc. 
+This source code is the Intellectual Property of Koos Technical Services,Inc.
 (KTS) and is provided under a License Agreement which protects KTS' ownership and
 derivative rights in exchange for negotiated compensation.
 ******************************************************************************/
 
-//  2^(-k)      
-//  1                 
-//  0.5          
-//  0.25         
-//  0.125        
-//  0.0625       
-//  0.03125      
-//  0.015625     
-//  0.0078125   
+//  2^(-k)
+//  1
+//  0.5
+//  0.25
+//  0.125
+//  0.0625
+//  0.03125
+//  0.015625
+//  0.0078125
 //
-// atan(2^(-k)) * 2^bits / 2 / (2*pi) 
+// atan(2^(-k)) * 2^bits / 2 / (2*pi)
 
 
 parameter atan_ki = n==08 ? 'h0020 : (

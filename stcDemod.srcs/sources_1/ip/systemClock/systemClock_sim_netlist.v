@@ -1,49 +1,56 @@
 // Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2017.2 (win64) Build 1909853 Thu Jun 15 18:39:09 MDT 2017
-// Date        : Thu May 30 09:12:17 2019
-// Host        : DESKTOP-BUCL8EC running 64-bit major release  (build 9200)
-// Command     : write_verilog -force -mode funcsim
-//               C:/modem/vivado2017/semcoDemod.srcs/sources_1/ip/systemClock/systemClock_sim_netlist.v
+// Date        : Fri Jul  5 13:08:01 2019
+// Host        : SEMCO1039 running 64-bit major release  (build 9200)
+// Command     : write_verilog -force -mode funcsim -rename_top systemClock -prefix
+//               systemClock_ systemClock_sim_netlist.v
 // Design      : systemClock
 // Purpose     : This verilog netlist is a functional simulation representation of the design and should not be modified
 //               or synthesized. This netlist cannot be used for SDF annotated simulation.
-// Device      : xc7k160tfbg676-1
+// Device      : xc7k325tfbg676-2
 // --------------------------------------------------------------------------------
 `timescale 1 ps / 1 ps
 
 (* NotValidForBitStream *)
 module systemClock
-   (clk_out1,
+   (clk93,
+    clk186,
     locked,
     clk_in1);
-  output clk_out1;
+  output clk93;
+  output clk186;
   output locked;
   input clk_in1;
 
+  wire clk186;
+  wire clk93;
   (* IBUF_LOW_PWR *) wire clk_in1;
-  wire clk_out1;
   wire locked;
 
   systemClock_systemClock_clk_wiz inst
-       (.clk_in1(clk_in1),
-        .clk_out1(clk_out1),
+       (.clk186(clk186),
+        .clk93(clk93),
+        .clk_in1(clk_in1),
         .locked(locked));
 endmodule
 
-(* ORIG_REF_NAME = "systemClock_clk_wiz" *) 
 module systemClock_systemClock_clk_wiz
-   (clk_out1,
+   (clk93,
+    clk186,
     locked,
     clk_in1);
-  output clk_out1;
+  output clk93;
+  output clk186;
   output locked;
   input clk_in1;
 
+  wire clk186;
+  wire clk186_systemClock;
+  wire clk93;
+  wire clk93_systemClock;
   wire clk_in1;
   wire clk_in1_systemClock;
-  wire clk_out1;
-  wire clk_out1_systemClock;
   wire clkfbout_buf_systemClock;
   wire clkfbout_systemClock;
   wire locked;
@@ -51,7 +58,6 @@ module systemClock_systemClock_clk_wiz
   wire NLW_mmcm_adv_inst_CLKFBSTOPPED_UNCONNECTED;
   wire NLW_mmcm_adv_inst_CLKINSTOPPED_UNCONNECTED;
   wire NLW_mmcm_adv_inst_CLKOUT0B_UNCONNECTED;
-  wire NLW_mmcm_adv_inst_CLKOUT1_UNCONNECTED;
   wire NLW_mmcm_adv_inst_CLKOUT1B_UNCONNECTED;
   wire NLW_mmcm_adv_inst_CLKOUT2_UNCONNECTED;
   wire NLW_mmcm_adv_inst_CLKOUT2B_UNCONNECTED;
@@ -79,21 +85,25 @@ module systemClock_systemClock_clk_wiz
         .O(clk_in1_systemClock));
   (* BOX_TYPE = "PRIMITIVE" *) 
   BUFG clkout1_buf
-       (.I(clk_out1_systemClock),
-        .O(clk_out1));
+       (.I(clk93_systemClock),
+        .O(clk93));
+  (* BOX_TYPE = "PRIMITIVE" *) 
+  BUFG clkout2_buf
+       (.I(clk186_systemClock),
+        .O(clk186));
   (* BOX_TYPE = "PRIMITIVE" *) 
   MMCME2_ADV #(
     .BANDWIDTH("OPTIMIZED"),
-    .CLKFBOUT_MULT_F(10.750000),
+    .CLKFBOUT_MULT_F(10.000000),
     .CLKFBOUT_PHASE(0.000000),
     .CLKFBOUT_USE_FINE_PS("FALSE"),
     .CLKIN1_PERIOD(10.714000),
     .CLKIN2_PERIOD(0.000000),
-    .CLKOUT0_DIVIDE_F(10.750000),
+    .CLKOUT0_DIVIDE_F(10.000000),
     .CLKOUT0_DUTY_CYCLE(0.500000),
     .CLKOUT0_PHASE(0.000000),
     .CLKOUT0_USE_FINE_PS("FALSE"),
-    .CLKOUT1_DIVIDE(1),
+    .CLKOUT1_DIVIDE(5),
     .CLKOUT1_DUTY_CYCLE(0.500000),
     .CLKOUT1_PHASE(0.000000),
     .CLKOUT1_USE_FINE_PS("FALSE"),
@@ -140,9 +150,9 @@ module systemClock_systemClock_clk_wiz
         .CLKIN2(1'b0),
         .CLKINSEL(1'b1),
         .CLKINSTOPPED(NLW_mmcm_adv_inst_CLKINSTOPPED_UNCONNECTED),
-        .CLKOUT0(clk_out1_systemClock),
+        .CLKOUT0(clk93_systemClock),
         .CLKOUT0B(NLW_mmcm_adv_inst_CLKOUT0B_UNCONNECTED),
-        .CLKOUT1(NLW_mmcm_adv_inst_CLKOUT1_UNCONNECTED),
+        .CLKOUT1(clk186_systemClock),
         .CLKOUT1B(NLW_mmcm_adv_inst_CLKOUT1B_UNCONNECTED),
         .CLKOUT2(NLW_mmcm_adv_inst_CLKOUT2_UNCONNECTED),
         .CLKOUT2B(NLW_mmcm_adv_inst_CLKOUT2B_UNCONNECTED),

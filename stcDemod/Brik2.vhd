@@ -229,11 +229,7 @@ ARCHITECTURE rtl OF Brik2 IS
             H1EstR_CE,
             H1EstI_CE,
             Tau0Est,
-            Tau1Est,
-            H0EstR_sf,
-            H0EstI_sf,
-            H1EstR_sf,
-            H1EstI_sf         : STC_Parm;
+            Tau1Est           : STC_Parm;
    SIGNAL   ValidDly          : std_logic_vector(1 downto 0);
    SIGNAL   Tau0EstNdxTE,
             Tau1EstNdxTE      : integer range 0 to SEARCH_LENGTH;
@@ -292,7 +288,7 @@ BEGIN
    FreqProcess : process(Clk)
    begin
       if (rising_edge(Clk)) then
-         FreqEstDone <= StartIn;   --
+         FreqEstDone <= '1';   --
       end if;
    end process;
 
@@ -455,23 +451,6 @@ BEGIN
 
    TrellisPreStart <= TrellisDelay(2);
 
-   EstimatesProcess : process(clk) -- Latch all the estimates when trellis starts
-   begin
-      if (rising_edge(clk)) then
-         if (reset) then
-            H0EstR_sf      <= to_sfixed(0.707, H0EstR_sf);
-            H0EstI_sf      <= (others=>'0');
-            H1EstR_sf      <= to_sfixed(0.707, H1EstR_sf);
-            H1EstI_sf      <= (others=>'0');
-         elsif (ce and TrellisPreStart) then
-            H0EstR_sf      <= H0EstR_CE;
-            H0EstI_sf      <= H0EstI_CE;
-            H1EstR_sf      <= H1EstR_CE;
-            H1EstI_sf      <= H1EstI_CE;
-         end if;
-      end if;
-   end process EstimatesProcess;
-
    EstimatesProc : process(clk)
    begin
       if (rising_edge(clk)) then
@@ -516,15 +495,15 @@ BEGIN
             elsif (ChanEstDone) then
                AllDone(2) <= '1';
             end if;
-            TrellisDelay <= TrellisDelay(2 downto 0) & TrellisStarter;
+            TrellisDelay <= TrellisDelay(TrellisDelay'left-1 downto 0) & TrellisStarter;
             EstimatesDone <= TrellisDelay(3);
-            if (TrellisStarter) then   -- All estimates are done, allow time to calculate values.
-               H0EstR      <= H0EstR_sf;
-               H0EstI      <= H0EstI_sf;
-               H1EstR      <= H1EstR_sf;
-               H1EstI      <= H1EstI_sf;
-               H0Mag       <= resize(H0EstR_sf * H0EstR_sf + H0EstI_sf * H0EstI_sf, H0Mag);
-               H1Mag       <= resize(H1EstR_sf * H1EstR_sf + H1EstI_sf * H1EstI_sf, H1Mag);
+            if (ChanEstDone) then   -- All estimates are done, allow time to calculate values.
+               H0EstR      <= H0EstR_CE;
+               H0EstI      <= H0EstI_CE;
+               H1EstR      <= H1EstR_CE;
+               H1EstI      <= H1EstI_CE;
+               H0Mag       <= resize(H0EstR_CE * H0EstR_CE + H0EstI_CE * H0EstI_CE, H0Mag);
+               H1Mag       <= resize(H1EstR_CE * H1EstR_CE + H1EstI_CE * H1EstI_CE, H1Mag);
                Tau0Est     <= Tau0EstTE;
                Tau1Est     <= Tau1EstTE;
             end if;

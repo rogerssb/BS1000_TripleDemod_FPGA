@@ -4,6 +4,7 @@
 module trellisProcess (
     input                   clk,
                             clk2x,
+                            clkEnable,
                             reset,
                             frameStart,
                             inputValid,
@@ -20,6 +21,7 @@ module trellisProcess (
     output  signed  [17:0]  sample0r,
                             sample0i,
     output                  outputEn,
+                            interpOutEn,
     output          [3:0]   outputBits
 );
 
@@ -66,11 +68,11 @@ module trellisProcess (
     */
     wire    signed  [17:0]  faReal,faImag;
 
-    always @(posedge clk) begin
+    always @(posedge clk2x) begin
     `ifdef USE_FIXED_ESTIMATES
-        h0EstReal   <= 18'h1ffff;  // 1.0 + j0.0
+        h0EstReal   <= 18'h30000;  // 1.0 + j0.0
         h0EstImag   <= 18'h00000;
-        h1EstReal   <= 18'h00000;  // 0.0 + j0.0
+        h1EstReal   <= 18'h30000;  // 0.0 + j0.0
         h1EstImag   <= 18'h00000;
         deltaTauEst <= 6'h0;
         ch0Mu       <= 18'h0;
@@ -103,8 +105,8 @@ module trellisProcess (
         .dinReal(dfRealOutput),
         .dinImag(dfImagOutput),
         .clkEnOut(faClkEn),
-        .interpolate(interpolate),
         .myStartOfTrellis(myStartOfTrellis),
+        .interpolate(interpolate),
         .doutReal(faReal),
         .doutImag(faImag)
     );
@@ -114,7 +116,7 @@ module trellisProcess (
     interpolator ch0r(
         .clk(clk2x),
         .clkEn(1'b1),
-        .reset(estimatesDone),
+        .reset(myStartOfTrellis),
         .interpolate(faClkEn & interpolate),
         .mu(ch0Mu),
         .inputEn(faClkEn),
@@ -126,7 +128,7 @@ module trellisProcess (
     interpolator ch0i(
         .clk(clk2x),
         .clkEn(1'b1),
-        .reset(estimatesDone),
+        .reset(myStartOfTrellis),
         .interpolate(faClkEn & interpolate),
         .mu(ch0Mu),
         .inputEn(faClkEn),
@@ -139,7 +141,7 @@ module trellisProcess (
     interpolator ch1r(
         .clk(clk2x),
         .clkEn(1'b1),
-        .reset(estimatesDone),
+        .reset(myStartOfTrellis),
         .interpolate(faClkEn & interpolate),
         .mu(ch1Mu),
         .inputEn(faClkEn),
@@ -151,7 +153,7 @@ module trellisProcess (
     interpolator ch1i(
         .clk(clk2x),
         .clkEn(1'b1),
-        .reset(estimatesDone),
+        .reset(myStartOfTrellis),
         .interpolate(faClkEn & interpolate),
         .mu(ch1Mu),
         .inputEn(faClkEn),
@@ -167,7 +169,7 @@ module trellisProcess (
         .clkEn(1'b1),
         .reset(reset),
         .sampleEn(interpOutEn),
-        .startFrame(estimatesDone),
+        .startFrame(myStartOfTrellis),
         .in0Real(sample0r), .in0Imag(sample0i),
         .in1Real(sample1r), .in1Imag(sample1i),
         .deltaTauEst(deltaTauEst),
@@ -180,7 +182,7 @@ module trellisProcess (
     );
 
     always @(posedge clk2x) begin
-        if (myStartOfTrellis) begin
+        if (reset || myStartOfTrellis) begin
             sampleOut <= 0;
         end
         else if (tdOutEn) begin

@@ -1,14 +1,14 @@
 -- Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2017.2 (win64) Build 1909853 Thu Jun 15 18:39:09 MDT 2017
--- Date        : Wed May 29 15:37:41 2019
--- Host        : DESKTOP-BUCL8EC running 64-bit major release  (build 9200)
--- Command     : write_vhdl -force -mode funcsim
---               C:/modem/vivado2017/semcoDemod.srcs/sources_1/ip/resamplerTap6/resamplerTap6_sim_netlist.vhdl
+-- Date        : Fri Jul  5 13:07:00 2019
+-- Host        : SEMCO1039 running 64-bit major release  (build 9200)
+-- Command     : write_vhdl -force -mode funcsim -rename_top resamplerTap6 -prefix
+--               resamplerTap6_ resamplerTap6_sim_netlist.vhdl
 -- Design      : resamplerTap6
 -- Purpose     : This VHDL netlist is a functional simulation representation of the design and should not be modified or
 --               synthesized. This netlist cannot be used for SDF annotated simulation.
--- Device      : xc7k160tfbg676-1
+-- Device      : xc7k325tfbg676-2
 -- --------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
@@ -98,8 +98,6 @@ entity resamplerTap6_dist_mem_gen_v8_0_11 is
   attribute C_SYNC_ENABLE of resamplerTap6_dist_mem_gen_v8_0_11 : entity is 1;
   attribute C_WIDTH : integer;
   attribute C_WIDTH of resamplerTap6_dist_mem_gen_v8_0_11 : entity is 18;
-  attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of resamplerTap6_dist_mem_gen_v8_0_11 : entity is "dist_mem_gen_v8_0_11";
 end resamplerTap6_dist_mem_gen_v8_0_11;
 
 architecture STRUCTURE of resamplerTap6_dist_mem_gen_v8_0_11 is

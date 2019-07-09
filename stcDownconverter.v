@@ -21,6 +21,7 @@ module stcDownconverter(
     output  reg         [31:0]  dout,
     input       signed  [17:0]  iRx, qRx,
     output      signed  [17:0]  iStc, qStc,
+    output                      resampSync,
     output              [3:0]   dac0Select,dac1Select,dac2Select,
     output  reg                 dac0Sync,
     output  reg signed  [17:0]  dac0Data,

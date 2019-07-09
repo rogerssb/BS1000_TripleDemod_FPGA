@@ -175,30 +175,8 @@ ARCHITECTURE rtl OF ChannelEstimate IS
    SIGNAL   Sig1R       : SIG_ARRAY := InitSigFromFile("C:\Semco\Vivado\Demods\stcDemod\sourceData\s1_lut_r.slv");
    SIGNAL   Sig1I       : SIG_ARRAY := InitSigFromFile("C:\Semco\Vivado\Demods\stcDemod\sourceData\s1_lut_i.slv");
 
-/*
-   signal   XrSpinvR0_Ila,
-            XrSpinvI0_Ila,
-            XiSpinvR0_Ila,
-            XiSpinvI0_Ila      : SLV18;
-   attribute mark_debug : string;
-   attribute mark_debug of XrSpinvR0_Ila         : signal is "true";
-   attribute mark_debug of XrSpinvI0_Ila         : signal is "true";
-   attribute mark_debug of XiSpinvR0_Ila         : signal is "true";
-   attribute mark_debug of XiSpinvI0_Ila         : signal is "true";
-   attribute mark_debug of Done                  : signal is "true";
-*/
 BEGIN
-/*
-   IlaProcess : process(clk)
-   begin
-      if (rising_edge(clk)) then
-         XrSpinvR0_Ila <= to_slv(XrSpinvR0); -- to make sure scaling is right
-         XrSpinvI0_Ila <= to_slv(XrSpinvI0);
-         XiSpinvR0_Ila <= to_slv(XiSpinvR0);
-         XiSpinvI0_Ila <= to_slv(XiSpinvI0);
-       end if;
-   end process;
-*/
+
    ChannelProcess : process (clk)
    begin
       if (rising_edge(clk)) then

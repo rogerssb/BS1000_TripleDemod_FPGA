@@ -1,13 +1,13 @@
 // Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2017.2 (win64) Build 1909853 Thu Jun 15 18:39:09 MDT 2017
-// Date        : Wed May 29 15:35:08 2019
-// Host        : DESKTOP-BUCL8EC running 64-bit major release  (build 9200)
-// Command     : write_verilog -force -mode synth_stub
-//               C:/modem/vivado2017/semcoDemod.srcs/sources_1/ip/resamplerTap2/resamplerTap2_stub.v
+// Date        : Fri Jul  5 13:05:51 2019
+// Host        : SEMCO1039 running 64-bit major release  (build 9200)
+// Command     : write_verilog -force -mode synth_stub -rename_top resamplerTap2 -prefix
+//               resamplerTap2_ resamplerTap2_stub.v
 // Design      : resamplerTap2
 // Purpose     : Stub declaration of top-level module interface
-// Device      : xc7k160tfbg676-1
+// Device      : xc7k325tfbg676-2
 // --------------------------------------------------------------------------------
 
 // This empty module with port declaration file causes synthesis tools to infer a black box for IP.

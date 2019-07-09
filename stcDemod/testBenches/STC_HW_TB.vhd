@@ -66,7 +66,7 @@ ARCHITECTURE rtl OF STC_HW_TB IS
   signal BitRate,
          Power0In,
          Power1In  : sfixed(0 downto -17);
-   signal PilotSyncOffset : SLV12 := x"A00";    -- 800 for 10mB, A00 for 20mB
+   signal PilotSyncOffset : SLV12 := x"800";    -- 800 for 10mB, A00 for 20mB
 
 BEGIN
 
@@ -75,9 +75,9 @@ BEGIN
       Clk <= not Clk;
    end process;
 
-   Power0In <= to_sfixed(0.99, Power0In);
-   Power1In <= to_sfixed(0.00, Power1In);
-   BitRate  <= to_sfixed(2*41.6/93.3, BitRate);    -- 41.6 is 10Mb times 4 plus 4% overhead for pilot
+   Power0In <= to_sfixed(0.50, Power0In);
+   Power1In <= to_sfixed(0.50, Power1In);
+   BitRate  <= to_sfixed(41.6/93.3, BitRate);    -- 41.6 is 10Mb times 4 plus 4% overhead for pilot
 
    Brik1 : Brik1_Hw_tb
    GENERIC MAP(

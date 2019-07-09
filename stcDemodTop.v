@@ -127,7 +127,8 @@ module stcDemodTop (
     `ifdef TRIPLE_DEMOD
     systemClock systemClock (
         .clk_in1(adc0Clk),
-        .clk_out1(clk),
+        .clk93(clk),
+        .clk186(clk2x),
         .locked(clkLocked)
     );
 
@@ -155,7 +156,8 @@ module stcDemodTop (
     `else //TRIPLE_DEMOD
     systemClock systemClock (
         .clk_in1(sysClk),
-        .clk_out1(clk),
+        .clk93(clk),
+        .clk186(clk2x),
         .locked(clkLocked)
      );
 
@@ -316,6 +318,36 @@ module stcDemodTop (
 
 
 //******************************************************************************
+//                         STC Registers
+//******************************************************************************
+
+    reg stcTopSpace;
+    always @* begin
+        casex(addr)
+            `STC_DEMOD_SPACE:       stcTopSpace = cs;
+            default:                stcTopSpace = 0;
+        endcase
+    end
+
+    wire    [15:0]  clocksPerBit;
+    wire    [11:0]  pilotOffset;
+    wire    [3:0]   stcDacSelect;
+    wire    [31:0]  stcDout;
+
+    stcRegs stcTopReg(
+        .busClk(busClk),
+        .cs(stcTopSpace),
+        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .addr(addr),
+        .dataIn(dataIn),
+        .dataOut(stcDout),
+        .clocksPerBit(clocksPerBit),
+        .pilotOffset(pilotOffset),
+        .dacSelect(stcDacSelect)
+);
+
+
+//******************************************************************************
 //                         Downconverter
 //******************************************************************************
 
@@ -336,6 +368,7 @@ module stcDemodTop (
         .dout(demodDout),
         .iRx(adc0In), .qRx(18'h0),
         .iStc(iStc), .qStc(qStc),
+        .resampSync(stcDdcClkEn),
         .dac0Select(demodDac0Select),
         .dac1Select(demodDac1Select),
         .dac2Select(demodDac2Select),
@@ -361,15 +394,26 @@ module stcDemodTop (
     wire                    stcBitEnOut;
     wire                    stcBit;
 
-    assign stcDac0Data = 0;
-    assign stcDac0ClkEn = 1'b0;
-    assign stcDac1Data = 0;
-    assign stcDac1ClkEn = 1'b0;
-    assign stcDac2Data = 0;
-    assign stcDac2ClkEn = 1'b0;
-    assign stcBitEnOut = 1'b0;
-    assign stcBit = 1'b0;
-
+    STC stcDemod(
+        .ResampleR(iStc),
+        .ResampleI(qStc),
+        .Clk93(clk),
+        .Clk186(clk2x),
+        .ValidIn(stcDdcClkEn),
+        .ClocksPerBit(clocksPerBit),
+        .DacSelect(stcDacSelect),
+        .PilotSyncOffset(pilotOffset),
+        .ClkOutEn(stcBitEnOut),
+        .PilotFound(pilotFound),
+        .PilotLocked(pilotLocked),
+        .DataOut(stcBit),
+        .Dac0Data(stcDac0Data),
+        .Dac0ClkEn(stcDac0ClkEn),
+        .Dac1Data(stcDac1Data),
+        .Dac1ClkEn(stcDac1ClkEn),
+        .Dac2Data(stcDac2Data),
+        .Dac2ClkEn(stcDac2ClkEn)
+    );
 
 //******************************************************************************
 //                       Clock/Data Jitter Reduction
@@ -660,8 +704,8 @@ module stcDemodTop (
     assign dac2_nCs = 1'b0;
     assign dac_sdio = 1'b0;
 
-    assign lockLed0n = 1'b1;
-    assign lockLed1n = 1'b1;
+    assign lockLed0n = pilotFound;
+    assign lockLed1n = pilotLocked;
 
     `ifdef TRIPLE_DEMOD
 
@@ -768,6 +812,8 @@ module stcDemodTop (
             `SPIGW_SPACE:       rd_mux = spiGatewayDout;
             `endif
 
+            `STC_DEMOD_SPACE    rd_mux = stcDout;
+
             `DEMODSPACE,
             `DDCSPACE,
             `DDCFIRSPACE,
@@ -817,6 +863,15 @@ module stcDemodTop (
                 end
             end
             `endif
+
+            `STC_DEMOD_SPACE:   begin
+                if (addr[1]) begin
+                    rd_mux = stcDout[31:16];
+                end
+                else begin
+                    rd_mux = stcDout[15:0];
+                end
+            end
 
             `DEMODSPACE,
             `DDCSPACE,

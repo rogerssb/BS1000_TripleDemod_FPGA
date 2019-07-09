@@ -53,18 +53,6 @@ Top level modules:
 	cmpy18x18
 	glbl
 
-} {} {}} C:/Semco/Vivado/Demods/stcDemod/testBenches/STC_HW_TB.vhd {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/testBenches/STC_HW_TB.vhd
-Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
--- Loading package STANDARD
--- Loading package TEXTIO
--- Loading package std_logic_1164
--- Loading package NUMERIC_STD
--- Loading package fixed_pkg
--- Loading package MATH_REAL
--- Loading package Semco_pkg
--- Compiling entity STC_HW_TB
--- Compiling architecture rtl of STC_HW_TB
-
 } {} {}} C:/Semco/STCinfo/system_generator_projects/Source_HDL/trellisDetector.v {1 {vlog -work work -stats=none C:/Semco/STCinfo/system_generator_projects/Source_HDL/trellisDetector.v
 Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
 -- Compiling module trellisDetector
@@ -806,6 +794,13 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Loading package Semco_pkg
 -- Compiling entity STC
 -- Compiling architecture rtl of STC
+
+} {} {}} C:/Semco/Vivado/Demods/stcDemod/frameAlignment.v {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/frameAlignment.v
+Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
+-- Compiling module frameAlignment
+
+Top level modules:
+	frameAlignment
 
 } {} {}} C:/Semco/STCinfo/system_generator_projects/SIM_HDL/PIlot_tb.vhd {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/STCinfo/system_generator_projects/SIM_HDL/PIlot_tb.vhd
 Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
@@ -1683,13 +1678,6 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Loading package NUMERIC_STD
 -- Compiling entity fft_1k
 -- Compiling architecture fft_1k_arch of fft_1k
-
-} {} {}} C:/Semco/Vivado/Demods/stcDemod/trellisProcess.v {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/trellisProcess.v
-Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
--- Compiling module trellisProcess
-
-Top level modules:
-	trellisProcess
 
 } {} {}} {C:\Semco\Vivado\Demods\stcDemod/DFT.vhd} {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/DFT.vhd
 Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016

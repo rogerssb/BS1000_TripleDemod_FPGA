@@ -1,14 +1,14 @@
 // Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2017.2 (win64) Build 1909853 Thu Jun 15 18:39:09 MDT 2017
-// Date        : Thu May 30 09:13:31 2019
-// Host        : DESKTOP-BUCL8EC running 64-bit major release  (build 9200)
-// Command     : write_verilog -force -mode funcsim
-//               C:/modem/vivado2017/semcoDemod.srcs/sources_1/ip/flexbusClock/flexbusClock_sim_netlist.v
+// Date        : Fri Jul  5 13:04:14 2019
+// Host        : SEMCO1039 running 64-bit major release  (build 9200)
+// Command     : write_verilog -force -mode funcsim -rename_top flexbusClock -prefix
+//               flexbusClock_ flexbusClock_sim_netlist.v
 // Design      : flexbusClock
 // Purpose     : This verilog netlist is a functional simulation representation of the design and should not be modified
 //               or synthesized. This netlist cannot be used for SDF annotated simulation.
-// Device      : xc7k160tfbg676-1
+// Device      : xc7k325tfbg676-2
 // --------------------------------------------------------------------------------
 `timescale 1 ps / 1 ps
 
@@ -31,7 +31,6 @@ module flexbusClock
         .locked(locked));
 endmodule
 
-(* ORIG_REF_NAME = "flexbusClock_clk_wiz" *) 
 module flexbusClock_flexbusClock_clk_wiz
    (clk_out1,
     locked,

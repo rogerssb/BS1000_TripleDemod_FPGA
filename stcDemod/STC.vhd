@@ -85,6 +85,10 @@ ARCHITECTURE rtl OF STC IS
          Threshold      : OUT ufixed(10 downto -7);
          ReOut,
          ImOut          : OUT FLOAT_1_18;
+         Magnitude0,
+         Magnitude1,
+         PhaseOut0,
+         PhaseOut1      : OUT SLV18;
          PilotFound,
          ValidOut,
          StartOut       : OUT std_logic
@@ -133,9 +137,12 @@ ARCHITECTURE rtl OF STC IS
    COMPONENT trellisProcess
       PORT (
        clk,
+       clk2x,
+       clkEnable,
        reset,
        frameStart,
-       inputValid       : IN  std_logic;
+       inputValid,
+       estimatesDone    : IN  std_logic;
        dinReal,
        dinImag,
        h0EstRealIn,
@@ -147,7 +154,8 @@ ARCHITECTURE rtl OF STC IS
        deltaTauEstIn    : IN  std_logic_vector(5 downto 0);
        sample0r,
        sample0i         : OUT SLV18;
-       outputEn         : OUT std_logic;
+       outputEn,
+       interpOutEn      : OUT std_logic;
        outputBits       : OUT SLV4
    );
    END COMPONENT TrellisProcess;
@@ -178,9 +186,9 @@ ARCHITECTURE rtl OF STC IS
             StartInBrik2Dly,
             ValidInBrik2Dly,
             TrellisOutEn,
+            interpOutEn,
             EstimatesDone     : std_logic;
-   SIGNAL   TrellisBitsRaw,
-            TrellisBits       : std_logic_vector(3 downto 0);
+   SIGNAL   TrellisBits       : std_logic_vector(3 downto 0);
    SIGNAL   RealOutPS,
             ImagOutPS,
             InRBrik2Dly,
@@ -194,7 +202,11 @@ ARCHITECTURE rtl OF STC IS
             Ch0Mu,
             Ch1Mu             : Float_1_18;
    SIGNAL   DeltaTauEst       : sfixed(0 downto -5);
-
+   SIGNAL   Magnitude0,
+            Magnitude1,
+            PhaseOut0,
+            PhaseOut1,
+            StartDac2Data     : SLV18;
    SIGNAL   PilotPulse,
             PilotValidOut     : std_logic;
    SIGNAL   PilotRealOut,
@@ -269,6 +281,10 @@ BEGIN
          PilotFound     => PilotFound,
          PilotIndex     => PilotIndex,
          Threshold      => Threshold,
+         Magnitude0     => Magnitude0,
+         Magnitude1     => Magnitude1,
+         PhaseOut0      => PhaseOut0,
+         PhaseOut1      => PhaseOut1,
          ReOut          => PilotRealOut,
          ImOut          => PilotImagOut,
          ValidOut       => PilotValidOut,
@@ -319,7 +335,7 @@ BEGIN
          ValidIn        => ValidInBrik2Dly,
          InR            => to_slv(InRBrik2Dly),
          InI            => to_slv(InIBrik2Dly),
-         EstimatesDone   => EstimatesDone,
+         EstimatesDone  => EstimatesDone,
          H0EstR         => H0EstR,
          H0EstI         => H0EstI,
          H1EstR         => H1EstR,
@@ -331,8 +347,11 @@ BEGIN
 
    Trellis_u : trellisProcess
       PORT MAP (
-         clk                  => Clk2x,
+         clk                  => clk,
+         clk2x                => Clk2x,
+         clkEnable            => CE,
          reset                => Reset,
+         estimatesDone        => EstimatesDone,
          frameStart           => StartInBrik2Dly,
          inputValid           => ValidInBrik2Dly,
          dinReal              => to_slv(InRBrik2Dly),
@@ -346,6 +365,7 @@ BEGIN
          deltaTauEstIn        => to_slv(DeltaTauEst),
          sample0r             => sample0r,
          sample0i             => sample0i,
+         interpOutEn          => interpOutEn,
          outputEn             => TrellisOutEn,
          outputBits           => TrellisBits
       );
@@ -363,30 +383,60 @@ BEGIN
          ClkOut         => ClkOutEn
       );
 
+   StartDac2Data <= 18x"1FFFF" when (StartInBrik2Dly) else 18x"0";
+
    DacOutputs : process(Clk2x)
    begin
       if (rising_edge(Clk2x)) then
          if (DacSelect = x"0") then
             Dac0Data    <= to_slv(InRBrik2Dly);
             Dac1Data    <= to_slv(InIBrik2Dly);
-            Dac2Data    <= 18x"1FFFF" when (StartInBrik2Dly) else 18x"0";
+            Dac2Data    <= StartDac2Data;
             Dac0ClkEn   <= ValidInBrik2Dly;
             Dac1ClkEn   <= ValidInBrik2Dly;
             Dac2ClkEn   <= ValidInBrik2Dly;
          elsif (DacSelect = x"1") then
             Dac0Data    <= sample0r;
             Dac1Data    <= sample0i;
-            Dac2Data    <= 18x"1FFFF" when (EstimatesDone) else 18x"0";
+            Dac2Data    <= 18x"1FFFF" when (interpOutEn) else 18x"0";
             Dac0ClkEn   <= '1';
             Dac1ClkEn   <= '1';
             Dac2ClkEn   <= '1';
-         else -- if (DacSelect = x"2") then
+         elsif (DacSelect = x"2") then
             Dac0Data    <= (TrellisBits & 14x"0");
             Dac1Data    <= sample0r;
             Dac2Data    <= 18x"1FFFF" when (EstimatesDone) else 18x"0";
             Dac0ClkEn   <= TrellisOutEn;
             Dac1ClkEn   <= TrellisOutEn;
             Dac2ClkEn   <= TrellisOutEn;
+         elsif (DacSelect = x"3") then
+            Dac0Data    <= Magnitude0;
+            Dac1Data    <= Magnitude1;
+            Dac2Data    <= StartDac2Data;
+            Dac0ClkEn   <= '1';
+            Dac1ClkEn   <= '1';
+            Dac2ClkEn   <= '1';
+         elsif (DacSelect = x"4") then
+            Dac0Data    <= PhaseOut0;
+            Dac1Data    <= PhaseOut1;
+            Dac2Data    <= StartDac2Data;
+            Dac0ClkEn   <= '1';
+            Dac1ClkEn   <= '1';
+            Dac2ClkEn   <= '1';
+         elsif (DacSelect = x"5") then
+            Dac0Data    <= Magnitude0;
+            Dac1Data    <= PhaseOut0;
+            Dac2Data    <= StartDac2Data;
+            Dac0ClkEn   <= '1';
+            Dac1ClkEn   <= '1';
+            Dac2ClkEn   <= '1';
+         else
+            Dac0Data    <= Magnitude1;
+            Dac1Data    <= PhaseOut1;
+            Dac2Data    <= StartDac2Data;
+            Dac0ClkEn   <= '1';
+            Dac1ClkEn   <= '1';
+            Dac2ClkEn   <= '1';
          end if;
       end if;
    end process DacOutputs;
