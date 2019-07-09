@@ -707,6 +707,8 @@ module stcDemodTop (
     assign lockLed0n = pilotFound;
     assign lockLed1n = pilotLocked;
 
+    assign sdiOut = 1'b0;
+
     `ifdef TRIPLE_DEMOD
 
     //******************************************************************************

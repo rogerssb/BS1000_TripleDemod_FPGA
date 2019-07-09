@@ -176,7 +176,7 @@ module stcDownconverter(
         .demodMode(demodMode),
         .phase(phase),
         .freq(freq),
-        .highFreqOffset(highFreqOffset),
+        .highFreqOffset(1'b0),
         .offsetError(12'h0),
         .offsetErrorEn(1'b0),
         .carrierFreqOffset(carrierFreqOffset),
