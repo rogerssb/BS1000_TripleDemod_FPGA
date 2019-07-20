@@ -262,6 +262,8 @@ mrk_spc_decode mrk_spc_decode
     end
     assign symb_clk = clk_sel ? symbol_clk : symb_clk_2x_en;
 
+    `ifdef BITSYNC_BERT
+
     pcmEncoder pcmEnc(
         .clk(clk),
         .reset(reset),
@@ -275,6 +277,12 @@ mrk_spc_decode mrk_spc_decode
     );
 
     assign data_out = pcmEncData ;
+
+    `else // BITSYNC_BERT
+
+    assign data_out = data_inverse ;
+
+    `endif //BITSYNC_BERT
 
 
 endmodule
