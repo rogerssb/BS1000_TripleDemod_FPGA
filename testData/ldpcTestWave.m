@@ -2,7 +2,7 @@
 
 writeTestVectors = 0;
 writeMatFile = 0;
-writeSimVectors = 0;
+writeSimVectors = 1;
 
 % PN sequence order
 pnOrder = 6;
@@ -12,8 +12,11 @@ pnLength = 2^pnOrder - 1;
 sps = 4;
 
 % LDPC parameters
-codeRate = 4/5;
-infoBitsPerCodeword = 4096;
+% codeRate = 1/2;
+codeRate = 2/3;
+% codeRate = 4/5;
+infoBitsPerCodeword = 1024;
+% infoBitsPerCodeword = 4096;
 if (infoBitsPerCodeword == 4096)
     syncLength = 4*64;
 else 
@@ -47,9 +50,21 @@ infoMatrix = reshape(infoBits,[infoBitsPerCodeword frames])';
 % LDPC encode each row
 
 if (infoBitsPerCodeword == 4096)
-    load W_ROW_ROM_4096_4_5;
+    if (codeRate == 1/2)
+        load W_ROW_ROM_1024_1_2;
+    elseif (codeRate == 2/3)
+        load W_ROW_ROM_1024_2_3;
+    else % Must be 4/5
+        load W_ROW_ROM_4096_4_5;
+    end
 else 
-    load W_ROW_ROM_1024_4_5;
+    if (codeRate == 1/2)
+        load W_ROW_ROM_1024_1_2;
+    elseif (codeRate == 2/3)
+        load W_ROW_ROM_1024_2_3;
+    else % Must be 4/5
+        load W_ROW_ROM_1024_4_5;
+    end
 end
 for i=1:frames
     codedMatrix(i,:) = LdpcEncoder1(infoMatrix(i,:),W_ROW_ROM,parityBits/8);
@@ -131,11 +146,27 @@ if (writeSimVectors == 1)
     qData = downsample(framedBits,2,1);
     qData = upsample(qData,2,1);
     if (infoBitsPerCodeword == 4096)
-        save('ldpcSimWaveform_I_4096_4_5.txt','iData','-ascii');
-        save('ldpcSimWaveform_Q_4096_4_5.txt','qData','-ascii');
+        if (codeRate == 1/2)
+            save('ldpcSimWaveform_I_4096_1_2.txt','iData','-ascii');
+            save('ldpcSimWaveform_Q_4096_1_52txt','qData','-ascii');
+        elseif (codeRate == 2/3)
+            save('ldpcSimWaveform_I_4096_2_3.txt','iData','-ascii');
+            save('ldpcSimWaveform_Q_4096_2_3.txt','qData','-ascii');
+        else % Must be 4/5
+            save('ldpcSimWaveform_I_4096_4_5.txt','iData','-ascii');
+            save('ldpcSimWaveform_Q_4096_4_5.txt','qData','-ascii');
+        end
     else
-        save('ldpcSimWaveform_I_1024_4_5.txt','iData','-ascii');
-        save('ldpcSimWaveform_Q_1024_4_5.txt','qData','-ascii');
+        if (codeRate == 1/2)
+            save('ldpcSimWaveform_I_1024_1_2.txt','iData','-ascii');
+            save('ldpcSimWaveform_Q_1024_1_52txt','qData','-ascii');
+        elseif (codeRate == 2/3)
+            save('ldpcSimWaveform_I_1024_2_3.txt','iData','-ascii');
+            save('ldpcSimWaveform_Q_1024_2_3.txt','qData','-ascii');
+        else % Must be 4/5
+            save('ldpcSimWaveform_I_1024_4_5.txt','iData','-ascii');
+            save('ldpcSimWaveform_Q_1024_4_5.txt','qData','-ascii');
+        end
     end
 end
 

@@ -3,31 +3,40 @@
 
     //`define ROTATE_90
     //`define FIXED_CODEWORD
+
     `define TEST_4096
+    //`define TEST_R12
+    `define TEST_R23
 
     `ifdef FIXED_CODEWORD
-        `ifdef ROTATE_90
-        `define TEST_DATA_Q "c:/modem/vivado/testData/ldpcTestPattern_I_1024_4_5.txt"
-        `define TEST_DATA_I "c:/modem/vivado/testData/ldpcTestPattern_Q_1024_4_5.txt"
-        `else
         `define TEST_DATA_I "c:/modem/vivado/testData/ldpcTestPattern_I_1024_4_5.txt"
         `define TEST_DATA_Q "c:/modem/vivado/testData/ldpcTestPattern_Q_1024_4_5.txt"
-        `endif
     `else //FIXED_CODEWORD
-        `ifdef ROTATE_90
-        `define TEST_DATA_Q "c:/modem/vivado/testData/ldpcSimWaveform_I_1024_4_5.txt"
-        `define TEST_DATA_I "c:/modem/vivado/testData/ldpcSimWaveform_Q_1024_4_5.txt"
-        `else
-            `ifdef TEST_4096
+        `ifdef TEST_4096
+            `define CODE_LENGTH `LDPC_CODE_LENGTH_4096
+            `define SYNC_THRESHOLD 11'd250
+            `ifdef TEST_R12
+                `define TEST_DATA_I "c:/modem/vivado/testData/ldpcSimWaveform_I_4096_1_2.txt"
+                `define TEST_DATA_Q "c:/modem/vivado/testData/ldpcSimWaveform_Q_4096_1_2.txt"
+            `elsif TEST_R23
+                `define TEST_DATA_I "c:/modem/vivado/testData/ldpcSimWaveform_I_4096_2_3.txt"
+                `define TEST_DATA_Q "c:/modem/vivado/testData/ldpcSimWaveform_Q_4096_2_3.txt"
+            `else
                 `define TEST_DATA_I "c:/modem/vivado/testData/ldpcSimWaveform_I_4096_4_5.txt"
                 `define TEST_DATA_Q "c:/modem/vivado/testData/ldpcSimWaveform_Q_4096_4_5.txt"
-                `define CODE_LENGTH `LDPC_CODE_LENGTH_4096
-                `define SYNC_THRESHOLD 11'd250
+            `endif
+        `else
+            `define CODE_LENGTH `LDPC_CODE_LENGTH_1024
+            `define SYNC_THRESHOLD 11'd62
+            `ifdef TEST_R12
+                `define TEST_DATA_I "c:/modem/vivado/testData/ldpcSimWaveform_I_1024_1_2.txt"
+                `define TEST_DATA_Q "c:/modem/vivado/testData/ldpcSimWaveform_Q_1024_1_2.txt"
+            `elsif TEST_R23
+                `define TEST_DATA_I "c:/modem/vivado/testData/ldpcSimWaveform_I_1024_2_3.txt"
+                `define TEST_DATA_Q "c:/modem/vivado/testData/ldpcSimWaveform_Q_1024_2_3.txt"
             `else
                 `define TEST_DATA_I "c:/modem/vivado/testData/ldpcSimWaveform_I_1024_4_5.txt"
                 `define TEST_DATA_Q "c:/modem/vivado/testData/ldpcSimWaveform_Q_1024_4_5.txt"
-                `define CODE_LENGTH `LDPC_CODE_LENGTH_1024
-                `define SYNC_THRESHOLD 11'd62
             `endif
         `endif
     `endif //FIXED_CODEWORD
@@ -160,19 +169,6 @@ module test;
         if (!enableInput) begin
             qSample <= 0;
         end
-        `ifdef ROTATE_90
-        else if (clkEnable) begin
-            if (qSampleFloat >= 1.0) begin
-                qSample <= $signed(18'h20001);
-            end
-            else if (qSampleFloat <= -1.0) begin
-                qSample <= $signed(18'h1ffff);
-            end
-            else begin
-                qSample <= $rtoi(-(2**17)*qSampleFloat);
-            end
-        end
-        `else
         else if (clkEnable) begin
             if (qSampleFloat >= 1.0) begin
                 qSample <= $signed(18'h1ffff);
@@ -184,7 +180,6 @@ module test;
                 qSample <= $rtoi((2**17)*qSampleFloat);
             end
         end
-        `endif
     end
 
 
@@ -249,9 +244,16 @@ module test;
     `endif
 
 
-    `ifdef LDPC_TEST
     wire    signed  [17:0]  iLdpc,qLdpc;
-    `endif
+    always @* begin
+        `ifdef ROTATE_90
+        iLdpc = qSample;
+        qLdpc = -iSample;
+        `else
+        iLdpc = iSample;
+        qLdpc = qSample;
+        `endif
+    end
     ldpc #(.LDPCBITS(7)) ldpc(
         .clk(clk), .clkEn(clkEnable), .reset(reset),
         .busClk(busClk),
