@@ -4,7 +4,7 @@
     //`define ROTATE_90
     //`define FIXED_CODEWORD
 
-    `define TEST_4096
+    //`define TEST_4096
     //`define TEST_R12
     `define TEST_R23
 
@@ -16,12 +16,15 @@
             `define CODE_LENGTH `LDPC_CODE_LENGTH_4096
             `define SYNC_THRESHOLD 11'd250
             `ifdef TEST_R12
+                `define CODE_RATE `LDPC_RATE_1_2
                 `define TEST_DATA_I "c:/modem/vivado/testData/ldpcSimWaveform_I_4096_1_2.txt"
                 `define TEST_DATA_Q "c:/modem/vivado/testData/ldpcSimWaveform_Q_4096_1_2.txt"
             `elsif TEST_R23
+                `define CODE_RATE `LDPC_RATE_2_3
                 `define TEST_DATA_I "c:/modem/vivado/testData/ldpcSimWaveform_I_4096_2_3.txt"
                 `define TEST_DATA_Q "c:/modem/vivado/testData/ldpcSimWaveform_Q_4096_2_3.txt"
             `else
+                `define CODE_RATE `LDPC_RATE_4_5
                 `define TEST_DATA_I "c:/modem/vivado/testData/ldpcSimWaveform_I_4096_4_5.txt"
                 `define TEST_DATA_Q "c:/modem/vivado/testData/ldpcSimWaveform_Q_4096_4_5.txt"
             `endif
@@ -29,12 +32,15 @@
             `define CODE_LENGTH `LDPC_CODE_LENGTH_1024
             `define SYNC_THRESHOLD 11'd62
             `ifdef TEST_R12
+                `define CODE_RATE `LDPC_RATE_1_2
                 `define TEST_DATA_I "c:/modem/vivado/testData/ldpcSimWaveform_I_1024_1_2.txt"
                 `define TEST_DATA_Q "c:/modem/vivado/testData/ldpcSimWaveform_Q_1024_1_2.txt"
             `elsif TEST_R23
+                `define CODE_RATE `LDPC_RATE_2_3
                 `define TEST_DATA_I "c:/modem/vivado/testData/ldpcSimWaveform_I_1024_2_3.txt"
                 `define TEST_DATA_Q "c:/modem/vivado/testData/ldpcSimWaveform_Q_1024_2_3.txt"
             `else
+                `define CODE_RATE `LDPC_RATE_4_5
                 `define TEST_DATA_I "c:/modem/vivado/testData/ldpcSimWaveform_I_1024_4_5.txt"
                 `define TEST_DATA_Q "c:/modem/vivado/testData/ldpcSimWaveform_Q_1024_4_5.txt"
             `endif
@@ -209,13 +215,13 @@ module test;
         write16(createAddress(`LDPCSPACE, `LDPC_DLL_GAINS),16'h0018);
         write16(createAddress(`LDPCSPACE, `LDPC_DLL_FDBK_DIV),16'd1);
         write32(createAddress(`LDPCSPACE, `LDPC_CONTROL),{1'b0,4'b0,`SYNC_THRESHOLD,
-                                                          10'b0,`LDPC_DERAND_NONE,`CODE_LENGTH,1'b0,`LDPC_RATE_4_5});
+                                                          10'b0,`LDPC_DERAND_NONE,`CODE_LENGTH,1'b0,`CODE_RATE});
         // Wait 2 bit periods
         repeat (2*`CLOCKS_PER_BIT) @ (posedge clk) ;
 
         // Set the run bit
         write32(createAddress(`LDPCSPACE, `LDPC_CONTROL),{1'b1,4'b0,`SYNC_THRESHOLD,
-                                                          10'b0,`LDPC_DERAND_NONE,`CODE_LENGTH,1'b0,`LDPC_RATE_4_5});
+                                                          10'b0,`LDPC_DERAND_NONE,`CODE_LENGTH,1'b0,`CODE_RATE});
         // Run the demod
         repeat (200000*`CLOCKS_PER_BIT) @ (posedge clk) ;
 
@@ -244,7 +250,7 @@ module test;
     `endif
 
 
-    wire    signed  [17:0]  iLdpc,qLdpc;
+    reg     signed  [17:0]  iLdpc,qLdpc;
     always @* begin
         `ifdef ROTATE_90
         iLdpc = qSample;
