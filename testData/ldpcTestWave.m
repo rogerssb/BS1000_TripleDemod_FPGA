@@ -1,8 +1,8 @@
 % ldpcTestWave.m - create baseband I/Q for testLdpcDecoder.v
 
-writeTestVectors = 0;
+writeTestVectors = 1;
 writeMatFile = 0;
-writeSimVectors = 1;
+writeSimVectors = 0;
 
 % PN sequence order
 pnOrder = 6;
@@ -132,11 +132,27 @@ if (writeTestVectors == 1)
     realz = real(z)';
     imagz = imag(z)';
     if (infoBitsPerCodeword == 4096)
-        save('ldpcTestWaveform_I_4096_4_5.txt','realz','-ascii');
-        save('ldpcTestWaveform_Q_4096_4_5.txt','imagz','-ascii');
+        if (codeRate == 1/2)
+            save('ldpcTestWaveform_I_4096_1_2.txt','realz','-ascii');
+            save('ldpcTestWaveform_Q_4096_1_2.txt','imagz','-ascii');
+        elseif (codeRate == 2/3)
+            save('ldpcTestWaveform_I_4096_2_3.txt','realz','-ascii');
+            save('ldpcTestWaveform_Q_4096_2_3.txt','imagz','-ascii');
+        else % Must be 4/5
+            save('ldpcTestWaveform_I_4096_4_5.txt','realz','-ascii');
+            save('ldpcTestWaveform_Q_4096_4_5.txt','imagz','-ascii');
+        end
     else
-        save('ldpcTestWaveform_I_1024_4_5.txt','realz','-ascii');
-        save('ldpcTestWaveform_Q_1024_4_5.txt','imagz','-ascii');
+        if (codeRate == 1/2)
+            save('ldpcTestWaveform_I_1024_1_2.txt','realz','-ascii');
+            save('ldpcTestWaveform_Q_1024_1_2.txt','imagz','-ascii');
+        elseif (codeRate == 2/3)
+            save('ldpcTestWaveform_I_1024_2_3.txt','realz','-ascii');
+            save('ldpcTestWaveform_Q_1024_2_3.txt','imagz','-ascii');
+        else % Must be 4/5
+            save('ldpcTestWaveform_I_1024_4_5.txt','realz','-ascii');
+            save('ldpcTestWaveform_Q_1024_4_5.txt','imagz','-ascii');
+        end
     end
 end
 if (writeSimVectors == 1)
