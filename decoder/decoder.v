@@ -401,6 +401,7 @@ always @ ( posedge clk )
     end
     assign symb_clk = clk_sel ? symbol_clk : symb_clk_2x_en;
 
+    `ifdef BITSYNC_BERT
     pcmEncoder pcmEncI(
         .clk(clk),
         .reset(reset),
@@ -427,6 +428,13 @@ always @ ( posedge clk )
 
     assign dout_i = pcm_i ;
     assign dout_q = pcm_q ;
+
+    `else //BITSYNC_BERT
+
+    assign dout_i = data_inv_i ;
+    assign dout_q = data_inv_q ;
+
+    `endif //BITSYNC_BERT
 
 //------------------------------------------------------------------------------
 //                                 Registers

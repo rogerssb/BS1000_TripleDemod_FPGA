@@ -6,6 +6,7 @@ module pngenTop(
     input               clkEn,
     input               reset,
     input               busClk,
+    input               cs,
     input               wr0, wr1, wr2, wr3,
     input       [12:0]  addr,
     input       [31:0]  din,
@@ -23,6 +24,7 @@ module pngenTop(
     wire        [3:0]   pcmMode;
     pngenRegs pngenRegs(
         .busClk(busClk),
+        .cs(cs),
         .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
         .addr(addr),
         .din(din),

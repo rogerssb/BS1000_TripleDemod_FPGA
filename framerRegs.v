@@ -3,6 +3,7 @@
 
 module framerRegs(
     input                       busClk,
+    input                       cs,
     input                       wr0, wr1, wr2, wr3,
     input               [12:0]  addr,
     input               [31:0]  din,
@@ -25,7 +26,7 @@ module framerRegs(
     reg framerSpace;
     always @* begin
         casex(addr)
-            RegSpace:           framerSpace = 1;
+            RegSpace:           framerSpace = cs;
             default:            framerSpace = 0;
         endcase
     end

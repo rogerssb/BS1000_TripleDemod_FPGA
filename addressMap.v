@@ -45,7 +45,7 @@
 //`define ADD_DESPREADER
 //`define ADD_SCPATH
 //`define ADD_CMA
-//`define ADD_LDPC
+`define ADD_LDPC
 `define ADD_DQM
 //`define ADD_MULTIH
 `define ADD_SUPERBAUD_TED
@@ -53,6 +53,7 @@
 `define EMBED_MULTIH_CARRIER_LOOP
 `endif
 `define ADD_SPI_GATEWAY
+//`define ADD_PNGEN
 `endif
 
 `ifdef ADD_CMA
@@ -493,16 +494,34 @@
 `define DQMLUTSPACE         13'b0_0110_xxxx_xxxx
 
 // Video Interpolators and FIRs
-`define INTERP0SPACE        13'b0_1000_0000_xxxx
-`define VIDFIR0SPACE        13'b0_1000_0001_xxxx
-`define INTERP1SPACE        13'b0_1000_0010_xxxx
-`define VIDFIR1SPACE        13'b0_1000_0011_xxxx
-`define INTERP2SPACE        13'b0_1000_0100_xxxx
-`define VIDFIR2SPACE        13'b0_1000_0101_xxxx
+`define INTERP0SPACE            13'b0_1000_0000_xxxx
+`define VIDFIR0SPACE            13'b0_1000_0001_xxxx
+`define INTERP1SPACE            13'b0_1000_0010_xxxx
+`define VIDFIR1SPACE            13'b0_1000_0011_xxxx
+`define INTERP2SPACE            13'b0_1000_0100_xxxx
+`define VIDFIR2SPACE            13'b0_1000_0101_xxxx
 
 // Video Switch Control registers
-`define VIDSWITCHSPACE      13'b0_1000_1000_xxxx
-    `define VIDSWITCH_CONTROL   13'bx_xxxx_xxxx_00xx
+`define VIDSWITCHSPACE          13'b0_1000_1000_xxxx
+    `define VIDSWITCH_CONTROL       13'bx_xxxx_xxxx_00xx
+
+`ifdef ADD_PNGEN
+// PN Generator subsystem registers
+`define PNGEN_SPACE             13'b0_11xx_xxxx_xxxx
+    `define PNGEN_POLY              13'bx_xxxx_xxxx_00xx
+    `define PNGEN_RATE              13'bx_xxxx_xxxx_01xx
+    `define PNGEN_PCM_MODE          13'bx_xxxx_xxxx_10xx
+        `define PNGEN_PCM_NRZL          4'b0000
+        `define PNGEN_PCM_NRZM          4'b0001
+        `define PNGEN_PCM_NRZS          4'b0010
+        `define PNGEN_PCM_BIPL          4'b0100
+        `define PNGEN_PCM_BIPM          4'b0101
+        `define PNGEN_PCM_BIPS          4'b0110
+        `define PNGEN_PCM_DMM           4'b1000
+        `define PNGEN_PCM_DMS           4'b1001
+        `define PNGEN_PCM_MDMM          4'b1010
+        `define PNGEN_PCM_MDMS          4'b1011
+`endif //ADD_PNGEN
 
 `elsif STC_DEMOD
 

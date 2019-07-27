@@ -254,9 +254,9 @@ module stcMod(
     end
     `endif
 
-    assign fmModFreq0 = modFreq0 + carrierFreq;
+    assign fmModFreq0 = carrierFreq - modFreq0;
     assign modWaveform0 = interpOut0;
-    assign fmModFreq1 = modFreq1 + carrierFreq;
+    assign fmModFreq1 = carrierFreq - modFreq1;
     assign modWaveform1 = interpOut1;
 
 endmodule

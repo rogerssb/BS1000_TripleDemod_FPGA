@@ -179,6 +179,7 @@ module ldpc #(parameter LDPCBITS = 3) (
 
     `ifdef USE_FAKE_LDPC_DECODER
 
+    assign ldpcReady = ldpcRun;
     assign ldpcBitEnOut = (clkEn & codewordEn);
     assign ldpcBitOut = softDecision[LDPCBITS];
 
@@ -294,10 +295,12 @@ module ldpc #(parameter LDPCBITS = 3) (
                 dac1Data <= sprtSyncCount;
                 dac1ClkEn <= clkEn;
             end
+            `ifndef USE_FAKE_LDPC_DECODER
             `DAC_LDPC_CTRL: begin
                 dac1Data <= {1'b0,iterationNumber[2:0],14'b0};
                 dac1ClkEn <= clkEn;
             end
+            `endif
             default: begin
                 dac1Data <= {softDecision,{(18-LDPCBITS){1'b0}}};
                 dac1ClkEn <= clkEn;
@@ -316,10 +319,12 @@ module ldpc #(parameter LDPCBITS = 3) (
                 dac2Data <= sprtSyncCount;
                 dac2ClkEn <= clkEn;
             end
+            `ifndef USE_FAKE_LDPC_DECODER
             `DAC_LDPC_CTRL: begin
                 dac2Data <= {1'b0,iterationNumberB[2:0],14'b0};
                 dac2ClkEn <= clkEn;
             end
+            `endif
             default: begin
                 dac2Data <= {softDecision,{(18-LDPCBITS){1'b0}}};
                 dac2ClkEn <= clkEn;

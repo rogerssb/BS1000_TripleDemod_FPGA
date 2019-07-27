@@ -35,7 +35,8 @@ module bert_registers (
   continuous_test_errors,
   continuous_test_count,
   one_error_enable,
-  e3_errors_enable
+  e3_errors_enable,
+  sourceSelect
 );
 
 input busClk;
@@ -91,6 +92,9 @@ reg one_error_enable;
 output e3_errors_enable;
 reg e3_errors_enable;
 
+output  [3:0] sourceSelct;
+reg     [3:0] sourceSelect;
+
 always @(posedge busClk) begin
   if (cs && wr0) begin
     casex (addr)
@@ -132,6 +136,9 @@ always @(posedge busClk) begin
       end
       `SINGLE_TEST_LENGTH: begin
         single_test_length[15:8] <= dataIn[15:8];
+      end
+      `TEST_CONTROL: begin
+        sourceSelect <= dataIn[11:8];
       end
       default:  ;
     endcase
@@ -212,9 +219,10 @@ always @* begin
       end
       `TEST_CONTROL: begin
         dataOut = {
-            insync,syncLoss,2'bx,
-            20'bx, 
-            2'bx,e3_errors_enable, one_error_enable, 
+            insync,syncLoss,2'b0,
+            12'b0, 
+            4'b0,sourceSelect,
+            2'b0,e3_errors_enable, one_error_enable, 
             continuous_test_reset, continuous_test_start, single_test_complete, single_test_start
             };
       end

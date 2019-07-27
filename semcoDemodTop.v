@@ -118,7 +118,7 @@ module semcoDemodTop (
 
 );
 
-    parameter VER_NUMBER = 16'd513;
+    parameter VER_NUMBER = 16'd514;
 
 
 //******************************************************************************
@@ -528,6 +528,69 @@ module semcoDemodTop (
 
 `endif //ADD_MULTIH
 
+`ifdef ADD_FRAMER
+//******************************************************************************
+//                        QPSK/OQPSK Ambiguity Resolution
+//******************************************************************************
+    reg     ch0Bit,ch1Bit,qDelay;
+    always @(posedge clk) begin
+        if (demodMode == `DEMOD_MODE_QPSK) begin
+            if (ch0SymEn) begin
+                case (rotation)
+                    0: begin
+                        ch0Bit <= iDemodBit;
+                        ch1Bit <= qDemodBit;
+                    end
+                    1: begin
+                        ch0Bit <= qDemodBit;
+                        ch1Bit <= ~iDemodBit;
+                    end
+                    2: begin
+                        ch0Bit <= ~iDemodBit;
+                        ch1Bit <= ~qDemodBit;
+                    end
+                    3: begin
+                        ch0Bit <= ~qDemodBit;
+                        ch1Bit <= iDemodBit;
+                    end
+                endcase
+            end
+        end
+        else if (demodMode == `DEMOD_MODE_OQPSK) begin
+            if (ch0SymEn) begin
+                qDelay <= qDemodBit;
+                case (rotation)
+                    0: begin
+                        ch0Bit <= iDemodBit;
+                        ch1Bit <= qDemodBit;
+                    end
+                    1: begin
+                        ch0Bit <= qDelay;
+                        ch1Bit <= ~iDemodBit;
+                    end
+                    2: begin
+                        ch0Bit <= ~iDemodBit;
+                        ch1Bit <= ~qDemodBit;
+                    end
+                    3: begin
+                        ch0Bit <= ~qDelay;
+                        ch1Bit <= iDemodBit;
+                    end
+                endcase
+            end
+        end
+        else begin
+            if (ch0SymEn) begin
+                ch0Bit <= iDemodBit;
+            end
+            if (ch1SymEn) begin
+                ch1Bit <= qDemodBit;
+            end
+        end
+    end
+
+`endif //ADD_FRAMER
+
 //******************************************************************************
 //                                PCM Decoders
 //******************************************************************************
@@ -725,6 +788,170 @@ module semcoDemodTop (
 `endif //ADD_DQM
 
 
+`ifdef ADD_PNGEN
+//******************************************************************************
+//                               PN Generator
+//******************************************************************************
+    wire    [31:0]  pngenDout;
+    pngenTop pngen(
+        .clk(clk),
+        .clkEn(pngenEnable),
+        .reset(reset),
+        .busClk(busClk),
+        .cs(cs),
+        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .addr(addr),
+        .din(dataIn),
+        .dout(pngenDout),
+        .pnClkEn(pnClkEn),
+        .nrzBit(pnNrzBit),
+        .pnBit(pnBit),
+        .pnClk(pnClk)
+    );
+`endif //ADD_PNGEN
+
+
+`ifdef ADD_BERT
+//******************************************************************************
+//                            Bit Error Rate Tester
+//******************************************************************************
+
+    wire    [3:0]   bertSrcSelect;
+    reg             bertClkEn;
+    reg             bertData;
+    always @* begin
+        casex (bertSrcSelect)
+            CandD_SRC_LEGACY_I:      begin
+                bertClkEn = iDemodSymEn;
+                bertData = iDemodBit;
+            end
+            CandD_SRC_LEGACY_Q:      begin
+                bertClkEn = qDemodSymEn;
+                bertData = qDemodBit;
+            end
+            CandD_SRC_PCMTRELLIS:    begin
+                bertClkEn = pcmTrellisSymEnOut;
+                bertData = pcmTrellisBit;
+            end
+            //CandD_SRC_STC:           begin
+            `ifdef ADD_LDPC
+            CandD_SRC_LDPC:          begin
+                bertClkEn = ldpcBitEnOut;
+                bertData = ldpcBitOut;
+            end
+            `endif
+            CandD_SRC_DEC0_CH0:      begin
+                bertClkEn = dualPcmClkEn;
+                bertData = dualDataI;
+            end
+            CandD_SRC_DEC0_CH1:      begin
+                bertClkEn = dualPcmClkEn;
+                bertData = dualDataQ;
+            end
+            CandD_SRC_DEC1_CH0:      begin
+                bertClkEn = ch1PcmClkEn;
+                bertData =  ch1PcmData;
+            default:                begin
+            end
+        endcase
+    end
+
+    reg bertSpace;
+    always @* begin
+        casex(addr)
+            `BERT_SPACE:            bertSpace = cs;
+            default:                bertSpace = 0;
+            endcase
+        end
+    wire    [31:0]  bertDout;
+    bert_top bert(
+        .reset(reset),
+        .busClk(busClk),
+        .cs(bertSpace),
+        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .addr(addr),
+        .dataIn(dataIn),
+        .dataOut(bertDout),
+        .clk(clk),
+        .enable(bertClkEn),
+        .data(bertData),
+        .sourceSelect(bertSrcSelect)
+    );
+
+`endif //ADD_BERT
+
+
+`ifdef ADD_FRAMER
+//******************************************************************************
+//                               Framer
+//******************************************************************************
+
+    wire    [3:0]   framerSrcSelect;
+    reg             framerClkEn;
+    reg             framerData;
+    always @* begin
+        casex (framerSrcSelect)
+            CandD_SRC_LEGACY_I:      begin
+                framerClkEn = iDemodSymEn;
+                framerData = iDemodBit;
+            end
+            CandD_SRC_LEGACY_Q:      begin
+                framerClkEn = qDemodSymEn;
+                framerData = qDemodBit;
+            end
+            CandD_SRC_PCMTRELLIS:    begin
+                framerClkEn = pcmTrellisSymEnOut;
+                framerData = pcmTrellisBit;
+            end
+            //CandD_SRC_STC:           begin
+            `ifdef ADD_LDPC
+            CandD_SRC_LDPC:          begin
+                framerClkEn = ldpcBitEnOut;
+                framerData = ldpcBitOut;
+            end
+            `endif
+            CandD_SRC_DEC0_CH0:      begin
+                framerClkEn = dualPcmClkEn;
+                framerData = dualDataI;
+            end
+            CandD_SRC_DEC0_CH1:      begin
+                framerClkEn = dualPcmClkEn;
+                framerData = dualDataQ;
+            end
+            CandD_SRC_DEC1_CH0:      begin
+                framerClkEn = ch1PcmClkEn;
+                framerData =  ch1PcmData;
+            default:                begin
+            end
+        endcase
+    end
+
+    wire    [1:0]   framerRotation;
+    wire    [31:0]  framerDout;
+    framerTop framer(
+        .reset(reset),
+        .busClk(busClk),
+        .cs(cs),
+        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .addr(addr),
+        .din(dataIn),
+        .dout(framerDout),
+        .clk(clk),
+        .clkEn(framerClkEn),
+        .dataBitIn(framerData),
+        .sourceSelect(framerSrcSelect),
+        .rotation(framerRotation),
+        .framesyncPulse(),
+        .framedBitOut(),
+        .framesync()
+    );
+
+    assign rotation = framerEnable ? framerRotation : 2'b0;
+
+`endif //ADD_FRAMER
+
+
+
 //******************************************************************************
 //                       Clock/Data Jitter Reduction
 //******************************************************************************
@@ -781,7 +1008,12 @@ module semcoDemodTop (
             end
             //`CandD_SRC_MULTIH:
             //`CandD_SRC_STC:
-            //`CandD_SRC_PNGEN:
+            `ifdef ADD_PNGEN
+            `CandD_SRC_PNGEN: begin
+                cAndD0ClkEn = pnClkEn;
+                cAndD0DataIn = pnBit;
+            end
+            `endif
             `ifdef ADD_LDPC
             `CandD_SRC_LDPC: begin
                 cAndD0ClkEn = ldpcBitEnOut;
@@ -861,7 +1093,12 @@ module semcoDemodTop (
             end
             //`CandD_SRC_MULTIH:
             //`CandD_SRC_STC:
-            //`CandD_SRC_PNGEN:
+            `ifdef ADD_PNGEN
+            `CandD_SRC_PNGEN: begin
+                cAndD1ClkEn = pnClkEn;
+                cAndD1DataIn = pnBit;
+            end
+            `endif
             `ifdef ADD_LDPC
             `CandD_SRC_LDPC: begin
                 cAndD1ClkEn = ldpcBitEnOut;
@@ -1286,6 +1523,14 @@ sdi sdi(
             `DQMSPACE:          rd_mux = dqmDout;
             `endif
 
+            `ifdef ADD_PNGEN
+            `PNGEN_SPACE:       rd_mux = pngenDout;
+            `endif
+
+            `ifdef ADD_BERT
+            `BERT_SPACE:        rd_mux = bertDout;
+            `endif
+
             `DEMODSPACE,
             `ifdef ADD_CMA
             `EQUALIZERSPACE,
@@ -1387,6 +1632,28 @@ sdi sdi(
                 end
                 else begin
                     rd_mux = dqmDout[15:0];
+                end
+            end
+            `endif
+
+            `ifdef ADD_PNGEN
+            `PNGEN_SPACE:       begin
+                if (addr[1]) begin
+                    rd_mux = pngenDout[31:16];
+                end
+                else begin
+                    rd_mux = pngenDout[15:0];
+                end
+            end
+            `endif
+
+            `ifdef ADD_BERT
+            `BERT_SPACE:       begin
+                if (addr[1]) begin
+                    rd_mux = bertDout[31:16];
+                end
+                else begin
+                    rd_mux = bertDout[15:0];
                 end
             end
             `endif

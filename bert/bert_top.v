@@ -10,7 +10,8 @@ module bert_top (
   reset,
   clk,
   enable,
-  data
+  data,
+  sourceSelect
 );
 
 input busClk;
@@ -23,6 +24,7 @@ input reset;
 input clk;
 input enable;
 input data;
+output  [3:0]   sourceSelect;
 
 
 // i/o register wiring
@@ -70,7 +72,8 @@ bert_registers bert_registers (
   .continuous_test_errors(continuous_test_errors),
   .continuous_test_count(continuous_test_count),
   .one_error_enable(one_error_enable),
-  .e3_errors_enable(e3_errors_enable)
+  .e3_errors_enable(e3_errors_enable),
+  .sourceSelect(sourceSelect)
 );
 
 // module wiring

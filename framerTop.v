@@ -4,6 +4,7 @@
 module framerTop(
     input               reset,
     input               busClk,
+    input               cs,
     input               wr0, wr1, wr2, wr3,
     input       [12:0]  addr,
     input       [31:0]  din,
@@ -29,6 +30,7 @@ module framerTop(
     wire signed [6:0]   syncThreshold;
     framerRegs framerRegs(
         .busClk(busClk),
+        .cs(cs),
         .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
         .addr(addr),
         .din(din),
@@ -79,7 +81,7 @@ module framerTop(
             32'b00000000_00000000_00000000_000001xx: syncwordBits =  2;
             32'b00000000_00000000_00000000_0000001x: syncwordBits =  1;
             32'b00000000_00000000_00000000_00000001: syncwordBits =  0;
-	    default:                                     syncwordBits =  0;
+            default:                                     syncwordBits =  0;
         endcase       
     end               
 

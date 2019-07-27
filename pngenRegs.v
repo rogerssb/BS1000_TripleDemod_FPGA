@@ -3,6 +3,7 @@
 
 module pngenRegs(
     input               busClk,
+    input               cs,
     input               wr0, wr1, wr2, wr3,
     input       [12:0]  addr,
     input       [31:0]  din,
@@ -23,7 +24,7 @@ module pngenRegs(
     reg pnSpace;
     always @* begin
         casex(addr)
-            RegSpace:           pnSpace = 1;
+            RegSpace:           pnSpace = cs;
             default:            pnSpace = 0;
         endcase
     end
