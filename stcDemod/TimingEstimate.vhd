@@ -250,10 +250,10 @@ ARCHITECTURE rtl OF TimingEstimate IS
             SsInvR3D,
             SsInvI3D          : sfixed(-7 downto -24);
 
-
+/*
    attribute mark_debug : string;
    attribute mark_debug of StartIn, Xr, Xi, RdAddr, Mode, PipeLine, Done : signal is "true";
-
+*/
 
 BEGIN
 

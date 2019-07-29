@@ -55,7 +55,7 @@ module stcMod(
     reg     [15:0]  modSampleCount;
     reg     [2:0]   bitrateCount;
     always @(posedge clk) begin
-        if (reset) begin
+        if (!txEnable) begin
             modSampleCount <= modSampleDiv;
             bitrateCount <= 0;
             modSampleEn <= 0;
@@ -181,7 +181,7 @@ module stcMod(
         .shift(cicShift),
         .dIn(cicOut1),
         .dOut(interpOut1)
-    );               
+    );
 
 
     `ifdef TEST_SOQPSK_FIR

@@ -21,7 +21,7 @@ derivative rights in exchange for negotiated compensation.
 
 `timescale 1ns/10ps
 
-`include ".\addressMap.v"
+`include "addressMap.v"
 
 `ifdef USE_BUS_CLOCK
 

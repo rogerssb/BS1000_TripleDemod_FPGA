@@ -150,7 +150,41 @@ module test;
         end
     end
 
+    `define USE_FIXED_ESTIMATES
+    `ifdef USE_FIXED_ESTIMATES
+    reg     signed  [17:0]  h0EstReal,h0EstImag;
+    reg     signed  [17:0]  h1EstReal,h1EstImag;
+    reg     signed  [5:0]   deltaTauEst;
+    reg             [17:0]  ch0Mu,ch1Mu;
+    `else
+    `endif
+
     //******************************* UUT *************************************
+
+    trellisProcess tp (
+        .clk(clk),
+        .clk2x(clk2x),
+        .clkEnable(clkEnable),
+        .reset(reset),
+        .frameStart(inputStart),
+        .inputValid(inputValid),
+        .estimatesDone(estimatesDone),
+        .dinReal(inputSampleReal),
+        .dinImag(inputSampleImag),
+        .h0EstRealIn(h0EstReal),
+        .h0EstImagIn(h0EstImag),
+        .h1EstRealIn(h1EstReal),
+        .h1EstImagIn(h1EstImag),
+        .ch0MuIn(ch0Mu),
+        .ch1MuIn(ch1Mu),
+        .deltaTauEstIn(deltaTauEst),
+        .sample0r(),
+        .sample0i(),
+        .outputEn(),
+        .interpOutEn(),
+        .outputBits()
+    );
+
 
     //----------------------- Detection Filter --------------------------------
     wire            [47:0]  df_tdata;
@@ -168,15 +202,6 @@ module test;
     );
 
     //-------------------------- Estimators -----------------------------------
-
-    `define USE_FIXED_ESTIMATES
-    `ifdef USE_FIXED_ESTIMATES
-    reg     signed  [17:0]  h0EstReal,h0EstImag;
-    reg     signed  [17:0]  h1EstReal,h1EstImag;
-    reg     signed  [5:0]   deltaTauEst;
-    reg             [17:0]  ch0Mu,ch1Mu;
-    `else
-    `endif
 
     //------------------------- Start Pulse Alignment -------------------------
     /*
@@ -197,7 +222,7 @@ module test;
     reg             [14:0]  sampleInFrame;
     reg             [11:0]  sampleOut;
 
-    wire    estimatesDone = (sampleInFrame == 5600);
+    assign  estimatesDone = (sampleInFrame == 5600);
     wire    myStartOfTrellis;
 
     always @(posedge clk) begin

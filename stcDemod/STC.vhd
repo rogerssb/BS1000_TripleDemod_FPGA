@@ -51,11 +51,13 @@ ENTITY STC IS
       DacSelect         : IN  SLV4;
       Clk93,
       Clk186,
+      SpectrumInv,
       ValidIn           : IN  std_logic;
       DataOut,                            -- Trellis Data Output
       ClkOutEn,                           -- Trellis Clock Output
       PilotFound,                         -- Pilot Found LED
       PilotLocked,
+      TrellisFull,
       Dac0ClkEn,
       Dac1ClkEn,
       Dac2ClkEn         : OUT std_logic;
@@ -77,18 +79,21 @@ ARCHITECTURE rtl OF STC IS
          reset,
          reset2x,
          ce,
+         SpectrumInv,
          ValidIn        : IN  std_logic;
          ReIn,
          ImIn           : IN  FLOAT_1_18;
          PilotIndex     : OUT ufixed(10 downto 0);
-         PilotMag,
-         Threshold      : OUT ufixed(10 downto -7);
          ReOut,
          ImOut          : OUT FLOAT_1_18;
          Magnitude0,
          Magnitude1,
          PhaseOut0,
-         PhaseOut1      : OUT SLV18;
+         PhaseOut1,
+         Mag0Peak,
+         Mag1Peak,
+         Phs0Peak,
+         Phs1Peak       : OUT SLV18;
          PilotFound,
          ValidOut,
          StartOut       : OUT std_logic
@@ -155,6 +160,8 @@ ARCHITECTURE rtl OF STC IS
        sample0r,
        sample0i         : OUT SLV18;
        outputEn,
+       lastSampleReset,
+       full,
        interpOutEn      : OUT std_logic;
        outputBits       : OUT SLV4
    );
@@ -174,6 +181,45 @@ ARCHITECTURE rtl OF STC IS
       );
    END COMPONENT FireberdDrive;
 
+   COMPONENT vio_Estimates
+      PORT (
+         clk : IN STD_LOGIC;
+         probe_out0 : OUT STD_LOGIC_VECTOR(17 DOWNTO 0);
+         probe_out1 : OUT STD_LOGIC_VECTOR(17 DOWNTO 0);
+         probe_out2 : OUT STD_LOGIC_VECTOR(17 DOWNTO 0);
+         probe_out3 : OUT STD_LOGIC_VECTOR(17 DOWNTO 0);
+         probe_out4 : OUT STD_LOGIC_VECTOR(5 DOWNTO 0);
+         probe_out5 : OUT STD_LOGIC_VECTOR(17 DOWNTO 0);
+         probe_out6 : OUT STD_LOGIC_VECTOR(17 DOWNTO 0);
+         probe_out7 : OUT STD_LOGIC_VECTOR(0 DOWNTO 0)
+      );
+   END COMPONENT;
+
+   COMPONENT RAM_2Reads_1Write IS
+      GENERIC(
+         FILENAME    : string    := "";      -- Filename is absolute for Vivado and Modelsim to find
+         DATA_WIDTH  : positive  := 32;
+         BINPT       : integer   := -20;      -- only needed for ROMs
+         ADDR_WIDTH  : positive  := 9;
+         FILE_IS_SLV : boolean   := false;    -- nonSLV files are not synthesizable
+         LATENCY     : positive  := 1;
+         MAX_ADDR    : natural   := 0;
+         RAM_TYPE    : string    := "block"  -- or "distributed"
+      );
+      PORT(
+         clk,
+         ce,
+         reset,
+         WrEn           : IN  std_logic;
+         WrAddr,
+         RdAddrA,
+         RdAddrB        : IN  natural range 0 to 2**ADDR_WIDTH-1;
+         WrData         : In  std_logic_vector(DATA_WIDTH-1 DOWNTO 0);
+         RdOutA,
+         RdOutB         : OUT std_logic_vector(DATA_WIDTH-1 DOWNTO 0)
+      );
+   END COMPONENT RAM_2Reads_1Write;
+
   -- Signals
    SIGNAL   ResetSrc          : SLV8 := x"FF";
    SIGNAL   CE,
@@ -187,7 +233,9 @@ ARCHITECTURE rtl OF STC IS
             ValidInBrik2Dly,
             TrellisOutEn,
             interpOutEn,
+            lastSampleReset,
             EstimatesDone     : std_logic;
+   SIGNAL   VioMode           : std_logic_vector(0 downto 0);
    SIGNAL   TrellisBits       : std_logic_vector(3 downto 0);
    SIGNAL   RealOutPS,
             ImagOutPS,
@@ -206,27 +254,50 @@ ARCHITECTURE rtl OF STC IS
             Magnitude1,
             PhaseOut0,
             PhaseOut1,
+            Mag0Peak,
+            Mag1Peak,
+            Phs0Peak,
+            Phs1Peak,
+            H0EstRslv,
+            H0EstIslv,
+            H1EstRslv,
+            H1EstIslv,
+            H0EstRvio,
+            H0EstIvio,
+            H1EstRvio,
+            H1EstIvio,
+            Ch0MuSlv,
+            Ch1MuSlv,
+            Ch0MuVio,
+            Ch1MuVio,
             StartDac2Data     : SLV18;
+   SIGNAL   DeltaTauSlv,
+            DeltaTauVio       : std_logic_vector(5 downto 0);
    SIGNAL   PilotPulse,
             PilotValidOut     : std_logic;
    SIGNAL   PilotRealOut,
             PilotImagOut      : Float_1_18;
    SIGNAL   PilotIndex        : ufixed(10 downto 0);
-   SIGNAL   PilotMag,
-            Threshold         : ufixed(11 downto -6);
 
 -- todo, remove
+   SIGNAL   ExpectedData      : SLV4;
+   SIGNAL   DataAddr          : integer range 0 to 800;
+   SIGNAL   Bert,
+            BitErrors         : natural range 0 to 3200;
    signal   sample0r,
             sample0i,
             InRBrik2Ila,
             InIBrik2Ila       : SLV18;
+   signal   Ch0MuIla,
+            Ch1MuIla          : std_logic_vector(16 downto 0);
    signal   StartIla,
             ValidIla          : std_logic;
-   signal   TrellisCount      : natural range 0 to 3300;
 
    attribute mark_debug : string;
-   attribute mark_debug of TrellisBits, TrellisOutEn, EstimatesDone, TrellisCount,
-                  DataOut, ClkOutEn, StartIla, ValidIla, InRBrik2Ila, InIBrik2Ila       : signal is "true";
+   attribute mark_debug of TrellisBits, TrellisOutEn, EstimatesDone,
+                  H0EstRslv, H0EstIslv, H1EstRslv, H1EstIslv, Ch0MuIla, Ch1MuIla, DeltaTauSlv,
+                  DataOut, ClkOutEn, StartIla, ValidIla, InRBrik2Ila, InIBrik2Ila,
+                  Bert, BitErrors, lastSampleReset, TrellisFull : signal is "true";
 
 BEGIN
 
@@ -238,6 +309,48 @@ BEGIN
          InIBrik2Ila <= to_slv(InIBrik2Dly);
          StartIla    <= StartInBrik2Dly;
          ValidIla    <= ValidInBrik2Dly;
+         Ch0MuIla    <= Ch0MuSlv(17 downto 1);
+         Ch1MuIla    <= Ch1MuSlv(17 downto 1);
+      end if;
+   end process;
+
+   ReadData : RAM_2Reads_1Write
+      GENERIC MAP(
+         FILENAME    => "C:\Semco\STCinfo\RealTimeC\SpaceTimeCodeInC\SpaceTimeCodeInC\Iseed12345678HexData.slv",
+         DATA_WIDTH  => 4,
+         BINPT       => 0,
+         FILE_IS_SLV => true,
+         ADDR_WIDTH  => 10,
+         MAX_ADDR    => 800,
+         LATENCY     => 1
+      )
+      PORT MAP(
+         clk         => Clk2x,
+         ce          => '1',
+         reset       => Reset,
+         WrEn        => '0',
+         WrAddr      => 0,
+         RdAddrA     => 0,
+         RdAddrB     => DataAddr,
+         WrData      => (others=>'0'),
+         RdOutA      => open,
+         RdOutB      => ExpectedData
+      );
+
+   -- Capture BER info per frame
+   CaptureProc : process(Clk2x)
+      variable CaptureErrors : SLV4;
+   begin
+      if (rising_edge(Clk2x)) then
+         CaptureErrors  := ExpectedData xor TrellisBits;
+         if (lastSampleReset) then
+            DataAddr  <= 0;
+            Bert      <= BitErrors;
+            BitErrors <= 0;
+         elsif (TrellisOutEn) then
+            DataAddr <= DataAddr + 1;
+            BitErrors <= BitErrors + count_bits(CaptureErrors);
+         end if;
       end if;
    end process;
 
@@ -274,17 +387,20 @@ BEGIN
          reset2x        => Reset2x,
          ce             => Ce,
          ValidIn        => ValidIn,
+         SpectrumInv    => SpectrumInv,
          ReIn           => ResampleR_s,
          ImIn           => ResampleI_s,
          -- outputs
-         PilotMag       => PilotMag,
          PilotFound     => PilotFound,
          PilotIndex     => PilotIndex,
-         Threshold      => Threshold,
          Magnitude0     => Magnitude0,
          Magnitude1     => Magnitude1,
          PhaseOut0      => PhaseOut0,
          PhaseOut1      => PhaseOut1,
+         Mag0Peak       => Mag0Peak,
+         Mag1Peak       => Mag1Peak,
+         Phs0Peak       => Phs0Peak,
+         Phs1Peak       => Phs1Peak,
          ReOut          => PilotRealOut,
          ImOut          => PilotImagOut,
          ValidOut       => PilotValidOut,
@@ -302,16 +418,16 @@ BEGIN
          IndexIn        => PilotIndex,
          RealIn         => PilotRealOut,
          ImagIn         => PilotImagOut,
-         RealOut        => RealOutPS,
+         RealOut        => RealOutPS,     -- 93Mhz
          ImagOut        => ImagOutPS,
          StartOut       => StartOutPS,
          ValidOut       => ValidOutPS,
          PilotLocked    => PilotLocked
    );
 
-   InterBrikClk : process(Clk2x) is
+   InterBrikClk : process(Clk) is
    begin
-      if(rising_edge(Clk2x)) then
+      if(rising_edge(Clk)) then
          if (Reset) then
             StartInBrik2Dly <= '0';
             ValidInBrik2Dly <= '0';
@@ -328,7 +444,7 @@ BEGIN
 
    Brik2_u : Brik2
       PORT MAP(
-         Clk            => Clk2x,
+         Clk            => Clk,
          Reset          => Reset,
          CE             => CE,
          StartIn        => StartInBrik2Dly,
@@ -345,6 +461,27 @@ BEGIN
          Mu1            => Ch1Mu
       );
 
+   Vio : vio_Estimates
+      PORT MAP (
+         clk        => clk2x,
+         probe_out0 =>  H0EstRvio,
+         probe_out1 =>  H0EstIvio,
+         probe_out2 =>  H1EstRvio,
+         probe_out3 =>  H1EstIvio,
+         probe_out4 =>  DeltaTauVio,
+         probe_out5 =>  Ch0MuVio,
+         probe_out6 =>  Ch1MuVio,
+         probe_out7 =>  VioMode
+      );
+
+   H0EstRslv   <= H0EstRvio   when (VioMode(0)) else to_slv(H0EstR);
+   H0EstIslv   <= H0EstIvio   when (VioMode(0)) else to_slv(H0EstI);
+   H1EstRslv   <= H1EstRvio   when (VioMode(0)) else to_slv(H1EstR);
+   H1EstIslv   <= H1EstIvio   when (VioMode(0)) else to_slv(H1EstI);
+   Ch0MuSlv    <= Ch0MuVio    when (VioMode(0)) else to_slv(Ch0Mu);
+   Ch1MuSlv    <= Ch1MuVio    when (VioMode(0)) else to_slv(Ch1Mu);
+   DeltaTauSlv <= DeltaTauVio when (VioMode(0)) else to_slv(DeltaTauEst);
+
    Trellis_u : trellisProcess
       PORT MAP (
          clk                  => clk,
@@ -356,16 +493,18 @@ BEGIN
          inputValid           => ValidInBrik2Dly,
          dinReal              => to_slv(InRBrik2Dly),
          dinImag              => to_slv(InIBrik2Dly),
-         h0EstRealIn          => to_slv(H0EstR),
-         h0EstImagIn          => to_slv(H0EstI),
-         h1EstRealIn          => to_slv(H1EstR),
-         h1EstImagIn          => to_slv(H1EstI),
-         ch0MuIn              => to_slv(Ch0Mu),
-         ch1MuIn              => to_slv(Ch1Mu),
-         deltaTauEstIn        => to_slv(DeltaTauEst),
+         h0EstRealIn          => H0EstRslv,
+         h0EstImagIn          => H0EstIslv,
+         h1EstRealIn          => H1EstRslv,
+         h1EstImagIn          => H1EstIslv,
+         ch0MuIn              => Ch0MuSlv,
+         ch1MuIn              => Ch1MuSlv,
+         deltaTauEstIn        => DeltaTauSlv,
          sample0r             => sample0r,
          sample0i             => sample0i,
          interpOutEn          => interpOutEn,
+         lastSampleReset      => lastSampleReset,
+         full                 => TrellisFull,
          outputEn             => TrellisOutEn,
          outputBits           => TrellisBits
       );
@@ -417,22 +556,36 @@ BEGIN
             Dac1ClkEn   <= '1';
             Dac2ClkEn   <= '1';
          elsif (DacSelect = x"4") then
-            Dac0Data    <= PhaseOut0;
-            Dac1Data    <= PhaseOut1;
-            Dac2Data    <= StartDac2Data;
-            Dac0ClkEn   <= '1';
-            Dac1ClkEn   <= '1';
-            Dac2ClkEn   <= '1';
-         elsif (DacSelect = x"5") then
             Dac0Data    <= Magnitude0;
             Dac1Data    <= PhaseOut0;
             Dac2Data    <= StartDac2Data;
             Dac0ClkEn   <= '1';
             Dac1ClkEn   <= '1';
             Dac2ClkEn   <= '1';
-         else
+         elsif (DacSelect = x"5") then
             Dac0Data    <= Magnitude1;
             Dac1Data    <= PhaseOut1;
+            Dac2Data    <= StartDac2Data;
+            Dac0ClkEn   <= '1';
+            Dac1ClkEn   <= '1';
+            Dac2ClkEn   <= '1';
+         elsif (DacSelect = x"6") then
+            Dac0Data    <= Mag0Peak;
+            Dac1Data    <= Phs0Peak;
+            Dac2Data    <= StartDac2Data;
+            Dac0ClkEn   <= '1';
+            Dac1ClkEn   <= '1';
+            Dac2ClkEn   <= '1';
+         elsif (DacSelect = x"7") then
+            Dac0Data    <= Mag1Peak;
+            Dac1Data    <= Phs1Peak;
+            Dac2Data    <= StartDac2Data;
+            Dac0ClkEn   <= '1';
+            Dac1ClkEn   <= '1';
+            Dac2ClkEn   <= '1';
+         else
+            Dac0Data    <= Mag0Peak;
+            Dac1Data    <= Mag1Peak;
             Dac2Data    <= StartDac2Data;
             Dac0ClkEn   <= '1';
             Dac1ClkEn   <= '1';

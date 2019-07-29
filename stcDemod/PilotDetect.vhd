@@ -55,18 +55,21 @@ entity PilotDetect is
          reset,
          reset2x,
          ce,
+         SpectrumInv,
          ValidIn        : IN  std_logic;
          ReIn,
          ImIn           : IN  FLOAT_1_18;
          PilotIndex     : OUT ufixed(10 downto 0);
-         PilotMag,
-         Threshold      : OUT ufixed(11 downto -6);
          ReOut,
          ImOut          : OUT FLOAT_1_18;
          Magnitude0,
          Magnitude1,
          PhaseOut0,
-         PhaseOut1      : OUT SLV18;
+         PhaseOut1,
+         Mag0Peak,
+         Mag1Peak,
+         Phs0Peak,
+         Phs1Peak       : OUT SLV18;
          PilotFound,
          ValidOut,
          StartOut       : OUT std_logic
@@ -152,6 +155,8 @@ architecture rtl of PilotDetect is
          ImIn           : IN  sfixed(IN_WIDTH+IN_BINPT-1 downto IN_BINPT);
          ValidIn,
          StartIn        : IN  std_logic;     -- Start is just delayed in sync
+         ReOut,
+         ImOut          : OUT sfixed(IN_WIDTH+IN_BINPT downto IN_BINPT);
          AbsOut         : OUT ufixed(OUT_WIDTH+OUT_BINPT-1 downto OUT_BINPT);
          ValidOut,
          StartOut       : OUT std_logic
@@ -206,7 +211,7 @@ architecture rtl of PilotDetect is
 -------------------------------------------------------------------------------
 --                       CONSTANT DEFINITIONS
 -------------------------------------------------------------------------------
-   CONSTANT FFT_TOP_R      : natural := 25; -- Pick useful FFT bits
+   CONSTANT FFT_TOP_R      : natural := 26; -- Pick useful FFT bits
    CONSTANT FFT_BOT_R      : natural := FFT_TOP_R - 17;
    CONSTANT FFT_TOP_I      : natural := FFT_TOP_R + 32;
    CONSTANT FFT_BOT_I      : natural := FFT_TOP_I - 17;
@@ -249,7 +254,8 @@ architecture rtl of PilotDetect is
 --   CONSTANT HYSTERESIS     : positive := 64; -- turn PacketOffset on/off
    CONSTANT PACKETS_PER_FRAME : positive  := 26;
 
-   type  MAG_ARRAY  is array (natural range <>) of ufixed(11 downto -6);
+   SIGNAL   AbsZero           : ufixed(6 downto -11);
+   type  MAG_ARRAY  is array (natural range <>) of ufixed(AbsZero'range);
 
    SIGNAL   ConfigTValid,
             ConfigDone,
@@ -261,9 +267,11 @@ architecture rtl of PilotDetect is
             ValidPack,
             ValidFft,
             ValidFftDly,
-            ValidMult,
+            ValidMult0,
+            ValidMult1,
             ValidIFftOut,
             ValidAbs,
+            ValidOverAdd,
             Hi1, Hi0,
             Lo1, Lo0,
             FftStarted,
@@ -275,11 +283,11 @@ architecture rtl of PilotDetect is
             FftTLastOut,
             PilotPulse,
             PilotPulse1x,
-            CordicOutEn,
+            ValidCordic,
             CalcThreshold     : std_logic := '0';
    SIGNAL   SkipPacket        : std_logic_vector(1 downto 0);
    SIGNAL   ReInDly,
-            ImInDly           : sfixed(14 downto -3);
+            ImInDly           : FLOAT_1_18;
    SIGNAL   XC_Zero,
             XC0CntrR,              -- 0Hz version of H0's
             XC0CntrI,
@@ -290,18 +298,35 @@ architecture rtl of PilotDetect is
             iFftCntr1R,
             iFftCntr0I,
             iFftCntr1I        : sfixed(4 downto -13);
+   SIGNAL   OverAddR0,
+            OverAddI0,
+            OverAddR1,
+            OverAddI1         : sfixed(5 downto -13);
    SIGNAL   Mag0,
-            Mag1              : std_logic_vector(iFftCntr0R'length downto 2);
+            Mag1,
+            Mag0PeakFind,
+            Mag1PeakFind,
+            Mag0ArrayFind,
+            Mag1ArrayFind     : std_logic_vector(OverAddR0'length-2 downto 0);
    SIGNAL   Phase0,
-            Phase1            : std_logic_vector(iFftCntr0R'length - 2 downto 1);
-   SIGNAL   AbsZero,          -- just used for setting generics
+            Phase1,
+            Phs0PeakFind,
+            Phs1PeakFind,
+            Phs0ArrayFind,
+            Phs1ArrayFind     : std_logic_vector(OverAddR0'length - 3 downto 0);
+   SIGNAL   MagPeakArray0,
+            MagPeakArray1     : vector_of_slvs(25 downto 0)(Mag0'left downto 0) := (others=>(others=>'0'));
+   SIGNAL   PhsPeakArray0,
+            PhsPeakArray1     : vector_of_slvs(25 downto 0)(Phase0'left downto 0) := (others=>(others=>'0'));
+   SIGNAL   PilotMag,
+            Threshold,
             AbsCntr0,
             AbsCntr1,
             MaxCntr,
             Max,
             CurrentPeak,
             Peak1,
-            Peak2             : ufixed(PilotMag'left downto PilotMag'right);
+            Peak2             : ufixed(AbsZero'range);
    SIGNAL   MagDelay          : MAG_ARRAY(27 downto 0);
    SIGNAL   PackR,
             PackI             : float_1_18 := float_zero_1_18;
@@ -314,6 +339,7 @@ architecture rtl of PilotDetect is
    SIGNAL   Count,
             Index0,
             Index1,
+            IndexMag,
             MaxIndex          : natural range 0 to 1023;
    SIGNAL   MultTLast         : std_logic_vector(5 downto 0);
    SIGNAL   tdata1,
@@ -329,10 +355,7 @@ architecture rtl of PilotDetect is
             IgnoreInitial     : integer range 0 to 128;
    SIGNAL   PeakPointer       : natural range 0 to 27;
    SIGNAL   SampleCount       : natural range 0 to 163830;
-
-   CONSTANT MAG_ZEROS_FILL    : std_logic_vector(17-Mag0'length downto 0) := (others=>'0');
    CONSTANT PHS_ZEROS_FILL    : std_logic_vector(17-Phase0'length downto 0) := (others=>'0');
-
 -- ILAs
     SIGNAL  PilotMag_Ila,
             Threshold_Ila,
@@ -345,7 +368,8 @@ architecture rtl of PilotDetect is
    attribute mark_debug : string;
    attribute mark_debug of PilotMag_Ila, PilotFound, Threshold_Ila, Peak1_Ila, Peak2_Ila,
              PilotIndex, OverflowFft, OverflowIFft, AbsCntr0_Ila, AbsCntr1_Ila,
-             Mag0, Mag1, Phase0, Phase1 : signal is "true";
+             Magnitude0, Magnitude1, PhaseOut0, PhaseOut1, Mag0Peak, Mag1Peak,
+             Phs0Peak, Phs1Peak : signal is "true";
 begin
 
    IlaProcess : process(clk)
@@ -375,10 +399,15 @@ begin
          if (Resets1X(0)) then
             ReInDly        <= (others=>'0');
             ImInDly        <= (others=>'0');
+            ValidInDly     <= '0';
          elsif (ce) then
             if (ValidIn) then
                ReInDly <= ReIn;
-               ImInDly <= ImIn;
+               if (SpectrumInv) then
+                  ImInDly <= not ImIn;
+               else
+                  ImInDly <= ImIn;
+               end if;
             end if;
             ValidInDly <= ValidIn;
          end if;
@@ -520,7 +549,7 @@ begin
          StartIn     => StartIFft,
          ReOut       => XC0CntrR,
          ImOut       => XC0CntrI,
-         ValidOut    => ValidMult,
+         ValidOut    => ValidMult0,
          StartOut    => open
       );
 
@@ -532,7 +561,7 @@ begin
       s_axis_config_tvalid        => ConfigTValid,
       s_axis_config_tready        => ConfigTReady(1),
       s_axis_config_tdata         => IFFT_CODE,
-      s_axis_data_tvalid          => ValidMult,
+      s_axis_data_tvalid          => ValidMult0,
       s_axis_data_tready          => iFftReady(0),
       s_axis_data_tdata           => 6x"00" & to_slv(XC0CntrI) & 6x"00" & to_slv(XC0CntrR),
       s_axis_data_tlast           => MultTLast(5),
@@ -584,7 +613,7 @@ begin
          StartIn     => StartIFft,
          ReOut       => XC1CntrR,
          ImOut       => XC1CntrI,
-         ValidOut    => open,
+         ValidOut    => ValidMult1,
          StartOut    => open
       );
 
@@ -596,7 +625,7 @@ begin
       s_axis_config_tvalid        => ConfigTValid,
       s_axis_config_tready        => ConfigTReady(2),
       s_axis_config_tdata         => IFFT_CODE,
-      s_axis_data_tvalid          => ValidMult,
+      s_axis_data_tvalid          => ValidMult1,
       s_axis_data_tready          => iFftReady(1),
       s_axis_data_tdata           => 6x"00" & to_slv(XC1CntrI) & 6x"00" & to_slv(XC1CntrR),
       s_axis_data_tlast           => MultTLast(5),
@@ -614,38 +643,6 @@ begin
    iFftCntr1R <= to_sfixed(iFftCntr1Slv(IFFT_TOP_R downto IFFT_BOT_R), iFftCntr1R);
    iFftCntr1I <= to_sfixed(iFftCntr1Slv(IFFT_TOP_I downto IFFT_BOT_I), iFftCntr1I);
 
-   cordic0 : vm_cordic_fast
-      GENERIC MAP (
-         n => iFftCntr0R'length
-      )
-      PORT MAP (
-         clk   => Clk2x,
-         ena   => ValidIFftOut,
-         x     => to_slv(iFftCntr0R),
-         y     => to_slv(iFftCntr0I),
-         m     => Mag0,
-         p     => Phase0,
-         enOut => CordicOutEn
-      );
-
-   cordic1 : vm_cordic_fast
-      GENERIC MAP (
-         n => iFftCntr1R'length
-      )
-      PORT MAP (
-         clk   => Clk2x,
-         ena   => ValidIFftOut,
-         x     => to_slv(iFftCntr1R),
-         y     => to_slv(iFftCntr1I),
-         m     => Mag1,
-         p     => Phase1,
-         enOut => open
-      );
-
-   Magnitude0 <= Mag0 & MAG_ZEROS_FILL;
-   Magnitude1 <= Mag1 & MAG_ZEROS_FILL;
-   PhaseOut0  <= Phase0 & PHS_ZEROS_FILL;
-   PhaseOut1  <= Phase1 & PHS_ZEROS_FILL;
 
    Cntr0Abs : OverlapAddAbs
       GENERIC MAP(IN_WIDTH  => iFftZero'length, IN_BINPT  => iFftZero'right,
@@ -653,6 +650,7 @@ begin
       PORT MAP(
          clk    => Clk2x,      reset    => Resets2X(10),    ce       => ce,
          ReIn   => iFftCntr0R, ImIn     => iFftCntr0I, ValidIn  => ValidIFftOut,
+         ReOut  => OverAddR0,  ImOut    => OverAddI0,
          AbsOut => AbsCntr0,   ValidOut => ValidAbs,   StartIn  => '0', StartOut => open);
 
    Cntr1Abs : OverlapAddAbs
@@ -661,9 +659,98 @@ begin
       PORT MAP(
          clk    => Clk2x,      reset    => Resets2X(11),    ce       => ce,
          ReIn   => iFftCntr1R, ImIn     => iFftCntr1I, ValidIn  => ValidIFftOut,
+         ReOut  => OverAddR1,  ImOut    => OverAddI1,
          AbsOut => AbsCntr1,   ValidOut => open,       StartIn  => '0', StartOut => open);
 
-   -- Now find peak of all offsets and H0/1
+   cordic0 : vm_cordic_fast
+      GENERIC MAP (
+         n => OverAddR0'length
+      )
+      PORT MAP (
+         clk   => Clk2x,
+         ena   => ValidOverAdd,
+         x     => to_slv(OverAddR0),
+         y     => to_slv(OverAddI0),
+         m     => Mag0,          -- m[n:2]
+         p     => Phase0,
+         enOut => ValidCordic
+      );
+
+   cordic1 : vm_cordic_fast
+      GENERIC MAP (
+         n => OverAddR1'length
+      )
+      PORT MAP (
+         clk   => Clk2x,
+         ena   => ValidOverAdd,
+         x     => to_slv(OverAddR1),
+         y     => to_slv(OverAddI1),
+         m     => Mag1,
+         p     => Phase1,
+         enOut => open
+      );
+
+   Magnitude0 <= Mag0 when ((ValidCordic = '1') and (IndexMag < 512)) else (others=>'0');
+   Magnitude1 <= Mag1 when ((ValidCordic = '1') and (IndexMag < 512)) else (others=>'0');
+   PhaseOut0  <= Phase0 & PHS_ZEROS_FILL;
+   PhaseOut1  <= Phase1 & PHS_ZEROS_FILL;
+
+   MaxPeakProc : process(Clk2x)  -- find peak of this burst for H0 and H1
+   begin
+      if (rising_edge(Clk2x)) then
+         ValidOverAdd <= ValidAbs;  -- delay ValidAbs to realign OverAdd sum outputs
+         if (Resets2X(12) or not ValidCordic) then
+            IndexMag <= 0;
+         elsif (IndexMag < 1023) then
+            IndexMag <= IndexMag + 1;
+         end if;
+
+         if (Resets2X(12) or not ValidCordic) then
+            Mag0PeakFind   <= (others=>'0');
+            Mag1PeakFind   <= (others=>'0');
+            Phs0PeakFind   <= (others=>'0');
+            Phs1PeakFind   <= (others=>'0');
+         elsif (IndexMag = 512) then  -- last one
+            MagPeakArray0 <= MagPeakArray0(24 downto 0) & Mag0PeakFind;
+            PhsPeakArray0 <= PhsPeakArray0(24 downto 0) & Phs0PeakFind;
+            MagPeakArray1 <= MagPeakArray1(24 downto 0) & Mag1PeakFind;
+            PhsPeakArray1 <= PhsPeakArray1(24 downto 0) & Phs1PeakFind;
+         elsif (IndexMag < 512) then
+            if (Mag0 > Mag0PeakFind) then
+               Mag0PeakFind   <= Mag0;
+               Phs0PeakFind <= Phase0;    -- capture phase of current magnitude
+            end if;
+            if (Mag1 > Mag1PeakFind) then
+               Mag1PeakFind   <= Mag1;
+               Phs1PeakFind <= Phase1;
+            end if;
+         end if;
+
+         if (Resets2X(12) or not ValidCordic) then
+            Mag0ArrayFind <= (others=>'0');
+            Mag1ArrayFind <= (others=>'0');
+            Phs0ArrayFind <= (others=>'0');
+            Phs1ArrayFind <= (others=>'0');
+         elsif (IndexMag >= 514) and (IndexMag < 514 + 26) then
+            if (MagPeakArray0(IndexMag - 514) > Mag0ArrayFind) then
+               Mag0ArrayFind <= MagPeakArray0(IndexMag - 514);
+               Phs0ArrayFind <= PhsPeakArray0(IndexMag - 514);
+            end if;
+            if (MagPeakArray1(IndexMag - 514) > Mag1ArrayFind) then
+               Mag1ArrayFind <= MagPeakArray1(IndexMag - 514);
+               Phs1ArrayFind <= PhsPeakArray1(IndexMag - 514);
+            end if;
+         elsif(IndexMag = 514 + 26) then
+            Mag0Peak <= Mag0ArrayFind;
+            Mag1Peak <= Mag1ArrayFind;
+            Phs0Peak <= Phs0ArrayFind & '0';
+            Phs1Peak <= Phs1ArrayFind & '0';
+         end if;
+      end if;
+   end process;
+
+
+   -- Now find peak of H0/1
    MaxProcess : process(Clk2x)
    begin
       if (rising_edge(Clk2x)) then
@@ -676,7 +763,7 @@ begin
             MaxCntr      <= (others=>'0');
          elsif (ce) then
             Index1   <= Index0;
-            if (ValidAbs = '1') then
+            if (ValidAbs) then
                if (AbsCntr0 > AbsCntr1) then
                   MaxCntr <= AbsCntr0;
                else
@@ -716,6 +803,9 @@ begin
             PilotFound        <= '0';
             PilotPulse1x      <= '0';
             ValidAbsDly       <= '0';
+            CalcThreshold     <= '0';
+            StartOut          <= '0';
+            PeakPointer       <= 1;
             SkipPacket        <= "00";
  --           PacketOffset      <= 0;
             BadPilot          <= 0;

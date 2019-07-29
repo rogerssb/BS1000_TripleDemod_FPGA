@@ -1,5 +1,5 @@
 `timescale 1ns / 10 ps
-`include ".\addressMap.v"
+`include "./addressMap.v"
 
 `ifdef SILOS
 module soqpskMod(

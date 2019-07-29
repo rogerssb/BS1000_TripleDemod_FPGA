@@ -7,7 +7,7 @@ derivative rights in exchange for negotiated compensation.
 ******************************************************************************/
 
 `timescale 1ns / 10 ps
-`include ".\addressMap.v"
+`include "addressMap.v"
 
 module interpolate(
     input                       clk, reset, clkEn,

@@ -3,7 +3,7 @@
 <!--                                                         -->
 <!-- Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.   -->
 
-<Project Version="7" Minor="20" Path="C:/modem/vivado2017/stcDemod.xpr">
+<Project Version="7" Minor="20" Path="C:/Semco/Vivado/Demods/stcDemod.xpr">
   <DefaultLaunch Dir="$PRUNDIR"/>
   <Configuration>
     <Option Name="Id" Val="74b055a536924e9f8fc11be3e3050a58"/>
@@ -373,14 +373,6 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PSRCDIR/sources_1/imports/ip/resamplerTap2/resamplerTap2.mif">
-        <FileInfo>
-          <Attr Name="ImportPath" Val="$PPRDIR/semcoDemod.srcs/sources_1/ip/resamplerTap2/resamplerTap2.mif"/>
-          <Attr Name="ImportTime" Val="1559838864"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
       <File Path="$PPRDIR/xc7k160t-IP/resamplerTap0.coe">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -393,32 +385,8 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PSRCDIR/sources_1/imports/sources_1/ip/resamplerTap0/resamplerTap0.mif">
-        <FileInfo>
-          <Attr Name="ImportPath" Val="$PPRDIR/semcoDemod.srcs/sources_1/ip/resamplerTap0/resamplerTap0.mif"/>
-          <Attr Name="ImportTime" Val="1559168804"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PSRCDIR/sources_1/imports/sources_1/ip/resamplerTap3/resamplerTap3.mif">
-        <FileInfo>
-          <Attr Name="ImportPath" Val="$PPRDIR/semcoDemod.srcs/sources_1/ip/resamplerTap3/resamplerTap3.mif"/>
-          <Attr Name="ImportTime" Val="1559168804"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
       <File Path="$PPRDIR/xc7k160t-IP/resamplerTap1.coe">
         <FileInfo>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PSRCDIR/sources_1/imports/sources_1/ip/resamplerTap1/resamplerTap1.mif">
-        <FileInfo>
-          <Attr Name="ImportPath" Val="$PPRDIR/semcoDemod.srcs/sources_1/ip/resamplerTap1/resamplerTap1.mif"/>
-          <Attr Name="ImportTime" Val="1559168804"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
@@ -435,30 +403,6 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PSRCDIR/sources_1/imports/sources_1/ip/reciprocalLut/reciprocalLut.mif">
-        <FileInfo>
-          <Attr Name="ImportPath" Val="$PPRDIR/semcoDemod.srcs/sources_1/ip/reciprocalLut/reciprocalLut.mif"/>
-          <Attr Name="ImportTime" Val="1559168803"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PSRCDIR/sources_1/imports/ip/resamplerTap5/resamplerTap5.mif">
-        <FileInfo>
-          <Attr Name="ImportPath" Val="$PPRDIR/semcoDemod.srcs/sources_1/ip/resamplerTap5/resamplerTap5.mif"/>
-          <Attr Name="ImportTime" Val="1559168805"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PSRCDIR/sources_1/imports/ip/resamplerTap7/resamplerTap7.mif">
-        <FileInfo>
-          <Attr Name="ImportPath" Val="$PPRDIR/semcoDemod.srcs/sources_1/ip/resamplerTap7/resamplerTap7.mif"/>
-          <Attr Name="ImportTime" Val="1559168806"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
       <File Path="$PPRDIR/xc7k160t-IP/resamplerTap6.coe">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -467,22 +411,6 @@
       </File>
       <File Path="$PPRDIR/xc7k160t-IP/resamplerTap7.coe">
         <FileInfo>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PSRCDIR/sources_1/imports/ip/resamplerTap8/resamplerTap8.mif">
-        <FileInfo>
-          <Attr Name="ImportPath" Val="$PPRDIR/semcoDemod.srcs/sources_1/ip/resamplerTap8/resamplerTap8.mif"/>
-          <Attr Name="ImportTime" Val="1559168806"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PSRCDIR/sources_1/imports/sources_1/ip/resamplerTap6/resamplerTap6.mif">
-        <FileInfo>
-          <Attr Name="ImportPath" Val="$PPRDIR/semcoDemod.srcs/sources_1/ip/resamplerTap6/resamplerTap6.mif"/>
-          <Attr Name="ImportTime" Val="1559168805"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
@@ -505,38 +433,14 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PSRCDIR/sources_1/imports/sources_1/ip/resamplerTap4/resamplerTap4.mif">
-        <FileInfo>
-          <Attr Name="ImportPath" Val="$PPRDIR/semcoDemod.srcs/sources_1/ip/resamplerTap4/resamplerTap4.mif"/>
-          <Attr Name="ImportTime" Val="1559168805"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
       <File Path="$PPRDIR/xc7k160t-IP/halfbandEven.coe">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PSRCDIR/sources_1/imports/sources_1/ip/halfbandEven/halfbandEven.mif">
-        <FileInfo>
-          <Attr Name="ImportPath" Val="$PPRDIR/semcoDemod.srcs/sources_1/ip/halfbandEven/halfbandEven.mif"/>
-          <Attr Name="ImportTime" Val="1559221721"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
       <File Path="$PPRDIR/xc7k160t-IP/invSinc.coe">
         <FileInfo>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PSRCDIR/sources_1/imports/sources_1/ip/invSinc/invSinc.mif">
-        <FileInfo>
-          <Attr Name="ImportPath" Val="$PPRDIR/semcoDemod.srcs/sources_1/ip/invSinc/invSinc.mif"/>
-          <Attr Name="ImportTime" Val="1559221640"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
@@ -1546,7 +1450,7 @@
       <ReportStrategy/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
     </Run>
-    <Run Id="impl_1" Type="Ft2:EntireDesign" Part="xc7k325tfbg676-2" ConstrsSet="constrs_1" Description="Default settings for Implementation." State="current" SynthRun="synth_1" IncludeInArchive="true">
+    <Run Id="impl_1" Type="Ft2:EntireDesign" Part="xc7k325tfbg676-2" ConstrsSet="constrs_1" Description="Default settings for Implementation." State="current" Dir="$PRUNDIR/impl_1" SynthRun="synth_1" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2017"/>
         <Step Id="init_design"/>
@@ -1557,8 +1461,11 @@
         <Step Id="phys_opt_design"/>
         <Step Id="route_design"/>
         <Step Id="post_route_phys_opt_design"/>
-        <Step Id="write_bitstream"/>
+        <Step Id="write_bitstream">
+          <Option Id="BinFile">1</Option>
+        </Step>
       </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
       <ReportStrategy/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
     </Run>

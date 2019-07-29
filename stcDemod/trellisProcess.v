@@ -20,9 +20,11 @@ module trellisProcess (
     input   signed  [5:0]   deltaTauEstIn,
     output  signed  [17:0]  sample0r,
                             sample0i,
-    output                  outputEn,
-                            interpOutEn,
-    output          [3:0]   outputBits
+    output  reg             outputEn,
+    output                  interpOutEn,
+                            lastSampleReset,
+                            full,
+    output  reg     [3:0]   outputBits
 );
 
 
@@ -67,6 +69,7 @@ module trellisProcess (
         the pilot and staying true for the duration of the frame.
     */
     wire    signed  [17:0]  faReal,faImag;
+    reg                     estimatesDoneDly;
 
     always @(posedge clk2x) begin
     `ifdef USE_FIXED_ESTIMATES
@@ -78,7 +81,8 @@ module trellisProcess (
         ch0Mu       <= 18'h0;
         ch1Mu       <= 18'h0;
     `else
-        if (estimatesDone) begin
+        estimatesDoneDly <= estimatesDone;
+        if (estimatesDoneDly) begin
             h0EstReal   <= h0EstRealIn;
             h0EstImag   <= h0EstImagIn;
             h1EstReal   <= h1EstRealIn;
@@ -90,6 +94,18 @@ module trellisProcess (
     `endif
     end
 
+    integer SPARE_CODE_WORDS; // first two outputs are bogus except on first frame after boot. Not cured by reset
+    assign  lastSampleReset = (sampleOut == `CODEWORDS_PER_FRAME + SPARE_CODE_WORDS);
+
+    always @(posedge(clk2x)) begin
+        if (reset) begin
+            SPARE_CODE_WORDS = 1;
+        end
+        else if (lastSampleReset) begin
+            SPARE_CODE_WORDS = 2;
+        end
+    end
+
     frameAlignment #(
         .START_OFFSET(0),
         .CLKS_PER_OUTPUT(4))
@@ -99,13 +115,14 @@ module trellisProcess (
         .clkEn(clkEnable),
         .reset(reset),
         .startOfFrame(frameStart),
-        .estimatesDone(estimatesDone),
-        .sampleOut(sampleOut),
+        .estimatesDone(estimatesDoneDly),
+        .lastSampleReset(lastSampleReset),
         .valid(dfValid),
         .dinReal(dfRealOutput),
         .dinImag(dfImagOutput),
         .clkEnOut(faClkEn),
         .myStartOfTrellis(myStartOfTrellis),
+        .full(full),
         .interpolate(interpolate),
         .doutReal(faReal),
         .doutImag(faImag)
@@ -163,11 +180,12 @@ module trellisProcess (
     );
 
     //------------------------- Trellis Detector ------------------------------
+    wire [3:0]   tdOutputBits;
 
     trellisDetector td(
         .clk(clk2x),
         .clkEn(1'b1),
-        .reset(reset),
+        .reset(reset || lastSampleReset),
         .sampleEn(interpOutEn),
         .startFrame(myStartOfTrellis),
         .in0Real(sample0r), .in0Imag(sample0i),
@@ -177,16 +195,30 @@ module trellisProcess (
         .h1EstReal(h1EstReal), .h1EstImag(h1EstImag),
         .finalMetricOutputEn(),
         .finalMetric(),
-        .outputEn(tdOutEn),
-        .outputBits(tdBits)
+        .outputEn(tdOutputEn),
+        .outputBits(tdOutputBits)
     );
 
     always @(posedge clk2x) begin
-        if (reset || myStartOfTrellis) begin
+        if (reset || myStartOfTrellis || lastSampleReset) begin
             sampleOut <= 0;
         end
-        else if (tdOutEn) begin
+        else if (tdOutputEn) begin
             sampleOut <= sampleOut+ 1;
+        end
+
+        if ((sampleOut >= SPARE_CODE_WORDS) && (sampleOut <= `CODEWORDS_PER_FRAME + 1)) begin        // skip first trellis output
+            outputEn <= tdOutputEn;
+        end
+        else begin
+            outputEn <= 0;
+        end
+
+        if (reset) begin
+            outputBits <= 0;
+        end
+        else if (tdOutputEn) begin
+            outputBits <= tdOutputBits;
         end
     end
 

@@ -244,23 +244,12 @@ ARCHITECTURE rtl OF Brik2 IS
             Tau1EstA          : sfixed(3 downto -17);
 
 -- TODO remove test points
-   signal   H0Mag_Ila,
-            H1Mag_Ila,
-            Tau0Est_Ila,
-            Tau1Est_Ila,
-            H0EstR_Ila,
-            H0EstI_Ila,
-            H1EstR_Ila,
-            H1EstI_Ila,
-            DF_R_Ila,
-            DF_I_Ila,
-            Mu0_Ila,
-            Mu1_Ila           : SLV18;  -- remove fractions for ILA, doesn't like negatives
+   signal   DF_R_Ila,
+            DF_I_Ila          : SLV18;  -- remove fractions for ILA, doesn't like negatives
    SIGNAL   ValidDF_ILA       : std_logic;
 
    attribute mark_debug : string;
-   attribute mark_debug of DF_R_Ila, DF_I_Ila, H0Mag_Ila, H0EstR_Ila, H0EstI_Ila,
-                           Tau0Est_Ila, Mu0_Ila, ValidDF_ILA, TimeEstDone, ChanEstDone,
+   attribute mark_debug of DF_R_Ila, DF_I_Ila, ValidDF_ILA, TimeEstDone, ChanEstDone,
                            StartTime : signal is "true";
 
 BEGIN
@@ -268,18 +257,8 @@ BEGIN
    IlaProcess : process(clk)
    begin
       if (rising_edge(clk)) then
-         H0Mag_Ila      <= to_slv(H0Mag);
-         H1Mag_Ila      <= to_slv(H1Mag);
-         Tau0Est_Ila    <= to_slv(Tau0Est);
-         Tau1Est_Ila    <= to_slv(Tau1Est);
-         H0EstR_Ila     <= to_slv(H0EstR);
-         H0EstI_Ila     <= to_slv(H0EstI);
-         H1EstR_Ila     <= to_slv(H1EstR);
-         H1EstI_Ila     <= to_slv(H1EstI);
          DF_R_Ila       <= to_slv(DF_R);
          DF_I_Ila       <= to_slv(DF_I);
-         Mu0_Ila        <= to_slv(Mu0);
-         Mu1_Ila        <= to_slv(Mu1);
          ValidDF_ILA    <= ValidDFreg;
       end if;
    end process IlaProcess;

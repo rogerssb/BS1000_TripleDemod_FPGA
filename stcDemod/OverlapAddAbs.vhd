@@ -52,6 +52,8 @@ ENTITY OverlapAddAbs IS
       ValidIn,
       StartIn        : IN  std_logic;     -- Start is just delayed in sync
       AbsOut         : OUT ufixed(OUT_WIDTH+OUT_BINPT-1 downto OUT_BINPT);
+      ReOut,
+      ImOut          : OUT sfixed(IN_WIDTH+IN_BINPT downto IN_BINPT);
       ValidOut,
       StartOut       : OUT std_logic
    );
@@ -62,13 +64,11 @@ ARCHITECTURE rtl OF OverlapAddAbs IS
 
    CONSTANT IN_LEFT     : integer := ReIn'left;
    CONSTANT IN_RIGHT    : integer := ReIn'right;
-   CONSTANT DELAY       : integer := 511;
+   CONSTANT DELAY       : integer := 512;
 
    type DelayLine is array (natural range <>) of sfixed(IN_LEFT downto IN_RIGHT);
 
   -- Signals
-   SIGNAL   ReDly,
-            ImDly       : sfixed(IN_LEFT downto IN_RIGHT);
    SIGNAL   A0,
             B0          : sfixed(IN_LEFT+1 downto IN_RIGHT); -- same width but 2x higher range
    SIGNAL   MultR,
@@ -81,26 +81,9 @@ ARCHITECTURE rtl OF OverlapAddAbs IS
    SIGNAL   OverFlow    : std_logic;
    SIGNAL   FullSize    : ufixed(2*A0'left+2 downto OUT_BINPT);
    SIGNAL   ReDlyLine,
-            ImDlyLine   : DelayLine(DELAY downto 0);
-
---   SIGNAL   ReInIla, ImInIla, ReDlyIla, ImDlyIla   : slv18;
---   signal   A0Ila, B0Ila : std_logic_vector(A0'length-1 downto 0);
---   signal   MultRIla, MultIIla : std_logic_vector(MultR'length-1 downto 0);
-
---   attribute mark_debug : string;
---   attribute mark_debug of ReInIla, ImInIla, ReDlyIla, ImDlyIla, A0Ila, B0Ila,
---               MultRIla, MultIIla, OverFlow    : signal is "true";
+            ImDlyLine   : DelayLine(DELAY downto 0) := (others=>(others=>'0'));     -- TODO FZ, remove initialization to pack into SRL16s
 
 BEGIN
-
--- ReInIla   <= to_slv(ReIn);
--- ImInIla   <= to_slv(ImIn);
--- ReDlyIla  <= to_slv(ReDly);
--- ImDlyIla  <= to_slv(ImDly);
--- A0Ila     <= to_slv(A0);
--- B0Ila     <= to_slv(B0);
--- MultRIla  <= to_slv(MultR);
--- MultIIla  <= to_slv(MultI);
 
    ClkProcess : process(clk)
    begin
@@ -108,8 +91,6 @@ BEGIN
          if (reset) then
             A0          <= (others=>'0');
             B0          <= (others=>'0');
-            ReDly       <= (others=>'0');
-            ImDly       <= (others=>'0');
             MultR       <= (others=>'0');
             MultI       <= (others=>'0');
             MultRDly    <= (others=>'0');
@@ -121,14 +102,14 @@ BEGIN
             Count       <= 0;
             OverFlow    <= '0';
          elsif (ce) then
+            ValidDly <= ValidDly(3 downto 1) & ValidIn;
+            StartDly <= StartDly(3 downto 1) & StartIn;
             if (ValidIn) then
-               ReDlyLine <= ReDlyLine(ReDlyLine'left-1 downto 0) & ReIn;
-               ImDlyLine <= ImDlyLine(ImDlyLine'left-1 downto 0) & ImIn;
+               ReDlyLine <= ReDlyLine(DELAY-1 downto 0) & ReIn;
+               ImDlyLine <= ImDlyLine(DELAY-1 downto 0) & ImIn;
                -- pipeline level 1, latch inputs
-               A0 <= ReIn + ReDly;
-               B0 <= ImIn + ImDly;
-               ReDly <= ReDlyLine(DELAY);
-               ImDly <= ImDlyLine(DELAY);
+               A0 <= ReIn + ReDlyLine(DELAY);
+               B0 <= ImIn + ImDlyLine(DELAY);
                if (Count < 1023) then
                   Count <= Count + 1;
                end if;
@@ -151,14 +132,14 @@ BEGIN
                FullSize <= resize(MultRDly + MultIDly, FullSize);
             end if;
             OverFlow <= '0' when (AbsOut = FullSize) else '1';
-            StartDly <= StartDly(3 downto 1) & StartIn;
-            ValidDly <= ValidDly(3 downto 1) & ValidIn;
          end if;
       end if;
    end process ClkProcess;
 
    StartOut <= StartDly(4);
    ValidOut <= ValidDly(4);
+   ReOut    <= A0;
+   ImOut    <= B0;
 
 END rtl;
 

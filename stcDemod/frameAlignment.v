@@ -8,15 +8,16 @@ module frameAlignment
                             clk2x,
                             clkEn,
                             reset,
+                            lastSampleReset,
                             startOfFrame,       // start of frame, not start of trellis activiy
                             estimatesDone,     // Estimates are complete, start Trellis process
                             valid,
     input   signed  [17:0]  dinReal,
                             dinImag,
-    input           [11:0]  sampleOut,
     output                  clkEnOut,
     output  reg             interpolate,
                             myStartOfTrellis,
+                            full,
     output  signed  [17:0]  doutReal,
                             doutImag
 );
@@ -24,26 +25,16 @@ module frameAlignment
 
     //------------------------------ Sample Counter ---------------------------
 
-    reg             [14:0]  sampleCount, wrAddr, rdAddr, sofAddress;
+    reg             [14:0]  wrAddr, rdAddr, sofAddress;
     reg                     estimatesReady, sofDetected, frameActive;
     always @(posedge clk2x) begin
         if (reset) begin
-            sampleCount <= 0;
             myStartOfTrellis <= 0;
             sofDetected      <= 0;
             estimatesReady   <= 0;
             sofAddress       <= 0;
         end
         else if (clkEn) begin
-            if (startOfFrame) begin
-                sampleCount <= START_OFFSET;
-            end
-            else if (valid && clk) begin    // valid is clk wide, not 2x
-                if (sampleCount < `SAMPLES_PER_FRAME) begin
-                    sampleCount <= sampleCount + 1;
-                end
-            end
-
             if (estimatesDone) begin
                 estimatesReady <= 1;
             end
@@ -52,7 +43,7 @@ module frameAlignment
             end
             if (startOfFrame) begin
                 sofDetected <= 1;
-                sofAddress  <= wrAddr;  // capture address of first sample of next frame. SOF goes active between packets, so wrAddr is inactive
+                sofAddress  <= wrAddr + `PILOT_SAMPLES_PER_FRAME - 9;  // capture address of first sample of next frame. SOF goes active between packets, so wrAddr is inactive
             end
             else if (myStartOfTrellis) begin
                 sofDetected <= 0;
@@ -63,12 +54,11 @@ module frameAlignment
 
     //------------------------- Sample FIFO -----------------------------------
 
-    wire                    fifoWrEn = (clkEn && valid && clk && (sampleCount >= (`PILOT_SAMPLES_PER_FRAME-9)));
+    wire                    fifoWrEn = (clkEn && valid && clk);
     reg                     fifoRdEn;
     wire    [35:0]          fifoRdData;
 
     wire    empty = (wrAddr == rdAddr);
-    reg     full;
     always @(posedge clk2x) begin
         if (reset) begin
             rdAddr <= 0;
@@ -116,9 +106,9 @@ module frameAlignment
         `define WAIT_DECIMATION     1'b1
     reg             [2:0]   decimationCount;
     reg             [1:0]   outputCount;
-    reg             [8:0]   trellisInitCnt, interpCount;
+    reg             [8:0]   trellisInitCnt;
     always @(posedge clk2x) begin
-        if (reset || ((rdAddr == sofAddress-1) && (trellisInitCnt == 0)) || (!sofDetected && (sampleOut == `DATA_SAMPLES_PER_FRAME))) begin  // if we read up to the Start of Next frame, halt processing
+        if (reset || lastSampleReset) begin
             outputState <= `WAIT_VALID;
             decimationCount <= CLKS_PER_OUTPUT-1;
             fifoRdEn        <= 0;

@@ -54,13 +54,16 @@ use work.fixed_pkg.all;
 entity Brik1_Hw_tb is
    GENERIC (SIM_MODE : boolean := false);
    PORT (
-      Clk93In  : IN  std_logic;
-      BitRate,
+      Clk93In           : IN  std_logic;
+      BitRateIn,
       Power0In,
-      Power1In : IN  sfixed(0 downto -17);
-      PilotSyncOffset : IN SLV12;
+      Power1In,
+      NoiseIn           : IN  sfixed(0 downto -17);
+      PilotSyncOffset   : IN SLV12;
+      DataOut_o,
+      ClkOut_o,
       BS_LED,
-      DemodLED : OUT std_logic
+      DemodLED          : OUT std_logic
    );
 end Brik1_Hw_tb;
 
@@ -79,11 +82,13 @@ architecture rtl of Brik1_Hw_tb is
       DacSelect         : IN  SLV4;
       Clk93,
       Clk186,
+      SpectrumInv,
       ValidIn           : IN  std_logic;
       DataOut,                            -- Trellis Data Output
       ClkOutEn,                           -- Trellis Clock Output
       PilotFound,                         -- Pilot Found LED
       PilotLocked,
+      TrellisFull,
       Dac0ClkEn,
       Dac1ClkEn,
       Dac2ClkEn         : OUT std_logic;
@@ -188,7 +193,8 @@ architecture rtl of Brik1_Hw_tb is
          probe_out8     : OUT std_logic_vector(11 downto 0);
          probe_out9     : OUT std_logic_vector(11 downto 0);
          probe_out10    : OUT std_logic_vector(7 downto 0);
-         probe_out11    : OUT std_logic_vector(17 downto 0)
+         probe_out11    : OUT std_logic_vector(17 downto 0);
+         probe_out12    : OUT std_logic_vector(15 downto 0)
       );
    END COMPONENT Vio_0;
 
@@ -209,10 +215,10 @@ architecture rtl of Brik1_Hw_tb is
             ResetBufg,
             Clk93,
             ClkXn,
+            lastSampleReset,
             Locked,
+            TrellisFull,
             PhaseValid           : std_logic;
-   SIGNAL   StartOut,
-            DataValid_o          : std_logic;
    SIGNAL   DataValid            : SLV8 := x"00";
    SIGNAL   RdAddr_i,
             RdAddr0_i,
@@ -240,28 +246,29 @@ architecture rtl of Brik1_Hw_tb is
             Phase1I              : sfixed(0 downto -15);
    SIGNAL   SinCosData0,
             SinCosData1          : std_logic_vector(31 downto 0);
-   SIGNAL   Offset,
+   SIGNAL   Offset_vio,
             PilotSyncOffsetIn,
-            PilotSyncOffsetSlv   : SLV12; -- := 1535;
-   SIGNAL   BitRateVio,
-            BitRateSlv,
-            Frequency0,
-            Frequency1,
-            Power0,
-            Power1,
-            Power0Slv,
-            Power1Slv,
-            NoiseGainSlv,
-            Phase0,
-            Phase1,
-            NoiseGain            : std_logic_vector(17 downto 0);
-   SIGNAL   DeltaT_slv,
+            PilotSyncOffset_vio  : SLV12; -- := 1535;
+   SIGNAL   BitRate_vio,
+            Frequency0_vio,
+            Frequency1_vio,
+            Power0_vio,
+            Power1_vio,
+            Phase0_vio,
+            Phase1_vio,
+            BitRate_slv,
+            Power0_slv,
+            Power1_slv,
+            NoiseGain_slv,
+            NoiseGain_vio        : SLV18;
+   SIGNAL   DeltaT_vio,
             MiscBits,
             Errors               : SLV8;
    SIGNAL   LedCount             : UINT32;
+   SIGNAL   ClocksPerBit         : SLV16;
 
    attribute mark_debug : string;
-   attribute mark_debug of RdAddr_i, RealOut, ImagOut, DataValid_o, StartOut : signal is "true";
+   attribute mark_debug of RdAddr_i, RealOut, ImagOut, ClkOut_o, DataOut_o : signal is "true";
 
 begin
 
@@ -278,18 +285,19 @@ begin
       PORT MAP (
          clk        => ClkXn,
          probe_in0  => Errors,
-         probe_out0 => Frequency0,
-         probe_out1 => Frequency1,
-         probe_out2 => Phase0,
-         probe_out3 => Phase1,
-         probe_out4 => DeltaT_slv,
-         probe_out5 => Power0,
-         probe_out6 => Power1,
-         probe_out7 => NoiseGain,
-         probe_out8 => PilotSyncOffsetSlv,
-         probe_out9 => Offset,
+         probe_out0 => Frequency0_vio,          -- 00280 start getting errors at end of frame
+         probe_out1 => Frequency1_vio,
+         probe_out2 => Phase0_vio,              -- has no effect unless both channels active
+         probe_out3 => Phase1_vio,
+         probe_out4 => DeltaT_vio,
+         probe_out5 => Power0_vio,
+         probe_out6 => Power1_vio,
+         probe_out7 => NoiseGain_vio,
+         probe_out8 => PilotSyncOffset_vio,     -- 7ff or 800 at 41.6Mb
+         probe_out9 => Offset_vio,
          probe_out10 => MiscBits,
-         probe_out11 => BitRateSlv
+         probe_out11 => BitRate_vio,            -- 0e449 is 41.6Mb
+         probe_out12 => ClocksPerBit
       );
 
    ErrorProc : process (ClkXn)
@@ -305,7 +313,7 @@ begin
             else
                LedCount <= x"00000000";
             end if;
-            DemodLED <= '1' when (LedCount < 93333333) else '0';
+            DemodLED <= TrellisFull; --'1' when (LedCount < 93333333) else '0';
             if (<< signal UUTu.PD_u.OverflowIFft : std_logic >> ) then
                Errors(0) <= '1';
             else
@@ -337,7 +345,7 @@ begin
                Errors(5) <= '0';
             end if;
          end if;
-         BS_LED <= or(Errors);
+         BS_LED <= nor(Errors);
       end if;
    end process;
 
@@ -347,8 +355,8 @@ begin
       variable Power0_v,
                Power1_v,
                NoiseGain_v,
-               Noise_v,
                BitRate_v   : sfixed(0 downto -17);
+      variable Noise_v     : sfixed(3 downto -14);
    begin
       if (rising_edge(Clk93)) then
          if (Reset) then
@@ -356,11 +364,14 @@ begin
             BitRateAcc  <= to_sfixed(0, BitRateAcc);
             RdAddr_i    <= 12800;
          else
+            BitRate_slv   <= BitRate_vio;
+            Power0_slv    <= Power0_vio;
+            Power1_slv    <= Power1_vio;
+            NoiseGain_slv <= NoiseGain_vio;
             if (SIM_MODE) then
-               BitRate_v := resize(BitRateAcc + BitRate, BitRateAcc);
+               BitRate_v := resize(BitRateAcc + BitRateIn, BitRateAcc);
             else
-               BitRateVio <= BitRateSlv;
-               BitRate_v := resize(BitRateAcc + to_sfixed(BitRateVio, BitRate_v), BitRateAcc);
+               BitRate_v := resize(BitRateAcc + to_sfixed(BitRate_slv, BitRate_v), BitRateAcc);
             end if;
             BitRateAcc <= BitRate_v;
             DataValid <= DataValid(DataValid'left-1 downto 0) & (BitRate_v(0) xor BitRateAcc(0));
@@ -372,8 +383,8 @@ begin
                end if;
             end if;
          end if;
-         DeltaT_v  := to_integer(signed(DeltaT_slv));    -- add ±4 then check for overflow
-         Offset_v  := to_integer(signed(Offset));
+         DeltaT_v  := to_integer(signed(DeltaT_vio));    -- add ±4 then check for overflow
+         Offset_v  := to_integer(signed(Offset_vio));
          RdAddr0_v <= RdAddr_i + Offset_v;
          if (RdAddr0_v > 13311) then
             RdAddr0_i <= RdAddr0_v - 13312;
@@ -392,27 +403,33 @@ begin
             RdAddr1_i <= RdAddr1_v;
          end if;
 
-         Power0Slv    <= Power0;
-         Power1Slv    <= Power1;
-         NoiseGainSlv <= NoiseGain;
-         NoiseGain_v := to_sfixed(NoiseGainSlv, NoiseGain_v);
+         if (SIM_MODE) then
+            NoiseGain_v := NoiseIn;
+         else
+            NoiseGain_v := to_sfixed(NoiseGain_slv, NoiseGain_v);
+         end if;
          Noise_v     := resize(to_sfixed(RealRead(2), Noise_v) * NoiseGain_v, Noise_v);
          if (SIM_MODE) then
             Power0_v := Power0In;
             Power1_v := Power1In;
          else
-            Power0_v := to_sfixed(Power0Slv, Power0_v);
-            Power1_v := to_sfixed(Power1Slv, Power1_v);
+            Power0_v := to_sfixed(Power0_slv, Power0_v);
+            Power1_v := to_sfixed(Power1_slv, Power1_v);
          end if;
 
          ResampleR_s <= resize((Chan0r * Power0_v) + (Chan1r * Power1_v) + Noise_v, ResampleR_s, fixed_saturate, fixed_truncate);
-         ResampleI_s <= resize((Chan0i * Power0_v) + (Chan1i * Power1_v) + Noise_v, ResampleI_s, fixed_saturate, fixed_truncate);
+         if (MiscBits(1)) then   -- invert I data for spectral inversion
+            ResampleI_s <= resize((-Chan0i * Power0_v) + (-Chan1i * Power1_v) - Noise_v, ResampleI_s, fixed_saturate, fixed_truncate);
+         else
+            ResampleI_s <= resize((Chan0i * Power0_v) + (Chan1i * Power1_v) + Noise_v, ResampleI_s, fixed_saturate, fixed_truncate);
+         end if;
+
       end if;
    end process reg_process;
 
    ReadRealC0 : RAM_2Reads_1Write
       GENERIC MAP(
-         FILENAME    => "C:\Semco\STCinfo\RealTimeC\SpaceTimeCodeInC\SpaceTimeCodeInC/resampled_r_+0_50_100%.slv",
+         FILENAME    => "C:\Semco\STCinfo\RealTimeC\SpaceTimeCodeInC\SpaceTimeCodeInC\resampledIseed_r_+0_50_100%.slv",
          DATA_WIDTH  => 18,
          BINPT       => -17,
          FILE_IS_SLV => true,
@@ -435,7 +452,7 @@ begin
 
    ReadImagC0 : RAM_2Reads_1Write
       GENERIC MAP(
-         FILENAME    => "C:\Semco\STCinfo\RealTimeC\SpaceTimeCodeInC\SpaceTimeCodeInC/resampled_i_+0_50_100%.slv",
+         FILENAME    => "C:\Semco\STCinfo\RealTimeC\SpaceTimeCodeInC\SpaceTimeCodeInC\resampledIseed_i_+0_50_100%.slv",
          DATA_WIDTH  => 18,
          BINPT       => -17,
          FILE_IS_SLV => true,
@@ -458,7 +475,7 @@ begin
 
    ReadRealC1 : RAM_2Reads_1Write
       GENERIC MAP(
-         FILENAME    => "C:\Semco\STCinfo\RealTimeC\SpaceTimeCodeInC\SpaceTimeCodeInC/resampled_r_+0_50_0%.slv",
+         FILENAME    => "C:\Semco\STCinfo\RealTimeC\SpaceTimeCodeInC\SpaceTimeCodeInC\resampledIseed_r_+0_50_0%.slv",
          DATA_WIDTH  => 18,
          BINPT       => -17,
          FILE_IS_SLV => true,
@@ -481,7 +498,7 @@ begin
 
    ReadImagC1 : RAM_2Reads_1Write
       GENERIC MAP(
-         FILENAME    => "C:\Semco\STCinfo\RealTimeC\SpaceTimeCodeInC\SpaceTimeCodeInC/resampled_i_+0_50_0%.slv",
+         FILENAME    => "C:\Semco\STCinfo\RealTimeC\SpaceTimeCodeInC\SpaceTimeCodeInC\resampledIseed_i_+0_50_0%.slv",
          DATA_WIDTH  => 18,
          BINPT       => -17,
          FILE_IS_SLV => true,
@@ -504,7 +521,7 @@ begin
 
    ReadNoise : RAM_2Reads_1Write
       GENERIC MAP(
-         FILENAME    => "C:\Semco\STCinfo\RealTimeC\SpaceTimeCodeInC\SpaceTimeCodeInC/Noise.slv",
+         FILENAME    => "C:\Semco\STCinfo\RealTimeC\SpaceTimeCodeInC\SpaceTimeCodeInC\Noise.slv",
          DATA_WIDTH  => 18,
          BINPT       => -17,
          FILE_IS_SLV => true,
@@ -530,7 +547,7 @@ begin
          aclk                 => Clk93,
          aresetn              => not Reset,
          s_axis_config_tvalid => DataValid(0),  -- Freq/Phase offset may be delayed relative to simulation
-         s_axis_config_tdata  => (63 downto 18+32=> Phase0(Phase0'left)) & Phase0 & (31 downto 18=> Frequency0(Frequency0'left)) & Frequency0, -- sign extend phase and freq values
+         s_axis_config_tdata  => (63 downto 18+32=> Phase0_vio(Phase0_vio'left)) & Phase0_vio & (31 downto 18=> Frequency0_vio(Frequency0_vio'left)) & Frequency0_vio, -- sign extend phase and freq values
          m_axis_data_tvalid   => open,
          m_axis_data_tdata    => SinCosData0,
          m_axis_phase_tvalid  => open,
@@ -545,7 +562,7 @@ begin
          aclk                 => Clk93,
          aresetn              => not Reset,
          s_axis_config_tvalid => DataValid(0),
-         s_axis_config_tdata  => (63 downto 18+32=> Phase1(Phase1'left)) & Phase1 & (31 downto 18=> Frequency1(Frequency1'left)) & Frequency1,
+         s_axis_config_tdata  => (63 downto 18+32=> Phase1_vio(Phase1_vio'left)) & Phase1_vio & (31 downto 18=> Frequency1_vio(Frequency1_vio'left)) & Frequency1_vio,
          m_axis_data_tvalid   => open,
          m_axis_data_tdata    => SinCosData1,
          m_axis_phase_tvalid  => open,
@@ -614,7 +631,7 @@ begin
          O => ResetBufg
    );
 
-   PilotSyncOffsetIn <= PilotSyncOffset when SIM_MODE else PilotSyncOffsetSlv;
+   PilotSyncOffsetIn <= PilotSyncOffset when SIM_MODE else PilotSyncOffset_vio;
 
    UUTu : STC
       generic map (
@@ -623,14 +640,15 @@ begin
       PORT MAP(
          ResampleR      => to_slv(ResampleR_s),
          ResampleI      => to_slv(ResampleI_s),
-         ClocksPerBit   => x"1000",
+         ClocksPerBit   => ClocksPerBit,
          PilotSyncOffset => PilotSyncOffsetIn,
          DacSelect      => x"0",
          Clk93          => Clk93,
          Clk186         => ClkXn,
          ValidIn        => PhaseValid,
-         DataOut        => open,
-         ClkOutEn       => open,
+         SpectrumInv    => MiscBits(0),
+         DataOut        => DataOut_o,
+         ClkOutEn       => ClkOut_o,
          PilotFound     => open,
          PilotLocked    => open,
          Dac0ClkEn      => open,

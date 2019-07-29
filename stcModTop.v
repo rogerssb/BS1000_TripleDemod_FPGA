@@ -295,7 +295,7 @@ module stcModTop (
       .aresetn(!ddsReset),
       .m_axis_data_tdata(m_axis0),
       .m_axis_data_tvalid(),
-      .s_axis_phase_tdata(fmModFreq0),
+      .s_axis_phase_tdata(~fmModFreq0),
       .s_axis_phase_tvalid(1'b1)
     );
 
@@ -308,7 +308,7 @@ module stcModTop (
       .aresetn(!ddsReset),
       .m_axis_data_tdata(m_axis1),
       .m_axis_data_tvalid(),
-      .s_axis_phase_tdata(fmModFreq1),
+      .s_axis_phase_tdata(~fmModFreq1),
       .s_axis_phase_tvalid(1'b1)
     );
 

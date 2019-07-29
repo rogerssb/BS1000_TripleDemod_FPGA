@@ -50,11 +50,14 @@ ARCHITECTURE rtl OF STC_HW_TB IS
    COMPONENT Brik1_Hw_tb is
       GENERIC (SIM_MODE : boolean := false);
       PORT (
-         Clk93In  : IN  std_logic;
-         BitRate,
+         Clk93In           : IN  std_logic;
+         BitRateIn,
          Power0In,
-         Power1In : IN  sfixed(0 downto -17);
-         PilotSyncOffset : IN  SLV12;
+         Power1In,
+         NoiseIn           : IN  sfixed(0 downto -17);
+         PilotSyncOffset   : IN  SLV12;
+         DataOut_o,
+         ClkOut_o,
          BS_LED,
          DemodLED : OUT std_logic
       );
@@ -62,11 +65,12 @@ ARCHITECTURE rtl OF STC_HW_TB IS
 
 
   -- Signals
-  signal Clk       : std_logic := '0';
+  signal Clk               : std_logic := '0';
   signal BitRate,
          Power0In,
-         Power1In  : sfixed(0 downto -17);
-   signal PilotSyncOffset : SLV12 := x"800";    -- 800 for 10mB, A00 for 20mB
+         Power1In,
+         NoiseIn           : sfixed(0 downto -17);
+   signal PilotSyncOffset  : SLV12 := x"800";    -- 600 for 4.6mB, 800 for 10mB, A00 for 20mB
 
 BEGIN
 
@@ -75,8 +79,9 @@ BEGIN
       Clk <= not Clk;
    end process;
 
-   Power0In <= to_sfixed(0.50, Power0In);
-   Power1In <= to_sfixed(0.50, Power1In);
+   Power0In <= to_sfixed(0.40, Power0In);
+   Power1In <= to_sfixed(0.40, Power1In);
+   NoiseIn  <= to_sfixed(0.0, NoiseIn);
    BitRate  <= to_sfixed(41.6/93.3, BitRate);    -- 41.6 is 10Mb times 4 plus 4% overhead for pilot
 
    Brik1 : Brik1_Hw_tb
@@ -87,7 +92,8 @@ BEGIN
       Clk93In  => Clk,
       Power0In => Power0In,
       Power1In => Power1In,
-      BitRate  => BitRate,
+      NoiseIn  => NoiseIn,
+      BitRateIn => BitRate,
       PilotSyncOffset => PilotSyncOffset,
       BS_LED   => open,
       DemodLED => open

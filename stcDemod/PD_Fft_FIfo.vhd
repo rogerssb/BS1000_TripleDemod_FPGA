@@ -122,7 +122,7 @@ BEGIN
             LastOut2x     <= '0';
             ValidOut2x    <= '0';
          elsif (ce) then
-            if (ProgFull2x and Idle2x and not Start2x) then     -- check Pop also to avoid double start
+            if (ProgFull2x and Idle2x and not Start2x) then     -- check Start2x also to avoid double start
                Start2x <= '1';                  -- Start precedes the first sample
             end if;
             if (PopCount2x = WORDS+1) then
@@ -211,8 +211,8 @@ BEGIN
    );
 
    -- send WORDS samples, then WORDS zeros
-   ReOut2x    <= to_sfixed(FifoData2x(17 downto  0), ReOut2x) when Pop2x else (others=>'0');
-   ImOut2x    <= to_sfixed(FifoData2x(35 downto 18), ImOut2x) when Pop2x else (others=>'0');
+   ReOut2x    <= to_sfixed(FifoData2x(17 downto  0), ReOut2x) when (PopCount2x >= 512) else (others=>'0');
+   ImOut2x    <= to_sfixed(FifoData2x(35 downto 18), ImOut2x) when (PopCount2x >= 512) else (others=>'0');
 
 
    Idle1x <= '1' when (PopCount1x = 0) else '0';
