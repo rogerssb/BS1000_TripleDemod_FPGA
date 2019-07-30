@@ -20,6 +20,7 @@ module stcRegs(
     input               [31:0]  dataIn,
     output  reg         [31:0]  dataOut,
     output  reg         [31:0]  clocksPerBit,
+    output  reg                 spectrumInvert,
     output  reg         [11:0]  pilotOffset,
     output  reg         [3:0]   dacSelect
 );
@@ -64,7 +65,7 @@ module stcRegs(
             endcase
         end
     end
-/*
+
     `ifdef USE_BUS_CLOCK
     always @(posedge busClk) begin
         if (cs & wr2) begin
@@ -73,12 +74,14 @@ module stcRegs(
         if (cs) begin
     `endif
             casex (addr)
-                `DDC_CENTER_FREQ:   ddcCenterFreq[23:16] <= dataIn[23:16];
+                `STC_CLOCKS_PER_BIT: begin
+                    spectrumInvert <= dataIn[16];
+                    end
                 default:  ;
             endcase
         end
     end
-
+/*
     `ifdef USE_BUS_CLOCK
     always @(posedge busClk) begin
         if (cs & wr3) begin
@@ -96,7 +99,7 @@ module stcRegs(
     always @* begin
         if (cs) begin
             casex (addr)
-                `STC_CLOCKS_PER_BIT:    dataOut = {16'h0, clocksPerBit};
+                `STC_CLOCKS_PER_BIT:    dataOut = {15'h0, spectrumInvert, clocksPerBit};
                 `STC_PILOT_OFFSET:      dataOut = {20'h0, pilotOffset};
                 `STC_DAC_SELECT:        dataOut = {28'h0, dacSelect};
                 default:                dataOut = 32'h0;
