@@ -250,8 +250,7 @@ architecture rtl of Brik1_Hw_tb is
             PilotSyncOffsetIn,
             PilotSyncOffset_vio  : SLV12; -- := 1535;
    SIGNAL   BitRate_vio,
-            Frequency0_vio,
-            Frequency1_vio,
+            Frequency_vio,
             Power0_vio,
             Power1_vio,
             Phase0_vio,
@@ -285,8 +284,8 @@ begin
       PORT MAP (
          clk        => ClkXn,
          probe_in0  => Errors,
-         probe_out0 => Frequency0_vio,          -- 00280 start getting errors at end of frame
-         probe_out1 => Frequency1_vio,
+         probe_out0 => Frequency_vio,          -- 00280 start getting errors at end of frame
+         probe_out1 => open,
          probe_out2 => Phase0_vio,              -- has no effect unless both channels active
          probe_out3 => Phase1_vio,
          probe_out4 => DeltaT_vio,
@@ -384,7 +383,7 @@ begin
             end if;
          end if;
          DeltaT_v  := to_integer(signed(DeltaT_vio));    -- add ±4 then check for overflow
-         Offset_v  := to_integer(signed(Offset_vio));
+         Offset_v  := 290; --to_integer(signed(Offset_vio));
          RdAddr0_v <= RdAddr_i + Offset_v;
          if (RdAddr0_v > 13311) then
             RdAddr0_i <= RdAddr0_v - 13312;
@@ -547,7 +546,7 @@ begin
          aclk                 => Clk93,
          aresetn              => not Reset,
          s_axis_config_tvalid => DataValid(0),  -- Freq/Phase offset may be delayed relative to simulation
-         s_axis_config_tdata  => (63 downto 18+32=> Phase0_vio(Phase0_vio'left)) & Phase0_vio & (31 downto 18=> Frequency0_vio(Frequency0_vio'left)) & Frequency0_vio, -- sign extend phase and freq values
+         s_axis_config_tdata  => (63 downto 18+32=> Phase0_vio(Phase0_vio'left)) & Phase0_vio & (31 downto 18=> Frequency_vio(Frequency_vio'left)) & Frequency_vio, -- sign extend phase and freq values
          m_axis_data_tvalid   => open,
          m_axis_data_tdata    => SinCosData0,
          m_axis_phase_tvalid  => open,
@@ -562,7 +561,7 @@ begin
          aclk                 => Clk93,
          aresetn              => not Reset,
          s_axis_config_tvalid => DataValid(0),
-         s_axis_config_tdata  => (63 downto 18+32=> Phase1_vio(Phase1_vio'left)) & Phase1_vio & (31 downto 18=> Frequency1_vio(Frequency1_vio'left)) & Frequency1_vio,
+         s_axis_config_tdata  => (63 downto 18+32=> Phase1_vio(Phase1_vio'left)) & Phase1_vio & (31 downto 18=> Frequency_vio(Frequency_vio'left)) & Frequency_vio,
          m_axis_data_tvalid   => open,
          m_axis_data_tdata    => SinCosData1,
          m_axis_phase_tvalid  => open,
@@ -640,7 +639,7 @@ begin
       PORT MAP(
          ResampleR      => to_slv(ResampleR_s),
          ResampleI      => to_slv(ResampleI_s),
-         ClocksPerBit   => ClocksPerBit,
+         ClocksPerBit   => to_slv(to_sfixed(10.0/93.3, 0, -15)),
          PilotSyncOffset => PilotSyncOffsetIn,
          DacSelect      => x"0",
          Clk93          => Clk93,

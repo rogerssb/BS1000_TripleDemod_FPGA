@@ -77,7 +77,7 @@ ENTITY Brik2 IS
       ValidIn        : IN  std_logic;
       InR,
       InI            : IN  SLV18;
-      EstimatesDone   : OUT std_logic;
+      EstimatesDone  : OUT std_logic;
       H0EstR,
       H0EstI,
       H1EstR,

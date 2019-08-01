@@ -45,109 +45,102 @@ ENTITY FireberdDrive IS
       clk,
       reset,
       ce,
-      Clk10MIn,
+      MsbFirst,
       ValidIn        : IN  std_logic;
       RecoveredData  : IN  SLV4;
+      ClocksPerBit   : IN  sfixed(0 downto -15);
       DataOut,
-      ClkOut,
-      OverFlow,
-      UnderFlow      : OUT std_logic
+      ClkOut         : OUT std_logic
    );
 END FireberdDrive;
 
 
 ARCHITECTURE rtl OF FireberdDrive IS
 
-   CONSTANT FULL_THRESH : natural := 16384;
---   CONSTANT FULL_THRESH : natural := 16;  -- set lower level for simulation
+   COMPONENT Fifo8k4to1
+      PORT (
+         clk : IN STD_LOGIC;
+         srst : IN STD_LOGIC;
+         din : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
+         wr_en : IN STD_LOGIC;
+         rd_en : IN STD_LOGIC;
+         dout : OUT STD_LOGIC_VECTOR(0 DOWNTO 0);
+         full : OUT STD_LOGIC;
+         empty : OUT STD_LOGIC;
+         wr_data_count : OUT STD_LOGIC_VECTOR(13 DOWNTO 0);
+         prog_full : OUT STD_LOGIC
+      );
+   END COMPONENT;
 
    -- Signals
-   SIGNAL   Shift,
-            FifoData    : SLV4;
-   SIGNAL   ChkCount    : natural range 0 to 3;
+   SIGNAL   Accum       : sfixed(0 downto -15);
+   SIGNAL   FifoDataIn,
+            ClkDelay    : SLV4;
+   SIGNAL   FifoDataOut : std_logic_vector(0 to 0);
+   SIGNAL   WrCount     : STD_LOGIC_VECTOR(13 DOWNTO 0);
+   SIGNAL   BertShift   : STD_LOGIC_VECTOR(10 DOWNTO 0);
    SIGNAL   RdEn,
             Active,
-            WrRstBusy,
-            RdRstBusy,
+            Ber,
+            Empty,
             ProgFull    : std_logic;
+
+   attribute mark_debug : string;
+   attribute mark_debug of WrCount, Ber : signal is "true";
 
 BEGIN
 
-   DataOut  <= Shift(3);
-   ClkOut   <= Clk10MIn;
+   FifoDataIn <= RecoveredData when (MsbFirst) else reverse_slv_bits(RecoveredData);
+   DataOut    <= FifoDataOut(0);
 
-   ShiftProcess : process(Clk10MIn, reset)
+   BertProcess : process(Clk)
    begin
-      if (reset) then
-         Shift    <= x"0";
-         ChkCount <= 0;
-         Active   <= '0';
-         RdEn     <= '0';
-      elsif (rising_edge(Clk10MIn)) then
-         if (ce) then
+      if (rising_edge(Clk)) then
+         if (ClkDelay(3)) then
+            BertShift <= BertShift(9 downto 0) & DataOut;
+            Ber       <= BertShift(10) xor (BertShift(8) xnor BertShift(0));
+         end if;
+      end if;
+   end process BertProcess;
+
+   ClkProcess : process(Clk)
+      variable Accum_v   : sfixed(0 downto -15);
+   begin
+      if (rising_edge(Clk)) then
+         if (reset) then
+            Accum    <= to_sfixed(0, Accum);
+            Active   <= '0';
+            RdEn     <= '0';
+            ClkOut   <= '0';
+            ClkDelay <= x"0";
+         elsif (ce) then
             if (ProgFull) then
                Active <= '1';
             end if;
             if (Active) then
-               if (ChkCount = 0) then
-                  Shift    <= FifoData;
-                  ChkCount <= 3;
-                  RdEn     <= '1';
-               else
-                  ChkCount <= ChkCount - 1;
-                  Shift <= Shift(2 downto 0) & '0';
-                  RdEn  <= '0';
-               end if;
+               Accum_v  := resize(Accum + ClocksPerBit, Accum);
+               Accum    <= Accum_v;
+               RdEn     <= Accum_v(0) and not Accum(0) and not empty;
             end if;
+            ClkDelay <= ClkDelay(2 downto 0) & RdEn;
+            ClkOut   <= nor(ClkDelay); --TODO FZ (3) or ClkDelay(2);    -- Delay ClkOut into valid data, widen pulse to 93M clock
          end if;
       end if;
-   end process ShiftProcess;
+   end process ClkProcess;
 
-xpm_fifo_async_inst : xpm_fifo_async
-  generic map (
-
-    FIFO_MEMORY_TYPE         => "block",          --string; "auto", "block", "distributed", or "ultra" ;
-    ECC_MODE                 => "no_ecc",         --string; "no_ecc" or "en_ecc";
-    FIFO_WRITE_DEPTH         => 32768,            --positive integer
-    RELATED_CLOCKS           => 0,                --positive integer; 0 or 1
-    WRITE_DATA_WIDTH         => 4,                --positive integer
-    WR_DATA_COUNT_WIDTH      => 15,               --positive integer
-    PROG_FULL_THRESH         => FULL_THRESH,      --positive integer
-    FULL_RESET_VALUE         => 0,                --positive integer; 0 or 1;
-    READ_MODE                => "std",            --string; "std" or "fwft";
-    FIFO_READ_LATENCY        => 1,                --positive integer;
-    READ_DATA_WIDTH          => 4,                --positive integer
-    RD_DATA_COUNT_WIDTH      => 15,               --positive integer
-    PROG_EMPTY_THRESH        => 10,               --positive integer
-    DOUT_RESET_VALUE         => "0",              --string
-    CDC_SYNC_STAGES          => 3,                --positive integer
-    WAKEUP_TIME              => 0                 --positive integer; 0 or 2;
-  )
-  port map (
-
-    rst              => reset,
-    wr_clk           => clk,
-    wr_en            => ValidIn and not WrRstBusy,
-    din              => RecoveredData,
-    full             => open,
-    overflow         => OverFlow,
-    wr_rst_busy      => WrRstBusy,
-    rd_clk           => Clk10MIn,
-    rd_en            => RdEn and not RdRstBusy,
-    dout             => FifoData,
-    empty            => open,
-    underflow        => UnderFlow,
-    rd_rst_busy      => RdRstBusy,
-    prog_full        => ProgFull,
-    wr_data_count    => open,
-    prog_empty       => open,
-    rd_data_count    => open,
-    sleep            => '0',
-    injectsbiterr    => '0',
-    injectdbiterr    => '0',
-    sbiterr          => open,
-    dbiterr          => open
-  );
+   FdFifo  : Fifo8k4to1
+   PORT MAP (
+      clk            => clk,
+      srst           => reset,
+      din            => FifoDataIn,
+      wr_en          => ValidIn,
+      rd_en          => RdEn and not empty,
+      dout           => FifoDataOut,
+      full           => open,
+      empty          => empty,
+      wr_data_count  => WrCount,
+      prog_full      => ProgFull
+   );
 
 END rtl;
 

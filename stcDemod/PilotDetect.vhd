@@ -255,7 +255,7 @@ architecture rtl of PilotDetect is
    CONSTANT PACKETS_PER_FRAME : positive  := 26;
 
    SIGNAL   AbsZero           : ufixed(6 downto -11);
-   type  MAG_ARRAY  is array (natural range <>) of ufixed(AbsZero'range);
+   type     MAG_ARRAY  is array (natural range <>) of ufixed(AbsZero'range);
 
    SIGNAL   ConfigTValid,
             ConfigDone,
@@ -769,7 +769,7 @@ begin
                else
                   MaxCntr <= AbsCntr1;
                end if;
-               if (MaxCntr > Max) then
+               if ((MaxCntr > Max) and (Index1 < 512)) then
                   Max      <= MaxCntr;
                   MaxIndex <= Index1;
                end if;
@@ -778,7 +778,7 @@ begin
                Max      <= (others=>'0');
             end if;
             if (ValidAbs) then
-               if (Index1 = 512) then
+               if (Index1 = 513) then     -- give Max a chance to propagate to PilotMag
                   PilotPulse  <= '1';
                elsif (PilotPulse1X) then  -- send wider pulse to threshold logic at lower clock
                   PilotPulse  <= '0';
@@ -797,7 +797,7 @@ begin
    begin
       if (rising_edge(clk)) then
          if (Resets1X(2)) then
-            Threshold         <= to_ufixed(5000, Threshold); -- set initial RunningTotal to typical at highest signal levels
+            Threshold         <= to_ufixed(2.0, Threshold); -- set initial RunningTotal to typical at highest signal levels
             MagDelay          <= (others=>(others=>'0'));
             PilotMag          <= (others=>'0');
             PilotFound        <= '0';
@@ -874,9 +874,17 @@ begin
                if (PeakPointer <= PACKETS_PER_FRAME) then
                   if (CurrentPeak > Peak1) then
                      Peak1 <= CurrentPeak;   -- Found new peak, store previous in peak2
-                     Peak2 <= Peak1;
+                     if (Peak1 > CurrentPeak / 2) then
+                        Peak2 <= resize(Peak1 / 2, Peak2);     -- if peak spans two packets, then both values would be similar and distort threshold
+                     else
+                        Peak2 <= Peak1;
+                     end if;
                   elsif (CurrentPeak > Peak2) then
-                     Peak2 <= CurrentPeak;
+                      if (Peak1 < CurrentPeak * 2) then
+                        Peak2 <= resize(CurrentPeak / 2, Peak2);     -- if peak spans two packets, then both values would be similar and distort threshold
+                     else
+                        Peak2 <= CurrentPeak;
+                     end if;
                   end if;
                   PeakPointer <= PeakPointer + 1;
                else

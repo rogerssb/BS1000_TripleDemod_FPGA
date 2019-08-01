@@ -167,33 +167,19 @@ ARCHITECTURE rtl OF STC IS
    );
    END COMPONENT TrellisProcess;
 
-   COMPONENT FireberdDrive IS
+   COMPONENT FireberdDrive
       PORT(
-         Clk,
-         Reset,
-         CE,
+         clk,
+         reset,
+         ce,
          MsbFirst,
          ValidIn        : IN  std_logic;
-         ClocksPerBit   : IN  SLV16;
          RecoveredData  : IN  SLV4;
+         ClocksPerBit   : IN  sfixed(0 downto -15);
          DataOut,
          ClkOut         : OUT std_logic
       );
    END COMPONENT FireberdDrive;
-
-   COMPONENT vio_Estimates
-      PORT (
-         clk : IN STD_LOGIC;
-         probe_out0 : OUT STD_LOGIC_VECTOR(17 DOWNTO 0);
-         probe_out1 : OUT STD_LOGIC_VECTOR(17 DOWNTO 0);
-         probe_out2 : OUT STD_LOGIC_VECTOR(17 DOWNTO 0);
-         probe_out3 : OUT STD_LOGIC_VECTOR(17 DOWNTO 0);
-         probe_out4 : OUT STD_LOGIC_VECTOR(5 DOWNTO 0);
-         probe_out5 : OUT STD_LOGIC_VECTOR(17 DOWNTO 0);
-         probe_out6 : OUT STD_LOGIC_VECTOR(17 DOWNTO 0);
-         probe_out7 : OUT STD_LOGIC_VECTOR(0 DOWNTO 0)
-      );
-   END COMPONENT;
 
    COMPONENT RAM_2Reads_1Write IS
       GENERIC(
@@ -235,7 +221,6 @@ ARCHITECTURE rtl OF STC IS
             interpOutEn,
             lastSampleReset,
             EstimatesDone     : std_logic;
-   SIGNAL   VioMode           : std_logic_vector(0 downto 0);
    SIGNAL   TrellisBits       : std_logic_vector(3 downto 0);
    SIGNAL   RealOutPS,
             ImagOutPS,
@@ -258,21 +243,7 @@ ARCHITECTURE rtl OF STC IS
             Mag1Peak,
             Phs0Peak,
             Phs1Peak,
-            H0EstRslv,
-            H0EstIslv,
-            H1EstRslv,
-            H1EstIslv,
-            H0EstRvio,
-            H0EstIvio,
-            H1EstRvio,
-            H1EstIvio,
-            Ch0MuSlv,
-            Ch1MuSlv,
-            Ch0MuVio,
-            Ch1MuVio,
             StartDac2Data     : SLV18;
-   SIGNAL   DeltaTauSlv,
-            DeltaTauVio       : std_logic_vector(5 downto 0);
    SIGNAL   PilotPulse,
             PilotValidOut     : std_logic;
    SIGNAL   PilotRealOut,
@@ -288,14 +259,11 @@ ARCHITECTURE rtl OF STC IS
             sample0i,
             InRBrik2Ila,
             InIBrik2Ila       : SLV18;
-   signal   Ch0MuIla,
-            Ch1MuIla          : std_logic_vector(16 downto 0);
    signal   StartIla,
             ValidIla          : std_logic;
 
    attribute mark_debug : string;
    attribute mark_debug of TrellisBits, TrellisOutEn, EstimatesDone,
-                  H0EstRslv, H0EstIslv, H1EstRslv, H1EstIslv, Ch0MuIla, Ch1MuIla, DeltaTauSlv,
                   DataOut, ClkOutEn, StartIla, ValidIla, InRBrik2Ila, InIBrik2Ila,
                   Bert, BitErrors, lastSampleReset, TrellisFull : signal is "true";
 
@@ -309,8 +277,6 @@ BEGIN
          InIBrik2Ila <= to_slv(InIBrik2Dly);
          StartIla    <= StartInBrik2Dly;
          ValidIla    <= ValidInBrik2Dly;
-         Ch0MuIla    <= Ch0MuSlv(17 downto 1);
-         Ch1MuIla    <= Ch1MuSlv(17 downto 1);
       end if;
    end process;
 
@@ -461,30 +427,9 @@ BEGIN
          Mu1            => Ch1Mu
       );
 
-   Vio : vio_Estimates
-      PORT MAP (
-         clk        => clk2x,
-         probe_out0 =>  H0EstRvio,
-         probe_out1 =>  H0EstIvio,
-         probe_out2 =>  H1EstRvio,
-         probe_out3 =>  H1EstIvio,
-         probe_out4 =>  DeltaTauVio,
-         probe_out5 =>  Ch0MuVio,
-         probe_out6 =>  Ch1MuVio,
-         probe_out7 =>  VioMode
-      );
-
-   H0EstRslv   <= H0EstRvio   when (VioMode(0)) else to_slv(H0EstR);
-   H0EstIslv   <= H0EstIvio   when (VioMode(0)) else to_slv(H0EstI);
-   H1EstRslv   <= H1EstRvio   when (VioMode(0)) else to_slv(H1EstR);
-   H1EstIslv   <= H1EstIvio   when (VioMode(0)) else to_slv(H1EstI);
-   Ch0MuSlv    <= Ch0MuVio    when (VioMode(0)) else to_slv(Ch0Mu);
-   Ch1MuSlv    <= Ch1MuVio    when (VioMode(0)) else to_slv(Ch1Mu);
-   DeltaTauSlv <= DeltaTauVio when (VioMode(0)) else to_slv(DeltaTauEst);
-
    Trellis_u : trellisProcess
       PORT MAP (
-         clk                  => clk,
+         clk                  => Clk,
          clk2x                => Clk2x,
          clkEnable            => CE,
          reset                => Reset,
@@ -493,13 +438,13 @@ BEGIN
          inputValid           => ValidInBrik2Dly,
          dinReal              => to_slv(InRBrik2Dly),
          dinImag              => to_slv(InIBrik2Dly),
-         h0EstRealIn          => H0EstRslv,
-         h0EstImagIn          => H0EstIslv,
-         h1EstRealIn          => H1EstRslv,
-         h1EstImagIn          => H1EstIslv,
-         ch0MuIn              => Ch0MuSlv,
-         ch1MuIn              => Ch1MuSlv,
-         deltaTauEstIn        => DeltaTauSlv,
+         h0EstRealIn          => to_slv(H0EstR),
+         h0EstImagIn          => to_slv(H0EstI),
+         h1EstRealIn          => to_slv(H1EstR),
+         h1EstImagIn          => to_slv(H1EstI),
+         ch0MuIn              => to_slv(Ch0Mu),
+         ch1MuIn              => to_slv(Ch1Mu),
+         deltaTauEstIn        => to_slv(DeltaTauEst),
          sample0r             => sample0r,
          sample0i             => sample0i,
          interpOutEn          => interpOutEn,
@@ -509,15 +454,15 @@ BEGIN
          outputBits           => TrellisBits
       );
 
-   FD : fireberdDrive
+   FD : FireberdDrive
       PORT MAP(
-         Clk            => Clk2x,
-         Reset          => Reset,
-         CE             => CE,
-         ClocksPerBit   => ClocksPerBit,
-         MsbFirst       => '1',
+         clk            => Clk2x,
+         reset          => Reset,
+         ce             => CE,
          ValidIn        => TrellisOutEn,
+         MsbFirst       => '1',
          RecoveredData  => TrellisBits,
+         ClocksPerBit   => to_sfixed(ClocksPerBit, 0, -15),
          DataOut        => DataOut,
          ClkOut         => ClkOutEn
       );

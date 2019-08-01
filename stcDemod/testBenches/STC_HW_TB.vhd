@@ -71,6 +71,7 @@ ARCHITECTURE rtl OF STC_HW_TB IS
          Power1In,
          NoiseIn           : sfixed(0 downto -17);
    signal PilotSyncOffset  : SLV12 := x"800";    -- 600 for 4.6mB, 800 for 10mB, A00 for 20mB
+   signal   ShiftIn, ShiftOut : std_logic_vector(10 downto 0) := 11x"7ff";
 
 BEGIN
 
@@ -80,9 +81,9 @@ BEGIN
    end process;
 
    Power0In <= to_sfixed(0.40, Power0In);
-   Power1In <= to_sfixed(0.40, Power1In);
+   Power1In <= to_sfixed(0.00, Power1In);
    NoiseIn  <= to_sfixed(0.0, NoiseIn);
-   BitRate  <= to_sfixed(41.6/93.3, BitRate);    -- 41.6 is 10Mb times 4 plus 4% overhead for pilot
+   BitRate  <= to_sfixed(9.33*4*1.04/93.3, BitRate);    -- 41.6 is 10Mb times 4 plus 4% overhead for pilot
 
    Brik1 : Brik1_Hw_tb
    GENERIC MAP(
