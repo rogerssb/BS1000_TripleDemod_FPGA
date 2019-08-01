@@ -133,6 +133,8 @@ ARCHITECTURE rtl OF STC IS
          H0EstI,
          H1EstR,
          H1EstI         : OUT STC_PARM;
+         m_ndx0,
+         m_ndx1         : OUT integer range -5 to 3;
          Mu0,
          Mu1            : OUT FLOAT_1_18;
          DeltaTauEst    : OUT sfixed(0 downto -5)
@@ -156,6 +158,8 @@ ARCHITECTURE rtl OF STC IS
        h1EstImagIn,
        ch0MuIn,
        ch1MuIn          : IN  SLV18;
+       m_ndx0,
+       m_ndx1           : IN  SLV4;
        deltaTauEstIn    : IN  std_logic_vector(5 downto 0);
        sample0r,
        sample0i         : OUT SLV18;
@@ -234,6 +238,8 @@ ARCHITECTURE rtl OF STC IS
             ResampleI_s,
             Ch0Mu,
             Ch1Mu             : Float_1_18;
+   SIGNAL   m_ndx0,
+            m_ndx1            : integer range -5 to 3 := 0;
    SIGNAL   DeltaTauEst       : sfixed(0 downto -5);
    SIGNAL   Magnitude0,
             Magnitude1,
@@ -423,6 +429,8 @@ BEGIN
          H1EstR         => H1EstR,
          H1EstI         => H1EstI,
          DeltaTauEst    => DeltaTauEst,
+         m_ndx0         => m_ndx0,
+         m_ndx1         => m_ndx1,
          Mu0            => Ch0Mu,
          Mu1            => Ch1Mu
       );
@@ -445,6 +453,8 @@ BEGIN
          ch0MuIn              => to_slv(Ch0Mu),
          ch1MuIn              => to_slv(Ch1Mu),
          deltaTauEstIn        => to_slv(DeltaTauEst),
+         m_ndx0               => std_logic_vector(to_signed(m_ndx0, 4)),
+         m_ndx1               => std_logic_vector(to_signed(m_ndx1, 4)),
          sample0r             => sample0r,
          sample0i             => sample0i,
          interpOutEn          => interpOutEn,

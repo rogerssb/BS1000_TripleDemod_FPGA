@@ -17,6 +17,8 @@ module trellisProcess (
                             h1EstImagIn,
                             ch0MuIn,
                             ch1MuIn,
+    input   signed  [3:0]   m_ndx0,
+                            m_ndx1,
     input   signed  [5:0]   deltaTauEstIn,
     output  signed  [17:0]  sample0r,
                             sample0i,

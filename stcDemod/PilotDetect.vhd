@@ -285,7 +285,6 @@ architecture rtl of PilotDetect is
             PilotPulse1x,
             ValidCordic,
             CalcThreshold     : std_logic := '0';
-   SIGNAL   SkipPacket        : std_logic_vector(1 downto 0);
    SIGNAL   ReInDly,
             ImInDly           : FLOAT_1_18;
    SIGNAL   XC_Zero,
@@ -319,6 +318,7 @@ architecture rtl of PilotDetect is
    SIGNAL   PhsPeakArray0,
             PhsPeakArray1     : vector_of_slvs(25 downto 0)(Phase0'left downto 0) := (others=>(others=>'0'));
    SIGNAL   PilotMag,
+            PreviousMag,
             Threshold,
             AbsCntr0,
             AbsCntr1,
@@ -800,14 +800,13 @@ begin
             Threshold         <= to_ufixed(2.0, Threshold); -- set initial RunningTotal to typical at highest signal levels
             MagDelay          <= (others=>(others=>'0'));
             PilotMag          <= (others=>'0');
+            PreviousMag       <= (others=>'0');
             PilotFound        <= '0';
             PilotPulse1x      <= '0';
             ValidAbsDly       <= '0';
             CalcThreshold     <= '0';
             StartOut          <= '0';
             PeakPointer       <= 1;
-            SkipPacket        <= "00";
- --           PacketOffset      <= 0;
             BadPilot          <= 0;
             if (SIM_MODE) then
                GoodPilot         <= 3;
@@ -841,15 +840,7 @@ begin
                   else
                      PilotFound <= '1';
                      GoodPilot <= 3;
-                     StartOut <= SkipPacket ?= "00";  -- prevents double starts
-                     -- force bulk of pilot within one packet
-   --                     if ((PilotIndex > 384 + HYSTERESIS) or (PilotIndex < 128 - HYSTERESIS)) and (SkipPacket = "00") then
-   --                        PacketOffset  <= to_integer(PilotIndex);
-   --                        SkipPacket        <= "11";
-   --                     elsif ((PilotIndex > 384 - HYSTERESIS) or (PilotIndex < 128 + HYSTERESIS)) and (SkipPacket = "00") then
-   --                        PacketOffset <= to_integer(PilotIndex);
-   --                     end if;
-                    SkipPacket       <= "11";
+                     StartOut <= '1' when (PilotMag > PreviousMag) else '0';  -- prevents double starts if bell curve is falling
                   end if;
                else
                   if (BadPilot <= 127) then    -- 128 bad packets in a row = lost. Should get 25 data packets
@@ -860,13 +851,11 @@ begin
                   end if;
                end if;
                MagDelay   <= MagDelay(26 downto 0) & PilotMag; -- only use last 26, but pipelining wants array of 27
+               PreviousMag <= PilotMag;
             else
                StartOut <= '0';
             end if;
 
-            if (ValidAbs and not ValidAbsDly) then -- skip end of this and all of next packet
-               SkipPacket <= SkipPacket(0) & '0';
-            end if;
             ValidAbsDly  <= ValidAbs;
 
             if (CalcThreshold) then          -- Place threshold in center of two highest peaks

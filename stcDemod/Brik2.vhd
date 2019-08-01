@@ -82,6 +82,8 @@ ENTITY Brik2 IS
       H0EstI,
       H1EstR,
       H1EstI         : OUT STC_PARM;
+      m_ndx0,
+      m_ndx1         : OUT integer range -5 to 3;
       Mu0,
       Mu1            : OUT FLOAT_1_18;
       DeltaTauEst    : OUT sfixed(0 downto -5)
@@ -202,6 +204,7 @@ ARCHITECTURE rtl OF Brik2 IS
             ChanEstDone,
             TimeEstDone,
             TimeActive,
+            ResetTiming,
             StartTime,
             StartDF,
             FirstPass,
@@ -234,9 +237,7 @@ ARCHITECTURE rtl OF Brik2 IS
    SIGNAL   Tau0EstNdxTE,
             Tau1EstNdxTE      : integer range 0 to SEARCH_LENGTH;
    SIGNAL   Tau0Int,
-            Tau1Int,
-            m_ndx0,
-            m_ndx1            : integer range -MIN_M_NDX to MAX_M_NDX := 0;
+            Tau1Int           : integer range -MIN_M_NDX to MAX_M_NDX := 0;
    SIGNAL   TrellisDelay      : SLV4;
    SIGNAL   Tau0EstX4,
             Tau1EstX4,
@@ -245,12 +246,14 @@ ARCHITECTURE rtl OF Brik2 IS
 
 -- TODO remove test points
    signal   DF_R_Ila,
-            DF_I_Ila          : SLV18;  -- remove fractions for ILA, doesn't like negatives
+            DF_I_Ila,
+            TauEst0Ila,
+            TauEst1Ila        : SLV18;  -- remove fractions for ILA, doesn't like negatives
    SIGNAL   ValidDF_ILA       : std_logic;
 
    attribute mark_debug : string;
    attribute mark_debug of DF_R_Ila, DF_I_Ila, ValidDF_ILA, TimeEstDone, ChanEstDone,
-                           StartTime : signal is "true";
+                           TauEst0Ila, TauEst1Ila, StartTime : signal is "true";
 
 BEGIN
 
@@ -259,6 +262,8 @@ BEGIN
       if (rising_edge(clk)) then
          DF_R_Ila       <= to_slv(DF_R);
          DF_I_Ila       <= to_slv(DF_I);
+         TauEst0Ila     <= to_slv(Tau0Est);
+         TauEst1Ila     <= to_slv(Tau1Est);
          ValidDF_ILA    <= ValidDFreg;
       end if;
    end process IlaProcess;
@@ -312,13 +317,19 @@ BEGIN
    ValidTimeChan <= ValidDFreg when (TimeViaDF) else ValidIn or StartIn;
    TimeChanR     <= DF_R when (TimeViaDF) else InR_sf;
    TimeChanI     <= DF_I when (TimeViaDF) else InI_sf;
+   ResetTiming   <= reset or (StartTimeChan and TimeActive);   -- if PD bell curve is on edge of packet, actual peak could be on second packet, restart
 
    TimeProcess : process(clk)  -- Time and channel want last half of pilot
    begin
       if (rising_edge(clk)) then
-         if (reset) then
-            TimeCount <= PILOT_SIZE + PILOT_OFFSET;
-            TimeActive <= '0';
+         if (ResetTiming) then
+            if (StartTimeChan) then
+               TimeCount <= 0;
+               TimeActive <= '1';
+            else
+               TimeCount <= PILOT_SIZE + PILOT_OFFSET;
+               TimeActive <= '0';
+            end if;
             StartTime  <= '0';
             WrAddr      <= 0;
          elsif (ce) then
@@ -397,7 +408,7 @@ BEGIN
       PORT MAP(
          clk         => clk,
          ce          => ce,
-         reset       => reset,
+         reset       => ResetTiming,   -- if Pilot restarted
          StartIn     => StartTime,
          Xr          => TimeR,
          Xi          => TimeI,

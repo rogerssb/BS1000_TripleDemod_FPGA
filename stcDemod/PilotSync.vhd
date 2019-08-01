@@ -206,7 +206,7 @@ BEGIN
             if (WaitCount_i > 0) then
                WaitCount_i <= WaitCount_i - 1;
             elsif (PacketCount_i = 1) then
-               WaitCount_i <= 61;   -- minimum dead time at 40Mbps
+               WaitCount_i <= 61;   -- minimum dead time at 20Mbps
             end if;
 
          if (StartOut) then
