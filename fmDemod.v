@@ -50,6 +50,7 @@ module fmDemod(
                 `MODE_PM: begin
                     phaseError <= phase;
                     end
+                `MODE_STC,
                 `MODE_FM: begin
                     phaseError <= phase;
                     end

@@ -115,6 +115,7 @@ module carrierLoop(
                 //modeError <= freq;
                 //enableCarrierLock <= 0;
                 end
+            `MODE_STC,
             `MODE_MULTIH,
             `MODE_FM: begin
                 loopFilterEn <= ddcClkEn;

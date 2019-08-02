@@ -760,6 +760,7 @@
     `define MODE_MULTIH         5'b01010
     `define MODE_AUQPSK         5'b01011
     `define MODE_UQPSK          5'b01100
+    `define MODE_STC            5'b01101
 `define DEMOD_DACSELECT 13'bx_xxxx_xxx0_01xx
 `define DAC_I               4'b0000
 `define DAC_Q               4'b0001
