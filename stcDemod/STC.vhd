@@ -83,7 +83,7 @@ ARCHITECTURE rtl OF STC IS
          ValidIn        : IN  std_logic;
          ReIn,
          ImIn           : IN  FLOAT_1_18;
-         PilotIndex     : OUT ufixed(10 downto 0);
+         PilotIndex     : OUT natural range 0 to 1023;
          ReOut,
          ImOut          : OUT FLOAT_1_18;
          Magnitude0,
@@ -108,7 +108,7 @@ ARCHITECTURE rtl OF STC IS
          PilotPulseIn,
          ValidIn        : IN STD_LOGIC;
          PilotSyncOffset : IN  natural range 0 to 4095;
-         IndexIn        : IN ufixed(10 DOWNTO 0);
+         IndexIn        : IN natural range 0 to 1023;
          RealIn,
          ImagIn         : IN  Float_1_18;
          RealOut,
@@ -254,10 +254,12 @@ ARCHITECTURE rtl OF STC IS
             PilotValidOut     : std_logic;
    SIGNAL   PilotRealOut,
             PilotImagOut      : Float_1_18;
-   SIGNAL   PilotIndex        : ufixed(10 downto 0);
+   SIGNAL   PilotIndex        : natural range 0 to 1023;
 
 -- todo, remove
-   SIGNAL   ExpectedData      : SLV4;
+   SIGNAL   ExpectedData,
+            m_ndx0Slv,
+            m_ndx1Slv         : SLV4;
    SIGNAL   DataAddr          : integer range 0 to 800;
    SIGNAL   Bert,
             BitErrors         : natural range 0 to 3200;
@@ -271,7 +273,8 @@ ARCHITECTURE rtl OF STC IS
    attribute mark_debug : string;
    attribute mark_debug of TrellisBits, TrellisOutEn, EstimatesDone,
                   DataOut, ClkOutEn, StartIla, ValidIla, InRBrik2Ila, InIBrik2Ila,
-                  Bert, BitErrors, lastSampleReset, TrellisFull : signal is "true";
+                  Bert, BitErrors, lastSampleReset, TrellisFull,
+                  m_ndx0Slv, m_ndx1Slv : signal is "true";
 
 BEGIN
 
@@ -435,6 +438,9 @@ BEGIN
          Mu1            => Ch1Mu
       );
 
+   m_ndx0Slv <= std_logic_vector(to_signed(m_ndx0, 4));
+   m_ndx1Slv <= std_logic_vector(to_signed(m_ndx1, 4));
+
    Trellis_u : trellisProcess
       PORT MAP (
          clk                  => Clk,
@@ -453,8 +459,8 @@ BEGIN
          ch0MuIn              => to_slv(Ch0Mu),
          ch1MuIn              => to_slv(Ch1Mu),
          deltaTauEstIn        => to_slv(DeltaTauEst),
-         m_ndx0               => std_logic_vector(to_signed(m_ndx0, 4)),
-         m_ndx1               => std_logic_vector(to_signed(m_ndx1, 4)),
+         m_ndx0               => m_ndx0Slv,
+         m_ndx1               => m_ndx1Slv,
          sample0r             => sample0r,
          sample0i             => sample0i,
          interpOutEn          => interpOutEn,

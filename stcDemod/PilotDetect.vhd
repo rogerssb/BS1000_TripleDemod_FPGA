@@ -59,7 +59,7 @@ entity PilotDetect is
          ValidIn        : IN  std_logic;
          ReIn,
          ImIn           : IN  FLOAT_1_18;
-         PilotIndex     : OUT ufixed(10 downto 0);
+         PilotIndex     : OUT natural range 0 to 1023;
          ReOut,
          ImOut          : OUT FLOAT_1_18;
          Magnitude0,
@@ -818,12 +818,12 @@ begin
             CurrentPeak       <= (others=>'0');
             Peak1             <= (others=>'0');
             Peak2             <= (0=>'1', others=>'0');
-            PilotIndex        <= (others=>'0');
+            PilotIndex        <= 0;
          elsif (ce) then
             PilotMag     <= Max;          -- Latch clock transfers
             PilotPulse1x <= PilotPulse;
             if (PilotPulse1x) then
-               PilotIndex  <= to_ufixed(MaxIndex, PilotIndex);
+               PilotIndex  <= MaxIndex;
                if (IgnoreInitial < 25) then
                   IgnoreInitial <= IgnoreInitial + 1; -- let first frame accumulate to set threshold
                else

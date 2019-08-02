@@ -58,9 +58,9 @@ ENTITY PilotSync IS
       reset,
       ce,
       PilotPulseIn,
-      ValidIn        : IN STD_LOGIC;
+      ValidIn        : IN  STD_LOGIC;
       PilotSyncOffset : IN natural range 0 to 4095;
-      IndexIn        : IN ufixed(10 DOWNTO 0);
+      IndexIn        : IN  natural range 0 to 1023;
       RealIn,
       ImagIn         : IN  Float_1_18;
       RealOut,
@@ -99,16 +99,17 @@ ARCHITECTURE rtl OF PilotSync IS
    END COMPONENT RAM_2Reads_1Write;
 
    CONSTANT ADDR_BITS      : integer := 13;
+   CONSTANT ADDR_RANGE     : integer := 2**ADDR_BITS-1;
 
    -- Signals
+   SIGNAL   IndexLatch,
+            IndexOut             : natural range 0 to 1023;
    SIGNAL   WrAddr,
-            RdAddr,
-            IndexOut             : ufixed(ADDR_BITS-1 downto 0);
-   SIGNAL   WrAddr_i,
             PacketCount_i,
             WaitCount_i,
-            RdAddr_i             : integer range 0 to 2**ADDR_BITS-1;
+            RdAddr_i             : integer range 0 to ADDR_RANGE;
    SIGNAL   SampleCount          : natural range 0 to 16383;
+   SIGNAL   FallCount            : natural range 0 to 2;
    SIGNAL   ReadCount,
             InvRdCount,
             PilotCount           : unsigned (8 downto 0);
@@ -119,6 +120,8 @@ ARCHITECTURE rtl OF PilotSync IS
    SIGNAL   StartNext,
             Clock256,
             PilotValid,
+            FallValidOut,
+            ValidOutDly,
             PilotPacket          : std_logic;
    SIGNAL   ReadR,
             ReadI                : FLOAT_1_18;
@@ -144,18 +147,20 @@ BEGIN
 
    Clock256    <= '1' when (PacketCount_i = 256) else '0';
    PilotValid  <= PilotPulseIn; -- TODO '1' when (PilotPulseIn = '1') and (SampleCount > 13300) else '0'; -- pulse should be at 13312
+   FallValidOut <= ValidOutDly and not ValidOut;
 
    ClkProcess: process (clk)
    begin
       if (rising_edge(clk)) then
          if (reset) then
-            WrAddr         <= (others=>'0');
-            RdAddr         <= (others=>'0');
+            WrAddr         <= 0;
             SyncSum        <= (others=>'0');
             SyncError      <= (others=>'0');
             ReadCount      <= (others=>'0');
             PilotCount     <= (others=>'0');
-            IndexOut       <= to_ufixed(0, IndexOut);    -- was 290
+            IndexOut       <= 0;
+            IndexLatch     <= 0;
+            ValidOutDly    <= '0';
             WaitCount_i    <= 0;
             SampleCount    <= 0;
             PacketCount_i  <= 512;
@@ -163,19 +168,28 @@ BEGIN
             PilotPacket    <= '0';
             PilotLocked    <= '0';
          elsif ce = '1' then
-            ValidOut <= ValidIn;
-
-            if (PilotValid) then -- validated pilot with distance between frames
-               IndexOut <= resize(IndexIn, IndexOut);
-            --   RdAddr   <= resize(WrAddr - PacketCount_i, RdAddr);   -- if synchronized, should be going to same value either way
-            elsif (ValidIn) then
-               RdAddr <= resize(RdAddr + 1, RdAddr);
-            else
-               RdAddr <= WrAddr; -- Start at beginning of this packet
-            end if;
+            ValidOut    <= ValidIn;
+            ValidOutDly <= ValidOut;
 
             if (ValidIn) then
-               WrAddr <= resize(WrAddr + 1, WrAddr);
+               if (WrAddr < ADDR_RANGE) then
+                  WrAddr <= WrAddr + 1;
+               else
+                  WrAddr <= 0;
+               end if;
+            end if;
+
+            if ((PilotPulseIn = '1') and (FallCount = 0)) then
+               FallCount <= 2;
+               IndexLatch <= IndexIn;
+            elsif (PilotPulseIn) then
+               IndexLatch <= IndexIn + 512;
+            elsif ((FallValidOut = '1') and (FallCount > 0)) then
+               FallCount <= FallCount - 1;
+               if (FallCount = 1) then
+                  StartNext <= '1';
+                  IndexOut <= IndexLatch;
+               end if;
             end if;
 
             if (PilotValid) then
@@ -186,9 +200,9 @@ BEGIN
                SampleCount <= SampleCount + 1;
             end if;
 
-            if (PilotValid = '1') or (SampleCount = 13324) then   -- request a start pulse between packets
+        /*    if (SampleCount = 13324) then   -- request a start pulse between packets
                StartNext <= '1';                                  -- even if this frame didn't find a pilot
-            elsif (WaitCount_i = 32) and (StartNext = '1') then   -- setting StartNext timing is not critical
+            els*/if (WaitCount_i = 32) and (StartNext = '1') then   -- setting StartNext timing is not critical
                StartNext <= '0';
                StartOut  <= '1';
             else
@@ -234,8 +248,8 @@ BEGIN
       end if;
    end process ClkProcess;
 
-   WrAddr_i <= to_integer(WrAddr);
-   RdAddr_i <= to_integer(resize(RdAddr - PilotSyncOffset + IndexOut, RdAddr));
+   RdAddr_i <= WrAddr - PilotSyncOffset + IndexOut when (WrAddr - PilotSyncOffset + IndexOut >= 0) else
+      WrAddr - PilotSyncOffset + IndexOut + ADDR_RANGE + 1;
 
    PilotSync_r_u : RAM_2Reads_1Write
       GENERIC MAP(
@@ -249,7 +263,7 @@ BEGIN
          ce          => ce,
          reset       => reset,
          WrEn        => ValidIn,
-         WrAddr      => WrAddr_i,
+         WrAddr      => WrAddr,
          RdAddrA     => 0,
          RdAddrB     => RdAddr_i,
          WrData      => to_slv(RealIn),
@@ -269,7 +283,7 @@ BEGIN
          ce          => ce,
          reset       => reset,
          WrEn        => ValidIn,
-         WrAddr      => WrAddr_i,
+         WrAddr      => WrAddr,
          RdAddrA     => 0,
          RdAddrB     => RdAddr_i,
          WrData      => to_slv(ImagIn),

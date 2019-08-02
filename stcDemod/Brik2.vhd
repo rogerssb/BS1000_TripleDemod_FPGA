@@ -248,12 +248,17 @@ ARCHITECTURE rtl OF Brik2 IS
    signal   DF_R_Ila,
             DF_I_Ila,
             TauEst0Ila,
-            TauEst1Ila        : SLV18;  -- remove fractions for ILA, doesn't like negatives
+            TauEst1Ila,
+            H0EstR_Ila,
+            H0EstI_Ila,
+            H1EstR_Ila,
+            H1EstI_Ila        : SLV18;  -- remove fractions for ILA, doesn't like negatives
    SIGNAL   ValidDF_ILA       : std_logic;
 
    attribute mark_debug : string;
    attribute mark_debug of DF_R_Ila, DF_I_Ila, ValidDF_ILA, TimeEstDone, ChanEstDone,
-                           TauEst0Ila, TauEst1Ila, StartTime : signal is "true";
+                  TauEst0Ila, TauEst1Ila, StartTime,
+                  H0EstR_Ila, H0EstI_Ila, H1EstR_Ila, H1EstI_Ila : signal is "true";
 
 BEGIN
 
@@ -264,6 +269,10 @@ BEGIN
          DF_I_Ila       <= to_slv(DF_I);
          TauEst0Ila     <= to_slv(Tau0Est);
          TauEst1Ila     <= to_slv(Tau1Est);
+         H0EstR_Ila     <= to_slv(H0EstR);
+         H0EstI_Ila     <= to_slv(H0EstI);
+         H1EstR_Ila     <= to_slv(H1EstR);
+         H1EstI_Ila     <= to_slv(H1EstI);
          ValidDF_ILA    <= ValidDFreg;
       end if;
    end process IlaProcess;
