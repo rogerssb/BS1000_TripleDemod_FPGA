@@ -621,6 +621,7 @@
 `define RESAMPSPACE         13'b0_0100_0101_xxxx
 `define CHAGCSPACE          13'b0_0100_101x_xxxx
 `define CARRIERSPACE        13'b0_0100_110x_xxxx
+`define PILOT_LF_SPACE      13'b0_0100_111x_xxxx
 
 // Video Interpolators and FIRs
 `define INTERP0SPACE        13'b0_1000_0000_xxxx

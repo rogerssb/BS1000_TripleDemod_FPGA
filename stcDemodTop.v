@@ -352,7 +352,7 @@ module stcDemodTop (
 //                         Downconverter
 //******************************************************************************
 
-    wire    signed  [17:0]  iStc,qStc;
+    wire    signed  [17:0]  iDdc,qDdc;
     wire    signed  [3:0]   demodDac0Select,demodDac1Select,demodDac2Select;
     wire    signed  [17:0]  demodDac0Data,demodDac1Data,demodDac2Data;
     wire            [4:0]   demodMode;
@@ -368,7 +368,7 @@ module stcDemodTop (
         .din(dataIn),
         .dout(demodDout),
         .iRx(adc0In), .qRx(18'h0),
-        .iStc(iStc), .qStc(qStc),
+        .iStc(iDdc), .qStc(qDdc),
         .resampSync(stcDdcClkEn),
         .dac0Select(demodDac0Select),
         .dac1Select(demodDac1Select),
@@ -381,6 +381,78 @@ module stcDemodTop (
         .dac2Data(demodDac2Data),
         .demodMode(demodMode)
     );
+
+
+/******************************************************************************
+                            Pilot Carrier Loop
+******************************************************************************/
+    wire    signed  [17:0]  pilotPhaseDiff;
+    wire    signed  [31:0]  pilotFreqOffset;
+    wire    signed  [11:0]  pilotLoopError;
+    wire            [31:0]  pilotDout;
+    carrierLoop #(.RegSpace(`PILOT_LF_SPACE)) pilot(
+        .clk(clk), .reset(reset),
+        .resampClkEn(),
+        .ddcClkEn(pilotPhaseDiffEn),
+        `ifdef USE_BUS_CLOCK
+        .busClk(busClk),
+        `endif
+        .cs(cs),
+        .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
+        .addr(addr),
+        .din(din),
+        .dout(pilotDout),
+        .demodMode(`MODE_STC),
+        .phase(),
+        .freq(pilotPhaseDiff[17:6]),
+        .highFreqOffset(1'b0),
+        .offsetError(12'h0),
+        .offsetErrorEn(1'b0),
+        .carrierFreqOffset(pilotFreqOffset),
+        .carrierLeadFreq(),
+        .carrierFreqEn(pilotFreqOffsetEn),
+        .loopError(pilotLoopError),
+        .carrierLock(),
+        .lockCounter()
+    );
+
+    // LO Generator
+    wire    [47:0]  m_axis;
+    wire    [17:0]  qDds = m_axis[41:24];
+    wire    [17:0]  iDds = m_axis[17:0];
+    `ifdef SIMULATE
+    reg ddsSimReset;
+    initial ddsSimReset = 0;
+    wire ddsReset = ddsSimReset || reset;
+    `else
+    wire ddsReset = reset;
+    `endif
+    dds6p0 dds(
+      .aclk(clk),
+      .aclken(1'b1),
+      .aresetn(!ddsReset),
+      .m_axis_data_tdata(m_axis),
+      .m_axis_data_tvalid(),
+      .s_axis_phase_tdata(pilotFreqOffset),
+      .s_axis_phase_tvalid(1'b1)
+    );
+
+
+    // Complex Multiplier
+    wire [17:0]iStc;
+    wire [17:0]qStc;
+    cmpy18 mixer( 
+        .clk(clk),
+        .reset(reset),
+        .aReal(iDdc),
+        .aImag(qDdc),
+        .bReal(iDds),
+        .bImag(qDds),
+        .pReal(iStc),
+        .pImag(qStc)
+    );
+
+
 
 
 //******************************************************************************
@@ -405,6 +477,8 @@ module stcDemodTop (
         .DacSelect(stcDacSelect),
         .SpectrumInv(SpectrumInv),
         .PilotSyncOffset(pilotOffset),
+        .PhaseDiff(pilotPhaseDiff),
+        .PhaseDiffEn(pilotPhaseDiffEn),
         .ClkOutEn(stcBitEnOut),
         .PilotFound(pilotFound),
         .PilotLocked(pilotLocked),
@@ -829,6 +903,8 @@ module stcDemodTop (
             `CARRIERSPACE,
             `CHAGCSPACE :       rd_mux = demodDout;
 
+            `PILOT_LF_SPACE:    rd_mux = pilotDout;
+
             `VIDFIR0SPACE,
             `INTERP0SPACE:      rd_mux = interp0Dout;
 
@@ -894,6 +970,16 @@ module stcDemodTop (
                     rd_mux = demodDout[15:0];
                 end
             end
+
+            `PILOT_LF_SPACE: begin
+                if (addr[1]) begin
+                    rd_mux = pilotDout[31:16];
+                end
+                else begin
+                    rd_mux = pilotDout[15:0];
+                end
+            end
+
             `VIDFIR0SPACE,
             `INTERP0SPACE: begin
                 if (addr[1]) begin

@@ -161,7 +161,7 @@ module stcDownconverter(
     wire    [15:0]  freqLockCounter;
     wire    [31:0]  freqDout;
     wire    [11:0]  rndOffsetError = offsetError[17:6] + offsetError[5];
-    carrierLoop carrierLoop(
+    carrierLoop #(.RegSpace(`CARRIERSPACE)) carrierLoop(
         .clk(clk), .reset(reset),
         .resampClkEn(resampSync),
         .ddcClkEn(demodSync),
