@@ -22,7 +22,9 @@ module stcRegs(
     output  reg         [31:0]  clocksPerBit,
     output  reg                 spectrumInvert,
     output  reg         [11:0]  pilotOffset,
-    output  reg         [3:0]   dacSelect
+    output  reg         [3:0]   dac0Select,
+    output  reg         [3:0]   dac1Select,
+    output  reg         [3:0]   dac2Select
 );
 
     `ifdef USE_BUS_CLOCK
@@ -40,7 +42,7 @@ module stcRegs(
                     pilotOffset[7:0] <= dataIn[7:0];
                     end
                 `STC_DAC_SELECT: begin
-                    dacSelect <= dataIn[3:0];
+                    dac0Select <= dataIn[3:0];
                     end
                 default: ;
             endcase
@@ -61,6 +63,9 @@ module stcRegs(
                 `STC_PILOT_OFFSET: begin
                     pilotOffset[11:8] <= dataIn[11:8];
                     end
+                `STC_DAC_SELECT: begin
+                    dac1Select <= dataIn[11:8];
+                    end
                 default:  ;
             endcase
         end
@@ -76,6 +81,9 @@ module stcRegs(
             casex (addr)
                 `STC_CLOCKS_PER_BIT: begin
                     spectrumInvert <= dataIn[16];
+                    end
+                `STC_DAC_SELECT: begin
+                    dac2Select <= dataIn[19:16];
                     end
                 default:  ;
             endcase
@@ -99,9 +107,17 @@ module stcRegs(
     always @* begin
         if (cs) begin
             casex (addr)
-                `STC_CLOCKS_PER_BIT:    dataOut = {15'h0, spectrumInvert, clocksPerBit};
+                `STC_CLOCKS_PER_BIT:    dataOut = {
+                                            15'h0, spectrumInvert, 
+                                            clocksPerBit
+                                        };
                 `STC_PILOT_OFFSET:      dataOut = {20'h0, pilotOffset};
-                `STC_DAC_SELECT:        dataOut = {28'h0, dacSelect};
+                `STC_DAC_SELECT:        dataOut = {
+                                            8'h0, 
+                                            4'h0, dac2Select,
+                                            4'h0, dac1Select,
+                                            4'h0, dac0Select
+                                        };
                 default:                dataOut = 32'h0;
             endcase
         end

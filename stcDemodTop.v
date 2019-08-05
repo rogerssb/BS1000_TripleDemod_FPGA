@@ -331,7 +331,9 @@ module stcDemodTop (
 
     wire    [15:0]  clocksPerBit;
     wire    [11:0]  pilotOffset;
-    wire    [3:0]   stcDacSelect;
+    wire    [3:0]   stcDac0Select;
+    wire    [3:0]   stcDac1Select;
+    wire    [3:0]   stcDac2Select;
     wire    [31:0]  stcDout;
 
     stcRegs stcTopReg(
@@ -344,7 +346,9 @@ module stcDemodTop (
         .spectrumInvert(SpectrumInv),
         .clocksPerBit(clocksPerBit),
         .pilotOffset(pilotOffset),
-        .dacSelect(stcDacSelect)
+        .dac0Select(stcDac0Select),
+        .dac1Select(stcDac1Select),
+        .dac2Select(stcDac2Select)
 );
 
 
