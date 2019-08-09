@@ -340,8 +340,8 @@
 
 `define LDPCSPACE               13'b0_00xx_010x_xxxx
     `define LDPC_CONTROL            13'bx_xxxx_xxx0_00xx
-        `define LDPC_RATE_1_2           2'b00
-        `define LDPC_RATE_2_3           2'b01
+        `define LDPC_RATE_1_2           2'b01
+        `define LDPC_RATE_2_3           2'b10
         `define LDPC_RATE_4_5           2'b11
         `define LDPC_CODE_LENGTH_1024   1'b0
         `define LDPC_CODE_LENGTH_4096   1'b1

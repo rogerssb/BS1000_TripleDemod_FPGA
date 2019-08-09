@@ -920,10 +920,13 @@ module semcoDemodTop (
         .pllOutputClk(pll1_OUT1),
         .sourceSelect(cAndD1SourceSelect),
         .pllReferenceClk(pll1_REF),
-        .outputClk(ch1ClkOut),
+        //.outputClk(ch1ClkOut),
+        .outputClk(),
         .outputData(cAndD1DataOut)
     );
-    assign ch1DataOut = cAndD1DataOut[2];
+    //assign ch1DataOut = cAndD1DataOut[2];
+    assign ch1DataOut = ldpcBitOut;
+    assign ch1ClkOut = ldpcBitEnOut;
     assign ch3ClkOut = ch1ClkOut;
     assign ch3DataOut = cAndD1DataOut[2];
     `endif
