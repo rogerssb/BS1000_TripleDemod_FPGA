@@ -70,8 +70,7 @@ ARCHITECTURE rtl OF STC_HW_TB IS
          Power0In,
          Power1In,
          NoiseIn           : sfixed(0 downto -17);
-   signal PilotSyncOffset  : SLV12 := x"A01";    -- 600 for 4.6mB, 800 for 10mB, A00 for 20mB
-   signal   ShiftIn, ShiftOut : std_logic_vector(10 downto 0) := 11x"7ff";
+   signal PilotSyncOffset  : SLV12 := x"802";    -- 600 for 4.6mB, 800 for 10mB, A00 for 20mB
 
 BEGIN
 

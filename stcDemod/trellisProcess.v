@@ -70,7 +70,7 @@ module trellisProcess (
     3) It creates a valid signal timed to be true starting with the last bit of
         the pilot and staying true for the duration of the frame.
     */
-    wire    signed  [17:0]  faReal,faImag;
+    wire    signed  [17:0]  faReal0,faImag0,faReal1,faImag1;
     reg                     estimatesDoneDly;
 
     always @(posedge clk2x) begin
@@ -122,12 +122,16 @@ module trellisProcess (
         .valid(dfValid),
         .dinReal(dfRealOutput),
         .dinImag(dfImagOutput),
+        .m_ndx0(m_ndx0),
+        .m_ndx1(m_ndx1),
         .clkEnOut(faClkEn),
         .myStartOfTrellis(myStartOfTrellis),
         .full(full),
         .interpolate(interpolate),
-        .doutReal(faReal),
-        .doutImag(faImag)
+        .doutReal0(faReal0),
+        .doutImag0(faImag0),
+        .doutReal1(faReal1),
+        .doutImag1(faImag1)
     );
 
     //------------------------- Interpolators ---------------------------------
@@ -139,7 +143,7 @@ module trellisProcess (
         .interpolate(faClkEn & interpolate),
         .mu(ch0Mu),
         .inputEn(faClkEn),
-        .din(faReal),
+        .din(faReal0),
         .outputEn(interpOutEn),
         .dout(sample0r)
     );
@@ -151,7 +155,7 @@ module trellisProcess (
         .interpolate(faClkEn & interpolate),
         .mu(ch0Mu),
         .inputEn(faClkEn),
-        .din(faImag),
+        .din(faImag0),
         .outputEn(),
         .dout(sample0i)
     );
@@ -164,7 +168,7 @@ module trellisProcess (
         .interpolate(faClkEn & interpolate),
         .mu(ch1Mu),
         .inputEn(faClkEn),
-        .din(faReal),
+        .din(faReal1),
         .outputEn(),
         .dout(sample1r)
     );
@@ -176,7 +180,7 @@ module trellisProcess (
         .interpolate(faClkEn & interpolate),
         .mu(ch1Mu),
         .inputEn(faClkEn),
-        .din(faImag),
+        .din(faImag1),
         .outputEn(),
         .dout(sample1i)
     );

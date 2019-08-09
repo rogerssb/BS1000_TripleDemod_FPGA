@@ -51,7 +51,8 @@ ENTITY DelayLine IS
       reset          : IN  std_logic;
       ce             : IN  std_logic;
       Input          : IN  sfixed(DATA_WIDTH-BINPT-1 downto -BINPT);
-      Output         : OUT sfixed(DATA_WIDTH-BINPT-1 downto -BINPT)
+      Output         : OUT sfixed(DATA_WIDTH-BINPT-1 downto -BINPT);
+      ValidOut       : OUT std_logic
    );
 END DelayLine;
 
@@ -89,7 +90,7 @@ ARCHITECTURE rtl OF DelayLine IS
    SIGNAL   RdAddr,
             WrAddr         : natural range 0 to MAX_ADDR;
    SIGNAL   FifoOut        : std_logic_vector(DATA_WIDTH-1 downto 0);
-   SIGNAL   ShiftReg       : vector_of_slvs(LENGTH-1 downto 0)(DATA_WIDTH-1 downto 0);
+   SIGNAL   ShiftReg       : vector_of_slvs(LENGTH-1 downto 0)(DATA_WIDTH downto 0);
 
 BEGIN
 
@@ -118,6 +119,7 @@ BEGIN
                   end if;
                end if;
             end if;
+            ValidOut    <= (ce and LengthMet);
          end if;
       end process SimpleDualPortRAM_process;
 
@@ -149,12 +151,13 @@ BEGIN
       begin
          if (rising_edge(clk)) then
             if (ce) then
-               ShiftReg <= ShiftReg(LENGTH-2 downto 0) & to_slv(Input);
+               ShiftReg <= ShiftReg(LENGTH-2 downto 0) & (ce & to_slv(Input));
             end if;
          end if;
       end process;
 
-      Output <= to_sfixed(ShiftReg(LENGTH-1), Output);
+      Output <= to_sfixed(ShiftReg(LENGTH-1)(DATA_WIDTH-1 downto 0), Output);
+      ValidOut <= ShiftReg(LENGTH-1)(DATA_WIDTH);
    end generate;
 
 END rtl;

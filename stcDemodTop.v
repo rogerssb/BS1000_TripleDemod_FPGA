@@ -404,7 +404,7 @@ module stcDemodTop (
         .cs(cs),
         .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
         .addr(addr),
-        .din(din),
+        .din(dataIn),
         .dout(pilotDout),
         .demodMode(`MODE_STC),
         .phase(),
@@ -445,7 +445,7 @@ module stcDemodTop (
     // Complex Multiplier
     wire [17:0]iStc;
     wire [17:0]qStc;
-    cmpy18 mixer( 
+    cmpy18 mixer(
         .clk(clk),
         .reset(reset),
         .aReal(iDdc),
@@ -478,7 +478,9 @@ module stcDemodTop (
         .Clk186(clk2x),
         .ValidIn(stcDdcClkEn),
         .ClocksPerBit(clocksPerBit),
-        .DacSelect(stcDacSelect),
+        .DacSelect0(stcDac0Select),
+        .DacSelect1(stcDac1Select),
+        .DacSelect2(stcDac2Select),
         .SpectrumInv(SpectrumInv),
         .PilotSyncOffset(pilotOffset),
         .PhaseDiff(pilotPhaseDiff),

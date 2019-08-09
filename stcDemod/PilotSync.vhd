@@ -58,13 +58,17 @@ ENTITY PilotSync IS
       reset,
       ce,
       PilotPulseIn,
-      ValidIn        : IN  STD_LOGIC;
+      Mag0GtMag1,
+      ValidIn        : IN STD_LOGIC;
       PilotSyncOffset : IN natural range 0 to 4095;
-      IndexIn        : IN  natural range 0 to 1023;
+      IndexIn        : IN ufixed(10 DOWNTO 0);
       RealIn,
       ImagIn         : IN  Float_1_18;
+      PhaseOut       : OUT SLV18;
+      PhaseDiff,
       RealOut,
       ImagOut        : OUT Float_1_18;
+      PhaseDiffEn,
       StartOut,
       ValidOut,
       PilotLocked    : OUT STD_LOGIC
@@ -73,6 +77,46 @@ END PilotSync;
 
 
 ARCHITECTURE rtl OF PilotSync IS
+
+   Component CmplxMult IS
+      GENERIC (
+         IN_LEFT     : integer := 8;
+         IN_RIGHT    : integer := -9;
+         OUT_LEFT    : integer := 15;
+         OUT_BINPT  : integer := -2
+      );
+      PORT(
+         clk,
+         reset,
+         ce,
+         ValidIn,
+         StartIn,
+         ReadyIn        : IN  std_logic;
+         ReInA,
+         ImInA,
+         ReInB,
+         ImInB          : IN  sfixed(IN_LEFT downto IN_RIGHT);
+         ReOut,
+         ImOut          : OUT sfixed(OUT_LEFT downto OUT_BINPT);
+         ValidOut,
+         StartOut       : OUT std_logic
+      );
+   END Component CmplxMult;
+
+   COMPONENT vm_cordic_fast IS
+      GENERIC (
+         n  : positive := 14
+      );
+      PORT (
+         clk,
+         ena      : IN  std_logic;
+         x,
+         y        : IN  std_logic_vector(n-1 downto 0);
+         m        : OUT std_logic_vector(n downto 2);
+         p        : OUT std_logic_vector(n-2 downto 1);
+         enOut    : OUT std_logic
+      );
+   END COMPONENT vm_cordic_fast;
 
    COMPONENT RAM_2Reads_1Write IS
       GENERIC(
@@ -99,40 +143,78 @@ ARCHITECTURE rtl OF PilotSync IS
    END COMPONENT RAM_2Reads_1Write;
 
    CONSTANT ADDR_BITS      : integer := 13;
-   CONSTANT ADDR_RANGE     : integer := 2**ADDR_BITS-1;
 
    -- Signals
-   SIGNAL   IndexLatch,
-            IndexOut             : natural range 0 to 1023;
    SIGNAL   WrAddr,
+            IndexOut             : ufixed(ADDR_BITS-1 downto 0);
+   SIGNAL   WrAddr_i,
             PacketCount_i,
             WaitCount_i,
-            RdAddr_i             : integer range 0 to ADDR_RANGE;
+            RdAddr_i             : integer range 0 to 2**ADDR_BITS-1;
    SIGNAL   SampleCount          : natural range 0 to 16383;
-   SIGNAL   FallCount            : natural range 0 to 2;
    SIGNAL   ReadCount,
             InvRdCount,
             PilotCount           : unsigned (8 downto 0);
    SIGNAL   RealOutSlv,
             ImagOutSlv,
             PilotCaptureR_slv,
-            PilotCaptureI_slv    : SLV18;
+            PilotCaptureI_slv,
+            H0Rslv,
+            H0Islv,
+            H1Rslv,
+            H1Islv               : SLV18;
    SIGNAL   StartNext,
             Clock256,
-            PilotValid,
-            FallValidOut,
+            CmplxValid,
             ValidOutDly,
+            CordicStart,
+            ValidCordic,
+            PilotValid,
             PilotPacket          : std_logic;
    SIGNAL   ReadR,
-            ReadI                : FLOAT_1_18;
+            ReadI,
+            H0R,
+            H0I,
+            H1R,
+            H1I,
+            ImagOutDly,
+            RealOutDly,
+            CmplxH0r,
+            CmplxH0i,
+            CmplxH1r,
+            CmplxH1i             : FLOAT_1_18;
    SIGNAL   SyncError            : sfixed(1 downto -16);
    SIGNAL   SyncSum              : sfixed(10 downto -16);
+   SIGNAL   H0AccR,
+            H0AccI,
+            H1AccR,
+            H1AccI               : sfixed(5 downto -17);
+   SIGNAL   H0SumRA,
+            H0SumIA,
+            H1SumRA,
+            H1SumIA,
+            H0SumRB,
+            H0SumIB,
+            H1SumRB,
+            H1SumIB,
+            CordicR0,
+            CordicI0,
+            CordicR1,
+            CordicI1             : sfixed(5 downto -12);
+   SIGNAL   Phase0,
+            Phase1               : std_logic_vector(CordicR0'length - 3 downto 0);
+   SIGNAL   Phase0A,
+            Phase0B,
+            Phase1A,
+            Phase1B              : sfixed(0 downto -Phase0'length+1);
+   SIGNAL   CmplxCount           : integer range 0 to 511;
 
    signal   SyncSumIla           : sfixed(10 downto 0);
    signal   ReadR_Ila, ReadI_Ila : sfixed(17 downto 0);
 
    attribute mark_debug : string;
-   attribute mark_debug of SampleCount, StartOut, SyncSumIla, ReadR_Ila, ReadI_Ila, IndexOut : signal is "true";
+   attribute mark_debug of SampleCount, StartOut, SyncSumIla, ReadR_Ila, ReadI_Ila, IndexOut,
+               Phase0, Phase1, PhaseDiff : signal is "true";
 
 BEGIN
 
@@ -147,20 +229,21 @@ BEGIN
 
    Clock256    <= '1' when (PacketCount_i = 256) else '0';
    PilotValid  <= PilotPulseIn; -- TODO '1' when (PilotPulseIn = '1') and (SampleCount > 13300) else '0'; -- pulse should be at 13312
-   FallValidOut <= ValidOutDly and not ValidOut;
+
+   PhaseOut <= Phase0 & "00";
 
    ClkProcess: process (clk)
    begin
       if (rising_edge(clk)) then
          if (reset) then
-            WrAddr         <= 0;
+            WrAddr         <= (others=>'0');
             SyncSum        <= (others=>'0');
             SyncError      <= (others=>'0');
             ReadCount      <= (others=>'0');
             PilotCount     <= (others=>'0');
-            IndexOut       <= 0;
-            IndexLatch     <= 0;
-            ValidOutDly    <= '0';
+            PhaseDiff      <= (others=>'0');
+            IndexOut       <= to_ufixed(0, IndexOut);
+            PhaseDiffEn    <= '0';
             WaitCount_i    <= 0;
             SampleCount    <= 0;
             PacketCount_i  <= 512;
@@ -168,28 +251,14 @@ BEGIN
             PilotPacket    <= '0';
             PilotLocked    <= '0';
          elsif ce = '1' then
-            ValidOut    <= ValidIn;
-            ValidOutDly <= ValidOut;
+            ValidOut <= ValidIn;
 
-            if (ValidIn) then
-               if (WrAddr < ADDR_RANGE) then
-                  WrAddr <= WrAddr + 1;
-               else
-                  WrAddr <= 0;
-               end if;
+            if (PilotValid) then -- validated pilot with distance between frames
+               IndexOut <= resize(IndexIn, IndexOut);
             end if;
 
-            if ((PilotPulseIn = '1') and (FallCount = 0)) then
-               FallCount <= 2;
-               IndexLatch <= IndexIn;
-            elsif (PilotPulseIn) then
-               IndexLatch <= IndexIn + 512;
-            elsif ((FallValidOut = '1') and (FallCount > 0)) then
-               FallCount <= FallCount - 1;
-               if (FallCount = 1) then
-                  StartNext <= '1';
-                  IndexOut <= IndexLatch;
-               end if;
+            if (ValidIn) then
+               WrAddr <= resize(WrAddr + 1, WrAddr);
             end if;
 
             if (PilotValid) then
@@ -200,9 +269,9 @@ BEGIN
                SampleCount <= SampleCount + 1;
             end if;
 
-        /*    if (SampleCount = 13324) then   -- request a start pulse between packets
+            if (PilotValid = '1') or (SampleCount = 13324) then   -- request a start pulse between packets
                StartNext <= '1';                                  -- even if this frame didn't find a pilot
-            els*/if (WaitCount_i = 32) and (StartNext = '1') then   -- setting StartNext timing is not critical
+            elsif (WaitCount_i = 32) and (StartNext = '1') then   -- setting StartNext timing is not critical
                StartNext <= '0';
                StartOut  <= '1';
             else
@@ -210,11 +279,9 @@ BEGIN
             end if;
 
             if (ValidIn) then
-               if (PacketCount_i = 1) then
-                  PacketCount_i <= 512;
-               else
-                  PacketCount_i  <= PacketCount_i - 1;
-               end if;
+               PacketCount_i  <= PacketCount_i - 1;
+            else
+               PacketCount_i <= 512;
             end if;
 
             if (WaitCount_i > 0) then
@@ -223,33 +290,91 @@ BEGIN
                WaitCount_i <= 61;   -- minimum dead time at 20Mbps
             end if;
 
-         if (StartOut) then
-            PilotPacket <= '1';
-            PilotCount <= (others=>'0');
-         elsif (PilotCount = 511) then
-            PilotPacket <= '0';
-            ReadCount <= to_unsigned(509, ReadCount);
-            SyncSum <= (others=>'0');
-         end if;
-         if (PilotPacket) then
-            if (ValidOut) then
-               PilotCount <= PilotCount + 1;
-             end if;
-         elsif (ReadCount > 0) then
-            SyncError   <= resize(Abs(ReadR - ReadI), SyncError);
-            SyncSum     <= resize(SyncSum + SyncError, SyncSum);
-            ReadCount   <= ReadCount - 1;
-            if (ReadCount = 1) then
-               PilotLocked <= '1' when SyncSum < 100 else '0';
+            if (StartOut) then
+               PilotPacket <= '1';
+               PilotCount <= (others=>'0');
+            elsif (PilotCount = 511) then
+               PilotPacket <= '0';
+               ReadCount <= to_unsigned(509, ReadCount);
+               SyncSum <= (others=>'0');
             end if;
-         end if;
+            if (PilotPacket) then
+               if (ValidOut) then
+                  PilotCount <= PilotCount + 1;
+                end if;
+            elsif (ReadCount > 0) then
+               SyncError   <= resize(Abs(ReadR - ReadI), SyncError);
+               SyncSum     <= resize(SyncSum + SyncError, SyncSum);
+               ReadCount   <= ReadCount - 1;
+               if (ReadCount = 1) then
+                  PilotLocked <= '1' when SyncSum < 100 else '0';
+               end if;
+            end if;
+
+            ImagOutDly  <= ImagOut;
+            RealOutDly  <= RealOut;
+            ValidOutDly <= ValidOut;
+            if (StartOut) then
+               CmplxCount  <= 0;
+               H0AccR      <= (others=>'0');
+               H0AccI      <= (others=>'0');
+               H1AccR      <= (others=>'0');
+               H1AccI      <= (others=>'0');
+            elsif (CmplxValid) then
+               if (CmplxCount = 256) then
+                  CordicStart <= '1';
+                  CmplxCount <= CmplxCount + 1;
+                  H0SumRA <= resize(H0AccR, H0SumRA);
+                  H0SumIA <= resize(H0AccI, H0SumIA);
+                  H1SumRA <= resize(H1AccR, H1SumRA);
+                  H1SumIA <= resize(H1AccI, H1SumIA);
+                  H0AccR <= resize(CmplxH0r, H0AccR);
+                  H0AccI <= resize(CmplxH0i, H0AccR);
+                  H1AccR <= resize(CmplxH1r, H0AccR);
+                  H1AccI <= resize(CmplxH1i, H0AccR);
+               else
+                  CmplxCount <= CmplxCount + 1;
+                  CordicStart <= '0';
+                  H0AccR <= resize(H0AccR + CmplxH0r, H0AccR);
+                  H0AccI <= resize(H0AccI + CmplxH0i, H0AccR);
+                  H1AccR <= resize(H1AccR + CmplxH1r, H0AccR);
+                  H1AccI <= resize(H1AccI + CmplxH1i, H0AccR);
+               end if;
+            elsif (CmplxCount = 511) then
+               H0SumRB <= resize(H0AccR + CmplxH0r, H0SumRB);
+               H0SumIB <= resize(H0AccI + CmplxH0i, H0SumIB);
+               H1SumRB <= resize(H1AccR + CmplxH1r, H1SumRB);
+               H1SumIB <= resize(H1AccI + CmplxH1i, H1SumIB);
+               CordicStart <= '1';
+               CmplxCount <= 0;
+            else
+               CordicStart <= '0';
+            end if;
+
+            if (ValidCordic) then
+               if (CmplxCount > 0) then
+                  Phase0A <= to_sfixed(Phase0, Phase0A);
+                  Phase1A <= to_sfixed(Phase1, Phase0A);
+               else     -- process is done and count is reset to 0
+                  Phase0B <= to_sfixed(Phase0, Phase0A);
+                  Phase1B <= to_sfixed(Phase1, Phase0A);
+                  if (Mag0GtMag1) then
+                     PhaseDiff <= resize(Phase0A - to_sfixed(Phase0, Phase0A), PhaseDiff);
+                  else
+                     PhaseDiff <= resize(Phase1A - to_sfixed(Phase1, Phase0A), PhaseDiff);
+                  end if;
+                  PhaseDiffEn <= '1';
+               end if;
+            else
+               PhaseDiffEn <= '0';
+            end if;
 
          end if;
       end if;
    end process ClkProcess;
 
-   RdAddr_i <= WrAddr - PilotSyncOffset + IndexOut when (WrAddr - PilotSyncOffset + IndexOut >= 0) else
-      WrAddr - PilotSyncOffset + IndexOut + ADDR_RANGE + 1;
+   WrAddr_i <= to_integer(WrAddr);
+   RdAddr_i <= to_integer(resize(WrAddr - PilotSyncOffset + IndexOut, WrAddr));
 
    PilotSync_r_u : RAM_2Reads_1Write
       GENERIC MAP(
@@ -263,7 +388,7 @@ BEGIN
          ce          => ce,
          reset       => reset,
          WrEn        => ValidIn,
-         WrAddr      => WrAddr,
+         WrAddr      => WrAddr_i,
          RdAddrA     => 0,
          RdAddrB     => RdAddr_i,
          WrData      => to_slv(RealIn),
@@ -283,7 +408,7 @@ BEGIN
          ce          => ce,
          reset       => reset,
          WrEn        => ValidIn,
-         WrAddr      => WrAddr,
+         WrAddr      => WrAddr_i,
          RdAddrA     => 0,
          RdAddrB     => RdAddr_i,
          WrData      => to_slv(ImagIn),
@@ -337,6 +462,183 @@ BEGIN
    InvRdCount  <= 510 - ReadCount;
    ReadR       <= to_sfixed(PilotCaptureR_slv, ReadR);
    ReadI       <= to_sfixed(PilotCaptureI_slv, ReadI);
+
+   CmplxMultH0 : CmplxMult
+      GENERIC MAP (
+         IN_LEFT     => RealOut'left,
+         IN_RIGHT    => RealOut'right,
+         OUT_LEFT    => RealOut'left,
+         OUT_BINPT   => RealOut'right
+      )
+      PORT MAP (
+         clk         => clk,
+         reset       => reset,
+         ce          => ce,
+         ValidIn     => PilotPacket and ValidOutDly,
+         StartIn     => '0',
+         ReadyIn     => '1',
+         ReInA       => RealOutDly,
+         ImInA       => ImagOutDly,
+         ReInB       => H0R,
+         ImInB       => H0I,
+         ReOut       => CmplxH0r,
+         ImOut       => CmplxH0i,
+         ValidOut    => CmplxValid,
+         StartOut    => open
+   );
+
+   CmplxMultH1 : CmplxMult
+      GENERIC MAP (
+         IN_LEFT     => RealOut'left,
+         IN_RIGHT    => RealOut'right,
+         OUT_LEFT    => RealOut'left,
+         OUT_BINPT   => RealOut'right
+      )
+      PORT MAP (
+         clk         => clk,
+         reset       => reset,
+         ce          => ce,
+         ValidIn     => PilotPacket and ValidOutDly,
+         StartIn     => '0',
+         ReadyIn     => '1',
+         ReInA       => RealOutDly,
+         ImInA       => ImagOutDly,
+         ReInB       => H1R,
+         ImInB       => H1I,
+         ReOut       => CmplxH1r,
+         ImOut       => CmplxH1i,
+         ValidOut    => open,
+         StartOut    => open
+   );
+
+   H0r_u : RAM_2Reads_1Write
+      GENERIC MAP(
+         FILENAME    => "C:\Semco\Vivado\Demods\stcDemod\sourceData\p0_r_pt17.slv",
+         DATA_WIDTH  => H0r'length,
+         BINPT       => H0r'right,
+         ADDR_WIDTH  => 9,
+         FILE_IS_SLV => true,
+         LATENCY     => 1,
+         RAM_TYPE    => "block"
+      )
+      PORT MAP(
+         clk         => Clk,
+         ce          => ce,
+         reset       => reset,
+         WrEn        => '0',
+         WrAddr      => 0,
+         RdAddrA     => to_integer(PilotCount),
+         RdAddrB     => 0,
+         WrData      => (others=>'0'),
+         RdOutA      => H0Rslv,
+         RdOutB      => open
+      );
+
+   H0i_u : RAM_2Reads_1Write
+      GENERIC MAP(
+         FILENAME    => "C:\Semco\Vivado\Demods\stcDemod\sourceData\p0_i_pt17.slv",
+         DATA_WIDTH  => H0r'length,
+         BINPT       => H0r'right,
+         ADDR_WIDTH  => 9,
+         FILE_IS_SLV => true,
+         LATENCY     => 1,
+         RAM_TYPE    => "block"
+      )
+      PORT MAP(
+         clk         => Clk,
+         ce          => ce,
+         reset       => reset,
+         WrEn        => '0',
+         WrAddr      => 0,
+         RdAddrA     => to_integer(PilotCount),
+         RdAddrB     => 0,
+         WrData      => (others=>'0'),
+         RdOutA      => H0Islv,
+         RdOutB      => open
+      );
+
+   H1r_u : RAM_2Reads_1Write
+      GENERIC MAP(
+         FILENAME    => "C:\Semco\Vivado\Demods\stcDemod\sourceData\p1_r_pt17.slv",
+         DATA_WIDTH  => H0r'length,
+         BINPT       => H0r'right,
+         ADDR_WIDTH  => 9,
+         FILE_IS_SLV => true,
+         LATENCY     => 1,
+         RAM_TYPE    => "block"
+      )
+      PORT MAP(
+         clk         => Clk,
+         ce          => ce,
+         reset       => reset,
+         WrEn        => '0',
+         WrAddr      => 0,
+         RdAddrA     => to_integer(PilotCount),
+         RdAddrB     => 0,
+         WrData      => (others=>'0'),
+         RdOutA      => H1Rslv,
+         RdOutB      => open
+      );
+
+   H1i_u : RAM_2Reads_1Write
+      GENERIC MAP(
+         FILENAME    => "C:\Semco\Vivado\Demods\stcDemod\sourceData\p1_i_pt17.slv",
+         DATA_WIDTH  => H0r'length,
+         BINPT       => H0r'right,
+         ADDR_WIDTH  => 9,
+         FILE_IS_SLV => true,
+         LATENCY     => 1,
+         RAM_TYPE    => "block"
+      )
+      PORT MAP(
+         clk         => Clk,
+         ce          => ce,
+         reset       => reset,
+         WrEn        => '0',
+         WrAddr      => 0,
+         RdAddrA     => to_integer(PilotCount),
+         RdAddrB     => 0,
+         WrData      => (others=>'0'),
+         RdOutA      => H1Islv,
+         RdOutB      => open
+      );
+
+   H0R      <= to_sfixed(H0Rslv, H0R);
+   H0I      <= to_sfixed(H0Islv, H0I);
+   H1R      <= to_sfixed(H1Rslv, H1R);
+   H1I      <= to_sfixed(H1Islv, H1I);
+   CordicR0 <= H0SumRA when (CmplxCount > 0) else H0SumRB;
+   CordicI0 <= H0SumIA when (CmplxCount > 0) else H0SumIB;
+   CordicR1 <= H1SumRA when (CmplxCount > 0) else H1SumRB;
+   CordicI1 <= H1SumIA when (CmplxCount > 0) else H1SumIB;
+
+   cordic0 : vm_cordic_fast
+      GENERIC MAP (
+         n => CordicR0'length
+      )
+      PORT MAP (
+         clk   => Clk,
+         ena   => CordicStart,
+         x     => to_slv(CordicR0),
+         y     => to_slv(CordicI0),
+         m     => open,          -- m[n:2]
+         p     => Phase0,
+         enOut => ValidCordic
+      );
+
+   cordic1 : vm_cordic_fast
+      GENERIC MAP (
+         n => CordicR0'length
+      )
+      PORT MAP (
+         clk   => Clk,
+         ena   => CordicStart,
+         x     => to_slv(CordicR1),
+         y     => to_slv(CordicI1),
+         m     => open,          -- m[n:2]
+         p     => Phase1,
+         enOut => open
+      );
 
 END rtl;
 

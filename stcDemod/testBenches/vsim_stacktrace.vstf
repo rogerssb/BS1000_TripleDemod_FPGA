@@ -296,3 +296,35 @@
 # End of Stack Trace
 
 
+# Current time Tue Aug 06 18:04:23 2019
+# ModelSim PE Stack Trace
+# Program = vsim
+# Id = "10.5c"
+# Version = "2016.07"
+# Date = "Jul 21 2016"
+# Platform = win32pe
+# Signature = 0c4b3f48b753105122c56716278fbcc6
+# 0    0x005edf2f: '<unknown (@0x5edf2f)>'
+# 1    0xed1ea12b: 'C:/Semco/Vivado/Demods/stcDemod/STC.vhd:379'
+# 2    0xed1ea12b: 'C:/Semco/Vivado/Demods/stcDemod/STC.vhd:379'
+# 3    0x0061d3ad: '<unknown (@0x61d3ad)>'
+# 4    0x0077d846: '<unknown (@0x77d846)>'
+# End of Stack Trace
+
+
+# Current time Tue Aug 06 18:05:19 2019
+# ModelSim PE Stack Trace
+# Program = vsim
+# Id = "10.5c"
+# Version = "2016.07"
+# Date = "Jul 21 2016"
+# Platform = win32pe
+# Signature = 0c4b3f48b753105122c56716278fbcc6
+# 0    0x005edf2f: '<unknown (@0x5edf2f)>'
+# 1    0xfe1ea1eb: 'C:/Semco/Vivado/Demods/stcDemod/STC.vhd:379'
+# 2    0xfe1ea1eb: 'C:/Semco/Vivado/Demods/stcDemod/STC.vhd:379'
+# 3    0x0061d3ad: '<unknown (@0x61d3ad)>'
+# 4    0x0077d846: '<unknown (@0x77d846)>'
+# End of Stack Trace
+
+

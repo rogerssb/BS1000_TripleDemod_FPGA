@@ -79,7 +79,9 @@ architecture rtl of Brik1_Hw_tb is
       ResampleI         : IN  SLV18;
       ClocksPerBit      : IN  SLV16;
       PilotSyncOffset   : IN  SLV12;
-      DacSelect         : IN  SLV4;
+      DacSelect0,
+      DacSelect1,
+      DacSelect2        : IN  SLV4;
       Clk93,
       Clk186,
       SpectrumInv,
@@ -251,6 +253,7 @@ architecture rtl of Brik1_Hw_tb is
             PilotSyncOffset_vio  : SLV12; -- := 1535;
    SIGNAL   BitRate_vio,
             Frequency_vio,
+            FrameClocks_vio,
             Power0_vio,
             Power1_vio,
             Phase0_vio,
@@ -284,19 +287,19 @@ begin
       PORT MAP (
          clk        => ClkXn,
          probe_in0  => Errors,
-         probe_out0 => Frequency_vio,          -- 00280 start getting errors at end of frame
-         probe_out1 => open,
+         probe_out0 => Frequency_vio,           -- 00280 (222Hz) start getting errors at end of frame
+         probe_out1 => FrameClocks_vio,         -- usually 13312-1=13311. smaller makes packets slide
          probe_out2 => Phase0_vio,              -- has no effect unless both channels active
          probe_out3 => Phase1_vio,
          probe_out4 => DeltaT_vio,
-         probe_out5 => Power0_vio,
-         probe_out6 => Power1_vio,
+         probe_out5 => Power0_vio,              -- H0 power 128k is max
+         probe_out6 => Power1_vio,              -- H1 power. sum of both must be < 128k
          probe_out7 => NoiseGain_vio,
-         probe_out8 => PilotSyncOffset_vio,     -- 7ff or 800 at 41.6Mb
+         probe_out8 => PilotSyncOffset_vio,     -- 802 at 41.6Mb
          probe_out9 => Offset_vio,
          probe_out10 => MiscBits,
          probe_out11 => BitRate_vio,            -- 0e449 is 41.6Mb
-         probe_out12 => ClocksPerBit
+         probe_out12 => ClocksPerBit            -- c50 for 9.33/1.04, db7 at 10Mb 41.6
       );
 
    ErrorProc : process (ClkXn)
@@ -375,7 +378,7 @@ begin
             BitRateAcc <= BitRate_v;
             DataValid <= DataValid(DataValid'left-1 downto 0) & (BitRate_v(0) xor BitRateAcc(0));
             if (DataValid(0)) then
-               if (RdAddr_i < 13311) then
+               if (RdAddr_i < 13310) then -- TODO unsigned(FrameClocks_vio)) then
                   RdAddr_i <= RdAddr_i + 1;
                else
                   RdAddr_i <= 0;
@@ -383,7 +386,7 @@ begin
             end if;
          end if;
          DeltaT_v  := to_integer(signed(DeltaT_vio));    -- add ±4 then check for overflow
-         Offset_v  := 290; --to_integer(signed(Offset_vio));
+         Offset_v  := 287; --to_integer(signed(Offset_vio));   -- 290 = 511, 287 is 515
          RdAddr0_v <= RdAddr_i + Offset_v;
          if (RdAddr0_v > 13311) then
             RdAddr0_i <= RdAddr0_v - 13312;
@@ -541,7 +544,7 @@ begin
          RdOutB      => RealRead(2)
       );
 
-   DDS0 : dds_sin_cos
+   DDS0 : dds_sin_cos      -- DDS is 28 bit phase increment. only bottom 18 are tunable for 100KHz range
       PORT MAP (
          aclk                 => Clk93,
          aresetn              => not Reset,
@@ -639,9 +642,11 @@ begin
       PORT MAP(
          ResampleR      => to_slv(ResampleR_s),
          ResampleI      => to_slv(ResampleI_s),
-         ClocksPerBit   => to_slv(to_sfixed(10.0/93.3, 0, -15)),
+         ClocksPerBit   => to_slv(to_sfixed(9.34/93.3, 0, -15)),
          PilotSyncOffset => PilotSyncOffsetIn,
-         DacSelect      => x"0",
+         DacSelect0     => x"0",
+         DacSelect1     => x"0",
+         DacSelect2     => x"0",
          Clk93          => Clk93,
          Clk186         => ClkXn,
          ValidIn        => PhaseValid,

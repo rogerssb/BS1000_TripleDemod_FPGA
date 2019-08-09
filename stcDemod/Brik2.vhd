@@ -322,10 +322,10 @@ BEGIN
    InR_sf <= to_sfixed(InR, InR_sf);
    InI_sf <= to_sfixed(InI, InI_sf);
 
-   StartTimeChan <= StartDF when (TimeViaDF) else StartIn;
+   StartTimeChan <= StartDF    when (TimeViaDF) else StartIn;
    ValidTimeChan <= ValidDFreg when (TimeViaDF) else ValidIn or StartIn;
-   TimeChanR     <= DF_R when (TimeViaDF) else InR_sf;
-   TimeChanI     <= DF_I when (TimeViaDF) else InI_sf;
+   TimeChanR     <= DF_R       when (TimeViaDF) else InR_sf;
+   TimeChanI     <= DF_I       when (TimeViaDF) else InI_sf;
    ResetTiming   <= reset or (StartTimeChan and TimeActive);   -- if PD bell curve is on edge of packet, actual peak could be on second packet, restart
 
    TimeProcess : process(clk)  -- Time and channel want last half of pilot

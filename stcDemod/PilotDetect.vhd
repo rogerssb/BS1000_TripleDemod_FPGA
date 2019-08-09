@@ -59,7 +59,7 @@ entity PilotDetect is
          ValidIn        : IN  std_logic;
          ReIn,
          ImIn           : IN  FLOAT_1_18;
-         PilotIndex     : OUT natural range 0 to 1023;
+         PilotIndex     : OUT ufixed(10 downto 0);
          ReOut,
          ImOut          : OUT FLOAT_1_18;
          Magnitude0,
@@ -71,6 +71,7 @@ entity PilotDetect is
          Phs0Peak,
          Phs1Peak       : OUT SLV18;
          PilotFound,
+         PilotTime,
          ValidOut,
          StartOut       : OUT std_logic
       );
@@ -806,6 +807,7 @@ begin
             ValidAbsDly       <= '0';
             CalcThreshold     <= '0';
             StartOut          <= '0';
+            PilotTime         <= '0';
             PeakPointer       <= 1;
             BadPilot          <= 0;
             if (SIM_MODE) then
@@ -818,12 +820,13 @@ begin
             CurrentPeak       <= (others=>'0');
             Peak1             <= (others=>'0');
             Peak2             <= (0=>'1', others=>'0');
-            PilotIndex        <= 0;
+            PilotIndex        <= (others=>'0');
          elsif (ce) then
             PilotMag     <= Max;          -- Latch clock transfers
             PilotPulse1x <= PilotPulse;
+            PilotTime    <= PilotPulse1x; -- to line up with StartOut
             if (PilotPulse1x) then
-               PilotIndex  <= MaxIndex;
+               PilotIndex  <= to_ufixed(MaxIndex, PilotIndex);
                if (IgnoreInitial < 25) then
                   IgnoreInitial <= IgnoreInitial + 1; -- let first frame accumulate to set threshold
                else

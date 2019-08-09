@@ -14,18 +14,23 @@ module frameAlignment
                             valid,
     input   signed  [17:0]  dinReal,
                             dinImag,
+    input   signed  [3:0]   m_ndx0,
+                            m_ndx1,
     output                  clkEnOut,
     output  reg             interpolate,
                             myStartOfTrellis,
                             full,
-    output  signed  [17:0]  doutReal,
-                            doutImag
+    output  signed  [17:0]  doutReal0,
+                            doutImag0,
+                            doutReal1,
+                            doutImag1
 );
 
 
     //------------------------------ Sample Counter ---------------------------
 
     reg             [14:0]  wrAddr, rdAddr, sofAddress;
+    wire   signed   [15:0]  rdAddr0, rdAddr1;
     reg                     estimatesReady, sofDetected, frameActive;
     always @(posedge clk2x) begin
         if (reset) begin
@@ -43,7 +48,7 @@ module frameAlignment
             end
             if (startOfFrame) begin
                 sofDetected <= 1;
-                sofAddress  <= wrAddr + `PILOT_SAMPLES_PER_FRAME - 9;  // capture address of first sample of next frame. SOF goes active between packets, so wrAddr is inactive
+                sofAddress  <= wrAddr + `PILOT_SAMPLES_PER_FRAME - 8;  // capture address of first sample of next frame. SOF goes active between packets, so wrAddr is inactive
             end
             else if (myStartOfTrellis) begin
                 sofDetected <= 0;
@@ -54,9 +59,9 @@ module frameAlignment
 
     //------------------------- Sample FIFO -----------------------------------
 
-    wire                    fifoWrEn = (clkEn && valid && clk);
+    wire                    fifoWrEn = (clkEn && valid && clk); // doing a Clk1x to Clk2x transfer so only enable for half of clk1x
     reg                     fifoRdEn;
-    wire    [35:0]          fifoRdData;
+    wire    [35:0]          fifoRdData0, fifoRdData1;
 
     wire    empty = (wrAddr == rdAddr);
     always @(posedge clk2x) begin
@@ -79,6 +84,9 @@ module frameAlignment
         end
     end
 
+    assign  rdAddr0 = {1'b0, rdAddr} + {{12{m_ndx0[3]}}, m_ndx0};
+    assign  rdAddr1 = {1'b0, rdAddr} + {{12{m_ndx1[3]}}, m_ndx1};
+
     RAM_2Reads_1WriteVerWrap #(
       .DATA_WIDTH  (36),
       .ADDR_WIDTH  (15),
@@ -89,15 +97,17 @@ module frameAlignment
         .reset(reset),
         .WrEn(fifoWrEn),
         .WrAddr(wrAddr),
-        .RdAddrA(rdAddr),
-        .RdAddrB(15'h0),
+        .RdAddrA(rdAddr0[14:0]),
+        .RdAddrB(rdAddr1[14:0]),
         .WrData({dinReal, dinImag}),
-        .RdOutA(fifoRdData),
-        .RdOutB()
+        .RdOutA(fifoRdData0),
+        .RdOutB(fifoRdData1)
     );
     wire    fifoOutputValid = ~empty;
-    assign  doutReal        = fifoRdData[35:18];
-    assign  doutImag        = fifoRdData[17:0];
+    assign  doutReal0       = fifoRdData0[35:18];
+    assign  doutImag0       = fifoRdData0[17:0];
+    assign  doutReal1       = fifoRdData1[35:18];
+    assign  doutImag1       = fifoRdData1[17:0];
 
     //-------------------------- Output State Machine -------------------------
 

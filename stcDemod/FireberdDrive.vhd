@@ -78,30 +78,18 @@ ARCHITECTURE rtl OF FireberdDrive IS
             ClkDelay    : SLV4;
    SIGNAL   FifoDataOut : std_logic_vector(0 to 0);
    SIGNAL   WrCount     : STD_LOGIC_VECTOR(13 DOWNTO 0);
-   SIGNAL   BertShift   : STD_LOGIC_VECTOR(10 DOWNTO 0);
    SIGNAL   RdEn,
             Active,
-            Ber,
             Empty,
             ProgFull    : std_logic;
 
    attribute mark_debug : string;
-   attribute mark_debug of WrCount, Ber : signal is "true";
+   attribute mark_debug of WrCount : signal is "true";
 
 BEGIN
 
    FifoDataIn <= RecoveredData when (MsbFirst) else reverse_slv_bits(RecoveredData);
    DataOut    <= FifoDataOut(0);
-
-   BertProcess : process(Clk)
-   begin
-      if (rising_edge(Clk)) then
-         if (ClkDelay(3)) then
-            BertShift <= BertShift(9 downto 0) & DataOut;
-            Ber       <= BertShift(10) xor (BertShift(8) xnor BertShift(0));
-         end if;
-      end if;
-   end process BertProcess;
 
    ClkProcess : process(Clk)
       variable Accum_v   : sfixed(0 downto -15);
