@@ -1,1 +1,0 @@
--wto "0027b497f38f46a7b40b8158d1351c26" --debug "typical" --relax --mt "2" -d "SIMULATE=" -d "TEST_MODULE=" -L "xil_defaultlib" -L "unisims_ver" -L "unimacro_ver" -L "secureip" -L "xpm" --snapshot "test_behav" "xil_defaultlib.test" "xil_defaultlib.glbl" -log "elaborate.log" 
