@@ -1,6 +1,0 @@
-# compile verilog/system verilog design source files
-verilog xil_defaultlib  "test_func_synth.v" -i "../../../../" --include "../../../../semcoDemod.srcs/sources_1/ip/flexbusClock" --include "../../../../semcoDemod.srcs/sources_1/ip/systemClock" -d "SEMCO_DEMOD=" -d "SIMULATE="
-verilog xil_defaultlib  "../../../../multi-h/testMultiH.v" -i "../../../../" --include "../../../../semcoDemod.srcs/sources_1/ip/flexbusClock" --include "../../../../semcoDemod.srcs/sources_1/ip/systemClock" -d "SEMCO_DEMOD=" -d "SIMULATE="
-
-# Do not sort compile order
-nosort
