@@ -64,7 +64,7 @@ ARCHITECTURE rtl OF OverlapAddAbs IS
 
    CONSTANT IN_LEFT     : integer := ReIn'left;
    CONSTANT IN_RIGHT    : integer := ReIn'right;
-   CONSTANT DELAY       : integer := 512;
+   CONSTANT DELAY       : integer := 511;
 
    type DelayLine is array (natural range <>) of sfixed(IN_LEFT downto IN_RIGHT);
 

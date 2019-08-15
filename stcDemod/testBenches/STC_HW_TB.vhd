@@ -55,7 +55,6 @@ ARCHITECTURE rtl OF STC_HW_TB IS
          Power0In,
          Power1In,
          NoiseIn           : IN  sfixed(0 downto -17);
-         PilotSyncOffset   : IN  SLV12;
          DataOut_o,
          ClkOut_o,
          BS_LED,
@@ -70,7 +69,6 @@ ARCHITECTURE rtl OF STC_HW_TB IS
          Power0In,
          Power1In,
          NoiseIn           : sfixed(0 downto -17);
-   signal PilotSyncOffset  : SLV12 := x"802";    -- 600 for 4.6mB, 800 for 10mB, A00 for 20mB
 
 BEGIN
 
@@ -94,7 +92,6 @@ BEGIN
       Power1In => Power1In,
       NoiseIn  => NoiseIn,
       BitRateIn => BitRate,
-      PilotSyncOffset => PilotSyncOffset,
       BS_LED   => open,
       DemodLED => open
    );

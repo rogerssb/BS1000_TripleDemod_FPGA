@@ -47,7 +47,6 @@ ENTITY STC IS
       ResampleR,
       ResampleI         : IN  SLV18;
       ClocksPerBit      : IN  SLV16;
-      PilotSyncOffset   : IN  SLV12;
       DacSelect0,
       DacSelect1,
       DacSelect2        : IN  SLV4;
@@ -74,7 +73,7 @@ END STC;
 
 ARCHITECTURE rtl OF STC IS
 
-   COMPONENT PilotDetect is
+   COMPONENT PilotDetectSliding is
     GENERIC (SIM_MODE : boolean := false
    );
       PORT(
@@ -87,7 +86,7 @@ ARCHITECTURE rtl OF STC IS
          ValidIn        : IN  std_logic;
          ReIn,
          ImIn           : IN  FLOAT_1_18;
-         PilotIndex     : OUT ufixed(10 downto 0);
+         CorrPntr       : OUT ufixed(15 downto 0);
          ReOut,
          ImOut          : OUT FLOAT_1_18;
          Magnitude0,
@@ -99,13 +98,12 @@ ARCHITECTURE rtl OF STC IS
          Phs0Peak,
          Phs1Peak       : OUT SLV18;
          PilotFound,
-         PilotTime,
          ValidOut,
          StartOut       : OUT std_logic
       );
-   end COMPONENT PilotDetect;
-/*
-   COMPONENT pilotsync
+   end COMPONENT PilotDetectSliding;
+
+   COMPONENT PilotSync
       PORT (
          clk,
          reset,
@@ -113,35 +111,10 @@ ARCHITECTURE rtl OF STC IS
          PilotPulseIn,
          Mag0GtMag1,
          ValidIn        : IN STD_LOGIC;
-         PilotSyncOffset : IN  natural range 0 to 4095;
-         IndexIn        : IN ufixed(10 DOWNTO 0);
+         CorrPntr       : IN ufixed(15 DOWNTO 0);
+         Offset         : IN  SLV4;
          RealIn,
          ImagIn         : IN  Float_1_18;
-         PhaseOut       : OUT SLV18;
-         RealOut,
-         ImagOut,
-         PhaseDiff      : OUT Float_1_18;
-         StartOut,
-         PhaseDiffEn,
-         ValidOut,
-         PilotLocked    : OUT STD_LOGIC
-      );
-   END COMPONENT;
-*/
-   COMPONENT PilotSyncOverTwoPackets
-      PORT (
-         clk,
-         reset,
-         ce,
-         PilotPulseIn,
-         PilotTime,
-         Mag0GtMag1,
-         ValidIn        : IN STD_LOGIC;
-         PilotSyncOffset : IN  natural range 0 to 4095;
-         IndexIn        : IN ufixed(10 DOWNTO 0);
-         RealIn,
-         ImagIn         : IN  Float_1_18;
-         RdAddrDiff,
          PhaseOut       : OUT SLV18;
          RealOut,
          ImagOut,
@@ -162,11 +135,15 @@ ARCHITECTURE rtl OF STC IS
          ValidIn        : IN  std_logic;
          InR,
          InI            : IN  SLV18;
-         EstimatesDone   : OUT std_logic;
+         StartDF,
+         ValidDF,
+         EstimatesDone  : OUT std_logic;
          H0EstR,
          H0EstI,
          H1EstR,
-         H1EstI         : OUT STC_PARM;
+         H1EstI,
+         DF_R,
+         DF_I           : OUT STC_PARM;
          m_ndx0,
          m_ndx1         : OUT integer range -5 to 3;
          Mu0,
@@ -178,7 +155,6 @@ ARCHITECTURE rtl OF STC IS
    COMPONENT trellisProcess
       PORT (
        clk,
-       clk2x,
        clkEnable,
        reset,
        frameStart,
@@ -251,7 +227,8 @@ ARCHITECTURE rtl OF STC IS
          probe_out1 : OUT STD_LOGIC_VECTOR(17 DOWNTO 0);
          probe_out2 : OUT STD_LOGIC_VECTOR(17 DOWNTO 0);
          probe_out3 : OUT STD_LOGIC_VECTOR(0 downto 0);
-         probe_out4 : OUT STD_LOGIC_VECTOR(3 downto 0)
+         probe_out4,
+         probe_out5 :  OUT STD_LOGIC_VECTOR(3 downto 0)
       );
    END COMPONENT;
 
@@ -306,17 +283,22 @@ ARCHITECTURE rtl OF STC IS
             StartInBrik2Dly,
             ValidInBrik2Dly,
             PilotValidOutDly,
+            StartDF,
+            ValidDF,
             TrellisOutEn,
             interpOutEn,
             lastSampleReset,
             EstimatesDone     : std_logic;
-   SIGNAL   TrellisBits       : std_logic_vector(3 downto 0);
+   SIGNAL   TrellisBits,
+            OffsetPS          : SLV4;
    SIGNAL   RealOutPS,
             ImagOutPS,
             RealOutPSB,
             ImagOutPSB,
             InRBrik2Dly,
             InIBrik2Dly,
+            DF_R,
+            DF_I,
             H0EstR,
             H0EstI,
             H1EstR,
@@ -327,13 +309,11 @@ ARCHITECTURE rtl OF STC IS
             Ch1Mu,
             PhaseDiff1,
             PhaseDiff2,
-            PhaseDiff2A,
-            PhaseDiff2B,
             PhaseDiff1xGain,
             PhaseDiff2xGain,
-            PhaseDiff2Offset : Float_1_18;
+            PhaseDiff2Offset  : Float_1_18;
    SIGNAL   PhaseDiff1Gain,
-            PhaseDiff2Gain     : sfixed(9 downto -8);
+            PhaseDiff2Gain    : sfixed(9 downto -8);
    SIGNAL   m_ndx0,
             m_ndx1            : integer range -5 to 3 := 0;
    SIGNAL   DeltaTauEst       : sfixed(0 downto -5);
@@ -354,26 +334,24 @@ ARCHITECTURE rtl OF STC IS
             PhaseDiffGain2Slv1,
             PhaseDiffOffsetSlv1,
             Phase2,
-            Phase2A,
-            Phase2B,
-            RdAddrDiff,
             PhaseDiffSlv,
             PhaseDiff1xGainSlv,
-            PhaseDiff2xGainSlv,
-            StartDac2Data     : SLV18;
+            PhaseDiff2xGainSlv : SLV18;
    SIGNAL   StartCount        : integer range 0 to 3 := 0;
    SIGNAL   PilotPulse,
-            PilotTime,
             PilotValidOut     : std_logic;
    SIGNAL   PilotRealOut,
             PilotImagOut      : Float_1_18;
-   SIGNAL   PilotIndex        : ufixed(10 downto 0);
-   signal   PnDelay           : natural range 0 to 255 := 0;
+   SIGNAL   CorrPntr          : ufixed(15 downto 0);
+   signal   PnDelay,
+            BerRange,
+            Ber               : natural range 0 to 255 := 0;
    SIGNAL   ValidData2047,
             ClkOutEnDly,
             pnBitEn,
             dataBit,
-            codeBit           : std_logic;
+            codeBit,
+            Reload            : std_logic;
 
 -- todo, remove
    SIGNAL   H0Phase           : std_logic_vector(15 downto 0);
@@ -391,7 +369,7 @@ ARCHITECTURE rtl OF STC IS
             InIBrik2Ila       : SLV18;
    signal   StartIla,
             ValidIla          : std_logic;
-   signal   PilotSel          : std_logic_vector(0 downto 0);
+   signal   TrellisPol          : std_logic_vector(0 downto 0);
    signal   DacMux            : vector_of_slvs(0 to 15)(17 downto 0);
 
    attribute mark_debug : string;
@@ -480,7 +458,7 @@ BEGIN
    ResampleR_s <= to_sfixed(ResampleR, ResampleR_s);
    ResampleI_s <= to_sfixed(ResampleI, ResampleI_s);
 
-   PD_u : PilotDetect
+   PD_u : PilotDetectSliding
       GENERIC MAP (
          SIM_MODE => SIM_MODE
       )
@@ -496,7 +474,7 @@ BEGIN
          ImIn           => ResampleI_s,
          -- outputs
          PilotFound     => PilotFound,    -- not used
-         PilotIndex     => PilotIndex,
+         CorrPntr       => CorrPntr,
          Magnitude0     => Magnitude0,
          Magnitude1     => Magnitude1,
          PhaseOut0      => PhaseOut0,
@@ -508,7 +486,6 @@ BEGIN
          ReOut          => PilotRealOut,
          ImOut          => PilotImagOut,
          ValidOut       => PilotValidOut,
-         PilotTime      => PilotTime,
          StartOut       => PilotPulse
    );
 
@@ -526,7 +503,6 @@ BEGIN
             Phs0LastPeak <= (others=>'0');
             Phs1LastPeak <= (others=>'0');
             PhaseDiff    <= (others=>'0');
-            PhaseDiffEn  <= '0';
          elsif (StartOutPS) then
             if (StartCount = 0) then
                if (Mag0GtMag1) then
@@ -538,7 +514,6 @@ BEGIN
                PhaseDiff <= std_logic_vector(resize(PhaseDiff1xGain + PhaseDiff2xGain, 0, -17));
                Phs0LastPeak <= Phs0Peak;
                Phs1LastPeak <= Phs1Peak;
-               PhaseDiffEn <= '1';
             end if;
             StartCount <= 3;
          elsif (PilotValidOut and not PilotValidOutDly) then
@@ -546,11 +521,34 @@ BEGIN
                StartCount <= StartCount - 1;
             end if;
          else
-            PhaseDiffEn <= '0';  -- make clk93 wide
             PhaseDiff2xGain <= resize((PhaseDiff2 - PhaseDiff2Offset) * PhaseDiff2Gain, PhaseDiff2xGain);
          end if;
       end if;
    end process AFC_process;
+
+   Mag0GtMag1 <= '1' when (Mag0Peak > Mag1Peak) else '0';
+
+   PS_u : pilotsync
+      PORT MAP (
+         clk            => Clk2x,
+         ce             => CE,
+         reset          => reset,
+         PilotPulseIn   => PilotPulse,
+         Mag0GtMag1     => Mag0GtMag1,
+         ValidIn        => PilotValidOut,
+         CorrPntr       => CorrPntr,
+         Offset         => OffsetPS,
+         RealIn         => PilotRealOut,
+         ImagIn         => PilotImagOut,
+         PhaseOut       => Phase2,
+         PhaseDiffEn    => PhaseDiffEn,
+         PhaseDiff      => PhaseDiff2,
+         RealOut        => RealOutPS,     -- 186Mhz
+         ImagOut        => ImagOutPS,
+         StartOut       => StartOutPS,
+         ValidOut       => ValidOutPS,
+         PilotLocked    => PilotLocked
+   );
 
    VioPhase  : Vio2x18
       PORT MAP (
@@ -558,84 +556,32 @@ BEGIN
          probe_out0  => PhaseDiffGain2Slv,
          probe_out1  => PhaseDiffOffsetSlv,
          probe_out2  => PhaseDiffGain1Slv,
-         probe_out3  => PilotSel,
-         probe_out4  => TrellisOffsetSlv
+         probe_out3  => TrellisPol,
+         probe_out4  => TrellisOffsetSlv,
+         probe_out5  => OffsetPS
    );
    TrellisOffset <= signed(TrellisOffsetSlv);
 
-   Mag0GtMag1 <= '1' when (Mag0Peak > Mag1Peak) else '0';
-/*
-   PS_u : pilotsync
-      PORT MAP (
-         clk            => Clk,
-         ce             => CE,
-         reset          => reset,
-         PilotSyncOffset => to_integer(unsigned(PilotSyncOffset)),
-         PilotPulseIn   => PilotPulse,
-         Mag0GtMag1     => Mag0GtMag1,
-         ValidIn        => PilotValidOut,
-         IndexIn        => PilotIndex,
-         RealIn         => PilotRealOut,
-         ImagIn         => PilotImagOut,
-         PhaseOut       => Phase2A,
-         PhaseDiffEn    => PhaseDiffEnPSA,
-         PhaseDiff      => PhaseDiff2A,
-         RealOut        => RealOutPS,     -- 93Mhz
-         ImagOut        => ImagOutPS,
-         StartOut       => StartOutPS,
-         ValidOut       => ValidOutPS,
-         PilotLocked    => PilotLockedA
-   );
-*/
-   PS_u : PilotSyncOverTwoPackets
-      PORT MAP (
-         clk            => Clk,
-         ce             => CE,
-         reset          => reset,
-         PilotSyncOffset => to_integer(unsigned(PilotSyncOffset)),
-         PilotPulseIn   => PilotPulse,
-         PilotTime      => PilotTime,
-         RdAddrDiff     => RdAddrDiff,
-         Mag0GtMag1     => Mag0GtMag1,
-         ValidIn        => PilotValidOut,
-         IndexIn        => PilotIndex,
-         RealIn         => PilotRealOut,
-         ImagIn         => PilotImagOut,
-         PhaseOut       => Phase2B,
-         PhaseDiffEn    => PhaseDiffEnPSB,
-         PhaseDiff      => PhaseDiff2B,
-         RealOut        => RealOutPSB,     -- 93Mhz
-         ImagOut        => ImagOutPSB,
-         StartOut       => StartOutPSB,
-         ValidOut       => ValidOutPSB,
-         PilotLocked    => PilotLockedB
-   );
-
-   PhaseDiffEn   <= /*PhaseDiffEnPSA when (PilotSel(0) = '0') else*/ PhaseDiffEnPSB;
-   PhaseDiff2    <= /*PhaseDiff2A    when (PilotSel(0) = '0') else*/ PhaseDiff2B;
-   Phase2        <= /*Phase2A        when (PilotSel(0) = '0') else*/ Phase2B;
-   PilotLocked   <= /*PilotLockedA   when (PilotSel(0) = '0') else*/ PilotLockedB;
-
-   InterBrikClk : process(Clk) is
+   InterBrikClk : process(Clk2x) is
    begin
-      if(rising_edge(Clk)) then
+      if(rising_edge(Clk2x)) then
          if (Reset) then
             StartInBrik2Dly <= '0';
             ValidInBrik2Dly <= '0';
             InRBrik2Dly     <= (others=>'0');
             InIBrik2Dly     <= (others=>'0');
          else
-            StartInBrik2Dly <= /*StartOutPS when (PilotSel(0) = '0') else*/ StartOutPSB;
-            ValidInBrik2Dly <= /*ValidOutPS when (PilotSel(0) = '0') else*/ ValidOutPSB;
-            InRBrik2Dly     <= /*RealOutPS  when (PilotSel(0) = '0') else*/ RealOutPSB;
-            InIBrik2Dly     <= /*ImagOutPS  when (PilotSel(0) = '0') else*/ ImagOutPSB;
+            StartInBrik2Dly <= StartOutPS;
+            ValidInBrik2Dly <= ValidOutPS;
+            InRBrik2Dly     <= RealOutPS;
+            InIBrik2Dly     <= ImagOutPS;
          end if;
       end if;
    end process InterBrikClk;
 
    Brik2_u : Brik2
       PORT MAP(
-         Clk            => Clk,
+         Clk            => Clk2x,
          Reset          => Reset,
          CE             => CE,
          StartIn        => StartInBrik2Dly,
@@ -643,6 +589,10 @@ BEGIN
          InR            => to_slv(InRBrik2Dly),
          InI            => to_slv(InIBrik2Dly),
          EstimatesDone  => EstimatesDone,
+         StartDF        => StartDF,
+         ValidDF        => ValidDF,
+         DF_R           => DF_R,
+         DF_I           => DF_I,
          H0EstR         => H0EstR,
          H0EstI         => H0EstI,
          H1EstR         => H1EstR,
@@ -654,20 +604,19 @@ BEGIN
          Mu1            => Ch1Mu
       );
 
-   m_ndx0Slv <= std_logic_vector(to_signed(m_ndx0, 4) + TrellisOffset);
-   m_ndx1Slv <= std_logic_vector(to_signed(m_ndx1, 4) + TrellisOffset);
+   m_ndx0Slv <= std_logic_vector(TrellisOffset + to_signed(m_ndx0, 4)) when (TrellisPol(0)) else std_logic_vector(TrellisOffset - to_signed(m_ndx0, 4));
+   m_ndx1Slv <= std_logic_vector(TrellisOffset + to_signed(m_ndx1, 4)) when (TrellisPol(0)) else std_logic_vector(TrellisOffset - to_signed(m_ndx1, 4));
 
    Trellis_u : trellisProcess
       PORT MAP (
-         clk                  => Clk,
-         clk2x                => Clk2x,
+         clk                  => Clk2x,
          clkEnable            => CE,
          reset                => Reset,
          estimatesDone        => EstimatesDone,
-         frameStart           => StartInBrik2Dly,
-         inputValid           => ValidInBrik2Dly,
-         dinReal              => to_slv(InRBrik2Dly),
-         dinImag              => to_slv(InIBrik2Dly),
+         frameStart           => StartDF,
+         inputValid           => ValidDF,
+         dinReal              => to_slv(DF_R),
+         dinImag              => to_slv(DF_I),
          h0EstRealIn          => to_slv(H0EstR),
          h0EstImagIn          => to_slv(H0EstI),
          h1EstRealIn          => to_slv(H1EstR),
@@ -710,6 +659,19 @@ BEGIN
          pnBitEn <= ClkOutEn and not ClkOutEnDly;
          ClkOutEnDly <= ClkOutEn;
          ValidData2047 <= dataBit xor codeBit;
+         if (BerRange < 255) then
+            BerRange <= BerRange + 1;
+            Reload   <= '0';
+            if (ValidData2047) then
+               Ber <= Ber + 1;
+            end if;
+         else
+            BerRange <= 0;
+            if (Ber > 20) then
+               Reload <= '1';
+            end if;
+            Ber <= 0;
+         end if;
       end if;
    end process PnProc;
 
@@ -722,13 +684,11 @@ BEGIN
          clock        => clk2x,
          enable       => pnBitEn, --   clock in data
          lfsr_enable  => pnBitEn, --   gated clock in data
-         reload       => PilotSel(0),
+         reload       => Reload,
          data         => DataOut,
          data_bit     => dataBit,
          code_bit     => codeBit
       );
-
-   StartDac2Data <= 18x"1FFFF" when (StartInBrik2Dly) else 18x"0";
 
    DacOutputs : process(Clk2x)
    begin
@@ -742,10 +702,10 @@ BEGIN
          Dac2ClkEn  <= '1';
          DacMux(0)  <= to_slv(InRBrik2Dly);        -- reframed resample R & I
          DacMux(1)  <= to_slv(InIBrik2Dly);        --
-         DacMux(2)  <= StartDac2Data;              -- Start of Frame signal
+         DacMux(2)  <= StartInBrik2Dly & 17x"0";              -- Start of Frame signal
          DacMux(3)  <= ValidInBrik2Dly & 17x"0";   -- Valid packet signal
          DacMux(4)  <= Phase2;                     -- Half Pilot Phase
-         DacMux(5)  <= to_slv(PilotIndex) & 7x"0";                   --
+         DacMux(5)  <= to_slv(CorrPntr) & 2x"0";                   --
          DacMux(6)  <= PhaseDiffSlv;               -- Composite Phase Diff
          DacMux(7)  <= PhaseDiff1xGainSlv;         -- Whole Pilot Phase Diff
          DacMux(8)  <= PhaseDiff2xGainSlv;         -- Half Pilot Phase Diff
@@ -754,10 +714,8 @@ BEGIN
          DacMux(11) <= PhaseOut0;                  -- iFFT H0 Phase every other sample
          DacMux(12) <= PhaseOut1;                  -- H1
          DacMux(13) <= Mag0Peak;                   -- Peak Magnitude H0 per frame
-         DacMux(14) <= Phs0Peak;                   -- Full Pilot Phase at peak magnitude
-         DacMux(15) <= Mag1Peak;                   --
-         DacMux(1)  <= RdAddrDiff;                   --
-         DacMux(1)  <= H0Phase & "00";        -- Computed H0 Phase            was ValidData2047 & 17x"0";     -- My 2047 BER with triples per error
+         DacMux(14) <= ValidData2047 & 17x"0"; -- Phs0Peak;                   -- Full Pilot Phase at peak magnitude
+         DacMux(15) <= to_slv(CorrPntr(8 downto 0)) & 9x"00";        -- Computed H0 Phase            was ValidData2047 & 17x"0";     -- My 2047 BER with triples per error
       end if;
    end process DacOutputs;
 

@@ -3,7 +3,6 @@
 
 module trellisProcess (
     input                   clk,
-                            clk2x,
                             clkEnable,
                             reset,
                             frameStart,
@@ -73,7 +72,7 @@ module trellisProcess (
     wire    signed  [17:0]  faReal0,faImag0,faReal1,faImag1;
     reg                     estimatesDoneDly;
 
-    always @(posedge clk2x) begin
+    always @(posedge clk) begin
     `ifdef USE_FIXED_ESTIMATES
         h0EstReal   <= 18'h30000;  // 1.0 + j0.0
         h0EstImag   <= 18'h00000;
@@ -99,7 +98,7 @@ module trellisProcess (
     integer SPARE_CODE_WORDS; // first two outputs are bogus except on first frame after boot. Not cured by reset
     assign  lastSampleReset = (sampleOut == `CODEWORDS_PER_FRAME + SPARE_CODE_WORDS);
 
-    always @(posedge(clk2x)) begin
+    always @(posedge(clk)) begin
         if (reset) begin
             SPARE_CODE_WORDS = 1;
         end
@@ -113,7 +112,6 @@ module trellisProcess (
         .CLKS_PER_OUTPUT(4))
     fa(
         .clk(clk),
-        .clk2x(clk2x),
         .clkEn(clkEnable),
         .reset(reset),
         .startOfFrame(frameStart),
@@ -137,7 +135,7 @@ module trellisProcess (
     //------------------------- Interpolators ---------------------------------
 
     interpolator ch0r(
-        .clk(clk2x),
+        .clk(clk),
         .clkEn(1'b1),
         .reset(myStartOfTrellis),
         .interpolate(faClkEn & interpolate),
@@ -149,7 +147,7 @@ module trellisProcess (
     );
 
     interpolator ch0i(
-        .clk(clk2x),
+        .clk(clk),
         .clkEn(1'b1),
         .reset(myStartOfTrellis),
         .interpolate(faClkEn & interpolate),
@@ -162,7 +160,7 @@ module trellisProcess (
 
     wire    signed      [17:0]  sample1r;
     interpolator ch1r(
-        .clk(clk2x),
+        .clk(clk),
         .clkEn(1'b1),
         .reset(myStartOfTrellis),
         .interpolate(faClkEn & interpolate),
@@ -174,7 +172,7 @@ module trellisProcess (
     );
     wire    signed      [17:0]  sample1i;
     interpolator ch1i(
-        .clk(clk2x),
+        .clk(clk),
         .clkEn(1'b1),
         .reset(myStartOfTrellis),
         .interpolate(faClkEn & interpolate),
@@ -189,7 +187,7 @@ module trellisProcess (
     wire [3:0]   tdOutputBits;
 
     trellisDetector td(
-        .clk(clk2x),
+        .clk(clk),
         .clkEn(1'b1),
         .reset(reset || lastSampleReset),
         .sampleEn(interpOutEn),
@@ -205,7 +203,7 @@ module trellisProcess (
         .outputBits(tdOutputBits)
     );
 
-    always @(posedge clk2x) begin
+    always @(posedge clk) begin
         if (reset || myStartOfTrellis || lastSampleReset) begin
             sampleOut <= 0;
         end

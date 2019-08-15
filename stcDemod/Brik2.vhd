@@ -77,11 +77,15 @@ ENTITY Brik2 IS
       ValidIn        : IN  std_logic;
       InR,
       InI            : IN  SLV18;
+      StartDF,
+      ValidDF,
       EstimatesDone  : OUT std_logic;
       H0EstR,
       H0EstI,
       H1EstR,
-      H1EstI         : OUT STC_PARM;
+      H1EstI,
+      DF_R,
+      DF_I           : OUT STC_PARM;
       m_ndx0,
       m_ndx1         : OUT integer range -5 to 3;
       Mu0,
@@ -185,7 +189,7 @@ ARCHITECTURE rtl OF Brik2 IS
    CONSTANT StartDF_Delay     : positive := 3;  -- data is delayed 10 clocks but takes 13 to build
    CONSTANT MIN_M_NDX         : positive := 5;
    CONSTANT MAX_M_NDX         : positive := 3;
-   CONSTANT PILOT_OFFSET      : positive := 3;
+   CONSTANT PILOT_OFFSET      : natural  := 0;
 
    CONSTANT TimeViaDF         : boolean := false;
 
@@ -200,27 +204,17 @@ ARCHITECTURE rtl OF Brik2 IS
             TimeRead,
             TimeRdAddr,
             ChanRdAddr        : integer range 0 to TIME_DEPTH - 1;
-   SIGNAL   FreqEstDone,
-            ChanEstDone,
+   SIGNAL   ChanEstDone,
             TimeEstDone,
             TimeActive,
-            ResetTiming,
             StartTime,
-            StartDF,
             FirstPass,
-            StartTimeChan,
             ValidTimeChan,
-            ValidDF,
-            ValidDFreg,
-            TrellisStarter,
-            TrellisPreStart   : std_logic;
+            ValidDetFilt      : std_logic;
    SIGNAL   DF_DataOut        : std_logic_vector(47 downto 0);
-   SIGNAL   AllDone           : std_logic_vector(2 downto 0);
    SIGNAL   StartDF_Out       : std_logic_vector(StartDF_Delay-1 downto 0);
    SIGNAL   InR_sf,
             InI_sf,
-            DF_R,
-            DF_I,
             TimeChanR,
             TimeChanI,
             H0Mag,
@@ -238,7 +232,7 @@ ARCHITECTURE rtl OF Brik2 IS
             Tau1EstNdxTE      : integer range 0 to SEARCH_LENGTH;
    SIGNAL   Tau0Int,
             Tau1Int           : integer range -MIN_M_NDX to MAX_M_NDX := 0;
-   SIGNAL   TrellisDelay      : SLV4;
+   SIGNAL   TrellisDelay      : std_logic_vector(5 downto 0);
    SIGNAL   Tau0EstX4,
             Tau1EstX4,
             Tau0EstA,
@@ -273,17 +267,10 @@ BEGIN
          H0EstI_Ila     <= to_slv(H0EstI);
          H1EstR_Ila     <= to_slv(H1EstR);
          H1EstI_Ila     <= to_slv(H1EstI);
-         ValidDF_ILA    <= ValidDFreg;
+         ValidDF_ILA    <= ValidDF;
       end if;
    end process IlaProcess;
 -- end of test points TODO
-
-   FreqProcess : process(Clk)
-   begin
-      if (rising_edge(Clk)) then
-         FreqEstDone <= '1';   --
-      end if;
-   end process;
 
    DetectFilt : DetectionFilter
       PORT MAP (
@@ -293,7 +280,7 @@ BEGIN
          s_axis_data_tvalid   => ValidIn,
          s_axis_data_tdata    => 6x"00" & to_slv(InI) & 6x"00"& to_slv(InR),
          s_axis_data_tready   => open,
-         m_axis_data_tvalid   => ValidDF,
+         m_axis_data_tvalid   => ValidDetFilt,
          m_axis_data_tdata    => DF_DataOut
       );
 
@@ -304,35 +291,28 @@ BEGIN
             StartDF_Out <= (others=>'0');
             DF_R        <= (others=>'0');
             DF_I        <= (others=>'0');
-            ValidDFreg <= '0';
+            ValidDF     <= '0';
          elsif (ce) then
             DF_R        <= to_sfixed(DF_DataOut(17 downto 0), DF_R);
             DF_I        <= to_sfixed(DF_DataOut(24+17 downto 24), DF_I);
-            ValidDFreg  <= ValidDF;
-            if (StartIn) then
-               StartDF_Out <= (0 => '1', others=>'0');
-            elsif (ValidDFreg) then
-               StartDF_Out <= StartDF_Out(StartDF_Delay-2 downto 0) & '0';
-            end if;
+            ValidDF     <= ValidDetFilt;
          end if;
       end if;
    end process DF_Process;
 
-   StartDF <= StartDF_Out(StartDF_Delay-1);
    InR_sf <= to_sfixed(InR, InR_sf);
    InI_sf <= to_sfixed(InI, InI_sf);
 
-   StartTimeChan <= StartDF    when (TimeViaDF) else StartIn;
-   ValidTimeChan <= ValidDFreg when (TimeViaDF) else ValidIn or StartIn;
+   StartDF       <= StartIn;
+   ValidTimeChan <= ValidDF    when (TimeViaDF) else ValidIn;
    TimeChanR     <= DF_R       when (TimeViaDF) else InR_sf;
    TimeChanI     <= DF_I       when (TimeViaDF) else InI_sf;
-   ResetTiming   <= reset or (StartTimeChan and TimeActive);   -- if PD bell curve is on edge of packet, actual peak could be on second packet, restart
 
    TimeProcess : process(clk)  -- Time and channel want last half of pilot
    begin
       if (rising_edge(clk)) then
-         if (ResetTiming) then
-            if (StartTimeChan) then
+         if (Reset) then
+            if (StartIn) then
                TimeCount <= 0;
                TimeActive <= '1';
             else
@@ -342,11 +322,11 @@ BEGIN
             StartTime  <= '0';
             WrAddr      <= 0;
          elsif (ce) then
-            if (StartTimeChan and ValidTimeChan and not TimeActive) then   -- could occur when ValidDF is skipping samples
+            if (StartIn and not TimeActive) then   -- could occur when ValidDF is skipping samples
                TimeCount   <= 0;    -- TimeCount starts after DF is primed
                WrAddr      <= 0;
                TimeActive  <= '1';
-             elsif (TimeEstDone) then  -- just needs cleared before next packet
+            elsif (TimeEstDone) then  -- just needs cleared before next packet
                TimeActive <= '0';
             end if;
             if (ValidTimeChan) then
@@ -417,7 +397,7 @@ BEGIN
       PORT MAP(
          clk         => clk,
          ce          => ce,
-         reset       => ResetTiming,   -- if Pilot restarted
+         reset       => Reset,
          StartIn     => StartTime,
          Xr          => TimeR,
          Xi          => TimeI,
@@ -448,16 +428,12 @@ BEGIN
          Done           => ChanEstDone
    );
 
-   TrellisPreStart <= TrellisDelay(2);
-
    EstimatesProc : process(clk)
    begin
       if (rising_edge(clk)) then
          if (reset) then
-            TrellisStarter <= '0';
             EstimatesDone   <= '0';
-            AllDone        <= "000";
-            TrellisDelay   <= x"0";
+            TrellisDelay   <= 6x"0";
             m_ndx0         <= 0;
             m_ndx1         <= 0;
             Tau0Int        <= 0;
@@ -478,24 +454,8 @@ BEGIN
             H1Mag          <= (others=>'0');
             DeltaTauEst    <= (others=>'0');
          elsif (ce) then
-            TrellisStarter <= AllDone ?= "111";
-            if (StartIn) or and(AllDone) then
-               AllDone(0) <= '0';
-            elsif (FreqEstDone) then
-               AllDone(0) <= '1';
-            end if;
-            if (StartIn) or and(AllDone) then
-               AllDone(1) <= '0';
-            elsif (TimeEstDone) then
-               AllDone(1) <= '1';
-            end if;
-            if (StartIn) or and(AllDone) then
-               AllDone(2) <= '0';
-            elsif (ChanEstDone) then
-               AllDone(2) <= '1';
-            end if;
-            TrellisDelay <= TrellisDelay(TrellisDelay'left-1 downto 0) & TrellisStarter;
-            EstimatesDone <= TrellisDelay(3);
+            TrellisDelay <= TrellisDelay(TrellisDelay'left-1 downto 0) & ChanEstDone;
+            EstimatesDone <= TrellisDelay(5);
             if (ChanEstDone) then   -- All estimates are done, allow time to calculate values.
                H0EstR      <= H0EstR_CE;
                H0EstI      <= H0EstI_CE;

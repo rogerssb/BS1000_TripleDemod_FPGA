@@ -482,7 +482,6 @@ module stcDemodTop (
         .DacSelect1(stcDac1Select),
         .DacSelect2(stcDac2Select),
         .SpectrumInv(SpectrumInv),
-        .PilotSyncOffset(pilotOffset),
         .PhaseDiff(pilotPhaseDiff),
         .PhaseDiffEn(pilotPhaseDiffEn),
         .ClkOutEn(stcBitEnOut),

@@ -833,13 +833,6 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Compiling entity Dec_156_175
 -- Compiling architecture rtl of Dec_156_175
 
-} {} {}} C:/Semco/Vivado/Demods/stcDemod/frameAlignment.v {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/frameAlignment.v
-Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
--- Compiling module frameAlignment
-
-Top level modules:
-	frameAlignment
-
 } {} {}} {C:\Semco\Vivado\Demods\stcDemod/STC.vhd} {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/STC.vhd
 Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Loading package STANDARD
@@ -851,6 +844,13 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Loading package Semco_pkg
 -- Compiling entity STC
 -- Compiling architecture rtl of STC
+
+} {} {}} C:/Semco/Vivado/Demods/stcDemod/frameAlignment.v {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/frameAlignment.v
+Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
+-- Compiling module frameAlignment
+
+Top level modules:
+	frameAlignment
 
 } {} {}} C:/Semco/Vivado/Demods/stcMod/soqpsk_ternary_encoder.v {1 {vlog -work work +incdir+C:/Semco/Vivado/Demods +define+STC_MOD -stats=none C:/Semco/Vivado/Demods/stcMod/soqpsk_ternary_encoder.v
 Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
@@ -1112,19 +1112,6 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Compiling entity DetectionFilter
 -- Compiling architecture STRUCTURE of DetectionFilter
 -- Loading entity DetectionFilter_fir_compiler_v7_2_8
-
-} {} {}} {C:\Semco\Vivado\Demods\stcDemod/testBenches/Brik1_Hw_tb.vhd} {1 {vcom -work work -2008 -explicit -check_synthesis -stats=none C:/Semco/Vivado/Demods/stcDemod/testBenches/Brik1_Hw_tb.vhd
-Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
--- Loading package STANDARD
--- Loading package TEXTIO
--- Loading package std_logic_1164
--- Loading package std_logic_textio
--- Loading package NUMERIC_STD
--- Loading package MATH_REAL
--- Loading package fixed_pkg
--- Loading package Semco_pkg
--- Compiling entity Brik1_Hw_tb
--- Compiling architecture rtl of Brik1_Hw_tb
 
 } {} {}} {C:\Semco\Vivado\Demods\stcDemod/Vivado/xc7k160t-IP-Vivado2015p1/twoPortDistMem128x18/twoPortDistMem128x18_sim_netlist.v} {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/Vivado/xc7k160t-IP-Vivado2015p1/twoPortDistMem128x18/twoPortDistMem128x18_sim_netlist.v
 Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
@@ -2752,6 +2739,18 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Loading package Semco_pkg
 -- Compiling entity Aliasing_DDC
 -- Compiling architecture rtl of Aliasing_DDC
+
+} {} {}} C:/Semco/Vivado/Demods/stcDemod/PilotSyncOverTwoPackets.vhd {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/PilotSyncOverTwoPackets.vhd
+Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package fixed_pkg
+-- Loading package MATH_REAL
+-- Loading package Semco_pkg
+-- Compiling entity PilotSyncOverTwoPackets
+-- Compiling architecture rtl of PilotSyncOverTwoPackets
 
 } {} {}} C:/Semco/stcDemod/Vivado/stcDemod.srcs/sources_1/ip/p0_r_c/p0_r_c_sim_netlist.vhdl {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/stcDemod/Vivado/stcDemod.srcs/sources_1/ip/p0_r_c/p0_r_c_sim_netlist.vhdl
 Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016

@@ -5,11 +5,10 @@ module frameAlignment
     #(parameter START_OFFSET = 0,
       parameter CLKS_PER_OUTPUT = 4) (
     input                   clk,
-                            clk2x,
                             clkEn,
                             reset,
                             lastSampleReset,
-                            startOfFrame,       // start of frame, not start of trellis activiy
+                            startOfFrame,       // start of frame, not start of trellis activty
                             estimatesDone,     // Estimates are complete, start Trellis process
                             valid,
     input   signed  [17:0]  dinReal,
@@ -32,7 +31,7 @@ module frameAlignment
     reg             [14:0]  wrAddr, rdAddr, sofAddress;
     wire   signed   [15:0]  rdAddr0, rdAddr1;
     reg                     estimatesReady, sofDetected, frameActive;
-    always @(posedge clk2x) begin
+    always @(posedge clk) begin
         if (reset) begin
             myStartOfTrellis <= 0;
             sofDetected      <= 0;
@@ -59,12 +58,12 @@ module frameAlignment
 
     //------------------------- Sample FIFO -----------------------------------
 
-    wire                    fifoWrEn = (clkEn && valid && clk); // doing a Clk1x to Clk2x transfer so only enable for half of clk1x
+    wire                    fifoWrEn = (clkEn && valid);
     reg                     fifoRdEn;
     wire    [35:0]          fifoRdData0, fifoRdData1;
 
     wire    empty = (wrAddr == rdAddr);
-    always @(posedge clk2x) begin
+    always @(posedge clk) begin
         if (reset) begin
             rdAddr <= 0;
             wrAddr <= 0;
@@ -92,7 +91,7 @@ module frameAlignment
       .ADDR_WIDTH  (15),
       .LATENCY     (1) )
     fifoRealImag(
-        .clk(clk2x),
+        .clk(clk),
         .ce(clkEn),
         .reset(reset),
         .WrEn(fifoWrEn),
@@ -117,7 +116,7 @@ module frameAlignment
     reg             [2:0]   decimationCount;
     reg             [1:0]   outputCount;
     reg             [8:0]   trellisInitCnt;
-    always @(posedge clk2x) begin
+    always @(posedge clk) begin
         if (reset || lastSampleReset) begin
             outputState <= `WAIT_VALID;
             decimationCount <= CLKS_PER_OUTPUT-1;

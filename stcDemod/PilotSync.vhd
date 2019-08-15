@@ -60,10 +60,10 @@ ENTITY PilotSync IS
       PilotPulseIn,
       Mag0GtMag1,
       ValidIn        : IN STD_LOGIC;
-      PilotSyncOffset : IN natural range 0 to 4095;
-      IndexIn        : IN ufixed(10 DOWNTO 0);
+      CorrPntr       : IN ufixed(15 DOWNTO 0);
       RealIn,
       ImagIn         : IN  Float_1_18;
+      Offset         : IN  SLV4;
       PhaseOut       : OUT SLV18;
       PhaseDiff,
       RealOut,
@@ -75,7 +75,6 @@ ENTITY PilotSync IS
    );
 END PilotSync;
 
-
 ARCHITECTURE rtl OF PilotSync IS
 
    Component CmplxMult IS
@@ -83,7 +82,7 @@ ARCHITECTURE rtl OF PilotSync IS
          IN_LEFT     : integer := 8;
          IN_RIGHT    : integer := -9;
          OUT_LEFT    : integer := 15;
-         OUT_BINPT  : integer := -2
+         OUT_BINPT   : integer := -2
       );
       PORT(
          clk,
@@ -142,19 +141,23 @@ ARCHITECTURE rtl OF PilotSync IS
       );
    END COMPONENT RAM_2Reads_1Write;
 
-   CONSTANT ADDR_BITS      : integer := 13;
+   CONSTANT ADDR_BITS      : integer := CorrPntr'length;
+   type     ModeType is (Idle, SET_START, CLR_START, READ_LOOP);
 
-   -- Signals
-   SIGNAL   WrAddr,
-            IndexOut             : ufixed(ADDR_BITS-1 downto 0);
+  -- Signals
+   SIGNAL   PacketMode           : ModeType;
+   SIGNAL   RamDepth,
+            WrAddr,
+            RdAddr,
+            CorrCntrCapture      : ufixed(CorrPntr'range);
+   SIGNAL   WaitCount            : natural range 0 to 15;
+   SIGNAL   PacketCount          : natural range 0 to 26;
+   SIGNAL   FrmSmplCount         : natural range 0 to 16383;
    SIGNAL   WrAddr_i,
-            PacketCount_i,
-            WaitCount_i,
-            RdAddr_i             : integer range 0 to 2**ADDR_BITS-1;
-   SIGNAL   SampleCount          : natural range 0 to 16383;
+            RdAddr_i             : natural range 0 to 2**ADDR_BITS-1;
    SIGNAL   ReadCount,
             InvRdCount,
-            PilotCount           : unsigned (8 downto 0);
+            PilotCount           :unsigned(8 downto 0);
    SIGNAL   RealOutSlv,
             ImagOutSlv,
             PilotCaptureR_slv,
@@ -163,12 +166,11 @@ ARCHITECTURE rtl OF PilotSync IS
             H0Islv,
             H1Rslv,
             H1Islv               : SLV18;
-   SIGNAL   StartNext,
-            Clock256,
-            CmplxValid,
+   SIGNAL   CmplxValid,
             ValidOutDly,
             CordicStart,
             ValidCordic,
+            Captured,
             PilotValid,
             PilotPacket          : std_logic;
    SIGNAL   ReadR,
@@ -207,13 +209,15 @@ ARCHITECTURE rtl OF PilotSync IS
             Phase0B,
             Phase1A,
             Phase1B              : sfixed(0 downto -Phase0'length+1);
-   SIGNAL   CmplxCount           : integer range 0 to 511;
+   SIGNAL   CmplxCount,
+            PckSmplCount         : integer range 0 to 511;
 
    signal   SyncSumIla           : sfixed(10 downto 0);
    signal   ReadR_Ila, ReadI_Ila : sfixed(17 downto 0);
+   signal   Offset_u             : ufixed(3 downto 0);
 
    attribute mark_debug : string;
-   attribute mark_debug of SampleCount, StartOut, SyncSumIla, ReadR_Ila, ReadI_Ila, IndexOut,
+   attribute mark_debug of FrmSmplCount, StartOut, SyncSumIla, ReadR_Ila, ReadI_Ila, CorrCntrCapture,
                Phase0, Phase1, PhaseDiff : signal is "true";
 
 BEGIN
@@ -224,11 +228,11 @@ BEGIN
          SyncSumIla   <= SyncSum(10 downto 0);
          ReadR_Ila    <= ReadR;
          ReadI_Ila    <= ReadI;
+         Offset_u     <= ufixed(Offset);
       end if;
    end process IlaProcess;
 
-   Clock256    <= '1' when (PacketCount_i = 256) else '0';
-   PilotValid  <= PilotPulseIn; -- TODO '1' when (PilotPulseIn = '1') and (SampleCount > 13300) else '0'; -- pulse should be at 13312
+   PilotValid  <= PilotPulseIn; -- TODO '1' when (PilotPulseIn = '1') and (FrmSmplCount > 13300) else '0'; -- pulse should be at 13312
 
    PhaseOut <= Phase0 & "00";
 
@@ -237,76 +241,125 @@ BEGIN
       if (rising_edge(clk)) then
          if (reset) then
             WrAddr         <= (others=>'0');
+            RdAddr         <= (others=>'0');
             SyncSum        <= (others=>'0');
             SyncError      <= (others=>'0');
+            CorrCntrCapture <= (others=>'0');
             ReadCount      <= (others=>'0');
             PilotCount     <= (others=>'0');
             PhaseDiff      <= (others=>'0');
-            IndexOut       <= to_ufixed(0, IndexOut);
             PhaseDiffEn    <= '0';
-            WaitCount_i    <= 0;
-            SampleCount    <= 0;
-            PacketCount_i  <= 512;
-            StartNext      <= '0';
+            FrmSmplCount    <= 0;
+            PckSmplCount   <= 0;
+            PacketCount    <= 0;
+            Captured       <= '0';
+            StartOut       <= '0';
+            ValidOut       <= '0';
             PilotPacket    <= '0';
             PilotLocked    <= '0';
-         elsif ce = '1' then
-            ValidOut <= ValidIn;
+         elsif (ce) then
+            /*
+               wait for PilotPulseIn and capture CorrPntr. set active flag.
+               wait for WrAddr > CorrPntr + 512 for first packet
+               Set StartOut, Set RdAddr to CorrPntrCapture
+               Wait two clock
+               Set ValidOut,
+               Inc RdAddr
+               Do 512 samples,
+               Clr ValidOut, Inc PacketCntr
+               Wait or WrAddr > RdAddr + 512 for next packer
+               if (PacketCntr < 26) goto Wait Two Clocks
+               else
+               Clr PacketCntr
+               Goto Wait for PilotPulseIn.
+            */
+            RamDepth <= resize(WrAddr - RdAddr, RamDepth);
+            case (PacketMode) is
+            when IDLE =>
+               if (Captured = '1') and (RamDepth > 512) then
+                  PacketMode  <= SET_START;
+                  PacketCount <= 0;
+                  WaitCount   <= 10;      -- keep start pulse away from valid data before or after
+               end if;
+            when SET_START =>
+               if (WaitCount > 0) then
+                  WaitCount <= WaitCount - 1;
+               else
+                  StartOut    <= '1';
+                  WaitCount   <= 10;
+                  Captured    <= '0';
+                  RdAddr      <= CorrCntrCapture;
+                  PacketMode  <= CLR_START;
+               end if;
+            when CLR_START =>
+               StartOut <= '0';
+               if (WaitCount > 0) then
+                  WaitCount <= WaitCount - 1;
+               else
+                  ValidOut    <= '1';
+                  RdAddr      <= resize(RdAddr + 1, RdAddr);
+                  PckSmplCount <= 0;
+                  PacketMode  <= READ_LOOP;
+               end if;
+            when READ_LOOP =>
+               if (PckSmplCount < 511) then
+                  PckSmplCount <= PckSmplCount + 1;
+                  RdAddr      <= resize(RdAddr + 1, RdAddr);
+               else
+                  ValidOut <= '0';
+                  if (PacketCount < 26) then
+                     if (ValidOut) then
+                        PacketCount <= PacketCount + 1;
+                     end if;
+                     if (RamDepth > 512) then
+                        WaitCount  <= 2;
+                        PacketMode <= CLR_START;
+                     end if;
+                  else
+                     PacketMode <= IDLE;  -- wait for next packet start. could already exist
+                  end if;
+               end if;
+            when others =>
+               PacketMode <= IDLE;
+            end case;
 
             if (PilotValid) then -- validated pilot with distance between frames
-               IndexOut <= resize(IndexIn, IndexOut);
+               CorrCntrCapture <= resize(CorrPntr - 512 + Offset_u - 8, CorrCntrCapture);
+               Captured <= '1';
             end if;
 
-            if (ValidIn) then
+            if (ValidIn) then    -- capture the Packet data feeding the Pilot Detector
                WrAddr <= resize(WrAddr + 1, WrAddr);
             end if;
 
-            if (PilotValid) then
-               SampleCount <= 0;
-            elsif (SampleCount > 13324) then    -- maintain sync over missed pilots, should have gone off 12 samples ago
-               SampleCount <= 12;
+            if (PilotValid) then    -- if we don't get a PilotValid for a frame, the RdAddr will lose
+               FrmSmplCount <= 0;
+            elsif (FrmSmplCount > 13336) then    -- maintain sync over missed pilots, should have gone off 12 samples ago
+               FrmSmplCount <= 24;
+               Captured <= '1';
             elsif (ValidIn) then
-               SampleCount <= SampleCount + 1;
+               FrmSmplCount <= FrmSmplCount + 1;
             end if;
 
-            if (PilotValid = '1') or (SampleCount = 13324) then   -- request a start pulse between packets
-               StartNext <= '1';                                  -- even if this frame didn't find a pilot
-            elsif (WaitCount_i = 32) and (StartNext = '1') then   -- setting StartNext timing is not critical
-               StartNext <= '0';
-               StartOut  <= '1';
-            else
-               StartOut <= '0';
-            end if;
-
-            if (ValidIn) then
-               PacketCount_i  <= PacketCount_i - 1;
-            else
-               PacketCount_i <= 512;
-            end if;
-
-            if (WaitCount_i > 0) then
-               WaitCount_i <= WaitCount_i - 1;
-            elsif (PacketCount_i = 1) then
-               WaitCount_i <= 61;   -- minimum dead time at 20Mbps
-            end if;
 
             if (StartOut) then
                PilotPacket <= '1';
-               PilotCount <= (others=>'0');
+               PilotCount  <= (others=>'0');
             elsif (PilotCount = 511) then
                PilotPacket <= '0';
-               ReadCount <= to_unsigned(509, ReadCount);
+               ReadCount <= to_unsigned(6, ReadCount'length);
                SyncSum <= (others=>'0');
             end if;
             if (PilotPacket) then
                if (ValidOut) then
                   PilotCount <= PilotCount + 1;
                 end if;
-            elsif (ReadCount > 0) then
+            end if;
+            if (ReadCount >= 6) and (ReadCount < 507) then   -- skip the edges
                SyncError   <= resize(Abs(ReadR - ReadI), SyncError);
                SyncSum     <= resize(SyncSum + SyncError, SyncSum);
-               ReadCount   <= ReadCount - 1;
-               if (ReadCount = 1) then
+               ReadCount   <= ReadCount + 1;
+               if (ReadCount = 506) then
                   PilotLocked <= '1' when SyncSum < 100 else '0';
                end if;
             end if;
@@ -374,7 +427,7 @@ BEGIN
    end process ClkProcess;
 
    WrAddr_i <= to_integer(WrAddr);
-   RdAddr_i <= to_integer(resize(WrAddr - PilotSyncOffset + IndexOut, WrAddr));
+   RdAddr_i <= to_integer(RdAddr);
 
    PilotSync_r_u : RAM_2Reads_1Write
       GENERIC MAP(
@@ -459,7 +512,7 @@ BEGIN
          RdOutB      => PilotCaptureI_slv
       );
 
-   InvRdCount  <= 510 - ReadCount;
+   InvRdCount  <= 507 - ReadCount;
    ReadR       <= to_sfixed(PilotCaptureR_slv, ReadR);
    ReadI       <= to_sfixed(PilotCaptureI_slv, ReadI);
 
