@@ -53,7 +53,7 @@ ENTITY OverlapAddAbs IS
       StartIn        : IN  std_logic;     -- Start is just delayed in sync
       AbsOut         : OUT ufixed(OUT_WIDTH+OUT_BINPT-1 downto OUT_BINPT);
       ReOut,
-      ImOut          : OUT sfixed(IN_WIDTH+IN_BINPT downto IN_BINPT);
+      ImOut          : OUT sfixed(IN_WIDTH+IN_BINPT downto IN_BINPT+1);
       ValidOut,
       StartOut       : OUT std_logic
    );
@@ -70,7 +70,13 @@ ARCHITECTURE rtl OF OverlapAddAbs IS
 
   -- Signals
    SIGNAL   A0,
-            B0          : sfixed(IN_LEFT+1 downto IN_RIGHT); -- same width but 2x higher range
+            B0,
+            A1,
+            B1,
+            A2,
+            B2,
+            A3,
+            B3          : sfixed(IN_LEFT+1 downto IN_RIGHT); -- same width but 2x higher range
    SIGNAL   MultR,
             MultI,
             MultRDly,
@@ -118,18 +124,24 @@ BEGIN
             end if;
                -- pipeline level 2, multiply latched inputs
             if (ValidDly(1)) then
-               MultR     <= ufixed(A0 * A0);
-               MultI     <= ufixed(B0 * B0);
+               MultR <= ufixed(A0 * A0);
+               MultI <= ufixed(B0 * B0);
+               A1    <= A0;
+               B1    <= B0;
             end if;
                -- pipeline level 3, just pipeline out of DSP48
             if (ValidDly(2)) then
                MultRDly  <= MultR;
                MultIDly  <= MultI;
+               A2        <= A1;
+               B2        <= B1;
             end if;
                -- pipeline level 4, add squares
             if (ValidDly(3)) then
                AbsOut   <= resize(MultRDly + MultIDly, AbsOut);
                FullSize <= resize(MultRDly + MultIDly, FullSize);
+               A3       <=  A2;
+               B3       <=  B2;
             end if;
             OverFlow <= '0' when (AbsOut = FullSize) else '1';
          end if;
@@ -138,8 +150,8 @@ BEGIN
 
    StartOut <= StartDly(4);
    ValidOut <= ValidDly(4);
-   ReOut    <= A0;
-   ImOut    <= B0;
+   ReOut    <= resize(A3, ReOut);
+   ImOut    <= resize(B3, ImOut);
 
 END rtl;
 

@@ -37,13 +37,13 @@
     <Option Name="WTVcsLaunchSim" Val="0"/>
     <Option Name="WTRivieraLaunchSim" Val="0"/>
     <Option Name="WTActivehdlLaunchSim" Val="0"/>
-    <Option Name="WTXSimExportSim" Val="115"/>
-    <Option Name="WTModelSimExportSim" Val="116"/>
-    <Option Name="WTQuestaExportSim" Val="115"/>
-    <Option Name="WTIesExportSim" Val="115"/>
-    <Option Name="WTVcsExportSim" Val="115"/>
-    <Option Name="WTRivieraExportSim" Val="115"/>
-    <Option Name="WTActivehdlExportSim" Val="115"/>
+    <Option Name="WTXSimExportSim" Val="118"/>
+    <Option Name="WTModelSimExportSim" Val="119"/>
+    <Option Name="WTQuestaExportSim" Val="118"/>
+    <Option Name="WTIesExportSim" Val="118"/>
+    <Option Name="WTVcsExportSim" Val="118"/>
+    <Option Name="WTRivieraExportSim" Val="118"/>
+    <Option Name="WTActivehdlExportSim" Val="118"/>
     <Option Name="GenerateIPUpgradeLog" Val="TRUE"/>
     <Option Name="XSimRadix" Val="hex"/>
     <Option Name="XSimTimeUnit" Val="ns"/>
@@ -827,6 +827,7 @@
         <Option Name="VerilogDir" Val="$PPRDIR/."/>
         <Option Name="VerilogDir" Val="$PPRDIR/stcDemod"/>
         <Define Name="STC_DEMOD"/>
+        <Generic Name="BuildAll" Val="1"/>
       </Config>
     </FileSet>
     <FileSet Name="constrs_1" Type="Constrs" RelSrcDir="$PSRCDIR/constrs_1">

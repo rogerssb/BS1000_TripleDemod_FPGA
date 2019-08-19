@@ -390,7 +390,7 @@ module stcDemodTop (
 /******************************************************************************
                             Pilot Carrier Loop
 ******************************************************************************/
-    wire    signed  [17:0]  pilotPhaseDiff;
+    wire    signed  [17:0]  pilotPhaseDiff, pilotPhase;
     wire    signed  [31:0]  pilotFreqOffset;
     wire    signed  [11:0]  pilotLoopError;
     wire            [31:0]  pilotDout;
@@ -407,7 +407,7 @@ module stcDemodTop (
         .din(dataIn),
         .dout(pilotDout),
         .demodMode(`MODE_STC),
-        .phase(),
+        .phase(pilotPhase[17:6]),
         .freq(pilotPhaseDiff[17:6]),
         .highFreqOffset(1'b0),
         .offsetError(12'h0),
@@ -482,6 +482,7 @@ module stcDemodTop (
         .DacSelect1(stcDac1Select),
         .DacSelect2(stcDac2Select),
         .SpectrumInv(SpectrumInv),
+        .PhaseOut(pilotPhase),
         .PhaseDiff(pilotPhaseDiff),
         .PhaseDiffEn(pilotPhaseDiffEn),
         .ClkOutEn(stcBitEnOut),

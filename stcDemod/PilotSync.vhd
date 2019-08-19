@@ -57,14 +57,15 @@ ENTITY PilotSync IS
       clk,
       reset,
       ce,
+      DiffEn,
       PilotPulseIn,
-      Mag0GtMag1,
       ValidIn        : IN STD_LOGIC;
       CorrPntr       : IN ufixed(15 DOWNTO 0);
       RealIn,
       ImagIn         : IN  Float_1_18;
       Offset         : IN  SLV4;
-      PhaseOut       : OUT SLV18;
+      PhaseOutA,
+      PhaseOutB      : OUT SLV18;
       PhaseDiff,
       RealOut,
       ImagOut        : OUT Float_1_18;
@@ -203,8 +204,10 @@ ARCHITECTURE rtl OF PilotSync IS
             CordicI0,
             CordicR1,
             CordicI1             : sfixed(5 downto -12);
+   SIGNAL   Mag0,
+            Mag1                 : std_logic_vector(12 downto 0);
    SIGNAL   Phase0,
-            Phase1               : std_logic_vector(CordicR0'length - 3 downto 0);
+            Phase1               : std_logic_vector(11 downto 0);
    SIGNAL   Phase0A,
             Phase0B,
             Phase1A,
@@ -218,7 +221,7 @@ ARCHITECTURE rtl OF PilotSync IS
 
    attribute mark_debug : string;
    attribute mark_debug of FrmSmplCount, StartOut, SyncSumIla, ReadR_Ila, ReadI_Ila, CorrCntrCapture,
-               Phase0, Phase1, PhaseDiff : signal is "true";
+               Phase0A, Phase0B, PhaseDiff : signal is "true";
 
 BEGIN
 
@@ -234,7 +237,8 @@ BEGIN
 
    PilotValid  <= PilotPulseIn; -- TODO '1' when (PilotPulseIn = '1') and (FrmSmplCount > 13300) else '0'; -- pulse should be at 13312
 
-   PhaseOut <= Phase0 & "00";
+   PhaseOutA <= to_slv(resize(Phase0A, 0, -17));
+   PhaseOutB <= to_slv(resize(Phase0B, 0, -17));
 
    ClkProcess: process (clk)
    begin
@@ -369,12 +373,12 @@ BEGIN
             ValidOutDly <= ValidOut;
             if (StartOut) then
                CmplxCount  <= 0;
-               H0AccR      <= (others=>'0');
+               H0AccR      <= (others=>'0');    -- setup for first half
                H0AccI      <= (others=>'0');
                H1AccR      <= (others=>'0');
                H1AccI      <= (others=>'0');
             elsif (CmplxValid) then
-               if (CmplxCount = 256) then
+               if (CmplxCount = 256) then                -- store first half, start second
                   CordicStart <= '1';
                   CmplxCount <= CmplxCount + 1;
                   H0SumRA <= resize(H0AccR, H0SumRA);
@@ -386,7 +390,7 @@ BEGIN
                   H1AccR <= resize(CmplxH1r, H0AccR);
                   H1AccI <= resize(CmplxH1i, H0AccR);
                else
-                  CmplxCount <= CmplxCount + 1;
+                  CmplxCount <= CmplxCount + 1;          -- accumulate over pilot
                   CordicStart <= '0';
                   H0AccR <= resize(H0AccR + CmplxH0r, H0AccR);
                   H0AccI <= resize(H0AccI + CmplxH0i, H0AccR);
@@ -394,7 +398,7 @@ BEGIN
                   H1AccI <= resize(H1AccI + CmplxH1i, H0AccR);
                end if;
             elsif (CmplxCount = 511) then
-               H0SumRB <= resize(H0AccR + CmplxH0r, H0SumRB);
+               H0SumRB <= resize(H0AccR + CmplxH0r, H0SumRB);  -- store second half
                H0SumIB <= resize(H0AccI + CmplxH0i, H0SumIB);
                H1SumRB <= resize(H1AccR + CmplxH1r, H1SumRB);
                H1SumIB <= resize(H1AccI + CmplxH1i, H1SumIB);
@@ -411,10 +415,14 @@ BEGIN
                else     -- process is done and count is reset to 0
                   Phase0B <= to_sfixed(Phase0, Phase0A);
                   Phase1B <= to_sfixed(Phase1, Phase0A);
-                  if (Mag0GtMag1) then
-                     PhaseDiff <= resize(Phase0A - to_sfixed(Phase0, Phase0A), PhaseDiff);
+                  if (DiffEn) then
+                     if (Mag0 > Mag1) then
+                        PhaseDiff <= resize(to_sfixed(Phase0, Phase0A) - Phase0A, PhaseDiff);
+                     else
+                        PhaseDiff <= resize(to_sfixed(Phase1, Phase0A) - Phase1A, PhaseDiff);
+                     end if;
                   else
-                     PhaseDiff <= resize(Phase1A - to_sfixed(Phase1, Phase0A), PhaseDiff);
+                     PhaseDiff <= resize(Phase0A, PhaseDiff);
                   end if;
                   PhaseDiffEn <= '1';
                end if;
@@ -667,28 +675,28 @@ BEGIN
 
    cordic0 : vm_cordic_fast
       GENERIC MAP (
-         n => CordicR0'length
+         n => 14
       )
       PORT MAP (
          clk   => Clk,
          ena   => CordicStart,
-         x     => to_slv(CordicR0),
-         y     => to_slv(CordicI0),
-         m     => open,          -- m[n:2]
+         x     => to_slv(CordicR0(5 downto -8)),
+         y     => to_slv(CordicI0(5 downto -8)),
+         m     => Mag0,          -- m[n:2]
          p     => Phase0,
          enOut => ValidCordic
       );
 
    cordic1 : vm_cordic_fast
       GENERIC MAP (
-         n => CordicR0'length
+         n => 14
       )
       PORT MAP (
          clk   => Clk,
          ena   => CordicStart,
-         x     => to_slv(CordicR1),
-         y     => to_slv(CordicI1),
-         m     => open,          -- m[n:2]
+         x     => to_slv(CordicR1(5 downto -8)),
+         y     => to_slv(CordicI1(5 downto -8)),
+         m     => Mag1,          -- m[n:2]
          p     => Phase1,
          enOut => open
       );
