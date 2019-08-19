@@ -391,7 +391,8 @@ module stcDemodTop (
                             Pilot Carrier Loop
 ******************************************************************************/
     wire    signed  [17:0]  pilotPhaseDiff, pilotPhase;
-    wire    signed  [31:0]  pilotFreqOffset;
+    wire    signed  [31:0]  pilotFreqLag;
+    wire    signed  [31:0]  pilotFreqLead;
     wire    signed  [11:0]  pilotLoopError;
     wire            [31:0]  pilotDout;
     carrierLoop #(.RegSpace(`PILOT_LF_SPACE)) pilot(
@@ -412,8 +413,8 @@ module stcDemodTop (
         .highFreqOffset(1'b0),
         .offsetError(12'h0),
         .offsetErrorEn(1'b0),
-        .carrierFreqOffset(pilotFreqOffset),
-        .carrierLeadFreq(),
+        .carrierFreqOffset(pilotFreqLag),
+        .carrierLeadFreq(pilotFreqLead),
         .carrierFreqEn(pilotFreqOffsetEn),
         .loopError(pilotLoopError),
         .carrierLock(),
@@ -431,6 +432,7 @@ module stcDemodTop (
     `else
     wire ddsReset = reset;
     `endif
+    wire    signed  [31:0]  pilotFreq = pilotFreqLag + pilotFreqLead;
     dds6p0 dds(
       .aclk(clk),
       .aclken(1'b1),
