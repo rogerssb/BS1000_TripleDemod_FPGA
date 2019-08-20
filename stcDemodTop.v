@@ -395,7 +395,7 @@ module stcDemodTop (
     wire    signed  [31:0]  pilotFreqLead;
     wire    signed  [11:0]  pilotLoopError;
     wire            [31:0]  pilotDout;
-    carrierLoop #(.RegSpace(`PILOT_LF_SPACE)) pilot(
+    stcLoop #(.RegSpace(`PILOT_LF_SPACE)) pilot(
         .clk(clk), .reset(reset),
         .resampClkEn(),
         .ddcClkEn(pilotPhaseDiffEn),
