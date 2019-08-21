@@ -66,6 +66,7 @@ ENTITY PilotSync IS
       Offset         : IN  SLV4;
       PhaseOutA,
       PhaseOutB      : OUT SLV18;
+      StartNextFrame : OUT ufixed(15 DOWNTO 0);
       PhaseDiff,
       RealOut,
       ImagOut        : OUT Float_1_18;
@@ -248,6 +249,7 @@ BEGIN
             RdAddr         <= (others=>'0');
             SyncSum        <= (others=>'0');
             SyncError      <= (others=>'0');
+            StartNextFrame <= (others=>'0');
             CorrCntrCapture <= (others=>'0');
             ReadCount      <= (others=>'0');
             PilotCount     <= (others=>'0');
@@ -329,6 +331,7 @@ BEGIN
 
             if (PilotValid) then -- validated pilot with distance between frames
                CorrCntrCapture <= resize(CorrPntr - 512 + Offset_u - 8, CorrCntrCapture);
+               StartNextFrame <= resize(CorrPntr - 512 + Offset_u - 8 + 13312, StartNextFrame);
                Captured <= '1';
             end if;
 
@@ -424,12 +427,8 @@ BEGIN
                   else
                      PhaseDiff <= resize(Phase0A, PhaseDiff);
                   end if;
-                  PhaseDiffEn <= '1';
                end if;
-            else
-               PhaseDiffEn <= '0';
             end if;
-
          end if;
       end if;
    end process ClkProcess;

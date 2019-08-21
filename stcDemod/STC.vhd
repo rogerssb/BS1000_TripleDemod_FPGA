@@ -90,6 +90,7 @@ ARCHITECTURE rtl OF STC IS
          ValidIn        : IN  std_logic;
          ReIn,
          ImIn           : IN  FLOAT_1_18;
+         RawAddr,
          CorrPntr       : OUT ufixed(15 downto 0);
          ReOut,
          ImOut          : OUT FLOAT_1_18;
@@ -119,11 +120,11 @@ ARCHITECTURE rtl OF STC IS
          ImagIn         : IN  Float_1_18;
          PhaseOutA,
          PhaseOutB      : OUT SLV18;
+         StartNextFrame : OUT ufixed(15 DOWNTO 0);
          RealOut,
          ImagOut,
          PhaseDiff      : OUT Float_1_18;
          StartOut,
-         PhaseDiffEn,
          ValidOut,
          PilotLocked    : OUT STD_LOGIC
       );
@@ -136,6 +137,7 @@ ARCHITECTURE rtl OF STC IS
          ce             : IN  std_logic;
          StartIn,
          ValidIn        : IN  std_logic;
+         MiscBits,
          InR,
          InI            : IN  SLV18;
          StartDF,
@@ -337,7 +339,9 @@ ARCHITECTURE rtl OF STC IS
             PilotValidOut     : std_logic;
    SIGNAL   PilotRealOut,
             PilotImagOut      : Float_1_18;
-   SIGNAL   CorrPntr          : ufixed(15 downto 0);
+   SIGNAL   RawAddr,
+            StartNextFrame,
+            CorrPntr          : ufixed(15 downto 0);
    signal   BerRange,
             Ber               : natural range 0 to 255 := 0;
    SIGNAL   ValidData2047,
@@ -473,6 +477,7 @@ BEGIN
          -- outputs
          PilotFound     => PilotFound,    -- not used
          CorrPntr       => CorrPntr,
+         RawAddr        => RawAddr,
          Magnitude0     => Magnitude0,
          Magnitude1     => Magnitude1,
          PhaseOut0      => PhaseOut0,
@@ -501,7 +506,7 @@ BEGIN
             PhaseDiff2xGain <= (others=>'0');
             PhaseDiffEnDly  <= (others=>'0');
             PhaseDiffEn     <= '0';
-         elsif (PhaseDiffEnPS) then
+         elsif (StartNextFrame = RawAddr) then
             PhaseDiff1  <= resize(to_sfixed(PhsPeak, PhaseDiff1) - to_sfixed(PhsLastPeak, PhaseDiff1), PhaseDiff1);
             PhaseDiffEnDly  <= x"01";
          else
@@ -530,13 +535,13 @@ BEGIN
          PilotPulseIn   => PilotPulse,
          ValidIn        => PilotValidOut,
          CorrPntr       => CorrPntr,
+         StartNextFrame => StartNextFrame,
          Offset         => OffsetPS,
          RealIn         => PilotRealOut,
          ImagIn         => PilotImagOut,
          PhaseOutA      => Phase0A,
          PhaseOutB      => Phase0B,
          DiffEn         => MiscBits(2),
-         PhaseDiffEn    => PhaseDiffEnPS,
          PhaseDiff      => PhaseDiff2,
          RealOut        => RealOutPS,     -- 186Mhz
          ImagOut        => ImagOutPS,
@@ -585,6 +590,7 @@ ShortBuild : if (BuildAll) generate
          ValidIn        => ValidInBrik2Dly,
          InR            => to_slv(InRBrik2Dly),
          InI            => to_slv(InIBrik2Dly),
+         MiscBits       => MiscBits,
          EstimatesDone  => EstimatesDone,
          StartDF        => StartDF,
          ValidDF        => ValidDF,

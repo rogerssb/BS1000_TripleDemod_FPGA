@@ -59,7 +59,8 @@ entity PilotDetectSliding is
          ValidIn        : IN  std_logic;
          ReIn,
          ImIn           : IN  FLOAT_1_18;
-         CorrPntr       : OUT ufixed(15 downto 0);
+         CorrPntr,
+         RawAddr        : OUT ufixed(15 downto 0);
          ReOut,
          ImOut          : OUT FLOAT_1_18;
          Magnitude0,
@@ -176,11 +177,11 @@ architecture rtl of PilotDetectSliding is
          ce,
          ReadyIn,
          ValidIn           : IN  std_logic;
- --        PacketOffset      : IN  natural range 0 to 512;
          ReIn,
          ImIn              : IN  sfixed(DATA_WIDTH-BINPT-1 downto -BINPT);
          ReOut2x,
          ImOut2x           : OUT sfixed(DATA_WIDTH-BINPT-1 downto -BINPT);
+         RawAddr           : OUT ufixed(15 downto 0);
          Start2x,
          ValidData2x,
          ValidOut2x,
@@ -455,6 +456,7 @@ begin
          ValidIn           => ValidInDly,
          ReIn              => ReInDly,
          ImIn              => ImInDly,
+         RawAddr           => RawAddr,
          ReOut2x           => PackR,
          ImOut2x           => PackI,
          Start2x           => open,

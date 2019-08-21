@@ -58,6 +58,7 @@ ENTITY PD_Fft_Fifo IS
       ImIn           : IN  sfixed(DATA_WIDTH+BINPT-1 downto BINPT);
       ReOut2x,
       ImOut2x        : OUT sfixed(DATA_WIDTH+BINPT-1 downto BINPT);
+      RawAddr        : OUT ufixed(15 downto 0);
       Start2x,
       ValidOut2x,
       ValidData2x,
@@ -88,7 +89,7 @@ BEGIN
    Fifo2x_process: process (clk2x)
    begin
       if (rising_edge(clk2x)) then
-         if (reset2x = '1') then
+         if (reset2x) then
             PopCount2x    <= 0;
             Pop2x         <= '0';
             Start2x       <= '0';
@@ -122,6 +123,19 @@ BEGIN
       end if;
    end process Fifo2x_process;
 
+   clk1Process : process(Clk)
+   begin
+      if (rising_edge(Clk)) then
+         if (reset) then
+            RawAddr <= (others=>'0');
+         elsif (ce) then
+            if (ValidIn and not WrRstBusy2x) then
+               RawAddr <= resize(RawAddr + 1, RawAddr);
+            end if;
+         end if;
+      end if;
+   end process clk1Process;
+
    Clk2xFifo : xpm_fifo_async
       generic map (
          FIFO_MEMORY_TYPE        => "block",          --string; "auto", "block", "distributed", or "ultra" ;
@@ -144,7 +158,7 @@ BEGIN
       port map (
          rst                     => reset,
          wr_clk                  => clk,
-         wr_en                   => ce and ValidIn and not WrRstBusy2x, -- and not PacketNoWrite,
+         wr_en                   => ce and ValidIn and not WrRstBusy2x,
          din                     => to_slv(ImIn) & to_slv(ReIn),
          full                    => open,
          overflow                => OverFlow2x,
