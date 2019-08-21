@@ -187,6 +187,17 @@ module stcLoop(
         end
     end
 
+    reg         [3:0]   loopEnSR;
+    wire                loopEn = loopEnSR[3];
+    always @(posedge clk) begin
+        if (reset) begin
+            loopEnSR <= 0;
+        end
+        else begin
+            loopEnSR <= {loopEnSR[3:1],loopFilterEn};
+        end
+    end
+
 
     /***************************** Loop Filter ************************************/
 
@@ -202,7 +213,7 @@ module stcLoop(
         );
 
     lagGain12 lagGain (
-        .clk(clk), .clkEn(1'b1), .reset(reset),
+        .clk(clk), .clkEn(loopEnSR[0]), .reset(reset),
         .error(loopError),
         .lagExp(lagExp),
         .upperLimit(upperLimit),
@@ -218,17 +229,8 @@ module stcLoop(
 
 
     // Final filter output
-    reg         [3:0]   loopEnSR;
-    wire                loopEn = loopEnSR[3];
     reg signed  [39:0]  filterSum;
     always @(posedge clk) begin
-        if (reset) begin
-            loopEnSR <= 0;
-        end
-        else begin
-            loopEnSR <= {loopEnSR[3:1],loopFilterEn};
-        end
-
         if (reset) begin
             filterSum <= 0;
         end
