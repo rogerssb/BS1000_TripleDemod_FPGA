@@ -75,6 +75,7 @@ ENTITY Brik2 IS
       ce             : IN  std_logic;
       StartIn,
       ValidIn        : IN  std_logic;
+      MiscBits,
       InR,
       InI            : IN  SLV18;
       StartDF,
@@ -232,7 +233,7 @@ ARCHITECTURE rtl OF Brik2 IS
             Tau1EstNdxTE      : integer range 0 to SEARCH_LENGTH;
    SIGNAL   Tau0Int,
             Tau1Int           : integer range -MIN_M_NDX to MAX_M_NDX := 0;
-   SIGNAL   TrellisDelay      : std_logic_vector(5 downto 0);
+   SIGNAL   TrellisDelay      : SLV8;
    SIGNAL   Tau0EstX4,
             Tau1EstX4,
             Tau0EstA,
@@ -433,7 +434,7 @@ BEGIN
       if (rising_edge(clk)) then
          if (reset) then
             EstimatesDone   <= '0';
-            TrellisDelay   <= 6x"0";
+            TrellisDelay   <= (others=>'0');
             m_ndx0         <= 0;
             m_ndx1         <= 0;
             Tau0Int        <= 0;
@@ -455,16 +456,16 @@ BEGIN
             DeltaTauEst    <= (others=>'0');
          elsif (ce) then
             TrellisDelay <= TrellisDelay(TrellisDelay'left-1 downto 0) & ChanEstDone;
-            EstimatesDone <= TrellisDelay(5);
+            EstimatesDone <= TrellisDelay(TrellisDelay'left);
             if (ChanEstDone) then   -- All estimates are done, allow time to calculate values.
-               H0EstR      <= H0EstR_CE;
-               H0EstI      <= H0EstI_CE;
-               H1EstR      <= H1EstR_CE;
-               H1EstI      <= H1EstI_CE;
-               H0Mag       <= resize(H0EstR_CE * H0EstR_CE + H0EstI_CE * H0EstI_CE, H0Mag);
-               H1Mag       <= resize(H1EstR_CE * H1EstR_CE + H1EstI_CE * H1EstI_CE, H1Mag);
-               Tau0Est     <= Tau0EstTE;
-               Tau1Est     <= Tau1EstTE;
+               H0EstR      <= H0EstR_CE when MiscBits(5) else (others=>'0');
+               H0EstI      <= H0EstI_CE when MiscBits(5) else (others=>'0');
+               H1EstR      <= (others=>'0'); --H1EstR_CE;
+               H1EstI      <= (others=>'0'); --H1EstI_CE;
+               H0Mag       <= (others=>'0'); --resize(H0EstR_CE * H0EstR_CE + H0EstI_CE * H0EstI_CE, H0Mag);
+               H1Mag       <= (others=>'0'); --resize(H1EstR_CE * H1EstR_CE + H1EstI_CE * H1EstI_CE, H1Mag);
+               Tau0Est     <= (others=>'0'); --Tau0EstTE;
+               Tau1Est     <= (others=>'0'); --Tau1EstTE;
             end if;
 
             Tau0EstA    <= resize(Tau0Est, Tau0EstA) when (H0Mag > 0.05) else (others=>'0');

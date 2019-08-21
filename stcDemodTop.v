@@ -439,7 +439,7 @@ module stcDemodTop (
       .aresetn(!ddsReset),
       .m_axis_data_tdata(m_axis),
       .m_axis_data_tvalid(),
-      .s_axis_phase_tdata(pilotFreqOffset),
+      .s_axis_phase_tdata(pilotFreq),
       .s_axis_phase_tvalid(1'b1)
     );
 

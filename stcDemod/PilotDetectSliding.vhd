@@ -394,7 +394,6 @@ begin
    Ila2xProcess : process(clk2X)
    begin
       if (rising_edge(clk2X)) then
-         Resets2X       <= (others=>Reset);
          AbsCntr0_Ila   <= to_slv(AbsCntr0);
          AbsCntr1_Ila   <= to_slv(AbsCntr1);
       end if;
@@ -404,8 +403,7 @@ begin
    LatchInputs : process(clk)
    begin
       if (rising_edge(clk)) then
-         Resets1X <= (others=>Reset);
-         if (Resets1X(0)) then
+         if (Reset) then
             ReInDly        <= (others=>'0');
             ImInDly        <= (others=>'0');
             ValidInDly     <= '0';
@@ -426,7 +424,7 @@ begin
    SetForInvFFT : process(Clk2x)
    begin
       if (rising_edge(Clk2x)) then
-         if (Resets2X(0)) then
+         if (Reset2x) then
             ConfigTValid   <= '0';
             ConfigDone     <= '0';
          elsif (ce) then
@@ -450,8 +448,8 @@ begin
       PORT MAP(
          clk               => clk,
          clk2x             => Clk2x,
-         reset             => Resets1X(1),
-         reset2x           => Resets2X(1),
+         reset             => Reset,
+         reset2x           => Reset2X,
          ce                => ce,
          ReadyIn           => FftReady,
          ValidIn           => ValidInDly,
@@ -471,7 +469,7 @@ begin
    Fft_u : fft_1k
     port map (
       aclk                        => Clk2x,
-      aresetn                     => not Resets2X(2),
+      aresetn                     => not Reset2X,
       aclken                      => ce,
       s_axis_config_tvalid        => '0', -- not needed and prone to error, was ConfigTValid,
       s_axis_config_tready        => ConfigTReady(0),
@@ -496,7 +494,7 @@ begin
                Lo1, Lo0       : std_logic;
    begin
       if (rising_edge(Clk2x)) then
-         if (Resets2X(3)) then
+         if (Reset2X) then
             Count          <= 0;
             OverflowFft    <= '0';
             ValidFftDly    <= '0';
@@ -527,7 +525,7 @@ begin
    Templates : PilotTemplates
       PORT MAP(
          clk      => Clk2x,
-         reset    => Resets2X(4),
+         reset    => Reset2X,
          ce       => ce,
          Count    => Count,
          H0CntrR  => H0CntrR,
@@ -547,7 +545,7 @@ begin
       PORT MAP(
          clk         => Clk2x,
          ce          => ce,
-         reset       => Resets2X(5),
+         reset       => Reset2X,
          ReadyIn     => iFftReady(0),
          ReInA       => H0CntrR,
          ImInA       => H0CntrI,
@@ -564,7 +562,7 @@ begin
    iFftCntr0_u : fft_1k
     port map (
       aclk                        => Clk2x,
-      aresetn                     => not Resets2X(6),
+      aresetn                     => not Reset2X,
       aclken                      => ce,
       s_axis_config_tvalid        => ConfigTValid,
       s_axis_config_tready        => ConfigTReady(1),
@@ -585,7 +583,7 @@ begin
    process(Clk2x)
    begin
       if (rising_edge(Clk2x)) then
-         if (Resets2X(7)) then
+         if (Reset2X) then
             OverflowIFft <= '0';
             Lo1          <= '1';
             Hi1          <= '1';
@@ -611,7 +609,7 @@ begin
       PORT MAP(
          clk         => Clk2x,
          ce          => ce,
-         reset       => Resets2X(8),
+         reset       => Reset2X,
          ReadyIn     => iFftReady(1),
          ReInA       => H1CntrR,
          ImInA       => H1CntrI,
@@ -628,7 +626,7 @@ begin
    iFftCntr1_u : fft_1k
     port map (
       aclk                        => Clk2x,
-      aresetn                     => not Resets2X(9),
+      aresetn                     => not Reset2X,
       aclken                      => ce,
       s_axis_config_tvalid        => ConfigTValid,
       s_axis_config_tready        => ConfigTReady(2),
@@ -656,7 +654,7 @@ begin
       GENERIC MAP(IN_WIDTH  => iFftZero'length, IN_BINPT  => iFftZero'right,
                   OUT_WIDTH => AbsZero'length,  OUT_BINPT => AbsZero'right )
       PORT MAP(
-         clk    => Clk2x,      reset    => Resets2X(10),    ce       => ce,
+         clk    => Clk2x,      reset    => Reset2X,    ce       => ce,
          ReIn   => iFftCntr0R, ImIn     => iFftCntr0I, ValidIn  => ValidIFftOut,
          ReOut  => OverAddR0,  ImOut    => OverAddI0,
          AbsOut => AbsCntr0,   ValidOut => ValidAbs,   StartIn  => '0', StartOut => open);
@@ -665,7 +663,7 @@ begin
       GENERIC MAP(IN_WIDTH  => iFftZero'length, IN_BINPT  => iFftZero'right,
                   OUT_WIDTH => AbsZero'length,  OUT_BINPT => AbsZero'right )
       PORT MAP(
-         clk    => Clk2x,      reset    => Resets2X(11),    ce       => ce,
+         clk    => Clk2x,      reset    => Reset2X,    ce       => ce,
          ReIn   => iFftCntr1R, ImIn     => iFftCntr1I, ValidIn  => ValidIFftOut,
          ReOut  => OverAddR1,  ImOut    => OverAddI1,
          AbsOut => AbsCntr1,   ValidOut => open,       StartIn  => '0', StartOut => open);
@@ -708,7 +706,7 @@ begin
    MaxProcess : process(Clk2x)
    begin
       if (rising_edge(Clk2x)) then
-         if (Resets2X(12)) then
+         if (Reset2X) then
             MaxIndex     <= 0;
             Index0       <= 0;
             Index1       <= 0;
@@ -808,7 +806,7 @@ begin
    DetectProcess : process(clk)
    begin
       if (rising_edge(clk)) then
-         if (Resets1X(2)) then
+         if (Reset) then
             Threshold         <= to_ufixed(2.0, Threshold); -- set initial RunningTotal to typical at highest signal levels
             MagDelay          <= (others=>(to_ufixed(0.5, MagDelay(0))));
             PilotMag          <= (others=>'0');

@@ -38,11 +38,13 @@ USE IEEE.std_logic_1164.ALL;
 USE IEEE.numeric_std.ALL;
 use work.fixed_pkg.all;
 use work.Semco_pkg.ALL;
+Library UNISIM;
+use UNISIM.vcomponents.all;
 
 ENTITY STC IS
    GENERIC (
          SIM_MODE    : boolean := false;
-         BuildAll    : boolean := false
+         BuildAll    : boolean := true
       );
    PORT(
       ResampleR,
@@ -224,10 +226,10 @@ ARCHITECTURE rtl OF STC IS
    COMPONENT Vio2x18
       PORT (
          clk : IN STD_LOGIC;
-         probe_out0 : OUT STD_LOGIC_VECTOR(17 DOWNTO 0);
-         probe_out1 : OUT STD_LOGIC_VECTOR(17 DOWNTO 0);
-         probe_out2 : OUT STD_LOGIC_VECTOR(17 DOWNTO 0);
-         probe_out3,
+         probe_out0,
+         probe_out1,
+         probe_out2,
+         probe_out3 : OUT STD_LOGIC_VECTOR(17 DOWNTO 0);
          probe_out4,
          probe_out5 :  OUT STD_LOGIC_VECTOR(3 downto 0)
       );
@@ -336,8 +338,7 @@ ARCHITECTURE rtl OF STC IS
    SIGNAL   PilotRealOut,
             PilotImagOut      : Float_1_18;
    SIGNAL   CorrPntr          : ufixed(15 downto 0);
-   signal   PnDelay,
-            BerRange,
+   signal   BerRange,
             Ber               : natural range 0 to 255 := 0;
    SIGNAL   ValidData2047,
             ClkOutEnDly,
@@ -350,7 +351,6 @@ ARCHITECTURE rtl OF STC IS
    SIGNAL   H0Phase           : std_logic_vector(11 downto 0);
    SIGNAL   ExpectedData,
             TrellisOffsetSlv,
-            MiscBits,
             m_ndx0Slv,
             m_ndx1Slv         : SLV4;
    SIGNAL   TrellisOffset     : signed(3 downto 0);
@@ -359,6 +359,7 @@ ARCHITECTURE rtl OF STC IS
             BitErrors         : natural range 0 to 3200;
    signal   sample0r,
             sample0i,
+            MiscBits,
             InRBrik2Ila,
             InIBrik2Ila       : SLV18;
    signal   StartIla,
@@ -375,9 +376,9 @@ ARCHITECTURE rtl OF STC IS
 BEGIN
 
 
-   process(Clk)
+   process(Clk2x)
    begin
-      if (rising_edge(Clk)) then
+      if (rising_edge(Clk2x)) then
 -- TODO remove ILAs
    PhaseDiff1xGainSlv <= to_slv(PhaseDiff1xGain);
    PhaseDiff2xGainSlv <= to_slv(PhaseDiff2xGain);
@@ -402,7 +403,7 @@ BEGIN
       PORT MAP(
          clk         => Clk2x,
          ce          => '1',
-         reset       => Reset,
+         reset       => Reset2x,
          WrEn        => '0',
          WrAddr      => 0,
          RdAddrA     => 0,
@@ -437,16 +438,20 @@ BEGIN
    begin
       if(rising_edge(Clk)) then
          ResetSrc <= ResetSrc(6 downto 0) & '0';
-         Reset    <= ResetSrc(7);
       end if;
    end process;
 
-   Reset2xProcess : process(Clk2x)
-   begin
-      if(rising_edge(Clk2x)) then
-         Reset2x <= ResetSrc(7);
-      end if;
-   end process;
+   ResetBufg : BUFG
+   port map (
+      I => ResetSrc(7),
+      O => Reset
+   );
+
+   Reset2Bufg : BUFG
+   port map (
+      I => ResetSrc(7),
+      O => Reset2x
+   );
 
    ResampleR_s <= to_sfixed(ResampleR, ResampleR_s);
    ResampleI_s <= to_sfixed(ResampleI, ResampleI_s);
@@ -490,7 +495,7 @@ BEGIN
          PhaseDiff1Gain    <= to_sfixed(PhaseDiffGain1Slv1, PhaseDiff1Gain);
          PhaseDiff2Gain    <= to_sfixed(PhaseDiffGain2Slv1, PhaseDiff2Gain);
          PhaseDiff2Offset  <= to_sfixed(PhaseDiffOffsetSlv1, PhaseDiff2Offset);
-         if (Reset) then
+         if (Reset2x) then
             PhaseDiff       <= (others=>'0');
             PhaseDiff1xGain <= (others=>'0');
             PhaseDiff2xGain <= (others=>'0');
@@ -507,7 +512,7 @@ BEGIN
             PhaseDiffEn     <= PhaseDiffEnDly(3) or PhaseDiffEnDly(4);  -- needs two clocks wide for 93Mhz domain
          end if;
 
-         if (Reset) then
+         if (Reset2x) then
             PhsLastPeak <= (others=>'0');
          elsif (PhaseDiffEnDly(7)) then
             PhsLastPeak <= PhsPeak when (MiscBits(1)) else (others=>'0');
@@ -521,7 +526,7 @@ BEGIN
       PORT MAP (
          clk            => Clk2x,
          ce             => CE,
-         reset          => reset,
+         reset          => Reset2x,
          PilotPulseIn   => PilotPulse,
          ValidIn        => PilotValidOut,
          CorrPntr       => CorrPntr,
@@ -557,7 +562,7 @@ ShortBuild : if (BuildAll) generate
    InterBrikClk : process(Clk2x) is
    begin
       if(rising_edge(Clk2x)) then
-         if (Reset) then
+         if (Reset2x) then
             StartInBrik2Dly <= '0';
             ValidInBrik2Dly <= '0';
             InRBrik2Dly     <= (others=>'0');
@@ -574,7 +579,7 @@ ShortBuild : if (BuildAll) generate
    Brik2_u : Brik2
       PORT MAP(
          Clk            => Clk2x,
-         Reset          => Reset,
+         Reset          => Reset2x,
          CE             => CE,
          StartIn        => StartInBrik2Dly,
          ValidIn        => ValidInBrik2Dly,
@@ -603,7 +608,7 @@ ShortBuild : if (BuildAll) generate
       PORT MAP (
          clk                  => Clk2x,
          clkEnable            => CE,
-         reset                => Reset,
+         reset                => Reset2x,
          estimatesDone        => EstimatesDone,
          frameStart           => StartDF,
          inputValid           => ValidDF,
@@ -630,7 +635,7 @@ ShortBuild : if (BuildAll) generate
    FD : FireberdDrive
       PORT MAP(
          clk            => Clk2x,
-         reset          => Reset,
+         reset          => Reset2x,
          ce             => CE,
          ValidIn        => TrellisOutEn,
          MsbFirst       => '1',
@@ -643,11 +648,6 @@ ShortBuild : if (BuildAll) generate
    PnProc : process(Clk2x)
    begin
       if (rising_edge(Clk2x)) then
-         if (EstimatesDone) then
-            PnDelay <= 0;
-         elsif (PnDelay < 255) then
-            PnDelay <= PnDelay + 1;
-         end if;
          pnBitEn <= ClkOutEn and not ClkOutEnDly;
          ClkOutEnDly <= ClkOutEn;
          ValidData2047 <= dataBit xor codeBit;
@@ -672,7 +672,7 @@ ShortBuild : if (BuildAll) generate
          poly         => 24x"500",
          poly_length  => 5x"0b",
          poly_mode    => '0',
-         reset        => reset,
+         reset        => Reset2x,
          clock        => clk2x,
          enable       => pnBitEn, --   clock in data
          lfsr_enable  => pnBitEn, --   gated clock in data

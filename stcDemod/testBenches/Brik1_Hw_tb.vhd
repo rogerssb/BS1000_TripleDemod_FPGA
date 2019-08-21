@@ -285,7 +285,7 @@ begin
       PORT MAP (
          clk        => ClkXn,
          probe_in0  => Errors,
-         probe_out0 => open,           -- 00280 (222Hz) start getting errors at end of frame
+         probe_out0 => Frequency_vio,           -- 00280 (222Hz) start getting errors at end of frame
          probe_out1 => FrameClocks_vio,         -- usually 13312-1=13311. smaller makes packets slide
          probe_out2 => Phase0_vio,              -- has no effect unless both channels active
          probe_out3 => Phase1_vio,
@@ -299,7 +299,6 @@ begin
          probe_out11 => BitRate_vio,            -- 0e449 is 41.6Mb
          probe_out12 => ClocksPerBit            -- c50 for 9.33/1.04, db7 at 10Mb 41.6
       );
-Frequency_vio <= 18x"280";
 
    ErrorProc : process (ClkXn)
    begin
