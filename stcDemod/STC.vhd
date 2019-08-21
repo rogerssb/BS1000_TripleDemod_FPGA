@@ -373,7 +373,7 @@ ARCHITECTURE rtl OF STC IS
    attribute mark_debug : string;
    attribute mark_debug of TrellisBits, TrellisOutEn, EstimatesDone,
                   DataOut, ClkOutEn, StartIla, ValidIla, InRBrik2Ila, InIBrik2Ila,
-                  Bert, BitErrors, lastSampleReset, TrellisFull, PhaseDiff2xGainSlv,
+                  Ber, lastSampleReset, TrellisFull, PhaseDiff2xGainSlv,
                   PhaseDiff1xGainSlv, PhaseDiffSlv, PhaseDiffEn,
                   m_ndx0Slv, m_ndx1Slv, ValidData2047 : signal is "true";
 
@@ -394,6 +394,7 @@ BEGIN
       end if;
    end process;
 
+-- synthesis translate_off
    ReadData : RAM_2Reads_1Write
       GENERIC MAP(
          FILENAME    => "C:\Semco\STCinfo\RealTimeC\SpaceTimeCodeInC\SpaceTimeCodeInC\Iseed12345678HexData.slv",
@@ -416,6 +417,7 @@ BEGIN
          RdOutA      => open,
          RdOutB      => ExpectedData
       );
+-- synthesis translate_on
 
    -- Capture BER info per frame
    CaptureProc : process(Clk2x)
@@ -506,7 +508,7 @@ BEGIN
             PhaseDiff2xGain <= (others=>'0');
             PhaseDiffEnDly  <= (others=>'0');
             PhaseDiffEn     <= '0';
-         elsif (StartNextFrame = RawAddr) then
+         elsif (resize(StartNextFrame + ufixed(MiscBits(15 downto 12)), RawAddr) = RawAddr) then
             PhaseDiff1  <= resize(to_sfixed(PhsPeak, PhaseDiff1) - to_sfixed(PhsLastPeak, PhaseDiff1), PhaseDiff1);
             PhaseDiffEnDly  <= x"01";
          else
@@ -656,11 +658,11 @@ ShortBuild : if (BuildAll) generate
       if (rising_edge(Clk2x)) then
          pnBitEn <= ClkOutEn and not ClkOutEnDly;
          ClkOutEnDly <= ClkOutEn;
-         ValidData2047 <= dataBit xor codeBit;
+         ValidData2047 <= dataBit xnor codeBit;
          if (BerRange < 255) then
             BerRange <= BerRange + 1;
             Reload   <= '0';
-            if (ValidData2047) then
+            if (not ValidData2047) then
                Ber <= Ber + 1;
             end if;
          else
