@@ -458,14 +458,14 @@ BEGIN
             TrellisDelay <= TrellisDelay(TrellisDelay'left-1 downto 0) & ChanEstDone;
             EstimatesDone <= TrellisDelay(TrellisDelay'left);
             if (ChanEstDone) then   -- All estimates are done, allow time to calculate values.
-               H0EstR      <= H0EstR_CE when MiscBits(5) else (others=>'0');
+               H0EstR      <= H0EstR_CE when MiscBits(5) else to_sfixed(0.25, H0EstR);
                H0EstI      <= H0EstI_CE when MiscBits(5) else (others=>'0');
-               H1EstR      <= (others=>'0'); --H1EstR_CE;
-               H1EstI      <= (others=>'0'); --H1EstI_CE;
-               H0Mag       <= (others=>'0'); --resize(H0EstR_CE * H0EstR_CE + H0EstI_CE * H0EstI_CE, H0Mag);
-               H1Mag       <= (others=>'0'); --resize(H1EstR_CE * H1EstR_CE + H1EstI_CE * H1EstI_CE, H1Mag);
-               Tau0Est     <= (others=>'0'); --Tau0EstTE;
-               Tau1Est     <= (others=>'0'); --Tau1EstTE;
+               H1EstR      <= H1EstR_CE when MiscBits(6) else to_sfixed(0.0, H0EstR);
+               H1EstI      <= H1EstI_CE when MiscBits(6) else (others=>'0');
+               H0Mag       <= resize(H0EstR_CE * H0EstR_CE + H0EstI_CE * H0EstI_CE, H0Mag);
+               H1Mag       <= resize(H1EstR_CE * H1EstR_CE + H1EstI_CE * H1EstI_CE, H1Mag);
+               Tau0Est     <= Tau0EstTE when MiscBits(4) else (others=>'0');
+               Tau1Est     <= Tau1EstTE when MiscBits(7) else (others=>'0');
             end if;
 
             Tau0EstA    <= resize(Tau0Est, Tau0EstA) when (H0Mag > 0.05) else (others=>'0');

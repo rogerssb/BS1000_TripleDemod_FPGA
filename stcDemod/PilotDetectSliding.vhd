@@ -67,8 +67,10 @@ entity PilotDetectSliding is
          Magnitude1,
          PhaseOut0,
          PhaseOut1,
-         MagPeak,
-         PhsPeak        : OUT SLV18;
+         MagPeak0,
+         PhsPeak0
+         MagPeak1,
+         PhsPeak1        : OUT SLV18;
          PilotFound,
          Max0GtMax1,
          ValidOut,
@@ -296,9 +298,8 @@ architecture rtl of PilotDetectSliding is
             FftTLastOut,
             PilotPulse,
             PilotPulse1x,
-            PhsCntStrt,
-            MaxIsH0,
-            MaxIsH0Dly,
+            PhsCntStrt0,
+            PhsCntStrt1,
             ValidCordic,
             CalcThreshold     : std_logic := '0';
    SIGNAL   ReInDly,
@@ -327,8 +328,12 @@ architecture rtl of PilotDetectSliding is
             AbsCntr0,
             AbsCntr1,
             MaxCntr,
+            MaxCntr0,
+            MaxCntr1,
             MaxOfPckt,
             MaxPeak,
+            MaxPeak0
+            MaxPeak1,
             CurrentPeak,
             Peak1,
             Peak2             : ufixed(AbsZero'range);
@@ -345,8 +350,7 @@ architecture rtl of PilotDetectSliding is
             PhsPeakInt        : SLV18;
    SIGNAL   Count,
             Index0,
-            Index1,
-            MaxIndex          : natural range 0 to 1023;
+            Index1            : natural range 0 to 1023;
    SIGNAL   PackCntr          : ufixed(6 downto 0);
    SIGNAL   DelayData         : std_logic_vector(2*PackR'length downto 0);
    SIGNAL   MultTLast         : std_logic_vector(5 downto 0);
@@ -362,7 +366,8 @@ architecture rtl of PilotDetectSliding is
    SIGNAL   BadPilot,
             IgnoreInitial     : integer range 0 to 128;
    SIGNAL   PeakPointer,
-            PhsCount,
+            PhsCount0,
+            PhsCount1,
             MaxCount          : natural range 0 to 28;
    SIGNAL   SampleCount       : natural range 0 to 163830;
 
@@ -709,12 +714,13 @@ begin
    begin
       if (rising_edge(Clk2x)) then
          if (Reset2X) then
-            MaxIndex     <= 0;
             Index0       <= 0;
             Index1       <= 0;
             MaxCount     <= 0;
             PilotPulse   <= '0';
             MaxPeak      <= (others=>'0');
+            MaxPeak0     <= (others=>'0');
+            MaxPeak1     <= (others=>'0');
             MaxOfPckt    <= (others=>'0');
             MaxCntr      <= (others=>'0');
             PackCntr     <= (others=>'0');   -- PackCntr must be reset released with WrAddr in PilotSync
@@ -725,23 +731,20 @@ begin
             Index1   <= Index0;
             if (ValidAbs) then
                if (AbsCntr0 > AbsCntr1) then
-                  MaxCntr <= AbsCntr0;
-                  MaxIsH0 <= '1';
+                  MaxCntr  <= AbsCntr0;
+                  MaxCntr0 <= AbsCntr0;
                else
-                  MaxCntr <= AbsCntr1;
-                  MaxIsH0 <= '0';
+                  MaxCntr  <= AbsCntr1;
+                  MaxCntr1 <= AbsCntr1;
                end if;
 
+               -- Find the peak of this packet regardless of H0 or H1
                if (Index1 < 512) then     -- only search first half of the ifft
                   if (MaxCntr > MaxPeak) and (MaxCntr > Threshold) then
                      MaxPeak     <= MaxCntr;
-                     MaxIsH0Dly  <= MaxIsH0;
-                     MaxIndex    <= Index1;
                      MaxCount    <= START_MAX;
-                     PhsCntStrt  <= '1';
                      CorrPntr    <= PackCntr & to_ufixed(Index1, 8, 0); -- Index1 is 0 to 511, so PackCntr is an extension
                   elsif (MaxCount > 0) then
-                     PhsCntStrt  <= '0';
                      MaxCount    <= MaxCount - 1;
                   end if;
 
@@ -754,25 +757,28 @@ begin
                   if (MaxCount = 0) then     -- if not active search, then start from scratch
                      MaxPeak <= (others=>'0');  -- setup for next frame
                   end if;
-               else
-                  PhsCntStrt  <= '0';
+               end if;
+
+               -- Find the peak of H0 only
+               if (Index1 < 512) then     -- only search first half of the ifft
+                  if (MaxCntr0 > MaxPeak0) and (MaxCntr0 > Threshold) then
+                     MaxPeak0     <= MaxCntr0;
+                     PhsCntStrt0  <= '1';
+                  else
+                     PhsCntStrt0  <= '0';
+                  end if;
+                else
+                  PhsCntStrt0  <= '0';
                end if;
             end if;
 
-            if (PhsCntStrt) then
-               PhsCount <= PHS_LATENCY - 2;  -- it took a clock to set PhsCntStrt and determine MaxCntr from AbsCntrs
-            elsif (PhsCount > 0) then     -- cordic is not ValidIn dependent, just straight latency
-               PhsCount <= PhsCount - 1;
-               if (PhsCount = 1) then
-                  if (MaxIsH0Dly) then
-                     Max0GtMax1 <= '1';
-                     PhsPeakInt <= Phase0 & "000000";    -- capture phase of current max magnitude
-                     MagPeakInt <= Mag0 & "00000";
-                  else
-                     Max0GtMax1 <= '0';
-                     PhsPeakInt <= Phase1 & "000000";    -- capture phase of current max magnitude
-                     MagPeakInt <= Mag1 & "00000";
-                  end if;
+            if (PhsCntStrt0) then
+               PhsCount0 <= PHS_LATENCY - 2;  -- it took a clock to set PhsCntStrt and determine MaxCntr from AbsCntrs
+            elsif (PhsCount0 > 0) then     -- cordic is not ValidIn dependent, just straight latency
+               PhsCount0 <= PhsCount0 - 1;
+               if (PhsCount0 = 1) then
+                  PhsPeakInt0 <= Phase0 & "000000";    -- capture phase of current max magnitude
+                  MagPeakInt0 <= Mag0 & "00000";
                end if;                       -- once calculated
             end if;
 
@@ -783,8 +789,10 @@ begin
 
             if (StartOut) then     -- StartOut is only one clock wide
                StartOut <= '0';
-               MagPeak  <= MagPeakInt;
-               PhsPeak  <= PhsPeakInt;
+               MagPeak0  <= MagPeakInt0;
+               PhsPeak0  <= PhsPeakInt0;
+               MagPeak1  <= MagPeakInt1;
+               PhsPeak1  <= PhsPeakInt1;
             end if;
 
 

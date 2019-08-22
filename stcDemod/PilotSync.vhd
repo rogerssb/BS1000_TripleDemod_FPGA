@@ -173,6 +173,7 @@ ARCHITECTURE rtl OF PilotSync IS
             CordicStart,
             ValidCordic,
             Captured,
+            Missed,
             PilotValid,
             PilotPacket          : std_logic;
    SIGNAL   ReadR,
@@ -282,7 +283,7 @@ BEGIN
             RamDepth <= resize(WrAddr - RdAddr, RamDepth);
             case (PacketMode) is
             when IDLE =>
-               if (Captured = '1') and (RamDepth > 512) then
+               if ((Missed = '1') or (Captured = '1')) and (RamDepth > 512) then
                   PacketMode  <= SET_START;
                   PacketCount <= 0;
                   WaitCount   <= 10;      -- keep start pulse away from valid data before or after
@@ -294,7 +295,10 @@ BEGIN
                   StartOut    <= '1';
                   WaitCount   <= 10;
                   Captured    <= '0';
-                  RdAddr      <= CorrCntrCapture;
+                  Missed      <= '0';
+                  if (Captured) then
+                     RdAddr   <= CorrCntrCapture;
+                  end if;
                   PacketMode  <= CLR_START;
                end if;
             when CLR_START =>
@@ -339,11 +343,11 @@ BEGIN
                WrAddr <= resize(WrAddr + 1, WrAddr);
             end if;
 
-            if (PilotValid) then    -- if we don't get a PilotValid for a frame, the RdAddr will lose
+            if (PilotValid) then    -- if we don't get a PilotValid for a frame, the RdAddr should continue but need a new Start sequence
                FrmSmplCount <= 0;
-            elsif (FrmSmplCount > 13336) then    -- maintain sync over missed pilots, should have gone off 12 samples ago
-               FrmSmplCount <= 24;
-               Captured <= '1';
+            elsif (FrmSmplCount >= 13336 +512) then    -- maintain sync over missed pilots, should have gone off 12 samples ago
+               FrmSmplCount <= 25+512;
+               Missed <= '1';
             elsif (ValidIn) then
                FrmSmplCount <= FrmSmplCount + 1;
             end if;
@@ -664,9 +668,9 @@ BEGIN
       );
 
    H0R      <= to_sfixed(H0Rslv, H0R);
-   H0I      <= to_sfixed(H0Islv, H0I);
+   H0I      <= to_sfixed(not H0Islv, H0I);
    H1R      <= to_sfixed(H1Rslv, H1R);
-   H1I      <= to_sfixed(H1Islv, H1I);
+   H1I      <= to_sfixed(not H1Islv, H1I);
    CordicR0 <= H0SumRA when (CmplxCount > 0) else H0SumRB;
    CordicI0 <= H0SumIA when (CmplxCount > 0) else H0SumIB;
    CordicR1 <= H1SumRA when (CmplxCount > 0) else H1SumRB;
