@@ -170,10 +170,10 @@ ARCHITECTURE rtl OF ChannelEstimate IS
    SIGNAL   PilotCount  : integer range 0 to PILOT_LENGTH_4 / 2 + DELAY + 2;
    SIGNAL   XrDelay,
             XiDelay     : FLOAT_ARRAY_1_18(DELAY-1 downto 0);
-   SIGNAL   Sig0R       : SIG_ARRAY := InitSigFromFile("C:\Semco\Vivado\Demods\stcDemod\sourceData\s0_lut_r.slv");
-   SIGNAL   Sig0I       : SIG_ARRAY := InitSigFromFile("C:\Semco\Vivado\Demods\stcDemod\sourceData\s0_lut_i.slv");
-   SIGNAL   Sig1R       : SIG_ARRAY := InitSigFromFile("C:\Semco\Vivado\Demods\stcDemod\sourceData\s1_lut_r.slv");
-   SIGNAL   Sig1I       : SIG_ARRAY := InitSigFromFile("C:\Semco\Vivado\Demods\stcDemod\sourceData\s1_lut_i.slv");
+   SIGNAL   Sig0R       : SIG_ARRAY := InitSigFromFile("..\sourceData\s0_lut_r.slv");
+   SIGNAL   Sig0I       : SIG_ARRAY := InitSigFromFile("..\sourceData\s0_lut_i.slv");
+   SIGNAL   Sig1R       : SIG_ARRAY := InitSigFromFile("..\sourceData\s1_lut_r.slv");
+   SIGNAL   Sig1I       : SIG_ARRAY := InitSigFromFile("..\sourceData\s1_lut_i.slv");
 
 BEGIN
 

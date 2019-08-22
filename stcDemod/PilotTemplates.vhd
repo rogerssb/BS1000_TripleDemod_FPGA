@@ -118,7 +118,7 @@ BEGIN
    -- -66KHz FFT of H0/1/R/I
    H0NegR_u : RAM_2Reads_1Write
       GENERIC MAP(
-         FILENAME    => "C:\Semco\Vivado\Demods\stcDemod\sourceData\neg_h0_r_pt9.slv",
+         FILENAME    => "..\sourceData\neg_h0_r_pt9.slv",
          DATA_WIDTH  => FLOAT_256_LP'length,
          BINPT       => FLOAT_256_LP'right,
          ADDR_WIDTH  => 10,
@@ -140,7 +140,7 @@ BEGIN
       );
    H0NegI_u : RAM_2Reads_1Write
       GENERIC MAP(
-         FILENAME    => "C:\Semco\Vivado\Demods\stcDemod\sourceData\Neg_h0_I_pt9.slv",
+         FILENAME    => "..\sourceData\Neg_h0_I_pt9.slv",
          DATA_WIDTH  => FLOAT_256_LP'length,
          BINPT       => FLOAT_256_LP'right,
          ADDR_WIDTH  => 10,
@@ -162,7 +162,7 @@ BEGIN
       );
    H1NegR_u : RAM_2Reads_1Write
       GENERIC MAP(
-         FILENAME    => "C:\Semco\Vivado\Demods\stcDemod\sourceData\Neg_h1_R_pt9.slv",
+         FILENAME    => "..\sourceData\Neg_h1_R_pt9.slv",
          DATA_WIDTH  => FLOAT_256_LP'length,
          BINPT       => FLOAT_256_LP'right,
          ADDR_WIDTH  => 10,
@@ -184,7 +184,7 @@ BEGIN
       );
    H1NegI_u : RAM_2Reads_1Write
       GENERIC MAP(
-         FILENAME    => "C:\Semco\Vivado\Demods\stcDemod\sourceData\Neg_h1_I_pt9.slv",
+         FILENAME    => "..\sourceData\Neg_h1_I_pt9.slv",
          DATA_WIDTH  => FLOAT_256_LP'length,
          BINPT       => FLOAT_256_LP'right,
          ADDR_WIDTH  => 10,
@@ -208,7 +208,7 @@ BEGIN
    -- 0KHz FFT of H0/1/R/I
    H0CntrR_u : RAM_2Reads_1Write
       GENERIC MAP(
-         FILENAME    => ".\sourceData\Center_h0_R_pt9.slv",
+         FILENAME    => "..\sourceData\Center_h0_R_pt9.slv",
          DATA_WIDTH  => FLOAT_256_LP'length,
          BINPT       => FLOAT_256_LP'right,
          ADDR_WIDTH  => 10,
@@ -230,7 +230,7 @@ BEGIN
       );
    H0CntrI_u : RAM_2Reads_1Write
       GENERIC MAP(
-         FILENAME    => ".\sourceData\Center_h0_I_pt9.slv",
+         FILENAME    => "..\sourceData\Center_h0_I_pt9.slv",
          DATA_WIDTH  => FLOAT_256_LP'length,
          BINPT       => FLOAT_256_LP'right,
          ADDR_WIDTH  => 10,
@@ -252,7 +252,7 @@ BEGIN
       );
    H1CntrR_u : RAM_2Reads_1Write
       GENERIC MAP(
-         FILENAME    => ".\sourceData\Center_h1_R_pt9.slv",
+         FILENAME    => "..\sourceData\Center_h1_R_pt9.slv",
          DATA_WIDTH  => FLOAT_256_LP'length,
          BINPT       => FLOAT_256_LP'right,
          ADDR_WIDTH  => 10,
@@ -274,7 +274,7 @@ BEGIN
       );
    H1CntrI_u : RAM_2Reads_1Write
       GENERIC MAP(
-         FILENAME    => ".\sourceData\Center_h1_I_pt9.slv",
+         FILENAME    => "..\sourceData\Center_h1_I_pt9.slv",
          DATA_WIDTH  => FLOAT_256_LP'length,
          BINPT       => FLOAT_256_LP'right,
          ADDR_WIDTH  => 10,
@@ -298,7 +298,7 @@ BEGIN
    -- +66KHz FFT of H0/1/R/I
    H0PosR_u : RAM_2Reads_1Write
       GENERIC MAP(
-         FILENAME    => "C:\Semco\Vivado\Demods\stcDemod\sourceData\Pos_h0_R_pt9.slv",
+         FILENAME    => "..\sourceData\Pos_h0_R_pt9.slv",
          DATA_WIDTH  => FLOAT_256_LP'length,
          BINPT       => FLOAT_256_LP'right,
          ADDR_WIDTH  => 10,
@@ -320,7 +320,7 @@ BEGIN
       );
    H0PosI_u : RAM_2Reads_1Write
       GENERIC MAP(
-         FILENAME    => "C:\Semco\Vivado\Demods\stcDemod\sourceData\Pos_h0_I_pt9.slv",
+         FILENAME    => "..\sourceData\Pos_h0_I_pt9.slv",
          DATA_WIDTH  => FLOAT_256_LP'length,
          BINPT       => FLOAT_256_LP'right,
          ADDR_WIDTH  => 10,
@@ -342,7 +342,7 @@ BEGIN
       );
    H1PosR_u : RAM_2Reads_1Write
       GENERIC MAP(
-         FILENAME    => "C:\Semco\Vivado\Demods\stcDemod\sourceData\Pos_h1_R_pt9.slv",
+         FILENAME    => "..\sourceData\Pos_h1_R_pt9.slv",
          DATA_WIDTH  => FLOAT_256_LP'length,
          BINPT       => FLOAT_256_LP'right,
          ADDR_WIDTH  => 10,
@@ -364,7 +364,7 @@ BEGIN
       );
    H1PosI_u : RAM_2Reads_1Write
       GENERIC MAP(
-         FILENAME    => "C:\Semco\Vivado\Demods\stcDemod\sourceData\Pos_h1_I_pt9.slv",
+         FILENAME    => "..\sourceData\Pos_h1_I_pt9.slv",
          DATA_WIDTH  => FLOAT_256_LP'length,
          BINPT       => FLOAT_256_LP'right,
          ADDR_WIDTH  => 10,

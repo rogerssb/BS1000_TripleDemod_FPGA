@@ -144,6 +144,7 @@ ARCHITECTURE rtl OF PilotSync IS
    END COMPONENT RAM_2Reads_1Write;
 
    CONSTANT ADDR_BITS      : integer := CorrPntr'length;
+
    type     ModeType is (Idle, SET_START, CLR_START, READ_LOOP);
 
   -- Signals
@@ -577,7 +578,7 @@ BEGIN
 
    H0r_u : RAM_2Reads_1Write
       GENERIC MAP(
-         FILENAME    => ".\sourceData\p0_r_pt17.slv",
+         FILENAME    => "..\sourceData\p0_r_pt17.slv",
          DATA_WIDTH  => H0r'length,
          BINPT       => H0r'right,
          ADDR_WIDTH  => 9,
@@ -600,7 +601,7 @@ BEGIN
 
    H0i_u : RAM_2Reads_1Write
       GENERIC MAP(
-         FILENAME    => ".\sourceData\p0_i_pt17.slv",
+         FILENAME    => "..\sourceData\p0_i_pt17.slv",
          DATA_WIDTH  => H0r'length,
          BINPT       => H0r'right,
          ADDR_WIDTH  => 9,
@@ -623,7 +624,7 @@ BEGIN
 
    H1r_u : RAM_2Reads_1Write
       GENERIC MAP(
-         FILENAME    => ".\sourceData\p1_r_pt17.slv",
+         FILENAME    => "..\sourceData\p1_r_pt17.slv",
          DATA_WIDTH  => H0r'length,
          BINPT       => H0r'right,
          ADDR_WIDTH  => 9,
@@ -646,7 +647,7 @@ BEGIN
 
    H1i_u : RAM_2Reads_1Write
       GENERIC MAP(
-         FILENAME    => ".\sourceData\p1_i_pt17.slv",
+         FILENAME    => "..\sourceData\p1_i_pt17.slv",
          DATA_WIDTH  => H0r'length,
          BINPT       => H0r'right,
          ADDR_WIDTH  => 9,
