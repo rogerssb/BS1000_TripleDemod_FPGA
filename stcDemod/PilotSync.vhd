@@ -577,7 +577,7 @@ BEGIN
 
    H0r_u : RAM_2Reads_1Write
       GENERIC MAP(
-         FILENAME    => "C:\Semco\Vivado\Demods\stcDemod\sourceData\p0_r_pt17.slv",
+         FILENAME    => ".\sourceData\p0_r_pt17.slv",
          DATA_WIDTH  => H0r'length,
          BINPT       => H0r'right,
          ADDR_WIDTH  => 9,
@@ -600,7 +600,7 @@ BEGIN
 
    H0i_u : RAM_2Reads_1Write
       GENERIC MAP(
-         FILENAME    => "C:\Semco\Vivado\Demods\stcDemod\sourceData\p0_i_pt17.slv",
+         FILENAME    => ".\sourceData\p0_i_pt17.slv",
          DATA_WIDTH  => H0r'length,
          BINPT       => H0r'right,
          ADDR_WIDTH  => 9,
@@ -623,7 +623,7 @@ BEGIN
 
    H1r_u : RAM_2Reads_1Write
       GENERIC MAP(
-         FILENAME    => "C:\Semco\Vivado\Demods\stcDemod\sourceData\p1_r_pt17.slv",
+         FILENAME    => ".\sourceData\p1_r_pt17.slv",
          DATA_WIDTH  => H0r'length,
          BINPT       => H0r'right,
          ADDR_WIDTH  => 9,
@@ -646,7 +646,7 @@ BEGIN
 
    H1i_u : RAM_2Reads_1Write
       GENERIC MAP(
-         FILENAME    => "C:\Semco\Vivado\Demods\stcDemod\sourceData\p1_i_pt17.slv",
+         FILENAME    => ".\sourceData\p1_i_pt17.slv",
          DATA_WIDTH  => H0r'length,
          BINPT       => H0r'right,
          ADDR_WIDTH  => 9,
