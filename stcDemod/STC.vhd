@@ -719,7 +719,7 @@ BEGIN
          DacMux(11) <= PhaseOut0;                  -- iFFT H0 Phase every other sample
          DacMux(12) <= PhaseOut1;                  -- H1
          DacMux(13) <= MagPeak0;                    -- Peak Magnitude per frame
-         DacMux(14) <= PhsPeak1;                    -- Full Pilot Phase at peak magnitude
+         DacMux(14) <= PhsPeak0;                    -- Full Pilot Phase at peak magnitude
          DacMux(15) <= to_slv(CorrPntr(8 downto 0)) & 9x"00";        -- Computed H0 Phase            was ValidData2047 & 17x"0";     -- My 2047 BER with triples per error
       end if;
    end process DacOutputs;

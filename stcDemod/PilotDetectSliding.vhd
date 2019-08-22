@@ -47,7 +47,8 @@ use work.Semco_pkg.all;
 use work.fixed_pkg.all;
 
 entity PilotDetectSliding is
-   GENERIC (SIM_MODE : boolean := false
+   GENERIC
+      (SIM_MODE : boolean := false
    );
    PORT(
          clk,
@@ -737,11 +738,11 @@ begin
             if (ValidAbs) then
                if (AbsCntr0 > AbsCntr1) then
                   MaxCntr  <= AbsCntr0;
-                  MaxCntr0 <= AbsCntr0;
                else
                   MaxCntr  <= AbsCntr1;
-                  MaxCntr1 <= AbsCntr1;
                end if;
+               MaxCntr0 <= AbsCntr0;   -- just delayed to keep timing happy
+               MaxCntr1 <= AbsCntr1;
 
                -- Find the peak of this packet regardless of H0 or H1
                if (Index1 < 512) then     -- only search first half of the ifft
@@ -772,8 +773,10 @@ begin
                   else
                      PhsCntStrt0  <= '0';
                   end if;
-                else
-                  PhsCntStrt0  <= '0';
+              elsif (Index1 = 515) then     -- setup for next frame
+                  MaxPeak0    <= (others=>'0');
+               else
+                  PhsCntStrt0 <= '0';
                end if;
 
                -- Find the peak of H1 only
@@ -784,8 +787,10 @@ begin
                   else
                      PhsCntStrt1  <= '0';
                   end if;
-                else
-                  PhsCntStrt1  <= '0';
+               elsif (Index1 = 515) then     -- setup for next frame
+                  MaxPeak1    <= (others=>'0');
+               else
+                  PhsCntStrt1 <= '0';
                end if;
             end if;
 
