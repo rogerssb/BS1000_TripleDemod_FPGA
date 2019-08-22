@@ -194,7 +194,7 @@ module stcLoop(
             loopEnSR <= 0;
         end
         else begin
-            loopEnSR <= {loopEnSR[3:1],loopFilterEn};
+            loopEnSR <= {loopEnSR[2:0],loopFilterEn};
         end
     end
 
