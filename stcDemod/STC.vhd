@@ -98,8 +98,10 @@ ARCHITECTURE rtl OF STC IS
          Magnitude1,
          PhaseOut0,
          PhaseOut1,
-         MagPeak,
-         PhsPeak        : OUT SLV18;
+         MagPeak0,
+         PhsPeak0,
+         MagPeak1,
+         PhsPeak1       : OUT SLV18;
          PilotFound,
          ValidOut,
          StartOut       : OUT std_logic
@@ -320,8 +322,11 @@ ARCHITECTURE rtl OF STC IS
             PhaseOut0,
             Magnitude1,
             PhaseOut1,
-            MagPeak,
+            MagPeak0,
+            MagPeak1,
             PhsPeak,
+            PhsPeak0,
+            PhsPeak1,
             PhsLastPeak,
             PhaseDiffGain1Slv,
             PhaseDiffGain2Slv,
@@ -484,8 +489,10 @@ BEGIN
          Magnitude1     => Magnitude1,
          PhaseOut0      => PhaseOut0,
          PhaseOut1      => PhaseOut1,
-         MagPeak        => MagPeak,
-         PhsPeak        => PhsPeak,
+         MagPeak0       => MagPeak0,
+         PhsPeak0       => PhsPeak0,
+         MagPeak1       => MagPeak1,
+         PhsPeak1       => PhsPeak1,
          ReOut          => PilotRealOut,
          ImOut          => PilotImagOut,
          ValidOut       => PilotValidOut,
@@ -522,12 +529,13 @@ BEGIN
          if (Reset2x) then
             PhsLastPeak <= (others=>'0');
          elsif (PhaseDiffEnDly(7)) then
-            PhsLastPeak <= PhsPeak when (MiscBits(1)) else (others=>'0');
+            PhsLastPeak <= PhsPeak0 when (MiscBits(1)) else (others=>'0');
          end if;
       end if;
    end process AFC_process;
 
    PhaseOut <= to_slv(PhaseDiff2) when (not MiscBits(3)) else to_slv(PhsPeak);
+   PhsPeak  <= PhsPeak0 when not MiscBits(16) else PhsPeak1;
 
    PS_u : pilotsync
       PORT MAP (
@@ -563,8 +571,6 @@ BEGIN
          probe_out5  => OffsetPS
    );
    TrellisOffset <= signed(TrellisOffsetSlv);
-
-ShortBuild : if (BuildAll) generate
 
    InterBrikClk : process(Clk2x) is
    begin
@@ -689,20 +695,18 @@ ShortBuild : if (BuildAll) generate
          data_bit     => dataBit,
          code_bit     => codeBit
       );
-end generate;
 
    DacOutputs : process(Clk2x)
    begin
       if (rising_edge(Clk2x)) then
-
-         Dac0Data <= DacMux(to_integer(unsigned(DacSelect0)));
-         Dac1Data <= DacMux(to_integer(unsigned(DacSelect1)));
-         Dac2Data <= DacMux(to_integer(unsigned(DacSelect2)));
+         Dac0Data   <= DacMux(to_integer(unsigned(DacSelect0)));
+         Dac1Data   <= DacMux(to_integer(unsigned(DacSelect1)));
+         Dac2Data   <= DacMux(to_integer(unsigned(DacSelect2)));
          Dac0ClkEn  <= '1';
          Dac1ClkEn  <= '1';
          Dac2ClkEn  <= '1';
-         DacMux(0)  <= to_slv(InRBrik2Dly);        -- reframed resample R & I
-         DacMux(1)  <= to_slv(InIBrik2Dly);        --
+         DacMux(0)  <= MagPeak1; --to_slv(InRBrik2Dly);        -- reframed resample R & I
+         DacMux(1)  <= PhsPeak1; --to_slv(InIBrik2Dly);        --
          DacMux(2)  <= StartInBrik2Dly & 17x"0";              -- Start of Frame signal
          DacMux(3)  <= ValidInBrik2Dly & 17x"0";   -- Valid packet signal
          DacMux(4)  <= Phase0A;                     -- Half Pilot Phase
@@ -713,9 +717,9 @@ end generate;
          DacMux(9)  <= Magnitude0;                 -- iFFT H0 Magnitude every other sample
          DacMux(10) <= Magnitude1;                 -- H1
          DacMux(11) <= PhaseOut0;                  -- iFFT H0 Phase every other sample
-         DacMux(12) <= Phase0B;  --PhaseOut1;                  -- H1
-         DacMux(13) <= MagPeak;                    -- Peak Magnitude per frame
-         DacMux(14) <= PhsPeak;                    -- Full Pilot Phase at peak magnitude
+         DacMux(12) <= PhaseOut1;                  -- H1
+         DacMux(13) <= MagPeak0;                    -- Peak Magnitude per frame
+         DacMux(14) <= PhsPeak1;                    -- Full Pilot Phase at peak magnitude
          DacMux(15) <= to_slv(CorrPntr(8 downto 0)) & 9x"00";        -- Computed H0 Phase            was ValidData2047 & 17x"0";     -- My 2047 BER with triples per error
       end if;
    end process DacOutputs;

@@ -480,7 +480,7 @@ BEGIN
             m_ndx1      <= Tau1Int when (Tau1EstA >= 0) else Tau1Int - 1;
             Mu1         <= resize(Tau1EstX4 - m_ndx1, Mu1, fixed_wrap, fixed_truncate);
 
-            DeltaTauEst <= resize(Tau1Est - Tau0Est, DeltaTauEst);
+            DeltaTauEst <= resize(Tau1EstA - Tau0EstA, DeltaTauEst);
          end if;
       end if;
    end process EstimatesProc;

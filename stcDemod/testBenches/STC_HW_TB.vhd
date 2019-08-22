@@ -77,8 +77,8 @@ BEGIN
       Clk <= not Clk;
    end process;
 
-   Power0In <= to_sfixed(0.40, Power0In);
-   Power1In <= to_sfixed(0.00, Power1In);
+   Power0In <= to_sfixed(0.0, Power0In);
+   Power1In <= to_sfixed(0.40, Power1In);
    NoiseIn  <= to_sfixed(0.0, NoiseIn);
    BitRate  <= to_sfixed(9.33*4*1.04/93.3, BitRate);    -- 41.6 is 10Mb times 4 plus 4% overhead for pilot
 

@@ -68,7 +68,7 @@ entity PilotDetectSliding is
          PhaseOut0,
          PhaseOut1,
          MagPeak0,
-         PhsPeak0
+         PhsPeak0,
          MagPeak1,
          PhsPeak1        : OUT SLV18;
          PilotFound,
@@ -332,7 +332,7 @@ architecture rtl of PilotDetectSliding is
             MaxCntr1,
             MaxOfPckt,
             MaxPeak,
-            MaxPeak0
+            MaxPeak0,
             MaxPeak1,
             CurrentPeak,
             Peak1,
@@ -346,8 +346,10 @@ architecture rtl of PilotDetectSliding is
             H0CntrI,
             H1CntrR,
             H1CntrI           : FLOAT_256_LP;
-   SIGNAL   MagPeakInt,
-            PhsPeakInt        : SLV18;
+   SIGNAL   MagPeakInt0,
+            PhsPeakInt0,
+            MagPeakInt1,
+            PhsPeakInt1       : SLV18;
    SIGNAL   Count,
             Index0,
             Index1            : natural range 0 to 1023;
@@ -381,10 +383,9 @@ architecture rtl of PilotDetectSliding is
             Resets2X          : SLV18;
 
    attribute mark_debug : string;
-   attribute mark_debug of PilotMag_Ila, PilotFound, Threshold_Ila, Peak1_Ila, Peak2_Ila,
-             CorrPntr, OverflowFft, OverflowIFft, AbsCntr0_Ila, AbsCntr1_Ila,
-             Magnitude1, PhaseOut1, Magnitude0, PhaseOut0,
-             MagPeak, PhsPeak, MagPeakInt, PhsPeakInt : signal is "true";
+   attribute mark_debug of PilotMag_Ila, PilotFound, Peak1_Ila, Peak2_Ila,
+             CorrPntr, AbsCntr0_Ila, AbsCntr1_Ila,
+             MagPeak0, PhsPeak0, MagPeak1, PhsPeak1 : signal is "true";
 begin
 
    IlaProcess : process(clk)
@@ -717,12 +718,16 @@ begin
             Index0       <= 0;
             Index1       <= 0;
             MaxCount     <= 0;
+            PhsCount0    <= 0;
+            PhsCount1    <= 0;
             PilotPulse   <= '0';
             MaxPeak      <= (others=>'0');
             MaxPeak0     <= (others=>'0');
             MaxPeak1     <= (others=>'0');
             MaxOfPckt    <= (others=>'0');
             MaxCntr      <= (others=>'0');
+            MaxCntr0     <= (others=>'0');
+            MaxCntr1     <= (others=>'0');
             PackCntr     <= (others=>'0');   -- PackCntr must be reset released with WrAddr in PilotSync
             CorrPntr     <= (others=>'0');
             StartOut     <= '0';
@@ -770,6 +775,18 @@ begin
                 else
                   PhsCntStrt0  <= '0';
                end if;
+
+               -- Find the peak of H1 only
+               if (Index1 < 512) then     -- only search first half of the ifft
+                  if (MaxCntr1 > MaxPeak1) and (MaxCntr1 > Threshold) then
+                     MaxPeak1     <= MaxCntr1;
+                     PhsCntStrt1  <= '1';
+                  else
+                     PhsCntStrt1  <= '0';
+                  end if;
+                else
+                  PhsCntStrt1  <= '0';
+               end if;
             end if;
 
             if (PhsCntStrt0) then
@@ -780,6 +797,16 @@ begin
                   PhsPeakInt0 <= Phase0 & "000000";    -- capture phase of current max magnitude
                   MagPeakInt0 <= Mag0 & "00000";
                end if;                       -- once calculated
+            end if;
+
+            if (PhsCntStrt1) then
+               PhsCount1 <= PHS_LATENCY - 2;  -- it took a clock to set PhsCntStrt and determine MaxCntr from AbsCntrs
+            elsif (PhsCount1 > 0) then     -- cordic is not ValidIn dependent, just straight latency
+               PhsCount1 <= PhsCount1 - 1;
+               if (PhsCount1 = 1) then
+                  PhsPeakInt1 <= Phase1 & "000000";    -- capture phase of current max magnitude
+                  MagPeakInt1 <= Mag1 & "00000";
+               end if;
             end if;
 
             if (MaxCount = 1) then  -- found the peak, store the results
