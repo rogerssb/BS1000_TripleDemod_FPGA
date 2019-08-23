@@ -294,6 +294,7 @@ ARCHITECTURE rtl OF STC IS
    SIGNAL   TrellisBits,
             OffsetPS          : SLV4;
    SIGNAL   PhaseDiffEnDly    : SLV8;
+   SIGNAL   StartOffset       : SLV16;
    SIGNAL   RealOutPS,
             ImagOutPS,
             InRBrik2Dly,
@@ -346,6 +347,7 @@ ARCHITECTURE rtl OF STC IS
             PilotImagOut      : Float_1_18;
    SIGNAL   RawAddr,
             StartNextFrame,
+            StartFrameOffset,
             CorrPntr          : ufixed(15 downto 0);
    signal   BerRange,
             Ber               : natural range 0 to 255 := 0;
@@ -509,13 +511,15 @@ BEGIN
          PhaseDiff1Gain    <= to_sfixed(PhaseDiffGain1Slv1, PhaseDiff1Gain);
          PhaseDiff2Gain    <= to_sfixed(PhaseDiffGain2Slv1, PhaseDiff2Gain);
          PhaseDiff2Offset  <= to_sfixed(PhaseDiffOffsetSlv1, PhaseDiff2Offset);
+         StartOffset       <= x"000" & MiscBits(15 downto 12);
+         StartFrameOffset  <= resize(StartNextFrame + ufixed(StartOffset), StartFrameOffset);
          if (Reset2x) then
             PhaseDiff       <= (others=>'0');
             PhaseDiff1xGain <= (others=>'0');
             PhaseDiff2xGain <= (others=>'0');
             PhaseDiffEnDly  <= (others=>'0');
             PhaseDiffEn     <= '0';
-         elsif (resize(StartNextFrame + ufixed(MiscBits(15 downto 12)), RawAddr) = RawAddr) then
+         elsif (StartFrameOffset = RawAddr) then
             PhaseDiff1  <= resize(to_sfixed(PhsPeak, PhaseDiff1) - to_sfixed(PhsLastPeak, PhaseDiff1), PhaseDiff1);
             PhaseDiffEnDly  <= x"01";
          else

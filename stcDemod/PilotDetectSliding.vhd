@@ -766,29 +766,29 @@ begin
                end if;
 
                -- Find the peak of H0 only
-               if (Index1 < 512) then     -- only search first half of the ifft
+               if (Index1 = 515) and (MaxCount = 0) then     -- setup for next frame
+                  MaxPeak0    <= (others=>'0');
+               elsif (Index1 < 512) then     -- only search first half of the ifft
                   if (MaxCntr0 > MaxPeak0) and (MaxCntr0 > Threshold) then
                      MaxPeak0     <= MaxCntr0;
                      PhsCntStrt0  <= '1';
                   else
                      PhsCntStrt0  <= '0';
                   end if;
-              elsif (Index1 = 515) then     -- setup for next frame
-                  MaxPeak0    <= (others=>'0');
                else
                   PhsCntStrt0 <= '0';
                end if;
 
                -- Find the peak of H1 only
-               if (Index1 < 512) then     -- only search first half of the ifft
+               if (MaxCount = 1) then     -- setup for next frame
+                  MaxPeak1    <= (others=>'0');
+               elsif (Index1 < 512) then     -- only search first half of the ifft
                   if (MaxCntr1 > MaxPeak1) and (MaxCntr1 > Threshold) then
                      MaxPeak1     <= MaxCntr1;
                      PhsCntStrt1  <= '1';
                   else
                      PhsCntStrt1  <= '0';
                   end if;
-               elsif (Index1 = 515) then     -- setup for next frame
-                  MaxPeak1    <= (others=>'0');
                else
                   PhsCntStrt1 <= '0';
                end if;
@@ -817,14 +817,14 @@ begin
             if (MaxCount = 1) then  -- found the peak, store the results
                StartOut <= '1';
                MaxCount <= 0;
-            end if;
-
-            if (StartOut) then     -- StartOut is only one clock wide
-               StartOut <= '0';
                MagPeak0  <= MagPeakInt0;
                PhsPeak0  <= PhsPeakInt0;
                MagPeak1  <= MagPeakInt1;
                PhsPeak1  <= PhsPeakInt1;
+            end if;
+
+            if (StartOut) then     -- StartOut is only one clock wide
+               StartOut <= '0';
             end if;
 
 

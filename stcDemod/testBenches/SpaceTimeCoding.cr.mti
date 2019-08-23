@@ -1,15 +1,4 @@
-C:/Semco/Vivado/Demods/stcDemod/ReadFilesFolder/RAM_2Reads_1Write.vhd {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/ReadFilesFolder/RAM_2Reads_1Write.vhd
-Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
--- Loading package STANDARD
--- Loading package TEXTIO
--- Loading package std_logic_1164
--- Loading package NUMERIC_STD
--- Loading package std_logic_textio
--- Loading package fixed_pkg
--- Compiling entity RAM_2Reads_1Write
--- Compiling architecture rtl of RAM_2Reads_1Write
-
-} {} {}} {C:\Semco\Vivado\Demods\stcDemod/STC.vhd} {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/STC.vhd
+{C:\Semco\Vivado\Demods\stcDemod/PilotSync.vhd} {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/PilotSync.vhd
 Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Loading package STANDARD
 -- Loading package TEXTIO
@@ -18,8 +7,33 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Loading package fixed_pkg
 -- Loading package MATH_REAL
 -- Loading package Semco_pkg
--- Compiling entity STC
--- Compiling architecture rtl of STC
+-- Compiling entity PilotSync
+-- Compiling architecture rtl of PilotSync
+
+} {} {}} C:/Semco/Vivado/Demods/stcDemod/ReadFilesFolder/ComputeMetric.vhd {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/ReadFilesFolder/ComputeMetric.vhd
+Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package std_logic_textio
+-- Loading package fixed_pkg
+-- Loading package MATH_REAL
+-- Loading package Semco_pkg
+-- Compiling entity ComputeMetric
+-- Compiling architecture rtl of ComputeMetric
+
+} {} {}} C:/Semco/Vivado/Demods/stcDemod/testBenches/STC_HW_TB.vhd {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/testBenches/STC_HW_TB.vhd
+Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package fixed_pkg
+-- Loading package MATH_REAL
+-- Loading package Semco_pkg
+-- Compiling entity STC_HW_TB
+-- Compiling architecture rtl of STC_HW_TB
 
 } {} {}} {C:\Semco\Vivado\Demods\stcDemod/Brik2.vhd} {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/Brik2.vhd
 Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
@@ -33,7 +47,32 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Compiling entity Brik2
 -- Compiling architecture rtl of Brik2
 
-} {} {}} C:/Semco/Vivado/Demods/stcDemod.srcs/sources_1/ip/Vio2x18/Vio2x18_sim_netlist.vhdl {1 vcom\ -work\ work\ -2008\ -explicit\ -stats=none\ C:/Semco/Vivado/Demods/stcDemod.srcs/sources_1/ip/Vio2x18/Vio2x18_sim_netlist.vhdl\nModel\ Technology\ ModelSim\ PE\ vcom\ 10.5c\ Compiler\ 2016.07\ Jul\ 21\ 2016\n--\ Loading\ package\ STANDARD\n--\ Loading\ package\ TEXTIO\n--\ Loading\ package\ std_logic_1164\n--\ Compiling\ entity\ Vio2x18_vio_v3_0_16_decoder\n--\ Compiling\ architecture\ STRUCTURE\ of\ Vio2x18_vio_v3_0_16_decoder\n--\ Compiling\ entity\ Vio2x18_vio_v3_0_16_probe_out_one\n--\ Compiling\ architecture\ STRUCTURE\ of\ Vio2x18_vio_v3_0_16_probe_out_one\n--\ Compiling\ entity\ Vio2x18_vio_v3_0_16_probe_out_one_0\n--\ Compiling\ architecture\ STRUCTURE\ of\ Vio2x18_vio_v3_0_16_probe_out_one_0\n--\ Compiling\ entity\ \\Vio2x18_vio_v3_0_16_probe_out_one__parameterized0\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\Vio2x18_vio_v3_0_16_probe_out_one__parameterized0\\\n--\ Compiling\ entity\ \\Vio2x18_vio_v3_0_16_probe_out_one__parameterized1\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\Vio2x18_vio_v3_0_16_probe_out_one__parameterized1\\\n--\ Compiling\ entity\ \\Vio2x18_vio_v3_0_16_probe_out_one__parameterized2\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\Vio2x18_vio_v3_0_16_probe_out_one__parameterized2\\\n--\ Compiling\ entity\ \\Vio2x18_vio_v3_0_16_probe_out_one__parameterized3\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\Vio2x18_vio_v3_0_16_probe_out_one__parameterized3\\\n--\ Compiling\ entity\ Vio2x18_vio_v3_0_16_probe_width\n--\ Compiling\ architecture\ STRUCTURE\ of\ Vio2x18_vio_v3_0_16_probe_width\n--\ Compiling\ entity\ Vio2x18_xsdbs_v1_0_2_xsdbs\n--\ Compiling\ architecture\ STRUCTURE\ of\ Vio2x18_xsdbs_v1_0_2_xsdbs\n--\ Compiling\ entity\ Vio2x18_vio_v3_0_16_probe_out_all\n--\ Compiling\ architecture\ STRUCTURE\ of\ Vio2x18_vio_v3_0_16_probe_out_all\n--\ Loading\ entity\ Vio2x18_vio_v3_0_16_probe_out_one\n--\ Loading\ entity\ Vio2x18_vio_v3_0_16_probe_out_one_0\n--\ Loading\ entity\ \\Vio2x18_vio_v3_0_16_probe_out_one__parameterized0\\\n--\ Loading\ entity\ \\Vio2x18_vio_v3_0_16_probe_out_one__parameterized1\\\n--\ Loading\ entity\ \\Vio2x18_vio_v3_0_16_probe_out_one__parameterized2\\\n--\ Loading\ entity\ \\Vio2x18_vio_v3_0_16_probe_out_one__parameterized3\\\n--\ Compiling\ entity\ Vio2x18_vio_v3_0_16_vio\n--\ Compiling\ architecture\ STRUCTURE\ of\ Vio2x18_vio_v3_0_16_vio\n--\ Loading\ entity\ Vio2x18_vio_v3_0_16_decoder\n--\ Loading\ entity\ Vio2x18_vio_v3_0_16_probe_out_all\n--\ Loading\ entity\ Vio2x18_vio_v3_0_16_probe_width\n--\ Loading\ entity\ Vio2x18_xsdbs_v1_0_2_xsdbs\n--\ Compiling\ entity\ Vio2x18\n--\ Compiling\ architecture\ STRUCTURE\ of\ Vio2x18\n--\ Loading\ entity\ Vio2x18_vio_v3_0_16_vio\n\n {} {}} C:/Semco/Vivado/Demods/stcDemod/PilotDetectSliding.vhd {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/PilotDetectSliding.vhd
+} {} {}} {C:\Semco\Vivado\Demods\stcDemod/testBenches/Brik1_Hw_tb.vhd} {1 {vcom -work work -2008 -explicit -check_synthesis -stats=none C:/Semco/Vivado/Demods/stcDemod/testBenches/Brik1_Hw_tb.vhd
+Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package std_logic_textio
+-- Loading package NUMERIC_STD
+-- Loading package MATH_REAL
+-- Loading package fixed_pkg
+-- Loading package Semco_pkg
+-- Compiling entity Brik1_Hw_tb
+-- Compiling architecture rtl of Brik1_Hw_tb
+
+} {} {}} C:/Semco/Vivado/Demods/stcDemod/ReadFilesFolder/ChannelEstimate.vhd {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/ReadFilesFolder/ChannelEstimate.vhd
+Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package fixed_pkg
+-- Loading package MATH_REAL
+-- Loading package Semco_pkg
+-- Compiling entity ChannelEstimate
+-- Compiling architecture rtl of ChannelEstimate
+
+} {} {}} C:/Semco/Vivado/Demods/stcDemod/PilotDetectSliding.vhd {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/PilotDetectSliding.vhd
 Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Loading package STANDARD
 -- Loading package TEXTIO
@@ -46,7 +85,7 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Compiling entity PilotDetectSliding
 -- Compiling architecture rtl of PilotDetectSliding
 
-} {} {}} C:/Semco/Vivado/Demods/stcDemod/testBenches/STC_HW_TB.vhd {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/testBenches/STC_HW_TB.vhd
+} {} {}} C:/Semco/Vivado/Demods/stcDemod.srcs/sources_1/ip/Vio2x18/Vio2x18_sim_netlist.vhdl {1 vcom\ -work\ work\ -2008\ -explicit\ -stats=none\ C:/Semco/Vivado/Demods/stcDemod.srcs/sources_1/ip/Vio2x18/Vio2x18_sim_netlist.vhdl\nModel\ Technology\ ModelSim\ PE\ vcom\ 10.5c\ Compiler\ 2016.07\ Jul\ 21\ 2016\n--\ Loading\ package\ STANDARD\n--\ Loading\ package\ TEXTIO\n--\ Loading\ package\ std_logic_1164\n--\ Compiling\ entity\ Vio2x18_vio_v3_0_16_decoder\n--\ Compiling\ architecture\ STRUCTURE\ of\ Vio2x18_vio_v3_0_16_decoder\n--\ Compiling\ entity\ Vio2x18_vio_v3_0_16_probe_out_one\n--\ Compiling\ architecture\ STRUCTURE\ of\ Vio2x18_vio_v3_0_16_probe_out_one\n--\ Compiling\ entity\ Vio2x18_vio_v3_0_16_probe_out_one_0\n--\ Compiling\ architecture\ STRUCTURE\ of\ Vio2x18_vio_v3_0_16_probe_out_one_0\n--\ Compiling\ entity\ \\Vio2x18_vio_v3_0_16_probe_out_one__parameterized0\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\Vio2x18_vio_v3_0_16_probe_out_one__parameterized0\\\n--\ Compiling\ entity\ \\Vio2x18_vio_v3_0_16_probe_out_one__parameterized1\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\Vio2x18_vio_v3_0_16_probe_out_one__parameterized1\\\n--\ Compiling\ entity\ \\Vio2x18_vio_v3_0_16_probe_out_one__parameterized2\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\Vio2x18_vio_v3_0_16_probe_out_one__parameterized2\\\n--\ Compiling\ entity\ \\Vio2x18_vio_v3_0_16_probe_out_one__parameterized3\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\Vio2x18_vio_v3_0_16_probe_out_one__parameterized3\\\n--\ Compiling\ entity\ Vio2x18_vio_v3_0_16_probe_width\n--\ Compiling\ architecture\ STRUCTURE\ of\ Vio2x18_vio_v3_0_16_probe_width\n--\ Compiling\ entity\ Vio2x18_xsdbs_v1_0_2_xsdbs\n--\ Compiling\ architecture\ STRUCTURE\ of\ Vio2x18_xsdbs_v1_0_2_xsdbs\n--\ Compiling\ entity\ Vio2x18_vio_v3_0_16_probe_out_all\n--\ Compiling\ architecture\ STRUCTURE\ of\ Vio2x18_vio_v3_0_16_probe_out_all\n--\ Loading\ entity\ Vio2x18_vio_v3_0_16_probe_out_one\n--\ Loading\ entity\ Vio2x18_vio_v3_0_16_probe_out_one_0\n--\ Loading\ entity\ \\Vio2x18_vio_v3_0_16_probe_out_one__parameterized0\\\n--\ Loading\ entity\ \\Vio2x18_vio_v3_0_16_probe_out_one__parameterized1\\\n--\ Loading\ entity\ \\Vio2x18_vio_v3_0_16_probe_out_one__parameterized2\\\n--\ Loading\ entity\ \\Vio2x18_vio_v3_0_16_probe_out_one__parameterized3\\\n--\ Compiling\ entity\ Vio2x18_vio_v3_0_16_vio\n--\ Compiling\ architecture\ STRUCTURE\ of\ Vio2x18_vio_v3_0_16_vio\n--\ Loading\ entity\ Vio2x18_vio_v3_0_16_decoder\n--\ Loading\ entity\ Vio2x18_vio_v3_0_16_probe_out_all\n--\ Loading\ entity\ Vio2x18_vio_v3_0_16_probe_width\n--\ Loading\ entity\ Vio2x18_xsdbs_v1_0_2_xsdbs\n--\ Compiling\ entity\ Vio2x18\n--\ Compiling\ architecture\ STRUCTURE\ of\ Vio2x18\n--\ Loading\ entity\ Vio2x18_vio_v3_0_16_vio\n\n {} {}} {C:\Semco\Vivado\Demods\stcDemod/PilotTemplates.vhd} {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/PilotTemplates.vhd
 Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Loading package STANDARD
 -- Loading package TEXTIO
@@ -55,7 +94,42 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Loading package fixed_pkg
 -- Loading package MATH_REAL
 -- Loading package Semco_pkg
--- Compiling entity STC_HW_TB
--- Compiling architecture rtl of STC_HW_TB
+-- Compiling entity PilotTemplates
+-- Compiling architecture rtl of PilotTemplates
+
+} {} {}} {C:\Semco\Vivado\Demods\stcDemod/SinvLuts.vhd} {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/SinvLuts.vhd
+Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package fixed_pkg
+-- Loading package MATH_REAL
+-- Loading package Semco_pkg
+-- Compiling entity SinvLuts
+-- Compiling architecture rtl of SinvLuts
+
+} {} {}} C:/Semco/Vivado/Demods/stcDemod/ReadFilesFolder/RAM_2Reads_1Write.vhd {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/ReadFilesFolder/RAM_2Reads_1Write.vhd
+Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package std_logic_textio
+-- Loading package fixed_pkg
+-- Compiling entity RAM_2Reads_1Write
+-- Compiling architecture rtl of RAM_2Reads_1Write
+
+} {} {}} C:/Semco/Vivado/Demods/stcDemod/ReadFilesFolder/ROM_2D.vhd {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/ReadFilesFolder/ROM_2D.vhd
+Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package fixed_pkg
+-- Loading package MATH_REAL
+-- Loading package Semco_pkg
+-- Compiling entity ROM_2D
+-- Compiling architecture rtl of ROM_2D
 
 } {} {}}

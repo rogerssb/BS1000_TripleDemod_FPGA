@@ -376,7 +376,7 @@ begin
             BitRateAcc <= BitRate_v;
             DataValid <= DataValid(DataValid'left-1 downto 0) & (BitRate_v(0) xor BitRateAcc(0));
             if (DataValid(0)) then
-               if (RdAddr_i < 13312) then -- TODO unsigned(FrameClocks_vio)) then
+               if (RdAddr_i < 13300) then -- TODO unsigned(FrameClocks_vio)) then
                   RdAddr_i <= RdAddr_i + 1;
                else
                   RdAddr_i <= 0;
