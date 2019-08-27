@@ -114,6 +114,7 @@ ARCHITECTURE rtl OF STC IS
          reset,
          ce,
          PilotPulseIn,
+         PilotFound,
          DiffEn,
          ValidIn        : IN STD_LOGIC;
          CorrPntr       : IN ufixed(15 DOWNTO 0);
@@ -484,7 +485,7 @@ BEGIN
          ReIn           => ResampleR_s,
          ImIn           => ResampleI_s,
          -- outputs
-         PilotFound     => PilotFound,    -- not used
+         PilotFound     => PilotFound,
          CorrPntr       => CorrPntr,
          RawAddr        => RawAddr,
          Magnitude0     => Magnitude0,
@@ -548,6 +549,7 @@ BEGIN
          reset          => Reset2x,
          PilotPulseIn   => PilotPulse,
          ValidIn        => PilotValidOut,
+         PilotFound     => PilotFound,
          CorrPntr       => CorrPntr,
          StartNextFrame => StartNextFrame,
          Offset         => OffsetPS,

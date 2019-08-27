@@ -1,14 +1,9 @@
-{C:\Semco\Vivado\Demods\stcDemod/PilotSync.vhd} {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/PilotSync.vhd
-Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
--- Loading package STANDARD
--- Loading package TEXTIO
--- Loading package std_logic_1164
--- Loading package NUMERIC_STD
--- Loading package fixed_pkg
--- Loading package MATH_REAL
--- Loading package Semco_pkg
--- Compiling entity PilotSync
--- Compiling architecture rtl of PilotSync
+C:/Semco/Vivado/Demods/stcDemod/trellisProcess.v {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/trellisProcess.v
+Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
+-- Compiling module trellisProcess
+
+Top level modules:
+	trellisProcess
 
 } {} {}} C:/Semco/Vivado/Demods/stcDemod/ReadFilesFolder/ComputeMetric.vhd {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/ReadFilesFolder/ComputeMetric.vhd
 Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
@@ -72,6 +67,19 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Compiling entity ChannelEstimate
 -- Compiling architecture rtl of ChannelEstimate
 
+} {} {}} {C:\Semco\Vivado\Demods\stcDemod/PD_Fft_FIfo.vhd} {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/PD_Fft_FIfo.vhd
+Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package VCOMPONENTS
+-- Loading package fixed_pkg
+-- Loading package MATH_REAL
+-- Loading package Semco_pkg
+-- Compiling entity PD_Fft_Fifo
+-- Compiling architecture rtl of PD_Fft_Fifo
+
 } {} {}} C:/Semco/Vivado/Demods/stcDemod/PilotDetectSliding.vhd {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/PilotDetectSliding.vhd
 Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Loading package STANDARD
@@ -109,17 +117,6 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Compiling entity SinvLuts
 -- Compiling architecture rtl of SinvLuts
 
-} {} {}} C:/Semco/Vivado/Demods/stcDemod/ReadFilesFolder/RAM_2Reads_1Write.vhd {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/ReadFilesFolder/RAM_2Reads_1Write.vhd
-Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
--- Loading package STANDARD
--- Loading package TEXTIO
--- Loading package std_logic_1164
--- Loading package NUMERIC_STD
--- Loading package std_logic_textio
--- Loading package fixed_pkg
--- Compiling entity RAM_2Reads_1Write
--- Compiling architecture rtl of RAM_2Reads_1Write
-
 } {} {}} C:/Semco/Vivado/Demods/stcDemod/ReadFilesFolder/ROM_2D.vhd {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/ReadFilesFolder/ROM_2D.vhd
 Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Loading package STANDARD
@@ -131,5 +128,35 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Loading package Semco_pkg
 -- Compiling entity ROM_2D
 -- Compiling architecture rtl of ROM_2D
+
+} {} {}} C:/Semco/Vivado/Demods/stcDemod/ReadFilesFolder/RAM_2Reads_1Write.vhd {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/ReadFilesFolder/RAM_2Reads_1Write.vhd
+Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package std_logic_textio
+-- Loading package fixed_pkg
+-- Compiling entity RAM_2Reads_1Write
+-- Compiling architecture rtl of RAM_2Reads_1Write
+
+} {} {}} C:/Semco/Vivado/Demods/stcDemod/frameAlignment.v {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/frameAlignment.v
+Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
+-- Compiling module frameAlignment
+
+Top level modules:
+	frameAlignment
+
+} {} {}} {C:\Semco\Vivado\Demods\stcDemod/STC.vhd} {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/STC.vhd
+Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package fixed_pkg
+-- Loading package MATH_REAL
+-- Loading package Semco_pkg
+-- Compiling entity STC
+-- Compiling architecture rtl of STC
 
 } {} {}}

@@ -332,13 +332,25 @@ architecture rtl of PilotDetectSliding is
             MaxCntr0,
             MaxCntr1,
             MaxOfPckt,
-            MaxPeak,
-            MaxPeak0,
-            MaxPeak1,
+            AbsPeak,
+            AbsPeak0,
+            AbsPeak1,
+            CurrentMag0,
+            MagPeak0_u,
+            PhsPeak0_u,
+            MagPeak1_u,
+            PhsPeak1_u,
+            CurrentMag1,
+            CurrentPhs0,
+            CurrentPhs1,
             CurrentPeak,
             Peak1,
             Peak2             : ufixed(AbsZero'range);
-   SIGNAL   MagDelay          : MAG_ARRAY(28 downto 0);
+   SIGNAL   MagDelay,
+            MagDelay0,
+            MagDelay1,
+            PhsDelay0,
+            PhsDelay1         : MAG_ARRAY(28 downto 0);
    SIGNAL   PackR,
             PackI             : float_1_18 := float_zero_1_18;
    SIGNAL   FftR,
@@ -385,7 +397,8 @@ architecture rtl of PilotDetectSliding is
 
    attribute mark_debug : string;
    attribute mark_debug of PilotMag_Ila, PilotFound, Peak1_Ila, Peak2_Ila,
-             CorrPntr, AbsCntr0_Ila, AbsCntr1_Ila,
+             CorrPntr, AbsCntr0_Ila, AbsCntr1_Ila, MagPeakInt0, PhsPeakInt0,
+             MagPeakInt1, PhsPeakInt1, CurrentMag0, CurrentMag1,
              MagPeak0, PhsPeak0, MagPeak1, PhsPeak1 : signal is "true";
 begin
 
@@ -722,9 +735,13 @@ begin
             PhsCount0    <= 0;
             PhsCount1    <= 0;
             PilotPulse   <= '0';
-            MaxPeak      <= (others=>'0');
-            MaxPeak0     <= (others=>'0');
-            MaxPeak1     <= (others=>'0');
+            MagPeakInt0  <= (others=>'0');
+            PhsPeakInt0  <= (others=>'0');
+            MagPeakInt1  <= (others=>'0');
+            PhsPeakInt1  <= (others=>'0');
+            AbsPeak      <= (others=>'0');
+            AbsPeak0     <= (others=>'0');
+            AbsPeak1     <= (others=>'0');
             MaxOfPckt    <= (others=>'0');
             MaxCntr      <= (others=>'0');
             MaxCntr0     <= (others=>'0');
@@ -746,8 +763,8 @@ begin
 
                -- Find the peak of this packet regardless of H0 or H1
                if (Index1 < 512) then     -- only search first half of the ifft
-                  if (MaxCntr > MaxPeak) and (MaxCntr > Threshold) then
-                     MaxPeak     <= MaxCntr;
+                  if (MaxCntr > AbsPeak) and (MaxCntr > Threshold) then
+                     AbsPeak     <= MaxCntr;
                      MaxCount    <= START_MAX;
                      CorrPntr    <= PackCntr & to_ufixed(Index1, 8, 0); -- Index1 is 0 to 511, so PackCntr is an extension
                   elsif (MaxCount > 0) then
@@ -757,20 +774,22 @@ begin
                   if (MaxCntr > MaxOfPckt) then
                      MaxOfPckt <= MaxCntr;
                   end if;
-               elsif (Index1 = 515) then     -- setup for next frame
+               elsif (Index1 = 525) then     -- setup for next frame
                   PackCntr    <= resize(PackCntr + 1, PackCntr);
                   MaxOfPckt   <= (others=>'0');
                   if (MaxCount = 0) then     -- if not active search, then start from scratch
-                     MaxPeak <= (others=>'0');  -- setup for next frame
+                     AbsPeak <= (others=>'0');  -- setup for next frame
                   end if;
                end if;
 
                -- Find the peak of H0 only
-               if (Index1 = 515) and (MaxCount = 0) then     -- setup for next frame
-                  MaxPeak0    <= (others=>'0');
+               if (Index1 = 525) then     -- setup for next frame
+                  AbsPeak0    <= (others=>'0');
+                  MagDelay0   <= MagDelay0(27 downto 0) & ufixed(MagPeakInt0); -- only use last 26, but PeakPointer goes to 28
+                  PhsDelay0   <= PhsDelay0(27 downto 0) & ufixed(PhsPeakInt0);
                elsif (Index1 < 512) then     -- only search first half of the ifft
-                  if (MaxCntr0 > MaxPeak0) and (MaxCntr0 > Threshold) then
-                     MaxPeak0     <= MaxCntr0;
+                  if (MaxCntr0 > AbsPeak0) then
+                     AbsPeak0     <= MaxCntr0;
                      PhsCntStrt0  <= '1';
                   else
                      PhsCntStrt0  <= '0';
@@ -778,21 +797,6 @@ begin
                else
                   PhsCntStrt0 <= '0';
                end if;
-
-               -- Find the peak of H1 only
-               if (MaxCount = 1) then     -- setup for next frame
-                  MaxPeak1    <= (others=>'0');
-               elsif (Index1 < 512) then     -- only search first half of the ifft
-                  if (MaxCntr1 > MaxPeak1) and (MaxCntr1 > Threshold) then
-                     MaxPeak1     <= MaxCntr1;
-                     PhsCntStrt1  <= '1';
-                  else
-                     PhsCntStrt1  <= '0';
-                  end if;
-               else
-                  PhsCntStrt1 <= '0';
-               end if;
-            end if;
 
             if (PhsCntStrt0) then
                PhsCount0 <= PHS_LATENCY - 2;  -- it took a clock to set PhsCntStrt and determine MaxCntr from AbsCntrs
@@ -802,6 +806,23 @@ begin
                   PhsPeakInt0 <= Phase0 & "000000";    -- capture phase of current max magnitude
                   MagPeakInt0 <= Mag0 & "00000";
                end if;                       -- once calculated
+            end if;
+
+               -- Find the peak of H1 only
+               if (Index1 = 525) then     -- setup for next frame
+                  AbsPeak1    <= (others=>'0');
+                  MagDelay1   <= MagDelay1(27 downto 0) & ufixed(MagPeakInt1); -- only use last 26, but PeakPointer goes to 28
+                  PhsDelay1   <= PhsDelay1(27 downto 0) & ufixed(PhsPeakInt1);
+               elsif (Index1 < 512) then     -- only search first half of the ifft
+                  if (MaxCntr1 > AbsPeak1) then
+                     AbsPeak1     <= MaxCntr1;
+                     PhsCntStrt1  <= '1';
+                  else
+                     PhsCntStrt1  <= '0';
+                  end if;
+               else
+                  PhsCntStrt1 <= '0';
+               end if;
             end if;
 
             if (PhsCntStrt1) then
@@ -817,10 +838,6 @@ begin
             if (MaxCount = 1) then  -- found the peak, store the results
                StartOut <= '1';
                MaxCount <= 0;
-               MagPeak0  <= MagPeakInt0;
-               PhsPeak0  <= PhsPeakInt0;
-               MagPeak1  <= MagPeakInt1;
-               PhsPeak1  <= PhsPeakInt1;
             end if;
 
             if (StartOut) then     -- StartOut is only one clock wide
@@ -829,7 +846,7 @@ begin
 
 
             if (ValidAbs) then
-               if (Index1 = 513) then     -- give MaxOfPckt a chance to propagate to PilotMag
+               if (Index1 = 523) then     -- give MaxOfPckt a chance to propagate to PilotMag
                   PilotPulse  <= '1';
                elsif (PilotPulse1X) then  -- send wider pulse to threshold logic at lower clock
                   PilotPulse  <= '0';
@@ -867,6 +884,18 @@ begin
                IgnoreInitial     <= 0;
             end if;
             CurrentPeak       <= (others=>'0');
+            CurrentMag0       <= (others=>'0');
+            CurrentMag1       <= (others=>'0');
+            CurrentPhs0       <= (others=>'0');
+            CurrentPhs1       <= (others=>'0');
+            MagPeak0          <= (others=>'0');
+            PhsPeak0          <= (others=>'0');
+            MagPeak1          <= (others=>'0');
+            PhsPeak1          <= (others=>'0');
+            MagPeak0_u        <= (others=>'0');
+            PhsPeak0_u        <= (others=>'0');
+            MagPeak1_u        <= (others=>'0');
+            PhsPeak1_u        <= (others=>'0');
             Peak1             <= (others=>'0');
             Peak2             <= (0=>'1', others=>'0');
          elsif (ce) then
@@ -881,6 +910,14 @@ begin
                   Peak1          <= PilotMag;   -- Assume first is largest
                   Peak2          <= (others=>'0');
                   CurrentPeak    <= (others=>'0');
+                  CurrentMag0    <= (others=>'0');
+                  CurrentMag1    <= (others=>'0');
+                  CurrentPhs0    <= (others=>'0');
+                  CurrentPhs1    <= (others=>'0');
+                  MagPeak0_u     <= MagDelay0(0);
+                  PhsPeak0_u     <= PhsDelay0(0);
+                  MagPeak1_u     <= MagDelay1(0);
+                  PhsPeak1_u     <= PhsDelay1(0);
                end if;
                if (PilotMag > Threshold) then
                   BadPilot <= 0;
@@ -898,7 +935,7 @@ begin
                      PilotFound <= '0';
                   end if;
                end if;
-               MagDelay   <= MagDelay(27 downto 0) & PilotMag; -- only use last 26, but PeakPointer goes to 28
+               MagDelay    <= MagDelay(27 downto 0) & PilotMag; -- only use last 26, but PeakPointer goes to 28
                PreviousMag <= PilotMag;
             end if;
 
@@ -906,9 +943,22 @@ begin
 
             if (CalcThreshold) then          -- Place threshold in center of two highest peaks
                CurrentPeak <= MagDelay(PeakPointer);
+               CurrentMag0 <= MagDelay0(PeakPointer);
+               CurrentMag1 <= MagDelay1(PeakPointer);
+               CurrentPhs0 <= PhsDelay0(PeakPointer);
+               CurrentPhs1 <= PhsDelay1(PeakPointer);
+
                if (PeakPointer <= PACKETS_PER_FRAME) then
                   if (CurrentPeak > Peak1) then
                      Peak1 <= CurrentPeak;   -- Found new peak, store previous in peak2
+                  end if;
+                  if (CurrentMag0 > MagPeak0_u) then
+                     MagPeak0_u <= CurrentMag0;
+                     PhsPeak0_u <= CurrentPhs0;
+                  end if;
+                  if (CurrentMag1 > MagPeak1_u) then
+                     MagPeak1_u <= CurrentMag1;
+                     PhsPeak1_u <= CurrentPhs1;
                   end if;
                   PeakPointer <= PeakPointer + 1;
                elsif (PeakPointer = PACKETS_PER_FRAME + 1) then
@@ -917,6 +967,10 @@ begin
                   else                          -- so just grab a small packet
                      Peak2 <= MagDelay(6);
                   end if;
+                  MagPeak0  <= to_slv(MagPeak0_u);
+                  PhsPeak0  <= to_slv(PhsPeak0_u);
+                  MagPeak1  <= to_slv(MagPeak1_u);
+                  PhsPeak1  <= to_slv(PhsPeak1_u);
                   PeakPointer <= PeakPointer + 1;
                else
                   Threshold <= resize((Peak1 + Peak2) / 2, Threshold);

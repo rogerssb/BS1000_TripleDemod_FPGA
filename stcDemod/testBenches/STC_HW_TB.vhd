@@ -64,23 +64,48 @@ ARCHITECTURE rtl OF STC_HW_TB IS
 
 
   -- Signals
-  signal Clk               : std_logic := '0';
+  signal Clk,
+         RdAddrEq,
+         RdAddrDly         : std_logic := '0';
   signal BitRate,
          Power0In,
          Power1In,
          NoiseIn           : sfixed(0 downto -17);
+  signal FrameCnt          : natural := 0;
 
 BEGIN
 
    process begin
       wait for 5 nS;
-      Clk <= not Clk;
+      if (FrameCnt < 30) then
+         Clk <= not Clk;
+      end if;
    end process;
 
-   Power0In <= to_sfixed(0.0, Power0In);
-   Power1In <= to_sfixed(0.40, Power1In);
-   NoiseIn  <= to_sfixed(0.0, NoiseIn);
-   BitRate  <= to_sfixed(9.33*4*1.04/93.3, BitRate);    -- 41.6 is 10Mb times 4 plus 4% overhead for pilot
+   PowerProc : process(Clk)
+   begin
+      if (rising_edge(Clk)) then
+         RdAddrEq <= '1' when (<< signal Brik1.RdAddr_i : natural range 0 to 13312 >> = 12799) else '0';
+         RdAddrDly <= RdAddrEq;
+         if (<< signal Brik1.Reset  : std_logic >>) then
+            Power0In <= to_sfixed(0.40, Power0In);
+            Power1In <= to_sfixed(0.0, Power1In);
+            NoiseIn  <= to_sfixed(0.0, NoiseIn);
+            BitRate  <= to_sfixed(9.33*4*1.04/93.3, BitRate);    -- 41.6 is 10Mb times 4 plus 4% overhead for pilot
+         elsif (RdAddrEq and not RdAddrDly) then
+            case (FrameCnt) is
+            when 0 =>
+               Power1In <= to_sfixed(0.40, Power1In);
+               Power0In <= (others=>'0');
+            when 1 =>
+               Power0In <= to_sfixed(0.60, Power0In);
+            when others =>
+               Power0In <= resize(Power0In - 0.05, Power0In);
+            end case;
+            FrameCnt <= FrameCnt + 1;
+         end if;
+      end if;
+   end process;
 
    Brik1 : Brik1_Hw_tb
    GENERIC MAP(

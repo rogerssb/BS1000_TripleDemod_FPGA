@@ -246,9 +246,7 @@ architecture rtl of Brik1_Hw_tb is
             Phase1I              : sfixed(0 downto -15);
    SIGNAL   SinCosData0,
             SinCosData1          : std_logic_vector(31 downto 0);
-   SIGNAL   Offset_vio,
-            PilotSyncOffsetIn,
-            PilotSyncOffset_vio  : SLV12; -- := 1535;
+   SIGNAL   Offset_vio           : SLV12;
    SIGNAL   BitRate_vio,
             Frequency_vio,
             FrameClocks_vio,
@@ -287,18 +285,20 @@ begin
          probe_in0  => Errors,
          probe_out0 => Frequency_vio,           -- 00280 (222Hz) start getting errors at end of frame
          probe_out1 => FrameClocks_vio,         -- usually 13312-1=13311. smaller makes packets slide
-         probe_out2 => Phase0_vio,              -- has no effect unless both channels active
-         probe_out3 => Phase1_vio,
+         probe_out2 => open, --Phase0_vio,              -- has no effect unless both channels active
+         probe_out3 => open, --Phase1_vio,
          probe_out4 => DeltaT_vio,
          probe_out5 => Power0_vio,              -- H0 power 128k is max
          probe_out6 => Power1_vio,              -- H1 power. sum of both must be < 128k
          probe_out7 => NoiseGain_vio,
-         probe_out8 => PilotSyncOffset_vio,     -- 802 at 41.6Mb
+         probe_out8 => open,
          probe_out9 => Offset_vio,
          probe_out10 => MiscBits,
          probe_out11 => BitRate_vio,            -- 0e449 is 41.6Mb
          probe_out12 => ClocksPerBit            -- c50 for 9.33/1.04, db7 at 10Mb 41.6
       );
+Phase0_vio <= 18x"10000";
+Phase1_vio <= 18x"30000";
 
    ErrorProc : process (ClkXn)
    begin
@@ -376,7 +376,7 @@ begin
             BitRateAcc <= BitRate_v;
             DataValid <= DataValid(DataValid'left-1 downto 0) & (BitRate_v(0) xor BitRateAcc(0));
             if (DataValid(0)) then
-               if (RdAddr_i < 13300) then -- TODO unsigned(FrameClocks_vio)) then
+               if (RdAddr_i < 13311) then -- TODO unsigned(FrameClocks_vio)) then
                   RdAddr_i <= RdAddr_i + 1;
                else
                   RdAddr_i <= 0;

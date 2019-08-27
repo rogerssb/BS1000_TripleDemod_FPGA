@@ -59,6 +59,7 @@ ENTITY PilotSync IS
       ce,
       DiffEn,
       PilotPulseIn,
+      PilotFound,
       ValidIn        : IN STD_LOGIC;
       CorrPntr       : IN ufixed(15 DOWNTO 0);
       RealIn,
@@ -184,17 +185,17 @@ ARCHITECTURE rtl OF PilotSync IS
             H1R,
             H1I,
             ImagOutDly,
-            RealOutDly,
+            RealOutDly           : FLOAT_1_18;
+   SIGNAL   SyncError,
             CmplxH0r,
             CmplxH0i,
             CmplxH1r,
-            CmplxH1i             : FLOAT_1_18;
-   SIGNAL   SyncError            : sfixed(1 downto -16);
+            CmplxH1i             : sfixed(1 downto -16);
    SIGNAL   SyncSum              : sfixed(10 downto -16);
    SIGNAL   H0AccR,
             H0AccI,
             H1AccR,
-            H1AccI               : sfixed(5 downto -17);
+            H1AccI               : sfixed(7 downto -16);
    SIGNAL   H0SumRA,
             H0SumIA,
             H1SumRA,
@@ -206,7 +207,7 @@ ARCHITECTURE rtl OF PilotSync IS
             CordicR0,
             CordicI0,
             CordicR1,
-            CordicI1             : sfixed(5 downto -12);
+            CordicI1             : sfixed(7 downto -10);
    SIGNAL   Mag0,
             Mag1                 : std_logic_vector(12 downto 0);
    SIGNAL   Phase0,
@@ -238,7 +239,7 @@ BEGIN
       end if;
    end process IlaProcess;
 
-   PilotValid  <= PilotPulseIn; -- TODO '1' when (PilotPulseIn = '1') and (FrmSmplCount > 13300) else '0'; -- pulse should be at 13312
+   PilotValid  <= '1' when (PilotPulseIn = '1') and ((PilotFound = '0') or (FrmSmplCount > 13300) or (Missed = '1') else '0'; -- pulse should be at 13312
 
    PhaseOutA <= to_slv(resize(Phase0A, 0, -17));
    PhaseOutB <= to_slv(resize(Phase0B, 0, -17));
@@ -296,7 +297,6 @@ BEGIN
                   StartOut    <= '1';
                   WaitCount   <= 10;
                   Captured    <= '0';
-                  Missed      <= '0';
                   if (Captured) then
                      RdAddr   <= CorrCntrCapture;
                   end if;
@@ -336,8 +336,9 @@ BEGIN
 
             if (PilotValid) then -- validated pilot with distance between frames
                CorrCntrCapture <= resize(CorrPntr - 512 + Offset_u - 8, CorrCntrCapture);
-               StartNextFrame <= resize(CorrPntr - 512 - 8 + 13312, StartNextFrame); -- offset added in STC
-               Captured <= '1';
+               StartNextFrame  <= resize(CorrPntr - 512 - 8 + 13312, StartNextFrame); -- offset added in STC
+               Captured        <= '1';
+               Missed          <= '0';
             end if;
 
             if (ValidIn) then    -- capture the Packet data feeding the Pilot Detector
@@ -532,8 +533,8 @@ BEGIN
       GENERIC MAP (
          IN_LEFT     => RealOut'left,
          IN_RIGHT    => RealOut'right,
-         OUT_LEFT    => RealOut'left,
-         OUT_BINPT   => RealOut'right
+         OUT_LEFT    => CmplxH0r'left,
+         OUT_BINPT   => CmplxH0r'right
       )
       PORT MAP (
          clk         => clk,
@@ -556,8 +557,8 @@ BEGIN
       GENERIC MAP (
          IN_LEFT     => RealOut'left,
          IN_RIGHT    => RealOut'right,
-         OUT_LEFT    => RealOut'left,
-         OUT_BINPT   => RealOut'right
+         OUT_LEFT    => CmplxH1r'left,
+         OUT_BINPT   => CmplxH1r'right
       )
       PORT MAP (
          clk         => clk,
@@ -684,8 +685,8 @@ BEGIN
       PORT MAP (
          clk   => Clk,
          ena   => CordicStart,
-         x     => to_slv(CordicR0(5 downto -8)),
-         y     => to_slv(CordicI0(5 downto -8)),
+         x     => to_slv(CordicR0(CordicR0'left downto CordicR0'left-13)),
+         y     => to_slv(CordicI0(CordicR0'left downto CordicR0'left-13)),
          m     => Mag0,          -- m[n:2]
          p     => Phase0,
          enOut => ValidCordic
@@ -698,8 +699,8 @@ BEGIN
       PORT MAP (
          clk   => Clk,
          ena   => CordicStart,
-         x     => to_slv(CordicR1(5 downto -8)),
-         y     => to_slv(CordicI1(5 downto -8)),
+         x     => to_slv(CordicR1(CordicR0'left downto CordicR0'left-13)),
+         y     => to_slv(CordicI1(CordicR0'left downto CordicR0'left-13)),
          m     => Mag1,          -- m[n:2]
          p     => Phase1,
          enOut => open

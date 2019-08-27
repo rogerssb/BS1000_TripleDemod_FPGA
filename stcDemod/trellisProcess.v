@@ -211,7 +211,7 @@ module trellisProcess (
             sampleOut <= sampleOut+ 1;
         end
 
-        if ((sampleOut >= SPARE_CODE_WORDS) && (sampleOut <= `CODEWORDS_PER_FRAME + 1)) begin        // skip first trellis output
+        if ((sampleOut >= SPARE_CODE_WORDS) && (sampleOut < `CODEWORDS_PER_FRAME + SPARE_CODE_WORDS)) begin        // skip first trellis output
             outputEn <= tdOutputEn;
         end
         else begin
