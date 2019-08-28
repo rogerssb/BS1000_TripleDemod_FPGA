@@ -222,7 +222,7 @@ architecture rtl of Brik1_Hw_tb is
    SIGNAL   DataValid            : SLV8 := x"00";
    SIGNAL   RdAddr_i,
             RdAddr0_i,
-            RdAddr1_i            : natural range 0 to 13312;
+            RdAddr1_i            : natural range 0 to FRAME_LENGTH_4;
    SIGNAL   RdAddr0_v,
             RdAddr1_v            : integer range 0-2048-128 to 13311+2047+127 := 0;
    SIGNAL   RealRead,
@@ -376,7 +376,7 @@ Phase1_vio <= 18x"30000";
             BitRateAcc <= BitRate_v;
             DataValid <= DataValid(DataValid'left-1 downto 0) & (BitRate_v(0) xor BitRateAcc(0));
             if (DataValid(0)) then
-               if (RdAddr_i < 13311) then -- TODO unsigned(FrameClocks_vio)) then
+               if (RdAddr_i < 13310) then -- TODO unsigned(FrameClocks_vio)) then
                   RdAddr_i <= RdAddr_i + 1;
                else
                   RdAddr_i <= 0;
@@ -384,21 +384,21 @@ Phase1_vio <= 18x"30000";
             end if;
          end if;
          DeltaT_v  := to_integer(signed(DeltaT_vio));    -- add ±4 then check for overflow
-         Offset_v  := 318; --to_integer(signed(Offset_vio));   -- 290 = 511, 287 is 3
+         Offset_v  := 290+26; --to_integer(signed(Offset_vio));   -- 290 = 511, 287 is 3
          RdAddr0_v <= RdAddr_i + Offset_v;
          if (RdAddr0_v > 13311) then
-            RdAddr0_i <= RdAddr0_v - 13312;
+            RdAddr0_i <= RdAddr0_v - FRAME_LENGTH_4;
          elsif (RdAddr0_v < 0) then
-            RdAddr0_i <= RdAddr0_v + 13312;
+            RdAddr0_i <= RdAddr0_v + FRAME_LENGTH_4;
          else
             RdAddr0_i <= RdAddr0_v;
          end if;
 
          RdAddr1_v <= RdAddr_i + Offset_v + DeltaT_v;
          if (RdAddr1_v > 13311) then
-            RdAddr1_i <= RdAddr1_v - 13312;
+            RdAddr1_i <= RdAddr1_v - FRAME_LENGTH_4;
          elsif (RdAddr1_v < 0) then
-            RdAddr1_i <= RdAddr1_v + 13312;
+            RdAddr1_i <= RdAddr1_v + FRAME_LENGTH_4;
          else
             RdAddr1_i <= RdAddr1_v;
          end if;

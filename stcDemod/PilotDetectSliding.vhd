@@ -73,7 +73,6 @@ entity PilotDetectSliding is
          MagPeak1,
          PhsPeak1        : OUT SLV18;
          PilotFound,
-         Max0GtMax1,
          ValidOut,
          StartOut       : OUT std_logic
       );
@@ -299,6 +298,7 @@ architecture rtl of PilotDetectSliding is
             FftTLastOut,
             PilotPulse,
             PilotPulse1x,
+            PilotFoundPend,
             PhsCntStrt0,
             PhsCntStrt1,
             ValidCordic,
@@ -871,6 +871,7 @@ begin
             PilotMag          <= (others=>'0');
             PreviousMag       <= (others=>'0');
             PilotFound        <= '0';
+            PilotFoundPend    <= '0';
             PilotPulse1x      <= '0';
             ValidAbsDly       <= '0';
             CalcThreshold     <= '0';
@@ -924,7 +925,7 @@ begin
                   if (GoodPilot < 2) then
                      GoodPilot <= GoodPilot + 1;   -- 3 good frames in a row = found
                   else
-                     PilotFound <= '1';
+                     PilotFoundPend <= '1';        -- set PilotFound on next packet to allow StartOut to propagate when MaxCount is still counting
                      GoodPilot <= 3;
                   end if;
                else
@@ -932,9 +933,10 @@ begin
                      BadPilot <= BadPilot + 1;
                   else
                      GoodPilot <= 0;
-                     PilotFound <= '0';
+                     PilotFoundPend <= '0';
                   end if;
                end if;
+               PilotFound  <= PilotFoundPend;
                MagDelay    <= MagDelay(27 downto 0) & PilotMag; -- only use last 26, but PeakPointer goes to 28
                PreviousMag <= PilotMag;
             end if;

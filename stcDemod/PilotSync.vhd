@@ -41,6 +41,10 @@ Dependencies:
 
 ----------------------------------------------------------------------------
                                HISTORY
+
+                               CLEANUP
+ Change MissedPilot to constant after determining value, rempve VIO signals
+ Determine Offset input value and set to constant
 ----------------------------------------------------------------------------
 12-16-16 Initial release FZ
 -------------------------------------------------------------
@@ -64,14 +68,14 @@ ENTITY PilotSync IS
       CorrPntr       : IN ufixed(15 DOWNTO 0);
       RealIn,
       ImagIn         : IN  Float_1_18;
-      Offset         : IN  SLV4;
+      Offset         : IN  SLV4;       -- TODO, remove
+      MissedPilot    : IN  SLV18;      -- TODO, remove
       PhaseOutA,
       PhaseOutB      : OUT SLV18;
       StartNextFrame : OUT ufixed(15 DOWNTO 0);
       PhaseDiff,
       RealOut,
       ImagOut        : OUT Float_1_18;
-      PhaseDiffEn,
       StartOut,
       ValidOut,
       PilotLocked    : OUT STD_LOGIC
@@ -145,6 +149,8 @@ ARCHITECTURE rtl OF PilotSync IS
    END COMPONENT RAM_2Reads_1Write;
 
    CONSTANT ADDR_BITS      : integer := CorrPntr'length;
+   CONSTANT FRAME_LENGTH_4 : natural := 13312;
+   CONSTANT MISSED_PILOT   : natural := 128;
 
    type     ModeType is (Idle, SET_START, CLR_START, READ_LOOP);
 
@@ -219,27 +225,30 @@ ARCHITECTURE rtl OF PilotSync IS
    SIGNAL   CmplxCount,
             PckSmplCount         : integer range 0 to 511;
 
-   signal   SyncSumIla           : sfixed(10 downto 0);
-   signal   ReadR_Ila, ReadI_Ila : sfixed(17 downto 0);
+   signal   SyncSumIla           : std_logic_vector(10 downto 0);
+   signal   ReadR_Ila,
+            ReadI_Ila,
+            PhaseDiff_ILA        : SLV18;
    signal   Offset_u             : ufixed(3 downto 0);
 
    attribute mark_debug : string;
-   attribute mark_debug of FrmSmplCount, StartOut, SyncSumIla, ReadR_Ila, ReadI_Ila, CorrCntrCapture,
-               Phase0A, Phase0B, PhaseDiff : signal is "true";
+   attribute mark_debug of FrmSmplCount, StartOut, SyncSumIla, ReadR_Ila, ReadI_Ila, PilotValid, PilotPulseIn,
+               PhaseOutA, PhaseOutB, PhaseDiff_ILA, Missed, RdAddr : signal is "true";
 
 BEGIN
 
    IlaProcess : process(clk)
    begin
       if (rising_edge(clk)) then
-         SyncSumIla   <= SyncSum(10 downto 0);
-         ReadR_Ila    <= ReadR;
-         ReadI_Ila    <= ReadI;
-         Offset_u     <= ufixed(Offset);
+         SyncSumIla     <= to_slv(SyncSum(10 downto 0));
+         ReadR_Ila      <= to_slv(ReadR);
+         ReadI_Ila      <= to_slv(ReadI);
+         PhaseDiff_ILA  <= to_slv(PhaseDiff);
+         Offset_u       <= ufixed(Offset);
       end if;
    end process IlaProcess;
 
-   PilotValid  <= '1' when (PilotPulseIn = '1') and ((PilotFound = '0') or (FrmSmplCount > 13300) or (Missed = '1') else '0'; -- pulse should be at 13312
+   PilotValid  <= '1' when (PilotPulseIn = '1') and ((PilotFound = '0') or (FrmSmplCount > 12750) or (Missed = '1')) else '0'; -- pulse should be at 13312
 
    PhaseOutA <= to_slv(resize(Phase0A, 0, -17));
    PhaseOutB <= to_slv(resize(Phase0B, 0, -17));
@@ -257,10 +266,10 @@ BEGIN
             ReadCount      <= (others=>'0');
             PilotCount     <= (others=>'0');
             PhaseDiff      <= (others=>'0');
-            PhaseDiffEn    <= '0';
             FrmSmplCount    <= 0;
             PckSmplCount   <= 0;
             PacketCount    <= 0;
+            Missed         <= '0';
             Captured       <= '0';
             StartOut       <= '0';
             ValidOut       <= '0';
@@ -297,6 +306,7 @@ BEGIN
                   StartOut    <= '1';
                   WaitCount   <= 10;
                   Captured    <= '0';
+                  Missed      <= '0';
                   if (Captured) then
                      RdAddr   <= CorrCntrCapture;
                   end if;
@@ -336,24 +346,20 @@ BEGIN
 
             if (PilotValid) then -- validated pilot with distance between frames
                CorrCntrCapture <= resize(CorrPntr - 512 + Offset_u - 8, CorrCntrCapture);
-               StartNextFrame  <= resize(CorrPntr - 512 - 8 + 13312, StartNextFrame); -- offset added in STC
+               StartNextFrame  <= resize(CorrPntr - 512 - 8 + FRAME_LENGTH_4, StartNextFrame); -- offset added in STC
                Captured        <= '1';
-               Missed          <= '0';
-            end if;
-
-            if (ValidIn) then    -- capture the Packet data feeding the Pilot Detector
-               WrAddr <= resize(WrAddr + 1, WrAddr);
-            end if;
-
-            if (PilotValid) then    -- if we don't get a PilotValid for a frame, the RdAddr should continue but need a new Start sequence
                FrmSmplCount <= 0;
-            elsif (FrmSmplCount >= 13336 +512) then    -- maintain sync over missed pilots, should have gone off 12 samples ago
-               FrmSmplCount <= 25+512;
+            -- if we don't get a PilotValid for a frame, the RdAddr should continue but need a new Start sequence
+            elsif (FrmSmplCount >= FRAME_LENGTH_4 + to_integer(unsigned(MissedPilot)) + 512) then    -- maintain sync over missed pilots, should have gone off 12 samples and one packet ago
+               FrmSmplCount <= FrmSmplCount - FRAME_LENGTH_4 + 1;
                Missed <= '1';
             elsif (ValidIn) then
                FrmSmplCount <= FrmSmplCount + 1;
             end if;
 
+            if (ValidIn) then    -- capture the Packet data feeding the Pilot Detector
+               WrAddr <= resize(WrAddr + 1, WrAddr);
+            end if;
 
             if (StartOut) then
                PilotPacket <= '1';

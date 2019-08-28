@@ -43,8 +43,7 @@ use UNISIM.vcomponents.all;
 
 ENTITY STC IS
    GENERIC (
-         SIM_MODE    : boolean := false;
-         BuildAll    : boolean := true
+         SIM_MODE    : boolean := false
       );
    PORT(
       ResampleR,
@@ -121,6 +120,7 @@ ARCHITECTURE rtl OF STC IS
          Offset         : IN  SLV4;
          RealIn,
          ImagIn         : IN  Float_1_18;
+      MissedPilot    : IN  SLV18;
          PhaseOutA,
          PhaseOutB      : OUT SLV18;
          StartNextFrame : OUT ufixed(15 DOWNTO 0);
@@ -332,10 +332,8 @@ ARCHITECTURE rtl OF STC IS
             PhsLastPeak,
             PhaseDiffGain1Slv,
             PhaseDiffGain2Slv,
-            PhaseDiffOffsetSlv,
             PhaseDiffGain1Slv1,
             PhaseDiffGain2Slv1,
-            PhaseDiffOffsetSlv1,
             Phase0A,
             Phase0B,
             PhaseDiffSlv,
@@ -372,6 +370,7 @@ ARCHITECTURE rtl OF STC IS
    signal   sample0r,
             sample0i,
             MiscBits,
+            MissedPilot,
             InRBrik2Ila,
             InIBrik2Ila       : SLV18;
    signal   StartIla,
@@ -508,10 +507,8 @@ BEGIN
          PilotValidOutDly  <= PilotValidOut;
          PhaseDiffGain1Slv1  <= PhaseDiffGain1Slv; -- the slv to slv transfer are to make the ILA unconfused
          PhaseDiffGain2Slv1  <= PhaseDiffGain2Slv;
-         PhaseDiffOffsetSlv1 <= PhaseDiffOffsetSlv;
          PhaseDiff1Gain    <= to_sfixed(PhaseDiffGain1Slv1, PhaseDiff1Gain);
          PhaseDiff2Gain    <= to_sfixed(PhaseDiffGain2Slv1, PhaseDiff2Gain);
-         PhaseDiff2Offset  <= to_sfixed(PhaseDiffOffsetSlv1, PhaseDiff2Offset);
          StartOffset       <= x"000" & MiscBits(15 downto 12);
          StartFrameOffset  <= resize(StartNextFrame + ufixed(StartOffset), StartFrameOffset);
          if (Reset2x) then
@@ -526,7 +523,7 @@ BEGIN
          else
             PhaseDiff <= std_logic_vector(resize(PhaseDiff1xGain + PhaseDiff2xGain, 0, -17));
             PhaseDiff1xGain <= resize(PhaseDiff1 * PhaseDiff1Gain, PhaseDiff1xGain);
-            PhaseDiff2xGain <= resize((PhaseDiff2 - PhaseDiff2Offset) * PhaseDiff2Gain, PhaseDiff2xGain);
+            PhaseDiff2xGain <= resize(PhaseDiff2 * PhaseDiff2Gain, PhaseDiff2xGain);
             PhaseDiffEnDly  <= PhaseDiffEnDly(6 downto 0) & '0';
             PhaseDiffEn     <= PhaseDiffEnDly(3) or PhaseDiffEnDly(4);  -- needs two clocks wide for 93Mhz domain
          end if;
@@ -551,6 +548,7 @@ BEGIN
          ValidIn        => PilotValidOut,
          PilotFound     => PilotFound,
          CorrPntr       => CorrPntr,
+         MissedPilot    => MissedPilot,
          StartNextFrame => StartNextFrame,
          Offset         => OffsetPS,
          RealIn         => PilotRealOut,
@@ -570,7 +568,7 @@ BEGIN
       PORT MAP (
          clk         => clk2x,
          probe_out0  => PhaseDiffGain2Slv,
-         probe_out1  => PhaseDiffOffsetSlv,
+         probe_out1  => MissedPilot,
          probe_out2  => PhaseDiffGain1Slv,
          probe_out3  => MiscBits,
          probe_out4  => TrellisOffsetSlv,
