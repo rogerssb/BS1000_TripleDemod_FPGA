@@ -223,24 +223,6 @@ architecture rtl of PilotDetectSliding is
    END COMPONENT DelayLineSlv;
 
 -------------------------------------------------------------------------------
---                       CONSTANT DEFINITIONS
--------------------------------------------------------------------------------
-   CONSTANT FFT_TOP_R      : natural := 26; -- Pick useful FFT bits
-   CONSTANT FFT_BOT_R      : natural := FFT_TOP_R - 17;
-   CONSTANT FFT_TOP_I      : natural := FFT_TOP_R + 32;
-   CONSTANT FFT_BOT_I      : natural := FFT_TOP_I - 17;
-   CONSTANT IFFT_TOP_R     : natural := 22; -- Pick useful iFFT bits, was 19 but overflowed at gain ~= 60000
-   CONSTANT IFFT_BOT_R     : natural := IFFT_TOP_R - 17;
-   CONSTANT IFFT_TOP_I     : natural := IFFT_TOP_R + 32;
-   CONSTANT IFFT_BOT_I     : natural := IFFT_TOP_I - 17;
-   CONSTANT FFT_CODE       : SLV8 := x"01";
-   CONSTANT IFFT_CODE      : SLV8 := x"00";
-   CONSTANT FFT_IFFT_DELAY : natural := 4334;
-   CONSTANT FFT_ALL_ONES   : std_logic_vector(31 downto FFT_TOP_R) := (others=>'1');
-   CONSTANT FFT_ALL_ZEROS  : std_logic_vector(31 downto FFT_TOP_R) := (others=>'0');
-   CONSTANT IFFT_ALL_ONES  : std_logic_vector(31 downto IFFT_TOP_R) := (others=>'1');
-   CONSTANT IFFT_ALL_ZEROS : std_logic_vector(31 downto IFFT_TOP_R) := (others=>'0');
-   CONSTANT START_MAX      : natural := 27;
 
    function count_ones(in_vector : std_logic_vector) return natural is
       variable result : natural;
@@ -266,8 +248,27 @@ architecture rtl of PilotDetectSliding is
       return result;
    end function count_zeros;
 
+--                       CONSTANT DEFINITIONS
+-------------------------------------------------------------------------------
+   CONSTANT FFT_TOP_R      : natural := 26; -- Pick useful FFT bits
+   CONSTANT FFT_BOT_R      : natural := FFT_TOP_R - 17;
+   CONSTANT FFT_TOP_I      : natural := FFT_TOP_R + 32;
+   CONSTANT FFT_BOT_I      : natural := FFT_TOP_I - 17;
+   CONSTANT IFFT_TOP_R     : natural := 22; -- Pick useful iFFT bits, was 19 but overflowed at gain ~= 60000
+   CONSTANT IFFT_BOT_R     : natural := IFFT_TOP_R - 17;
+   CONSTANT IFFT_TOP_I     : natural := IFFT_TOP_R + 32;
+   CONSTANT IFFT_BOT_I     : natural := IFFT_TOP_I - 17;
+   CONSTANT FFT_CODE       : SLV8 := x"01";
+   CONSTANT IFFT_CODE      : SLV8 := x"00";
+   CONSTANT FFT_IFFT_DELAY : natural := 4334;
+   CONSTANT FFT_ALL_ONES   : std_logic_vector(31 downto FFT_TOP_R) := (others=>'1');
+   CONSTANT FFT_ALL_ZEROS  : std_logic_vector(31 downto FFT_TOP_R) := (others=>'0');
+   CONSTANT IFFT_ALL_ONES  : std_logic_vector(31 downto IFFT_TOP_R) := (others=>'1');
+   CONSTANT IFFT_ALL_ZEROS : std_logic_vector(31 downto IFFT_TOP_R) := (others=>'0');
    CONSTANT PACKETS_PER_FRAME : positive  := 26;
-   CONSTANT PHS_LATENCY       : natural := 15;
+   CONSTANT PHS_LATENCY    : natural := 15;
+   CONSTANT START_MAX      : natural := 27;
+   CONSTANT SEARCH_RANGE   : natural := 3;   -- ±3 is range of m_ndx
 
    SIGNAL   AbsZero           : ufixed(6 downto -11);
    type     MAG_ARRAY  is array (natural range <>) of ufixed(AbsZero'range);
@@ -364,6 +365,12 @@ architecture rtl of PilotDetectSliding is
             MagPeakInt1,
             PhsPeakInt1       : SLV18;
    SIGNAL   Count,
+            PeakIndex,
+            MaxIndex,
+            StartIndex1,
+            StopIndex1,
+            StartIndex2,
+            StopIndex2,
             Index0,
             Index1            : natural range 0 to 1023;
    SIGNAL   PackCntr          : ufixed(6 downto 0);
@@ -384,7 +391,7 @@ architecture rtl of PilotDetectSliding is
             PhsCount0,
             PhsCount1,
             MaxCount          : natural range 0 to 28;
-   SIGNAL   SampleCount       : natural range 0 to 163830;
+   SIGNAL   SampleCount       : natural range 0 to 16383;
 
 -- ILAs
     SIGNAL  PilotMag_Ila,
@@ -398,6 +405,7 @@ architecture rtl of PilotDetectSliding is
    attribute mark_debug : string;
    attribute mark_debug of PilotMag_Ila, PilotFound, Peak1_Ila, Peak2_Ila,
              CorrPntr, AbsCntr0_Ila, AbsCntr1_Ila,
+             PeakIndex, MaxIndex,
              MagPeak0, PhsPeak0, MagPeak1, PhsPeak1 : signal is "true";
 begin
 
@@ -730,6 +738,10 @@ begin
          if (Reset2X) then
             Index0       <= 0;
             Index1       <= 0;
+            StartIndex1  <= 0;
+            StopIndex1   <= 511;
+            StartIndex2  <= 0;
+            StopIndex2   <= 511;
             MaxCount     <= 0;
             PhsCount0    <= 0;
             PhsCount1    <= 0;
@@ -764,21 +776,53 @@ begin
                if (Index1 < 512) then     -- only search first half of the ifft
                   if (MaxCntr > AbsPeak) and (MaxCntr > Threshold) then
                      AbsPeak     <= MaxCntr;
-                     MaxCount    <= START_MAX;
-                     CorrPntr    <= PackCntr & to_ufixed(Index1, 8, 0); -- Index1 is 0 to 511, so PackCntr is an extension
+                     if (((Index1 >= StartIndex1) and (Index1 <= StopIndex1)) or ((Index1 >= StartIndex2) and (Index1 <= StopIndex2)) or (PilotFound = '0')) then
+                        MaxCount <= START_MAX;
+                        ThisPeak <= MaxCntr;
+                        CorrPntr <= PackCntr & to_ufixed(Index1, 8, 0); -- Index1 is 0 to 511, so PackCntr is an extension
+                     end if;
                   elsif (MaxCount > 0) then
                      MaxCount    <= MaxCount - 1;
                   end if;
 
                   if (MaxCntr > MaxOfPckt) then
                      MaxOfPckt <= MaxCntr;
+                     MaxIndex  <= Index1;
+                  end if;
+               elsif (Index1 = 524) and (AbsPeak > Threshold) then     -- check for MaxIndex catching an odd peak in wrong spot
+                  if (not PilotFound) then
+                     PeakIndex <= MaxIndex;
+                  elsif (MaxIndex >= 509) and (PeakIndex < 3) then    -- check for wrapping, PeakIndex is value from last frame
+                     PeakIndex <= MaxIndex;
+                  elsif (MaxIndex <= 3) and (PeakIndex > 509) then
+                     PeakIndex <= MaxIndex;
+                  elsif (MaxIndex < PeakIndex) then -- only allow peak to slide ±1
+                     PeakIndex <= PeakIndex - 1;
+                  elsif (MaxIndex > PeakIndex) then
+                     PeakIndex <= PeakIndex + 1;
+                  else
+                     PeakIndex <= MaxIndex;
                   end if;
                elsif (Index1 = 525) then     -- setup for next frame
+                  -- if PeakIndex of last frame is near the edge, check from 0 to SEARCH_RANGE, then 511-SEARCH_RANGE to 511
+                  if (PeakIndex < SEARCH_RANGE) then  -- check for start of sweep and carry over from previous packet
+                     StartIndex1 <= 0;
+                     StopIndex1  <= SEARCH_RANGE;
+                     StartIndex2 <= 511 - SEARCH_RANGE + PeakIndex;
+                     StopIndex2  <= 511;
+                  elsif (PeakIndex > (511 - SEARCH_RANGE)) then   -- check for end of sweep with rollover to next packet
+                     StartIndex1 <= 0;
+                     StopIndex1  <= PeakIndex + SEARCH_RANGE - 512;
+                     StartIndex2 <= PeakIndex - SEARCH_RANGE;
+                     StopIndex2  <= 511;
+                  else
+                     StartIndex1 <= PeakIndex - SEARCH_RANGE;
+                     StopIndex1  <= PeakIndex + SEARCH_RANGE;
+                     StartIndex2 <= PeakIndex - SEARCH_RANGE;
+                     StopIndex2  <= PeakIndex + SEARCH_RANGE;
+                  end if;
                   PackCntr    <= resize(PackCntr + 1, PackCntr);
                   MaxOfPckt   <= (others=>'0');
-                  if (MaxCount = 0) then     -- if not active search, then start from scratch
-                     AbsPeak <= (others=>'0');  -- setup for next frame
-                  end if;
                end if;
 
                -- Find the peak of H0 only
@@ -797,16 +841,6 @@ begin
                   PhsCntStrt0 <= '0';
                end if;
 
-            if (PhsCntStrt0) then
-               PhsCount0 <= PHS_LATENCY - 2;  -- it took a clock to set PhsCntStrt and determine MaxCntr from AbsCntrs
-            elsif (PhsCount0 > 0) then     -- cordic is not ValidIn dependent, just straight latency
-               PhsCount0 <= PhsCount0 - 1;
-               if (PhsCount0 = 1) then
-                  PhsPeakInt0 <= Phase0 & "000000";    -- capture phase of current max magnitude
-                  MagPeakInt0 <= Mag0 & "00000";
-               end if;                       -- once calculated
-            end if;
-
                -- Find the peak of H1 only
                if (Index1 = 525) then     -- setup for next frame
                   AbsPeak1    <= (others=>'0');
@@ -824,6 +858,16 @@ begin
                end if;
             end if;
 
+            if (PhsCntStrt0) then
+               PhsCount0 <= PHS_LATENCY - 2;  -- it took a clock to set PhsCntStrt and determine MaxCntr from AbsCntrs
+            elsif (PhsCount0 > 0) then     -- cordic is not ValidIn dependent, just straight latency
+               PhsCount0 <= PhsCount0 - 1;
+               if (PhsCount0 = 1) then
+                  PhsPeakInt0 <= Phase0 & "000000";    -- capture phase of current max magnitude
+                  MagPeakInt0 <= Mag0 & "00000";
+               end if;                       -- once calculated
+            end if;
+
             if (PhsCntStrt1) then
                PhsCount1 <= PHS_LATENCY - 2;  -- it took a clock to set PhsCntStrt and determine MaxCntr from AbsCntrs
             elsif (PhsCount1 > 0) then     -- cordic is not ValidIn dependent, just straight latency
@@ -835,6 +879,7 @@ begin
             end if;
 
             if (MaxCount = 1) then  -- found the peak, store the results
+               AbsPeak <= (others=>'0');  -- setup for next frame
                StartOut <= '1';
                MaxCount <= 0;
             end if;
