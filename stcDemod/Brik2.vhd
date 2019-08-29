@@ -251,7 +251,7 @@ ARCHITECTURE rtl OF Brik2 IS
    SIGNAL   ValidDF_ILA       : std_logic;
 
    attribute mark_debug : string;
-   attribute mark_debug of DF_R_Ila, DF_I_Ila, ValidDF_ILA, TimeEstDone, ChanEstDone,
+   attribute mark_debug of /*DF_R_Ila, DF_I_Ila, ValidDF_ILA,*/ TimeEstDone, ChanEstDone,
                   TauEst0Ila, TauEst1Ila, StartTime,
                   H0EstR_Ila, H0EstI_Ila, H1EstR_Ila, H1EstI_Ila : signal is "true";
 

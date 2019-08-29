@@ -43,7 +43,6 @@ Dependencies:
                                HISTORY
 
                                CLEANUP
- Change MissedPilot to constant after determining value, rempve VIO signals
  Determine Offset input value and set to constant
 ----------------------------------------------------------------------------
 12-16-16 Initial release FZ
@@ -69,7 +68,6 @@ ENTITY PilotSync IS
       RealIn,
       ImagIn         : IN  Float_1_18;
       Offset         : IN  SLV4;       -- TODO, remove
-      MissedPilot    : IN  SLV18;      -- TODO, remove
       PhaseOutA,
       PhaseOutB      : OUT SLV18;
       StartNextFrame : OUT ufixed(15 DOWNTO 0);
@@ -149,8 +147,7 @@ ARCHITECTURE rtl OF PilotSync IS
    END COMPONENT RAM_2Reads_1Write;
 
    CONSTANT ADDR_BITS      : integer := CorrPntr'length;
-   CONSTANT FRAME_LENGTH_4 : natural := 13312;
-   CONSTANT MISSED_PILOT   : natural := 128;
+   CONSTANT MISSED_PILOT   : natural := 12;
 
    type     ModeType is (Idle, SET_START, CLR_START, READ_LOOP);
 
@@ -233,7 +230,7 @@ ARCHITECTURE rtl OF PilotSync IS
 
    attribute mark_debug : string;
    attribute mark_debug of FrmSmplCount, StartOut, SyncSumIla, ReadR_Ila, ReadI_Ila, PilotValid, PilotPulseIn,
-               PhaseOutA, PhaseOutB, PhaseDiff_ILA, Missed, RdAddr : signal is "true";
+              /* PhaseOutA, PhaseOutB, PhaseDiff_ILA, */Missed, RdAddr : signal is "true";
 
 BEGIN
 
@@ -350,7 +347,7 @@ BEGIN
                Captured        <= '1';
                FrmSmplCount <= 0;
             -- if we don't get a PilotValid for a frame, the RdAddr should continue but need a new Start sequence
-            elsif (FrmSmplCount >= FRAME_LENGTH_4 + to_integer(unsigned(MissedPilot)) + 512) then    -- maintain sync over missed pilots, should have gone off 12 samples and one packet ago
+            elsif (FrmSmplCount >= FRAME_LENGTH_4 + MISSED_PILOT + 512) then    -- maintain sync over missed pilots, should have gone off 12 samples and one packet ago
                FrmSmplCount <= FrmSmplCount - FRAME_LENGTH_4 + 1;
                Missed <= '1';
             elsif (ValidIn) then

@@ -30,7 +30,7 @@ module frameAlignment
 
     reg             [14:0]  wrAddr, rdAddr, sofAddress;
     wire   signed   [15:0]  rdAddr0, rdAddr1;
-    reg                     estimatesReady, sofDetected, frameActive;
+    reg                     estimatesReady, sofDetected;
     always @(posedge clk) begin
         if (reset) begin
             myStartOfTrellis <= 0;
@@ -52,7 +52,7 @@ module frameAlignment
             else if (myStartOfTrellis) begin
                 sofDetected <= 0;
             end
-            myStartOfTrellis <= (estimatesReady & sofDetected & ~frameActive & ~myStartOfTrellis); // wait till current frame is done. Check own output for one clock cycle
+            myStartOfTrellis <= (estimatesReady & sofDetected & ~myStartOfTrellis); // wait till current frame is done. Check own output for one clock cycle
         end
     end
 
@@ -83,7 +83,7 @@ module frameAlignment
         end
     end
 
-    assign  rdAddr0 = {1'b0, rdAddr} + {{12{m_ndx0[3]}}, m_ndx0};
+    assign  rdAddr0 = {1'b0, rdAddr} + {{12{m_ndx0[3]}}, m_ndx0};   // sign extend to add signed offset
     assign  rdAddr1 = {1'b0, rdAddr} + {{12{m_ndx1[3]}}, m_ndx1};
 
     RAM_2Reads_1WriteVerWrap #(
@@ -96,7 +96,7 @@ module frameAlignment
         .reset(reset),
         .WrEn(fifoWrEn),
         .WrAddr(wrAddr),
-        .RdAddrA(rdAddr0[14:0]),
+        .RdAddrA(rdAddr0[14:0]),        // only use the unsigned part of rdAddr
         .RdAddrB(rdAddr1[14:0]),
         .WrData({dinReal, dinImag}),
         .RdOutA(fifoRdData0),
@@ -124,12 +124,10 @@ module frameAlignment
             outputCount     <= 0;
             interpolate     <= 0;
             trellisInitCnt  <= 130; // inactive state
-            frameActive     <= 0;
         end
         else if (clkEn) begin
             if (myStartOfTrellis) begin
                 trellisInitCnt <= 128;
-                frameActive    <= 1;
             end
             else if ((trellisInitCnt < 130) && (trellisInitCnt > 0)) begin
                 trellisInitCnt <= trellisInitCnt - 1;

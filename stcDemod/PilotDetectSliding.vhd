@@ -397,8 +397,7 @@ architecture rtl of PilotDetectSliding is
 
    attribute mark_debug : string;
    attribute mark_debug of PilotMag_Ila, PilotFound, Peak1_Ila, Peak2_Ila,
-             CorrPntr, AbsCntr0_Ila, AbsCntr1_Ila, MagPeakInt0, PhsPeakInt0,
-             MagPeakInt1, PhsPeakInt1, CurrentMag0, CurrentMag1,
+             CorrPntr, AbsCntr0_Ila, AbsCntr1_Ila,
              MagPeak0, PhsPeak0, MagPeak1, PhsPeak1 : signal is "true";
 begin
 

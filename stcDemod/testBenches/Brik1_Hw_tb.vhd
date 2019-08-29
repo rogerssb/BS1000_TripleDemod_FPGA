@@ -376,7 +376,7 @@ Phase1_vio <= 18x"30000";
             BitRateAcc <= BitRate_v;
             DataValid <= DataValid(DataValid'left-1 downto 0) & (BitRate_v(0) xor BitRateAcc(0));
             if (DataValid(0)) then
-               if (RdAddr_i < 13310) then -- TODO unsigned(FrameClocks_vio)) then
+               if (RdAddr_i < 13312) then -- TODO unsigned(FrameClocks_vio)) then
                   RdAddr_i <= RdAddr_i + 1;
                else
                   RdAddr_i <= 0;
@@ -384,7 +384,7 @@ Phase1_vio <= 18x"30000";
             end if;
          end if;
          DeltaT_v  := to_integer(signed(DeltaT_vio));    -- add ±4 then check for overflow
-         Offset_v  := 290+26; --to_integer(signed(Offset_vio));   -- 290 = 511, 287 is 3
+         Offset_v  := 290+28; --to_integer(signed(Offset_vio));   -- 290 = 511, 287 is 3
          RdAddr0_v <= RdAddr_i + Offset_v;
          if (RdAddr0_v > 13311) then
             RdAddr0_i <= RdAddr0_v - FRAME_LENGTH_4;
