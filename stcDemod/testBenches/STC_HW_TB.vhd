@@ -72,6 +72,8 @@ ARCHITECTURE rtl OF STC_HW_TB IS
          Power1In,
          NoiseIn           : sfixed(0 downto -17);
   signal FrameCnt          : natural := 0;
+   signal OffsetPS         : SLV4;
+   signal   OffsetPS_u     : unsigned(3 downto 0) := x"4";
 
 BEGIN
 
@@ -82,17 +84,19 @@ BEGIN
       end if;
    end process;
 
+
    PowerProc : process(Clk)
    begin
       if (rising_edge(Clk)) then
          RdAddrEq <= '1' when (<< signal Brik1.RdAddr_i : natural range 0 to FRAME_LENGTH_4 >> = 12799) else '0';
          RdAddrDly <= RdAddrEq;
          if (<< signal Brik1.Reset  : std_logic >>) then
-            Power0In <= to_sfixed(0.40, Power0In);
-            Power1In <= to_sfixed(0.0, Power1In);
+            Power0In <= to_sfixed(0.240, Power0In);
+            Power1In <= to_sfixed(0.240, Power1In);
             NoiseIn  <= to_sfixed(0.0, NoiseIn);
             BitRate  <= to_sfixed(9.33*4*1.04/93.3, BitRate);    -- 41.6 is 10Mb times 4 plus 4% overhead for pilot
          elsif (RdAddrEq and not RdAddrDly) then
+ /* Power Test
             case (FrameCnt) is
             when 0 =>
                Power1In <= to_sfixed(0.40, Power1In);
@@ -102,10 +106,14 @@ BEGIN
             when others =>
                Power0In <= resize(Power0In - 0.05, Power0In);
             end case;
+*/
+            OffsetPS_u <= OffsetPS_u + 1;
             FrameCnt <= FrameCnt + 1;
          end if;
       end if;
    end process;
+
+   OffsetPS <= std_logic_Vector(OffsetPS_u);
 
    Brik1 : Brik1_Hw_tb
    GENERIC MAP(
@@ -120,6 +128,8 @@ BEGIN
       BS_LED   => open,
       DemodLED => open
    );
+
+   << signal Brik1.UUTu.OffsetPS : SLV4 >> <= OffsetPS;
 
 END rtl;
 

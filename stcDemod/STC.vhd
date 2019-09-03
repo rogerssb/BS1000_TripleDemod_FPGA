@@ -292,7 +292,7 @@ ARCHITECTURE rtl OF STC IS
             lastSampleReset,
             EstimatesDone     : std_logic;
    SIGNAL   TrellisBits,
-            OffsetPS          : SLV4;
+            OffsetPS          : SLV4 := x"A";
    SIGNAL   PhaseDiffEnDly    : SLV8;
    SIGNAL   StartOffset       : SLV16;
    SIGNAL   RealOutPS,
@@ -369,7 +369,8 @@ ARCHITECTURE rtl OF STC IS
             m_ndx0Slv,
             m_ndx1Slv         : SLV4;
    SIGNAL   TrellisOffset     : signed(3 downto 0);
-   SIGNAL   DataAddr          : integer range 0 to 800;
+   SIGNAL   DataAddr          : ufixed(9 downto 0);
+   SIGNAL   DataAddr_i        : natural range 0 to 1023;
    SIGNAL   Bert,
             BitErrors         : natural range 0 to 3200;
    signal   sample0r,
@@ -409,6 +410,7 @@ BEGIN
    end process;
 
 -- synthesis translate_off
+   DataAddr_i <= to_integer(DataAddr);
    ReadData : RAM_2Reads_1Write
       GENERIC MAP(
          FILENAME    => "C:\Semco\STCinfo\RealTimeC\SpaceTimeCodeInC\SpaceTimeCodeInC\Iseed12345678HexData.slv",
@@ -426,7 +428,7 @@ BEGIN
          WrEn        => '0',
          WrAddr      => 0,
          RdAddrA     => 0,
-         RdAddrB     => DataAddr,
+         RdAddrB     => DataAddr_i,
          WrData      => (others=>'0'),
          RdOutA      => open,
          RdOutB      => ExpectedData
@@ -439,12 +441,12 @@ BEGIN
    begin
       if (rising_edge(Clk2x)) then
          CaptureErrors  := ExpectedData xor TrellisBits;
-         if (lastSampleReset) then
-            DataAddr  <= 0;
+         if (lastSampleReset or Reset2x) then
+            DataAddr  <= (others=>'0');
             Bert      <= BitErrors;
             BitErrors <= 0;
          elsif (TrellisOutEn) then
-            DataAddr <= DataAddr + 1;
+            DataAddr <= resize(DataAddr + 1, DataAddr);
             BitErrors <= BitErrors + count_bits(CaptureErrors);
          end if;
       end if;
@@ -579,7 +581,7 @@ BEGIN
          probe_out2  => PhaseDiffGain1Slv,
          probe_out3  => MiscBits,
          probe_out4  => TrellisOffsetSlv,
-         probe_out5  => OffsetPS
+         probe_out5  => open --OffsetPS
    );
    TrellisOffset <= signed(TrellisOffsetSlv);
 
@@ -626,8 +628,8 @@ BEGIN
          Mu1            => Ch1Mu
       );
 
-   m_ndx0Slv <= std_logic_vector(TrellisOffset + to_signed(m_ndx0, 4)) when (MiscBits(0)) else std_logic_vector(TrellisOffset - to_signed(m_ndx0, 4));
-   m_ndx1Slv <= std_logic_vector(TrellisOffset + to_signed(m_ndx1, 4)) when (MiscBits(0)) else std_logic_vector(TrellisOffset - to_signed(m_ndx1, 4));
+   m_ndx0Slv <= std_logic_vector(TrellisOffset + to_signed(m_ndx0, 4)) when (not MiscBits(0)) else std_logic_vector(TrellisOffset - to_signed(m_ndx0, 4));
+   m_ndx1Slv <= std_logic_vector(TrellisOffset + to_signed(m_ndx1, 4)) when (not MiscBits(0)) else std_logic_vector(TrellisOffset - to_signed(m_ndx1, 4));
 
    Trellis_u : trellisProcess
       PORT MAP (

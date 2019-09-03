@@ -228,7 +228,6 @@ ARCHITECTURE rtl OF Brik2 IS
             H1EstI_CE,
             Tau0Est,
             Tau1Est           : STC_Parm;
-   SIGNAL   ValidDly          : std_logic_vector(1 downto 0);
    SIGNAL   Tau0EstNdxTE,
             Tau1EstNdxTE      : integer range 0 to SEARCH_LENGTH;
    SIGNAL   Tau0Int,
@@ -458,6 +457,7 @@ BEGIN
             TrellisDelay <= TrellisDelay(TrellisDelay'left-1 downto 0) & ChanEstDone;
             EstimatesDone <= TrellisDelay(TrellisDelay'left);
             if (ChanEstDone) then   -- All estimates are done, allow time to calculate values.
+               -- TODO remove the miscbits
                H0EstR      <= H0EstR_CE when MiscBits(5) else to_sfixed(0.25, H0EstR);
                H0EstI      <= H0EstI_CE when MiscBits(5) else (others=>'0');
                H1EstR      <= H1EstR_CE when MiscBits(6) else to_sfixed(0.0, H0EstR);
@@ -468,19 +468,29 @@ BEGIN
                Tau1Est     <= Tau1EstTE when MiscBits(7) else (others=>'0');
             end if;
 
-            Tau0EstA    <= resize(Tau0Est, Tau0EstA) when (H0Mag > 0.05) else (others=>'0');
+            Tau0EstA    <= resize(Tau0Est, Tau0EstA);
             Tau0EstX4   <= resize(4 * Tau0EstA, Tau0EstX4);
             Tau0Int     <= RoundTo0(Tau0EstX4);
             m_ndx0      <= Tau0Int when (Tau0EstA >= 0) else Tau0Int - 1;
-            Mu0         <= resize(Tau0EstX4 - m_ndx0, Mu0, fixed_wrap, fixed_truncate);
 
-            Tau1EstA    <= resize(Tau1Est, Tau1EstA) when (H1Mag > 0.05) else (others=>'0');
+            Tau1EstA    <= resize(Tau1Est, Tau1EstA);
             Tau1EstX4   <= resize(4 * Tau1EstA, Tau1EstX4);
             Tau1Int     <= RoundTo0(Tau1EstX4);
             m_ndx1      <= Tau1Int when (Tau1EstA >= 0) else Tau1Int - 1;
-            Mu1         <= resize(Tau1EstX4 - m_ndx1, Mu1, fixed_wrap, fixed_truncate);
 
-            DeltaTauEst <= resize(Tau1EstA - Tau0EstA, DeltaTauEst);
+            if (H0Mag > H1Mag * 128) then
+               Mu0         <= resize(Tau0EstX4 - m_ndx0, Mu0, fixed_wrap, fixed_truncate);
+               Mu1         <= (others=>'0');
+               DeltaTauEst <= (others=>'0');
+            elsif(H1Mag > H0Mag * 128) then
+               Mu0         <= (others=>'0');
+               Mu1         <= resize(Tau1EstX4 - m_ndx1, Mu1, fixed_wrap, fixed_truncate);
+               DeltaTauEst <= (others=>'0');
+            else
+               Mu0         <= resize(Tau0EstX4 - m_ndx0, Mu0, fixed_wrap, fixed_truncate);
+               Mu1         <= resize(Tau1EstX4 - m_ndx1, Mu1, fixed_wrap, fixed_truncate);
+               DeltaTauEst <= resize(Tau1EstA - Tau0EstA, DeltaTauEst);
+            end if;
          end if;
       end if;
    end process EstimatesProc;

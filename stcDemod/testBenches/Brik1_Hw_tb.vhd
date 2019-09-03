@@ -249,6 +249,7 @@ architecture rtl of Brik1_Hw_tb is
    SIGNAL   Offset_vio           : SLV12;
    SIGNAL   BitRate_vio,
             Frequency_vio,
+            notFrequency_vio,
             FrameClocks_vio,
             Power0_vio,
             Power1_vio,
@@ -283,7 +284,7 @@ begin
       PORT MAP (
          clk        => ClkXn,
          probe_in0  => Errors,
-         probe_out0 => Frequency_vio,           -- 00280 (222Hz) start getting errors at end of frame
+         probe_out0 => open, --Frequency_vio,           -- 00280 (222Hz) start getting errors at end of frame
          probe_out1 => FrameClocks_vio,         -- usually 13312-1=13311. smaller makes packets slide
          probe_out2 => open, --Phase0_vio,              -- has no effect unless both channels active
          probe_out3 => open, --Phase1_vio,
@@ -299,6 +300,7 @@ begin
       );
 Phase0_vio <= 18x"10000";
 Phase1_vio <= 18x"30000";
+Frequency_vio <= 18x"080";
 
    ErrorProc : process (ClkXn)
    begin
@@ -376,7 +378,7 @@ Phase1_vio <= 18x"30000";
             BitRateAcc <= BitRate_v;
             DataValid <= DataValid(DataValid'left-1 downto 0) & (BitRate_v(0) xor BitRateAcc(0));
             if (DataValid(0)) then
-               if (RdAddr_i < 13312) then -- TODO unsigned(FrameClocks_vio)) then
+               if (RdAddr_i < 13311) then -- TODO unsigned(FrameClocks_vio)) then
                   RdAddr_i <= RdAddr_i + 1;
                else
                   RdAddr_i <= 0;
@@ -556,13 +558,14 @@ Phase1_vio <= 18x"30000";
 
    Phase0R <= to_sfixed(SinCosData0(15 downto 0), Phase0R);
    Phase0I <= to_sfixed(SinCosData0(31 downto 16), Phase0I);
+   notFrequency_vio <= not Frequency_vio;
 
    DDS1 : dds_sin_cos
       PORT MAP (
          aclk                 => Clk93,
          aresetn              => not Reset,
          s_axis_config_tvalid => DataValid(0),
-         s_axis_config_tdata  => (63 downto 18+32=> Phase1_vio(Phase1_vio'left)) & Phase1_vio & (31 downto 18=> Frequency_vio(Frequency_vio'left)) & Frequency_vio,
+         s_axis_config_tdata  => (63 downto 18+32=> Phase1_vio(Phase1_vio'left)) & Phase1_vio & (31 downto 18=> notFrequency_vio(notFrequency_vio'left)) & notFrequency_vio,
          m_axis_data_tvalid   => open,
          m_axis_data_tdata    => SinCosData1,
          m_axis_phase_tvalid  => open,

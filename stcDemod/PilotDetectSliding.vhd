@@ -325,7 +325,6 @@ architecture rtl of PilotDetectSliding is
    SIGNAL   Phase0,
             Phase1            : std_logic_vector(11 downto 0);
    SIGNAL   PilotMag,
-            PreviousMag,
             Threshold,
             AbsCntr0,
             AbsCntr1,
@@ -778,7 +777,6 @@ begin
                      AbsPeak     <= MaxCntr;
                      if (((Index1 >= StartIndex1) and (Index1 <= StopIndex1)) or ((Index1 >= StartIndex2) and (Index1 <= StopIndex2)) or (PilotFound = '0')) then
                         MaxCount <= START_MAX;
-                        ThisPeak <= MaxCntr;
                         CorrPntr <= PackCntr & to_ufixed(Index1, 8, 0); -- Index1 is 0 to 511, so PackCntr is an extension
                      end if;
                   elsif (MaxCount > 0) then
@@ -822,6 +820,7 @@ begin
                      StopIndex2  <= PeakIndex + SEARCH_RANGE;
                   end if;
                   PackCntr    <= resize(PackCntr + 1, PackCntr);
+                  AbsPeak     <= (others=>'0');  -- setup for next frame
                   MaxOfPckt   <= (others=>'0');
                end if;
 
@@ -879,7 +878,6 @@ begin
             end if;
 
             if (MaxCount = 1) then  -- found the peak, store the results
-               AbsPeak <= (others=>'0');  -- setup for next frame
                StartOut <= '1';
                MaxCount <= 0;
             end if;
@@ -910,10 +908,9 @@ begin
    begin
       if (rising_edge(clk)) then
          if (Reset) then
-            Threshold         <= to_ufixed(2.0, Threshold); -- set initial RunningTotal to typical at highest signal levels
+            Threshold         <= to_ufixed(0.75, Threshold); -- set initial RunningTotal to typical at highest signal levels
             MagDelay          <= (others=>(to_ufixed(0.5, MagDelay(0))));
             PilotMag          <= (others=>'0');
-            PreviousMag       <= (others=>'0');
             PilotFound        <= '0';
             PilotFoundPend    <= '0';
             PilotPulse1x      <= '0';
@@ -941,8 +938,8 @@ begin
             PhsPeak0_u        <= (others=>'0');
             MagPeak1_u        <= (others=>'0');
             PhsPeak1_u        <= (others=>'0');
-            Peak1             <= (others=>'0');
-            Peak2             <= (0=>'1', others=>'0');
+            Peak1             <= to_ufixed(1.0, Peak1);
+            Peak2             <= to_ufixed(0.2, Peak2);
          elsif (ce) then
             PilotMag     <= MaxOfPckt;          -- Latch clock transfers
             PilotPulse1x <= PilotPulse;
@@ -982,7 +979,6 @@ begin
                end if;
                PilotFound  <= PilotFoundPend;
                MagDelay    <= MagDelay(27 downto 0) & PilotMag; -- only use last 26, but PeakPointer goes to 28
-               PreviousMag <= PilotMag;
             end if;
 
             ValidAbsDly  <= ValidAbs;
