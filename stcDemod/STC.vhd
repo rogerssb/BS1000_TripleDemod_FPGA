@@ -292,7 +292,7 @@ ARCHITECTURE rtl OF STC IS
             lastSampleReset,
             EstimatesDone     : std_logic;
    SIGNAL   TrellisBits,
-            OffsetPS          : SLV4 := x"A";
+            OffsetPS          : SLV4;
    SIGNAL   PhaseDiffEnDly    : SLV8;
    SIGNAL   StartOffset       : SLV16;
    SIGNAL   RealOutPS,
@@ -581,7 +581,7 @@ BEGIN
          probe_out2  => PhaseDiffGain1Slv,
          probe_out3  => MiscBits,
          probe_out4  => TrellisOffsetSlv,
-         probe_out5  => open --OffsetPS
+         probe_out5  => OffsetPS
    );
    TrellisOffset <= signed(TrellisOffsetSlv);
 
