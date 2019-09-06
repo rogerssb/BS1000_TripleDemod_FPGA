@@ -19,7 +19,7 @@ module stcRegs(
     input               [12:0]  addr,
     input               [31:0]  dataIn,
     output  reg         [31:0]  dataOut,
-    output  reg         [31:0]  clocksPerBit,
+    output  reg         [15:0]  clocksPerBit,
     output  reg                 spectrumInvert,
     output  reg         [11:0]  pilotOffset,
     output  reg         [3:0]   dac0Select,
