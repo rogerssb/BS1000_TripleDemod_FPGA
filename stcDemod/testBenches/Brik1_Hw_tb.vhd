@@ -431,7 +431,7 @@ begin
 
    ReadRealC0 : RAM_2Reads_1Write
       GENERIC MAP(
-         FILENAME    => "C:\Semco\STCinfo\RealTimeC\SpaceTimeCodeInC\SpaceTimeCodeInC\resampledIseed_r_+0_50_100%.slv",
+         FILENAME    => "..\sourceData\resampledIseed_r_+0_50_100%.slv",
          DATA_WIDTH  => 18,
          BINPT       => -17,
          FILE_IS_SLV => true,
@@ -454,7 +454,7 @@ begin
 
    ReadImagC0 : RAM_2Reads_1Write
       GENERIC MAP(
-         FILENAME    => "C:\Semco\STCinfo\RealTimeC\SpaceTimeCodeInC\SpaceTimeCodeInC\resampledIseed_i_+0_50_100%.slv",
+         FILENAME    => "..\sourceData\resampledIseed_i_+0_50_100%.slv",
          DATA_WIDTH  => 18,
          BINPT       => -17,
          FILE_IS_SLV => true,
@@ -477,7 +477,7 @@ begin
 
    ReadRealC1 : RAM_2Reads_1Write
       GENERIC MAP(
-         FILENAME    => "C:\Semco\STCinfo\RealTimeC\SpaceTimeCodeInC\SpaceTimeCodeInC\resampledIseed_r_+0_50_0%.slv",
+         FILENAME    => "..\sourceData\resampledIseed_r_+0_50_0%.slv",
          DATA_WIDTH  => 18,
          BINPT       => -17,
          FILE_IS_SLV => true,
@@ -500,7 +500,7 @@ begin
 
    ReadImagC1 : RAM_2Reads_1Write
       GENERIC MAP(
-         FILENAME    => "C:\Semco\STCinfo\RealTimeC\SpaceTimeCodeInC\SpaceTimeCodeInC\resampledIseed_i_+0_50_0%.slv",
+         FILENAME    => "..\sourceData\resampledIseed_i_+0_50_0%.slv",
          DATA_WIDTH  => 18,
          BINPT       => -17,
          FILE_IS_SLV => true,
@@ -523,7 +523,7 @@ begin
 
    ReadNoise : RAM_2Reads_1Write
       GENERIC MAP(
-         FILENAME    => "C:\Semco\STCinfo\RealTimeC\SpaceTimeCodeInC\SpaceTimeCodeInC\Noise.slv",
+         FILENAME    => "..\SourceData\Noise.slv",
          DATA_WIDTH  => 18,
          BINPT       => -17,
          FILE_IS_SLV => true,

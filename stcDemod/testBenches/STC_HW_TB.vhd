@@ -106,14 +106,15 @@ BEGIN
             when others =>
                Power0In <= resize(Power0In - 0.05, Power0In);
             end case;
-*/
+
             OffsetPS_u <= OffsetPS_u + 1;
             FrameCnt <= FrameCnt + 1;
+            OffsetPS <= std_logic_Vector(OffsetPS_u);
+*/
          end if;
       end if;
    end process;
 
-   OffsetPS <= std_logic_Vector(OffsetPS_u);
 
    Brik1 : Brik1_Hw_tb
    GENERIC MAP(
@@ -129,7 +130,7 @@ BEGIN
       DemodLED => open
    );
 
-   << signal Brik1.UUTu.OffsetPS : SLV4 >> <= OffsetPS;
+--   << signal Brik1.UUTu.OffsetPS : SLV4 >> <= OffsetPS;
 
 END rtl;
 

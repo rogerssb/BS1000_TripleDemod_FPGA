@@ -386,7 +386,7 @@ ARCHITECTURE rtl OF STC IS
    attribute mark_debug : string;
    attribute mark_debug of TrellisBits, TrellisOutEn, EstimatesDone,
                   DataOut, ClkOutEn, StartIla, ValidIla, InRBrik2Ila, InIBrik2Ila,
-                  Ber, lastSampleReset, TrellisFull,
+                  Ber, lastSampleReset, TrellisFull, Bert, BitErrors,
                   H0Phase, H1Phase, H0Mag, H1Mag,
             /* PhaseDiff2xGainSlv,
                   PhaseDiff1xGainSlv, PhaseDiffSlv,*/ PhaseDiffEn, CorrDiff,
@@ -409,11 +409,10 @@ BEGIN
       end if;
    end process;
 
--- synthesis translate_off
    DataAddr_i <= to_integer(DataAddr);
    ReadData : RAM_2Reads_1Write
       GENERIC MAP(
-         FILENAME    => "C:\Semco\STCinfo\RealTimeC\SpaceTimeCodeInC\SpaceTimeCodeInC\Iseed12345678HexData.slv",
+         FILENAME    => "..\sourceData\Iseed12345678HexData.slv",
          DATA_WIDTH  => 4,
          BINPT       => 0,
          FILE_IS_SLV => true,
@@ -433,7 +432,6 @@ BEGIN
          RdOutA      => open,
          RdOutB      => ExpectedData
       );
--- synthesis translate_on
 
    -- Capture BER info per frame
    CaptureProc : process(Clk2x)
