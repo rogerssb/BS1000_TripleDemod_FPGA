@@ -328,6 +328,8 @@ ARCHITECTURE rtl OF STC IS
             PhsPeak,
             PhsPeak0,
             PhsPeak1,
+            Ch0MuSlv,
+            Ch1MuSlv,
             PhsLastPeak,
             PhaseDiffGain1Slv,
             PhaseDiffGain2Slv,
@@ -348,22 +350,21 @@ ARCHITECTURE rtl OF STC IS
             StartFrameOffset,
             CorrPntr          : ufixed(15 downto 0);
    signal   BerRange,
-            Ber               : natural range 0 to 255 := 0;
+            Ber               : natural range 0 to 3200 := 0;
    SIGNAL   ValidData2047,
             ClkOutEnDly,
             pnBitEn,
             dataBit,
             codeBit,
             Reload            : std_logic;
+   SIGNAL   deltaTauEstSlv    : std_logic_vector(5 downto 0);
 
 -- todo, remove
    SIGNAL   H0Phase,
             H1Phase           : SLV12;
    SIGNAL   H0Mag,
             H1Mag             : std_logic_vector(12 downto 0);
-   SIGNAL   CorrPntrSF,
-            OldCorrPntr,
-            CorrDiff          : sfixed(9 downto 0) := (others=>'0');
+   SIGNAL   CorrPntr8to0      : std_logic_vector(8 downto 0);
    SIGNAL   ExpectedData,
             TrellisOffsetSlv,
             m_ndx0Slv,
@@ -387,9 +388,9 @@ ARCHITECTURE rtl OF STC IS
    attribute mark_debug of TrellisBits, TrellisOutEn, EstimatesDone,
                   DataOut, ClkOutEn, StartIla, ValidIla, InRBrik2Ila, InIBrik2Ila,
                   Ber, lastSampleReset, TrellisFull, Bert, BitErrors,
-                  H0Phase, H1Phase, H0Mag, H1Mag,
+                  H0Phase, H1Phase, H0Mag, H1Mag, Ch0MuSlv, Ch1MuSlv, deltaTauEstSlv,
             /* PhaseDiff2xGainSlv,
-                  PhaseDiff1xGainSlv, PhaseDiffSlv,*/ PhaseDiffEn, CorrDiff,
+                  PhaseDiff1xGainSlv, PhaseDiffSlv,*/ PhaseDiffEn, CorrPntr8to0,
                   m_ndx0Slv, m_ndx1Slv, ValidData2047 : signal is "true";
 
 BEGIN
@@ -438,14 +439,32 @@ BEGIN
       variable CaptureErrors : SLV4;
    begin
       if (rising_edge(Clk2x)) then
-         CaptureErrors  := ExpectedData xor TrellisBits;
-         if (lastSampleReset or Reset2x) then
-            DataAddr  <= (others=>'0');
-            Bert      <= BitErrors;
-            BitErrors <= 0;
-         elsif (TrellisOutEn) then
-            DataAddr <= resize(DataAddr + 1, DataAddr);
-            BitErrors <= BitErrors + count_bits(CaptureErrors);
+         if (SIM_MODE) then
+            CaptureErrors  := ExpectedData xor TrellisBits;
+            if (lastSampleReset or Reset2x) then
+               DataAddr  <= (others=>'0');
+               Bert      <= BitErrors;
+               BitErrors <= 0;
+            elsif (TrellisOutEn) then
+               DataAddr <= resize(DataAddr + 1, DataAddr);
+               BitErrors <= BitErrors + count_bits(CaptureErrors);
+            end if;
+         else
+            pnBitEn <= ClkOutEn and not ClkOutEnDly;
+            ClkOutEnDly <= ClkOutEn;
+            ValidData2047 <= dataBit xnor codeBit;
+            if (not StartOutPS) then
+               Reload   <= '0';
+               if (pnBitEn and not ValidData2047) then
+                  Ber <= Ber + 1;
+               end if;
+            else
+               Bert <= Ber;
+               Ber <= 0;
+               if (Ber > 200) then
+                  Reload <= '1';
+               end if;
+            end if;
          end if;
       end if;
    end process;
@@ -626,8 +645,16 @@ BEGIN
          Mu1            => Ch1Mu
       );
 
-   m_ndx0Slv <= std_logic_vector(TrellisOffset + to_signed(m_ndx0, 4)) when (not MiscBits(0)) else std_logic_vector(TrellisOffset - to_signed(m_ndx0, 4));
-   m_ndx1Slv <= std_logic_vector(TrellisOffset + to_signed(m_ndx1, 4)) when (not MiscBits(0)) else std_logic_vector(TrellisOffset - to_signed(m_ndx1, 4));
+   TP_Process : process(Clk2x)
+   begin
+      if (rising_edge(Clk2x)) then
+         m_ndx0Slv      <= std_logic_vector(TrellisOffset + to_signed(m_ndx0, 4)) when (not MiscBits(0)) else std_logic_vector(TrellisOffset - to_signed(m_ndx0, 4));
+         m_ndx1Slv      <= std_logic_vector(TrellisOffset + to_signed(m_ndx1, 4)) when (not MiscBits(0)) else std_logic_vector(TrellisOffset - to_signed(m_ndx1, 4));
+         Ch0MuSlv       <= to_slv(Ch0Mu);
+         Ch1MuSlv       <= to_slv(Ch1Mu);
+         deltaTauEstSlv <= to_slv(DeltaTauEst);
+      end if;
+   end process;
 
    Trellis_u : trellisProcess
       PORT MAP (
@@ -643,9 +670,9 @@ BEGIN
          h0EstImagIn          => to_slv(H0EstI),
          h1EstRealIn          => to_slv(H1EstR),
          h1EstImagIn          => to_slv(H1EstI),
-         ch0MuIn              => to_slv(Ch0Mu),
-         ch1MuIn              => to_slv(Ch1Mu),
-         deltaTauEstIn        => to_slv(DeltaTauEst),
+         ch0MuIn              => Ch0MuSlv,
+         ch1MuIn              => Ch1MuSlv,
+         deltaTauEstIn        => deltaTauEstSlv,
          m_ndx0               => m_ndx0Slv,
          m_ndx1               => m_ndx1Slv,
          sample0r             => sample0r,
@@ -669,28 +696,6 @@ BEGIN
          DataOut        => DataOut,
          ClkOut         => ClkOutEn
       );
-
-   PnProc : process(Clk2x)
-   begin
-      if (rising_edge(Clk2x)) then
-         pnBitEn <= ClkOutEn and not ClkOutEnDly;
-         ClkOutEnDly <= ClkOutEn;
-         ValidData2047 <= dataBit xnor codeBit;
-         if (BerRange < 255) then
-            BerRange <= BerRange + 1;
-            Reload   <= '0';
-            if (not ValidData2047) then
-               Ber <= Ber + 1;
-            end if;
-         else
-            BerRange <= 0;
-            if (Ber > 20) then
-               Reload <= '1';
-            end if;
-            Ber <= 0;
-         end if;
-      end if;
-   end process PnProc;
 
    pn_derand : bert_correlator
       port map (
@@ -733,14 +738,11 @@ BEGIN
          DacMux(14) <= PhsPeak0;                    -- Full Pilot Phase at peak magnitude
          DacMux(15) <= to_slv(CorrPntr(8 downto 0)) & 9x"00";        -- Computed H0 Phase            was ValidData2047 & 17x"0";     -- My 2047 BER with triples per error
 
-         if (StartOutPS) then
-            OldCorrPntr <= CorrPntrSF;
-            CorrDiff    <= resize(CorrPntrSF - OldCorrPntr, CorrDiff);
-         end if;
+   CorrPntr8to0 <= to_slv(CorrPntr(8 downto 0));   -- TODO, remove
+
       end if;
    end process DacOutputs;
 
-   CorrPntrSF <= to_sfixed("0" & to_slv(CorrPntr(8 downto 0)), CorrPntrSF);
 
    cordic0 : vm_cordic_fast
       GENERIC MAP (

@@ -471,25 +471,29 @@ BEGIN
             Tau0EstA    <= resize(Tau0Est, Tau0EstA);
             Tau0EstX4   <= resize(4 * Tau0EstA, Tau0EstX4);
             Tau0Int     <= RoundTo0(Tau0EstX4);
-            m_ndx0      <= Tau0Int when (Tau0EstA >= 0) else Tau0Int - 1;
 
             Tau1EstA    <= resize(Tau1Est, Tau1EstA);
             Tau1EstX4   <= resize(4 * Tau1EstA, Tau1EstX4);
             Tau1Int     <= RoundTo0(Tau1EstX4);
-            m_ndx1      <= Tau1Int when (Tau1EstA >= 0) else Tau1Int - 1;
 
-            if (H0Mag > H1Mag * 128) then
+            if (H0Mag > H1Mag * 64) then
                Mu0         <= resize(Tau0EstX4 - m_ndx0, Mu0, fixed_wrap, fixed_truncate);
                Mu1         <= (others=>'0');
                DeltaTauEst <= (others=>'0');
-            elsif(H1Mag > H0Mag * 128) then
+               m_ndx0      <= Tau0Int when (Tau0EstA >= 0) else Tau0Int - 1;
+               m_ndx1      <= 0;
+            elsif(H1Mag > H0Mag * 64) then
                Mu0         <= (others=>'0');
                Mu1         <= resize(Tau1EstX4 - m_ndx1, Mu1, fixed_wrap, fixed_truncate);
                DeltaTauEst <= (others=>'0');
+               m_ndx0      <= 0;
+               m_ndx1      <= Tau1Int when (Tau1EstA >= 0) else Tau1Int - 1;
             else
                Mu0         <= resize(Tau0EstX4 - m_ndx0, Mu0, fixed_wrap, fixed_truncate);
                Mu1         <= resize(Tau1EstX4 - m_ndx1, Mu1, fixed_wrap, fixed_truncate);
                DeltaTauEst <= resize(Tau1EstA - Tau0EstA, DeltaTauEst);
+               m_ndx0      <= Tau0Int when (Tau0EstA >= 0) else Tau0Int - 1;
+               m_ndx1      <= Tau1Int when (Tau1EstA >= 0) else Tau1Int - 1;
             end if;
          end if;
       end if;
