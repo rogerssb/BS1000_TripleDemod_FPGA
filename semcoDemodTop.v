@@ -114,7 +114,8 @@ module semcoDemodTop (
     output              lockLed0n, lockLed1n,
 
     // SDI Output
-    output              sdiOut
+    output              sdiOut,
+    output              DQMOut
 
 );
 
@@ -920,13 +921,13 @@ module semcoDemodTop (
         .pllOutputClk(pll1_OUT1),
         .sourceSelect(cAndD1SourceSelect),
         .pllReferenceClk(pll1_REF),
-        //.outputClk(ch1ClkOut),
-        .outputClk(),
+        .outputClk(ch1ClkOut),
+        //.outputClk(),
         .outputData(cAndD1DataOut)
     );
-    //assign ch1DataOut = cAndD1DataOut[2];
-    assign ch1DataOut = ldpcBitOut;
-    assign ch1ClkOut = ldpcBitEnOut;
+    assign ch1DataOut = cAndD1DataOut[2];
+    //assign ch1DataOut = ldpcBitOut;
+    //assign ch1ClkOut = ldpcBitEnOut;
     assign ch3ClkOut = ch1ClkOut;
     assign ch3DataOut = cAndD1DataOut[2];
     `endif
@@ -1267,6 +1268,29 @@ sdi sdi(
     `endif //TRIPLE_DEMOD
 
 
+    //******************************************************************************
+    //                          Spectral Sweep Card
+    //******************************************************************************
+    `ifdef TRIPLE_DEMOD
+    wire [31:0] sscDout;
+    ssc ssc(
+        .atod(adc0In[17:4]),
+        .clk(clk),
+        .reset(reset),
+        .busClk(busClk),
+        .cs(cs),
+        .wr0(wr0),
+        .wr1(wr1),
+        .wr2(wr2),
+        .wr3(wr3),
+        .addr(addr),
+        .dataIn(dataIn),
+        .dataOut(sscDout),
+        .uartOut(DQMOut)
+        );
+    `endif  //TRIPLE_DEMOD
+    
+    
     `ifdef TRIPLE_DEMOD
 
     //******************************************************************************
@@ -1529,6 +1553,14 @@ sdi sdi(
                     rd_mux = ch1DecDout[15:0];
                     end
                 end
+             `SSCSPACE: begin
+             if (addr[1]) begin
+                 rd_mux = sscDout[31:16];
+             end
+             else begin
+                 rd_mux = sscDout[15:0];
+             end
+             end
              default : rd_mux = 16'hxxxx;
             endcase
          end
@@ -1536,6 +1568,7 @@ sdi sdi(
     assign fb_data = (cs & rd) ? rd_mux : 16'hzzzz;
 
     `endif //TRIPLE_DEMOD
+
 
 endmodule
 

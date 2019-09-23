@@ -45,7 +45,7 @@
 //`define ADD_DESPREADER
 //`define ADD_SCPATH
 //`define ADD_CMA
-`define ADD_LDPC
+//`define ADD_LDPC
 `define ADD_DQM
 //`define ADD_MULTIH
 `define ADD_SUPERBAUD_TED
@@ -490,6 +490,8 @@
 `define VIDSWITCHSPACE      13'b0_1000_1000_xxxx
     `define VIDSWITCH_CONTROL   13'bx_xxxx_xxxx_00xx
 
+// Spectral Sweep Card
+`define SSCSPACE            13'b0_1000_1001_xxxx
 `else  // Old demod builds
 //------------------------------ Old Demod ------------------------------------
 
@@ -769,7 +771,11 @@
 `define DS_MODE_NASA_DG1_MODE3_SPREAD_I     3'b011
 `define DS_MODE_NASA_DG1_MODE3_SPREAD_Q     3'b100
 
-
+// Define the Spectral Sweep registers
+`define SSC_BAUD_DIV   13'bx_xxxx_xxxx_00xx
+`define SSC_CONTROL    13'bx_xxxx_xxxx_01xx
+`define SSC_FRAME_WAIT 13'bx_xxxx_xxxx_10xx
+`define SSC_CH         13'bx_xxxx_xxxx_11xx
 
 `endif //ADDRESS_MAP
 

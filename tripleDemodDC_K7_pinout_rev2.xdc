@@ -60,7 +60,7 @@ set_property PACKAGE_PIN B10 [get_ports {dac1_d[2]}]
 set_property PACKAGE_PIN A10 [get_ports {dac1_d[1]}]
 set_property PACKAGE_PIN B15 [get_ports {dac1_d[0]}]
 
-# set_property PACKAGE_PIN AF25 [get_ports DQM]
+set_property PACKAGE_PIN AF25 [get_ports DQMOut]
 set_property PACKAGE_PIN AD26 [get_ports sdiOut]
 
 set_property PACKAGE_PIN AE21 [get_ports ch0ClkOut]
@@ -345,6 +345,11 @@ set_property SLEW SLOW [get_ports ch0DataOut]
 set_property IOSTANDARD LVCMOS33 [get_ports sdiOut]
 set_property DRIVE 12 [get_ports sdiOut]
 set_property SLEW SLOW [get_ports sdiOut]
+
+set_property IOSTANDARD LVCMOS33 [get_ports DQMOut]
+set_property DRIVE 12 [get_ports DQMOut]
+set_property SLEW SLOW [get_ports DQMOut]
+
 set_property IOSTANDARD LVCMOS18 [get_ports lockLed0n]
 set_property DRIVE 12 [get_ports lockLed0n]
 set_property SLEW SLOW [get_ports lockLed0n]

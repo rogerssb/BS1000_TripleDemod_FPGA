@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="testSSC_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="testSSC" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="0fs"></ZoomStartTime>
+      <ZoomEndTime time="761000001fs"></ZoomEndTime>
+      <Cursor1Time time="10000000000fs"></Cursor1Time>
+   </zoom_setting>
+   <WVObjectSize size="35" />
+   <wave_markers>
+      <marker time="27669600000" label="" />
+   </wave_markers>
+   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/clk" type="logic">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/uartOut" type="logic">
+      <obj_property name="ElementShortName">uartOut</obj_property>
+      <obj_property name="ObjectShortName">uartOut</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/baudDiv" type="array">
+      <obj_property name="ElementShortName">baudDiv[15:0]</obj_property>
+      <obj_property name="ObjectShortName">baudDiv[15:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/nfft" type="array">
+      <obj_property name="ElementShortName">nfft[4:0]</obj_property>
+      <obj_property name="ObjectShortName">nfft[4:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/fftEnable" type="logic">
+      <obj_property name="ElementShortName">fftEnable</obj_property>
+      <obj_property name="ObjectShortName">fftEnable</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/frameWaitMSec" type="array">
+      <obj_property name="ElementShortName">frameWaitMSec[9:0]</obj_property>
+      <obj_property name="ObjectShortName">frameWaitMSec[9:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/ch" type="array">
+      <obj_property name="ElementShortName">ch[3:0]</obj_property>
+      <obj_property name="ObjectShortName">ch[3:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/atod" type="array">
+      <obj_property name="ElementShortName">atod[13:0]</obj_property>
+      <obj_property name="ObjectShortName">atod[13:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/rstfifo" type="array">
+      <obj_property name="ElementShortName">rstfifo[0:0]</obj_property>
+      <obj_property name="ObjectShortName">rstfifo[0:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/smState" type="array">
+      <obj_property name="ElementShortName">smState[3:0]</obj_property>
+      <obj_property name="ObjectShortName">smState[3:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/uartData" type="array">
+      <obj_property name="ElementShortName">uartData[7:0]</obj_property>
+      <obj_property name="ObjectShortName">uartData[7:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/winAddr" type="array">
+      <obj_property name="ElementShortName">winAddr[12:0]</obj_property>
+      <obj_property name="ObjectShortName">winAddr[12:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/winCoef" type="array">
+      <obj_property name="ElementShortName">winCoef[15:0]</obj_property>
+      <obj_property name="ObjectShortName">winCoef[15:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/uartDataNeeded" type="logic">
+      <obj_property name="ElementShortName">uartDataNeeded</obj_property>
+      <obj_property name="ObjectShortName">uartDataNeeded</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/uartDataAvailable" type="logic">
+      <obj_property name="ElementShortName">uartDataAvailable</obj_property>
+      <obj_property name="ObjectShortName">uartDataAvailable</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/fifoDataOut" type="array">
+      <obj_property name="ElementShortName">fifoDataOut[15:0]</obj_property>
+      <obj_property name="ObjectShortName">fifoDataOut[15:0]</obj_property>
+      <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/fifoEmpty" type="logic">
+      <obj_property name="ElementShortName">fifoEmpty</obj_property>
+      <obj_property name="ObjectShortName">fifoEmpty</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/fifoRead" type="logic">
+      <obj_property name="ElementShortName">fifoRead</obj_property>
+      <obj_property name="ObjectShortName">fifoRead</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/fifoReset" type="logic">
+      <obj_property name="ElementShortName">fifoReset</obj_property>
+      <obj_property name="ObjectShortName">fifoReset</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/fifoFull" type="logic">
+      <obj_property name="ElementShortName">fifoFull</obj_property>
+      <obj_property name="ObjectShortName">fifoFull</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/fifoEn" type="logic">
+      <obj_property name="ElementShortName">fifoEn</obj_property>
+      <obj_property name="ObjectShortName">fifoEn</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/fifoEmpty" type="logic">
+      <obj_property name="ElementShortName">fifoEmpty</obj_property>
+      <obj_property name="ObjectShortName">fifoEmpty</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/fifoWe" type="logic">
+      <obj_property name="ElementShortName">fifoWe</obj_property>
+      <obj_property name="ObjectShortName">fifoWe</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/rstfifo" type="array">
+      <obj_property name="ElementShortName">rstfifo[0:0]</obj_property>
+      <obj_property name="ObjectShortName">rstfifo[0:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/fft_mag_finished" type="array">
+      <obj_property name="ElementShortName">fft_mag_finished[0:0]</obj_property>
+      <obj_property name="ObjectShortName">fft_mag_finished[0:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/fft_mag_m_axis_tdata_real" type="array">
+      <obj_property name="ElementShortName">fft_mag_m_axis_tdata_real[15:0]</obj_property>
+      <obj_property name="ObjectShortName">fft_mag_m_axis_tdata_real[15:0]</obj_property>
+      <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+      <obj_property name="CellHeight">100</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/fft_mag_m_axis_dout_tvalid" type="array">
+      <obj_property name="ElementShortName">fft_mag_m_axis_dout_tvalid[0:0]</obj_property>
+      <obj_property name="ObjectShortName">fft_mag_m_axis_dout_tvalid[0:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/fft_axis_tuser_xk_index_d" type="array">
+      <obj_property name="ElementShortName">fft_axis_tuser_xk_index_d[11:0]</obj_property>
+      <obj_property name="ObjectShortName">fft_axis_tuser_xk_index_d[11:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/fft_mag_m_axis_data_tlast" type="array">
+      <obj_property name="ElementShortName">fft_mag_m_axis_data_tlast[0:0]</obj_property>
+      <obj_property name="ObjectShortName">fft_mag_m_axis_data_tlast[0:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/count" type="array">
+      <obj_property name="ElementShortName">count[12:0]</obj_property>
+      <obj_property name="ObjectShortName">count[12:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/fftN" type="array">
+      <obj_property name="ElementShortName">fftN[12:0]</obj_property>
+      <obj_property name="ObjectShortName">fftN[12:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/nfftwe" type="array">
+      <obj_property name="ElementShortName">nfftwe[0:0]</obj_property>
+      <obj_property name="ObjectShortName">nfftwe[0:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/startn" type="array">
+      <obj_property name="ElementShortName">startn[0:0]</obj_property>
+      <obj_property name="ObjectShortName">startn[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="divider" fp_name="divider171">
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/ce2" type="logic">
+      <obj_property name="ElementShortName">ce2</obj_property>
+      <obj_property name="ObjectShortName">ce2</obj_property>
+   </wvobject>
+</wave_config>
