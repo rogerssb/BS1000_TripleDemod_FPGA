@@ -1,6 +1,19 @@
 `ifndef ADDRESS_MAP
 `define ADDRESS_MAP
 
+// FPGA Image Types
+// NOTE: Multi H is listed as 3 because we don't want to rebuild the image to
+// add the readback circuitry and it defaults to 3
+`define LEGACY_DEMOD_IMAGE          16'h0
+`define TRELLIS_DEMOD_IMAGE         16'h1
+`define TWOCHANNEL_SCDEMOD_IMAGE    16'h2
+`define MULTIH_DEMOD_IMAGE          16'h3
+`define BITSYNC_BERT_IMAGE          16'h4
+`define LEGACY_CMA_IMAGE            16'h5
+`define SEMCO_DEMOD_IMAGE           16'h6
+`define LDPC_DEMOD_IMAGE            16'h7
+`define STC_DEMOD_IMAGE             16'h8
+
 //`define INTERNAL_ADAPT
 `define SYM_DEVIATION
 `define ADD_SOQPSK_TRELLIS
@@ -38,21 +51,56 @@
 `define SEMCO_DEMOD
 `endif
 
+`ifdef TRIPLE_LDPC
+`define LDPC_DEMOD
+`endif
+
 `ifdef SEMCO_DEMOD
+`define FPGA_TYPE           `SEMCO_DEMOD_IMAGE
+`define SEMCO_DEMOD_MAP
 `define USE_BUS_CLOCK
 `define USE_VIVADO_CORES
 `define USE_DDC_FIR
 //`define ADD_DESPREADER
 //`define ADD_SCPATH
-//`define ADD_CMA
+`define ADD_CMA
+`define ADD_TRELLIS
+`define ADD_MULTIH
 //`define ADD_LDPC
 `define ADD_DQM
-//`define ADD_MULTIH
 `define ADD_SUPERBAUD_TED
 `ifndef SIMULATE
 `define EMBED_MULTIH_CARRIER_LOOP
 `endif
 `define ADD_SPI_GATEWAY
+`define ADD_BERT
+`define ADD_MULTIBOOT
+`endif
+
+`ifdef LDPC_DEMOD
+`define FPGA_TYPE           `LDPC_DEMOD_IMAGE
+`define SEMCO_DEMOD_MAP
+`define USE_BUS_CLOCK
+`define USE_VIVADO_CORES
+`define USE_DDC_FIR
+//`define ADD_DESPREADER
+//`define ADD_SCPATH
+`define ADD_CMA
+//`define ADD_TRELLIS
+//`define ADD_MULTIH
+`define ADD_LDPC
+`define ADD_DQM
+`define ADD_SUPERBAUD_TED
+`ifndef SIMULATE
+`define EMBED_MULTIH_CARRIER_LOOP
+`endif
+`define ADD_SPI_GATEWAY
+`define ADD_BERT
+`define ADD_MULTIBOOT
+`endif
+
+`ifdef ADD_LDPC
+    `define TEST_LDPC
 `endif
 
 `ifdef ADD_CMA
@@ -308,7 +356,7 @@
     `define TURBO_ASM_PARMS         13'bx_xxxx_xxx1_00xx
 
 
-`elsif SEMCO_DEMOD
+`elsif SEMCO_DEMOD_MAP
 
 //-------------------------------- Semco Demod --------------------------------
 
@@ -478,6 +526,39 @@
         `define DQM_SRC_DEC3_CH1    4'b1111
 `define DQMLUTSPACE         13'b0_0110_xxxx_xxxx
 
+// BERT subsystem registers
+`define BERT_SPACE          13'b0_0111_xxxx_xxxx
+    `define BERT_POLY               13'bx_xxxx_x000_00xx
+    `define POLARITY_THRESHOLD      13'bx_xxxx_x000_01xx
+    `define SLIP_LIMIT              13'bx_xxxx_x000_10xx
+    `define SLIP_THRESHOLD          13'bx_xxxx_x000_11xx
+    `define SLIP_RECOVERY           13'bx_xxxx_x001_00xx
+    `define SYNC_THRESHOLD          13'bx_xxxx_x001_01xx
+    `define SINGLE_TEST_LENGTH      13'bx_xxxx_x001_10xx
+    `define SINGLE_TEST_ERRORS      13'bx_xxxx_x001_11xx
+    `define SINGLE_TEST_COUNT       13'bx_xxxx_x010_00xx
+    `define CONTINUOUS_TEST_ERRORS  13'bx_xxxx_x010_01xx
+    `define CONTINUOUS_TEST_COUNT   13'bx_xxxx_x010_10xx
+    `define TEST_CONTROL            13'bx_xxxx_x010_11xx
+    `define SOURCE_SELECT           13'bx_xxxx_x011_000x
+        `define BERT_SRC_LEGACY_I    4'b0000
+        `define BERT_SRC_LEGACY_Q    4'b0001
+        `define BERT_SRC_PCMTRELLIS  4'b0010
+        `define BERT_SRC_VIT0        4'b0011
+        `define BERT_SRC_STC         4'b0100
+        `define BERT_SRC_VIT1        4'b0101
+        `define BERT_SRC_LDPC        4'b0110
+        `define BERT_SRC_RSVD0       4'b0111
+        `define BERT_SRC_DEC0_CH0    4'b1000
+        `define BERT_SRC_DEC0_CH1    4'b1001
+        `define BERT_SRC_DEC1_CH0    4'b1010
+        `define BERT_SRC_DEC1_CH1    4'b1011
+        `define BERT_SRC_DEC2_CH0    4'b1100
+        `define BERT_SRC_DEC2_CH1    4'b1101
+        `define BERT_SRC_DEC3_CH0    4'b1110
+        `define BERT_SRC_DEC3_CH1    4'b1111
+
+
 // Video Interpolators and FIRs
 `define INTERP0SPACE        13'b0_1000_0000_xxxx
 `define VIDFIR0SPACE        13'b0_1000_0001_xxxx
@@ -492,6 +573,8 @@
 
 // Spectral Sweep Card
 `define SSCSPACE            13'b0_1000_1001_xxxx
+
+
 `else  // Old demod builds
 //------------------------------ Old Demod ------------------------------------
 
@@ -699,16 +782,6 @@
 `define OUT_MUX_SEL_DQM     2'b11
 `define REBOOT_ADDR     13'bx_xxxx_xxx0_11xx
 `define MISC_TYPE       13'bx_xxxx_xxx1_000x
-// FPGA Image Types
-// NOTE: Multi H is listed as 3 because we don't want to rebuild the image to
-// add the readback circuitry and it defaults to 3
-`define LEGACY_DEMOD_IMAGE          16'h0
-`define TRELLIS_DEMOD_IMAGE         16'h1
-`define TWOCHANNEL_SCDEMOD_IMAGE    16'h2
-`define MULTIH_DEMOD_IMAGE          16'h3
-`define BITSYNC_BERT_IMAGE          16'h4
-`define LEGACY_CMA_IMAGE            16'h5
-`define SEMCO_DEMOD_IMAGE           16'h6
 
 // Define the DAC control locations
 `define DAC_WDATA       13'bx_xxxx_xxxx_x00x

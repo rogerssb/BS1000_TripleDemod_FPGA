@@ -113,13 +113,17 @@ module semcoDemodTop (
     // Lock indicators
     output              lockLed0n, lockLed1n,
 
+    `ifdef TRIPLE_DEMOD
     // SDI Output
     output              sdiOut,
     output              DQMOut
+    `else
+    output              sdiOut
+    `endif
 
 );
 
-    parameter VER_NUMBER = 16'd514;
+    parameter VER_NUMBER = 16'd602;
 
 
 //******************************************************************************
@@ -292,7 +296,7 @@ module semcoDemodTop (
         endcase
     end
 
-    wire    [23:0]  boot_addr;
+    wire    [31:0]  boot_addr;
     wire    [3:0]   ch0MuxSelect;
     wire    [3:0]   ch1MuxSelect;
     wire    [31:0]  semcoTopDout;
@@ -305,6 +309,7 @@ module semcoDemodTop (
         .dataOut(semcoTopDout),
         .clk(clk),
         .versionNumber(VER_NUMBER),
+        .fpgaType(`FPGA_TYPE),
         .reset(reset),
         .reboot(reboot),
         .rebootAddress(boot_addr),
@@ -315,6 +320,19 @@ module semcoDemodTop (
         .ch1MuxSelect()
     );
 
+`ifdef ADD_MULTIBOOT
+//******************************************************************************
+//                           Multiboot Controller
+//******************************************************************************
+
+    multibootK7 multiboot(
+        .clk(clk), 
+        .pulse(reboot), 
+        .addr(boot_addr), 
+        .reset(reset)
+    );
+
+`endif //ADD_MULTIBOOT
 
 //******************************************************************************
 //                          Legacy Demod
@@ -402,6 +420,7 @@ module semcoDemodTop (
         .eyeOffset(demodEyeOffset)
     );
 
+`ifdef ADD_TRELLIS
 //******************************************************************************
 //                        PCMFM Trellis Decoder
 //******************************************************************************
@@ -448,6 +467,7 @@ module semcoDemodTop (
         .sym2xEnOut(pcmTrellisSym2xEnOut),
         .oneOrZeroPredecessor()
     );
+`endif //ADD_TRELLIS
 
 `ifdef ADD_MULTIH
 //******************************************************************************
@@ -545,6 +565,7 @@ module semcoDemodTop (
     reg                 dualSymEn;
     reg                 dualSym2xEn;
     always @(posedge clk) begin
+        `ifdef ADD_TRELLIS
         if (pcmTrellisMode) begin
             dualCh0Input <= pcmTrellisBit;
             dualCh1Input <= pcmTrellisBit;
@@ -565,6 +586,14 @@ module semcoDemodTop (
             dualSymEn <= iDemodSymEn;
             dualSym2xEn <= iDemodSym2xEn;
         end
+
+        `else //ADD_TRELLIS
+
+        dualCh0Input <= iDemodBit;
+        dualCh1Input <= qDemodBit;
+        dualSymEn <= iDemodSymEn;
+        dualSym2xEn <= iDemodSym2xEn;
+        `endif //ADD_TRELLIS
     end
 
     wire    [31:0]  dualDecDout;
@@ -676,6 +705,85 @@ module semcoDemodTop (
 `endif
 
 
+`ifdef ADD_BERT
+//******************************************************************************
+//                            Bit Error Rate Tester
+//******************************************************************************
+
+    reg bertSpace;
+    always @* begin
+        casex(addr)
+            `BERT_SPACE:            bertSpace = cs;
+            default:                bertSpace = 0;
+            endcase
+        end
+
+    wire    [3:0]   bertSourceSelect;
+    reg             bertClkEn;
+    reg             bertDataIn;
+    always @* begin
+        casex (bertSourceSelect)
+            `BERT_SRC_LEGACY_I: begin
+                bertClkEn = iDemodSymEn;
+                bertDataIn = iDemodBit;
+            end
+            `BERT_SRC_LEGACY_Q: begin
+                bertClkEn = qDemodSymEn;
+                bertDataIn = qDemodBit;
+            end
+            `ifdef ADD_TRELLIS
+            `BERT_SRC_PCMTRELLIS: begin
+                bertClkEn = pcmTrellisSymEnOut;
+                bertDataIn = pcmTrellisBit;
+            end
+            `endif
+            `ifdef ADD_LDPC
+            `BERT_SRC_LDPC: begin
+                bertClkEn = ldpcBitEnOut;
+                bertDataIn = ldpcBitOut;
+            end
+            `endif
+            `BERT_SRC_DEC0_CH0: begin
+                bertClkEn = dualPcmClkEn;
+                bertDataIn = dualDataI;
+            end
+            `BERT_SRC_DEC0_CH1: begin
+                bertClkEn = dualPcmClkEn;
+                bertDataIn = dualDataQ;
+            end
+            `BERT_SRC_DEC1_CH0: begin
+                bertClkEn = ch1PcmClkEn;
+                bertDataIn = ch1PcmData;
+            end
+            //`BERT_SRC_DEC1_CH1:
+            //`BERT_SRC_DEC2_CH0:
+            //`BERT_SRC_DEC2_CH1:
+            //`BERT_SRC_DEC3_CH0:
+            //`BERT_SRC_DEC3_CH1:
+            default:   begin
+                bertClkEn = iDemodSymEn;
+                bertDataIn = iDemodBit;
+            end
+        endcase
+    end
+
+    wire    [31:0]  bertDout;
+    bert_top bert(
+        .reset(reset),
+        .busClk(busClk),
+        .cs(bertSpace),
+        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .addr(addr),
+        .dataIn(dataIn),
+        .dataOut(bertDout),
+        .clk(clk),
+        .enable(bertClkEn),
+        .data(bertDataIn),
+        .inputSourceSelect(bertSourceSelect)
+    );
+`endif //ADD_BERT
+
+
 `ifdef ADD_DQM
 /******************************************************************************
                                     DQM
@@ -685,10 +793,12 @@ module semcoDemodTop (
     reg             dqmBitIn;
     always @(posedge clk) begin
         casex (dqmSourceSelect)
+            `ifdef ADD_TRELLIS
             `DQM_SRC_PCMTRELLIS: begin
                 dqmBitEnIn <= pcmTrellisSymEnOut;
                 dqmBitIn <= pcmTrellisBit;
             end
+            `endif
             `DQM_SRC_DEC0_CH0: begin
                 dqmBitEnIn <= dualPcmClkEn;
                 dqmBitIn <= dualDataI;
@@ -776,10 +886,12 @@ module semcoDemodTop (
                 cAndD0ClkEn = qDemodSymEn;
                 cAndD0DataIn = {qDemodBit,1'b0,1'b0};
             end
+            `ifdef ADD_TRELLIS
             `CandD_SRC_PCMTRELLIS: begin
                 cAndD0ClkEn = pcmTrellisSymEnOut;
                 cAndD0DataIn = {pcmTrellisBit,pcmTrellisBit,1'b0};
             end
+            `endif
             //`CandD_SRC_MULTIH:
             //`CandD_SRC_STC:
             //`CandD_SRC_PNGEN:
@@ -856,10 +968,12 @@ module semcoDemodTop (
                 cAndD1ClkEn = qDemodSymEn;
                 cAndD1DataIn = {qDemodBit,1'b0,1'b0};
             end
+            `ifdef ADD_TRELLIS
             `CandD_SRC_PCMTRELLIS: begin
                 cAndD1ClkEn = pcmTrellisSymEnOut;
                 cAndD1DataIn = {pcmTrellisBit,pcmTrellisBit,1'b0};
             end
+            `endif
             //`CandD_SRC_MULTIH:
             //`CandD_SRC_STC:
             //`CandD_SRC_PNGEN:
@@ -921,16 +1035,21 @@ module semcoDemodTop (
         .pllOutputClk(pll1_OUT1),
         .sourceSelect(cAndD1SourceSelect),
         .pllReferenceClk(pll1_REF),
-        .outputClk(ch1ClkOut),
-        //.outputClk(),
+        .outputClk(cAndD1ClkOut),
         .outputData(cAndD1DataOut)
     );
-    assign ch1DataOut = cAndD1DataOut[2];
-    //assign ch1DataOut = ldpcBitOut;
-    //assign ch1ClkOut = ldpcBitEnOut;
-    assign ch3ClkOut = ch1ClkOut;
+    `ifdef TEST_LDPC
+    assign ch1DataOut = ldpcBitOut;
+    assign ch1ClkOut = ldpcBitEnOut;
+    assign ch3ClkOut = cAndD1ClkOut;
     assign ch3DataOut = cAndD1DataOut[2];
-    `endif
+    `else
+    assign ch1ClkOut = cAndD1ClkOut;
+    assign ch1DataOut = cAndD1DataOut[2];
+    assign ch3ClkOut = cAndD1ClkOut;
+    assign ch3DataOut = cAndD1DataOut[2];
+    `endif //TEST_LDPC
+    `endif //BYPASS_MULTIH_DECODER
 
     assign          pll2_REF = 1'b0;
     assign          pll2_Data = 1'b0;
@@ -950,10 +1069,12 @@ module semcoDemodTop (
                 interp0DataIn <= demodDac0Data;
                 interp0ClkEn <= demodDac0ClkEn;
             end
+            `ifdef ADD_TRELLIS
             `DAC_SRC_FMTRELLIS: begin
                 interp0DataIn <= pcmDac0Data;
                 interp0ClkEn <= pcmDac0ClkEn;
             end
+            `endif
             `ifdef ADD_MULTIH
             `DAC_SRC_MULTIHTRELLIS: begin
                 interp0DataIn <= multih0Out;
@@ -1010,10 +1131,12 @@ module semcoDemodTop (
                 interp1DataIn <= demodDac1Data;
                 interp1ClkEn <= demodDac1ClkEn;
             end
+            `ifdef ADD_TRELLIS
             `DAC_SRC_FMTRELLIS: begin
                 interp1DataIn <= pcmDac1Data;
                 interp1ClkEn <= pcmDac1ClkEn;
             end
+            `endif
             `ifdef ADD_MULTIH
             `DAC_SRC_MULTIHTRELLIS: begin
                 interp1DataIn <= multih1Out;
@@ -1070,10 +1193,12 @@ module semcoDemodTop (
                 interp2DataIn <= demodDac2Data;
                 interp2ClkEn <= demodDac2ClkEn;
             end
+            `ifdef ADD_TRELLIS
             `DAC_SRC_FMTRELLIS: begin
                 interp2DataIn <= pcmDac2Data;
                 interp2ClkEn <= pcmDac2ClkEn;
             end
+            `endif
             `ifdef ADD_MULTIH
             `DAC_SRC_MULTIHTRELLIS: begin
                 interp2DataIn <= multih2Out;
@@ -1289,8 +1414,8 @@ sdi sdi(
         .uartOut(DQMOut)
         );
     `endif  //TRIPLE_DEMOD
-    
-    
+
+
     `ifdef TRIPLE_DEMOD
 
     //******************************************************************************
@@ -1311,6 +1436,10 @@ sdi sdi(
             `ifdef ADD_DQM
             `DQMLUTSPACE,
             `DQMSPACE:          rd_mux = dqmDout;
+            `endif
+
+            `ifdef ADD_BERT
+            `BERT_SPACE:        rd_mux = bertDout;
             `endif
 
             `DEMODSPACE,
@@ -1334,8 +1463,10 @@ sdi sdi(
             `MULTIHLFSPACE:     rd_mux = multihDout;
             `endif //ADD_MULTIH
 
+            `ifdef ADD_TRELLIS
             `TRELLIS_SPACE,
             `TRELLISLFSPACE:    rd_mux = trellisDout;
+            `endif
 
             `UARTSPACE,
             `SDISPACE:          rd_mux = sdiDout;
@@ -1363,6 +1494,8 @@ sdi sdi(
             `CandD1SPACE:       rd_mux = cAndD1Dout;
 
             `VIDSWITCHSPACE:    rd_mux = vsDout;
+
+            `SSCSPACE:          rd_mux = sscDout;
 
              default :          rd_mux = 32'hxxxx;
         endcase
@@ -1418,6 +1551,17 @@ sdi sdi(
             end
             `endif
 
+            `ifdef ADD_BERT
+            `BERT_SPACE:        begin
+                if (addr[1]) begin
+                    rd_mux = bertDout[31:16];
+                end
+                else begin
+                    rd_mux = bertDout[15:0];
+                end
+            end
+            `endif
+
             `DEMODSPACE,
             `ifdef ADD_CMA
             `EQUALIZERSPACE,
@@ -1451,6 +1595,8 @@ sdi sdi(
                 end
             end
             `endif //ADD_MULTIH
+
+            `ifdef ADD_TRELLIS
             `TRELLIS_SPACE,
             `TRELLISLFSPACE: begin
                 if (addr[1]) begin
@@ -1460,6 +1606,7 @@ sdi sdi(
                     rd_mux = trellisDout[15:0];
                 end
             end
+            `endif //ADD_TRELLIS
 
             `UARTSPACE,
             `SDISPACE: begin
@@ -1553,14 +1700,6 @@ sdi sdi(
                     rd_mux = ch1DecDout[15:0];
                     end
                 end
-             `SSCSPACE: begin
-             if (addr[1]) begin
-                 rd_mux = sscDout[31:16];
-             end
-             else begin
-                 rd_mux = sscDout[15:0];
-             end
-             end
              default : rd_mux = 16'hxxxx;
             endcase
          end
