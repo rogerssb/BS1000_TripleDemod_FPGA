@@ -1,0 +1,317 @@
+{
+  'Line_1004' => {
+    'CodeInstance' => 'hbf_fft_struct/xndelay',
+    'Instance' => 'xndelay',
+    'SimulinkInstance' => 'hbf_fft/xnDelay'
+  },
+  'Line_1027' => {
+    'CodeInstance' => 'hbf_fft_default_clock_driver/clockdriver_x0',
+    'Instance' => 'clockdriver_x0',
+    'SimulinkInstance' => ''
+  },
+  'Line_1038' => {
+    'CodeInstance' => 'hbf_fft_default_clock_driver/clockdriver',
+    'Instance' => 'clockdriver',
+    'SimulinkInstance' => ''
+  },
+  'Line_1076' => {
+    'CodeInstance' => 'hbf_fft_default_clock_driver',
+    'Instance' => 'hbf_fft_default_clock_driver',
+    'SimulinkInstance' => ''
+  },
+  'Line_1085' => {
+    'CodeInstance' => 'hbf_fft_struct',
+    'Instance' => 'hbf_fft_struct',
+    'SimulinkInstance' => 'hbf_fft'
+  },
+  'Line_130' => {
+    'CodeInstance' => 'hbf_fft_struct/quaddwncnv/cmult2',
+    'Instance' => 'cmult2',
+    'SimulinkInstance' => 'hbf_fft/QuadDwnCnv/CMult2'
+  },
+  'Line_142' => {
+    'CodeInstance' => 'hbf_fft_struct/quaddwncnv/counter',
+    'Instance' => 'counter',
+    'SimulinkInstance' => 'hbf_fft/QuadDwnCnv/Counter'
+  },
+  'Line_154' => {
+    'CodeInstance' => 'hbf_fft_struct/quaddwncnv/delay',
+    'Instance' => 'delay',
+    'SimulinkInstance' => 'hbf_fft/QuadDwnCnv/Delay'
+  },
+  'Line_173' => {
+    'CodeInstance' => 'hbf_fft_struct/quaddwncnv/even_sample',
+    'Instance' => 'even_sample',
+    'SimulinkInstance' => 'hbf_fft/QuadDwnCnv/Even Sample'
+  },
+  'Line_185' => {
+    'CodeInstance' => 'hbf_fft_struct/quaddwncnv/expression',
+    'Instance' => 'expression',
+    'SimulinkInstance' => 'hbf_fft/QuadDwnCnv/Expression'
+  },
+  'Line_193' => {
+    'CodeInstance' => 'hbf_fft_struct/quaddwncnv/fir_compiler_7_2',
+    'Instance' => 'fir_compiler_7_2',
+    'SimulinkInstance' => 'hbf_fft/QuadDwnCnv/FIR Compiler 7.2 '
+  },
+  'Line_207' => {
+    'CodeInstance' => 'hbf_fft_struct/quaddwncnv/muxi',
+    'Instance' => 'muxi',
+    'SimulinkInstance' => 'hbf_fft/QuadDwnCnv/MuxI'
+  },
+  'Line_216' => {
+    'CodeInstance' => 'hbf_fft_struct/quaddwncnv/muxq',
+    'Instance' => 'muxq',
+    'SimulinkInstance' => 'hbf_fft/QuadDwnCnv/MuxQ'
+  },
+  'Line_236' => {
+    'CodeInstance' => 'hbf_fft_struct/quaddwncnv/odd_sample',
+    'Instance' => 'odd_sample',
+    'SimulinkInstance' => 'hbf_fft/QuadDwnCnv/Odd Sample'
+  },
+  'Line_252' => {
+    'CodeInstance' => 'hbf_fft_struct/quaddwncnv/register',
+    'Instance' => 'register',
+    'SimulinkInstance' => 'hbf_fft/QuadDwnCnv/Register'
+  },
+  'Line_264' => {
+    'CodeInstance' => 'hbf_fft_struct/quaddwncnv/register1',
+    'Instance' => 'register1',
+    'SimulinkInstance' => 'hbf_fft/QuadDwnCnv/Register1'
+  },
+  'Line_329' => {
+    'CodeInstance' => 'hbf_fft_struct/windmult/mult',
+    'Instance' => 'mult',
+    'SimulinkInstance' => 'hbf_fft/WindMult/Mult'
+  },
+  'Line_365' => {
+    'CodeInstance' => 'hbf_fft_struct/windmult/mult1',
+    'Instance' => 'mult1',
+    'SimulinkInstance' => 'hbf_fft/WindMult/Mult1'
+  },
+  'Line_382' => {
+    'CodeInstance' => 'hbf_fft_struct/windmult/register',
+    'Instance' => 'register',
+    'SimulinkInstance' => 'hbf_fft/WindMult/Register'
+  },
+  'Line_394' => {
+    'CodeInstance' => 'hbf_fft_struct/windmult/register1',
+    'Instance' => 'register1',
+    'SimulinkInstance' => 'hbf_fft/WindMult/Register1'
+  },
+  'Line_406' => {
+    'CodeInstance' => 'hbf_fft_struct/windmult/register2',
+    'Instance' => 'register2',
+    'SimulinkInstance' => 'hbf_fft/WindMult/Register2'
+  },
+  'Line_447' => {
+    'CodeInstance' => 'hbf_fft_struct/nfftcounter/twopower1/constant',
+    'Instance' => 'constant',
+    'SimulinkInstance' => 'hbf_fft/nfftCounter/TwoPower1/Constant'
+  },
+  'Line_453' => {
+    'CodeInstance' => 'hbf_fft_struct/nfftcounter/twopower1/mux',
+    'Instance' => 'mux',
+    'SimulinkInstance' => 'hbf_fft/nfftCounter/TwoPower1/Mux'
+  },
+  'Line_462' => {
+    'CodeInstance' => 'hbf_fft_struct/nfftcounter/twopower1/mux1',
+    'Instance' => 'mux1',
+    'SimulinkInstance' => 'hbf_fft/nfftCounter/TwoPower1/Mux1'
+  },
+  'Line_471' => {
+    'CodeInstance' => 'hbf_fft_struct/nfftcounter/twopower1/mux2',
+    'Instance' => 'mux2',
+    'SimulinkInstance' => 'hbf_fft/nfftCounter/TwoPower1/Mux2'
+  },
+  'Line_480' => {
+    'CodeInstance' => 'hbf_fft_struct/nfftcounter/twopower1/mux3',
+    'Instance' => 'mux3',
+    'SimulinkInstance' => 'hbf_fft/nfftCounter/TwoPower1/Mux3'
+  },
+  'Line_493' => {
+    'CodeInstance' => 'hbf_fft_struct/nfftcounter/twopower1/register',
+    'Instance' => 'register',
+    'SimulinkInstance' => 'hbf_fft/nfftCounter/TwoPower1/Register'
+  },
+  'Line_501' => {
+    'CodeInstance' => 'hbf_fft_struct/nfftcounter/twopower1/shift',
+    'Instance' => 'shift',
+    'SimulinkInstance' => 'hbf_fft/nfftCounter/TwoPower1/Shift'
+  },
+  'Line_508' => {
+    'CodeInstance' => 'hbf_fft_struct/nfftcounter/twopower1/shift1',
+    'Instance' => 'shift1',
+    'SimulinkInstance' => 'hbf_fft/nfftCounter/TwoPower1/Shift1'
+  },
+  'Line_515' => {
+    'CodeInstance' => 'hbf_fft_struct/nfftcounter/twopower1/shift2',
+    'Instance' => 'shift2',
+    'SimulinkInstance' => 'hbf_fft/nfftCounter/TwoPower1/Shift2'
+  },
+  'Line_522' => {
+    'CodeInstance' => 'hbf_fft_struct/nfftcounter/twopower1/shift3',
+    'Instance' => 'shift3',
+    'SimulinkInstance' => 'hbf_fft/nfftCounter/TwoPower1/Shift3'
+  },
+  'Line_535' => {
+    'CodeInstance' => 'hbf_fft_struct/nfftcounter/twopower1/slice0',
+    'Instance' => 'slice0',
+    'SimulinkInstance' => 'hbf_fft/nfftCounter/TwoPower1/Slice0'
+  },
+  'Line_545' => {
+    'CodeInstance' => 'hbf_fft_struct/nfftcounter/twopower1/slice1',
+    'Instance' => 'slice1',
+    'SimulinkInstance' => 'hbf_fft/nfftCounter/TwoPower1/Slice1'
+  },
+  'Line_555' => {
+    'CodeInstance' => 'hbf_fft_struct/nfftcounter/twopower1/slice2',
+    'Instance' => 'slice2',
+    'SimulinkInstance' => 'hbf_fft/nfftCounter/TwoPower1/Slice2'
+  },
+  'Line_565' => {
+    'CodeInstance' => 'hbf_fft_struct/nfftcounter/twopower1/slice3',
+    'Instance' => 'slice3',
+    'SimulinkInstance' => 'hbf_fft/nfftCounter/TwoPower1/Slice3'
+  },
+  'Line_598' => {
+    'CodeInstance' => 'hbf_fft_struct/nfftcounter/twopower1',
+    'Instance' => 'twopower1',
+    'SimulinkInstance' => 'hbf_fft/nfftCounter/TwoPower1'
+  },
+  'Line_605' => {
+    'CodeInstance' => 'hbf_fft_struct/nfftcounter/mcode',
+    'Instance' => 'mcode',
+    'SimulinkInstance' => 'hbf_fft/nfftCounter/MCode'
+  },
+  'Line_635' => {
+    'CodeInstance' => 'hbf_fft_struct/strobe/inverter',
+    'Instance' => 'inverter',
+    'SimulinkInstance' => 'hbf_fft/strobe/Inverter'
+  },
+  'Line_642' => {
+    'CodeInstance' => 'hbf_fft_struct/strobe/logical',
+    'Instance' => 'logical',
+    'SimulinkInstance' => 'hbf_fft/strobe/Logical'
+  },
+  'Line_654' => {
+    'CodeInstance' => 'hbf_fft_struct/strobe/register',
+    'Instance' => 'register',
+    'SimulinkInstance' => 'hbf_fft/strobe/Register'
+  },
+  'Line_66' => {
+    'CodeInstance' => 'hbf_fft_struct/quaddwncnv/cmult',
+    'Instance' => 'cmult',
+    'SimulinkInstance' => 'hbf_fft/QuadDwnCnv/CMult'
+  },
+  'Line_666' => {
+    'CodeInstance' => 'hbf_fft_struct/strobe/register3',
+    'Instance' => 'register3',
+    'SimulinkInstance' => 'hbf_fft/strobe/Register3'
+  },
+  'Line_678' => {
+    'CodeInstance' => 'hbf_fft_struct/strobe/register4',
+    'Instance' => 'register4',
+    'SimulinkInstance' => 'hbf_fft/strobe/Register4'
+  },
+  'Line_793' => {
+    'CodeInstance' => 'hbf_fft_struct/quaddwncnv',
+    'Instance' => 'quaddwncnv',
+    'SimulinkInstance' => 'hbf_fft/QuadDwnCnv'
+  },
+  'Line_803' => {
+    'CodeInstance' => 'hbf_fft_struct/windmult',
+    'Instance' => 'windmult',
+    'SimulinkInstance' => 'hbf_fft/WindMult'
+  },
+  'Line_814' => {
+    'CodeInstance' => 'hbf_fft_struct/nfftcounter',
+    'Instance' => 'nfftcounter',
+    'SimulinkInstance' => 'hbf_fft/nfftCounter'
+  },
+  'Line_824' => {
+    'CodeInstance' => 'hbf_fft_struct/strobe',
+    'Instance' => 'strobe',
+    'SimulinkInstance' => 'hbf_fft/strobe'
+  },
+  'Line_830' => {
+    'CodeInstance' => 'hbf_fft_struct/bitbasher',
+    'Instance' => 'bitbasher',
+    'SimulinkInstance' => 'hbf_fft/BitBasher'
+  },
+  'Line_837' => {
+    'CodeInstance' => 'hbf_fft_struct/bitbasher1',
+    'Instance' => 'bitbasher1',
+    'SimulinkInstance' => 'hbf_fft/BitBasher1'
+  },
+  'Line_844' => {
+    'CodeInstance' => 'hbf_fft_struct/cordic_6_0',
+    'Instance' => 'cordic_6_0',
+    'SimulinkInstance' => 'hbf_fft/CORDIC 6.0 '
+  },
+  'Line_860' => {
+    'CodeInstance' => 'hbf_fft_struct/clock_enable_probe',
+    'Instance' => 'clock_enable_probe',
+    'SimulinkInstance' => 'hbf_fft/Clock Enable Probe'
+  },
+  'Line_866' => {
+    'CodeInstance' => 'hbf_fft_struct/constant',
+    'Instance' => 'constant',
+    'SimulinkInstance' => 'hbf_fft/Constant'
+  },
+  'Line_872' => {
+    'CodeInstance' => 'hbf_fft_struct/constant4',
+    'Instance' => 'constant4',
+    'SimulinkInstance' => 'hbf_fft/Constant4'
+  },
+  'Line_878' => {
+    'CodeInstance' => 'hbf_fft_struct/constant7',
+    'Instance' => 'constant7',
+    'SimulinkInstance' => 'hbf_fft/Constant7'
+  },
+  'Line_893' => {
+    'CodeInstance' => 'hbf_fft_struct/fifoi',
+    'Instance' => 'fifoi',
+    'SimulinkInstance' => 'hbf_fft/FIFOI'
+  },
+  'Line_916' => {
+    'CodeInstance' => 'hbf_fft_struct/fifoq',
+    'Instance' => 'fifoq',
+    'SimulinkInstance' => 'hbf_fft/FIFOQ'
+  },
+  'Line_930' => {
+    'CodeInstance' => 'hbf_fft_struct/fast_fourier_transform_9_0',
+    'Instance' => 'fast_fourier_transform_9_0',
+    'SimulinkInstance' => 'hbf_fft/Fast Fourier Transform 9.0 '
+  },
+  'Line_953' => {
+    'CodeInstance' => 'hbf_fft_struct/invfifoiempty',
+    'Instance' => 'invfifoiempty',
+    'SimulinkInstance' => 'hbf_fft/InvFifoIEmpty'
+  },
+  'Line_960' => {
+    'CodeInstance' => 'hbf_fft_struct/logical',
+    'Instance' => 'logical',
+    'SimulinkInstance' => 'hbf_fft/Logical'
+  },
+  'Line_972' => {
+    'CodeInstance' => 'hbf_fft_struct/register',
+    'Instance' => 'register',
+    'SimulinkInstance' => 'hbf_fft/Register'
+  },
+  'Line_98' => {
+    'CodeInstance' => 'hbf_fft_struct/quaddwncnv/cmult1',
+    'Instance' => 'cmult1',
+    'SimulinkInstance' => 'hbf_fft/QuadDwnCnv/CMult1'
+  },
+  'Line_984' => {
+    'CodeInstance' => 'hbf_fft_struct/register1',
+    'Instance' => 'register1',
+    'SimulinkInstance' => 'hbf_fft/Register1'
+  },
+  'Line_996' => {
+    'CodeInstance' => 'hbf_fft_struct/register2',
+    'Instance' => 'register2',
+    'SimulinkInstance' => 'hbf_fft/Register2'
+  }
+}
