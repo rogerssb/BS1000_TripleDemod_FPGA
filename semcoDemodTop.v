@@ -3,14 +3,14 @@
 
 module semcoDemodTop (
 
-    `ifdef TRIPLE_DEMOD
+    `ifdef R6100
 
     input               spiClk,
     input               spiCSn,
     input               spiDataIn,
     inout               spiDataOut,
 
-    `else   //TRIPLE_DEMOD
+    `else   //R6100
 
     // Flexbus connections
     input               fbClk,
@@ -21,17 +21,17 @@ module semcoDemodTop (
     input       [15:0]  fb_addr,
     inout       [15:0]  fb_data,
 
-    `endif //TRIPLE_DEMOD
+    `endif //R6100
 
     // ADC Inputs
     input       [13:0]  adc0,
     input               adc0_overflow,
     output              adc01_powerDown,
-    `ifdef TRIPLE_DEMOD
+    `ifdef R6100
     input               adc0Clk,
-    `else // TRIPLE_DEMOD
+    `else // R6100
     input               sysClk,
-    `endif // TRIPLE_DEMOD
+    `endif // R6100
 
     // DAC configuration interface
     output              dac_rst,
@@ -39,7 +39,7 @@ module semcoDemodTop (
     output              dac_sdio,
     output              dac0_nCs,
     output              dac1_nCs,
-    `ifndef TRIPLE_DEMOD
+    `ifndef R6100
     output              dac2_nCs,
     `endif
 
@@ -48,7 +48,7 @@ module semcoDemodTop (
     output  reg [13:0]  dac0_d,
     output              dac1_clk,
     output  reg [13:0]  dac1_d,
-    `ifndef TRIPLE_DEMOD
+    `ifndef R6100
     output              dac2_clk,
     output  reg [13:0]  dac2_d,
     `endif
@@ -59,7 +59,7 @@ module semcoDemodTop (
     output              ch2ClkOut,ch2DataOut,
     output              ch3ClkOut,ch3DataOut,
 
-    `ifdef TRIPLE_DEMOD
+    `ifdef R6100
 
     // PLL Interface Signals
     output              pll0_REF,
@@ -83,7 +83,7 @@ module semcoDemodTop (
     output      [1:0]   video1InSelect,
     output reg  [1:0]   video1OutSelect,
 
-    `else   //TRIPLE_DEMOD
+    `else   //R6100
 
     // PLL Interface Signals
     output              pll_SCK,
@@ -101,7 +101,7 @@ module semcoDemodTop (
     input               pll2_OUT1,
     output              pll2_PWDn,
 
-    `endif //TRIPLE_DEMOD
+    `endif //R6100
 
     `ifdef ADD_SPI_GATEWAY
     //output              spiFlashCK, //Output through the STARTUPE2 primitive
@@ -113,7 +113,7 @@ module semcoDemodTop (
     // Lock indicators
     output              lockLed0n, lockLed1n,
 
-    `ifdef TRIPLE_DEMOD
+    `ifdef R6100
     // SDI Output
     output              sdiOut,
     output              DQMOut
@@ -123,13 +123,13 @@ module semcoDemodTop (
 
 );
 
-    parameter VER_NUMBER = 16'd602;
+    parameter VER_NUMBER = 16'd604;
 
 
 //******************************************************************************
 //                          Clock Distribution
 //******************************************************************************
-    `ifdef TRIPLE_DEMOD
+    `ifdef R6100
     systemClock systemClock (
         .clk_in1(adc0Clk),
         .clk_out1(clk),
@@ -157,7 +157,7 @@ module semcoDemodTop (
     );
     `endif //ADD_FRANKS_KLUDGE
 
-    `else //TRIPLE_DEMOD
+    `else //R6100
     systemClock systemClock (
         .clk_in1(sysClk),
         .clk_out1(clk),
@@ -169,11 +169,11 @@ module semcoDemodTop (
         .clk_out1(busClk),
         .locked(fbClkLocked)
     );
-    `endif //TRIPLE_DEMOD
+    `endif //R6100
 
 
 
-    `ifdef TRIPLE_DEMOD
+    `ifdef R6100
     /******************************************************************************
                                  SPI Config Interface
     ******************************************************************************/
@@ -199,7 +199,7 @@ module semcoDemodTop (
     );
     assign spiDataOut = spiDataOE ? spiOut : 1'bz;
 
-    `else //TRIPLE_DEMOD
+    `else //R6100
 
     /******************************************************************************
                                  Bus Interface
@@ -223,7 +223,7 @@ module semcoDemodTop (
     assign  addr[0] = 1'b0;
     wire    rd = !fb_oen;
 
-    `endif //TRIPLE_DEMOD
+    `endif //R6100
 
     `ifdef ADD_SPI_GATEWAY
     /******************************************************************************
@@ -840,10 +840,10 @@ module semcoDemodTop (
 //                       Clock/Data Jitter Reduction
 //******************************************************************************
 
-    `ifdef TRIPLE_DEMOD
+    `ifdef R6100
 
 
-    `else //TRIPLE_DEMOD
+    `else //R6100
 
     // SPI interface to the PLLs
     wire    [31:0]  pllDout;
@@ -869,7 +869,7 @@ module semcoDemodTop (
         .pll2Reset(pll2Reset)
     );
 
-    `endif //TRIPLE_DEMOD
+    `endif //R6100
 
     //----------------------- Channel 0 Jitter Attenuation --------------------
 
@@ -1183,7 +1183,7 @@ module semcoDemodTop (
     end
     `endif
 
-    `ifndef TRIPLE_DEMOD
+    `ifndef R6100
     reg     [17:0]  interp2DataIn;
     reg             interp2ClkEn;
     wire    [3:0]   dac2Source;
@@ -1245,12 +1245,12 @@ module semcoDemodTop (
     end
     `endif  //TEST_DACS
 
-    `endif //not TRIPLE_DEMOD
+    `endif //not R6100
 
 
     assign dac0_clk = clk;
     assign dac1_clk = clk;
-    `ifndef TRIPLE_DEMOD
+    `ifndef R6100
     assign dac2_clk = clk;
     `endif
 
@@ -1301,7 +1301,7 @@ sdi sdi(
     assign lockLed0n = !timingLock;
     assign lockLed1n = !carrierLock;
 
-    `ifdef TRIPLE_DEMOD
+    `ifdef R6100
 
     //******************************************************************************
     //                           AM ADC Interface
@@ -1390,13 +1390,13 @@ sdi sdi(
         endcase
     end
 
-    `endif //TRIPLE_DEMOD
+    `endif //R6100
 
 
+    `ifdef ADD_SPECTRAL_SWEEP
     //******************************************************************************
     //                          Spectral Sweep Card
     //******************************************************************************
-    `ifdef TRIPLE_DEMOD
     wire [31:0] sscDout;
     ssc ssc(
         .atod(adc0In[17:4]),
@@ -1413,10 +1413,10 @@ sdi sdi(
         .dataOut(sscDout),
         .uartOut(DQMOut)
         );
-    `endif  //TRIPLE_DEMOD
+    `endif  //ADD_SPECTRAL_SWEEP
 
 
-    `ifdef TRIPLE_DEMOD
+    `ifdef R6100
 
     //******************************************************************************
     //                           Processor Read Data Mux
@@ -1495,13 +1495,15 @@ sdi sdi(
 
             `VIDSWITCHSPACE:    rd_mux = vsDout;
 
+            `ifdef ADD_SPECTRAL_SWEEP
             `SSCSPACE:          rd_mux = sscDout;
+            `endif
 
              default :          rd_mux = 32'hxxxx;
         endcase
     end
 
-    `else //TRIPLE_DEMOD
+    `else //R6100
 
     //******************************************************************************
     //                           Processor Read Data Mux
@@ -1706,7 +1708,7 @@ sdi sdi(
 
     assign fb_data = (cs & rd) ? rd_mux : 16'hzzzz;
 
-    `endif //TRIPLE_DEMOD
+    `endif //R6100
 
 
 endmodule

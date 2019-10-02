@@ -49,10 +49,12 @@
 
 `ifdef TRIPLE_DEMOD
 `define SEMCO_DEMOD
+`define R6100
 `endif
 
 `ifdef TRIPLE_LDPC
 `define LDPC_DEMOD
+`define R6100
 `endif
 
 `ifdef SEMCO_DEMOD
