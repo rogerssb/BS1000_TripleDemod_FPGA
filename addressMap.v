@@ -77,6 +77,7 @@
 `define ADD_SPI_GATEWAY
 `define ADD_BERT
 `define ADD_MULTIBOOT
+`define ADD_SPECTRAL_SWEEP
 `endif
 
 `ifdef LDPC_DEMOD
@@ -99,10 +100,11 @@
 `define ADD_SPI_GATEWAY
 `define ADD_BERT
 `define ADD_MULTIBOOT
+`define ADD_SPECTRAL_SWEEP
 `endif
 
 `ifdef ADD_LDPC
-    `define TEST_LDPC
+    //`define TEST_LDPC
 `endif
 
 `ifdef ADD_CMA
