@@ -5,6 +5,7 @@
 module viterbi(
     input                   clk,clkEn,reset,
     input                   busClk,
+    input                   cs,
     input                   wr0,wr1,wr2,wr3,
     input           [12:0]  addr,
     input           [31:0]  din,
@@ -25,7 +26,7 @@ module viterbi(
     reg viterbiSpace;
     always @* begin
         casex(addr)
-            `VITERBISPACE:  viterbiSpace = 1;
+            `VITERBISPACE:  viterbiSpace = cs;
             default:        viterbiSpace = 0;
         endcase
     end

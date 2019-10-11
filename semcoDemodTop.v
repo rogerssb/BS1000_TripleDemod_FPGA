@@ -123,7 +123,7 @@ module semcoDemodTop (
 
 );
 
-    parameter VER_NUMBER = 16'd604;
+    parameter VER_NUMBER = 16'd606;
 
 
 //******************************************************************************
@@ -420,6 +420,64 @@ module semcoDemodTop (
         .eyeOffset(demodEyeOffset)
     );
 
+`ifdef ADD_VITERBI
+/******************************************************************************
+                            Viterbi Decoders
+******************************************************************************/
+/*
+    The viterbi was originally used in the bitsync bert card so there's a value
+    called bitsyncMode that doesn't exist in the legacy demod. We re-create it 
+    here from demodMode so we don't have two versions of viterbi to support.
+*/
+
+    reg         [1:0]   bitsyncMode;
+    always @* begin
+        case (demodMode)
+            `MODE_QPSK:   bitsyncMode = `BS_MODE_DUAL_CH;
+            `MODE_OQPSK:  bitsyncMode = `BS_MODE_OFFSET_CH;
+            default:      bitsyncMode = `BS_MODE_IND_CH;
+        endcase
+    end
+
+    wire    [31:0]  vitDout;
+    viterbi viterbi(
+        .clk(clk),
+        .clkEn(1'b1),
+        .reset(reset),
+        .busClk(busClk),
+        .cs(cs),
+        .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
+        .addr(addr),
+        .din(dataIn),
+        .dout(vitDout),
+        .bitsyncMode(bitsyncMode),
+        .ch0SymEn(iDemodSymEn),
+        .ch0SymData(iDemodSymData),
+        .ch1SymEn(qDemodSymEn),
+        .ch1SymData(qDemodSymData),
+        .ch0BitEnOut(ch0VitBitEn),
+        .ch0BitOut(ch0VitBit),
+        .ch1BitEnOut(ch1VitBitEn),
+        .ch1BitOut(ch1VitBit)
+        );
+    reg                 ch0VitSym2xEn;
+    reg                 ch1VitSym2xEn;
+    always @* begin
+        case (bitsyncMode)
+            `BS_MODE_DUAL_CH,
+            `BS_MODE_OFFSET_CH: begin
+                ch0VitSym2xEn = iDemodSym2xEn;
+                ch1VitSym2xEn = iDemodSym2xEn;
+            end
+            default: begin
+                ch0VitSym2xEn = iDemodSymEn;
+                ch1VitSym2xEn = qDemodSymEn;
+            end
+        endcase
+    end
+`endif //ADD_VITERBI
+
+
 `ifdef ADD_TRELLIS
 //******************************************************************************
 //                        PCMFM Trellis Decoder
@@ -560,40 +618,53 @@ module semcoDemodTop (
         endcase
     end
 
+    wire        [1:0]   dualSrcSelect;
     reg                 dualCh0Input;
     reg                 dualCh1Input;
     reg                 dualSymEn;
     reg                 dualSym2xEn;
     always @(posedge clk) begin
-        `ifdef ADD_TRELLIS
-        if (pcmTrellisMode) begin
-            dualCh0Input <= pcmTrellisBit;
-            dualCh1Input <= pcmTrellisBit;
-            dualSymEn <= pcmTrellisSymEnOut;
-            dualSym2xEn <= pcmTrellisSym2xEnOut;
-        end
-        `ifdef ADD_MULTIH
-        else if (multihMode) begin
-            dualCh0Input <= multihBit[0];
-            dualCh1Input <= multihBit[1];
-            dualSymEn <= multihSymEnOut;
-            dualSym2xEn <= multihSym2xEnOut;
-        end
-        `endif
-        else begin
-            dualCh0Input <= iDemodBit;
-            dualCh1Input <= qDemodBit;
-            dualSymEn <= iDemodSymEn;
-            dualSym2xEn <= iDemodSym2xEn;
-        end
+        case (dualSrcSelect)
+            `ifdef ADD_VITERBI
+            `DEC_SRC_VITERBI: begin
+                dualCh0Input <= ch0VitBit;
+                dualCh1Input <= ch0VitBit;
+                dualSymEn <= ch0VitBitEn;
+                dualSym2xEn <= ch0VitSym2xEn;
+            end
+            `endif //ADD_VITERBI
+            default: begin
+                `ifdef ADD_TRELLIS
+                if (pcmTrellisMode) begin
+                    dualCh0Input <= pcmTrellisBit;
+                    dualCh1Input <= pcmTrellisBit;
+                    dualSymEn <= pcmTrellisSymEnOut;
+                    dualSym2xEn <= pcmTrellisSym2xEnOut;
+                end
+                `ifdef ADD_MULTIH
+                else if (multihMode) begin
+                    dualCh0Input <= multihBit[0];
+                    dualCh1Input <= multihBit[1];
+                    dualSymEn <= multihSymEnOut;
+                    dualSym2xEn <= multihSym2xEnOut;
+                end
+                `endif
+                else begin
+                    dualCh0Input <= iDemodBit;
+                    dualCh1Input <= qDemodBit;
+                    dualSymEn <= iDemodSymEn;
+                    dualSym2xEn <= iDemodSym2xEn;
+                end
 
-        `else //ADD_TRELLIS
+                `else //ADD_TRELLIS
 
-        dualCh0Input <= iDemodBit;
-        dualCh1Input <= qDemodBit;
-        dualSymEn <= iDemodSymEn;
-        dualSym2xEn <= iDemodSym2xEn;
-        `endif //ADD_TRELLIS
+                dualCh0Input <= iDemodBit;
+                dualCh1Input <= qDemodBit;
+                dualSymEn <= iDemodSymEn;
+                dualSym2xEn <= iDemodSym2xEn;
+                `endif //ADD_TRELLIS
+            end
+        endcase
     end
 
     wire    [31:0]  dualDecDout;
@@ -622,7 +693,7 @@ module semcoDemodTop (
         .fifo_reset(),
         .clkPhase(),
         .symb_clk(dualPcmSymClk),
-        .inputSelect()
+        .inputSelect(dualSrcSelect)
     );
 
     reg ch1DecoderSpace;
@@ -636,12 +707,21 @@ module semcoDemodTop (
     reg                 ch1DecInput;
     reg                 ch1DecSymEn;
     reg                 ch1DecSym2xEn;
-    reg                 ch1DecSymClk;
     always @(posedge clk) begin
-        ch1DecInput <= qDemodBit;
-        ch1DecSymEn <= qDemodSymEn;
-        ch1DecSym2xEn <= qDemodSym2xEn;
-        ch1DecSymClk <= qDemodSymClk;
+        case (dualSrcSelect)
+            `ifdef ADD_VITERBI
+            `DEC_SRC_VITERBI: begin
+                ch1DecInput <= ch1VitBit;
+                ch1DecSymEn <= ch1VitBitEn;
+                ch1DecSym2xEn <= ch1VitSym2xEn;
+            end
+            `endif //ADD_VITERBI
+            default: begin
+                ch1DecInput <= qDemodBit;
+                ch1DecSymEn <= qDemodSymEn;
+                ch1DecSym2xEn <= qDemodSym2xEn;
+            end
+        endcase
     end
 
 
@@ -1486,6 +1566,10 @@ sdi sdi(
             `VIDFIR1SPACE,
             `INTERP1SPACE:      rd_mux = interp1Dout;
 
+            `ifdef ADD_VITERBI
+            `VITERBISPACE:      rd_mux = vitDout;
+            `endif
+
             `DUAL_DECODERSPACE: rd_mux = dualDecDout;
 
             `CH1_DECODERSPACE:  rd_mux = ch1DecDout;
@@ -1686,6 +1770,18 @@ sdi sdi(
                     rd_mux = pllDout[15:0];
                     end
                 end
+
+            `ifdef ADD_VITERBI
+            `VITERBISPACE: begin
+                if (addr[1]) begin
+                    rd_mux = vitDout[31:16];
+                    end
+                else begin
+                    rd_mux = vitDout[15:0];
+                    end
+                end
+            `endif
+
             `DUAL_DECODERSPACE: begin
                 if (addr[1]) begin
                     rd_mux = dualDecDout[31:16];

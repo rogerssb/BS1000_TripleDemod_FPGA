@@ -5,6 +5,7 @@
 //`define SOQPSK_TEST
 `define LDPC_TEST
 //`define AQPSK_TEST
+//`define QPSK_VIT_TEST
 
 `define ENABLE_AGC
 //`define TEST_CMA
@@ -18,6 +19,8 @@
     //`define TEST_DATA "c:/modem/vivado/testData/ldpcSyncWaveform.txt"
 `elsif AQPSK_TEST
     `define TEST_DATA "c:/modem/vivado/testData/soqpskTestData.txt"
+`elsif QPSK_VIT_TEST
+    `define TEST_DATA "c:/semco/qpsk/qpsk_2047_R1_2_K7_G2Inverted.txt"
 `endif
 
 module test;
@@ -287,6 +290,8 @@ module test;
         write32(createAddress(`DEMODSPACE,`DEMOD_CONTROL),{16'bx,13'bx,`MODE_OQPSK});
         `elsif AQPSK_TEST
         write32(createAddress(`DEMODSPACE,`DEMOD_CONTROL),{16'bx,13'bx,`MODE_AQPSK});
+        `elsif QPSK_VIT_TEST
+        write32(createAddress(`DEMODSPACE,`DEMOD_CONTROL),{16'bx,13'bx,`MODE_QPSK});
         `endif
 
         // Init the sample rate loop filters
@@ -303,6 +308,8 @@ module test;
         write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h001a0010);
         write32(createAddress(`BITSYNCAUSPACE,`LF_LEAD_LAG),32'h001a0010);
         write32(createAddress(`BITSYNCAUSPACE,`LF_LEAD_LAG),32'h001a0010);
+        `elsif QPSK_VIT_TEST
+        write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h001a0010);
         `endif
         write32(createAddress(`BITSYNCSPACE,`LF_LIMIT), resamplerLimitInt);
 
@@ -329,6 +336,12 @@ module test;
         `elsif AQPSK_TEST
         write32(createAddress(`CARRIERSPACE,`CLF_CONTROL),1);    // Zero the error
         write32(createAddress(`CARRIERSPACE,`CLF_LEAD_LAG),32'h18180808);
+        write32(createAddress(`CARRIERSPACE,`CLF_ULIMIT),  carrierLimit);
+        write32(createAddress(`CARRIERSPACE,`CLF_LLIMIT), -carrierLimit);
+        write32(createAddress(`CARRIERSPACE,`CLF_LOOPDATA), sweepRate);
+        `elsif QPSK_VIT_TEST
+        write32(createAddress(`CARRIERSPACE,`CLF_CONTROL),1);    // Zero the error
+        write32(createAddress(`CARRIERSPACE,`CLF_LEAD_LAG),32'h14140606);
         write32(createAddress(`CARRIERSPACE,`CLF_ULIMIT),  carrierLimit);
         write32(createAddress(`CARRIERSPACE,`CLF_LLIMIT), -carrierLimit);
         write32(createAddress(`CARRIERSPACE,`CLF_LOOPDATA), sweepRate);
@@ -426,6 +439,13 @@ module test;
         `endif
 
         write32(createAddress(`UARTSPACE,`UART_BAUD_DIV),32'h0000000f);
+
+        `ifdef QPSK_VIT_TEST
+        // Set for inverse of 0.45 which is a smidge less than the AGC setpoint of 0.5 to 
+        // account for shaping filter losses.
+        write32(createAddress(`VITERBISPACE, `VIT_INVERSE_MEAN), 32'h00018e39);
+        write32(createAddress(`VITERBISPACE, `VIT_BER_TEST_LENGTH), 32'd8);
+        `endif
 
         reset = 1;
         repeat (2) @ (posedge clk) ;
@@ -530,6 +550,10 @@ module test;
         write32(createAddress(`CARRIERSPACE,`CLF_CONTROL),2);
         `endif
 
+        `ifdef QPSK_VIT_TEST
+        write32(createAddress(`CARRIERSPACE,`CLF_CONTROL),2);
+        `endif
+
         `ifdef TEST_CMA
         // Wait for some data to pass thru
         repeat (50*`CLOCKS_PER_BIT) @ (posedge clk) ;
@@ -542,6 +566,12 @@ module test;
         `ifdef TRELLIS
         // Turn on the trellis carrier loop
         write32(createAddress(`TRELLIS_SPACE,`LF_CONTROL),32'h0);
+        `endif
+
+        `ifdef QPSK_VIT_TEST
+        viterbi.vitReset = 1;
+        repeat (2*`CLOCKS_PER_BIT) @ (posedge clk) ;
+        viterbi.vitReset = 0;
         `endif
 
         // Enable the SDI in eye pattern mode
@@ -584,6 +614,7 @@ module test;
     wire    signed  [17:0]  iLdpc,qLdpc;
     `endif
     wire    [12:0]  mag;
+    wire    signed  [4:0]   demodMode;
     wire    [17:0]  dac0Out,dac1Out,dac2Out, iSymData, qSymData, sdiDataI, sdiDataQ;
     wire    [17:0]  iEye,qEye;
     wire    [31:0]  dout;
@@ -607,6 +638,7 @@ module test;
         .iSymData(sdiDataI),
         .iBit(demodBit),
         .qSymEn(qSymEn),
+        .qSym2xEn(qSym2xEn),
         .qSymData(sdiDataQ),
         .sdiSymEn(sdiSymEn),
         .trellisSymEn(trellisSymEn),
@@ -614,6 +646,7 @@ module test;
         .qTrellis(qSymData),
         .mag(mag),
         .magClkEn(magClkEn),
+        .demodMode(demodMode),
         `ifdef LDPC_TEST
         .iLdpcSymEn(iLdpcSymEn),.qLdpcSymEn(qLdpcSymEn),
         .iLdpc(iLdpc),
@@ -682,6 +715,54 @@ module test;
         .ldpcBitEnOut(),
         .ldpcBitOut()
     );
+    `endif
+
+    `ifdef QPSK_VIT_TEST
+    reg         [1:0]   bitsyncMode;
+    always @* begin
+        case (demodMode)
+            `MODE_QPSK:   bitsyncMode = `BS_MODE_DUAL_CH;
+            `MODE_OQPSK:  bitsyncMode = `BS_MODE_OFFSET_CH;
+            default:      bitsyncMode = `BS_MODE_IND_CH;
+        endcase
+    end
+
+    wire    [31:0]  vitDout;
+    viterbi viterbi(
+        .clk(clk),
+        .clkEn(1'b1),
+        .reset(reset),
+        .busClk(busClk),
+        .cs(cs),
+        .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
+        .addr(a),
+        .din(d),
+        .dout(vitDout),
+        .bitsyncMode(bitsyncMode),
+        .ch0SymEn(iSymEn),
+        .ch0SymData(sdiDataI),
+        .ch1SymEn(qSymEn),
+        .ch1SymData(sdiDataQ),
+        .ch0BitEnOut(ch0VitBitEn),
+        .ch0BitOut(ch0VitBit),
+        .ch1BitEnOut(ch1VitBitEn),
+        .ch1BitOut(ch1VitBit)
+        );
+    reg                 ch0VitSym2xEn;
+    reg                 ch1VitSym2xEn;
+    always @* begin
+        case (bitsyncMode)
+            `BS_MODE_DUAL_CH,
+            `BS_MODE_OFFSET_CH: begin
+                ch0VitSym2xEn = sym2xEn;
+                ch1VitSym2xEn = qSym2xEn;
+            end
+            default: begin
+                ch0VitSym2xEn = iSymEn;
+                ch1VitSym2xEn = qSymEn;
+            end
+        endcase
+    end
     `endif
 
     sdi sdi(
@@ -757,6 +838,10 @@ module test;
     //**************************** Startup ************************************
     initial begin
         clken <= 1;
+
+        `ifdef QPSK_VIT_TEST
+        viterbi.vitReset = 0;
+        `endif
 
         // Wait 10 clks
         repeat (6) @ (posedge clk) ;
