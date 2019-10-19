@@ -7,18 +7,18 @@ set_property CONFIG_MODE SPIx1 [current_design]
 create_clock -period 6.250 -name pll0_OUT1 -waveform {0.000 3.125} [get_ports pll0_OUT1]
 create_clock -period 6.250 -name pll1_OUT1 -waveform {0.000 3.125} [get_ports pll1_OUT1]
 
-create_generated_clock -name cAndD0/dll/dllOutputClk_reg/Q -source [get_pins cAndD0/CLK] -divide_by 2 [get_pins cAndD0/dll/dllOutputClk_reg/Q]
-create_generated_clock -name {cAndD0/dllDivider_reg[0]/Q} -source [get_ports sysClk] -divide_by 4 -add -master_clock CandD0dllOutputClk [get_pins {cAndD0/dllDivider_reg[0]/Q}]
+create_generated_clock -name cAndD0/dll/dllOutputClk_reg/Q -source [get_ports sysClk] -divide_by 2 [get_pins cAndD0/dll/dllOutputClk_reg/Q]
+create_generated_clock -name {cAndD0/dllDivider_reg[0]/Q} -source [get_ports sysClk] -divide_by 4 [get_pins {cAndD0/dllDivider_reg[0]/Q}]
 create_generated_clock -name {cAndD0/pllDivider_reg[0]/Q} -source [get_ports pll0_OUT1] -divide_by 4 -add -master_clock pll0_OUT1 [get_pins {cAndD0/pllDivider_reg[0]/Q}]
 
-create_generated_clock -name cAndD1/dll/dllOutputClk_reg/Q -source [get_ports sysClk] -divide_by 2 -add -master_clock clk93_systemClock [get_pins cAndD1/dll/dllOutputClk_reg/Q]
-create_generated_clock -name {cAndD1/dllDivider_reg[0]/Q} -source [get_ports sysClk] -divide_by 4 -add -master_clock cAndD1/dll/dllOutputClk_reg/Q [get_pins {cAndD1/dllDivider_reg[0]/Q}]
-create_generated_clock -name {cAndD1/pllDivider_reg[0]/Q} -source [get_ports pll1_OUT1] -divide_by 4 -add -master_clock [get_clocks pll1_OUT1] [get_pins {cAndD1/pllDivider_reg[0]/Q}]
+create_generated_clock -name cAndD1/dll/dllOutputClk_reg/Q -source [get_ports sysClk] -divide_by 2 [get_pins cAndD1/dll/dllOutputClk_reg/Q]
+create_generated_clock -name {cAndD1/dllDivider_reg[0]/Q} -source [get_ports sysClk] -divide_by 4 [get_pins {cAndD1/dllDivider_reg[0]/Q}]
+create_generated_clock -name {cAndD1/pllDivider_reg[0]/Q} -source [get_ports pll1_OUT1] -divide_by 4 -add -master_clock pll1_OUT1 [get_pins {cAndD1/pllDivider_reg[0]/Q}]
 
 
 set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets pll0_OUT1_IBUF]
 
-set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks fbClk] -group [get_clocks -include_generated_clocks sysClk] -group [get_clocks -include_generated_clocks pll0_OUT1] -group [get_clocks -include_generated_clocks pll1_OUT1]
+set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks fbClk] -group [get_clocks -include_generated_clocks sysClk] -group [get_clocks -include_generated_clocks pll0_OUT1] -group [get_clocks -include_generated_clocks pll1_OUT1] -group [get_clocks {cAndD0/dll/dllOutputClk_reg/Q {cAndD0/dllDivider_reg[0]/Q} {cAndD0/pllDivider_reg[0]/Q}}] -group [get_clocks {cAndD1/dll/dllOutputClk_reg/Q {cAndD1/dllDivider_reg[0]/Q} {cAndD1/pllDivider_reg[0]/Q}}]
 
 set_input_delay -clock [get_clocks sysClk] -min -add_delay 0.000 [get_ports spiFlashMISO]
 set_input_delay -clock [get_clocks sysClk] -max -add_delay 2.000 [get_ports spiFlashMISO]
@@ -37,17 +37,12 @@ set_input_delay -clock [get_clocks fbClk] -max -add_delay 13.500 [get_ports fb_w
 
 set_output_delay -clock [get_clocks fbClk] -min -add_delay -0.500 [get_ports {fb_data[*]}]
 set_output_delay -clock [get_clocks fbClk] -max -add_delay 8.500 [get_ports {fb_data[*]}]
-set_output_delay -clock [get_clocks sysClk] -min -add_delay -0.100 [get_ports {dac0_d[*]}]
-set_output_delay -clock [get_clocks sysClk] -max -add_delay 3.400 [get_ports {dac0_d[*]}]
-set_output_delay -clock [get_clocks sysClk] -min -add_delay -0.100 [get_ports {dac1_d[*]}]
-set_output_delay -clock [get_clocks sysClk] -max -add_delay 3.400 [get_ports {dac1_d[*]}]
-set_output_delay -clock [get_clocks sysClk] -min -add_delay -0.100 [get_ports {dac2_d[*]}]
-set_output_delay -clock [get_clocks sysClk] -max -add_delay 3.400 [get_ports {dac2_d[*]}]
+set_output_delay -clock [get_clocks sysClk] -min -add_delay -0.100 [get_ports {dac*_d[*]}]
+set_output_delay -clock [get_clocks sysClk] -max -add_delay 3.400 [get_ports {dac*_d[*]}]
 
+set_false_path -from * -to [get_ports {lockLed*n pll*_CS pll*_REF pll_SCK pll_SDI spiFlash* ch*DataOut ch*ClkOut}]
 
-
-
-
-
-
-
+set_property C_CLK_INPUT_FREQ_HZ 300000000 [get_debug_cores dbg_hub]
+set_property C_ENABLE_CLK_DIVIDER false [get_debug_cores dbg_hub]
+set_property C_USER_SCAN_CHAIN 1 [get_debug_cores dbg_hub]
+connect_debug_port dbg_hub/clk [get_nets clk2x]

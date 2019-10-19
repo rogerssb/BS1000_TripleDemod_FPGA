@@ -15,10 +15,10 @@ module acsOp(
     wire    signed  [17:0]  diffImag = {y8Imag[17],y8Imag[17:1]} - {sImag[17],sImag[17:1]};
 
     `ifdef ACS_USE_MAG
-    // An ACS operation implements 
+    // An ACS operation implements
     //                 accOut = accIn + |y8 - s|^2
-    // where y8 and s are complex. The cmag18 module returns an approximation to the 
-    // sqrt(|x|^2) which simulation indicates works as well. We do this to save 
+    // where y8 and s are complex. The cmag18 module returns an approximation to the
+    // sqrt(|x|^2) which simulation indicates works as well. We do this to save
     // dedicated multipliers
 
     wire            [17:0]  branchMetric;
@@ -52,17 +52,27 @@ module acsOp(
 
     `endif // ACS_USE_MAG
 
-    // Final output is a saturated sum. 
+    // Final output is a saturated sum.
     //wire            [18:0]  accSum = {1'b0,accMetric[0]} + branchMetric;
-    wire            [18:0]  accSum = {1'b0,accMetricIn} + branchMetric;
+    reg            [18:0]  accSum;
     always @(posedge clk) begin
-        if (accSum[18]) begin
+
+        accSum <= {1'b0,accMetricIn} + branchMetric;
+/*        if (accSum[18]) begin
             accMetricOut <= 18'h3ffff;
         end
         else begin
             accMetricOut <= accSum[17:0];
         end
-    end
+*/  end
+
+    always @*   // perform the saturation logic after the add for timimg
+        if (accSum[18]) begin
+            accMetricOut = 18'h3ffff;
+        end
+        else begin
+            accMetricOut = accSum[17:0];
+        end
 
     // Create the output clk enable
     reg             [7:0] clkEnSR;

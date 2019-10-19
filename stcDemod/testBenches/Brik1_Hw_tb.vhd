@@ -167,8 +167,9 @@ architecture rtl of Brik1_Hw_tb is
 
    COMPONENT dds_sin_cos
       PORT (
-         aclk                 : IN STD_LOGIC;
-         aresetn              : IN STD_LOGIC;
+         aclk,
+         aclken,
+         aresetn,
          s_axis_config_tvalid : IN STD_LOGIC;
          s_axis_config_tdata  : IN STD_LOGIC_VECTOR(63 DOWNTO 0);
          m_axis_data_tvalid   : OUT STD_LOGIC;
@@ -182,7 +183,7 @@ architecture rtl of Brik1_Hw_tb is
       PORT (
          clk            : IN  std_logic;
          probe_in0      : IN  std_logic_vector(7 downto 0);
-         probe_out0     : OUT std_logic_vector(17 downto 0);
+         probe_out0     : OUT std_logic_vector(23 downto 0);
          probe_out1     : OUT std_logic_vector(17 downto 0);
          probe_out2     : OUT std_logic_vector(17 downto 0);
          probe_out3     : OUT std_logic_vector(17 downto 0);
@@ -240,16 +241,16 @@ architecture rtl of Brik1_Hw_tb is
             RealOut,
             ImagOut,
             BitRateAcc           : sfixed(0 downto -17);
-   SIGNAL   Phase0R,
-            Phase0I,
-            Phase1R,
-            Phase1I              : sfixed(0 downto -15);
+   SIGNAL   Cos0,
+            Sin0,
+            Cos1,
+            Sin1              : sfixed(0 downto -15);
    SIGNAL   SinCosData0,
             SinCosData1          : std_logic_vector(31 downto 0);
+   SIGNAL   Frequency_vio,
+            notFrequency_vio     : std_logic_vector(23 downto 0);
    SIGNAL   Offset_vio           : SLV12;
    SIGNAL   BitRate_vio,
-            Frequency_vio,
-            notFrequency_vio,
             FrameClocks_vio,
             Power0_vio,
             Power1_vio,
@@ -284,7 +285,7 @@ begin
       PORT MAP (
          clk        => ClkXn,
          probe_in0  => Errors,
-         probe_out0 => Frequency_vio,           -- 00280 (222Hz) start getting errors at end of frame
+         probe_out0 => open, --Frequency_vio,           -- 00280 (222Hz) start getting errors at end of frame
          probe_out1 => FrameClocks_vio,         -- usually 13312-1=13311. smaller makes packets slide
          probe_out2 => Phase0_vio,              -- has no effect unless both channels active
          probe_out3 => Phase1_vio,
@@ -300,7 +301,7 @@ begin
       );
 -- Phase0_vio <= 18x"10000";
 -- Phase1_vio <= 18x"30000";
--- Frequency_vio <= 18x"080";
+Frequency_vio <= 24x"8000";
 
    ErrorProc : process (ClkXn)
    begin
@@ -544,36 +545,38 @@ begin
          RdOutB      => RealRead(2)
       );
 
-   DDS0 : dds_sin_cos      -- DDS is 28 bit phase increment. only bottom 18 are tunable for 100KHz range
+   DDS0 : dds_sin_cos      -- DDS is 28 bit phase increment. only bottom 18 are tunable for ±50KHz range
       PORT MAP (
          aclk                 => Clk93,
+         aclken               => DataValid(0),
          aresetn              => not Reset,
-         s_axis_config_tvalid => DataValid(0),  -- Freq/Phase offset may be delayed relative to simulation
-         s_axis_config_tdata  => (63 downto 18+32=> Phase0_vio(Phase0_vio'left)) & Phase0_vio & (31 downto 18=> Frequency_vio(Frequency_vio'left)) & Frequency_vio, -- sign extend phase and freq values
+         s_axis_config_tvalid => '1',  -- Freq/Phase offset may be delayed relative to simulation
+         s_axis_config_tdata  => (63 downto 60=> Phase0_vio(Phase0_vio'left)) & Phase0_vio & 4x"0" & (31 downto 18=> Frequency_vio(Frequency_vio'left)) & Frequency_vio, -- sign extend phase and freq values
          m_axis_data_tvalid   => open,
          m_axis_data_tdata    => SinCosData0,
          m_axis_phase_tvalid  => open,
          m_axis_phase_tdata   => open
    );
 
-   Phase0R <= to_sfixed(SinCosData0(15 downto 0), Phase0R);
-   Phase0I <= to_sfixed(SinCosData0(31 downto 16), Phase0I);
+   Cos0 <= to_sfixed(SinCosData0(15 downto 0), Cos0);
+   Sin0 <= to_sfixed(SinCosData0(31 downto 16), Sin0);
    notFrequency_vio <= not Frequency_vio;
 
    DDS1 : dds_sin_cos
       PORT MAP (
          aclk                 => Clk93,
+         aclken               => DataValid(0),
          aresetn              => not Reset,
-         s_axis_config_tvalid => DataValid(0),
-         s_axis_config_tdata  => (63 downto 18+32=> Phase1_vio(Phase1_vio'left)) & Phase1_vio & (31 downto 18=> notFrequency_vio(notFrequency_vio'left)) & notFrequency_vio,
+         s_axis_config_tvalid => '1',
+         s_axis_config_tdata  => (63 downto 60=> Phase1_vio(Phase1_vio'left)) & Phase1_vio & 4x"0" & (31 downto 18=> Frequency_vio(Frequency_vio'left)) & Frequency_vio,
          m_axis_data_tvalid   => open,
          m_axis_data_tdata    => SinCosData1,
          m_axis_phase_tvalid  => open,
          m_axis_phase_tdata   => open
    );
 
-   Phase1R <= to_sfixed(SinCosData1(15 downto 0), Phase1R);
-   Phase1I <= to_sfixed(SinCosData1(31 downto 16), Phase1I);
+   Cos1 <= to_sfixed(SinCosData1(15 downto 0), Cos1);
+   Sin1 <= to_sfixed(SinCosData1(31 downto 16), Sin1);
 
    H0r            <= to_sfixed(RealRead(0), ResampleR_s);
    H0i            <= to_sfixed(ImagRead(0), ResampleI_s);
@@ -596,8 +599,8 @@ begin
          ReadyIn     => '1',
          ReInA       => H0r,
          ImInA       => H0i,
-         ReInB       => Phase0R & "00",
-         ImInB       => Phase0I & "00",
+         ReInB       => Cos0 & "00",
+         ImInB       => Sin0 & "00",
          ReOut       => Chan0r,
          ImOut       => Chan0i,
          ValidOut    => PhaseValid,
@@ -620,8 +623,8 @@ begin
          ReadyIn     => '1',
          ReInA       => H1r,
          ImInA       => H1i,
-         ReInB       => Phase1R & "00",
-         ImInB       => Phase1I & "00",
+         ReInB       => Cos1 & "00",
+         ImInB       => Sin1 & "00",
          ReOut       => Chan1r,
          ImOut       => Chan1i,
          ValidOut    => open,

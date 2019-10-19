@@ -114,21 +114,16 @@ ARCHITECTURE rtl OF STC IS
          ce,
          PilotPulseIn,
          PilotFound,
-         DiffEn,
          ValidIn        : IN STD_LOGIC;
          CorrPntr       : IN ufixed(15 DOWNTO 0);
          Offset         : IN  SLV4;
          RealIn,
          ImagIn         : IN  Float_1_18;
-         PhaseOutA,
-         PhaseOutB      : OUT SLV18;
          StartNextFrame : OUT ufixed(15 DOWNTO 0);
          RealOut,
-         ImagOut,
-         PhaseDiff      : OUT Float_1_18;
+         ImagOut        : OUT Float_1_18;
          StartOut,
-         ValidOut,
-         PilotLocked    : OUT STD_LOGIC
+         ValidOut    : OUT STD_LOGIC
       );
    END COMPONENT;
 
@@ -136,6 +131,7 @@ ARCHITECTURE rtl OF STC IS
       PORT(
          clk,
          reset,
+         DiffEn,
          ce             : IN  std_logic;
          StartIn,
          ValidIn        : IN  std_logic;
@@ -144,6 +140,7 @@ ARCHITECTURE rtl OF STC IS
          InI            : IN  SLV18;
          StartDF,
          ValidDF,
+         PilotLocked,
          EstimatesDone  : OUT std_logic;
          H0EstR,
          H0EstI,
@@ -154,8 +151,11 @@ ARCHITECTURE rtl OF STC IS
          m_ndx0,
          m_ndx1         : OUT integer range -5 to 3;
          Mu0,
-         Mu1            : OUT FLOAT_1_18;
-         DeltaTauEst    : OUT sfixed(0 downto -5)
+         Mu1,
+         PhaseDiff      : OUT FLOAT_1_18;
+         DeltaTauEst    : OUT sfixed(0 downto -5);
+         PhaseOutA,
+         PhaseOutB      : OUT SLV18
       );
    END COMPONENT Brik2;
 
@@ -273,10 +273,10 @@ ARCHITECTURE rtl OF STC IS
   -- Signals
    SIGNAL   ResetSrc          : SLV8 := x"FF";
    SIGNAL   CE,
-            Clk,
-            Clk2x,
             Reset,
             Reset2x,
+            Reset93,
+            Reset186,
             StartOutPS,
             ValidOutPS,
             PilotLockedA,
@@ -396,9 +396,9 @@ ARCHITECTURE rtl OF STC IS
 BEGIN
 
 
-   process(Clk2x)
+   process(Clk186)
    begin
-      if (rising_edge(Clk2x)) then
+      if (rising_edge(Clk186)) then
 -- TODO remove ILAs
    PhaseDiff1xGainSlv <= to_slv(PhaseDiff1xGain);
    PhaseDiff2xGainSlv <= to_slv(PhaseDiff2xGain);
@@ -422,7 +422,7 @@ BEGIN
          LATENCY     => 1
       )
       PORT MAP(
-         clk         => Clk2x,
+         clk         => Clk186,
          ce          => '1',
          reset       => Reset2x,
          WrEn        => '0',
@@ -435,10 +435,10 @@ BEGIN
       );
 
    -- Capture BER info per frame
-   CaptureProc : process(Clk2x)
+   CaptureProc : process(Clk186)
       variable CaptureErrors : SLV4;
    begin
-      if (rising_edge(Clk2x)) then
+      if (rising_edge(Clk186)) then
          if (SIM_MODE) then
             CaptureErrors  := ExpectedData xor TrellisBits;
             if (lastSampleReset or Reset2x) then
@@ -469,26 +469,34 @@ BEGIN
       end if;
    end process;
 
-   Clk   <= Clk93;
-   Clk2x <= Clk186;
    CE    <= '1';     -- no need to strobe CE at this point.
 
-   ResetProcess : process(Clk)
+   Reset93Process : process(Clk93)
    begin
-      if(rising_edge(Clk)) then
+      if(rising_edge(Clk93)) then
          ResetSrc <= ResetSrc(6 downto 0) & '0';
+         Reset93  <= ResetSrc(7);
+      end if;
+   end process;
+
+   Reset186Process : process(Clk186)
+   begin
+      if(rising_edge(Clk186)) then
+         if not (Clk93) then
+            Reset186 <= ResetSrc(7);
+         end if;
       end if;
    end process;
 
    ResetBufg : BUFG
    port map (
-      I => ResetSrc(7),
+      I => Reset93,
       O => Reset
    );
 
    Reset2Bufg : BUFG
    port map (
-      I => ResetSrc(7),
+      I => Reset186,
       O => Reset2x
    );
 
@@ -500,8 +508,8 @@ BEGIN
          SIM_MODE => SIM_MODE
       )
       PORT MAP (
-         clk            => Clk,
-         clk2x          => Clk2x,
+         clk            => Clk93,
+         clk2x          => Clk186,
          reset          => Reset,
          reset2x        => Reset2x,
          ce             => Ce,
@@ -527,9 +535,9 @@ BEGIN
          StartOut       => PilotPulse
    );
 
-   AFC_process : process(Clk2x)
+   AFC_process : process(Clk186)
    begin
-      if (rising_edge(Clk2x)) then
+      if (rising_edge(Clk186)) then
          PilotValidOutDly  <= PilotValidOut;
          PhaseDiffGain1Slv1  <= PhaseDiffGain1Slv; -- the slv to slv transfer are to make the ILA unconfused
          PhaseDiffGain2Slv1  <= PhaseDiffGain2Slv;
@@ -568,7 +576,7 @@ BEGIN
 
    PS_u : pilotsync
       PORT MAP (
-         clk            => Clk2x,
+         clk            => Clk186,
          ce             => CE,
          reset          => Reset2x,
          PilotPulseIn   => PilotPulse,
@@ -579,32 +587,27 @@ BEGIN
          Offset         => OffsetPS,
          RealIn         => PilotRealOut,
          ImagIn         => PilotImagOut,
-         PhaseOutA      => Phase0A,
-         PhaseOutB      => Phase0B,
-         DiffEn         => MiscBits(2),
-         PhaseDiff      => PhaseDiff2,
          RealOut        => RealOutPS,     -- 186Mhz
          ImagOut        => ImagOutPS,
          StartOut       => StartOutPS,
-         ValidOut       => ValidOutPS,
-         PilotLocked    => PilotLocked
+         ValidOut       => ValidOutPS
    );
 
    VioPhase  : Vio2x18
       PORT MAP (
-         clk         => clk2x,
+         clk         => Clk186,
          probe_out0  => PhaseDiffGain2Slv,
          probe_out1  => open,
          probe_out2  => PhaseDiffGain1Slv,
          probe_out3  => MiscBits,
          probe_out4  => TrellisOffsetSlv,
-         probe_out5  => OffsetPS
+         probe_out5  => open -- TODO OffsetPS
    );
    TrellisOffset <= signed(TrellisOffsetSlv);
 
-   InterBrikClk : process(Clk2x) is
+   InterBrikClk : process(Clk186) is
    begin
-      if(rising_edge(Clk2x)) then
+      if(rising_edge(Clk186)) then
          if (Reset2x) then
             StartInBrik2Dly <= '0';
             ValidInBrik2Dly <= '0';
@@ -621,7 +624,7 @@ BEGIN
 
    Brik2_u : Brik2
       PORT MAP(
-         Clk            => Clk2x,
+         Clk            => Clk186,
          Reset          => Reset2x,
          CE             => CE,
          StartIn        => StartInBrik2Dly,
@@ -629,6 +632,10 @@ BEGIN
          InR            => to_slv(InRBrik2Dly),
          InI            => to_slv(InIBrik2Dly),
          MiscBits       => MiscBits,
+         PhaseOutA      => Phase0A,
+         PhaseOutB      => Phase0B,
+         DiffEn         => MiscBits(2),
+         PhaseDiff      => PhaseDiff2,
          EstimatesDone  => EstimatesDone,
          StartDF        => StartDF,
          ValidDF        => ValidDF,
@@ -642,12 +649,13 @@ BEGIN
          m_ndx0         => m_ndx0,
          m_ndx1         => m_ndx1,
          Mu0            => Ch0Mu,
-         Mu1            => Ch1Mu
+         Mu1            => Ch1Mu,
+         PilotLocked    => PilotLocked
       );
 
-   TP_Process : process(Clk2x)
+   TP_Process : process(Clk186)
    begin
-      if (rising_edge(Clk2x)) then
+      if (rising_edge(Clk186)) then
          m_ndx0Slv      <= std_logic_vector(TrellisOffset + to_signed(m_ndx0, 4)) when (not MiscBits(0)) else std_logic_vector(TrellisOffset - to_signed(m_ndx0, 4));
          m_ndx1Slv      <= std_logic_vector(TrellisOffset + to_signed(m_ndx1, 4)) when (not MiscBits(0)) else std_logic_vector(TrellisOffset - to_signed(m_ndx1, 4));
          Ch0MuSlv       <= to_slv(Ch0Mu);
@@ -658,7 +666,7 @@ BEGIN
 
    Trellis_u : trellisProcess
       PORT MAP (
-         clk                  => Clk2x,
+         clk                  => Clk186,
          clkEnable            => CE,
          reset                => Reset2x,
          estimatesDone        => EstimatesDone,
@@ -686,7 +694,7 @@ BEGIN
 
    FD : FireberdDrive
       PORT MAP(
-         clk            => Clk2x,
+         clk            => Clk186,
          reset          => Reset2x,
          ce             => CE,
          ValidIn        => TrellisOutEn,
@@ -703,7 +711,7 @@ BEGIN
          poly_length  => 5x"0b",
          poly_mode    => '0',
          reset        => Reset2x,
-         clock        => clk2x,
+         clock        => Clk186,
          enable       => pnBitEn, --   clock in data
          lfsr_enable  => pnBitEn, --   gated clock in data
          reload       => Reload,
@@ -712,9 +720,9 @@ BEGIN
          code_bit     => codeBit
       );
 
-   DacOutputs : process(Clk2x)
+   DacOutputs : process(Clk186)
    begin
-      if (rising_edge(Clk2x)) then
+      if (rising_edge(Clk186)) then
          Dac0Data   <= DacMux(to_integer(unsigned(DacSelect0)));
          Dac1Data   <= DacMux(to_integer(unsigned(DacSelect1)));
          Dac2Data   <= DacMux(to_integer(unsigned(DacSelect2)));
@@ -749,7 +757,7 @@ BEGIN
          n => 14
       )
       PORT MAP (
-         clk   => Clk,
+         clk   => Clk93,
          ena   => EstimatesDone,
          x     => to_slv(H0EstR(0 downto -13)),
          y     => to_slv(H0EstI(0 downto -13)),
@@ -763,7 +771,7 @@ BEGIN
          n => 14
       )
       PORT MAP (
-         clk   => Clk,
+         clk   => Clk93,
          ena   => EstimatesDone,
          x     => to_slv(H1EstR(0 downto -13)),
          y     => to_slv(H1EstI(0 downto -13)),

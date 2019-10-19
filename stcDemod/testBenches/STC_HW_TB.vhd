@@ -73,7 +73,7 @@ ARCHITECTURE rtl OF STC_HW_TB IS
          NoiseIn           : sfixed(0 downto -17);
   signal FrameCnt          : natural := 0;
    signal OffsetPS         : SLV4;
-   signal   OffsetPS_u     : unsigned(3 downto 0) := x"4";
+   signal   OffsetPS_u     : unsigned(3 downto 0) := x"9";
 
 BEGIN
 
@@ -96,22 +96,20 @@ BEGIN
             NoiseIn  <= to_sfixed(0.0, NoiseIn);
             BitRate  <= to_sfixed(9.33*4*1.04/93.3, BitRate);    -- 41.6 is 10Mb times 4 plus 4% overhead for pilot
          elsif (RdAddrEq and not RdAddrDly) then
- /* Power Test
-            case (FrameCnt) is
+/*            case (FrameCnt) is
             when 0 =>
-               Power1In <= to_sfixed(0.40, Power1In);
+               Power1In <= to_sfixed(0.240, Power1In);
                Power0In <= (others=>'0');
             when 1 =>
-               Power0In <= to_sfixed(0.60, Power0In);
+               Power0In <= to_sfixed(0.28, Power0In);
             when others =>
-               Power0In <= resize(Power0In - 0.05, Power0In);
+               Power0In <= resize(Power0In - 0.02, Power0In);
             end case;
-
-            OffsetPS_u <= OffsetPS_u + 1;
-            FrameCnt <= FrameCnt + 1;
-            OffsetPS <= std_logic_Vector(OffsetPS_u);
 */
+            FrameCnt <= FrameCnt + 1;
+--            OffsetPS_u <= OffsetPS_u + 1;
          end if;
+         OffsetPS <= std_logic_Vector(OffsetPS_u);
       end if;
    end process;
 
@@ -130,7 +128,7 @@ BEGIN
       DemodLED => open
    );
 
---   << signal Brik1.UUTu.OffsetPS : SLV4 >> <= OffsetPS;
+   << signal Brik1.UUTu.OffsetPS : SLV4 >> <= OffsetPS;
 
 END rtl;
 

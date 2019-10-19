@@ -1,5 +1,6 @@
 `timescale 1ns/100ps
 `include "addressMap.v"
+// Rev 601, FZ 9-14-19. Modified the TEST_DACS generic to remove the interpolators when not using their outputs. I use this for the 7k160 build to reduce DSP usage.
 
 module stcDemodTop (
 
@@ -647,6 +648,8 @@ module stcDemodTop (
     end
     wire    [31:0]  interp0Dout;
     wire    [17:0]  interp0DataOut;
+    //`define TEST_DACS
+    `ifndef TEST_DACS
     interpolate #(.RegSpace(`INTERP0SPACE), .FirRegSpace(`VIDFIR0SPACE)) dac0Interp(
         .clk(clk), .reset(reset), .clkEn(interp0ClkEn),
         .busClk(busClk),
@@ -660,17 +663,15 @@ module stcDemodTop (
         .clkEnOut(),
         .dataOut(interp0DataOut)
         );
-    //`define TEST_DACS
-    `ifdef TEST_DACS
+    always @(posedge clk) begin
+        dac0_d[12:0] <= interp0DataOut[16:4];
+        dac0_d[13] <= ~interp0DataOut[17];
+    end
+    `else
     always @(posedge clk) begin
         //dac0_d <= adc0Reg;
         dac0_d[12:0] <= interp0DataIn[16:4];
         dac0_d[13] <= ~interp0DataIn[17];
-    end
-    `else
-    always @(posedge clk) begin
-        dac0_d[12:0] <= interp0DataOut[16:4];
-        dac0_d[13] <= ~interp0DataOut[17];
     end
     `endif
 
@@ -695,6 +696,7 @@ module stcDemodTop (
     end
     wire    [31:0]  interp1Dout;
     wire    [17:0]  interp1DataOut;
+    `ifndef TEST_DACS
     interpolate #(.RegSpace(`INTERP1SPACE), .FirRegSpace(`VIDFIR1SPACE)) dac1Interp(
         .clk(clk), .reset(reset), .clkEn(interp1ClkEn),
         .busClk(busClk),
@@ -708,16 +710,14 @@ module stcDemodTop (
         .clkEnOut(),
         .dataOut(interp1DataOut)
         );
-    `ifdef TEST_DACS
-    always @(posedge clk) begin
-        //dac1_d <= adc0Reg;
-        dac1_d[12:0] <= interp0DataIn[16:4];
-        dac1_d[13] <= ~interp0DataIn[17];
-    end
-    `else
     always @(posedge clk) begin
         dac1_d[12:0] <= interp1DataOut[16:4];
         dac1_d[13] <= ~interp1DataOut[17];
+    end
+    `else
+    always @(posedge clk) begin
+        dac1_d[12:0] <= interp0DataIn[16:4];
+        dac1_d[13] <= ~interp0DataIn[17];
     end
     `endif
 
@@ -743,6 +743,7 @@ module stcDemodTop (
     end
     wire    [31:0]  interp2Dout;
     wire    [17:0]  interp2DataOut;
+    `ifndef TEST_DACS
     interpolate #(.RegSpace(`INTERP2SPACE), .FirRegSpace(`VIDFIR2SPACE)) dac2Interp(
         .clk(clk), .reset(reset), .clkEn(interp2ClkEn),
         .busClk(busClk),
@@ -756,16 +757,15 @@ module stcDemodTop (
         .clkEnOut(),
         .dataOut(interp2DataOut)
         );
-    `ifdef TEST_DACS
+    always @(posedge clk) begin
+        dac2_d[12:0] <= interp2DataOut[16:4];
+        dac2_d[13] <= ~interp2DataOut[17];
+    end
+    `else
     always @(posedge clk) begin
         //dac2_d <= adc0Reg;
         dac2_d[12:0] <= interp2DataIn[16:4];
         dac2_d[13] <= ~interp2DataIn[17];
-    end
-    `else
-    always @(posedge clk) begin
-        dac2_d[12:0] <= interp2DataOut[16:4];
-        dac2_d[13] <= ~interp2DataOut[17];
     end
     `endif  //TEST_DACS
 

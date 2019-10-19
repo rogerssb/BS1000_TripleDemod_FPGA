@@ -71,7 +71,8 @@ entity PilotDetectSliding is
          MagPeak0,
          PhsPeak0,
          MagPeak1,
-         PhsPeak1        : OUT SLV18;
+         PhsPeak1       : OUT SLV18;
+         FftPeakIndex   : OUT natural range 0 to 1023;
          PilotFound,
          ValidOut,
          StartOut       : OUT std_logic
@@ -191,6 +192,18 @@ architecture rtl of PilotDetectSliding is
       );
    END COMPONENT PD_Fft_Fifo;
 
+   COMPONENT DetectionFilter
+      PORT (
+         aclk                 : IN STD_LOGIC;
+         aclken               : IN STD_LOGIC;
+         aresetn              : IN STD_LOGIC;
+         s_axis_data_tvalid   : IN STD_LOGIC;
+         s_axis_data_tdata    : IN STD_LOGIC_VECTOR(47 DOWNTO 0);
+         s_axis_data_tready   : OUT STD_LOGIC;
+         m_axis_data_tvalid   : OUT STD_LOGIC;
+         m_axis_data_tdata    : OUT STD_LOGIC_VECTOR(47 DOWNTO 0)
+      );
+   END COMPONENT;
    COMPONENT vm_cordic_fast IS
       GENERIC (
          n  : positive := 14
@@ -205,22 +218,6 @@ architecture rtl of PilotDetectSliding is
          enOut    : OUT std_logic
       );
    END COMPONENT vm_cordic_fast;
-
-   COMPONENT DelayLineSlv IS
-      GENERIC (
-         LENGTH      : natural := 4096;
-         DATA_WIDTH  : natural := 16;
-         ADDR_WIDTH  : natural := 12;  -- longest delay is 4096
-         RAM_TYPE    : string  := "block"  -- or "distributed"
-      );
-      PORT(
-         clk            : IN  std_logic;
-         reset          : IN  std_logic;
-         ce             : IN  std_logic;
-         Input          : IN  std_logic_vector(DATA_WIDTH-1 downto 0);
-         Output         : OUT std_logic_vector(DATA_WIDTH-1 downto 0)
-      );
-   END COMPONENT DelayLineSlv;
 
 -------------------------------------------------------------------------------
 
@@ -272,6 +269,7 @@ architecture rtl of PilotDetectSliding is
 
    SIGNAL   AbsZero           : ufixed(6 downto -11);
    type     MAG_ARRAY  is array (natural range <>) of ufixed(AbsZero'range);
+   type     FFTMAG_ARRAY is array (natural range <>) of ufixed(0 downto -12);
 
    SIGNAL   ConfigTValid,
             ConfigDone,
@@ -287,6 +285,10 @@ architecture rtl of PilotDetectSliding is
             ValidMult1,
             ValidIFftOut,
             ValidAbs,
+            ValidFftCordic,
+            ValidFftCordicDly,
+            ValidFftDispFilt,
+            FftRamReset,
             ValidOverAdd,
             Hi1, Hi0,
             Lo1, Lo0,
@@ -320,8 +322,15 @@ architecture rtl of PilotDetectSliding is
             OverAddI0,
             OverAddR1,
             OverAddI1         : sfixed(5 downto -12);
-   SIGNAL   Mag0,
+   SIGNAL   FftRam            : FFTMAG_ARRAY(0 to 1023);
+   SIGNAL   MagFft,
+            Mag0,
             Mag1              : std_logic_vector(12 downto 0);
+   SIGNAL   MagFftPeak,
+            MagFft_u          : ufixed(0 downto -MagFft'left);
+   SIGNAL   FftDisp,
+            FftDispFilt       : ufixed(FftRam(0)'range);
+   SIGNAL   FftFiltOut        : std_logic_vector(47 downto 0);
    SIGNAL   Phase0,
             Phase1            : std_logic_vector(11 downto 0);
    SIGNAL   PilotMag,
@@ -366,6 +375,7 @@ architecture rtl of PilotDetectSliding is
    SIGNAL   Count,
             PeakIndex,
             MaxIndex,
+            FftPeakCount,
             StartIndex1,
             StopIndex1,
             StartIndex2,
@@ -529,12 +539,41 @@ begin
             FftR           <= (others=>'0');
             FftI           <= (others=>'0');
             MultTLast      <= (others=>'0');
+            FftPeakCount   <= 0;
+            FftRamReset    <= '1';
+            MagFftPeak     <= to_ufixed(0, MagFftPeak);
+            FftPeakIndex   <= 0;
          elsif (ce) then
             if (ValidFft = '1') and (Count < 1023) then
                Count <= Count + 1;
             else
                Count <= 0;
             end if;
+            if (FftRamReset) then
+               FftRam(FftPeakCount) <= (others=>'0');
+               if (FftPeakCount < 1023) then
+                  FftPeakCount <= FftPeakCount + 1;
+               else
+                  FftRamReset <= '0';
+               end if;
+            elsif (ValidFftCordic = '1') and (FftPeakCount < 1023) then
+               FftRam(FftPeakCount) <= resize( ((FftRam(FftPeakCount) sra 4)*15) + (MagFft_u sra 4), FftRam(0));
+               if (MagFft_u > MagFftPeak) then
+                  FftPeakIndex <= FftPeakCount;
+                  MagFftPeak   <= MagFft_u;
+               end if;
+               FftPeakCount    <= FftPeakCount + 1;
+            elsif (ValidFftCordicDly and not ValidFftCordic) then -- if falling_edge
+               MagFftPeak           <= to_ufixed(0, MagFftPeak);
+            else
+               FftPeakCount <= 0;
+            end if;
+            if (Count < 512) then
+               FftDisp        <= FftRam(Count + 512);
+            else
+               FftDisp        <= FftRam(Count - 512);
+            end if;
+            ValidFftCordicDly <= ValidFftCordic;
             ValidFftDly    <= ValidFft;
             FftR           <= to_sfixed(FftOutSlv(FFT_TOP_R downto FFT_BOT_R), FftR);
             FftI           <= to_sfixed(FftOutSlv(FFT_TOP_I downto FFT_BOT_I), FftI);
@@ -549,6 +588,36 @@ begin
          end if;
       end if;
    end process FftProcess;
+
+   MagFft_u <= to_ufixed(MagFft, MagFftPeak);
+
+   FftFilter : DetectionFilter
+      PORT MAP (
+         aclk                 => Clk2x,
+         aclken               => ce,
+         aresetn              => not reset,
+         s_axis_data_tvalid   => ValidFftDly,
+         s_axis_data_tdata    => 24x"00" & 6x"00"& to_slv(FftDisp) & 5x"00",
+         s_axis_data_tready   => open,
+         m_axis_data_tvalid   => ValidFftDispFilt,
+         m_axis_data_tdata    => FftFiltOut
+      );
+
+   FftDispFilt <= to_ufixed(FftFiltOut(17 downto 5), FftDispFilt);
+
+   cordicFft : vm_cordic_fast
+      GENERIC MAP (
+         n => 14
+      )
+      PORT MAP (
+         clk   => Clk2x,
+         ena   => ValidFftDly,
+         x     => to_slv(FftR(FftR'left downto FftR'left - 13)),
+         y     => to_slv(FftI(FftR'left downto FftR'left - 13)),
+         m     => MagFft,        -- m[n:2]
+         p     => open  ,        -- p[n:3]
+         enOut => ValidFftCordic
+      );
 
    Templates : PilotTemplates
       PORT MAP(
