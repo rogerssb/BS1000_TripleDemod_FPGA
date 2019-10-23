@@ -109,6 +109,7 @@ module interpolate(
         end
     end
 
+    `ifdef USE_VIDEO_FIR
     // Video FIR
     wire    signed  [17:0]  firOut;
     wire            [31:0]  firDout;
@@ -150,7 +151,35 @@ module interpolate(
         .din(firOut)
     );
     wire    [17:0]  cicCompOut = lutDout[26:9];
-    `endif
+    `endif //CIC_USE_MPYS
+
+    `else  //USE_VIDEO_FIR
+
+    `define CIC_USE_MPYS
+    `ifdef CIC_USE_MPYS
+    // CIC Compensation
+    wire    signed  [17:0]  cicCompOut;
+    cicCompMpy cicComp(
+        .clk(clk),
+        .reset(reset),
+        .clkEn(clkEn),
+        .compIn(invertIn),
+        .compOut(cicCompOut)
+        );
+    `else
+    wire    [32:0]  lutDout;
+    cicCompensation cicComp(
+        .rfd(),
+        .rdy(),
+        .nd(clkEn | reset),
+        .clk(clk),
+        .dout(lutDout),
+        .din(invertIn)
+    );
+    wire    [17:0]  cicCompOut = lutDout[26:9];
+    `endif //CIC_USE_MPYS
+
+    `endif //USE_VIDEO_FIR
 
     `ifdef SIMULATE
     real compReal;
@@ -237,11 +266,19 @@ module interpolate(
                 2'b00: begin
                     muxOut <= $signed(invSincOut[24:7]);
                 end
+                `ifdef USE_VIDEO_FIR
                 2'b01: begin
                     if (clkEn) begin
                         muxOut <= firOut;
                     end
                 end
+                `else
+                2'b01: begin
+                    if (clkEn) begin
+                        muxOut <= invertIn;
+                    end
+                end
+                `endif
                 2'b10: begin
                     muxOut <= $signed(scaledValue[33:16]);
                 end
@@ -280,7 +317,9 @@ module interpolate(
     always @* begin
         casex (addr)
             RegSpace :          dout = interpDout;
+            `ifdef USE_VIDEO_FIR
             FirRegSpace:        dout = firDout;
+            `endif
             default:            dout = 32'bx;
         endcase
     end

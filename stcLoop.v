@@ -11,8 +11,7 @@ derivative rights in exchange for negotiated compensation.
 
 module stcLoop(
     input                       clk, reset,
-    input                       ddcClkEn,
-    input                       resampClkEn,
+    input                       clkEn,
     `ifdef USE_BUS_CLOCK
     input                       busClk,
     `endif
@@ -21,17 +20,13 @@ module stcLoop(
     input               [12:0]  addr,
     input               [31:0]  din,
     output              [31:0]  dout,
-    input               [4:0]   demodMode,
     input       signed  [11:0]  phase,
     input       signed  [11:0]  freq,
-    input                       highFreqOffset,
-    input       signed  [11:0]  offsetError,
-    input                       offsetErrorEn,
     output      signed  [31:0]  carrierFreqOffset,
     output      signed  [31:0]  carrierLeadFreq,
     output                      carrierFreqEn,
     output  reg signed  [11:0]  loopError,
-    output  reg                 carrierLock,
+    output  reg                 freqAcquired,
     output  reg         [15:0]  lockCounter
     );
 
@@ -48,13 +43,14 @@ module stcLoop(
         endcase
     end
 
-    wire            [1:0]   acqTrackControl;
     wire            [4:0]   leadExp;
-    wire            [4:0]   lagExp;
+    wire            [4:0]   phaseLagExp;
+    wire            [4:0]   freqLagExp;
     wire    signed  [31:0]  upperLimit;
     wire    signed  [31:0]  lowerLimit;
     wire            [31:0]  loopOffset;
-    wire            [31:0]  sweepOffsetMag;
+    wire            [31:0]  loopData;
+    assign                  freqLagExp = loopData[4:0];
     wire            [15:0]  lockCount;
     wire            [11:0]  syncThreshold;
     wire    signed  [39:0]  lagAccum;
@@ -74,117 +70,32 @@ module stcLoop(
         .ctrl2(sweepEnable),
         .clearAccum(clearAccum),
         .ctrl4(),
-        .acqTrackControl(acqTrackControl),
+        .acqTrackControl(),
         .leadMan(),
         .leadExp(leadExp),
         .lagMan(),
-        .lagExp(lagExp),
+        .lagExp(phaseLagExp),
         .upperLimit(upperLimit),
         .lowerLimit(lowerLimit),
-        .loopData(sweepOffsetMag),
+        .loopData(loopData),
         .lockCount(lockCount),
         .syncThreshold(syncThreshold)
         );
 
 
-    /************************ Error Signal Source *********************************/
-
-    // Determine the source of the error signal
-    reg     signed  [11:0]  modeError;
-    reg                     loopFilterEn;
-    wire    signed  [11:0]  bpskPhase = phase;
-    wire    signed  [11:0]  qpskPhase = phase - $signed(12'h200);
-    reg                     enableCarrierLock;
-    always @(posedge clk) begin
-        case (demodMode)
-            `MODE_AM: begin
-                loopFilterEn <= ddcClkEn;
-                modeError <= 0;
-                enableCarrierLock <= 0;
-                end
-            `MODE_PM: begin
-                loopFilterEn <= ddcClkEn;
-                modeError <= phase;
-                enableCarrierLock <= 1;
-                end
-            `MODE_PCMTRELLIS: begin
-                loopFilterEn <= resampClkEn & offsetErrorEn;
-                modeError <= offsetError;
-                enableCarrierLock <= 0;
-                //loopFilterEn <= ddcClkEn;
-                //modeError <= freq;
-                //enableCarrierLock <= 0;
-                end
-            `MODE_STC: begin
-                loopFilterEn <= ddcClkEn;
-                modeError <= phase;
-                enableCarrierLock <= 0;
-                end
-            `MODE_MULTIH,
-            `MODE_FM: begin
-                loopFilterEn <= ddcClkEn;
-                modeError <= freq;
-                enableCarrierLock <= 0;
-                end
-            `MODE_2FSK: begin
-                //loopFilterEn <= resampClkEn & offsetErrorEn;
-                //modeError <= offsetError;
-                //enableCarrierLock <= 0;
-                loopFilterEn <= ddcClkEn;
-                modeError <= freq;
-                enableCarrierLock <= 0;
-                end
-            `MODE_UQPSK,
-            `MODE_AUQPSK,
-            `MODE_BPSK: begin
-                loopFilterEn <= ddcClkEn;
-                modeError <= {bpskPhase[10:0],1'b1};
-                enableCarrierLock <= 1;
-                end
-            `MODE_QPSK,
-            `MODE_OQPSK,
-            `MODE_SOQPSK,
-            `MODE_AQPSK: begin
-                loopFilterEn <= ddcClkEn;
-                modeError <= {qpskPhase[9:0],2'b10};
-                enableCarrierLock <= 1;
-                end
-            default: begin
-                loopFilterEn <= 1'b1;
-                modeError <= 0;
-                enableCarrierLock <= 1;
-                end
-        endcase
-    end
-
-    `ifdef SIMULATE
-    real modeErrorReal;
-    always @(modeError) modeErrorReal = $itor(modeError)/(2**11);
-    real avgErrorReal;
-    always @(posedge clk) begin
-        if (reset) begin
-            avgErrorReal <= 0.0;
-        end
-        else if (loopFilterEn) begin
-            avgErrorReal <= (0.999 * avgErrorReal) + (0.001 * modeErrorReal);
-        end
-    end
-    `endif
-
-
     /**************************** Adjust Error ************************************/
-    wire    signed  [11:0]  negModeError = -modeError;
-    wire                    breakLoop = (zeroError || (sweepEnable && highFreqOffset));
+    reg signed  [11:0]  freqLoopError;
     always @(posedge clk) begin
-        if (breakLoop) begin
+        if (zeroLoop) begin
             loopError <= 12'h0;
         end
         else if (invertError) begin
-            loopError <= negModeError;
+            loopError <= -phaseError;
         end
         else begin
-            loopError <= modeError;
+            loopError <= phaseError;
         end
+        freqLoopError <= freqError;
     end
 
     reg         [3:0]   loopEnSR;
@@ -212,21 +123,19 @@ module stcLoop(
         .leadError(leadError)
         );
 
-    lagGain12 lagGain (
+    reg                     freqAcquired;
+    stcLagGain12 lagGain (
         .clk(clk), .clkEn(loopEnSR[0]), .reset(reset),
-        .error(freq),
-        .lagExp(lagExp),
+        .phaseError(loopError),
+        .freqError(freqLoopError),
+        .phaseLagExp(phaseLagExp),
+        .freqLagExp(freqLagExp),
         .upperLimit(upperLimit),
         .lowerLimit(lowerLimit),
-        .sweepEnable(sweepEnable),
-        .sweepRateMag(sweepOffsetMag),
+        .freqAcquired(freqAcquired),
         .clearAccum(clearAccum),
-        .carrierInSync(carrierLock && !highFreqOffset),
-        .acqTrackControl(acqTrackControl),
-        .track(carrierLock),
         .lagAccum(lagAccum)
         );
-
 
     // Final filter output
     reg signed  [39:0]  filterSum;
@@ -239,21 +148,21 @@ module stcLoop(
         end
     end
 
-    /******************************* Lock Detector ********************************/
+    /******************************* Freq Lock Detector ********************************/
 
     reg     [11:0]  absModeError;
     wire    [16:0]  lockPlus = {1'b0,lockCounter} + 17'h00001;
     wire    [16:0]  lockMinus = {1'b0,lockCounter} + 17'h1ffff;
     always @(posedge clk) begin
-        if (reset || !enableCarrierLock) begin
+        if (reset) begin
             lockCounter <= 0;
-            carrierLock <= 1;
+            freqAcquired <= 1;
             end
-        else if (loopEn) begin
-            absModeError <= $unsigned(modeError[11] ? negModeError : modeError);
+        else if (clkEn) begin
+            absModeError <= $unsigned(freqError[11] ? -freqError : freqError);
             if (absModeError > syncThreshold) begin
                 if (lockCounter == (16'hffff - lockCount)) begin
-                    carrierLock <= 0;
+                    freqAcquired <= 0;
                     lockCounter <= 0;
                     end
                 else begin
@@ -262,7 +171,7 @@ module stcLoop(
                 end
             else begin
                 if (lockCounter == lockCount) begin
-                    carrierLock <= 1;
+                    freqAcquired <= 1;
                     lockCounter <= 0;
                     end
                 else begin

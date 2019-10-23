@@ -398,8 +398,7 @@ module stcDemodTop (
     wire            [31:0]  pilotDout;
     stcLoop #(.RegSpace(`PILOT_LF_SPACE)) pilot(
         .clk(clk), .reset(reset),
-        .resampClkEn(),
-        .ddcClkEn(pilotPhaseDiffEn),
+        .dlkEn(pilotPhaseDiffEn),
         `ifdef USE_BUS_CLOCK
         .busClk(busClk),
         `endif
@@ -408,17 +407,14 @@ module stcDemodTop (
         .addr(addr),
         .din(dataIn),
         .dout(pilotDout),
-        .demodMode(`MODE_STC),
         .phase(pilotPhase[17:6]),
         .freq(pilotPhaseDiff[17:6]),
         .highFreqOffset(1'b0),
-        .offsetError(12'h0),
-        .offsetErrorEn(1'b0),
         .carrierFreqOffset(pilotFreqLag),
         .carrierLeadFreq(pilotFreqLead),
         .carrierFreqEn(pilotFreqOffsetEn),
         .loopError(pilotLoopError),
-        .carrierLock(),
+        .freqAcquired(),
         .lockCounter()
     );
 
@@ -648,8 +644,8 @@ module stcDemodTop (
     end
     wire    [31:0]  interp0Dout;
     wire    [17:0]  interp0DataOut;
-    //`define TEST_DACS
-    `ifndef TEST_DACS
+    //`define USE_INTERPOLATORS
+    `ifdef USE_INTERPOLATORS
     interpolate #(.RegSpace(`INTERP0SPACE), .FirRegSpace(`VIDFIR0SPACE)) dac0Interp(
         .clk(clk), .reset(reset), .clkEn(interp0ClkEn),
         .busClk(busClk),
@@ -667,7 +663,45 @@ module stcDemodTop (
         dac0_d[12:0] <= interp0DataOut[16:4];
         dac0_d[13] <= ~interp0DataOut[17];
     end
-    `else
+
+    `else //USE_INTERPOLATORS
+
+    // Chip select decodes
+    reg interp0CS;
+    always @* begin
+        casex (addr)
+            `INTERP0SPACE: begin
+                interp0CS = cs;
+            end
+            default: begin
+                interp0CS = 0;
+            end
+        endcase
+    end
+
+    // Register interface
+    wire            [31:0]  interp0Dout;
+    interpRegs interpRegs0  (
+        `ifdef USE_BUS_CLOCK
+        .busClk(busClk),
+        `endif
+        .cs(interp0CS),
+        .addr(addr),
+        .dataIn(din),
+        .dataOut(interp0Dout),
+        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .bypass(),
+        .test(),
+        .invert(),
+        .bypassEQ(),
+        .source(dac0Source),
+        .testValue(),
+        .cicExponent(),
+        .cicMantissa(),
+        .gainExponent(),
+        .gainMantissa()
+    );
+
     always @(posedge clk) begin
         //dac0_d <= adc0Reg;
         dac0_d[12:0] <= interp0DataIn[16:4];
@@ -696,7 +730,7 @@ module stcDemodTop (
     end
     wire    [31:0]  interp1Dout;
     wire    [17:0]  interp1DataOut;
-    `ifndef TEST_DACS
+    `ifndef USE_INTERPOLATORS
     interpolate #(.RegSpace(`INTERP1SPACE), .FirRegSpace(`VIDFIR1SPACE)) dac1Interp(
         .clk(clk), .reset(reset), .clkEn(interp1ClkEn),
         .busClk(busClk),
@@ -714,12 +748,50 @@ module stcDemodTop (
         dac1_d[12:0] <= interp1DataOut[16:4];
         dac1_d[13] <= ~interp1DataOut[17];
     end
-    `else
+
+    `else //USE_INTERPOLATORS
+
+    // Chip select decodes
+    reg interp1CS;
+    always @* begin
+        casex (addr)
+            `INTERP1SPACE: begin
+                interp1CS = cs;
+            end
+            default: begin
+                interp1CS = 0;
+            end
+        endcase
+    end
+
+    // Register interface
+    wire            [31:0]  interp1Dout;
+    interpRegs interpRegs1  (
+        `ifdef USE_BUS_CLOCK
+        .busClk(busClk),
+        `endif
+        .cs(interp1CS),
+        .addr(addr),
+        .dataIn(din),
+        .dataOut(interp1Dout),
+        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .bypass(),
+        .test(),
+        .invert(),
+        .bypassEQ(),
+        .source(dac0Source),
+        .testValue(),
+        .cicExponent(),
+        .cicMantissa(),
+        .gainExponent(),
+        .gainMantissa()
+    );
+
     always @(posedge clk) begin
         dac1_d[12:0] <= interp0DataIn[16:4];
         dac1_d[13] <= ~interp0DataIn[17];
     end
-    `endif
+    `endif //USE_INTERPOLATORS
 
     `ifndef TRIPLE_DEMOD
     reg     [17:0]  interp2DataIn;
@@ -743,7 +815,7 @@ module stcDemodTop (
     end
     wire    [31:0]  interp2Dout;
     wire    [17:0]  interp2DataOut;
-    `ifndef TEST_DACS
+    `ifndef USE_INTERPOLATORS
     interpolate #(.RegSpace(`INTERP2SPACE), .FirRegSpace(`VIDFIR2SPACE)) dac2Interp(
         .clk(clk), .reset(reset), .clkEn(interp2ClkEn),
         .busClk(busClk),
@@ -761,13 +833,51 @@ module stcDemodTop (
         dac2_d[12:0] <= interp2DataOut[16:4];
         dac2_d[13] <= ~interp2DataOut[17];
     end
-    `else
+
+    `else //USE_INTERPOLATORS
+
+    // Chip select decodes
+    reg interp2CS;
+    always @* begin
+        casex (addr)
+            `INTERP2SPACE: begin
+                interp2CS = cs;
+            end
+            default: begin
+                interp2CS = 0;
+            end
+        endcase
+    end
+
+    // Register interface
+    wire            [31:0]  interp2Dout;
+    interpRegs interpRegs2 (
+        `ifdef USE_BUS_CLOCK
+        .busClk(busClk),
+        `endif
+        .cs(interp2CS),
+        .addr(addr),
+        .dataIn(din),
+        .dataOut(interp2Dout),
+        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .bypass(),
+        .test(),
+        .invert(),
+        .bypassEQ(),
+        .source(dac2Source),
+        .testValue(),
+        .cicExponent(),
+        .cicMantissa(),
+        .gainExponent(),
+        .gainMantissa()
+    );
+
     always @(posedge clk) begin
         //dac2_d <= adc0Reg;
         dac2_d[12:0] <= interp2DataIn[16:4];
         dac2_d[13] <= ~interp2DataIn[17];
     end
-    `endif  //TEST_DACS
+    `endif  //USE_INTERPOLATORS
 
     `endif //not TRIPLE_DEMOD
 

@@ -26,6 +26,7 @@
 
 `ifdef BITSYNC_BERT
 `define USE_BUS_CLOCK
+`define USE_VIDEO_FIR
 `define DF_CIC_COMP_USE_MPY
 `define BS_CIC_COMP_USE_MPY
 `define ADD_BERT
@@ -42,6 +43,7 @@
 `define USE_BUS_CLOCK
 `define USE_VIVADO_CORES
 `define USE_DDC_FIR
+`define USE_VIDEO_FIR
 //`define ADD_DESPREADER
 //`define ADD_SCPATH
 //`define ADD_CMA
