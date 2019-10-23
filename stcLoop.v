@@ -214,7 +214,7 @@ module stcLoop(
 
     lagGain12 lagGain (
         .clk(clk), .clkEn(loopEnSR[0]), .reset(reset),
-        .error(loopError),
+        .error(freq),
         .lagExp(lagExp),
         .upperLimit(upperLimit),
         .lowerLimit(lowerLimit),
