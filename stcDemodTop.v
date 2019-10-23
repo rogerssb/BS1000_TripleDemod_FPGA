@@ -119,7 +119,7 @@ module stcDemodTop (
 
 );
 
-    parameter VER_NUMBER = 16'd530;
+    parameter VER_NUMBER = 16'd610;
 
 
 //******************************************************************************
@@ -398,7 +398,7 @@ module stcDemodTop (
     wire            [31:0]  pilotDout;
     stcLoop #(.RegSpace(`PILOT_LF_SPACE)) pilot(
         .clk(clk), .reset(reset),
-        .dlkEn(pilotPhaseDiffEn),
+        .clkEn(pilotPhaseDiffEn),
         `ifdef USE_BUS_CLOCK
         .busClk(busClk),
         `endif
@@ -409,7 +409,6 @@ module stcDemodTop (
         .dout(pilotDout),
         .phase(pilotPhase[17:6]),
         .freq(pilotPhaseDiff[17:6]),
-        .highFreqOffset(1'b0),
         .carrierFreqOffset(pilotFreqLag),
         .carrierLeadFreq(pilotFreqLead),
         .carrierFreqEn(pilotFreqOffsetEn),
@@ -680,14 +679,13 @@ module stcDemodTop (
     end
 
     // Register interface
-    wire            [31:0]  interp0Dout;
     interpRegs interpRegs0  (
         `ifdef USE_BUS_CLOCK
         .busClk(busClk),
         `endif
         .cs(interp0CS),
         .addr(addr),
-        .dataIn(din),
+        .dataIn(dataIn),
         .dataOut(interp0Dout),
         .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
         .bypass(),
@@ -730,7 +728,7 @@ module stcDemodTop (
     end
     wire    [31:0]  interp1Dout;
     wire    [17:0]  interp1DataOut;
-    `ifndef USE_INTERPOLATORS
+    `ifdef USE_INTERPOLATORS
     interpolate #(.RegSpace(`INTERP1SPACE), .FirRegSpace(`VIDFIR1SPACE)) dac1Interp(
         .clk(clk), .reset(reset), .clkEn(interp1ClkEn),
         .busClk(busClk),
@@ -765,21 +763,20 @@ module stcDemodTop (
     end
 
     // Register interface
-    wire            [31:0]  interp1Dout;
     interpRegs interpRegs1  (
         `ifdef USE_BUS_CLOCK
         .busClk(busClk),
         `endif
         .cs(interp1CS),
         .addr(addr),
-        .dataIn(din),
+        .dataIn(dataIn),
         .dataOut(interp1Dout),
         .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
         .bypass(),
         .test(),
         .invert(),
         .bypassEQ(),
-        .source(dac0Source),
+        .source(dac1Source),
         .testValue(),
         .cicExponent(),
         .cicMantissa(),
@@ -815,7 +812,7 @@ module stcDemodTop (
     end
     wire    [31:0]  interp2Dout;
     wire    [17:0]  interp2DataOut;
-    `ifndef USE_INTERPOLATORS
+    `ifdef USE_INTERPOLATORS
     interpolate #(.RegSpace(`INTERP2SPACE), .FirRegSpace(`VIDFIR2SPACE)) dac2Interp(
         .clk(clk), .reset(reset), .clkEn(interp2ClkEn),
         .busClk(busClk),
@@ -850,14 +847,13 @@ module stcDemodTop (
     end
 
     // Register interface
-    wire            [31:0]  interp2Dout;
     interpRegs interpRegs2 (
         `ifdef USE_BUS_CLOCK
         .busClk(busClk),
         `endif
         .cs(interp2CS),
         .addr(addr),
-        .dataIn(din),
+        .dataIn(dataIn),
         .dataOut(interp2Dout),
         .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
         .bypass(),

@@ -779,7 +779,7 @@ BEGIN
                PilotCount <= PilotCount + 1;
             end if;
 
-            -- now that extimates are done, start phase and  sync routines
+            -- now that estimates are done, start phase and sync routines
             if (NormDone) then
                SyncSum <= (others=>'0');
                ReadCount <= (others=>'0');

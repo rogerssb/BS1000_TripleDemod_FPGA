@@ -1,8 +1,8 @@
 // Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
-// Tool Version: Vivado v.2017.2 (win64) Build 1909853 Thu Jun 15 18:39:09 MDT 2017
-// Date        : Thu Jun  6 15:10:12 2019
-// Host        : SEMCO1039 running 64-bit major release  (build 9200)
+// Tool Version: Vivado v.2017.2.1 (win64) Build 1957588 Wed Aug  9 16:32:24 MDT 2017
+// Date        : Tue Oct 22 15:19:43 2019
+// Host        : SEMCO_1039B running 64-bit major release  (build 9200)
 // Command     : write_verilog -force -mode synth_stub -rename_top halfbandEven -prefix
 //               halfbandEven_ halfbandEven_stub.v
 // Design      : halfbandEven
@@ -13,7 +13,7 @@
 // This empty module with port declaration file causes synthesis tools to infer a black box for IP.
 // The synthesis directives are for Synopsys Synplify support to prevent IO buffer insertion.
 // Please paste the declaration into a Verilog source file or add the file as an additional source.
-(* x_core_info = "fir_compiler_v7_2_8,Vivado 2017.2" *)
+(* x_core_info = "fir_compiler_v7_2_8,Vivado 2017.2.1" *)
 module halfbandEven(aresetn, aclk, aclken, s_axis_data_tvalid, 
   s_axis_data_tready, s_axis_data_tdata, m_axis_data_tvalid, m_axis_data_tuser, 
   m_axis_data_tdata)

@@ -60,7 +60,6 @@ ENTITY STC IS
       ClkOutEn,                           -- Trellis Clock Output
       PilotFound,                         -- Pilot Found LED
       PilotLocked,
-      TrellisFull,
       PhaseDiffEn,
       Dac0ClkEn,
       Dac1ClkEn,
@@ -282,6 +281,7 @@ ARCHITECTURE rtl OF STC IS
             PilotLockedA,
             PhaseDiffEnPS,
             Mag0GtMag1,
+            TrellisFull,
             StartInBrik2Dly,
             ValidInBrik2Dly,
             PilotValidOutDly,
@@ -565,14 +565,14 @@ BEGIN
          if (Reset2x) then
             PhsLastPeak <= (others=>'0');
          elsif (PhaseDiffEnDly(7)) then
-            PhsLastPeak <= PhsPeak0 when (MiscBits(1)) else (others=>'0');
+            PhsLastPeak <= PhsPeak when (MiscBits(1)) else (others=>'0');
          end if;
       end if;
    end process AFC_process;
 
-   PhaseOut <= HxPhase when (not MiscBits(3)) else to_slv(PhsPeak);
-   PhsPeak  <= PhsPeak0 when not MiscBits(16) else PhsPeak1;
-   HxPhase  <= (H0Phase & 6x"0") when not MiscBits(16) else H1Phase & 6X"0";
+   PhaseOut <= HxPhase when (not MiscBits(3)) else to_slv(PhsPeak);  -- Pilot Detect or Channel Est Phase select
+   PhsPeak  <= PhsPeak0 when Mag0GtMag1 else PhsPeak1;         -- Pilot Detect Phase select
+   HxPhase  <= (H0Phase & 6x"0") when Mag0GtMag1 else H1Phase & 6X"0";  -- Channel Est Phase select
 
    PS_u : pilotsync
       PORT MAP (
@@ -601,7 +601,7 @@ BEGIN
          probe_out2  => PhaseDiffGain1Slv,
          probe_out3  => MiscBits,
          probe_out4  => TrellisOffsetSlv,
-         probe_out5  => open -- TODO OffsetPS
+         probe_out5  => OffsetPS
    );
    TrellisOffset <= signed(TrellisOffsetSlv);
 
@@ -720,33 +720,34 @@ BEGIN
          code_bit     => codeBit
       );
 
-   DacOutputs : process(Clk186)
+   DacOutputs : process(Clk93)
    begin
-      if (rising_edge(Clk186)) then
+      if (rising_edge(Clk93)) then
          Dac0Data   <= DacMux(to_integer(unsigned(DacSelect0)));
          Dac1Data   <= DacMux(to_integer(unsigned(DacSelect1)));
          Dac2Data   <= DacMux(to_integer(unsigned(DacSelect2)));
          Dac0ClkEn  <= '1';
          Dac1ClkEn  <= '1';
          Dac2ClkEn  <= '1';
-         DacMux(0)  <= MagPeak1; --to_slv(InRBrik2Dly);        -- reframed resample R & I
-         DacMux(1)  <= PhsPeak1; --to_slv(InIBrik2Dly);        --
-         DacMux(2)  <= m_ndx0Slv & 14x"0"; --StartInBrik2Dly & 17x"0";              -- Start of Frame signal
-         DacMux(3)  <= m_ndx1Slv & 14x"0"; --ValidInBrik2Dly & 17x"0";   -- Valid packet signal
-         DacMux(4)  <= Phase0A;                     -- Half Pilot Phase
-         DacMux(5)  <= H0Mag & 5x"0";--to_slv(CorrPntr) & 2x"0";                   --
-         DacMux(6)  <= H1Mag & 5x"0";--PhaseDiffSlv;               -- Composite Phase Diff
-         DacMux(7)  <= H0Phase & 6x"0";--PhaseDiff1xGainSlv;         -- Whole Pilot Phase Diff
-         DacMux(8)  <= H1Phase & 6x"0";--PhaseDiff2xGainSlv;         -- Half Pilot Phase Diff
+         DacMux(0)  <= MagPeak1;
+         DacMux(1)  <= PhsPeak1;       --
+         DacMux(2)  <= m_ndx0Slv & 14x"0";
+         DacMux(3)  <= m_ndx1Slv & 14x"0";
+         DacMux(4)  <= Phase0A;
+         DacMux(5)  <= to_slv(PhaseDiff); --H0Mag & 5x"0";
+         DacMux(6)  <= to_slv(PhaseDiff2); --H1Mag & 5x"0";
+         DacMux(7)  <= H0Phase & 6x"0";
+         DacMux(8)  <= H1Phase & 6x"0";
          DacMux(9)  <= Magnitude0;                 -- iFFT H0 Magnitude every other sample
          DacMux(10) <= Magnitude1;                 -- H1
          DacMux(11) <= PhaseOut0;                  -- iFFT H0 Phase every other sample
          DacMux(12) <= PhaseOut1;                  -- H1
          DacMux(13) <= MagPeak0;                    -- Peak Magnitude per frame
          DacMux(14) <= PhsPeak0;                    -- Full Pilot Phase at peak magnitude
-         DacMux(15) <= to_slv(CorrPntr(8 downto 0)) & 9x"00";        -- Computed H0 Phase            was ValidData2047 & 17x"0";     -- My 2047 BER with triples per error
+         DacMux(15) <= to_slv(CorrPntr(8 downto 0)) & 9x"00";
 
-   CorrPntr8to0 <= to_slv(CorrPntr(8 downto 0));   -- TODO, remove
+         CorrPntr8to0 <= to_slv(CorrPntr(8 downto 0));
+         Mag0GtMag1   <= '1' when (H0Mag > H1Mag) else '0';
 
       end if;
    end process DacOutputs;

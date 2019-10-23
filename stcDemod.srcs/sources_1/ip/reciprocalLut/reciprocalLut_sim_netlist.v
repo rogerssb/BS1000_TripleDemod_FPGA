@@ -1,8 +1,8 @@
 // Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
-// Tool Version: Vivado v.2017.2 (win64) Build 1909853 Thu Jun 15 18:39:09 MDT 2017
-// Date        : Thu Jun  6 15:09:52 2019
-// Host        : SEMCO1039 running 64-bit major release  (build 9200)
+// Tool Version: Vivado v.2017.2.1 (win64) Build 1957588 Wed Aug  9 16:32:24 MDT 2017
+// Date        : Tue Oct 22 15:19:29 2019
+// Host        : SEMCO_1039B running 64-bit major release  (build 9200)
 // Command     : write_verilog -force -mode funcsim -rename_top reciprocalLut -prefix
 //               reciprocalLut_ reciprocalLut_sim_netlist.v
 // Design      : reciprocalLut
@@ -12,7 +12,7 @@
 // --------------------------------------------------------------------------------
 `timescale 1 ps / 1 ps
 
-(* CHECK_LICENSE_TYPE = "reciprocalLut,dist_mem_gen_v8_0_11,{}" *) (* downgradeipidentifiedwarnings = "yes" *) (* x_core_info = "dist_mem_gen_v8_0_11,Vivado 2017.2" *) 
+(* CHECK_LICENSE_TYPE = "reciprocalLut,dist_mem_gen_v8_0_11,{}" *) (* downgradeipidentifiedwarnings = "yes" *) (* x_core_info = "dist_mem_gen_v8_0_11,Vivado 2017.2.1" *) 
 (* NotValidForBitStream *)
 module reciprocalLut
    (a,

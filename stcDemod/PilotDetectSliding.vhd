@@ -72,7 +72,6 @@ entity PilotDetectSliding is
          PhsPeak0,
          MagPeak1,
          PhsPeak1       : OUT SLV18;
-         FftPeakIndex   : OUT natural range 0 to 1023;
          PilotFound,
          ValidOut,
          StartOut       : OUT std_logic
@@ -192,18 +191,6 @@ architecture rtl of PilotDetectSliding is
       );
    END COMPONENT PD_Fft_Fifo;
 
-   COMPONENT DetectionFilter
-      PORT (
-         aclk                 : IN STD_LOGIC;
-         aclken               : IN STD_LOGIC;
-         aresetn              : IN STD_LOGIC;
-         s_axis_data_tvalid   : IN STD_LOGIC;
-         s_axis_data_tdata    : IN STD_LOGIC_VECTOR(47 DOWNTO 0);
-         s_axis_data_tready   : OUT STD_LOGIC;
-         m_axis_data_tvalid   : OUT STD_LOGIC;
-         m_axis_data_tdata    : OUT STD_LOGIC_VECTOR(47 DOWNTO 0)
-      );
-   END COMPONENT;
    COMPONENT vm_cordic_fast IS
       GENERIC (
          n  : positive := 14
@@ -266,10 +253,10 @@ architecture rtl of PilotDetectSliding is
    CONSTANT PHS_LATENCY    : natural := 15;
    CONSTANT START_MAX      : natural := 27;
    CONSTANT SEARCH_RANGE   : natural := 3;   -- ±3 is range of m_ndx
+   CONSTANT SEARCH512      : natural := 512 - SEARCH_RANGE;    -- 509
 
    SIGNAL   AbsZero           : ufixed(6 downto -11);
    type     MAG_ARRAY  is array (natural range <>) of ufixed(AbsZero'range);
-   type     FFTMAG_ARRAY is array (natural range <>) of ufixed(0 downto -12);
 
    SIGNAL   ConfigTValid,
             ConfigDone,
@@ -285,10 +272,6 @@ architecture rtl of PilotDetectSliding is
             ValidMult1,
             ValidIFftOut,
             ValidAbs,
-            ValidFftCordic,
-            ValidFftCordicDly,
-            ValidFftDispFilt,
-            FftRamReset,
             ValidOverAdd,
             Hi1, Hi0,
             Lo1, Lo0,
@@ -322,15 +305,8 @@ architecture rtl of PilotDetectSliding is
             OverAddI0,
             OverAddR1,
             OverAddI1         : sfixed(5 downto -12);
-   SIGNAL   FftRam            : FFTMAG_ARRAY(0 to 1023);
-   SIGNAL   MagFft,
-            Mag0,
+   SIGNAL   Mag0,
             Mag1              : std_logic_vector(12 downto 0);
-   SIGNAL   MagFftPeak,
-            MagFft_u          : ufixed(0 downto -MagFft'left);
-   SIGNAL   FftDisp,
-            FftDispFilt       : ufixed(FftRam(0)'range);
-   SIGNAL   FftFiltOut        : std_logic_vector(47 downto 0);
    SIGNAL   Phase0,
             Phase1            : std_logic_vector(11 downto 0);
    SIGNAL   PilotMag,
@@ -340,7 +316,6 @@ architecture rtl of PilotDetectSliding is
             MaxCntr,
             MaxCntr0,
             MaxCntr1,
-            MaxOfPckt,
             AbsPeak,
             AbsPeak0,
             AbsPeak1,
@@ -373,9 +348,7 @@ architecture rtl of PilotDetectSliding is
             MagPeakInt1,
             PhsPeakInt1       : SLV18;
    SIGNAL   Count,
-            PeakIndex,
             MaxIndex,
-            FftPeakCount,
             StartIndex1,
             StopIndex1,
             StartIndex2,
@@ -413,8 +386,7 @@ architecture rtl of PilotDetectSliding is
 
    attribute mark_debug : string;
    attribute mark_debug of PilotMag_Ila, PilotFound, Peak1_Ila, Peak2_Ila,
-             AbsCntr0_Ila, AbsCntr1_Ila,
-             PeakIndex, MaxIndex,
+             AbsCntr0_Ila, AbsCntr1_Ila, MaxIndex,
              MagPeak0, PhsPeak0, MagPeak1, PhsPeak1 : signal is "true";
 begin
 
@@ -539,41 +511,12 @@ begin
             FftR           <= (others=>'0');
             FftI           <= (others=>'0');
             MultTLast      <= (others=>'0');
-            FftPeakCount   <= 0;
-            FftRamReset    <= '1';
-            MagFftPeak     <= to_ufixed(0, MagFftPeak);
-            FftPeakIndex   <= 0;
          elsif (ce) then
             if (ValidFft = '1') and (Count < 1023) then
                Count <= Count + 1;
             else
                Count <= 0;
             end if;
-            if (FftRamReset) then
-               FftRam(FftPeakCount) <= (others=>'0');
-               if (FftPeakCount < 1023) then
-                  FftPeakCount <= FftPeakCount + 1;
-               else
-                  FftRamReset <= '0';
-               end if;
-            elsif (ValidFftCordic = '1') and (FftPeakCount < 1023) then
-               FftRam(FftPeakCount) <= resize( ((FftRam(FftPeakCount) sra 4)*15) + (MagFft_u sra 4), FftRam(0));
-               if (MagFft_u > MagFftPeak) then
-                  FftPeakIndex <= FftPeakCount;
-                  MagFftPeak   <= MagFft_u;
-               end if;
-               FftPeakCount    <= FftPeakCount + 1;
-            elsif (ValidFftCordicDly and not ValidFftCordic) then -- if falling_edge
-               MagFftPeak           <= to_ufixed(0, MagFftPeak);
-            else
-               FftPeakCount <= 0;
-            end if;
-            if (Count < 512) then
-               FftDisp        <= FftRam(Count + 512);
-            else
-               FftDisp        <= FftRam(Count - 512);
-            end if;
-            ValidFftCordicDly <= ValidFftCordic;
             ValidFftDly    <= ValidFft;
             FftR           <= to_sfixed(FftOutSlv(FFT_TOP_R downto FFT_BOT_R), FftR);
             FftI           <= to_sfixed(FftOutSlv(FFT_TOP_I downto FFT_BOT_I), FftI);
@@ -588,36 +531,6 @@ begin
          end if;
       end if;
    end process FftProcess;
-
-   MagFft_u <= to_ufixed(MagFft, MagFftPeak);
-
-   FftFilter : DetectionFilter
-      PORT MAP (
-         aclk                 => Clk2x,
-         aclken               => ce,
-         aresetn              => not reset,
-         s_axis_data_tvalid   => ValidFftDly,
-         s_axis_data_tdata    => 24x"00" & 6x"00"& to_slv(FftDisp) & 5x"00",
-         s_axis_data_tready   => open,
-         m_axis_data_tvalid   => ValidFftDispFilt,
-         m_axis_data_tdata    => FftFiltOut
-      );
-
-   FftDispFilt <= to_ufixed(FftFiltOut(17 downto 5), FftDispFilt);
-
-   cordicFft : vm_cordic_fast
-      GENERIC MAP (
-         n => 14
-      )
-      PORT MAP (
-         clk   => Clk2x,
-         ena   => ValidFftDly,
-         x     => to_slv(FftR(FftR'left downto FftR'left - 13)),
-         y     => to_slv(FftI(FftR'left downto FftR'left - 13)),
-         m     => MagFft,        -- m[n:2]
-         p     => open  ,        -- p[n:3]
-         enOut => ValidFftCordic
-      );
 
    Templates : PilotTemplates
       PORT MAP(
@@ -821,7 +734,6 @@ begin
             AbsPeak      <= (others=>'0');
             AbsPeak0     <= (others=>'0');
             AbsPeak1     <= (others=>'0');
-            MaxOfPckt    <= (others=>'0');
             MaxCntr      <= (others=>'0');
             MaxCntr0     <= (others=>'0');
             MaxCntr1     <= (others=>'0');
@@ -843,54 +755,19 @@ begin
                -- Find the peak of this packet regardless of H0 or H1
                if (Index1 < 512) then     -- only search first half of the ifft
                   if (MaxCntr > AbsPeak) and (MaxCntr > Threshold) then
-                     AbsPeak     <= MaxCntr;
+                     AbsPeak <= MaxCntr;
                      if (((Index1 >= StartIndex1) and (Index1 <= StopIndex1)) or ((Index1 >= StartIndex2) and (Index1 <= StopIndex2)) or (PilotFound = '0')) then
                         MaxCount <= START_MAX;
-                        CorrPntr <= PackCntr & to_ufixed(Index1, 8, 0); -- Index1 is 0 to 511, so PackCntr is an extension
+                        CorrPntr <= PackCntr & to_ufixed(Index1, 8, 0); -- Index1 is 0 to 511, so PackCntr is the packet number + offset of 0 to 511
+                        MaxIndex <= Index1;
                      end if;
                   elsif (MaxCount > 0) then
-                     MaxCount    <= MaxCount - 1;
+                     MaxCount <= MaxCount - 1;
                   end if;
 
-                  if (MaxCntr > MaxOfPckt) then
-                     MaxOfPckt <= MaxCntr;
-                     MaxIndex  <= Index1;
-                  end if;
-               elsif (Index1 = 524) and (AbsPeak > Threshold) then     -- check for MaxIndex catching an odd peak in wrong spot
-                  if (not PilotFound) then
-                     PeakIndex <= MaxIndex;
-                  elsif (MaxIndex >= 509) and (PeakIndex < 3) then    -- check for wrapping, PeakIndex is value from last frame
-                     PeakIndex <= MaxIndex;
-                  elsif (MaxIndex <= 3) and (PeakIndex > 509) then
-                     PeakIndex <= MaxIndex;
-                  elsif (MaxIndex < PeakIndex) then -- only allow peak to slide ±1
-                     PeakIndex <= PeakIndex - 1;
-                  elsif (MaxIndex > PeakIndex) then
-                     PeakIndex <= PeakIndex + 1;
-                  else
-                     PeakIndex <= MaxIndex;
-                  end if;
-               elsif (Index1 = 525) then     -- setup for next frame
-                  -- if PeakIndex of last frame is near the edge, check from 0 to SEARCH_RANGE, then 511-SEARCH_RANGE to 511
-                  if (PeakIndex < SEARCH_RANGE) then  -- check for start of sweep and carry over from previous packet
-                     StartIndex1 <= 0;
-                     StopIndex1  <= SEARCH_RANGE;
-                     StartIndex2 <= 511 - SEARCH_RANGE + PeakIndex;
-                     StopIndex2  <= 511;
-                  elsif (PeakIndex > (511 - SEARCH_RANGE)) then   -- check for end of sweep with rollover to next packet
-                     StartIndex1 <= 0;
-                     StopIndex1  <= PeakIndex + SEARCH_RANGE - 512;
-                     StartIndex2 <= PeakIndex - SEARCH_RANGE;
-                     StopIndex2  <= 511;
-                  else
-                     StartIndex1 <= PeakIndex - SEARCH_RANGE;
-                     StopIndex1  <= PeakIndex + SEARCH_RANGE;
-                     StartIndex2 <= PeakIndex - SEARCH_RANGE;
-                     StopIndex2  <= PeakIndex + SEARCH_RANGE;
-                  end if;
-                  PackCntr    <= resize(PackCntr + 1, PackCntr);
-                  AbsPeak     <= (others=>'0');  -- setup for next frame
-                  MaxOfPckt   <= (others=>'0');
+                elsif (Index1 = 524) then     -- setup for next frame
+                  PackCntr <= resize(PackCntr + 1, PackCntr);
+                  AbsPeak  <= (others=>'0');  -- setup for next frame
                end if;
 
                -- Find the peak of H0 only
@@ -948,6 +825,23 @@ begin
 
             if (MaxCount = 1) then  -- found the peak, store the results
                StartOut <= '1';
+               -- if MaxIndex of last frame is near the edge, check from 0 to SEARCH_RANGE, then 511-SEARCH_RANGE to 511
+               if (MaxIndex < SEARCH_RANGE) then  -- check for start of sweep and carry over from previous packet
+                  StartIndex1 <= 0;
+                  StopIndex1  <= MaxIndex + SEARCH_RANGE;
+                  StartIndex2 <= SEARCH512 + MaxIndex;
+                  StopIndex2  <= 511;
+               elsif (MaxIndex >= SEARCH512) then   -- check for end of sweep with rollover to next packet
+                  StartIndex1 <= 0;
+                  StopIndex1  <= MaxIndex - SEARCH512;
+                  StartIndex2 <= MaxIndex - SEARCH_RANGE;
+                  StopIndex2  <= 511;
+               else
+                  StartIndex1 <= MaxIndex - SEARCH_RANGE;
+                  StopIndex1  <= MaxIndex + SEARCH_RANGE;
+                  StartIndex2 <= MaxIndex - SEARCH_RANGE;
+                  StopIndex2  <= MaxIndex + SEARCH_RANGE;
+               end if;
                MaxCount <= 0;
             end if;
 
@@ -957,7 +851,7 @@ begin
 
 
             if (ValidAbs) then
-               if (Index1 = 523) then     -- give MaxOfPckt a chance to propagate to PilotMag
+               if (Index1 = 523) then     -- give AbsPeak a chance to propagate to PilotMag
                   PilotPulse  <= '1';
                elsif (PilotPulse1X) then  -- send wider pulse to threshold logic at lower clock
                   PilotPulse  <= '0';
@@ -1010,7 +904,7 @@ begin
             Peak1             <= to_ufixed(1.0, Peak1);
             Peak2             <= to_ufixed(0.2, Peak2);
          elsif (ce) then
-            PilotMag     <= MaxOfPckt;          -- Latch clock transfers
+            PilotMag     <= AbsPeak;          -- Latch clock transfers
             PilotPulse1x <= PilotPulse;
             if (PilotPulse1x) then
                if (IgnoreInitial < 25) then

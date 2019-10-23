@@ -62,7 +62,7 @@ module stcLoop(
         `endif
         .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
         .lagAccum(lagAccum[39:8]),
-        .lockStatus(carrierLock),
+        .lockStatus(1'b0),
         .dataIn(din),
         .dataOut(dout),
         .invertError(invertError),
@@ -86,16 +86,16 @@ module stcLoop(
     /**************************** Adjust Error ************************************/
     reg signed  [11:0]  freqLoopError;
     always @(posedge clk) begin
-        if (zeroLoop) begin
+        if (zeroError) begin
             loopError <= 12'h0;
         end
         else if (invertError) begin
-            loopError <= -phaseError;
+            loopError <= -phase;
         end
         else begin
-            loopError <= phaseError;
+            loopError <= phase;
         end
-        freqLoopError <= freqError;
+        freqLoopError <= freq;
     end
 
     reg         [3:0]   loopEnSR;
@@ -105,7 +105,7 @@ module stcLoop(
             loopEnSR <= 0;
         end
         else begin
-            loopEnSR <= {loopEnSR[2:0],loopFilterEn};
+            loopEnSR <= {loopEnSR[2:0],clkEn};
         end
     end
 
@@ -118,12 +118,11 @@ module stcLoop(
         .clk(clk), .clkEn(1'b1), .reset(reset),
         .error(loopError),
         .leadExp(leadExp),
-        .acqTrackControl(acqTrackControl),
+        .acqTrackControl(0),
         .track(carrierLock),
         .leadError(leadError)
         );
 
-    reg                     freqAcquired;
     stcLagGain12 lagGain (
         .clk(clk), .clkEn(loopEnSR[0]), .reset(reset),
         .phaseError(loopError),
@@ -159,7 +158,7 @@ module stcLoop(
             freqAcquired <= 1;
             end
         else if (clkEn) begin
-            absModeError <= $unsigned(freqError[11] ? -freqError : freqError);
+            absModeError <= $unsigned(freq[11] ? -freq : freq);
             if (absModeError > syncThreshold) begin
                 if (lockCounter == (16'hffff - lockCount)) begin
                     freqAcquired <= 0;

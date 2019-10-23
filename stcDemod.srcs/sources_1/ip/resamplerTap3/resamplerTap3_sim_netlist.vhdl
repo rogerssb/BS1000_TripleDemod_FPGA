@@ -1,8 +1,8 @@
 -- Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
--- Tool Version: Vivado v.2017.2 (win64) Build 1909853 Thu Jun 15 18:39:09 MDT 2017
--- Date        : Thu Jun  6 15:11:04 2019
--- Host        : SEMCO1039 running 64-bit major release  (build 9200)
+-- Tool Version: Vivado v.2017.2.1 (win64) Build 1957588 Wed Aug  9 16:32:24 MDT 2017
+-- Date        : Tue Oct 22 15:20:15 2019
+-- Host        : SEMCO_1039B running 64-bit major release  (build 9200)
 -- Command     : write_vhdl -force -mode funcsim -rename_top resamplerTap3 -prefix
 --               resamplerTap3_ resamplerTap3_sim_netlist.vhdl
 -- Design      : resamplerTap3
@@ -407,7 +407,7 @@ entity resamplerTap3 is
   attribute downgradeipidentifiedwarnings : string;
   attribute downgradeipidentifiedwarnings of resamplerTap3 : entity is "yes";
   attribute x_core_info : string;
-  attribute x_core_info of resamplerTap3 : entity is "dist_mem_gen_v8_0_11,Vivado 2017.2";
+  attribute x_core_info of resamplerTap3 : entity is "dist_mem_gen_v8_0_11,Vivado 2017.2.1";
 end resamplerTap3;
 
 architecture STRUCTURE of resamplerTap3 is
