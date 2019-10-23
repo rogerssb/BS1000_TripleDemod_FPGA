@@ -394,7 +394,8 @@ module stcDemodTop (
     wire    signed  [17:0]  pilotPhaseDiff, pilotPhase;
     wire    signed  [31:0]  pilotFreqLag;
     wire    signed  [31:0]  pilotFreqLead;
-    wire    signed  [11:0]  pilotLoopError;
+    wire    signed  [11:0]  pilotLeadError;
+    wire    signed  [11:0]  pilotLagError;
     wire            [31:0]  pilotDout;
     stcLoop #(.RegSpace(`PILOT_LF_SPACE)) pilot(
         .clk(clk), .reset(reset),
@@ -412,8 +413,9 @@ module stcDemodTop (
         .carrierFreqOffset(pilotFreqLag),
         .carrierLeadFreq(pilotFreqLead),
         .carrierFreqEn(pilotFreqOffsetEn),
-        .loopError(pilotLoopError),
-        .freqAcquired(),
+        .phaseLoopError(pilotLeadError),
+        .freqLoopError(pilotLagError),
+        .freqAcquired(pilotFreqAcquired),
         .lockCounter()
     );
 
@@ -636,8 +638,8 @@ module stcDemodTop (
                 interp0ClkEn <= stcDac0ClkEn;
             end
             default: begin
-                interp0DataIn <= demodDac0Data;
-                interp0ClkEn <= demodDac0ClkEn;
+                interp0DataIn <= {pilotLeadError,6'b0};
+                interp0ClkEn <= 1'b1;
             end
         endcase
     end
@@ -721,8 +723,8 @@ module stcDemodTop (
                 interp1ClkEn <= stcDac1ClkEn;
             end
             default: begin
-                interp1DataIn <= demodDac1Data;
-                interp1ClkEn <= demodDac1ClkEn;
+                interp1DataIn <= {pilotLagError,6'b0};
+                interp1ClkEn <= 1'b1;
             end
         endcase
     end
@@ -785,8 +787,8 @@ module stcDemodTop (
     );
 
     always @(posedge clk) begin
-        dac1_d[12:0] <= interp0DataIn[16:4];
-        dac1_d[13] <= ~interp0DataIn[17];
+        dac1_d[12:0] <= interp1DataIn[16:4];
+        dac1_d[13] <= ~interp1DataIn[17];
     end
     `endif //USE_INTERPOLATORS
 
@@ -805,8 +807,8 @@ module stcDemodTop (
                 interp2ClkEn <= stcDac2ClkEn;
             end
             default: begin
-                interp2DataIn <= demodDac2Data;
-                interp2ClkEn <= demodDac2ClkEn;
+                interp2DataIn <= {1'b0,pilotFreqAcquired,16'b0};
+                interp2ClkEn <= 1'b1;
             end
         endcase
     end

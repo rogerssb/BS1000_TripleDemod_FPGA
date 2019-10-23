@@ -25,7 +25,8 @@ module stcLoop(
     output      signed  [31:0]  carrierFreqOffset,
     output      signed  [31:0]  carrierLeadFreq,
     output                      carrierFreqEn,
-    output  reg signed  [11:0]  loopError,
+    output  reg signed  [11:0]  phaseLoopError,
+    output  reg signed  [11:0]  freqLoopError,
     output  reg                 freqAcquired,
     output  reg         [15:0]  lockCounter
     );
@@ -84,16 +85,15 @@ module stcLoop(
 
 
     /**************************** Adjust Error ************************************/
-    reg signed  [11:0]  freqLoopError;
     always @(posedge clk) begin
-        if (zeroError) begin
-            loopError <= 12'h0;
+        if (zeroError || !freqAcquired) begin
+            phaseLoopError <= 12'h0;
         end
         else if (invertError) begin
-            loopError <= -phase;
+            phaseLoopError <= -phase;
         end
         else begin
-            loopError <= phase;
+            phaseLoopError <= phase;
         end
         freqLoopError <= freq;
     end
@@ -116,16 +116,16 @@ module stcLoop(
     wire    signed  [39:0]  leadError;
     leadGain12 leadGain (
         .clk(clk), .clkEn(1'b1), .reset(reset),
-        .error(loopError),
+        .error(phaseLoopError),
         .leadExp(leadExp),
         .acqTrackControl(0),
-        .track(carrierLock),
+        .track(1'b0),
         .leadError(leadError)
         );
 
     stcLagGain12 lagGain (
         .clk(clk), .clkEn(loopEnSR[0]), .reset(reset),
-        .phaseError(loopError),
+        .phaseError(phaseLoopError),
         .freqError(freqLoopError),
         .phaseLagExp(phaseLagExp),
         .freqLagExp(freqLagExp),
