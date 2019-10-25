@@ -26,7 +26,7 @@ module stcLoop(
     output      signed  [31:0]  carrierLeadFreq,
     output                      carrierFreqEn,
     output  reg signed  [11:0]  phaseLoopError,
-    output  reg signed  [11:0]  freqLoopError,
+    output      signed  [11:0]  avgFreqError,
     output  reg                 freqAcquired,
     output  reg         [15:0]  lockCounter
     );
@@ -150,6 +150,8 @@ module stcLoop(
     /******************************* Freq Lock Detector ********************************/
 
     reg     [11:0]  absModeError;
+    reg     [15:0]  avgAbsModeError;
+    assign          avgFreqError = avgAbsModeError[15:4];
     wire    [16:0]  lockPlus = {1'b0,lockCounter} + 17'h00001;
     wire    [16:0]  lockMinus = {1'b0,lockCounter} + 17'h1ffff;
     always @(posedge clk) begin
@@ -159,7 +161,8 @@ module stcLoop(
             end
         else if (clkEn) begin
             absModeError <= $unsigned(freq[11] ? -freq : freq);
-            if (absModeError > syncThreshold) begin
+            avgAbsModeError <= avgAbsModeError - {4'b0,avgAbsModeError[15:4]} + {4'b0,absModeError};  
+            if (avgAbsModeError > syncThreshold) begin
                 if (lockCounter == (16'hffff - lockCount)) begin
                     freqAcquired <= 0;
                     lockCounter <= 0;

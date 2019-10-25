@@ -119,7 +119,7 @@ module stcDemodTop (
 
 );
 
-    parameter VER_NUMBER = 16'd610;
+    parameter VER_NUMBER = 16'd613;
 
 
 //******************************************************************************
@@ -395,7 +395,7 @@ module stcDemodTop (
     wire    signed  [31:0]  pilotFreqLag;
     wire    signed  [31:0]  pilotFreqLead;
     wire    signed  [11:0]  pilotLeadError;
-    wire    signed  [11:0]  pilotLagError;
+    wire    signed  [11:0]  pilotFreqError;
     wire            [31:0]  pilotDout;
     stcLoop #(.RegSpace(`PILOT_LF_SPACE)) pilot(
         .clk(clk), .reset(reset),
@@ -414,7 +414,7 @@ module stcDemodTop (
         .carrierLeadFreq(pilotFreqLead),
         .carrierFreqEn(pilotFreqOffsetEn),
         .phaseLoopError(pilotLeadError),
-        .freqLoopError(pilotLagError),
+        .avgFreqError(pilotFreqError),
         .freqAcquired(pilotFreqAcquired),
         .lockCounter()
     );
@@ -723,7 +723,7 @@ module stcDemodTop (
                 interp1ClkEn <= stcDac1ClkEn;
             end
             default: begin
-                interp1DataIn <= {pilotLagError,6'b0};
+                interp1DataIn <= {pilotFreqError,6'b0};
                 interp1ClkEn <= 1'b1;
             end
         endcase
