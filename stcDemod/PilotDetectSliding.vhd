@@ -60,6 +60,7 @@ entity PilotDetectSliding is
          ValidIn        : IN  std_logic;
          ReIn,
          ImIn           : IN  FLOAT_1_18;
+         SearchRange    : IN  SLV4;
          CorrPntr,
          RawAddr        : OUT ufixed(15 downto 0);
          ReOut,
@@ -252,8 +253,7 @@ architecture rtl of PilotDetectSliding is
    CONSTANT PACKETS_PER_FRAME : positive  := 26;
    CONSTANT PHS_LATENCY    : natural := 15;
    CONSTANT START_MAX      : natural := 27;
-   CONSTANT SEARCH_RANGE   : natural := 3;   -- ±3 is range of m_ndx
-   CONSTANT SEARCH512      : natural := 512 - SEARCH_RANGE;    -- 509
+--   CONSTANT SEARCH_RANGE   : natural := 3;   -- ±3 is range of m_ndx
 
    SIGNAL   AbsZero           : ufixed(6 downto -11);
    type     MAG_ARRAY  is array (natural range <>) of ufixed(AbsZero'range);
@@ -264,7 +264,6 @@ architecture rtl of PilotDetectSliding is
             OverflowIFft,
             StartIFft,
             ValidInDly,
-            ValidAbsDly,
             ValidPack,
             ValidFft,
             ValidFftDly,
@@ -285,10 +284,12 @@ architecture rtl of PilotDetectSliding is
             PilotPulse,
             PilotPulse1x,
             PilotFoundPend,
+            PeakPend,
             PhsCntStrt0,
             PhsCntStrt1,
             ValidCordic,
             CalcThreshold     : std_logic := '0';
+   SIGNAL   CorrPend          : ufixed(15 downto 0);
    SIGNAL   ReInDly,
             ImInDly           : FLOAT_1_18;
    SIGNAL   XC_Zero,
@@ -316,6 +317,7 @@ architecture rtl of PilotDetectSliding is
             MaxCntr,
             MaxCntr0,
             MaxCntr1,
+            MaxOfPckt,
             AbsPeak,
             AbsPeak0,
             AbsPeak1,
@@ -349,10 +351,8 @@ architecture rtl of PilotDetectSliding is
             PhsPeakInt1       : SLV18;
    SIGNAL   Count,
             MaxIndex,
-            StartIndex1,
-            StopIndex1,
-            StartIndex2,
-            StopIndex2,
+            PrevIndex,
+            PendIndex,
             Index0,
             Index1            : natural range 0 to 1023;
    SIGNAL   PackCntr          : ufixed(6 downto 0);
@@ -374,20 +374,19 @@ architecture rtl of PilotDetectSliding is
             PhsCount1,
             MaxCount          : natural range 0 to 28;
    SIGNAL   SampleCount       : natural range 0 to 16383;
+   SIGNAL   DropCount         : natural range 0 to 7;
 
 -- ILAs
     SIGNAL  PilotMag_Ila,
-            Threshold_Ila,
             Peak1_Ila,
             Peak2_Ila,
             AbsCntr0_Ila,
-            AbsCntr1_Ila,
-            Resets2X          : SLV18;
+            AbsCntr1_Ila      : SLV18;
 
    attribute mark_debug : string;
    attribute mark_debug of PilotMag_Ila, PilotFound, Peak1_Ila, Peak2_Ila,
-             AbsCntr0_Ila, AbsCntr1_Ila, MaxIndex,
-             MagPeak0, PhsPeak0, MagPeak1, PhsPeak1 : signal is "true";
+             /* MagPeak0, PhsPeak0, MagPeak1, PhsPeak1, */
+             AbsCntr0_Ila, AbsCntr1_Ila, MaxIndex, PrevIndex, PendIndex : signal is "true";
 begin
 
    IlaProcess : process(clk)
@@ -396,7 +395,6 @@ begin
          PilotMag_Ila   <= to_slv(PilotMag);
          Peak1_Ila      <= to_slv(Peak1);
          Peak2_Ila      <= to_slv(Peak2);
-         Threshold_Ila  <= to_slv(Threshold);
       end if;
    end process IlaProcess;
 
@@ -714,18 +712,20 @@ begin
 
    -- Now find peak of H0/1
    MaxProcess : process(Clk2x)
+      variable Index1_s,
+               PrevIndex_s    : signed(8 downto 0);
+      variable Index1_u,
+               PrevIndex_u    : unsigned(8 downto 0);
    begin
       if (rising_edge(Clk2x)) then
          if (Reset2X) then
             Index0       <= 0;
             Index1       <= 0;
-            StartIndex1  <= 0;
-            StopIndex1   <= 511;
-            StartIndex2  <= 0;
-            StopIndex2   <= 511;
+            PrevIndex    <= 511;
             MaxCount     <= 0;
             PhsCount0    <= 0;
             PhsCount1    <= 0;
+            DropCount    <= 7;
             PilotPulse   <= '0';
             MagPeakInt0  <= (others=>'0');
             PhsPeakInt0  <= (others=>'0');
@@ -734,10 +734,12 @@ begin
             AbsPeak      <= (others=>'0');
             AbsPeak0     <= (others=>'0');
             AbsPeak1     <= (others=>'0');
+            MaxOfPckt    <= (others=>'0');
             MaxCntr      <= (others=>'0');
             MaxCntr0     <= (others=>'0');
             MaxCntr1     <= (others=>'0');
             PackCntr     <= (others=>'0');   -- PackCntr must be reset released with WrAddr in PilotSync
+            CorrPend     <= (others=>'0');
             CorrPntr     <= (others=>'0');
             StartOut     <= '0';
          elsif (ce) then
@@ -756,18 +758,58 @@ begin
                if (Index1 < 512) then     -- only search first half of the ifft
                   if (MaxCntr > AbsPeak) and (MaxCntr > Threshold) then
                      AbsPeak <= MaxCntr;
-                     if (((Index1 >= StartIndex1) and (Index1 <= StopIndex1)) or ((Index1 >= StartIndex2) and (Index1 <= StopIndex2)) or (PilotFound = '0')) then
+                     Index1_u := to_unsigned(Index1, Index1_u);   -- these are to convert 0 to 511 to ±255
+                     Index1_s := signed(Index1_u);
+                     PrevIndex_u := to_unsigned(PrevIndex, Index1_u);
+                     PrevIndex_s := signed(PrevIndex_u);
+                     if ((abs(Index1_s - PrevIndex_s) <= signed('0' & SearchRange)) or (PilotFound = '0')) then
                         MaxCount <= START_MAX;
                         CorrPntr <= PackCntr & to_ufixed(Index1, 8, 0); -- Index1 is 0 to 511, so PackCntr is the packet number + offset of 0 to 511
                         MaxIndex <= Index1;
+                        DropCount <= 0;
+                        PeakPend <= '0';
+                     elsif (MaxCount = 0) then
+                        PendIndex <= Index1; -- if peak is found but out of search range at end of packet, increment DropCount. If < 7, slide toward new index, else take index
+                        if (DropCount < 7) then
+                           if (Abs(PrevIndex_s) > 128) then    -- are we wrapping the index or in the middle
+                              if (Index1 < PrevIndex) then
+                                 CorrPend <= PackCntr & to_ufixed(PrevIndex - 1, 8, 0);
+                              else
+                                 CorrPend <= PackCntr & to_ufixed(PrevIndex + 1, 8, 0);
+                              end if;
+                           else
+                              if (Index1_s < PrevIndex_s) then
+                                 CorrPend <= PackCntr & to_ufixed(PrevIndex_u - 1, 8, 0);
+                              else
+                                 CorrPend <= PackCntr & to_ufixed(PrevIndex_u + 1, 8, 0);
+                              end if;
+                           end if;
+                           DropCount <= DropCount + 1;
+                        else
+                           CorrPend <= PackCntr & to_ufixed(Index1, 8, 0);
+                        end if;
+                        PeakPend <= '1';
                      end if;
                   elsif (MaxCount > 0) then
                      MaxCount <= MaxCount - 1;
                   end if;
 
-                elsif (Index1 = 524) then     -- setup for next frame
+                  if (MaxCntr > MaxOfPckt) then
+                     MaxOfPckt <= MaxCntr;
+                  end if;
+
+               elsif (Index1 = 525) then     -- setup for next frame
                   PackCntr <= resize(PackCntr + 1, PackCntr);
-                  AbsPeak  <= (others=>'0');  -- setup for next frame
+                  if (MaxCount = 0) then    -- maintaint the current peak across packets
+                     AbsPeak <= (others=>'0');  -- setup for next frame
+                     if (PeakPend) then
+                        StartOut  <= '1';
+                        PrevIndex <= PendIndex;
+                        CorrPntr  <= CorrPend;
+                        PeakPend  <= '0';
+                     end if;
+                  end if;
+                  MaxOfPckt <= (others=>'0');
                end if;
 
                -- Find the peak of H0 only
@@ -801,57 +843,34 @@ begin
                else
                   PhsCntStrt1 <= '0';
                end if;
-            end if;
 
-            if (PhsCntStrt0) then
-               PhsCount0 <= PHS_LATENCY - 2;  -- it took a clock to set PhsCntStrt and determine MaxCntr from AbsCntrs
-            elsif (PhsCount0 > 0) then     -- cordic is not ValidIn dependent, just straight latency
-               PhsCount0 <= PhsCount0 - 1;
-               if (PhsCount0 = 1) then
-                  PhsPeakInt0 <= Phase0 & "000000";    -- capture phase of current max magnitude
-                  MagPeakInt0 <= Mag0 & "00000";
-               end if;                       -- once calculated
-            end if;
-
-            if (PhsCntStrt1) then
-               PhsCount1 <= PHS_LATENCY - 2;  -- it took a clock to set PhsCntStrt and determine MaxCntr from AbsCntrs
-            elsif (PhsCount1 > 0) then     -- cordic is not ValidIn dependent, just straight latency
-               PhsCount1 <= PhsCount1 - 1;
-               if (PhsCount1 = 1) then
-                  PhsPeakInt1 <= Phase1 & "000000";    -- capture phase of current max magnitude
-                  MagPeakInt1 <= Mag1 & "00000";
+               if (PhsCntStrt0) then
+                  PhsCount0 <= PHS_LATENCY - 2;  -- it took a clock to set PhsCntStrt and determine MaxCntr from AbsCntrs
+               elsif (PhsCount0 > 0) then     -- cordic is not ValidIn dependent, just straight latency
+                  PhsCount0 <= PhsCount0 - 1;
+                  if (PhsCount0 = 1) then
+                     PhsPeakInt0 <= Phase0 & "000000";    -- capture phase of current max magnitude
+                     MagPeakInt0 <= Mag0 & "00000";
+                  end if;                       -- once calculated
                end if;
-            end if;
 
-            if (MaxCount = 1) then  -- found the peak, store the results
-               StartOut <= '1';
-               -- if MaxIndex of last frame is near the edge, check from 0 to SEARCH_RANGE, then 511-SEARCH_RANGE to 511
-               if (MaxIndex < SEARCH_RANGE) then  -- check for start of sweep and carry over from previous packet
-                  StartIndex1 <= 0;
-                  StopIndex1  <= MaxIndex + SEARCH_RANGE;
-                  StartIndex2 <= SEARCH512 + MaxIndex;
-                  StopIndex2  <= 511;
-               elsif (MaxIndex >= SEARCH512) then   -- check for end of sweep with rollover to next packet
-                  StartIndex1 <= 0;
-                  StopIndex1  <= MaxIndex - SEARCH512;
-                  StartIndex2 <= MaxIndex - SEARCH_RANGE;
-                  StopIndex2  <= 511;
-               else
-                  StartIndex1 <= MaxIndex - SEARCH_RANGE;
-                  StopIndex1  <= MaxIndex + SEARCH_RANGE;
-                  StartIndex2 <= MaxIndex - SEARCH_RANGE;
-                  StopIndex2  <= MaxIndex + SEARCH_RANGE;
+               if (PhsCntStrt1) then
+                  PhsCount1 <= PHS_LATENCY - 2;  -- it took a clock to set PhsCntStrt and determine MaxCntr from AbsCntrs
+               elsif (PhsCount1 > 0) then     -- cordic is not ValidIn dependent, just straight latency
+                  PhsCount1 <= PhsCount1 - 1;
+                  if (PhsCount1 = 1) then
+                     PhsPeakInt1 <= Phase1 & "000000";    -- capture phase of current max magnitude
+                     MagPeakInt1 <= Mag1 & "00000";
+                  end if;
                end if;
-               MaxCount <= 0;
-            end if;
 
-            if (StartOut) then     -- StartOut is only one clock wide
-               StartOut <= '0';
-            end if;
+               if (MaxCount = 1) then  -- found the peak, store the results
+                  StartOut    <= '1';
+                  PrevIndex   <= MaxIndex;
+                  MaxCount    <= 0;
+               end if;
 
-
-            if (ValidAbs) then
-               if (Index1 = 523) then     -- give AbsPeak a chance to propagate to PilotMag
+               if (Index1 = 523) then     -- give MaxOfPckt a chance to propagate to PilotMag
                   PilotPulse  <= '1';
                elsif (PilotPulse1X) then  -- send wider pulse to threshold logic at lower clock
                   PilotPulse  <= '0';
@@ -861,6 +880,10 @@ begin
                end if;
             else
                Index0 <= 0;
+            end if;
+
+            if (StartOut) then     -- StartOut is only one clock wide
+               StartOut <= '0';
             end if;
 
          end if;
@@ -877,7 +900,6 @@ begin
             PilotFound        <= '0';
             PilotFoundPend    <= '0';
             PilotPulse1x      <= '0';
-            ValidAbsDly       <= '0';
             CalcThreshold     <= '0';
             PeakPointer       <= 1;
             BadPilot          <= 0;
@@ -904,7 +926,7 @@ begin
             Peak1             <= to_ufixed(1.0, Peak1);
             Peak2             <= to_ufixed(0.2, Peak2);
          elsif (ce) then
-            PilotMag     <= AbsPeak;          -- Latch clock transfers
+            PilotMag     <= MaxOfPckt;          -- Latch clock transfers
             PilotPulse1x <= PilotPulse;
             if (PilotPulse1x) then
                if (IgnoreInitial < 25) then
@@ -943,8 +965,6 @@ begin
                PilotFound  <= PilotFoundPend;
                MagDelay    <= MagDelay(27 downto 0) & PilotMag; -- only use last 26, but PeakPointer goes to 28
             end if;
-
-            ValidAbsDly  <= ValidAbs;
 
             if (CalcThreshold) then          -- Place threshold in center of two highest peaks
                CurrentPeak <= MagDelay(PeakPointer);

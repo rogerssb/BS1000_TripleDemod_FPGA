@@ -83,8 +83,8 @@ ARCHITECTURE rtl OF FireberdDrive IS
             Empty,
             ProgFull    : std_logic;
 
-   attribute mark_debug : string;
-   attribute mark_debug of WrCount : signal is "true";
+--   attribute mark_debug : string;
+--   attribute mark_debug of WrCount : signal is "true";
 
 BEGIN
 

@@ -47,3 +47,6 @@ set_false_path -from [get_pins {stcDemod/Trellis_u/td/stage*/wrAddr_reg[0]/C}] -
 set_false_path -from [get_pins stcDemod/Trellis_u/td/stageSetup*/refValid_reg/C] -to [get_pins {stcDemod/Trellis_u/td/stage*/acs*/cmag/mpy*/U0/i_mult/gDSP.gHYBRID.iHYBRID/single_mult.dsp_based.iDSP/inferred_dsp.reg_mult.m_reg_reg/B[*]}]
 set_false_path -from [get_pins {stcDemod/Trellis_u/td/stage*/wrAddr_reg[0]/C}] -to [get_pins {stcDemod/Trellis_u/td/stage*/acs*/cmag/mpy*/U0/i_mult/gDSP.gHYBRID.iHYBRID/single_mult.dsp_based.iDSP/inferred_dsp.reg_mult.m_reg_reg/B[*]}]
 
+
+
+

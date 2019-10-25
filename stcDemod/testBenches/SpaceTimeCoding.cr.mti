@@ -135,20 +135,7 @@ Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
 Top level modules:
 	acsStage7
 
-} {} {}} C:/Semco/Vivado/Demods/stcDemod.srcs/sources_1/ip/Vio2x18/Vio2x18_sim_netlist.vhdl {1 vcom\ -work\ work\ -2008\ -explicit\ -stats=none\ C:/Semco/Vivado/Demods/stcDemod.srcs/sources_1/ip/Vio2x18/Vio2x18_sim_netlist.vhdl\nModel\ Technology\ ModelSim\ PE\ vcom\ 10.5c\ Compiler\ 2016.07\ Jul\ 21\ 2016\n--\ Loading\ package\ STANDARD\n--\ Loading\ package\ TEXTIO\n--\ Loading\ package\ std_logic_1164\n--\ Compiling\ entity\ Vio2x18_vio_v3_0_16_decoder\n--\ Compiling\ architecture\ STRUCTURE\ of\ Vio2x18_vio_v3_0_16_decoder\n--\ Compiling\ entity\ Vio2x18_vio_v3_0_16_probe_out_one\n--\ Compiling\ architecture\ STRUCTURE\ of\ Vio2x18_vio_v3_0_16_probe_out_one\n--\ Compiling\ entity\ \\Vio2x18_vio_v3_0_16_probe_out_one__parameterized0\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\Vio2x18_vio_v3_0_16_probe_out_one__parameterized0\\\n--\ Compiling\ entity\ \\Vio2x18_vio_v3_0_16_probe_out_one__parameterized1\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\Vio2x18_vio_v3_0_16_probe_out_one__parameterized1\\\n--\ Compiling\ entity\ \\Vio2x18_vio_v3_0_16_probe_out_one__parameterized2\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\Vio2x18_vio_v3_0_16_probe_out_one__parameterized2\\\n--\ Compiling\ entity\ \\Vio2x18_vio_v3_0_16_probe_out_one__parameterized3\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\Vio2x18_vio_v3_0_16_probe_out_one__parameterized3\\\n--\ Compiling\ entity\ \\Vio2x18_vio_v3_0_16_probe_out_one__parameterized4\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\Vio2x18_vio_v3_0_16_probe_out_one__parameterized4\\\n--\ Compiling\ entity\ Vio2x18_vio_v3_0_16_probe_width\n--\ Compiling\ architecture\ STRUCTURE\ of\ Vio2x18_vio_v3_0_16_probe_width\n--\ Compiling\ entity\ Vio2x18_xsdbs_v1_0_2_xsdbs\n--\ Compiling\ architecture\ STRUCTURE\ of\ Vio2x18_xsdbs_v1_0_2_xsdbs\n--\ Compiling\ entity\ Vio2x18_vio_v3_0_16_probe_out_all\n--\ Compiling\ architecture\ STRUCTURE\ of\ Vio2x18_vio_v3_0_16_probe_out_all\n--\ Loading\ entity\ Vio2x18_vio_v3_0_16_probe_out_one\n--\ Loading\ entity\ \\Vio2x18_vio_v3_0_16_probe_out_one__parameterized0\\\n--\ Loading\ entity\ \\Vio2x18_vio_v3_0_16_probe_out_one__parameterized1\\\n--\ Loading\ entity\ \\Vio2x18_vio_v3_0_16_probe_out_one__parameterized2\\\n--\ Loading\ entity\ \\Vio2x18_vio_v3_0_16_probe_out_one__parameterized3\\\n--\ Loading\ entity\ \\Vio2x18_vio_v3_0_16_probe_out_one__parameterized4\\\n--\ Compiling\ entity\ Vio2x18_vio_v3_0_16_vio\n--\ Compiling\ architecture\ STRUCTURE\ of\ Vio2x18_vio_v3_0_16_vio\n--\ Loading\ entity\ Vio2x18_vio_v3_0_16_decoder\n--\ Loading\ entity\ Vio2x18_vio_v3_0_16_probe_out_all\n--\ Loading\ entity\ Vio2x18_vio_v3_0_16_probe_width\n--\ Loading\ entity\ Vio2x18_xsdbs_v1_0_2_xsdbs\n--\ Compiling\ entity\ Vio2x18\n--\ Compiling\ architecture\ STRUCTURE\ of\ Vio2x18\n--\ Loading\ entity\ Vio2x18_vio_v3_0_16_vio\n\n {} {}} C:/Semco/Vivado/Demods/stcDemod/PilotDetectSliding.vhd {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/PilotDetectSliding.vhd
-Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
--- Loading package STANDARD
--- Loading package TEXTIO
--- Loading package std_logic_1164
--- Loading package std_logic_textio
--- Loading package NUMERIC_STD
--- Loading package MATH_REAL
--- Loading package fixed_pkg
--- Loading package Semco_pkg
--- Compiling entity PilotDetectSliding
--- Compiling architecture rtl of PilotDetectSliding
-
-} {} {}} {C:\Semco\Vivado\Demods\stcDemod/Vivado/xc7k160t-IP-Vivado2015p1/y8_IReal_QImag/y8_IReal_QImag_sim_netlist.v} {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/Vivado/xc7k160t-IP-Vivado2015p1/y8_IReal_QImag/y8_IReal_QImag_sim_netlist.v
+} {} {}} C:/Semco/Vivado/Demods/stcDemod.srcs/sources_1/ip/Vio2x18/Vio2x18_sim_netlist.vhdl {1 vcom\ -work\ work\ -2008\ -explicit\ -stats=none\ C:/Semco/Vivado/Demods/stcDemod.srcs/sources_1/ip/Vio2x18/Vio2x18_sim_netlist.vhdl\nModel\ Technology\ ModelSim\ PE\ vcom\ 10.5c\ Compiler\ 2016.07\ Jul\ 21\ 2016\n--\ Loading\ package\ STANDARD\n--\ Loading\ package\ TEXTIO\n--\ Loading\ package\ std_logic_1164\n--\ Compiling\ entity\ Vio2x18_vio_v3_0_16_decoder\n--\ Compiling\ architecture\ STRUCTURE\ of\ Vio2x18_vio_v3_0_16_decoder\n--\ Compiling\ entity\ Vio2x18_vio_v3_0_16_probe_out_one\n--\ Compiling\ architecture\ STRUCTURE\ of\ Vio2x18_vio_v3_0_16_probe_out_one\n--\ Compiling\ entity\ \\Vio2x18_vio_v3_0_16_probe_out_one__parameterized0\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\Vio2x18_vio_v3_0_16_probe_out_one__parameterized0\\\n--\ Compiling\ entity\ \\Vio2x18_vio_v3_0_16_probe_out_one__parameterized0_0\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\Vio2x18_vio_v3_0_16_probe_out_one__parameterized0_0\\\n--\ Compiling\ entity\ \\Vio2x18_vio_v3_0_16_probe_out_one__parameterized1\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\Vio2x18_vio_v3_0_16_probe_out_one__parameterized1\\\n--\ Compiling\ entity\ \\Vio2x18_vio_v3_0_16_probe_out_one__parameterized2\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\Vio2x18_vio_v3_0_16_probe_out_one__parameterized2\\\n--\ Compiling\ entity\ \\Vio2x18_vio_v3_0_16_probe_out_one__parameterized3\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\Vio2x18_vio_v3_0_16_probe_out_one__parameterized3\\\n--\ Compiling\ entity\ Vio2x18_vio_v3_0_16_probe_width\n--\ Compiling\ architecture\ STRUCTURE\ of\ Vio2x18_vio_v3_0_16_probe_width\n--\ Compiling\ entity\ Vio2x18_xsdbs_v1_0_2_xsdbs\n--\ Compiling\ architecture\ STRUCTURE\ of\ Vio2x18_xsdbs_v1_0_2_xsdbs\n--\ Compiling\ entity\ Vio2x18_vio_v3_0_16_probe_out_all\n--\ Compiling\ architecture\ STRUCTURE\ of\ Vio2x18_vio_v3_0_16_probe_out_all\n--\ Loading\ entity\ Vio2x18_vio_v3_0_16_probe_out_one\n--\ Loading\ entity\ \\Vio2x18_vio_v3_0_16_probe_out_one__parameterized0\\\n--\ Loading\ entity\ \\Vio2x18_vio_v3_0_16_probe_out_one__parameterized0_0\\\n--\ Loading\ entity\ \\Vio2x18_vio_v3_0_16_probe_out_one__parameterized1\\\n--\ Loading\ entity\ \\Vio2x18_vio_v3_0_16_probe_out_one__parameterized2\\\n--\ Loading\ entity\ \\Vio2x18_vio_v3_0_16_probe_out_one__parameterized3\\\n--\ Compiling\ entity\ Vio2x18_vio_v3_0_16_vio\n--\ Compiling\ architecture\ STRUCTURE\ of\ Vio2x18_vio_v3_0_16_vio\n--\ Loading\ entity\ Vio2x18_vio_v3_0_16_decoder\n--\ Loading\ entity\ Vio2x18_vio_v3_0_16_probe_out_all\n--\ Loading\ entity\ Vio2x18_vio_v3_0_16_probe_width\n--\ Loading\ entity\ Vio2x18_xsdbs_v1_0_2_xsdbs\n--\ Compiling\ entity\ Vio2x18\n--\ Compiling\ architecture\ STRUCTURE\ of\ Vio2x18\n--\ Loading\ entity\ Vio2x18_vio_v3_0_16_vio\n\n {} {}} {C:\Semco\Vivado\Demods\stcDemod/Vivado/xc7k160t-IP-Vivado2015p1/y8_IReal_QImag/y8_IReal_QImag_sim_netlist.v} {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/Vivado/xc7k160t-IP-Vivado2015p1/y8_IReal_QImag/y8_IReal_QImag_sim_netlist.v
 Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
 -- Compiling module y8_IReal_QImag
 -- Compiling module y8_IReal_QImag_blk_mem_gen_generic_cstr
@@ -209,6 +196,18 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Loading package VCOMPONENTS
 -- Compiling entity FireberdDrive
 -- Compiling architecture rtl of FireberdDrive
+
+} {} {}} {C:\Semco\Vivado\Demods\stcDemod/STC.vhd} {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/STC.vhd
+Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package fixed_pkg
+-- Loading package MATH_REAL
+-- Loading package Semco_pkg
+-- Compiling entity STC
+-- Compiling architecture rtl of STC
 
 } {} {}} C:/Semco/Vivado/Demods/stcDemod/frameAlignment.v {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/frameAlignment.v
 Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
@@ -491,12 +490,12 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Compiling package body Semco_pkg
 -- Loading package Semco_pkg
 
-} {} {}} C:/Semco/Vivado/Demods/stcMod/soqpsk_encoders_test.v {1 {vlog -work work +incdir+C:/Semco/Vivado/Demods +define+STC_MOD -stats=none C:/Semco/Vivado/Demods/stcMod/soqpsk_encoders_test.v
+} {} {}} {C:\Semco\Vivado\Demods\stcDemod/stageSetup.v} {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/stageSetup.v
 Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
--- Compiling module soqpsk_encoders_test
+-- Compiling module stageSetup
 
 Top level modules:
-	soqpsk_encoders_test
+	stageSetup
 
 } {} {}} {C:\Semco\Vivado\Demods\stcDemod/Vivado/xc7k160t-IP-Vivado2015p1/twoPortDistMem56x16/twoPortDistMem56x16_sim_netlist.v} {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/Vivado/xc7k160t-IP-Vivado2015p1/twoPortDistMem56x16/twoPortDistMem56x16_sim_netlist.v
 Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
@@ -510,12 +509,12 @@ Top level modules:
 	twoPortDistMem56x16
 	glbl
 
-} {} {}} {C:\Semco\Vivado\Demods\stcDemod/stageSetup.v} {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/stageSetup.v
+} {} {}} C:/Semco/Vivado/Demods/stcMod/soqpsk_encoders_test.v {1 {vlog -work work +incdir+C:/Semco/Vivado/Demods +define+STC_MOD -stats=none C:/Semco/Vivado/Demods/stcMod/soqpsk_encoders_test.v
 Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
--- Compiling module stageSetup
+-- Compiling module soqpsk_encoders_test
 
 Top level modules:
-	stageSetup
+	soqpsk_encoders_test
 
 } {} {}} C:/Semco/Vivado/Demods/stcDemod/testBenches/OverlapAdd_tb.vhd {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/testBenches/OverlapAdd_tb.vhd
 Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016

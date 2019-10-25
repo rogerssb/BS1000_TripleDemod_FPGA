@@ -88,6 +88,7 @@ ARCHITECTURE rtl OF STC IS
          ValidIn        : IN  std_logic;
          ReIn,
          ImIn           : IN  FLOAT_1_18;
+         SearchRange    : IN SLV4;
          RawAddr,
          CorrPntr       : OUT ufixed(15 downto 0);
          ReOut,
@@ -134,7 +135,6 @@ ARCHITECTURE rtl OF STC IS
          ce             : IN  std_logic;
          StartIn,
          ValidIn        : IN  std_logic;
-         MiscBits,
          InR,
          InI            : IN  SLV18;
          StartDF,
@@ -385,13 +385,11 @@ ARCHITECTURE rtl OF STC IS
    signal   DacMux            : vector_of_slvs(0 to 15)(17 downto 0);
 
    attribute mark_debug : string;
-   attribute mark_debug of TrellisBits, TrellisOutEn, EstimatesDone,
-                  DataOut, ClkOutEn, StartIla, ValidIla, InRBrik2Ila, InIBrik2Ila,
-                  Ber, lastSampleReset, TrellisFull, Bert, BitErrors,
+   attribute mark_debug of /*TrellisOutEn, EstimatesDone, TrellisFull, lastSampleReset,
+                  StartIla, ValidIla, InRBrik2Ila, InIBrik2Ila,
+                 PhaseDiffEn, */  CorrPntr8to0, m_ndx0Slv, m_ndx1Slv,
                   H0Phase, H1Phase, H0Mag, H1Mag, Ch0MuSlv, Ch1MuSlv, deltaTauEstSlv,
-            /* PhaseDiff2xGainSlv,
-                  PhaseDiff1xGainSlv, PhaseDiffSlv,*/ PhaseDiffEn, CorrPntr8to0,
-                  m_ndx0Slv, m_ndx1Slv, ValidData2047 : signal is "true";
+                  Ber, Bert, BitErrors, DataOut, ClkOutEn, ValidData2047 : signal is "true";
 
 BEGIN
 
@@ -517,6 +515,7 @@ BEGIN
          SpectrumInv    => SpectrumInv,
          ReIn           => ResampleR_s,
          ImIn           => ResampleI_s,
+         SearchRange    => MiscBits(7 downto 4),
          -- outputs
          PilotFound     => PilotFound,
          CorrPntr       => CorrPntr,
@@ -631,7 +630,6 @@ BEGIN
          ValidIn        => ValidInBrik2Dly,
          InR            => to_slv(InRBrik2Dly),
          InI            => to_slv(InIBrik2Dly),
-         MiscBits       => MiscBits,
          PhaseOutA      => Phase0A,
          PhaseOutB      => Phase0B,
          DiffEn         => MiscBits(2),

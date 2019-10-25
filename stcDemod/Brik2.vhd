@@ -76,7 +76,6 @@ ENTITY Brik2 IS
       ce             : IN  std_logic;
       StartIn,
       ValidIn        : IN  std_logic;
-      MiscBits,
       InR,
       InI            : IN  SLV18;
       StartDF,
@@ -389,7 +388,7 @@ ARCHITECTURE rtl OF Brik2 IS
 
    attribute mark_debug : string;
    attribute mark_debug of /*DF_R_Ila, DF_I_Ila, ValidDF_ILA,*/ TimeEstDone, ChanEstDone,
-                  TauEst0Ila, TauEst1Ila, StartTime, SyncSumIla, ReadR_Ila, ReadI_Ila,
+                  TauEst0Ila, TauEst1Ila, /*StartTime, SyncSumIla, ReadR_Ila, ReadI_Ila,*/
                   H0EstR_Ila, H0EstI_Ila, H1EstR_Ila, H1EstI_Ila : signal is "true";
 
 BEGIN
@@ -603,15 +602,14 @@ BEGIN
             TrellisDelay <= TrellisDelay(TrellisDelay'left-1 downto 0) & ChanEstDone;
             EstimatesDone <= TrellisDelay(TrellisDelay'left);
             if (ChanEstDone) then   -- All estimates are done, allow time to calculate values.
-               -- TODO remove the miscbits
-               H0EstR      <= H0EstR_CE when MiscBits(5) else to_sfixed(0.25, H0EstR);
-               H0EstI      <= H0EstI_CE when MiscBits(5) else (others=>'0');
-               H1EstR      <= H1EstR_CE when MiscBits(6) else to_sfixed(0.0, H0EstR);
-               H1EstI      <= H1EstI_CE when MiscBits(6) else (others=>'0');
+               H0EstR      <= H0EstR_CE;
+               H0EstI      <= H0EstI_CE;
+               H1EstR      <= H1EstR_CE;
+               H1EstI      <= H1EstI_CE;
                H0Mag       <= resize(H0EstR_CE * H0EstR_CE + H0EstI_CE * H0EstI_CE, H0Mag);
                H1Mag       <= resize(H1EstR_CE * H1EstR_CE + H1EstI_CE * H1EstI_CE, H1Mag);
-               Tau0Est     <= Tau0EstTE when MiscBits(4) else (others=>'0');
-               Tau1Est     <= Tau1EstTE when MiscBits(7) else (others=>'0');
+               Tau0Est     <= Tau0EstTE;
+               Tau1Est     <= Tau1EstTE;
             end if;
 
             H0GtH1 <= '1' when (H0Mag > H1Mag) else '0';

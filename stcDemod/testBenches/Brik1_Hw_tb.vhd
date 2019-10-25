@@ -88,7 +88,6 @@ architecture rtl of Brik1_Hw_tb is
       ClkOutEn,                           -- Trellis Clock Output
       PilotFound,                         -- Pilot Found LED
       PilotLocked,
-      TrellisFull,
       Dac0ClkEn,
       Dac1ClkEn,
       Dac2ClkEn         : OUT std_logic;
@@ -218,7 +217,6 @@ architecture rtl of Brik1_Hw_tb is
             ClkXn,
             lastSampleReset,
             Locked,
-            TrellisFull,
             PhaseValid           : std_logic;
    SIGNAL   DataValid            : SLV8 := x"00";
    SIGNAL   RdAddr_i,
@@ -301,7 +299,7 @@ begin
       );
 -- Phase0_vio <= 18x"10000";
 -- Phase1_vio <= 18x"30000";
-Frequency_vio <= 24x"8000";
+Frequency_vio <= 24x"000";
 
    ErrorProc : process (ClkXn)
    begin
@@ -316,7 +314,7 @@ Frequency_vio <= 24x"8000";
             else
                LedCount <= x"00000000";
             end if;
-            DemodLED <= TrellisFull; --'1' when (LedCount < 93333333) else '0';
+            DemodLED <= '1' when (LedCount < 93333333) else '0';
             if (<< signal UUTu.PD_u.OverflowIFft : std_logic >> ) then
                Errors(0) <= '1';
             else
@@ -365,7 +363,7 @@ Frequency_vio <= 24x"8000";
          if (Reset) then
             DataValid <= x"00";
             BitRateAcc  <= to_sfixed(0, BitRateAcc);
-            RdAddr_i    <= 12800;
+            RdAddr_i    <= 12576; --12800;
          else
             BitRate_slv   <= BitRate_vio;
             Power0_slv    <= Power0_vio;
@@ -379,7 +377,7 @@ Frequency_vio <= 24x"8000";
             BitRateAcc <= BitRate_v;
             DataValid <= DataValid(DataValid'left-1 downto 0) & (BitRate_v(0) xor BitRateAcc(0));
             if (DataValid(0)) then
-               if (RdAddr_i < unsigned(FrameClocks_vio)) then
+               if (RdAddr_i < 13310) then --unsigned(FrameClocks_vio)) then
                   RdAddr_i <= RdAddr_i + 1;
                else
                   RdAddr_i <= 0;
