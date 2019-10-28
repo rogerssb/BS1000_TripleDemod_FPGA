@@ -66,13 +66,14 @@ module acsOp(
         end
 */  end
 
-    always @*   // perform the saturation logic after the add for timimg
+    always @* begin  // perform the saturation logic after the add for timimg
         if (accSum[18]) begin
             accMetricOut = 18'h3ffff;
         end
         else begin
             accMetricOut = accSum[17:0];
         end
+    end
 
     // Create the output clk enable
     reg             [7:0] clkEnSR;

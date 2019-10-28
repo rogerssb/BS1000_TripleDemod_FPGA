@@ -20,6 +20,8 @@ module stcDownconverter(
     input               [31:0]  din,
     output  reg         [31:0]  dout,
     input       signed  [17:0]  iRx, qRx,
+    input                       sampleRateErrorEn,
+    input       signed  [8:0]   sampleRateError,
     output      signed  [17:0]  iStc, qStc,
     output                      resampSync,
     output              [3:0]   dac0Select,dac1Select,dac2Select,
@@ -197,6 +199,46 @@ module stcDownconverter(
         qResampIn <= qFiltered;
     end
 
+
+    /******************************************************************************
+                             Resampler Loop Filter
+    ******************************************************************************/
+
+    reg bitsyncSpace;
+    always @* begin
+        casex(addr)
+            `BITSYNCSPACE:  bitsyncSpace = cs;
+            default:        bitsyncSpace = 0;
+        endcase
+    end
+
+    wire    signed  [31:0]  sampleFreq;
+    wire            [31:0]  bsDout;
+    loopFilter sampleLoop(
+        .clk(clk),
+        .clkEn(sampleRateErrorEn),
+        .reset(reset),
+        `ifdef USE_BUS_CLOCK
+        .busClk(busClk),
+        `endif
+        .cs(bitsyncSpace),
+        .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
+        .addr(addr),
+        .din(din),
+        .dout(bsDout),
+        .error($signed({sampleRateError,3'b0})),
+        .loopFreq(sampleFreq),
+        .ctrl2(),
+        .ctrl4(),
+        .satPos(),
+        .satNeg(),
+        .lockCount(),
+        .syncThreshold()
+    );
+
+
+
+
     /******************************************************************************
                                       Resampler
     ******************************************************************************/
@@ -214,7 +256,7 @@ module stcDownconverter(
         .din(din),
         .dout(resampDout),
         .demodMode(demodMode),
-        .resamplerFreqOffset(32'h0),
+        .resamplerFreqOffset(sampleFreq),
         .auResamplerFreqOffset(32'h0),
         .offsetEn(1'b1),
         .auOffsetEn(1'b1),

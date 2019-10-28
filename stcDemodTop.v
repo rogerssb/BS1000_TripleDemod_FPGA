@@ -357,6 +357,7 @@ module stcDemodTop (
 //                         Downconverter
 //******************************************************************************
 
+    wire    signed  [8:0]   sampleRateError;
     wire    signed  [17:0]  iDdc,qDdc;
     wire    signed  [3:0]   demodDac0Select,demodDac1Select,demodDac2Select;
     wire    signed  [17:0]  demodDac0Data,demodDac1Data,demodDac2Data;
@@ -373,6 +374,8 @@ module stcDemodTop (
         .din(dataIn),
         .dout(demodDout),
         .iRx(adc0In), .qRx(18'h0),
+        .sampleRateErrorEn(sampleRateErrorEn),
+        .sampleRateError(sampleRateError),
         .iStc(iDdc), .qStc(qDdc),
         .resampSync(stcDdcClkEn),
         .dac0Select(demodDac0Select),
@@ -485,6 +488,8 @@ module stcDemodTop (
         .PhaseOut(pilotPhase),
         .PhaseDiff(pilotPhaseDiff),
         .PhaseDiffEn(pilotPhaseDiffEn),
+        .PilotOffset(sampleRateError),
+        .StartOfFrame(sampleRateErrorEn),
         .ClkOutEn(stcBitEnOut),
         .PilotFound(pilotFound),
         .PilotLocked(pilotLocked),
