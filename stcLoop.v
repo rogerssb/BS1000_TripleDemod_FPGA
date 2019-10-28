@@ -53,7 +53,7 @@ module stcLoop(
     wire            [31:0]  loopData;
     assign                  freqLagExp = loopData[4:0];
     wire            [15:0]  lockCount;
-    wire            [15:0]  syncThreshold;
+    wire            [11:0]  syncThreshold;
     wire    signed  [39:0]  lagAccum;
     carrierLoopRegs loopRegs(
         .cs(freqLoopSpace),
@@ -163,7 +163,7 @@ module stcLoop(
         else if (clkEn) begin
             absModeError <= $unsigned(freq[11] ? -freq : freq);
             avgAbsModeError <= avgAbsModeError - {4'b0,avgAbsModeError[15:4]} + {4'b0,absModeError};
-            if (avgAbsModeError > syncThreshold) begin
+            if (avgAbsModeError > {syncThreshold,4'b0}) begin
                 if (lockCounter == (16'hffff - lockCount)) begin
                     freqAcquired <= 0;
                     lockCounter <= 0;

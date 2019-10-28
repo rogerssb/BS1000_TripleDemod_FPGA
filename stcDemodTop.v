@@ -1021,6 +1021,7 @@ module stcDemodTop (
             `DDCFIRSPACE,
             `CICDECSPACE,
             `RESAMPSPACE,
+            `BITSYNCSPACE,
             `CARRIERSPACE,
             `CHAGCSPACE :       rd_mux = demodDout;
 
@@ -1082,6 +1083,7 @@ module stcDemodTop (
             `DDCFIRSPACE,
             `CICDECSPACE,
             `RESAMPSPACE,
+            `BITSYNCSPACE,
             `CARRIERSPACE,
             `CHAGCSPACE : begin
                 if (addr[1]) begin

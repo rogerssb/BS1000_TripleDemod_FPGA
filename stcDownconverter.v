@@ -417,6 +417,7 @@ always @* begin
         `CICDECSPACE,
         `DDCFIRSPACE,
         `DDCSPACE:          dout = ddcDout;
+        `BITSYNCSPACE:      dout = bsDout;
         `RESAMPSPACE:       dout = resampDout;
         `CARRIERSPACE:      dout = freqDout;
         default:            dout = 32'bx;

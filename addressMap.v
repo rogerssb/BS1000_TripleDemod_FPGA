@@ -620,6 +620,7 @@
 `define DDCSPACE            13'b0_0100_0010_xxxx
 `define DDCFIRSPACE         13'b0_0100_0011_xxxx
 `define CICDECSPACE         13'b0_0100_0100_0xxx
+`define BITSYNCSPACE        13'b0_0100_011x_xxxx
 `define RESAMPSPACE         13'b0_0100_0101_xxxx
 `define CHAGCSPACE          13'b0_0100_101x_xxxx
 `define CARRIERSPACE        13'b0_0100_110x_xxxx
