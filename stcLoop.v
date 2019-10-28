@@ -85,6 +85,7 @@ module stcLoop(
 
 
     /**************************** Adjust Error ************************************/
+    reg signed [11:0] freqLoopError;
     always @(posedge clk) begin
         if (zeroError || !freqAcquired) begin
             phaseLoopError <= 12'h0;

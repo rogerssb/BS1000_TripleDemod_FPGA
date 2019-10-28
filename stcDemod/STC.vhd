@@ -30,6 +30,8 @@ Dependencies:
                                HISTORY
 ----------------------------------------------------------------------------
 9-6-16 Initial release FZ
+
+10-25-19 Removed MiscBit selection on TrellisOffset polarity
 -------------------------------------------------------------
 */
 
@@ -59,6 +61,7 @@ ENTITY STC IS
       DataOut,                            -- Trellis Data Output
       ClkOutEn,                           -- Trellis Clock Output
       PilotFound,                         -- Pilot Found LED
+      BitRateDir,
       PilotLocked,
       PhaseDiffEn,
       Dac0ClkEn,
@@ -101,6 +104,7 @@ ARCHITECTURE rtl OF STC IS
          PhsPeak0,
          MagPeak1,
          PhsPeak1       : OUT SLV18;
+         BitRateDir,
          PilotFound,
          ValidOut,
          StartOut       : OUT std_logic
@@ -309,11 +313,7 @@ ARCHITECTURE rtl OF STC IS
             ResampleI_s,
             Ch0Mu,
             Ch1Mu,
-            PhaseDiff1,
-            PhaseDiff2,
-            PhaseDiff1xGain,
-            PhaseDiff2xGain,
-            PhaseDiff2Offset  : Float_1_18;
+            PhaseDiff2        : Float_1_18;
    SIGNAL   PhaseDiff1Gain,
             PhaseDiff2Gain    : sfixed(9 downto -8);
    SIGNAL   m_ndx0,
@@ -331,15 +331,9 @@ ARCHITECTURE rtl OF STC IS
             Ch0MuSlv,
             Ch1MuSlv,
             PhsLastPeak,
-            PhaseDiffGain1Slv,
-            PhaseDiffGain2Slv,
-            PhaseDiffGain1Slv1,
-            PhaseDiffGain2Slv1,
             Phase0A,
             Phase0B,
-            PhaseDiffSlv,
-            PhaseDiff1xGainSlv,
-            PhaseDiff2xGainSlv : SLV18;
+            PhaseDiffSlv      : SLV18;
    SIGNAL   StartCount        : integer range 0 to 3 := 0;
    SIGNAL   PilotPulse,
             PilotValidOut     : std_logic;
@@ -348,6 +342,8 @@ ARCHITECTURE rtl OF STC IS
    SIGNAL   RawAddr,
             StartNextFrame,
             StartFrameOffset,
+            CorrDiff,
+            CorrPrev,
             CorrPntr          : ufixed(15 downto 0);
    signal   BerRange,
             Ber               : natural range 0 to 3200 := 0;
@@ -380,14 +376,15 @@ ARCHITECTURE rtl OF STC IS
             HxPhase,
             InRBrik2Ila,
             InIBrik2Ila       : SLV18;
+   signal   CorrDiffIla       : SLV16;
    signal   StartIla,
             ValidIla          : std_logic;
    signal   DacMux            : vector_of_slvs(0 to 15)(17 downto 0);
 
    attribute mark_debug : string;
    attribute mark_debug of /*TrellisOutEn, EstimatesDone, TrellisFull, lastSampleReset,
-                  StartIla, ValidIla, InRBrik2Ila, InIBrik2Ila,
-                 PhaseDiffEn, */  CorrPntr8to0, m_ndx0Slv, m_ndx1Slv,
+                  StartIla, ValidIla, InRBrik2Ila, InIBrik2Ila, */
+                  PhaseDiffSlv, CorrPntr, m_ndx0Slv, m_ndx1Slv, CorrDiffIla,
                   H0Phase, H1Phase, H0Mag, H1Mag, Ch0MuSlv, Ch1MuSlv, deltaTauEstSlv,
                   Ber, Bert, BitErrors, DataOut, ClkOutEn, ValidData2047 : signal is "true";
 
@@ -398,11 +395,10 @@ BEGIN
    begin
       if (rising_edge(Clk186)) then
 -- TODO remove ILAs
-   PhaseDiff1xGainSlv <= to_slv(PhaseDiff1xGain);
-   PhaseDiff2xGainSlv <= to_slv(PhaseDiff2xGain);
-   PhaseDiffSlv       <= to_slv(PhaseDiff);
+         PhaseDiffSlv <= to_slv(PhaseDiff);
          InRBrik2Ila <= to_slv(InRBrik2Dly);
          InIBrik2Ila <= to_slv(InIBrik2Dly);
+         CorrDiffIla <= to_slv(CorrDiff);
          StartIla    <= StartInBrik2Dly;
          ValidIla    <= ValidInBrik2Dly;
       end if;
@@ -518,6 +514,7 @@ BEGIN
          SearchRange    => MiscBits(7 downto 4),
          -- outputs
          PilotFound     => PilotFound,
+         BitRateDir     => BitRateDir,
          CorrPntr       => CorrPntr,
          RawAddr        => RawAddr,
          Magnitude0     => Magnitude0,
@@ -538,25 +535,14 @@ BEGIN
    begin
       if (rising_edge(Clk186)) then
          PilotValidOutDly  <= PilotValidOut;
-         PhaseDiffGain1Slv1  <= PhaseDiffGain1Slv; -- the slv to slv transfer are to make the ILA unconfused
-         PhaseDiffGain2Slv1  <= PhaseDiffGain2Slv;
-         PhaseDiff1Gain    <= to_sfixed(PhaseDiffGain1Slv1, PhaseDiff1Gain);
-         PhaseDiff2Gain    <= to_sfixed(PhaseDiffGain2Slv1, PhaseDiff2Gain);
          StartOffset       <= x"000" & MiscBits(15 downto 12);
          StartFrameOffset  <= resize(StartNextFrame + ufixed(StartOffset), StartFrameOffset);
          if (Reset2x) then
-            PhaseDiff       <= (others=>'0');
-            PhaseDiff1xGain <= (others=>'0');
-            PhaseDiff2xGain <= (others=>'0');
             PhaseDiffEnDly  <= (others=>'0');
             PhaseDiffEn     <= '0';
          elsif (StartFrameOffset = RawAddr) then
-            PhaseDiff1  <= resize(to_sfixed(PhsPeak, PhaseDiff1) - to_sfixed(PhsLastPeak, PhaseDiff1), PhaseDiff1);
             PhaseDiffEnDly  <= x"01";
          else
-            PhaseDiff <= std_logic_vector(resize(PhaseDiff1xGain + PhaseDiff2xGain, 0, -17));
-            PhaseDiff1xGain <= resize(PhaseDiff1 * PhaseDiff1Gain, PhaseDiff1xGain);
-            PhaseDiff2xGain <= resize(PhaseDiff2 * PhaseDiff2Gain, PhaseDiff2xGain);
             PhaseDiffEnDly  <= PhaseDiffEnDly(6 downto 0) & '0';
             PhaseDiffEn     <= PhaseDiffEnDly(3) or PhaseDiffEnDly(4);  -- needs two clocks wide for 93Mhz domain
          end if;
@@ -569,6 +555,7 @@ BEGIN
       end if;
    end process AFC_process;
 
+   PhaseDiff <= to_slv(PhaseDiff2);
    PhaseOut <= HxPhase when (not MiscBits(3)) else to_slv(PhsPeak);  -- Pilot Detect or Channel Est Phase select
    PhsPeak  <= PhsPeak0 when Mag0GtMag1 else PhsPeak1;         -- Pilot Detect Phase select
    HxPhase  <= (H0Phase & 6x"0") when Mag0GtMag1 else H1Phase & 6X"0";  -- Channel Est Phase select
@@ -595,9 +582,9 @@ BEGIN
    VioPhase  : Vio2x18
       PORT MAP (
          clk         => Clk186,
-         probe_out0  => PhaseDiffGain2Slv,
+         probe_out0  => open,
          probe_out1  => open,
-         probe_out2  => PhaseDiffGain1Slv,
+         probe_out2  => open,
          probe_out3  => MiscBits,
          probe_out4  => TrellisOffsetSlv,
          probe_out5  => OffsetPS
@@ -617,6 +604,11 @@ BEGIN
             ValidInBrik2Dly <= ValidOutPS;
             InRBrik2Dly     <= RealOutPS;
             InIBrik2Dly     <= ImagOutPS;
+
+            if (StartOutPS) then
+               CorrPrev <= CorrPntr;
+               CorrDiff <= resize(CorrPntr - CorrPrev, CorrDiff);
+            end if;
          end if;
       end if;
    end process InterBrikClk;
@@ -654,8 +646,8 @@ BEGIN
    TP_Process : process(Clk186)
    begin
       if (rising_edge(Clk186)) then
-         m_ndx0Slv      <= std_logic_vector(TrellisOffset + to_signed(m_ndx0, 4)) when (not MiscBits(0)) else std_logic_vector(TrellisOffset - to_signed(m_ndx0, 4));
-         m_ndx1Slv      <= std_logic_vector(TrellisOffset + to_signed(m_ndx1, 4)) when (not MiscBits(0)) else std_logic_vector(TrellisOffset - to_signed(m_ndx1, 4));
+         m_ndx0Slv      <= std_logic_vector(TrellisOffset + to_signed(m_ndx0, 4));
+         m_ndx1Slv      <= std_logic_vector(TrellisOffset + to_signed(m_ndx1, 4));
          Ch0MuSlv       <= to_slv(Ch0Mu);
          Ch1MuSlv       <= to_slv(Ch1Mu);
          deltaTauEstSlv <= to_slv(DeltaTauEst);

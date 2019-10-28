@@ -86,6 +86,7 @@ architecture rtl of Brik1_Hw_tb is
       ValidIn           : IN  std_logic;
       DataOut,                            -- Trellis Data Output
       ClkOutEn,                           -- Trellis Clock Output
+      BitRateDir,
       PilotFound,                         -- Pilot Found LED
       PilotLocked,
       Dac0ClkEn,
@@ -216,6 +217,7 @@ architecture rtl of Brik1_Hw_tb is
             Clk93,
             ClkXn,
             lastSampleReset,
+            BitRateDir,
             Locked,
             PhaseValid           : std_logic;
    SIGNAL   DataValid            : SLV8 := x"00";
@@ -242,7 +244,7 @@ architecture rtl of Brik1_Hw_tb is
    SIGNAL   Cos0,
             Sin0,
             Cos1,
-            Sin1              : sfixed(0 downto -15);
+            Sin1                 : sfixed(0 downto -15);
    SIGNAL   SinCosData0,
             SinCosData1          : std_logic_vector(31 downto 0);
    SIGNAL   Frequency_vio,
@@ -264,6 +266,7 @@ architecture rtl of Brik1_Hw_tb is
             Errors               : SLV8;
    SIGNAL   LedCount             : UINT32;
    SIGNAL   ClocksPerBit         : SLV16;
+   SIGNAL   FrameCount           : unsigned(5 downto 0) := "000000";
 
    attribute mark_debug : string;
    attribute mark_debug of RdAddr_i, RealOut, ImagOut, ClkOut_o, DataOut_o : signal is "true";
@@ -358,12 +361,13 @@ Frequency_vio <= 24x"000";
                NoiseGain_v,
                BitRate_v   : sfixed(0 downto -17);
       variable Noise_v     : sfixed(3 downto -14);
+      variable FrameClocks_v  : integer range 0 to 16383;
    begin
       if (rising_edge(Clk93)) then
          if (Reset) then
             DataValid <= x"00";
             BitRateAcc  <= to_sfixed(0, BitRateAcc);
-            RdAddr_i    <= 12576; --12800;
+            RdAddr_i    <= 12830;
          else
             BitRate_slv   <= BitRate_vio;
             Power0_slv    <= Power0_vio;
@@ -377,10 +381,19 @@ Frequency_vio <= 24x"000";
             BitRateAcc <= BitRate_v;
             DataValid <= DataValid(DataValid'left-1 downto 0) & (BitRate_v(0) xor BitRateAcc(0));
             if (DataValid(0)) then
-               if (RdAddr_i < 13310) then --unsigned(FrameClocks_vio)) then
+               if (FrameCount(0)) then
+                  FrameClocks_v := 13311; --to_integer(unsigned(FrameClocks_vio));
+               elsif (BitRateDir) then
+                  FrameClocks_v := 13310;
+               else
+                  FrameClocks_v := 13312;
+               end if;
+
+               if (RdAddr_i < FrameClocks_v) then
                   RdAddr_i <= RdAddr_i + 1;
                else
                   RdAddr_i <= 0;
+                  FrameCount <= FrameCount + 1;
                end if;
             end if;
          end if;
@@ -651,6 +664,7 @@ Frequency_vio <= 24x"000";
          Clk186         => ClkXn,
          ValidIn        => PhaseValid,
          SpectrumInv    => MiscBits(0),
+         BitRateDir     => BitRateDir,
          DataOut        => DataOut_o,
          ClkOutEn       => ClkOut_o,
          PilotFound     => open,

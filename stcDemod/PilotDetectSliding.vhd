@@ -73,6 +73,7 @@ entity PilotDetectSliding is
          PhsPeak0,
          MagPeak1,
          PhsPeak1       : OUT SLV18;
+         BitRateDir,
          PilotFound,
          ValidOut,
          StartOut       : OUT std_logic
@@ -350,6 +351,7 @@ architecture rtl of PilotDetectSliding is
             MagPeakInt1,
             PhsPeakInt1       : SLV18;
    SIGNAL   Count,
+            AbsIndex,
             MaxIndex,
             PrevIndex,
             PendIndex,
@@ -386,7 +388,7 @@ architecture rtl of PilotDetectSliding is
    attribute mark_debug : string;
    attribute mark_debug of PilotMag_Ila, PilotFound, Peak1_Ila, Peak2_Ila,
              /* MagPeak0, PhsPeak0, MagPeak1, PhsPeak1, */
-             AbsCntr0_Ila, AbsCntr1_Ila, MaxIndex, PrevIndex, PendIndex : signal is "true";
+             AbsCntr0_Ila, AbsCntr1_Ila, AbsIndex, MaxIndex, PrevIndex, PendIndex : signal is "true";
 begin
 
    IlaProcess : process(clk)
@@ -727,6 +729,7 @@ begin
             PhsCount1    <= 0;
             DropCount    <= 7;
             PilotPulse   <= '0';
+            BitRateDir   <= '0';
             MagPeakInt0  <= (others=>'0');
             PhsPeakInt0  <= (others=>'0');
             MagPeakInt1  <= (others=>'0');
@@ -758,37 +761,25 @@ begin
                if (Index1 < 512) then     -- only search first half of the ifft
                   if (MaxCntr > AbsPeak) and (MaxCntr > Threshold) then
                      AbsPeak <= MaxCntr;
+                     AbsIndex <= Index1;
                      Index1_u := to_unsigned(Index1, Index1_u);   -- these are to convert 0 to 511 to ±255
                      Index1_s := signed(Index1_u);
                      PrevIndex_u := to_unsigned(PrevIndex, Index1_u);
                      PrevIndex_s := signed(PrevIndex_u);
                      if ((abs(Index1_s - PrevIndex_s) <= signed('0' & SearchRange)) or (PilotFound = '0')) then
-                        MaxCount <= START_MAX;
-                        CorrPntr <= PackCntr & to_ufixed(Index1, 8, 0); -- Index1 is 0 to 511, so PackCntr is the packet number + offset of 0 to 511
-                        MaxIndex <= Index1;
-                        DropCount <= 0;
-                        PeakPend <= '0';
+                        MaxCount    <= START_MAX;
+                        CorrPend    <= PackCntr & to_ufixed(Index1, 8, 0); -- Index1 is 0 to 511, so PackCntr is the packet number + offset of 0 to 511
+                        MaxIndex    <= Index1;
+                        DropCount   <= 0;
+                        PeakPend    <= '1';
                      elsif (MaxCount = 0) then
                         PendIndex <= Index1; -- if peak is found but out of search range at end of packet, increment DropCount. If < 7, slide toward new index, else take index
                         if (DropCount < 7) then
-                           if (Abs(PrevIndex_s) > 128) then    -- are we wrapping the index or in the middle
-                              if (Index1 < PrevIndex) then
-                                 CorrPend <= PackCntr & to_ufixed(PrevIndex - 1, 8, 0);
-                              else
-                                 CorrPend <= PackCntr & to_ufixed(PrevIndex + 1, 8, 0);
-                              end if;
-                           else
-                              if (Index1_s < PrevIndex_s) then
-                                 CorrPend <= PackCntr & to_ufixed(PrevIndex_u - 1, 8, 0);
-                              else
-                                 CorrPend <= PackCntr & to_ufixed(PrevIndex_u + 1, 8, 0);
-                              end if;
-                           end if;
                            DropCount <= DropCount + 1;
                         else
                            CorrPend <= PackCntr & to_ufixed(Index1, 8, 0);
+                           PeakPend <= '1';
                         end if;
-                        PeakPend <= '1';
                      end if;
                   elsif (MaxCount > 0) then
                      MaxCount <= MaxCount - 1;
@@ -867,8 +858,12 @@ begin
                if (MaxCount = 1) then  -- found the peak, store the results
                   StartOut    <= '1';
                   PrevIndex   <= MaxIndex;
+                  CorrPntr    <= CorrPend;
+                  PeakPend    <= '0';
                   MaxCount    <= 0;
                end if;
+
+               BitRateDir <= '1' when (PrevIndex >= 256) else '0';
 
                if (Index1 = 523) then     -- give MaxOfPckt a chance to propagate to PilotMag
                   PilotPulse  <= '1';

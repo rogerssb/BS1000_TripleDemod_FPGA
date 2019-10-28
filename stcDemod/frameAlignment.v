@@ -1,6 +1,8 @@
 `timescale 1ns/100ps
 `include "stcDefines.vh"
 
+// 10-25-19 Modified sofAddress offset from 8 to 7. Could go to 6
+
 module frameAlignment
     #(parameter START_OFFSET = 0,
       parameter CLKS_PER_OUTPUT = 4) (
@@ -47,7 +49,7 @@ module frameAlignment
             end
             if (startOfFrame) begin
                 sofDetected <= 1;
-                sofAddress  <= wrAddr + `PILOT_SAMPLES_PER_FRAME - 8;  // capture address of first sample of next frame. SOF goes active between packets, so wrAddr is inactive
+                sofAddress  <= wrAddr + `PILOT_SAMPLES_PER_FRAME - 7;  // capture address of first sample of next frame. SOF goes active between packets, so wrAddr is inactive
             end
             else if (myStartOfTrellis) begin
                 sofDetected <= 0;

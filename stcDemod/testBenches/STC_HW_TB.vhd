@@ -92,7 +92,7 @@ BEGIN
          RdAddrDly <= RdAddrEq;
          if (<< signal Brik1.Reset  : std_logic >>) then
             Power0In <= to_sfixed(0.240, Power0In);
-            Power1In <= to_sfixed(0.240, Power1In);
+            Power1In <= to_sfixed(0.0, Power1In);
             NoiseIn  <= to_sfixed(0.0, NoiseIn);
             BitRate  <= to_sfixed(9.33*4*1.04/93.3, BitRate);    -- 41.6 is 10Mb times 4 plus 4% overhead for pilot
          elsif (RdAddrEq and not RdAddrDly) then
@@ -128,7 +128,7 @@ BEGIN
       DemodLED => open
    );
 
-   << signal Brik1.UUTu.OffsetPS : SLV4 >> <= OffsetPS;
+--   << signal Brik1.UUTu.OffsetPS : SLV4 >> <= OffsetPS;
 
 END rtl;
 
