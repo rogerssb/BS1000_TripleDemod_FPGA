@@ -61,21 +61,21 @@ entity PilotDetectSliding is
          ReIn,
          ImIn           : IN  FLOAT_1_18;
          SearchRange    : IN  SLV4;
-         CorrPntr,
+         CorrPntr,                                 -- Packet buffer pointer
          RawAddr        : OUT ufixed(15 downto 0);
          ReOut,
-         ImOut          : OUT FLOAT_1_18;
+         ImOut          : OUT FLOAT_1_18;          -- Packetized output
          Magnitude0,
          Magnitude1,
          PhaseOut0,
-         PhaseOut1,
+         PhaseOut1,                                -- Streaming Mag/Phs of iFFT
          MagPeak0,
          PhsPeak0,
          MagPeak1,
-         PhsPeak1       : OUT SLV18;
-         BitRateDir,
+         PhsPeak1       : OUT SLV18;               -- Peak Mag/Phs of iFFT
+         PilotOffset    : OUT SFixed(8 downto 0);  -- Bit Sync Loop Error
          PilotFound,
-         ValidOut,
+         ValidOut,                                 -- ReOut/ImOut valid
          StartOut       : OUT std_logic
       );
 end PilotDetectSliding;
@@ -357,7 +357,7 @@ architecture rtl of PilotDetectSliding is
             PendIndex,
             Index0,
             Index1            : natural range 0 to 1023;
-   SIGNAL   PackCntr          : ufixed(6 downto 0);
+   SIGNAL   PackCntr          : ufixed(6 downto 0);  -- upper 7 bits of 16 bit address to ram buffer
    SIGNAL   DelayData         : std_logic_vector(2*PackR'length downto 0);
    SIGNAL   MultTLast         : std_logic_vector(5 downto 0);
    SIGNAL   tdata1,
@@ -729,7 +729,7 @@ begin
             PhsCount1    <= 0;
             DropCount    <= 7;
             PilotPulse   <= '0';
-            BitRateDir   <= '0';
+            PilotOffset  <= (others=>'0');
             MagPeakInt0  <= (others=>'0');
             PhsPeakInt0  <= (others=>'0');
             MagPeakInt1  <= (others=>'0');
@@ -863,7 +863,7 @@ begin
                   MaxCount    <= 0;
                end if;
 
-               BitRateDir <= '1' when (PrevIndex >= 256) else '0';
+               PilotOffset <= to_sfixed(PrevIndex - 256, PilotOffset);  -- set bit sync error to BS Loop
 
                if (Index1 = 523) then     -- give MaxOfPckt a chance to propagate to PilotMag
                   PilotPulse  <= '1';

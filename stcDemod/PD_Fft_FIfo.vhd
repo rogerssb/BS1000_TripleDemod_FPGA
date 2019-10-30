@@ -60,8 +60,8 @@ ENTITY PD_Fft_Fifo IS
       ImOut2x        : OUT sfixed(DATA_WIDTH+BINPT-1 downto BINPT);
       RawAddr        : OUT ufixed(15 downto 0);
       Start2x,
-      ValidOut2x,
-      ValidData2x,
+      ValidOut2x,       -- actual data is valid
+      ValidData2x,      -- data and 512 zeros for fft
       LastOut2x      : OUT std_logic
    );
 END PD_Fft_Fifo;

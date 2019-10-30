@@ -61,12 +61,13 @@ ENTITY STC IS
       DataOut,                            -- Trellis Data Output
       ClkOutEn,                           -- Trellis Clock Output
       PilotFound,                         -- Pilot Found LED
-      BitRateDir,
       PilotLocked,
+      StartOfFrame,
       PhaseDiffEn,
       Dac0ClkEn,
       Dac1ClkEn,
       Dac2ClkEn         : OUT std_logic;
+      PilotOffset       : OUT STD_LOGIC_VECTOR(8 downto 0); -- signed Pilot Detect Offset from center
       Dac0Data,
       Dac1Data,
       Dac2Data          : OUT SLV18;
@@ -96,6 +97,7 @@ ARCHITECTURE rtl OF STC IS
          CorrPntr       : OUT ufixed(15 downto 0);
          ReOut,
          ImOut          : OUT FLOAT_1_18;
+         PilotOffset    : OUT SFixed(8 downto 0);
          Magnitude0,
          Magnitude1,
          PhaseOut0,
@@ -104,7 +106,6 @@ ARCHITECTURE rtl OF STC IS
          PhsPeak0,
          MagPeak1,
          PhsPeak1       : OUT SLV18;
-         BitRateDir,
          PilotFound,
          ValidOut,
          StartOut       : OUT std_logic
@@ -342,8 +343,6 @@ ARCHITECTURE rtl OF STC IS
    SIGNAL   RawAddr,
             StartNextFrame,
             StartFrameOffset,
-            CorrDiff,
-            CorrPrev,
             CorrPntr          : ufixed(15 downto 0);
    signal   BerRange,
             Ber               : natural range 0 to 3200 := 0;
@@ -354,6 +353,7 @@ ARCHITECTURE rtl OF STC IS
             codeBit,
             Reload            : std_logic;
    SIGNAL   deltaTauEstSlv    : std_logic_vector(5 downto 0);
+   SIGNAL   PilotOffset_s     : SFixed(8 downto 0);
 
 -- todo, remove
    SIGNAL   H0Phase,
@@ -376,17 +376,16 @@ ARCHITECTURE rtl OF STC IS
             HxPhase,
             InRBrik2Ila,
             InIBrik2Ila       : SLV18;
-   signal   CorrDiffIla       : SLV16;
    signal   StartIla,
             ValidIla          : std_logic;
    signal   DacMux            : vector_of_slvs(0 to 15)(17 downto 0);
 
    attribute mark_debug : string;
-   attribute mark_debug of /*TrellisOutEn, EstimatesDone, TrellisFull, lastSampleReset,
-                  StartIla, ValidIla, InRBrik2Ila, InIBrik2Ila, */
-                  PhaseDiffSlv, CorrPntr, m_ndx0Slv, m_ndx1Slv, CorrDiffIla,
+   attribute mark_debug of /*TrellisOutEn, EstimatesDone, TrellisFull, lastSampleReset, */
+                  StartIla, ValidIla, InRBrik2Ila, InIBrik2Ila,
+                  PhaseDiffSlv, CorrPntr, m_ndx0Slv, m_ndx1Slv, Phase0A, Phase0B,
                   H0Phase, H1Phase, H0Mag, H1Mag, Ch0MuSlv, Ch1MuSlv, deltaTauEstSlv,
-                  Ber, Bert, BitErrors, DataOut, ClkOutEn, ValidData2047 : signal is "true";
+                  Bert, DataOut, ClkOutEn, ValidData2047 : signal is "true";
 
 BEGIN
 
@@ -398,7 +397,6 @@ BEGIN
          PhaseDiffSlv <= to_slv(PhaseDiff);
          InRBrik2Ila <= to_slv(InRBrik2Dly);
          InIBrik2Ila <= to_slv(InIBrik2Dly);
-         CorrDiffIla <= to_slv(CorrDiff);
          StartIla    <= StartInBrik2Dly;
          ValidIla    <= ValidInBrik2Dly;
       end if;
@@ -514,7 +512,7 @@ BEGIN
          SearchRange    => MiscBits(7 downto 4),
          -- outputs
          PilotFound     => PilotFound,
-         BitRateDir     => BitRateDir,
+         PilotOffset    => PilotOffset_s,
          CorrPntr       => CorrPntr,
          RawAddr        => RawAddr,
          Magnitude0     => Magnitude0,
@@ -530,6 +528,8 @@ BEGIN
          ValidOut       => PilotValidOut,
          StartOut       => PilotPulse
    );
+
+   PilotOffset <= to_slv(PilotOffset_s);
 
    AFC_process : process(Clk186)
    begin
@@ -559,6 +559,7 @@ BEGIN
    PhaseOut <= HxPhase when (not MiscBits(3)) else to_slv(PhsPeak);  -- Pilot Detect or Channel Est Phase select
    PhsPeak  <= PhsPeak0 when Mag0GtMag1 else PhsPeak1;         -- Pilot Detect Phase select
    HxPhase  <= (H0Phase & 6x"0") when Mag0GtMag1 else H1Phase & 6X"0";  -- Channel Est Phase select
+   StartOfFrame <= PhaseDiffEn;
 
    PS_u : pilotsync
       PORT MAP (
@@ -605,10 +606,6 @@ BEGIN
             InRBrik2Dly     <= RealOutPS;
             InIBrik2Dly     <= ImagOutPS;
 
-            if (StartOutPS) then
-               CorrPrev <= CorrPntr;
-               CorrDiff <= resize(CorrPntr - CorrPrev, CorrDiff);
-            end if;
          end if;
       end if;
    end process InterBrikClk;
@@ -724,8 +721,8 @@ BEGIN
          DacMux(2)  <= m_ndx0Slv & 14x"0";
          DacMux(3)  <= m_ndx1Slv & 14x"0";
          DacMux(4)  <= Phase0A;
-         DacMux(5)  <= to_slv(PhaseDiff); --H0Mag & 5x"0";
-         DacMux(6)  <= to_slv(PhaseDiff2); --H1Mag & 5x"0";
+         DacMux(5)  <= Phase0B;
+         DacMux(6)  <= to_slv(PhaseDiff2);
          DacMux(7)  <= H0Phase & 6x"0";
          DacMux(8)  <= H1Phase & 6x"0";
          DacMux(9)  <= Magnitude0;                 -- iFFT H0 Magnitude every other sample

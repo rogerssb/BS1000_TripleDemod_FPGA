@@ -102,8 +102,6 @@ ARCHITECTURE rtl OF CmplxMult IS
             StartDly    : std_logic_vector(6 downto 1);
    SIGNAL   ByPass,
             OverFlow    : std_logic;
-   attribute mark_debug : string;
-   attribute mark_debug of OverFlow   : signal is "true";
 
 BEGIN
 

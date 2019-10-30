@@ -86,12 +86,13 @@ architecture rtl of Brik1_Hw_tb is
       ValidIn           : IN  std_logic;
       DataOut,                            -- Trellis Data Output
       ClkOutEn,                           -- Trellis Clock Output
-      BitRateDir,
+      StartOfFrame,
       PilotFound,                         -- Pilot Found LED
       PilotLocked,
       Dac0ClkEn,
       Dac1ClkEn,
       Dac2ClkEn         : OUT std_logic;
+      PilotOffset       : OUT std_logic_vector(8 downto 0);
       Dac0Data,
       Dac1Data,
       Dac2Data          : OUT SLV18
@@ -217,7 +218,7 @@ architecture rtl of Brik1_Hw_tb is
             Clk93,
             ClkXn,
             lastSampleReset,
-            BitRateDir,
+            StartOfFrame,
             Locked,
             PhaseValid           : std_logic;
    SIGNAL   DataValid            : SLV8 := x"00";
@@ -267,6 +268,7 @@ architecture rtl of Brik1_Hw_tb is
    SIGNAL   LedCount             : UINT32;
    SIGNAL   ClocksPerBit         : SLV16;
    SIGNAL   FrameCount           : unsigned(5 downto 0) := "000000";
+   SIGNAL   PilotOffset          : std_logic_vector(8 downto 0);
 
    attribute mark_debug : string;
    attribute mark_debug of RdAddr_i, RealOut, ImagOut, ClkOut_o, DataOut_o : signal is "true";
@@ -383,7 +385,7 @@ Frequency_vio <= 24x"000";
             if (DataValid(0)) then
                if (FrameCount(0)) then
                   FrameClocks_v := 13311; --to_integer(unsigned(FrameClocks_vio));
-               elsif (BitRateDir) then
+               elsif (signed(PilotOffset) > 0) then
                   FrameClocks_v := 13310;
                else
                   FrameClocks_v := 13312;
@@ -664,11 +666,12 @@ Frequency_vio <= 24x"000";
          Clk186         => ClkXn,
          ValidIn        => PhaseValid,
          SpectrumInv    => MiscBits(0),
-         BitRateDir     => BitRateDir,
+         PilotOffset    => PilotOffset,
          DataOut        => DataOut_o,
          ClkOutEn       => ClkOut_o,
          PilotFound     => open,
          PilotLocked    => open,
+         StartOfFrame   => open,
          Dac0ClkEn      => open,
          Dac1ClkEn      => open,
          Dac2ClkEn      => open,

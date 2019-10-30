@@ -161,12 +161,12 @@ BEGIN
                wait for PilotPulseIn and capture CorrPntr. set active flag.
                wait for WrAddr > CorrPntr + 512 for first packet
                Set StartOut, Set RdAddr to CorrPntrCapture
-               Wait two clock
+               Wait two clock for StartOut to drop
                Set ValidOut,
                Inc RdAddr
                Do 512 samples,
                Clr ValidOut, Inc PacketCntr
-               Wait or WrAddr > RdAddr + 512 for next packer
+               Wait for WrAddr > RdAddr + 512 for next packet
                if (PacketCntr < 26) goto Wait Two Clocks
                else
                Clr PacketCntr
