@@ -377,18 +377,6 @@ Top level modules:
 	twoPortDistMem32x18
 	glbl
 
-} {} {}} {C:\Semco\Vivado\Demods\stcDemod/Brik2.vhd} {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/Brik2.vhd
-Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
--- Loading package STANDARD
--- Loading package TEXTIO
--- Loading package std_logic_1164
--- Loading package NUMERIC_STD
--- Loading package fixed_pkg
--- Loading package MATH_REAL
--- Loading package Semco_pkg
--- Compiling entity Brik2
--- Compiling architecture rtl of Brik2
-
 } {} {}} C:/Semco/Vivado/Demods/bert/bert_correlator.v {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/bert/bert_correlator.v
 Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
 -- Compiling module bert_correlator
@@ -421,6 +409,19 @@ Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
 
 Top level modules:
 	acsStage4
+
+} {} {}} C:/Semco/Vivado/Demods/stcDemod/testBenches/HalfPilotPhase_tb.vhd {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/testBenches/HalfPilotPhase_tb.vhd
+Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package std_logic_textio
+-- Loading package NUMERIC_STD
+-- Loading package MATH_REAL
+-- Loading package fixed_pkg
+-- Loading package Semco_pkg
+-- Compiling entity HalfPilotPhase_tb
+-- Compiling architecture rtl of HalfPilotPhase_tb
 
 } {} {}} C:/Semco/Vivado/Demods/bert/bert_lfsr.v {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/bert/bert_lfsr.v
 Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016

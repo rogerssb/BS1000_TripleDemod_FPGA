@@ -80,6 +80,7 @@ ENTITY Brik2 IS
       InI            : IN  SLV18;
       StartDF,
       ValidDF,
+      PilotFoundCE,
       PilotLocked,
       EstimatesDone  : OUT std_logic;
       H0EstR,
@@ -467,7 +468,8 @@ BEGIN
    begin
       if (rising_edge(clk)) then
          if (reset) then
-            EstimatesDone   <= '0';
+            EstimatesDone  <= '0';
+            PilotFoundCE   <= '0';
             TrellisDelay   <= (others=>'0');
             m_ndx0         <= 0;
             m_ndx1         <= 0;
@@ -496,11 +498,12 @@ BEGIN
                H0EstI      <= H0EstI_CE;
                H1EstR      <= H1EstR_CE;
                H1EstI      <= H1EstI_CE;
-               H0Mag       <= resize(H0EstR_CE * H0EstR_CE + H0EstI_CE * H0EstI_CE, H0Mag);
+               H0Mag       <= resize(H0EstR_CE * H0EstR_CE + H0EstI_CE * H0EstI_CE, H0Mag);  -- about .15 at noise threshold
                H1Mag       <= resize(H1EstR_CE * H1EstR_CE + H1EstI_CE * H1EstI_CE, H1Mag);
                Tau0Est     <= Tau0EstTE;
                Tau1Est     <= Tau1EstTE;
             end if;
+            PilotFoundCE <= '1' when (H0Mag > 0.1) or (H1Mag > 0.1) else '0';
 
             H0GtH1 <= '1' when (H0Mag > H1Mag) else '0';
 

@@ -127,8 +127,8 @@ ARCHITECTURE rtl OF PilotSync IS
    signal   Offset_u             : ufixed(3 downto 0);
 
    attribute mark_debug : string;
-   attribute mark_debug of /*FrmSmplCount,*/ StartOut, PilotValid, PilotPulseIn/*,
-              Missed, RdAddr*/ : signal is "true";
+   attribute mark_debug of FrmSmplCount, StartOut, PilotValid, PilotPulseIn,
+              Missed, RdAddr, WrAddr : signal is "true";
 
 BEGIN
 
@@ -188,7 +188,7 @@ BEGIN
                   WaitCount   <= 10;
                   Captured    <= '0';
                   Missed      <= '0';
-                  if (Captured) then
+                  if (Captured) then      -- only recenter the RdAddr if new CorrPntr
                      RdAddr   <= CorrCntrCapture;
                   end if;
                   PacketMode  <= CLR_START;

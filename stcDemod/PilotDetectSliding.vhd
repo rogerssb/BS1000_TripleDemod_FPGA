@@ -352,7 +352,6 @@ architecture rtl of PilotDetectSliding is
             PhsPeakInt1       : SLV18;
    SIGNAL   Count,
             AbsIndex,
-            MaxIndex,
             PrevIndex,
             PendIndex,
             Index0,
@@ -388,7 +387,7 @@ architecture rtl of PilotDetectSliding is
    attribute mark_debug : string;
    attribute mark_debug of PilotMag_Ila, PilotFound, Peak1_Ila, Peak2_Ila,
              /* MagPeak0, PhsPeak0, MagPeak1, PhsPeak1, */
-             AbsCntr0_Ila, AbsCntr1_Ila, AbsIndex, MaxIndex, PrevIndex, PendIndex : signal is "true";
+             AbsCntr0_Ila, AbsCntr1_Ila, AbsIndex, PrevIndex, PendIndex : signal is "true";
 begin
 
    IlaProcess : process(clk)
@@ -760,28 +759,34 @@ begin
                -- Find the peak of this packet regardless of H0 or H1
                if (Index1 < 512) then     -- only search first half of the ifft
                   if (MaxCntr > AbsPeak) and (MaxCntr > Threshold) then
-                     AbsPeak <= MaxCntr;
-                     AbsIndex <= Index1;
-                     Index1_u := to_unsigned(Index1, Index1_u);   -- these are to convert 0 to 511 to ±255
-                     Index1_s := signed(Index1_u);
+                     AbsPeak     <= MaxCntr;
+                     AbsIndex    <= Index1;
+                     PeakPend    <= '1';
+                     Index1_u    := to_unsigned(Index1, Index1_u);   -- these are to convert 0 to 511 to ±255
+                     Index1_s    := signed(Index1_u);
                      PrevIndex_u := to_unsigned(PrevIndex, Index1_u);
                      PrevIndex_s := signed(PrevIndex_u);
                      if ((abs(Index1_s - PrevIndex_s) <= signed('0' & SearchRange)) or (PilotFound = '0')) then
                         MaxCount    <= START_MAX;
                         CorrPend    <= PackCntr & to_ufixed(Index1, 8, 0); -- Index1 is 0 to 511, so PackCntr is the packet number + offset of 0 to 511
-                        MaxIndex    <= Index1;
+                        PendIndex   <= Index1;
                         DropCount   <= 0;
-                        PeakPend    <= '1';
-                     elsif (MaxCount = 0) then
-                        PendIndex <= Index1; -- if peak is found but out of search range at end of packet, increment DropCount. If < 7, slide toward new index, else take index
+                     elsif (MaxCount = 0) then  -- if peak is found but out of search range at end of packet, increment DropCount. If < 7, slide toward new index, else take index
                         if (DropCount < 7) then
                            DropCount <= DropCount + 1;
+                           if (Index1 > PrevIndex) then
+                              CorrPend  <= PackCntr & to_ufixed(PrevIndex + 1, 8, 0);
+                              PendIndex <= PrevIndex + 1;
+                           else
+                              CorrPend  <= PackCntr & to_ufixed(PrevIndex - 1, 8, 0);
+                              PendIndex <= PrevIndex - 1;
+                           end if;
                         else
                            CorrPend <= PackCntr & to_ufixed(Index1, 8, 0);
-                           PeakPend <= '1';
+                           PendIndex <= Index1;
                         end if;
                      end if;
-                  elsif (MaxCount > 0) then
+                  elsif (MaxCount > 0) then     -- past peak, start counting down
                      MaxCount <= MaxCount - 1;
                   end if;
 
@@ -791,14 +796,14 @@ begin
 
                elsif (Index1 = 525) then     -- setup for next frame
                   PackCntr <= resize(PackCntr + 1, PackCntr);
-                  if (MaxCount = 0) then    -- maintaint the current peak across packets
-                     AbsPeak <= (others=>'0');  -- setup for next frame
-                     if (PeakPend) then
-                        StartOut  <= '1';
-                        PrevIndex <= PendIndex;
-                        CorrPntr  <= CorrPend;
-                        PeakPend  <= '0';
-                     end if;
+                  if (PeakPend) then
+                     StartOut  <= '1';
+                     PrevIndex <= PendIndex;
+                     CorrPntr  <= CorrPend;
+                     PeakPend  <= '0';
+                  end if;
+                  if (MaxCount = 0) then    -- maintain the current peak across packets
+                     AbsPeak <= (others=>'0');  -- setup for next frame if not carrying over from previous
                   end if;
                   MaxOfPckt <= (others=>'0');
                end if;
@@ -854,15 +859,15 @@ begin
                      MagPeakInt1 <= Mag1 & "00000";
                   end if;
                end if;
-
+/*
                if (MaxCount = 1) then  -- found the peak, store the results
                   StartOut    <= '1';
-                  PrevIndex   <= MaxIndex;
+                  PrevIndex   <= PendIndex;
                   CorrPntr    <= CorrPend;
                   PeakPend    <= '0';
                   MaxCount    <= 0;
                end if;
-
+*/
                PilotOffset <= to_sfixed(PrevIndex - 256, PilotOffset);  -- set bit sync error to BS Loop
 
                if (Index1 = 523) then     -- give MaxOfPckt a chance to propagate to PilotMag
@@ -870,6 +875,7 @@ begin
                elsif (PilotPulse1X) then  -- send wider pulse to threshold logic at lower clock
                   PilotPulse  <= '0';
                end if;
+
                if (Index0 < 1023) then
                   Index0 <= Index0 + 1;
                end if;
@@ -941,7 +947,7 @@ begin
                   MagPeak1_u     <= MagDelay1(0);
                   PhsPeak1_u     <= PhsDelay1(0);
                end if;
-               if (PilotMag > Threshold) then
+               if (PilotMag > Threshold) and (Peak1 > (Peak2 sla 2)) then  -- even at noise threshold, peaks are still 4:1
                   BadPilot <= 0;
                   if (GoodPilot < 2) then
                      GoodPilot <= GoodPilot + 1;   -- 3 good frames in a row = found
@@ -950,7 +956,7 @@ begin
                      GoodPilot <= 3;
                   end if;
                else
-                  if (BadPilot <= 127) then    -- 128 bad packets in a row = lost. Should get 25 data packets
+                  if (BadPilot <= 127) then    -- 128 bad packets in a row = lost. Should get 25 "bad" data packets per frame, so 4 bad frames
                      BadPilot <= BadPilot + 1;
                   else
                      GoodPilot <= 0;

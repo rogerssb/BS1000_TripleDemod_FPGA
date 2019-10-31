@@ -145,6 +145,7 @@ ARCHITECTURE rtl OF STC IS
          StartDF,
          ValidDF,
          PilotLocked,
+         PilotFoundCE,
          EstimatesDone  : OUT std_logic;
          H0EstR,
          H0EstI,
@@ -283,7 +284,8 @@ ARCHITECTURE rtl OF STC IS
             Reset186,
             StartOutPS,
             ValidOutPS,
-            PilotLockedA,
+            PilotFoundPD,
+            PilotFoundCE,
             PhaseDiffEnPS,
             Mag0GtMag1,
             TrellisFull,
@@ -382,7 +384,7 @@ ARCHITECTURE rtl OF STC IS
 
    attribute mark_debug : string;
    attribute mark_debug of /*TrellisOutEn, EstimatesDone, TrellisFull, lastSampleReset, */
-                  StartIla, ValidIla, InRBrik2Ila, InIBrik2Ila,
+                  StartIla, ValidIla, InRBrik2Ila, InIBrik2Ila, PilotFoundCE, PilotFoundPD,
                   PhaseDiffSlv, CorrPntr, m_ndx0Slv, m_ndx1Slv, Phase0A, Phase0B,
                   H0Phase, H1Phase, H0Mag, H1Mag, Ch0MuSlv, Ch1MuSlv, deltaTauEstSlv,
                   Bert, DataOut, ClkOutEn, ValidData2047 : signal is "true";
@@ -511,7 +513,7 @@ BEGIN
          ImIn           => ResampleI_s,
          SearchRange    => MiscBits(7 downto 4),
          -- outputs
-         PilotFound     => PilotFound,
+         PilotFound     => PilotFoundPD,
          PilotOffset    => PilotOffset_s,
          CorrPntr       => CorrPntr,
          RawAddr        => RawAddr,
@@ -555,11 +557,12 @@ BEGIN
       end if;
    end process AFC_process;
 
-   PhaseDiff <= to_slv(PhaseDiff2);
-   PhaseOut <= HxPhase when (not MiscBits(3)) else to_slv(PhsPeak);  -- Pilot Detect or Channel Est Phase select
-   PhsPeak  <= PhsPeak0 when Mag0GtMag1 else PhsPeak1;         -- Pilot Detect Phase select
-   HxPhase  <= (H0Phase & 6x"0") when Mag0GtMag1 else H1Phase & 6X"0";  -- Channel Est Phase select
-   StartOfFrame <= PhaseDiffEn;
+   PhaseDiff      <= to_slv(PhaseDiff2);
+   PhaseOut       <= HxPhase when (not MiscBits(3)) else to_slv(PhsPeak);  -- Pilot Detect or Channel Est Phase select
+   PhsPeak        <= PhsPeak0 when Mag0GtMag1 else PhsPeak1;         -- Pilot Detect Phase select
+   HxPhase        <= (H0Phase & 6x"0") when Mag0GtMag1 else H1Phase & 6X"0";  -- Channel Est Phase select
+   StartOfFrame   <= PhaseDiffEn;
+   PilotFound     <= PilotFoundPD and PilotFoundCE;
 
    PS_u : pilotsync
       PORT MAP (
@@ -637,6 +640,7 @@ BEGIN
          m_ndx1         => m_ndx1,
          Mu0            => Ch0Mu,
          Mu1            => Ch1Mu,
+         PilotFoundCE   => PilotFoundCE,
          PilotLocked    => PilotLocked
       );
 

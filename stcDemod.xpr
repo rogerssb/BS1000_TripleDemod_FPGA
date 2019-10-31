@@ -1299,7 +1299,7 @@
       <ReportStrategy/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
     </Run>
-    <Run Id="impl_1" Type="Ft2:EntireDesign" Part="xc7k325tfbg676-2" ConstrsSet="constrs_1" Description="Default settings for Implementation." State="current" Dir="$PRUNDIR/impl_1" SynthRun="synth_1" IncludeInArchive="true">
+    <Run Id="impl_1" Type="Ft2:EntireDesign" Part="xc7k325tfbg676-2" ConstrsSet="constrs_1" Description="Default settings for Implementation." IncrementalCheckpoint="$PRUNDIR/stcDemodTop_routed7k325.dcp" State="current" Dir="$PRUNDIR/impl_1" SynthRun="synth_1" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2017"/>
         <Step Id="init_design"/>
@@ -1528,7 +1528,7 @@
       <ReportStrategy/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
     </Run>
-    <Run Id="impl_4" Type="Ft2:EntireDesign" Part="xc7k160tfbg676-2" ConstrsSet="NoILA" Description="Uses multiple optimization algorithms to get potentially fewer LUTs and registers." SynthRun="synth_162" IncludeInArchive="true">
+    <Run Id="impl_4" Type="Ft2:EntireDesign" Part="xc7k160tfbg676-2" ConstrsSet="constrs_1" Description="Uses multiple optimization algorithms to get potentially fewer LUTs and registers." SynthRun="synth_162" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Area_ExploreSequential" Flow="Vivado Implementation 2017"/>
         <Step Id="init_design"/>
@@ -1546,7 +1546,7 @@
       <ReportStrategy/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
     </Run>
-    <Run Id="impl_6" Type="Ft2:EntireDesign" Part="xc7k160tfbg676-2" ConstrsSet="NoILA" Description="Adds the remap optimization to reduce logic" SynthRun="synth_162" IncludeInArchive="true">
+    <Run Id="impl_6" Type="Ft2:EntireDesign" Part="xc7k160tfbg676-2" ConstrsSet="constrs_1" Description="Adds the remap optimization to reduce logic" SynthRun="synth_162" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Area_ExploreWithRemap" Flow="Vivado Implementation 2017"/>
         <Step Id="init_design"/>
@@ -1564,7 +1564,7 @@
       <ReportStrategy/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
     </Run>
-    <Run Id="impl_7" Type="Ft2:EntireDesign" Part="xc7k160tfbg676-2" ConstrsSet="NoILA" Description="Similar to the Implementation Run Defaults, but enables the physical optimization step (phys_opt_design)." SynthRun="synth_162" IncludeInArchive="true">
+    <Run Id="impl_7" Type="Ft2:EntireDesign" Part="xc7k160tfbg676-2" ConstrsSet="constrs_1" Description="Similar to the Implementation Run Defaults, but enables the physical optimization step (phys_opt_design)." SynthRun="synth_162" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Flow_RunPhysOpt" Flow="Vivado Implementation 2017"/>
         <Step Id="init_design"/>
@@ -1582,7 +1582,7 @@
       <ReportStrategy/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
     </Run>
-    <Run Id="impl_13" Type="Ft2:EntireDesign" Part="xc7k160tfbg676-2" ConstrsSet="NoILA" Description="Similar to the Implementation Run Defaults, but enables the physical optimization step (phys_opt_design) before and after routing." SynthRun="synth_162" IncludeInArchive="true">
+    <Run Id="impl_13" Type="Ft2:EntireDesign" Part="xc7k160tfbg676-2" ConstrsSet="constrs_1" Description="Similar to the Implementation Run Defaults, but enables the physical optimization step (phys_opt_design) before and after routing." SynthRun="synth_162" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Flow_RunPostRoutePhysOpt" Flow="Vivado Implementation 2017"/>
         <Step Id="init_design"/>
@@ -1602,7 +1602,7 @@
       <ReportStrategy/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
     </Run>
-    <Run Id="impl_14" Type="Ft2:EntireDesign" Part="xc7k160tfbg676-2" ConstrsSet="NoILA" Description="Similar to Peformance_Explore, but enables the physical optimization step (phys_opt_design) with the Explore directive after routing." SynthRun="synth_162" IncludeInArchive="true">
+    <Run Id="impl_14" Type="Ft2:EntireDesign" Part="xc7k160tfbg676-2" ConstrsSet="constrs_1" Description="Similar to Peformance_Explore, but enables the physical optimization step (phys_opt_design) with the Explore directive after routing." SynthRun="synth_162" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Performance_ExplorePostRoutePhysOpt" Flow="Vivado Implementation 2017"/>
         <Step Id="init_design"/>
