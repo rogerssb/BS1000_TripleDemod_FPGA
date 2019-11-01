@@ -123,7 +123,7 @@ module semcoDemodTop (
 
 );
 
-    parameter VER_NUMBER = 16'd606;
+    parameter VER_NUMBER = 16'd621;
 
 
 //******************************************************************************
@@ -373,11 +373,13 @@ module semcoDemodTop (
         .iSymEn(iDemodSymEn),
         .iSymData(iDemodSymData),
         .iSymClk(iDemodSymClk),
+        .iBitEn(iDemodBitEn),
         .iBit(iDemodBit),
         .qSym2xEn(qDemodSym2xEn),
         .qSymEn(qDemodSymEn),
         .qSymClk(qDemodSymClk),
         .qSymData(qDemodSymData),
+        .qBitEn(qDemodBitEn),
         .qBit(qDemodBit),
         .auSymClk(auDemodSymClk),
         .auBit(auDemodBit),
@@ -607,6 +609,41 @@ module semcoDemodTop (
 
 `endif //ADD_MULTIH
 
+`ifdef ADD_LDPC
+//******************************************************************************
+//                              LDPC Decoder
+//******************************************************************************
+    wire            [17:0]  ldpcDac0Data;
+    wire            [17:0]  ldpcDac1Data;
+    wire            [17:0]  ldpcDac2Data;
+    wire            [31:0]  ldpcDout;
+    ldpc #(.LDPCBITS(7)) ldpc(
+        .clk(clk), .clkEn(iDemodSym2xEn), .reset(reset),
+        .busClk(busClk),
+        .cs(cs),
+        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .addr(addr),
+        .din(dataIn),
+        .dout(ldpcDout),
+        .iSymEn(iLdpcSymEn),
+        .iSymData(iLdpc),
+        .qSymEn(qLdpcSymEn),
+        .qSymData(qLdpc),
+        .dac0Select(demodDac0Select),
+        .dac1Select(demodDac1Select),
+        .dac2Select(demodDac2Select),
+        .dac0ClkEn(ldpcDac0ClkEn),
+        .dac0Data(ldpcDac0Data),
+        .dac1ClkEn(ldpcDac1ClkEn),
+        .dac1Data(ldpcDac1Data),
+        .dac2ClkEn(ldpcDac2ClkEn),
+        .dac2Data(ldpcDac2Data),
+        .ldpcBitEnOut(ldpcBitEnOut),
+        .ldpcBitOut(ldpcBitOut)
+    );
+`endif
+
+
 //******************************************************************************
 //                                PCM Decoders
 //******************************************************************************
@@ -618,7 +655,7 @@ module semcoDemodTop (
         endcase
     end
 
-    wire        [1:0]   dualSrcSelect;
+    wire        [2:0]   dualSrcSelect;
     reg                 dualCh0Input;
     reg                 dualCh1Input;
     reg                 dualSymEn;
@@ -652,7 +689,7 @@ module semcoDemodTop (
                 else begin
                     dualCh0Input <= iDemodBit;
                     dualCh1Input <= qDemodBit;
-                    dualSymEn <= iDemodSymEn;
+                    dualSymEn <= iDemodBitEn;
                     dualSym2xEn <= iDemodSym2xEn;
                 end
 
@@ -660,7 +697,7 @@ module semcoDemodTop (
 
                 dualCh0Input <= iDemodBit;
                 dualCh1Input <= qDemodBit;
-                dualSymEn <= iDemodSymEn;
+                dualSymEn <= iDemodBitEn;
                 dualSym2xEn <= iDemodSym2xEn;
                 `endif //ADD_TRELLIS
             end
@@ -704,11 +741,19 @@ module semcoDemodTop (
         endcase
     end
 
+    wire        [2:0]   pcmSrcSelect;
     reg                 ch1DecInput;
     reg                 ch1DecSymEn;
     reg                 ch1DecSym2xEn;
     always @(posedge clk) begin
-        case (dualSrcSelect)
+        case (pcmSrcSelect)
+            `ifdef ADD_LDPC
+            `DEC_SRC_LDPC: begin
+                ch1DecInput <= ldpcBitOut;
+                ch1DecSymEn <= ldpcBitEnOut;
+                ch1DecSym2xEn <= 1'b1;
+            end
+            `endif
             `ifdef ADD_VITERBI
             `DEC_SRC_VITERBI: begin
                 ch1DecInput <= ch1VitBit;
@@ -718,7 +763,7 @@ module semcoDemodTop (
             `endif //ADD_VITERBI
             default: begin
                 ch1DecInput <= qDemodBit;
-                ch1DecSymEn <= qDemodSymEn;
+                ch1DecSymEn <= qDemodBitEn;
                 ch1DecSym2xEn <= qDemodSym2xEn;
             end
         endcase
@@ -746,43 +791,8 @@ module semcoDemodTop (
         .fifo_reset(),
         .clkPhase(),
         .symb_clk(ch1PcmSymClk),
-        .inputSelect()
+        .inputSelect(pcmSrcSelect)
     );
-
-
-`ifdef ADD_LDPC
-//******************************************************************************
-//                              LDPC Decoder
-//******************************************************************************
-    wire            [17:0]  ldpcDac0Data;
-    wire            [17:0]  ldpcDac1Data;
-    wire            [17:0]  ldpcDac2Data;
-    wire            [31:0]  ldpcDout;
-    ldpc #(.LDPCBITS(7)) ldpc(
-        .clk(clk), .clkEn(iDemodSym2xEn), .reset(reset),
-        .busClk(busClk),
-        .cs(cs),
-        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
-        .addr(addr),
-        .din(dataIn),
-        .dout(ldpcDout),
-        .iSymEn(iLdpcSymEn),
-        .iSymData(iLdpc),
-        .qSymEn(qLdpcSymEn),
-        .qSymData(qLdpc),
-        .dac0Select(demodDac0Select),
-        .dac1Select(demodDac1Select),
-        .dac2Select(demodDac2Select),
-        .dac0ClkEn(ldpcDac0ClkEn),
-        .dac0Data(ldpcDac0Data),
-        .dac1ClkEn(ldpcDac1ClkEn),
-        .dac1Data(ldpcDac1Data),
-        .dac2ClkEn(ldpcDac2ClkEn),
-        .dac2Data(ldpcDac2Data),
-        .ldpcBitEnOut(ldpcBitEnOut),
-        .ldpcBitOut(ldpcBitOut)
-    );
-`endif
 
 
 `ifdef ADD_BERT
@@ -804,11 +814,11 @@ module semcoDemodTop (
     always @* begin
         casex (bertSourceSelect)
             `BERT_SRC_LEGACY_I: begin
-                bertClkEn = iDemodSymEn;
+                bertClkEn = iDemodBitEn;
                 bertDataIn = iDemodBit;
             end
             `BERT_SRC_LEGACY_Q: begin
-                bertClkEn = qDemodSymEn;
+                bertClkEn = qDemodBitEn;
                 bertDataIn = qDemodBit;
             end
             `ifdef ADD_TRELLIS
@@ -841,7 +851,7 @@ module semcoDemodTop (
             //`BERT_SRC_DEC3_CH0:
             //`BERT_SRC_DEC3_CH1:
             default:   begin
-                bertClkEn = iDemodSymEn;
+                bertClkEn = iDemodBitEn;
                 bertDataIn = iDemodBit;
             end
         endcase
@@ -959,11 +969,11 @@ module semcoDemodTop (
     always @* begin
         casex (cAndD0SourceSelect)
             `CandD_SRC_LEGACY_I: begin
-                cAndD0ClkEn = iDemodSymEn;
+                cAndD0ClkEn = iDemodBitEn;
                 cAndD0DataIn = {iDemodBit,qDemodBit,1'b0};
             end
             `CandD_SRC_LEGACY_Q: begin
-                cAndD0ClkEn = qDemodSymEn;
+                cAndD0ClkEn = qDemodBitEn;
                 cAndD0DataIn = {qDemodBit,1'b0,1'b0};
             end
             `ifdef ADD_TRELLIS
@@ -1005,7 +1015,7 @@ module semcoDemodTop (
             //`CandD_SRC_DEC3_CH0:
             //`CandD_SRC_DEC3_CH1:
             default:   begin
-                cAndD0ClkEn = iDemodSymEn;
+                cAndD0ClkEn = iDemodBitEn;
                 cAndD0DataIn = {iDemodBit,qDemodBit,1'b0};
             end
         endcase
@@ -1041,11 +1051,11 @@ module semcoDemodTop (
     always @* begin
         casex (cAndD1SourceSelect)
             `CandD_SRC_LEGACY_I: begin
-                cAndD1ClkEn = iDemodSymEn;
+                cAndD1ClkEn = iDemodBitEn;
                 cAndD1DataIn = {iDemodBit,qDemodBit,1'b0};
             end
             `CandD_SRC_LEGACY_Q: begin
-                cAndD1ClkEn = qDemodSymEn;
+                cAndD1ClkEn = qDemodBitEn;
                 cAndD1DataIn = {qDemodBit,1'b0,1'b0};
             end
             `ifdef ADD_TRELLIS
@@ -1087,7 +1097,7 @@ module semcoDemodTop (
             //`CandD_SRC_DEC3_CH0:
             //`CandD_SRC_DEC3_CH1:
             default:   begin
-                cAndD1ClkEn = iDemodSymEn;
+                cAndD1ClkEn = iDemodBitEn;
                 cAndD1DataIn = {iDemodBit,qDemodBit,1'b0};
             end
         endcase
@@ -1351,9 +1361,9 @@ sdi sdi(
     .addr(addr),
     .dataIn(dataIn),
     .dataOut(sdiDout),
-    .iSymEn(iDemodSymEn),
+    .iSymEn(iDemodBitEn),
     .iSymData(iTrellis),
-    .qSymEn(qDemodSymEn),
+    .qSymEn(qDemodBitEn),
     .qSymData(qTrellis),
     .eyeSync(demodEyeClkEn),
     .iEye(iDemodEye),.qEye(qDemodEye),

@@ -317,6 +317,7 @@
     `define CONTINUOUS_TEST_ERRORS  13'bx_xxxx_x010_01xx
     `define CONTINUOUS_TEST_COUNT   13'bx_xxxx_x010_10xx
     `define TEST_CONTROL            13'bx_xxxx_x010_11xx
+    `define SOURCE_SELECT           13'bx_xxxx_x011_000x
 
 
 // PN Generator subsystem registers
@@ -424,10 +425,11 @@
         `define DEC_CLK_PHASE_180       2'b01
         `define DEC_CLK_PHASE_90        2'b10
         `define DEC_CLK_PHASE_270       2'b11
-        `define DEC_SRC_DEMOD           2'b00
-        `define DEC_SRC_SC0             2'b01
-        `define DEC_SRC_SC1             2'b10
-        `define DEC_SRC_VITERBI         2'b11
+        `define DEC_SRC_DEMOD           3'b000
+        `define DEC_SRC_SC0             3'b001
+        `define DEC_SRC_SC1             3'b010
+        `define DEC_SRC_VITERBI         3'b011
+        `define DEC_SRC_LDPC            3'b100
         // These are used to define the PCM decoder modes and are
         // shared with the PN Generator which is not used in this build
         `define PNGEN_PCM_NRZL          4'b0000

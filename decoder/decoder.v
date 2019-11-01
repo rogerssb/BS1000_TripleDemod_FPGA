@@ -32,7 +32,7 @@ module decoder (
     output                  fifo_reset,
     output          [1:0]   clkPhase,
     output                  symb_clk,
-    output          [1:0]   inputSelect
+    output          [2:0]   inputSelect
 );
 
     wire            [1:0]   mode;

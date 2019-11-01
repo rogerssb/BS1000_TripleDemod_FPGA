@@ -37,12 +37,14 @@ module bitsync(
     output                      iSymEn,
     output                      iSymClk,
     output  reg signed  [17:0]  symDataI,
-    output  reg                 bitDataI,
+    output  wire                iBitEn,
+    output  reg                 iBit,
     output                      qSym2xEn,
     output                      qSymEn,
     output                      qSymClk,
     output  reg signed  [17:0]  symDataQ,
-    output  reg                 bitDataQ,
+    output                      qBitEn,
+    output  reg                 qBit,
     output              [31:0]  sampleFreq,
     output              [31:0]  auSampleFreq,
     output  reg                 bitsyncLock,
@@ -227,7 +229,7 @@ module bitsync(
     //********************** Multih Superbaud TED *********************************
     multihSuperbaudTED ted(
         .clk(clk),
-        .symEn(iSymEn),
+        .symEn(iBitEn),
         .sym2xEn(sym2xClkEn),
         .reset(reset),
         //.i(iTrellis),.q(qTrellis),
@@ -1007,10 +1009,10 @@ module bitsync(
             end
             if (timingErrorEn) begin
                 if (fmModes) begin
-                    bitDataI <= bbSRI[1][17];
+                    iBit <= bbSRI[1][17];
                 end
                 else begin
-                    bitDataI <= bbSRI[1][17];
+                    iBit <= bbSRI[1][17];
                 end
             end
         end
@@ -1020,7 +1022,7 @@ module bitsync(
             if (auResampClkEn) begin
                 symDataQ <= auSR[1];
                 if (auTimingErrorEn) begin
-                    bitDataQ <= auSR[1][17];
+                    qBit <= auSR[1][17];
                 end
             end
         end
@@ -1040,16 +1042,16 @@ module bitsync(
                 if (demodMode == `MODE_MULTIH) begin
                     if (timingErrorEn) begin
                         if (bbSRQ[1][17]) begin
-                            bitDataQ <= (bbSRQ[1] < negMultihThreshold);
+                            qBit <= (bbSRQ[1] < negMultihThreshold);
                         end
                         else begin
-                            bitDataQ <= (bbSRQ[1] < multihThreshold);
+                            qBit <= (bbSRQ[1] < multihThreshold);
                         end
                     end
                 end
                 else begin
                     if (timingErrorEn) begin
-                        bitDataQ <= bbSRQ[1][17];
+                        qBit <= bbSRQ[1][17];
                     end
                 end
             end
@@ -1066,10 +1068,10 @@ module bitsync(
             symDataI <= bbSRI[1];
             if (timingErrorEn) begin
                 if (fmModes) begin
-                    bitDataI <= bbSRI[1][17];
+                    iBit <= bbSRI[1][17];
                 end
                 else begin
-                    bitDataI <= bbSRI[1][17];
+                    iBit <= bbSRI[1][17];
                 end
             end
         end
@@ -1079,7 +1081,7 @@ module bitsync(
             if (auResampClkEn) begin
                 symDataQ <= auSR[1];
                 if (auTimingErrorEn) begin
-                    bitDataQ <= auSR[1][17];
+                    qBit <= auSR[1][17];
                 end
             end
         end
@@ -1088,7 +1090,7 @@ module bitsync(
                 // Capture the Q output sample
                 symDataQ <= bbSRQ[1];
                 if (timingErrorEn) begin
-                    bitDataQ <= bbSRQ[1][17];
+                    qBit <= bbSRQ[1][17];
                 end
             end
         end
@@ -1098,12 +1100,14 @@ module bitsync(
 
     // Clock Enables
     assign iSym2xEn = sym2xClkEn;
-    assign iSymEn = sym2xClkEn & timingErrorEn;
+    assign iSymEn = sym2xClkEn & !timingErrorEn;
     assign sdiSymEn = sym2xClkEn & !timingErrorEn;
     assign iSymClk = timingErrorEn;
+    assign iBitEn = sym2xClkEn & timingErrorEn;
     assign qSym2xEn = auEnable ? auResampClkEn : sym2xClkEn;
-    assign qSymEn = auEnable ? (auResampClkEn & auTimingErrorEn) : (sym2xClkEn & timingErrorEn);
+    assign qSymEn = auEnable ? (auResampClkEn & !auTimingErrorEn) : (sym2xClkEn & !timingErrorEn);
     assign qSymClk = auTimingErrorEn;
+    assign qBitEn = auEnable ? (auResampClkEn & auTimingErrorEn) : (sym2xClkEn & timingErrorEn);
 
     `ifdef ADD_LDPC
     assign iLdpcSymEn = sym2xClkEn & timingErrorEn;

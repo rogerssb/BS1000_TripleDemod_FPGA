@@ -26,11 +26,13 @@ module demod(
     output                      iSymEn,
     output      signed  [17:0]  iSymData,
     output                      iSymClk,
+    output                      iBitEn,
     output                      iBit,
     output                      qSym2xEn,
     output                      qSymEn,
     output                      qSymClk,
     output      signed  [17:0]  qSymData,
+    output                      qBitEn,
     output                      qBit,
     output                      auSymClk,
     output                      auBit,
@@ -687,12 +689,14 @@ bitsync bitsync(
     .iSymEn(iSymEn),
     .iSymClk(iSymClk),
     .symDataI(iBsSymData),
-    .bitDataI(iBit),
+    .iBitEn(iBitEn),
+    .iBit(iBit),
     .qSym2xEn(qSym2xEn),
     .qSymEn(qSymEn),
     .qSymClk(qSymClk),
     .symDataQ(qBsSymData),
-    .bitDataQ(qBit),
+    .qBitEn(qBitEn),
+    .qBit(qBit),
     .sampleFreq(resamplerFreqOffset),
     .auSampleFreq(auResamplerFreqOffset),
     .bitsyncLock(bitsyncLock),
@@ -771,7 +775,7 @@ real iSymReal;
 always @* iSymReal = $itor($signed(iSymData))/(2.0**17);
 `endif
 
-assign trellisSymEn = iSymEn & resampSync;
+assign trellisSymEn = iBitEn & resampSync;
 
 assign eyeSync = resampSync;
 assign cordicModes = ( (demodMode == `MODE_2FSK)

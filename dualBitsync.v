@@ -69,9 +69,9 @@ output          ch0SymEn;
 output          ch0SymClk;
 output  [17:0]  ch0SymData;
 output          ch0BitData;
-output          ch1Sym2xEn;
-output          ch1SymEn;
-output          ch1SymClk;
+output  reg         ch1Sym2xEn;
+output  reg         ch1SymEn;
+output  reg         ch1SymClk;
 output  [17:0]  ch1SymData;
 output          ch1BitData;
 output  [31:0]  ch0SampleFreq;
@@ -906,9 +906,18 @@ always @(posedge sampleClk) begin
 assign ch0Sym2xEn = ch0ClkEn;
 assign ch0SymEn = ch0ClkEn & timingErrorEn;
 assign ch0SymClk = timingErrorEn;
-assign ch1Sym2xEn = ch1ClkEn;
-assign ch1SymEn = ch1ClkEn & asyncTimingErrorEn;
-assign ch1SymClk = asyncTimingErrorEn;
+always @* begin
+    if (asyncEnable) begin
+        ch1Sym2xEn = ch1ClkEn;
+        ch1SymEn = ch1ClkEn & asyncTimingErrorEn;
+        ch1SymClk = asyncTimingErrorEn;
+    end
+    else begin
+        ch1Sym2xEn = ch0ClkEn;
+        ch1SymEn = ch0ClkEn & timingErrorEn;
+        ch1SymClk = timingErrorEn;
+    end
+end
 
 
 `ifdef SIMULATE

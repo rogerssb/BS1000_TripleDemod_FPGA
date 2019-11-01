@@ -3,9 +3,9 @@
 
 //`define FM_TEST
 //`define SOQPSK_TEST
-`define LDPC_TEST
+//`define LDPC_TEST
 //`define AQPSK_TEST
-//`define QPSK_VIT_TEST
+`define QPSK_VIT_TEST
 
 `define ENABLE_AGC
 //`define TEST_CMA
@@ -616,6 +616,7 @@ module test;
     wire    [12:0]  mag;
     wire    signed  [4:0]   demodMode;
     wire    [17:0]  dac0Out,dac1Out,dac2Out, iSymData, qSymData, sdiDataI, sdiDataQ;
+    wire    signed  [17:0]  iTrellis,qTrellis;
     wire    [17:0]  iEye,qEye;
     wire    [31:0]  dout;
     demod demod(
@@ -635,15 +636,16 @@ module test;
         .dac2Data(dac2Out),
         .iSymEn(iSymEn),
         .iSym2xEn(sym2xEn),
-        .iSymData(sdiDataI),
+        .iSymData(iSymData),
+        .iBitEn(iBitEn),
         .iBit(demodBit),
         .qSymEn(qSymEn),
         .qSym2xEn(qSym2xEn),
-        .qSymData(sdiDataQ),
+        .qSymData(qSymData),
         .sdiSymEn(sdiSymEn),
         .trellisSymEn(trellisSymEn),
-        .iTrellis(iSymData),
-        .qTrellis(qSymData),
+        .iTrellis(iTrellis),
+        .qTrellis(qTrellis),
         .mag(mag),
         .magClkEn(magClkEn),
         .demodMode(demodMode),
@@ -740,9 +742,9 @@ module test;
         .dout(vitDout),
         .bitsyncMode(bitsyncMode),
         .ch0SymEn(iSymEn),
-        .ch0SymData(sdiDataI),
+        .ch0SymData(iSymData),
         .ch1SymEn(qSymEn),
-        .ch1SymData(sdiDataQ),
+        .ch1SymData(qSymData),
         .ch0BitEnOut(ch0VitBitEn),
         .ch0BitOut(ch0VitBit),
         .ch1BitEnOut(ch1VitBitEn),
@@ -774,7 +776,7 @@ module test;
         .addr(a),
         .dataIn(d),
         .dataOut(),
-        .iSymEn(iSymEn),
+        .iSymEn(iBitEn),
         .iSymData(sdiDataI),
         .qSymEn(iSymEn),
         .qSymData(sdiDataQ),
@@ -795,11 +797,11 @@ module test;
     always @(posedge clk) begin
         casex (dqmSourceSelect)
             `DQM_SRC_DEC0_CH0: begin
-                dqmBitEnIn <= iSymEn;
+                dqmBitEnIn <= iBitEn;
                 dqmBitIn <= demodBit;
             end
             default: begin
-                dqmBitEnIn <= iSymEn;
+                dqmBitEnIn <= iBitEn;
                 dqmBitIn <= demodBit;
             end
         endcase

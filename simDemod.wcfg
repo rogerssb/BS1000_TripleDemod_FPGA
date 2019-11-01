@@ -11,15 +11,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="2802416266666fs"></ZoomStartTime>
-      <ZoomEndTime time="2971416266667fs"></ZoomEndTime>
-      <Cursor1Time time="3194499600000fs"></Cursor1Time>
+      <ZoomStartTime time="261752900000fs"></ZoomStartTime>
+      <ZoomEndTime time="1212752900001fs"></ZoomEndTime>
+      <Cursor1Time time="1054252900000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="179"></NameColumnWidth>
-      <ValueColumnWidth column_width="108"></ValueColumnWidth>
+      <ValueColumnWidth column_width="104"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="38" />
+   <WVObjectSize size="33" />
    <wave_markers>
       <marker time="35140000000" label="" />
    </wave_markers>
@@ -671,6 +671,7 @@
    <wvobject fp_name="group73" type="group">
       <obj_property name="label">Bitsync</obj_property>
       <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
       <wvobject fp_name="/test/demod/bitsync/sampleLoop/zeroError" type="logic">
          <obj_property name="ElementShortName">zeroError</obj_property>
          <obj_property name="ObjectShortName">zeroError</obj_property>
@@ -894,6 +895,26 @@
          <obj_property name="AnalogHorizLine">0.000000</obj_property>
          <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
       </wvobject>
+      <wvobject fp_name="/test/demod/bitsync/iSymEn" type="logic">
+         <obj_property name="ElementShortName">iSymEn</obj_property>
+         <obj_property name="ObjectShortName">iSymEn</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/demod/bitsync/symDataI" type="array">
+         <obj_property name="ElementShortName">symDataI[17:0]</obj_property>
+         <obj_property name="ObjectShortName">symDataI[17:0]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">17</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+         <obj_property name="CellHeight">100</obj_property>
+         <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
+         <obj_property name="AnalogYRangeMin">0.000000</obj_property>
+         <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
+         <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
+         <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
+         <obj_property name="AnalogHorizLine">0.000000</obj_property>
+         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+      </wvobject>
    </wvobject>
    <wvobject fp_name="group72" type="group">
       <obj_property name="label">Carrier</obj_property>
@@ -1005,67 +1026,7 @@
          <obj_property name="label">softMapper</obj_property>
          <obj_property name="DisplayName">label</obj_property>
          <obj_property name="isExpanded"></obj_property>
-         <wvobject fp_name="/test/ldpc/ldpcd/data_in" type="array">
-            <obj_property name="ElementShortName">data_in[7:0]</obj_property>
-            <obj_property name="ObjectShortName">data_in[7:0]</obj_property>
-            <obj_property name="Radix">REALRADIX</obj_property>
-            <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
-            <obj_property name="radix_fractionWidth">7</obj_property>
-            <obj_property name="radix_otherWidth">0</obj_property>
-            <obj_property name="CellHeight">100</obj_property>
-            <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
-            <obj_property name="AnalogYRangeMin">0.000000</obj_property>
-            <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
-            <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
-            <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
-            <obj_property name="AnalogHorizLine">0.000000</obj_property>
-            <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
-         </wvobject>
       </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcd/Iteration_Number" type="array">
-         <obj_property name="ElementShortName">Iteration_Number[7:0]</obj_property>
-         <obj_property name="ObjectShortName">Iteration_Number[7:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcf/wordCount" type="array">
-         <obj_property name="ElementShortName">wordCount[7:0]</obj_property>
-         <obj_property name="ObjectShortName">wordCount[7:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/ldpc/ldpcf/correlation" type="array">
-         <obj_property name="ElementShortName">correlation[17:0]</obj_property>
-         <obj_property name="ObjectShortName">correlation[17:0]</obj_property>
-         <obj_property name="Radix">REALRADIX</obj_property>
-         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
-         <obj_property name="radix_fractionWidth">17</obj_property>
-         <obj_property name="radix_otherWidth">0</obj_property>
-         <obj_property name="CellHeight">100</obj_property>
-         <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
-         <obj_property name="AnalogYRangeMin">0.000000</obj_property>
-         <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
-         <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
-         <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
-         <obj_property name="AnalogHorizLine">0.000000</obj_property>
-         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
-      </wvobject>
-   </wvobject>
-   <wvobject fp_name="/test/ldpc/ldpcf/frameSync" type="logic">
-      <obj_property name="ElementShortName">frameSync</obj_property>
-      <obj_property name="ObjectShortName">frameSync</obj_property>
-   </wvobject>
-   <wvobject fp_name="/test/ldpc/ldpcf/codewordEn" type="logic">
-      <obj_property name="ElementShortName">codewordEn</obj_property>
-      <obj_property name="ObjectShortName">codewordEn</obj_property>
-   </wvobject>
-   <wvobject fp_name="/test/ldpc/ldpcd/rd_clk_in" type="array">
-      <obj_property name="ElementShortName">rd_clk_in[0:0]</obj_property>
-      <obj_property name="ObjectShortName">rd_clk_in[0:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/test/ldpc/ldpcd/DECODE_OUT" type="array">
-      <obj_property name="ElementShortName">DECODE_OUT[0:0]</obj_property>
-      <obj_property name="ObjectShortName">DECODE_OUT[0:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/test/ldpc/ldpcd/DECODE_OUT_VALID" type="logic">
-      <obj_property name="ElementShortName">DECODE_OUT_VALID</obj_property>
-      <obj_property name="ObjectShortName">DECODE_OUT_VALID</obj_property>
    </wvobject>
    <wvobject fp_name="group225" type="group">
       <obj_property name="label">LDPC Status</obj_property>
@@ -1235,6 +1196,7 @@
    <wvobject fp_name="group190" type="group">
       <obj_property name="label">Viterbi</obj_property>
       <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
       <wvobject fp_name="/test/sym2xEn" type="logic">
          <obj_property name="ElementShortName">sym2xEn</obj_property>
          <obj_property name="ObjectShortName">sym2xEn</obj_property>
@@ -1258,6 +1220,70 @@
          <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
          <obj_property name="AnalogHorizLine">0.000000</obj_property>
          <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/viterbi/ch0SoftEn" type="logic">
+         <obj_property name="ElementShortName">ch0SoftEn</obj_property>
+         <obj_property name="ObjectShortName">ch0SoftEn</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/viterbi/ch0Soft" type="array">
+         <obj_property name="ElementShortName">ch0Soft[2:0]</obj_property>
+         <obj_property name="ObjectShortName">ch0Soft[2:0]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">2</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+         <obj_property name="CellHeight">100</obj_property>
+         <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
+         <obj_property name="AnalogYRangeMin">0.000000</obj_property>
+         <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
+         <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
+         <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
+         <obj_property name="AnalogHorizLine">0.000000</obj_property>
+         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/viterbi/ch1SoftEn" type="logic">
+         <obj_property name="ElementShortName">ch1SoftEn</obj_property>
+         <obj_property name="ObjectShortName">ch1SoftEn</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/viterbi/ch1Soft" type="array">
+         <obj_property name="ElementShortName">ch1Soft[2:0]</obj_property>
+         <obj_property name="ObjectShortName">ch1Soft[2:0]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">2</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+         <obj_property name="CellHeight">100</obj_property>
+         <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
+         <obj_property name="AnalogYRangeMin">0.000000</obj_property>
+         <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
+         <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
+         <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
+         <obj_property name="AnalogHorizLine">0.000000</obj_property>
+         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/viterbi/ch0VitRdy" type="logic">
+         <obj_property name="ElementShortName">ch0VitRdy</obj_property>
+         <obj_property name="ObjectShortName">ch0VitRdy</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/viterbi/ch0BerCount" type="array">
+         <obj_property name="ElementShortName">ch0BerCount[15:0]</obj_property>
+         <obj_property name="ObjectShortName">ch0BerCount[15:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/viterbi/ch0SyncState" type="array">
+         <obj_property name="ElementShortName">ch0SyncState[2:0]</obj_property>
+         <obj_property name="ObjectShortName">ch0SyncState[2:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/viterbi/ch0SprtAccum" type="array">
+         <obj_property name="ElementShortName">ch0SprtAccum[15:0]</obj_property>
+         <obj_property name="ObjectShortName">ch0SprtAccum[15:0]</obj_property>
+         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+         <obj_property name="CellHeight">100</obj_property>
+         <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
+         <obj_property name="AnalogYRangeMin">0.000000</obj_property>
+         <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
+         <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
+         <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
+         <obj_property name="AnalogHorizLine">0.000000</obj_property>
       </wvobject>
    </wvobject>
 </wave_config>

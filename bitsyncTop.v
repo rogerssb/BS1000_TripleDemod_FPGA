@@ -531,6 +531,7 @@ pcmAgcLoop #(.RegSpace(`CH1_AGCSPACE)) pcmAgcLoop1(
         .clkEn(1'b1),
         .reset(reset),
         .busClk(busClk),
+        .cs(cs),
         .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
         .addr(addr),
         .din(din),

@@ -30,7 +30,7 @@ module decoderRegs #(parameter ADDR_BITS = 13) (
     output  reg             biphaseEnable,
     output  reg             millerEnable,
     output  reg     [1:0]   mode,
-    output  reg     [1:0]   inputSelect,
+    output  reg     [2:0]   inputSelect,
     output  reg     [3:0]   pcmEncoderMode
 );
 
@@ -73,7 +73,7 @@ module decoderRegs #(parameter ADDR_BITS = 13) (
                     millerEnable <= dataIn[9];
                     mode <= dataIn[11:10];
                     derandomize[1] <= dataIn[12];
-                    inputSelect <= dataIn[14:13];
+                    inputSelect[1:0] <= dataIn[14:13];
                     derandomize[2] <= dataIn[15];
                 end
                 default: ;
@@ -98,14 +98,30 @@ module decoderRegs #(parameter ADDR_BITS = 13) (
         end
     end
 
+    `ifdef USE_BUS_CLOCK
+    always @(posedge busClk) begin
+        if (cs && wr3) begin
+    `else
+    always @(negedge wr3) begin
+        if (cs) begin
+    `endif
+            casex (addr)
+                `DEC_CONTROL: begin
+                    inputSelect[2] <= dataIn[24];
+                end
+                default: ;
+            endcase
+        end
+    end
+
     always @* begin
         if (cs) begin
             casex (addr)
                 `DEC_CONTROL: begin
                     dataOut = {
-                        8'h0,
+                        7'h0,inputSelect[2],
                         pcmEncoderMode,3'b0,clkPhase[1],
-                        derandomize[2], inputSelect, derandomize[1],
+                        derandomize[2], inputSelect[1:0], derandomize[1],
                         mode, millerEnable, biphaseEnable,
                         iqSwap, feherEnable, demuxEnable, derandomize[0],
                         dataInvert, clkSelect, clkPhase[0], fifoReset

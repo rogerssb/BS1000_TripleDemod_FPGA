@@ -5,7 +5,7 @@
 //`define ADD_FIFOS
 //`define MATLAB_VECTORS
 `define ADD_BERT_TEST
-//`define QPSK
+`define QPSK
 
 module test;
 
@@ -227,7 +227,8 @@ interpolate #(.RegSpace(`INTERP0SPACE), .FirRegSpace(`VIDFIR0SPACE)) ch0Interpol
     `ifdef USE_BUS_CLOCK
     .busClk(bc),
     `endif
-    .wr0(we0 & txRegCS), .wr1(we1 & txRegCS), .wr2(we2 & txRegCS), .wr3(we3 & txRegCS),
+    .cs(txRegCS),
+    .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
     .addr(a),
     .din(d),
     .dout(),
@@ -241,7 +242,8 @@ interpolate #(.RegSpace(`INTERP0SPACE), .FirRegSpace(`VIDFIR0SPACE)) ch0Interpol
     `ifdef USE_BUS_CLOCK
     .busClk(bc),
     `endif
-    .wr0(we0 & txRegCS), .wr1(we1 & txRegCS), .wr2(we2 & txRegCS), .wr3(we3 & txRegCS),
+    .cs(txRegCS),
+    .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
     .addr(a),
     .din(d),
     .dout(),
@@ -256,7 +258,8 @@ interpolate #(.RegSpace(`INTERP0SPACE), .FirRegSpace(`VIDFIR0SPACE)) ch0Interpol
     `ifdef USE_BUS_CLOCK
     .busClk(bc),
     `endif
-    .wr0(we0 & txRegCS), .wr1(we1 & txRegCS), .wr2(we2 & txRegCS), .wr3(we3 & txRegCS),
+    .cs(txRegCS),
+    .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
     .addr(a),
     .din(d),
     .dout(),
@@ -354,7 +357,8 @@ bitsyncTop bitsyncTop(
     `ifdef USE_BUS_CLOCK
     .busClk(bc),
     `endif
-    .wr0(we0 & !txRegCS), .wr1(we1 & !txRegCS), .wr2(we2 & !txRegCS), .wr3(we3 & !txRegCS),
+    .cs(!txRegCS),
+    .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
     .addr(a),
     .din(d),
     .dout(dout),
@@ -406,6 +410,7 @@ interpolate #(.RegSpace(`INTERP0SPACE), .FirRegSpace(`VIDFIR0SPACE)) dac0Interp(
     `ifdef USE_BUS_CLOCK
     .busClk(bc),
     `endif
+    .cs(!txRegCS),
     .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
     .addr(a),
     .din(d),
@@ -423,6 +428,7 @@ interpolate #(.RegSpace(`INTERP1SPACE), .FirRegSpace(`VIDFIR1SPACE)) dac1Interp(
     `ifdef USE_BUS_CLOCK
     .busClk(bc),
     `endif
+    .cs(!txRegCS),
     .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
     .addr(a),
     .din(d),
@@ -440,6 +446,7 @@ interpolate #(.RegSpace(`INTERP2SPACE), .FirRegSpace(`VIDFIR2SPACE)) dac2Interp(
     `ifdef USE_BUS_CLOCK
     .busClk(bc),
     `endif
+    .cs(!txRegCS),
     .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
     .addr(a),
     .din(d),
@@ -449,20 +456,6 @@ interpolate #(.RegSpace(`INTERP2SPACE), .FirRegSpace(`VIDFIR2SPACE)) dac2Interp(
 );
 assign dac2_d = dac2Data[17:4];
 assign dac2_clk = clk;
-
-    digitalPLL #(.REG_SPACE(`DLL0SPACE)) dll0(
-        .clk(clk),
-        .reset(reset),
-        .busClk(bc),
-        .addr(a),
-        .dataIn(d),
-        .dataOut(),
-        .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
-        .referenceClkEn(ch0SymEn),
-        .dllOutputClk(),
-        .dllOutputClkEn()
-    );
-
 
 mcp48xxInterface dacInterface (
     .clk(clk),
@@ -494,6 +487,7 @@ mcp48xxInterface dacInterface (
         `ifdef USE_BUS_CLOCK
         .busClk(bc),
         `endif
+        .cs(!txRegCS),
         .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
         .clk(clk),
         .SCK(pll_SCK),
@@ -557,7 +551,7 @@ mcp48xxInterface dacInterface (
     reg bertSpace;
     always @* begin
         casex(a)
-            `BERT_SPACE:            bertSpace = 1;
+            `BERT_SPACE:            bertSpace = !txRegCS;
             default:                bertSpace = 0;
             endcase
         end
@@ -608,7 +602,7 @@ always @(negedge clk) begin
 function [12:0] createAddress;
     input [12:0] addrA;
     input [12:0] addrB;
-    
+
     integer i;
     reg [12:0]finalAddress;
 
@@ -807,9 +801,11 @@ initial begin
     // Init the interpolator
     txRegCS = 1;
     write32(createAddress(`INTERP0SPACE, `INTERP_CONTROL),1);
-    write32(createAddress(`INTERP0SPACE, `INTERP_EXPONENT), modInterpExponent);
-    write32(createAddress(`INTERP0SPACE, `INTERP_MANTISSA), modInterpMantissa);
-    write32(createAddress(`INTERP0SPACE, `INTERP_CONTROL),0);
+    write16(createAddress(`INTERP0SPACE, `INTERP_CIC_EXPONENT), modInterpExponent);
+    write32(createAddress(`INTERP0SPACE, `INTERP_CIC_MANTISSA), modInterpMantissa);
+    write16(createAddress(`INTERP0SPACE, `INTERP_GAIN_MANTISSA),16'hffff);
+    write16(createAddress(`INTERP0SPACE, `INTERP_GAIN_EXPONENT),16'h10);
+    write32(createAddress(`INTERP0SPACE, `INTERP_CONTROL),8);
     txRegCS = 0;
     // Reset to start the transmitter
     #(16*C) ;
@@ -875,15 +871,15 @@ initial begin
     write32(createAddress(`BITSYNC_TOP_SPACE, `BS_TOP_CH0_CONTROL  ), {12'h0,`BS_DAC_AGC,
                                                                         4'h0,`BS_DAC_SYM,
                                                                         4'h0,`BS_DAC_DF});
-    write32(createAddress(`INTERP0SPACE, `INTERP_CONTROL),0);
-    write32(createAddress(`INTERP0SPACE, `INTERP_EXPONENT), 8);
-    write32(createAddress(`INTERP0SPACE, `INTERP_MANTISSA), 32'h00012000);
-    write32(createAddress(`INTERP1SPACE, `INTERP_CONTROL),0);
-    write32(createAddress(`INTERP1SPACE, `INTERP_EXPONENT), 8);
-    write32(createAddress(`INTERP1SPACE, `INTERP_MANTISSA), 32'h00012000);
-    write32(createAddress(`INTERP2SPACE, `INTERP_CONTROL),0);
-    write32(createAddress(`INTERP2SPACE, `INTERP_EXPONENT), 8);
-    write32(createAddress(`INTERP2SPACE, `INTERP_MANTISSA), 32'h00012000);
+    write32(createAddress(`INTERP0SPACE, `INTERP_CONTROL),8);
+    write32(createAddress(`INTERP0SPACE, `INTERP_CIC_EXPONENT), 8);
+    write32(createAddress(`INTERP0SPACE, `INTERP_CIC_MANTISSA), 32'h00012000);
+    write32(createAddress(`INTERP1SPACE, `INTERP_CONTROL),8);
+    write32(createAddress(`INTERP1SPACE, `INTERP_CIC_EXPONENT), 8);
+    write32(createAddress(`INTERP1SPACE, `INTERP_CIC_MANTISSA), 32'h00012000);
+    write32(createAddress(`INTERP2SPACE, `INTERP_CONTROL),8);
+    write32(createAddress(`INTERP2SPACE, `INTERP_CIC_EXPONENT), 8);
+    write32(createAddress(`INTERP2SPACE, `INTERP_CIC_MANTISSA), 32'h00012000);
 
     `ifdef ADD_BERT_TEST
     write32(createAddress(`BERT_SPACE,`BERT_POLY), 32'h080000b8);
@@ -895,9 +891,6 @@ initial begin
     write32(createAddress(`BERT_SPACE,`SINGLE_TEST_LENGTH), 32'd5000);
     write32(createAddress(`BERT_SPACE,`TEST_CONTROL), 32'h0);
     `endif
-
-    write32(createAddress(`DLL0SPACE,`DLL_CENTER_FREQ), 32'd178956970);
-    write32(createAddress(`DLL0SPACE,`DLL_GAINS),32'd7);
 
     // Set for inverse of 0.45 which is a smidge less than the AGC setpoint of 0.5 to 
     // account for shaping filter losses.
