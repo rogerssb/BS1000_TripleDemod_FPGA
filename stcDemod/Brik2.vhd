@@ -80,7 +80,6 @@ ENTITY Brik2 IS
       InI            : IN  SLV18;
       StartDF,
       ValidDF,
-      PilotFoundCE,
       PilotLocked,
       EstimatesDone  : OUT std_logic;
       H0EstR,
@@ -256,8 +255,8 @@ ARCHITECTURE rtl OF Brik2 IS
             InI_sf,
             TimeChanR,
             TimeChanI,
-            H0Mag,
-            H1Mag,
+            H0MagCE,
+            H1MagCE,
             H0MagOver32,
             H1MagOver32,
             H0MagNorm,
@@ -469,7 +468,6 @@ BEGIN
       if (rising_edge(clk)) then
          if (reset) then
             EstimatesDone  <= '0';
-            PilotFoundCE   <= '0';
             TrellisDelay   <= (others=>'0');
             m_ndx0         <= 0;
             m_ndx1         <= 0;
@@ -487,8 +485,8 @@ BEGIN
             Tau1EstA       <= (others=>'0');
             Tau1EstX4      <= (others=>'0');
             Mu1            <= (others=>'0');
-            H0Mag          <= (others=>'0');
-            H1Mag          <= (others=>'0');
+            H0MagCE        <= (others=>'0');
+            H1MagCE        <= (others=>'0');
             DeltaTauEst    <= (others=>'0');
          elsif (ce) then
             TrellisDelay <= TrellisDelay(TrellisDelay'left-1 downto 0) & ChanEstDone;
@@ -498,14 +496,13 @@ BEGIN
                H0EstI      <= H0EstI_CE;
                H1EstR      <= H1EstR_CE;
                H1EstI      <= H1EstI_CE;
-               H0Mag       <= resize(H0EstR_CE * H0EstR_CE + H0EstI_CE * H0EstI_CE, H0Mag);  -- about .15 at noise threshold
-               H1Mag       <= resize(H1EstR_CE * H1EstR_CE + H1EstI_CE * H1EstI_CE, H1Mag);
+               H0MagCE     <= resize(H0EstR_CE * H0EstR_CE + H0EstI_CE * H0EstI_CE, H0MagCE);
+               H1MagCE     <= resize(H1EstR_CE * H1EstR_CE + H1EstI_CE * H1EstI_CE, H1MagCE);
                Tau0Est     <= Tau0EstTE;
                Tau1Est     <= Tau1EstTE;
             end if;
-            PilotFoundCE <= '1' when (H0Mag > 0.1) or (H1Mag > 0.1) else '0';
 
-            H0GtH1 <= '1' when (H0Mag > H1Mag) else '0';
+            H0GtH1 <= '1' when (H0MagCE > H1MagCE) else '0';
 
             Tau0EstA    <= resize(Tau0Est, Tau0EstA);
             Tau0EstX4   <= resize(4 * Tau0EstA, Tau0EstX4);
@@ -515,13 +512,13 @@ BEGIN
             Tau1EstX4   <= resize(4 * Tau1EstA, Tau1EstX4);
             Tau1Int     <= RoundTo0(Tau1EstX4);
 
-            if (H0MagOver32 > H1Mag) then -- if H0 is > 32 * H1, then ignore H1
+            if (H0MagOver32 > H1MagCE) then -- if H0 is > 32 * H1, then ignore H1
                Mu0         <= resize(Tau0EstX4 - m_ndx0, Mu0, fixed_wrap, fixed_truncate);
                Mu1         <= (others=>'0');
                DeltaTauEst <= (others=>'0');
                m_ndx0      <= Tau0Int when (Tau0EstA >= 0) else Tau0Int - 1;
                m_ndx1      <= 0;
-            elsif (H1MagOver32 > H0Mag) then
+            elsif (H1MagOver32 > H0MagCE) then
                Mu0         <= (others=>'0');
                Mu1         <= resize(Tau1EstX4 - m_ndx1, Mu1, fixed_wrap, fixed_truncate);
                DeltaTauEst <= (others=>'0');
@@ -538,8 +535,8 @@ BEGIN
       end if;
    end process EstimatesProc;
 
-   H0MagOver32 <= H0Mag sra 5;
-   H1MagOver32 <= H1Mag sra 5;
+   H0MagOver32 <= H0MagCE sra 5;
+   H1MagOver32 <= H1MagCE sra 5;
 
    HPP : HalfPilotPhase
       PORT MAP(
@@ -552,8 +549,8 @@ BEGIN
          ValidIn        => ValidIn,
          InR            => InR,
          InI            => InI,
-         H0Mag          => H0Mag,
-         H1Mag          => H1Mag,
+         H0Mag          => H0MagCE,
+         H1Mag          => H1MagCE,
          m_ndx0         => m_ndx0,
          m_ndx1         => m_ndx1,
          PhaseDiff      => PhaseDiff,

@@ -145,7 +145,6 @@ ARCHITECTURE rtl OF STC IS
          StartDF,
          ValidDF,
          PilotLocked,
-         PilotFoundCE,
          EstimatesDone  : OUT std_logic;
          H0EstR,
          H0EstI,
@@ -356,6 +355,8 @@ ARCHITECTURE rtl OF STC IS
             Reload            : std_logic;
    SIGNAL   deltaTauEstSlv    : std_logic_vector(5 downto 0);
    SIGNAL   PilotOffset_s     : SFixed(8 downto 0);
+   SIGNAL   H0Mag_u,
+            H1Mag_u           : ufixed(0 downto -12);
 
 -- todo, remove
    SIGNAL   H0Phase,
@@ -640,7 +641,6 @@ BEGIN
          m_ndx1         => m_ndx1,
          Mu0            => Ch0Mu,
          Mu1            => Ch1Mu,
-         PilotFoundCE   => PilotFoundCE,
          PilotLocked    => PilotLocked
       );
 
@@ -739,10 +739,13 @@ BEGIN
 
          CorrPntr8to0 <= to_slv(CorrPntr(8 downto 0));
          Mag0GtMag1   <= '1' when (H0Mag > H1Mag) else '0';
+         PilotFoundCE <= '1' when (H0Mag_u > 0.1) or (H1Mag_u > 0.1) else '0';  -- about .15 at noise threshold
 
       end if;
    end process DacOutputs;
 
+   H0Mag_u <= to_ufixed(H0Mag, H0Mag_u);
+   H1Mag_u <= to_ufixed(H1Mag, H1Mag_u);
 
    cordic0 : vm_cordic_fast
       GENERIC MAP (

@@ -1803,7 +1803,7 @@
       <ReportStrategy/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
     </Run>
-    <Run Id="impl_25" Type="Ft2:EntireDesign" Part="xc7k325tfbg676-2" ConstrsSet="constrs_1" Description="Uses multiple optimization algorithms to get potentially fewer LUTs." Dir="$PRUNDIR/impl_25" SynthRun="synth_162" IncludeInArchive="true">
+    <Run Id="impl_25" Type="Ft2:EntireDesign" Part="xc7k325tfbg676-2" ConstrsSet="constrs_1" Description="Uses multiple optimization algorithms to get potentially fewer LUTs." SynthRun="synth_162" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Area_Explore" Flow="Vivado Implementation 2017"/>
         <Step Id="init_design"/>
@@ -1818,7 +1818,6 @@
         <Step Id="post_route_phys_opt_design"/>
         <Step Id="write_bitstream"/>
       </Strategy>
-      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
       <ReportStrategy/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
     </Run>
