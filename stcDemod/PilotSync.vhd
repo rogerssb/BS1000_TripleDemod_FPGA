@@ -139,7 +139,7 @@ BEGIN
       end if;
    end process IlaProcess;
 
-   PilotValid  <= '1' when (PilotPulseIn = '1') and ((PilotFound = '0') or (FrmSmplCount > 12750) or (Missed = '1')) else '0'; -- pulse should be at 13312
+   PilotValid  <= '1' when (PilotPulseIn = '1') and ((PilotFound = '0') or (FrmSmplCount > FRAME_LENGTH_4 - 256) or (Missed = '1')) else '0'; -- pulse should be at 13312
 
    ClkProcess: process (clk)
    begin

@@ -290,8 +290,8 @@ begin
          probe_in0  => Errors,
          probe_out0 => open, --Frequency_vio,           -- 00280 (222Hz) start getting errors at end of frame
          probe_out1 => FrameClocks_vio,         -- usually 13312-1=13311. smaller makes packets slide
-         probe_out2 => Phase0_vio,              -- has no effect unless both channels active
-         probe_out3 => Phase1_vio,
+         probe_out2 => open, --Phase0_vio,              -- has no effect unless both channels active
+         probe_out3 => open, --Phase1_vio,
          probe_out4 => DeltaT_vio,
          probe_out5 => Power0_vio,              -- H0 power 128k is max
          probe_out6 => Power1_vio,              -- H1 power. sum of both must be < 128k
@@ -302,9 +302,9 @@ begin
          probe_out11 => BitRate_vio,            -- 0e449 is 41.6Mb
          probe_out12 => ClocksPerBit            -- c50 for 9.33/1.04, db7 at 10Mb 41.6
       );
--- Phase0_vio <= 18x"10000";
--- Phase1_vio <= 18x"30000";
-Frequency_vio <= 24x"000";
+ Phase0_vio <= 18x"10000";
+ Phase1_vio <= 18x"00000";
+Frequency_vio <= 24x"8000";
 
    ErrorProc : process (ClkXn)
    begin

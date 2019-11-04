@@ -36,6 +36,8 @@
                                   HISTORY
   -----------------------------------------------------------------------------
    9/17/16 Initial release FZ
+
+   Removed CorrPend, calc CorrPntr from PackCntr and PendIndex instead. Was redundant
 -----------------------------------------------------------------------------*/
 
 library ieee;
@@ -290,7 +292,6 @@ architecture rtl of PilotDetectSliding is
             PhsCntStrt1,
             ValidCordic,
             CalcThreshold     : std_logic := '0';
-   SIGNAL   CorrPend          : ufixed(15 downto 0);
    SIGNAL   ReInDly,
             ImInDly           : FLOAT_1_18;
    SIGNAL   XC_Zero,
@@ -377,6 +378,9 @@ architecture rtl of PilotDetectSliding is
    SIGNAL   SampleCount       : natural range 0 to 16383;
    SIGNAL   DropCount         : natural range 0 to 7;
 
+      signal AbsDiff_sr       : signed(9 downto 0);
+
+
 -- ILAs
     SIGNAL  PilotMag_Ila,
             Peak1_Ila,
@@ -385,7 +389,7 @@ architecture rtl of PilotDetectSliding is
             AbsCntr1_Ila      : SLV18;
 
    attribute mark_debug : string;
-   attribute mark_debug of PilotMag_Ila, PilotFound, Peak1_Ila, Peak2_Ila,
+   attribute mark_debug of PilotMag_Ila, PilotFound, Peak1_Ila, Peak2_Ila, AbsDiff_sr,
              /* MagPeak0, PhsPeak0, MagPeak1, PhsPeak1, */
              AbsCntr0_Ila, AbsCntr1_Ila, AbsIndex, PrevIndex, PendIndex : signal is "true";
 begin
@@ -714,15 +718,17 @@ begin
    -- Now find peak of H0/1
    MaxProcess : process(Clk2x)
       variable Index1_s,
-               PrevIndex_s    : signed(8 downto 0);
+               PrevIndex_s    : signed(9 downto 0);
       variable Index1_u,
                PrevIndex_u    : unsigned(8 downto 0);
+      variable Diff_s         : signed(9 downto 0);
+      variable AbsDiff_s      : signed(9 downto 0);
    begin
       if (rising_edge(Clk2x)) then
          if (Reset2X) then
             Index0       <= 0;
             Index1       <= 0;
-            PrevIndex    <= 511;
+            PrevIndex    <= 256;
             MaxCount     <= 0;
             PhsCount0    <= 0;
             PhsCount1    <= 0;
@@ -741,12 +747,20 @@ begin
             MaxCntr0     <= (others=>'0');
             MaxCntr1     <= (others=>'0');
             PackCntr     <= (others=>'0');   -- PackCntr must be reset released with WrAddr in PilotSync
-            CorrPend     <= (others=>'0');
             CorrPntr     <= (others=>'0');
             StartOut     <= '0';
          elsif (ce) then
             ValidOverAdd <= ValidAbs;  -- delay ValidAbs to realign OverAdd sum outputs
             Index1   <= Index0;
+            Index1_u    := to_unsigned(Index1, Index1_u);   -- these are to convert 0 to 511 to ±255
+            Index1_s    := signed('0' & Index1_u);
+            PrevIndex_u := to_unsigned(PrevIndex, Index1_u);
+            PrevIndex_s := signed('0' & PrevIndex_u);
+            Diff_s         := Index1_s - PrevIndex_s;
+            AbsDiff_s      := abs(Diff_s);
+
+            AbsDiff_sr     <= AbsDiff_s;
+
             if (ValidAbs) then
                if (AbsCntr0 > AbsCntr1) then
                   MaxCntr  <= AbsCntr0;
@@ -762,27 +776,19 @@ begin
                      AbsPeak     <= MaxCntr;
                      AbsIndex    <= Index1;
                      PeakPend    <= '1';
-                     Index1_u    := to_unsigned(Index1, Index1_u);   -- these are to convert 0 to 511 to ±255
-                     Index1_s    := signed(Index1_u);
-                     PrevIndex_u := to_unsigned(PrevIndex, Index1_u);
-                     PrevIndex_s := signed(PrevIndex_u);
-                     if ((abs(Index1_s - PrevIndex_s) <= signed('0' & SearchRange)) or (PilotFound = '0')) then
+                     if ((AbsDiff_s <= signed('0' & SearchRange)) or (PilotFound = '0')) then
                         MaxCount    <= START_MAX;
-                        CorrPend    <= PackCntr & to_ufixed(Index1, 8, 0); -- Index1 is 0 to 511, so PackCntr is the packet number + offset of 0 to 511
                         PendIndex   <= Index1;
                         DropCount   <= 0;
                      elsif (MaxCount = 0) then  -- if peak is found but out of search range at end of packet, increment DropCount. If < 7, slide toward new index, else take index
                         if (DropCount < 7) then
                            DropCount <= DropCount + 1;
                            if (Index1 > PrevIndex) then
-                              CorrPend  <= PackCntr & to_ufixed(PrevIndex + 1, 8, 0);
                               PendIndex <= PrevIndex + 1;
                            else
-                              CorrPend  <= PackCntr & to_ufixed(PrevIndex - 1, 8, 0);
                               PendIndex <= PrevIndex - 1;
                            end if;
                         else
-                           CorrPend <= PackCntr & to_ufixed(Index1, 8, 0);
                            PendIndex <= Index1;
                         end if;
                      end if;
@@ -799,7 +805,7 @@ begin
                   if (PeakPend) then
                      StartOut  <= '1';
                      PrevIndex <= PendIndex;
-                     CorrPntr  <= CorrPend;
+                     CorrPntr  <= PackCntr & to_ufixed(PendIndex, 8, 0);
                      PeakPend  <= '0';
                   end if;
                   if (MaxCount = 0) then    -- maintain the current peak across packets
@@ -859,15 +865,7 @@ begin
                      MagPeakInt1 <= Mag1 & "00000";
                   end if;
                end if;
-/*
-               if (MaxCount = 1) then  -- found the peak, store the results
-                  StartOut    <= '1';
-                  PrevIndex   <= PendIndex;
-                  CorrPntr    <= CorrPend;
-                  PeakPend    <= '0';
-                  MaxCount    <= 0;
-               end if;
-*/
+
                PilotOffset <= to_sfixed(PrevIndex - 256, PilotOffset);  -- set bit sync error to BS Loop
 
                if (Index1 = 523) then     -- give MaxOfPckt a chance to propagate to PilotMag

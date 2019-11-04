@@ -72,8 +72,6 @@ ARCHITECTURE rtl OF STC_HW_TB IS
          Power1In,
          NoiseIn           : sfixed(0 downto -17);
   signal FrameCnt          : natural := 0;
-   signal OffsetPS         : SLV4;
-   signal   OffsetPS_u     : unsigned(3 downto 0) := x"9";
 
 BEGIN
 
@@ -92,29 +90,22 @@ BEGIN
          RdAddrDly <= RdAddrEq;
          if (<< signal Brik1.Reset  : std_logic >>) then
             Power0In <= to_sfixed(0.240, Power0In);
-            Power1In <= to_sfixed(0.0, Power1In);
+            Power1In <= to_sfixed(0.240, Power1In);
             NoiseIn  <= to_sfixed(0.0, NoiseIn);
             BitRate  <= to_sfixed(9.33*4*1.04/93.3, BitRate);    -- 41.6 is 10Mb times 4 plus 4% overhead for pilot
          elsif (RdAddrEq and not RdAddrDly) then
-            if (FrameCnt = 0) then
-               NoiseIn <= to_sfixed(0.5, NoiseIn);
-            else
-               NoiseIn  <= to_sfixed(0.0, NoiseIn);
-            end if;
-/*            case (FrameCnt) is
+           case (FrameCnt) is
             when 0 =>
+               Power0In <= to_sfixed(0.000, Power0In);
                Power1In <= to_sfixed(0.240, Power1In);
-               Power0In <= (others=>'0');
             when 1 =>
-               Power0In <= to_sfixed(0.28, Power0In);
+               Power0In <= to_sfixed(0.240, Power0In);
+               Power1In <= to_sfixed(0.000, Power1In);
             when others =>
-               Power0In <= resize(Power0In - 0.02, Power0In);
+               Power1In <= resize(Power1In + 0.02, Power1In);
             end case;
-*/
             FrameCnt <= FrameCnt + 1;
---            OffsetPS_u <= OffsetPS_u + 1;
          end if;
-         OffsetPS <= std_logic_Vector(OffsetPS_u);
       end if;
    end process;
 
@@ -133,7 +124,6 @@ BEGIN
       DemodLED => open
    );
 
---   << signal Brik1.UUTu.OffsetPS : SLV4 >> <= OffsetPS;
 
 END rtl;
 

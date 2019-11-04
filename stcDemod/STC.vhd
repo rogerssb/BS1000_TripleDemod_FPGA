@@ -372,13 +372,15 @@ ARCHITECTURE rtl OF STC IS
    SIGNAL   DataAddr          : ufixed(9 downto 0);
    SIGNAL   DataAddr_i        : natural range 0 to 1023;
    SIGNAL   Bert,
-            BitErrors         : natural range 0 to 3200;
+            BitErrors         : natural range 0 to 32000;
    signal   sample0r,
             sample0i,
             MiscBits,
             HxPhase,
+            HxThreshSlv,
             InRBrik2Ila,
             InIBrik2Ila       : SLV18;
+   SIGNAL   HxThresh          : ufixed(0 downto -11);
    signal   StartIla,
             ValidIla          : std_logic;
    signal   DacMux            : vector_of_slvs(0 to 15)(17 downto 0);
@@ -587,14 +589,14 @@ BEGIN
    VioPhase  : Vio2x18
       PORT MAP (
          clk         => Clk186,
-         probe_out0  => open,
+         probe_out0  => HxThreshSlv,
          probe_out1  => open,
          probe_out2  => open,
          probe_out3  => MiscBits,
          probe_out4  => TrellisOffsetSlv,
          probe_out5  => OffsetPS
    );
-   TrellisOffset <= signed(TrellisOffsetSlv);
+   TrellisOffset  <= signed(TrellisOffsetSlv);
 
    InterBrikClk : process(Clk186) is
    begin
@@ -735,17 +737,18 @@ BEGIN
          DacMux(12) <= PhaseOut1;                  -- H1
          DacMux(13) <= MagPeak0;                    -- Peak Magnitude per frame
          DacMux(14) <= PhsPeak0;                    -- Full Pilot Phase at peak magnitude
-         DacMux(15) <= to_slv(CorrPntr(8 downto 0)) & 9x"00";
+         DacMux(15) <= (CorrPntr8to0 xor 9x"100") & 9x"00";  -- convert to two complement
 
          CorrPntr8to0 <= to_slv(CorrPntr(8 downto 0));
          Mag0GtMag1   <= '1' when (H0Mag > H1Mag) else '0';
-         PilotFoundCE <= '1' when (H0Mag_u > 0.1) or (H1Mag_u > 0.1) else '0';  -- about .15 at noise threshold
+         PilotFoundCE <= '1' when (H0Mag_u > HxThresh) or (H1Mag_u > HxThresh) else '0';  -- about .15 at noise threshold
 
       end if;
    end process DacOutputs;
 
-   H0Mag_u <= to_ufixed(H0Mag, H0Mag_u);
-   H1Mag_u <= to_ufixed(H1Mag, H1Mag_u);
+   HxThresh <= to_ufixed(HxThreshSlv(11 downto 0), HxThresh);
+   H0Mag_u  <= to_ufixed(H0Mag, H0Mag_u);
+   H1Mag_u  <= to_ufixed(H1Mag, H1Mag_u);
 
    cordic0 : vm_cordic_fast
       GENERIC MAP (

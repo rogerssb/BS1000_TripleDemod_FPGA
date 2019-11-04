@@ -242,10 +242,10 @@ ARCHITECTURE rtl OF Brik2 IS
             TimeRdAddr,
             ChanRdAddr        : integer range 0 to TIME_DEPTH - 1;
    SIGNAL   ChanEstDone,
+            ChanEstDoneDly,
             TimeEstDone,
             TimeActive,
             StartTime,
-            H0GtH1,
             FirstPass,
             ValidTimeChan,
             ValidDetFilt      : std_logic;
@@ -267,6 +267,10 @@ ARCHITECTURE rtl OF Brik2 IS
             H0EstI_CE,
             H1EstR_CE,
             H1EstI_CE,
+            H0EstR_Sqr,
+            H0EstI_Sqr,
+            H1EstR_Sqr,
+            H1EstI_Sqr,
             Tau0Est,
             Tau1Est           : STC_Parm;
    SIGNAL   Tau0EstNdxTE,
@@ -489,20 +493,24 @@ BEGIN
             H1MagCE        <= (others=>'0');
             DeltaTauEst    <= (others=>'0');
          elsif (ce) then
-            TrellisDelay <= TrellisDelay(TrellisDelay'left-1 downto 0) & ChanEstDone;
-            EstimatesDone <= TrellisDelay(TrellisDelay'left);
-            if (ChanEstDone) then   -- All estimates are done, allow time to calculate values.
+            TrellisDelay   <= TrellisDelay(TrellisDelay'left-1 downto 0) & ChanEstDoneDly;
+            EstimatesDone  <= TrellisDelay(TrellisDelay'left);
+            ChanEstDoneDly <= ChanEstDone;
+            H0EstR_Sqr     <= resize(H0EstR_CE * H0EstR_CE, H0EstR_Sqr);
+            H0EstI_Sqr     <= resize(H0EstI_CE * H0EstI_CE, H0EstI_Sqr);
+            H1EstR_Sqr     <= resize(H1EstR_CE * H1EstR_CE, H1EstR_Sqr);
+            H1EstI_Sqr     <= resize(H1EstI_CE * H1EstI_CE, H1EstI_Sqr);
+
+            if (ChanEstDoneDly) then   -- All estimates are done, allow time to calculate values.
                H0EstR      <= H0EstR_CE;
                H0EstI      <= H0EstI_CE;
                H1EstR      <= H1EstR_CE;
                H1EstI      <= H1EstI_CE;
-               H0MagCE     <= resize(H0EstR_CE * H0EstR_CE + H0EstI_CE * H0EstI_CE, H0MagCE);
-               H1MagCE     <= resize(H1EstR_CE * H1EstR_CE + H1EstI_CE * H1EstI_CE, H1MagCE);
+               H0MagCE     <= resize(H0EstR_Sqr + H0EstI_Sqr, H0MagCE);
+               H1MagCE     <= resize(H1EstR_Sqr + H1EstI_Sqr, H1MagCE);
                Tau0Est     <= Tau0EstTE;
                Tau1Est     <= Tau1EstTE;
             end if;
-
-            H0GtH1 <= '1' when (H0MagCE > H1MagCE) else '0';
 
             Tau0EstA    <= resize(Tau0Est, Tau0EstA);
             Tau0EstX4   <= resize(4 * Tau0EstA, Tau0EstX4);
