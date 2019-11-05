@@ -136,10 +136,10 @@ ARCHITECTURE rtl OF STC IS
       PORT(
          clk,
          reset,
-         DiffEn,
          ce             : IN  std_logic;
          StartIn,
          ValidIn        : IN  std_logic;
+         MiscBits,
          InR,
          InI            : IN  SLV18;
          StartDF,
@@ -156,6 +156,7 @@ ARCHITECTURE rtl OF STC IS
          m_ndx1         : OUT integer range -5 to 3;
          Mu0,
          Mu1,
+         PhaseOut,
          PhaseDiff      : OUT FLOAT_1_18;
          DeltaTauEst    : OUT sfixed(0 downto -5);
          PhaseOutA,
@@ -315,6 +316,7 @@ ARCHITECTURE rtl OF STC IS
             ResampleI_s,
             Ch0Mu,
             Ch1Mu,
+            PhaseHPP,
             PhaseDiff2        : Float_1_18;
    SIGNAL   PhaseDiff1Gain,
             PhaseDiff2Gain    : sfixed(9 downto -8);
@@ -561,7 +563,7 @@ BEGIN
    end process AFC_process;
 
    PhaseDiff      <= to_slv(PhaseDiff2);
-   PhaseOut       <= HxPhase when (not MiscBits(3)) else to_slv(PhsPeak);  -- Pilot Detect or Channel Est Phase select
+   PhaseOut       <= to_slv(PhaseHPP) when MiscBits(8) else HxPhase when (MiscBits(3)) else to_slv(PhsPeak);  -- Pilot Detect or Channel Est Phase select
    PhsPeak        <= PhsPeak0 when Mag0GtMag1 else PhsPeak1;         -- Pilot Detect Phase select
    HxPhase        <= (H0Phase & 6x"0") when Mag0GtMag1 else H1Phase & 6X"0";  -- Channel Est Phase select
    StartOfFrame   <= PhaseDiffEn;
@@ -623,11 +625,12 @@ BEGIN
          CE             => CE,
          StartIn        => StartInBrik2Dly,
          ValidIn        => ValidInBrik2Dly,
+         MiscBits       => MiscBits,
          InR            => to_slv(InRBrik2Dly),
          InI            => to_slv(InIBrik2Dly),
          PhaseOutA      => Phase0A,
          PhaseOutB      => Phase0B,
-         DiffEn         => MiscBits(2),
+         PhaseOut       => PhaseHPP,
          PhaseDiff      => PhaseDiff2,
          EstimatesDone  => EstimatesDone,
          StartDF        => StartDF,

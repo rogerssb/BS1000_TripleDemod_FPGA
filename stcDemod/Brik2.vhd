@@ -72,10 +72,10 @@ ENTITY Brik2 IS
    PORT(
       clk,
       reset,
-      DiffEn,
       ce             : IN  std_logic;
       StartIn,
       ValidIn        : IN  std_logic;
+      MiscBits,
       InR,
       InI            : IN  SLV18;
       StartDF,
@@ -91,6 +91,7 @@ ENTITY Brik2 IS
       m_ndx0,
       m_ndx1         : OUT integer range -5 to 3;
       PhaseDiff,
+      PhaseOut,
       Mu0,
       Mu1            : OUT FLOAT_1_18;
       DeltaTauEst    : OUT sfixed(0 downto -5);
@@ -142,7 +143,8 @@ ARCHITECTURE rtl OF Brik2 IS
    PORT(
       clk,
       reset,
-      DiffEn,
+      DiffMag,
+      PhaseMag,
       EstimatesDone,
       ce             : IN  std_logic;
       StartIn,
@@ -153,6 +155,7 @@ ARCHITECTURE rtl OF Brik2 IS
       m_ndx1         : IN  integer range -5 to 3;
       H0Mag,
       H1Mag          : IN  sfixed(0 downto -17);
+      PhaseOut,
       PhaseDiff      : OUT FLOAT_1_18;
       PhaseOutA,
       PhaseOutB      : OUT SLV18;
@@ -550,7 +553,8 @@ BEGIN
       PORT MAP(
          clk            => clk,
          reset          => reset,
-         DiffEn         => DiffEn,
+         DiffMag        => MiscBits(10),
+         PhaseMag       => MiscBits(9),
          EstimatesDone  => EstimatesDone,
          ce             => ce,
          StartIn        => StartIn,
@@ -564,6 +568,7 @@ BEGIN
          PhaseDiff      => PhaseDiff,
          PhaseOutA      => PhaseOutA,
          PhaseOutB      => PhaseOutB,
+         PhaseOut       => PhaseOut,
          PilotLocked    => PilotLocked
    );
 
