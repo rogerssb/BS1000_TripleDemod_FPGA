@@ -378,9 +378,6 @@ architecture rtl of PilotDetectSliding is
    SIGNAL   SampleCount       : natural range 0 to 16383;
    SIGNAL   DropCount         : natural range 0 to 7;
 
-      signal AbsDiff_sr       : signed(9 downto 0);
-
-
 -- ILAs
     SIGNAL  PilotMag_Ila,
             Peak1_Ila,
@@ -389,9 +386,8 @@ architecture rtl of PilotDetectSliding is
             AbsCntr1_Ila      : SLV18;
 
    attribute mark_debug : string;
-   attribute mark_debug of PilotMag_Ila, PilotFound, Peak1_Ila, Peak2_Ila, AbsDiff_sr,
-             /* MagPeak0, PhsPeak0, MagPeak1, PhsPeak1, */
-             AbsCntr0_Ila, AbsCntr1_Ila, AbsIndex, PrevIndex, PendIndex : signal is "true";
+   attribute mark_debug of PilotMag_Ila, PilotFound, Peak1_Ila, Peak2_Ila,
+             AbsCntr0_Ila, AbsCntr1_Ila, AbsIndex, PrevIndex : signal is "true";
 begin
 
    IlaProcess : process(clk)
@@ -758,9 +754,6 @@ begin
             PrevIndex_s := signed('0' & PrevIndex_u);
             Diff_s         := Index1_s - PrevIndex_s;
             AbsDiff_s      := abs(Diff_s);
-
-            AbsDiff_sr     <= AbsDiff_s;
-
             if (ValidAbs) then
                if (AbsCntr0 > AbsCntr1) then
                   MaxCntr  <= AbsCntr0;

@@ -136,12 +136,15 @@ ARCHITECTURE rtl OF STC IS
       PORT(
          clk,
          reset,
-         ce             : IN  std_logic;
+         ce,
+         StartHPP,
          StartIn,
          ValidIn        : IN  std_logic;
          MiscBits,
          InR,
          InI            : IN  SLV18;
+         H0MagIn,
+         H1MagIn        : IN  std_logic_vector(12 downto 0);
          StartDF,
          ValidDF,
          PilotLocked,
@@ -155,12 +158,11 @@ ARCHITECTURE rtl OF STC IS
          m_ndx0,
          m_ndx1         : OUT integer range -5 to 3;
          Mu0,
-         Mu1,
-         PhaseOut,
-         PhaseDiff      : OUT FLOAT_1_18;
+         Mu1            : OUT FLOAT_1_18;
+         PhaseDiff      : OUT sfixed(0 downto -11);
          DeltaTauEst    : OUT sfixed(0 downto -5);
          PhaseOutA,
-         PhaseOutB      : OUT SLV18
+         PhaseOutB      : OUT SLV12
       );
    END COMPONENT Brik2;
 
@@ -288,6 +290,7 @@ ARCHITECTURE rtl OF STC IS
             PilotFoundCE,
             PhaseDiffEnPS,
             Mag0GtMag1,
+            CordicValid,
             TrellisFull,
             StartInBrik2Dly,
             ValidInBrik2Dly,
@@ -315,9 +318,8 @@ ARCHITECTURE rtl OF STC IS
    SIGNAL   ResampleR_s,
             ResampleI_s,
             Ch0Mu,
-            Ch1Mu,
-            PhaseHPP,
-            PhaseDiff2        : Float_1_18;
+            Ch1Mu             : Float_1_18;
+   SIGNAL   PhaseDiff2        : sfixed(0 downto -11);
    SIGNAL   PhaseDiff1Gain,
             PhaseDiff2Gain    : sfixed(9 downto -8);
    SIGNAL   m_ndx0,
@@ -334,10 +336,10 @@ ARCHITECTURE rtl OF STC IS
             PhsPeak1,
             Ch0MuSlv,
             Ch1MuSlv,
-            PhsLastPeak,
-            Phase0A,
+            PhsLastPeak       : SLV18;
+   SIGNAL   Phase0A,
             Phase0B,
-            PhaseDiffSlv      : SLV18;
+            PhaseDiffSlv      : SLV12;
    SIGNAL   StartCount        : integer range 0 to 3 := 0;
    SIGNAL   PilotPulse,
             PilotValidOut     : std_logic;
@@ -388,11 +390,11 @@ ARCHITECTURE rtl OF STC IS
    signal   DacMux            : vector_of_slvs(0 to 15)(17 downto 0);
 
    attribute mark_debug : string;
-   attribute mark_debug of /*TrellisOutEn, EstimatesDone, TrellisFull, lastSampleReset, */
+   attribute mark_debug of EstimatesDone,
                   StartIla, ValidIla, InRBrik2Ila, InIBrik2Ila, PilotFoundCE, PilotFoundPD,
-                  PhaseDiffSlv, CorrPntr, m_ndx0Slv, m_ndx1Slv, Phase0A, Phase0B,
-                  H0Phase, H1Phase, H0Mag, H1Mag, Ch0MuSlv, Ch1MuSlv, deltaTauEstSlv,
-                  Bert, DataOut, ClkOutEn, ValidData2047 : signal is "true";
+                  PhaseDiffSlv, CorrPntr, m_ndx0Slv, m_ndx1Slv,
+                  H0Phase, H1Phase, H0Mag, H1Mag, deltaTauEstSlv,
+                  DataOut, ClkOutEn, ValidData2047 : signal is "true";
 
 BEGIN
 
@@ -401,7 +403,7 @@ BEGIN
    begin
       if (rising_edge(Clk186)) then
 -- TODO remove ILAs
-         PhaseDiffSlv <= to_slv(PhaseDiff);
+         PhaseDiffSlv <= to_slv(PhaseDiff2);
          InRBrik2Ila <= to_slv(InRBrik2Dly);
          InIBrik2Ila <= to_slv(InIBrik2Dly);
          StartIla    <= StartInBrik2Dly;
@@ -562,8 +564,8 @@ BEGIN
       end if;
    end process AFC_process;
 
-   PhaseDiff      <= to_slv(PhaseDiff2);
-   PhaseOut       <= to_slv(PhaseHPP) when MiscBits(8) else HxPhase when (MiscBits(3)) else to_slv(PhsPeak);  -- Pilot Detect or Channel Est Phase select
+   PhaseDiff      <= to_slv(PhaseDiff2) & 6x"00";
+   PhaseOut       <= Phase0B & 6x"00" when MiscBits(8) else HxPhase when (MiscBits(3)) else to_slv(PhsPeak);  -- Pilot Detect or Channel Est Phase select
    PhsPeak        <= PhsPeak0 when Mag0GtMag1 else PhsPeak1;         -- Pilot Detect Phase select
    HxPhase        <= (H0Phase & 6x"0") when Mag0GtMag1 else H1Phase & 6X"0";  -- Channel Est Phase select
    StartOfFrame   <= PhaseDiffEn;
@@ -628,11 +630,12 @@ BEGIN
          MiscBits       => MiscBits,
          InR            => to_slv(InRBrik2Dly),
          InI            => to_slv(InIBrik2Dly),
+         H0MagIn        => H0Mag,
+         H1MagIn        => H1Mag,
          PhaseOutA      => Phase0A,
          PhaseOutB      => Phase0B,
-         PhaseOut       => PhaseHPP,
          PhaseDiff      => PhaseDiff2,
-         EstimatesDone  => EstimatesDone,
+         StartHPP       => CordicValid,
          StartDF        => StartDF,
          ValidDF        => ValidDF,
          DF_R           => DF_R,
@@ -646,6 +649,7 @@ BEGIN
          m_ndx1         => m_ndx1,
          Mu0            => Ch0Mu,
          Mu1            => Ch1Mu,
+         EstimatesDone  => EstimatesDone,
          PilotLocked    => PilotLocked
       );
 
@@ -729,8 +733,8 @@ BEGIN
          DacMux(1)  <= PhsPeak1;       --
          DacMux(2)  <= m_ndx0Slv & 14x"0";
          DacMux(3)  <= m_ndx1Slv & 14x"0";
-         DacMux(4)  <= Phase0A;
-         DacMux(5)  <= Phase0B;
+         DacMux(4)  <= Phase0A & 6x"0";
+         DacMux(5)  <= Phase0B & 6x"0";
          DacMux(6)  <= to_slv(PhaseDiff2);
          DacMux(7)  <= H0Phase & 6x"0";
          DacMux(8)  <= H1Phase & 6x"0";
@@ -745,13 +749,14 @@ BEGIN
          CorrPntr8to0 <= to_slv(CorrPntr(8 downto 0));
          Mag0GtMag1   <= '1' when (H0Mag > H1Mag) else '0';
          PilotFoundCE <= '1' when (H0Mag_u > HxThresh) or (H1Mag_u > HxThresh) else '0';  -- about .15 at noise threshold
-
+         if (CordicValid) then
+            H0Mag_u  <= to_ufixed(H0Mag, H0Mag_u);
+            H1Mag_u  <= to_ufixed(H1Mag, H1Mag_u);
+         end if;
       end if;
    end process DacOutputs;
 
    HxThresh <= to_ufixed(HxThreshSlv(11 downto 0), HxThresh);
-   H0Mag_u  <= to_ufixed(H0Mag, H0Mag_u);
-   H1Mag_u  <= to_ufixed(H1Mag, H1Mag_u);
 
    cordic0 : vm_cordic_fast
       GENERIC MAP (
@@ -764,7 +769,7 @@ BEGIN
          y     => to_slv(H0EstI(0 downto -13)),
          m     => H0Mag,          -- m[n:2]
          p     => H0Phase,
-         enOut => open
+         enOut => CordicValid
       );
 
    cordic1 : vm_cordic_fast

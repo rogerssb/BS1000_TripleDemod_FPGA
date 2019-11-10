@@ -53,6 +53,9 @@ at 500Hz, Diff yields
    H0    H0H1I = 6.76
    H1    H0H1  = 7.97
    H1    H0H1I = -5.72
+
+   To get accurate phase, the two correlated sequences need the same relative
+   phase of H0 and H1 especially when the same magnitudes.
 ----------------------------------------------------------------------------
                                HISTORY
 ----------------------------------------------------------------------------
@@ -73,9 +76,7 @@ ENTITY HalfPilotPhase IS
    PORT(
       clk,
       reset,
-      DiffMag,
-      PhaseMag,
-      EstimatesDone,
+      StartHPP,
       ce             : IN  std_logic;
       StartIn,
       ValidIn        : IN  std_logic;
@@ -84,11 +85,10 @@ ENTITY HalfPilotPhase IS
       m_ndx0,
       m_ndx1         : IN  integer range -5 to 3;
       H0Mag,
-      H1Mag          : IN  sfixed(0 downto -17);
-      PhaseDiff,
-      PhaseOut       : OUT FLOAT_1_18;
+      H1Mag          : IN  std_logic_vector(12 downto 0);
+      PhaseDiff      : OUT sfixed(0 downto -11);
       PhaseOutA,
-      PhaseOutB      : OUT SLV18;
+      PhaseOutB      : OUT SLV12;
       PilotLocked    : OUT std_logic
    );
 END HalfPilotPhase;
@@ -177,7 +177,7 @@ ARCHITECTURE rtl OF HalfPilotPhase IS
    SIGNAL   WrAddr            : integer range 0 to TIME_DEPTH - 1;
    SIGNAL   H0GtH1           : std_logic;
    SIGNAL   H0MagNorm,
-            H1MagNorm         : STC_Parm;
+            H1MagNorm         : sfixed(0 downto -12);
    SIGNAL   m_ndx             : integer range -5 to 3;
    SIGNAL   ReadCount,
             ReadCountR,
@@ -193,7 +193,6 @@ ARCHITECTURE rtl OF HalfPilotPhase IS
    SIGNAL   CmplxValid,
             Normalize,
             NormDone,
-            NoMagWt,
             CalcPhase,
             CordicStart,
             ValidCordic,
@@ -218,22 +217,10 @@ ARCHITECTURE rtl OF HalfPilotPhase IS
             H0INormd,
             H1RNormd,
             H1INormd,
-            p0R,
-            p0I,
-            p1R,
-            p1I,
-            H0R_Dly0,
-            H0I_Dly0,
-            H1R_Dly0,
-            H1I_Dly0,
-            H0R_Dly1,
-            H0I_Dly1,
-            H1R_Dly1,
-            H1I_Dly1,
             H0R,
             H0I,
             H1R,
-            H1I              : FLOAT_1_18;
+            H1I               : FLOAT_1_18;
    SIGNAL   SyncError,
             CmplxH0r,
             CmplxH0i,
@@ -268,7 +255,8 @@ ARCHITECTURE rtl OF HalfPilotPhase IS
    SIGNAL   CalcPhaseDly      : SLV4;
 
    attribute mark_debug : string;
-   attribute mark_debug of Phase0A, Phase0B, Phase1A, Phase1B : signal is "true";
+   attribute mark_debug of Phase0A, Phase0B, CmplxValid,
+            Normalize, NormDone, CalcPhase, CordicStart, ValidCordic, PilotPacket : signal is "true";
 
 BEGIN
 
@@ -276,8 +264,10 @@ BEGIN
    -- estimates are valid, use realigned pilot to check phase shift between first half and second
    -- half of the the pilot for a wideband frequency offset.
 
-   PhaseOutA <= to_slv(resize(Phase0A, 0, -17));
-   PhaseOutB <= to_slv(resize(Phase0B, 0, -17));
+   PhaseOutA <= to_slv(resize(Phase0A, 0, -11));
+   PhaseOutB <= to_slv(resize(Phase0B, 0, -11));
+
+
 
    DoublePhaseProc : process(Clk)
    begin
@@ -288,6 +278,7 @@ BEGIN
             ReadCount      <= to_signed(511, ReadCount'length);
             PilotCount     <= (others=>'0');
             PhaseDiff      <= (others=>'0');
+            H0SumRA        <= (others=>'0');
             H0SumIA        <= (others=>'0');
             H1SumRA        <= (others=>'0');
             H1SumIA        <= (others=>'0');
@@ -314,15 +305,14 @@ BEGIN
             NormDone       <= '0';
             CalcPhaseDly   <= x"0";
          elsif (ce) then
-            if (EstimatesDone) then
+            if (StartHPP) then
                CmplxCount  <= 0;
-               NoMagWt      <= '1';
                H0AccR      <= (others=>'0');    -- setup for first half
                H0AccI      <= (others=>'0');
                H1AccR      <= (others=>'0');
                H1AccI      <= (others=>'0');
-               H0MagNorm   <= H0Mag;
-               H1MagNorm   <= H1Mag;
+               H0MagNorm   <= to_sfixed(H0Mag, 0 , -12);
+               H1MagNorm   <= to_sfixed(H1Mag, 0 , -12);
                Normalize      <= '1';
             elsif (Normalize) then        -- normalize mags till max is in 0.25 to 0.5 range
                if (H0MagNorm < 0.25) and (H1MagNorm < 0.25) then
@@ -354,7 +344,6 @@ BEGIN
                   H1SumIB <= resize(H1AccI + CmplxH1i, H1SumIB);
                   CordicStart <= '1';
                   CmplxCount <= 0;
-                  NoMagWt      <= '0';
                else
                   CmplxCount <= CmplxCount + 1;          -- accumulate over pilot
                   CordicStart <= '0';
@@ -369,31 +358,16 @@ BEGIN
             end if;
 
             if (ValidCordic) then
-               if (CmplxCount > 30) then
+               if (CmplxCount > 0) then
                   Phase0A <= to_sfixed(Phase0, Phase0A);
                   Phase1A <= to_sfixed(Phase1, Phase1A);
                else     -- process is done and count is reset to 0
                   Phase0B <= to_sfixed(Phase0, Phase0B);
                   Phase1B <= to_sfixed(Phase1, Phase1B);
-               end if;
-            end if;
-
-            if (ValidCordic) then
-               if (CmplxCount < 30) then
-                  if (Mag0 > Mag1) then
-                     if ((DiffMag = '0') and (ReadCount < 30)) or ((DiffMag = '1') and (ReadCount = 511)) then -- Phase0B - Phase0A
+                  if (H0GtH1) then
                         PhaseDiff <= resize(to_sfixed(Phase0, Phase0A) - Phase0A, PhaseDiff);
-                     end if;
-                     if ((PhaseMag = '0') and (ReadCount < 30)) or ((PhaseMag = '1') and (ReadCount = 511)) then
-                        PhaseOut <= resize(Phase0A, PhaseDiff);
-                     end if;
                   else
-                     if ((DiffMag = '0') and (ReadCount < 30)) or ((DiffMag = '1') and (ReadCount = 511)) then
                         PhaseDiff <= resize(to_sfixed(Phase1, Phase1A) - Phase1A, PhaseDiff);
-                     end if;
-                     if ((PhaseMag = '0') and (ReadCount < 30)) or ((PhaseMag = '1') and (ReadCount = 511)) then
-                        PhaseOut <= resize(Phase1A, PhaseDiff);
-                     end if;
                   end if;
                end if;
             else     -- if  phases rollover 180°...
@@ -416,10 +390,10 @@ BEGIN
 
             -- now that estimates are done, start phase and sync routines
             if (NormDone) then
-               SyncSum   <= (others=>'0');
+               SyncSum <= (others=>'0');
                ReadCount <= (others=>'0');
                CalcPhase <= '1';
-            elsif (ReadCount >= READ_START) and (ReadCount <= READ_STOP) and (NoMagWt = '1') then   -- skip the edges
+            elsif (ReadCount >= READ_START) and (ReadCount <= READ_STOP) then   -- skip the edges
                SyncError   <= resize(Abs(ReadR - ReadI), SyncError);
                SyncSum     <= resize(SyncSum + SyncError, SyncSum);
                ReadCount   <= ReadCount + 1;
@@ -429,10 +403,7 @@ BEGIN
             elsif (ReadCount < 511) then
                ReadCount <= ReadCount + 1;
             elsif (ReadCount = 511) then  -- turn off Calcs and idle here
-               CalcPhase <= NoMagWt;
-               if (NoMagWt) then
-                  ReadCount <= (others=>'0');   -- do next round with Mag weighted p0/1
-               end if;
+               CalcPhase   <= '0';
             end if;
 
             CalcPhaseDly <= CalcPhaseDly(2 downto 0) & CalcPhase;
@@ -440,7 +411,7 @@ BEGIN
       end if;
    end process DoublePhaseProc;
 
-   H0GtH1 <= '1' when (H0Mag > H1Mag) else '0';
+   H0GtH1 <= '1' when (H0MagNorm > H1MagNorm) else '0';
    m_ndx        <= m_ndx0 when H0GtH1 else m_ndx1;
    ReadCount0   <= ReadCount + m_ndx0;
    ReadCount1   <= ReadCount + m_ndx1;
@@ -538,14 +509,6 @@ BEGIN
    H0H1Process : process(clk)
    begin
       if (rising_edge(clk)) then
-         H0R_Dly0    <= H0R;
-         H0I_Dly0    <= not(H0I);
-         H1R_Dly0    <= H1R;
-         H1I_Dly0    <= not(H1I);
-         H0R_Dly1    <= H0R_Dly0;
-         H0I_Dly1    <= H0I_Dly0;
-         H1R_Dly1    <= H1R_Dly0;
-         H1I_Dly1    <= H1I_Dly0;
          H0RNormd    <= resize(H0R * H0MagNorm, H0RNormd);
          H0INormd    <= resize(H0I * H0MagNorm, H0INormd);
          H1RNormd    <= resize(H1R * H1MagNorm, H0RNormd);
@@ -583,18 +546,13 @@ BEGIN
          ReadyIn     => '1',
          ReInA       => ReadR0Dly1,
          ImInA       => ReadI0Dly1,
-         ReInB       => p0R,
-         ImInB       => p0I,
+         ReInB       => H0H1R,
+         ImInB       => H0H1I,
          ReOut       => CmplxH0r,
          ImOut       => CmplxH0i,
          ValidOut    => CmplxValid,
          StartOut    => open
    );
-
-   p0R <= H0R_Dly1 when NoMagWt else H0H1R;
-   p0I <= H0I_Dly1 when NoMagWt else H0H1I;
-   p1R <= H1R_Dly1 when NoMagWt else H0H1R;
-   p1I <= H1I_Dly1 when NoMagWt else H0H1I;
 
    CmplxMultH1 : CmplxMult
       GENERIC MAP (
@@ -612,8 +570,8 @@ BEGIN
          ReadyIn     => '1',
          ReInA       => ReadR1Dly1,
          ImInA       => ReadI1Dly1,
-         ReInB       => p1R,
-         ImInB       => p1I,
+         ReInB       => H0H1R,
+         ImInB       => H0H1I,
          ReOut       => CmplxH1r,
          ImOut       => CmplxH1i,
          ValidOut    => open,

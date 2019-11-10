@@ -55,10 +55,12 @@ entity Brik1_Hw_tb is
    GENERIC (SIM_MODE : boolean := false);
    PORT (
       Clk93In           : IN  std_logic;
+      -- synthesis translate_off
       BitRateIn,
       Power0In,
       Power1In,
       NoiseIn           : IN  sfixed(0 downto -17);
+      -- synthesis translate_on
       DataOut_o,
       ClkOut_o,
       BS_LED,
@@ -71,9 +73,10 @@ architecture rtl of Brik1_Hw_tb is
   -- Define Components
 
    COMPONENT STC IS
-      GENERIC (SIM_MODE : boolean := false
+   GENERIC (
+         SIM_MODE    : boolean := false
       );
-      PORT(
+   PORT(
       ResampleR,
       ResampleI         : IN  SLV18;
       ClocksPerBit      : IN  SLV16;
@@ -86,16 +89,19 @@ architecture rtl of Brik1_Hw_tb is
       ValidIn           : IN  std_logic;
       DataOut,                            -- Trellis Data Output
       ClkOutEn,                           -- Trellis Clock Output
-      StartOfFrame,
       PilotFound,                         -- Pilot Found LED
       PilotLocked,
+      StartOfFrame,
+      PhaseDiffEn,
       Dac0ClkEn,
       Dac1ClkEn,
       Dac2ClkEn         : OUT std_logic;
-      PilotOffset       : OUT std_logic_vector(8 downto 0);
+      PilotOffset       : OUT STD_LOGIC_VECTOR(8 downto 0); -- signed Pilot Detect Offset from center
       Dac0Data,
       Dac1Data,
-      Dac2Data          : OUT SLV18
+      Dac2Data          : OUT SLV18;
+      PhaseOut,
+      PhaseDiff         : OUT SLV18
       );
    END COMPONENT STC;
 
@@ -263,7 +269,7 @@ architecture rtl of Brik1_Hw_tb is
             NoiseGain_slv,
             NoiseGain_vio        : SLV18;
    SIGNAL   DeltaT_vio,
-            MiscBits,
+            HwControlBits,
             Errors               : SLV8;
    SIGNAL   LedCount             : UINT32;
    SIGNAL   ClocksPerBit         : SLV16;
@@ -288,28 +294,28 @@ begin
       PORT MAP (
          clk        => ClkXn,
          probe_in0  => Errors,
-         probe_out0 => open, --Frequency_vio,           -- 00280 (222Hz) start getting errors at end of frame
+         probe_out0 => Frequency_vio,           -- 00280 (222Hz) start getting errors at end of frame
          probe_out1 => FrameClocks_vio,         -- usually 13312-1=13311. smaller makes packets slide
-         probe_out2 => open, --Phase0_vio,              -- has no effect unless both channels active
-         probe_out3 => open, --Phase1_vio,
+         probe_out2 => Phase0_vio,              -- has no effect unless both channels active
+         probe_out3 => Phase1_vio,
          probe_out4 => DeltaT_vio,
          probe_out5 => Power0_vio,              -- H0 power 128k is max
          probe_out6 => Power1_vio,              -- H1 power. sum of both must be < 128k
          probe_out7 => NoiseGain_vio,
          probe_out8 => open,
          probe_out9 => Offset_vio,
-         probe_out10 => MiscBits,
+         probe_out10 => HwControlBits,
          probe_out11 => BitRate_vio,            -- 0e449 is 41.6Mb
          probe_out12 => ClocksPerBit            -- c50 for 9.33/1.04, db7 at 10Mb 41.6
       );
- Phase0_vio <= 18x"10000";
- Phase1_vio <= 18x"00000";
-Frequency_vio <= 24x"8000";
+-- Phase0_vio <= 18x"10000";
+-- Phase1_vio <= 18x"00000";
+--Frequency_vio <= 24x"8000";
 
    ErrorProc : process (ClkXn)
    begin
       if (rising_edge(ClkXn)) then
-         Reset <= (not locked) or MiscBits(7);
+         Reset <= (not locked) or HwControlBits(7);
          if (Reset) then
             Errors <= x"00";
             LedCount <= x"00000000";
@@ -376,7 +382,9 @@ Frequency_vio <= 24x"8000";
             Power1_slv    <= Power1_vio;
             NoiseGain_slv <= NoiseGain_vio;
             if (SIM_MODE) then
+      -- synthesis translate_off
                BitRate_v := resize(BitRateAcc + BitRateIn, BitRateAcc);
+      -- synthesis translate_on
             else
                BitRate_v := resize(BitRateAcc + to_sfixed(BitRate_slv, BitRate_v), BitRateAcc);
             end if;
@@ -420,21 +428,25 @@ Frequency_vio <= 24x"8000";
          end if;
 
          if (SIM_MODE) then
+      -- synthesis translate_off
             NoiseGain_v := NoiseIn;
+      -- synthesis translate_on
          else
             NoiseGain_v := to_sfixed(NoiseGain_slv, NoiseGain_v);
          end if;
          Noise_v     := resize(to_sfixed(RealRead(2), Noise_v) * NoiseGain_v, Noise_v);
          if (SIM_MODE) then
+      -- synthesis translate_off
             Power0_v := Power0In;
             Power1_v := Power1In;
+      -- synthesis translate_on
          else
             Power0_v := to_sfixed(Power0_slv, Power0_v);
             Power1_v := to_sfixed(Power1_slv, Power1_v);
          end if;
 
          ResampleR_s <= resize((Chan0r * Power0_v) + (Chan1r * Power1_v) + Noise_v, ResampleR_s, fixed_saturate, fixed_truncate);
-         if (MiscBits(1)) then   -- invert I data for spectral inversion
+         if (HwControlBits(1)) then   -- invert I data for spectral inversion
             ResampleI_s <= resize((-Chan0i * Power0_v) + (-Chan1i * Power1_v) - Noise_v, ResampleI_s, fixed_saturate, fixed_truncate);
          else
             ResampleI_s <= resize((Chan0i * Power0_v) + (Chan1i * Power1_v) + Noise_v, ResampleI_s, fixed_saturate, fixed_truncate);
@@ -564,7 +576,7 @@ Frequency_vio <= 24x"8000";
          aclken               => DataValid(0),
          aresetn              => not Reset,
          s_axis_config_tvalid => '1',  -- Freq/Phase offset may be delayed relative to simulation
-         s_axis_config_tdata  => (63 downto 60=> Phase0_vio(Phase0_vio'left)) & Phase0_vio & 4x"0" & (31 downto 18=> Frequency_vio(Frequency_vio'left)) & Frequency_vio, -- sign extend phase and freq values
+         s_axis_config_tdata  => (63 downto 60=> '0') & Phase0_vio & 10x"0" & (31 downto 24=> Frequency_vio(Frequency_vio'left)) & Frequency_vio, -- sign extend phase and freq values
          m_axis_data_tvalid   => open,
          m_axis_data_tdata    => SinCosData0,
          m_axis_phase_tvalid  => open,
@@ -581,7 +593,7 @@ Frequency_vio <= 24x"8000";
          aclken               => DataValid(0),
          aresetn              => not Reset,
          s_axis_config_tvalid => '1',
-         s_axis_config_tdata  => (63 downto 60=> Phase1_vio(Phase1_vio'left)) & Phase1_vio & 4x"0" & (31 downto 18=> Frequency_vio(Frequency_vio'left)) & Frequency_vio,
+         s_axis_config_tdata  => (63 downto 60=> '0') & Phase1_vio & 10x"0" & (31 downto 24=> Frequency_vio(Frequency_vio'left)) & Frequency_vio,
          m_axis_data_tvalid   => open,
          m_axis_data_tdata    => SinCosData1,
          m_axis_phase_tvalid  => open,
@@ -665,7 +677,7 @@ Frequency_vio <= 24x"8000";
          Clk93          => Clk93,
          Clk186         => ClkXn,
          ValidIn        => PhaseValid,
-         SpectrumInv    => MiscBits(0),
+         SpectrumInv    => HwControlBits(0),
          PilotOffset    => PilotOffset,
          DataOut        => DataOut_o,
          ClkOutEn       => ClkOut_o,

@@ -72,12 +72,15 @@ ENTITY Brik2 IS
    PORT(
       clk,
       reset,
-      ce             : IN  std_logic;
+      ce,
+      StartHPP,
       StartIn,
       ValidIn        : IN  std_logic;
       MiscBits,
       InR,
       InI            : IN  SLV18;
+      H0MagIn,
+      H1MagIn        : IN  std_logic_vector(12 downto 0);
       StartDF,
       ValidDF,
       PilotLocked,
@@ -90,13 +93,12 @@ ENTITY Brik2 IS
       DF_I           : OUT STC_PARM;
       m_ndx0,
       m_ndx1         : OUT integer range -5 to 3;
-      PhaseDiff,
-      PhaseOut,
       Mu0,
       Mu1            : OUT FLOAT_1_18;
+      PhaseDiff      : OUT sfixed(0 downto -11);
       DeltaTauEst    : OUT sfixed(0 downto -5);
       PhaseOutA,
-      PhaseOutB      : OUT SLV18
+      PhaseOutB      : OUT SLV12
    );
 END Brik2;
 
@@ -143,9 +145,7 @@ ARCHITECTURE rtl OF Brik2 IS
    PORT(
       clk,
       reset,
-      DiffMag,
-      PhaseMag,
-      EstimatesDone,
+      StartHPP,
       ce             : IN  std_logic;
       StartIn,
       ValidIn        : IN  std_logic;
@@ -154,11 +154,10 @@ ARCHITECTURE rtl OF Brik2 IS
       m_ndx0,
       m_ndx1         : IN  integer range -5 to 3;
       H0Mag,
-      H1Mag          : IN  sfixed(0 downto -17);
-      PhaseOut,
-      PhaseDiff      : OUT FLOAT_1_18;
+      H1Mag          : IN  std_logic_vector(12 downto 0);
+      PhaseDiff      : OUT sfixed(0 downto -11);
       PhaseOutA,
-      PhaseOutB      : OUT SLV18;
+      PhaseOutB      : OUT SLV12;
       PilotLocked    : OUT std_logic
    );
    END COMPONENT HalfPilotPhase;
@@ -227,19 +226,8 @@ ARCHITECTURE rtl OF Brik2 IS
    SIGNAL   TimeR,
             TimeI             : FLOAT_1_18;
    SIGNAL   TimeRslv,
-            TimeIslv,
-            PilotCaptureR0_slv,
-            PilotCaptureI0_slv,
-            PilotCaptureR1_slv,
-            PilotCaptureI1_slv,
-            PilotCaptureR_slv,
-            PilotCaptureI_slv,
-            H0Rslv,
-            H0Islv,
-            H1Rslv,
-            H1Islv            : SLV18;
-   SIGNAL   TimeCount,
-            FreqCount         : integer range 0 to PILOT_SIZE + PILOT_OFFSET;
+            TimeIslv          : SLV18;
+   SIGNAL   TimeCount         : integer range 0 to PILOT_SIZE + PILOT_OFFSET;
    SIGNAL   WrAddr,
             TimeRead,
             TimeRdAddr,
@@ -262,8 +250,6 @@ ARCHITECTURE rtl OF Brik2 IS
             H1MagCE,
             H0MagOver32,
             H1MagOver32,
-            H0MagNorm,
-            H1MagNorm,
             Tau0EstTE,
             Tau1EstTE,
             H0EstR_CE,
@@ -286,6 +272,7 @@ ARCHITECTURE rtl OF Brik2 IS
             Tau0EstA,
             Tau1EstA          : sfixed(3 downto -17);
    SIGNAL   m_ndx             : integer range -5 to 3;
+
 
 -- TODO remove test points
    signal   TauEst0Ila,
@@ -553,22 +540,19 @@ BEGIN
       PORT MAP(
          clk            => clk,
          reset          => reset,
-         DiffMag        => MiscBits(10),
-         PhaseMag       => MiscBits(9),
-         EstimatesDone  => EstimatesDone,
+         StartHPP       => StartHPP,
          ce             => ce,
          StartIn        => StartIn,
          ValidIn        => ValidIn,
          InR            => InR,
          InI            => InI,
-         H0Mag          => H0MagCE,
-         H1Mag          => H1MagCE,
+         H0Mag          => H0MagIn,
+         H1Mag          => H1MagIn,
          m_ndx0         => m_ndx0,
          m_ndx1         => m_ndx1,
          PhaseDiff      => PhaseDiff,
          PhaseOutA      => PhaseOutA,
          PhaseOutB      => PhaseOutB,
-         PhaseOut       => PhaseOut,
          PilotLocked    => PilotLocked
    );
 
