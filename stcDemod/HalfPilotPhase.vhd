@@ -77,9 +77,10 @@ ENTITY HalfPilotPhase IS
       clk,
       reset,
       StartHPP,
-      ce             : IN  std_logic;
+      ce,
       StartIn,
-      ValidIn        : IN  std_logic;
+      ValidIn,
+      Mag0GtMag1     : IN  std_logic;
       InR,
       InI            : IN  SLV18;
       m_ndx0,
@@ -179,7 +180,6 @@ ARCHITECTURE rtl OF HalfPilotPhase IS
             H1Rslv,
             H1Islv            : SLV18;
    SIGNAL   WrAddr            : integer range 0 to TIME_DEPTH - 1;
-   SIGNAL   H0GtH1           : std_logic;
    SIGNAL   H0MagNorm,
             H1MagNorm         : sfixed(0 downto -12);
    SIGNAL   m_ndx             : integer range -5 to 3;
@@ -395,7 +395,7 @@ BEGIN
 
             if (ValidCordicDly) then
                if (CmplxCount = 0) then
-                  if (H0GtH1) then
+                  if (Mag0GtMag1) then
                         PhaseDiff <= resize(Phase0B - Phase0A, PhaseDiff);
                   else
                         PhaseDiff <= resize(Phase1B - Phase1A, PhaseDiff);
@@ -442,8 +442,7 @@ BEGIN
       end if;
    end process DoublePhaseProc;
 
-   H0GtH1 <= '1' when (H0MagNorm > H1MagNorm) else '0';
-   m_ndx        <= m_ndx0 when H0GtH1 else m_ndx1;
+   m_ndx        <= m_ndx0 when Mag0GtMag1 else m_ndx1;
    ReadCount0   <= ReadCount + m_ndx0;
    ReadCount1   <= ReadCount + m_ndx1;
    ReadCountR   <= ReadCount + m_ndx;

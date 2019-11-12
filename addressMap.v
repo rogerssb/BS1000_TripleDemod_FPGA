@@ -557,7 +557,7 @@
 
 `define STC_DEMOD_SPACE     13'b0_00xx_0011_xxxx
     `define STC_CLOCKS_PER_BIT  13'bxxxx_xxxx_00xx
-    `define STC_PILOT_OFFSET    13'bxxxx_xxxx_01xx
+    `define STC_HX_THRESH    13'bxxxx_xxxx_01xx
     `define STC_DAC_SELECT      13'bxxxx_xxxx_10xx
 
 `define FMMODSPACE          13'b0_00xx_011x_xxxx

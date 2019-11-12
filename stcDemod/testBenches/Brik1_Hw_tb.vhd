@@ -80,6 +80,7 @@ architecture rtl of Brik1_Hw_tb is
       ResampleR,
       ResampleI         : IN  SLV18;
       ClocksPerBit      : IN  SLV16;
+      HxThreshSlv       : IN  SLV12;
       DacSelect0,
       DacSelect1,
       DacSelect2        : IN  SLV4;
@@ -296,19 +297,19 @@ begin
          probe_in0  => Errors,
          probe_out0 => Frequency_vio,           -- 00280 (222Hz) start getting errors at end of frame
          probe_out1 => FrameClocks_vio,         -- usually 13312-1=13311. smaller makes packets slide
-         probe_out2 => open, --Phase0_vio,              -- has no effect unless both channels active
+         probe_out2 => Phase0_vio,              -- has no effect unless both channels active
          probe_out3 => Phase1_vio,
-         probe_out4 => DeltaT_vio,
+         probe_out4 => DeltaT_vio,              -- Offset between H0 and H1
          probe_out5 => Power0_vio,              -- H0 power 128k is max
          probe_out6 => Power1_vio,              -- H1 power. sum of both must be < 128k
          probe_out7 => NoiseGain_vio,
          probe_out8 => open,
-         probe_out9 => Offset_vio,
+         probe_out9 => Offset_vio,              -- General jump between frames, not sure why for
          probe_out10 => HwControlBits,
          probe_out11 => BitRate_vio,            -- 0e449 is 41.6Mb
          probe_out12 => ClocksPerBit            -- c50 for 9.33/1.04, db7 at 10Mb 41.6
       );
-Phase0_vio <= 18x"20000";
+-- Phase0_vio <= 18x"20000";
 -- Phase1_vio <= 18x"00000";
 --Frequency_vio <= 24x"8000";
 
@@ -391,7 +392,7 @@ Phase0_vio <= 18x"20000";
             BitRateAcc <= BitRate_v;
             DataValid <= DataValid(DataValid'left-1 downto 0) & (BitRate_v(0) xor BitRateAcc(0));
             if (DataValid(0)) then
-               if (FrameCount(0)) then
+               if (FrameCount(0)) then    -- update every other frame
                   FrameClocks_v := 13311; --to_integer(unsigned(FrameClocks_vio));
                elsif (signed(PilotOffset) > 0) then
                   FrameClocks_v := 13310;
@@ -408,7 +409,7 @@ Phase0_vio <= 18x"20000";
             end if;
          end if;
          DeltaT_v  := to_integer(signed(DeltaT_vio));    -- add up to ±4 then check for overflow
-         Offset_v  := to_integer(signed(Offset_vio));   -- 290 = 511, 287 is 3, 290+28=485
+         Offset_v  := to_integer(signed(Offset_vio));   -- 290 = 511, 287 is 3, 290+28=485 where packet rollover issues start
          RdAddr0_v <= RdAddr_i + Offset_v;
          if (RdAddr0_v > 13311) then
             RdAddr0_i <= RdAddr0_v - FRAME_LENGTH_4;
@@ -671,6 +672,7 @@ Phase0_vio <= 18x"20000";
          ResampleR      => to_slv(ResampleR_s),
          ResampleI      => to_slv(ResampleI_s),
          ClocksPerBit   => ClocksPerBit, --to_slv(to_sfixed(9.34/93.3, 0, -15)),
+         HxThreshSlv    => 12x"180",
          DacSelect0     => x"0",
          DacSelect1     => x"0",
          DacSelect2     => x"0",

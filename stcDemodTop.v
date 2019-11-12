@@ -119,7 +119,7 @@ module stcDemodTop (
 
 );
 
-    parameter VER_NUMBER = 16'd624;
+    parameter VER_NUMBER = 16'd627;
 
 
 //******************************************************************************
@@ -331,7 +331,7 @@ module stcDemodTop (
     end
 
     wire    [15:0]  clocksPerBit;
-    wire    [11:0]  pilotOffset;
+    wire    [11:0]  hxThreshSlv;
     wire    [3:0]   stcDac0Select;
     wire    [3:0]   stcDac1Select;
     wire    [3:0]   stcDac2Select;
@@ -346,7 +346,7 @@ module stcDemodTop (
         .dataOut(stcDout),
         .spectrumInvert(SpectrumInv),
         .clocksPerBit(clocksPerBit),
-        .pilotOffset(pilotOffset),
+        .hxThreshSlv(hxThreshSlv),      // AGC dependent, usually x"180"
         .dac0Select(stcDac0Select),
         .dac1Select(stcDac1Select),
         .dac2Select(stcDac2Select)
@@ -481,6 +481,7 @@ module stcDemodTop (
         .Clk186(clk2x),
         .ValidIn(stcDdcClkEn),
         .ClocksPerBit(clocksPerBit),
+        .HxThreshSlv(hxThreshSlv),
         .DacSelect0(stcDac0Select),
         .DacSelect1(stcDac1Select),
         .DacSelect2(stcDac2Select),

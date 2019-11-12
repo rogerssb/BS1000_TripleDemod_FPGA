@@ -21,7 +21,7 @@ module stcRegs(
     output  reg         [31:0]  dataOut,
     output  reg         [15:0]  clocksPerBit,
     output  reg                 spectrumInvert,
-    output  reg         [11:0]  pilotOffset,
+    output  reg         [11:0]  hxThreshSlv,
     output  reg         [3:0]   dac0Select,
     output  reg         [3:0]   dac1Select,
     output  reg         [3:0]   dac2Select
@@ -38,8 +38,8 @@ module stcRegs(
                 `STC_CLOCKS_PER_BIT: begin
                     clocksPerBit[7:0] <= dataIn[7:0];
                     end
-                `STC_PILOT_OFFSET: begin
-                    pilotOffset[7:0] <= dataIn[7:0];
+                `STC_HX_THRESH: begin
+                    hxThreshSlv[7:0] <= dataIn[7:0];
                     end
                 `STC_DAC_SELECT: begin
                     dac0Select <= dataIn[3:0];
@@ -60,8 +60,8 @@ module stcRegs(
                 `STC_CLOCKS_PER_BIT: begin
                     clocksPerBit[15:8] <= dataIn[15:8];
                     end
-                `STC_PILOT_OFFSET: begin
-                    pilotOffset[11:8] <= dataIn[11:8];
+                `STC_HX_THRESH: begin
+                    hxThreshSlv[11:8] <= dataIn[11:8];
                     end
                 `STC_DAC_SELECT: begin
                     dac1Select <= dataIn[11:8];
@@ -108,12 +108,12 @@ module stcRegs(
         if (cs) begin
             casex (addr)
                 `STC_CLOCKS_PER_BIT:    dataOut = {
-                                            15'h0, spectrumInvert, 
+                                            15'h0, spectrumInvert,
                                             clocksPerBit
                                         };
-                `STC_PILOT_OFFSET:      dataOut = {20'h0, pilotOffset};
+                `STC_HX_THRESH:      dataOut = {20'h0, hxThreshSlv};
                 `STC_DAC_SELECT:        dataOut = {
-                                            8'h0, 
+                                            8'h0,
                                             4'h0, dac2Select,
                                             4'h0, dac1Select,
                                             4'h0, dac0Select

@@ -75,8 +75,8 @@ ENTITY Brik2 IS
       ce,
       StartHPP,
       StartIn,
-      ValidIn        : IN  std_logic;
-      MiscBits,
+      ValidIn,
+      Mag0GtMag1     : IN  std_logic;
       InR,
       InI            : IN  SLV18;
       H0MagIn,
@@ -146,9 +146,10 @@ ARCHITECTURE rtl OF Brik2 IS
       clk,
       reset,
       StartHPP,
-      ce             : IN  std_logic;
+      ce,
       StartIn,
-      ValidIn        : IN  std_logic;
+      ValidIn,
+      Mag0GtMag1     : IN  std_logic;
       InR,
       InI            : IN  SLV18;
       m_ndx0,
@@ -548,6 +549,7 @@ BEGIN
          ce             => ce,
          StartIn        => StartIn,
          ValidIn        => ValidIn,
+         Mag0GtMag1     => Mag0GtMag1,
          InR            => InR,
          InI            => InI,
          H0Mag          => H0MagIn,

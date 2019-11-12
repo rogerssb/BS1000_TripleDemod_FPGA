@@ -32,6 +32,7 @@ Dependencies:
 9-6-16 Initial release FZ
 
 10-25-19 Removed MiscBit selection on TrellisOffset polarity
+11-12-19 Removed most MiscBits, Mag0GtMag1 requires 2:1 to switch
 -------------------------------------------------------------
 */
 
@@ -51,6 +52,7 @@ ENTITY STC IS
       ResampleR,
       ResampleI         : IN  SLV18;
       ClocksPerBit      : IN  SLV16;
+      HxThreshSlv       : IN  SLV12;
       DacSelect0,
       DacSelect1,
       DacSelect2        : IN  SLV4;
@@ -139,8 +141,8 @@ ARCHITECTURE rtl OF STC IS
          ce,
          StartHPP,
          StartIn,
-         ValidIn        : IN  std_logic;
-         MiscBits,
+         ValidIn,
+         Mag0GtMag1     : IN  std_logic;
          InR,
          InI            : IN  SLV18;
          H0MagIn,
@@ -301,8 +303,7 @@ ARCHITECTURE rtl OF STC IS
             interpOutEn,
             lastSampleReset,
             EstimatesDone     : std_logic;
-   SIGNAL   TrellisBits,
-            OffsetPS          : SLV4;
+   SIGNAL   TrellisBits       : SLV4;
    SIGNAL   PhaseDiffEnDly    : SLV8;
    SIGNAL   StartOffset       : SLV16;
    SIGNAL   RealOutPS,
@@ -356,20 +357,18 @@ ARCHITECTURE rtl OF STC IS
             Reload            : std_logic;
    SIGNAL   deltaTauEstSlv    : std_logic_vector(5 downto 0);
    SIGNAL   PilotOffset_s     : SFixed(8 downto 0);
-   SIGNAL   H0Mag_u,
-            H1Mag_u           : ufixed(0 downto -12);
-
--- todo, remove
    SIGNAL   H0Phase,
             H1Phase           : SLV12;
    SIGNAL   H0Mag,
             H1Mag             : std_logic_vector(12 downto 0);
+   SIGNAL   H0Mag_u,
+            H1Mag_u           : ufixed(0 downto -12);
    SIGNAL   CorrPntr8to0      : std_logic_vector(8 downto 0);
+
+-- todo, remove
    SIGNAL   ExpectedData,
-            TrellisOffsetSlv,
             m_ndx0Slv,
             m_ndx1Slv         : SLV4;
-   SIGNAL   TrellisOffset     : signed(3 downto 0);
    SIGNAL   DataAddr          : ufixed(9 downto 0);
    SIGNAL   DataAddr_i        : natural range 0 to 1023;
    SIGNAL   Bert,
@@ -378,7 +377,6 @@ ARCHITECTURE rtl OF STC IS
             sample0i,
             MiscBits,
             HxPhase,
-            HxThreshSlv,
             InRBrik2Ila,
             InIBrik2Ila       : SLV18;
    SIGNAL   HxThresh          : ufixed(0 downto -11);
@@ -389,7 +387,7 @@ ARCHITECTURE rtl OF STC IS
    attribute mark_debug : string;
    attribute mark_debug of EstimatesDone,
                   StartIla, ValidIla, InRBrik2Ila, InIBrik2Ila, PilotFoundCE, PilotFoundPD,
-                  PhaseDiff, CorrPntr, m_ndx0Slv, m_ndx1Slv,
+                  PhaseDiff, CorrPntr, m_ndx0Slv, m_ndx1Slv, Mag0GtMag1,
                   H0Phase, H1Phase, H0Mag, H1Mag, deltaTauEstSlv,
                   DataOut, ClkOutEn, ValidData2047 : signal is "true";
 
@@ -514,7 +512,7 @@ BEGIN
          SpectrumInv    => SpectrumInv,
          ReIn           => ResampleR_s,
          ImIn           => ResampleI_s,
-         SearchRange    => MiscBits(7 downto 4),
+         SearchRange    => x"1",
          -- outputs
          PilotFound     => PilotFoundPD,
          PilotOffset    => PilotOffset_s,
@@ -540,7 +538,7 @@ BEGIN
    begin
       if (rising_edge(Clk186)) then
          PilotValidOutDly  <= PilotValidOut;
-         StartOffset       <= x"000" & MiscBits(15 downto 12);
+         StartOffset       <= x"0008";
          StartFrameOffset  <= resize(StartNextFrame + ufixed(StartOffset), StartFrameOffset);
          if (Reset2x) then
             PhaseDiffEnDly  <= (others=>'0');
@@ -561,9 +559,9 @@ BEGIN
    end process AFC_process;
 
    PhaseDiff      <= to_slv(PhaseDiff2) & 6x"00";
-   PhaseOut       <= Phase0B & 6x"00" when MiscBits(8) else HxPhase when (MiscBits(3)) else to_slv(PhsPeak);  -- Pilot Detect or Channel Est Phase select
+   PhaseOut       <= HxPhase when (MiscBits(3)) else to_slv(PhsPeak);  -- Pilot Detect or Channel Est Phase select
    PhsPeak        <= PhsPeak0 when Mag0GtMag1 else PhsPeak1;         -- Pilot Detect Phase select
-   HxPhase        <= (H0Phase & 6x"0") when Mag0GtMag1 else H1Phase & 6X"0";  -- Channel Est Phase select
+   HxPhase        <= (H0Phase & 6x"0") when Mag0GtMag1 else (H1Phase & 6X"0");  -- Channel Est Phase select
    StartOfFrame   <= PhaseDiffEn;
    PilotFound     <= PilotFoundPD and PilotFoundCE;
 
@@ -577,7 +575,7 @@ BEGIN
          PilotFound     => PilotFound,
          CorrPntr       => CorrPntr,
          StartNextFrame => StartNextFrame,
-         Offset         => OffsetPS,
+         Offset         => x"A",
          RealIn         => PilotRealOut,
          ImagIn         => PilotImagOut,
          RealOut        => RealOutPS,     -- 186Mhz
@@ -589,14 +587,13 @@ BEGIN
    VioPhase  : Vio2x18
       PORT MAP (
          clk         => Clk186,
-         probe_out0  => HxThreshSlv,
+         probe_out0  => open,
          probe_out1  => open,
          probe_out2  => open,
          probe_out3  => MiscBits,
-         probe_out4  => TrellisOffsetSlv,
-         probe_out5  => OffsetPS
+         probe_out4  => open,
+         probe_out5  => open
    );
-   TrellisOffset  <= signed(TrellisOffsetSlv);
 
    InterBrikClk : process(Clk186) is
    begin
@@ -623,9 +620,9 @@ BEGIN
          CE             => CE,
          StartIn        => StartInBrik2Dly,
          ValidIn        => ValidInBrik2Dly,
-         MiscBits       => MiscBits,
          InR            => to_slv(InRBrik2Dly),
          InI            => to_slv(InIBrik2Dly),
+         Mag0GtMag1     => Mag0GtMag1,
          H0MagIn        => H0Mag,
          H1MagIn        => H1Mag,
          PhaseOutA      => Phase0A,
@@ -652,8 +649,8 @@ BEGIN
    TP_Process : process(Clk186)
    begin
       if (rising_edge(Clk186)) then
-         m_ndx0Slv      <= std_logic_vector(TrellisOffset + to_signed(m_ndx0, 4));
-         m_ndx1Slv      <= std_logic_vector(TrellisOffset + to_signed(m_ndx1, 4));
+         m_ndx0Slv      <= std_logic_vector(to_signed(m_ndx0, 4));
+         m_ndx1Slv      <= std_logic_vector(to_signed(m_ndx1, 4));
          Ch0MuSlv       <= to_slv(Ch0Mu);
          Ch1MuSlv       <= to_slv(Ch1Mu);
          deltaTauEstSlv <= to_slv(DeltaTauEst);
@@ -743,7 +740,13 @@ BEGIN
          DacMux(15) <= (CorrPntr8to0 xor 9x"100") & 9x"00";  -- convert to two complement
 
          CorrPntr8to0 <= to_slv(CorrPntr(8 downto 0));
-         Mag0GtMag1   <= '1' when (H0Mag > H1Mag) else '0';
+         if (Reset) then
+            Mag0GtMag1 <= '0';
+         elsif (H0Mag_u > H1Mag_u sla 1) then
+            Mag0GtMag1   <= '1';
+         elsif (H1Mag_u > H0Mag_u sla 1) then
+            Mag0GtMag1   <= '0';
+         end if;
          PilotFoundCE <= '1' when (H0Mag_u > HxThresh) or (H1Mag_u > HxThresh) else '0';  -- about .15 at noise threshold
          if (CordicValid) then
             H0Mag_u  <= to_ufixed(H0Mag, H0Mag_u);
@@ -752,7 +755,7 @@ BEGIN
       end if;
    end process DacOutputs;
 
-   HxThresh <= to_ufixed(HxThreshSlv(11 downto 0), HxThresh);
+   HxThresh <= to_ufixed(HxThreshSlv, HxThresh);
 
    cordic0 : vm_cordic_fast
       GENERIC MAP (

@@ -210,6 +210,18 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Compiling entity FireberdDrive
 -- Compiling architecture rtl of FireberdDrive
 
+} {} {}} {C:\Semco\Vivado\Demods\stcDemod/STC.vhd} {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/STC.vhd
+Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package fixed_pkg
+-- Loading package MATH_REAL
+-- Loading package Semco_pkg
+-- Compiling entity STC
+-- Compiling architecture rtl of STC
+
 } {} {}} C:/Semco/Vivado/Demods/stcDemod/frameAlignment.v {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/frameAlignment.v
 Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
 -- Compiling module frameAlignment
@@ -230,13 +242,6 @@ Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
 
 Top level modules:
 	acsStage0and1
-
-} {} {}} C:/Semco/Vivado/Demods/stcDemodTop.v {1 {vlog -work work +incdir+C:/Semco/Vivado/Demods +define+STC_DEMOD -stats=none C:/Semco/Vivado/Demods/stcDemodTop.v
-Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
--- Compiling module stcDemodTop
-
-Top level modules:
-	stcDemodTop
 
 } {} {}} C:/Semco/Vivado/Demods/stcModTopRegs.v {1 {vlog -work work +incdir+C:/Semco/Vivado/Demods +define+STC_MOD -stats=none C:/Semco/Vivado/Demods/stcModTopRegs.v
 Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
