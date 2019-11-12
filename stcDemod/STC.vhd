@@ -320,8 +320,6 @@ ARCHITECTURE rtl OF STC IS
             Ch0Mu,
             Ch1Mu             : Float_1_18;
    SIGNAL   PhaseDiff2        : sfixed(0 downto -11);
-   SIGNAL   PhaseDiff1Gain,
-            PhaseDiff2Gain    : sfixed(9 downto -8);
    SIGNAL   m_ndx0,
             m_ndx1            : integer range -5 to 3 := 0;
    SIGNAL   DeltaTauEst       : sfixed(0 downto -5);
@@ -338,8 +336,7 @@ ARCHITECTURE rtl OF STC IS
             Ch1MuSlv,
             PhsLastPeak       : SLV18;
    SIGNAL   Phase0A,
-            Phase0B,
-            PhaseDiffSlv      : SLV12;
+            Phase0B           : SLV12;
    SIGNAL   StartCount        : integer range 0 to 3 := 0;
    SIGNAL   PilotPulse,
             PilotValidOut     : std_logic;
@@ -392,7 +389,7 @@ ARCHITECTURE rtl OF STC IS
    attribute mark_debug : string;
    attribute mark_debug of EstimatesDone,
                   StartIla, ValidIla, InRBrik2Ila, InIBrik2Ila, PilotFoundCE, PilotFoundPD,
-                  PhaseDiffSlv, CorrPntr, m_ndx0Slv, m_ndx1Slv,
+                  PhaseDiff, CorrPntr, m_ndx0Slv, m_ndx1Slv,
                   H0Phase, H1Phase, H0Mag, H1Mag, deltaTauEstSlv,
                   DataOut, ClkOutEn, ValidData2047 : signal is "true";
 
@@ -403,7 +400,6 @@ BEGIN
    begin
       if (rising_edge(Clk186)) then
 -- TODO remove ILAs
-         PhaseDiffSlv <= to_slv(PhaseDiff2);
          InRBrik2Ila <= to_slv(InRBrik2Dly);
          InIBrik2Ila <= to_slv(InIBrik2Dly);
          StartIla    <= StartInBrik2Dly;
@@ -735,7 +731,7 @@ BEGIN
          DacMux(3)  <= m_ndx1Slv & 14x"0";
          DacMux(4)  <= Phase0A & 6x"0";
          DacMux(5)  <= Phase0B & 6x"0";
-         DacMux(6)  <= to_slv(PhaseDiff2);
+         DacMux(6)  <= PhaseDiff;
          DacMux(7)  <= H0Phase & 6x"0";
          DacMux(8)  <= H1Phase & 6x"0";
          DacMux(9)  <= Magnitude0;                 -- iFFT H0 Magnitude every other sample

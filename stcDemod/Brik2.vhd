@@ -155,6 +155,10 @@ ARCHITECTURE rtl OF Brik2 IS
       m_ndx1         : IN  integer range -5 to 3;
       H0Mag,
       H1Mag          : IN  std_logic_vector(12 downto 0);
+      H0EstR,
+      H0EstI,
+      H1EstR,
+      H1EstI         : IN  STC_PARM;
       PhaseDiff      : OUT sfixed(0 downto -11);
       PhaseOutA,
       PhaseOutB      : OUT SLV12;
@@ -548,6 +552,10 @@ BEGIN
          InI            => InI,
          H0Mag          => H0MagIn,
          H1Mag          => H1MagIn,
+         H0EstR         => H0EstR,
+         H0EstI         => H0EstI,
+         H1EstR         => H1EstR,
+         H1EstI         => H1EstI,
          m_ndx0         => m_ndx0,
          m_ndx1         => m_ndx1,
          PhaseDiff      => PhaseDiff,

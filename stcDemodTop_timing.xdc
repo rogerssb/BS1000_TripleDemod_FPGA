@@ -18,7 +18,7 @@ create_generated_clock -name {cAndD1/pllDivider_reg[0]/Q} -source [get_ports pll
 
 set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets pll0_OUT1_IBUF]
 
-set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks fbClk] -group [get_clocks -include_generated_clocks sysClk] -group [get_clocks -include_generated_clocks pll0_OUT1] -group [get_clocks -include_generated_clocks pll1_OUT1] -group [get_clocks {cAndD0/dll/dllOutputClk_reg/Q {cAndD0/dllDivider_reg[0]/Q} {cAndD0/pllDivider_reg[0]/Q}}] -group [get_clocks {cAndD1/dll/dllOutputClk_reg/Q {cAndD1/dllDivider_reg[0]/Q} {cAndD1/pllDivider_reg[0]/Q}}]
+set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks fbClk] -group [get_clocks -include_generated_clocks sysClk] -group [get_clocks -include_generated_clocks pll0_OUT1] -group [get_clocks -include_generated_clocks pll1_OUT1] 
 
 set_input_delay -clock [get_clocks sysClk] -min -add_delay 0.000 [get_ports spiFlashMISO]
 set_input_delay -clock [get_clocks sysClk] -max -add_delay 2.000 [get_ports spiFlashMISO]

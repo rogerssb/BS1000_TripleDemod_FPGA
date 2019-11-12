@@ -86,6 +86,10 @@ ENTITY HalfPilotPhase IS
       m_ndx1         : IN  integer range -5 to 3;
       H0Mag,
       H1Mag          : IN  std_logic_vector(12 downto 0);
+      H0EstR,
+      H0EstI,
+      H1EstR,
+      H1EstI         : IN  STC_PARM;
       PhaseDiff      : OUT sfixed(0 downto -11);
       PhaseOutA,
       PhaseOutB      : OUT SLV12;
@@ -196,23 +200,28 @@ ARCHITECTURE rtl OF HalfPilotPhase IS
             CalcPhase,
             CordicStart,
             ValidCordic,
+            ValidCordicDly,
             PilotPacket       : std_logic;
-   SIGNAL   ReadR0,
-            ReadI0,
-            ReadR1,
-            ReadI1,
-            ReadR0Dly0,
-            ReadI0Dly0,
-            ReadR1Dly0,
-            ReadI1Dly0,
-            ReadR0Dly1,
-            ReadI0Dly1,
-            ReadR1Dly1,
-            ReadI1Dly1,
-            ReadR,
+   SIGNAL   ReadR0Dly,
+            ReadI0Dly,
+            ReadR1Dly,
+            ReadI1Dly        : FLOAT_ARRAY_1_18(2 downto 0);
+   SIGNAL   ReadR,
             ReadI,
             H0H1R,
             H0H1I,
+            H0RRNormd,
+            H0IRNormd,
+            H1RRNormd,
+            H1IRNormd,
+            H0RINormd,
+            H0IINormd,
+            H1RINormd,
+            H1IINormd,
+            H0EstRNorm,
+            H0EstINorm,
+            H1EstRNorm,
+            H1EstINorm,
             H0RNormd,
             H0INormd,
             H1RNormd,
@@ -264,8 +273,8 @@ BEGIN
    -- estimates are valid, use realigned pilot to check phase shift between first half and second
    -- half of the the pilot for a wideband frequency offset.
 
-   PhaseOutA <= to_slv(resize(Phase0A, 0, -11));
-   PhaseOutB <= to_slv(resize(Phase0B, 0, -11));
+   PhaseOutA <= to_slv(Phase0A);
+   PhaseOutB <= to_slv(Phase0B);
 
 
 
@@ -292,6 +301,10 @@ BEGIN
             H1SumIB        <= (others=>'0');
             H0MagNorm      <= (others=>'0');
             H1MagNorm      <= (others=>'0');
+            H0EstRNorm     <= (others=>'0');
+            H0EstINorm     <= (others=>'0');
+            H1EstRNorm     <= (others=>'0');
+            H1EstINorm     <= (others=>'0');
             Phase0A        <= (others=>'0');
             Phase0B        <= (others=>'0');
             Phase1A        <= (others=>'0');
@@ -305,22 +318,35 @@ BEGIN
             NormDone       <= '0';
             CalcPhaseDly   <= x"0";
          elsif (ce) then
+            ValidCordicDly <= ValidCordic;
             if (StartHPP) then
                CmplxCount  <= 0;
                H0AccR      <= (others=>'0');    -- setup for first half
                H0AccI      <= (others=>'0');
                H1AccR      <= (others=>'0');
                H1AccI      <= (others=>'0');
-               H0MagNorm   <= to_sfixed(H0Mag, 0 , -12);
-               H1MagNorm   <= to_sfixed(H1Mag, 0 , -12);
-               Normalize      <= '1';
+               H0MagNorm   <= to_sfixed(H0Mag, H0MagNorm);
+               H1MagNorm   <= to_sfixed(H1Mag, H1MagNorm);
+               H0EstRNorm  <= H0EstR;
+               H0EstINorm  <= H0EstI;
+               H1EstRNorm  <= H1EstR;
+               H1EstINorm  <= H1EstI;
+               Normalize   <= '1';
             elsif (Normalize) then        -- normalize mags till max is in 0.25 to 0.5 range
                if (H0MagNorm < 0.25) and (H1MagNorm < 0.25) then
-                  H0MagNorm <= resize(H0MagNorm + H0MagNorm, H0MagNorm);   -- multiply by 2
-                  H1MagNorm <= resize(H1MagNorm + H1MagNorm, H1MagNorm);
+                  H0MagNorm   <= H0MagNorm  sla 1;   -- multiply by 2
+                  H1MagNorm   <= H1MagNorm  sla 1;
+                  H0EstRNorm  <= H0EstRNorm sla 1;
+                  H0EstINorm  <= H0EstINorm sla 1;
+                  H1EstRNorm  <= H1EstRNorm sla 1;
+                  H1EstINorm  <= H1EstINorm sla 1;
                elsif (H0MagNorm >= 0.5) or (H1MagNorm >= 0.5) then
-                  H0MagNorm <= resize(H0MagNorm sra 1, H0MagNorm);   -- divide by 2
-                  H1MagNorm <= resize(H1MagNorm sra 1, H1MagNorm);
+                  H0MagNorm   <= H0MagNorm  sra 1;   -- divide by 2
+                  H1MagNorm   <= H1MagNorm  sra 1;
+                  H0EstRNorm  <= H0EstRNorm sra 1;
+                  H0EstINorm  <= H0EstINorm sra 1;
+                  H1EstRNorm  <= H1EstRNorm sra 1;
+                  H1EstINorm  <= H1EstINorm sra 1;
                else
                   Normalize <= '0';
                   NormDone  <= '1';
@@ -364,10 +390,15 @@ BEGIN
                else     -- process is done and count is reset to 0
                   Phase0B <= to_sfixed(Phase0, Phase0B);
                   Phase1B <= to_sfixed(Phase1, Phase1B);
+               end if;
+            end if;
+
+            if (ValidCordicDly) then
+               if (CmplxCount = 0) then
                   if (H0GtH1) then
-                        PhaseDiff <= resize(to_sfixed(Phase0, Phase0A) - Phase0A, PhaseDiff);
+                        PhaseDiff <= resize(Phase0B - Phase0A, PhaseDiff);
                   else
-                        PhaseDiff <= resize(to_sfixed(Phase1, Phase1A) - Phase1A, PhaseDiff);
+                        PhaseDiff <= resize(Phase1B - Phase1A, PhaseDiff);
                   end if;
                end if;
             else     -- if  phases rollover 180°...
@@ -426,7 +457,7 @@ BEGIN
          FILENAME    => "",
          DATA_WIDTH  => 18,
          ADDR_WIDTH  => 9,
-         LATENCY     => 2
+         LATENCY     => 3
       )
       PORT MAP(
          clk         => clk,
@@ -446,7 +477,7 @@ BEGIN
          FILENAME    => "",
          DATA_WIDTH  => 18,
          ADDR_WIDTH  => 9,
-         LATENCY     => 2
+         LATENCY     => 3
       )
       PORT MAP(
          clk         => clk,
@@ -509,31 +540,31 @@ BEGIN
    H0H1Process : process(clk)
    begin
       if (rising_edge(clk)) then
-         H0RNormd    <= resize(H0R * H0MagNorm, H0RNormd);
-         H0INormd    <= resize(H0I * H0MagNorm, H0INormd);
-         H1RNormd    <= resize(H1R * H1MagNorm, H0RNormd);
-         H1INormd    <= resize(H1I * H1MagNorm, H0INormd);
+         H0RRNormd    <= resize(H0R * H0EstRNorm, H0RNormd);
+         H0IRNormd    <= resize(H0I * H0EstRNorm, H0INormd);
+         H0RINormd    <= resize(H0R * H0EstINorm, H0RNormd);
+         H0IINormd    <= resize(H0I * H0EstINorm, H0INormd);
+         H1RRNormd    <= resize(H1R * H1EstRNorm, H0RNormd);
+         H1IRNormd    <= resize(H1I * H1EstRNorm, H0INormd);
+         H1RINormd    <= resize(H1R * H1EstINorm, H0RNormd);
+         H1IINormd    <= resize(H1I * H1EstINorm, H0INormd);
+         H0RNormd    <= resize(H0RRNormd - H0IINormd, H0RNormd);
+         H0INormd    <= resize(H0RINormd + H0IRNormd, H0RNormd);
+         H1RNormd    <= resize(H1RRNormd - H1IINormd, H1RNormd);
+         H1INormd    <= resize(H1RINormd + H1IRNormd, H1RNormd);
          H0H1R       <= resize(H0RNormd + H1RNormd, H0H1R);
          H0H1I       <= not(resize(H0INormd + H1INormd, H0H1I));  -- use conjugate
-         ReadR0      <= to_sfixed(PilotCaptureR0_slv, ReadR0);
-         ReadI0      <= to_sfixed(PilotCaptureI0_slv, ReadI0);
-         ReadR1      <= to_sfixed(PilotCaptureR1_slv, ReadR1);
-         ReadI1      <= to_sfixed(PilotCaptureI1_slv, ReadI1);
-         ReadR0Dly0  <= ReadR0;
-         ReadI0Dly0  <= ReadI0;
-         ReadR1Dly0  <= ReadR1;
-         ReadI1Dly0  <= ReadI1;
-         ReadR0Dly1  <= ReadR0Dly0;
-         ReadI0Dly1  <= ReadI0Dly0;
-         ReadR1Dly1  <= ReadR1Dly0;
-         ReadI1Dly1  <= ReadI1Dly0;
+         ReadR0Dly   <= ReadR0Dly(ReadR0Dly'left-1 downto 0) & to_sfixed(PilotCaptureR0_slv, ReadR0Dly(0));
+         ReadI0Dly   <= ReadI0Dly(ReadR0Dly'left-1 downto 0) & to_sfixed(PilotCaptureI0_slv, ReadI0Dly(0));
+         ReadR1Dly   <= ReadR1Dly(ReadR0Dly'left-1 downto 0) & to_sfixed(PilotCaptureR1_slv, ReadR1Dly(0));
+         ReadI1Dly   <= ReadI1Dly(ReadR0Dly'left-1 downto 0) & to_sfixed(PilotCaptureI1_slv, ReadI1Dly(0));
       end if;
    end process H0H1Process;
 
    CmplxMultH0 : CmplxMult
       GENERIC MAP (
-         IN_LEFT     => ReadR0Dly0'left,
-         IN_RIGHT    => ReadR0Dly0'right,
+         IN_LEFT     => H0R'left,
+         IN_RIGHT    => H0R'right,
          OUT_LEFT    => CmplxH0r'left,
          OUT_BINPT   => CmplxH0r'right
       )
@@ -544,8 +575,8 @@ BEGIN
          ValidIn     => CalcPhaseDly(3),
          StartIn     => '0',
          ReadyIn     => '1',
-         ReInA       => ReadR0Dly1,
-         ImInA       => ReadI0Dly1,
+         ReInA       => ReadR0Dly(ReadR0Dly'left),
+         ImInA       => ReadI0Dly(ReadR0Dly'left),
          ReInB       => H0H1R,
          ImInB       => H0H1I,
          ReOut       => CmplxH0r,
@@ -556,8 +587,8 @@ BEGIN
 
    CmplxMultH1 : CmplxMult
       GENERIC MAP (
-         IN_LEFT     => ReadR1Dly0'left,
-         IN_RIGHT    => ReadR1Dly0'right,
+         IN_LEFT     => H0R'left,
+         IN_RIGHT    => H0R'right,
          OUT_LEFT    => CmplxH1r'left,
          OUT_BINPT   => CmplxH1r'right
       )
@@ -568,8 +599,8 @@ BEGIN
          ValidIn     => CalcPhaseDly(3),
          StartIn     => '0',
          ReadyIn     => '1',
-         ReInA       => ReadR1Dly1,
-         ImInA       => ReadI1Dly1,
+         ReInA       => ReadR1Dly(ReadR1Dly'left),
+         ImInA       => ReadI1Dly(ReadR1Dly'left),
          ReInB       => H0H1R,
          ImInB       => H0H1I,
          ReOut       => CmplxH1r,
@@ -674,6 +705,7 @@ BEGIN
    H0I      <= to_sfixed(H0Islv, H0I);
    H1R      <= to_sfixed(H1Rslv, H1R);
    H1I      <= to_sfixed(H1Islv, H1I);
+
    CordicR0 <= resize(H0SumRA, CordicR0) when (CmplxCount > 0) else resize(H0SumRB, CordicR0);
    CordicI0 <= resize(H0SumIA, CordicR0) when (CmplxCount > 0) else resize(H0SumIB, CordicR0);
    CordicR1 <= resize(H1SumRA, CordicR0) when (CmplxCount > 0) else resize(H1SumRB, CordicR0);
