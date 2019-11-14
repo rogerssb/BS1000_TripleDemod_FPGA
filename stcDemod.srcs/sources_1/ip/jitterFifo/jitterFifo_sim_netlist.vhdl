@@ -1,14 +1,14 @@
 -- Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
--- Tool Version: Vivado v.2017.2 (win64) Build 1909853 Thu Jun 15 18:39:09 MDT 2017
--- Date        : Thu Jun  6 15:10:08 2019
--- Host        : SEMCO1039 running 64-bit major release  (build 9200)
--- Command     : write_vhdl -force -mode funcsim -rename_top jitterFifo -prefix
---               jitterFifo_ jitterFifo_sim_netlist.vhdl
+-- Tool Version: Vivado v.2017.2.1 (win64) Build 1957588 Wed Aug  9 16:32:24 MDT 2017
+-- Date        : Wed Nov 13 17:30:30 2019
+-- Host        : SEMCO_1039B running 64-bit major release  (build 9200)
+-- Command     : write_vhdl -force -mode funcsim
+--               C:/Semco/Vivado/Demods/stcDemod.srcs/sources_1/ip/jitterFifo/jitterFifo_sim_netlist.vhdl
 -- Design      : jitterFifo
 -- Purpose     : This VHDL netlist is a functional simulation representation of the design and should not be modified or
 --               synthesized. This netlist cannot be used for SDF annotated simulation.
--- Device      : xc7k325tfbg676-2
+-- Device      : xc7k160tfbg676-2
 -- --------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
@@ -26,6 +26,8 @@ entity jitterFifo_dmem is
     rd_clk : in STD_LOGIC;
     AR : in STD_LOGIC_VECTOR ( 0 to 0 )
   );
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of jitterFifo_dmem : entity is "dmem";
 end jitterFifo_dmem;
 
 architecture STRUCTURE of jitterFifo_dmem is
@@ -109,6 +111,8 @@ entity jitterFifo_rd_bin_cntr is
     rd_clk : in STD_LOGIC;
     AR : in STD_LOGIC_VECTOR ( 0 to 0 )
   );
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of jitterFifo_rd_bin_cntr : entity is "rd_bin_cntr";
 end jitterFifo_rd_bin_cntr;
 
 architecture STRUCTURE of jitterFifo_rd_bin_cntr is
@@ -291,6 +295,8 @@ entity jitterFifo_rd_status_flags_as is
     AR : in STD_LOGIC_VECTOR ( 0 to 0 );
     rd_en : in STD_LOGIC
   );
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of jitterFifo_rd_status_flags_as : entity is "rd_status_flags_as";
 end jitterFifo_rd_status_flags_as;
 
 architecture STRUCTURE of jitterFifo_rd_status_flags_as is
@@ -353,6 +359,8 @@ entity jitterFifo_synchronizer_ff is
     in0 : in STD_LOGIC_VECTOR ( 0 to 0 );
     rd_clk : in STD_LOGIC
   );
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of jitterFifo_synchronizer_ff : entity is "synchronizer_ff";
 end jitterFifo_synchronizer_ff;
 
 architecture STRUCTURE of jitterFifo_synchronizer_ff is
@@ -899,6 +907,8 @@ entity jitterFifo_wr_bin_cntr is
     wr_en : in STD_LOGIC;
     \out\ : in STD_LOGIC
   );
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of jitterFifo_wr_bin_cntr : entity is "wr_bin_cntr";
 end jitterFifo_wr_bin_cntr;
 
 architecture STRUCTURE of jitterFifo_wr_bin_cntr is
@@ -1185,6 +1195,8 @@ entity jitterFifo_wr_pf_as is
     wr_rst_busy : in STD_LOGIC;
     ram_full_fb_i_reg : in STD_LOGIC
   );
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of jitterFifo_wr_pf_as : entity is "wr_pf_as";
 end jitterFifo_wr_pf_as;
 
 architecture STRUCTURE of jitterFifo_wr_pf_as is
@@ -1241,6 +1253,8 @@ entity jitterFifo_wr_status_flags_as is
     \grstd1.grst_full.grst_f.rst_d2_reg\ : in STD_LOGIC;
     wr_en : in STD_LOGIC
   );
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of jitterFifo_wr_status_flags_as : entity is "wr_status_flags_as";
 end jitterFifo_wr_status_flags_as;
 
 architecture STRUCTURE of jitterFifo_wr_status_flags_as is
@@ -1313,6 +1327,8 @@ entity jitterFifo_clk_x_pntrs is
     \ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1]\ : in STD_LOGIC_VECTOR ( 0 to 0 );
     \gc0.count_d1_reg[2]\ : in STD_LOGIC_VECTOR ( 2 downto 0 )
   );
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of jitterFifo_clk_x_pntrs : entity is "clk_x_pntrs";
 end jitterFifo_clk_x_pntrs;
 
 architecture STRUCTURE of jitterFifo_clk_x_pntrs is
@@ -1678,6 +1694,8 @@ entity jitterFifo_memory is
     rd_clk : in STD_LOGIC;
     AR : in STD_LOGIC_VECTOR ( 0 to 0 )
   );
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of jitterFifo_memory : entity is "memory";
 end jitterFifo_memory;
 
 architecture STRUCTURE of jitterFifo_memory is
@@ -1712,6 +1730,8 @@ entity jitterFifo_rd_logic is
     AR : in STD_LOGIC_VECTOR ( 0 to 0 );
     rd_en : in STD_LOGIC
   );
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of jitterFifo_rd_logic : entity is "rd_logic";
 end jitterFifo_rd_logic;
 
 architecture STRUCTURE of jitterFifo_rd_logic is
@@ -1752,6 +1772,8 @@ entity jitterFifo_reset_blk_ramfifo is
     wr_clk : in STD_LOGIC;
     rst : in STD_LOGIC
   );
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of jitterFifo_reset_blk_ramfifo : entity is "reset_blk_ramfifo";
 end jitterFifo_reset_blk_ramfifo;
 
 architecture STRUCTURE of jitterFifo_reset_blk_ramfifo is
@@ -2049,6 +2071,8 @@ entity jitterFifo_wr_logic is
     wr_rst_busy : in STD_LOGIC;
     \gnxpm_cdc.rd_pntr_bin_reg[3]\ : in STD_LOGIC_VECTOR ( 3 downto 0 )
   );
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of jitterFifo_wr_logic : entity is "wr_logic";
 end jitterFifo_wr_logic;
 
 architecture STRUCTURE of jitterFifo_wr_logic is
@@ -2110,6 +2134,8 @@ entity jitterFifo_fifo_generator_ramfifo is
     rst : in STD_LOGIC;
     din : in STD_LOGIC_VECTOR ( 2 downto 0 )
   );
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of jitterFifo_fifo_generator_ramfifo : entity is "fifo_generator_ramfifo";
 end jitterFifo_fifo_generator_ramfifo;
 
 architecture STRUCTURE of jitterFifo_fifo_generator_ramfifo is
@@ -2231,6 +2257,8 @@ entity jitterFifo_fifo_generator_top is
     rst : in STD_LOGIC;
     din : in STD_LOGIC_VECTOR ( 2 downto 0 )
   );
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of jitterFifo_fifo_generator_top : entity is "fifo_generator_top";
 end jitterFifo_fifo_generator_top;
 
 architecture STRUCTURE of jitterFifo_fifo_generator_top is
@@ -2268,6 +2296,8 @@ entity jitterFifo_fifo_generator_v13_1_4_synth is
     rst : in STD_LOGIC;
     din : in STD_LOGIC_VECTOR ( 2 downto 0 )
   );
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of jitterFifo_fifo_generator_v13_1_4_synth : entity is "fifo_generator_v13_1_4_synth";
 end jitterFifo_fifo_generator_v13_1_4_synth;
 
 architecture STRUCTURE of jitterFifo_fifo_generator_v13_1_4_synth is
@@ -2929,6 +2959,8 @@ entity jitterFifo_fifo_generator_v13_1_4 is
   attribute C_WR_PNTR_WIDTH_WRCH of jitterFifo_fifo_generator_v13_1_4 : entity is 4;
   attribute C_WR_RESPONSE_LATENCY : integer;
   attribute C_WR_RESPONSE_LATENCY of jitterFifo_fifo_generator_v13_1_4 : entity is 1;
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of jitterFifo_fifo_generator_v13_1_4 : entity is "fifo_generator_v13_1_4";
 end jitterFifo_fifo_generator_v13_1_4;
 
 architecture STRUCTURE of jitterFifo_fifo_generator_v13_1_4 is
@@ -3487,7 +3519,7 @@ entity jitterFifo is
   attribute downgradeipidentifiedwarnings : string;
   attribute downgradeipidentifiedwarnings of jitterFifo : entity is "yes";
   attribute x_core_info : string;
-  attribute x_core_info of jitterFifo : entity is "fifo_generator_v13_1_4,Vivado 2017.2";
+  attribute x_core_info of jitterFifo : entity is "fifo_generator_v13_1_4,Vivado 2017.2.1";
 end jitterFifo;
 
 architecture STRUCTURE of jitterFifo is

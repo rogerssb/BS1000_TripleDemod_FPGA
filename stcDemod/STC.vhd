@@ -362,13 +362,16 @@ ARCHITECTURE rtl OF STC IS
    SIGNAL   H0Mag,
             H1Mag             : std_logic_vector(12 downto 0);
    SIGNAL   H0Mag_u,
-            H1Mag_u           : ufixed(0 downto -12);
+            H1Mag_u,
+            HxThresh          : ufixed(0 downto -12);
    SIGNAL   CorrPntr8to0      : std_logic_vector(8 downto 0);
 
 -- todo, remove
    SIGNAL   ExpectedData,
+            TrellisOffsetSlv,
             m_ndx0Slv,
             m_ndx1Slv         : SLV4;
+   SIGNAL   TrellisOffset     : signed(3 downto 0);
    SIGNAL   DataAddr          : ufixed(9 downto 0);
    SIGNAL   DataAddr_i        : natural range 0 to 1023;
    SIGNAL   Bert,
@@ -379,7 +382,6 @@ ARCHITECTURE rtl OF STC IS
             HxPhase,
             InRBrik2Ila,
             InIBrik2Ila       : SLV18;
-   SIGNAL   HxThresh          : ufixed(0 downto -11);
    signal   StartIla,
             ValidIla          : std_logic;
    signal   DacMux            : vector_of_slvs(0 to 15)(17 downto 0);
@@ -591,9 +593,10 @@ BEGIN
          probe_out1  => open,
          probe_out2  => open,
          probe_out3  => MiscBits,
-         probe_out4  => open,
+         probe_out4  => TrellisOffsetSlv,
          probe_out5  => open
    );
+   TrellisOffset  <= signed(TrellisOffsetSlv);
 
    InterBrikClk : process(Clk186) is
    begin
@@ -649,8 +652,8 @@ BEGIN
    TP_Process : process(Clk186)
    begin
       if (rising_edge(Clk186)) then
-         m_ndx0Slv      <= std_logic_vector(to_signed(m_ndx0, 4));
-         m_ndx1Slv      <= std_logic_vector(to_signed(m_ndx1, 4));
+         m_ndx0Slv      <= std_logic_vector(TrellisOffset + to_signed(m_ndx0, 4));
+         m_ndx1Slv      <= std_logic_vector(TrellisOffset + to_signed(m_ndx1, 4));
          Ch0MuSlv       <= to_slv(Ch0Mu);
          Ch1MuSlv       <= to_slv(Ch1Mu);
          deltaTauEstSlv <= to_slv(DeltaTauEst);
@@ -727,7 +730,7 @@ BEGIN
          DacMux(2)  <= m_ndx0Slv & 14x"0";
          DacMux(3)  <= m_ndx1Slv & 14x"0";
          DacMux(4)  <= Phase0A & 6x"0";
-         DacMux(5)  <= Phase0B & 6x"0";
+         DacMux(5)  <= PhaseOut;
          DacMux(6)  <= PhaseDiff;
          DacMux(7)  <= H0Phase & 6x"0";
          DacMux(8)  <= H1Phase & 6x"0";
@@ -737,7 +740,7 @@ BEGIN
          DacMux(12) <= PhaseOut1;                  -- H1
          DacMux(13) <= MagPeak0;                    -- Peak Magnitude per frame
          DacMux(14) <= PhsPeak0;                    -- Full Pilot Phase at peak magnitude
-         DacMux(15) <= (CorrPntr8to0 xor 9x"100") & 9x"00";  -- convert to two complement
+         DacMux(15) <= PilotOffset & 9x"00";
 
          CorrPntr8to0 <= to_slv(CorrPntr(8 downto 0));
          if (Reset) then
@@ -755,7 +758,7 @@ BEGIN
       end if;
    end process DacOutputs;
 
-   HxThresh <= to_ufixed(HxThreshSlv, HxThresh);
+   HxThresh <= to_ufixed('0' & HxThreshSlv, HxThresh);
 
    cordic0 : vm_cordic_fast
       GENERIC MAP (

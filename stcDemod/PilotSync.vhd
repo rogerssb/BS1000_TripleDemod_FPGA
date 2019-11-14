@@ -139,7 +139,7 @@ BEGIN
       end if;
    end process IlaProcess;
 
-   PilotValid  <= '1' when (PilotPulseIn = '1') and ((PilotFound = '0') or (FrmSmplCount > FRAME_LENGTH_4 - 256) or (Missed = '1')) else '0'; -- pulse should be at 13312
+   PilotValid  <= '1' when ((PilotPulseIn = '1') and ((PilotFound = '0') or (FrmSmplCount > FRAME_LENGTH_4 - 256))) else '0'; -- pulse should be at 13312
 
    ClkProcess: process (clk)
    begin
@@ -231,7 +231,7 @@ BEGIN
                Captured        <= '1';
                FrmSmplCount <= 0;
             -- if we don't get a PilotValid for a frame, the RdAddr should continue but need a new Start sequence
-            elsif (FrmSmplCount >= FRAME_LENGTH_4 + MISSED_PILOT + 512) then    -- maintain sync over missed pilots, should have gone off 12 samples and one packet ago
+            elsif (FrmSmplCount >= FRAME_LENGTH_4 + MISSED_PILOT) then    -- maintain sync over missed pilots, should have gone off 12 samples and one packet ago
                FrmSmplCount <= FrmSmplCount - FRAME_LENGTH_4 + 1;
                Missed <= '1';
             elsif (ValidIn) then

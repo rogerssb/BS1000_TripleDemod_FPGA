@@ -386,7 +386,7 @@ architecture rtl of PilotDetectSliding is
             AbsCntr1_Ila      : SLV18;
 
    attribute mark_debug : string;
-   attribute mark_debug of PilotMag_Ila, PilotFound, Peak1_Ila, Peak2_Ila,
+   attribute mark_debug of PilotMag_Ila, PilotFound, Peak1_Ila, Peak2_Ila, BadPilot,
              AbsCntr0_Ila, AbsCntr1_Ila, AbsIndex, PrevIndex : signal is "true";
 begin
 
@@ -938,7 +938,7 @@ begin
                   MagPeak1_u     <= MagDelay1(0);
                   PhsPeak1_u     <= PhsDelay1(0);
                end if;
-               if (PilotMag > Threshold) and (Peak1 > (Peak2 sla 2)) then  -- even at noise threshold, peaks are still 4:1
+               if (PilotMag > Threshold) and (Peak1 > (Peak2 sla 1)) then  -- even at noise threshold, peaks are still 2:1
                   BadPilot <= 0;
                   if (GoodPilot < 2) then
                      GoodPilot <= GoodPilot + 1;   -- 3 good frames in a row = found

@@ -1,14 +1,14 @@
 -- Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
--- Tool Version: Vivado v.2017.2 (win64) Build 1909853 Thu Jun 15 18:39:09 MDT 2017
--- Date        : Tue Jul 30 20:55:57 2019
--- Host        : SEMCO1039 running 64-bit major release  (build 9200)
--- Command     : write_vhdl -force -mode funcsim -rename_top Fifo8k4to1 -prefix
---               Fifo8k4to1_ Fifo8k4to1_sim_netlist.vhdl
+-- Tool Version: Vivado v.2017.2.1 (win64) Build 1957588 Wed Aug  9 16:32:24 MDT 2017
+-- Date        : Wed Nov 13 17:30:28 2019
+-- Host        : SEMCO_1039B running 64-bit major release  (build 9200)
+-- Command     : write_vhdl -force -mode funcsim
+--               C:/Semco/Vivado/Demods/stcDemod.srcs/sources_1/ip/Fifo8k4to1/Fifo8k4to1_sim_netlist.vhdl
 -- Design      : Fifo8k4to1
 -- Purpose     : This VHDL netlist is a functional simulation representation of the design and should not be modified or
 --               synthesized. This netlist cannot be used for SDF annotated simulation.
--- Device      : xc7k325tfbg676-2
+-- Device      : xc7k160tfbg676-2
 -- --------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
@@ -26,6 +26,8 @@ entity Fifo8k4to1_blk_mem_gen_prim_wrapper is
     din : in STD_LOGIC_VECTOR ( 3 downto 0 );
     WEA : in STD_LOGIC_VECTOR ( 0 to 0 )
   );
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of Fifo8k4to1_blk_mem_gen_prim_wrapper : entity is "blk_mem_gen_prim_wrapper";
 end Fifo8k4to1_blk_mem_gen_prim_wrapper;
 
 architecture STRUCTURE of Fifo8k4to1_blk_mem_gen_prim_wrapper is
@@ -282,6 +284,8 @@ entity Fifo8k4to1_compare is
     \gcc0.gc0.count_d1_reg[10]\ : in STD_LOGIC;
     \gc0.count_d1_reg[14]\ : in STD_LOGIC
   );
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of Fifo8k4to1_compare : entity is "compare";
 end Fifo8k4to1_compare;
 
 architecture STRUCTURE of Fifo8k4to1_compare is
@@ -565,6 +569,8 @@ entity Fifo8k4to1_dc_ss is
     ram_full_fb_i_reg_0 : in STD_LOGIC_VECTOR ( 3 downto 0 );
     ram_full_fb_i_reg_1 : in STD_LOGIC_VECTOR ( 3 downto 0 )
   );
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of Fifo8k4to1_dc_ss : entity is "dc_ss";
 end Fifo8k4to1_dc_ss;
 
 architecture STRUCTURE of Fifo8k4to1_dc_ss is
@@ -866,6 +872,8 @@ entity Fifo8k4to1_rd_bin_cntr is
     \out\ : in STD_LOGIC;
     rd_en : in STD_LOGIC
   );
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of Fifo8k4to1_rd_bin_cntr : entity is "rd_bin_cntr";
 end Fifo8k4to1_rd_bin_cntr;
 
 architecture STRUCTURE of Fifo8k4to1_rd_bin_cntr is
@@ -1535,6 +1543,8 @@ entity Fifo8k4to1_wr_bin_cntr is
     \gc0.count_d1_reg[14]\ : in STD_LOGIC_VECTOR ( 12 downto 0 );
     \gc0.count_reg[13]\ : in STD_LOGIC_VECTOR ( 11 downto 0 )
   );
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of Fifo8k4to1_wr_bin_cntr : entity is "wr_bin_cntr";
 end Fifo8k4to1_wr_bin_cntr;
 
 architecture STRUCTURE of Fifo8k4to1_wr_bin_cntr is
@@ -2437,6 +2447,8 @@ entity Fifo8k4to1_wr_pf_ss is
     \gcc0.gc0.count_d1_reg[12]\ : in STD_LOGIC_VECTOR ( 0 to 0 );
     E : in STD_LOGIC_VECTOR ( 0 to 0 )
   );
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of Fifo8k4to1_wr_pf_ss : entity is "wr_pf_ss";
 end Fifo8k4to1_wr_pf_ss;
 
 architecture STRUCTURE of Fifo8k4to1_wr_pf_ss is
@@ -2597,6 +2609,8 @@ entity Fifo8k4to1_blk_mem_gen_prim_width is
     din : in STD_LOGIC_VECTOR ( 3 downto 0 );
     WEA : in STD_LOGIC_VECTOR ( 0 to 0 )
   );
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of Fifo8k4to1_blk_mem_gen_prim_width : entity is "blk_mem_gen_prim_width";
 end Fifo8k4to1_blk_mem_gen_prim_width;
 
 architecture STRUCTURE of Fifo8k4to1_blk_mem_gen_prim_width is
@@ -2644,6 +2658,8 @@ entity Fifo8k4to1_rd_status_flags_ss is
     wr_en : in STD_LOGIC;
     DI : in STD_LOGIC_VECTOR ( 1 downto 0 )
   );
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of Fifo8k4to1_rd_status_flags_ss : entity is "rd_status_flags_ss";
 end Fifo8k4to1_rd_status_flags_ss;
 
 architecture STRUCTURE of Fifo8k4to1_rd_status_flags_ss is
@@ -2790,6 +2806,8 @@ entity Fifo8k4to1_wr_status_flags_ss is
     wr_data_count : in STD_LOGIC_VECTOR ( 11 downto 0 );
     DI : in STD_LOGIC_VECTOR ( 1 downto 0 )
   );
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of Fifo8k4to1_wr_status_flags_ss : entity is "wr_status_flags_ss";
 end Fifo8k4to1_wr_status_flags_ss;
 
 architecture STRUCTURE of Fifo8k4to1_wr_status_flags_ss is
@@ -3080,6 +3098,8 @@ entity Fifo8k4to1_blk_mem_gen_generic_cstr is
     din : in STD_LOGIC_VECTOR ( 3 downto 0 );
     WEA : in STD_LOGIC_VECTOR ( 0 to 0 )
   );
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of Fifo8k4to1_blk_mem_gen_generic_cstr : entity is "blk_mem_gen_generic_cstr";
 end Fifo8k4to1_blk_mem_gen_generic_cstr;
 
 architecture STRUCTURE of Fifo8k4to1_blk_mem_gen_generic_cstr is
@@ -3128,6 +3148,8 @@ entity Fifo8k4to1_rd_logic is
     wr_en : in STD_LOGIC;
     DI : in STD_LOGIC_VECTOR ( 1 downto 0 )
   );
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of Fifo8k4to1_rd_logic : entity is "rd_logic";
 end Fifo8k4to1_rd_logic;
 
 architecture STRUCTURE of Fifo8k4to1_rd_logic is
@@ -3219,6 +3241,8 @@ entity Fifo8k4to1_wr_logic is
     ram_empty_i_reg_7 : in STD_LOGIC;
     S : in STD_LOGIC_VECTOR ( 1 downto 0 )
   );
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of Fifo8k4to1_wr_logic : entity is "wr_logic";
 end Fifo8k4to1_wr_logic;
 
 architecture STRUCTURE of Fifo8k4to1_wr_logic is
@@ -3388,6 +3412,8 @@ entity Fifo8k4to1_blk_mem_gen_top is
     din : in STD_LOGIC_VECTOR ( 3 downto 0 );
     WEA : in STD_LOGIC_VECTOR ( 0 to 0 )
   );
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of Fifo8k4to1_blk_mem_gen_top : entity is "blk_mem_gen_top";
 end Fifo8k4to1_blk_mem_gen_top;
 
 architecture STRUCTURE of Fifo8k4to1_blk_mem_gen_top is
@@ -3421,6 +3447,8 @@ entity Fifo8k4to1_blk_mem_gen_v8_3_6_synth is
     din : in STD_LOGIC_VECTOR ( 3 downto 0 );
     WEA : in STD_LOGIC_VECTOR ( 0 to 0 )
   );
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of Fifo8k4to1_blk_mem_gen_v8_3_6_synth : entity is "blk_mem_gen_v8_3_6_synth";
 end Fifo8k4to1_blk_mem_gen_v8_3_6_synth;
 
 architecture STRUCTURE of Fifo8k4to1_blk_mem_gen_v8_3_6_synth is
@@ -3454,6 +3482,8 @@ entity Fifo8k4to1_blk_mem_gen_v8_3_6 is
     din : in STD_LOGIC_VECTOR ( 3 downto 0 );
     WEA : in STD_LOGIC_VECTOR ( 0 to 0 )
   );
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of Fifo8k4to1_blk_mem_gen_v8_3_6 : entity is "blk_mem_gen_v8_3_6";
 end Fifo8k4to1_blk_mem_gen_v8_3_6;
 
 architecture STRUCTURE of Fifo8k4to1_blk_mem_gen_v8_3_6 is
@@ -3487,6 +3517,8 @@ entity Fifo8k4to1_memory is
     din : in STD_LOGIC_VECTOR ( 3 downto 0 );
     WEA : in STD_LOGIC_VECTOR ( 0 to 0 )
   );
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of Fifo8k4to1_memory : entity is "memory";
 end Fifo8k4to1_memory;
 
 architecture STRUCTURE of Fifo8k4to1_memory is
@@ -3521,6 +3553,8 @@ entity Fifo8k4to1_fifo_generator_ramfifo is
     srst : in STD_LOGIC;
     din : in STD_LOGIC_VECTOR ( 3 downto 0 )
   );
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of Fifo8k4to1_fifo_generator_ramfifo : entity is "fifo_generator_ramfifo";
 end Fifo8k4to1_fifo_generator_ramfifo;
 
 architecture STRUCTURE of Fifo8k4to1_fifo_generator_ramfifo is
@@ -3643,6 +3677,8 @@ entity Fifo8k4to1_fifo_generator_top is
     srst : in STD_LOGIC;
     din : in STD_LOGIC_VECTOR ( 3 downto 0 )
   );
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of Fifo8k4to1_fifo_generator_top : entity is "fifo_generator_top";
 end Fifo8k4to1_fifo_generator_top;
 
 architecture STRUCTURE of Fifo8k4to1_fifo_generator_top is
@@ -3678,6 +3714,8 @@ entity Fifo8k4to1_fifo_generator_v13_1_4_synth is
     srst : in STD_LOGIC;
     din : in STD_LOGIC_VECTOR ( 3 downto 0 )
   );
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of Fifo8k4to1_fifo_generator_v13_1_4_synth : entity is "fifo_generator_v13_1_4_synth";
 end Fifo8k4to1_fifo_generator_v13_1_4_synth;
 
 architecture STRUCTURE of Fifo8k4to1_fifo_generator_v13_1_4_synth is
@@ -4338,6 +4376,8 @@ entity Fifo8k4to1_fifo_generator_v13_1_4 is
   attribute C_WR_PNTR_WIDTH_WRCH of Fifo8k4to1_fifo_generator_v13_1_4 : entity is 4;
   attribute C_WR_RESPONSE_LATENCY : integer;
   attribute C_WR_RESPONSE_LATENCY of Fifo8k4to1_fifo_generator_v13_1_4 : entity is 1;
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of Fifo8k4to1_fifo_generator_v13_1_4 : entity is "fifo_generator_v13_1_4";
 end Fifo8k4to1_fifo_generator_v13_1_4;
 
 architecture STRUCTURE of Fifo8k4to1_fifo_generator_v13_1_4 is
@@ -4913,7 +4953,7 @@ entity Fifo8k4to1 is
   attribute downgradeipidentifiedwarnings : string;
   attribute downgradeipidentifiedwarnings of Fifo8k4to1 : entity is "yes";
   attribute x_core_info : string;
-  attribute x_core_info of Fifo8k4to1 : entity is "fifo_generator_v13_1_4,Vivado 2017.2";
+  attribute x_core_info of Fifo8k4to1 : entity is "fifo_generator_v13_1_4,Vivado 2017.2.1";
 end Fifo8k4to1;
 
 architecture STRUCTURE of Fifo8k4to1 is

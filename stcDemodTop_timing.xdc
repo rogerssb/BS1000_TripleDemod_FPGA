@@ -18,7 +18,7 @@ create_generated_clock -name {cAndD1/pllDivider_reg[0]/Q} -source [get_ports pll
 
 set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets pll0_OUT1_IBUF]
 
-set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks fbClk] -group [get_clocks -include_generated_clocks sysClk] -group [get_clocks -include_generated_clocks pll0_OUT1] -group [get_clocks -include_generated_clocks pll1_OUT1] 
+set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks fbClk] -group [get_clocks -include_generated_clocks sysClk] -group [get_clocks -include_generated_clocks pll0_OUT1] -group [get_clocks -include_generated_clocks pll1_OUT1]
 
 set_input_delay -clock [get_clocks sysClk] -min -add_delay 0.000 [get_ports spiFlashMISO]
 set_input_delay -clock [get_clocks sysClk] -max -add_delay 2.000 [get_ports spiFlashMISO]
@@ -46,6 +46,7 @@ set_false_path -from [get_pins stcDemod/Trellis_u/td/stageSetup*/refValid_reg/C]
 set_false_path -from [get_pins {stcDemod/Trellis_u/td/stage*/wrAddr_reg[*]/C}] -to [get_pins {stcDemod/Trellis_u/td/stage*/acs*/cmag/mpy*/U0/i_mult/gDSP.gHYBRID.iHYBRID/single_mult.dsp_based.iDSP/inferred_dsp.reg_mult.m_reg_reg/A[*]}]
 set_false_path -from [get_pins stcDemod/Trellis_u/td/stageSetup*/refValid_reg/C] -to [get_pins {stcDemod/Trellis_u/td/stage*/acs*/cmag/mpy*/U0/i_mult/gDSP.gHYBRID.iHYBRID/single_mult.dsp_based.iDSP/inferred_dsp.reg_mult.m_reg_reg/B[*]}]
 set_false_path -from [get_pins {stcDemod/Trellis_u/td/stage*/wrAddr_reg[*]/C}] -to [get_pins {stcDemod/Trellis_u/td/stage*/acs*/cmag/mpy*/U0/i_mult/gDSP.gHYBRID.iHYBRID/single_mult.dsp_based.iDSP/inferred_dsp.reg_mult.m_reg_reg/B[*]}]
+
 
 
 
