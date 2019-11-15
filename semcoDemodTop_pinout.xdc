@@ -378,17 +378,9 @@ set_property IOSTANDARD LVCMOS33 [get_ports fb_csn]
 set_property IOSTANDARD LVCMOS33 [get_ports fb_oen]
 set_property IOSTANDARD LVCMOS33 [get_ports fb_wrn]
 set_property IOSTANDARD LVCMOS33 [get_ports ch1DataOut]
-set_property DRIVE 12 [get_ports ch1DataOut]
-set_property SLEW SLOW [get_ports ch1DataOut]
 set_property IOSTANDARD LVCMOS33 [get_ports ch0ClkOut]
-set_property DRIVE 12 [get_ports ch0ClkOut]
-set_property SLEW SLOW [get_ports ch0ClkOut]
 set_property IOSTANDARD LVCMOS33 [get_ports ch1ClkOut]
-set_property DRIVE 12 [get_ports ch1ClkOut]
-set_property SLEW SLOW [get_ports ch1ClkOut]
 set_property IOSTANDARD LVCMOS33 [get_ports ch0DataOut]
-set_property DRIVE 12 [get_ports ch0DataOut]
-set_property SLEW SLOW [get_ports ch0DataOut]
 set_property IOSTANDARD LVCMOS33 [get_ports ch3DataOut]
 set_property DRIVE 12 [get_ports ch1DataOut]
 set_property SLEW SLOW [get_ports ch1DataOut]
@@ -451,6 +443,8 @@ set_property DRIVE 12 [get_ports spiFlashCSn]
 set_property DRIVE 12 [get_ports spiFlashMOSI]
 set_property SLEW SLOW [get_ports spiFlashCSn]
 set_property SLEW SLOW [get_ports spiFlashMOSI]
+
+
 
 
 

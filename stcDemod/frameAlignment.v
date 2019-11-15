@@ -5,7 +5,7 @@
 
 module frameAlignment
     #(parameter START_OFFSET = 0,
-      parameter CLKS_PER_OUTPUT = 4) (
+      parameter CLKS_PER_OUTPUT = 2) (
     input                   clk,
                             clkEn,
                             reset,

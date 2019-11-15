@@ -134,6 +134,7 @@ PACKAGE Semco_pkg IS
    type  FLOAT_ARRAY_16_HP is array (natural range <>) of FLOAT_16_HP;
    type  FLOAT_ARRAY_64_LP is array (natural range <>) of FLOAT_64_LP;
    type  FLOAT_ARRAY_64_HP is array (natural range <>) of FLOAT_64_HP;
+   type  FLOAT_ARRAY_256_LP is array (natural range <>) of FLOAT_256_LP;
    type  FLOAT_ARRAY_256_HP is array (natural range <>) of FLOAT_256_HP;
    type  FLOAT_ARRAY_1K    is array (natural range <>) of FLOAT_1K;
    type  FLOAT_ARRAY_4K    is array (natural range <>) of FLOAT_4K;

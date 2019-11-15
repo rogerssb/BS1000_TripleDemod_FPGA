@@ -671,7 +671,7 @@ begin
       PORT MAP(
          ResampleR      => to_slv(ResampleR_s),
          ResampleI      => to_slv(ResampleI_s),
-         ClocksPerBit   => ClocksPerBit, --to_slv(to_sfixed(9.34/93.3, 0, -15)),
+         ClocksPerBit   => to_slv(to_sfixed(19.34/93.3/1.04, 0, -15)), --ClocksPerBit,
          HxThreshSlv    => 12x"180",
          DacSelect0     => x"0",
          DacSelect1     => x"0",

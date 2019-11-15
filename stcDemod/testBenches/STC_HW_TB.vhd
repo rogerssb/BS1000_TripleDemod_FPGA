@@ -86,13 +86,13 @@ BEGIN
    PowerProc : process(Clk)
    begin
       if (rising_edge(Clk)) then
-         RdAddrEq <= '1' when (<< signal Brik1.RdAddr_i : natural range 0 to FRAME_LENGTH_4 >> = 12799) else '0';
+         RdAddrEq <= '1' when (<< signal Brik1.RdAddr_i : natural range 0 to FRAME_LENGTH_4 >> = 13100) else '0';
          RdAddrDly <= RdAddrEq;
          if (<< signal Brik1.Reset  : std_logic >>) then
             Power0In <= to_sfixed(0.240, Power0In);
             Power1In <= to_sfixed(0.240, Power1In);
             NoiseIn  <= to_sfixed(0.0, NoiseIn);
-            BitRate  <= to_sfixed(9.33*4*1.04/93.3, BitRate);    -- 41.6 is 10Mb times 4 plus 4% overhead for pilot
+            BitRate  <= to_sfixed(19.33*4*1.04/93.3, BitRate);    -- 41.6 is 10Mb times 4 plus 4% overhead for pilot
          elsif (RdAddrEq and not RdAddrDly) then
            case (FrameCnt) is
             when 0 =>

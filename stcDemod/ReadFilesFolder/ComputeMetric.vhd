@@ -149,6 +149,10 @@ ARCHITECTURE rtl OF ComputeMetric IS
             NormTempI0,
             NormTempR1,
             NormTempI1        : FLOAT_16_HP;
+   SIGNAL   NormTempR0L,
+            NormTempI0L,
+            NormTempR1L,
+            NormTempI1L       : FLOAT_16_HP;
    SIGNAL   XrNorm,
             XiNorm            : FLOAT_16_LP;
    SIGNAL   XrNormSq,
@@ -163,6 +167,11 @@ ARCHITECTURE rtl OF ComputeMetric IS
    SIGNAL   Sig1I             : SIG_ARRAY := InitSigFromFile("..\sourceData\s1_lut_i.slv");
 
 BEGIN
+
+   NormTempR0L <= resize(NormTempR0, NormTempR0L);
+   NormTempI0L <= resize(NormTempI0, NormTempI0L);
+   NormTempR1L <= resize(NormTempR1, NormTempR1L);
+   NormTempI1L <= resize(NormTempI1, NormTempI1L);
 
    ComputeProcess: process (clk)
       variable Real_v : real;
@@ -396,15 +405,15 @@ BEGIN
                end if;
 	            -- compute S*inv(S'*S)*S'*x (the result is a PILOT_LENGTH_4x1 vector)
                -- complex_mult(norm_temp_r[0],norm_temp_i[0],ss0_r[k],ss0_i[k],&temp0_r,&temp0_i);
-               NormRSs0R0 <= resize(NormTempR0 * Ss0R23, NormRSs0R0);
-               NormRSs0I0 <= resize(NormTempR0 * Ss0I23, NormRSs0I0);
-               NormISs0R0 <= resize(NormTempI0 * Ss0R23, NormISs0R0);
-               NormISs0I0 <= resize(NormTempI0 * Ss0I23, NormISs0I0);
+               NormRSs0R0 <= resize(NormTempR0L * Ss0R23, NormRSs0R0);
+               NormRSs0I0 <= resize(NormTempR0L * Ss0I23, NormRSs0I0);
+               NormISs0R0 <= resize(NormTempI0L * Ss0R23, NormISs0R0);
+               NormISs0I0 <= resize(NormTempI0L * Ss0I23, NormISs0I0);
                -- complex_mult(norm_temp_r[1],norm_temp_i[1],ss1_r[k],ss1_i[k],&temp1_r,&temp1_i);
-               NormRSs1R1 <= resize(NormTempR1 * Ss1R23, NormRSs1R1);
-               NormRSs1I1 <= resize(NormTempR1 * Ss1I23, NormRSs1I1);
-               NormISs1R1 <= resize(NormTempI1 * Ss1R23, NormISs1R1);
-               NormISs1I1 <= resize(NormTempI1 * Ss1I23, NormISs1I1);
+               NormRSs1R1 <= resize(NormTempR1L * Ss1R23, NormRSs1R1);
+               NormRSs1I1 <= resize(NormTempR1L * Ss1I23, NormRSs1I1);
+               NormISs1R1 <= resize(NormTempI1L * Ss1R23, NormISs1R1);
+               NormISs1I1 <= resize(NormTempI1L * Ss1I23, NormISs1I1);
                -- norm_temp_long_r[k] = temp1_r + temp1_r;
                -- norm_temp_long_i[k] = temp1_i + temp1_i;
                NormLongR <= resize(NormRSs0R0 - NormISs0I0 + NormRSs1R1 - NormISs1I1, NormLongR);

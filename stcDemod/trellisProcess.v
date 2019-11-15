@@ -109,7 +109,7 @@ module trellisProcess (
 
     frameAlignment #(
         .START_OFFSET(0),
-        .CLKS_PER_OUTPUT(4))
+        .CLKS_PER_OUTPUT(2))
     fa(
         .clk(clk),
         .clkEn(clkEnable),

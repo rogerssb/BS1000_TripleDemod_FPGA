@@ -116,7 +116,7 @@ BEGIN
       end if;
    end process ClkProcess;
 
-   FdFifo  : Fifo8k4to1
+   FdFifo  : Fifo8k4to1       -- 4 bit in, 1 bit output
    PORT MAP (
       clk            => clk,
       srst           => reset,
