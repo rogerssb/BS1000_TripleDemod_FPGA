@@ -94,7 +94,7 @@ BEGIN
             NoiseIn  <= to_sfixed(0.0, NoiseIn);
             BitRate  <= to_sfixed(19.33*4*1.04/93.3, BitRate);    -- 41.6 is 10Mb times 4 plus 4% overhead for pilot
          elsif (RdAddrEq and not RdAddrDly) then
-           case (FrameCnt) is
+ /*          case (FrameCnt) is
             when 0 =>
                Power0In <= to_sfixed(0.000, Power0In);
                Power1In <= to_sfixed(0.240, Power1In);
@@ -104,7 +104,7 @@ BEGIN
             when others =>
                Power1In <= resize(Power1In + 0.02, Power1In);
             end case;
-            FrameCnt <= FrameCnt + 1;
+*/            FrameCnt <= FrameCnt + 1;
          end if;
       end if;
    end process;
