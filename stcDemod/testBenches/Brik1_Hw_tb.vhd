@@ -60,6 +60,7 @@ entity Brik1_Hw_tb is
       Power0In,
       Power1In,
       NoiseIn           : IN  sfixed(0 downto -17);
+      BitRate_r         : IN  real;
       -- synthesis translate_on
       DataOut_o,
       ClkOut_o,
@@ -207,15 +208,16 @@ architecture rtl of Brik1_Hw_tb is
       );
    END COMPONENT Vio_0;
 
-   component clk_wiz_0
-      port (
-         clk93,
-         reset        : in     std_logic;
-         ClkX1,
-         ClkXn,
-         locked       : out    std_logic
-      );
+   component systemClock
+      port
+       (
+        clk_in1         : in     std_logic;
+        clk93           : out    std_logic;
+        clk186          : out    std_logic;
+        locked          : out    std_logic
+       );
    end component;
+
 -------------------------------------------------------------------------------
 --                       CONSTANT DEFINITIONS
 -------------------------------------------------------------------------------
@@ -273,7 +275,8 @@ architecture rtl of Brik1_Hw_tb is
             HwControlBits,
             Errors               : SLV8;
    SIGNAL   LedCount             : UINT32;
-   SIGNAL   ClocksPerBit         : SLV16;
+   SIGNAL   ClocksPerBit,
+            ClocksPerBitSlv      : SLV16;
    SIGNAL   FrameCount           : unsigned(5 downto 0) := "000000";
    SIGNAL   PilotOffset          : std_logic_vector(8 downto 0);
 
@@ -282,13 +285,12 @@ architecture rtl of Brik1_Hw_tb is
 
 begin
 
-   Clocks : clk_wiz_0
+   Clocks : systemClock
       port map (
-         clk93    => Clk93In,
-         reset    => '0',
-         ClkX1    => Clk93,
-         ClkXn    => ClkXn,
-         locked   => Locked
+         clk_in1    => Clk93In,
+         clk93      => Clk93,
+         clk186     => ClkXn,
+         locked     => Locked
       );
 
    Vio_u : Vio_0
@@ -663,6 +665,13 @@ begin
          O => ResetBufg
    );
 
+g1 : if (SIM_MODE) generate begin
+      -- synthesis translate_off
+         ClocksPerBitSlv <= to_slv(to_sfixed(BitRate_r*1.02/93.3, 0, -15));
+      -- synthesis translate_on
+else generate
+         ClocksPerBitSlv <= ClocksPerBit;
+end generate;
 
    UUTu : STC
       generic map (
@@ -671,7 +680,7 @@ begin
       PORT MAP(
          ResampleR      => to_slv(ResampleR_s),
          ResampleI      => to_slv(ResampleI_s),
-         ClocksPerBit   => to_slv(to_sfixed(19.34/93.3/1.04, 0, -15)), --ClocksPerBit,
+         ClocksPerBit   => ClocksPerBitSlv,
          HxThreshSlv    => 12x"180",
          DacSelect0     => x"0",
          DacSelect1     => x"0",
@@ -691,7 +700,10 @@ begin
          Dac2ClkEn      => open,
          Dac0Data       => open,
          Dac1Data       => open,
-         Dac2Data       => open
+         Dac2Data       => open,
+         PhaseDiffEn    => open,
+         PhaseOut       => open,
+         PhaseDiff      => open
       );
 
 end rtl;

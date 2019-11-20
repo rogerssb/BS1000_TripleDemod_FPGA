@@ -9,7 +9,7 @@ module digitalPLL(
     input           [7:0]   feedbackDivider,
     input                   referenceClkEn,
     output  reg             feedbackClkEn,
-    output  reg             dllOutputClk,
+    output  reg             dllOutputClkEn,     // FZ Mod, was fabric based clock signal. Changed to clock enable
     output                  filteredRefClk,
     output  reg     [7:0]   phaseError
 );
@@ -22,6 +22,7 @@ module digitalPLL(
     reg     [31:0]  phaseInc;
     wire    [31:0]  phaseSum = phase + phaseInc;
     reg     [1:0]   clkSR;
+    reg             dllOutputClk;
     always @(posedge clk) begin
         if (reset) begin
             phase <= 0;
@@ -31,6 +32,7 @@ module digitalPLL(
             clkSR <= {clkSR[0],phaseSum[31]};
         end
         dllOutputClk <= phase[31];
+        dllOutputClkEn <= phase[31] & ~dllOutputClk;
     end
 
     `define ADD_DIVIDER
@@ -57,27 +59,29 @@ module digitalPLL(
     reg     [6:0]   outputCounter;
     wire    [6:0]   outputDivider = feedbackDivider[7:1] - 1;
     reg             div2Clock;
-    always @(posedge dllOutputClk) begin
+    always @(posedge clk) begin
         if (reset) begin
             outputCounter <= outputDivider;
             div2Clock <= 0;
         end
-        else if (outputCounter > 0) begin
-            outputCounter <= outputCounter - 1;
-        end
-        else begin
-            outputCounter <= outputDivider;
-            div2Clock <= ~div2Clock;
-        end
+        else if (dllOutputClkEn) begin        // was clocked by dllOutputClk which is fabric based
+            if (outputCounter > 0) begin
+                outputCounter <= outputCounter - 1;
+            end
+            else begin
+                outputCounter <= outputDivider;
+                div2Clock <= ~div2Clock;
+            end
+         end
     end
-    assign filteredRefClk = (outputDivider == 7'h7f) ? dllOutputClk : div2Clock;
+    assign filteredRefClk = (outputDivider == 7'h7f) ? dllOutputClkEn : div2Clock;
 
     `else   //ADD_DIVIDER
 
     always @(posedge clk) begin
         feedbackClkEn <= (clkSR == 2'b10);
     end
-    assign filteredRefClk = dllOutputClk;
+    assign filteredRefClk = dllOutputClkEn;
 
     `endif //ADD_DIVIDER
 

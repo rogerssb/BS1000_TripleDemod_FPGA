@@ -2,6 +2,7 @@
 `include "stcDefines.vh"
 
 // 10-25-19 Modified sofAddress offset from 8 to 7. Could go to 6
+// 11-16-19 Changed offset to vio variable to optimize against real time noise.
 
 module frameAlignment
     #(parameter START_OFFSET = 0,
@@ -9,7 +10,6 @@ module frameAlignment
     input                   clk,
                             clkEn,
                             reset,
-                            lastSampleReset,
                             startOfFrame,       // start of frame, not start of trellis activty
                             estimatesDone,     // Estimates are complete, start Trellis process
                             valid,
@@ -17,6 +17,7 @@ module frameAlignment
                             dinImag,
     input   signed  [3:0]   m_ndx0,
                             m_ndx1,
+                            offset,         // was equal 7
     output                  clkEnOut,
     output  reg             interpolate,
                             myStartOfTrellis,
@@ -49,7 +50,7 @@ module frameAlignment
             end
             if (startOfFrame) begin
                 sofDetected <= 1;
-                sofAddress  <= wrAddr + `PILOT_SAMPLES_PER_FRAME - 7;  // capture address of first sample of next frame. SOF goes active between packets, so wrAddr is inactive
+                sofAddress  <= wrAddr + `PILOT_SAMPLES_PER_FRAME - offset;  // capture address of first sample of next frame. SOF goes active between packets, so wrAddr is inactive
             end
             else if (myStartOfTrellis) begin
                 sofDetected <= 0;
@@ -112,18 +113,21 @@ module frameAlignment
 
     //-------------------------- Output State Machine -------------------------
 
-    reg                     outputState;
+    reg                     outputState, lastSample;
         `define WAIT_VALID          1'b0
         `define WAIT_DECIMATION     1'b1
     reg             [2:0]   decimationCount;
     reg             [1:0]   outputCount;
     reg             [8:0]   trellisInitCnt;
+    reg             [14:0]   sampleCount;
     always @(posedge clk) begin
-        if (reset || lastSampleReset) begin
+        if (reset || lastSample) begin
             outputState <= `WAIT_VALID;
             decimationCount <= CLKS_PER_OUTPUT-1;
             fifoRdEn        <= 0;
             outputCount     <= 0;
+            sampleCount     <= 0;
+            lastSample      <= 0;
             interpolate     <= 0;
             trellisInitCnt  <= 130; // inactive state
         end
@@ -138,10 +142,10 @@ module frameAlignment
             case (outputState)
                 `WAIT_VALID:  begin
                     if ((fifoOutputValid == 1'b1) && (trellisInitCnt == 0)) begin
-                        fifoRdEn <= 1;
+                        fifoRdEn    <= 1;
                         if (CLKS_PER_OUTPUT > 1) begin
                             decimationCount <= decimationCount - 1;
-                            outputState <= `WAIT_DECIMATION;
+                            outputState     <= `WAIT_DECIMATION;
                         end
                     end
                     else begin
@@ -159,15 +163,24 @@ module frameAlignment
                     end
                 end
                 default: begin
-                    outputState <= `WAIT_VALID;
+                    outputState     <= `WAIT_VALID;
                     decimationCount <= CLKS_PER_OUTPUT-1;
-                    fifoRdEn <= 0;
+                    fifoRdEn        <= 0;
                 end
             endcase
 
             if (clkEnOut) begin
                 outputCount <= outputCount + 1;
                 interpolate <= (outputCount == 2'b10);
+            end
+
+            if (clkEnOut && interpolate) begin
+                sampleCount <= sampleCount + 1;
+                if (sampleCount == 3205) begin
+                    lastSample <= 1'b1;
+                end
+            else
+                lastSample <= 1'b0;
             end
         end
     end

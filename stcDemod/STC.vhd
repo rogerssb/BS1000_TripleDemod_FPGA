@@ -137,6 +137,7 @@ ARCHITECTURE rtl OF STC IS
    COMPONENT Brik2
       PORT(
          clk,
+         clk93,
          reset,
          ce,
          StartHPP,
@@ -147,16 +148,12 @@ ARCHITECTURE rtl OF STC IS
          InI            : IN  SLV18;
          H0MagIn,
          H1MagIn        : IN  std_logic_vector(12 downto 0);
-         StartDF,
-         ValidDF,
          PilotLocked,
          EstimatesDone  : OUT std_logic;
          H0EstR,
          H0EstI,
          H1EstR,
-         H1EstI,
-         DF_R,
-         DF_I           : OUT STC_PARM;
+         H1EstI         : OUT STC_PARM;
          m_ndx0,
          m_ndx1         : OUT integer range -5 to 3;
          Mu0,
@@ -184,6 +181,7 @@ ARCHITECTURE rtl OF STC IS
        h1EstImagIn,
        ch0MuIn,
        ch1MuIn          : IN  SLV18;
+       offset,
        m_ndx0,
        m_ndx1           : IN  SLV4;
        deltaTauEstIn    : IN  std_logic_vector(5 downto 0);
@@ -296,13 +294,14 @@ ARCHITECTURE rtl OF STC IS
             TrellisFull,
             StartInBrik2Dly,
             ValidInBrik2Dly,
+            ValidInBrik2Dly1,
+            ValidInBrik2Dly2,
             PilotValidOutDly,
-            StartDF,
-            ValidDF,
             TrellisOutEn,
             interpOutEn,
             lastSampleReset,
-            EstimatesDone     : std_logic;
+            EstimatesDone,
+            EstimatesDoneDly  : std_logic;
    SIGNAL   TrellisBits       : SLV4;
    SIGNAL   PhaseDiffEnDly    : SLV8;
    SIGNAL   StartOffset       : SLV16;
@@ -310,8 +309,6 @@ ARCHITECTURE rtl OF STC IS
             ImagOutPS,
             InRBrik2Dly,
             InIBrik2Dly,
-            DF_R,
-            DF_I,
             H0EstR,
             H0EstI,
             H1EstR,
@@ -609,6 +606,8 @@ BEGIN
          else
             StartInBrik2Dly <= StartOutPS;
             ValidInBrik2Dly <= ValidOutPS;
+            ValidInBrik2Dly1<= ValidInBrik2Dly;
+            ValidInBrik2Dly2<= ValidInBrik2Dly1;
             InRBrik2Dly     <= RealOutPS;
             InIBrik2Dly     <= ImagOutPS;
 
@@ -618,6 +617,7 @@ BEGIN
 
    Brik2_u : Brik2
       PORT MAP(
+         clk93          => Clk93,
          Clk            => Clk186,
          Reset          => Reset2x,
          CE             => CE,
@@ -632,10 +632,6 @@ BEGIN
          PhaseOutB      => Phase0B,
          PhaseDiff      => PhaseDiff2,
          StartHPP       => CordicValid,
-         StartDF        => StartDF,
-         ValidDF        => ValidDF,
-         DF_R           => DF_R,
-         DF_I           => DF_I,
          H0EstR         => H0EstR,
          H0EstI         => H0EstI,
          H1EstR         => H1EstR,
@@ -657,6 +653,7 @@ BEGIN
          Ch0MuSlv       <= to_slv(Ch0Mu);
          Ch1MuSlv       <= to_slv(Ch1Mu);
          deltaTauEstSlv <= to_slv(DeltaTauEst);
+         EstimatesDoneDly <= EstimatesDone;
       end if;
    end process;
 
@@ -665,11 +662,11 @@ BEGIN
          clk                  => Clk186,
          clkEnable            => CE,
          reset                => Reset2x,
-         estimatesDone        => EstimatesDone,
-         frameStart           => StartDF,
-         inputValid           => ValidDF,
-         dinReal              => to_slv(DF_R),
-         dinImag              => to_slv(DF_I),
+         estimatesDone        => EstimatesDone and not EstimatesDoneDly,   -- rising edge of 93M clock pulse
+         frameStart           => StartInBrik2Dly,
+         inputValid           => ValidInBrik2Dly1,
+         dinReal              => to_slv(InRBrik2Dly),
+         dinImag              => to_slv(InIBrik2Dly),
          h0EstRealIn          => to_slv(H0EstR),
          h0EstImagIn          => to_slv(H0EstI),
          h1EstRealIn          => to_slv(H1EstR),
@@ -679,6 +676,7 @@ BEGIN
          deltaTauEstIn        => deltaTauEstSlv,
          m_ndx0               => m_ndx0Slv,
          m_ndx1               => m_ndx1Slv,
+         offset               => MiscBits(15 downto 12),
          sample0r             => sample0r,
          sample0i             => sample0i,
          interpOutEn          => interpOutEn,

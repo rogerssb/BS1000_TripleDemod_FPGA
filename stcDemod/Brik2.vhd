@@ -71,6 +71,7 @@ use work.Semco_pkg.ALL;
 ENTITY Brik2 IS
    PORT(
       clk,
+      clk93,
       reset,
       ce,
       StartHPP,
@@ -81,16 +82,12 @@ ENTITY Brik2 IS
       InI            : IN  SLV18;
       H0MagIn,
       H1MagIn        : IN  std_logic_vector(12 downto 0);
-      StartDF,
-      ValidDF,
       PilotLocked,
       EstimatesDone  : OUT std_logic;
       H0EstR,
       H0EstI,
       H1EstR,
-      H1EstI,
-      DF_R,
-      DF_I           : OUT STC_PARM;
+      H1EstI         : OUT STC_PARM;
       m_ndx0,
       m_ndx1         : OUT integer range -5 to 3;
       Mu0,
@@ -167,19 +164,6 @@ ARCHITECTURE rtl OF Brik2 IS
    );
    END COMPONENT HalfPilotPhase;
 
-   COMPONENT DetectionFilter
-      PORT (
-         aclk                 : IN STD_LOGIC;
-         aclken               : IN STD_LOGIC;
-         aresetn              : IN STD_LOGIC;
-         s_axis_data_tvalid   : IN STD_LOGIC;
-         s_axis_data_tdata    : IN STD_LOGIC_VECTOR(47 DOWNTO 0);
-         s_axis_data_tready   : OUT STD_LOGIC;
-         m_axis_data_tvalid   : OUT STD_LOGIC;
-         m_axis_data_tdata    : OUT STD_LOGIC_VECTOR(47 DOWNTO 0)
-      );
-   END COMPONENT;
-
    COMPONENT RAM_2Reads_1Write IS
       GENERIC(
          FILENAME    : string    := "";
@@ -220,12 +204,9 @@ ARCHITECTURE rtl OF Brik2 IS
    end function RoundTo0;
 
 -- CONSTANTS
-   CONSTANT StartDF_Delay     : positive := 3;  -- data is delayed 10 clocks but takes 13 to build
    CONSTANT MIN_M_NDX         : positive := 5;
    CONSTANT MAX_M_NDX         : positive := 3;
    CONSTANT PILOT_OFFSET      : natural  := 0;
-
-   CONSTANT TimeViaDF         : boolean := false;
 
    -- Signals
    SIGNAL   TimeR,
@@ -242,15 +223,9 @@ ARCHITECTURE rtl OF Brik2 IS
             TimeEstDone,
             TimeActive,
             StartTime,
-            FirstPass,
-            ValidTimeChan,
-            ValidDetFilt      : std_logic;
-   SIGNAL   DF_DataOut        : std_logic_vector(47 downto 0);
-   SIGNAL   StartDF_Out       : std_logic_vector(StartDF_Delay-1 downto 0);
+            FirstPass         : std_logic;
    SIGNAL   InR_sf,
             InI_sf,
-            TimeChanR,
-            TimeChanI,
             H0MagCE,
             H1MagCE,
             H0MagOver32,
@@ -306,41 +281,8 @@ BEGIN
    end process IlaProcess;
 -- end of test points TODO
 
-   DetectFilt : DetectionFilter
-      PORT MAP (
-         aclk                 => clk,
-         aclken               => ce,
-         aresetn              => not reset,
-         s_axis_data_tvalid   => ValidIn,
-         s_axis_data_tdata    => 6x"00" & to_slv(InI) & 6x"00"& to_slv(InR),
-         s_axis_data_tready   => open,
-         m_axis_data_tvalid   => ValidDetFilt,
-         m_axis_data_tdata    => DF_DataOut
-      );
-
-   DF_Process : process(clk)
-   begin
-      if (rising_edge(clk)) then
-         if (reset) then
-            StartDF_Out <= (others=>'0');
-            DF_R        <= (others=>'0');
-            DF_I        <= (others=>'0');
-            ValidDF     <= '0';
-         elsif (ce) then
-            DF_R        <= to_sfixed(DF_DataOut(17 downto 0), DF_R);
-            DF_I        <= to_sfixed(DF_DataOut(24+17 downto 24), DF_I);
-            ValidDF     <= ValidDetFilt;
-         end if;
-      end if;
-   end process DF_Process;
-
    InR_sf <= to_sfixed(InR, InR_sf);
    InI_sf <= to_sfixed(InI, InI_sf);
-
-   StartDF       <= StartIn;
-   ValidTimeChan <= ValidDF    when (TimeViaDF) else ValidIn;
-   TimeChanR     <= DF_R       when (TimeViaDF) else InR_sf;
-   TimeChanI     <= DF_I       when (TimeViaDF) else InI_sf;
 
    TimeProcess : process(clk)  -- Time and channel want last half of pilot
    begin
@@ -356,14 +298,14 @@ BEGIN
             StartTime  <= '0';
             WrAddr      <= 0;
          elsif (ce) then
-            if (StartIn and not TimeActive) then   -- could occur when ValidDF is skipping samples
-               TimeCount   <= 0;    -- TimeCount starts after DF is primed
+            if (StartIn and not TimeActive) then   -- could occur when ValidIn is skipping samples
+               TimeCount   <= 0;
                WrAddr      <= 0;
                TimeActive  <= '1';
             elsif (TimeEstDone) then  -- just needs cleared before next packet
                TimeActive <= '0';
             end if;
-            if (ValidTimeChan) then
+            if (ValidIn) then
                if (TimeCount < PILOT_SIZE + PILOT_OFFSET) then
                   TimeCount <= TimeCount + 1;
                end if;
@@ -371,12 +313,12 @@ BEGIN
                   WrAddr <= WrAddr + 1;
                end if;
             end if;
-            StartTime <= '1' when (TimeCount = PILOT_SIZE + PILOT_OFFSET - 3) else '0';  -- wait till input buffer is full
+            StartTime <= '1' when (TimeCount = PILOT_SIZE + PILOT_OFFSET - 3) or (TimeCount = PILOT_SIZE + PILOT_OFFSET - 2) else '0';  -- wait till input buffer is full
          end if;
       end if;
    end process TimeProcess;
                                  -- start early for negative Ndx offsets
-   FirstPass   <= ValidTimeChan when (TimeCount >= TIME_DEPTH + PILOT_OFFSET - 2) and (TimeCount < PILOT_SIZE + PILOT_OFFSET - 2) else '0';
+   FirstPass   <= ValidIn when (TimeCount >= TIME_DEPTH + PILOT_OFFSET - 2) and (TimeCount < PILOT_SIZE + PILOT_OFFSET - 2) else '0';
    TimeRead    <= TimeRdAddr when TimeActive else ChanRdAddr;
    TimeR       <= resize(to_sfixed(TimeRslv, PARM_ZERO), TimeR);
    TimeI       <= resize(to_sfixed(TimeIslv, PARM_ZERO), TimeR);
@@ -384,8 +326,8 @@ BEGIN
    RepeatR_u : RAM_2Reads_1Write
       GENERIC MAP(
          FILENAME    => "",
-         DATA_WIDTH  => TimeChanR'length,
-         BINPT       => TimeChanR'right,
+         DATA_WIDTH  => InR_sf'length,
+         BINPT       => InR_sf'right,
          ADDR_WIDTH  => 8,
          FILE_IS_SLV => false,
          LATENCY     => 1,
@@ -399,7 +341,7 @@ BEGIN
          WrAddr      => WrAddr,
          RdAddrA     => TimeRead,
          RdAddrB     => 0,
-         WrData      => to_slv(TimeChanR),
+         WrData      => to_slv(InR_sf),
          RdOutA      => TimeRslv,
          RdOutB      => open
       );
@@ -407,8 +349,8 @@ BEGIN
    RepeatI_u : RAM_2Reads_1Write
       GENERIC MAP(
          FILENAME    => "",
-         DATA_WIDTH  => TimeChanI'length,
-         BINPT       => TimeChanI'right,
+         DATA_WIDTH  => InI_sf'length,
+         BINPT       => InI_sf'right,
          ADDR_WIDTH  => 8,
          LATENCY     => 1,
          FILE_IS_SLV => false,
@@ -422,14 +364,14 @@ BEGIN
          WrAddr      => WrAddr,
          RdAddrA     => TimeRead,
          RdAddrB     => 0,
-         WrData      => to_slv(TimeChanI),
+         WrData      => to_slv(InI_sf),
          RdOutA      => TimeIslv,
          RdOutB      => open
       );
 
    TE_u : TimingEstimate
       PORT MAP(
-         clk         => clk,
+         clk         => clk93,
          ce          => ce,
          reset       => Reset,
          StartIn     => StartTime,
@@ -446,7 +388,7 @@ BEGIN
    -- TimeEst determines Tau Indexes first
    CE_u : ChannelEstimate
       PORT MAP(
-         clk            => clk,
+         clk            => clk93,
          ce             => ce,
          reset          => reset,
          StartIn        => TimeEstDone,
@@ -462,9 +404,9 @@ BEGIN
          Done           => ChanEstDone
    );
 
-   EstimatesProc : process(clk)
+   EstimatesProc : process(clk93)
    begin
-      if (rising_edge(clk)) then
+      if (rising_edge(clk93)) then
          if (reset) then
             EstimatesDone  <= '0';
             TrellisDelay   <= (others=>'0');

@@ -38,13 +38,13 @@
     <Option Name="WTVcsLaunchSim" Val="0"/>
     <Option Name="WTRivieraLaunchSim" Val="0"/>
     <Option Name="WTActivehdlLaunchSim" Val="0"/>
-    <Option Name="WTXSimExportSim" Val="160"/>
-    <Option Name="WTModelSimExportSim" Val="161"/>
-    <Option Name="WTQuestaExportSim" Val="160"/>
-    <Option Name="WTIesExportSim" Val="160"/>
-    <Option Name="WTVcsExportSim" Val="160"/>
-    <Option Name="WTRivieraExportSim" Val="160"/>
-    <Option Name="WTActivehdlExportSim" Val="160"/>
+    <Option Name="WTXSimExportSim" Val="161"/>
+    <Option Name="WTModelSimExportSim" Val="162"/>
+    <Option Name="WTQuestaExportSim" Val="161"/>
+    <Option Name="WTIesExportSim" Val="161"/>
+    <Option Name="WTVcsExportSim" Val="161"/>
+    <Option Name="WTRivieraExportSim" Val="161"/>
+    <Option Name="WTActivehdlExportSim" Val="161"/>
     <Option Name="GenerateIPUpgradeLog" Val="TRUE"/>
     <Option Name="XSimRadix" Val="hex"/>
     <Option Name="XSimTimeUnit" Val="ns"/>
@@ -687,6 +687,13 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
+      <File Path="$PPRDIR/stcDemod/Vivado/xc7k160t-IP-Vivado2015p1/cmpy18x18/cmpy18x18.xci">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
       <Config>
         <Option Name="DesignMode" Val="RTL"/>
         <Option Name="TopModule" Val="stcDemodTop"/>
@@ -819,22 +826,6 @@
       </File>
       <Config>
         <Option Name="TopModule" Val="Vio2x18"/>
-        <Option Name="VerilogDir" Val="$PPRDIR/."/>
-        <Option Name="VerilogDir" Val="$PPRDIR/stcDemod"/>
-        <Option Name="UseBlackboxStub" Val="1"/>
-        <Define Name="STC_DEMOD"/>
-      </Config>
-    </FileSet>
-    <FileSet Name="cmpy18x18" Type="BlockSrcs" RelSrcDir="$PSRCDIR/cmpy18x18">
-      <File Path="$PPRDIR/stcDemod/Vivado/xc7k160t-IP-Vivado2015p1/cmpy18x18/cmpy18x18.xci">
-        <FileInfo>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <Config>
-        <Option Name="TopModule" Val="cmpy18x18"/>
         <Option Name="VerilogDir" Val="$PPRDIR/."/>
         <Option Name="VerilogDir" Val="$PPRDIR/stcDemod"/>
         <Option Name="UseBlackboxStub" Val="1"/>
@@ -1354,15 +1345,6 @@
       <ReportStrategy/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
     </Run>
-    <Run Id="cmpy18x18_synth_1" Type="Ft3:Synth" SrcSet="cmpy18x18" Part="xc7k160tfbg676-2" ConstrsSet="cmpy18x18" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/cmpy18x18_synth_1" IncludeInArchive="true">
-      <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2017"/>
-        <Step Id="synth_design"/>
-      </Strategy>
-      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
-      <ReportStrategy/>
-      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
-    </Run>
     <Run Id="dds6p0_synth_1" Type="Ft3:Synth" SrcSet="dds6p0" Part="xc7k160tfbg676-2" ConstrsSet="dds6p0" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/dds6p0_synth_1" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2017"/>
@@ -1599,9 +1581,7 @@
     </Run>
     <Run Id="synth160Default" Type="Ft3:Synth" SrcSet="sources_1" Part="xc7k160tfbg676-2" ConstrsSet="7K160" Description="Vivado Synthesis Defaults" State="current" Dir="$PRUNDIR/synth160Default" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2017">
-          <Desc>Vivado Synthesis Defaults</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2017"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
@@ -1681,22 +1661,6 @@
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
     </Run>
     <Run Id="Vio2x18_impl_1" Type="Ft2:EntireDesign" Part="xc7k160tfbg676-2" ConstrsSet="Vio2x18" Description="Default settings for Implementation." SynthRun="Vio2x18_synth_1" IncludeInArchive="false">
-      <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2017"/>
-        <Step Id="init_design"/>
-        <Step Id="opt_design"/>
-        <Step Id="power_opt_design"/>
-        <Step Id="place_design"/>
-        <Step Id="post_place_power_opt_design"/>
-        <Step Id="phys_opt_design"/>
-        <Step Id="route_design"/>
-        <Step Id="post_route_phys_opt_design"/>
-        <Step Id="write_bitstream"/>
-      </Strategy>
-      <ReportStrategy/>
-      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
-    </Run>
-    <Run Id="cmpy18x18_impl_1" Type="Ft2:EntireDesign" Part="xc7k160tfbg676-2" ConstrsSet="cmpy18x18" Description="Default settings for Implementation." SynthRun="cmpy18x18_synth_1" IncludeInArchive="false">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2017"/>
         <Step Id="init_design"/>
@@ -2128,11 +2092,9 @@
       <ReportStrategy/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
     </Run>
-    <Run Id="impl_2" Type="Ft2:EntireDesign" Part="xc7k160tfbg676-2" ConstrsSet="7K160" Description="Default settings for Implementation." State="current" Dir="$PRUNDIR/impl_2" SynthRun="synth160Default" IncludeInArchive="true">
+    <Run Id="impl_2" Type="Ft2:EntireDesign" Part="xc7k160tfbg676-2" ConstrsSet="7K160" Description="Default settings for Implementation." IncrementalCheckpoint="$PRUNDIR/stcDemodTop_routed7k160Full.dcp" State="current" Dir="$PRUNDIR/impl_2" SynthRun="synth160Default" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2017">
-          <Desc>Default settings for Implementation.</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2017"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>

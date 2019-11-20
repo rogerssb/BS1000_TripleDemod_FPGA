@@ -55,6 +55,7 @@ ARCHITECTURE rtl OF STC_HW_TB IS
          Power0In,
          Power1In,
          NoiseIn           : IN  sfixed(0 downto -17);
+         BitRate_r         : IN  real;
          DataOut_o,
          ClkOut_o,
          BS_LED,
@@ -72,6 +73,7 @@ ARCHITECTURE rtl OF STC_HW_TB IS
          Power1In,
          NoiseIn           : sfixed(0 downto -17);
   signal FrameCnt          : natural := 0;
+  signal BitRate_r         : real := 9.33;
 
 BEGIN
 
@@ -92,7 +94,7 @@ BEGIN
             Power0In <= to_sfixed(0.240, Power0In);
             Power1In <= to_sfixed(0.240, Power1In);
             NoiseIn  <= to_sfixed(0.0, NoiseIn);
-            BitRate  <= to_sfixed(19.33*4*1.04/93.3, BitRate);    -- 41.6 is 10Mb times 4 plus 4% overhead for pilot
+            BitRate  <= to_sfixed(BitRate_r*4.0*1.04/93.3, BitRate);    -- 41.6 is 10Mb times 4 plus 4% overhead for pilot
          elsif (RdAddrEq and not RdAddrDly) then
  /*          case (FrameCnt) is
             when 0 =>
@@ -120,6 +122,7 @@ BEGIN
       Power1In => Power1In,
       NoiseIn  => NoiseIn,
       BitRateIn => BitRate,
+      BitRate_r => BitRate_r,
       BS_LED   => open,
       DemodLED => open
    );

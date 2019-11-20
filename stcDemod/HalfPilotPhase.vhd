@@ -35,25 +35,6 @@ Dependencies:
 ----------------------------------------------------------------------------
                                DETAILS
 ----------------------------------------------------------------------------
-if Phase is 0 and Freq is 0 with one carrier, the PhaseDiff is 0
-Setting a phase offset on one carrier gives .00097
-Changing the power ratios gives a max phase of 0.0035
-Adding random phases and huge offsets especially at even power levels
-
-1kHz gives phase diff of .025
-
------ MATLAB Results--------
-H0H1 = H0 + H1
-H0H1I = H0 - H1
-
-at 500Hz, Diff yields
-   H0H1  H0H1I = -178
-   H0H1  H0H1  = 1.27
-   H0    H0H1  = -5.41
-   H0    H0H1I = 6.76
-   H1    H0H1  = 7.97
-   H1    H0H1I = -5.72
-
    To get accurate phase, the two correlated sequences need the same relative
    phase of H0 and H1 especially when the same magnitudes.
 ----------------------------------------------------------------------------
@@ -263,9 +244,9 @@ ARCHITECTURE rtl OF HalfPilotPhase IS
    SIGNAL   CmplxCount        : integer range 0 to 511;
    SIGNAL   CalcPhaseDly      : SLV4;
 
-   attribute mark_debug : string;
-   attribute mark_debug of Phase0A, Phase0B, CmplxValid,
-            Normalize, NormDone, CalcPhase, CordicStart, ValidCordic, PilotPacket : signal is "true";
+--   attribute mark_debug : string;
+--   attribute mark_debug of Phase0A, Phase0B, CmplxValid,
+--            Normalize, NormDone, CalcPhase, CordicStart, ValidCordic, PilotPacket : signal is "true";
 
 BEGIN
 

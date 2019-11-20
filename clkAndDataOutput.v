@@ -53,7 +53,7 @@ module clkAndDataOutput(
         .feedbackDivider(dllFeedbackDivider),
         .referenceClkEn(clkEnIn),
         .feedbackClkEn(),
-        .dllOutputClk(dllOutputClk),
+        .dllOutputClkEn(dllOutputClk),
         .filteredRefClk(pllReferenceClk),
         .phaseError(dllPhaseError)
     );

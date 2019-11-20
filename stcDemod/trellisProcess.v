@@ -18,6 +18,7 @@ module trellisProcess (
                             ch1MuIn,
     input   signed  [3:0]   m_ndx0,
                             m_ndx1,
+                            offset,
     input   signed  [5:0]   deltaTauEstIn,
     output  signed  [17:0]  sample0r,
                             sample0i,
@@ -95,17 +96,8 @@ module trellisProcess (
     `endif
     end
 
-    integer SPARE_CODE_WORDS; // first two outputs are bogus except on first frame after boot. Not cured by reset
+    integer SPARE_CODE_WORDS = 1; // first output is bogus
     assign  lastSampleReset = (sampleOut == `CODEWORDS_PER_FRAME + SPARE_CODE_WORDS);
-
-    always @(posedge(clk)) begin
-        if (reset) begin
-            SPARE_CODE_WORDS = 1;
-        end
-        else if (lastSampleReset) begin
-            SPARE_CODE_WORDS = 2;
-        end
-    end
 
     frameAlignment #(
         .START_OFFSET(0),
@@ -116,12 +108,12 @@ module trellisProcess (
         .reset(reset),
         .startOfFrame(frameStart),
         .estimatesDone(estimatesDoneDly),
-        .lastSampleReset(lastSampleReset),
         .valid(dfValid),
         .dinReal(dfRealOutput),
         .dinImag(dfImagOutput),
         .m_ndx0(m_ndx0),
         .m_ndx1(m_ndx1),
+        .offset(offset),
         .clkEnOut(faClkEn),
         .myStartOfTrellis(myStartOfTrellis),
         .full(full),
