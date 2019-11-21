@@ -219,6 +219,7 @@
 `define DEC_MUX_SEL_DEMOD   2'b00
 `define DEC_MUX_SEL_SC0     2'b01
 `define DEC_MUX_SEL_VITERBI 2'b10
+`define DEC_MUX_SEL_DUALVIT 2'b11
 `define OUT_MUX_SEL_DEMOD   2'b00
 `define OUT_MUX_SEL_SC0     2'b01
 `define OUT_MUX_SEL_SC1     2'b10

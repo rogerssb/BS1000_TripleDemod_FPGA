@@ -802,6 +802,43 @@ assign dac2_clk = clk;
 `endif //ADD_VITERBI
 
 
+`ifdef ADD_VITERBI
+//******************************************************************************
+//                          Dual Viterbi Decoder
+//******************************************************************************
+    wire    [31:0]  vitDout;
+    dualViterbi viterbi(
+        .clk(clk),
+        .clkEn(1'b1),
+        .reset(reset),
+        .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
+        .addr(addr),
+        .din(dataIn),
+        .dout(vitDout),
+        .demodMode(demodMode),
+        .decoderSource(dec_in_sel),
+        .symEn(dataSymEnReg),
+        .iSymData(iIn),
+        .qSymData(qIn),
+        .bitEnOut(viterbiBitEn),
+        .bitOut(viterbiBit),
+        .vitError()
+        );
+    reg viterbiSym2xEn;
+    always @* begin
+        case (demodMode)
+            `MODE_QPSK,
+            `MODE_OQPSK: begin
+                viterbiSym2xEn = dataSym2xEnReg;
+            end
+            default: begin
+                viterbiSym2xEn = dataSymEnReg;
+            end
+        endcase
+    end
+`endif //ADD_VITERBI
+
+
 //******************************************************************************
 //                                 Decoder
 //******************************************************************************
@@ -847,6 +884,14 @@ always @(posedge clk) begin
         `DEC_MUX_SEL_VITERBI: begin
             iDec <= viterbiBit;
             qDec <= viterbiBit;
+            decoderSymEn <= viterbiBitEn;
+            decoderSym2xEn <= viterbiSym2xEn;
+        end
+        `endif
+        `ifdef ADD_DUAL_VITERBI
+        `DEC_MUX_SEL_DUALVIT: begin
+            iDec <= viterbiBitI;
+            qDec <= viterbiBitQ;
             decoderSymEn <= viterbiBitEn;
             decoderSym2xEn <= viterbiSym2xEn;
         end
