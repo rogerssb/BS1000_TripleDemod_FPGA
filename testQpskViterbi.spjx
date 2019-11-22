@@ -7,10 +7,10 @@
      <setting value="N" name="GotoSource" />
      <setting value="180" name="C0Width" />
      <setting value="58" name="C1Width" />
-     <setting value="193" name="C2Width" />
+     <setting value="53" name="C2Width" />
     </settings>
     <views>
-     <view value="42216.408 ns,117568.713 ns,1062.048 ns,78956.631 ns,79836.388 ns" name="Last" />
+     <view value="22833.448 ns,26379.927 ns,63.843 ns,23306.647 ns,27086.104 ns" name="Last" />
     </views>
     <groups>
      <group open="no" name="Rx" show="yes" >
@@ -189,6 +189,8 @@
        <signal name="iTest[2:0]" scope="test.viterbi" />
        <signal name="qSoft[2:0]" scope="test.viterbi" />
        <signal name="codeEn" scope="test.viterbi" />
+       <signal name="infoBitEn" scope="test" />
+       <signal name="modSampleEn" scope="test" />
        <signal name="g1[2:0]" scope="test.viterbi" />
        <signal name="g2[2:0]" scope="test.viterbi" />
        <signal name="vitReset" scope="test.viterbi" />
@@ -255,7 +257,7 @@
    </datafilters>
    <explorer>
     <settings>
-     <setting value="test.viterbi" name="Scope" />
+     <setting value="test.modSampleEn" name="Scope" />
     </settings>
    </explorer>
    <plifiles>

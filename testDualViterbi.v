@@ -9,6 +9,16 @@
 //`define BER_TEST
 //`define MATLAB_VECTORS
 
+`define ROT0
+//`define ROT90
+//`define ROT180
+//`define ROT270
+//`define ROT45
+
+`ifdef TEST_OQPSK
+    `define Q_BEFORE_I
+`endif
+
 `ifdef BER_TEST
 //!control .savsim=1
 //!mkeep (test
@@ -24,6 +34,9 @@ reg sync;
 reg [12:0]a;
 reg [31:0]d;
 wire [31:0]dout;
+
+reg     [1:0]   dec_in_sel;
+initial         dec_in_sel = `DEC_MUX_SEL_DUALVIT;
 
 // Create the clocks
 parameter TX_FREQ = 93.333333e6;
@@ -47,35 +60,35 @@ always #HC clk = clk^clken;
 
 real carrierFreqHz;
 real carrierFreqNorm;
-initial begin 
+initial begin
   carrierFreqHz = 23333333.3;
   carrierFreqNorm = carrierFreqHz * `SAMPLE_PERIOD * `TWO_POW_32;
-end                 
+end
 
 integer carrierFreqInt;
-initial begin 
-  carrierFreqInt = carrierFreqNorm; 
+initial begin
+  carrierFreqInt = carrierFreqNorm;
 end
 wire [31:0] carrierFreq = carrierFreqInt;
 
 real carrierOffsetFreqHz;
 real carrierOffsetFreqNorm;
 integer carrierOffsetFreqInt;
-initial begin 
+initial begin
   carrierOffsetFreqHz = 0.0;
   carrierOffsetFreqNorm = carrierOffsetFreqHz * `SAMPLE_PERIOD * `TWO_POW_32;
   carrierOffsetFreqInt = carrierOffsetFreqNorm;
-end                 
+end
 wire [31:0] carrierOffsetFreq = carrierOffsetFreqInt;
 
 real carrierLimitHz;
 real carrierLimitNorm;
 integer carrierLimitInt;
-initial begin 
+initial begin
   carrierLimitHz = 60000.0;
   carrierLimitNorm = carrierLimitHz * `SAMPLE_PERIOD * `TWO_POW_32;
   carrierLimitInt = carrierLimitNorm;
-end                 
+end
 wire [31:0] carrierLimit = carrierLimitInt;
 
 wire [31:0] sweepRate = 32'h00000000;
@@ -93,7 +106,7 @@ real interpolationGain = 1.28;
 real deviationHz;
 real deviationNorm;
 integer deviationInt;
-initial begin 
+initial begin
   deviationHz = 2*0.350 * bitrateBps;
   deviationNorm = deviationHz * `SAMPLE_PERIOD * `TWO_POW_32;
   deviationInt = deviationNorm*interpolationGain;
@@ -117,7 +130,7 @@ always @* resamplerFreqInt = (resamplerFreqNorm >= `TWO_POW_31) ? (resamplerFreq
 //integer resamplerFreqInt = resamplerFreqNorm;
 real resamplerLimitNorm;
 integer resamplerLimitInt;
-always @* begin 
+always @* begin
   resamplerLimitNorm = 0.001*resamplerFreqSps/RX_SAMPLE_FREQ * `TWO_POW_32;
   resamplerLimitInt = resamplerLimitNorm;
 end
@@ -159,28 +172,42 @@ always @(negedge modClk or posedge reset) begin
 // Random data
 parameter PN17 = 16'h008e,
           MASK17 = 16'h00ff;
-reg [15:0]sr;
-reg [4:0]zeroCount;
-reg  randData;
+reg         enableSR1;
+reg [15:0]  sr0;
+reg [15:0]  sr1;
+reg [4:0]   zeroCount;
+reg         randData;
+reg         altBit;
 always @(negedge modClk or posedge reset) begin
     if (reset) begin
+        enableSR1 <= 0;
+        altBit <= 0;
         zeroCount <= 5'b0;
-        sr <= MASK17;
-        end
-    else if (infoBitEn) begin
-        if (sr[0] | (zeroCount == 5'b11111))
-            begin
+        sr0 <= MASK17;
+        sr1 <= PN17;
+    end
+    else if (infoBitEn & !enableSR1) begin
+        enableSR1 <= 1;
+        if (sr0[0] | (zeroCount == 5'b11111)) begin
             zeroCount <= 5'h0;
-            sr <= {1'b0, sr[15:1]} ^ PN17;
-            end
-        else
-            begin
+            sr0 <= {1'b0, sr0[15:1]} ^ PN17;
+        end
+        else begin
             zeroCount <= zeroCount + 5'h1;
-            sr <= sr >> 1;
-            end
-        randData <= sr[0];
+            sr0 <= sr0 >> 1;
         end
     end
+    else if (infoBitEn & enableSR1) begin
+        if (sr1[0] | (zeroCount == 5'b11111)) begin
+            zeroCount <= 5'h0;
+            sr1 <= {1'b0, sr1[15:1]} ^ PN17;
+        end
+        else begin
+            zeroCount <= zeroCount + 5'h1;
+            sr1 <= sr1 >> 1;
+        end
+    end
+end
 
 // Incrementing Data
 reg [7:0]   incSR;
@@ -204,32 +231,39 @@ always @(negedge modClk or posedge reset) begin
         end
     end
 
-// Non-systematic R1/2, K7 Convolutional Encoder
-// Uses generator polys G1 = 171 (octal) and G2 = 133
-//wire            vitData = incSR[0];
-wire            vitData = randData;
-//wire            vitData = altData;
-reg     [5:0]   gSR;
-always @(negedge modClk or posedge reset) begin
-    if (reset) begin
-        gSR <= 6'b000000;
+    // Non-systematic R1/2, K7 Convolutional Encoder
+    // Uses generator polys G1 = 171 (octal) and G2 = 133
+    //wire            vitData = incSR[0];
+    wire            vitData = randData;
+    //wire            vitData = altData;
+    reg     [5:0]   gSR0;
+    reg     [5:0]   gSR1;
+    always @(negedge modClk or posedge reset) begin
+        if (reset) begin
+            gSR0 <= 6'b000000;
+            gSR1 <= 6'b000000;
+            end
+        else if (infoBitEn & !enableSR1) begin
+            gSR0 <= {gSR0[4:0],sr0[0]};
         end
-    else if (infoBitEn) begin
-        gSR <= {gSR[4:0],vitData};
+        else if (infoBitEn & enableSR1) begin
+            gSR1 <= {gSR1[4:0],sr1[0]};
         end
     end
 
-                     //   x6        x5       x4      x3        x2       x1       x0
-wire            g1Bit = vitData ^ gSR[0] ^ gSR[1] ^ gSR[2]                   ^ gSR[5];
-wire            g2Bit = vitData          ^ gSR[1] ^ gSR[2]          ^ gSR[4] ^ gSR[5];
+                      //   x6        x5       x4        x3       x2        x1        x0
+wire            g1Bit0 = sr0[0] ^ gSR0[0] ^ gSR0[1] ^ gSR0[2]                    ^ gSR0[5];
+wire            g2Bit0 = sr0[0]           ^ gSR0[1] ^ gSR0[2]          ^ gSR0[4] ^ gSR0[5];
+wire            g1Bit1 = sr1[0] ^ gSR1[0] ^ gSR1[1] ^ gSR1[2]                    ^ gSR1[5];
+wire            g2Bit1 = sr1[0]           ^ gSR1[1] ^ gSR1[2]          ^ gSR1[4] ^ gSR1[5];
 
 reg modData;
 always @(negedge modClk) begin
     if (infoBitEn) begin
-        modData <= g2Bit;
+        modData <= g2Bit0;
     end
     else begin
-        modData <= g1Bit;
+        modData <= g1Bit0;
     end
 end
 
@@ -316,7 +350,7 @@ wire    [33:0]  iCicOut;
 real            iCicReal;
 always @*       iCicReal = $itor($signed(iCicOut));
 oqpskInterpolate cicI(
-    .clk(txClk), 
+    .clk(txClk),
     .reset(!modDataValid | cicReset),
     .clkEn(enableTx),
     .inputClkEn(cicClkEn),
@@ -327,7 +361,7 @@ wire    [17:0]  iInterpOut;
 real            iTxInterpReal;
 always @*       iTxInterpReal = $itor($signed(iInterpOut))/(2**17);
 shift34to18 cicGainAdjustI(
-    .clk(txClk), 
+    .clk(txClk),
     .clkEn(enableTx),
     .shift(modExponent),
     .dIn(iCicOut),
@@ -406,7 +440,7 @@ wire    [33:0]  iCicOut;
 real            iCicReal;
 always @*       iCicReal = $itor($signed(iCicOut));
 oqpskInterpolate cicI(
-    .clk(txClk), 
+    .clk(txClk),
     .reset(!modDataValid | cicReset),
     .clkEn(enableTx),
     .inputClkEn(modSampleEn),
@@ -417,7 +451,7 @@ wire    [17:0]  iInterpOut;
 real            iTxInterpReal;
 always @*       iTxInterpReal = $itor($signed(iInterpOut))/(2**17);
 shift34to18 cicGainAdjustI(
-    .clk(txClk), 
+    .clk(txClk),
     .clkEn(enableTx),
     .shift(modExponent),
     .dIn(iCicOut),
@@ -437,7 +471,7 @@ wire    [33:0]  qCicOut;
 real            qCicReal;
 always @*       qCicReal = $itor($signed(qCicOut));
 oqpskInterpolate cicQ(
-    .clk(txClk), 
+    .clk(txClk),
     .reset(!modDataValid | cicReset),
     .clkEn(enableTx),
     .inputClkEn(modSampleEn),
@@ -448,7 +482,7 @@ wire    [17:0]  qInterpOut;
 real            qTxInterpReal;
 always @*       qTxInterpReal = $itor($signed(qInterpOut))/(2**17);
 shift34to18 cicGainAdjustQ(
-    .clk(txClk), 
+    .clk(txClk),
     .clkEn(enableTx),
     .shift(modExponent),
     .dIn(qCicOut),
@@ -506,8 +540,20 @@ always @(posedge txClk) begin
 reg     signed  [17:0]  iQpsk,qQpsk;
 always @(posedge txClk) begin
     if (modSampleEn & infoBitEn) begin
-        iQpsk <= {g1Bit,17'h10000};
-        qQpsk <= {g2Bit,17'h10000};
+        if (enableSR1) begin
+            iQpsk <= {g1Bit0,17'h10000};
+        end
+        else begin
+            iQpsk <= {g2Bit0,17'h10000};
+        end
+    end
+    else if (modSampleEn & !infoBitEn) begin
+        if (enableSR1) begin
+            qQpsk <= {g2Bit1,17'h10000};
+        end
+        else begin
+            qQpsk <= {g1Bit1,17'h10000};
+        end
     end
 end
 
@@ -526,7 +572,7 @@ wire    [33:0]  iCicOut;
 real            iCicReal;
 always @*       iCicReal = $itor($signed(iCicOut));
 oqpskInterpolate cicI(
-    .clk(txClk), 
+    .clk(txClk),
     .reset(!modDataValid | cicReset),
     .clkEn(enableTx),
     .inputClkEn(modSampleEn),
@@ -537,7 +583,7 @@ wire    [17:0]  iInterpOut;
 real            iTxInterpReal;
 always @*       iTxInterpReal = $itor($signed(iInterpOut))/(2**17);
 shift34to18 cicGainAdjustI(
-    .clk(txClk), 
+    .clk(txClk),
     .clkEn(enableTx),
     .shift(modExponent),
     .dIn(iCicOut),
@@ -557,7 +603,7 @@ wire    [33:0]  qCicOut;
 real            qCicReal;
 always @*       qCicReal = $itor($signed(qCicOut));
 oqpskInterpolate cicQ(
-    .clk(txClk), 
+    .clk(txClk),
     .reset(!modDataValid | cicReset),
     .clkEn(enableTx),
     .inputClkEn(modSampleEn),
@@ -568,7 +614,7 @@ wire    [17:0]  qInterpOut;
 real            qTxInterpReal;
 always @*       qTxInterpReal = $itor($signed(qInterpOut))/(2**17);
 shift34to18 cicGainAdjustQ(
-    .clk(txClk), 
+    .clk(txClk),
     .clkEn(enableTx),
     .shift(modExponent),
     .dIn(qCicOut),
@@ -584,7 +630,6 @@ mpy18x18 qScaler (
     );
 wire    signed  [17:0]  qTx = $signed(qScaledOut[33:16]);
 
-
 `else //FSK
 
 /******************************************************************************
@@ -594,8 +639,8 @@ wire    [31:0]fmModFreq;
 reg     fmModCS;
 reg     enableTx;
 initial enableTx = 0;
-fmMod fmMod( 
-    .clk(clk), .reset(reset), 
+fmMod fmMod(
+    .clk(clk), .reset(reset),
     .cs(fmModCS),
     .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
     .addr(a[11:0]),
@@ -611,50 +656,50 @@ fmMod fmMod(
 `define USE_BASEBAND
 `ifdef USE_BASEBAND
 wire    [17:0]iTx,qTx;
-dds iqDds ( 
-//dds4p0 iqDds ( 
-    .sclr(reset), 
-    .clk(clk), 
+dds iqDds (
+//dds4p0 iqDds (
+    .sclr(reset),
+    .clk(clk),
     .ce(1'b1),
-    .we(1'b1), 
-    .data(fmModFreq), 
-    .sine(), 
+    .we(1'b1),
+    .data(fmModFreq),
+    .sine(),
     .cosine(iTx)
     );
 assign qTx = 18'h0;
 `else
 wire    [17:0]  iBB,qBB;
-dds iqDds ( 
-    .sclr(reset), 
-    .clk(clk), 
+dds iqDds (
+    .sclr(reset),
+    .clk(clk),
     .ce(1'b1),
-    .we(1'b1), 
-    .data(fmModFreq), 
-    .sine(qBB), 
+    .we(1'b1),
+    .data(fmModFreq),
+    .sine(qBB),
     .cosine(iBB)
     );
 wire    [17:0]  iLO,qLO;
 dds carrierDds (
-    .sclr(reset), 
-    .clk(clk), 
+    .sclr(reset),
+    .clk(clk),
     .ce(1'b1),
-    .we(1'b1), 
-    .data(carrierFreq), 
-    .sine(qLO), 
+    .we(1'b1),
+    .data(carrierFreq),
+    .sine(qLO),
     .cosine(iLO)
     );
 wire [35:0]productI;
-mpy18x18 mpyI(.clk(clk), 
+mpy18x18 mpyI(.clk(clk),
                 .sclr(reset),
-                .a(iBB), 
-                .b(iLO), 
+                .a(iBB),
+                .b(iLO),
                 .p(productI)
                 );
 wire [35:0]productQ;
-mpy18x18 mpyQ(.clk(clk), 
+mpy18x18 mpyQ(.clk(clk),
                 .sclr(reset),
-                .a(qBB), 
-                .b(qLO), 
+                .a(qBB),
+                .b(qLO),
                 .p(productQ)
                 );
 wire [35:0]carrierSum = productI + productQ;
@@ -663,7 +708,7 @@ wire [17:0]qTx = 18'h0;
 always @(posedge clk) begin
     iTx <= carrierSum[35:18];
     end
-
+`endif //USE_BASEBAND
 
 `endif //Modulation Format Selection
 
@@ -682,18 +727,23 @@ real txScaleFactor;
  //always @(qTx) qTxReal = (qTx[17] ? (qTx - 262144.0) : qTx)/131072.0;
 
 
+`ifdef ROT0
 // 0 Degrees
-//real rotateReal = 1.0;
-//real rotateImag = 0.0;
+real rotateReal = 1.0;
+real rotateImag = 0.0;
+`elsif ROT45
 // 45 Degrees
-//real rotateReal = 0.707;
-//real rotateImag = 0.707;
+real rotateReal = 0.707;
+real rotateImag = 0.707;
+`elsif ROT90
 // 90 Degrees
 real rotateReal = 0.0;
 real rotateImag = 1.0;
+`elsif ROT180
 // 180 Degrees
-//real rotateReal = -1.0;
-//real rotateImag = 0.0;
+real rotateReal = -1.0;
+real rotateImag = 0.0;
+`endif
 
 real iRotReal = (iTxReal*rotateReal - qTxReal*rotateImag) * txScaleFactor;
 real qRotReal = (iTxReal*rotateImag + qTxReal*rotateReal) * txScaleFactor;
@@ -741,7 +791,7 @@ always @(negedge txClk) begin
         end
     end
 
-wire    [18:0]  iRxSum = {iSignal[17],iSignal} + {iNoise[17],iNoise};                    
+wire    [18:0]  iRxSum = {iSignal[17],iSignal} + {iNoise[17],iNoise};
 always @(iRxSum) begin
     if (iRxSum[18] & !iRxSum[17]) begin
         iRx = 18'h20001;
@@ -753,7 +803,7 @@ always @(iRxSum) begin
         iRx = iRxSum[17:0];
         end
     end
-wire    [18:0]  qRxSum = {qSignal[17],qSignal} + {qNoise[17],qNoise};                    
+wire    [18:0]  qRxSum = {qSignal[17],qSignal} + {qNoise[17],qNoise};
 always @(qRxSum) begin
     if (qRxSum[18] & !qRxSum[17]) begin
         qRx = 18'h20001;
@@ -775,7 +825,7 @@ always @(qRxSum) begin
 wire            [17:0]  dac0Out,dac1Out,dac2Out;
 wire    signed  [17:0]  iSymData, qSymData, sdiDataI, sdiDataQ;
 wire            [4:0]   demodMode;
-demod demod( 
+demod demod(
     .clk(clk), .reset(reset),
     .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
     .addr(a),
@@ -801,35 +851,34 @@ demod demod(
     .demodMode(demodMode)
     );
 
-/******************************************************************************
-                              Viterbi Decoder
-******************************************************************************/
-// Simulate the one clock delay in FPGA2
-reg     signed  [17:0]  iIn,qIn;
-always @(posedge clk) begin
-    iIn <= iSymData;
-    qIn <= qSymData;
-end
+//******************************************************************************
+//                          Dual Viterbi Decoder
+//******************************************************************************
+    // Simulate the one clock delay in FPGA2
+    reg     signed  [17:0]  iIn,qIn;
+    always @(posedge clk) begin
+        iIn <= iSymData;
+        qIn <= qSymData;
+    end
 
-wire    [31:0]  vitDout;
-viterbi viterbi(
-    .clk(clk),
-    .clkEn(1'b1),
-    .reset(reset),
-    .wr0(we0),.wr1(we1),.wr2(we2),.wr3(we3),
-    .addr(a),
-    .din(d),
-    .dout(vitDout),
-    .demodMode(demodMode),
-    //.symEn(sdiSymEn),
-    //.iSymData(sdiDataI),
-    //.qSymData(sdiDataQ),
-    .symEn(demodSymEn),
-    .iSymData(iIn),
-    .qSymData(qIn),
-    .bitEnOut(viterbiSymEn),
-    .bitOut(viterbiBit),
-    .vitError()
+    wire    [31:0]  vitDout;
+    dualViterbi viterbi(
+        .clk(clk),
+        .clkEn(1'b1),
+        .reset(reset),
+        .wr0(we0),.wr1(we1),.wr2(we2),.wr3(we3),
+        .addr(a),
+        .din(d),
+        .dout(vitDout),
+        .demodMode(demodMode),
+        .decoderSource(dec_in_sel),
+        .symEn(demodSymEn),
+        .iSymData(iIn),
+        .qSymData(qIn),
+        .bitEnOut(viterbiSymEn),
+        .iBitOut(viterbiBit0),
+        .iBitOut(viterbiBit1),
+        .vitError()
     );
     reg viterbiSym2xEn;
     always @* begin
@@ -867,7 +916,7 @@ always @(a) begin
             dac1CS <= 0;
             dac2CS <= 1;
             end
-        default: begin  
+        default: begin
             dac0CS <= 0;
             dac1CS <= 0;
             dac2CS <= 0;
@@ -918,11 +967,9 @@ assign dac2_d = dac2Data[17:4];
 assign dac2_clk = clk;
 
 
-reg     [1:0]   dec_in_sel;
 reg             iDec,qDec;
 reg             decoderSymEn;
 reg             decoderSym2xEn;
-initial dec_in_sel = `DEC_MUX_SEL_VITERBI;
 always @(posedge clk) begin
     case (dec_in_sel)
         `DEC_MUX_SEL_DEMOD: begin
@@ -932,8 +979,14 @@ always @(posedge clk) begin
             decoderSym2xEn <= demodSym2xEn ;
         end
         `DEC_MUX_SEL_VITERBI: begin
-            iDec <= viterbiBit;
-            qDec <= viterbiBit;
+            iDec <= viterbiBit0;
+            qDec <= viterbiBit0;
+            decoderSymEn <= viterbiSymEn;
+            decoderSym2xEn <= viterbiSym2xEn;
+        end
+        `DEC_MUX_SEL_DUALVIT: begin
+            iDec <= viterbiBit0;
+            qDec <= viterbiBit1;
             decoderSymEn <= viterbiSymEn;
             decoderSym2xEn <= viterbiSym2xEn;
         end
@@ -1005,6 +1058,8 @@ always @(posedge clk) begin
         txDelay <= delaySR[412];
         `elsif TEST_QPSK
         txDelay <= delaySR[468];
+        `elsif TEST_OQPSK
+        txDelay <= delaySR[468];
         `else
         txDelay <= delaySR[418];
         `endif
@@ -1013,7 +1068,7 @@ always @(posedge clk) begin
         end
     end
 
-reg testBits;  
+reg testBits;
 initial testBits = 0;
 reg     bitError;
 integer bitErrors;
@@ -1096,14 +1151,14 @@ task write16;
     if (addr[1]) begin
         d[31:16] = data;
         #100 we2 = 1; we3 = 1;
-        #100 we2 = 0; we3 = 0; 
+        #100 we2 = 0; we3 = 0;
         end
     else begin
         d[15:0] = data;
         #100 we0 = 1; we1 = 1;
-        #100 we0 = 0; we1 = 0; 
+        #100 we0 = 0; we1 = 0;
         end
-    #100  
+    #100
     d = 32'hz;
     #200;
   end
@@ -1117,7 +1172,7 @@ task write32;
     d = data;
     rd = 0;
     #100 we0 = 1; we1 = 1; we2 = 1; we3 = 1;
-    #100 we0 = 0; we1 = 0; we2 = 0; we3 = 0; 
+    #100 we0 = 0; we1 = 0; we2 = 0; we3 = 0;
     #100
     d = 32'hz;
     #200;
@@ -1138,7 +1193,7 @@ endtask
 initial begin
 
     `ifdef ADD_NOISE
-    // The 11.5 is a fudge factor (should be 12 for the 2 bit shift) for the scaling 
+    // The 11.5 is a fudge factor (should be 12 for the 2 bit shift) for the scaling
     // down of the transmit waveform from full scale.
     // The 13.0 is to translate from SNR to EBNO which is 10log10(bitrate/bandwidth).
     $initGaussPLI(1,20.0 + 11.5 - 7.0,131072.0);
@@ -1150,7 +1205,7 @@ initial begin
     sync = 1;
     clk = 0;
     rd = 0;
-    we0 = 0; we1 = 0; we2 = 0; we3 = 0; 
+    we0 = 0; we1 = 0; we2 = 0; we3 = 0;
     d = 32'hz;
     fmModCS = 0;
     txScaleFactor = 0.25;
@@ -1166,6 +1221,11 @@ initial begin
     modExponent = 7;
 
     `elsif TEST_QPSK
+
+    // This value is ceiling(log2(R*R)), where R = interpolation rate.
+    modExponent = 7;
+
+    `elsif TEST_OQPSK
 
     // This value is ceiling(log2(R*R)), where R = interpolation rate.
     modExponent = 7;
@@ -1186,37 +1246,49 @@ initial begin
 
     // Init the mode
     `ifdef TEST_BPSK
-    write32(createAddress(`DEMODSPACE,`DEMOD_CONTROL),{14'bx,`MODE_SINGLE_RAIL,13'bx,`MODE_BPSK});
+    write32(createAddress(`DEMODSPACE,`DEMOD_CONTROL),{14'bx,`MODE_SINGLE_RAIL,11'bx,`MODE_BPSK});
     `elsif TEST_QPSK
-    write32(createAddress(`DEMODSPACE,`DEMOD_CONTROL),{14'bx,`MODE_SINGLE_RAIL,13'bx,`MODE_QPSK});
+    write32(createAddress(`DEMODSPACE,`DEMOD_CONTROL),{14'bx,`MODE_SINGLE_RAIL,11'bx,`MODE_QPSK});
+    `elsif TEST_OQPSK
+        `ifdef Q_BEFORE_I
+        write32(createAddress(`DEMODSPACE,`DEMOD_CONTROL),{14'bx,`MODE_SINGLE_RAIL,2'b0,1'b0,8'b0,`MODE_OQPSK});
+        `else
+        write32(createAddress(`DEMODSPACE,`DEMOD_CONTROL),{14'bx,`MODE_SINGLE_RAIL,2'b0,1'b1,8'b0,`MODE_OQPSK});
+        `endif
     `else
-    write32(createAddress(`DEMODSPACE,`DEMOD_CONTROL),{14'bx,`MODE_SINGLE_RAIL,13'bx,`MODE_2FSK});
+    write32(createAddress(`DEMODSPACE,`DEMOD_CONTROL),{14'bx,`MODE_SINGLE_RAIL,11'bx,`MODE_2FSK});
     `endif
 
     // Init the sample rate loop filters
     write32(createAddress(`RESAMPSPACE,`RESAMPLER_RATE),resamplerFreqInt);
     write32(createAddress(`BITSYNCSPACE,`LF_CONTROL),1);    // Zero the error
-    write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h001b0016);    
-    //write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h0014000c);    
-    write32(createAddress(`BITSYNCSPACE,`LF_LIMIT), resamplerLimitInt);    
+    write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h001b0016);
+    //write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h0014000c);
+    write32(createAddress(`BITSYNCSPACE,`LF_LIMIT), resamplerLimitInt);
 
     // Init the carrier loop filters
     `ifdef TEST_BPSK
     write32(createAddress(`CARRIERSPACE,`CLF_CONTROL),1);    // Zero the error
-    write32(createAddress(`CARRIERSPACE,`CLF_LEAD_LAG),32'h18180808);   
+    write32(createAddress(`CARRIERSPACE,`CLF_LEAD_LAG),32'h18180808);
     write32(createAddress(`CARRIERSPACE,`CLF_ULIMIT), carrierLimit);
     write32(createAddress(`CARRIERSPACE,`CLF_LLIMIT), -carrierLimit);
     write32(createAddress(`CARRIERSPACE,`CLF_LOOPDATA), sweepRate);
     `elsif TEST_QPSK
     write32(createAddress(`CARRIERSPACE,`CLF_CONTROL),1);    // Zero the error
-    write32(createAddress(`CARRIERSPACE,`CLF_LEAD_LAG),32'h18180808);   
+    write32(createAddress(`CARRIERSPACE,`CLF_LEAD_LAG),32'h18180808);
+    write32(createAddress(`CARRIERSPACE,`CLF_ULIMIT), carrierLimit);
+    write32(createAddress(`CARRIERSPACE,`CLF_LLIMIT), -carrierLimit);
+    write32(createAddress(`CARRIERSPACE,`CLF_LOOPDATA), sweepRate);
+    `elsif TEST_OQPSK
+    write32(createAddress(`CARRIERSPACE,`CLF_CONTROL),1);    // Zero the error
+    write32(createAddress(`CARRIERSPACE,`CLF_LEAD_LAG),32'h18180808);
     write32(createAddress(`CARRIERSPACE,`CLF_ULIMIT), carrierLimit);
     write32(createAddress(`CARRIERSPACE,`CLF_LLIMIT), -carrierLimit);
     write32(createAddress(`CARRIERSPACE,`CLF_LOOPDATA), sweepRate);
     `else
     // Setup for AFC
     write32(createAddress(`CARRIERSPACE,`CLF_CONTROL),1);    // Zero the error
-    write32(createAddress(`CARRIERSPACE,`CLF_LEAD_LAG),32'h00000012);   
+    write32(createAddress(`CARRIERSPACE,`CLF_LEAD_LAG),32'h00000012);
     write32(createAddress(`CARRIERSPACE,`CLF_ULIMIT), carrierLimit);
     write32(createAddress(`CARRIERSPACE,`CLF_LLIMIT), -carrierLimit);
     write32(createAddress(`CARRIERSPACE,`CLF_LOOPDATA), sweepRate);
@@ -1224,8 +1296,8 @@ initial begin
 
     // Init the trellis carrier loop
     write32(createAddress(`TRELLISLFSPACE,`LF_CONTROL),13);    // Forces the lag acc and the error term to be zero
-    write32(createAddress(`TRELLISLFSPACE,`LF_LEAD_LAG),32'h0015_0005);   
-    write32(createAddress(`TRELLISLFSPACE,`LF_LIMIT),32'h0100_0000);   
+    write32(createAddress(`TRELLISLFSPACE,`LF_LEAD_LAG),32'h0015_0005);
+    write32(createAddress(`TRELLISLFSPACE,`LF_LIMIT),32'h0100_0000);
     //write32(createAddress(`TRELLISLFSPACE,`LF_LOOPDATA0),32'h0333_3333);
     //write32(createAddress(`TRELLISLFSPACE,`LF_LOOPDATA0),32'h0666_6666);
     write32(createAddress(`TRELLISLFSPACE,`LF_LOOPDATA0),32'h0100_0000);
@@ -1238,6 +1310,8 @@ initial begin
     `ifdef TEST_BPSK
     write32(createAddress(`DDCSPACE,`DDC_CENTER_FREQ), 0);
     `elsif TEST_QPSK
+    write32(createAddress(`DDCSPACE,`DDC_CENTER_FREQ), 0);
+    `elsif TEST_OQPSK
     write32(createAddress(`DDCSPACE,`DDC_CENTER_FREQ), 0);
     `else
     write32(createAddress(`DDCSPACE,`DDC_CENTER_FREQ), carrierFreq);
@@ -1270,11 +1344,15 @@ initial begin
     write32(createAddress(`INTERP2SPACE, `INTERP_MANTISSA), 32'h00012000);
 
     `ifdef TEST_BPSK
-    // Set for inverse of 0.45 which is a smidge less than the AGC setpoint of 0.5 to 
+    // Set for inverse of 0.45 which is a smidge less than the AGC setpoint of 0.5 to
     // account for shaping filter losses.
     write32(createAddress(`VITERBISPACE, `VIT_INVERSE_MEAN), 32'h00018e39);
     `elsif TEST_QPSK
-    // Set for inverse of 0.225 which is a smidge less than the AGC setpoint of 0.25 to 
+    // Set for inverse of 0.225 which is a smidge less than the AGC setpoint of 0.25 to
+    // account for shaping filter losses.
+    write32(createAddress(`VITERBISPACE, `VIT_INVERSE_MEAN), 32'h00028e39);
+    `elsif TEST_OQPSK
+    // Set for inverse of 0.225 which is a smidge less than the AGC setpoint of 0.25 to
     // account for shaping filter losses.
     write32(createAddress(`VITERBISPACE, `VIT_INVERSE_MEAN), 32'h00028e39);
     `else
@@ -1294,6 +1372,8 @@ initial begin
     `ifdef TEST_BPSK
     demod.ddc.ddcFreq = 0;
     `elsif TEST_QPSK
+    demod.ddc.ddcFreq = 0;
+    `elsif TEST_OQPSK
     demod.ddc.ddcFreq = 0;
     `else
     // Force the carrier frequency to load. We have to do this because
@@ -1317,6 +1397,10 @@ initial begin
     #(2*C) ;
     cicReset = 0;
     `elsif TEST_QPSK
+    cicReset = 1;
+    #(2*C) ;
+    cicReset = 0;
+    `elsif TEST_OQPSK
     cicReset = 1;
     #(2*C) ;
     cicReset = 0;
@@ -1344,7 +1428,7 @@ initial begin
     interpReset = 0;
 
     // Enable the sample rate loop without 2 sample summer
-    write32(createAddress(`BITSYNCSPACE,`LF_CONTROL),32'h0000_0000);  
+    write32(createAddress(`BITSYNCSPACE,`LF_CONTROL),32'h0000_0000);
 
     // Wait 2 bit periods
     #(10*bitrateSamplesInt*TC) ;
@@ -1356,12 +1440,14 @@ initial begin
 
     `ifdef ENABLE_AGC
     // Enable the AGC loop
-    write32(createAddress(`CHAGCSPACE,`ALF_CONTROL),0);              
+    write32(createAddress(`CHAGCSPACE,`ALF_CONTROL),0);
     `endif
 
-    `ifdef TEST_BPSK    
+    `ifdef TEST_BPSK
     write32(createAddress(`CARRIERSPACE,`CLF_CONTROL),2);
     `elsif TEST_QPSK
+    write32(createAddress(`CARRIERSPACE,`CLF_CONTROL),2);
+    `elsif TEST_OQPSK
     write32(createAddress(`CARRIERSPACE,`CLF_CONTROL),2);
     `endif
 

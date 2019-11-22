@@ -16,7 +16,8 @@ module dualViterbi(
     input   signed  [17:0]  iSymData,
     input   signed  [17:0]  qSymData,
     output                  bitEnOut,
-    output                  bitOut,
+    output                  iBitOut,
+    output                  qBitOut,
     output  reg             vitError
     );
 
@@ -61,7 +62,7 @@ module dualViterbi(
                     codeEn <= 1;
                 end
                 `MODE_OQPSK: begin
-                    if (decoderSource == `DEC_MUX_SEL_DUAL_VIT) begin
+                    if (decoderSource == `DEC_MUX_SEL_DUALVIT) begin
                         if (softEn) begin
                             codeEn <= ~codeEn;
                         end
@@ -101,7 +102,7 @@ module dualViterbi(
     // Soft Decision Mapper
     wire    [2:0]   iSoft;
     softDecisionMapper iMap(
-        .clk(clk), 
+        .clk(clk),
         .clkEn(softEn),
         .reset(reset),
         .inverseMeanMantissa(invMeanMantissa),
@@ -111,7 +112,7 @@ module dualViterbi(
     );
     wire    [2:0]   qSoft;
     softDecisionMapper qMap(
-        .clk(clk), 
+        .clk(clk),
         .clkEn(softEn),
         .reset(reset),
         .inverseMeanMantissa(invMeanMantissa),
@@ -142,6 +143,7 @@ module dualViterbi(
 
     // G1/G2 synchronization
     reg     [2:0]   i_g1,i_g2;
+    reg     [2:0]   q_g1,q_g2;
     reg             outOfSync;
     reg     [1:0]   singleRailState;
     parameter   G1G2 =      2'b00,
@@ -195,7 +197,7 @@ module dualViterbi(
                             P90_G1G2: begin
                                 i_g1 <= qSoftDelay1;
                                 i_g2 <= qSoftDelay0;
-                                q_g1 <= ~iSoftDelay;
+                                q_g1 <= ~iSoftDelay0;
                                 q_g2 <= ~iSoft;
                             end
                             P180_G1G2: begin
@@ -207,7 +209,7 @@ module dualViterbi(
                             P270_G1G2: begin
                                 i_g1 <= ~qSoftDelay1;
                                 i_g2 <= ~qSoftDelay0;
-                                q_g1 <= iSoftDelay;
+                                q_g1 <= iSoftDelay0;
                                 q_g2 <= iSoft;
                             end
                             P0_G1G2_: begin
@@ -219,7 +221,7 @@ module dualViterbi(
                             P90_G1G2_: begin
                                 i_g1 <= qSoftDelay1;
                                 i_g2 <= qSoftDelay0;
-                                q_g1 <= iSoftDelay;
+                                q_g1 <= iSoftDelay0;
                                 q_g2 <= iSoft;
                             end
                             P180_G1G2_: begin
@@ -231,7 +233,7 @@ module dualViterbi(
                             P270_G1G2_: begin
                                 i_g1 <= ~qSoftDelay1;
                                 i_g2 <= ~qSoftDelay0;
-                                q_g1 <= ~iSoftDelay;
+                                q_g1 <= ~iSoftDelay0;
                                 q_g2 <= ~iSoft;
                             end
                             default: begin
@@ -530,7 +532,7 @@ module dualViterbi(
 
     `else //HARD_DECISIONS
 
-    wire    [15:0]  berCount;
+    wire    [15:0]  berCountI;
     xilinxViterbiV7p0 vitI(
         .clk(clk),
         .ce(vitEn),
@@ -542,11 +544,12 @@ module dualViterbi(
         .data_in0(i_g1),
         .data_in1(i_g2),
         .rdy(viterbiBitEn),
-        .data_out(bitOut),
+        .data_out(iBitOut),
         .norm(norm),
         .ber_done(berDone),
-        .ber(berCount)
+        .ber(berCountI)
     );
+    wire    [15:0]  berCountQ;
     xilinxViterbiV7p0 vitQ(
         .clk(clk),
         .ce(vitEn),
@@ -557,11 +560,11 @@ module dualViterbi(
         `endif
         .data_in0(q_g1),
         .data_in1(q_g2),
-        .rdy(viterbiBitEn),
-        .data_out(bitOut),
+        .rdy(),
+        .data_out(qBitOut),
         .norm(norm),
-        .ber_done(berDone),
-        .ber(berCount)
+        .ber_done(),
+        .ber(berCountQ)
     );
 
     `endif //HARD_DECISIONS
@@ -573,6 +576,7 @@ module dualViterbi(
     // Sync Detect
     `define USE_BER
     `ifdef USE_BER
+    wire            [15:0]  berCount = berCountI + berCountQ;
     reg     signed  [15:0]  sprtAccum;
     `define SPRT_SYNC_LIMIT     16'd128
     `define SPRT_START_VALUE    16'd64

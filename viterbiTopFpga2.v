@@ -483,9 +483,9 @@ pcmDecoder scDecoder (
     .data_out(sc_dataOut),            // data output
     .clkEn_out(sc_clkEnOut),          // clk output
     .fifo_rs(),
-    .clk_inv(sc_clk_inv),   
+    .clk_inv(sc_clk_inv),
     .bypass_fifo(),
-    .symb_clk(sc_symbol_clk)  
+    .symb_clk(sc_symbol_clk)
     );
 wire sc_cout = (sc_symbol_clk) ^ !sc_clk_inv;
 
@@ -799,10 +799,9 @@ assign dac2_clk = clk;
         endcase
     end
     `endif
-`endif //ADD_VITERBI
 
+`elsif ADD_DUAL_VITERBI
 
-`ifdef ADD_VITERBI
 //******************************************************************************
 //                          Dual Viterbi Decoder
 //******************************************************************************
@@ -821,7 +820,8 @@ assign dac2_clk = clk;
         .iSymData(iIn),
         .qSymData(qIn),
         .bitEnOut(viterbiBitEn),
-        .bitOut(viterbiBit),
+        .iBitOut(viterbiBitI),
+        .qBitOut(viterbiBitQ),
         .vitError()
         );
     reg viterbiSym2xEn;
@@ -836,7 +836,8 @@ assign dac2_clk = clk;
             end
         endcase
     end
-`endif //ADD_VITERBI
+
+`endif //ADD_DUAL_VITERBI
 
 
 //******************************************************************************
@@ -1103,7 +1104,7 @@ always @* begin
         dout_q = sc_dataOut;
         end
     `ifdef ADD_DQM
-    else if (qOutMuxSel == `OUT_MUX_SEL_DQM) begin 
+    else if (qOutMuxSel == `OUT_MUX_SEL_DQM) begin
         dout_q = dqmQ;
         end
     `endif
