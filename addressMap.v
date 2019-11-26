@@ -35,7 +35,9 @@
 `ifdef TRELLIS_DEMOD
 `define CIC_COMP_USE_MPY
 `define ADD_DQM
-`define ADD_VITERBI
+//`define ADD_VITERBI
+`define ADD_DUAL_VITERBI
+//`define THREE_DAC_CHANNELS
 `endif
 
 `ifdef SUBCARRIER_DEMOD

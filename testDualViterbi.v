@@ -9,14 +9,14 @@
 //`define BER_TEST
 //`define MATLAB_VECTORS
 
-`define ROT0
-//`define ROT90
+//`define ROT0
+`define ROT90
 //`define ROT180
 //`define ROT270
 //`define ROT45
 
 `ifdef TEST_OQPSK
-    `define Q_BEFORE_I
+//    `define Q_BEFORE_I
 `endif
 
 `ifdef BER_TEST
@@ -175,58 +175,65 @@ parameter PN17 = 16'h008e,
 reg         enableSR1;
 reg [15:0]  sr0;
 reg [15:0]  sr1;
-reg [4:0]   zeroCount;
+reg [4:0]   zeroCount0;
+reg [4:0]   zeroCount1;
 reg         randData;
 reg         altBit;
 always @(negedge modClk or posedge reset) begin
     if (reset) begin
         enableSR1 <= 0;
+    end
+    else if (infoBitEn) begin
+        enableSR1 <= ~enableSR1;
+    end
+
+    if (reset) begin
         altBit <= 0;
-        zeroCount <= 5'b0;
+        zeroCount0 <= 5'b0;
+        zeroCount1 <= 5'b0;
         sr0 <= MASK17;
         sr1 <= PN17;
     end
     else if (infoBitEn & !enableSR1) begin
-        enableSR1 <= 1;
-        if (sr0[0] | (zeroCount == 5'b11111)) begin
-            zeroCount <= 5'h0;
+        if (sr0[0] | (zeroCount0 == 5'b11111)) begin
+            zeroCount0 <= 5'h0;
             sr0 <= {1'b0, sr0[15:1]} ^ PN17;
         end
         else begin
-            zeroCount <= zeroCount + 5'h1;
+            zeroCount0 <= zeroCount0 + 5'h1;
             sr0 <= sr0 >> 1;
         end
     end
-    else if (infoBitEn & enableSR1) begin
-        if (sr1[0] | (zeroCount == 5'b11111)) begin
-            zeroCount <= 5'h0;
+    else if (!infoBitEn & enableSR1) begin
+        if (sr1[0] | (zeroCount1 == 5'b11111)) begin
+            zeroCount1 <= 5'h0;
             sr1 <= {1'b0, sr1[15:1]} ^ PN17;
         end
         else begin
-            zeroCount <= zeroCount + 5'h1;
+            zeroCount1 <= zeroCount1 + 5'h1;
             sr1 <= sr1 >> 1;
         end
     end
 end
 
-// Incrementing Data
-reg [7:0]   incSR;
-integer     bitCnt;
-reg [7:0]   incValue;
-always @(negedge modClk or posedge reset) begin
-    if (reset) begin
-        bitCnt <= 5;
-        incValue <= 0;
-        end
-    else if (infoBitEn) begin
-        if (bitCnt == 0) begin
+    // Incrementing Data
+    reg [7:0]   incSR;
+    integer     bitCnt;
+    reg [7:0]   incValue;
+    always @(negedge modClk or posedge reset) begin
+        if (reset) begin
             bitCnt <= 5;
-            incSR <= incValue;
-            incValue <= incValue + 1;
+            incValue <= 0;
+        end
+        else if (infoBitEn) begin
+            if (bitCnt == 0) begin
+                bitCnt <= 5;
+                incSR <= incValue;
+                incValue <= incValue + 1;
             end
-        else begin
-            bitCnt <= bitCnt - 1;
-            incSR <= {1'b0,incSR[7:1]};
+            else begin
+                bitCnt <= bitCnt - 1;
+                incSR <= {1'b0,incSR[7:1]};
             end
         end
     end
@@ -242,11 +249,11 @@ always @(negedge modClk or posedge reset) begin
         if (reset) begin
             gSR0 <= 6'b000000;
             gSR1 <= 6'b000000;
-            end
+        end
         else if (infoBitEn & !enableSR1) begin
             gSR0 <= {gSR0[4:0],sr0[0]};
         end
-        else if (infoBitEn & enableSR1) begin
+        else if (!infoBitEn & enableSR1) begin
             gSR1 <= {gSR1[4:0],sr1[0]};
         end
     end
@@ -539,7 +546,7 @@ always @(posedge txClk) begin
 
 reg     signed  [17:0]  iQpsk,qQpsk;
 always @(posedge txClk) begin
-    if (modSampleEn & infoBitEn) begin
+    if (modSampleEn & !infoBitEn) begin
         if (enableSR1) begin
             iQpsk <= {g1Bit0,17'h10000};
         end
@@ -547,12 +554,12 @@ always @(posedge txClk) begin
             iQpsk <= {g2Bit0,17'h10000};
         end
     end
-    else if (modSampleEn & !infoBitEn) begin
+    else if (modSampleEn & infoBitEn) begin
         if (enableSR1) begin
-            qQpsk <= {g2Bit1,17'h10000};
+            qQpsk <= {g1Bit1,17'h10000};
         end
         else begin
-            qQpsk <= {g1Bit1,17'h10000};
+            qQpsk <= {g2Bit1,17'h10000};
         end
     end
 end
@@ -877,7 +884,7 @@ demod demod(
         .qSymData(qIn),
         .bitEnOut(viterbiSymEn),
         .iBitOut(viterbiBit0),
-        .iBitOut(viterbiBit1),
+        .qBitOut(viterbiBit1),
         .vitError()
     );
     reg viterbiSym2xEn;

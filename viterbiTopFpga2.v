@@ -18,10 +18,16 @@ module viterbiTopFpga2 (
     bsyncLockInput,demodLockInput,
     sdiInput,
     dac0_nCs,dac0_sclk,
+    dac0_clk,
+    dac0_d,
     dac1_nCs,dac1_sclk,
+    dac1_clk,
+    dac1_d,
+    `ifdef THREE_DAC_CHANNELS
     dac2_nCs,dac2_sclk,
-    dac0_d,dac1_d,dac2_d,
-    dac0_clk,dac1_clk,dac2_clk,
+    dac2_clk,
+    dac2_d,
+    `endif
     cout_i,dout_i,
     cout_q,dout_q,
     bsync_nLock,demod_nLock,
@@ -68,10 +74,16 @@ input           iData,qData;
 
 output          dac_rst;
 output          dac0_nCs,dac0_sclk;
+output          dac0_clk;
+output  [13:0]  dac0_d;
 output          dac1_nCs,dac1_sclk;
+output          dac1_clk;
+output  [13:0]  dac1_d;
+`ifdef THREE_DAC_CHANNELS
 output          dac2_nCs,dac2_sclk;
-output  [13:0]  dac0_d,dac1_d,dac2_d;
-output          dac0_clk,dac1_clk,dac2_clk;
+output          dac2_clk;
+output  [13:0]  dac2_d;
+`endif
 output          cout_i,dout_i;
 output          cout_q,dout_q;
 output          bsync_nLock,demod_nLock;
@@ -604,6 +616,7 @@ always @(posedge clk) begin
         dac1Sync <= sc_dac1Sync;
         end
 
+    `ifdef THREE_DAC_CHANNELS
     if (dac2_in_sel == `DAC_IN_SEL_DEMOD) begin
         if (trellisMode) begin
             case (dac2Select)
@@ -629,7 +642,9 @@ always @(posedge clk) begin
         interp2DataIn <= sc_dac2Data;
         dac2Sync <= sc_dac2Sync;
         end
+    `endif
     end
+
 //******************************************************************************
 //                              Interpolators
 //******************************************************************************
@@ -659,6 +674,7 @@ interpolate #(.RegSpace(`INTERP1SPACE), .FirRegSpace(`VIDFIR1SPACE)) dac1Interp(
     .dataOut(interp1DataOut)
     );
 
+`ifdef THREE_DAC_CHANNELS
 wire    [31:0]  interp2Dout;
 wire    [17:0]  interp2DataOut;
 wire    [13:0]  dac2Out = interp2DataOut[17:4];
@@ -671,6 +687,7 @@ interpolate #(.RegSpace(`INTERP2SPACE), .FirRegSpace(`VIDFIR2SPACE)) dac2Interp(
     .dataIn(interp2DataIn),
     .dataOut(interp2DataOut)
     );
+`endif
 
 FDCE dac0_d_0  (.Q(dac0_d[0]),   .C(clk),  .CE(1'b1),  .CLR(1'b0), .D(dac0Out[0]));
 FDCE dac0_d_1  (.Q(dac0_d[1]),   .C(clk),  .CE(1'b1),  .CLR(1'b0), .D(dac0Out[1]));
@@ -704,6 +721,7 @@ FDCE dac1_d_12 (.Q(dac1_d[12]),  .C(clk),  .CE(1'b1),  .CLR(1'b0), .D(dac1Out[12
 FDCE dac1_d_13 (.Q(dac1_d[13]),  .C(clk),  .CE(1'b1),  .CLR(1'b0), .D(~dac1Out[13]));
 assign dac1_clk = clk;
 
+`ifdef THREE_DAC_CHANNELS
 FDCE dac2_d_0  (.Q(dac2_d[0]),   .C(clk),  .CE(1'b1),  .CLR(1'b0), .D(dac2Out[0]));
 FDCE dac2_d_1  (.Q(dac2_d[1]),   .C(clk),  .CE(1'b1),  .CLR(1'b0), .D(dac2Out[1]));
 FDCE dac2_d_2  (.Q(dac2_d[2]),   .C(clk),  .CE(1'b1),  .CLR(1'b0), .D(dac2Out[2]));
@@ -719,6 +737,7 @@ FDCE dac2_d_11 (.Q(dac2_d[11]),  .C(clk),  .CE(1'b1),  .CLR(1'b0), .D(dac2Out[11
 FDCE dac2_d_12 (.Q(dac2_d[12]),  .C(clk),  .CE(1'b1),  .CLR(1'b0), .D(dac2Out[12]));
 FDCE dac2_d_13 (.Q(dac2_d[13]),  .C(clk),  .CE(1'b1),  .CLR(1'b0), .D(~dac2Out[13]));
 assign dac2_clk = clk;
+`endif
 
 `ifdef ADD_VITERBI
 //******************************************************************************
@@ -1174,6 +1193,7 @@ always @* begin
          rd_mux = interp1Dout[15:0];
          end
        end
+    `ifdef THREE_DAC_CHANNELS
      `VIDFIR2SPACE,
      `INTERP2SPACE: begin
        if (addr[1]) begin
@@ -1183,6 +1203,7 @@ always @* begin
          rd_mux = interp2Dout[15:0];
          end
        end
+    `endif
      `TRELLISLFSPACE,
      `TRELLIS_SPACE: begin
          if (addr[1]) begin

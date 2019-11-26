@@ -545,7 +545,7 @@ module dualViterbi(
         .data_in1(i_g2),
         .rdy(viterbiBitEn),
         .data_out(iBitOut),
-        .norm(norm),
+        .norm(),
         .ber_done(berDone),
         .ber(berCountI)
     );
@@ -562,7 +562,7 @@ module dualViterbi(
         .data_in1(q_g2),
         .rdy(),
         .data_out(qBitOut),
-        .norm(norm),
+        .norm(),
         .ber_done(),
         .ber(berCountQ)
     );
