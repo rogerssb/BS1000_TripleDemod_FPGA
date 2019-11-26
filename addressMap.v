@@ -35,13 +35,15 @@
 `ifdef TRELLIS_DEMOD
 `define CIC_COMP_USE_MPY
 `define ADD_DQM
-//`define ADD_VITERBI
-`define ADD_DUAL_VITERBI
-//`define THREE_DAC_CHANNELS
+`define ADD_VITERBI
 `endif
 
 `ifdef SUBCARRIER_DEMOD
 `define DDC_CIC_COMP_USE_MPY
+`endif
+
+`ifdef VITERBI_DEMOD
+`define ADD_DQM
 `endif
 
 `ifdef ADD_CMA
@@ -221,7 +223,6 @@
 `define DEC_MUX_SEL_DEMOD   2'b00
 `define DEC_MUX_SEL_SC0     2'b01
 `define DEC_MUX_SEL_VITERBI 2'b10
-`define DEC_MUX_SEL_DUALVIT 2'b11
 `define OUT_MUX_SEL_DEMOD   2'b00
 `define OUT_MUX_SEL_SC0     2'b01
 `define OUT_MUX_SEL_SC1     2'b10
@@ -231,12 +232,24 @@
 // FPGA Image Types
 // NOTE: Multi H is listed as 3 because we don't want to rebuild the image to
 // add the readback circuitry and it defaults to 3
+// FPGA1: Original legacy demod image
 `define LEGACY_DEMOD_IMAGE          16'h0
+// FPGA2: One subcarrier demod, the PCM Trellis demod and pcm decoders
 `define TRELLIS_DEMOD_IMAGE         16'h1
+// FPGA2: Two subcarrier demods
 `define TWOCHANNEL_SCDEMOD_IMAGE    16'h2
+// FPGA2: MultiH Demod
 `define MULTIH_DEMOD_IMAGE          16'h3
+// BS1000 Bitsync Bert 
 `define BITSYNC_BERT_IMAGE          16'h4
+// FPGA1: Legacy Demod with CMA Equalizer
 `define LEGACY_CMA_IMAGE            16'h5
+// Images 6 thru 8 identify new generation images
+`define SEMCO_DEMOD_IMAGE           16'h6
+`define LDPC_DEMOD_IMAGE            16'h7
+`define STC_DEMOD_IMAGE             16'h8
+// FPGA2: Two channel viterbi with PCM decoder
+`define VITERBI_DEMOD_IMAGE         16'h9
 
 // Define the DAC control locations
 `define DAC_WDATA       13'bx_xxxx_xxxx_x00x

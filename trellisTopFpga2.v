@@ -2,7 +2,7 @@
 `include "addressMap.v"
 `include "defines.v"
 
-module trellisTopFpga2 (
+module viterbiTopFpga2 (
     clk,
     nWe,nRd,nCs,
     addr12,
@@ -18,10 +18,14 @@ module trellisTopFpga2 (
     bsyncLockInput,demodLockInput,
     sdiInput,
     dac0_nCs,dac0_sclk,
+    dac0_clk,
+    dac0_d,
     dac1_nCs,dac1_sclk,
+    dac1_clk,
+    dac1_d,
     dac2_nCs,dac2_sclk,
-    dac0_d,dac1_d,dac2_d,
-    dac0_clk,dac1_clk,dac2_clk,
+    dac2_clk,
+    dac2_d,
     cout_i,dout_i,
     cout_q,dout_q,
     bsync_nLock,demod_nLock,
@@ -68,10 +72,14 @@ input           iData,qData;
 
 output          dac_rst;
 output          dac0_nCs,dac0_sclk;
+output          dac0_clk;
+output  [13:0]  dac0_d;
 output          dac1_nCs,dac1_sclk;
+output          dac1_clk;
+output  [13:0]  dac1_d;
 output          dac2_nCs,dac2_sclk;
-output  [13:0]  dac0_d,dac1_d,dac2_d;
-output          dac0_clk,dac1_clk,dac2_clk;
+output          dac2_clk;
+output  [13:0]  dac2_d;
 output          cout_i,dout_i;
 output          cout_q,dout_q;
 output          bsync_nLock,demod_nLock;
@@ -81,7 +89,7 @@ input           symb_pll_vco;
 output          sdiOut;
 input           legacyBit_pad ;
 
-parameter VER_NUMBER = 16'd412;
+parameter VER_NUMBER = 16'd435;
 
 // 12 Jun 13
 // IOB reclocking of inputs to trellis
@@ -135,7 +143,7 @@ wire misc_en = !nCs && misc_space;
 reg     [1:0]   dac0_in_sel;
 reg     [1:0]   dac1_in_sel;
 reg     [1:0]   dac2_in_sel;
-reg             dec_in_sel;
+reg     [1:0]   dec_in_sel;
 reg             iOutMuxSel;
 reg     [1:0]   qOutMuxSel;
 reg     [23:0]  boot_addr;
@@ -176,7 +184,7 @@ always @(negedge wr2) begin
         casex (addr)
             `DEC_IN_SEL:
                 begin
-                dec_in_sel <= dataIn[16];
+                dec_in_sel <= dataIn[17:16];
                 iOutMuxSel <= dataIn[18];
                 qOutMuxSel <= dataIn[21:20];
                 end
@@ -206,13 +214,13 @@ always @* begin
         `DAC_IN_SEL:
             begin
             rs = 0;
-            misc_dout = {10'b0,qOutMuxSel,1'b0,iOutMuxSel,1'b0,dec_in_sel,
+            misc_dout = {10'b0,qOutMuxSel,1'b0,iOutMuxSel,dec_in_sel,
                          10'b0,dac2_in_sel,dac1_in_sel,dac0_in_sel};
             end
         `DEC_IN_SEL:
             begin
             rs = 0;
-            misc_dout = {10'b0,qOutMuxSel,1'b0,iOutMuxSel,1'b0,dec_in_sel,
+            misc_dout = {10'b0,qOutMuxSel,1'b0,iOutMuxSel,dec_in_sel,
                          10'b0,dac2_in_sel,dac1_in_sel,dac0_in_sel};
             end
         `MISC_TYPE: begin
@@ -257,16 +265,24 @@ always @*
         end
     end
 
-always @ (posedge clk)
-    begin
-    reboot_decode_sync <= {reboot_decode_sync[6:0],reboot_decode};
-    reboot <= (reboot_decode_sync[7:6] == 2'b10);
+    reg bootClk;
+    always @ (posedge clk) begin
+        if (reset) begin
+            bootClk <= 0;
+        end
+        else begin
+            bootClk <= ~bootClk;
+        end
+    end
+    always @(posedge bootClk) begin
+        reboot_decode_sync <= {reboot_decode_sync[6:0],reboot_decode};
+        reboot <= (reboot_decode_sync[7:6] == 2'b10);
     end
 
 multiboot multiboot
     (
     .addr(boot_addr),
-    .clk(clk),
+    .clk(bootClk),
     .reset(reset),
     .pulse(reboot)
     );
@@ -475,9 +491,9 @@ pcmDecoder scDecoder (
     .data_out(sc_dataOut),            // data output
     .clkEn_out(sc_clkEnOut),          // clk output
     .fifo_rs(),
-    .clk_inv(sc_clk_inv),   
+    .clk_inv(sc_clk_inv),
     .bypass_fifo(),
-    .symb_clk(sc_symbol_clk)  
+    .symb_clk(sc_symbol_clk)
     );
 wire sc_cout = (sc_symbol_clk) ^ !sc_clk_inv;
 
@@ -520,60 +536,26 @@ trellis trellis(
     .sym2xEnOut(pcmTrellisSym2xEn),
     .decision(pcmTrellisBit)
     );
-//******************************************************************************
-//                           SOQPSK Trellis Decoder
-//******************************************************************************
-wire    [17:0]  soqpskTrellis0Out,soqpskTrellis1Out,soqpskTrellis2Out;
-wire    [31:0]  soqpskTrellisDout;
-trellisSoqpsk soqpsk
-    (
-    .clk(clk),
-    .reset(reset),
-    .symEn(soqpskSymEn),
-    .sym2xEn(soqpskSym2xEn),
-    .iIn(iIn),
-    .qIn(qIn),
-    .wr0(wr0),
-    .wr1(wr1),
-    .wr2(wr2),
-    .wr3(wr3),
-    .addr(addr),
-    .din(dataIn),
-    .dout(soqpskTrellisDout),
-    .dac0Select(dac0Select),
-    .dac1Select(dac1Select),
-    .dac2Select(dac2Select),
-    .dac0Sync(soqpskTrellis0Sync),
-    .dac0Data(soqpskTrellis0Out),
-    .dac1Sync(soqpskTrellis1Sync),
-    .dac1Data(soqpskTrellis1Out),
-    .dac2Sync(soqpskTrellis2Sync),
-    .dac2Data(soqpskTrellis2Out),
-    .ternarySymEnOut(soqpskTrellisSymEn),
-    .ternarySym2xEnOut(soqpskTrellisSym2xEn),
-    .decision(soqpskTrellisBit)
-   );
-
 // The pcmTrellisBit is inverted to correct a polarity problem of the data.
 // This is the wrong place to fix this, but Semco wanted it done in the
 // FPGA rather than in software configuration somewhere else.
 
 always @(posedge clk) begin
-    trellisSymEn <= pcmTrellisMode ? pcmTrellisSymEn : soqpskTrellisSymEn;
-    trellisSym2xEn <= pcmTrellisMode ? pcmTrellisSym2xEn : soqpskTrellisSym2xEn;
-    trellisBit <= pcmTrellisMode ? !pcmTrellisBit : soqpskTrellisBit;
+    trellisSymEn <= pcmTrellisSymEn;
+    trellisSym2xEn <= pcmTrellisSym2xEn;
+    trellisBit <= !pcmTrellisBit;
     end
 
 //******************************************************************************
 //                          Trellis Output Selection
 //******************************************************************************
-wire [31:0] trellisDout = pcmTrellisMode ? pcmTrellisDout : soqpskTrellisDout;
-wire [17:0] trellis0Out = pcmTrellisMode ? pcmTrellis0Out : soqpskTrellis0Out;
-wire        trellis0Sync = pcmTrellisMode ? pcmTrellis0Sync : soqpskTrellis0Sync;
-wire [17:0] trellis1Out = pcmTrellisMode ? pcmTrellis1Out : soqpskTrellis1Out;
-wire        trellis1Sync = pcmTrellisMode ? pcmTrellis1Sync : soqpskTrellis1Sync;
-wire [17:0] trellis2Out = pcmTrellisMode ? pcmTrellis2Out : soqpskTrellis2Out;
-wire        trellis2Sync = pcmTrellisMode ? pcmTrellis2Sync : soqpskTrellis2Sync;
+wire [31:0] trellisDout = pcmTrellisDout;
+wire [17:0] trellis0Out = pcmTrellis0Out;
+wire        trellis0Sync = pcmTrellis0Sync;
+wire [17:0] trellis1Out = pcmTrellis1Out;
+wire        trellis1Sync = pcmTrellis1Sync;
+wire [17:0] trellis2Out = pcmTrellis2Out;
+wire        trellis2Sync = pcmTrellis2Sync;
 reg  [17:0] interp0DataIn,interp1DataIn,interp2DataIn;
 reg         dac0Sync,dac1Sync,dac2Sync;
 
@@ -656,6 +638,7 @@ always @(posedge clk) begin
         dac2Sync <= sc_dac2Sync;
         end
     end
+
 //******************************************************************************
 //                              Interpolators
 //******************************************************************************
@@ -745,6 +728,44 @@ FDCE dac2_d_11 (.Q(dac2_d[11]),  .C(clk),  .CE(1'b1),  .CLR(1'b0), .D(dac2Out[11
 FDCE dac2_d_12 (.Q(dac2_d[12]),  .C(clk),  .CE(1'b1),  .CLR(1'b0), .D(dac2Out[12]));
 FDCE dac2_d_13 (.Q(dac2_d[13]),  .C(clk),  .CE(1'b1),  .CLR(1'b0), .D(~dac2Out[13]));
 assign dac2_clk = clk;
+
+`ifdef ADD_VITERBI
+//******************************************************************************
+//                          Viterbi Decoder
+//******************************************************************************
+    wire    [31:0]  vitDout;
+    viterbi viterbi(
+        .clk(clk),
+        .clkEn(1'b1),
+        .reset(reset),
+        .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
+        .addr(addr),
+        .din(dataIn),
+        .dout(vitDout),
+        .demodMode(demodMode),
+        .symEn(dataSymEnReg),
+        .iSymData(iIn),
+        .qSymData(qIn),
+        .bitEnOut(viterbiBitEn),
+        .bitOut(viterbiBit),
+        .vitError()
+        );
+    reg viterbiSym2xEn;
+    always @* begin
+        case (demodMode)
+            `MODE_QPSK,
+            `MODE_OQPSK: begin
+                viterbiSym2xEn = dataSym2xEnReg;
+            end
+            default: begin
+                viterbiSym2xEn = dataSymEnReg;
+            end
+        endcase
+    end
+`endif
+
+
+
 //******************************************************************************
 //                                 Decoder
 //******************************************************************************
@@ -767,27 +788,41 @@ reg iDec,qDec;
 reg decoderSymEn;
 reg decoderSym2xEn;
 
-wire iDec_wire = trellisEn ? trellisBit : iBitReg ;
-wire qDec_wire = trellisEn ? trellisBit : qBitReg ;
-wire decSymEn_wire = trellisEn ? trellisSymEn : dataSymEnReg ;
-wire decSym2xEn_wire = trellisEn ? trellisSym2xEn : dataSym2xEnReg ;
+wire iDemodBit = trellisEn ? trellisBit : iBitReg ;
+wire qDemodBit = trellisEn ? trellisBit : qBitReg ;
+wire demodSymEn = trellisEn ? trellisSymEn : dataSymEnReg ;
+wire demodSym2xEn = trellisEn ? trellisSym2xEn : dataSym2xEnReg ;
 
 always @(posedge clk) begin
-    if (dec_in_sel)
-        begin
-        iDec <= sc_iBit ;
-        qDec <= sc_qBit ;
-        decoderSymEn <= sc_iSymEn ;
-        decoderSym2xEn <= sc_iSym2xEn ;
+    case (dec_in_sel)
+        `DEC_MUX_SEL_DEMOD: begin
+            iDec <= iDemodBit ;
+            qDec <= qDemodBit ;
+            decoderSymEn <= demodSymEn ;
+            decoderSym2xEn <= demodSym2xEn ;
         end
-    else
-        begin
-        iDec <= iDec_wire ;
-        qDec <= qDec_wire ;
-        decoderSymEn <= decSymEn_wire ;
-        decoderSym2xEn <= decSym2xEn_wire ;
+        `DEC_MUX_SEL_SC0: begin
+            iDec <= sc_iBit ;
+            qDec <= sc_qBit ;
+            decoderSymEn <= sc_iSymEn ;
+            decoderSym2xEn <= sc_iSym2xEn ;
         end
-    end
+        `ifdef ADD_VITERBI
+        `DEC_MUX_SEL_VITERBI: begin
+            iDec <= viterbiBit;
+            qDec <= viterbiBit;
+            decoderSymEn <= viterbiBitEn;
+            decoderSym2xEn <= viterbiSym2xEn;
+        end
+        `endif
+        default: begin
+            iDec <= iDemodBit ;
+            qDec <= qDemodBit ;
+            decoderSymEn <= demodSymEn ;
+            decoderSym2xEn <= demodSym2xEn ;
+        end
+    endcase
+end
 
 decoder decoder
   (
@@ -813,6 +848,9 @@ decoder decoder
   .symb_clk(symbol_clk)
   );
  wire symb_pll_out;
+
+
+
  `ifdef ADD_DQM
 //******************************************************************************
 //                   Data Quality Metric Encapsulation
@@ -846,15 +884,16 @@ wire decoder_fifo_dout_i,decoder_fifo_dout_q;
 wire decoder_fifo_empty,decoder_fifo_full;
 reg  decoder_fifoReadEn;
 
-
+wire    [1:0]   pllData = {decoder_dout_q,decoder_dout_i};
+wire            pllWriteEn = decoderClkEn;
 decoder_output_fifo decoder_output_fifo
   (
-  .din({decoder_dout_q,decoder_dout_i}),
+  .din(pllData),
   .rd_clk(symb_pll_out),
   .rd_en(decoder_fifoReadEn),
   .rst(decoder_fifo_rs),
   .wr_clk(clk),
-  .wr_en(decoderClkEn),
+  .wr_en(pllWriteEn),
   .dout({decoder_fifo_dout_q,decoder_fifo_dout_i}),
   .empty(decoder_fifo_empty),
   .full(decoder_fifo_full),
@@ -893,7 +932,7 @@ symb_pll symb_pll
   .di(dataIn),
   .do(symb_pll_dout),
   .clk(clk),
-  .clk_en(decoderClkEn),
+  .clk_en(pllWriteEn),
   .clk_ref(pllRef),           // output pad, comparator reference clock
   .clk_vco(symb_pll_vco),     // input pad, vco output
   .clk_fbk(symb_pll_fbk),     // output pad, comparator feedback clock
@@ -907,7 +946,16 @@ always @(posedge clk) begin
 
 wire clkOut = bypass_fifo ? symbol_clk : symb_pll_out;
 wire cout = (clkOut) ^ !cout_inv;
+//`define BYPASS_DECODER
+`ifdef BYPASS_DECODER
+reg cout_i,dout_i;
+always @(posedge clk) begin
+    cout_i <= decoderSymEn;
+    dout_i <= iDec;
+end
+`else //BYPASS_DECODER
 assign cout_i = cout;
+`endif // BYPASS_DECODER
 reg cout_q;
 always @* begin
     if (qOutMuxSel == `OUT_MUX_SEL_SC0) begin
@@ -915,8 +963,8 @@ always @* begin
         end
     `ifdef ADD_DQM
     else if (qOutMuxSel == `OUT_MUX_SEL_DQM) begin
-        //cout_q = symb_pll_out ^ !cout_inv;
-        cout_q = symb_pll_out & clockGate;
+        cout_q = symb_pll_out ^ !cout_inv;
+        //cout_q = symb_pll_out & clockGate;
         end
     `endif
     else begin
@@ -948,9 +996,15 @@ always @* begin
     //    decQ = bypass_fifo ? dout_bypass_fifo_q : dout_fifo_q;
     //end
     //`else
+    `ifdef BYPASS_DECODER
+    reg decQ;
+    `else
     reg dout_i,decQ;
+    `endif //BYPASS_DECODER
     always @(posedge clkOut)begin
+        `ifndef BYPASS_DECODER
         dout_i <= bypass_fifo ? decoder_dout_i : decoder_fifo_dout_i;
+        `endif
         decQ <= bypass_fifo ? decoder_dout_q : decoder_fifo_dout_q;
     end
     `ifdef ADD_DQM
@@ -968,7 +1022,7 @@ always @* begin
         dout_q = sc_dataOut;
         end
     `ifdef ADD_DQM
-    else if (qOutMuxSel == `OUT_MUX_SEL_DQM) begin 
+    else if (qOutMuxSel == `OUT_MUX_SEL_DQM) begin
         dout_q = dqmQ;
         end
     `endif
@@ -1063,6 +1117,16 @@ always @* begin
           end
         else begin
           rd_mux = dqmDout[15:0];
+          end
+        end
+    `endif
+    `ifdef ADD_VITERBI
+      `VITERBISPACE: begin
+        if (addr[1]) begin
+          rd_mux = vitDout[31:16];
+          end
+        else begin
+          rd_mux = vitDout[15:0];
           end
         end
     `endif

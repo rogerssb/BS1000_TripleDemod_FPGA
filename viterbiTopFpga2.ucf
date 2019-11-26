@@ -289,7 +289,6 @@ NET "qSymData_pad<17>" IOSTANDARD = "LVCMOS33";
 NET "iData" LOC = E7 | IOSTANDARD = "LVCMOS33";
 NET "qData" LOC = E8 | IOSTANDARD = "LVCMOS33";
 
-NET "legacyBit_pad" LOC = E10 |IOSTANDARD = "LVCMOS33";
 NET "auSymClk" LOC = E11;
 NET "auSymClk" IOSTANDARD = "LVCMOS33";
 
@@ -413,7 +412,6 @@ NET "symb_pll_ref" IOSTANDARD = "LVCMOS33";
 NET "symb_pll_vco" IOSTANDARD = "LVCMOS33";
 NET "symb_pll_vco" CLOCK_DEDICATED_ROUTE = FALSE;
 
-NET "trellisSymSync_pad" LOC = D15  | IOSTANDARD = "LVCMOS33";
 NET "iSym2xEn_pad" LOC = D17 | IOSTANDARD = "LVCMOS33";
 
 NET "dataSymEn" LOC = D18 | IOSTANDARD = "LVCMOS33";
@@ -474,44 +472,6 @@ TIMESPEC TS_clkToDSPS = FROM PADS(clk) TO DSPS TIG;
 TIMESPEC TS_clkToRAMS = FROM PADS(clk) TO RAMS TIG;
 
 # Devices with clock enables than can run slower
-NET "sc/dac0Sync*" TNM_NET = FFS syncGroup;
-NET "sc/dac1Sync*" TNM_NET = FFS syncGroup;
-NET "sc/dac2Sync*" TNM_NET = FFS syncGroup;
-NET "sc/ddc/agcSync*" TNM_NET = FFS syncGroup;
-NET "sc/ddc/cic/cicI/syncOut*" TNM_NET = FFS syncGroup;
-NET "sc/ddc/cic/cicQ/syncOut*" TNM_NET = FFS syncGroup;
-NET "sc/ddc/cicClockEn*" TNM_NET = FFS syncGroup;
-NET "sc/ddc/hb/evenSync*" TNM_NET = FFS syncGroup;
-NET "sc/ddc/hb/syncOut*" TNM_NET = FFS syncGroup;
-NET "sc/ddc/hbClockEn*" TNM_NET = FFS syncGroup;
-NET "sc/ddc/hb0/evenSync*" TNM_NET = FFS syncGroup;
-NET "sc/ddc/hb0/syncOut*" TNM_NET = FFS syncGroup;
-#NET "sc/ddc/firClockEn*" TNM_NET = FFS syncGroup;
-#NET "sc/ddc/firClockEn*" TNM_NET = DSPS syncGroup;
-#NET "sc/carrierOffsetEn*" TNM_NET = FFS syncGroup;
-NET "sc/ddc/syncOut*" TNM_NET = FFS syncGroup;
-NET "sc/ddc/syncOut*" TNM_NET = DSPS syncGroup;
-NET "sc/resampler/resamplerI/resampleDelay*" TNM_NET = FFS syncGroup;
-NET "sc/resampler/resamplerQ/resampleDelay*" TNM_NET = FFS syncGroup;
-#NET "sc/resampler/resamplerI/resampleDelay*" TNM_NET = DSPS syncGroup;
-#NET "sc/resampler/resamplerQ/resampleDelay*" TNM_NET = DSPS syncGroup;
-NET "sc/resampler/auCic/syncOut*" TNM_NET = FFS syncGroup;
-NET "sc/carrierLoop/loopFilterEn*" TNM_NET = FFS syncGroup;
-NET "sc/fmDemod/cordic/enSR*" TNM_NET = FFS syncGroup;
-#NET "sc/fmDemod/cordic/enSR*" TNM_NET = DSPS syncGroup;
-NET "sc/bitsync/phaseState*" TNM_NET = FFS syncGroup;
-NET "pcmSymEn*" TNM_NET = FFS syncGroup;
-NET "pcmSym2xEn*" TNM_NET = FFS syncGroup;
-NET "trellis/viterbi_top/traceback/symEnDly*" TNM_NET = FFS syncGroup;
-#NET "trellis/viterbi_top/traceback/symEnSr2*" TNM_NET = FFS syncGroup;
-NET "trellis/trellisCarrierLoop/sym2xEnSr*" TNM_NET = FFS syncGroup;
-NET "trellis/trellisCarrierLoop/symEnSr*" TNM_NET = FFS syncGroup;
-#NET "trellis/trellisCarrierLoop/fmDemod/cordic/enSR*" TNM_NET = FFS syncGroup;
-NET "trellis/symEnOut*" TNM_NET = FFS syncGroup;
-#NET "trellis/symEnOut*" TNM_NET = DSPS syncGroup;
-NET "trellis/sym2xEnOut*" TNM_NET = FFS syncGroup;
-#NET "trellis/sym2xEnOut*" TNM_NET = DSPS syncGroup;
-NET "trellis/symEnShift*" TNM_NET = FFS syncGroup;
 NET "dac0Sync*" TNM_NET = FFS syncGroup;
 NET "dac0Sync*" TNM_NET = DSPS syncGroup;
 NET "dac1Sync*" TNM_NET = FFS syncGroup;
@@ -530,85 +490,23 @@ NET "decoderSymEn*" TNM_NET = FFS syncGroup;
 NET "decoderSym2xEn*" TNM_NET = FFS syncGroup;
 
 # A group composed of all the clock enables
-TIMEGRP "clken" =  FFS(pcmSymEn*) FFS(pcmSym2xEn*) 
-                   FFS(trellis/viterbi_top/traceback/symEnDly*)
-#                   FFS(trellis/viterbi_top/traceback/symEnSr2*)
-                   FFS(trellis/trellisCarrierLoop/sym2xEnSr*)
-                   FFS(trellis/trellisCarrierLoop/symEnSr*)
-#                   FFS(trellis/trellisCarrierLoop/fmDemod/cordic/enSR*)
-                   FFS(trellis/symEnShift*)
-                   FFS(trellis/symEnOut*)
-                   FFS(trellis/sym2xEnOut*)
-                   FFS(dac0Sync*) FFS(dac1Sync*) FFS(dac2Sync*)
-                   FFS(sc/dac0Sync*) 
-                   FFS(sc/dac1Sync*) 
-                   FFS(sc/dac2Sync*)
-                   FFS(sc/ddc/agcSync*) 
-                   FFS(sc/ddc/cic/cicI/syncOut*) 
-                   FFS(sc/ddc/cic/cicQ/syncOut*)
-                   FFS(sc/ddc/cicClockEn*) 
-                   FFS(sc/ddc/hb/evenSync*) 
-                   FFS(sc/ddc/hb/syncOut*)
-                   FFS(sc/ddc/hbClockEn*) 
-                   FFS(sc/ddc/hb0/evenSync*) 
-                   FFS(sc/ddc/hb0/syncOut*)
-#                   FFS(sc/ddc/firClockEn*)
-                   FFS(sc/ddc/syncOut*)
-                   FFS(sc/resampler/resamplerI/resampleDelay*)
-                   FFS(sc/resampler/resamplerQ/resampleDelay*)
-                   FFS(sc/resampler/auCic/syncOut*)
-                   FFS(sc/carrierLoop/loopFilterEn*)
-                   FFS(sc/fmDemod/cordic/enSR*) 
-                   FFS(sc/bitsync/phaseState*)
+TIMEGRP "clken" =  FFS(dac0Sync*) FFS(dac1Sync*) FFS(dac2Sync*)
                    FFS(dataSymEnReg*)
-				   FFS(dataSym2xEnReg*)
-#				   FFS(vitSymEn*)
-#				   FFS(vitSym2xEn*)
-				   FFS(viterbi/codeEn*)
-#				   FFS(viterbi/symEnSR*)
+                   FFS(dataSym2xEnReg*)
+#                   FFS(vitSymEn*)
+#                   FFS(vitSym2xEn*)
+                   FFS(viterbi/codeEn*)
+#                   FFS(viterbi/symEnSR*)
                    FFS(decoderSymEn)
-				   FFS(decoderSym2xEn);
+                   FFS(decoderSym2xEn);
 
 # A group composed of clock-enabled flip-flops
 TIMEGRP "allEnables" = syncGroup EXCEPT clken ;
 
-# DDC that can clock slower
-TIMEGRP "ddcPL" = FFS(sc/ddc/iCicIn*) FFS(sc/ddc/qCicIn*)
-                  FFS(sc/ddc/cicCompI*) FFS(sc/ddc/cicCompQ*)
-                  FFS(sc/ddc/iAgcIn*) FFS(sc/ddc/qAgcIn*)
-                  FFS(sc/ddc/iHbIn*) FFS(sc/ddc/qHbIn*)
- #                 FFS(sc/ddc/iFirIn*) FFS(sc/ddc/qFirIn*)
-                  FFS(sc/ddc/iLeadIn*) FFS(sc/ddc/qLeadIn*);
-
-# AGC loop that can clock slower
-TIMEGRP "magloop" = FFS( sc/magLoop/lagAccum*) ;
-
 # Slower clock timespecs. 
 TIMESPEC TS_syncGroup = FROM "allEnables" TO "syncGroup" 46.67 MHz PRIORITY 4;
 TIMESPEC TS_dacGroup = FROM "syncGroup" TO FFS(sc/dac*Data*) 46.67 MHz PRIORITY 3;
-TIMESPEC "TS_ddc1" = FROM "ddcPL" TO FFS 46.67 MHz PRIORITY 3;
-TIMESPEC "TS_ddc2" = FROM "ddcPL" TO DSPS 46.67 MHz PRIORITY 3;
-TIMESPEC TS_magloop = FROM "magloop" TO "magloop" 46.67 MHz PRIORITY 3;
 TIMESPEC TS_clken = FROM "clken" TO FFS 93.33 MHz PRIORITY 1;
-
-
-# Trellis ACS units that can clock slower.
-TIMEGRP "acs" = FFS(trellis/viterbi_top/acs*);
-TIMEGRP "rotOut" = FFS(trellis/rotator/m*/reOut*) FFS(trellis/rotator/m*/imOut*);
-TIMEGRP "maxMetric" = FFS(trellis/viterbi_top/maxMetric/*);
-TIMEGRP "acsAcc" = FFS(trellis/viterbi_top/acs*/accumDecay/*);
-TIMESPEC TS_trellisAcs0 = FROM "acs" TO "acs" 23.33 MHz;
-TIMESPEC TS_trellisAcs1 = FROM "rotOut" TO "acs" 23.33 MHz;
-TIMESPEC TS_trellisAcs2 = FROM "acsAcc" TO "maxMetric" 30 ns;
-
-# Loop filters that can clock slower
-TIMEGRP "trellisLF" = FFS(trellis/trellisCarrierLoop/lagGain/*) 
-                      FFS(trellis/trellisCarrierLoop/leadGain/*) 
-                      FFS(trellis/trellisCarrierLoop/filterSum*) 
-                      FFS(trellis/trellisCarrierLoop/afcLoopFilter/*);
-#TIMEGRP "loopFilter" = "trellisLF" "soqpskLF" "carrierLF" "multihLF" "auBitsyncLF" "bitsyncLF" "agcLF";
-TIMEGRP "loopFilter" = "trellisLF";
-TIMESPEC TS_loopFilter = FROM "loopFilter" TO "loopFilter" 46.67 MHz;
 
 # Clocked Inputs
 OFFSET = IN 100 ns BEFORE "clk" RISING;
