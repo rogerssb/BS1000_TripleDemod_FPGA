@@ -61,7 +61,7 @@ module acsStage0(
 
     end
     assign                  metricRequest = metricInEn;
-    assign                  startNextStage = (metricAddr == 1);
+    assign                  startNextStage = (metricAddr == 2);
 
     // Stage 0 ACS Unit
 

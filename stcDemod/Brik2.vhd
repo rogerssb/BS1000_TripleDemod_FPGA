@@ -206,14 +206,13 @@ ARCHITECTURE rtl OF Brik2 IS
 -- CONSTANTS
    CONSTANT MIN_M_NDX         : positive := 5;
    CONSTANT MAX_M_NDX         : positive := 3;
-   CONSTANT PILOT_OFFSET      : natural  := 0;
 
    -- Signals
    SIGNAL   TimeR,
             TimeI             : FLOAT_1_18;
    SIGNAL   TimeRslv,
             TimeIslv          : SLV18;
-   SIGNAL   TimeCount         : integer range 0 to PILOT_SIZE + PILOT_OFFSET;
+   SIGNAL   TimeCount         : integer range 0 to PILOT_SIZE;
    SIGNAL   WrAddr,
             TimeRead,
             TimeRdAddr,
@@ -292,7 +291,7 @@ BEGIN
                TimeCount <= 0;
                TimeActive <= '1';
             else
-               TimeCount <= PILOT_SIZE + PILOT_OFFSET;
+               TimeCount <= PILOT_SIZE;
                TimeActive <= '0';
             end if;
             StartTime  <= '0';
@@ -306,19 +305,19 @@ BEGIN
                TimeActive <= '0';
             end if;
             if (ValidIn) then
-               if (TimeCount < PILOT_SIZE + PILOT_OFFSET) then
+               if (TimeCount < PILOT_SIZE) then
                   TimeCount <= TimeCount + 1;
                end if;
-               if (TimeCount >= PILOT_SIZE/2 + PILOT_OFFSET - 2) and (WrAddr < TIME_DEPTH - 1) then
+               if (TimeCount >= PILOT_SIZE/2 - 2) and (WrAddr < TIME_DEPTH - 1) then
                   WrAddr <= WrAddr + 1;
                end if;
-            end if;
-            StartTime <= '1' when (TimeCount = PILOT_SIZE + PILOT_OFFSET - 3) or (TimeCount = PILOT_SIZE + PILOT_OFFSET - 2) else '0';  -- wait till input buffer is full
+            end if;     -- make StartTime two clocks wide for Clk93 driving TE
+            StartTime <= '1' when (TimeCount = PILOT_SIZE - 3) or (TimeCount = PILOT_SIZE - 2) else '0';  -- wait till input buffer is full
          end if;
       end if;
    end process TimeProcess;
                                  -- start early for negative Ndx offsets
-   FirstPass   <= ValidIn when (TimeCount >= TIME_DEPTH + PILOT_OFFSET - 2) and (TimeCount < PILOT_SIZE + PILOT_OFFSET - 2) else '0';
+   FirstPass   <= ValidIn when (TimeCount >= TIME_DEPTH - 2) and (TimeCount < PILOT_SIZE - 2) else '0';
    TimeRead    <= TimeRdAddr when TimeActive else ChanRdAddr;
    TimeR       <= resize(to_sfixed(TimeRslv, PARM_ZERO), TimeR);
    TimeI       <= resize(to_sfixed(TimeIslv, PARM_ZERO), TimeR);
@@ -330,7 +329,7 @@ BEGIN
          BINPT       => InR_sf'right,
          ADDR_WIDTH  => 8,
          FILE_IS_SLV => false,
-         LATENCY     => 1,
+         LATENCY     => 2,
          RAM_TYPE    => "block"
       )
       PORT MAP(
@@ -341,7 +340,7 @@ BEGIN
          WrAddr      => WrAddr,
          RdAddrA     => TimeRead,
          RdAddrB     => 0,
-         WrData      => to_slv(InR_sf),
+         WrData      => InR,
          RdOutA      => TimeRslv,
          RdOutB      => open
       );
@@ -352,7 +351,7 @@ BEGIN
          DATA_WIDTH  => InI_sf'length,
          BINPT       => InI_sf'right,
          ADDR_WIDTH  => 8,
-         LATENCY     => 1,
+         LATENCY     => 2,
          FILE_IS_SLV => false,
          RAM_TYPE    => "block"
       )
@@ -364,7 +363,7 @@ BEGIN
          WrAddr      => WrAddr,
          RdAddrA     => TimeRead,
          RdAddrB     => 0,
-         WrData      => to_slv(InI_sf),
+         WrData      => InI,
          RdOutA      => TimeIslv,
          RdOutB      => open
       );

@@ -48,7 +48,7 @@ module acsStage1(
             metricAddr <= 1;
         end
     end
-    assign                  startNextStage = (metricAddr == 1);
+    assign                  startNextStage = (metricAddr == 2);
 
     // Registers to hold the current block's input samples
     reg     signed  [17:0]  s1Real,s1Imag;
@@ -68,5 +68,5 @@ module acsStage1(
         .accMetricOutEn(metricOutEn),
         .accMetricOut(accMetricOut)
     );
-    
+
 endmodule

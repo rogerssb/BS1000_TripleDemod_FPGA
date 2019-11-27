@@ -1,14 +1,14 @@
 -- Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2017.2.1 (win64) Build 1957588 Wed Aug  9 16:32:24 MDT 2017
--- Date        : Tue Nov 19 19:55:10 2019
+-- Date        : Wed Nov 13 17:32:22 2019
 -- Host        : SEMCO_1039B running 64-bit major release  (build 9200)
--- Command     : write_vhdl -force -mode funcsim
---               C:/Semco/Vivado/Demods/stcDemod.srcs/sources_1/ip/systemClock/systemClock_sim_netlist.vhdl
+-- Command     : write_vhdl -force -mode funcsim -rename_top systemClock -prefix
+--               systemClock_ systemClock_sim_netlist.vhdl
 -- Design      : systemClock
 -- Purpose     : This VHDL netlist is a functional simulation representation of the design and should not be modified or
 --               synthesized. This netlist cannot be used for SDF annotated simulation.
--- Device      : xc7k325tfbg676-2
+-- Device      : xc7k160tfbg676-2
 -- --------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
@@ -21,8 +21,6 @@ entity systemClock_systemClock_clk_wiz is
     locked : out STD_LOGIC;
     clk_in1 : in STD_LOGIC
   );
-  attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of systemClock_systemClock_clk_wiz : entity is "systemClock_clk_wiz";
 end systemClock_systemClock_clk_wiz;
 
 architecture STRUCTURE of systemClock_systemClock_clk_wiz is

@@ -244,20 +244,16 @@ ARCHITECTURE rtl OF HalfPilotPhase IS
    SIGNAL   CmplxCount        : integer range 0 to 511;
    SIGNAL   CalcPhaseDly      : SLV4;
 
---   attribute mark_debug : string;
---   attribute mark_debug of Phase0A, Phase0B, CmplxValid,
---            Normalize, NormDone, CalcPhase, CordicStart, ValidCordic, PilotPacket : signal is "true";
+   attribute mark_debug : string;
+   attribute mark_debug of Normalize, NormDone : signal is "true";   -- removing attribute caused ?? net names in 17.2
 
 BEGIN
-
 
    -- estimates are valid, use realigned pilot to check phase shift between first half and second
    -- half of the the pilot for a wideband frequency offset.
 
    PhaseOutA <= to_slv(Phase0A);
    PhaseOutB <= to_slv(Phase0B);
-
-
 
    DoublePhaseProc : process(Clk)
    begin

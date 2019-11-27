@@ -359,6 +359,39 @@ module trellisDetector (
         .startNextStage(startStage4)
     );
 
+    reg     [17:0]  s0_2_realDly[3:0];
+    reg     [17:0]  s0_2_imagDly[3:0];
+    reg     [17:0]  s1_2_realDly[3:0];
+    reg     [17:0]  s1_2_imagDly[3:0];
+    reg     [17:0]  s0_3_realDly[3:0];
+    reg     [17:0]  s0_3_imagDly[3:0];
+    reg     [17:0]  s1_3_realDly[3:0];
+    reg     [17:0]  s1_3_imagDly[3:0];
+    reg     [3:0]   startBlockDly;
+    integer i;
+    always @(posedge clk) begin
+        if (clkEn) begin
+            startBlockDly <= {startBlockDly[2:0], (startBlock & sampleEn)};
+            for (i=3; i>0; i=i-1) begin
+                s0_2_realDly[i] <= s0_2_realDly[i-1];
+                s0_2_imagDly[i] <= s0_2_imagDly[i-1];
+                s0_3_realDly[i] <= s0_3_realDly[i-1];
+                s0_3_imagDly[i] <= s0_3_imagDly[i-1];
+                s1_2_realDly[i] <= s1_2_realDly[i-1];
+                s1_2_imagDly[i] <= s1_2_imagDly[i-1];
+                s1_3_realDly[i] <= s1_3_realDly[i-1];
+                s1_3_imagDly[i] <= s1_3_imagDly[i-1];
+            end
+            s0_2_realDly[0] <= s0_2_real;
+            s0_2_imagDly[0] <= s0_2_imag;
+            s0_3_realDly[0] <= s0_3_real;
+            s0_3_imagDly[0] <= s0_3_imag;
+            s1_2_realDly[0] <= s1_2_real;
+            s1_2_imagDly[0] <= s1_2_imag;
+            s1_3_realDly[0] <= s1_3_real;
+            s1_3_imagDly[0] <= s1_3_imag;
+        end
+    end
 
     //----------------------------- Stage 4 -----------------------------------
 
@@ -382,13 +415,23 @@ module trellisDetector (
     wire            [17:0]  startMetric_01;
     wire            [17:0]  startMetric_10;
     wire            [17:0]  startMetric_11;
-    wire            [18:0]  sumMetric_00 = {1'b0,accMetric3_00} + {1'b0,startMetric_00};
-    wire            [18:0]  sumMetric_01 = {1'b0,accMetric3_01} + {1'b0,startMetric_01};
-    wire            [18:0]  sumMetric_10 = {1'b0,accMetric3_10} + {1'b0,startMetric_10};
-    wire            [18:0]  sumMetric_11 = {1'b0,accMetric3_11} + {1'b0,startMetric_11};
+    reg             [17:0]  accMetric3Dly_00, accMetric3Dly_01, accMetric3Dly_10, accMetric3Dly_11;
+    wire            [18:0]  sumMetric_00 = {1'b0,accMetric3Dly_00} + {1'b0,startMetric_00};
+    wire            [18:0]  sumMetric_01 = {1'b0,accMetric3Dly_01} + {1'b0,startMetric_01};
+    wire            [18:0]  sumMetric_10 = {1'b0,accMetric3Dly_10} + {1'b0,startMetric_10};
+    wire            [18:0]  sumMetric_11 = {1'b0,accMetric3Dly_11} + {1'b0,startMetric_11};
     wire            [6:0]   winner5;
-    reg                     flipTracebackPingPong;
+    reg                     flipTracebackPingPong, metric3OutputEnDly;
     wire            [3:0]   detectedBits;
+
+    always @(posedge clk) begin // delay stage3 till previous 4 to 7 finish
+        metric3OutputEnDly <= metric3OutputEn;
+        accMetric3Dly_00   <= accMetric3_00;
+        accMetric3Dly_01   <= accMetric3_01;
+        accMetric3Dly_10   <= accMetric3_10;
+        accMetric3Dly_11   <= accMetric3_11;
+    end
+
     `endif
     wire            [17:0]  accMetric4_000;
     wire            [17:0]  accMetric4_001;
@@ -402,10 +445,10 @@ module trellisDetector (
         .clk(clk),.clkEn(clkEn), .reset(reset),
         .positiveTau(positiveTau),
         .startFrame(startFrame),
-        .startBlock(startBlock & sampleEn),
+        .startBlock(startBlockDly[3]),
         .startStage(startStage4),
-        .in0Real(s0_2_real),.in0Imag(s0_2_imag),
-        .accMetricInEn(metric3OutputEn),
+        .in0Real(s0_2_realDly[3]),.in0Imag(s0_2_imagDly[3]),
+        .accMetricInEn(metric3OutputEnDly),
         `ifdef USE_WIDE_OUTPUT
         .accMetricIn_00(sumMetric_00[18] ? 18'h3ffff : sumMetric_00[17:0]),
         .accMetricIn_01(sumMetric_01[18] ? 18'h3ffff : sumMetric_01[17:0]),
@@ -466,9 +509,9 @@ module trellisDetector (
         .clk(clk),.clkEn(clkEn), .reset(reset),
         .positiveTau(positiveTau),
         .startFrame(startFrame),
-        .startBlock(startBlock & sampleEn),
+        .startBlock(startBlockDly[3]),
         .startStage(startStage5),
-        .in1Real(s1_2_real),.in1Imag(s1_2_imag),
+        .in1Real(s1_2_realDly[3]),.in1Imag(s1_2_imagDly[3]),
         .accMetricInEn(metric4OutputEn),
         .accMetricIn_000(accMetric4_000),
         .accMetricIn_001(accMetric4_001),
@@ -504,8 +547,8 @@ module trellisDetector (
         .clk(clk),.clkEn(clkEn), .reset(reset),
         .positiveTau(positiveTau),
         .startFrame(startFrame),
-        .startBlock(startBlock & sampleEn),
-        .in1Real(s1_2_real),.in1Imag(s1_2_imag),
+        .startBlock(startBlockDly[3]),
+        .in1Real(s1_2_realDly[3]),.in1Imag(s1_2_imagDly[3]),
         .accMetricInEn(metric4OutputEn),
         .accMetricIn_000(accMetric4_000),
         .accMetricIn_001(accMetric4_001),
@@ -557,9 +600,9 @@ module trellisDetector (
         .clk(clk),.clkEn(clkEn), .reset(reset),
         .positiveTau(positiveTau),
         .startFrame(startFrame),
-        .startBlock(startBlock & sampleEn),
+        .startBlock(startBlockDly[3]),
         .startStage(startStage6),
-        .in0Real(s0_3_real),.in0Imag(s0_3_imag),
+        .in0Real(s0_3_realDly[3]),.in0Imag(s0_3_imagDly[3]),
         .accMetricInEn(metric5OutputEn),
         .accMetricIn_000(accMetric5_000),
         .accMetricIn_001(accMetric5_001),
@@ -593,8 +636,8 @@ module trellisDetector (
         .clk(clk),.clkEn(clkEn), .reset(reset),
         .positiveTau(positiveTau),
         .startFrame(startFrame),
-        .startBlock(startBlock & sampleEn),
-        .in0Real(s0_3_real),.in0Imag(s0_3_imag),
+        .startBlock(startBlockDly[3]),
+        .in0Real(s0_3_realDly[3]),.in0Imag(s0_3_imagDly[3]),
         .accMetricInEn(metric5OutputEn),
         .accMetricIn_00(accMetric5_00),
         .accMetricIn_01(accMetric5_01),
@@ -640,9 +683,9 @@ module trellisDetector (
         .clk(clk),.clkEn(clkEn), .reset(reset),
         .positiveTau(positiveTau),
         .startFrame(startFrame),
-        .startBlock(startBlock & sampleEn),
+        .startBlock(startBlockDly[3]),
         .startStage(startStage7),
-        .in1Real(s1_3_real),.in1Imag(s1_3_imag),
+        .in1Real(s1_3_realDly[3]),.in1Imag(s1_3_imagDly[3]),
         .accMetricInEn(metric6OutputEn),
         .accMetricIn_000(accMetric6_000),
         .accMetricIn_001(accMetric6_001),
@@ -916,18 +959,36 @@ module trellisDetector (
     end
 
     // Save the final metric as the input metric to the next block
-    assign                  startMetricRequest = metric3OutputEn;
+    assign                  startMetricRequest = metric3OutputEnDly;
     wire            [17:0]  fifoMetric;
-    acsFifo #(.LOG2DEPTH(4)) metricFifo(
-        .clk(clk),
-        .srst(startFrame),
-        .wr_en(finalMetricOutputEn),
-        .din(finalMetric),
-        .rd_en(startMetricRequest),
-        .dout(fifoMetric),
-        .full(),
-        .empty()
-    );
+    reg             [3:0]   finalMetricWrAddr;
+    reg             [3:0]   finalMetricRdAddr;
+    reg             [17:0]  finalMetricRam[15:0];
+    always @(posedge clk) begin
+        if (reset) begin
+            for (i=0; i<=15; i=i+1) begin
+                finalMetricRam[i] <= 0;
+            end
+            finalMetricWrAddr <= 0;
+        end
+        else if (finalMetricOutputEn) begin
+            finalMetricRam[finalMetricWrAddr] <= finalMetric;
+            finalMetricWrAddr <= finalMetricWrAddr + 1;
+        end
+        else begin
+            finalMetricWrAddr <= 0;
+        end
+
+        if (startMetricRequest) begin
+            finalMetricRdAddr <= finalMetricRdAddr + 1;
+        end
+        else begin
+            finalMetricRdAddr <= 0;
+        end
+    end
+
+    // if rd and wr coincide just pass the data on
+    assign fifoMetric = (startMetricRequest) ? ( ((finalMetricWrAddr == finalMetricRdAddr) && (finalMetricOutputEn)) ? finalMetric : finalMetricRam[finalMetricRdAddr]) : 0;
     assign startMetric_00 = fifoMetric;
     assign startMetric_01 = fifoMetric;
     assign startMetric_10 = fifoMetric;
@@ -959,8 +1020,8 @@ module trellisDetector (
         .clk(clk),.clkEn(clkEn), .reset(reset),
         .positiveTau(positiveTau),
         .startFrame(startFrame),
-        .startBlock(startBlock & sampleEn),
-        .in1Real(s1_3_real),.in1Imag(s1_3_imag),
+        .startBlock(startBlockDly[3]),
+        .in1Real(s1_3_realDly[3]),.in1Imag(s1_3_imagDly[3]),
         .accMetricInEn(metric6OutputEn),
         .accMetricIn_0(accMetric6_0),
         .accMetricIn_1(accMetric6_1),

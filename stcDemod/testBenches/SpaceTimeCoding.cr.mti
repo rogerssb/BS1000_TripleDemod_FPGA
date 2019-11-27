@@ -180,6 +180,18 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Compiling entity FireberdDrive
 -- Compiling architecture rtl of FireberdDrive
 
+} {} {}} {C:\Semco\Vivado\Demods\stcDemod/STC.vhd} {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/STC.vhd
+Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package fixed_pkg
+-- Loading package MATH_REAL
+-- Loading package Semco_pkg
+-- Compiling entity STC
+-- Compiling architecture rtl of STC
+
 } {} {}} C:/Semco/Vivado/Demods/stcDemod/frameAlignment.v {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/frameAlignment.v
 Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
 -- Compiling module frameAlignment
@@ -425,13 +437,6 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Compiling entity ChannelEstimate
 -- Compiling architecture rtl of ChannelEstimate
 
-} {} {}} {C:\Semco\Vivado\Demods\stcDemod/acsStage4.v} {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/acsStage4.v
-Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
--- Compiling module acsStage4
-
-Top level modules:
-	acsStage4
-
 } {} {}} C:/Semco/Vivado/Demods/stcDemod/testBenches/HalfPilotPhase_tb.vhd {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/testBenches/HalfPilotPhase_tb.vhd
 Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Loading package STANDARD
@@ -480,13 +485,6 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Loading package fixed_pkg
 -- Compiling entity RAM_2Reads_1WriteVerWrap
 -- Compiling architecture rtl of RAM_2Reads_1WriteVerWrap
-
-} {} {}} {C:\Semco\Vivado\Demods\stcDemod/acsStage7Wide.v} {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/acsStage7Wide.v
-Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
--- Compiling module acsStage7Wide
-
-Top level modules:
-	acsStage7Wide
 
 } {} {}} {C:\Semco\Vivado\Demods\stcDemod/Vivado/stcDemod.srcs/sources_1/ip/p0_i_c/p0_i_c_sim_netlist.vhdl} {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/Vivado/stcDemod.srcs/sources_1/ip/p0_i_c/p0_i_c_sim_netlist.vhdl
 Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
@@ -656,6 +654,13 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Compiling entity fft_1k
 -- Compiling architecture fft_1k_arch of fft_1k
 
+} {} {}} C:/Semco/Vivado/Demods/stcDemod/trellisProcess.v {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/trellisProcess.v
+Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
+-- Compiling module trellisProcess
+
+Top level modules:
+	trellisProcess
+
 } {} {}} {C:\Semco\Vivado\Demods\stcDemod/DFT.vhd} {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/DFT.vhd
 Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Loading package STANDARD
@@ -667,13 +672,6 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Loading package Semco_pkg
 -- Compiling entity DFT
 -- Compiling architecture rtl of DFT
-
-} {} {}} C:/Semco/Vivado/Demods/stcDemod/trellisProcess.v {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/trellisProcess.v
-Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
--- Compiling module trellisProcess
-
-Top level modules:
-	trellisProcess
 
 } {} {}} {C:\Semco\Vivado\Demods\stcDemod/acsStage1.v} {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/acsStage1.v
 Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
@@ -803,13 +801,6 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Compiling architecture STRUCTURE of mpy18x18
 -- Loading entity mpy18x18_mult_gen_v12_0_12
 
-} {} {}} {C:\Semco\Vivado\Demods\stcDemod/acsStage6Wide.v} {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/acsStage6Wide.v
-Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
--- Compiling module acsStage6Wide
-
-Top level modules:
-	acsStage6Wide
-
 } {} {}} {C:\Semco\Vivado\Demods\stcDemod/CmplxMult.vhd} {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/CmplxMult.vhd
 Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Loading package STANDARD
@@ -836,6 +827,13 @@ Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
 Top level modules:
 	twoPortBlkMem48x8
 	glbl
+
+} {} {}} C:/Semco/Vivado/Demods/stcDemod/trellisDetectorOld.v {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/trellisDetectorOld.v
+Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
+-- Compiling module trellisDetectorOld
+
+Top level modules:
+	trellisDetectorOld
 
 } {} {}} C:/Semco/Vivado/Demods/stcDemod/HalfPilotPhase.vhd {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/HalfPilotPhase.vhd
 Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
@@ -927,9 +925,11 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 } {} {}} {C:\Semco\Vivado\Demods\stcDemod/acsOp.v} {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/acsOp.v
 Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
 -- Compiling module acsOp
+-- Compiling module acsOpOld
 
 Top level modules:
 	acsOp
+	acsOpOld
 
 } {} {}} {C:\Semco\Vivado\Demods\stcDemod/cmagSquared18.v} {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/cmagSquared18.v
 Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
@@ -984,13 +984,6 @@ Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
 
 Top level modules:
 	interpolator
-
-} {} {}} {C:\Semco\Vivado\Demods\stcDemod/acsStage5Wide.v} {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/acsStage5Wide.v
-Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
--- Compiling module acsStage5Wide
-
-Top level modules:
-	acsStage5Wide
 
 } {} {}} {C:\Semco\Vivado\Demods\stcDemod/acsStage6.v} {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/acsStage6.v
 Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016

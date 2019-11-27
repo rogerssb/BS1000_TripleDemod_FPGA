@@ -294,8 +294,6 @@ ARCHITECTURE rtl OF STC IS
             TrellisFull,
             StartInBrik2Dly,
             ValidInBrik2Dly,
-            ValidInBrik2Dly1,
-            ValidInBrik2Dly2,
             PilotValidOutDly,
             TrellisOutEn,
             interpOutEn,
@@ -606,11 +604,8 @@ BEGIN
          else
             StartInBrik2Dly <= StartOutPS;
             ValidInBrik2Dly <= ValidOutPS;
-            ValidInBrik2Dly1<= ValidInBrik2Dly;
-            ValidInBrik2Dly2<= ValidInBrik2Dly1;
             InRBrik2Dly     <= RealOutPS;
             InIBrik2Dly     <= ImagOutPS;
-
          end if;
       end if;
    end process InterBrikClk;
@@ -664,7 +659,7 @@ BEGIN
          reset                => Reset2x,
          estimatesDone        => EstimatesDone and not EstimatesDoneDly,   -- rising edge of 93M clock pulse
          frameStart           => StartInBrik2Dly,
-         inputValid           => ValidInBrik2Dly1,
+         inputValid           => ValidInBrik2Dly,
          dinReal              => to_slv(InRBrik2Dly),
          dinImag              => to_slv(InIBrik2Dly),
          h0EstRealIn          => to_slv(H0EstR),
@@ -728,15 +723,15 @@ BEGIN
          DacMux(2)  <= m_ndx0Slv & 14x"0";
          DacMux(3)  <= m_ndx1Slv & 14x"0";
          DacMux(4)  <= Phase0A & 6x"0";
-         DacMux(5)  <= PhaseOut;
-         DacMux(6)  <= PhaseDiff;
-         DacMux(7)  <= H0Phase & 6x"0";
+         DacMux(5)  <= PhaseOut;                   -- Phase output to loop filter
+         DacMux(6)  <= PhaseDiff;                  -- FM output to loop filter
+         DacMux(7)  <= H0Phase & 6x"0";            -- Phase outputs from Channel Estimates
          DacMux(8)  <= H1Phase & 6x"0";
-         DacMux(9)  <= Magnitude0;                 -- iFFT H0 Magnitude every other sample
-         DacMux(10) <= Magnitude1;                 -- H1
-         DacMux(11) <= PhaseOut0;                  -- iFFT H0 Phase every other sample
+         DacMux(9)  <= Magnitude0;                 -- iFFT H0 Magnitude
+         DacMux(10) <= Magnitude1;                 -- iFFT H1 Magnitude
+         DacMux(11) <= PhaseOut0;                  -- iFFT H0 Phase
          DacMux(12) <= PhaseOut1;                  -- H1
-         DacMux(13) <= MagPeak0;                    -- Peak Magnitude per frame
+         DacMux(13) <= MagPeak0;                    -- Peak H0 Magnitude per frame
          DacMux(14) <= PhsPeak0;                    -- Full Pilot Phase at peak magnitude
          DacMux(15) <= PilotOffset & 9x"00";
 

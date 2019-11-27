@@ -129,7 +129,7 @@ module trellisProcess (
     interpolator ch0r(
         .clk(clk),
         .clkEn(1'b1),
-        .reset(myStartOfTrellis),
+        .reset(reset || myStartOfTrellis),
         .interpolate(faClkEn & interpolate),
         .mu(ch0Mu),
         .inputEn(faClkEn),
@@ -141,7 +141,7 @@ module trellisProcess (
     interpolator ch0i(
         .clk(clk),
         .clkEn(1'b1),
-        .reset(myStartOfTrellis),
+        .reset(reset || myStartOfTrellis),
         .interpolate(faClkEn & interpolate),
         .mu(ch0Mu),
         .inputEn(faClkEn),
@@ -154,7 +154,7 @@ module trellisProcess (
     interpolator ch1r(
         .clk(clk),
         .clkEn(1'b1),
-        .reset(myStartOfTrellis),
+        .reset(reset || myStartOfTrellis),
         .interpolate(faClkEn & interpolate),
         .mu(ch1Mu),
         .inputEn(faClkEn),
@@ -166,7 +166,7 @@ module trellisProcess (
     interpolator ch1i(
         .clk(clk),
         .clkEn(1'b1),
-        .reset(myStartOfTrellis),
+        .reset(reset || myStartOfTrellis),
         .interpolate(faClkEn & interpolate),
         .mu(ch1Mu),
         .inputEn(faClkEn),
@@ -194,6 +194,24 @@ module trellisProcess (
         .outputEn(tdOutputEn),
         .outputBits(tdOutputBits)
     );
+// synthesis translate_off
+    trellisDetectorOld tdOld(
+        .clk(clk),
+        .clkEn(1'b1),
+        .reset(reset || lastSampleReset),
+        .sampleEn(interpOutEn),
+        .startFrame(myStartOfTrellis),
+        .in0Real(sample0r), .in0Imag(sample0i),
+        .in1Real(sample1r), .in1Imag(sample1i),
+        .deltaTauEst(deltaTauEst),
+        .h0EstReal(h0EstReal), .h0EstImag(h0EstImag),
+        .h1EstReal(h1EstReal), .h1EstImag(h1EstImag),
+        .finalMetricOutputEn(),
+        .finalMetric(),
+        .outputEn(),
+        .outputBits()
+    );
+// synthesis translate_on
 
     always @(posedge clk) begin
         if (reset || myStartOfTrellis || lastSampleReset) begin

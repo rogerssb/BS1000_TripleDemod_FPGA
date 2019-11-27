@@ -31,7 +31,8 @@ module frameAlignment
 
     //------------------------------ Sample Counter ---------------------------
 
-    reg             [14:0]  wrAddr, rdAddr, sofAddress;
+    reg             [14:0]  wrAddr, rdAddr,sofAddress;
+    wire            [14:0]  maxAddr;
     wire   signed   [15:0]  rdAddr0, rdAddr1;
     reg                     estimatesReady, sofDetected;
     always @(posedge clk) begin
@@ -50,7 +51,7 @@ module frameAlignment
             end
             if (startOfFrame) begin
                 sofDetected <= 1;
-                sofAddress  <= wrAddr + `PILOT_SAMPLES_PER_FRAME - offset;  // capture address of first sample of next frame. SOF goes active between packets, so wrAddr is inactive
+                sofAddress  <= wrAddr + `PILOT_SAMPLES_PER_FRAME - offset - 3;  // capture address of first sample of next frame. SOF goes active between packets, so wrAddr is inactive
             end
             else if (myStartOfTrellis) begin
                 sofDetected <= 0;
@@ -88,6 +89,7 @@ module frameAlignment
 
     assign  rdAddr0 = {1'b0, rdAddr} + {{12{m_ndx0[3]}}, m_ndx0};   // sign extend to add signed offset
     assign  rdAddr1 = {1'b0, rdAddr} + {{12{m_ndx1[3]}}, m_ndx1};
+    assign  maxAddr = (m_ndx0 > m_ndx1) ? rdAddr0[14:0] : rdAddr1[14:0];
 
     RAM_2Reads_1WriteVerWrap #(
       .DATA_WIDTH  (36),
@@ -105,7 +107,7 @@ module frameAlignment
         .RdOutA(fifoRdData0),
         .RdOutB(fifoRdData1)
     );
-    wire    fifoOutputValid = ~empty;
+    wire    fifoOutputValid = (maxAddr + 1 < wrAddr) || (!wrAddr[14] && maxAddr[14]);  // highest read address less than write or write has wrapped to zero and read is still high
     assign  doutReal0       = fifoRdData0[35:18];
     assign  doutImag0       = fifoRdData0[17:0];
     assign  doutReal1       = fifoRdData1[35:18];
@@ -127,7 +129,7 @@ module frameAlignment
             fifoRdEn        <= 0;
             outputCount     <= 0;
             sampleCount     <= 0;
-            lastSample      <= 0;
+            lastSample      <= 0;   // synchronous clear, so no race condition on lastSample clearing itself
             interpolate     <= 0;
             trellisInitCnt  <= 130; // inactive state
         end

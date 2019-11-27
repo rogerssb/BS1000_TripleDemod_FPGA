@@ -226,7 +226,7 @@ BEGIN
             end case;
 
             if (PilotValid) then -- validated pilot with distance between frames
-               CorrCntrCapture <= resize(CorrPntr - 512 + Offset_u - 8, CorrCntrCapture);
+               CorrCntrCapture <= resize(CorrPntr - 512 + Offset_u - 9, CorrCntrCapture);
                StartNextFrame  <= resize(CorrPntr - 512 - 8 + FRAME_LENGTH_4, StartNextFrame); -- offset added in STC
                Captured        <= '1';
                FrmSmplCount <= 0;
