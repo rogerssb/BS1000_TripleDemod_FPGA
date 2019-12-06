@@ -58,6 +58,7 @@
 //----------------------------------------------------------------------------
 // ___clk93____93.333______0.000______50.0______140.363____103.963
 // __clk186___186.667______0.000______50.0______122.636____103.963
+// clk93Dly____93.333_____45.000______50.0______140.363____103.963
 //
 //----------------------------------------------------------------------------
 // Input Clock   Freq (MHz)    Input Jitter (UI)
@@ -72,6 +73,7 @@ module systemClock_clk_wiz
   // Clock out ports
   output        clk93,
   output        clk186,
+  output        clk93Dly,
   // Status and control signals
   output        locked,
   input         clk_in1
@@ -94,7 +96,7 @@ wire clk_in2_systemClock;
 
   wire        clk93_systemClock;
   wire        clk186_systemClock;
-  wire        clk_out3_systemClock;
+  wire        clk93Dly_systemClock;
   wire        clk_out4_systemClock;
   wire        clk_out5_systemClock;
   wire        clk_out6_systemClock;
@@ -109,7 +111,6 @@ wire clk_in2_systemClock;
   wire        clkfboutb_unused;
     wire clkout0b_unused;
    wire clkout1b_unused;
-   wire clkout2_unused;
    wire clkout2b_unused;
    wire clkout3_unused;
    wire clkout3b_unused;
@@ -136,6 +137,10 @@ wire clk_in2_systemClock;
     .CLKOUT1_PHASE        (0.000),
     .CLKOUT1_DUTY_CYCLE   (0.500),
     .CLKOUT1_USE_FINE_PS  ("FALSE"),
+    .CLKOUT2_DIVIDE       (10),
+    .CLKOUT2_PHASE        (45.000),
+    .CLKOUT2_DUTY_CYCLE   (0.500),
+    .CLKOUT2_USE_FINE_PS  ("FALSE"),
     .CLKIN1_PERIOD        (10.714))
   mmcm_adv_inst
     // Output clocks
@@ -146,7 +151,7 @@ wire clk_in2_systemClock;
     .CLKOUT0B            (clkout0b_unused),
     .CLKOUT1             (clk186_systemClock),
     .CLKOUT1B            (clkout1b_unused),
-    .CLKOUT2             (clkout2_unused),
+    .CLKOUT2             (clk93Dly_systemClock),
     .CLKOUT2B            (clkout2b_unused),
     .CLKOUT3             (clkout3_unused),
     .CLKOUT3B            (clkout3b_unused),
@@ -199,6 +204,8 @@ wire clk_in2_systemClock;
   BUFG clkout2_buf
    (.O   (clk186),
     .I   (clk186_systemClock));
+
+  assign clk93Dly = clk93Dly_systemClock;
 
 
 

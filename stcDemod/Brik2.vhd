@@ -261,6 +261,9 @@ ARCHITECTURE rtl OF Brik2 IS
             H1EstR_Ila,
             H1EstI_Ila        : SLV18;  -- remove fractions for ILA, doesn't like negatives
 
+   attribute KEEP : string;
+   attribute KEEP of TimeActive : signal is "true";
+
    attribute mark_debug : string;
    attribute mark_debug of TimeEstDone, ChanEstDone, TauEst0Ila, TauEst1Ila,
                   H0EstR_Ila, H0EstI_Ila, H1EstR_Ila, H1EstI_Ila : signal is "true";
@@ -368,6 +371,7 @@ BEGIN
          RdOutB      => open
       );
 
+   -- run estimates at slow clock to ease timing
    TE_u : TimingEstimate
       PORT MAP(
          clk         => clk93,
@@ -404,6 +408,7 @@ BEGIN
    );
 
    EstimatesProc : process(clk93)
+      variable  Delta  : sfixed(4 downto -17);
    begin
       if (rising_edge(clk93)) then
          if (reset) then
@@ -471,7 +476,14 @@ BEGIN
             else
                Mu0         <= resize(Tau0EstX4 - m_ndx0, Mu0, fixed_wrap, fixed_truncate);
                Mu1         <= resize(Tau1EstX4 - m_ndx1, Mu1, fixed_wrap, fixed_truncate);
-               DeltaTauEst <= resize(Tau1EstA - Tau0EstA, DeltaTauEst);
+               Delta       := resize(Tau1EstA - Tau0EstA, Delta);
+               if (Delta >= 1.0) then
+                  DeltaTauEst <= (DeltaTauEst'left => '0', others=>'1');   -- almost +1.0
+               elsif (Delta <= -1.0) then
+                  DeltaTauEst <= to_sfixed(-1.0, DeltaTauEst);
+               else
+                  DeltaTauEst <= resize(Tau1EstA - Tau0EstA, DeltaTauEst);
+               end if;
                m_ndx0      <= Tau0Int when (Tau0EstA >= 0) else Tau0Int - 1;
                m_ndx1      <= Tau1Int when (Tau1EstA >= 0) else Tau1Int - 1;
             end if;

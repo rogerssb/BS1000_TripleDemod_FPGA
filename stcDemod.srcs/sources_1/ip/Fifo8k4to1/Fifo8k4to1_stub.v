@@ -1,10 +1,10 @@
 // Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2017.2.1 (win64) Build 1957588 Wed Aug  9 16:32:24 MDT 2017
-// Date        : Wed Nov 13 17:30:28 2019
+// Date        : Mon Dec  2 18:58:55 2019
 // Host        : SEMCO_1039B running 64-bit major release  (build 9200)
-// Command     : write_verilog -force -mode synth_stub
-//               C:/Semco/Vivado/Demods/stcDemod.srcs/sources_1/ip/Fifo8k4to1/Fifo8k4to1_stub.v
+// Command     : write_verilog -force -mode synth_stub -rename_top Fifo8k4to1 -prefix
+//               Fifo8k4to1_ Fifo8k4to1_stub.v
 // Design      : Fifo8k4to1
 // Purpose     : Stub declaration of top-level module interface
 // Device      : xc7k160tfbg676-2

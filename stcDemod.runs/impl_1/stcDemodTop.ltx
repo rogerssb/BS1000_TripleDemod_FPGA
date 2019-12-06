@@ -13,24 +13,24 @@
         <Option Id="PROBE_PORT_BIT_COUNT" value="18"/>
       </probeOptions>
       <nets>
-        <net name="stcDemod/HxThreshSlv[17]"/>
-        <net name="stcDemod/HxThreshSlv[16]"/>
-        <net name="stcDemod/HxThreshSlv[15]"/>
-        <net name="stcDemod/HxThreshSlv[14]"/>
-        <net name="stcDemod/HxThreshSlv[13]"/>
-        <net name="stcDemod/HxThreshSlv[12]"/>
-        <net name="stcDemod/HxThreshSlv[11]"/>
-        <net name="stcDemod/HxThreshSlv[10]"/>
-        <net name="stcDemod/HxThreshSlv[9]"/>
-        <net name="stcDemod/HxThreshSlv[8]"/>
-        <net name="stcDemod/HxThreshSlv[7]"/>
-        <net name="stcDemod/HxThreshSlv[6]"/>
-        <net name="stcDemod/HxThreshSlv[5]"/>
-        <net name="stcDemod/HxThreshSlv[4]"/>
-        <net name="stcDemod/HxThreshSlv[3]"/>
-        <net name="stcDemod/HxThreshSlv[2]"/>
-        <net name="stcDemod/HxThreshSlv[1]"/>
-        <net name="stcDemod/HxThreshSlv[0]"/>
+        <net name="stcDemod/VioPhase/probe_out0[17]"/>
+        <net name="stcDemod/VioPhase/probe_out0[16]"/>
+        <net name="stcDemod/VioPhase/probe_out0[15]"/>
+        <net name="stcDemod/VioPhase/probe_out0[14]"/>
+        <net name="stcDemod/VioPhase/probe_out0[13]"/>
+        <net name="stcDemod/VioPhase/probe_out0[12]"/>
+        <net name="stcDemod/VioPhase/probe_out0[11]"/>
+        <net name="stcDemod/VioPhase/probe_out0[10]"/>
+        <net name="stcDemod/VioPhase/probe_out0[9]"/>
+        <net name="stcDemod/VioPhase/probe_out0[8]"/>
+        <net name="stcDemod/VioPhase/probe_out0[7]"/>
+        <net name="stcDemod/VioPhase/probe_out0[6]"/>
+        <net name="stcDemod/VioPhase/probe_out0[5]"/>
+        <net name="stcDemod/VioPhase/probe_out0[4]"/>
+        <net name="stcDemod/VioPhase/probe_out0[3]"/>
+        <net name="stcDemod/VioPhase/probe_out0[2]"/>
+        <net name="stcDemod/VioPhase/probe_out0[1]"/>
+        <net name="stcDemod/VioPhase/probe_out0[0]"/>
       </nets>
     </probe>
     <probe type="vio_output" busType="bus" source="netlist" spec="VIO_OUTPUT_V2_RT">
@@ -159,10 +159,10 @@
         <Option Id="PROBE_PORT_BIT_COUNT" value="4"/>
       </probeOptions>
       <nets>
-        <net name="stcDemod/Offset[3]"/>
-        <net name="stcDemod/Offset[2]"/>
-        <net name="stcDemod/Offset[1]"/>
-        <net name="stcDemod/Offset[0]"/>
+        <net name="stcDemod/VioPhase/probe_out5[3]"/>
+        <net name="stcDemod/VioPhase/probe_out5[2]"/>
+        <net name="stcDemod/VioPhase/probe_out5[1]"/>
+        <net name="stcDemod/VioPhase/probe_out5[0]"/>
       </nets>
     </probe>
     <probe type="ila" busType="net" source="netlist" spec="ILA_V2_RT">
@@ -175,150 +175,7 @@
         <Option Id="PROBE_PORT_BIT_COUNT" value="1"/>
       </probeOptions>
       <nets>
-        <net name="stcDemod/Brik2_u/HPP/Phase0A[-11]"/>
-      </nets>
-    </probe>
-    <probe type="ila" busType="net" source="netlist" spec="ILA_V2_RT">
-      <probeOptions Id="DebugProbeParams">
-        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="0"/>
-        <Option Id="PROBE_PORT_BITS" value="1"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="1"/>
-      </probeOptions>
-      <nets>
-        <net name="stcDemod/Brik2_u/HPP/Phase0A[-10]"/>
-      </nets>
-    </probe>
-    <probe type="ila" busType="net" source="netlist" spec="ILA_V2_RT">
-      <probeOptions Id="DebugProbeParams">
-        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="0"/>
-        <Option Id="PROBE_PORT_BITS" value="2"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="1"/>
-      </probeOptions>
-      <nets>
-        <net name="stcDemod/Brik2_u/HPP/Phase0A[-9]"/>
-      </nets>
-    </probe>
-    <probe type="ila" busType="net" source="netlist" spec="ILA_V2_RT">
-      <probeOptions Id="DebugProbeParams">
-        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="0"/>
-        <Option Id="PROBE_PORT_BITS" value="3"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="1"/>
-      </probeOptions>
-      <nets>
-        <net name="stcDemod/Brik2_u/HPP/Phase0A[-8]"/>
-      </nets>
-    </probe>
-    <probe type="ila" busType="net" source="netlist" spec="ILA_V2_RT">
-      <probeOptions Id="DebugProbeParams">
-        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="0"/>
-        <Option Id="PROBE_PORT_BITS" value="4"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="1"/>
-      </probeOptions>
-      <nets>
-        <net name="stcDemod/Brik2_u/HPP/Phase0A[-7]"/>
-      </nets>
-    </probe>
-    <probe type="ila" busType="net" source="netlist" spec="ILA_V2_RT">
-      <probeOptions Id="DebugProbeParams">
-        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="0"/>
-        <Option Id="PROBE_PORT_BITS" value="5"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="1"/>
-      </probeOptions>
-      <nets>
-        <net name="stcDemod/Brik2_u/HPP/Phase0A[-6]"/>
-      </nets>
-    </probe>
-    <probe type="ila" busType="net" source="netlist" spec="ILA_V2_RT">
-      <probeOptions Id="DebugProbeParams">
-        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="0"/>
-        <Option Id="PROBE_PORT_BITS" value="6"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="1"/>
-      </probeOptions>
-      <nets>
-        <net name="stcDemod/Brik2_u/HPP/Phase0A[-5]"/>
-      </nets>
-    </probe>
-    <probe type="ila" busType="net" source="netlist" spec="ILA_V2_RT">
-      <probeOptions Id="DebugProbeParams">
-        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="0"/>
-        <Option Id="PROBE_PORT_BITS" value="7"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="1"/>
-      </probeOptions>
-      <nets>
-        <net name="stcDemod/Brik2_u/HPP/Phase0A[-4]"/>
-      </nets>
-    </probe>
-    <probe type="ila" busType="net" source="netlist" spec="ILA_V2_RT">
-      <probeOptions Id="DebugProbeParams">
-        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="0"/>
-        <Option Id="PROBE_PORT_BITS" value="8"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="1"/>
-      </probeOptions>
-      <nets>
-        <net name="stcDemod/Brik2_u/HPP/Phase0A[-3]"/>
-      </nets>
-    </probe>
-    <probe type="ila" busType="net" source="netlist" spec="ILA_V2_RT">
-      <probeOptions Id="DebugProbeParams">
-        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="0"/>
-        <Option Id="PROBE_PORT_BITS" value="9"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="1"/>
-      </probeOptions>
-      <nets>
-        <net name="stcDemod/Brik2_u/HPP/Phase0A[-2]"/>
-      </nets>
-    </probe>
-    <probe type="ila" busType="net" source="netlist" spec="ILA_V2_RT">
-      <probeOptions Id="DebugProbeParams">
-        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="0"/>
-        <Option Id="PROBE_PORT_BITS" value="10"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="1"/>
-      </probeOptions>
-      <nets>
-        <net name="stcDemod/Brik2_u/HPP/Phase0A[-1]"/>
-      </nets>
-    </probe>
-    <probe type="ila" busType="bus" source="netlist" spec="ILA_V2_RT">
-      <probeOptions Id="DebugProbeParams">
-        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="0"/>
-        <Option Id="PROBE_PORT_BITS" value="11"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="1"/>
-      </probeOptions>
-      <nets>
-        <net name="stcDemod/Brik2_u/HPP/Phase0A[0]"/>
+        <net name="stcDemod/Mag0GtMag1"/>
       </nets>
     </probe>
     <probe type="ila" busType="net" source="netlist" spec="ILA_V2_RT">
@@ -331,636 +188,41 @@
         <Option Id="PROBE_PORT_BIT_COUNT" value="1"/>
       </probeOptions>
       <nets>
-        <net name="stcDemod/Brik2_u/HPP/Phase0B[-11]"/>
+        <net name="u_ila_0_PilotFound_1"/>
       </nets>
     </probe>
     <probe type="ila" busType="net" source="netlist" spec="ILA_V2_RT">
-      <probeOptions Id="DebugProbeParams">
-        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="1"/>
-        <Option Id="PROBE_PORT_BITS" value="1"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="1"/>
-      </probeOptions>
-      <nets>
-        <net name="stcDemod/Brik2_u/HPP/Phase0B[-10]"/>
-      </nets>
-    </probe>
-    <probe type="ila" busType="net" source="netlist" spec="ILA_V2_RT">
-      <probeOptions Id="DebugProbeParams">
-        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="1"/>
-        <Option Id="PROBE_PORT_BITS" value="2"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="1"/>
-      </probeOptions>
-      <nets>
-        <net name="stcDemod/Brik2_u/HPP/Phase0B[-9]"/>
-      </nets>
-    </probe>
-    <probe type="ila" busType="net" source="netlist" spec="ILA_V2_RT">
-      <probeOptions Id="DebugProbeParams">
-        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="1"/>
-        <Option Id="PROBE_PORT_BITS" value="3"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="1"/>
-      </probeOptions>
-      <nets>
-        <net name="stcDemod/Brik2_u/HPP/Phase0B[-8]"/>
-      </nets>
-    </probe>
-    <probe type="ila" busType="net" source="netlist" spec="ILA_V2_RT">
-      <probeOptions Id="DebugProbeParams">
-        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="1"/>
-        <Option Id="PROBE_PORT_BITS" value="4"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="1"/>
-      </probeOptions>
-      <nets>
-        <net name="stcDemod/Brik2_u/HPP/Phase0B[-7]"/>
-      </nets>
-    </probe>
-    <probe type="ila" busType="net" source="netlist" spec="ILA_V2_RT">
-      <probeOptions Id="DebugProbeParams">
-        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="1"/>
-        <Option Id="PROBE_PORT_BITS" value="5"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="1"/>
-      </probeOptions>
-      <nets>
-        <net name="stcDemod/Brik2_u/HPP/Phase0B[-6]"/>
-      </nets>
-    </probe>
-    <probe type="ila" busType="net" source="netlist" spec="ILA_V2_RT">
-      <probeOptions Id="DebugProbeParams">
-        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="1"/>
-        <Option Id="PROBE_PORT_BITS" value="6"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="1"/>
-      </probeOptions>
-      <nets>
-        <net name="stcDemod/Brik2_u/HPP/Phase0B[-5]"/>
-      </nets>
-    </probe>
-    <probe type="ila" busType="net" source="netlist" spec="ILA_V2_RT">
-      <probeOptions Id="DebugProbeParams">
-        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="1"/>
-        <Option Id="PROBE_PORT_BITS" value="7"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="1"/>
-      </probeOptions>
-      <nets>
-        <net name="stcDemod/Brik2_u/HPP/Phase0B[-4]"/>
-      </nets>
-    </probe>
-    <probe type="ila" busType="net" source="netlist" spec="ILA_V2_RT">
-      <probeOptions Id="DebugProbeParams">
-        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="1"/>
-        <Option Id="PROBE_PORT_BITS" value="8"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="1"/>
-      </probeOptions>
-      <nets>
-        <net name="stcDemod/Brik2_u/HPP/Phase0B[-3]"/>
-      </nets>
-    </probe>
-    <probe type="ila" busType="net" source="netlist" spec="ILA_V2_RT">
-      <probeOptions Id="DebugProbeParams">
-        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="1"/>
-        <Option Id="PROBE_PORT_BITS" value="9"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="1"/>
-      </probeOptions>
-      <nets>
-        <net name="stcDemod/Brik2_u/HPP/Phase0B[-2]"/>
-      </nets>
-    </probe>
-    <probe type="ila" busType="net" source="netlist" spec="ILA_V2_RT">
-      <probeOptions Id="DebugProbeParams">
-        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="1"/>
-        <Option Id="PROBE_PORT_BITS" value="10"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="1"/>
-      </probeOptions>
-      <nets>
-        <net name="stcDemod/Brik2_u/HPP/Phase0B[-1]"/>
-      </nets>
-    </probe>
-    <probe type="ila" busType="bus" source="netlist" spec="ILA_V2_RT">
-      <probeOptions Id="DebugProbeParams">
-        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="1"/>
-        <Option Id="PROBE_PORT_BITS" value="11"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="1"/>
-      </probeOptions>
-      <nets>
-        <net name="stcDemod/Brik2_u/HPP/Phase0B[0]"/>
-      </nets>
-    </probe>
-    <probe type="ila" busType="bus" source="netlist" spec="ILA_V2_RT">
       <probeOptions Id="DebugProbeParams">
         <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
         <Option Id="CORE_LOCATION" value="1:1"/>
         <Option Id="HW_ILA" value="u_ila_0"/>
         <Option Id="PROBE_PORT" value="2"/>
         <Option Id="PROBE_PORT_BITS" value="0"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="10"/>
+        <Option Id="PROBE_PORT_BIT_COUNT" value="1"/>
       </probeOptions>
       <nets>
-        <net name="stcDemod/PD_u/PrevIndex[9]"/>
-        <net name="stcDemod/PD_u/PrevIndex[8]"/>
-        <net name="stcDemod/PD_u/PrevIndex[7]"/>
-        <net name="stcDemod/PD_u/PrevIndex[6]"/>
-        <net name="stcDemod/PD_u/PrevIndex[5]"/>
-        <net name="stcDemod/PD_u/PrevIndex[4]"/>
-        <net name="stcDemod/PD_u/PrevIndex[3]"/>
-        <net name="stcDemod/PD_u/PrevIndex[2]"/>
-        <net name="stcDemod/PD_u/PrevIndex[1]"/>
-        <net name="stcDemod/PD_u/PrevIndex[0]"/>
+        <net name="stcDemod/PilotFoundCE"/>
       </nets>
     </probe>
-    <probe type="ila" busType="bus" source="netlist" spec="ILA_V2_RT">
+    <probe type="ila" busType="net" source="netlist" spec="ILA_V2_RT">
       <probeOptions Id="DebugProbeParams">
         <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
         <Option Id="CORE_LOCATION" value="1:1"/>
         <Option Id="HW_ILA" value="u_ila_0"/>
         <Option Id="PROBE_PORT" value="3"/>
         <Option Id="PROBE_PORT_BITS" value="0"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="18"/>
-      </probeOptions>
-      <nets>
-        <net name="stcDemod/PD_u/PilotMag_Ila[17]"/>
-        <net name="stcDemod/PD_u/PilotMag_Ila[16]"/>
-        <net name="stcDemod/PD_u/PilotMag_Ila[15]"/>
-        <net name="stcDemod/PD_u/PilotMag_Ila[14]"/>
-        <net name="stcDemod/PD_u/PilotMag_Ila[13]"/>
-        <net name="stcDemod/PD_u/PilotMag_Ila[12]"/>
-        <net name="stcDemod/PD_u/PilotMag_Ila[11]"/>
-        <net name="stcDemod/PD_u/PilotMag_Ila[10]"/>
-        <net name="stcDemod/PD_u/PilotMag_Ila[9]"/>
-        <net name="stcDemod/PD_u/PilotMag_Ila[8]"/>
-        <net name="stcDemod/PD_u/PilotMag_Ila[7]"/>
-        <net name="stcDemod/PD_u/PilotMag_Ila[6]"/>
-        <net name="stcDemod/PD_u/PilotMag_Ila[5]"/>
-        <net name="stcDemod/PD_u/PilotMag_Ila[4]"/>
-        <net name="stcDemod/PD_u/PilotMag_Ila[3]"/>
-        <net name="stcDemod/PD_u/PilotMag_Ila[2]"/>
-        <net name="stcDemod/PD_u/PilotMag_Ila[1]"/>
-        <net name="stcDemod/PD_u/PilotMag_Ila[0]"/>
-      </nets>
-    </probe>
-    <probe type="ila" busType="bus" source="netlist" spec="ILA_V2_RT">
-      <probeOptions Id="DebugProbeParams">
-        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="4"/>
-        <Option Id="PROBE_PORT_BITS" value="0"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="16"/>
-      </probeOptions>
-      <nets>
-        <net name="stcDemod/PS_u/RdAddr[15]"/>
-        <net name="stcDemod/PS_u/RdAddr[14]"/>
-        <net name="stcDemod/PS_u/RdAddr[13]"/>
-        <net name="stcDemod/PS_u/RdAddr[12]"/>
-        <net name="stcDemod/PS_u/RdAddr[11]"/>
-        <net name="stcDemod/PS_u/RdAddr[10]"/>
-        <net name="stcDemod/PS_u/RdAddr[9]"/>
-        <net name="stcDemod/PS_u/RdAddr[8]"/>
-        <net name="stcDemod/PS_u/RdAddr[7]"/>
-        <net name="stcDemod/PS_u/RdAddr[6]"/>
-        <net name="stcDemod/PS_u/RdAddr[5]"/>
-        <net name="stcDemod/PS_u/RdAddr[4]"/>
-        <net name="stcDemod/PS_u/RdAddr[3]"/>
-        <net name="stcDemod/PS_u/RdAddr[2]"/>
-        <net name="stcDemod/PS_u/RdAddr[1]"/>
-        <net name="stcDemod/PS_u/RdAddr[0]"/>
-      </nets>
-    </probe>
-    <probe type="ila" busType="bus" source="netlist" spec="ILA_V2_RT">
-      <probeOptions Id="DebugProbeParams">
-        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="5"/>
-        <Option Id="PROBE_PORT_BITS" value="0"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="14"/>
-      </probeOptions>
-      <nets>
-        <net name="stcDemod/PS_u/FrmSmplCount[13]"/>
-        <net name="stcDemod/PS_u/FrmSmplCount[12]"/>
-        <net name="stcDemod/PS_u/FrmSmplCount[11]"/>
-        <net name="stcDemod/PS_u/FrmSmplCount[10]"/>
-        <net name="stcDemod/PS_u/FrmSmplCount[9]"/>
-        <net name="stcDemod/PS_u/FrmSmplCount[8]"/>
-        <net name="stcDemod/PS_u/FrmSmplCount[7]"/>
-        <net name="stcDemod/PS_u/FrmSmplCount[6]"/>
-        <net name="stcDemod/PS_u/FrmSmplCount[5]"/>
-        <net name="stcDemod/PS_u/FrmSmplCount[4]"/>
-        <net name="stcDemod/PS_u/FrmSmplCount[3]"/>
-        <net name="stcDemod/PS_u/FrmSmplCount[2]"/>
-        <net name="stcDemod/PS_u/FrmSmplCount[1]"/>
-        <net name="stcDemod/PS_u/FrmSmplCount[0]"/>
-      </nets>
-    </probe>
-    <probe type="ila" busType="bus" source="netlist" spec="ILA_V2_RT">
-      <probeOptions Id="DebugProbeParams">
-        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="6"/>
-        <Option Id="PROBE_PORT_BITS" value="0"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="16"/>
-      </probeOptions>
-      <nets>
-        <net name="stcDemod/PS_u/WrAddr[15]"/>
-        <net name="stcDemod/PS_u/WrAddr[14]"/>
-        <net name="stcDemod/PS_u/WrAddr[13]"/>
-        <net name="stcDemod/PS_u/WrAddr[12]"/>
-        <net name="stcDemod/PS_u/WrAddr[11]"/>
-        <net name="stcDemod/PS_u/WrAddr[10]"/>
-        <net name="stcDemod/PS_u/WrAddr[9]"/>
-        <net name="stcDemod/PS_u/WrAddr[8]"/>
-        <net name="stcDemod/PS_u/WrAddr[7]"/>
-        <net name="stcDemod/PS_u/WrAddr[6]"/>
-        <net name="stcDemod/PS_u/WrAddr[5]"/>
-        <net name="stcDemod/PS_u/WrAddr[4]"/>
-        <net name="stcDemod/PS_u/WrAddr[3]"/>
-        <net name="stcDemod/PS_u/WrAddr[2]"/>
-        <net name="stcDemod/PS_u/WrAddr[1]"/>
-        <net name="stcDemod/PS_u/WrAddr[0]"/>
-      </nets>
-    </probe>
-    <probe type="ila" busType="bus" source="netlist" spec="ILA_V2_RT">
-      <probeOptions Id="DebugProbeParams">
-        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="7"/>
-        <Option Id="PROBE_PORT_BITS" value="0"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="2"/>
-      </probeOptions>
-      <nets>
-        <net name="stcDemod/CorrPntr_1[1]"/>
-        <net name="stcDemod/CorrPntr_1[0]"/>
-      </nets>
-    </probe>
-    <probe type="ila" busType="bus" source="netlist" spec="ILA_V2_RT">
-      <probeOptions Id="DebugProbeParams">
-        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="7"/>
-        <Option Id="PROBE_PORT_BITS" value="2"/>
         <Option Id="PROBE_PORT_BIT_COUNT" value="1"/>
       </probeOptions>
       <nets>
-        <net name="u_ila_0_CorrPntr_1[2]"/>
+        <net name="u_ila_0_PilotFound"/>
       </nets>
     </probe>
     <probe type="ila" busType="bus" source="netlist" spec="ILA_V2_RT">
       <probeOptions Id="DebugProbeParams">
         <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="7"/>
-        <Option Id="PROBE_PORT_BITS" value="3"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="1"/>
-      </probeOptions>
-      <nets>
-        <net name="stcDemod/CorrPntr_2[3]"/>
-      </nets>
-    </probe>
-    <probe type="ila" busType="bus" source="netlist" spec="ILA_V2_RT">
-      <probeOptions Id="DebugProbeParams">
-        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="7"/>
-        <Option Id="PROBE_PORT_BITS" value="4"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="5"/>
-      </probeOptions>
-      <nets>
-        <net name="u_ila_0_CorrPntr[8]"/>
-        <net name="u_ila_0_CorrPntr[7]"/>
-        <net name="u_ila_0_CorrPntr[6]"/>
-        <net name="u_ila_0_CorrPntr[5]"/>
-        <net name="u_ila_0_CorrPntr[4]"/>
-      </nets>
-    </probe>
-    <probe type="ila" busType="bus" source="netlist" spec="ILA_V2_RT">
-      <probeOptions Id="DebugProbeParams">
-        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="7"/>
-        <Option Id="PROBE_PORT_BITS" value="9"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="7"/>
-      </probeOptions>
-      <nets>
-        <net name="stcDemod/CorrPntr[15]"/>
-        <net name="stcDemod/CorrPntr[14]"/>
-        <net name="stcDemod/CorrPntr[13]"/>
-        <net name="stcDemod/CorrPntr[12]"/>
-        <net name="stcDemod/CorrPntr[11]"/>
-        <net name="stcDemod/CorrPntr[10]"/>
-        <net name="stcDemod/CorrPntr[9]"/>
-      </nets>
-    </probe>
-    <probe type="ila" busType="bus" source="netlist" spec="ILA_V2_RT">
-      <probeOptions Id="DebugProbeParams">
-        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="8"/>
-        <Option Id="PROBE_PORT_BITS" value="0"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="13"/>
-      </probeOptions>
-      <nets>
-        <net name="stcDemod/H0Mag[12]"/>
-        <net name="stcDemod/H0Mag[11]"/>
-        <net name="stcDemod/H0Mag[10]"/>
-        <net name="stcDemod/H0Mag[9]"/>
-        <net name="stcDemod/H0Mag[8]"/>
-        <net name="stcDemod/H0Mag[7]"/>
-        <net name="stcDemod/H0Mag[6]"/>
-        <net name="stcDemod/H0Mag[5]"/>
-        <net name="stcDemod/H0Mag[4]"/>
-        <net name="stcDemod/H0Mag[3]"/>
-        <net name="stcDemod/H0Mag[2]"/>
-        <net name="stcDemod/H0Mag[1]"/>
-        <net name="stcDemod/H0Mag[0]"/>
-      </nets>
-    </probe>
-    <probe type="ila" busType="bus" source="netlist" spec="ILA_V2_RT">
-      <probeOptions Id="DebugProbeParams">
-        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="9"/>
-        <Option Id="PROBE_PORT_BITS" value="0"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="12"/>
-      </probeOptions>
-      <nets>
-        <net name="stcDemod/H0Phase[11]"/>
-        <net name="stcDemod/H0Phase[10]"/>
-        <net name="stcDemod/H0Phase[9]"/>
-        <net name="stcDemod/H0Phase[8]"/>
-        <net name="stcDemod/H0Phase[7]"/>
-        <net name="stcDemod/H0Phase[6]"/>
-        <net name="stcDemod/H0Phase[5]"/>
-        <net name="stcDemod/H0Phase[4]"/>
-        <net name="stcDemod/H0Phase[3]"/>
-        <net name="stcDemod/H0Phase[2]"/>
-        <net name="stcDemod/H0Phase[1]"/>
-        <net name="stcDemod/H0Phase[0]"/>
-      </nets>
-    </probe>
-    <probe type="ila" busType="bus" source="netlist" spec="ILA_V2_RT">
-      <probeOptions Id="DebugProbeParams">
-        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="10"/>
-        <Option Id="PROBE_PORT_BITS" value="0"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="13"/>
-      </probeOptions>
-      <nets>
-        <net name="stcDemod/H1Mag[12]"/>
-        <net name="stcDemod/H1Mag[11]"/>
-        <net name="stcDemod/H1Mag[10]"/>
-        <net name="stcDemod/H1Mag[9]"/>
-        <net name="stcDemod/H1Mag[8]"/>
-        <net name="stcDemod/H1Mag[7]"/>
-        <net name="stcDemod/H1Mag[6]"/>
-        <net name="stcDemod/H1Mag[5]"/>
-        <net name="stcDemod/H1Mag[4]"/>
-        <net name="stcDemod/H1Mag[3]"/>
-        <net name="stcDemod/H1Mag[2]"/>
-        <net name="stcDemod/H1Mag[1]"/>
-        <net name="stcDemod/H1Mag[0]"/>
-      </nets>
-    </probe>
-    <probe type="ila" busType="bus" source="netlist" spec="ILA_V2_RT">
-      <probeOptions Id="DebugProbeParams">
-        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="11"/>
-        <Option Id="PROBE_PORT_BITS" value="0"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="12"/>
-      </probeOptions>
-      <nets>
-        <net name="stcDemod/H1Phase[11]"/>
-        <net name="stcDemod/H1Phase[10]"/>
-        <net name="stcDemod/H1Phase[9]"/>
-        <net name="stcDemod/H1Phase[8]"/>
-        <net name="stcDemod/H1Phase[7]"/>
-        <net name="stcDemod/H1Phase[6]"/>
-        <net name="stcDemod/H1Phase[5]"/>
-        <net name="stcDemod/H1Phase[4]"/>
-        <net name="stcDemod/H1Phase[3]"/>
-        <net name="stcDemod/H1Phase[2]"/>
-        <net name="stcDemod/H1Phase[1]"/>
-        <net name="stcDemod/H1Phase[0]"/>
-      </nets>
-    </probe>
-    <probe type="ila" busType="bus" source="netlist" spec="ILA_V2_RT">
-      <probeOptions Id="DebugProbeParams">
-        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="12"/>
-        <Option Id="PROBE_PORT_BITS" value="0"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="18"/>
-      </probeOptions>
-      <nets>
-        <net name="stcDemod/InIBrik2Ila[17]"/>
-        <net name="stcDemod/InIBrik2Ila[16]"/>
-        <net name="stcDemod/InIBrik2Ila[15]"/>
-        <net name="stcDemod/InIBrik2Ila[14]"/>
-        <net name="stcDemod/InIBrik2Ila[13]"/>
-        <net name="stcDemod/InIBrik2Ila[12]"/>
-        <net name="stcDemod/InIBrik2Ila[11]"/>
-        <net name="stcDemod/InIBrik2Ila[10]"/>
-        <net name="stcDemod/InIBrik2Ila[9]"/>
-        <net name="stcDemod/InIBrik2Ila[8]"/>
-        <net name="stcDemod/InIBrik2Ila[7]"/>
-        <net name="stcDemod/InIBrik2Ila[6]"/>
-        <net name="stcDemod/InIBrik2Ila[5]"/>
-        <net name="stcDemod/InIBrik2Ila[4]"/>
-        <net name="stcDemod/InIBrik2Ila[3]"/>
-        <net name="stcDemod/InIBrik2Ila[2]"/>
-        <net name="stcDemod/InIBrik2Ila[1]"/>
-        <net name="stcDemod/InIBrik2Ila[0]"/>
-      </nets>
-    </probe>
-    <probe type="ila" busType="bus" source="netlist" spec="ILA_V2_RT">
-      <probeOptions Id="DebugProbeParams">
-        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="13"/>
-        <Option Id="PROBE_PORT_BITS" value="0"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="18"/>
-      </probeOptions>
-      <nets>
-        <net name="stcDemod/InRBrik2Ila[17]"/>
-        <net name="stcDemod/InRBrik2Ila[16]"/>
-        <net name="stcDemod/InRBrik2Ila[15]"/>
-        <net name="stcDemod/InRBrik2Ila[14]"/>
-        <net name="stcDemod/InRBrik2Ila[13]"/>
-        <net name="stcDemod/InRBrik2Ila[12]"/>
-        <net name="stcDemod/InRBrik2Ila[11]"/>
-        <net name="stcDemod/InRBrik2Ila[10]"/>
-        <net name="stcDemod/InRBrik2Ila[9]"/>
-        <net name="stcDemod/InRBrik2Ila[8]"/>
-        <net name="stcDemod/InRBrik2Ila[7]"/>
-        <net name="stcDemod/InRBrik2Ila[6]"/>
-        <net name="stcDemod/InRBrik2Ila[5]"/>
-        <net name="stcDemod/InRBrik2Ila[4]"/>
-        <net name="stcDemod/InRBrik2Ila[3]"/>
-        <net name="stcDemod/InRBrik2Ila[2]"/>
-        <net name="stcDemod/InRBrik2Ila[1]"/>
-        <net name="stcDemod/InRBrik2Ila[0]"/>
-      </nets>
-    </probe>
-    <probe type="ila" busType="bus" source="netlist" spec="ILA_V2_RT">
-      <probeOptions Id="DebugProbeParams">
-        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="14"/>
-        <Option Id="PROBE_PORT_BITS" value="0"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="18"/>
-      </probeOptions>
-      <nets>
-        <net name="stcDemod/PhaseDiff[17]"/>
-        <net name="stcDemod/PhaseDiff[16]"/>
-        <net name="stcDemod/PhaseDiff[15]"/>
-        <net name="stcDemod/PhaseDiff[14]"/>
-        <net name="stcDemod/PhaseDiff[13]"/>
-        <net name="stcDemod/PhaseDiff[12]"/>
-        <net name="stcDemod/PhaseDiff[11]"/>
-        <net name="stcDemod/PhaseDiff[10]"/>
-        <net name="stcDemod/PhaseDiff[9]"/>
-        <net name="stcDemod/PhaseDiff[8]"/>
-        <net name="stcDemod/PhaseDiff[7]"/>
-        <net name="stcDemod/PhaseDiff[6]"/>
-        <net name="stcDemod/PhaseDiff[5]"/>
-        <net name="stcDemod/PhaseDiff[4]"/>
-        <net name="stcDemod/PhaseDiff[3]"/>
-        <net name="stcDemod/PhaseDiff[2]"/>
-        <net name="stcDemod/PhaseDiff[1]"/>
-        <net name="stcDemod/PhaseDiff[0]"/>
-      </nets>
-    </probe>
-    <probe type="ila" busType="bus" source="netlist" spec="ILA_V2_RT">
-      <probeOptions Id="DebugProbeParams">
-        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="15"/>
-        <Option Id="PROBE_PORT_BITS" value="0"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="6"/>
-      </probeOptions>
-      <nets>
-        <net name="stcDemod/deltaTauEstSlv[5]"/>
-        <net name="stcDemod/deltaTauEstSlv[4]"/>
-        <net name="stcDemod/deltaTauEstSlv[3]"/>
-        <net name="stcDemod/deltaTauEstSlv[2]"/>
-        <net name="stcDemod/deltaTauEstSlv[1]"/>
-        <net name="stcDemod/deltaTauEstSlv[0]"/>
-      </nets>
-    </probe>
-    <probe type="ila" busType="bus" source="netlist" spec="ILA_V2_RT">
-      <probeOptions Id="DebugProbeParams">
-        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="16"/>
-        <Option Id="PROBE_PORT_BITS" value="0"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="4"/>
-      </probeOptions>
-      <nets>
-        <net name="stcDemod/m_ndx0Slv[3]"/>
-        <net name="stcDemod/m_ndx0Slv[2]"/>
-        <net name="stcDemod/m_ndx0Slv[1]"/>
-        <net name="stcDemod/m_ndx0Slv[0]"/>
-      </nets>
-    </probe>
-    <probe type="ila" busType="bus" source="netlist" spec="ILA_V2_RT">
-      <probeOptions Id="DebugProbeParams">
-        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="17"/>
-        <Option Id="PROBE_PORT_BITS" value="0"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="4"/>
-      </probeOptions>
-      <nets>
-        <net name="stcDemod/m_ndx1Slv[3]"/>
-        <net name="stcDemod/m_ndx1Slv[2]"/>
-        <net name="stcDemod/m_ndx1Slv[1]"/>
-        <net name="stcDemod/m_ndx1Slv[0]"/>
-      </nets>
-    </probe>
-    <probe type="ila" busType="bus" source="netlist" spec="ILA_V2_RT">
-      <probeOptions Id="DebugProbeParams">
-        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="18"/>
-        <Option Id="PROBE_PORT_BITS" value="0"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="18"/>
-      </probeOptions>
-      <nets>
-        <net name="stcDemod/Brik2_u/TauEst0Ila[17]"/>
-        <net name="stcDemod/Brik2_u/TauEst0Ila[16]"/>
-        <net name="stcDemod/Brik2_u/TauEst0Ila[15]"/>
-        <net name="stcDemod/Brik2_u/TauEst0Ila[14]"/>
-        <net name="stcDemod/Brik2_u/TauEst0Ila[13]"/>
-        <net name="stcDemod/Brik2_u/TauEst0Ila[12]"/>
-        <net name="stcDemod/Brik2_u/TauEst0Ila[11]"/>
-        <net name="stcDemod/Brik2_u/TauEst0Ila[10]"/>
-        <net name="stcDemod/Brik2_u/TauEst0Ila[9]"/>
-        <net name="stcDemod/Brik2_u/TauEst0Ila[8]"/>
-        <net name="stcDemod/Brik2_u/TauEst0Ila[7]"/>
-        <net name="stcDemod/Brik2_u/TauEst0Ila[6]"/>
-        <net name="stcDemod/Brik2_u/TauEst0Ila[5]"/>
-        <net name="stcDemod/Brik2_u/TauEst0Ila[4]"/>
-        <net name="stcDemod/Brik2_u/TauEst0Ila[3]"/>
-        <net name="stcDemod/Brik2_u/TauEst0Ila[2]"/>
-        <net name="stcDemod/Brik2_u/TauEst0Ila[1]"/>
-        <net name="stcDemod/Brik2_u/TauEst0Ila[0]"/>
-      </nets>
-    </probe>
-    <probe type="ila" busType="bus" source="netlist" spec="ILA_V2_RT">
-      <probeOptions Id="DebugProbeParams">
-        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="19"/>
+        <Option Id="CORE_LOCATION" value="1:2"/>
+        <Option Id="HW_ILA" value="u_ila_1"/>
+        <Option Id="PROBE_PORT" value="0"/>
         <Option Id="PROBE_PORT_BITS" value="0"/>
         <Option Id="PROBE_PORT_BIT_COUNT" value="18"/>
       </probeOptions>
@@ -988,297 +250,327 @@
     <probe type="ila" busType="bus" source="netlist" spec="ILA_V2_RT">
       <probeOptions Id="DebugProbeParams">
         <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="20"/>
+        <Option Id="CORE_LOCATION" value="1:2"/>
+        <Option Id="HW_ILA" value="u_ila_1"/>
+        <Option Id="PROBE_PORT" value="1"/>
         <Option Id="PROBE_PORT_BITS" value="0"/>
         <Option Id="PROBE_PORT_BIT_COUNT" value="18"/>
       </probeOptions>
       <nets>
-        <net name="stcDemod/Brik2_u/H1EstR_Ila[17]"/>
-        <net name="stcDemod/Brik2_u/H1EstR_Ila[16]"/>
-        <net name="stcDemod/Brik2_u/H1EstR_Ila[15]"/>
-        <net name="stcDemod/Brik2_u/H1EstR_Ila[14]"/>
-        <net name="stcDemod/Brik2_u/H1EstR_Ila[13]"/>
-        <net name="stcDemod/Brik2_u/H1EstR_Ila[12]"/>
-        <net name="stcDemod/Brik2_u/H1EstR_Ila[11]"/>
-        <net name="stcDemod/Brik2_u/H1EstR_Ila[10]"/>
-        <net name="stcDemod/Brik2_u/H1EstR_Ila[9]"/>
-        <net name="stcDemod/Brik2_u/H1EstR_Ila[8]"/>
-        <net name="stcDemod/Brik2_u/H1EstR_Ila[7]"/>
-        <net name="stcDemod/Brik2_u/H1EstR_Ila[6]"/>
-        <net name="stcDemod/Brik2_u/H1EstR_Ila[5]"/>
-        <net name="stcDemod/Brik2_u/H1EstR_Ila[4]"/>
-        <net name="stcDemod/Brik2_u/H1EstR_Ila[3]"/>
-        <net name="stcDemod/Brik2_u/H1EstR_Ila[2]"/>
-        <net name="stcDemod/Brik2_u/H1EstR_Ila[1]"/>
-        <net name="stcDemod/Brik2_u/H1EstR_Ila[0]"/>
+        <net name="stcDemod/Brik2_u/TauEst0Ila[17]"/>
+        <net name="stcDemod/Brik2_u/TauEst0Ila[16]"/>
+        <net name="stcDemod/Brik2_u/TauEst0Ila[15]"/>
+        <net name="stcDemod/Brik2_u/TauEst0Ila[14]"/>
+        <net name="stcDemod/Brik2_u/TauEst0Ila[13]"/>
+        <net name="stcDemod/Brik2_u/TauEst0Ila[12]"/>
+        <net name="stcDemod/Brik2_u/TauEst0Ila[11]"/>
+        <net name="stcDemod/Brik2_u/TauEst0Ila[10]"/>
+        <net name="stcDemod/Brik2_u/TauEst0Ila[9]"/>
+        <net name="stcDemod/Brik2_u/TauEst0Ila[8]"/>
+        <net name="stcDemod/Brik2_u/TauEst0Ila[7]"/>
+        <net name="stcDemod/Brik2_u/TauEst0Ila[6]"/>
+        <net name="stcDemod/Brik2_u/TauEst0Ila[5]"/>
+        <net name="stcDemod/Brik2_u/TauEst0Ila[4]"/>
+        <net name="stcDemod/Brik2_u/TauEst0Ila[3]"/>
+        <net name="stcDemod/Brik2_u/TauEst0Ila[2]"/>
+        <net name="stcDemod/Brik2_u/TauEst0Ila[1]"/>
+        <net name="stcDemod/Brik2_u/TauEst0Ila[0]"/>
       </nets>
     </probe>
     <probe type="ila" busType="bus" source="netlist" spec="ILA_V2_RT">
       <probeOptions Id="DebugProbeParams">
         <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="21"/>
+        <Option Id="CORE_LOCATION" value="1:2"/>
+        <Option Id="HW_ILA" value="u_ila_1"/>
+        <Option Id="PROBE_PORT" value="2"/>
         <Option Id="PROBE_PORT_BITS" value="0"/>
         <Option Id="PROBE_PORT_BIT_COUNT" value="18"/>
       </probeOptions>
       <nets>
-        <net name="stcDemod/Brik2_u/H0EstR_Ila[17]"/>
-        <net name="stcDemod/Brik2_u/H0EstR_Ila[16]"/>
-        <net name="stcDemod/Brik2_u/H0EstR_Ila[15]"/>
-        <net name="stcDemod/Brik2_u/H0EstR_Ila[14]"/>
-        <net name="stcDemod/Brik2_u/H0EstR_Ila[13]"/>
-        <net name="stcDemod/Brik2_u/H0EstR_Ila[12]"/>
-        <net name="stcDemod/Brik2_u/H0EstR_Ila[11]"/>
-        <net name="stcDemod/Brik2_u/H0EstR_Ila[10]"/>
-        <net name="stcDemod/Brik2_u/H0EstR_Ila[9]"/>
-        <net name="stcDemod/Brik2_u/H0EstR_Ila[8]"/>
-        <net name="stcDemod/Brik2_u/H0EstR_Ila[7]"/>
-        <net name="stcDemod/Brik2_u/H0EstR_Ila[6]"/>
-        <net name="stcDemod/Brik2_u/H0EstR_Ila[5]"/>
-        <net name="stcDemod/Brik2_u/H0EstR_Ila[4]"/>
-        <net name="stcDemod/Brik2_u/H0EstR_Ila[3]"/>
-        <net name="stcDemod/Brik2_u/H0EstR_Ila[2]"/>
-        <net name="stcDemod/Brik2_u/H0EstR_Ila[1]"/>
-        <net name="stcDemod/Brik2_u/H0EstR_Ila[0]"/>
+        <net name="stcDemod/Trellis_u/tdOld/fifoMetric[17]"/>
+        <net name="stcDemod/Trellis_u/tdOld/fifoMetric[16]"/>
+        <net name="stcDemod/Trellis_u/tdOld/fifoMetric[15]"/>
+        <net name="stcDemod/Trellis_u/tdOld/fifoMetric[14]"/>
+        <net name="stcDemod/Trellis_u/tdOld/fifoMetric[13]"/>
+        <net name="stcDemod/Trellis_u/tdOld/fifoMetric[12]"/>
+        <net name="stcDemod/Trellis_u/tdOld/fifoMetric[11]"/>
+        <net name="stcDemod/Trellis_u/tdOld/fifoMetric[10]"/>
+        <net name="stcDemod/Trellis_u/tdOld/fifoMetric[9]"/>
+        <net name="stcDemod/Trellis_u/tdOld/fifoMetric[8]"/>
+        <net name="stcDemod/Trellis_u/tdOld/fifoMetric[7]"/>
+        <net name="stcDemod/Trellis_u/tdOld/fifoMetric[6]"/>
+        <net name="stcDemod/Trellis_u/tdOld/fifoMetric[5]"/>
+        <net name="stcDemod/Trellis_u/tdOld/fifoMetric[4]"/>
+        <net name="stcDemod/Trellis_u/tdOld/fifoMetric[3]"/>
+        <net name="stcDemod/Trellis_u/tdOld/fifoMetric[2]"/>
+        <net name="stcDemod/Trellis_u/tdOld/fifoMetric[1]"/>
+        <net name="stcDemod/Trellis_u/tdOld/fifoMetric[0]"/>
       </nets>
     </probe>
     <probe type="ila" busType="bus" source="netlist" spec="ILA_V2_RT">
       <probeOptions Id="DebugProbeParams">
         <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="22"/>
+        <Option Id="CORE_LOCATION" value="1:2"/>
+        <Option Id="HW_ILA" value="u_ila_1"/>
+        <Option Id="PROBE_PORT" value="3"/>
         <Option Id="PROBE_PORT_BITS" value="0"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="18"/>
+        <Option Id="PROBE_PORT_BIT_COUNT" value="4"/>
       </probeOptions>
       <nets>
-        <net name="stcDemod/Brik2_u/H0EstI_Ila[17]"/>
-        <net name="stcDemod/Brik2_u/H0EstI_Ila[16]"/>
-        <net name="stcDemod/Brik2_u/H0EstI_Ila[15]"/>
-        <net name="stcDemod/Brik2_u/H0EstI_Ila[14]"/>
-        <net name="stcDemod/Brik2_u/H0EstI_Ila[13]"/>
-        <net name="stcDemod/Brik2_u/H0EstI_Ila[12]"/>
-        <net name="stcDemod/Brik2_u/H0EstI_Ila[11]"/>
-        <net name="stcDemod/Brik2_u/H0EstI_Ila[10]"/>
-        <net name="stcDemod/Brik2_u/H0EstI_Ila[9]"/>
-        <net name="stcDemod/Brik2_u/H0EstI_Ila[8]"/>
-        <net name="stcDemod/Brik2_u/H0EstI_Ila[7]"/>
-        <net name="stcDemod/Brik2_u/H0EstI_Ila[6]"/>
-        <net name="stcDemod/Brik2_u/H0EstI_Ila[5]"/>
-        <net name="stcDemod/Brik2_u/H0EstI_Ila[4]"/>
-        <net name="stcDemod/Brik2_u/H0EstI_Ila[3]"/>
-        <net name="stcDemod/Brik2_u/H0EstI_Ila[2]"/>
-        <net name="stcDemod/Brik2_u/H0EstI_Ila[1]"/>
-        <net name="stcDemod/Brik2_u/H0EstI_Ila[0]"/>
+        <net name="stcDemod/ExpectedData[3]"/>
+        <net name="stcDemod/ExpectedData[2]"/>
+        <net name="stcDemod/ExpectedData[1]"/>
+        <net name="stcDemod/ExpectedData[0]"/>
       </nets>
     </probe>
     <probe type="ila" busType="bus" source="netlist" spec="ILA_V2_RT">
       <probeOptions Id="DebugProbeParams">
         <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="23"/>
+        <Option Id="CORE_LOCATION" value="1:2"/>
+        <Option Id="HW_ILA" value="u_ila_1"/>
+        <Option Id="PROBE_PORT" value="4"/>
         <Option Id="PROBE_PORT_BITS" value="0"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="18"/>
+        <Option Id="PROBE_PORT_BIT_COUNT" value="4"/>
       </probeOptions>
       <nets>
-        <net name="stcDemod/Brik2_u/H1EstI_Ila[17]"/>
-        <net name="stcDemod/Brik2_u/H1EstI_Ila[16]"/>
-        <net name="stcDemod/Brik2_u/H1EstI_Ila[15]"/>
-        <net name="stcDemod/Brik2_u/H1EstI_Ila[14]"/>
-        <net name="stcDemod/Brik2_u/H1EstI_Ila[13]"/>
-        <net name="stcDemod/Brik2_u/H1EstI_Ila[12]"/>
-        <net name="stcDemod/Brik2_u/H1EstI_Ila[11]"/>
-        <net name="stcDemod/Brik2_u/H1EstI_Ila[10]"/>
-        <net name="stcDemod/Brik2_u/H1EstI_Ila[9]"/>
-        <net name="stcDemod/Brik2_u/H1EstI_Ila[8]"/>
-        <net name="stcDemod/Brik2_u/H1EstI_Ila[7]"/>
-        <net name="stcDemod/Brik2_u/H1EstI_Ila[6]"/>
-        <net name="stcDemod/Brik2_u/H1EstI_Ila[5]"/>
-        <net name="stcDemod/Brik2_u/H1EstI_Ila[4]"/>
-        <net name="stcDemod/Brik2_u/H1EstI_Ila[3]"/>
-        <net name="stcDemod/Brik2_u/H1EstI_Ila[2]"/>
-        <net name="stcDemod/Brik2_u/H1EstI_Ila[1]"/>
-        <net name="stcDemod/Brik2_u/H1EstI_Ila[0]"/>
+        <net name="stcDemod/m_ndx0Slv[3]"/>
+        <net name="stcDemod/m_ndx0Slv[2]"/>
+        <net name="stcDemod/m_ndx0Slv[1]"/>
+        <net name="stcDemod/m_ndx0Slv[0]"/>
       </nets>
     </probe>
     <probe type="ila" busType="bus" source="netlist" spec="ILA_V2_RT">
       <probeOptions Id="DebugProbeParams">
         <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="24"/>
+        <Option Id="CORE_LOCATION" value="1:2"/>
+        <Option Id="HW_ILA" value="u_ila_1"/>
+        <Option Id="PROBE_PORT" value="5"/>
         <Option Id="PROBE_PORT_BITS" value="0"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="18"/>
+        <Option Id="PROBE_PORT_BIT_COUNT" value="6"/>
       </probeOptions>
       <nets>
-        <net name="stcDemod/PD_u/Peak2_Ila[17]"/>
-        <net name="stcDemod/PD_u/Peak2_Ila[16]"/>
-        <net name="stcDemod/PD_u/Peak2_Ila[15]"/>
-        <net name="stcDemod/PD_u/Peak2_Ila[14]"/>
-        <net name="stcDemod/PD_u/Peak2_Ila[13]"/>
-        <net name="stcDemod/PD_u/Peak2_Ila[12]"/>
-        <net name="stcDemod/PD_u/Peak2_Ila[11]"/>
-        <net name="stcDemod/PD_u/Peak2_Ila[10]"/>
-        <net name="stcDemod/PD_u/Peak2_Ila[9]"/>
-        <net name="stcDemod/PD_u/Peak2_Ila[8]"/>
-        <net name="stcDemod/PD_u/Peak2_Ila[7]"/>
-        <net name="stcDemod/PD_u/Peak2_Ila[6]"/>
-        <net name="stcDemod/PD_u/Peak2_Ila[5]"/>
-        <net name="stcDemod/PD_u/Peak2_Ila[4]"/>
-        <net name="stcDemod/PD_u/Peak2_Ila[3]"/>
-        <net name="stcDemod/PD_u/Peak2_Ila[2]"/>
-        <net name="stcDemod/PD_u/Peak2_Ila[1]"/>
-        <net name="stcDemod/PD_u/Peak2_Ila[0]"/>
+        <net name="stcDemod/deltaTauEstSlv[5]"/>
+        <net name="stcDemod/deltaTauEstSlv[4]"/>
+        <net name="stcDemod/deltaTauEstSlv[3]"/>
+        <net name="stcDemod/deltaTauEstSlv[2]"/>
+        <net name="stcDemod/deltaTauEstSlv[1]"/>
+        <net name="stcDemod/deltaTauEstSlv[0]"/>
       </nets>
     </probe>
     <probe type="ila" busType="bus" source="netlist" spec="ILA_V2_RT">
       <probeOptions Id="DebugProbeParams">
         <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="25"/>
+        <Option Id="CORE_LOCATION" value="1:2"/>
+        <Option Id="HW_ILA" value="u_ila_1"/>
+        <Option Id="PROBE_PORT" value="6"/>
         <Option Id="PROBE_PORT_BITS" value="0"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="18"/>
+        <Option Id="PROBE_PORT_BIT_COUNT" value="4"/>
       </probeOptions>
       <nets>
-        <net name="stcDemod/PD_u/AbsCntr0_Ila[17]"/>
-        <net name="stcDemod/PD_u/AbsCntr0_Ila[16]"/>
-        <net name="stcDemod/PD_u/AbsCntr0_Ila[15]"/>
-        <net name="stcDemod/PD_u/AbsCntr0_Ila[14]"/>
-        <net name="stcDemod/PD_u/AbsCntr0_Ila[13]"/>
-        <net name="stcDemod/PD_u/AbsCntr0_Ila[12]"/>
-        <net name="stcDemod/PD_u/AbsCntr0_Ila[11]"/>
-        <net name="stcDemod/PD_u/AbsCntr0_Ila[10]"/>
-        <net name="stcDemod/PD_u/AbsCntr0_Ila[9]"/>
-        <net name="stcDemod/PD_u/AbsCntr0_Ila[8]"/>
-        <net name="stcDemod/PD_u/AbsCntr0_Ila[7]"/>
-        <net name="stcDemod/PD_u/AbsCntr0_Ila[6]"/>
-        <net name="stcDemod/PD_u/AbsCntr0_Ila[5]"/>
-        <net name="stcDemod/PD_u/AbsCntr0_Ila[4]"/>
-        <net name="stcDemod/PD_u/AbsCntr0_Ila[3]"/>
-        <net name="stcDemod/PD_u/AbsCntr0_Ila[2]"/>
-        <net name="stcDemod/PD_u/AbsCntr0_Ila[1]"/>
-        <net name="stcDemod/PD_u/AbsCntr0_Ila[0]"/>
+        <net name="u_ila_1_TrellisBits[3]"/>
+        <net name="u_ila_1_TrellisBits[2]"/>
+        <net name="u_ila_1_TrellisBits[1]"/>
+        <net name="u_ila_1_TrellisBits[0]"/>
       </nets>
     </probe>
     <probe type="ila" busType="bus" source="netlist" spec="ILA_V2_RT">
       <probeOptions Id="DebugProbeParams">
         <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="26"/>
+        <Option Id="CORE_LOCATION" value="1:2"/>
+        <Option Id="HW_ILA" value="u_ila_1"/>
+        <Option Id="PROBE_PORT" value="7"/>
         <Option Id="PROBE_PORT_BITS" value="0"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="18"/>
+        <Option Id="PROBE_PORT_BIT_COUNT" value="4"/>
       </probeOptions>
       <nets>
-        <net name="stcDemod/PD_u/AbsCntr1_Ila[17]"/>
-        <net name="stcDemod/PD_u/AbsCntr1_Ila[16]"/>
-        <net name="stcDemod/PD_u/AbsCntr1_Ila[15]"/>
-        <net name="stcDemod/PD_u/AbsCntr1_Ila[14]"/>
-        <net name="stcDemod/PD_u/AbsCntr1_Ila[13]"/>
-        <net name="stcDemod/PD_u/AbsCntr1_Ila[12]"/>
-        <net name="stcDemod/PD_u/AbsCntr1_Ila[11]"/>
-        <net name="stcDemod/PD_u/AbsCntr1_Ila[10]"/>
-        <net name="stcDemod/PD_u/AbsCntr1_Ila[9]"/>
-        <net name="stcDemod/PD_u/AbsCntr1_Ila[8]"/>
-        <net name="stcDemod/PD_u/AbsCntr1_Ila[7]"/>
-        <net name="stcDemod/PD_u/AbsCntr1_Ila[6]"/>
-        <net name="stcDemod/PD_u/AbsCntr1_Ila[5]"/>
-        <net name="stcDemod/PD_u/AbsCntr1_Ila[4]"/>
-        <net name="stcDemod/PD_u/AbsCntr1_Ila[3]"/>
-        <net name="stcDemod/PD_u/AbsCntr1_Ila[2]"/>
-        <net name="stcDemod/PD_u/AbsCntr1_Ila[1]"/>
-        <net name="stcDemod/PD_u/AbsCntr1_Ila[0]"/>
+        <net name="stcDemod/m_ndx1Slv[3]"/>
+        <net name="stcDemod/m_ndx1Slv[2]"/>
+        <net name="stcDemod/m_ndx1Slv[1]"/>
+        <net name="stcDemod/m_ndx1Slv[0]"/>
       </nets>
     </probe>
     <probe type="ila" busType="bus" source="netlist" spec="ILA_V2_RT">
       <probeOptions Id="DebugProbeParams">
         <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="27"/>
+        <Option Id="CORE_LOCATION" value="1:2"/>
+        <Option Id="HW_ILA" value="u_ila_1"/>
+        <Option Id="PROBE_PORT" value="8"/>
         <Option Id="PROBE_PORT_BITS" value="0"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="10"/>
+        <Option Id="PROBE_PORT_BIT_COUNT" value="4"/>
       </probeOptions>
       <nets>
-        <net name="stcDemod/PD_u/AbsIndex[9]"/>
-        <net name="stcDemod/PD_u/AbsIndex[8]"/>
-        <net name="stcDemod/PD_u/AbsIndex[7]"/>
-        <net name="stcDemod/PD_u/AbsIndex[6]"/>
-        <net name="stcDemod/PD_u/AbsIndex[5]"/>
-        <net name="stcDemod/PD_u/AbsIndex[4]"/>
-        <net name="stcDemod/PD_u/AbsIndex[3]"/>
-        <net name="stcDemod/PD_u/AbsIndex[2]"/>
-        <net name="stcDemod/PD_u/AbsIndex[1]"/>
-        <net name="stcDemod/PD_u/AbsIndex[0]"/>
+        <net name="stcDemod/Trellis_u/tdOutputBitsOld[3]"/>
+        <net name="stcDemod/Trellis_u/tdOutputBitsOld[2]"/>
+        <net name="stcDemod/Trellis_u/tdOutputBitsOld[1]"/>
+        <net name="stcDemod/Trellis_u/tdOutputBitsOld[0]"/>
       </nets>
     </probe>
     <probe type="ila" busType="bus" source="netlist" spec="ILA_V2_RT">
       <probeOptions Id="DebugProbeParams">
         <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="28"/>
-        <Option Id="PROBE_PORT_BITS" value="0"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="18"/>
-      </probeOptions>
-      <nets>
-        <net name="stcDemod/PD_u/Peak1_Ila[17]"/>
-        <net name="stcDemod/PD_u/Peak1_Ila[16]"/>
-        <net name="stcDemod/PD_u/Peak1_Ila[15]"/>
-        <net name="stcDemod/PD_u/Peak1_Ila[14]"/>
-        <net name="stcDemod/PD_u/Peak1_Ila[13]"/>
-        <net name="stcDemod/PD_u/Peak1_Ila[12]"/>
-        <net name="stcDemod/PD_u/Peak1_Ila[11]"/>
-        <net name="stcDemod/PD_u/Peak1_Ila[10]"/>
-        <net name="stcDemod/PD_u/Peak1_Ila[9]"/>
-        <net name="stcDemod/PD_u/Peak1_Ila[8]"/>
-        <net name="stcDemod/PD_u/Peak1_Ila[7]"/>
-        <net name="stcDemod/PD_u/Peak1_Ila[6]"/>
-        <net name="stcDemod/PD_u/Peak1_Ila[5]"/>
-        <net name="stcDemod/PD_u/Peak1_Ila[4]"/>
-        <net name="stcDemod/PD_u/Peak1_Ila[3]"/>
-        <net name="stcDemod/PD_u/Peak1_Ila[2]"/>
-        <net name="stcDemod/PD_u/Peak1_Ila[1]"/>
-        <net name="stcDemod/PD_u/Peak1_Ila[0]"/>
-      </nets>
-    </probe>
-    <probe type="ila" busType="net" source="netlist" spec="ILA_V2_RT">
-      <probeOptions Id="DebugProbeParams">
-        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="29"/>
+        <Option Id="CORE_LOCATION" value="1:2"/>
+        <Option Id="HW_ILA" value="u_ila_1"/>
+        <Option Id="PROBE_PORT" value="9"/>
         <Option Id="PROBE_PORT_BITS" value="0"/>
         <Option Id="PROBE_PORT_BIT_COUNT" value="1"/>
       </probeOptions>
       <nets>
-        <net name="stcDemod/Brik2_u/HPP/CalcPhase"/>
+        <net name="u_ila_1_sample1i[0]"/>
       </nets>
     </probe>
-    <probe type="ila" busType="net" source="netlist" spec="ILA_V2_RT">
+    <probe type="ila" busType="bus" source="netlist" spec="ILA_V2_RT">
       <probeOptions Id="DebugProbeParams">
         <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="30"/>
+        <Option Id="CORE_LOCATION" value="1:2"/>
+        <Option Id="HW_ILA" value="u_ila_1"/>
+        <Option Id="PROBE_PORT" value="9"/>
+        <Option Id="PROBE_PORT_BITS" value="1"/>
+        <Option Id="PROBE_PORT_BIT_COUNT" value="17"/>
+      </probeOptions>
+      <nets>
+        <net name="stcDemod/Trellis_u/sample1i[17]"/>
+        <net name="stcDemod/Trellis_u/sample1i[16]"/>
+        <net name="stcDemod/Trellis_u/sample1i[15]"/>
+        <net name="stcDemod/Trellis_u/sample1i[14]"/>
+        <net name="stcDemod/Trellis_u/sample1i[13]"/>
+        <net name="stcDemod/Trellis_u/sample1i[12]"/>
+        <net name="stcDemod/Trellis_u/sample1i[11]"/>
+        <net name="stcDemod/Trellis_u/sample1i[10]"/>
+        <net name="stcDemod/Trellis_u/sample1i[9]"/>
+        <net name="stcDemod/Trellis_u/sample1i[8]"/>
+        <net name="stcDemod/Trellis_u/sample1i[7]"/>
+        <net name="stcDemod/Trellis_u/sample1i[6]"/>
+        <net name="stcDemod/Trellis_u/sample1i[5]"/>
+        <net name="stcDemod/Trellis_u/sample1i[4]"/>
+        <net name="stcDemod/Trellis_u/sample1i[3]"/>
+        <net name="stcDemod/Trellis_u/sample1i[2]"/>
+        <net name="stcDemod/Trellis_u/sample1i[1]"/>
+      </nets>
+    </probe>
+    <probe type="ila" busType="bus" source="netlist" spec="ILA_V2_RT">
+      <probeOptions Id="DebugProbeParams">
+        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
+        <Option Id="CORE_LOCATION" value="1:2"/>
+        <Option Id="HW_ILA" value="u_ila_1"/>
+        <Option Id="PROBE_PORT" value="10"/>
+        <Option Id="PROBE_PORT_BITS" value="0"/>
+        <Option Id="PROBE_PORT_BIT_COUNT" value="4"/>
+      </probeOptions>
+      <nets>
+        <net name="stcDemod/Trellis_u/tdOutputBits[3]"/>
+        <net name="stcDemod/Trellis_u/tdOutputBits[2]"/>
+        <net name="stcDemod/Trellis_u/tdOutputBits[1]"/>
+        <net name="stcDemod/Trellis_u/tdOutputBits[0]"/>
+      </nets>
+    </probe>
+    <probe type="ila" busType="bus" source="netlist" spec="ILA_V2_RT">
+      <probeOptions Id="DebugProbeParams">
+        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
+        <Option Id="CORE_LOCATION" value="1:2"/>
+        <Option Id="HW_ILA" value="u_ila_1"/>
+        <Option Id="PROBE_PORT" value="11"/>
         <Option Id="PROBE_PORT_BITS" value="0"/>
         <Option Id="PROBE_PORT_BIT_COUNT" value="1"/>
       </probeOptions>
       <nets>
-        <net name="u_ila_0_ChanEstDone"/>
+        <net name="u_ila_1_sample1r[0]"/>
+      </nets>
+    </probe>
+    <probe type="ila" busType="bus" source="netlist" spec="ILA_V2_RT">
+      <probeOptions Id="DebugProbeParams">
+        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
+        <Option Id="CORE_LOCATION" value="1:2"/>
+        <Option Id="HW_ILA" value="u_ila_1"/>
+        <Option Id="PROBE_PORT" value="11"/>
+        <Option Id="PROBE_PORT_BITS" value="1"/>
+        <Option Id="PROBE_PORT_BIT_COUNT" value="17"/>
+      </probeOptions>
+      <nets>
+        <net name="stcDemod/Trellis_u/sample1r[17]"/>
+        <net name="stcDemod/Trellis_u/sample1r[16]"/>
+        <net name="stcDemod/Trellis_u/sample1r[15]"/>
+        <net name="stcDemod/Trellis_u/sample1r[14]"/>
+        <net name="stcDemod/Trellis_u/sample1r[13]"/>
+        <net name="stcDemod/Trellis_u/sample1r[12]"/>
+        <net name="stcDemod/Trellis_u/sample1r[11]"/>
+        <net name="stcDemod/Trellis_u/sample1r[10]"/>
+        <net name="stcDemod/Trellis_u/sample1r[9]"/>
+        <net name="stcDemod/Trellis_u/sample1r[8]"/>
+        <net name="stcDemod/Trellis_u/sample1r[7]"/>
+        <net name="stcDemod/Trellis_u/sample1r[6]"/>
+        <net name="stcDemod/Trellis_u/sample1r[5]"/>
+        <net name="stcDemod/Trellis_u/sample1r[4]"/>
+        <net name="stcDemod/Trellis_u/sample1r[3]"/>
+        <net name="stcDemod/Trellis_u/sample1r[2]"/>
+        <net name="stcDemod/Trellis_u/sample1r[1]"/>
+      </nets>
+    </probe>
+    <probe type="ila" busType="bus" source="netlist" spec="ILA_V2_RT">
+      <probeOptions Id="DebugProbeParams">
+        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
+        <Option Id="CORE_LOCATION" value="1:2"/>
+        <Option Id="HW_ILA" value="u_ila_1"/>
+        <Option Id="PROBE_PORT" value="12"/>
+        <Option Id="PROBE_PORT_BITS" value="0"/>
+        <Option Id="PROBE_PORT_BIT_COUNT" value="18"/>
+      </probeOptions>
+      <nets>
+        <net name="u_ila_1_sample0i[17]"/>
+        <net name="u_ila_1_sample0i[16]"/>
+        <net name="u_ila_1_sample0i[15]"/>
+        <net name="u_ila_1_sample0i[14]"/>
+        <net name="u_ila_1_sample0i[13]"/>
+        <net name="u_ila_1_sample0i[12]"/>
+        <net name="u_ila_1_sample0i[11]"/>
+        <net name="u_ila_1_sample0i[10]"/>
+        <net name="u_ila_1_sample0i[9]"/>
+        <net name="u_ila_1_sample0i[8]"/>
+        <net name="u_ila_1_sample0i[7]"/>
+        <net name="u_ila_1_sample0i[6]"/>
+        <net name="u_ila_1_sample0i[5]"/>
+        <net name="u_ila_1_sample0i[4]"/>
+        <net name="u_ila_1_sample0i[3]"/>
+        <net name="u_ila_1_sample0i[2]"/>
+        <net name="u_ila_1_sample0i[1]"/>
+        <net name="u_ila_1_sample0i[0]"/>
+      </nets>
+    </probe>
+    <probe type="ila" busType="bus" source="netlist" spec="ILA_V2_RT">
+      <probeOptions Id="DebugProbeParams">
+        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
+        <Option Id="CORE_LOCATION" value="1:2"/>
+        <Option Id="HW_ILA" value="u_ila_1"/>
+        <Option Id="PROBE_PORT" value="13"/>
+        <Option Id="PROBE_PORT_BITS" value="0"/>
+        <Option Id="PROBE_PORT_BIT_COUNT" value="18"/>
+      </probeOptions>
+      <nets>
+        <net name="u_ila_1_sample0r[17]"/>
+        <net name="u_ila_1_sample0r[16]"/>
+        <net name="u_ila_1_sample0r[15]"/>
+        <net name="u_ila_1_sample0r[14]"/>
+        <net name="u_ila_1_sample0r[13]"/>
+        <net name="u_ila_1_sample0r[12]"/>
+        <net name="u_ila_1_sample0r[11]"/>
+        <net name="u_ila_1_sample0r[10]"/>
+        <net name="u_ila_1_sample0r[9]"/>
+        <net name="u_ila_1_sample0r[8]"/>
+        <net name="u_ila_1_sample0r[7]"/>
+        <net name="u_ila_1_sample0r[6]"/>
+        <net name="u_ila_1_sample0r[5]"/>
+        <net name="u_ila_1_sample0r[4]"/>
+        <net name="u_ila_1_sample0r[3]"/>
+        <net name="u_ila_1_sample0r[2]"/>
+        <net name="u_ila_1_sample0r[1]"/>
+        <net name="u_ila_1_sample0r[0]"/>
       </nets>
     </probe>
     <probe type="ila" busType="net" source="netlist" spec="ILA_V2_RT">
       <probeOptions Id="DebugProbeParams">
         <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="31"/>
+        <Option Id="CORE_LOCATION" value="1:2"/>
+        <Option Id="HW_ILA" value="u_ila_1"/>
+        <Option Id="PROBE_PORT" value="14"/>
         <Option Id="PROBE_PORT_BITS" value="0"/>
         <Option Id="PROBE_PORT_BIT_COUNT" value="1"/>
       </probeOptions>
@@ -1289,35 +581,9 @@
     <probe type="ila" busType="net" source="netlist" spec="ILA_V2_RT">
       <probeOptions Id="DebugProbeParams">
         <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="32"/>
-        <Option Id="PROBE_PORT_BITS" value="0"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="1"/>
-      </probeOptions>
-      <nets>
-        <net name="u_ila_0_CmplxValid"/>
-      </nets>
-    </probe>
-    <probe type="ila" busType="net" source="netlist" spec="ILA_V2_RT">
-      <probeOptions Id="DebugProbeParams">
-        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="33"/>
-        <Option Id="PROBE_PORT_BITS" value="0"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="1"/>
-      </probeOptions>
-      <nets>
-        <net name="u_ila_0_CordicStart"/>
-      </nets>
-    </probe>
-    <probe type="ila" busType="net" source="netlist" spec="ILA_V2_RT">
-      <probeOptions Id="DebugProbeParams">
-        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="34"/>
+        <Option Id="CORE_LOCATION" value="1:2"/>
+        <Option Id="HW_ILA" value="u_ila_1"/>
+        <Option Id="PROBE_PORT" value="15"/>
         <Option Id="PROBE_PORT_BITS" value="0"/>
         <Option Id="PROBE_PORT_BIT_COUNT" value="1"/>
       </probeOptions>
@@ -1328,209 +594,53 @@
     <probe type="ila" busType="net" source="netlist" spec="ILA_V2_RT">
       <probeOptions Id="DebugProbeParams">
         <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="35"/>
+        <Option Id="CORE_LOCATION" value="1:2"/>
+        <Option Id="HW_ILA" value="u_ila_1"/>
+        <Option Id="PROBE_PORT" value="16"/>
         <Option Id="PROBE_PORT_BITS" value="0"/>
         <Option Id="PROBE_PORT_BIT_COUNT" value="1"/>
       </probeOptions>
       <nets>
-        <net name="u_ila_0_EstimatesDone"/>
+        <net name="stcDemod/Trellis_u/tdOld/startMetricRequest"/>
       </nets>
     </probe>
     <probe type="ila" busType="net" source="netlist" spec="ILA_V2_RT">
       <probeOptions Id="DebugProbeParams">
         <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="36"/>
+        <Option Id="CORE_LOCATION" value="1:2"/>
+        <Option Id="HW_ILA" value="u_ila_1"/>
+        <Option Id="PROBE_PORT" value="17"/>
         <Option Id="PROBE_PORT_BITS" value="0"/>
         <Option Id="PROBE_PORT_BIT_COUNT" value="1"/>
       </probeOptions>
       <nets>
-        <net name="stcDemod/Mag0GtMag1"/>
+        <net name="stcDemod/Trellis_u/tdGood"/>
       </nets>
     </probe>
     <probe type="ila" busType="net" source="netlist" spec="ILA_V2_RT">
       <probeOptions Id="DebugProbeParams">
         <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="37"/>
+        <Option Id="CORE_LOCATION" value="1:2"/>
+        <Option Id="HW_ILA" value="u_ila_1"/>
+        <Option Id="PROBE_PORT" value="18"/>
         <Option Id="PROBE_PORT_BITS" value="0"/>
         <Option Id="PROBE_PORT_BIT_COUNT" value="1"/>
       </probeOptions>
       <nets>
-        <net name="stcDemod/PS_u/Missed"/>
+        <net name="stcDemod/Trellis_u/tdOutputEnOld"/>
       </nets>
     </probe>
     <probe type="ila" busType="net" source="netlist" spec="ILA_V2_RT">
       <probeOptions Id="DebugProbeParams">
         <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="38"/>
-        <Option Id="PROBE_PORT_BITS" value="0"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="1"/>
-      </probeOptions>
-      <nets>
-        <net name="stcDemod/Brik2_u/HPP/Normalize"/>
-      </nets>
-    </probe>
-    <probe type="ila" busType="net" source="netlist" spec="ILA_V2_RT">
-      <probeOptions Id="DebugProbeParams">
-        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="39"/>
-        <Option Id="PROBE_PORT_BITS" value="0"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="1"/>
-      </probeOptions>
-      <nets>
-        <net name="stcDemod/Brik2_u/HPP/NormDone"/>
-      </nets>
-    </probe>
-    <probe type="ila" busType="net" source="netlist" spec="ILA_V2_RT">
-      <probeOptions Id="DebugProbeParams">
-        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="40"/>
-        <Option Id="PROBE_PORT_BITS" value="0"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="1"/>
-      </probeOptions>
-      <nets>
-        <net name="u_ila_0_PilotFound"/>
-      </nets>
-    </probe>
-    <probe type="ila" busType="net" source="netlist" spec="ILA_V2_RT">
-      <probeOptions Id="DebugProbeParams">
-        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="41"/>
-        <Option Id="PROBE_PORT_BITS" value="0"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="1"/>
-      </probeOptions>
-      <nets>
-        <net name="stcDemod/PilotFoundCE"/>
-      </nets>
-    </probe>
-    <probe type="ila" busType="net" source="netlist" spec="ILA_V2_RT">
-      <probeOptions Id="DebugProbeParams">
-        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="42"/>
-        <Option Id="PROBE_PORT_BITS" value="0"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="1"/>
-      </probeOptions>
-      <nets>
-        <net name="u_ila_0_PilotPacket"/>
-      </nets>
-    </probe>
-    <probe type="ila" busType="net" source="netlist" spec="ILA_V2_RT">
-      <probeOptions Id="DebugProbeParams">
-        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="43"/>
-        <Option Id="PROBE_PORT_BITS" value="0"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="1"/>
-      </probeOptions>
-      <nets>
-        <net name="u_ila_0_PilotPulseIn"/>
-      </nets>
-    </probe>
-    <probe type="ila" busType="net" source="netlist" spec="ILA_V2_RT">
-      <probeOptions Id="DebugProbeParams">
-        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="44"/>
-        <Option Id="PROBE_PORT_BITS" value="0"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="1"/>
-      </probeOptions>
-      <nets>
-        <net name="stcDemod/PS_u/PilotValid"/>
-      </nets>
-    </probe>
-    <probe type="ila" busType="net" source="netlist" spec="ILA_V2_RT">
-      <probeOptions Id="DebugProbeParams">
-        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="45"/>
-        <Option Id="PROBE_PORT_BITS" value="0"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="1"/>
-      </probeOptions>
-      <nets>
-        <net name="stcDemod/StartIla"/>
-      </nets>
-    </probe>
-    <probe type="ila" busType="net" source="netlist" spec="ILA_V2_RT">
-      <probeOptions Id="DebugProbeParams">
-        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="46"/>
-        <Option Id="PROBE_PORT_BITS" value="0"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="1"/>
-      </probeOptions>
-      <nets>
-        <net name="stcDemod/PS_u/StartOut"/>
-      </nets>
-    </probe>
-    <probe type="ila" busType="net" source="netlist" spec="ILA_V2_RT">
-      <probeOptions Id="DebugProbeParams">
-        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="47"/>
-        <Option Id="PROBE_PORT_BITS" value="0"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="1"/>
-      </probeOptions>
-      <nets>
-        <net name="u_ila_0_TimeEstDone"/>
-      </nets>
-    </probe>
-    <probe type="ila" busType="net" source="netlist" spec="ILA_V2_RT">
-      <probeOptions Id="DebugProbeParams">
-        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="48"/>
-        <Option Id="PROBE_PORT_BITS" value="0"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="1"/>
-      </probeOptions>
-      <nets>
-        <net name="stcDemod/Brik2_u/HPP/ValidCordic"/>
-      </nets>
-    </probe>
-    <probe type="ila" busType="net" source="netlist" spec="ILA_V2_RT">
-      <probeOptions Id="DebugProbeParams">
-        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="49"/>
+        <Option Id="CORE_LOCATION" value="1:2"/>
+        <Option Id="HW_ILA" value="u_ila_1"/>
+        <Option Id="PROBE_PORT" value="19"/>
         <Option Id="PROBE_PORT_BITS" value="0"/>
         <Option Id="PROBE_PORT_BIT_COUNT" value="1"/>
       </probeOptions>
       <nets>
         <net name="stcDemod/ValidData2047"/>
-      </nets>
-    </probe>
-    <probe type="ila" busType="net" source="netlist" spec="ILA_V2_RT">
-      <probeOptions Id="DebugProbeParams">
-        <Option Id="BSCAN_SWITCH_INDEX" value="0"/>
-        <Option Id="CORE_LOCATION" value="1:1"/>
-        <Option Id="HW_ILA" value="u_ila_0"/>
-        <Option Id="PROBE_PORT" value="50"/>
-        <Option Id="PROBE_PORT_BITS" value="0"/>
-        <Option Id="PROBE_PORT_BIT_COUNT" value="1"/>
-      </probeOptions>
-      <nets>
-        <net name="stcDemod/ValidIla"/>
       </nets>
     </probe>
   </probeset>

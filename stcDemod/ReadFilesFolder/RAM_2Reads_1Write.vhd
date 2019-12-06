@@ -74,6 +74,7 @@ ARCHITECTURE rtl OF RAM_2Reads_1Write IS
             RdRegB,
             RamDataA,
             RamDataB    : std_logic_vector(DATA_WIDTH-1 downto 0) ;
+   signal   WrEnCe      : std_logic;
 
    -- The folowing code either initializes the memory values to a specified file or to all zeros to match hardware
    -- The decimal place is set in Matlab such that BinPt bits are right justified in a 32 bit word. This routine reads
@@ -129,12 +130,17 @@ ARCHITECTURE rtl OF RAM_2Reads_1Write IS
    attribute   ram_style               : string;
    attribute   ram_style of BlockRam   : signal is RAM_TYPE;
 
+   attribute KEEP : string;
+   attribute KEEP of WrEnCe : signal is "true";
+
 begin
+
+   WrEnCe <= WrEn and ce;
 
    process(clk)
    begin
        if (rising_edge(clk)) then
-           if (WrEn and ce) then
+           if (WrEnCe) then
                BlockRam(WrAddr) <= WrData;
            end if;
            if (ce) then

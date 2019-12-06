@@ -126,6 +126,9 @@ ARCHITECTURE rtl OF PilotSync IS
             Missed               : std_logic;
    signal   Offset_u             : ufixed(3 downto 0);
 
+   attribute KEEP : string;
+   attribute KEEP of Captured : signal is "true";
+
    attribute mark_debug : string;
    attribute mark_debug of FrmSmplCount, StartOut, PilotValid, PilotPulseIn,
               Missed, RdAddr, WrAddr : signal is "true";

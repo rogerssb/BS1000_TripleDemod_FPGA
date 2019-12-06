@@ -86,6 +86,7 @@ architecture rtl of Brik1_Hw_tb is
       DacSelect1,
       DacSelect2        : IN  SLV4;
       Clk93,
+      Clk93Dly,
       Clk186,
       SpectrumInv,
       ValidIn           : IN  std_logic;
@@ -212,8 +213,9 @@ architecture rtl of Brik1_Hw_tb is
       port
        (
         clk_in1         : in     std_logic;
-        clk93           : out    std_logic;
-        clk186          : out    std_logic;
+        clk93,
+        clk93Dly,
+        clk186,
         locked          : out    std_logic
        );
    end component;
@@ -225,6 +227,7 @@ architecture rtl of Brik1_Hw_tb is
    signal   Reset,
             ResetBufg,
             Clk93,
+            Clk93Dly,
             ClkXn,
             lastSampleReset,
             StartOfFrame,
@@ -289,6 +292,7 @@ begin
       port map (
          clk_in1    => Clk93In,
          clk93      => Clk93,
+         clk93Dly   => Clk93Dly,
          clk186     => ClkXn,
          locked     => Locked
       );
@@ -313,7 +317,7 @@ begin
       );
 -- Phase0_vio <= 18x"20000";
 -- Phase1_vio <= 18x"00000";
---Frequency_vio <= 24x"8000";
+-- Frequency_vio <= 24x"8000";
 
    ErrorProc : process (ClkXn)
    begin
@@ -686,6 +690,7 @@ end generate;
          DacSelect1     => x"0",
          DacSelect2     => x"0",
          Clk93          => Clk93,
+         Clk93Dly       => Clk93Dly,
          Clk186         => ClkXn,
          ValidIn        => PhaseValid,
          SpectrumInv    => HwControlBits(0),

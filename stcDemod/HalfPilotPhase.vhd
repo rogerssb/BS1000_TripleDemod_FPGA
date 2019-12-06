@@ -178,6 +178,7 @@ ARCHITECTURE rtl OF HalfPilotPhase IS
    SIGNAL   CmplxValid,
             Normalize,
             NormDone,
+            WrEn,
             CalcPhase,
             CordicStart,
             ValidCordic,
@@ -244,8 +245,8 @@ ARCHITECTURE rtl OF HalfPilotPhase IS
    SIGNAL   CmplxCount        : integer range 0 to 511;
    SIGNAL   CalcPhaseDly      : SLV4;
 
-   attribute mark_debug : string;
-   attribute mark_debug of Normalize, NormDone : signal is "true";   -- removing attribute caused ?? net names in 17.2
+   attribute KEEP : string;
+   attribute KEEP of Normalize, NormDone, WrEn : signal is "true";   -- removing attribute caused ?? net names in 17.2
 
 BEGIN
 
@@ -392,7 +393,7 @@ BEGIN
                PilotCount  <= (others=>'0');
             elsif (PilotCount = 511) then
                PilotPacket <= '0';
-            elsif (PilotPacket and ValidIn) then
+            elsif (WrEn) then
                PilotCount <= PilotCount + 1;
             end if;
 
@@ -427,6 +428,7 @@ BEGIN
    ReadCount0_u <= unsigned(ReadCount0(8 downto 0));
    ReadCount1_u <= unsigned(ReadCount1(8 downto 0));
    ReadCountR_u <= unsigned(ReadCountR(8 downto 0));
+   WrEn         <= PilotPacket and ValidIn;
 
    PilotCapture_r_u : RAM_2Reads_1Write
       GENERIC MAP(
@@ -439,7 +441,7 @@ BEGIN
          clk         => clk,
          ce          => ce,
          reset       => reset,
-         WrEn        => PilotPacket and ValidIn,
+         WrEn        => WrEn,
          WrAddr      => to_integer(PilotCount),
          RdAddrA     => to_integer(ReadCount0_u),
          RdAddrB     => to_integer(ReadCount1_u),
@@ -459,7 +461,7 @@ BEGIN
          clk         => clk,
          ce          => ce,
          reset       => reset,
-         WrEn        => PilotPacket and ValidIn,
+         WrEn        => WrEn,
          WrAddr      => to_integer(PilotCount),
          RdAddrA     => to_integer(ReadCount0_u),
          RdAddrB     => to_integer(ReadCount1_u),
@@ -479,7 +481,7 @@ BEGIN
          clk         => clk,
          ce          => ce,
          reset       => reset,
-         WrEn        => PilotPacket and ValidIn,
+         WrEn        => WrEn,
          WrAddr      => to_integer(PilotCount),
          RdAddrA     => 0,
          RdAddrB     => to_integer(ReadCountR_u),
@@ -499,7 +501,7 @@ BEGIN
          clk         => clk,
          ce          => ce,
          reset       => reset,
-         WrEn        => PilotPacket and ValidIn,
+         WrEn        => WrEn,
          WrAddr      => to_integer(PilotCount),
          RdAddrA     => 0,
          RdAddrB     => to_integer(InvRdCount_u),

@@ -54,7 +54,7 @@ trellisDetector
 
 */
 module trellisDetector (
-    input                   clk, clkEn,
+    input                   clk, clkEn, fbEn,
     input                   reset,
     input                   sampleEn,
     input                   startFrame,
@@ -335,10 +335,11 @@ module trellisDetector (
         .refReal(setup3Real), .refImag(setup3Imag)
     );
 
-    wire            [17:0]  accMetric3_00;
-    wire            [17:0]  accMetric3_01;
-    wire            [17:0]  accMetric3_10;
-    wire            [17:0]  accMetric3_11;
+  (* MARK_DEBUG="true" *)    wire            [17:0]  accMetric3_00;
+  (* MARK_DEBUG="true" *)    wire            [17:0]  accMetric3_01;
+  (* MARK_DEBUG="true" *)    wire            [17:0]  accMetric3_10;
+  (* MARK_DEBUG="true" *)    wire            [17:0]  accMetric3_11;
+
     acsStage3 stage3(
         .clk(clk),.clkEn(clkEn), .reset(reset),
         .startFrame(startFrame),
@@ -433,10 +434,10 @@ module trellisDetector (
     end
 
     `endif
-    wire            [17:0]  accMetric4_000;
-    wire            [17:0]  accMetric4_001;
-    wire            [17:0]  accMetric4_010;
-    wire            [17:0]  accMetric4_011;
+  (* MARK_DEBUG="true" *)    wire            [17:0]  accMetric4_000;
+  (* MARK_DEBUG="true" *)    wire            [17:0]  accMetric4_001;
+  (* MARK_DEBUG="true" *)    wire            [17:0]  accMetric4_010;
+  (* MARK_DEBUG="true" *)    wire            [17:0]  accMetric4_011;
     wire            [17:0]  accMetric4_100;
     wire            [17:0]  accMetric4_101;
     wire            [17:0]  accMetric4_110;
@@ -496,10 +497,10 @@ module trellisDetector (
     );
 
     `ifdef USE_WIDE_OUTPUT
-    wire            [17:0]  accMetric5_000;
-    wire            [17:0]  accMetric5_001;
-    wire            [17:0]  accMetric5_010;
-    wire            [17:0]  accMetric5_011;
+  (* MARK_DEBUG="true" *)    wire            [17:0]  accMetric5_000;
+  (* MARK_DEBUG="true" *)    wire            [17:0]  accMetric5_001;
+  (* MARK_DEBUG="true" *)    wire            [17:0]  accMetric5_010;
+  (* MARK_DEBUG="true" *)    wire            [17:0]  accMetric5_011;
     wire            [17:0]  accMetric5_100;
     wire            [17:0]  accMetric5_101;
     wire            [17:0]  accMetric5_110;
@@ -587,10 +588,10 @@ module trellisDetector (
     );
 
     `ifdef USE_WIDE_OUTPUT
-    wire            [17:0]  accMetric6_000;
-    wire            [17:0]  accMetric6_001;
-    wire            [17:0]  accMetric6_010;
-    wire            [17:0]  accMetric6_011;
+  (* MARK_DEBUG="true" *)    wire            [17:0]  accMetric6_000;
+  (* MARK_DEBUG="true" *)    wire            [17:0]  accMetric6_001;
+  (* MARK_DEBUG="true" *)    wire            [17:0]  accMetric6_010;
+  (* MARK_DEBUG="true" *)    wire            [17:0]  accMetric6_011;
     wire            [17:0]  accMetric6_100;
     wire            [17:0]  accMetric6_101;
     wire            [17:0]  accMetric6_110;
@@ -670,10 +671,10 @@ module trellisDetector (
     );
 
     `ifdef USE_WIDE_OUTPUT
-    wire            [17:0]  accMetric7_000;
-    wire            [17:0]  accMetric7_001;
-    wire            [17:0]  accMetric7_010;
-    wire            [17:0]  accMetric7_011;
+  (* MARK_DEBUG="true" *)    wire            [17:0]  accMetric7_000;
+  (* MARK_DEBUG="true" *)    wire            [17:0]  accMetric7_001;
+  (* MARK_DEBUG="true" *)    wire            [17:0]  accMetric7_010;
+  (* MARK_DEBUG="true" *)    wire            [17:0]  accMetric7_011;
     wire            [17:0]  accMetric7_100;
     wire            [17:0]  accMetric7_101;
     wire            [17:0]  accMetric7_110;
@@ -959,8 +960,8 @@ module trellisDetector (
     end
 
     // Save the final metric as the input metric to the next block
-    assign                  startMetricRequest = metric3OutputEnDly;
-    wire            [17:0]  fifoMetric;
+  (* MARK_DEBUG="true" *)    wire            startMetricRequest = metric3OutputEnDly;
+  (* MARK_DEBUG="true" *)    wire            [17:0]  fifoMetric;
     reg             [3:0]   finalMetricWrAddr;
     reg             [3:0]   finalMetricRdAddr;
     reg             [17:0]  finalMetricRam[15:0];
@@ -989,10 +990,10 @@ module trellisDetector (
 
     // if rd and wr coincide just pass the data on
     assign fifoMetric = (startMetricRequest) ? ( ((finalMetricWrAddr == finalMetricRdAddr) && (finalMetricOutputEn)) ? finalMetric : finalMetricRam[finalMetricRdAddr]) : 0;
-    assign startMetric_00 = fifoMetric;
-    assign startMetric_01 = fifoMetric;
-    assign startMetric_10 = fifoMetric;
-    assign startMetric_11 = fifoMetric;
+    assign startMetric_00 = (fbEn) ? fifoMetric : 0;
+    assign startMetric_01 = (fbEn) ? fifoMetric : 0;
+    assign startMetric_10 = (fbEn) ? fifoMetric : 0;
+    assign startMetric_11 = (fbEn) ? fifoMetric : 0;
 
     // Delay the stage 7 startNextStage to create the outputEn
 //    reg                     outputEn;

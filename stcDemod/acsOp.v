@@ -141,13 +141,7 @@ module acsOpOld(
     always @(posedge clk) begin
 
         accSum <= {1'b0,accMetricIn} + branchMetric;
-/*        if (accSum[18]) begin
-            accMetricOut <= 18'h3ffff;
-        end
-        else begin
-            accMetricOut <= accSum[17:0];
-        end
-*/  end
+    end
 
     // perform the saturation logic after the add for timimg
     assign accMetricOut = (accSum[18]) ? 18'h3ffff : accSum[17:0];

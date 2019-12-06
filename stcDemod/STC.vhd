@@ -57,6 +57,7 @@ ENTITY STC IS
       DacSelect1,
       DacSelect2        : IN  SLV4;
       Clk93,
+      Clk93Dly,
       Clk186,
       SpectrumInv,
       ValidIn           : IN  std_logic;
@@ -170,6 +171,8 @@ ARCHITECTURE rtl OF STC IS
        clk,
        clkEnable,
        reset,
+       tdSel,
+       fbEn,
        frameStart,
        inputValid,
        estimatesDone    : IN  std_logic;
@@ -369,8 +372,7 @@ ARCHITECTURE rtl OF STC IS
    SIGNAL   TrellisOffset     : signed(3 downto 0);
    SIGNAL   DataAddr          : ufixed(9 downto 0);
    SIGNAL   DataAddr_i        : natural range 0 to 1023;
-   SIGNAL   Bert,
-            BitErrors         : natural range 0 to 32000;
+   SIGNAL   BitErrors         : natural range 0 to 32000;
    signal   sample0r,
             sample0i,
             MiscBits,
@@ -382,7 +384,7 @@ ARCHITECTURE rtl OF STC IS
    signal   DacMux            : vector_of_slvs(0 to 15)(17 downto 0);
 
    attribute mark_debug : string;
-   attribute mark_debug of EstimatesDone,
+   attribute mark_debug of EstimatesDone, ExpectedData, TrellisBits, BitErrors,
                   StartIla, ValidIla, InRBrik2Ila, InIBrik2Ila, PilotFoundCE, PilotFoundPD,
                   PhaseDiff, CorrPntr, m_ndx0Slv, m_ndx1Slv, Mag0GtMag1,
                   H0Phase, H1Phase, H0Mag, H1Mag, deltaTauEstSlv,
@@ -431,31 +433,27 @@ BEGIN
       variable CaptureErrors : SLV4;
    begin
       if (rising_edge(Clk186)) then
-         if (SIM_MODE) then
-            CaptureErrors  := ExpectedData xor TrellisBits;
-            if (lastSampleReset or Reset2x) then
-               DataAddr  <= (others=>'0');
-               Bert      <= BitErrors;
-               BitErrors <= 0;
-            elsif (TrellisOutEn) then
-               DataAddr <= resize(DataAddr + 1, DataAddr);
-               BitErrors <= BitErrors + count_bits(CaptureErrors);
+         CaptureErrors  := ExpectedData xor TrellisBits;
+         if (lastSampleReset or Reset2x) then
+            DataAddr  <= (others=>'0');
+            BitErrors <= 0;
+         elsif (TrellisOutEn) then
+            DataAddr <= resize(DataAddr + 1, DataAddr);
+            BitErrors <= BitErrors + count_bits(CaptureErrors);
+         end if;
+
+         pnBitEn <= ClkOutEn and not ClkOutEnDly;
+         ClkOutEnDly <= ClkOutEn;
+         ValidData2047 <= dataBit xnor codeBit;
+         if (not StartOutPS) then
+            Reload   <= '0';
+            if (pnBitEn and not ValidData2047) then
+               Ber <= Ber + 1;
             end if;
          else
-            pnBitEn <= ClkOutEn and not ClkOutEnDly;
-            ClkOutEnDly <= ClkOutEn;
-            ValidData2047 <= dataBit xnor codeBit;
-            if (not StartOutPS) then
-               Reload   <= '0';
-               if (pnBitEn and not ValidData2047) then
-                  Ber <= Ber + 1;
-               end if;
-            else
-               Bert <= Ber;
-               Ber <= 0;
-               if (Ber > 200) then
-                  Reload <= '1';
-               end if;
+            Ber <= 0;
+            if (Ber > 200) then
+               Reload <= '1';
             end if;
          end if;
       end if;
@@ -474,7 +472,7 @@ BEGIN
    Reset186Process : process(Clk186)
    begin
       if(rising_edge(Clk186)) then
-         if not (Clk93) then
+         if not (Clk93Dly) then
             Reset186 <= ResetSrc(7);
          end if;
       end if;
@@ -572,7 +570,7 @@ BEGIN
          PilotFound     => PilotFound,
          CorrPntr       => CorrPntr,
          StartNextFrame => StartNextFrame,
-         Offset         => x"A",
+         Offset         => MiscBits(7 downto 4), -- x"A",
          RealIn         => PilotRealOut,
          ImagIn         => PilotImagOut,
          RealOut        => RealOutPS,     -- 186Mhz
@@ -657,6 +655,8 @@ BEGIN
          clk                  => Clk186,
          clkEnable            => CE,
          reset                => Reset2x,
+         tdSel                => MiscBits(0),
+         fbEn                 => MiscBits(1),
          estimatesDone        => EstimatesDone and not EstimatesDoneDly,   -- rising edge of 93M clock pulse
          frameStart           => StartInBrik2Dly,
          inputValid           => ValidInBrik2Dly,

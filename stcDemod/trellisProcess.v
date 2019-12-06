@@ -8,6 +8,8 @@ module trellisProcess (
                             frameStart,
                             inputValid,
                             estimatesDone,
+                            fbEn,
+                            tdSel,
     input   signed  [17:0]  dinReal,
                             dinImag,
                             h0EstRealIn,
@@ -176,11 +178,15 @@ module trellisProcess (
     );
 
     //------------------------- Trellis Detector ------------------------------
-    wire [3:0]   tdOutputBits;
+  (* MARK_DEBUG="true" *)   wire [3:0]   tdOutputBits, tdOutputBitsOld, tdOutputBitsNew;
+  (* MARK_DEBUG="true" *)   wire tdOutputEnNew, tdOutputEnOld;
+  (* MARK_DEBUG="true" *)   reg  tdGood;
 
+ `ifdef TD_NEW
     trellisDetector td(
         .clk(clk),
         .clkEn(1'b1),
+        .fbEn(fbEn),
         .reset(reset || lastSampleReset),
         .sampleEn(interpOutEn),
         .startFrame(myStartOfTrellis),
@@ -191,13 +197,16 @@ module trellisProcess (
         .h1EstReal(h1EstReal), .h1EstImag(h1EstImag),
         .finalMetricOutputEn(),
         .finalMetric(),
-        .outputEn(tdOutputEn),
-        .outputBits(tdOutputBits)
+        .outputEn(tdOutputEnNew),
+        .outputBits(tdOutputBitsNew)
     );
-// synthesis translate_off
+`endif
+
+`ifdef TD_OLD
     trellisDetectorOld tdOld(
         .clk(clk),
         .clkEn(1'b1),
+        .fbEn(fbEn),
         .reset(reset || lastSampleReset),
         .sampleEn(interpOutEn),
         .startFrame(myStartOfTrellis),
@@ -208,10 +217,13 @@ module trellisProcess (
         .h1EstReal(h1EstReal), .h1EstImag(h1EstImag),
         .finalMetricOutputEn(),
         .finalMetric(),
-        .outputEn(),
-        .outputBits()
+        .outputEn(tdOutputEnOld),
+        .outputBits(tdOutputBitsOld)
     );
-// synthesis translate_on
+`endif
+
+    assign  tdOutputEn      = (tdSel) ? tdOutputEnNew : tdOutputEnOld;
+    assign  tdOutputBits    = (tdSel) ? tdOutputBitsNew : tdOutputBitsOld;
 
     always @(posedge clk) begin
         if (reset || myStartOfTrellis || lastSampleReset) begin
@@ -233,6 +245,10 @@ module trellisProcess (
         end
         else if (tdOutputEn) begin
             outputBits <= tdOutputBits;
+        end
+
+        if (tdOutputEnNew) begin
+            tdGood <= (tdOutputBitsNew == tdOutputBitsOld);
         end
     end
 

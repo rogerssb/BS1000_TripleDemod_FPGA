@@ -385,6 +385,9 @@ architecture rtl of PilotDetectSliding is
             AbsCntr0_Ila,
             AbsCntr1_Ila      : SLV18;
 
+   attribute KEEP : string;
+   attribute KEEP of PhsCntStrt0, PhsCntStrt1, CalcThreshold : signal is "true";
+
    attribute mark_debug : string;
    attribute mark_debug of PilotMag_Ila, PilotFound, Peak1_Ila, Peak2_Ila, BadPilot,
              AbsCntr0_Ila, AbsCntr1_Ila, AbsIndex, PrevIndex : signal is "true";
