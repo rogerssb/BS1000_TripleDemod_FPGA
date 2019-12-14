@@ -1,10 +1,10 @@
 // Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2017.2.1 (win64) Build 1957588 Wed Aug  9 16:32:24 MDT 2017
-// Date        : Tue Oct 22 15:19:43 2019
+// Date        : Fri Dec 13 22:23:33 2019
 // Host        : SEMCO_1039B running 64-bit major release  (build 9200)
-// Command     : write_verilog -force -mode synth_stub -rename_top halfbandEven -prefix
-//               halfbandEven_ halfbandEven_stub.v
+// Command     : write_verilog -force -mode synth_stub
+//               C:/Semco/Vivado/Demods/stcDemod.srcs/sources_1/ip/halfbandEven/halfbandEven_stub.v
 // Design      : halfbandEven
 // Purpose     : Stub declaration of top-level module interface
 // Device      : xc7k325tfbg676-2

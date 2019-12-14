@@ -130,6 +130,7 @@ module stcDemodTop (
         .clk_in1(adc0Clk),
         .clk93(clk),
         .clk93Dly(clk93Dly),
+        .clkTD(clkTD),
         .clk186(clk2x),
         .locked(clkLocked)
     );
@@ -159,7 +160,9 @@ module stcDemodTop (
     systemClock systemClock (
         .clk_in1(sysClk),
         .clk93(clk),
+        .clk93Dly(clk93Dly),
         .clk186(clk2x),
+        .clkTD(clkTD),
         .locked(clkLocked)
      );
 
@@ -479,8 +482,9 @@ module stcDemodTop (
         .ResampleR(iStc),
         .ResampleI(qStc),
         .Clk93(clk),
-        .clk93Dly(clk93Dly),
+        .Clk93Dly(clk93Dly),
         .Clk186(clk2x),
+        .ClkTD(clkTD),
         .ValidIn(stcDdcClkEn),
         .ClocksPerBit(clocksPerBit),
         .HxThreshSlv(hxThreshSlv),

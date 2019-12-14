@@ -1,7 +1,7 @@
 -- Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2017.2.1 (win64) Build 1957588 Wed Aug  9 16:32:24 MDT 2017
--- Date        : Wed Dec  4 10:48:32 2019
+-- Date        : Fri Dec 13 22:20:49 2019
 -- Host        : SEMCO_1039B running 64-bit major release  (build 9200)
 -- Command     : write_vhdl -force -mode synth_stub
 --               C:/Semco/Vivado/Demods/stcDemod.srcs/sources_1/ip/systemClock/systemClock_stub.vhdl
@@ -17,6 +17,7 @@ entity systemClock is
     clk93 : out STD_LOGIC;
     clk186 : out STD_LOGIC;
     clk93Dly : out STD_LOGIC;
+    clkTD : out STD_LOGIC;
     locked : out STD_LOGIC;
     clk_in1 : in STD_LOGIC
   );
@@ -27,6 +28,6 @@ architecture stub of systemClock is
 attribute syn_black_box : boolean;
 attribute black_box_pad_pin : string;
 attribute syn_black_box of stub : architecture is true;
-attribute black_box_pad_pin of stub : architecture is "clk93,clk186,clk93Dly,locked,clk_in1";
+attribute black_box_pad_pin of stub : architecture is "clk93,clk186,clk93Dly,clkTD,locked,clk_in1";
 begin
 end;

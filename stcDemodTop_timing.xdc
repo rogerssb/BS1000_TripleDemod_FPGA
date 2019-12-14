@@ -7,12 +7,6 @@ set_property CONFIG_MODE SPIx1 [current_design]
 create_clock -period 6.250 -name pll0_OUT1 -waveform {0.000 3.125} [get_ports pll0_OUT1]
 create_clock -period 6.250 -name pll1_OUT1 -waveform {0.000 3.125} [get_ports pll1_OUT1]
 
-create_generated_clock -name dllClk0 -source [get_pins cAndD0/clk93] -divide_by 2 -add -master_clock clk93_systemClock [get_pins cAndD0/dll/dllOutputClkEn_reg/Q]
-create_generated_clock -name dllClk1 -source [get_pins cAndD1/clk93] -divide_by 2 -add -master_clock clk93_systemClock [get_pins cAndD1/dll/dllOutputClkEn_reg/Q]
-create_generated_clock -name dllReadClk0 -source [get_pins cAndD0/dll/dllOutputClk] -divide_by 4 -add -master_clock dllClk0 [get_pins {cAndD0/FSM_sequential_dllDivider_reg[0]/Q}]
-create_generated_clock -name dll90Clk0 -source [get_pins cAndD0/dll/dllOutputClk] -divide_by 4 -add -master_clock dllClk0 [get_pins {cAndD0/FSM_sequential_dllDivider_reg[1]/Q}]
-create_generated_clock -name dllReadClk1 -source [get_pins cAndD1/dll/dllOutputClk] -divide_by 4 -add -master_clock dllClk1 [get_pins {cAndD1/FSM_sequential_dllDivider_reg[0]/Q}]
-create_generated_clock -name dll90Clk1 -source [get_pins cAndD1/dll/dllOutputClk] -divide_by 4 -add -master_clock dllClk1 [get_pins {cAndD1/FSM_sequential_dllDivider_reg[1]/Q}]
 
 create_generated_clock -name PllReadClk0 -source [get_ports pll0_OUT1] -divide_by 4 -add -master_clock pll0_OUT1 [get_pins {cAndD0/FSM_sequential_pllDivider_reg[0]/Q}]
 create_generated_clock -name Pll90Clk0 -source [get_ports pll0_OUT1] -divide_by 4 -add -master_clock pll0_OUT1 [get_pins {cAndD0/FSM_sequential_pllDivider_reg[1]/Q}]
@@ -45,12 +39,13 @@ set_output_delay -clock [get_clocks sysClk] -max -add_delay 3.400 [get_ports {da
 
 set_false_path -to [get_ports {lockLed*n pll*_CS pll*_REF pll_SCK pll_SDI spiFlashMOSI spiFlashCSn ch*DataOut ch*ClkOut}]
 
-set_false_path -from [get_pins stcDemod/Trellis_u/tdOld/stageSetup*/refValid_reg/C] -to [get_pins {stcDemod/Trellis_u/tdOld/stage*/acs*/cmag/mpy*/U0/i_mult/gDSP.gHYBRID.iHYBRID/single_mult.dsp_based.iDSP/inferred_dsp.reg_mult.m_reg_reg/A[*]}]
-set_false_path -from [get_pins {stcDemod/Trellis_u/tdOld/stage*/wrAddr_reg[*]/C}] -to [get_pins {stcDemod/Trellis_u/tdOld/stage*/acs*/cmag/mpy*/U0/i_mult/gDSP.gHYBRID.iHYBRID/single_mult.dsp_based.iDSP/inferred_dsp.reg_mult.m_reg_reg/A[*]}]
-set_false_path -from [get_pins stcDemod/Trellis_u/tdOld/stageSetup*/refValid_reg/C] -to [get_pins {stcDemod/Trellis_u/tdOld/stage*/acs*/cmag/mpy*/U0/i_mult/gDSP.gHYBRID.iHYBRID/single_mult.dsp_based.iDSP/inferred_dsp.reg_mult.m_reg_reg/B[*]}]
-set_false_path -from [get_pins {stcDemod/Trellis_u/tdOld/stage*/wrAddr_reg[*]/C}] -to [get_pins {stcDemod/Trellis_u/tdOld/stage*/acs*/cmag/mpy*/U0/i_mult/gDSP.gHYBRID.iHYBRID/single_mult.dsp_based.iDSP/inferred_dsp.reg_mult.m_reg_reg/B[*]}]
+set_false_path -from [get_pins stcDemod/Trellis_u/td/stageSetup*/refValid_re*/C] -to [get_pins {stcDemod/Trellis_u/td/stage*/acs*/cmag/mpy*/U0/i_mult/gDSP.gHYBRID.iHYBRID/single_mult.dsp_based.iDSP/inferred_dsp.reg_mult.m_reg_reg/A[*]}]
+set_false_path -from [get_pins {stcDemod/Trellis_u/td/stage*/wrAddr_reg[*]/C}] -to [get_pins {stcDemod/Trellis_u/td/stage*/acs*/cmag/mpy*/U0/i_mult/gDSP.gHYBRID.iHYBRID/single_mult.dsp_based.iDSP/inferred_dsp.reg_mult.m_reg_reg/A[*]}]
+set_false_path -from [get_pins stcDemod/Trellis_u/td/stageSetup*/refValid_re*/C] -to [get_pins {stcDemod/Trellis_u/td/stage*/acs*/cmag/mpy*/U0/i_mult/gDSP.gHYBRID.iHYBRID/single_mult.dsp_based.iDSP/inferred_dsp.reg_mult.m_reg_reg/B[*]}]
+set_false_path -from [get_pins {stcDemod/Trellis_u/td/stage*/wrAddr_reg[*]/C}] -to [get_pins {stcDemod/Trellis_u/td/stage*/acs*/cmag/mpy*/U0/i_mult/gDSP.gHYBRID.iHYBRID/single_mult.dsp_based.iDSP/inferred_dsp.reg_mult.m_reg_reg/B[*]}]
 
 set_false_path -from [get_ports {fb_data[*]}] -to [get_clocks sysClk]
+
 
 
 

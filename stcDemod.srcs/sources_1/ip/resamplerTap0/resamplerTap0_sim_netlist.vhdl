@@ -1,10 +1,10 @@
 -- Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2017.2.1 (win64) Build 1957588 Wed Aug  9 16:32:24 MDT 2017
--- Date        : Tue Oct 22 15:19:29 2019
+-- Date        : Fri Dec 13 22:22:42 2019
 -- Host        : SEMCO_1039B running 64-bit major release  (build 9200)
--- Command     : write_vhdl -force -mode funcsim -rename_top resamplerTap0 -prefix
---               resamplerTap0_ resamplerTap0_sim_netlist.vhdl
+-- Command     : write_vhdl -force -mode funcsim
+--               C:/Semco/Vivado/Demods/stcDemod.srcs/sources_1/ip/resamplerTap0/resamplerTap0_sim_netlist.vhdl
 -- Design      : resamplerTap0
 -- Purpose     : This VHDL netlist is a functional simulation representation of the design and should not be modified or
 --               synthesized. This netlist cannot be used for SDF annotated simulation.
@@ -98,6 +98,8 @@ entity resamplerTap0_dist_mem_gen_v8_0_11 is
   attribute C_SYNC_ENABLE of resamplerTap0_dist_mem_gen_v8_0_11 : entity is 1;
   attribute C_WIDTH : integer;
   attribute C_WIDTH of resamplerTap0_dist_mem_gen_v8_0_11 : entity is 18;
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of resamplerTap0_dist_mem_gen_v8_0_11 : entity is "dist_mem_gen_v8_0_11";
 end resamplerTap0_dist_mem_gen_v8_0_11;
 
 architecture STRUCTURE of resamplerTap0_dist_mem_gen_v8_0_11 is

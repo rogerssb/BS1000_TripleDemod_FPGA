@@ -59,6 +59,7 @@ ENTITY STC IS
       Clk93,
       Clk93Dly,
       Clk186,
+      ClkTD,
       SpectrumInv,
       ValidIn           : IN  std_logic;
       DataOut,                            -- Trellis Data Output
@@ -168,11 +169,10 @@ ARCHITECTURE rtl OF STC IS
 
    COMPONENT trellisProcess
       PORT (
-       clk,
+       clk186,
+       ClkTD,
        clkEnable,
        reset,
-       tdSel,
-       fbEn,
        frameStart,
        inputValid,
        estimatesDone    : IN  std_logic;
@@ -184,7 +184,6 @@ ARCHITECTURE rtl OF STC IS
        h1EstImagIn,
        ch0MuIn,
        ch1MuIn          : IN  SLV18;
-       offset,
        m_ndx0,
        m_ndx1           : IN  SLV4;
        deltaTauEstIn    : IN  std_logic_vector(5 downto 0);
@@ -570,7 +569,7 @@ BEGIN
          PilotFound     => PilotFound,
          CorrPntr       => CorrPntr,
          StartNextFrame => StartNextFrame,
-         Offset         => MiscBits(7 downto 4), -- x"A",
+         Offset         => x"A",
          RealIn         => PilotRealOut,
          ImagIn         => PilotImagOut,
          RealOut        => RealOutPS,     -- 186Mhz
@@ -652,11 +651,10 @@ BEGIN
 
    Trellis_u : trellisProcess
       PORT MAP (
-         clk                  => Clk186,
+         clk186               => Clk186,
+         ClkTD                => ClkTD,
          clkEnable            => CE,
          reset                => Reset2x,
-         tdSel                => MiscBits(0),
-         fbEn                 => MiscBits(1),
          estimatesDone        => EstimatesDone and not EstimatesDoneDly,   -- rising edge of 93M clock pulse
          frameStart           => StartInBrik2Dly,
          inputValid           => ValidInBrik2Dly,
@@ -671,7 +669,6 @@ BEGIN
          deltaTauEstIn        => deltaTauEstSlv,
          m_ndx0               => m_ndx0Slv,
          m_ndx1               => m_ndx1Slv,
-         offset               => MiscBits(15 downto 12),
          sample0r             => sample0r,
          sample0i             => sample0i,
          interpOutEn          => interpOutEn,
@@ -683,7 +680,7 @@ BEGIN
 
    FD : FireberdDrive
       PORT MAP(
-         clk            => Clk186,
+         clk            => ClkTD,
          reset          => Reset2x,
          ce             => CE,
          ValidIn        => TrellisOutEn,
@@ -700,7 +697,7 @@ BEGIN
          poly_length  => 5x"0b",
          poly_mode    => '0',
          reset        => Reset2x,
-         clock        => Clk186,
+         clock        => ClkTD,
          enable       => pnBitEn, --   clock in data
          lfsr_enable  => pnBitEn, --   gated clock in data
          reload       => Reload,

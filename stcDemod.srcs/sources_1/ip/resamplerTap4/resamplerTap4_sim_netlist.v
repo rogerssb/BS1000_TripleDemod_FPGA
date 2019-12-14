@@ -1,10 +1,10 @@
 // Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2017.2.1 (win64) Build 1957588 Wed Aug  9 16:32:24 MDT 2017
-// Date        : Tue Oct 22 15:20:15 2019
+// Date        : Fri Dec 13 22:22:04 2019
 // Host        : SEMCO_1039B running 64-bit major release  (build 9200)
-// Command     : write_verilog -force -mode funcsim -rename_top resamplerTap4 -prefix
-//               resamplerTap4_ resamplerTap4_sim_netlist.v
+// Command     : write_verilog -force -mode funcsim
+//               C:/Semco/Vivado/Demods/stcDemod.srcs/sources_1/ip/resamplerTap4/resamplerTap4_sim_netlist.v
 // Design      : resamplerTap4
 // Purpose     : This verilog netlist is a functional simulation representation of the design and should not be modified
 //               or synthesized. This netlist cannot be used for SDF annotated simulation.
@@ -88,7 +88,7 @@ endmodule
 (* C_MEM_INIT_FILE = "resamplerTap4.mif" *) (* C_MEM_TYPE = "0" *) (* C_PARSER_TYPE = "1" *) 
 (* C_PIPELINE_STAGES = "0" *) (* C_QCE_JOINED = "0" *) (* C_QUALIFY_WE = "0" *) 
 (* C_READ_MIF = "1" *) (* C_REG_A_D_INPUTS = "0" *) (* C_REG_DPRA_INPUT = "0" *) 
-(* C_SYNC_ENABLE = "1" *) (* C_WIDTH = "18" *) 
+(* C_SYNC_ENABLE = "1" *) (* C_WIDTH = "18" *) (* ORIG_REF_NAME = "dist_mem_gen_v8_0_11" *) 
 module resamplerTap4_dist_mem_gen_v8_0_11
    (a,
     d,
@@ -196,6 +196,7 @@ module resamplerTap4_dist_mem_gen_v8_0_11
         .spo(\^spo ));
 endmodule
 
+(* ORIG_REF_NAME = "dist_mem_gen_v8_0_11_synth" *) 
 module resamplerTap4_dist_mem_gen_v8_0_11_synth
    (spo,
     a);
@@ -210,6 +211,7 @@ module resamplerTap4_dist_mem_gen_v8_0_11_synth
         .spo(spo));
 endmodule
 
+(* ORIG_REF_NAME = "rom" *) 
 module resamplerTap4_rom
    (spo,
     a);

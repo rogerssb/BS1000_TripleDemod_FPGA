@@ -63,8 +63,8 @@ module trellisDetector (
     input   signed  [17:0]  h0EstReal, h0EstImag, h1EstReal, h1EstImag,
     `ifdef USE_WIDE_OUTPUT
     output  reg             finalMetricOutputEn,
-    `else
-    output                  finalMetricOutputEn,
+//    `else
+//    output                  finalMetricOutputEn,
     `endif
     output  reg     [17:0]  finalMetric,
     output  reg             outputEn,
@@ -228,8 +228,8 @@ module trellisDetector (
     );
     `ifdef USE_WIDE_OUTPUT
     wire            [17:0]  startMetric = 18'h0;
-    `else
-    reg             [17:0]  startMetric;
+//    `else
+//    reg             [17:0]  startMetric;
     `endif
     wire            [17:0]  accMetric0;
     acsStage0 stage0(
@@ -455,12 +455,12 @@ module trellisDetector (
         .accMetricIn_01(sumMetric_01[18] ? 18'h3ffff : sumMetric_01[17:0]),
         .accMetricIn_10(sumMetric_10[18] ? 18'h3ffff : sumMetric_10[17:0]),
         .accMetricIn_11(sumMetric_11[18] ? 18'h3ffff : sumMetric_11[17:0]),
-        `else
+/*        `else
         .accMetricIn_00(accMetric3_00),
         .accMetricIn_01(accMetric3_01),
         .accMetricIn_10(accMetric3_10),
         .accMetricIn_11(accMetric3_11),
-        `endif
+*/      `endif
         .setupComplete(stage4SetupComplete),
         .setupOutputValid(stage4OutputValid),
         .setupReal(setup4Real),.setupImag(setup4Imag),
@@ -539,7 +539,7 @@ module trellisDetector (
         .startNextStage(startStage6),
         .winner5(winner5)
     );
-    `else
+/*    `else
     wire            [17:0]  accMetric5_00;
     wire            [17:0]  accMetric5_01;
     wire            [17:0]  accMetric5_10;
@@ -567,7 +567,7 @@ module trellisDetector (
         .accMetric_01(accMetric5_01),
         .accMetric_10(accMetric5_10),
         .accMetric_11(accMetric5_11)
-    );
+    );*/
     `endif
 
     //----------------------------- Stage 6 -----------------------------------
@@ -630,7 +630,7 @@ module trellisDetector (
         .startNextStage(startStage7),
         .winner6(winner6)
     );
-    `else
+/*    `else
     wire            [17:0]  accMetric6_0;
     wire            [17:0]  accMetric6_1;
     acsStage6 stage6(
@@ -650,7 +650,7 @@ module trellisDetector (
         .metricOutEn(metric6OutputEn),
         .accMetric_0(accMetric6_0),
         .accMetric_1(accMetric6_1)
-    );
+    );*/
     `endif
 
     //----------------------------- Stage 7 -----------------------------------
@@ -859,59 +859,59 @@ module trellisDetector (
                 end
                 `MIN_COMPARE4: begin
                     if (minMetric_000 <= minMetric_001) begin
-                        minMetric_00 <= minMetric_000;
-                        minIndex_00 <= minIndex_000;
+                        minMetric_00 = minMetric_000;
+                        minIndex_00 = minIndex_000;
                     end
                     else begin
-                        minMetric_00 <= minMetric_001;
-                        minIndex_00 <= minIndex_001;
+                        minMetric_00 = minMetric_001;
+                        minIndex_00 = minIndex_001;
                     end
                     if (minMetric_010 <= minMetric_011) begin
-                        minMetric_01 <= minMetric_010;
-                        minIndex_01 <= minIndex_010;
+                        minMetric_01 = minMetric_010;
+                        minIndex_01 = minIndex_010;
                     end
                     else begin
-                        minMetric_01 <= minMetric_011;
-                        minIndex_01 <= minIndex_011;
+                        minMetric_01 = minMetric_011;
+                        minIndex_01 = minIndex_011;
                     end
                     if (minMetric_100 <= minMetric_101) begin
-                        minMetric_10 <= minMetric_100;
-                        minIndex_10 <= minIndex_100;
+                        minMetric_10 = minMetric_100;
+                        minIndex_10 = minIndex_100;
                     end
                     else begin
-                        minMetric_10 <= minMetric_101;
-                        minIndex_10 <= minIndex_101;
+                        minMetric_10 = minMetric_101;
+                        minIndex_10 = minIndex_101;
                     end
                     if (minMetric_110 <= minMetric_111) begin
-                        minMetric_11 <= minMetric_110;
-                        minIndex_11 <= minIndex_110;
+                        minMetric_11 = minMetric_110;
+                        minIndex_11 = minIndex_110;
                     end
                     else begin
-                        minMetric_11 <= minMetric_111;
-                        minIndex_11 <= minIndex_111;
+                        minMetric_11 = minMetric_111;
+                        minIndex_11 = minIndex_111;
                     end
-                    minState <= `MIN_COMPARE2;
-                end
-                `MIN_COMPARE2: begin
+//                  minState <= `MIN_COMPARE2;
+//              end
+//              `MIN_COMPARE2: begin
                     if (minMetric_00 <= minMetric_01) begin
-                        minMetric_0 <= minMetric_00;
-                        minIndex_0 <= minIndex_00;
+                        minMetric_0 = minMetric_00;
+                        minIndex_0 = minIndex_00;
                     end
                     else begin
-                        minMetric_0 <= minMetric_01;
-                        minIndex_0 <= minIndex_01;
+                        minMetric_0 = minMetric_01;
+                        minIndex_0 = minIndex_01;
                     end
                     if (minMetric_10 <= minMetric_11) begin
-                        minMetric_1 <= minMetric_10;
-                        minIndex_1 <= minIndex_10;
+                        minMetric_1 = minMetric_10;
+                        minIndex_1 = minIndex_10;
                     end
                     else begin
-                        minMetric_1 <= minMetric_11;
-                        minIndex_1 <= minIndex_11;
+                        minMetric_1 = minMetric_11;
+                        minIndex_1 = minIndex_11;
                     end
-                    minState <= `MIN_COMPARE1;
-                end
-                `MIN_COMPARE1: begin
+ //                 minState <= `MIN_COMPARE1;
+ //             end
+ //             `MIN_COMPARE1: begin
                     if (minMetric_0 <= minMetric_1) begin
                         minMetric <= minMetric_0;
                         minIndex <= minIndex_0;
@@ -1014,7 +1014,7 @@ module trellisDetector (
         end
     end
 
-    `else //USE_WIDE_OUTPUT
+/*    `else //USE_WIDE_OUTPUT
 
     wire            [17:0]  accMetric7;
     acsStage7 stage7(
@@ -1078,7 +1078,7 @@ module trellisDetector (
         startMetric = fifoMetric - minMetric;
     end
 
-
+*/
     `endif
 
 

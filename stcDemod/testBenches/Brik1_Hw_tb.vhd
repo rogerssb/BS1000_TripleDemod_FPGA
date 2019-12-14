@@ -88,6 +88,7 @@ architecture rtl of Brik1_Hw_tb is
       Clk93,
       Clk93Dly,
       Clk186,
+      ClkTD,
       SpectrumInv,
       ValidIn           : IN  std_logic;
       DataOut,                            -- Trellis Data Output
@@ -107,6 +108,41 @@ architecture rtl of Brik1_Hw_tb is
       PhaseDiff         : OUT SLV18
       );
    END COMPONENT STC;
+
+  component STC628 IS
+   GENERIC (
+         SIM_MODE    : boolean := false
+      );
+   PORT(
+      ResampleR,
+      ResampleI         : IN  SLV18;
+      ClocksPerBit      : IN  SLV16;
+      HxThreshSlv       : IN  SLV12;
+      DacSelect0,
+      DacSelect1,
+      DacSelect2        : IN  SLV4;
+      Clk93,
+      Clk186,
+      SpectrumInv,
+      ValidIn           : IN  std_logic;
+      DataOut,                            -- Trellis Data Output
+      ClkOutEn,                           -- Trellis Clock Output
+      PilotFound,                         -- Pilot Found LED
+      PilotLocked,
+      StartOfFrame,
+      PhaseDiffEn,
+      Dac0ClkEn,
+      Dac1ClkEn,
+      Dac2ClkEn         : OUT std_logic;
+      PilotOffset       : OUT STD_LOGIC_VECTOR(8 downto 0); -- signed Pilot Detect Offset from center
+      Dac0Data,
+      Dac1Data,
+      Dac2Data          : OUT SLV18;
+      PhaseOut,
+      PhaseDiff         : OUT SLV18
+   );
+   END component STC628;
+
 
    COMPONENT CmplxMult IS
       GENERIC (
@@ -216,6 +252,7 @@ architecture rtl of Brik1_Hw_tb is
         clk93,
         clk93Dly,
         clk186,
+        ClkTD,
         locked          : out    std_logic
        );
    end component;
@@ -228,7 +265,8 @@ architecture rtl of Brik1_Hw_tb is
             ResetBufg,
             Clk93,
             Clk93Dly,
-            ClkXn,
+            Clk186,
+            ClkTD,
             lastSampleReset,
             StartOfFrame,
             Locked,
@@ -293,13 +331,14 @@ begin
          clk_in1    => Clk93In,
          clk93      => Clk93,
          clk93Dly   => Clk93Dly,
-         clk186     => ClkXn,
+         clk186     => Clk186,
+         ClkTD      => ClkTD,
          locked     => Locked
       );
 
    Vio_u : Vio_0
       PORT MAP (
-         clk        => ClkXn,
+         clk        => Clk186,
          probe_in0  => Errors,
          probe_out0 => Frequency_vio,           -- 00280 (222Hz) start getting errors at end of frame
          probe_out1 => FrameClocks_vio,         -- usually 13312-1=13311. smaller makes packets slide
@@ -319,9 +358,9 @@ begin
 -- Phase1_vio <= 18x"00000";
 -- Frequency_vio <= 24x"8000";
 
-   ErrorProc : process (ClkXn)
+   ErrorProc : process (Clk186)
    begin
-      if (rising_edge(ClkXn)) then
+      if (rising_edge(Clk186)) then
          Reset <= (not locked) or HwControlBits(7);
          if (Reset) then
             Errors <= x"00";
@@ -414,7 +453,7 @@ begin
                end if;
             end if;
          end if;
-         DeltaT_v  := to_integer(signed(DeltaT_vio));    -- add up to ±4 then check for overflow
+         DeltaT_v  := 0; -- TODO to_integer(signed(DeltaT_vio));    -- add up to ±4 then check for overflow
          Offset_v  := to_integer(signed(Offset_vio));   -- 290 = 511, 287 is 3, 290+28=485 where packet rollover issues start
          RdAddr0_v <= RdAddr_i + Offset_v;
          if (RdAddr0_v > 13311) then
@@ -691,7 +730,8 @@ end generate;
          DacSelect2     => x"0",
          Clk93          => Clk93,
          Clk93Dly       => Clk93Dly,
-         Clk186         => ClkXn,
+         Clk186         => Clk186,
+         ClkTD          => ClkTD,
          ValidIn        => PhaseValid,
          SpectrumInv    => HwControlBits(0),
          PilotOffset    => PilotOffset,
@@ -710,5 +750,38 @@ end generate;
          PhaseOut       => open,
          PhaseDiff      => open
       );
+
+   Stc_628 : STC628
+   GENERIC MAP (
+         SIM_MODE   => SIM_MODE
+      )
+   PORT MAP(
+      ResampleR         => to_slv(ResampleR_s),
+      ResampleI         => to_slv(ResampleI_s),
+      ClocksPerBit      => ClocksPerBitSlv,
+      HxThreshSlv       => 12x"180",
+      DacSelect0        => x"0",
+      DacSelect1        => x"0",
+      DacSelect2        => x"0",
+      Clk93             => Clk93,
+      Clk186           => Clk186,
+      SpectrumInv      => HwControlBits(0),
+      ValidIn          => PhaseValid,
+      DataOut          => open,
+      ClkOutEn         => open,
+      PilotFound       => open,
+      PilotLocked      => open,
+      StartOfFrame     => open,
+      PhaseDiffEn      => open,
+      Dac0ClkEn        => open,
+      Dac1ClkEn        => open,
+      Dac2ClkEn        => open,
+      PilotOffset      => open,
+      Dac0Data         => open,
+      Dac1Data         => open,
+      Dac2Data         => open,
+      PhaseOut         => open,
+      PhaseDiff        => open
+   );
 
 end rtl;

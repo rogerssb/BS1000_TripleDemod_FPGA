@@ -1,109 +1,224 @@
 onerror {resume}
-radix define sfix17 -fixed -fraction 17 -signed -base signed -precision 6
-radix define u6 -fixed -fraction 6 -base signed -precision 6
-radix define s18 -fixed -fraction 18 -signed -base signed -precision 6
-radix define s18_17 -fixed -fraction 17 -signed -base signed -precision 6
-radix define s17 -fixed -fraction 17 -signed -base signed -precision 6
-radix define u7 -fixed -fraction 7 -base signed -precision 6
-radix define u8 -fixed -fraction 8 -base signed -precision 6
-radix define u9 -fixed -fraction 9 -base signed -precision 6
-radix define u10 -fixed -fraction 10 -base signed -precision 6
-radix define u11 -fixed -fraction 11 -base signed -precision 6
-radix define u12 -fixed -fraction 12 -base signed -precision 6
-radix define u13 -fixed -fraction 13 -base signed -precision 6
-radix define u14 -fixed -fraction 14 -base signed -precision 6
-radix define u15 -fixed -fraction 15 -base signed -precision 6
-radix define u16 -fixed -fraction 16 -base signed -precision 6
-radix define s6 -fixed -fraction 6 -signed -base signed -precision 6
-radix define s7 -fixed -fraction 7 -signed -base signed -precision 6
-radix define s8 -fixed -fraction 8 -signed -base signed -precision 6
-radix define s9 -fixed -fraction 9 -signed -base signed -precision 6
-radix define s10 -fixed -fraction 10 -signed -base signed -precision 6
-radix define s11 -fixed -fraction 11 -signed -base signed -precision 6
-radix define s12 -fixed -fraction 12 -signed -base signed -precision 6
-radix define s13 -fixed -fraction 13 -signed -base signed -precision 6
-radix define s14 -fixed -fraction 14 -signed -base signed -precision 6
-radix define s15 -fixed -fraction 15 -signed -base signed -precision 6
-radix define s16 -fixed -fraction 16 -signed -base signed -precision 6
-radix define s19 -fixed -fraction 19 -signed -base signed -precision 6
-radix define s20 -fixed -fraction 20 -signed -base signed -precision 6
-radix define s21 -fixed -fraction 21 -signed -base signed -precision 6
-radix define s22 -fixed -fraction 22 -signed -base signed -precision 6
-radix define s23 -fixed -fraction 23 -signed -base signed -precision 6
-radix define s24 -fixed -fraction 24 -signed -base signed -precision 6
-radix define s25 -fixed -fraction 25 -signed -base signed -precision 6
-radix define s26 -fixed -fraction 26 -signed -base signed -precision 6
-radix define s27 -fixed -fraction 27 -signed -base signed -precision 6
-radix define float -fixed -fraction 27 -signed -base signed -precision 6
-radix define float_1k -fixed -fraction 21 -signed -base signed -precision 6
-radix define float_4k -fixed -fraction 19 -signed -base signed -precision 6
-radix define float_64k -fixed -fraction 15 -signed -base signed -precision 6
-radix define float_1m -fixed -fraction 11 -signed -base signed -precision 6
-radix define float_1b -fixed -fraction 1 -signed -base signed -precision 6
-radix define FLoat16 -fixed -fraction 27 -signed -base signed -precision 6
-radix define fixed#31#decimal -fixed -fraction 31 -base signed -precision 6
-radix define fixed#32#decimal -fixed -fraction 32 -base signed -precision 6
-radix define fixed#17#decimal#signed -fixed -fraction 17 -signed -base signed -precision 6
-radix define fixed#7#decimal#signed -fixed -fraction 7 -signed -base signed -precision 6
-radix define s31 -fixed -fraction 31 -signed -precision 6
-radix define fixed#5#decimal#signed -fixed -fraction 5 -signed -base signed -precision 6
-radix define fixed#17#decimal -fixed -fraction 17 -base signed -precision 6
-radix define fixed#31#decimal#signed -fixed -fraction 31 -signed -base signed -precision 6
 quietly WaveActivateNextPane {} 0
-add wave -noupdate /test/deltaTauEst
-add wave -noupdate /test/estimatesDone
-add wave -noupdate /test/fp_sampleImag
-add wave -noupdate /test/fp_sampleReal
-add wave -noupdate /test/fp_start
-add wave -noupdate /test/fp_valid
-add wave -noupdate /test/h0EstImag
-add wave -noupdate /test/h0EstReal
-add wave -noupdate /test/h1EstImag
-add wave -noupdate /test/h1EstReal
-add wave -noupdate -radix s18_17 /test/inputSampleImag
-add wave -noupdate -radix s18_17 /test/inputSampleReal
-add wave -noupdate /test/inputStart
-add wave -noupdate /test/inputValid
-add wave -noupdate /test/interpolate
-add wave -noupdate /test/interpOutEn
-add wave -noupdate /test/myStartOfTrellis
-add wave -noupdate /test/faClkEn
-add wave -noupdate -radix s18_17 /test/faImag
-add wave -noupdate -radix s18_17 /test/faReal
-add wave -noupdate -radix s18_17 /test/sample0i
-add wave -noupdate -radix s18_17 /test/sample0r
-add wave -noupdate -radix s18_17 /test/sample1i
-add wave -noupdate -radix s18_17 /test/sample1r
-add wave -noupdate /test/sampleCount
-add wave -noupdate /test/sampleImag
-add wave -noupdate /test/sampleReal
-add wave -noupdate /test/sampleStart
-add wave -noupdate /test/sampleValid
-add wave -noupdate /test/sampleInFrame
-add wave -noupdate /test/sampleOut
-add wave -noupdate -radix hexadecimal -radixshowbase 0 /test/tdBits
-add wave -noupdate /test/tdOutEn
-add wave -noupdate /test/fa/outputCount
-add wave -noupdate /test/fa/fifoOutputValid
-add wave -noupdate /test/fa/sampleCount
-add wave -noupdate /test/fa/rdAddr
-add wave -noupdate /test/fa/sofAddress
-add wave -noupdate /test/fa/estimatesReady
-add wave -noupdate /test/fa/sofDetected
-add wave -noupdate /test/fa/frameActive
-add wave -noupdate /test/fa/fifoWrEn
-add wave -noupdate /test/fa/fifoRdEn
-add wave -noupdate /test/fa/empty
-add wave -noupdate /test/fa/full
-add wave -noupdate /test/td/TrellisDetectInit
-add wave -noupdate /test/td/TrellisSetup
-add wave -noupdate /test/td/TrellisIdle
-add wave -noupdate /test/td/setupComplete
+add wave -noupdate /trellistb/BitRate
+add wave -noupdate /trellistb/Ch0Mu
+add wave -noupdate /trellistb/Ch1Mu
+add wave -noupdate /trellistb/Chan0i
+add wave -noupdate /trellistb/Chan0r
+add wave -noupdate /trellistb/Chan1i
+add wave -noupdate /trellistb/Chan1r
+add wave -noupdate /trellistb/Clk140
+add wave -noupdate /trellistb/Clk186
+add wave -noupdate /trellistb/CordicValid
+add wave -noupdate /trellistb/Cos0
+add wave -noupdate /trellistb/Cos1
+add wave -noupdate /trellistb/DataAddr
+add wave -noupdate /trellistb/DataValid
+add wave -noupdate /trellistb/DeadTime
+add wave -noupdate /trellistb/DeltaTauEst
+add wave -noupdate /trellistb/EstimatesDone
+add wave -noupdate /trellistb/EstimatesDoneDly
+add wave -noupdate /trellistb/Frequency
+add wave -noupdate /trellistb/H0EstI
+add wave -noupdate /trellistb/H0EstR
+add wave -noupdate /trellistb/H0Mag
+add wave -noupdate /trellistb/H0Mag_u
+add wave -noupdate /trellistb/H0Phase
+add wave -noupdate /trellistb/H0i
+add wave -noupdate /trellistb/H0r
+add wave -noupdate /trellistb/H1EstI
+add wave -noupdate /trellistb/H1EstR
+add wave -noupdate /trellistb/H1Mag
+add wave -noupdate /trellistb/H1Mag_u
+add wave -noupdate /trellistb/H1Phase
+add wave -noupdate /trellistb/H1i
+add wave -noupdate /trellistb/H1r
+add wave -noupdate /trellistb/ImagRead
+add wave -noupdate /trellistb/Locked
+add wave -noupdate /trellistb/Mag0GtMag1
+add wave -noupdate /trellistb/NoiseIn
+add wave -noupdate /trellistb/Phase0
+add wave -noupdate /trellistb/Phase1
+add wave -noupdate /trellistb/PhaseValid
+add wave -noupdate /trellistb/Power0In
+add wave -noupdate /trellistb/Power1In
+add wave -noupdate /trellistb/RdAddr0_i
+add wave -noupdate -radix hexadecimal /trellistb/RdAddr1_i
+add wave -noupdate -format Analog-Step -height 74 -max 13311.0 /trellistb/RdAddr_i
+add wave -noupdate -format Analog-Step -height 74 -max 58567.999999999993 -min -58682.0 /trellistb/ResampleI_s
+add wave -noupdate -format Analog-Step -height 74 -max 58790.999999999993 -min -58947.0 /trellistb/ResampleR_s
+add wave -noupdate /trellistb/Reset
+add wave -noupdate /trellistb/Sin0
+add wave -noupdate /trellistb/Sin1
+add wave -noupdate /trellistb/SinCosData0
+add wave -noupdate /trellistb/SinCosData1
+add wave -noupdate /trellistb/StartIn
+add wave -noupdate /trellistb/TrellisFull
+add wave -noupdate /trellistb/ValidCount
+add wave -noupdate /trellistb/deltaTauEstSlv
+add wave -noupdate /trellistb/interpOutEn
+add wave -noupdate /trellistb/lastSampleReset
+add wave -noupdate /trellistb/m_ndx0
+add wave -noupdate /trellistb/m_ndx0slv
+add wave -noupdate /trellistb/m_ndx1
+add wave -noupdate /trellistb/m_ndx1slv
+add wave -noupdate /trellistb/sample0i
+add wave -noupdate /trellistb/sample0r
+add wave -noupdate /trellistb/Trellis_u/SPARE_CODE_WORDS
+add wave -noupdate /trellistb/Trellis_u/ch0Mu
+add wave -noupdate /trellistb/Trellis_u/ch0MuIn
+add wave -noupdate /trellistb/Trellis_u/ch1Mu
+add wave -noupdate /trellistb/Trellis_u/ch1MuIn
+add wave -noupdate /trellistb/Trellis_u/clk140
+add wave -noupdate /trellistb/Trellis_u/clk186
+add wave -noupdate /trellistb/Trellis_u/clkEnable
+add wave -noupdate /trellistb/Trellis_u/deltaTauEst
+add wave -noupdate /trellistb/Trellis_u/deltaTauEstIn
+add wave -noupdate /trellistb/Trellis_u/dfImagOutput
+add wave -noupdate /trellistb/Trellis_u/dfRealOutput
+add wave -noupdate /trellistb/Trellis_u/dfValid
+add wave -noupdate /trellistb/Trellis_u/df_tdata
+add wave -noupdate /trellistb/Trellis_u/fa/rdAddr
+add wave -noupdate /trellistb/Trellis_u/h0EstImag
+add wave -noupdate /trellistb/Trellis_u/h0EstImagIn
+add wave -noupdate /trellistb/Trellis_u/h0EstReal
+add wave -noupdate /trellistb/Trellis_u/h0EstRealIn
+add wave -noupdate /trellistb/Trellis_u/h1EstImag
+add wave -noupdate /trellistb/Trellis_u/h1EstImagIn
+add wave -noupdate /trellistb/Trellis_u/h1EstReal
+add wave -noupdate /trellistb/Trellis_u/h1EstRealIn
+add wave -noupdate /trellistb/Trellis_u/inputValid
+add wave -noupdate /trellistb/Trellis_u/m_ndx0
+add wave -noupdate /trellistb/Trellis_u/m_ndx1
+add wave -noupdate /trellistb/Trellis_u/myStartOfTrellisClr
+add wave -noupdate /trellistb/Trellis_u/offset
+add wave -noupdate /trellistb/Trellis_u/outputBits
+add wave -noupdate /trellistb/Trellis_u/outputEn
+add wave -noupdate /trellistb/Trellis_u/reset
+add wave -noupdate /trellistb/Trellis_u/dinImag
+add wave -noupdate /trellistb/Trellis_u/dinReal
+add wave -noupdate /trellistb/Trellis_u/estimatesDone
+add wave -noupdate /trellistb/Trellis_u/estimatesDoneDly
+add wave -noupdate /trellistb/Trellis_u/frameStart
+add wave -noupdate /trellistb/Trellis_u/full
+add wave -noupdate /trellistb/Trellis_u/tdFifo_u/rd_en
+add wave -noupdate /trellistb/Trellis_u/tdFifo_u/wr_en
+add wave -noupdate /trellistb/Trellis_u/tdFifoFull
+add wave -noupdate -format Analog-Step -height 74 -max 25.999999999999996 -radix unsigned /trellistb/Trellis_u/ClockCntr
+add wave -noupdate /trellistb/Trellis_u/fa/interpolate
+add wave -noupdate /trellistb/Trellis_u/fa/lastSample
+add wave -noupdate /trellistb/Trellis_u/fa/myStartOfTrellis
+add wave -noupdate /trellistb/Trellis_u/fa/outputCount
+add wave -noupdate /trellistb/Trellis_u/fa/outputState
+add wave -noupdate /trellistb/Trellis_u/fa/sampleCount
+add wave -noupdate /trellistb/Trellis_u/td/startBlock
+add wave -noupdate /trellistb/Trellis_u/td/startBlockEarly
+add wave -noupdate /trellistb/Trellis_u/td/startFrame
+add wave -noupdate /trellistb/TrellisOld_u/td/startFrame
+add wave -noupdate /trellistb/Trellis_u/td/TrellisIdle
+add wave -noupdate /trellistb/Trellis_u/faClkEn
+add wave -noupdate /trellistb/TrellisOld_u/faClkEn
+add wave -noupdate /trellistb/Trellis_u/faImag0
+add wave -noupdate /trellistb/Trellis_u/faImag1
+add wave -noupdate /trellistb/Trellis_u/faReal0
+add wave -noupdate /trellistb/Trellis_u/faReal1
+add wave -noupdate /trellistb/TrellisOld_u/faImag0
+add wave -noupdate /trellistb/TrellisOld_u/faImag1
+add wave -noupdate /trellistb/TrellisOld_u/faReal0
+add wave -noupdate /trellistb/TrellisOld_u/faReal1
+add wave -noupdate /trellistb/Trellis_u/interpOutEn
+add wave -noupdate /trellistb/TrellisOld_u/interpOutEn
+add wave -noupdate /trellistb/Trellis_u/interpolate
+add wave -noupdate /trellistb/TrellisOld_u/interpolate
+add wave -noupdate /trellistb/TrellisOld_u/lastSampleReset
+add wave -noupdate /trellistb/Trellis_u/lastSampleReset
+add wave -noupdate /trellistb/Trellis_u/myStartOfTrellis
+add wave -noupdate /trellistb/TrellisOld_u/myStartOfTrellis
+add wave -noupdate /trellistb/TrellisOld_u/outputEn
+add wave -noupdate /trellistb/Trellis_u/rdFifo
+add wave -noupdate /trellistb/Trellis_u/td/sampleEn
+add wave -noupdate /trellistb/TrellisOld_u/td/sampleEn
+add wave -noupdate /trellistb/Trellis_u/tdSample0i
+add wave -noupdate /trellistb/Trellis_u/tdSample0r
+add wave -noupdate /trellistb/Trellis_u/tdSample1i
+add wave -noupdate /trellistb/Trellis_u/tdSample1r
+add wave -noupdate /trellistb/TrellisOld_u/sample0i
+add wave -noupdate /trellistb/TrellisOld_u/sample0r
+add wave -noupdate /trellistb/TrellisOld_u/sample1i
+add wave -noupdate /trellistb/TrellisOld_u/sample1r
+add wave -noupdate /trellistb/TrellisOld_u/sampleOut
+add wave -noupdate -radix hexadecimal /trellistb/TrellisOld_u/tdOutputBits
+add wave -noupdate /trellistb/TrellisOld_u/tdOutputEn
+add wave -noupdate /trellistb/TrellisOld_u/td/TrellisIdle
+add wave -noupdate -radix unsigned /trellistb/Trellis_u/td/sampleCount
+add wave -noupdate -radix unsigned /trellistb/TrellisOld_u/td/sampleCount
+add wave -noupdate -divider {New Divider}
+add wave -noupdate /trellistb/Trellis_u/sample0i
+add wave -noupdate /trellistb/Trellis_u/sample0r
+add wave -noupdate /trellistb/Trellis_u/sample1i
+add wave -noupdate /trellistb/Trellis_u/sample1r
+add wave -noupdate /trellistb/Trellis_u/sampleOut
+add wave -noupdate /trellistb/Trellis_u/tdFifoOut
+add wave -noupdate /trellistb/Trellis_u/tdOutputBits
+add wave -noupdate /trellistb/Trellis_u/tdOutputEn
+add wave -noupdate /trellistb/Trellis_u/tdStartOfTrellis
+add wave -noupdate /trellistb/Trellis_u/tdStartOfTrellisDly
+add wave -noupdate -radix unsigned /trellistb/Trellis_u/td/sampleCount
+add wave -noupdate /trellistb/Trellis_u/td/startBlock
+add wave -noupdate /trellistb/TrellisOld_u/td/startBlock
+add wave -noupdate /trellistb/Trellis_u/td/startBlockEarly
+add wave -noupdate /trellistb/TrellisOld_u/td/startBlockEarly
+add wave -noupdate /trellistb/Trellis_u/td/startMetric
+add wave -noupdate /trellistb/TrellisOld_u/td/startMetric
+add wave -noupdate /trellistb/TrellisOld_u/td/startMetric_00
+add wave -noupdate -radix hexadecimal /trellistb/ExpectedDataOld
+add wave -noupdate /trellistb/BitErrorsOld
+add wave -noupdate /trellistb/BitErrors
+add wave -noupdate -radix hexadecimal /trellistb/ExpectedData
+add wave -noupdate -radix hexadecimal /trellistb/TrellisOld_u/outputBits
+add wave -noupdate -radix hexadecimal /trellistb/TrellisBits
+add wave -noupdate /trellistb/TrellisOutEn
+add wave -noupdate /trellistb/Trellis_u/fa/clk
+add wave -noupdate /trellistb/Trellis_u/fa/clkEn
+add wave -noupdate /trellistb/Trellis_u/fa/clkEnOut
+add wave -noupdate /trellistb/Trellis_u/fa/CLKS_PER_OUTPUT
+add wave -noupdate /trellistb/Trellis_u/fa/decimationCount
+add wave -noupdate /trellistb/Trellis_u/fa/dinImag
+add wave -noupdate /trellistb/Trellis_u/fa/dinReal
+add wave -noupdate /trellistb/Trellis_u/fa/doutImag0
+add wave -noupdate /trellistb/Trellis_u/fa/doutImag1
+add wave -noupdate /trellistb/Trellis_u/fa/doutReal0
+add wave -noupdate /trellistb/Trellis_u/fa/doutReal1
+add wave -noupdate /trellistb/Trellis_u/fa/estimatesDone
+add wave -noupdate /trellistb/Trellis_u/fa/fifoRdData0
+add wave -noupdate /trellistb/Trellis_u/fa/fifoRdData1
+add wave -noupdate /trellistb/Trellis_u/fa/fifoWrEn
+add wave -noupdate /trellistb/Trellis_u/fa/m_ndx0
+add wave -noupdate /trellistb/Trellis_u/fa/m_ndx1
+add wave -noupdate /trellistb/Trellis_u/fa/offset
+add wave -noupdate /trellistb/Trellis_u/fa/rdAddr0
+add wave -noupdate /trellistb/Trellis_u/fa/rdAddr1
+add wave -noupdate /trellistb/Trellis_u/fa/reset
+add wave -noupdate /trellistb/Trellis_u/fa/sofAddress
+add wave -noupdate /trellistb/Trellis_u/fa/sofDetected
+add wave -noupdate /trellistb/Trellis_u/fa/START_OFFSET
+add wave -noupdate /trellistb/Trellis_u/fa/startOfFrame
+add wave -noupdate /trellistb/Trellis_u/fa/trellisInitCnt
+add wave -noupdate /trellistb/Trellis_u/fa/valid
+add wave -noupdate -format Analog-Step -height 74 -max 9370.0 -radix unsigned /trellistb/Trellis_u/fa/depth
+add wave -noupdate /trellistb/Trellis_u/fa/empty
+add wave -noupdate /trellistb/Trellis_u/fa/fifoOutputValid
+add wave -noupdate /trellistb/Trellis_u/fa/fifoRdEn
+add wave -noupdate /trellistb/Trellis_u/fifoEmpty
+add wave -noupdate /trellistb/Trellis_u/fa/full
+add wave -noupdate -format Analog-Step -height 74 -max 32767.0 -radix hexadecimal /trellistb/Trellis_u/fa/wrAddr
+add wave -noupdate /trellistb/Trellis_u/sampleOut
+add wave -noupdate /trellistb/TrellisOld_u/sampleOut
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {11804610000 ps} 0} {{Cursor 2} {485454000 ps} 0} {{Cursor 3} {822731000 ps} 0}
-quietly wave cursor active 3
-configure wave -namecolwidth 312
-configure wave -valuecolwidth 65
+WaveRestoreCursors {{Cursor 1} {105249167 ps} 0} {{Cursor 3} {208864167 ps} 0}
+quietly wave cursor active 2
+configure wave -namecolwidth 242
+configure wave -valuecolwidth 100
 configure wave -justifyvalue left
 configure wave -signalnamewidth 0
 configure wave -snapdistance 10
@@ -116,7 +231,7 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {819726872 ps} {825735128 ps}
+WaveRestoreZoom {0 ps} {525 us}
 bookmark add wave bookmark0 {{2508730 ps} {2540670 ps}} 0
 bookmark add wave bookmark1 {{3023030 ps} {3054970 ps}} 0
 bookmark add wave bookmark2 {{2187685 ps} {2199857 ps}} 33

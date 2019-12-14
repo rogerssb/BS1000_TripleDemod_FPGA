@@ -5,19 +5,18 @@
 // 11-16-19 Changed offset to vio variable to optimize against real time noise.
 
 module frameAlignment
-    #(parameter START_OFFSET = 0,
-      parameter CLKS_PER_OUTPUT = 2) (
+    #(parameter CLKS_PER_OUTPUT = 4) (
     input                   clk,
                             clkEn,
                             reset,
                             startOfFrame,       // start of frame, not start of trellis activty
                             estimatesDone,     // Estimates are complete, start Trellis process
+                            tdFifoFull,
                             valid,
     input   signed  [17:0]  dinReal,
                             dinImag,
     input   signed  [3:0]   m_ndx0,
                             m_ndx1,
-                            offset,         // was equal 7
     output                  clkEnOut,
     output  reg             interpolate,
                             myStartOfTrellis,
@@ -31,36 +30,30 @@ module frameAlignment
 
     //------------------------------ Sample Counter ---------------------------
 
-    reg             [14:0]  wrAddr, rdAddr,sofAddress;
-    wire            [14:0]  maxAddr;
+    reg             [14:0]  wrAddr, rdAddr, depth;
     wire   signed   [15:0]  rdAddr0, rdAddr1;
-    reg                     estimatesReady, sofDetected;
+    reg                     sofDetected;
+    `define   SOF_ADDRESS `PILOT_SAMPLES_PER_FRAME - 9  // capture address of first sample of next frame. SOF goes active between packets, so wrAddr is inactive
     always @(posedge clk) begin
         if (reset) begin
             myStartOfTrellis <= 0;
             sofDetected      <= 0;
-            estimatesReady   <= 0;
-            sofAddress       <= 0;
         end
         else if (clkEn) begin
-            if (estimatesDone) begin
-                estimatesReady <= 1;
-            end
-            else if (myStartOfTrellis) begin
-                estimatesReady <= 0;
-            end
             if (startOfFrame) begin
                 sofDetected <= 1;
-                sofAddress  <= wrAddr + `PILOT_SAMPLES_PER_FRAME - offset - 3;  // capture address of first sample of next frame. SOF goes active between packets, so wrAddr is inactive
             end
             else if (myStartOfTrellis) begin
                 sofDetected <= 0;
             end
-            myStartOfTrellis <= (estimatesReady & sofDetected & ~myStartOfTrellis); // wait till current frame is done. Check own output for one clock cycle
+            myStartOfTrellis <= (estimatesDone & sofDetected);
         end
     end
 
     //------------------------- Sample FIFO -----------------------------------
+    // Packet starts writing at address 0 when StartOfFrame is detected. The useful user data start 512 samples later.
+    // This forces the packet to always start at 0 up to 13312ish then the next packet will start at the bottom
+    // The read address then starts at 512 - 12 samples later
 
     wire                    fifoWrEn = (clkEn && valid);
     reg                     fifoRdEn;
@@ -74,12 +67,17 @@ module frameAlignment
             full   <= 0;
         end
         else if (clkEn) begin
-            if (fifoWrEn) begin
-                wrAddr <= wrAddr + 1;
-                full <= ((wrAddr == rdAddr - 1) && ~fifoRdEn);
+            if (startOfFrame) begin     // start each frame at 0, read starts at sofAddress.
+                wrAddr <= 0;
             end
+            else if (fifoWrEn) begin
+                wrAddr <= wrAddr + 1;
+            end
+
+            full <= ((wrAddr == rdAddr - 1) && ~fifoRdEn);  // should never reach end of buffer but could overrun
+
             if (myStartOfTrellis) begin
-                rdAddr <= sofAddress;  // skip any extraneous input data at first sync
+                rdAddr <= `SOF_ADDRESS;  // skip the pilot data at first sync
             end
             else if (fifoRdEn) begin
                 rdAddr <= rdAddr + 1;
@@ -89,7 +87,6 @@ module frameAlignment
 
     assign  rdAddr0 = {1'b0, rdAddr} + {{12{m_ndx0[3]}}, m_ndx0};   // sign extend to add signed offset
     assign  rdAddr1 = {1'b0, rdAddr} + {{12{m_ndx1[3]}}, m_ndx1};
-    assign  maxAddr = (m_ndx0 > m_ndx1) ? rdAddr0[14:0] : rdAddr1[14:0];
 
     RAM_2Reads_1WriteVerWrap #(
       .DATA_WIDTH  (36),
@@ -107,7 +104,7 @@ module frameAlignment
         .RdOutA(fifoRdData0),
         .RdOutB(fifoRdData1)
     );
-    wire    fifoOutputValid = (maxAddr + 1 < wrAddr) || (!wrAddr[14] && maxAddr[14]);  // highest read address less than write or write has wrapped to zero and read is still high
+    wire    fifoOutputValid = ((interpolate == 1) || (depth > 5) || (sofDetected == 1));  // allow enough room for worst case, don't leave interpolate hanging. When next startOfFrame wrAddr goes to 0, so keep reading to end of data section
     assign  doutReal0       = fifoRdData0[35:18];
     assign  doutImag0       = fifoRdData0[17:0];
     assign  doutReal1       = fifoRdData1[35:18];
@@ -134,6 +131,8 @@ module frameAlignment
             trellisInitCnt  <= 130; // inactive state
         end
         else if (clkEn) begin
+            depth <= wrAddr - rdAddr;
+
             if (myStartOfTrellis) begin
                 trellisInitCnt <= 128;
             end
@@ -143,7 +142,7 @@ module frameAlignment
 
             case (outputState)
                 `WAIT_VALID:  begin
-                    if ((fifoOutputValid == 1'b1) && (trellisInitCnt == 0)) begin
+                    if ((fifoOutputValid == 1) && (tdFifoFull == 0) && (trellisInitCnt == 0)) begin
                         fifoRdEn    <= 1;
                         if (CLKS_PER_OUTPUT > 1) begin
                             decimationCount <= decimationCount - 1;
@@ -176,7 +175,7 @@ module frameAlignment
                 interpolate <= (outputCount == 2'b10);
             end
 
-            if (clkEnOut && interpolate) begin
+            if (clkEnOut && interpolate) begin  // increment every 4 samples
                 sampleCount <= sampleCount + 1;
                 if (sampleCount == 3205) begin
                     lastSample <= 1'b1;
@@ -186,6 +185,6 @@ module frameAlignment
             end
         end
     end
-    assign  clkEnOut = (fifoRdEn && fifoOutputValid);
+    assign  clkEnOut = (fifoRdEn);
 
 endmodule
