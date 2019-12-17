@@ -37,13 +37,13 @@
     <Option Name="WTVcsLaunchSim" Val="0"/>
     <Option Name="WTRivieraLaunchSim" Val="0"/>
     <Option Name="WTActivehdlLaunchSim" Val="0"/>
-    <Option Name="WTXSimExportSim" Val="200"/>
-    <Option Name="WTModelSimExportSim" Val="201"/>
-    <Option Name="WTQuestaExportSim" Val="200"/>
-    <Option Name="WTIesExportSim" Val="200"/>
-    <Option Name="WTVcsExportSim" Val="200"/>
-    <Option Name="WTRivieraExportSim" Val="200"/>
-    <Option Name="WTActivehdlExportSim" Val="200"/>
+    <Option Name="WTXSimExportSim" Val="201"/>
+    <Option Name="WTModelSimExportSim" Val="202"/>
+    <Option Name="WTQuestaExportSim" Val="201"/>
+    <Option Name="WTIesExportSim" Val="201"/>
+    <Option Name="WTVcsExportSim" Val="201"/>
+    <Option Name="WTRivieraExportSim" Val="201"/>
+    <Option Name="WTActivehdlExportSim" Val="201"/>
     <Option Name="GenerateIPUpgradeLog" Val="TRUE"/>
     <Option Name="XSimRadix" Val="hex"/>
     <Option Name="XSimTimeUnit" Val="ns"/>
@@ -787,19 +787,18 @@
       </File>
       <File Path="$PSRCDIR/7K160/new/Debug160.xdc">
         <FileInfo>
+          <Attr Name="UserDisabled" Val="1"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
         </FileInfo>
       </File>
       <File Path="$PSRCDIR/7K160/new/PBlock160.xdc">
         <FileInfo>
-          <Attr Name="UserDisabled" Val="1"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
         </FileInfo>
       </File>
       <Config>
-        <Option Name="TargetConstrsFile" Val="$PSRCDIR/7K160/new/Debug160.xdc"/>
         <Option Name="ConstrsType" Val="XDC"/>
       </Config>
     </FileSet>
@@ -1372,7 +1371,7 @@
     </Simulator>
   </Simulators>
   <Runs Version="1" Minor="10">
-    <Run Id="synth160Default" Type="Ft3:Synth" SrcSet="sources_1" Part="xc7k325tfbg676-2" ConstrsSet="7K160" Description="Vivado Synthesis Defaults" State="current" Dir="$PRUNDIR/synth160Default" IncludeInArchive="true">
+    <Run Id="synth160Default" Type="Ft3:Synth" SrcSet="sources_1" Part="xc7k325tfbg676-2" ConstrsSet="7k325" Description="Vivado Synthesis Defaults" State="current" Dir="$PRUNDIR/synth160Default" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2017"/>
         <Step Id="synth_design"/>
@@ -1655,25 +1654,6 @@
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2017"/>
         <Step Id="synth_design"/>
-      </Strategy>
-      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
-      <ReportStrategy/>
-      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
-    </Run>
-    <Run Id="impl_27" Type="Ft2:EntireDesign" Part="xc7k325tfbg676-2" ConstrsSet="7K160" Description="Adds power optimization (power_opt_design) to reduce power consumption." State="current" Dir="$PRUNDIR/impl_27" SynthRun="synth160Default" IncludeInArchive="true">
-      <Strategy Version="1" Minor="2">
-        <StratHandle Name="Power_DefaultOpt" Flow="Vivado Implementation 2017"/>
-        <Step Id="init_design"/>
-        <Step Id="opt_design"/>
-        <Step Id="power_opt_design" EnableStepBool="1"/>
-        <Step Id="place_design"/>
-        <Step Id="post_place_power_opt_design"/>
-        <Step Id="phys_opt_design"/>
-        <Step Id="route_design"/>
-        <Step Id="post_route_phys_opt_design"/>
-        <Step Id="write_bitstream">
-          <Option Id="BinFile">1</Option>
-        </Step>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
       <ReportStrategy/>
@@ -2172,6 +2152,46 @@
         <Step Id="post_route_phys_opt_design"/>
         <Step Id="write_bitstream"/>
       </Strategy>
+      <ReportStrategy/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+    </Run>
+    <Run Id="impl_1" Type="Ft2:EntireDesign" Part="xc7k160tfbg676-2" ConstrsSet="7K160" Description="Default settings for Implementation." State="current" Dir="$PRUNDIR/impl_1" SynthRun="synth160Default" IncludeInArchive="true">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2017"/>
+        <Step Id="init_design"/>
+        <Step Id="opt_design"/>
+        <Step Id="power_opt_design"/>
+        <Step Id="place_design"/>
+        <Step Id="post_place_power_opt_design"/>
+        <Step Id="phys_opt_design"/>
+        <Step Id="route_design"/>
+        <Step Id="post_route_phys_opt_design"/>
+        <Step Id="write_bitstream">
+          <Option Id="NoBinaryBitfileBool">1</Option>
+          <Option Id="BinFile">1</Option>
+        </Step>
+      </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
+      <ReportStrategy/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+    </Run>
+    <Run Id="impl_2" Type="Ft2:EntireDesign" Part="xc7k325tfbg676-2" ConstrsSet="7k325NoILA" Description="Default settings for Implementation." Dir="$PRUNDIR/impl_2" SynthRun="synth160Default" IncludeInArchive="true">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2017"/>
+        <Step Id="init_design"/>
+        <Step Id="opt_design"/>
+        <Step Id="power_opt_design"/>
+        <Step Id="place_design"/>
+        <Step Id="post_place_power_opt_design"/>
+        <Step Id="phys_opt_design"/>
+        <Step Id="route_design"/>
+        <Step Id="post_route_phys_opt_design"/>
+        <Step Id="write_bitstream">
+          <Option Id="NoBinaryBitfileBool">1</Option>
+          <Option Id="BinFile">1</Option>
+        </Step>
+      </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
       <ReportStrategy/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
     </Run>

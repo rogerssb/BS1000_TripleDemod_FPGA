@@ -45,19 +45,9 @@ set_false_path -from [get_pins stcDemod/Trellis_u/td/stageSetup*/refValid_re*/C]
 set_false_path -from [get_pins {stcDemod/Trellis_u/td/stage*/wrAddr_reg[*]/C}] -to [get_pins {stcDemod/Trellis_u/td/stage*/acs*/cmag/mpy*/U0/i_mult/gDSP.gHYBRID.iHYBRID/single_mult.dsp_based.iDSP/inferred_dsp.reg_mult.m_reg_reg/B[*]}]
 
 set_false_path -from [get_ports {fb_data[*]}] -to [get_clocks sysClk]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+set_false_path -from [get_clocks -of_objects [get_pins systemClock/inst/mmcm_adv_inst/CLKOUT3]] -to [get_clocks -of_objects [get_pins systemClock/inst/mmcm_adv_inst/CLKOUT0]]
+set_false_path -from [get_pins stcDemod/Mag0GtMag1_reg/C] 
+set_false_path -from [get_pins {stcDemod/deltaTauEstSlv_reg[*]/C}] -to [get_pins {stcDemod/Trellis_u/deltaTauEst_reg[*]/D}]
+set_false_path -from [get_pins {stcDemod/Brik2_u/H*Est*_reg[*]/C}]
+set_false_path -from [get_pins {stcDemod/ResetSrc_reg[7]/C}] -to [get_pins stcDemod/Reset163_reg/D]
+set_false_path -to [get_pins stcDemod/FD/Active_reg/D]

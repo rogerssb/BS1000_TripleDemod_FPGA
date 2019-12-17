@@ -1,4 +1,4 @@
-{C:\Semco\Vivado\Demods\stcDemod/TrellisCheck.vhd} {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/TrellisCheck.vhd
+{C:\Semco\Vivado\Demods\stcDemod/PilotSync.vhd} {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/PilotSync.vhd
 Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Loading package STANDARD
 -- Loading package TEXTIO
@@ -7,8 +7,8 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Loading package fixed_pkg
 -- Loading package MATH_REAL
 -- Loading package Semco_pkg
--- Compiling entity TrellisCheck
--- Compiling architecture rtl of TrellisCheck
+-- Compiling entity PilotSync
+-- Compiling architecture rtl of PilotSync
 
 } {} {}} {C:\Semco\Vivado\Demods\stcDemod/testBenches/Brik1_tb.vhd} {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/testBenches/Brik1_tb.vhd
 Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
@@ -23,7 +23,7 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Compiling entity Brik1_tb
 -- Compiling architecture rtl of Brik1_tb
 
-} {} {}} {C:\Semco\Vivado\Demods\stcDemod/PilotSync.vhd} {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/PilotSync.vhd
+} {} {}} {C:\Semco\Vivado\Demods\stcDemod/TrellisCheck.vhd} {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/TrellisCheck.vhd
 Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Loading package STANDARD
 -- Loading package TEXTIO
@@ -32,15 +32,8 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Loading package fixed_pkg
 -- Loading package MATH_REAL
 -- Loading package Semco_pkg
--- Compiling entity PilotSync
--- Compiling architecture rtl of PilotSync
-
-} {} {}} C:/Semco/Vivado/Demods/stcMod/dualSoqpskMod.v {1 {vlog -work work +incdir+C:/Semco/Vivado/Demods +define+STC_MOD -stats=none C:/Semco/Vivado/Demods/stcMod/dualSoqpskMod.v
-Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
--- Compiling module dualSoqpskMod
-
-Top level modules:
-	dualSoqpskMod
+-- Compiling entity TrellisCheck
+-- Compiling architecture rtl of TrellisCheck
 
 } {} {}} C:/Semco/Vivado/Demods/stcMod/stcFramer.v {1 {vlog -work work +incdir+C:/Semco/Vivado/Demods +define+STC_MOD -stats=none C:/Semco/Vivado/Demods/stcMod/stcFramer.v
 Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
@@ -49,24 +42,19 @@ Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
 Top level modules:
 	stcFramer
 
+} {} {}} C:/Semco/Vivado/Demods/stcMod/dualSoqpskMod.v {1 {vlog -work work +incdir+C:/Semco/Vivado/Demods +define+STC_MOD -stats=none C:/Semco/Vivado/Demods/stcMod/dualSoqpskMod.v
+Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
+-- Compiling module dualSoqpskMod
+
+Top level modules:
+	dualSoqpskMod
+
 } {} {}} C:/Semco/Vivado/Demods/stcDemod/testBenches/stcModDemod_TB.v {1 {vlog -work work +incdir+C:/Semco/Vivado/Demods +define+STC_MOD -stats=none C:/Semco/Vivado/Demods/stcDemod/testBenches/stcModDemod_TB.v
 Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
 -- Compiling module stcModDemod_TB
 
 Top level modules:
 	stcModDemod_TB
-
-} {} {}} C:/Semco/Vivado/Demods/stcDemod/testBenches/STC_HW_TB.vhd {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/testBenches/STC_HW_TB.vhd
-Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
--- Loading package STANDARD
--- Loading package TEXTIO
--- Loading package std_logic_1164
--- Loading package NUMERIC_STD
--- Loading package fixed_pkg
--- Loading package MATH_REAL
--- Loading package Semco_pkg
--- Compiling entity STC_HW_TB
--- Compiling architecture rtl of STC_HW_TB
 
 } {} {}} C:/Semco/Vivado/Demods/stcDemod/testBenches/TrellisTB.vhd {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/testBenches/TrellisTB.vhd
 Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
@@ -81,14 +69,17 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Compiling entity TrellisTB
 -- Compiling architecture rtl of TrellisTB
 
-} {} {}} {C:\Semco\Vivado\Demods\stcDemod/Vivado/xc7k160t-IP-Vivado2015p1/SinCosLut/SinCosLut_sim_netlist.vhdl} {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/Vivado/xc7k160t-IP-Vivado2015p1/SinCosLut/SinCosLut_sim_netlist.vhdl
+} {} {}} C:/Semco/Vivado/Demods/stcDemod/testBenches/STC_HW_TB.vhd {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/testBenches/STC_HW_TB.vhd
 Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Loading package STANDARD
--- Compiling entity SinCosLut_dds_compiler_v6_0_13
--- Compiling architecture STRUCTURE of SinCosLut_dds_compiler_v6_0_13
--- Compiling entity SinCosLut
--- Compiling architecture STRUCTURE of SinCosLut
--- Loading entity SinCosLut_dds_compiler_v6_0_13
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package fixed_pkg
+-- Loading package MATH_REAL
+-- Loading package Semco_pkg
+-- Compiling entity STC_HW_TB
+-- Compiling architecture rtl of STC_HW_TB
 
 } {} {}} C:/Semco/Vivado/Demods/STC_StandAlone/STC_StandAlone.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0_sim_netlist.vhdl {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/STC_StandAlone/STC_StandAlone.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0_sim_netlist.vhdl
 Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
@@ -100,6 +91,15 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Compiling entity clk_wiz_0
 -- Compiling architecture STRUCTURE of clk_wiz_0
 -- Loading entity clk_wiz_0_clk_wiz_0_clk_wiz
+
+} {} {}} {C:\Semco\Vivado\Demods\stcDemod/Vivado/xc7k160t-IP-Vivado2015p1/SinCosLut/SinCosLut_sim_netlist.vhdl} {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/Vivado/xc7k160t-IP-Vivado2015p1/SinCosLut/SinCosLut_sim_netlist.vhdl
+Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
+-- Loading package STANDARD
+-- Compiling entity SinCosLut_dds_compiler_v6_0_13
+-- Compiling architecture STRUCTURE of SinCosLut_dds_compiler_v6_0_13
+-- Compiling entity SinCosLut
+-- Compiling architecture STRUCTURE of SinCosLut
+-- Loading entity SinCosLut_dds_compiler_v6_0_13
 
 } {} {}} {C:\Semco\Vivado\Demods\stcDemod/acsStage3.v} {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/acsStage3.v
 Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
@@ -192,18 +192,6 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Loading package VCOMPONENTS
 -- Compiling entity FireberdDrive
 -- Compiling architecture rtl of FireberdDrive
-
-} {} {}} {C:\Semco\Vivado\Demods\stcDemod/STC.vhd} {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/STC.vhd
-Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
--- Loading package STANDARD
--- Loading package TEXTIO
--- Loading package std_logic_1164
--- Loading package NUMERIC_STD
--- Loading package fixed_pkg
--- Loading package MATH_REAL
--- Loading package Semco_pkg
--- Compiling entity STC
--- Compiling architecture rtl of STC
 
 } {} {}} C:/Semco/Vivado/Demods/stcDemod/frameAlignment.v {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/frameAlignment.v
 Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
@@ -495,7 +483,7 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Compiling architecture STRUCTURE of Clk_93_X2
 -- Loading entity Clk_93_X2_Clk_93_X2_clk_wiz
 
-} {} {}} C:/Semco/Vivado/Demods/stcDemod/STC628.vhd {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/STC628.vhd
+} {} {}} C:/Semco/Vivado/Demods/stcDemod/STC628.vhd {0 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/STC628.vhd
 Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Loading package STANDARD
 -- Loading package TEXTIO
@@ -504,10 +492,13 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Loading package fixed_pkg
 -- Loading package MATH_REAL
 -- Loading package Semco_pkg
--- Compiling entity STC
--- Compiling architecture rtl of STC
+-- Compiling entity STC628
+-- Compiling architecture rtl of STC628
+** Error: C:/Semco/Vivado/Demods/stcDemod/STC628.vhd(692): (vcom-1136) Unknown identifier "ClkTD".
+** Error: C:/Semco/Vivado/Demods/stcDemod/STC628.vhd(693): (vcom-1136) Unknown identifier "ResetTD".
+** Error: C:/Semco/Vivado/Demods/stcDemod/STC628.vhd(791): VHDL Compiler exiting
 
-} {} {}} C:/Semco/Vivado/Demods/stcDemod/RAM_2Reads_1WriteVerWrap.vhd {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/RAM_2Reads_1WriteVerWrap.vhd
+} {12.0 15.0} {}} C:/Semco/Vivado/Demods/stcDemod/RAM_2Reads_1WriteVerWrap.vhd {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/RAM_2Reads_1WriteVerWrap.vhd
 Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Loading package STANDARD
 -- Loading package TEXTIO
@@ -517,24 +508,6 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Loading package fixed_pkg
 -- Compiling entity RAM_2Reads_1WriteVerWrap
 -- Compiling architecture rtl of RAM_2Reads_1WriteVerWrap
-
-} {} {}} C:/Semco/Vivado/Demods/stcDemod.srcs/sources_1/ip/systemClock/systemClock_sim_netlist.vhdl {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod.srcs/sources_1/ip/systemClock/systemClock_sim_netlist.vhdl
-Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
--- Loading package STANDARD
--- Loading package TEXTIO
--- Loading package std_logic_1164
--- Compiling entity systemClock_systemClock_clk_wiz
--- Compiling architecture STRUCTURE of systemClock_systemClock_clk_wiz
--- Compiling entity systemClock
--- Compiling architecture STRUCTURE of systemClock
--- Loading entity systemClock_systemClock_clk_wiz
-
-} {} {}} {C:\Semco\Vivado\Demods\stcDemod/acsStage7Wide.v} {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/acsStage7Wide.v
-Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
--- Compiling module acsStage7Wide
-
-Top level modules:
-	acsStage7Wide
 
 } {} {}} {C:\Semco\Vivado\Demods\stcDemod/Vivado/stcDemod.srcs/sources_1/ip/p0_i_c/p0_i_c_sim_netlist.vhdl} {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/Vivado/stcDemod.srcs/sources_1/ip/p0_i_c/p0_i_c_sim_netlist.vhdl
 Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
@@ -562,6 +535,24 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Compiling architecture STRUCTURE of p0_i_c
 -- Loading entity p0_i_c_blk_mem_gen_v8_3_6
 
+} {} {}} {C:\Semco\Vivado\Demods\stcDemod/acsStage7Wide.v} {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/acsStage7Wide.v
+Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
+-- Compiling module acsStage7Wide
+
+Top level modules:
+	acsStage7Wide
+
+} {} {}} C:/Semco/Vivado/Demods/stcDemod.srcs/sources_1/ip/systemClock/systemClock_sim_netlist.vhdl {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod.srcs/sources_1/ip/systemClock/systemClock_sim_netlist.vhdl
+Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity systemClock_systemClock_clk_wiz
+-- Compiling architecture STRUCTURE of systemClock_systemClock_clk_wiz
+-- Compiling entity systemClock
+-- Compiling architecture STRUCTURE of systemClock
+-- Loading entity systemClock_systemClock_clk_wiz
+
 } {} {}} {C:\Semco\Vivado\Demods\stcDemod/Semco_pkg.vhd} {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/Semco_pkg.vhd
 Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Loading package STANDARD
@@ -574,6 +565,27 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Compiling package body Semco_pkg
 -- Loading package Semco_pkg
 
+} {} {}} C:/Semco/Vivado/Demods/stcDemod/trellisDetector628.v {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/trellisDetector628.v
+Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
+-- Compiling module trellisDetector628
+
+Top level modules:
+	trellisDetector628
+
+} {} {}} C:/Semco/Vivado/Demods/stcMod/soqpsk_encoders_test.v {1 {vlog -work work +incdir+C:/Semco/Vivado/Demods +define+STC_MOD -stats=none C:/Semco/Vivado/Demods/stcMod/soqpsk_encoders_test.v
+Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
+-- Compiling module soqpsk_encoders_test
+
+Top level modules:
+	soqpsk_encoders_test
+
+} {} {}} {C:\Semco\Vivado\Demods\stcDemod/stageSetup.v} {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/stageSetup.v
+Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
+-- Compiling module stageSetup
+
+Top level modules:
+	stageSetup
+
 } {} {}} {C:\Semco\Vivado\Demods\stcDemod/Vivado/xc7k160t-IP-Vivado2015p1/twoPortDistMem56x16/twoPortDistMem56x16_sim_netlist.v} {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/Vivado/xc7k160t-IP-Vivado2015p1/twoPortDistMem56x16/twoPortDistMem56x16_sim_netlist.v
 Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
 -- Compiling module twoPortDistMem56x16
@@ -585,39 +597,6 @@ Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
 Top level modules:
 	twoPortDistMem56x16
 	glbl
-
-} {} {}} {C:\Semco\Vivado\Demods\stcDemod/stageSetup.v} {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/stageSetup.v
-Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
--- Compiling module stageSetup
-
-Top level modules:
-	stageSetup
-
-} {} {}} C:/Semco/Vivado/Demods/stcMod/soqpsk_encoders_test.v {1 {vlog -work work +incdir+C:/Semco/Vivado/Demods +define+STC_MOD -stats=none C:/Semco/Vivado/Demods/stcMod/soqpsk_encoders_test.v
-Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
--- Compiling module soqpsk_encoders_test
-
-Top level modules:
-	soqpsk_encoders_test
-
-} {} {}} C:/Semco/Vivado/Demods/stcDemod/trellisDetector628.v {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/trellisDetector628.v
-Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
--- Compiling module trellisDetector628
-
-Top level modules:
-	trellisDetector628
-
-} {} {}} {C:\Semco\Vivado\Demods\stcDemod/CmplxAbs.vhd} {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/CmplxAbs.vhd
-Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
--- Loading package STANDARD
--- Loading package TEXTIO
--- Loading package std_logic_1164
--- Loading package NUMERIC_STD
--- Loading package fixed_pkg
--- Loading package MATH_REAL
--- Loading package Semco_pkg
--- Compiling entity CmplxAbs
--- Compiling architecture rtl of CmplxAbs
 
 } {} {}} C:/Semco/Vivado/Demods/stcDemod/testBenches/OverlapAdd_tb.vhd {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/testBenches/OverlapAdd_tb.vhd
 Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
@@ -632,31 +611,24 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Compiling entity OverlapAdd_tb
 -- Compiling architecture rtl of OverlapAdd_tb
 
-} {} {}} {C:\Semco\Vivado\Demods\stcDemod/Vivado/stcDemod.srcs/sources_1/ip/p1_r_c/p1_r_c_sim_netlist.vhdl} {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/Vivado/stcDemod.srcs/sources_1/ip/p1_r_c/p1_r_c_sim_netlist.vhdl
+} {} {}} {C:\Semco\Vivado\Demods\stcDemod/CmplxAbs.vhd} {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/CmplxAbs.vhd
 Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Loading package STANDARD
 -- Loading package TEXTIO
 -- Loading package std_logic_1164
--- Compiling entity p1_r_c_blk_mem_gen_prim_wrapper
--- Compiling architecture STRUCTURE of p1_r_c_blk_mem_gen_prim_wrapper
--- Compiling entity p1_r_c_blk_mem_gen_prim_width
--- Compiling architecture STRUCTURE of p1_r_c_blk_mem_gen_prim_width
--- Loading entity p1_r_c_blk_mem_gen_prim_wrapper
--- Compiling entity p1_r_c_blk_mem_gen_generic_cstr
--- Compiling architecture STRUCTURE of p1_r_c_blk_mem_gen_generic_cstr
--- Loading entity p1_r_c_blk_mem_gen_prim_width
--- Compiling entity p1_r_c_blk_mem_gen_top
--- Compiling architecture STRUCTURE of p1_r_c_blk_mem_gen_top
--- Loading entity p1_r_c_blk_mem_gen_generic_cstr
--- Compiling entity p1_r_c_blk_mem_gen_v8_3_6_synth
--- Compiling architecture STRUCTURE of p1_r_c_blk_mem_gen_v8_3_6_synth
--- Loading entity p1_r_c_blk_mem_gen_top
--- Compiling entity p1_r_c_blk_mem_gen_v8_3_6
--- Compiling architecture STRUCTURE of p1_r_c_blk_mem_gen_v8_3_6
--- Loading entity p1_r_c_blk_mem_gen_v8_3_6_synth
--- Compiling entity p1_r_c
--- Compiling architecture STRUCTURE of p1_r_c
--- Loading entity p1_r_c_blk_mem_gen_v8_3_6
+-- Loading package NUMERIC_STD
+-- Loading package fixed_pkg
+-- Loading package MATH_REAL
+-- Loading package Semco_pkg
+-- Compiling entity CmplxAbs
+-- Compiling architecture rtl of CmplxAbs
+
+} {} {}} C:/Semco/Vivado/Demods/stcDemod/testStcDemod.v {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/testStcDemod.v
+Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
+-- Compiling module test
+
+Top level modules:
+	test
 
 } {} {}} {C:\Semco\Vivado\Demods\stcDemod/Vivado/stcDemod.srcs/sources_1/ip/Ram512x50DP3/Ram512x50DP3_sim_netlist.vhdl} {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/Vivado/stcDemod.srcs/sources_1/ip/Ram512x50DP3/Ram512x50DP3_sim_netlist.vhdl
 Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
@@ -684,12 +656,31 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Compiling architecture STRUCTURE of Ram512x50DP3
 -- Loading entity Ram512x50DP3_blk_mem_gen_v8_3_6
 
-} {} {}} C:/Semco/Vivado/Demods/stcDemod/testStcDemod.v {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/testStcDemod.v
-Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
--- Compiling module test
-
-Top level modules:
-	test
+} {} {}} {C:\Semco\Vivado\Demods\stcDemod/Vivado/stcDemod.srcs/sources_1/ip/p1_r_c/p1_r_c_sim_netlist.vhdl} {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/Vivado/stcDemod.srcs/sources_1/ip/p1_r_c/p1_r_c_sim_netlist.vhdl
+Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity p1_r_c_blk_mem_gen_prim_wrapper
+-- Compiling architecture STRUCTURE of p1_r_c_blk_mem_gen_prim_wrapper
+-- Compiling entity p1_r_c_blk_mem_gen_prim_width
+-- Compiling architecture STRUCTURE of p1_r_c_blk_mem_gen_prim_width
+-- Loading entity p1_r_c_blk_mem_gen_prim_wrapper
+-- Compiling entity p1_r_c_blk_mem_gen_generic_cstr
+-- Compiling architecture STRUCTURE of p1_r_c_blk_mem_gen_generic_cstr
+-- Loading entity p1_r_c_blk_mem_gen_prim_width
+-- Compiling entity p1_r_c_blk_mem_gen_top
+-- Compiling architecture STRUCTURE of p1_r_c_blk_mem_gen_top
+-- Loading entity p1_r_c_blk_mem_gen_generic_cstr
+-- Compiling entity p1_r_c_blk_mem_gen_v8_3_6_synth
+-- Compiling architecture STRUCTURE of p1_r_c_blk_mem_gen_v8_3_6_synth
+-- Loading entity p1_r_c_blk_mem_gen_top
+-- Compiling entity p1_r_c_blk_mem_gen_v8_3_6
+-- Compiling architecture STRUCTURE of p1_r_c_blk_mem_gen_v8_3_6
+-- Loading entity p1_r_c_blk_mem_gen_v8_3_6_synth
+-- Compiling entity p1_r_c
+-- Compiling architecture STRUCTURE of p1_r_c
+-- Loading entity p1_r_c_blk_mem_gen_v8_3_6
 
 } {} {}} C:/Semco/Vivado/Demods/stcDemod/Vivado/xc7k160t-IP-Vivado2015p1/fft_1k/sim/fft_1k.vhd {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/Vivado/xc7k160t-IP-Vivado2015p1/fft_1k/sim/fft_1k.vhd
 Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
@@ -699,6 +690,13 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Loading package NUMERIC_STD
 -- Compiling entity fft_1k
 -- Compiling architecture fft_1k_arch of fft_1k
+
+} {} {}} C:/Semco/Vivado/Demods/stcDemod/trellisProcess.v {1 {vlog -work work +define+TD_OLD -stats=none C:/Semco/Vivado/Demods/stcDemod/trellisProcess.v
+Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
+-- Compiling module trellisProcess
+
+Top level modules:
+	trellisProcess
 
 } {} {}} {C:\Semco\Vivado\Demods\stcDemod/DFT.vhd} {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/DFT.vhd
 Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
@@ -718,20 +716,6 @@ Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
 
 Top level modules:
 	acsStage1
-
-} {} {}} {C:\Semco\Vivado\Demods\stcDemod/Decimate512By64.vhd} {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/Decimate512By64.vhd
-Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
--- Loading package STANDARD
--- Loading package TEXTIO
--- Loading package std_logic_1164
--- Loading package NUMERIC_STD
--- Loading package fixed_pkg
--- Loading package MATH_REAL
--- Loading package Semco_pkg
--- Compiling entity Decimate512By64
--- Compiling architecture rtl of Decimate512By64
--- Compiling entity DecimateBy2
--- Compiling architecture rtl of DecimateBy2
 
 } {} {}} {C:\Semco\Vivado\Demods\stcDemod/Vivado/stcDemod.srcs/sources_1/ip/p1_i_c/p1_i_c_sim_netlist.vhdl} {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/Vivado/stcDemod.srcs/sources_1/ip/p1_i_c/p1_i_c_sim_netlist.vhdl
 Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
@@ -759,6 +743,20 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Compiling architecture STRUCTURE of p1_i_c
 -- Loading entity p1_i_c_blk_mem_gen_v8_3_6
 
+} {} {}} {C:\Semco\Vivado\Demods\stcDemod/Decimate512By64.vhd} {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/Decimate512By64.vhd
+Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package fixed_pkg
+-- Loading package MATH_REAL
+-- Loading package Semco_pkg
+-- Compiling entity Decimate512By64
+-- Compiling architecture rtl of Decimate512By64
+-- Compiling entity DecimateBy2
+-- Compiling architecture rtl of DecimateBy2
+
 } {} {}} {C:\Semco\Vivado\Demods\stcDemod/BurstDumpFIfo.vhd} {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/BurstDumpFIfo.vhd
 Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Loading package STANDARD
@@ -770,27 +768,6 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Loading package Semco_pkg
 -- Compiling entity BurstDumpFifo
 -- Compiling architecture rtl of BurstDumpFifo
-
-} {} {}} {C:\Semco\Vivado\Demods\stcDemod/Vivado/xc7k160t-IP-Vivado2015p1/DetectionFilter/DetectionFilter_sim_netlist.vhdl} {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/Vivado/xc7k160t-IP-Vivado2015p1/DetectionFilter/DetectionFilter_sim_netlist.vhdl
-Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
--- Loading package STANDARD
--- Compiling entity DetectionFilter_fir_compiler_v7_2_8
--- Compiling architecture STRUCTURE of DetectionFilter_fir_compiler_v7_2_8
--- Compiling entity DetectionFilter
--- Compiling architecture STRUCTURE of DetectionFilter
--- Loading entity DetectionFilter_fir_compiler_v7_2_8
-
-} {} {}} {C:\Semco\Vivado\Demods\stcDemod/DFT_Search.vhd} {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/DFT_Search.vhd
-Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
--- Loading package STANDARD
--- Loading package TEXTIO
--- Loading package std_logic_1164
--- Loading package NUMERIC_STD
--- Loading package fixed_pkg
--- Loading package MATH_REAL
--- Loading package Semco_pkg
--- Compiling entity DFT_Search
--- Compiling architecture rtl of DFT_Search
 
 } {} {}} {C:\Semco\Vivado\Demods\stcDemod/testBenches/Brik1_Hw_tb.vhd} {1 {vcom -work work -2008 -explicit -check_synthesis -stats=none C:/Semco/Vivado/Demods/stcDemod/testBenches/Brik1_Hw_tb.vhd
 Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
@@ -805,12 +782,49 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Compiling entity Brik1_Hw_tb
 -- Compiling architecture rtl of Brik1_Hw_tb
 
+} {} {}} {C:\Semco\Vivado\Demods\stcDemod/DFT_Search.vhd} {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/DFT_Search.vhd
+Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package fixed_pkg
+-- Loading package MATH_REAL
+-- Loading package Semco_pkg
+-- Compiling entity DFT_Search
+-- Compiling architecture rtl of DFT_Search
+
+} {} {}} {C:\Semco\Vivado\Demods\stcDemod/Vivado/xc7k160t-IP-Vivado2015p1/DetectionFilter/DetectionFilter_sim_netlist.vhdl} {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/Vivado/xc7k160t-IP-Vivado2015p1/DetectionFilter/DetectionFilter_sim_netlist.vhdl
+Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
+-- Loading package STANDARD
+-- Compiling entity DetectionFilter_fir_compiler_v7_2_8
+-- Compiling architecture STRUCTURE of DetectionFilter_fir_compiler_v7_2_8
+-- Compiling entity DetectionFilter
+-- Compiling architecture STRUCTURE of DetectionFilter
+-- Loading entity DetectionFilter_fir_compiler_v7_2_8
+
 } {} {}} {C:\Semco\Vivado\Demods\stcDemod/acsStage5.v} {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/acsStage5.v
 Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
 -- Compiling module acsStage5
 
 Top level modules:
 	acsStage5
+
+} {} {}} {C:\Semco\Vivado\Demods\stcDemod/trellisDetector.v} {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/trellisDetector.v
+Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
+-- Compiling module trellisDetector
+
+Top level modules:
+	trellisDetector
+
+} {} {}} C:/Semco/Vivado/Demods/stcDemod/Vivado/xc7k160t-IP-Vivado2015p1/mpy18x18/mpy18x18_sim_netlist.vhdl {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/Vivado/xc7k160t-IP-Vivado2015p1/mpy18x18/mpy18x18_sim_netlist.vhdl
+Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
+-- Loading package STANDARD
+-- Compiling entity mpy18x18_mult_gen_v12_0_12
+-- Compiling architecture STRUCTURE of mpy18x18_mult_gen_v12_0_12
+-- Compiling entity mpy18x18
+-- Compiling architecture STRUCTURE of mpy18x18
+-- Loading entity mpy18x18_mult_gen_v12_0_12
 
 } {} {}} {C:\Semco\Vivado\Demods\stcDemod/Vivado/xc7k160t-IP-Vivado2015p1/twoPortDistMem128x18/twoPortDistMem128x18_sim_netlist.v} {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/Vivado/xc7k160t-IP-Vivado2015p1/twoPortDistMem128x18/twoPortDistMem128x18_sim_netlist.v
 Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
@@ -824,21 +838,12 @@ Top level modules:
 	twoPortDistMem128x18
 	glbl
 
-} {} {}} C:/Semco/Vivado/Demods/stcDemod/Vivado/xc7k160t-IP-Vivado2015p1/mpy18x18/mpy18x18_sim_netlist.vhdl {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/Vivado/xc7k160t-IP-Vivado2015p1/mpy18x18/mpy18x18_sim_netlist.vhdl
-Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
--- Loading package STANDARD
--- Compiling entity mpy18x18_mult_gen_v12_0_12
--- Compiling architecture STRUCTURE of mpy18x18_mult_gen_v12_0_12
--- Compiling entity mpy18x18
--- Compiling architecture STRUCTURE of mpy18x18
--- Loading entity mpy18x18_mult_gen_v12_0_12
-
-} {} {}} {C:\Semco\Vivado\Demods\stcDemod/acsStage6Wide.v} {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/acsStage6Wide.v
+} {} {}} C:/Semco/Vivado/Demods/stcDemod/trellisProcess628.v {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/trellisProcess628.v
 Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
--- Compiling module acsStage6Wide
+-- Compiling module trellisProcess628
 
 Top level modules:
-	acsStage6Wide
+	trellisProcess628
 
 } {} {}} {C:\Semco\Vivado\Demods\stcDemod/CmplxMult.vhd} {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/CmplxMult.vhd
 Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
@@ -852,14 +857,14 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Compiling entity CmplxMult
 -- Compiling architecture rtl of CmplxMult
 
-} {} {}} C:/Semco/Vivado/Demods/stcDemod/trellisProcess628.v {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/trellisProcess628.v
+} {} {}} {C:\Semco\Vivado\Demods\stcDemod/acsStage6Wide.v} {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/acsStage6Wide.v
 Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
--- Compiling module trellisProcess628
+-- Compiling module acsStage6Wide
 
 Top level modules:
-	trellisProcess628
+	acsStage6Wide
 
-} {} {}} {C:\Semco\Vivado\Demods\stcDemod/Vivado/xc7k160t-IP-Vivado2015p1/twoPortBlkMem48x8/twoPortBlkMem48x8_sim_netlist.v} {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/Vivado/xc7k160t-IP-Vivado2015p1/twoPortBlkMem48x8/twoPortBlkMem48x8_sim_netlist.v
+} {} {}} C:/Semco/Vivado/Demods/stcDemod/Vivado/stcDemod.srcs/sources_1/ip/vio_Estimates/vio_Estimates_sim_netlist.vhdl {1 vcom\ -work\ work\ -2008\ -explicit\ -stats=none\ C:/Semco/Vivado/Demods/stcDemod/Vivado/stcDemod.srcs/sources_1/ip/vio_Estimates/vio_Estimates_sim_netlist.vhdl\nModel\ Technology\ ModelSim\ PE\ vcom\ 10.5c\ Compiler\ 2016.07\ Jul\ 21\ 2016\n--\ Loading\ package\ STANDARD\n--\ Loading\ package\ TEXTIO\n--\ Loading\ package\ std_logic_1164\n--\ Compiling\ entity\ vio_Estimates_vio_v3_0_16_decoder\n--\ Compiling\ architecture\ STRUCTURE\ of\ vio_Estimates_vio_v3_0_16_decoder\n--\ Compiling\ entity\ vio_Estimates_vio_v3_0_16_probe_out_one\n--\ Compiling\ architecture\ STRUCTURE\ of\ vio_Estimates_vio_v3_0_16_probe_out_one\n--\ Compiling\ entity\ \\vio_Estimates_vio_v3_0_16_probe_out_one__parameterized0\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\vio_Estimates_vio_v3_0_16_probe_out_one__parameterized0\\\n--\ Compiling\ entity\ \\vio_Estimates_vio_v3_0_16_probe_out_one__parameterized0_0\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\vio_Estimates_vio_v3_0_16_probe_out_one__parameterized0_0\\\n--\ Compiling\ entity\ \\vio_Estimates_vio_v3_0_16_probe_out_one__parameterized0_1\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\vio_Estimates_vio_v3_0_16_probe_out_one__parameterized0_1\\\n--\ Compiling\ entity\ \\vio_Estimates_vio_v3_0_16_probe_out_one__parameterized0_2\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\vio_Estimates_vio_v3_0_16_probe_out_one__parameterized0_2\\\n--\ Compiling\ entity\ \\vio_Estimates_vio_v3_0_16_probe_out_one__parameterized0_3\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\vio_Estimates_vio_v3_0_16_probe_out_one__parameterized0_3\\\n--\ Compiling\ entity\ \\vio_Estimates_vio_v3_0_16_probe_out_one__parameterized1\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\vio_Estimates_vio_v3_0_16_probe_out_one__parameterized1\\\n--\ Compiling\ entity\ \\vio_Estimates_vio_v3_0_16_probe_out_one__parameterized2\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\vio_Estimates_vio_v3_0_16_probe_out_one__parameterized2\\\n--\ Compiling\ entity\ vio_Estimates_vio_v3_0_16_probe_width\n--\ Compiling\ architecture\ STRUCTURE\ of\ vio_Estimates_vio_v3_0_16_probe_width\n--\ Compiling\ entity\ vio_Estimates_xsdbs_v1_0_2_xsdbs\n--\ Compiling\ architecture\ STRUCTURE\ of\ vio_Estimates_xsdbs_v1_0_2_xsdbs\n--\ Compiling\ entity\ vio_Estimates_vio_v3_0_16_probe_out_all\n--\ Compiling\ architecture\ STRUCTURE\ of\ vio_Estimates_vio_v3_0_16_probe_out_all\n--\ Loading\ entity\ vio_Estimates_vio_v3_0_16_probe_out_one\n--\ Loading\ entity\ \\vio_Estimates_vio_v3_0_16_probe_out_one__parameterized0\\\n--\ Loading\ entity\ \\vio_Estimates_vio_v3_0_16_probe_out_one__parameterized0_0\\\n--\ Loading\ entity\ \\vio_Estimates_vio_v3_0_16_probe_out_one__parameterized0_1\\\n--\ Loading\ entity\ \\vio_Estimates_vio_v3_0_16_probe_out_one__parameterized1\\\n--\ Loading\ entity\ \\vio_Estimates_vio_v3_0_16_probe_out_one__parameterized0_2\\\n--\ Loading\ entity\ \\vio_Estimates_vio_v3_0_16_probe_out_one__parameterized0_3\\\n--\ Loading\ entity\ \\vio_Estimates_vio_v3_0_16_probe_out_one__parameterized2\\\n--\ Compiling\ entity\ vio_Estimates_vio_v3_0_16_vio\n--\ Compiling\ architecture\ STRUCTURE\ of\ vio_Estimates_vio_v3_0_16_vio\n--\ Loading\ entity\ vio_Estimates_vio_v3_0_16_decoder\n--\ Loading\ entity\ vio_Estimates_vio_v3_0_16_probe_out_all\n--\ Loading\ entity\ vio_Estimates_vio_v3_0_16_probe_width\n--\ Loading\ entity\ vio_Estimates_xsdbs_v1_0_2_xsdbs\n--\ Compiling\ entity\ vio_Estimates\n--\ Compiling\ architecture\ STRUCTURE\ of\ vio_Estimates\n--\ Loading\ entity\ vio_Estimates_vio_v3_0_16_vio\n\n {} {}} C:/Semco/Vivado/Demods/STC_StandAlone/STC_StandAlone.srcs/sources_1/ip/vio_0/vio_0_sim_netlist.vhdl {1 vcom\ -work\ work\ -2008\ -explicit\ -stats=none\ C:/Semco/Vivado/Demods/STC_StandAlone/STC_StandAlone.srcs/sources_1/ip/vio_0/vio_0_sim_netlist.vhdl\nModel\ Technology\ ModelSim\ PE\ vcom\ 10.5c\ Compiler\ 2016.07\ Jul\ 21\ 2016\n--\ Loading\ package\ STANDARD\n--\ Loading\ package\ TEXTIO\n--\ Loading\ package\ std_logic_1164\n--\ Compiling\ entity\ vio_0_vio_v3_0_16_decoder\n--\ Compiling\ architecture\ STRUCTURE\ of\ vio_0_vio_v3_0_16_decoder\n--\ Compiling\ entity\ vio_0_vio_v3_0_16_probe_in_one\n--\ Compiling\ architecture\ STRUCTURE\ of\ vio_0_vio_v3_0_16_probe_in_one\n--\ Compiling\ entity\ vio_0_vio_v3_0_16_probe_out_one\n--\ Compiling\ architecture\ STRUCTURE\ of\ vio_0_vio_v3_0_16_probe_out_one\n--\ Compiling\ entity\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized0\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized0\\\n--\ Compiling\ entity\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized1\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized1\\\n--\ Compiling\ entity\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized1_0\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized1_0\\\n--\ Compiling\ entity\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized1_2\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized1_2\\\n--\ Compiling\ entity\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized1_3\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized1_3\\\n--\ Compiling\ entity\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized2\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized2\\\n--\ Compiling\ entity\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized2_1\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized2_1\\\n--\ Compiling\ entity\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized3\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized3\\\n--\ Compiling\ entity\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized4\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized4\\\n--\ Compiling\ entity\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized5\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized5\\\n--\ Compiling\ entity\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized6\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized6\\\n--\ Compiling\ entity\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized7\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized7\\\n--\ Compiling\ entity\ vio_0_vio_v3_0_16_probe_width\n--\ Compiling\ architecture\ STRUCTURE\ of\ vio_0_vio_v3_0_16_probe_width\n--\ Compiling\ entity\ vio_0_xsdbs_v1_0_2_xsdbs\n--\ Compiling\ architecture\ STRUCTURE\ of\ vio_0_xsdbs_v1_0_2_xsdbs\n--\ Compiling\ entity\ vio_0_vio_v3_0_16_probe_out_all\n--\ Compiling\ architecture\ STRUCTURE\ of\ vio_0_vio_v3_0_16_probe_out_all\n--\ Loading\ entity\ vio_0_vio_v3_0_16_probe_out_one\n--\ Loading\ entity\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized2\\\n--\ Loading\ entity\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized6\\\n--\ Loading\ entity\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized7\\\n--\ Loading\ entity\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized0\\\n--\ Loading\ entity\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized1\\\n--\ Loading\ entity\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized1_0\\\n--\ Loading\ entity\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized2_1\\\n--\ Loading\ entity\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized3\\\n--\ Loading\ entity\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized1_2\\\n--\ Loading\ entity\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized1_3\\\n--\ Loading\ entity\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized4\\\n--\ Loading\ entity\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized5\\\n--\ Compiling\ entity\ vio_0_vio_v3_0_16_vio\n--\ Compiling\ architecture\ STRUCTURE\ of\ vio_0_vio_v3_0_16_vio\n--\ Loading\ entity\ vio_0_vio_v3_0_16_decoder\n--\ Loading\ entity\ vio_0_vio_v3_0_16_probe_in_one\n--\ Loading\ entity\ vio_0_vio_v3_0_16_probe_out_all\n--\ Loading\ entity\ vio_0_vio_v3_0_16_probe_width\n--\ Loading\ entity\ vio_0_xsdbs_v1_0_2_xsdbs\n--\ Compiling\ entity\ vio_0\n--\ Compiling\ architecture\ STRUCTURE\ of\ vio_0\n--\ Loading\ entity\ vio_0_vio_v3_0_16_vio\n\n {} {}} {C:\Semco\Vivado\Demods\stcDemod/Vivado/xc7k160t-IP-Vivado2015p1/twoPortBlkMem48x8/twoPortBlkMem48x8_sim_netlist.v} {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/Vivado/xc7k160t-IP-Vivado2015p1/twoPortBlkMem48x8/twoPortBlkMem48x8_sim_netlist.v
 Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
 -- Compiling module twoPortBlkMem48x8
 -- Compiling module twoPortBlkMem48x8_blk_mem_gen_generic_cstr
@@ -874,7 +879,7 @@ Top level modules:
 	twoPortBlkMem48x8
 	glbl
 
-} {} {}} C:/Semco/Vivado/Demods/STC_StandAlone/STC_StandAlone.srcs/sources_1/ip/vio_0/vio_0_sim_netlist.vhdl {1 vcom\ -work\ work\ -2008\ -explicit\ -stats=none\ C:/Semco/Vivado/Demods/STC_StandAlone/STC_StandAlone.srcs/sources_1/ip/vio_0/vio_0_sim_netlist.vhdl\nModel\ Technology\ ModelSim\ PE\ vcom\ 10.5c\ Compiler\ 2016.07\ Jul\ 21\ 2016\n--\ Loading\ package\ STANDARD\n--\ Loading\ package\ TEXTIO\n--\ Loading\ package\ std_logic_1164\n--\ Compiling\ entity\ vio_0_vio_v3_0_16_decoder\n--\ Compiling\ architecture\ STRUCTURE\ of\ vio_0_vio_v3_0_16_decoder\n--\ Compiling\ entity\ vio_0_vio_v3_0_16_probe_in_one\n--\ Compiling\ architecture\ STRUCTURE\ of\ vio_0_vio_v3_0_16_probe_in_one\n--\ Compiling\ entity\ vio_0_vio_v3_0_16_probe_out_one\n--\ Compiling\ architecture\ STRUCTURE\ of\ vio_0_vio_v3_0_16_probe_out_one\n--\ Compiling\ entity\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized0\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized0\\\n--\ Compiling\ entity\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized1\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized1\\\n--\ Compiling\ entity\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized1_0\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized1_0\\\n--\ Compiling\ entity\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized1_2\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized1_2\\\n--\ Compiling\ entity\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized1_3\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized1_3\\\n--\ Compiling\ entity\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized2\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized2\\\n--\ Compiling\ entity\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized2_1\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized2_1\\\n--\ Compiling\ entity\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized3\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized3\\\n--\ Compiling\ entity\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized4\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized4\\\n--\ Compiling\ entity\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized5\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized5\\\n--\ Compiling\ entity\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized6\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized6\\\n--\ Compiling\ entity\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized7\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized7\\\n--\ Compiling\ entity\ vio_0_vio_v3_0_16_probe_width\n--\ Compiling\ architecture\ STRUCTURE\ of\ vio_0_vio_v3_0_16_probe_width\n--\ Compiling\ entity\ vio_0_xsdbs_v1_0_2_xsdbs\n--\ Compiling\ architecture\ STRUCTURE\ of\ vio_0_xsdbs_v1_0_2_xsdbs\n--\ Compiling\ entity\ vio_0_vio_v3_0_16_probe_out_all\n--\ Compiling\ architecture\ STRUCTURE\ of\ vio_0_vio_v3_0_16_probe_out_all\n--\ Loading\ entity\ vio_0_vio_v3_0_16_probe_out_one\n--\ Loading\ entity\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized2\\\n--\ Loading\ entity\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized6\\\n--\ Loading\ entity\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized7\\\n--\ Loading\ entity\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized0\\\n--\ Loading\ entity\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized1\\\n--\ Loading\ entity\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized1_0\\\n--\ Loading\ entity\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized2_1\\\n--\ Loading\ entity\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized3\\\n--\ Loading\ entity\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized1_2\\\n--\ Loading\ entity\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized1_3\\\n--\ Loading\ entity\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized4\\\n--\ Loading\ entity\ \\vio_0_vio_v3_0_16_probe_out_one__parameterized5\\\n--\ Compiling\ entity\ vio_0_vio_v3_0_16_vio\n--\ Compiling\ architecture\ STRUCTURE\ of\ vio_0_vio_v3_0_16_vio\n--\ Loading\ entity\ vio_0_vio_v3_0_16_decoder\n--\ Loading\ entity\ vio_0_vio_v3_0_16_probe_in_one\n--\ Loading\ entity\ vio_0_vio_v3_0_16_probe_out_all\n--\ Loading\ entity\ vio_0_vio_v3_0_16_probe_width\n--\ Loading\ entity\ vio_0_xsdbs_v1_0_2_xsdbs\n--\ Compiling\ entity\ vio_0\n--\ Compiling\ architecture\ STRUCTURE\ of\ vio_0\n--\ Loading\ entity\ vio_0_vio_v3_0_16_vio\n\n {} {}} C:/Semco/Vivado/Demods/stcDemod/Vivado/stcDemod.srcs/sources_1/ip/vio_Estimates/vio_Estimates_sim_netlist.vhdl {1 vcom\ -work\ work\ -2008\ -explicit\ -stats=none\ C:/Semco/Vivado/Demods/stcDemod/Vivado/stcDemod.srcs/sources_1/ip/vio_Estimates/vio_Estimates_sim_netlist.vhdl\nModel\ Technology\ ModelSim\ PE\ vcom\ 10.5c\ Compiler\ 2016.07\ Jul\ 21\ 2016\n--\ Loading\ package\ STANDARD\n--\ Loading\ package\ TEXTIO\n--\ Loading\ package\ std_logic_1164\n--\ Compiling\ entity\ vio_Estimates_vio_v3_0_16_decoder\n--\ Compiling\ architecture\ STRUCTURE\ of\ vio_Estimates_vio_v3_0_16_decoder\n--\ Compiling\ entity\ vio_Estimates_vio_v3_0_16_probe_out_one\n--\ Compiling\ architecture\ STRUCTURE\ of\ vio_Estimates_vio_v3_0_16_probe_out_one\n--\ Compiling\ entity\ \\vio_Estimates_vio_v3_0_16_probe_out_one__parameterized0\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\vio_Estimates_vio_v3_0_16_probe_out_one__parameterized0\\\n--\ Compiling\ entity\ \\vio_Estimates_vio_v3_0_16_probe_out_one__parameterized0_0\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\vio_Estimates_vio_v3_0_16_probe_out_one__parameterized0_0\\\n--\ Compiling\ entity\ \\vio_Estimates_vio_v3_0_16_probe_out_one__parameterized0_1\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\vio_Estimates_vio_v3_0_16_probe_out_one__parameterized0_1\\\n--\ Compiling\ entity\ \\vio_Estimates_vio_v3_0_16_probe_out_one__parameterized0_2\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\vio_Estimates_vio_v3_0_16_probe_out_one__parameterized0_2\\\n--\ Compiling\ entity\ \\vio_Estimates_vio_v3_0_16_probe_out_one__parameterized0_3\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\vio_Estimates_vio_v3_0_16_probe_out_one__parameterized0_3\\\n--\ Compiling\ entity\ \\vio_Estimates_vio_v3_0_16_probe_out_one__parameterized1\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\vio_Estimates_vio_v3_0_16_probe_out_one__parameterized1\\\n--\ Compiling\ entity\ \\vio_Estimates_vio_v3_0_16_probe_out_one__parameterized2\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\vio_Estimates_vio_v3_0_16_probe_out_one__parameterized2\\\n--\ Compiling\ entity\ vio_Estimates_vio_v3_0_16_probe_width\n--\ Compiling\ architecture\ STRUCTURE\ of\ vio_Estimates_vio_v3_0_16_probe_width\n--\ Compiling\ entity\ vio_Estimates_xsdbs_v1_0_2_xsdbs\n--\ Compiling\ architecture\ STRUCTURE\ of\ vio_Estimates_xsdbs_v1_0_2_xsdbs\n--\ Compiling\ entity\ vio_Estimates_vio_v3_0_16_probe_out_all\n--\ Compiling\ architecture\ STRUCTURE\ of\ vio_Estimates_vio_v3_0_16_probe_out_all\n--\ Loading\ entity\ vio_Estimates_vio_v3_0_16_probe_out_one\n--\ Loading\ entity\ \\vio_Estimates_vio_v3_0_16_probe_out_one__parameterized0\\\n--\ Loading\ entity\ \\vio_Estimates_vio_v3_0_16_probe_out_one__parameterized0_0\\\n--\ Loading\ entity\ \\vio_Estimates_vio_v3_0_16_probe_out_one__parameterized0_1\\\n--\ Loading\ entity\ \\vio_Estimates_vio_v3_0_16_probe_out_one__parameterized1\\\n--\ Loading\ entity\ \\vio_Estimates_vio_v3_0_16_probe_out_one__parameterized0_2\\\n--\ Loading\ entity\ \\vio_Estimates_vio_v3_0_16_probe_out_one__parameterized0_3\\\n--\ Loading\ entity\ \\vio_Estimates_vio_v3_0_16_probe_out_one__parameterized2\\\n--\ Compiling\ entity\ vio_Estimates_vio_v3_0_16_vio\n--\ Compiling\ architecture\ STRUCTURE\ of\ vio_Estimates_vio_v3_0_16_vio\n--\ Loading\ entity\ vio_Estimates_vio_v3_0_16_decoder\n--\ Loading\ entity\ vio_Estimates_vio_v3_0_16_probe_out_all\n--\ Loading\ entity\ vio_Estimates_vio_v3_0_16_probe_width\n--\ Loading\ entity\ vio_Estimates_xsdbs_v1_0_2_xsdbs\n--\ Compiling\ entity\ vio_Estimates\n--\ Compiling\ architecture\ STRUCTURE\ of\ vio_Estimates\n--\ Loading\ entity\ vio_Estimates_vio_v3_0_16_vio\n\n {} {}} {C:\Semco\Vivado\Demods\stcDemod/OverlapAddAbs.vhd} {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/OverlapAddAbs.vhd
+} {} {}} C:/Semco/Vivado/Demods/stcDemod/HalfPilotPhase.vhd {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/HalfPilotPhase.vhd
 Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Loading package STANDARD
 -- Loading package TEXTIO
@@ -883,8 +888,8 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Loading package fixed_pkg
 -- Loading package MATH_REAL
 -- Loading package Semco_pkg
--- Compiling entity OverlapAddAbs
--- Compiling architecture rtl of OverlapAddAbs
+-- Compiling entity HalfPilotPhase
+-- Compiling architecture rtl of HalfPilotPhase
 
 } {} {}} {C:\Semco\Vivado\Demods\stcDemod/SinvLuts.vhd} {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/SinvLuts.vhd
 Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
@@ -898,7 +903,7 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Compiling entity SinvLuts
 -- Compiling architecture rtl of SinvLuts
 
-} {} {}} C:/Semco/Vivado/Demods/stcDemod/HalfPilotPhase.vhd {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/HalfPilotPhase.vhd
+} {} {}} {C:\Semco\Vivado\Demods\stcDemod/OverlapAddAbs.vhd} {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/OverlapAddAbs.vhd
 Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Loading package STANDARD
 -- Loading package TEXTIO
@@ -907,8 +912,18 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Loading package fixed_pkg
 -- Loading package MATH_REAL
 -- Loading package Semco_pkg
--- Compiling entity HalfPilotPhase
--- Compiling architecture rtl of HalfPilotPhase
+-- Compiling entity OverlapAddAbs
+-- Compiling architecture rtl of OverlapAddAbs
+
+} {} {}} {C:\Semco\Vivado\Demods\stcDemod/Vivado/xc7k160t-IP-Vivado2015p1/cmpy18x18/cmpy18x18_funcsim.v} {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/Vivado/xc7k160t-IP-Vivado2015p1/cmpy18x18/cmpy18x18_funcsim.v
+Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
+-- Compiling module cmpy18x18
+-- Compiling module cmpy18x18_cmpy_v6_0
+-- Compiling module glbl
+
+Top level modules:
+	cmpy18x18
+	glbl
 
 } {} {}} C:/Semco/Vivado/Demods/stcDemod/ReadFilesFolder/ROM_2D.vhd {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/ReadFilesFolder/ROM_2D.vhd
 Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
@@ -922,22 +937,25 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Compiling entity ROM_2D
 -- Compiling architecture rtl of ROM_2D
 
-} {} {}} {C:\Semco\Vivado\Demods\stcDemod/Vivado/xc7k160t-IP-Vivado2015p1/cmpy18x18/cmpy18x18_funcsim.v} {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/Vivado/xc7k160t-IP-Vivado2015p1/cmpy18x18/cmpy18x18_funcsim.v
+} {} {}} {C:\Semco\Vivado\Demods\stcDemod/acsOp.v} {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/acsOp.v
 Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
--- Compiling module cmpy18x18
--- Compiling module cmpy18x18_cmpy_v6_0
--- Compiling module glbl
+-- Compiling module acsOp
 
 Top level modules:
-	cmpy18x18
-	glbl
+	acsOp
 
-} {} {}} {C:\Semco\Vivado\Demods\stcDemod/cmagSquared18.v} {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/cmagSquared18.v
-Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
--- Compiling module cmagSquared18
-
-Top level modules:
-	cmagSquared18
+} {} {}} C:/Semco/Vivado/Demods/stcDemod/testBenches/PD_Hw_tb.vhd {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/testBenches/PD_Hw_tb.vhd
+Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package std_logic_textio
+-- Loading package NUMERIC_STD
+-- Loading package fixed_pkg
+-- Loading package MATH_REAL
+-- Loading package Semco_pkg
+-- Compiling entity PD_Hw_tb
+-- Compiling architecture rtl of PD_Hw_tb
 
 } {} {}} {C:\Semco\Vivado\Demods\stcDemod/fixed_pkg_2008.vhd} {2 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/fixed_pkg_2008.vhd
 Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
@@ -955,25 +973,12 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 ** Warning: C:/Semco/Vivado/Demods/stcDemod/fixed_pkg_2008.vhd(1285): (vcom-1246) Range 0 downto 1 is null.
 ** Warning: C:/Semco/Vivado/Demods/stcDemod/fixed_pkg_2008.vhd(6240): (vcom-1246) Range 2 to 1 is null.
 
-} {} {}} C:/Semco/Vivado/Demods/stcDemod/testBenches/PD_Hw_tb.vhd {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/testBenches/PD_Hw_tb.vhd
-Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
--- Loading package STANDARD
--- Loading package TEXTIO
--- Loading package std_logic_1164
--- Loading package std_logic_textio
--- Loading package NUMERIC_STD
--- Loading package fixed_pkg
--- Loading package MATH_REAL
--- Loading package Semco_pkg
--- Compiling entity PD_Hw_tb
--- Compiling architecture rtl of PD_Hw_tb
-
-} {} {}} {C:\Semco\Vivado\Demods\stcDemod/acsOp.v} {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/acsOp.v
+} {} {}} {C:\Semco\Vivado\Demods\stcDemod/cmagSquared18.v} {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/cmagSquared18.v
 Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
--- Compiling module acsOp
+-- Compiling module cmagSquared18
 
 Top level modules:
-	acsOp
+	cmagSquared18
 
 } {} {}} C:/Semco/Vivado/Demods/stcMod/soqpskMod.v {1 {vlog -work work +incdir+C:/Semco/Vivado/Demods +define+STC_MOD -stats=none C:/Semco/Vivado/Demods/stcMod/soqpskMod.v
 Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
@@ -981,6 +986,13 @@ Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
 
 Top level modules:
 	soqpskMod
+
+} {} {}} {C:\Semco\Vivado\Demods\stcDemod/acsStage2.v} {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/acsStage2.v
+Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
+-- Compiling module acsStage2
+
+Top level modules:
+	acsStage2
 
 } {} {}} {C:\Semco\Vivado\Demods\stcDemod/Brik1.vhd} {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/Brik1.vhd
 Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
@@ -994,12 +1006,12 @@ Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016
 -- Compiling entity Brik1
 -- Compiling architecture rtl of Brik1
 
-} {} {}} {C:\Semco\Vivado\Demods\stcDemod/acsStage2.v} {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/acsStage2.v
+} {} {}} C:/Semco/Vivado/Demods/stcDemod/frameAlignment628.v {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/frameAlignment628.v
 Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
--- Compiling module acsStage2
+-- Compiling module frameAlignment628
 
 Top level modules:
-	acsStage2
+	frameAlignment628
 
 } {} {}} C:/Semco/Vivado/Demods/stcMod/shift32to32.v {1 {vlog -work work +incdir+C:/Semco/Vivado/Demods +define+STC_MOD -stats=none C:/Semco/Vivado/Demods/stcMod/shift32to32.v
 Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
@@ -1008,12 +1020,12 @@ Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
 Top level modules:
 	shift32to32
 
-} {} {}} C:/Semco/Vivado/Demods/stcDemod/frameAlignment628.v {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/frameAlignment628.v
+} {} {}} C:/Semco/Vivado/Demods/stcDemod.srcs/sources_1/ip/Fifo8k4to1/Fifo8k4to1_sim_netlist.vhdl {1 vcom\ -work\ work\ -2008\ -explicit\ -stats=none\ C:/Semco/Vivado/Demods/stcDemod.srcs/sources_1/ip/Fifo8k4to1/Fifo8k4to1_sim_netlist.vhdl\nModel\ Technology\ ModelSim\ PE\ vcom\ 10.5c\ Compiler\ 2016.07\ Jul\ 21\ 2016\n--\ Loading\ package\ STANDARD\n--\ Loading\ package\ TEXTIO\n--\ Loading\ package\ std_logic_1164\n--\ Compiling\ entity\ Fifo8k4to1_blk_mem_gen_prim_wrapper\n--\ Compiling\ architecture\ STRUCTURE\ of\ Fifo8k4to1_blk_mem_gen_prim_wrapper\n--\ Compiling\ entity\ Fifo8k4to1_compare\n--\ Compiling\ architecture\ STRUCTURE\ of\ Fifo8k4to1_compare\n--\ Compiling\ entity\ Fifo8k4to1_compare_4\n--\ Compiling\ architecture\ STRUCTURE\ of\ Fifo8k4to1_compare_4\n--\ Compiling\ entity\ \\Fifo8k4to1_compare__parameterized0\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\Fifo8k4to1_compare__parameterized0\\\n--\ Compiling\ entity\ \\Fifo8k4to1_compare__parameterized0_3\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\Fifo8k4to1_compare__parameterized0_3\\\n--\ Compiling\ entity\ Fifo8k4to1_rd_bin_cntr\n--\ Compiling\ architecture\ STRUCTURE\ of\ Fifo8k4to1_rd_bin_cntr\n--\ Compiling\ entity\ Fifo8k4to1_synchronizer_ff\n--\ Compiling\ architecture\ STRUCTURE\ of\ Fifo8k4to1_synchronizer_ff\n--\ Compiling\ entity\ Fifo8k4to1_synchronizer_ff_0\n--\ Compiling\ architecture\ STRUCTURE\ of\ Fifo8k4to1_synchronizer_ff_0\n--\ Compiling\ entity\ Fifo8k4to1_synchronizer_ff_1\n--\ Compiling\ architecture\ STRUCTURE\ of\ Fifo8k4to1_synchronizer_ff_1\n--\ Compiling\ entity\ Fifo8k4to1_synchronizer_ff_2\n--\ Compiling\ architecture\ STRUCTURE\ of\ Fifo8k4to1_synchronizer_ff_2\n--\ Compiling\ entity\ \\Fifo8k4to1_synchronizer_ff__parameterized0\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\Fifo8k4to1_synchronizer_ff__parameterized0\\\n--\ Compiling\ entity\ \\Fifo8k4to1_synchronizer_ff__parameterized0_5\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\Fifo8k4to1_synchronizer_ff__parameterized0_5\\\n--\ Compiling\ entity\ \\Fifo8k4to1_synchronizer_ff__parameterized1\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\Fifo8k4to1_synchronizer_ff__parameterized1\\\n--\ Compiling\ entity\ \\Fifo8k4to1_synchronizer_ff__parameterized1_6\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\Fifo8k4to1_synchronizer_ff__parameterized1_6\\\n--\ Compiling\ entity\ Fifo8k4to1_wr_bin_cntr\n--\ Compiling\ architecture\ STRUCTURE\ of\ Fifo8k4to1_wr_bin_cntr\n--\ Compiling\ entity\ Fifo8k4to1_wr_dc_as\n--\ Compiling\ architecture\ STRUCTURE\ of\ Fifo8k4to1_wr_dc_as\n--\ Compiling\ entity\ Fifo8k4to1_wr_pf_as\n--\ Compiling\ architecture\ STRUCTURE\ of\ Fifo8k4to1_wr_pf_as\n--\ Compiling\ entity\ Fifo8k4to1_blk_mem_gen_prim_width\n--\ Compiling\ architecture\ STRUCTURE\ of\ Fifo8k4to1_blk_mem_gen_prim_width\n--\ Loading\ entity\ Fifo8k4to1_blk_mem_gen_prim_wrapper\n--\ Compiling\ entity\ Fifo8k4to1_clk_x_pntrs\n--\ Compiling\ architecture\ STRUCTURE\ of\ Fifo8k4to1_clk_x_pntrs\n--\ Loading\ entity\ \\Fifo8k4to1_synchronizer_ff__parameterized0\\\n--\ Loading\ entity\ \\Fifo8k4to1_synchronizer_ff__parameterized1\\\n--\ Loading\ entity\ \\Fifo8k4to1_synchronizer_ff__parameterized0_5\\\n--\ Loading\ entity\ \\Fifo8k4to1_synchronizer_ff__parameterized1_6\\\n--\ Compiling\ entity\ Fifo8k4to1_rd_status_flags_as\n--\ Compiling\ architecture\ STRUCTURE\ of\ Fifo8k4to1_rd_status_flags_as\n--\ Loading\ entity\ Fifo8k4to1_compare\n--\ Loading\ entity\ Fifo8k4to1_compare_4\n--\ Compiling\ entity\ Fifo8k4to1_reset_blk_ramfifo\n--\ Compiling\ architecture\ STRUCTURE\ of\ Fifo8k4to1_reset_blk_ramfifo\n--\ Loading\ entity\ Fifo8k4to1_synchronizer_ff\n--\ Loading\ entity\ Fifo8k4to1_synchronizer_ff_0\n--\ Loading\ entity\ Fifo8k4to1_synchronizer_ff_1\n--\ Loading\ entity\ Fifo8k4to1_synchronizer_ff_2\n--\ Compiling\ entity\ Fifo8k4to1_wr_status_flags_as\n--\ Compiling\ architecture\ STRUCTURE\ of\ Fifo8k4to1_wr_status_flags_as\n--\ Loading\ entity\ \\Fifo8k4to1_compare__parameterized0\\\n--\ Loading\ entity\ \\Fifo8k4to1_compare__parameterized0_3\\\n--\ Compiling\ entity\ Fifo8k4to1_blk_mem_gen_generic_cstr\n--\ Compiling\ architecture\ STRUCTURE\ of\ Fifo8k4to1_blk_mem_gen_generic_cstr\n--\ Loading\ entity\ Fifo8k4to1_blk_mem_gen_prim_width\n--\ Compiling\ entity\ Fifo8k4to1_rd_logic\n--\ Compiling\ architecture\ STRUCTURE\ of\ Fifo8k4to1_rd_logic\n--\ Loading\ entity\ Fifo8k4to1_rd_status_flags_as\n--\ Loading\ entity\ Fifo8k4to1_rd_bin_cntr\n--\ Compiling\ entity\ Fifo8k4to1_wr_logic\n--\ Compiling\ architecture\ STRUCTURE\ of\ Fifo8k4to1_wr_logic\n--\ Loading\ entity\ Fifo8k4to1_wr_pf_as\n--\ Loading\ entity\ Fifo8k4to1_wr_dc_as\n--\ Loading\ entity\ Fifo8k4to1_wr_status_flags_as\n--\ Loading\ entity\ Fifo8k4to1_wr_bin_cntr\n--\ Compiling\ entity\ Fifo8k4to1_blk_mem_gen_top\n--\ Compiling\ architecture\ STRUCTURE\ of\ Fifo8k4to1_blk_mem_gen_top\n--\ Loading\ entity\ Fifo8k4to1_blk_mem_gen_generic_cstr\n--\ Compiling\ entity\ Fifo8k4to1_blk_mem_gen_v8_3_6_synth\n--\ Compiling\ architecture\ STRUCTURE\ of\ Fifo8k4to1_blk_mem_gen_v8_3_6_synth\n--\ Loading\ entity\ Fifo8k4to1_blk_mem_gen_top\n--\ Compiling\ entity\ Fifo8k4to1_blk_mem_gen_v8_3_6\n--\ Compiling\ architecture\ STRUCTURE\ of\ Fifo8k4to1_blk_mem_gen_v8_3_6\n--\ Loading\ entity\ Fifo8k4to1_blk_mem_gen_v8_3_6_synth\n--\ Compiling\ entity\ Fifo8k4to1_memory\n--\ Compiling\ architecture\ STRUCTURE\ of\ Fifo8k4to1_memory\n--\ Loading\ entity\ Fifo8k4to1_blk_mem_gen_v8_3_6\n--\ Compiling\ entity\ Fifo8k4to1_fifo_generator_ramfifo\n--\ Compiling\ architecture\ STRUCTURE\ of\ Fifo8k4to1_fifo_generator_ramfifo\n--\ Loading\ entity\ Fifo8k4to1_clk_x_pntrs\n--\ Loading\ entity\ Fifo8k4to1_rd_logic\n--\ Loading\ entity\ Fifo8k4to1_wr_logic\n--\ Loading\ entity\ Fifo8k4to1_memory\n--\ Loading\ entity\ Fifo8k4to1_reset_blk_ramfifo\n--\ Compiling\ entity\ Fifo8k4to1_fifo_generator_top\n--\ Compiling\ architecture\ STRUCTURE\ of\ Fifo8k4to1_fifo_generator_top\n--\ Loading\ entity\ Fifo8k4to1_fifo_generator_ramfifo\n--\ Compiling\ entity\ Fifo8k4to1_fifo_generator_v13_1_4_synth\n--\ Compiling\ architecture\ STRUCTURE\ of\ Fifo8k4to1_fifo_generator_v13_1_4_synth\n--\ Loading\ entity\ Fifo8k4to1_fifo_generator_top\n--\ Compiling\ entity\ Fifo8k4to1_fifo_generator_v13_1_4\n--\ Compiling\ architecture\ STRUCTURE\ of\ Fifo8k4to1_fifo_generator_v13_1_4\n--\ Loading\ entity\ Fifo8k4to1_fifo_generator_v13_1_4_synth\n--\ Compiling\ entity\ Fifo8k4to1\n--\ Compiling\ architecture\ STRUCTURE\ of\ Fifo8k4to1\n--\ Loading\ entity\ Fifo8k4to1_fifo_generator_v13_1_4\n\n {} {}} C:/Semco/Vivado/Demods/stcModTop.v {1 {vlog -work work +protect +incdir+C:/Semco/Vivado/Demods +define+STC_MOD +define+SIMULATE -stats=none C:/Semco/Vivado/Demods/stcModTop.v
 Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
--- Compiling module frameAlignment628
+-- Compiling module stcModTop
 
 Top level modules:
-	frameAlignment628
+	stcModTop
 
 } {} {}} C:/Semco/Vivado/Demods/stcDemod/interpolator.v {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/interpolator.v
 Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
@@ -1022,26 +1034,26 @@ Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
 Top level modules:
 	interpolator
 
-} {} {}} C:/Semco/Vivado/Demods/stcModTop.v {1 {vlog -work work +protect +incdir+C:/Semco/Vivado/Demods +define+STC_MOD +define+SIMULATE -stats=none C:/Semco/Vivado/Demods/stcModTop.v
-Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
--- Compiling module stcModTop
-
-Top level modules:
-	stcModTop
-
-} {} {}} C:/Semco/Vivado/Demods/stcDemod.srcs/sources_1/ip/Fifo8k4to1/Fifo8k4to1_sim_netlist.vhdl {1 vcom\ -work\ work\ -2008\ -explicit\ -stats=none\ C:/Semco/Vivado/Demods/stcDemod.srcs/sources_1/ip/Fifo8k4to1/Fifo8k4to1_sim_netlist.vhdl\nModel\ Technology\ ModelSim\ PE\ vcom\ 10.5c\ Compiler\ 2016.07\ Jul\ 21\ 2016\n--\ Loading\ package\ STANDARD\n--\ Loading\ package\ TEXTIO\n--\ Loading\ package\ std_logic_1164\n--\ Compiling\ entity\ Fifo8k4to1_blk_mem_gen_prim_wrapper\n--\ Compiling\ architecture\ STRUCTURE\ of\ Fifo8k4to1_blk_mem_gen_prim_wrapper\n--\ Compiling\ entity\ Fifo8k4to1_compare\n--\ Compiling\ architecture\ STRUCTURE\ of\ Fifo8k4to1_compare\n--\ Compiling\ entity\ Fifo8k4to1_compare_1\n--\ Compiling\ architecture\ STRUCTURE\ of\ Fifo8k4to1_compare_1\n--\ Compiling\ entity\ \\Fifo8k4to1_compare__parameterized0\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\Fifo8k4to1_compare__parameterized0\\\n--\ Compiling\ entity\ \\Fifo8k4to1_compare__parameterized0_0\\\n--\ Compiling\ architecture\ STRUCTURE\ of\ \\Fifo8k4to1_compare__parameterized0_0\\\n--\ Compiling\ entity\ Fifo8k4to1_dc_ss\n--\ Compiling\ architecture\ STRUCTURE\ of\ Fifo8k4to1_dc_ss\n--\ Compiling\ entity\ Fifo8k4to1_rd_bin_cntr\n--\ Compiling\ architecture\ STRUCTURE\ of\ Fifo8k4to1_rd_bin_cntr\n--\ Compiling\ entity\ Fifo8k4to1_wr_bin_cntr\n--\ Compiling\ architecture\ STRUCTURE\ of\ Fifo8k4to1_wr_bin_cntr\n--\ Compiling\ entity\ Fifo8k4to1_wr_pf_ss\n--\ Compiling\ architecture\ STRUCTURE\ of\ Fifo8k4to1_wr_pf_ss\n--\ Compiling\ entity\ Fifo8k4to1_blk_mem_gen_prim_width\n--\ Compiling\ architecture\ STRUCTURE\ of\ Fifo8k4to1_blk_mem_gen_prim_width\n--\ Loading\ entity\ Fifo8k4to1_blk_mem_gen_prim_wrapper\n--\ Compiling\ entity\ Fifo8k4to1_rd_status_flags_ss\n--\ Compiling\ architecture\ STRUCTURE\ of\ Fifo8k4to1_rd_status_flags_ss\n--\ Loading\ entity\ Fifo8k4to1_compare\n--\ Loading\ entity\ Fifo8k4to1_compare_1\n--\ Compiling\ entity\ Fifo8k4to1_wr_status_flags_ss\n--\ Compiling\ architecture\ STRUCTURE\ of\ Fifo8k4to1_wr_status_flags_ss\n--\ Loading\ entity\ \\Fifo8k4to1_compare__parameterized0\\\n--\ Loading\ entity\ \\Fifo8k4to1_compare__parameterized0_0\\\n--\ Compiling\ entity\ Fifo8k4to1_blk_mem_gen_generic_cstr\n--\ Compiling\ architecture\ STRUCTURE\ of\ Fifo8k4to1_blk_mem_gen_generic_cstr\n--\ Loading\ entity\ Fifo8k4to1_blk_mem_gen_prim_width\n--\ Compiling\ entity\ Fifo8k4to1_rd_logic\n--\ Compiling\ architecture\ STRUCTURE\ of\ Fifo8k4to1_rd_logic\n--\ Loading\ entity\ Fifo8k4to1_rd_status_flags_ss\n--\ Loading\ entity\ Fifo8k4to1_rd_bin_cntr\n--\ Compiling\ entity\ Fifo8k4to1_wr_logic\n--\ Compiling\ architecture\ STRUCTURE\ of\ Fifo8k4to1_wr_logic\n--\ Loading\ entity\ Fifo8k4to1_wr_pf_ss\n--\ Loading\ entity\ Fifo8k4to1_dc_ss\n--\ Loading\ entity\ Fifo8k4to1_wr_status_flags_ss\n--\ Loading\ entity\ Fifo8k4to1_wr_bin_cntr\n--\ Compiling\ entity\ Fifo8k4to1_blk_mem_gen_top\n--\ Compiling\ architecture\ STRUCTURE\ of\ Fifo8k4to1_blk_mem_gen_top\n--\ Loading\ entity\ Fifo8k4to1_blk_mem_gen_generic_cstr\n--\ Compiling\ entity\ Fifo8k4to1_blk_mem_gen_v8_3_6_synth\n--\ Compiling\ architecture\ STRUCTURE\ of\ Fifo8k4to1_blk_mem_gen_v8_3_6_synth\n--\ Loading\ entity\ Fifo8k4to1_blk_mem_gen_top\n--\ Compiling\ entity\ Fifo8k4to1_blk_mem_gen_v8_3_6\n--\ Compiling\ architecture\ STRUCTURE\ of\ Fifo8k4to1_blk_mem_gen_v8_3_6\n--\ Loading\ entity\ Fifo8k4to1_blk_mem_gen_v8_3_6_synth\n--\ Compiling\ entity\ Fifo8k4to1_memory\n--\ Compiling\ architecture\ STRUCTURE\ of\ Fifo8k4to1_memory\n--\ Loading\ entity\ Fifo8k4to1_blk_mem_gen_v8_3_6\n--\ Compiling\ entity\ Fifo8k4to1_fifo_generator_ramfifo\n--\ Compiling\ architecture\ STRUCTURE\ of\ Fifo8k4to1_fifo_generator_ramfifo\n--\ Loading\ entity\ Fifo8k4to1_rd_logic\n--\ Loading\ entity\ Fifo8k4to1_wr_logic\n--\ Loading\ entity\ Fifo8k4to1_memory\n--\ Compiling\ entity\ Fifo8k4to1_fifo_generator_top\n--\ Compiling\ architecture\ STRUCTURE\ of\ Fifo8k4to1_fifo_generator_top\n--\ Loading\ entity\ Fifo8k4to1_fifo_generator_ramfifo\n--\ Compiling\ entity\ Fifo8k4to1_fifo_generator_v13_1_4_synth\n--\ Compiling\ architecture\ STRUCTURE\ of\ Fifo8k4to1_fifo_generator_v13_1_4_synth\n--\ Loading\ entity\ Fifo8k4to1_fifo_generator_top\n--\ Compiling\ entity\ Fifo8k4to1_fifo_generator_v13_1_4\n--\ Compiling\ architecture\ STRUCTURE\ of\ Fifo8k4to1_fifo_generator_v13_1_4\n--\ Loading\ entity\ Fifo8k4to1_fifo_generator_v13_1_4_synth\n--\ Compiling\ entity\ Fifo8k4to1\n--\ Compiling\ architecture\ STRUCTURE\ of\ Fifo8k4to1\n--\ Loading\ entity\ Fifo8k4to1_fifo_generator_v13_1_4\n\n {} {}} {C:\Semco\Vivado\Demods\stcDemod/acsStage5Wide.v} {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/acsStage5Wide.v
-Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
--- Compiling module acsStage5Wide
-
-Top level modules:
-	acsStage5Wide
-
 } {} {}} {C:\Semco\Vivado\Demods\stcDemod/acsStage6.v} {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/acsStage6.v
 Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
 -- Compiling module acsStage6
 
 Top level modules:
 	acsStage6
+
+} {} {}} {C:\Semco\Vivado\Demods\stcDemod/acsStage5Wide.v} {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/acsStage5Wide.v
+Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
+-- Compiling module acsStage5Wide
+
+Top level modules:
+	acsStage5Wide
+
+} {} {}} {C:\Semco\Vivado\Demods\stcDemod/acsFifo.v} {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/acsFifo.v
+Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
+-- Compiling module acsFifo
+
+Top level modules:
+	acsFifo
 
 } {} {}} {C:\Semco\Vivado\Demods\stcDemod/Vivado/xc7k160t-IP-Vivado2015p1/twoPortDistMem64x16/twoPortDistMem64x16_sim_netlist.v} {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/Vivado/xc7k160t-IP-Vivado2015p1/twoPortDistMem64x16/twoPortDistMem64x16_sim_netlist.v
 Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
@@ -1054,13 +1066,6 @@ Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
 Top level modules:
 	twoPortDistMem64x16
 	glbl
-
-} {} {}} {C:\Semco\Vivado\Demods\stcDemod/acsFifo.v} {1 {vlog -work work -stats=none C:/Semco/Vivado/Demods/stcDemod/acsFifo.v
-Model Technology ModelSim PE vlog 10.5c Compiler 2016.07 Jul 21 2016
--- Compiling module acsFifo
-
-Top level modules:
-	acsFifo
 
 } {} {}} C:/Semco/Vivado/Demods/stcDemod/ReadFilesFolder/RAM_2Reads_1Write.vhd {1 {vcom -work work -2008 -explicit -stats=none C:/Semco/Vivado/Demods/stcDemod/ReadFilesFolder/RAM_2Reads_1Write.vhd
 Model Technology ModelSim PE vcom 10.5c Compiler 2016.07 Jul 21 2016

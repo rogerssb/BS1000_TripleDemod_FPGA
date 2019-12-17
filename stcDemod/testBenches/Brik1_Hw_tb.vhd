@@ -750,7 +750,7 @@ end generate;
          PhaseOut       => open,
          PhaseDiff      => open
       );
-
+/*
    Stc_628 : STC628
    GENERIC MAP (
          SIM_MODE   => SIM_MODE
@@ -783,5 +783,5 @@ end generate;
       PhaseOut         => open,
       PhaseDiff        => open
    );
-
+*/
 end rtl;

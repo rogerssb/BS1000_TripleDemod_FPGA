@@ -3,9 +3,10 @@
 
 module trellisProcess (
     input                   clk186,
-                            ClkTD,
+                            clkTD,
                             clkEnable,
                             reset,
+                            resetTD,
                             frameStart,
                             inputValid,
                             estimatesDone,
@@ -49,10 +50,10 @@ module trellisProcess (
 
     //-------------------------- Estimators -----------------------------------
 
-    reg     signed  [17:0]  h0EstReal,h0EstImag;
-    reg     signed  [17:0]  h1EstReal,h1EstImag;
-    reg     signed  [5:0]   deltaTauEst;
-    reg             [17:0]  ch0Mu,ch1Mu;
+  (* ASYNC_REG="true" *)    reg     signed  [17:0]  h0EstReal,h0EstImag;
+  (* ASYNC_REG="true" *)    reg     signed  [17:0]  h1EstReal,h1EstImag;
+  (* ASYNC_REG="true" *)    reg     signed  [5:0]   deltaTauEst;
+                            reg             [17:0]  ch0Mu,ch1Mu;
     reg             [11:0]  sampleOut;
 
     //------------------------- Start Pulse Alignment -------------------------
@@ -77,11 +78,6 @@ module trellisProcess (
         estimatesDoneDly    <= estimatesDone;
         myStartOfTrellisClr <= myStartOfTrellis;
         if (estimatesDoneDly) begin
-            h0EstReal   <= h0EstRealIn;
-            h0EstImag   <= h0EstImagIn;
-            h1EstReal   <= h1EstRealIn;
-            h1EstImag   <= h1EstImagIn;
-            deltaTauEst <= deltaTauEstIn;
             ch0Mu       <= ch0MuIn;
             ch1Mu       <= ch1MuIn;
         end
@@ -172,7 +168,7 @@ module trellisProcess (
     tdFifo tdFifo_u (
       .rst(reset),
       .wr_clk(clk186),
-      .rd_clk(ClkTD),
+      .rd_clk(clkTD),
       .din({myStartOfTrellis, sample1i, sample1r, sample0i, sample0r}),
       .wr_en(interpOutEn || myStartOfTrellis || myStartOfTrellisClr),
       .rd_en(rdFifo),
@@ -189,13 +185,21 @@ module trellisProcess (
     wire   tdStartOfTrellis = tdFifoOut[72];
 
     //------------------------- Trellis Detector ------------------------------
-  (* MARK_DEBUG="true" *)   wire [3:0]   tdOutputBits;
+    wire [3:0]   tdOutputBits;
     reg  tdStartOfTrellisDly;
 
+    always @(posedge clkTD) begin
+        h0EstReal   <= h0EstRealIn;
+        h0EstImag   <= h0EstImagIn;
+        h1EstReal   <= h1EstRealIn;
+        h1EstImag   <= h1EstImagIn;
+        deltaTauEst <= deltaTauEstIn;
+    end
+
     trellisDetector td(
-        .clk(ClkTD),
+        .clk(clkTD),
         .clkEn(1'b1),
-        .reset(reset || lastSampleReset),
+        .reset(resetTD || lastSampleReset),
         .sampleEn(rdFifo && !tdStartOfTrellisDly),
         .startFrame(tdStartOfTrellis && !tdStartOfTrellisDly),  // tdStartOfTrellis is too wide
         .in0Real(tdSample0r), .in0Imag(tdSample0i),
@@ -211,8 +215,8 @@ module trellisProcess (
 
     reg [4:0]   ClockCntr;
 
-    always @(posedge ClkTD) begin
-        if (reset) begin
+    always @(posedge clkTD) begin
+        if (resetTD) begin
             tdStartOfTrellisDly <= 0;
         end
         else if (tdStartOfTrellis) begin
@@ -222,7 +226,7 @@ module trellisProcess (
             tdStartOfTrellisDly <= 0;
         end
 
-        if (reset) begin
+        if (resetTD) begin
             ClockCntr <= 0;
         end
         else if (ClockCntr < 6) begin // do a read every 7 clocks if data available. 7 x 4 samples/bit is 28 clocks per trellis cycle
@@ -234,7 +238,7 @@ module trellisProcess (
             rdFifo    <= !fifoEmpty;
         end
 
-        if (reset || tdStartOfTrellis || lastSampleReset) begin
+        if (resetTD || tdStartOfTrellis || lastSampleReset) begin
             sampleOut <= 0;
         end
         else if (tdOutputEn) begin
@@ -248,7 +252,7 @@ module trellisProcess (
             outputEn <= 0;
         end
 
-        if (reset) begin
+        if (resetTD) begin
             outputBits <= 0;
         end
         else if (tdOutputEn) begin

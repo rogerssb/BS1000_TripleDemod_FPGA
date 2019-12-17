@@ -70,9 +70,10 @@ use work.Semco_pkg.ALL;
 
 ENTITY Brik2 IS
    PORT(
-      clk,
+      clk186,
       clk93,
       reset,
+      reset2x,
       ce,
       StartHPP,
       StartIn,
@@ -270,9 +271,9 @@ ARCHITECTURE rtl OF Brik2 IS
 
 BEGIN
 
-   IlaProcess : process(clk)
+   IlaProcess : process(clk186)
    begin
-      if (rising_edge(clk)) then
+      if (rising_edge(clk186)) then
          TauEst0Ila     <= to_slv(Tau0Est);
          TauEst1Ila     <= to_slv(Tau1Est);
          H0EstR_Ila     <= to_slv(H0EstR);
@@ -286,10 +287,10 @@ BEGIN
    InR_sf <= to_sfixed(InR, InR_sf);
    InI_sf <= to_sfixed(InI, InI_sf);
 
-   TimeProcess : process(clk)  -- Time and channel want last half of pilot
+   TimeProcess : process(clk186)  -- Time and channel want last half of pilot
    begin
-      if (rising_edge(clk)) then
-         if (Reset) then
+      if (rising_edge(clk186)) then
+         if (reset2x) then
             if (StartIn) then
                TimeCount <= 0;
                TimeActive <= '1';
@@ -336,9 +337,9 @@ BEGIN
          RAM_TYPE    => "block"
       )
       PORT MAP(
-         clk         => clk,
+         clk         => clk186,
          ce          => ce,
-         reset       => reset,
+         reset       => reset2x,
          WrEn        => FirstPass,
          WrAddr      => WrAddr,
          RdAddrA     => TimeRead,
@@ -359,9 +360,9 @@ BEGIN
          RAM_TYPE    => "block"
       )
       PORT MAP(
-         clk         => clk,
+         clk         => clk186,
          ce          => ce,
-         reset       => reset,
+         reset       => reset2x,
          WrEn        => FirstPass,
          WrAddr      => WrAddr,
          RdAddrA     => TimeRead,
@@ -496,8 +497,8 @@ BEGIN
 
    HPP : HalfPilotPhase
       PORT MAP(
-         clk            => clk,
-         reset          => reset,
+         clk            => clk186,
+         reset          => reset2x,
          StartHPP       => StartHPP,
          ce             => ce,
          StartIn        => StartIn,

@@ -138,9 +138,10 @@ ARCHITECTURE rtl OF STC IS
 
    COMPONENT Brik2
       PORT(
-         clk,
+         clk186,
          clk93,
          reset,
+         reset2x,
          ce,
          StartHPP,
          StartIn,
@@ -173,6 +174,7 @@ ARCHITECTURE rtl OF STC IS
        ClkTD,
        clkEnable,
        reset,
+       resetTD,
        frameStart,
        inputValid,
        estimatesDone    : IN  std_logic;
@@ -199,8 +201,10 @@ ARCHITECTURE rtl OF STC IS
 
    COMPONENT FireberdDrive
       PORT(
-         clk,
-         reset,
+         clk186,
+         clkTD,
+         resetTD,
+         reset186,
          ce,
          MsbFirst,
          ValidIn        : IN  std_logic;
@@ -284,7 +288,9 @@ ARCHITECTURE rtl OF STC IS
    SIGNAL   CE,
             Reset,
             Reset2x,
+            ResetTD,
             Reset93,
+            Reset163,
             Reset186,
             StartOutPS,
             ValidOutPS,
@@ -415,9 +421,9 @@ BEGIN
          LATENCY     => 1
       )
       PORT MAP(
-         clk         => Clk186,
+         clk         => ClkTD,
          ce          => '1',
-         reset       => Reset2x,
+         reset       => ResetTD,
          WrEn        => '0',
          WrAddr      => 0,
          RdAddrA     => 0,
@@ -428,23 +434,28 @@ BEGIN
       );
 
    -- Capture BER info per frame
-   CaptureProc : process(Clk186)
+   CaptureProc : process(ClkTD)
       variable CaptureErrors : SLV4;
    begin
-      if (rising_edge(Clk186)) then
+      if (rising_edge(ClkTD)) then
          CaptureErrors  := ExpectedData xor TrellisBits;
-         if (lastSampleReset or Reset2x) then
+         if (lastSampleReset or ResetTD) then
             DataAddr  <= (others=>'0');
             BitErrors <= 0;
          elsif (TrellisOutEn) then
             DataAddr <= resize(DataAddr + 1, DataAddr);
             BitErrors <= BitErrors + count_bits(CaptureErrors);
          end if;
+      end if;
+   end process;
 
+   BerProc : process(Clk186)
+   begin
+      if (rising_edge(Clk186)) then
          pnBitEn <= ClkOutEn and not ClkOutEnDly;
          ClkOutEnDly <= ClkOutEn;
          ValidData2047 <= dataBit xnor codeBit;
-         if (not StartOutPS) then
+         if (not EstimatesDoneDly) then
             Reload   <= '0';
             if (pnBitEn and not ValidData2047) then
                Ber <= Ber + 1;
@@ -487,6 +498,19 @@ BEGIN
    port map (
       I => Reset186,
       O => Reset2x
+   );
+
+   Reset163Process : process(ClkTD)
+   begin
+      if(rising_edge(ClkTD)) then
+         Reset163 <= ResetSrc(7);
+      end if;
+   end process;
+
+   ResetTdBufg : BUFG
+   port map (
+      I => Reset163,
+      O => ResetTD
    );
 
    ResampleR_s <= to_sfixed(ResampleR, ResampleR_s);
@@ -610,8 +634,9 @@ BEGIN
    Brik2_u : Brik2
       PORT MAP(
          clk93          => Clk93,
-         Clk            => Clk186,
-         Reset          => Reset2x,
+         Clk186         => Clk186,
+         Reset          => Reset,
+         Reset2x        => Reset2x,
          CE             => CE,
          StartIn        => StartInBrik2Dly,
          ValidIn        => ValidInBrik2Dly,
@@ -655,6 +680,7 @@ BEGIN
          ClkTD                => ClkTD,
          clkEnable            => CE,
          reset                => Reset2x,
+         resetTD              => ResetTD,
          estimatesDone        => EstimatesDone and not EstimatesDoneDly,   -- rising edge of 93M clock pulse
          frameStart           => StartInBrik2Dly,
          inputValid           => ValidInBrik2Dly,
@@ -680,8 +706,10 @@ BEGIN
 
    FD : FireberdDrive
       PORT MAP(
-         clk            => ClkTD,
-         reset          => Reset2x,
+         clk186         => clk186,
+         clkTD          => ClkTD,
+         resetTD        => ResetTD,
+         reset186       => Reset2x,
          ce             => CE,
          ValidIn        => TrellisOutEn,
          MsbFirst       => '1',
@@ -696,8 +724,8 @@ BEGIN
          poly         => 24x"500",
          poly_length  => 5x"0b",
          poly_mode    => '0',
-         reset        => Reset2x,
-         clock        => ClkTD,
+         reset        => Reset186,
+         clock        => Clk186,
          enable       => pnBitEn, --   clock in data
          lfsr_enable  => pnBitEn, --   gated clock in data
          reload       => Reload,

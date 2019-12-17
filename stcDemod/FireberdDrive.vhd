@@ -42,8 +42,10 @@ use xpm.vcomponents.all;
 
 ENTITY FireberdDrive IS
    PORT(
-      clk,
-      reset,
+      clk186,
+      clkTD,
+      reset186,
+      resetTD,
       ce,
       MsbFirst,
       ValidIn        : IN  std_logic;
@@ -59,16 +61,17 @@ ARCHITECTURE rtl OF FireberdDrive IS
 
    COMPONENT Fifo8k4to1
       PORT (
-         clk : IN STD_LOGIC;
-         srst : IN STD_LOGIC;
-         din : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
-         wr_en : IN STD_LOGIC;
-         rd_en : IN STD_LOGIC;
-         dout : OUT STD_LOGIC_VECTOR(0 DOWNTO 0);
-         full : OUT STD_LOGIC;
-         empty : OUT STD_LOGIC;
-         wr_data_count : OUT STD_LOGIC_VECTOR(13 DOWNTO 0);
-         prog_full : OUT STD_LOGIC
+         wr_clk,
+         rd_clk,
+         wr_en,
+         rd_en,
+         rst            : IN STD_LOGIC;
+         din            : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
+         dout           : OUT STD_LOGIC_VECTOR(0 DOWNTO 0);
+         full           : OUT STD_LOGIC;
+         empty          : OUT STD_LOGIC;
+         wr_data_count  : OUT STD_LOGIC_VECTOR(12 DOWNTO 0);
+         prog_full      : OUT STD_LOGIC
       );
    END COMPONENT;
 
@@ -77,7 +80,7 @@ ARCHITECTURE rtl OF FireberdDrive IS
    SIGNAL   FifoDataIn,
             ClkDelay    : SLV4;
    SIGNAL   FifoDataOut : std_logic_vector(0 to 0);
-   SIGNAL   WrCount     : STD_LOGIC_VECTOR(13 DOWNTO 0);
+   SIGNAL   WrCount     : STD_LOGIC_VECTOR(12 DOWNTO 0);
    SIGNAL   RdEn,
             Active,
             Empty,
@@ -91,11 +94,11 @@ BEGIN
    FifoDataIn <= RecoveredData when (MsbFirst) else reverse_slv_bits(RecoveredData);
    DataOut    <= FifoDataOut(0);
 
-   ClkProcess : process(Clk)
+   ClkProcess : process(Clk186)
       variable Accum_v   : sfixed(0 downto -15);
    begin
-      if (rising_edge(Clk)) then
-         if (reset) then
+      if (rising_edge(Clk186)) then
+         if (reset186) then
             Accum    <= to_sfixed(0, Accum);
             Active   <= '0';
             RdEn     <= '0';
@@ -111,15 +114,16 @@ BEGIN
                RdEn     <= Accum_v(0) and not Accum(0) and not empty;
             end if;
             ClkDelay <= ClkDelay(2 downto 0) & RdEn;
-            ClkOut   <= nor(ClkDelay); --TODO FZ (3) or ClkDelay(2);    -- Delay ClkOut into valid data, widen pulse to 93M clock
+            ClkOut   <= ClkDelay(3) or ClkDelay(2);    -- Delay ClkOut into valid data, widen pulse to 93M clock
          end if;
       end if;
    end process ClkProcess;
 
    FdFifo  : Fifo8k4to1       -- 4 bit in, 1 bit output
    PORT MAP (
-      clk            => clk,
-      srst           => reset,
+      wr_clk         => clkTD,
+      rd_clk         => clk186,
+      rst            => resetTD,
       din            => FifoDataIn,
       wr_en          => ValidIn,
       rd_en          => RdEn and not empty,
