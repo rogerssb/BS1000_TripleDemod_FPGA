@@ -56,10 +56,9 @@
 //  Output     Output      Phase    Duty Cycle   Pk-to-Pk     Phase
 //   Clock     Freq (MHz)  (degrees)    (%)     Jitter (ps)  Error (ps)
 //----------------------------------------------------------------------------
-// ___clk93____93.333______0.000______50.0______110.877_____83.970
-// __clk186___186.667______0.000______50.0_______97.927_____83.970
-// clk93Dly____93.333_____45.000______50.0______110.877_____83.970
-// ___clkTD___163.333______0.000______50.0______100.289_____83.970
+// ___clk93____93.333______0.000______50.0______140.363____103.963
+// __clk186___186.667______0.000______50.0______122.636____103.963
+// clk93Dly____93.333_____45.000______50.0______140.363____103.963
 //
 //----------------------------------------------------------------------------
 // Input Clock   Freq (MHz)    Input Jitter (UI)
@@ -68,7 +67,7 @@
 
 `timescale 1ps/1ps
 
-(* CORE_GENERATION_INFO = "systemClock,clk_wiz_v5_4_1_0,{component_name=systemClock,use_phase_alignment=true,use_min_o_jitter=false,use_max_i_jitter=false,use_dyn_phase_shift=false,use_inclk_switchover=false,use_dyn_reconfig=false,enable_axi=0,feedback_source=FDBK_AUTO,PRIMITIVE=MMCM,num_out_clk=4,clkin1_period=10.714,clkin2_period=10.000,use_power_down=false,use_reset=false,use_locked=true,use_inclk_stopped=false,feedback_type=SINGLE,CLOCK_MGR_TYPE=NA,manual_override=false}" *)
+(* CORE_GENERATION_INFO = "systemClock,clk_wiz_v5_4_1_0,{component_name=systemClock,use_phase_alignment=true,use_min_o_jitter=false,use_max_i_jitter=false,use_dyn_phase_shift=false,use_inclk_switchover=false,use_dyn_reconfig=false,enable_axi=0,feedback_source=FDBK_AUTO,PRIMITIVE=MMCM,num_out_clk=3,clkin1_period=10.714,clkin2_period=10.000,use_power_down=false,use_reset=false,use_locked=true,use_inclk_stopped=false,feedback_type=SINGLE,CLOCK_MGR_TYPE=NA,manual_override=false}" *)
 
 module systemClock 
  (
@@ -76,7 +75,6 @@ module systemClock
   output        clk93,
   output        clk186,
   output        clk93Dly,
-  output        clkTD,
   // Status and control signals
   output        locked,
  // Clock in ports
@@ -89,7 +87,6 @@ module systemClock
   .clk93(clk93),
   .clk186(clk186),
   .clk93Dly(clk93Dly),
-  .clkTD(clkTD),
   // Status and control signals               
   .locked(locked),
  // Clock in ports

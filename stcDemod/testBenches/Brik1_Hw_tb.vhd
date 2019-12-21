@@ -39,6 +39,7 @@
 --                                HISTORY
 -------------------------------------------------------------------------------
 -- 4/17/15 Initial release FZ
+-- 12-19-19 Removed STC628. Was known good (Golden build) for comparison
 -------------------------------------------------------------------------------
 
 library ieee;
@@ -88,7 +89,6 @@ architecture rtl of Brik1_Hw_tb is
       Clk93,
       Clk93Dly,
       Clk186,
-      ClkTD,
       SpectrumInv,
       ValidIn           : IN  std_logic;
       DataOut,                            -- Trellis Data Output
@@ -252,7 +252,6 @@ architecture rtl of Brik1_Hw_tb is
         clk93,
         clk93Dly,
         clk186,
-        ClkTD,
         locked          : out    std_logic
        );
    end component;
@@ -266,7 +265,6 @@ architecture rtl of Brik1_Hw_tb is
             Clk93,
             Clk93Dly,
             Clk186,
-            ClkTD,
             lastSampleReset,
             StartOfFrame,
             Locked,
@@ -332,7 +330,6 @@ begin
          clk93      => Clk93,
          clk93Dly   => Clk93Dly,
          clk186     => Clk186,
-         ClkTD      => ClkTD,
          locked     => Locked
       );
 
@@ -731,7 +728,6 @@ end generate;
          Clk93          => Clk93,
          Clk93Dly       => Clk93Dly,
          Clk186         => Clk186,
-         ClkTD          => ClkTD,
          ValidIn        => PhaseValid,
          SpectrumInv    => HwControlBits(0),
          PilotOffset    => PilotOffset,
@@ -750,38 +746,5 @@ end generate;
          PhaseOut       => open,
          PhaseDiff      => open
       );
-/*
-   Stc_628 : STC628
-   GENERIC MAP (
-         SIM_MODE   => SIM_MODE
-      )
-   PORT MAP(
-      ResampleR         => to_slv(ResampleR_s),
-      ResampleI         => to_slv(ResampleI_s),
-      ClocksPerBit      => ClocksPerBitSlv,
-      HxThreshSlv       => 12x"180",
-      DacSelect0        => x"0",
-      DacSelect1        => x"0",
-      DacSelect2        => x"0",
-      Clk93             => Clk93,
-      Clk186           => Clk186,
-      SpectrumInv      => HwControlBits(0),
-      ValidIn          => PhaseValid,
-      DataOut          => open,
-      ClkOutEn         => open,
-      PilotFound       => open,
-      PilotLocked      => open,
-      StartOfFrame     => open,
-      PhaseDiffEn      => open,
-      Dac0ClkEn        => open,
-      Dac1ClkEn        => open,
-      Dac2ClkEn        => open,
-      PilotOffset      => open,
-      Dac0Data         => open,
-      Dac1Data         => open,
-      Dac2Data         => open,
-      PhaseOut         => open,
-      PhaseDiff        => open
-   );
-*/
+
 end rtl;

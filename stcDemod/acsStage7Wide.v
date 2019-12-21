@@ -54,20 +54,20 @@ module acsStage7Wide(
     wire    signed  [17:0]  table7r_000,table7i_000;
     wire    signed  [17:0]  table7r_001,table7i_001;
     twoPortDistMem32x18 dpRam7r_00x(
-        .clk(clk), 
-        .we(setupOutputValid), 
-        .a(spoAddr00x), 
-        .d(setupReal), 
-        .dpra(addr000), 
+        .clk(clk),
+        .we(setupOutputValid),
+        .a(spoAddr00x),
+        .d(setupReal),
+        .dpra(addr000),
         .dpo(table7r_000),
         .spo(table7r_001)
     );
     twoPortDistMem32x18 dpRam7i_00x(
-        .clk(clk), 
-        .we(setupOutputValid), 
-        .a(spoAddr00x), 
-        .d(setupImag), 
-        .dpra(addr000), 
+        .clk(clk),
+        .we(setupOutputValid),
+        .a(spoAddr00x),
+        .d(setupImag),
+        .dpra(addr000),
         .dpo(table7i_000),
         .spo(table7i_001)
     );
@@ -77,20 +77,20 @@ module acsStage7Wide(
     wire    signed  [17:0]  table7r_010,table7i_010;
     wire    signed  [17:0]  table7r_011,table7i_011;
     twoPortDistMem32x18 dpRam7r_01x(
-        .clk(clk), 
-        .we(setupOutputValid), 
-        .a(spoAddr01x), 
-        .d(setupReal), 
-        .dpra(addr010), 
+        .clk(clk),
+        .we(setupOutputValid),
+        .a(spoAddr01x),
+        .d(setupReal),
+        .dpra(addr010),
         .dpo(table7r_010),
         .spo(table7r_011)
     );
     twoPortDistMem32x18 dpRam7i_01x(
-        .clk(clk), 
-        .we(setupOutputValid), 
-        .a(spoAddr01x), 
-        .d(setupImag), 
-        .dpra(addr010), 
+        .clk(clk),
+        .we(setupOutputValid),
+        .a(spoAddr01x),
+        .d(setupImag),
+        .dpra(addr010),
         .dpo(table7i_010),
         .spo(table7i_011)
     );
@@ -100,20 +100,20 @@ module acsStage7Wide(
     wire    signed  [17:0]  table7r_100,table7i_100;
     wire    signed  [17:0]  table7r_101,table7i_101;
     twoPortDistMem32x18 dpRam7r_10x(
-        .clk(clk), 
-        .we(setupOutputValid), 
-        .a(spoAddr10x), 
-        .d(setupReal), 
-        .dpra(addr100), 
+        .clk(clk),
+        .we(setupOutputValid),
+        .a(spoAddr10x),
+        .d(setupReal),
+        .dpra(addr100),
         .dpo(table7r_100),
         .spo(table7r_101)
     );
     twoPortDistMem32x18 dpRam7i_10x(
-        .clk(clk), 
-        .we(setupOutputValid), 
-        .a(spoAddr10x), 
-        .d(setupImag), 
-        .dpra(addr100), 
+        .clk(clk),
+        .we(setupOutputValid),
+        .a(spoAddr10x),
+        .d(setupImag),
+        .dpra(addr100),
         .dpo(table7i_100),
         .spo(table7i_101)
     );
@@ -123,27 +123,27 @@ module acsStage7Wide(
     wire    signed  [17:0]  table7r_110,table7i_110;
     wire    signed  [17:0]  table7r_111,table7i_111;
     twoPortDistMem32x18 dpRam7r_11x(
-        .clk(clk), 
-        .we(setupOutputValid), 
-        .a(spoAddr11x), 
-        .d(setupReal), 
-        .dpra(addr110), 
+        .clk(clk),
+        .we(setupOutputValid),
+        .a(spoAddr11x),
+        .d(setupReal),
+        .dpra(addr110),
         .dpo(table7r_110),
         .spo(table7r_111)
     );
     twoPortDistMem32x18 dpRam7i_11x(
-        .clk(clk), 
-        .we(setupOutputValid), 
-        .a(spoAddr11x), 
-        .d(setupImag), 
-        .dpra(addr110), 
+        .clk(clk),
+        .we(setupOutputValid),
+        .a(spoAddr11x),
+        .d(setupImag),
+        .dpra(addr110),
         .dpo(table7i_110),
         .spo(table7i_111)
     );
 
     `define PER_TABLE_ADDRESS
     `ifdef PER_TABLE_ADDRESS
-    // Count through the 4 states of the 8 acs units to generate 32 outputs. 
+    // Count through the 4 states of the 8 acs units to generate 32 outputs.
     reg             [1:0]   metricAddr[0:7];
     integer                 k;
     always @(posedge clk) begin
@@ -169,7 +169,7 @@ module acsStage7Wide(
     assign                  addr111 =    {metricAddr[7],3'b111};
 
     `else //PER_TABLE_ADDRESS
-    // Count through the 4 states of the 8 acs units to generate 32 outputs. 
+    // Count through the 4 states of the 8 acs units to generate 32 outputs.
     reg             [1:0]   metricAddr;
     always @(posedge clk) begin
         if (reset) begin
@@ -212,7 +212,7 @@ module acsStage7Wide(
     wire            [17:0]  accMetricTmp_110;
     wire            [17:0]  accMetricTmp_111;
     acsOp acs000(
-        .clk(clk), .reset(startFrame),
+        .clk(clk), .reset(startFrame | reset),
         .y8Real(table7r_000),    .y8Imag(table7i_000),
         .sReal(s1Real),         .sImag(s1Imag),
         .accMetricInEn(accMetricInEn),
@@ -221,7 +221,7 @@ module acsStage7Wide(
         .accMetricOut(accMetricTmp_000)
     );
     acsOp acs001(
-        .clk(clk), .reset(startFrame),
+        .clk(clk), .reset(startFrame | reset),
         .y8Real(table7r_001),    .y8Imag(table7i_001),
         .sReal(s1Real),         .sImag(s1Imag),
         .accMetricInEn(accMetricInEn),
@@ -230,7 +230,7 @@ module acsStage7Wide(
         .accMetricOut(accMetricTmp_001)
     );
     acsOp acs010(
-        .clk(clk), .reset(startFrame),
+        .clk(clk), .reset(startFrame | reset),
         .y8Real(table7r_010),    .y8Imag(table7i_010),
         .sReal(s1Real),         .sImag(s1Imag),
         .accMetricInEn(accMetricInEn),
@@ -239,7 +239,7 @@ module acsStage7Wide(
         .accMetricOut(accMetricTmp_010)
     );
     acsOp acs011(
-        .clk(clk), .reset(startFrame),
+        .clk(clk), .reset(startFrame | reset),
         .y8Real(table7r_011),    .y8Imag(table7i_011),
         .sReal(s1Real),         .sImag(s1Imag),
         .accMetricInEn(accMetricInEn),
@@ -248,7 +248,7 @@ module acsStage7Wide(
         .accMetricOut(accMetricTmp_011)
     );
     acsOp acs100(
-        .clk(clk), .reset(startFrame),
+        .clk(clk), .reset(startFrame | reset),
         .y8Real(table7r_100),    .y8Imag(table7i_100),
         .sReal(s1Real),         .sImag(s1Imag),
         .accMetricInEn(accMetricInEn),
@@ -257,7 +257,7 @@ module acsStage7Wide(
         .accMetricOut(accMetricTmp_100)
     );
     acsOp acs101(
-        .clk(clk), .reset(startFrame),
+        .clk(clk), .reset(startFrame | reset),
         .y8Real(table7r_101),    .y8Imag(table7i_101),
         .sReal(s1Real),         .sImag(s1Imag),
         .accMetricInEn(accMetricInEn),
@@ -266,7 +266,7 @@ module acsStage7Wide(
         .accMetricOut(accMetricTmp_101)
     );
     acsOp acs110(
-        .clk(clk), .reset(startFrame),
+        .clk(clk), .reset(startFrame | reset),
         .y8Real(table7r_110),    .y8Imag(table7i_110),
         .sReal(s1Real),         .sImag(s1Imag),
         .accMetricInEn(accMetricInEn),
@@ -275,7 +275,7 @@ module acsStage7Wide(
         .accMetricOut(accMetricTmp_110)
     );
     acsOp acs111(
-        .clk(clk), .reset(startFrame),
+        .clk(clk), .reset(startFrame | reset),
         .y8Real(table7r_111),    .y8Imag(table7i_111),
         .sReal(s1Real),         .sImag(s1Imag),
         .accMetricInEn(accMetricInEn),
@@ -284,7 +284,7 @@ module acsStage7Wide(
         .accMetricOut(accMetricTmp_111)
     );
 
-    // Create a delay line for comparing paths that are 16 states apart. 
+    // Create a delay line for comparing paths that are 16 states apart.
     // Since states are presented 8 at a time, the delay is 2 clocks.
     reg             [17:0]  delayed_000[0:7];
     reg             [17:0]  delayed_001[0:7];
@@ -334,8 +334,8 @@ module acsStage7Wide(
     wire            [17:0]  path1Metric_110 =   accMetricTmp_110;
     wire            [17:0]  path1Metric_111 =   accMetricTmp_111;
 
-    // A total of 16 comparisons are made between pairs of acs outputs. The 16 
-    // comparisons are sequential but are presented 8 at a time. 
+    // A total of 16 comparisons are made between pairs of acs outputs. The 16
+    // comparisons are sequential but are presented 8 at a time.
     reg             [1:0]   outputCounter;
     reg             [1:0]   delayedEnSR;
     wire                    delayedEn =     delayedEnSR[1];
@@ -458,13 +458,13 @@ module acsStage7Wide(
 
     wire            [39:0]  tbBits;
     twoPortBlkMem40x4 tbRam7(
-        .clka(clk), 
-        .wea(metricOutEn), 
-        .addra({ppAddrBit,tbWrAddr}), 
+        .clka(clk),
+        .wea(metricOutEn),
+        .addra({ppAddrBit,tbWrAddr}),
         .dina({winningIndex_111,winningIndex_110,winningIndex_101,winningIndex_100,
-               winningIndex_011,winningIndex_010,winningIndex_001,winningIndex_000}), 
+               winningIndex_011,winningIndex_010,winningIndex_001,winningIndex_000}),
         .clkb(clk),
-        .addrb({~ppAddrBit,minIndex[3]}), 
+        .addrb({~ppAddrBit,minIndex[3]}),
         .doutb(tbBits)
     );
 

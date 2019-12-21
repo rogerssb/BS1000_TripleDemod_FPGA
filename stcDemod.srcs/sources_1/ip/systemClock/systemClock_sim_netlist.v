@@ -1,14 +1,14 @@
 // Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2017.2.1 (win64) Build 1957588 Wed Aug  9 16:32:24 MDT 2017
-// Date        : Fri Dec 13 22:20:49 2019
+// Date        : Sat Dec 21 15:59:32 2019
 // Host        : SEMCO_1039B running 64-bit major release  (build 9200)
 // Command     : write_verilog -force -mode funcsim
 //               C:/Semco/Vivado/Demods/stcDemod.srcs/sources_1/ip/systemClock/systemClock_sim_netlist.v
 // Design      : systemClock
 // Purpose     : This verilog netlist is a functional simulation representation of the design and should not be modified
 //               or synthesized. This netlist cannot be used for SDF annotated simulation.
-// Device      : xc7k325tfbg676-2
+// Device      : xc7k325tfbg676-1
 // --------------------------------------------------------------------------------
 `timescale 1 ps / 1 ps
 
@@ -17,20 +17,17 @@ module systemClock
    (clk93,
     clk186,
     clk93Dly,
-    clkTD,
     locked,
     clk_in1);
   output clk93;
   output clk186;
   output clk93Dly;
-  output clkTD;
   output locked;
   input clk_in1;
 
   wire clk186;
   wire clk93;
   wire clk93Dly;
-  wire clkTD;
   (* IBUF_LOW_PWR *) wire clk_in1;
   wire locked;
 
@@ -38,7 +35,6 @@ module systemClock
        (.clk186(clk186),
         .clk93(clk93),
         .clk93Dly(clk93Dly),
-        .clkTD(clkTD),
         .clk_in1(clk_in1),
         .locked(locked));
 endmodule
@@ -48,13 +44,11 @@ module systemClock_systemClock_clk_wiz
    (clk93,
     clk186,
     clk93Dly,
-    clkTD,
     locked,
     clk_in1);
   output clk93;
   output clk186;
   output clk93Dly;
-  output clkTD;
   output locked;
   input clk_in1;
 
@@ -63,8 +57,6 @@ module systemClock_systemClock_clk_wiz
   wire clk93;
   wire clk93Dly;
   wire clk93_systemClock;
-  wire clkTD;
-  wire clkTD_systemClock;
   wire clk_in1;
   wire clk_in1_systemClock;
   wire clkfbout_buf_systemClock;
@@ -76,6 +68,7 @@ module systemClock_systemClock_clk_wiz
   wire NLW_mmcm_adv_inst_CLKOUT0B_UNCONNECTED;
   wire NLW_mmcm_adv_inst_CLKOUT1B_UNCONNECTED;
   wire NLW_mmcm_adv_inst_CLKOUT2B_UNCONNECTED;
+  wire NLW_mmcm_adv_inst_CLKOUT3_UNCONNECTED;
   wire NLW_mmcm_adv_inst_CLKOUT3B_UNCONNECTED;
   wire NLW_mmcm_adv_inst_CLKOUT4_UNCONNECTED;
   wire NLW_mmcm_adv_inst_CLKOUT5_UNCONNECTED;
@@ -106,30 +99,26 @@ module systemClock_systemClock_clk_wiz
        (.I(clk186_systemClock),
         .O(clk186));
   (* BOX_TYPE = "PRIMITIVE" *) 
-  BUFG clkout4_buf
-       (.I(clkTD_systemClock),
-        .O(clkTD));
-  (* BOX_TYPE = "PRIMITIVE" *) 
   MMCME2_ADV #(
     .BANDWIDTH("OPTIMIZED"),
-    .CLKFBOUT_MULT_F(14.000000),
+    .CLKFBOUT_MULT_F(10.000000),
     .CLKFBOUT_PHASE(0.000000),
     .CLKFBOUT_USE_FINE_PS("FALSE"),
     .CLKIN1_PERIOD(10.714000),
     .CLKIN2_PERIOD(0.000000),
-    .CLKOUT0_DIVIDE_F(14.000000),
+    .CLKOUT0_DIVIDE_F(10.000000),
     .CLKOUT0_DUTY_CYCLE(0.500000),
     .CLKOUT0_PHASE(0.000000),
     .CLKOUT0_USE_FINE_PS("FALSE"),
-    .CLKOUT1_DIVIDE(7),
+    .CLKOUT1_DIVIDE(5),
     .CLKOUT1_DUTY_CYCLE(0.500000),
     .CLKOUT1_PHASE(0.000000),
     .CLKOUT1_USE_FINE_PS("FALSE"),
-    .CLKOUT2_DIVIDE(14),
+    .CLKOUT2_DIVIDE(10),
     .CLKOUT2_DUTY_CYCLE(0.500000),
     .CLKOUT2_PHASE(45.000000),
     .CLKOUT2_USE_FINE_PS("FALSE"),
-    .CLKOUT3_DIVIDE(8),
+    .CLKOUT3_DIVIDE(1),
     .CLKOUT3_DUTY_CYCLE(0.500000),
     .CLKOUT3_PHASE(0.000000),
     .CLKOUT3_USE_FINE_PS("FALSE"),
@@ -174,7 +163,7 @@ module systemClock_systemClock_clk_wiz
         .CLKOUT1B(NLW_mmcm_adv_inst_CLKOUT1B_UNCONNECTED),
         .CLKOUT2(clk93Dly),
         .CLKOUT2B(NLW_mmcm_adv_inst_CLKOUT2B_UNCONNECTED),
-        .CLKOUT3(clkTD_systemClock),
+        .CLKOUT3(NLW_mmcm_adv_inst_CLKOUT3_UNCONNECTED),
         .CLKOUT3B(NLW_mmcm_adv_inst_CLKOUT3B_UNCONNECTED),
         .CLKOUT4(NLW_mmcm_adv_inst_CLKOUT4_UNCONNECTED),
         .CLKOUT5(NLW_mmcm_adv_inst_CLKOUT5_UNCONNECTED),

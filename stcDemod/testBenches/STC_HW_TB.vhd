@@ -73,7 +73,7 @@ ARCHITECTURE rtl OF STC_HW_TB IS
          Power1In,
          NoiseIn           : sfixed(0 downto -17);
   signal FrameCnt          : natural := 0;
-  signal BitRate_r         : real := 9.33;
+  signal BitRate_r         : real := 20.0; --9.33;
 
 BEGIN
 

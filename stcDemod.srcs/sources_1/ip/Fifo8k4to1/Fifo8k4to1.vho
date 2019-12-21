@@ -54,16 +54,15 @@
 ------------- Begin Cut here for COMPONENT Declaration ------ COMP_TAG
 COMPONENT Fifo8k4to1
   PORT (
-    rst : IN STD_LOGIC;
-    wr_clk : IN STD_LOGIC;
-    rd_clk : IN STD_LOGIC;
+    clk : IN STD_LOGIC;
+    srst : IN STD_LOGIC;
     din : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
     wr_en : IN STD_LOGIC;
     rd_en : IN STD_LOGIC;
     dout : OUT STD_LOGIC_VECTOR(0 DOWNTO 0);
     full : OUT STD_LOGIC;
     empty : OUT STD_LOGIC;
-    wr_data_count : OUT STD_LOGIC_VECTOR(12 DOWNTO 0);
+    wr_data_count : OUT STD_LOGIC_VECTOR(13 DOWNTO 0);
     prog_full : OUT STD_LOGIC
   );
 END COMPONENT;
@@ -75,9 +74,8 @@ END COMPONENT;
 ------------- Begin Cut here for INSTANTIATION Template ----- INST_TAG
 your_instance_name : Fifo8k4to1
   PORT MAP (
-    rst => rst,
-    wr_clk => wr_clk,
-    rd_clk => rd_clk,
+    clk => clk,
+    srst => srst,
     din => din,
     wr_en => wr_en,
     rd_en => rd_en,

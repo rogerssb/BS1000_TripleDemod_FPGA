@@ -3,15 +3,17 @@
 
 // 10-25-19 Modified sofAddress offset from 8 to 7. Could go to 6
 // 11-16-19 Changed offset to vio variable to optimize against real time noise.
+// 12/18/19 Changed buffer from circular to zero based. Each frame starts at zero. Reading starts at end of pilot minus preload of 12 plus m_ndx's.
+//          Add depth register so read never reaches within 5 of write to avoid possible overflow if m_ndx is large positive. When SOF is detected, write goes
+//          back to zero, but read continues till all samples read. Added sample counter.
 
 module frameAlignment
-    #(parameter CLKS_PER_OUTPUT = 4) (
+    #(parameter CLKS_PER_OUTPUT = 2) (
     input                   clk,
                             clkEn,
                             reset,
                             startOfFrame,       // start of frame, not start of trellis activty
                             estimatesDone,     // Estimates are complete, start Trellis process
-                            tdFifoFull,
                             valid,
     input   signed  [17:0]  dinReal,
                             dinImag,
@@ -20,7 +22,6 @@ module frameAlignment
     output                  clkEnOut,
     output  reg             interpolate,
                             myStartOfTrellis,
-                            full,
     output  signed  [17:0]  doutReal0,
                             doutImag0,
                             doutReal1,
@@ -33,7 +34,7 @@ module frameAlignment
     reg             [14:0]  wrAddr, rdAddr, depth;
     wire   signed   [15:0]  rdAddr0, rdAddr1;
     reg                     sofDetected;
-    `define   SOF_ADDRESS `PILOT_SAMPLES_PER_FRAME - 9  // capture address of first sample of next frame. SOF goes active between packets, so wrAddr is inactive
+    `define   SOF_ADDRESS `PILOT_SAMPLES_PER_FRAME - 9  // capture address of first sample of next frame.
     always @(posedge clk) begin
         if (reset) begin
             myStartOfTrellis <= 0;
@@ -50,21 +51,19 @@ module frameAlignment
         end
     end
 
-    //------------------------- Sample FIFO -----------------------------------
-    // Packet starts writing at address 0 when StartOfFrame is detected. The useful user data start 512 samples later.
+    //------------------------- Sample buffer holds entire frame of data -----------------------------------
+    // Packet starts writing at address 0 when StartOfFrame is detected. The useful user data starts 512 samples later.
     // This forces the packet to always start at 0 up to 13312ish then the next packet will start at the bottom
-    // The read address then starts at 512 - 12 samples later
+    // The read address then starts at SOF_ADDRESS samples later
 
     wire                    fifoWrEn = (clkEn && valid);
     reg                     fifoRdEn;
     wire    [35:0]          fifoRdData0, fifoRdData1;
 
-    wire    empty = (wrAddr == rdAddr);
     always @(posedge clk) begin
         if (reset) begin
             rdAddr <= 0;
             wrAddr <= 0;
-            full   <= 0;
         end
         else if (clkEn) begin
             if (startOfFrame) begin     // start each frame at 0, read starts at sofAddress.
@@ -73,8 +72,6 @@ module frameAlignment
             else if (fifoWrEn) begin
                 wrAddr <= wrAddr + 1;
             end
-
-            full <= ((wrAddr == rdAddr - 1) && ~fifoRdEn);  // should never reach end of buffer but could overrun
 
             if (myStartOfTrellis) begin
                 rdAddr <= `SOF_ADDRESS;  // skip the pilot data at first sync
@@ -104,7 +101,7 @@ module frameAlignment
         .RdOutA(fifoRdData0),
         .RdOutB(fifoRdData1)
     );
-    wire    fifoOutputValid = ((interpolate == 1) || (depth > 5) || (sofDetected == 1));  // allow enough room for worst case, don't leave interpolate hanging. When next startOfFrame wrAddr goes to 0, so keep reading to end of data section
+    wire    fifoOutputValid = ((interpolate == 1) || (depth > 5) || (sofDetected == 1));  // allow enough room for worst case, don't leave interpolate hanging. When next startOfFrame wrAddr goes to 0, so keep reading to end of current data section
     assign  doutReal0       = fifoRdData0[35:18];
     assign  doutImag0       = fifoRdData0[17:0];
     assign  doutReal1       = fifoRdData1[35:18];
@@ -142,7 +139,7 @@ module frameAlignment
 
             case (outputState)
                 `WAIT_VALID:  begin
-                    if ((fifoOutputValid == 1) && (tdFifoFull == 0) && (trellisInitCnt == 0)) begin
+                    if ((fifoOutputValid == 1) && (trellisInitCnt == 0)) begin
                         fifoRdEn    <= 1;
                         if (CLKS_PER_OUTPUT > 1) begin
                             decimationCount <= decimationCount - 1;

@@ -1,14 +1,14 @@
 -- Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2017.2.1 (win64) Build 1957588 Wed Aug  9 16:32:24 MDT 2017
--- Date        : Fri Dec 13 22:20:49 2019
+-- Date        : Sat Dec 21 15:59:32 2019
 -- Host        : SEMCO_1039B running 64-bit major release  (build 9200)
 -- Command     : write_vhdl -force -mode funcsim
 --               C:/Semco/Vivado/Demods/stcDemod.srcs/sources_1/ip/systemClock/systemClock_sim_netlist.vhdl
 -- Design      : systemClock
 -- Purpose     : This VHDL netlist is a functional simulation representation of the design and should not be modified or
 --               synthesized. This netlist cannot be used for SDF annotated simulation.
--- Device      : xc7k325tfbg676-2
+-- Device      : xc7k325tfbg676-1
 -- --------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
@@ -19,7 +19,6 @@ entity systemClock_systemClock_clk_wiz is
     clk93 : out STD_LOGIC;
     clk186 : out STD_LOGIC;
     clk93Dly : out STD_LOGIC;
-    clkTD : out STD_LOGIC;
     locked : out STD_LOGIC;
     clk_in1 : in STD_LOGIC
   );
@@ -30,7 +29,6 @@ end systemClock_systemClock_clk_wiz;
 architecture STRUCTURE of systemClock_systemClock_clk_wiz is
   signal clk186_systemClock : STD_LOGIC;
   signal clk93_systemClock : STD_LOGIC;
-  signal clkTD_systemClock : STD_LOGIC;
   signal clk_in1_systemClock : STD_LOGIC;
   signal clkfbout_buf_systemClock : STD_LOGIC;
   signal clkfbout_systemClock : STD_LOGIC;
@@ -40,6 +38,7 @@ architecture STRUCTURE of systemClock_systemClock_clk_wiz is
   signal NLW_mmcm_adv_inst_CLKOUT0B_UNCONNECTED : STD_LOGIC;
   signal NLW_mmcm_adv_inst_CLKOUT1B_UNCONNECTED : STD_LOGIC;
   signal NLW_mmcm_adv_inst_CLKOUT2B_UNCONNECTED : STD_LOGIC;
+  signal NLW_mmcm_adv_inst_CLKOUT3_UNCONNECTED : STD_LOGIC;
   signal NLW_mmcm_adv_inst_CLKOUT3B_UNCONNECTED : STD_LOGIC;
   signal NLW_mmcm_adv_inst_CLKOUT4_UNCONNECTED : STD_LOGIC;
   signal NLW_mmcm_adv_inst_CLKOUT5_UNCONNECTED : STD_LOGIC;
@@ -58,7 +57,6 @@ architecture STRUCTURE of systemClock_systemClock_clk_wiz is
   attribute IFD_DELAY_VALUE of clkin1_ibufg : label is "AUTO";
   attribute BOX_TYPE of clkout1_buf : label is "PRIMITIVE";
   attribute BOX_TYPE of clkout2_buf : label is "PRIMITIVE";
-  attribute BOX_TYPE of clkout4_buf : label is "PRIMITIVE";
   attribute BOX_TYPE of mmcm_adv_inst : label is "PRIMITIVE";
 begin
 clkf_buf: unisim.vcomponents.BUFG
@@ -84,32 +82,27 @@ clkout2_buf: unisim.vcomponents.BUFG
       I => clk186_systemClock,
       O => clk186
     );
-clkout4_buf: unisim.vcomponents.BUFG
-     port map (
-      I => clkTD_systemClock,
-      O => clkTD
-    );
 mmcm_adv_inst: unisim.vcomponents.MMCME2_ADV
     generic map(
       BANDWIDTH => "OPTIMIZED",
-      CLKFBOUT_MULT_F => 14.000000,
+      CLKFBOUT_MULT_F => 10.000000,
       CLKFBOUT_PHASE => 0.000000,
       CLKFBOUT_USE_FINE_PS => false,
       CLKIN1_PERIOD => 10.714000,
       CLKIN2_PERIOD => 0.000000,
-      CLKOUT0_DIVIDE_F => 14.000000,
+      CLKOUT0_DIVIDE_F => 10.000000,
       CLKOUT0_DUTY_CYCLE => 0.500000,
       CLKOUT0_PHASE => 0.000000,
       CLKOUT0_USE_FINE_PS => false,
-      CLKOUT1_DIVIDE => 7,
+      CLKOUT1_DIVIDE => 5,
       CLKOUT1_DUTY_CYCLE => 0.500000,
       CLKOUT1_PHASE => 0.000000,
       CLKOUT1_USE_FINE_PS => false,
-      CLKOUT2_DIVIDE => 14,
+      CLKOUT2_DIVIDE => 10,
       CLKOUT2_DUTY_CYCLE => 0.500000,
       CLKOUT2_PHASE => 45.000000,
       CLKOUT2_USE_FINE_PS => false,
-      CLKOUT3_DIVIDE => 8,
+      CLKOUT3_DIVIDE => 1,
       CLKOUT3_DUTY_CYCLE => 0.500000,
       CLKOUT3_PHASE => 0.000000,
       CLKOUT3_USE_FINE_PS => false,
@@ -155,7 +148,7 @@ mmcm_adv_inst: unisim.vcomponents.MMCME2_ADV
       CLKOUT1B => NLW_mmcm_adv_inst_CLKOUT1B_UNCONNECTED,
       CLKOUT2 => clk93Dly,
       CLKOUT2B => NLW_mmcm_adv_inst_CLKOUT2B_UNCONNECTED,
-      CLKOUT3 => clkTD_systemClock,
+      CLKOUT3 => NLW_mmcm_adv_inst_CLKOUT3_UNCONNECTED,
       CLKOUT3B => NLW_mmcm_adv_inst_CLKOUT3B_UNCONNECTED,
       CLKOUT4 => NLW_mmcm_adv_inst_CLKOUT4_UNCONNECTED,
       CLKOUT5 => NLW_mmcm_adv_inst_CLKOUT5_UNCONNECTED,
@@ -185,7 +178,6 @@ entity systemClock is
     clk93 : out STD_LOGIC;
     clk186 : out STD_LOGIC;
     clk93Dly : out STD_LOGIC;
-    clkTD : out STD_LOGIC;
     locked : out STD_LOGIC;
     clk_in1 : in STD_LOGIC
   );
@@ -200,7 +192,6 @@ inst: entity work.systemClock_systemClock_clk_wiz
       clk186 => clk186,
       clk93 => clk93,
       clk93Dly => clk93Dly,
-      clkTD => clkTD,
       clk_in1 => clk_in1,
       locked => locked
     );

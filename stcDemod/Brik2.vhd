@@ -251,7 +251,6 @@ ARCHITECTURE rtl OF Brik2 IS
             Tau1EstX4,
             Tau0EstA,
             Tau1EstA          : sfixed(3 downto -17);
-   SIGNAL   m_ndx             : integer range -5 to 3;
 
 
 -- TODO remove test points

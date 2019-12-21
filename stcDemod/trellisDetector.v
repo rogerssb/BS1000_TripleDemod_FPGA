@@ -52,6 +52,7 @@ trellisDetector
         4) At 40 Mbps, the system clock is at least 160 MHz so its not likely the clock can
             be increase much beyond twice that frequency.
 
+    History
 */
 module trellisDetector (
     input                   clk, clkEn,
@@ -850,24 +851,24 @@ module trellisDetector (
               end
               `MIN_COMPARE2: begin
                     if (minMetric_00 <= minMetric_01) begin
-                        minMetric_0 = minMetric_00;
-                        minIndex_0 = minIndex_00;
+                        minMetric_0 <= minMetric_00;
+                        minIndex_0 <= minIndex_00;
                     end
                     else begin
-                        minMetric_0 = minMetric_01;
-                        minIndex_0 = minIndex_01;
+                        minMetric_0 <= minMetric_01;
+                        minIndex_0 <= minIndex_01;
                     end
                     if (minMetric_10 <= minMetric_11) begin
-                        minMetric_1 = minMetric_10;
-                        minIndex_1 = minIndex_10;
+                        minMetric_1 <= minMetric_10;
+                        minIndex_1 <= minIndex_10;
                     end
                     else begin
-                        minMetric_1 = minMetric_11;
-                        minIndex_1 = minIndex_11;
+                        minMetric_1 <= minMetric_11;
+                        minIndex_1 <= minIndex_11;
                     end
- //                 minState <= `MIN_COMPARE1;
- //             end
- //             `MIN_COMPARE1: begin
+                  minState <= `MIN_COMPARE1;
+              end
+              `MIN_COMPARE1: begin
                     if (minMetric_0 <= minMetric_1) begin
                         minMetric <= minMetric_0;
                         minIndex <= minIndex_0;
@@ -952,7 +953,7 @@ module trellisDetector (
         end
     end
 
-/*    `else //USE_WIDE_OUTPUT
+    `else //USE_WIDE_OUTPUT
 
     wire            [17:0]  accMetric7;
     acsStage7 stage7(
@@ -1016,7 +1017,7 @@ module trellisDetector (
         startMetric = fifoMetric - minMetric;
     end
 
-*/
+
     `endif
 
 

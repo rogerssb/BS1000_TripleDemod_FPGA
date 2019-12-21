@@ -54,9 +54,8 @@
 
 (* DowngradeIPIdentifiedWarnings = "yes" *)
 module Fifo8k4to1 (
-  rst,
-  wr_clk,
-  rd_clk,
+  clk,
+  srst,
   din,
   wr_en,
   rd_en,
@@ -67,11 +66,9 @@ module Fifo8k4to1 (
   prog_full
 );
 
-input wire rst;
-(* X_INTERFACE_INFO = "xilinx.com:signal:clock:1.0 write_clk CLK" *)
-input wire wr_clk;
-(* X_INTERFACE_INFO = "xilinx.com:signal:clock:1.0 read_clk CLK" *)
-input wire rd_clk;
+(* X_INTERFACE_INFO = "xilinx.com:signal:clock:1.0 core_clk CLK" *)
+input wire clk;
+input wire srst;
 (* X_INTERFACE_INFO = "xilinx.com:interface:fifo_write:1.0 FIFO_WRITE WR_DATA" *)
 input wire [3 : 0] din;
 (* X_INTERFACE_INFO = "xilinx.com:interface:fifo_write:1.0 FIFO_WRITE WR_EN" *)
@@ -84,11 +81,11 @@ output wire [0 : 0] dout;
 output wire full;
 (* X_INTERFACE_INFO = "xilinx.com:interface:fifo_read:1.0 FIFO_READ EMPTY" *)
 output wire empty;
-output wire [12 : 0] wr_data_count;
+output wire [13 : 0] wr_data_count;
 output wire prog_full;
 
   fifo_generator_v13_1_4 #(
-    .C_COMMON_CLOCK(0),
+    .C_COMMON_CLOCK(1),
     .C_SELECT_XPM(0),
     .C_COUNT_TYPE(0),
     .C_DATA_COUNT_WIDTH(13),
@@ -98,7 +95,7 @@ output wire prog_full;
     .C_DOUT_WIDTH(1),
     .C_ENABLE_RLOCS(0),
     .C_FAMILY("kintex7"),
-    .C_FULL_FLAGS_RST_VAL(1),
+    .C_FULL_FLAGS_RST_VAL(0),
     .C_HAS_ALMOST_EMPTY(0),
     .C_HAS_ALMOST_FULL(0),
     .C_HAS_BACKUP(0),
@@ -108,14 +105,14 @@ output wire prog_full;
     .C_HAS_OVERFLOW(0),
     .C_HAS_RD_DATA_COUNT(0),
     .C_HAS_RD_RST(0),
-    .C_HAS_RST(1),
-    .C_HAS_SRST(0),
+    .C_HAS_RST(0),
+    .C_HAS_SRST(1),
     .C_HAS_UNDERFLOW(0),
     .C_HAS_VALID(0),
     .C_HAS_WR_ACK(0),
     .C_HAS_WR_DATA_COUNT(1),
     .C_HAS_WR_RST(0),
-    .C_IMPLEMENTATION_TYPE(2),
+    .C_IMPLEMENTATION_TYPE(0),
     .C_INIT_WR_PNTR_VAL(0),
     .C_MEMORY_TYPE(1),
     .C_MIF_FILE_NAME("BlankString"),
@@ -130,7 +127,7 @@ output wire prog_full;
     .C_PROG_FULL_THRESH_ASSERT_VAL(128),
     .C_PROG_FULL_THRESH_NEGATE_VAL(127),
     .C_PROG_FULL_TYPE(1),
-    .C_RD_DATA_COUNT_WIDTH(15),
+    .C_RD_DATA_COUNT_WIDTH(16),
     .C_RD_DEPTH(32768),
     .C_RD_FREQ(1),
     .C_RD_PNTR_WIDTH(15),
@@ -141,10 +138,10 @@ output wire prog_full;
     .C_USE_PIPELINE_REG(0),
     .C_POWER_SAVING_MODE(0),
     .C_USE_FIFO16_FLAGS(0),
-    .C_USE_FWFT_DATA_COUNT(0),
+    .C_USE_FWFT_DATA_COUNT(1),
     .C_VALID_LOW(0),
     .C_WR_ACK_LOW(0),
-    .C_WR_DATA_COUNT_WIDTH(13),
+    .C_WR_DATA_COUNT_WIDTH(14),
     .C_WR_DEPTH(8192),
     .C_WR_FREQ(1),
     .C_WR_PNTR_WIDTH(13),
@@ -293,12 +290,12 @@ output wire prog_full;
   ) inst (
     .backup(1'D0),
     .backup_marker(1'D0),
-    .clk(1'D0),
-    .rst(rst),
-    .srst(1'D0),
-    .wr_clk(wr_clk),
+    .clk(clk),
+    .rst(1'D0),
+    .srst(srst),
+    .wr_clk(1'D0),
     .wr_rst(1'D0),
-    .rd_clk(rd_clk),
+    .rd_clk(1'D0),
     .rd_rst(1'D0),
     .din(din),
     .wr_en(wr_en),

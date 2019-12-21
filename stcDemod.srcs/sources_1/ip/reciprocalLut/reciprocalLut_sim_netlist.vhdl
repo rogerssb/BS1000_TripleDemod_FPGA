@@ -1,14 +1,14 @@
 -- Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2017.2.1 (win64) Build 1957588 Wed Aug  9 16:32:24 MDT 2017
--- Date        : Fri Dec 13 22:22:51 2019
+-- Date        : Wed Dec 18 17:03:30 2019
 -- Host        : SEMCO_1039B running 64-bit major release  (build 9200)
 -- Command     : write_vhdl -force -mode funcsim
 --               C:/Semco/Vivado/Demods/stcDemod.srcs/sources_1/ip/reciprocalLut/reciprocalLut_sim_netlist.vhdl
 -- Design      : reciprocalLut
 -- Purpose     : This VHDL netlist is a functional simulation representation of the design and should not be modified or
 --               synthesized. This netlist cannot be used for SDF annotated simulation.
--- Device      : xc7k325tfbg676-2
+-- Device      : xc7k325tfbg676-1
 -- --------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;

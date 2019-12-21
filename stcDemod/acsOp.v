@@ -78,7 +78,12 @@ module acsOp(
     // Create the output clk enable
     reg             [7:0] clkEnSR;
     always @(posedge clk) begin
-        clkEnSR <= {clkEnSR[6:0],accMetricInEn};
+        if (reset) begin
+            clkEnSR <= 0;
+        end
+        else begin
+            clkEnSR <= {clkEnSR[6:0],accMetricInEn};
+        end
     end
     assign accMetricOutEn = clkEnSR[0];
 

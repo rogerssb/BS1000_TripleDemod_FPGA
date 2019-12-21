@@ -1,12 +1,18 @@
+/*
+    History
+    12-??-19    Changed DECIMATION from 4 to 2 to allow 20Mb data rates
+    12-18-19    Added reset signal to interpolators to avoid random resets putting system in unstable state.
+
+       First pilot data pair in 50-50 mode is -0.373817, 0.128822, -0.361626, 0.0697403
+    First trellis pairs in 50-50 mode are -0.360298, 0.167099   -0.361679, 0.102417
+*/
 `include "stcDefines.vh"
 `timescale 1ns/100ps
 
 module trellisProcess (
-    input                   clk186,
-                            clkTD,
+    input                   clk,
                             clkEnable,
                             reset,
-                            resetTD,
                             frameStart,
                             inputValid,
                             estimatesDone,
@@ -21,12 +27,9 @@ module trellisProcess (
     input   signed  [3:0]   m_ndx0,
                             m_ndx1,
     input   signed  [5:0]   deltaTauEstIn,
-    output  signed  [17:0]  sample0r,
-                            sample0i,
     output  reg             outputEn,
     output                  interpOutEn,
                             lastSampleReset,
-                            full,
     output  reg     [3:0]   outputBits
 );
 
@@ -39,7 +42,7 @@ module trellisProcess (
                             dfImagOutput = df_tdata[17:0];
     DetectionFilter df (
         .aresetn(!reset),
-        .aclk(clk186),
+        .aclk(clk),
         .aclken(clkEnable),
         .s_axis_data_tvalid(inputValid),                                        // input wire s_axis_data_tvalid
         .s_axis_data_tready(),                                                  // output wire s_axis_data_tready
@@ -50,10 +53,10 @@ module trellisProcess (
 
     //-------------------------- Estimators -----------------------------------
 
-  (* ASYNC_REG="true" *)    reg     signed  [17:0]  h0EstReal,h0EstImag;
-  (* ASYNC_REG="true" *)    reg     signed  [17:0]  h1EstReal,h1EstImag;
-  (* ASYNC_REG="true" *)    reg     signed  [5:0]   deltaTauEst;
-                            reg             [17:0]  ch0Mu,ch1Mu;
+    reg     signed  [17:0]  h0EstReal,h0EstImag;
+    reg     signed  [17:0]  h1EstReal,h1EstImag;
+    reg     signed  [5:0]   deltaTauEst;
+    reg             [17:0]  ch0Mu,ch1Mu;
     reg             [11:0]  sampleOut;
 
     //------------------------- Start Pulse Alignment -------------------------
@@ -65,19 +68,22 @@ module trellisProcess (
     1) It creates an interpolate signal that is aligned with the first sample
         of the block of 4 samples that define a bit period. This signal is used
         by the interpolate blocks.
-    2) It buffers the sample burst and places idle time between the samples
+    2) It buffers the frame data while estimating and places idle time between the samples
         to keep from over-running the trellis detector.
     3) It creates a valid signal timed to be true starting with the last bit of
         the pilot and staying true for the duration of the frame.
     */
     wire    signed  [17:0]  faReal0,faImag0,faReal1,faImag1;
-    reg                     estimatesDoneDly, myStartOfTrellisClr;
-    wire                    myStartOfTrellis;
+    reg                     estimatesDoneDly;
 
-    always @(posedge clk186) begin
-        estimatesDoneDly    <= estimatesDone;
-        myStartOfTrellisClr <= myStartOfTrellis;
+    always @(posedge clk) begin
+        estimatesDoneDly <= estimatesDone;
         if (estimatesDoneDly) begin
+            h0EstReal   <= h0EstRealIn;
+            h0EstImag   <= h0EstImagIn;
+            h1EstReal   <= h1EstRealIn;
+            h1EstImag   <= h1EstImagIn;
+            deltaTauEst <= deltaTauEstIn;
             ch0Mu       <= ch0MuIn;
             ch1Mu       <= ch1MuIn;
         end
@@ -89,12 +95,11 @@ module trellisProcess (
     frameAlignment #(
         .CLKS_PER_OUTPUT(2))
     fa(
-        .clk(clk186),
+        .clk(clk),
         .clkEn(clkEnable),
         .reset(reset),
         .startOfFrame(frameStart),
         .estimatesDone(estimatesDoneDly),
-        .tdFifoFull(tdFifoFull),
         .valid(dfValid),
         .dinReal(dfRealOutput),
         .dinImag(dfImagOutput),
@@ -102,7 +107,6 @@ module trellisProcess (
         .m_ndx1(m_ndx1),
         .clkEnOut(faClkEn),
         .myStartOfTrellis(myStartOfTrellis),
-        .full(full),
         .interpolate(interpolate),
         .doutReal0(faReal0),
         .doutImag0(faImag0),
@@ -112,8 +116,9 @@ module trellisProcess (
 
     //------------------------- Interpolators ---------------------------------
 
+    wire    signed      [17:0]  sample0r, sample0i, sample1r, sample1i;
     interpolator ch0r(
-        .clk(clk186),
+        .clk(clk),
         .clkEn(1'b1),
         .reset(reset || myStartOfTrellis),
         .interpolate(faClkEn & interpolate),
@@ -125,7 +130,7 @@ module trellisProcess (
     );
 
     interpolator ch0i(
-        .clk(clk186),
+        .clk(clk),
         .clkEn(1'b1),
         .reset(reset || myStartOfTrellis),
         .interpolate(faClkEn & interpolate),
@@ -136,9 +141,8 @@ module trellisProcess (
         .dout(sample0i)
     );
 
-    wire    signed      [17:0]  sample1r;
     interpolator ch1r(
-        .clk(clk186),
+        .clk(clk),
         .clkEn(1'b1),
         .reset(reset || myStartOfTrellis),
         .interpolate(faClkEn & interpolate),
@@ -148,9 +152,9 @@ module trellisProcess (
         .outputEn(),
         .dout(sample1r)
     );
-    wire    signed      [17:0]  sample1i;
+
     interpolator ch1i(
-        .clk(clk186),
+        .clk(clk),
         .clkEn(1'b1),
         .reset(reset || myStartOfTrellis),
         .interpolate(faClkEn & interpolate),
@@ -161,49 +165,17 @@ module trellisProcess (
         .dout(sample1i)
     );
 
-    wire    [72:0]  tdFifoOut;
-    wire    [17:0]  tdSample0i, tdSample0r, tdSample1i, tdSample1r;
-    reg             rdFifo;
-
-    tdFifo tdFifo_u (
-      .rst(reset),
-      .wr_clk(clk186),
-      .rd_clk(clkTD),
-      .din({myStartOfTrellis, sample1i, sample1r, sample0i, sample0r}),
-      .wr_en(interpOutEn || myStartOfTrellis || myStartOfTrellisClr),
-      .rd_en(rdFifo),
-      .dout(tdFifoOut),
-      .full(realFull),
-      .empty(fifoEmpty),
-      .prog_full(tdFifoFull)
-    );
-
-    assign tdSample1i = tdFifoOut[71:54];
-    assign tdSample1r = tdFifoOut[53:36];
-    assign tdSample0i = tdFifoOut[35:18];
-    assign tdSample0r = tdFifoOut[17:0];
-    wire   tdStartOfTrellis = tdFifoOut[72];
-
     //------------------------- Trellis Detector ------------------------------
     wire [3:0]   tdOutputBits;
-    reg  tdStartOfTrellisDly;
-
-    always @(posedge clkTD) begin
-        h0EstReal   <= h0EstRealIn;
-        h0EstImag   <= h0EstImagIn;
-        h1EstReal   <= h1EstRealIn;
-        h1EstImag   <= h1EstImagIn;
-        deltaTauEst <= deltaTauEstIn;
-    end
 
     trellisDetector td(
-        .clk(clkTD),
+        .clk(clk),
         .clkEn(1'b1),
-        .reset(resetTD || lastSampleReset),
-        .sampleEn(rdFifo && !tdStartOfTrellisDly),
-        .startFrame(tdStartOfTrellis && !tdStartOfTrellisDly),  // tdStartOfTrellis is too wide
-        .in0Real(tdSample0r), .in0Imag(tdSample0i),
-        .in1Real(tdSample1r), .in1Imag(tdSample1i),
+        .reset(reset || lastSampleReset),
+        .sampleEn(interpOutEn),
+        .startFrame(myStartOfTrellis),
+        .in0Real(sample0r), .in0Imag(sample0i),
+        .in1Real(sample1r), .in1Imag(sample1i),
         .deltaTauEst(deltaTauEst),
         .h0EstReal(h0EstReal), .h0EstImag(h0EstImag),
         .h1EstReal(h1EstReal), .h1EstImag(h1EstImag),
@@ -213,32 +185,8 @@ module trellisProcess (
         .outputBits(tdOutputBits)
     );
 
-    reg [4:0]   ClockCntr;
-
-    always @(posedge clkTD) begin
-        if (resetTD) begin
-            tdStartOfTrellisDly <= 0;
-        end
-        else if (tdStartOfTrellis) begin
-            tdStartOfTrellisDly <= 1;
-        end
-        else if (rdFifo) begin
-            tdStartOfTrellisDly <= 0;
-        end
-
-        if (resetTD) begin
-            ClockCntr <= 0;
-        end
-        else if (ClockCntr < 6) begin // do a read every 7 clocks if data available. 7 x 4 samples/bit is 28 clocks per trellis cycle
-            ClockCntr <= ClockCntr + 1;
-            rdFifo    <= 0;
-        end
-        else begin
-            ClockCntr <= 0;
-            rdFifo    <= !fifoEmpty;
-        end
-
-        if (resetTD || tdStartOfTrellis || lastSampleReset) begin
+    always @(posedge clk) begin
+        if (reset || myStartOfTrellis || lastSampleReset) begin
             sampleOut <= 0;
         end
         else if (tdOutputEn) begin
@@ -252,7 +200,7 @@ module trellisProcess (
             outputEn <= 0;
         end
 
-        if (resetTD) begin
+        if (reset) begin
             outputBits <= 0;
         end
         else if (tdOutputEn) begin

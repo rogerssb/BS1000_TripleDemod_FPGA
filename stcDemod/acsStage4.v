@@ -142,10 +142,8 @@ module acsStage4(
 
     // Count through the 16 states of the 8 acs units to generate 128 outputs.
     reg             [3:0]   metricAddr[0:7];
-    reg                     startStageDly;
     integer                 k;
     always @(posedge clk) begin
-        startStageDly <= startStage;
         for (k = 0; k < 8; k = k + 1) begin
             if (reset) begin
                 metricAddr[k] <= 0;
@@ -153,7 +151,7 @@ module acsStage4(
             else if (accMetricInEn && (metricAddr[k] > 0)) begin
                 metricAddr[k] <= metricAddr[k] + 1;
             end
-            else if (startStageDly) begin
+            else if (startStage) begin
                 metricAddr[k] <= 1;
             end
         end
@@ -212,7 +210,7 @@ module acsStage4(
     wire            [17:0]  accMetricTmp_110;
     wire            [17:0]  accMetricTmp_111;
     acsOp acs000(
-        .clk(clk), .reset(startFrame),
+        .clk(clk), .reset(startFrame | reset),
         .y8Real(table4r_000),    .y8Imag(table4i_000),
         .sReal(s0Real),         .sImag(s0Imag),
         .accMetricInEn(accMetricInEn),
@@ -221,7 +219,7 @@ module acsStage4(
         .accMetricOut(accMetricTmp_000)
     );
     acsOp acs001(
-        .clk(clk), .reset(startFrame),
+        .clk(clk), .reset(startFrame | reset),
         .y8Real(table4r_001),    .y8Imag(table4i_001),
         .sReal(s0Real),         .sImag(s0Imag),
         .accMetricInEn(accMetricInEn),
@@ -230,7 +228,7 @@ module acsStage4(
         .accMetricOut(accMetricTmp_001)
     );
     acsOp acs010(
-        .clk(clk), .reset(startFrame),
+        .clk(clk), .reset(startFrame | reset),
         .y8Real(table4r_010),    .y8Imag(table4i_010),
         .sReal(s0Real),         .sImag(s0Imag),
         .accMetricInEn(accMetricInEn),
@@ -239,7 +237,7 @@ module acsStage4(
         .accMetricOut(accMetricTmp_010)
     );
     acsOp acs011(
-        .clk(clk), .reset(startFrame),
+        .clk(clk), .reset(startFrame | reset),
         .y8Real(table4r_011),    .y8Imag(table4i_011),
         .sReal(s0Real),         .sImag(s0Imag),
         .accMetricInEn(accMetricInEn),
@@ -248,7 +246,7 @@ module acsStage4(
         .accMetricOut(accMetricTmp_011)
     );
     acsOp acs100(
-        .clk(clk), .reset(startFrame),
+        .clk(clk), .reset(startFrame | reset),
         .y8Real(table4r_100),    .y8Imag(table4i_100),
         .sReal(s0Real),         .sImag(s0Imag),
         .accMetricInEn(accMetricInEn),
@@ -257,7 +255,7 @@ module acsStage4(
         .accMetricOut(accMetricTmp_100)
     );
     acsOp acs101(
-        .clk(clk), .reset(startFrame),
+        .clk(clk), .reset(startFrame | reset),
         .y8Real(table4r_101),    .y8Imag(table4i_101),
         .sReal(s0Real),         .sImag(s0Imag),
         .accMetricInEn(accMetricInEn),
@@ -266,7 +264,7 @@ module acsStage4(
         .accMetricOut(accMetricTmp_101)
     );
     acsOp acs110(
-        .clk(clk), .reset(startFrame),
+        .clk(clk), .reset(startFrame | reset),
         .y8Real(table4r_110),    .y8Imag(table4i_110),
         .sReal(s0Real),         .sImag(s0Imag),
         .accMetricInEn(accMetricInEn),
@@ -275,7 +273,7 @@ module acsStage4(
         .accMetricOut(accMetricTmp_110)
     );
     acsOp acs111(
-        .clk(clk), .reset(startFrame),
+        .clk(clk), .reset(startFrame | reset),
         .y8Real(table4r_111),    .y8Imag(table4i_111),
         .sReal(s0Real),         .sImag(s0Imag),
         .accMetricInEn(accMetricInEn),
