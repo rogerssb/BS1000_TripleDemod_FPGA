@@ -33,6 +33,8 @@ Dependencies:
 
 10-25-19 Removed MiscBit selection on TrellisOffset polarity
 11-12-19 Removed most MiscBits, Mag0GtMag1 requires 2:1 to switch
+12_??-19 Removed Detection Filter from Brik2 module. Changed STC routing to match
+12-19-19 Change PilotSync Offset to 9. Changed TrellisOffset in VIO to 0
 -------------------------------------------------------------
 */
 
@@ -57,6 +59,7 @@ ENTITY STC IS
       DacSelect1,
       DacSelect2        : IN  SLV4;
       Clk93,
+ --     Clk93Dly,		-- TODO uncomment
       Clk186,
       SpectrumInv,
       ValidIn           : IN  std_logic;
@@ -136,8 +139,10 @@ ARCHITECTURE rtl OF STC IS
 
    COMPONENT Brik2
       PORT(
-         clk,
+         clk186,
+         clk93,
          reset,
+         reset2x,
          ce,
          StartHPP,
          StartIn,
@@ -147,16 +152,12 @@ ARCHITECTURE rtl OF STC IS
          InI            : IN  SLV18;
          H0MagIn,
          H1MagIn        : IN  std_logic_vector(12 downto 0);
-         StartDF,
-         ValidDF,
          PilotLocked,
          EstimatesDone  : OUT std_logic;
          H0EstR,
          H0EstI,
          H1EstR,
-         H1EstI,
-         DF_R,
-         DF_I           : OUT STC_PARM;
+         H1EstI         : OUT STC_PARM;
          m_ndx0,
          m_ndx1         : OUT integer range -5 to 3;
          Mu0,
@@ -184,14 +185,15 @@ ARCHITECTURE rtl OF STC IS
        h1EstImagIn,
        ch0MuIn,
        ch1MuIn          : IN  SLV18;
+--       clksPerOutput,					-- TODO uncomment
        m_ndx0,
        m_ndx1           : IN  SLV4;
        deltaTauEstIn    : IN  std_logic_vector(5 downto 0);
        sample0r,
-       sample0i         : OUT SLV18;
+       sample0i         : OUT SLV18;	-- TODO uncomment
        outputEn,
        lastSampleReset,
-       full,
+       full,							-- TODO uncomment
        interpOutEn      : OUT std_logic;
        outputBits       : OUT SLV4
    );
@@ -293,25 +295,22 @@ ARCHITECTURE rtl OF STC IS
             PhaseDiffEnPS,
             Mag0GtMag1,
             CordicValid,
-            TrellisFull,
             StartInBrik2Dly,
             ValidInBrik2Dly,
             PilotValidOutDly,
-            StartDF,
-            ValidDF,
             TrellisOutEn,
             interpOutEn,
             lastSampleReset,
-            EstimatesDone     : std_logic;
-   SIGNAL   TrellisBits       : SLV4;
+            EstimatesDone,
+            EstimatesDoneDly  : std_logic;
+   SIGNAL   TrellisBits,
+            ClkPerTrellis     : SLV4;
    SIGNAL   PhaseDiffEnDly    : SLV8;
    SIGNAL   StartOffset       : SLV16;
    SIGNAL   RealOutPS,
             ImagOutPS,
             InRBrik2Dly,
             InIBrik2Dly,
-            DF_R,
-            DF_I,
             H0EstR,
             H0EstI,
             H1EstR,
@@ -374,17 +373,16 @@ ARCHITECTURE rtl OF STC IS
    SIGNAL   TrellisOffset     : signed(3 downto 0);
    SIGNAL   DataAddr          : ufixed(9 downto 0);
    SIGNAL   DataAddr_i        : natural range 0 to 1023;
-   SIGNAL   Bert,
-            BitErrors         : natural range 0 to 32000;
-   signal   sample0r,
-            sample0i,
-            MiscBits,
+   SIGNAL   BitErrors,
+            BitError          : natural range 0 to 32000;
+   signal   MiscBits,
             HxPhase,
             InRBrik2Ila,
             InIBrik2Ila       : SLV18;
    signal   StartIla,
             ValidIla          : std_logic;
    signal   DacMux            : vector_of_slvs(0 to 15)(17 downto 0);
+   signal   DeltaTauEn        : std_logic;
 
    attribute mark_debug : string;
    attribute mark_debug of EstimatesDone,
@@ -438,10 +436,10 @@ BEGIN
       if (rising_edge(Clk186)) then
          if (SIM_MODE) then
             CaptureErrors  := ExpectedData xor TrellisBits;
-            if (lastSampleReset or Reset2x) then
+            if ((EstimatesDone and not EstimatesDoneDly) or Reset2x) then
                DataAddr  <= (others=>'0');
-               Bert      <= BitErrors;
                BitErrors <= 0;
+               BitError  <= BitErrors;
             elsif (TrellisOutEn) then
                DataAddr <= resize(DataAddr + 1, DataAddr);
                BitErrors <= BitErrors + count_bits(CaptureErrors);
@@ -450,13 +448,12 @@ BEGIN
             pnBitEn <= ClkOutEn and not ClkOutEnDly;
             ClkOutEnDly <= ClkOutEn;
             ValidData2047 <= dataBit xnor codeBit;
-            if (not StartOutPS) then
+         if (not EstimatesDone) then
                Reload   <= '0';
                if (pnBitEn and not ValidData2047) then
                   Ber <= Ber + 1;
                end if;
             else
-               Bert <= Ber;
                Ber <= 0;
                if (Ber > 200) then
                   Reload <= '1';
@@ -479,7 +476,7 @@ BEGIN
    Reset186Process : process(Clk186)
    begin
       if(rising_edge(Clk186)) then
-         if not (Clk93) then
+         if not (Clk93) then		-- Clk93Dly  TODO uncomment
             Reset186 <= ResetSrc(7);
          end if;
       end if;
@@ -585,7 +582,8 @@ BEGIN
          StartOut       => StartOutPS,
          ValidOut       => ValidOutPS
    );
-
+/*
+   g1 : if (not SIM_MODE) generate
    VioPhase  : Vio2x18
       PORT MAP (
          clk         => Clk186,
@@ -594,8 +592,13 @@ BEGIN
          probe_out2  => open,
          probe_out3  => MiscBits,
          probe_out4  => TrellisOffsetSlv,
-         probe_out5  => open
+         probe_out5  => ClkPerTrellis
    );
+   end generate;
+*/
+   MiscBits       <= 18x"80F4";
+   TrellisOffsetSlv <= x"D";
+
    TrellisOffset  <= signed(TrellisOffsetSlv);
 
    InterBrikClk : process(Clk186) is
@@ -618,8 +621,10 @@ BEGIN
 
    Brik2_u : Brik2
       PORT MAP(
-         Clk            => Clk186,
-         Reset          => Reset2x,
+         clk93          => Clk93,
+         Clk186         => Clk186,
+         Reset          => Reset,
+         Reset2x        => Reset2x,
          CE             => CE,
          StartIn        => StartInBrik2Dly,
          ValidIn        => ValidInBrik2Dly,
@@ -632,10 +637,6 @@ BEGIN
          PhaseOutB      => Phase0B,
          PhaseDiff      => PhaseDiff2,
          StartHPP       => CordicValid,
-         StartDF        => StartDF,
-         ValidDF        => ValidDF,
-         DF_R           => DF_R,
-         DF_I           => DF_I,
          H0EstR         => H0EstR,
          H0EstI         => H0EstI,
          H1EstR         => H1EstR,
@@ -656,7 +657,12 @@ BEGIN
          m_ndx1Slv      <= std_logic_vector(TrellisOffset + to_signed(m_ndx1, 4));
          Ch0MuSlv       <= to_slv(Ch0Mu);
          Ch1MuSlv       <= to_slv(Ch1Mu);
-         deltaTauEstSlv <= to_slv(DeltaTauEst);
+         if (SIM_MODE) then
+            deltaTauEstSlv <= to_slv(DeltaTauEst) when DeltaTauEn else 6x"00";
+         else
+            deltaTauEstSlv <= to_slv(DeltaTauEst) when MiscBits(12) else 6x"00";
+         end if;
+         EstimatesDoneDly <= EstimatesDone;
       end if;
    end process;
 
@@ -665,11 +671,11 @@ BEGIN
          clk                  => Clk186,
          clkEnable            => CE,
          reset                => Reset2x,
-         estimatesDone        => EstimatesDone,
-         frameStart           => StartDF,
-         inputValid           => ValidDF,
-         dinReal              => to_slv(DF_R),
-         dinImag              => to_slv(DF_I),
+         estimatesDone        => EstimatesDone and not EstimatesDoneDly,   -- rising edge of 93M clock pulse
+         frameStart           => StartInBrik2Dly,
+         inputValid           => ValidInBrik2Dly,
+         dinReal              => to_slv(InRBrik2Dly),
+         dinImag              => to_slv(InIBrik2Dly),
          h0EstRealIn          => to_slv(H0EstR),
          h0EstImagIn          => to_slv(H0EstI),
          h1EstRealIn          => to_slv(H1EstR),
@@ -677,13 +683,14 @@ BEGIN
          ch0MuIn              => Ch0MuSlv,
          ch1MuIn              => Ch1MuSlv,
          deltaTauEstIn        => deltaTauEstSlv,
+--         clksPerOutput        => ClkPerTrellis,	-- TODO uncomment
          m_ndx0               => m_ndx0Slv,
          m_ndx1               => m_ndx1Slv,
-         sample0r             => sample0r,
-         sample0i             => sample0i,
+         sample0r             => open,
+         sample0i             => open,
          interpOutEn          => interpOutEn,
          lastSampleReset      => lastSampleReset,
-         full                 => TrellisFull,
+         full                 => open,
          outputEn             => TrellisOutEn,
          outputBits           => TrellisBits
       );

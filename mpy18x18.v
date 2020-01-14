@@ -15,10 +15,15 @@ module mpy18x18(
             p <= 36'h0;
         end
         else begin
+            `define MPY_ALTERNATE
+            `ifdef MPY_ALTERNATE
             aReg <= a;
             bReg <= b;
+            p <= aReg * bReg;
+            `else
             pReg <= a * b;
             p <= pReg;
+            `endif
         end
     end
 

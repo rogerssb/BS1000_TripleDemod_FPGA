@@ -61,14 +61,14 @@ ARCHITECTURE rtl OF FireberdDrive IS
       PORT (
          clk : IN STD_LOGIC;
          srst : IN STD_LOGIC;
-         din : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
+         din            : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
          wr_en : IN STD_LOGIC;
          rd_en : IN STD_LOGIC;
-         dout : OUT STD_LOGIC_VECTOR(0 DOWNTO 0);
-         full : OUT STD_LOGIC;
-         empty : OUT STD_LOGIC;
+         dout           : OUT STD_LOGIC_VECTOR(0 DOWNTO 0);
+         full           : OUT STD_LOGIC;
+         empty          : OUT STD_LOGIC;
          wr_data_count : OUT STD_LOGIC_VECTOR(13 DOWNTO 0);
-         prog_full : OUT STD_LOGIC
+         prog_full      : OUT STD_LOGIC
       );
    END COMPONENT;
 
@@ -83,8 +83,8 @@ ARCHITECTURE rtl OF FireberdDrive IS
             Empty,
             ProgFull    : std_logic;
 
---   attribute mark_debug : string;
---   attribute mark_debug of WrCount : signal is "true";
+   attribute KEEP : string;
+   attribute KEEP of Active : signal is "true";
 
 BEGIN
 
@@ -111,12 +111,12 @@ BEGIN
                RdEn     <= Accum_v(0) and not Accum(0) and not empty;
             end if;
             ClkDelay <= ClkDelay(2 downto 0) & RdEn;
-            ClkOut   <= nor(ClkDelay); --TODO FZ (3) or ClkDelay(2);    -- Delay ClkOut into valid data, widen pulse to 93M clock
+            ClkOut   <= ClkDelay(3) or ClkDelay(2);    -- Delay ClkOut into valid data, widen pulse to 93M clock
          end if;
       end if;
    end process ClkProcess;
 
-   FdFifo  : Fifo8k4to1
+   FdFifo  : Fifo8k4to1       -- 4 bit in, 1 bit output
    PORT MAP (
       clk            => clk,
       srst           => reset,

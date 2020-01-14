@@ -1,8 +1,0 @@
-i<>.\..\..\testPcmfm.v
-i<>.\..\..\demod.v
-i<>.\..\..\bitsync.v
-i<>.\..\..\carrierLoop.v
-i<>.\..\..\channelAgc.v
-i<>.\..\..\demodRegs.v
-i<>.\..\..\fmDemod\fmDemod.v
-i<>.\..\..\log2.v

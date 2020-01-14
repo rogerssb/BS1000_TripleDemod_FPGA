@@ -4,14 +4,14 @@
 
 module stcDemodTop (
 
-    `ifdef TRIPLE_DEMOD
+    `ifdef R6100
 
     input               spiClk,
     input               spiCSn,
     input               spiDataIn,
     inout               spiDataOut,
 
-    `else   //TRIPLE_DEMOD
+    `else   //R6100
 
     // Flexbus connections
     input               fbClk,
@@ -22,17 +22,17 @@ module stcDemodTop (
     input       [15:0]  fb_addr,
     inout       [15:0]  fb_data,
 
-    `endif //TRIPLE_DEMOD
+    `endif //R6100
 
     // ADC Inputs
     input       [13:0]  adc0,
     input               adc0_overflow,
     output              adc01_powerDown,
-    `ifdef TRIPLE_DEMOD
+    `ifdef R6100
     input               adc0Clk,
-    `else // TRIPLE_DEMOD
+    `else // R6100
     input               sysClk,
-    `endif // TRIPLE_DEMOD
+    `endif // R6100
 
     // DAC configuration interface
     output              dac_rst,
@@ -40,7 +40,7 @@ module stcDemodTop (
     output              dac_sdio,
     output              dac0_nCs,
     output              dac1_nCs,
-    `ifndef TRIPLE_DEMOD
+    `ifndef R6100
     output              dac2_nCs,
     `endif
 
@@ -49,7 +49,7 @@ module stcDemodTop (
     output  reg [13:0]  dac0_d,
     output              dac1_clk,
     output  reg [13:0]  dac1_d,
-    `ifndef TRIPLE_DEMOD
+    `ifndef R6100
     output              dac2_clk,
     output  reg [13:0]  dac2_d,
     `endif
@@ -60,7 +60,7 @@ module stcDemodTop (
     output              ch2ClkOut,ch2DataOut,
     output              ch3ClkOut,ch3DataOut,
 
-    `ifdef TRIPLE_DEMOD
+    `ifdef R6100
 
     // PLL Interface Signals
     output              pll0_REF,
@@ -68,6 +68,7 @@ module stcDemodTop (
     output              pll1_REF,
     input               pll1_OUT1,
 
+    `ifdef ADD_AM
     // AM ADC Interface
     input               amAdcDataIn,
     output              amAdcClk,
@@ -77,6 +78,7 @@ module stcDemodTop (
     output              amDacDataOut,
     output              amDacClk,
     output              amDacCSn,
+    `endif
 
     // Video Switch Select Lines
     output      [1:0]   video0InSelect,
@@ -84,7 +86,7 @@ module stcDemodTop (
     output      [1:0]   video1InSelect,
     output reg  [1:0]   video1OutSelect,
 
-    `else   //TRIPLE_DEMOD
+    `else   //R6100
 
     // PLL Interface Signals
     output              pll_SCK,
@@ -102,7 +104,7 @@ module stcDemodTop (
     input               pll2_OUT1,
     output              pll2_PWDn,
 
-    `endif //TRIPLE_DEMOD
+    `endif //R6100
 
     `ifdef ADD_SPI_GATEWAY
     //output              spiFlashCK, //Output through the STARTUPE2 primitive
@@ -119,13 +121,13 @@ module stcDemodTop (
 
 );
 
-    parameter VER_NUMBER = 16'd627;
+    parameter VER_NUMBER = 16'd628;
 
 
 //******************************************************************************
 //                          Clock Distribution
 //******************************************************************************
-    `ifdef TRIPLE_DEMOD
+    `ifdef R6100
     systemClock systemClock (
         .clk_in1(adc0Clk),
         .clk93(clk),
@@ -154,7 +156,7 @@ module stcDemodTop (
     );
     `endif //ADD_FRANKS_KLUDGE
 
-    `else //TRIPLE_DEMOD
+    `else //R6100
     systemClock systemClock (
         .clk_in1(sysClk),
         .clk93(clk),
@@ -167,11 +169,11 @@ module stcDemodTop (
         .clk_out1(busClk),
         .locked(fbClkLocked)
     );
-    `endif //TRIPLE_DEMOD
+    `endif //R6100
 
 
 
-    `ifdef TRIPLE_DEMOD
+    `ifdef R6100
     /******************************************************************************
                                  SPI Config Interface
     ******************************************************************************/
@@ -197,7 +199,7 @@ module stcDemodTop (
     );
     assign spiDataOut = spiDataOE ? spiOut : 1'bz;
 
-    `else //TRIPLE_DEMOD
+    `else //R6100
 
     /******************************************************************************
                                  Bus Interface
@@ -221,7 +223,7 @@ module stcDemodTop (
     assign  addr[0] = 1'b0;
     wire    rd = !fb_oen;
 
-    `endif //TRIPLE_DEMOD
+    `endif //R6100
 
     `ifdef ADD_SPI_GATEWAY
     /******************************************************************************
@@ -294,7 +296,7 @@ module stcDemodTop (
         endcase
     end
 
-    wire    [23:0]  boot_addr;
+    wire    [31:0]  boot_addr;
     wire    [3:0]   ch0MuxSelect;
     wire    [3:0]   ch1MuxSelect;
     wire    [31:0]  semcoTopDout;
@@ -307,6 +309,7 @@ module stcDemodTop (
         .dataOut(semcoTopDout),
         .clk(clk),
         .versionNumber(VER_NUMBER),
+        .fpgaType(`FPGA_TYPE),
         .reset(reset),
         .reboot(reboot),
         .rebootAddress(boot_addr),
@@ -507,10 +510,10 @@ module stcDemodTop (
 //                       Clock/Data Jitter Reduction
 //******************************************************************************
 
-    `ifdef TRIPLE_DEMOD
+    `ifdef R6100
 
 
-    `else //TRIPLE_DEMOD
+    `else //R6100
 
     // SPI interface to the PLLs
     wire    [31:0]  pllDout;
@@ -536,7 +539,7 @@ module stcDemodTop (
         .pll2Reset(pll2Reset)
     );
 
-    `endif //TRIPLE_DEMOD
+    `endif //R6100
 
     //----------------------- Channel 0 Jitter Attenuation --------------------
 
@@ -611,15 +614,17 @@ module stcDemodTop (
         .pllOutputClk(pll1_OUT1),
         .sourceSelect(cAndD1SourceSelect),
         .pllReferenceClk(pll1_REF),
-//        .outputClk(ch1ClkOut),
-        .outputClk(),
+        .outputClk(cAndD1ClkOut),
         .outputData(cAndD1DataOut)
     );
 //    assign ch1DataOut = cAndD1DataOut[2];
+//    assign ch1ClkOut = cAndD1ClkOut;
     assign ch1DataOut = stcBit;
     assign ch1ClkOut = stcBitEnOut;
-    assign ch3ClkOut = ch1ClkOut;
-    assign ch3DataOut = cAndD1DataOut[2];
+//    assign ch3ClkOut = cAndD1ClkOut;
+//    assign ch3DataOut = cAndD1DataOut[2];
+    assign ch3ClkOut = stcBit;
+    assign ch3DataOut = stcBitEnOut;
 
     assign          pll2_REF = 1'b0;
     assign          pll2_Data = 1'b0;
@@ -798,7 +803,7 @@ module stcDemodTop (
     end
     `endif //USE_INTERPOLATORS
 
-    `ifndef TRIPLE_DEMOD
+    `ifndef R6100
     reg     [17:0]  interp2DataIn;
     reg             interp2ClkEn;
     wire    [3:0]   dac2Source;
@@ -883,12 +888,12 @@ module stcDemodTop (
     end
     `endif  //USE_INTERPOLATORS
 
-    `endif //not TRIPLE_DEMOD
+    `endif //not R6100
 
 
     assign dac0_clk = clk;
     assign dac1_clk = clk;
-    `ifndef TRIPLE_DEMOD
+    `ifndef R6100
     assign dac2_clk = clk;
     `endif
 
@@ -910,8 +915,9 @@ module stcDemodTop (
 
     assign sdiOut = 1'b0;
 
-    `ifdef TRIPLE_DEMOD
+    `ifdef R6100
 
+    `ifdef ADD_AM
     //******************************************************************************
     //                           AM ADC Interface
     //******************************************************************************
@@ -938,6 +944,7 @@ module stcDemodTop (
         .spiClk(amDacClk),
         .spiCSn(amDacCSn)
     );
+    `endif
 
     //******************************************************************************
     //                          Video Switch Interface
@@ -999,10 +1006,10 @@ module stcDemodTop (
         endcase
     end
 
-    `endif //TRIPLE_DEMOD
+    `endif //R6100
 
 
-    `ifdef TRIPLE_DEMOD
+    `ifdef R6100
 
     //******************************************************************************
     //                           Processor Read Data Mux
@@ -1015,7 +1022,7 @@ module stcDemodTop (
             `SPIGW_SPACE:       rd_mux = spiGatewayDout;
             `endif
 
-            `STC_DEMOD_SPACE    rd_mux = stcDout;
+            `STC_DEMOD_SPACE:   rd_mux = stcDout;
 
             `DEMODSPACE,
             `DDCSPACE,
@@ -1043,7 +1050,7 @@ module stcDemodTop (
         endcase
     end
 
-    `else //TRIPLE_DEMOD
+    `else //R6100
 
     //******************************************************************************
     //                           Processor Read Data Mux
@@ -1163,7 +1170,8 @@ module stcDemodTop (
 
     assign fb_data = (cs & rd) ? rd_mux : 16'hzzzz;
 
-    `endif //TRIPLE_DEMOD
+    `endif //R6100
+
 
 endmodule
 

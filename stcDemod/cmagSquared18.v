@@ -9,6 +9,8 @@ module cmagSquared18(
     `define USE_CLOCKED_MPYS
     `ifdef USE_CLOCKED_MPYS
 
+    //`define USE_CORE_MPY
+    `ifdef USE_CORE_MPY
     wire    [35:0]  realSquared;
     mpy18x18 mpyReal(
         .CLK(clk),
@@ -23,6 +25,24 @@ module cmagSquared18(
         .B(inImag),
         .P(imagSquared)
     );
+    `else
+    wire    [35:0]  realSquared;
+    mpy18x18PL1 mpyReal(
+        .clk(clk),
+        .sclr(1'b0),
+        .a(inReal),
+        .b(inReal),
+        .p(realSquared)
+    );
+    wire    [35:0]  imagSquared;
+    mpy18x18PL1 mpyImag(
+        .clk(clk),
+        .sclr(1'b0),
+        .a(inImag),
+        .b(inImag),
+        .p(imagSquared)
+    );
+    `endif
     wire    signed  [18:0] sum = {realSquared[34:16]} + {imagSquared[34:16]};
     reg     signed  [17:0] sat;
     always @* begin
