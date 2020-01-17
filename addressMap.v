@@ -125,6 +125,7 @@
 `define USE_VIVADO_CORES
 `define USE_DDC_FIR
 `define ADD_SPI_GATEWAY
+`define ADD_MULTIBOOT
 `endif
 
 `ifdef STC_MOD

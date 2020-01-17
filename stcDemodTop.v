@@ -121,7 +121,7 @@ module stcDemodTop (
 
 );
 
-    parameter VER_NUMBER = 16'd628;
+    parameter VER_NUMBER = 16'd643;
 
 
 //******************************************************************************
@@ -320,6 +320,20 @@ module stcDemodTop (
         .ch1MuxSelect()
     );
 
+
+`ifdef ADD_MULTIBOOT
+//******************************************************************************
+//                           Multiboot Controller
+//******************************************************************************
+
+    multibootK7 multiboot(
+        .clk(clk), 
+        .pulse(reboot), 
+        .addr(boot_addr), 
+        .reset(reset)
+    );
+
+`endif //ADD_MULTIBOOT
 
 //******************************************************************************
 //                         STC Registers
@@ -617,14 +631,14 @@ module stcDemodTop (
         .outputClk(cAndD1ClkOut),
         .outputData(cAndD1DataOut)
     );
-//    assign ch1DataOut = cAndD1DataOut[2];
-//    assign ch1ClkOut = cAndD1ClkOut;
-    assign ch1DataOut = stcBit;
-    assign ch1ClkOut = stcBitEnOut;
-//    assign ch3ClkOut = cAndD1ClkOut;
-//    assign ch3DataOut = cAndD1DataOut[2];
-    assign ch3ClkOut = stcBit;
-    assign ch3DataOut = stcBitEnOut;
+    assign ch1DataOut = cAndD1DataOut[2];
+    assign ch1ClkOut = cAndD1ClkOut;
+    assign ch3DataOut = cAndD1DataOut[2];
+    assign ch3ClkOut = cAndD1ClkOut;
+//    assign ch1DataOut = stcBit;
+//    assign ch1ClkOut = stcBitEnOut;
+//    assign ch3DataOut = stcBit;
+//    assign ch3ClkOut = stcBitEnOut;
 
     assign          pll2_REF = 1'b0;
     assign          pll2_Data = 1'b0;
