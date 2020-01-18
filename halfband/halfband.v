@@ -79,8 +79,8 @@ always @(posedge clk) begin
         end
     end
 
-`define ODD_DELAY  32
-reg [17:0]fifo[`ODD_DELAY-1:0];
+`define HB_ODD_DELAY  25
+reg [17:0]fifo[`HB_ODD_DELAY-1:0];
 always @(posedge clk) begin
     if (sync) begin
         if (!evenSync) begin
@@ -109,7 +109,6 @@ always @(posedge clk) begin
             fifo[22] <= fifo[21];
             fifo[23] <= fifo[22];
             fifo[24] <= fifo[23];
-            fifo[25] <= fifo[24];
             end
         end
     end

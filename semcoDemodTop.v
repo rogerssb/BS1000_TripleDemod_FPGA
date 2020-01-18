@@ -113,17 +113,38 @@ module semcoDemodTop (
     // Lock indicators
     output              lockLed0n, lockLed1n,
 
+
     `ifdef R6100
+
+    `ifdef ADD_BITSYNC
+    // Bitsync ADC
+    input       [13:0]  bsAdc,
+    input               bsAdc_overflow,
+    output              bsAdc_powerDown,
+
+    // Input Impedance and Topology controls
+    output              bsHighImpedance,
+    output              bsSingleEnded,
+
+    // Gain and Offset DAC interfaces
+    output              bsDacSELn,
+    output              bsDacSCLK, bsDacMOSI,
+    `endif  //ADD_BITSYNC
+
     // SDI Output
     output              sdiOut,
     output              DQMOut
-    `else
+
+    `else   //R6100
+
+    // SDI Output
     output              sdiOut
-    `endif
+
+    `endif //R6100
 
 );
 
-    parameter VER_NUMBER = 16'd621;
+    parameter VER_NUMBER = 16'd644;
 
 
 //******************************************************************************
@@ -421,6 +442,83 @@ module semcoDemodTop (
         .iEye(iDemodEye),   .qEye(qDemodEye),
         .eyeOffset(demodEyeOffset)
     );
+
+`ifdef ADD_BITSYNC
+//******************************************************************************
+//                    Standalone Single Channel Bitsync
+//******************************************************************************
+    reg             [13:0]  bsAdcReg;
+    reg     signed  [17:0]  bsAdcIn;
+    reg             [1:0]   bsAdcOverflowSR;
+    wire                    bsAdcOverflow = bsAdcOverflowSR[1];
+    always @(posedge clk) begin
+        bsAdcReg <= bsAdc;
+        bsAdcIn <= $signed({~bsAdcReg[13],bsAdcReg[12:0],4'b0});
+        bsAdcOverflowSR <= {bsAdcOverflowSR[0],bsAdc_overflow};
+    end
+
+    wire    signed  [17:0]  sbsSymData;
+    wire    signed  [17:0]  sbsDac0Data;
+    wire    signed  [17:0]  sbsDac1Data;
+    wire    signed  [17:0]  sbsDac2Data;
+    wire    signed  [17:0]  sbsInputGain;
+    wire    signed  [17:0]  sbsDcOffset;
+    wire            [31:0]  sbsDout;
+    singleBitsyncTop sbs(
+        .clk(clk), .clkEn(1'b1), .reset(reset),
+        `ifdef USE_BUS_CLOCK
+        .busClk(busClk),
+        `endif
+        .cs(cs),
+        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .addr(addr),
+        .din(dataIn),
+        .dout(sbsDout),
+        .rx(bsAdcIn),
+        .rxSaturated(bsAdcOverflow),
+        .rotation(2'b00),
+        .lock(sbsLock),
+        .sym2xEn(sbsSym2xEn),
+        .symEn(sbsSymEn),
+        .symData(sbsSymData),
+        .symClk(sbsSymClk),
+        .bitOutput(sbsBit),
+        .dac0ClkEn(sbsDac0ClkEn),
+        .dac0Data(sbsDac0Data),
+        .dac1ClkEn(sbsDac1ClkEn),
+        .dac1Data(sbsDac1Data),
+        .dac2ClkEn(sbsDac2ClkEn),
+        .dac2Data(sbsDac2Data),
+        .highImpedance(bsHighImpedance),
+        .singleEnded(bsSingleEnded),
+        .gain(sbsInputGain),
+        .dcOffset(sbsDcOffset)
+    );
+
+    //------------------------- AGC/DC Offset DAC Interfaces -------------------
+    mcp48xxInterface dacInterface (
+        .clk(clk),
+        .clkEn0(sbsSymEn),
+        .clkEn1(1'b0),
+        .reset(reset),
+        .dac0GainSelA(1'b1),
+        .dac0GainSelB(1'b1),
+        .dac0ValueA(sbsInputGain[17:6]),
+        .dac0ValueB(sbsDcOffset[17:6]),
+        .dac1GainSelA(1'b0),
+        .dac1GainSelB(1'b0),
+        .dac1ValueA(12'b0),
+        .dac1ValueB(12'b0),
+        .SCK(bsDacSCLK),
+        .SDI(bsDacMOSI),
+        .CS0n(bsDacSELn),
+        .CS1n()
+    );
+
+
+
+`endif //ADD_BITSYNC
+
 
 `ifdef ADD_VITERBI
 /******************************************************************************
@@ -747,6 +845,13 @@ module semcoDemodTop (
     reg                 ch1DecSym2xEn;
     always @(posedge clk) begin
         case (pcmSrcSelect)
+            `ifdef ADD_BITSYNC
+            `DEC_SRC_SBS: begin
+                ch1DecInput <= sbsBit;
+                ch1DecSymEn <= sbsSymEn;
+                ch1DecSym2xEn <= sbsSym2xEn;
+            end
+            `endif
             `ifdef ADD_LDPC
             `DEC_SRC_LDPC: begin
                 ch1DecInput <= ldpcBitOut;
@@ -872,6 +977,62 @@ module semcoDemodTop (
         .inputSourceSelect(bertSourceSelect)
     );
 `endif //ADD_BERT
+
+`ifdef ADD_FRAMER
+//******************************************************************************
+//                               Framer
+//******************************************************************************
+    clockAndDataMux framerMux(
+        .muxSelect(framerInputMuxSelect),
+        .clk0(dll0_Clk),
+        .clkInvert0(1'b0),
+        .data0(dll0_Data),
+        .clk1(pll0_Clk),
+        .clkInvert1(1'b0),
+        .data1(pll0_Data),
+        .clk2(dll1_Clk),
+        .clkInvert2(1'b0),
+        .data2(dll1_Data),
+        .clk3(pll1_Clk),
+        .clkInvert3(1'b0),
+        .data3(pll1_Data),
+        .clk4(singleEndedClk),
+        .clkInvert4(1'b0),
+        .data4(singleEndedData),
+        .clk5(differentialClk),
+        .clkInvert5(1'b0),
+        .data5(differentialData),
+        .clk6(1'b0),
+        .clkInvert6(1'b0),
+        .data6(1'b0),
+        .clk7(1'b0),
+        .clkInvert7(1'b0),
+        .data7(1'b0),
+        .outputClk(framer_Clk),
+        .outputData(framerData)
+    );
+
+    wire    [1:0]   framerRotation;
+    wire    [31:0]  framerDout;
+    framerTop framer(
+        .reset(reset),
+        .busClk(fb_clk),
+        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .addr(addr),
+        .din(dataIn),
+        .dout(framerDout),
+        .clk(framer_Clk),
+        .clkEn(1'b1),
+        .dataBitIn(framerData),
+        .rotation(framerRotation),
+        .framesyncPulse(framer_Sync),
+        .framedBitOut(framer_Data),
+        .framesync(framesync)
+    );
+
+    assign rotation = framerEnable ? framerRotation : 2'b0;
+`endif //ADD_FRAMER
+
 
 
 `ifdef ADD_DQM
@@ -1177,6 +1338,12 @@ module semcoDemodTop (
                 interp0ClkEn <= ldpcDac0ClkEn;
             end
             `endif
+            `ifdef ADD_BITSYNC
+            `DAC_SRC_SBS: begin
+                interp0DataIn <= sbsDac0Data;
+                interp0ClkEn <= sbsDac0ClkEn;
+            end
+            `endif
             default: begin
                 interp0DataIn <= demodDac0Data;
                 interp0ClkEn <= demodDac0ClkEn;
@@ -1239,6 +1406,12 @@ module semcoDemodTop (
                 interp1ClkEn <= ldpcDac1ClkEn;
             end
             `endif
+            `ifdef ADD_BITSYNC
+            `DAC_SRC_SBS: begin
+                interp1DataIn <= sbsDac1Data;
+                interp1ClkEn <= sbsDac1ClkEn;
+            end
+            `endif
             default: begin
                 interp1DataIn <= demodDac1Data;
                 interp1ClkEn <= demodDac1ClkEn;
@@ -1299,6 +1472,12 @@ module semcoDemodTop (
             `DAC_SRC_LDPC: begin
                 interp2DataIn <= ldpcDac2Data;
                 interp2ClkEn <= ldpcDac2ClkEn;
+            end
+            `endif
+            `ifdef ADD_BITSYNC
+            `DAC_SRC_SBS: begin
+                interp2DataIn <= sbsDac2Data;
+                interp2ClkEn <= sbsDac2ClkEn;
             end
             `endif
             default: begin
@@ -1380,6 +1559,9 @@ sdi sdi(
 //******************************************************************************
 
     assign adc01_powerDown = 1'b0;
+    `ifdef ADD_BITSYNC
+    assign bsAdc_powerDown = 1'b0;
+    `endif
 
     assign dac_rst = 1'b1;
     assign dac_sclk = 1'b0;
@@ -1591,6 +1773,15 @@ sdi sdi(
 
             `ifdef ADD_SPECTRAL_SWEEP
             `SSCSPACE:          rd_mux = sscDout;
+            `endif
+
+            `ifdef ADD_BITSYNC
+            `SBS_TOP_SPACE,
+            `SBS_DFSPACE,
+            `SBS_DFFIRSPACE,
+            `SBS_RESAMPSPACE,
+            `SBS_BITSYNCSPACE,
+            `SBS_AGCSPACE:      rd_mux = sbsDout;
             `endif
 
              default :          rd_mux = 32'hxxxx;
@@ -1808,6 +1999,23 @@ sdi sdi(
                     rd_mux = ch1DecDout[15:0];
                     end
                 end
+
+            `ifdef ADD_BITSYNC
+            `SBS_TOP_SPACE,
+            `SBS_DFSPACE,
+            `SBS_DFFIRSPACE,
+            `SBS_RESAMPSPACE,
+            `SBS_BITSYNCSPACE,
+            `SBS_AGCSPACE: begin
+                if (addr[1]) begin
+                    rd_mux = sbsDout[31:16];
+                end
+                else begin
+                    rd_mux = sbsDout[15:0];
+                end
+            end
+            `endif
+
              default : rd_mux = 16'hxxxx;
             endcase
          end

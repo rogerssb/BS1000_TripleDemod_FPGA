@@ -24,8 +24,13 @@ module decimatingFilter(
     dfOut
     );
 
+`ifdef BITSYNC_BERT
 parameter RegSpace = `CH0_DFSPACE,
           FirSpace = `CH0_DFFIRSPACE;
+`else
+parameter RegSpace = `SBS_DFSPACE,
+          FirSpace = `SBS_DFFIRSPACE;
+`endif
 
 input           clk;
 input           reset;
@@ -202,7 +207,7 @@ always @(compOut) compReal = $itor($signed(compOut))/(2**17);
         .dout(hb1Out),
         .syncOut(hb1ClkEnOut)
     );
-    
+
     `ifdef SIMULATE
     real hb1Real;
     always @(hb1Out) hb1Real = $itor($signed(hb1Out))/(2**17);
@@ -240,7 +245,7 @@ always @(compOut) compReal = $itor($signed(compOut))/(2**17);
             endcase
         end
     end
-    
+
     reg firSpace;
     always @* begin
         casex(addr)
@@ -248,7 +253,7 @@ always @(compOut) compReal = $itor($signed(compOut))/(2**17);
             default:    firSpace    = 0;
         endcase
     end
-    
+
     wire    [17:0]  firOut;
     wire    [31:0]  firDout;
     videoFir videoFir( 
@@ -264,8 +269,8 @@ always @(compOut) compReal = $itor($signed(compOut))/(2**17);
         .videoIn(firIn),
         .videoOut(firOut)
     );
-    
-    
+
+
     reg     [17:0]  dfOut;
     reg             clkEnOut;
     always @(posedge clk) begin
@@ -296,13 +301,13 @@ always @(compOut) compReal = $itor($signed(compOut))/(2**17);
             end
         endcase
     end
-    
+
     `ifdef SIMULATE
     real dfOutReal;
     always @* dfOutReal = $itor($signed(dfOut))/(2**17);
     `endif
-    
-    
+
+
     reg [31:0]dout;
     always @* begin
         casex (addr)
@@ -313,4 +318,4 @@ always @(compOut) compReal = $itor($signed(compOut))/(2**17);
     end
 
 endmodule
-                     
+

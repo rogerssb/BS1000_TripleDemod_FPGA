@@ -28,7 +28,11 @@ module pcmAgcLoop(
     output          [17:0]  agcGain
 );
 
+    `ifdef BITSYNC_BERT
     parameter RegSpace = `CH0_AGCSPACE;
+    `else
+    parameter RegSpace = `SBS_AGCSPACE;
+    `endif
 
     wire    signed  [17:0]   abs = rx[17] ? -rx : rx;
     always @(posedge clk) begin
