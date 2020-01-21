@@ -3,6 +3,7 @@
 
 module framerRegs(
     input                       busClk,
+    input                       cs,
     input                       wr0, wr1, wr2, wr3,
     input               [12:0]  addr,
     input               [31:0]  din,
@@ -14,7 +15,8 @@ module framerRegs(
     output reg          [15:0]  wordsPerFrame,
     output reg          [31:0]  syncwordMask,
     output reg          [31:0]  syncword,
-    output      signed  [6:0]   syncThreshold
+    output      signed  [6:0]   syncThreshold,
+    output reg          [3:0]   inputSourceSelect
 );
 
     parameter RegSpace = `FRAMER_SPACE;
@@ -25,7 +27,7 @@ module framerRegs(
     reg framerSpace;
     always @* begin
         casex(addr)
-            RegSpace:           framerSpace = 1;
+            RegSpace:           framerSpace = cs;
             default:            framerSpace = 0;
         endcase
     end
@@ -36,6 +38,7 @@ module framerRegs(
                 `FRAMER_CONTROL:        bitsPerWord <= din[4:0];
                 `FRAMER_SYNCWORD:       syncword[7:0] <= din[7:0];
                 `FRAMER_SYNCWORD_MASK:  syncwordMask[7:0] <= din[7:0];
+                `FRAMER_SOURCE_SELECT:  inputSourceSelect <= din[3:0];
                 default: ;
             endcase
         end
@@ -72,6 +75,7 @@ module framerRegs(
                 `FRAMER_SYNCWORD:       dout = syncword;
                 `FRAMER_SYNCWORD_MASK:  dout = syncwordMask;
                 `FRAMER_STATUS:         dout = {23'b0,invertData,2'b0,syncState,3'b0,framesync};
+                `FRAMER_SOURCE_SELECT:  dout = {28'b0,inputSourceSelect};
                 default:                dout = 32'hx;
             endcase
         end
@@ -79,7 +83,7 @@ module framerRegs(
             dout = 32'hx;
         end
     end
-    
+
 endmodule
 
 

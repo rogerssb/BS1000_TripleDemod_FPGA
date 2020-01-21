@@ -144,7 +144,7 @@ module semcoDemodTop (
 
 );
 
-    parameter VER_NUMBER = 16'd644;
+    parameter VER_NUMBER = 16'd645;
 
 
 //******************************************************************************
@@ -338,7 +338,8 @@ module semcoDemodTop (
         .dac1InputSelect(),
         .dac2InputSelect(),
         .ch0MuxSelect(),
-        .ch1MuxSelect()
+        .ch1MuxSelect(),
+        .framerEnable(framerEnable)
     );
 
 `ifdef ADD_MULTIBOOT
@@ -742,6 +743,73 @@ module semcoDemodTop (
 `endif
 
 
+`ifdef ADD_FRAMER
+//******************************************************************************
+//                        QPSK/OQPSK Ambiguity Removal
+//******************************************************************************
+
+    wire    [1:0]   rotation;
+    reg             iRotBit,qRotBit,qDemodBitDelay;
+    always @(posedge clk) begin
+        case (demodMode) 
+            `MODE_QPSK: begin
+                if (iDemodBitEn) begin
+                    case (rotation)
+                        0: begin
+                            iRotBit <= iDemodBit;
+                            qRotBit <= qDemodBit;
+                        end
+                        1: begin
+                            iRotBit <= qDemodBit;
+                            qRotBit <= ~iDemodBit;
+                        end
+                        2: begin
+                            iRotBit <= ~iDemodBit;
+                            qRotBit <= ~qDemodBit;
+                        end
+                        3: begin
+                            iRotBit <= ~qDemodBit;
+                            qRotBit <= iDemodBit;
+                        end
+                    endcase
+                end
+            end
+            `MODE_OQPSK: begin
+                if (iDemodBitEn) begin
+                    qDemodBitDelay <= qDemodBit;
+                    case (rotation)
+                        0: begin
+                            iRotBit <= iDemodBit;
+                            qRotBit <= qDemodBit;
+                        end
+                        1: begin
+                            iRotBit <= qDemodBitDelay;
+                            qRotBit <= ~iDemodBit;
+                        end
+                        2: begin
+                            iRotBit <= ~iDemodBit;
+                            qRotBit <= ~qDemodBit;
+                        end
+                        3: begin
+                            iRotBit <= ~qDemodBitDelay;
+                            qRotBit <= iDemodBit;
+                        end
+                    endcase
+                end
+            end
+            default: begin
+                if (iDemodBitEn) begin
+                    iRotBit <= iDemodBit;
+                end
+                if (qDemodBitEn) begin
+                    qRotBit <= qDemodBit;
+                end
+            end
+        endcase
+    end
+`endif //ADD_FRAMER
+
+
 //******************************************************************************
 //                                PCM Decoders
 //******************************************************************************
@@ -785,18 +853,33 @@ module semcoDemodTop (
                 end
                 `endif
                 else begin
+                    `ifdef ADD_FRAMER
+                    dualCh0Input <= iRotBit;
+                    dualCh1Input <= qRotBit;
+                    dualSymEn <= iDemodBitEn;
+                    dualSym2xEn <= iDemodSym2xEn;
+                    `else //ADD_FRAMER
                     dualCh0Input <= iDemodBit;
                     dualCh1Input <= qDemodBit;
                     dualSymEn <= iDemodBitEn;
                     dualSym2xEn <= iDemodSym2xEn;
+                    `endif //ADD_FRAMER
                 end
 
                 `else //ADD_TRELLIS
 
+                `ifdef ADD_FRAMER
+                dualCh0Input <= iRotBit;
+                dualCh1Input <= qRotBit;
+                dualSymEn <= iDemodBitEn;
+                dualSym2xEn <= iDemodSym2xEn;
+                `else //ADD_FRAMER
                 dualCh0Input <= iDemodBit;
                 dualCh1Input <= qDemodBit;
                 dualSymEn <= iDemodBitEn;
                 dualSym2xEn <= iDemodSym2xEn;
+                `endif //ADD_FRAMER
+
                 `endif //ADD_TRELLIS
             end
         endcase
@@ -919,12 +1002,22 @@ module semcoDemodTop (
     always @* begin
         casex (bertSourceSelect)
             `BERT_SRC_LEGACY_I: begin
+                `ifdef ADD_FRAMER
+                bertClkEn = iDemodBitEn;
+                bertDataIn = iRotBit;
+                `else
                 bertClkEn = iDemodBitEn;
                 bertDataIn = iDemodBit;
+                `endif
             end
             `BERT_SRC_LEGACY_Q: begin
+                `ifdef ADD_FRAMER
+                bertClkEn = qDemodBitEn;
+                bertDataIn = qRotBit;
+                `else
                 bertClkEn = qDemodBitEn;
                 bertDataIn = qDemodBit;
+                `endif
             end
             `ifdef ADD_TRELLIS
             `BERT_SRC_PCMTRELLIS: begin
@@ -982,51 +1075,83 @@ module semcoDemodTop (
 //******************************************************************************
 //                               Framer
 //******************************************************************************
-    clockAndDataMux framerMux(
-        .muxSelect(framerInputMuxSelect),
-        .clk0(dll0_Clk),
-        .clkInvert0(1'b0),
-        .data0(dll0_Data),
-        .clk1(pll0_Clk),
-        .clkInvert1(1'b0),
-        .data1(pll0_Data),
-        .clk2(dll1_Clk),
-        .clkInvert2(1'b0),
-        .data2(dll1_Data),
-        .clk3(pll1_Clk),
-        .clkInvert3(1'b0),
-        .data3(pll1_Data),
-        .clk4(singleEndedClk),
-        .clkInvert4(1'b0),
-        .data4(singleEndedData),
-        .clk5(differentialClk),
-        .clkInvert5(1'b0),
-        .data5(differentialData),
-        .clk6(1'b0),
-        .clkInvert6(1'b0),
-        .data6(1'b0),
-        .clk7(1'b0),
-        .clkInvert7(1'b0),
-        .data7(1'b0),
-        .outputClk(framer_Clk),
-        .outputData(framerData)
-    );
+
+    wire    [3:0]   framerSourceSelect;
+    reg             framerClkEn;
+    reg             framerDataIn;
+    always @* begin
+        casex (framerSourceSelect)
+            `FRAMER_SRC_LEGACY_I: begin
+                `ifdef ADD_FRAMER
+                framerClkEn = iDemodBitEn;
+                framerDataIn = iRotBit;
+                `else
+                framerClkEn = iDemodBitEn;
+                framerDataIn = iDemodBit;
+                `endif
+            end
+            `FRAMER_SRC_LEGACY_Q: begin
+                `ifdef ADD_FRAMER
+                framerClkEn = qDemodBitEn;
+                framerDataIn = qRotBit;
+                `else
+                framerClkEn = qDemodBitEn;
+                framerDataIn = qDemodBit;
+                `endif
+            end
+            `ifdef ADD_TRELLIS
+            `FRAMER_SRC_PCMTRELLIS: begin
+                framerClkEn = pcmTrellisSymEnOut;
+                framerDataIn = pcmTrellisBit;
+            end
+            `endif
+            `ifdef ADD_LDPC
+            `FRAMER_SRC_LDPC: begin
+                framerClkEn = ldpcBitEnOut;
+                framerDataIn = ldpcBitOut;
+            end
+            `endif
+            `FRAMER_SRC_DEC0_CH0: begin
+                framerClkEn = dualPcmClkEn;
+                framerDataIn = dualDataI;
+            end
+            `FRAMER_SRC_DEC0_CH1: begin
+                framerClkEn = dualPcmClkEn;
+                framerDataIn = dualDataQ;
+            end
+            `FRAMER_SRC_DEC1_CH0: begin
+                framerClkEn = ch1PcmClkEn;
+                framerDataIn = ch1PcmData;
+            end
+            //`FRAMER_SRC_DEC1_CH1:
+            //`FRAMER_SRC_DEC2_CH0:
+            //`FRAMER_SRC_DEC2_CH1:
+            //`FRAMER_SRC_DEC3_CH0:
+            //`FRAMER_SRC_DEC3_CH1:
+            default:   begin
+                framerClkEn = iDemodBitEn;
+                framerDataIn = iDemodBit;
+            end
+        endcase
+    end
 
     wire    [1:0]   framerRotation;
     wire    [31:0]  framerDout;
     framerTop framer(
         .reset(reset),
-        .busClk(fb_clk),
+        .busClk(busClk),
+        .cs(cs),
         .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
         .addr(addr),
         .din(dataIn),
         .dout(framerDout),
-        .clk(framer_Clk),
-        .clkEn(1'b1),
-        .dataBitIn(framerData),
+        .clk(clk),
+        .clkEn(framerClkEn),
+        .dataBitIn(framerDataIn),
         .rotation(framerRotation),
+        .inputSourceSelect(framerSourceSelect),
         .framesyncPulse(framer_Sync),
-        .framedBitOut(framer_Data),
+        .framedBitOut(framerBitOut),
         .framesync(framesync)
     );
 
@@ -1130,12 +1255,22 @@ module semcoDemodTop (
     always @* begin
         casex (cAndD0SourceSelect)
             `CandD_SRC_LEGACY_I: begin
+                `ifdef ADD_FRAMER
+                cAndD0ClkEn = iDemodBitEn;
+                cAndD0DataIn = {iRotBit,qRotBit,1'b0};
+                `else
                 cAndD0ClkEn = iDemodBitEn;
                 cAndD0DataIn = {iDemodBit,qDemodBit,1'b0};
+                `endif
             end
             `CandD_SRC_LEGACY_Q: begin
+                `ifdef ADD_FRAMER
+                cAndD0ClkEn = qDemodBitEn;
+                cAndD0DataIn = {qRotBit,1'b0,1'b0};
+                `else
                 cAndD0ClkEn = qDemodBitEn;
                 cAndD0DataIn = {qDemodBit,1'b0,1'b0};
+                `endif
             end
             `ifdef ADD_TRELLIS
             `CandD_SRC_PCMTRELLIS: begin
@@ -1145,7 +1280,7 @@ module semcoDemodTop (
             `endif
             //`CandD_SRC_MULTIH:
             //`CandD_SRC_STC:
-            //`CandD_SRC_PNGEN:
+            //`CandD_SRC_PNGEN;
             `ifdef ADD_LDPC
             `CandD_SRC_LDPC: begin
                 cAndD0ClkEn = ldpcBitEnOut;
@@ -1212,12 +1347,22 @@ module semcoDemodTop (
     always @* begin
         casex (cAndD1SourceSelect)
             `CandD_SRC_LEGACY_I: begin
+                `ifdef ADD_FRAMER
+                cAndD1ClkEn = iDemodBitEn;
+                cAndD1DataIn = {iRotBit,qRotBit,1'b0};
+                `else
                 cAndD1ClkEn = iDemodBitEn;
                 cAndD1DataIn = {iDemodBit,qDemodBit,1'b0};
+                `endif
             end
             `CandD_SRC_LEGACY_Q: begin
+                `ifdef ADD_FRAMER
+                cAndD1ClkEn = qDemodBitEn;
+                cAndD1DataIn = {qRotBit,1'b0,1'b0};
+                `else
                 cAndD1ClkEn = qDemodBitEn;
                 cAndD1DataIn = {qDemodBit,1'b0,1'b0};
+                `endif
             end
             `ifdef ADD_TRELLIS
             `CandD_SRC_PCMTRELLIS: begin
@@ -1714,6 +1859,10 @@ sdi sdi(
             `BERT_SPACE:        rd_mux = bertDout;
             `endif
 
+            `ifdef ADD_FRAMER
+            `FRAMER_SPACE:      rd_mux = framerDout;
+            `endif
+
             `DEMODSPACE,
             `ifdef ADD_CMA
             `EQUALIZERSPACE,
@@ -1845,6 +1994,17 @@ sdi sdi(
                 end
                 else begin
                     rd_mux = bertDout[15:0];
+                end
+            end
+            `endif
+
+            `ifdef ADD_FRAMER
+            `FRAMER_SPACE:        begin
+                if (addr[1]) begin
+                    rd_mux = framerDout[31:16];
+                end
+                else begin
+                    rd_mux = framerDout[15:0];
                 end
             end
             `endif

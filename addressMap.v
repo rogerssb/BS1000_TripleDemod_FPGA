@@ -76,6 +76,7 @@
 `endif
 `define ADD_SPI_GATEWAY
 `define ADD_BERT
+`define ADD_FRAMER
 `define ADD_MULTIBOOT
 `define ADD_SPECTRAL_SWEEP
 `define ADD_VITERBI
@@ -495,7 +496,7 @@
         `define CandD_SRC_PCMTRELLIS    4'b0010
         `define CandD_SRC_MULTIH        4'b0011
         `define CandD_SRC_STC           4'b0100
-        `define CandD_SRC_PNGEN         4'b0101
+        `define CandD_SRC_FRAMER        4'b0101
         `define CandD_SRC_LDPC          4'b0110
         `define CandD_SRC_DQM           4'b0111
         `define CandD_SRC_DEC0_CH0      4'b1000
@@ -562,7 +563,7 @@
 `define DQMLUTSPACE         13'b0_0110_xxxx_xxxx
 
 // BERT subsystem registers
-`define BERT_SPACE          13'b0_0111_xxxx_xxxx
+`define BERT_SPACE          13'b0_0111_0xxx_xxxx
     `define BERT_POLY               13'bx_xxxx_x000_00xx
     `define POLARITY_THRESHOLD      13'bx_xxxx_x000_01xx
     `define SLIP_LIMIT              13'bx_xxxx_x000_10xx
@@ -592,6 +593,30 @@
         `define BERT_SRC_DEC2_CH1    4'b1101
         `define BERT_SRC_DEC3_CH0    4'b1110
         `define BERT_SRC_DEC3_CH1    4'b1111
+
+// Framesync subsystem registers
+`define FRAMER_SPACE            13'b0_0111_100x_xxxx
+    `define FRAMER_CONTROL          13'bx_xxxx_xxx0_00xx
+    `define FRAMER_SYNCWORD         13'bx_xxxx_xxx0_01xx
+    `define FRAMER_SYNCWORD_MASK    13'bx_xxxx_xxx0_10xx
+    `define FRAMER_STATUS           13'bx_xxxx_xxx0_11xx
+    `define FRAMER_SOURCE_SELECT    13'bx_xxxx_xxx1_00xx
+        `define FRAMER_SRC_LEGACY_I    4'b0000
+        `define FRAMER_SRC_LEGACY_Q    4'b0001
+        `define FRAMER_SRC_PCMTRELLIS  4'b0010
+        `define FRAMER_SRC_VIT0        4'b0011
+        `define FRAMER_SRC_STC         4'b0100
+        `define FRAMER_SRC_VIT1        4'b0101
+        `define FRAMER_SRC_LDPC        4'b0110
+        `define FRAMER_SRC_RSVD0       4'b0111
+        `define FRAMER_SRC_DEC0_CH0    4'b1000
+        `define FRAMER_SRC_DEC0_CH1    4'b1001
+        `define FRAMER_SRC_DEC1_CH0    4'b1010
+        `define FRAMER_SRC_DEC1_CH1    4'b1011
+        `define FRAMER_SRC_DEC2_CH0    4'b1100
+        `define FRAMER_SRC_DEC2_CH1    4'b1101
+        `define FRAMER_SRC_DEC3_CH0    4'b1110
+        `define FRAMER_SRC_DEC3_CH1    4'b1111
 
 
 // Video Interpolators and FIRs

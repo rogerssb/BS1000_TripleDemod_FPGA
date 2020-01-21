@@ -1087,6 +1087,7 @@ clockAndDataInputSync diffSync(
         .clkEn(1'b1),
         .dataBitIn(framerData),
         .rotation(framerRotation),
+        .inputSourceSelect(),
         .framesyncPulse(framer_Sync),
         .framedBitOut(framer_Data),
         .framesync(framesync)

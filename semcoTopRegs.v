@@ -27,7 +27,8 @@ module semcoTopRegs(
     output  reg [2:0]   dac1InputSelect,
     output  reg [2:0]   dac2InputSelect,
     output  reg [3:0]   ch0MuxSelect,
-    output  reg [3:0]   ch1MuxSelect
+    output  reg [3:0]   ch1MuxSelect,
+    output  reg         framerEnable
 );
 
 
@@ -106,12 +107,13 @@ module semcoTopRegs(
     always @(posedge busClk) begin
         if (cs && wr0) begin
             casex (addr)
-                `SYS_REBOOT_ADDR:   rebootAddress[7:0] <= dataIn[7:0];
-                `SYS_DAC_INPUT_SEL: dac0InputSelect <= dataIn[2:0];
-                `SYS_OUTPUT_SEL:    begin
-                                    ch0MuxSelect <= dataIn[3:0];
-                                    ch1MuxSelect <= dataIn[7:4];
-                                    end
+                `SYS_SUBSYSTEM_CTRL:    framerEnable <= dataIn[0];
+                `SYS_REBOOT_ADDR:       rebootAddress[7:0] <= dataIn[7:0];
+                `SYS_DAC_INPUT_SEL:     dac0InputSelect <= dataIn[2:0];
+                `SYS_OUTPUT_SEL:        begin
+                                        ch0MuxSelect <= dataIn[3:0];
+                                        ch1MuxSelect <= dataIn[7:4];
+                                        end
                 default: ;
             endcase
         end
@@ -145,7 +147,7 @@ module semcoTopRegs(
                     dataOut = {versionNumber,16'b0};
                     end
                 `SYS_SUBSYSTEM_CTRL: begin
-                    dataOut = {32'b0};
+                    dataOut = {31'b0,framerEnable};
                     end
                 `SYS_TYPE: begin
                     dataOut = {16'b0,fpgaType};
