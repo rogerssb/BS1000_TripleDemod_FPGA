@@ -121,7 +121,7 @@ module stcDemodTop (
 
 );
 
-    parameter VER_NUMBER = 16'd643;
+    parameter VER_NUMBER = 16'd646;
 
 
 //******************************************************************************
@@ -347,12 +347,14 @@ module stcDemodTop (
         endcase
     end
 
-    wire    [15:0]  clocksPerBit;
-    wire    [11:0]  hxThreshSlv;
-    wire    [3:0]   stcDac0Select;
-    wire    [3:0]   stcDac1Select;
-    wire    [3:0]   stcDac2Select;
-    wire    [31:0]  stcDout;
+    wire    signed  [15:0]  ch0Mag,ch1Mag;
+    wire    signed  [5:0]   stcDeltaTau;
+    wire            [15:0]  clocksPerBit;
+    wire            [11:0]  hxThreshSlv;
+    wire            [3:0]   stcDac0Select;
+    wire            [3:0]   stcDac1Select;
+    wire            [3:0]   stcDac2Select;
+    wire            [31:0]  stcDout;
 
     stcRegs stcTopReg(
         .busClk(busClk),
@@ -361,6 +363,9 @@ module stcDemodTop (
         .addr(addr),
         .dataIn(dataIn),
         .dataOut(stcDout),
+        .ch0Mag(ch0Mag),
+        .ch1Mag(ch1Mag),
+        .stcDeltaTau(stcDeltaTau),
         .spectrumInvert(SpectrumInv),
         .clocksPerBit(clocksPerBit),
         .hxThreshSlv(hxThreshSlv),      // AGC dependent, usually x"180"
@@ -490,7 +495,10 @@ module stcDemodTop (
     wire                    stcDac2ClkEn;
     wire                    stcBitEnOut;
     wire                    stcBit;
-
+    wire            [31:0]  stcPeaks;
+    assign  ch0Mag = $signed(stcPeaks[15:0]);
+    assign  ch1Mag = $signed(stcPeaks[31:16]);
+    
     STC stcDemod(
         .ResampleR(iStc),
         .ResampleI(qStc),
@@ -503,6 +511,7 @@ module stcDemodTop (
         .DacSelect1(stcDac1Select),
         .DacSelect2(stcDac2Select),
         .SpectrumInv(SpectrumInv),
+        .ReadHold(1'b0),
         .PhaseOut(pilotPhase),
         .PhaseDiff(pilotPhaseDiff),
         .PhaseDiffEn(pilotPhaseDiffEn),
@@ -511,6 +520,8 @@ module stcDemodTop (
         .ClkOutEn(stcBitEnOut),
         .PilotFound(pilotFound),
         .PilotLocked(pilotLocked),
+        .Peaks(stcPeaks),
+        .DeltaTau(stcDeltaTau),
         .DataOut(stcBit),
         .Dac0Data(stcDac0Data),
         .Dac0ClkEn(stcDac0ClkEn),

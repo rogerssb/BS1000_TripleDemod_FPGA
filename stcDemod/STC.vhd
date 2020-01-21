@@ -35,6 +35,8 @@ Dependencies:
 11-12-19 Removed most MiscBits, Mag0GtMag1 requires 2:1 to switch
 12_??-19 Removed Detection Filter from Brik2 module. Changed STC routing to match
 12-19-19 Change PilotSync Offset to 9. Changed TrellisOffset in VIO to 0
+01-14-20 Add Peaks and DeltaTau outputs for meter, add ReadHold to pause data while reading
+
 -------------------------------------------------------------
 */
 
@@ -62,7 +64,8 @@ ENTITY STC IS
  --     Clk93Dly,		-- TODO uncomment
       Clk186,
       SpectrumInv,
-      ValidIn           : IN  std_logic;
+      ReadHold,
+      ValidIn           : IN  STD_LOGIC;
       DataOut,                            -- Trellis Data Output
       ClkOutEn,                           -- Trellis Clock Output
       PilotFound,                         -- Pilot Found LED
@@ -71,8 +74,10 @@ ENTITY STC IS
       PhaseDiffEn,
       Dac0ClkEn,
       Dac1ClkEn,
-      Dac2ClkEn         : OUT std_logic;
+      Dac2ClkEn         : OUT STD_LOGIC;
       PilotOffset       : OUT STD_LOGIC_VECTOR(8 downto 0); -- signed Pilot Detect Offset from center
+      DeltaTau          : OUT STD_LOGIC_VECTOR(5 downto 0);
+      Peaks             : OUT SLV32;
       Dac0Data,
       Dac1Data,
       Dac2Data          : OUT SLV18;
@@ -662,7 +667,11 @@ BEGIN
          else
             deltaTauEstSlv <= to_slv(DeltaTauEst) when MiscBits(12) else 6x"00";
          end if;
-         EstimatesDoneDly <= EstimatesDone;
+         if (not ReadHold) then
+            DeltaTau          <= deltaTauEstSlv;    -- output to meter
+            Peaks             <= MagPeak1(15 downto 0) & MagPeak0(15 downto 0);
+         end if;
+         EstimatesDoneDly  <= EstimatesDone;
       end if;
    end process;
 
