@@ -21,6 +21,8 @@ module stcRegs(
     output  reg         [31:0]  dataOut,
     input       signed  [15:0]  ch0Mag, ch1Mag,
     input       signed  [5:0]   stcDeltaTau,
+    input                       lockStatus0,
+    input                       lockStatus1,
     output  reg         [15:0]  clocksPerBit,
     output  reg                 spectrumInvert,
     output  reg         [11:0]  hxThreshSlv,
@@ -139,7 +141,11 @@ module stcRegs(
                                             4'h0, dac0Select
                                         };
                 `STC_PEAK_MAGS:         dataOut = {ch1MagHold,ch0MagHold};
-                `STC_DELTA_TAU:         dataOut = {26'h0, stcDeltaTauHold};
+                `STC_DELTA_TAU:         dataOut = {
+                                            lockStatus0,lockStatus1,6'b0,
+                                            16'h0, 
+                                            2'b0,stcDeltaTauHold
+                                        };
                 default:                dataOut = 32'h0;
             endcase
         end

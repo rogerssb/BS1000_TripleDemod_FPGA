@@ -121,7 +121,7 @@ module stcDemodTop (
 
 );
 
-    parameter VER_NUMBER = 16'd646;
+    parameter VER_NUMBER = 16'd647;
 
 
 //******************************************************************************
@@ -366,6 +366,8 @@ module stcDemodTop (
         .ch0Mag(ch0Mag),
         .ch1Mag(ch1Mag),
         .stcDeltaTau(stcDeltaTau),
+        .lockStatus0(pilotFound),
+        .lockStatus1(pilotLocked),
         .spectrumInvert(SpectrumInv),
         .clocksPerBit(clocksPerBit),
         .hxThreshSlv(hxThreshSlv),      // AGC dependent, usually x"180"
@@ -498,7 +500,7 @@ module stcDemodTop (
     wire            [31:0]  stcPeaks;
     assign  ch0Mag = $signed(stcPeaks[15:0]);
     assign  ch1Mag = $signed(stcPeaks[31:16]);
-    
+
     STC stcDemod(
         .ResampleR(iStc),
         .ResampleI(qStc),
