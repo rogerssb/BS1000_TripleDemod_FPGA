@@ -3,22 +3,38 @@
 `include "addressMap.v"
 
 module dualViterbi(
-    input                   clk,clkEn,reset,
-    input                   wr0,wr1,wr2,wr3,
-    input           [12:0]  addr,
-    input           [31:0]  din,
-    output          [31:0]  dout,
-    input           [4:0]   demodMode,
-    input           [1:0]   decoderSource,
-    input                   demodLock,
-    input                   bitsyncLock,
-    input                   symEn,
-    input   signed  [17:0]  iSymData,
-    input   signed  [17:0]  qSymData,
-    output                  bitEnOut,
-    output                  iBitOut,
-    output                  qBitOut,
-    output  reg             vitError
+    input                       clk,clkEn,reset,
+    input                       wr0,wr1,wr2,wr3,
+    input               [12:0]  addr,
+    input               [31:0]  din,
+    output              [31:0]  dout,
+    input               [4:0]   demodMode,
+    input               [1:0]   decoderSource,
+    input                       symEn,
+    input       signed  [17:0]  iSymData,
+    input       signed  [17:0]  qSymData,
+    input               [3:0]   dac0Select,
+    input               [3:0]   dac1Select,
+    input               [3:0]   dac2Select,
+    output                      bitEnOut,
+    output                      iBitOut,
+    output                      qBitOut,
+    output  reg                 vitError,
+    `ifdef SIMULATE
+    output  reg                 dac0ClkEn,
+    output  reg         [17:0]  dac0Output,
+    output  reg                 dac1ClkEn,
+    output  reg         [17:0]  dac1Output,
+    output  reg                 dac2ClkEn,
+    output  reg         [17:0]  dac2Output
+    `else
+    output  reg                 dac0ClkEn,
+    output  reg signed  [17:0]  dac0Output,
+    output  reg                 dac1ClkEn,
+    output  reg signed  [17:0]  dac1Output,
+    output  reg                 dac2ClkEn,
+    output  reg signed  [17:0]  dac2Output
+    `endif
     );
 
     `define VITERBI_SYMEN_DELAY 19
@@ -62,7 +78,7 @@ module dualViterbi(
                     codeEn <= 1;
                 end
                 `MODE_OQPSK: begin
-                    if (decoderSource == `DEC_MUX_SEL_DUALVIT) begin
+                    if (decoderSource == `DEC_MUX_SEL_VITERBI) begin
                         if (softEn) begin
                             codeEn <= ~codeEn;
                         end
@@ -80,17 +96,31 @@ module dualViterbi(
         end
     end
 
+    // Reclock the viterbi inputs to meet timing
+    reg                     softEnReg;
+    reg                     codeEnReg;
+    reg                     vitEnReg;
+    reg     signed  [17:0]  iSymDataReg;
+    reg     signed  [17:0]  qSymDataReg;
+    always @(posedge clk) begin
+        softEnReg <= softEn;
+        codeEnReg <= codeEn;
+        vitEnReg <= vitEn;
+        iSymDataReg <= iSymData;
+        qSymDataReg <= qSymData;
+    end
+
     `ifdef HARD_DECISIONS
     reg     [2:0]   iSoft,qSoft;
     always @(posedge clk) begin
-        if (softEn) begin
-            if (iSymData[17]) begin
+        if (softEnReg) begin
+            if (iSymDataReg[17]) begin
                 iSoft <= 3'h2;
             end
             else begin
                 iSoft <= 3'h5;
             end
-            if (qSymData[17]) begin
+            if (qSymDataReg[17]) begin
                 qSoft <= 3'h2;
             end
             else begin
@@ -103,21 +133,21 @@ module dualViterbi(
     wire    [2:0]   iSoft;
     softDecisionMapper iMap(
         .clk(clk),
-        .clkEn(softEn),
+        .clkEn(softEnReg),
         .reset(reset),
         .inverseMeanMantissa(invMeanMantissa),
         .inverseMeanExponent(invMeanExponent),
-        .dIn(iSymData),
+        .dIn(iSymDataReg),
         .dOut(iSoft)
     );
     wire    [2:0]   qSoft;
     softDecisionMapper qMap(
         .clk(clk),
-        .clkEn(softEn),
+        .clkEn(softEnReg),
         .reset(reset),
         .inverseMeanMantissa(invMeanMantissa),
         .inverseMeanExponent(invMeanExponent),
-        .dIn(qSymData),
+        .dIn(qSymDataReg),
         .dOut(qSoft)
     );
     `endif
@@ -126,7 +156,7 @@ module dualViterbi(
     reg     [2:0]   iSoftDelay0,qSoftDelay0;
     reg     [2:0]   iSoftDelay1,qSoftDelay1;
     always @(posedge clk) begin
-        if (softEn) begin
+        if (softEnReg) begin
             iSoftDelay0 <= iSoft;
             qSoftDelay0 <= qSoft;
             iSoftDelay1 <= iSoftDelay0;
@@ -154,13 +184,13 @@ module dualViterbi(
     reg     [2:0]   qpskState;
     reg     [2:0]   oqpskState;
     parameter   P0_G1G2 =       3'b000,
-                P0_G2G1 =       3'b001,     P90_G1G2 =      3'b001,
-                P180_G1G2 =     3'b011,
-                P180_G2G1 =     3'b010,     P270_G1G2 =     3'b010,
+                P0_G2G1 =       3'b001,     P270_G1G2 =     3'b001,
+                P90_G1G2 =      3'b011,     P180_G2G1 =     3'b011,
+                P90_G2G1 =      3'b010,     P180_G1G2 =     3'b010,
                 P0_G1G2_ =      3'b110,
-                P0_G2_G1 =      3'b111,     P90_G1G2_ =     3'b111,
-                P180_G1G2_ =    3'b101,
-                P180_G2_G1 =    3'b100,     P270_G1G2_ =    3'b100;
+                P0_G2_G1 =      3'b111,     P270_G1G2_ =    3'b111,
+                P90_G1G2_ =     3'b101,     P180_G2_G1 =    3'b101,
+                P90_G2_G1 =     3'b100,     P180_G1G2_ =    3'b100;
 
     always @(posedge clk) begin
         if (reset) begin
@@ -169,12 +199,103 @@ module dualViterbi(
             qpskState <= P0_G1G2;
             oqpskState <= P0_G1G2;
         end
-        else if (softEn) begin
+        else if (softEnReg) begin
             case (demodMode)
                 `MODE_OQPSK: begin
-                    if (decoderSource == `DEC_MUX_SEL_DUALVIT) begin
+                    `define OQPSK_LWK
+                    `ifdef OQPSK_LWK
+                    if (decoderSource == `DEC_MUX_SEL_VITERBI) begin
                         syncState <= oqpskState;
-                        if (outOfSync & codeEn) begin
+                        if (outOfSync & codeEnReg) begin
+                            case (oqpskState)
+                                P0_G1G2:    oqpskState <= P0_G2G1;
+                                P0_G2G1:    oqpskState <= P90_G1G2;
+                                P90_G1G2:   oqpskState <= P90_G2G1;
+                                P90_G2G1:   oqpskState <= P0_G1G2_;
+                                P0_G1G2_:   oqpskState <= P0_G2_G1;
+                                P0_G2_G1:   oqpskState <= P90_G1G2_;
+                                P90_G1G2_:  oqpskState <= P90_G2_G1;
+                                P90_G2_G1:  oqpskState <= P0_G1G2;
+                                default:    oqpskState <= P0_G1G2;
+                            endcase
+                        end
+                        case (oqpskState)
+                            P0_G1G2: begin
+                                if (codeEnReg) begin
+                                    i_g1 <= iSoftDelay0;
+                                    i_g2 <= iSoft;
+                                    q_g1 <= qSoftDelay0;
+                                    q_g2 <= qSoft;
+                                end
+                            end
+                            P0_G2G1: begin
+                                if (!codeEnReg) begin
+                                    i_g1 <= iSoftDelay0;
+                                    i_g2 <= iSoft;
+                                    q_g1 <= qSoftDelay0;
+                                    q_g2 <= qSoft;
+                                end
+                            end
+                            P90_G1G2: begin
+                                if (codeEnReg) begin
+                                    i_g1 <= qSoftDelay1;
+                                    i_g2 <= qSoftDelay0;
+                                    q_g1 <= ~iSoftDelay0;
+                                    q_g2 <= ~iSoft;
+                                end
+                            end
+                            P90_G2G1: begin
+                                if (!codeEnReg) begin
+                                    i_g1 <= qSoftDelay1;
+                                    i_g2 <= qSoftDelay0;
+                                    q_g1 <= ~iSoftDelay0;
+                                    q_g2 <= ~iSoft;
+                                end
+                            end
+                            P0_G1G2_: begin
+                                if (codeEnReg) begin
+                                    i_g1 <= iSoftDelay0;
+                                    i_g2 <= ~iSoft;
+                                    q_g1 <= qSoftDelay0;
+                                    q_g2 <= ~qSoft;
+                                end
+                            end
+                            P0_G2_G1: begin
+                                if (!codeEnReg) begin
+                                    i_g1 <= iSoftDelay0;
+                                    i_g2 <= ~iSoft;
+                                    q_g1 <= qSoftDelay0;
+                                    q_g2 <= ~qSoft;
+                                end
+                            end
+                            P90_G1G2_: begin
+                                if (codeEnReg) begin
+                                    i_g1 <= qSoftDelay1;
+                                    i_g2 <= ~qSoftDelay0;
+                                    q_g1 <= ~iSoftDelay0;
+                                    q_g2 <= iSoft;
+                                end
+                            end
+                            P90_G2_G1: begin
+                                if (!codeEnReg) begin
+                                    i_g1 <= qSoftDelay1;
+                                    i_g2 <= ~qSoftDelay0;
+                                    q_g1 <= ~iSoftDelay0;
+                                    q_g2 <= iSoft;
+                                end
+                            end
+                            default: begin
+                                i_g1 <= iSoftDelay0;
+                                i_g2 <= iSoft;
+                                q_g1 <= qSoftDelay0;
+                                q_g2 <= qSoft;
+                            end
+                        endcase
+                    end
+                    `else //OQPSK_LWK
+                    if (decoderSource == `DEC_MUX_SEL_VITERBI) begin
+                        syncState <= oqpskState;
+                        if (outOfSync & codeEnReg) begin
                             case (oqpskState)
                                 P0_G1G2:    oqpskState <= P90_G1G2;
                                 P90_G1G2:   oqpskState <= P180_G1G2;
@@ -220,8 +341,8 @@ module dualViterbi(
                             end
                             P90_G1G2_: begin
                                 i_g1 <= qSoftDelay1;
-                                i_g2 <= qSoftDelay0;
-                                q_g1 <= iSoftDelay0;
+                                i_g2 <= ~qSoftDelay0;
+                                q_g1 <= ~iSoftDelay0;
                                 q_g2 <= iSoft;
                             end
                             P180_G1G2_: begin
@@ -232,8 +353,8 @@ module dualViterbi(
                             end
                             P270_G1G2_: begin
                                 i_g1 <= ~qSoftDelay1;
-                                i_g2 <= ~qSoftDelay0;
-                                q_g1 <= ~iSoftDelay0;
+                                i_g2 <=  qSoftDelay0;
+                                q_g1 <=  iSoftDelay0;
                                 q_g2 <= ~iSoft;
                             end
                             default: begin
@@ -244,6 +365,7 @@ module dualViterbi(
                             end
                         endcase
                     end
+                    `endif //OQPSK_LWK
                     else begin
                         syncState <= oqpskState;
                         if (outOfSync) begin
@@ -363,7 +485,7 @@ module dualViterbi(
                  */
                  `MODE_BPSK: begin
                     syncState <= bpskState;
-                    if (outOfSync & codeEn) begin
+                    if (outOfSync & codeEnReg) begin
                         case (bpskState)
                             P0_G1G2:    bpskState <= P0_G2G1;
                             P0_G2G1:    bpskState <= P180_G1G2;
@@ -378,55 +500,55 @@ module dualViterbi(
                     end
                     case (bpskState)
                         P0_G1G2: begin
-                            if (codeEn) begin
+                            if (codeEnReg) begin
                                 i_g1 <= iSoftDelay0;
                                 i_g2 <= iSoft;
                             end
                         end
                         P0_G2G1: begin
-                            if (!codeEn) begin
+                            if (!codeEnReg) begin
                                 i_g1 <= iSoftDelay0;
                                 i_g2 <= iSoft;
                             end
                         end
                         P0_G1G2_: begin
-                            if (codeEn) begin
+                            if (codeEnReg) begin
                                 i_g1 <= iSoftDelay0;
                                 i_g2 <= ~iSoft;
                             end
                         end
                         P0_G2_G1: begin
-                            if (!codeEn) begin
+                            if (!codeEnReg) begin
                                 i_g1 <= iSoftDelay0;
                                 i_g2 <= ~iSoft;
                             end
                         end
                         P180_G1G2: begin
-                            if (codeEn) begin
+                            if (codeEnReg) begin
                                 i_g1 <= ~iSoftDelay0;
                                 i_g2 <= ~iSoft;
                             end
                         end
                         P180_G2G1: begin
-                            if (!codeEn) begin
+                            if (!codeEnReg) begin
                                 i_g1 <= ~iSoftDelay0;
                                 i_g2 <= ~iSoft;
                             end
                         end
                         P180_G1G2_: begin
-                            if (codeEn) begin
+                            if (codeEnReg) begin
                                 i_g1 <= ~iSoftDelay0;
                                 i_g2 <= iSoft;
                             end
                         end
                         P180_G2_G1: begin
-                            if (!codeEn) begin
+                            if (!codeEnReg) begin
                                 i_g1 <= ~iSoftDelay0;
                                 i_g2 <= iSoft;
                             end
                         end
                         default: begin
-                            if (codeEn) begin
+                            if (codeEnReg) begin
                                 i_g1 <= iSoftDelay0;
                                 i_g2 <= iSoft;
                             end
@@ -463,7 +585,7 @@ module dualViterbi(
                     else begin
                         case (singleRailState)
                             G1G2: begin
-                                if (codeEn) begin
+                                if (codeEnReg) begin
                                     i_g1 <= iSoft;
                                 end
                                 else begin
@@ -471,13 +593,13 @@ module dualViterbi(
                                 end
                             end
                             G2G1: begin
-                                if (codeEn) begin
+                                if (codeEnReg) begin
                                     i_g1 <= iSoftDelay0;
                                     i_g2 <= iSoft;
                                 end
                             end
                             G1G2_: begin
-                                if (codeEn) begin
+                                if (codeEnReg) begin
                                     i_g1 <= iSoft;
                                 end
                                 else begin
@@ -485,13 +607,13 @@ module dualViterbi(
                                 end
                             end
                             G2_G1: begin
-                                if (codeEn) begin
+                                if (codeEnReg) begin
                                     i_g1 <= iSoftDelay0;
                                     i_g2 <= ~iSoft;
                                 end
                             end
                             default: begin
-                                if (codeEn) begin
+                                if (codeEnReg) begin
                                     i_g1 <= iSoft;
                                 end
                                 else begin
@@ -516,7 +638,7 @@ module dualViterbi(
     wire    [15:0]  berCount;
     xilinxViterbiHardV7p0 xilViterbi(
         .clk(clk),
-        .ce(vitEn),
+        .ce(vitEnReg),
         `ifdef SIMULATE
         .sclr(reset | outOfSync | vitReset),
         `else
@@ -535,7 +657,7 @@ module dualViterbi(
     wire    [15:0]  berCountI;
     xilinxViterbiV7p0 vitI(
         .clk(clk),
-        .ce(vitEn),
+        .ce(vitEnReg),
         `ifdef SIMULATE
         .sclr(reset | outOfSync | vitReset),
         `else
@@ -552,7 +674,7 @@ module dualViterbi(
     wire    [15:0]  berCountQ;
     xilinxViterbiV7p0 vitQ(
         .clk(clk),
-        .ce(vitEn),
+        .ce(vitEnReg),
         `ifdef SIMULATE
         .sclr(reset | outOfSync | vitReset),
         `else
@@ -560,7 +682,7 @@ module dualViterbi(
         `endif
         .data_in0(q_g1),
         .data_in1(q_g2),
-        .rdy(),
+        .rdy(qRdy),
         .data_out(qBitOut),
         .norm(),
         .ber_done(),
@@ -570,7 +692,7 @@ module dualViterbi(
     `endif //HARD_DECISIONS
 
     // Output bit enable
-    assign bitEnOut = vitEn;
+    assign bitEnOut = vitEnReg;
 
 
     // Sync Detect
@@ -578,8 +700,13 @@ module dualViterbi(
     `ifdef USE_BER
     wire            [15:0]  berCount = berCountI + berCountQ;
     reg     signed  [15:0]  sprtAccum;
-    `define SPRT_SYNC_LIMIT     16'd128
-    `define SPRT_START_VALUE    16'd64
+    `ifdef SIMULATE
+    `define SPRT_SYNC_LIMIT     16'd64
+    `define SPRT_START_VALUE    16'd32
+    `else
+    `define SPRT_SYNC_LIMIT     16'd256
+    `define SPRT_START_VALUE    16'd128
+    `endif
     always @(posedge clk) begin
         if (reset) begin
             outOfSync <= 1'b0;
@@ -677,5 +804,99 @@ module dualViterbi(
     end
     `endif  // USE_BER
 
+
+    // DAC Output Mux
+    always @(posedge clk) begin
+        case (dac0Select)
+            `DAC_VIT_I: begin
+                dac0Output <= iSymData;
+                dac0ClkEn <= symEn;
+            end
+            `DAC_VIT_Q: begin
+                dac0Output <= qSymData;
+                dac0ClkEn <= symEn;
+            end
+            `DAC_VIT_ISOFT: begin
+                dac0Output <= {i_g1,15'b0};
+                dac0ClkEn <= softEnReg;
+            end
+            `DAC_VIT_QSOFT: begin
+                dac0Output <= {q_g1,15'b0};
+                dac0ClkEn <= softEnReg;
+            end
+            `DAC_VIT_IBIT: begin
+                dac0Output <= {1'b0,iBitOut,16'b0};
+                dac0ClkEn <= bitEnOut;
+            end
+            `DAC_VIT_QBIT: begin
+                dac0Output <= {1'b0,qBitOut,16'b0};
+                dac0ClkEn <= bitEnOut;
+            end
+            default: begin
+                dac0Output <= {1'b0,syncState,14'h0};
+                dac0ClkEn <= vitEnReg;
+            end
+        endcase
+        case (dac1Select)
+            `DAC_VIT_I: begin
+                dac1Output <= iSymData;
+                dac1ClkEn <= symEn;
+            end
+            `DAC_VIT_Q: begin
+                dac1Output <= qSymData;
+                dac1ClkEn <= symEn;
+            end
+            `DAC_VIT_ISOFT: begin
+                dac1Output <= {i_g2,15'b0};
+                dac1ClkEn <= softEnReg;
+            end
+            `DAC_VIT_QSOFT: begin
+                dac1Output <= {q_g2,15'b0};
+                dac1ClkEn <= softEnReg;
+            end
+            `DAC_VIT_IBIT: begin
+                dac1Output <= {1'b0,iBitOut,16'b0};
+                dac1ClkEn <= bitEnOut;
+            end
+            `DAC_VIT_QBIT: begin
+                dac1Output <= {1'b0,qBitOut,16'b0};
+                dac1ClkEn <= bitEnOut;
+            end
+            default: begin
+                dac1Output <= {1'b0,sprtAccum[8:0],8'h0};
+                dac1ClkEn <= vitEnReg;
+            end
+        endcase
+        case (dac2Select)
+            `DAC_VIT_I: begin
+                dac2Output <= iSymData;
+                dac2ClkEn <= symEn;
+            end
+            `DAC_VIT_Q: begin
+                dac2Output <= qSymData;
+                dac2ClkEn <= symEn;
+            end
+            `DAC_VIT_ISOFT: begin
+                dac2Output <= {i_g1,15'b0};
+                dac2ClkEn <= softEnReg;
+            end
+            `DAC_VIT_QSOFT: begin
+                dac2Output <= {i_g2,15'b0};
+                dac2ClkEn <= softEnReg;
+            end
+            `DAC_VIT_IBIT: begin
+                dac2Output <= {1'b0,iBitOut,16'b0};
+                dac2ClkEn <= bitEnOut;
+            end
+            `DAC_VIT_QBIT: begin
+                dac2Output <= {1'b0,qBitOut,16'b0};
+                dac2ClkEn <= bitEnOut;
+            end
+            default: begin
+                dac2Output <= {1'b0,berCount[3:0],13'h0};
+                dac2ClkEn <= vitEnReg;
+            end
+        endcase
+    end
 endmodule
 

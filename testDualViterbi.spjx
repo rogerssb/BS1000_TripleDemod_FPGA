@@ -7,10 +7,10 @@
      <setting value="N" name="GotoSource" />
      <setting value="180" name="C0Width" />
      <setting value="58" name="C1Width" />
-     <setting value="149" name="C2Width" />
+     <setting value="153" name="C2Width" />
     </settings>
     <views>
-     <view value="0.000 ns,159659.311 ns,2182.629 ns,62796.723 ns,64870.936 ns" name="Last" />
+     <view value="0.000 ns,255177.100 ns,4425.541 ns,20290.534 ns,21443.405 ns" name="Last" />
     </views>
     <groups>
      <group open="no" name="Rx" show="yes" >
@@ -199,15 +199,21 @@
        <signal name="qSymData[17:0]" scope="test.viterbi" />
        <signal name="invMeanMantissa[15:0]" scope="test.viterbi" />
        <signal name="invMeanExponent[2:0]" scope="test.viterbi" />
+       <signal name="softEn" scope="test.viterbi" />
+       <signal name="vitEn" scope="test.viterbi" />
+       <signal name="softEnReg" scope="test.viterbi" />
+       <signal name="codeEnReg" scope="test.viterbi" />
+       <signal name="vitEnReg" scope="test.viterbi" />
        <signal name="iSoft[2:0]" scope="test.viterbi" />
        <signal name="qSoft[2:0]" scope="test.viterbi" />
        <signal name="decoderSource[1:0]" scope="test.viterbi" />
-       <signal name="codeEn" scope="test.viterbi" />
        <signal name="g1[2:0]" scope="test.viterbi" />
        <signal name="g2[2:0]" scope="test.viterbi" />
        <signal name="vitReset" scope="test.viterbi" />
        <signal name="viterbiBitEn" scope="test.viterbi" />
+       <signal name="qRdy" scope="test.viterbi" />
        <signal name="bitEnOut" scope="test.viterbi" />
+       <signal name="symEn" scope="test.viterbi" />
        <signal name="iBitOut" scope="test.viterbi" />
        <signal name="qBitOut" scope="test.viterbi" />
        <signal name="viterbiBitOut" scope="test.viterbi" />
@@ -262,12 +268,14 @@
       <module name="test.dac2Interp" />
       <module name="test.decoder" />
       <module name="test.demod" />
+      <module name="test.viterbi.vitI" />
+      <module name="test.viterbi.vitQ" />
      </modules>
     </exclude>
    </datafilters>
    <explorer>
     <settings>
-     <setting value="test.gSR1[5:0]" name="Scope" />
+     <setting value="test.viterbi.vitEnReg" name="Scope" />
     </settings>
    </explorer>
    <plifiles>

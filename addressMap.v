@@ -132,6 +132,12 @@
 `define DAC_TRELLIS_Q           4'b1101
 `define DAC_TRELLIS_PHERR       4'b1110
 `define DAC_TRELLIS_INDEX       4'b1111
+`define DAC_VIT_I               4'b0000
+`define DAC_VIT_Q               4'b0001
+`define DAC_VIT_ISOFT           4'b0010
+`define DAC_VIT_QSOFT           4'b0011
+`define DAC_VIT_IBIT            4'b0100
+`define DAC_VIT_QBIT            4'b0101
 `define DEMOD_FALSELOCK     13'bx_xxxx_xxx0_10xx
 `define DEMOD_STATUS        13'bx_xxxx_xxx0_11xx
 `define DEMOD_AMTC          13'bx_xxxx_xxx1_00xx
@@ -240,7 +246,7 @@
 `define TWOCHANNEL_SCDEMOD_IMAGE    16'h2
 // FPGA2: MultiH Demod
 `define MULTIH_DEMOD_IMAGE          16'h3
-// BS1000 Bitsync Bert 
+// BS1000 Bitsync Bert
 `define BITSYNC_BERT_IMAGE          16'h4
 // FPGA1: Legacy Demod with CMA Equalizer
 `define LEGACY_CMA_IMAGE            16'h5

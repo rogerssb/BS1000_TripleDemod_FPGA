@@ -9,6 +9,8 @@
 //`define BER_TEST
 //`define MATLAB_VECTORS
 
+`define INVERT_G2
+
 //`define ROT0
 `define ROT90
 //`define ROT180
@@ -36,7 +38,7 @@ reg [31:0]d;
 wire [31:0]dout;
 
 reg     [1:0]   dec_in_sel;
-initial         dec_in_sel = `DEC_MUX_SEL_DUALVIT;
+initial         dec_in_sel = `DEC_MUX_SEL_VITERBI;
 
 // Create the clocks
 parameter TX_FREQ = 93.333333e6;
@@ -193,6 +195,7 @@ always @(negedge modClk or posedge reset) begin
         zeroCount1 <= 5'b0;
         sr0 <= MASK17;
         sr1 <= PN17;
+        //sr1 <= MASK17;
     end
     else if (infoBitEn & !enableSR1) begin
         if (sr0[0] | (zeroCount0 == 5'b11111)) begin
@@ -551,7 +554,11 @@ always @(posedge txClk) begin
             iQpsk <= {g1Bit0,17'h10000};
         end
         else begin
+            `ifdef INVERT_G2
+            iQpsk <= {~g2Bit0,17'h10000};
+            `else
             iQpsk <= {g2Bit0,17'h10000};
+            `endif
         end
     end
     else if (modSampleEn & infoBitEn) begin
@@ -559,7 +566,11 @@ always @(posedge txClk) begin
             qQpsk <= {g1Bit1,17'h10000};
         end
         else begin
+            `ifdef INVERT_G2
+            qQpsk <= {~g2Bit1,17'h10000};
+            `else
             qQpsk <= {g2Bit1,17'h10000};
+            `endif
         end
     end
 end
@@ -750,6 +761,10 @@ real rotateImag = 1.0;
 // 180 Degrees
 real rotateReal = -1.0;
 real rotateImag = 0.0;
+`elsif ROT270
+// 270 Degrees
+real rotateReal = 0.0;
+real rotateImag = -1.0;
 `endif
 
 real iRotReal = (iTxReal*rotateReal - qTxReal*rotateImag) * txScaleFactor;
@@ -986,12 +1001,6 @@ always @(posedge clk) begin
             decoderSym2xEn <= demodSym2xEn ;
         end
         `DEC_MUX_SEL_VITERBI: begin
-            iDec <= viterbiBit0;
-            qDec <= viterbiBit0;
-            decoderSymEn <= viterbiSymEn;
-            decoderSym2xEn <= viterbiSym2xEn;
-        end
-        `DEC_MUX_SEL_DUALVIT: begin
             iDec <= viterbiBit0;
             qDec <= viterbiBit1;
             decoderSymEn <= viterbiSymEn;
@@ -1443,7 +1452,7 @@ initial begin
     viterbi.vitReset = 1;
     #(2*2*bitrateSamplesInt*TC) ;
     viterbi.vitReset = 0;
-    //viterbi.codeEn = 1;
+    viterbi.codeEn = 0;
 
     `ifdef ENABLE_AGC
     // Enable the AGC loop

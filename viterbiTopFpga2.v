@@ -87,7 +87,7 @@ input           symb_pll_vco;
 output          sdiOut;
 input           legacyBit_pad ;
 
-parameter VER_NUMBER = 16'd435;
+parameter VER_NUMBER = 16'd636;
 
 // 12 Jun 13
 // IOB reclocking of inputs to trellis
@@ -397,18 +397,84 @@ always @(posedge clk) begin
     end
 
 //******************************************************************************
+//                          Dual Viterbi Decoder
+//******************************************************************************
+    wire    signed  [17:0]  vitDac0Data;
+    wire    signed  [17:0]  vitDac1Data;
+    wire    signed  [17:0]  vitDac2Data;
+    wire            [31:0]  vitDout;
+    dualViterbi viterbi(
+        .clk(clk),
+        .clkEn(1'b1),
+        .reset(reset),
+        .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
+        .addr(addr),
+        .din(dataIn),
+        .dout(vitDout),
+        .demodMode(demodMode),
+        .decoderSource(dec_in_sel),
+        .symEn(dataSymEnReg),
+        .iSymData(iIn),
+        .qSymData(qIn),
+        .bitEnOut(viterbiBitEn),
+        .iBitOut(viterbiBitI),
+        .qBitOut(viterbiBitQ),
+        .vitError(),
+        .dac0Select(dac0Select),
+        .dac0ClkEn(vitDac0ClkEn),
+        .dac0Output(vitDac0Data),
+        .dac1Select(dac1Select),
+        .dac1ClkEn(vitDac1ClkEn),
+        .dac1Output(vitDac1Data),
+        .dac2Select(dac2Select),
+        .dac2ClkEn(vitDac2ClkEn),
+        .dac2Output(vitDac2Data)
+        );
+    reg viterbiSym2xEn;
+    always @(posedge clk) begin
+        case (demodMode)
+            `MODE_QPSK,
+            `MODE_OQPSK: begin
+                viterbiSym2xEn <= dataSymEnReg;
+            end
+            default: begin
+                viterbiSym2xEn <= dataSymEnReg;
+            end
+        endcase
+    end
+
+
+//******************************************************************************
 //                              Interpolators
 //******************************************************************************
     reg  [17:0] interp0DataIn,interp1DataIn,interp2DataIn;
     reg         dac0Sync,dac1Sync,dac2Sync;
 
     always @(posedge clk) begin
-        interp0DataIn <= {demod0DataReg,4'h0};
-        dac0Sync <= demod0SyncReg;
-        interp1DataIn <= {demod1DataReg,4'h0};
-        dac1Sync <= demod1SyncReg;
-        interp2DataIn <= {demod2DataReg,4'h0};
-        dac2Sync <= demod2SyncReg;
+        if (dac0_in_sel == `DAC_IN_SEL_DEMOD) begin
+            interp0DataIn <= {demod0DataReg,4'h0};
+            dac0Sync <= demod0SyncReg;
+        end
+        else begin
+            interp0DataIn <= vitDac0Data;
+            dac0Sync <= vitDac0ClkEn;
+        end
+        if (dac1_in_sel == `DAC_IN_SEL_DEMOD) begin
+            interp1DataIn <= {demod1DataReg,4'h0};
+            dac1Sync <= demod1SyncReg;
+        end
+        else begin
+            interp1DataIn <= vitDac1Data;
+            dac1Sync <= vitDac1ClkEn;
+        end
+        if (dac2_in_sel == `DAC_IN_SEL_DEMOD) begin
+            interp2DataIn <= {demod2DataReg,4'h0};
+            dac2Sync <= demod2SyncReg;
+        end
+        else begin
+            interp2DataIn <= vitDac2Data;
+            dac2Sync <= vitDac2ClkEn;
+        end
     end
 
 wire    [31:0]  interp0Dout;
@@ -497,42 +563,6 @@ FDCE dac2_d_11 (.Q(dac2_d[11]),  .C(clk),  .CE(1'b1),  .CLR(1'b0), .D(dac2Out[11
 FDCE dac2_d_12 (.Q(dac2_d[12]),  .C(clk),  .CE(1'b1),  .CLR(1'b0), .D(dac2Out[12]));
 FDCE dac2_d_13 (.Q(dac2_d[13]),  .C(clk),  .CE(1'b1),  .CLR(1'b0), .D(~dac2Out[13]));
 assign dac2_clk = clk;
-
-//******************************************************************************
-//                          Dual Viterbi Decoder
-//******************************************************************************
-    wire    [31:0]  vitDout;
-    dualViterbi viterbi(
-        .clk(clk),
-        .clkEn(1'b1),
-        .reset(reset),
-        .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
-        .addr(addr),
-        .din(dataIn),
-        .dout(vitDout),
-        .demodMode(demodMode),
-        .decoderSource(dec_in_sel),
-        .symEn(dataSymEnReg),
-        .iSymData(iIn),
-        .qSymData(qIn),
-        .bitEnOut(viterbiBitEn),
-        .iBitOut(viterbiBitI),
-        .qBitOut(viterbiBitQ),
-        .vitError()
-        );
-    reg viterbiSym2xEn;
-    always @* begin
-        case (demodMode)
-            `MODE_QPSK,
-            `MODE_OQPSK: begin
-                viterbiSym2xEn = dataSym2xEnReg;
-            end
-            default: begin
-                viterbiSym2xEn = dataSymEnReg;
-            end
-        endcase
-    end
-
 
 //******************************************************************************
 //                                 Decoder

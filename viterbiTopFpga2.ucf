@@ -479,12 +479,14 @@ NET "dac1Sync*" TNM_NET = DSPS syncGroup;
 NET "dac2Sync*" TNM_NET = FFS syncGroup;
 NET "dac2Sync*" TNM_NET = DSPS syncGroup;
 NET "dataSymEnReg*" TNM_NET = FFS syncGroup;
-NET "dataSymEnReg*" TNM_NET = DSPS syncGroup;
+#NET "dataSymEnReg*" TNM_NET = DSPS syncGroup;
 NET "dataSym2xEnReg*" TNM_NET = FFS syncGroup;
 #NET "vitSymEn*" TNM_NET = FFS syncGroup;
 #NET "vitSymEn*" TNM_NET = DSPS syncGroup;
 #NET "vitSym2xEn*" TNM_NET = FFS syncGroup;
-NET "viterbi/codeEn*" TNM_NET = FFS syncGroup;
+NET "viterbi/codeEnReg*" TNM_NET = FFS syncGroup;
+#NET "viterbi/softEnReg*" TNM_NET = FFS syncGroup;
+NET "viterbi/vitEnReg*" TNM_NET = FFS syncGroup;
 #NET "viterbi/symEnSR*" TNM_NET = FFS syncGroup;
 NET "decoderSymEn*" TNM_NET = FFS syncGroup;
 NET "decoderSym2xEn*" TNM_NET = FFS syncGroup;
@@ -495,7 +497,9 @@ TIMEGRP "clken" =  FFS(dac0Sync*) FFS(dac1Sync*) FFS(dac2Sync*)
                    FFS(dataSym2xEnReg*)
 #                   FFS(vitSymEn*)
 #                   FFS(vitSym2xEn*)
-                   FFS(viterbi/codeEn*)
+                   FFS(viterbi/codeEnReg*)
+#                   FFS(viterbi/softEnReg*)
+                   FFS(viterbi/vitEnReg*)
 #                   FFS(viterbi/symEnSR*)
                    FFS(decoderSymEn)
                    FFS(decoderSym2xEn);
@@ -505,7 +509,6 @@ TIMEGRP "allEnables" = syncGroup EXCEPT clken ;
 
 # Slower clock timespecs. 
 TIMESPEC TS_syncGroup = FROM "allEnables" TO "syncGroup" 46.67 MHz PRIORITY 4;
-TIMESPEC TS_dacGroup = FROM "syncGroup" TO FFS(sc/dac*Data*) 46.67 MHz PRIORITY 3;
 TIMESPEC TS_clken = FROM "clken" TO FFS 93.33 MHz PRIORITY 1;
 
 # Clocked Inputs
