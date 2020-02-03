@@ -87,7 +87,7 @@ input           symb_pll_vco;
 output          sdiOut;
 input           legacyBit_pad ;
 
-parameter VER_NUMBER = 16'd636;
+parameter VER_NUMBER = 16'd649;
 
 // 12 Jun 13
 // IOB reclocking of inputs to trellis
