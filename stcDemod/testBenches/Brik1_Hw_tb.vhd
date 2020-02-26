@@ -62,6 +62,7 @@ entity Brik1_Hw_tb is
       Power1In,
       NoiseIn           : IN  sfixed(0 downto -17);
       BitRate_r         : IN  real;
+      DeltaIn           : IN  integer;
       -- synthesis translate_on
       DataOut_o,
       ClkOut_o,
@@ -90,7 +91,9 @@ architecture rtl of Brik1_Hw_tb is
       Clk93Dly,
       Clk186,
       SpectrumInv,
-      ValidIn           : IN  std_logic;
+      TwoClksPerTrellis,
+      ReadHold,
+      ValidIn           : IN  STD_LOGIC;
       DataOut,                            -- Trellis Data Output
       ClkOutEn,                           -- Trellis Clock Output
       PilotFound,                         -- Pilot Found LED
@@ -99,8 +102,10 @@ architecture rtl of Brik1_Hw_tb is
       PhaseDiffEn,
       Dac0ClkEn,
       Dac1ClkEn,
-      Dac2ClkEn         : OUT std_logic;
+      Dac2ClkEn         : OUT STD_LOGIC;
       PilotOffset       : OUT STD_LOGIC_VECTOR(8 downto 0); -- signed Pilot Detect Offset from center
+      DeltaTau          : OUT STD_LOGIC_VECTOR(5 downto 0);
+      Peaks             : OUT SLV32;
       Dac0Data,
       Dac1Data,
       Dac2Data          : OUT SLV18;
@@ -108,41 +113,6 @@ architecture rtl of Brik1_Hw_tb is
       PhaseDiff         : OUT SLV18
       );
    END COMPONENT STC;
-
-  component STC628 IS
-   GENERIC (
-         SIM_MODE    : boolean := false
-      );
-   PORT(
-      ResampleR,
-      ResampleI         : IN  SLV18;
-      ClocksPerBit      : IN  SLV16;
-      HxThreshSlv       : IN  SLV12;
-      DacSelect0,
-      DacSelect1,
-      DacSelect2        : IN  SLV4;
-      Clk93,
-      Clk186,
-      SpectrumInv,
-      ValidIn           : IN  std_logic;
-      DataOut,                            -- Trellis Data Output
-      ClkOutEn,                           -- Trellis Clock Output
-      PilotFound,                         -- Pilot Found LED
-      PilotLocked,
-      StartOfFrame,
-      PhaseDiffEn,
-      Dac0ClkEn,
-      Dac1ClkEn,
-      Dac2ClkEn         : OUT std_logic;
-      PilotOffset       : OUT STD_LOGIC_VECTOR(8 downto 0); -- signed Pilot Detect Offset from center
-      Dac0Data,
-      Dac1Data,
-      Dac2Data          : OUT SLV18;
-      PhaseOut,
-      PhaseDiff         : OUT SLV18
-   );
-   END component STC628;
-
 
    COMPONENT CmplxMult IS
       GENERIC (
@@ -256,9 +226,23 @@ architecture rtl of Brik1_Hw_tb is
        );
    end component;
 
+   COMPONENT xadcConvert IS
+      GENERIC(
+         NUM_INPUTS  : positive := 3
+      );
+      PORT(
+         clk            : IN  std_logic;
+         reset          : IN  std_logic;
+         ce             : IN  std_logic;
+         rdChan         : IN  STD_LOGIC_VECTOR(4 downto 0);
+         dataOut        : OUT STD_LOGIC_VECTOR(15 DOWNTO 0)
+      );
+   END COMPONENT xadcConvert;
+
 -------------------------------------------------------------------------------
 --                       CONSTANT DEFINITIONS
 -------------------------------------------------------------------------------
+  CONSTANT   NUM_INPUTS : positive  := 3;
 
    signal   Reset,
             ResetBufg,
@@ -266,15 +250,17 @@ architecture rtl of Brik1_Hw_tb is
             Clk93Dly,
             Clk186,
             lastSampleReset,
+            TwoClksPerTrellis,
             StartOfFrame,
+            PilotFound,
+            PilotLocked,
             Locked,
             PhaseValid           : std_logic;
    SIGNAL   DataValid            : SLV8 := x"00";
    SIGNAL   RdAddr_i,
             RdAddr0_i,
             RdAddr1_i            : natural range 0 to FRAME_LENGTH_4;
-   SIGNAL   RdAddr0_v,
-            RdAddr1_v            : integer range 0-2048-128 to 13311+2047+127 := 0;
+   SIGNAL   NoiseAddr            : natural range 0 to 16383;
    SIGNAL   RealRead,
             ImagRead             : vector_of_slvs(0 to 2)(17 downto 0);
    SIGNAL   H0r,
@@ -287,8 +273,6 @@ architecture rtl of Brik1_Hw_tb is
             Chan1i,
             ResampleR_s,
             ResampleI_s,
-            RealOut,
-            ImagOut,
             BitRateAcc           : sfixed(0 downto -17);
    SIGNAL   Cos0,
             Sin0,
@@ -303,6 +287,8 @@ architecture rtl of Brik1_Hw_tb is
             FrameClocks_vio,
             Power0_vio,
             Power1_vio,
+            RealOut,
+            ImagOut,
             Phase0_vio,
             Phase1_vio,
             BitRate_slv,
@@ -313,22 +299,26 @@ architecture rtl of Brik1_Hw_tb is
    SIGNAL   DeltaT_vio,
             HwControlBits,
             Errors               : SLV8;
-   SIGNAL   LedCount             : UINT32;
    SIGNAL   ClocksPerBit,
             ClocksPerBitSlv      : SLV16;
    SIGNAL   FrameCount           : unsigned(5 downto 0) := "000000";
    SIGNAL   PilotOffset          : std_logic_vector(8 downto 0);
+   SIGNAL   DeltaT               : integer;
+   signal   rdChan               : ufixed(4 downto 0) := "00000";
+   signal   dataOut              : SLV16;
 
    attribute mark_debug : string;
-   attribute mark_debug of RdAddr_i, RealOut, ImagOut, ClkOut_o, DataOut_o : signal is "true";
+   attribute mark_debug of RdAddr_i, RealOut, ImagOut, ClkOut_o, DataOut_o,
+         PilotFound, PilotLocked : signal is "true";
 
 begin
+
 
    Clocks : systemClock
       port map (
          clk_in1    => Clk93In,
          clk93      => Clk93,
-         clk93Dly   => Clk93Dly,
+         Clk93Dly   => Clk93Dly,
          clk186     => Clk186,
          locked     => Locked
       );
@@ -359,16 +349,16 @@ begin
    begin
       if (rising_edge(Clk186)) then
          Reset <= (not locked) or HwControlBits(7);
+         if (rdChan < NUM_INPUTS - 1) then
+            rdChan <= resize(rdChan + 1, rdChan);
+         else
+            rdChan <= "00000";
+         end if;
          if (Reset) then
             Errors <= x"00";
-            LedCount <= x"00000000";
          else
-            if (LedCount < 186666666) then
-               LedCount <= LedCount + 1;
-            else
-               LedCount <= x"00000000";
-            end if;
-            DemodLED <= '1' when (LedCount < 93333333) else '0';
+            DemodLED <= not PilotFound;
+            BS_LED   <= not PilotLocked;
             if (<< signal UUTu.PD_u.OverflowIFft : std_logic >> ) then
                Errors(0) <= '1';
             else
@@ -400,11 +390,12 @@ begin
                Errors(5) <= '0';
             end if;
          end if;
-         BS_LED <= nor(Errors);
       end if;
    end process;
 
    reg_process : process (Clk93)
+      variable RdAddr0_v,
+               RdAddr1_v   : integer range 0-2048-128 to 13311+2047+127;
       variable Offset_v    : integer range -2048 to 2047;
       variable DeltaT_v    : integer range -128 to 127;
       variable Power0_v,
@@ -419,6 +410,7 @@ begin
             DataValid <= x"00";
             BitRateAcc  <= to_sfixed(0, BitRateAcc);
             RdAddr_i    <= 12830;
+            NoiseAddr   <= 0;
          else
             BitRate_slv   <= BitRate_vio;
             Power0_slv    <= Power0_vio;
@@ -448,11 +440,23 @@ begin
                   RdAddr_i <= 0;
                   FrameCount <= FrameCount + 1;
                end if;
+               if (NoiseAddr < 16383) then
+                  NoiseAddr <= NoiseAddr + 1;
+               else
+                  NoiseAddr <= 0;
+               end if;
             end if;
          end if;
-         DeltaT_v  := 0; -- TODO to_integer(signed(DeltaT_vio));    -- add up to ±4 then check for overflow
+         if (SIM_MODE) then
+      -- synthesis translate_off
+            DeltaT_v := DeltaIn;
+      -- synthesis translate_on
+         else
+            DeltaT_v  := to_integer(signed(DeltaT_vio));    -- add up to ±4 then check for overflow
+         end if;
+         DeltaT <= DeltaT_v;
          Offset_v  := to_integer(signed(Offset_vio));   -- 290 = 511, 287 is 3, 290+28=485 where packet rollover issues start
-         RdAddr0_v <= RdAddr_i + Offset_v;
+         RdAddr0_v := RdAddr_i + Offset_v;
          if (RdAddr0_v > 13311) then
             RdAddr0_i <= RdAddr0_v - FRAME_LENGTH_4;
          elsif (RdAddr0_v < 0) then
@@ -461,7 +465,7 @@ begin
             RdAddr0_i <= RdAddr0_v;
          end if;
 
-         RdAddr1_v <= RdAddr_i + Offset_v + DeltaT_v;
+         RdAddr1_v := RdAddr_i + Offset_v + DeltaT_v;
          if (RdAddr1_v > 13311) then
             RdAddr1_i <= RdAddr1_v - FRAME_LENGTH_4;
          elsif (RdAddr1_v < 0) then
@@ -489,11 +493,14 @@ begin
          end if;
 
          ResampleR_s <= resize((Chan0r * Power0_v) + (Chan1r * Power1_v) + Noise_v, ResampleR_s, fixed_saturate, fixed_truncate);
-         if (HwControlBits(1)) then   -- invert I data for spectral inversion
+         if (HwControlBits(6)) then   -- invert I data for spectral inversion
             ResampleI_s <= resize((-Chan0i * Power0_v) + (-Chan1i * Power1_v) - Noise_v, ResampleI_s, fixed_saturate, fixed_truncate);
          else
             ResampleI_s <= resize((Chan0i * Power0_v) + (Chan1i * Power1_v) + Noise_v, ResampleI_s, fixed_saturate, fixed_truncate);
          end if;
+
+         RealOut <= to_slv(ResampleR_s);
+         ImagOut <= to_slv(ResampleI_s);
 
       end if;
    end process reg_process;
@@ -597,7 +604,7 @@ begin
          BINPT       => -17,
          FILE_IS_SLV => true,
          ADDR_WIDTH  => 14,
-         MAX_ADDR    => 13311,
+         MAX_ADDR    => 16383,
          LATENCY     => 1
       )
       PORT MAP(
@@ -607,7 +614,7 @@ begin
          WrEn        => '0',
          WrAddr      => 0,
          RdAddrA     => 0,
-         RdAddrB     => RdAddr0_i,
+         RdAddrB     => NoiseAddr,
          WrData      => (others=>'0'),
          RdOutA      => open,
          RdOutB      => RealRead(2)
@@ -710,7 +717,8 @@ g1 : if (SIM_MODE) generate begin
          ClocksPerBitSlv <= to_slv(to_sfixed(BitRate_r*1.02/93.3, 0, -15));
       -- synthesis translate_on
 else generate
-         ClocksPerBitSlv <= ClocksPerBit;
+         ClocksPerBitSlv   <= ClocksPerBit;
+         TwoClksPerTrellis <= HwControlBits(0);
 end generate;
 
    UUTu : STC
@@ -722,19 +730,23 @@ end generate;
          ResampleI      => to_slv(ResampleI_s),
          ClocksPerBit   => ClocksPerBitSlv,
          HxThreshSlv    => 12x"180",
+         TwoClksPerTrellis => TwoClksPerTrellis,
          DacSelect0     => x"0",
          DacSelect1     => x"0",
          DacSelect2     => x"0",
+         ReadHold       => '0',
          Clk93          => Clk93,
          Clk93Dly       => Clk93Dly,
          Clk186         => Clk186,
          ValidIn        => PhaseValid,
-         SpectrumInv    => HwControlBits(0),
+         SpectrumInv    => HwControlBits(6),
          PilotOffset    => PilotOffset,
          DataOut        => DataOut_o,
          ClkOutEn       => ClkOut_o,
-         PilotFound     => open,
-         PilotLocked    => open,
+         PilotFound     => PilotFound,
+         PilotLocked    => PilotLocked,
+         DeltaTau       => open,
+         Peaks          => open,
          StartOfFrame   => open,
          Dac0ClkEn      => open,
          Dac1ClkEn      => open,
@@ -746,5 +758,17 @@ end generate;
          PhaseOut       => open,
          PhaseDiff      => open
       );
+
+   xadc : xadcConvert
+      GENERIC MAP (
+         NUM_INPUTS => NUM_INPUTS
+      )
+      PORT map(
+      clk      => Clk93,
+      reset    => Reset,
+      ce       => '1',
+      rdChan   => to_slv(rdChan),
+      dataOut  => dataOut
+   );
 
 end rtl;

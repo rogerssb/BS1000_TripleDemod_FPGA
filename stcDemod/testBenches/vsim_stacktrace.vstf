@@ -341,3 +341,19 @@
 # End of Stack Trace
 
 
+# Current time Thu Feb 20 15:28:28 2020
+# ModelSim PE Stack Trace
+# Program = vsim
+# Id = "10.5c"
+# Version = "2016.07"
+# Date = "Jul 21 2016"
+# Platform = win32pe
+# Signature = 0c4b3f48b753105122c56716278fbcc6
+# 0    0x011492e5: '<unknown (@0x11492e5)>'
+# 1    0x0113f06a: '<unknown (@0x113f06a)>'
+# 2    0x603c9282: 'Tcl_SetServiceMode + 0x62' in 'c:\modeltech_pe_10.5c\win32pe\tcl85.dll'
+# 3    0x0113f06a: '<unknown (@0x113f06a)>'
+# 4    0x01149240: '<unknown (@0x1149240)>'
+# End of Stack Trace
+
+

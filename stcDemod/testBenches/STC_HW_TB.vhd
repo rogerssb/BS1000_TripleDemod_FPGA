@@ -56,6 +56,7 @@ ARCHITECTURE rtl OF STC_HW_TB IS
          Power1In,
          NoiseIn           : IN  sfixed(0 downto -17);
          BitRate_r         : IN  real;
+         DeltaIn           : IN  integer;
          DataOut_o,
          ClkOut_o,
          BS_LED,
@@ -63,27 +64,31 @@ ARCHITECTURE rtl OF STC_HW_TB IS
       );
    end COMPONENT Brik1_Hw_tb;
 
-
   -- Signals
   signal Clk,
          RdAddrEq,
-         RdAddrDly         : std_logic := '0';
+         RdAddrDly      : std_logic := '0';
+  signal reset          : std_logic := '1';
   signal BitRate,
          Power0In,
          Power1In,
-         NoiseIn           : sfixed(0 downto -17);
-  signal FrameCnt          : natural := 0;
-  signal BitRate_r         : real := 20.0; --9.33;
+         NoiseIn        : sfixed(0 downto -17);
+  signal FrameCnt,
+         Delta,
+         DeltaTauEn     : integer := 0;
+  signal BitRate_r      : real := 9.33;
 
 BEGIN
 
    process begin
       wait for 5 nS;
-      if (FrameCnt < 30) then
-         Clk <= not Clk;
-      end if;
+      Clk <= not Clk;
    end process;
 
+   reset_process : process begin
+      wait for 20 ns;
+      reset <= '0';
+   end process reset_process;
 
    PowerProc : process(Clk)
    begin
@@ -91,42 +96,61 @@ BEGIN
          RdAddrEq <= '1' when (<< signal Brik1.RdAddr_i : natural range 0 to FRAME_LENGTH_4 >> = 13100) else '0';
          RdAddrDly <= RdAddrEq;
          if (<< signal Brik1.Reset  : std_logic >>) then
-            Power0In <= to_sfixed(0.240, Power0In);
-            Power1In <= to_sfixed(0.240, Power1In);
-            NoiseIn  <= to_sfixed(0.0, NoiseIn);
-            BitRate  <= to_sfixed(BitRate_r*4.0*1.04/93.3, BitRate);    -- 41.6 is 10Mb times 4 plus 4% overhead for pilot
+            Power0In                                        <= to_sfixed(0.240, Power0In);
+            Power1In                                        <= to_sfixed(0.240, Power1In);
+            NoiseIn                                         <= to_sfixed(0.0, NoiseIn); --38, NoiseIn);
+            Delta                                           <= 0;
+            <<signal Brik1.UUTu.DeltaTauEn : std_logic >>   <= '1';
+            <<signal Brik1.TwoClksPerTrellis : std_logic >>     <= '0'; --'1';
+            <<signal Brik1.UUTu.MiscBits : SLV18 >>         <= 18x"30008";
+            <<signal Brik1.UUTu.TrellisOffsetSlv : SLV4 >>  <= x"F";
          elsif (RdAddrEq and not RdAddrDly) then
- /*          case (FrameCnt) is
+           case (FrameCnt) is
             when 0 =>
-               Power0In <= to_sfixed(0.000, Power0In);
+               Power0In <= to_sfixed(0.0, Power0In);
                Power1In <= to_sfixed(0.240, Power1In);
             when 1 =>
+               <<signal Brik1.UUTu.DeltaTauEn : std_logic >> <= '1';
                Power0In <= to_sfixed(0.240, Power0In);
-               Power1In <= to_sfixed(0.000, Power1In);
+               Power1In <= to_sfixed(0.0, Power1In);
+            when 2 =>
+               Power0In <= to_sfixed(0.240, Power0In);
+               Power1In <= to_sfixed(0.240, Power1In);
+            when 3 =>
+               Delta <= -2;
+            when 5 =>
+--            <<signal Brik1.TwoClksPerTrellis : std_logic >>     <= '0';
+            BitRate_r <= 9.33;
+            when 7 =>
+               Delta <= +2;
             when others =>
-               Power1In <= resize(Power1In + 0.02, Power1In);
             end case;
-*/            FrameCnt <= FrameCnt + 1;
+            if (FrameCnt < 10) then
+               FrameCnt <= FrameCnt + 1;
+            else
+               FrameCnt <= 0;
+ --           <<signal Brik1.TwoClksPerTrellis : std_logic >>     <= '1';
+            end if;
          end if;
       end if;
    end process;
 
+   BitRate <= to_sfixed(BitRate_r*4.0*1.04/93.3, BitRate);    -- 41.6 is 10Mb times 4 plus 4% overhead for pilot
 
    Brik1 : Brik1_Hw_tb
    GENERIC MAP(
       SIM_MODE => true
    )
    PORT MAP(
-      Clk93In  => Clk,
-      Power0In => Power0In,
-      Power1In => Power1In,
-      NoiseIn  => NoiseIn,
+      Clk93In   => Clk,
+      Power0In  => Power0In,
+      Power1In  => Power1In,
+      NoiseIn   => NoiseIn,
       BitRateIn => BitRate,
       BitRate_r => BitRate_r,
-      BS_LED   => open,
-      DemodLED => open
+      DeltaIn   => Delta,
+      BS_LED    => open,
+      DemodLED  => open
    );
 
-
 END rtl;
-
