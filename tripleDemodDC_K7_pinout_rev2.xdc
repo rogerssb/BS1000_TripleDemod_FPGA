@@ -421,7 +421,8 @@ set_property CONFIG_VOLTAGE 3.3 [current_design]
 # set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets dac1_clk_OBUF]
 
 set_property BITSTREAM.CONFIG.CONFIGRATE 66 [current_design]
-set_property BITSTREAM.CONFIG.SPI_32BIT_ADDR YES [current_design]
-set_property BITSTREAM.CONFIG.SPI_BUSWIDTH 4 [current_design]
+set_property BITSTREAM.CONFIG.SPI_32BIT_ADDR NO [current_design]
+set_property BITSTREAM.CONFIG.SPI_BUSWIDTH 1 [current_design]
+
 
 

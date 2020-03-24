@@ -3,14 +3,14 @@
 
 module stcModTop (
 
-    `ifdef TRIPLE_DEMOD
+    `ifdef R6100
 
     input               spiClk,
     input               spiCSn,
     input               spiDataIn,
     inout               spiDataOut,
 
-    `else   //TRIPLE_DEMOD
+    `else   //R6100
 
     // Flexbus connections
     input               fbClk,
@@ -21,13 +21,13 @@ module stcModTop (
     input       [15:0]  fb_addr,
     inout       [15:0]  fb_data,
 
-    `endif //TRIPLE_DEMOD
+    `endif //R6100
 
-    `ifdef TRIPLE_DEMOD
+    `ifdef R6100
     input               adc0Clk,
-    `else // TRIPLE_DEMOD
+    `else // R6100
     input               sysClk,
-    `endif // TRIPLE_DEMOD
+    `endif // R6100
 
     // DAC configuration interface
     output              dac_rst,
@@ -35,7 +35,7 @@ module stcModTop (
     output              dac_sdio,
     output              dac0_nCs,
     output              dac1_nCs,
-    `ifndef TRIPLE_DEMOD
+    `ifndef R6100
     output              dac2_nCs,
     `endif
 
@@ -44,12 +44,12 @@ module stcModTop (
     output  reg [13:0]  dac0_d,
     output              dac1_clk,
     output  reg [13:0]  dac1_d,
-    `ifndef TRIPLE_DEMOD
+    `ifndef R6100
     output              dac2_clk,
     output  reg [13:0]  dac2_d,
     `endif
 
-    `ifdef TRIPLE_DEMOD
+    `ifdef R6100
 
     // Video Switch Select Lines
     output      [1:0]   video0InSelect,
@@ -57,7 +57,7 @@ module stcModTop (
     output      [1:0]   video1InSelect,
     output reg  [1:0]   video1OutSelect,
 
-    `endif //TRIPLE_DEMOD
+    `endif //R6100
 
     output              adc01_powerDown
 );
@@ -68,8 +68,8 @@ module stcModTop (
 //******************************************************************************
 //                          Clock Distribution
 //******************************************************************************
-    `ifdef TRIPLE_DEMOD
-    systemClock systemClock (
+    `ifdef R6100
+    systemClockStcMod systemClock (
         .clk_in1(adc0Clk),
         .clk_out1(clk),
         .locked(clkLocked)
@@ -96,8 +96,8 @@ module stcModTop (
     );
     `endif //ADD_FRANKS_KLUDGE
 
-    `else //TRIPLE_DEMOD
-    systemClock systemClock (
+    `else //R6100
+    systemClockStcMod systemClock (
         .clk_in1(sysClk),
         .clk_out1(clk),
         .locked(clkLocked)
@@ -108,11 +108,11 @@ module stcModTop (
         .clk_out1(busClk),
         .locked(fbClkLocked)
     );
-    `endif //TRIPLE_DEMOD
+    `endif //R6100
 
 
 
-    `ifdef TRIPLE_DEMOD
+    `ifdef R6100
     /******************************************************************************
                                  SPI Config Interface
     ******************************************************************************/
@@ -138,7 +138,7 @@ module stcModTop (
     );
     assign spiDataOut = spiDataOE ? spiOut : 1'bz;
 
-    `else //TRIPLE_DEMOD
+    `else //R6100
 
     /******************************************************************************
                                  Bus Interface
@@ -162,7 +162,7 @@ module stcModTop (
     assign  addr[0] = 1'b0;
     wire    rd = !fb_oen;
 
-    `endif //TRIPLE_DEMOD
+    `endif //R6100
 
 //******************************************************************************
 //                             Top Level Registers
@@ -226,9 +226,9 @@ module stcModTop (
         .reload(1'b0),
         .load_data(24'b0),
         .data(),
-        .serial(pnBit)
+        .serial(pnBit)/*,
+        .serialC(pnBit)*/
     );
-
 
     //******************************************************************************
     //                           Two Channel Framer
@@ -469,7 +469,7 @@ module stcModTop (
         dac1_d[13] <= ~interp1DataOut[17];
     end
 
-    `ifndef TRIPLE_DEMOD
+    `ifndef R6100
     reg     [17:0]  interp2DataIn;
     wire    [3:0]   dac2Source;
     always @(posedge clk) begin
@@ -526,12 +526,12 @@ module stcModTop (
         dac2_d[13] <= ~interp2DataOut[17];
     end
 
-    `endif //not TRIPLE_DEMOD
+    `endif //not R6100
 
 
     assign dac0_clk = clk;
     assign dac1_clk = clk;
-    `ifndef TRIPLE_DEMOD
+    `ifndef R6100
     assign dac2_clk = clk;
     `endif
 
@@ -548,7 +548,7 @@ module stcModTop (
     assign dac2_nCs = 1'b0;
     assign dac_sdio = 1'b0;
 
-    `ifdef TRIPLE_DEMOD
+    `ifdef R6100
 
     //******************************************************************************
     //                          Video Switch Interface
@@ -610,10 +610,10 @@ module stcModTop (
         endcase
     end
 
-    `endif //TRIPLE_DEMOD
+    `endif //R6100
 
 
-    `ifdef TRIPLE_DEMOD
+    `ifdef R6100
 
     //******************************************************************************
     //                           Processor Read Data Mux
@@ -636,7 +636,7 @@ module stcModTop (
         endcase
     end
 
-    `else //TRIPLE_DEMOD
+    `else //R6100
 
     //******************************************************************************
     //                           Processor Read Data Mux
@@ -695,7 +695,7 @@ module stcModTop (
 
     assign fb_data = (cs & rd) ? rd_mux : 16'hzzzz;
 
-    `endif //TRIPLE_DEMOD
+    `endif //R6100
 
 endmodule
 

@@ -428,7 +428,7 @@ begin
             if (DataValid(0)) then
                if (FrameCount(0)) then    -- update every other frame
                   FrameClocks_v := 13311; --to_integer(unsigned(FrameClocks_vio));
-               elsif (signed(PilotOffset) > 0) then
+               elsif (signed(PilotOffset) > 0) then   -- used to realign the bit rate
                   FrameClocks_v := 13310;
                else
                   FrameClocks_v := 13312;
