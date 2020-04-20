@@ -19,4 +19,3 @@ set_output_delay -clock [get_clocks sysClk] -max -add_delay 3.400 [get_ports {da
 set_output_delay -clock [get_clocks sysClk] -min -add_delay -0.100 [get_ports {dac2_d[*]}]
 set_output_delay -clock [get_clocks sysClk] -max -add_delay 3.400 [get_ports {dac2_d[*]}]
 
-
