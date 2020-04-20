@@ -69,7 +69,7 @@ module stcModTop (
 //                          Clock Distribution
 //******************************************************************************
     `ifdef R6100
-    systemClockStcMod systemClock (
+    systemClock systemClock (
         .clk_in1(adc0Clk),
         .clk_out1(clk),
         .locked(clkLocked)
@@ -97,7 +97,7 @@ module stcModTop (
     `endif //ADD_FRANKS_KLUDGE
 
     `else //R6100
-    systemClockStcMod systemClock (
+    systemClock systemClock (
         .clk_in1(sysClk),
         .clk_out1(clk),
         .locked(clkLocked)

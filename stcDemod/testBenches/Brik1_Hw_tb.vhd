@@ -91,7 +91,6 @@ architecture rtl of Brik1_Hw_tb is
       Clk93Dly,
       Clk186,
       SpectrumInv,
-      TwoClksPerTrellis,
       ReadHold,
       ValidIn           : IN  STD_LOGIC;
       DataOut,                            -- Trellis Data Output
@@ -730,10 +729,9 @@ end generate;
          ResampleI      => to_slv(ResampleI_s),
          ClocksPerBit   => ClocksPerBitSlv,
          HxThreshSlv    => 12x"180",
-         TwoClksPerTrellis => TwoClksPerTrellis,
-         DacSelect0     => x"0",
-         DacSelect1     => x"0",
-         DacSelect2     => x"0",
+         DacSelect0     => x"9",
+         DacSelect1     => x"A",
+         DacSelect2     => x"F",
          ReadHold       => '0',
          Clk93          => Clk93,
          Clk93Dly       => Clk93Dly,
