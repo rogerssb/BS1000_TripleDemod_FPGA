@@ -121,7 +121,7 @@ module stcDemodTop (
 
 );
 
-    parameter VER_NUMBER = 16'd647;
+    parameter VER_NUMBER = 16'd654;
 
 
 //******************************************************************************
@@ -327,9 +327,9 @@ module stcDemodTop (
 //******************************************************************************
 
     multibootK7 multiboot(
-        .clk(clk), 
-        .pulse(reboot), 
-        .addr(boot_addr), 
+        .clk(clk),
+        .pulse(reboot),
+        .addr(boot_addr),
         .reset(reset)
     );
 
@@ -382,7 +382,7 @@ module stcDemodTop (
 //******************************************************************************
 
     wire    signed  [8:0]   sampleRateError;
-    wire    signed  [17:0]  iDdc,qDdc;
+    wire    signed  [17:0]  iDdc,qDdc, HxEstR, HxEstI;
     wire    signed  [3:0]   demodDac0Select,demodDac1Select,demodDac2Select;
     wire    signed  [17:0]  demodDac0Data,demodDac1Data,demodDac2Data;
     wire            [4:0]   demodMode;
@@ -522,6 +522,8 @@ module stcDemodTop (
         .ClkOutEn(stcBitEnOut),
         .PilotFound(pilotFound),
         .PilotLocked(pilotLocked),
+        .HxEstR(HxEstR),
+        .HxEstI(HxEstI),
         .Peaks(stcPeaks),
         .DeltaTau(stcDeltaTau),
         .DataOut(stcBit),

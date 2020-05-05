@@ -81,6 +81,8 @@ ENTITY STC IS
       Dac0Data,
       Dac1Data,
       Dac2Data          : OUT SLV18;
+      HxEstR,
+      HxEstI,
       PhaseOut,
       PhaseDiff         : OUT SLV18
    );
@@ -672,6 +674,13 @@ BEGIN
             Peaks             <= MagPeak1(15 downto 0) & MagPeak0(15 downto 0);
          end if;
          EstimatesDoneDly  <= EstimatesDone;
+         if (Mag0GtMag1) then
+            HxEstR <= to_slv(H0EstR);
+            HxEstI <= to_slv(H0EstI);
+         else
+            HxEstR <= to_slv(H1EstR);
+            HxEstI <= to_slv(H1EstI);
+         end if;
       end if;
    end process;
 
