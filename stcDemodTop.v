@@ -398,8 +398,11 @@ module stcDemodTop (
         .din(dataIn),
         .dout(demodDout),
         .iRx(adc0In), .qRx(18'h0),
+        .maxChEstI(HxEstR), .maxChEstQ(HxEstI),
+        .maxChEstClkEn(pilotPhaseDiffEn),
         .sampleRateErrorEn(sampleRateErrorEn),
         .sampleRateError(sampleRateError),
+        .locked(pilotFound),
         .iStc(iDdc), .qStc(qDdc),
         .resampSync(stcDdcClkEn),
         .dac0Select(demodDac0Select),
@@ -939,8 +942,8 @@ module stcDemodTop (
     assign dac2_nCs = 1'b0;
     assign dac_sdio = 1'b0;
 
-    assign lockLed0n = pilotFound;
-    assign lockLed1n = pilotLocked;
+    assign lockLed0n = !pilotFound;
+    assign lockLed1n = !pilotLocked;
 
     assign sdiOut = 1'b0;
 

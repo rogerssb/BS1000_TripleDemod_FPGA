@@ -667,7 +667,8 @@ BEGIN
          if (SIM_MODE) then
             deltaTauEstSlv <= to_slv(DeltaTauEst) when DeltaTauEn else 6x"00";
          else
-            deltaTauEstSlv <= to_slv(DeltaTauEst) when MiscBits(12) else 6x"00";
+            -- deltaTauEstSlv <= to_slv(DeltaTauEst) when MiscBits(12) else 6x"00";
+            deltaTauEstSlv <= to_slv(DeltaTauEst);
          end if;
          if (not ReadHold) then
             DeltaTau          <= deltaTauEstSlv;    -- output to meter

@@ -20,8 +20,11 @@ module stcDownconverter(
     input               [31:0]  din,
     output  reg         [31:0]  dout,
     input       signed  [17:0]  iRx, qRx,
+    input       signed  [17:0]  maxChEstI, maxChEstQ,
+    input                       maxChEstClkEn,
     input                       sampleRateErrorEn,
     input       signed  [8:0]   sampleRateError,
+    input                       locked,
     output      signed  [17:0]  iStc, qStc,
     output                      resampSync,
     output              [3:0]   dac0Select,dac1Select,dac2Select,
@@ -107,7 +110,7 @@ module stcDownconverter(
     ******************************************************************************/
     wire    [31:0]  nbAgcDout;
     channelAGC channelAGC(
-        .clk(clk), .reset(reset), .clkEn(ddcSync),
+        .clk(clk), .reset(reset), .clkEn(ddcSync & !locked),
         `ifdef USE_BUS_CLOCK
         .busClk(busClk),
         `endif
@@ -152,6 +155,31 @@ module stcDownconverter(
         .freqError(freqError),
         .mag(mag),
         .clkEnOut(demodSync)
+    );
+
+    /******************************************************************************
+                               Phase/Freq/Mag Detector
+    ******************************************************************************/
+    reg     signed  [17:0]  iFmNew,qFmNew;
+    reg                     fmDemodNewClkEn;
+    always @* begin
+        fmDemodNewClkEn = maxChEstClkEn;
+        iFmNew = maxChEstI;
+        qFmNew = maxChEstQ;
+    end
+
+    wire    [12:0]  magNew;
+    fmDemod fmDemodNew(
+        .clk(clk), .reset(reset),
+        .clkEn(fmDemodNewClkEn),
+        .iFm(iFmNew),.qFm(qFmNew),
+        .demodMode(demodMode),
+        .phase(),
+        .phaseError(),
+        .freq(),
+        .freqError(),
+        .mag(magNew),
+        .clkEnOut()
     );
 
     /******************************************************************************
@@ -361,8 +389,8 @@ always @(posedge clk) begin
             dac1Sync <= demodSync;
             end
         `DAC_MAG: begin
-            dac1Data <= magReg;
-            dac1Sync <= demodSync;
+            dac1Data <= {1'b0,magNew,4'b0};
+            dac1Sync <= 1'b1;
             end
         default: begin
             dac1Data <= iResampInReg;
