@@ -1,3 +1,5 @@
+// Set ProjectManager/Settings/General/VerilogOptions/Defines to STC_TRIPLE_MOD for R6100 or STC_MOD for BS1000
+
 `timescale 1ns/100ps
 `include "addressMap.v"
 

@@ -290,6 +290,7 @@ architecture rtl of Brik1_Hw_tb is
             ImagOut,
             Phase0_vio,
             Phase1_vio,
+            PhaseInc,
             BitRate_slv,
             Power0_slv,
             Power1_slv,
@@ -329,7 +330,7 @@ begin
          probe_out0 => Frequency_vio,           -- 00280 (222Hz) start getting errors at end of frame
          probe_out1 => FrameClocks_vio,         -- usually 13312-1=13311. smaller makes packets slide
          probe_out2 => Phase0_vio,              -- has no effect unless both channels active
-         probe_out3 => Phase1_vio,
+         probe_out3 => PhaseInc, --Phase1_vio,
          probe_out4 => DeltaT_vio,              -- Offset between H0 and H1
          probe_out5 => Power0_vio,              -- H0 power 128k is max
          probe_out6 => Power1_vio,              -- H1 power. sum of both must be < 128k
@@ -438,6 +439,7 @@ begin
                else
                   RdAddr_i <= 0;
                   FrameCount <= FrameCount + 1;
+                  Phase1_vio <= std_logic_vector(unsigned(Phase1_vio) + unsigned(PhaseInc));
                end if;
                if (NoiseAddr < 16383) then
                   NoiseAddr <= NoiseAddr + 1;
