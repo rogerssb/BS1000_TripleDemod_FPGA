@@ -50,20 +50,20 @@ module acsStage4(
     wire    signed  [17:0]  table4r_000,table4i_000;
     wire    signed  [17:0]  table4r_001,table4i_001;
     twoPortDistMem128x18 dpRam4r_00x(
-        .clk(clk),
-        .we(setupOutputValid),
-        .a(spoAddr00x),
-        .d(setupReal),
-        .dpra(addr000),
+        .clk(clk), 
+        .we(setupOutputValid), 
+        .a(spoAddr00x), 
+        .d(setupReal), 
+        .dpra(addr000), 
         .dpo(table4r_000),
         .spo(table4r_001)
     );
     twoPortDistMem128x18 dpRam4i_00x(
-        .clk(clk),
-        .we(setupOutputValid),
-        .a(spoAddr00x),
-        .d(setupImag),
-        .dpra(addr000),
+        .clk(clk), 
+        .we(setupOutputValid), 
+        .a(spoAddr00x), 
+        .d(setupImag), 
+        .dpra(addr000), 
         .dpo(table4i_000),
         .spo(table4i_001)
     );
@@ -73,20 +73,20 @@ module acsStage4(
     wire    signed  [17:0]  table4r_010,table4i_010;
     wire    signed  [17:0]  table4r_011,table4i_011;
     twoPortDistMem128x18 dpRam4r_01x(
-        .clk(clk),
-        .we(setupOutputValid),
-        .a(spoAddr01x),
-        .d(setupReal),
-        .dpra(addr010),
+        .clk(clk), 
+        .we(setupOutputValid), 
+        .a(spoAddr01x), 
+        .d(setupReal), 
+        .dpra(addr010), 
         .dpo(table4r_010),
         .spo(table4r_011)
     );
     twoPortDistMem128x18 dpRam4i_01x(
-        .clk(clk),
-        .we(setupOutputValid),
-        .a(spoAddr01x),
-        .d(setupImag),
-        .dpra(addr010),
+        .clk(clk), 
+        .we(setupOutputValid), 
+        .a(spoAddr01x), 
+        .d(setupImag), 
+        .dpra(addr010), 
         .dpo(table4i_010),
         .spo(table4i_011)
     );
@@ -96,20 +96,20 @@ module acsStage4(
     wire    signed  [17:0]  table4r_100,table4i_100;
     wire    signed  [17:0]  table4r_101,table4i_101;
     twoPortDistMem128x18 dpRam4r_10x(
-        .clk(clk),
-        .we(setupOutputValid),
-        .a(spoAddr10x),
-        .d(setupReal),
-        .dpra(addr100),
+        .clk(clk), 
+        .we(setupOutputValid), 
+        .a(spoAddr10x), 
+        .d(setupReal), 
+        .dpra(addr100), 
         .dpo(table4r_100),
         .spo(table4r_101)
     );
     twoPortDistMem128x18 dpRam4i_10x(
-        .clk(clk),
-        .we(setupOutputValid),
-        .a(spoAddr10x),
-        .d(setupImag),
-        .dpra(addr100),
+        .clk(clk), 
+        .we(setupOutputValid), 
+        .a(spoAddr10x), 
+        .d(setupImag), 
+        .dpra(addr100), 
         .dpo(table4i_100),
         .spo(table4i_101)
     );
@@ -119,20 +119,20 @@ module acsStage4(
     wire    signed  [17:0]  table4r_110,table4i_110;
     wire    signed  [17:0]  table4r_111,table4i_111;
     twoPortDistMem128x18 dpRam4r_11x(
-        .clk(clk),
-        .we(setupOutputValid),
-        .a(spoAddr11x),
-        .d(setupReal),
-        .dpra(addr110),
+        .clk(clk), 
+        .we(setupOutputValid), 
+        .a(spoAddr11x), 
+        .d(setupReal), 
+        .dpra(addr110), 
         .dpo(table4r_110),
         .spo(table4r_111)
     );
     twoPortDistMem128x18 dpRam4i_11x(
-        .clk(clk),
-        .we(setupOutputValid),
-        .a(spoAddr11x),
-        .d(setupImag),
-        .dpra(addr110),
+        .clk(clk), 
+        .we(setupOutputValid), 
+        .a(spoAddr11x), 
+        .d(setupImag), 
+        .dpra(addr110), 
         .dpo(table4i_110),
         .spo(table4i_111)
     );
@@ -140,7 +140,7 @@ module acsStage4(
     `define PER_TABLE_ADDRESS
     `ifdef PER_TABLE_ADDRESS
 
-    // Count through the 16 states of the 8 acs units to generate 128 outputs.
+    // Count through the 16 states of the 8 acs units to generate 128 outputs. 
     reg             [3:0]   metricAddr[0:7];
     integer                 k;
     always @(posedge clk) begin
@@ -167,7 +167,7 @@ module acsStage4(
 
     `else //PER_TABLE_ADDRESS
 
-    // Count through the 16 states of the 8 acs units to generate 128 outputs.
+    // Count through the 16 states of the 8 acs units to generate 128 outputs. 
     reg             [3:0]   metricAddr;
     always @(posedge clk) begin
         if (reset) begin
@@ -210,7 +210,7 @@ module acsStage4(
     wire            [17:0]  accMetricTmp_110;
     wire            [17:0]  accMetricTmp_111;
     acsOp acs000(
-        .clk(clk), .reset(startFrame | reset),
+        .clk(clk), .reset(startFrame),
         .y8Real(table4r_000),    .y8Imag(table4i_000),
         .sReal(s0Real),         .sImag(s0Imag),
         .accMetricInEn(accMetricInEn),
@@ -219,7 +219,7 @@ module acsStage4(
         .accMetricOut(accMetricTmp_000)
     );
     acsOp acs001(
-        .clk(clk), .reset(startFrame | reset),
+        .clk(clk), .reset(startFrame),
         .y8Real(table4r_001),    .y8Imag(table4i_001),
         .sReal(s0Real),         .sImag(s0Imag),
         .accMetricInEn(accMetricInEn),
@@ -228,7 +228,7 @@ module acsStage4(
         .accMetricOut(accMetricTmp_001)
     );
     acsOp acs010(
-        .clk(clk), .reset(startFrame | reset),
+        .clk(clk), .reset(startFrame),
         .y8Real(table4r_010),    .y8Imag(table4i_010),
         .sReal(s0Real),         .sImag(s0Imag),
         .accMetricInEn(accMetricInEn),
@@ -237,7 +237,7 @@ module acsStage4(
         .accMetricOut(accMetricTmp_010)
     );
     acsOp acs011(
-        .clk(clk), .reset(startFrame | reset),
+        .clk(clk), .reset(startFrame),
         .y8Real(table4r_011),    .y8Imag(table4i_011),
         .sReal(s0Real),         .sImag(s0Imag),
         .accMetricInEn(accMetricInEn),
@@ -246,7 +246,7 @@ module acsStage4(
         .accMetricOut(accMetricTmp_011)
     );
     acsOp acs100(
-        .clk(clk), .reset(startFrame | reset),
+        .clk(clk), .reset(startFrame),
         .y8Real(table4r_100),    .y8Imag(table4i_100),
         .sReal(s0Real),         .sImag(s0Imag),
         .accMetricInEn(accMetricInEn),
@@ -255,7 +255,7 @@ module acsStage4(
         .accMetricOut(accMetricTmp_100)
     );
     acsOp acs101(
-        .clk(clk), .reset(startFrame | reset),
+        .clk(clk), .reset(startFrame),
         .y8Real(table4r_101),    .y8Imag(table4i_101),
         .sReal(s0Real),         .sImag(s0Imag),
         .accMetricInEn(accMetricInEn),
@@ -264,7 +264,7 @@ module acsStage4(
         .accMetricOut(accMetricTmp_101)
     );
     acsOp acs110(
-        .clk(clk), .reset(startFrame | reset),
+        .clk(clk), .reset(startFrame),
         .y8Real(table4r_110),    .y8Imag(table4i_110),
         .sReal(s0Real),         .sImag(s0Imag),
         .accMetricInEn(accMetricInEn),
@@ -273,7 +273,7 @@ module acsStage4(
         .accMetricOut(accMetricTmp_110)
     );
     acsOp acs111(
-        .clk(clk), .reset(startFrame | reset),
+        .clk(clk), .reset(startFrame),
         .y8Real(table4r_111),    .y8Imag(table4i_111),
         .sReal(s0Real),         .sImag(s0Imag),
         .accMetricInEn(accMetricInEn),
@@ -283,7 +283,7 @@ module acsStage4(
     );
 
     // Create a delay line for comparing best paths
-    // When tau is positive, we compare paths 16 states apart. When tau is
+    // When tau is positive, we compare paths 16 states apart. When tau is 
     // negative, 64 states apart. Since states are presented 8 at a time, the
     // delay is 2 clocks for positive tau and 8 clocks for negative tau.
     reg             [17:0]  delayed_000[0:7];
@@ -340,8 +340,8 @@ module acsStage4(
     reg             [6:0]   fifoWriteCounter;
     reg             [7:0]   delayedEnSR;
     wire                    delayedEn =     positiveTau ? delayedEnSR[1] : delayedEnSR[7];
-    wire                    fifoWriteEn =   delayedEn &&
-                                        (   positiveTau ? !fifoWriteCounter[4]
+    wire                    fifoWriteEn =   delayedEn && 
+                                        (   positiveTau ? !fifoWriteCounter[4] 
                                                         : !fifoWriteCounter[6]);
     wire                    compareEn = fifoWriteEn;
     assign                  startNextStage = fifoWriteEn && (fifoWriteCounter == 0);
@@ -582,15 +582,15 @@ module acsStage4(
     // for the traceback. Here, we will double the width of the traceback memory
     wire            [63:0]  tbBits;
     twoPortDistMem64x16 tbRam4(
-        .clk(clk),
-        .we(fifoWriteEn),
-        .a({ppAddrBit,tbWrAddr}),
+        .clk(clk), 
+        .we(fifoWriteEn), 
+        .a({ppAddrBit,tbWrAddr}), 
         .d({winningIndex_1111[6:3],winningIndex_1110[6:3],winningIndex_1101[6:3],winningIndex_1100[6:3],
             winningIndex_1011[6:3],winningIndex_1010[6:3],winningIndex_1001[6:3],winningIndex_1000[6:3],
             winningIndex_0111[6:3],winningIndex_0110[6:3],winningIndex_0101[6:3],winningIndex_0100[6:3],
             winningIndex_0011[6:3],winningIndex_0010[6:3],winningIndex_0001[6:3],winningIndex_0000[6:3]}
-            ),
-        .dpra({~ppAddrBit,winner5[6:4]}),
+            ), 
+        .dpra({~ppAddrBit,winner5[6:4]}), 
         .qdpo_clk(clk),
         .dpo(tbBits)
     );
@@ -746,7 +746,7 @@ module acsStage4(
     );
     wire            [17:0]  accMetric0_110,accMetric1_110;
     acsFifo #(.LOG2DEPTH(3)) fifo0_110(
-        .clk(clk),
+        .clk(clk),          
         .srst(reset),
         .wr_en(fifoWriteEn),
         .din(positiveTau ? smallestMetric_011 : smallestMetric_010),
@@ -788,7 +788,7 @@ module acsStage4(
     );
 
     reg             [3:0]   fifoReadCounter;
-    assign                  fifo0ReadEn = !fifoReadCounter[0] && !fifo0Empty;
+    assign                  fifo0ReadEn = !fifoReadCounter[0] && !fifo0Empty; 
     assign                  fifo1ReadEn =  fifoReadCounter[0] && !fifo1Empty;
     assign                  metricOutEn = !fifo0Empty || (fifoReadCounter != 0);
     always @(posedge clk) begin

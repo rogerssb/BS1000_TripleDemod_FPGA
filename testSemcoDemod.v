@@ -1,16 +1,17 @@
 `timescale 1ns/100ps
 `include "addressMap.v"
 
-//`define FM_TEST
+`define FM_TEST
 //`define SOQPSK_TEST
-`define LDPC_TEST
+//`define LDPC_TEST
 //`define AQPSK_TEST
 
 `define ENABLE_AGC
 //`define TEST_CMA
 
 `ifdef FM_TEST
-    `define TEST_DATA "c:/modem/vivado/testData/pcmfmTestData.txt"
+    `define TEST_DATA "y:/vivado2017/testData/pcmfmTestData.txt"
+    //`define TEST_DATA "y:/vivado2017/testData/pcmfmTestData.txt"
 `elsif SOQPSK_TEST
     `define TEST_DATA "c:/modem/vivado/testData/soqpskTestData.txt"
 `elsif LDPC_TEST
@@ -68,7 +69,7 @@ module test;
     `ifdef LDPC_TEST
     parameter               ifSamplesPerBit = 128;
     `else
-    parameter               ifSamplesPerBit = 32;
+    parameter               ifSamplesPerBit = 4;
     `endif
     `define CLOCKS_PER_BIT  (ifSamplesPerBit*CLOCK_DECIMATION)
     initial begin
@@ -146,15 +147,8 @@ module test;
     //------------------------------ DDC Settings -----------------------------
     `define NEW_DDC_SETTINGS
     `ifdef NEW_DDC_SETTINGS
+
     parameter samplesPerSymbol = 2;
-    integer minDdcSamplesPerSymbol;
-    always @* begin
-        `ifdef SOQPSK_TEST
-        minDdcSamplesPerSymbol = $rtoi(2.0*ifSamplesPerBit/samplesPerSymbol + 0.5);
-        `else
-        minDdcSamplesPerSymbol = $rtoi(ifSamplesPerBit/samplesPerSymbol + 0.5);
-        `endif
-    end
 
     real resamplerFreqSps;
     always @(bitrateBps) begin
@@ -165,19 +159,38 @@ module test;
         `endif
     end
 
+    integer minDdcSamplesPerSymbol;
+    initial begin
+        `ifdef SOQPSK_TEST
+        minDdcSamplesPerSymbol = $rtoi(2.0*ifSamplesPerBit/samplesPerSymbol + 0.5);
+        `else
+        minDdcSamplesPerSymbol = $rtoi(ifSamplesPerBit/samplesPerSymbol + 0.5);
+        `endif
+    end
+
     real    ddcOutputFreq;
     real    cicDecimationReal;
     integer cicDecimation;
     integer ddcControl;
     always @* begin
         $display("Bitrate = %f:\n", bitrateBps);
-        if (ifSamplesPerBit < 5) begin
+        $display("\tminDdcSamplesPerSymbol = %d\n",minDdcSamplesPerSymbol);
+        if (ifSamplesPerBit < 4) begin
             $display("ERROR - bitrate too low\n");
             $stop;
+        end
+        else if (minDdcSamplesPerSymbol <= 2) begin
+            cicDecimation = 1;
+            ddcControl = (16 + 7);
+            $display("\tHB0 bypassed\n");
+            $display("\tCIC bypassed\n");
+            $display("\tHB  bypassed\n");
+            ddcOutputFreq = (`SAMPLE_FREQ/2);
         end
         else if (minDdcSamplesPerSymbol <= 4) begin
             cicDecimation = 1;
             ddcControl = 7;
+            $display("\tHB0 enabled\n");
             $display("\tCIC bypassed\n");
             $display("\tHB  bypassed\n");
             ddcOutputFreq = (`SAMPLE_FREQ/2);
@@ -185,6 +198,7 @@ module test;
         else if (minDdcSamplesPerSymbol <= 6) begin
             cicDecimation = 1;
             ddcControl = 5;
+            $display("\tHB0 enabled\n");
             $display("\tCIC bypassed\n");
             $display("\tHB  enabled\n");
             ddcOutputFreq = (`SAMPLE_FREQ/4);
@@ -192,6 +206,7 @@ module test;
         else if (minDdcSamplesPerSymbol <= 8) begin
             cicDecimation = 3;
             ddcControl = 6;
+            $display("\tHB0 enabled\n");
             $display("\tCIC decimate by %d\n",cicDecimation);
             $display("\tHB  bypassed\n");
             ddcOutputFreq = (`SAMPLE_FREQ/6);
@@ -200,6 +215,7 @@ module test;
             cicDecimationReal = `SAMPLE_FREQ/8.0/resamplerFreqSps;
             cicDecimation = $rtoi(`SAMPLE_FREQ/8.0/resamplerFreqSps);
             ddcControl = 4;
+            $display("\tHB0 enabled\n");
             $display("\tCIC decimate by %d\n",cicDecimation);
             $display("\tHB  enabled\n");
             ddcOutputFreq = (`SAMPLE_FREQ/4/cicDecimation);
@@ -349,6 +365,7 @@ module test;
 
         // Init the downcoverter register set
         //`define USE_0p1_FIR
+        `define USE_0p2_FIR
         `ifdef USE_0p1_FIR
         ddcControl = ddcControl & ~32'h00000004;
         write16(createAddress(`DDCFIRSPACE,`DDC_FIR_COEFF_0),-46);
@@ -359,6 +376,17 @@ module test;
         write16(createAddress(`DDCFIRSPACE,`DDC_FIR_COEFF_5),4302);
         write16(createAddress(`DDCFIRSPACE,`DDC_FIR_COEFF_6),7178);
         write16(createAddress(`DDCFIRSPACE,`DDC_FIR_COEFF_7),8409);
+        `endif
+        `ifdef USE_0p2_FIR
+        ddcControl = ddcControl & ~32'h00000004;
+        write16(createAddress(`DDCFIRSPACE,`DDC_FIR_COEFF_0),-14);
+        write16(createAddress(`DDCFIRSPACE,`DDC_FIR_COEFF_1),93);
+        write16(createAddress(`DDCFIRSPACE,`DDC_FIR_COEFF_2),337);
+        write16(createAddress(`DDCFIRSPACE,`DDC_FIR_COEFF_3),-476);
+        write16(createAddress(`DDCFIRSPACE,`DDC_FIR_COEFF_4),-1912);
+        write16(createAddress(`DDCFIRSPACE,`DDC_FIR_COEFF_5),1033);
+        write16(createAddress(`DDCFIRSPACE,`DDC_FIR_COEFF_6),9785);
+        write16(createAddress(`DDCFIRSPACE,`DDC_FIR_COEFF_7),15075);
         `endif
         write32(createAddress(`DDCSPACE,`DDC_CONTROL),ddcControl);
         write32(createAddress(`DDCSPACE,`DDC_CENTER_FREQ), carrierFreq);
@@ -584,7 +612,9 @@ module test;
     wire    signed  [17:0]  iLdpc,qLdpc;
     `endif
     wire    [12:0]  mag;
+    wire    signed  [4:0]   demodMode;
     wire    [17:0]  dac0Out,dac1Out,dac2Out, iSymData, qSymData, sdiDataI, sdiDataQ;
+    wire    signed  [17:0]  iTrellis,qTrellis;
     wire    [17:0]  iEye,qEye;
     wire    [31:0]  dout;
     demod demod(
@@ -604,16 +634,19 @@ module test;
         .dac2Data(dac2Out),
         .iSymEn(iSymEn),
         .iSym2xEn(sym2xEn),
-        .iSymData(sdiDataI),
+        .iSymData(iSymData),
+        .iBitEn(iBitEn),
         .iBit(demodBit),
         .qSymEn(qSymEn),
-        .qSymData(sdiDataQ),
+        .qSym2xEn(qSym2xEn),
+        .qSymData(qSymData),
         .sdiSymEn(sdiSymEn),
         .trellisSymEn(trellisSymEn),
-        .iTrellis(iSymData),
-        .qTrellis(qSymData),
+        .iTrellis(iTrellis),
+        .qTrellis(qTrellis),
         .mag(mag),
         .magClkEn(magClkEn),
+        .demodMode(demodMode),
         `ifdef LDPC_TEST
         .iLdpcSymEn(iLdpcSymEn),.qLdpcSymEn(qLdpcSymEn),
         .iLdpc(iLdpc),
@@ -693,7 +726,7 @@ module test;
         .addr(a),
         .dataIn(d),
         .dataOut(),
-        .iSymEn(iSymEn),
+        .iSymEn(iBitEn),
         .iSymData(sdiDataI),
         .qSymEn(iSymEn),
         .qSymData(sdiDataQ),
@@ -714,11 +747,11 @@ module test;
     always @(posedge clk) begin
         casex (dqmSourceSelect)
             `DQM_SRC_DEC0_CH0: begin
-                dqmBitEnIn <= iSymEn;
+                dqmBitEnIn <= iBitEn;
                 dqmBitIn <= demodBit;
             end
             default: begin
-                dqmBitEnIn <= iSymEn;
+                dqmBitEnIn <= iBitEn;
                 dqmBitIn <= demodBit;
             end
         endcase

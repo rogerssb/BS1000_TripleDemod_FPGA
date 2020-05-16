@@ -212,7 +212,7 @@ module acsStage7Wide(
     wire            [17:0]  accMetricTmp_110;
     wire            [17:0]  accMetricTmp_111;
     acsOp acs000(
-        .clk(clk), .reset(startFrame | reset),
+        .clk(clk), .reset(startFrame),
         .y8Real(table7r_000),    .y8Imag(table7i_000),
         .sReal(s1Real),         .sImag(s1Imag),
         .accMetricInEn(accMetricInEn),
@@ -221,7 +221,7 @@ module acsStage7Wide(
         .accMetricOut(accMetricTmp_000)
     );
     acsOp acs001(
-        .clk(clk), .reset(startFrame | reset),
+        .clk(clk), .reset(startFrame),
         .y8Real(table7r_001),    .y8Imag(table7i_001),
         .sReal(s1Real),         .sImag(s1Imag),
         .accMetricInEn(accMetricInEn),
@@ -230,7 +230,7 @@ module acsStage7Wide(
         .accMetricOut(accMetricTmp_001)
     );
     acsOp acs010(
-        .clk(clk), .reset(startFrame | reset),
+        .clk(clk), .reset(startFrame),
         .y8Real(table7r_010),    .y8Imag(table7i_010),
         .sReal(s1Real),         .sImag(s1Imag),
         .accMetricInEn(accMetricInEn),
@@ -239,7 +239,7 @@ module acsStage7Wide(
         .accMetricOut(accMetricTmp_010)
     );
     acsOp acs011(
-        .clk(clk), .reset(startFrame | reset),
+        .clk(clk), .reset(startFrame),
         .y8Real(table7r_011),    .y8Imag(table7i_011),
         .sReal(s1Real),         .sImag(s1Imag),
         .accMetricInEn(accMetricInEn),
@@ -248,16 +248,16 @@ module acsStage7Wide(
         .accMetricOut(accMetricTmp_011)
     );
     acsOp acs100(
-        .clk(clk), .reset(startFrame | reset),
+        .clk(clk), .reset(startFrame),
         .y8Real(table7r_100),    .y8Imag(table7i_100),
         .sReal(s1Real),         .sImag(s1Imag),
         .accMetricInEn(accMetricInEn),
         .accMetricIn(accMetricIn_100),
-        .accMetricOutEn(tmpMetricOutEn),
+        .accMetricOutEn(),
         .accMetricOut(accMetricTmp_100)
     );
     acsOp acs101(
-        .clk(clk), .reset(startFrame | reset),
+        .clk(clk), .reset(startFrame),
         .y8Real(table7r_101),    .y8Imag(table7i_101),
         .sReal(s1Real),         .sImag(s1Imag),
         .accMetricInEn(accMetricInEn),
@@ -266,7 +266,7 @@ module acsStage7Wide(
         .accMetricOut(accMetricTmp_101)
     );
     acsOp acs110(
-        .clk(clk), .reset(startFrame | reset),
+        .clk(clk), .reset(startFrame),
         .y8Real(table7r_110),    .y8Imag(table7i_110),
         .sReal(s1Real),         .sImag(s1Imag),
         .accMetricInEn(accMetricInEn),
@@ -275,7 +275,7 @@ module acsStage7Wide(
         .accMetricOut(accMetricTmp_110)
     );
     acsOp acs111(
-        .clk(clk), .reset(startFrame | reset),
+        .clk(clk), .reset(startFrame),
         .y8Real(table7r_111),    .y8Imag(table7i_111),
         .sReal(s1Real),         .sImag(s1Imag),
         .accMetricInEn(accMetricInEn),

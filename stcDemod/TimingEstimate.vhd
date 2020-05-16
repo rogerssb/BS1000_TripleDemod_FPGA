@@ -115,6 +115,10 @@ ARCHITECTURE rtl OF TimingEstimate IS
       );
    END COMPONENT SinvLuts;
 
+   -- constants
+   type    ModeType           is (IDLE, SEARCH, NEIGHBORS, FIND_INDEX, FIND_TAU, TAU_SUB, FINISH);
+   SIGNAL   Mode              : ModeType := IDLE;
+
    function ResultsMin(Results_v : in FLOAT_ARRAY_256_HP(0 to 3)) return integer is
    -- find minimum of first three values
       variable Index01_v,
@@ -146,8 +150,8 @@ ARCHITECTURE rtl OF TimingEstimate IS
       end if;
       return Index_v;
    end function;
-
-   function OffsetX(Index : in integer; Offset : in integer) return integer is
+/*
+   impure function OffsetX(Index : in integer; Offset : in integer) return integer is
    -- find minimum of first three values
       variable Result     : integer range -32 to 32;
    begin
@@ -161,14 +165,18 @@ ARCHITECTURE rtl OF TimingEstimate IS
       else
          if  (Index mod 2 = 1) then
             Result := Offset;
-         else
+         elsif (Mode < NEIGHBORS) then
             Result := -Offset;
+         elsif (Index = 0) then
+            Result := -1;
+         else
+            Result := 0;
          end if;
       end if;
       return Result;
    end function;
 
-   function OffsetY(Index : in integer; Offset : in integer) return integer is
+   impure function OffsetY(Index : in integer; Offset : in integer) return integer is
    -- find minimum of first three values
       variable Result     : integer range -32 to 32;
    begin
@@ -181,40 +189,40 @@ ARCHITECTURE rtl OF TimingEstimate IS
       else
          if (Index >= 2) then    -- 0 or Offset
             Result := Offset;
-         else
+         elsif (Mode < NEIGHBORS) then
             Result := -Offset;
+         elsif (Index = 0) then
+            Result := -1;
+         else
+            Result := 0;
          end if;
       end if;
       return Result;
    end function;
-
-   -- constants
-   type    ModeType           is (IDLE, SEARCH, NEIGHBORS, FIND_INDEX, FIND_TAU, TAU_SUB, FINISH);
-
+*/
    CONSTANT ADDR_MAX          : positive := PILOT_LENGTH_4;   -- 0 to 256 twice. 512 implies done
    CONSTANT ALMOST_ONE        : STC_Parm := to_sfixed(1.0, PARM_ZERO, FIXED_SATURATE, FIXED_TRUNCATE);
 
   -- Signals
-   SIGNAL   CenterX,
+   SIGNAL   NewCntrXreg,
+            NewCntrYreg,
+            CenterX,
             CenterY           : natural range 0 to SEARCH_LENGTH := 32;
    SIGNAL   ResultsCM         : FLOAT_ARRAY_256_HP(0 to 3);
    SIGNAL   ResultsCMreg,
             MinCM             : FLOAT_256_HP;
-   SIGNAL   Mode              : ModeType := IDLE;
-   SIGNAL   Offset            : integer range 0 to 16 := 16;
+   SIGNAL   Offset            : integer range -1 to 16 := 16;
    SIGNAL   RdCntr            : integer range 0 to ADDR_MAX;
    SIGNAL   RdCntr_u          : unsigned(9 downto 0);
    SIGNAL   ComputeDone,
             StartCM           : std_logic;
    SIGNAL   MinIndex,
-            Iterations        : integer range 0 to 3;
+            Iterations        : integer range 0 to 7;
    SIGNAL   MinX, MinY        : integer range 0 to SEARCH_LENGTH;
    SIGNAL   xx, yy            : natural_array(0 to 3);
    SIGNAL   Tau0Est_sf,
             Tau1Est_sf        : sfixed(6 downto -8);
    SIGNAL   PipeLine          : natural range 0 to 2;
-   SIGNAL   OffsetXreg,
-            OffsetYreg        : integer range -32 to 32;
    SIGNAL   Tau0Sf,
             Tau1Sf            : sfixed(6 downto 0);
    SIGNAL   SsInvR0A,
@@ -264,8 +272,8 @@ BEGIN
             RdCntr         <= 0;
             MinX           <= 0;                      -- current minimum x,y
             MinY           <= 0;
-            OffsetXreg     <= 0;
-            OffsetYreg     <= 0;
+            NewCntrXreg     <= 0;
+            NewCntrYreg     <= 0;
             ResultsCMreg   <= (others => '0');
             MinCM          <= to_sfixed(255, MinCM);  -- current minimum value
             PipeLine       <= 0;
@@ -326,17 +334,17 @@ BEGIN
                      MinCM <= ResultsCM(MinIndex);
                      MinX  <= xx(MinIndex);
                      MinY  <= yy(MinIndex);
+                     CenterX <= xx(MinIndex); --OffsetX(MinIndex, Offset);
+                     CenterY <= yy(MinIndex); --OffsetY(MinIndex, Offset);
                   end if;
                   PipeLine <= PipeLine + 1;
                when 2 =>
-                  CenterX <= CenterX + OffsetX(MinIndex, Offset);
-                  CenterY <= CenterY + OffsetY(MinIndex, Offset);
                   PipeLine <= 0;
                   if (Offset >= 2) then
                      Offset   <= Offset / 2;
                   else
                      Mode <= NEIGHBORS;
-                     Iterations <= 3;
+                     Iterations <= 7;
                   end if;
                   StartCM <= '1';
                end case;
@@ -350,25 +358,32 @@ BEGIN
                      StartCM <= '0';
                   end if;
                When 1 =>
-                  -- find new offsets
-                  OffsetXreg <= OffsetX(MinIndex, Offset);
-                  OffsetYreg <= OffsetY(MinIndex, Offset);
+                  -- find new Center
+                  NewCntrXreg <= xx(MinIndex); --OffsetX(MinIndex, Offset);
+                  NewCntrYreg <= yy(MinIndex); --OffsetY(MinIndex, Offset);
                   ResultsCMreg <= ResultsCM(MinIndex);
                   PipeLine <= PipeLine + 1;
                When 2 =>
                   -- keep Centers within 1 to 63
-                  CenterX <= MyMax(MyMin(CenterX + OffsetXreg, SEARCH_LENGTH-1), 1);
-                  CenterY <= MyMax(MyMin(CenterY + OffsetYreg, SEARCH_LENGTH-1), 1);
                   PipeLine <= 0;
                   if (ResultsCMreg < MinCM) then
-                     MinCM <= ResultsCMreg;
-                     MinX  <= xx(MinIndex);
-                     MinY  <= yy(MinIndex);
-                  end if;
-                  if (Iterations = 0) then
+                     CenterX <= MyMax(MyMin(NewCntrXreg, SEARCH_LENGTH-1), 1);
+                     CenterY <= MyMax(MyMin(NewCntrYreg, SEARCH_LENGTH-1), 1);
+                     MinCM       <= ResultsCMreg;
+                     MinX        <= xx(MinIndex);
+                     MinY        <= yy(MinIndex);
+            --         Offset      <= 1;
+                     if (Iterations = 0) then
+                        Mode <= FIND_INDEX;
+                        PipeLine <= 0;
+                     else
+                        Iterations  <= Iterations - 1;
+                     end if;
+                  elsif (Iterations = 0) then
                      Mode <= FIND_INDEX;
                      PipeLine <= 0;
                   else
+                     Offset     <= -Offset;
                      Iterations <= Iterations - 1;
                   end if;
                   StartCM <= '1';
@@ -430,14 +445,14 @@ BEGIN
                -- taken care of by reversing the subtractions above
                Mode <= IDLE;
             end case;
-            xx(0) <= CenterX - Offset;
-            yy(0) <= CenterY - Offset;
-            xx(1) <= CenterX + Offset;
-            yy(1) <= CenterY - Offset;
-            xx(2) <= CenterX - Offset;
-            yy(2) <= CenterY + Offset;
-            xx(3) <= CenterX + Offset;
-            yy(3) <= CenterY + Offset;
+            xx(0) <= CenterX - Offset when ( Mode < NEIGHBORS) else CenterX - Offset;
+            yy(0) <= CenterY - Offset when ( Mode < NEIGHBORS) else CenterY - Offset;
+            xx(1) <= CenterX + Offset when ( Mode < NEIGHBORS) else CenterX;
+            yy(1) <= CenterY - Offset when ( Mode < NEIGHBORS) else CenterY - Offset;
+            xx(2) <= CenterX - Offset when ( Mode < NEIGHBORS) else CenterX + Offset;
+            yy(2) <= CenterY + Offset when ( Mode < NEIGHBORS) else CenterY - Offset;
+            xx(3) <= CenterX + Offset when ( Mode < NEIGHBORS) else CenterX - Offset;
+            yy(3) <= CenterY + Offset when ( Mode < NEIGHBORS) else CenterY;
          end if;
       end if;
    end process;

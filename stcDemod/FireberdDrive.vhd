@@ -77,7 +77,8 @@ ARCHITECTURE rtl OF FireberdDrive IS
    SIGNAL   FifoDataIn,
             ClkDelay    : SLV4;
    SIGNAL   FifoDataOut : std_logic_vector(0 to 0);
-   SIGNAL   WrCount     : STD_LOGIC_VECTOR(13 DOWNTO 0);
+   SIGNAL   FifoDepth,
+            WrCount     : STD_LOGIC_VECTOR(13 DOWNTO 0);
    SIGNAL   RdEn,
             Active,
             Empty,
@@ -85,6 +86,9 @@ ARCHITECTURE rtl OF FireberdDrive IS
 
    attribute KEEP : string;
    attribute KEEP of Active : signal is "true";
+
+   attribute MARK_DEBUG : string;
+   attribute MARK_DEBUG of FifoDepth : signal is "true";
 
 BEGIN
 
@@ -101,6 +105,7 @@ BEGIN
             RdEn     <= '0';
             ClkOut   <= '0';
             ClkDelay <= x"0";
+            WrCount  <= (others=>'0');
          elsif (ce) then
             if (ProgFull) then
                Active <= '1';
@@ -109,9 +114,12 @@ BEGIN
                Accum_v  := resize(Accum + ClocksPerBit, Accum);
                Accum    <= Accum_v;
                RdEn     <= Accum_v(0) and not Accum(0) and not empty;
+               if (unsigned(FifoDepth) > unsigned(WrCount)) then
+                  WrCount <= FifoDepth;
+               end if;
             end if;
             ClkDelay <= ClkDelay(2 downto 0) & RdEn;
-            ClkOut   <= nor(ClkDelay); --TODO FZ (3) or ClkDelay(2);    -- Delay ClkOut into valid data, widen pulse to 93M clock
+            ClkOut   <= ClkDelay(3) or ClkDelay(2);    -- Delay ClkOut into valid data, widen pulse to 93M clock
          end if;
       end if;
    end process ClkProcess;
@@ -126,7 +134,7 @@ BEGIN
       dout           => FifoDataOut,
       full           => open,
       empty          => empty,
-      wr_data_count  => WrCount,
+      wr_data_count  => FifoDepth,
       prog_full      => ProgFull
    );
 

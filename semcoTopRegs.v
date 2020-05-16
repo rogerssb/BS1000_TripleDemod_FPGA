@@ -19,9 +19,10 @@ module semcoTopRegs(
     input               wr0, wr1, wr2, wr3,
     input               clk,
     input       [15:0]  versionNumber,
+    input       [15:0]  fpgaType,
     output  reg         reset,
     output  reg         reboot,
-    output  reg [23:0]  rebootAddress,
+    output  reg [31:0]  rebootAddress,
     output  reg [2:0]   dac0InputSelect,
     output  reg [2:0]   dac1InputSelect,
     output  reg [2:0]   dac2InputSelect,
@@ -76,7 +77,7 @@ module semcoTopRegs(
     reg reboot_decode;
     always @(posedge busClk)
         begin
-        if (cs && wr2)
+        if (cs && wr3)
             begin
             casex (addr)
                 `SYS_REBOOT_ADDR:
@@ -130,6 +131,7 @@ module semcoTopRegs(
         end
         if (cs && wr3) begin
             casex (addr)
+                `SYS_REBOOT_ADDR:   rebootAddress[31:24] <= dataIn[31:24];
                 default: ;
             endcase
         end
@@ -146,7 +148,7 @@ module semcoTopRegs(
                     dataOut = {32'b0};
                     end
                 `SYS_TYPE: begin
-                    dataOut = {16'b0,`SEMCO_DEMOD_IMAGE};
+                    dataOut = {16'b0,fpgaType};
                     end
                 `SYS_DAC_INPUT_SEL: begin
                     dataOut = {8'b0,

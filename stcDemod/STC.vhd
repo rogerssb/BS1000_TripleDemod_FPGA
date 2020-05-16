@@ -35,6 +35,9 @@ Dependencies:
 11-12-19 Removed most MiscBits, Mag0GtMag1 requires 2:1 to switch
 12_??-19 Removed Detection Filter from Brik2 module. Changed STC routing to match
 12-19-19 Change PilotSync Offset to 9. Changed TrellisOffset in VIO to 0
+01-14-20 Add Peaks and DeltaTau outputs for meter, add ReadHold to pause data while reading
+04-30-20 Removed all VIO influence
+
 -------------------------------------------------------------
 */
 
@@ -62,7 +65,8 @@ ENTITY STC IS
       Clk93Dly,
       Clk186,
       SpectrumInv,
-      ValidIn           : IN  std_logic;
+      ReadHold,
+      ValidIn           : IN  STD_LOGIC;
       DataOut,                            -- Trellis Data Output
       ClkOutEn,                           -- Trellis Clock Output
       PilotFound,                         -- Pilot Found LED
@@ -71,11 +75,15 @@ ENTITY STC IS
       PhaseDiffEn,
       Dac0ClkEn,
       Dac1ClkEn,
-      Dac2ClkEn         : OUT std_logic;
+      Dac2ClkEn         : OUT STD_LOGIC;
       PilotOffset       : OUT STD_LOGIC_VECTOR(8 downto 0); -- signed Pilot Detect Offset from center
+      DeltaTau          : OUT STD_LOGIC_VECTOR(5 downto 0);
+      Peaks             : OUT SLV32;
       Dac0Data,
       Dac1Data,
       Dac2Data          : OUT SLV18;
+      HxEstR,
+      HxEstI,
       PhaseOut,
       PhaseDiff         : OUT SLV18
    );
@@ -176,6 +184,7 @@ ARCHITECTURE rtl OF STC IS
        reset,
        frameStart,
        inputValid,
+       TwoClksPerTrellis,
        estimatesDone    : IN  std_logic;
        dinReal,
        dinImag,
@@ -234,6 +243,7 @@ ARCHITECTURE rtl OF STC IS
       );
    END COMPONENT RAM_2Reads_1Write;
 
+
    COMPONENT Vio2x18
       PORT (
          clk : IN STD_LOGIC;
@@ -284,11 +294,14 @@ ARCHITECTURE rtl OF STC IS
             Reset2x,
             Reset93,
             Reset186,
+            NotReadHold,
             StartOutPS,
             ValidOutPS,
             PilotFoundPD,
             PilotFoundCE,
             PhaseDiffEnPS,
+            TwoClksPerTrellis,
+            TwoClksPerTrellisSw,
             Mag0GtMag1,
             CordicValid,
             StartInBrik2Dly,
@@ -322,14 +335,12 @@ ARCHITECTURE rtl OF STC IS
             PhaseOut0,
             Magnitude1,
             PhaseOut1,
-            MagPeak0,
-            MagPeak1,
-            PhsPeak,
             PhsPeak0,
             PhsPeak1,
+            MagPeak0,
+            MagPeak1,
             Ch0MuSlv,
-            Ch1MuSlv,
-            PhsLastPeak       : SLV18;
+            Ch1MuSlv          : SLV18;
    SIGNAL   Phase0A,
             Phase0B           : SLV12;
    SIGNAL   StartCount        : integer range 0 to 3 := 0;
@@ -341,8 +352,7 @@ ARCHITECTURE rtl OF STC IS
             StartNextFrame,
             StartFrameOffset,
             CorrPntr          : ufixed(15 downto 0);
-   signal   BerRange,
-            Ber               : natural range 0 to 3200 := 0;
+   signal   Ber               : unsigned(11 downto 0) := to_unsigned(200, 12);
    SIGNAL   ValidData2047,
             ClkOutEnDly,
             pnBitEn,
@@ -352,35 +362,40 @@ ARCHITECTURE rtl OF STC IS
    SIGNAL   deltaTauEstSlv    : std_logic_vector(5 downto 0);
    SIGNAL   PilotOffset_s     : SFixed(8 downto 0);
    SIGNAL   H0Phase,
-            H1Phase           : SLV12;
+            H1Phase,
+            InPhase           : SLV12;
    SIGNAL   H0Mag,
-            H1Mag             : std_logic_vector(12 downto 0);
+            H1Mag,
+            InMag             : std_logic_vector(12 downto 0);
    SIGNAL   H0Mag_u,
             H1Mag_u,
             HxThresh          : ufixed(0 downto -12);
    SIGNAL   CorrPntr8to0      : std_logic_vector(8 downto 0);
 
 -- todo, remove
+   signal   DacCount          : unsigned(17 downto 0) := 18x"0";
+   signal   TrellisOffsetSlv  : SLV4 := 4x"0";
    SIGNAL   ExpectedData,
-            TrellisOffsetSlv,
             m_ndx0Slv,
             m_ndx1Slv         : SLV4;
-   SIGNAL   TrellisOffset     : signed(3 downto 0);
+   SIGNAL   TrellisOffset,
+            FrameCount        : signed(3 downto 0);
    SIGNAL   DataAddr          : ufixed(9 downto 0);
    SIGNAL   DataAddr_i        : natural range 0 to 1023;
-   SIGNAL   BitErrors         : natural range 0 to 32000;
-   signal   MiscBits,
-            HxPhase,
-            InRBrik2Ila,
+   SIGNAL   BitErrors,
+            BitError          : natural range 0 to 32000;
+   signal   MiscBits          : SLV18 := 18x"30008";
+   signal   InRBrik2Ila,
             InIBrik2Ila       : SLV18;
    signal   StartIla,
             ValidIla          : std_logic;
    signal   DacMux            : vector_of_slvs(0 to 15)(17 downto 0);
+   signal   DeltaTauEn        : std_logic := '1';
 
    attribute mark_debug : string;
-   attribute mark_debug of EstimatesDone,
+   attribute mark_debug of EstimatesDone, BitError, BitErrors, Ber, Peaks,
                   StartIla, ValidIla, InRBrik2Ila, InIBrik2Ila, PilotFoundCE, PilotFoundPD,
-                  PhaseDiff, CorrPntr, m_ndx0Slv, m_ndx1Slv, Mag0GtMag1,
+                  CorrPntr8to0, m_ndx0Slv, m_ndx1Slv, Mag0GtMag1, InMag, InPhase,
                   H0Phase, H1Phase, H0Mag, H1Mag, deltaTauEstSlv,
                   DataOut, ClkOutEn, ValidData2047 : signal is "true";
 
@@ -427,29 +442,39 @@ BEGIN
       variable CaptureErrors : SLV4;
    begin
       if (rising_edge(Clk186)) then
-         if (SIM_MODE) then
-            CaptureErrors  := ExpectedData xor TrellisBits;
-            if (lastSampleReset or Reset2x) then
-               DataAddr  <= (others=>'0');
-               BitErrors <= 0;
-            elsif (TrellisOutEn) then
-               DataAddr <= resize(DataAddr + 1, DataAddr);
-               BitErrors <= BitErrors + count_bits(CaptureErrors);
-            end if;
-         else
-            pnBitEn <= ClkOutEn and not ClkOutEnDly;
-            ClkOutEnDly <= ClkOutEn;
-            ValidData2047 <= dataBit xnor codeBit;
-         if (not EstimatesDone) then
-               Reload   <= '0';
-               if (pnBitEn and not ValidData2047) then
-                  Ber <= Ber + 1;
-               end if;
+         CaptureErrors  := ExpectedData xor TrellisBits;
+         -- Self testing bit errors
+         if ((EstimatesDone and not EstimatesDoneDly) or Reset2x) then
+            if (Reset2x) then
+               FrameCount <= x"F";
             else
-               Ber <= 0;
-               if (Ber > 200) then
-                  Reload <= '1';
-               end if;
+               FrameCount <= FrameCount + 1;
+            end if;
+            DataAddr  <= (others=>'0');
+            if (FrameCount = 0) then
+               BitErrors <= 0;
+               BitError  <= BitErrors;
+            end if;
+         elsif (TrellisOutEn) then
+            DataAddr <= resize(DataAddr + 1, DataAddr);
+            BitErrors <= BitErrors + count_bits(CaptureErrors);
+         end if;
+
+         -- external 2047 data bit errors
+         pnBitEn <= ClkOutEn and not ClkOutEnDly;
+         ClkOutEnDly <= ClkOutEn;
+         ValidData2047 <= (dataBit ?= codeBit);
+         if (not EstimatesDone) then
+            if (pnBitEn) then
+               Reload <= '0';
+            end if;
+            if (pnBitEn and not ValidData2047) then
+               Ber <= Ber + 1;
+            end if;
+         elsif (FrameCount = 0) or (Ber > 200) then  -- TODO remove > 200
+            Ber <= x"000";
+            if (Ber >= 200) then
+               Reload <= '1';
             end if;
          end if;
       end if;
@@ -540,19 +565,11 @@ BEGIN
             PhaseDiffEnDly  <= PhaseDiffEnDly(6 downto 0) & '0';
             PhaseDiffEn     <= PhaseDiffEnDly(3) or PhaseDiffEnDly(4);  -- needs two clocks wide for 93Mhz domain
          end if;
-
-         if (Reset2x) then
-            PhsLastPeak <= (others=>'0');
-         elsif (PhaseDiffEnDly(7)) then
-            PhsLastPeak <= PhsPeak when (MiscBits(1)) else (others=>'0');
-         end if;
       end if;
    end process AFC_process;
 
    PhaseDiff      <= to_slv(PhaseDiff2) & 6x"00";
-   PhaseOut       <= HxPhase when (MiscBits(3)) else to_slv(PhsPeak);  -- Pilot Detect or Channel Est Phase select
-   PhsPeak        <= PhsPeak0 when Mag0GtMag1 else PhsPeak1;         -- Pilot Detect Phase select
-   HxPhase        <= (H0Phase & 6x"0") when Mag0GtMag1 else (H1Phase & 6X"0");  -- Channel Est Phase select
+   PhaseOut       <= (H0Phase & 6x"0") when Mag0GtMag1 else (H1Phase & 6X"0");  -- Channel Est Phase select
    StartOfFrame   <= PhaseDiffEn;
    PilotFound     <= PilotFoundPD and PilotFoundCE;
 
@@ -574,17 +591,19 @@ BEGIN
          StartOut       => StartOutPS,
          ValidOut       => ValidOutPS
    );
-
+/*   g1 : if (not SIM_MODE) generate
    VioPhase  : Vio2x18
       PORT MAP (
          clk         => Clk186,
          probe_out0  => open,
          probe_out1  => open,
          probe_out2  => open,
-         probe_out3  => MiscBits,
-         probe_out4  => TrellisOffsetSlv,
-         probe_out5  => open
+         probe_out3  => MiscBits,            -- 30008
+         probe_out4  => TrellisOffsetSlv,    -- 0
+         probe_out5  => open        -- 2 to 4
    );
+   end generate;
+*/
    TrellisOffset  <= signed(TrellisOffsetSlv);
 
    InterBrikClk : process(Clk186) is
@@ -643,10 +662,29 @@ BEGIN
          m_ndx1Slv      <= std_logic_vector(TrellisOffset + to_signed(m_ndx1, 4));
          Ch0MuSlv       <= to_slv(Ch0Mu);
          Ch1MuSlv       <= to_slv(Ch1Mu);
-         deltaTauEstSlv <= to_slv(DeltaTauEst);
-         EstimatesDoneDly <= EstimatesDone;
+         if (SIM_MODE) then
+            deltaTauEstSlv <= to_slv(DeltaTauEst) when DeltaTauEn else 6x"00";
+         else
+            deltaTauEstSlv <= to_slv(DeltaTauEst);
+         end if;
+         NotReadHold <= not ReadHold;  -- not ReadHold was synthesizing as ??_1
+         if (NotReadHold) then
+            DeltaTau          <= deltaTauEstSlv;    -- output to meter
+            Peaks             <= MagPeak1(15 downto 0) & MagPeak0(15 downto 0);
+         end if;
+         EstimatesDoneDly  <= EstimatesDone;
+         if (Mag0GtMag1) then
+            HxEstR <= to_slv(H0EstR);
+            HxEstI <= to_slv(H0EstI);
+         else
+            HxEstR <= to_slv(H1EstR);
+            HxEstI <= to_slv(H1EstI);
+         end if;
       end if;
    end process;
+
+   TwoClksPerTrellis   <= '1' when (ClocksPerBit > 16x"D00") else '0';  -- ~9.5Mb
+   TwoClksPerTrellisSw <= TwoClksPerTrellis;
 
    Trellis_u : trellisProcess
       PORT MAP (
@@ -665,6 +703,7 @@ BEGIN
          ch0MuIn              => Ch0MuSlv,
          ch1MuIn              => Ch1MuSlv,
          deltaTauEstIn        => deltaTauEstSlv,
+         TwoClksPerTrellis    => TwoClksPerTrellisSw,
          m_ndx0               => m_ndx0Slv,
          m_ndx1               => m_ndx1Slv,
          interpOutEn          => interpOutEn,
@@ -688,8 +727,8 @@ BEGIN
 
    pn_derand : bert_correlator
       port map (
-         poly         => 24x"500",
-         poly_length  => 5x"0b",
+         poly         => 24x"6000", -- pn15
+         poly_length  => 5x"0f",
          poly_mode    => '0',
          reset        => Reset2x,
          clock        => Clk186,
@@ -704,6 +743,8 @@ BEGIN
    DacOutputs : process(Clk93)
    begin
       if (rising_edge(Clk93)) then
+         DacCount <= DacCount + 1;  -- TODO remove
+
          Dac0Data   <= DacMux(to_integer(unsigned(DacSelect0)));
          Dac1Data   <= DacMux(to_integer(unsigned(DacSelect1)));
          Dac2Data   <= DacMux(to_integer(unsigned(DacSelect2)));
@@ -711,7 +752,7 @@ BEGIN
          Dac1ClkEn  <= '1';
          Dac2ClkEn  <= '1';
          DacMux(0)  <= MagPeak1;
-         DacMux(1)  <= PhsPeak1;       --
+         DacMux(1)  <= std_logic_vector(DacCount);       --
          DacMux(2)  <= m_ndx0Slv & 14x"0";
          DacMux(3)  <= m_ndx1Slv & 14x"0";
          DacMux(4)  <= Phase0A & 6x"0";
@@ -719,12 +760,12 @@ BEGIN
          DacMux(6)  <= PhaseDiff;
          DacMux(7)  <= H0Phase & 6x"0";
          DacMux(8)  <= H1Phase & 6x"0";
-         DacMux(9)  <= Magnitude0;                 -- iFFT H0 Magnitude every other sample
-         DacMux(10) <= Magnitude1;                 -- H1
-         DacMux(11) <= PhaseOut0;                  -- iFFT H0 Phase every other sample
-         DacMux(12) <= PhaseOut1;                  -- H1
-         DacMux(13) <= MagPeak0;                    -- Peak Magnitude per frame
-         DacMux(14) <= PhsPeak0;                    -- Full Pilot Phase at peak magnitude
+         DacMux(9)  <= Magnitude0(13 downto 0) & 4x"0";  -- iFFT H0 Magnitude every other sample
+         DacMux(10) <= Magnitude1(13 downto 0) & 4x"0";  -- H1
+         DacMux(11) <= PhaseOut0;                        -- iFFT H0 Phase every other sample
+         DacMux(12) <= PhaseOut1;                        -- H1
+         DacMux(13) <= MagPeak0;                         -- Peak Magnitude per frame
+         DacMux(14) <= PhsPeak0;                         -- Full Pilot Phase at peak magnitude
          DacMux(15) <= PilotOffset & 9x"00";
 
          CorrPntr8to0 <= to_slv(CorrPntr(8 downto 0));
@@ -772,5 +813,20 @@ BEGIN
          p     => H1Phase,
          enOut => open
       );
+
+   cordicIn : vm_cordic_fast
+      GENERIC MAP (
+         n => 14
+      )
+      PORT MAP (
+         clk   => Clk93,
+         ena   => ValidIn,
+         x     => ResampleR(17 downto 4),
+         y     => ResampleI(17 downto 4),
+         m     => InMag,          -- m[n:2]
+         p     => InPhase,
+         enOut => open
+      );
+
 
 END rtl;

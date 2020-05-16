@@ -76,14 +76,11 @@ module acsOp(
     end
 
     // Create the output clk enable
+    reg                   overflow;
     reg             [7:0] clkEnSR;
     always @(posedge clk) begin
-        if (reset) begin
-            clkEnSR <= 0;
-        end
-        else begin
-            clkEnSR <= {clkEnSR[6:0],accMetricInEn};
-        end
+        clkEnSR <= {clkEnSR[6:0],accMetricInEn};
+        overflow <= (accSum >= 19'h10000);
     end
     assign accMetricOutEn = clkEnSR[0];
 

@@ -35,6 +35,25 @@ Dependencies:
 ----------------------------------------------------------------------------
                                DETAILS
 ----------------------------------------------------------------------------
+if Phase is 0 and Freq is 0 with one carrier, the PhaseDiff is 0
+Setting a phase offset on one carrier gives .00097
+Changing the power ratios gives a max phase of 0.0035
+Adding random phases and huge offsets especially at even power levels
+
+1kHz gives phase diff of .025
+
+----- MATLAB Results--------
+H0H1 = H0 + H1
+H0H1I = H0 - H1
+
+at 500Hz, Diff yields
+   H0H1  H0H1I = -178
+   H0H1  H0H1  = 1.27
+   H0    H0H1  = -5.41
+   H0    H0H1I = 6.76
+   H1    H0H1  = 7.97
+   H1    H0H1I = -5.72
+
    To get accurate phase, the two correlated sequences need the same relative
    phase of H0 and H1 especially when the same magnitudes.
 ----------------------------------------------------------------------------
@@ -178,7 +197,6 @@ ARCHITECTURE rtl OF HalfPilotPhase IS
    SIGNAL   CmplxValid,
             Normalize,
             NormDone,
-            WrEn,
             CalcPhase,
             CordicStart,
             ValidCordic,
@@ -245,16 +263,20 @@ ARCHITECTURE rtl OF HalfPilotPhase IS
    SIGNAL   CmplxCount        : integer range 0 to 511;
    SIGNAL   CalcPhaseDly      : SLV4;
 
-   attribute KEEP : string;
-   attribute KEEP of Normalize, NormDone, WrEn : signal is "true";   -- removing attribute caused ?? net names in 17.2
+--   attribute mark_debug : string;
+--   attribute mark_debug of Phase0A, Phase0B, CmplxValid,
+--            Normalize, NormDone, CalcPhase, CordicStart, ValidCordic, PilotPacket : signal is "true";
 
 BEGIN
+
 
    -- estimates are valid, use realigned pilot to check phase shift between first half and second
    -- half of the the pilot for a wideband frequency offset.
 
    PhaseOutA <= to_slv(Phase0A);
    PhaseOutB <= to_slv(Phase0B);
+
+
 
    DoublePhaseProc : process(Clk)
    begin
@@ -393,7 +415,7 @@ BEGIN
                PilotCount  <= (others=>'0');
             elsif (PilotCount = 511) then
                PilotPacket <= '0';
-            elsif (WrEn) then
+            elsif (PilotPacket and ValidIn) then
                PilotCount <= PilotCount + 1;
             end if;
 
@@ -428,7 +450,6 @@ BEGIN
    ReadCount0_u <= unsigned(ReadCount0(8 downto 0));
    ReadCount1_u <= unsigned(ReadCount1(8 downto 0));
    ReadCountR_u <= unsigned(ReadCountR(8 downto 0));
-   WrEn         <= PilotPacket and ValidIn;
 
    PilotCapture_r_u : RAM_2Reads_1Write
       GENERIC MAP(
@@ -441,7 +462,7 @@ BEGIN
          clk         => clk,
          ce          => ce,
          reset       => reset,
-         WrEn        => WrEn,
+         WrEn        => PilotPacket and ValidIn,
          WrAddr      => to_integer(PilotCount),
          RdAddrA     => to_integer(ReadCount0_u),
          RdAddrB     => to_integer(ReadCount1_u),
@@ -461,7 +482,7 @@ BEGIN
          clk         => clk,
          ce          => ce,
          reset       => reset,
-         WrEn        => WrEn,
+         WrEn        => PilotPacket and ValidIn,
          WrAddr      => to_integer(PilotCount),
          RdAddrA     => to_integer(ReadCount0_u),
          RdAddrB     => to_integer(ReadCount1_u),
@@ -481,7 +502,7 @@ BEGIN
          clk         => clk,
          ce          => ce,
          reset       => reset,
-         WrEn        => WrEn,
+         WrEn        => PilotPacket and ValidIn,
          WrAddr      => to_integer(PilotCount),
          RdAddrA     => 0,
          RdAddrB     => to_integer(ReadCountR_u),
@@ -501,7 +522,7 @@ BEGIN
          clk         => clk,
          ce          => ce,
          reset       => reset,
-         WrEn        => WrEn,
+         WrEn        => PilotPacket and ValidIn,
          WrAddr      => to_integer(PilotCount),
          RdAddrA     => 0,
          RdAddrB     => to_integer(InvRdCount_u),

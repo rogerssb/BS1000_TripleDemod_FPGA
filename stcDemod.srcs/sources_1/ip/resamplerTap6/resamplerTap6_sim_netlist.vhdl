@@ -1,14 +1,14 @@
 -- Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2017.2.1 (win64) Build 1957588 Wed Aug  9 16:32:24 MDT 2017
--- Date        : Wed Dec 18 17:02:32 2019
+-- Date        : Mon Feb 17 20:25:43 2020
 -- Host        : SEMCO_1039B running 64-bit major release  (build 9200)
 -- Command     : write_vhdl -force -mode funcsim
---               C:/Semco/Vivado/Demods/stcDemod.srcs/sources_1/ip/resamplerTap6/resamplerTap6_sim_netlist.vhdl
+--               C:/Semco/Vivado/Demods/Latest/stcDemod.srcs/sources_1/ip/resamplerTap6/resamplerTap6_sim_netlist.vhdl
 -- Design      : resamplerTap6
 -- Purpose     : This VHDL netlist is a functional simulation representation of the design and should not be modified or
 --               synthesized. This netlist cannot be used for SDF annotated simulation.
--- Device      : xc7k325tfbg676-1
+-- Device      : xc7k160tfbg676-1
 -- --------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;

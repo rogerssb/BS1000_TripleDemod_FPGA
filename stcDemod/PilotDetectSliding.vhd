@@ -38,6 +38,7 @@
    9/17/16 Initial release FZ
 
    Removed CorrPend, calc CorrPntr from PackCntr and PendIndex instead. Was redundant
+   Added AbsPeakIlaX signals for debug in ILA
 -----------------------------------------------------------------------------*/
 
 library ieee;
@@ -350,7 +351,9 @@ architecture rtl of PilotDetectSliding is
    SIGNAL   MagPeakInt0,
             PhsPeakInt0,
             MagPeakInt1,
-            PhsPeakInt1       : SLV18;
+            PhsPeakInt1,
+            AbsPeakIla0,
+            AbsPeakIla1       : SLV18;
    SIGNAL   Count,
             AbsIndex,
             PrevIndex,
@@ -390,7 +393,7 @@ architecture rtl of PilotDetectSliding is
 
    attribute mark_debug : string;
    attribute mark_debug of PilotMag_Ila, PilotFound, Peak1_Ila, Peak2_Ila, BadPilot,
-             AbsCntr0_Ila, AbsCntr1_Ila, AbsIndex, PrevIndex : signal is "true";
+             AbsCntr0_Ila, AbsCntr1_Ila, AbsIndex, PrevIndex, AbsPeakIla0, AbsPeakIla1 : signal is "true";
 begin
 
    IlaProcess : process(clk)
@@ -813,6 +816,7 @@ begin
                -- Find the peak of H0 only
                if (Index1 = 525) then     -- setup for next frame
                   AbsPeak0    <= (others=>'0');
+                  AbsPeakIla0 <= to_slv(AbsPeak0);
                   MagDelay0   <= MagDelay0(27 downto 0) & ufixed(MagPeakInt0); -- only use last 26, but PeakPointer goes to 28
                   PhsDelay0   <= PhsDelay0(27 downto 0) & ufixed(PhsPeakInt0);
                elsif (Index1 < 512) then     -- only search first half of the ifft
@@ -829,6 +833,7 @@ begin
                -- Find the peak of H1 only
                if (Index1 = 525) then     -- setup for next frame
                   AbsPeak1    <= (others=>'0');
+                  AbsPeakIla1 <= to_slv(AbsPeak1);
                   MagDelay1   <= MagDelay1(27 downto 0) & ufixed(MagPeakInt1); -- only use last 26, but PeakPointer goes to 28
                   PhsDelay1   <= PhsDelay1(27 downto 0) & ufixed(PhsPeakInt1);
                elsif (Index1 < 512) then     -- only search first half of the ifft
@@ -890,7 +895,7 @@ begin
       if (rising_edge(clk)) then
          if (Reset) then
             Threshold         <= to_ufixed(0.75, Threshold); -- set initial RunningTotal to typical at highest signal levels
-            MagDelay          <= (others=>(to_ufixed(0.5, MagDelay(0))));
+            MagDelay          <= (others=>(to_ufixed(0.10, MagDelay(0))));
             PilotMag          <= (others=>'0');
             PilotFound        <= '0';
             PilotFoundPend    <= '0';
@@ -959,9 +964,8 @@ begin
                end if;
                PilotFound  <= PilotFoundPend;
                MagDelay    <= MagDelay(27 downto 0) & PilotMag; -- only use last 26, but PeakPointer goes to 28
-            end if;
 
-            if (CalcThreshold) then          -- Place threshold in center of two highest peaks
+            elsif (CalcThreshold) then          -- Place threshold in center of two highest peaks
                CurrentPeak <= MagDelay(PeakPointer);
                CurrentMag0 <= MagDelay0(PeakPointer);
                CurrentMag1 <= MagDelay1(PeakPointer);

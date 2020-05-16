@@ -8,12 +8,14 @@
 //          back to zero, but read continues till all samples read. Added sample counter.
 
 module frameAlignment
-    #(parameter CLKS_PER_OUTPUT = 2) (
+//    #(parameter CLKS_PER_OUTPUT = 2)
+    (
     input                   clk,
                             clkEn,
                             reset,
                             startOfFrame,       // start of frame, not start of trellis activty
                             estimatesDone,     // Estimates are complete, start Trellis process
+                            TwoClksPerTrellis,  // either 4 or 2 clocks per trellis input
                             valid,
     input   signed  [17:0]  dinReal,
                             dinImag,
@@ -34,7 +36,7 @@ module frameAlignment
     reg             [14:0]  wrAddr, rdAddr, depth;
     wire   signed   [15:0]  rdAddr0, rdAddr1;
     reg                     sofDetected;
-    `define   SOF_ADDRESS `PILOT_SAMPLES_PER_FRAME - 9  // capture address of first sample of next frame.
+    `define   SOF_ADDRESS `PILOT_SAMPLES_PER_FRAME - 10  // capture address of first sample of next frame.
     always @(posedge clk) begin
         if (reset) begin
             myStartOfTrellis <= 0;
@@ -106,6 +108,7 @@ module frameAlignment
     assign  doutImag0       = fifoRdData0[17:0];
     assign  doutReal1       = fifoRdData1[35:18];
     assign  doutImag1       = fifoRdData1[17:0];
+    wire            [3:0]   clksPerOutput = (TwoClksPerTrellis) ? 2 : 4;
 
     //-------------------------- Output State Machine -------------------------
 
@@ -113,13 +116,14 @@ module frameAlignment
         `define WAIT_VALID          1'b0
         `define WAIT_DECIMATION     1'b1
     reg             [2:0]   decimationCount;
+    reg             [5:0]   clockCount;
     reg             [1:0]   outputCount;
     reg             [8:0]   trellisInitCnt;
     reg             [14:0]   sampleCount;
     always @(posedge clk) begin
         if (reset || lastSample) begin
             outputState <= `WAIT_VALID;
-            decimationCount <= CLKS_PER_OUTPUT-1;
+            decimationCount <= clksPerOutput - 1; //CLKS_PER_OUTPUT-1;
             fifoRdEn        <= 0;
             outputCount     <= 0;
             sampleCount     <= 0;
@@ -127,7 +131,7 @@ module frameAlignment
             interpolate     <= 0;
             trellisInitCnt  <= 130; // inactive state
         end
-        else if (clkEn) begin
+        else if (clkEn && !clockCount[5]) begin
             depth <= wrAddr - rdAddr;
 
             if (myStartOfTrellis) begin
@@ -141,7 +145,7 @@ module frameAlignment
                 `WAIT_VALID:  begin
                     if ((fifoOutputValid == 1) && (trellisInitCnt == 0)) begin
                         fifoRdEn    <= 1;
-                        if (CLKS_PER_OUTPUT > 1) begin
+                        if (clksPerOutput > 1) begin
                             decimationCount <= decimationCount - 1;
                             outputState     <= `WAIT_DECIMATION;
                         end
@@ -156,13 +160,13 @@ module frameAlignment
                         decimationCount <= decimationCount - 1;
                     end
                     else begin
-                        decimationCount <= CLKS_PER_OUTPUT-1;
+                        decimationCount <= clksPerOutput-1; //CLKS_PER_OUTPUT-1;
                         outputState <= `WAIT_VALID;
                     end
                 end
                 default: begin
                     outputState     <= `WAIT_VALID;
-                    decimationCount <= CLKS_PER_OUTPUT-1;
+                    decimationCount <= clksPerOutput-1; //CLKS_PER_OUTPUT-1;
                     fifoRdEn        <= 0;
                 end
             endcase
@@ -183,5 +187,24 @@ module frameAlignment
         end
     end
     assign  clkEnOut = (fifoRdEn);
+
+    always @(posedge clk) begin
+        if (myStartOfTrellis) begin
+            clockCount <= 0;
+        end
+        else begin
+            if ((fifoOutputValid == 1) && (clksPerOutput == 2)) begin
+                if (clockCount < 31) begin
+                    clockCount <= clockCount + 1;
+                end
+                else begin
+                    clockCount <= 0;
+                end
+            end
+            else begin
+                clockCount <= 0;
+            end
+        end
+    end
 
 endmodule

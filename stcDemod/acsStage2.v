@@ -37,25 +37,25 @@ module acsStage2(
     wire    signed  [17:0]  tableEven2r,tableEven2i;
     wire    signed  [17:0]  tableOdd2r,tableOdd2i;
     twoPortDistMem32x18 dpRam2r(
-        .clk(clk),
-        .we(setupOutputValid),
-        .a(spoAddr),
-        .d(setupReal),
-        .dpra(evenAddr),
+        .clk(clk), 
+        .we(setupOutputValid), 
+        .a(spoAddr), 
+        .d(setupReal), 
+        .dpra(evenAddr), 
         .dpo(tableEven2r),
         .spo(tableOdd2r)
     );
     twoPortDistMem32x18 dpRam2i(
-        .clk(clk),
-        .we(setupOutputValid),
-        .a(spoAddr),
-        .d(setupImag),
-        .dpra(evenAddr),
+        .clk(clk), 
+        .we(setupOutputValid), 
+        .a(spoAddr), 
+        .d(setupImag), 
+        .dpra(evenAddr), 
         .dpo(tableEven2i),
         .spo(tableOdd2i)
     );
 
-    // Count through the 16 states of the 2 acs units to generate 32 outputs.
+    // Count through the 16 states of the 2 acs units to generate 32 outputs. 
     reg             [3:0]   metricAddr;
     always @(posedge clk) begin
         if (reset) begin
@@ -83,7 +83,7 @@ module acsStage2(
 
     // Stage 2 ACS Units
     acsOp acsEven(
-        .clk(clk), .reset(startFrame | reset),
+        .clk(clk), .reset(startFrame),
         .y8Real(tableEven2r),   .y8Imag(tableEven2i),
         .sReal(s0Real),         .sImag(s0Imag),
         .accMetricInEn(accMetricInEn),
@@ -92,7 +92,7 @@ module acsStage2(
         .accMetricOut(accMetricEvenOut)
     );
     acsOp acsOdd(
-        .clk(clk), .reset(startFrame | reset),
+        .clk(clk), .reset(startFrame),
         .y8Real(tableOdd2r),    .y8Imag(tableOdd2i),
         .sReal(s0Real),         .sImag(s0Imag),
         .accMetricInEn(accMetricInEn),
@@ -100,6 +100,6 @@ module acsStage2(
         .accMetricOutEn(),
         .accMetricOut(accMetricOddOut)
     );
-
+    
 
 endmodule

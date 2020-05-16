@@ -41,20 +41,20 @@ module acsStage3(
     wire    signed  [17:0]  table3r_00,table3i_00;
     wire    signed  [17:0]  table3r_01,table3i_01;
     twoPortDistMem64x18 dpRam3r_0x(
-        .clk(clk),
-        .we(setupOutputValid),
-        .a(spoAddr0x),
-        .d(setupReal),
-        .dpra(addr00),
+        .clk(clk), 
+        .we(setupOutputValid), 
+        .a(spoAddr0x), 
+        .d(setupReal), 
+        .dpra(addr00), 
         .dpo(table3r_00),
         .spo(table3r_01)
     );
     twoPortDistMem64x18 dpRam3i_0x(
-        .clk(clk),
-        .we(setupOutputValid),
-        .a(spoAddr0x),
-        .d(setupImag),
-        .dpra(addr00),
+        .clk(clk), 
+        .we(setupOutputValid), 
+        .a(spoAddr0x), 
+        .d(setupImag), 
+        .dpra(addr00), 
         .dpo(table3i_00),
         .spo(table3i_01)
     );
@@ -62,25 +62,25 @@ module acsStage3(
     wire    signed  [17:0]  table3r_10,table3i_10;
     wire    signed  [17:0]  table3r_11,table3i_11;
     twoPortDistMem64x18 dpRam3r_1x(
-        .clk(clk),
-        .we(setupOutputValid),
-        .a(spoAddr1x),
-        .d(setupReal),
-        .dpra(addr10),
+        .clk(clk), 
+        .we(setupOutputValid), 
+        .a(spoAddr1x), 
+        .d(setupReal), 
+        .dpra(addr10), 
         .dpo(table3r_10),
         .spo(table3r_11)
     );
     twoPortDistMem64x18 dpRam3i_1x(
-        .clk(clk),
-        .we(setupOutputValid),
-        .a(spoAddr1x),
-        .d(setupImag),
-        .dpra(addr10),
+        .clk(clk), 
+        .we(setupOutputValid), 
+        .a(spoAddr1x), 
+        .d(setupImag), 
+        .dpra(addr10), 
         .dpo(table3i_10),
         .spo(table3i_11)
     );
 
-    // Count through the 16 states of the 4 acs units to generate 64 outputs.
+    // Count through the 16 states of the 4 acs units to generate 64 outputs. 
     reg             [3:0]   metricAddr;
     always @(posedge clk) begin
         if (reset) begin
@@ -110,7 +110,7 @@ module acsStage3(
 
     // Stage 3 ACS Units
     acsOp acs00(
-        .clk(clk), .reset(startFrame | reset),
+        .clk(clk), .reset(startFrame),
         .y8Real(table3r_00),    .y8Imag(table3i_00),
         .sReal(s1Real),         .sImag(s1Imag),
         .accMetricInEn(accMetricInEn),
@@ -119,7 +119,7 @@ module acsStage3(
         .accMetricOut(accMetricOut_00)
     );
     acsOp acs01(
-        .clk(clk), .reset(startFrame | reset),
+        .clk(clk), .reset(startFrame),
         .y8Real(table3r_01),    .y8Imag(table3i_01),
         .sReal(s1Real),         .sImag(s1Imag),
         .accMetricInEn(accMetricInEn),
@@ -128,7 +128,7 @@ module acsStage3(
         .accMetricOut(accMetricOut_01)
     );
     acsOp acs10(
-        .clk(clk), .reset(startFrame | reset),
+        .clk(clk), .reset(startFrame),
         .y8Real(table3r_10),    .y8Imag(table3i_10),
         .sReal(s1Real),         .sImag(s1Imag),
         .accMetricInEn(accMetricInEn),
@@ -137,7 +137,7 @@ module acsStage3(
         .accMetricOut(accMetricOut_10)
     );
     acsOp acs11(
-        .clk(clk), .reset(startFrame | reset),
+        .clk(clk), .reset(startFrame),
         .y8Real(table3r_11),    .y8Imag(table3i_11),
         .sReal(s1Real),         .sImag(s1Imag),
         .accMetricInEn(accMetricInEn),
@@ -145,6 +145,6 @@ module acsStage3(
         .accMetricOutEn(),
         .accMetricOut(accMetricOut_11)
     );
-
+    
 
 endmodule

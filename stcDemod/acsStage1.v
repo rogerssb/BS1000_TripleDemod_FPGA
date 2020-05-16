@@ -60,7 +60,7 @@ module acsStage1(
     end
 
     acsOp acs(
-        .clk(clk), .reset(startFrame | reset),
+        .clk(clk), .reset(startFrame),
         .y8Real(table1r[metricAddr]),  .y8Imag(table1i[metricAddr]),
         .sReal(s1Real),                 .sImag(s1Imag),
         .accMetricInEn(accMetricInEn),
@@ -68,5 +68,5 @@ module acsStage1(
         .accMetricOutEn(metricOutEn),
         .accMetricOut(accMetricOut)
     );
-
+    
 endmodule

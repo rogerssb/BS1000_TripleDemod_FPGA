@@ -62,10 +62,7 @@ since the data is 4 samples per bit at this point.
 LIBRARY IEEE;
 USE IEEE.std_logic_1164.ALL;
 USE IEEE.numeric_std.ALL;
-library std;
-use std.textio.all;
 use work.fixed_pkg.all;
-USE IEEE.math_real.all;
 use work.Semco_pkg.ALL;
 
 ENTITY Brik2 IS

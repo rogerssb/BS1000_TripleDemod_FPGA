@@ -132,7 +132,7 @@
 `ifdef STC_TRIPLE_MOD
 `define STC_MOD
 `define R6100
-`endif 
+`endif
 
 `ifdef STC_MOD
 `define USE_BUS_CLOCK
@@ -694,10 +694,13 @@
     `define SPIGW_RSVD1         13'bx_xxxx_xxxx_101x
     `define SPIGW_CONTROL       13'bx_xxxx_xxxx_11xx
 
-`define STC_DEMOD_SPACE     13'b0_00xx_0011_xxxx
-    `define STC_CLOCKS_PER_BIT  13'bxxxx_xxxx_00xx
-    `define STC_HX_THRESH    13'bxxxx_xxxx_01xx
-    `define STC_DAC_SELECT      13'bxxxx_xxxx_10xx
+    // not sure why but the software didn't like address at 30, so changed to 40
+`define STC_DEMOD_SPACE     13'b0_00xx_010x_xxxx
+    `define STC_CLOCKS_PER_BIT  13'bx_xxxx_xxx0_00xx
+    `define STC_HX_THRESH       13'bx_xxxx_xxx0_01xx
+    `define STC_DAC_SELECT      13'bx_xxxx_xxx0_10xx
+    `define STC_PEAK_MAGS       13'bx_xxxx_xxx0_11xx
+    `define STC_DELTA_TAU       13'bx_xxxx_xxx1_00xx
 
 `define FMMODSPACE          13'b0_00xx_011x_xxxx
     `define FM_MOD_FREQ         13'bxxxx_xxx0_00xx

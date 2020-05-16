@@ -15,6 +15,7 @@ module trellisProcess (
                             reset,
                             frameStart,
                             inputValid,
+                            TwoClksPerTrellis,
                             estimatesDone,
     input   signed  [17:0]  dinReal,
                             dinImag,
@@ -92,8 +93,7 @@ module trellisProcess (
     integer SPARE_CODE_WORDS = 1; // first output is bogus
     assign  lastSampleReset = (sampleOut == `CODEWORDS_PER_FRAME + SPARE_CODE_WORDS);
 
-    frameAlignment #(
-        .CLKS_PER_OUTPUT(2))
+    frameAlignment
     fa(
         .clk(clk),
         .clkEn(clkEnable),
@@ -103,6 +103,7 @@ module trellisProcess (
         .valid(dfValid),
         .dinReal(dfRealOutput),
         .dinImag(dfImagOutput),
+        .TwoClksPerTrellis(TwoClksPerTrellis),
         .m_ndx0(m_ndx0),
         .m_ndx1(m_ndx1),
         .clkEnOut(faClkEn),
@@ -173,6 +174,7 @@ module trellisProcess (
         .clkEn(1'b1),
         .reset(reset || lastSampleReset),
         .sampleEn(interpOutEn),
+        .clksPerEq2(TwoClksPerTrellis),
         .startFrame(myStartOfTrellis),
         .in0Real(sample0r), .in0Imag(sample0i),
         .in1Real(sample1r), .in1Imag(sample1i),

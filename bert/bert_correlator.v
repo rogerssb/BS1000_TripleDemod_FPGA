@@ -1,3 +1,4 @@
+// added serialC to lfsr. can revert after stcMod tests
 `timescale 1ns / 10 ps
 
 module bert_correlator (
@@ -51,6 +52,7 @@ bert_lfsr bert_lfsr (
   .reload(reload),
   .load_data(data_buffer),
   .data(code),
+  .serialC(),
   .serial()
 );
 

@@ -1,6 +1,8 @@
 `timescale 1ns/100ps
 `include "addressMap.v"
 
+`define MATLAB_VECTORS
+
 module test;
     parameter CLOCK_FREQ = 93.333333e6;
     parameter HC = 1e9/CLOCK_FREQ/2;
@@ -38,6 +40,10 @@ module test;
         end
     end
 
+    `ifdef MATLAB_VECTORS
+    reg     testBits;
+    initial testBits = 0;
+    `endif
 
     //************************** uP Interface *********************************
     `ifdef TRIPLE_DEMOD
@@ -81,7 +87,7 @@ module test;
     Encode devScaleFactor as an exponent and mantissa
     */
     real    devExponent;
-    initial devExponent = 0;
+    initial devExponent = 1;
     real    devMantissa;
     initial devMantissa = 1.0;
 
@@ -182,6 +188,10 @@ module test;
         // Wait 5 bit periods
         repeat (5*`CLOCKS_PER_BIT) @ (posedge clk) ;
 
+        `ifdef MATLAB_VECTORS
+        testBits = 1;
+        `endif
+
         // Run the modulator
         repeat (200000*`CLOCKS_PER_BIT) @ (posedge clk) ;
 
@@ -268,6 +278,41 @@ module test;
     );
 
 
+    `ifdef SIMULATE
+    reg ddsSimReset;
+    initial ddsSimReset = 0;
+    wire ddsReset = ddsSimReset || reset;
+    `else
+    wire ddsReset = reset;
+    `endif
+
+    wire            [47:0]  m_axis0;
+    wire    signed  [17:0]  qStc0 = m_axis0[41:24];
+    wire    signed  [17:0]  iStc0 = m_axis0[17:0];
+    dds6p0 dds0(
+      .aclk(clk),
+      .aclken(1'b1),
+      .aresetn(!ddsReset),
+      .m_axis_data_tdata(m_axis0),
+      .m_axis_data_tvalid(),
+      .s_axis_phase_tdata(fmModFreq0),
+      .s_axis_phase_tvalid(1'b1)
+    );
+
+    wire            [47:0]  m_axis1;
+    wire    signed  [17:0]  qStc1 = m_axis1[41:24];
+    wire    signed  [17:0]  iStc1 = m_axis1[17:0];
+    dds6p0 dds1(
+      .aclk(clk),
+      .aclken(1'b1),
+      .aresetn(!ddsReset),
+      .m_axis_data_tdata(m_axis1),
+      .m_axis_data_tvalid(),
+      .s_axis_phase_tdata(fmModFreq1),
+      .s_axis_phase_tvalid(1'b1)
+    );
+
+
 
 
     //**************************** Startup ************************************
@@ -307,6 +352,39 @@ module test;
             end
         end
     end
+
+    `ifdef MATLAB_VECTORS
+    integer outfile;
+    integer vectorCount;
+    integer vectorDecimationCount;
+    initial begin
+        outfile = $fopen("stcModSamples.txt");
+        vectorCount = 0;
+        vectorDecimationCount <= 2;
+    end
+
+    real iTxReal,qTxReal;
+    //always @* iTxReal = $itor(iStc0)/(2**17);
+    //always @* qTxReal = $itor(qStc0)/(2**17);
+    always @* iTxReal = $itor(iStc1)/(2**17);
+    always @* qTxReal = $itor(qStc1)/(2**17);
+    always @(posedge clk) begin
+        if (testBits) begin
+            if (vectorDecimationCount == 0) begin
+                $fwrite(outfile,"%f %f\n",iTxReal,qTxReal);
+                vectorCount <= vectorCount + 1;
+                if (vectorCount == 10239) begin
+                    $fclose(outfile);
+                    $stop;
+                end
+                vectorDecimationCount <= `CLOCKS_PER_BIT/4 - 1;
+            end
+            else begin
+                vectorDecimationCount <= vectorDecimationCount - 1;
+            end
+        end
+    end
+    `endif
 
 endmodule
 

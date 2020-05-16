@@ -57,12 +57,8 @@ module acsStage0(
             startStage <= 0;
         end
 
-        if (reset) begin
-            metricInEn <= 0;
-        end
-        else begin
-            metricInEn <= (metricAddr > 0) || startStage;
-        end
+        metricInEn <= (metricAddr > 0) || startStage;
+
     end
     assign                  metricRequest = metricInEn;
     assign                  startNextStage = (metricAddr == 1);
@@ -79,7 +75,7 @@ module acsStage0(
     end
 
     acsOp acs0(
-        .clk(clk), .reset(startFrame | reset),
+        .clk(clk), .reset(startFrame),
         .y8Real(table0r[metricAddr]),  .y8Imag(table0i[metricAddr]),
         .sReal(s0Real),                 .sImag(s0Imag),
         .accMetricInEn(metricInEn),

@@ -512,37 +512,52 @@ module stageSetup (
 
     // Calculate the final output
     wire    signed  [36:0]  temp0Real,temp0Imag;
-    wire            [2:0]   waste00,waste01;
     wire                    temp0Valid;
-    cmpy18x18 cmpy0(
-        .aclk(clk),
-        .s_axis_a_tvalid(romDataValid),
-        .s_axis_a_tdata({6'bx,samp0Imag,6'bx,samp0Real}),
-        .s_axis_b_tvalid(romDataValid),
-        .s_axis_b_tdata({6'bx,h0EstImag,6'bx,h0EstReal}),
-        .m_axis_dout_tvalid(temp0Valid),
-        .m_axis_dout_tdata({waste01,temp0Imag,waste00,temp0Real})
-    );
+    CmplxMult #(.IN_LEFT(17), .IN_RIGHT(0), .OUT_LEFT(36), .OUT_BINPT(0)) Cmpy0(
+      .clk      (clk),
+      .reset    (reset),
+      .ce       (1'b1),
+      .ValidIn  (romDataValid),
+      .StartIn  (1'b0),
+      .ReadyIn  (1'b1),
+      .ReInA    (samp0Real),
+      .ImInA    (samp0Imag),
+      .ReInB    (h0EstReal),
+      .ImInB    (h0EstImag),
+      .ReOut    (temp0Real),
+      .ImOut    (temp0Imag),
+      .ValidOut (temp0Valid),
+      .StartOut ()
+   );
+
+
     wire    signed  [36:0]  temp1Real,temp1Imag;
-    wire            [2:0]   waste10,waste11;
     wire                    temp1Valid;
-    cmpy18x18 cmpy1(
-        .aclk(clk),
-        .s_axis_a_tvalid(romDataValid),
-        .s_axis_a_tdata({6'bx,samp1Imag,6'bx,samp1Real}),
-        .s_axis_b_tvalid(romDataValid),
-        .s_axis_b_tdata({6'bx,h1EstImag,6'bx,h1EstReal}),
-        .m_axis_dout_tvalid(temp1Valid),
-        .m_axis_dout_tdata({waste11,temp1Imag,waste10,temp1Real})
-    );
+    CmplxMult #(.IN_LEFT(17), .IN_RIGHT(0), .OUT_LEFT(36), .OUT_BINPT(0)) Cmpy1(
+      .clk      (clk),
+      .reset    (reset),
+      .ce       (1'b1),
+      .ValidIn  (romDataValid),
+      .StartIn  (1'b0),
+      .ReadyIn  (1'b1),
+      .ReInA    (samp1Real),
+      .ImInA    (samp1Imag),
+      .ReInB    (h1EstReal),
+      .ImInB    (h1EstImag),
+      .ReOut    (temp1Real),
+      .ImOut    (temp1Imag),
+      .ValidOut (temp1Valid),
+      .StartOut ()
+   );
+
     reg     signed  [37:0]  sumReal,sumImag;
     reg                     sumValid;
     reg     signed  [17:0]  satSumReal,satSumImag;
     reg                     refValid;
     always @(posedge clk) begin
         // Complex sum
-        sumReal <= temp0Real + temp1Real;
-        sumImag <= temp0Imag + temp1Imag;
+        sumReal  <= temp0Real + temp1Real;
+        sumImag  <= temp0Imag + temp1Imag;
         sumValid <= temp0Valid;
         // Test for saturation
         if (sumReal[37] && (sumReal[36:34] != 3'b111)) begin
@@ -566,7 +581,7 @@ module stageSetup (
         refValid <= sumValid;
     end
     assign stageOutputValid = refValid;
-    assign refReal = satSumReal;
-    assign refImag = satSumImag;
+    assign refReal          = satSumReal;
+    assign refImag          = satSumImag;
 
 endmodule

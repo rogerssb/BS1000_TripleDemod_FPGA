@@ -52,12 +52,11 @@ trellisDetector
         4) At 40 Mbps, the system clock is at least 160 MHz so its not likely the clock can
             be increase much beyond twice that frequency.
 
-    History
 */
 module trellisDetector (
     input                   clk, clkEn,
     input                   reset,
-    input                   sampleEn,
+    input                   sampleEn, clksPerEq2,
     input                   startFrame,
     input   signed  [17:0]  in0Real, in0Imag, in1Real, in1Imag,
     input   signed  [5:0]   deltaTauEst,
@@ -637,13 +636,32 @@ module trellisDetector (
     wire            [17:0]  accMetric7_110;
     wire            [17:0]  accMetric7_111;
     reg             [3:0]   minIndex;
+    reg             [7:0]   startBlock7Dly;
+    reg             [17:0]  acc7Real, acc7Imag;
+    wire                    acc7Start  = (positiveTau || !clksPerEq2) ? (startBlock & sampleEn) : startBlock7Dly[7];
+    wire            [17:0]  acc7RealIn = (positiveTau || !clksPerEq2) ? s1_3_real : acc7Real;
+    wire            [17:0]  acc7ImagIn = (positiveTau || !clksPerEq2) ? s1_3_imag : acc7Imag;
+    // if clksPerTrellis = 2 and not positiveTau, stage 7 needs to hold off the new Re/Im input 8 clocks
+    always @(posedge clk) begin
+        if (startFrame) begin
+            startBlock7Dly <= 0;
+        end
+        else begin
+            if (startBlock & sampleEn) begin
+                acc7Real <= s1_3_real;
+                acc7Imag <= s1_3_imag;
+            end
+            startBlock7Dly <= {startBlock7Dly[6:0], (startBlock & sampleEn)};
+        end
+    end
+
     acsStage7Wide stage7(
         .clk(clk),.clkEn(clkEn), .reset(reset),
         .positiveTau(positiveTau),
         .startFrame(startFrame),
-        .startBlock(startBlock & sampleEn),
+        .startBlock(acc7Start),
         .startStage(startStage7),
-        .in1Real(s1_3_real),.in1Imag(s1_3_imag),
+        .in1Real(acc7RealIn),.in1Imag(acc7ImagIn),
         .accMetricInEn(metric6OutputEn),
         .accMetricIn_000(accMetric6_000),
         .accMetricIn_001(accMetric6_001),
@@ -670,6 +688,17 @@ module trellisDetector (
         .startNextStage(startMinSearch),
         .winner7(winner7)
     );
+
+    `ifdef SIMULATE
+    wire    overflow0 = stage0.acs0.overflow;
+    wire    overflow1 = stage1.acs.overflow;
+    wire    overflow2 = stage2.acsOdd.overflow | stage2.acsEven.overflow;
+    wire    overflow3 = stage3.acs00.overflow | stage3.acs01.overflow | stage3.acs10.overflow | stage3.acs11.overflow;
+    wire    overflow4 = stage4.acs000.overflow | stage4.acs001.overflow | stage4.acs010.overflow | stage4.acs011.overflow | stage4.acs100.overflow | stage4.acs101.overflow | stage4.acs110.overflow | stage4.acs111.overflow;
+    wire    overflow5 = stage5.acs000.overflow | stage5.acs001.overflow | stage5.acs010.overflow | stage5.acs011.overflow | stage5.acs100.overflow | stage5.acs101.overflow | stage5.acs110.overflow | stage5.acs111.overflow;
+    wire    overflow6 = stage6.acs000.overflow | stage6.acs001.overflow | stage6.acs010.overflow | stage6.acs011.overflow | stage6.acs100.overflow | stage6.acs101.overflow | stage6.acs110.overflow | stage6.acs111.overflow;
+    wire    overflow7 = stage7.acs000.overflow | stage7.acs001.overflow | stage7.acs010.overflow | stage7.acs011.overflow | stage7.acs100.overflow | stage7.acs101.overflow | stage7.acs110.overflow | stage7.acs111.overflow;
+    `endif
 
     // Find the minimum metric and serialize the output
     reg             [2:0]   minState;
@@ -717,11 +746,13 @@ module trellisDetector (
     reg             [17:0]  accMetric_1110;
     reg             [17:0]  accMetric_1111;
     reg             [3:0]   finalMetricCount;
+    reg                     zeroFinal;
     always @(posedge clk) begin
         if (startFrame) begin
-            minState <= `MIN_IDLE;
-            minMetric <= 0;
-            flipTracebackPingPong <= 0;
+            minState                <= `MIN_IDLE;
+            minMetric               <= 0;
+            flipTracebackPingPong   <= 0;
+            zeroFinal               <= 0;
         end
         else begin
             case (minState)
@@ -749,72 +780,72 @@ module trellisDetector (
                     accMetric_1110 <= accMetric7_110;
                     accMetric_1111 <= accMetric7_111;
                     if (accMetric_0000 <= accMetric7_000) begin
-                        minMetric_000 <= accMetric_0000;
-                        minIndex_000 <= 0;
+                        minMetric_000 = accMetric_0000;
+                        minIndex_000 = 0;
                     end
                     else begin
-                        minMetric_000 <= accMetric7_000;
-                        minIndex_000 <= 8;
+                        minMetric_000 = accMetric7_000;
+                        minIndex_000 = 8;
                     end
                     if (accMetric_0001 <= accMetric7_001) begin
-                        minMetric_001 <= accMetric_0001;
-                        minIndex_001 <= 1;
+                        minMetric_001 = accMetric_0001;
+                        minIndex_001 = 1;
                     end
                     else begin
-                        minMetric_001 <= accMetric7_001;
-                        minIndex_001 <= 9;
+                        minMetric_001 = accMetric7_001;
+                        minIndex_001 = 9;
                     end
                     if (accMetric_0010 <= accMetric7_010) begin
-                        minMetric_010 <= accMetric_0010;
-                        minIndex_010 <= 2;
+                        minMetric_010 = accMetric_0010;
+                        minIndex_010 = 2;
                     end
                     else begin
-                        minMetric_010 <= accMetric7_010;
-                        minIndex_010 <= 10;
+                        minMetric_010 = accMetric7_010;
+                        minIndex_010 = 10;
                     end
                     if (accMetric_0011 <= accMetric7_011) begin
-                        minMetric_011 <= accMetric_0011;
-                        minIndex_011 <= 3;
+                        minMetric_011 = accMetric_0011;
+                        minIndex_011 = 3;
                     end
                     else begin
-                        minMetric_011 <= accMetric7_011;
-                        minIndex_011 <= 11;
+                        minMetric_011 = accMetric7_011;
+                        minIndex_011 = 11;
                     end
                     if (accMetric_0100 <= accMetric7_100) begin
-                        minMetric_100 <= accMetric_0100;
-                        minIndex_100 <= 4;
+                        minMetric_100 = accMetric_0100;
+                        minIndex_100 = 4;
                     end
                     else begin
-                        minMetric_100 <= accMetric7_100;
-                        minIndex_100 <= 12;
+                        minMetric_100 = accMetric7_100;
+                        minIndex_100 = 12;
                     end
                     if (accMetric_0101 <= accMetric7_101) begin
-                        minMetric_101 <= accMetric_0101;
-                        minIndex_101 <= 5;
+                        minMetric_101 = accMetric_0101;
+                        minIndex_101 = 5;
                     end
                     else begin
-                        minMetric_101 <= accMetric7_101;
-                        minIndex_101 <= 13;
+                        minMetric_101 = accMetric7_101;
+                        minIndex_101 = 13;
                     end
                     if (accMetric_0110 <= accMetric7_110) begin
-                        minMetric_110 <= accMetric_0110;
-                        minIndex_110 <= 6;
+                        minMetric_110 = accMetric_0110;
+                        minIndex_110 = 6;
                     end
                     else begin
-                        minMetric_110 <= accMetric7_110;
-                        minIndex_110 <= 14;
+                        minMetric_110 = accMetric7_110;
+                        minIndex_110 = 14;
                     end
                     if (accMetric_0111 <= accMetric7_111) begin
-                        minMetric_111 <= accMetric_0111;
-                        minIndex_111 <= 7;
+                        minMetric_111 = accMetric_0111;
+                        minIndex_111 = 7;
                     end
                     else begin
-                        minMetric_111 <= accMetric7_111;
-                        minIndex_111 <= 15;
+                        minMetric_111 = accMetric7_111;
+                        minIndex_111 = 15;
                     end
-                    minState <= `MIN_COMPARE4;
-                end
-                `MIN_COMPARE4: begin
+//                    minState <= `MIN_COMPARE4;
+//                end
+//                `MIN_COMPARE4: begin
                     if (minMetric_000 <= minMetric_001) begin
                         minMetric_00 <= minMetric_000;
                         minIndex_00 <= minIndex_000;
@@ -847,28 +878,28 @@ module trellisDetector (
                         minMetric_11 <= minMetric_111;
                         minIndex_11 <= minIndex_111;
                     end
-                  minState <= `MIN_COMPARE2;
-              end
-              `MIN_COMPARE2: begin
+                    minState <= `MIN_COMPARE2;
+                end
+                `MIN_COMPARE2: begin
                     if (minMetric_00 <= minMetric_01) begin
-                        minMetric_0 <= minMetric_00;
-                        minIndex_0 <= minIndex_00;
+                        minMetric_0 = minMetric_00;
+                        minIndex_0 = minIndex_00;
                     end
                     else begin
-                        minMetric_0 <= minMetric_01;
-                        minIndex_0 <= minIndex_01;
+                        minMetric_0 = minMetric_01;
+                        minIndex_0 = minIndex_01;
                     end
                     if (minMetric_10 <= minMetric_11) begin
-                        minMetric_1 <= minMetric_10;
-                        minIndex_1 <= minIndex_10;
+                        minMetric_1 = minMetric_10;
+                        minIndex_1 = minIndex_10;
                     end
                     else begin
-                        minMetric_1 <= minMetric_11;
-                        minIndex_1 <= minIndex_11;
+                        minMetric_1 = minMetric_11;
+                        minIndex_1 = minIndex_11;
                     end
-                  minState <= `MIN_COMPARE1;
-              end
-              `MIN_COMPARE1: begin
+//                    minState <= `MIN_COMPARE1;
+//                end
+//                `MIN_COMPARE1: begin
                     if (minMetric_0 <= minMetric_1) begin
                         minMetric <= minMetric_0;
                         minIndex <= minIndex_0;
@@ -888,7 +919,8 @@ module trellisDetector (
                     flipTracebackPingPong <= 0;
                     if (finalMetricCount == 0) begin
                         finalMetricOutputEn <= 0;
-                        minState <= `MIN_IDLE;
+                        minState            <= `MIN_IDLE;
+                        zeroFinal           <= 1;   // zero the first value since accMetrics aren't initialized
                     end
                     else begin
                         finalMetricCount <= finalMetricCount - 1;
@@ -929,10 +961,10 @@ module trellisDetector (
         .full(),
         .empty()
     );
-    assign startMetric_00 = fifoMetric;
-    assign startMetric_01 = fifoMetric;
-    assign startMetric_10 = fifoMetric;
-    assign startMetric_11 = fifoMetric;
+    assign startMetric_00 = (clksPerEq2 && zeroFinal && !positiveTau) ? finalMetric : fifoMetric;
+    assign startMetric_01 = (clksPerEq2 && zeroFinal && !positiveTau) ? finalMetric : fifoMetric;
+    assign startMetric_10 = (clksPerEq2 && zeroFinal && !positiveTau) ? finalMetric : fifoMetric;
+    assign startMetric_11 = (clksPerEq2 && zeroFinal && !positiveTau) ? finalMetric : fifoMetric;
 
     // Delay the stage 7 startNextStage to create the outputEn
 //    reg                     outputEn;

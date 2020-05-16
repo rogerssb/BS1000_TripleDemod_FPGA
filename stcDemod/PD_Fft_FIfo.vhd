@@ -80,8 +80,6 @@ ARCHITECTURE rtl OF PD_Fft_Fifo IS
    SIGNAL   PopCount2x        : natural range 0 to 2 * WORDS;
    SIGNAL   FifoData2x        : std_logic_vector(35 downto 0);
 
-   signal   WrCount  : ufixed(17 downto 0);
-
 BEGIN
 
    Idle2x <= '1' when (PopCount2x = 0) else '0';

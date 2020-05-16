@@ -1,4 +1,4 @@
-set_property BITSTREAM.CONFIG.CONFIGRATE 50 [current_design]
+set_property BITSTREAM.CONFIG.CONFIGRATE 66 [current_design]
 set_property CONFIG_VOLTAGE 3.3 [current_design]
 set_property CFGBVS VCCO [current_design]
 set_property BITSTREAM.CONFIG.SPI_BUSWIDTH 1 [current_design]
@@ -7,14 +7,10 @@ set_property CONFIG_MODE SPIx1 [current_design]
 create_clock -period 6.250 -name pll0_OUT1 -waveform {0.000 3.125} [get_ports pll0_OUT1]
 create_clock -period 6.250 -name pll1_OUT1 -waveform {0.000 3.125} [get_ports pll1_OUT1]
 
-create_generated_clock -name DllReadClk0 -source [get_pins cAndD0/clk93] -multiply_by 4 -add -master_clock clk93_systemClock [get_pins {cAndD0/dllDivider_reg[0]/Q}]
-create_generated_clock -name Dll90Clk0   -source [get_pins cAndD0/clk93] -multiply_by 4 -add -master_clock clk93_systemClock [get_pins {cAndD0/dllDivider_reg[1]/Q}]
-create_generated_clock -name Dll90Clk1   -source [get_pins cAndD1/clk93] -multiply_by 4 -add -master_clock clk93_systemClock [get_pins {cAndD1/dllDivider_reg[1]/Q}]
-create_generated_clock -name DllReadClk1 -source [get_pins cAndD1/clk93] -multiply_by 4 -add -master_clock clk93_systemClock [get_pins {cAndD1/dllDivider_reg[0]/Q}]
 
 create_generated_clock -name PllReadClk0 -source [get_ports pll0_OUT1] -divide_by 4 -add -master_clock pll0_OUT1 [get_pins {cAndD0/pllDivider_reg[0]/Q}]
-create_generated_clock -name Pll90Clk0   -source [get_ports pll0_OUT1] -divide_by 4 -add -master_clock pll0_OUT1 [get_pins {cAndD0/pllDivider_reg[1]/Q}]
-create_generated_clock -name Pll90Clk1   -source [get_ports pll1_OUT1] -divide_by 4 -add -master_clock pll1_OUT1 [get_pins {cAndD1/pllDivider_reg[1]/Q}]
+create_generated_clock -name Pll90Clk0 -source [get_ports pll0_OUT1] -divide_by 4 -add -master_clock pll0_OUT1 [get_pins {cAndD0/pllDivider_reg[1]/Q}]
+create_generated_clock -name Pll90Clk1 -source [get_ports pll1_OUT1] -divide_by 4 -add -master_clock pll1_OUT1 [get_pins {cAndD1/pllDivider_reg[1]/Q}]
 create_generated_clock -name PllReadClk1 -source [get_ports pll1_OUT1] -divide_by 4 -add -master_clock pll1_OUT1 [get_pins {cAndD1/pllDivider_reg[0]/Q}]
 
 set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets pll0_OUT1_IBUF]
@@ -40,15 +36,14 @@ set_output_delay -clock [get_clocks fbClk] -min -add_delay -0.500 [get_ports {fb
 set_output_delay -clock [get_clocks fbClk] -max -add_delay 8.500 [get_ports {fb_data[*]}]
 set_output_delay -clock [get_clocks sysClk] -min -add_delay -0.100 [get_ports {dac*_d[*]}]
 set_output_delay -clock [get_clocks sysClk] -max -add_delay 3.400 [get_ports {dac*_d[*]}]
-set_output_delay -clock [get_clocks [get_clocks -of_objects [get_pins systemClock/inst/mmcm_adv_inst/CLKOUT0]]] 10.0 [get_ports {ch*ClkOut ch*DataOut pll*_REF spiFlashCSn spiFlashMOSI}]
-set_output_delay -clock [get_clocks fbClk] 10.0 [get_ports {pll*_CS pll_SCK pll_SDI}]
-set_output_delay -clock [get_clocks [get_clocks -of_objects [get_pins systemClock/inst/mmcm_adv_inst/CLKOUT1]]] 10.0 [get_ports lockLed*n]
 
-#set_false_path -to [get_ports {lockLed*n pll*_CS pll*_REF pll_SCK pll_SDI spiFlashMOSI spiFlashCSn ch*DataOut ch*ClkOut}]
+set_false_path -to [get_ports {lockLed*n pll*_CS pll*_REF pll_SCK pll_SDI spiFlashMOSI spiFlashCSn ch*DataOut ch*ClkOut}]
 
-set_false_path -from [get_pins stcDemod/Trellis_u/td/stageSetup*/refValid_re*/C] -to [get_pins {stcDemod/Trellis_u/td/stage*/acs*/cmag/mpy*/p_reg/A[*]}]
-set_false_path -from [get_pins {stcDemod/Trellis_u/td/stage*/wrAddr_reg[*]/C}] -to [get_pins {stcDemod/Trellis_u/td/stage*/acs*/cmag/mpy*/p_reg/A[*]}]
-set_false_path -from [get_pins stcDemod/Trellis_u/td/stageSetup*/refValid_re*/C] -to [get_pins {stcDemod/Trellis_u/td/stage*/acs*/cmag/mpy*/p_reg/B[*]}]
-set_false_path -from [get_pins {stcDemod/Trellis_u/td/stage*/wrAddr_reg[*]/C}] -to [get_pins {stcDemod/Trellis_u/td/stage*/acs*/cmag/mpy*/p_reg/B[*]}]
+set_false_path -from [get_pins -hierarchical -regexp {.*stcDemod/Trellis_u/td/stageSetup[0-9]*/refValid_reg.*/C$.*}] -to [get_pins -hierarchical -regexp {.*/td/stage[0-9]*/acs[0-9]*/cmag/.*/p_reg/A\[.*}]
+set_false_path -from [get_pins -hierarchical -regexp {.*stcDemod/Trellis_u/td/stage[0-9]*/wrAddr_reg\[.*/C$.*}] -to [get_pins -hierarchical -regexp {.*/td/stage[0-9]*/acs[0-9]*/cmag/.*/p_reg/A\[.*}]
+set_false_path -from [get_pins -hierarchical -regexp {.*stcDemod/Trellis_u/td/stageSetup[0-9]*/refValid_reg.*/C$.*}] -to [get_pins -hierarchical -regexp {.*/td/stage[0-9]*/acs[0-9]*/cmag/.*/p_reg/B\[.*}]
+set_false_path -from [get_pins -hierarchical -regexp {.*stcDemod/Trellis_u/td/stage[0-9]*/wrAddr_reg\[.*/C$.*}] -to [get_pins -hierarchical -regexp {.*/td/stage[0-9]*/acs[0-9]*/cmag/.*/p_reg/B\[.*}]
 
 set_false_path -from [get_ports {fb_data[*]}] -to [get_clocks sysClk]
+
+
