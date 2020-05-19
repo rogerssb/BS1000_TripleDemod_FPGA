@@ -8,14 +8,18 @@ module stcFramer
     input                       clkEn,
     input                       reset,
     input                       payloadBit,
-    output  reg                 payloadBitEn,
+    output                      payloadBitEn,
     output                      stcBit0,
     output                      stcBit1,
     output                      stcFrameSync
 );
 
+`ifdef SIMULATE
+`define STC_PAYLOAD_BITS    256
+`else
 `define STC_PAYLOAD_BITS    3200
-//`define STC_PAYLOAD_BITS    256
+`endif
+
 `define STC_PILOT_BITS      128
 `define STC_PILOT0          128'ha88d_9ad4_dc40_4947_e292_023b_2b59_b115
 `define STC_PILOT1          128'he3c7_7761_f070_36be_7d6c_0e0f_86ee_e3c7
@@ -60,14 +64,14 @@ module stcFramer
             endcase
         end
     end
+    assign              payloadBitEn = (stcState == `STC_PAYLOAD);
 
     reg         [1:0]   payloadBitcount;
     wire                loadPayloadSR =     (stcState == `STC_PAYLOAD) && (bitcount[1:0] == 2'b00);
     wire                shiftPayloadSR =    (stcState == `STC_PAYLOAD) && (bitcount[1:0] != 2'b00);
-    reg         [3:0]   b, temp;
+    reg         [3:0]   b;
     always @(posedge clk) begin
         if (reset) begin
-//            payloadBitEn <= 0;
             b <= 0;
             payloadBitcount <= 0;
         end
@@ -75,15 +79,11 @@ module stcFramer
             if (loadPayloadSR) begin
                 payloadBitcount <= 3;
             end
-//            else if (payloadBitcount == 0) begin
-//                payloadBitEn <= 0;
-//            end
             else begin
                 payloadBitcount <= payloadBitcount - 1;
             end
             // Load and shift the STC encoded payload bits
             if (loadPayloadSR) begin
-                temp <= {b[0],b[1],b[2],b[3]};
                 payload0SR <= {b[0],b[1],~b[2], b[3]};
                 payload1SR <= {b[2],b[3], b[0],~b[1]};
             end
@@ -95,33 +95,11 @@ module stcFramer
                 b <= {payloadBit,b[3:1]};
             end
         end
-        payloadBitEn <= (stcState == `STC_PAYLOAD);
     end
 
     assign stcBit0 = (stcState == `STC_PILOT) ? pilot0SR[127] : payload0SR[3];
     assign stcBit1 = (stcState == `STC_PILOT) ? pilot1SR[127] : payload1SR[3];
     assign stcFrameSync = (stcState == `STC_PILOT);
-
-    reg [11:0]   counter;
-    reg         frameSyncDly;
-
-    always @ (posedge clk) begin
-        frameSyncDly <= stcFrameSync;
-        if (reset) begin
-            counter <= 0;
-        end
-        else if (frameSyncDly != stcFrameSync) begin
-           counter <= 0;
-        end
-        else if (clkEn) begin
-            if (stcFrameSync) begin
-                counter <= counter + 1;
-            end
-            else if (payloadBitEn) begin
-                counter <= counter + 1;
-            end
-        end
-    end
 
 endmodule
 

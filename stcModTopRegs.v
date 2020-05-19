@@ -28,6 +28,8 @@ module stcModTopRegs(
     output  reg signed  [17:0]  h0Imag,
     output  reg signed  [17:0]  h1Real,
     output  reg signed  [17:0]  h1Imag,
+    output  reg signed  [7:0]   h0Tau,
+    output  reg signed  [7:0]   h1Tau,
     output  reg signed          txEnable
 );
 
@@ -113,6 +115,8 @@ module stcModTopRegs(
                 `SYS_STCMOD_H0IMAG:     h0Imag[7:0] <= dataIn[7:0];
                 `SYS_STCMOD_H1REAL:     h1Real[7:0] <= dataIn[7:0];
                 `SYS_STCMOD_H1IMAG:     h1Imag[7:0] <= dataIn[7:0];
+                `SYS_STCMOD_H0TAU:      h0Tau <= dataIn[7:0];
+                `SYS_STCMOD_H1TAU:      h1Tau <= dataIn[7:0];
                 default: ;
             endcase
         end
@@ -174,6 +178,12 @@ module stcModTopRegs(
                     end
                 `SYS_STCMOD_H1IMAG: begin
                     dataOut = {14'b0,h1Imag};
+                    end
+                `SYS_STCMOD_H0TAU: begin
+                    dataOut = {24'h0,h0Tau};
+                    end
+                `SYS_STCMOD_H1TAU: begin
+                    dataOut = {24'h0,h1Tau};
                     end
                 default: begin
                     dataOut = 32'b0;

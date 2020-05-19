@@ -12,6 +12,10 @@ module stcMod(
     input                       modData0,
     input                       modData1,
     input                       modDataValid,
+    `ifdef ADD_TAU
+    input       signed  [7:0]   h0Tau,
+    input       signed  [7:0]   h1Tau,
+    `endif
     input                       txEnable,
     output  reg                 posEdgeModClkEn,
     output      signed  [17:0]  modWaveform0,
@@ -102,13 +106,88 @@ module stcMod(
         .deviation1(stcDev1)
     );
 
+    `ifdef ADD_TAU
+    wire    signed  [2:0]   h0SampleDelay;
+    wire    signed  [4:0]   h0FractionalDelay;
+    assign h0SampleDelay = h0Tau[7:5];
+    assign h0FractionalDelay = h0Tau[4:0];
+    reg     signed  [17:0]  stcSR0[0:3];
+    reg     signed  [17:0]  delay0In;
+    always @(posedge clk) begin
+        if (stcDevClkEn) begin
+            stcSR0[0] <= stcDev0;
+            stcSR0[1] <= stcSR0[0];
+            stcSR0[2] <= stcSR0[1];
+            stcSR0[3] <= stcSR0[2];
+            case (h0SampleDelay) 
+                3'b000: delay0In <= stcDev0;
+                3'b001: delay0In <= stcSR0[0];
+                3'b010: delay0In <= stcSR0[1];
+                3'b011: delay0In <= stcSR0[2];
+                3'b100,
+                3'b101,
+                3'b110,
+                3'b111: delay0In <= stcSR0[3];
+            endcase
+        end
+    end
+    wire    signed  [17:0]  stcDelay0;
+    fractionalDelay delay0( 
+        .clk(clk), 
+        .reset(reset), 
+        .sync(stcDevClkEn),
+        .sampleOffset(~h0FractionalDelay),
+        .in(delay0In),
+        .out(stcDelay0)
+    );
+    wire    signed  [2:0]   h1SampleDelay;
+    wire    signed  [4:0]   h1FractionalDelay;
+    assign h1SampleDelay = h1Tau[7:5];
+    assign h1FractionalDelay = h1Tau[4:0];
+    reg     signed  [17:0]  stcSR1[0:3];
+    reg     signed  [17:0]  delay1In;
+    always @(posedge clk) begin
+        if (stcDevClkEn) begin
+            stcSR1[0] <= stcDev1;
+            stcSR1[1] <= stcSR1[0];
+            stcSR1[2] <= stcSR1[1];
+            stcSR1[3] <= stcSR1[2];
+            case (h1SampleDelay) 
+                3'b000: delay1In <= stcDev1;
+                3'b001: delay1In <= stcSR1[0];
+                3'b010: delay1In <= stcSR1[1];
+                3'b011: delay1In <= stcSR1[2];
+                3'b100,
+                3'b101,
+                3'b110,
+                3'b111: delay1In <= stcSR1[3];
+            endcase
+        end
+    end
+    wire    signed  [17:0]  stcDelay1;
+    fractionalDelay delay1( 
+        .clk(clk), 
+        .reset(reset), 
+        .sync(stcDevClkEn),
+        .sampleOffset(~h1FractionalDelay),
+        .in(delay1In),
+        .out(stcDelay1)
+    );
+    `endif
+
+
     reg     [17:0]  cicIn0;
     reg     [17:0]  cicIn1;
     reg             cicClkEn;
     always @(posedge clk) begin
         if (clkEn) begin
+            `ifdef ADD_TAU
+            cicIn0 <= stcDelay0;
+            cicIn1 <= stcDelay1;
+            `else
             cicIn0 <= stcDev0;
             cicIn1 <= stcDev1;
+            `endif
             cicClkEn <= stcDevClkEn;
         end
     end
@@ -121,7 +200,11 @@ module stcMod(
             phaseAccum0 <= 0;
         end
         else if (clkEn) begin
+            `ifdef ADD_TAU
+            phaseAccum0 <= phaseAccum0 + {{14{stcDelay0[17]}},stcDelay0};
+            `else
             phaseAccum0 <= phaseAccum0 + {{14{stcDev0[17]}},stcDev0};
+            `endif
         end
     end
     `endif

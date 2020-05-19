@@ -182,6 +182,9 @@ module stcModTop (
     wire            [4:0]   pnPolyLength;
     wire    signed  [17:0]  h0Real,h0Imag;
     wire    signed  [17:0]  h1Real,h1Imag;
+    `ifdef ADD_TAU
+    wire    signed  [7:0]   h0Tau,h1Tau;
+    `endif
     wire            [31:0]  stcTopDout;
     stcModTopRegs topRegs(
         .busClk(busClk),
@@ -201,6 +204,10 @@ module stcModTop (
         .h0Imag(h0Imag),
         .h1Real(h1Real),
         .h1Imag(h1Imag),
+        `ifdef ADD_TAU
+        .h0Tau(h0Tau),
+        .h1Tau(h1Tau),
+        `endif
         .txEnable(txEnableAsync)
     );
     reg [1:0]   txEnableSR;
@@ -267,6 +274,10 @@ module stcModTop (
         .modData0(stcBit0),
         .modData1(stcBit1),
         .modDataValid(txEnable),
+        `ifdef ADD_TAU
+        .h0Tau(h0Tau),
+        .h1Tau(h1Tau),
+        `endif
         .txEnable(txEnable),
         .posEdgeModClkEn(posEdgeModClkEn),
         .modWaveform0(modWaveform0),

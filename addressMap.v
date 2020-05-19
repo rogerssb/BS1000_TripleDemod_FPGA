@@ -4,17 +4,19 @@
 // FPGA Image Types
 // NOTE: Multi H is listed as 3 because we don't want to rebuild the image to
 // add the readback circuitry and it defaults to 3
-`define LEGACY_DEMOD_IMAGE          16'h0
-`define TRELLIS_DEMOD_IMAGE         16'h1
-`define TWOCHANNEL_SCDEMOD_IMAGE    16'h2
-`define MULTIH_DEMOD_IMAGE          16'h3
-`define BITSYNC_BERT_IMAGE          16'h4
-`define LEGACY_CMA_IMAGE            16'h5
-`define SEMCO_DEMOD_IMAGE           16'h6
-`define LDPC_DEMOD_IMAGE            16'h7
-`define STC_DEMOD_IMAGE             16'h8
-`define STC_MOD_IMAGE               16'h9
-
+`define LEGACY_DEMOD_IMAGE          16'd0
+`define TRELLIS_DEMOD_IMAGE         16'd1
+`define TWOCHANNEL_SCDEMOD_IMAGE    16'd2
+`define MULTIH_DEMOD_IMAGE          16'd3
+`define BITSYNC_BERT_IMAGE          16'd4
+`define LEGACY_CMA_IMAGE            16'd5
+`define SEMCO_DEMOD_IMAGE           16'd6
+`define LDPC_DEMOD_IMAGE            16'd7
+`define STC_DEMOD_IMAGE             16'd8
+// FPGA2: Two channel viterbi with PCM decoder
+`define VITERBI_DEMOD_IMAGE         16'd9
+// STC Modulator on a BS1000
+`define STC_MOD_IMAGE               16'd10
 
 //`define INTERNAL_ADAPT
 `define SYM_DEVIATION
@@ -133,12 +135,12 @@
 `define STC_MOD
 `define R6100
 `endif
-
 `ifdef STC_MOD
 `define USE_BUS_CLOCK
 `define USE_VIVADO_CORES
 `define USE_DDC_FIR
 `define ADD_SPI_GATEWAY
+`define ADD_TAU
 `endif
 
 `ifdef BITSYNC_BERT
@@ -785,18 +787,20 @@
 //-------------------------------- STC Mod ------------------------------------
 
 // Top level registers
-`define STC_MOD_SPACE       13'b0_00xx_000x_xxxx
+`define STC_MOD_SPACE       13'b0_00xx_00xx_xxxx
     // Define the system top level memory map
-    `define SYS_RESET           13'bx_xxxx_xxx0_000x
-    `define SYS_VERSION         13'bx_xxxx_xxx0_001x
-    `define SYS_STCMOD_H0REAL   13'bx_xxxx_xxx0_01xx
-    `define SYS_STCMOD_H0IMAG   13'bx_xxxx_xxx0_10xx
-    `define SYS_REBOOT_ADDR     13'bx_xxxx_xxx0_11xx
-    `define SYS_TYPE            13'bx_xxxx_xxx1_000x
-    `define SYS_STCMOD_CONTROL  13'bx_xxxx_xxx1_001x
-    `define SYS_STCMOD_PNPOLY   13'bx_xxxx_xxx1_01xx
-    `define SYS_STCMOD_H1REAL   13'bx_xxxx_xxx1_10xx
-    `define SYS_STCMOD_H1IMAG   13'bx_xxxx_xxx1_11xx
+    `define SYS_RESET           13'bx_xxxx_xx00_000x
+    `define SYS_VERSION         13'bx_xxxx_xx00_001x
+    `define SYS_STCMOD_H0REAL   13'bx_xxxx_xx00_01xx
+    `define SYS_STCMOD_H0IMAG   13'bx_xxxx_xx00_10xx
+    `define SYS_REBOOT_ADDR     13'bx_xxxx_xx00_11xx
+    `define SYS_TYPE            13'bx_xxxx_xx01_000x
+    `define SYS_STCMOD_CONTROL  13'bx_xxxx_xx01_001x
+    `define SYS_STCMOD_PNPOLY   13'bx_xxxx_xx01_01xx
+    `define SYS_STCMOD_H1REAL   13'bx_xxxx_xx01_10xx
+    `define SYS_STCMOD_H1IMAG   13'bx_xxxx_xx01_11xx
+    `define SYS_STCMOD_H0TAU    13'bx_xxxx_xx10_00xx
+    `define SYS_STCMOD_H1TAU    13'bx_xxxx_xx10_01xx
 
 `define FMMODSPACE              13'b0_00xx_011x_xxxx
     `define FM_MOD_FREQ         12'bxxxx_xxx0_00xx
