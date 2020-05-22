@@ -121,7 +121,7 @@ module stcDemodTop (
 
 );
 
-    parameter VER_NUMBER = 16'd654;
+    parameter VER_NUMBER = 16'd659;
 
 
 //******************************************************************************

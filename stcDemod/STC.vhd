@@ -375,8 +375,10 @@ ARCHITECTURE rtl OF STC IS
 -- todo, remove
    SIGNAL   ExpectedData,
             TrellisOffsetSlv,
+	    PilotSyncOffsetSlv,
             m_ndx0Slv,
             m_ndx1Slv         : SLV4;
+   SIGNAL   PilotSyncOffset   : signed(3 downto 0);
    SIGNAL   TrellisOffset     : signed(3 downto 0);
    SIGNAL   DataAddr          : ufixed(9 downto 0);
    SIGNAL   DataAddr_i        : natural range 0 to 1023;
@@ -571,6 +573,8 @@ BEGIN
    StartOfFrame   <= PhaseDiffEn;
    PilotFound     <= PilotFoundPD and PilotFoundCE;
 
+   PilotSyncOffset <= signed(PilotSyncOffsetSlv);
+
    PS_u : pilotsync
       PORT MAP (
          clk            => Clk186,
@@ -582,6 +586,7 @@ BEGIN
          CorrPntr       => CorrPntr,
          StartNextFrame => StartNextFrame,
          Offset         => x"A",
+         --Offset         => PilotSyncOffsetSlv,
          RealIn         => PilotRealOut,
          ImagIn         => PilotImagOut,
          RealOut        => RealOutPS,     -- 186Mhz
@@ -597,9 +602,9 @@ BEGIN
          probe_out0  => open,
          probe_out1  => open,
          probe_out2  => open,
-         probe_out3  => MiscBits,
+         probe_out3  => open,
          probe_out4  => TrellisOffsetSlv,
-         probe_out5  => ClkPerTrellis
+         probe_out5  => PilotSyncOffsetSlv
    );
    end generate;
 */
