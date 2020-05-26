@@ -375,10 +375,8 @@ ARCHITECTURE rtl OF STC IS
 -- todo, remove
    SIGNAL   ExpectedData,
             TrellisOffsetSlv,
-	    PilotSyncOffsetSlv,
             m_ndx0Slv,
             m_ndx1Slv         : SLV4;
-   SIGNAL   PilotSyncOffset   : signed(3 downto 0);
    SIGNAL   TrellisOffset     : signed(3 downto 0);
    SIGNAL   DataAddr          : ufixed(9 downto 0);
    SIGNAL   DataAddr_i        : natural range 0 to 1023;
@@ -573,8 +571,6 @@ BEGIN
    StartOfFrame   <= PhaseDiffEn;
    PilotFound     <= PilotFoundPD and PilotFoundCE;
 
-   PilotSyncOffset <= signed(PilotSyncOffsetSlv);
-
    PS_u : pilotsync
       PORT MAP (
          clk            => Clk186,
@@ -586,7 +582,6 @@ BEGIN
          CorrPntr       => CorrPntr,
          StartNextFrame => StartNextFrame,
          Offset         => x"A",
-         --Offset         => PilotSyncOffsetSlv,
          RealIn         => PilotRealOut,
          ImagIn         => PilotImagOut,
          RealOut        => RealOutPS,     -- 186Mhz
@@ -594,6 +589,7 @@ BEGIN
          StartOut       => StartOutPS,
          ValidOut       => ValidOutPS
    );
+   
 /*
    g1 : if (not SIM_MODE) generate
    VioPhase  : Vio2x18
@@ -604,13 +600,13 @@ BEGIN
          probe_out2  => open,
          probe_out3  => open,
          probe_out4  => TrellisOffsetSlv,
-         probe_out5  => PilotSyncOffsetSlv
+         probe_out5  => open
    );
    end generate;
 */
-   MiscBits       <= 18x"80F4";
-   TrellisOffsetSlv <= x"D";
 
+   MiscBits       <= 18x"0008";
+   TrellisOffsetSlv <= x"0";
    TrellisOffset  <= signed(TrellisOffsetSlv);
 
    InterBrikClk : process(Clk186) is
@@ -760,8 +756,10 @@ BEGIN
          DacMux(1)  <= PhsPeak1;       --
          DacMux(2)  <= m_ndx0Slv & 14x"0";
          DacMux(3)  <= m_ndx1Slv & 14x"0";
-         DacMux(4)  <= Phase0A & 6x"0";
-         DacMux(5)  <= PhaseOut;
+         -- DacMux(4)  <= Phase0A & 6x"0";
+         -- DacMux(5)  <= PhaseOut;
+         DacMux(4)  <= ResampleR;
+         DacMux(5)  <= ResampleI;
          DacMux(6)  <= PhaseDiff;
          DacMux(7)  <= H0Phase & 6x"0";
          DacMux(8)  <= H1Phase & 6x"0";

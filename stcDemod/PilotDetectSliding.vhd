@@ -956,9 +956,8 @@ begin
                end if;
                PilotFound  <= PilotFoundPend;
                MagDelay    <= MagDelay(27 downto 0) & PilotMag; -- only use last 26, but PeakPointer goes to 28
-            end if;
 
-            if (CalcThreshold) then          -- Place threshold in center of two highest peaks
+            elsif (CalcThreshold) then          -- Place threshold in center of two highest peaks
                CurrentPeak <= MagDelay(PeakPointer);
                CurrentMag0 <= MagDelay0(PeakPointer);
                CurrentMag1 <= MagDelay1(PeakPointer);

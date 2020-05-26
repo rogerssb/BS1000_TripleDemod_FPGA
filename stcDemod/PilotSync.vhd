@@ -125,6 +125,10 @@ ARCHITECTURE rtl OF PilotSync IS
             PilotValid,
             Missed               : std_logic;
    signal   Offset_u             : ufixed(3 downto 0);
+   signal   MissedCnt            : natural range 0 to 3;
+
+   attribute KEEP : string;
+   attribute KEEP of Captured : signal is "true";
 
    attribute mark_debug : string;
    attribute mark_debug of FrmSmplCount, StartOut, PilotValid, PilotPulseIn,
@@ -139,7 +143,7 @@ BEGIN
       end if;
    end process IlaProcess;
 
-   PilotValid  <= '1' when ((PilotPulseIn = '1') and ((PilotFound = '0') or (FrmSmplCount > FRAME_LENGTH_4 - 256))) else '0'; -- pulse should be at 13312
+   PilotValid  <= '1' when ((PilotPulseIn = '1') and ((PilotFound = '0') or (MissedCnt = 3) or (FrmSmplCount > FRAME_LENGTH_4 - 256))) else '0'; -- pulse should be at 13312
 
    ClkProcess: process (clk)
    begin
@@ -153,6 +157,7 @@ BEGIN
             PckSmplCount   <= 0;
             PacketCount    <= 0;
             Missed         <= '0';
+            MissedCnt       <=  0;
             Captured       <= '0';
             StartOut       <= '0';
             ValidOut       <= '0';
@@ -230,10 +235,14 @@ BEGIN
                StartNextFrame  <= resize(CorrPntr - 512 - 8 + FRAME_LENGTH_4, StartNextFrame); -- offset added in STC
                Captured        <= '1';
                FrmSmplCount <= 0;
+               MissedCnt         <= 0;
             -- if we don't get a PilotValid for a frame, the RdAddr should continue but need a new Start sequence
             elsif (FrmSmplCount >= FRAME_LENGTH_4 + MISSED_PILOT) then    -- maintain sync over missed pilots, should have gone off 12 samples and one packet ago
                FrmSmplCount <= FrmSmplCount - FRAME_LENGTH_4 + 1;
                Missed <= '1';
+               if (MissedCnt < 3) then
+                  MissedCnt <= MissedCnt + 1;   -- if missed for 4 frames, open window on PilotPulseIn
+               end if;
             elsif (ValidIn) then
                FrmSmplCount <= FrmSmplCount + 1;
             end if;
