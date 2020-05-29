@@ -108,9 +108,11 @@ module stcDownconverter(
     /******************************************************************************
                                 Narrowband Channel AGC
     ******************************************************************************/
+    reg     signed  [17:0]  iFmNew,qFmNew;
     wire    [31:0]  nbAgcDout;
     channelAGC channelAGC(
-        .clk(clk), .reset(reset), .clkEn(ddcSync & !locked),
+        //.clk(clk), .reset(reset), .clkEn(ddcSync & !locked),
+        .clk(clk), .reset(reset), .clkEn(maxChEstClkEn),
         `ifdef USE_BUS_CLOCK
         .busClk(busClk),
         `endif
@@ -119,7 +121,8 @@ module stcDownconverter(
         .addr(addr),
         .din(din),
         .dout(nbAgcDout),
-        .iIn(iDdc),.qIn(qDdc),
+        //.iIn(iDdc),.qIn(qDdc),
+        .iIn(iFmNew),.qIn(qFmNew),
         .agcGain(nbAgcGain)
     );
 
@@ -160,18 +163,17 @@ module stcDownconverter(
     /******************************************************************************
                                Phase/Freq/Mag Detector
     ******************************************************************************/
-    reg     signed  [17:0]  iFmNew,qFmNew;
-    reg                     fmDemodNewClkEn;
-    always @* begin
-        fmDemodNewClkEn = maxChEstClkEn;
-        iFmNew = maxChEstI;
-        qFmNew = maxChEstQ;
+    always @(posedge clk) begin
+        if (maxChEstClkEn) begin
+            iFmNew = maxChEstI;
+            qFmNew = maxChEstQ;
+        end
     end
 
     wire    [12:0]  magNew;
     fmDemod fmDemodNew(
         .clk(clk), .reset(reset),
-        .clkEn(fmDemodNewClkEn),
+        .clkEn(ddcSync),
         .iFm(iFmNew),.qFm(qFmNew),
         .demodMode(demodMode),
         .phase(),
