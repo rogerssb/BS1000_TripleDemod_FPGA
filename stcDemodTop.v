@@ -425,6 +425,7 @@ module stcDemodTop (
     wire    signed  [31:0]  pilotFreqLag;
     wire    signed  [31:0]  pilotFreqLead;
     wire    signed  [11:0]  pilotLeadError;
+    wire    signed  [11:0]  pilotLagError;
     wire    signed  [11:0]  pilotFreqError;
     wire            [31:0]  pilotDout;
     stcLoop #(.RegSpace(`PILOT_LF_SPACE)) pilot(
@@ -444,6 +445,7 @@ module stcDemodTop (
         .carrierLeadFreq(pilotFreqLead),
         .carrierFreqEn(pilotFreqOffsetEn),
         .phaseLoopError(pilotLeadError),
+        .lagError(pilotLagError),
         .avgFreqError(pilotFreqError),
         .freqAcquired(pilotFreqAcquired),
         .lockCounter()
@@ -681,7 +683,7 @@ module stcDemodTop (
                 interp0ClkEn <= stcDac0ClkEn;
             end
             default: begin
-                interp0DataIn <= {pilotLeadError,6'b0};
+                interp0DataIn <= {pilotLagError,6'b0};
                 interp0ClkEn <= 1'b1;
             end
         endcase
@@ -766,7 +768,8 @@ module stcDemodTop (
                 interp1ClkEn <= stcDac1ClkEn;
             end
             default: begin
-                interp1DataIn <= {pilotFreqError,6'b0};
+                interp1DataIn <= {1'b0,pilotFreqAcquired,16'b0};
+                //interp1DataIn <= {1'b0,pilotPhaseDiffEn,16'b0};
                 interp1ClkEn <= 1'b1;
             end
         endcase

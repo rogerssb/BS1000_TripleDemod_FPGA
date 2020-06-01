@@ -394,7 +394,7 @@ ARCHITECTURE rtl OF STC IS
    attribute mark_debug : string;
    attribute mark_debug of EstimatesDone,
                   StartIla, ValidIla, InRBrik2Ila, InIBrik2Ila, PilotFoundCE, PilotFoundPD,
-                  PhaseDiff, CorrPntr, m_ndx0Slv, m_ndx1Slv, Mag0GtMag1,
+                  PhaseDiff, CorrPntr, m_ndx0Slv, m_ndx1Slv, Mag0GtMag1, HxThresh,
                   H0Phase, H1Phase, H0Mag, H1Mag, deltaTauEstSlv,
                   DataOut, ClkOutEn, ValidData2047 : signal is "true";
 
@@ -779,15 +779,16 @@ BEGIN
          elsif (H1Mag_u > H0Mag_u sla 1) then
             Mag0GtMag1   <= '0';
          end if;
-         PilotFoundCE <= '1' when (H0Mag_u > HxThresh) or (H1Mag_u > HxThresh) else '0';  -- about .15 at noise threshold
+
+         -- Add threshold hysteresis to prevent PilotFoundCE oscillating when power is around threshold.
+         HxThresh       <= to_ufixed('0' & HxThreshSlv, HxThresh) when (not PilotFoundCE) else to_ufixed("00" & HxThreshSlv(11 downto 1), HxThresh);
+         PilotFoundCE   <= '1' when (H0Mag_u > HxThresh) or (H1Mag_u > HxThresh) else '0';  -- about .15 at noise threshold
          if (CordicValid) then
             H0Mag_u  <= to_ufixed(H0Mag, H0Mag_u);
             H1Mag_u  <= to_ufixed(H1Mag, H1Mag_u);
          end if;
       end if;
    end process DacOutputs;
-
-   HxThresh <= to_ufixed('0' & HxThreshSlv, HxThresh);
 
    cordic0 : vm_cordic_fast
       GENERIC MAP (

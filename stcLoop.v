@@ -26,6 +26,7 @@ module stcLoop(
     output      signed  [31:0]  carrierLeadFreq,
     output                      carrierFreqEn,
     output  reg signed  [11:0]  phaseLoopError,
+    output      signed  [11:0]  lagError,
     output      signed  [11:0]  avgFreqError,
     output  reg                 freqAcquired,
     output  reg         [15:0]  lockCounter
@@ -85,8 +86,28 @@ module stcLoop(
 
 
     /**************************** Adjust Error ************************************/
-    reg signed [11:0] freqLoopError;
+    `define USE_PILOT_FREQ
+    `ifdef USE_PILOT_FREQ
+    reg signed  [11:0]  prevPhase;
+    reg signed  [11:0]  newPhase;
+    `endif
+    reg signed  [11:0]  freqLoopError;
     always @(posedge clk) begin
+        `ifdef USE_PILOT_FREQ
+        if (clkEn) begin
+            newPhase <= phase;
+            prevPhase <= newPhase;
+        end
+        if (zeroError || !freqAcquired) begin
+            phaseLoopError <= 12'h0;
+        end
+        else if (invertError) begin
+            phaseLoopError <= prevPhase - newPhase;
+        end
+        else begin
+            phaseLoopError <= newPhase - prevPhase;
+        end
+        `else
         if (zeroError || !freqAcquired) begin
             phaseLoopError <= 12'h0;
         end
@@ -96,6 +117,7 @@ module stcLoop(
         else begin
             phaseLoopError <= phase;
         end
+        `endif
         freqLoopError <= freq;
     end
 
@@ -122,8 +144,23 @@ module stcLoop(
         .acqTrackControl(0),
         .track(1'b0),
         .leadError(leadError)
-        );
+    );
 
+    `ifdef USE_PILOT_FREQ
+    assign  lagError = freqAcquired ? phaseLoopError : freqLoopError;
+    stcLagGain12 lagGain (
+        .clk(clk), .clkEn(loopEnSR[1]), .reset(reset),
+        .phaseError(lagError),
+        .freqError(lagError),
+        .phaseLagExp(phaseLagExp),
+        .freqLagExp(freqLagExp),
+        .upperLimit(upperLimit),
+        .lowerLimit(lowerLimit),
+        .freqAcquired(freqAcquired),
+        .clearAccum(clearAccum),
+        .lagAccum(lagAccum)
+    );
+    `else
     stcLagGain12 lagGain (
         .clk(clk), .clkEn(loopEnSR[0]), .reset(reset),
         .phaseError(phaseLoopError),
@@ -135,7 +172,8 @@ module stcLoop(
         .freqAcquired(freqAcquired),
         .clearAccum(clearAccum),
         .lagAccum(lagAccum)
-        );
+    );
+    `endif
 
     // Final filter output
     reg signed  [39:0]  filterSum;
