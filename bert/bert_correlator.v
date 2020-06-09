@@ -52,7 +52,6 @@ bert_lfsr bert_lfsr (
   .reload(reload),
   .load_data(data_buffer),
   .data(code),
-  .serialC(),
   .serial()
 );
 

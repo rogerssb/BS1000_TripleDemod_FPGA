@@ -28,11 +28,11 @@
 -- 9/17/16 Initial release FZ
 -------------------------------------------------------------------------------
 
-library ieee;
-use ieee.std_logic_1164.all;
-use ieee.std_logic_textio.all;
-use ieee.numeric_std.all;
-use work.Semco_pkg.all;
+LIBRARY IEEE;
+USE IEEE.std_logic_1164.ALL;
+USE IEEE.numeric_std.ALL;
+use work.fixed_pkg.all;
+use work.Semco_pkg.ALL;
 
 entity FireberdDriveTb is
 end FireberdDriveTb;
@@ -43,18 +43,18 @@ architecture rtl of FireberdDriveTb is
 
    COMPONENT FireberdDrive IS
       PORT(
-         clk,
-         reset,
-         ce,
-         Clk10MIn,
-         ValidIn        : IN  std_logic;
-         RecoveredData  : IN  SLV4;
-         DataOut,
-         ClkOut,
-         OverFlow,
-         UnderFlow      : OUT std_logic
+      clk,
+      reset,
+      ce,
+      MsbFirst,
+      ValidIn        : IN  std_logic;
+      RecoveredData  : IN  SLV4;
+      ClocksPerBit   : IN  sfixed(0 downto -15);
+      DataOut,
+      ClkOut         : OUT std_logic
       );
    END COMPONENT FireberdDrive;
+
 -------------------------------------------------------------------------------
 --                       CONSTANT DEFINITIONS
 -------------------------------------------------------------------------------
@@ -64,13 +64,19 @@ architecture rtl of FireberdDriveTb is
    signal   ce                   : std_logic := '1';
 
    SIGNAL   ValidIn,
-            OverFlow,
-            UnderFlow,
+            TrellisOutEn,
+            PrnError0,
+            PrnError1,
+            PrnError2,
+            PrnError3,
             DataOut,
             ClkOut,
             ClkDelay          : std_logic := '0';
    SIGNAL   RecoveredData     : unsigned(3 downto 0) := x"5";
    SIGNAL   Count             : natural range 0 to 3;
+   SIGNAL   Shifter,
+            PrnShift          : SLV18;
+   SIGNAL   TrellisBits       : SLV4;
 
 begin
 
@@ -85,7 +91,7 @@ begin
    end process;
 
    reset_process : process begin
-      wait for 2 ns;
+      wait for 20 ns;
       reset <= '0';
    end process reset_process;
 
@@ -100,6 +106,27 @@ begin
             Count <= Count + 1;
             ValidIn <= '0';
          end if;
+
+         if (reset) then
+            Shifter <= 18x"3FFFF";
+         else
+            Shifter <= Shifter(16 downto 0) & xor(Shifter(14 downto 13));
+            if (Count = 3) then
+               TrellisBits <= Shifter(3 downto 0);
+               TrellisOutEn <= '1';
+            else
+               TrellisOutEn <= '0';
+            end if;
+         end if;
+
+         if (TrellisOutEn) then
+            PrnShift <= PrnShift(13 downto 0) & TrellisBits;
+            PrnError0 <= PrnShift(14) xor PrnShift(13) xor TrellisBits(3);
+            PrnError1 <= PrnShift(13) xor PrnShift(12) xor TrellisBits(2);
+            PrnError2 <= PrnShift(12) xor PrnShift(11) xor TrellisBits(1);
+            PrnError3 <= PrnShift(11) xor PrnShift(10) xor TrellisBits(0);
+         end if;
+
       end if;
    end process;
 
@@ -108,13 +135,12 @@ begin
       clk            => clk,
       reset          => reset,
       ce             => ce,
+      MsbFirst       => '0',
       ValidIn        => ValidIn,
-      Clk10MIn       => clk10,
       RecoveredData  => std_logic_vector(RecoveredData),
+      ClocksPerBit   => to_sfixed(0.25, 0, -15),
       DataOut        => DataOut,
-      ClkOut         => ClkOut,
-      OverFlow       => OverFlow,
-      UnderFlow      => UnderFlow
+      ClkOut         => ClkOut
    );
 
 end rtl;

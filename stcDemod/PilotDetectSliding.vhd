@@ -690,8 +690,8 @@ begin
       PORT MAP (
          clk   => Clk2x,
          ena   => ValidAbs,
-         x     => to_slv(OverAddR0(5 downto -8)),
-         y     => to_slv(OverAddI0(5 downto -8)),
+         x     => to_slv(OverAddR0(1 downto -12)),
+         y     => to_slv(OverAddI0(1 downto -12)),
          m     => Mag0,          -- m[n:2]
          p     => Phase0,        -- p[n:3]
          enOut => ValidCordic
@@ -704,8 +704,8 @@ begin
       PORT MAP (
          clk   => Clk2x,
          ena   => ValidAbs,
-         x     => to_slv(OverAddR1(5 downto -8)),
-         y     => to_slv(OverAddI1(5 downto -8)),
+         x     => to_slv(OverAddR1(1 downto -12)),
+         y     => to_slv(OverAddI1(1 downto -12)),
          m     => Mag1,
          p     => Phase1,
          enOut => open
@@ -816,7 +816,6 @@ begin
                -- Find the peak of H0 only
                if (Index1 = 525) then     -- setup for next frame
                   AbsPeak0    <= (others=>'0');
-                  AbsPeakIla0 <= to_slv(AbsPeak0);
                   MagDelay0   <= MagDelay0(27 downto 0) & ufixed(MagPeakInt0); -- only use last 26, but PeakPointer goes to 28
                   PhsDelay0   <= PhsDelay0(27 downto 0) & ufixed(PhsPeakInt0);
                elsif (Index1 < 512) then     -- only search first half of the ifft
@@ -833,7 +832,6 @@ begin
                -- Find the peak of H1 only
                if (Index1 = 525) then     -- setup for next frame
                   AbsPeak1    <= (others=>'0');
-                  AbsPeakIla1 <= to_slv(AbsPeak1);
                   MagDelay1   <= MagDelay1(27 downto 0) & ufixed(MagPeakInt1); -- only use last 26, but PeakPointer goes to 28
                   PhsDelay1   <= PhsDelay1(27 downto 0) & ufixed(PhsPeakInt1);
                elsif (Index1 < 512) then     -- only search first half of the ifft

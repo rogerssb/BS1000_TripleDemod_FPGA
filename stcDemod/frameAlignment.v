@@ -33,10 +33,10 @@ module frameAlignment
 
     //------------------------------ Sample Counter ---------------------------
 
-    reg             [14:0]  wrAddr, rdAddr, depth;
-    wire   signed   [15:0]  rdAddr0, rdAddr1;
+(* MARK_DEBUG="true" *)    reg             [14:0]  wrAddr, rdAddr, depth;
+    wire   signed   [15:0]  rdAddr0, rdAddr1, rdAddr0Tmp, rdAddr1Tmp;
     reg                     sofDetected;
-    `define   SOF_ADDRESS `PILOT_SAMPLES_PER_FRAME - 10  // capture address of first sample of next frame.
+    `define   SOF_ADDRESS `PILOT_SAMPLES_PER_FRAME - 10  // since new frame starts writing at 0, frame data starts at known offset
     always @(posedge clk) begin
         if (reset) begin
             myStartOfTrellis <= 0;
@@ -79,13 +79,16 @@ module frameAlignment
                 rdAddr <= `SOF_ADDRESS;  // skip the pilot data at first sync
             end
             else if (fifoRdEn) begin
-                rdAddr <= rdAddr + 1;
+                rdAddr <= (rdAddr < 13311) ? rdAddr + 1 : 0;   // wrap read address back around to find final data at start of next packet.
             end
         end
     end
 
-    assign  rdAddr0 = {1'b0, rdAddr} + {{12{m_ndx0[3]}}, m_ndx0};   // sign extend to add signed offset
-    assign  rdAddr1 = {1'b0, rdAddr} + {{12{m_ndx1[3]}}, m_ndx1};
+    assign  rdAddr0Tmp = {1'b0, rdAddr} + {{12{m_ndx0[3]}}, m_ndx0};   // sign extend to add signed offset
+    assign  rdAddr1Tmp = {1'b0, rdAddr} + {{12{m_ndx1[3]}}, m_ndx1};
+    assign  rdAddr0    = (rdAddr0Tmp < 13312) ? rdAddr0Tmp : rdAddr0Tmp - 13312;    // wrap read address within 0 to 13311 range
+    assign  rdAddr1    = (rdAddr1Tmp < 13312) ? rdAddr1Tmp : rdAddr1Tmp - 13312;
+
 
     RAM_2Reads_1WriteVerWrap #(
       .DATA_WIDTH  (36),

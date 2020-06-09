@@ -386,7 +386,7 @@ module stcDemodTop (
 //******************************************************************************
 
     wire    signed  [8:0]   sampleRateError;
-    wire    signed  [17:0]  iDdc,qDdc;
+    wire    signed  [17:0]  iDdc,qDdc, HxEstR, HxEstI;
     wire    signed  [3:0]   demodDac0Select,demodDac1Select,demodDac2Select;
     wire    signed  [17:0]  demodDac0Data,demodDac1Data,demodDac2Data;
     wire            [4:0]   demodMode;
@@ -402,8 +402,11 @@ module stcDemodTop (
         .din(dataIn),
         .dout(demodDout),
         .iRx(adc0In), .qRx(18'h0),
+        .maxChEstI(HxEstR), .maxChEstQ(HxEstI),
+        .maxChEstClkEn(pilotPhaseDiffEn),
         .sampleRateErrorEn(sampleRateErrorEn),
         .sampleRateError(sampleRateError),
+        .locked(pilotFound),
         .iStc(iDdc), .qStc(qDdc),
         .resampSync(stcDdcClkEn),
         .dac0Select(demodDac0Select),
@@ -527,6 +530,8 @@ module stcDemodTop (
         .ClkOutEn(stcBitEnOut),
         .PilotFound(pilotFound),
         .PilotLocked(pilotLocked),
+        .HxEstR(HxEstR),
+        .HxEstI(HxEstI),
         .Peaks(stcPeaks),
         .DeltaTau(stcDeltaTau),
         .DataOut(stcBit),
@@ -646,15 +651,17 @@ module stcDemodTop (
         .pllOutputClk(pll1_OUT1),
         .sourceSelect(cAndD1SourceSelect),
         .pllReferenceClk(pll1_REF),
-//        .outputClk(ch1ClkOut),
-        .outputClk(),
+        .outputClk(cAndD1ClkOut),
         .outputData(cAndD1DataOut)
     );
-//    assign ch1DataOut = cAndD1DataOut[2];
-    assign ch1DataOut = stcBit;
-    assign ch1ClkOut = stcBitEnOut;
-    assign ch3ClkOut = ch1ClkOut;
+    assign ch1DataOut = cAndD1DataOut[2];
+    assign ch1ClkOut = cAndD1ClkOut;
     assign ch3DataOut = cAndD1DataOut[2];
+    assign ch3ClkOut = cAndD1ClkOut;
+//    assign ch1DataOut = stcBit;
+//    assign ch1ClkOut = stcBitEnOut;
+//    assign ch3DataOut = stcBit;
+//    assign ch3ClkOut = stcBitEnOut;
 
     assign          pll2_REF = 1'b0;
     assign          pll2_Data = 1'b0;
@@ -940,8 +947,8 @@ module stcDemodTop (
     assign dac2_nCs = 1'b0;
     assign dac_sdio = 1'b0;
 
-    assign lockLed0n = pilotFound;
-    assign lockLed1n = pilotLocked;
+    assign lockLed0n = !pilotFound;
+    assign lockLed1n = !pilotLocked;
 
     assign sdiOut = 1'b0;
 
@@ -1201,6 +1208,7 @@ module stcDemodTop (
     assign fb_data = (cs & rd) ? rd_mux : 16'hzzzz;
 
     `endif //R6100
+
 
 endmodule
 

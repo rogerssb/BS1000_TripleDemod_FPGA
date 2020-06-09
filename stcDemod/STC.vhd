@@ -304,6 +304,7 @@ ARCHITECTURE rtl OF STC IS
             TwoClksPerTrellisSw,
             Mag0GtMag1,
             CordicValid,
+            Start93Clk,
             StartInBrik2Dly,
             ValidInBrik2Dly,
             PilotValidOutDly,
@@ -352,13 +353,22 @@ ARCHITECTURE rtl OF STC IS
             StartNextFrame,
             StartFrameOffset,
             CorrPntr          : ufixed(15 downto 0);
-   signal   Ber               : unsigned(11 downto 0) := to_unsigned(200, 12);
+   signal   Ber,
+            Ber2              : unsigned(11 downto 0) := to_unsigned(200, 12);
    SIGNAL   ValidData2047,
             ClkOutEnDly,
             pnBitEn,
             dataBit,
             codeBit,
-            Reload            : std_logic;
+            Reload,
+            ValidDataTrellis,
+            ClkOutEn2,
+            ClkOut2EnDly,
+            DataOut2,
+            pnBitEn2,
+            dataBit2,
+            codeBit2,
+            Reload2           : std_logic;
    SIGNAL   deltaTauEstSlv    : std_logic_vector(5 downto 0);
    SIGNAL   PilotOffset_s     : SFixed(8 downto 0);
    SIGNAL   H0Phase,
@@ -369,17 +379,15 @@ ARCHITECTURE rtl OF STC IS
             InMag             : std_logic_vector(12 downto 0);
    SIGNAL   H0Mag_u,
             H1Mag_u,
-            HxThresh          : ufixed(0 downto -12);
+            HxThresh          : ufixed(12 downto 0);
    SIGNAL   CorrPntr8to0      : std_logic_vector(8 downto 0);
 
 -- todo, remove
    signal   DacCount          : unsigned(17 downto 0) := 18x"0";
-   signal   TrellisOffsetSlv  : SLV4 := 4x"0";
    SIGNAL   ExpectedData,
             m_ndx0Slv,
             m_ndx1Slv         : SLV4;
-   SIGNAL   TrellisOffset,
-            FrameCount        : signed(3 downto 0);
+   SIGNAL   FrameCount        : signed(3 downto 0);
    SIGNAL   DataAddr          : ufixed(9 downto 0);
    SIGNAL   DataAddr_i        : natural range 0 to 1023;
    SIGNAL   BitErrors,
@@ -393,10 +401,10 @@ ARCHITECTURE rtl OF STC IS
    signal   DeltaTauEn        : std_logic := '1';
 
    attribute mark_debug : string;
-   attribute mark_debug of EstimatesDone, BitError, BitErrors, Ber, Peaks,
+   attribute mark_debug of EstimatesDone, BitError, BitErrors, Ber, Peaks, ValidDataTrellis, DataOut2, ClkOutEn2,
                   StartIla, ValidIla, InRBrik2Ila, InIBrik2Ila, PilotFoundCE, PilotFoundPD,
                   CorrPntr8to0, m_ndx0Slv, m_ndx1Slv, Mag0GtMag1, InMag, InPhase,
-                  H0Phase, H1Phase, H0Mag, H1Mag, deltaTauEstSlv,
+                  H0Phase, H1Phase, H0Mag, H1Mag, deltaTauEstSlv, Start93Clk,
                   DataOut, ClkOutEn, ValidData2047 : signal is "true";
 
 BEGIN
@@ -475,6 +483,24 @@ BEGIN
             Ber <= x"000";
             if (Ber >= 200) then
                Reload <= '1';
+            end if;
+         end if;
+
+         -- trellis output data bit errors
+         pnBitEn2 <= ClkOutEn2 and not ClkOut2EnDly;
+         ClkOut2EnDly <= ClkOutEn2;
+         ValidDataTrellis <= (dataBit2 ?= codeBit2);
+         if (not EstimatesDone) then
+            if (pnBitEn2) then
+               Reload2 <= '0';
+            end if;
+            if (pnBitEn2 and not ValidDataTrellis) then
+               Ber2 <= Ber2 + 1;
+            end if;
+         elsif (FrameCount = 0) or (Ber2 > 200) then  -- TODO remove > 200
+            Ber2 <= x"000";
+            if (Ber2 >= 200) then
+               Reload2 <= '1';
             end if;
          end if;
       end if;
@@ -599,12 +625,11 @@ BEGIN
          probe_out1  => open,
          probe_out2  => open,
          probe_out3  => MiscBits,            -- 30008
-         probe_out4  => TrellisOffsetSlv,    -- 0
+         probe_out4  => open   ,    -- 0
          probe_out5  => open        -- 2 to 4
    );
    end generate;
 */
-   TrellisOffset  <= signed(TrellisOffsetSlv);
 
    InterBrikClk : process(Clk186) is
    begin
@@ -619,7 +644,7 @@ BEGIN
             ValidInBrik2Dly <= ValidOutPS;
             InRBrik2Dly     <= RealOutPS;
             InIBrik2Dly     <= ImagOutPS;
-
+            Start93Clk      <= StartOutPS or StartInBrik2Dly;
          end if;
       end if;
    end process InterBrikClk;
@@ -658,8 +683,8 @@ BEGIN
    TP_Process : process(Clk186)
    begin
       if (rising_edge(Clk186)) then
-         m_ndx0Slv      <= std_logic_vector(TrellisOffset + to_signed(m_ndx0, 4));
-         m_ndx1Slv      <= std_logic_vector(TrellisOffset + to_signed(m_ndx1, 4));
+         m_ndx0Slv      <= std_logic_vector(to_signed(m_ndx0, 4));
+         m_ndx1Slv      <= std_logic_vector(to_signed(m_ndx1, 4));
          Ch0MuSlv       <= to_slv(Ch0Mu);
          Ch1MuSlv       <= to_slv(Ch1Mu);
          if (SIM_MODE) then
@@ -673,7 +698,7 @@ BEGIN
             Peaks             <= MagPeak1(15 downto 0) & MagPeak0(15 downto 0);
          end if;
          EstimatesDoneDly  <= EstimatesDone;
-         if (Mag0GtMag1) then
+         if (H0Mag_u > H1Mag_u) then
             HxEstR <= to_slv(H0EstR);
             HxEstI <= to_slv(H0EstI);
          else
@@ -740,6 +765,34 @@ BEGIN
          code_bit     => codeBit
       );
 
+   FD2 : FireberdDrive
+      PORT MAP(
+         clk            => Clk186,
+         reset          => Reset2x,
+         ce             => CE,
+         ValidIn        => TrellisOutEn,
+         MsbFirst       => '1',
+         RecoveredData  => TrellisBits,
+         ClocksPerBit   => to_sfixed(0.25, 0, -15),
+         DataOut        => DataOut2,
+         ClkOut         => ClkOutEn2
+      );
+
+   pn_derand2 : bert_correlator
+      port map (
+         poly         => 24x"6000", -- pn15
+         poly_length  => 5x"0f",
+         poly_mode    => '0',
+         reset        => Reset2x,
+         clock        => Clk186,
+         enable       => pnBitEn2, --   clock in data
+         lfsr_enable  => pnBitEn2, --   gated clock in data
+         reload       => Reload2,
+         data         => DataOut2,
+         data_bit     => dataBit2,
+         code_bit     => codeBit2
+      );
+
    DacOutputs : process(Clk93)
    begin
       if (rising_edge(Clk93)) then
@@ -776,6 +829,9 @@ BEGIN
          elsif (H1Mag_u > H0Mag_u sla 1) then
             Mag0GtMag1   <= '0';
          end if;
+
+         -- Add threshold hysteresis to prevent PilotFoundCE oscillating when power is around threshold.
+         HxThresh       <= to_ufixed('0' & HxThreshSlv, HxThresh) when (not PilotFoundCE) else to_ufixed("00" & HxThreshSlv(11 downto 1), HxThresh);
          PilotFoundCE <= '1' when (H0Mag_u > HxThresh) or (H1Mag_u > HxThresh) else '0';  -- about .15 at noise threshold
          if (CordicValid) then
             H0Mag_u  <= to_ufixed(H0Mag, H0Mag_u);
@@ -783,8 +839,6 @@ BEGIN
          end if;
       end if;
    end process DacOutputs;
-
-   HxThresh <= to_ufixed('0' & HxThreshSlv, HxThresh);
 
    cordic0 : vm_cordic_fast
       GENERIC MAP (

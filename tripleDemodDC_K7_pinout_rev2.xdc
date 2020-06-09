@@ -229,30 +229,12 @@ set_property IOSTANDARD LVCMOS18 [get_ports dac_sdio]
 set_property DRIVE 12 [get_ports dac_sdio]
 set_property SLEW SLOW [get_ports dac_sdio]
 
-set_property IOSTANDARD LVCMOS33 [get_ports ch0ClkOut]
-set_property IOSTANDARD LVCMOS33 [get_ports ch1ClkOut]
-set_property IOSTANDARD LVCMOS33 [get_ports ch2ClkOut]
-set_property IOSTANDARD LVCMOS33 [get_ports ch3ClkOut]
-set_property IOSTANDARD LVCMOS33 [get_ports ch0DataOut]
-set_property IOSTANDARD LVCMOS33 [get_ports ch1DataOut]
-set_property IOSTANDARD LVCMOS33 [get_ports ch2DataOut]
-set_property IOSTANDARD LVCMOS33 [get_ports ch3DataOut]
-set_property DRIVE 12 [get_ports ch0ClkOut]
-set_property SLEW FAST [get_ports ch0ClkOut]
-set_property DRIVE 12 [get_ports ch1ClkOut]
-set_property SLEW FAST [get_ports ch1ClkOut]
-set_property DRIVE 12 [get_ports ch2ClkOut]
-set_property SLEW FAST [get_ports ch2ClkOut]
-set_property DRIVE 12 [get_ports ch3ClkOut]
-set_property SLEW FAST [get_ports ch3ClkOut]
-set_property DRIVE 12 [get_ports ch0DataOut]
-set_property SLEW FAST [get_ports ch0DataOut]
-set_property DRIVE 12 [get_ports ch1DataOut]
-set_property SLEW FAST [get_ports ch1DataOut]
-set_property DRIVE 12 [get_ports ch2DataOut]
-set_property SLEW FAST [get_ports ch2DataOut]
-set_property DRIVE 12 [get_ports ch3DataOut]
-set_property SLEW FAST [get_ports ch3DataOut]
+set_property IOSTANDARD LVCMOS33 [get_ports ch*ClkOut]
+set_property DRIVE 12 [get_ports ch*ClkOut]
+set_property SLEW FAST [get_ports ch*ClkOut]
+set_property IOSTANDARD LVCMOS33 [get_ports ch*DataOut]
+set_property DRIVE 12 [get_ports ch*DataOut]
+set_property SLEW FAST [get_ports ch*DataOut]
 
 set_property IOSTANDARD LVCMOS33 [get_ports sdiOut]
 set_property DRIVE 12 [get_ports sdiOut]
@@ -262,14 +244,10 @@ set_property SLEW SLOW [get_ports lockLed0n]
 set_property DRIVE 12 [get_ports lockLed1n]
 set_property SLEW SLOW [get_ports lockLed1n]
 
-set_property IOSTANDARD LVCMOS33 [get_ports pll0_REF]
-set_property IOSTANDARD LVCMOS33 [get_ports pll0_OUT1]
-set_property IOSTANDARD LVCMOS33 [get_ports pll1_REF]
-set_property IOSTANDARD LVCMOS33 [get_ports pll1_OUT1]
-set_property DRIVE 12 [get_ports pll0_REF]
-set_property DRIVE 12 [get_ports pll1_REF]
-set_property SLEW FAST [get_ports pll0_REF]
-set_property SLEW FAST [get_ports pll1_REF]
+set_property IOSTANDARD LVCMOS33 [get_ports pll*_REF]
+set_property IOSTANDARD LVCMOS33 [get_ports pll*_OUT1]
+set_property DRIVE 12 [get_ports pll*_REF]
+set_property SLEW FAST [get_ports pll*_REF]
 
 set_property IOSTANDARD LVCMOS33 [get_ports spiClk]
 set_property IOSTANDARD LVCMOS33 [get_ports spiCSn]
@@ -307,32 +285,12 @@ set_property SLEW SLOW [get_ports amDacCSn]
 set_property IOSTANDARD LVCMOS33 [get_ports lockLed0n]
 set_property IOSTANDARD LVCMOS33 [get_ports lockLed1n]
 
-set_property IOSTANDARD LVCMOS33 [get_ports {video1OutSelect[1]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {video1OutSelect[0]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {video0OutSelect[1]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {video0OutSelect[0]}]
-
-set_property IOSTANDARD LVCMOS33 [get_ports {video1InSelect[1]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {video1InSelect[0]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {video0InSelect[1]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {video0InSelect[0]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {video*OutSelect[*]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {video*InSelect[*]}]
 
 
-
-#[Place 30-876] Port 'adcClk'  is assigned to PACKAGE_PIN 'D18'  which can only be used as the N side of a differential clock input.
-#Please use the following constraint(s) to pass this DRC check:
-# set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets {systemClock/inst/clk_in1_systemClock}]
-# set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets spiClk_IBUF]
-# set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets BS_PllOut_IBUF]
-# set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets pll0_OUT1_IBUF]
-# set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets pll1_OUT1_IBUF]
-# set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets dac1_clk_OBUF]
-
+set_property CFGBVS VCCO [current_design]
+set_property CONFIG_VOLTAGE 3.3 [current_design]
+set_property BITSTREAM.CONFIG.CONFIGRATE 66 [current_design]
 set_property BITSTREAM.CONFIG.SPI_32BIT_ADDR YES [current_design]
-
-
-
-
-
-
-
+set_property BITSTREAM.CONFIG.SPI_BUSWIDTH 4 [current_design]

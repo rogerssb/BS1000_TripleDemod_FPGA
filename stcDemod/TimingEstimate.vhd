@@ -258,16 +258,34 @@ ARCHITECTURE rtl OF TimingEstimate IS
             SsInvR3D,
             SsInvI3D          : sfixed(-7 downto -24);
 
-/*
+   signal   ResultsCM0Ila, ResultsCM1Ila, ResultsCM2Ila, ResultsCM3Ila, MinCMIla : std_logic_vector(24 downto 0);
+   signal   Tau0EstIla, Tau1EstIla : SLV18;
+   signal   xx0, xx1, xx2, xx3, yy0, yy1, yy2, yy3 : natural range 0 to 64;
    attribute mark_debug : string;
-   attribute mark_debug of StartIn, Xr, Xi, RdAddr, Mode, PipeLine, Done : signal is "true";
-*/
+   attribute mark_debug of StartIn, Mode, PipeLine, Done, CenterX, CenterY, Offset, ComputeDone, StartCM, MinIndex,
+               MinX, MinY, Iterations, xx0, xx1, xx2, xx3, yy0, yy1, yy2, yy3, Tau0Ndx, Tau1Ndx, Tau0EstIla, Tau1EstIla,
+               ResultsCM0Ila, ResultsCM1Ila, ResultsCM2Ila, ResultsCM3Ila, MinCMIla : signal is "true";
+
 
 BEGIN
-
    process (clk)
    begin
       if (rising_edge(clk)) then
+         ResultsCM0Ila  <= to_slv(ResultsCM(0));
+         ResultsCM1Ila  <= to_slv(ResultsCM(1));
+         ResultsCM2Ila  <= to_slv(ResultsCM(2));
+         ResultsCM3Ila  <= to_slv(ResultsCM(3));
+         MinCMIla       <= to_slv(MinCM);
+         xx0            <= xx(0);
+         xx1            <= xx(1);
+         xx2            <= xx(2);
+         xx3            <= xx(3);
+         yy0            <= yy(0);
+         yy1            <= yy(1);
+         yy2            <= yy(2);
+         yy3            <= yy(3);
+         Tau0EstIla     <= to_slv(Tau0Est);
+         Tau1EstIla     <= to_slv(Tau1Est);
          if (reset) then
             RdCntr         <= 0;
             MinX           <= 0;                      -- current minimum x,y
@@ -421,7 +439,7 @@ BEGIN
             when TAU_SUB =>
                Tau0Est_sf  <= resize(SAMPS_BIT_OVER - Tau0Sf, Tau0Est_sf, FIXED_WRAP, FIXED_TRUNCATE);
                -- *tau_est1 = (float)(*tau1_est_ndx - SAMPS_BIT_OVER)/(float)SAMPS_BIT_OVER;
-               Tau1Est_sf  <= resize(SAMPS_BIT_OVER - Tau1Sf, Tau1Est_sf);
+               Tau1Est_sf  <= resize(SAMPS_BIT_OVER - Tau1Sf, Tau1Est_sf, FIXED_WRAP, FIXED_TRUNCATE);
                Mode <= FINISH;
             when FINISH =>
                Done <= '1';

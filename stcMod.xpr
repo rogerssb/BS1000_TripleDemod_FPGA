@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Product Version: Vivado v2017.2 (64-bit)              -->
+<!-- Product Version: Vivado v2017.2.1 (64-bit)              -->
 <!--                                                         -->
 <!-- Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.   -->
 
-<Project Version="7" Minor="20" Path="Y:/vivado2017/stcMod.xpr">
+<Project Version="7" Minor="20" Path="C:/Semco/Vivado/Demods/stcMod.xpr">
   <DefaultLaunch Dir="$PRUNDIR"/>
   <Configuration>
     <Option Name="Id" Val="9988a4b1e3524bf895ef0c5473ab3d25"/>
@@ -36,13 +36,13 @@
     <Option Name="WTVcsLaunchSim" Val="0"/>
     <Option Name="WTRivieraLaunchSim" Val="0"/>
     <Option Name="WTActivehdlLaunchSim" Val="0"/>
-    <Option Name="WTXSimExportSim" Val="31"/>
-    <Option Name="WTModelSimExportSim" Val="31"/>
-    <Option Name="WTQuestaExportSim" Val="31"/>
-    <Option Name="WTIesExportSim" Val="31"/>
-    <Option Name="WTVcsExportSim" Val="31"/>
-    <Option Name="WTRivieraExportSim" Val="31"/>
-    <Option Name="WTActivehdlExportSim" Val="31"/>
+    <Option Name="WTXSimExportSim" Val="33"/>
+    <Option Name="WTModelSimExportSim" Val="33"/>
+    <Option Name="WTQuestaExportSim" Val="33"/>
+    <Option Name="WTIesExportSim" Val="33"/>
+    <Option Name="WTVcsExportSim" Val="33"/>
+    <Option Name="WTRivieraExportSim" Val="33"/>
+    <Option Name="WTActivehdlExportSim" Val="33"/>
     <Option Name="GenerateIPUpgradeLog" Val="TRUE"/>
     <Option Name="XSimRadix" Val="hex"/>
     <Option Name="XSimTimeUnit" Val="ns"/>
@@ -52,20 +52,6 @@
   <FileSets Version="1" Minor="31">
     <FileSet Name="sources_1" Type="DesignSrcs" RelSrcDir="$PSRCDIR/sources_1">
       <Filter Type="Srcs"/>
-      <File Path="$PPRDIR/stcDemod/fixed_pkg_2008.vhd">
-        <FileInfo SFType="VHDL2008">
-          <Attr Name="Library" Val="work"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PPRDIR/stcDemod/Semco_pkg.vhd">
-        <FileInfo SFType="VHDL2008">
-          <Attr Name="Library" Val="work"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
       <File Path="$PPRDIR/bert/bert_lfsr.v">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -257,13 +243,6 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PSRCDIR/sources_1/ip/systemClock/systemClock.xci">
-        <FileInfo>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
       <File Path="$PPRDIR/resampler/fractionalDelay.v">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -271,129 +250,91 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/xc7k160t-IP/resamplerTap3.coe">
+      <File Path="$PSRCDIR/sources_1/ip/resamplerTap8.coe">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/xc7k160t-IP/resamplerTap0.coe">
+      <File Path="$PSRCDIR/sources_1/ip/resamplerTap0.coe">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/xc7k160t-IP/resamplerTap7.coe">
+      <File Path="$PSRCDIR/sources_1/ip/resamplerTap1.coe">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/xc7k160t-IP/resamplerTap1.coe">
+      <File Path="$PSRCDIR/sources_1/ip/resamplerTap2.coe">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/xc7k160t-IP/resamplerTap6.coe">
+      <File Path="$PSRCDIR/sources_1/ip/resamplerTap3.coe">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/xc7k160t-IP/resamplerTap4.coe">
+      <File Path="$PSRCDIR/sources_1/ip/resamplerTap4.coe">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/xc7k160t-IP/resamplerTap8.coe">
+      <File Path="$PSRCDIR/sources_1/ip/resamplerTap5.coe">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/xc7k160t-IP/resamplerTap5.coe">
+      <File Path="$PSRCDIR/sources_1/ip/resamplerTap6.coe">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/xc7k160t-IP/resamplerTap2.coe">
+      <File Path="$PSRCDIR/sources_1/ip/resamplerTap7.coe">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PSRCDIR/sources_1/imports/resamplerTap8/resamplerTap8.mif">
+      <File Path="$PSRCDIR/sources_1/ip/dds6p0/dds6p0.xci">
         <FileInfo>
-          <Attr Name="ImportPath" Val="$PPRDIR/stcDemod.srcs/sources_1/ip/resamplerTap8/resamplerTap8.mif"/>
-          <Attr Name="ImportTime" Val="1576178693"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/semcoDemod.srcs/sources_1/ip/dds6p0/dds6p0.xci"/>
+          <Attr Name="ImportTime" Val="1559168811"/>
           <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PSRCDIR/sources_1/imports/sources_1/ip/resamplerTap0/resamplerTap0.mif">
+      <File Path="$PSRCDIR/sources_1/ip/flexbusClock/flexbusClock.xci">
         <FileInfo>
-          <Attr Name="ImportPath" Val="$PPRDIR/stcDemod.srcs/sources_1/ip/resamplerTap0/resamplerTap0.mif"/>
-          <Attr Name="ImportTime" Val="1576178679"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/semcoDemod.srcs/sources_1/ip/flexbusClock/flexbusClock.xci"/>
+          <Attr Name="ImportTime" Val="1559169671"/>
           <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PSRCDIR/sources_1/imports/sources_1/ip/resamplerTap1/resamplerTap1.mif">
+      <File Path="$PSRCDIR/sources_1/ip/invSinc/invSinc.xci">
         <FileInfo>
-          <Attr Name="ImportPath" Val="$PPRDIR/stcDemod.srcs/sources_1/ip/resamplerTap1/resamplerTap1.mif"/>
-          <Attr Name="ImportTime" Val="1576178680"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/semcoDemod.srcs/sources_1/ip/invSinc/invSinc.xci"/>
+          <Attr Name="ImportTime" Val="1559221635"/>
           <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PSRCDIR/sources_1/imports/ip/resamplerTap2/resamplerTap2.mif">
+      <File Path="$PSRCDIR/sources_1/ip/systemClock/systemClock.xci">
         <FileInfo>
-          <Attr Name="ImportPath" Val="$PPRDIR/stcDemod.srcs/sources_1/ip/resamplerTap2/resamplerTap2.mif"/>
-          <Attr Name="ImportTime" Val="1576178682"/>
           <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PSRCDIR/sources_1/imports/sources_1/ip/resamplerTap3/resamplerTap3.mif">
-        <FileInfo>
-          <Attr Name="ImportPath" Val="$PPRDIR/stcDemod.srcs/sources_1/ip/resamplerTap3/resamplerTap3.mif"/>
-          <Attr Name="ImportTime" Val="1576178684"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PSRCDIR/sources_1/imports/sources_1/ip/resamplerTap4/resamplerTap4.mif">
-        <FileInfo>
-          <Attr Name="ImportPath" Val="$PPRDIR/stcDemod.srcs/sources_1/ip/resamplerTap4/resamplerTap4.mif"/>
-          <Attr Name="ImportTime" Val="1576178686"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PSRCDIR/sources_1/imports/ip/resamplerTap5/resamplerTap5.mif">
-        <FileInfo>
-          <Attr Name="ImportPath" Val="$PPRDIR/stcDemod.srcs/sources_1/ip/resamplerTap5/resamplerTap5.mif"/>
-          <Attr Name="ImportTime" Val="1576178687"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PSRCDIR/sources_1/imports/ip/resamplerTap7/resamplerTap7.mif">
-        <FileInfo>
-          <Attr Name="ImportPath" Val="$PPRDIR/stcDemod.srcs/sources_1/ip/resamplerTap7/resamplerTap7.mif"/>
-          <Attr Name="ImportTime" Val="1576178691"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PSRCDIR/sources_1/imports/sources_1/ip/resamplerTap6/resamplerTap6.mif">
-        <FileInfo>
-          <Attr Name="ImportPath" Val="$PPRDIR/stcDemod.srcs/sources_1/ip/resamplerTap6/resamplerTap6.mif"/>
-          <Attr Name="ImportTime" Val="1576178689"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
@@ -420,6 +361,7 @@
         </FileInfo>
       </File>
       <Config>
+        <Option Name="TargetConstrsFile" Val="$PPRDIR/stcModTop_timing.xdc"/>
         <Option Name="ConstrsType" Val="XDC"/>
       </Config>
     </FileSet>
@@ -610,57 +552,6 @@
         <Define Name="STC_MOD"/>
         <Define Name="TEST_SOQPSK_FIR"/>
         <Define Name="SIMULATE"/>
-      </Config>
-    </FileSet>
-    <FileSet Name="invSinc" Type="BlockSrcs" RelSrcDir="$PSRCDIR/invSinc">
-      <File Path="$PSRCDIR/sources_1/ip/invSinc/invSinc.xci">
-        <FileInfo>
-          <Attr Name="ImportPath" Val="$PPRDIR/semcoDemod.srcs/sources_1/ip/invSinc/invSinc.xci"/>
-          <Attr Name="ImportTime" Val="1559221635"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <Config>
-        <Option Name="TopModule" Val="invSinc"/>
-        <Option Name="VerilogDir" Val="$PPRDIR/."/>
-        <Option Name="UseBlackboxStub" Val="1"/>
-        <Define Name="STC_MOD"/>
-      </Config>
-    </FileSet>
-    <FileSet Name="dds6p0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/dds6p0">
-      <File Path="$PSRCDIR/sources_1/ip/dds6p0/dds6p0.xci">
-        <FileInfo>
-          <Attr Name="ImportPath" Val="$PPRDIR/semcoDemod.srcs/sources_1/ip/dds6p0/dds6p0.xci"/>
-          <Attr Name="ImportTime" Val="1559168811"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <Config>
-        <Option Name="TopModule" Val="dds6p0"/>
-        <Option Name="VerilogDir" Val="$PPRDIR/."/>
-        <Option Name="UseBlackboxStub" Val="1"/>
-        <Define Name="STC_MOD"/>
-      </Config>
-    </FileSet>
-    <FileSet Name="flexbusClock" Type="BlockSrcs" RelSrcDir="$PSRCDIR/flexbusClock">
-      <File Path="$PSRCDIR/sources_1/ip/flexbusClock/flexbusClock.xci">
-        <FileInfo>
-          <Attr Name="ImportPath" Val="$PPRDIR/semcoDemod.srcs/sources_1/ip/flexbusClock/flexbusClock.xci"/>
-          <Attr Name="ImportTime" Val="1559169671"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <Config>
-        <Option Name="TopModule" Val="flexbusClock"/>
-        <Option Name="VerilogDir" Val="$PPRDIR/."/>
-        <Option Name="UseBlackboxStub" Val="1"/>
-        <Define Name="STC_MOD"/>
       </Config>
     </FileSet>
     <FileSet Name="constrs_Triple" Type="Constrs" RelSrcDir="$PSRCDIR/constrs_Triple">
@@ -870,33 +761,6 @@
       <ReportStrategy/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
     </Run>
-    <Run Id="invSinc_synth_1" Type="Ft3:Synth" SrcSet="invSinc" Part="xc7k160tfbg676-1" ConstrsSet="invSinc" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/invSinc_synth_1" IncludeInArchive="true">
-      <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2017"/>
-        <Step Id="synth_design"/>
-      </Strategy>
-      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
-      <ReportStrategy/>
-      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
-    </Run>
-    <Run Id="dds6p0_synth_1" Type="Ft3:Synth" SrcSet="dds6p0" Part="xc7k160tfbg676-1" ConstrsSet="dds6p0" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/dds6p0_synth_1" IncludeInArchive="true">
-      <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2017"/>
-        <Step Id="synth_design"/>
-      </Strategy>
-      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
-      <ReportStrategy/>
-      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
-    </Run>
-    <Run Id="flexbusClock_synth_1" Type="Ft3:Synth" SrcSet="flexbusClock" Part="xc7k160tfbg676-1" ConstrsSet="flexbusClock" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/flexbusClock_synth_1" IncludeInArchive="true">
-      <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2017"/>
-        <Step Id="synth_design"/>
-      </Strategy>
-      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
-      <ReportStrategy/>
-      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
-    </Run>
     <Run Id="synth6100" Type="Ft3:Synth" SrcSet="sources_1" Part="xc7k160tfbg676-2" ConstrsSet="constrs_Triple" Description="Vivado Synthesis Defaults" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2017"/>
@@ -907,7 +771,9 @@
     </Run>
     <Run Id="resamplerTap8_synth_1" Type="Ft3:Synth" SrcSet="resamplerTap8" Part="xc7k160tfbg676-1" ConstrsSet="resamplerTap8" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/resamplerTap8_synth_1" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2017"/>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2017">
+          <Desc>Vivado Synthesis Defaults</Desc>
+        </StratHandle>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
@@ -916,7 +782,9 @@
     </Run>
     <Run Id="resamplerTap0_synth_1" Type="Ft3:Synth" SrcSet="resamplerTap0" Part="xc7k160tfbg676-1" ConstrsSet="resamplerTap0" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/resamplerTap0_synth_1" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2017"/>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2017">
+          <Desc>Vivado Synthesis Defaults</Desc>
+        </StratHandle>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
@@ -925,7 +793,9 @@
     </Run>
     <Run Id="resamplerTap1_synth_1" Type="Ft3:Synth" SrcSet="resamplerTap1" Part="xc7k160tfbg676-1" ConstrsSet="resamplerTap1" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/resamplerTap1_synth_1" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2017"/>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2017">
+          <Desc>Vivado Synthesis Defaults</Desc>
+        </StratHandle>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
@@ -934,7 +804,9 @@
     </Run>
     <Run Id="resamplerTap2_synth_1" Type="Ft3:Synth" SrcSet="resamplerTap2" Part="xc7k160tfbg676-1" ConstrsSet="resamplerTap2" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/resamplerTap2_synth_1" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2017"/>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2017">
+          <Desc>Vivado Synthesis Defaults</Desc>
+        </StratHandle>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
@@ -943,7 +815,9 @@
     </Run>
     <Run Id="resamplerTap3_synth_1" Type="Ft3:Synth" SrcSet="resamplerTap3" Part="xc7k160tfbg676-1" ConstrsSet="resamplerTap3" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/resamplerTap3_synth_1" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2017"/>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2017">
+          <Desc>Vivado Synthesis Defaults</Desc>
+        </StratHandle>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
@@ -952,7 +826,9 @@
     </Run>
     <Run Id="resamplerTap4_synth_1" Type="Ft3:Synth" SrcSet="resamplerTap4" Part="xc7k160tfbg676-1" ConstrsSet="resamplerTap4" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/resamplerTap4_synth_1" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2017"/>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2017">
+          <Desc>Vivado Synthesis Defaults</Desc>
+        </StratHandle>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
@@ -961,7 +837,9 @@
     </Run>
     <Run Id="resamplerTap5_synth_1" Type="Ft3:Synth" SrcSet="resamplerTap5" Part="xc7k160tfbg676-1" ConstrsSet="resamplerTap5" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/resamplerTap5_synth_1" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2017"/>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2017">
+          <Desc>Vivado Synthesis Defaults</Desc>
+        </StratHandle>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
@@ -970,7 +848,9 @@
     </Run>
     <Run Id="resamplerTap6_synth_1" Type="Ft3:Synth" SrcSet="resamplerTap6" Part="xc7k160tfbg676-1" ConstrsSet="resamplerTap6" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/resamplerTap6_synth_1" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2017"/>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2017">
+          <Desc>Vivado Synthesis Defaults</Desc>
+        </StratHandle>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
@@ -979,14 +859,16 @@
     </Run>
     <Run Id="resamplerTap7_synth_1" Type="Ft3:Synth" SrcSet="resamplerTap7" Part="xc7k160tfbg676-1" ConstrsSet="resamplerTap7" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/resamplerTap7_synth_1" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2017"/>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2017">
+          <Desc>Vivado Synthesis Defaults</Desc>
+        </StratHandle>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
       <ReportStrategy/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
     </Run>
-    <Run Id="impl_1" Type="Ft2:EntireDesign" Part="xc7k160tfbg676-1" ConstrsSet="constrs_BS1000" Description="Default settings for Implementation." State="current" Dir="$PRUNDIR/impl_1" SynthRun="synth_1" IncludeInArchive="true">
+    <Run Id="impl_1" Type="Ft2:EntireDesign" Part="xc7k160tfbg676-1" ConstrsSet="constrs_BS1000" Description="Default settings for Implementation." Dir="$PRUNDIR/impl_1" SynthRun="synth_1" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2017"/>
         <Step Id="init_design"/>
@@ -1002,54 +884,6 @@
         </Step>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
-      <ReportStrategy/>
-      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
-    </Run>
-    <Run Id="invSinc_impl_1" Type="Ft2:EntireDesign" Part="xc7k160tfbg676-1" ConstrsSet="invSinc" Description="Default settings for Implementation." SynthRun="invSinc_synth_1" IncludeInArchive="false">
-      <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2017"/>
-        <Step Id="init_design"/>
-        <Step Id="opt_design"/>
-        <Step Id="power_opt_design"/>
-        <Step Id="place_design"/>
-        <Step Id="post_place_power_opt_design"/>
-        <Step Id="phys_opt_design"/>
-        <Step Id="route_design"/>
-        <Step Id="post_route_phys_opt_design"/>
-        <Step Id="write_bitstream"/>
-      </Strategy>
-      <ReportStrategy/>
-      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
-    </Run>
-    <Run Id="dds6p0_impl_1" Type="Ft2:EntireDesign" Part="xc7k160tfbg676-1" ConstrsSet="dds6p0" Description="Default settings for Implementation." SynthRun="dds6p0_synth_1" IncludeInArchive="false">
-      <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2017"/>
-        <Step Id="init_design"/>
-        <Step Id="opt_design"/>
-        <Step Id="power_opt_design"/>
-        <Step Id="place_design"/>
-        <Step Id="post_place_power_opt_design"/>
-        <Step Id="phys_opt_design"/>
-        <Step Id="route_design"/>
-        <Step Id="post_route_phys_opt_design"/>
-        <Step Id="write_bitstream"/>
-      </Strategy>
-      <ReportStrategy/>
-      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
-    </Run>
-    <Run Id="flexbusClock_impl_1" Type="Ft2:EntireDesign" Part="xc7k160tfbg676-1" ConstrsSet="flexbusClock" Description="Default settings for Implementation." SynthRun="flexbusClock_synth_1" IncludeInArchive="false">
-      <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2017"/>
-        <Step Id="init_design"/>
-        <Step Id="opt_design"/>
-        <Step Id="power_opt_design"/>
-        <Step Id="place_design"/>
-        <Step Id="post_place_power_opt_design"/>
-        <Step Id="phys_opt_design"/>
-        <Step Id="route_design"/>
-        <Step Id="post_route_phys_opt_design"/>
-        <Step Id="write_bitstream"/>
-      </Strategy>
       <ReportStrategy/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
     </Run>
@@ -1073,7 +907,9 @@
     </Run>
     <Run Id="resamplerTap8_impl_1" Type="Ft2:EntireDesign" Part="xc7k160tfbg676-1" ConstrsSet="resamplerTap8" Description="Default settings for Implementation." SynthRun="resamplerTap8_synth_1" IncludeInArchive="false">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2017"/>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2017">
+          <Desc>Default settings for Implementation.</Desc>
+        </StratHandle>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -1089,7 +925,9 @@
     </Run>
     <Run Id="resamplerTap0_impl_1" Type="Ft2:EntireDesign" Part="xc7k160tfbg676-1" ConstrsSet="resamplerTap0" Description="Default settings for Implementation." SynthRun="resamplerTap0_synth_1" IncludeInArchive="false">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2017"/>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2017">
+          <Desc>Default settings for Implementation.</Desc>
+        </StratHandle>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -1105,7 +943,9 @@
     </Run>
     <Run Id="resamplerTap1_impl_1" Type="Ft2:EntireDesign" Part="xc7k160tfbg676-1" ConstrsSet="resamplerTap1" Description="Default settings for Implementation." SynthRun="resamplerTap1_synth_1" IncludeInArchive="false">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2017"/>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2017">
+          <Desc>Default settings for Implementation.</Desc>
+        </StratHandle>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -1121,7 +961,9 @@
     </Run>
     <Run Id="resamplerTap2_impl_1" Type="Ft2:EntireDesign" Part="xc7k160tfbg676-1" ConstrsSet="resamplerTap2" Description="Default settings for Implementation." SynthRun="resamplerTap2_synth_1" IncludeInArchive="false">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2017"/>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2017">
+          <Desc>Default settings for Implementation.</Desc>
+        </StratHandle>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -1137,7 +979,9 @@
     </Run>
     <Run Id="resamplerTap3_impl_1" Type="Ft2:EntireDesign" Part="xc7k160tfbg676-1" ConstrsSet="resamplerTap3" Description="Default settings for Implementation." SynthRun="resamplerTap3_synth_1" IncludeInArchive="false">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2017"/>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2017">
+          <Desc>Default settings for Implementation.</Desc>
+        </StratHandle>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -1153,7 +997,9 @@
     </Run>
     <Run Id="resamplerTap4_impl_1" Type="Ft2:EntireDesign" Part="xc7k160tfbg676-1" ConstrsSet="resamplerTap4" Description="Default settings for Implementation." SynthRun="resamplerTap4_synth_1" IncludeInArchive="false">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2017"/>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2017">
+          <Desc>Default settings for Implementation.</Desc>
+        </StratHandle>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -1169,7 +1015,9 @@
     </Run>
     <Run Id="resamplerTap5_impl_1" Type="Ft2:EntireDesign" Part="xc7k160tfbg676-1" ConstrsSet="resamplerTap5" Description="Default settings for Implementation." SynthRun="resamplerTap5_synth_1" IncludeInArchive="false">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2017"/>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2017">
+          <Desc>Default settings for Implementation.</Desc>
+        </StratHandle>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -1185,7 +1033,9 @@
     </Run>
     <Run Id="resamplerTap6_impl_1" Type="Ft2:EntireDesign" Part="xc7k160tfbg676-1" ConstrsSet="resamplerTap6" Description="Default settings for Implementation." SynthRun="resamplerTap6_synth_1" IncludeInArchive="false">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2017"/>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2017">
+          <Desc>Default settings for Implementation.</Desc>
+        </StratHandle>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -1201,7 +1051,9 @@
     </Run>
     <Run Id="resamplerTap7_impl_1" Type="Ft2:EntireDesign" Part="xc7k160tfbg676-1" ConstrsSet="resamplerTap7" Description="Default settings for Implementation." SynthRun="resamplerTap7_synth_1" IncludeInArchive="false">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2017"/>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2017">
+          <Desc>Default settings for Implementation.</Desc>
+        </StratHandle>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -1212,6 +1064,27 @@
         <Step Id="post_route_phys_opt_design"/>
         <Step Id="write_bitstream"/>
       </Strategy>
+      <ReportStrategy/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+    </Run>
+    <Run Id="Impl325_BS1000" Type="Ft2:EntireDesign" Part="xc7k325tfbg676-2" ConstrsSet="constrs_BS1000" Description="Default settings for Implementation." State="current" Dir="$PRUNDIR/Impl325_BS1000" SynthRun="synth_1" IncludeInArchive="true">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2017">
+          <Desc>Default settings for Implementation.</Desc>
+        </StratHandle>
+        <Step Id="init_design"/>
+        <Step Id="opt_design"/>
+        <Step Id="power_opt_design"/>
+        <Step Id="place_design"/>
+        <Step Id="post_place_power_opt_design"/>
+        <Step Id="phys_opt_design"/>
+        <Step Id="route_design"/>
+        <Step Id="post_route_phys_opt_design"/>
+        <Step Id="write_bitstream">
+          <Option Id="BinFile">1</Option>
+        </Step>
+      </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
       <ReportStrategy/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
     </Run>
