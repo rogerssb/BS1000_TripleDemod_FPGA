@@ -121,7 +121,7 @@ module stcDemodTop (
 
 );
 
-    parameter VER_NUMBER = 16'd670;
+    parameter VER_NUMBER = 16'd671;
 
 
 //******************************************************************************
@@ -399,7 +399,7 @@ module stcDemodTop (
         .dout(demodDout),
         .iRx(adc0In), .qRx(18'h0),
         .maxChEstI(HxEstR), .maxChEstQ(HxEstI),
-        .maxChEstClkEn(pilotPhaseDiffEn),
+        .maxChEstClkEn(phaseDiffEn),
         .sampleRateErrorEn(sampleRateErrorEn),
         .sampleRateError(sampleRateError),
         .locked(pilotFound),
@@ -421,7 +421,7 @@ module stcDemodTop (
 /******************************************************************************
                             Pilot Carrier Loop
 ******************************************************************************/
-    wire    signed  [17:0]  pilotPhaseDiff, pilotPhase;
+    wire    signed  [17:0]  phaseDiffNB, phaseDiffWB;
     wire    signed  [31:0]  pilotFreqLag;
     wire    signed  [31:0]  pilotFreqLead;
     wire    signed  [11:0]  pilotLeadError;
@@ -430,7 +430,7 @@ module stcDemodTop (
     wire            [31:0]  pilotDout;
     stcLoop #(.RegSpace(`PILOT_LF_SPACE)) pilot(
         .clk(clk), .reset(reset),
-        .clkEn(pilotPhaseDiffEn),
+        .clkEn(phaseDiffEn),
         `ifdef USE_BUS_CLOCK
         .busClk(busClk),
         `endif
@@ -439,8 +439,8 @@ module stcDemodTop (
         .addr(addr),
         .din(dataIn),
         .dout(pilotDout),
-        .phase(pilotPhase[17:6]),
-        .freq(pilotPhaseDiff[17:6]),
+        .phaseDiffNB(phaseDiffNB[17:6]),
+        .phaseDiffWB(phaseDiffWB[17:6]),
         .carrierFreqOffset(pilotFreqLag),
         .carrierLeadFreq(pilotFreqLead),
         .carrierFreqEn(pilotFreqOffsetEn),
@@ -519,9 +519,9 @@ module stcDemodTop (
         .DacSelect2(stcDac2Select),
         .SpectrumInv(SpectrumInv),
         .ReadHold(1'b0),
-        .PhaseOut(pilotPhase),
-        .PhaseDiff(pilotPhaseDiff),
-        .PhaseDiffEn(pilotPhaseDiffEn),
+        .PhaseDiffNB(phaseDiffNB),
+        .PhaseDiffWB(phaseDiffWB),
+        .PhaseDiffEn(phaseDiffEn),
         .PilotOffset(sampleRateError),
         .StartOfFrame(sampleRateErrorEn),
         .ClkOutEn(stcBitEnOut),
@@ -769,7 +769,7 @@ module stcDemodTop (
             end
             default: begin
                 interp1DataIn <= {1'b0,pilotFreqAcquired,16'b0};
-                //interp1DataIn <= {1'b0,pilotPhaseDiffEn,16'b0};
+                //interp1DataIn <= {1'b0,phaseDiffEn,16'b0};
                 interp1ClkEn <= 1'b1;
             end
         endcase

@@ -31,7 +31,7 @@ module frameAlignment
 
     //------------------------------ Sample Counter ---------------------------
 
-    reg             [14:0]  wrAddr, rdAddr, sofAddress;
+    reg             [14:0]  wrAddr, rdAddr, depth, sofAddress;
     wire   signed   [15:0]  rdAddr0, rdAddr1;
     reg                     estimatesReady, sofDetected;
     always @(posedge clk) begin
@@ -65,14 +65,16 @@ module frameAlignment
     reg                     fifoRdEn;
     wire    [35:0]          fifoRdData0, fifoRdData1;
 
-    wire    empty = (wrAddr == rdAddr);
+    wire    empty = (depth < 50);    // leave last 5 entries in buffer to prevent overflow when adding m_ndx's
     always @(posedge clk) begin
         if (reset) begin
             rdAddr <= 0;
             wrAddr <= 0;
             full   <= 0;
+            depth  <= 0;
         end
         else if (clkEn) begin
+            depth <= wrAddr - rdAddr;
             if (fifoWrEn) begin
                 wrAddr <= wrAddr + 1;
                 full <= ((wrAddr == rdAddr - 1) && ~fifoRdEn);

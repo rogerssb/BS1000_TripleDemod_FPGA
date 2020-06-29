@@ -75,7 +75,6 @@ entity PilotDetectSliding is
          PhsPeak0,
          MagPeak1,
          PhsPeak1       : OUT SLV18;               -- Peak Mag/Phs of iFFT
-         PilotOffset    : OUT SFixed(8 downto 0);  -- Bit Sync Loop Error
          PilotFound,
          ValidOut,                                 -- ReOut/ImOut valid
          StartOut       : OUT std_logic
@@ -730,7 +729,6 @@ begin
             PhsCount1    <= 0;
             DropCount    <= 7;
             PilotPulse   <= '0';
-            PilotOffset  <= (others=>'0');
             MagPeakInt0  <= (others=>'0');
             PhsPeakInt0  <= (others=>'0');
             MagPeakInt1  <= (others=>'0');
@@ -858,8 +856,6 @@ begin
                      MagPeakInt1 <= Mag1 & "00000";
                   end if;
                end if;
-
-               PilotOffset <= to_sfixed(PrevIndex - 256, PilotOffset);  -- set bit sync error to BS Loop
 
                if (Index1 = 523) then     -- give MaxOfPckt a chance to propagate to PilotMag
                   PilotPulse  <= '1';

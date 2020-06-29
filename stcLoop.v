@@ -9,6 +9,8 @@ derivative rights in exchange for negotiated compensation.
 `timescale 1ns/1ps
 `include ".\addressMap.v"
 
+`define USE_PILOT_FREQ
+
 module stcLoop(
     input                       clk, reset,
     input                       clkEn,
@@ -20,8 +22,13 @@ module stcLoop(
     input               [12:0]  addr,
     input               [31:0]  din,
     output              [31:0]  dout,
+    `ifdef USE_PILOT_FREQ
+    input       signed  [11:0]  phaseDiffNB,
+    input       signed  [11:0]  phaseDiffWB,
+    `else
     input       signed  [11:0]  phase,
     input       signed  [11:0]  freq,
+    `endif
     output      signed  [31:0]  carrierFreqOffset,
     output      signed  [31:0]  carrierLeadFreq,
     output                      carrierFreqEn,
@@ -33,6 +40,7 @@ module stcLoop(
     );
 
     parameter RegSpace = `CARRIERSPACE;
+
 
 
     /***************************** Control Registers ******************************/
@@ -86,27 +94,19 @@ module stcLoop(
 
 
     /**************************** Adjust Error ************************************/
-    `define USE_PILOT_FREQ
-    `ifdef USE_PILOT_FREQ
-    reg signed  [11:0]  prevPhase;
-    reg signed  [11:0]  newPhase;
-    `endif
     reg signed  [11:0]  freqLoopError;
     always @(posedge clk) begin
         `ifdef USE_PILOT_FREQ
-        if (clkEn) begin
-            newPhase <= phase;
-            prevPhase <= newPhase;
-        end
         if (zeroError || !freqAcquired) begin
             phaseLoopError <= 12'h0;
         end
         else if (invertError) begin
-            phaseLoopError <= prevPhase - newPhase;
+            phaseLoopError <= -phaseDiffNB;
         end
         else begin
-            phaseLoopError <= newPhase - prevPhase;
+            phaseLoopError <= phaseDiffNB;
         end
+        freqLoopError <= phaseDiffWB;
         `else
         if (zeroError || !freqAcquired) begin
             phaseLoopError <= 12'h0;
@@ -117,8 +117,8 @@ module stcLoop(
         else begin
             phaseLoopError <= phase;
         end
-        `endif
         freqLoopError <= freq;
+        `endif
     end
 
     reg         [3:0]   loopEnSR;
@@ -199,7 +199,11 @@ module stcLoop(
             freqAcquired <= 1;
             end
         else if (clkEn) begin
+            `ifdef USE_PILOT_FREQ
+            absModeError <= $unsigned(phaseDiffWB[11] ? -phaseDiffWB : phaseDiffWB);
+            `else
             absModeError <= $unsigned(freq[11] ? -freq : freq);
+            `endif
             avgAbsModeError <= avgAbsModeError - {4'b0,avgAbsModeError[15:4]} + {4'b0,absModeError};
             if (avgAbsModeError > {syncThreshold,4'b0}) begin
                 if (lockCounter == (16'hffff - lockCount)) begin

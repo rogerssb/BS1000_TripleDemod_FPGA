@@ -67,6 +67,7 @@ ENTITY PilotSync IS
       RealIn,
       ImagIn         : IN  Float_1_18;
       Offset         : IN  SLV4;       -- TODO, remove
+      PilotOffset    : OUT SFixed(8 downto 0);
       StartNextFrame : OUT ufixed(15 DOWNTO 0);
       RealOut,
       ImagOut        : OUT Float_1_18;
@@ -146,21 +147,23 @@ BEGIN
    PilotValid  <= '1' when ((PilotPulseIn = '1') and ((PilotFound = '0') or (MissedCnt = 3) or (FrmSmplCount > FRAME_LENGTH_4 - 256))) else '0'; -- pulse should be at 13312
 
    ClkProcess: process (clk)
+      variable CorrPntr_s        : sfixed(16 downto 0);
+      variable PilotOffset_s     : sfixed(9 downto 0);
    begin
       if (rising_edge(clk)) then
          if (reset) then
-            WrAddr         <= (others=>'0');
-            RdAddr         <= (others=>'0');
-            StartNextFrame <= (others=>'0');
-            CorrCntrCapture <= (others=>'0');
-            FrmSmplCount    <= 0;
-            PckSmplCount   <= 0;
-            PacketCount    <= 0;
-            Missed         <= '0';
-            MissedCnt       <=  0;
-            Captured       <= '0';
-            StartOut       <= '0';
-            ValidOut       <= '0';
+            WrAddr            <= (others=>'0');
+            RdAddr            <= (others=>'0');
+            StartNextFrame    <= (others=>'0');
+            CorrCntrCapture   <= (others=>'0');
+            FrmSmplCount      <= 0;
+            PckSmplCount      <= 0;
+            PacketCount       <= 0;
+            MissedCnt         <= 0;
+            Missed            <= '0';
+            Captured          <= '0';
+            StartOut          <= '0';
+            ValidOut          <= '0';
          elsif (ce) then
             /*
                wait for PilotPulseIn and capture CorrPntr. set active flag.
@@ -215,7 +218,7 @@ BEGIN
                else
                   ValidOut <= '0';
                   if (PacketCount < 26) then
-                     if (ValidOut) then
+                     if (ValidOut) then         -- just about to drop on next clock so falling edge detected
                         PacketCount <= PacketCount + 1;
                      end if;
                      if (RamDepth > 512) then
@@ -234,8 +237,11 @@ BEGIN
                CorrCntrCapture <= resize(CorrPntr - 512 + Offset_u - 8, CorrCntrCapture);
                StartNextFrame  <= resize(CorrPntr - 512 - 8 + FRAME_LENGTH_4, StartNextFrame); -- offset added in STC
                Captured        <= '1';
-               FrmSmplCount <= 0;
-               MissedCnt         <= 0;
+               CorrPntr_s      := to_sfixed('0' & to_slv(CorrPntr), CorrPntr_s);
+               PilotOffset_s   := resize(CorrPntr_s - 256, PilotOffset_s); -- CorrPntr is ufixed[15:0]
+               PilotOffset     <= resize(PilotOffset_s, PilotOffset);
+               FrmSmplCount    <= 0;
+               MissedCnt       <= 0;
             -- if we don't get a PilotValid for a frame, the RdAddr should continue but need a new Start sequence
             elsif (FrmSmplCount >= FRAME_LENGTH_4 + MISSED_PILOT) then    -- maintain sync over missed pilots, should have gone off 12 samples and one packet ago
                FrmSmplCount <= FrmSmplCount - FRAME_LENGTH_4 + 1;
