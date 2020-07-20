@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="test_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="test" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="18515120250fs"></ZoomStartTime>
+      <ZoomEndTime time="21083120251fs"></ZoomEndTime>
+      <Cursor1Time time="20885000000fs"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="175"></NameColumnWidth>
+      <ValueColumnWidth column_width="136"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="4" />
+   <wvobject fp_name="/test/HC" type="array">
+      <obj_property name="ElementShortName">HC[31:0]</obj_property>
+      <obj_property name="ObjectShortName">HC[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/C" type="array">
+      <obj_property name="ElementShortName">C[31:0]</obj_property>
+      <obj_property name="ObjectShortName">C[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="group18" type="group">
+      <obj_property name="label">TestBench</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/test/reset" type="logic">
+         <obj_property name="ElementShortName">reset</obj_property>
+         <obj_property name="ObjectShortName">reset</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/clk" type="logic">
+         <obj_property name="ElementShortName">clk</obj_property>
+         <obj_property name="ObjectShortName">clk</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/clken" type="logic">
+         <obj_property name="ElementShortName">clken</obj_property>
+         <obj_property name="ObjectShortName">clken</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/clkCount" type="array">
+         <obj_property name="ElementShortName">clkCount[31:0]</obj_property>
+         <obj_property name="ObjectShortName">clkCount[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/spiClk" type="logic">
+         <obj_property name="ElementShortName">spiClk</obj_property>
+         <obj_property name="ObjectShortName">spiClk</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/spiSR" type="array">
+         <obj_property name="ElementShortName">spiSR[47:0]</obj_property>
+         <obj_property name="ObjectShortName">spiSR[47:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/spiData" type="logic">
+         <obj_property name="ElementShortName">spiData</obj_property>
+         <obj_property name="ObjectShortName">spiData</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/shiftCount" type="array">
+         <obj_property name="ElementShortName">shiftCount[31:0]</obj_property>
+         <obj_property name="ObjectShortName">shiftCount[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/spiCS" type="logic">
+         <obj_property name="ElementShortName">spiCS</obj_property>
+         <obj_property name="ObjectShortName">spiCS</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/spiWrite" type="logic">
+         <obj_property name="ElementShortName">spiWrite</obj_property>
+         <obj_property name="ObjectShortName">spiWrite</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/spiSize" type="array">
+         <obj_property name="ElementShortName">spiSize[1:0]</obj_property>
+         <obj_property name="ObjectShortName">spiSize[1:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/spiAddr" type="array">
+         <obj_property name="ElementShortName">spiAddr[12:0]</obj_property>
+         <obj_property name="ObjectShortName">spiAddr[12:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/readData" type="array">
+         <obj_property name="ElementShortName">readData[31:0]</obj_property>
+         <obj_property name="ObjectShortName">readData[31:0]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="group19" type="group">
+      <obj_property name="label">spiInterface</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/test/spi/clk" type="logic">
+         <obj_property name="ElementShortName">clk</obj_property>
+         <obj_property name="ObjectShortName">clk</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/spi/reset" type="logic">
+         <obj_property name="ElementShortName">reset</obj_property>
+         <obj_property name="ObjectShortName">reset</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/spiStart" type="logic">
+         <obj_property name="ElementShortName">spiStart</obj_property>
+         <obj_property name="ObjectShortName">spiStart</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/spi/spiClk" type="logic">
+         <obj_property name="ElementShortName">spiClk</obj_property>
+         <obj_property name="ObjectShortName">spiClk</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/spi/spiCS" type="logic">
+         <obj_property name="ElementShortName">spiCS</obj_property>
+         <obj_property name="ObjectShortName">spiCS</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/spi/spiDataIn" type="logic">
+         <obj_property name="ElementShortName">spiDataIn</obj_property>
+         <obj_property name="ObjectShortName">spiDataIn</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/spi/spiDataOE" type="logic">
+         <obj_property name="ElementShortName">spiDataOE</obj_property>
+         <obj_property name="ObjectShortName">spiDataOE</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/spi/spiDataOut" type="logic">
+         <obj_property name="ElementShortName">spiDataOut</obj_property>
+         <obj_property name="ObjectShortName">spiDataOut</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/spi/spiWrite" type="logic">
+         <obj_property name="ElementShortName">spiWrite</obj_property>
+         <obj_property name="ObjectShortName">spiWrite</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/spi/spiXferSize" type="array">
+         <obj_property name="ElementShortName">spiXferSize[1:0]</obj_property>
+         <obj_property name="ObjectShortName">spiXferSize[1:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/spi/spiState" type="array">
+         <obj_property name="ElementShortName">spiState[2:0]</obj_property>
+         <obj_property name="ObjectShortName">spiState[2:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/spi/spiSR" type="array">
+         <obj_property name="ElementShortName">spiSR[31:0]</obj_property>
+         <obj_property name="ObjectShortName">spiSR[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/spi/spiBitcount" type="array">
+         <obj_property name="ElementShortName">spiBitcount[5:0]</obj_property>
+         <obj_property name="ObjectShortName">spiBitcount[5:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/spi/spiOutSR" type="array">
+         <obj_property name="ElementShortName">spiOutSR[31:0]</obj_property>
+         <obj_property name="ObjectShortName">spiOutSR[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/spi/cs" type="logic">
+         <obj_property name="ElementShortName">cs</obj_property>
+         <obj_property name="ObjectShortName">cs</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/spi/wr0" type="logic">
+         <obj_property name="ElementShortName">wr0</obj_property>
+         <obj_property name="ObjectShortName">wr0</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/spi/wr1" type="logic">
+         <obj_property name="ElementShortName">wr1</obj_property>
+         <obj_property name="ObjectShortName">wr1</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/spi/wr2" type="logic">
+         <obj_property name="ElementShortName">wr2</obj_property>
+         <obj_property name="ObjectShortName">wr2</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/spi/wr3" type="logic">
+         <obj_property name="ElementShortName">wr3</obj_property>
+         <obj_property name="ObjectShortName">wr3</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/spi/addr" type="array">
+         <obj_property name="ElementShortName">addr[12:0]</obj_property>
+         <obj_property name="ObjectShortName">addr[12:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/spi/dataIn" type="array">
+         <obj_property name="ElementShortName">dataIn[31:0]</obj_property>
+         <obj_property name="ObjectShortName">dataIn[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/spi/dataOut" type="array">
+         <obj_property name="ElementShortName">dataOut[31:0]</obj_property>
+         <obj_property name="ObjectShortName">dataOut[31:0]</obj_property>
+      </wvobject>
+   </wvobject>
+</wave_config>

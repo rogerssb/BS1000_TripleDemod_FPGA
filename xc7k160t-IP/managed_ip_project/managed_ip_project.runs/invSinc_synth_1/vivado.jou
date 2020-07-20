@@ -1,0 +1,12 @@
+#-----------------------------------------------------------
+# Vivado v2015.4 (64-bit)
+# SW Build 1412921 on Wed Nov 18 09:43:45 MST 2015
+# IP Build 1412160 on Tue Nov 17 13:47:24 MST 2015
+# Start of session at: Mon Nov 14 12:42:47 2016
+# Process ID: 6260
+# Current directory: C:/modem/vivado/xc7k160t-IP/managed_ip_project/managed_ip_project.runs/invSinc_synth_1
+# Command line: vivado.exe -log invSinc.vds -mode batch -messageDb vivado.pb -notrace -source invSinc.tcl
+# Log file: C:/modem/vivado/xc7k160t-IP/managed_ip_project/managed_ip_project.runs/invSinc_synth_1/invSinc.vds
+# Journal file: C:/modem/vivado/xc7k160t-IP/managed_ip_project/managed_ip_project.runs/invSinc_synth_1\vivado.jou
+#-----------------------------------------------------------
+source invSinc.tcl -notrace

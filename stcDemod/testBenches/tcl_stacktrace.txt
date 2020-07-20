@@ -1,0 +1,14 @@
+Fri Apr 26 12:54:58 CDT 2019
+Trace back: invalid command name "SrcCommon::LoadDBSDialog"
+    while executing
+"SrcCommon::LoadDBSDialog"
+    ("after" script)
+  <2:C:/modeltech_pe_10.5c/win32pe/tk8.5/bgerror.tcl:92: ::tkerror {invalid command name "SrcCommon::LoadDBSDialog"}
+  <1:eval:1: ::tk::dialog::error::bgerror {invalid command name "SrcCommon::LoadDBSDialog"}
+Tue Jun 11 13:18:41 CDT 2019
+Trace back: invalid command name "SrcCommon::LoadDBSDialog"
+    while executing
+"SrcCommon::LoadDBSDialog"
+    ("after" script)
+  <2:C:/modeltech_pe_10.5c/win32pe/tk8.5/bgerror.tcl:92: ::tkerror {invalid command name "SrcCommon::LoadDBSDialog"}
+  <1:eval:1: ::tk::dialog::error::bgerror {invalid command name "SrcCommon::LoadDBSDialog"}

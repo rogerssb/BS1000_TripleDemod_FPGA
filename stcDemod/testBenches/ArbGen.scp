@@ -1,0 +1,235 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Application Name="Keysight Signal Studio Toolkit" Version="2.1.2.0">
+    <Framework SerializationVersion="1.0">
+        <CurrentSystem>
+            <Function>1 Antenna</Function>
+            <Source_IntArb_HwSystem>
+                <Name>&lt;Simulated Hardware&gt;</Name>
+                <SourceVisaResourceName />
+            </Source_IntArb_HwSystem>
+        </CurrentSystem>
+        <CurrentComponent>
+            <ToolkitComponent Name="N7622" Version="2.1.2.0">
+                <ToolkitEngine>
+                    <_readerArray>
+                        <WaveformFileReaderBase d7p1:type="TekArbPatternFile" xmlns:d7p1="http://www.w3.org/2001/XMLSchema-instance">
+                            <StreamModeEnabled>false</StreamModeEnabled>
+                            <NumberOfMarkers>4</NumberOfMarkers>
+                            <IFileName />
+                            <QFileName />
+                        </WaveformFileReaderBase>
+                    </_readerArray>
+                    <_matReaderArray>
+                        <MatFile5>
+                            <StreamModeEnabled>false</StreamModeEnabled>
+                            <NumberOfMarkers>0</NumberOfMarkers>
+                            <FileName />
+                            <UseMarker>false</UseMarker>
+                            <IVarName>I</IVarName>
+                            <QVarName>Q</QVarName>
+                            <MkrVarName>Markers</MkrVarName>
+                        </MatFile5>
+                    </_matReaderArray>
+                    <_asciiReaderArray>
+                        <ASCIIFile>
+                            <StreamModeEnabled>false</StreamModeEnabled>
+                            <NumberOfMarkers>0</NumberOfMarkers>
+                            <FileName>C:\Users\frank.ziegler\Documents\GitHub\stcDemod\simData\input_rx_0Hz_50snr_99Percent_R.txt</FileName>
+                            <QFileName>C:\Users\frank.ziegler\Documents\GitHub\stcDemod\simData\input_rx_0Hz_50snr_99Percent_I.txt</QFileName>
+                            <MkrFileName />
+                            <UseQFile>true</UseQFile>
+                            <UseMarkers>false</UseMarkers>
+                        </ASCIIFile>
+                    </_asciiReaderArray>
+                    <_agt14ReaderArray>
+                        <Agt14File>
+                            <StreamModeEnabled>false</StreamModeEnabled>
+                            <NumberOfMarkers>2</NumberOfMarkers>
+                            <IFileName />
+                            <QFileName />
+                            <BigEndian>true</BigEndian>
+                        </Agt14File>
+                    </_agt14ReaderArray>
+                    <_agt16ReaderArray>
+                        <Agt16File>
+                            <StreamModeEnabled>false</StreamModeEnabled>
+                            <NumberOfMarkers>0</NumberOfMarkers>
+                            <DataFileName />
+                            <MarkerFileName />
+                            <UseMarkers>false</UseMarkers>
+                            <BigEndian>true</BigEndian>
+                        </Agt16File>
+                    </_agt16ReaderArray>
+                    <_tekFloatReaderArray>
+                        <TekArbFloatFile>
+                            <StreamModeEnabled>false</StreamModeEnabled>
+                            <NumberOfMarkers>4</NumberOfMarkers>
+                            <IFileName />
+                            <QFileName />
+                        </TekArbFloatFile>
+                    </_tekFloatReaderArray>
+                    <_tekPatternReaderArray>
+                        <TekArbPatternFile>
+                            <StreamModeEnabled>false</StreamModeEnabled>
+                            <NumberOfMarkers>4</NumberOfMarkers>
+                            <IFileName />
+                            <QFileName />
+                        </TekArbPatternFile>
+                    </_tekPatternReaderArray>
+                    <AppCorForCompat>
+                        <SystemBW>80000000</SystemBW>
+                        <GenCorrIfNeeded>true</GenCorrIfNeeded>
+                        <ApplyCorrections>true</ApplyCorrections>
+                        <DisableSaDisplayForImportExport>false</DisableSaDisplayForImportExport>
+                        <OptimizeCorrection>SPEED</OptimizeCorrection>
+                        <NumCalPoints>100</NumCalPoints>
+                    </AppCorForCompat>
+                    <App_Signal>
+                        <_originalWfmSampleRate>46666666.666</_originalWfmSampleRate>
+                        <_targetWfmSampleRate>46666666.666</_targetWfmSampleRate>
+                        <DnldWfmName>STC_0_50_99.bin</DnldWfmName>
+                        <AutoScale>true</AutoScale>
+                        <ScaleFactor>100</ScaleFactor>
+                        <MirrorImageForImportExport>false</MirrorImageForImportExport>
+                        <OriginalWaveformSampleRate>46666666.666</OriginalWaveformSampleRate>
+                        <OversamplingRatio>1</OversamplingRatio>
+                        <TargetWaveformSampleRate>46666666.666</TargetWaveformSampleRate>
+                        <CrestFactorAuto>true</CrestFactorAuto>
+                        <CrestFactor>0</CrestFactor>
+                    </App_Signal>
+                    <App_SG_array>
+                        <SigGenHW>
+                            <AlcBwEnumVal>AUTO</AlcBwEnumVal>
+                            <AlcBw>Auto</AlcBw>
+                            <FreqOffsetForImportExport>0</FreqOffsetForImportExport>
+                            <AmplOffsetForImportExport>0</AmplOffsetForImportExport>
+                            <Freq>70000000</Freq>
+                            <Ampl>3</Ampl>
+                            <AttenHold>false</AttenHold>
+                            <AlcState>true</AlcState>
+                            <PSMode>Manual</PSMode>
+                            <PSRef>Mod</PSRef>
+                            <PSRf>Normal</PSRf>
+                            <IQInputsEnumVal>INT</IQInputsEnumVal>
+                            <IQModFilter>40.00 MHz</IQModFilter>
+                            <IqModAtten>12</IqModAtten>
+                            <IqModAttenAuto>true</IqModAttenAuto>
+                            <IQState>false</IQState>
+                            <IQAdj>false</IQAdj>
+                            <IOffset>0</IOffset>
+                            <QOffset>0</QOffset>
+                            <IQSkew>0</IQSkew>
+                            <QuadSkew>0</QuadSkew>
+                            <RfState>true</RfState>
+                            <ModState>true</ModState>
+                            <RfPort>RFO</RfPort>
+                            <RfPortFDOnly>RFO</RfPortFDOnly>
+                            <RfPortHDOnly>RFO</RfPortHDOnly>
+                            <TrigType>Continuous</TrigType>
+                            <TrigSource>External</TrigSource>
+                            <ExternalSource>PXI0</ExternalSource>
+                            <ExternalPolarity>Positive</ExternalPolarity>
+                            <ExternalDelay>0.001</ExternalDelay>
+                            <ContinuousMode>Trigger &amp; Run</ContinuousMode>
+                            <AlcTrigSource>AUTO</AlcTrigSource>
+                            <AlcMode>OFF</AlcMode>
+                            <TrigPulseGenState>true</TrigPulseGenState>
+                        </SigGenHW>
+                    </App_SG_array>
+                    <App_Arb_array>
+                        <ArbHW>
+                            <MarkerPolarityPositive>
+                                <boolean>true</boolean>
+                                <boolean>true</boolean>
+                                <boolean>true</boolean>
+                                <boolean>true</boolean>
+                            </MarkerPolarityPositive>
+                            <SampleClock>46666666.666</SampleClock>
+                            <SampleClockSource>Internal</SampleClockSource>
+                            <RuntimeScaling>70</RuntimeScaling>
+                            <ExtRecFilter>None</ExtRecFilter>
+                            <ExtCustRecFilter>40000000</ExtCustRecFilter>
+                            <TekVolts>0.4</TekVolts>
+                            <MarkerRoutingPulse>0</MarkerRoutingPulse>
+                            <BurstCount>0</BurstCount>
+                            <BurstTrigSrcExt1>false</BurstTrigSrcExt1>
+                            <IntRecFilter>Through</IntRecFilter>
+                            <HighCrest>false</HighCrest>
+                            <MarkerRoutingAltAmplForImportExport>0</MarkerRoutingAltAmplForImportExport>
+                            <MarkerRoutingAlcHold>0</MarkerRoutingAlcHold>
+                        </ArbHW>
+                    </App_Arb_array>
+                    <InstrNum>1</InstrNum>
+                    <MatReader_array>
+                        <MatFile5>
+                            <StreamModeEnabled>false</StreamModeEnabled>
+                            <NumberOfMarkers>0</NumberOfMarkers>
+                            <FileName />
+                            <UseMarker>false</UseMarker>
+                            <IVarName>I</IVarName>
+                            <QVarName>Q</QVarName>
+                            <MkrVarName>Markers</MkrVarName>
+                        </MatFile5>
+                    </MatReader_array>
+                    <ASCIIReader_array>
+                        <ASCIIFile>
+                            <StreamModeEnabled>false</StreamModeEnabled>
+                            <NumberOfMarkers>0</NumberOfMarkers>
+                            <FileName>C:\Users\frank.ziegler\Documents\GitHub\stcDemod\simData\input_rx_0Hz_50snr_99Percent_R.txt</FileName>
+                            <QFileName>C:\Users\frank.ziegler\Documents\GitHub\stcDemod\simData\input_rx_0Hz_50snr_99Percent_I.txt</QFileName>
+                            <MkrFileName />
+                            <UseQFile>true</UseQFile>
+                            <UseMarkers>false</UseMarkers>
+                        </ASCIIFile>
+                    </ASCIIReader_array>
+                    <Agt14Reader_array>
+                        <Agt14File>
+                            <StreamModeEnabled>false</StreamModeEnabled>
+                            <NumberOfMarkers>2</NumberOfMarkers>
+                            <IFileName />
+                            <QFileName />
+                            <BigEndian>true</BigEndian>
+                        </Agt14File>
+                    </Agt14Reader_array>
+                    <Agt16Reader_array>
+                        <Agt16File>
+                            <StreamModeEnabled>false</StreamModeEnabled>
+                            <NumberOfMarkers>0</NumberOfMarkers>
+                            <DataFileName />
+                            <MarkerFileName />
+                            <UseMarkers>false</UseMarkers>
+                            <BigEndian>true</BigEndian>
+                        </Agt16File>
+                    </Agt16Reader_array>
+                    <TekFloatReader_array>
+                        <TekArbFloatFile>
+                            <StreamModeEnabled>false</StreamModeEnabled>
+                            <NumberOfMarkers>4</NumberOfMarkers>
+                            <IFileName />
+                            <QFileName />
+                        </TekArbFloatFile>
+                    </TekFloatReader_array>
+                    <TekPatternReader_array>
+                        <TekArbPatternFile>
+                            <StreamModeEnabled>false</StreamModeEnabled>
+                            <NumberOfMarkers>4</NumberOfMarkers>
+                            <IFileName />
+                            <QFileName />
+                        </TekArbPatternFile>
+                    </TekPatternReader_array>
+                    <DataSourceForSaveLoad>
+                        <WaveformFileReaderBase d7p1:type="ASCIIFile" xmlns:d7p1="http://www.w3.org/2001/XMLSchema-instance">
+                            <StreamModeEnabled>false</StreamModeEnabled>
+                            <NumberOfMarkers>0</NumberOfMarkers>
+                            <FileName>C:\Users\frank.ziegler\Documents\GitHub\stcDemod\simData\input_rx_0Hz_50snr_99Percent_R.txt</FileName>
+                            <QFileName>C:\Users\frank.ziegler\Documents\GitHub\stcDemod\simData\input_rx_0Hz_50snr_99Percent_I.txt</QFileName>
+                            <MkrFileName />
+                            <UseQFile>true</UseQFile>
+                            <UseMarkers>false</UseMarkers>
+                        </WaveformFileReaderBase>
+                    </DataSourceForSaveLoad>
+                </ToolkitEngine>
+            </ToolkitComponent>
+        </CurrentComponent>
+    </Framework>
+</Application>

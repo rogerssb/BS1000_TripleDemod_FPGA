@@ -1,0 +1,12 @@
+#-----------------------------------------------------------
+# Vivado v2015.4 (64-bit)
+# SW Build 1412921 on Wed Nov 18 09:43:45 MST 2015
+# IP Build 1412160 on Tue Nov 17 13:47:24 MST 2015
+# Start of session at: Mon Nov 14 11:23:44 2016
+# Process ID: 17076
+# Current directory: C:/modem/vivado/xc7k160t-IP/managed_ip_project/managed_ip_project.runs/resamplerTap1_synth_1
+# Command line: vivado.exe -log resamplerTap1.vds -mode batch -messageDb vivado.pb -notrace -source resamplerTap1.tcl
+# Log file: C:/modem/vivado/xc7k160t-IP/managed_ip_project/managed_ip_project.runs/resamplerTap1_synth_1/resamplerTap1.vds
+# Journal file: C:/modem/vivado/xc7k160t-IP/managed_ip_project/managed_ip_project.runs/resamplerTap1_synth_1\vivado.jou
+#-----------------------------------------------------------
+source resamplerTap1.tcl -notrace

@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="test_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="test" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="16961583333fs"></ZoomStartTime>
+      <ZoomEndTime time="17307083334fs"></ZoomEndTime>
+      <Cursor1Time time="21000000000fs"></Cursor1Time>
+   </zoom_setting>
+   <WVObjectSize size="6" />
+   <wave_markers>
+      <marker time="11585000000" label="" />
+   </wave_markers>
+   <wvobject db_ref_id="1" fp_name="/test/CLOCK_FREQ" type="other">
+      <obj_property name="ElementShortName">CLOCK_FREQ</obj_property>
+      <obj_property name="ObjectShortName">CLOCK_FREQ</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/test/HC" type="other">
+      <obj_property name="ElementShortName">HC</obj_property>
+      <obj_property name="ObjectShortName">HC</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/test/C" type="other">
+      <obj_property name="ElementShortName">C</obj_property>
+      <obj_property name="ObjectShortName">C</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/test/enableInput" type="logic">
+      <obj_property name="ElementShortName">enableInput</obj_property>
+      <obj_property name="ObjectShortName">enableInput</obj_property>
+   </wvobject>
+   <wvobject fp_name="group588" type="group">
+      <obj_property name="label">Test Vectors</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject db_ref_id="1" fp_name="/test/reset" type="logic">
+         <obj_property name="ElementShortName">reset</obj_property>
+         <obj_property name="ObjectShortName">reset</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/test/clk" type="logic">
+         <obj_property name="ElementShortName">clk</obj_property>
+         <obj_property name="ObjectShortName">clk</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/test/clken" type="logic">
+         <obj_property name="ElementShortName">clken</obj_property>
+         <obj_property name="ObjectShortName">clken</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/test/enableInput" type="logic">
+         <obj_property name="ElementShortName">enableInput</obj_property>
+         <obj_property name="ObjectShortName">enableInput</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/test/clkCount" type="array">
+         <obj_property name="ElementShortName">clkCount[31:0]</obj_property>
+         <obj_property name="ObjectShortName">clkCount[31:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/test/clkEnable" type="logic">
+         <obj_property name="ElementShortName">clkEnable</obj_property>
+         <obj_property name="ObjectShortName">clkEnable</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/test/sampleCount" type="array">
+         <obj_property name="ElementShortName">sampleCount[31:0]</obj_property>
+         <obj_property name="ObjectShortName">sampleCount[31:0]</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/test/sampleCountWire" type="array">
+         <obj_property name="ElementShortName">sampleCountWire[31:0]</obj_property>
+         <obj_property name="ObjectShortName">sampleCountWire[31:0]</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/test/startFrame" type="logic">
+         <obj_property name="ElementShortName">startFrame</obj_property>
+         <obj_property name="ObjectShortName">startFrame</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/test/sampleEn" type="logic">
+         <obj_property name="ElementShortName">sampleEn</obj_property>
+         <obj_property name="ObjectShortName">sampleEn</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/test/interpolate" type="logic">
+         <obj_property name="ElementShortName">interpolate</obj_property>
+         <obj_property name="ObjectShortName">interpolate</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/test/muReal" type="other">
+         <obj_property name="ElementShortName">muReal</obj_property>
+         <obj_property name="ObjectShortName">muReal</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/test/mu" type="array">
+         <obj_property name="ElementShortName">mu[17:0]</obj_property>
+         <obj_property name="ObjectShortName">mu[17:0]</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/test/uut/signedMu" type="array">
+         <obj_property name="ElementShortName">signedMu[17:0]</obj_property>
+         <obj_property name="ObjectShortName">signedMu[17:0]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">17</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/test/s0rReal" type="other">
+         <obj_property name="ElementShortName">s0rReal</obj_property>
+         <obj_property name="ObjectShortName">s0rReal</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/test/s0r" type="array">
+         <obj_property name="ElementShortName">s0r[17:0]</obj_property>
+         <obj_property name="ObjectShortName">s0r[17:0]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="group816" type="group">
+      <obj_property name="label">Interpolator</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject db_ref_id="1" fp_name="/test/uut/clkEn" type="logic">
+         <obj_property name="ElementShortName">clkEn</obj_property>
+         <obj_property name="ObjectShortName">clkEn</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/test/uut/inputEn" type="logic">
+         <obj_property name="ElementShortName">inputEn</obj_property>
+         <obj_property name="ObjectShortName">inputEn</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/test/uut/interpolate" type="logic">
+         <obj_property name="ElementShortName">interpolate</obj_property>
+         <obj_property name="ObjectShortName">interpolate</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/test/uut/din" type="array">
+         <obj_property name="ElementShortName">din[17:0]</obj_property>
+         <obj_property name="ObjectShortName">din[17:0]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">16</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/test/uut/s0" type="array">
+         <obj_property name="ElementShortName">s0[17:0]</obj_property>
+         <obj_property name="ObjectShortName">s0[17:0]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">15</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/test/uut/s1" type="array">
+         <obj_property name="ElementShortName">s1[17:0]</obj_property>
+         <obj_property name="ObjectShortName">s1[17:0]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">15</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/test/uut/s2" type="array">
+         <obj_property name="ElementShortName">s2[17:0]</obj_property>
+         <obj_property name="ObjectShortName">s2[17:0]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">15</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/test/uut/s3" type="array">
+         <obj_property name="ElementShortName">s3[17:0]</obj_property>
+         <obj_property name="ObjectShortName">s3[17:0]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">15</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/test/uut/v2" type="array">
+         <obj_property name="ElementShortName">v2[17:0]</obj_property>
+         <obj_property name="ObjectShortName">v2[17:0]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">15</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/test/uut/v1" type="array">
+         <obj_property name="ElementShortName">v1[17:0]</obj_property>
+         <obj_property name="ObjectShortName">v1[17:0]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">15</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/test/uut/v1Reg" type="array">
+         <obj_property name="ElementShortName">v1Reg[36:0]</obj_property>
+         <obj_property name="ObjectShortName">v1Reg[36:0]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">32</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/test/uut/mreg1" type="array">
+         <obj_property name="ElementShortName">mreg1[36:0]</obj_property>
+         <obj_property name="ObjectShortName">mreg1[36:0]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">32</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/test/uut/tmp1" type="array">
+         <obj_property name="ElementShortName">tmp1[36:0]</obj_property>
+         <obj_property name="ObjectShortName">tmp1[36:0]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">32</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/test/uut/term1" type="array">
+         <obj_property name="ElementShortName">term1[17:0]</obj_property>
+         <obj_property name="ObjectShortName">term1[17:0]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">15</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/test/uut/s1Reg" type="array">
+         <obj_property name="ElementShortName">s1Reg[36:0]</obj_property>
+         <obj_property name="ObjectShortName">s1Reg[36:0]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">32</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/test/uut/mreg2" type="array">
+         <obj_property name="DisplayName">label</obj_property>
+         <obj_property name="ElementShortName">mreg2[36:0]</obj_property>
+         <obj_property name="ObjectShortName">mreg2[36:0]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">32</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+         <obj_property name="label">mreg2[36:0]</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/test/uut/tmp2" type="array">
+         <obj_property name="ElementShortName">tmp2[36:0]</obj_property>
+         <obj_property name="ObjectShortName">tmp2[36:0]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">32</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/test/uut/outputEn" type="logic">
+         <obj_property name="ElementShortName">outputEn</obj_property>
+         <obj_property name="ObjectShortName">outputEn</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" fp_name="/test/uut/dout" type="array">
+         <obj_property name="ElementShortName">dout[17:0]</obj_property>
+         <obj_property name="ObjectShortName">dout[17:0]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">15</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+   </wvobject>
+</wave_config>

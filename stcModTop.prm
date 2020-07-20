@@ -1,0 +1,11 @@
+===================================
+Configuration Memory information
+===================================
+File Format        MCS
+Interface          SPIX1
+Size               64M
+Start Address      0x00000000
+End Address        0x03FFFFFF
+
+Addr1         Addr2         Date                    File(s)
+0x00000000    0x00661EDB    Sep  9 15:31:45 2019    Y:/vivado2017/stcMod.runs/impl_1/stcModTop.bit

@@ -1,0 +1,575 @@
+#-----------------------------------------------------------
+# Vivado v2015.4 (64-bit)
+# SW Build 1412921 on Wed Nov 18 09:43:45 MST 2015
+# IP Build 1412160 on Tue Nov 17 13:47:24 MST 2015
+# Start of session at: Sat Oct 29 14:47:45 2016
+# Process ID: 8996
+# Current directory: C:/modem/vivado/xc7k160t-IP/managed_ip_project/managed_ip_project.runs/halfbandEven_synth_1
+# Command line: vivado.exe -log halfbandEven.vds -mode batch -messageDb vivado.pb -notrace -source halfbandEven.tcl
+# Log file: C:/modem/vivado/xc7k160t-IP/managed_ip_project/managed_ip_project.runs/halfbandEven_synth_1/halfbandEven.vds
+# Journal file: C:/modem/vivado/xc7k160t-IP/managed_ip_project/managed_ip_project.runs/halfbandEven_synth_1\vivado.jou
+#-----------------------------------------------------------
+source halfbandEven.tcl -notrace
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'C:/Xilinx/Vivado/2015.4/data/ip'.
+WARNING: [IP_Flow 19-3664] IP 'halfbandEven' generated file not found 'c:/modem/vivado/xc7k160t-IP/halfbandEven/halfbandEven.dcp'. Please regenerate to continue.
+WARNING: [IP_Flow 19-3664] IP 'halfbandEven' generated file not found 'c:/modem/vivado/xc7k160t-IP/halfbandEven/halfbandEven_stub.v'. Please regenerate to continue.
+WARNING: [IP_Flow 19-3664] IP 'halfbandEven' generated file not found 'c:/modem/vivado/xc7k160t-IP/halfbandEven/halfbandEven_stub.vhdl'. Please regenerate to continue.
+WARNING: [IP_Flow 19-3664] IP 'halfbandEven' generated file not found 'c:/modem/vivado/xc7k160t-IP/halfbandEven/halfbandEven_sim_netlist.v'. Please regenerate to continue.
+WARNING: [IP_Flow 19-3664] IP 'halfbandEven' generated file not found 'c:/modem/vivado/xc7k160t-IP/halfbandEven/halfbandEven_sim_netlist.vhdl'. Please regenerate to continue.
+Command: synth_design -top halfbandEven -part xc7k160tfbg676-1 -mode out_of_context
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xc7k160t'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7k160t'
+INFO: [Common 17-1223] The version limit for your license is '2016.05' and will expire in -151 days. A version limit expiration means that, although you may be able to continue to use the current version of tools or IP with this license, you will not be eligible for any updates or new releases.
+---------------------------------------------------------------------------------
+Starting RTL Elaboration : Time (s): cpu = 00:00:09 ; elapsed = 00:00:12 . Memory (MB): peak = 298.563 ; gain = 126.371
+---------------------------------------------------------------------------------
+INFO: [Synth 8-638] synthesizing module 'halfbandEven' [c:/modem/vivado/xc7k160t-IP/halfbandEven/synth/halfbandEven.vhd:73]
+INFO: [Synth 8-3491] module 'fir_compiler_v7_2_5' declared at 'c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2.vhd:119' bound to instance 'U0' of component 'fir_compiler_v7_2_5' [c:/modem/vivado/xc7k160t-IP/halfbandEven/synth/halfbandEven.vhd:198]
+INFO: [Synth 8-638] synthesizing module 'fir_compiler_v7_2_5' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2.vhd:244]
+INFO: [Synth 8-3491] module 'fir_compiler_v7_2_5_viv' declared at 'c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:59610' bound to instance 'i_synth' of component 'fir_compiler_v7_2_5_viv' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2.vhd:250]
+INFO: [Synth 8-638] synthesizing module 'fir_compiler_v7_2_5_viv' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:59747]
+INFO: [Synth 8-3491] module 'single_rate' declared at 'c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:14901' bound to instance 'i_single_rate' of component 'single_rate' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:59757]
+INFO: [Synth 8-638] synthesizing module 'single_rate' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:15029]
+WARNING: [Synth 8-5639] ignoring null variable initialization [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:2884]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:15297]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:15297]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:15299]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:15330]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:15330]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:15330]
+INFO: [Synth 8-638] synthesizing module 'glb_ifx_slave' [c:/modem/vivado/xc7k160t-IP/halfbandEven/axi_utils_v2_0_1/hdl/axi_utils_v2_0_vh_rfs.vhd:2905]
+INFO: [Synth 8-3491] module 'glb_srl_fifo' declared at 'c:/modem/vivado/xc7k160t-IP/halfbandEven/axi_utils_v2_0_1/hdl/axi_utils_v2_0_vh_rfs.vhd:2422' bound to instance 'fifo0' of component 'glb_srl_fifo' [c:/modem/vivado/xc7k160t-IP/halfbandEven/axi_utils_v2_0_1/hdl/axi_utils_v2_0_vh_rfs.vhd:2938]
+INFO: [Synth 8-638] synthesizing module 'glb_srl_fifo' [c:/modem/vivado/xc7k160t-IP/halfbandEven/axi_utils_v2_0_1/hdl/axi_utils_v2_0_vh_rfs.vhd:2474]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/halfbandEven/axi_utils_v2_0_1/hdl/axi_utils_v2_0_vh_rfs.vhd:2522]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/halfbandEven/axi_utils_v2_0_1/hdl/axi_utils_v2_0_vh_rfs.vhd:2522]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/halfbandEven/axi_utils_v2_0_1/hdl/axi_utils_v2_0_vh_rfs.vhd:2522]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/halfbandEven/axi_utils_v2_0_1/hdl/axi_utils_v2_0_vh_rfs.vhd:2522]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/halfbandEven/axi_utils_v2_0_1/hdl/axi_utils_v2_0_vh_rfs.vhd:2522]
+WARNING: [Synth 8-312] ignoring unsynthesizable construct: assertion statement [c:/modem/vivado/xc7k160t-IP/halfbandEven/axi_utils_v2_0_1/hdl/axi_utils_v2_0_vh_rfs.vhd:2522]
+INFO: [Synth 8-256] done synthesizing module 'glb_srl_fifo' (1#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/axi_utils_v2_0_1/hdl/axi_utils_v2_0_vh_rfs.vhd:2474]
+INFO: [Synth 8-256] done synthesizing module 'glb_ifx_slave' (2#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/axi_utils_v2_0_1/hdl/axi_utils_v2_0_vh_rfs.vhd:2905]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:15630]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:15643]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:15645]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:15685]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:15702]
+INFO: [Synth 8-638] synthesizing module 'delay' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-256] done synthesizing module 'delay' (3#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:15977]
+INFO: [Synth 8-638] synthesizing module 'delay__parameterized0' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-256] done synthesizing module 'delay__parameterized0' (3#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-638] synthesizing module 'delay__parameterized1' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-256] done synthesizing module 'delay__parameterized1' (3#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-638] synthesizing module 'delay__parameterized2' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-256] done synthesizing module 'delay__parameterized2' (3#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-638] synthesizing module 'cntrl_delay' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:10469]
+INFO: [Synth 8-506] null port 'ADDR_IN' ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:10456]
+INFO: [Synth 8-506] null port 'ADDR_OUT' ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:10458]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:10477]
+INFO: [Synth 8-256] done synthesizing module 'cntrl_delay' (4#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:10469]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:16198]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:16249]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:16250]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:16198]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:16238]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:16239]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:16198]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:16238]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:16239]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:16198]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:16238]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:16239]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:16198]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:16238]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:16239]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:16198]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:16238]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:16239]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:16198]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:16238]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:16239]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:16198]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:16238]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:16239]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:16198]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:16238]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:16239]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:5861]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:5883]
+INFO: [Synth 8-638] synthesizing module 'filt_mem' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:12564]
+INFO: [Synth 8-506] null port 'ADDRA' ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:12546]
+INFO: [Synth 8-506] null port 'ADDRB' ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:12551]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:12578]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:12583]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:12593]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:12606]
+INFO: [Synth 8-638] synthesizing module 'sp_mem' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:7836]
+INFO: [Synth 8-506] null port 'ADDR' ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:7822]
+INFO: [Synth 8-256] done synthesizing module 'sp_mem' (5#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:7836]
+INFO: [Synth 8-638] synthesizing module 'sp_mem__parameterized0' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:7836]
+INFO: [Synth 8-506] null port 'ADDR' ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:7822]
+INFO: [Synth 8-256] done synthesizing module 'sp_mem__parameterized0' (5#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:7836]
+INFO: [Synth 8-256] done synthesizing module 'filt_mem' (6#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:12564]
+INFO: [Synth 8-638] synthesizing module 'filt_mem__parameterized0' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:12564]
+INFO: [Synth 8-506] null port 'ADDRA' ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:12546]
+INFO: [Synth 8-506] null port 'ADDRB' ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:12551]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:12578]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:12583]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:12593]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:12606]
+INFO: [Synth 8-638] synthesizing module 'sp_mem__parameterized1' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:7836]
+INFO: [Synth 8-506] null port 'ADDR' ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:7822]
+INFO: [Synth 8-256] done synthesizing module 'sp_mem__parameterized1' (6#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:7836]
+INFO: [Synth 8-638] synthesizing module 'sp_mem__parameterized2' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:7836]
+INFO: [Synth 8-506] null port 'ADDR' ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:7822]
+INFO: [Synth 8-256] done synthesizing module 'sp_mem__parameterized2' (6#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:7836]
+INFO: [Synth 8-256] done synthesizing module 'filt_mem__parameterized0' (6#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:12564]
+INFO: [Synth 8-638] synthesizing module 'filt_mem__parameterized1' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:12564]
+INFO: [Synth 8-506] null port 'ADDRA' ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:12546]
+INFO: [Synth 8-506] null port 'ADDRB' ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:12551]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:12578]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:12583]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:12593]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:12606]
+INFO: [Synth 8-638] synthesizing module 'sp_mem__parameterized3' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:7836]
+INFO: [Synth 8-506] null port 'ADDR' ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:7822]
+INFO: [Synth 8-256] done synthesizing module 'sp_mem__parameterized3' (6#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:7836]
+INFO: [Synth 8-638] synthesizing module 'sp_mem__parameterized4' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:7836]
+INFO: [Synth 8-506] null port 'ADDR' ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:7822]
+INFO: [Synth 8-256] done synthesizing module 'sp_mem__parameterized4' (6#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:7836]
+INFO: [Synth 8-256] done synthesizing module 'filt_mem__parameterized1' (6#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:12564]
+INFO: [Synth 8-638] synthesizing module 'filt_mem__parameterized2' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:12564]
+INFO: [Synth 8-506] null port 'ADDRA' ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:12546]
+INFO: [Synth 8-506] null port 'ADDRB' ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:12551]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:12578]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:12583]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:12593]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:12606]
+INFO: [Synth 8-638] synthesizing module 'sp_mem__parameterized5' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:7836]
+INFO: [Synth 8-506] null port 'ADDR' ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:7822]
+INFO: [Synth 8-256] done synthesizing module 'sp_mem__parameterized5' (6#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:7836]
+INFO: [Synth 8-638] synthesizing module 'sp_mem__parameterized6' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:7836]
+INFO: [Synth 8-506] null port 'ADDR' ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:7822]
+INFO: [Synth 8-256] done synthesizing module 'sp_mem__parameterized6' (6#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:7836]
+INFO: [Synth 8-256] done synthesizing module 'filt_mem__parameterized2' (6#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:12564]
+INFO: [Synth 8-638] synthesizing module 'filt_mem__parameterized3' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:12564]
+INFO: [Synth 8-506] null port 'ADDRA' ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:12546]
+INFO: [Synth 8-506] null port 'ADDRB' ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:12551]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:12578]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:12583]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:12586]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:12586]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:12593]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:12606]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:12608]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:12611]
+INFO: [Synth 8-638] synthesizing module 'sp_mem__parameterized7' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:7836]
+INFO: [Synth 8-506] null port 'ADDR' ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:7822]
+INFO: [Synth 8-256] done synthesizing module 'sp_mem__parameterized7' (6#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:7836]
+INFO: [Synth 8-256] done synthesizing module 'filt_mem__parameterized3' (6#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:12564]
+INFO: [Synth 8-638] synthesizing module 'buff' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:9468]
+INFO: [Synth 8-506] null port 'READ_ADDR' ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:9459]
+INFO: [Synth 8-638] synthesizing module 'delay__parameterized3' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-256] done synthesizing module 'delay__parameterized3' (6#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-256] done synthesizing module 'buff' (7#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:9468]
+INFO: [Synth 8-638] synthesizing module 'delay__parameterized4' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-256] done synthesizing module 'delay__parameterized4' (7#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-638] synthesizing module 'delay__parameterized5' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-256] done synthesizing module 'delay__parameterized5' (7#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-638] synthesizing module 'delay__parameterized6' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-256] done synthesizing module 'delay__parameterized6' (7#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-638] synthesizing module 'delay__parameterized7' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-256] done synthesizing module 'delay__parameterized7' (7#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-638] synthesizing module 'delay__parameterized8' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-256] done synthesizing module 'delay__parameterized8' (7#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-638] synthesizing module 'delay__parameterized9' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-256] done synthesizing module 'delay__parameterized9' (7#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-638] synthesizing module 'delay__parameterized10' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-256] done synthesizing module 'delay__parameterized10' (7#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-638] synthesizing module 'delay__parameterized11' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-256] done synthesizing module 'delay__parameterized11' (7#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-638] synthesizing module 'delay__parameterized12' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-256] done synthesizing module 'delay__parameterized12' (7#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-638] synthesizing module 'buff__parameterized0' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:9468]
+INFO: [Synth 8-506] null port 'READ_ADDR' ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:9459]
+INFO: [Synth 8-638] synthesizing module 'delay__parameterized13' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-256] done synthesizing module 'delay__parameterized13' (7#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-256] done synthesizing module 'buff__parameterized0' (7#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:9468]
+INFO: [Synth 8-638] synthesizing module 'buff__parameterized1' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:9468]
+INFO: [Synth 8-506] null port 'READ_ADDR' ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:9459]
+INFO: [Synth 8-638] synthesizing module 'delay__parameterized14' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-256] done synthesizing module 'delay__parameterized14' (7#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-256] done synthesizing module 'buff__parameterized1' (7#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:9468]
+INFO: [Synth 8-638] synthesizing module 'buff__parameterized2' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:9468]
+INFO: [Synth 8-506] null port 'READ_ADDR' ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:9459]
+INFO: [Synth 8-638] synthesizing module 'delay__parameterized15' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-256] done synthesizing module 'delay__parameterized15' (7#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-256] done synthesizing module 'buff__parameterized2' (7#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:9468]
+INFO: [Synth 8-638] synthesizing module 'buff__parameterized3' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:9468]
+INFO: [Synth 8-506] null port 'READ_ADDR' ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:9459]
+INFO: [Synth 8-638] synthesizing module 'delay__parameterized16' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-256] done synthesizing module 'delay__parameterized16' (7#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-256] done synthesizing module 'buff__parameterized3' (7#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:9468]
+INFO: [Synth 8-638] synthesizing module 'buff__parameterized4' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:9468]
+INFO: [Synth 8-506] null port 'READ_ADDR' ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:9459]
+INFO: [Synth 8-638] synthesizing module 'delay__parameterized17' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-256] done synthesizing module 'delay__parameterized17' (7#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-256] done synthesizing module 'buff__parameterized4' (7#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:9468]
+INFO: [Synth 8-638] synthesizing module 'buff__parameterized5' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:9468]
+INFO: [Synth 8-506] null port 'READ_ADDR' ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:9459]
+INFO: [Synth 8-638] synthesizing module 'delay__parameterized18' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-256] done synthesizing module 'delay__parameterized18' (7#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-256] done synthesizing module 'buff__parameterized5' (7#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:9468]
+INFO: [Synth 8-638] synthesizing module 'buff__parameterized6' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:9468]
+INFO: [Synth 8-506] null port 'READ_ADDR' ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:9459]
+INFO: [Synth 8-638] synthesizing module 'delay__parameterized19' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-256] done synthesizing module 'delay__parameterized19' (7#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-256] done synthesizing module 'buff__parameterized6' (7#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:9468]
+INFO: [Synth 8-638] synthesizing module 'buff__parameterized7' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:9468]
+INFO: [Synth 8-506] null port 'READ_ADDR' ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:9459]
+INFO: [Synth 8-638] synthesizing module 'delay__parameterized20' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-256] done synthesizing module 'delay__parameterized20' (7#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-256] done synthesizing module 'buff__parameterized7' (7#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:9468]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:16906]
+INFO: [Synth 8-638] synthesizing module 'addsub_mult_add' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:11711]
+INFO: [Synth 8-638] synthesizing module 'delay__parameterized21' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-256] done synthesizing module 'delay__parameterized21' (7#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-638] synthesizing module 'delay__parameterized22' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-256] done synthesizing module 'delay__parameterized22' (7#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-638] synthesizing module 'delay__parameterized23' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-256] done synthesizing module 'delay__parameterized23' (7#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-638] synthesizing module 'delay__parameterized24' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-256] done synthesizing module 'delay__parameterized24' (7#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-638] synthesizing module 'calc' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:10932]
+INFO: [Synth 8-638] synthesizing module 'delay__parameterized25' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-256] done synthesizing module 'delay__parameterized25' (7#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-638] synthesizing module 'delay__parameterized26' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-256] done synthesizing module 'delay__parameterized26' (7#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-638] synthesizing module 'delay__parameterized27' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-256] done synthesizing module 'delay__parameterized27' (7#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-113] binding component instance 'i_dsp48e1' to cell 'DSP48E1' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:11153]
+INFO: [Synth 8-256] done synthesizing module 'calc' (8#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:10932]
+INFO: [Synth 8-256] done synthesizing module 'addsub_mult_add' (9#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:11711]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:16906]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:16906]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:16906]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:16906]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:16906]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:16906]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:16906]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:16906]
+INFO: [Synth 8-638] synthesizing module 'addsub_mult_add__parameterized0' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:11711]
+INFO: [Synth 8-638] synthesizing module 'delay__parameterized28' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-256] done synthesizing module 'delay__parameterized28' (9#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-638] synthesizing module 'delay__parameterized29' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-256] done synthesizing module 'delay__parameterized29' (9#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-638] synthesizing module 'delay__parameterized30' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-256] done synthesizing module 'delay__parameterized30' (9#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-638] synthesizing module 'delay__parameterized31' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-256] done synthesizing module 'delay__parameterized31' (9#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-638] synthesizing module 'delay__parameterized32' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-256] done synthesizing module 'delay__parameterized32' (9#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-256] done synthesizing module 'addsub_mult_add__parameterized0' (9#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:11711]
+INFO: [Synth 8-638] synthesizing module 'delay__parameterized33' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-256] done synthesizing module 'delay__parameterized33' (9#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:8907]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:19612]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:19619]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:19640]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:19646]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:19657]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:19671]
+INFO: [Synth 8-3919] null assignment ignored [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:19675]
+INFO: [Synth 8-3936] Found unconnected internal register 'g_parallel.g_paths[0].p_path_out_reg[0][fab]' and it is trimmed from '48' to '29' bits. [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:17002]
+INFO: [Synth 8-256] done synthesizing module 'single_rate' (10#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:15029]
+INFO: [Synth 8-256] done synthesizing module 'fir_compiler_v7_2_5_viv' (11#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:59747]
+INFO: [Synth 8-256] done synthesizing module 'fir_compiler_v7_2_5' (12#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2.vhd:244]
+INFO: [Synth 8-256] done synthesizing module 'halfbandEven' (13#1) [c:/modem/vivado/xc7k160t-IP/halfbandEven/synth/halfbandEven.vhd:73]
+---------------------------------------------------------------------------------
+Finished RTL Elaboration : Time (s): cpu = 00:00:48 ; elapsed = 00:00:53 . Memory (MB): peak = 353.832 ; gain = 181.641
+---------------------------------------------------------------------------------
+
+Report Check Netlist: 
++------+------------------+-------+---------+-------+------------------+
+|      |Item              |Errors |Warnings |Status |Description       |
++------+------------------+-------+---------+-------+------------------+
+|1     |multi_driven_nets |      0|        0|Passed |Multi driven nets |
++------+------------------+-------+---------+-------+------------------+
+INFO: [Synth 8-3295] tying undriven pin \g_parallel.g_cntrl[0].g_sym_cntrl.i_delay :CNTRL_IN[4] to constant 0 [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:16143]
+INFO: [Synth 8-3295] tying undriven pin \g_parallel.g_cntrl[0].g_sym_cntrl.i_delay :CNTRL_IN[3] to constant 0 [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:16143]
+INFO: [Synth 8-3295] tying undriven pin \g_parallel.g_cntrl[1].g_sym_cntrl.i_delay :CNTRL_IN[4] to constant 0 [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:16143]
+INFO: [Synth 8-3295] tying undriven pin \g_parallel.g_cntrl[1].g_sym_cntrl.i_delay :CNTRL_IN[3] to constant 0 [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:16143]
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:48 ; elapsed = 00:00:53 . Memory (MB): peak = 353.832 ; gain = 181.641
+---------------------------------------------------------------------------------
+INFO: [Netlist 29-17] Analyzing 9 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Device 21-403] Loading part xc7k160tfbg676-1
+INFO: [Project 1-570] Preparing netlist for logic optimization
+
+Processing XDC Constraints
+Initializing timing engine
+Parsing XDC File [c:/modem/vivado/xc7k160t-IP/halfbandEven/halfbandEven_ooc.xdc] for cell 'U0'
+Finished Parsing XDC File [c:/modem/vivado/xc7k160t-IP/halfbandEven/halfbandEven_ooc.xdc] for cell 'U0'
+Parsing XDC File [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/constraints/fir_compiler_v7_2.xdc] for cell 'U0'
+Finished Parsing XDC File [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/constraints/fir_compiler_v7_2.xdc] for cell 'U0'
+Parsing XDC File [C:/modem/vivado/xc7k160t-IP/managed_ip_project/managed_ip_project.runs/halfbandEven_synth_1/dont_touch.xdc]
+Finished Parsing XDC File [C:/modem/vivado/xc7k160t-IP/managed_ip_project/managed_ip_project.runs/halfbandEven_synth_1/dont_touch.xdc]
+Completed Processing XDC Constraints
+
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.107 . Memory (MB): peak = 617.961 ; gain = 0.000
+---------------------------------------------------------------------------------
+Finished Constraint Validation : Time (s): cpu = 00:01:07 ; elapsed = 00:01:14 . Memory (MB): peak = 617.961 ; gain = 445.770
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Loading Part and Timing Information
+---------------------------------------------------------------------------------
+Loading part: xc7k160tfbg676-1
+---------------------------------------------------------------------------------
+Finished Loading Part and Timing Information : Time (s): cpu = 00:01:07 ; elapsed = 00:01:14 . Memory (MB): peak = 617.961 ; gain = 445.770
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying 'set_property' XDC Constraints
+---------------------------------------------------------------------------------
+Applied set_property DONT_TOUCH = true for U0. (constraint file  auto generated constraint, line ).
+---------------------------------------------------------------------------------
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:01:07 ; elapsed = 00:01:14 . Memory (MB): peak = 617.961 ; gain = 445.770
+---------------------------------------------------------------------------------
+INFO: [Synth 8-4471] merging register 'g_events_if.event_s_data_tlast_unexpected_reg' into 'g_events_if.event_s_data_tlast_missing_reg' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:19481]
+INFO: [Synth 8-4471] merging register 'g_events_if.event_s_data_chanid_incorrect_reg' into 'g_events_if.event_s_data_tlast_missing_reg' [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:19482]
+INFO: [Synth 8-3936] Found unconnected internal register 'g_parallel.we_gen_algn_reg' and it is trimmed from '3' to '2' bits. [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/hdl/fir_compiler_v7_2_vh_rfs.vhd:15743]
+INFO: [Synth 8-5546] ROM "add" won't be mapped to RAM because it is too sparse
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:01:08 ; elapsed = 00:01:16 . Memory (MB): peak = 617.961 ; gain = 445.770
+---------------------------------------------------------------------------------
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+---------------------------------------------------------------------------------
+Start RTL Component Statistics 
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RTL Component Statistics 
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start RTL Hierarchical Component Statistics 
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RTL Hierarchical Component Statistics
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Part Resource Summary
+---------------------------------------------------------------------------------
+Part Resources:
+DSPs: 600 (col length:100)
+BRAMs: 650 (col length: RAMB18 100 RAMB36 50)
+---------------------------------------------------------------------------------
+Finished Part Resource Summary
+---------------------------------------------------------------------------------
+Start Parallel Synthesis Optimization  : Time (s): cpu = 00:01:09 ; elapsed = 00:01:17 . Memory (MB): peak = 617.961 ; gain = 445.770
+---------------------------------------------------------------------------------
+Start Cross Boundary Optimization
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Cross Boundary Optimization : Time (s): cpu = 00:01:09 ; elapsed = 00:01:17 . Memory (MB): peak = 617.961 ; gain = 445.770
+---------------------------------------------------------------------------------
+Finished Parallel Reinference  : Time (s): cpu = 00:01:09 ; elapsed = 00:01:17 . Memory (MB): peak = 617.961 ; gain = 445.770
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+---------------------------------------------------------------------------------
+Start Area Optimization
+---------------------------------------------------------------------------------
+INFO: [Synth 8-3333] propagating constant 1 across sequential element (U0/i_synth/\g_single_rate.i_single_rate/g_parallel.rfd_int_reg )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (U0/i_synth/\g_single_rate.i_single_rate/g_events_if.event_s_data_tlast_missing_reg )
+INFO: [Synth 8-3886] merging instance 'U0/i_synth/\g_single_rate.i_single_rate/g_m_data_chan_no_fifo.m_axis_data_tdata_int_reg[28] ' (FDRE) to 'U0/i_synth/\g_single_rate.i_single_rate/g_m_data_chan_no_fifo.m_axis_data_tdata_int_reg[29] '
+INFO: [Synth 8-3886] merging instance 'U0/i_synth/\g_single_rate.i_single_rate/g_m_data_chan_no_fifo.m_axis_data_tdata_int_reg[29] ' (FDRE) to 'U0/i_synth/\g_single_rate.i_single_rate/g_m_data_chan_no_fifo.m_axis_data_tdata_int_reg[30] '
+INFO: [Synth 8-3886] merging instance 'U0/i_synth/\g_single_rate.i_single_rate/g_m_data_chan_no_fifo.m_axis_data_tdata_int_reg[30] ' (FDRE) to 'U0/i_synth/\g_single_rate.i_single_rate/g_m_data_chan_no_fifo.m_axis_data_tdata_int_reg[31] '
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (U0/i_synth/\g_single_rate.i_single_rate/g_m_data_chan_no_fifo.m_axis_data_tlast_int_reg )
+INFO: [Synth 8-3332] Sequential element (\g_single_rate.i_single_rate/g_parallel.g_cntrl[7].g_sym_cntrl.g_reg.cntrl_reg[7][1] ) is unused and will be removed from module fir_compiler_v7_2_5_viv.
+INFO: [Synth 8-3332] Sequential element (\g_single_rate.i_single_rate/g_parallel.g_cntrl[6].g_sym_cntrl.g_reg.cntrl_reg[6][1] ) is unused and will be removed from module fir_compiler_v7_2_5_viv.
+INFO: [Synth 8-3332] Sequential element (\g_single_rate.i_single_rate/g_parallel.g_cntrl[5].g_sym_cntrl.g_reg.cntrl_reg[5][1] ) is unused and will be removed from module fir_compiler_v7_2_5_viv.
+INFO: [Synth 8-3332] Sequential element (\g_single_rate.i_single_rate/g_parallel.g_cntrl[4].g_sym_cntrl.g_reg.cntrl_reg[4][1] ) is unused and will be removed from module fir_compiler_v7_2_5_viv.
+INFO: [Synth 8-3332] Sequential element (\g_single_rate.i_single_rate/g_parallel.g_cntrl[3].g_sym_cntrl.g_reg.cntrl_reg[3][1] ) is unused and will be removed from module fir_compiler_v7_2_5_viv.
+INFO: [Synth 8-3332] Sequential element (\g_single_rate.i_single_rate/g_parallel.g_cntrl[2].g_sym_cntrl.g_reg.cntrl_reg[2][1] ) is unused and will be removed from module fir_compiler_v7_2_5_viv.
+INFO: [Synth 8-3332] Sequential element (\g_single_rate.i_single_rate/g_parallel.g_cntrl[1].g_sym_cntrl.g_reg.cntrl_reg[1][1] ) is unused and will be removed from module fir_compiler_v7_2_5_viv.
+INFO: [Synth 8-3332] Sequential element (\g_single_rate.i_single_rate/g_parallel.g_cntrl[8].g_sym_cntrl.g_reg.cntrl_reg[8][6] ) is unused and will be removed from module fir_compiler_v7_2_5_viv.
+INFO: [Synth 8-3332] Sequential element (\g_single_rate.i_single_rate/g_parallel.g_cntrl[8].g_sym_cntrl.g_reg.cntrl_reg[8][1] ) is unused and will be removed from module fir_compiler_v7_2_5_viv.
+INFO: [Synth 8-3332] Sequential element (\g_single_rate.i_single_rate/g_parallel.flush_sym_data_reg ) is unused and will be removed from module fir_compiler_v7_2_5_viv.
+INFO: [Synth 8-3332] Sequential element (\g_single_rate.i_single_rate/g_parallel.i_cntrl_sym_buff_sclr/gen_reg.d_reg_reg[0] ) is unused and will be removed from module fir_compiler_v7_2_5_viv.
+INFO: [Synth 8-3332] Sequential element (\g_single_rate.i_single_rate/g_m_data_chan_no_fifo.m_axis_data_tlast_int_reg ) is unused and will be removed from module fir_compiler_v7_2_5_viv.
+INFO: [Synth 8-3332] Sequential element (\g_single_rate.i_single_rate/g_m_data_chan_no_fifo.m_axis_data_tdata_int_reg[30] ) is unused and will be removed from module fir_compiler_v7_2_5_viv.
+INFO: [Synth 8-3332] Sequential element (\g_single_rate.i_single_rate/g_m_data_chan_no_fifo.m_axis_data_tdata_int_reg[29] ) is unused and will be removed from module fir_compiler_v7_2_5_viv.
+INFO: [Synth 8-3332] Sequential element (\g_single_rate.i_single_rate/g_m_data_chan_no_fifo.m_axis_data_tdata_int_reg[28] ) is unused and will be removed from module fir_compiler_v7_2_5_viv.
+INFO: [Synth 8-3332] Sequential element (\g_single_rate.i_single_rate/g_events_if.event_s_data_tlast_missing_reg ) is unused and will be removed from module fir_compiler_v7_2_5_viv.
+INFO: [Synth 8-3332] Sequential element (\g_single_rate.i_single_rate/g_parallel.rfd_int_reg ) is unused and will be removed from module fir_compiler_v7_2_5_viv.
+INFO: [Synth 8-3332] Sequential element (\g_single_rate.i_single_rate/g_parallel.we_gen_reg ) is unused and will be removed from module fir_compiler_v7_2_5_viv.
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (U0/i_synth/\g_single_rate.i_single_rate/g_s_data_chan_fifo.i_s_data_chan_fifo/fifo0 /not_aempty_1_reg)
+INFO: [Synth 8-3333] propagating constant 1 across sequential element (U0/i_synth/\g_single_rate.i_single_rate/g_s_data_chan_fifo.i_s_data_chan_fifo/fifo0 /aempty_1_reg)
+INFO: [Synth 8-3332] Sequential element (aempty_1_reg) is unused and will be removed from module glb_srl_fifo.
+INFO: [Synth 8-3332] Sequential element (not_aempty_1_reg) is unused and will be removed from module glb_srl_fifo.
+INFO: [Synth 8-3332] Sequential element (\g_single_rate.i_single_rate/g_parallel.sclr_cntrl_algn_reg[0] ) is unused and will be removed from module fir_compiler_v7_2_5_viv.
+---------------------------------------------------------------------------------
+Finished Area Optimization : Time (s): cpu = 00:01:10 ; elapsed = 00:01:18 . Memory (MB): peak = 617.961 ; gain = 445.770
+---------------------------------------------------------------------------------
+Finished Parallel Area Optimization  : Time (s): cpu = 00:01:10 ; elapsed = 00:01:18 . Memory (MB): peak = 617.961 ; gain = 445.770
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+---------------------------------------------------------------------------------
+Start Timing Optimization
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying XDC Timing Constraints
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:01:38 ; elapsed = 00:01:48 . Memory (MB): peak = 647.004 ; gain = 474.813
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Timing Optimization : Time (s): cpu = 00:01:39 ; elapsed = 00:01:49 . Memory (MB): peak = 661.203 ; gain = 489.012
+---------------------------------------------------------------------------------
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+---------------------------------------------------------------------------------
+Start Technology Mapping
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Technology Mapping : Time (s): cpu = 00:01:40 ; elapsed = 00:01:50 . Memory (MB): peak = 671.715 ; gain = 499.523
+---------------------------------------------------------------------------------
+Finished Parallel Technology Mapping Optimization  : Time (s): cpu = 00:01:40 ; elapsed = 00:01:50 . Memory (MB): peak = 671.715 ; gain = 499.523
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+Finished Parallel Synthesis Optimization  : Time (s): cpu = 00:01:40 ; elapsed = 00:01:50 . Memory (MB): peak = 671.715 ; gain = 499.523
+---------------------------------------------------------------------------------
+Start IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished IO Insertion : Time (s): cpu = 00:01:41 ; elapsed = 00:01:51 . Memory (MB): peak = 671.715 ; gain = 499.523
+---------------------------------------------------------------------------------
+
+Report Check Netlist: 
++------+------------------+-------+---------+-------+------------------+
+|      |Item              |Errors |Warnings |Status |Description       |
++------+------------------+-------+---------+-------+------------------+
+|1     |multi_driven_nets |      0|        0|Passed |Multi driven nets |
++------+------------------+-------+---------+-------+------------------+
+---------------------------------------------------------------------------------
+Start Renaming Generated Instances
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Instances : Time (s): cpu = 00:01:41 ; elapsed = 00:01:51 . Memory (MB): peak = 671.715 ; gain = 499.523
+---------------------------------------------------------------------------------
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+---------------------------------------------------------------------------------
+Start Rebuilding User Hierarchy
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:01:41 ; elapsed = 00:01:51 . Memory (MB): peak = 671.715 ; gain = 499.523
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Ports
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Ports : Time (s): cpu = 00:01:41 ; elapsed = 00:01:51 . Memory (MB): peak = 671.715 ; gain = 499.523
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:01:41 ; elapsed = 00:01:51 . Memory (MB): peak = 671.715 ; gain = 499.523
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Nets
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Nets : Time (s): cpu = 00:01:41 ; elapsed = 00:01:51 . Memory (MB): peak = 671.715 ; gain = 499.523
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Writing Synthesis Report
+---------------------------------------------------------------------------------
+
+Report BlackBoxes: 
++-+--------------+----------+
+| |BlackBox name |Instances |
++-+--------------+----------+
++-+--------------+----------+
+
+Report Cell Usage: 
++------+--------+------+
+|      |Cell    |Count |
++------+--------+------+
+|1     |DSP48E1 |     9|
+|2     |LUT1    |     4|
+|3     |LUT2    |    16|
+|4     |LUT3    |     5|
+|5     |LUT4    |     5|
+|6     |LUT5    |     8|
+|7     |LUT6    |     6|
+|8     |SRL16E  |   289|
+|9     |FDRE    |   562|
+|10    |FDSE    |    10|
++------+--------+------+
+---------------------------------------------------------------------------------
+Finished Writing Synthesis Report : Time (s): cpu = 00:01:41 ; elapsed = 00:01:51 . Memory (MB): peak = 671.715 ; gain = 499.523
+---------------------------------------------------------------------------------
+Synthesis finished with 0 errors, 0 critical warnings and 0 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:42 ; elapsed = 00:01:32 . Memory (MB): peak = 671.715 ; gain = 190.223
+Synthesis Optimization Complete : Time (s): cpu = 00:01:42 ; elapsed = 00:01:52 . Memory (MB): peak = 671.715 ; gain = 499.523
+INFO: [Project 1-571] Translating synthesized netlist
+INFO: [Netlist 29-17] Analyzing 9 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-570] Preparing netlist for logic optimization
+Parsing XDC File [c:/modem/vivado/xc7k160t-IP/halfbandEven/halfbandEven_ooc.xdc] for cell 'U0'
+Finished Parsing XDC File [c:/modem/vivado/xc7k160t-IP/halfbandEven/halfbandEven_ooc.xdc] for cell 'U0'
+Parsing XDC File [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/constraints/fir_compiler_v7_2.xdc] for cell 'U0'
+Finished Parsing XDC File [c:/modem/vivado/xc7k160t-IP/halfbandEven/fir_compiler_v7_2_5/constraints/fir_compiler_v7_2.xdc] for cell 'U0'
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+INFO: [Common 17-83] Releasing license: Synthesis
+308 Infos, 12 Warnings, 0 Critical Warnings and 0 Errors encountered.
+synth_design completed successfully
+synth_design: Time (s): cpu = 00:01:42 ; elapsed = 00:01:50 . Memory (MB): peak = 671.715 ; gain = 456.590
+INFO: [Coretcl 2-1174] Renamed 82 cell refs.
+report_utilization: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.057 . Memory (MB): peak = 671.715 ; gain = 0.000
+INFO: [Common 17-206] Exiting Vivado at Sat Oct 29 14:49:43 2016...

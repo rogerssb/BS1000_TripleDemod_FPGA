@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="test_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="test" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="0fs"></ZoomStartTime>
+      <ZoomEndTime time="10000000001fs"></ZoomEndTime>
+      <Cursor1Time time="10000000000fs"></Cursor1Time>
+   </zoom_setting>
+   <WVObjectSize size="18" />
+   <wvobject db_ref_id="1" fp_name="/test/reset" type="logic">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/test/clk" type="logic">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/test/bc" type="logic">
+      <obj_property name="ElementShortName">bc</obj_property>
+      <obj_property name="ObjectShortName">bc</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/test/clken" type="logic">
+      <obj_property name="ElementShortName">clken</obj_property>
+      <obj_property name="ObjectShortName">clken</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/test/framer/clk" type="logic">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/test/framer/clkEn" type="logic">
+      <obj_property name="ElementShortName">clkEn</obj_property>
+      <obj_property name="ObjectShortName">clkEn</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/test/framer/dataBitIn" type="logic">
+      <obj_property name="ElementShortName">dataBitIn</obj_property>
+      <obj_property name="ObjectShortName">dataBitIn</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/test/framer/rotation" type="array">
+      <obj_property name="ElementShortName">rotation[1:0]</obj_property>
+      <obj_property name="ObjectShortName">rotation[1:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/test/framer/bitsPerWord" type="array">
+      <obj_property name="ElementShortName">bitsPerWord[4:0]</obj_property>
+      <obj_property name="ObjectShortName">bitsPerWord[4:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/test/framer/wordsPerFrame" type="array">
+      <obj_property name="ElementShortName">wordsPerFrame[15:0]</obj_property>
+      <obj_property name="ObjectShortName">wordsPerFrame[15:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/test/framer/syncwordMask" type="array">
+      <obj_property name="ElementShortName">syncwordMask[31:0]</obj_property>
+      <obj_property name="ObjectShortName">syncwordMask[31:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/test/framer/syncword" type="array">
+      <obj_property name="ElementShortName">syncword[31:0]</obj_property>
+      <obj_property name="ObjectShortName">syncword[31:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/test/framer/syncThreshold" type="array">
+      <obj_property name="ElementShortName">syncThreshold[6:0]</obj_property>
+      <obj_property name="ObjectShortName">syncThreshold[6:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/test/framer/bitSum" type="array">
+      <obj_property name="ElementShortName">bitSum[6:0]</obj_property>
+      <obj_property name="ObjectShortName">bitSum[6:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/test/framer/invertData" type="logic">
+      <obj_property name="ElementShortName">invertData</obj_property>
+      <obj_property name="ObjectShortName">invertData</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/test/framer/framedBitOut" type="logic">
+      <obj_property name="ElementShortName">framedBitOut</obj_property>
+      <obj_property name="ObjectShortName">framedBitOut</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/test/framer/framesync" type="logic">
+      <obj_property name="ElementShortName">framesync</obj_property>
+      <obj_property name="ObjectShortName">framesync</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/test/framer/framesyncPulse" type="logic">
+      <obj_property name="ElementShortName">framesyncPulse</obj_property>
+      <obj_property name="ObjectShortName">framesyncPulse</obj_property>
+   </wvobject>
+</wave_config>

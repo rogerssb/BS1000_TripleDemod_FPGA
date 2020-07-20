@@ -1,0 +1,15 @@
+<!DOCTYPE SilvacoProject>
+<project version="1" name="testTrellisDetector" >
+ <products>
+  <product name="SILOS" >
+   <settings>
+    <setting value="Y" name="DebugEnable" />
+    <setting value="Silvaco4.14.3.R" name="Version" />
+   </settings>
+   <sourcefiles>
+    <file name="testTrellisDetector.v" />
+    <file name="trellisDetector.v" />
+   </sourcefiles>
+  </product>
+ </products>
+</project>
