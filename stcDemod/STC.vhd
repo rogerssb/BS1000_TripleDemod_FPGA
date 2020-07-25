@@ -35,7 +35,7 @@ Dependencies:
 11-12-19 Removed most MiscBits, Mag0GtMag1 requires 2:1 to switch
 12_??-19 Removed Detection Filter from Brik2 module. Changed STC routing to match
 12-19-19 Change PilotSync Offset to 9. Changed TrellisOffset in VIO to 0
-01-14-20 Add Peaks and DeltaTau outputs for meter, add ReadHold to pause data while reading
+01-14-20 Add Peaks and DeltaTau outputs for meter
 
 -------------------------------------------------------------
 */
@@ -64,7 +64,6 @@ ENTITY STC IS
  --     Clk93Dly,		-- TODO uncomment
       Clk186,
       SpectrumInv,
-      ReadHold,
       ValidIn           : IN  STD_LOGIC;
       DataOut,                            -- Trellis Data Output
       ClkOutEn,                           -- Trellis Clock Output
@@ -101,6 +100,7 @@ ARCHITECTURE rtl OF STC IS
          reset2x,
          ce,
          SpectrumInv,
+         Mag0GtMag1,
          ValidIn        : IN  std_logic;
          ReIn,
          ImIn           : IN  FLOAT_1_18;
@@ -170,9 +170,7 @@ ARCHITECTURE rtl OF STC IS
          Mu0,
          Mu1            : OUT FLOAT_1_18;
          PhaseDiff      : OUT sfixed(0 downto -11);
-         DeltaTauEst    : OUT sfixed(0 downto -5);
-         PhaseOutA,
-         PhaseOutB      : OUT SLV12
+         DeltaTauEst    : OUT sfixed(0 downto -5)
       );
    END COMPONENT Brik2;
 
@@ -245,7 +243,7 @@ ARCHITECTURE rtl OF STC IS
       );
    END COMPONENT RAM_2Reads_1Write;
 
-   COMPONENT Vio2x18
+   COMPONENT Vio2x18 IS
       PORT (
          clk : IN STD_LOGIC;
          probe_out0,
@@ -256,6 +254,24 @@ ARCHITECTURE rtl OF STC IS
          probe_out5 :  OUT STD_LOGIC_VECTOR(3 downto 0)
       );
    END COMPONENT;
+
+   component fmDemod is
+      PORT (
+         clk,
+         reset,
+         clkEn           : in  std_logic;
+         iFm,
+         qFm             : in  SLV18;
+         demodMode       : in  std_logic_vector(4 downto 0);
+         phase,
+         phaseError,
+         freq,
+         freqError       : out SLV12;
+         mag             : out std_logic_vector(12 downto 0);
+         clkEnOut        : out std_logic
+      );
+   end component fmDemod;
+
 
    COMPONENT vm_cordic_fast IS
       GENERIC (
@@ -341,8 +357,6 @@ ARCHITECTURE rtl OF STC IS
             PhsPeak1,
             Ch0MuSlv,
             Ch1MuSlv          : SLV18;
-   SIGNAL   Phase0A,
-            Phase0B           : SLV12;
    SIGNAL   StartCount        : integer range 0 to 3 := 0;
    SIGNAL   PilotPulse,
             PilotValidOut     : std_logic;
@@ -379,7 +393,8 @@ ARCHITECTURE rtl OF STC IS
 -- todo, remove
    SIGNAL   ExpectedData,
             m_ndx0Slv,
-            m_ndx1Slv         : SLV4;
+            m_ndx1Slv,
+            PrnError          : SLV4;
    SIGNAL   DataAddr          : ufixed(9 downto 0);
    SIGNAL   DataAddr_i        : natural range 0 to 1023;
    SIGNAL   BitErrors,
@@ -387,18 +402,24 @@ ARCHITECTURE rtl OF STC IS
    signal   MiscBits,
             HxPhase,
             InRBrik2Ila,
-            InIBrik2Ila       : SLV18;
+            InIBrik2Ila,
+            PrnShift          : SLV18;
    signal   StartIla,
             ValidIla          : std_logic;
    signal   DacMux            : vector_of_slvs(0 to 15)(17 downto 0);
-   signal   DeltaTauEn        : std_logic;
+   signal   DeltaTauEn,
+            PrnErrors         : std_logic;
+
+   signal   mag               : std_logic_vector(12 downto 0);
+   signal   phase,
+            freq              : SLV12;
 
    attribute mark_debug : string;
    attribute mark_debug of EstimatesDone,
                   StartIla, ValidIla, InRBrik2Ila, InIBrik2Ila, PilotFoundCE, PilotFoundPD,
                   PhaseDiffWB, PhaseDiffNB, CorrPntr8to0, m_ndx0Slv, m_ndx1Slv, Mag0GtMag1, HxThresh,
-                  H0Phase, H1Phase, H0Mag, H1Mag, deltaTauEstSlv,
-                  PilotOffset, PilotOffset_s,
+                  H0Phase, H1Phase, H0Mag, H1Mag, deltaTauEstSlv, DataAddr,
+                  PrnErrors, PhaseDiffs, mag, phase, freq, PilotOffset, PilotOffset_s,
                   DataOut, ClkOutEn, ValidData2047 : signal is "true";
 
 BEGIN
@@ -457,20 +478,29 @@ BEGIN
          ClkOutEnDly <= ClkOutEn;
          ValidData2047 <= dataBit xnor codeBit;
          if (not EstimatesDone) then
-	    Reload   <= '0';
-	    if (pnBitEn and not ValidData2047) then
-	        Ber <= Ber + 1;
-	    end if;
-	 else
-	    Ber <= 0;
-	    if (Ber > 200) then
-	         Reload <= '1';
-	    end if;
-	 end if;
+               Reload   <= '0';
+               if (pnBitEn and not ValidData2047) then
+                  Ber <= Ber + 1;
+               end if;
+         else
+            Ber <= 0;
+            if (Ber > 200) then
+               Reload <= '1';
+            end if;
+         end if;
+
+         if (TrellisOutEn) then
+            PrnShift <= PrnShift(13 downto 0) & TrellisBits;
+            PrnError(0) <= PrnShift(14) xor PrnShift(13) xor TrellisBits(3);
+            PrnError(1) <= PrnShift(13) xor PrnShift(12) xor TrellisBits(2);
+            PrnError(2) <= PrnShift(12) xor PrnShift(11) xor TrellisBits(1);
+            PrnError(3) <= PrnShift(11) xor PrnShift(10) xor TrellisBits(0);
+         end if;
+         PrnErrors <= or(PrnError);
       end if;
    end process;
 
-   CE    <= '1';     -- no need to strobe CE at this point.
+   CE        <= '1';     -- no need to strobe CE at this point.
 
    Reset93Process : process(Clk93)
    begin
@@ -501,6 +531,25 @@ BEGIN
       O => Reset2x
    );
 
+   -- TODO, remove fmdemod
+    stcFmDemod : fmDemod
+      PORT MAP (
+         clk         => clk93,
+         reset       => Reset,
+         clkEn       => ValidIn,
+         iFm         => ResampleR,
+         qFm         => ResampleI,
+         demodMode   => "00010",
+         phase       => phase,
+         phaseError  => open,
+         freq        => freq,
+         freqError   => open,
+         mag         => mag,
+         clkEnOut    => open
+    );
+
+
+
    ResampleR_s <= to_sfixed(ResampleR, ResampleR_s);
    ResampleI_s <= to_sfixed(ResampleI, ResampleI_s);
 
@@ -515,10 +564,11 @@ BEGIN
          reset2x        => Reset2x,
          ce             => CE,
          ValidIn        => ValidIn,
+         Mag0GtMag1     => Mag0GtMag1,
          SpectrumInv    => SpectrumInv,
          ReIn           => ResampleR_s,
          ImIn           => ResampleI_s,
-         SearchRange    => x"1",
+         SearchRange    => x"2",
          -- outputs
          PilotFound     => PilotFoundPD,
          CorrPntr       => CorrPntr,
@@ -580,7 +630,7 @@ BEGIN
          ValidOut       => ValidOutPS
    );
 
-   PilotOffset <= 9x"002" when (PilotOffset_s > 2) else 9x"1fd" when (PilotOffset_s < -2) else to_slv(PilotOffset_s);
+   PilotOffset <= to_slv(PilotOffset_s);
 
    InterBrikClk : process(Clk186) is
    begin
@@ -614,8 +664,6 @@ BEGIN
          Mag0GtMag1     => Mag0GtMag1,
          H0MagIn        => H0Mag,
          H1MagIn        => H1Mag,
-         PhaseOutA      => Phase0A,
-         PhaseOutB      => Phase0B,
          PhaseDiff      => PhaseDiff2,
          StartHPP       => CordicValid,
          H0EstR         => H0EstR,
@@ -643,10 +691,8 @@ BEGIN
          else
             deltaTauEstSlv <= to_slv(DeltaTauEst);
          end if;
-         if (not ReadHold) then
-            DeltaTau          <= deltaTauEstSlv;    -- output to meter
-            Peaks             <= MagPeak1(15 downto 0) & MagPeak0(15 downto 0);
-         end if;
+         DeltaTau          <= deltaTauEstSlv;    -- output to meter
+         Peaks             <= H1Mag & 3x"0" & H0Mag & 3x"0";
          EstimatesDoneDly  <= EstimatesDone;
          if (Mag0GtMag1) then
             HxEstR <= to_slv(H0EstR);
@@ -728,13 +774,11 @@ BEGIN
          DacMux(1)  <= PhsPeak1;       --
          DacMux(2)  <= m_ndx0Slv & 14x"0";
          DacMux(3)  <= m_ndx1Slv & 14x"0";
-         -- DacMux(4)  <= Phase0A & 6x"0";
-         -- DacMux(5)  <= PhaseOut;
          DacMux(4)  <= ResampleR;
          DacMux(5)  <= ResampleI;
          DacMux(6)  <= PhaseDiffWB;
-         DacMux(7)  <= to_slv(H0PhaseDiff) & 6x"0";
-         DacMux(8)  <= to_slv(H1PhaseDiff) & 6x"0";
+         DacMux(7)  <= PhaseDiffNB;
+         DacMux(8)  <= PhaseDiffs & 6x"00";
          DacMux(9)  <= Magnitude0;                 -- iFFT H0 Magnitude every other sample
          DacMux(10) <= Magnitude1;                 -- H1
          DacMux(11) <= PhaseOut0;                  -- iFFT H0 Phase every other sample
@@ -744,6 +788,7 @@ BEGIN
          DacMux(15) <= PilotOffset & 9x"00";
 
          CorrPntr8to0 <= to_slv(CorrPntr(8 downto 0));
+
          if (Reset) then
             Mag0GtMag1 <= '0';
          elsif (H0Mag_u > H1Mag_u sla 1) then
@@ -751,6 +796,7 @@ BEGIN
          elsif (H1Mag_u > H0Mag_u sla 1) then
             Mag0GtMag1   <= '0';
          end if;
+
 
          -- Add threshold hysteresis to prevent PilotFoundCE oscillating when power is around threshold.
          HxThresh       <= to_ufixed('0' & HxThreshSlv, HxThresh) when (not PilotFoundCE) else to_ufixed("00" & HxThreshSlv(11 downto 1), HxThresh);
@@ -795,5 +841,16 @@ BEGIN
          p     => H1Phase,
          enOut => open
       );
-
+/*
+   Vio : Vio2x18
+      PORT MAP(
+         clk         => Clk93,
+         probe_out0  => MiscBits,
+         probe_out1  => open,
+         probe_out2  => open,
+         probe_out3  => open,
+         probe_out4  => open,
+         probe_out5  => open
+      );
+*/
 END rtl;

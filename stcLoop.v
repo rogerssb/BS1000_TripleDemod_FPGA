@@ -61,9 +61,9 @@ module stcLoop(
     wire            [31:0]  loopOffset;
     wire            [31:0]  loopData;
     assign                  freqLagExp = loopData[4:0];
-    wire            [15:0]  lockCount;
-    wire            [11:0]  syncThreshold;
-    wire    signed  [39:0]  lagAccum;
+ (* MARK_DEBUG="true" *)    wire            [15:0]  lockCount;
+ (* MARK_DEBUG="true" *)    wire            [11:0]  syncThreshold;
+ (* MARK_DEBUG="true" *)    wire    signed  [39:0]  lagAccum;
     carrierLoopRegs loopRegs(
         .cs(freqLoopSpace),
         .addr(addr),
@@ -189,7 +189,7 @@ module stcLoop(
     /******************************* Freq Lock Detector ********************************/
 
     reg     [11:0]  absModeError;
-    reg     [15:0]  avgAbsModeError;
+ (* MARK_DEBUG="true" *)  reg     [15:0]  avgAbsModeError;
     assign          avgFreqError = avgAbsModeError[15:4];
     wire    [16:0]  lockPlus = {1'b0,lockCounter} + 17'h00001;
     wire    [16:0]  lockMinus = {1'b0,lockCounter} + 17'h1ffff;

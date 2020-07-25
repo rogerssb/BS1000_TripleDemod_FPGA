@@ -133,7 +133,7 @@ ARCHITECTURE rtl OF PilotSync IS
 
    attribute mark_debug : string;
    attribute mark_debug of FrmSmplCount, StartOut, PilotValid, PilotPulseIn,
-              Missed, RdAddr, WrAddr : signal is "true";
+              Missed, MissedCnt, RdAddr, WrAddr : signal is "true";
 
 BEGIN
 
@@ -144,7 +144,8 @@ BEGIN
       end if;
    end process IlaProcess;
 
-   PilotValid  <= '1' when ((PilotPulseIn = '1') and ((PilotFound = '0') or (MissedCnt = 3) or (FrmSmplCount > FRAME_LENGTH_4 - 256))) else '0'; -- pulse should be at 13312
+   -- pulse should be at 13312
+   PilotValid  <= '1' when ((PilotPulseIn = '1') and ((PilotFound = '0') or (MissedCnt = 3) or (FrmSmplCount > FRAME_LENGTH_4 - 256))) else '0';
 
    ClkProcess: process (clk)
       variable CorrPntr_s        : sfixed(16 downto 0);

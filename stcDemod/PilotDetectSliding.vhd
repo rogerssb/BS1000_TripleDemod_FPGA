@@ -59,6 +59,7 @@ entity PilotDetectSliding is
          reset2x,
          ce,
          SpectrumInv,
+         Mag0GtMag1,
          ValidIn        : IN  std_logic;
          ReIn,
          ImIn           : IN  FLOAT_1_18;
@@ -332,7 +333,8 @@ architecture rtl of PilotDetectSliding is
             CurrentPhs1,
             CurrentPeak,
             Peak1,
-            Peak2             : ufixed(AbsZero'range);
+            Peak2,
+            Peak3             : ufixed(AbsZero'range);
    SIGNAL   MagDelay,
             MagDelay0,
             MagDelay1,
@@ -381,11 +383,15 @@ architecture rtl of PilotDetectSliding is
     SIGNAL  PilotMag_Ila,
             Peak1_Ila,
             Peak2_Ila,
+            Peak3_Ila,
             AbsCntr0_Ila,
             AbsCntr1_Ila      : SLV18;
 
+   attribute KEEP : string;
+   attribute KEEP of CalcThreshold, PhsCntStrt0  : signal is "TRUE";
+
    attribute mark_debug : string;
-   attribute mark_debug of PilotMag_Ila, PilotFound, Peak1_Ila, Peak2_Ila, BadPilot,
+   attribute mark_debug of PilotMag_Ila, PilotFound, Peak1_Ila, Peak2_Ila, Peak3_Ila, BadPilot,
              AbsCntr0_Ila, AbsCntr1_Ila, AbsIndex, PrevIndex : signal is "true";
 begin
 
@@ -395,6 +401,7 @@ begin
          PilotMag_Ila   <= to_slv(PilotMag);
          Peak1_Ila      <= to_slv(Peak1);
          Peak2_Ila      <= to_slv(Peak2);
+         Peak3_Ila      <= to_slv(Peak3);
       end if;
    end process IlaProcess;
 
@@ -744,16 +751,16 @@ begin
             CorrPntr     <= (others=>'0');
             StartOut     <= '0';
          elsif (ce) then
-            ValidOverAdd <= ValidAbs;  -- delay ValidAbs to realign OverAdd sum outputs
-            Index1   <= Index0;
-            Index1_u    := to_unsigned(Index1, Index1_u);   -- these are to convert 0 to 511 to ±255
-            Index1_s    := signed('0' & Index1_u);
-            PrevIndex_u := to_unsigned(PrevIndex, Index1_u);
-            PrevIndex_s := signed('0' & PrevIndex_u);
+            ValidOverAdd   <= ValidAbs;  -- delay ValidAbs to realign OverAdd sum outputs
+            Index1         <= Index0;
+            Index1_u       := to_unsigned(Index1, Index1_u);   -- these are to convert 0 to 511 to ±255
+            Index1_s       := signed('0' & Index1_u);
+            PrevIndex_u    := to_unsigned(PrevIndex, Index1_u);
+            PrevIndex_s    := signed('0' & PrevIndex_u);
             Diff_s         := Index1_s - PrevIndex_s;
             AbsDiff_s      := abs(Diff_s);
             if (ValidAbs) then
-               if (AbsCntr0 > AbsCntr1) then
+               if (Mag0GtMag1) then --ignore other channel to avoid hopping back and forth. AbsCntr0 > AbsCntr1) then
                   MaxCntr  <= AbsCntr0;
                else
                   MaxCntr  <= AbsCntr1;
@@ -913,6 +920,7 @@ begin
             PhsPeak1_u        <= (others=>'0');
             Peak1             <= to_ufixed(1.0, Peak1);
             Peak2             <= to_ufixed(0.2, Peak2);
+            Peak3             <= to_ufixed(0.2, Peak3);
          elsif (ce) then
             PilotMag     <= MaxOfPckt;          -- Latch clock transfers
             PilotPulse1x <= PilotPulse;
@@ -923,7 +931,8 @@ begin
                   CalcThreshold  <= '1';
                   PeakPointer    <= 1;          -- no need to check PilotMag(0) since Peak1 is set to PilotMag also
                   Peak1          <= PilotMag;   -- Assume first is largest
-                  Peak2          <= (others=>'0');
+                  Peak2          <= MagDelay(4);   -- if peak is in first position, 2 and/or 3 never get set
+                  Peak3          <= MagDelay(4);
                   CurrentPeak    <= (others=>'0');
                   CurrentMag0    <= (others=>'0');
                   CurrentMag1    <= (others=>'0');
@@ -934,7 +943,7 @@ begin
                   MagPeak1_u     <= MagDelay1(0);
                   PhsPeak1_u     <= PhsDelay1(0);
                end if;
-               if (PilotMag > Threshold) and (Peak1 > (Peak2 sla 1)) then  -- even at noise threshold, peaks are still 2:1
+               if (PilotMag > Threshold) and (Peak1 > (Peak3 sla 1)) then  -- even at noise threshold, peaks are still 2:1
                   BadPilot <= 0;
                   if (GoodPilot < 2) then
                      GoodPilot <= GoodPilot + 1;   -- 3 good frames in a row = found
@@ -962,7 +971,9 @@ begin
 
                if (PeakPointer <= PACKETS_PER_FRAME) then
                   if (CurrentPeak > Peak1) then
-                     Peak1 <= CurrentPeak;   -- Found new peak, store previous in peak2
+                     Peak1 <= CurrentPeak;   -- Found new peak, store previous in peak2 and peak3. Peak3 is to avoid spurious peaks
+                     Peak2 <= Peak1;
+                     Peak3 <= Peak2;
                   end if;
                   if (CurrentMag0 > MagPeak0_u) then
                      MagPeak0_u <= CurrentMag0;
@@ -974,18 +985,13 @@ begin
                   end if;
                   PeakPointer <= PeakPointer + 1;
                elsif (PeakPointer = PACKETS_PER_FRAME + 1) then
-                  if (MagDelay(18) < MagDelay(6)) then
-                     Peak2 <= MagDelay(18);     -- if peak spans two packets, then both values would be similar and distort threshold
-                  else                          -- so just grab a small packet
-                     Peak2 <= MagDelay(6);
-                  end if;
                   MagPeak0  <= to_slv(MagPeak0_u);
                   PhsPeak0  <= to_slv(PhsPeak0_u);
                   MagPeak1  <= to_slv(MagPeak1_u);
                   PhsPeak1  <= to_slv(PhsPeak1_u);
                   PeakPointer <= PeakPointer + 1;
                else
-                  Threshold <= resize((Peak1 + Peak2) / 2, Threshold);
+                  Threshold <= resize((Peak1 + Peak3) / 2, Threshold);
                   CalcThreshold <= '0';
                   CurrentPeak <= (others=>'0');
                end if;

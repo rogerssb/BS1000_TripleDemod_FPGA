@@ -43,7 +43,9 @@ module cmagSquared18(
         .p(imagSquared)
     );
     `endif
-    wire    signed  [18:0] sum = {realSquared[34:16]} + {imagSquared[34:16]};
+ 	// Prev version acsOp did divide by 2 then squared for divide by 4, then shift by 2 for final of divide by 2. 
+	// This version has no gain or loss. Was chasing first bit out error when I noticed this. Didn't help or hurt.
+    wire    signed  [18:0] sum = {realSquared[35:17]} + {imagSquared[35:17]};
     reg     signed  [17:0] sat;
     always @* begin
         if (sum[18]) begin
@@ -69,7 +71,7 @@ module cmagSquared18(
         .B(inImag),
         .P(imagSquared)
     );
-    wire    signed  [18:0] sum = {realSquared[34:16]} + {imagSquared[34:16]};
+    wire    signed  [18:0] sum = {realSquared[35:17]} + {imagSquared[35:17]};
     reg     signed  [17:0] sat;
     always @(posedge clk) begin
         if (clkEn) begin

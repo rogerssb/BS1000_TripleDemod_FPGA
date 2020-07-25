@@ -428,6 +428,8 @@ module stcDemodTop (
     wire    signed  [11:0]  pilotLagError;
     wire    signed  [11:0]  pilotFreqError;
     wire            [31:0]  pilotDout;
+ (* MARK_DEBUG="true" *) wire [15:0] lockCounter;
+
     stcLoop #(.RegSpace(`PILOT_LF_SPACE)) pilot(
         .clk(clk), .reset(reset),
         .clkEn(phaseDiffEn),
@@ -448,7 +450,7 @@ module stcDemodTop (
         .lagError(pilotLagError),
         .avgFreqError(pilotFreqError),
         .freqAcquired(pilotFreqAcquired),
-        .lockCounter()
+        .lockCounter(lockCounter)
     );
 
     // LO Generator
@@ -518,7 +520,6 @@ module stcDemodTop (
         .DacSelect1(stcDac1Select),
         .DacSelect2(stcDac2Select),
         .SpectrumInv(SpectrumInv),
-        .ReadHold(1'b0),
         .PhaseDiffNB(phaseDiffNB),
         .PhaseDiffWB(phaseDiffWB),
         .PhaseDiffEn(phaseDiffEn),

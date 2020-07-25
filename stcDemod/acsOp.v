@@ -10,9 +10,9 @@ module acsOp(
     output  reg     [17:0]  accMetricOut
 );
 
-    // Calculate y8 - s.
-    wire    signed  [17:0]  diffReal = {y8Real[17],y8Real[17:1]} - {sReal[17],sReal[17:1]};
-    wire    signed  [17:0]  diffImag = {y8Imag[17],y8Imag[17:1]} - {sImag[17],sImag[17:1]};
+    // Calculate y8 - s.                // caution, assumes no overflow but values are very small
+    wire    signed  [17:0]  diffReal = y8Real - sReal; //{y8Real[17],y8Real[17:1]} - {sReal[17],sReal[17:1]};
+    wire    signed  [17:0]  diffImag = y8Imag - sImag; //{y8Imag[17],y8Imag[17:1]} - {sImag[17],sImag[17:1]};
 
     `ifdef ACS_USE_MAG
     // An ACS operation implements
