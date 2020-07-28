@@ -102,9 +102,9 @@ module trellisProcess (
         if (reset) begin
             SPARE_CODE_WORDS = 1;
         end
-        else if (lastSampleReset) begin
-            SPARE_CODE_WORDS = 2;
-        end
+//        else if (lastSampleReset) begin   // fixed first bit error, no longer need to change spare_code_words
+//            SPARE_CODE_WORDS = 2;
+//        end
     end
 
     frameAlignment #(

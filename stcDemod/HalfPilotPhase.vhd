@@ -14,18 +14,19 @@ manufacture, development, or derivation of any designs, or configuration.
 Company:     Semco Inc.
 
 Module Name: HalfPilotPhase.vhd
-Description:   Do a correlation with a composite H0&H1 template and the incoming
-   RF stream. The composite takes the magnitude of the H0 and H1 from the estimators
-   to weight a H0Template * H0Mag + H1Template * H1Mag. This better matches what the
-   RF stream looks like and give a better correlation than just the two templates.
-      To do the half pilot phase part, the complex multiply outputs are added
-   together of the first half of the pilot and then again with the second half.
-   The complex results are then converted to mag and phase. The phase difference
-   is then calculated as the final output.
-      Note, that two correlations are actually being computed based on the m_ndx
-   signals for H0 and H1. These are used to offset the template relative to the
-   carrier and generate Phase0 and Phase1. Other than this distinction, the two
-   correlations are identical.
+Description: The first step is to recreate the incoming RF pilot sequence by
+   taking the H0 and H1 templates, offset by their m_ndx's and scaled by their
+   channel estimates. At this point the RF and composite templates should be
+   identical aside from the incoming noise and any phase skew caused by frequency
+   offset in the IF. It is this phase skew across the pilot interval that we're
+   trying to determine.
+      If we then correlate the RF with the composite pilot, split the resulting
+   vector into first and second half, complex add across the two half vectors to
+   get two complex sums, convert the complex sums to mag/phase, then the phase
+   difference between the first half phase and the second half phase will be the
+   phase skew across the pilot interval. Since this interval is 52 times smaller
+   than a frame interval, the resulting phase has a much higher corresponding
+   frequency
 
 ARGUMENTS :
 
@@ -60,6 +61,7 @@ at 500Hz, Diff yields
                                HISTORY
 ----------------------------------------------------------------------------
 9-6-16 Initial release FZ
+7-21-20  Added KEEPs to some nets to prevent ?? netnames
 -------------------------------------------------------------
 */
 
@@ -67,9 +69,7 @@ LIBRARY IEEE;
 USE IEEE.std_logic_1164.ALL;
 USE IEEE.numeric_std.ALL;
 library std;
-use std.textio.all;
 use work.fixed_pkg.all;
-USE IEEE.math_real.all;
 use work.Semco_pkg.ALL;
 
 ENTITY HalfPilotPhase IS
@@ -84,7 +84,7 @@ ENTITY HalfPilotPhase IS
       InR,
       InI            : IN  SLV18;
       m_ndx0,
-      m_ndx1         : IN  integer range -5 to 3;
+      m_ndx1         : IN  integer range -8 to 7;
       H0Mag,
       H1Mag          : IN  std_logic_vector(12 downto 0);
       H0EstR,
@@ -92,8 +92,6 @@ ENTITY HalfPilotPhase IS
       H1EstR,
       H1EstI         : IN  STC_PARM;
       PhaseDiff      : OUT sfixed(0 downto -11);
-      PhaseOutA,
-      PhaseOutB      : OUT SLV12;
       PilotLocked    : OUT std_logic
    );
 END HalfPilotPhase;
@@ -171,8 +169,6 @@ ARCHITECTURE rtl OF HalfPilotPhase IS
    -- Signals
    SIGNAL   PilotCaptureR0_slv,
             PilotCaptureI0_slv,
-            PilotCaptureR1_slv,
-            PilotCaptureI1_slv,
             PilotCaptureR_slv,
             PilotCaptureI_slv,
             H0Rslv,
@@ -202,10 +198,8 @@ ARCHITECTURE rtl OF HalfPilotPhase IS
             ValidCordic,
             ValidCordicDly,
             PilotPacket       : std_logic;
-   SIGNAL   ReadR0Dly,
-            ReadI0Dly,
-            ReadR1Dly,
-            ReadI1Dly        : FLOAT_ARRAY_1_18(2 downto 0);
+   SIGNAL   ReadRDly,
+            ReadIDly          : FLOAT_ARRAY_1_18(2 downto 0);
    SIGNAL   ReadR,
             ReadI,
             H0H1R,
@@ -237,46 +231,33 @@ ARCHITECTURE rtl OF HalfPilotPhase IS
             CmplxH1i          : sfixed(1 downto -16);
    SIGNAL   SyncSum           : sfixed(10 downto -16);
    SIGNAL   H0AccR,
-            H0AccI,
-            H1AccR,
-            H1AccI            : sfixed(7 downto -16);
+            H0AccI            : sfixed(7 downto -16);
    SIGNAL   H0SumRA,
             H0SumIA,
-            H1SumRA,
-            H1SumIA,
             H0SumRB,
-            H0SumIB,
-            H1SumRB,
-            H1SumIB           : sfixed(7 downto -10);
+            H0SumIB           : sfixed(7 downto -10);
    SIGNAL   CordicR0,
-            CordicI0,
-            CordicR1,
-            CordicI1          : sfixed(7 downto -6);
-   SIGNAL   Mag0,
-            Mag1              : std_logic_vector(12 downto 0);
-   SIGNAL   Phase0,
-            Phase1            : std_logic_vector(11 downto 0);
-   SIGNAL   Phase0A,
-            Phase0B,
-            Phase1A,
-            Phase1B           : sfixed(0 downto -Phase0'length+1);
+            CordicI0          : sfixed(7 downto -6);
+   SIGNAL   Mag               : std_logic_vector(12 downto 0);
+   SIGNAL   Phase             : std_logic_vector(11 downto 0);
+   SIGNAL   PhaseA,
+            PhaseB            : sfixed(0 downto -Phase'length+1);
    SIGNAL   CmplxCount        : integer range 0 to 511;
    SIGNAL   CalcPhaseDly      : SLV4;
 
+   attribute keep : string;   -- Keeps are used to prevent vivado nets with "??" netnames. Not sure it matters, but scary
+   attribute keep of Normalize, NormDone : signal is "true";
+
    attribute mark_debug : string;
-   attribute mark_debug of Phase0A, Phase0B, CmplxValid,
-            Normalize, NormDone, CalcPhase, CordicStart, ValidCordic, PilotPacket : signal is "true";
+   attribute mark_debug of H0H1R, H0H1I, H0RRNormd, H0IRNormd, H1RRNormd, H1IRNormd, H0RINormd, H0IINormd,
+         H1RINormd, H1IINormd, H0EstRNorm, H0EstINorm, H1EstRNorm, H1EstINorm, H0RNormd, H0INormd, H1RNormd,
+         H1INormd, H0R, H0I, H1R, H1I, CmplxH0r, CmplxH0i, CmplxH1r, CmplxH1i  : signal is "true";
 
 BEGIN
 
 
    -- estimates are valid, use realigned pilot to check phase shift between first half and second
    -- half of the the pilot for a wideband frequency offset.
-
-   PhaseOutA <= to_slv(Phase0A);
-   PhaseOutB <= to_slv(Phase0B);
-
-
 
    DoublePhaseProc : process(Clk)
    begin
@@ -289,26 +270,18 @@ BEGIN
             PhaseDiff      <= (others=>'0');
             H0SumRA        <= (others=>'0');
             H0SumIA        <= (others=>'0');
-            H1SumRA        <= (others=>'0');
-            H1SumIA        <= (others=>'0');
             H0AccR         <= (others=>'0');
             H0AccI         <= (others=>'0');
-            H1AccR         <= (others=>'0');
-            H1AccI         <= (others=>'0');
             H0SumRB        <= (others=>'0');
             H0SumIB        <= (others=>'0');
-            H1SumRB        <= (others=>'0');
-            H1SumIB        <= (others=>'0');
             H0MagNorm      <= (others=>'0');
             H1MagNorm      <= (others=>'0');
             H0EstRNorm     <= (others=>'0');
             H0EstINorm     <= (others=>'0');
             H1EstRNorm     <= (others=>'0');
             H1EstINorm     <= (others=>'0');
-            Phase0A        <= (others=>'0');
-            Phase0B        <= (others=>'0');
-            Phase1A        <= (others=>'0');
-            Phase1B        <= (others=>'0');
+            PhaseA        <= (others=>'0');
+            PhaseB        <= (others=>'0');
             CmplxCount     <= 0;
             CordicStart    <= '0';
             PilotPacket    <= '0';
@@ -323,8 +296,6 @@ BEGIN
                CmplxCount  <= 0;
                H0AccR      <= (others=>'0');    -- setup for first half
                H0AccI      <= (others=>'0');
-               H1AccR      <= (others=>'0');
-               H1AccI      <= (others=>'0');
                H0MagNorm   <= to_sfixed(H0Mag, H0MagNorm);
                H1MagNorm   <= to_sfixed(H1Mag, H1MagNorm);
                H0EstRNorm  <= H0EstR;
@@ -357,17 +328,11 @@ BEGIN
                   CmplxCount <= CmplxCount + 1;
                   H0SumRA <= resize(H0AccR, H0SumRA);
                   H0SumIA <= resize(H0AccI, H0SumIA);
-                  H1SumRA <= resize(H1AccR, H1SumRA);
-                  H1SumIA <= resize(H1AccI, H1SumIA);
                   H0AccR <= resize(CmplxH0r, H0AccR);
                   H0AccI <= resize(CmplxH0i, H0AccR);
-                  H1AccR <= resize(CmplxH1r, H0AccR);
-                  H1AccI <= resize(CmplxH1i, H0AccR);
                elsif (CmplxCount = 511) then
                   H0SumRB <= resize(H0AccR + CmplxH0r, H0SumRB);  -- store second half
                   H0SumIB <= resize(H0AccI + CmplxH0i, H0SumIB);
-                  H1SumRB <= resize(H1AccR + CmplxH1r, H1SumRB);
-                  H1SumIB <= resize(H1AccI + CmplxH1i, H1SumIB);
                   CordicStart <= '1';
                   CmplxCount <= 0;
                else
@@ -375,8 +340,6 @@ BEGIN
                   CordicStart <= '0';
                   H0AccR <= resize(H0AccR + CmplxH0r, H0AccR);
                   H0AccI <= resize(H0AccI + CmplxH0i, H0AccR);
-                  H1AccR <= resize(H1AccR + CmplxH1r, H0AccR);
-                  H1AccI <= resize(H1AccI + CmplxH1i, H0AccR);
                end if;
             else
                NormDone  <= '0';       -- NormDone gets cleared just after Normalize goes low since CmplxValid takes a while
@@ -385,21 +348,15 @@ BEGIN
 
             if (ValidCordic) then
                if (CmplxCount > 0) then
-                  Phase0A <= to_sfixed(Phase0, Phase0A);
-                  Phase1A <= to_sfixed(Phase1, Phase1A);
+                  PhaseA <= to_sfixed(Phase, PhaseA);
                else     -- process is done and count is reset to 0
-                  Phase0B <= to_sfixed(Phase0, Phase0B);
-                  Phase1B <= to_sfixed(Phase1, Phase1B);
+                  PhaseB <= to_sfixed(Phase, PhaseB);
                end if;
             end if;
 
             if (ValidCordicDly) then
                if (CmplxCount = 0) then
-                  if (Mag0GtMag1) then
-                        PhaseDiff <= resize(Phase0B - Phase0A, PhaseDiff);
-                  else
-                        PhaseDiff <= resize(Phase1B - Phase1A, PhaseDiff);
-                  end if;
+                  PhaseDiff <= resize(PhaseB - PhaseA, PhaseDiff);
                end if;
             else     -- if  phases rollover 180°...
                if (PhaseDiff >= 0.5) then
@@ -443,9 +400,9 @@ BEGIN
    end process DoublePhaseProc;
 
    m_ndx        <= m_ndx0 when Mag0GtMag1 else m_ndx1;
-   ReadCount0   <= ReadCount + m_ndx0;
-   ReadCount1   <= ReadCount + m_ndx1;
-   ReadCountR   <= ReadCount + m_ndx;
+   ReadCount0   <= ReadCount - m_ndx0;
+   ReadCount1   <= ReadCount - m_ndx1;
+   ReadCountR   <= ReadCount - m_ndx;
    ReadCount_u  <= unsigned(ReadCount(8 downto 0));
    ReadCount0_u <= unsigned(ReadCount0(8 downto 0));
    ReadCount1_u <= unsigned(ReadCount1(8 downto 0));
@@ -464,11 +421,11 @@ BEGIN
          reset       => reset,
          WrEn        => PilotPacket and ValidIn,
          WrAddr      => to_integer(PilotCount),
-         RdAddrA     => to_integer(ReadCount0_u),
-         RdAddrB     => to_integer(ReadCount1_u),
+         RdAddrA     => to_integer(ReadCount_u),
+         RdAddrB     => 0,
          WrData      => InR,
          RdOutA      => PilotCaptureR0_slv,
-         RdOutB      => PilotCaptureR1_slv
+         RdOutB      => open
       );
 
    PilotCapture_i_u : RAM_2Reads_1Write
@@ -484,11 +441,11 @@ BEGIN
          reset       => reset,
          WrEn        => PilotPacket and ValidIn,
          WrAddr      => to_integer(PilotCount),
-         RdAddrA     => to_integer(ReadCount0_u),
-         RdAddrB     => to_integer(ReadCount1_u),
+         RdAddrA     => to_integer(ReadCount_u),
+         RdAddrB     => 0,
          WrData      => InI,
          RdOutA      => PilotCaptureI0_slv,
-         RdOutB      => PilotCaptureI1_slv
+         RdOutB      => open
       );
 
    PilotCapture_ReadR_u : RAM_2Reads_1Write
@@ -536,9 +493,11 @@ BEGIN
    ReadR       <= to_sfixed(PilotCaptureR_slv,  ReadR);
    ReadI       <= to_sfixed(PilotCaptureI_slv,  ReadI);
 
+   -- form composite pilot from template ROMs
    H0H1Process : process(clk)
    begin
       if (rising_edge(clk)) then
+         -- complex scale the m_ndx offset templates with their complex estimates
          H0RRNormd    <= resize(H0R * H0EstRNorm, H0RNormd);
          H0IRNormd    <= resize(H0I * H0EstRNorm, H0INormd);
          H0RINormd    <= resize(H0R * H0EstINorm, H0RNormd);
@@ -547,20 +506,22 @@ BEGIN
          H1IRNormd    <= resize(H1I * H1EstRNorm, H0INormd);
          H1RINormd    <= resize(H1R * H1EstINorm, H0RNormd);
          H1IINormd    <= resize(H1I * H1EstINorm, H0INormd);
+         -- add the complex components for each template
          H0RNormd    <= resize(H0RRNormd - H0IINormd, H0RNormd);
          H0INormd    <= resize(H0RINormd + H0IRNormd, H0RNormd);
          H1RNormd    <= resize(H1RRNormd - H1IINormd, H1RNormd);
          H1INormd    <= resize(H1RINormd + H1IRNormd, H1RNormd);
+         -- add the two templates together to simulate the RF antenna action
          H0H1R       <= resize(H0RNormd + H1RNormd, H0H1R);
+         -- we want to conjugate with the complex conjugate of the template, so invert the Imaginary
          H0H1I       <= not(resize(H0INormd + H1INormd, H0H1I));  -- use conjugate
-         ReadR0Dly   <= ReadR0Dly(ReadR0Dly'left-1 downto 0) & to_sfixed(PilotCaptureR0_slv, ReadR0Dly(0));
-         ReadI0Dly   <= ReadI0Dly(ReadR0Dly'left-1 downto 0) & to_sfixed(PilotCaptureI0_slv, ReadI0Dly(0));
-         ReadR1Dly   <= ReadR1Dly(ReadR0Dly'left-1 downto 0) & to_sfixed(PilotCaptureR1_slv, ReadR1Dly(0));
-         ReadI1Dly   <= ReadI1Dly(ReadR0Dly'left-1 downto 0) & to_sfixed(PilotCaptureI1_slv, ReadI1Dly(0));
+         -- delay the RF signal to match the delays above.
+         ReadRDly   <= ReadRDly(ReadRDly'left-1 downto 0) & to_sfixed(PilotCaptureR0_slv, ReadRDly(0));
+         ReadIDly   <= ReadIDly(ReadRDly'left-1 downto 0) & to_sfixed(PilotCaptureI0_slv, ReadIDly(0));
       end if;
    end process H0H1Process;
 
-   CmplxMultH0 : CmplxMult
+   CmplxMultHx : CmplxMult
       GENERIC MAP (
          IN_LEFT     => H0R'left,
          IN_RIGHT    => H0R'right,
@@ -574,37 +535,13 @@ BEGIN
          ValidIn     => CalcPhaseDly(3),
          StartIn     => '0',
          ReadyIn     => '1',
-         ReInA       => ReadR0Dly(ReadR0Dly'left),
-         ImInA       => ReadI0Dly(ReadR0Dly'left),
+         ReInA       => ReadRDly(ReadRDly'left),
+         ImInA       => ReadIDly(ReadRDly'left),
          ReInB       => H0H1R,
          ImInB       => H0H1I,
          ReOut       => CmplxH0r,
          ImOut       => CmplxH0i,
          ValidOut    => CmplxValid,
-         StartOut    => open
-   );
-
-   CmplxMultH1 : CmplxMult
-      GENERIC MAP (
-         IN_LEFT     => H0R'left,
-         IN_RIGHT    => H0R'right,
-         OUT_LEFT    => CmplxH1r'left,
-         OUT_BINPT   => CmplxH1r'right
-      )
-      PORT MAP (
-         clk         => clk,
-         reset       => reset,
-         ce          => ce,
-         ValidIn     => CalcPhaseDly(3),
-         StartIn     => '0',
-         ReadyIn     => '1',
-         ReInA       => ReadR1Dly(ReadR1Dly'left),
-         ImInA       => ReadI1Dly(ReadR1Dly'left),
-         ReInB       => H0H1R,
-         ImInB       => H0H1I,
-         ReOut       => CmplxH1r,
-         ImOut       => CmplxH1i,
-         ValidOut    => open,
          StartOut    => open
    );
 
@@ -624,7 +561,7 @@ BEGIN
          reset       => reset,
          WrEn        => '0',
          WrAddr      => 0,
-         RdAddrA     => to_integer(ReadCount_u),
+         RdAddrA     => to_integer(ReadCount0_u),
          RdAddrB     => 0,
          WrData      => (others=>'0'),
          RdOutA      => H0Rslv,
@@ -647,7 +584,7 @@ BEGIN
          reset       => reset,
          WrEn        => '0',
          WrAddr      => 0,
-         RdAddrA     => to_integer(ReadCount_u),
+         RdAddrA     => to_integer(ReadCount0_u),
          RdAddrB     => 0,
          WrData      => (others=>'0'),
          RdOutA      => H0Islv,
@@ -670,7 +607,7 @@ BEGIN
          reset       => reset,
          WrEn        => '0',
          WrAddr      => 0,
-         RdAddrA     => to_integer(ReadCount_u),
+         RdAddrA     => to_integer(ReadCount1_u),
          RdAddrB     => 0,
          WrData      => (others=>'0'),
          RdOutA      => H1Rslv,
@@ -693,7 +630,7 @@ BEGIN
          reset       => reset,
          WrEn        => '0',
          WrAddr      => 0,
-         RdAddrA     => to_integer(ReadCount_u),
+         RdAddrA     => to_integer(ReadCount1_u),
          RdAddrB     => 0,
          WrData      => (others=>'0'),
          RdOutA      => H1Islv,
@@ -705,10 +642,9 @@ BEGIN
    H1R      <= to_sfixed(H1Rslv, H1R);
    H1I      <= to_sfixed(H1Islv, H1I);
 
+   -- do cordics to get phasees
    CordicR0 <= resize(H0SumRA, CordicR0) when (CmplxCount > 0) else resize(H0SumRB, CordicR0);
    CordicI0 <= resize(H0SumIA, CordicR0) when (CmplxCount > 0) else resize(H0SumIB, CordicR0);
-   CordicR1 <= resize(H1SumRA, CordicR0) when (CmplxCount > 0) else resize(H1SumRB, CordicR0);
-   CordicI1 <= resize(H1SumIA, CordicR0) when (CmplxCount > 0) else resize(H1SumIB, CordicR0);
 
    cordic0 : vm_cordic_fast
       GENERIC MAP (
@@ -719,23 +655,9 @@ BEGIN
          ena   => CordicStart,
          x     => to_slv(CordicR0),
          y     => to_slv(CordicI0),
-         m     => Mag0,          -- m[n:2]
-         p     => Phase0,
+         m     => Mag,          -- m[n:2]
+         p     => Phase,
          enOut => ValidCordic
-      );
-
-   cordic1 : vm_cordic_fast
-      GENERIC MAP (
-         n => 14
-      )
-      PORT MAP (
-         clk   => Clk,
-         ena   => CordicStart,
-         x     => to_slv(CordicR1),
-         y     => to_slv(CordicI1),
-         m     => Mag1,          -- m[n:2]
-         p     => Phase1,
-         enOut => open
       );
 
 end rtl;

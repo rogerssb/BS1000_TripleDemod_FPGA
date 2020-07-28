@@ -170,9 +170,7 @@ ARCHITECTURE rtl OF STC IS
          Mu0,
          Mu1            : OUT FLOAT_1_18;
          PhaseDiff      : OUT sfixed(0 downto -11);
-         DeltaTauEst    : OUT sfixed(0 downto -5);
-         PhaseOutA,
-         PhaseOutB      : OUT SLV12
+         DeltaTauEst    : OUT sfixed(0 downto -5)
       );
    END COMPONENT Brik2;
 
@@ -341,8 +339,6 @@ ARCHITECTURE rtl OF STC IS
             PhsPeak1,
             Ch0MuSlv,
             Ch1MuSlv          : SLV18;
-   SIGNAL   Phase0A,
-            Phase0B           : SLV12;
    SIGNAL   StartCount        : integer range 0 to 3 := 0;
    SIGNAL   PilotPulse,
             PilotValidOut     : std_logic;
@@ -614,8 +610,6 @@ BEGIN
          Mag0GtMag1     => Mag0GtMag1,
          H0MagIn        => H0Mag,
          H1MagIn        => H1Mag,
-         PhaseOutA      => Phase0A,
-         PhaseOutB      => Phase0B,
          PhaseDiff      => PhaseDiff2,
          StartHPP       => CordicValid,
          H0EstR         => H0EstR,
@@ -728,8 +722,6 @@ BEGIN
          DacMux(1)  <= PhsPeak1;       --
          DacMux(2)  <= m_ndx0Slv & 14x"0";
          DacMux(3)  <= m_ndx1Slv & 14x"0";
-         -- DacMux(4)  <= Phase0A & 6x"0";
-         -- DacMux(5)  <= PhaseOut;
          DacMux(4)  <= ResampleR;
          DacMux(5)  <= ResampleI;
          DacMux(6)  <= PhaseDiffWB;
