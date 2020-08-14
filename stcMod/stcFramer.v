@@ -66,22 +66,22 @@ module stcFramer
     end
     assign              payloadBitEn = (stcState == `STC_PAYLOAD);
 
-    reg         [1:0]   payloadBitcount;
+//    reg         [1:0]   payloadBitcount;
     wire                loadPayloadSR =     (stcState == `STC_PAYLOAD) && (bitcount[1:0] == 2'b00);
     wire                shiftPayloadSR =    (stcState == `STC_PAYLOAD) && (bitcount[1:0] != 2'b00);
     reg         [3:0]   b;
     always @(posedge clk) begin
         if (reset) begin
             b <= 0;
-            payloadBitcount <= 0;
+//            payloadBitcount <= 0;
         end
         else if (clkEn) begin
-            if (loadPayloadSR) begin
-                payloadBitcount <= 3;
-            end
-            else begin
-                payloadBitcount <= payloadBitcount - 1;
-            end
+//            if (loadPayloadSR) begin
+//                payloadBitcount <= 3;
+//            end
+//            else begin
+//                payloadBitcount <= payloadBitcount - 1;
+//            end
             // Load and shift the STC encoded payload bits
             if (loadPayloadSR) begin
                 payload0SR <= {b[0],b[1],~b[2], b[3]};

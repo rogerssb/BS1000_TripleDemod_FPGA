@@ -137,12 +137,13 @@ module trellisDetector (
     reg     signed  [17:0]  s1_1_real,s1_1_imag;
     reg     signed  [17:0]  s1_2_real,s1_2_imag;
     reg     signed  [17:0]  s1_3_real,s1_3_imag;
-    reg     signed  [17:0]  s1_4_real,s1_4_imag;
     reg             [1:0]   sampleCount;
     reg                     startBlock,startBlockEarly;
     always @(posedge clk) begin
         if (startFrame) begin
-            sampleCount <= 2'd3;
+            sampleCount     <= 2'd3;
+            startBlockEarly <= 1'b0;    // these two bits were left dangling from prev frame messing up first bit
+            startBlock      <= 1'b0;
         end
         else if (clkEn & sampleEn) begin
             if (positiveTau) begin

@@ -91,9 +91,7 @@ ENTITY Brik2 IS
       Mu0,
       Mu1            : OUT FLOAT_1_18;
       PhaseDiff      : OUT sfixed(0 downto -11);
-      DeltaTauEst    : OUT sfixed(0 downto -5);
-      PhaseOutA,
-      PhaseOutB      : OUT SLV12
+      DeltaTauEst    : OUT sfixed(0 downto -5)
    );
 END Brik2;
 
@@ -156,8 +154,6 @@ ARCHITECTURE rtl OF Brik2 IS
       H1EstR,
       H1EstI         : IN  STC_PARM;
       PhaseDiff      : OUT sfixed(0 downto -11);
-      PhaseOutA,
-      PhaseOutB      : OUT SLV12;
       PilotLocked    : OUT std_logic
    );
    END COMPONENT HalfPilotPhase;
@@ -511,8 +507,6 @@ BEGIN
          m_ndx0         => m_ndx0,
          m_ndx1         => m_ndx1,
          PhaseDiff      => PhaseDiff,
-         PhaseOutA      => PhaseOutA,
-         PhaseOutB      => PhaseOutB,
          PilotLocked    => PilotLocked
    );
 

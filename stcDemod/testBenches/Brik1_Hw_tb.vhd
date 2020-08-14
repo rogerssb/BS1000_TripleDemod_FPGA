@@ -91,7 +91,6 @@ architecture rtl of Brik1_Hw_tb is
       Clk93Dly,
       Clk186,
       SpectrumInv,
-      ReadHold,
       ValidIn           : IN  STD_LOGIC;
       DataOut,                            -- Trellis Data Output
       ClkOutEn,                           -- Trellis Clock Output
@@ -108,8 +107,10 @@ architecture rtl of Brik1_Hw_tb is
       Dac0Data,
       Dac1Data,
       Dac2Data          : OUT SLV18;
-      PhaseOut,
-      PhaseDiff         : OUT SLV18
+      HxEstR,
+      HxEstI,
+      PhaseDiffNB,
+      PhaseDiffWB       : OUT SLV18
       );
    END COMPONENT STC;
 
@@ -342,7 +343,6 @@ begin
          probe_out12 => ClocksPerBit            -- c50 for 9.33/1.04, db7 at 10Mb 41.6
       );
 -- Phase0_vio <= 18x"20000";
--- Phase1_vio <= 18x"00000";
 -- Frequency_vio <= 24x"8000";
 
    ErrorProc : process (Clk186)
@@ -408,6 +408,7 @@ begin
       if (rising_edge(Clk93)) then
          if (Reset) then
             DataValid <= x"00";
+    Phase1_vio <= 18x"00000";
             BitRateAcc  <= to_sfixed(0, BitRateAcc);
             RdAddr_i    <= 12830;
             NoiseAddr   <= 0;
@@ -734,7 +735,6 @@ end generate;
          DacSelect0     => x"9",
          DacSelect1     => x"A",
          DacSelect2     => x"F",
-         ReadHold       => '0',
          Clk93          => Clk93,
          Clk93Dly       => Clk93Dly,
          Clk186         => Clk186,
@@ -755,8 +755,10 @@ end generate;
          Dac1Data       => open,
          Dac2Data       => open,
          PhaseDiffEn    => open,
-         PhaseOut       => open,
-         PhaseDiff      => open
+         HxEstR         => open,
+         HxEstI         => open,
+         PhaseDiffNB    => open,
+         PhaseDiffWB    => open
       );
 
    xadc : xadcConvert

@@ -253,6 +253,25 @@ module stcModTop (
         .stcFrameSync(stcFrameSync)
     );
 
+   (* MARK_DEBUG="true" *)  reg     [1:0]   bitCnt;
+   (* MARK_DEBUG="true" *)  reg     [3:0]   H0, H1, H0Capture, H1Capture;
+    always @(posedge clk) begin
+        if (posEdgeModClkEn) begin
+            if (stcFrameSync) begin
+                bitCnt <= 0;
+            end
+            else begin
+                bitCnt <= bitCnt + 1;
+                H0 <= {H0[2:0], stcBit0};
+                H1 <= {H1[2:0], stcBit1};
+                if (bitCnt == 0) begin
+                    H0Capture <= {H0[0], ~H0[1], H0[2], H0[3]};
+                    H1Capture <= {H1[2], H1[3], ~H1[0], H1[1]};
+                end
+            end
+        end
+    end
+   (* MARK_DEBUG="true" *)  wire    Good = (H0Capture == H1Capture);
 
     //******************************************************************************
     //                          STC Modulator

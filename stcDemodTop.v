@@ -121,7 +121,7 @@ module stcDemodTop (
 
 );
 
-    parameter VER_NUMBER = 16'd601;
+    parameter VER_NUMBER = 16'd671;
 
 
 //******************************************************************************
@@ -131,7 +131,7 @@ module stcDemodTop (
     systemClock systemClock (
         .clk_in1(adc0Clk),
         .clk93(clk),
-        .clk93Dly(clk93Dly),
+        .clk93Dly(clkDly),
         .clk186(clk2x),
         .locked(clkLocked)
     );
@@ -161,7 +161,7 @@ module stcDemodTop (
     systemClock systemClock (
         .clk_in1(sysClk),
         .clk93(clk),
-        .clk93Dly(clk93Dly),
+        .clk93Dly(clkDly),
         .clk186(clk2x),
         .locked(clkLocked)
      );
@@ -179,11 +179,9 @@ module stcDemodTop (
     /******************************************************************************
                                  SPI Config Interface
     ******************************************************************************/
-     wire    [12:0]  addr;
-     wire    [31:0]  dataIn;
-     reg     [31:0]  rd_mux;
-     wire    cs, wr0, wr2;
-
+    wire    [12:0]  addr;
+    wire    [31:0]  dataIn;
+    reg     [31:0]  rd_mux;
     spiBusInterface spi(
         .clk(clk),
         .reset(reset),
@@ -353,12 +351,12 @@ module stcDemodTop (
 
     wire    signed  [15:0]  ch0Mag,ch1Mag;
     wire    signed  [5:0]   stcDeltaTau;
-    wire    [15:0]  clocksPerBit;
-    wire    [11:0]  hxThreshSlv;
-    wire    [3:0]   stcDac0Select;
-    wire    [3:0]   stcDac1Select;
-    wire    [3:0]   stcDac2Select;
-    wire    [31:0]  stcDout;
+    wire            [15:0]  clocksPerBit;
+    wire            [11:0]  hxThreshSlv;
+    wire            [3:0]   stcDac0Select;
+    wire            [3:0]   stcDac1Select;
+    wire            [3:0]   stcDac2Select;
+    wire            [31:0]  stcDout;
 
     stcRegs stcTopReg(
         .busClk(busClk),
@@ -403,7 +401,7 @@ module stcDemodTop (
         .dout(demodDout),
         .iRx(adc0In), .qRx(18'h0),
         .maxChEstI(HxEstR), .maxChEstQ(HxEstI),
-        .maxChEstClkEn(pilotPhaseDiffEn),
+        .maxChEstClkEn(phaseDiffEn),
         .sampleRateErrorEn(sampleRateErrorEn),
         .sampleRateError(sampleRateError),
         .locked(pilotFound),
@@ -425,15 +423,18 @@ module stcDemodTop (
 /******************************************************************************
                             Pilot Carrier Loop
 ******************************************************************************/
-    wire    signed  [17:0]  pilotPhaseDiff, pilotPhase;
+    wire    signed  [17:0]  phaseDiffNB, phaseDiffWB;
     wire    signed  [31:0]  pilotFreqLag;
     wire    signed  [31:0]  pilotFreqLead;
     wire    signed  [11:0]  pilotLeadError;
+    wire    signed  [11:0]  pilotLagError;
     wire    signed  [11:0]  pilotFreqError;
     wire            [31:0]  pilotDout;
+    wire [15:0] lockCounter;
+
     stcLoop #(.RegSpace(`PILOT_LF_SPACE)) pilot(
         .clk(clk), .reset(reset),
-        .clkEn(pilotPhaseDiffEn),
+        .clkEn(phaseDiffEn),
         `ifdef USE_BUS_CLOCK
         .busClk(busClk),
         `endif
@@ -442,15 +443,16 @@ module stcDemodTop (
         .addr(addr),
         .din(dataIn),
         .dout(pilotDout),
-        .phase(pilotPhase[17:6]),
-        .freq(pilotPhaseDiff[17:6]),
+        .phaseDiffNB(phaseDiffNB[17:6]),
+        .phaseDiffWB(phaseDiffWB[17:6]),
         .carrierFreqOffset(pilotFreqLag),
         .carrierLeadFreq(pilotFreqLead),
         .carrierFreqEn(pilotFreqOffsetEn),
         .phaseLoopError(pilotLeadError),
+        .lagError(pilotLagError),
         .avgFreqError(pilotFreqError),
         .freqAcquired(pilotFreqAcquired),
-        .lockCounter()
+        .lockCounter(lockCounter)
     );
 
     // LO Generator
@@ -512,7 +514,7 @@ module stcDemodTop (
         .ResampleR(iStc),
         .ResampleI(qStc),
         .Clk93(clk),
-        .Clk93Dly(clk93Dly),
+        .Clk93Dly(clkDly),
         .Clk186(clk2x),
         .ValidIn(stcDdcClkEn),
         .ClocksPerBit(clocksPerBit),
@@ -521,10 +523,9 @@ module stcDemodTop (
         .DacSelect1(stcDac1Select),
         .DacSelect2(stcDac2Select),
         .SpectrumInv(SpectrumInv),
-        .ReadHold(cs),
-        .PhaseOut(pilotPhase),
-        .PhaseDiff(pilotPhaseDiff),
-        .PhaseDiffEn(pilotPhaseDiffEn),
+        .PhaseDiffNB(phaseDiffNB),
+        .PhaseDiffWB(phaseDiffWB),
+        .PhaseDiffEn(phaseDiffEn),
         .PilotOffset(sampleRateError),
         .StartOfFrame(sampleRateErrorEn),
         .ClkOutEn(stcBitEnOut),
@@ -686,7 +687,7 @@ module stcDemodTop (
                 interp0ClkEn <= stcDac0ClkEn;
             end
             default: begin
-                interp0DataIn <= {pilotLeadError,6'b0};
+                interp0DataIn <= {pilotLagError,6'b0};
                 interp0ClkEn <= 1'b1;
             end
         endcase
@@ -771,7 +772,8 @@ module stcDemodTop (
                 interp1ClkEn <= stcDac1ClkEn;
             end
             default: begin
-                interp1DataIn <= {pilotFreqError,6'b0};
+                interp1DataIn <= {1'b0,pilotFreqAcquired,16'b0};
+                //interp1DataIn <= {1'b0,phaseDiffEn,16'b0};
                 interp1ClkEn <= 1'b1;
             end
         endcase
@@ -1059,7 +1061,7 @@ module stcDemodTop (
             `SPIGW_SPACE:       rd_mux = spiGatewayDout;
             `endif
 
-            `STC_DEMOD_SPACE:    rd_mux = stcDout;
+            `STC_DEMOD_SPACE:   rd_mux = stcDout;
 
             `DEMODSPACE,
             `DDCSPACE,

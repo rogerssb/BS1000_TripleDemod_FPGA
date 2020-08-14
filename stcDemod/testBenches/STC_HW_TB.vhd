@@ -100,10 +100,6 @@ BEGIN
             Power1In                                        <= to_sfixed(0.120, Power1In);
             NoiseIn                                         <= to_sfixed(0.019, NoiseIn); --0.038, NoiseIn);
             Delta                                           <= 0;
-            <<signal Brik1.UUTu.DeltaTauEn : std_logic >>   <= '1';
-            <<signal Brik1.TwoClksPerTrellis : std_logic >>     <= '0'; --'1';
-            <<signal Brik1.UUTu.MiscBits : SLV18 >>         <= 18x"30008";
-            <<signal Brik1.UUTu.TrellisOffsetSlv : SLV4 >>  <= x"0";
          elsif (RdAddrEq and not RdAddrDly) then
            case (FrameCnt) is
             when 0 =>

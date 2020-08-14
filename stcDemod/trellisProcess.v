@@ -29,8 +29,6 @@ module trellisProcess (
                             m_ndx1,
     input   signed  [5:0]   deltaTauEstIn,
     output  reg             outputEn,
-    output                  interpOutEn,
-                            lastSampleReset,
     output  reg     [3:0]   outputBits
 );
 

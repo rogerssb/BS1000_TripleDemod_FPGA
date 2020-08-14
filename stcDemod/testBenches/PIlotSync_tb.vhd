@@ -42,43 +42,24 @@ architecture rtl of PilotSync_tb is
 
   -- Define Components
 
-   COMPONENT PilotDetect is
-      PORT(
-            clk,
-            clk2x,
-            reset,
-            ce,
-            ValidIn        : IN  std_logic;
-            Variables      : IN  RecordType;
-            ReIn,
-            ImIn           : IN  FLOAT_1_18;
-            PilotIndex     : OUT ufixed(10 downto 0);
-            PilotMag,
-            Threshold      : OUT sfixed(16 downto -1);
-            ReOut,
-            ImOut          : OUT FLOAT_1_18;
-            PilotPulse,
-            PilotFound,
-            ValidOut,
-            StartOut       : OUT std_logic
-      );
-   end COMPONENT PilotDetect;
-
    COMPONENT pilotsync
       PORT (
          clk,
          reset,
          ce,
          PilotPulseIn,
-         ValidIn       : IN STD_LOGIC;
-         Variables      : IN  RecordType;   -- for resampler and PilotDetect
-         IndexIn       : IN ufixed(10 DOWNTO 0);
+         PilotFound,
+         ValidIn        : IN STD_LOGIC;
+         CorrPntr       : IN ufixed(15 DOWNTO 0);
          RealIn,
-         ImagIn        : IN  Float_1_18;
+         ImagIn         : IN  Float_1_18;
+         Offset         : IN  SLV4;       -- TODO, remove
+         PilotOffset    : OUT SFixed(8 downto 0);
+         StartNextFrame : OUT ufixed(15 DOWNTO 0);
          RealOut,
-         ImagOut       : OUT Float_1_18;
+         ImagOut        : OUT Float_1_18;
          StartOut,
-         ValidOut      : OUT STD_LOGIC
+         ValidOut       : OUT STD_LOGIC
       );
    END COMPONENT;
 
@@ -109,18 +90,20 @@ architecture rtl of PilotSync_tb is
 
    SIGNAL   ValidIn,
             StartIn,
+            PilotFound,
             ReadEn,
             StartOut,
             ValidOut,
             Done1       : std_logic := '0';
-   signal   Variables   : RecordType := c_RecordType;
    SIGNAL   ReRead,
             ImRead      : vector_of_slvs(0 downto 0)(17 downto 0);
    SIGNAL   ReOut,
             ImOut       : FLOAT_1_18;
    SIGNAL   Booleans    : vector_of_slvs(3 downto 0)(0 downto 0);
    SIGNAL   Count,
-            PacketCount : natural;
+            PacketCount,
+            FrameCount  : natural;
+
 
 begin
 
@@ -177,6 +160,7 @@ begin
          if (reset) then
             Count <= 0;
             PacketCount <= 0;
+            FrameCount  <= 0;
             StartIn <= '1';
             ValidIn <= '0';
             ReadEn  <= '0';
@@ -199,6 +183,7 @@ begin
                if (PacketCount < 25) then
                   PacketCount <= PacketCount + 1;
                else
+                  FrameCount  <= FrameCount + 1;
                   PacketCount <= 0;
                end if;
             end if;
@@ -206,23 +191,24 @@ begin
       end if;
    end process ClkProcess;
 
-   Variables.PilotSyncOffset <= to_ufixed(1013, Variables.PilotSyncOffset);
-
    PS_u : pilotsync
    PORT MAP (
       clk            => clk,
       reset          => reset,
       ce             => ce,
       PilotPulseIn   => StartIn,
+      PilotFound     => '1',
       ValidIn        => ValidIn,
-      Variables      => Variables,
-      IndexIn        => to_ufixed(281, 10, 0),
+      Offset         => x"0",
+      CorrPntr       => to_ufixed(FrameCount, 15, 0),
       RealIn         => to_sfixed(ReRead(0), FLOAT_ZERO_1_18),
       ImagIn         => to_sfixed(ImRead(0), FLOAT_ZERO_1_18),
-      RealOut        => ReOut,
-      ImagOut        => ImOut,
-      StartOut       => StartOut,
-      ValidOut       => ValidOut
+      PilotOffset    => open,
+      StartNextFrame => open,
+      RealOut        => open,
+      ImagOut        => open,
+      StartOut       => open,
+      ValidOut       => open
    );
 
 end rtl;

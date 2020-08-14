@@ -43,7 +43,7 @@ module cmagSquared18(
         .p(imagSquared)
     );
     `endif
-    wire    signed  [18:0] sum = {realSquared[34:16]} + {imagSquared[34:16]};
+    wire    signed  [18:0] sum = {realSquared[35:17]} + {imagSquared[35:17]};
     reg     signed  [17:0] sat;
     always @* begin
         if (sum[18]) begin
@@ -69,7 +69,7 @@ module cmagSquared18(
         .B(inImag),
         .P(imagSquared)
     );
-    wire    signed  [18:0] sum = {realSquared[34:16]} + {imagSquared[34:16]};
+    wire    signed  [18:0] sum = {realSquared[35:17]} + {imagSquared[35:17]};
     reg     signed  [17:0] sat;
     always @(posedge clk) begin
         if (clkEn) begin

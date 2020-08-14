@@ -108,6 +108,24 @@ module stcRegs(
         end
     end
 */
+
+    // Make latches to hold the stc mag and tau readbacks
+    reg signed  [15:0]  ch0MagHold,ch1MagHold;
+    reg signed  [5:0]   stcDeltaTauHold;
+    always @* begin
+        if (cs) begin
+            ch0MagHold = ch0MagHold;
+            ch1MagHold = ch1MagHold;
+            stcDeltaTauHold = stcDeltaTauHold;
+        end
+        else begin
+            ch0MagHold = ch0Mag;
+            ch1MagHold = ch1Mag;
+            stcDeltaTauHold = stcDeltaTau;
+        end
+    end
+
+
     always @* begin
         if (cs) begin
             casex (addr)
@@ -115,18 +133,18 @@ module stcRegs(
                                             15'h0, spectrumInvert,
                                             clocksPerBit
                                         };
-                `STC_HX_THRESH:      dataOut = {20'h0, hxThreshSlv};
+                `STC_HX_THRESH:         dataOut = {20'h0, hxThreshSlv};
                 `STC_DAC_SELECT:        dataOut = {
                                             8'h0,
                                             4'h0, dac2Select,
                                             4'h0, dac1Select,
                                             4'h0, dac0Select
                                         };
-                `STC_PEAK_MAGS:         dataOut = {ch1Mag,ch0Mag};
+                `STC_PEAK_MAGS:         dataOut = {ch1MagHold,ch0MagHold};
                 `STC_DELTA_TAU:         dataOut = {
                                             lockStatus0,lockStatus1,6'b0,
                                             16'h0,
-                                            2'b0,stcDeltaTau
+                                            2'b0,stcDeltaTauHold
                                         };
                 default:                dataOut = 32'h0;
             endcase
