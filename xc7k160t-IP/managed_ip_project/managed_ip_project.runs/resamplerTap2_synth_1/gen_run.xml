@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <GenRun Id="resamplerTap2_synth_1" LaunchPart="xc7k160tfbg676-1" LaunchTime="1479140643">
-  <File Type="RDS-DCP" Name="resamplerTap2.dcp"/>
-  <File Type="RUN-CONSTRS" Name="$PDATADIR/runs/resamplerTap2_synth_1/constrs_in.xml"/>
-  <File Type="RDS-UTIL-PB" Name="resamplerTap2_utilization_synth.pb"/>
-  <File Type="RUN-SRCS" Name="$PDATADIR/runs/resamplerTap2_synth_1/sources.xml"/>
   <File Type="RDS-PROPCONSTRS" Name="resamplerTap2_drc_synth.rpt"/>
   <File Type="PA-TCL" Name="resamplerTap2.tcl"/>
+  <File Type="RUN-CONSTRS" Name="$PDATADIR/runs/resamplerTap2_synth_1/constrs_in.xml"/>
+  <File Type="RDS-DCP" Name="resamplerTap2.dcp"/>
+  <File Type="RUN-SRCS" Name="$PDATADIR/runs/resamplerTap2_synth_1/sources.xml"/>
+  <File Type="RDS-UTIL-PB" Name="resamplerTap2_utilization_synth.pb"/>
   <File Type="RUN-STRAT" Name="$PDATADIR/runs/resamplerTap2_synth_1/resamplerTap2_synth_1.psg"/>
   <File Type="RDS-RDS" Name="resamplerTap2.vds"/>
   <File Type="RDS-UTIL" Name="resamplerTap2_utilization_synth.rpt"/>

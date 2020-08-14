@@ -357,13 +357,17 @@
         `define PNGEN_PCM_DMS           4'b1001
         `define PNGEN_PCM_MDMM          4'b1010
         `define PNGEN_PCM_MDMS          4'b1011
-
+        `define PNGEN_FEC_OFF           2'b00
+        `define PNGEN_FEC_CONV          2'b01
+        `define PNGEN_FEC_LDPC          2'b11
+        
 // Framesync subsystem registers
 `define FRAMER_SPACE            13'b1_00xx_0000_xxxx
     `define FRAMER_CONTROL          13'bx_xxxx_xxxx_00xx
     `define FRAMER_SYNCWORD         13'bx_xxxx_xxxx_01xx
     `define FRAMER_SYNCWORD_MASK    13'bx_xxxx_xxxx_10xx
     `define FRAMER_STATUS           13'bx_xxxx_xxxx_11xx
+    `define FRAMER_SOURCE_SELECT    13'bx_xxxx_xxx1_00xx
 
 // Dual MSE subsystem registers
 `define DMSE_SPACE              13'b1_00xx_0001_xxxx

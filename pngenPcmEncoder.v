@@ -23,6 +23,7 @@ module pngenPcmEncoder (
         if (clkEn & infoClkEn) begin
             prevBit <= nrzBit;
             case (pcmMode)
+                `PNGEN_PCM_BIPM,
                 `PNGEN_PCM_NRZM:
                     if (prevBit ^ nrzBit) begin
                         diffBit <= 1;

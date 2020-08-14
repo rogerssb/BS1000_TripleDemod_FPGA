@@ -20,7 +20,7 @@ module pngenTop(
     wire        [23:0]  pnPolyTaps;
     wire        [4:0]   pnPolyLength;
     wire        [31:0]  pnClockRate;
-    wire        [3:0]   pcmMode;
+    wire        [3:0]   pcmMode;    
     pngenRegs pngenRegs(
         .busClk(busClk),
         .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
@@ -35,7 +35,9 @@ module pngenTop(
         .pcmInvert(pcmInvert),
         .pnRestart(pnRestart),
         .inject1E3Errors(inject1E3Errors),
-        .injectError(injectError)
+        .injectError(injectError),
+        .fecMode(fecMode),
+        .vitG2Inv(vitG2Inv)
     );
 
     // Phase Accumulator
@@ -44,6 +46,8 @@ module pngenTop(
     wire    [32:0]  phaseSum = {1'b0,phase} + {1'b0,pnClockRate};
     reg             infoClkEn;
     reg             everyOtherEn;
+    wire            pause;
+    
     always @(posedge clk) begin
         if (reset) begin
             phase <= 0;
@@ -58,20 +62,24 @@ module pngenTop(
                     phase <= phaseSum[31:0];
                     if (phaseSum[32]) begin
                         pnClkEn <= 1;
-                        infoClkEn <= 1;
+                        if(~pause)
+                            infoClkEn <= 1;
                     end
                     else begin
                         pnClkEn <= 0;
-                        infoClkEn <= 0;
+                        if(~pause)
+                            infoClkEn <= 0;
                     end
                 end
                 default: begin
                     phase <= phaseSum[31:0];
                     if (phaseSum[32]) begin
                         pnClkEn <= 1;
-                        everyOtherEn <= ~everyOtherEn;
-                        if (everyOtherEn) begin
-                            infoClkEn <= 1;
+                        if(~pause) begin
+                            everyOtherEn <= ~everyOtherEn;
+                            if (everyOtherEn) begin
+                                infoClkEn <= 1;
+                            end
                         end
                     end
                     else begin
@@ -102,7 +110,7 @@ module pngenTop(
         .reload(1'b0),
         .load_data(24'b0),
         .data(),
-        .serial(pnBit)
+        .serial(pnBit0)
     );
 
     `else //ADD_PCM_ENCODER
@@ -151,14 +159,53 @@ module pngenTop(
         .clk(clk),
         .reset(reset),
         .clkEn(clkEn),
-        .pnClkEn(pnClkEn),
+        .pnClkEn(pnClkEn & ~pause),
         .infoClkEn(infoClkEn),
         .pcmMode(pcmMode),
         .pcmInvert(pcmInvert),
         .nrzBit(nrzBit),
-        .pcmBit(pnBit)
+        .pcmBit(pnBit0)
     );
 
     `endif //ADD_PCM_ENCODER
+    
+    // Foward Error Corrections 
+    reg convEncReset;       
+    convEncoder conv_enc
+    (
+        .clk(clk),
+        .clkEn(pnClkEn),
+        .reset(convEncReset),
+        .pcmBit(pnBit0),
+        .hold(pause),
+        .encBit(pnBitConvEnc),
+        .vitG2Inv(vitG2Inv)
+    );
 
+
+    reg pnBitMux;
+    always @(posedge clk) begin
+        if (reset) begin
+            pnBitMux <= 0;
+            convEncReset <= 1;
+        end
+        else if(pnClkEn) begin
+            case (fecMode) 
+            `PNGEN_FEC_OFF:     begin
+                                pnBitMux <= pnBit0;
+                                convEncReset <= 1;
+                                end
+            `PNGEN_FEC_CONV:    begin
+                                pnBitMux <= pnBitConvEnc;
+                                convEncReset <= 0;
+                                end
+            default:            begin 
+                                pnBitMux <= pnBit0;
+                                convEncReset <= 1;
+                                end
+            endcase
+        end
+    end
+    assign pnBit = pnBitMux;
+    
 endmodule
