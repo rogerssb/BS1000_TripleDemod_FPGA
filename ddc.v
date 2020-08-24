@@ -249,8 +249,8 @@ dualDecimator #(.RegSpace(`CICDECSPACE)) cic(
     always @(posedge clk) begin
         `ifdef ADD_HB0_BYPASS
         if (bypassHb0) begin
-            iAgcIn <= {iMix,30'h0};
-            qAgcIn <= {qMix,30'h0};
+            iAgcIn <= {iFir,30'h0};
+            qAgcIn <= {qFir,30'h0};
             agcSync <= 1'b1;
         end
         else if (bypassCic) begin
@@ -378,9 +378,9 @@ always @(posedge clk) begin
     else begin
         `ifdef ADD_HB0_BYPASS
         if (bypassHb0) begin
-            firClockEn <= agcSync;
-            iFirIn <= iMux;
-            qFirIn <= qMux;
+            firClockEn <= 1'b1;
+            iFirIn <= iMix;
+            qFirIn <= qMix;
         end
         else if (bypassHb) begin
         `else
@@ -428,6 +428,13 @@ always @(posedge clk) begin
             qLeadIn <= qHb;
             end
         end
+    `ifdef ADD_HB0_BYPASS
+    else if (bypassHb0) begin
+        iLeadIn <= iAgc;
+        qLeadIn <= qAgc;
+        syncOut <= agcSync;
+    end
+    `endif
     else begin
         iLeadIn <= iFir;
         qLeadIn <= qFir;
@@ -503,7 +510,7 @@ always @(qLeadDds) qLeadDdsReal = ((qLeadDds > 131071.0) ? (qLeadDds - 262144.0)
 
 // Complex Multiplier
 wire    [17:0]  iLead,qLead;
-cmpy18 leadMixer(
+cmpy18 #(.UnityGain(1)) leadMixer(
     .clk(clk),
     .reset(reset),
     .aReal(iLeadIn),

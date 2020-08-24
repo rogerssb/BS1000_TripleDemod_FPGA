@@ -639,8 +639,8 @@ BEGIN
    TP_Process : process(Clk186)
    begin
       if (rising_edge(Clk186)) then
-         m_ndx0Slv      <= std_logic_vector(to_signed(m_ndx0, 4));
-         m_ndx1Slv      <= std_logic_vector(to_signed(m_ndx1, 4));
+         m_ndx0Slv      <= std_logic_vector(to_signed(m_ndx0, 4) + signed(MiscBits(2 downto 0)));
+         m_ndx1Slv      <= std_logic_vector(to_signed(m_ndx1, 4) + signed(MiscBits(2 downto 0)));
          Ch0MuSlv       <= to_slv(Ch0Mu);
          Ch1MuSlv       <= to_slv(Ch1Mu);
          if (SIM_MODE) then
@@ -654,7 +654,7 @@ BEGIN
       end if;
    end process;
 
-   TwoClksPerTrellis   <= '1' when (ClocksPerBit > 16x"D00") else '0';  -- ~9.5Mb
+   TwoClksPerTrellis   <= MiscBits(3); -- '1' when (ClocksPerBit > 16x"D00") else '0';  -- ~9.5Mb
 
    Trellis_u : trellisProcess
       PORT MAP (
@@ -673,7 +673,7 @@ BEGIN
          ch0MuIn              => Ch0MuSlv,
          ch1MuIn              => Ch1MuSlv,
          deltaTauEstIn        => deltaTauEstSlv,
-         TwoClksPerTrellis    => TwoClksPerTrellis,
+         TwoClksPerTrellis    => '0',
          m_ndx0               => m_ndx0Slv,
          m_ndx1               => m_ndx1Slv,
          outputEn             => TrellisOutEn,
@@ -783,24 +783,8 @@ BEGIN
                HxEstI <= to_slv(H1EstI);
             end if;
          else
-               with MiscBits(2 downto 0) select    -- TODO FZ, set to 0
-                  HxEstR <=   to_slv(MagR sra 1) when 3x"1",
-                              to_slv(MagR sra 2) when 3x"2",
-                              to_slv(MagR sra 3) when 3x"3",
-                              to_slv(MagR sra 4) when 3x"4",
-                              to_slv(MagR sra 5) when 3x"5",
-                              to_slv(MagR sra 6) when 3x"6",
-                              to_slv(MagR sra 7) when 3x"7",
-                              to_slv(MagR)       when others;
-               with MiscBits(2 downto 0) select
-                  HxEstI <=   to_slv(MagI sra 1) when 3x"1",
-                              to_slv(MagI sra 2) when 3x"2",
-                              to_slv(MagI sra 3) when 3x"3",
-                              to_slv(MagI sra 4) when 3x"4",
-                              to_slv(MagI sra 5) when 3x"5",
-                              to_slv(MagI sra 6) when 3x"6",
-                              to_slv(MagI sra 7) when 3x"7",
-                              to_slv(MagI)       when others;
+               HxEstR <= to_slv(MagR);
+               HxEstI <= to_slv(MagI);
          end if;
       end if;
    end process;

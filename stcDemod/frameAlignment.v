@@ -119,7 +119,6 @@ module frameAlignment
         `define WAIT_VALID          1'b0
         `define WAIT_DECIMATION     1'b1
     reg             [2:0]   decimationCount;
-    reg             [5:0]   clockCount;
     reg             [1:0]   outputCount;
     reg             [8:0]   trellisInitCnt;
     reg             [14:0]   sampleCount;
@@ -134,7 +133,7 @@ module frameAlignment
             interpolate     <= 0;
             trellisInitCnt  <= 130; // inactive state
         end
-        else if (clkEn && !clockCount[5]) begin
+        else if (clkEn) begin
             depth <= wrAddr - rdAddr;
 
             if (myStartOfTrellis) begin
@@ -190,24 +189,5 @@ module frameAlignment
         end
     end
     assign  clkEnOut = (fifoRdEn);
-
-    always @(posedge clk) begin
-        if (myStartOfTrellis) begin
-            clockCount <= 0;
-        end
-        else begin
-            if ((fifoOutputValid == 1) && (clksPerOutput == 2)) begin
-                if (clockCount < 31) begin
-                    clockCount <= clockCount + 1;
-                end
-                else begin
-                    clockCount <= 0;
-                end
-            end
-            else begin
-                clockCount <= 0;
-            end
-        end
-    end
 
 endmodule

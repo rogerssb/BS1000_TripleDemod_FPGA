@@ -380,13 +380,10 @@ module trellisDetector (
 
     `ifdef USE_WIDE_OUTPUT
     wire            [17:0]  startMetric_00;
-    wire            [17:0]  startMetric_01;
-    wire            [17:0]  startMetric_10;
-    wire            [17:0]  startMetric_11;
     wire            [18:0]  sumMetric_00 = {1'b0,accMetric3_00} + {1'b0,startMetric_00};
-    wire            [18:0]  sumMetric_01 = {1'b0,accMetric3_01} + {1'b0,startMetric_01};
-    wire            [18:0]  sumMetric_10 = {1'b0,accMetric3_10} + {1'b0,startMetric_10};
-    wire            [18:0]  sumMetric_11 = {1'b0,accMetric3_11} + {1'b0,startMetric_11};
+    wire            [18:0]  sumMetric_01 = {1'b0,accMetric3_01} + {1'b0,startMetric_00};
+    wire            [18:0]  sumMetric_10 = {1'b0,accMetric3_10} + {1'b0,startMetric_00};
+    wire            [18:0]  sumMetric_11 = {1'b0,accMetric3_11} + {1'b0,startMetric_00};
     wire            [6:0]   winner5;
     reg                     flipTracebackPingPong;
     wire            [3:0]   detectedBits;
@@ -747,13 +744,11 @@ module trellisDetector (
     reg             [17:0]  accMetric_1110;
     reg             [17:0]  accMetric_1111;
     reg             [3:0]   finalMetricCount;
-    reg                     zeroFinal;
     always @(posedge clk) begin
         if (startFrame) begin
             minState                <= `MIN_IDLE;
             minMetric               <= 0;
             flipTracebackPingPong   <= 0;
-            zeroFinal               <= 0;
         end
         else begin
             case (minState)
@@ -921,7 +916,6 @@ module trellisDetector (
                     if (finalMetricCount == 0) begin
                         finalMetricOutputEn <= 0;
                         minState            <= `MIN_IDLE;
-                        zeroFinal           <= 1;   // zero the first value since accMetrics aren't initialized
                     end
                     else begin
                         finalMetricCount <= finalMetricCount - 1;
@@ -962,10 +956,7 @@ module trellisDetector (
         .full(),
         .empty()
     );
-    assign startMetric_00 = (clksPerEq2 && zeroFinal && !positiveTau) ? finalMetric : fifoMetric;
-    assign startMetric_01 = (clksPerEq2 && zeroFinal && !positiveTau) ? finalMetric : fifoMetric;
-    assign startMetric_10 = (clksPerEq2 && zeroFinal && !positiveTau) ? finalMetric : fifoMetric;
-    assign startMetric_11 = (clksPerEq2 && zeroFinal && !positiveTau) ? finalMetric : fifoMetric;
+    assign startMetric_00 = (clksPerEq2 && !positiveTau) ? finalMetric : fifoMetric;
 
     // Delay the stage 7 startNextStage to create the outputEn
 //    reg                     outputEn;

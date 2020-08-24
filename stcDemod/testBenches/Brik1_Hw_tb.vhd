@@ -408,7 +408,7 @@ begin
       if (rising_edge(Clk93)) then
          if (Reset) then
             DataValid <= x"00";
-    Phase1_vio <= 18x"00000";
+    Phase1_vio <= 18x"30000";
             BitRateAcc  <= to_sfixed(0, BitRateAcc);
             RdAddr_i    <= 12830;
             NoiseAddr   <= 0;

@@ -76,7 +76,7 @@ ARCHITECTURE rtl OF STC_HW_TB IS
   signal FrameCnt,
          Delta,
          DeltaTauEn     : integer := 0;
-  signal BitRate_r      : real := 9.33;
+  signal BitRate_r      : real := 11.666;
 
 BEGIN
 
@@ -98,12 +98,12 @@ BEGIN
          if (<< signal Brik1.Reset  : std_logic >>) then
             Power0In                                        <= to_sfixed(0.120, Power0In);
             Power1In                                        <= to_sfixed(0.120, Power1In);
-            NoiseIn                                         <= to_sfixed(0.019, NoiseIn); --0.038, NoiseIn);
-            Delta                                           <= 0;
+            NoiseIn                                         <= to_sfixed(0.00019, NoiseIn); --0.038, NoiseIn);
+            Delta                                           <= -1;
          elsif (RdAddrEq and not RdAddrDly) then
            case (FrameCnt) is
             when 0 =>
-               Power0In <= to_sfixed(0.0, Power0In);
+               Power0In <= to_sfixed(0.120, Power0In);
                Power1In <= to_sfixed(0.120, Power1In);
             when 1 =>
                <<signal Brik1.UUTu.DeltaTauEn : std_logic >> <= '1';
@@ -121,13 +121,13 @@ BEGIN
                Delta <= +2;
             when others =>
             end case;
-            if (FrameCnt < 10) then
+/*            if (FrameCnt < 10) then
                FrameCnt <= FrameCnt + 1;
             else
                FrameCnt <= 0;
  --           <<signal Brik1.TwoClksPerTrellis : std_logic >>     <= '1';
             end if;
-         end if;
+*/         end if;
       end if;
    end process;
 

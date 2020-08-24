@@ -10,7 +10,7 @@ derivative rights in exchange for negotiated compensation.
 //`define UNITY_GAIN
 
 
-module cmpy18(
+module cmpy18 #(parameter UnityGain=0) (
     input                       clk,
     input                       reset,
     input       signed  [17:0]  aReal,aImag,
@@ -63,36 +63,35 @@ module cmpy18(
     wire signed [35:0]  realSum = {productRxR[34],productRxR[34:0]} - {productIxI[34],productIxI[34:0]};
     wire signed [35:0]  imagSum = {productRxI[34],productRxI[34:0]} + {productIxR[34],productIxR[34:0]};
 
-    `ifdef UNITY_GAIN
-
-    always @(posedge clk) begin
-        if (realSum[35] & !realSum[34]) begin
-            pReal <= 18'h20001;
-        end
-        else if (!realSum[35] & realSum[34]) begin
-            pReal <= 18'h1ffff;
+    generate
+        if (UnityGain == 0) begin
+            always @(posedge clk) begin
+                pReal <= realSum[35:18];
+                pImag <= imagSum[35:18];
+            end
         end
         else begin
-            pReal <= realSum[34:17];
+            always @(posedge clk) begin
+                if (realSum[35] & !realSum[34]) begin
+                    pReal <= 18'h20001;
+                end
+                else if (!realSum[35] & realSum[34]) begin
+                    pReal <= 18'h1ffff;
+                end
+                else begin
+                    pReal <= realSum[34:17];
+                end
+                if (imagSum[35] & !imagSum[34]) begin
+                    pImag <= 18'h20001;
+                end
+                else if (!imagSum[35] & imagSum[34]) begin
+                    pImag <= 18'h1ffff;
+                end
+                else begin
+                    pImag <= imagSum[34:17];
+                end
+            end
         end
-        if (imagSum[35] & !imagSum[34]) begin
-            pImag <= 18'h20001;
-        end
-        else if (!imagSum[35] & imagSum[34]) begin
-            pImag <= 18'h1ffff;
-        end
-        else begin
-            pImag <= imagSum[34:17];
-        end
-    end
-
-    `else
-
-    always @(posedge clk) begin
-        pReal <= realSum[35:18];
-        pImag <= imagSum[35:18];
-    end
-
-    `endif
+    endgenerate
 
 endmodule

@@ -430,8 +430,6 @@ module stcDemodTop (
     wire    signed  [11:0]  pilotLagError;
     wire    signed  [11:0]  pilotFreqError;
     wire            [31:0]  pilotDout;
-    wire [15:0] lockCounter;
-
     stcLoop #(.RegSpace(`PILOT_LF_SPACE)) pilot(
         .clk(clk), .reset(reset),
         .clkEn(phaseDiffEn),
@@ -452,7 +450,7 @@ module stcDemodTop (
         .lagError(pilotLagError),
         .avgFreqError(pilotFreqError),
         .freqAcquired(pilotFreqAcquired),
-        .lockCounter(lockCounter)
+        .lockCounter()
     );
 
     // LO Generator
@@ -481,7 +479,7 @@ module stcDemodTop (
     // Complex Multiplier
     wire [17:0]iStc;
     wire [17:0]qStc;
-    cmpy18 mixer(
+    cmpy18 #(.UnityGain(1)) mixer(
         .clk(clk),
         .reset(reset),
         .aReal(iDdc),
