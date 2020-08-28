@@ -358,8 +358,6 @@ ARCHITECTURE rtl OF STC IS
             PhaseDiffs        : SLV12;
    SIGNAL   H0PhaseOld,
             H1PhaseOld,
-            H0PhasePos,
-            H0PhaseNeg,
             H0PhaseDiff,
             H1PhaseDiff       : sfixed(11 downto 0);
    SIGNAL   H0Mag,
@@ -393,8 +391,7 @@ ARCHITECTURE rtl OF STC IS
    attribute mark_debug of EstimatesDone,
                   StartIla, ValidIla, InRBrik2Ila, InIBrik2Ila, PilotFoundCE, PilotFoundPD,
                   PhaseDiffWB, PhaseDiffNB, CorrPntr8to0, m_ndx0Slv, m_ndx1Slv, Mag0GtMag1, HxThresh,
-                  H0Phase, H1Phase, H0Mag, H1Mag, deltaTauEstSlv, DataAddr,H0PhasePos,
-            H0PhaseNeg, MagR, MagI,
+                  H0Phase, H1Phase, H0Mag, H1Mag, deltaTauEstSlv, DataAddr, MagR, MagI,
                   PrnErrors, PhaseDiffs, PilotOffset, PilotOffset_s,
                   DataOut, ClkOutEn, ValidData2047 : signal is "true";
 
@@ -639,8 +636,8 @@ BEGIN
    TP_Process : process(Clk186)
    begin
       if (rising_edge(Clk186)) then
-         m_ndx0Slv      <= std_logic_vector(to_signed(m_ndx0, 4) + signed(MiscBits(2 downto 0)));
-         m_ndx1Slv      <= std_logic_vector(to_signed(m_ndx1, 4) + signed(MiscBits(2 downto 0)));
+         m_ndx0Slv      <= std_logic_vector(to_signed(m_ndx0, 4));
+         m_ndx1Slv      <= std_logic_vector(to_signed(m_ndx1, 4));
          Ch0MuSlv       <= to_slv(Ch0Mu);
          Ch1MuSlv       <= to_slv(Ch1Mu);
          if (SIM_MODE) then
@@ -654,7 +651,7 @@ BEGIN
       end if;
    end process;
 
-   TwoClksPerTrellis   <= MiscBits(3); -- '1' when (ClocksPerBit > 16x"D00") else '0';  -- ~9.5Mb
+   TwoClksPerTrellis   <= '1' when (ClocksPerBit > 16x"D00") else '0';  -- ~9.5Mb
 
    Trellis_u : trellisProcess
       PORT MAP (
@@ -673,7 +670,7 @@ BEGIN
          ch0MuIn              => Ch0MuSlv,
          ch1MuIn              => Ch1MuSlv,
          deltaTauEstIn        => deltaTauEstSlv,
-         TwoClksPerTrellis    => '0',
+         TwoClksPerTrellis    => TwoClksPerTrellis,
          m_ndx0               => m_ndx0Slv,
          m_ndx1               => m_ndx1Slv,
          outputEn             => TrellisOutEn,
@@ -745,8 +742,7 @@ BEGIN
          end if;
 
          -- Add threshold hysteresis to prevent PilotFoundCE oscillating when power is around threshold.
---         HxThresh       <= to_ufixed('0' & HxThreshSlv, HxThresh) when (not PilotFoundCE) else to_ufixed("00" & HxThreshSlv(11 downto 1), HxThresh);
-         HxThresh       <= to_ufixed('0' & MiscBits(15 downto 4), HxThresh) when (not PilotFoundCE) else to_ufixed("00" & MiscBits(15 downto 5), HxThresh);
+         HxThresh       <= to_ufixed('0' & HxThreshSlv, HxThresh) when (not PilotFoundCE) else to_ufixed("00" & HxThreshSlv(11 downto 1), HxThresh);
          PilotFoundCE   <= '1' when (H0Mag_u > HxThresh) or (H1Mag_u > HxThresh) else '0';  -- about .15 at noise threshold
          if (CordicValid) then
             H0Mag_u  <= to_ufixed(H0Mag, H0Mag_u);
@@ -757,14 +753,12 @@ BEGIN
             H1PhaseOld  <= to_sfixed(H1Phase, H1PhaseOld);
             -- PhaseDiffs is used to show the difference between H0 and H1 phases. When both are on, I get errors at a certain PhaseDiff
             PhaseDiffs  <= to_slv(resize(H0PhaseOld - H1PhaseOld, H1PhaseOld));
-            H0PhasePos <= H0PhaseDiff when (H0PhaseDiff > 0) else x"000";
-            H0PhaseNeg <= H0PhaseDiff when (H0PhaseDiff < 0) else x"FFF";
          end if;
       end if;
    end process DacOutputs;
 
-   AGCprocess : process(Clk93)
-   begin
+   AGCprocess : process(Clk93)   -- if AGC overdrives front end, the pilot gets lost and goes to zero, causing more AGC
+   begin                         -- To compensate, check for PilotFound, else feedback raw sample RMS signal
       if (rising_edge(Clk93)) then
          if (Reset) then
             MagR <= 18x"0";
@@ -774,7 +768,7 @@ BEGIN
             MagI <= resize(MagI - (MagI sra 8) + (abs(ResampleI_s) sra 8), MagR);
          end if;
 
-         if ((MiscBits(17) and PilotFoundCE) or MiscBits(16)) then
+         if (PilotFoundCE) then
             if (Mag0GtMag1) then
                HxEstR <= to_slv(H0EstR);
                HxEstI <= to_slv(H0EstI);
@@ -816,7 +810,7 @@ BEGIN
          p     => H1Phase,
          enOut => open
       );
-
+/*
    Vio : Vio2x18
       PORT MAP(
          clk         => Clk93,
@@ -827,5 +821,5 @@ BEGIN
          probe_out4  => open,
          probe_out5  => open
       );
-
+*/
 END rtl;
