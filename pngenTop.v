@@ -20,7 +20,10 @@ module pngenTop(
     wire        [23:0]  pnPolyTaps;
     wire        [4:0]   pnPolyLength;
     wire        [31:0]  pnClockRate;
-    wire        [3:0]   pcmMode;    
+    wire        [3:0]   pcmMode; 
+    wire        [1:0]   fecMode;
+    wire        [1:0]   ldpcRate;
+    wire        [1:0]   ldpcRandomize;   
     pngenRegs pngenRegs(
         .busClk(busClk),
         .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
@@ -37,7 +40,10 @@ module pngenTop(
         .inject1E3Errors(inject1E3Errors),
         .injectError(injectError),
         .fecMode(fecMode),
-        .vitG2Inv(vitG2Inv)
+        .vitG2Inv(vitG2Inv),
+        .ldpcRate(ldpcRate),
+        .ldpcBlockSize(ldpcBlockSize),
+        .ldpcRandomize(ldpcRandomize)
     );
 
     // Phase Accumulator
@@ -177,31 +183,53 @@ module pngenTop(
         .clkEn(pnClkEn),
         .reset(convEncReset),
         .pcmBit(pnBit0),
-        .hold(pause),
+        .hold(holdConvEnc),
         .encBit(pnBitConvEnc),
         .vitG2Inv(vitG2Inv)
     );
+    /// LDPC Encoder ///
+    reg ldpcEncReset;
+    ldpc_encoder ldpc(
+        .clk(clk),
+        .clkEn(pnClkEn),
+        .reset(ldpcEncReset),
+        .pcmBit(pnBit0),
+        .hold(holdLdpc),
+        .encBit(ldpcEncBit),
+        .rate(ldpcRate),
+        .blocksize(ldpcBlockSize),
+        .randomize(ldpcRandomize)
+    );
 
-
+    assign pause = fecMode==`PNGEN_FEC_CONV ? holdConvEnc :( fecMode==`PNGEN_FEC_LDPC ? holdLdpc : 1'b0) ;
     reg pnBitMux;
     always @(posedge clk) begin
         if (reset) begin
-            pnBitMux <= 0;
-            convEncReset <= 1;
+            pnBitMux <= 1'b0;
+            convEncReset <= 1'b1;
+            ldpcEncReset <= 1'b1;
         end
         else if(pnClkEn) begin
             case (fecMode) 
             `PNGEN_FEC_OFF:     begin
                                 pnBitMux <= pnBit0;
                                 convEncReset <= 1;
+                                ldpcEncReset <= 1;
                                 end
             `PNGEN_FEC_CONV:    begin
                                 pnBitMux <= pnBitConvEnc;
                                 convEncReset <= 0;
+                                ldpcEncReset <= 1;
+                                end
+            `PNGEN_FEC_LDPC:    begin
+                                pnBitMux <= ldpcEncBit;
+                                ldpcEncReset <= 0;
+                                convEncReset <= 1;
                                 end
             default:            begin 
                                 pnBitMux <= pnBit0;
                                 convEncReset <= 1;
+                                ldpcEncReset <= 1;
                                 end
             endcase
         end

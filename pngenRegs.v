@@ -17,7 +17,10 @@ module pngenRegs(
     output  reg         inject1E3Errors,
     output  reg         injectError,
     output  reg [1:0]   fecMode,
-    output  reg         vitG2Inv
+    output  reg         vitG2Inv,
+    output  reg [1:0]   ldpcRate,
+    output  reg         ldpcBlockSize,
+    output  reg [1:0]   ldpcRandomize
 );
 
     parameter RegSpace = `PNGEN_SPACE;
@@ -37,6 +40,7 @@ module pngenRegs(
                 `PNGEN_RATE:    pnClockRate[7:0] <= din[7:0];
                 `PNGEN_PCM_MODE: begin    
                                 pcmMode[3:0] <= din[3:0];
+                                ldpcRate <= din[6:5];
                                 pcmInvert <= din[7];
                                 end
                 default: ;
@@ -49,6 +53,8 @@ module pngenRegs(
                 `PNGEN_PCM_MODE: begin
                                 fecMode <= din[9:8]; 
                                 vitG2Inv <= din[10];
+                                ldpcBlockSize <= din[11];
+                                ldpcRandomize <= din[13:12];
                                 inject1E3Errors <= din[14];
                                 injectError <= din[15];
                                 end
@@ -80,7 +86,7 @@ module pngenRegs(
             casex (addr)
                 `PNGEN_POLY:    dout = {pnPolyMode, pnRestart, 1'b0, pnPolyLength, pnPolyTaps};
                 `PNGEN_RATE:    dout = pnClockRate;
-                `PNGEN_PCM_MODE:dout = {16'b0,injectError,inject1E3Errors,3'b0,vitG2Inv,fecMode,pcmInvert,3'b0,pcmMode};
+                `PNGEN_PCM_MODE:dout = {16'b0,injectError,inject1E3Errors,ldpcRandomize,ldpcBlockSize,vitG2Inv,fecMode,pcmInvert,ldpcRate,1'b0,pcmMode};
                 default:        dout = 32'hx;
             endcase
         end

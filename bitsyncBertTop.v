@@ -84,7 +84,7 @@ module bitsyncBertTop (
 
 );
 
-    parameter VER_NUMBER = 16'd670;
+    parameter VER_NUMBER = 16'd674;
 
 
 //******************************************************************************
@@ -1079,6 +1079,7 @@ clockAndDataInputSync diffSync(
     framerTop framer(
         .reset(reset),
         .busClk(fb_clk),
+        .cs(cs),
         .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
         .addr(addr),
         .din(dataIn),

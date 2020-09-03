@@ -359,7 +359,16 @@
         `define PNGEN_PCM_MDMS          4'b1011
         `define PNGEN_FEC_OFF           2'b00
         `define PNGEN_FEC_CONV          2'b01
-        `define PNGEN_FEC_LDPC          2'b11
+        `define PNGEN_FEC_LDPC          2'b10
+        `define PNGEN_LDPC_R1_2         2'b00
+        `define PNGEN_LDPC_R2_3         2'b01
+        //`define PNGEN_LDPC_R3_4         2'b10
+        `define PNGEN_LDPC_R4_5         2'b10
+        `define PNGEN_LDPC_L1024        1'b0
+        `define PNGEN_LDPC_L4096        1'b1
+        `define PNGEN_LDPC_RND_OFF      2'b00
+        `define PNGEN_LDPC_RND_CCSDS    2'b01
+        `define PNGEN_LDPC_RND_IRIG     2'b10
         
 // Framesync subsystem registers
 `define FRAMER_SPACE            13'b1_00xx_0000_xxxx
