@@ -261,11 +261,11 @@ ARCHITECTURE rtl OF TimingEstimate IS
    signal   ResultsCM0Ila, ResultsCM1Ila, ResultsCM2Ila, ResultsCM3Ila, MinCMIla : std_logic_vector(24 downto 0);
    signal   Tau0EstIla, Tau1EstIla : SLV18;
    signal   xx0, xx1, xx2, xx3, yy0, yy1, yy2, yy3 : natural range 0 to 64;
-   attribute mark_debug : string;
+/*   attribute mark_debug : string;
    attribute mark_debug of StartIn, Mode, PipeLine, Done, CenterX, CenterY, Offset, ComputeDone, StartCM, MinIndex,
                MinX, MinY, Iterations, xx0, xx1, xx2, xx3, yy0, yy1, yy2, yy3, Tau0Ndx, Tau1Ndx, Tau0EstIla, Tau1EstIla,
                ResultsCM0Ila, ResultsCM1Ila, ResultsCM2Ila, ResultsCM3Ila, MinCMIla : signal is "true";
-
+*/
 
 BEGIN
    process (clk)

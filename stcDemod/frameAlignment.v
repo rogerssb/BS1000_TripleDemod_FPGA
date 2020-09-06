@@ -6,6 +6,7 @@
 // 12/18/19 Changed buffer from circular to zero based. Each frame starts at zero. Reading starts at end of pilot minus preload of 12 plus m_ndx's.
 //          Add depth register so read never reaches within 5 of write to avoid possible overflow if m_ndx is large positive. When SOF is detected, write goes
 //          back to zero, but read continues till all samples read. Added sample counter.
+// 9/3/20   Modulo 13312 math wasn't checking underflow. fifoOutputValid wasn't waiting for data, just SOF
 
 module frameAlignment
 //    #(parameter CLKS_PER_OUTPUT = 2)
@@ -33,14 +34,18 @@ module frameAlignment
 
     //------------------------------ Sample Counter ---------------------------
 
-(* MARK_DEBUG="true" *)    reg             [14:0]  wrAddr, rdAddr, depth;
+(* MARK_DEBUG="true" *)    reg             [14:0]  wrAddr, rdAddr;
+(* MARK_DEBUG="true" *)    reg  signed     [14:0]  depth;
     wire   signed   [15:0]  rdAddr0, rdAddr1, rdAddr0Tmp, rdAddr1Tmp;
-    reg                     sofDetected;
+    reg                     sofDetected, lastSamplesAvailable;
+    reg                     outputState, lastSample;
+    reg             [14:0]   sampleCount;
     `define   SOF_ADDRESS `PILOT_SAMPLES_PER_FRAME - 10  // since new frame starts writing at 0, frame data starts at known offset
     always @(posedge clk) begin
         if (reset) begin
             myStartOfTrellis <= 0;
             sofDetected      <= 0;
+            lastSamplesAvailable <= 0;
         end
         else if (clkEn) begin
             if (startOfFrame) begin
@@ -49,6 +54,14 @@ module frameAlignment
             else if (myStartOfTrellis) begin
                 sofDetected <= 0;
             end
+
+            if (lastSample) begin
+                lastSamplesAvailable <= 0;
+            end
+            else if ((wrAddr == 20) && (sampleCount > 2000)) begin
+                lastSamplesAvailable <= 1;
+            end
+
             myStartOfTrellis <= (estimatesDone & sofDetected);
         end
     end
@@ -86,8 +99,8 @@ module frameAlignment
 
     assign  rdAddr0Tmp = {1'b0, rdAddr} + {{12{m_ndx0[3]}}, m_ndx0};   // sign extend to add signed offset
     assign  rdAddr1Tmp = {1'b0, rdAddr} + {{12{m_ndx1[3]}}, m_ndx1};
-    assign  rdAddr0    = (rdAddr0Tmp < 13312) ? rdAddr0Tmp : rdAddr0Tmp - 13312;    // wrap read address within 0 to 13311 range
-    assign  rdAddr1    = (rdAddr1Tmp < 13312) ? rdAddr1Tmp : rdAddr1Tmp - 13312;
+    assign  rdAddr0    = (rdAddr0Tmp > 13311) ? rdAddr0Tmp - 13312 : ((rdAddr0Tmp < 0) ? rdAddr0Tmp + 13312 : rdAddr0Tmp);    // wrap read address within 0 to 13311 range
+    assign  rdAddr1    = (rdAddr1Tmp > 13311) ? rdAddr1Tmp - 13312 : ((rdAddr1Tmp < 0) ? rdAddr1Tmp + 13312 : rdAddr1Tmp);
 
 
     RAM_2Reads_1WriteVerWrap #(
@@ -106,7 +119,7 @@ module frameAlignment
         .RdOutA(fifoRdData0),
         .RdOutB(fifoRdData1)
     );
-    wire    fifoOutputValid = ((interpolate == 1) || (depth > 5) || (sofDetected == 1));  // allow enough room for worst case, don't leave interpolate hanging. When next startOfFrame wrAddr goes to 0, so keep reading to end of current data section
+    wire    fifoOutputValid = ((interpolate == 1) || (depth > 5) || (lastSamplesAvailable == 1));  // allow enough room for worst case, don't leave interpolate hanging. When next startOfFrame wrAddr goes to 0, so keep reading to end of current data section
     assign  doutReal0       = fifoRdData0[35:18];
     assign  doutImag0       = fifoRdData0[17:0];
     assign  doutReal1       = fifoRdData1[35:18];
@@ -115,13 +128,11 @@ module frameAlignment
 
     //-------------------------- Output State Machine -------------------------
 
-    reg                     outputState, lastSample;
         `define WAIT_VALID          1'b0
         `define WAIT_DECIMATION     1'b1
     reg             [2:0]   decimationCount;
     reg             [1:0]   outputCount;
     reg             [8:0]   trellisInitCnt;
-    reg             [14:0]   sampleCount;
     always @(posedge clk) begin
         if (reset || lastSample) begin
             outputState <= `WAIT_VALID;
@@ -137,7 +148,8 @@ module frameAlignment
             depth <= wrAddr - rdAddr;
 
             if (myStartOfTrellis) begin
-                trellisInitCnt <= 128;
+                trellisInitCnt  <= 128;
+                sampleCount     <= 0;
             end
             else if ((trellisInitCnt < 130) && (trellisInitCnt > 0)) begin
                 trellisInitCnt <= trellisInitCnt - 1;

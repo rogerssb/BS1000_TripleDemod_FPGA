@@ -329,6 +329,8 @@ ARCHITECTURE rtl OF STC IS
             PhaseOut1,
             MagPeak0,
             MagPeak1,
+            MagRSlv,
+            MagISlv,
             PhsPeak,
             PhsPeak0,
             PhsPeak1,
@@ -391,7 +393,7 @@ ARCHITECTURE rtl OF STC IS
    attribute mark_debug of EstimatesDone,
                   StartIla, ValidIla, InRBrik2Ila, InIBrik2Ila, PilotFoundCE, PilotFoundPD,
                   PhaseDiffWB, PhaseDiffNB, CorrPntr8to0, m_ndx0Slv, m_ndx1Slv, Mag0GtMag1, HxThresh,
-                  H0Phase, H1Phase, H0Mag, H1Mag, deltaTauEstSlv, DataAddr, MagR, MagI,
+                  H0Phase, H1Phase, H0Mag, H1Mag, deltaTauEstSlv, DataAddr, MagRSlv, MagISlv,
                   PrnErrors, PhaseDiffs, PilotOffset, PilotOffset_s,
                   DataOut, ClkOutEn, ValidData2047 : signal is "true";
 
@@ -741,8 +743,8 @@ BEGIN
             Mag0GtMag1   <= '0';
          end if;
 
-         -- Add threshold hysteresis to prevent PilotFoundCE oscillating when power is around threshold.
-         HxThresh       <= to_ufixed('0' & HxThreshSlv, HxThresh) when (not PilotFoundCE) else to_ufixed("00" & HxThreshSlv(11 downto 1), HxThresh);
+         -- Add threshold hysteresis to prevent PilotFound oscillating when power is around threshold.
+         HxThresh       <= 13x"200" when (not PilotFound) else 13x"180";   -- On at 512, off 375
          PilotFoundCE   <= '1' when (H0Mag_u > HxThresh) or (H1Mag_u > HxThresh) else '0';  -- about .15 at noise threshold
          if (CordicValid) then
             H0Mag_u  <= to_ufixed(H0Mag, H0Mag_u);
@@ -768,7 +770,7 @@ BEGIN
             MagI <= resize(MagI - (MagI sra 8) + (abs(ResampleI_s) sra 8), MagR);
          end if;
 
-         if (PilotFoundCE) then
+         if (PilotFound) then
             if (Mag0GtMag1) then
                HxEstR <= to_slv(H0EstR);
                HxEstI <= to_slv(H0EstI);
@@ -777,9 +779,12 @@ BEGIN
                HxEstI <= to_slv(H1EstI);
             end if;
          else
-               HxEstR <= to_slv(MagR);
-               HxEstI <= to_slv(MagI);
+               HxEstR <= MagRSlv;
+               HxEstI <= MagISlv;
          end if;
+         MagRSlv <= to_slv(MagR);
+         MagISlv <= to_slv(MagI);
+
       end if;
    end process;
 
