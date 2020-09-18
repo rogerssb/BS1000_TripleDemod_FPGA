@@ -225,7 +225,7 @@ architecture rtl of Brik1_Hw_tb is
         locked          : out    std_logic
        );
    end component;
-
+/*
    COMPONENT xadcConvert IS
       GENERIC(
          NUM_INPUTS  : positive := 3
@@ -238,6 +238,19 @@ architecture rtl of Brik1_Hw_tb is
          dataOut        : OUT STD_LOGIC_VECTOR(15 DOWNTO 0)
       );
    END COMPONENT xadcConvert;
+*/
+   component channelAGC is
+      port (
+         clk, reset, clkEn,
+         cs,
+         wr0, wr1, wr2, wr3  : IN  std_logic;
+         addr                : IN  std_logic_vector(12 downto 0);
+         din                 : IN  std_logic_vector(31 downto 0);
+         iIn,qIn             : IN  std_logic_vector(17 downto 0);
+         dout                : OUT std_logic_vector(31 downto 0);
+         agcGain             : OUT std_logic_vector(20 downto 0)
+      );
+   end component;
 
 -------------------------------------------------------------------------------
 --                       CONSTANT DEFINITIONS
@@ -313,6 +326,24 @@ architecture rtl of Brik1_Hw_tb is
          PilotFound, PilotLocked : signal is "true";
 
 begin
+
+    channelAGCu : channelAGC
+      port map (
+         clk      => Clk93,
+         reset    => Reset,
+         clkEn    => '1',
+         cs       => '0',
+         wr0      => '0',
+         wr1      => '0',
+         wr2      => '0',
+         wr3      => '0',
+         addr     => 13x"0",
+         din      => 32x"0",
+         dout     => open,
+         iIn      => Power0_slv,
+         qIn      => Power1_slv,
+         agcGain  => open
+    );
 
 
    Clocks : systemClock
@@ -760,7 +791,7 @@ end generate;
          PhaseDiffNB    => open,
          PhaseDiffWB    => open
       );
-
+/*
    xadc : xadcConvert
       GENERIC MAP (
          NUM_INPUTS => NUM_INPUTS
@@ -772,5 +803,5 @@ end generate;
       rdChan   => to_slv(rdChan),
       dataOut  => dataOut
    );
-
+*/
 end rtl;

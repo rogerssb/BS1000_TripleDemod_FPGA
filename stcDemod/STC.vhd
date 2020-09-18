@@ -564,7 +564,7 @@ BEGIN
    PhaseDiffWB    <= to_slv(PhaseDiff2) & 6x"00";
    PhaseDiffNB    <= (to_slv(H0PhaseDiff) & 6x"0") when Mag0GtMag1 else (to_slv(H1PhaseDiff) & 6X"0");  -- Channel Est Phase select
    StartOfFrame   <= PhaseDiffEn;
-   PilotFound     <= PilotFoundPD and PilotFoundCE;
+   PilotFound     <= '1' when (PilotFoundPD = '1') and (PilotFoundCE = '1') and (MagRSlv < MiscBits) else '0';
 
    PS_u : pilotsync
       PORT MAP (
@@ -779,8 +779,18 @@ BEGIN
                HxEstI <= to_slv(H1EstI);
             end if;
          else
+            if (MiscBits(0)) then
+               HxEstR <= 18d"85000";
+               HxEstI <= 18d"85000";
+            elsif (MiscBits(1)) then
+               HxEstR <= 18d"4000";
+               HxEstI <= 18d"4000";
+            else
                HxEstR <= MagRSlv;
                HxEstI <= MagISlv;
+            end if;
+   --               HxEstR <= MagRSlv;
+   --               HxEstI <= MagISlv;
          end if;
          MagRSlv <= to_slv(MagR);
          MagISlv <= to_slv(MagI);
@@ -815,7 +825,7 @@ BEGIN
          p     => H1Phase,
          enOut => open
       );
-/*
+
    Vio : Vio2x18
       PORT MAP(
          clk         => Clk93,
@@ -826,5 +836,5 @@ BEGIN
          probe_out4  => open,
          probe_out5  => open
       );
-*/
+
 END rtl;
