@@ -1,95 +1,31 @@
 onerror {resume}
 quietly WaveActivateNextPane {} 0
-add wave -noupdate /trellisilatb/Trellis_u/sample0i
-add wave -noupdate /trellisilatb/StartIn
-add wave -noupdate /trellisilatb/DataValid
-add wave -noupdate /trellisilatb/ImagRead
-add wave -noupdate /trellisilatb/RealRead
-add wave -noupdate -radix hexadecimal /trellisilatb/PrnError
-add wave -noupdate /trellisilatb/PrnErrors
-add wave -noupdate /trellisilatb/RdAddr_i
-add wave -noupdate /trellisilatb/DeltaTauEst
-add wave -noupdate /trellisilatb/EstimatesDone
-add wave -noupdate /trellisilatb/EstimatesDoneDly
-add wave -noupdate /trellisilatb/Frequency
-add wave -noupdate /trellisilatb/H0EstI
-add wave -noupdate /trellisilatb/H0EstR
-add wave -noupdate /trellisilatb/H0Mag
-add wave -noupdate /trellisilatb/H0Mag_u
-add wave -noupdate /trellisilatb/H0Phase
-add wave -noupdate /trellisilatb/H1EstI
-add wave -noupdate /trellisilatb/H1EstR
-add wave -noupdate /trellisilatb/H1Mag
-add wave -noupdate /trellisilatb/H1Mag_u
-add wave -noupdate /trellisilatb/H1Phase
-add wave -noupdate /trellisilatb/Locked
-add wave -noupdate /trellisilatb/Mag0GtMag1
-add wave -noupdate /trellisilatb/Reset
-add wave -noupdate /trellisilatb/TwoClksPerTrellis
-add wave -noupdate /trellisilatb/ValidCount
-add wave -noupdate /trellisilatb/ValidInDly
-add wave -noupdate /trellisilatb/m_ndx0
-add wave -noupdate /trellisilatb/m_ndx0slv
-add wave -noupdate /trellisilatb/m_ndx1
-add wave -noupdate /trellisilatb/m_ndx1slv
-add wave -noupdate /trellisilatb/Trellis_u/fa/TwoClksPerTrellis
-add wave -noupdate /trellisilatb/Trellis_u/fa/clk
-add wave -noupdate /trellisilatb/Trellis_u/fa/clkEn
-add wave -noupdate /trellisilatb/Trellis_u/fa/clkEnOut
-add wave -noupdate /trellisilatb/Trellis_u/fa/clksPerOutput
-add wave -noupdate -radix decimal /trellisilatb/Trellis_u/fa/depth
-add wave -noupdate -radix unsigned /trellisilatb/Trellis_u/fa/wrAddr
-add wave -noupdate -radix unsigned /trellisilatb/Trellis_u/fa/rdAddr
-add wave -noupdate -radix unsigned /trellisilatb/Trellis_u/fa/rdAddr0
-add wave -noupdate -radix unsigned /trellisilatb/Trellis_u/fa/rdAddr1
-add wave -noupdate /trellisilatb/TrellisBits
-add wave -noupdate /trellisilatb/TrellisOutEn
-add wave -noupdate -radix unsigned /trellisilatb/Trellis_u/fa/rdAddr0Tmp
-add wave -noupdate -radix unsigned /trellisilatb/Trellis_u/fa/rdAddr1Tmp
-add wave -noupdate /trellisilatb/Trellis_u/fa/decimationCount
-add wave -noupdate -radix decimal -radixshowbase 0 /trellisilatb/Trellis_u/fa/dinImag
-add wave -noupdate /trellisilatb/Trellis_u/fa/dinReal
-add wave -noupdate /trellisilatb/Trellis_u/fa/doutImag0
-add wave -noupdate /trellisilatb/Trellis_u/fa/doutImag1
-add wave -noupdate /trellisilatb/Trellis_u/fa/doutReal0
-add wave -noupdate /trellisilatb/Trellis_u/fa/doutReal1
-add wave -noupdate /trellisilatb/Trellis_u/fa/estimatesDone
-add wave -noupdate /trellisilatb/Trellis_u/fa/fifoOutputValid
-add wave -noupdate /trellisilatb/Trellis_u/fa/fifoRdData0
-add wave -noupdate /trellisilatb/Trellis_u/fa/fifoRdData1
-add wave -noupdate /trellisilatb/Trellis_u/fa/fifoRdEn
-add wave -noupdate /trellisilatb/Trellis_u/fa/fifoWrEn
-add wave -noupdate /trellisilatb/Trellis_u/fa/interpolate
-add wave -noupdate /trellisilatb/Trellis_u/fa/lastSample
-add wave -noupdate /trellisilatb/Trellis_u/fa/m_ndx0
-add wave -noupdate /trellisilatb/Trellis_u/fa/m_ndx1
-add wave -noupdate /trellisilatb/Trellis_u/fa/myStartOfTrellis
-add wave -noupdate /trellisilatb/Trellis_u/fa/outputCount
-add wave -noupdate /trellisilatb/Trellis_u/fa/outputState
-add wave -noupdate /trellisilatb/Trellis_u/fa/reset
-add wave -noupdate /trellisilatb/Trellis_u/fa/sampleCount
-add wave -noupdate /trellisilatb/Trellis_u/fa/sofDetected
-add wave -noupdate /trellisilatb/Trellis_u/fa/startOfFrame
-add wave -noupdate /trellisilatb/Trellis_u/fa/trellisInitCnt
-add wave -noupdate /trellisilatb/Trellis_u/fa/valid
-add wave -noupdate /trellisilatb/Trellis_u/faClkEn
-add wave -noupdate /trellisilatb/Trellis_u/faImag0
-add wave -noupdate /trellisilatb/Trellis_u/faImag1
-add wave -noupdate /trellisilatb/Trellis_u/faReal0
-add wave -noupdate /trellisilatb/Trellis_u/faReal1
-add wave -noupdate /trellisilatb/Trellis_u/interpOutEn
-add wave -noupdate /trellisilatb/Trellis_u/interpolate
-add wave -noupdate /trellisilatb/Trellis_u/lastSampleReset
-add wave -noupdate /trellisilatb/Trellis_u/sample0i
-add wave -noupdate /trellisilatb/Trellis_u/sample0r
-add wave -noupdate /trellisilatb/Trellis_u/sample1i
-add wave -noupdate /trellisilatb/Trellis_u/sample1r
-add wave -noupdate /trellisilatb/Trellis_u/sampleOut
+add wave -noupdate -clampanalog 1 -format Analog-Step -height 74 -max 383.0 -min -458.0 -radix sfixed -childformat {{/fireberddrivetb/Check_u/EffectiveRate(12) -radix sfixed} {/fireberddrivetb/Check_u/EffectiveRate(11) -radix sfixed} {/fireberddrivetb/Check_u/EffectiveRate(10) -radix sfixed} {/fireberddrivetb/Check_u/EffectiveRate(9) -radix sfixed} {/fireberddrivetb/Check_u/EffectiveRate(8) -radix sfixed} {/fireberddrivetb/Check_u/EffectiveRate(7) -radix sfixed} {/fireberddrivetb/Check_u/EffectiveRate(6) -radix sfixed} {/fireberddrivetb/Check_u/EffectiveRate(5) -radix sfixed} {/fireberddrivetb/Check_u/EffectiveRate(4) -radix sfixed} {/fireberddrivetb/Check_u/EffectiveRate(3) -radix sfixed} {/fireberddrivetb/Check_u/EffectiveRate(2) -radix sfixed} {/fireberddrivetb/Check_u/EffectiveRate(1) -radix sfixed} {/fireberddrivetb/Check_u/EffectiveRate(0) -radix sfixed}} -subitemconfig {/fireberddrivetb/Check_u/EffectiveRate(12) {-height 15 -radix sfixed} /fireberddrivetb/Check_u/EffectiveRate(11) {-height 15 -radix sfixed} /fireberddrivetb/Check_u/EffectiveRate(10) {-height 15 -radix sfixed} /fireberddrivetb/Check_u/EffectiveRate(9) {-height 15 -radix sfixed} /fireberddrivetb/Check_u/EffectiveRate(8) {-height 15 -radix sfixed} /fireberddrivetb/Check_u/EffectiveRate(7) {-height 15 -radix sfixed} /fireberddrivetb/Check_u/EffectiveRate(6) {-height 15 -radix sfixed} /fireberddrivetb/Check_u/EffectiveRate(5) {-height 15 -radix sfixed} /fireberddrivetb/Check_u/EffectiveRate(4) {-height 15 -radix sfixed} /fireberddrivetb/Check_u/EffectiveRate(3) {-height 15 -radix sfixed} /fireberddrivetb/Check_u/EffectiveRate(2) {-height 15 -radix sfixed} /fireberddrivetb/Check_u/EffectiveRate(1) {-height 15 -radix sfixed} /fireberddrivetb/Check_u/EffectiveRate(0) {-height 15 -radix sfixed}} /fireberddrivetb/Check_u/EffectiveRate
+add wave -noupdate -clampanalog 1 -format Analog-Step -height 74 -max 255.99999999999997 -min -530.0 -radix sfixed -childformat {{/fireberddrivetb/Check_u/FifoOffset(12) -radix decimal} {/fireberddrivetb/Check_u/FifoOffset(11) -radix decimal} {/fireberddrivetb/Check_u/FifoOffset(10) -radix decimal} {/fireberddrivetb/Check_u/FifoOffset(9) -radix decimal} {/fireberddrivetb/Check_u/FifoOffset(8) -radix decimal} {/fireberddrivetb/Check_u/FifoOffset(7) -radix decimal} {/fireberddrivetb/Check_u/FifoOffset(6) -radix decimal} {/fireberddrivetb/Check_u/FifoOffset(5) -radix decimal} {/fireberddrivetb/Check_u/FifoOffset(4) -radix decimal} {/fireberddrivetb/Check_u/FifoOffset(3) -radix decimal} {/fireberddrivetb/Check_u/FifoOffset(2) -radix decimal} {/fireberddrivetb/Check_u/FifoOffset(1) -radix decimal} {/fireberddrivetb/Check_u/FifoOffset(0) -radix decimal}} -subitemconfig {/fireberddrivetb/Check_u/FifoOffset(12) {-height 15 -radix decimal} /fireberddrivetb/Check_u/FifoOffset(11) {-height 15 -radix decimal} /fireberddrivetb/Check_u/FifoOffset(10) {-height 15 -radix decimal} /fireberddrivetb/Check_u/FifoOffset(9) {-height 15 -radix decimal} /fireberddrivetb/Check_u/FifoOffset(8) {-height 15 -radix decimal} /fireberddrivetb/Check_u/FifoOffset(7) {-height 15 -radix decimal} /fireberddrivetb/Check_u/FifoOffset(6) {-height 15 -radix decimal} /fireberddrivetb/Check_u/FifoOffset(5) {-height 15 -radix decimal} /fireberddrivetb/Check_u/FifoOffset(4) {-height 15 -radix decimal} /fireberddrivetb/Check_u/FifoOffset(3) {-height 15 -radix decimal} /fireberddrivetb/Check_u/FifoOffset(2) {-height 15 -radix decimal} /fireberddrivetb/Check_u/FifoOffset(1) {-height 15 -radix decimal} /fireberddrivetb/Check_u/FifoOffset(0) {-height 15 -radix decimal}} /fireberddrivetb/Check_u/FifoOffset
+add wave -noupdate -clampanalog 1 -format Analog-Step -height 74 -max 786.0 -radix unsigned -childformat {{/fireberddrivetb/Check_u/FifoDepth(13) -radix unsigned} {/fireberddrivetb/Check_u/FifoDepth(12) -radix unsigned} {/fireberddrivetb/Check_u/FifoDepth(11) -radix unsigned} {/fireberddrivetb/Check_u/FifoDepth(10) -radix unsigned} {/fireberddrivetb/Check_u/FifoDepth(9) -radix unsigned} {/fireberddrivetb/Check_u/FifoDepth(8) -radix unsigned} {/fireberddrivetb/Check_u/FifoDepth(7) -radix unsigned} {/fireberddrivetb/Check_u/FifoDepth(6) -radix unsigned} {/fireberddrivetb/Check_u/FifoDepth(5) -radix unsigned} {/fireberddrivetb/Check_u/FifoDepth(4) -radix unsigned} {/fireberddrivetb/Check_u/FifoDepth(3) -radix unsigned} {/fireberddrivetb/Check_u/FifoDepth(2) -radix unsigned} {/fireberddrivetb/Check_u/FifoDepth(1) -radix unsigned} {/fireberddrivetb/Check_u/FifoDepth(0) -radix unsigned}} -radixshowbase 0 -subitemconfig {/fireberddrivetb/Check_u/FifoDepth(13) {-height 15 -radix unsigned} /fireberddrivetb/Check_u/FifoDepth(12) {-height 15 -radix unsigned} /fireberddrivetb/Check_u/FifoDepth(11) {-height 15 -radix unsigned} /fireberddrivetb/Check_u/FifoDepth(10) {-height 15 -radix unsigned} /fireberddrivetb/Check_u/FifoDepth(9) {-height 15 -radix unsigned} /fireberddrivetb/Check_u/FifoDepth(8) {-height 15 -radix unsigned} /fireberddrivetb/Check_u/FifoDepth(7) {-height 15 -radix unsigned} /fireberddrivetb/Check_u/FifoDepth(6) {-height 15 -radix unsigned} /fireberddrivetb/Check_u/FifoDepth(5) {-height 15 -radix unsigned} /fireberddrivetb/Check_u/FifoDepth(4) {-height 15 -radix unsigned} /fireberddrivetb/Check_u/FifoDepth(3) {-height 15 -radix unsigned} /fireberddrivetb/Check_u/FifoDepth(2) {-height 15 -radix unsigned} /fireberddrivetb/Check_u/FifoDepth(1) {-height 15 -radix unsigned} /fireberddrivetb/Check_u/FifoDepth(0) {-height 15 -radix unsigned}} /fireberddrivetb/Check_u/FifoDepth
+add wave -noupdate -radix unsigned /fireberddrivetb/Check_u/Active
+add wave -noupdate -radix unsigned /fireberddrivetb/Check_u/ClkDelay
+add wave -noupdate -radix unsigned /fireberddrivetb/Check_u/ClkOut
+add wave -noupdate -radix sfixed /fireberddrivetb/Check_u/ClocksPerBit
+add wave -noupdate -radix sfixed /fireberddrivetb/Check_u/ClocksPerBitDly
+add wave -noupdate -radix unsigned /fireberddrivetb/Check_u/DataOut
+add wave -noupdate -radix unsigned /fireberddrivetb/Check_u/Empty
+add wave -noupdate -radix unsigned /fireberddrivetb/Check_u/FifoDataIn
+add wave -noupdate -radix unsigned /fireberddrivetb/Check_u/FifoDataOut
+add wave -noupdate -radix unsigned /fireberddrivetb/Check_u/MsbFirst
+add wave -noupdate -radix unsigned /fireberddrivetb/Check_u/RdEn
+add wave -noupdate -radix unsigned /fireberddrivetb/Check_u/ValidIn
+add wave -noupdate /fireberddrivetb/Check_u/EstimatesDone
+add wave -noupdate -radix unsigned /fireberddrivetb/Check_u/WrCount
+add wave -noupdate -radix unsigned /fireberddrivetb/Check_u/ce
+add wave -noupdate -radix unsigned /fireberddrivetb/Check_u/clk
+add wave -noupdate -radix unsigned /fireberddrivetb/Check_u/reset
+add wave -noupdate -radix unsigned /fireberddrivetb/Check_u/FdFifo/full
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {1594658831 ps} 0}
+WaveRestoreCursors {{Cursor 1} {1716282454 ps} 0}
 quietly wave cursor active 1
-configure wave -namecolwidth 243
-configure wave -valuecolwidth 100
+configure wave -namecolwidth 287
+configure wave -valuecolwidth 84
 configure wave -justifyvalue left
 configure wave -signalnamewidth 0
 configure wave -snapdistance 10
@@ -102,7 +38,7 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {1594434523 ps} {1594883139 ps}
+WaveRestoreZoom {947556233 ps} {10222513883 ps}
 bookmark add wave bookmark0 {{2508730 ps} {2540670 ps}} 0
 bookmark add wave bookmark1 {{3023030 ps} {3054970 ps}} 0
 bookmark add wave bookmark2 {{2187685 ps} {2199857 ps}} 33

@@ -3,7 +3,7 @@
 <!--                                                         -->
 <!-- Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.   -->
 
-<Project Version="7" Minor="20" Path="C:/Semco/Vivado/Demods/stcTriple.xpr">
+<Project Version="7" Minor="20" Path="C:/Semco/Vivado/Demod/stcTriple.xpr">
   <DefaultLaunch Dir="$PRUNDIR"/>
   <Configuration>
     <Option Name="Id" Val="74b055a536924e9f8fc11be3e3050a58"/>
@@ -38,13 +38,13 @@
     <Option Name="WTVcsLaunchSim" Val="0"/>
     <Option Name="WTRivieraLaunchSim" Val="0"/>
     <Option Name="WTActivehdlLaunchSim" Val="0"/>
-    <Option Name="WTXSimExportSim" Val="292"/>
-    <Option Name="WTModelSimExportSim" Val="293"/>
-    <Option Name="WTQuestaExportSim" Val="292"/>
-    <Option Name="WTIesExportSim" Val="291"/>
-    <Option Name="WTVcsExportSim" Val="291"/>
-    <Option Name="WTRivieraExportSim" Val="291"/>
-    <Option Name="WTActivehdlExportSim" Val="291"/>
+    <Option Name="WTXSimExportSim" Val="293"/>
+    <Option Name="WTModelSimExportSim" Val="294"/>
+    <Option Name="WTQuestaExportSim" Val="293"/>
+    <Option Name="WTIesExportSim" Val="292"/>
+    <Option Name="WTVcsExportSim" Val="292"/>
+    <Option Name="WTRivieraExportSim" Val="292"/>
+    <Option Name="WTActivehdlExportSim" Val="292"/>
     <Option Name="GenerateIPUpgradeLog" Val="TRUE"/>
     <Option Name="XSimRadix" Val="hex"/>
     <Option Name="XSimTimeUnit" Val="ns"/>
@@ -398,7 +398,7 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/stcDemod/stageSetupLK.v">
+      <File Path="$PPRDIR/stcDemod/stageSetup.v">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
