@@ -1,2 +1,2 @@
-write_cfgmem -force -format mcs -interface SPIx4 -size 512 -loadbit "up 1000000 C:/Semco/Vivado/Demods/stcTriple.runs/impl_3/stcDemodTop.bit" C:/Semco/Vivado/Demods/stcTriple.runs/1stcDemodTop160.mcs
+write_cfgmem -force -format mcs -interface SPIx4 -size 64 -loadbit "up 1000000 [get_property DIRECTORY [current_project]]/stcTriple.runs/impl_2/stcDemodTop.bit" [get_property DIRECTORY [current_project]]/stcTriple.mcs
 
