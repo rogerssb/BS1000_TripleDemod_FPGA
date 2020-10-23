@@ -65,7 +65,10 @@ ENTITY K7_DaughterCardTest IS
       PrevDataIO_n,
       NextDataIO_p,
       NextDataIO_n      : INOUT std_logic_vector(PORTS-1 downto 0);
-      CommandIO         : INOUT std_logic_vector(3 downto 0); -- 3:2 to Ch2, 1:0 to Ch1
+      NextClkIO_p,
+      NextClkIO_n,
+      PrevClkIO_p,
+      PrevClkIO_n       : INOUT std_logic;
       IF_Data,
       MonData,
       BS_Data           : IN  std_logic_vector(13 downto 0);
@@ -142,15 +145,17 @@ ARCHITECTURE rtl OF K7_DaughterCardTest IS
 
    component CombinerSerDesIn is
       Generic (
+         CHANNEL  : natural := 1;
          PORTS    : natural := 5
       );
       Port (
-         Clk,
+         Clk93M,
+         ClkIn_p,
+         ClkIn_n,
          Reset             : in  std_logic;
          DataIn_p,
-         DataIn_n          : in  STD_LOGIC_VECTOR(PORTS-1 downto 0);
-         Command           : out std_logic_vector(1 downto 0);
-         DataOut           : out SLV8_ARRAY(PORTS-1 downto 0)
+         DataIn_n          : in  STD_LOGIC_VECTOR(PORTS-2 downto 0);
+         DataOut           : out SLV8_ARRAY(PORTS-2 downto 0)
       );
    end component CombinerSerDesIn;
 
@@ -163,11 +168,12 @@ ARCHITECTURE rtl OF K7_DaughterCardTest IS
          Reset,
          Active            : in std_logic;
          TxData            : in SLV8_ARRAY(PORTS-1 downto 0);
-         Command           : in std_logic_vector(1 downto 0);
          DataOut_p,
-         DataOut_n         : out STD_LOGIC_VECTOR(PORTS-1 downto 0)
+         DataOut_n         : out STD_LOGIC_VECTOR(PORTS-1 downto 0);
+         RefClkOut_p,
+         RefClkOut_n       : out std_logic
       );
-   end component DemodSerDesOut;
+  end component DemodSerDesOut;
 
    component I2C_FS714x
       PORT(
@@ -289,9 +295,7 @@ ARCHITECTURE rtl OF K7_DaughterCardTest IS
    signal   CosSF,
             SinSF,
             GainSF         : sfixed(0 downto -13);
-   SIGNAL   RamWr,
-            CommandIn,
-            CommandOut     : std_logic_vector(3 downto 0);
+   SIGNAL   RamWr         : std_logic_vector(3 downto 0);
    SIGNAL   RamCS,
             CountRst,
             SpiDataOE,
@@ -330,7 +334,7 @@ ARCHITECTURE rtl OF K7_DaughterCardTest IS
             ADC_Sync, ADC_SDIO, ADC_SClk, ADC_CS_n, ADC_OE_n, ADC_PwrDn,
             BS_ADC_LowZ, BS_ADC_PwrDn, BS_ADC_SE, BS_ADC_SClk, BS_ADC_CS_n, BS_ADC_SDIO,
             BS_DAC_Sel_n, BS_DAC_SClk, BS_DAC_MOSI,
-            BS_PllOut, BS_RefPll, FPGA_ID1, CommandIO,
+            BS_PllOut, BS_RefPll, FPGA_ID1,
             BS_I2C_SCl, BS_I2C_SDa,
             DacClk0, DacClk1, DacRst, Dac0SpiCS_n, Dac1SpiCS_n,
             DacSpiClk, DacSpiSDIO, Dac0, Dac1 : signal is "LVCMOS18";
@@ -341,7 +345,7 @@ ARCHITECTURE rtl OF K7_DaughterCardTest IS
             SPI_CS_n, SPI_MOSI, SPI_MISO, Spi_SClk,
             BS_DAC_Sel_n, BS_DAC_SClk, BS_DAC_MOSI,
             SwVid0, SwVid1, SwFilt0, SwFilt1, VidSel,
-            ID, CommandIO, BS_PllHold,
+            ID, BS_PllHold,
             PllHold0, PllHold1,*/
             Ch1Data, Ch2Data,
             Dac0, Dac1 : signal is "TRUE";
@@ -636,38 +640,39 @@ BEGIN
    BS_RefPll   <= DivBy2toN(DivBy2toN'left);
 */
    ID          <= FPGA_ID1 & FPGA_ID0;
-   Lock        <= CommandIn(1 downto 0) when (ID = CHANNEL_1) else CommandIn(3 downto 2);
-   CommandIn   <= CommandIO;
-   CommandIO   <= CommandOut when (ID = COMBINER) else "ZZZZ";
 
    SerDes : if (DEMOD_COMB = "COMB") generate
       Ch1SerDes_u : CombinerSerDesIn
          Generic Map
          (
-            PORTS    => PORTS
+            CHANNEL  => 1,
+            PORTS    => PORTS+1
          )
          Port Map
          (
-               Clk               => MonClk,
+               Clk93M            => MonClk,
+               ClkIn_p           => PrevClkIO_p,
+               ClkIn_n           => PrevClkIO_n,
                Reset             => SysRst(SysRst'left),
-               DataIn_p          => NextDataIO_p,
-               DataIn_n          => NextDataIO_n,
-               DataOut           => Ch1Data,
-               Command           => CommandOut(1 downto 0)
+               DataIn_p          => PrevDataIO_p,
+               DataIn_n          => PrevDataIO_n,
+               DataOut           => Ch1Data
       );
       Ch2SerDes_u : CombinerSerDesIn
          Generic Map
          (
-            PORTS    => PORTS
+            CHANNEL  => 2,
+            PORTS    => PORTS+1
          )
          Port Map
          (
-               Clk               => MonClk,
+               Clk93M            => MonClk,
+               ClkIn_p           => NextClkIO_p,
+               ClkIn_n           => NextClkIO_n,
                Reset             => SysRst(SysRst'left),
-               DataIn_p          => PrevDataIO_p,
-               DataIn_n          => PrevDataIO_n,
-               DataOut           => Ch2Data,
-               Command           => CommandOut(3 downto 2)
+               DataIn_p          => NextDataIO_p,
+               DataIn_n          => NextDataIO_n,
+               DataOut           => Ch2Data
       );
    else generate
       TxData(0) <= Toggle(5 downto 0) & "00"; --Dac0
@@ -686,9 +691,10 @@ BEGIN
             Reset       => SysRst(SysRst'left),
             Active      => (ID ?= CHANNEL_1),
             TxData      => TxData1,
-            Command     => CommandIn(1 downto 0),
             DataOut_p   => PrevDataIO_p,
-            DataOut_n   => PrevDataIO_n
+            DataOut_n   => PrevDataIO_n,
+            RefClkOut_p => PrevClkIO_p,
+            RefClkOut_n => PrevClkIO_n
          );
      Ch2SerDes : DemodSerDesOut
          Generic Map(
@@ -699,9 +705,10 @@ BEGIN
             Reset       => SysRst(SysRst'left),
             Active      => (ID ?= CHANNEL_2),
             TxData      => TxData2,
-            Command     => CommandIn(3 downto 2),
             DataOut_p   => NextDataIO_p,
-            DataOut_n   => NextDataIO_n
+            DataOut_n   => NextDataIO_n,
+            RefClkOut_p => NextClkIO_p,
+            RefClkOut_n => NextClkIO_n
          );
    end generate;
 /*

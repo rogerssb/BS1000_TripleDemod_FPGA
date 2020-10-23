@@ -9,21 +9,11 @@
    Target Devices: 7k160
    Tool Versions:  2017.4
    Description:
-      Only the Combiner FPGA needs data from the other channels so the data back to the
-      other channels will be used to align/synchronize the Combiner.
+      Only the Combiner FPGA needs data from the other channels.
       The Ch1/Ch2 FPGAs will send IF and AGC data to the Prev or Next ports as required
-      and 0's to the other. The Combiners three Prev/Next serdes streams will be all zeroes from one
-      channel and one of three non-zero values as the Combiner locks the streams depending on the
-      Command value:
-         00 for DelayAdjust mode, Transmit 1 0 pattern to align center of bit
-         01 for AlignData mode, Transmit valid K symbols while Comb bit slips till valid
-         10 for Data mode, Transmit IF/AGC data.
+      and 0's to the other.
 
       Ch1 is ID 00, Ch2 is 01 and Cmb is 10
-
-      Convert incoming LVDS data from adjacent demod channels to internal serdes streams,
-      delay the incoming SerDes Data to optimize timing then pass it to the 10:1 iserdes.
-      Convert the 10 bit 10b:8b output data to 8 bit and pass it along to the combiner module.
 
       Take the incoming 8 bit data, do 8b:10b conversion, pass it to the 10:1 output
       serdes, then convert to LVDS. No delay is required since the other end aligns the data.
@@ -50,9 +40,10 @@ entity DemodSerDesOut is
       Reset,
       Active            : in std_logic;
       TxData            : in SLV8_ARRAY(PORTS-1 downto 0);
-      Command           : in std_logic_vector(1 downto 0);
       DataOut_p,
-      DataOut_n         : out STD_LOGIC_VECTOR(PORTS-1 downto 0)
+      DataOut_n         : out STD_LOGIC_VECTOR(PORTS-1 downto 0);
+      RefClkOut_p,
+      RefClkOut_n       : out std_logic
    );
 end DemodSerDesOut;
 
@@ -93,25 +84,25 @@ architecture rtl of DemodSerDesOut is
          -- Clock and reset signals
          clk_in                  : in    std_logic;                    -- Fast clock from PLL/MMCM
          clk_div_in              : in    std_logic;                    -- Slow clock from PLL/MMCM
+         clk_reset               : in    std_logic;                    -- Reset signal for Clock circuit
          io_reset                : in    std_logic;                    -- Reset signal for IO circuit
          -- From the device then out to the system
          data_out_from_device    : in    std_logic_vector(50-1 downto 0);
          data_out_to_pins_p      : out   std_logic_vector(5-1 downto 0);
-         data_out_to_pins_n      : out   std_logic_vector(5-1 downto 0)
+         data_out_to_pins_n      : out   std_logic_vector(5-1 downto 0);
+         clk_to_pins_p           : out std_logic;
+         clk_to_pins_n           : out std_logic
       );
    end component SerDes5x10to1Out;
-
-   constant DELAY_ADJUST      : std_logic_vector(1 downto 0) := "00";
-   constant ALIGN_DATA        : std_logic_vector(1 downto 0) := "01";
-   constant DATA_MODE         : std_logic_vector(1 downto 0) := "10";
 
    signal   SyncRst           : std_logic_vector(5 downto 0) := (others=>'1');
    signal   TxDataDly,
             Tx1, Tx2          : SLV8_ARRAY(PORTS-1 downto 0);
    signal   TenB_Out,
             ChTenB            : vector_of_slvs(PORTS-1 downto 0)(9 downto 0);
-   signal   Clk466M,
-            Clk93M,
+   signal   SerDesIn          : std_logic_vector(PORTS*10-1 downto 0);
+   signal   Clk5x,
+            Clk1x,
             Lock466M, KO,
             SRst              : std_logic;
    signal   Diff              : SLV8;
@@ -119,7 +110,7 @@ architecture rtl of DemodSerDesOut is
 signal DataOut : std_logic_vector(7 downto 0); --debug
 
    attribute MARK_DEBUG : string;
-   attribute MARK_DEBUG of Reset, SyncRst, TxData, TenB_Out, ChTenB, Diff, Lock466M, Command, DataOut, KO : signal is "TRUE";
+   attribute MARK_DEBUG of Reset, SyncRst, TxData, TenB_Out, ChTenB, Diff, Lock466M, DataOut, KO : signal is "TRUE";
 
 begin
 
@@ -131,16 +122,16 @@ begin
          reset    => Reset,
          locked   => Lock466M,
         -- Clock out ports
-         clk_1x  => Clk93M,
-         clk_5x  => Clk466M
+         clk_1x  => Clk1x,
+         clk_5x  => Clk5x
     );
 
-   RstClk : process(Clk93M, Reset)
+   RstClk : process(Clk1x, Reset)
    begin
       if (Reset) then
          SyncRst  <= (others=>'1');
          SRst     <= '1';
-      elsif (rising_edge(Clk93M)) then
+      elsif (rising_edge(Clk1x)) then
          TxDataDly   <= TxData;
          Tx1 <= TxDataDly;
          Tx2 <= Tx1;
@@ -149,37 +140,49 @@ begin
             SyncRst  <= SyncRst(SyncRst'left-1 downto 0) & '0';
             SRst     <= SyncRst(SyncRst'left);
          end if;
+
+         for x in 0 to PORTS-1 loop
+            for bits in 0 to 9 loop
+               SerDesIn(bits*5 + x) <= ChTenb(x)(bits);
+            end loop;
+         end loop;
+
       end if;
    end process RstClk;
 
    Encode : for n in 0 to PORTS-1 generate
-         -- outputs aren't delayed
-         Ch_8b10b : enc_8b10b
-            port map(
-               RESET       => SRst,       -- Global asynchronous reset (active high)
-               CLK         => Clk93M,          -- Master synchronous send byte clock
-               KI          => (Command ?= ALIGN_DATA), -- Control (K) input(active high)
-               DataIn      => TxDataDly(n),
-               DataOut     => TenB_Out(n)
-           );
+      -- outputs aren't delayed
+      Ch_8b10b : enc_8b10b
+         port map(
+            RESET       => SRst,       -- Global asynchronous reset (active high)
+            CLK         => Clk1x,     -- Master synchronous send byte clock
+            KI          => '0',        -- Control (K) input(active high)
+            DataIn      => TxDataDly(n),
+            DataOut     => TenB_Out(n)
+        );
 
-         ChTenB(n) <= 10x"000" when not Active else "1010101010" when (Command = DELAY_ADJUST) else TenB_Out(n);
+         ChTenB(n) <= 10x"000" when not Active else std_logic_vector(to_unsigned(n, 10)); --"1010101010"; --TenB_Out(n);
    end generate;
+
+
 
    SerDes5x10Out : SerDes5x10to1Out
       port map (
-         clk_in                => Clk466M,
-         clk_div_in            => Clk93M,
+         clk_in                => Clk5x,
+         clk_div_in            => Clk1x,
+         clk_reset             => Srst,
          io_reset              => Srst,
-         data_out_from_device  => ChTenB(4) & ChTenB(3) & ChTenB(2) & ChTenB(1) & ChTenB(0),
+         data_out_from_device  => SerDesIn,
          data_out_to_pins_p    => DataOut_p,
-         data_out_to_pins_n    => DataOut_n
+         data_out_to_pins_n    => DataOut_n,
+         clk_to_pins_p         => RefClkOut_p,
+         clk_to_pins_n         => RefClkOut_n
       );
 
    Ch_10b8b : dec_8b10b
        port map(
          RESET       => SRst,       -- Global asynchronous reset (AH)
-         CLK         => Clk93M,     -- Master synchronous receive byte clock
+         CLK         => Clk1x,     -- Master synchronous receive byte clock
          DataIn      => TenB_Out(1),  -- Encoded input (LS..MS)
          KO          => KO,      -- Control (K) character indicator (AH)
          DataOut     => DataOut  -- Decoded out (MS..LS)

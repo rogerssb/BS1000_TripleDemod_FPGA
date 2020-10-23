@@ -13,17 +13,10 @@
       delay the incoming SerDes Data to optimize timing then pass it to the 10:1 iserdes.
       Convert the 10 bit 10b:8b output data to 8 bit and pass it along to the combiner module.
 
-      Only the Combiner FPGA needs data from the other channels so the two bits of data back to the
-      other channels will be used to align/synchronize the Combiner.
+      Only the Combiner FPGA needs data from the other channels.
       The Ch1/Ch2 FPGAs will send IF,AGC and DQM data to the Combiner as required.
       The Combiner uses DataIn[1:0] for IF, 3:2 for AGC and 4 for DQM, however this module only
       recovers the data then passes it out.
-
-      The demod channels will send one of three non-zero values as the Combiner locks
-      the streams depending on the Command value:
-         00 for DelayAdjust mode, Transmit 1 0 pattern to align center of bit
-         01 for AlignData mode, Transmit valid K symbols while Comb bit slips till valid
-         10 for Data mode, Transmit IF/AGC data.
       The upper layer VHDL will send 0's to the other demod to demod channel to save power.
 
    Revision:
@@ -42,15 +35,17 @@ use work.Semco_pkg.all;
 
 entity CombinerSerDesIn is
    Generic (
+      CHANNEL  : natural := 1;
       PORTS    : natural := 5
    );
    Port (
-      Clk,
-      Reset            : in  std_logic;
+      ClkIn_p,
+      ClkIn_n,
+      Clk93M,
+      Reset             : in  std_logic;
       DataIn_p,
-      DataIn_n          : in  STD_LOGIC_VECTOR(PORTS-1 downto 0);
-      Command           : out std_logic_vector(1 downto 0);
-      DataOut           : out SLV8_ARRAY(PORTS-1 downto 0)
+      DataIn_n          : in  STD_LOGIC_VECTOR(PORTS-2 downto 0);
+      DataOut           : out SLV8_ARRAY(PORTS-2 downto 0)
    );
 end CombinerSerDesIn;
 
@@ -87,28 +82,25 @@ architecture rtl of CombinerSerDesIn is
    end component;
 
    component SerDes5x10to1In
+      generic (
+         SYS_W    : integer := 6;
+         DEV_W    : integer := 60
+      );
       port
        (
         -- From the system into the device
-        data_in_from_pins_p     : in    std_logic_vector(5-1 downto 0);
-        data_in_from_pins_n     : in    std_logic_vector(5-1 downto 0);
-        data_in_to_device       : out   std_logic_vector(50-1 downto 0);
+        data_in_from_pins       : in    std_logic_vector(SYS_W-1 downto 0);
+        data_in_to_device       : out   std_logic_vector(DEV_W-1 downto 0);
 
       -- Input, Output delay control signals
-        in_delay_reset          : in    std_logic;                    -- Active high synchronous reset for input delay
-        in_delay_data_ce        : in    std_logic_vector(5 -1 downto 0);                    -- Enable signal for delay
-        in_delay_data_inc       : in    std_logic_vector(5 -1 downto 0);                    -- Delay increment (high), decrement (low) signal
-        in_delay_tap_in         : in    std_logic_vector(5*5 -1 downto 0); -- Dynamically loadable delay tap value for input delay
-        in_delay_tap_out        : out   std_logic_vector(5*5 -1 downto 0); -- Delay tap value for monitoring input delay
-        delay_locked            : out   std_logic;                    -- Locked signal from IDELAYCTRL
-        ref_clock               : in    std_logic;                    -- Reference Clock for IDELAYCTRL. Has to come from BUFG.
-        bitslip                 : in    std_logic_vector(5-1 downto 0);                    -- Bitslip module is enabled in NETWORKING mode
-                                                                      -- User should tie it to '0' if not needed
-
+        delay_locked            : out   std_logic;                         -- Locked signal from IDELAYCTRL
+        ref_clock               : in    std_logic;                         -- Reference Clock for IDELAYCTRL. Has to come from BUFG.
+        bitslip                 : in    std_logic_vector(SYS_W-1 downto 0);    -- Bitslip module is enabled in NETWORKING mode
+                                                                           -- User should tie it to '0' if not needed
       -- Clock and reset signals
-        clk_in                  : in    std_logic;                    -- Fast clock from PLL/MMCM
-        clk_div_in              : in    std_logic;                    -- Slow clock from PLL/MMCM
-        io_reset                : in    std_logic                     -- Reset signal for IO circuit
+        clk_div_in,                                                        -- Slow clock output
+        io_reset,
+        clk_in                   : in    std_logic                          -- Reset signal for IO circuit
      );
    end component;
 
@@ -127,83 +119,39 @@ architecture rtl of CombinerSerDesIn is
       );
    END COMPONENT;
 
-   constant DELAY_ADJUST      : std_logic_vector(1 downto 0) := "00";
-   constant ALIGN_DATA        : std_logic_vector(1 downto 0) := "01";
-   constant DATA_MODE         : std_logic_vector(1 downto 0) := "10";
-
    signal   SyncRst           : std_logic_vector(15 downto 0) := (others=>'1');
-   signal   ChBitSlip,
-            KO                : std_logic_vector(PORTS-1 downto 0);
-   signal   Clk466M,
-            Clk93M,
-            Lock466M,
-            Clk_199m999,
-            TapLoad,
+   signal   ChBitSlip         : std_logic_vector(PORTS-1 downto 0);
+   signal   DataIn,
+            KO                : std_logic_vector(PORTS-2 downto 0);
+   signal   Clk_199m999,
+            ClkIn,
+            ClkInX1,
+            ClkInX5,
             DelayLocked,
+            LockedX5,
             Lock199m999,
             SRst              : std_logic;
    signal   ChTenB            : vector_of_slvs(PORTS-1 downto 0)(9 downto 0);
-   signal   ChOut             : std_logic_vector (49 downto 0);
-   signal   Count             : unsigned(6 downto 0);
-   signal   Taps              : std_logic_vector(5*5 - 1 downto 0);
+   signal   ChOut             : std_logic_vector ((PORTS*10)-1 downto 0);
    signal   ProbeOut2,
             ProbeOut2Dly      : std_logic_vector(5 downto 0) := "000000";
 
    attribute MARK_DEBUG : string;
-   attribute MARK_DEBUG of ChOut, ChBitSlip, DataOut, Lock466M, Lock199m999, Command : signal is "TRUE";
+   attribute MARK_DEBUG of ChOut, ChBitSlip, DataOut, Lock199m999 : signal is "TRUE";
 
 begin
-/*
-   Vio0 : vio_0
-      PORT MAP (
-         clk => clk,
-         probe_out0 => open,
-         probe_out1 => open,
-         probe_out2 => ProbeOut2,
-         probe_out3 => open,
-         probe_out4 => open,
-         probe_out5 => open,
-         probe_out6 => open,
-         probe_out7 => open,
-         probe_out8 => open
-   );
-*/
-   Taps <= ProbeOut2(4 downto 0) & ProbeOut2(4 downto 0) & ProbeOut2(4 downto 0) & ProbeOut2(4 downto 0) & ProbeOut2(4 downto 0);
-
-   Pll466_u : Pll_933_over_2
-      port map (
-         -- Clock in ports
-         clk_in1  => Clk,
-        -- Status and control signals
-         reset    => Reset,
-         locked   => Lock466M,
-        -- Clock out ports
-         clk_1x  => Clk93M,
-         clk_5x  => Clk466M
-    );
 
    RstClk : process(Clk93M)
    begin
       if (rising_edge(Clk93M)) then
          if (Reset) then
-               SyncRst     <= (others=>'1');
-               SRst        <= '1';
-               Count       <= (others=>'0');
-               TapLoad     <= '0';
-               ProbeOut2Dly <= (others=>'0');
-               Command     <= DELAY_ADJUST;
-         elsif (Lock466M) then
-            SyncRst  <= SyncRst(SyncRst'left-1 downto 0) & not Lock199m999;
+            SyncRst     <= (others=>'1');
+            SRst        <= '1';
+            ProbeOut2Dly   <= (others=>'0');
+         elsif (LockedX5) then
+            SyncRst  <= SyncRst(SyncRst'left-1 downto 0) & "0";
             SRst     <= SyncRst(SyncRst'left);
-            Count    <= Count + 1;
-            if (Command = DELAY_ADJUST) and (Count = 0) then
-               ProbeOut2 <= std_logic_vector(unsigned(ProbeOut2) + 1);
-            end if;
-            ProbeOut2Dly <= ProbeOut2;
-            TapLoad <= '1' when (ProbeOut2 /= ProbeOut2Dly) else '0';
-            if (Command = DELAY_ADJUST) and (ChOut = 50x"2AAAAAAAAAAAA") then
-               Command <= ALIGN_DATA;
-            end if;
+            ProbeOut2Dly   <= ProbeOut2;
          end if;
       end if;
    end process RstClk;
@@ -216,44 +164,82 @@ begin
          Clk_199m999 => Clk_199m999
       );
 
+   ClkBuf : IBUFDS
+      generic map (
+         DIFF_TERM      => TRUE, -- Differential Termination
+         IBUF_LOW_PWR   => TRUE, -- Low power (TRUE) vs. performance (FALSE) setting for referenced I/O standards
+         IOSTANDARD     => "LVDS")
+      port map (
+         I  => ClkIn_p,
+         IB => ClkIn_n,
+         O  => ClkIn
+      );
+
+   Pll466_u : Pll_933_over_2
+      port map (
+         -- Clock in ports
+         clk_in1  => ClkIn,
+        -- Status and control signals
+         reset    => Reset,
+         locked   => LockedX5,
+        -- Clock out ports
+         clk_1x  => ClkInX1,
+         clk_5x  => ClkInX5
+    );
+
    SerDes5x10In : SerDes5x10to1In
+      generic map(
+         SYS_W   => 6,
+         DEV_W   => 60
+      )
        port map
       (
-         clk_in               => Clk466M,
-         clk_div_in           => Clk93M,
+         clk_in               => ClkInX5,
+         clk_div_in           => ClkInX1,
          io_reset             => SRst,
          ref_clock            => Clk_199m999,
 
-         data_in_from_pins_p  => DataIn_p,
-         data_in_from_pins_n  => DataIn_n,
-         in_delay_reset       => TapLoad,
-         in_delay_data_ce     => 5x"0",
-         in_delay_data_inc    => 5x"1",
-         in_delay_tap_in      => Taps,
-         in_delay_tap_out     => open,
+         data_in_from_pins    => ClkIn & DataIn(PORTS-2 downto 0),
          bitslip              => ChBitSlip,
          data_in_to_device    => ChOut,
          delay_locked         => DelayLocked
       );
 
-   Diff : for n in 0 to PORTS-1 generate
+   DeInterlace : process(ClkInX1)
    begin
-         Ch_10b8b : dec_8b10b
-             port map(
-               RESET       => SRst,       -- Global asynchronous reset (AH)
-               CLK         => Clk93M,     -- Master synchronous receive byte clock
-               DataIn      => ChOut(n*10+9 downto n*10),  -- Encoded input (LS..MS)
-               KO          => KO(n),      -- Control (K) character indicator (AH)
-               DataOut     => DataOut(n)  -- Decoded out (MS..LS)
-                );
+      if (rising_edge(ClkInX1)) then
+         for ch in 0 to PORTS-1 loop
+            for bits in 0 to 9 loop
+               ChTenB(ch)(bits) <= ChOut((54+ch)-(bits*6));
+            end loop;
+         end loop;
+      end if;
+   end process;
+
+   Diff : for n in 0 to PORTS-2 generate
+   begin
+      Ch_10b8b : dec_8b10b
+          port map(
+            RESET       => SRst,       -- Global asynchronous reset (AH)
+            CLK         => Clk93M,     -- Master synchronous receive byte clock
+            DataIn      => ChTenB(n),     -- Encoded input (LS..MS)
+            KO          => KO(n),      -- Control (K) character indicator (AH)
+            DataOut     => DataOut(n)  -- Decoded out (MS..LS)
+             );
+
+      DataBuf : IBUFDS
+         generic map (
+            DIFF_TERM      => TRUE, -- Differential Termination
+            IBUF_LOW_PWR   => TRUE, -- Low power (TRUE) vs. performance (FALSE) setting for referenced I/O standards
+            IOSTANDARD     => "LVDS")
+         port map (
+            I  => DataIn_p(n),
+            IB => DataIn_n(n),
+            O  => DataIn(n)
+         );
+
    end generate;
 
-   ChBitSlip   <= (others=>'0');
-
-   ChTenB(4) <= ChOut(49 downto 40);
-   ChTenB(3) <= ChOut(39 downto 30);
-   ChTenB(2) <= ChOut(29 downto 20);
-   ChTenB(1) <= ChOut(19 downto 10);
-   ChTenB(0) <= ChOut(09 downto 00);
+   ChBitSlip      <= (others=>'0');
 
 end rtl;

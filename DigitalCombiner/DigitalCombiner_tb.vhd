@@ -64,7 +64,10 @@ architecture rtl of DigitalCombiner_tb is
       PrevDataIO_n,
       NextDataIO_p,
       NextDataIO_n      : INOUT std_logic_vector(PORTS-1 downto 0);
-      CommandIO         : INOUT std_logic_vector(3 downto 0); -- 3:2 to Ch2, 1:0 to Ch1
+      NextClkIO_p,
+      NextClkIO_n,
+      PrevClkIO_p,
+      PrevClkIO_n       : INOUT std_logic;
       IF_Data,
       MonData,
       BS_Data           : IN  std_logic_vector(13 downto 0);
@@ -140,20 +143,19 @@ architecture rtl of DigitalCombiner_tb is
    END component LogToLin;
 
    TYPE vector_of_slvs     IS ARRAY (NATURAL RANGE <>) OF std_logic_vector;
-   constant PORTS : integer := 5;
+   constant PORTS       : integer := 5;
+   constant CH1DELAY    : time := 800 ps;
+   constant CH2DELAY    : time := 300 ps;
 
    signal   clk,
             reset,
             XX             : std_logic := '1';
    signal   Dac0,
             Dac1           : std_logic_vector(13 downto 0);
-   signal   CommandIO      : std_logic_vector(3 downto 0);
    signal   Ch1PrevDataIO_p,
             Ch1PrevDataIO_n,
             Ch1NextDataIO_p,
             Ch1NextDataIO_n,
-            Ch2PrevDataIO_p,
-            Ch2PrevDataIO_n,
             Ch2NextDataIO_p,
             Ch2NextDataIO_n,
             PcbDelayIn1_p,
@@ -164,6 +166,14 @@ architecture rtl of DigitalCombiner_tb is
             CmbDataIn1_n,
             CmbDataIn2_p,
             CmbDataIn2_n      : std_logic_vector(PORTS-1 downto 0);
+   signal   CmbClkIn1_p,
+            CmbClkIn1_n,
+            CmbClkIn2_p,
+            CmbClkIn2_n,
+            PrevClkIO_p,
+            PrevClkIO_n,
+            NextClkIO_p,
+            NextClkIO_n       : std_logic;
    signal   IF_Data           : vector_of_slvs(3 downto 0)(13 downto 0) := (14x"1000", 14x"1000", 14x"3000", 14x"3000");
    signal   LogIn             : sfixed(4 downto -5);
    signal   LinearOut         : ufixed(3 downto -8);
@@ -176,9 +186,9 @@ begin
    end process;
 
    process begin
-      wait for 0.07 ns;
-      XX <= 'X';
-      wait for 1.00 ns;
+      wait for 0.17 ns;
+      XX <= '0';
+      wait for 0.90 ns;
       XX <= '0';
    end process;
 
@@ -280,9 +290,12 @@ begin
          AM_DAC_Data          => open,
          PrevDataIO_p         => Ch1PrevDataIO_p,
          PrevDataIO_n         => Ch1PrevDataIO_n,
+         PrevClkIO_p          => PrevClkIO_p,
+         PrevClkIO_n          => PrevClkIO_n,
          NextDataIO_p         => Ch1NextDataIO_p,
          NextDataIO_n         => Ch1NextDataIO_n,
-         CommandIO            => CommandIO,
+         NextClkIO_p          => open,
+         NextClkIO_n          => open,
          DacClk0              => open,
          DacClk1              => open,
          DacRst               => open,
@@ -358,11 +371,14 @@ begin
          AM_DAC_CS_n          => open,
          AM_DAC_Clk           => open,
          AM_DAC_Data          => open,
-         PrevDataIO_p         => Ch2PrevDataIO_p,
-         PrevDataIO_n         => Ch2PrevDataIO_n,
+         PrevDataIO_p         => Ch1NextDataIO_p,
+         PrevDataIO_n         => Ch1NextDataIO_n,
+         PrevClkIO_p          => open,
+         PrevClkIO_n          => open,
          NextDataIO_p         => Ch2NextDataIO_p,
          NextDataIO_n         => Ch2NextDataIO_n,
-         CommandIO            => CommandIO,
+         NextClkIO_p          => NextClkIO_p,
+         NextClkIO_n          => NextClkIO_n,
          DacClk0              => open,
          DacClk1              => open,
          DacRst               => open,
@@ -440,9 +456,12 @@ begin
          AM_DAC_Data          => open,
          PrevDataIO_p         => CmbDataIn1_p,
          PrevDataIO_n         => CmbDataIn1_n,
+         PrevClkIO_p          => CmbClkIn1_p,
+         PrevClkIO_n          => CmbClkIn1_n,
          NextDataIO_p         => CmbDataIn2_p,
          NextDataIO_n         => CmbDataIn2_n,
-         CommandIO            => CommandIO,
+         NextClkIO_p          => CmbClkIn2_p,
+         NextClkIO_n          => CmbClkIn2_n,
          DacClk0              => open,
          DacClk1              => open,
          DacRst               => open,
@@ -452,22 +471,20 @@ begin
          DacSpiSDIO           => open
    );
 
-PcbDelayIn1_p <= transport Ch1PrevDataIO_p after 800 ps;
-PcbDelayIn1_n <= transport Ch1PrevDataIO_n after 800 ps;
-PcbDelayIn2_p <= transport Ch2NextDataIO_p after 500 ps;
-PcbDelayIn2_n <= transport Ch2NextDataIO_n after 500 ps;
+PcbDelayIn1_p <= (others=>'X') when (XX = 'X') else Ch1PrevDataIO_p;
+PcbDelayIn1_n <= (others=>'X') when (XX = 'X') else Ch1PrevDataIO_n;
+PcbDelayIn2_p <= (others=>'X') when (XX = 'X') else Ch2NextDataIO_p;
+PcbDelayIn2_n <= (others=>'X') when (XX = 'X') else Ch2NextDataIO_n;
 
-CmbDataIn1_p <= (others=>'X') when (XX = 'X') else PcbDelayIn1_p;
-CmbDataIn1_n <= (others=>'X') when (XX = 'X') else PcbDelayIn1_n;
-CmbDataIn2_p <= (others=>'X') when (XX = 'X') else PcbDelayIn2_p;
-CmbDataIn2_n <= (others=>'X') when (XX = 'X') else PcbDelayIn2_n;
+CmbDataIn1_p <= transport (PcbDelayIn1_p) after CH1DELAY;
+CmbDataIn1_n <= transport (PcbDelayIn1_n) after CH1DELAY;
+CmbClkIn1_p  <= transport (PrevClkIO_p)   after CH1DELAY;
+CmbClkIn1_n  <= transport (PrevClkIO_n)   after CH1DELAY;
+
+CmbDataIn2_p <= transport (PcbDelayIn2_p) after CH2DELAY;
+CmbDataIn2_n <= transport (PcbDelayIn2_n) after CH2DELAY;
+CmbClkIn2_p  <= transport (NextClkIO_p)   after CH2DELAY;
+CmbClkIn2_n  <= transport (NextClkIO_n)   after CH2DELAY;
+
 
 end rtl;
--------------
--- CVS Info:
--------------
--- $Source: $
--- $Revision: $
--- $Date: $
--- $Author: $
--- $Log: $
