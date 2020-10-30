@@ -39,91 +39,181 @@ end DigitalCombiner_tb;
 architecture rtl of DigitalCombiner_tb is
 
   -- Define Components
-   component K7_DaughterCardTest IS
+   component DC_DemodTop IS
    GENERIC (
-      PORTS       : natural := 5;
-      DEMOD_COMB  : string := "DEMOD"
-   );
-    PORT(
-      IF_Ovf,
-      IF_Clk,
-      MonOvf,
-      MonClk,
-      BS_Ovf,
-      BS_Clk,
-      AM_ADC_Data,
-      SPI_CS_n,
-      SPI_MOSI,
-      SPI_SClk,
-      PllOut0,
-      PllOut1,
-      FPGA_ID0,
-      FPGA_ID1,
-      BS_PllOut         : IN std_logic;
-      PrevDataIO_p,
-      PrevDataIO_n,
-      NextDataIO_p,
-      NextDataIO_n      : INOUT std_logic_vector(PORTS-1 downto 0);
-      NextClkIO_p,
-      NextClkIO_n,
-      PrevClkIO_p,
-      PrevClkIO_n       : INOUT std_logic;
-      IF_Data,
-      MonData,
-      BS_Data           : IN  std_logic_vector(13 downto 0);
+      PORTS       : natural := 5
+      );
+      PORT(
+         adc0_overflow,
+         adc0Clk,
+         MonOvf,
+         MonClk,
+         BS_Ovf,
+         BS_Clk,
+         amAdcDataIn,
+         spiCSn,
+         spiDataOut,
+         spiClk,
+         pll0_OUT1,
+         pll1_OUT1,
+         FPGA_ID0,
+         FPGA_ID1,
+         BS_PllOut         : IN std_logic;
+         PrevDataIO_p,
+         PrevDataIO_n,
+         NextDataIO_p,
+         NextDataIO_n      : OUT std_logic_vector(PORTS-1 downto 0);
+         NextClkIO_p,
+         NextClkIO_n,
+         PrevClkIO_p,
+         PrevClkIO_n       : OUT std_logic;
+         adc0,
+         MonData,
+         BS_Data           : IN  std_logic_vector(13 downto 0);
+         video0InSelect,
+         video1InSelect,
+         video1OutSelect,
+         video0OutSelect   : OUT std_logic_vector(1 downto 0);
+         VidSel            : OUT std_logic_vector(2 downto 0);
+         dac0_d,
+         dac1_d            : OUT std_logic_vector(13 downto 0);
+         ADC_Sync,
+         ADC_SDIO,
+         ADC_SClk,
+         ADC_CS_n,
+         ADC_OE_n,
+         adc01_powerDown,
+         BS_ADC_LowZ,
+         BS_ADC_PwrDn,
+         BS_ADC_SE,
+         BS_ADC_SClk,
+         BS_ADC_CS_n,
+         BS_ADC_SDIO,
+         BS_RefPll,
+         BS_DAC_Sel_n,
+         BS_DAC_SClk,
+         BS_DAC_MOSI,
+         amAdcClk,
+         amAdcCSn,
+         spiDataIn,
+         lockLed0n,
+         lockLed1n,
+         Sw50_Ohm,
+         pll0_REF,
+         pll1_REF,
+         ch0ClkOut,
+         ch0DataOut,
+         ch1ClkOut,
+         ch1DataOut,
+         ch2ClkOut,
+         ch2DataOut,
+         ch3ClkOut,
+         ch3DataOut,
+         DQM,
+         sdiOut,
+         amDacCSn,
+         amDacClk,
+         amDacDataOut,
+         dac0_clk,
+         dac1_clk,
+         dac_rst,
+         dac0_nCs,
+         dac1_nCs,
+         dac_sclk,
+         dac_sdio          : OUT std_logic;
+         BS_I2C_SCl,
+         BS_I2C_SDa        : INOUT std_logic
+      );
+   END component DC_DemodTop;
 
-      SwVid0,
-      SwVid1,
-      SwFilt0,
-      SwFilt1,
-      Lock              : OUT std_logic_vector(1 downto 0);
-      TtlOut            : OUT std_logic_vector(3 downto 0);
-      VidSel            : OUT std_logic_vector(2 downto 0);
-      Dac0,
-      Dac1              : OUT std_logic_vector(13 downto 0);
+   component DC_CombinerTop IS
+      GENERIC (
+         PORTS       : natural := 5
+      );
+      PORT(
+         adc0_overflow,
+         adc0Clk,
+         MonOvf,
+         MonClk,
+         BS_Ovf,
+         BS_Clk,
+         amAdcDataIn,
+         spiCSn,
+         spiDataOut,
+         spiClk,
+         pll0_OUT1,
+         pll1_OUT1,
+         FPGA_ID0,
+         FPGA_ID1,
+         BS_PllOut         : IN std_logic;
+         PrevDataIO_p,
+         PrevDataIO_n,
+         NextDataIO_p,
+         NextDataIO_n      : IN std_logic_vector(PORTS-1 downto 0);
+         NextClkIO_p,
+         NextClkIO_n,
+         PrevClkIO_p,
+         PrevClkIO_n       : IN std_logic;
+         adc0,
+         MonData,
+         BS_Data           : IN  std_logic_vector(13 downto 0);
 
-      ADC_Sync,
-      ADC_SDIO,
-      ADC_SClk,
-      ADC_CS_n,
-      ADC_OE_n,
-      ADC_PwrDn,
-      BS_ADC_LowZ,
-      BS_ADC_PwrDn,
-      BS_ADC_SE,
-      BS_ADC_SClk,
-      BS_ADC_CS_n,
-      BS_ADC_SDIO,
-      BS_RefPll,
-      BS_DAC_Sel_n,
-      BS_DAC_SClk,
-      BS_DAC_MOSI,
-      AM_ADC_Clk,
-      AM_ADC_CS_n,
-      SPI_MISO,
-      Sw50_Ohm,
-      RefPll0,
-      RefPll1,
-      EncDataTtl,
-      EncClkTtl,
-      BsDataTtl,
-      BsClkTtl,
-      DQM,
-      SDI,
-      AM_DAC_CS_n,
-      AM_DAC_Clk,
-      AM_DAC_Data,
-      DacClk0,
-      DacClk1,
-      DacRst,
-      Dac0SpiCS_n,
-      Dac1SpiCS_n,
-      DacSpiClk,
-      DacSpiSDIO        : OUT std_logic;
-      BS_I2C_SCl,
-      BS_I2C_SDa        : INOUT std_logic
-   );
-   END component K7_DaughterCardTest;
+         video0InSelect,
+         video1InSelect,
+         video1OutSelect,
+         video0OutSelect   : OUT std_logic_vector(1 downto 0);
+         VidSel            : OUT std_logic_vector(2 downto 0);
+         dac0_d,
+         dac1_d            : OUT std_logic_vector(13 downto 0);
+         BS_I2C_SCl,
+         BS_I2C_SDa        : INOUT std_logic;
+
+         ADC_Sync,
+         ADC_SDIO,
+         ADC_SClk,
+         ADC_CS_n,
+         ADC_OE_n,
+         adc01_powerDown,
+         BS_ADC_LowZ,
+         BS_ADC_PwrDn,
+         BS_ADC_SE,
+         BS_ADC_SClk,
+         BS_ADC_CS_n,
+         BS_ADC_SDIO,
+         BS_RefPll,
+         BS_DAC_Sel_n,
+         BS_DAC_SClk,
+         BS_DAC_MOSI,
+         amAdcClk,
+         amAdcCSn,
+         spiDataIn,
+         lockLed0n,
+         lockLed1n,
+         Sw50_Ohm,
+         pll0_REF,
+         pll1_REF,
+         ch0ClkOut,
+         ch0DataOut,
+         ch1ClkOut,
+         ch1DataOut,
+         ch2ClkOut,
+         ch2DataOut,
+         ch3ClkOut,
+         ch3DataOut,
+         DQM,
+         sdiOut,
+         amDacCSn,
+         amDacClk,
+         amDacDataOut,
+         dac0_clk,
+         dac1_clk,
+         dac_rst,
+         dac0_nCs,
+         dac1_nCs,
+         dac_sclk,
+         dac_sdio        : OUT std_logic
+      );
+   END component DC_CombinerTop;
 
    component LogToLin IS
       GENERIC(
@@ -145,19 +235,17 @@ architecture rtl of DigitalCombiner_tb is
    TYPE vector_of_slvs     IS ARRAY (NATURAL RANGE <>) OF std_logic_vector;
    constant PORTS       : integer := 5;
    constant CH1DELAY    : time := 800 ps;
-   constant CH2DELAY    : time := 300 ps;
+   constant CH2DELAY    : time := 500 ps;
 
    signal   clk,
             reset,
             XX             : std_logic := '1';
    signal   Dac0,
             Dac1           : std_logic_vector(13 downto 0);
-   signal   Ch1PrevDataIO_p,
-            Ch1PrevDataIO_n,
-            Ch1NextDataIO_p,
-            Ch1NextDataIO_n,
-            Ch2NextDataIO_p,
-            Ch2NextDataIO_n,
+   signal   ChPrevDataIO_p,
+            ChPrevDataIO_n,
+            ChNextDataIO_p,
+            ChNextDataIO_n,
             PcbDelayIn1_p,
             PcbDelayIn1_n,
             PcbDelayIn2_p,
@@ -191,7 +279,7 @@ begin
       wait for 0.90 ns;
       XX <= '0';
    end process;
-
+/*
    process (clk)
    begin
       if (rising_edge(clk)) then
@@ -204,7 +292,7 @@ begin
          end if;
       end if;
    end process;
-/*
+
    LogLin : LogToLin
       GENERIC MAP (
          LEFT_IN   => LogIn'left,
@@ -222,45 +310,42 @@ begin
    );
 */
 
-   Ch1K7 : K7_DaughterCardTest
+   Ch1K7 : DC_DemodTop
       GENERIC MAP (
-         PORTS       => PORTS,
-         DEMOD_COMB  => "DEMOD"
+         PORTS       => PORTS
       )
       PORT MAP(
-         IF_Ovf               => '0',
-         IF_Clk               => clk,
+         adc0_overflow		   => '0',
+         adc0Clk              => '0',
          MonOvf               => '0',
          MonClk               => clk,
          BS_Ovf               => '0',
-         BS_Clk               => clk,
-         AM_ADC_Data          => '0',
-         SPI_CS_n             => '0',
-         SPI_MOSI             => '0',
-         SPI_SClk             => '0',
-         PllOut0              => '0',
-         PllOut1              => '0',
+         BS_Clk               => '0',
+         amAdcDataIn          => '0',
+         spiCSn               => '0',
+         spiDataOut           => '0',
+         spiClk               => '0',
+         pll0_OUT1            => '0',
+         pll1_OUT1            => '0',
          FPGA_ID0             => '0',
          FPGA_ID1             => '0',
-         BS_PllOut            => '0',
-         IF_Data              => IF_Data(3),
-         MonData              => Dac0,
-         BS_Data              => Dac0,
-         SwVid0               => open,
-         SwVid1               => open,
-         SwFilt0              => open,
-         SwFilt1              => open,
-         Lock                 => open,
-         TtlOut               => open,
+         BS_PllOut		      => '0',
+         adc0                 => (others=>'0'),
+         MonData              => (others=>'0'),
+         BS_Data              => (others=>'0'),
+         video0InSelect       => open,
+         video1InSelect       => open,
+         video1OutSelect      => open,
+         video0OutSelect      => open,
          VidSel               => open,
-         Dac0                 => Dac0,
-         Dac1                 => open,
+         dac0_d               => open,
+         dac1_d               => open,
          ADC_Sync             => open,
          ADC_SDIO             => open,
          ADC_SClk             => open,
          ADC_CS_n             => open,
          ADC_OE_n             => open,
-         ADC_PwrDn            => open,
+         adc01_powerDown      => open,
          BS_ADC_LowZ          => open,
          BS_ADC_PwrDn         => open,
          BS_ADC_SE            => open,
@@ -268,82 +353,83 @@ begin
          BS_ADC_CS_n          => open,
          BS_ADC_SDIO          => open,
          BS_RefPll            => open,
-         BS_I2C_SCl           => open,
-         BS_I2C_SDa           => open,
          BS_DAC_Sel_n         => open,
          BS_DAC_SClk          => open,
          BS_DAC_MOSI          => open,
-         AM_ADC_Clk           => open,
-         AM_ADC_CS_n          => open,
-         SPI_MISO             => open,
+         amAdcClk             => open,
+         amAdcCSn             => open,
+         spiDataIn            => open,
+         lockLed0n            => open,
+         lockLed1n            => open,
          Sw50_Ohm             => open,
-         RefPll0              => open,
-         RefPll1              => open,
-         EncDataTtl           => open,
-         EncClkTtl            => open,
-         BsDataTtl            => open,
-         BsClkTtl             => open,
+         pll0_REF             => open,
+         pll1_REF             => open,
+         ch0ClkOut            => open,
+         ch0DataOut           => open,
+         ch1ClkOut            => open,
+         ch1DataOut           => open,
+         ch2ClkOut            => open,
+         ch2DataOut           => open,
+         ch3ClkOut            => open,
+         ch3DataOut           => open,
          DQM                  => open,
-         SDI                  => open,
-         AM_DAC_CS_n          => open,
-         AM_DAC_Clk           => open,
-         AM_DAC_Data          => open,
-         PrevDataIO_p         => Ch1PrevDataIO_p,
-         PrevDataIO_n         => Ch1PrevDataIO_n,
+         sdiOut               => open,
+         amDacCSn             => open,
+         amDacClk             => open,
+         amDacDataOut         => open,
+         dac0_clk             => open,
+         dac1_clk             => open,
+         dac_rst              => open,
+         dac0_nCs             => open,
+         dac1_nCs             => open,
+         dac_sclk             => open,
+         dac_sdio             => open,
+         PrevDataIO_p         => ChPrevDataIO_p,
+         PrevDataIO_n         => ChPrevDataIO_n,
          PrevClkIO_p          => PrevClkIO_p,
          PrevClkIO_n          => PrevClkIO_n,
-         NextDataIO_p         => Ch1NextDataIO_p,
-         NextDataIO_n         => Ch1NextDataIO_n,
+         NextDataIO_p         => open,
+         NextDataIO_n         => open,
          NextClkIO_p          => open,
-         NextClkIO_n          => open,
-         DacClk0              => open,
-         DacClk1              => open,
-         DacRst               => open,
-         Dac0SpiCS_n          => open,
-         Dac1SpiCS_n          => open,
-         DacSpiClk            => open,
-         DacSpiSDIO           => open
+         NextClkIO_n          => open
    );
 
-   Ch2K7 : K7_DaughterCardTest
+   Ch2K7 : DC_DemodTop
       GENERIC MAP (
-         PORTS       => PORTS,
-         DEMOD_COMB  => "DEMOD"
+         PORTS       => PORTS
       )
       PORT MAP(
-         IF_Ovf               => '0',
-         IF_Clk               => clk,
+         adc0_overflow		   => '0',
+         adc0Clk              => '0',
          MonOvf               => '0',
          MonClk               => clk,
          BS_Ovf               => '0',
-         BS_Clk               => clk,
-         AM_ADC_Data          => '0',
-         SPI_CS_n             => '0',
-         SPI_MOSI             => '0',
-         SPI_SClk             => '0',
-         PllOut0              => '0',
-         PllOut1              => '0',
+         BS_Clk               => '0',
+         amAdcDataIn          => '0',
+         spiCSn               => '0',
+         spiDataOut           => '0',
+         spiClk               => '0',
+         pll0_OUT1            => '0',
+         pll1_OUT1            => '0',
          FPGA_ID0             => '1',
          FPGA_ID1             => '0',
-         BS_PllOut            => '0',
-         IF_Data              => Dac0,
-         MonData              => Dac0,
-         BS_Data              => Dac0,
-         SwVid0               => open,
-         SwVid1               => open,
-         SwFilt0              => open,
-         SwFilt1              => open,
-         Lock                 => open,
-         TtlOut               => open,
+         BS_PllOut		      => '0',
+         adc0                 => (others=>'0'),
+         MonData              => (others=>'0'),
+         BS_Data              => (others=>'0'),
+         video0InSelect       => open,
+         video1InSelect       => open,
+         video1OutSelect      => open,
+         video0OutSelect      => open,
          VidSel               => open,
-         Dac0                 => open,
-         Dac1                 => open,
+         dac0_d               => open,
+         dac1_d               => open,
          ADC_Sync             => open,
          ADC_SDIO             => open,
          ADC_SClk             => open,
          ADC_CS_n             => open,
          ADC_OE_n             => open,
-         ADC_PwrDn            => open,
+         adc01_powerDown      => open,
          BS_ADC_LowZ          => open,
          BS_ADC_PwrDn         => open,
          BS_ADC_SE            => open,
@@ -351,82 +437,83 @@ begin
          BS_ADC_CS_n          => open,
          BS_ADC_SDIO          => open,
          BS_RefPll            => open,
-         BS_I2C_SCl           => open,
-         BS_I2C_SDa           => open,
          BS_DAC_Sel_n         => open,
          BS_DAC_SClk          => open,
          BS_DAC_MOSI          => open,
-         AM_ADC_Clk           => open,
-         AM_ADC_CS_n          => open,
-         SPI_MISO             => open,
+         amAdcClk             => open,
+         amAdcCSn             => open,
+         spiDataIn            => open,
+         lockLed0n            => open,
+         lockLed1n            => open,
          Sw50_Ohm             => open,
-         RefPll0              => open,
-         RefPll1              => open,
-         EncDataTtl           => open,
-         EncClkTtl            => open,
-         BsDataTtl            => open,
-         BsClkTtl             => open,
+         pll0_REF             => open,
+         pll1_REF             => open,
+         ch0ClkOut            => open,
+         ch0DataOut           => open,
+         ch1ClkOut            => open,
+         ch1DataOut           => open,
+         ch2ClkOut            => open,
+         ch2DataOut           => open,
+         ch3ClkOut            => open,
+         ch3DataOut           => open,
          DQM                  => open,
-         SDI                  => open,
-         AM_DAC_CS_n          => open,
-         AM_DAC_Clk           => open,
-         AM_DAC_Data          => open,
-         PrevDataIO_p         => Ch1NextDataIO_p,
-         PrevDataIO_n         => Ch1NextDataIO_n,
+         sdiOut               => open,
+         amDacCSn             => open,
+         amDacClk             => open,
+         amDacDataOut         => open,
+         dac0_clk             => open,
+         dac1_clk             => open,
+         dac_rst              => open,
+         dac0_nCs             => open,
+         dac1_nCs             => open,
+         dac_sclk             => open,
+         dac_sdio             => open,
+         PrevDataIO_p         => open,
+         PrevDataIO_n         => open,
          PrevClkIO_p          => open,
          PrevClkIO_n          => open,
-         NextDataIO_p         => Ch2NextDataIO_p,
-         NextDataIO_n         => Ch2NextDataIO_n,
+         NextDataIO_p         => ChNextDataIO_p,
+         NextDataIO_n         => ChNextDataIO_n,
          NextClkIO_p          => NextClkIO_p,
-         NextClkIO_n          => NextClkIO_n,
-         DacClk0              => open,
-         DacClk1              => open,
-         DacRst               => open,
-         Dac0SpiCS_n          => open,
-         Dac1SpiCS_n          => open,
-         DacSpiClk            => open,
-         DacSpiSDIO           => open
+         NextClkIO_n          => NextClkIO_n
    );
 
-   CmbK7 : K7_DaughterCardTest
+   CmbK7 : DC_CombinerTop
       GENERIC MAP (
-         PORTS       => PORTS,
-         DEMOD_COMB  => "COMB"
+         PORTS       => PORTS
       )
       PORT MAP(
-         IF_Ovf               => '0',
-         IF_Clk               => clk,
+         adc0_overflow		   => '0',
+         adc0Clk              => '0',
          MonOvf               => '0',
          MonClk               => clk,
          BS_Ovf               => '0',
-         BS_Clk               => clk,
-         AM_ADC_Data          => '0',
-         SPI_CS_n             => '0',
-         SPI_MOSI             => '0',
-         SPI_SClk             => '0',
-         PllOut0              => '0',
-         PllOut1              => '0',
+         BS_Clk               => '0',
+         amAdcDataIn          => '0',
+         spiCSn               => '0',
+         spiDataOut           => '0',
+         spiClk               => '0',
+         pll0_OUT1            => '0',
+         pll1_OUT1            => '0',
          FPGA_ID0             => '0',
          FPGA_ID1             => '1',
-         BS_PllOut            => '0',
-         IF_Data              => Dac0,
-         MonData              => Dac0,
-         BS_Data              => Dac0,
-         SwVid0               => open,
-         SwVid1               => open,
-         SwFilt0              => open,
-         SwFilt1              => open,
-         Lock                 => open,
-         TtlOut               => open,
+         BS_PllOut		      => '0',
+         adc0                 => (others=>'0'),
+         MonData              => (others=>'0'),
+         BS_Data              => (others=>'0'),
+         video0InSelect       => open,
+         video1InSelect       => open,
+         video1OutSelect      => open,
+         video0OutSelect      => open,
          VidSel               => open,
-         Dac0                 => open,
-         Dac1                 => open,
+         dac0_d               => open,
+         dac1_d               => open,
          ADC_Sync             => open,
          ADC_SDIO             => open,
          ADC_SClk             => open,
          ADC_CS_n             => open,
          ADC_OE_n             => open,
-         ADC_PwrDn            => open,
+         adc01_powerDown      => open,
          BS_ADC_LowZ          => open,
          BS_ADC_PwrDn         => open,
          BS_ADC_SE            => open,
@@ -434,26 +521,37 @@ begin
          BS_ADC_CS_n          => open,
          BS_ADC_SDIO          => open,
          BS_RefPll            => open,
-         BS_I2C_SCl           => open,
-         BS_I2C_SDa           => open,
          BS_DAC_Sel_n         => open,
          BS_DAC_SClk          => open,
          BS_DAC_MOSI          => open,
-         AM_ADC_Clk           => open,
-         AM_ADC_CS_n          => open,
-         SPI_MISO             => open,
+         amAdcClk             => open,
+         amAdcCSn             => open,
+         spiDataIn            => open,
+         lockLed0n            => open,
+         lockLed1n            => open,
          Sw50_Ohm             => open,
-         RefPll0              => open,
-         RefPll1              => open,
-         EncDataTtl           => open,
-         EncClkTtl            => open,
-         BsDataTtl            => open,
-         BsClkTtl             => open,
+         pll0_REF             => open,
+         pll1_REF             => open,
+         ch0ClkOut            => open,
+         ch0DataOut           => open,
+         ch1ClkOut            => open,
+         ch1DataOut           => open,
+         ch2ClkOut            => open,
+         ch2DataOut           => open,
+         ch3ClkOut            => open,
+         ch3DataOut           => open,
          DQM                  => open,
-         SDI                  => open,
-         AM_DAC_CS_n          => open,
-         AM_DAC_Clk           => open,
-         AM_DAC_Data          => open,
+         sdiOut               => open,
+         amDacCSn             => open,
+         amDacClk             => open,
+         amDacDataOut         => open,
+         dac0_clk             => open,
+         dac1_clk             => open,
+         dac_rst              => open,
+         dac0_nCs             => open,
+         dac1_nCs             => open,
+         dac_sclk             => open,
+         dac_sdio             => open,
          PrevDataIO_p         => CmbDataIn1_p,
          PrevDataIO_n         => CmbDataIn1_n,
          PrevClkIO_p          => CmbClkIn1_p,
@@ -461,30 +559,23 @@ begin
          NextDataIO_p         => CmbDataIn2_p,
          NextDataIO_n         => CmbDataIn2_n,
          NextClkIO_p          => CmbClkIn2_p,
-         NextClkIO_n          => CmbClkIn2_n,
-         DacClk0              => open,
-         DacClk1              => open,
-         DacRst               => open,
-         Dac0SpiCS_n          => open,
-         Dac1SpiCS_n          => open,
-         DacSpiClk            => open,
-         DacSpiSDIO           => open
+         NextClkIO_n          => CmbClkIn2_n
    );
 
-PcbDelayIn1_p <= (others=>'X') when (XX = 'X') else Ch1PrevDataIO_p;
-PcbDelayIn1_n <= (others=>'X') when (XX = 'X') else Ch1PrevDataIO_n;
-PcbDelayIn2_p <= (others=>'X') when (XX = 'X') else Ch2NextDataIO_p;
-PcbDelayIn2_n <= (others=>'X') when (XX = 'X') else Ch2NextDataIO_n;
+PcbDelayIn1_p <= (others=>'X') when (XX = 'X') else ChPrevDataIO_p;
+PcbDelayIn1_n <= (others=>'X') when (XX = 'X') else ChPrevDataIO_n;
+PcbDelayIn2_p <= (others=>'X') when (XX = 'X') else ChNextDataIO_p;
+PcbDelayIn2_n <= (others=>'X') when (XX = 'X') else ChNextDataIO_n;
 
-CmbDataIn1_p <= transport (PcbDelayIn1_p) after CH1DELAY;
-CmbDataIn1_n <= transport (PcbDelayIn1_n) after CH1DELAY;
-CmbClkIn1_p  <= transport (PrevClkIO_p)   after CH1DELAY;
-CmbClkIn1_n  <= transport (PrevClkIO_n)   after CH1DELAY;
+CmbDataIn1_p <= (PcbDelayIn1_p) after CH1DELAY;
+CmbDataIn1_n <= (PcbDelayIn1_n) after CH1DELAY;
+CmbClkIn1_p  <= (PrevClkIO_p)   after CH1DELAY;
+CmbClkIn1_n  <= (PrevClkIO_n)   after CH1DELAY;
 
-CmbDataIn2_p <= transport (PcbDelayIn2_p) after CH2DELAY;
-CmbDataIn2_n <= transport (PcbDelayIn2_n) after CH2DELAY;
-CmbClkIn2_p  <= transport (NextClkIO_p)   after CH2DELAY;
-CmbClkIn2_n  <= transport (NextClkIO_n)   after CH2DELAY;
+CmbDataIn2_p <= (PcbDelayIn2_p) after CH2DELAY;
+CmbDataIn2_n <= (PcbDelayIn2_n) after CH2DELAY;
+CmbClkIn2_p  <= (NextClkIO_p)   after CH2DELAY;
+CmbClkIn2_n  <= (NextClkIO_n)   after CH2DELAY;
 
 
 end rtl;

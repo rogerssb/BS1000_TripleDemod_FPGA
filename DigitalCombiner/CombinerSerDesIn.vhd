@@ -36,55 +36,30 @@ use work.Semco_pkg.all;
 entity CombinerSerDesIn is
    Generic (
       CHANNEL  : natural := 1;
-      PORTS    : natural := 5
+      PORTS    : natural := 6
    );
    Port (
-      ClkIn_p,
-      ClkIn_n,
+      ClkIn1_p,
+      ClkIn1_n,
+      ClkIn2_p,
+      ClkIn2_n,
       Clk93M,
       Reset             : in  std_logic;
-      DataIn_p,
-      DataIn_n          : in  STD_LOGIC_VECTOR(PORTS-2 downto 0);
-      DataOut           : out SLV8_ARRAY(PORTS-2 downto 0)
+      DataIn1_p,
+      DataIn1_n,
+      DataIn2_p,
+      DataIn2_n         : in  STD_LOGIC_VECTOR(PORTS-2 downto 0);
+      DataOut1,
+      DataOut2          : out SLV8_ARRAY(PORTS-2 downto 0)
    );
 end CombinerSerDesIn;
 
 architecture rtl of CombinerSerDesIn is
 
-   component dec_8b10b is
-      port(
-         RESET,                                       -- Global asynchronous reset (AH)
-         CLK      : in  std_logic ;                   -- Master synchronous receive byte clock
-         DataIn   : in  std_logic_vector(9 downto 0); -- Encoded input (LS..MS)
-         KO       : out std_logic ;	                  -- Control (K) character indicator (AH)
-         DataOut  : out std_logic_vector(7 downto 0)	-- Decoded out (MS..LS)
-      );
-   end component dec_8b10b;
-
-   component pll_933_over_2
-      port
-       (
-        clk_in1,
-        reset     : in     std_logic;
-        clk_5x,
-        clk_1x,
-        locked    : out    std_logic
-       );
-   end component;
-
-   component Clk199m999
-      port (
-         reset             : in     std_logic;
-         Clk93m3           : in     std_logic;
-         locked            : out    std_logic;
-         Clk_199m999       : out    std_logic
-      );
-   end component;
-
-   component SerDes5x10to1In
+   component SerDes6x8to1In
       generic (
          SYS_W    : integer := 6;
-         DEV_W    : integer := 60
+         DEV_W    : integer := SYS_W*8
       );
       port
        (
@@ -104,142 +79,214 @@ architecture rtl of CombinerSerDesIn is
      );
    end component;
 
-    COMPONENT vio_0
-      PORT (
-         clk : IN STD_LOGIC;
-         probe_out0 : OUT STD_LOGIC_VECTOR(13 DOWNTO 0);
-         probe_out1 : OUT STD_LOGIC_VECTOR(13 DOWNTO 0);
-         probe_out2 : OUT STD_LOGIC_VECTOR(5 DOWNTO 0);
-         probe_out3 : OUT STD_LOGIC_VECTOR(5 DOWNTO 0);
-         probe_out4 : OUT STD_LOGIC_VECTOR(5 DOWNTO 0);
-         probe_out5 : OUT STD_LOGIC_VECTOR(1 DOWNTO 0);
-         probe_out6 : OUT STD_LOGIC_VECTOR(8 DOWNTO 0);
-         probe_out7 : OUT STD_LOGIC_VECTOR(23 DOWNTO 0);
-         probe_out8 : OUT STD_LOGIC_VECTOR(13 DOWNTO 0)
+   component Clk200
+      port (
+         reset             : in     std_logic;
+         Clk93m3           : in     std_logic;
+         locked            : out    std_logic;
+         input_clk_stopped : out    std_logic;
+         Clk200M           : out    std_logic
       );
-   END COMPONENT;
+   end component;
 
-   signal   SyncRst           : std_logic_vector(15 downto 0) := (others=>'1');
-   signal   ChBitSlip         : std_logic_vector(PORTS-1 downto 0);
-   signal   DataIn,
-            KO                : std_logic_vector(PORTS-2 downto 0);
-   signal   Clk_199m999,
-            ClkIn,
+   component SerDesPll
+      port (
+         clk_in1,
+         reset             : in     std_logic;
+         clk_Nx,
+         clk_1x,
+         input_clk_stopped,
+         locked            : out    std_logic
+      );
+   end component;
+
+   constant CLOCK             : natural := PORTS-1;
+
+   signal   SyncRst           : SLV16 := (others=>'1');
+   signal   ChBitSlip1,
+            ChBitSlip2        : std_logic_vector(PORTS-1 downto 0);
+   signal   DataIn1,
+            DataIn2           : std_logic_vector(PORTS-2 downto 0);
+   signal   ClkIn1,
+            ClkIn2,
             ClkInX1,
-            ClkInX5,
-            DelayLocked,
-            LockedX5,
-            Lock199m999,
-            SRst              : std_logic;
-   signal   ChTenB            : vector_of_slvs(PORTS-1 downto 0)(9 downto 0);
-   signal   ChOut             : std_logic_vector ((PORTS*10)-1 downto 0);
-   signal   ProbeOut2,
-            ProbeOut2Dly      : std_logic_vector(5 downto 0) := "000000";
-
-   attribute MARK_DEBUG : string;
-   attribute MARK_DEBUG of ChOut, ChBitSlip, DataOut, Lock199m999 : signal is "TRUE";
+            ClkNx,
+            Clk200M,
+            ClkStopped200,
+            ClkStoppedXn,
+            ResetPll,
+            DelayLocked1,
+            DelayLocked2,
+            LockedXn,
+            Lock200           : std_logic;
+   signal   Demux1,
+            Demux2            : SLV8_ARRAY(PORTS-1 downto 0);
+   signal   ChOut1,
+            ChOut2            : std_logic_vector ((PORTS*8)-1 downto 0);
+   signal   Count1,
+            Count2            : UINT8 := x"00";
 
 begin
 
-   RstClk : process(Clk93M)
-   begin
-      if (rising_edge(Clk93M)) then
-         if (Reset) then
-            SyncRst     <= (others=>'1');
-            SRst        <= '1';
-            ProbeOut2Dly   <= (others=>'0');
-         elsif (LockedX5) then
-            SyncRst  <= SyncRst(SyncRst'left-1 downto 0) & "0";
-            SRst     <= SyncRst(SyncRst'left);
-            ProbeOut2Dly   <= ProbeOut2;
-         end if;
-      end if;
-   end process RstClk;
-
-   Pll200 : Clk199m999
-      port map(
-         reset       => Reset,
-         Clk93m3     => Clk93m,
-         locked      => Lock199m999,
-         Clk_199m999 => Clk_199m999
-      );
-
-   ClkBuf : IBUFDS
-      generic map (
-         DIFF_TERM      => TRUE, -- Differential Termination
-         IBUF_LOW_PWR   => TRUE, -- Low power (TRUE) vs. performance (FALSE) setting for referenced I/O standards
-         IOSTANDARD     => "LVDS")
-      port map (
-         I  => ClkIn_p,
-         IB => ClkIn_n,
-         O  => ClkIn
-      );
-
-   Pll466_u : Pll_933_over_2
-      port map (
-         -- Clock in ports
-         clk_in1  => ClkIn,
-        -- Status and control signals
-         reset    => Reset,
-         locked   => LockedX5,
-        -- Clock out ports
-         clk_1x  => ClkInX1,
-         clk_5x  => ClkInX5
-    );
-
-   SerDes5x10In : SerDes5x10to1In
-      generic map(
-         SYS_W   => 6,
-         DEV_W   => 60
-      )
-       port map
-      (
-         clk_in               => ClkInX5,
-         clk_div_in           => ClkInX1,
-         io_reset             => SRst,
-         ref_clock            => Clk_199m999,
-
-         data_in_from_pins    => ClkIn & DataIn(PORTS-2 downto 0),
-         bitslip              => ChBitSlip,
-         data_in_to_device    => ChOut,
-         delay_locked         => DelayLocked
-      );
-
-   DeInterlace : process(ClkInX1)
-   begin
-      if (rising_edge(ClkInX1)) then
-         for ch in 0 to PORTS-1 loop
-            for bits in 0 to 9 loop
-               ChTenB(ch)(bits) <= ChOut((54+ch)-(bits*6));
-            end loop;
-         end loop;
-      end if;
-   end process;
-
    Diff : for n in 0 to PORTS-2 generate
    begin
-      Ch_10b8b : dec_8b10b
-          port map(
-            RESET       => SRst,       -- Global asynchronous reset (AH)
-            CLK         => Clk93M,     -- Master synchronous receive byte clock
-            DataIn      => ChTenB(n),     -- Encoded input (LS..MS)
-            KO          => KO(n),      -- Control (K) character indicator (AH)
-            DataOut     => DataOut(n)  -- Decoded out (MS..LS)
-             );
-
-      DataBuf : IBUFDS
+      DataBuf1 : IBUFDS
          generic map (
             DIFF_TERM      => TRUE, -- Differential Termination
             IBUF_LOW_PWR   => TRUE, -- Low power (TRUE) vs. performance (FALSE) setting for referenced I/O standards
             IOSTANDARD     => "LVDS")
          port map (
-            I  => DataIn_p(n),
-            IB => DataIn_n(n),
-            O  => DataIn(n)
+            I  => DataIn1_p(n),
+            IB => DataIn1_n(n),
+            O  => DataIn1(n)
          );
 
+      DataBuf2 : IBUFDS
+         generic map (
+            DIFF_TERM      => TRUE, -- Differential Termination
+            IBUF_LOW_PWR   => TRUE, -- Low power (TRUE) vs. performance (FALSE) setting for referenced I/O standards
+            IOSTANDARD     => "LVDS")
+         port map (
+            I  => DataIn2_p(n),
+            IB => DataIn2_n(n),
+            O  => DataIn2(n)
+         );
    end generate;
 
-   ChBitSlip      <= (others=>'0');
+   ClkBuf1 : IBUFDS
+      generic map (
+         DIFF_TERM      => TRUE, -- Differential Termination
+         IBUF_LOW_PWR   => TRUE, -- Low power (TRUE) vs. performance (FALSE) setting for referenced I/O standards
+         IOSTANDARD     => "LVDS")
+      port map (
+         I  => ClkIn1_p,
+         IB => ClkIn1_n,
+         O  => ClkIn1
+      );
+
+   ClkBuf2 : IBUFDS
+      generic map (
+         DIFF_TERM      => TRUE, -- Differential Termination
+         IBUF_LOW_PWR   => TRUE, -- Low power (TRUE) vs. performance (FALSE) setting for referenced I/O standards
+         IOSTANDARD     => "LVDS")
+      port map (
+         I  => ClkIn2_p,
+         IB => ClkIn2_n,
+         O  => ClkIn2
+      );
+
+   ResetPll <= ClkStopped200 or ClkStoppedXn or Reset;
+
+   Pll200 : Clk200
+      port map(
+         Clk93m3           => Clk93M,
+         reset             => ResetPll,
+         locked            => Lock200,
+         input_clk_stopped => ClkStopped200,
+         Clk200M           => Clk200M
+      );
+
+   PllXn_u : SerDesPll
+      port map (
+         clk_in1           => Clk93M,
+         reset             => ResetPll,
+         locked            => LockedXn,
+         input_clk_stopped => ClkStoppedXn,
+         clk_1x            => ClkInX1,
+         clk_Nx            => ClkNx
+    );
+
+   SyncRstProcess : process(Clk93M)
+   begin
+      if (rising_edge(Clk93M)) then
+         if (Lock200 and LockedXn and not Reset) then
+            SyncRst <= SyncRst(14 downto 0) & '0' ;
+         else
+            SyncRst <= (others=>'1');
+         end if;
+      end if;
+   end process SyncRstProcess;
+
+   SerDesIn1 : SerDes6x8to1In
+      generic map(
+         SYS_W   => 6,
+         DEV_W   => 48
+      )
+       port map
+      (
+         clk_in               => ClkNx,
+         clk_div_in           => ClkInX1,
+         io_reset             => SyncRst(SyncRst'left),
+         ref_clock            => Clk200M,
+
+         data_in_from_pins    => ClkIn1 & DataIn1(PORTS-2 downto 0),
+         bitslip              => ChBitSlip1,
+         data_in_to_device    => ChOut1,
+         delay_locked         => DelayLocked1
+      );
+
+   SerDesIn2 : SerDes6x8to1In
+      generic map(
+         SYS_W   => 6,
+         DEV_W   => 48
+      )
+       port map
+      (
+         clk_in               => ClkNx,
+         clk_div_in           => ClkInX1,
+         io_reset             => SyncRst(SyncRst'left),
+         ref_clock            => Clk200M,
+
+         data_in_from_pins    => ClkIn2 & DataIn2(PORTS-2 downto 0),
+         bitslip              => ChBitSlip2,
+         data_in_to_device    => ChOut2,
+         delay_locked         => DelayLocked2
+      );
+
+   DeInterlace1 : process(ClkInX1)
+   begin
+      if (rising_edge(ClkInX1)) then
+         for ch in 0 to PORTS-1 loop
+            for bits in 0 to 7 loop
+               Demux1(ch)(bits) <= ChOut1((42+ch)-((7-bits)*6));
+            end loop;
+         end loop;
+         if (Demux1(CLOCK)(7 downto 1) = "0000111") then
+            Count1 <= x"00";
+            ChBitSlip1 <= (others=>'0');
+         elsif (Count1 < 15) then
+            Count1 <= Count1 + 1;
+            ChBitSlip1 <= (others=>'0');
+         else
+            Count1 <= x"00";
+            ChBitSlip1 <= (others=>'1');
+         end if;
+      end if;
+   end process;
+
+   DataOut1   <= Demux1(4 downto 0);
+
+   DeInterlace2 : process(ClkInX1)
+   begin
+      if (rising_edge(ClkInX1)) then
+         for ch in 0 to PORTS-1 loop
+            for bits in 0 to 7 loop
+               Demux2(ch)(bits) <= ChOut2((42+ch)-((7-bits)*6));
+            end loop;
+         end loop;
+         if (Demux2(CLOCK)(7 downto 1) = "0000111") then
+            Count2 <= x"00";
+            ChBitSlip2 <= (others=>'0');
+         elsif (Count2 < 15) then
+            Count2 <= Count2 + 1;
+            ChBitSlip2 <= (others=>'0');
+         else
+            Count2 <= x"00";
+            ChBitSlip2 <= (others=>'1');
+         end if;
+      end if;
+   end process;
+
+   DataOut2   <= Demux2(4 downto 0);
 
 end rtl;

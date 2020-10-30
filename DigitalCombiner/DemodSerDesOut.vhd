@@ -13,10 +13,14 @@
       The Ch1/Ch2 FPGAs will send IF and AGC data to the Prev or Next ports as required
       and 0's to the other.
 
-      Ch1 is ID 00, Ch2 is 01 and Cmb is 10
+      There are 5 byte wide data channels and are split up as:
+      Ch0   RawRF[7:0]     or    ResampleX[7:0]
+      Ch1   RawRF[13:8]          ResampleX[15:8]
+      Ch2   DQM                  DQM & I/Q_Flag & ResampleX[17:16]
+      Ch3   AGC[15:8]
+      Ch4   AGC[7:0]
 
-      Take the incoming 8 bit data, do 8b:10b conversion, pass it to the 10:1 output
-      serdes, then convert to LVDS. No delay is required since the other end aligns the data.
+      Ch1 is ID 00, Ch2 is 01 and Cmb is 10
 
    Revision:
    Revision 0.01 - File Created
@@ -36,7 +40,7 @@ entity DemodSerDesOut is
       PORTS    : natural := 5
    );
    Port (
-      Clk,
+      Clk93M,
       Reset,
       Active            : in std_logic;
       TxData            : in SLV8_ARRAY(PORTS-1 downto 0);
@@ -49,37 +53,18 @@ end DemodSerDesOut;
 
 architecture rtl of DemodSerDesOut is
 
-   component enc_8b10b is
-      port (
-         RESET,                                       -- Global asynchronous reset (AH)
-         CLK      : in  std_logic;                    -- Master synchronous receive byte clock
-         DataIn   : in  std_logic_vector(7 downto 0); -- input (MS..LS)
-         KI       : in std_logic;	                  -- Control (K) character input
-         DataOut  : out std_logic_vector(9 downto 0)	-- Encoded out (LS..MS)
-      );
-   end component enc_8b10b;
-
-   component dec_8b10b is
-      port(
-         RESET,                                       -- Global asynchronous reset (AH)
-         CLK      : in  std_logic ;                   -- Master synchronous receive byte clock
-         DataIn   : in  std_logic_vector(9 downto 0); -- Encoded input (LS..MS)
-         KO       : out std_logic ;	                  -- Control (K) character indicator (AH)
-         DataOut  : out std_logic_vector(7 downto 0)	-- Decoded out (MS..LS)
-      );
-   end component dec_8b10b;
-
-   component pll_933_over_2
+   component SerDesPll
       port (
          clk_in1,
-         reset     : in     std_logic;
-         clk_5x,
+         reset             : in     std_logic;
+         clk_Nx,
          clk_1x,
-         locked    : out    std_logic
+         input_clk_stopped,
+         locked            : out    std_logic
       );
-   end component pll_933_over_2;
+   end component;
 
-   component SerDes5x10to1Out
+   component SerDes5x8to1Out
       port (
          -- Clock and reset signals
          clk_in                  : in    std_logic;                    -- Fast clock from PLL/MMCM
@@ -87,105 +72,89 @@ architecture rtl of DemodSerDesOut is
          clk_reset               : in    std_logic;                    -- Reset signal for Clock circuit
          io_reset                : in    std_logic;                    -- Reset signal for IO circuit
          -- From the device then out to the system
-         data_out_from_device    : in    std_logic_vector(50-1 downto 0);
+         data_out_from_device    : in    std_logic_vector(40-1 downto 0);
          data_out_to_pins_p      : out   std_logic_vector(5-1 downto 0);
          data_out_to_pins_n      : out   std_logic_vector(5-1 downto 0);
          clk_to_pins_p           : out std_logic;
          clk_to_pins_n           : out std_logic
       );
-   end component SerDes5x10to1Out;
+   end component SerDes5x8to1Out;
 
    signal   SyncRst           : std_logic_vector(5 downto 0) := (others=>'1');
-   signal   TxDataDly,
-            Tx1, Tx2          : SLV8_ARRAY(PORTS-1 downto 0);
-   signal   TenB_Out,
-            ChTenB            : vector_of_slvs(PORTS-1 downto 0)(9 downto 0);
-   signal   SerDesIn          : std_logic_vector(PORTS*10-1 downto 0);
-   signal   Clk5x,
+   signal   TxDataDly         : SLV8_ARRAY(PORTS-1 downto 0);
+   signal   SerDesIn          : std_logic_vector(PORTS*8-1 downto 0);
+   signal   ClkNx,
             Clk1x,
-            Lock466M, KO,
+            LockPll,
+            ClkStoppedXn,
             SRst              : std_logic;
-   signal   Diff              : SLV8;
 
-signal DataOut : std_logic_vector(7 downto 0); --debug
+            -- debug signals
+   signal   RefClkOutP,
+            RefClkOutN        : std_logic;
+   signal   Offset, Count     : natural range 0 to 255 := 19;
+   signal   DataOutp,
+            DataOutn          : STD_LOGIC_VECTOR(PORTS-1 downto 0);
 
    attribute MARK_DEBUG : string;
-   attribute MARK_DEBUG of Reset, SyncRst, TxData, TenB_Out, ChTenB, Diff, Lock466M, DataOut, KO : signal is "TRUE";
+   attribute MARK_DEBUG of Reset, SyncRst, TxData, LockPll : signal is "TRUE";
 
 begin
 
-   Pll466_u : Pll_933_over_2
+   Pll466_u : SerDesPll
       port map (
-         -- Clock in ports
-         clk_in1  => Clk,
-        -- Status and control signals
+         clk_in1  => Clk93M,
          reset    => Reset,
-         locked   => Lock466M,
-        -- Clock out ports
+         locked   => LockPll,
+         input_clk_stopped => ClkStoppedXn,
          clk_1x  => Clk1x,
-         clk_5x  => Clk5x
+         clk_Nx  => ClkNx
     );
 
    RstClk : process(Clk1x, Reset)
    begin
-      if (Reset) then
+      if (Reset or ClkStoppedXn) then
          SyncRst  <= (others=>'1');
          SRst     <= '1';
       elsif (rising_edge(Clk1x)) then
          TxDataDly   <= TxData;
-         Tx1 <= TxDataDly;
-         Tx2 <= Tx1;
-         Diff <= Tx2(1) xor DataOut;
-         if (Lock466M) then
+         if (LockPll) then
             SyncRst  <= SyncRst(SyncRst'left-1 downto 0) & '0';
             SRst     <= SyncRst(SyncRst'left);
+            if (Count = 63) then
+               Count <= 0;
+ --              Offset <= Offset - 1 when (Offset > 0) else 63;
+            else
+               Count <= Count + 1;
+            end if;
          end if;
 
          for x in 0 to PORTS-1 loop
-            for bits in 0 to 9 loop
-               SerDesIn(bits*5 + x) <= ChTenb(x)(bits);
+            for bits in 0 to 7 loop
+               SerDesIn(bits*5 + x) <= TxDataDly(x)(bits);
             end loop;
          end loop;
 
       end if;
    end process RstClk;
 
-   Encode : for n in 0 to PORTS-1 generate
-      -- outputs aren't delayed
-      Ch_8b10b : enc_8b10b
-         port map(
-            RESET       => SRst,       -- Global asynchronous reset (active high)
-            CLK         => Clk1x,     -- Master synchronous send byte clock
-            KI          => '0',        -- Control (K) input(active high)
-            DataIn      => TxDataDly(n),
-            DataOut     => TenB_Out(n)
-        );
-
-         ChTenB(n) <= 10x"000" when not Active else std_logic_vector(to_unsigned(n, 10)); --"1010101010"; --TenB_Out(n);
-   end generate;
-
-
-
-   SerDes5x10Out : SerDes5x10to1Out
+   SerDes5x10Out : SerDes5x8to1Out
       port map (
-         clk_in                => Clk5x,
+         clk_in                => ClkNx,
          clk_div_in            => Clk1x,
          clk_reset             => Srst,
          io_reset              => Srst,
          data_out_from_device  => SerDesIn,
-         data_out_to_pins_p    => DataOut_p,
-         data_out_to_pins_n    => DataOut_n,
-         clk_to_pins_p         => RefClkOut_p,
-         clk_to_pins_n         => RefClkOut_n
+         data_out_to_pins_p    => DataOutp,
+         data_out_to_pins_n    => DataOutn,
+         clk_to_pins_p         => RefClkOutp,
+         clk_to_pins_n         => RefClkOutn
       );
 
-   Ch_10b8b : dec_8b10b
-       port map(
-         RESET       => SRst,       -- Global asynchronous reset (AH)
-         CLK         => Clk1x,     -- Master synchronous receive byte clock
-         DataIn      => TenB_Out(1),  -- Encoded input (LS..MS)
-         KO          => KO,      -- Control (K) character indicator (AH)
-         DataOut     => DataOut  -- Decoded out (MS..LS)
-          );
+
+      RefClkOut_p <= transport RefClkOutP  after offset * 300 ps;
+      RefClkOut_n <= transport RefClkOutN  after offset * 300 ps;
+      DataOut_p   <= transport DataOutP    after offset * 300 ps;
+      DataOut_n   <= transport DataOutN    after offset * 300 ps;
 
 end rtl;
