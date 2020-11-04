@@ -59,14 +59,14 @@ architecture rtl of DigitalCombiner_tb is
          FPGA_ID0,
          FPGA_ID1,
          BS_PllOut         : IN std_logic;
-         PrevDataIO_p,
-         PrevDataIO_n,
-         NextDataIO_p,
-         NextDataIO_n      : OUT std_logic_vector(PORTS-1 downto 0);
-         NextClkIO_p,
-         NextClkIO_n,
-         PrevClkIO_p,
-         PrevClkIO_n       : OUT std_logic;
+         PrevData_p,
+         PrevData_n,
+         NextData_p,
+         NextData_n      : OUT std_logic_vector(PORTS-1 downto 0);
+         NextClk_p,
+         NextClk_n,
+         PrevClk_p,
+         PrevClk_n       : OUT std_logic;
          adc0,
          MonData,
          BS_Data           : IN  std_logic_vector(13 downto 0);
@@ -146,14 +146,14 @@ architecture rtl of DigitalCombiner_tb is
          FPGA_ID0,
          FPGA_ID1,
          BS_PllOut         : IN std_logic;
-         PrevDataIO_p,
-         PrevDataIO_n,
-         NextDataIO_p,
-         NextDataIO_n      : IN std_logic_vector(PORTS-1 downto 0);
-         NextClkIO_p,
-         NextClkIO_n,
-         PrevClkIO_p,
-         PrevClkIO_n       : IN std_logic;
+         PrevData_p,
+         PrevData_n,
+         NextData_p,
+         NextData_n      : IN std_logic_vector(PORTS-1 downto 0);
+         NextClk_p,
+         NextClk_n,
+         PrevClk_p,
+         PrevClk_n       : IN std_logic;
          adc0,
          MonData,
          BS_Data           : IN  std_logic_vector(13 downto 0);
@@ -242,10 +242,10 @@ architecture rtl of DigitalCombiner_tb is
             XX             : std_logic := '1';
    signal   Dac0,
             Dac1           : std_logic_vector(13 downto 0);
-   signal   ChPrevDataIO_p,
-            ChPrevDataIO_n,
-            ChNextDataIO_p,
-            ChNextDataIO_n,
+   signal   ChPrevData_p,
+            ChPrevData_n,
+            ChNextData_p,
+            ChNextData_n,
             PcbDelayIn1_p,
             PcbDelayIn1_n,
             PcbDelayIn2_p,
@@ -258,10 +258,10 @@ architecture rtl of DigitalCombiner_tb is
             CmbClkIn1_n,
             CmbClkIn2_p,
             CmbClkIn2_n,
-            PrevClkIO_p,
-            PrevClkIO_n,
-            NextClkIO_p,
-            NextClkIO_n       : std_logic;
+            PrevClk_p,
+            PrevClk_n,
+            NextClk_p,
+            NextClk_n       : std_logic;
    signal   IF_Data           : vector_of_slvs(3 downto 0)(13 downto 0) := (14x"1000", 14x"1000", 14x"3000", 14x"3000");
    signal   LogIn             : sfixed(4 downto -5);
    signal   LinearOut         : ufixed(3 downto -8);
@@ -384,14 +384,14 @@ begin
          dac1_nCs             => open,
          dac_sclk             => open,
          dac_sdio             => open,
-         PrevDataIO_p         => ChPrevDataIO_p,
-         PrevDataIO_n         => ChPrevDataIO_n,
-         PrevClkIO_p          => PrevClkIO_p,
-         PrevClkIO_n          => PrevClkIO_n,
-         NextDataIO_p         => open,
-         NextDataIO_n         => open,
-         NextClkIO_p          => open,
-         NextClkIO_n          => open
+         PrevData_p         => ChPrevData_p,
+         PrevData_n         => ChPrevData_n,
+         PrevClk_p          => PrevClk_p,
+         PrevClk_n          => PrevClk_n,
+         NextData_p         => open,
+         NextData_n         => open,
+         NextClk_p          => open,
+         NextClk_n          => open
    );
 
    Ch2K7 : DC_DemodTop
@@ -468,14 +468,14 @@ begin
          dac1_nCs             => open,
          dac_sclk             => open,
          dac_sdio             => open,
-         PrevDataIO_p         => open,
-         PrevDataIO_n         => open,
-         PrevClkIO_p          => open,
-         PrevClkIO_n          => open,
-         NextDataIO_p         => ChNextDataIO_p,
-         NextDataIO_n         => ChNextDataIO_n,
-         NextClkIO_p          => NextClkIO_p,
-         NextClkIO_n          => NextClkIO_n
+         PrevData_p         => open,
+         PrevData_n         => open,
+         PrevClk_p          => open,
+         PrevClk_n          => open,
+         NextData_p         => ChNextData_p,
+         NextData_n         => ChNextData_n,
+         NextClk_p          => NextClk_p,
+         NextClk_n          => NextClk_n
    );
 
    CmbK7 : DC_CombinerTop
@@ -552,30 +552,30 @@ begin
          dac1_nCs             => open,
          dac_sclk             => open,
          dac_sdio             => open,
-         PrevDataIO_p         => CmbDataIn1_p,
-         PrevDataIO_n         => CmbDataIn1_n,
-         PrevClkIO_p          => CmbClkIn1_p,
-         PrevClkIO_n          => CmbClkIn1_n,
-         NextDataIO_p         => CmbDataIn2_p,
-         NextDataIO_n         => CmbDataIn2_n,
-         NextClkIO_p          => CmbClkIn2_p,
-         NextClkIO_n          => CmbClkIn2_n
+         PrevData_p         => CmbDataIn1_p,
+         PrevData_n         => CmbDataIn1_n,
+         PrevClk_p          => CmbClkIn1_p,
+         PrevClk_n          => CmbClkIn1_n,
+         NextData_p         => CmbDataIn2_p,
+         NextData_n         => CmbDataIn2_n,
+         NextClk_p          => CmbClkIn2_p,
+         NextClk_n          => CmbClkIn2_n
    );
 
-PcbDelayIn1_p <= (others=>'X') when (XX = 'X') else ChPrevDataIO_p;
-PcbDelayIn1_n <= (others=>'X') when (XX = 'X') else ChPrevDataIO_n;
-PcbDelayIn2_p <= (others=>'X') when (XX = 'X') else ChNextDataIO_p;
-PcbDelayIn2_n <= (others=>'X') when (XX = 'X') else ChNextDataIO_n;
+PcbDelayIn1_p <= (others=>'X') when (XX = 'X') else ChPrevData_p;
+PcbDelayIn1_n <= (others=>'X') when (XX = 'X') else ChPrevData_n;
+PcbDelayIn2_p <= (others=>'X') when (XX = 'X') else ChNextData_p;
+PcbDelayIn2_n <= (others=>'X') when (XX = 'X') else ChNextData_n;
 
 CmbDataIn1_p <= (PcbDelayIn1_p) after CH1DELAY;
 CmbDataIn1_n <= (PcbDelayIn1_n) after CH1DELAY;
-CmbClkIn1_p  <= (PrevClkIO_p)   after CH1DELAY;
-CmbClkIn1_n  <= (PrevClkIO_n)   after CH1DELAY;
+CmbClkIn1_p  <= (PrevClk_p)   after CH1DELAY;
+CmbClkIn1_n  <= (PrevClk_n)   after CH1DELAY;
 
 CmbDataIn2_p <= (PcbDelayIn2_p) after CH2DELAY;
 CmbDataIn2_n <= (PcbDelayIn2_n) after CH2DELAY;
-CmbClkIn2_p  <= (NextClkIO_p)   after CH2DELAY;
-CmbClkIn2_n  <= (NextClkIO_n)   after CH2DELAY;
+CmbClkIn2_p  <= (NextClk_p)   after CH2DELAY;
+CmbClkIn2_n  <= (NextClk_n)   after CH2DELAY;
 
 
 end rtl;

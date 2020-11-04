@@ -72,6 +72,14 @@ architecture rtl of CombinerSerDesIn is
         ref_clock               : in    std_logic;                         -- Reference Clock for IDELAYCTRL. Has to come from BUFG.
         bitslip                 : in    std_logic_vector(SYS_W-1 downto 0);    -- Bitslip module is enabled in NETWORKING mode
                                                                            -- User should tie it to '0' if not needed
+
+        -- Input, Output delay control signals
+        in_delay_reset          : in    std_logic;                    -- Active high synchronous reset for input delay
+        in_delay_data_ce        : in    std_logic_vector(SYS_W -1 downto 0);                    -- Enable signal for delay
+        in_delay_data_inc       : in    std_logic_vector(SYS_W -1 downto 0);                    -- Delay increment (high), decrement (low) signal
+        in_delay_tap_in         : in    std_logic_vector(5*SYS_W -1 downto 0); -- Dynamically loadable delay tap value for input delay
+        in_delay_tap_out        : out   std_logic_vector(5*SYS_W -1 downto 0); -- Delay tap value for monitoring input delay
+
       -- Clock and reset signals
         clk_div_in,                                                        -- Slow clock output
         io_reset,
@@ -100,6 +108,23 @@ architecture rtl of CombinerSerDesIn is
       );
    end component;
 
+
+COMPONENT vio_0
+  PORT (
+    clk : IN STD_LOGIC;
+    probe_out0 : OUT STD_LOGIC_VECTOR(13 DOWNTO 0);
+    probe_out1 : OUT STD_LOGIC_VECTOR(13 DOWNTO 0);
+    probe_out2 : OUT STD_LOGIC_VECTOR(5 DOWNTO 0);
+    probe_out3 : OUT STD_LOGIC_VECTOR(5 DOWNTO 0);
+    probe_out4 : OUT STD_LOGIC_VECTOR(5 DOWNTO 0);
+    probe_out5 : OUT STD_LOGIC_VECTOR(1 DOWNTO 0);
+    probe_out6 : OUT STD_LOGIC_VECTOR(8 DOWNTO 0);
+    probe_out7 : OUT STD_LOGIC_VECTOR(23 DOWNTO 0);
+    probe_out8 : OUT STD_LOGIC_VECTOR(13 DOWNTO 0)
+  );
+END COMPONENT;
+
+
    constant CLOCK             : natural := PORTS-1;
 
    signal   SyncRst           : SLV16 := (others=>'1');
@@ -109,22 +134,36 @@ architecture rtl of CombinerSerDesIn is
             DataIn2           : std_logic_vector(PORTS-2 downto 0);
    signal   ClkIn1,
             ClkIn2,
-            ClkInX1,
+            ClkX1,
             ClkNx,
             Clk200M,
             ClkStopped200,
             ClkStoppedXn,
             ResetPll,
+            Reset1,
+            Reset2,
             DelayLocked1,
             DelayLocked2,
             LockedXn,
             Lock200           : std_logic;
+   signal   Tap1,
+            Tap2              : std_logic_vector(4 downto 0);
    signal   Demux1,
             Demux2            : SLV8_ARRAY(PORTS-1 downto 0);
    signal   ChOut1,
             ChOut2            : std_logic_vector ((PORTS*8)-1 downto 0);
-   signal   Count1,
-            Count2            : UINT8 := x"00";
+   signal   Count             : UINT8 := x"00";
+   signal   tapOut1, tapOut2  : std_logic_vector(29 downto 0);
+
+   attribute MARK_DEBUG : string;
+   attribute MARK_DEBUG of tapOut1, tapOut2,
+            Demux1, Demux2, Count, LockedXn, Lock200, ChBitSlip1, ChBitSlip2,
+            ClkStopped200, ClkStoppedXn, ResetPll, DelayLocked1, DelayLocked2 : signal is "TRUE";
+   SIGNAL   probe_out0,
+            probe_out1     : STD_LOGIC_VECTOR(13 DOWNTO 0);
+   signal   probe_out7     : STD_LOGIC_VECTOR(23 DOWNTO 0);
+   signal   probe_out8     : STD_LOGIC_VECTOR(13 DOWNTO 0);
+
 
 begin
 
@@ -133,7 +172,7 @@ begin
       DataBuf1 : IBUFDS
          generic map (
             DIFF_TERM      => TRUE, -- Differential Termination
-            IBUF_LOW_PWR   => TRUE, -- Low power (TRUE) vs. performance (FALSE) setting for referenced I/O standards
+            IBUF_LOW_PWR   => FALSE, -- Low power (TRUE) vs. performance (FALSE) setting for referenced I/O standards
             IOSTANDARD     => "LVDS")
          port map (
             I  => DataIn1_p(n),
@@ -144,7 +183,7 @@ begin
       DataBuf2 : IBUFDS
          generic map (
             DIFF_TERM      => TRUE, -- Differential Termination
-            IBUF_LOW_PWR   => TRUE, -- Low power (TRUE) vs. performance (FALSE) setting for referenced I/O standards
+            IBUF_LOW_PWR   => FALSE, -- Low power (TRUE) vs. performance (FALSE) setting for referenced I/O standards
             IOSTANDARD     => "LVDS")
          port map (
             I  => DataIn2_p(n),
@@ -156,7 +195,7 @@ begin
    ClkBuf1 : IBUFDS
       generic map (
          DIFF_TERM      => TRUE, -- Differential Termination
-         IBUF_LOW_PWR   => TRUE, -- Low power (TRUE) vs. performance (FALSE) setting for referenced I/O standards
+         IBUF_LOW_PWR   => FALSE, -- Low power (TRUE) vs. performance (FALSE) setting for referenced I/O standards
          IOSTANDARD     => "LVDS")
       port map (
          I  => ClkIn1_p,
@@ -167,7 +206,7 @@ begin
    ClkBuf2 : IBUFDS
       generic map (
          DIFF_TERM      => TRUE, -- Differential Termination
-         IBUF_LOW_PWR   => TRUE, -- Low power (TRUE) vs. performance (FALSE) setting for referenced I/O standards
+         IBUF_LOW_PWR   => FALSE, -- Low power (TRUE) vs. performance (FALSE) setting for referenced I/O standards
          IOSTANDARD     => "LVDS")
       port map (
          I  => ClkIn2_p,
@@ -192,7 +231,7 @@ begin
          reset             => ResetPll,
          locked            => LockedXn,
          input_clk_stopped => ClkStoppedXn,
-         clk_1x            => ClkInX1,
+         clk_1x            => ClkX1,
          clk_Nx            => ClkNx
     );
 
@@ -215,9 +254,15 @@ begin
        port map
       (
          clk_in               => ClkNx,
-         clk_div_in           => ClkInX1,
+         clk_div_in           => ClkX1,
          io_reset             => SyncRst(SyncRst'left),
          ref_clock            => Clk200M,
+
+         in_delay_reset    => Reset1,
+         in_delay_data_ce  => "000000",
+         in_delay_data_inc => "000000",
+         in_delay_tap_in   => Tap1 & Tap1 & Tap1 & Tap1 & Tap1 & Tap1,
+         in_delay_tap_out  => tapOut1,
 
          data_in_from_pins    => ClkIn1 & DataIn1(PORTS-2 downto 0),
          bitslip              => ChBitSlip1,
@@ -233,9 +278,15 @@ begin
        port map
       (
          clk_in               => ClkNx,
-         clk_div_in           => ClkInX1,
+         clk_div_in           => ClkX1,
          io_reset             => SyncRst(SyncRst'left),
          ref_clock            => Clk200M,
+
+         in_delay_reset    => Reset2,
+         in_delay_data_ce  => "000000",
+         in_delay_data_inc => "000000",
+         in_delay_tap_in   => Tap2 & Tap2 & Tap2 & Tap2 & Tap2 & Tap2,
+         in_delay_tap_out  => tapOut2,
 
          data_in_from_pins    => ClkIn2 & DataIn2(PORTS-2 downto 0),
          bitslip              => ChBitSlip2,
@@ -243,50 +294,80 @@ begin
          delay_locked         => DelayLocked2
       );
 
-   DeInterlace1 : process(ClkInX1)
+   DeInterlace1 : process(ClkX1)
    begin
-      if (rising_edge(ClkInX1)) then
+      if (rising_edge(ClkX1)) then
          for ch in 0 to PORTS-1 loop
             for bits in 0 to 7 loop
                Demux1(ch)(bits) <= ChOut1((42+ch)-((7-bits)*6));
             end loop;
          end loop;
-         if (Demux1(CLOCK)(7 downto 1) = "0000111") then
-            Count1 <= x"00";
-            ChBitSlip1 <= (others=>'0');
-         elsif (Count1 < 15) then
-            Count1 <= Count1 + 1;
+
+         if (Count < 15) then
+            Count <= Count + 1;
+         else
+            Count <= x"00";
+         end if;
+
+         if (Count < 15) then
+            Reset1 <= '0';
+         else
+            Reset1 <= (tapOut1(4 downto 0) ?/= Tap1);
+         end if;
+
+         if ((Demux1(CLOCK) = probe_out7(7 downto 0)) or (Count < 15)) then
             ChBitSlip1 <= (others=>'0');
          else
-            Count1 <= x"00";
             ChBitSlip1 <= (others=>'1');
          end if;
+
       end if;
    end process;
 
    DataOut1   <= Demux1(4 downto 0);
 
-   DeInterlace2 : process(ClkInX1)
+   DeInterlace2 : process(ClkX1)
    begin
-      if (rising_edge(ClkInX1)) then
+      if (rising_edge(ClkX1)) then
          for ch in 0 to PORTS-1 loop
             for bits in 0 to 7 loop
                Demux2(ch)(bits) <= ChOut2((42+ch)-((7-bits)*6));
             end loop;
          end loop;
-         if (Demux2(CLOCK)(7 downto 1) = "0000111") then
-            Count2 <= x"00";
-            ChBitSlip2 <= (others=>'0');
-         elsif (Count2 < 15) then
-            Count2 <= Count2 + 1;
+
+         if (Count < 15) then
+            Reset2 <= '0';
+         else
+            Reset2 <= (tapOut2(4 downto 0) ?/= Tap2);
+         end if;
+
+         if ((Demux2(CLOCK) = probe_out8(7 downto 0)) or (Count < 15)) then
             ChBitSlip2 <= (others=>'0');
          else
-            Count2 <= x"00";
             ChBitSlip2 <= (others=>'1');
          end if;
+
       end if;
    end process;
 
    DataOut2   <= Demux2(4 downto 0);
+
+
+   CombVio : vio_0
+  PORT MAP (
+    clk        => ClkX1,
+    probe_out0 => probe_out0,
+    probe_out1 => probe_out1,
+    probe_out2 => open,
+    probe_out3 => open,
+    probe_out4 => open,
+    probe_out5 => open,
+    probe_out6 => open,
+    probe_out7 => probe_out7,
+    probe_out8 => probe_out8
+  );
+
+  Tap1 <= probe_out0(4 downto 0);
+  Tap2 <= probe_out1(4 downto 0);
 
 end rtl;

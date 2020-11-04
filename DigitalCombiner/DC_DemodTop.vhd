@@ -60,14 +60,14 @@ ENTITY DC_DemodTop IS
       FPGA_ID0,
       FPGA_ID1,
       BS_PllOut         : IN std_logic;
-      PrevDataIO_p,
-      PrevDataIO_n,
-      NextDataIO_p,
-      NextDataIO_n      : OUT std_logic_vector(PORTS-1 downto 0);
-      NextClkIO_p,
-      NextClkIO_n,
-      PrevClkIO_p,
-      PrevClkIO_n       : OUT std_logic;
+      PrevData_p,
+      PrevData_n,
+      NextData_p,
+      NextData_n      : OUT std_logic_vector(PORTS-1 downto 0);
+      NextClk_p,
+      NextClk_n,
+      PrevClk_p,
+      PrevClk_n       : OUT std_logic;
       adc0,
       MonData,
       BS_Data           : IN  std_logic_vector(13 downto 0);
@@ -146,11 +146,27 @@ ARCHITECTURE rtl OF DC_DemodTop IS
       );
   end component DemodSerDesOut;
 
+COMPONENT vio_0
+  PORT (
+    clk : IN STD_LOGIC;
+    probe_out0 : OUT STD_LOGIC_VECTOR(13 DOWNTO 0);
+    probe_out1 : OUT STD_LOGIC_VECTOR(13 DOWNTO 0);
+    probe_out2 : OUT STD_LOGIC_VECTOR(5 DOWNTO 0);
+    probe_out3 : OUT STD_LOGIC_VECTOR(5 DOWNTO 0);
+    probe_out4 : OUT STD_LOGIC_VECTOR(5 DOWNTO 0);
+    probe_out5 : OUT STD_LOGIC_VECTOR(1 DOWNTO 0);
+    probe_out6 : OUT STD_LOGIC_VECTOR(8 DOWNTO 0);
+    probe_out7 : OUT STD_LOGIC_VECTOR(23 DOWNTO 0);
+    probe_out8 : OUT STD_LOGIC_VECTOR(13 DOWNTO 0)
+  );
+END COMPONENT;
+
    constant CHANNEL_1         : std_logic_vector(1 downto 0) := "00";
    constant CHANNEL_2         : std_logic_vector(1 downto 0) := "01";
    constant COMBINER          : std_logic_vector(1 downto 0) := "10";
 
   -- Signals
+   SIGNAL   reset          : std_logic;
    SIGNAL   probe_out0,
             probe_out1,
             probe_out8,
@@ -173,7 +189,8 @@ ARCHITECTURE rtl OF DC_DemodTop IS
             SinSF,
             GainSF         : sfixed(0 downto -13);
    signal   SysRst         : std_logic_vector(3 downto 0) := (others=>'1');
-   signal   ID             : std_logic_vector(1 downto 0);
+   signal   ID,
+            probe_out5     : std_logic_vector(1 downto 0);
    signal   TxData         : UINT8_ARRAY(PORTS - 1 downto 0);
    signal   TxData1,
             TxData2        : SLV8_ARRAY(PORTS - 1 downto 0);
@@ -199,31 +216,42 @@ ARCHITECTURE rtl OF DC_DemodTop IS
             dac0_clk, dac1_clk, dac_rst, dac0_nCs, dac1_nCs,
             dac_sclk, dac_sdio, dac0_d, dac1_d : signal is "LVCMOS18";
 
+                  signal Shift : SLV16;
+                  constant Invert1 : std_logic_vector(4 downto 0) := "11000";
+                  constant Invert2 : std_logic_vector(4 downto 0) := "11001";
+
+   attribute MARK_DEBUG : string;
+   attribute MARK_DEBUG of Shift : signal is "TRUE";
+
+
 BEGIN
 
    SysRstProcess : process(MonClk)
    begin
       if (rising_edge(MonClk)) then
-         SysRst <= SysRst(2 downto 0) & '0';
+         SysRst <= SysRst(SysRst'left-1 downto 0) & '0';
       end if;
    end process SysRstProcess;
 
    IF_Clk_process : process(MonClk)
    begin
       if (rising_edge(MonClk)) then
-         if (SysRst(SysRst'left)) then
+         reset <= SysRst(SysRst'left);
+         if (reset) then
             TxData(0) <= x"11";
             TxData(1) <= x"22";
             TxData(2) <= x"33";
             TxData(3) <= x"44";
             TxData(4) <= x"55";
+            Shift     <= x"0003";
          else
+            Shift  <= Shift(14 downto 0) & Shift(15);
             DivBy4 <= DivBy4 + 1;
-            if (DivBy4 = 3) then
+ --           if (DivBy4 = 3) then
                for ch in 0 to PORTS-1 loop
                   TxData(ch) <= TxData(ch) + 1;
                end loop;
-            end if;
+ --           end if;
          end if;
       end if;
    end process IF_Clk_process;
@@ -244,27 +272,75 @@ BEGIN
       )
       Port MAP(
          Clk93M      => MonClk,
-         Reset       => SysRst(SysRst'left),
+         Reset       => reset,
          Active      => (ID ?= CHANNEL_1),
          TxData      => TxData1,
-         DataOut_p   => PrevDataIO_p,
-         DataOut_n   => PrevDataIO_n,
-         RefClkOut_p => PrevClkIO_p,
-         RefClkOut_n => PrevClkIO_n
+         DataOut_p   => PrevData_p,
+         DataOut_n   => PrevData_n,
+         RefClkOut_p => PrevClk_p,
+         RefClkOut_n => PrevClk_n
       );
+
   Ch2SerDes : DemodSerDesOut
       Generic Map(
          PORTS    => PORTS
       )
       Port MAP(
          Clk93M      => MonClk,
-         Reset       => SysRst(SysRst'left),
+         Reset       => reset,
          Active      => (ID ?= CHANNEL_2),
          TxData      => TxData2,
-         DataOut_p   => NextDataIO_p,
-         DataOut_n   => NextDataIO_n,
-         RefClkOut_p => NextClkIO_p,
-         RefClkOut_n => NextClkIO_n
+         DataOut_p   => NextData_p,
+         DataOut_n   => NextData_n,
+         RefClkOut_p => NextClk_p,
+         RefClkOut_n => NextClk_n
       );
 
+/*
+   Diff1 : for n in 0 to PORTS-1 generate
+   begin
+      DataBuf1 : OBUFDS
+         generic map (
+            SLEW        => "SLOW",
+            IOSTANDARD  => "LVDS")
+         port map (
+            O  => PrevData_p(n),
+            OB => PrevData_n(n),
+            I  => Shift(n) xor Invert1(n)
+         );
+   end generate;
+
+   ClkBuf1 : OBUFDS
+      generic map (
+         SLEW        => "SLOW",
+         IOSTANDARD  => "LVDS")
+      port map (
+         O  => PrevClk_p,
+         OB => PrevClk_n,
+         I  => not Shift(5)
+      );
+
+   Diff2 : for n in 0 to PORTS-1 generate
+   begin
+      DataBuf2 : OBUFDS
+         generic map (
+            SLEW        => "SLOW",
+            IOSTANDARD  => "LVDS")
+         port map (
+            O  => NextData_p(n),
+            OB => NextData_n(n),
+            I  => Shift(n+7) xor Invert2(n)
+         );
+   end generate;
+
+   ClkBuf2 : OBUFDS
+      generic map (
+         SLEW        => "SLOW",
+         IOSTANDARD  => "LVDS")
+      port map (
+         O  => NextClk_p,
+         OB => NextClk_n,
+         I  => Shift(12)
+      );
+*/
 END rtl;

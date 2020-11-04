@@ -60,14 +60,14 @@ ENTITY DC_CombinerTop IS
       FPGA_ID0,
       FPGA_ID1,
       BS_PllOut         : IN std_logic;
-      PrevDataIO_p,
-      PrevDataIO_n,
-      NextDataIO_p,
-      NextDataIO_n      : IN std_logic_vector(PORTS-1 downto 0);
-      NextClkIO_p,
-      NextClkIO_n,
-      PrevClkIO_p,
-      PrevClkIO_n       : IN std_logic;
+      PrevData_p,
+      PrevData_n,
+      NextData_p,
+      NextData_n      : IN std_logic_vector(PORTS-1 downto 0);
+      NextClk_p,
+      NextClk_n,
+      PrevClk_p,
+      PrevClk_n       : IN std_logic;
       adc0,
       MonData,
       BS_Data           : IN  std_logic_vector(13 downto 0);
@@ -154,6 +154,10 @@ ARCHITECTURE rtl OF DC_CombinerTop IS
    COMPONENT vio_0
       PORT (
          clk : IN STD_LOGIC;
+         probe_in0  : IN STD_LOGIC_VECTOR(5 DOWNTO 0);
+         probe_in1  : IN STD_LOGIC_VECTOR(5 DOWNTO 0);
+         probe_in2  : IN STD_LOGIC_VECTOR(5 DOWNTO 0);
+         probe_in3  : IN STD_LOGIC_VECTOR(5 DOWNTO 0);
          probe_out0 : OUT STD_LOGIC_VECTOR(13 DOWNTO 0);
          probe_out1 : OUT STD_LOGIC_VECTOR(13 DOWNTO 0);
          probe_out2 : OUT STD_LOGIC_VECTOR(5 DOWNTO 0);
@@ -177,7 +181,11 @@ ARCHITECTURE rtl OF DC_CombinerTop IS
             probe_out8Reg,
             NcoSine,
             NcoCos         : STD_LOGIC_VECTOR(13 DOWNTO 0);
-   SIGNAL   probe_out2,
+   SIGNAL   probe_in0,
+            probe_in1,
+            probe_in2,
+            probe_in3,
+            probe_out2,
             probe_out3,
             probe_out4,
             probe_out2Reg,
@@ -195,6 +203,8 @@ ARCHITECTURE rtl OF DC_CombinerTop IS
             TxData2        : SLV8_ARRAY(PORTS - 1 downto 0);
    signal   Ch1Data,
             Ch2Data        : SLV8_Array(PORTS-1 downto 0);
+
+            signal LockPll, ClkStoppedXn, Clk1x, ClkNx : std_logic;
 
    attribute IOSTANDARD    : string;
    attribute IOSTANDARD of spiCSn, spiDataIn, spiDataOut, spiClk,
@@ -215,11 +225,6 @@ ARCHITECTURE rtl OF DC_CombinerTop IS
             BS_I2C_SCl, BS_I2C_SDa,
             dac0_clk, dac1_clk, dac_rst, dac0_nCs, dac1_nCs,
             dac_sclk, dac_sdio, dac0_d, dac1_d : signal is "LVCMOS18";
-
-   attribute MARK_DEBUG : string;
-   attribute MARK_DEBUG of
-            Ch1Data, Ch2Data,
-            dac0_d, dac1_d : signal is "TRUE";
 
 BEGIN
 
@@ -249,33 +254,20 @@ BEGIN
       (
             Clk93M            => MonClk,
             Reset             => ResetDly(ResetDly'left),
-            ClkIn1_p          => PrevClkIO_p,
-            ClkIn1_n          => PrevClkIO_n,
-            DataIn1_p         => PrevDataIO_p,
-            DataIn1_n         => PrevDataIO_n,
+            ClkIn1_p          => PrevClk_p,
+            ClkIn1_n          => PrevClk_n,
+            DataIn1_p         => PrevData_p,
+            DataIn1_n         => PrevData_n,
             DataOut1          => Ch1Data,
-            ClkIn2_p          => NextClkIO_p,
-            ClkIn2_n          => NextClkIO_n,
-            DataIn2_p         => NextDataIO_p,
-            DataIn2_n         => NextDataIO_n,
+            ClkIn2_p          => NextClk_p,
+            ClkIn2_n          => NextClk_n,
+            DataIn2_p         => NextData_p,
+            DataIn2_n         => NextData_n,
             DataOut2          => Ch2Data
    );
-
-   CombinerVio : vio_0
-       PORT MAP (
-         clk => MonClk,
-         probe_out0 => probe_out0,
-         probe_out1 => probe_out1,
-         probe_out2 => probe_out2,
-         probe_out3 => probe_out3,
-         probe_out4 => probe_out4,
-         probe_out5 => probe_out5,
-         probe_out6 => probe_out6,
-         probe_out7 => probe_out7,
-         probe_out8 => probe_out8
-       );
-
+/*
    dac0_d <= Ch1Data(to_integer(unsigned(probe_out0))) & 6x"0";
    dac1_d <= Ch2Data(to_integer(unsigned(probe_out0))) & 6x"0";
 
+*/
 END rtl;
