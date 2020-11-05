@@ -567,15 +567,31 @@ PcbDelayIn1_n <= (others=>'X') when (XX = 'X') else ChPrevData_n;
 PcbDelayIn2_p <= (others=>'X') when (XX = 'X') else ChNextData_p;
 PcbDelayIn2_n <= (others=>'X') when (XX = 'X') else ChNextData_n;
 
-CmbDataIn1_p <= (PcbDelayIn1_p) after CH1DELAY;
-CmbDataIn1_n <= (PcbDelayIn1_n) after CH1DELAY;
-CmbClkIn1_p  <= (PrevClk_p)   after CH1DELAY;
-CmbClkIn1_n  <= (PrevClk_n)   after CH1DELAY;
+CmbDataIn1_p(0) <= PcbDelayIn1_p(0) after CH1DELAY;
+CmbDataIn1_n(0) <= PcbDelayIn1_n(0) after CH1DELAY;
+CmbDataIn1_p(1) <= PcbDelayIn1_p(1) after CH1DELAY;
+CmbDataIn1_n(1) <= PcbDelayIn1_n(1) after CH1DELAY;
+CmbDataIn1_p(2) <= PcbDelayIn1_p(2) after CH1DELAY;
+CmbDataIn1_n(2) <= PcbDelayIn1_n(2) after CH1DELAY;
+CmbDataIn1_p(3) <= PcbDelayIn1_n(3) after CH1DELAY;
+CmbDataIn1_n(3) <= PcbDelayIn1_p(3) after CH1DELAY;
+CmbDataIn1_p(4) <= PcbDelayIn1_n(4) after CH1DELAY;
+CmbDataIn1_n(4) <= PcbDelayIn1_p(4) after CH1DELAY;
+CmbClkIn1_p     <= PrevClk_n        after CH1DELAY;
+CmbClkIn1_n     <= PrevClk_p        after CH1DELAY;
 
-CmbDataIn2_p <= (PcbDelayIn2_p) after CH2DELAY;
-CmbDataIn2_n <= (PcbDelayIn2_n) after CH2DELAY;
-CmbClkIn2_p  <= (NextClk_p)   after CH2DELAY;
-CmbClkIn2_n  <= (NextClk_n)   after CH2DELAY;
+CmbDataIn2_p(0) <= PcbDelayIn2_n(0) after CH2DELAY;
+CmbDataIn2_n(0) <= PcbDelayIn2_p(0) after CH2DELAY;
+CmbDataIn2_p(1) <= PcbDelayIn2_p(1) after CH2DELAY;
+CmbDataIn2_n(1) <= PcbDelayIn2_n(1) after CH2DELAY;
+CmbDataIn2_p(2) <= PcbDelayIn2_p(2) after CH2DELAY;
+CmbDataIn2_n(2) <= PcbDelayIn2_n(2) after CH2DELAY;
+CmbDataIn2_p(3) <= PcbDelayIn2_n(3) after CH2DELAY;
+CmbDataIn2_n(3) <= PcbDelayIn2_p(3) after CH2DELAY;
+CmbDataIn2_p(4) <= PcbDelayIn2_n(4) after CH2DELAY;
+CmbDataIn2_n(4) <= PcbDelayIn2_p(4) after CH2DELAY;
+CmbClkIn2_p     <= NextClk_p        after CH2DELAY;
+CmbClkIn2_n     <= NextClk_n        after CH2DELAY;
 
 
 end rtl;

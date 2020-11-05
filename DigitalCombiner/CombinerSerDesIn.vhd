@@ -72,14 +72,6 @@ architecture rtl of CombinerSerDesIn is
         ref_clock               : in    std_logic;                         -- Reference Clock for IDELAYCTRL. Has to come from BUFG.
         bitslip                 : in    std_logic_vector(SYS_W-1 downto 0);    -- Bitslip module is enabled in NETWORKING mode
                                                                            -- User should tie it to '0' if not needed
-
-        -- Input, Output delay control signals
-        in_delay_reset          : in    std_logic;                    -- Active high synchronous reset for input delay
-        in_delay_data_ce        : in    std_logic_vector(SYS_W -1 downto 0);                    -- Enable signal for delay
-        in_delay_data_inc       : in    std_logic_vector(SYS_W -1 downto 0);                    -- Delay increment (high), decrement (low) signal
-        in_delay_tap_in         : in    std_logic_vector(5*SYS_W -1 downto 0); -- Dynamically loadable delay tap value for input delay
-        in_delay_tap_out        : out   std_logic_vector(5*SYS_W -1 downto 0); -- Delay tap value for monitoring input delay
-
       -- Clock and reset signals
         clk_div_in,                                                        -- Slow clock output
         io_reset,
@@ -108,23 +100,6 @@ architecture rtl of CombinerSerDesIn is
       );
    end component;
 
-
-COMPONENT vio_0
-  PORT (
-    clk : IN STD_LOGIC;
-    probe_out0 : OUT STD_LOGIC_VECTOR(13 DOWNTO 0);
-    probe_out1 : OUT STD_LOGIC_VECTOR(13 DOWNTO 0);
-    probe_out2 : OUT STD_LOGIC_VECTOR(5 DOWNTO 0);
-    probe_out3 : OUT STD_LOGIC_VECTOR(5 DOWNTO 0);
-    probe_out4 : OUT STD_LOGIC_VECTOR(5 DOWNTO 0);
-    probe_out5 : OUT STD_LOGIC_VECTOR(1 DOWNTO 0);
-    probe_out6 : OUT STD_LOGIC_VECTOR(8 DOWNTO 0);
-    probe_out7 : OUT STD_LOGIC_VECTOR(23 DOWNTO 0);
-    probe_out8 : OUT STD_LOGIC_VECTOR(13 DOWNTO 0)
-  );
-END COMPONENT;
-
-
    constant CLOCK             : natural := PORTS-1;
 
    signal   SyncRst           : SLV16 := (others=>'1');
@@ -140,30 +115,20 @@ END COMPONENT;
             ClkStopped200,
             ClkStoppedXn,
             ResetPll,
-            Reset1,
-            Reset2,
             DelayLocked1,
             DelayLocked2,
             LockedXn,
             Lock200           : std_logic;
-   signal   Tap1,
-            Tap2              : std_logic_vector(4 downto 0);
    signal   Demux1,
             Demux2            : SLV8_ARRAY(PORTS-1 downto 0);
    signal   ChOut1,
             ChOut2            : std_logic_vector ((PORTS*8)-1 downto 0);
    signal   Count             : UINT8 := x"00";
-   signal   tapOut1, tapOut2  : std_logic_vector(29 downto 0);
 
    attribute MARK_DEBUG : string;
-   attribute MARK_DEBUG of tapOut1, tapOut2,
+   attribute MARK_DEBUG of
             Demux1, Demux2, Count, LockedXn, Lock200, ChBitSlip1, ChBitSlip2,
             ClkStopped200, ClkStoppedXn, ResetPll, DelayLocked1, DelayLocked2 : signal is "TRUE";
-   SIGNAL   probe_out0,
-            probe_out1     : STD_LOGIC_VECTOR(13 DOWNTO 0);
-   signal   probe_out7     : STD_LOGIC_VECTOR(23 DOWNTO 0);
-   signal   probe_out8     : STD_LOGIC_VECTOR(13 DOWNTO 0);
-
 
 begin
 
@@ -258,12 +223,6 @@ begin
          io_reset             => SyncRst(SyncRst'left),
          ref_clock            => Clk200M,
 
-         in_delay_reset    => Reset1,
-         in_delay_data_ce  => "000000",
-         in_delay_data_inc => "000000",
-         in_delay_tap_in   => Tap1 & Tap1 & Tap1 & Tap1 & Tap1 & Tap1,
-         in_delay_tap_out  => tapOut1,
-
          data_in_from_pins    => ClkIn1 & DataIn1(PORTS-2 downto 0),
          bitslip              => ChBitSlip1,
          data_in_to_device    => ChOut1,
@@ -282,12 +241,6 @@ begin
          io_reset             => SyncRst(SyncRst'left),
          ref_clock            => Clk200M,
 
-         in_delay_reset    => Reset2,
-         in_delay_data_ce  => "000000",
-         in_delay_data_inc => "000000",
-         in_delay_tap_in   => Tap2 & Tap2 & Tap2 & Tap2 & Tap2 & Tap2,
-         in_delay_tap_out  => tapOut2,
-
          data_in_from_pins    => ClkIn2 & DataIn2(PORTS-2 downto 0),
          bitslip              => ChBitSlip2,
          data_in_to_device    => ChOut2,
@@ -298,9 +251,15 @@ begin
    begin
       if (rising_edge(ClkX1)) then
          for ch in 0 to PORTS-1 loop
-            for bits in 0 to 7 loop
-               Demux1(ch)(bits) <= ChOut1((42+ch)-((7-bits)*6));
-            end loop;
+            if ((ch = 3) or (ch = 4) or (ch = 5)) then   -- some traces got crossed in routing the PCB
+               for bits in 0 to 7 loop
+                  Demux1(ch)(bits) <= not (ChOut1((42+ch)-((7-bits)*6)) );
+               end loop;
+            else
+               for bits in 0 to 7 loop
+                  Demux1(ch)(bits) <= ChOut1((42+ch)-((7-bits)*6));
+               end loop;
+            end if;
          end loop;
 
          if (Count < 15) then
@@ -309,13 +268,7 @@ begin
             Count <= x"00";
          end if;
 
-         if (Count < 15) then
-            Reset1 <= '0';
-         else
-            Reset1 <= (tapOut1(4 downto 0) ?/= Tap1);
-         end if;
-
-         if ((Demux1(CLOCK) = probe_out7(7 downto 0)) or (Count < 15)) then
+         if ((Demux1(CLOCK) = x"0F") or (Count < 15)) then  -- Clock 1 is inverted
             ChBitSlip1 <= (others=>'0');
          else
             ChBitSlip1 <= (others=>'1');
@@ -330,18 +283,18 @@ begin
    begin
       if (rising_edge(ClkX1)) then
          for ch in 0 to PORTS-1 loop
-            for bits in 0 to 7 loop
-               Demux2(ch)(bits) <= ChOut2((42+ch)-((7-bits)*6));
-            end loop;
+            if ((ch = 0) or (ch = 3) or (ch = 4)) then
+               for bits in 0 to 7 loop
+                  Demux2(ch)(bits) <= not( ChOut2((42+ch)-((7-bits)*6)));
+               end loop;
+            else
+               for bits in 0 to 7 loop
+                  Demux2(ch)(bits) <= ChOut2((42+ch)-((7-bits)*6));
+               end loop;
+            end if;
          end loop;
 
-         if (Count < 15) then
-            Reset2 <= '0';
-         else
-            Reset2 <= (tapOut2(4 downto 0) ?/= Tap2);
-         end if;
-
-         if ((Demux2(CLOCK) = probe_out8(7 downto 0)) or (Count < 15)) then
+         if ((Demux2(CLOCK) = x"0F") or (Count < 15)) then
             ChBitSlip2 <= (others=>'0');
          else
             ChBitSlip2 <= (others=>'1');
@@ -351,23 +304,5 @@ begin
    end process;
 
    DataOut2   <= Demux2(4 downto 0);
-
-
-   CombVio : vio_0
-  PORT MAP (
-    clk        => ClkX1,
-    probe_out0 => probe_out0,
-    probe_out1 => probe_out1,
-    probe_out2 => open,
-    probe_out3 => open,
-    probe_out4 => open,
-    probe_out5 => open,
-    probe_out6 => open,
-    probe_out7 => probe_out7,
-    probe_out8 => probe_out8
-  );
-
-  Tap1 <= probe_out0(4 downto 0);
-  Tap2 <= probe_out1(4 downto 0);
 
 end rtl;

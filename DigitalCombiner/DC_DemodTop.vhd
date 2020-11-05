@@ -146,6 +146,8 @@ ARCHITECTURE rtl OF DC_DemodTop IS
       );
   end component DemodSerDesOut;
 
+
+
 COMPONENT vio_0
   PORT (
     clk : IN STD_LOGIC;
@@ -160,6 +162,8 @@ COMPONENT vio_0
     probe_out8 : OUT STD_LOGIC_VECTOR(13 DOWNTO 0)
   );
 END COMPONENT;
+
+
 
    constant CHANNEL_1         : std_logic_vector(1 downto 0) := "00";
    constant CHANNEL_2         : std_logic_vector(1 downto 0) := "01";
@@ -195,6 +199,7 @@ END COMPONENT;
    signal   TxData1,
             TxData2        : SLV8_ARRAY(PORTS - 1 downto 0);
    signal   DivBy4         : unsigned(1 downto 0) := "00";
+   signal   Diff           : UINT8;
 
    attribute IOSTANDARD    : string;
    attribute IOSTANDARD of spiCSn, spiDataIn, spiDataOut, spiClk,
@@ -216,14 +221,6 @@ END COMPONENT;
             dac0_clk, dac1_clk, dac_rst, dac0_nCs, dac1_nCs,
             dac_sclk, dac_sdio, dac0_d, dac1_d : signal is "LVCMOS18";
 
-                  signal Shift : SLV16;
-                  constant Invert1 : std_logic_vector(4 downto 0) := "11000";
-                  constant Invert2 : std_logic_vector(4 downto 0) := "11001";
-
-   attribute MARK_DEBUG : string;
-   attribute MARK_DEBUG of Shift : signal is "TRUE";
-
-
 BEGIN
 
    SysRstProcess : process(MonClk)
@@ -243,15 +240,19 @@ BEGIN
             TxData(2) <= x"33";
             TxData(3) <= x"44";
             TxData(4) <= x"55";
-            Shift     <= x"0003";
          else
-            Shift  <= Shift(14 downto 0) & Shift(15);
-            DivBy4 <= DivBy4 + 1;
- --           if (DivBy4 = 3) then
-               for ch in 0 to PORTS-1 loop
-                  TxData(ch) <= TxData(ch) + 1;
+            if (TxData(0) < 255) then
+               TxData(0) <= TxData(0) + 1;
+               for ch in 1 to PORTS-1 loop
+                  TxData(ch) <= TxData(ch-1) + x"11";
                end loop;
- --           end if;
+            else
+               TxData(0) <= x"11";
+               TxData(1) <= x"22";
+               TxData(2) <= x"33";
+               TxData(3) <= x"44";
+               TxData(4) <= x"55";
+            end if;
          end if;
       end if;
    end process IF_Clk_process;
@@ -296,51 +297,4 @@ BEGIN
          RefClkOut_n => NextClk_n
       );
 
-/*
-   Diff1 : for n in 0 to PORTS-1 generate
-   begin
-      DataBuf1 : OBUFDS
-         generic map (
-            SLEW        => "SLOW",
-            IOSTANDARD  => "LVDS")
-         port map (
-            O  => PrevData_p(n),
-            OB => PrevData_n(n),
-            I  => Shift(n) xor Invert1(n)
-         );
-   end generate;
-
-   ClkBuf1 : OBUFDS
-      generic map (
-         SLEW        => "SLOW",
-         IOSTANDARD  => "LVDS")
-      port map (
-         O  => PrevClk_p,
-         OB => PrevClk_n,
-         I  => not Shift(5)
-      );
-
-   Diff2 : for n in 0 to PORTS-1 generate
-   begin
-      DataBuf2 : OBUFDS
-         generic map (
-            SLEW        => "SLOW",
-            IOSTANDARD  => "LVDS")
-         port map (
-            O  => NextData_p(n),
-            OB => NextData_n(n),
-            I  => Shift(n+7) xor Invert2(n)
-         );
-   end generate;
-
-   ClkBuf2 : OBUFDS
-      generic map (
-         SLEW        => "SLOW",
-         IOSTANDARD  => "LVDS")
-      port map (
-         O  => NextClk_p,
-         OB => NextClk_n,
-         I  => Shift(12)
-      );
-*/
 END rtl;
