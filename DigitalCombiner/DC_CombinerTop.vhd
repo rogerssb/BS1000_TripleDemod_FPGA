@@ -35,7 +35,6 @@ Dependencies:
 LIBRARY IEEE;
 USE IEEE.std_logic_1164.ALL;
 USE IEEE.numeric_std.ALL;
-use work.fixed_pkg.ALL;
 use work.Semco_pkg.all;
 Library UNISIM;
 use UNISIM.vcomponents.all;
@@ -49,8 +48,11 @@ ENTITY DC_CombinerTop IS
       adc0Clk,
       MonOvf,
       MonClk,
-      BS_Ovf,
-      BS_Clk,
+
+      DdsPdClk,
+      DdsSyncClk,
+      DdsMiso,
+
       amAdcDataIn,
       spiCSn,
       spiDataOut,
@@ -58,19 +60,17 @@ ENTITY DC_CombinerTop IS
       pll0_OUT1,
       pll1_OUT1,
       FPGA_ID0,
-      FPGA_ID1,
-      BS_PllOut         : IN std_logic;
+      FPGA_ID1          : IN std_logic;
       PrevData_p,
       PrevData_n,
       NextData_p,
-      NextData_n      : IN std_logic_vector(PORTS-1 downto 0);
+      NextData_n        : IN std_logic_vector(PORTS-1 downto 0);
       NextClk_p,
       NextClk_n,
       PrevClk_p,
-      PrevClk_n       : IN std_logic;
+      PrevClk_n         : IN std_logic;
       adc0,
-      MonData,
-      BS_Data           : IN  std_logic_vector(13 downto 0);
+      MonData           : IN  SLV18;
 
       video0InSelect,
       video1InSelect,
@@ -79,8 +79,16 @@ ENTITY DC_CombinerTop IS
       VidSel            : OUT std_logic_vector(2 downto 0);
       dac0_d,
       dac1_d            : OUT std_logic_vector(13 downto 0);
-      BS_I2C_SCl,
-      BS_I2C_SDa        : INOUT std_logic;
+
+      DdsData           : OUT SLV18;
+      DdsCS_n,
+      DdsIO_Reset,
+      DdsTxEn,
+      DdsMosi,
+      DdsRT,
+      DdsSClk,
+      DdsIO_Update,
+      DdsReset          : OUT std_logic;
 
       ADC_Sync,
       ADC_SDIO,
@@ -88,16 +96,6 @@ ENTITY DC_CombinerTop IS
       ADC_CS_n,
       ADC_OE_n,
       adc01_powerDown,
-      BS_ADC_LowZ,
-      BS_ADC_PwrDn,
-      BS_ADC_SE,
-      BS_ADC_SClk,
-      BS_ADC_CS_n,
-      BS_ADC_SDIO,
-      BS_RefPll,
-      BS_DAC_Sel_n,
-      BS_DAC_SClk,
-      BS_DAC_MOSI,
       amAdcClk,
       amAdcCSn,
       spiDataIn,
@@ -216,13 +214,10 @@ ARCHITECTURE rtl OF DC_CombinerTop IS
             amDacCSn, amDacClk, amDacDataOut : signal is "LVCMOS33";
 
    attribute IOSTANDARD of adc0_overflow, adc0Clk, adc0,
-            MonOvf, MonClk, MonData,
-            BS_Ovf, BS_Clk, BS_Data,
+            MonOvf, MonClk, MonData, DdsData,
             ADC_Sync, ADC_SDIO, ADC_SClk, ADC_CS_n, ADC_OE_n, adc01_powerDown,
-            BS_ADC_LowZ, BS_ADC_PwrDn, BS_ADC_SE, BS_ADC_SClk, BS_ADC_CS_n, BS_ADC_SDIO,
-            BS_DAC_Sel_n, BS_DAC_SClk, BS_DAC_MOSI,
-            BS_PllOut, BS_RefPll,
-            BS_I2C_SCl, BS_I2C_SDa,
+            DdsIO_Reset, DdsMiso, DdsSyncClk, DdsTxEn, DdsPdClk, DdsMosi,
+            DdsRT, DdsSClk, DdsCS_n, DdsIO_Update, DdsReset,
             dac0_clk, dac1_clk, dac_rst, dac0_nCs, dac1_nCs,
             dac_sclk, dac_sdio, dac0_d, dac1_d : signal is "LVCMOS18";
 
@@ -244,7 +239,7 @@ BEGIN
          ResetDly <= ResetDly(ResetDly'left-1 downto 0) & not FPGA_ID1;
       end if;
    end process;
-
+/*
    SerDes_u : CombinerSerDesIn
       Generic Map
       (
@@ -265,9 +260,28 @@ BEGIN
             DataIn2_n         => NextData_n,
             DataOut2          => Ch2Data
    );
+*/
+
 /*
    dac0_d <= Ch1Data(to_integer(unsigned(probe_out0))) & 6x"0";
    dac1_d <= Ch2Data(to_integer(unsigned(probe_out0))) & 6x"0";
 
 */
+
+   DdsProc : process(DdsPdClk)
+   begin
+      if (rising_edge(DdsPdClk)) then
+         DdsData        <= DdsData(16 downto 0) & DdsCS_n    ;
+      end if;
+   end process;
+
+      DdsCS_n        <= DdsIO_Reset;
+      DdsIO_Reset    <= DdsTxEn    ;
+      DdsTxEn        <= DdsMosi    ;
+      DdsMosi        <= DdsRT      ;
+      DdsRT          <= DdsIO_Update   ;
+      DdsIO_Update   <= DdsReset   ;
+      DdsReset       <= MonClk;
+
+
 END rtl;
