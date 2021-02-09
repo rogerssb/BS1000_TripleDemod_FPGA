@@ -78,7 +78,7 @@
 `define ADD_MULTIH
 //`define ADD_LDPC
 `define ADD_DQM
-`define ADD_SUPERBAUD_TED
+//`define ADD_SUPERBAUD_TED
 `ifndef SIMULATE
 `define EMBED_MULTIH_CARRIER_LOOP
 `endif
@@ -375,7 +375,7 @@
         `define PNGEN_LDPC_RND_OFF      2'b00
         `define PNGEN_LDPC_RND_CCSDS    2'b01
         `define PNGEN_LDPC_RND_IRIG     2'b10
-        
+
 // Framesync subsystem registers
 `define FRAMER_SPACE            13'b1_00xx_0000_xxxx
     `define FRAMER_CONTROL          13'bx_xxxx_xxxx_00xx

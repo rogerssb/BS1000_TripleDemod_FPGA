@@ -1332,12 +1332,21 @@ module semcoDemodTop (
         .pllOutputClk(pll0_OUT1),
         .sourceSelect(cAndD0SourceSelect),
         .pllReferenceClk(pll0_REF),
-        .outputClk(ch0ClkOut),
+        .outputClk(cAndD0ClkOut),
         .outputData(cAndD0DataOut)
     );
+    //`define BYPASS_CANDD0
+    `ifdef BYPASS_CANDD0
+    assign ch0ClkOut = cAndD0ClkEn;
+    assign ch0DataOut = cAndD0DataIn[2];
+    assign ch2ClkOut = cAndD0ClkEn;
+    assign ch2DataOut = cAndD0DataIn[2];
+    `else
+    assign ch0ClkOut = cAndD0ClkOut;
     assign ch0DataOut = cAndD0DataOut[2];
-    assign ch2ClkOut = ch0ClkOut;
+    assign ch2ClkOut = cAndD0ClkOut;
     assign ch2DataOut = cAndD0DataOut[2];
+    `endif
 
     //----------------------- Channel 1 Jitter Attenuation --------------------
 
@@ -1434,11 +1443,17 @@ module semcoDemodTop (
         .outputClk(cAndD1ClkOut),
         .outputData(cAndD1DataOut)
     );
+    //`define BYPASS_CANDD1
     `ifdef TEST_LDPC
     assign ch1DataOut = ldpcBitOut;
     assign ch1ClkOut = ldpcBitEnOut;
     assign ch3ClkOut = cAndD1ClkOut;
     assign ch3DataOut = cAndD1DataOut[2];
+    `elif BYPASS_CANDD1
+    assign ch1ClkOut = cAndD1ClkEn;
+    assign ch1DataOut = cAndD1DataIn[2];
+    assign ch3ClkOut = cAndD1ClkEn;
+    assign ch3DataOut = cAndD1DataIn[2];
     `else
     assign ch1ClkOut = cAndD1ClkOut;
     assign ch1DataOut = cAndD1DataOut[2];

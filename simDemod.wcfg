@@ -11,15 +11,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="261752900000fs"></ZoomStartTime>
-      <ZoomEndTime time="1212752900001fs"></ZoomEndTime>
-      <Cursor1Time time="1054252900000fs"></Cursor1Time>
+      <ZoomStartTime time="56456916667fs"></ZoomStartTime>
+      <ZoomEndTime time="79558216667fs"></ZoomEndTime>
+      <Cursor1Time time="75708000000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="179"></NameColumnWidth>
-      <ValueColumnWidth column_width="104"></ValueColumnWidth>
+      <ValueColumnWidth column_width="102"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="33" />
+   <WVObjectSize size="34" />
    <wave_markers>
       <marker time="35140000000" label="" />
    </wave_markers>
@@ -246,6 +246,7 @@
    <wvobject fp_name="group59" type="group">
       <obj_property name="label">DDC</obj_property>
       <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
       <wvobject fp_name="/test/demod/ddc/micro/cs" type="logic">
          <obj_property name="ElementShortName">cs</obj_property>
          <obj_property name="ObjectShortName">cs</obj_property>
@@ -357,22 +358,6 @@
       <wvobject fp_name="/test/demod/ddc/nbAgcGain" type="array">
          <obj_property name="ElementShortName">nbAgcGain[20:0]</obj_property>
          <obj_property name="ObjectShortName">nbAgcGain[20:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/demod/ddc/iAgc" type="array">
-         <obj_property name="ElementShortName">iAgc[17:0]</obj_property>
-         <obj_property name="ObjectShortName">iAgc[17:0]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
-         <obj_property name="radix_fractionWidth">17</obj_property>
-         <obj_property name="radix_otherWidth">0</obj_property>
-         <obj_property name="CellHeight">100</obj_property>
-         <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
-         <obj_property name="AnalogYRangeMin">0.000000</obj_property>
-         <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
-         <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
-         <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
-         <obj_property name="AnalogHorizLine">0.000000</obj_property>
-         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
       </wvobject>
       <wvobject fp_name="/test/demod/ddc/iAgc" type="array">
          <obj_property name="ElementShortName">iAgc[17:0]</obj_property>
@@ -671,7 +656,6 @@
    <wvobject fp_name="group73" type="group">
       <obj_property name="label">Bitsync</obj_property>
       <obj_property name="DisplayName">label</obj_property>
-      <obj_property name="isExpanded"></obj_property>
       <wvobject fp_name="/test/demod/bitsync/sampleLoop/zeroError" type="logic">
          <obj_property name="ElementShortName">zeroError</obj_property>
          <obj_property name="ObjectShortName">zeroError</obj_property>
@@ -1196,7 +1180,6 @@
    <wvobject fp_name="group190" type="group">
       <obj_property name="label">Viterbi</obj_property>
       <obj_property name="DisplayName">label</obj_property>
-      <obj_property name="isExpanded"></obj_property>
       <wvobject fp_name="/test/sym2xEn" type="logic">
          <obj_property name="ElementShortName">sym2xEn</obj_property>
          <obj_property name="ObjectShortName">sym2xEn</obj_property>
@@ -1221,16 +1204,17 @@
          <obj_property name="AnalogHorizLine">0.000000</obj_property>
          <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
       </wvobject>
-      <wvobject fp_name="/test/viterbi/ch0SoftEn" type="logic">
-         <obj_property name="ElementShortName">ch0SoftEn</obj_property>
-         <obj_property name="ObjectShortName">ch0SoftEn</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/viterbi/ch0Soft" type="array">
-         <obj_property name="ElementShortName">ch0Soft[2:0]</obj_property>
-         <obj_property name="ObjectShortName">ch0Soft[2:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="group190" type="group">
+      <obj_property name="label">AGC</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/test/demod/channelAGC/iIn" type="array">
+         <obj_property name="ElementShortName">iIn[17:0]</obj_property>
+         <obj_property name="ObjectShortName">iIn[17:0]</obj_property>
          <obj_property name="Radix">REALRADIX</obj_property>
          <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
-         <obj_property name="radix_fractionWidth">2</obj_property>
+         <obj_property name="radix_fractionWidth">17</obj_property>
          <obj_property name="radix_otherWidth">0</obj_property>
          <obj_property name="CellHeight">100</obj_property>
          <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
@@ -1241,16 +1225,12 @@
          <obj_property name="AnalogHorizLine">0.000000</obj_property>
          <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
       </wvobject>
-      <wvobject fp_name="/test/viterbi/ch1SoftEn" type="logic">
-         <obj_property name="ElementShortName">ch1SoftEn</obj_property>
-         <obj_property name="ObjectShortName">ch1SoftEn</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/viterbi/ch1Soft" type="array">
-         <obj_property name="ElementShortName">ch1Soft[2:0]</obj_property>
-         <obj_property name="ObjectShortName">ch1Soft[2:0]</obj_property>
+      <wvobject fp_name="/test/demod/channelAGC/qIn" type="array">
+         <obj_property name="ElementShortName">qIn[17:0]</obj_property>
+         <obj_property name="ObjectShortName">qIn[17:0]</obj_property>
          <obj_property name="Radix">REALRADIX</obj_property>
          <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
-         <obj_property name="radix_fractionWidth">2</obj_property>
+         <obj_property name="radix_fractionWidth">17</obj_property>
          <obj_property name="radix_otherWidth">0</obj_property>
          <obj_property name="CellHeight">100</obj_property>
          <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
@@ -1261,22 +1241,21 @@
          <obj_property name="AnalogHorizLine">0.000000</obj_property>
          <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
       </wvobject>
-      <wvobject fp_name="/test/viterbi/ch0VitRdy" type="logic">
-         <obj_property name="ElementShortName">ch0VitRdy</obj_property>
-         <obj_property name="ObjectShortName">ch0VitRdy</obj_property>
+      <wvobject fp_name="/test/demod/channelAGC/sum" type="array">
+         <obj_property name="ElementShortName">sum[16:0]</obj_property>
+         <obj_property name="ObjectShortName">sum[16:0]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">UNSIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">16</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
       </wvobject>
-      <wvobject fp_name="/test/viterbi/ch0BerCount" type="array">
-         <obj_property name="ElementShortName">ch0BerCount[15:0]</obj_property>
-         <obj_property name="ObjectShortName">ch0BerCount[15:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/viterbi/ch0SyncState" type="array">
-         <obj_property name="ElementShortName">ch0SyncState[2:0]</obj_property>
-         <obj_property name="ObjectShortName">ch0SyncState[2:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/test/viterbi/ch0SprtAccum" type="array">
-         <obj_property name="ElementShortName">ch0SprtAccum[15:0]</obj_property>
-         <obj_property name="ObjectShortName">ch0SprtAccum[15:0]</obj_property>
-         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+      <wvobject fp_name="/test/demod/channelAGC/chAgcLoopFilter/loopError" type="array">
+         <obj_property name="ElementShortName">loopError[7:0]</obj_property>
+         <obj_property name="ObjectShortName">loopError[7:0]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">7</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
          <obj_property name="CellHeight">100</obj_property>
          <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
          <obj_property name="AnalogYRangeMin">0.000000</obj_property>
@@ -1284,6 +1263,7 @@
          <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
          <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
          <obj_property name="AnalogHorizLine">0.000000</obj_property>
+         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
       </wvobject>
    </wvobject>
 </wave_config>
