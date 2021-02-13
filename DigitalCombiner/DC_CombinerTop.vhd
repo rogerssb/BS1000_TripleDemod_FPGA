@@ -70,7 +70,7 @@ ENTITY DC_CombinerTop IS
       PrevClk_p,
       PrevClk_n         : IN std_logic;
       adc0,
-      MonData           : IN  SLV18;
+      MonData           : IN std_logic_vector(13 downto 0);
 
       video0InSelect,
       video1InSelect,

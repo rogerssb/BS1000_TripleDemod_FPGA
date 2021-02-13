@@ -64,7 +64,9 @@ module channelAGC(
     wire    [17:0]   absI = $unsigned(iIn[17] ? -iIn : iIn);
     wire    [17:0]   absQ = $unsigned(qIn[17] ? -qIn : qIn);
     reg     [16:0]   max,min;
+    reg     [6:0]    clkEnDly;      // pipeline the clkEn's to avoid needing 6 frames to get a result
     always @(posedge clk) begin
+        clkEnDly <= {clkEnDly[5:0], clkEn};
         if (clkEn) begin
             if (absI > absQ) begin
                 max <= absI[16:0];
@@ -108,7 +110,7 @@ module channelAGC(
     //wire    [16:0]  sum = maxTerm[35:19] + minTerm[35:19];
     reg     [15:0]  rxLevel;
     always @(posedge clk) begin
-        if (clkEn) begin
+        if (clkEnDly[4]) begin
             if (sum[16]) begin
                 rxLevel <= 16'hffff;
             end
@@ -124,7 +126,7 @@ module channelAGC(
     log2 log2(
         .clk(clk),
         .reset(reset),
-        .clkEn(clkEn),
+        .clkEn(clkEnDly[5]),
         .linear(rxLevel),
         .log(log2Mag)
     );
@@ -148,7 +150,7 @@ module channelAGC(
         end
     wire    [31:0]loopOutput;
     agcLoopFilter chAgcLoopFilter(
-        .clk(clk), .reset(reset), .clkEn(clkEn),
+        .clk(clk), .reset(reset), .clkEn(clkEnDly[6]),
         `ifdef USE_BUS_CLOCK
         .busClk(busClk),
         `endif

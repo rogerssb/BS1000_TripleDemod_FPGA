@@ -205,6 +205,7 @@ ARCHITECTURE rtl OF STC IS
          reset,
          ce,
          MsbFirst,
+         EstimatesDone,
          ValidIn        : IN  std_logic;
          RecoveredData  : IN  SLV4;
          ClocksPerBit   : IN  sfixed(0 downto -15);
@@ -685,6 +686,7 @@ BEGIN
          reset          => Reset2x,
          ce             => CE,
          ValidIn        => TrellisOutEn,
+         EstimatesDone  => EstimatesDone,
          MsbFirst       => '1',
          RecoveredData  => TrellisBits,
          ClocksPerBit   => to_sfixed(ClocksPerBit, 0, -15),
@@ -770,7 +772,10 @@ BEGIN
             MagI <= resize(MagI - (MagI sra 8) + (abs(ResampleI_s) sra 8), MagR);
          end if;
 
-         if (PilotFound) then
+         if (MiscBits(0)) then
+            HxEstR <= MiscBits;
+            HxEstI <= MiscBits;
+         elsif (PilotFound) then
             if (Mag0GtMag1) then
                HxEstR <= to_slv(H0EstR);
                HxEstI <= to_slv(H0EstI);
@@ -779,18 +784,8 @@ BEGIN
                HxEstI <= to_slv(H1EstI);
             end if;
          else
-            if (MiscBits(0)) then
-               HxEstR <= 18d"85000";
-               HxEstI <= 18d"85000";
-            elsif (MiscBits(1)) then
-               HxEstR <= 18d"4000";
-               HxEstI <= 18d"4000";
-            else
-               HxEstR <= MagRSlv;
-               HxEstI <= MagISlv;
-            end if;
-   --               HxEstR <= MagRSlv;
-   --               HxEstI <= MagISlv;
+            HxEstR <= MagRSlv;
+            HxEstI <= MagISlv;
          end if;
          MagRSlv <= to_slv(MagR);
          MagISlv <= to_slv(MagI);

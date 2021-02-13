@@ -13,6 +13,10 @@
 `define SEMCO_DEMOD_IMAGE           16'h6
 `define LDPC_DEMOD_IMAGE            16'h7
 `define STC_DEMOD_IMAGE             16'h8
+// FPGA2: Two channel viterbi with PCM decoder
+`define VITERBI_DEMOD_IMAGE         16'd9
+// STC Modulator on a BS1000
+`define STC_MOD_IMAGE               16'd10
 
 //`define INTERNAL_ADAPT
 `define SYM_DEVIATION
@@ -129,11 +133,16 @@
 `define ADD_MULTIBOOT
 `endif
 
+`ifdef STC_TRIPLE_MOD
+`define STC_MOD
+`define R6100
+`endif
 `ifdef STC_MOD
 `define USE_BUS_CLOCK
 `define USE_VIVADO_CORES
 `define USE_DDC_FIR
 `define ADD_SPI_GATEWAY
+`define ADD_TAU
 `endif
 
 `ifdef BITSYNC_BERT
@@ -689,6 +698,7 @@
     `define SPIGW_RSVD1         13'bx_xxxx_xxxx_101x
     `define SPIGW_CONTROL       13'bx_xxxx_xxxx_11xx
 
+    // not sure why but the software didn't like address at 30, so changed to 40
 `define STC_DEMOD_SPACE     13'b0_00xx_010x_xxxx
     `define STC_CLOCKS_PER_BIT  13'bx_xxxx_xxx0_00xx
     `define STC_HX_THRESH       13'bx_xxxx_xxx0_01xx
@@ -779,18 +789,20 @@
 //-------------------------------- STC Mod ------------------------------------
 
 // Top level registers
-`define STC_MOD_SPACE       13'b0_00xx_000x_xxxx
+`define STC_MOD_SPACE       13'b0_00xx_00xx_xxxx
     // Define the system top level memory map
-    `define SYS_RESET           13'bx_xxxx_xxx0_000x
-    `define SYS_VERSION         13'bx_xxxx_xxx0_001x
-    `define SYS_STCMOD_H0REAL   13'bx_xxxx_xxx0_01xx
-    `define SYS_STCMOD_H0IMAG   13'bx_xxxx_xxx0_10xx
-    `define SYS_REBOOT_ADDR     13'bx_xxxx_xxx0_11xx
-    `define SYS_TYPE            13'bx_xxxx_xxx1_000x
-    `define SYS_STCMOD_CONTROL  13'bx_xxxx_xxx1_001x
-    `define SYS_STCMOD_PNPOLY   13'bx_xxxx_xxx1_01xx
-    `define SYS_STCMOD_H1REAL   13'bx_xxxx_xxx1_10xx
-    `define SYS_STCMOD_H1IMAG   13'bx_xxxx_xxx1_11xx
+    `define SYS_RESET           13'bx_xxxx_xx00_000x
+    `define SYS_VERSION         13'bx_xxxx_xx00_001x
+    `define SYS_STCMOD_H0REAL   13'bx_xxxx_xx00_01xx
+    `define SYS_STCMOD_H0IMAG   13'bx_xxxx_xx00_10xx
+    `define SYS_REBOOT_ADDR     13'bx_xxxx_xx00_11xx
+    `define SYS_TYPE            13'bx_xxxx_xx01_000x
+    `define SYS_STCMOD_CONTROL  13'bx_xxxx_xx01_001x
+    `define SYS_STCMOD_PNPOLY   13'bx_xxxx_xx01_01xx
+    `define SYS_STCMOD_H1REAL   13'bx_xxxx_xx01_10xx
+    `define SYS_STCMOD_H1IMAG   13'bx_xxxx_xx01_11xx
+    `define SYS_STCMOD_H0TAU    13'bx_xxxx_xx10_00xx
+    `define SYS_STCMOD_H1TAU    13'bx_xxxx_xx10_01xx
 
 `define FMMODSPACE              13'b0_00xx_011x_xxxx
     `define FM_MOD_FREQ         12'bxxxx_xxx0_00xx

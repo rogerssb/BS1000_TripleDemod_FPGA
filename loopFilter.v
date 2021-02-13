@@ -69,7 +69,9 @@ module loopFilter (
 
     /**************************** Adjust Error ************************************/
     reg     signed  [11:0]  loopError;
+    reg             [2:0]   clkEnDly;
     always @(posedge clk) begin
+        clkEnDly <= {clkEnDly[1:0], clkEn};
         if (zeroError) begin
             loopError <= 12'h0;
         end
@@ -87,12 +89,12 @@ module loopFilter (
 
     /*************************** Lead Gain Section ********************************/
 
-    reg     signed  [31:0]  leadError;
+    reg     signed  [31:0]  leadError, leadErrorDly;
     always @(posedge clk) begin
         if (reset) begin
             leadError <= 0;
         end
-        else if (clkEn) begin
+        else if (clkEnDly[0]) begin
             case(lead)
                   5'h00: leadError <= 0;
                   5'h01: leadError <= $signed({{30{loopError[11]}},loopError[11:10]});
@@ -137,7 +139,7 @@ module loopFilter (
         if (reset) begin
             lagError <= 0;
         end
-        else if (clkEn) begin
+        else if (clkEnDly[0]) begin
             case(lag)
                   5'h00: lagError <= 0;
                   5'h01: lagError <= $signed({{30{loopError[11]}},loopError[11:10]});
@@ -189,7 +191,8 @@ module loopFilter (
         else if (clearAccum) begin
             lagAccum <= 0;
         end
-        else if (clkEn) begin
+        else if (clkEnDly[1]) begin
+            leadErrorDly <= leadError;             // delay lead error to match lagAccum timing
             if ( (sum[31] && upperLimit[31])          // both negative
              && (sum >= upperLimit) ) begin       // between upper limit and 0
                 lagAccum <= upperLimit;
@@ -227,8 +230,8 @@ module loopFilter (
         if (reset) begin
             filterSum <= 0;
         end
-        else if (clkEn) begin
-            filterSum <= lagAccum + leadError;
+        else if (clkEnDly[2]) begin
+            filterSum <= lagAccum + leadErrorDly;
         end
     end
 
