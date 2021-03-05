@@ -16,8 +16,8 @@ create_generated_clock -name cAndD2/dll/dllOutputClk -source [get_pins systemClo
 create_generated_clock -name {cAndD2/dllDivider_reg_n_0_[0]} -source [get_pins cAndD2/dll/dllOutputClk_reg/Q] -divide_by 4 [get_pins {cAndD2/dllDivider_reg[0]/Q}]
 create_generated_clock -name {cAndD2/pllDivider_reg_n_0_[0]} -source [get_ports pll2_OUT1] -divide_by 4 [get_pins {cAndD2/pllDivider_reg[0]/Q}]
 
-set_multicycle_path -setup 4 -from [get_pins -hierarchical -regexp {.*mse/mse./diffTotal_reg.*/C$}] -to [get_pins -hierarchical -regexp {.*mse/mse./.*/D$}]
-set_multicycle_path -hold  3 -from [get_pins -hierarchical -regexp {.*mse/mse./diffTotal_reg.*/C$}] -to [get_pins -hierarchical -regexp {.*mse/mse./.*/D$}]
+set_multicycle_path -setup -from [get_pins -hierarchical -regexp {.*mse/mse./diffTotal_reg.*/C$}] -to [get_pins -hierarchical -regexp {.*mse/mse./.*/D$}] 4
+set_multicycle_path -hold -from [get_pins -hierarchical -regexp {.*mse/mse./diffTotal_reg.*/C$}] -to [get_pins -hierarchical -regexp {.*mse/mse./.*/D$}] 3
 
 
 set_input_delay -clock [get_clocks sysClk] -min -add_delay 1.800 [get_ports {adc0[*]}]
@@ -146,7 +146,8 @@ set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets differentialClk_IBUF_BUFG]
 
 
 
-
+set_false_path -from * -to [get_clocks sysClk]
+set_clock_groups -name Clocks -asynchronous -group [get_clocks -include_generated_clocks fbClk] -group [list [get_clocks -include_generated_clocks sysClk] [get_clocks [list cAndD0/dll/dllOutputClk cAndD1/dll/dllOutputClk cAndD2/dll/dllOutputClk sysClk [get_clocks -of_objects [get_pins systemClock/inst/mmcm_adv_inst/CLKOUT0]]]]] -group [get_clocks -include_generated_clocks differentialClk] -group [get_clocks -include_generated_clocks singleEndedClk] -group [get_clocks -include_generated_clocks pll0_OUT1] -group [get_clocks -include_generated_clocks pll1_OUT1] -group [get_clocks -include_generated_clocks pll2_OUT1]
 
 set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks fbClk] -group [get_clocks -include_generated_clocks sysClk]
 set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks differentialClk] -group [get_clocks -include_generated_clocks sysClk]
@@ -195,6 +196,7 @@ set_false_path -from [get_clocks sysClk] -to [get_ports ch1Lockn]
 set_false_path -from [get_clocks fbClk] -to [get_ports pll*_PWDn]
 set_false_path -from [get_clocks fbClk] -to [get_ports ch*HighImpedance]
 set_false_path -from [get_clocks fbClk] -to [get_ports ch*SingleEnded]
+
 
 
 

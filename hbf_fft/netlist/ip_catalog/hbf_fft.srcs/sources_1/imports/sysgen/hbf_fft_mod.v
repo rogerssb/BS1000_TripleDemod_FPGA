@@ -10,6 +10,7 @@ module hbf_fft_stub (
   input [1-1:0] startn,
   input [16-1:0] window,
   input clk,
+  output [1-1:0] ce2,
   output [1-1:0] fifofull_i,
   output [1-1:0] fifofull_q,
   output [19-1:0] idata,
@@ -20,8 +21,7 @@ module hbf_fft_stub (
   output [1-1:0] fft_mag_m_axis_data_tlast,
   output [1-1:0] fft_mag_m_axis_dout_tvalid,
   output [16-1:0] fft_mag_m_axis_tdata_real,
-  output [13-1:0] index_k,
-  output [1-1:0] ce2
+  output [13-1:0] index_k
 );
   hbf_fft_0 sysgen_dut (
     .datain(datain),
@@ -33,6 +33,7 @@ module hbf_fft_stub (
     .startn(startn),
     .window(window),
     .clk(clk),
+    .ce2(ce2),
     .fifofull_i(fifofull_i),
     .fifofull_q(fifofull_q),
     .idata(idata),
@@ -43,7 +44,6 @@ module hbf_fft_stub (
     .fft_mag_m_axis_data_tlast(fft_mag_m_axis_data_tlast),
     .fft_mag_m_axis_dout_tvalid(fft_mag_m_axis_dout_tvalid),
     .fft_mag_m_axis_tdata_real(fft_mag_m_axis_tdata_real),
-    .index_k(index_k),
-    .ce2(ce2)
+    .index_k(index_k)
   );
 endmodule

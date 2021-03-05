@@ -707,13 +707,10 @@ namespace eval ::xilinx::dsp::planaheadworker {
    #     optional param in driver tcl, this is dir name relative to tcl working dir, planAhead or vivado
    #     project will be generated in this dir
    #
-   #   InferBoard
-   #      optional param in driver tcl. If the param exists then 0 indicates do not associate a board with the 
-   #      project else attempt to associate a pre-existing board with the project
-   #   
    #   Board
-   #      optional param in driver tcl. If the param exists then the board inference routine infers the board
-   #      specifed by this parameter. This is a mechanism to force a particular board in the flow. 
+   #      optional param in driver tcl. If the param exists then the board_part property of the project
+   #      will be set to this parameter. This is a mechanism to force a particular board in the flow. 
+   #
    #  EnableIPOOCCaching
    #     optional param in driver tcl. If param exists and it is true then set cache paths for the IP OOCs
    #     in System Generator netlist. Synthesized_Checkpoint and HWCosim can benefit from this as it speeds
@@ -769,7 +766,6 @@ namespace eval ::xilinx::dsp::planaheadworker {
       dsp_clear_empty_parameter ${driverns}::CustomUpdateSimulationSettingsProc
       dsp_clear_empty_parameter ${driverns}::CustomProjectDir
       dsp_clear_empty_parameter ${driverns}::FileRepository
-      dsp_clear_empty_parameter ${driverns}::InferBoard
       dsp_clear_empty_parameter ${driverns}::Board
 
       if { [ info exists ${driverns}::CustomProjectDir ] } {
@@ -1413,6 +1409,7 @@ namespace eval ::xilinx::dsp::planaheadworker {
    # Sets the synthesis settings for vivado.
    #-------------------------------------------------------------------------
    proc dsp_set_vivado_synthesis_settings {} {
+      set_property XPM_LIBRARIES {XPM_CDC XPM_MEMORY} [current_project]
       set paramvalueSynthStrategyName [ dsp_get_param_value_in_driver_tcl_namespace SynthStrategyName ]
       if { [string length ${paramvalueSynthStrategyName}] > 0 } {
          set_property strategy ${paramvalueSynthStrategyName} [get_runs synth_1]
@@ -1538,12 +1535,12 @@ namespace eval ::xilinx::dsp::planaheadworker {
       set paramvalueProject [ dsp_get_param_value_in_driver_tcl_namespace Project ]
       set devicenamevalue [ dsp_get_devicename ]
       ::create_project ${paramvalueProject} ${paramvalueProjectDir} -part ${devicenamevalue}
-      dsp_inferboard [ dsp_get_devicename 1 ] 
+      dsp_setboardpart 
       if { [ dsp_hdllang_is_vhdl ] } {
          set vhdl_lib [ dsp_get_vhdllib ]
          dsp_setvhdllib $vhdl_lib
       }
-    dsp_setipooccache    
+  		dsp_setipooccache
    }
 
    #-------------------------------------------------------------------------
@@ -1555,47 +1552,52 @@ namespace eval ::xilinx::dsp::planaheadworker {
    #--------------------------------------------------------------------------
    # Infer the board that is necessary
    #--------------------------------------------------------------------------
-   proc dsp_inferboard { devicenamevalue } {
+   proc dsp_setboardpart {} {
       set driverns [ dsp_get_driver_tcl_namespace_qualifiers ]
-      if { [ info exists ${driverns}::InferBoard] } {
-         set paramvalueInferBoard [ dsp_get_param_value_in_driver_tcl_namespace InferBoard]
-      } else {
-         if { [ dsp_get_param_value_in_driver_tcl_namespace CompilationFlow ] == "IP" } {
-            set paramvalueInferBoard 1 
-         } else {
-            return
-         }
-      }
-      if { $paramvalueInferBoard == 0 } {
-         return
-      }
-      # Force board to user specified value
+      # Force board part to user specified value if it exists
       if { [ info exists ${driverns}::Board] } {
-         set paramvalueBoard [ dsp_get_param_value_in_driver_tcl_namespace Board]
+         set paramvalueBoard [ dsp_get_param_value_in_driver_tcl_namespace Board ]
 	     set_property board_part $paramvalueBoard [current_project]
          return
       }
-      # A Special hard coding for ZC702 board because of the Zed board
-      # Conflict - Need a better way to do this
-      if {[string first "ZC702" [dsp_get_param_value_in_driver_tcl_namespace Compilation]] != -1} {
-          set_property board_part "xilinx.com:zc702:part0:0.9" [current_project]
-          return
+
+      # Starting in 2016.1 we get Vivado Board Support, i.e. board name, vendor name and file version passed down from the Sysgen Token
+      if { [ info exists ${driverns}::BoardName] } {
+         if { [ info exists ${driverns}::BoardVendor] } {
+            set boardPartString [ dsp_get_param_value_in_driver_tcl_namespace BoardVendor ]
+         } else {
+            # if for any reason there is no Board Vendor string set, default to Xilinx
+            set boardPartString "xilinx.com"
+         }
+         set paramvalueBoardName [ dsp_get_param_value_in_driver_tcl_namespace BoardName ]
+         append boardPartString ":" $paramvalueBoardName ":part0"
+         if { [ info exists ${driverns}::BoardFileVersion] } {
+            append boardPartString ":" [ dsp_get_param_value_in_driver_tcl_namespace BoardFileVersion ]
+         } else {
+            append boardPartString ":1.0"
+         }
+         set_property board_part $boardPartString [current_project]
+         return
       }
-      puts "******* Inferring the Board from the Device Name *******"
-      set boards [get_board_parts]
-      foreach board $boards {
-         set partname [get_property PART_NAME $board]
-         if { "$partname" == $devicenamevalue } {
-	       set_property board_part $board [current_project]
-           return
-         } 
-      } 
    }
 
   #-------------------------------------------------------------------------
+  # Set Remote IP cache if specified from Model Setting.
   # Set IPOOC cache if requested. Also creates the cache root path if it does not exixt
   #-------------------------------------------------------------------------
   proc dsp_setipooccache {} {
+    set enableIPCaching [ dsp_get_param_value_in_driver_tcl_namespace EnableIPCaching ]
+    if {$enableIPCaching == 1} {
+      set ipCachePath [ dsp_get_param_value_in_driver_tcl_namespace IPCachePath ]
+      if { $ipCachePath ne "" } {
+        if {[file isdirectory $ipCachePath] == 0} {
+          file mkdir $ipCachePath
+        } 
+      } 
+    	config_ip_cache -import_from_project -use_cache_location "$ipCachePath"
+		update_ip_catalog    
+    }
+
     set enableIPOOCCaching [ dsp_get_param_value_in_driver_tcl_namespace EnableIPOOCCaching ]
     if {$enableIPOOCCaching == 1} {
       set ipOOCCacheRootPath [ dsp_get_param_value_in_driver_tcl_namespace IPOOCCacheRootPath ]
@@ -1604,7 +1606,7 @@ namespace eval ::xilinx::dsp::planaheadworker {
           file mkdir $ipOOCCacheRootPath
         } 
       } 
-      check_ip_cache -use_cache_location "$ipOOCCacheRootPath"
+      config_ip_cache -use_cache_location "$ipOOCCacheRootPath"
     }
   }
 
@@ -1624,12 +1626,16 @@ namespace eval ::xilinx::dsp::planaheadworker {
       set analyzeTiming [ dsp_get_param_value_in_driver_tcl_namespace AnalyzeTiming ]
       if { [ dsp_is_good_string $analyzeTiming ] && [string equal $analyzeTiming "1"] } {
           dsp_generate_timing_report
+          # generate SysGen resource utilization report
+          # dsp_generate_resource_utilization_report
       }
-      # generate SysGen resource utilization report
-      set resourceUtilization [ dsp_get_param_value_in_driver_tcl_namespace ResourceUtilization ]
-      if { [ dsp_is_good_string $resourceUtilization ] && [string equal $resourceUtilization "1"] } {
-          dsp_generate_resource_utilization_report
-      }
+       # NOTE: No need for separate param to collect resource utilization data
+       # The function should be called based on analyzeTiming parameters only
+#      set resourceUtilization [ dsp_get_param_value_in_driver_tcl_namespace ResourceUtilization ]
+#      if { [ dsp_is_good_string $resourceUtilization ] && [string equal $resourceUtilization "1"] } {
+#          dsp_generate_resource_utilization_report
+#      }
+
       ::close_project
    }
 
@@ -2522,6 +2528,7 @@ namespace eval ::xilinx::dsp::planaheadworker {
        set_property description [dsp_ip_packager_get_description] $currentCore
        set_property company_url {} $currentCore
        set_property taxonomy [dsp_ip_packager_get_taxonomy] $currentCore
+       set_property definition_source {sysgen} $currentCore
     } 
   #-------------------------------------------------------
   # Set support family for ip packager process
@@ -3985,7 +3992,7 @@ namespace eval ::xilinx::dsp::planaheadworker {
        
      } else { 
        # This Proc should Only Be called is AXI Lite and AXI MM interfaces are detected
-       set bd_design [create_bd_design [dsp_ip_packager_get_top_name]_bd]
+       set bd_design [create_bd_design -bdsource SYSGEN [dsp_ip_packager_get_top_name]_bd]
        #Instantiate IP in IPI design
        dsp_instance_ip_in_ipi_design
        
@@ -4023,7 +4030,11 @@ namespace eval ::xilinx::dsp::planaheadworker {
       error "Plug-in Vivado project file '$vivado_project' does not exist. Please provide a valid Vivado project file (.xpr) and then try again."
     }
     
-    if { [ catch "open_project -read_only $vivado_project" err ] } {      
+    # Removed -read_only option while opening vivado project
+    # until issue in IPI is fixed, CR# 936873.
+    # This work-around helped generate correct platform.tcl file
+    # and fixed clock constraint issus reported in CR# 936874
+    if { [ catch "open_project $vivado_project" err ] } {
       error "An error occured while opening the Plug-in Vivado project '$vivado_project'. Please provide a valid Vivado project file (.xpr) and then try again. \n\n $err"              
     }
     
@@ -4382,7 +4393,9 @@ proc dsp_is_processor_interfaces_available_on_ip {} {
  # Returns 1 if ZynQ device is targetted
  #-------------------------------------------------------------------------
  proc dsp_ipp_is_zynq {} {
-    return [string match [dsp_get_param_value_in_driver_tcl_namespace DSPFamily] "zynq"]
+#    return [string match [dsp_get_param_value_in_driver_tcl_namespace DSPFamily] "zynq"]
+    # using wildcards to also match QZynq (no ZynqUPlus, yet, since this is different IP)
+    return [string match -nocase "*zynq" [dsp_get_param_value_in_driver_tcl_namespace DSPFamily]]
  }
  #-------------------------------------------------------
  # Performs Automation for IP Created By System Generator
@@ -4453,7 +4466,7 @@ proc dsp_is_processor_interfaces_available_on_ip {} {
  }
 
    # setting project and fileset properties when compilation target is HDL Netlist or IP Catalog
-   proc dsp_timing_analysis_set_project_settings {} {
+   proc dsp_analysis_set_project_settings {} {
        set compilationFlowName [ dsp_get_compilation_flow_name ]
        if { [ string equal $compilationFlowName "HDL Netlist" ] || [string equal $compilationFlowName "IP Catalog"] } {
            puts "INFO: Setting More Options property of synthesis to -mode out_of_context."
@@ -4472,14 +4485,14 @@ proc dsp_is_processor_interfaces_available_on_ip {} {
            set stub_top_module ${top_level_module}_stub
            ### DEBUG
            # puts "INFO: Original top module: $orig_top_module_name"
-           puts "INFO: For IP Catalog flow with timing analysis the top module is set to $stub_top_module."
+           puts "INFO: To enable analysis of IP Catalog flow results the top module is set to $stub_top_module."
            set_property -name top -value $stub_top_module [current_fileset] -quiet
        }
        return [ list $orig_top_module_name ]
    }
 
    # reverting project and fileset property settings
-   proc dsp_timing_analysis_revert_project_settings {prefValueList} {
+   proc dsp_analysis_revert_project_settings {prefValueList} {
        set compilationFlowName [ dsp_get_compilation_flow_name ]
        if { [ string equal $compilationFlowName "HDL Netlist" ] || [string equal $compilationFlowName "IP Catalog"] } {
            puts "INFO: Setting More Options property of synthesis to empty string."
@@ -4489,30 +4502,39 @@ proc dsp_is_processor_interfaces_available_on_ip {} {
        set orig_top_module_name [ get_property top [current_fileset] ]
        if { [string equal $compilationFlowName "IP Catalog"] } {
            set orig_top_module [ lindex $prefValueList 0 ]
-           puts "INFO: For IP Catalog flow with timing analysis the top module is reverted back to $orig_top_module."
+           puts "INFO: For IP Catalog flow the top module is reverted back to $orig_top_module after collecting results for analysis."
            set_property -name top -value $orig_top_module [current_fileset] -quiet
        }
    }
 
    proc dsp_generate_timing_report {} {
+       ### PERF_DEBUG
+       set Performance_benchmarking 0
+       if {$Performance_benchmarking == 1} {
+           set system_time [clock seconds]
+           set formated_time [clock format $system_time -format %H:%M:%S]
+           puts "INFO: TA_Performance -- Entered dsp_generate_timing_report at time : $formated_time"
+       }
+       ### END PERF_DEBUG
+
+       set curr_proj [::current_project]
+       set ext {.xpr}
+
        # get necessary params to open project
        set paramvalueProjectDir [ dsp_get_param_value_in_driver_tcl_namespace ProjectDir ]
        set paramvalueProject [ dsp_get_param_value_in_driver_tcl_namespace Project ]
-
-       set ext {.xpr}
        set proj_path "${paramvalueProjectDir}/${paramvalueProject}${ext}"
-       set curr_proj [::current_project]
        if { [ dsp_is_good_string $curr_proj ] == 0 } {
            ### DEBUG
-           # puts "INFO: Timing_Analyzer -- Opening Vivado project ${proj_path} "
+           # puts "INFO: SG_Analyzer -- Opening Vivado project ${proj_path} "
            [::open_project ${proj_path} -quiet]
        } else {
            ### DEBUG
-           # puts "INFO: Timing_Analyzer -- Vivado project ${proj_path} is already open."
+           # puts "INFO: SG_Analyzer -- Vivado project ${proj_path} is already open."
        }
 
        # set project preferences set for timing analysis flow
-       set origProjectSettings [ dsp_timing_analysis_set_project_settings ]
+       set origProjectSettings [ dsp_analysis_set_project_settings ]
 
        set currDir [pwd]
        cd "${paramvalueProjectDir}"
@@ -4530,12 +4552,20 @@ proc dsp_is_processor_interfaces_available_on_ip {} {
 
        set prgs [get_property progress [get_runs synth_1]]
        if { [ string equal $prgs "100%" ] } {
-           puts "INFO: Timing_Analyzer -- A successful synthesis run is found. Opening run synth_1 ..."
+           puts "INFO: SG_Analyzer -- A successful synthesis run is found. Opening run synth_1 ..."
            if { [ catch {::open_run synth_1 -name "synth_1" -quiet} result ] } {
                # do nothing
            }
        } else {
-           puts "INFO: Timing_Analyzer -- Running synth_1 ..."
+           ### PERF_DEBUG
+           if {$Performance_benchmarking == 1} {
+               set system_time1 [clock seconds]
+               set formated_time [clock format $system_time1 -format %H:%M:%S]
+               puts "INFO: TA_Performance -- Starting design synthesis at time : $formated_time"
+           }
+           ### END PERF_DEBUG
+
+           puts "INFO: SG_Analyzer -- Running synth_1 ..."
            [ ::launch_runs synth_1 ]
            [ ::wait_on_run synth_1 ]
            if { [ catch {::open_run synth_1 -name "synth_1" -quiet} result ] } {
@@ -4546,6 +4576,16 @@ proc dsp_is_processor_interfaces_available_on_ip {} {
            # timing results from just synthesized design 
            # Commenting out opt_design run after synthesis 
            # [ ::opt_design ]
+
+           ### PERF_DEBUG
+           if {$Performance_benchmarking == 1} {
+               set system_time2 [clock seconds]
+               set formated_time [clock format $system_time2 -format %H:%M:%S]
+               puts "INFO: TA_Performance -- Completed synthesis at time : $formated_time"
+               set time_diff [ expr {$system_time2 - $system_time1} ];
+               puts "INFO: TA_Performance -- Total time in seconds : $time_diff"
+           }
+           ### END PERF_DEBUG
        }
 
        # check if post-implementation timing analysis is expected
@@ -4555,29 +4595,47 @@ proc dsp_is_processor_interfaces_available_on_ip {} {
        ### DEBUG
        # puts "Value of analyzeTimingPostImplementation option: $atPostImpl";
        if { [ dsp_is_good_string $atPostImpl ] && [ string equal $atPostImpl "1" ] } {
-           puts "INFO: Timing_Analyzer -- Timing paths data will be collected from the post-implementation design ...";
            set prgs [get_property progress [get_runs impl_1]]
            if { [ string equal $prgs "100%" ] } {
-               puts "INFO: Timing_Analyzer -- A successful implementation run is found. Opening run impl_1 ..."
+               puts "INFO: SG_Analyzer -- A successful implementation run is found. Opening run impl_1 ..."
                if { [ catch {::open_run impl_1 -name "impl_1"} result ] } {
                    # do nothing
                }
            } else {
+               ### PERF_DEBUG
+               if {$Performance_benchmarking == 1} {
+                   set system_time1 [clock seconds]
+                   set formated_time [clock format $system_time1 -format %H:%M:%S]
+                   puts "INFO: TA_Performance -- Starting design optimization and implementation at time : $formated_time"
+               }
+               ### END PERF_DEBUG
+
                # run design optimization
                [ ::opt_design ]
 
-               puts "INFO: Timing_Analyzer -- Running impl_1 ..."
+               puts "INFO: SG_Analyzer -- Running impl_1 ..."
                [ ::launch_runs impl_1 ]
                [ ::wait_on_run impl_1 ]
                if { [ catch {::open_run impl_1 -name "impl_1"} result ] } {
                    # do nothing
                }
+
+               ### PERF_DEBUG
+               if {$Performance_benchmarking == 1} {
+                   set system_time2 [clock seconds]
+                   set formated_time [clock format $system_time2 -format %H:%M:%S]
+                   puts "INFO: TA_Performance -- Completed optimization and implementation at time : $formated_time"
+                   set time_diff [ expr {$system_time2 - $system_time1} ];
+                   puts "INFO: TA_Performance -- Total time in seconds : $time_diff"
+               }
+               ### END PERF_DEBUG
            }
+           puts "INFO: SG_Analyzer -- Timing paths data will be collected from the post-implementation design ...";
        } else {
-           puts "INFO: Timing_Analyzer -- Timing paths data will be collected from the post-synthesis design ..."
+           puts "INFO: SG_Analyzer -- Timing paths data will be collected from the post-synthesis design ..."
        }
 
-#           set clock_xdc_file "./${top_level_module}.srcs/constrs_1/imports/sysgen/${top_level_module}_clock.xdc"
+       ## set clock_xdc_file "./${top_level_module}.srcs/constrs_1/imports/sysgen/${top_level_module}_clock.xdc"
        # Reading <top_module>_clock.xdc file for Synthesized_Checkpoint flow
        set compilationFlowName [ dsp_get_compilation_flow_name ]
        if { [ string equal $compilationFlowName "Synthesized Checkpoint" ] } {
@@ -4590,6 +4648,75 @@ proc dsp_is_processor_interfaces_available_on_ip {} {
            ::set_property HD.CLK_SRC BUFGCTRL_X0Y0 [get_ports clk]
        }
 
+       ### PERF_DEBUG
+       if {$Performance_benchmarking == 1} {
+           set system_time1 [clock seconds]
+           set formated_time [clock format $system_time1 -format %H:%M:%S]
+           puts "INFO: TA_Performance -- Starting timing paths data collection at time : $formated_time"
+       }
+       ### END PERF_DEBUG
+
+       ### DEBUG
+       # puts "Calling dsp_extract_timing_paths"
+       set status [ dsp_extract_timing_paths ]
+
+       ### PERF_DEBUG
+       if {$Performance_benchmarking == 1} {
+           set system_time2 [clock seconds]
+           set formated_time [clock format $system_time2 -format %H:%M:%S]
+           puts "INFO: TA_Performance -- Completed timing paths data collection at time : $formated_time"
+           set time_diff [ expr {$system_time2 - $system_time1} ];
+           puts "INFO: TA_Performance -- Total time in timing paths collection : $time_diff seconds"
+       }
+       ### END PERF_DEBUG
+
+       ### DEBUG
+       # puts "Calling dsp_extract_resource_utilization_data"
+       set status [ dsp_extract_resource_utilization_data ]
+
+       ### PERF_DEBUG
+       if {$Performance_benchmarking == 1} {
+           set system_time3 [clock seconds]
+           set formated_time [clock format $system_time3 -format %H:%M:%S]
+           puts "INFO: TA_Performance -- Completed resource utilization data collection at time : $formated_time"
+           set time_diff [ expr {$system_time3 - $system_time2} ];
+           puts "INFO: TA_Performance -- Total time in resources data collection : $time_diff seconds"
+       }
+       ### END PERF_DEBUG
+
+       ### DEBUG
+       # puts "change working directory to $currDir"
+       cd "$currDir"
+
+       # revert project preferences set for timing analysis flow to their original values
+       dsp_analysis_revert_project_settings $origProjectSettings
+       puts "INFO: SG_Analyzer -- Collected Vivado timing paths and resource utilization information ..."
+
+       ### PERF_DEBUG
+       if {$Performance_benchmarking == 1} {
+           set system_time [clock seconds]
+           set formated_time [clock format $system_time -format %H:%M:%S]
+           puts "INFO: TA_Performance -- Exiting dsp_generate_timing_report at time : $formated_time"
+       }
+       ### END PERF_DEBUG
+   }
+   # End of dsp_generate_timing_report
+
+
+   # writes timing data into outFile if HDL file used by Vivado tools 
+   # match with the HDL file generated by SysGen
+   # The generated data is in AnyTable Format
+   proc dsp_extract_timing_paths {} {
+       set result True
+
+       # get file name <proj_name>.at to write timing data
+       set paramvalueProject [ dsp_get_param_value_in_driver_tcl_namespace Project ]
+       set netlistDir [ dsp_get_param_value_in_driver_tcl_namespace TargetDir ]
+
+       set timing_report_file "${netlistDir}/${paramvalueProject}.at"
+       ### DEBUG
+       # puts "Timing paths data will be written in file: ${timing_report_file}"
+
        set hdlNetlistFile "${paramvalueProject}.v"
        if { [ dsp_hdllang_is_vhdl ] } {
            set hdlNetlistFile "${paramvalueProject}.vhd"
@@ -4599,43 +4726,24 @@ proc dsp_is_processor_interfaces_available_on_ip {} {
        set atHoldConstraints [ dsp_get_param_value_in_driver_tcl_namespace AnalyzeTimingHoldConstraints ]
        ### DEBUG
        # puts "Value of analyzeTimingHoldConstraints option: $atHoldConstraints";
+
+       set delayTypes [ list "max" ]
        if { [ dsp_is_good_string $atHoldConstraints ] && [ string equal $atHoldConstraints "1" ] } {
            set delayTypes [ list "max" "min" ]
            ### DEBUG
            # puts "INFO: Timing_Analyzer -- Timing paths for both SETUP and HOLD constrains will be collected ...";
        } else {
-           set delayTypes [ list "max" ]
            ### DEBUG
            # puts "INFO: Timing_Analyzer -- Timing paths for only SETUP constrain will be collected ...";
        }
 
-       ### DEBUG
-       # puts "Calling dsp_extract_timing_paths"
-       set status [ dsp_extract_timing_paths $delayTypes $hdlNetlistFiles ]
-
-       ### DEBUG
-       # puts "change working directory to $currDir"
-       cd "$currDir"
-
-       # revert project preferences set for timing analysis flow to their original values
-       dsp_timing_analysis_revert_project_settings $origProjectSettings
-       puts "INFO: Timing_Analyzer -- Collected Vivado timing paths information ..."
-   }
-   # End of dsp_generate_timing_report
-
-
-   # writes timing data into outFile if HDL file used by Vivado tools 
-   # match with the HDL file generated by SysGen
-   # The generated data is in AnyTable Format
-   proc dsp_extract_timing_paths {delayTypes hdlNetlistFiles} {
-       set result True
-
-       # get file name <proj_name>.at to write timing data
-       set paramvalueProject [ dsp_get_param_value_in_driver_tcl_namespace Project ]
-       set netlistDir [ dsp_get_param_value_in_driver_tcl_namespace TargetDir ]
-       set timing_report_file "${netlistDir}/${paramvalueProject}.at"
-       ### DEBUG
-       # puts "Timing paths data will be written in file: ${timing_report_file}"
+       set top_level_module [ dsp_get_param_value_in_driver_tcl_namespace TopLevelModule ]
+       set crossProbeFile "${top_level_module}.v.at"
+       set hdl_language "verilog"
+       if { [ dsp_hdllang_is_vhdl ] } {
+           set crossProbeFile "${top_level_module}.vhd.at"
+           set hdl_language "vhdl"
+       }
 
        set outFile [ open ${timing_report_file} w ]
        puts $outFile "\# Vivado timing paths data is represented in anytable format"
@@ -4650,6 +4758,9 @@ proc dsp_is_processor_interfaces_available_on_ip {} {
        } else {
            puts $outFile "            'Vivado_Stage' => 'Post Synthesis',"
        }
+       puts $outFile "            'Top_Module' => '${top_level_module}',"
+       puts $outFile "            'HDL_Language' => '${hdl_language}',"
+       puts $outFile "            'Netlist_Crossprobe_File' => '${crossProbeFile}',"
        puts $outFile "        }"
        puts $outFile "    \],"
 
@@ -4807,7 +4918,7 @@ proc dsp_is_processor_interfaces_available_on_ip {} {
                    puts $outFile "                     'HDL_File' => 'UNFOUND',"
                    puts $outFile "                     'Line_Num' => 'Line_000',"
                    puts $outFile "                     'HDL_Files' => '',"
-                   puts $outFile "                     'Line_Numbers' => '',"
+                   puts $outFile "                     'Line_Numbers' => 'Line_000',"
                    puts $outFile "                     'Block_Path' => '',"
                    puts $outFile "                     'Hier_Name' => '$hier_cell',"
                    puts $outFile "                     'Ref_Name' => '$ref_name',"
@@ -4907,7 +5018,7 @@ proc dsp_is_processor_interfaces_available_on_ip {} {
                                puts $outFile "                     'HDL_File' => 'UNFOUND',"
                                puts $outFile "                     'Line_Num' => 'Line_000',"
                                puts $outFile "                     'HDL_Files' => '',"
-                               puts $outFile "                     'Line_Numbers' => '',"
+                               puts $outFile "                     'Line_Numbers' => 'Line_000',"
                                puts $outFile "                     'Block_Path' => '',"
                                puts $outFile "                     'Hier_Name' => '$hier_cell',"
                                puts $outFile "                     'Ref_Name' => '$ref_name',"
@@ -4967,7 +5078,7 @@ proc dsp_is_processor_interfaces_available_on_ip {} {
                            puts $outFile "                     'HDL_File' => 'UNFOUND',"
                            puts $outFile "                     'Line_Num' => 'Line_000',"
                            puts $outFile "                     'HDL_Files' => '',"
-                           puts $outFile "                     'Line_Numbers' => '',"
+                           puts $outFile "                     'Line_Numbers' => 'Line_000',"
                            puts $outFile "                     'Block_Path' => '',"
                            puts $outFile "                     'Hier_Name' => '$hier_cell',"
                            puts $outFile "                     'Ref_Name' => '$ref_name',"
@@ -5077,22 +5188,18 @@ proc dsp_is_processor_interfaces_available_on_ip {} {
                        # New properties FILE_NAMES and LINE_NUMBERS were added in 2015.3 to provide this information.
                        list fileNames ""
                        list lineNumberStrings ""
-                       if { [ llength [ get_property FILE_NAMES $parentCell ] ] > 0 } {
-                           set filePaths [ ::get_property FILE_NAMES $parentCell ]
-                           set fileLines [ ::get_property LINE_NUMBERS $parentCell ]
+                       set fileLines [ ::get_property LINE_NUMBERS $parentCell ]
+                       if { [ llength $fileLines ] > 0 } {
                            ### DEBUG
-                           # puts "filePaths : $filePaths"
                            # puts "fileLines : $fileLines"
-                           if { [ llength $filePaths ] > 0 } {
-                               foreach fPath $filePaths lNum $fileLines {
-                                   ### DEBUG
-                                   # puts "filePath : $fPath"
-                                   # puts "lineNum  : $lNum"
-                                   set fName [ file tail $fPath ]
-                                   lappend fileNames $fName
-                                   set lNumStr "Line_${lNum}"
-                                   lappend lineNumberStrings $lNumStr
-                               }
+                           set numLines [llength $fileLines]
+                           for {set i 0} {$i < $numLines} {set i [expr {$i + 1}]} {
+                               set lNum [lindex $fileLines $i]
+                               ### DEBUG
+                               # puts "lineNum  : $lNum"
+                               lappend fileNames $matchedNetlistFile
+                               set lNumStr "Line_${lNum}"
+                               lappend lineNumberStrings $lNumStr
                            }
                        }
                        ### DEBUG
@@ -5118,9 +5225,21 @@ proc dsp_is_processor_interfaces_available_on_ip {} {
    }
    # End of dsp_extract_sysgen_block_name
 
+   # Note: Call to function dsp_generate_resource_utilization_report is commented out
+   # Function dsp_extract_resource_utilization_data is directly called
+   # from dsp_generate_timing_report
    # Collect resource utilization data from Vivado database
    # Write the data in the anytable format
    proc dsp_generate_resource_utilization_report {} {
+       ### PERF_DEBUG
+       set Performance_benchmarking 0
+       if {$Performance_benchmarking == 1} {
+           set system_time [clock seconds]
+           set formated_time [clock format $system_time -format %H:%M:%S]
+           puts "INFO: RA_Performance -- Entered dsp_generate_resourfce_utilization_report at time : $formated_time"
+       }
+       ### END PERF_DEBUG
+
        set curr_proj [::current_project]
        set ext {.xpr}
 
@@ -5130,15 +5249,15 @@ proc dsp_is_processor_interfaces_available_on_ip {} {
        set proj_path "${paramvalueProjectDir}/${paramvalueProject}${ext}"
        if { [ dsp_is_good_string $curr_proj ] == 0 } {
            ### DEBUG
-           # puts "INFO: Res_Util -- Opening Vivado project ${proj_path} "
+           # puts "INFO: SG_Analyzer -- Opening Vivado project ${proj_path} "
            [::open_project ${proj_path} -quiet]
        } else {
            ### DEBUG
-           # puts "INFO: Res_Util -- Vivado project ${proj_path} is already open."
+           # puts "INFO: SG_Analyzer -- Vivado project ${proj_path} is already open."
        }
 
        # set project preferences set for timing analysis flow
-       set origProjectSettings [ dsp_timing_analysis_set_project_settings ]
+       set origProjectSettings [ dsp_analysis_set_project_settings ]
 
        set currDir [pwd]
        cd "${paramvalueProjectDir}"
@@ -5146,20 +5265,26 @@ proc dsp_is_processor_interfaces_available_on_ip {} {
        # puts "Current Directory: ${currDir}"
        # puts "Project Directory: ${paramvalueProjectDir}"
 
+       # Setting of following parameter enables Vivado database to preserve information of the merged/shared resources.
+       # It will be saved as FILE_NAMES and LINE_NUMBERS cell properties.
+       [ ::set_param netlist.enableMultipleFileLines 1 ]
+
        set prgs [get_property progress [get_runs synth_1]]
        if { [ string equal $prgs "100%" ] } {
-           puts "INFO: Res_Util -- A successful synthesis run is found. Opening run synth_1 ..."
+           puts "INFO: SG_Analyzer -- A successful synthesis run is found. Opening run synth_1 ..."
            if { [ catch {::open_run synth_1 -name "synth_1" -quiet} result ] } {
                # do nothing
            }
        } else {
            ### PERF_DEBUG
-           set system_time [clock seconds]
-           set formated_time [clock format $system_time -format %H:%M:%S]
-           puts "INFO: Res_UTil_Perf -- Starting Synthesis at time : $formated_time"
-           ### PERF_DEBUG
+           if {$Performance_benchmarking == 1} {
+               set system_time1 [clock seconds]
+               set formated_time [clock format $system_time1 -format %H:%M:%S]
+               puts "INFO: RA_Performance -- Starting design synthesis at time : $formated_time"
+           }
+           ### END PERF_DEBUG
 
-           puts "INFO: Res_Util -- Running synth_1 ..."
+           puts "INFO: SG_Analyzer -- Running synth_1 ..."
            [ ::launch_runs synth_1 ]
            [ ::wait_on_run synth_1 ]
            if { [ catch {::open_run synth_1 -name "synth_1" -quiet} result ] } {
@@ -5167,62 +5292,102 @@ proc dsp_is_processor_interfaces_available_on_ip {} {
            }
 
            ### PERF_DEBUG
-           set system_time [clock seconds]
-           set formated_time [clock format $system_time -format %H:%M:%S]
-           puts "INFO: Res_UTil_Perf -- Completed Synthesis at time : $formated_time"
-           ### PERF_DEBUG
+           if {$Performance_benchmarking == 1} {
+               set system_time2 [clock seconds]
+               set formated_time [clock format $system_time2 -format %H:%M:%S]
+               puts "INFO: RA_Performance -- Completed synthesis at time : $formated_time"
+               set time_diff [ expr {$system_time2 - $system_time1} ];
+               puts "INFO: RA_Performance -- Total time in seconds: $time_diff"
+           }
+           ### END PERF_DEBUG
        }
 
-       set prgs [get_property progress [get_runs impl_1]]
-       if { [ string equal $prgs "100%" ] } {
-           puts "INFO: Res_Util -- A successful implementation run is found. Opening run impl_1 ..."
-           if { [ catch {::open_run impl_1 -name "impl_1"} result ] } {
+       # check if post-implementation analysis is expected
+       # if AnalyzeTimingPostImplementation is not set to 1 then
+       # gather Vivado resource utilization data after synthesis
+       set atPostImpl [ dsp_get_param_value_in_driver_tcl_namespace AnalyzeTimingPostImplementation ]
+       ### DEBUG
+       # puts "Value of analyzeTimingPostImplementation option: $atPostImpl";
+       if { [ dsp_is_good_string $atPostImpl ] && [ string equal $atPostImpl "1" ] } {
+           set prgs [get_property progress [get_runs impl_1]]
+           if { [ string equal $prgs "100%" ] } {
+               puts "INFO: SG_Analyzer -- A successful implementation run is found. Opening run impl_1 ..."
+               if { [ catch {::open_run impl_1 -name "impl_1"} result ] } {
                # do nothing
            }
+           } else {
+               ### PERF_DEBUG
+               if {$Performance_benchmarking == 1} {
+                   set system_time1 [clock seconds]
+                   set formated_time [clock format $system_time1 -format %H:%M:%S]
+                   puts "INFO: RA_Performance -- Starting design optimization and implementation at time : $formated_time"
+               }
+               ### END PERF_DEBUG
+
+               # run design optimization
+               [ ::opt_design ]
+
+               ### DEBUG
+               # puts "INFO: SG_Analyzer -- Running impl_1 ..."
+
+               [ ::launch_runs impl_1 ]
+               [ ::wait_on_run impl_1 ]
+               if { [ catch {::open_run impl_1 -name "impl_1"} result ] } {
+                   # do nothing
+               }
+
+               ### PERF_DEBUG
+               if {$Performance_benchmarking == 1} {
+                   set system_time2 [clock seconds]
+                   set formated_time [clock format $system_time2 -format %H:%M:%S]
+                   puts "INFO: RA_Performance -- Completed optimization and implementation at time : $formated_time"
+                   set time_diff [ expr {$system_time2 - $system_time1} ];
+                   puts "INFO: RA_Performance -- Total time in seconds: $time_diff"
+               }
+               ### END PERF_DEBUG
+           }
+           puts "INFO: SG_Analyzer -- Resource utilization data will be collected from the post-implementation design ...";
        } else {
-           ### PERF_DEBUG
-           set system_time [clock seconds]
-           set formated_time [clock format $system_time -format %H:%M:%S]
-           puts "INFO: Res_Util_Perf -- Starting Implementation at time : $formated_time"
-           ### PERF_DEBUG
-
-           puts "INFO: Res_Util -- Running impl_1 ..."
-           [ ::launch_runs impl_1 ]
-           [ ::wait_on_run impl_1 ]
-           if { [ catch {::open_run impl_1 -name "impl_1"} result ] } {
-               # do nothing
-           }
-
-           ### PERF_DEBUG
-           set system_time [clock seconds]
-           set formated_time [clock format $system_time -format %H:%M:%S]
-           puts "INFO: Res_Util_Perf -- Completed Implementation at time : $formated_time"
-           ### PERF_DEBUG
+           puts "INFO: SG_Analyzer -- Resource utilization data will be collected from the post-synthesis design ..."
        }
 
        ### PERF_DEBUG
-       set system_time [clock seconds]
-       set formated_time [clock format $system_time -format %H:%M:%S]
-       puts "INFO: Res_Util_Perf -- Starting data extraction at time : $formated_time"
-       ### PERF_DEBUG
+       if {$Performance_benchmarking == 1} {
+           set system_time1 [clock seconds]
+           set formated_time [clock format $system_time1 -format %H:%M:%S]
+           puts "INFO: RA_Performance -- Starting resource utilization data collection at time : $formated_time"
+       }
+       ### END PERF_DEBUG
 
        ### DEBUG
        # puts "Calling dsp_extract_resource_utilization_data"
        set status [ dsp_extract_resource_utilization_data ]
 
        ### PERF_DEBUG
-       set system_time [clock seconds]
-       set formated_time [clock format $system_time -format %H:%M:%S]
-       puts "INFO: Res_Util_Perf -- Completed data extraction at time : $formated_time"
-       ### PERF_DEBUG
+       if {$Performance_benchmarking == 1} {
+           set system_time2 [clock seconds]
+           set formated_time [clock format $system_time2 -format %H:%M:%S]
+           puts "INFO: RA_Performance -- Completed resource utilization data collection at time : $formated_time"
+           set time_diff [ expr {$system_time2 - $system_time1} ];
+           puts "INFO: SG_Analyzer_Performance -- Total time in data collection : $time_diff seconds"
+       }
+       ### END PERF_DEBUG
 
        ### DEBUG
        # puts "change working directory to $currDir"
        cd "$currDir"
 
        # revert project preferences set for timing analysis flow to their original values
-       dsp_timing_analysis_revert_project_settings $origProjectSettings
-       puts "INFO: Res_Util -- Collected Vivado resource utilization data ..."
+       dsp_analysis_revert_project_settings $origProjectSettings
+       puts "INFO: SG_Analyzer -- Collected Vivado resource utilization data ..."
+
+       ### PERF_DEBUG
+       if {$Performance_benchmarking == 1} {
+           set system_time [clock seconds]
+           set formated_time [clock format $system_time -format %H:%M:%S]
+           puts "INFO: SG_Analyzer_Performance -- Exiting dsp_generate_resource_utilization_report at time : $formated_time"
+       }
+       ### END PERF_DEBUG
    }
    # End of dsp_generate_resource_utilization_report
 
@@ -5242,35 +5407,228 @@ proc dsp_is_processor_interfaces_available_on_ip {} {
        set netlistDir [ dsp_get_param_value_in_driver_tcl_namespace TargetDir ]
        set res_util_data_file "${netlistDir}/${paramvalueProject}_res_util.at"
        ### DEBUG
-       # puts "INFO: Res_Util -- Resource Utilization data will be written in file: ${res_util_data_file}"
+       # puts "INFO: SG_Analyzer -- Resource Utilization data will be written in file: ${res_util_data_file}"
+
+       set vivado_stage "Post Synthesis"
+       set atPostImpl [ dsp_get_param_value_in_driver_tcl_namespace AnalyzeTimingPostImplementation ]
+       if { [ dsp_is_good_string $atPostImpl ] && [ string equal $atPostImpl "1" ] } {
+           set vivado_stage "Post Implementation"
+       }
+       set top_level_module [ dsp_get_param_value_in_driver_tcl_namespace TopLevelModule ]
+       set crossProbeFile "${top_level_module}.v.at"
+       set hdl_language "verilog"
+       if { [ dsp_hdllang_is_vhdl ] } {
+           set crossProbeFile "${top_level_module}.vhd.at"
+           set hdl_language "vhdl"
+       }
+
+       set proj_part [::get_property PART $curr_proj]
+       set block_RAMs [::get_property BLOCK_RAMS $proj_part]
+       set DSPs [::get_property DSP $proj_part]
+       set Registers [::get_property FLIPFLOPS $proj_part]
+       set LUT_Elements [::get_property LUT_ELEMENTS $proj_part]
+       # Ultra RAMs are added in UltraScale+ devices
+       # the ULTRA_RAMS propery will not be present for other 
+       # device parts from 7/8 series/UltraScale families
+       set Ultra_RAMs ""
+       set uram_property "ULTRA_RAMS"
+       set part_properties [list_property $proj_part]
+       if { [lsearch $part_properties $uram_property] } {
+          set Ultra_RAMs [::get_property ULTRA_RAMS $proj_part]
+       }
 
        set outFile [ open ${res_util_data_file} w ]
        puts $outFile "\# Vivado resource utilization data is represented in anytable format"
        puts $outFile "\# The data will be consumed by Resource Utilization flow in SysGen.\n"
        puts $outFile "{"
+       puts $outFile "   'Design_Information' => \["
+       puts $outFile "     { "
+       puts $outFile "        'PART' => '${proj_part}',"
+       puts $outFile "        'Vivado_Stage' => '${vivado_stage}',"
+       puts $outFile "        'Top_Module' => '${top_level_module}',"
+       puts $outFile "        'HDL_Language' => '${hdl_language}',"
+       puts $outFile "        'Netlist_Crossprobe_File' => '${crossProbeFile}',"
+       puts $outFile "     },"
+       puts $outFile "   \],"
+       puts $outFile "   'Device_Resources' => \["
+       puts $outFile "     { "
+       if { $Ultra_RAMs > 0 } {
+           puts $outFile "        'URAMs' => '${Ultra_RAMs}',"
+       }
+       puts $outFile "        'BRAMs' => '${block_RAMs}',"
+       puts $outFile "        'DSPs' => '${DSPs}',"
+       puts $outFile "        'Registers' => '${Registers}',"
+       puts $outFile "        'LUTs' => '${LUT_Elements}',"
+       puts $outFile "     },"
+       puts $outFile "   \],"
        puts $outFile "   'Resource_Utilization_Data' => \["
 
-       set count 0
-       set cell_list [get_cells ${top_name}_struct/*]
+       # Note: Due to lack of additional wrapper code
+       # instance <top_name>_struct is at the top level in the final netlist
+       # for HDL Netlist and Synthesized Checkpoint flows
+       set design_top_instance "${top_name}_struct"
+       set compilationFlowName [ dsp_get_compilation_flow_name ]
+       if { [string equal $compilationFlowName "IP Catalog"] } {
+           # Note: Search for <top_name>_struct instance for IP Catalog
+           set expected_top_instance ${top_name}_struct
+           set wrapper_top_instance "${top_name}_bd_i"
+           # puts "DEBUG: IP Catalog wrapper top instance: $wrapper_top_instance"
+
+           # Go through all subcells under "${top_name}_bd_i" to find hierarchical
+           # name of ${top_name}_struct instance
+           set cell_list [ get_cells $wrapper_top_instance/*]
+           foreach cl $cell_list {
+               set is_prim [ ::get_property IS_PRIMITIVE $cl ]
+               if { $is_prim == 1 } {
+                   continue
+               }
+               ### DEBUG
+               # set cell_name [ ::get_property NAME $cl ]
+               # puts "DEBUG: Cell Name: $cell_name"
+               set top_struct_instance [ dsp_find_top_struct_instance $cl $hdlNetlistFile $expected_top_instance ]
+               if { [llength $top_struct_instance] > 0 } {
+                   set design_top_instance $top_struct_instance
+                   break
+               }
+           }
+
+           ### DEBUG
+           # puts "DEBUG: IP Catalog flow Changing Top Instance to: $design_top_instance"
+       } else {
+           set paramvalueProjectDir [ dsp_get_param_value_in_driver_tcl_namespace ProjectDir ]
+           if { [string equal $paramvalueProjectDir "hwcosim"] } {
+               # Note: Search for <top_name>_struct instance for HwCosim flow
+               set expected_top_instance ${top_name}_struct
+               set wrapper_top_instance "${paramvalueProjectDir}_top_i"
+               # wrapper_top_instance is "hwcosim_top_i"
+               # puts "DEBUG: HWCosim wrapper top instance: $wrapper_top_instance"
+
+               # Go through all subcells under "hwcosim_top_i" to find hierarchical
+               # name of ${top_name}_struct instance
+               set cell_list [ get_cells $wrapper_top_instance/*]
+               foreach cl $cell_list {
+                   set is_prim [ ::get_property IS_PRIMITIVE $cl ]
+                   if { $is_prim == 1 } {
+                       continue
+                   }
+
+                    ### DEBUG
+                   set cell_name [ ::get_property NAME $cl ]
+                   # puts "DEBUG: design wrapper cell name: $cell_name"
+                   set top_struct_instance [ dsp_find_top_struct_instance $cl $hdlNetlistFile $expected_top_instance ]
+                   if { [llength $top_struct_instance] > 0 } {
+                       set design_top_instance $top_struct_instance
+                       break
+                   }
+               }
+
+               # After hierarchical name of ${top_name}_struct instance is found
+               # find resources used by additional logic added as hwcosim wrapper
+               set logic_level "design_wrapper_top"
+               set design_wrapper_name "hwcosim_wrapper_logic_and_axi_lite_interface"
+               set wrapper_RU_data [dict create "cell_name" $design_wrapper_name]
+               set cell_list [ get_cells $wrapper_top_instance/*]
+               foreach cl $cell_list {
+                   set is_prim [ ::get_property IS_PRIMITIVE $cl ]
+                   if { $is_prim == 1 } {
+                       continue
+                   }
+
+                    ### DEBUG
+                   set cell_name [ ::get_property NAME $cl ]
+                   # puts "DEBUG: design wrapper cell name: $cell_name"
+                   # puts "DEBUG: getting resource utilization for design wrapper cell name : $cell_name"
+                   set cell_RU_data [ dsp_get_resource_utilization_data $cl $hdlNetlistFile $outFile $design_top_instance $logic_level ]
+                   foreach id [ dict keys $cell_RU_data ] {
+                       if { [string equal $id "cell_name"] == 0 } {
+                           set val [ dict get $cell_RU_data $id ]
+                           if { [dict exists $wrapper_RU_data $id] } {
+                               set orig_val [ dict get $wrapper_RU_data $id ]
+
+                               ### DEBUG
+                               # puts "Existing Key-Value Pair: $id -- $orig_val"
+                               # set new_val [expr {$val + $orig_val}]
+                               # dict set wrapper_RU_data $id $new_val
+
+                               dict set wrapper_RU_data $id [expr {$val + $orig_val}]
+
+                               ### DEBUG
+                               # set new_val [dict get $wrapper_RU_data $id]
+                               # puts "Updated Key-Value Pair: $id -- $new_val"
+                           } else {
+                               dict set wrapper_RU_data $id $val
+                           }
+                           ### DEBUG
+                           # puts "Primitive: $id Value: $val"
+                       }
+                   }
+               }
+
+               if { [dict size $wrapper_RU_data] > 1 } {
+                   puts $outFile "     { "
+                   puts $outFile "          'File_Name' => 'design_wrapper_logic',"
+                   puts $outFile "          'Line_Num' => 'Line_000',"
+                   puts $outFile "          'Hier_Name' => '$design_wrapper_name',"
+                   set id "cell_name"
+                   puts $outFile "          'Cell_Name' => '$design_wrapper_name',"
+                   puts $outFile "          'Primitives' => \[ "
+                   puts $outFile "               { "
+                   ## Note: Print resources that is not a cell name and
+                   ## do not match "Total_*" pattern
+                   foreach id [ dict keys $wrapper_RU_data ] {
+                       if { [string equal $id "cell_name"] == 0 &&
+                            [string match "Total_*"  $id] == 0 } {
+                           set val [ dict get $wrapper_RU_data $id ]
+                           ### DEBUG
+                           # puts "     ${id} => $val"
+                           puts $outFile "                    '${id}' => $val,"
+                       }
+                   }
+                   ## Note: Print resources that match "Total_*" pattern
+                   foreach id [ dict keys $wrapper_RU_data ] {
+                       if { [string match "Total_*" $id] == 1 } {
+                           set val [ dict get $wrapper_RU_data $id ]
+                           ### DEBUG
+                           # puts "     ${id} => $val"
+                           puts $outFile "                    '${id}' => $val,"
+                       }
+                   }
+                   puts $outFile "               },"
+                   puts $outFile "          \],"
+                   puts $outFile "     },"
+               }
+
+               ### DEBUG
+               # puts "DEBUG: HWCosim flow Changing Top Instance to: $design_top_instance"
+           }
+       }
+
+       ### DEBUG
+       # puts "DEBUG: Design Top Instance: $design_top_instance"
+       set cell_list [get_cells ${design_top_instance}/*]
        set len [llength $cell_list]
        if {$len > 0} {
            set top_RU_data [dict create "cell_name" $top_name]
-
            foreach cl $cell_list {
                ### DEBUG
-               # puts "INFO: Res_Util -- Calling dsp_get_resource_utilization_data for cell: $cl"
-               set cell_RU_data [ dsp_get_resource_utilization_data $cl $hdlNetlistFile $outFile ]
+               # puts "INFO: SG_Analyzer -- Calling dsp_get_resource_utilization_data for cell: $cl"
+               set logic_level "design_struct"
+               set cell_RU_data [ dsp_get_resource_utilization_data $cl $hdlNetlistFile $outFile $design_top_instance $logic_level ]
                foreach id [ dict keys $cell_RU_data ] {
                    if { [string equal $id "cell_name"] == 0 } {
                        set val [ dict get $cell_RU_data $id ]
                        ### DEBUG
                        # puts "Valid Key : $id  Value: $val"
                        if { [dict exists $top_RU_data $id] } {
-                           ### DEBUG
-                           # set orig_val [dict get $top_RU_data $id]
-                           # puts "Existing Key-Value Pair: $id -- $orig_val"
+                           ## dict incr top_RU_data $id $val
+                           set orig_val [ dict get $top_RU_data $id ]
 
-                           dict incr top_RU_data $id $val
+                           ### DEBUG
+                           # puts "Existing Key-Value Pair: $id -- $orig_val"
+                           # set new_val [expr {$val + $orig_val}]
+                           # dict set top_RU_data $id $new_val
+
+                           dict set top_RU_data $id [expr {$val + $orig_val}]
 
                            ### DEBUG
                            # set new_val [dict get $top_RU_data $id]
@@ -5280,7 +5638,6 @@ proc dsp_is_processor_interfaces_available_on_ip {} {
                        }
                        ### DEBUG
                        # puts "Primitive: $id Value: $val"
-                       set count [ expr {$count + $val} ]
                    }
                }
            }
@@ -5297,8 +5654,20 @@ proc dsp_is_processor_interfaces_available_on_ip {} {
            puts $outFile "          'Cell_Name' => '${top_name}',"
            puts $outFile "          'Primitives' => \[ "
            puts $outFile "               { "
+           ## Note: Print resources that is not a cell name and
+           ## do not match "Total_*" pattern
            foreach id [ dict keys $top_RU_data ] {
-               if { [string equal $id "cell_name"] == 0 } {
+               if { [string equal $id "cell_name"] == 0 &&
+                    [string match "Total_*"  $id] == 0 } {
+                   set val [ dict get $top_RU_data $id ]
+                   ### DEBUG
+                   # puts "     ${id} => $val"
+                   puts $outFile "                    '${id}' => $val,"
+               }
+           }
+           ## Note: Print resources that match "Total_*" pattern
+           foreach id [ dict keys $top_RU_data ] {
+               if { [string match "Total_*" $id] == 1 } {
                    set val [ dict get $top_RU_data $id ]
                    ### DEBUG
                    # puts "     ${id} => $val"
@@ -5307,28 +5676,65 @@ proc dsp_is_processor_interfaces_available_on_ip {} {
            }
            puts $outFile "               },"
            puts $outFile "          \],"
-           puts $outFile "          'Total_Count' => $count,"
            puts $outFile "     },"
        }
 
-       puts $outFile "   \]"
+       puts $outFile "   \],"
        puts $outFile "} "
        ::close $outFile
    }
 
    # this process is recursively called for each cell
-   proc dsp_get_resource_utilization_data {cellName hdlNetlistFile outFile} {
-       set count 0
+   proc dsp_get_resource_utilization_data {cellName hdlNetlistFile outFile designTopInstance logicLevel} {
+       # set count 0
        set cell_RU_data [ dict create "cell_name" $cellName ]
-       set is_prim [ get_property IS_PRIMITIVE $cellName ]
+       set is_prim [ ::get_property IS_PRIMITIVE $cellName ]
        if { $is_prim == 1 } {
-           set ref_name [ get_property REF_NAME $cellName ]
-           if { [ string equal $ref_name "GND" ] == 0 && [ string equal $ref_name "VCC" ] == 0 } {
-               set prim_count [ get_property PRIMITIVE_COUNT $cellName ]
-               set count [ expr {$count + $prim_count} ]
+           set ref_name [ ::get_property REF_NAME $cellName ]
+           # Ground (GND), and Power Supply (VCC) type of primitives
+           # are not mapped to LUTs, BRAMs, URAMs, Registers or DSPs
+           if { [string equal $ref_name "GND"] == 0 &&
+                [string equal $ref_name "VCC"] == 0 } {
+
+               # CARRY4 and CARRY8 are also not mapped to the primitive types of
+               # our interest but still will be printed in the output file just
+               # to preserve the information
+               set prim_count [ ::get_property PRIMITIVE_COUNT $cellName ]
                ### DEBUG
                # puts "Primitive Name: $ref_name, Count: $prim_count"
                dict set cell_RU_data $ref_name $prim_count
+               if { [ string match "*LUT*" $ref_name ] || [ string match "SRL*" $ref_name ] } {
+                   dict set cell_RU_data "Total_LUTs" $prim_count
+               }
+               # Primitives of type FDCE, FDPE, FDRE and FDSE and LDCE and LDPE are considered registers
+               # Hence these primitivs are added under Total_Registers count
+               if { [ string match "FD*" $ref_name ] ||  [ string match "LD*" $ref_name ] } {
+                   dict set cell_RU_data "Total_Registers" $prim_count
+               }
+               if { [ string match "DSP*" $ref_name ] } {
+                   dict set cell_RU_data "Total_DSPs" $prim_count
+               }
+               #
+               # As per Vivado report utilization development team
+               # RAMB18, RAMB18E1, RAMB18E2, RAMB18SDP are treated as RAMB18
+               # FIFO18E1, FIFO18E2 are treated as FIFO18
+               # RAMB36, RAMB36E1, RAMB36E2, RAMB36E2_TEST, RAMB36SDP, RAMB36SDP_EXT
+               # and RAMB36_EXP are treated as FIFO36
+               # FIFO36E1 and FIFO36E2 are treated as FIFO36
+               # Following equation is used to compute total BRAM count
+               # Total BRAM count = (RAMB18+FIFO18)/2 + (RAMB36+FIFO36)
+               if { [ string match "RAMB18*" $ref_name ] || [string match "FIFO18*" $ref_name] } {
+                   dict set cell_RU_data "Total_BRAMs" [ expr {$prim_count/2.0} ]
+               }
+               if { [ string match "RAMB36*" $ref_name ] || [string match "FIFO36*" $ref_name] } {
+                   dict set cell_RU_data "Total_BRAMs" $prim_count
+               }
+               # Ultra RAMs are added for UltraScale+ device families
+               # This primitive resource is reported separately from BRAMs (Block RAMS + FIFO)
+               # resource in Vivado resource utilization report
+               if { [ string match "URAM*" $ref_name ] } {
+                   dict set cell_RU_data "Total_URAMs" $prim_count
+               }
            }
        } else {
            ### DEBUG
@@ -5336,21 +5742,44 @@ proc dsp_is_processor_interfaces_available_on_ip {} {
            set cell_list [ get_cells $cellName/* ]
            set len [ llength $cell_list ]
            if { $len > 0 } {
+               if { [string equal $logicLevel "design_wrapper_top"] } {
+                   set subLogicLevel "design_wrapper_internal"
+               } else {
+                   set subLogicLevel $logicLevel
+               }
                foreach cl $cell_list {
                    ### DEBUG
-                   # puts "Calling dsp_get_resource_utilization_data for cell: $cl"
-                   set RU_data [ dsp_get_resource_utilization_data $cl $hdlNetlistFile $outFile ]
+                   # if { [string equal $logicLevel "design_wrapper_internal"] || [string equal $logicLevel "design_wrapper_top"] } {
+                   #    puts "Calling dsp_get_resource_utilization_data for cell: $cl"
+                   # }
+
+                   if { [string equal $logicLevel "design_struct"] == 0 } {
+                       if { [string equal $cl $designTopInstance] } {
+                           ### DEBUG
+                           # puts "DEBUG: Found design_top_instance, $designTopInstance, while getting res_util data for wrapper."
+                           # puts "DEBUG: Skipping the cell instance"
+                           continue
+                       }
+                   }
+
+                   set RU_data [ dsp_get_resource_utilization_data $cl $hdlNetlistFile $outFile $designTopInstance $subLogicLevel ]
                    foreach id [ dict keys $RU_data ] {
                        if { [string equal $id "cell_name"] == 0 } {
                            set val [ dict get $RU_data $id ]
                            ### DEBUG
                            # puts "Valid Key : $id  Value: $val"
+                           set new_val $val
                            if { [dict exists $cell_RU_data $id] } {
-                               ### DEBUG
-                               # set orig_val [ dict get $cell_RU_data $id ]
-                               # puts "Existing Key-Value Pair: $id -- $orig_val"
+                               ## dict incr cell_RU_data $id $val
+                               set orig_val [ dict get $cell_RU_data $id ]
 
-                               dict incr cell_RU_data $id $val
+                               ### DEBUG
+                               # puts "Existing Key-Value Pair: $id -- $orig_val"
+                               # set new_val [expr {$val + $orig_val}]
+                               # puts "Changing Key-Value Pair: $id -- $new_val"
+                               # dict set cell_RU_data $id $new_val
+
+                               dict set cell_RU_data $id [expr {$val + $orig_val}]
 
                                ### DEBUG
                                # set new_val [ dict get $cell_RU_data $id ]
@@ -5358,42 +5787,69 @@ proc dsp_is_processor_interfaces_available_on_ip {} {
                            } else {
                                dict set cell_RU_data $id $val
                            }
+
                            ### DEBUG
                            # puts "Primitive: $id Value: $val"
-                           set count [ expr {$count + $val} ]
                        }
                    }
                }
 
-               set filePath [ ::get_property FILE_NAME $cellName ]
-               set fileName [ file tail $filePath ]
-               if { [string equal $fileName $hdlNetlistFile] } {
-                   set lineNum [ ::get_property LINE_NUMBER $cellName ]
+               set write_output 0
+               if { [string equal $logicLevel "design_wrapper_top"] } {
+                   set fileName "design_wrapper_logic"
+                   set lineNum "000"
                    set hierName [ ::get_property HIERARCHICALNAME $cellName ]
-                   set ref_name [ ::get_property REF_NAME $cellName ]
-                   puts $outFile "     {"
-                   puts $outFile "          'File_Name' => '$fileName',"
-                   puts $outFile "          'Line_Num' => 'Line_${lineNum}',"
-                   puts $outFile "          'Hier_Name' => '$hierName',"
-                   set id "cell_name"
-                   set val [ dict get $cell_RU_data $id ]
-                   ### DEBUG
-                   # puts "     Cell_Name => $val"
-                   puts $outFile "          'Cell_Name' => '$val',"
-                   puts $outFile "          'Primitives' => \[ "
-                   puts $outFile "               {"
-                   foreach id [ dict keys $cell_RU_data ] {
-                       if { [string equal $id "cell_name"] == 0 } {
-                           set val [ dict get $cell_RU_data $id ]
-                           ### DEBUG
-                           # puts "     ${id} => $val"
-                           puts $outFile "                    '${id}' => $val,"
-                       }
+                   set write_output 1
+               }
+               if { [string equal $logicLevel "design_struct"] } {
+                   set filePath [ ::get_property FILE_NAME $cellName ]
+                   set fileName [ file tail $filePath ]
+               
+                   if { [string equal $fileName $hdlNetlistFile] } {
+                       set lineNum [ ::get_property LINE_NUMBER $cellName ]
+                       set hierName [ ::get_property HIERARCHICALNAME $cellName ]
+                       # set ref_name [ ::get_property REF_NAME $cellName ]
+                       set write_output 1
                    }
-                   puts $outFile "               },"
-                   puts $outFile "          \], "
-                   puts $outFile "          'Total_Count' => $count,"
-                   puts $outFile "     },"
+               }
+
+               if { $write_output == 1 } {
+                       puts $outFile "     {"
+                       puts $outFile "          'File_Name' => '$fileName',"
+                       puts $outFile "          'Line_Num' => 'Line_${lineNum}',"
+                       puts $outFile "          'Hier_Name' => '$hierName',"
+                       set id "cell_name"
+                       set val [ dict get $cell_RU_data $id ]
+                       ### DEBUG
+                       # puts "     Cell_Name => $val"
+                       puts $outFile "          'Cell_Name' => '$val',"
+                       puts $outFile "          'Primitives' => \[ "
+                       puts $outFile "               {"
+                       ## Note: Print resources that is not a cell name and
+                       ## do not match "Total*" pattern
+                       foreach id [ dict keys $cell_RU_data ] {
+                           if { [string equal $id "cell_name"] == 0 && 
+                                [string match "Total_*" $id] == 0 } {
+                               set val [ dict get $cell_RU_data $id ]
+                               ### DEBUG
+                               # puts "     ${id} => $val"
+                               puts $outFile "                    '${id}' => $val,"
+                           }
+                       }
+                       ## Note: Print resources that match "Total_*" pattern
+                       foreach id [ dict keys $cell_RU_data ] {
+                           ## Note: Print resources that is not a cell name and
+                           ## do not match "Total*" pattern
+                           if { [string match "Total_*" $id] == 1 } {
+                               set val [ dict get $cell_RU_data $id ]
+                               ### DEBUG
+                               # puts "     ${id} => $val"
+                               puts $outFile "                    '${id}' => $val,"
+                           }
+                       }
+                       puts $outFile "               },"
+                       puts $outFile "          \], "
+                       puts $outFile "     },"
                }
            }
        }
@@ -5401,5 +5857,50 @@ proc dsp_is_processor_interfaces_available_on_ip {} {
        return ${cell_RU_data}
    }
 
+   # This process is called for HwCosim and IP Catalog compilation targets
+   # to find out <top_module>_struct instance under the top level wrapper
+   proc dsp_find_top_struct_instance {cellName hdlNetlistFile expectedTopInstance} {
+       set top_struct_instance ""
+       # The expected top instance <top_module>_struct is at higher level in hierarchy
+       # Hence, if the cell is a primitive then return.
+       set is_prim [::get_property IS_PRIMITIVE $cellName]
+       if { $is_prim == 1 } {
+           return ${top_struct_instance}
+       }
+
+       set hier_name [::get_property NAME $cellName]
+       set cell_name [file tail $hier_name]
+       # The clock_driver related instances are not part of Simulink design.
+       # Hence, return if the cell name has "clock_driver" string.
+       if { [string match {*clock_driver*} $cell_name] } {
+           # puts "DEBUG: cell name matches with string: clock_driver"
+           return ${top_struct_instance}
+       }
+       # puts "DEBUG: Cell Name = $cell_name"
+       set file_path [::get_property FILE_NAME $cellName]
+       set file_name [file tail $file_path]
+       # puts "DEBUG: File Name = $file_name"
+       if { [string equal $file_name $hdlNetlistFile] == 1 &&
+            [string equal $cell_name $expectedTopInstance] == 1 } {
+           set top_struct_instance $cellName
+           # puts "DEBUG: found top_struct_instance $top_struct_instance"
+       } else {
+           # puts "DEBUG: Calling get cells for $cellName"
+           set cell_list [::get_cells $cellName/*]
+           set len [llength $cell_list]
+           if { $len > 0 } {
+               foreach cl $cell_list {
+                   set top_struct_instance [dsp_find_top_struct_instance $cl $hdlNetlistFile $expectedTopInstance]
+                   if { [llength $top_struct_instance] > 0 } {
+                       break
+                   }
+               }
+           }
+       }
+       return ${top_struct_instance}
+   }
+
 }
 # END namespace ::xilinx::dsp::planaheadworker
+
+# XSIP watermark, do not delete 67d7842dbbe25473c3c32b93c0da8047785f30d78e8a024de1b57352245f9689

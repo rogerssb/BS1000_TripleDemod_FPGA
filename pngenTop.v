@@ -17,13 +17,13 @@ module pngenTop(
 );
 
 
-    wire        [23:0]  pnPolyTaps;
-    wire        [4:0]   pnPolyLength;
-    wire        [31:0]  pnClockRate;
-    wire        [3:0]   pcmMode; 
+  (* MARK_DEBUG="true" *)  wire        [23:0]  pnPolyTaps;
+  (* MARK_DEBUG="true" *)  wire        [4:0]   pnPolyLength;
+  (* MARK_DEBUG="true" *)  wire        [31:0]  pnClockRate;
+  (* MARK_DEBUG="true" *)  wire        [3:0]   pcmMode;
     wire        [1:0]   fecMode;
     wire        [1:0]   ldpcRate;
-    wire        [1:0]   ldpcRandomize;   
+    wire        [1:0]   ldpcRandomize;
     pngenRegs pngenRegs(
         .busClk(busClk),
         .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
@@ -53,7 +53,7 @@ module pngenTop(
     reg             infoClkEn;
     reg             everyOtherEn;
     wire            pause;
-    
+
     always @(posedge clk) begin
         if (reset) begin
             phase <= 0;
@@ -61,7 +61,7 @@ module pngenTop(
             everyOtherEn <= 0;
         end
         else if (clkEn) begin
-            case (pcmMode) 
+            case (pcmMode)
                 `PNGEN_PCM_NRZL,
                 `PNGEN_PCM_NRZM,
                 `PNGEN_PCM_NRZS: begin
@@ -101,38 +101,37 @@ module pngenTop(
         end
     end
 
+    `include "bert/bert_functions.v"
+    wire [23:0] polyData;
+    wire [23:0] poly = pnPolyMode ? mirror_taps (pnPolyTaps, pnPolyLength) : pnPolyTaps;
     `define ADD_PCM_ENCODER
     `ifndef ADD_PCM_ENCODER
 
     // PN Generator
-    `include "bert/bert_functions.v"
-    wire [23:0] poly = pnPolyMode ? mirror_taps (pnPolyTaps, pnPolyLength) : pnPolyTaps;
     bert_lfsr pn_lfsr (
         .poly(poly),
         .poly_length(pnPolyLength),
         .reset(reset),
         .clock(clk),
         .enable(infoClkEn),
-        .reload(1'b0),
-        .load_data(24'b0),
-        .data(),
+        .reload(~|polyData),    // TODO FZ lfsr was going to all zeroes if fed bad poly. Couldn't recover
+        .load_data(24'h0099),
+        .data(polyData),
         .serial(pnBit0)
     );
 
     `else //ADD_PCM_ENCODER
 
     // PN Generator
-    `include "bert/bert_functions.v"
-    wire [23:0] poly = pnPolyMode ? mirror_taps (pnPolyTaps, pnPolyLength) : pnPolyTaps;
     bert_lfsr pn_lfsr (
         .poly(poly),
         .poly_length(pnPolyLength),
         .reset(reset),
         .clock(clk),
         .enable(infoClkEn),
-        .reload(1'b0),
-        .load_data(24'b0),
-        .data(),
+        .reload(~|polyData),    // TODO FZ lfsr was going to all zeroes if fed bad poly. Couldn't recover
+        .load_data(24'h0099),
+        .data(polyData),
         .serial(errorFreeNrzBit)
     );
 
@@ -174,9 +173,9 @@ module pngenTop(
     );
 
     `endif //ADD_PCM_ENCODER
-    
-    // Foward Error Corrections 
-    reg convEncReset;       
+
+    // Foward Error Corrections
+    reg convEncReset;
     convEncoder conv_enc
     (
         .clk(clk),
@@ -187,6 +186,10 @@ module pngenTop(
         .encBit(pnBitConvEnc),
         .vitG2Inv(vitG2Inv)
     );
+
+   wire holdLdpc;
+   reg  ldpcEncReset;
+    `ifndef NO_LDPC_ENC
     /// LDPC Encoder ///
     reg ldpcEncReset;
     ldpc_encoder ldpc(
@@ -200,6 +203,7 @@ module pngenTop(
         .blocksize(ldpcBlockSize),
         .randomize(ldpcRandomize)
     );
+    `endif  // NO_LDPC_ENC
 
     assign pause = fecMode==`PNGEN_FEC_CONV ? holdConvEnc :( fecMode==`PNGEN_FEC_LDPC ? holdLdpc : 1'b0) ;
     reg pnBitMux;
@@ -210,7 +214,7 @@ module pngenTop(
             ldpcEncReset <= 1'b1;
         end
         else if(pnClkEn) begin
-            case (fecMode) 
+            case (fecMode)
             `PNGEN_FEC_OFF:     begin
                                 pnBitMux <= pnBit0;
                                 convEncReset <= 1;
@@ -221,12 +225,14 @@ module pngenTop(
                                 convEncReset <= 0;
                                 ldpcEncReset <= 1;
                                 end
-            `PNGEN_FEC_LDPC:    begin
+     `ifndef NO_LDPC_ENC
+           `PNGEN_FEC_LDPC:    begin
                                 pnBitMux <= ldpcEncBit;
                                 ldpcEncReset <= 0;
                                 convEncReset <= 1;
                                 end
-            default:            begin 
+    `endif
+            default:            begin
                                 pnBitMux <= pnBit0;
                                 convEncReset <= 1;
                                 ldpcEncReset <= 1;
@@ -235,5 +241,5 @@ module pngenTop(
         end
     end
     assign pnBit = pnBitMux;
-    
+
 endmodule

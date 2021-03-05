@@ -144,7 +144,7 @@ module semcoDemodTop (
 
 );
 
-    parameter VER_NUMBER = 16'd645;
+    parameter VER_NUMBER = 16'd646;
 
 
 //******************************************************************************
@@ -198,9 +198,10 @@ module semcoDemodTop (
     /******************************************************************************
                                  SPI Config Interface
     ******************************************************************************/
-    wire    [12:0]  addr;
-    wire    [31:0]  dataIn;
-    reg     [31:0]  rd_mux;
+ (* MARK_DEBUG="true" *)    wire    [12:0]  addr;
+ (* MARK_DEBUG="true" *)    wire    [31:0]  dataIn;
+ (* MARK_DEBUG="true" *)    reg     [31:0]  rd_mux;
+ (* MARK_DEBUG="true" *)    wire    cs, wr0, wr1, wr2, wr3, framerEnable, pngenEnable;
     spiBusInterface spi(
         .clk(clk),
         .reset(reset),
@@ -339,6 +340,7 @@ module semcoDemodTop (
         .dac2InputSelect(),
         .ch0MuxSelect(),
         .ch1MuxSelect(),
+        .pngenEnable(pngenEnable),
         .framerEnable(framerEnable)
     );
 
@@ -348,9 +350,9 @@ module semcoDemodTop (
 //******************************************************************************
 
     multibootK7 multiboot(
-        .clk(clk), 
-        .pulse(reboot), 
-        .addr(boot_addr), 
+        .clk(clk),
+        .pulse(reboot),
+        .addr(boot_addr),
         .reset(reset)
     );
 
@@ -527,7 +529,7 @@ module semcoDemodTop (
 ******************************************************************************/
 /*
     The viterbi was originally used in the bitsync bert card so there's a value
-    called bitsyncMode that doesn't exist in the legacy demod. We re-create it 
+    called bitsyncMode that doesn't exist in the legacy demod. We re-create it
     here from demodMode so we don't have two versions of viterbi to support.
 */
 
@@ -751,7 +753,7 @@ module semcoDemodTop (
     wire    [1:0]   rotation;
     reg             iRotBit,qRotBit,qDemodBitDelay;
     always @(posedge clk) begin
-        case (demodMode) 
+        case (demodMode)
             `MODE_QPSK: begin
                 if (iDemodBitEn) begin
                     case (rotation)
@@ -1211,7 +1213,29 @@ module semcoDemodTop (
 
 `endif //ADD_DQM
 
+`ifdef ADD_PN_GEN
 
+//******************************************************************************
+//                               PN Generator
+//******************************************************************************
+    wire    [31:0]  pngenDout;
+    pngenTop pngen(
+        .clk(clk),
+        .clkEn(pngenEnable),
+        .reset(reset),
+        .busClk(busClk),
+        // TODO, needed CS to prevent early writes with garbage only on triple demod
+        .wr0(cs & wr0), .wr1(cs & wr1), .wr2(cs & wr2), .wr3(cs & wr3),
+        .addr(addr),
+        .din(dataIn),
+        .dout(pngenDout),
+        .pnClkEn(pnClkEn),
+        .nrzBit(pnNrzBit),
+        .pnBit(pnBit),
+        .pnClk(pnClk)
+    );
+
+ `endif
 //******************************************************************************
 //                       Clock/Data Jitter Reduction
 //******************************************************************************
@@ -1252,6 +1276,7 @@ module semcoDemodTop (
     wire    [3:0]   cAndD0SourceSelect;
     reg             cAndD0ClkEn;
     reg     [2:0]   cAndD0DataIn;
+
     always @* begin
         casex (cAndD0SourceSelect)
             `CandD_SRC_LEGACY_I: begin
@@ -1280,7 +1305,13 @@ module semcoDemodTop (
             `endif
             //`CandD_SRC_MULTIH:
             //`CandD_SRC_STC:
-            //`CandD_SRC_PNGEN;
+            `ifdef ADD_PN_GEN
+            // should never get here since the Pn outputs are on clock1&3
+            `CandD_SRC_PNGEN: begin
+                cAndD0ClkEn = pnClkEn;
+                cAndD0DataIn = {pnBit,2'b0};
+            end
+            `endif
             `ifdef ADD_LDPC
             `CandD_SRC_LDPC: begin
                 cAndD0ClkEn = ldpcBitEnOut;
@@ -1354,68 +1385,73 @@ module semcoDemodTop (
     reg             cAndD1ClkEn;
     reg     [2:0]   cAndD1DataIn;
     always @* begin
-        casex (cAndD1SourceSelect)
-            `CandD_SRC_LEGACY_I: begin
-                `ifdef ADD_FRAMER
-                cAndD1ClkEn = iDemodBitEn;
-                cAndD1DataIn = {iRotBit,qRotBit,1'b0};
-                `else
-                cAndD1ClkEn = iDemodBitEn;
-                cAndD1DataIn = {iDemodBit,qDemodBit,1'b0};
-                `endif
-            end
-            `CandD_SRC_LEGACY_Q: begin
-                `ifdef ADD_FRAMER
-                cAndD1ClkEn = qDemodBitEn;
-                cAndD1DataIn = {qRotBit,1'b0,1'b0};
-                `else
-                cAndD1ClkEn = qDemodBitEn;
-                cAndD1DataIn = {qDemodBit,1'b0,1'b0};
-                `endif
-            end
-            `ifdef ADD_TRELLIS
-            `CandD_SRC_PCMTRELLIS: begin
-                cAndD1ClkEn = pcmTrellisSymEnOut;
-                cAndD1DataIn = {pcmTrellisBit,pcmTrellisBit,1'b0};
-            end
-            `endif
-            //`CandD_SRC_MULTIH:
-            //`CandD_SRC_STC:
-            //`CandD_SRC_PNGEN:
-            `ifdef ADD_LDPC
-            `CandD_SRC_LDPC: begin
-                cAndD1ClkEn = ldpcBitEnOut;
-                cAndD1DataIn = {ldpcBitOut,2'b0};
-            end
-            `endif
-            `ifdef ADD_DQM
-            `CandD_SRC_DQM: begin
-                cAndD1ClkEn = dqmBitEn;
-                cAndD1DataIn = {dqmBit,2'b0};
-            end
-            `endif
-            `CandD_SRC_DEC0_CH0: begin
-                cAndD1ClkEn = dualPcmClkEn;
-                cAndD1DataIn = {dualDataI,dualDataQ,1'b0};
-            end
-            `CandD_SRC_DEC0_CH1: begin
-                cAndD1ClkEn = dualPcmClkEn;
-                cAndD1DataIn = {dualDataQ,dualDataI,1'b0};
-            end
-            `CandD_SRC_DEC1_CH0: begin
-                cAndD1ClkEn = ch1PcmClkEn;
-                cAndD1DataIn = {ch1PcmData,1'b0,1'b0};
-            end
-            //`CandD_SRC_DEC1_CH1:
-            //`CandD_SRC_DEC2_CH0:
-            //`CandD_SRC_DEC2_CH1:
-            //`CandD_SRC_DEC3_CH0:
-            //`CandD_SRC_DEC3_CH1:
-            default:   begin
-                cAndD1ClkEn = iDemodBitEn;
-                cAndD1DataIn = {iDemodBit,qDemodBit,1'b0};
-            end
-        endcase
+       casex (cAndD1SourceSelect)
+           `CandD_SRC_LEGACY_I: begin
+               `ifdef ADD_FRAMER
+               cAndD1ClkEn = iDemodBitEn;
+               cAndD1DataIn = {iRotBit,qRotBit,1'b0};
+               `else
+               cAndD1ClkEn = iDemodBitEn;
+               cAndD1DataIn = {iDemodBit,qDemodBit,1'b0};
+               `endif
+           end
+           `CandD_SRC_LEGACY_Q: begin
+               `ifdef ADD_FRAMER
+               cAndD1ClkEn = qDemodBitEn;
+               cAndD1DataIn = {qRotBit,1'b0,1'b0};
+               `else
+               cAndD1ClkEn = qDemodBitEn;
+               cAndD1DataIn = {qDemodBit,1'b0,1'b0};
+               `endif
+           end
+           `ifdef ADD_TRELLIS
+           `CandD_SRC_PCMTRELLIS: begin
+               cAndD1ClkEn = pcmTrellisSymEnOut;
+               cAndD1DataIn = {pcmTrellisBit,pcmTrellisBit,1'b0};
+           end
+           `endif
+           //`CandD_SRC_MULTIH:
+           //`CandD_SRC_STC:
+           `ifdef ADD_PN_GEN
+           `CandD_SRC_PNGEN: begin
+               cAndD1ClkEn = pnClkEn;
+               cAndD1DataIn = {pnBit,2'b0};
+           end
+           `endif
+           `ifdef ADD_LDPC
+           `CandD_SRC_LDPC: begin
+               cAndD1ClkEn = ldpcBitEnOut;
+               cAndD1DataIn = {ldpcBitOut,2'b0};
+           end
+           `endif
+           `ifdef ADD_DQM
+           `CandD_SRC_DQM: begin
+               cAndD1ClkEn = dqmBitEn;
+               cAndD1DataIn = {dqmBit,2'b0};
+           end
+           `endif
+           `CandD_SRC_DEC0_CH0: begin
+               cAndD1ClkEn = dualPcmClkEn;
+               cAndD1DataIn = {dualDataI,dualDataQ,1'b0};
+           end
+           `CandD_SRC_DEC0_CH1: begin
+               cAndD1ClkEn = dualPcmClkEn;
+               cAndD1DataIn = {dualDataQ,dualDataI,1'b0};
+           end
+           `CandD_SRC_DEC1_CH0: begin
+               cAndD1ClkEn = ch1PcmClkEn;
+               cAndD1DataIn = {ch1PcmData,1'b0,1'b0};
+           end
+           //`CandD_SRC_DEC1_CH1:
+           //`CandD_SRC_DEC2_CH0:
+           //`CandD_SRC_DEC2_CH1:
+           //`CandD_SRC_DEC3_CH0:
+           //`CandD_SRC_DEC3_CH1:
+           default:   begin
+               cAndD1ClkEn = iDemodBitEn;
+               cAndD1DataIn = {iDemodBit,qDemodBit,1'b0};
+           end
+       endcase
     end
 
     `ifdef BYPASS_MULTIH_DECODER
@@ -1874,6 +1910,10 @@ sdi sdi(
             `BERT_SPACE:        rd_mux = bertDout;
             `endif
 
+            `ifdef ADD_PN_GEN
+             `PNGEN_SPACE:      rd_mux = pngenDout;
+            `endif
+
             `ifdef ADD_FRAMER
             `FRAMER_SPACE:      rd_mux = framerDout;
             `endif
@@ -2022,6 +2062,10 @@ sdi sdi(
                     rd_mux = framerDout[15:0];
                 end
             end
+            `endif
+
+            `ifdef ADD_PN_GEN
+             `PNGEN_SPACE:      TODO, pnGen is not intended for non6100 builds. FZ
             `endif
 
             `DEMODSPACE,

@@ -1,5 +1,5 @@
 #-----------------------------------------------------------------
-# System Generator version 2015.4 IP Tcl source file.
+# System Generator version 2016.4 IP Tcl source file.
 #
 # Copyright(C) 2013 by Xilinx, Inc.  All rights reserved.  This
 # text/file contains proprietary, confidential information of Xilinx,
@@ -69,10 +69,10 @@ set_property -dict $params_list [get_ips hbf_fft_cordic_v6_0_i0]
 
 
 set existingipslist [get_ips]
-if {[lsearch $existingipslist hbf_fft_fifo_generator_v13_0_i0] < 0} {
-create_ip -name fifo_generator -version 13.0 -vendor xilinx.com -library ip -module_name hbf_fft_fifo_generator_v13_0_i0
+if {[lsearch $existingipslist hbf_fft_fifo_generator_v13_1_i0] < 0} {
+create_ip -name fifo_generator -version 13.1 -vendor xilinx.com -library ip -module_name hbf_fft_fifo_generator_v13_1_i0
 set params_list [list]
-lappend params_list CONFIG.Component_Name {hbf_fft_fifo_generator_v13_0_i0}
+lappend params_list CONFIG.Component_Name {hbf_fft_fifo_generator_v13_1_i0}
 lappend params_list CONFIG.almost_empty_flag {false}
 lappend params_list CONFIG.almost_full_flag {false}
 lappend params_list CONFIG.data_count {false}
@@ -106,7 +106,7 @@ lappend params_list CONFIG.valid_sense {Active_High}
 lappend params_list CONFIG.write_acknowledge_flag {false}
 lappend params_list CONFIG.write_acknowledge_sense {Active_High}
 
-set_property -dict $params_list [get_ips hbf_fft_fifo_generator_v13_0_i0]
+set_property -dict $params_list [get_ips hbf_fft_fifo_generator_v13_1_i0]
 }
 
 

@@ -1,15 +1,15 @@
-//Copyright 1986-2015 Xilinx, Inc. All Rights Reserved.
+//Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
 //--------------------------------------------------------------------------------
-//Tool Version: Vivado v.2015.4 (win64) Build 1412921 Wed Nov 18 09:43:45 MST 2015
-//Date        : Wed Sep 18 17:48:09 2019
-//Host        : scottAlien running 64-bit Service Pack 1  (build 7601)
+//Tool Version: Vivado v.2016.4 (win64) Build 1756540 Mon Jan 23 19:11:23 MST 2017
+//Date        : Wed Jan 20 18:19:45 2021
+//Host        : SEMCO_1039B running 64-bit major release  (build 9200)
 //Command     : generate_target hbf_fft_bd.bd
 //Design      : hbf_fft_bd
 //Purpose     : IP block netlist
 //--------------------------------------------------------------------------------
 `timescale 1 ps / 1 ps
 
-(* CORE_GENERATION_INFO = "hbf_fft_bd,IP_Integrator,{x_ipVendor=xilinx.com,x_ipLibrary=BlockDiagram,x_ipName=hbf_fft_bd,x_ipVersion=1.00.a,x_ipLanguage=VERILOG,numBlks=1,numReposBlks=1,numNonXlnxBlks=1,numHierBlks=0,maxHierDepth=0,synth_mode=Global}" *) (* HW_HANDOFF = "hbf_fft_bd.hwdef" *) 
+(* CORE_GENERATION_INFO = "hbf_fft_bd,IP_Integrator,{x_ipVendor=xilinx.com,x_ipLibrary=BlockDiagram,x_ipName=hbf_fft_bd,x_ipVersion=1.00.a,x_ipLanguage=VERILOG,numBlks=1,numReposBlks=1,numNonXlnxBlks=1,numHierBlks=0,maxHierDepth=0,numSysgenBlks=1,numHlsBlks=0,numHdlrefBlks=0,numPkgbdBlks=0,bdsource=SYSGEN,synth_mode=OOC_per_IP}" *) (* HW_HANDOFF = "hbf_fft_bd.hwdef" *) 
 module hbf_fft_bd
    (ce2,
     clk,
@@ -59,8 +59,8 @@ module hbf_fft_bd
   wire [0:0]hbf_fft_1_ce2;
   wire [11:0]hbf_fft_1_fft_axis_tuser_xk_index_d;
   wire [0:0]hbf_fft_1_fft_mag_finished;
-  wire [0:0]hbf_fft_1_fft_mag_m_axis_data_TLAST;
-  wire [0:0]hbf_fft_1_fft_mag_m_axis_dout_TVALID;
+  wire [0:0]hbf_fft_1_fft_mag_m_axis_data_tlast;
+  wire [0:0]hbf_fft_1_fft_mag_m_axis_dout_tvalid;
   wire [15:0]hbf_fft_1_fft_mag_m_axis_tdata_real;
   wire [0:0]hbf_fft_1_fifofull_i;
   wire [0:0]hbf_fft_1_fifofull_q;
@@ -81,8 +81,8 @@ module hbf_fft_bd
   assign datain_1 = datain[13:0];
   assign fft_axis_tuser_xk_index_d[11:0] = hbf_fft_1_fft_axis_tuser_xk_index_d;
   assign fft_mag_finished[0] = hbf_fft_1_fft_mag_finished;
-  assign fft_mag_m_axis_data_tlast[0] = hbf_fft_1_fft_mag_m_axis_data_TLAST;
-  assign fft_mag_m_axis_dout_tvalid[0] = hbf_fft_1_fft_mag_m_axis_dout_TVALID;
+  assign fft_mag_m_axis_data_tlast[0] = hbf_fft_1_fft_mag_m_axis_data_tlast;
+  assign fft_mag_m_axis_dout_tvalid[0] = hbf_fft_1_fft_mag_m_axis_dout_tvalid;
   assign fft_mag_m_axis_tdata_real[15:0] = hbf_fft_1_fft_mag_m_axis_tdata_real;
   assign fifofull_i[0] = hbf_fft_1_fifofull_i;
   assign fifofull_q[0] = hbf_fft_1_fifofull_q;
@@ -103,8 +103,8 @@ module hbf_fft_bd
         .datain(datain_1),
         .fft_axis_tuser_xk_index_d(hbf_fft_1_fft_axis_tuser_xk_index_d),
         .fft_mag_finished(hbf_fft_1_fft_mag_finished),
-        .fft_mag_m_axis_data_tlast(hbf_fft_1_fft_mag_m_axis_data_TLAST),
-        .fft_mag_m_axis_dout_tvalid(hbf_fft_1_fft_mag_m_axis_dout_TVALID),
+        .fft_mag_m_axis_data_tlast(hbf_fft_1_fft_mag_m_axis_data_tlast),
+        .fft_mag_m_axis_dout_tvalid(hbf_fft_1_fft_mag_m_axis_dout_tvalid),
         .fft_mag_m_axis_tdata_real(hbf_fft_1_fft_mag_m_axis_tdata_real),
         .fifofull_i(hbf_fft_1_fifofull_i),
         .fifofull_q(hbf_fft_1_fifofull_q),

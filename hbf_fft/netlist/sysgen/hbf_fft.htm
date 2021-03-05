@@ -95,7 +95,7 @@ table {border-collapse:collapse;
 <td class="title_table_design_cell">hbf_fft</td>
 </tr>
 <tr>
-<td colspan=2 class="title_table_date_cell"><b>18-Sep-2019</b></td>
+<td colspan=2 class="title_table_date_cell"><b>20-Jan-2021</b></td>
 </tr>
 </table>
 <br>
@@ -134,6 +134,8 @@ This section documents the port interface of hbf_fft. All the <i>Gateway In</i> 
 <tr class="sg_row">
 <td class="sg_cell">datain</td><td class="sg_cell">in</td><td class="sg_cell">std_logic_vector(13 downto 0)</td><td class="sg_cell">data</td><td class="sg_cell">Fix_14_13</td><td class="sg_cell">1</td><td class="sg_cell"></td></tr>
 <tr class="sg_row">
+<td class="sg_cell">ce2</td><td class="sg_cell">out</td><td class="sg_cell">std_logic_vector(0 downto 0)</td><td class="sg_cell">data</td><td class="sg_cell">Bool</td><td class="sg_cell">1</td><td class="sg_cell"></td></tr>
+<tr class="sg_row">
 <td class="sg_cell">fifofull_i</td><td class="sg_cell">out</td><td class="sg_cell">std_logic_vector(0 downto 0)</td><td class="sg_cell">data</td><td class="sg_cell">Bool</td><td class="sg_cell">2</td><td class="sg_cell"></td></tr>
 <tr class="sg_row">
 <td class="sg_cell">fifofull_q</td><td class="sg_cell">out</td><td class="sg_cell">std_logic_vector(0 downto 0)</td><td class="sg_cell">data</td><td class="sg_cell">Bool</td><td class="sg_cell">2</td><td class="sg_cell"></td></tr>
@@ -155,8 +157,6 @@ This section documents the port interface of hbf_fft. All the <i>Gateway In</i> 
 <td class="sg_cell">fft_mag_m_axis_tdata_real</td><td class="sg_cell">out</td><td class="sg_cell">std_logic_vector(15 downto 0)</td><td class="sg_cell">data</td><td class="sg_cell">Fix_16_14</td><td class="sg_cell">2</td><td class="sg_cell"></td></tr>
 <tr class="sg_row">
 <td class="sg_cell">index_k</td><td class="sg_cell">out</td><td class="sg_cell">std_logic_vector(12 downto 0)</td><td class="sg_cell">data</td><td class="sg_cell">UFix_13_0</td><td class="sg_cell">2</td><td class="sg_cell"></td></tr>
-<tr class="sg_row">
-<td class="sg_cell">ce2</td><td class="sg_cell">out</td><td class="sg_cell">std_logic_vector(0 downto 0)</td><td class="sg_cell">data</td><td class="sg_cell">Bool</td><td class="sg_cell">1</td><td class="sg_cell"></td></tr>
 <tr class="sg_row">
 <td class="sg_cell">clk</td><td class="sg_cell">in</td><td class="sg_cell">std_logic</td><td class="sg_cell">clock</td><td class="sg_cell">-</td><td class="sg_cell">1</td><td class="sg_cell"></td></tr>
 <caption class="sg_caption"><i>Table 1.</i> <b>Top Level Port Interface</b></caption>
@@ -242,7 +242,7 @@ The table below lists the tools and their versions used to generate this design.
 <tr class="sg_row">
 <td class="sg_cell_first_row">Tools</td><td class="sg_cell_first_row">Version</td></tr>
 <tr class="sg_row">
-<td class="sg_cell">Vivado</td><td class="sg_cell">2015.4</td></tr>
+<td class="sg_cell">Vivado</td><td class="sg_cell">2016.4</td></tr>
 <caption class="sg_caption"><i>Table 3.</i> <b>Tool Versions</b></caption>
 </table>
 </body>

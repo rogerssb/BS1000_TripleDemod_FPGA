@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------
-// System Generator version 2015.4 Verilog source file.
+// System Generator version 2016.4 Verilog source file.
 //
 // Copyright(C) 2013 by Xilinx, Inc.  All rights reserved.  This
 // text/file contains proprietary, confidential information of Xilinx,
@@ -1057,9 +1057,9 @@ module hbf_fft_xlfifogen (din, we, we_ce, re, re_ce, rst, en, ce, clk,
 
 
 
-if (core_name0 == "hbf_fft_fifo_generator_v13_0_i0") 
+if (core_name0 == "hbf_fft_fifo_generator_v13_1_i0") 
      begin:comp0
-hbf_fft_fifo_generator_v13_0_i0 core_instance0 ( 
+hbf_fft_fifo_generator_v13_1_i0 core_instance0 ( 
          .clk(clk),
          .srst(srst),
          .din(din),
