@@ -1,0 +1,91 @@
+<!DOCTYPE SilvacoProject>
+<project version="1" name="testViterbiCore" >
+ <products>
+  <product name="SILOS" >
+   <settings>
+    <setting value="Silvaco4.14.3.R" name="Version" />
+    <setting value="Y" name="NoFloatWarn" />
+    <setting value="search" name="SystaskSearchOrder" />
+    <setting value="./." name="SimFile" />
+    <setting value="N" name="VisualDebug" />
+    <setting value="N" name="SaveAms" />
+   </settings>
+   <librarydirs>
+    <directory name="..\..\Xilinx\13.4\ISE_DS\ISE\verilog\src\unisims\{.v}" />
+   </librarydirs>
+   <plifiles>
+    <file name="gausspli.dll" />
+   </plifiles>
+   <analyzer>
+    <views>
+     <view value="0.000 ns,218653.465 ns,3936.156 ns,1080030.000 ns,1357135.479 ns" name="Last" />
+    </views>
+    <settings>
+     <setting value="142" name="C0Width" />
+     <setting value="75" name="C1Width" />
+     <setting value="95" name="C2Width" />
+     <setting value="N" name="GotoSource" />
+    </settings>
+    <groups>
+     <group open="no" name="Bit Errors" show="yes" >
+      <signals>
+       <signal name="clk" scope="test" />
+       <signal name="clken" scope="test" />
+       <signal name="clkEn" scope="test" />
+       <signal name="reset" scope="test" />
+       <signal name="vitReset" scope="test" />
+       <signal name="g1Bit" scope="test" />
+       <signal interpolate="Step" radix="Real" name="g1SignalReal" scope="test" />
+       <signal interpolate="Step" radix="Real" name="g1NoiseReal" scope="test" />
+       <signal name="g2Bit" scope="test" />
+       <signal interpolate="Step" radix="Real" name="g2SignalReal" scope="test" />
+       <signal interpolate="Step" radix="Real" name="g2NoiseReal" scope="test" />
+       <signal name="g1[2:0]" scope="test" />
+       <signal name="g2[2:0]" scope="test" />
+       <signal name="viterbiBitEn" scope="test" />
+       <signal name="bitOut" scope="test" />
+       <signal name="vitDataDelay" scope="test" />
+       <signal name="g1[2]" scope="test" />
+       <signal name="g1Delay" scope="test" />
+       <signal name="testBits" scope="test" />
+       <signal interpolate="Step" radix="Decimal" name="vitErrors" scope="test" />
+       <signal interpolate="Step" radix="Decimal" name="g1Errors" scope="test" />
+       <signal interpolate="Step" radix="Decimal" name="testBitCount" scope="test" />
+      </signals>
+     </group>
+     <group open="yes" name="Viterbi Pins" show="yes" >
+      <signals>
+       <signal name="rdy" scope="test.xilViterbi" />
+       <signal name="norm" scope="test.xilViterbi" />
+       <signal name="data_out" scope="test.xilViterbi" />
+       <signal name="ber_done" scope="test.xilViterbi" />
+       <signal name="ber[15:0]" scope="test.xilViterbi" />
+       <signal name="sclr" scope="test.xilViterbi" />
+       <signal name="clk" scope="test.xilViterbi" />
+       <signal name="ce" scope="test.xilViterbi" />
+       <signal name="data_in1[2:0]" scope="test.xilViterbi" />
+       <signal name="data_in0[2:0]" scope="test.xilViterbi" />
+      </signals>
+     </group>
+     <group open="no" name="Noise Calibration" show="yes" >
+      <signals>
+       <signal interpolate="Step" radix="Decimal" name="txSampleCount" scope="test" />
+       <signal interpolate="Step" radix="Real" name="signalMagSquared" scope="test" />
+       <signal interpolate="Step" radix="Real" name="noiseMagSquared" scope="test" />
+      </signals>
+     </group>
+    </groups>
+   </analyzer>
+   <explorer>
+    <settings>
+     <setting value="test.xilViterbi" name="Scope" />
+    </settings>
+   </explorer>
+   <sourcefiles>
+    <file name="testViterbiCore.v" />
+    <file name=".\coregen\xilinxViterbiV7p0.v" />
+    <file name="..\..\Xilinx\10.1\ISE\verilog\src\unisims\RAMB16BWER.v" />
+   </sourcefiles>
+  </product>
+ </products>
+</project>
