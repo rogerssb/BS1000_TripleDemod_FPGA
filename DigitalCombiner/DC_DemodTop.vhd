@@ -42,6 +42,7 @@ use UNISIM.vcomponents.all;
 
 ENTITY DC_DemodTop IS
    GENERIC (
+      SimMode     : boolean := true;
       PORTS       : natural := 5
    );
    PORT(
@@ -53,21 +54,37 @@ ENTITY DC_DemodTop IS
       BS_Clk,
       amAdcDataIn,
       spiCSn,
-      spiDataOut,
       spiClk,
       pll0_OUT1,
       pll1_OUT1,
       FPGA_ID0,
       FPGA_ID1,
       BS_PllOut         : IN std_logic;
+      spiDataOut        : inout std_logic;
+      --      spiFlashCK, --Output through the STARTUPE2 primitive
+      spiFlashCSn,
+      spiFlashMOSI      : out std_logic;
+      spiFlashMISO      : in  std_logic;
+      -- Bitsync ADC
+      bsAdc             : in  std_logic_vector(13 downto 0);
+      bsAdc_overflow    : in  std_logic;
+      bsAdc_powerDown   : out std_logic;
+      -- Input Impedance and Topology controls
+      bsHighImpedance,
+      bsSingleEnded     : out std_logic;
+      -- Gain and Offset DAC interfaces
+      bsDacSELn,
+      bsDacSCLK,
+      bsDacMOSI         : out std_logic;
+      -- interFpga data
       PrevData_p,
       PrevData_n,
       NextData_p,
-      NextData_n      : OUT std_logic_vector(PORTS-1 downto 0);
+      NextData_n        : OUT std_logic_vector(PORTS-1 downto 0);
       NextClk_p,
       NextClk_n,
       PrevClk_p,
-      PrevClk_n       : OUT std_logic;
+      PrevClk_n         : OUT std_logic;
       adc0,
       MonData,
       BS_Data           : IN  std_logic_vector(13 downto 0);
@@ -110,7 +127,7 @@ ENTITY DC_DemodTop IS
       ch2DataOut,
       ch3ClkOut,
       ch3DataOut,
-      DQM,
+      DQMOut,
       sdiOut,
       amDacCSn,
       amDacClk,
@@ -144,62 +161,110 @@ ARCHITECTURE rtl OF DC_DemodTop IS
          RefClkOut_p,
          RefClkOut_n       : out std_logic
       );
-  end component DemodSerDesOut;
+   end component DemodSerDesOut;
 
+   component ad7476Interface is
+      port (
+         clk,
+         reset,
+         spiDin      : in  std_logic;
+         spiClk,
+         spiCSn,
+         adcDataEn   : out std_logic;
+         adcData     : out slv12
+      );
+    end component ad7476Interface;
 
+   component semcoDemodTop  is   -- forced to R6100 mode with SPI Gateway and sidecar Bit Sync
+      port (
+          spiClk,
+          spiCSn,
+          spiDataIn        : in  std_logic;
+          spiDataOut       : inout std_logic;
+          -- ADC Inputs
+          adc0             : in  std_logic_vector(13 downto 0);
+          adc0_overflow    : in  std_logic;
+          adc01_powerDown  : out std_logic;
+          adc0Clk          : in  std_logic;
+          -- DAC configuration interface
+          dac_rst,
+          dac_sclk,
+          dac_sdio,
+          dac0_nCs,
+          dac1_nCs         : out std_logic;
+          -- DAC datapath interface
+          dac0_clk,
+          dac1_clk         : out std_logic;
+          dac0_d,
+          dac1_d           : out std_logic_vector(13 downto 0);
+          -- Clock and data outputs
+          ch0ClkOut,
+          ch0DataOut,
+          ch1ClkOut,
+          ch1DataOut,
+          ch2ClkOut,
+          ch2DataOut,
+          ch3ClkOut,
+          ch3DataOut       : out std_logic;
+          -- PLL Interface Signals
+          pll0_OUT1,
+          pll1_OUT1        : in  std_logic;
+          pll0_REF,
+          pll1_REF         : out std_logic;
 
-COMPONENT vio_0
-  PORT (
-    clk : IN STD_LOGIC;
-    probe_out0 : OUT STD_LOGIC_VECTOR(13 DOWNTO 0);
-    probe_out1 : OUT STD_LOGIC_VECTOR(13 DOWNTO 0);
-    probe_out2 : OUT STD_LOGIC_VECTOR(5 DOWNTO 0);
-    probe_out3 : OUT STD_LOGIC_VECTOR(5 DOWNTO 0);
-    probe_out4 : OUT STD_LOGIC_VECTOR(5 DOWNTO 0);
-    probe_out5 : OUT STD_LOGIC_VECTOR(1 DOWNTO 0);
-    probe_out6 : OUT STD_LOGIC_VECTOR(8 DOWNTO 0);
-    probe_out7 : OUT STD_LOGIC_VECTOR(23 DOWNTO 0);
-    probe_out8 : OUT STD_LOGIC_VECTOR(13 DOWNTO 0)
-  );
-END COMPONENT;
+          -- AM ADC Interface
+          amAdcDataIn      : in  std_logic;
+          amAdcClk,
+          amAdcCSn         : out std_logic;
 
+          -- AM DAC Interface
+          amDacDataOut,
+          amDacClk,
+          amDacCSn         : out std_logic;
 
+          -- Video Switch Select Lines
+          video0InSelect,
+          video0OutSelect,
+          video1InSelect,
+          video1OutSelect  : out std_logic_vector(1 downto 0);
+          --output              spiFlashCK, --Output through the STARTUPE2 primitive
+          spiFlashCSn,
+          spiFlashMOSI     : out std_logic;
+          spiFlashMISO     : in  std_logic;
+          -- Lock indicators
+          lockLed0n,
+          lockLed1n        : out std_logic;
+          -- Bitsync ADC
+          bsAdc            : in  std_logic_vector(13 downto 0);
+          bsAdc_overflow   : in  std_logic;
+          bsAdc_powerDown  : out std_logic;
+          -- Input Impedance and Topology controls
+          bsHighImpedance,
+          bsSingleEnded    : out std_logic;
+          -- Gain and Offset DAC interfaces
+          bsDacSELn,
+          bsDacSCLK,
+          bsDacMOSI        : out std_logic;
+          -- SDI Output
+          sdiOut,
+          DQMOut           : out std_logic
+      );
+   end component semcoDemodTop;
 
    constant CHANNEL_1         : std_logic_vector(1 downto 0) := "00";
    constant CHANNEL_2         : std_logic_vector(1 downto 0) := "01";
    constant COMBINER          : std_logic_vector(1 downto 0) := "10";
 
   -- Signals
-   SIGNAL   reset          : std_logic;
-   SIGNAL   probe_out0,
-            probe_out1,
-            probe_out8,
-            probe_out8Reg,
-            NcoSine,
-            NcoCos         : STD_LOGIC_VECTOR(13 DOWNTO 0);
-   SIGNAL   probe_out2,
-            probe_out3,
-            probe_out4,
-            probe_out2Reg,
-            probe_out3Reg,
-            probe_out4Reg  : STD_LOGIC_VECTOR(5 DOWNTO 0);
-   SIGNAL   probe_out6,
-            probe_out6Reg  : STD_LOGIC_VECTOR(8 DOWNTO 0);
-   SIGNAL   probe_out7,
-            NcoFreq        : STD_LOGIC_VECTOR(23 DOWNTO 0);
-   SIGNAL   NcoOut         : STD_LOGIC_VECTOR(31 downto 0);
-   SIGNAL   Freq           : unsigned(23 DOWNTO 0) := (others=>'0');
-   signal   CosSF,
-            SinSF,
-            GainSF         : sfixed(0 downto -13);
+   SIGNAL   Clk,
+            Reset,
+            amDataEn       : std_logic := '1';
    signal   SysRst         : std_logic_vector(3 downto 0) := (others=>'1');
-   signal   ID,
-            probe_out5     : std_logic_vector(1 downto 0);
+   signal   ID             : std_logic_vector(1 downto 0);
    signal   TxData         : UINT8_ARRAY(PORTS - 1 downto 0);
    signal   TxData1,
             TxData2        : SLV8_ARRAY(PORTS - 1 downto 0);
-   signal   DivBy4         : unsigned(1 downto 0) := "00";
-   signal   Diff           : UINT8;
+   signal   amDataIn       : SLV12;
 
    attribute IOSTANDARD    : string;
    attribute IOSTANDARD of spiCSn, spiDataIn, spiDataOut, spiClk,
@@ -207,12 +272,15 @@ END COMPONENT;
             ch0ClkOut, ch0DataOut, ch1ClkOut, ch1DataOut, ch2ClkOut, ch2DataOut, ch3ClkOut, ch3DataOut,
             amAdcDataIn, amAdcClk, amAdcCSn,
             Sw50_Ohm, pll0_REF, pll1_REF,
-            DQM, sdiOut, lockLed0n, lockLed1n, FPGA_ID0, FPGA_ID1,
+            DQMOut, sdiOut, lockLed0n, lockLed1n, FPGA_ID0, FPGA_ID1,
             amDacCSn, amDacClk, amDacDataOut : signal is "LVCMOS33";
 
    attribute IOSTANDARD of adc0_overflow, adc0Clk, adc0,
             MonOvf, MonClk, MonData,
             BS_Ovf, BS_Clk, BS_Data,
+            spiFlashCSn, spiFlashMOSI, spiFlashMISO,
+            bsAdc, bsAdc_overflow, bsAdc_powerDown, bsHighImpedance,
+            bsSingleEnded, bsDacSELn, bsDacSCLK, bsDacMOSI,
             ADC_Sync, ADC_SDIO, ADC_SClk, ADC_CS_n, ADC_OE_n, adc01_powerDown,
             BS_ADC_LowZ, BS_ADC_PwrDn, BS_ADC_SE, BS_ADC_SClk, BS_ADC_CS_n, BS_ADC_SDIO,
             BS_DAC_Sel_n, BS_DAC_SClk, BS_DAC_MOSI,
@@ -223,18 +291,33 @@ END COMPONENT;
 
 BEGIN
 
-   SysRstProcess : process(MonClk)
+   SysRstProcess : process(Clk)
    begin
-      if (rising_edge(MonClk)) then
+      if (rising_edge(Clk)) then
          SysRst <= SysRst(SysRst'left-1 downto 0) & '0';
+         Reset <= SysRst(SysRst'left);
       end if;
    end process SysRstProcess;
 
-   IF_Clk_process : process(MonClk)
+   amAdc : ad7476Interface
+      port map(
+        clk          => Clk,
+        reset        => Reset,
+        spiDin       => amAdcDataIn,
+        spiClk       => amAdcClk,
+        spiCSn       => amAdcCSn,
+        adcData      => amDataIn,
+        adcDataEn    => amDataEn
+    );
+
+SimOrReal: if (not SimMode) generate
+
+   Clk <= MonClk;
+
+   IF_Clk_process : process(Clk)
    begin
-      if (rising_edge(MonClk)) then
-         reset <= SysRst(SysRst'left);
-         if (reset) then
+      if (rising_edge(Clk)) then
+         if (Reset) then
             TxData(0) <= x"11";
             TxData(1) <= x"22";
             TxData(2) <= x"33";
@@ -257,8 +340,6 @@ BEGIN
       end if;
    end process IF_Clk_process;
 
-   ID <= FPGA_ID1 & FPGA_ID0;
-
    TxDataCast : process(all)
    begin
       for ch in 0 to PORTS-1 loop
@@ -267,13 +348,49 @@ BEGIN
       end loop;
    end process;
 
+else generate
+
+   process begin
+      wait for 5.35 ns;
+      Clk <= not Clk;
+   end process;
+
+   IF_Clk_process : process(Clk)
+   begin
+      if (rising_edge(Clk)) then
+         if (TxData(4) < 255) then
+            TxData(4) <= TxData(4) + x"11";
+         else
+            TxData(4) <= x"55";
+         end if;
+         if (ID = CHANNEL_1) then
+            TxData1(0) <= adc0(7 downto 0);
+            TxData1(1) <= "00" & not adc0(13) & adc0(12 downto 8);
+            TxData1(2) <= amDataIn(7 downto 0);
+            TxData1(3) <= amDataEn & "000" & amDataIn(11 downto 8);
+            TxData1(4) <= std_logic_vector(TxData(4));
+            TxData2(0) <= x"00";
+            TxData2(1) <= x"00";
+            TxData2(2) <= x"00";
+            TxData2(3) <= x"00";
+            TxData2(4) <= x"00";
+         else
+
+         end if;
+      end if;
+   end process IF_Clk_process;
+
+end generate;
+
+   ID <= FPGA_ID1 & FPGA_ID0;
+
    Ch1SerDes : DemodSerDesOut
       Generic Map(
          PORTS    => PORTS
       )
       Port MAP(
-         Clk93M      => MonClk,
-         Reset       => reset,
+         Clk93M      => Clk,
+         Reset       => Reset,
          Active      => (ID ?= CHANNEL_1),
          TxData      => TxData1,
          DataOut_p   => PrevData_p,
@@ -287,14 +404,72 @@ BEGIN
          PORTS    => PORTS
       )
       Port MAP(
-         Clk93M      => MonClk,
-         Reset       => reset,
+         Clk93M      => Clk,
+         Reset       => Reset,
          Active      => (ID ?= CHANNEL_2),
          TxData      => TxData2,
          DataOut_p   => NextData_p,
          DataOut_n   => NextData_n,
          RefClkOut_p => NextClk_p,
          RefClkOut_n => NextClk_n
+      );
+
+   Demod : semcoDemodTop  -- forced to R6100 mode with SPI Gateway and sidecar Bit Sync
+      port map (
+          spiClk              => spiClk,
+          spiCSn              => spiCSn,
+          spiDataIn           => spiDataIn,
+          spiDataOut          => spiDataOut,
+          adc0                => adc0,
+          adc0_overflow       => adc0_overflow,
+          adc01_powerDown     => adc01_powerDown,
+          adc0Clk             => adc0Clk,
+          dac_rst             => dac_rst,
+          dac_sclk            => dac_sclk,
+          dac_sdio            => dac_sdio,
+          dac0_nCs            => dac0_nCs,
+          dac1_nCs            => dac1_nCs,
+          dac0_clk            => dac0_clk,
+          dac1_clk            => dac1_clk,
+          dac0_d              => dac0_d,
+          dac1_d              => dac1_d,
+          ch0ClkOut           => ch0ClkOut,
+          ch0DataOut          => ch0DataOut,
+          ch1ClkOut           => ch1ClkOut,
+          ch1DataOut          => ch1DataOut,
+          ch2ClkOut           => ch2ClkOut,
+          ch2DataOut          => ch2DataOut,
+          ch3ClkOut           => ch3ClkOut,
+          ch3DataOut          => ch3DataOut,
+          pll0_OUT1           => pll0_OUT1,
+          pll1_OUT1           => pll1_OUT1,
+          pll0_REF            => pll0_REF,
+          pll1_REF            => pll1_REF,
+          amAdcDataIn         => amAdcDataIn,
+          amAdcClk            => amAdcClk,
+          amAdcCSn            => amAdcCSn,
+          amDacDataOut        => amDacDataOut,
+          amDacClk            => amDacClk,
+          amDacCSn            => amDacCSn,
+          video0InSelect      => video0InSelect,
+          video0OutSelect     => video0OutSelect,
+          video1InSelect      => video1InSelect,
+          video1OutSelect     => video1OutSelect,
+          spiFlashCSn         => spiFlashCSn,
+          spiFlashMOSI        => spiFlashMOSI,
+          spiFlashMISO        => spiFlashMISO,
+          lockLed0n           => lockLed0n,
+          lockLed1n           => lockLed1n,
+          bsAdc               => bsAdc,
+          bsAdc_overflow      => bsAdc_overflow,
+          bsAdc_powerDown     => bsAdc_powerDown,
+          bsHighImpedance     => bsHighImpedance,
+          bsSingleEnded       => bsSingleEnded,
+          bsDacSELn           => bsDacSELn,
+          bsDacSCLK           => bsDacSCLK,
+          bsDacMOSI           => bsDacMOSI,
+          sdiOut              => sdiOut,
+          DQMOut              => DQMOut
       );
 
 END rtl;

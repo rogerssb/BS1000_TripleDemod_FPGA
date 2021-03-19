@@ -7,18 +7,18 @@
    Module Name: SerDes - arch
    Project Name: Digital Combiner
    Target Devices: 7k160
-   Tool Versions:  2017.4
+   Tool Versions:  2017.2
    Description:
       Only the Combiner FPGA needs data from the other channels.
       The Ch1/Ch2 FPGAs will send IF and AGC data to the Prev or Next ports as required
       and 0's to the other.
 
       There are 5 byte wide data channels and are split up as:
-      Ch0   RawRF[7:0]     or    ResampleX[7:0]
-      Ch1   RawRF[13:8]          ResampleX[15:8]
-      Ch2   DQM                  DQM & I/Q_Flag & ResampleX[17:16]
-      Ch3   AGC[15:8]
-      Ch4   AGC[7:0]
+      Ch0   RawRF[7:0]
+      Ch1   00 & RawRF[13:8]
+      Ch2   AGC[15:8]
+      Ch3   AGC[7:0]
+      Ch4   DQM & Misc
 
       Ch1 is ID 00, Ch2 is 01 and Cmb is 10
 

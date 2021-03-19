@@ -296,17 +296,6 @@ ARCHITECTURE rtl OF CmplPhsDetTb IS
       );
    END COMPONENT gng;
 
-   /*
-   COMPONENT WhiteNoise
-      PORT(
-         clk,
-         reset,
-         ce             : IN  std_logic;
-         Seed           : IN  SLV24;
-         Noise          : OUT sfixed(3 downto -16)
-      );
-   END COMPONENT WhiteNoise;
-*/
    -- Constants
    constant Plus1             : Float_1_18 := to_sfixed(0.707 / 4.0, 0, -17);
    constant Neg1              : Float_1_18 := to_sfixed(-0.707 / 4.0, 0, -17);
@@ -330,7 +319,6 @@ ARCHITECTURE rtl OF CmplPhsDetTb IS
             PrnData,
             PrnEn,
             NoiseEn,
-            BitFlip,
             FirDataValid,
             NotFirstTime,
             Clk,
@@ -534,7 +522,7 @@ end generate;
    SideCarClk   <= SideCar(32);
    BS_PllOut    <= SideCar(17) when (not IF_BS_n) else '0';
    DdsSyncClk   <= SideCar(17) when (not IF_BS_n) else '0';
-   IF_BS_n      <= IlaCounter(8);
+   IF_BS_n      <= not Vio9(9);
 
 
    Reset          <= ResetShft(17);
@@ -563,7 +551,6 @@ end generate;
          DataRate   <= DataRate + 1 when (DataRate < 9) else 0;
          if (DataRate = 0) then
             PrnEn   <= '1';
-            BitFlip <= not BitFlip;
             case (Mode) is
                when BPSK =>
                   DataReal <= Plus1 when (PrnData) else Neg1;
@@ -600,8 +587,6 @@ end generate;
 
          Noise2Rms <= resize(Noise2Rms - (Noise2Rms sra 10) + (abs(Filtered2Noise) sra 10), Real1Rms);
          Real1Rms  <= resize(Real1Rms  - (Real1Rms  sra 10) + (abs(Filtered1Real)  sra 10), Real1Rms);
-
-
       end if;
    end process Delay_process;
 
@@ -650,17 +635,6 @@ end generate;
     data_out   => Noise1
 );
 
-/*
-   NoiseGen1 : WhiteNoise
-      PORT MAP(
-         clk         => Clk,
-         reset       => Reset,
-         ce          => NoiseEn,
-         Seed        => 24x"9009",
-         Noise       => Noise1
-      );
-*/
-
   NoiseGen2 : gng
    GENERIC MAP (
       INIT_Z1 => 64x"C9B0_01FF_FFE0_09FF",   -- 14,533,118,196,545,751,551
@@ -674,16 +648,7 @@ end generate;
     valid_out  => open,
     data_out   => Noise2
 );
-/*
-   NoiseGen2 : WhiteNoise
-      PORT MAP(
-         clk         => Clk,
-         reset       => Reset,
-         ce          => NoiseEn,
-         Seed        => 24x"6006",
-         Noise       => Noise2
-      );
-*/
+
    -- the off tune NCO pulls channel 1 slightly off center frequency since there's no carrier loop yet
    OffTuneNCO : OffsetNCO
       PORT MAP (
@@ -901,9 +866,11 @@ end generate;
 
    DiffDly: process (Clk)
    begin
-      DataInA <= "00" & std_logic_vector(IlaCounter);
-      DataInB <= "11" & std_logic_vector(IlaCounter);
-      Diff    <= signed('0' & DataOutA(9 downto 0)) - signed('0' & DataOutB(9 downto 0));
+      if (rising_edge(Clk)) then
+         DataInA <= "00" & std_logic_vector(IlaCounter);
+         DataInB <= "11" & std_logic_vector(IlaCounter);
+         Diff    <= signed('0' & DataOutA(9 downto 0)) - signed('0' & DataOutB(9 downto 0));
+      end if;
    end process DiffDly;
 
 END rtl;

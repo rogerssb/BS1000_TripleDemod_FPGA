@@ -117,8 +117,6 @@ END DC_CombinerTop;
 
 ARCHITECTURE rtl OF DC_CombinerTop IS
 
-ARCHITECTURE rtl OF CmplPhsDetTb IS
-
    COMPONENT complexphasedetector_0
       PORT (
          clk : IN STD_LOGIC;
@@ -267,31 +265,13 @@ ARCHITECTURE rtl OF CmplPhsDetTb IS
             GainOutMax,
             GainOutMin     : SLV18;
    signal   RealXord,
-            ImagXord       : STD_LOGIC;
-   signal   DataRealSlv,
-            DataImagSlv,
-            NcodRealSlv,
-            NcodImagSlv,
-            Real1RmsSlv,
-            Imag1RmsSlv,
-            Real1NoisySlv,
-            Imag1NoisySlv,
-            Real2NoisySlv,
-            Imag2NoisySlv  : SLV18;
-   signal   IlaCounter     : uint16 := x"0000";
+            ImagXord,
+            RecoveredData  : STD_LOGIC;
 
-   signal   DataInA,
-            DataInB,
-            DataOutA,
-            DataOutB       : SLV18;
-   signal   Diff           : signed(10 downto 0);
 
    attribute MARK_DEBUG : string;
    attribute MARK_DEBUG of RealCmb, ImagCmb, RealLock, ImagLock, Locked,
-      DataRealSlv, DataImagSlv, NcodRealSlv, NcodImagSlv, Real1NoisySlv,
-      Imag1NoisySlv, Real2NoisySlv, Imag2NoisySlv, PrnEn,
-      Ch1Agc, Ch2Agc,  LagCoef, LeadCoef, NoiseGain1, NoiseGain2, Real1RmsSlv,
-      Imag1RmsSlv, Filtered1Real, Filtered1Imag, Filtered2Real, Filtered2Imag,
+      Ch1Agc, Ch2Agc,  LagCoef, LeadCoef,
       agc1_gt_agc2, abs_agc_diff, nco_control_out, phase_detect, lag_out,
       MaxImagout, MaxRealout, MinImagout, MinRealout, RealXord, ImagXord,
       GainOutMax, GainOutMin, IlaCounter : signal is "TRUE";
@@ -346,7 +326,7 @@ BEGIN
    SideCarClk   <= SideCar(32);
    BS_PllOut    <= SideCar(17) when (not IF_BS_n) else '0';
    DdsSyncClk   <= SideCar(17) when (not IF_BS_n) else '0';
-   IF_BS_n      <= IlaCounter(8);
+   IF_BS_n      <= not Vio9(9);
 
    dac_rst  <= '0';
    dac0_nCs <= '0';
@@ -435,12 +415,37 @@ BEGIN
       gainoutmin     => GainOutMin
    );
 
+   OutProc: process (Clk)
+   begin
+      if (rising_edge(Clk)) then
+         if (DataRate = (to_integer(unsigned(Vio9(15 downto 12))))) then
+            RealIandD <= resize(to_sfixed(RealCmb, DataReal), RealIandD);
+            ImagIandD <= resize(to_sfixed(ImagCmb, DataReal), RealIandD);
+            RecoveredData <= not RealIandD(2) when (not Vio9(8)) else not ImagIandD(2);
+            RealDelay <= RealDelay(RealDelay'left-1 downto 0) & PrnData;
+         else
+            RealIandD <= resize(RealIandD + to_sfixed(RealCmb, DataReal), RealIandD);
+            ImagIandD <= resize(ImagIandD + to_sfixed(ImagCmb, DataReal), RealIandD);
+         end if;
+         if (BitCount =  10e6 - 1) then
+            BitCount <= 32x"0";
+            BitErrors <= ErrorCount;
+            ErrorCount <= 32x"0";
+         elsif (DataRate = 0) then
+            BitCount  <= BitCount + 1;
+            if (RealDelay(RealDelay'left) /= RecoveredData) then
+               ErrorCount <= ErrorCount + 1;
+            end if;
+         end if;
+      end if;
+   end process OutProc;
+
    dac0_d      <= RealCmb(17 downto 4);
    dac1_d      <= ImagCmb(17 downto 4);
    lockLed0n   <= not RealLock(12);
    lockLed1n   <= not ImagLock(12);
-   ch3DataOut  <= RealCmb(17) when (not Vio9(15)) else ImagCmb(17);
-   ch3ClkOut   <= PrnEnDly(to_integer(unsigned(Vio9(3 downto 0))));
+   ch3DataOut  <= RecoveredData;
+   ch3ClkOut   <= '1' when (DataRate > 4) else '0';
 
    DdsProc: process (DdsPdClkBufG)
    begin
