@@ -1,3 +1,36 @@
+/*
+    This is the top module for BS1000 and R6100 flavors of demods and thus
+    needs some configuration to accomplish the desired results. All variations
+    are controlled by setting defines in the Vivado Verilog Options GUI. Click
+    on Settings, General, Verilog Options and add/remove Defines as needed.
+    TRIPLE_DEMOD builds the R6100 board from the tripleDemod.xpr project. This define
+    also adds the following options in the addressMap.v file.
+        `ifdef TRIPLE_DEMOD
+        `define SEMCO_DEMOD
+        `define ADD_FRAMER
+        `define ADD_BITSYNC
+        `define ADD_MULTIBOOT
+        `define ADD_SPECTRAL_SWEEP
+        `define R6100
+        `endif
+
+    ADD_PN_GEN includes the PN Generator
+    NO_LDPC_ENC turns off the LDPC encoder since it won't fit with ADD_PN_GEN
+    COMBINER adds the I/Os for either combiner
+    COMBINER_DEMOD adds the outputs from the demod to the combiner card
+    COMBINER_COMBINE adds the front end serdes and phase alignment for the combiner
+    ADD_SPI_GATEWAY turns on the SPI Flash signals. TRIPLE_DEMOD
+    ADD_LDPC turns on the LDPC module
+    ADD_VITERBI
+    ADD_TRELLIS
+    ADD_MULTIH
+    ADD_DQM
+
+    NOTE ALSO, the combiner is built on a 7k325 vs the 7k160 of the rest. The
+    "Project Part" will need modified when changing configurations and then
+    the IPs will need updating to the new part.
+*/
+
 `timescale 1ns/100ps
 `include "addressMap.v"
 
@@ -113,38 +146,240 @@ module semcoDemodTop (
     // Lock indicators
     output              lockLed0n, lockLed1n,
 
-
     `ifdef R6100
+    input               Sw50Ohm,
 
-    `ifdef ADD_BITSYNC
-    // Bitsync ADC
-    input       [13:0]  bsAdc,
-    input               bsAdc_overflow,
-    output              bsAdc_powerDown,
+       `ifdef COMBINER  // both sides need these signals
+        input               FPGA_ID0, FPGA_ID1,
+        // interFpga data
+        output  [4:0]       PrevData_p,
+                            PrevData_n,
+                            NextData_p,
+                            NextData_n,
+        output              NextClk_p,
+                            NextClk_n,
+                            PrevClk_p,
+                            PrevClk_n,
+        `endif // combiner
 
-    // Input Impedance and Topology controls
-    output              bsHighImpedance,
-    output              bsSingleEnded,
+        `ifdef COMBINER_COMBINE     // if this is the combiner, add sidecar signals
+            inout    [1:40]   SideCar,
 
-    // Gain and Offset DAC interfaces
-    output              bsDacSELn,
-    output              bsDacSCLK, bsDacMOSI,
-    `endif  //ADD_BITSYNC
+        `elsif ADD_BITSYNC          // if not combining at all, add bitsync if desired
+            // Bitsync ADC
+            input       [13:0]  bsAdc,
+            input               bsAdc_overflow,
+            output              bsAdc_powerDown,
 
+            // Input Impedance and Topology controls
+            output              bsHighImpedance,
+            output              bsSingleEnded,
+
+            // Gain and Offset DAC interfaces
+            output              bsDacSELn,
+            output              bsDacSCLK, bsDacMOSI,
+        `endif
     // SDI Output
     output              sdiOut,
     output              DQMOut
 
     `else   //R6100
 
-    // SDI Output
-    output              sdiOut
+        // SDI Output
+        output              sdiOut
 
     `endif //R6100
-
 );
 
-    parameter VER_NUMBER = 16'd646;
+    parameter VER_NUMBER = 16'd648;
+
+//******************************************************************************
+//                          Combiner/BitSync Interface
+//******************************************************************************
+    `ifdef ADD_BITSYNC
+        `ifdef COMBINER_COMBINE
+            wire    [13:0]  bsAdc;
+            wire            bsAdc_overflow, bsAdc_powerDown, bsHighImpedance, bsSingleEnded,
+                            bsDacSELn, bsDacSCLK, bsDacMOSI, IF_BS_n;
+            assign bsAdc[13] = !IF_BS_n ? SideCar[4]  : 1'b0;
+            assign bsAdc[12] = !IF_BS_n ? SideCar[6]  : 1'b0;
+            assign bsAdc[11] = !IF_BS_n ? SideCar[8]  : 1'b0;
+            assign bsAdc[10] = !IF_BS_n ? SideCar[10] : 1'b0;
+            assign bsAdc[9]  = !IF_BS_n ? SideCar[12] : 1'b0;
+            assign bsAdc[8]  = !IF_BS_n ? SideCar[14] : 1'b0;
+            assign bsAdc[7]  = !IF_BS_n ? SideCar[16] : 1'b0;
+            assign bsAdc[6]  = !IF_BS_n ? SideCar[18] : 1'b0;
+            assign bsAdc[5]  = !IF_BS_n ? SideCar[20] : 1'b0;
+            assign bsAdc[4]  = !IF_BS_n ? SideCar[22] : 1'b0;
+            assign bsAdc[3]  = !IF_BS_n ? SideCar[24] : 1'b0;
+            assign bsAdc[2]  = !IF_BS_n ? SideCar[26] : 1'b0;
+            assign bsAdc[1]  = !IF_BS_n ? SideCar[28] : 1'b0;
+            assign bsAdc[0]  = !IF_BS_n ? SideCar[30] : 1'b0;
+        `endif
+    `endif
+
+    wire    signed  [17:0]  iBB, qBB;
+    wire                    bbClkEn;
+
+    `ifdef COMBINER_COMBINE
+        wire        [17:0]  DdsData;
+        wire        [1:0]   ID;
+        wire                DdsIO_Reset, DdsTxEn, DdsIO_Update, DdsReset,
+                            DdsCS_n, DdsSClk, DdsMosi, DdsMiso,
+                            SideCarClk, DdsSyncClk;
+
+        assign SideCar[2]  = IF_BS_n;
+        assign SideCar[4]  = IF_BS_n ? DdsData[17]  : 1'bz;
+        assign SideCar[6]  = IF_BS_n ? DdsData[16]  : 1'bz;
+        assign SideCar[8]  = IF_BS_n ? DdsData[15]  : 1'bz;
+        assign SideCar[10] = IF_BS_n ? DdsData[14]  : 1'bz;
+        assign SideCar[12] = IF_BS_n ? DdsData[13]  : 1'bz;
+        assign SideCar[14] = IF_BS_n ? DdsData[12]  : 1'bz;
+        assign SideCar[16] = IF_BS_n ? DdsData[11]  : 1'bz;
+        assign SideCar[18] = IF_BS_n ? DdsData[10]  : 1'bz;
+        assign SideCar[20] = IF_BS_n ? DdsData[9]   : 1'bz;
+        assign SideCar[22] = IF_BS_n ? DdsData[8]   : 1'bz;
+        assign SideCar[24] = IF_BS_n ? DdsData[7]   : 1'bz;
+        assign SideCar[26] = IF_BS_n ? DdsData[6]   : 1'bz;
+        assign SideCar[28] = IF_BS_n ? DdsData[5]   : 1'bz;
+        assign SideCar[30] = IF_BS_n ? DdsData[4]   : 1'bz;
+        assign SideCar[34] = IF_BS_n ? DdsData[3]   : 1'b0;
+        assign SideCar[36] = IF_BS_n ? DdsData[2]   : 1'b0;
+        assign SideCar[38] = IF_BS_n ? DdsData[1]   : 1'b0;
+        assign SideCar[40] = IF_BS_n ? DdsData[0]   : bsHighImpedance;
+
+        assign SideCar[11] = IF_BS_n ? DdsIO_Reset  : bsAdc_powerDown;
+        assign SideCar[15] = IF_BS_n ? DdsTxEn      : 1'b0;
+        assign SideCar[19] = IF_BS_n ? DdsIO_Update : 1'b0;
+        assign SideCar[21] = IF_BS_n ? DdsReset     : 1'b0;
+        assign SideCar[23] = IF_BS_n ? DdsCS_n      : bsDacSELn;
+        assign SideCar[25] = IF_BS_n ? DdsSClk      : bsDacSCLK;
+        assign SideCar[27] = IF_BS_n ? DdsMosi      : bsDacMOSI;
+        assign SideCar[29] = IF_BS_n ? DdsMiso      : bsSingleEnded;
+        assign bsAdc_overflow = 1'b0;   // this signal isn't connected in bs/combiner board
+        assign SideCarClk = SideCar[32];
+        assign DdsSyncClk = !IF_BS_n ? SideCar[17] : 1'b0;
+        assign ID         = {FPGA_ID1, FPGA_ID0};
+ //       assign IF_BS_n    = not Vio9(9);
+
+        wire            [7:0]   DataOut10, DataOut11, DataOut12, DataOut13, DataOut14,
+                                DataOut20, DataOut21, DataOut22, DataOut23, DataOut24;
+        CombinerSerDesIn #(.PORTS(5)) SerDes_u
+            (
+            .Clk93M    (clk),
+            .Reset     (reset),
+            .ClkIn1_p  (NextClk_p),  //- Next is Ch1
+            .ClkIn1_n  (NextClk_n),
+            .DataIn1_p (NextData_p),
+            .DataIn1_n (NextData_n),
+            .DataOut10 (DataOut10),
+            .DataOut11 (DataOut11),
+            .DataOut12 (DataOut12),
+            .DataOut13 (DataOut13),
+            .DataOut14 (DataOut14),
+            .ClkIn2_p  (PrevClk_p),  // Prev is Ch2
+            .ClkIn2_n  (PrevClk_n),
+            .DataIn2_p (PrevData_p),
+            .DataIn2_n (PrevData_n),
+            .DataOut20 (DataOut20),
+            .DataOut21 (DataOut21),
+            .DataOut22 (DataOut22),
+            .DataOut23 (DataOut23),
+            .DataOut24 (DataOut24)
+            );
+
+        wire    [13:0]  Ch1Adc0 = {DataOut11[5:0], DataOut10};
+        wire    [13:0]  Ch2Adc0 = {DataOut21[5:0], DataOut20};
+        wire    [11:0]  Ch1Agc  = {DataOut13[3:0], DataOut12};
+        wire    [11:0]  Ch2Agc  = {DataOut23[3:0], DataOut22};
+        wire    [17:0]  LagCoef, LeadCoef, SweepLimit, SweepRate,
+                        Ch1Real, Ch1Imag, Ch2Real, Ch2Imag,
+                        Ch1Adc17, Ch2Adc17, Ch1Diff, Ch2Diff;
+        wire    [6:0]   Diff;
+
+        /*  Initially the syncIF module will time align the recovered data streams from the two demods
+            which should allow the complex phase detector to lock up, but since the data edges tend to
+            wander at the lower rates, the MSBs of the IFs will be used for final alignment
+        */
+        syncIFs syncIFs
+            (
+            .Clk(clk),
+            .Reset(reset),
+            .ChAData(DataOut11[7:6]),
+            .ChBData(DataOut21[7:6]),
+            .ChAThenChB(AbeforeB),
+            .IndexOut(Diff)
+            );
+
+        assign Ch1Adc17 = {!Ch1Adc0[13], Ch1Adc0[12:0], 4'b0};
+        assign Ch2Adc17 = {!Ch2Adc0[13], Ch2Adc0[12:0], 4'b0};
+
+        DiffDelay RF_Align
+            (
+            .clk(clk),
+            .reset(reset),
+            .AbeforeB(AbeforeB),
+            .Diff(Diff),
+            .DataInA(Ch1Adc17),
+            .DataInB(Ch2Adc17),
+            .DataOutA(Ch1Diff),
+            .DataOutB(Ch2Diff)
+            );
+
+        quadDdc Ch1Ddc
+            (
+            .clk(clk),
+            .reset(reset),
+            .ifIn(Ch1Diff),
+            .syncOut(),
+            .iOut(Ch1Real),
+            .qOut(Ch1Imag)
+            );
+
+        quadDdc Ch2Ddc
+            (
+            .clk(clk),
+            .reset(reset),
+            .ifIn(Ch2Diff),
+            .syncOut(),
+            .iOut(Ch2Real),
+            .qOut(Ch2Imag)
+            );
+
+        complexphasedetector_0 CmplxPhsDet
+            (
+            .clk            (clk),
+            .ch1agc         (Ch1Agc),
+            .ch2agc         (Ch2Agc),
+            .ch1real        (Ch1Real),
+            .ch1imag        (Ch1Imag),
+            .ch2real        (Ch2Real),
+            .ch2imag        (Ch2Imag),
+            .lag_coef       (LagCoef),
+            .lead_coef      (LeadCoef),
+            .sweeplmt       (SweepLimit),
+            .swprate        (SweepRate),
+            .realout        (iBB),
+            .imagout        (qBB),
+            .reallock       (RealLock),
+            .imaglock       (ImagLock),
+            .locked_n       (Locked),
+            .agc1_gt_agc2   (agc1_gt_agc2),
+            .lag_out        (lag_out),
+            .nco_control_out(nco_control_out),
+            .phase_detect   (phase_detect),
+            .abs_agc_diff   (abs_agc_diff),
+            .maximagout     (MaxImagout),
+            .maxrealout     (MaxRealout),
+            .minimagout     (MinImagout),
+            .minrealout     (MinRealout),
+            .realxord       (RealXord),
+            .imagxord       (ImagXord),
+            .gainoutmax     (GainOutMax),
+            .gainoutmin     (GainOutMin)
+       );
+
+   `endif
 
 
 //******************************************************************************
@@ -198,10 +433,11 @@ module semcoDemodTop (
     /******************************************************************************
                                  SPI Config Interface
     ******************************************************************************/
- (* MARK_DEBUG="true" *)    wire    [12:0]  addr;
- (* MARK_DEBUG="true" *)    wire    [31:0]  dataIn;
- (* MARK_DEBUG="true" *)    reg     [31:0]  rd_mux;
- (* MARK_DEBUG="true" *)    wire    cs, wr0, wr1, wr2, wr3, framerEnable, pngenEnable;
+    wire    [12:0]  addr;
+    wire    [31:0]  dataIn;
+    reg     [31:0]  rd_mux;
+
+    wire    cs, wr0, wr1, wr2, wr3, framerEnable, pngenEnable;
     spiBusInterface spi(
         .clk(clk),
         .reset(reset),
@@ -391,8 +627,8 @@ module semcoDemodTop (
         .din(dataIn),
         .dout(demodDout),
         .iRx(adc0In), .qRx(18'h0),
-        .bbClkEn(1'b0),
-        .iBB(18'h0), .qBB(18'h0),
+        .bbClkEn(bbClkEn),
+        .iBB(iBB), .qBB(qBB),
         .iSym2xEn(iDemodSym2xEn),
         .iSymEn(iDemodSymEn),
         .iSymData(iDemodSymData),
@@ -1765,6 +2001,7 @@ sdi sdi(
     assign dac1_nCs = 1'b0;
     assign dac2_nCs = 1'b0;
     assign dac_sdio = 1'b0;
+    assign Sw50Ohm  = 1'b0;
 
     assign lockLed0n = !timingLock;
     assign lockLed1n = !carrierLock;
@@ -1784,6 +2021,31 @@ sdi sdi(
         .adcData(amDataIn),
         .adcDataEn(amDataEn)
     );
+
+//******************************************************************************
+//                               Combiner Outputs from Demod
+//******************************************************************************
+    `ifdef COMBINER_DEMOD
+     DC_DemodTop combinerOut(
+        .Clk(clk),
+        .Reset(reset),
+        .FPGA_ID0(FPGA_ID0),
+        .FPGA_ID1(FPGA_ID1),
+        .iDemodBit(iDemodBit),
+        .qDemodBit(qDemodBit),
+        .amDataEn(amDataEn),
+        .amDataIn(amDataIn),
+        .adc0(adc0),
+        .PrevData_p(PrevData_p),
+        .PrevData_n(PrevData_n),
+        .NextData_p(NextData_p),
+        .NextData_n(NextData_n),
+        .NextClk_p(NextClk_p),
+        .NextClk_n(NextClk_n),
+        .PrevClk_p(PrevClk_p),
+        .PrevClk_n(PrevClk_n)
+    );
+    `endif // combiner_demod
 
     //******************************************************************************
     //                           AM DAC Interface

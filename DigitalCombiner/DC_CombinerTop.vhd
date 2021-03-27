@@ -355,15 +355,15 @@ BEGIN
       (
             Clk93M            => MonClk,
             Reset             => Reset,
-            ClkIn1_p          => PrevClk_p,
-            ClkIn1_n          => PrevClk_n,
-            DataIn1_p         => PrevData_p,
-            DataIn1_n         => PrevData_n,
+            ClkIn1_p          => NextClk_p,  -- Next is Ch1
+            ClkIn1_n          => NextClk_n,
+            DataIn1_p         => NextData_p,
+            DataIn1_n         => NextData_n,
             DataOut1          => Ch1Data,
-            ClkIn2_p          => NextClk_p,
-            ClkIn2_n          => NextClk_n,
-            DataIn2_p         => NextData_p,
-            DataIn2_n         => NextData_n,
+            ClkIn2_p          => PrevClk_p,  -- Prev is Ch2
+            ClkIn2_n          => PrevClk_n,
+            DataIn2_p         => PrevData_p,
+            DataIn2_n         => PrevData_n,
             DataOut2          => Ch2Data
    );
 

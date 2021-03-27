@@ -296,6 +296,17 @@ ARCHITECTURE rtl OF CmplPhsDetTb IS
       );
    END COMPONENT gng;
 
+   COMPONENT SyncIFs
+      PORT (
+         Clk,
+         Reset,
+         ChAData,
+         ChBData        : IN  std_logic;
+         ChAThenChB     : OUT std_logic;
+         IndexOut       : OUT natural range 0 to 127
+      );
+   END COMPONENT SyncIFs;
+
    -- Constants
    constant Plus1             : Float_1_18 := to_sfixed(0.707 / 4.0, 0, -17);
    constant Neg1              : Float_1_18 := to_sfixed(-0.707 / 4.0, 0, -17);
@@ -362,7 +373,7 @@ ARCHITECTURE rtl OF CmplPhsDetTb IS
             Imag1Noisy,
             Real2Noisy,
             Imag2Noisy     : FLOAT_1_18 := (others=>'0');
-   signal   DataRate       : integer range 0 to 9;
+   signal   DataRate       : integer range 0 to 127;
    signal   FirDataIn,
             FirDataOut     : std_logic_vector(143 downto 0);
    signal   NcoData,
@@ -398,7 +409,8 @@ ARCHITECTURE rtl OF CmplPhsDetTb IS
             BS_PllOut,
             DdsPdClkBufG,
             DdsPdClk2xBufg,
-            SideCarClk        : std_logic;
+            SideCarClk,
+            Ch1ThenCh2        : std_logic;
 
    attribute IOSTANDARD    : string;
    attribute IOSTANDARD of spiCSn, spiDataIn, spiDataOut, spiClk,
@@ -442,11 +454,16 @@ ARCHITECTURE rtl OF CmplPhsDetTb IS
             ErrorCount,
             BitErrors      : uint32 := 32x"0";
    signal   RealDelay      : std_logic_vector(10 downto 0);
+   signal   DataA,
+            DataB          : std_logic_vector(1 downto 0);
    signal   DataInA,
             DataInB,
             DataOutA,
             DataOutB       : SLV18;
-   signal   Diff           : signed(10 downto 0);
+   signal   DataDly        : std_logic_vector(127 downto 0);
+   signal   Data1,
+            Data2,
+            IndexOut       : natural range 0 to 127 := 0;
 
    attribute MARK_DEBUG : string;
    attribute MARK_DEBUG of RealCmb, ImagCmb, RealLock, ImagLock, Locked,
@@ -540,6 +557,19 @@ end generate;
    Imag2NoisySlv  <= to_slv(Imag2Noisy);
    Mode           <= modulation'val(to_integer(unsigned(Vio9(5 downto 4))));
 
+   LFSR15 : BERT_LFSR
+      PORT MAP(
+         clock       => Clk,
+         reset       => Reset,
+         reload      => '0',
+         enable      => PrnEn,
+         poly        => 24x"6000",
+         poly_length => 5x"0F",
+         load_data   => 24x"9009",
+         data        => open,
+         serial      => PrnData
+   );
+
    Delay_process: process (Clk)
    begin
       if (rising_edge(Clk)) then
@@ -548,7 +578,7 @@ end generate;
          if (IlaCounter > 256) then
             NotFirstTime <= '1';
          end if;
-         DataRate   <= DataRate + 1 when (DataRate < 9) else 0;
+         DataRate   <= DataRate + 1 when (DataRate < 93) else 0;
          if (DataRate = 0) then
             PrnEn   <= '1';
             case (Mode) is
@@ -589,6 +619,7 @@ end generate;
          Real1Rms  <= resize(Real1Rms  - (Real1Rms  sra 10) + (abs(Filtered1Real)  sra 10), Real1Rms);
       end if;
    end process Delay_process;
+/*
 
    VIO : vio_0
       PORT MAP (
@@ -604,20 +635,6 @@ end generate;
          probe_out8  => PhaseInc,
          probe_out9  => Vio9
    );
-
-   LFSR15 : BERT_LFSR
-      PORT MAP(
-         clock       => Clk,
-         reset       => Reset,
-         reload      => '0',
-         enable      => PrnEn,
-         poly        => 24x"6000",
-         poly_length => 5x"0F",
-         load_data   => 24x"9009",
-         data        => open,
-         serial      => PrnData
-   );
-
 --  5030521883283424767
 -- 18445829279364155008
 -- 18436106298727503359
@@ -847,31 +864,46 @@ end generate;
       DdsReset    => DdsReset,
       DdsUpdate   => DdsIO_Update
    );
+*/
+
+   Sync : SyncIFs
+   PORT MAP(
+      Clk         => Clk,
+      Reset       => Reset,
+      ChAData     => DataDly(Data1),   -- represents data from ch1 demod
+      ChBData     => DataDly(Data2),
+      ChAThenChB  => Ch1ThenCh2,
+      IndexOut    => IndexOut
+   );
 
    Delay_u : DiffDelay
       GENERIC MAP (
-         DATA_WIDTH  => 18,
-         LENGTH_BITS => 10
+         DATA_WIDTH  => 2,
+         LENGTH_BITS => 8
       )
       PORT MAP (
          clk         => Clk,
          reset       => Reset,
-         AbeforeB    => SweepLimit(1),
-         DataInA     => DataInA,
-         DataInB     => DataInB,
-         Diff        => unsigned(SweepRate(9 downto 0)),
-         DataOutA    => DataOutA,
-         DataOutB    => DataOutB
+         AbeforeB    => Ch1ThenCh2,
+         DataInA     => '0' & DataDly(Data1),
+         DataInB     => '0' & DataDly(Data2),
+         Diff        => to_unsigned(IndexOut, 8),
+         DataOutA    => DataA,
+         DataOutB    => DataB
       );
 
-   DiffDly: process (Clk)
+   DiffDlyProc: process (Clk)
    begin
       if (rising_edge(Clk)) then
-         DataInA <= "00" & std_logic_vector(IlaCounter);
-         DataInB <= "11" & std_logic_vector(IlaCounter);
-         Diff    <= signed('0' & DataOutA(9 downto 0)) - signed('0' & DataOutB(9 downto 0));
+         DataDly <= DataDly(126 downto 0) & PrnData;
+         if (IlaCounter(15 downto 0) = 16x"00") then
+            Data2 <= Data2 + 3;
+            Data1 <= 0;
+         end if;
+         dac0_d <= DataOutA(17 downto 4);
+         dac1_d <= DataOutB(17 downto 4);
       end if;
-   end process DiffDly;
+   end process DiffDlyProc;
 
 END rtl;
 

@@ -49,8 +49,16 @@ entity CombinerSerDesIn is
       DataIn1_n,
       DataIn2_p,
       DataIn2_n         : in  STD_LOGIC_VECTOR(PORTS-2 downto 0);
-      DataOut1,
-      DataOut2          : out SLV8_ARRAY(PORTS-2 downto 0)
+      DataOut10,
+      DataOut11,
+      DataOut12,
+      DataOut13,
+      DataOut14,
+      DataOut20,
+      DataOut21,
+      DataOut22,
+      DataOut23,
+      DataOut24         : out SLV8
    );
 end CombinerSerDesIn;
 
@@ -277,7 +285,12 @@ begin
       end if;
    end process;
 
-   DataOut1   <= Demux1(4 downto 0);
+   DataOut10 <= Demux1(0);
+   DataOut11 <= Demux1(1);
+   DataOut12 <= Demux1(2);
+   DataOut13 <= Demux1(3);
+   DataOut14 <= Demux1(4);
+
 
    DeInterlace2 : process(ClkX1)
    begin
@@ -303,6 +316,10 @@ begin
       end if;
    end process;
 
-   DataOut2   <= Demux2(4 downto 0);
+   DataOut20 <= Demux2(0);
+   DataOut21 <= Demux2(1);
+   DataOut22 <= Demux2(2);
+   DataOut23 <= Demux2(3);
+   DataOut24 <= Demux2(4);
 
 end rtl;

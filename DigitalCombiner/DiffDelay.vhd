@@ -83,7 +83,7 @@ ARCHITECTURE rtl OF DiffDelay IS
    SIGNAL   DataIn,
             RdOut                : std_logic_vector(DATA_WIDTH-1 downto 0);
    SIGNAL   Cntr,
-            CntrMinusOffset      : unsigned(LENGTH_BITS-1 downto 0);
+            CntrMinusOffset      : unsigned(LENGTH_BITS-1 downto 0) := (others=>'0');
    SIGNAL   DataInDly            : vector_of_slvs(2 downto 0)(DATA_WIDTH-1 downto 0);
 
 BEGIN
@@ -99,21 +99,21 @@ BEGIN
             Cntr            <= resize(Cntr + 1, Cntr);
             CntrMinusOffset <= resize(Cntr - Diff - 1, Cntr);  -- in case Diff is 0, need previous value
             if (AbeforeB) then
-               DataOutA    <= DataInDly(2);
-               DataInDly   <= DataInDly(1 downto 0) & DataInA;
-               DataOutB    <= RdOut;
-            else
                DataOutA    <= RdOut;
                DataOutB    <= DataInDly(2);
                DataInDly   <= DataInDly(1 downto 0) & DataInB;
+            else
+               DataOutA    <= DataInDly(2);
+               DataInDly   <= DataInDly(1 downto 0) & DataInA;
+               DataOutB    <= RdOut;
             end if;
          end if;
       end if;
    end process Delay_process;
 
-   DataIn   <= DataInB when (AbeforeB) else DataInA;
+   DataIn   <= DataInA when (AbeforeB) else DataInB;
 
-   p0_r_u : RAM_2Reads_1Write
+   FifoRam : RAM_2Reads_1Write
       GENERIC MAP(
          DATA_WIDTH  => DATA_WIDTH,
          ADDR_WIDTH  => LENGTH_BITS,
