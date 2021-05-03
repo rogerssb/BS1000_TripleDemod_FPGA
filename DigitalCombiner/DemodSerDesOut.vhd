@@ -96,8 +96,8 @@ architecture rtl of DemodSerDesOut is
    signal   DataOutp,
             DataOutn          : STD_LOGIC_VECTOR(PORTS-1 downto 0);
 
-   attribute MARK_DEBUG : string;
-   attribute MARK_DEBUG of Reset, SyncRst, TxData, LockPll : signal is "TRUE";
+--   attribute MARK_DEBUG : string;
+--   attribute MARK_DEBUG of Reset, SyncRst, TxData, LockPll : signal is "TRUE";
 
 begin
 
@@ -119,14 +119,14 @@ begin
       elsif (rising_edge(Clk1x)) then
          TxDataDly   <= TxData;
          if (LockPll) then
-            SyncRst  <= SyncRst(SyncRst'left-1 downto 0) & '0';
+            SyncRst  <= SyncRst(SyncRst'left-1 downto 0) & not Active;
             SRst     <= SyncRst(SyncRst'left);
-            if (Count = 63) then
-               Count <= 0;
- --              Offset <= Offset - 1 when (Offset > 0) else 63;
-            else
-               Count <= Count + 1;
-            end if;
+ --           if (Count = 63) then
+ --              Count <= 0;
+ ----              Offset <= Offset - 1 when (Offset > 0) else 63;
+ --           else
+ --              Count <= Count + 1;
+ --           end if;
          end if;
 
          for x in 0 to PORTS-1 loop
@@ -147,8 +147,8 @@ begin
          data_out_from_device  => SerDesIn,
          data_out_to_pins_p    => DataOutp,
          data_out_to_pins_n    => DataOutn,
-         clk_to_pins_p         => RefClkOutp,
-         clk_to_pins_n         => RefClkOutn
+         clk_to_pins_p         => RefClkOutP,
+         clk_to_pins_n         => RefClkOutN
       );
 
 

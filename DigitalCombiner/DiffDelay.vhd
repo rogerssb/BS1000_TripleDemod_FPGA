@@ -39,18 +39,21 @@ USE work.Semco_pkg.ALL;
 
 ENTITY DiffDelay IS
       GENERIC(
-         DATA_WIDTH  : positive := 18;
-         LENGTH_BITS : positive := 10
+         DATA_WIDTH  : positive := 18
       );
    PORT(
       clk,
       reset,
       AbeforeB       : IN  std_logic;
-      DataInA,
-      DataInB        : IN  std_logic_vector(DATA_WIDTH-1 downto 0);
-      Diff           : IN  unsigned(LENGTH_BITS-1 downto 0);
-      DataOutA,
-      DataOutB       : OUT std_logic_vector(DATA_WIDTH-1 downto 0)
+      DataInA1,
+      DataInA2,
+      DataInB1,
+      DataInB2        : IN  std_logic_vector(DATA_WIDTH-1 downto 0);
+      Diff           : IN  uint8;
+      DataOutA1,
+      DataOutA2,
+      DataOutB1,
+      DataOutB2       : OUT std_logic_vector(DATA_WIDTH-1 downto 0)
    );
 END DiffDelay;
 
@@ -80,11 +83,13 @@ ARCHITECTURE rtl OF DiffDelay IS
 
 
   -- Signals
-   SIGNAL   DataIn,
-            RdOut                : std_logic_vector(DATA_WIDTH-1 downto 0);
+   SIGNAL   DataInA,
+            DataInB,
+            RdOutA,
+            RdOutB         : std_logic_vector(DATA_WIDTH*2-1 downto 0);
    SIGNAL   Cntr,
-            CntrMinusOffset      : unsigned(LENGTH_BITS-1 downto 0) := (others=>'0');
-   SIGNAL   DataInDly            : vector_of_slvs(2 downto 0)(DATA_WIDTH-1 downto 0);
+            CntrA,
+            CntrB          : unsigned(6 downto 0) := (others=>'0');
 
 BEGIN
 
@@ -93,30 +98,38 @@ BEGIN
    begin
       if (rising_edge(clk)) then
          if (reset) then
-            Cntr            <= (others=>'0');
-            CntrMinusOffset <= resize(Cntr - Diff - 1, Cntr);
+            Cntr        <= (others=>'0');
+            CntrA       <= (others=>'0');
+            CntrB       <= (others=>'0');
+            DataOutA1   <= (others=>'0');
+            DataOutA2   <= (others=>'0');
+            DataOutB1   <= (others=>'0');
+            DataOutB2   <= (others=>'0');
          else
             Cntr            <= resize(Cntr + 1, Cntr);
-            CntrMinusOffset <= resize(Cntr - Diff - 1, Cntr);  -- in case Diff is 0, need previous value
             if (AbeforeB) then
-               DataOutA    <= RdOut;
-               DataOutB    <= DataInDly(2);
-               DataInDly   <= DataInDly(1 downto 0) & DataInB;
+               CntrA <= resize(Cntr - Diff - 1, Cntr);   -- in case Diff is 0, need same cntr
+               CntrB <= Cntr - 1;                        -- allow two clocks for data to settle
             else
-               DataOutA    <= DataInDly(2);
-               DataInDly   <= DataInDly(1 downto 0) & DataInA;
-               DataOutB    <= RdOut;
+               CntrB <= resize(Cntr - Diff - 1, Cntr);
+               CntrA <= Cntr - 1;
             end if;
+
+            DataOutA1   <= RdOutA(DATA_WIDTH*2-1 downto DATA_WIDTH);
+            DataOutA2   <= RdOutA(DATA_WIDTH-1 downto 0);
+            DataOutB1   <= RdOutB(DATA_WIDTH*2-1 downto DATA_WIDTH);
+            DataOutB2   <= RdOutB(DATA_WIDTH-1 downto 0);
          end if;
       end if;
    end process Delay_process;
 
-   DataIn   <= DataInA when (AbeforeB) else DataInB;
+   DataInA  <= DataInA1 & DataInA2;
+   DataInB  <= DataInB1 & DataInB2;
 
-   FifoRam : RAM_2Reads_1Write
+   FifoRamA : RAM_2Reads_1Write
       GENERIC MAP(
-         DATA_WIDTH  => DATA_WIDTH,
-         ADDR_WIDTH  => LENGTH_BITS,
+         DATA_WIDTH  => DATA_WIDTH*2,
+         ADDR_WIDTH  => 7,
          LATENCY     => 1
       )
       PORT MAP(
@@ -125,13 +138,31 @@ BEGIN
          reset       => reset,
          WrEn        => '1',
          WrAddr      => to_integer(Cntr),
-         RdAddrA     => to_integer(CntrMinusOffset),
+         RdAddrA     => to_integer(CntrA),
          RdAddrB     => 0,
-         WrData      => DataIn,
-         RdOutA      => RdOut,
+         WrData      => DataInA,
+         RdOutA      => RdOutA,
          RdOutB      => open
       );
 
+   FifoRamB : RAM_2Reads_1Write
+      GENERIC MAP(
+         DATA_WIDTH  => DATA_WIDTH*2,
+         ADDR_WIDTH  => 7,
+         LATENCY     => 1
+      )
+      PORT MAP(
+         clk         => clk,
+         ce          => '1',
+         reset       => reset,
+         WrEn        => '1',
+         WrAddr      => to_integer(Cntr),
+         RdAddrA     => to_integer(CntrB),
+         RdAddrB     => 0,
+         WrData      => DataInB,
+         RdOutA      => RdOutB,
+         RdOutB      => open
+      );
 
 END rtl;
 

@@ -39,16 +39,12 @@ entity CombinerSerDesIn is
       PORTS    : natural := 6
    );
    Port (
-      ClkIn1_p,
-      ClkIn1_n,
-      ClkIn2_p,
-      ClkIn2_n,
+      ClkIn1,
+      ClkIn2,
       Clk93M,
       Reset             : in  std_logic;
-      DataIn1_p,
-      DataIn1_n,
-      DataIn2_p,
-      DataIn2_n         : in  STD_LOGIC_VECTOR(PORTS-2 downto 0);
+      DataIn1,
+      DataIn2           : in  STD_LOGIC_VECTOR(PORTS-2 downto 0);
       DataOut10,
       DataOut11,
       DataOut12,
@@ -65,20 +61,16 @@ end CombinerSerDesIn;
 architecture rtl of CombinerSerDesIn is
 
    component SerDes6x8to1In
-      generic (
-         SYS_W    : integer := 6;
-         DEV_W    : integer := SYS_W*8
-      );
       port
        (
         -- From the system into the device
-        data_in_from_pins       : in    std_logic_vector(SYS_W-1 downto 0);
-        data_in_to_device       : out   std_logic_vector(DEV_W-1 downto 0);
+        data_in_from_pins       : in    std_logic_vector(6-1 downto 0);
+        data_in_to_device       : out   std_logic_vector(48-1 downto 0);
 
       -- Input, Output delay control signals
         delay_locked            : out   std_logic;                         -- Locked signal from IDELAYCTRL
         ref_clock               : in    std_logic;                         -- Reference Clock for IDELAYCTRL. Has to come from BUFG.
-        bitslip                 : in    std_logic_vector(SYS_W-1 downto 0);    -- Bitslip module is enabled in NETWORKING mode
+        bitslip                 : in    std_logic_vector(6-1 downto 0);    -- Bitslip module is enabled in NETWORKING mode
                                                                            -- User should tie it to '0' if not needed
       -- Clock and reset signals
         clk_div_in,                                                        -- Slow clock output
@@ -108,16 +100,28 @@ architecture rtl of CombinerSerDesIn is
       );
    end component;
 
-   constant CLOCK             : natural := PORTS-1;
+   COMPONENT vio_0
+      PORT (
+         clk        : IN STD_LOGIC;
+         probe_out0 : OUT STD_LOGIC_VECTOR(17 DOWNTO 0);
+         probe_out1 : OUT STD_LOGIC_VECTOR(17 DOWNTO 0);
+         probe_out2 : OUT STD_LOGIC_VECTOR(17 DOWNTO 0);
+         probe_out3 : OUT STD_LOGIC_VECTOR(17 DOWNTO 0);
+         probe_out4 : OUT STD_LOGIC_VECTOR(11 DOWNTO 0);
+         probe_out5 : OUT STD_LOGIC_VECTOR(11 DOWNTO 0);
+         probe_out6 : OUT STD_LOGIC_VECTOR(13 DOWNTO 0);
+         probe_out7 : OUT STD_LOGIC_VECTOR(17 DOWNTO 0);
+         probe_out8 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+         probe_out9 : OUT STD_LOGIC_VECTOR(15 DOWNTO 0)
+      );
+   END COMPONENT;
+
+   constant CLOCK             : natural := PORTS-1;   -- the last port is the 93MHz clock from the demod used for phase alignment
 
    signal   SyncRst           : SLV16 := (others=>'1');
    signal   ChBitSlip1,
             ChBitSlip2        : std_logic_vector(PORTS-1 downto 0);
-   signal   DataIn1,
-            DataIn2           : std_logic_vector(PORTS-2 downto 0);
-   signal   ClkIn1,
-            ClkIn2,
-            ClkX1,
+   signal   ClkX1,
             ClkNx,
             Clk200M,
             ClkStopped200,
@@ -132,60 +136,14 @@ architecture rtl of CombinerSerDesIn is
    signal   ChOut1,
             ChOut2            : std_logic_vector ((PORTS*8)-1 downto 0);
    signal   Count             : UINT8 := x"00";
+   signal   Vio0              : SLV18;
 
-   attribute MARK_DEBUG : string;
-   attribute MARK_DEBUG of
-            Demux1, Demux2, Count, LockedXn, Lock200, ChBitSlip1, ChBitSlip2,
-            ClkStopped200, ClkStoppedXn, ResetPll, DelayLocked1, DelayLocked2 : signal is "TRUE";
+   --   attribute MARK_DEBUG : string;
+   --   attribute MARK_DEBUG of
+   --            Demux1, Demux2, Count, LockedXn, Lock200, ChBitSlip1, ChBitSlip2,
+   --            ClkStopped200, ClkStoppedXn, ResetPll, DelayLocked1, DelayLocked2 : signal is "TRUE";
 
 begin
-
-   Diff : for n in 0 to PORTS-2 generate
-   begin
-      DataBuf1 : IBUFDS
-         generic map (
-            DIFF_TERM      => TRUE, -- Differential Termination
-            IBUF_LOW_PWR   => FALSE, -- Low power (TRUE) vs. performance (FALSE) setting for referenced I/O standards
-            IOSTANDARD     => "LVDS")
-         port map (
-            I  => DataIn1_p(n),
-            IB => DataIn1_n(n),
-            O  => DataIn1(n)
-         );
-
-      DataBuf2 : IBUFDS
-         generic map (
-            DIFF_TERM      => TRUE, -- Differential Termination
-            IBUF_LOW_PWR   => FALSE, -- Low power (TRUE) vs. performance (FALSE) setting for referenced I/O standards
-            IOSTANDARD     => "LVDS")
-         port map (
-            I  => DataIn2_p(n),
-            IB => DataIn2_n(n),
-            O  => DataIn2(n)
-         );
-   end generate;
-
-   ClkBuf1 : IBUFDS
-      generic map (
-         DIFF_TERM      => TRUE, -- Differential Termination
-         IBUF_LOW_PWR   => FALSE, -- Low power (TRUE) vs. performance (FALSE) setting for referenced I/O standards
-         IOSTANDARD     => "LVDS")
-      port map (
-         I  => ClkIn1_p,
-         IB => ClkIn1_n,
-         O  => ClkIn1
-      );
-
-   ClkBuf2 : IBUFDS
-      generic map (
-         DIFF_TERM      => TRUE, -- Differential Termination
-         IBUF_LOW_PWR   => FALSE, -- Low power (TRUE) vs. performance (FALSE) setting for referenced I/O standards
-         IOSTANDARD     => "LVDS")
-      port map (
-         I  => ClkIn2_p,
-         IB => ClkIn2_n,
-         O  => ClkIn2
-      );
 
    ResetPll <= ClkStopped200 or ClkStoppedXn or Reset;
 
@@ -208,6 +166,21 @@ begin
          clk_Nx            => ClkNx
     );
 
+   VIO : vio_0
+      PORT MAP (
+         clk         => Clk93M,
+         probe_out0  => Vio0,
+         probe_out1  => open,
+         probe_out2  => open,
+         probe_out3  => open,
+         probe_out4  => open,
+         probe_out5  => open,
+         probe_out6  => open,
+         probe_out7  => open,
+         probe_out8  => open,
+         probe_out9  => open
+   );
+
    SyncRstProcess : process(Clk93M)
    begin
       if (rising_edge(Clk93M)) then
@@ -220,10 +193,6 @@ begin
    end process SyncRstProcess;
 
    SerDesIn1 : SerDes6x8to1In
-      generic map(
-         SYS_W   => 6,
-         DEV_W   => 48
-      )
        port map
       (
          clk_in               => ClkNx,
@@ -238,10 +207,6 @@ begin
       );
 
    SerDesIn2 : SerDes6x8to1In
-      generic map(
-         SYS_W   => 6,
-         DEV_W   => 48
-      )
        port map
       (
          clk_in               => ClkNx,
@@ -259,7 +224,7 @@ begin
    begin
       if (rising_edge(ClkX1)) then
          for ch in 0 to PORTS-1 loop
-            if ((ch = 3) or (ch = 4) or (ch = 5)) then   -- some traces got crossed in routing the PCB
+            if ((ch = 3) or (ch = 4) or (ch = 5)) then
                for bits in 0 to 7 loop
                   Demux1(ch)(bits) <= not (ChOut1((42+ch)-((7-bits)*6)) );
                end loop;
@@ -296,9 +261,9 @@ begin
    begin
       if (rising_edge(ClkX1)) then
          for ch in 0 to PORTS-1 loop
-            if ((ch = 0) or (ch = 3) or (ch = 4)) then
+            if ((ch = 3) or (ch = 4) or (ch = 5)) then
                for bits in 0 to 7 loop
-                  Demux2(ch)(bits) <= not( ChOut2((42+ch)-((7-bits)*6)));
+                  Demux2(ch)(bits) <= not(ChOut2((42+ch)-((7-bits)*6)));
                end loop;
             else
                for bits in 0 to 7 loop

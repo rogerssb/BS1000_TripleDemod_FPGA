@@ -82,6 +82,22 @@ ARCHITECTURE rtl OF DC_DemodTop IS
       );
    end component DemodSerDesOut;
 
+   COMPONENT vio_0
+      PORT (
+         clk        : IN STD_LOGIC;
+         probe_out0 : OUT STD_LOGIC_VECTOR(17 DOWNTO 0);
+         probe_out1 : OUT STD_LOGIC_VECTOR(17 DOWNTO 0);
+         probe_out2 : OUT STD_LOGIC_VECTOR(17 DOWNTO 0);
+         probe_out3 : OUT STD_LOGIC_VECTOR(17 DOWNTO 0);
+         probe_out4 : OUT STD_LOGIC_VECTOR(11 DOWNTO 0);
+         probe_out5 : OUT STD_LOGIC_VECTOR(11 DOWNTO 0);
+         probe_out6 : OUT STD_LOGIC_VECTOR(13 DOWNTO 0);
+         probe_out7 : OUT STD_LOGIC_VECTOR(17 DOWNTO 0);
+         probe_out8 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+         probe_out9 : OUT STD_LOGIC_VECTOR(15 DOWNTO 0)
+      );
+   END COMPONENT;
+
    constant CHANNEL_1         : std_logic_vector(1 downto 0) := "00";
    constant CHANNEL_2         : std_logic_vector(1 downto 0) := "01";
    constant COMBINER          : std_logic_vector(1 downto 0) := "10";
@@ -89,48 +105,82 @@ ARCHITECTURE rtl OF DC_DemodTop IS
 
   -- Signals
    signal   ID             : std_logic_vector(1 downto 0);
-   signal   TxData4         : UINT8;
+   signal   TxData4        : UINT8 := x"55";
    signal   TxData1,
             TxData2        : SLV8_ARRAY(PORTS - 1 downto 0);
+   signal   Vio9           : SLV16;
+   signal   Active1,
+            Active2        : std_logic;
 
 BEGIN
 
    ID <= FPGA_ID1 & FPGA_ID0;
 
+   VIO : vio_0
+      PORT MAP (
+         clk         => Clk,
+         probe_out0  => open,
+         probe_out1  => open,
+         probe_out2  => open,
+         probe_out3  => open,
+         probe_out4  => open,
+         probe_out5  => open,
+         probe_out6  => open,
+         probe_out7  => open,
+         probe_out8  => open,
+         probe_out9  => Vio9
+   );
+
    IF_Clk_process : process(Clk)
    begin
       if (rising_edge(Clk)) then
-         if (TxData4 < 255) then
-            TxData4 <= TxData4 + x"11";
-         else
+         if (Reset) then
             TxData4 <= x"55";
-         end if;
-
-         if (ID = CHANNEL_1) then
-            TxData1(0) <= adc0(7 downto 0);
-            TxData1(1) <= iDemodBit & qDemodBit & not adc0(13) & adc0(12 downto 8);
-            TxData1(2) <= amDataIn(7 downto 0);
-            TxData1(3) <= amDataEn & "000" & amDataIn(11 downto 8);
-            TxData1(4) <= std_logic_vector(TxData4);   -- spare channel, setup for debug
+            TxData1(0) <= x"00";
+            TxData1(1) <= x"00";
+            TxData1(2) <= x"00";
+            TxData1(3) <= x"00";
+            TxData1(4) <= x"00";
             TxData2(0) <= x"00";
             TxData2(1) <= x"00";
             TxData2(2) <= x"00";
             TxData2(3) <= x"00";
             TxData2(4) <= x"00";
          else
-            TxData2(0) <= adc0(7 downto 0);
-            TxData2(1) <= iDemodBit & qDemodBit & not adc0(13) & adc0(12 downto 8);
-            TxData2(2) <= amDataIn(7 downto 0);
-            TxData2(3) <= amDataEn & "000" & amDataIn(11 downto 8);
-            TxData2(4) <= std_logic_vector(TxData4);
-            TxData1(0) <= x"00";
-            TxData1(1) <= x"00";
-            TxData1(2) <= x"00";
-            TxData1(3) <= x"00";
-            TxData1(4) <= x"00";
+            if (TxData4 < 255) then
+               TxData4 <= TxData4 + x"11";
+            else
+               TxData4 <= x"55";
+            end if;
+
+            if (ID = CHANNEL_1) then
+               TxData1(0) <=  x"12" when (Vio9(0)) else adc0(7 downto 0);
+               TxData1(1) <=  x"23" when (Vio9(0)) else iDemodBit & qDemodBit & not adc0(13) & adc0(12 downto 8);
+               TxData1(2) <=  x"34" when (Vio9(0)) else amDataIn(7 downto 0);
+               TxData1(3) <=  x"45" when (Vio9(0)) else amDataEn & "000" & amDataIn(11 downto 8);
+               TxData1(4) <= std_logic_vector(TxData4);   -- spare channel, setup for debug
+               TxData2(0) <= x"00";
+               TxData2(1) <= x"00";
+               TxData2(2) <= x"00";
+               TxData2(3) <= x"00";
+               TxData2(4) <= x"00";
+            else
+               TxData2(0) <= x"56" when (Vio9(0)) else adc0(7 downto 0);
+               TxData2(1) <= x"67" when (Vio9(0)) else iDemodBit & qDemodBit & not adc0(13) & adc0(12 downto 8);
+               TxData2(2) <= x"78" when (Vio9(0)) else amDataIn(7 downto 0);
+               TxData2(3) <= x"89" when (Vio9(0)) else amDataEn & "000" & amDataIn(11 downto 8);
+               TxData2(4) <= std_logic_vector(TxData4);
+               TxData1(0) <= x"00";
+               TxData1(1) <= x"00";
+               TxData1(2) <= x"00";
+               TxData1(3) <= x"00";
+               TxData1(4) <= x"00";
+            end if;
          end if;
       end if;
    end process IF_Clk_process;
+
+   Active1 <= '1' when (ID = CHANNEL_1) else '0';
 
    Ch1SerDes : DemodSerDesOut
       Generic Map(
@@ -139,7 +189,7 @@ BEGIN
       Port MAP(
          Clk93M      => Clk,
          Reset       => Reset,
-         Active      => (ID ?= CHANNEL_1),
+         Active      => Active1,
          TxData      => TxData1,
          DataOut_p   => PrevData_p,
          DataOut_n   => PrevData_n,
@@ -147,14 +197,16 @@ BEGIN
          RefClkOut_n => PrevClk_n
       );
 
-  Ch2SerDes : DemodSerDesOut
+   Active2 <= '1' when (ID = CHANNEL_2) else '0';
+
+   Ch2SerDes : DemodSerDesOut
       Generic Map(
          PORTS    => PORTS
       )
       Port MAP(
          Clk93M      => Clk,
          Reset       => Reset,
-         Active      => (ID ?= CHANNEL_2),
+         Active      => Active2,
          TxData      => TxData2,
          DataOut_p   => NextData_p,
          DataOut_n   => NextData_n,

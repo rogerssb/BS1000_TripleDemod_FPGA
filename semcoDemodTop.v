@@ -16,9 +16,7 @@
 
     ADD_PN_GEN includes the PN Generator
     NO_LDPC_ENC turns off the LDPC encoder since it won't fit with ADD_PN_GEN
-    COMBINER adds the I/Os for either combiner
-    COMBINER_DEMOD adds the outputs from the demod to the combiner card
-    COMBINER_COMBINE adds the front end serdes and phase alignment for the combiner
+    COMBINER adds the front end serdes and phase alignment for the combiner
     ADD_SPI_GATEWAY turns on the SPI Flash signals. TRIPLE_DEMOD
     ADD_LDPC turns on the LDPC module
     ADD_VITERBI
@@ -28,7 +26,23 @@
 
     NOTE ALSO, the combiner is built on a 7k325 vs the 7k160 of the rest. The
     "Project Part" will need modified when changing configurations and then
-    the IPs will need updating to the new part.
+    the IPs will need updating to the new part as well as adding Combiner.xdc
+    and enabling the appropriate *_Debug.xdc files
+
+    There are also various options on constraint files, so rather than adding
+    them each time, they are all in the project but disabled making the choices
+    more obvious.
+
+    Notes on combiner:
+        The I/Q data from both channels is sent to the combiner to be used to
+    IF alignment due to propagation delays in the field. The jitter on the data
+    will be worse at the lower data rates, so I ran test at 1Mb driving both
+    demods in parallel. The Ch2 data is usually two clocks behind Ch1 data,
+    however the Ch2 data occasionally goes high several clocks before Ch1, Hmm?
+    Likewise Ch2 will drop early. Interesting point is the 'Fails' are always
+    off by the same amount of clocks. This one reason why the IF alignment will
+    use a loop filter to pull the two channels together slowly rather than on
+    a bit by bit basis.
 */
 
 `timescale 1ns/100ps
@@ -137,51 +151,46 @@ module semcoDemodTop (
     `endif //R6100
 
     `ifdef ADD_SPI_GATEWAY
-    //output              spiFlashCK, //Output through the STARTUPE2 primitive
-    output              spiFlashCSn,
-    output              spiFlashMOSI,
-    input               spiFlashMISO,
+        //output              spiFlashCK, //Output through the STARTUPE2 primitive
+        output              spiFlashCSn,
+        output              spiFlashMOSI,
+        input               spiFlashMISO,
     `endif
 
     // Lock indicators
     output              lockLed0n, lockLed1n,
 
     `ifdef R6100
-    input               Sw50Ohm,
+        output              Sw50Ohm,
+        input               FPGA_ID0, FPGA_ID1,
 
        `ifdef COMBINER  // both sides need these signals
-        input               FPGA_ID0, FPGA_ID1,
-        // interFpga data
-        output  [4:0]       PrevData_p,
-                            PrevData_n,
-                            NextData_p,
-                            NextData_n,
-        output              NextClk_p,
-                            NextClk_n,
-                            PrevClk_p,
-                            PrevClk_n,
-        `endif // combiner
+            input  [4:0]        PrevData_p,
+                                PrevData_n,
+                                NextData_p,
+                                NextData_n,
+            input               NextClk_p,
+                                NextClk_n,
+                                PrevClk_p,
+                                PrevClk_n,
+        `else // combiner
 
-        `ifdef COMBINER_COMBINE     // if this is the combiner, add sidecar signals
-            inout    [1:40]   SideCar,
-
-        `elsif ADD_BITSYNC          // if not combining at all, add bitsync if desired
-            // Bitsync ADC
-            input       [13:0]  bsAdc,
-            input               bsAdc_overflow,
-            output              bsAdc_powerDown,
-
-            // Input Impedance and Topology controls
-            output              bsHighImpedance,
-            output              bsSingleEnded,
-
-            // Gain and Offset DAC interfaces
-            output              bsDacSELn,
-            output              bsDacSCLK, bsDacMOSI,
+            // interFpga data
+            output [4:0]        PrevData_p,
+                                PrevData_n,
+                                NextData_p,
+                                NextData_n,
+            output              NextClk_p,
+                                NextClk_n,
+                                PrevClk_p,
+                                PrevClk_n,
         `endif
-    // SDI Output
-    output              sdiOut,
-    output              DQMOut
+
+        inout    [40:1]     SideCar,
+
+        // SDI Output
+        output              sdiOut,
+        output              DQMOut
 
     `else   //R6100
 
@@ -196,91 +205,171 @@ module semcoDemodTop (
 //******************************************************************************
 //                          Combiner/BitSync Interface
 //******************************************************************************
-    `ifdef ADD_BITSYNC
-        `ifdef COMBINER_COMBINE
-            wire    [13:0]  bsAdc;
-            wire            bsAdc_overflow, bsAdc_powerDown, bsHighImpedance, bsSingleEnded,
-                            bsDacSELn, bsDacSCLK, bsDacMOSI, IF_BS_n;
-            assign bsAdc[13] = !IF_BS_n ? SideCar[4]  : 1'b0;
-            assign bsAdc[12] = !IF_BS_n ? SideCar[6]  : 1'b0;
-            assign bsAdc[11] = !IF_BS_n ? SideCar[8]  : 1'b0;
-            assign bsAdc[10] = !IF_BS_n ? SideCar[10] : 1'b0;
-            assign bsAdc[9]  = !IF_BS_n ? SideCar[12] : 1'b0;
-            assign bsAdc[8]  = !IF_BS_n ? SideCar[14] : 1'b0;
-            assign bsAdc[7]  = !IF_BS_n ? SideCar[16] : 1'b0;
-            assign bsAdc[6]  = !IF_BS_n ? SideCar[18] : 1'b0;
-            assign bsAdc[5]  = !IF_BS_n ? SideCar[20] : 1'b0;
-            assign bsAdc[4]  = !IF_BS_n ? SideCar[22] : 1'b0;
-            assign bsAdc[3]  = !IF_BS_n ? SideCar[24] : 1'b0;
-            assign bsAdc[2]  = !IF_BS_n ? SideCar[26] : 1'b0;
-            assign bsAdc[1]  = !IF_BS_n ? SideCar[28] : 1'b0;
-            assign bsAdc[0]  = !IF_BS_n ? SideCar[30] : 1'b0;
-        `endif
-    `endif
+    wire    [13:0]  bsAdc;
+    wire            bsAdc_overflow, bsAdc_powerDown, bsHighImpedance, bsSingleEnded,
+                    bsDacSELn, bsDacSCLK, bsDacMOSI, IF_BS_n, clk, clk2x, clkOver2;
 
     wire    signed  [17:0]  iBB, qBB;
     wire                    bbClkEn;
 
-    `ifdef COMBINER_COMBINE
-        wire        [17:0]  DdsData;
-        wire        [1:0]   ID;
-        wire                DdsIO_Reset, DdsTxEn, DdsIO_Update, DdsReset,
-                            DdsCS_n, DdsSClk, DdsMosi, DdsMiso,
-                            SideCarClk, DdsSyncClk;
+    reg         [17:0]  DdsData;
+    wire        [15:0]  Vio9;
+    wire                DdsIO_Reset, DdsTxEn, DdsIO_Update, DdsReset,
+                        DdsCS_n, DdsSClk, DdsMosi, DdsMiso,
+                        SideCarClk, DdsSyncClk;
 
-        assign SideCar[2]  = IF_BS_n;
-        assign SideCar[4]  = IF_BS_n ? DdsData[17]  : 1'bz;
-        assign SideCar[6]  = IF_BS_n ? DdsData[16]  : 1'bz;
-        assign SideCar[8]  = IF_BS_n ? DdsData[15]  : 1'bz;
-        assign SideCar[10] = IF_BS_n ? DdsData[14]  : 1'bz;
-        assign SideCar[12] = IF_BS_n ? DdsData[13]  : 1'bz;
-        assign SideCar[14] = IF_BS_n ? DdsData[12]  : 1'bz;
-        assign SideCar[16] = IF_BS_n ? DdsData[11]  : 1'bz;
-        assign SideCar[18] = IF_BS_n ? DdsData[10]  : 1'bz;
-        assign SideCar[20] = IF_BS_n ? DdsData[9]   : 1'bz;
-        assign SideCar[22] = IF_BS_n ? DdsData[8]   : 1'bz;
-        assign SideCar[24] = IF_BS_n ? DdsData[7]   : 1'bz;
-        assign SideCar[26] = IF_BS_n ? DdsData[6]   : 1'bz;
-        assign SideCar[28] = IF_BS_n ? DdsData[5]   : 1'bz;
-        assign SideCar[30] = IF_BS_n ? DdsData[4]   : 1'bz;
-        assign SideCar[34] = IF_BS_n ? DdsData[3]   : 1'b0;
-        assign SideCar[36] = IF_BS_n ? DdsData[2]   : 1'b0;
-        assign SideCar[38] = IF_BS_n ? DdsData[1]   : 1'b0;
-        assign SideCar[40] = IF_BS_n ? DdsData[0]   : bsHighImpedance;
+    assign bsAdc[13] = !IF_BS_n ? SideCar[4]  : 1'b0;
+    assign bsAdc[12] = !IF_BS_n ? SideCar[6]  : 1'b0;
+    assign bsAdc[11] = !IF_BS_n ? SideCar[8]  : 1'b0;
+    assign bsAdc[10] = !IF_BS_n ? SideCar[10] : 1'b0;
+    assign bsAdc[9]  = !IF_BS_n ? SideCar[12] : 1'b0;
+    assign bsAdc[8]  = !IF_BS_n ? SideCar[14] : 1'b0;
+    assign bsAdc[7]  = !IF_BS_n ? SideCar[16] : 1'b0;
+    assign bsAdc[6]  = !IF_BS_n ? SideCar[18] : 1'b0;
+    assign bsAdc[5]  = !IF_BS_n ? SideCar[20] : 1'b0;
+    assign bsAdc[4]  = !IF_BS_n ? SideCar[22] : 1'b0;
+    assign bsAdc[3]  = !IF_BS_n ? SideCar[24] : 1'b0;
+    assign bsAdc[2]  = !IF_BS_n ? SideCar[26] : 1'b0;
+    assign bsAdc[1]  = !IF_BS_n ? SideCar[28] : 1'b0;
+    assign bsAdc[0]  = !IF_BS_n ? SideCar[30] : 1'b0;
 
-        assign SideCar[11] = IF_BS_n ? DdsIO_Reset  : bsAdc_powerDown;
-        assign SideCar[15] = IF_BS_n ? DdsTxEn      : 1'b0;
-        assign SideCar[19] = IF_BS_n ? DdsIO_Update : 1'b0;
-        assign SideCar[21] = IF_BS_n ? DdsReset     : 1'b0;
-        assign SideCar[23] = IF_BS_n ? DdsCS_n      : bsDacSELn;
-        assign SideCar[25] = IF_BS_n ? DdsSClk      : bsDacSCLK;
-        assign SideCar[27] = IF_BS_n ? DdsMosi      : bsDacMOSI;
-        assign SideCar[29] = IF_BS_n ? DdsMiso      : bsSingleEnded;
-        assign bsAdc_overflow = 1'b0;   // this signal isn't connected in bs/combiner board
-        assign SideCarClk = SideCar[32];
-        assign DdsSyncClk = !IF_BS_n ? SideCar[17] : 1'b0;
-        assign ID         = {FPGA_ID1, FPGA_ID0};
- //       assign IF_BS_n    = not Vio9(9);
+    assign SideCar[2]  = IF_BS_n;
+    assign SideCar[4]  = IF_BS_n ? DdsData[17]  : 1'bz;
+    assign SideCar[6]  = IF_BS_n ? DdsData[16]  : 1'bz;
+    assign SideCar[8]  = IF_BS_n ? DdsData[15]  : 1'bz;
+    assign SideCar[10] = IF_BS_n ? DdsData[14]  : 1'bz;
+    assign SideCar[12] = IF_BS_n ? DdsData[13]  : 1'bz;
+    assign SideCar[14] = IF_BS_n ? DdsData[12]  : 1'bz;
+    assign SideCar[16] = IF_BS_n ? DdsData[11]  : 1'bz;
+    assign SideCar[18] = IF_BS_n ? DdsData[10]  : 1'bz;
+    assign SideCar[20] = IF_BS_n ? DdsData[9]   : 1'bz;
+    assign SideCar[22] = IF_BS_n ? DdsData[8]   : 1'bz;
+    assign SideCar[24] = IF_BS_n ? DdsData[7]   : 1'bz;
+    assign SideCar[26] = IF_BS_n ? DdsData[6]   : 1'bz;
+    assign SideCar[28] = IF_BS_n ? DdsData[5]   : 1'bz;
+    assign SideCar[30] = IF_BS_n ? DdsData[4]   : 1'bz;
+    assign SideCar[34] = IF_BS_n ? DdsData[3]   : 1'bz;
+    assign SideCar[36] = IF_BS_n ? DdsData[2]   : 1'bz;
+    assign SideCar[38] = IF_BS_n ? DdsData[1]   : 1'bz;
+    assign SideCar[40] = IF_BS_n ? DdsData[0]   : bsHighImpedance;
 
-        wire            [7:0]   DataOut10, DataOut11, DataOut12, DataOut13, DataOut14,
-                                DataOut20, DataOut21, DataOut22, DataOut23, DataOut24;
-        CombinerSerDesIn #(.PORTS(5)) SerDes_u
+    assign SideCar[11] = IF_BS_n ? DdsIO_Reset  : bsAdc_powerDown;
+    assign SideCar[15] = IF_BS_n ? 1'b1         : 1'bz;
+    assign SideCar[19] = IF_BS_n ? DdsIO_Update : 1'bz;
+    assign SideCar[21] = IF_BS_n ? DdsReset     : 1'bz;
+    assign SideCar[23] = IF_BS_n ? DdsCS_n      : bsDacSELn;
+    assign SideCar[25] = IF_BS_n ? DdsSClk      : bsDacSCLK;
+    assign SideCar[27] = IF_BS_n ? DdsMosi      : bsDacMOSI;
+    assign SideCar[29] = IF_BS_n ? 1'bz         : bsSingleEnded;
+    assign DdsMiso = SideCar[29];
+    assign bsAdc_overflow = 1'b0;   // this signal isn't connected in bs/combiner board
+    assign SideCarClk = SideCar[32];
+    assign DdsSyncClk = !IF_BS_n ? SideCar[17] : 1'b0;
+
+ /*(* MARK_DEBUG="true" *)*/  wire [7:0]   DataOut10, DataOut11, DataOut12, DataOut13, DataOut14,
+                            DataOut20, DataOut21, DataOut22, DataOut23, DataOut24;
+
+    wire    [13:0]  Ch1Adc0 = {DataOut11[5:0], DataOut10};
+    wire    [13:0]  Ch2Adc0 = {DataOut21[5:0], DataOut20};
+    wire    [11:0]  Ch1Agc  = {DataOut13[3:0], DataOut12};
+    wire    [11:0]  Ch2Agc  = {DataOut23[3:0], DataOut22};
+    wire    [17:0]  LagCoef, LeadCoef, SweepRate, ProbeOut2;
+ /*(* MARK_DEBUG="true" *)*/ wire [17:0] MaxImagout, MaxRealout, MinImagout,
+                    MinRealout, GainOutMax, GainOutMin, phase_detect,
+                    Ch1RealPre, Ch1ImagPre, Ch2RealPre, Ch2ImagPre,
+                    Ch1Real, Ch1Imag, Ch2Real, Ch2Imag,
+                    Ch1Adc17, Ch2Adc17, Ch1Diff, Ch2Diff;
+ (* MARK_DEBUG="true" *)     wire    [7:0]   Diff;
+    wire    [13:0]  SweepLimit;
+ /*(* MARK_DEBUG="true" *)*/     wire    [12:0]  RealLock, ImagLock;
+ /*(* MARK_DEBUG="true" *)*/     wire    [31:0]  lag_out;
+ /*(* MARK_DEBUG="true" *)*/     wire    [21:0]  nco_control_out;
+ (* MARK_DEBUG="true" *)     wire AbeforeB;
+
+    wire    [10:0]  abs_agc_diff;
+
+    vio_0 VIO (
+        .clk(clk),                // input wire clk
+        .probe_out0(LagCoef),
+        .probe_out1(LeadCoef),
+        .probe_out2(ProbeOut2),
+        .probe_out3(SweepRate),
+        .probe_out4(),
+        .probe_out5(),
+        .probe_out6(),
+        .probe_out7(),
+        .probe_out8(),
+        .probe_out9(Vio9)
+    );
+
+    `ifdef COMBINER
+        assign IF_BS_n  = !Vio9[0];
+
+        wire    [4:0]   PrevData, NextData;
+        genvar n;
+        generate
+            for (n=0; n<5; n=n+1)
+            begin: Input1Buffers
+                IBUFDS # (
+                    .DIFF_TERM     ("TRUE"), // Differential Termination
+                    .IBUF_LOW_PWR  ("FALSE"),// Low power (TRUE) vs. performance (FALSE) setting for referenced I/O standards
+                    .IOSTANDARD    ("LVDS")
+                    )
+                    DataBuf1
+                    (
+                        .I  (NextData_p[n]),
+                        .IB (NextData_n[n]),
+                        .O  (NextData[n])
+                    );
+
+                IBUFDS # (
+                    .DIFF_TERM     ("TRUE"), // Differential Termination
+                    .IBUF_LOW_PWR  ("FALSE"),// Low power (TRUE) vs. performance (FALSE) setting for referenced I/O standards
+                    .IOSTANDARD    ("LVDS"))
+                    DataBuf2
+                    (
+                        .I  (PrevData_p[n]),
+                        .IB (PrevData_n[n]),
+                        .O  (PrevData[n])
+                    );
+            end
+        endgenerate
+
+        IBUFDS #(
+            .DIFF_TERM     ("TRUE"), // Differential Termination
+            .IBUF_LOW_PWR  ("FALSE"),// Low power (TRUE) vs. performance (FALSE) setting for referenced I/O standards
+            .IOSTANDARD    ("LVDS"))
+            ClkBuf1
+            (
+                .I  (NextClk_p),
+                .IB (NextClk_n),
+                .O  (NextClk )
+            );
+
+        IBUFDS #(
+            .DIFF_TERM     ("TRUE"), // Differential Termination
+            .IBUF_LOW_PWR  ("FALSE"),// Low power (TRUE) vs. performance (FALSE) setting for referenced I/O standards
+            .IOSTANDARD    ("LVDS"))
+            ClkBuf2
+            (
+                .I  (PrevClk_p),
+                .IB (PrevClk_n),
+                .O  (PrevClk)
+            );
+
+        CombinerSerDesIn #(.PORTS(6)) SerDes_u
             (
             .Clk93M    (clk),
-            .Reset     (reset),
-            .ClkIn1_p  (NextClk_p),  //- Next is Ch1
-            .ClkIn1_n  (NextClk_n),
-            .DataIn1_p (NextData_p),
-            .DataIn1_n (NextData_n),
+            .Reset     (!IF_BS_n || !FPGA_ID1 || reset),
+            .ClkIn1    (NextClk),  // Next is Ch1
+            .DataIn1   (NextData),
             .DataOut10 (DataOut10),
             .DataOut11 (DataOut11),
             .DataOut12 (DataOut12),
             .DataOut13 (DataOut13),
             .DataOut14 (DataOut14),
-            .ClkIn2_p  (PrevClk_p),  // Prev is Ch2
-            .ClkIn2_n  (PrevClk_n),
-            .DataIn2_p (PrevData_p),
-            .DataIn2_n (PrevData_n),
+            .ClkIn2    (PrevClk),  // Prev is Ch2
+            .DataIn2   (PrevData),
             .DataOut20 (DataOut20),
             .DataOut21 (DataOut21),
             .DataOut22 (DataOut22),
@@ -288,67 +377,48 @@ module semcoDemodTop (
             .DataOut24 (DataOut24)
             );
 
-        wire    [13:0]  Ch1Adc0 = {DataOut11[5:0], DataOut10};
-        wire    [13:0]  Ch2Adc0 = {DataOut21[5:0], DataOut20};
-        wire    [11:0]  Ch1Agc  = {DataOut13[3:0], DataOut12};
-        wire    [11:0]  Ch2Agc  = {DataOut23[3:0], DataOut22};
-        wire    [17:0]  LagCoef, LeadCoef, SweepLimit, SweepRate,
-                        Ch1Real, Ch1Imag, Ch2Real, Ch2Imag,
-                        Ch1Adc17, Ch2Adc17, Ch1Diff, Ch2Diff;
-        wire    [6:0]   Diff;
+        assign SweepLimit = ProbeOut2[13:0];
 
         /*  Initially the syncIF module will time align the recovered data streams from the two demods
             which should allow the complex phase detector to lock up, but since the data edges tend to
             wander at the lower rates, the MSBs of the IFs will be used for final alignment
         */
-        syncIFs syncIFs
-            (
-            .Clk(clk),
-            .Reset(reset),
-            .ChAData(DataOut11[7:6]),
-            .ChBData(DataOut21[7:6]),
-            .ChAThenChB(AbeforeB),
-            .IndexOut(Diff)
-            );
 
         assign Ch1Adc17 = {!Ch1Adc0[13], Ch1Adc0[12:0], 4'b0};
         assign Ch2Adc17 = {!Ch2Adc0[13], Ch2Adc0[12:0], 4'b0};
 
-        DiffDelay RF_Align
+        dualQuadDdc preDdc    // do both channels with same phase LO
             (
             .clk(clk),
-            .reset(reset),
-            .AbeforeB(AbeforeB),
-            .Diff(Diff),
-            .DataInA(Ch1Adc17),
-            .DataInB(Ch2Adc17),
-            .DataOutA(Ch1Diff),
-            .DataOutB(Ch2Diff)
+            .reset(!IF_BS_n || !FPGA_ID1 || reset),
+            .ifIn1(Ch1Adc17),
+            .ifIn2(Ch2Adc17),
+            .syncOut(),
+            .iOut1(Ch1RealPre),
+            .qOut1(Ch1ImagPre),
+            .iOut2(Ch2RealPre),
+            .qOut2(Ch2ImagPre)
             );
 
-        quadDdc Ch1Ddc
+        IF_Align syncIFs
             (
-            .clk(clk),
-            .reset(reset),
-            .ifIn(Ch1Diff),
-            .syncOut(),
-            .iOut(Ch1Real),
-            .qOut(Ch1Imag)
-            );
-
-        quadDdc Ch2Ddc
-            (
-            .clk(clk),
-            .reset(reset),
-            .ifIn(Ch2Diff),
-            .syncOut(),
-            .iOut(Ch2Real),
-            .qOut(Ch2Imag)
-            );
+                .clk        (clkOver2),
+                .clk4x      (clk2x),
+                .reset      (!IF_BS_n || !FPGA_ID1 || reset),
+                .ce         (1'b1),
+                .Re1In      (Ch1RealPre),
+                .Im1In      (Ch1ImagPre),
+                .Re2In      (Ch2RealPre),
+                .Im2In      (Ch2ImagPre),
+                .Re1Out     (Ch1Real),
+                .Im1Out     (Ch1Imag),
+                .Re2Out     (Ch2Real),
+                .Im2Out     (Ch2Imag)
+           );
 
         complexphasedetector_0 CmplxPhsDet
             (
-            .clk            (clk),
+            .clk            (clkOver2), // the DDCs decimate by 2
             .ch1agc         (Ch1Agc),
             .ch2agc         (Ch2Agc),
             .ch1real        (Ch1Real),
@@ -363,7 +433,7 @@ module semcoDemodTop (
             .imagout        (qBB),
             .reallock       (RealLock),
             .imaglock       (ImagLock),
-            .locked_n       (Locked),
+            .locked_n       (combLocked_n),
             .agc1_gt_agc2   (agc1_gt_agc2),
             .lag_out        (lag_out),
             .nco_control_out(nco_control_out),
@@ -377,9 +447,45 @@ module semcoDemodTop (
             .imagxord       (ImagXord),
             .gainoutmax     (GainOutMax),
             .gainoutmin     (GainOutMin)
-       );
+        );
 
-   `endif
+        PdClkMmcm DdsClkBufg (
+            .clk_in1  (SideCarClk),
+            .reset    (!IF_BS_n || !FPGA_ID1 || reset),
+            .locked   (),
+            .clk_out1 (DdsPdClkBufg),
+            .clk_out2 (DdsPdClk2xBufg)
+        );
+
+        reg     [17:0]      RealCmbFF, ImagCmbFF, ImagCmbFFDly;
+        always @ (posedge DdsPdClkBufg) begin
+            RealCmbFF      <= iBB;
+            ImagCmbFF      <= qBB;
+            ImagCmbFFDly   <= ImagCmbFF;
+        end
+
+        always @ (posedge DdsPdClk2xBufg) begin
+            if (DdsPdClkBufg) begin
+                DdsData <= ImagCmbFFDly;
+            end
+            else begin
+                DdsData <= RealCmbFF;
+            end
+        end
+
+        // The upconverter mixes RR and II then adds, II is -1 so needs inverted
+        AD9957 AD9957_u (
+            .clk       (clk),
+            .reset     (!IF_BS_n || !FPGA_ID1 || reset),
+            .DdsMiso   (DdsMiso),
+            .DdsMosi   (DdsMosi),
+            .DdsCS_n   (DdsCS_n),
+            .DdsClk    (DdsSClk),
+            .IO_Reset  (DdsIO_Reset),
+            .DdsReset  (DdsReset),
+            .DdsUpdate (DdsIO_Update)
+       );
+    `endif
 
 
 //******************************************************************************
@@ -388,7 +494,9 @@ module semcoDemodTop (
     `ifdef R6100
     systemClock systemClock (
         .clk_in1(adc0Clk),
-        .clk_out1(clk),
+        .clk1x(clk),
+        .clk2x(clk2x),
+        .clkOver2(clkOver2),
         .locked(clkLocked)
     );
 
@@ -416,8 +524,10 @@ module semcoDemodTop (
     `else //R6100
     systemClock systemClock (
         .clk_in1(sysClk),
-        .clk_out1(clk),
-        .locked(clkLocked)
+         .clk1x(clk),
+         .clk2x(clk2x),
+         .clkOver2(clkOver2),
+         .locked(clkLocked)
      );
 
     flexbusClock flexbusClock (
@@ -430,9 +540,9 @@ module semcoDemodTop (
 
 
     `ifdef R6100
-    /******************************************************************************
-                                 SPI Config Interface
-    ******************************************************************************/
+//******************************************************************************
+//                            SPI Config Interface
+//******************************************************************************
     wire    [12:0]  addr;
     wire    [31:0]  dataIn;
     reg     [31:0]  rd_mux;
@@ -459,9 +569,9 @@ module semcoDemodTop (
 
     `else //R6100
 
-    /******************************************************************************
-                                 Bus Interface
-    ******************************************************************************/
+//******************************************************************************
+//                            Bus Interface
+//******************************************************************************
     wire    [12:0]  addr;
     wire    [31:0]  dataIn;
     flexbus flexbus(
@@ -484,9 +594,9 @@ module semcoDemodTop (
     `endif //R6100
 
     `ifdef ADD_SPI_GATEWAY
-    /******************************************************************************
-                               SPI Flash Interface
-    ******************************************************************************/
+//******************************************************************************
+//                          SPI Flash Interface
+//******************************************************************************
     reg spiGatewaySpace;
     always @* begin
         casex(addr)
@@ -628,7 +738,7 @@ module semcoDemodTop (
         .dout(demodDout),
         .iRx(adc0In), .qRx(18'h0),
         .bbClkEn(bbClkEn),
-        .iBB(iBB), .qBB(qBB),
+        .iBB(iBB), .qBB(qBB),       // if using the combiner, the RF input is ignored
         .iSym2xEn(iDemodSym2xEn),
         .iSymEn(iDemodSymEn),
         .iSymData(iDemodSymData),
@@ -704,7 +814,7 @@ module semcoDemodTop (
     wire    signed  [17:0]  sbsDcOffset;
     wire            [31:0]  sbsDout;
     singleBitsyncTop sbs(
-        .clk(clk), .clkEn(1'b1), .reset(reset),
+        .clk(clk), .clkEn(1'b1), .reset(IF_BS_n),
         `ifdef USE_BUS_CLOCK
         .busClk(busClk),
         `endif
@@ -760,14 +870,14 @@ module semcoDemodTop (
 
 
 `ifdef ADD_VITERBI
-/******************************************************************************
-                            Viterbi Decoders
-******************************************************************************/
-/*
-    The viterbi was originally used in the bitsync bert card so there's a value
-    called bitsyncMode that doesn't exist in the legacy demod. We re-create it
-    here from demodMode so we don't have two versions of viterbi to support.
-*/
+//******************************************************************************
+//                           Viterbi Decoders
+//******************************************************************************
+//
+//  The viterbi was originally used in the bitsync bert card so there's a value
+//  called bitsyncMode that doesn't exist in the legacy demod. We re-create it
+//  here from demodMode so we don't have two versions of viterbi to support.
+//
 
     reg         [1:0]   bitsyncMode;
     always @* begin
@@ -1399,9 +1509,9 @@ module semcoDemodTop (
 
 
 `ifdef ADD_DQM
-/******************************************************************************
-                                    DQM
-******************************************************************************/
+//******************************************************************************
+//                                   DQM
+//******************************************************************************
     wire    [3:0]   dqmSourceSelect;
     reg             dqmBitEnIn;
     reg             dqmBitIn;
@@ -2003,122 +2113,128 @@ sdi sdi(
     assign dac_sdio = 1'b0;
     assign Sw50Ohm  = 1'b0;
 
-    assign lockLed0n = !timingLock;
-    assign lockLed1n = !carrierLock;
-
     `ifdef R6100
 
-    //******************************************************************************
-    //                           AM ADC Interface
-    //******************************************************************************
-    wire    signed  [11:0]  amDataIn;
-    ad7476Interface amAdc(
-        .clk(clk),
-        .reset(reset),
-        .spiDin(amAdcDataIn),
-        .spiClk(amAdcClk),
-        .spiCSn(amAdcCSn),
-        .adcData(amDataIn),
-        .adcDataEn(amDataEn)
-    );
-
-//******************************************************************************
-//                               Combiner Outputs from Demod
-//******************************************************************************
-    `ifdef COMBINER_DEMOD
-     DC_DemodTop combinerOut(
-        .Clk(clk),
-        .Reset(reset),
-        .FPGA_ID0(FPGA_ID0),
-        .FPGA_ID1(FPGA_ID1),
-        .iDemodBit(iDemodBit),
-        .qDemodBit(qDemodBit),
-        .amDataEn(amDataEn),
-        .amDataIn(amDataIn),
-        .adc0(adc0),
-        .PrevData_p(PrevData_p),
-        .PrevData_n(PrevData_n),
-        .NextData_p(NextData_p),
-        .NextData_n(NextData_n),
-        .NextClk_p(NextClk_p),
-        .NextClk_n(NextClk_n),
-        .PrevClk_p(PrevClk_p),
-        .PrevClk_n(PrevClk_n)
-    );
-    `endif // combiner_demod
+        //******************************************************************************
+        //                           AM ADC Interface
+        //******************************************************************************
+        wire    signed  [11:0]  amDataIn;
+        ad7476Interface amAdc(
+            .clk(clk),
+            .reset(reset),
+            .spiDin(amAdcDataIn),
+            .spiClk(amAdcClk),
+            .spiCSn(amAdcCSn),
+            .adcData(amDataIn),
+            .adcDataEn(amDataEn)
+        );
 
     //******************************************************************************
-    //                           AM DAC Interface
+    //                               Combiner Outputs from Demod
     //******************************************************************************
-    max5352Interface amDac(
-        .clk(clk),
-        .reset(reset),
-        .dacDataEn(amDataEn),
-        .dacData(amDataIn),
-        .spiDout(amDacDataOut),
-        .spiClk(amDacClk),
-        .spiCSn(amDacCSn)
-    );
+        `ifndef COMBINER
 
-    //******************************************************************************
-    //                          Video Switch Interface
-    //******************************************************************************
+            assign lockLed0n = !timingLock;
+            assign lockLed1n = !carrierLock;
+            assign IF_BS_n   = 1'b0;    // if demod, ignore IF signals
 
-    wire    [1:0]   vid0Select;
-    wire    [1:0]   vid1Select;
-    wire    [31:0]  vsDout;
-    vidSwitchRegs vsregs(
-        .busClk(busClk),
-        .cs(cs),
-        .wr0(wr0),
-        .wr1(wr1),
-        .wr2(wr2),
-        .wr3(wr3),
-        .addr(addr),
-        .din(dataIn),
-        .dout(vsDout),
-        .vid0Select(vid0Select),
-        .vid1Select(vid1Select),
-        .vid2Select(),
-        .vid3Select()
-    );
+            DC_DemodTop combinerOut(
+                .Clk(clk),
+                .Reset(reset),
+                .FPGA_ID0(FPGA_ID0),
+                .FPGA_ID1(FPGA_ID1),
+                .iDemodBit(iDemodBit),
+                .qDemodBit(qDemodBit),
+                .amDataEn(amDataEn),
+                .amDataIn(amDataIn),
+                .adc0(adc0),
+                .PrevData_p(PrevData_p),
+                .PrevData_n(PrevData_n),
+                .NextData_p(NextData_p),
+                .NextData_n(NextData_n),
+                .NextClk_p(NextClk_p),
+                .NextClk_n(NextClk_n),
+                .PrevClk_p(PrevClk_p),
+                .PrevClk_n(PrevClk_n)
+            );
+        `else
 
-    assign video0InSelect = vid0Select;
-    assign video1InSelect = vid1Select;
+            assign  lockLed0n = RealLock;
+            assign  lockLed1n = ImagLock;
 
-    //This is to fix an error on the board layout
-    always @* begin
-        case (vid0Select)
-            2'b00: begin
-                video0OutSelect = 2'b00;
-            end
-            2'b01: begin
-                video0OutSelect = 2'b10;
-            end
-            2'b10: begin
-                video0OutSelect = 2'b01;
-            end
-            2'b11: begin
-                video0OutSelect = 2'b11;
-            end
-        endcase
-    end
-    always @* begin
-        case (vid1Select)
-            2'b00: begin
-                video1OutSelect = 2'b00;
-            end
-            2'b01: begin
-                video1OutSelect = 2'b10;
-            end
-            2'b10: begin
-                video1OutSelect = 2'b01;
-            end
-            2'b11: begin
-                video1OutSelect = 2'b11;
-            end
-        endcase
-    end
+        `endif
+        //******************************************************************************
+        //                           AM DAC Interface
+        //******************************************************************************
+        max5352Interface amDac(
+            .clk(clk),
+            .reset(reset),
+            .dacDataEn(amDataEn),
+            .dacData(amDataIn),
+            .spiDout(amDacDataOut),
+            .spiClk(amDacClk),
+            .spiCSn(amDacCSn)
+        );
+
+        //******************************************************************************
+        //                          Video Switch Interface
+        //******************************************************************************
+
+        wire    [1:0]   vid0Select;
+        wire    [1:0]   vid1Select;
+        wire    [31:0]  vsDout;
+        vidSwitchRegs vsregs(
+            .busClk(busClk),
+            .cs(cs),
+            .wr0(wr0),
+            .wr1(wr1),
+            .wr2(wr2),
+            .wr3(wr3),
+            .addr(addr),
+            .din(dataIn),
+            .dout(vsDout),
+            .vid0Select(vid0Select),
+            .vid1Select(vid1Select),
+            .vid2Select(),
+            .vid3Select()
+        );
+
+        assign video0InSelect = vid0Select;
+        assign video1InSelect = vid1Select;
+
+        //This is to fix an error on the board layout
+        always @* begin
+            case (vid0Select)
+                2'b00: begin
+                    video0OutSelect = 2'b00;
+                end
+                2'b01: begin
+                    video0OutSelect = 2'b10;
+                end
+                2'b10: begin
+                    video0OutSelect = 2'b01;
+                end
+                2'b11: begin
+                    video0OutSelect = 2'b11;
+                end
+            endcase
+        end
+        always @* begin
+            case (vid1Select)
+                2'b00: begin
+                    video1OutSelect = 2'b00;
+                end
+                2'b01: begin
+                    video1OutSelect = 2'b10;
+                end
+                2'b10: begin
+                    video1OutSelect = 2'b01;
+                end
+                2'b11: begin
+                    video1OutSelect = 2'b11;
+                end
+            endcase
+        end
 
     `endif //R6100
 
@@ -2504,6 +2620,7 @@ sdi sdi(
     assign fb_data = (cs & rd) ? rd_mux : 16'hzzzz;
 
     `endif //R6100
+
 
 
 endmodule

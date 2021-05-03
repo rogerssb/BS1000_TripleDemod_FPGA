@@ -17,7 +17,13 @@ Module Name: CmplPhsDetTb.vhd
 Description:
 
 ARGUMENTS :
-
+   Vio9 bit definitions
+      15:12 DataRate
+      9     IF_BS_n
+      8     I/Q recovered data mux
+      7     OffsetNCO Reset
+      4     Ch1ThenCh2
+      1:0   Modulation Mode
 
 Dependencies:
 
@@ -44,8 +50,6 @@ USE IEEE.std_logic_1164.ALL;
 USE IEEE.numeric_std.ALL;
 Library UNISIM;
 use UNISIM.vcomponents.all;
---Library UNIMACRO;
---use UNIMACRO.vcomponents.all;
 use work.fixed_pkg.all;
 USE work.Semco_pkg.ALL;
 
@@ -130,37 +134,52 @@ ARCHITECTURE rtl OF CmplPhsDetTb IS
 
    COMPONENT complexphasedetector_0
       PORT (
-         clk : IN STD_LOGIC;
-         ch1agc : IN STD_LOGIC_VECTOR(11 DOWNTO 0);
-         ch1imag : IN STD_LOGIC_VECTOR(17 DOWNTO 0);
-         ch1real : IN STD_LOGIC_VECTOR(17 DOWNTO 0);
-         ch2agc : IN STD_LOGIC_VECTOR(11 DOWNTO 0);
-         ch2imag : IN STD_LOGIC_VECTOR(17 DOWNTO 0);
-         ch2real : IN STD_LOGIC_VECTOR(17 DOWNTO 0);
-         lag_coef : IN STD_LOGIC_VECTOR(17 DOWNTO 0);
-         lead_coef : IN STD_LOGIC_VECTOR(17 DOWNTO 0);
-         swprate : IN STD_LOGIC_VECTOR(17 DOWNTO 0);
-         sweeplmt : IN STD_LOGIC_VECTOR(13 DOWNTO 0);
-         agc1_gt_agc2 : OUT STD_LOGIC;
-         abs_agc_diff : OUT STD_LOGIC_VECTOR(10 DOWNTO 0);
-         maximagout : OUT STD_LOGIC_VECTOR(17 DOWNTO 0);
-         maxrealout : OUT STD_LOGIC_VECTOR(17 DOWNTO 0);
-         minimagout : OUT STD_LOGIC_VECTOR(17 DOWNTO 0);
-         minrealout : OUT STD_LOGIC_VECTOR(17 DOWNTO 0);
-         realxord : OUT STD_LOGIC;
-         imagxord : OUT STD_LOGIC;
-         imaglock : OUT STD_LOGIC_VECTOR(12 DOWNTO 0);
-         imagout : OUT STD_LOGIC_VECTOR(17 DOWNTO 0);
-         gainoutmax : OUT STD_LOGIC_VECTOR(17 DOWNTO 0);
-         gainoutmin : OUT STD_LOGIC_VECTOR(17 DOWNTO 0);
-         lag_out : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
-         locked_n : OUT STD_LOGIC;
-         nco_control_out : OUT STD_LOGIC_VECTOR(21 DOWNTO 0);
-         phase_detect : OUT STD_LOGIC_VECTOR(17 DOWNTO 0);
-         reallock : OUT STD_LOGIC_VECTOR(12 DOWNTO 0);
-         realout : OUT STD_LOGIC_VECTOR(17 DOWNTO 0)
+         clk,
+         reset             : IN  STD_LOGIC;
+         attack,
+         decay             : IN  STD_LOGIC_VECTOR(2 DOWNTO 0);
+         ch1agc,
+         ch2agc            : IN  STD_LOGIC_VECTOR(11 DOWNTO 0);
+         ch1imag,
+         ch1real,
+         ch2imag,
+         ch2real,
+         agcref,
+         lag_coef,
+         lead_coef,
+         swprate           : IN  STD_LOGIC_VECTOR(17 DOWNTO 0);
+         sweeplmt          : IN  STD_LOGIC_VECTOR(13 DOWNTO 0);
+         maximagout,
+         maxrealout,
+         minimagout,
+         minrealout,
+         imagout,
+         realout,
+         gainoutmax,
+         gainoutmin,
+         phase_detect      : OUT STD_LOGIC_VECTOR(17 DOWNTO 0);
+         agc1_gt_agc2,
+         realxord,
+         imagxord,
+         locked            : OUT STD_LOGIC;
+         imaglock,
+         reallock          : OUT STD_LOGIC_VECTOR(12 DOWNTO 0);
+         lag_out           : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+         nco_control_out   : OUT STD_LOGIC_VECTOR(21 DOWNTO 0)
       );
    END COMPONENT complexphasedetector_0;
+
+   component systemClock
+      port
+         (
+         clk_in1           : in     std_logic;
+         -- Clock out ports
+         clk1x,
+         clk2x,
+         clkOver2,
+         locked            : out    std_logic
+         );
+   end component systemClock;
 
    COMPONENT AD9957
       PORT(
@@ -175,23 +194,6 @@ ARCHITECTURE rtl OF CmplPhsDetTb IS
          DdsUpdate      : OUT std_logic
       );
    END COMPONENT AD9957;
-
-   COMPONENT DiffDelay IS
-      GENERIC(
-         DATA_WIDTH  : positive := 18;
-         LENGTH_BITS : positive := 10
-      );
-      PORT(
-         clk,
-         reset,
-         AbeforeB       : IN  std_logic;
-         DataInA,
-         DataInB        : IN  std_logic_vector(DATA_WIDTH-1 downto 0);
-         Diff           : IN  unsigned(LENGTH_BITS-1 downto 0);
-         DataOutA,
-         DataOutB       : OUT std_logic_vector(DATA_WIDTH-1 downto 0)
-      );
-   END COMPONENT DiffDelay;
 
    component PdClkMmcm
       port (
@@ -274,10 +276,10 @@ ARCHITECTURE rtl OF CmplPhsDetTb IS
          aclk : IN STD_LOGIC;
          aresetn  : IN STD_LOGIC;
          s_axis_data_tvalid   : IN STD_LOGIC;
-         s_axis_data_tdata    : IN STD_LOGIC_VECTOR(143 DOWNTO 0);
+         s_axis_data_tdata    : IN STD_LOGIC_VECTOR(95 DOWNTO 0);
          s_axis_data_tready,
          m_axis_data_tvalid   : OUT STD_LOGIC;
-         m_axis_data_tdata    : OUT STD_LOGIC_VECTOR(143 DOWNTO 0)
+         m_axis_data_tdata    : OUT STD_LOGIC_VECTOR(95 DOWNTO 0)
       );
    END COMPONENT;
 
@@ -296,21 +298,29 @@ ARCHITECTURE rtl OF CmplPhsDetTb IS
       );
    END COMPONENT gng;
 
-   COMPONENT SyncIFs
+   COMPONENT IF_Align
       PORT (
          Clk,
-         Reset,
-         ChAData,
-         ChBData        : IN  std_logic;
-         ChAThenChB     : OUT std_logic;
-         IndexOut       : OUT natural range 0 to 127
+         Clk4x,
+         ce,
+         Reset          : IN  std_logic;
+         Re1In,
+         Im1In,
+         Re2In,
+         Im2In          : IN  float_1_18;
+         Re1Out,
+         Im1Out,
+         Re2Out,
+         Im2Out         : OUT SLV18
       );
-   END COMPONENT SyncIFs;
+   END COMPONENT IF_Align;
 
    -- Constants
    constant Plus1             : Float_1_18 := to_sfixed(0.707 / 4.0, 0, -17);
    constant Neg1              : Float_1_18 := to_sfixed(-0.707 / 4.0, 0, -17);
    constant Zero              : Float_1_18 := to_sfixed(0.0, 0, -17);
+   constant I                 : natural := 1;
+   constant Q                 : natural := 0;
    constant NCO_DLY           : natural := 4;
    constant FILT_OUTS         : sfixed(1 downto -16) := (others=>'0');
 
@@ -319,20 +329,28 @@ ARCHITECTURE rtl OF CmplPhsDetTb IS
    -- Signals
    signal   Mode              : Modulation;
    signal   agc1_gt_agc2      : STD_LOGIC;
-   signal   abs_agc_diff      : STD_LOGIC_VECTOR(10 DOWNTO 0);
+   signal   Attack,
+            Decay             : STD_LOGIC_VECTOR(2 DOWNTO 0);
    signal   nco_control_out   : STD_LOGIC_VECTOR(21 DOWNTO 0);
-   signal   phase_detect      : STD_LOGIC_VECTOR(17 DOWNTO 0);
-   signal   lag_out           : STD_LOGIC_VECTOR(31 DOWNTO 0);
+   signal   lag_out           : SLV32;
    signal   SweepLimit        : STD_LOGIC_VECTOR(13 DOWNTO 0);
-   signal   SweepRate         : STD_LOGIC_VECTOR(17 DOWNTO 0);
-   signal   Vio9              : STD_LOGIC_VECTOR(15 DOWNTO 0);
+   signal   phase_detect,
+            SweepRate         : SLV18;
+   signal   Vio9              : SLV16;
    signal   Locked,
-            PrnData,
+            PrnDataI,
+            PrnDataQ,
             PrnEn,
             NoiseEn,
+            Noise1Vld,
+            Noise2Vld,
             FirDataValid,
             NotFirstTime,
+            PhsDetLocked,
             Clk,
+            Clk2x,
+            Clk1x,
+            clkOver2,
             Reset             : std_logic := '0';
    signal   Ch1Agc,
             Ch2Agc            : std_logic_vector(11 downto 0);
@@ -340,42 +358,48 @@ ARCHITECTURE rtl OF CmplPhsDetTb IS
             LeadCoef,
             NoiseGain1,
             NoiseGain2,
-            RealCmbFF,
-            ImagCmbFF,
-            ImagCmbFFDly,
-            RealCmb,
-            ImagCmb           : SLV18;
-   signal   RealLock,
-            ImagLock          : std_logic_vector(12 downto 0);
+            ICmbFF,
+            QCmbFF,
+            QCmbFFDly,
+            ICmb,
+            QCmb              : SLV18;
+   signal   ILock,
+            QLock             : std_logic_vector(12 downto 0);
    signal   Noise1,
-            Noise2            : SLV16;
-   signal   RealIandD,
-            ImagIandD         : sfixed(2 downto -17);
-   signal   DataReal,
-            DataImag,
-            NcodReal,
-            NcodImag,
-            OffTunedReal,
-            OffTunedImag,
+            Noise2,
+            Noise1Out,
+            Noise2Out         : SLV16;
+   signal   IIandD,
+            QIandD            : sfixed(2 downto -17);
+   signal   DataI,
+            DataQ,
+            DelayI,
+            DelayQ,
+            MultIn1I,
+            MultIn1Q,
+            MultIn2I,
+            MultIn2Q,
+            NcodI,
+            NcodQ,
+            OffTunedI,
+            OffTunedQ,
             Noise2Rms,
-            Real1Rms,
-            Filtered1Real,
-            Filtered1Imag,
-            Filtered2Real,
-            Filtered2Imag,
-            Filtered1Noise,
-            Filtered2Noise,
-            Noise1Gained,
-            Noise2Gained,
+            I1Rms,
             Filtered1NoiseDly,
             Filtered2NoiseDly,
-            Real1Noisy,
-            Imag1Noisy,
-            Real2Noisy,
-            Imag2Noisy     : FLOAT_1_18 := (others=>'0');
+            I1Noisy,
+            Q1Noisy,
+            I2Noisy,
+            Q2Noisy        : FLOAT_1_18 := (others=>'0');
+   signal   FilteredI,
+            FilteredQ,
+            Noise1Gained,
+            Noise2Gained   : sfixed(1 downto -16) := (others=>'0');
+   signal   Filtered1Noise,
+            Filtered2Noise : sfixed(2 downto -15);
    signal   DataRate       : integer range 0 to 127;
    signal   FirDataIn,
-            FirDataOut     : std_logic_vector(143 downto 0);
+            FirDataOut     : std_logic_vector(95 downto 0);
    signal   NcoData,
             OffTunedSines  : std_logic_vector(47 downto 0);
    signal   PhaseInc       : SLV32;
@@ -430,50 +454,51 @@ ARCHITECTURE rtl OF CmplPhsDetTb IS
 
 
    -- debug signals
-   signal   MaxImagout,
-            MaxRealout,
-            MinImagout,
-            MinRealout,
+   signal   MaxQout,
+            MaxIout,
+            MinQout,
+            MinIout,
             GainOutMax,
             GainOutMin     : SLV18;
-   signal   RealXord,
-            ImagXord,
+   signal   IXord,
+            QXord,
             RecoveredData  : STD_LOGIC;
-   signal   DataRealSlv,
-            DataImagSlv,
-            NcodRealSlv,
-            NcodImagSlv,
+   signal   DataISlv,
+            DataQSlv,
+            NcodISlv,
+            NcodQSlv,
             Noise2RmsSlv,
-            Real1RmsSlv,
-            Real1NoisySlv,
-            Imag1NoisySlv,
-            Real2NoisySlv,
-            Imag2NoisySlv  : SLV18;
-   signal   IlaCounter     : uint16 := x"0000";
+            I1RmsSlv,
+            I1NoisySlv,
+            Q1NoisySlv,
+            I2NoisySlv,
+            Q2NoisySlv     : SLV18;
+   signal   BitCounter     : uint16 := x"0000";
    signal   BitCount,
             ErrorCount,
             BitErrors      : uint32 := 32x"0";
-   signal   RealDelay      : std_logic_vector(10 downto 0);
-   signal   DataA,
-            DataB          : std_logic_vector(1 downto 0);
-   signal   DataInA,
+   signal   IDelay         : std_logic_vector(23 downto 0);
+   signal   Real1Out,
+            Imag1Out,
+            Real2Out,
+            Imag2Out,
+            DataInA,
             DataInB,
             DataOutA,
             DataOutB       : SLV18;
-   signal   DataDly        : std_logic_vector(127 downto 0);
-   signal   Data1,
-            Data2,
-            IndexOut       : natural range 0 to 127 := 0;
+   signal   DataDlyI,
+            DataDlyQ       : FLOAT_ARRAY_1_18(127 downto 0) := (others=>(others=>'0'));
+   signal   Delay          : natural range 0 to 127 := 80;
+   signal   IndexOut       : uint8 := x"00";
 
    attribute MARK_DEBUG : string;
-   attribute MARK_DEBUG of RealCmb, ImagCmb, RealLock, ImagLock, Locked,
-      DataRealSlv, DataImagSlv, NcodRealSlv, NcodImagSlv, Real1NoisySlv,
-      Imag1NoisySlv, Real2NoisySlv, Imag2NoisySlv, PrnEn, BitErrors, BitCount, ErrorCount, RecoveredData, RealDelay,
-      Ch1Agc, Ch2Agc,  LagCoef, LeadCoef, NoiseGain1, NoiseGain2, Noise2RmsSlv,
-      Real1RmsSlv, Filtered1Real, Filtered1Imag, Filtered2Real, Filtered2Imag,
-      agc1_gt_agc2, abs_agc_diff, nco_control_out, phase_detect, lag_out,
-      MaxImagout, MaxRealout, MinImagout, MinRealout, RealXord, ImagXord,
-      GainOutMax, GainOutMin, IlaCounter : signal is "TRUE";
+   attribute MARK_DEBUG of ICmb, QCmb, ILock, QLock, PhsDetLocked, IndexOut, Real1Out, Real2Out,
+      DataISlv, DataQSlv, NcodISlv, NcodQSlv, I1NoisySlv,
+      Q1NoisySlv, I2NoisySlv, Q2NoisySlv, PrnEn, BitErrors, BitCount, ErrorCount, RecoveredData, IDelay,
+      Noise2RmsSlv, I1RmsSlv,
+      agc1_gt_agc2, nco_control_out, phase_detect, lag_out,
+      MaxQout, MaxIout, MinQout, MinIout, IXord, QXord,
+      GainOutMax, GainOutMin, BitCounter : signal is "TRUE";
 
 constant in_simulation : boolean := false
 --pragma synthesis_off
@@ -486,11 +511,39 @@ BEGIN
 
 ClkGen : if (in_simulation) generate
    process begin
-      wait for 5.35 ns;
+      wait for 5.00 ns;
       Clk <= not Clk;
    end process;
+
+   LagCoef     <= 18x"00000";
+   LeadCoef    <= 18x"00000";
+   NoiseGain1  <= 18x"01000";
+   NoiseGain2  <= 18x"01000";
+   Ch1Agc      <= 12x"000";
+   Ch2Agc      <= 12x"020";
+   SweepLimit  <= 14x"0000";
+   SweepRate   <= 18x"00000";
+   PhaseInc    <= 32x"00000";
+   Vio9        <= 16x"0000";
+
 else generate
    Clk            <= MonClk;
+
+   VIO : vio_0
+      PORT MAP (
+         clk         => ClkOver2,
+         probe_out0  => LagCoef,
+         probe_out1  => LeadCoef,
+         probe_out2  => NoiseGain1,
+         probe_out3  => NoiseGain2,    -- x10000 is 0dB s/n
+         probe_out4  => Ch1Agc,
+         probe_out5  => Ch2Agc,
+         probe_out6  => SweepLimit,
+         probe_out7  => SweepRate,
+         probe_out8  => PhaseInc,
+         probe_out9  => Vio9
+   );
+
 end generate;
 
    SideCar(2)   <= IF_BS_n;
@@ -541,25 +594,46 @@ end generate;
    DdsSyncClk   <= SideCar(17) when (not IF_BS_n) else '0';
    IF_BS_n      <= not Vio9(9);
 
-
    Reset          <= ResetShft(17);
 
-   DataRealSlv    <= to_slv(DataReal);
-   DataImagSlv    <= to_slv(DataImag);
-   NcodRealSlv    <= to_slv(NcodReal);
-   NcodImagSlv    <= to_slv(NcodImag);
+   DataISlv    <= to_slv(DataI);
+   DataQSlv    <= to_slv(DataQ);
+   NcodISlv    <= to_slv(NcodI);
+   NcodQSlv    <= to_slv(NcodQ);
    Noise2RmsSlv   <= to_slv(Noise2Rms);
-   Real1RmsSlv    <= to_slv(Real1Rms);
+   I1RmsSlv    <= to_slv(I1Rms);
 
-   Real1NoisySlv  <= to_slv(Real1Noisy);
-   Imag1NoisySlv  <= to_slv(Imag1Noisy);
-   Real2NoisySlv  <= to_slv(Real2Noisy);
-   Imag2NoisySlv  <= to_slv(Imag2Noisy);
-   Mode           <= modulation'val(to_integer(unsigned(Vio9(5 downto 4))));
+   I1NoisySlv  <= to_slv(I1Noisy);
+   Q1NoisySlv  <= to_slv(Q1Noisy);
+   I2NoisySlv  <= to_slv(I2Noisy);
+   Q2NoisySlv  <= to_slv(Q2Noisy);
+   Mode           <= modulation'val(to_integer(unsigned(Vio9(1 downto 0))));
+
+   SystemClock_u : systemClock
+      port map (
+         clk_in1  => Clk,
+         clk1x    => Clk1x,
+         clk2x    => Clk2x,
+         clkOver2 => ClkOver2,
+         locked   => Locked
+      );
+
+   LFSR11 : BERT_LFSR
+      PORT MAP(
+         clock       => ClkOver2,
+         reset       => Reset,
+         reload      => '0',
+         enable      => PrnEn,
+         poly        => 24x"0500",
+         poly_length => 5x"0B",
+         load_data   => 24x"9009",
+         data        => open,
+         serial      => PrnDataI
+   );
 
    LFSR15 : BERT_LFSR
       PORT MAP(
-         clock       => Clk,
+         clock       => ClkOver2,
          reset       => Reset,
          reload      => '0',
          enable      => PrnEn,
@@ -567,75 +641,69 @@ end generate;
          poly_length => 5x"0F",
          load_data   => 24x"9009",
          data        => open,
-         serial      => PrnData
+         serial      => PrnDataQ
    );
 
-   Delay_process: process (Clk)
+   Delay_process: process (ClkOver2)
    begin
-      if (rising_edge(Clk)) then
-         ResetShft  <= ResetShft(16 downto 0) & '0';
-         IlaCounter <= IlaCounter + 1;
-         if (IlaCounter > 256) then
-            NotFirstTime <= '1';
+      if (rising_edge(ClkOver2)) then
+         if (Locked) then
+            ResetShft  <= ResetShft(16 downto 0) & not Locked;
+            DataRate   <= DataRate + 1 when (DataRate < 9) else 0;
+            if (BitCounter > 256) then
+               NotFirstTime <= '1';
+            end if;
+            if (DataRate = 0) then
+               BitCounter <= 16x"0" when (BitCounter = 1280) else BitCounter + 1;
+               PrnEn   <= '1';
+               case (Mode) is
+                  when BPSK =>
+                     DataI <= Plus1 when (PrnDataI) else Neg1;
+                     DataQ <= Zero;
+                  when QPSK =>
+                     DataI <= Plus1 when (PrnDataI) else Neg1;
+                     DataQ <= Plus1 when (PrnDataQ) else Neg1;
+                  when OQPSK =>
+                     DataI <= Plus1 when (PrnDataI) else Neg1;
+                  when others =>
+                     DataI <= Zero;
+                     DataQ <= Zero;
+               end case;
+            elsif ((DataRate = 5) and (Mode = OQPSK)) then
+               DataQ <= Plus1 when (PrnDataQ) else Neg1;   -- Delay Q a half bit
+               -- PrnEn should have gone low on DataRate = 1
+            else
+               PrnEn <= '0';
+            end if;
+
+            DataDlyI <= DataDlyI(126 downto 0) & FilteredI;
+            DataDlyQ <= DataDlyQ(126 downto 0) & FilteredQ;
+
+
+            -- generate noise at twice the data rate to get a nice wide noise bandwidth
+            NoiseEn      <= '1' when ((DataRate = 0) or (DataRate = 5)) else '0';
+
+            I1Noisy      <= resize(Filtered1Noise    + OffTunedI, I1Noisy);
+            Q1Noisy      <= resize(Filtered1NoiseDly + OffTunedQ, I1Noisy);
+            Filtered1NoiseDly <= Filtered1Noise;
+
+            I2Noisy      <= resize(Filtered2Noise    + NcodI, I1Noisy);
+            Q2Noisy      <= resize(Filtered2NoiseDly + NcodQ, I1Noisy);
+            Filtered2NoiseDly <= Filtered2Noise;
+
+            Noise1Gained    <= resize(to_sfixed(Noise1, 3, -12) * to_sfixed(NoiseGain1, DataI), Noise1Gained);
+            Noise2Gained    <= resize(to_sfixed(Noise2, 3, -12) * to_sfixed(NoiseGain2, DataI), Noise2Gained);
+
+            Noise2Rms <= resize(Noise2Rms - (Noise2Rms sra 10) + (abs(Filtered2Noise) sra 10), I1Rms);
+            I1Rms  <= resize(I1Rms  - (I1Rms  sra 10) + (abs(FilteredI)  sra 10), I1Rms);
          end if;
-         DataRate   <= DataRate + 1 when (DataRate < 93) else 0;
-         if (DataRate = 0) then
-            PrnEn   <= '1';
-            case (Mode) is
-               when BPSK =>
-                  DataReal <= Plus1 when (PrnData) else Neg1;
-                  DataImag <= Zero;
-               when QPSK =>
-                  DataReal <= Plus1 when (PrnData) else Neg1;
-                  DataImag <= DataReal;   -- Q data is I delayed one bit
-               when OQPSK =>
-                  DataReal <= Plus1 when (PrnData) else Neg1;
-               when others =>
-                  DataReal <= Zero;
-                  DataImag <= Zero;
-            end case;
-         elsif ((DataRate = 5) and (Mode = OQPSK)) then
-            DataImag <= DataReal;   -- Delay Q a half bit
-            -- PrnEn should have gone low on DataRate = 1
-         else
-            PrnEn <= '0';
-         end if;
-
-         -- generate noise at twice the data rate to get a nice wide noise bandwidth
-         NoiseEn         <= '1' when ((DataRate = 0) or (DataRate = 5)) else '0';
-
-         Real1Noisy      <= resize(Filtered1Noise + Filtered1Real, Real1Noisy);
-         Imag1Noisy      <= resize(Filtered1NoiseDly + Filtered1Imag, Real1Noisy);
-         Filtered1NoiseDly <= Filtered1Noise;
-
-         Real2Noisy      <= resize(Filtered2Noise    + Filtered2Real, Real1Noisy);
-         Imag2Noisy      <= resize(Filtered2NoiseDly + Filtered2Imag, Real1Noisy);
-         Filtered2NoiseDly <= Filtered2Noise;
-
-         Noise1Gained    <= resize(to_sfixed(Noise1, 3, -12) * to_sfixed(NoiseGain1, DataReal), Noise1Gained);
-         Noise2Gained    <= resize(to_sfixed(Noise2, 3, -12) * to_sfixed(NoiseGain2, DataReal), Noise2Gained);
-
-         Noise2Rms <= resize(Noise2Rms - (Noise2Rms sra 10) + (abs(Filtered2Noise) sra 10), Real1Rms);
-         Real1Rms  <= resize(Real1Rms  - (Real1Rms  sra 10) + (abs(Filtered1Real)  sra 10), Real1Rms);
       end if;
    end process Delay_process;
-/*
 
-   VIO : vio_0
-      PORT MAP (
-         clk         => Clk,
-         probe_out0  => LagCoef,
-         probe_out1  => LeadCoef,
-         probe_out2  => NoiseGain1,
-         probe_out3  => NoiseGain2,    -- 13312 is 0dB s/n
-         probe_out4  => Ch1Agc,
-         probe_out5  => Ch2Agc,
-         probe_out6  => SweepLimit,
-         probe_out7  => SweepRate,
-         probe_out8  => PhaseInc,
-         probe_out9  => Vio9
-   );
---  5030521883283424767
+   Ch1ThenCh2 <= Vio9(4);
+   Delay <= to_integer(unsigned(Ch2Agc(6 downto 0)));
+
+-- 05030521883283424767
 -- 18445829279364155008
 -- 18436106298727503359
   NoiseGen1 : gng
@@ -645,10 +713,10 @@ end generate;
       INIT_Z3 => 64x"FFDA350000FE95FF"
    )
    PORT MAP (
-    clk        => Clk,
+    clk        => ClkOver2,
     rstn       => not Reset,
     ce         => NoiseEn,
-    valid_out  => open,
+    valid_out  => Noise1Vld,
     data_out   => Noise1
 );
 
@@ -659,87 +727,19 @@ end generate;
       INIT_Z3 => 64x"FFB5_6A00_00FF_2BFF"    -- 18,425,749,998,705,519,615
    )
    PORT MAP (
-    clk        => Clk,
+    clk        => ClkOver2,
     rstn       => not Reset,
     ce         => NoiseEn,
-    valid_out  => open,
+    valid_out  => Noise2Vld,
     data_out   => Noise2
 );
 
-   -- the off tune NCO pulls channel 1 slightly off center frequency since there's no carrier loop yet
-   OffTuneNCO : OffsetNCO
-      PORT MAP (
-         aclk                 => Clk,
-         aresetn              => Vio9(7),    -- must be low for ber testing
-         s_axis_config_tvalid => '1',
-         s_axis_config_tdata  => 32x"1000",
-         m_axis_data_tvalid   => open,
-         m_axis_data_tdata    => OffTunedSines
-      );
-
-   OffTuneMult : CmplxMult
-      GENERIC MAP(
-         IN_WIDTH  => 18,
-         IN_BINPT  => 17,
-         OUT_WIDTH => 18,
-         OUT_BINPT => 17
-      )
-      PORT MAP(
-         clk         => Clk,
-         reset       => '0',
-         ce          => '1',
-         ValidIn     => '1',
-         StartIn     => '0',
-         ReadyIn     => '1',
-         ReInA       => DataReal,
-         ImInA       => DataImag,
-         ReInB       => to_sfixed(OffTunedSines(17 downto 0), DataReal),
-         ImInB       => to_sfixed(OffTunedSines(24+17 downto 24), DataReal),
-         ReOut       => OffTunedReal,
-         ImOut       => OffTunedImag,
-         ValidOut    => open,
-         StartOut    => open
-   );
-
-   NCO : OffsetNCO
-      PORT MAP (
-         aclk                 => Clk,
-         aresetn              => not Reset,
-         s_axis_config_tvalid => '1',
-         s_axis_config_tdata  => PhaseInc,
-         m_axis_data_tvalid   => open,
-         m_axis_data_tdata    => NcoData
-      );
-
-   ComplexMult : CmplxMult
-      GENERIC MAP(
-         IN_WIDTH  => 18,
-         IN_BINPT  => 17,
-         OUT_WIDTH => 18,
-         OUT_BINPT => 17
-      )
-      PORT MAP(
-         clk         => Clk,
-         reset       => '0',
-         ce          => '1',
-         ValidIn     => '1',
-         StartIn     => '0',
-         ReadyIn     => '1',
-         ReInA       => DataReal,
-         ImInA       => DataImag,
-         ReInB       => to_sfixed(NcoData(17 downto 0), DataReal),
-         ImInB       => to_sfixed(NcoData(24+17 downto 24), DataReal),
-         ReOut       => NcodReal,
-         ImOut       => NcodImag,
-         ValidOut    => open,
-         StartOut    => open
-   );
-
-   FirDataIn <= 6x"0" & to_slv(Noise1Gained) & 6x"0" & to_slv(Noise2Gained) & 6x"0" & to_slv(NcodReal) & 6x"0" & to_slv(NcodImag) & 6x"0" & to_slv(OffTunedReal) & 6x"0" & to_slv(OffTunedImag);
+   FirDataIn <= 6x"0" & to_slv(Noise1Gained) & 6x"0" & to_slv(Noise2Gained) &
+                6x"0" & to_slv(DataI) & 6x"0" & to_slv(DataQ);
 
    Lowpass : Lowpass66
       PORT MAP (
-         aclk                 => Clk,
+         aclk                 => ClkOver2,
          aresetn              => not Reset,
          s_axis_data_tvalid   => '1',
          s_axis_data_tdata    => FirDataIn,
@@ -749,57 +749,154 @@ end generate;
    );
 
    -- allow filter to settle to avoid unknowns in loop filters
-   Filtered1Real  <= to_sfixed(FirDataOut(41 downto 24),   FILT_OUTS) when ((IlaCounter > 256) or (NotFirstTime = '1')) else 18x"00";
-   Filtered1Imag  <= to_sfixed(FirDataOut(17 downto 00),   FILT_OUTS) when ((IlaCounter > 256) or (NotFirstTime = '1')) else 18x"00";
-   Filtered2Real  <= to_sfixed(FirDataOut(89 downto 72),   FILT_OUTS) when ((IlaCounter > 256) or (NotFirstTime = '1')) else 18x"00";
-   Filtered2Imag  <= to_sfixed(FirDataOut(65 downto 48),   FILT_OUTS) when ((IlaCounter > 256) or (NotFirstTime = '1')) else 18x"00";
-   Filtered2Noise <= to_sfixed(FirDataOut(113 downto 96),  FILT_OUTS) when ((IlaCounter > 256) or (NotFirstTime = '1')) else 18x"00";
-   Filtered1Noise <= to_sfixed(FirDataOut(137 downto 120), FILT_OUTS) when ((IlaCounter > 256) or (NotFirstTime = '1')) else 18x"00";
+   FilteredI  <= to_sfixed(FirDataOut(41 downto 24),   FILT_OUTS);
+   FilteredQ  <= to_sfixed(FirDataOut(17 downto 00),   FILT_OUTS);
+   Filtered1Noise  <= to_sfixed(FirDataOut(89 downto 72),   Filtered1Noise);
+   Filtered2Noise  <= to_sfixed(FirDataOut(65 downto 48),   Filtered1Noise);
 
-   CmplxPhsDet : complexphasedetector_0
+   -- the off tune NCO pulls channel 1 slightly off center frequency since there's no carrier loop yet
+   OffTuneNCO : OffsetNCO
+      PORT MAP (
+         aclk                 => ClkOver2,
+         aresetn              => Vio9(7),    -- must be low for ber testing
+         s_axis_config_tvalid => '1',
+         s_axis_config_tdata  => 32x"1000",
+         m_axis_data_tvalid   => open,
+         m_axis_data_tdata    => OffTunedSines
+      );
+
+   DelayI   <= DataDlyI(Delay);
+   DelayQ   <= DataDlyQ(Delay);
+   MultIn1I <= DataDlyI(0) when (Ch1ThenCh2) else DelayI;
+   MultIn1Q <= DataDlyQ(0) when (Ch1ThenCh2) else DelayQ;
+
+   OffTuneMult : CmplxMult
+      GENERIC MAP(
+         IN_WIDTH  => 18,
+         IN_BINPT  => 17,
+         OUT_WIDTH => 18,
+         OUT_BINPT => 17
+      )
+      PORT MAP(
+         clk         => ClkOver2,
+         reset       => Reset,
+         ce          => '1',
+         ValidIn     => '1',
+         StartIn     => '0',
+         ReadyIn     => '1',
+         ReInA       => MultIn1I,
+         ImInA       => MultIn1Q,
+         ReInB       => to_sfixed(OffTunedSines(17 downto 0), DataI),
+         ImInB       => to_sfixed(OffTunedSines(24+17 downto 24), DataI),
+         ReOut       => OffTunedI,
+         ImOut       => OffTunedQ,
+         ValidOut    => open,
+         StartOut    => open
+   );
+
+   NCO : OffsetNCO
+      PORT MAP (
+         aclk                 => ClkOver2,
+         aresetn              => not Reset,
+         s_axis_config_tvalid => '1',
+         s_axis_config_tdata  => PhaseInc,
+         m_axis_data_tvalid   => open,
+         m_axis_data_tdata    => NcoData
+      );
+
+   MultIn2I <= DataDlyI(0) when (not Ch1ThenCh2) else DelayI;
+   MultIn2Q <= DataDlyQ(0) when (not Ch1ThenCh2) else DelayQ;
+
+   ComplexMult : CmplxMult
+      GENERIC MAP(
+         IN_WIDTH  => 18,
+         IN_BINPT  => 17,
+         OUT_WIDTH => 18,
+         OUT_BINPT => 17
+      )
+      PORT MAP(
+         clk         => ClkOver2,
+         reset       => Reset,
+         ce          => '1',
+         ValidIn     => '1',
+         StartIn     => '0',
+         ReadyIn     => '1',
+         ReInA       => MultIn2I,
+         ImInA       => MultIn2Q,
+         ReInB       => to_sfixed(NcoData(17 downto 0), DataI),
+         ImInB       => to_sfixed(NcoData(24+17 downto 24), DataI),
+         ReOut       => NcodI,
+         ImOut       => NcodQ,
+         ValidOut    => open,
+         StartOut    => open
+   );
+
+   AlignIFs : IF_Align
+      PORT MAP (
+         clk         => ClkOver2,
+         clk4x       => Clk2x,
+         reset       => Reset,
+         ce          => '1',
+         Re1In       => I1Noisy,
+         Im1In       => Q1Noisy,
+         Re2In       => I2Noisy,
+         Im2In       => Q2Noisy,
+         Re1Out      => Real1Out,
+         Im1Out      => Imag1Out,
+         Re2Out      => Real2Out,
+         Im2Out      => Imag2Out
+     );
+
+   Attack   <= Vio9(11 downto 9);
+   Decay    <= Vio9(4 downto 2);
+
+  CmplxPhsDet : complexphasedetector_0
    PORT MAP (
-      clk            => Clk,
+      clk            => ClkOver2,
+      reset          => Reset,
       ch1agc         => Ch1Agc,
       ch2agc         => Ch2Agc,
-      ch1real        => to_slv(Real1Noisy),
-      ch1imag        => to_slv(Imag1Noisy),
-      ch2real        => to_slv(Real2Noisy),
-      ch2imag        => to_slv(Imag2Noisy),
+      ch1real        => Real1Out,
+      ch1imag        => Imag1Out,
+      ch2real        => Real2Out,
+      ch2imag        => Imag2Out,
+      agcref         => to_slv(to_sfixed(0.1, 0, -17)),
+      attack         => Attack,
+      decay          => Decay,
       lag_coef       => LagCoef,
       lead_coef      => LeadCoef,
       sweeplmt       => SweepLimit,
       swprate        => SweepRate,
-      realout        => RealCmb,
-      imagout        => ImagCmb,
-      reallock       => RealLock,
-      imaglock       => ImagLock,
-      locked_n       => Locked,
+      realout        => ICmb,
+      imagout        => QCmb,
+      reallock       => ILock,
+      imaglock       => QLock,
+      locked         => PhsDetLocked,
       agc1_gt_agc2   => agc1_gt_agc2,
       lag_out        => lag_out,
       nco_control_out=> nco_control_out,
       phase_detect   => phase_detect,
-      abs_agc_diff   => abs_agc_diff,
-      maximagout     => MaxImagout,
-      maxrealout     => MaxRealout,
-      minimagout     => MinImagout,
-      minrealout     => MinRealout,
-      realxord       => RealXord,
-      imagxord       => ImagXord,
+      maximagout     => MaxQout,
+      maxrealout     => MaxIout,
+      minimagout     => MinQout,
+      minrealout     => MinIout,
+      realxord       => IXord,
+      imagxord       => QXord,
       gainoutmax     => GainOutMax,
       gainoutmin     => GainOutMin
    );
 
-   OutProc: process (Clk)
+   OutProc: process (ClkOver2)
    begin
-      if (rising_edge(Clk)) then
+      if (rising_edge(ClkOver2)) then
          if (DataRate = (to_integer(unsigned(Vio9(15 downto 12))))) then
-            RealIandD <= resize(to_sfixed(RealCmb, DataReal), RealIandD);
-            ImagIandD <= resize(to_sfixed(ImagCmb, DataReal), RealIandD);
-            RecoveredData <= not RealIandD(2) when (not Vio9(8)) else not ImagIandD(2);
-            RealDelay <= RealDelay(RealDelay'left-1 downto 0) & PrnData;
+            IIandD <= resize(to_sfixed(ICmb, DataI), IIandD);
+            QIandD <= resize(to_sfixed(QCmb, DataI), IIandD);
+            RecoveredData <= not IIandD(2) when (not Vio9(8)) else not QIandD(2);
+            IDelay <= IDelay(IDelay'left-1 downto 0) & PrnDataI;
          else
-            RealIandD <= resize(RealIandD + to_sfixed(RealCmb, DataReal), RealIandD);
-            ImagIandD <= resize(ImagIandD + to_sfixed(ImagCmb, DataReal), RealIandD);
+            IIandD <= resize(IIandD + to_sfixed(ICmb, DataI), IIandD);
+            QIandD <= resize(QIandD + to_sfixed(QCmb, DataI), IIandD);
          end if;
          if (BitCount =  10e6 - 1) then
             BitCount <= 32x"0";
@@ -807,26 +904,26 @@ end generate;
             ErrorCount <= 32x"0";
          elsif (DataRate = 0) then
             BitCount  <= BitCount + 1;
-            if (RealDelay(RealDelay'left) /= RecoveredData) then
+            if (IDelay(IDelay'left) /= RecoveredData) then
                ErrorCount <= ErrorCount + 1;
             end if;
          end if;
       end if;
    end process OutProc;
 
-   dac0_d      <= RealCmb(17 downto 4);
-   dac1_d      <= ImagCmb(17 downto 4);
-   lockLed0n   <= not RealLock(12);
-   lockLed1n   <= not ImagLock(12);
-   ch3DataOut  <= RecoveredData;
-   ch3ClkOut   <= '1' when (DataRate > 4) else '0';
+   dac0_d      <= ICmb(17 downto 4);
+   dac1_d      <= QCmb(17 downto 4);
+   lockLed0n   <= not ILock(12);
+   lockLed1n   <= not QLock(12);
+   ch1DataOut  <= RecoveredData;
+   ch1ClkOut   <= '1' when (DataRate > 4) else '0';
 
    DdsProc: process (DdsPdClkBufG)
    begin
       if (rising_edge(DdsPdClkBufG)) then
-         RealCmbFF      <= RealCmb;
-         ImagCmbFF      <= ImagCmb;
-         ImagCmbFFDly   <= ImagCmbFF;
+         ICmbFF      <= ICmb;
+         QCmbFF      <= QCmb;
+         QCmbFFDly   <= QCmbFF;
       end if;
    end process DdsProc;
 
@@ -834,9 +931,9 @@ end generate;
    begin
       if (rising_edge(DdsPdClk2xBufg)) then
          if (DdsPdClkBufg) then
-            DdsData <= ImagCmbFFDly;
+            DdsData <= QCmbFFDly;
          else
-            DdsData <= RealCmbff;
+            DdsData <= ICmbff;
          end if;
       end if;
    end process;
@@ -864,46 +961,6 @@ end generate;
       DdsReset    => DdsReset,
       DdsUpdate   => DdsIO_Update
    );
-*/
-
-   Sync : SyncIFs
-   PORT MAP(
-      Clk         => Clk,
-      Reset       => Reset,
-      ChAData     => DataDly(Data1),   -- represents data from ch1 demod
-      ChBData     => DataDly(Data2),
-      ChAThenChB  => Ch1ThenCh2,
-      IndexOut    => IndexOut
-   );
-
-   Delay_u : DiffDelay
-      GENERIC MAP (
-         DATA_WIDTH  => 2,
-         LENGTH_BITS => 8
-      )
-      PORT MAP (
-         clk         => Clk,
-         reset       => Reset,
-         AbeforeB    => Ch1ThenCh2,
-         DataInA     => '0' & DataDly(Data1),
-         DataInB     => '0' & DataDly(Data2),
-         Diff        => to_unsigned(IndexOut, 8),
-         DataOutA    => DataA,
-         DataOutB    => DataB
-      );
-
-   DiffDlyProc: process (Clk)
-   begin
-      if (rising_edge(Clk)) then
-         DataDly <= DataDly(126 downto 0) & PrnData;
-         if (IlaCounter(15 downto 0) = 16x"00") then
-            Data2 <= Data2 + 3;
-            Data1 <= 0;
-         end if;
-         dac0_d <= DataOutA(17 downto 4);
-         dac1_d <= DataOutB(17 downto 4);
-      end if;
-   end process DiffDlyProc;
 
 END rtl;
 
