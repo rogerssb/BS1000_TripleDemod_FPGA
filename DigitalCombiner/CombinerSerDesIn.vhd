@@ -100,21 +100,6 @@ architecture rtl of CombinerSerDesIn is
       );
    end component;
 
-   COMPONENT vio_0
-      PORT (
-         clk        : IN STD_LOGIC;
-         probe_out0 : OUT STD_LOGIC_VECTOR(17 DOWNTO 0);
-         probe_out1 : OUT STD_LOGIC_VECTOR(17 DOWNTO 0);
-         probe_out2 : OUT STD_LOGIC_VECTOR(17 DOWNTO 0);
-         probe_out3 : OUT STD_LOGIC_VECTOR(17 DOWNTO 0);
-         probe_out4 : OUT STD_LOGIC_VECTOR(11 DOWNTO 0);
-         probe_out5 : OUT STD_LOGIC_VECTOR(11 DOWNTO 0);
-         probe_out6 : OUT STD_LOGIC_VECTOR(13 DOWNTO 0);
-         probe_out7 : OUT STD_LOGIC_VECTOR(17 DOWNTO 0);
-         probe_out8 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
-         probe_out9 : OUT STD_LOGIC_VECTOR(15 DOWNTO 0)
-      );
-   END COMPONENT;
 
    constant CLOCK             : natural := PORTS-1;   -- the last port is the 93MHz clock from the demod used for phase alignment
 
@@ -136,12 +121,6 @@ architecture rtl of CombinerSerDesIn is
    signal   ChOut1,
             ChOut2            : std_logic_vector ((PORTS*8)-1 downto 0);
    signal   Count             : UINT8 := x"00";
-   signal   Vio0              : SLV18;
-
-   --   attribute MARK_DEBUG : string;
-   --   attribute MARK_DEBUG of
-   --            Demux1, Demux2, Count, LockedXn, Lock200, ChBitSlip1, ChBitSlip2,
-   --            ClkStopped200, ClkStoppedXn, ResetPll, DelayLocked1, DelayLocked2 : signal is "TRUE";
 
 begin
 
@@ -165,21 +144,6 @@ begin
          clk_1x            => ClkX1,
          clk_Nx            => ClkNx
     );
-
-   VIO : vio_0
-      PORT MAP (
-         clk         => Clk93M,
-         probe_out0  => Vio0,
-         probe_out1  => open,
-         probe_out2  => open,
-         probe_out3  => open,
-         probe_out4  => open,
-         probe_out5  => open,
-         probe_out6  => open,
-         probe_out7  => open,
-         probe_out8  => open,
-         probe_out9  => open
-   );
 
    SyncRstProcess : process(Clk93M)
    begin

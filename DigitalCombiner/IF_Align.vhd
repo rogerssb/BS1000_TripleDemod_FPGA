@@ -56,10 +56,14 @@ entity IF_Align is
          clk4x,
          reset,
          ce             : IN  std_logic;
+         Attack,
+         Decay          : IN  std_logic_vector(2 downto 0);
+         RefLevel,
          Re1In,
          Im1In,
          Re2In,
          Im2In          : IN  FLOAT_1_18;
+         AgcDiff        : OUT FLOAT_1_18;
          Re1Out,
          Im1Out,
          Re2Out,
@@ -70,6 +74,20 @@ end IF_Align;
 architecture rtl of IF_Align is
 
   -- Define Components
+   COMPONENT DualAgc IS
+      PORT(
+         Clk,
+         Reset          : IN  std_logic;
+         Attack,
+         Decay          : IN  std_logic_vector(2 downto 0);
+         RealIn,
+         ImagIn,
+         RefLevel       : IN  float_1_18;
+         RealGained,
+         ImagGained,
+         AgcVoltage     : OUT float_1_18
+      );
+   END COMPONENT DualAgc;
 
    COMPONENT fft_512_Float IS
       PORT (
@@ -184,7 +202,7 @@ architecture rtl of IF_Align is
          DataInA1,
          DataInA2,
          DataInB1,
-         DataInB2        : IN  std_logic_vector(DATA_WIDTH-1 downto 0);
+         DataInB2       : IN  std_logic_vector(DATA_WIDTH-1 downto 0);
          Diff           : IN  uint8;
          DataOutA1,
          DataOutA2,
@@ -223,10 +241,16 @@ architecture rtl of IF_Align is
             FftTLastIn,
             FftTLastOut,
             iFftReady        : std_logic := '0';
-   SIGNAL   ReInDly1,
+   SIGNAL   Re1Agcd,
+            Im1Agcd,
+            Re2Agcd,
+            Im2Agcd,
+            ReInDly1,
             ImInDly1,
             ReInDly2,
-            ImInDly2          : FLOAT_1_18;
+            ImInDly2,
+            AgcVoltage1,
+            AgcVoltage2       : FLOAT_1_18;
    SIGNAL   AbsCntr,
             MaxCntr,
             AbsPeak           : ufixed(AbsSize'range);
@@ -235,7 +259,7 @@ architecture rtl of IF_Align is
             PackR2,
             PackI2,
             FftR1,            -- FFT outputs are in floating point but I'm ignoring the exponent
-            FftI1,
+            FftI1,            -- since I'm only looking for the peak of single FFTs
             FftR2,
             FftI2,
             XC_Size,
@@ -251,17 +275,77 @@ architecture rtl of IF_Align is
    SIGNAL   FftOutSlv,
             iFftSlv           : std_logic_vector(95 downto 0); -- fixed by FFT
    SIGNAL   SkipFirst2,
-            ConfigTReady      : std_logic_vector(1 downto 0);
-   SIGNAL   IndexAcc          : sfixed(8 downto -7);
+            ConfigTReady      : std_logic_vector(1 downto 0) := "00";
+   SIGNAL   IndexAcc          : sfixed(8 downto -7) := (others=>'0');
    SIGNAL   IndexOut,
-            IndexAbs          : uint8;
-   SIGNAL   IF_Diff           : SLV18;
+            IndexAbs          : uint8 := x"00";
+   SIGNAL   IF_Diff,
+            AgcVoltage1Slv,
+            AgcVoltage2Slv,
+            AgcDiffSlv        : SLV18;
 
    attribute MARK_DEBUG : string;
    attribute MARK_DEBUG of ValidOverAdd, IndexAcc, ValidOut, AbeforeB, IndexOut,
-            SkipFirst2, Restart, IndexAbs, IF_Diff : signal is "TRUE";
+            SkipFirst2, Restart, IndexAbs, IF_Diff, AgcVoltage1Slv, AgcVoltage2Slv, AgcDiffSlv : signal is "TRUE";
 
 begin
+
+   -- AGC the two IF signals before any compensation efforts to remove RF Channel impairments
+   -- since the IF_Align and CmplPhsDet are both assuming the pristine signals from the transmitter
+   AgcVoltage1Slv    <= to_slv(AgcVoltage1);
+   AgcVoltage2Slv    <= to_slv(AgcVoltage2);
+   AgcDiffSlv        <= to_slv(AgcDiff);
+
+   AGC1 : DualAgc
+      PORT MAP (
+         Clk         => Clk,
+         Reset       => Reset,
+         Attack      => Attack,
+         Decay       => Decay,
+         RealIn      => Re1In,
+         ImagIn      => Im1In,
+         RefLevel    => RefLevel,
+         RealGained  => Re1Agcd,
+         ImagGained  => Im1Agcd,
+         AgcVoltage  => AgcVoltage1
+   );
+
+   AGC2 : DualAgc
+      PORT MAP (
+         Clk         => Clk,
+         Reset       => Reset,
+         Attack      => Attack,
+         Decay       => Decay,
+         RealIn      => Re2In,
+         ImagIn      => Im2In,
+         RefLevel    => RefLevel,
+         RealGained  => Re2Agcd,
+         ImagGained  => Im2Agcd,
+         AgcVoltage  => AgcVoltage2
+   );
+
+   AgcDiff <= resize(AgcVoltage1 - AgcVoltage2, AgcDiff);
+
+   Delay_u : DiffDelay
+      GENERIC MAP (
+         DATA_WIDTH  => 18
+      )
+      PORT MAP (
+         clk         => Clk,
+         reset       => Reset,
+         AbeforeB    => IndexAcc(IndexAcc'left),
+         DataInA1    => to_slv(Re1Agcd),
+         DataInA2    => to_slv(Im1Agcd),
+         DataInB1    => to_slv(Re2Agcd),
+         DataInB2    => to_slv(Im2Agcd),
+         Diff        => IndexAbs,
+         DataOutA1   => Re1Out,
+         DataOutA2   => Im1Out,
+         DataOutB1   => Re2Out,
+         DataOutB2   => Im2Out
+      );
+
+   IF_Diff <= to_slv(resize(to_sfixed(Re1Out, 17, 0) - to_sfixed(Re2Out, 17, 0), 17, 0));
 
    LatchInputs : process(clk)
    begin
@@ -523,26 +607,5 @@ begin
       end if;
    end process MaxProcess;
 
-
-   Delay_u : DiffDelay
-      GENERIC MAP (
-         DATA_WIDTH  => 18
-      )
-      PORT MAP (
-         clk         => Clk,
-         reset       => Reset,
-         AbeforeB    => IndexAcc(IndexAcc'left),
-         DataInA1    => to_slv(Re1In),
-         DataInA2    => to_slv(Im1In),
-         DataInB1    => to_slv(Re2In),
-         DataInB2    => to_slv(Im2In),
-         Diff        => IndexAbs,
-         DataOutA1   => Re1Out,
-         DataOutA2   => Im1Out,
-         DataOutB1   => Re2Out,
-         DataOutB2   => Im2Out
-      );
-
-   IF_Diff <= to_slv(resize(to_sfixed(Re1Out, 17, 0) - to_sfixed(Re2Out, 17, 0), 17, 0));
 
 end rtl;

@@ -9,25 +9,10 @@ add wave -noupdate /cmplphsdettb/Imag1Out
 add wave -noupdate /cmplphsdettb/AlignIFs/Delay_u/Diff
 add wave -noupdate /cmplphsdettb/AlignIFs/Delay_u/RdOutA
 add wave -noupdate /cmplphsdettb/AlignIFs/Delay_u/RdOutB
-add wave -noupdate /cmplphsdettb/CmplxPhsDet/U0/complexphasedetector_struct/agcchanswapper/d
-add wave -noupdate /cmplphsdettb/CmplxPhsDet/U0/complexphasedetector_struct/agcchanswapper/s_axis_a_tdata
-add wave -noupdate /cmplphsdettb/CmplxPhsDet/U0/complexphasedetector_struct/agcchanswapper/\\reg_array\[17\].fde_used.u2\\
-add wave -noupdate /cmplphsdettb/CmplxPhsDet/U0/complexphasedetector_struct/agcchanswapper/reset
-add wave -noupdate /cmplphsdettb/CmplxPhsDet/U0/complexphasedetector_struct/agcchanswapper/decay
-add wave -noupdate /cmplphsdettb/CmplxPhsDet/U0/complexphasedetector_struct/agcchanswapper/attack
-add wave -noupdate /cmplphsdettb/CmplxPhsDet/U0/complexphasedetector_struct/agcchanswapper/\\op_mem_22_20_reg\[0\]\\
-add wave -noupdate /cmplphsdettb/CmplxPhsDet/U0/complexphasedetector_struct/agcchanswapper/mult6_p_net
-add wave -noupdate /cmplphsdettb/CmplxPhsDet/U0/complexphasedetector_struct/agcchanswapper/mult6_p_net_x0
-add wave -noupdate /cmplphsdettb/CmplxPhsDet/U0/complexphasedetector_struct/agcchanswapper/mult7_p_net
-add wave -noupdate /cmplphsdettb/CmplxPhsDet/U0/complexphasedetector_struct/agcchanswapper/mult7_p_net_x0
 add wave -noupdate /cmplphsdettb/AlignIFs/ValidOut
 add wave -noupdate /cmplphsdettb/AlignIFs/ValidOverAdd
-add wave -noupdate /cmplphsdettb/CmplxPhsDet/U0/complexphasedetector_struct/agcchanswapper/fast_agc1/q
-add wave -noupdate /cmplphsdettb/CmplxPhsDet/U0/complexphasedetector_struct/agcchanswapper/fast_agc1/\\inferred_dsp.reg_mult.m_reg_reg\\
-add wave -noupdate /cmplphsdettb/CmplxPhsDet/U0/complexphasedetector_struct/agcchanswapper/fast_agc1/reset
 add wave -noupdate /cmplphsdettb/CmplxPhsDet/agc1_gt_agc2
 add wave -noupdate /cmplphsdettb/CmplxPhsDet/realxord
-add wave -noupdate /cmplphsdettb/CmplxPhsDet/locked_n
 add wave -noupdate /cmplphsdettb/CmplxPhsDet/reallock
 add wave -noupdate /cmplphsdettb/CmplxPhsDet/realout
 add wave -noupdate /cmplphsdettb/dac0_d
@@ -64,8 +49,33 @@ add wave -noupdate /cmplphsdettb/AlignIFs/PackFifo/RdCount
 add wave -noupdate /cmplphsdettb/BitCounter
 add wave -noupdate /cmplphsdettb/NoiseGain1
 add wave -noupdate /cmplphsdettb/NoiseGain2
+add wave -noupdate -format Analog-Step -height 74 -max 21735.000000000004 -min -21736.0 -radix sfixed /cmplphsdettb/AlignIFs/AGC1/ImagIn
+add wave -noupdate -format Analog-Step -height 74 -max 21735.000000000004 -min -21736.0 -radix sfixed /cmplphsdettb/AlignIFs/AGC1/RealIn
+add wave -noupdate -format Analog-Step -height 74 -max 131071.00000000001 -min -131072.0 -radix sfixed /cmplphsdettb/AlignIFs/AGC1/ImagGained
+add wave -noupdate -format Analog-Step -height 74 -max 131071.00000000001 -min -131072.0 -radix sfixed /cmplphsdettb/AlignIFs/AGC1/RealGained
+add wave -noupdate -format Analog-Step -height 74 -max 65536.0 -radix sfixed /cmplphsdettb/AlignIFs/AGC1/ImagSq
+add wave -noupdate -format Analog-Step -height 74 -max 65536.0 -radix sfixed /cmplphsdettb/AlignIFs/AGC1/RealSq
+add wave -noupdate -format Analog-Step -height 74 -max 129892.0 -min -132250.0 -radix sfixed /cmplphsdettb/AlignIFs/AGC1/SumSq
+add wave -noupdate -format Analog-Step -height 74 -max 129962.0 -min 129892.0 -radix sfixed /cmplphsdettb/AlignIFs/AGC1/RefLevel
+add wave -noupdate -format Analog-Step -height 74 -max 105116.0 -radix ufixed -childformat {{/cmplphsdettb/AlignIFs/AGC1/GainInt(4) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(3) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(2) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(1) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(0) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(-1) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(-2) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(-3) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(-4) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(-5) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(-6) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(-7) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(-8) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(-9) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(-10) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(-11) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(-12) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(-13) -radix sfixed}} -subitemconfig {/cmplphsdettb/AlignIFs/AGC1/GainInt(4) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(3) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(2) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(1) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(0) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(-1) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(-2) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(-3) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(-4) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(-5) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(-6) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(-7) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(-8) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(-9) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(-10) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(-11) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(-12) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(-13) {-height 15 -radix sfixed}} /cmplphsdettb/AlignIFs/AGC1/GainInt
+add wave -noupdate -format Analog-Step -height 74 -max 48522.0 -radix hexadecimal -childformat {{/cmplphsdettb/AlignIFs/AGC1/GainInt(4) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(3) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(2) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(1) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(0) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(-1) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(-2) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(-3) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(-4) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(-5) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(-6) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(-7) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(-8) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(-9) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(-10) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(-11) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(-12) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(-13) -radix sfixed}} -subitemconfig {/cmplphsdettb/AlignIFs/AGC1/GainInt(4) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(3) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(2) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(1) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(0) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(-1) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(-2) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(-3) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(-4) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(-5) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(-6) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(-7) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(-8) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(-9) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(-10) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(-11) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(-12) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(-13) {-height 15 -radix sfixed}} /cmplphsdettb/AlignIFs/AGC1/GainInt
+add wave -noupdate -format Analog-Step -height 74 -max 523.0 -radix sfixed /cmplphsdettb/AlignIFs/AGC1/AgcAddr
+add wave -noupdate /cmplphsdettb/AlignIFs/AGC1/AgcRom(64)
+add wave -noupdate -format Analog-Step -height 74 -max 31513.999999999993 -min -21031.0 -radix sfixed /cmplphsdettb/AlignIFs/AgcDiff
+add wave -noupdate -format Analog-Step -height 74 -max 62732.999999999993 -min -131072.0 -radix sfixed /cmplphsdettb/AlignIFs/AgcVoltage1
+add wave -noupdate -format Analog-Step -height 74 -max 54155.0 -min -131072.0 -radix sfixed /cmplphsdettb/AlignIFs/AgcVoltage2
+add wave -noupdate /cmplphsdettb/AM_Amp1
+add wave -noupdate /cmplphsdettb/AM_Amp2
+add wave -noupdate /cmplphsdettb/AM_Freq1
+add wave -noupdate /cmplphsdettb/AM_Freq2
+add wave -noupdate /cmplphsdettb/Attack
+add wave -noupdate /cmplphsdettb/Decay
+add wave -noupdate /cmplphsdettb/Delay
+add wave -noupdate /cmplphsdettb/NoiseGain1
+add wave -noupdate /cmplphsdettb/NoiseGain2
+add wave -noupdate /cmplphsdettb/VioBits
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {9824809000 ps} 0} {{Cursor 2} {400293 ps} 0}
+WaveRestoreCursors {{Cursor 1} {9824809000 ps} 0} {{Cursor 2} {71620739 ps} 0}
 quietly wave cursor active 2
 configure wave -namecolwidth 345
 configure wave -valuecolwidth 114
@@ -81,7 +91,7 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {0 ps} {5250 ns}
+WaveRestoreZoom {137599483 ps} {138744195 ps}
 bookmark add wave bookmark0 {{2508730 ps} {2540670 ps}} 0
 bookmark add wave bookmark1 {{3023030 ps} {3054970 ps}} 0
 bookmark add wave bookmark2 {{2187685 ps} {2199857 ps}} 33

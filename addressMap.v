@@ -615,7 +615,7 @@
         `define BERT_SRC_DEC3_CH0    4'b1110
         `define BERT_SRC_DEC3_CH1    4'b1111
 
-// PN Generator subsystem registers
+// PN Generator subsystem registers start at 0xC00
 `define PNGEN_SPACE             13'b0_1100_0000_xxxx
     `define PNGEN_POLY              13'bx_xxxx_xxxx_00xx
     `define PNGEN_RATE              13'bx_xxxx_xxxx_01xx
@@ -642,6 +642,15 @@
         `define PNGEN_LDPC_RND_OFF      2'b00
         `define PNGEN_LDPC_RND_CCSDS    2'b01
         `define PNGEN_LDPC_RND_IRIG     2'b10
+
+// Combiner subsystem registers start at x0C40
+`define COMBINER_SPACE          13'b0_1100_010x_xxxx
+    `define COMB_LAG_COEF           13'bx_xxxx_xxx0_00xx
+    `define COMB_LEAD_COEF          13'bx_xxxx_xxx0_01xx
+    `define COMB_SWEEP_RATE         13'bx_xxxx_xxx0_10xx
+    `define COMB_SWEEP_LIMIT        13'bx_xxxx_xxx0_110x
+    `define COMP_OPTIONS            13'bx_xxxx_xxx0_111x
+    `define COMB_REF_LEVEL          13'bx_xxxx_xxx1_00xx
 
 // Framesync subsystem registers
 `define FRAMER_SPACE            13'b0_0111_100x_xxxx

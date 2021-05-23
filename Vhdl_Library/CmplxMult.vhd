@@ -170,10 +170,10 @@ BEGIN
              end if;
               -- pipeline level 5, add partials
             if (ValidDly(4)) then
-               RealValue <= resize(MultRDly + Mult0DlyA, RealValue);
-               ImagValue <= resize(MultIDly + Mult0DlyB, ImagValue);
-               FullSizeR <= resize(MultRDly + Mult0DlyA, FullSizeR);
-               FullSizeI <= resize(MultIDly + Mult0DlyB, FullSizeI);
+               RealValue <= resize(MultRDly + Mult0DlyA, RealValue, fixed_wrap, fixed_truncate);
+               ImagValue <= resize(MultIDly + Mult0DlyB, ImagValue, fixed_wrap, fixed_truncate);
+               FullSizeR <= resize(MultRDly + Mult0DlyA, FullSizeR, fixed_wrap, fixed_truncate);
+               FullSizeI <= resize(MultIDly + Mult0DlyB, FullSizeI, fixed_wrap, fixed_truncate);
             end if;
             OverFlow <= '0' when (FullSizeR = RealValue) and (FullSizeI = ImagValue) else '1';
             StartDly <= StartDly(5 downto 1) & StartIn;

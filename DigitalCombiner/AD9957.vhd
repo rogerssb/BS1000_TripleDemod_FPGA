@@ -106,11 +106,11 @@ ARCHITECTURE rtl OF AD9957 IS
    signal   Count9957   : integer range 0 to 72 := 0;
    signal   Shift9957   : std_logic_vector(0 to 71);
    signal   IO_Update   : STD_LOGIC_VECTOR(2 DOWNTO 0);
-
+/*
    attribute MARK_DEBUG : string;
    attribute MARK_DEBUG of Mode, Shift9957, Count9957,
          DdsCS_n, DdsClk, DdsMosi, DdsMiso, IO_Update, IO_Reset, Command : signal is "TRUE";
-
+*/
 BEGIN
 
 
