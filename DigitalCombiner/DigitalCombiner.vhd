@@ -39,11 +39,9 @@ use work.fixed_pkg.all;
 USE work.Semco_pkg.ALL;
 
 ENTITY DigitalCombiner IS
-   GENERIC (
-      useVio   : boolean := false
-   );
    PORT (
       clk,
+      clk2x,
       clk4x,
       reset,
       ce,
@@ -65,6 +63,7 @@ ENTITY DigitalCombiner IS
       minrealout,
       imagout,
       realout,
+      ifOut,
       agc1_gt_agc3,
       gainoutmax,
       gainoutmin,
@@ -73,6 +72,7 @@ ENTITY DigitalCombiner IS
       agc1_gt_agc2,
       realxord,
       imagxord,
+      combinerEn,
       locked,
       ifBS_n            : OUT STD_LOGIC;
       imaglock,
@@ -87,20 +87,20 @@ ARCHITECTURE rtl OF DigitalCombiner IS
 
    COMPONENT combinerRegs
       PORT (
-          cs,
-          wr0, wr1, wr2, wr3,
-          busClk        : IN  std_logic;
-          addr          : IN  std_logic_vector(12 downto 0);
-          dataIn        : IN  SLV32;
-          dataOut       : OUT SLV32;
-          lagCoef,
-          leadCoef,
-          sweepRate,
-          refLevel      : OUT SLV18;
-          sweepLimit    : OUT std_logic_vector(13 downto 0);
-          attack        : OUT std_logic_vector(2 downto 0);
-          decay         : OUT std_logic_vector(2 downto 0);
-          ifBS_n        : OUT std_logic
+         cs,
+         wr0, wr1, wr2, wr3,
+         realLock, imagLock,
+         busClk         : IN  std_logic;
+         addr           : IN  std_logic_vector(12 downto 0);
+         dataIn         : IN  SLV32;
+         dataOut        : OUT SLV32;
+         Index          : IN  SLV8;
+         MDB_180_1,
+         MDB_182_3,
+         MDB_184_5,
+         MDB_188_9      : OUT SLV32;
+         MDB_186,
+         MDB_187        : OUT SLV16
       );
    END COMPONENT combinerRegs;
 
@@ -118,6 +118,7 @@ ARCHITECTURE rtl OF DigitalCombiner IS
          Re2In,
          Im2In          : IN  float_1_18;
          AgcDiff        : OUT FLOAT_1_18;
+         Index          : OUT SLV8;
          Re1Out,
          Im1Out,
          Re2Out,
@@ -139,7 +140,7 @@ ARCHITECTURE rtl OF DigitalCombiner IS
          lag_coef,
          lead_coef,
          swprate           : IN  SLV18;
-         sweeplmt          : IN  STD_LOGIC_VECTOR(13 DOWNTO 0);
+         sweeplmt          : IN  STD_LOGIC_VECTOR(14 DOWNTO 0);
          maximagout,
          maxrealout,
          minimagout,
@@ -162,26 +163,32 @@ ARCHITECTURE rtl OF DigitalCombiner IS
       );
    END COMPONENT complexphasedetector_0;
 
+component DUC
+      port (
+         clk,
+         ce       : in  std_logic;
+         realIn,
+         imagIn   : in  std_logic_vector(17 downto 0);
+         ifOut    : out std_logic_vector(17 downto 0)
+      );
+END component DUC;
+
   -- Signals
    signal   Real1Out,
             Imag1Out,
             Real2Out,
             Imag2Out,
             refLevel       : SLV18;
+   signal   Index          : SLV8;
    signal   FastAgcDiff    : FLOAT_1_18;
-   signal   attack,
-            decay          : std_logic_vector(2 downto 0);
-   signal   lagCoef,
-            leadCoef,
-            sweepRate      : SLV18;
-   signal   sweepLimit     : STD_LOGIC_VECTOR(13 DOWNTO 0);
+   signal   MDB_180_1,
+            MDB_182_3,
+            MDB_184_5,
+            MDB_188_9      : SLV32;
+   signal   MDB_186,
+            MDB_187        : SLV16;
    signal   regCs          : std_logic;
-
-   attribute MARK_DEBUG : string;
-   attribute MARK_DEBUG of Real1Out, Real2Out, cs, wr0, wr1, wr2, wr3,
-      busClk, addr, dataIn, dataOut, lagCoef, leadCoef, sweepRate,
-      sweepLimit, refLevel, attack, decay, ifBS_n : signal is "TRUE";
-
+   signal   DucCount       : unsigned(1 downto 0) := "00";
 
 BEGIN
 
@@ -196,26 +203,29 @@ BEGIN
          addr        => addr,
          dataIn      => dataIn,
          dataOut     => dataOut,
-         lagCoef     => lagCoef,
-         leadCoef    => leadCoef,
-         sweepRate   => sweepRate,
-         sweepLimit  => sweepLimit,
-         refLevel    => refLevel,
-         attack      => attack,
-         decay       => decay,
-         ifBS_n      => ifBS_n
+         Index       => Index,
+         realLock    => realLock(12),
+         imagLock    => imagLock(12),
+         MDB_180_1   => MDB_180_1,
+         MDB_182_3   => MDB_182_3,
+         MDB_186     => MDB_186,
+         MDB_184_5   => MDB_184_5,
+         MDB_188_9   => MDB_188_9,
+         MDB_187     => MDB_187
       );
 
+   combinerEn  <= MDB_187(4);
+   ifBS_n      <= MDB_187(0);
 
    IF_Align_u : IF_Align
       PORT MAP (
          clk         => clk,
          clk4x       => clk4x,
-         reset       => reset,
+         reset       => reset or not combinerEn,
          ce          => '1',
-         Attack      => attack,
-         Decay       => decay,
-         RefLevel    => to_sfixed(refLevel, 0, -17),
+         Attack      => MDB_187(2 downto 0),
+         Decay       => MDB_187(6 downto 4),
+         RefLevel    => to_sfixed(MDB_188_9(17 downto 0), 0, -17),
          Re1In       => re1In,
          Im1In       => im1In,
          Re2In       => re2In,
@@ -224,44 +234,54 @@ BEGIN
          Im1Out      => Imag1Out,
          Re2Out      => Real2Out,
          Im2Out      => Imag2Out,
-         AgcDiff     => FastAgcDiff
+         AgcDiff     => FastAgcDiff,
+         Index       => Index
      );
 
-  CmplxPhsDet : complexphasedetector_0
-   PORT MAP (
-      clk            => clk,
-      reset          => reset,
-      ch1agc         => ch1Agc,
-      ch2agc         => ch2Agc,
-      ch1real        => Real1Out,
-      ch1imag        => Imag1Out,
-      ch2real        => Real2Out,
-      ch2imag        => Imag2Out,
-      fastagc_diff   => to_slv(FastAgcDiff),
-      lag_coef       => lagCoef,
-      lead_coef      => leadCoef,
-      sweeplmt       => sweepLimit,
-      swprate        => sweepRate,
-      realout        => realout,
-      imagout        => imagout,
-      reallock       => reallock,
-      imaglock       => imaglock,
-      locked         => locked,
-      agc1_gt_agc1   => agc1_gt_agc1,
-      agc1_gt_agc2   => agc1_gt_agc2,
-      agc1_gt_agc3   => agc1_gt_agc3,
-      lag_out        => lag_out,
-      nco_control_out=> nco_control_out,
-      phase_detect   => phase_detect,
-      maximagout     => maximagout,
-      maxrealout     => maxrealout,
-      minimagout     => minimagout,
-      minrealout     => minrealout,
-      realxord       => realxord,
-      imagxord       => imagxord,
-      gainoutmax     => gainoutmax,
-      gainoutmin     => gainoutmin
-   );
+   CmplxPhsDet : complexphasedetector_0
+      PORT MAP (
+         clk            => clk,
+         reset          => reset or not combinerEn,
+         ch1agc         => ch1Agc,
+         ch2agc         => ch2Agc,
+         ch1real        => Real1Out,
+         ch1imag        => Imag1Out,
+         ch2real        => Real2Out,
+         ch2imag        => Imag2Out,
+         fastagc_diff   => to_slv(FastAgcDiff),
+         lag_coef       => MDB_180_1(17 downto 0),
+         lead_coef      => MDB_182_3(17 downto 0),
+         sweeplmt       => MDB_186(14 downto 0),
+         swprate        => MDB_184_5(17 downto 0),
+         realout        => realout,
+         imagout        => imagout,
+         reallock       => reallock,
+         imaglock       => imaglock,
+         locked         => locked,
+         agc1_gt_agc1   => agc1_gt_agc1,
+         agc1_gt_agc2   => agc1_gt_agc2,
+         agc1_gt_agc3   => agc1_gt_agc3,
+         lag_out        => lag_out,
+         nco_control_out=> nco_control_out,
+         phase_detect   => phase_detect,
+         maximagout     => maximagout,
+         maxrealout     => maxrealout,
+         minimagout     => minimagout,
+         minrealout     => minrealout,
+         realxord       => realxord,
+         imagxord       => imagxord,
+         gainoutmax     => gainoutmax,
+         gainoutmin     => gainoutmin
+      );
+
+   GenIF : DUC
+      port map (
+         clk      => clk2x,
+         ce       => '1',
+         realIn   => realOut,
+         imagIn   => imagOut,
+         ifOut    => ifOut
+      );
 
 END rtl;
 

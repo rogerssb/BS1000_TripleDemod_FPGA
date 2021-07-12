@@ -17,83 +17,71 @@ module combinerRegs(
     output  reg [31:0]  dataOut,
     input               cs,
     input               wr0, wr1, wr2, wr3,
-    output  reg [17:0]  lagCoef = 18'h0000,
-    output  reg [17:0]  leadCoef = 18'h0000,
-    output  reg [13:0]  sweepLimit = 14'h00xx,
-    output  reg [17:0]  sweepRate = 18'h0000,
-    output  reg [17:0]  refLevel = 18'h0000,
-    output  reg [2:0]   attack = 3'b000,
-    output  reg [2:0]   decay = 3'b000,
-    output  reg         ifBS_n = 1'b0
+    input               realLock, imagLock,
+    input       [7:0]   Index,
+    output  reg [31:0]  MDB_180_1 = 32'h0000,
+    output  reg [31:0]  MDB_182_3 = 32'h0000,
+    output  reg [15:0]  MDB_186   = 16'h0000,
+    output  reg [31:0]  MDB_184_5 = 32'h0000,
+    output  reg [31:0]  MDB_188_9 = 32'h0000,
+    output  reg [15:0]  MDB_187   = 16'h0000
 );
 
     always @(posedge busClk) begin
         if (cs && wr0) begin
             casex (addr)
-                `COMB_LAG_COEF:         lagCoef[7:0]    <= dataIn[7:0];
-                `COMB_LEAD_COEF:        leadCoef[7:0]   <= dataIn[7:0];
-                `COMB_SWEEP_LIMIT:      sweepLimit[7:0] <= dataIn[7:0];
-                `COMB_SWEEP_RATE:       sweepRate[7:0]  <= dataIn[7:0];
-                `COMB_REF_LEVEL:        refLevel[7:0]   <= dataIn[7:0];
+                `COMB_LAG_COEF:         MDB_180_1[7:0]  <= dataIn[7:0];
+                `COMB_LEAD_COEF:        MDB_182_3[7:0]  <= dataIn[7:0];
+                `COMB_SWEEP_RATE:       MDB_184_5[7:0]  <= dataIn[7:0];
+                `COMB_REF_LEVEL:        MDB_188_9[7:0]  <= dataIn[7:0];
+                `COMB_SWEEP_LIMIT:      MDB_186[7:0]    <= dataIn[7:0];
                 default: ;
             endcase
         end
         if (cs && wr1) begin
             casex (addr)
-                `COMB_LAG_COEF:         lagCoef[15:8]    <= dataIn[15:8];
-                `COMB_LEAD_COEF:        leadCoef[15:8]   <= dataIn[15:8];
-                `COMB_SWEEP_LIMIT:      sweepLimit[13:8] <= dataIn[15:8];
-                `COMB_SWEEP_RATE:       sweepRate[15:8]  <= dataIn[15:8];
-                `COMP_OPTIONS:          ifBS_n           <= dataIn[8];
-                `COMB_REF_LEVEL:        refLevel[15:8]   <= dataIn[15:8];
+                `COMB_LAG_COEF:         MDB_180_1[15:8] <= dataIn[15:8];
+                `COMB_LEAD_COEF:        MDB_182_3[15:8] <= dataIn[15:8];
+                `COMB_SWEEP_RATE:       MDB_184_5[15:8] <= dataIn[15:8];
+                `COMB_REF_LEVEL:        MDB_188_9[15:8] <= dataIn[15:8];
+                `COMB_SWEEP_LIMIT:      MDB_186[15:8]   <= dataIn[15:8];
                 default: ;
             endcase
         end
         if (cs && wr2) begin
             casex (addr)
-                `COMB_LAG_COEF:         lagCoef[17:16]    <= dataIn[17:16];
-                `COMB_LEAD_COEF:        leadCoef[17:16]   <= dataIn[17:16];
-                `COMB_SWEEP_RATE:       sweepRate[17:16]  <= dataIn[17:16];
-                `COMP_OPTIONS:      begin
-                                        attack            <= dataIn[18:16];
-                                        decay             <= dataIn[22:20];
-                                    end
-                `COMB_REF_LEVEL:        refLevel[17:16]   <= dataIn[17:16];
+                `COMB_LAG_COEF:         MDB_180_1[23:16] <= dataIn[23:16];
+                `COMB_LEAD_COEF:        MDB_182_3[23:16] <= dataIn[23:16];
+                `COMB_SWEEP_RATE:       MDB_184_5[23:16] <= dataIn[23:16];
+                `COMB_REF_LEVEL:        MDB_188_9[23:16] <= dataIn[23:16];
+                `COMB_OPTIONS:          MDB_187[7:0]     <= dataIn[23:16];
                 default: ;
             endcase
         end
         if (cs && wr3) begin
             casex (addr)
-                `COMP_OPTIONS:          ifBS_n           <= dataIn[24];
+                `COMB_LAG_COEF:         MDB_180_1[28:24] <= dataIn[28:24];
+ //             `COMB_LEAD_COEF:        MDB_182_3[31:24] <= dataIn[31:24];
+                `COMB_SWEEP_RATE:       MDB_184_5[31:24] <= dataIn[31:24];
+                `COMB_REF_LEVEL:        MDB_188_9[31:24] <= dataIn[31:24];
+                `COMB_OPTIONS:          MDB_187[15:8]    <= dataIn[31:24];
                 default: ;
             endcase
         end
     end
 
     always @* begin
+        MDB_180_1[31:29] = {realLock | imagLock, realLock, imagLock};
+        MDB_182_3[31:24] = Index;
         if (cs) begin
             casex (addr)
-                `COMB_LAG_COEF: begin
-                    dataOut = {14'b0, lagCoef};
-                    end
-                `COMB_LEAD_COEF: begin
-                    dataOut = {14'b0, leadCoef};
-                    end
-                `COMB_SWEEP_LIMIT: begin
-                    dataOut = {"CB", 2'b0, sweepLimit};
-                    end
-                `COMB_SWEEP_RATE: begin
-                    dataOut = {14'b0, sweepRate};
-                    end
-                `COMP_OPTIONS: begin
-                    dataOut = {7'b0, ifBS_n, 1'b0, decay, 1'b0, attack, 16'b0};
-                    end
-                `COMB_REF_LEVEL: begin
-                    dataOut = {14'b0, refLevel};
-                    end
-                default: begin
-                    dataOut = 32'b0;
-                    end
+                `COMB_LAG_COEF:     dataOut = MDB_180_1;
+                `COMB_LEAD_COEF:    dataOut = MDB_182_3;
+                `COMB_SWEEP_LIMIT,
+                `COMB_OPTIONS:      dataOut = {MDB_187, MDB_186};
+                `COMB_SWEEP_RATE:   dataOut = MDB_184_5;
+                `COMB_REF_LEVEL:    dataOut = MDB_188_9;
+                default:            dataOut = 32'b0;
             endcase
         end
         else begin

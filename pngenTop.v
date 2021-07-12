@@ -17,10 +17,10 @@ module pngenTop(
 );
 
 
-  (* MARK_DEBUG="true" *)  wire        [23:0]  pnPolyTaps;
-  (* MARK_DEBUG="true" *)  wire        [4:0]   pnPolyLength;
-  (* MARK_DEBUG="true" *)  wire        [31:0]  pnClockRate;
-  (* MARK_DEBUG="true" *)  wire        [3:0]   pcmMode;
+    wire        [23:0]  pnPolyTaps;
+    wire        [4:0]   pnPolyLength;
+    wire        [31:0]  pnClockRate;
+    wire        [3:0]   pcmMode;
     wire        [1:0]   fecMode;
     wire        [1:0]   ldpcRate;
     wire        [1:0]   ldpcRandomize;

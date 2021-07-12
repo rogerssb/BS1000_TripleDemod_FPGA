@@ -27,22 +27,11 @@
     NOTE ALSO, the combiner is built on a 7k325 vs the 7k160 of the rest. The
     "Project Part" will need modified when changing configurations and then
     the IPs will need updating to the new part as well as adding Combiner.xdc
-    and enabling the appropriate *_Debug.xdc files
+    and enabling the appropriate Debug*.xdc files
 
     There are also various options on constraint files, so rather than adding
     them each time, they are all in the project but disabled making the choices
     more obvious.
-
-    Notes on combiner:
-        The I/Q data from both channels is sent to the combiner to be used to
-    IF alignment due to propagation delays in the field. The jitter on the data
-    will be worse at the lower data rates, so I ran test at 1Mb driving both
-    demods in parallel. The Ch2 data is usually two clocks behind Ch1 data,
-    however the Ch2 data occasionally goes high several clocks before Ch1, Hmm?
-    Likewise Ch2 will drop early. Interesting point is the 'Fails' are always
-    off by the same amount of clocks. This one reason why the IF alignment will
-    use a loop filter to pull the two channels together slowly rather than on
-    a bit by bit basis.
 */
 
 `timescale 1ns/100ps
@@ -106,6 +95,12 @@ module semcoDemodTop (
     output              ch2ClkOut,ch2DataOut,
     output              ch3ClkOut,ch3DataOut,
 
+    `ifdef TEST_BENCH
+    output              clk, clk2x, clkOver2, clkLocked,
+    output      [31:0]  MDB_180_1, MDB_182_3, MDB_184_5, MDB_188_9,
+    output      [15:0]  MDB_186, MDB_187,
+    `endif
+
     `ifdef R6100
 
     // PLL Interface Signals
@@ -130,6 +125,7 @@ module semcoDemodTop (
     output      [1:0]   video1InSelect,
     output reg  [1:0]   video1OutSelect,
 
+//    output      [2:0]   vidSel,
     `else   //R6100
 
     // PLL Interface Signals
@@ -200,9 +196,11 @@ module semcoDemodTop (
     `endif //R6100
 );
 
-    parameter VER_NUMBER = 16'd648;
+    parameter VER_NUMBER = 16'd701;
 
-
+    `ifndef TEST_BENCH
+        wire    clk, clk2x, clkOver2, clkLocked;
+    `endif
 //******************************************************************************
 //                          Clock Distribution
 //******************************************************************************
@@ -361,9 +359,11 @@ module semcoDemodTop (
     reg             [13:0]  adc0Reg;
     reg     signed  [17:0]  adc0In;
     reg                     bbClkEn;
+    wire    signed  [17:0]  combinerIF;
+    wire                    combinerEn;
     always @(posedge clk) begin
         adc0Reg <= adc0;
-        adc0In  <= $signed({~adc0Reg[13],adc0Reg[12:0],4'b0});
+        adc0In  <= (combinerEn) ? combinerIF : $signed({~adc0Reg[13],adc0Reg[12:0],4'b0});
         bbClkEn <= ~bbClkEn;    // baseband runs at half rate
     end
 
@@ -489,18 +489,14 @@ module semcoDemodTop (
         wire    [7:0]   DataOut10, DataOut11, DataOut12, DataOut13, DataOut14,
                         DataOut20, DataOut21, DataOut22, DataOut23, DataOut24;
 
-        wire    [13:0]  Ch1Adc0 = {DataOut11[5:0], DataOut10};
-        wire    [13:0]  Ch2Adc0 = {DataOut21[5:0], DataOut20};
-        wire    [11:0]  Ch1Agc  = {DataOut13[3:0], DataOut12};
-        wire    [11:0]  Ch2Agc  = {DataOut23[3:0], DataOut22};
-        wire    [17:0]  LagCoef, LeadCoef, SweepRate, ProbeOut2;
-        wire    [17:0]  MaxImagout, MaxRealout, MinImagout,
-                        MinRealout, GainOutMax, GainOutMin, phase_detect,
-                        Ch1RealPre, Ch1ImagPre, Ch2RealPre, Ch2ImagPre,
-                        Ch1Real, Ch1Imag, Ch2Real, Ch2Imag,
-                        Ch1Adc17, Ch2Adc17, Ch1Diff, Ch2Diff;
-        wire    [7:0]   Diff;
-        wire    [13:0]  SweepLimit;
+        wire    [17:0]  ch1Adc17 = {DataOut11[5:0], DataOut10, 4'b0};
+        wire    [17:0]  ch2Adc17 = {DataOut21[5:0], DataOut20, 4'b0};
+        wire    [11:0]  ch1Agc  = {DataOut13[3:0], DataOut12};
+        wire    [11:0]  ch2Agc  = {DataOut23[3:0], DataOut22};
+
+		  wire    [17:0]  maxImagout, maxRealout, minImagout,
+                        minRealout, gainOutMax, gainOutMin, phase_detect,
+                        ch1RealPre, ch1ImagPre, ch2RealPre, ch2ImagPre;
         wire    [12:0]  RealLock, ImagLock;
         wire    [31:0]  lag_out;
         wire    [21:0]  nco_control_out;
@@ -562,7 +558,7 @@ module semcoDemodTop (
         CombinerSerDesIn #(.PORTS(6)) SerDes_u
             (
             .Clk93M    (clk),
-            .Reset     (!IF_BS_n || !FPGA_ID1 || reset),
+            .Reset     (!IF_BS_n | !FPGA_ID1 | reset),
             .ClkIn1    (NextClk),  // Next is Ch1
             .DataIn1   (NextData),
             .DataOut10 (DataOut10),
@@ -579,20 +575,17 @@ module semcoDemodTop (
             .DataOut24 (DataOut24)
             );
 
-        assign Ch1Adc17 = {!Ch1Adc0[13], Ch1Adc0[12:0], 4'b0};
-        assign Ch2Adc17 = {!Ch2Adc0[13], Ch2Adc0[12:0], 4'b0};
-
         dualQuadDdc preDdc    // Down convert incoming IFs to baseband, do both channels with same phase LO
             (
             .clk(clk),
-            .reset(!IF_BS_n || !FPGA_ID1 || reset),
-            .ifIn1(Ch1Adc17),
-            .ifIn2(Ch2Adc17),
+            .reset(!IF_BS_n | !FPGA_ID1 | reset),
+            .ifIn1(ch1Adc17),
+            .ifIn2(ch2Adc17),
             .syncOut(),
-            .iOut1(Ch1RealPre),
-            .qOut1(Ch1ImagPre),
-            .iOut2(Ch2RealPre),
-            .qOut2(Ch2ImagPre)
+            .iOut1(ch1RealPre),
+            .qOut1(ch1ImagPre),
+            .iOut2(ch2RealPre),
+            .qOut2(ch2ImagPre)
             );
 
         reg combinerSpace;
@@ -606,9 +599,10 @@ module semcoDemodTop (
         wire            [31:0]  combinerDout;
         DigitalCombiner DigitalCombiner_u
             (
-                .clk                (ClkOver2),
-                .clk4x              (Clk2x),
-                .reset              (!FPGA_ID1 || Reset),
+                .clk                (clkOver2),
+                .clk2x              (clk),
+                .clk4x              (clk2x),
+                .reset              (!FPGA_ID1 | reset),
                 .ce                 (1'b1),
                 .cs                 (combinerSpace),
                 .busClk             (busClk),
@@ -616,14 +610,16 @@ module semcoDemodTop (
                 .addr               (addr),
                 .dataIn             (dataIn),
                 .dataOut            (combinerDout),
-                .re1In              (Ch1RealPre),
-                .im1In              (Ch1ImagPre),
-                .re2In              (Ch2RealPre),
-                .im2In              (Ch2ImagPre),
-                .ch1agc             (Ch1Agc),
-                .ch2agc             (Ch2Agc),
+                .re1In              (ch1RealPre),
+                .im1In              (ch1ImagPre),
+                .re2In              (ch2RealPre),
+                .im2In              (ch2ImagPre),
+                .ch1agc             (ch1Agc),
+                .ch2agc             (ch2Agc),
                 .realout            (iBB),
                 .imagout            (qBB),
+                .ifOut              (combinerIF),
+                .combinerEn         (combinerEn),
                 .reallock           (RealLock),
                 .imaglock           (ImagLock),
                 .locked             (combLocked_n),
@@ -631,20 +627,20 @@ module semcoDemodTop (
                 .lag_out            (lag_out),
                 .nco_control_out    (nco_control_out),
                 .phase_detect       (phase_detect),
-                .maximagout         (MaxImagout),
-                .maxrealout         (MaxRealout),
-                .minimagout         (MinImagout),
-                .minrealout         (MinRealout),
+                .maximagout         (maxImagout),
+                .maxrealout         (maxRealout),
+                .minimagout         (minImagout),
+                .minrealout         (minRealout),
                 .realxord           (RealXord),
                 .imagxord           (ImagXord),
-                .gainoutmax         (GainOutMax),
-                .gainoutmin         (GainOutMin),
+                .gainoutmax         (gainOutMax),
+                .gainoutmin         (gainOutMin),
                 .ifBS_n             (IF_BS_n)
             );
 
         PdClkMmcm DdsClkBufg (
             .clk_in1  (SideCarClk),
-            .reset    (!IF_BS_n || !FPGA_ID1 || reset),
+            .reset    (!IF_BS_n | !FPGA_ID1 | reset),
             .locked   (),
             .clk_out1 (DdsPdClkBufg),
             .clk_out2 (DdsPdClk2xBufg)
@@ -666,10 +662,10 @@ module semcoDemodTop (
             end
         end
 
-        // The upconverter mixes RR and II then adds, II is -1 so needs inverted
+        // The upconverter mixes R*R and I*I then adds, I*I is -1 so needs inverted
         AD9957 AD9957_u (
             .clk       (clk),
-            .reset     (!IF_BS_n || !FPGA_ID1 || reset),
+            .reset     (!IF_BS_n | !FPGA_ID1 | reset),
             .DdsMiso   (DdsMiso),
             .DdsMosi   (DdsMosi),
             .DdsCS_n   (DdsCS_n),
@@ -2096,7 +2092,7 @@ sdi sdi(
         //******************************************************************************
         //                           AM ADC Interface
         //******************************************************************************
-        wire    signed  [11:0]  amDataIn;
+        wire    signed  [11:0]  amDataIn, ChAgc;
         ad7476Interface amAdc(
             .clk(clk),
             .reset(reset),
@@ -2107,14 +2103,19 @@ sdi sdi(
             .adcDataEn(amDataEn)
         );
 
-    //******************************************************************************
+        `ifdef TEST_BENCH
+            assign ChAgc = MDB_186[11:0];
+        `else
+            assign ChAgc = amDataIn;
+        `endif
+
+    //******************************************************************************+++++++++++++++++++++++++++++
     //                               Combiner Outputs from Demod
     //******************************************************************************
         `ifndef COMBINER
 
             assign lockLed0n = !timingLock;
             assign lockLed1n = !carrierLock;
-            assign IF_BS_n   = 1'b0;    // if demod, ignore IF signals
 
             DC_DemodTop combinerOut(
                 .Clk(clk),
@@ -2124,8 +2125,8 @@ sdi sdi(
                 .iDemodBit(iDemodBit),
                 .qDemodBit(qDemodBit),
                 .amDataEn(amDataEn),
-                .amDataIn(amDataIn),
-                .adc0(adc0),
+                .amDataIn(ChAgc),
+                .adc0(adc0In[17:4]),
                 .PrevData_p(PrevData_p),
                 .PrevData_n(PrevData_n),
                 .NextData_p(NextData_p),
@@ -2135,10 +2136,39 @@ sdi sdi(
                 .PrevClk_p(PrevClk_p),
                 .PrevClk_n(PrevClk_n)
             );
+
+            // use the combine register set for controlling the combiner demod predistortion registers
+    reg combinerSpace;
+            always @* begin
+                casex(addr)
+                    `COMBINER_SPACE:    combinerSpace = cs;
+                    default:            combinerSpace = 0;
+                endcase
+            end
+
+    wire  [31:0]  combinerDout;
+            combinerRegs DC_Regs(
+                .cs          (combinerSpace),
+                .wr0         (wr0),
+                .wr1         (wr1),
+                .wr2         (wr2),
+                .wr3         (wr3),
+                .busClk      (busClk),
+                .addr        (addr),
+                .dataIn      (dataIn),
+                .dataOut     (combinerDout),
+                .MDB_180_1   (MDB_180_1),
+                .MDB_182_3   (MDB_182_3),
+                .MDB_184_5   (MDB_184_5),
+                .MDB_188_9   (MDB_188_9),
+                .MDB_186     (MDB_186),
+                .MDB_187     (MDB_187)
+            );
+
         `else
 
-            assign  lockLed0n = RealLock;
-            assign  lockLed1n = ImagLock;
+            assign  lockLed0n = !RealLock[12];
+            assign  lockLed1n = !ImagLock[12];
 
         `endif
         //******************************************************************************

@@ -50,7 +50,7 @@ dualHalfbandDecimate hb1(
     .clk(clk), .reset(reset), .clkEn(1'b1),
     .iIn(iMix1),.qIn(qMix1),
     .iOut(iOut1),.qOut(qOut1),
-    .clkEnOut(SyncOut)
+    .clkEnOut(syncOut)
     );
 
 // First Halfband Filters

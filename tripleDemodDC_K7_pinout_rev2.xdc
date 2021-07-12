@@ -95,6 +95,10 @@ set_property PACKAGE_PIN AF22 [get_ports amDacClk]
 set_property PACKAGE_PIN AE22 [get_ports amDacCSn]
 set_property PACKAGE_PIN Y20 [get_ports amDacDataOut]
 
+# set_property PACKAGE_PIN AE23 [get_ports vidSel[0]]
+# set_property PACKAGE_PIN AF23 [get_ports vidSel[1]]
+# set_property PACKAGE_PIN AD25 [get_ports vidSel[2]]
+
 # enable MonData.xdc in project
 # set_property PACKAGE_PIN H17 [get_ports MonClk]
 # set_property PACKAGE_PIN F19 [get_ports MonOvf]
@@ -189,7 +193,6 @@ set_property PACKAGE_PIN AB4 [get_ports {SideCar[34]}]
 set_property PACKAGE_PIN W6 [get_ports {SideCar[36]}]
 set_property PACKAGE_PIN W4 [get_ports {SideCar[38]}]
 set_property PACKAGE_PIN U2 [get_ports {SideCar[40]}]
-set_property PACKAGE_PIN W3 [get_ports {SideCar[11]}]
 set_property PACKAGE_PIN AE1 [get_ports {SideCar[15]}]
 set_property PACKAGE_PIN AF5 [get_ports {SideCar[19]}]
 set_property PACKAGE_PIN AF4 [get_ports {SideCar[21]}]
@@ -197,6 +200,20 @@ set_property PACKAGE_PIN AE3 [get_ports {SideCar[23]}]
 set_property PACKAGE_PIN AE2 [get_ports {SideCar[25]}]
 set_property PACKAGE_PIN AE6 [get_ports {SideCar[27]}]
 set_property PACKAGE_PIN AD1 [get_ports {SideCar[29]}]
+# not used pins for 1 to 40 range. FPGA pins are arbitrary place holders
+set_property PACKAGE_PIN U4 [get_ports {SideCar[1]}]
+set_property PACKAGE_PIN U6 [get_ports {SideCar[3]}]
+set_property PACKAGE_PIN U5 [get_ports {SideCar[5]}]
+set_property PACKAGE_PIN U1 [get_ports {SideCar[7]}]
+set_property PACKAGE_PIN W5 [get_ports {SideCar[9]}]
+set_property PACKAGE_PIN V3 [get_ports {SideCar[11]}]
+set_property PACKAGE_PIN U7 [get_ports {SideCar[13]}]
+set_property PACKAGE_PIN V6 [get_ports {SideCar[17]}]
+set_property PACKAGE_PIN V4 [get_ports {SideCar[31]}]
+set_property PACKAGE_PIN AC1 [get_ports {SideCar[33]}]
+set_property PACKAGE_PIN W1 [get_ports {SideCar[35]}]
+set_property PACKAGE_PIN Y1 [get_ports {SideCar[37]}]
+set_property PACKAGE_PIN AA2 [get_ports {SideCar[39]}]
 
 set_property IOSTANDARD LVCMOS18 [get_ports adc0Clk]
 set_property IOSTANDARD LVCMOS18 [get_ports {adc0[*]}]
@@ -285,13 +302,19 @@ set_property SLEW SLOW [get_ports amDacCSn]
 set_property IOSTANDARD LVCMOS33 [get_ports lockLed0n]
 set_property IOSTANDARD LVCMOS33 [get_ports lockLed1n]
 
-set_property IOSTANDARD LVCMOS33 [get_ports {video*Select[*]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {{video*Select[*]} {vidSel[*]}}]
 
 set_property CFGBVS VCCO [current_design]
 set_property CONFIG_VOLTAGE 3.3 [current_design]
 set_property BITSTREAM.CONFIG.CONFIGRATE 66 [current_design]
 set_property BITSTREAM.CONFIG.SPI_32BIT_ADDR YES [current_design]
 set_property BITSTREAM.CONFIG.SPI_BUSWIDTH 4 [current_design]
+
+
+
+
+
+
 
 
 

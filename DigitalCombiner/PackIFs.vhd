@@ -66,7 +66,7 @@ ENTITY PackIFs IS
       ReOut4x2,
       ImOut4x2       : OUT sfixed(DATA_WIDTH+BINPT-1 downto BINPT);
       Start4x,
-      Restart,          -- buffer overrun has been depleted, start new frames
+      Restart,          -- buffer overrun has been detected, start new frames
       OverFlow4x,
       ValidOut4x,       -- actual data is valid
       ValidData4x,      -- data and WORDS zeros for fft

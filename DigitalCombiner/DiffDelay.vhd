@@ -48,12 +48,12 @@ ENTITY DiffDelay IS
       DataInA1,
       DataInA2,
       DataInB1,
-      DataInB2        : IN  std_logic_vector(DATA_WIDTH-1 downto 0);
+      DataInB2       : IN  std_logic_vector(DATA_WIDTH-1 downto 0);
       Diff           : IN  uint8;
       DataOutA1,
       DataOutA2,
       DataOutB1,
-      DataOutB2       : OUT std_logic_vector(DATA_WIDTH-1 downto 0)
+      DataOutB2      : OUT std_logic_vector(DATA_WIDTH-1 downto 0)
    );
 END DiffDelay;
 

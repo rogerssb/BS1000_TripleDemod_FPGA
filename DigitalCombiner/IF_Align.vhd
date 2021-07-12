@@ -64,6 +64,7 @@ entity IF_Align is
          Re2In,
          Im2In          : IN  FLOAT_1_18;
          AgcDiff        : OUT FLOAT_1_18;
+         Index          : OUT SLV8;
          Re1Out,
          Im1Out,
          Re2Out,
@@ -251,8 +252,8 @@ architecture rtl of IF_Align is
             ImInDly2,
             AgcVoltage1,
             AgcVoltage2       : FLOAT_1_18;
-   SIGNAL   AbsCntr,
-            MaxCntr,
+   SIGNAL   AbsFft,
+            MaxFft,
             AbsPeak           : ufixed(AbsSize'range);
    SIGNAL   PackR1,
             PackI1,
@@ -285,7 +286,7 @@ architecture rtl of IF_Align is
             AgcDiffSlv        : SLV18;
 
    attribute MARK_DEBUG : string;
-   attribute MARK_DEBUG of ValidOverAdd, IndexAcc, ValidOut, AbeforeB, IndexOut,
+   attribute MARK_DEBUG of ValidOverAdd, Index, ValidOut,
             SkipFirst2, Restart, IndexAbs, IF_Diff, AgcVoltage1Slv, AgcVoltage2Slv, AgcDiffSlv : signal is "TRUE";
 
 begin
@@ -324,7 +325,6 @@ begin
          AgcVoltage  => AgcVoltage2
    );
 
-   AgcDiff <= resize(AgcVoltage1 - AgcVoltage2, AgcDiff);
 
    Delay_u : DiffDelay
       GENERIC MAP (
@@ -345,11 +345,12 @@ begin
          DataOutB2   => Im2Out
       );
 
-   IF_Diff <= to_slv(resize(to_sfixed(Re1Out, 17, 0) - to_sfixed(Re2Out, 17, 0), 17, 0));
 
    LatchInputs : process(clk)
    begin
       if (rising_edge(clk)) then
+         AgcDiff <= resize(AgcVoltage1 - AgcVoltage2, AgcDiff);
+         IF_Diff <= to_slv(resize(to_sfixed(Re1Out, 17, 0) - to_sfixed(Re2Out, 17, 0), 17, 0));
          if (Reset) then
             ReInDly1       <= (others=>'0');
             ImInDly1       <= (others=>'0');
@@ -531,7 +532,7 @@ begin
          clk    => Clk4x,     reset    => Reset or Restart,    ce       => ce,
          ReIn   => iFftR,     ImIn     => iFftI,      ValidIn  => ValidIFftOut,
          ReOut  => open,      ImOut    => open,
-         AbsOut => AbsCntr,   ValidOut => ValidAbs,   StartIn  => '0', StartOut => open);
+         AbsOut => AbsFft,    ValidOut => ValidAbs,   StartIn  => '0', StartOut => open);
 
 
    -- Now find peak of iFFT
@@ -544,16 +545,16 @@ begin
             SkipFirst2  <= "00";
             AbeforeB    <= '1';
             AbsPeak     <= (others=>'0');
-            MaxCntr     <= (others=>'0');
+            MaxFft      <= (others=>'0');
             IndexAcc    <= (others=>'0');
             IndexAbs    <= (others=>'0');
          elsif (ce) then
             ValidOverAdd   <= ValidAbs;  -- delay ValidAbs to realign OverAdd sum outputs
-            MaxCntr <= AbsCntr;              -- just delayed to keep timing happy
+            MaxFft         <= AbsFft;    -- just delayed to keep timing happy
             if (ValidOverAdd) then
                -- Find the peak of this packet
-               if (MaxCntr > AbsPeak) then
-                  AbsPeak     <= MaxCntr;
+               if (MaxFft > AbsPeak) then
+                  AbsPeak     <= MaxFft;
                   AbsIndex    <= Index0;
                end if;
 
@@ -582,7 +583,7 @@ begin
                SkipFirst2 <= SkipFirst2(0) & '0';   -- skip first two results to allow overlap
             end if;
 
-            if (ValidOut) then
+            if (ValidOut) then      -- Accumulate indexOut over time to smooth
                if (AbeforeB) then
                   IndexAcc <= resize(IndexAcc - to_sfixed('0' & std_logic_vector(IndexOut), 1, -7), IndexAcc);
                else
@@ -590,7 +591,7 @@ begin
                end if;
             end if;
 
-            if (IndexAcc >= 0) then
+            if (IndexAcc >= 0) then -- If saturated, reset
                if (IndexAcc > 127) and (AbeforeB = '0') then   -- if DiffDelay is on wrong end of offset, the FFT can appear inverted
                   IndexAcc <= to_sfixed(0.0, IndexAcc);
                else
@@ -603,6 +604,9 @@ begin
                   IndexAbs <= unsigned('0' & (not (std_logic_vector(IndexAcc(6 downto 0)))));
                end if;
             end if;
+
+            Index <= to_slv(IndexAcc(7 downto 0));
+
          end if;
       end if;
    end process MaxProcess;

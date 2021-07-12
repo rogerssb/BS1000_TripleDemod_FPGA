@@ -103,7 +103,7 @@ ENTITY CmplPhsDetTb IS
          video1InSelect,
          video1OutSelect,
          video0OutSelect   : OUT std_logic_vector(1 downto 0);
-         VidSel            : OUT std_logic_vector(2 downto 0);
+--         VidSel            : OUT std_logic_vector(2 downto 0);
          dac0_d,
          dac1_d            : OUT std_logic_vector(13 downto 0);
 
@@ -262,10 +262,10 @@ ARCHITECTURE rtl OF CmplPhsDetTb IS
          aclk : IN STD_LOGIC;
          aresetn  : IN STD_LOGIC;
          s_axis_data_tvalid   : IN STD_LOGIC;
-         s_axis_data_tdata    : IN STD_LOGIC_VECTOR(95 DOWNTO 0);
+         s_axis_data_tdata    : IN STD_LOGIC_VECTOR(47 DOWNTO 0);
          s_axis_data_tready,
          m_axis_data_tvalid   : OUT STD_LOGIC;
-         m_axis_data_tdata    : OUT STD_LOGIC_VECTOR(95 DOWNTO 0)
+         m_axis_data_tdata    : OUT STD_LOGIC_VECTOR(47 DOWNTO 0)
       );
    END COMPONENT;
 
@@ -285,48 +285,62 @@ ARCHITECTURE rtl OF CmplPhsDetTb IS
    END COMPONENT gng;
 
    COMPONENT DigitalCombiner
-      GENERIC (
-         useVio   : boolean := false
-      );
       PORT(
-         clk,
-         clk4x,
-         reset,
-         ce,
-         cs,
-         wr0, wr1, wr2, wr3,
-         busClk            : IN  std_logic;
-         re1In,
-         im1In,
-         re2In,
-         im2In             : IN  float_1_18;
-         ch1agc,
-         ch2agc            : IN  SLV12;
-         addr              : IN  std_logic_vector(12 downto 0);
-         dataIn            : IN  SLV32;
-         dataOut           : OUT SLV32;
-         maximagout,
-         maxrealout,
-         minimagout,
-         minrealout,
-         imagout,
-         realout,
-         agc1_gt_agc3,
-         gainoutmax,
-         gainoutmin,
-         phase_detect      : OUT SLV18;
-         agc1_gt_agc1      : OUT SLV12;
-         agc1_gt_agc2,
-         realxord,
-         imagxord,
-         locked,
-         ifBS_n            : OUT STD_LOGIC;
-         imaglock,
-         reallock          : OUT STD_LOGIC_VECTOR(12 DOWNTO 0);
-         lag_out           : OUT SLV32;
-         nco_control_out   : OUT STD_LOGIC_VECTOR(21 DOWNTO 0)
+      clk,
+      clk2x,
+      clk4x,
+      reset,
+      ce,
+      cs,
+      wr0, wr1, wr2, wr3,
+      busClk            : IN  std_logic;
+      re1In,
+      im1In,
+      re2In,
+      im2In             : IN  float_1_18;
+      ch1agc,
+      ch2agc            : IN  SLV12;
+      addr              : IN  std_logic_vector(12 downto 0);
+      dataIn            : IN  SLV32;
+      dataOut           : OUT SLV32;
+      maximagout,
+      maxrealout,
+      minimagout,
+      minrealout,
+      imagout,
+      realout,
+      ifOut,
+      agc1_gt_agc3,
+      gainoutmax,
+      gainoutmin,
+      phase_detect      : OUT SLV18;
+      agc1_gt_agc1      : OUT SLV12;
+      agc1_gt_agc2,
+      realxord,
+      imagxord,
+      combinerEn,
+      locked,
+      ifBS_n            : OUT STD_LOGIC;
+      imaglock,
+      reallock          : OUT STD_LOGIC_VECTOR(12 DOWNTO 0);
+      lag_out           : OUT SLV32;
+      nco_control_out   : OUT STD_LOGIC_VECTOR(21 DOWNTO 0)
       );
    END COMPONENT DigitalCombiner;
+
+   COMPONENT dualQuadDdc
+      PORT(
+         clk,
+         reset             : IN  std_logic;
+         ifIn1,
+         ifIn2             : IN  SLV18;
+         iOut1,
+         qOut1,
+         iOut2,
+         qOut2             : OUT SLV18;
+         syncOut           : OUT std_logic
+      );
+   END COMPONENT dualQuadDdc;
 
    -- Constants
    constant Plus1             : Float_1_18 := to_sfixed( 0.707 / 4.0, 0, -17);
@@ -349,7 +363,8 @@ ARCHITECTURE rtl OF CmplPhsDetTb IS
    signal   lag_out           : SLV32;
    signal   SweepLimit        : STD_LOGIC_VECTOR(13 DOWNTO 0);
    signal   phase_detect,
-            SweepRate         : SLV18;
+            SweepRate,
+            ifOut             : SLV18;
    signal   Locked,
             PrnDataI,
             PrnDataQ,
@@ -417,8 +432,10 @@ ARCHITECTURE rtl OF CmplPhsDetTb IS
    signal   Filtered1Noise,
             Filtered2Noise : sfixed(2 downto -15);
    signal   DataRate       : integer range 0 to 127;
-   signal   FirDataIn,
-            FirDataOut     : std_logic_vector(95 downto 0);
+   signal   FirDataIn1,
+            FirDataOut1,
+            FirDataIn2,
+            FirDataOut2    : std_logic_vector(47 downto 0);
    signal   NcoData,
             AM_Sines1,
             AM_Sines2,
@@ -466,7 +483,7 @@ ARCHITECTURE rtl OF CmplPhsDetTb IS
 
    attribute IOSTANDARD    : string;
    attribute IOSTANDARD of spiCSn, spiDataIn, spiDataOut, spiClk,
-            pll0_OUT1, pll1_OUT1, video0InSelect, video1InSelect, video1OutSelect, video0OutSelect, VidSel,
+            pll0_OUT1, pll1_OUT1, video0InSelect, video1InSelect, video1OutSelect, video0OutSelect,-- VidSel,
             ch0ClkOut, ch0DataOut, ch1ClkOut, ch1DataOut, ch2ClkOut, ch2DataOut, ch3ClkOut, ch3DataOut,
             amAdcDataIn, amAdcClk, amAdcCSn, AM_Mod1, AM_Mod2, AM_Sines1, AM_Sines2,
             Sw50_Ohm, pll0_REF, pll1_REF,
@@ -543,19 +560,26 @@ ClkGen : if (in_simulation) generate
 
    LagCoef     <= 18x"00C80";
    LeadCoef    <= 18x"0A000";
-   NoiseGain1  <= 18x"00000";
-   NoiseGain2  <= 18x"00000";
+   NoiseGain1  <= 18x"0a1e8"; -- set 0 C/N
+   NoiseGain2  <= 18x"0a1e8";
    Ch1Agc      <= 12x"000";
    Ch2Agc      <= 12x"000";
    SweepLimit  <= 14x"16A8";
    SweepRate   <= 18x"00064";
-   PhaseInc    <= 32x"0000_0000";
    Delay       <=  8x"20";
-   AM_Amp1     <= 18x"1_0000";
-   AM_Freq1    <= 32x"0000_1000";
-   AM_Amp2     <= 18x"1_0000";
-   AM_Freq2    <= 32x"0000_1000";
-   VioBits     <= 32x"6570_6601";
+   AM_Amp1     <= 18x"0_0000";
+   AM_Freq1    <= 32x"0000_0000";
+   AM_Amp2     <= 18x"0_0000";
+   AM_Freq2    <= 32x"0000_0000";
+   VioBits     <= 32x"0570_6680";
+
+   process begin
+      PhaseInc    <= 32x"0000_0000";
+      for k in 0 to 13 loop
+         wait for 200 us;
+         PhaseInc <= std_logic_vector(unsigned(PhaseInc) + 920350);
+      end loop;
+   end process;
 
 else generate
    Clk            <= MonClk;
@@ -765,25 +789,36 @@ end generate;
     data_out   => Noise2
 );
 
-   FirDataIn <= 6x"0" & to_slv(Noise1Gained) & 6x"0" & to_slv(Noise2Gained) &
-                6x"0" & to_slv(DataI) & 6x"0" & to_slv(DataQ);
+   FirDataIn1 <= 6x"0" & to_slv(Noise1Gained) & 6x"0" & to_slv(Noise2Gained);
+   FirDataIn2 <= 6x"0" & to_slv(DataI) & 6x"0" & to_slv(DataQ);
 
-   Lowpass : Lowpass66
+   Lowpass1 : Lowpass66
       PORT MAP (
-         aclk                 => ClkOver2,
+         aclk                 => Clk2x,
          aresetn              => not Reset,
          s_axis_data_tvalid   => '1',
-         s_axis_data_tdata    => FirDataIn,
+         s_axis_data_tdata    => FirDataIn1,
          s_axis_data_tready   => open,
          m_axis_data_tvalid   => FirDataValid,
-         m_axis_data_tdata    => FirDataOut
+         m_axis_data_tdata    => FirDataOut1
+   );
+
+   Lowpass2 : Lowpass66
+      PORT MAP (
+         aclk                 => Clk2x,
+         aresetn              => not Reset,
+         s_axis_data_tvalid   => '1',
+         s_axis_data_tdata    => FirDataIn2,
+         s_axis_data_tready   => open,
+         m_axis_data_tvalid   => open,
+         m_axis_data_tdata    => FirDataOut2
    );
 
    -- allow filter to settle to avoid unknowns in loop filters
-   FilteredI  <= to_sfixed(FirDataOut(41 downto 24),   FILT_OUTS);
-   FilteredQ  <= to_sfixed(FirDataOut(17 downto 00),   FILT_OUTS);
-   Filtered1Noise  <= to_sfixed(FirDataOut(89 downto 72),   Filtered1Noise);
-   Filtered2Noise  <= to_sfixed(FirDataOut(65 downto 48),   Filtered1Noise);
+   Filtered1Noise  <= to_sfixed(FirDataOut1(41 downto 24),   Filtered1Noise);
+   Filtered2Noise  <= to_sfixed(FirDataOut1(17 downto 00),   Filtered1Noise);
+   FilteredI  <= to_sfixed(FirDataOut2(41 downto 24),   FILT_OUTS);
+   FilteredQ  <= to_sfixed(FirDataOut2(17 downto 00),   FILT_OUTS);
 
    -- generate the AM modulation frequencies
    AM_NCO1 : OffsetNCO
@@ -895,7 +930,7 @@ end generate;
    -- COMB_LEAD_COEF          13'bx_xxxx_xxxx_01xx
    -- COMB_SWEEP_RATE         13'bx_xxxx_xxxx_10xx
    -- COMB_SWEEP_LIMIT        13'bx_xxxx_xxxx_110x
-   -- COMP_OPTIONS            13'bx_xxxx_xxxx_111x
+   -- COMB_OPTIONS            13'bx_xxxx_xxxx_111x
    -- COMB_REF_LEVEL          13'bx_xxxx_xxx1_00xx
    mcuProcess : process (ClkOver2)
    begin
@@ -921,7 +956,7 @@ end generate;
                      DC_DataIn <= 18x"000" & SweepLimit;
                      TwoWords  <= '0';
                   when 13x"0E" =>
-                     DC_DataIn <= 7x"00" & IF_BS_n & '0' & VioBits(22 downto 20) & '0' & VioBits(26 downto 24) & 16x"0000";
+                     DC_DataIn <= 7x"08" & IF_BS_n & '0' & VioBits(22 downto 20) & '0' & VioBits(26 downto 24) & 16x"0000";
                      TwoWords  <= '0';
                   when others =>
                      DC_DataIn <= 14x"0000" & to_slv(to_sfixed(0.01, 0, -17));
@@ -956,11 +991,9 @@ end generate;
    end process mcuProcess;
 
    DigitalCombiner_u : DigitalCombiner
-      GENERIC MAP (
-         useVIO         => false
-      )
       PORT MAP (
          clk            => ClkOver2,
+         clk2x          => Clk,
          clk4x          => Clk2x,
          reset          => Reset,
          ce             => '1',
@@ -981,6 +1014,8 @@ end generate;
          ch2agc         => Ch2Agc,
          realout        => ICmb,
          imagout        => QCmb,
+         ifOut          => ifOut,
+         combinerEn     => open,
          reallock       => ILock,
          imaglock       => QLock,
          locked         => PhsDetLocked,
@@ -1077,6 +1112,19 @@ end generate;
       DdsReset    => DdsReset,
       DdsUpdate   => DdsIO_Update
    );
+
+   ddc : dualQuadDdc    -- Down convert incoming IF to baseband, ignore other channel
+      port map (
+         clk      => clk,
+         reset    => reset,
+         ifIn1    => ifOut,
+         ifIn2    => ifOut,
+         syncOut  => open,
+         iOut1    => open,
+         qOut1    => open,
+         iOut2    => open,
+         qOut2    => open
+      );
 
 END rtl;
 

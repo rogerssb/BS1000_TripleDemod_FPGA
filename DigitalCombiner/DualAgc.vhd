@@ -93,7 +93,14 @@ ARCHITECTURE rtl OF DualAgc IS
    signal      AgcAddr        : sfixed(10 downto 0);
    signal      RomAddr        : natural range 0 to 1023;
 
+   signal      GainIntSlv     : SLV18;
+   attribute MARK_DEBUG : string;
+   attribute MARK_DEBUG of GainIntSlv : signal is "TRUE";
+
+
 BEGIN
+
+   GainIntSlv <= to_slv(GainInt);
 
    ShiftAttack <= SumSq sra to_integer(unsigned(Attack));
    ShiftDecay  <= SumSq sra to_integer(unsigned(Decay));

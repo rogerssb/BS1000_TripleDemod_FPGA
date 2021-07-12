@@ -649,7 +649,7 @@
     `define COMB_LEAD_COEF          13'bx_xxxx_xxx0_01xx
     `define COMB_SWEEP_RATE         13'bx_xxxx_xxx0_10xx
     `define COMB_SWEEP_LIMIT        13'bx_xxxx_xxx0_110x
-    `define COMP_OPTIONS            13'bx_xxxx_xxx0_111x
+    `define COMB_OPTIONS            13'bx_xxxx_xxx0_111x
     `define COMB_REF_LEVEL          13'bx_xxxx_xxx1_00xx
 
 // Framesync subsystem registers
