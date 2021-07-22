@@ -14,27 +14,27 @@ module hbf_fft_quaddwncnv (
   output [19-1:0] iout,
   output [16-1:0] qout
 );
+  wire [14-1:0] muxq_y_net;
+  wire [1-1:0] counter_op_net;
+  wire [14-1:0] cmult1_p_net;
+  wire [14-1:0] odd_sample_q_net;
+  wire [14-1:0] delay_q_net;
+  wire [14-1:0] even_sample_q_net;
   wire [19-1:0] fir_compiler_7_2_m_axis_data_tdata_real_net;
-  wire [14-1:0] datain_net;
   wire [16-1:0] cmult2_p_net;
+  wire [14-1:0] datain_net;
+  wire [1-1:0] spectinv_net;
   wire src_clk_net;
   wire src_ce_net;
   wire clk_net;
   wire ce_net;
-  wire [1-1:0] spectinv_net;
   wire [14-1:0] cmult_p_net;
-  wire [1-1:0] counter_op_net;
-  wire [14-1:0] cmult1_p_net;
-  wire [14-1:0] odd_sample_q_net;
-  wire [14-1:0] even_sample_q_net;
-  wire [14-1:0] muxq_y_net;
   wire [1-1:0] expression_dout_net;
-  wire [14-1:0] delay_q_net;
-  wire [14-1:0] register1_q_net;
   wire fir_compiler_7_2_s_axis_data_tready_net;
   wire fir_compiler_7_2_m_axis_data_tvalid_net;
-  wire [14-1:0] register_q_net;
   wire [14-1:0] muxi_y_net;
+  wire [14-1:0] register_q_net;
+  wire [14-1:0] register1_q_net;
   assign iout = fir_compiler_7_2_m_axis_data_tdata_real_net;
   assign qout = cmult2_p_net;
   assign datain_net = data;
@@ -283,17 +283,17 @@ module hbf_fft_windmult (
   output [18-1:0] outreal,
   output [18-1:0] outimag
 );
-  wire [16-1:0] cmult2_p_net;
-  wire [18-1:0] mult_p_net;
-  wire [16-1:0] window_net;
   wire [1-1:0] register2_q_net;
+  wire [18-1:0] mult_p_net;
   wire [18-1:0] mult1_p_net;
   wire [1-1:0] mcode_enout_net;
   wire [19-1:0] fir_compiler_7_2_m_axis_data_tdata_real_net;
+  wire [16-1:0] cmult2_p_net;
+  wire [16-1:0] window_net;
   wire clk_net;
   wire ce_net;
-  wire [1-1:0] register1_q_net;
   wire [1-1:0] register_q_net;
+  wire [1-1:0] register1_q_net;
   assign outwe = register2_q_net;
   assign outreal = mult_p_net;
   assign outimag = mult1_p_net;
@@ -421,24 +421,24 @@ module hbf_fft_twopower1 (
   input ce_2,
   output [13-1:0] out1
 );
-  wire [1-1:0] logical_y_net;
-  wire ce_net;
-  wire clk_net;
-  wire [5-1:0] nfft_net;
   wire [13-1:0] mux3_y_net;
+  wire [5-1:0] nfft_net;
+  wire [1-1:0] logical_y_net;
+  wire clk_net;
+  wire ce_net;
   wire [13-1:0] constant_op_net;
-  wire [13-1:0] shift_op_net;
-  wire [1-1:0] slice1_y_net;
-  wire [13-1:0] mux2_y_net;
-  wire [13-1:0] shift2_op_net;
   wire [13-1:0] mux_y_net;
-  wire [13-1:0] mux1_y_net;
-  wire [1-1:0] slice2_y_net;
-  wire [5-1:0] register_q_net;
-  wire [1-1:0] slice3_y_net;
-  wire [13-1:0] shift1_op_net;
   wire [1-1:0] slice0_y_net;
+  wire [13-1:0] shift_op_net;
+  wire [13-1:0] mux1_y_net;
+  wire [1-1:0] slice1_y_net;
+  wire [13-1:0] shift1_op_net;
+  wire [13-1:0] mux2_y_net;
+  wire [1-1:0] slice2_y_net;
+  wire [13-1:0] shift2_op_net;
+  wire [1-1:0] slice3_y_net;
   wire [13-1:0] shift3_op_net;
+  wire [5-1:0] register_q_net;
   assign out1 = mux3_y_net;
   assign nfft_net = in;
   assign logical_y_net = en;
@@ -579,14 +579,14 @@ module hbf_fft_nfftcounter (
   output [13-1:0] k,
   output [13-1:0] n
 );
-  wire [1-1:0] logical_y_net;
-  wire [5-1:0] nfft_net;
-  wire ce_net;
-  wire [13-1:0] mcode_kindexout_net;
-  wire [1-1:0] register2_q_net;
   wire [1-1:0] mcode_enout_net;
-  wire clk_net;
+  wire [13-1:0] mcode_kindexout_net;
   wire [13-1:0] mux3_y_net;
+  wire [5-1:0] nfft_net;
+  wire [1-1:0] logical_y_net;
+  wire [1-1:0] register2_q_net;
+  wire clk_net;
+  wire ce_net;
   assign en = mcode_enout_net;
   assign k = mcode_kindexout_net;
   assign n = mux3_y_net;
@@ -620,13 +620,13 @@ module hbf_fft_strobe (
   input ce_2,
   output [1-1:0] out1
 );
-  wire clk_net;
-  wire [1-1:0] inverter_op_net;
-  wire [1-1:0] nfftwe_net;
-  wire [1-1:0] register4_q_net;
-  wire ce_net;
-  wire [1-1:0] register_q_net;
   wire [1-1:0] logical_y_net;
+  wire [1-1:0] nfftwe_net;
+  wire clk_net;
+  wire ce_net;
+  wire [1-1:0] inverter_op_net;
+  wire [1-1:0] register4_q_net;
+  wire [1-1:0] register_q_net;
   wire [1-1:0] register3_q_net;
   assign out1 = logical_y_net;
   assign nfftwe_net = in1;
@@ -699,7 +699,6 @@ module hbf_fft_struct (
   input ce_1,
   input clk_2,
   input ce_2,
-  output [1-1:0] ce2,
   output [1-1:0] fifofull_i,
   output [1-1:0] fifofull_q,
   output [19-1:0] idata,
@@ -710,63 +709,63 @@ module hbf_fft_struct (
   output [1-1:0] fft_mag_m_axis_data_tlast,
   output [1-1:0] fft_mag_m_axis_dout_tvalid,
   output [16-1:0] fft_mag_m_axis_tdata_real,
-  output [13-1:0] index_k
+  output [13-1:0] index_k,
+  output [1-1:0] ce2
 );
-  wire [1-1:0] cordic_6_0_m_axis_dout_tlast_net;
-  wire [16-1:0] window_net;
-  wire [1-1:0] spectinv_net;
-  wire [5-1:0] nfft_net;
-  wire src_ce_net;
-  wire [1-1:0] nfftwe_net;
+  wire [14-1:0] datain_net;
+  wire [1-1:0] fifoi_full_net;
   wire [1-1:0] fifoq_full_net;
+  wire [19-1:0] fir_compiler_7_2_m_axis_data_tdata_real_net;
+  wire [13-1:0] mux3_y_net;
+  wire [5-1:0] nfft_net;
+  wire [1-1:0] nfftwe_net;
+  wire [16-1:0] cmult2_p_net;
   wire [1-1:0] rstfifo_net;
   wire [12-1:0] scalesch_net;
+  wire [1-1:0] spectinv_net;
+  wire [1-1:0] startn_net;
+  wire [16-1:0] window_net;
   wire [12-1:0] xndelay_q_net;
-  wire [14-1:0] datain_net;
-  wire [13-1:0] mcode_kindexout_net;
-  wire src_clk_net;
-  wire [1-1:0] clock_enable_probe_q_net;
-  wire [1-1:0] fifoi_full_net;
-  wire [13-1:0] mux3_y_net;
-  wire [16-1:0] cmult2_p_net;
+  wire [1-1:0] register_q_net;
+  wire [1-1:0] cordic_6_0_m_axis_dout_tlast_net;
+  wire [1-1:0] cordic_6_0_m_axis_dout_tvalid_net;
   wire [16-1:0] cordic_6_0_m_axis_dout_tdata_real_net;
-  wire [19-1:0] fir_compiler_7_2_m_axis_data_tdata_real_net;
+  wire [13-1:0] mcode_kindexout_net;
+  wire [1-1:0] clock_enable_probe_q_net;
+  wire src_clk_net;
+  wire src_ce_net;
   wire clk_net;
   wire ce_net;
-  wire [18-1:0] mult1_p_net;
   wire [1-1:0] register2_q_net;
+  wire [18-1:0] mult_p_net;
+  wire [18-1:0] mult1_p_net;
   wire [1-1:0] mcode_enout_net;
   wire [1-1:0] logical_y_net_x0;
-  wire [1-1:0] register_q_net;
-  wire [1-1:0] cordic_6_0_m_axis_dout_tvalid_net;
-  wire [18-1:0] mult_p_net;
-  wire [1-1:0] startn_net;
-  wire [1-1:0] constant_op_net;
-  wire [18-1:0] fast_fourier_transform_9_0_m_axis_data_tdata_xn_im_net;
-  wire [1-1:0] constant4_op_net;
   wire [1-1:0] register2_q_net_x0;
-  wire fast_fourier_transform_9_0_m_axis_data_tvalid_net;
   wire [17-1:0] bitbasher_a_net;
   wire [18-1:0] fast_fourier_transform_9_0_m_axis_data_tdata_xn_re_net;
   wire [17-1:0] bitbasher1_a_net;
+  wire [18-1:0] fast_fourier_transform_9_0_m_axis_data_tdata_xn_im_net;
   wire [16-1:0] cordic_6_0_m_axis_dout_tdata_phase_net;
+  wire fast_fourier_transform_9_0_m_axis_data_tvalid_net;
   wire fast_fourier_transform_9_0_m_axis_data_tlast_net;
+  wire [1-1:0] constant_op_net;
+  wire [1-1:0] constant4_op_net;
+  wire [1-1:0] constant7_op_net;
   wire [18-1:0] fifoi_dout_net;
   wire fifoi_empty_net;
   wire fast_fourier_transform_9_0_s_axis_data_tready_net;
-  wire [1-1:0] constant7_op_net;
-  wire fast_fourier_transform_9_0_event_tlast_unexpected_net;
-  wire fast_fourier_transform_9_0_event_data_in_channel_halt_net;
-  wire [12-1:0] fast_fourier_transform_9_0_m_axis_data_tuser_xk_index_net;
   wire [18-1:0] fifoq_dout_net;
-  wire fast_fourier_transform_9_0_s_axis_config_tready_net;
-  wire [1-1:0] logical_y_net;
   wire fifoq_empty_net;
-  wire fast_fourier_transform_9_0_event_tlast_missing_net;
-  wire invfifoiempty_op_net;
+  wire fast_fourier_transform_9_0_s_axis_config_tready_net;
+  wire [12-1:0] fast_fourier_transform_9_0_m_axis_data_tuser_xk_index_net;
   wire fast_fourier_transform_9_0_event_frame_started_net;
+  wire fast_fourier_transform_9_0_event_tlast_unexpected_net;
+  wire fast_fourier_transform_9_0_event_tlast_missing_net;
+  wire fast_fourier_transform_9_0_event_data_in_channel_halt_net;
+  wire invfifoiempty_op_net;
+  wire [1-1:0] logical_y_net;
   wire [1-1:0] register1_q_net;
-  assign ce2 = clock_enable_probe_q_net;
   assign datain_net = datain;
   assign fifofull_i = fifoi_full_net;
   assign fifofull_q = fifoq_full_net;
@@ -786,6 +785,7 @@ module hbf_fft_struct (
   assign fft_mag_m_axis_dout_tvalid = cordic_6_0_m_axis_dout_tvalid_net;
   assign fft_mag_m_axis_tdata_real = cordic_6_0_m_axis_dout_tdata_real_net;
   assign index_k = mcode_kindexout_net;
+  assign ce2 = clock_enable_probe_q_net;
   assign src_clk_net = clk_1;
   assign src_ce_net = ce_1;
   assign clk_net = clk_2;
@@ -882,7 +882,7 @@ module hbf_fft_struct (
     .op(constant7_op_net)
   );
   hbf_fft_xlfifogen #(
-    .core_name0("hbf_fft_fifo_generator_v13_1_i0"),
+    .core_name0("hbf_fft_fifo_generator_v13_0_i0"),
     .data_count_width(4),
     .data_width(18),
     .extra_registers(0),
@@ -905,7 +905,7 @@ module hbf_fft_struct (
     .full(fifoi_full_net)
   );
   hbf_fft_xlfifogen #(
-    .core_name0("hbf_fft_fifo_generator_v13_1_i0"),
+    .core_name0("hbf_fft_fifo_generator_v13_0_i0"),
     .data_count_width(4),
     .data_width(18),
     .extra_registers(0),
@@ -1045,7 +1045,7 @@ module hbf_fft_default_clock_driver (
 endmodule
 `timescale 1 ns / 10 ps
 // Generated from Simulink block 
-(* core_generation_info = "hbf_fft,sysgen_core_2016_4,{,compilation=IP Catalog,block_icon_display=Default,family=kintex7,part=xc7k160t,speed=-3,package=fbg676,synthesis_language=verilog,hdl_library=xil_defaultlib,synthesis_strategy=Vivado Synthesis Defaults,implementation_strategy=Vivado Implementation Defaults,testbench=0,interface_doc=1,ce_clr=0,clock_period=10,system_simulink_period=1,waveform_viewer=1,axilite_interface=0,ip_catalog_plugin=0,hwcosim_burst_mode=0,simulation_time=240300,bitbasher=2,ceprobe=1,cmult=3,constant=4,cordic_v6_0=1,counter=1,delay=2,dsamp=2,expr=1,fifo=2,fir_compiler_v7_2=1,inv=2,logical=2,mcode=1,mult=2,mux=6,register=12,shift=4,slice=4,xfft_v9_0=1,}" *)
+(* core_generation_info = "hbf_fft,sysgen_core_2015_4,{,compilation=IP Catalog,block_icon_display=Default,family=kintex7,part=xc7k160t,speed=-3,package=fbg676,synthesis_language=verilog,hdl_library=xil_defaultlib,synthesis_strategy=Vivado Synthesis Defaults,implementation_strategy=Vivado Implementation Defaults,testbench=0,interface_doc=1,ce_clr=0,clock_period=10,system_simulink_period=1,waveform_viewer=1,axilite_interface=0,ip_catalog_plugin=0,hwcosim_burst_mode=0,simulation_time=240300,bitbasher=2,ceprobe=1,cmult=3,constant=4,cordic_v6_0=1,counter=1,delay=2,dsamp=2,expr=1,fifo=2,fir_compiler_v7_2=1,inv=2,logical=2,mcode=1,mult=2,mux=6,register=12,shift=4,slice=4,xfft_v9_0=1,}" *)
 module hbf_fft (
   input [14-1:0] datain,
   input [5-1:0] nfft,
@@ -1056,7 +1056,6 @@ module hbf_fft (
   input [1-1:0] startn,
   input [16-1:0] window,
   input clk,
-  output [1-1:0] ce2,
   output [1-1:0] fifofull_i,
   output [1-1:0] fifofull_q,
   output [19-1:0] idata,
@@ -1067,12 +1066,13 @@ module hbf_fft (
   output [1-1:0] fft_mag_m_axis_data_tlast,
   output [1-1:0] fft_mag_m_axis_dout_tvalid,
   output [16-1:0] fft_mag_m_axis_tdata_real,
-  output [13-1:0] index_k
+  output [13-1:0] index_k,
+  output [1-1:0] ce2
 );
   wire clk_1_net;
+  wire ce_1_net;
   wire clk_2_net;
   wire ce_2_net;
-  wire ce_1_net;
   hbf_fft_default_clock_driver hbf_fft_default_clock_driver (
     .hbf_fft_sysclk(clk),
     .hbf_fft_sysce(1'b1),
@@ -1095,7 +1095,6 @@ module hbf_fft (
     .ce_1(ce_1_net),
     .clk_2(clk_2_net),
     .ce_2(ce_2_net),
-    .ce2(ce2),
     .fifofull_i(fifofull_i),
     .fifofull_q(fifofull_q),
     .idata(idata),
@@ -1106,6 +1105,7 @@ module hbf_fft (
     .fft_mag_m_axis_data_tlast(fft_mag_m_axis_data_tlast),
     .fft_mag_m_axis_dout_tvalid(fft_mag_m_axis_dout_tvalid),
     .fft_mag_m_axis_tdata_real(fft_mag_m_axis_tdata_real),
-    .index_k(index_k)
+    .index_k(index_k),
+    .ce2(ce2)
   );
 endmodule

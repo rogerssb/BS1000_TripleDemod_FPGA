@@ -515,8 +515,6 @@
         `define CandD_SRC_PCMTRELLIS    4'b0010
         `define CandD_SRC_MULTIH        4'b0011
         `define CandD_SRC_STC           4'b0100
-        // caution, pngen and framer both use 5
-        `define CandD_SRC_PNGEN         4'b0101
         `define CandD_SRC_FRAMER        4'b0101
         `define CandD_SRC_LDPC          4'b0110
         `define CandD_SRC_DQM           4'b0111
@@ -614,43 +612,6 @@
         `define BERT_SRC_DEC2_CH1    4'b1101
         `define BERT_SRC_DEC3_CH0    4'b1110
         `define BERT_SRC_DEC3_CH1    4'b1111
-
-// PN Generator subsystem registers start at 0xC00
-`define PNGEN_SPACE             13'b0_1100_0000_xxxx
-    `define PNGEN_POLY              13'bx_xxxx_xxxx_00xx
-    `define PNGEN_RATE              13'bx_xxxx_xxxx_01xx
-    `define PNGEN_PCM_MODE          13'bx_xxxx_xxxx_10xx
-        `define PNGEN_PCM_NRZL          4'b0000
-        `define PNGEN_PCM_NRZM          4'b0001
-        `define PNGEN_PCM_NRZS          4'b0010
-        `define PNGEN_PCM_BIPL          4'b0100
-        `define PNGEN_PCM_BIPM          4'b0101
-        `define PNGEN_PCM_BIPS          4'b0110
-        `define PNGEN_PCM_DMM           4'b1000
-        `define PNGEN_PCM_DMS           4'b1001
-        `define PNGEN_PCM_MDMM          4'b1010
-        `define PNGEN_PCM_MDMS          4'b1011
-        `define PNGEN_FEC_OFF           2'b00
-        `define PNGEN_FEC_CONV          2'b01
-        `define PNGEN_FEC_LDPC          2'b10
-        `define PNGEN_LDPC_R1_2         2'b00
-        `define PNGEN_LDPC_R2_3         2'b01
-        //`define PNGEN_LDPC_R3_4         2'b10
-        `define PNGEN_LDPC_R4_5         2'b10
-        `define PNGEN_LDPC_L1024        1'b0
-        `define PNGEN_LDPC_L4096        1'b1
-        `define PNGEN_LDPC_RND_OFF      2'b00
-        `define PNGEN_LDPC_RND_CCSDS    2'b01
-        `define PNGEN_LDPC_RND_IRIG     2'b10
-
-// Combiner subsystem registers start at x0C40
-`define COMBINER_SPACE          13'b0_1100_010x_xxxx
-    `define COMB_LAG_COEF           13'bx_xxxx_xxx0_00xx
-    `define COMB_LEAD_COEF          13'bx_xxxx_xxx0_01xx
-    `define COMB_SWEEP_RATE         13'bx_xxxx_xxx0_10xx
-    `define COMB_SWEEP_LIMIT        13'bx_xxxx_xxx0_110x
-    `define COMB_OPTIONS            13'bx_xxxx_xxx0_111x
-    `define COMB_REF_LEVEL          13'bx_xxxx_xxx1_00xx
 
 // Framesync subsystem registers
 `define FRAMER_SPACE            13'b0_0111_100x_xxxx

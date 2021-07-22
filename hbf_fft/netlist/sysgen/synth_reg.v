@@ -18,7 +18,7 @@
 //
 //-------------------------------------------------------------------
 
-/*`timescale 1 ns / 10 ps
+`timescale 1 ns / 10 ps
 module srl17e (clk, ce, d, q);
     parameter width = 16;
     parameter latency = 8;
@@ -51,84 +51,45 @@ module srl17e (clk, ce, d, q);
                 end
         end
     endgenerate
-endmodule */
-
-/////////////////////srlc33e implementation////////////////
-
-
-`timescale 1 ns / 10 ps
-module srlc33e (clk, ce, d, q);
-    parameter width = 16;
-    parameter latency = 8;
-    input clk, ce;
-    input [width-1:0] d;
-    output [width-1:0] q;
-    parameter signed [5:0] a = latency - 2;
-    wire[width - 1:0] #0.2 d_delayed;
-    wire[width - 1:0] srlc32_out;
-    genvar i;
-    assign d_delayed = d ;
-    generate
-      for(i=0; i<width; i=i+1)
-      begin:reg_array
-            if (latency > 1)
-                begin: has_2_latency
-                 SRLC32E u1 (.CLK(clk), .D(d_delayed[i]), .Q(srlc32_out[i]), .CE(ce), .A(a));
-                end
-            if (latency <= 1)
-                begin: has_1_latency
-                 assign srlc32_out[i] = d_delayed[i];
-                end
-            if (latency != 0)
-                begin: has_latency
-                 FDE u2 (.C(clk), .D(srlc32_out[i]), .Q(q[i]), .CE(ce));
-                end
-            if (latency == 0)
-                begin:has_0_latency
-                 assign q[i] = srlc32_out[i];
-                end
-        end
-    endgenerate
 endmodule
-
 module synth_reg (i, ce, clr, clk, o);
    parameter width  = 8;
    parameter latency  = 1;
    input[width - 1:0] i;
    input ce,clr,clk;
    output[width - 1:0] o;
-   parameter complete_num_srlc33es = latency/33;
-   parameter remaining_latency = latency%33;
-   parameter temp_num_srlc33es = (latency/33) + ((latency%33)?1:0);
-   parameter num_srlc33es = temp_num_srlc33es ? temp_num_srlc33es : 1;
-   wire [width - 1:0] z [0:num_srlc33es-1];
+   parameter complete_num_srl17es = latency/17;
+   parameter remaining_latency = latency%17;
+   parameter temp_num_srl17es = (latency/17) + ((latency%17)?1:0);
+   parameter num_srl17es = temp_num_srl17es ? temp_num_srl17es : 1;
+   wire [width - 1:0] z [0:num_srl17es-1];
    genvar t;
     generate
-      if (latency <= 33)
+      if (latency <= 17)
           begin:has_only_1
-              srlc33e #(width, latency) srlc33e_array0(.clk(clk), .ce(ce), .d(i), .q(o));
+              srl17e #(width, latency) srl17e_array0(.clk(clk), .ce(ce), .d(i), .q(o));
           end
      endgenerate
     generate
-     if (latency > 33)
+     if (latency > 17)
         begin:has_1
-             assign o = z[num_srlc33es-1];
-             srlc33e #(width, 33) srlc33e_array0(.clk(clk), .ce(ce), .d(i), .q(z[0]));
+             assign o = z[num_srl17es-1];
+             srl17e #(width, 17) srl17e_array0(.clk(clk), .ce(ce), .d(i), .q(z[0]));
         end
    endgenerate
    generate
-      if (latency > 33)
+      if (latency > 17)
           begin:more_than_1
-              for (t=1; t < complete_num_srlc33es; t=t+1)
+              for (t=1; t < complete_num_srl17es; t=t+1)
                 begin:left_complete_ones
-                   srlc33e #(width, 33) srlc33e_array(.clk(clk), .ce(ce), .d(z[t-1]), .q(z[t]));
+                   srl17e #(width, 17) srl17e_array(.clk(clk), .ce(ce), .d(z[t-1]), .q(z[t]));
                 end
           end
    endgenerate
    generate
-     if ((remaining_latency > 0) && (latency>33))
+     if ((remaining_latency > 0) && (latency>17))
           begin:remaining_ones
-             srlc33e #(width, (latency%33)) last_srlc33e (.clk(clk), .ce(ce), .d(z[num_srlc33es-2]), .q(z[num_srlc33es-1]));
+             srl17e #(width, (latency%17)) last_srl17e (.clk(clk), .ce(ce), .d(z[num_srl17es-2]), .q(z[num_srl17es-1]));
           end
    endgenerate
 endmodule
@@ -186,5 +147,3 @@ module synth_reg_reg (i, ce, clr, clk, o);
       end
    endgenerate
 endmodule
-
-// XSIP watermark, do not delete 67d7842dbbe25473c3c32b93c0da8047785f30d78e8a024de1b57352245f9689

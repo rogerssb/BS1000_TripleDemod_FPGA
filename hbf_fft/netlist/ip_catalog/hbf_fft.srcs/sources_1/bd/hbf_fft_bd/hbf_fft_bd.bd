@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<bd:repository xmlns:bd="http://www.xilinx.com/bd" bd:BoundaryCRC="0xF9866AF6696749D8" bd:bdsource="SYSGEN" bd:device="xc7k160tfbg676-3" bd:isValidated="true" bd:synthFlowMode="Hierarchical" bd:tool_version="2016.4" bd:top="hbf_fft_bd" bd:version="1.00.a">
+<bd:repository xmlns:bd="http://www.xilinx.com/bd" bd:synthFlowMode="None" bd:tool_version="2015.4" bd:top="hbf_fft_bd" bd:version="1.00.a">
 
   <spirit:component xmlns:spirit="http://www.spiritconsortium.org/XMLSchema/SPIRIT/1685-2009">
     <spirit:vendor>xilinx.com</spirit:vendor>
@@ -13,6 +13,20 @@
       </spirit:parameter>
     </spirit:parameters>
     <spirit:busInterfaces>
+      <spirit:busInterface>
+        <spirit:name>fft_mag_m_axis_data</spirit:name>
+        <spirit:master/>
+        <spirit:busType spirit:library="interface" spirit:name="axis" spirit:vendor="xilinx.com" spirit:version="1.0"/>
+        <spirit:abstractionType spirit:library="interface" spirit:name="axis_rtl" spirit:vendor="xilinx.com" spirit:version="1.0"/>
+        <spirit:parameters/>
+      </spirit:busInterface>
+      <spirit:busInterface>
+        <spirit:name>fft_mag_m_axis_dout</spirit:name>
+        <spirit:master/>
+        <spirit:busType spirit:library="interface" spirit:name="axis" spirit:vendor="xilinx.com" spirit:version="1.0"/>
+        <spirit:abstractionType spirit:library="interface" spirit:name="axis_rtl" spirit:vendor="xilinx.com" spirit:version="1.0"/>
+        <spirit:parameters/>
+      </spirit:busInterface>
       <spirit:busInterface>
         <spirit:name>DATA.CE2</spirit:name>
         <spirit:displayName>Data</spirit:displayName>
@@ -30,17 +44,7 @@
             </spirit:physicalPort>
           </spirit:portMap>
         </spirit:portMaps>
-        <spirit:parameters>
-          <spirit:parameter>
-            <spirit:name>LAYERED_METADATA</spirit:name>
-            <spirit:value>xilinx.com:interface:datatypes:1.0 {DATA {datatype {name {attribs {resolve_type immediate dependency {} format string minimum {} maximum {}} value {}} bitwidth {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 1} bitoffset {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 0} real {fixed {fractwidth {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 0} signed {attribs {resolve_type immediate dependency {} format bool minimum {} maximum {}} value false}}}}}}</spirit:value>
-            <spirit:vendorExtensions>
-              <bd:configElementInfos>
-                <bd:configElementInfo bd:valueSource="const_prop"/>
-              </bd:configElementInfos>
-            </spirit:vendorExtensions>
-          </spirit:parameter>
-        </spirit:parameters>
+        <spirit:parameters/>
       </spirit:busInterface>
       <spirit:busInterface>
         <spirit:name>CLK.CLK</spirit:name>
@@ -59,35 +63,7 @@
             </spirit:physicalPort>
           </spirit:portMap>
         </spirit:portMaps>
-        <spirit:parameters>
-          <spirit:parameter>
-            <spirit:name>FREQ_HZ</spirit:name>
-            <spirit:value>100000000</spirit:value>
-            <spirit:vendorExtensions>
-              <bd:configElementInfos>
-                <bd:configElementInfo bd:valueSource="default"/>
-              </bd:configElementInfos>
-            </spirit:vendorExtensions>
-          </spirit:parameter>
-          <spirit:parameter>
-            <spirit:name>PHASE</spirit:name>
-            <spirit:value>0.000</spirit:value>
-            <spirit:vendorExtensions>
-              <bd:configElementInfos>
-                <bd:configElementInfo bd:valueSource="default"/>
-              </bd:configElementInfos>
-            </spirit:vendorExtensions>
-          </spirit:parameter>
-          <spirit:parameter>
-            <spirit:name>CLK_DOMAIN</spirit:name>
-            <spirit:value>hbf_fft_bd_clk</spirit:value>
-            <spirit:vendorExtensions>
-              <bd:configElementInfos>
-                <bd:configElementInfo bd:valueSource="default"/>
-              </bd:configElementInfos>
-            </spirit:vendorExtensions>
-          </spirit:parameter>
-        </spirit:parameters>
+        <spirit:parameters/>
       </spirit:busInterface>
       <spirit:busInterface>
         <spirit:name>DATA.DATAIN</spirit:name>
@@ -106,17 +82,7 @@
             </spirit:physicalPort>
           </spirit:portMap>
         </spirit:portMaps>
-        <spirit:parameters>
-          <spirit:parameter>
-            <spirit:name>LAYERED_METADATA</spirit:name>
-            <spirit:value>undef</spirit:value>
-            <spirit:vendorExtensions>
-              <bd:configElementInfos>
-                <bd:configElementInfo bd:valueSource="default"/>
-              </bd:configElementInfos>
-            </spirit:vendorExtensions>
-          </spirit:parameter>
-        </spirit:parameters>
+        <spirit:parameters/>
       </spirit:busInterface>
       <spirit:busInterface>
         <spirit:name>DATA.FFT_AXIS_TUSER_XK_INDEX_D</spirit:name>
@@ -135,17 +101,7 @@
             </spirit:physicalPort>
           </spirit:portMap>
         </spirit:portMaps>
-        <spirit:parameters>
-          <spirit:parameter>
-            <spirit:name>LAYERED_METADATA</spirit:name>
-            <spirit:value>xilinx.com:interface:datatypes:1.0 {DATA {datatype {name {attribs {resolve_type immediate dependency {} format string minimum {} maximum {}} value {}} bitwidth {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 12} bitoffset {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 0} real {fixed {fractwidth {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 0} signed {attribs {resolve_type immediate dependency {} format bool minimum {} maximum {}} value false}}}}}}</spirit:value>
-            <spirit:vendorExtensions>
-              <bd:configElementInfos>
-                <bd:configElementInfo bd:valueSource="const_prop"/>
-              </bd:configElementInfos>
-            </spirit:vendorExtensions>
-          </spirit:parameter>
-        </spirit:parameters>
+        <spirit:parameters/>
       </spirit:busInterface>
       <spirit:busInterface>
         <spirit:name>DATA.FFT_MAG_FINISHED</spirit:name>
@@ -164,75 +120,7 @@
             </spirit:physicalPort>
           </spirit:portMap>
         </spirit:portMaps>
-        <spirit:parameters>
-          <spirit:parameter>
-            <spirit:name>LAYERED_METADATA</spirit:name>
-            <spirit:value>xilinx.com:interface:datatypes:1.0 {DATA {datatype {name {attribs {resolve_type immediate dependency {} format string minimum {} maximum {}} value {}} bitwidth {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 1} bitoffset {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 0} real {fixed {fractwidth {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 0} signed {attribs {resolve_type immediate dependency {} format bool minimum {} maximum {}} value false}}}}}}</spirit:value>
-            <spirit:vendorExtensions>
-              <bd:configElementInfos>
-                <bd:configElementInfo bd:valueSource="const_prop"/>
-              </bd:configElementInfos>
-            </spirit:vendorExtensions>
-          </spirit:parameter>
-        </spirit:parameters>
-      </spirit:busInterface>
-      <spirit:busInterface>
-        <spirit:name>DATA.FFT_MAG_M_AXIS_DATA_TLAST</spirit:name>
-        <spirit:displayName>Data</spirit:displayName>
-        <spirit:description>Data</spirit:description>
-        <spirit:busType spirit:library="signal" spirit:name="data" spirit:vendor="xilinx.com" spirit:version="1.0"/>
-        <spirit:abstractionType spirit:library="signal" spirit:name="data_rtl" spirit:vendor="xilinx.com" spirit:version="1.0"/>
-        <spirit:slave/>
-        <spirit:portMaps>
-          <spirit:portMap>
-            <spirit:logicalPort>
-              <spirit:name>DATA</spirit:name>
-            </spirit:logicalPort>
-            <spirit:physicalPort>
-              <spirit:name>fft_mag_m_axis_data_tlast</spirit:name>
-            </spirit:physicalPort>
-          </spirit:portMap>
-        </spirit:portMaps>
-        <spirit:parameters>
-          <spirit:parameter>
-            <spirit:name>LAYERED_METADATA</spirit:name>
-            <spirit:value>xilinx.com:interface:datatypes:1.0 {DATA {datatype {name {attribs {resolve_type immediate dependency {} format string minimum {} maximum {}} value {}} bitwidth {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 1} bitoffset {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 0} real {fixed {fractwidth {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 0} signed {attribs {resolve_type immediate dependency {} format bool minimum {} maximum {}} value false}}}}}}</spirit:value>
-            <spirit:vendorExtensions>
-              <bd:configElementInfos>
-                <bd:configElementInfo bd:valueSource="const_prop"/>
-              </bd:configElementInfos>
-            </spirit:vendorExtensions>
-          </spirit:parameter>
-        </spirit:parameters>
-      </spirit:busInterface>
-      <spirit:busInterface>
-        <spirit:name>DATA.FFT_MAG_M_AXIS_DOUT_TVALID</spirit:name>
-        <spirit:displayName>Data</spirit:displayName>
-        <spirit:description>Data</spirit:description>
-        <spirit:busType spirit:library="signal" spirit:name="data" spirit:vendor="xilinx.com" spirit:version="1.0"/>
-        <spirit:abstractionType spirit:library="signal" spirit:name="data_rtl" spirit:vendor="xilinx.com" spirit:version="1.0"/>
-        <spirit:slave/>
-        <spirit:portMaps>
-          <spirit:portMap>
-            <spirit:logicalPort>
-              <spirit:name>DATA</spirit:name>
-            </spirit:logicalPort>
-            <spirit:physicalPort>
-              <spirit:name>fft_mag_m_axis_dout_tvalid</spirit:name>
-            </spirit:physicalPort>
-          </spirit:portMap>
-        </spirit:portMaps>
-        <spirit:parameters>
-          <spirit:parameter>
-            <spirit:name>LAYERED_METADATA</spirit:name>
-            <spirit:value>xilinx.com:interface:datatypes:1.0 {DATA {datatype {name {attribs {resolve_type immediate dependency {} format string minimum {} maximum {}} value {}} bitwidth {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 1} bitoffset {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 0} real {fixed {fractwidth {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 0} signed {attribs {resolve_type immediate dependency {} format bool minimum {} maximum {}} value false}}}}}}</spirit:value>
-            <spirit:vendorExtensions>
-              <bd:configElementInfos>
-                <bd:configElementInfo bd:valueSource="const_prop"/>
-              </bd:configElementInfos>
-            </spirit:vendorExtensions>
-          </spirit:parameter>
-        </spirit:parameters>
+        <spirit:parameters/>
       </spirit:busInterface>
       <spirit:busInterface>
         <spirit:name>DATA.FFT_MAG_M_AXIS_TDATA_REAL</spirit:name>
@@ -251,17 +139,7 @@
             </spirit:physicalPort>
           </spirit:portMap>
         </spirit:portMaps>
-        <spirit:parameters>
-          <spirit:parameter>
-            <spirit:name>LAYERED_METADATA</spirit:name>
-            <spirit:value>xilinx.com:interface:datatypes:1.0 {DATA {datatype {name {attribs {resolve_type immediate dependency {} format string minimum {} maximum {}} value {}} bitwidth {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 16} bitoffset {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 0} real {fixed {fractwidth {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 14} signed {attribs {resolve_type immediate dependency {} format bool minimum {} maximum {}} value true}}}}}}</spirit:value>
-            <spirit:vendorExtensions>
-              <bd:configElementInfos>
-                <bd:configElementInfo bd:valueSource="const_prop"/>
-              </bd:configElementInfos>
-            </spirit:vendorExtensions>
-          </spirit:parameter>
-        </spirit:parameters>
+        <spirit:parameters/>
       </spirit:busInterface>
       <spirit:busInterface>
         <spirit:name>DATA.FIFOFULL_I</spirit:name>
@@ -280,17 +158,7 @@
             </spirit:physicalPort>
           </spirit:portMap>
         </spirit:portMaps>
-        <spirit:parameters>
-          <spirit:parameter>
-            <spirit:name>LAYERED_METADATA</spirit:name>
-            <spirit:value>xilinx.com:interface:datatypes:1.0 {DATA {datatype {name {attribs {resolve_type immediate dependency {} format string minimum {} maximum {}} value {}} bitwidth {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 1} bitoffset {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 0} real {fixed {fractwidth {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 0} signed {attribs {resolve_type immediate dependency {} format bool minimum {} maximum {}} value false}}}}}}</spirit:value>
-            <spirit:vendorExtensions>
-              <bd:configElementInfos>
-                <bd:configElementInfo bd:valueSource="const_prop"/>
-              </bd:configElementInfos>
-            </spirit:vendorExtensions>
-          </spirit:parameter>
-        </spirit:parameters>
+        <spirit:parameters/>
       </spirit:busInterface>
       <spirit:busInterface>
         <spirit:name>DATA.FIFOFULL_Q</spirit:name>
@@ -309,17 +177,7 @@
             </spirit:physicalPort>
           </spirit:portMap>
         </spirit:portMaps>
-        <spirit:parameters>
-          <spirit:parameter>
-            <spirit:name>LAYERED_METADATA</spirit:name>
-            <spirit:value>xilinx.com:interface:datatypes:1.0 {DATA {datatype {name {attribs {resolve_type immediate dependency {} format string minimum {} maximum {}} value {}} bitwidth {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 1} bitoffset {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 0} real {fixed {fractwidth {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 0} signed {attribs {resolve_type immediate dependency {} format bool minimum {} maximum {}} value false}}}}}}</spirit:value>
-            <spirit:vendorExtensions>
-              <bd:configElementInfos>
-                <bd:configElementInfo bd:valueSource="const_prop"/>
-              </bd:configElementInfos>
-            </spirit:vendorExtensions>
-          </spirit:parameter>
-        </spirit:parameters>
+        <spirit:parameters/>
       </spirit:busInterface>
       <spirit:busInterface>
         <spirit:name>DATA.IDATA</spirit:name>
@@ -338,17 +196,7 @@
             </spirit:physicalPort>
           </spirit:portMap>
         </spirit:portMaps>
-        <spirit:parameters>
-          <spirit:parameter>
-            <spirit:name>LAYERED_METADATA</spirit:name>
-            <spirit:value>xilinx.com:interface:datatypes:1.0 {DATA {datatype {name {attribs {resolve_type immediate dependency {} format string minimum {} maximum {}} value {}} bitwidth {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 19} bitoffset {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 0} real {fixed {fractwidth {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 17} signed {attribs {resolve_type immediate dependency {} format bool minimum {} maximum {}} value true}}}}}}</spirit:value>
-            <spirit:vendorExtensions>
-              <bd:configElementInfos>
-                <bd:configElementInfo bd:valueSource="const_prop"/>
-              </bd:configElementInfos>
-            </spirit:vendorExtensions>
-          </spirit:parameter>
-        </spirit:parameters>
+        <spirit:parameters/>
       </spirit:busInterface>
       <spirit:busInterface>
         <spirit:name>DATA.INDEX_K</spirit:name>
@@ -367,17 +215,7 @@
             </spirit:physicalPort>
           </spirit:portMap>
         </spirit:portMaps>
-        <spirit:parameters>
-          <spirit:parameter>
-            <spirit:name>LAYERED_METADATA</spirit:name>
-            <spirit:value>xilinx.com:interface:datatypes:1.0 {DATA {datatype {name {attribs {resolve_type immediate dependency {} format string minimum {} maximum {}} value {}} bitwidth {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 13} bitoffset {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 0} real {fixed {fractwidth {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 0} signed {attribs {resolve_type immediate dependency {} format bool minimum {} maximum {}} value false}}}}}}</spirit:value>
-            <spirit:vendorExtensions>
-              <bd:configElementInfos>
-                <bd:configElementInfo bd:valueSource="const_prop"/>
-              </bd:configElementInfos>
-            </spirit:vendorExtensions>
-          </spirit:parameter>
-        </spirit:parameters>
+        <spirit:parameters/>
       </spirit:busInterface>
       <spirit:busInterface>
         <spirit:name>DATA.N</spirit:name>
@@ -396,17 +234,7 @@
             </spirit:physicalPort>
           </spirit:portMap>
         </spirit:portMaps>
-        <spirit:parameters>
-          <spirit:parameter>
-            <spirit:name>LAYERED_METADATA</spirit:name>
-            <spirit:value>xilinx.com:interface:datatypes:1.0 {DATA {datatype {name {attribs {resolve_type immediate dependency {} format string minimum {} maximum {}} value {}} bitwidth {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 13} bitoffset {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 0} real {fixed {fractwidth {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 0} signed {attribs {resolve_type immediate dependency {} format bool minimum {} maximum {}} value false}}}}}}</spirit:value>
-            <spirit:vendorExtensions>
-              <bd:configElementInfos>
-                <bd:configElementInfo bd:valueSource="const_prop"/>
-              </bd:configElementInfos>
-            </spirit:vendorExtensions>
-          </spirit:parameter>
-        </spirit:parameters>
+        <spirit:parameters/>
       </spirit:busInterface>
       <spirit:busInterface>
         <spirit:name>DATA.NFFT</spirit:name>
@@ -425,17 +253,7 @@
             </spirit:physicalPort>
           </spirit:portMap>
         </spirit:portMaps>
-        <spirit:parameters>
-          <spirit:parameter>
-            <spirit:name>LAYERED_METADATA</spirit:name>
-            <spirit:value>undef</spirit:value>
-            <spirit:vendorExtensions>
-              <bd:configElementInfos>
-                <bd:configElementInfo bd:valueSource="default"/>
-              </bd:configElementInfos>
-            </spirit:vendorExtensions>
-          </spirit:parameter>
-        </spirit:parameters>
+        <spirit:parameters/>
       </spirit:busInterface>
       <spirit:busInterface>
         <spirit:name>DATA.NFFTWE</spirit:name>
@@ -454,17 +272,7 @@
             </spirit:physicalPort>
           </spirit:portMap>
         </spirit:portMaps>
-        <spirit:parameters>
-          <spirit:parameter>
-            <spirit:name>LAYERED_METADATA</spirit:name>
-            <spirit:value>undef</spirit:value>
-            <spirit:vendorExtensions>
-              <bd:configElementInfos>
-                <bd:configElementInfo bd:valueSource="default"/>
-              </bd:configElementInfos>
-            </spirit:vendorExtensions>
-          </spirit:parameter>
-        </spirit:parameters>
+        <spirit:parameters/>
       </spirit:busInterface>
       <spirit:busInterface>
         <spirit:name>DATA.QDATA</spirit:name>
@@ -483,17 +291,7 @@
             </spirit:physicalPort>
           </spirit:portMap>
         </spirit:portMaps>
-        <spirit:parameters>
-          <spirit:parameter>
-            <spirit:name>LAYERED_METADATA</spirit:name>
-            <spirit:value>xilinx.com:interface:datatypes:1.0 {DATA {datatype {name {attribs {resolve_type immediate dependency {} format string minimum {} maximum {}} value {}} bitwidth {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 16} bitoffset {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 0} real {fixed {fractwidth {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 14} signed {attribs {resolve_type immediate dependency {} format bool minimum {} maximum {}} value true}}}}}}</spirit:value>
-            <spirit:vendorExtensions>
-              <bd:configElementInfos>
-                <bd:configElementInfo bd:valueSource="const_prop"/>
-              </bd:configElementInfos>
-            </spirit:vendorExtensions>
-          </spirit:parameter>
-        </spirit:parameters>
+        <spirit:parameters/>
       </spirit:busInterface>
       <spirit:busInterface>
         <spirit:name>DATA.RSTFIFO</spirit:name>
@@ -512,17 +310,7 @@
             </spirit:physicalPort>
           </spirit:portMap>
         </spirit:portMaps>
-        <spirit:parameters>
-          <spirit:parameter>
-            <spirit:name>LAYERED_METADATA</spirit:name>
-            <spirit:value>undef</spirit:value>
-            <spirit:vendorExtensions>
-              <bd:configElementInfos>
-                <bd:configElementInfo bd:valueSource="default"/>
-              </bd:configElementInfos>
-            </spirit:vendorExtensions>
-          </spirit:parameter>
-        </spirit:parameters>
+        <spirit:parameters/>
       </spirit:busInterface>
       <spirit:busInterface>
         <spirit:name>DATA.SCALESCH</spirit:name>
@@ -541,17 +329,7 @@
             </spirit:physicalPort>
           </spirit:portMap>
         </spirit:portMaps>
-        <spirit:parameters>
-          <spirit:parameter>
-            <spirit:name>LAYERED_METADATA</spirit:name>
-            <spirit:value>undef</spirit:value>
-            <spirit:vendorExtensions>
-              <bd:configElementInfos>
-                <bd:configElementInfo bd:valueSource="default"/>
-              </bd:configElementInfos>
-            </spirit:vendorExtensions>
-          </spirit:parameter>
-        </spirit:parameters>
+        <spirit:parameters/>
       </spirit:busInterface>
       <spirit:busInterface>
         <spirit:name>DATA.SPECTINV</spirit:name>
@@ -570,17 +348,7 @@
             </spirit:physicalPort>
           </spirit:portMap>
         </spirit:portMaps>
-        <spirit:parameters>
-          <spirit:parameter>
-            <spirit:name>LAYERED_METADATA</spirit:name>
-            <spirit:value>undef</spirit:value>
-            <spirit:vendorExtensions>
-              <bd:configElementInfos>
-                <bd:configElementInfo bd:valueSource="default"/>
-              </bd:configElementInfos>
-            </spirit:vendorExtensions>
-          </spirit:parameter>
-        </spirit:parameters>
+        <spirit:parameters/>
       </spirit:busInterface>
       <spirit:busInterface>
         <spirit:name>DATA.STARTN</spirit:name>
@@ -599,17 +367,7 @@
             </spirit:physicalPort>
           </spirit:portMap>
         </spirit:portMaps>
-        <spirit:parameters>
-          <spirit:parameter>
-            <spirit:name>LAYERED_METADATA</spirit:name>
-            <spirit:value>undef</spirit:value>
-            <spirit:vendorExtensions>
-              <bd:configElementInfos>
-                <bd:configElementInfo bd:valueSource="default"/>
-              </bd:configElementInfos>
-            </spirit:vendorExtensions>
-          </spirit:parameter>
-        </spirit:parameters>
+        <spirit:parameters/>
       </spirit:busInterface>
       <spirit:busInterface>
         <spirit:name>DATA.WINDOW</spirit:name>
@@ -628,17 +386,7 @@
             </spirit:physicalPort>
           </spirit:portMap>
         </spirit:portMaps>
-        <spirit:parameters>
-          <spirit:parameter>
-            <spirit:name>LAYERED_METADATA</spirit:name>
-            <spirit:value>undef</spirit:value>
-            <spirit:vendorExtensions>
-              <bd:configElementInfos>
-                <bd:configElementInfo bd:valueSource="default"/>
-              </bd:configElementInfos>
-            </spirit:vendorExtensions>
-          </spirit:parameter>
-        </spirit:parameters>
+        <spirit:parameters/>
       </spirit:busInterface>
     </spirit:busInterfaces>
     <spirit:model>
@@ -688,26 +436,6 @@
         </spirit:port>
         <spirit:port>
           <spirit:name>fft_mag_finished</spirit:name>
-          <spirit:wire>
-            <spirit:direction>out</spirit:direction>
-            <spirit:vector>
-              <spirit:left>0</spirit:left>
-              <spirit:right>0</spirit:right>
-            </spirit:vector>
-          </spirit:wire>
-        </spirit:port>
-        <spirit:port>
-          <spirit:name>fft_mag_m_axis_data_tlast</spirit:name>
-          <spirit:wire>
-            <spirit:direction>out</spirit:direction>
-            <spirit:vector>
-              <spirit:left>0</spirit:left>
-              <spirit:right>0</spirit:right>
-            </spirit:vector>
-          </spirit:wire>
-        </spirit:port>
-        <spirit:port>
-          <spirit:name>fft_mag_m_axis_dout_tvalid</spirit:name>
           <spirit:wire>
             <spirit:direction>out</spirit:direction>
             <spirit:vector>
@@ -874,6 +602,7 @@
         </spirit:configurableElementValues>
       </spirit:componentInstance>
     </spirit:componentInstances>
+    <spirit:interconnections/>
     <spirit:adHocConnections>
       <spirit:adHocConnection>
         <spirit:name>hbf_fft_1_ce2</spirit:name>
@@ -899,16 +628,6 @@
         <spirit:name>hbf_fft_1_fft_mag_finished</spirit:name>
         <spirit:internalPortReference spirit:componentRef="hbf_fft_1" spirit:portRef="fft_mag_finished"/>
         <spirit:externalPortReference spirit:portRef="fft_mag_finished"/>
-      </spirit:adHocConnection>
-      <spirit:adHocConnection>
-        <spirit:name>hbf_fft_1_fft_mag_m_axis_data_tlast</spirit:name>
-        <spirit:internalPortReference spirit:componentRef="hbf_fft_1" spirit:portRef="fft_mag_m_axis_data_tlast"/>
-        <spirit:externalPortReference spirit:portRef="fft_mag_m_axis_data_tlast"/>
-      </spirit:adHocConnection>
-      <spirit:adHocConnection>
-        <spirit:name>hbf_fft_1_fft_mag_m_axis_dout_tvalid</spirit:name>
-        <spirit:internalPortReference spirit:componentRef="hbf_fft_1" spirit:portRef="fft_mag_m_axis_dout_tvalid"/>
-        <spirit:externalPortReference spirit:portRef="fft_mag_m_axis_dout_tvalid"/>
       </spirit:adHocConnection>
       <spirit:adHocConnection>
         <spirit:name>hbf_fft_1_fft_mag_m_axis_tdata_real</spirit:name>
@@ -981,6 +700,14 @@
         <spirit:internalPortReference spirit:componentRef="hbf_fft_1" spirit:portRef="window"/>
       </spirit:adHocConnection>
     </spirit:adHocConnections>
+    <spirit:hierConnections>
+      <spirit:hierConnection spirit:interfaceRef="fft_mag_m_axis_data/hbf_fft_1_fft_mag_m_axis_data">
+        <spirit:activeInterface spirit:busRef="fft_mag_m_axis_data" spirit:componentRef="hbf_fft_1"/>
+      </spirit:hierConnection>
+      <spirit:hierConnection spirit:interfaceRef="fft_mag_m_axis_dout/hbf_fft_1_fft_mag_m_axis_dout">
+        <spirit:activeInterface spirit:busRef="fft_mag_m_axis_dout" spirit:componentRef="hbf_fft_1"/>
+      </spirit:hierConnection>
+    </spirit:hierConnections>
   </spirit:design>
 
 </bd:repository>

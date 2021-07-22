@@ -8,7 +8,6 @@
     .startn(startn),
     .window(window),
     .clk(clk),
-    .ce2(ce2),
     .fifofull_i(fifofull_i),
     .fifofull_q(fifofull_q),
     .idata(idata),
@@ -19,5 +18,6 @@
     .fft_mag_m_axis_data_tlast(fft_mag_m_axis_data_tlast),
     .fft_mag_m_axis_dout_tvalid(fft_mag_m_axis_dout_tvalid),
     .fft_mag_m_axis_tdata_real(fft_mag_m_axis_tdata_real),
-    .index_k(index_k)
+    .index_k(index_k),
+    .ce2(ce2)
   );

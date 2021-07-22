@@ -16,14 +16,12 @@ module ad7476Interface(
     reg             [3:0]   clkCount;
     always @(posedge clk) begin
         if (reset) begin
-            clkCount <= 4'b0000;
+            clkCount <= 0;
         end
         else begin
             clkCount <= clkCount + 1;
         end
     end
-    
-    wire                    negEdgeSpiClk;
     assign                  spiClk = clkCount[3];
     assign                  negEdgeSpiClk = (clkCount == 4'b1111);
 

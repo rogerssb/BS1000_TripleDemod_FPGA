@@ -14,7 +14,7 @@ namespace eval ::xilinx::dsp::planaheaddriver {
 	set FPGAClockPeriod 10
 	set GenerateTestBench 0
 	set HDLLanguage {verilog}
-	set IPOOCCacheRootPath {C:/Users/frank/AppData/Local/Xilinx/Sysgen/SysgenVivado/win64.o/ip}
+	set IPOOCCacheRootPath {C:/Users/scott rogers/AppData/Local/Xilinx/Sysgen/SysgenVivado/win64.o/ip}
 	set IP_Auto_Infer {1}
 	set IP_Categories_Text {System Generator for DSP}
 	set IP_Common_Repos {0}
@@ -24,7 +24,7 @@ namespace eval ::xilinx::dsp::planaheaddriver {
 	set IP_LifeCycle_Menu {1}
 	set IP_Logo {sysgen_icon_100.png}
 	set IP_Name {hbf_fft}
-	set IP_Revision {242072367}
+	set IP_Revision {199734469}
 	set IP_Socket_IP {0}
 	set IP_Socket_IP_Proj_Path {}
 	set IP_Vendor_Text {SEMCO}
@@ -50,9 +50,9 @@ namespace eval ::xilinx::dsp::planaheaddriver {
 	set SimulationTime {2403210.00000000 ns}
 	set SynthStrategyName {Vivado Synthesis Defaults}
 	set SynthesisTool {Vivado}
-	set TargetDir {C:/Semco/Vivado/Demods2016/hbf_fft/netlist}
+	set TargetDir {C:/modem/vivado/hbf_fft/netlist}
 	set TopLevelModule {hbf_fft}
-	set TopLevelSimulinkHandle 2.00012
+	set TopLevelSimulinkHandle 3.00012
 	set TopLevelPortInterface {}
 	dict set TopLevelPortInterface window Name {window}
 	dict set TopLevelPortInterface window Type UFix_16_14
@@ -174,21 +174,6 @@ namespace eval ::xilinx::dsp::planaheaddriver {
 	dict set TopLevelPortInterface datain ClockDomain {hbf_fft}
 	dict set TopLevelPortInterface datain Locs {}
 	dict set TopLevelPortInterface datain IOStandard {}
-	dict set TopLevelPortInterface ce2 Name {ce2}
-	dict set TopLevelPortInterface ce2 Type Bool
-	dict set TopLevelPortInterface ce2 ArithmeticType xlUnsigned
-	dict set TopLevelPortInterface ce2 BinaryPoint 0
-	dict set TopLevelPortInterface ce2 Width 1
-	dict set TopLevelPortInterface ce2 DatFile {hbf_fft_ce2.dat}
-	dict set TopLevelPortInterface ce2 IconText {CE2}
-	dict set TopLevelPortInterface ce2 Direction out
-	dict set TopLevelPortInterface ce2 Period 1
-	dict set TopLevelPortInterface ce2 Interface 0
-	dict set TopLevelPortInterface ce2 InterfaceName {}
-	dict set TopLevelPortInterface ce2 InterfaceString {DATA}
-	dict set TopLevelPortInterface ce2 ClockDomain {hbf_fft}
-	dict set TopLevelPortInterface ce2 Locs {}
-	dict set TopLevelPortInterface ce2 IOStandard {}
 	dict set TopLevelPortInterface fifofull_i Name {fifofull_i}
 	dict set TopLevelPortInterface fifofull_i Type Bool
 	dict set TopLevelPortInterface fifofull_i ArithmeticType xlUnsigned
@@ -354,6 +339,21 @@ namespace eval ::xilinx::dsp::planaheaddriver {
 	dict set TopLevelPortInterface index_k ClockDomain {hbf_fft}
 	dict set TopLevelPortInterface index_k Locs {}
 	dict set TopLevelPortInterface index_k IOStandard {}
+	dict set TopLevelPortInterface ce2 Name {ce2}
+	dict set TopLevelPortInterface ce2 Type Bool
+	dict set TopLevelPortInterface ce2 ArithmeticType xlUnsigned
+	dict set TopLevelPortInterface ce2 BinaryPoint 0
+	dict set TopLevelPortInterface ce2 Width 1
+	dict set TopLevelPortInterface ce2 DatFile {hbf_fft_ce2.dat}
+	dict set TopLevelPortInterface ce2 IconText {CE2}
+	dict set TopLevelPortInterface ce2 Direction out
+	dict set TopLevelPortInterface ce2 Period 1
+	dict set TopLevelPortInterface ce2 Interface 0
+	dict set TopLevelPortInterface ce2 InterfaceName {}
+	dict set TopLevelPortInterface ce2 InterfaceString {DATA}
+	dict set TopLevelPortInterface ce2 ClockDomain {hbf_fft}
+	dict set TopLevelPortInterface ce2 Locs {}
+	dict set TopLevelPortInterface ce2 IOStandard {}
 	dict set TopLevelPortInterface clk Name {clk}
 	dict set TopLevelPortInterface clk Type -
 	dict set TopLevelPortInterface clk ArithmeticType xlUnsigned
