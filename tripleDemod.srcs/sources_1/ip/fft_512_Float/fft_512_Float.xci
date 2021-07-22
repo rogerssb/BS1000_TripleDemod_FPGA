@@ -51,7 +51,7 @@
         <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.complex_mult_type">use_mults_resources</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.cyclic_prefix_insertion">false</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.data_format">fixed_point</spirit:configurableElementValue>
-        <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.implementation_options">automatically_select</spirit:configurableElementValue>
+        <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.implementation_options">radix_2_burst_io</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.input_width">18</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.memory_options_data">block_ram</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.memory_options_hybrid">false</spirit:configurableElementValue>
@@ -65,7 +65,7 @@
         <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.run_time_configurable_transform_length">false</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.scaling_options">block_floating_point</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.target_clock_frequency">186</spirit:configurableElementValue>
-        <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.target_data_throughput">93</spirit:configurableElementValue>
+        <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.target_data_throughput">46</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.throttle_scheme">realtime</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.transform_length">512</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.xk_index">false</spirit:configurableElementValue>

@@ -117,7 +117,7 @@ BEGIN
             RealSq     <= (others=>'0');
             ImagSq     <= (others=>'0');
             SumSq      <= (others=>'0');
-            GainInt    <= (others=>'0');
+            GainInt    <= to_sfixed(1.472, GainInt);  -- nominal
             AgcVoltage <= (others=>'0');
          else
             RealGained <= resize(RealIn * GainInt, RealGained);

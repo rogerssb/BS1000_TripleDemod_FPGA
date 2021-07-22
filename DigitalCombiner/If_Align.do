@@ -1,84 +1,148 @@
 onerror {resume}
 quietly WaveActivateNextPane {} 0
-add wave -noupdate -radix sfixed /cmplphsdettb/I1Noisy
-add wave -noupdate -radix sfixed /cmplphsdettb/I2Noisy
-add wave -noupdate -radix sfixed /cmplphsdettb/Q1Noisy
-add wave -noupdate -radix sfixed /cmplphsdettb/Q2Noisy
-add wave -noupdate /cmplphsdettb/Real1Out
-add wave -noupdate /cmplphsdettb/Imag1Out
-add wave -noupdate /cmplphsdettb/AlignIFs/Delay_u/Diff
-add wave -noupdate /cmplphsdettb/AlignIFs/Delay_u/RdOutA
-add wave -noupdate /cmplphsdettb/AlignIFs/Delay_u/RdOutB
-add wave -noupdate /cmplphsdettb/AlignIFs/ValidOut
-add wave -noupdate /cmplphsdettb/AlignIFs/ValidOverAdd
-add wave -noupdate /cmplphsdettb/CmplxPhsDet/agc1_gt_agc2
-add wave -noupdate /cmplphsdettb/CmplxPhsDet/realxord
-add wave -noupdate /cmplphsdettb/CmplxPhsDet/reallock
-add wave -noupdate /cmplphsdettb/CmplxPhsDet/realout
-add wave -noupdate /cmplphsdettb/dac0_d
-add wave -noupdate /cmplphsdettb/dac1_d
-add wave -noupdate /cmplphsdettb/lockLed0n
-add wave -noupdate /cmplphsdettb/lockLed1n
-add wave -noupdate /cmplphsdettb/ch3ClkOut
-add wave -noupdate /cmplphsdettb/ch3DataOut
-add wave -noupdate /cmplphsdettb/AlignIFs/ValidAbs
-add wave -noupdate -format Analog-Step -height 74 -max 102168.0 -radix ufixed -childformat {{/cmplphsdettb/AlignIFs/AbsCntr(4) -radix ufixed} {/cmplphsdettb/AlignIFs/AbsCntr(3) -radix ufixed} {/cmplphsdettb/AlignIFs/AbsCntr(2) -radix ufixed} {/cmplphsdettb/AlignIFs/AbsCntr(1) -radix ufixed} {/cmplphsdettb/AlignIFs/AbsCntr(0) -radix ufixed} {/cmplphsdettb/AlignIFs/AbsCntr(-1) -radix ufixed} {/cmplphsdettb/AlignIFs/AbsCntr(-2) -radix ufixed} {/cmplphsdettb/AlignIFs/AbsCntr(-3) -radix ufixed} {/cmplphsdettb/AlignIFs/AbsCntr(-4) -radix ufixed} {/cmplphsdettb/AlignIFs/AbsCntr(-5) -radix ufixed} {/cmplphsdettb/AlignIFs/AbsCntr(-6) -radix ufixed} {/cmplphsdettb/AlignIFs/AbsCntr(-7) -radix ufixed} {/cmplphsdettb/AlignIFs/AbsCntr(-8) -radix ufixed} {/cmplphsdettb/AlignIFs/AbsCntr(-9) -radix ufixed} {/cmplphsdettb/AlignIFs/AbsCntr(-10) -radix ufixed} {/cmplphsdettb/AlignIFs/AbsCntr(-11) -radix ufixed} {/cmplphsdettb/AlignIFs/AbsCntr(-12) -radix ufixed} {/cmplphsdettb/AlignIFs/AbsCntr(-13) -radix ufixed} {/cmplphsdettb/AlignIFs/AbsCntr(-14) -radix ufixed} {/cmplphsdettb/AlignIFs/AbsCntr(-15) -radix ufixed}} -subitemconfig {/cmplphsdettb/AlignIFs/AbsCntr(4) {-height 15 -radix ufixed} /cmplphsdettb/AlignIFs/AbsCntr(3) {-height 15 -radix ufixed} /cmplphsdettb/AlignIFs/AbsCntr(2) {-height 15 -radix ufixed} /cmplphsdettb/AlignIFs/AbsCntr(1) {-height 15 -radix ufixed} /cmplphsdettb/AlignIFs/AbsCntr(0) {-height 15 -radix ufixed} /cmplphsdettb/AlignIFs/AbsCntr(-1) {-height 15 -radix ufixed} /cmplphsdettb/AlignIFs/AbsCntr(-2) {-height 15 -radix ufixed} /cmplphsdettb/AlignIFs/AbsCntr(-3) {-height 15 -radix ufixed} /cmplphsdettb/AlignIFs/AbsCntr(-4) {-height 15 -radix ufixed} /cmplphsdettb/AlignIFs/AbsCntr(-5) {-height 15 -radix ufixed} /cmplphsdettb/AlignIFs/AbsCntr(-6) {-height 15 -radix ufixed} /cmplphsdettb/AlignIFs/AbsCntr(-7) {-height 15 -radix ufixed} /cmplphsdettb/AlignIFs/AbsCntr(-8) {-height 15 -radix ufixed} /cmplphsdettb/AlignIFs/AbsCntr(-9) {-height 15 -radix ufixed} /cmplphsdettb/AlignIFs/AbsCntr(-10) {-height 15 -radix ufixed} /cmplphsdettb/AlignIFs/AbsCntr(-11) {-height 15 -radix ufixed} /cmplphsdettb/AlignIFs/AbsCntr(-12) {-height 15 -radix ufixed} /cmplphsdettb/AlignIFs/AbsCntr(-13) {-height 15 -radix ufixed} /cmplphsdettb/AlignIFs/AbsCntr(-14) {-height 15 -radix ufixed} /cmplphsdettb/AlignIFs/AbsCntr(-15) {-height 15 -radix ufixed}} /cmplphsdettb/AlignIFs/AbsCntr
-add wave -noupdate -format Analog-Step -height 74 -max 102168.0 -radix ufixed -childformat {{/cmplphsdettb/AlignIFs/MaxCntr(4) -radix ufixed} {/cmplphsdettb/AlignIFs/MaxCntr(3) -radix ufixed} {/cmplphsdettb/AlignIFs/MaxCntr(2) -radix sfixed} {/cmplphsdettb/AlignIFs/MaxCntr(1) -radix sfixed} {/cmplphsdettb/AlignIFs/MaxCntr(0) -radix sfixed} {/cmplphsdettb/AlignIFs/MaxCntr(-1) -radix sfixed} {/cmplphsdettb/AlignIFs/MaxCntr(-2) -radix sfixed} {/cmplphsdettb/AlignIFs/MaxCntr(-3) -radix sfixed} {/cmplphsdettb/AlignIFs/MaxCntr(-4) -radix sfixed} {/cmplphsdettb/AlignIFs/MaxCntr(-5) -radix sfixed} {/cmplphsdettb/AlignIFs/MaxCntr(-6) -radix sfixed} {/cmplphsdettb/AlignIFs/MaxCntr(-7) -radix sfixed} {/cmplphsdettb/AlignIFs/MaxCntr(-8) -radix sfixed} {/cmplphsdettb/AlignIFs/MaxCntr(-9) -radix sfixed} {/cmplphsdettb/AlignIFs/MaxCntr(-10) -radix sfixed} {/cmplphsdettb/AlignIFs/MaxCntr(-11) -radix sfixed} {/cmplphsdettb/AlignIFs/MaxCntr(-12) -radix ufixed} {/cmplphsdettb/AlignIFs/MaxCntr(-13) -radix ufixed} {/cmplphsdettb/AlignIFs/MaxCntr(-14) -radix ufixed} {/cmplphsdettb/AlignIFs/MaxCntr(-15) -radix ufixed}} -subitemconfig {/cmplphsdettb/AlignIFs/MaxCntr(4) {-height 15 -radix ufixed} /cmplphsdettb/AlignIFs/MaxCntr(3) {-height 15 -radix ufixed} /cmplphsdettb/AlignIFs/MaxCntr(2) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/MaxCntr(1) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/MaxCntr(0) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/MaxCntr(-1) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/MaxCntr(-2) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/MaxCntr(-3) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/MaxCntr(-4) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/MaxCntr(-5) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/MaxCntr(-6) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/MaxCntr(-7) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/MaxCntr(-8) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/MaxCntr(-9) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/MaxCntr(-10) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/MaxCntr(-11) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/MaxCntr(-12) {-height 15 -radix ufixed} /cmplphsdettb/AlignIFs/MaxCntr(-13) {-height 15 -radix ufixed} /cmplphsdettb/AlignIFs/MaxCntr(-14) {-height 15 -radix ufixed} /cmplphsdettb/AlignIFs/MaxCntr(-15) {-height 15 -radix ufixed}} /cmplphsdettb/AlignIFs/MaxCntr
-add wave -noupdate -format Analog-Step -height 74 -max 102168.0 -radix ufixed -childformat {{/cmplphsdettb/AlignIFs/AbsPeak(4) -radix ufixed} {/cmplphsdettb/AlignIFs/AbsPeak(3) -radix ufixed} {/cmplphsdettb/AlignIFs/AbsPeak(2) -radix sfixed} {/cmplphsdettb/AlignIFs/AbsPeak(1) -radix sfixed} {/cmplphsdettb/AlignIFs/AbsPeak(0) -radix sfixed} {/cmplphsdettb/AlignIFs/AbsPeak(-1) -radix sfixed} {/cmplphsdettb/AlignIFs/AbsPeak(-2) -radix sfixed} {/cmplphsdettb/AlignIFs/AbsPeak(-3) -radix sfixed} {/cmplphsdettb/AlignIFs/AbsPeak(-4) -radix sfixed} {/cmplphsdettb/AlignIFs/AbsPeak(-5) -radix sfixed} {/cmplphsdettb/AlignIFs/AbsPeak(-6) -radix sfixed} {/cmplphsdettb/AlignIFs/AbsPeak(-7) -radix sfixed} {/cmplphsdettb/AlignIFs/AbsPeak(-8) -radix sfixed} {/cmplphsdettb/AlignIFs/AbsPeak(-9) -radix sfixed} {/cmplphsdettb/AlignIFs/AbsPeak(-10) -radix sfixed} {/cmplphsdettb/AlignIFs/AbsPeak(-11) -radix sfixed} {/cmplphsdettb/AlignIFs/AbsPeak(-12) -radix ufixed} {/cmplphsdettb/AlignIFs/AbsPeak(-13) -radix ufixed} {/cmplphsdettb/AlignIFs/AbsPeak(-14) -radix ufixed} {/cmplphsdettb/AlignIFs/AbsPeak(-15) -radix ufixed}} -subitemconfig {/cmplphsdettb/AlignIFs/AbsPeak(4) {-height 15 -radix ufixed} /cmplphsdettb/AlignIFs/AbsPeak(3) {-height 15 -radix ufixed} /cmplphsdettb/AlignIFs/AbsPeak(2) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AbsPeak(1) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AbsPeak(0) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AbsPeak(-1) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AbsPeak(-2) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AbsPeak(-3) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AbsPeak(-4) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AbsPeak(-5) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AbsPeak(-6) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AbsPeak(-7) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AbsPeak(-8) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AbsPeak(-9) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AbsPeak(-10) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AbsPeak(-11) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AbsPeak(-12) {-height 15 -radix ufixed} /cmplphsdettb/AlignIFs/AbsPeak(-13) {-height 15 -radix ufixed} /cmplphsdettb/AlignIFs/AbsPeak(-14) {-height 15 -radix ufixed} /cmplphsdettb/AlignIFs/AbsPeak(-15) {-height 15 -radix ufixed}} /cmplphsdettb/AlignIFs/AbsPeak
-add wave -noupdate -radix unsigned -radixshowbase 0 /cmplphsdettb/AlignIFs/AbsIndex
-add wave -noupdate -radix unsigned -radixshowbase 0 /cmplphsdettb/AlignIFs/Index0
-add wave -noupdate -format Analog-Step -height 74 -max 56.0 -radix unsigned /cmplphsdettb/AlignIFs/IndexOut
-add wave -noupdate /cmplphsdettb/AlignIFs/AbeforeB
-add wave -noupdate -radix unsigned /cmplphsdettb/Delay
-add wave -noupdate -format Analog-Step -height 74 -max 127.0 -radix hexadecimal /cmplphsdettb/AlignIFs/IndexAbs
-add wave -noupdate -radix hexadecimal /cmplphsdettb/AlignIFs/IndexAcc
-add wave -noupdate -radix decimal /cmplphsdettb/AlignIFs/SkipFirst2
-add wave -noupdate -format Analog-Step -height 74 -max 67813.999999999985 -min -46446.0 -radix sfixed -childformat {{/cmplphsdettb/Filtered1Noise(2) -radix sfixed} {/cmplphsdettb/Filtered1Noise(1) -radix sfixed} {/cmplphsdettb/Filtered1Noise(0) -radix sfixed} {/cmplphsdettb/Filtered1Noise(-1) -radix sfixed} {/cmplphsdettb/Filtered1Noise(-2) -radix sfixed} {/cmplphsdettb/Filtered1Noise(-3) -radix sfixed} {/cmplphsdettb/Filtered1Noise(-4) -radix sfixed} {/cmplphsdettb/Filtered1Noise(-5) -radix sfixed} {/cmplphsdettb/Filtered1Noise(-6) -radix sfixed} {/cmplphsdettb/Filtered1Noise(-7) -radix sfixed} {/cmplphsdettb/Filtered1Noise(-8) -radix sfixed} {/cmplphsdettb/Filtered1Noise(-9) -radix sfixed} {/cmplphsdettb/Filtered1Noise(-10) -radix sfixed} {/cmplphsdettb/Filtered1Noise(-11) -radix sfixed} {/cmplphsdettb/Filtered1Noise(-12) -radix sfixed} {/cmplphsdettb/Filtered1Noise(-13) -radix sfixed} {/cmplphsdettb/Filtered1Noise(-14) -radix sfixed} {/cmplphsdettb/Filtered1Noise(-15) -radix sfixed}} -subitemconfig {/cmplphsdettb/Filtered1Noise(2) {-height 15 -radix sfixed} /cmplphsdettb/Filtered1Noise(1) {-height 15 -radix sfixed} /cmplphsdettb/Filtered1Noise(0) {-height 15 -radix sfixed} /cmplphsdettb/Filtered1Noise(-1) {-height 15 -radix sfixed} /cmplphsdettb/Filtered1Noise(-2) {-height 15 -radix sfixed} /cmplphsdettb/Filtered1Noise(-3) {-height 15 -radix sfixed} /cmplphsdettb/Filtered1Noise(-4) {-height 15 -radix sfixed} /cmplphsdettb/Filtered1Noise(-5) {-height 15 -radix sfixed} /cmplphsdettb/Filtered1Noise(-6) {-height 15 -radix sfixed} /cmplphsdettb/Filtered1Noise(-7) {-height 15 -radix sfixed} /cmplphsdettb/Filtered1Noise(-8) {-height 15 -radix sfixed} /cmplphsdettb/Filtered1Noise(-9) {-height 15 -radix sfixed} /cmplphsdettb/Filtered1Noise(-10) {-height 15 -radix sfixed} /cmplphsdettb/Filtered1Noise(-11) {-height 15 -radix sfixed} /cmplphsdettb/Filtered1Noise(-12) {-height 15 -radix sfixed} /cmplphsdettb/Filtered1Noise(-13) {-height 15 -radix sfixed} /cmplphsdettb/Filtered1Noise(-14) {-height 15 -radix sfixed} /cmplphsdettb/Filtered1Noise(-15) {-height 15 -radix sfixed}} /cmplphsdettb/Filtered1Noise
-add wave -noupdate -format Analog-Step -height 74 -max 43310.000000000007 -min -52933.0 -radix sfixed -childformat {{/cmplphsdettb/Filtered2Noise(2) -radix sfixed} {/cmplphsdettb/Filtered2Noise(1) -radix sfixed} {/cmplphsdettb/Filtered2Noise(0) -radix sfixed} {/cmplphsdettb/Filtered2Noise(-1) -radix sfixed} {/cmplphsdettb/Filtered2Noise(-2) -radix sfixed} {/cmplphsdettb/Filtered2Noise(-3) -radix sfixed} {/cmplphsdettb/Filtered2Noise(-4) -radix sfixed} {/cmplphsdettb/Filtered2Noise(-5) -radix sfixed} {/cmplphsdettb/Filtered2Noise(-6) -radix sfixed} {/cmplphsdettb/Filtered2Noise(-7) -radix sfixed} {/cmplphsdettb/Filtered2Noise(-8) -radix sfixed} {/cmplphsdettb/Filtered2Noise(-9) -radix sfixed} {/cmplphsdettb/Filtered2Noise(-10) -radix sfixed} {/cmplphsdettb/Filtered2Noise(-11) -radix sfixed} {/cmplphsdettb/Filtered2Noise(-12) -radix sfixed} {/cmplphsdettb/Filtered2Noise(-13) -radix sfixed} {/cmplphsdettb/Filtered2Noise(-14) -radix sfixed} {/cmplphsdettb/Filtered2Noise(-15) -radix sfixed}} -subitemconfig {/cmplphsdettb/Filtered2Noise(2) {-height 15 -radix sfixed} /cmplphsdettb/Filtered2Noise(1) {-height 15 -radix sfixed} /cmplphsdettb/Filtered2Noise(0) {-height 15 -radix sfixed} /cmplphsdettb/Filtered2Noise(-1) {-height 15 -radix sfixed} /cmplphsdettb/Filtered2Noise(-2) {-height 15 -radix sfixed} /cmplphsdettb/Filtered2Noise(-3) {-height 15 -radix sfixed} /cmplphsdettb/Filtered2Noise(-4) {-height 15 -radix sfixed} /cmplphsdettb/Filtered2Noise(-5) {-height 15 -radix sfixed} /cmplphsdettb/Filtered2Noise(-6) {-height 15 -radix sfixed} /cmplphsdettb/Filtered2Noise(-7) {-height 15 -radix sfixed} /cmplphsdettb/Filtered2Noise(-8) {-height 15 -radix sfixed} /cmplphsdettb/Filtered2Noise(-9) {-height 15 -radix sfixed} /cmplphsdettb/Filtered2Noise(-10) {-height 15 -radix sfixed} /cmplphsdettb/Filtered2Noise(-11) {-height 15 -radix sfixed} /cmplphsdettb/Filtered2Noise(-12) {-height 15 -radix sfixed} /cmplphsdettb/Filtered2Noise(-13) {-height 15 -radix sfixed} /cmplphsdettb/Filtered2Noise(-14) {-height 15 -radix sfixed} /cmplphsdettb/Filtered2Noise(-15) {-height 15 -radix sfixed}} /cmplphsdettb/Filtered2Noise
-add wave -noupdate -format Analog-Step -height 74 -max 21665.0 -radix sfixed -childformat {{/cmplphsdettb/Noise2Rms(0) -radix sfixed} {/cmplphsdettb/Noise2Rms(-1) -radix sfixed} {/cmplphsdettb/Noise2Rms(-2) -radix sfixed} {/cmplphsdettb/Noise2Rms(-3) -radix sfixed} {/cmplphsdettb/Noise2Rms(-4) -radix sfixed} {/cmplphsdettb/Noise2Rms(-5) -radix sfixed} {/cmplphsdettb/Noise2Rms(-6) -radix sfixed} {/cmplphsdettb/Noise2Rms(-7) -radix sfixed} {/cmplphsdettb/Noise2Rms(-8) -radix sfixed} {/cmplphsdettb/Noise2Rms(-9) -radix sfixed} {/cmplphsdettb/Noise2Rms(-10) -radix sfixed} {/cmplphsdettb/Noise2Rms(-11) -radix sfixed} {/cmplphsdettb/Noise2Rms(-12) -radix sfixed} {/cmplphsdettb/Noise2Rms(-13) -radix sfixed} {/cmplphsdettb/Noise2Rms(-14) -radix sfixed} {/cmplphsdettb/Noise2Rms(-15) -radix sfixed} {/cmplphsdettb/Noise2Rms(-16) -radix sfixed} {/cmplphsdettb/Noise2Rms(-17) -radix sfixed}} -subitemconfig {/cmplphsdettb/Noise2Rms(0) {-height 15 -radix sfixed} /cmplphsdettb/Noise2Rms(-1) {-height 15 -radix sfixed} /cmplphsdettb/Noise2Rms(-2) {-height 15 -radix sfixed} /cmplphsdettb/Noise2Rms(-3) {-height 15 -radix sfixed} /cmplphsdettb/Noise2Rms(-4) {-height 15 -radix sfixed} /cmplphsdettb/Noise2Rms(-5) {-height 15 -radix sfixed} /cmplphsdettb/Noise2Rms(-6) {-height 15 -radix sfixed} /cmplphsdettb/Noise2Rms(-7) {-height 15 -radix sfixed} /cmplphsdettb/Noise2Rms(-8) {-height 15 -radix sfixed} /cmplphsdettb/Noise2Rms(-9) {-height 15 -radix sfixed} /cmplphsdettb/Noise2Rms(-10) {-height 15 -radix sfixed} /cmplphsdettb/Noise2Rms(-11) {-height 15 -radix sfixed} /cmplphsdettb/Noise2Rms(-12) {-height 15 -radix sfixed} /cmplphsdettb/Noise2Rms(-13) {-height 15 -radix sfixed} /cmplphsdettb/Noise2Rms(-14) {-height 15 -radix sfixed} /cmplphsdettb/Noise2Rms(-15) {-height 15 -radix sfixed} /cmplphsdettb/Noise2Rms(-16) {-height 15 -radix sfixed} /cmplphsdettb/Noise2Rms(-17) {-height 15 -radix sfixed}} /cmplphsdettb/Noise2Rms
-add wave -noupdate -format Analog-Step -height 74 -max 45794.0 -radix sfixed /cmplphsdettb/I1Rms
-add wave -noupdate -format Analog-Step -height 74 -max 131071.00000000001 -min -131072.0 -radix sfixed -childformat {{/cmplphsdettb/Noise1Gained(1) -radix sfixed} {/cmplphsdettb/Noise1Gained(0) -radix sfixed} {/cmplphsdettb/Noise1Gained(-1) -radix sfixed} {/cmplphsdettb/Noise1Gained(-2) -radix sfixed} {/cmplphsdettb/Noise1Gained(-3) -radix sfixed} {/cmplphsdettb/Noise1Gained(-4) -radix sfixed} {/cmplphsdettb/Noise1Gained(-5) -radix sfixed} {/cmplphsdettb/Noise1Gained(-6) -radix sfixed} {/cmplphsdettb/Noise1Gained(-7) -radix sfixed} {/cmplphsdettb/Noise1Gained(-8) -radix sfixed} {/cmplphsdettb/Noise1Gained(-9) -radix sfixed} {/cmplphsdettb/Noise1Gained(-10) -radix sfixed} {/cmplphsdettb/Noise1Gained(-11) -radix sfixed} {/cmplphsdettb/Noise1Gained(-12) -radix sfixed} {/cmplphsdettb/Noise1Gained(-13) -radix sfixed} {/cmplphsdettb/Noise1Gained(-14) -radix sfixed} {/cmplphsdettb/Noise1Gained(-15) -radix sfixed} {/cmplphsdettb/Noise1Gained(-16) -radix sfixed}} -subitemconfig {/cmplphsdettb/Noise1Gained(1) {-height 15 -radix sfixed} /cmplphsdettb/Noise1Gained(0) {-height 15 -radix sfixed} /cmplphsdettb/Noise1Gained(-1) {-height 15 -radix sfixed} /cmplphsdettb/Noise1Gained(-2) {-height 15 -radix sfixed} /cmplphsdettb/Noise1Gained(-3) {-height 15 -radix sfixed} /cmplphsdettb/Noise1Gained(-4) {-height 15 -radix sfixed} /cmplphsdettb/Noise1Gained(-5) {-height 15 -radix sfixed} /cmplphsdettb/Noise1Gained(-6) {-height 15 -radix sfixed} /cmplphsdettb/Noise1Gained(-7) {-height 15 -radix sfixed} /cmplphsdettb/Noise1Gained(-8) {-height 15 -radix sfixed} /cmplphsdettb/Noise1Gained(-9) {-height 15 -radix sfixed} /cmplphsdettb/Noise1Gained(-10) {-height 15 -radix sfixed} /cmplphsdettb/Noise1Gained(-11) {-height 15 -radix sfixed} /cmplphsdettb/Noise1Gained(-12) {-height 15 -radix sfixed} /cmplphsdettb/Noise1Gained(-13) {-height 15 -radix sfixed} /cmplphsdettb/Noise1Gained(-14) {-height 15 -radix sfixed} /cmplphsdettb/Noise1Gained(-15) {-height 15 -radix sfixed} /cmplphsdettb/Noise1Gained(-16) {-height 15 -radix sfixed}} /cmplphsdettb/Noise1Gained
-add wave -noupdate -format Analog-Step -height 74 -max 131071.00000000001 -min -131072.0 -radix sfixed /cmplphsdettb/Noise2Gained
-add wave -noupdate -format Analog-Step -height 74 -max 92668.0 -min -92668.0 -radix sfixed -childformat {{/cmplphsdettb/DataI(0) -radix sfixed} {/cmplphsdettb/DataI(-1) -radix sfixed} {/cmplphsdettb/DataI(-2) -radix sfixed} {/cmplphsdettb/DataI(-3) -radix sfixed} {/cmplphsdettb/DataI(-4) -radix sfixed} {/cmplphsdettb/DataI(-5) -radix sfixed} {/cmplphsdettb/DataI(-6) -radix sfixed} {/cmplphsdettb/DataI(-7) -radix sfixed} {/cmplphsdettb/DataI(-8) -radix sfixed} {/cmplphsdettb/DataI(-9) -radix sfixed} {/cmplphsdettb/DataI(-10) -radix sfixed} {/cmplphsdettb/DataI(-11) -radix sfixed} {/cmplphsdettb/DataI(-12) -radix sfixed} {/cmplphsdettb/DataI(-13) -radix sfixed} {/cmplphsdettb/DataI(-14) -radix sfixed} {/cmplphsdettb/DataI(-15) -radix sfixed} {/cmplphsdettb/DataI(-16) -radix sfixed} {/cmplphsdettb/DataI(-17) -radix sfixed}} -subitemconfig {/cmplphsdettb/DataI(0) {-height 15 -radix sfixed} /cmplphsdettb/DataI(-1) {-height 15 -radix sfixed} /cmplphsdettb/DataI(-2) {-height 15 -radix sfixed} /cmplphsdettb/DataI(-3) {-height 15 -radix sfixed} /cmplphsdettb/DataI(-4) {-height 15 -radix sfixed} /cmplphsdettb/DataI(-5) {-height 15 -radix sfixed} /cmplphsdettb/DataI(-6) {-height 15 -radix sfixed} /cmplphsdettb/DataI(-7) {-height 15 -radix sfixed} /cmplphsdettb/DataI(-8) {-height 15 -radix sfixed} /cmplphsdettb/DataI(-9) {-height 15 -radix sfixed} /cmplphsdettb/DataI(-10) {-height 15 -radix sfixed} /cmplphsdettb/DataI(-11) {-height 15 -radix sfixed} /cmplphsdettb/DataI(-12) {-height 15 -radix sfixed} /cmplphsdettb/DataI(-13) {-height 15 -radix sfixed} /cmplphsdettb/DataI(-14) {-height 15 -radix sfixed} /cmplphsdettb/DataI(-15) {-height 15 -radix sfixed} /cmplphsdettb/DataI(-16) {-height 15 -radix sfixed} /cmplphsdettb/DataI(-17) {-height 15 -radix sfixed}} /cmplphsdettb/DataI
-add wave -noupdate -format Analog-Step -height 74 -max 57256.0 -min -57257.0 -radix sfixed -childformat {{/cmplphsdettb/FilteredI(1) -radix hexadecimal} {/cmplphsdettb/FilteredI(0) -radix sfixed} {/cmplphsdettb/FilteredI(-1) -radix sfixed} {/cmplphsdettb/FilteredI(-2) -radix sfixed} {/cmplphsdettb/FilteredI(-3) -radix sfixed} {/cmplphsdettb/FilteredI(-4) -radix sfixed} {/cmplphsdettb/FilteredI(-5) -radix sfixed} {/cmplphsdettb/FilteredI(-6) -radix sfixed} {/cmplphsdettb/FilteredI(-7) -radix sfixed} {/cmplphsdettb/FilteredI(-8) -radix sfixed} {/cmplphsdettb/FilteredI(-9) -radix sfixed} {/cmplphsdettb/FilteredI(-10) -radix sfixed} {/cmplphsdettb/FilteredI(-11) -radix sfixed} {/cmplphsdettb/FilteredI(-12) -radix sfixed} {/cmplphsdettb/FilteredI(-13) -radix sfixed} {/cmplphsdettb/FilteredI(-14) -radix sfixed} {/cmplphsdettb/FilteredI(-15) -radix sfixed} {/cmplphsdettb/FilteredI(-16) -radix sfixed}} -subitemconfig {/cmplphsdettb/FilteredI(1) {-height 15 -radix hexadecimal} /cmplphsdettb/FilteredI(0) {-height 15 -radix sfixed} /cmplphsdettb/FilteredI(-1) {-height 15 -radix sfixed} /cmplphsdettb/FilteredI(-2) {-height 15 -radix sfixed} /cmplphsdettb/FilteredI(-3) {-height 15 -radix sfixed} /cmplphsdettb/FilteredI(-4) {-height 15 -radix sfixed} /cmplphsdettb/FilteredI(-5) {-height 15 -radix sfixed} /cmplphsdettb/FilteredI(-6) {-height 15 -radix sfixed} /cmplphsdettb/FilteredI(-7) {-height 15 -radix sfixed} /cmplphsdettb/FilteredI(-8) {-height 15 -radix sfixed} /cmplphsdettb/FilteredI(-9) {-height 15 -radix sfixed} /cmplphsdettb/FilteredI(-10) {-height 15 -radix sfixed} /cmplphsdettb/FilteredI(-11) {-height 15 -radix sfixed} /cmplphsdettb/FilteredI(-12) {-height 15 -radix sfixed} /cmplphsdettb/FilteredI(-13) {-height 15 -radix sfixed} /cmplphsdettb/FilteredI(-14) {-height 15 -radix sfixed} /cmplphsdettb/FilteredI(-15) {-height 15 -radix sfixed} /cmplphsdettb/FilteredI(-16) {-height 15 -radix sfixed}} /cmplphsdettb/FilteredI
-add wave -noupdate -radix sfixed /cmplphsdettb/DataQ
-add wave -noupdate -radix sfixed /cmplphsdettb/FilteredQ
-add wave -noupdate /cmplphsdettb/AlignIFs/PackFifo/Restart
-add wave -noupdate /cmplphsdettb/AlignIFs/PackFifo/WrEn
-add wave -noupdate /cmplphsdettb/AlignIFs/PackFifo/RdCount
-add wave -noupdate /cmplphsdettb/BitCounter
 add wave -noupdate /cmplphsdettb/NoiseGain1
 add wave -noupdate /cmplphsdettb/NoiseGain2
-add wave -noupdate -format Analog-Step -height 74 -max 21735.000000000004 -min -21736.0 -radix sfixed /cmplphsdettb/AlignIFs/AGC1/ImagIn
-add wave -noupdate -format Analog-Step -height 74 -max 21735.000000000004 -min -21736.0 -radix sfixed /cmplphsdettb/AlignIFs/AGC1/RealIn
-add wave -noupdate -format Analog-Step -height 74 -max 131071.00000000001 -min -131072.0 -radix sfixed /cmplphsdettb/AlignIFs/AGC1/ImagGained
-add wave -noupdate -format Analog-Step -height 74 -max 131071.00000000001 -min -131072.0 -radix sfixed /cmplphsdettb/AlignIFs/AGC1/RealGained
-add wave -noupdate -format Analog-Step -height 74 -max 65536.0 -radix sfixed /cmplphsdettb/AlignIFs/AGC1/ImagSq
-add wave -noupdate -format Analog-Step -height 74 -max 65536.0 -radix sfixed /cmplphsdettb/AlignIFs/AGC1/RealSq
-add wave -noupdate -format Analog-Step -height 74 -max 129892.0 -min -132250.0 -radix sfixed /cmplphsdettb/AlignIFs/AGC1/SumSq
-add wave -noupdate -format Analog-Step -height 74 -max 129962.0 -min 129892.0 -radix sfixed /cmplphsdettb/AlignIFs/AGC1/RefLevel
-add wave -noupdate -format Analog-Step -height 74 -max 105116.0 -radix ufixed -childformat {{/cmplphsdettb/AlignIFs/AGC1/GainInt(4) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(3) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(2) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(1) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(0) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(-1) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(-2) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(-3) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(-4) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(-5) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(-6) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(-7) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(-8) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(-9) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(-10) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(-11) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(-12) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(-13) -radix sfixed}} -subitemconfig {/cmplphsdettb/AlignIFs/AGC1/GainInt(4) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(3) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(2) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(1) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(0) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(-1) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(-2) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(-3) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(-4) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(-5) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(-6) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(-7) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(-8) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(-9) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(-10) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(-11) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(-12) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(-13) {-height 15 -radix sfixed}} /cmplphsdettb/AlignIFs/AGC1/GainInt
-add wave -noupdate -format Analog-Step -height 74 -max 48522.0 -radix hexadecimal -childformat {{/cmplphsdettb/AlignIFs/AGC1/GainInt(4) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(3) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(2) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(1) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(0) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(-1) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(-2) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(-3) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(-4) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(-5) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(-6) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(-7) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(-8) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(-9) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(-10) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(-11) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(-12) -radix sfixed} {/cmplphsdettb/AlignIFs/AGC1/GainInt(-13) -radix sfixed}} -subitemconfig {/cmplphsdettb/AlignIFs/AGC1/GainInt(4) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(3) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(2) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(1) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(0) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(-1) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(-2) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(-3) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(-4) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(-5) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(-6) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(-7) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(-8) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(-9) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(-10) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(-11) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(-12) {-height 15 -radix sfixed} /cmplphsdettb/AlignIFs/AGC1/GainInt(-13) {-height 15 -radix sfixed}} /cmplphsdettb/AlignIFs/AGC1/GainInt
-add wave -noupdate -format Analog-Step -height 74 -max 523.0 -radix sfixed /cmplphsdettb/AlignIFs/AGC1/AgcAddr
-add wave -noupdate /cmplphsdettb/AlignIFs/AGC1/AgcRom(64)
-add wave -noupdate -format Analog-Step -height 74 -max 31513.999999999993 -min -21031.0 -radix sfixed /cmplphsdettb/AlignIFs/AgcDiff
-add wave -noupdate -format Analog-Step -height 74 -max 62732.999999999993 -min -131072.0 -radix sfixed /cmplphsdettb/AlignIFs/AgcVoltage1
-add wave -noupdate -format Analog-Step -height 74 -max 54155.0 -min -131072.0 -radix sfixed /cmplphsdettb/AlignIFs/AgcVoltage2
+add wave -noupdate /cmplphsdettb/PhaseInc
+add wave -noupdate -radix decimal -radixshowbase 0 /cmplphsdettb/FreqOffset
+add wave -noupdate /cmplphsdettb/Ch1Agc
+add wave -noupdate /cmplphsdettb/Ch2Agc
 add wave -noupdate /cmplphsdettb/AM_Amp1
 add wave -noupdate /cmplphsdettb/AM_Amp2
 add wave -noupdate /cmplphsdettb/AM_Freq1
 add wave -noupdate /cmplphsdettb/AM_Freq2
-add wave -noupdate /cmplphsdettb/Attack
-add wave -noupdate /cmplphsdettb/Decay
-add wave -noupdate /cmplphsdettb/Delay
+add wave -noupdate -radix decimal /cmplphsdettb/Delay
+add wave -noupdate /cmplphsdettb/SNR
+add wave -noupdate /cmplphsdettb/NoiseGain
+add wave -noupdate -radix ufixed /cmplphsdettb/NoiseGain_u
 add wave -noupdate /cmplphsdettb/NoiseGain1
-add wave -noupdate /cmplphsdettb/NoiseGain2
-add wave -noupdate /cmplphsdettb/VioBits
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/AbeforeB
+add wave -noupdate -clampanalog 1 -format Analog-Step -height 74 -max 70000.0 -radix unsigned /cmplphsdettb/DigitalCombiner_u/IF_Align_u/GenCorrs(2)/FftCorr/AbsFft
+add wave -noupdate -clampanalog 1 -format Analog-Step -height 74 -max 70000.0 -radix unsigned /cmplphsdettb/DigitalCombiner_u/IF_Align_u/GenCorrs(1)/FftCorr/AbsFft
+add wave -noupdate -clampanalog 1 -format Analog-Step -height 74 -max 70000.0 -radix unsigned /cmplphsdettb/DigitalCombiner_u/IF_Align_u/GenCorrs(0)/FftCorr/AbsFft
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/FftReady
+add wave -noupdate -radix unsigned -childformat {{/cmplphsdettb/DigitalCombiner_u/IF_Align_u/PeakOut(2) -radix unsigned} {/cmplphsdettb/DigitalCombiner_u/IF_Align_u/PeakOut(1) -radix unsigned} {/cmplphsdettb/DigitalCombiner_u/IF_Align_u/PeakOut(0) -radix unsigned}} -expand -subitemconfig {/cmplphsdettb/DigitalCombiner_u/IF_Align_u/PeakOut(2) {-clampanalog 1 -height 15 -radix unsigned -radixshowbase 0} /cmplphsdettb/DigitalCombiner_u/IF_Align_u/PeakOut(1) {-clampanalog 1 -height 15 -radix unsigned -radixshowbase 0} /cmplphsdettb/DigitalCombiner_u/IF_Align_u/PeakOut(0) {-clampanalog 1 -height 15 -radix unsigned -radixshowbase 0}} /cmplphsdettb/DigitalCombiner_u/IF_Align_u/PeakOut
+add wave -noupdate -radix decimal -childformat {{/cmplphsdettb/DigitalCombiner_u/IF_Align_u/IndexOut(2) -radix decimal} {/cmplphsdettb/DigitalCombiner_u/IF_Align_u/IndexOut(1) -radix decimal} {/cmplphsdettb/DigitalCombiner_u/IF_Align_u/IndexOut(0) -radix decimal}} -expand -subitemconfig {/cmplphsdettb/DigitalCombiner_u/IF_Align_u/IndexOut(2) {-clampanalog 1 -format Analog-Step -height 15 -max 36.0 -min 28.0 -radix decimal} /cmplphsdettb/DigitalCombiner_u/IF_Align_u/IndexOut(1) {-clampanalog 1 -format Analog-Step -height 15 -max 36.0 -min 28.0 -radix decimal} /cmplphsdettb/DigitalCombiner_u/IF_Align_u/IndexOut(0) {-clampanalog 1 -format Analog-Step -height 15 -max 36.0 -min 28.0 -radix decimal}} /cmplphsdettb/DigitalCombiner_u/IF_Align_u/IndexOut
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/Largest
+add wave -noupdate -format Analog-Step -height 74 -max 12.000000000000002 -min -13.0 -radix sfixed /cmplphsdettb/DigitalCombiner_u/IF_Align_u/GenCorrs(1)/FftCorr/FreqOffset
+add wave -noupdate -format Analog-Step -height 74 -max 2559.0 /cmplphsdettb/SampleCount
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/NewIndex
+add wave -noupdate -format Analog-Step -height 74 -max 2559.0 /cmplphsdettb/DigitalCombiner_u/IF_Align_u/GenCorrs(1)/FftCorr/SampleCount
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/GenCorrs(0)/FftCorr/SampleCount
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/GenCorrs(2)/FftCorr/SampleCount
+add wave -noupdate -clampanalog 1 -format Analog-Step -height 74 -max 35000.0 -min -35000.0 -radix sfixed /cmplphsdettb/DigitalCombiner_u/IF_Align_u/GenCorrs(0)/FftCorr/NcodI
+add wave -noupdate -clampanalog 1 -format Analog-Step -height 74 -max 35000.0 -min -35000.0 -radix sfixed /cmplphsdettb/DigitalCombiner_u/IF_Align_u/GenCorrs(0)/FftCorr/NcodR
+add wave -noupdate -clampanalog 1 -format Analog-Step -height 74 -max 35000.0 -min -35000.0 -radix sfixed /cmplphsdettb/DigitalCombiner_u/IF_Align_u/GenCorrs(1)/FftCorr/NcodI
+add wave -noupdate -clampanalog 1 -format Analog-Step -height 74 -max 35000.0 -min -35000.0 -radix sfixed /cmplphsdettb/DigitalCombiner_u/IF_Align_u/GenCorrs(1)/FftCorr/NcodR
+add wave -noupdate -clampanalog 1 -format Analog-Step -height 74 -max 35000.0 -min -35000.0 -radix sfixed /cmplphsdettb/DigitalCombiner_u/IF_Align_u/GenCorrs(2)/FftCorr/NcodI
+add wave -noupdate -clampanalog 1 -format Analog-Step -height 74 -max 35000.0 -min -35000.0 -radix sfixed /cmplphsdettb/DigitalCombiner_u/IF_Align_u/GenCorrs(2)/FftCorr/NcodR
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/GenCorrs(1)/FftCorr/Fft_u/m_axis_data_tdata
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/GenCorrs(1)/FftCorr/Fft_u/s_axis_data_tdata
+add wave -noupdate -format Analog-Step -height 74 -max 70.0 -radix sfixed /cmplphsdettb/ComplexMult/ImInA
+add wave -noupdate -format Analog-Step -height 74 -max 14314.000000000002 -min -14491.0 -radix sfixed /cmplphsdettb/ComplexMult/ReInA
+add wave -noupdate -format Analog-Step -height 74 -max 131069.99999999999 -min -131070.0 -radix sfixed /cmplphsdettb/ComplexMult/ImInB
+add wave -noupdate -format Analog-Step -height 74 -max 114776.00000000001 -min -131070.0 -radix sfixed /cmplphsdettb/ComplexMult/ReInB
+add wave -noupdate -format Analog-Step -height 74 -max 10570.999999999998 -min -11474.0 -radix sfixed /cmplphsdettb/ComplexMult/ImOut
+add wave -noupdate -format Analog-Step -height 74 -max 13054.0 -min -13305.0 -radix sfixed /cmplphsdettb/ComplexMult/ReOut
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/ValidFft
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/FftTLastIn
+add wave -noupdate -divider -height 40 {New Divider}
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/Restart
+add wave -noupdate -radix sfixed /cmplphsdettb/DigitalCombiner_u/IF_Align_u/AGC1/GainInt
+add wave -noupdate -radix sfixed /cmplphsdettb/DigitalCombiner_u/IF_Align_u/AGC2/GainInt
+add wave -noupdate -format Analog-Step -height 74 -max 14489.999999999998 -min -14485.0 -radix sfixed /cmplphsdettb/DigitalCombiner_u/IF_Align_u/GenCorrs(1)/FftCorr/ComplexMult/ImInA
+add wave -noupdate -format Analog-Step -height 74 -max 70.0 -radix sfixed /cmplphsdettb/DigitalCombiner_u/IF_Align_u/GenCorrs(1)/FftCorr/ComplexMult/ImInB
+add wave -noupdate -format Analog-Step -height 74 -max 14489.000000000002 -min -14485.0 -radix sfixed /cmplphsdettb/DigitalCombiner_u/IF_Align_u/GenCorrs(1)/FftCorr/ComplexMult/ImOut
+add wave -noupdate -format Analog-Step -height 74 -max 14467.000000000002 -min -14491.0 -radix sfixed /cmplphsdettb/DigitalCombiner_u/IF_Align_u/GenCorrs(1)/FftCorr/ComplexMult/ReInA
+add wave -noupdate -format Analog-Step -height 74 -max 131071.0 -radix sfixed /cmplphsdettb/DigitalCombiner_u/IF_Align_u/GenCorrs(1)/FftCorr/ComplexMult/ReInB
+add wave -noupdate -format Analog-Step -height 74 -max 14466.000000000002 -min -14491.0 -radix sfixed /cmplphsdettb/DigitalCombiner_u/IF_Align_u/GenCorrs(1)/FftCorr/ComplexMult/ReOut
+add wave -noupdate -format Analog-Step -height 74 -max 14470.0 -min -14491.0 -radix sfixed /cmplphsdettb/NcodI
+add wave -noupdate -format Analog-Step -height 74 -max 14489.999999999998 -min -14491.0 -radix sfixed /cmplphsdettb/NcodQ
+add wave -noupdate -format Analog-Step -height 74 -max 65536.0 -radix sfixed /cmplphsdettb/AM_Mod1
+add wave -noupdate -format Analog-Step -height 74 -max 65536.0 -radix sfixed /cmplphsdettb/AM_Mod2
+add wave -noupdate -format Analog-Step -height 74 -max 48372.0 -min -46684.0 -radix sfixed /cmplphsdettb/I1Noisy
+add wave -noupdate -format Analog-Step -height 74 -max 53847.0 -min -39599.0 -radix sfixed /cmplphsdettb/I2Noisy
+add wave -noupdate -format Analog-Step -height 74 -max 9193.0 -min -9131.0 -radix sfixed /cmplphsdettb/Q1Noisy
+add wave -noupdate -format Analog-Step -height 74 -max 18952.000000000004 -min -19547.0 -radix sfixed /cmplphsdettb/Q2Noisy
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/GenCorrs(2)/FftCorr/PHASE_INC
+add wave -noupdate -format Analog-Step -height 74 -max 131069.99999999999 -min -131070.0 -radix sfixed /cmplphsdettb/DigitalCombiner_u/IF_Align_u/GenCorrs(2)/FftCorr/Cos
+add wave -noupdate -format Analog-Step -height 74 -max 131069.99999999999 -min -131070.0 -radix sfixed /cmplphsdettb/DigitalCombiner_u/IF_Align_u/GenCorrs(0)/FftCorr/Cos
+add wave -noupdate -format Analog-Step -height 74 -max 131068.99999999999 -min -131071.0 -radix sfixed /cmplphsdettb/DigitalCombiner_u/IF_Align_u/GenCorrs(2)/FftCorr/Sin
+add wave -noupdate -format Analog-Step -height 74 -max 131069.99999999999 -min -131070.0 -radix sfixed /cmplphsdettb/DigitalCombiner_u/IF_Align_u/GenCorrs(0)/FftCorr/Sin
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/FftReady0
+add wave -noupdate -radix sfixed /cmplphsdettb/DigitalCombiner_u/IF_Align_u/Im1In
+add wave -noupdate -radix sfixed /cmplphsdettb/DigitalCombiner_u/IF_Align_u/Im1Out
+add wave -noupdate -radix sfixed /cmplphsdettb/DigitalCombiner_u/IF_Align_u/Im2In
+add wave -noupdate -radix sfixed /cmplphsdettb/DigitalCombiner_u/IF_Align_u/Im2Out
+add wave -noupdate -radix sfixed /cmplphsdettb/DigitalCombiner_u/IF_Align_u/ImInDly1
+add wave -noupdate -radix sfixed /cmplphsdettb/DigitalCombiner_u/IF_Align_u/ImInDly2
+add wave -noupdate -radix sfixed /cmplphsdettb/DigitalCombiner_u/IF_Align_u/Index
+add wave -noupdate -radix sfixed /cmplphsdettb/DigitalCombiner_u/IF_Align_u/IndexAbs
+add wave -noupdate -radix sfixed /cmplphsdettb/DigitalCombiner_u/IF_Align_u/IndexAcc
+add wave -noupdate -radix sfixed /cmplphsdettb/DigitalCombiner_u/IF_Align_u/IndexOut
+add wave -noupdate -radix sfixed /cmplphsdettb/DigitalCombiner_u/IF_Align_u/PackI1
+add wave -noupdate -radix sfixed /cmplphsdettb/DigitalCombiner_u/IF_Align_u/PackI2
+add wave -noupdate -radix sfixed /cmplphsdettb/DigitalCombiner_u/IF_Align_u/PackR1
+add wave -noupdate -radix sfixed /cmplphsdettb/DigitalCombiner_u/IF_Align_u/PackR2
+add wave -noupdate -divider -height 40 {New Divider}
+add wave -noupdate -format Analog-Step -height 74 -max 70882.0 -min -60645.0 -radix sfixed /cmplphsdettb/DigitalCombiner_u/IF_Align_u/PackFifo/ReIn1
+add wave -noupdate -format Analog-Step -height 74 -max 55108.999999999985 -min -59545.0 -radix sfixed /cmplphsdettb/DigitalCombiner_u/IF_Align_u/PackFifo/ReIn2
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/PackFifo/ImIn1
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/PackFifo/ImIn2
+add wave -noupdate -format Analog-Step -height 74 -max 99561.0 /cmplphsdettb/DigitalCombiner_u/IF_Align_u/PackFifo/RdCount
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/PackFifo/ImOut4x1
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/PackFifo/ImOut4x2
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/PackFifo/ReOut4x1
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/PackFifo/ReOut4x2
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/PackFifo/Idle4x
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/PackFifo/Mode
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/PackFifo/Restart
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/PackFifo/Start4x
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/PackFifo/ValidDataOut4x
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/PackFifo/ValidFftOut4x
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/PackFifo/LastOut4x
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/PackFifo/ReadyIn
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/PackFifo/Pop4x
+add wave -noupdate -radix unsigned -radixshowbase 0 /cmplphsdettb/DigitalCombiner_u/IF_Align_u/PackFifo/PopCount4x
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/PackFifo/ProgFull4x
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/PackFifo/OverFlow4x
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/PackFifo/RdRstBusy4x
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/PackFifo/UnderFlow4x
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/PackFifo/WrEn
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/PackFifo/WrRstBusy4x
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/Fft_u/s_axis_data_tvalid
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/GenCorrs(0)/FftCorr/ValidDataIn
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/GenCorrs(0)/FftCorr/ValidFft
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/GenCorrs(0)/FftCorr/ValidFftIn
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/GenCorrs(0)/FftCorr/ValidMixer
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/GenCorrs(1)/FftCorr/ValidDataIn
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/GenCorrs(1)/FftCorr/ValidFft
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/GenCorrs(1)/FftCorr/ValidFftIn
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/GenCorrs(1)/FftCorr/ValidMixer
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/GenCorrs(2)/FftCorr/ValidFft
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/GenCorrs(2)/FftCorr/ValidFftIn
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/GenCorrs(2)/FftCorr/ValidMixer
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/Fft_u/event_data_in_channel_halt
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/Fft_u/event_frame_started
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/Fft_u/event_tlast_missing
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/Fft_u/event_tlast_unexpected
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/GenCorrs(0)/FftCorr/Fft_u/s_axis_config_tdata
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/GenCorrs(0)/FftCorr/Fft_u/s_axis_config_tready
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/GenCorrs(0)/FftCorr/Fft_u/s_axis_config_tvalid
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/GenCorrs(0)/FftCorr/Fft_u/s_axis_data_tdata
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/GenCorrs(0)/FftCorr/Fft_u/s_axis_data_tlast
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/GenCorrs(0)/FftCorr/Fft_u/s_axis_data_tready
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/GenCorrs(0)/FftCorr/Fft_u/s_axis_data_tvalid
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/GenCorrs(0)/FftCorr/Fft_u/m_axis_data_tdata
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/GenCorrs(0)/FftCorr/Fft_u/m_axis_data_tlast
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/GenCorrs(0)/FftCorr/Fft_u/m_axis_data_tuser
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/GenCorrs(0)/FftCorr/Fft_u/m_axis_data_tvalid
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/GenCorrs(0)/FftCorr/Fft_u/m_axis_status_tdata
+add wave -noupdate /cmplphsdettb/DigitalCombiner_u/IF_Align_u/GenCorrs(0)/FftCorr/Fft_u/m_axis_status_tvalid
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {9824809000 ps} 0} {{Cursor 2} {71620739 ps} 0}
+WaveRestoreCursors {{Cursor 1} {8834011228 ps} 0} {{Cursor 2} {4705561873 ps} 0}
 quietly wave cursor active 2
-configure wave -namecolwidth 345
-configure wave -valuecolwidth 114
+configure wave -namecolwidth 507
+configure wave -valuecolwidth 100
 configure wave -justifyvalue left
 configure wave -signalnamewidth 0
 configure wave -snapdistance 10
@@ -91,7 +155,7 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {137599483 ps} {138744195 ps}
+WaveRestoreZoom {0 ps} {19312796055 ps}
 bookmark add wave bookmark0 {{2508730 ps} {2540670 ps}} 0
 bookmark add wave bookmark1 {{3023030 ps} {3054970 ps}} 0
 bookmark add wave bookmark2 {{2187685 ps} {2199857 ps}} 33

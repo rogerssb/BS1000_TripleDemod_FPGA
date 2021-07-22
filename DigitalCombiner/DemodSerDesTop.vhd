@@ -178,13 +178,15 @@ ARCHITECTURE rtl OF DemodSerDesTop IS
       );
    END COMPONENT CmplxMult;
 
-   COMPONENT OffsetNCO
+   COMPONENT OffsetNCO IS
       PORT (
          aclk : IN STD_LOGIC;
-         aresetn  : IN STD_LOGIC;
+         aresetn : IN STD_LOGIC;
          s_axis_config_tvalid : IN STD_LOGIC;
+         s_axis_config_tready : OUT STD_LOGIC;
          s_axis_config_tdata : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
          m_axis_data_tvalid : OUT STD_LOGIC;
+         m_axis_data_tready : IN STD_LOGIC;
          m_axis_data_tdata : OUT STD_LOGIC_VECTOR(47 DOWNTO 0)
       );
    END COMPONENT;
@@ -637,6 +639,8 @@ end generate;
          aresetn              => '1',
          s_axis_config_tvalid => '1',
          s_axis_config_tdata  => AM_Freq,
+         m_axis_data_tready   => '1',
+         s_axis_config_tready => open,
          m_axis_data_tvalid   => open,
          m_axis_data_tdata    => AM_Sines
       );
@@ -647,6 +651,8 @@ end generate;
          aresetn              => '1',
          s_axis_config_tvalid => '1',
          s_axis_config_tdata  => PhaseInc,
+         m_axis_data_tready   => '1',
+         s_axis_config_tready => open,
          m_axis_data_tvalid   => open,
          m_axis_data_tdata    => NcoData
       );

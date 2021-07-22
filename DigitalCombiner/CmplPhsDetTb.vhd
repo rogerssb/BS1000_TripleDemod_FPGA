@@ -65,6 +65,7 @@ Test results:
 LIBRARY IEEE;
 USE IEEE.std_logic_1164.ALL;
 USE IEEE.numeric_std.ALL;
+use IEEE.math_real.all;
 Library UNISIM;
 use UNISIM.vcomponents.all;
 use work.fixed_pkg.all;
@@ -246,13 +247,16 @@ ARCHITECTURE rtl OF CmplPhsDetTb IS
       );
    END COMPONENT CmplxMult;
 
-   COMPONENT OffsetNCO
+
+   COMPONENT OffsetNCO IS
       PORT (
          aclk : IN STD_LOGIC;
-         aresetn  : IN STD_LOGIC;
+         aresetn : IN STD_LOGIC;
          s_axis_config_tvalid : IN STD_LOGIC;
+         s_axis_config_tready : OUT STD_LOGIC;
          s_axis_config_tdata : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
          m_axis_data_tvalid : OUT STD_LOGIC;
+         m_axis_data_tready : IN STD_LOGIC;
          m_axis_data_tdata : OUT STD_LOGIC_VECTOR(47 DOWNTO 0)
       );
    END COMPONENT;
@@ -351,6 +355,7 @@ ARCHITECTURE rtl OF CmplPhsDetTb IS
    constant Q                 : natural := 0;
    constant NCO_DLY           : natural := 4;
    constant FILT_OUTS         : sfixed(1 downto -16) := (others=>'0');
+   CONSTANT PHASE_10K         : sfixed(31 downto 0) := to_sfixed(10000.0 / (280.0e6 / 6.0) * 65536.0 * 65536.0, 31, 0);
 
    type     Modulation        is (BPSK, QPSK, OQPSK, SOQPSK);
    type     mcuFsm            is (IDLE, SETUP, WRITE, FINISH);
@@ -533,6 +538,12 @@ ARCHITECTURE rtl OF CmplPhsDetTb IS
             DataDlyQ       : FLOAT_ARRAY_1_18(127 downto 0) := (others=>(others=>'0'));
    signal   Delay          : SLV8;
    signal   IndexOut       : uint8 := x"00";
+   signal   SampleCount    : integer := 1;
+   signal   FreqOffset     : sfixed(5 downto 0) := 6x"0";
+   signal   PhaseIncSF     : sfixed(31 downto 0);
+   signal   SNR,
+            NoiseGain      : real := 20.0;
+   signal   NoiseGain_u    : ufixed(0 downto -17);
 
    attribute MARK_DEBUG : string;
    attribute MARK_DEBUG of ICmb, QCmb, ILock, QLock, PhsDetLocked, IndexOut,
@@ -560,8 +571,6 @@ ClkGen : if (in_simulation) generate
 
    LagCoef     <= 18x"00C80";
    LeadCoef    <= 18x"0A000";
-   NoiseGain1  <= 18x"0a1e8"; -- set 0 C/N
-   NoiseGain2  <= 18x"0a1e8";
    Ch1Agc      <= 12x"000";
    Ch2Agc      <= 12x"000";
    SweepLimit  <= 14x"16A8";
@@ -571,15 +580,39 @@ ClkGen : if (in_simulation) generate
    AM_Freq1    <= 32x"0000_0000";
    AM_Amp2     <= 18x"0_0000";
    AM_Freq2    <= 32x"0000_0000";
-   VioBits     <= 32x"0570_6680";
+   VioBits     <= 32x"0770_6680";
 
-   process begin
-      PhaseInc    <= 32x"0000_0000";
-      for k in 0 to 13 loop
-         wait for 200 us;
-         PhaseInc <= std_logic_vector(unsigned(PhaseInc) + 920350);
-      end loop;
+   MainProcess : process(ClkOver2)
+   begin
+      if (rising_edge(ClkOver2)) then
+         if (Reset) then
+            FreqOffset  <= to_sfixed(-13, FreqOffset);
+            SNR         <= 20.0;
+            NoiseGain   <= 0.0;
+            PhaseIncSF  <= PHASE_10K;
+            SampleCount <= 1;
+         else
+            PhaseIncSF <= resize(FreqOffset * PHASE_10K, PhaseIncSF);  -- -130Khz
+            if (SampleCount < 256*10-1) then
+               SampleCount <= SampleCount + 1;
+            else
+               SampleCount <= 0;
+               if (FreqOffset = 13) then
+                  FreqOffset  <= to_sfixed(-13, FreqOffset);
+                  SNR         <= SNR - 3.0;
+                  NoiseGain <= (10.0 ** (-SNR/20.0));
+               else
+                  FreqOffset <= resize(FreqOffset + 1, FreqOffset);
+               end if;
+            end if;
+         end if;
+      end if;
    end process;
+
+   NoiseGain_u <= to_ufixed(NoiseGain, NoiseGain_u);
+   NoiseGain1  <= to_slv(NoiseGain_u);
+   NoiseGain2  <= to_slv(NoiseGain_u);
+   PhaseInc <= to_slv(PhaseIncSF);
 
 else generate
    Clk            <= MonClk;
@@ -827,9 +860,12 @@ end generate;
          aresetn              => VioBits(29),
          s_axis_config_tvalid => '1',
          s_axis_config_tdata  => AM_Freq1,
+         m_axis_data_tready   => '1',
+         s_axis_config_tready => open,
          m_axis_data_tvalid   => open,
          m_axis_data_tdata    => AM_Sines1
       );
+
 
    AM_NCO2 : OffsetNCO
       PORT MAP (
@@ -837,6 +873,8 @@ end generate;
          aresetn              => VioBits(30),
          s_axis_config_tvalid => '1',
          s_axis_config_tdata  => AM_Freq2,
+         m_axis_data_tready   => '1',
+         s_axis_config_tready => open,
          m_axis_data_tvalid   => open,
          m_axis_data_tdata    => AM_Sines2
       );
@@ -853,9 +891,11 @@ end generate;
    OffTuneNCO : OffsetNCO
       PORT MAP (
          aclk                 => ClkOver2,
-         aresetn              => VioBits(28),    -- must be low for ber testing
+         aresetn              => VioBits(28) or Reset,    -- must be low for ber testing, Reset pulse initializes the outputs
          s_axis_config_tvalid => '1',
          s_axis_config_tdata  => 32x"1000",
+         m_axis_data_tready   => '1',
+         s_axis_config_tready => open,
          m_axis_data_tvalid   => open,
          m_axis_data_tdata    => OffTunedSines
       );
@@ -892,9 +932,11 @@ end generate;
    NCO : OffsetNCO
       PORT MAP (
          aclk                 => ClkOver2,
-         aresetn              => VioBits(7),
+         aresetn              => VioBits(7) and not Reset,
          s_axis_config_tvalid => '1',
          s_axis_config_tdata  => PhaseInc,
+         m_axis_data_tready   => '1',
+         s_axis_config_tready => open,
          m_axis_data_tvalid   => open,
          m_axis_data_tdata    => NcoData
       );
