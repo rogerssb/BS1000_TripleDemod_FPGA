@@ -388,30 +388,38 @@ ARCHITECTURE rtl OF DemodSerDesTop IS
    signal   DataI,
             DataQ,
             DlyData,
-            NoisyIF,
-            NoiseGain,
             adc0In,
-            AM_Amp            : SLV18;
+            AM_Amp,
+            AM_d_IF,
+            NoiseGain,
+            NoiseI,
+            NoiseQ,
+            FilteredNoise1,
+            FilteredNoise2,
+            Noise             : SLV18;
    signal   Noise1,
-            Noise2,
-            Noise             : SLV16;
+            Noise2            : SLV16;
    signal   NcodI,
             NcodQ,
             DataIsim,
             DataQsim,
-            INoisyPipe,
-            QNoisyPipe,
-            INoisy,
-            QNoisy            : FLOAT_1_18 := (others=>'0');
-   signal   NoisyAdc,
-            adcRms,
+            IAM_dPipe,
+            QAM_dPipe,
+            IAM_d,
+            QAM_d,
+            NoisyI,
+            NoisyQ            : FLOAT_1_18 := (others=>'0');
+   signal   adcRms,
             NoiseRms,
             FilteredI,
             FilteredQ,
             AM_Mod,
-            NoiseGained       : sfixed(1 downto -16) := (others=>'0');
+            NoiseGainedI,
+            NoiseGainedQ      : sfixed(1 downto -16) := (others=>'0');
    signal   DataRate          : integer range 0 to 127 := 0;
-   signal   FirDataIn,
+   signal   FirNoiseIn,
+            FirNoiseOut,
+            FirDataIn,
             FirDataOut        : std_logic_vector(47 downto 0);
    signal   NcoData,
             AM_Sines          : std_logic_vector(47 downto 0);
@@ -471,12 +479,12 @@ ClkGen : if (in_simulation) generate
       end if;
    end process;
 
-   MDB_180_1(17 downto 0) <= 18x"0"; --3333";        -- NoiseGain
-   MDB_182_3              <= 32x"000E_0B1E";    -- PhaseInc
-   MDB_184_5              <= 32x"0000_0000";    -- AM_Freq
+   MDB_180_1(17 downto 0) <= 18x"03333";        -- NoiseGain
+   MDB_182_3              <= 32x"000";    -- PhaseInc
+   MDB_184_5              <= 32x"0010_0000";    -- AM_Freq
    MDB_186(11 downto 0)   <= 12x"000" ;         -- ChAgc
    MDB_187                <= 16x"0100";         -- Options & Delay
-   MDB_188_9(17 downto 0) <= 18x"0_0000";       -- AM_Amp
+   MDB_188_9(17 downto 0) <= 18x"0_4000";       -- AM_Amp
 
    clkLocked      <= '1';
    FPGA_ID0reg <= '0';
@@ -600,8 +608,23 @@ end generate;
          data_out   => Noise2
       );
 
-   Noise <= Noise1 when (FPGA_ID0reg) else Noise2;
-   NoisyAdc <= resize(to_sfixed(adc0In, 0, -17) + NoiseGained, NoisyAdc);
+   FirNoiseIn <= 6x"0" & Noise1 & "00" & 6x"0" & Noise2 & "00";
+
+   LowpassNoise : Lowpass66
+      PORT MAP (
+         aclk                 => Clk2x,      -- run at 4x clock rate to reduce DSPs
+         aresetn              => not Reset,
+         s_axis_data_tvalid   => '1',
+         s_axis_data_tdata    => FirNoiseIn,
+         s_axis_data_tready   => open,
+         m_axis_data_tvalid   => open,
+         m_axis_data_tdata    => FirNoiseOut
+   );
+
+   -- allow filter to settle to avoid unknowns in loop filters
+   FilteredNoise1 <= FirNoiseOut(41 downto 24);
+   FilteredNoise2 <= FirNoiseOut(17 downto 00);
+
    Delay16  <= 8x"00" & Delay;
    Delay16u <= unsigned(Delay16);
    Delay_u : VariableDelayLine
@@ -613,22 +636,23 @@ end generate;
          clk         => Clk,
          ce          => '1',
          reset       => Reset,
-         Input       => to_slv(NoisyAdc),
+         Input       => adc0In,
          Delay       => Delay16u,
          Output      => DlyData
       );
 
-   ddc : dualQuadDdc    -- Down convert incoming IF to baseband, ignore other channel
+   Noise <= FilteredNoise1 when (FPGA_ID0reg) else FilteredNoise2;
+   ddc : dualQuadDdc    -- Down convert incoming IF and Noise to baseband, output is decimated
       port map (
          clk      => clk,
          reset    => reset,
          ifIn1    => DlyData,
-         ifIn2    => (others=>'0'),
+         ifIn2    => Noise,
          syncOut  => open,
          iOut1    => DataI,
          qOut1    => DataQ,
-         iOut2    => open,
-         qOut2    => open
+         iOut2    => NoiseI,
+         qOut2    => NoiseQ
       );
 
 
@@ -706,13 +730,16 @@ end generate;
             Reset          <= ResetShft(ResetShft'left);
 
             NoiseEn        <= '1';
-            NoiseGained    <= resize(to_sfixed(Noise, 4, -11) * to_sfixed(NoiseGain, INoisy), NoiseGained);
+            NoiseGainedI   <= resize(to_sfixed(NoiseI, 4, -13) * to_sfixed(NoiseGain, NoiseRms), NoiseGainedI);
+            NoiseGainedQ   <= resize(to_sfixed(NoiseQ, 4, -13) * to_sfixed(NoiseGain, NoiseRms), NoiseGainedQ);
 
             AM_Mod      <= resize(1.0 + (to_sfixed(AM_Amp, 1, -16) * to_sfixed(AM_Sines(17 downto 0), 0, -17)), AM_Mod);
-            INoisyPipe  <= resize(AM_Mod * NcodI, INoisy, fixed_wrap, fixed_truncate);
-            QNoisyPipe  <= resize(AM_Mod * NcodQ, INoisy, fixed_wrap, fixed_truncate);
-            INoisy      <= INoisyPipe;
-            QNoisy      <= QNoisyPipe;
+            IAM_dPipe  <= resize(AM_Mod * NcodI, IAM_d, fixed_wrap, fixed_truncate);
+            QAM_dPipe  <= resize(AM_Mod * NcodQ, IAM_d, fixed_wrap, fixed_truncate);
+            IAM_d      <= IAM_dPipe;
+            QAM_d      <= QAM_dPipe;
+            NoisyI      <= resize(IAM_d + NoiseGainedI, NoisyI);
+            NoisyQ      <= resize(QAM_d + NoiseGainedQ, NoisyQ);
          end if;
       end if;
    end process Delay_process;
@@ -722,7 +749,7 @@ end generate;
       if (rising_edge(Clk)) then
          if (not Reset) then
             adcRms        <= resize(adcRms - (adcRms sra 11) + (abs(to_sfixed(adc0In, 0, -17)) sra 10), adcRms);
-            NoiseRms      <= resize(NoiseRms - (NoiseRms sra 10) + (abs(NoiseGained) sra 10), NoiseRms);
+            NoiseRms      <= resize(NoiseRms - (NoiseRms sra 10) + (abs(NoiseGainedI) sra 10), NoiseRms);
          end if;
       end if;
    end process Rms_process;
@@ -731,12 +758,12 @@ end generate;
       port map (
          clk      => clk,
          ce       => '1',
-         realIn   => to_slv(INoisy),
-         imagIn   => to_slv(QNoisy),
-         ifOut    => NoisyIF
+         realIn   => to_slv(NoisyI),
+         imagIn   => to_slv(NoisyQ),
+         ifOut    => AM_d_IF
       );
 
-   IF_Mux <= (NoisyIF(17 downto 4) xor 14x"2000") when (MDB_187(8)) else adc0Reg;
+   IF_Mux <= (AM_d_IF(17 downto 4) xor 14x"2000") when (not MDB_187(8)) else adc0Reg;
 
 DataGen : if (in_simulation) generate
 

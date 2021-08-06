@@ -75,7 +75,9 @@
 //`define ADD_SCPATH
 `define ADD_CMA
 `define ADD_TRELLIS
-`define ADD_MULTIH
+`ifndef NO_MULTIH
+   `define ADD_MULTIH
+`endif
 //`define ADD_LDPC
 `define ADD_DQM
 //`define ADD_SUPERBAUD_TED

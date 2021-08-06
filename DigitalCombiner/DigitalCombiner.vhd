@@ -110,14 +110,11 @@ ARCHITECTURE rtl OF DigitalCombiner IS
          Clk4x,
          ce,
          Reset          : IN  std_logic;
-         Attack,
-         Decay          : IN  std_logic_vector(2 downto 0);
          RefLevel,
          Re1In,
          Im1In,
          Re2In,
          Im2In          : IN  float_1_18;
-         AgcDiff        : OUT FLOAT_1_18;
          Index          : OUT SLV8;
          Re1Out,
          Im1Out,
@@ -136,7 +133,6 @@ ARCHITECTURE rtl OF DigitalCombiner IS
          ch1real,
          ch2imag,
          ch2real,
-         fastagc_diff,
          lag_coef,
          lead_coef,
          swprate           : IN  SLV18;
@@ -223,8 +219,6 @@ BEGIN
          clk4x       => clk4x,
          reset       => reset or not combinerEn,
          ce          => '1',
-         Attack      => MDB_187(2 downto 0),
-         Decay       => MDB_187(6 downto 4),
          RefLevel    => to_sfixed(MDB_188_9(17 downto 0), 0, -17),
          Re1In       => re1In,
          Im1In       => im1In,
@@ -234,11 +228,10 @@ BEGIN
          Im1Out      => Imag1Out,
          Re2Out      => Real2Out,
          Im2Out      => Imag2Out,
-         AgcDiff     => FastAgcDiff,
          Index       => Index
      );
 
-   CmplxPhsDet : complexphasedetector_0
+  CmplxPhsDet : complexphasedetector_0
       PORT MAP (
          clk            => clk,
          reset          => reset or not combinerEn,
@@ -248,7 +241,6 @@ BEGIN
          ch1imag        => Imag1Out,
          ch2real        => Real2Out,
          ch2imag        => Imag2Out,
-         fastagc_diff   => to_slv(FastAgcDiff),
          lag_coef       => MDB_180_1(17 downto 0),
          lead_coef      => MDB_182_3(17 downto 0),
          sweeplmt       => MDB_186(14 downto 0),

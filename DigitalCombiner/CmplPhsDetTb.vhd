@@ -586,19 +586,19 @@ ClkGen : if (in_simulation) generate
    begin
       if (rising_edge(ClkOver2)) then
          if (Reset) then
-            FreqOffset  <= to_sfixed(-13, FreqOffset);
+            FreqOffset  <= to_sfixed(-2, FreqOffset);
             SNR         <= 20.0;
             NoiseGain   <= 0.0;
             PhaseIncSF  <= PHASE_10K;
             SampleCount <= 1;
          else
             PhaseIncSF <= resize(FreqOffset * PHASE_10K, PhaseIncSF);  -- -130Khz
-            if (SampleCount < 256*10-1) then
+            if (SampleCount < 256*50-1) then
                SampleCount <= SampleCount + 1;
             else
                SampleCount <= 0;
-               if (FreqOffset = 13) then
-                  FreqOffset  <= to_sfixed(-13, FreqOffset);
+               if (FreqOffset = 2) then
+                  FreqOffset  <= to_sfixed(-2, FreqOffset);
                   SNR         <= SNR - 3.0;
                   NoiseGain <= (10.0 ** (-SNR/20.0));
                else
