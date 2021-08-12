@@ -1,0 +1,980 @@
+
+
+================================================================
+== Vivado HLS Report for 'setup_calc_12'
+================================================================
+* Date:           Sat Oct 05 16:58:47 2019
+
+* Version:        2016.3 (Build 1682563 on Mon Oct 10 19:41:59 MDT 2016)
+* Project:        LDPC_Decoder3U
+* Solution:       solution1
+* Product family: kintex7
+* Target device:  xc7k160tfbg676-1
+
+
+================================================================
+== Performance Estimates
+================================================================
++ Timing (ns): 
+    * Summary: 
+    +--------+-------+----------+------------+
+    |  Clock | Target| Estimated| Uncertainty|
+    +--------+-------+----------+------------+
+    |ap_clk  |  10.00|      6.96|        1.25|
+    +--------+-------+----------+------------+
+
++ Latency (clock cycles): 
+    * Summary: 
+    +-----+-----+-----+-----+---------+
+    |  Latency  |  Interval | Pipeline|
+    | min | max | min | max |   Type  |
+    +-----+-----+-----+-----+---------+
+    |    2|    2|    2|    2|   none  |
+    +-----+-----+-----+-----+---------+
+
+    + Detail: 
+        * Instance: 
+        N/A
+
+        * Loop: 
+        N/A
+
+============================================================
++ Verbose Summary: Synthesis Manager
+============================================================
+InlineROM: 1
+ExposeGlobal: 0
+============================================================
++ Verbose Summary: CDFG Model
+============================================================
+IsTopModel: 0
+ResetActiveHigh: 1
+IsCombinational: 2
+IsDatapathOnly: 0
+HasWiredReturn: 1
+HasMFsm: 0
+HasVarLatency: 1
+IsPipeline: 0
+IsRtlPipelined: 0
+IsInstanceOverlapped: 0
+IsDontTouch: 0
+HasImplIP: 0
+IsGatedGlobalClock: 0
+
+
+============================================================
++ Verbose Summary: Schedule
+============================================================
+* Number of FSM states: 3
+* Pipeline: 0
+* Dataflow Pipeline: 0
+
+* FSM state transitions: 
+1 --> 
+	2  / true
+2 --> 
+	3  / true
+3 --> 
+* FSM state operations: 
+
+ <State 1>: 1.46ns
+ST_1: mB_read (245)  [1/1] 0.00ns
+:0  %mB_read = call i16 @_ssdm_op_Read.ap_auto.i16(i16 %mB)
+
+ST_1: mA_read (246)  [1/1] 0.00ns
+:1  %mA_read = call i16 @_ssdm_op_Read.ap_auto.i16(i16 %mA)
+
+ST_1: m_read (247)  [1/1] 0.00ns
+:2  %m_read = call i16 @_ssdm_op_Read.ap_auto.i16(i16 %m)
+
+ST_1: StgValue_7 (248)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3362
+:3  store i16 %m_read, i16* @inxtab_0, align 2
+
+ST_1: StgValue_8 (249)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3381
+:4  store i16 %mA_read, i16* @inxtab_1, align 2
+
+ST_1: StgValue_9 (250)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3400
+:5  store i16 %mB_read, i16* @inxtab_2, align 2
+
+ST_1: call_ret (251)  [3/3] 1.46ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:6  %call_ret = call fastcc { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } @mcalcAA_12(i16 %m_read, i16 %mA_read, i16 %mB_read)
+
+ST_1: StgValue_11 (363)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:118  store i16 0, i16* @Lam_taby_6, align 2
+
+ST_1: StgValue_12 (364)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:119  store i16 0, i16* @Lam_taby_7, align 2
+
+ST_1: StgValue_13 (365)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:120  store i16 0, i16* @Lam_taby_8, align 2
+
+ST_1: StgValue_14 (366)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:121  store i16 0, i16* @Lam_taby_9, align 2
+
+ST_1: StgValue_15 (367)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:122  store i16 0, i16* @Lam_taby_10, align 2
+
+ST_1: StgValue_16 (368)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:123  store i16 0, i16* @Lam_taby_11, align 2
+
+ST_1: StgValue_17 (369)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:124  store i16 0, i16* @Lam_taby_12, align 2
+
+ST_1: StgValue_18 (370)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:125  store i16 0, i16* @Lam_taby_13, align 2
+
+ST_1: StgValue_19 (371)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:126  store i16 0, i16* @Lam_taby_14, align 2
+
+ST_1: StgValue_20 (372)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:127  store i16 0, i16* @Lam_taby_15, align 2
+
+ST_1: StgValue_21 (373)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:128  store i16 0, i16* @Lam_taby_16, align 2
+
+ST_1: StgValue_22 (374)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:129  store i16 0, i16* @Lam_taby_17, align 2
+
+ST_1: StgValue_23 (381)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:136  store i16 128, i16* @Peta_taby_6, align 2
+
+ST_1: StgValue_24 (382)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:137  store i16 128, i16* @Peta_taby_7, align 2
+
+ST_1: StgValue_25 (383)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:138  store i16 128, i16* @Peta_taby_8, align 2
+
+ST_1: StgValue_26 (384)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:139  store i16 128, i16* @Peta_taby_9, align 2
+
+ST_1: StgValue_27 (385)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:140  store i16 128, i16* @Peta_taby_10, align 2
+
+ST_1: StgValue_28 (386)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:141  store i16 128, i16* @Peta_taby_11, align 2
+
+ST_1: StgValue_29 (387)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:142  store i16 128, i16* @Peta_taby_12, align 2
+
+ST_1: StgValue_30 (388)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:143  store i16 128, i16* @Peta_taby_13, align 2
+
+ST_1: StgValue_31 (389)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:144  store i16 128, i16* @Peta_taby_14, align 2
+
+ST_1: StgValue_32 (390)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:145  store i16 128, i16* @Peta_taby_15, align 2
+
+ST_1: StgValue_33 (391)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:146  store i16 128, i16* @Peta_taby_16, align 2
+
+ST_1: StgValue_34 (392)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:147  store i16 128, i16* @Peta_taby_17, align 2
+
+ST_1: StgValue_35 (405)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:160  store i16 0, i16* @Lam_tabz_6, align 2
+
+ST_1: StgValue_36 (406)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:161  store i16 0, i16* @Lam_tabz_7, align 2
+
+ST_1: StgValue_37 (407)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:162  store i16 0, i16* @Lam_tabz_8, align 2
+
+ST_1: StgValue_38 (408)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:163  store i16 0, i16* @Lam_tabz_9, align 2
+
+ST_1: StgValue_39 (409)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:164  store i16 0, i16* @Lam_tabz_10, align 2
+
+ST_1: StgValue_40 (410)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:165  store i16 0, i16* @Lam_tabz_11, align 2
+
+ST_1: StgValue_41 (411)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:166  store i16 0, i16* @Lam_tabz_12, align 2
+
+ST_1: StgValue_42 (412)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:167  store i16 0, i16* @Lam_tabz_13, align 2
+
+ST_1: StgValue_43 (413)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:168  store i16 0, i16* @Lam_tabz_14, align 2
+
+ST_1: StgValue_44 (414)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:169  store i16 0, i16* @Lam_tabz_15, align 2
+
+ST_1: StgValue_45 (415)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:170  store i16 0, i16* @Lam_tabz_16, align 2
+
+ST_1: StgValue_46 (416)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:171  store i16 0, i16* @Lam_tabz_17, align 2
+
+ST_1: StgValue_47 (423)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:178  store i16 128, i16* @Peta_tabz_6, align 2
+
+ST_1: StgValue_48 (424)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:179  store i16 128, i16* @Peta_tabz_7, align 2
+
+ST_1: StgValue_49 (425)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:180  store i16 128, i16* @Peta_tabz_8, align 2
+
+ST_1: StgValue_50 (426)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:181  store i16 128, i16* @Peta_tabz_9, align 2
+
+ST_1: StgValue_51 (427)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:182  store i16 128, i16* @Peta_tabz_10, align 2
+
+ST_1: StgValue_52 (428)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:183  store i16 128, i16* @Peta_tabz_11, align 2
+
+ST_1: StgValue_53 (429)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:184  store i16 128, i16* @Peta_tabz_12, align 2
+
+ST_1: StgValue_54 (430)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:185  store i16 128, i16* @Peta_tabz_13, align 2
+
+ST_1: StgValue_55 (431)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:186  store i16 128, i16* @Peta_tabz_14, align 2
+
+ST_1: StgValue_56 (432)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:187  store i16 128, i16* @Peta_tabz_15, align 2
+
+ST_1: StgValue_57 (433)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:188  store i16 128, i16* @Peta_tabz_16, align 2
+
+ST_1: StgValue_58 (434)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:189  store i16 128, i16* @Peta_tabz_17, align 2
+
+ST_1: StgValue_59 (456)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:211  store i16 0, i16* @Lam_tabf_6, align 2
+
+ST_1: StgValue_60 (457)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:212  store i16 0, i16* @Lam_tabf_7, align 2
+
+ST_1: StgValue_61 (458)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:213  store i16 0, i16* @Lam_tabf_8, align 2
+
+ST_1: StgValue_62 (459)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:214  store i16 0, i16* @Lam_tabf_9, align 2
+
+ST_1: StgValue_63 (460)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:215  store i16 0, i16* @Lam_tabf_10, align 2
+
+ST_1: StgValue_64 (461)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:216  store i16 0, i16* @Lam_tabf_11, align 2
+
+ST_1: StgValue_65 (462)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:217  store i16 0, i16* @Lam_tabf_12, align 2
+
+ST_1: StgValue_66 (463)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:218  store i16 0, i16* @Lam_tabf_13, align 2
+
+ST_1: StgValue_67 (464)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:219  store i16 0, i16* @Lam_tabf_14, align 2
+
+ST_1: StgValue_68 (465)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:220  store i16 0, i16* @Lam_tabf_15, align 2
+
+ST_1: StgValue_69 (466)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:221  store i16 0, i16* @Lam_tabf_16, align 2
+
+ST_1: StgValue_70 (467)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:222  store i16 0, i16* @Lam_tabf_17, align 2
+
+ST_1: StgValue_71 (474)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:229  store i16 128, i16* @Peta_tabf_6, align 2
+
+ST_1: StgValue_72 (475)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:230  store i16 128, i16* @Peta_tabf_7, align 2
+
+ST_1: StgValue_73 (476)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:231  store i16 128, i16* @Peta_tabf_8, align 2
+
+ST_1: StgValue_74 (477)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:232  store i16 128, i16* @Peta_tabf_9, align 2
+
+ST_1: StgValue_75 (478)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:233  store i16 128, i16* @Peta_tabf_10, align 2
+
+ST_1: StgValue_76 (479)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:234  store i16 128, i16* @Peta_tabf_11, align 2
+
+ST_1: StgValue_77 (480)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:235  store i16 128, i16* @Peta_tabf_12, align 2
+
+ST_1: StgValue_78 (481)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:236  store i16 128, i16* @Peta_tabf_13, align 2
+
+ST_1: StgValue_79 (482)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:237  store i16 128, i16* @Peta_tabf_14, align 2
+
+ST_1: StgValue_80 (483)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:238  store i16 128, i16* @Peta_tabf_15, align 2
+
+ST_1: StgValue_81 (484)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:239  store i16 128, i16* @Peta_tabf_16, align 2
+
+ST_1: StgValue_82 (485)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:240  store i16 128, i16* @Peta_tabf_17, align 2
+
+ST_1: StgValue_83 (498)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:253  store i16 0, i16* @Lam_tabg_6, align 2
+
+ST_1: StgValue_84 (499)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:254  store i16 0, i16* @Lam_tabg_7, align 2
+
+ST_1: StgValue_85 (500)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:255  store i16 0, i16* @Lam_tabg_8, align 2
+
+ST_1: StgValue_86 (501)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:256  store i16 0, i16* @Lam_tabg_9, align 2
+
+ST_1: StgValue_87 (502)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:257  store i16 0, i16* @Lam_tabg_10, align 2
+
+ST_1: StgValue_88 (503)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:258  store i16 0, i16* @Lam_tabg_11, align 2
+
+ST_1: StgValue_89 (504)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:259  store i16 0, i16* @Lam_tabg_12, align 2
+
+ST_1: StgValue_90 (505)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:260  store i16 0, i16* @Lam_tabg_13, align 2
+
+ST_1: StgValue_91 (506)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:261  store i16 0, i16* @Lam_tabg_14, align 2
+
+ST_1: StgValue_92 (507)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:262  store i16 0, i16* @Lam_tabg_15, align 2
+
+ST_1: StgValue_93 (508)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:263  store i16 0, i16* @Lam_tabg_16, align 2
+
+ST_1: StgValue_94 (509)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:264  store i16 0, i16* @Lam_tabg_17, align 2
+
+ST_1: StgValue_95 (516)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:271  store i16 128, i16* @Peta_tabg_6, align 2
+
+ST_1: StgValue_96 (517)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:272  store i16 128, i16* @Peta_tabg_7, align 2
+
+ST_1: StgValue_97 (518)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:273  store i16 128, i16* @Peta_tabg_8, align 2
+
+ST_1: StgValue_98 (519)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:274  store i16 128, i16* @Peta_tabg_9, align 2
+
+ST_1: StgValue_99 (520)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:275  store i16 128, i16* @Peta_tabg_10, align 2
+
+ST_1: StgValue_100 (521)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:276  store i16 128, i16* @Peta_tabg_11, align 2
+
+ST_1: StgValue_101 (522)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:277  store i16 128, i16* @Peta_tabg_12, align 2
+
+ST_1: StgValue_102 (523)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:278  store i16 128, i16* @Peta_tabg_13, align 2
+
+ST_1: StgValue_103 (524)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:279  store i16 128, i16* @Peta_tabg_14, align 2
+
+ST_1: StgValue_104 (525)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:280  store i16 128, i16* @Peta_tabg_15, align 2
+
+ST_1: StgValue_105 (526)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:281  store i16 128, i16* @Peta_tabg_16, align 2
+
+ST_1: StgValue_106 (527)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:282  store i16 128, i16* @Peta_tabg_17, align 2
+
+
+ <State 2>: 6.96ns
+ST_2: call_ret (251)  [2/3] 6.96ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:6  %call_ret = call fastcc { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } @mcalcAA_12(i16 %m_read, i16 %mA_read, i16 %mB_read)
+
+
+ <State 3>: 3.17ns
+ST_3: call_ret (251)  [1/3] 3.17ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:6  %call_ret = call fastcc { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } @mcalcAA_12(i16 %m_read, i16 %mA_read, i16 %mB_read)
+
+ST_3: newret (252)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:7  %newret = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 0
+
+ST_3: newret1 (253)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:8  %newret1 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 1
+
+ST_3: newret3 (254)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:9  %newret3 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 2
+
+ST_3: newret5 (255)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:10  %newret5 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 3
+
+ST_3: newret7 (256)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:11  %newret7 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 4
+
+ST_3: newret9 (257)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:12  %newret9 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 5
+
+ST_3: newret11 (258)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:13  %newret11 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 6
+
+ST_3: newret13 (259)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:14  %newret13 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 7
+
+ST_3: newret15 (260)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:15  %newret15 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 8
+
+ST_3: newret17 (261)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:16  %newret17 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 9
+
+ST_3: newret19 (262)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:17  %newret19 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 10
+
+ST_3: newret21 (263)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:18  %newret21 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 11
+
+ST_3: newret23 (264)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:19  %newret23 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 12
+
+ST_3: newret25 (265)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:20  %newret25 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 13
+
+ST_3: newret27 (266)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:21  %newret27 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 14
+
+ST_3: newret29 (267)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:22  %newret29 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 15
+
+ST_3: newret31 (268)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:23  %newret31 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 16
+
+ST_3: newret33 (269)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:24  %newret33 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 17
+
+ST_3: newret35 (270)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:25  %newret35 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 18
+
+ST_3: newret37 (271)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:26  %newret37 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 19
+
+ST_3: newret39 (272)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:27  %newret39 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 20
+
+ST_3: newret41 (273)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:28  %newret41 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 21
+
+ST_3: newret43 (274)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:29  %newret43 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 22
+
+ST_3: newret45 (275)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:30  %newret45 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 23
+
+ST_3: newret47 (276)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:31  %newret47 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 24
+
+ST_3: newret49 (277)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:32  %newret49 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 25
+
+ST_3: newret51 (278)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:33  %newret51 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 26
+
+ST_3: newret53 (279)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:34  %newret53 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 27
+
+ST_3: newret55 (280)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:35  %newret55 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 28
+
+ST_3: newret57 (281)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:36  %newret57 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 29
+
+ST_3: newret59 (282)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:37  %newret59 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 30
+
+ST_3: newret61 (283)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:38  %newret61 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 31
+
+ST_3: newret63 (284)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:39  %newret63 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 32
+
+ST_3: newret65 (285)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:40  %newret65 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 33
+
+ST_3: newret67 (286)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:41  %newret67 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 34
+
+ST_3: newret69 (287)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:42  %newret69 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 35
+
+ST_3: newret71 (288)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:43  %newret71 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 36
+
+ST_3: newret73 (289)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:44  %newret73 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 37
+
+ST_3: newret75 (290)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:45  %newret75 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 38
+
+ST_3: newret77 (291)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:46  %newret77 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 39
+
+ST_3: newret79 (292)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:47  %newret79 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 40
+
+ST_3: newret81 (293)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:48  %newret81 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 41
+
+ST_3: newret83 (294)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:49  %newret83 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 42
+
+ST_3: newret85 (295)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:50  %newret85 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 43
+
+ST_3: newret87 (296)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:51  %newret87 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 44
+
+ST_3: newret89 (297)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:52  %newret89 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 45
+
+ST_3: newret91 (298)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:53  %newret91 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 46
+
+ST_3: newret93 (299)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:54  %newret93 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 47
+
+ST_3: newret95 (300)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:55  %newret95 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 48
+
+ST_3: newret97 (301)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:56  %newret97 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 49
+
+ST_3: newret99 (302)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:57  %newret99 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 50
+
+ST_3: newret101 (303)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:58  %newret101 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 51
+
+ST_3: newret103 (304)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:59  %newret103 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 52
+
+ST_3: newret105 (305)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:60  %newret105 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 53
+
+ST_3: newret107 (306)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:61  %newret107 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 54
+
+ST_3: newret109 (307)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:62  %newret109 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 55
+
+ST_3: newret111 (308)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:63  %newret111 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 56
+
+ST_3: newret113 (309)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:64  %newret113 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 57
+
+ST_3: newret115 (310)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:65  %newret115 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 58
+
+ST_3: newret117 (311)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:66  %newret117 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 59
+
+ST_3: newret119 (312)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:67  %newret119 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 60
+
+ST_3: newret121 (313)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:68  %newret121 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 61
+
+ST_3: newret123 (314)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:69  %newret123 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 62
+
+ST_3: newret125 (315)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:70  %newret125 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 63
+
+ST_3: newret127 (316)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:71  %newret127 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 64
+
+ST_3: newret129 (317)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:72  %newret129 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 65
+
+ST_3: newret131 (318)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:73  %newret131 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 66
+
+ST_3: newret133 (319)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:74  %newret133 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 67
+
+ST_3: newret135 (320)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:75  %newret135 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 68
+
+ST_3: newret137 (321)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:76  %newret137 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 69
+
+ST_3: newret138 (322)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:77  %newret138 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 70
+
+ST_3: newret139 (323)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:78  %newret139 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 71
+
+ST_3: newret140 (324)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:79  %newret140 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 72
+
+ST_3: newret141 (325)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:80  %newret141 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 73
+
+ST_3: newret142 (326)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:81  %newret142 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 74
+
+ST_3: newret143 (327)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:82  %newret143 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 75
+
+ST_3: newret144 (328)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:83  %newret144 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 76
+
+ST_3: newret145 (329)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:84  %newret145 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 77
+
+ST_3: newret146 (330)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:85  %newret146 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 78
+
+ST_3: newret147 (331)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:86  %newret147 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 79
+
+ST_3: newret148 (332)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:87  %newret148 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 80
+
+ST_3: newret149 (333)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:88  %newret149 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 81
+
+ST_3: newret150 (334)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:89  %newret150 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 82
+
+ST_3: newret151 (335)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:90  %newret151 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 83
+
+ST_3: newret152 (336)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:91  %newret152 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 84
+
+ST_3: newret153 (337)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:92  %newret153 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 85
+
+ST_3: newret154 (338)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:93  %newret154 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 86
+
+ST_3: newret155 (339)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:94  %newret155 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 87
+
+ST_3: newret156 (340)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:95  %newret156 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 88
+
+ST_3: newret157 (341)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:96  %newret157 = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %call_ret, 89
+
+ST_3: StgValue_199 (342)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:97  store i16 %newret, i16* @Eta_tabx_0, align 2
+
+ST_3: StgValue_200 (343)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:98  store i16 %newret1, i16* @Eta_tabx_1, align 2
+
+ST_3: StgValue_201 (344)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:99  store i16 %newret3, i16* @Eta_tabx_2, align 2
+
+ST_3: StgValue_202 (345)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:100  store i16 %newret5, i16* @Lam_tabx_0, align 2
+
+ST_3: StgValue_203 (346)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:101  store i16 %newret7, i16* @Lam_tabx_1, align 2
+
+ST_3: StgValue_204 (347)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:102  store i16 %newret9, i16* @Lam_tabx_2, align 2
+
+ST_3: StgValue_205 (348)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:103  store i16 %newret11, i16* @Peta_tabx_0, align 2
+
+ST_3: StgValue_206 (349)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:104  store i16 %newret13, i16* @Peta_tabx_1, align 2
+
+ST_3: StgValue_207 (350)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:105  store i16 %newret15, i16* @Peta_tabx_2, align 2
+
+ST_3: StgValue_208 (351)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:106  store i16 %newret17, i16* @Eta_taby_0, align 2
+
+ST_3: StgValue_209 (352)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:107  store i16 %newret19, i16* @Eta_taby_1, align 2
+
+ST_3: StgValue_210 (353)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:108  store i16 %newret21, i16* @Eta_taby_2, align 2
+
+ST_3: StgValue_211 (354)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:109  store i16 %newret23, i16* @Eta_taby_3, align 2
+
+ST_3: StgValue_212 (355)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:110  store i16 %newret25, i16* @Eta_taby_4, align 2
+
+ST_3: StgValue_213 (356)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:111  store i16 %newret27, i16* @Eta_taby_5, align 2
+
+ST_3: StgValue_214 (357)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:112  store i16 %newret29, i16* @Lam_taby_0, align 2
+
+ST_3: StgValue_215 (358)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:113  store i16 %newret31, i16* @Lam_taby_1, align 2
+
+ST_3: StgValue_216 (359)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:114  store i16 %newret33, i16* @Lam_taby_2, align 2
+
+ST_3: StgValue_217 (360)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:115  store i16 %newret35, i16* @Lam_taby_3, align 2
+
+ST_3: StgValue_218 (361)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:116  store i16 %newret37, i16* @Lam_taby_4, align 2
+
+ST_3: StgValue_219 (362)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:117  store i16 %newret39, i16* @Lam_taby_5, align 2
+
+ST_3: StgValue_220 (375)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:130  store i16 %newret41, i16* @Peta_taby_0, align 2
+
+ST_3: StgValue_221 (376)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:131  store i16 %newret43, i16* @Peta_taby_1, align 2
+
+ST_3: StgValue_222 (377)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:132  store i16 %newret45, i16* @Peta_taby_2, align 2
+
+ST_3: StgValue_223 (378)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:133  store i16 %newret47, i16* @Peta_taby_3, align 2
+
+ST_3: StgValue_224 (379)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:134  store i16 %newret49, i16* @Peta_taby_4, align 2
+
+ST_3: StgValue_225 (380)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:135  store i16 %newret51, i16* @Peta_taby_5, align 2
+
+ST_3: StgValue_226 (393)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:148  store i16 %newret53, i16* @Eta_tabz_0, align 2
+
+ST_3: StgValue_227 (394)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:149  store i16 %newret55, i16* @Eta_tabz_1, align 2
+
+ST_3: StgValue_228 (395)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:150  store i16 %newret57, i16* @Eta_tabz_2, align 2
+
+ST_3: StgValue_229 (396)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:151  store i16 %newret59, i16* @Eta_tabz_3, align 2
+
+ST_3: StgValue_230 (397)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:152  store i16 %newret61, i16* @Eta_tabz_4, align 2
+
+ST_3: StgValue_231 (398)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:153  store i16 %newret63, i16* @Eta_tabz_5, align 2
+
+ST_3: StgValue_232 (399)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:154  store i16 %newret65, i16* @Lam_tabz_0, align 2
+
+ST_3: StgValue_233 (400)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:155  store i16 %newret67, i16* @Lam_tabz_1, align 2
+
+ST_3: StgValue_234 (401)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:156  store i16 %newret69, i16* @Lam_tabz_2, align 2
+
+ST_3: StgValue_235 (402)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:157  store i16 %newret71, i16* @Lam_tabz_3, align 2
+
+ST_3: StgValue_236 (403)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:158  store i16 %newret73, i16* @Lam_tabz_4, align 2
+
+ST_3: StgValue_237 (404)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:159  store i16 %newret75, i16* @Lam_tabz_5, align 2
+
+ST_3: StgValue_238 (417)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:172  store i16 %newret77, i16* @Peta_tabz_0, align 2
+
+ST_3: StgValue_239 (418)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:173  store i16 %newret79, i16* @Peta_tabz_1, align 2
+
+ST_3: StgValue_240 (419)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:174  store i16 %newret81, i16* @Peta_tabz_2, align 2
+
+ST_3: StgValue_241 (420)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:175  store i16 %newret83, i16* @Peta_tabz_3, align 2
+
+ST_3: StgValue_242 (421)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:176  store i16 %newret85, i16* @Peta_tabz_4, align 2
+
+ST_3: StgValue_243 (422)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:177  store i16 %newret87, i16* @Peta_tabz_5, align 2
+
+ST_3: StgValue_244 (435)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:190  store i16 %newret89, i16* @Eta_tabe_0, align 2
+
+ST_3: StgValue_245 (436)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:191  store i16 %newret91, i16* @Eta_tabe_1, align 2
+
+ST_3: StgValue_246 (437)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:192  store i16 %newret93, i16* @Eta_tabe_2, align 2
+
+ST_3: StgValue_247 (438)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:193  store i16 %newret95, i16* @Lam_tabe_0, align 2
+
+ST_3: StgValue_248 (439)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:194  store i16 %newret97, i16* @Lam_tabe_1, align 2
+
+ST_3: StgValue_249 (440)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:195  store i16 %newret99, i16* @Lam_tabe_2, align 2
+
+ST_3: StgValue_250 (441)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:196  store i16 %newret101, i16* @Peta_tabe_0, align 2
+
+ST_3: StgValue_251 (442)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:197  store i16 %newret103, i16* @Peta_tabe_1, align 2
+
+ST_3: StgValue_252 (443)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:198  store i16 %newret105, i16* @Peta_tabe_2, align 2
+
+ST_3: StgValue_253 (444)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:199  store i16 %newret107, i16* @Eta_tabf_0, align 2
+
+ST_3: StgValue_254 (445)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:200  store i16 %newret109, i16* @Eta_tabf_1, align 2
+
+ST_3: StgValue_255 (446)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:201  store i16 %newret111, i16* @Eta_tabf_2, align 2
+
+ST_3: StgValue_256 (447)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:202  store i16 %newret113, i16* @Eta_tabf_3, align 2
+
+ST_3: StgValue_257 (448)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:203  store i16 %newret115, i16* @Eta_tabf_4, align 2
+
+ST_3: StgValue_258 (449)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:204  store i16 %newret117, i16* @Eta_tabf_5, align 2
+
+ST_3: StgValue_259 (450)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:205  store i16 %newret119, i16* @Lam_tabf_0, align 2
+
+ST_3: StgValue_260 (451)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:206  store i16 %newret121, i16* @Lam_tabf_1, align 2
+
+ST_3: StgValue_261 (452)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:207  store i16 %newret123, i16* @Lam_tabf_2, align 2
+
+ST_3: StgValue_262 (453)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:208  store i16 %newret125, i16* @Lam_tabf_3, align 2
+
+ST_3: StgValue_263 (454)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:209  store i16 %newret127, i16* @Lam_tabf_4, align 2
+
+ST_3: StgValue_264 (455)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:210  store i16 %newret129, i16* @Lam_tabf_5, align 2
+
+ST_3: StgValue_265 (468)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:223  store i16 %newret131, i16* @Peta_tabf_0, align 2
+
+ST_3: StgValue_266 (469)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:224  store i16 %newret133, i16* @Peta_tabf_1, align 2
+
+ST_3: StgValue_267 (470)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:225  store i16 %newret135, i16* @Peta_tabf_2, align 2
+
+ST_3: StgValue_268 (471)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:226  store i16 %newret137, i16* @Peta_tabf_3, align 2
+
+ST_3: StgValue_269 (472)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:227  store i16 %newret138, i16* @Peta_tabf_4, align 2
+
+ST_3: StgValue_270 (473)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:228  store i16 %newret139, i16* @Peta_tabf_5, align 2
+
+ST_3: StgValue_271 (486)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:241  store i16 %newret140, i16* @Eta_tabg_0, align 2
+
+ST_3: StgValue_272 (487)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:242  store i16 %newret141, i16* @Eta_tabg_1, align 2
+
+ST_3: StgValue_273 (488)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:243  store i16 %newret142, i16* @Eta_tabg_2, align 2
+
+ST_3: StgValue_274 (489)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:244  store i16 %newret143, i16* @Eta_tabg_3, align 2
+
+ST_3: StgValue_275 (490)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:245  store i16 %newret144, i16* @Eta_tabg_4, align 2
+
+ST_3: StgValue_276 (491)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:246  store i16 %newret145, i16* @Eta_tabg_5, align 2
+
+ST_3: StgValue_277 (492)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:247  store i16 %newret146, i16* @Lam_tabg_0, align 2
+
+ST_3: StgValue_278 (493)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:248  store i16 %newret147, i16* @Lam_tabg_1, align 2
+
+ST_3: StgValue_279 (494)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:249  store i16 %newret148, i16* @Lam_tabg_2, align 2
+
+ST_3: StgValue_280 (495)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:250  store i16 %newret149, i16* @Lam_tabg_3, align 2
+
+ST_3: StgValue_281 (496)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:251  store i16 %newret150, i16* @Lam_tabg_4, align 2
+
+ST_3: StgValue_282 (497)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:252  store i16 %newret151, i16* @Lam_tabg_5, align 2
+
+ST_3: StgValue_283 (510)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:265  store i16 %newret152, i16* @Peta_tabg_0, align 2
+
+ST_3: StgValue_284 (511)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:266  store i16 %newret153, i16* @Peta_tabg_1, align 2
+
+ST_3: StgValue_285 (512)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:267  store i16 %newret154, i16* @Peta_tabg_2, align 2
+
+ST_3: StgValue_286 (513)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:268  store i16 %newret155, i16* @Peta_tabg_3, align 2
+
+ST_3: StgValue_287 (514)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:269  store i16 %newret156, i16* @Peta_tabg_4, align 2
+
+ST_3: StgValue_288 (515)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403
+:270  store i16 %newret157, i16* @Peta_tabg_5, align 2
+
+ST_3: StgValue_289 (528)  [1/1] 0.00ns
+:283  ret void
+
+
+
+============================================================
++ Verbose Summary: Timing violations
+============================================================
+Target clock period: 10ns, clock uncertainty: 1.25ns.
+
+ <State 1>: 1.46ns
+The critical path consists of the following:
+	wire read on port 'mB' [245]  (0 ns)
+	'call' operation ('call_ret', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403) to 'mcalcAA_12' [251]  (1.46 ns)
+
+ <State 2>: 6.96ns
+The critical path consists of the following:
+	'call' operation ('call_ret', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403) to 'mcalcAA_12' [251]  (6.96 ns)
+
+ <State 3>: 3.17ns
+The critical path consists of the following:
+	'call' operation ('call_ret', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3403) to 'mcalcAA_12' [251]  (3.17 ns)
+
+
+============================================================
++ Verbose Summary: Binding
+============================================================
+N/A
+* FSMD analyzer results:
+  - Output states:
+ - Input state : 
+  - Chain level:
+	State 1
+	State 2
+	State 3
+
+
+============================================================
++ Verbose Summary: Datapath Resource usage 
+============================================================
+N/A

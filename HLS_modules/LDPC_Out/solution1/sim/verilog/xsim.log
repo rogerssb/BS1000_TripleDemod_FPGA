@@ -1,0 +1,32 @@
+#-----------------------------------------------------------
+# xsim v2016.3 (64-bit)
+# SW Build 1682563 on Mon Oct 10 19:07:27 MDT 2016
+# IP Build 1681267 on Mon Oct 10 21:28:31 MDT 2016
+# Start of session at: Thu Oct 10 20:35:07 2019
+# Process ID: 11460
+# Current directory: C:/Users/dougo/LDPC_Out/solution1/sim/verilog
+# Command line: xsim.exe -mode tcl -source {xsim.dir/LDPC_Out/xsim_script.tcl}
+# Log file: C:/Users/dougo/LDPC_Out/solution1/sim/verilog/xsim.log
+# Journal file: C:/Users/dougo/LDPC_Out/solution1/sim/verilog\xsim.jou
+#-----------------------------------------------------------
+source xsim.dir/LDPC_Out/xsim_script.tcl
+# xsim {LDPC_Out} -autoloadwcfg -tclbatch {LDPC_Out.tcl}
+Vivado Simulator 2016.3
+Time resolution is 1 ps
+source LDPC_Out.tcl
+## run all
+////////////////////////////////////////////////////////////////////////////////////
+// Inter-Transaction Progress: Completed Transaction / Total Transaction
+// Intra-Transaction Progress: Measured Latency / Latency Estimation * 100%
+//
+// RTL Simulation : "Inter-Transaction Progress" ["Intra-Transaction Progress"] @ "Simulation Time"
+////////////////////////////////////////////////////////////////////////////////////
+// RTL Simulation : 0 / 4 [0.00%] @ "125000"
+// RTL Simulation : 1 / 4 [0.00%] @ "165000"
+// RTL Simulation : 2 / 4 [0.00%] @ "205000"
+// RTL Simulation : 3 / 4 [0.00%] @ "245000"
+// RTL Simulation : 4 / 4 [0.00%] @ "285000"
+////////////////////////////////////////////////////////////////////////////////////
+$finish called at time : 325 ns : File "C:/Users/dougo/LDPC_Out/solution1/sim/verilog/LDPC_Out.autotb.v" Line 934
+## quit
+INFO: [Common 17-206] Exiting xsim at Thu Oct 10 20:35:13 2019...

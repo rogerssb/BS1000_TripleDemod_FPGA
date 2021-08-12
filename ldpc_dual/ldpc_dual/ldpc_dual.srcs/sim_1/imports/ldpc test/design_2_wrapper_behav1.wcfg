@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="design_2_wrapper_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="design_2_wrapper" />
+            <top_module name="glbl" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="634235770500fs"></ZoomStartTime>
+      <ZoomEndTime time="634362070501fs"></ZoomEndTime>
+      <Cursor1Time time="570000000000fs"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="225"></NameColumnWidth>
+      <ValueColumnWidth column_width="130"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="31" />
+   <wvobject fp_name="/design_2_wrapper/BLOCK_RATE" type="array">
+      <obj_property name="ElementShortName">BLOCK_RATE[1:0]</obj_property>
+      <obj_property name="ObjectShortName">BLOCK_RATE[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/BLOCK_SIZE" type="array">
+      <obj_property name="ElementShortName">BLOCK_SIZE[1:0]</obj_property>
+      <obj_property name="ObjectShortName">BLOCK_SIZE[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/DECODE_OUT" type="array">
+      <obj_property name="ElementShortName">DECODE_OUT[0:0]</obj_property>
+      <obj_property name="ObjectShortName">DECODE_OUT[0:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/DECODE_OUT_VALID" type="logic">
+      <obj_property name="ElementShortName">DECODE_OUT_VALID</obj_property>
+      <obj_property name="ObjectShortName">DECODE_OUT_VALID</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/ERR_CODE" type="array">
+      <obj_property name="ElementShortName">ERR_CODE[15:0]</obj_property>
+      <obj_property name="ObjectShortName">ERR_CODE[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/Iteration_Number" type="array">
+      <obj_property name="ElementShortName">Iteration_Number[7:0]</obj_property>
+      <obj_property name="ObjectShortName">Iteration_Number[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/LDPC_MODE" type="array">
+      <obj_property name="ElementShortName">LDPC_MODE[1:0]</obj_property>
+      <obj_property name="ObjectShortName">LDPC_MODE[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/LDPC_RUN" type="logic">
+      <obj_property name="ElementShortName">LDPC_RUN</obj_property>
+      <obj_property name="ObjectShortName">LDPC_RUN</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/buff_ready" type="array">
+      <obj_property name="ElementShortName">buff_ready[0:0]</obj_property>
+      <obj_property name="ObjectShortName">buff_ready[0:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/clk_div" type="array">
+      <obj_property name="ElementShortName">clk_div[15:0]</obj_property>
+      <obj_property name="ObjectShortName">clk_div[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/clock_rtl" type="logic">
+      <obj_property name="ElementShortName">clock_rtl</obj_property>
+      <obj_property name="ObjectShortName">clock_rtl</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/cnt" type="array">
+      <obj_property name="ElementShortName">cnt[31:0]</obj_property>
+      <obj_property name="ObjectShortName">cnt[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/cur_read_pos_V" type="array">
+      <obj_property name="ElementShortName">cur_read_pos_V[15:0]</obj_property>
+      <obj_property name="ObjectShortName">cur_read_pos_V[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/cur_write_pos_V" type="array">
+      <obj_property name="ElementShortName">cur_write_pos_V[15:0]</obj_property>
+      <obj_property name="ObjectShortName">cur_write_pos_V[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/data_in" type="array">
+      <obj_property name="ElementShortName">data_in[7:0]</obj_property>
+      <obj_property name="ObjectShortName">data_in[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/deran_data" type="array">
+      <obj_property name="ElementShortName">deran_data[7:0]</obj_property>
+      <obj_property name="ObjectShortName">deran_data[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/deran_data_ap_vld" type="logic">
+      <obj_property name="ElementShortName">deran_data_ap_vld</obj_property>
+      <obj_property name="ObjectShortName">deran_data_ap_vld</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/deran_sel" type="array">
+      <obj_property name="ElementShortName">deran_sel[1:0]</obj_property>
+      <obj_property name="ObjectShortName">deran_sel[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/full" type="array">
+      <obj_property name="ElementShortName">full[0:0]</obj_property>
+      <obj_property name="ObjectShortName">full[0:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/iteration_step" type="array">
+      <obj_property name="ElementShortName">iteration_step[7:0]</obj_property>
+      <obj_property name="ObjectShortName">iteration_step[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/overrun" type="array">
+      <obj_property name="ElementShortName">overrun[0:0]</obj_property>
+      <obj_property name="ObjectShortName">overrun[0:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/read_clk_en" type="array">
+      <obj_property name="ElementShortName">read_clk_en[0:0]</obj_property>
+      <obj_property name="ObjectShortName">read_clk_en[0:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/reset_rtl" type="logic">
+      <obj_property name="ElementShortName">reset_rtl</obj_property>
+      <obj_property name="ObjectShortName">reset_rtl</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/sync" type="array">
+      <obj_property name="ElementShortName">sync[0:0]</obj_property>
+      <obj_property name="ObjectShortName">sync[0:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/write_clk_en" type="array">
+      <obj_property name="ElementShortName">write_clk_en[0:0]</obj_property>
+      <obj_property name="ObjectShortName">write_clk_en[0:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/design_2_i/setupLDPC_0/etaIndexM_V_address0" type="array">
+      <obj_property name="ElementShortName">etaIndexM_V_address0[15:0]</obj_property>
+      <obj_property name="ObjectShortName">etaIndexM_V_address0[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/design_2_i/setupLDPC_0/etaIndexN_V_address0" type="array">
+      <obj_property name="ElementShortName">etaIndexN_V_address0[15:0]</obj_property>
+      <obj_property name="ObjectShortName">etaIndexN_V_address0[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/design_2_i/setupLDPC_0/lambdaIndexM_V_address0" type="array">
+      <obj_property name="ElementShortName">lambdaIndexM_V_address0[15:0]</obj_property>
+      <obj_property name="ObjectShortName">lambdaIndexM_V_address0[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/design_2_i/raw_data_0/addra" type="array">
+      <obj_property name="ElementShortName">addra[13:0]</obj_property>
+      <obj_property name="ObjectShortName">addra[13:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/design_2_i/raw_data_0/douta" type="array">
+      <obj_property name="ElementShortName">douta[15:0]</obj_property>
+      <obj_property name="ObjectShortName">douta[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/design_2_i/raw_data_0/wea" type="array">
+      <obj_property name="ElementShortName">wea[0:0]</obj_property>
+      <obj_property name="ObjectShortName">wea[0:0]</obj_property>
+   </wvobject>
+</wave_config>

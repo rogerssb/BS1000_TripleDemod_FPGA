@@ -1,0 +1,507 @@
+Loop Counter = 12
+**************  You Lucky Biscuit it passed 4096 1/2 ************ 
+ 4096 1/2  *****  Iterations = 12 
+
+ **** All Tests Passed ********* 
+
+C:\Users\dougo\LDPC_Decoder3U\solution1\sim\verilog>call xelab xil_defaultlib.apatb_HLSLdpcLogDecScaledMin_top -prj HLSLdpcLogDecScaledMin.prj --initfile "C:/Xilinx/Vivado/2016.3/bin/../data/xsim/ip/xsim_ip.ini" --lib "ieee_proposed=./ieee_proposed" -s HLSLdpcLogDecScaledMin  
+INFO: [XSIM 43-3496] Using init file passed via -initfile option "C:/Xilinx/Vivado/2016.3/bin/../data/xsim/ip/xsim_ip.ini".
+Vivado Simulator 2016.3
+Copyright 1986-1999, 2001-2016 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2016.3/bin/unwrapped/win64.o/xelab.exe xil_defaultlib.apatb_HLSLdpcLogDecScaledMin_top -prj HLSLdpcLogDecScaledMin.prj --initfile C:/Xilinx/Vivado/2016.3/bin/../data/xsim/ip/xsim_ip.ini --lib ieee_proposed=./ieee_proposed -s HLSLdpcLogDecScaledMin 
+Multi-threading is on. Using 6 slave threads.
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/AESL_automem_pbhat0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_automem_pbhat0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/AESL_automem_pbhat1.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_automem_pbhat1
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/AESL_automem_pbhat2.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_automem_pbhat2
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/AESL_automem_pbhat3.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_automem_pbhat3
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/AESL_automem_pbhat4.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_automem_pbhat4
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/AESL_automem_pbhat5.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_automem_pbhat5
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/AESL_automem_pbhat6.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_automem_pbhat6
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/AESL_automem_pbhat7.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_automem_pbhat7
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/AESL_automem_pR.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_automem_pR
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/AESL_automem_pR1.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_automem_pR1
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/AESL_automem_pR2.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_automem_pR2
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/AESL_automem_pR3.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_automem_pR3
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/AESL_automem_pR4.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_automem_pR4
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/AESL_automem_pR5.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_automem_pR5
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/AESL_automem_pR6.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_automem_pR6
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/AESL_automem_pR7.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_automem_pR7
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/AESL_automem_pR8.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_automem_pR8
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/AESL_automem_pR9.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_automem_pR9
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/calc_ma.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module calc_ma
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/calc_n.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module calc_n
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/calc_n_12.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module calc_n_12
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/calc_n_23.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module calc_n_23
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/HLSLdpcLogDecScal3i2.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module HLSLdpcLogDecScal3i2_ram
+INFO: [VRFC 10-311] analyzing module HLSLdpcLogDecScal3i2
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/HLSLdpcLogDecScal8jQ.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module HLSLdpcLogDecScal8jQ_ram
+INFO: [VRFC 10-311] analyzing module HLSLdpcLogDecScal8jQ
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/HLSLdpcLogDecScalbvn.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module HLSLdpcLogDecScalbvn_ram
+INFO: [VRFC 10-311] analyzing module HLSLdpcLogDecScalbvn
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/HLSLdpcLogDecScalcGz.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module HLSLdpcLogDecScalcGz_ram
+INFO: [VRFC 10-311] analyzing module HLSLdpcLogDecScalcGz
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/HLSLdpcLogDecScaldAI.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module HLSLdpcLogDecScaldAI_ram
+INFO: [VRFC 10-311] analyzing module HLSLdpcLogDecScaldAI
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/HLSLdpcLogDecScaldeE.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module HLSLdpcLogDecScaldeE_ram
+INFO: [VRFC 10-311] analyzing module HLSLdpcLogDecScaldeE
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/HLSLdpcLogDecScaldiF.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module HLSLdpcLogDecScaldiF_ram
+INFO: [VRFC 10-311] analyzing module HLSLdpcLogDecScaldiF
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/HLSLdpcLogDecScaldjF.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module HLSLdpcLogDecScaldjF_ram
+INFO: [VRFC 10-311] analyzing module HLSLdpcLogDecScaldjF
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/HLSLdpcLogDecScaledMin.autotb.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module apatb_HLSLdpcLogDecScaledMin_top
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/HLSLdpcLogDecScaledMin.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module HLSLdpcLogDecScaledMin
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/load_pest_12_bot.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module load_pest_12_bot
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/load_pest_12_top.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module load_pest_12_top
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/load_pest_all.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module load_pest_all
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/load_pest_all_23.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module load_pest_all_23
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcAA.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcAA_12.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_12
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcAA_12_varinxbkb.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_12_varinxbkb_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_12_varinxbkb
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcAA_12_varinxcud.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_12_varinxcud_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_12_varinxcud
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcAA_12_varinxdEe.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_12_varinxdEe_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_12_varinxdEe
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcAA_12_varinxeOg.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_12_varinxeOg_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_12_varinxeOg
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcAA_12_varinxfYi.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_12_varinxfYi_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_12_varinxfYi
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcAA_12_varinxg8j.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_12_varinxg8j_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_12_varinxg8j
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcAA_12_varinxhbi.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_12_varinxhbi_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_12_varinxhbi
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcAA_12_varinxibs.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_12_varinxibs_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_12_varinxibs
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcAA_12_varinxjbC.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_12_varinxjbC_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_12_varinxjbC
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcAA_12_varinxkbM.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_12_varinxkbM_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_12_varinxkbM
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcAA_23.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_23
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcAA_23_varinxAem.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxAem_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxAem
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcAA_23_varinxBew.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxBew_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxBew
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcAA_23_varinxCeG.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxCeG_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxCeG
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcAA_23_varinxlbW.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxlbW_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxlbW
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcAA_23_varinxmb6.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxmb6_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxmb6
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcAA_23_varinxncg.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxncg_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxncg
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcAA_23_varinxocq.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxocq_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxocq
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcAA_23_varinxpcA.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxpcA_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxpcA
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcAA_23_varinxqcK.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxqcK_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxqcK
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcAA_23_varinxrcU.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxrcU_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxrcU
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcAA_23_varinxsc4.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxsc4_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxsc4
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcAA_23_varinxtde.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxtde_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxtde
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcAA_23_varinxudo.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxudo_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxudo
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcAA_23_varinxvdy.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxvdy_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxvdy
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcAA_23_varinxwdI.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxwdI_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxwdI
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcAA_23_varinxxdS.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxxdS_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxxdS
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcAA_23_varinxyd2.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxyd2_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxyd2
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcAA_23_varinxzec.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxzec_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxzec
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcAA_varinx18AEe0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18AEe0_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18AEe0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcAA_varinx18AFfa.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18AFfa_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18AFfa
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcAA_varinx18AGfk.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18AGfk_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18AGfk
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcAA_varinx18AHfu.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18AHfu_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18AHfu
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcAA_varinx18AIfE.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18AIfE_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18AIfE
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcAA_varinx18AJfO.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18AJfO_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18AJfO
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcAA_varinx18ARg6.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18ARg6_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18ARg6
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcAA_varinx18AShg.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18AShg_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18AShg
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcAA_varinx18AThq.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18AThq_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18AThq
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcAA_varinx18AUhA.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18AUhA_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18AUhA
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcAA_varinx18AVhK.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18AVhK_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18AVhK
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcAA_varinx18AWhU.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18AWhU_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18AWhU
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcAA_varinx18B0iy.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18B0iy_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18B0iy
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcAA_varinx18B1iI.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18B1iI_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18B1iI
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcAA_varinx18B2iS.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18B2iS_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18B2iS
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcAA_varinx18BKfY.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18BKfY_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18BKfY
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcAA_varinx18BLf8.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18BLf8_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18BLf8
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcAA_varinx18BMgi.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18BMgi_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18BMgi
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcAA_varinx18BNgs.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18BNgs_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18BNgs
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcAA_varinx18BOgC.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18BOgC_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18BOgC
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcAA_varinx18BPgM.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18BPgM_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18BPgM
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcAA_varinx18BXh4.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18BXh4_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18BXh4
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcAA_varinx18BYie.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18BYie_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18BYie
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcAA_varinx18BZio.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18BZio_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18BZio
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcAA_varinx3_1DeQ.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx3_1DeQ_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx3_1DeQ
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcAA_varinx3_4QgW.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx3_4QgW_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx3_4QgW
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcB.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcB
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcC.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcC
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcD.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcD
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcE.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcE
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcF.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcF
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/mcalcG.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcG
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/setup_calc.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module setup_calc
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/setup_calc_12.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module setup_calc_12
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/setup_calc_23.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module setup_calc_23
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/update_hat_all.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module update_hat_all
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/update_lam_all.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module update_lam_all
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/update_lam_all_12.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module update_lam_all_12
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/update_lam_all_23.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module update_lam_all_23
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/write_result.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module write_result
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/write_result_12.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module write_result_12
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/write_result_23.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module write_result_23
+Starting static elaboration
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module xil_defaultlib.HLSLdpcLogDecScal3i2_ram
+Compiling module xil_defaultlib.HLSLdpcLogDecScal3i2(DataWidth=1...
+Compiling module xil_defaultlib.HLSLdpcLogDecScal8jQ_ram
+Compiling module xil_defaultlib.HLSLdpcLogDecScal8jQ(DataWidth=1...
+Compiling module xil_defaultlib.HLSLdpcLogDecScalbvn_ram
+Compiling module xil_defaultlib.HLSLdpcLogDecScalbvn(DataWidth=1...
+Compiling module xil_defaultlib.HLSLdpcLogDecScalcGz_ram
+Compiling module xil_defaultlib.HLSLdpcLogDecScalcGz(DataWidth=1...
+Compiling module xil_defaultlib.HLSLdpcLogDecScaldeE_ram
+Compiling module xil_defaultlib.HLSLdpcLogDecScaldeE(DataWidth=3...
+Compiling module xil_defaultlib.HLSLdpcLogDecScaldiF_ram
+Compiling module xil_defaultlib.HLSLdpcLogDecScaldiF(DataWidth=3...
+Compiling module xil_defaultlib.HLSLdpcLogDecScaldjF_ram
+Compiling module xil_defaultlib.HLSLdpcLogDecScaldjF(DataWidth=3...
+Compiling module xil_defaultlib.HLSLdpcLogDecScaldAI_ram
+Compiling module xil_defaultlib.HLSLdpcLogDecScaldAI(DataWidth=1...
+Compiling module xil_defaultlib.mcalcC
+Compiling module xil_defaultlib.mcalcD
+Compiling module xil_defaultlib.mcalcF
+Compiling module xil_defaultlib.mcalcG
+Compiling module xil_defaultlib.mcalcB
+Compiling module xil_defaultlib.mcalcE
+Compiling module xil_defaultlib.calc_ma
+Compiling module xil_defaultlib.mcalcAA_varinx3_1DeQ_rom
+Compiling module xil_defaultlib.mcalcAA_varinx3_1DeQ(DataWidth=2...
+Compiling module xil_defaultlib.mcalcAA_varinx18AEe0_rom
+Compiling module xil_defaultlib.mcalcAA_varinx18AEe0(DataWidth=2...
+Compiling module xil_defaultlib.mcalcAA_varinx18AFfa_rom
+Compiling module xil_defaultlib.mcalcAA_varinx18AFfa(DataWidth=2...
+Compiling module xil_defaultlib.mcalcAA_varinx18AGfk_rom
+Compiling module xil_defaultlib.mcalcAA_varinx18AGfk(DataWidth=2...
+Compiling module xil_defaultlib.mcalcAA_varinx18AHfu_rom
+Compiling module xil_defaultlib.mcalcAA_varinx18AHfu(DataWidth=2...
+Compiling module xil_defaultlib.mcalcAA_varinx18AIfE_rom
+Compiling module xil_defaultlib.mcalcAA_varinx18AIfE(DataWidth=2...
+Compiling module xil_defaultlib.mcalcAA_varinx18AJfO_rom
+Compiling module xil_defaultlib.mcalcAA_varinx18AJfO(DataWidth=2...
+Compiling module xil_defaultlib.mcalcAA_varinx18BKfY_rom
+Compiling module xil_defaultlib.mcalcAA_varinx18BKfY(DataWidth=2...
+Compiling module xil_defaultlib.mcalcAA_varinx18BLf8_rom
+Compiling module xil_defaultlib.mcalcAA_varinx18BLf8(DataWidth=2...
+Compiling module xil_defaultlib.mcalcAA_varinx18BMgi_rom
+Compiling module xil_defaultlib.mcalcAA_varinx18BMgi(DataWidth=2...
+Compiling module xil_defaultlib.mcalcAA_varinx18BNgs_rom
+Compiling module xil_defaultlib.mcalcAA_varinx18BNgs(DataWidth=2...
+Compiling module xil_defaultlib.mcalcAA_varinx18BOgC_rom
+Compiling module xil_defaultlib.mcalcAA_varinx18BOgC(DataWidth=2...
+Compiling module xil_defaultlib.mcalcAA_varinx18BPgM_rom
+Compiling module xil_defaultlib.mcalcAA_varinx18BPgM(DataWidth=2...
+Compiling module xil_defaultlib.mcalcAA_varinx3_4QgW_rom
+Compiling module xil_defaultlib.mcalcAA_varinx3_4QgW(DataWidth=2...
+Compiling module xil_defaultlib.mcalcAA_varinx18ARg6_rom
+Compiling module xil_defaultlib.mcalcAA_varinx18ARg6(DataWidth=2...
+Compiling module xil_defaultlib.mcalcAA_varinx18AShg_rom
+Compiling module xil_defaultlib.mcalcAA_varinx18AShg(DataWidth=2...
+Compiling module xil_defaultlib.mcalcAA_varinx18AThq_rom
+Compiling module xil_defaultlib.mcalcAA_varinx18AThq(DataWidth=2...
+Compiling module xil_defaultlib.mcalcAA_varinx18AUhA_rom
+Compiling module xil_defaultlib.mcalcAA_varinx18AUhA(DataWidth=2...
+Compiling module xil_defaultlib.mcalcAA_varinx18AVhK_rom
+Compiling module xil_defaultlib.mcalcAA_varinx18AVhK(DataWidth=2...
+Compiling module xil_defaultlib.mcalcAA_varinx18AWhU_rom
+Compiling module xil_defaultlib.mcalcAA_varinx18AWhU(DataWidth=2...
+Compiling module xil_defaultlib.mcalcAA_varinx18BXh4_rom
+Compiling module xil_defaultlib.mcalcAA_varinx18BXh4(DataWidth=2...
+Compiling module xil_defaultlib.mcalcAA_varinx18BYie_rom
+Compiling module xil_defaultlib.mcalcAA_varinx18BYie(DataWidth=2...
+Compiling module xil_defaultlib.mcalcAA_varinx18BZio_rom
+Compiling module xil_defaultlib.mcalcAA_varinx18BZio(DataWidth=2...
+Compiling module xil_defaultlib.mcalcAA_varinx18B0iy_rom
+Compiling module xil_defaultlib.mcalcAA_varinx18B0iy(DataWidth=2...
+Compiling module xil_defaultlib.mcalcAA_varinx18B1iI_rom
+Compiling module xil_defaultlib.mcalcAA_varinx18B1iI(DataWidth=2...
+Compiling module xil_defaultlib.mcalcAA_varinx18B2iS_rom
+Compiling module xil_defaultlib.mcalcAA_varinx18B2iS(DataWidth=2...
+Compiling module xil_defaultlib.mcalcAA
+Compiling module xil_defaultlib.setup_calc
+Compiling module xil_defaultlib.write_result
+Compiling module xil_defaultlib.mcalcAA_12_varinxbkb_rom
+Compiling module xil_defaultlib.mcalcAA_12_varinxbkb(DataWidth=3...
+Compiling module xil_defaultlib.mcalcAA_12_varinxcud_rom
+Compiling module xil_defaultlib.mcalcAA_12_varinxcud(DataWidth=3...
+Compiling module xil_defaultlib.mcalcAA_12_varinxdEe_rom
+Compiling module xil_defaultlib.mcalcAA_12_varinxdEe(DataWidth=3...
+Compiling module xil_defaultlib.mcalcAA_12_varinxeOg_rom
+Compiling module xil_defaultlib.mcalcAA_12_varinxeOg(DataWidth=3...
+Compiling module xil_defaultlib.mcalcAA_12_varinxfYi_rom
+Compiling module xil_defaultlib.mcalcAA_12_varinxfYi(DataWidth=3...
+Compiling module xil_defaultlib.mcalcAA_12_varinxg8j_rom
+Compiling module xil_defaultlib.mcalcAA_12_varinxg8j(DataWidth=3...
+Compiling module xil_defaultlib.mcalcAA_12_varinxhbi_rom
+Compiling module xil_defaultlib.mcalcAA_12_varinxhbi(DataWidth=3...
+Compiling module xil_defaultlib.mcalcAA_12_varinxibs_rom
+Compiling module xil_defaultlib.mcalcAA_12_varinxibs(DataWidth=3...
+Compiling module xil_defaultlib.mcalcAA_12_varinxjbC_rom
+Compiling module xil_defaultlib.mcalcAA_12_varinxjbC(DataWidth=3...
+Compiling module xil_defaultlib.mcalcAA_12_varinxkbM_rom
+Compiling module xil_defaultlib.mcalcAA_12_varinxkbM(DataWidth=3...
+Compiling module xil_defaultlib.mcalcAA_12
+Compiling module xil_defaultlib.setup_calc_12
+Compiling module xil_defaultlib.mcalcAA_23_varinxlbW_rom
+Compiling module xil_defaultlib.mcalcAA_23_varinxlbW(DataWidth=3...
+Compiling module xil_defaultlib.mcalcAA_23_varinxmb6_rom
+Compiling module xil_defaultlib.mcalcAA_23_varinxmb6(DataWidth=3...
+Compiling module xil_defaultlib.mcalcAA_23_varinxncg_rom
+Compiling module xil_defaultlib.mcalcAA_23_varinxncg(DataWidth=3...
+Compiling module xil_defaultlib.mcalcAA_23_varinxocq_rom
+Compiling module xil_defaultlib.mcalcAA_23_varinxocq(DataWidth=3...
+Compiling module xil_defaultlib.mcalcAA_23_varinxpcA_rom
+Compiling module xil_defaultlib.mcalcAA_23_varinxpcA(DataWidth=8...
+Compiling module xil_defaultlib.mcalcAA_23_varinxqcK_rom
+Compiling module xil_defaultlib.mcalcAA_23_varinxqcK(DataWidth=3...
+Compiling module xil_defaultlib.mcalcAA_23_varinxrcU_rom
+Compiling module xil_defaultlib.mcalcAA_23_varinxrcU(DataWidth=3...
+Compiling module xil_defaultlib.mcalcAA_23_varinxsc4_rom
+Compiling module xil_defaultlib.mcalcAA_23_varinxsc4(DataWidth=3...
+Compiling module xil_defaultlib.mcalcAA_23_varinxtde_rom
+Compiling module xil_defaultlib.mcalcAA_23_varinxtde(DataWidth=8...
+Compiling module xil_defaultlib.mcalcAA_23_varinxudo_rom
+Compiling module xil_defaultlib.mcalcAA_23_varinxudo(DataWidth=3...
+Compiling module xil_defaultlib.mcalcAA_23_varinxvdy_rom
+Compiling module xil_defaultlib.mcalcAA_23_varinxvdy(DataWidth=3...
+Compiling module xil_defaultlib.mcalcAA_23_varinxwdI_rom
+Compiling module xil_defaultlib.mcalcAA_23_varinxwdI(DataWidth=3...
+Compiling module xil_defaultlib.mcalcAA_23_varinxxdS_rom
+Compiling module xil_defaultlib.mcalcAA_23_varinxxdS(DataWidth=3...
+Compiling module xil_defaultlib.mcalcAA_23_varinxyd2_rom
+Compiling module xil_defaultlib.mcalcAA_23_varinxyd2(DataWidth=1...
+Compiling module xil_defaultlib.mcalcAA_23_varinxzec_rom
+Compiling module xil_defaultlib.mcalcAA_23_varinxzec(DataWidth=3...
+Compiling module xil_defaultlib.mcalcAA_23_varinxAem_rom
+Compiling module xil_defaultlib.mcalcAA_23_varinxAem(DataWidth=3...
+Compiling module xil_defaultlib.mcalcAA_23_varinxBew_rom
+Compiling module xil_defaultlib.mcalcAA_23_varinxBew(DataWidth=3...
+Compiling module xil_defaultlib.mcalcAA_23_varinxCeG_rom
+Compiling module xil_defaultlib.mcalcAA_23_varinxCeG(DataWidth=1...
+Compiling module xil_defaultlib.mcalcAA_23
+Compiling module xil_defaultlib.setup_calc_23
+Compiling module xil_defaultlib.write_result_12
+Compiling module xil_defaultlib.write_result_23
+Compiling module xil_defaultlib.load_pest_all
+Compiling module xil_defaultlib.update_lam_all
+Compiling module xil_defaultlib.update_hat_all
+Compiling module xil_defaultlib.calc_n
+Compiling module xil_defaultlib.load_pest_12_top
+Compiling module xil_defaultlib.load_pest_12_bot
+Compiling module xil_defaultlib.update_lam_all_12
+Compiling module xil_defaultlib.calc_n_12
+Compiling module xil_defaultlib.load_pest_all_23
+Compiling module xil_defaultlib.update_lam_all_23
+Compiling module xil_defaultlib.calc_n_23
+Compiling module xil_defaultlib.HLSLdpcLogDecScaledMin
+Compiling module xil_defaultlib.AESL_automem_pR
+Compiling module xil_defaultlib.AESL_automem_pR1
+Compiling module xil_defaultlib.AESL_automem_pR2
+Compiling module xil_defaultlib.AESL_automem_pR3
+Compiling module xil_defaultlib.AESL_automem_pR4
+Compiling module xil_defaultlib.AESL_automem_pR5
+Compiling module xil_defaultlib.AESL_automem_pR6
+Compiling module xil_defaultlib.AESL_automem_pR7
+Compiling module xil_defaultlib.AESL_automem_pR8
+Compiling module xil_defaultlib.AESL_automem_pR9
+Compiling module xil_defaultlib.AESL_automem_pbhat0
+Compiling module xil_defaultlib.AESL_automem_pbhat1
+Compiling module xil_defaultlib.AESL_automem_pbhat2
+Compiling module xil_defaultlib.AESL_automem_pbhat3
+Compiling module xil_defaultlib.AESL_automem_pbhat4
+Compiling module xil_defaultlib.AESL_automem_pbhat5
+Compiling module xil_defaultlib.AESL_automem_pbhat6
+Compiling module xil_defaultlib.AESL_automem_pbhat7
+Compiling module xil_defaultlib.apatb_HLSLdpcLogDecScaledMin_top
+Built simulation snapshot HLSLdpcLogDecScaledMin
+
+****** Webtalk v2016.3 (64-bit)
+  **** SW Build 1682563 on Mon Oct 10 19:07:27 MDT 2016
+  **** IP Build 1681267 on Mon Oct 10 21:28:31 MDT 2016
+    ** Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+
+source C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/xsim.dir/HLSLdpcLogDecScaledMin/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-186] 'C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/xsim.dir/HLSLdpcLogDecScaledMin/webtalk/usage_statistics_ext_xsim.xml' has been successfully sent to Xilinx on Sun Oct 06 12:00:57 2019. For additional details about this file, please refer to the WebTalk help file at C:/Xilinx/Vivado/2016.3/doc/webtalk_introduction.html.
+INFO: [Common 17-206] Exiting Webtalk at Sun Oct 06 12:00:57 2019...
+
+****** xsim v2016.3 (64-bit)
+  **** SW Build 1682563 on Mon Oct 10 19:07:27 MDT 2016
+  **** IP Build 1681267 on Mon Oct 10 21:28:31 MDT 2016
+    ** Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/HLSLdpcLogDecScaledMin/xsim_script.tcl
+# xsim {HLSLdpcLogDecScaledMin} -autoloadwcfg -tclbatch {HLSLdpcLogDecScaledMin.tcl}
+Vivado Simulator 2016.3
+Time resolution is 1 ps
+source HLSLdpcLogDecScaledMin.tcl
+## run all
+////////////////////////////////////////////////////////////////////////////////////
+// Inter-Transaction Progress: Completed Transaction / Total Transaction
+// Intra-Transaction Progress: Measured Latency / Latency Estimation * 100%
+//
+// RTL Simulation : "Inter-Transaction Progress" ["Intra-Transaction Progress"] @ "Simulation Time"
+////////////////////////////////////////////////////////////////////////////////////
+// RTL Simulation : 0 / 1 [n/a] @ "125000"
+// RTL Simulation : 1 / 1 [n/a] @ "9381795000"
+////////////////////////////////////////////////////////////////////////////////////
+$finish called at time : 9381835 ns : File "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/HLSLdpcLogDecScaledMin.autotb.v" Line 1465
+run: Time (s): cpu = 00:00:00 ; elapsed = 00:15:25 . Memory (MB): peak = 207.219 ; gain = 0.000
+## quit
+INFO: [Common 17-206] Exiting xsim at Sun Oct 06 12:16:31 2019...
+**************  You Lucky Biscuit it passed 4096 1/2 ************ 
+ 4096 1/2  *****  Iterations = 50 
+
+ **** All Tests Passed ********* 

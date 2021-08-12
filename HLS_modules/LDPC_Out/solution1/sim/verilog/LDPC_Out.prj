@@ -1,0 +1,11 @@
+sv xil_defaultlib "AESL_automem_mem_out0.v"
+sv xil_defaultlib "AESL_automem_mem_out1.v"
+sv xil_defaultlib "AESL_automem_mem_out2.v"
+sv xil_defaultlib "AESL_automem_mem_out3.v"
+sv xil_defaultlib "AESL_automem_mem_out4.v"
+sv xil_defaultlib "AESL_automem_mem_out5.v"
+sv xil_defaultlib "AESL_automem_mem_out6.v"
+sv xil_defaultlib "AESL_automem_mem_out7.v"
+sv xil_defaultlib "LDPC_Out.autotb.v"
+sv xil_defaultlib "LDPC_Out.v"
+

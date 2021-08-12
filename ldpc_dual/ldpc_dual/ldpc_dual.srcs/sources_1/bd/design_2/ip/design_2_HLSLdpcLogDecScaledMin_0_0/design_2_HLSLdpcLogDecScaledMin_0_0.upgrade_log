@@ -1,0 +1,63 @@
+Copyright 1986-2015 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2015.2 (win64) Build 1266856 Fri Jun 26 16:35:25 MDT 2015
+| Date         : Sun Aug 26 22:30:49 2018
+| Host         : DESKTOP-JTGGDF4 running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7k160tffv676-2
+------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'design_2_HLSLdpcLogDecScaledMin_0_0'
+
+1. Summary
+----------
+
+CAUTION (success, with warnings) in the upgrade of design_2_HLSLdpcLogDecScaledMin_0_0 (xilinx.com:hls:HLSLdpcLogDecScaledMin:1.0) from (Rev. 1804041814) to (Rev. 1808262144)
+
+After upgrade, an IP may have parameter and port differences compared to the original customization. Please review the parameters within the IP customization GUI to ensure proper functionality. Also, please review the updated IP instantiation template to ensure proper connectivity, and update your design if required.
+
+2. Interface Information
+------------------------
+
+Detected external interface differences while upgrading IP 'design_2_HLSLdpcLogDecScaledMin_0_0'.
+
+
+-upgrade has removed interface 'pR_V_address0'
+-upgrade has removed interface 'pR_V_q0'
+-upgrade has added interface 'pR_address0'
+-upgrade has added interface 'pR_q0'
+
+3. Connection Warnings
+----------------------
+
+Detected external port differences while upgrading IP 'design_2_HLSLdpcLogDecScaledMin_0_0'. These changes may impact your design.
+
+
+-upgrade has removed port 'pR_V_address0'
+-upgrade has removed port 'pR_V_ce0'
+-upgrade has removed port 'pR_V_q0'
+-upgrade has added port 'pR_address0'
+-upgrade has added port 'pR_ce0'
+-upgrade has added port 'pR_q0'
+
+
+
+
+
+
+Copyright 1986-2015 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2015.2 (win64) Build 1266856 Fri Jun 26 16:35:25 MDT 2015
+| Date         : Wed Apr 04 23:08:34 2018
+| Host         : DESKTOP-JTGGDF4 running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7k160tffv676-2
+------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'design_2_HLSLdpcLogDecScaledMin_0_0'
+
+1. Summary
+----------
+
+SUCCESS in the upgrade of design_2_HLSLdpcLogDecScaledMin_0_0 (xilinx.com:hls:HLSLdpcLogDecScaledMin:1.0) from (Rev. 1803251525) to (Rev. 1804041814)
+

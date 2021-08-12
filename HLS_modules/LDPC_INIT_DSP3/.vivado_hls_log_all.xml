@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vivadoHLSLog:LogRoot xmlns:vivadoHLSLog="www.xilinx.com/vivadoHLSLog">
+  <errorLogs>
+    <logs>
+      <synLog/>
+      <simLog>
+        <logs message="@E [SIM-4] *** C/RTL co-simulation finished: FAIL ***&#xD;&#xA;command 'ap_source' returned error code&#xD;&#xA;    while executing&#xD;&#xA;&quot;source C:/Users/dougo/LDPC_INIT_DSP3/solution1/cosim.tcl&quot;&#xD;&#xA;    invoked from within&#xD;&#xA;&quot;hls::main C:/Users/dougo/LDPC_INIT_DSP3/solution1/cosim.tcl&quot;&#xD;&#xA;    (&quot;uplevel&quot; body line 1)&#xD;&#xA;    invoked from within&#xD;&#xA;&quot;uplevel 1 hls::main {*}$args&quot;&#xD;&#xA;    (procedure &quot;hls_proc&quot; line 5)&#xD;&#xA;    invoked from within&#xD;&#xA;&quot;hls_proc $argv&quot;" projectName="LDPC_INIT_DSP3" solutionName="solution1" date="2018-03-23T18:06:01.422-0400"/>
+        <logs message="@E [SIM-119] Cannot find ISIM. Make sure it is added to the path variable." projectName="LDPC_INIT_DSP3" solutionName="solution1" date="2018-03-23T18:06:01.259-0400"/>
+      </simLog>
+      <mgLog/>
+      <packageLog/>
+      <csimLog/>
+    </logs>
+  </errorLogs>
+  <warningLogs>
+    <logs>
+      <synLog/>
+      <simLog/>
+      <mgLog/>
+      <packageLog>
+        <logs message="WARNING: [IMPL 213-201] IO timing constraints are not applied without adding IO buffers.&#xD;&#xA;" projectName="LDPC_INIT_DSP3" solutionName="solution2" date="2019-03-14T14:54:18.329-0400" type="Warning"/>
+        <logs message="WARNING: [IMPL 213-201] IO timing constraints are not applied without adding IO buffers." projectName="LDPC_INIT_DSP3" solutionName="solution2" date="2019-03-14T14:54:08.536-0400" type="Warning"/>
+      </packageLog>
+      <csimLog/>
+    </logs>
+  </warningLogs>
+</vivadoHLSLog:LogRoot>

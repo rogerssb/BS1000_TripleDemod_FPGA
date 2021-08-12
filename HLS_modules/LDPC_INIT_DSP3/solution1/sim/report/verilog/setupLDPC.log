@@ -1,0 +1,76 @@
+@I [SIM-47] Using XSIM for RTL simulation.
+@I [SIM-14] Instrumenting C test bench ...
+   Build using "C:/Xilinx/Vivado_HLS/2015.2/msys/bin/g++.exe"
+   Compiling LDPC_INIT_DSP3.cpp_pre.cpp.tb.cpp
+   Compiling LDPC_INT_TEST.cpp_pre.cpp.tb.cpp
+   Compiling apatb_setupLDPC.cpp
+   Generating cosim.tv.exe
+@I [SIM-302] Starting C TB testing ... 
+@I [SIM-333] Generating C post check test bench ...
+@I [SIM-12] Generating RTL test bench ...
+@I [SIM-323] Starting verilog simulation. 
+@I [SIM-15] Starting XSIM ...
+@I [SIM-316] Starting C post checking ...
+all test passed 
+
+C:\Users\dougo\LDPC_INIT_DSP3\solution1\sim\verilog>call xelab xil_defaultlib.apatb_setupLDPC_top -prj setupLDPC.prj --lib "ieee_proposed=./ieee_proposed" -s setupLDPC  
+Vivado Simulator 2015.2
+Copyright 1986-1999, 2001-2015 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2015.2/bin/unwrapped/win64.o/xelab.exe xil_defaultlib.apatb_setupLDPC_top -prj setupLDPC.prj --lib ieee_proposed=./ieee_proposed -s setupLDPC 
+Multi-threading is on. Using 6 slave threads.
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/dougo/LDPC_INIT_DSP3/solution1/sim/verilog/AESL_automem_etaIndexM_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_automem_etaIndexM_V
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/dougo/LDPC_INIT_DSP3/solution1/sim/verilog/AESL_automem_etaIndexN_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_automem_etaIndexN_V
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/dougo/LDPC_INIT_DSP3/solution1/sim/verilog/AESL_automem_lambdaIndexM_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_automem_lambdaIndexM_V
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/dougo/LDPC_INIT_DSP3/solution1/sim/verilog/setupLDPC.autotb.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module apatb_setupLDPC_top
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/dougo/LDPC_INIT_DSP3/solution1/sim/verilog/setupLDPC.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module setupLDPC
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/dougo/LDPC_INIT_DSP3/solution1/sim/verilog/setupLDPC_load_etaIndexM.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module setupLDPC_load_etaIndexM
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/dougo/LDPC_INIT_DSP3/solution1/sim/verilog/setupLDPC_load_etaIndexN.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module setupLDPC_load_etaIndexN
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/dougo/LDPC_INIT_DSP3/solution1/sim/verilog/setupLDPC_load_lambdaIndexM.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module setupLDPC_load_lambdaIndexM
+Starting static elaboration
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module xil_defaultlib.setupLDPC_load_etaIndexM
+Compiling module xil_defaultlib.setupLDPC_load_lambdaIndexM
+Compiling module xil_defaultlib.setupLDPC_load_etaIndexN
+Compiling module xil_defaultlib.setupLDPC
+Compiling module xil_defaultlib.AESL_automem_etaIndexM_V
+Compiling module xil_defaultlib.AESL_automem_etaIndexN_V
+Compiling module xil_defaultlib.AESL_automem_lambdaIndexM_V
+Compiling module xil_defaultlib.apatb_setupLDPC_top
+Built simulation snapshot setupLDPC
+
+****** Webtalk v2015.2 (64-bit)
+  **** SW Build 1266856 on Fri Jun 26 16:35:25 MDT 2015
+  **** IP Build 1264090 on Wed Jun 24 14:22:01 MDT 2015
+    ** Copyright 1986-2015 Xilinx, Inc. All Rights Reserved.
+
+source C:/Users/dougo/LDPC_INIT_DSP3/solution1/sim/verilog/xsim.dir/setupLDPC/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-186] 'C:/Users/dougo/LDPC_INIT_DSP3/solution1/sim/verilog/xsim.dir/setupLDPC/webtalk/usage_statistics_ext_xsim.xml' has been successfully sent to Xilinx on Fri Mar 23 18:07:09 2018. For additional details about this file, please refer to the WebTalk help file at C:/Xilinx/Vivado/2015.2/doc/webtalk_introduction.html.
+INFO: [Common 17-206] Exiting Webtalk at Fri Mar 23 18:07:09 2018...
+
+****** xsim v2015.2 (64-bit)
+  **** SW Build 1266856 on Fri Jun 26 16:35:25 MDT 2015
+  **** IP Build 1264090 on Wed Jun 24 14:22:01 MDT 2015
+    ** Copyright 1986-2015 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/setupLDPC/xsim_script.tcl
+# xsim {setupLDPC} -maxdeltaid 10000 -autoloadwcfg -tclbatch {setupLDPC.tcl}
+Vivado Simulator 2015.2
+Time resolution is 1 ps
+source setupLDPC.tcl
+## run all
+$finish called at time : 3088615400 ps : File "C:/Users/dougo/LDPC_INIT_DSP3/solution1/sim/verilog/setupLDPC.autotb.v" Line 1012
+## quit
+INFO: [Common 17-206] Exiting xsim at Fri Mar 23 18:07:17 2018...
+all test passed 
+@I [SIM-1000] *** C/RTL co-simulation finished: PASS ***

@@ -1,0 +1,290 @@
+@I [HLS-0] Workspace C:/Users/dougo/LDPC_INIT_DSP3/solution1 opened at Fri Mar 23 18:06:19 -0400 2018
+@I [HLS-100] Command "config_clock -quiet -name default -period 10 -default=false "
+@I [SYN-201] Setting up clock 'default' with a period of 10ns.
+@I [HLS-100] Command 'config_clock' returned 0; elapsed 0Total elapsed time: 0.786 sec.
+@I [HLS-100] Command "open_platform DefaultPlatform "
+@I [HLS-100] Command 'open_platform' returned 0; elapsed 0Total elapsed time: 0.787 sec.
+@I [HLS-100] Command "import_lib C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/spartan3adsp/spartan3adsp "
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/common/xilinx.lib "
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/interface/xilinx_interface.lib "
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/interface/plb46.lib "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.001Total elapsed time: 0.789 sec.
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/interface/fsl.lib "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0Total elapsed time: 0.789 sec.
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/interface/axi4.lib "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.001Total elapsed time: 0.790 sec.
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/interface/maxi.lib "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0Total elapsed time: 0.790 sec.
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/interface/saxilite.lib "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0Total elapsed time: 0.790 sec.
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.003Total elapsed time: 0.791 sec.
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/common/dsp48.lib "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0Total elapsed time: 0.791 sec.
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/ip/dds_compiler.lib "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.001Total elapsed time: 0.792 sec.
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/ip/xfft.lib "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0Total elapsed time: 0.792 sec.
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/ip/xfir.lib "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0Total elapsed time: 0.792 sec.
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.005Total elapsed time: 0.793 sec.
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/common/xilinx_old.lib "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.001Total elapsed time: 0.795 sec.
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/common/xilinx.hlp "
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/common/target_info.tcl "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.001Total elapsed time: 0.798 sec.
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/interface/xilinx_interface.hlp "
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/interface/maxi.hlp "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0Total elapsed time: 0.799 sec.
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/interface/saxilite.hlp "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0Total elapsed time: 0.799 sec.
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.001Total elapsed time: 0.799 sec.
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/common/dsp48.hlp "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.001Total elapsed time: 0.800 sec.
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.004Total elapsed time: 0.800 sec.
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/spartan3adsp/dsp48a.hlp "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.001Total elapsed time: 0.801 sec.
+@I [HLS-100] Command "get_default_platform "
+@I [HLS-100] Command 'get_default_platform' returned 0; elapsed 0Total elapsed time: 0.801 sec.
+@I [HLS-100] Command "config_chip_info -quiet -resource  {SLICE 23872} {LUT 47744} {FF 47744} {DSP48A 126} {BRAM 126}  "
+@I [HLS-100] Command 'config_chip_info' returned 0; elapsed 0Total elapsed time: 0.801 sec.
+@I [HLS-100] Command "config_chip_info -quiet -speed medium "
+@I [HLS-100] Command 'config_chip_info' returned 0; elapsed 0Total elapsed time: 0.801 sec.
+@I [HLS-100] Command 'import_lib' returned 0; elapsed 0.015Total elapsed time: 0.802 sec.
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/spartan3adsp/spartan3adsp.gen "
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/common/virtex.gen "
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/common/xilinx.gen "
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/interface/plb46.gen "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.002Total elapsed time: 0.805 sec.
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/interface/fsl.gen "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0Total elapsed time: 0.805 sec.
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/interface/axi4.gen "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.002Total elapsed time: 0.807 sec.
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/interface/nativeAXI4.gen "
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/interface/saxilite.gen "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.003Total elapsed time: 0.811 sec.
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/interface/maxi.gen "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.01Total elapsed time: 0.820 sec.
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.014Total elapsed time: 0.820 sec.
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/scripts/xilinxcoregen.gen "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.011Total elapsed time: 0.831 sec.
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/interface/XilEDKCoreGen.gen "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.009Total elapsed time: 0.840 sec.
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/ip/dds_compiler.gen "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.003Total elapsed time: 0.844 sec.
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/ip/util.gen "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0Total elapsed time: 0.844 sec.
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/ip/xfft.gen "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.123Total elapsed time: 0.967 sec.
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/ip/xfir.gen "
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/tps/tcl/tcllib1.11.1/struct/list.tcl "
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/tps/tcl/tcllib1.11.1/cmdline/cmdline.tcl "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.002Total elapsed time: 0.989 sec.
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.005Total elapsed time: 0.989 sec.
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/tps/tcl/tcllib1.11.1/math/bignum.tcl "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.002Total elapsed time: 0.998 sec.
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.037Total elapsed time: 1.4 sec.
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.203Total elapsed time: 1.5 sec.
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/common/dsp48.gen "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.001Total elapsed time: 1.6 sec.
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.205Total elapsed time: 1.6 sec.
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.205Total elapsed time: 1.6 sec.
+@I [HLS-100] Command "set_part xc3sd3400acs484-4 "
+@I [HLS-100] Command "add_library xilinx/spartan3adsp/spartan3adsp:xc3sd3400a:cs484:-4 "
+@I [HLS-100] Command "get_default_platform "
+@I [HLS-100] Command 'get_default_platform' returned 0; elapsed 0Total elapsed time: 1.9 sec.
+@I [HLS-100] Command "license_exists HLS "
+@I [LICQ-103] Checked out feature [HLS]
+@I [LIC-101] Checked out feature [HLS]
+@I [HLS-100] Command 'license_exists' returned 0; elapsed 0.001Total elapsed time: 1.10 sec.
+@I [HLS-100] Command "get_default_platform "
+@I [HLS-100] Command 'get_default_platform' returned 0; elapsed 0Total elapsed time: 1.15 sec.
+@I [HLS-100] Command "config_chip_info -quiet -resource  {SLICE 23872} {LUT 47744} {FF 47744} {DSP48A 126} {BRAM 126}  "
+@I [HLS-100] Command 'config_chip_info' returned 0; elapsed 0Total elapsed time: 1.15 sec.
+@I [HLS-100] Command "config_chip_info -quiet -speed medium "
+@I [HLS-100] Command 'config_chip_info' returned 0; elapsed 0Total elapsed time: 1.15 sec.
+@I [HLS-100] Command 'add_library' returned 0; elapsed 0.012Total elapsed time: 1.20 sec.
+@I [HLS-100] Command "add_library xilinx/spartan3adsp/spartan3adsp_fpv5 "
+@I [HLS-100] Command "get_default_platform "
+@I [HLS-100] Command 'get_default_platform' returned 0; elapsed 0Total elapsed time: 1.21 sec.
+@I [HLS-100] Command "license_exists HLS "
+@I [HLS-100] Command 'license_exists' returned 0; elapsed 0Total elapsed time: 1.21 sec.
+@I [HLS-100] Command "open_platform DefaultPlatform "
+@I [HLS-100] Command 'open_platform' returned 0; elapsed 0Total elapsed time: 1.21 sec.
+@I [HLS-100] Command "import_lib C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/spartan3adsp/spartan3adsp_fpv5 "
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/common/xilinx_fpv5_old.lib "
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/common/xilinx_fpv5.lib "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0Total elapsed time: 1.22 sec.
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.001Total elapsed time: 1.23 sec.
+@I [HLS-100] Command 'import_lib' returned 0; elapsed 0.005Total elapsed time: 1.26 sec.
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/spartan3adsp/spartan3adsp_fpv5.gen "
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/common/xilinx_fpv5.gen "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0Total elapsed time: 1.27 sec.
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.001Total elapsed time: 1.27 sec.
+@I [HLS-100] Command 'add_library' returned 0; elapsed 0.013Total elapsed time: 1.33 sec.
+@I [HLS-10] Setting target device to 'xc3sd3400acs484-4'
+@I [HLS-100] Command 'set_part' returned 0; elapsed 0.026Total elapsed time: 1.33 sec.
+@I [HLS-100] Command "get_default_platform "
+@I [HLS-100] Command 'get_default_platform' returned 0; elapsed 0Total elapsed time: 1.33 sec.
+@I [HLS-100] Command "config_chip_info -quiet -resource  {SLICE 23872} {LUT 47744} {FF 47744} {DSP48A 126} {BRAM 126}  "
+@I [HLS-100] Command 'config_chip_info' returned 0; elapsed 0Total elapsed time: 1.33 sec.
+@I [HLS-100] Command "config_chip_info -quiet -speed medium "
+@I [HLS-100] Command 'config_chip_info' returned 0; elapsed 0Total elapsed time: 1.33 sec.
+@I [HLS-100] Command 'open_solution' returned 0; elapsed 0.271Total elapsed time: 1.34 sec.
+@I [HLS-100] Command "cosim_design -tool xsim "
+@I [HLS-100] Command "source C:/Users/dougo/LDPC_INIT_DSP3/solution1/.autopilot/db/global.setting.tcl "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.001Total elapsed time: 1.38 sec.
+@I [HLS-100] Command "source C:/Users/dougo/LDPC_INIT_DSP3/solution1/.autopilot/db/global.setting.tcl "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.001Total elapsed time: 1.46 sec.
+@I [HLS-100] Command "source C:/Users/dougo/LDPC_INIT_DSP3/solution1/.autopilot/db/global.setting.tcl "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.001Total elapsed time: 1.67 sec.
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/generic/autopilot/common.gen "
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/generic/autopilot/APCoreGen.gen "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.001Total elapsed time: 1.69 sec.
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.001Total elapsed time: 1.69 sec.
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/generic/autopilot/op.gen "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.001Total elapsed time: 1.70 sec.
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/generic/autopilot/op_simcore.gen "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.001Total elapsed time: 1.71 sec.
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/generic/autopilot/interface.gen "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0Total elapsed time: 1.71 sec.
+@I [HLS-100] Command "source C:/Users/dougo/LDPC_INIT_DSP3/solution1/.autopilot/db/global.setting.tcl "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.001Total elapsed time: 1.72 sec.
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/spartan3adsp/spartan3adsp.gen "
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/common/virtex.gen "
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/common/xilinx.gen "
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/interface/plb46.gen "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.001Total elapsed time: 1.75 sec.
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/interface/fsl.gen "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.001Total elapsed time: 1.76 sec.
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/interface/axi4.gen "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.002Total elapsed time: 1.78 sec.
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/interface/nativeAXI4.gen "
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/interface/saxilite.gen "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.004Total elapsed time: 1.82 sec.
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/interface/maxi.gen "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.008Total elapsed time: 1.91 sec.
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.012Total elapsed time: 1.91 sec.
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/scripts/xilinxcoregen.gen "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.012Total elapsed time: 1.103 sec.
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/interface/XilEDKCoreGen.gen "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.011Total elapsed time: 1.114 sec.
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/ip/dds_compiler.gen "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.003Total elapsed time: 1.118 sec.
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/ip/util.gen "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0Total elapsed time: 1.118 sec.
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/ip/xfft.gen "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.1Total elapsed time: 1.217 sec.
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/ip/xfir.gen "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.032Total elapsed time: 1.249 sec.
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.175Total elapsed time: 1.249 sec.
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/common/dsp48.gen "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0Total elapsed time: 1.250 sec.
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.178Total elapsed time: 1.251 sec.
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.178Total elapsed time: 1.251 sec.
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/spartan3adsp/spartan3adsp_fpv5.gen "
+@I [HLS-100] Command "source C:/Xilinx/Vivado_HLS/2015.2/common/technology/xilinx/common/xilinx_fpv5.gen "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.001Total elapsed time: 1.252 sec.
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.001Total elapsed time: 1.252 sec.
+@I [HLS-100] Command "source C:/Users/dougo/LDPC_INIT_DSP3/solution1/.autopilot/db/global.setting.tcl "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.001Total elapsed time: 1.255 sec.
+@I [HLS-100] Command "source C:/Users/dougo/LDPC_INIT_DSP3/solution1/.autopilot/db/setupLDPC.rtl_wrap.cfg.tcl "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.001Total elapsed time: 1.258 sec.
+@I [HLS-100] Command "source C:/Users/dougo/LDPC_INIT_DSP3/solution1/.autopilot/db/setupLDPC.tbgen.tcl "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.001Total elapsed time: 1.259 sec.
+@I [HLS-100] Command "is_encrypted C:/Users/dougo/LDPC_INIT_DSP3/LDPC_INT_TEST.cpp "
+@I [HLS-100] Command 'is_encrypted' returned 0; elapsed 0Total elapsed time: 1.278 sec.
+@I [HLS-100] Command "is_encrypted C:/Users/dougo/LDPC_INIT_DSP3/LDPC_INIT_DSP3.cpp "
+@I [HLS-100] Command 'is_encrypted' returned 0; elapsed 0Total elapsed time: 1.278 sec.
+@I [HLS-100] Command "source C:/Users/dougo/LDPC_INIT_DSP3/solution1/.autopilot/db/setupLDPC.tbgen.tcl "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.001Total elapsed time: 1.280 sec.
+@I [HLS-100] Command "source C:/Users/dougo/LDPC_INIT_DSP3/solution1/.autopilot/db/setupLDPC.tbgen.tcl "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.001Total elapsed time: 1.281 sec.
+@I [SIM-47] Using XSIM for RTL simulation.
+@I [SIM-14] Instrumenting C test bench ...
+@I [HLS-100] Command "source C:/Users/dougo/LDPC_INIT_DSP3/solution1/.autopilot/db/setupLDPC.rtl_wrap.cfg.tcl "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.002Total elapsed time: 1.302 sec.
+@I [HLS-100] Command "source C:/Users/dougo/LDPC_INIT_DSP3/solution1/.autopilot/db/setupLDPC.rtl_wrap.cfg.tcl "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.001Total elapsed time: 1.304 sec.
+@I [HLS-100] Command "source C:/Users/dougo/LDPC_INIT_DSP3/solution1/.autopilot/db/setupLDPC.rtl_wrap.cfg.tcl "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.002Total elapsed time: 1.306 sec.
+@I [HLS-100] Command "source C:/Users/dougo/LDPC_INIT_DSP3/solution1/.autopilot/db/setupLDPC.tbgen.tcl "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.001Total elapsed time: 1.307 sec.
+@I [HLS-100] Command "source C:/Users/dougo/LDPC_INIT_DSP3/solution1/.autopilot/db/setupLDPC.tbgen.tcl "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.001Total elapsed time: 1.308 sec.
+@I [HLS-0] Marker-Pragma convertor: C:/Users/dougo/LDPC_INIT_DSP3/solution1/./sim/autowrap/testbench/LDPC_INT_TEST.cpp_pre.cpp C:/Users/dougo/LDPC_INIT_DSP3/solution1/./sim/autowrap/testbench/LDPC_INT_TEST.cpp_pre.cpp.line.cpp ./sim/autowrap/testbench/line.tmp 1
+@I [HLS-0] Marker-Pragma convertor: ./sim/autowrap/testbench/LDPC_INT_TEST.cpp_pre.cpp.tb.cpp.line ./sim/autowrap/testbench/LDPC_INT_TEST.cpp_pre.cpp.tb.cpp ./sim/autowrap/testbench/line.tmp 0
+@I [HLS-0] Marker-Pragma convertor: C:/Users/dougo/LDPC_INIT_DSP3/solution1/./sim/autowrap/testbench/LDPC_INIT_DSP3.cpp_pre.cpp C:/Users/dougo/LDPC_INIT_DSP3/solution1/./sim/autowrap/testbench/LDPC_INIT_DSP3.cpp_pre.cpp.line.cpp ./sim/autowrap/testbench/line.tmp 1
+@I [HLS-0] Marker-Pragma convertor: ./sim/autowrap/testbench/LDPC_INIT_DSP3.cpp_pre.cpp.tb.cpp.line ./sim/autowrap/testbench/LDPC_INIT_DSP3.cpp_pre.cpp.tb.cpp ./sim/autowrap/testbench/line.tmp 0
+@I [HLS-100] Command "source .run_sim.tcl "
+@I [SIM-302] Starting C TB testing ... 
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 1.359Total elapsed time: 42.791 sec.
+@I [SIM-333] Generating C post check test bench ...
+@I [SIM-12] Generating RTL test bench ...
+@I [HLS-100] Command "source C:/Users/dougo/LDPC_INIT_DSP3/solution1/.autopilot/db/setupLDPC.tbgen.tcl "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.002Total elapsed time: 42.862 sec.
+@I [HLS-100] Command "source C:/Users/dougo/LDPC_INIT_DSP3/solution1/.autopilot/db/setupLDPC.tbgen.tcl "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.003Total elapsed time: 42.865 sec.
+@I [HLS-100] Command "source C:/Users/dougo/LDPC_INIT_DSP3/solution1/.autopilot/db/setupLDPC.tbgen.tcl "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.001Total elapsed time: 42.866 sec.
+@I [HLS-100] Command "source C:/Users/dougo/LDPC_INIT_DSP3/solution1/.autopilot/db/setupLDPC.tbgen.tcl "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.002Total elapsed time: 42.868 sec.
+@I [HLS-100] Command "source ../tv/cdatafile/ref.tcl "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.001Total elapsed time: 42.870 sec.
+@I [HLS-100] Command "source C:/Users/dougo/LDPC_INIT_DSP3/solution1/.autopilot/db/setupLDPC.tbgen.tcl "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.001Total elapsed time: 42.872 sec.
+@I [HLS-100] Command "source C:/Users/dougo/LDPC_INIT_DSP3/solution1/.autopilot/db/setupLDPC.tbgen.tcl "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.002Total elapsed time: 42.874 sec.
+@I [HLS-100] Command "source C:/Users/dougo/LDPC_INIT_DSP3/solution1/.autopilot/db/setupLDPC.tbgen.tcl "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.001Total elapsed time: 42.876 sec.
+@I [HLS-100] Command "source C:/Users/dougo/LDPC_INIT_DSP3/solution1/.autopilot/db/setupLDPC.tbgen.tcl "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.001Total elapsed time: 42.878 sec.
+@I [HLS-100] Command "source C:/Users/dougo/LDPC_INIT_DSP3/solution1/.autopilot/db/setupLDPC.tbgen.tcl "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.001Total elapsed time: 42.887 sec.
+@I [HLS-100] Command "source C:/Users/dougo/LDPC_INIT_DSP3/solution1/.autopilot/db/setupLDPC.tbgen.tcl "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.002Total elapsed time: 42.921 sec.
+@I [HLS-100] Command "source C:/Users/dougo/LDPC_INIT_DSP3/solution1/.autopilot/db/setupLDPC.tbgen.tcl "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.001Total elapsed time: 42.922 sec.
+@I [HLS-100] Command "source C:/Users/dougo/LDPC_INIT_DSP3/solution1/.autopilot/db/setupLDPC.tbgen.tcl "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.001Total elapsed time: 42.923 sec.
+@I [HLS-100] Command "source C:/Users/dougo/LDPC_INIT_DSP3/solution1/.autopilot/db/setupLDPC.tbgen.tcl "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.001Total elapsed time: 42.971 sec.
+@I [HLS-100] Command "source C:/Users/dougo/LDPC_INIT_DSP3/solution1/.autopilot/db/setupLDPC.tbgen.tcl "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.002Total elapsed time: 42.977 sec.
+@I [HLS-100] Command "source C:/Users/dougo/LDPC_INIT_DSP3/solution1/.autopilot/db/setupLDPC.tbgen.tcl "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.002Total elapsed time: 42.980 sec.
+@I [HLS-100] Command "source C:/Users/dougo/LDPC_INIT_DSP3/solution1/.autopilot/db/setupLDPC.tbgen.tcl "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.002Total elapsed time: 42.982 sec.
+@I [HLS-100] Command "source C:/Users/dougo/LDPC_INIT_DSP3/solution1/.autopilot/db/setupLDPC.tbgen.tcl "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.002Total elapsed time: 42.984 sec.
+@I [HLS-100] Command "source ../tv/cdatafile/ref.tcl "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.002Total elapsed time: 42.986 sec.
+@I [HLS-100] Command "source C:/Users/dougo/LDPC_INIT_DSP3/solution1/.autopilot/db/setupLDPC.tbgen.tcl "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.002Total elapsed time: 42.988 sec.
+@I [HLS-100] Command "source C:/Users/dougo/LDPC_INIT_DSP3/solution1/.autopilot/db/setupLDPC.tbgen.tcl "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.002Total elapsed time: 42.991 sec.
+@I [HLS-100] Command "source C:/Users/dougo/LDPC_INIT_DSP3/solution1/.autopilot/db/setupLDPC.tbgen.tcl "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.001Total elapsed time: 42.992 sec.
+@I [HLS-100] Command "source C:/Users/dougo/LDPC_INIT_DSP3/solution1/.autopilot/db/setupLDPC.tbgen.tcl "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.002Total elapsed time: 42.994 sec.
+@I [HLS-100] Command "source C:/Users/dougo/LDPC_INIT_DSP3/solution1/.autopilot/db/setupLDPC.tbgen.tcl "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.001Total elapsed time: 43.1 sec.
+@I [HLS-100] Command "source C:/Users/dougo/LDPC_INIT_DSP3/solution1/.autopilot/db/setupLDPC.tbgen.tcl "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.002Total elapsed time: 43.33 sec.
+@I [HLS-100] Command "source C:/Users/dougo/LDPC_INIT_DSP3/solution1/.autopilot/db/setupLDPC.tbgen.tcl "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.001Total elapsed time: 43.34 sec.
+@I [HLS-100] Command "source C:/Users/dougo/LDPC_INIT_DSP3/solution1/.autopilot/db/setupLDPC.tbgen.tcl "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.001Total elapsed time: 43.35 sec.
+@I [HLS-100] Command "source .run_sim.tcl "
+@I [HLS-100] Command "source check_sim.tcl "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.001Total elapsed time: 43.193 sec.
+@I [HLS-100] Command "source .sim.status.tcl "
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 0.002Total elapsed time: 43.195 sec.
+@I [SIM-323] Starting verilog simulation. 
+@I [SIM-15] Starting XSIM ...
+@I [SIM-316] Starting C post checking ...
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 17.366Total elapsed time: 60.556 sec.
+@I [SIM-1000] *** C/RTL co-simulation finished: PASS ***
+@I [HLS-100] Command 'cosim_design' returned 0; elapsed 59.729Total elapsed time: 60.763 sec.
+@I [HLS-100] Command 'ap_source' returned 0; elapsed 60.011Total elapsed time: 60.763 sec.
+@I [HLS-100] Command "cleanup_all "
+@I [HLS-100] Command 'cleanup_all' returned 0; elapsed 0Total elapsed time: 60.763 sec.

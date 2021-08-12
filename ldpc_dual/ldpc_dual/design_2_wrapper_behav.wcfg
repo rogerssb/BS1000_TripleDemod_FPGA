@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="design_2_wrapper_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="design_2_wrapper" />
+            <top_module name="glbl" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="538566666667fs"></ZoomStartTime>
+      <ZoomEndTime time="539066666668fs"></ZoomEndTime>
+      <Cursor1Time time="538600000000fs"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="184"></NameColumnWidth>
+      <ValueColumnWidth column_width="50"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="52" />
+   <wave_markers>
+      <marker time="8565179975000" label="" />
+      <marker time="4570620000000" label="" />
+   </wave_markers>
+   <wvobject fp_name="/design_2_wrapper/LDPC_MODE" type="array">
+      <obj_property name="ElementShortName">LDPC_MODE[1:0]</obj_property>
+      <obj_property name="ObjectShortName">LDPC_MODE[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/LDPC_RUN" type="logic">
+      <obj_property name="ElementShortName">LDPC_RUN</obj_property>
+      <obj_property name="ObjectShortName">LDPC_RUN</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/pMaxIterations" type="array">
+      <obj_property name="ElementShortName">pMaxIterations[15:0]</obj_property>
+      <obj_property name="ObjectShortName">pMaxIterations[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/buff_ready" type="array">
+      <obj_property name="ElementShortName">buff_ready[0:0]</obj_property>
+      <obj_property name="ObjectShortName">buff_ready[0:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/data_in" type="array">
+      <obj_property name="ElementShortName">data_in[7:0]</obj_property>
+      <obj_property name="ObjectShortName">data_in[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/clk_div" type="array">
+      <obj_property name="ElementShortName">clk_div[15:0]</obj_property>
+      <obj_property name="ObjectShortName">clk_div[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/BLOCK_RATE" type="array">
+      <obj_property name="ElementShortName">BLOCK_RATE[1:0]</obj_property>
+      <obj_property name="ObjectShortName">BLOCK_RATE[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/BLOCK_SIZE" type="array">
+      <obj_property name="ElementShortName">BLOCK_SIZE[1:0]</obj_property>
+      <obj_property name="ObjectShortName">BLOCK_SIZE[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="group65" type="group">
+      <obj_property name="label">Decode_dataA</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject fp_name="/design_2_wrapper/design_2_i/decode_data_a_0/ena" type="logic">
+         <obj_property name="ElementShortName">ena</obj_property>
+         <obj_property name="ObjectShortName">ena</obj_property>
+      </wvobject>
+      <wvobject fp_name="/design_2_wrapper/design_2_i/decode_data_a_0/enb" type="logic">
+         <obj_property name="ElementShortName">enb</obj_property>
+         <obj_property name="ObjectShortName">enb</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="group68" type="group">
+      <obj_property name="label">Decode_dataB</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject fp_name="/design_2_wrapper/design_2_i/decode_data_b_0/ena" type="logic">
+         <obj_property name="ElementShortName">ena</obj_property>
+         <obj_property name="ObjectShortName">ena</obj_property>
+      </wvobject>
+      <wvobject fp_name="/design_2_wrapper/design_2_i/decode_data_b_0/enb" type="logic">
+         <obj_property name="ElementShortName">enb</obj_property>
+         <obj_property name="ObjectShortName">enb</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/DECODE_OUT" type="array">
+      <obj_property name="ElementShortName">DECODE_OUT[0:0]</obj_property>
+      <obj_property name="ObjectShortName">DECODE_OUT[0:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/DECODE_OUT_VALID" type="logic">
+      <obj_property name="ElementShortName">DECODE_OUT_VALID</obj_property>
+      <obj_property name="ObjectShortName">DECODE_OUT_VALID</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/cur_read_pos_V" type="array">
+      <obj_property name="ElementShortName">cur_read_pos_V[15:0]</obj_property>
+      <obj_property name="ObjectShortName">cur_read_pos_V[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/rd_clk_in" type="array">
+      <obj_property name="ElementShortName">rd_clk_in[0:0]</obj_property>
+      <obj_property name="ObjectShortName">rd_clk_in[0:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/sync" type="array">
+      <obj_property name="ElementShortName">sync[0:0]</obj_property>
+      <obj_property name="ObjectShortName">sync[0:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/design_2_i/LDPC_Out_0/rd_mux" type="array">
+      <obj_property name="ElementShortName">rd_mux[0:0]</obj_property>
+      <obj_property name="ObjectShortName">rd_mux[0:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/design_2_i/LDPC_buff_0/mux" type="array">
+      <obj_property name="ElementShortName">mux[0:0]</obj_property>
+      <obj_property name="ObjectShortName">mux[0:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/Decoder_B_Iterations" type="array">
+      <obj_property name="ElementShortName">Decoder_B_Iterations[7:0]</obj_property>
+      <obj_property name="ObjectShortName">Decoder_B_Iterations[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/design_2_i/Decoder_B/mux" type="array">
+      <obj_property name="ElementShortName">mux[0:0]</obj_property>
+      <obj_property name="ObjectShortName">mux[0:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/design_2_i/Decoder_B/pbhat0_ce0" type="logic">
+      <obj_property name="ElementShortName">pbhat0_ce0</obj_property>
+      <obj_property name="ObjectShortName">pbhat0_ce0</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/design_2_i/Decoder_B/pbhat0_we0" type="logic">
+      <obj_property name="ElementShortName">pbhat0_we0</obj_property>
+      <obj_property name="ObjectShortName">pbhat0_we0</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/ERR_CODE" type="array">
+      <obj_property name="ElementShortName">ERR_CODE[15:0]</obj_property>
+      <obj_property name="ObjectShortName">ERR_CODE[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/Iteration_Number" type="array">
+      <obj_property name="ElementShortName">Iteration_Number[7:0]</obj_property>
+      <obj_property name="ObjectShortName">Iteration_Number[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/design_2_i/Decoder_A/mux" type="array">
+      <obj_property name="ElementShortName">mux[0:0]</obj_property>
+      <obj_property name="ObjectShortName">mux[0:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/design_2_i/Decoder_A/pbhat0_ce0" type="logic">
+      <obj_property name="ElementShortName">pbhat0_ce0</obj_property>
+      <obj_property name="ObjectShortName">pbhat0_ce0</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/design_2_i/Decoder_A/pbhat0_we0" type="logic">
+      <obj_property name="ElementShortName">pbhat0_we0</obj_property>
+      <obj_property name="ObjectShortName">pbhat0_we0</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/clock_rtl" type="logic">
+      <obj_property name="ElementShortName">clock_rtl</obj_property>
+      <obj_property name="ObjectShortName">clock_rtl</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/cur_write_pos_V" type="array">
+      <obj_property name="ElementShortName">cur_write_pos_V[15:0]</obj_property>
+      <obj_property name="ObjectShortName">cur_write_pos_V[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/deran_sel" type="array">
+      <obj_property name="ElementShortName">deran_sel[1:0]</obj_property>
+      <obj_property name="ObjectShortName">deran_sel[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/full" type="array">
+      <obj_property name="ElementShortName">full[0:0]</obj_property>
+      <obj_property name="ObjectShortName">full[0:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/overrun" type="array">
+      <obj_property name="ElementShortName">overrun[0:0]</obj_property>
+      <obj_property name="ObjectShortName">overrun[0:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/rd_clk_out" type="array">
+      <obj_property name="ElementShortName">rd_clk_out[0:0]</obj_property>
+      <obj_property name="ObjectShortName">rd_clk_out[0:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/read_clk_en" type="array">
+      <obj_property name="ElementShortName">read_clk_en[0:0]</obj_property>
+      <obj_property name="ObjectShortName">read_clk_en[0:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/reset_rtl" type="logic">
+      <obj_property name="ElementShortName">reset_rtl</obj_property>
+      <obj_property name="ObjectShortName">reset_rtl</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/write_clk_en" type="array">
+      <obj_property name="ElementShortName">write_clk_en[0:0]</obj_property>
+      <obj_property name="ObjectShortName">write_clk_en[0:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/design_2_i/LDPC_buff_0/decode_done" type="array">
+      <obj_property name="ElementShortName">decode_done[0:0]</obj_property>
+      <obj_property name="ObjectShortName">decode_done[0:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/design_2_i/LDPC_buff_0/decode_start" type="array">
+      <obj_property name="ElementShortName">decode_start[0:0]</obj_property>
+      <obj_property name="ObjectShortName">decode_start[0:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/design_2_i/LDPC_buff_0/decode_ready" type="array">
+      <obj_property name="ElementShortName">decode_ready[0:0]</obj_property>
+      <obj_property name="ObjectShortName">decode_ready[0:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/design_2_i/LDPC_buff_0/decode_done_b" type="array">
+      <obj_property name="ElementShortName">decode_done_b[0:0]</obj_property>
+      <obj_property name="ObjectShortName">decode_done_b[0:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/design_2_i/LDPC_buff_0/decode_start_b" type="array">
+      <obj_property name="ElementShortName">decode_start_b[0:0]</obj_property>
+      <obj_property name="ObjectShortName">decode_start_b[0:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/design_2_i/LDPC_buff_0/decode_ready_b" type="array">
+      <obj_property name="ElementShortName">decode_ready_b[0:0]</obj_property>
+      <obj_property name="ObjectShortName">decode_ready_b[0:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="group58" type="group">
+      <obj_property name="label">Raw_Data_A</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/design_2_wrapper/design_2_i/raw_data_a/enb" type="logic">
+         <obj_property name="ElementShortName">enb</obj_property>
+         <obj_property name="ObjectShortName">enb</obj_property>
+      </wvobject>
+      <wvobject fp_name="/design_2_wrapper/design_2_i/raw_data_a/ena" type="logic">
+         <obj_property name="ElementShortName">ena</obj_property>
+         <obj_property name="ObjectShortName">ena</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="group61" type="group">
+      <obj_property name="label">Raw_Data_B</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/design_2_wrapper/design_2_i/raw_data_b/ena" type="logic">
+         <obj_property name="ElementShortName">ena</obj_property>
+         <obj_property name="ObjectShortName">ena</obj_property>
+      </wvobject>
+      <wvobject fp_name="/design_2_wrapper/design_2_i/raw_data_b/enb" type="logic">
+         <obj_property name="ElementShortName">enb</obj_property>
+         <obj_property name="ObjectShortName">enb</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/design_2_i/LDPC_buff_0/mux" type="array">
+      <obj_property name="ElementShortName">mux[0:0]</obj_property>
+      <obj_property name="ObjectShortName">mux[0:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/design_2_i/decode_start_lat/S" type="array">
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="ElementShortName">S[0:0]</obj_property>
+      <obj_property name="ObjectShortName">S[0:0]</obj_property>
+      <obj_property name="label">S[0:0] Decoder A</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/design_2_i/decode_start_lat/A" type="array">
+      <obj_property name="ElementShortName">A[0:0]</obj_property>
+      <obj_property name="ObjectShortName">A[0:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/design_2_i/decode_start_lat1/S" type="array">
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="ElementShortName">S[0:0]</obj_property>
+      <obj_property name="ObjectShortName">S[0:0]</obj_property>
+      <obj_property name="label">S[0:0] Decoder B</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/design_2_i/decode_start_lat1/A" type="array">
+      <obj_property name="ElementShortName">A[0:0]</obj_property>
+      <obj_property name="ObjectShortName">A[0:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/design_2_i/LDPC_buff_0/out_mux" type="array">
+      <obj_property name="ElementShortName">out_mux[0:0]</obj_property>
+      <obj_property name="ObjectShortName">out_mux[0:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/design_2_i/LDPC_buff_0/mux" type="array">
+      <obj_property name="ElementShortName">mux[0:0]</obj_property>
+      <obj_property name="ObjectShortName">mux[0:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/design_2_i/out_mux_lat/S" type="array">
+      <obj_property name="ElementShortName">S[0:0]</obj_property>
+      <obj_property name="ObjectShortName">S[0:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/design_2_wrapper/design_2_i/out_mux_lat/A" type="array">
+      <obj_property name="ElementShortName">A[0:0]</obj_property>
+      <obj_property name="ObjectShortName">A[0:0]</obj_property>
+   </wvobject>
+</wave_config>

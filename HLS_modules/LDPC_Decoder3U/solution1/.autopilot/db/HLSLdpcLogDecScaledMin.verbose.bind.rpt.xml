@@ -1,0 +1,65 @@
+<profile>
+
+<section name = "Vivado HLS Report for 'HLSLdpcLogDecScaledMin'" level="0">
+<item name = "Date">Sat Oct 05 17:10:56 2019
+</item>
+<item name = "Version">2016.3 (Build 1682563 on Mon Oct 10 19:41:59 MDT 2016)</item>
+<item name = "Project">LDPC_Decoder3U</item>
+<item name = "Solution">solution1</item>
+<item name = "Product family">kintex7</item>
+<item name = "Target device">xc7k160tfbg676-1</item>
+</section>
+
+<section name = "Performance Estimates" level="0">
+<item name = "Timing (ns)">
+<section name = "" level="1">
+<item name = "Summary"><table name="" hasTotal="0">
+<keys size="4">Clock, Target, Estimated, Uncertainty</keys>
+<column name="ap_clk">10.00, 8.75, 1.25</column>
+</table>
+</item>
+</section>
+</item>
+<item name = "Latency (clock cycles)">
+<section name = "" level="1">
+<item name = "Summary"><table name="" hasTotal="0">
+<keys size="6">, min, max, min, max, Type</keys>
+<column name="">?, ?, ?, ?, none</column>
+</table>
+</item>
+<item name = "Detail">
+<section name = "" level="1">
+<item name = "Instance"><table name="" hasTotal="0">
+<keys size="7">Instance, Module, min, max, min, max, Type</keys>
+<column name="grp_calc_ma_fu_3696">calc_ma, 2, 2, 1, 1, function</column>
+<column name="grp_setup_calc_fu_4168">setup_calc, 2, 2, 2, 2, none</column>
+<column name="grp_write_result_fu_4833">write_result, 2, 2, 2, 2, function</column>
+<column name="grp_setup_calc_12_fu_5447">setup_calc_12, 2, 2, 2, 2, none</column>
+<column name="grp_setup_calc_23_fu_5942">setup_calc_23, 3, 3, 3, 3, none</column>
+<column name="grp_write_result_12_fu_6479">write_result_12, 2, 2, 2, 2, function</column>
+<column name="grp_write_result_23_fu_6795">write_result_23, 2, 2, 2, 2, function</column>
+<column name="grp_calc_n_fu_7175">calc_n, ?, ?, ?, ?, none</column>
+<column name="grp_calc_n_12_fu_7606">calc_n_12, ?, ?, ?, ?, none</column>
+<column name="grp_calc_n_23_fu_7881">calc_n_23, ?, ?, ?, ?, none</column>
+</table>
+</item>
+<item name = "Loop"><table name="" hasTotal="0">
+<keys size="8">Loop Name, min, max, Latency, achieved, target, Count, Pipelined</keys>
+<column name="- Loop 1">?, ?, 4 ~ 6, -, -, ?, no</column>
+<column name="- Loop 2">?, ?, ?, -, -, ?, no</column>
+<column name=" + calc_m_labe45">?, ?, 10, -, -, ?, no</column>
+<column name=" + calc_m_label0">?, ?, 11, -, -, ?, no</column>
+<column name=" + calc_m_label0">?, ?, 10, -, -, ?, no</column>
+<column name=" + calc_m_labe45">?, ?, 10, -, -, ?, no</column>
+<column name=" + calc_m_label0">?, ?, 11, -, -, ?, no</column>
+<column name=" + calc_m_label0">?, ?, 10, -, -, ?, no</column>
+<column name="- Loop 3">?, ?, 1, -, -, ?, no</column>
+<column name="- Loop 4">?, ?, 3, -, -, ?, no</column>
+</table>
+</item>
+</section>
+</item>
+</section>
+</item>
+</section>
+</profile>

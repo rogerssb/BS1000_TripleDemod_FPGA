@@ -1,0 +1,8 @@
+INFO: [SIM 2] *************** CSIM start ***************
+WARNING: [SIM 51] HLS only supports CLANG compiler in Linux.
+INFO: [SIM 4] CSIM will launch GCC as the compiler.
+   Compiling ../../../LDPC_INT_TEST.cpp in debug mode
+   Compiling ../../../LDPC_INIT_DSP3.cpp in debug mode
+   Generating csim.exe
+INFO: [SIM 1] CSim file generation done with 0 errors.
+INFO: [SIM 3] *************** CSIM finish ***************

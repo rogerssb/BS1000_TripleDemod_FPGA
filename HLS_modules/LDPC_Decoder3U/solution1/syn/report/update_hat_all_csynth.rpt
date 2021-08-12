@@ -1,0 +1,338 @@
+
+
+================================================================
+== Vivado HLS Report for 'update_hat_all'
+================================================================
+* Date:           Sat Oct 05 17:18:32 2019
+
+* Version:        2016.3 (Build 1682563 on Mon Oct 10 19:41:59 MDT 2016)
+* Project:        LDPC_Decoder3U
+* Solution:       solution1
+* Product family: kintex7
+* Target device:  xc7k160tfbg676-1
+
+
+================================================================
+== Performance Estimates
+================================================================
++ Timing (ns): 
+    * Summary: 
+    +--------+-------+----------+------------+
+    |  Clock | Target| Estimated| Uncertainty|
+    +--------+-------+----------+------------+
+    |ap_clk  |  10.00|      2.39|        1.25|
+    +--------+-------+----------+------------+
+
++ Latency (clock cycles): 
+    * Summary: 
+    +-----+-----+-----+-----+----------+
+    |  Latency  |  Interval | Pipeline |
+    | min | max | min | max |   Type   |
+    +-----+-----+-----+-----+----------+
+    |    0|    0|    1|    1| function |
+    +-----+-----+-----+-----+----------+
+
+    + Detail: 
+        * Instance: 
+        N/A
+
+        * Loop: 
+        N/A
+
+
+
+================================================================
+== Utilization Estimates
+================================================================
+* Summary: 
++-----------------+---------+-------+--------+--------+
+|       Name      | BRAM_18K| DSP48E|   FF   |   LUT  |
++-----------------+---------+-------+--------+--------+
+|DSP              |        -|      -|       -|       -|
+|Expression       |        -|      -|       -|       -|
+|FIFO             |        -|      -|       -|       -|
+|Instance         |        -|      -|       -|       -|
+|Memory           |        -|      -|       -|       -|
+|Multiplexer      |        -|      -|       -|       -|
+|Register         |        -|      -|       -|       -|
++-----------------+---------+-------+--------+--------+
+|Total            |        0|      0|       0|       0|
++-----------------+---------+-------+--------+--------+
+|Available        |      650|    600|  202800|  101400|
++-----------------+---------+-------+--------+--------+
+|Utilization (%)  |        0|      0|       0|       0|
++-----------------+---------+-------+--------+--------+
+
++ Detail: 
+    * Instance: 
+    N/A
+
+    * DSP48: 
+    N/A
+
+    * Memory: 
+    N/A
+
+    * FIFO: 
+    N/A
+
+    * Expression: 
+    N/A
+
+    * Multiplexer: 
+    N/A
+
+    * Register: 
+    N/A
+
+
+
+================================================================
+== Interface
+================================================================
+* Summary: 
++------------------------+-----+-----+-----------+---------------+---------+
+|        RTL Ports       | Dir | Bits|  Protocol | Source Object |  C Type |
++------------------------+-----+-----+-----------+---------------+---------+
+|pos_r                   |  in |   13|  ap_none  |     pos_r     |  scalar |
+|bpest0                  |  in |    1|  ap_none  |     bpest0    | pointer |
+|prHat_buf_address1      | out |   11| ap_memory |   prHat_buf   |  array  |
+|prHat_buf_ce1           | out |    1| ap_memory |   prHat_buf   |  array  |
+|prHat_buf_we1           | out |    1| ap_memory |   prHat_buf   |  array  |
+|prHat_buf_d1            | out |    1| ap_memory |   prHat_buf   |  array  |
+|prHat_bufA_address1     | out |   11| ap_memory |   prHat_bufA  |  array  |
+|prHat_bufA_ce1          | out |    1| ap_memory |   prHat_bufA  |  array  |
+|prHat_bufA_we1          | out |    1| ap_memory |   prHat_bufA  |  array  |
+|prHat_bufA_d1           | out |    1| ap_memory |   prHat_bufA  |  array  |
+|prHat_bufAa_address1    | out |   11| ap_memory |  prHat_bufAa  |  array  |
+|prHat_bufAa_ce1         | out |    1| ap_memory |  prHat_bufAa  |  array  |
+|prHat_bufAa_we1         | out |    1| ap_memory |  prHat_bufAa  |  array  |
+|prHat_bufAa_d1          | out |    1| ap_memory |  prHat_bufAa  |  array  |
+|prHat_bufAb_address1    | out |   11| ap_memory |  prHat_bufAb  |  array  |
+|prHat_bufAb_ce1         | out |    1| ap_memory |  prHat_bufAb  |  array  |
+|prHat_bufAb_we1         | out |    1| ap_memory |  prHat_bufAb  |  array  |
+|prHat_bufAb_d1          | out |    1| ap_memory |  prHat_bufAb  |  array  |
+|prHat_bufAc_address1    | out |   11| ap_memory |  prHat_bufAc  |  array  |
+|prHat_bufAc_ce1         | out |    1| ap_memory |  prHat_bufAc  |  array  |
+|prHat_bufAc_we1         | out |    1| ap_memory |  prHat_bufAc  |  array  |
+|prHat_bufAc_d1          | out |    1| ap_memory |  prHat_bufAc  |  array  |
+|prHat_bufB_address1     | out |   11| ap_memory |   prHat_bufB  |  array  |
+|prHat_bufB_ce1          | out |    1| ap_memory |   prHat_bufB  |  array  |
+|prHat_bufB_we1          | out |    1| ap_memory |   prHat_bufB  |  array  |
+|prHat_bufB_d1           | out |    1| ap_memory |   prHat_bufB  |  array  |
+|bpest1                  |  in |    1|  ap_none  |     bpest1    | pointer |
+|prHat_buf1_address1     | out |   11| ap_memory |   prHat_buf1  |  array  |
+|prHat_buf1_ce1          | out |    1| ap_memory |   prHat_buf1  |  array  |
+|prHat_buf1_we1          | out |    1| ap_memory |   prHat_buf1  |  array  |
+|prHat_buf1_d1           | out |    1| ap_memory |   prHat_buf1  |  array  |
+|prHat_bufA1_address1    | out |   11| ap_memory |  prHat_bufA1  |  array  |
+|prHat_bufA1_ce1         | out |    1| ap_memory |  prHat_bufA1  |  array  |
+|prHat_bufA1_we1         | out |    1| ap_memory |  prHat_bufA1  |  array  |
+|prHat_bufA1_d1          | out |    1| ap_memory |  prHat_bufA1  |  array  |
+|prHat_bufB1_address1    | out |   11| ap_memory |  prHat_bufB1  |  array  |
+|prHat_bufB1_ce1         | out |    1| ap_memory |  prHat_bufB1  |  array  |
+|prHat_bufB1_we1         | out |    1| ap_memory |  prHat_bufB1  |  array  |
+|prHat_bufB1_d1          | out |    1| ap_memory |  prHat_bufB1  |  array  |
+|prHat_bufB1a_address1   | out |   11| ap_memory |  prHat_bufB1a |  array  |
+|prHat_bufB1a_ce1        | out |    1| ap_memory |  prHat_bufB1a |  array  |
+|prHat_bufB1a_we1        | out |    1| ap_memory |  prHat_bufB1a |  array  |
+|prHat_bufB1a_d1         | out |    1| ap_memory |  prHat_bufB1a |  array  |
+|prHat_bufB1b_address1   | out |   11| ap_memory |  prHat_bufB1b |  array  |
+|prHat_bufB1b_ce1        | out |    1| ap_memory |  prHat_bufB1b |  array  |
+|prHat_bufB1b_we1        | out |    1| ap_memory |  prHat_bufB1b |  array  |
+|prHat_bufB1b_d1         | out |    1| ap_memory |  prHat_bufB1b |  array  |
+|prHat_bufB1c_address1   | out |   11| ap_memory |  prHat_bufB1c |  array  |
+|prHat_bufB1c_ce1        | out |    1| ap_memory |  prHat_bufB1c |  array  |
+|prHat_bufB1c_we1        | out |    1| ap_memory |  prHat_bufB1c |  array  |
+|prHat_bufB1c_d1         | out |    1| ap_memory |  prHat_bufB1c |  array  |
+|bpest2                  |  in |    1|  ap_none  |     bpest2    | pointer |
+|prHat_buf2_address1     | out |   11| ap_memory |   prHat_buf2  |  array  |
+|prHat_buf2_ce1          | out |    1| ap_memory |   prHat_buf2  |  array  |
+|prHat_buf2_we1          | out |    1| ap_memory |   prHat_buf2  |  array  |
+|prHat_buf2_d1           | out |    1| ap_memory |   prHat_buf2  |  array  |
+|prHat_bufA2_address1    | out |   11| ap_memory |  prHat_bufA2  |  array  |
+|prHat_bufA2_ce1         | out |    1| ap_memory |  prHat_bufA2  |  array  |
+|prHat_bufA2_we1         | out |    1| ap_memory |  prHat_bufA2  |  array  |
+|prHat_bufA2_d1          | out |    1| ap_memory |  prHat_bufA2  |  array  |
+|prHat_bufA2a_address1   | out |   11| ap_memory |  prHat_bufA2a |  array  |
+|prHat_bufA2a_ce1        | out |    1| ap_memory |  prHat_bufA2a |  array  |
+|prHat_bufA2a_we1        | out |    1| ap_memory |  prHat_bufA2a |  array  |
+|prHat_bufA2a_d1         | out |    1| ap_memory |  prHat_bufA2a |  array  |
+|prHat_bufA2b_address1   | out |   11| ap_memory |  prHat_bufA2b |  array  |
+|prHat_bufA2b_ce1        | out |    1| ap_memory |  prHat_bufA2b |  array  |
+|prHat_bufA2b_we1        | out |    1| ap_memory |  prHat_bufA2b |  array  |
+|prHat_bufA2b_d1         | out |    1| ap_memory |  prHat_bufA2b |  array  |
+|prHat_bufA2c_address1   | out |   11| ap_memory |  prHat_bufA2c |  array  |
+|prHat_bufA2c_ce1        | out |    1| ap_memory |  prHat_bufA2c |  array  |
+|prHat_bufA2c_we1        | out |    1| ap_memory |  prHat_bufA2c |  array  |
+|prHat_bufA2c_d1         | out |    1| ap_memory |  prHat_bufA2c |  array  |
+|prHat_bufB2_address1    | out |   11| ap_memory |  prHat_bufB2  |  array  |
+|prHat_bufB2_ce1         | out |    1| ap_memory |  prHat_bufB2  |  array  |
+|prHat_bufB2_we1         | out |    1| ap_memory |  prHat_bufB2  |  array  |
+|prHat_bufB2_d1          | out |    1| ap_memory |  prHat_bufB2  |  array  |
+|bpest3                  |  in |    1|  ap_none  |     bpest3    | pointer |
+|prHat_buf3_address1     | out |   11| ap_memory |   prHat_buf3  |  array  |
+|prHat_buf3_ce1          | out |    1| ap_memory |   prHat_buf3  |  array  |
+|prHat_buf3_we1          | out |    1| ap_memory |   prHat_buf3  |  array  |
+|prHat_buf3_d1           | out |    1| ap_memory |   prHat_buf3  |  array  |
+|prHat_bufA3_address1    | out |   11| ap_memory |  prHat_bufA3  |  array  |
+|prHat_bufA3_ce1         | out |    1| ap_memory |  prHat_bufA3  |  array  |
+|prHat_bufA3_we1         | out |    1| ap_memory |  prHat_bufA3  |  array  |
+|prHat_bufA3_d1          | out |    1| ap_memory |  prHat_bufA3  |  array  |
+|prHat_bufB3_address1    | out |   11| ap_memory |  prHat_bufB3  |  array  |
+|prHat_bufB3_ce1         | out |    1| ap_memory |  prHat_bufB3  |  array  |
+|prHat_bufB3_we1         | out |    1| ap_memory |  prHat_bufB3  |  array  |
+|prHat_bufB3_d1          | out |    1| ap_memory |  prHat_bufB3  |  array  |
+|prHat_bufB3a_address1   | out |   11| ap_memory |  prHat_bufB3a |  array  |
+|prHat_bufB3a_ce1        | out |    1| ap_memory |  prHat_bufB3a |  array  |
+|prHat_bufB3a_we1        | out |    1| ap_memory |  prHat_bufB3a |  array  |
+|prHat_bufB3a_d1         | out |    1| ap_memory |  prHat_bufB3a |  array  |
+|prHat_bufB3b_address1   | out |   11| ap_memory |  prHat_bufB3b |  array  |
+|prHat_bufB3b_ce1        | out |    1| ap_memory |  prHat_bufB3b |  array  |
+|prHat_bufB3b_we1        | out |    1| ap_memory |  prHat_bufB3b |  array  |
+|prHat_bufB3b_d1         | out |    1| ap_memory |  prHat_bufB3b |  array  |
+|prHat_bufB3c_address1   | out |   11| ap_memory |  prHat_bufB3c |  array  |
+|prHat_bufB3c_ce1        | out |    1| ap_memory |  prHat_bufB3c |  array  |
+|prHat_bufB3c_we1        | out |    1| ap_memory |  prHat_bufB3c |  array  |
+|prHat_bufB3c_d1         | out |    1| ap_memory |  prHat_bufB3c |  array  |
+|bpest4                  |  in |    1|  ap_none  |     bpest4    | pointer |
+|prHat_buf4_address1     | out |   11| ap_memory |   prHat_buf4  |  array  |
+|prHat_buf4_ce1          | out |    1| ap_memory |   prHat_buf4  |  array  |
+|prHat_buf4_we1          | out |    1| ap_memory |   prHat_buf4  |  array  |
+|prHat_buf4_d1           | out |    1| ap_memory |   prHat_buf4  |  array  |
+|prHat_buf4a_address1    | out |   11| ap_memory |  prHat_buf4a  |  array  |
+|prHat_buf4a_ce1         | out |    1| ap_memory |  prHat_buf4a  |  array  |
+|prHat_buf4a_we1         | out |    1| ap_memory |  prHat_buf4a  |  array  |
+|prHat_buf4a_d1          | out |    1| ap_memory |  prHat_buf4a  |  array  |
+|prHat_bufA4_address1    | out |   11| ap_memory |  prHat_bufA4  |  array  |
+|prHat_bufA4_ce1         | out |    1| ap_memory |  prHat_bufA4  |  array  |
+|prHat_bufA4_we1         | out |    1| ap_memory |  prHat_bufA4  |  array  |
+|prHat_bufA4_d1          | out |    1| ap_memory |  prHat_bufA4  |  array  |
+|prHat_bufA4a_address1   | out |   11| ap_memory |  prHat_bufA4a |  array  |
+|prHat_bufA4a_ce1        | out |    1| ap_memory |  prHat_bufA4a |  array  |
+|prHat_bufA4a_we1        | out |    1| ap_memory |  prHat_bufA4a |  array  |
+|prHat_bufA4a_d1         | out |    1| ap_memory |  prHat_bufA4a |  array  |
+|prHat_bufA4b_address1   | out |   11| ap_memory |  prHat_bufA4b |  array  |
+|prHat_bufA4b_ce1        | out |    1| ap_memory |  prHat_bufA4b |  array  |
+|prHat_bufA4b_we1        | out |    1| ap_memory |  prHat_bufA4b |  array  |
+|prHat_bufA4b_d1         | out |    1| ap_memory |  prHat_bufA4b |  array  |
+|prHat_bufB4_address1    | out |   11| ap_memory |  prHat_bufB4  |  array  |
+|prHat_bufB4_ce1         | out |    1| ap_memory |  prHat_bufB4  |  array  |
+|prHat_bufB4_we1         | out |    1| ap_memory |  prHat_bufB4  |  array  |
+|prHat_bufB4_d1          | out |    1| ap_memory |  prHat_bufB4  |  array  |
+|bpest5                  |  in |    1|  ap_none  |     bpest5    | pointer |
+|prHat_bufA5_address1    | out |   11| ap_memory |  prHat_bufA5  |  array  |
+|prHat_bufA5_ce1         | out |    1| ap_memory |  prHat_bufA5  |  array  |
+|prHat_bufA5_we1         | out |    1| ap_memory |  prHat_bufA5  |  array  |
+|prHat_bufA5_d1          | out |    1| ap_memory |  prHat_bufA5  |  array  |
+|prHat_bufB5_address1    | out |   11| ap_memory |  prHat_bufB5  |  array  |
+|prHat_bufB5_ce1         | out |    1| ap_memory |  prHat_bufB5  |  array  |
+|prHat_bufB5_we1         | out |    1| ap_memory |  prHat_bufB5  |  array  |
+|prHat_bufB5_d1          | out |    1| ap_memory |  prHat_bufB5  |  array  |
+|prHat_bufB5a_address1   | out |   11| ap_memory |  prHat_bufB5a |  array  |
+|prHat_bufB5a_ce1        | out |    1| ap_memory |  prHat_bufB5a |  array  |
+|prHat_bufB5a_we1        | out |    1| ap_memory |  prHat_bufB5a |  array  |
+|prHat_bufB5a_d1         | out |    1| ap_memory |  prHat_bufB5a |  array  |
+|prHat_bufB5b_address1   | out |   11| ap_memory |  prHat_bufB5b |  array  |
+|prHat_bufB5b_ce1        | out |    1| ap_memory |  prHat_bufB5b |  array  |
+|prHat_bufB5b_we1        | out |    1| ap_memory |  prHat_bufB5b |  array  |
+|prHat_bufB5b_d1         | out |    1| ap_memory |  prHat_bufB5b |  array  |
+|prHat_bufB5c_address1   | out |   11| ap_memory |  prHat_bufB5c |  array  |
+|prHat_bufB5c_ce1        | out |    1| ap_memory |  prHat_bufB5c |  array  |
+|prHat_bufB5c_we1        | out |    1| ap_memory |  prHat_bufB5c |  array  |
+|prHat_bufB5c_d1         | out |    1| ap_memory |  prHat_bufB5c |  array  |
+|bpest6                  |  in |    1|  ap_none  |     bpest6    | pointer |
+|prHat_buf6_address1     | out |   11| ap_memory |   prHat_buf6  |  array  |
+|prHat_buf6_ce1          | out |    1| ap_memory |   prHat_buf6  |  array  |
+|prHat_buf6_we1          | out |    1| ap_memory |   prHat_buf6  |  array  |
+|prHat_buf6_d1           | out |    1| ap_memory |   prHat_buf6  |  array  |
+|prHat_buf6a_address1    | out |   11| ap_memory |  prHat_buf6a  |  array  |
+|prHat_buf6a_ce1         | out |    1| ap_memory |  prHat_buf6a  |  array  |
+|prHat_buf6a_we1         | out |    1| ap_memory |  prHat_buf6a  |  array  |
+|prHat_buf6a_d1          | out |    1| ap_memory |  prHat_buf6a  |  array  |
+|prHat_bufA6_address1    | out |   11| ap_memory |  prHat_bufA6  |  array  |
+|prHat_bufA6_ce1         | out |    1| ap_memory |  prHat_bufA6  |  array  |
+|prHat_bufA6_we1         | out |    1| ap_memory |  prHat_bufA6  |  array  |
+|prHat_bufA6_d1          | out |    1| ap_memory |  prHat_bufA6  |  array  |
+|prHat_bufA6a_address1   | out |   11| ap_memory |  prHat_bufA6a |  array  |
+|prHat_bufA6a_ce1        | out |    1| ap_memory |  prHat_bufA6a |  array  |
+|prHat_bufA6a_we1        | out |    1| ap_memory |  prHat_bufA6a |  array  |
+|prHat_bufA6a_d1         | out |    1| ap_memory |  prHat_bufA6a |  array  |
+|prHat_bufA6b_address1   | out |   11| ap_memory |  prHat_bufA6b |  array  |
+|prHat_bufA6b_ce1        | out |    1| ap_memory |  prHat_bufA6b |  array  |
+|prHat_bufA6b_we1        | out |    1| ap_memory |  prHat_bufA6b |  array  |
+|prHat_bufA6b_d1         | out |    1| ap_memory |  prHat_bufA6b |  array  |
+|prHat_bufA6c_address1   | out |   11| ap_memory |  prHat_bufA6c |  array  |
+|prHat_bufA6c_ce1        | out |    1| ap_memory |  prHat_bufA6c |  array  |
+|prHat_bufA6c_we1        | out |    1| ap_memory |  prHat_bufA6c |  array  |
+|prHat_bufA6c_d1         | out |    1| ap_memory |  prHat_bufA6c |  array  |
+|prHat_bufB6_address1    | out |   11| ap_memory |  prHat_bufB6  |  array  |
+|prHat_bufB6_ce1         | out |    1| ap_memory |  prHat_bufB6  |  array  |
+|prHat_bufB6_we1         | out |    1| ap_memory |  prHat_bufB6  |  array  |
+|prHat_bufB6_d1          | out |    1| ap_memory |  prHat_bufB6  |  array  |
+|bpest7                  |  in |    1|  ap_none  |     bpest7    | pointer |
+|prHat_bufA7_address1    | out |   11| ap_memory |  prHat_bufA7  |  array  |
+|prHat_bufA7_ce1         | out |    1| ap_memory |  prHat_bufA7  |  array  |
+|prHat_bufA7_we1         | out |    1| ap_memory |  prHat_bufA7  |  array  |
+|prHat_bufA7_d1          | out |    1| ap_memory |  prHat_bufA7  |  array  |
+|prHat_bufB7_address1    | out |   11| ap_memory |  prHat_bufB7  |  array  |
+|prHat_bufB7_ce1         | out |    1| ap_memory |  prHat_bufB7  |  array  |
+|prHat_bufB7_we1         | out |    1| ap_memory |  prHat_bufB7  |  array  |
+|prHat_bufB7_d1          | out |    1| ap_memory |  prHat_bufB7  |  array  |
+|prHat_bufB7a_address1   | out |   11| ap_memory |  prHat_bufB7a |  array  |
+|prHat_bufB7a_ce1        | out |    1| ap_memory |  prHat_bufB7a |  array  |
+|prHat_bufB7a_we1        | out |    1| ap_memory |  prHat_bufB7a |  array  |
+|prHat_bufB7a_d1         | out |    1| ap_memory |  prHat_bufB7a |  array  |
+|bpest8                  |  in |    1|  ap_none  |     bpest8    | pointer |
+|prHat_buf8_address1     | out |   11| ap_memory |   prHat_buf8  |  array  |
+|prHat_buf8_ce1          | out |    1| ap_memory |   prHat_buf8  |  array  |
+|prHat_buf8_we1          | out |    1| ap_memory |   prHat_buf8  |  array  |
+|prHat_buf8_d1           | out |    1| ap_memory |   prHat_buf8  |  array  |
+|bpest9                  |  in |    1|  ap_none  |     bpest9    | pointer |
+|prHat_bufA9_address1    | out |   11| ap_memory |  prHat_bufA9  |  array  |
+|prHat_bufA9_ce1         | out |    1| ap_memory |  prHat_bufA9  |  array  |
+|prHat_bufA9_we1         | out |    1| ap_memory |  prHat_bufA9  |  array  |
+|prHat_bufA9_d1          | out |    1| ap_memory |  prHat_bufA9  |  array  |
+|prHat_bufB9_address1    | out |   11| ap_memory |  prHat_bufB9  |  array  |
+|prHat_bufB9_ce1         | out |    1| ap_memory |  prHat_bufB9  |  array  |
+|prHat_bufB9_we1         | out |    1| ap_memory |  prHat_bufB9  |  array  |
+|prHat_bufB9_d1          | out |    1| ap_memory |  prHat_bufB9  |  array  |
+|prHat_bufB9a_address1   | out |   11| ap_memory |  prHat_bufB9a |  array  |
+|prHat_bufB9a_ce1        | out |    1| ap_memory |  prHat_bufB9a |  array  |
+|prHat_bufB9a_we1        | out |    1| ap_memory |  prHat_bufB9a |  array  |
+|prHat_bufB9a_d1         | out |    1| ap_memory |  prHat_bufB9a |  array  |
+|bpest10                 |  in |    1|  ap_none  |    bpest10    | pointer |
+|prHat_buf10_address1    | out |   11| ap_memory |  prHat_buf10  |  array  |
+|prHat_buf10_ce1         | out |    1| ap_memory |  prHat_buf10  |  array  |
+|prHat_buf10_we1         | out |    1| ap_memory |  prHat_buf10  |  array  |
+|prHat_buf10_d1          | out |    1| ap_memory |  prHat_buf10  |  array  |
+|prHat_buf10a_address1   | out |   11| ap_memory |  prHat_buf10a |  array  |
+|prHat_buf10a_ce1        | out |    1| ap_memory |  prHat_buf10a |  array  |
+|prHat_buf10a_we1        | out |    1| ap_memory |  prHat_buf10a |  array  |
+|prHat_buf10a_d1         | out |    1| ap_memory |  prHat_buf10a |  array  |
+|prHat_bufA10_address1   | out |   11| ap_memory |  prHat_bufA10 |  array  |
+|prHat_bufA10_ce1        | out |    1| ap_memory |  prHat_bufA10 |  array  |
+|prHat_bufA10_we1        | out |    1| ap_memory |  prHat_bufA10 |  array  |
+|prHat_bufA10_d1         | out |    1| ap_memory |  prHat_bufA10 |  array  |
+|prHat_bufA10a_address1  | out |   11| ap_memory | prHat_bufA10a |  array  |
+|prHat_bufA10a_ce1       | out |    1| ap_memory | prHat_bufA10a |  array  |
+|prHat_bufA10a_we1       | out |    1| ap_memory | prHat_bufA10a |  array  |
+|prHat_bufA10a_d1        | out |    1| ap_memory | prHat_bufA10a |  array  |
+|prHat_bufA10b_address1  | out |   11| ap_memory | prHat_bufA10b |  array  |
+|prHat_bufA10b_ce1       | out |    1| ap_memory | prHat_bufA10b |  array  |
+|prHat_bufA10b_we1       | out |    1| ap_memory | prHat_bufA10b |  array  |
+|prHat_bufA10b_d1        | out |    1| ap_memory | prHat_bufA10b |  array  |
+|prHat_bufA10c_address1  | out |   11| ap_memory | prHat_bufA10c |  array  |
+|prHat_bufA10c_ce1       | out |    1| ap_memory | prHat_bufA10c |  array  |
+|prHat_bufA10c_we1       | out |    1| ap_memory | prHat_bufA10c |  array  |
+|prHat_bufA10c_d1        | out |    1| ap_memory | prHat_bufA10c |  array  |
+|prHat_buf10b_address1   | out |   11| ap_memory |  prHat_buf10b |  array  |
+|prHat_buf10b_ce1        | out |    1| ap_memory |  prHat_buf10b |  array  |
+|prHat_buf10b_we1        | out |    1| ap_memory |  prHat_buf10b |  array  |
+|prHat_buf10b_d1         | out |    1| ap_memory |  prHat_buf10b |  array  |
+|prHat_bufB10_address1   | out |   11| ap_memory |  prHat_bufB10 |  array  |
+|prHat_bufB10_ce1        | out |    1| ap_memory |  prHat_bufB10 |  array  |
+|prHat_bufB10_we1        | out |    1| ap_memory |  prHat_bufB10 |  array  |
+|prHat_bufB10_d1         | out |    1| ap_memory |  prHat_bufB10 |  array  |
++------------------------+-----+-----+-----------+---------------+---------+
+

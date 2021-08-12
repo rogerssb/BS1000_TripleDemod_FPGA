@@ -1,0 +1,306 @@
+
+
+================================================================
+== Vivado HLS Report for 'setupLDPC_load_etaIndexM'
+================================================================
+* Date:           Fri Mar 23 18:05:28 2018
+
+* Version:        2015.2 (Build 1266856 on Fri Jun 26 16:57:37 PM 2015)
+* Project:        LDPC_INIT_DSP3
+* Solution:       solution1
+* Product family: spartan3adsp
+* Target device:  xc3sd3400acs484-4
+
+
+================================================================
+== Performance Estimates
+================================================================
++ Timing (ns): 
+    * Summary: 
+    +--------+-------+----------+------------+
+    |  Clock | Target| Estimated| Uncertainty|
+    +--------+-------+----------+------------+
+    |ap_clk  |  10.00|      5.14|        1.25|
+    +--------+-------+----------+------------+
+
++ Latency (clock cycles): 
+    * Summary: 
+    +-------+--------+-------+--------+---------+
+    |     Latency    |    Interval    | Pipeline|
+    |  min  |   max  |  min  |   max  |   Type  |
+    +-------+--------+-------+--------+---------+
+    |  96803|  663587|  96803|  663587|   none  |
+    +-------+--------+-------+--------+---------+
+
+    + Detail: 
+        * Instance: 
+        N/A
+
+        * Loop: 
+        +-------------+-------+--------+----------+-----------+-----------+--------------+----------+
+        |             |     Latency    | Iteration|  Initiation Interval  |     Trip     |          |
+        |  Loop Name  |  min  |   max  |  Latency |  achieved |   target  |     Count    | Pipelined|
+        +-------------+-------+--------+----------+-----------+-----------+--------------+----------+
+        |- Loop 1     |      8|       8|         1|          -|          -|             8|    no    |
+        |- Loop 2     |     24|      24|         1|          -|          -|            24|    no    |
+        |- Loop 3     |  96768|  663552|        18|          -|          -| 5376 ~ 36864 |    no    |
+        | + Loop 3.1  |     16|      16|         1|          -|          -|            16|    no    |
+        +-------------+-------+--------+----------+-----------+-----------+--------------+----------+
+
+
+
+================================================================
+== Utilization Estimates
+================================================================
+* Summary: 
++-----------------+---------+-------+-------+-------+
+|       Name      | BRAM_18K| DSP48A|   FF  |  LUT  |
++-----------------+---------+-------+-------+-------+
+|Expression       |        -|      -|      -|      -|
+|FIFO             |        -|      -|      -|      -|
+|Instance         |        -|      -|      -|      -|
+|Memory           |        -|      -|      -|      -|
+|Multiplexer      |        -|      -|      -|      -|
+|Register         |        -|      -|      -|      -|
++-----------------+---------+-------+-------+-------+
+|Total            |        0|      0|      0|      0|
++-----------------+---------+-------+-------+-------+
+|Available        |      126|    126|  47744|  47744|
++-----------------+---------+-------+-------+-------+
+|Utilization (%)  |        0|      0|      0|      0|
++-----------------+---------+-------+-------+-------+
+
++ Detail: 
+    * Instance: 
+    N/A
+
+    * Memory: 
+    N/A
+
+    * FIFO: 
+    N/A
+
+    * Expression: 
+    N/A
+
+    * Multiplexer: 
+    N/A
+
+    * Register: 
+    N/A
+
+
+
+================================================================
+== Interface
+================================================================
+* Summary: 
+N/A
+
+============================================================
++ Verbose Summary: Synthesis Manager
+============================================================
+InlineROM: 1
+ExposeGlobal: 0
+============================================================
++ Verbose Summary: CDFG Model
+============================================================
+IsTopModel: 0
+ResetActiveHigh: 1
+IsCombinational: 0
+IsDatapathOnly: 0
+HasWiredReturn: 1
+HasMFsm: 0
+HasVarLatency: 1
+IsPipeline: 0
+IsRtlPipelined: 0
+IsInstanceOverlapped: 0
+IsDontTouch: 0
+HasImplIP: 0
+IsGatedGlobalClock: 0
+
+
+============================================================
++ Verbose Summary: Schedule
+============================================================
+* Number of FSM states: 5
+* Pipeline: 0
+* Dataflow Pipeline: 0
+
+* FSM state transitions: 
+1 --> 
+	2  / true
+2 --> 
+	3  / (exitcond1)
+	2  / (!exitcond1)
+3 --> 
+	4  / (exitcond2)
+	3  / (!exitcond2)
+4 --> 
+	5  / (tmp_9)
+5 --> 
+	5  / (!exitcond)
+	4  / (exitcond)
+* FSM state operations: 
+
+ <State 1>: 2.48ns
+ST_1: num_read [1/1] 1.60ns
+:0  %num_read = call i17 @_ssdm_op_Read.ap_auto.i17(i17 %num)
+
+ST_1: stg_7 [1/1] 2.48ns
+:1  br label %1
+
+
+ <State 2>: 4.79ns
+ST_2: loop [1/1] 0.00ns
+:0  %loop = phi i4 [ 0, %0 ], [ %loop_3, %2 ]
+
+ST_2: read [1/1] 0.00ns
+:1  %read = phi i8 [ 3, %0 ], [ %read_3, %2 ]
+
+ST_2: exitcond1 [1/1] 2.71ns
+:2  %exitcond1 = icmp eq i4 %loop, -8
+
+ST_2: empty [1/1] 0.00ns
+:3  %empty = call i32 (...)* @_ssdm_op_SpecLoopTripCount(i64 8, i64 8, i64 8)
+
+ST_2: loop_3 [1/1] 1.32ns
+:4  %loop_3 = add i4 %loop, 1
+
+ST_2: stg_13 [1/1] 2.08ns
+:5  br i1 %exitcond1, label %.preheader110, label %2
+
+ST_2: tmp [1/1] 0.00ns
+:0  %tmp = call i1 @_ssdm_op_BitSelect.i1.i8.i32(i8 %read, i32 7)
+
+ST_2: stg_15 [1/1] 1.98ns
+:1  store i1 %tmp, i1* @dout, align 1
+
+ST_2: read_3 [1/1] 0.00ns
+:2  %read_3 = shl i8 %read, 1
+
+ST_2: stg_17 [1/1] 0.00ns
+:3  br label %1
+
+
+ <State 3>: 5.14ns
+ST_3: loop_1 [1/1] 0.00ns
+.preheader110:0  %loop_1 = phi i5 [ %loop_4, %3 ], [ 0, %1 ]
+
+ST_3: exitcond2 [1/1] 2.87ns
+.preheader110:1  %exitcond2 = icmp eq i5 %loop_1, -8
+
+ST_3: empty_8 [1/1] 0.00ns
+.preheader110:2  %empty_8 = call i32 (...)* @_ssdm_op_SpecLoopTripCount(i64 24, i64 24, i64 24)
+
+ST_3: loop_4 [1/1] 3.65ns
+.preheader110:3  %loop_4 = add i5 %loop_1, 1
+
+ST_3: stg_22 [1/1] 2.27ns
+.preheader110:4  br i1 %exitcond2, label %.preheader109, label %3
+
+ST_3: stg_23 [1/1] 1.98ns
+:0  store i1 false, i1* @dout, align 1
+
+ST_3: stg_24 [1/1] 0.00ns
+:1  br label %.preheader110
+
+
+ <State 4>: 3.91ns
+ST_4: pos [1/1] 0.00ns
+.preheader109:0  %pos = phi i16 [ %pos_1, %4 ], [ 0, %.preheader110 ]
+
+ST_4: pos_cast [1/1] 0.00ns
+.preheader109:1  %pos_cast = zext i16 %pos to i17
+
+ST_4: tmp_9 [1/1] 3.46ns
+.preheader109:2  %tmp_9 = icmp slt i17 %pos_cast, %num_read
+
+ST_4: empty_9 [1/1] 0.00ns
+.preheader109:3  %empty_9 = call i32 (...)* @_ssdm_op_SpecLoopTripCount(i64 5376, i64 36864, i64 0)
+
+ST_4: pos_1 [1/1] 3.91ns
+.preheader109:4  %pos_1 = add i16 %pos, 1
+
+ST_4: stg_30 [1/1] 0.00ns
+.preheader109:5  br i1 %tmp_9, label %.preheader.preheader, label %5
+
+ST_4: din_load [1/1] 0.00ns
+.preheader.preheader:0  %din_load = load i1* @din, align 1
+
+ST_4: stg_32 [1/1] 2.27ns
+.preheader.preheader:1  br label %.preheader
+
+ST_4: stg_33 [1/1] 0.00ns
+:0  store i1 true, i1* @cs, align 1
+
+ST_4: stg_34 [1/1] 0.00ns
+:1  store i1 false, i1* @clk, align 1
+
+ST_4: stg_35 [1/1] 0.00ns
+:2  ret void
+
+
+ <State 5>: 3.65ns
+ST_5: p_s [1/1] 0.00ns
+.preheader:0  %p_s = phi i16 [ %data_V_2, %_ZlsILi16ELb0EE11ap_int_baseIXT_EXT0_EXleT_Li64EEERKS1_i.exit ], [ 0, %.preheader.preheader ]
+
+ST_5: loop_2 [1/1] 0.00ns
+.preheader:1  %loop_2 = phi i5 [ %loop_5, %_ZlsILi16ELb0EE11ap_int_baseIXT_EXT0_EXleT_Li64EEERKS1_i.exit ], [ 0, %.preheader.preheader ]
+
+ST_5: exitcond [1/1] 2.87ns
+.preheader:2  %exitcond = icmp eq i5 %loop_2, -16
+
+ST_5: empty_10 [1/1] 0.00ns
+.preheader:3  %empty_10 = call i32 (...)* @_ssdm_op_SpecLoopTripCount(i64 16, i64 16, i64 16)
+
+ST_5: loop_5 [1/1] 3.65ns
+.preheader:4  %loop_5 = add i5 %loop_2, 1
+
+ST_5: stg_41 [1/1] 0.00ns
+.preheader:5  br i1 %exitcond, label %4, label %_ZlsILi16ELb0EE11ap_int_baseIXT_EXT0_EXleT_Li64EEERKS1_i.exit
+
+ST_5: r_V [1/1] 0.00ns
+_ZlsILi16ELb0EE11ap_int_baseIXT_EXT0_EXleT_Li64EEERKS1_i.exit:0  %r_V = shl i16 %p_s, 1
+
+ST_5: data_V_1 [1/1] 0.00ns
+_ZlsILi16ELb0EE11ap_int_baseIXT_EXT0_EXleT_Li64EEERKS1_i.exit:1  %data_V_1 = or i16 %r_V, 1
+
+ST_5: data_V_2 [1/1] 2.00ns
+_ZlsILi16ELb0EE11ap_int_baseIXT_EXT0_EXleT_Li64EEERKS1_i.exit:2  %data_V_2 = select i1 %din_load, i16 %data_V_1, i16 %r_V
+
+ST_5: stg_45 [1/1] 0.00ns
+_ZlsILi16ELb0EE11ap_int_baseIXT_EXT0_EXleT_Li64EEERKS1_i.exit:3  br label %.preheader
+
+ST_5: tmp_s [1/1] 0.00ns
+:0  %tmp_s = zext i16 %pos to i64
+
+ST_5: etaIndexM_V_addr [1/1] 0.00ns
+:1  %etaIndexM_V_addr = getelementptr [36864 x i16]* %etaIndexM_V, i64 0, i64 %tmp_s
+
+ST_5: stg_48 [1/1] 2.64ns
+:2  store i16 %p_s, i16* %etaIndexM_V_addr, align 2
+
+ST_5: stg_49 [1/1] 0.00ns
+:3  br label %.preheader109
+
+
+
+============================================================
++ Verbose Summary: Binding
+============================================================
+N/A
+* FSMD analyzer results:
+  - Output states:
+  - Chain level:
+	State 1
+	State 2
+	State 3
+	State 4
+	State 5
+
+
+============================================================
++ Verbose Summary: Datapath Resource usage 
+============================================================
+N/A

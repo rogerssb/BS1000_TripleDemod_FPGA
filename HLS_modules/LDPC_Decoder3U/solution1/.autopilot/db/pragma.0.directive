@@ -1,0 +1,364 @@
+<AutoPilot:ProjectResources xmlns:AutoPilot="com.autoesl.autopilot.ui.directiveView">
+<sourceFile name="">
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="SpEtaPrev"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="SpEtaPrevC"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="SpEtaPrevA"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="SpEtaPrevAa"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="SpEtaPrevAb"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="SpEtaPrevAc"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="SpEtaPrevAd"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="SpEtaPrevB"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="SpEtaPrevBa"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="SpEtaPrevBb"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="SpEtaPrevBc"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="SpEtaPrevBd"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="SpEtaPrevD"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="SpEtaPrevDa"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="SpEtaPrevDb"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="SpEtaPrevDc"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="SpEtaPrevDd"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="SpEtaPrevE"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="SpEtaPrevEa"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="SpEtaPrevEb"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="SpEtaPrevEc"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="SpEtaPrevEd"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="varinx3_1024_12"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="varinx6A_1024_a"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="varinx6B_1024_a"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="varinx6A_1024_b"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="varinx6B_1024_b"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="varinx3_1024_23"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="varinx10A_1024_a"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="varinx10B_1024_a"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="varinx10A_1024_b"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="varinx10B_1024_b"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="varinx10A_1024_c"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="varinx10B_1024_c"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="varinx3_1024_45"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="varinx18A_1024_a"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="varinx18B_1024_a"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="varinx18A_1024_b"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="varinx18B_1024_b"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="varinx18A_1024_c"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="varinx18B_1024_c"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="varinx18A_1024_d"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="varinx18B_1024_d"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="varinx18A_1024_e"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="varinx18B_1024_e"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="varinx18A_1024_f"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="varinx18B_1024_f"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="varinx3_4096_12"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="varinx6A_4096_a"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="varinx6B_4096_a"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="varinx6A_4096_b"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="varinx6B_4096_b"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="varinx3_4096_23"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="varinx10A_4096_a"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="varinx10B_4096_a"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="varinx10A_4096_b"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="varinx10B_4096_b"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="varinx10A_4096_c"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="varinx10B_4096_c"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="varinx3_4096_45"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="varinx18A_4096_a"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="varinx18B_4096_a"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="varinx18A_4096_b"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="varinx18B_4096_b"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="varinx18A_4096_c"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="varinx18B_4096_c"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="varinx18A_4096_d"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="varinx18B_4096_d"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="varinx18A_4096_e"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="varinx18B_4096_e"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="varinx18A_4096_f"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="HLSLdpcLogDecScaledMin" label="">
+<pragma name="DATA_PACK">
+<option name="variable" positionalBoolean="4" value="varinx18B_4096_f"/>
+</pragma>
+</directive>
+</sourceFile>
+</AutoPilot:ProjectResources>

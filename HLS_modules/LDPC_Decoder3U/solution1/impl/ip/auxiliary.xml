@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xd:acceleratorMap xmlns:xd="http://www.xilinx.com/xidane" xd:functionName="HLSLdpcLogDecScaledMin" xd:componentRef="HLSLdpcLogDecScaledMin" xd:initiationInterval="x" xd:clockPeriod="10.000000" xd:sequential="true" xd:hostMachine="64" xd:reset="control">
+  <xd:controlReg xd:name="control" xd:interfaceRef="ap_ctrl" xd:busTypeRef="acc_handshake" xd:type="acc_handshake"/>
+  <xd:arg xd:name="*(cnt)" xd:originalName="cnt" xd:direction="out" xd:interfaceRef="cnt" xd:busTypeRef="register" xd:handshakeRef="ap_vld" xd:dataWidth="32"/>
+  <xd:arg xd:name="nR_M" xd:originalName="nR_M" xd:direction="in" xd:interfaceRef="nR_M" xd:busTypeRef="register" xd:handshakeRef="ap_none" xd:dataWidth="16"/>
+  <xd:arg xd:name="etaIndexM_M" xd:originalName="etaIndexM_M" xd:direction="in" xd:interfaceRef="etaIndexM_M" xd:busTypeRef="register" xd:handshakeRef="ap_none" xd:dataWidth="16"/>
+  <xd:arg xd:name="pCodeM" xd:originalName="pCodeM" xd:direction="in" xd:interfaceRef="pCodeM" xd:busTypeRef="register" xd:handshakeRef="ap_none" xd:dataWidth="16"/>
+  <xd:arg xd:name="pMaxIterations" xd:originalName="pMaxIterations" xd:direction="in" xd:interfaceRef="pMaxIterations" xd:busTypeRef="register" xd:handshakeRef="ap_none" xd:dataWidth="16"/>
+  <xd:arg xd:name="*(itt_num)" xd:originalName="itt_num" xd:direction="out" xd:interfaceRef="itt_num" xd:busTypeRef="register" xd:handshakeRef="ap_vld" xd:dataWidth="8"/>
+  <xd:arg xd:name="numbits" xd:originalName="numbits" xd:direction="in" xd:interfaceRef="numbits" xd:busTypeRef="register" xd:handshakeRef="ap_none" xd:dataWidth="16"/>
+  <xd:arg xd:name="*(mux)" xd:originalName="mux" xd:direction="in" xd:interfaceRef="mux" xd:busTypeRef="register" xd:handshakeRef="ap_none" xd:dataWidth="1"/>
+  <xd:arg xd:name="pR_q0" xd:originalName="pR_q0" xd:direction="in" xd:interfaceRef="pR_q0" xd:busTypeRef="ap_memory" xd:arraySize="2048" xd:dataWidth="8"/>
+  <xd:arg xd:name="pR1_q0" xd:originalName="pR1_q0" xd:direction="in" xd:interfaceRef="pR1_q0" xd:busTypeRef="ap_memory" xd:arraySize="2048" xd:dataWidth="8"/>
+  <xd:arg xd:name="pR2_q0" xd:originalName="pR2_q0" xd:direction="in" xd:interfaceRef="pR2_q0" xd:busTypeRef="ap_memory" xd:arraySize="2048" xd:dataWidth="8"/>
+  <xd:arg xd:name="pR3_q0" xd:originalName="pR3_q0" xd:direction="in" xd:interfaceRef="pR3_q0" xd:busTypeRef="ap_memory" xd:arraySize="2048" xd:dataWidth="8"/>
+  <xd:arg xd:name="pR4_q0" xd:originalName="pR4_q0" xd:direction="in" xd:interfaceRef="pR4_q0" xd:busTypeRef="ap_memory" xd:arraySize="1024" xd:dataWidth="8"/>
+  <xd:arg xd:name="pR5_q0" xd:originalName="pR5_q0" xd:direction="in" xd:interfaceRef="pR5_q0" xd:busTypeRef="ap_memory" xd:arraySize="1024" xd:dataWidth="8"/>
+  <xd:arg xd:name="pR6_q0" xd:originalName="pR6_q0" xd:direction="in" xd:interfaceRef="pR6_q0" xd:busTypeRef="ap_memory" xd:arraySize="1024" xd:dataWidth="8"/>
+  <xd:arg xd:name="pR7_q0" xd:originalName="pR7_q0" xd:direction="in" xd:interfaceRef="pR7_q0" xd:busTypeRef="ap_memory" xd:arraySize="1024" xd:dataWidth="8"/>
+  <xd:arg xd:name="pR8_q0" xd:originalName="pR8_q0" xd:direction="in" xd:interfaceRef="pR8_q0" xd:busTypeRef="ap_memory" xd:arraySize="1024" xd:dataWidth="8"/>
+  <xd:arg xd:name="pR9_q0" xd:originalName="pR9_q0" xd:direction="in" xd:interfaceRef="pR9_q0" xd:busTypeRef="ap_memory" xd:arraySize="1024" xd:dataWidth="8"/>
+  <xd:arg xd:name="pR10_d0" xd:originalName="pR10_d0" xd:direction="out" xd:interfaceRef="pR10_d0" xd:busTypeRef="ap_memory" xd:arraySize="1024" xd:dataWidth="8"/>
+  <xd:arg xd:name="pR10_q0" xd:originalName="pR10_q0" xd:direction="in" xd:interfaceRef="pR10_q0" xd:busTypeRef="ap_memory" xd:arraySize="1024" xd:dataWidth="8"/>
+  <xd:arg xd:name="pR10_d1" xd:originalName="pR10_d1" xd:direction="out" xd:interfaceRef="pR10_d1" xd:busTypeRef="ap_memory" xd:arraySize="1024" xd:dataWidth="8"/>
+  <xd:arg xd:name="pR10_q1" xd:originalName="pR10_q1" xd:direction="in" xd:interfaceRef="pR10_q1" xd:busTypeRef="ap_memory" xd:arraySize="1024" xd:dataWidth="8"/>
+  <xd:arg xd:name="pbhat0_d0" xd:originalName="pbhat0_d0" xd:direction="out" xd:interfaceRef="pbhat0_d0" xd:busTypeRef="ap_memory" xd:arraySize="2048" xd:dataWidth="1"/>
+  <xd:arg xd:name="pbhat1_d0" xd:originalName="pbhat1_d0" xd:direction="out" xd:interfaceRef="pbhat1_d0" xd:busTypeRef="ap_memory" xd:arraySize="2048" xd:dataWidth="1"/>
+  <xd:arg xd:name="pbhat2_d0" xd:originalName="pbhat2_d0" xd:direction="out" xd:interfaceRef="pbhat2_d0" xd:busTypeRef="ap_memory" xd:arraySize="1024" xd:dataWidth="1"/>
+  <xd:arg xd:name="pbhat3_d0" xd:originalName="pbhat3_d0" xd:direction="out" xd:interfaceRef="pbhat3_d0" xd:busTypeRef="ap_memory" xd:arraySize="1024" xd:dataWidth="1"/>
+  <xd:arg xd:name="pbhat4_d0" xd:originalName="pbhat4_d0" xd:direction="out" xd:interfaceRef="pbhat4_d0" xd:busTypeRef="ap_memory" xd:arraySize="1024" xd:dataWidth="1"/>
+  <xd:arg xd:name="pbhat5_d0" xd:originalName="pbhat5_d0" xd:direction="out" xd:interfaceRef="pbhat5_d0" xd:busTypeRef="ap_memory" xd:arraySize="1024" xd:dataWidth="1"/>
+  <xd:arg xd:name="pbhat6_d0" xd:originalName="pbhat6_d0" xd:direction="out" xd:interfaceRef="pbhat6_d0" xd:busTypeRef="ap_memory" xd:arraySize="1024" xd:dataWidth="1"/>
+  <xd:arg xd:name="pbhat7_d0" xd:originalName="pbhat7_d0" xd:direction="out" xd:interfaceRef="pbhat7_d0" xd:busTypeRef="ap_memory" xd:arraySize="1024" xd:dataWidth="1"/>
+  <xd:latencyEstimates xd:best-case="undef" xd:worst-case="undef" xd:average-case="undef"/>
+  <xd:resourceEstimates xd:LUT="43239" xd:FF="11858" xd:BRAM="264" xd:DSP="0"/>
+</xd:acceleratorMap>

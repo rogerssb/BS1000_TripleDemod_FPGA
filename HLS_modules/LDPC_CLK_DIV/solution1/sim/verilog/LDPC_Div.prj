@@ -1,0 +1,3 @@
+sv xil_defaultlib "LDPC_Div.autotb.v"
+sv xil_defaultlib "LDPC_Div.v"
+

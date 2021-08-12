@@ -1,0 +1,575 @@
+
+
+================================================================
+== Vivado HLS Report for 'calc_n_23'
+================================================================
+* Date:           Sat Oct 05 17:09:21 2019
+
+* Version:        2016.3 (Build 1682563 on Mon Oct 10 19:41:59 MDT 2016)
+* Project:        LDPC_Decoder3U
+* Solution:       solution1
+* Product family: kintex7
+* Target device:  xc7k160tfbg676-1
+
+
+================================================================
+== Performance Estimates
+================================================================
++ Timing (ns): 
+    * Summary: 
+    +--------+-------+----------+------------+
+    |  Clock | Target| Estimated| Uncertainty|
+    +--------+-------+----------+------------+
+    |ap_clk  |  10.00|      8.59|        1.25|
+    +--------+-------+----------+------------+
+
++ Latency (clock cycles): 
+    * Summary: 
+    +-----+-----+-----+-----+---------+
+    |  Latency  |  Interval | Pipeline|
+    | min | max | min | max |   Type  |
+    +-----+-----+-----+-----+---------+
+    |    ?|    ?|    ?|    ?|   none  |
+    +-----+-----+-----+-----+---------+
+
+    + Detail: 
+        * Instance: 
+        N/A
+
+        * Loop: 
+        +----------+-----+-----+----------+-----------+-----------+------+----------+
+        |          |  Latency  | Iteration|  Initiation Interval  | Trip |          |
+        | Loop Name| min | max |  Latency |  achieved |   target  | Count| Pipelined|
+        +----------+-----+-----+----------+-----------+-----------+------+----------+
+        |- Loop 1  |    ?|    ?|         4|          -|          -|     ?|    no    |
+        +----------+-----+-----+----------+-----------+-----------+------+----------+
+
+============================================================
++ Verbose Summary: Synthesis Manager
+============================================================
+InlineROM: 1
+ExposeGlobal: 0
+============================================================
++ Verbose Summary: CDFG Model
+============================================================
+IsTopModel: 0
+ResetActiveHigh: 1
+IsCombinational: 0
+IsDatapathOnly: 0
+HasWiredReturn: 1
+HasMFsm: 0
+HasVarLatency: 1
+IsPipeline: 0
+IsRtlPipelined: 0
+IsInstanceOverlapped: 0
+IsDontTouch: 0
+HasImplIP: 0
+IsGatedGlobalClock: 0
+
+
+============================================================
++ Verbose Summary: Schedule
+============================================================
+* Number of FSM states: 4
+* Pipeline: 0
+* Dataflow Pipeline: 0
+
+* FSM state transitions: 
+1 --> 
+	2  / true
+2 --> 
+	3  / (!exitcond)
+3 --> 
+	4  / true
+4 --> 
+	2  / true
+* FSM state operations: 
+
+ <State 1>: 1.09ns
+ST_1: StgValue_5 (159)  [1/1] 0.00ns
+:0  call void (...)* @_ssdm_op_SpecMemCore([2048 x i1]* @prHat_buf6, [1 x i8]* @p_str, [15 x i8]* @p_str77, [1 x i8]* @p_str, i32 -1, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str) nounwind
+
+ST_1: StgValue_6 (160)  [1/1] 0.00ns
+:1  call void (...)* @_ssdm_op_SpecMemCore([2048 x i1]* @prHat_buf, [1 x i8]* @p_str, [15 x i8]* @p_str77, [1 x i8]* @p_str, i32 -1, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str) nounwind
+
+ST_1: StgValue_7 (161)  [1/1] 0.00ns
+:2  call void (...)* @_ssdm_op_SpecMemCore([2048 x i1]* @prHat_buf1, [1 x i8]* @p_str, [15 x i8]* @p_str77, [1 x i8]* @p_str, i32 -1, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str) nounwind
+
+ST_1: StgValue_8 (162)  [1/1] 0.00ns
+:3  call void (...)* @_ssdm_op_SpecMemCore([2048 x i1]* @prHat_buf2, [1 x i8]* @p_str, [15 x i8]* @p_str77, [1 x i8]* @p_str, i32 -1, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str) nounwind
+
+ST_1: StgValue_9 (163)  [1/1] 0.00ns
+:4  call void (...)* @_ssdm_op_SpecMemCore([2048 x i1]* @prHat_buf3, [1 x i8]* @p_str, [15 x i8]* @p_str77, [1 x i8]* @p_str, i32 -1, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str) nounwind
+
+ST_1: StgValue_10 (164)  [1/1] 0.00ns
+:5  call void (...)* @_ssdm_op_SpecMemCore([2048 x i1]* @prHat_buf4, [1 x i8]* @p_str, [15 x i8]* @p_str77, [1 x i8]* @p_str, i32 -1, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str) nounwind
+
+ST_1: StgValue_11 (165)  [1/1] 0.00ns
+:6  call void (...)* @_ssdm_op_SpecMemCore([2048 x i1]* @prHat_bufA, [1 x i8]* @p_str, [15 x i8]* @p_str77, [1 x i8]* @p_str, i32 -1, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str) nounwind
+
+ST_1: StgValue_12 (166)  [1/1] 0.00ns
+:7  call void (...)* @_ssdm_op_SpecMemCore([2048 x i1]* @prHat_bufA1, [1 x i8]* @p_str, [15 x i8]* @p_str77, [1 x i8]* @p_str, i32 -1, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str) nounwind
+
+ST_1: StgValue_13 (167)  [1/1] 0.00ns
+:8  call void (...)* @_ssdm_op_SpecMemCore([2048 x i1]* @prHat_bufA2, [1 x i8]* @p_str, [15 x i8]* @p_str77, [1 x i8]* @p_str, i32 -1, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str) nounwind
+
+ST_1: StgValue_14 (168)  [1/1] 0.00ns
+:9  call void (...)* @_ssdm_op_SpecMemCore([2048 x i1]* @prHat_bufA3, [1 x i8]* @p_str, [15 x i8]* @p_str77, [1 x i8]* @p_str, i32 -1, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str) nounwind
+
+ST_1: StgValue_15 (169)  [1/1] 0.00ns
+:10  call void (...)* @_ssdm_op_SpecMemCore([2048 x i1]* @prHat_bufA4, [1 x i8]* @p_str, [15 x i8]* @p_str77, [1 x i8]* @p_str, i32 -1, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str) nounwind
+
+ST_1: StgValue_16 (170)  [1/1] 0.00ns
+:11  call void (...)* @_ssdm_op_SpecMemCore([2048 x i1]* @prHat_bufA5, [1 x i8]* @p_str, [15 x i8]* @p_str77, [1 x i8]* @p_str, i32 -1, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str) nounwind
+
+ST_1: StgValue_17 (171)  [1/1] 0.00ns
+:12  call void (...)* @_ssdm_op_SpecMemCore([2048 x i1]* @prHat_bufA6, [1 x i8]* @p_str, [15 x i8]* @p_str77, [1 x i8]* @p_str, i32 -1, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str) nounwind
+
+ST_1: StgValue_18 (172)  [1/1] 0.00ns
+:13  call void (...)* @_ssdm_op_SpecMemCore([2048 x i1]* @prHat_bufB, [1 x i8]* @p_str, [15 x i8]* @p_str77, [1 x i8]* @p_str, i32 -1, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str) nounwind
+
+ST_1: StgValue_19 (173)  [1/1] 0.00ns
+:14  call void (...)* @_ssdm_op_SpecMemCore([2048 x i1]* @prHat_bufB1, [1 x i8]* @p_str, [15 x i8]* @p_str77, [1 x i8]* @p_str, i32 -1, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str) nounwind
+
+ST_1: StgValue_20 (174)  [1/1] 0.00ns
+:15  call void (...)* @_ssdm_op_SpecMemCore([2048 x i1]* @prHat_bufB2, [1 x i8]* @p_str, [15 x i8]* @p_str77, [1 x i8]* @p_str, i32 -1, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str) nounwind
+
+ST_1: StgValue_21 (175)  [1/1] 0.00ns
+:16  call void (...)* @_ssdm_op_SpecMemCore([2048 x i1]* @prHat_bufB3, [1 x i8]* @p_str, [15 x i8]* @p_str77, [1 x i8]* @p_str, i32 -1, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str) nounwind
+
+ST_1: StgValue_22 (176)  [1/1] 0.00ns
+:17  call void (...)* @_ssdm_op_SpecMemCore([2048 x i1]* @prHat_bufB4, [1 x i8]* @p_str, [15 x i8]* @p_str77, [1 x i8]* @p_str, i32 -1, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str) nounwind
+
+ST_1: StgValue_23 (177)  [1/1] 0.00ns
+:18  call void (...)* @_ssdm_op_SpecMemCore([2048 x i1]* @prHat_bufB5, [1 x i8]* @p_str, [15 x i8]* @p_str77, [1 x i8]* @p_str, i32 -1, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str) nounwind
+
+ST_1: StgValue_24 (178)  [1/1] 0.00ns
+:19  call void (...)* @_ssdm_op_SpecMemCore([2048 x i1]* @prHat_bufB6, [1 x i8]* @p_str, [15 x i8]* @p_str77, [1 x i8]* @p_str, i32 -1, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str) nounwind
+
+ST_1: StgValue_25 (179)  [1/1] 0.00ns
+:20  call void (...)* @_ssdm_op_SpecMemCore([2048 x i1]* @prHat_buf4a, [1 x i8]* @p_str, [15 x i8]* @p_str77, [1 x i8]* @p_str, i32 -1, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str) nounwind
+
+ST_1: StgValue_26 (180)  [1/1] 0.00ns
+:21  call void (...)* @_ssdm_op_SpecMemCore([2048 x i1]* @prHat_bufAa, [1 x i8]* @p_str, [15 x i8]* @p_str77, [1 x i8]* @p_str, i32 -1, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str) nounwind
+
+ST_1: StgValue_27 (181)  [1/1] 0.00ns
+:22  call void (...)* @_ssdm_op_SpecMemCore([2048 x i1]* @prHat_bufA4a, [1 x i8]* @p_str, [15 x i8]* @p_str77, [1 x i8]* @p_str, i32 -1, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str) nounwind
+
+ST_1: StgValue_28 (182)  [1/1] 0.00ns
+:23  call void (...)* @_ssdm_op_SpecMemCore([2048 x i1]* @prHat_bufB1a, [1 x i8]* @p_str, [15 x i8]* @p_str77, [1 x i8]* @p_str, i32 -1, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str) nounwind
+
+ST_1: StgValue_29 (183)  [1/1] 0.00ns
+:24  call void (...)* @_ssdm_op_SpecMemCore([2048 x i1]* @prHat_bufB5a, [1 x i8]* @p_str, [15 x i8]* @p_str77, [1 x i8]* @p_str, i32 -1, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str) nounwind
+
+ST_1: StgValue_30 (184)  [1/1] 0.00ns
+:25  call void (...)* @_ssdm_op_SpecMemCore([2048 x i1]* @prHat_bufA2a, [1 x i8]* @p_str, [15 x i8]* @p_str77, [1 x i8]* @p_str, i32 -1, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str) nounwind
+
+ST_1: StgValue_31 (185)  [1/1] 0.00ns
+:26  call void (...)* @_ssdm_op_SpecMemCore([2048 x i1]* @prHat_bufA6a, [1 x i8]* @p_str, [15 x i8]* @p_str77, [1 x i8]* @p_str, i32 -1, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str) nounwind
+
+ST_1: StgValue_32 (186)  [1/1] 0.00ns
+:27  call void (...)* @_ssdm_op_SpecMemCore([2048 x i1]* @prHat_bufB3a, [1 x i8]* @p_str, [15 x i8]* @p_str77, [1 x i8]* @p_str, i32 -1, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str) nounwind
+
+ST_1: StgValue_33 (187)  [1/1] 0.00ns
+:28  call void (...)* @_ssdm_op_SpecMemCore([2048 x i1]* @prHat_buf6a, [1 x i8]* @p_str, [15 x i8]* @p_str77, [1 x i8]* @p_str, i32 -1, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str) nounwind
+
+ST_1: StgValue_34 (188)  [1/1] 0.00ns
+:29  call void (...)* @_ssdm_op_SpecMemCore([2048 x i1]* @prHat_bufA4b, [1 x i8]* @p_str, [15 x i8]* @p_str77, [1 x i8]* @p_str, i32 -1, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str) nounwind
+
+ST_1: StgValue_35 (189)  [1/1] 0.00ns
+:30  call void (...)* @_ssdm_op_SpecMemCore([2048 x i1]* @prHat_bufB1b, [1 x i8]* @p_str, [15 x i8]* @p_str77, [1 x i8]* @p_str, i32 -1, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str) nounwind
+
+ST_1: StgValue_36 (190)  [1/1] 0.00ns
+:31  call void (...)* @_ssdm_op_SpecMemCore([2048 x i1]* @prHat_bufB1c, [1 x i8]* @p_str, [15 x i8]* @p_str77, [1 x i8]* @p_str, i32 -1, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str) nounwind
+
+ST_1: StgValue_37 (191)  [1/1] 0.00ns
+:32  call void (...)* @_ssdm_op_SpecMemCore([2048 x i1]* @prHat_bufB5b, [1 x i8]* @p_str, [15 x i8]* @p_str77, [1 x i8]* @p_str, i32 -1, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str) nounwind
+
+ST_1: StgValue_38 (192)  [1/1] 0.00ns
+:33  call void (...)* @_ssdm_op_SpecMemCore([2048 x i1]* @prHat_bufB5c, [1 x i8]* @p_str, [15 x i8]* @p_str77, [1 x i8]* @p_str, i32 -1, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str) nounwind
+
+ST_1: StgValue_39 (193)  [1/1] 0.00ns
+:34  call void (...)* @_ssdm_op_SpecMemCore([2048 x i1]* @prHat_bufAb, [1 x i8]* @p_str, [15 x i8]* @p_str77, [1 x i8]* @p_str, i32 -1, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str) nounwind
+
+ST_1: StgValue_40 (194)  [1/1] 0.00ns
+:35  call void (...)* @_ssdm_op_SpecMemCore([2048 x i1]* @prHat_bufAc, [1 x i8]* @p_str, [15 x i8]* @p_str77, [1 x i8]* @p_str, i32 -1, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str) nounwind
+
+ST_1: StgValue_41 (195)  [1/1] 0.00ns
+:36  call void (...)* @_ssdm_op_SpecMemCore([2048 x i1]* @prHat_bufB3b, [1 x i8]* @p_str, [15 x i8]* @p_str77, [1 x i8]* @p_str, i32 -1, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str) nounwind
+
+ST_1: StgValue_42 (196)  [1/1] 0.00ns
+:37  call void (...)* @_ssdm_op_SpecMemCore([2048 x i1]* @prHat_bufB3c, [1 x i8]* @p_str, [15 x i8]* @p_str77, [1 x i8]* @p_str, i32 -1, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str) nounwind
+
+ST_1: StgValue_43 (197)  [1/1] 0.00ns
+:38  call void (...)* @_ssdm_op_SpecMemCore([2048 x i1]* @prHat_bufA2b, [1 x i8]* @p_str, [15 x i8]* @p_str77, [1 x i8]* @p_str, i32 -1, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str) nounwind
+
+ST_1: StgValue_44 (198)  [1/1] 0.00ns
+:39  call void (...)* @_ssdm_op_SpecMemCore([2048 x i1]* @prHat_bufA2c, [1 x i8]* @p_str, [15 x i8]* @p_str77, [1 x i8]* @p_str, i32 -1, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str) nounwind
+
+ST_1: StgValue_45 (199)  [1/1] 0.00ns
+:40  call void (...)* @_ssdm_op_SpecMemCore([2048 x i1]* @prHat_bufA6b, [1 x i8]* @p_str, [15 x i8]* @p_str77, [1 x i8]* @p_str, i32 -1, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str) nounwind
+
+ST_1: StgValue_46 (200)  [1/1] 0.00ns
+:41  call void (...)* @_ssdm_op_SpecMemCore([2048 x i1]* @prHat_bufA6c, [1 x i8]* @p_str, [15 x i8]* @p_str77, [1 x i8]* @p_str, i32 -1, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str) nounwind
+
+ST_1: nCodeN11_read (201)  [1/1] 0.00ns
+:42  %nCodeN11_read = call i12 @_ssdm_op_Read.ap_auto.i12(i12 %nCodeN11)
+
+ST_1: StgValue_48 (202)  [1/1] 1.09ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5220
+:43  br label %1
+
+
+ <State 2>: 1.47ns
+ST_2: pos_assign (204)  [1/1] 0.00ns
+:0  %pos_assign = phi i12 [ 0, %0 ], [ %n, %2 ]
+
+ST_2: tmp_s (205)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5220
+:1  %tmp_s = zext i12 %pos_assign to i32
+
+ST_2: exitcond (206)  [1/1] 1.47ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5220
+:2  %exitcond = icmp eq i12 %pos_assign, %nCodeN11_read
+
+ST_2: n (207)  [1/1] 1.40ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5220
+:3  %n = add i12 %pos_assign, 1
+
+ST_2: StgValue_53 (208)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5220
+:4  br i1 %exitcond, label %3, label %2
+
+ST_2: pos_assign_cast_cast (210)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5222
+:0  %pos_assign_cast_cast = zext i12 %pos_assign to i13
+
+ST_2: StgValue_55 (211)  [2/2] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5222
+:1  call fastcc void @load_pest_all_23(i13 signext %pos_assign_cast_cast)
+
+ST_2: StgValue_56 (306)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5227
+:0  ret void
+
+
+ <State 3>: 0.00ns
+ST_3: StgValue_57 (211)  [1/2] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5222
+:1  call fastcc void @load_pest_all_23(i13 signext %pos_assign_cast_cast)
+
+
+ <State 4>: 2.39ns
+ST_4: StgValue_58 (212)  [1/1] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5223
+:2  call fastcc void @update_lam_all_23(i13 signext %pos_assign_cast_cast)
+
+ST_4: bpest0_load (213)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4930->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:3  %bpest0_load = load i1* @bpest0, align 1
+
+ST_4: prHat_buf_addr (214)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4930->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:4  %prHat_buf_addr = getelementptr inbounds [2048 x i1]* @prHat_buf, i32 0, i32 %tmp_s
+
+ST_4: StgValue_61 (215)  [1/1] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4930->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:5  store i1 %bpest0_load, i1* %prHat_buf_addr, align 1
+
+ST_4: prHat_bufA_addr (216)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4931->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:6  %prHat_bufA_addr = getelementptr inbounds [2048 x i1]* @prHat_bufA, i32 0, i32 %tmp_s
+
+ST_4: StgValue_63 (217)  [1/1] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4931->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:7  store i1 %bpest0_load, i1* %prHat_bufA_addr, align 1
+
+ST_4: prHat_bufAa_addr (218)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4932->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:8  %prHat_bufAa_addr = getelementptr inbounds [2048 x i1]* @prHat_bufAa, i32 0, i32 %tmp_s
+
+ST_4: StgValue_65 (219)  [1/1] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4932->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:9  store i1 %bpest0_load, i1* %prHat_bufAa_addr, align 1
+
+ST_4: prHat_bufAb_addr (220)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4933->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:10  %prHat_bufAb_addr = getelementptr inbounds [2048 x i1]* @prHat_bufAb, i32 0, i32 %tmp_s
+
+ST_4: StgValue_67 (221)  [1/1] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4933->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:11  store i1 %bpest0_load, i1* %prHat_bufAb_addr, align 1
+
+ST_4: prHat_bufAc_addr (222)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4934->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:12  %prHat_bufAc_addr = getelementptr inbounds [2048 x i1]* @prHat_bufAc, i32 0, i32 %tmp_s
+
+ST_4: StgValue_69 (223)  [1/1] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4934->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:13  store i1 %bpest0_load, i1* %prHat_bufAc_addr, align 1
+
+ST_4: prHat_bufB_addr (224)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4936->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:14  %prHat_bufB_addr = getelementptr inbounds [2048 x i1]* @prHat_bufB, i32 0, i32 %tmp_s
+
+ST_4: StgValue_71 (225)  [1/1] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4936->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:15  store i1 %bpest0_load, i1* %prHat_bufB_addr, align 1
+
+ST_4: bpest1_load (226)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4938->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:16  %bpest1_load = load i1* @bpest1, align 1
+
+ST_4: prHat_buf1_addr (227)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4938->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:17  %prHat_buf1_addr = getelementptr inbounds [2048 x i1]* @prHat_buf1, i32 0, i32 %tmp_s
+
+ST_4: StgValue_74 (228)  [1/1] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4938->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:18  store i1 %bpest1_load, i1* %prHat_buf1_addr, align 1
+
+ST_4: prHat_bufA1_addr (229)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4939->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:19  %prHat_bufA1_addr = getelementptr inbounds [2048 x i1]* @prHat_bufA1, i32 0, i32 %tmp_s
+
+ST_4: StgValue_76 (230)  [1/1] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4939->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:20  store i1 %bpest1_load, i1* %prHat_bufA1_addr, align 1
+
+ST_4: prHat_bufB1_addr (231)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4940->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:21  %prHat_bufB1_addr = getelementptr inbounds [2048 x i1]* @prHat_bufB1, i32 0, i32 %tmp_s
+
+ST_4: StgValue_78 (232)  [1/1] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4940->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:22  store i1 %bpest1_load, i1* %prHat_bufB1_addr, align 1
+
+ST_4: prHat_bufB1a_addr (233)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4941->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:23  %prHat_bufB1a_addr = getelementptr inbounds [2048 x i1]* @prHat_bufB1a, i32 0, i32 %tmp_s
+
+ST_4: StgValue_80 (234)  [1/1] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4941->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:24  store i1 %bpest1_load, i1* %prHat_bufB1a_addr, align 1
+
+ST_4: prHat_bufB1b_addr (235)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4942->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:25  %prHat_bufB1b_addr = getelementptr inbounds [2048 x i1]* @prHat_bufB1b, i32 0, i32 %tmp_s
+
+ST_4: StgValue_82 (236)  [1/1] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4942->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:26  store i1 %bpest1_load, i1* %prHat_bufB1b_addr, align 1
+
+ST_4: prHat_bufB1c_addr (237)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4943->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:27  %prHat_bufB1c_addr = getelementptr inbounds [2048 x i1]* @prHat_bufB1c, i32 0, i32 %tmp_s
+
+ST_4: StgValue_84 (238)  [1/1] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4943->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:28  store i1 %bpest1_load, i1* %prHat_bufB1c_addr, align 1
+
+ST_4: bpest2_load (239)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4945->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:29  %bpest2_load = load i1* @bpest2, align 1
+
+ST_4: prHat_buf2_addr (240)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4945->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:30  %prHat_buf2_addr = getelementptr inbounds [2048 x i1]* @prHat_buf2, i32 0, i32 %tmp_s
+
+ST_4: StgValue_87 (241)  [1/1] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4945->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:31  store i1 %bpest2_load, i1* %prHat_buf2_addr, align 1
+
+ST_4: prHat_bufA2_addr (242)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4946->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:32  %prHat_bufA2_addr = getelementptr inbounds [2048 x i1]* @prHat_bufA2, i32 0, i32 %tmp_s
+
+ST_4: StgValue_89 (243)  [1/1] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4946->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:33  store i1 %bpest2_load, i1* %prHat_bufA2_addr, align 1
+
+ST_4: prHat_bufA2a_addr (244)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4947->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:34  %prHat_bufA2a_addr = getelementptr inbounds [2048 x i1]* @prHat_bufA2a, i32 0, i32 %tmp_s
+
+ST_4: StgValue_91 (245)  [1/1] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4947->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:35  store i1 %bpest2_load, i1* %prHat_bufA2a_addr, align 1
+
+ST_4: prHat_bufA2b_addr (246)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4948->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:36  %prHat_bufA2b_addr = getelementptr inbounds [2048 x i1]* @prHat_bufA2b, i32 0, i32 %tmp_s
+
+ST_4: StgValue_93 (247)  [1/1] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4948->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:37  store i1 %bpest2_load, i1* %prHat_bufA2b_addr, align 1
+
+ST_4: prHat_bufA2c_addr (248)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4949->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:38  %prHat_bufA2c_addr = getelementptr inbounds [2048 x i1]* @prHat_bufA2c, i32 0, i32 %tmp_s
+
+ST_4: StgValue_95 (249)  [1/1] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4949->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:39  store i1 %bpest2_load, i1* %prHat_bufA2c_addr, align 1
+
+ST_4: prHat_bufB2_addr (250)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4950->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:40  %prHat_bufB2_addr = getelementptr inbounds [2048 x i1]* @prHat_bufB2, i32 0, i32 %tmp_s
+
+ST_4: StgValue_97 (251)  [1/1] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4950->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:41  store i1 %bpest2_load, i1* %prHat_bufB2_addr, align 1
+
+ST_4: bpest3_load (252)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4952->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:42  %bpest3_load = load i1* @bpest3, align 1
+
+ST_4: prHat_buf3_addr (253)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4952->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:43  %prHat_buf3_addr = getelementptr inbounds [2048 x i1]* @prHat_buf3, i32 0, i32 %tmp_s
+
+ST_4: StgValue_100 (254)  [1/1] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4952->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:44  store i1 %bpest3_load, i1* %prHat_buf3_addr, align 1
+
+ST_4: prHat_bufA3_addr (255)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4953->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:45  %prHat_bufA3_addr = getelementptr inbounds [2048 x i1]* @prHat_bufA3, i32 0, i32 %tmp_s
+
+ST_4: StgValue_102 (256)  [1/1] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4953->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:46  store i1 %bpest3_load, i1* %prHat_bufA3_addr, align 1
+
+ST_4: prHat_bufB3_addr (257)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4954->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:47  %prHat_bufB3_addr = getelementptr inbounds [2048 x i1]* @prHat_bufB3, i32 0, i32 %tmp_s
+
+ST_4: StgValue_104 (258)  [1/1] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4954->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:48  store i1 %bpest3_load, i1* %prHat_bufB3_addr, align 1
+
+ST_4: prHat_bufB3a_addr (259)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4955->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:49  %prHat_bufB3a_addr = getelementptr inbounds [2048 x i1]* @prHat_bufB3a, i32 0, i32 %tmp_s
+
+ST_4: StgValue_106 (260)  [1/1] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4955->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:50  store i1 %bpest3_load, i1* %prHat_bufB3a_addr, align 1
+
+ST_4: prHat_bufB3b_addr (261)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4956->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:51  %prHat_bufB3b_addr = getelementptr inbounds [2048 x i1]* @prHat_bufB3b, i32 0, i32 %tmp_s
+
+ST_4: StgValue_108 (262)  [1/1] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4956->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:52  store i1 %bpest3_load, i1* %prHat_bufB3b_addr, align 1
+
+ST_4: prHat_bufB3c_addr (263)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4957->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:53  %prHat_bufB3c_addr = getelementptr inbounds [2048 x i1]* @prHat_bufB3c, i32 0, i32 %tmp_s
+
+ST_4: StgValue_110 (264)  [1/1] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4957->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:54  store i1 %bpest3_load, i1* %prHat_bufB3c_addr, align 1
+
+ST_4: bpest4_load (265)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4959->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:55  %bpest4_load = load i1* @bpest4, align 1
+
+ST_4: prHat_buf4_addr (266)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4959->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:56  %prHat_buf4_addr = getelementptr inbounds [2048 x i1]* @prHat_buf4, i32 0, i32 %tmp_s
+
+ST_4: StgValue_113 (267)  [1/1] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4959->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:57  store i1 %bpest4_load, i1* %prHat_buf4_addr, align 1
+
+ST_4: prHat_buf4a_addr (268)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4960->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:58  %prHat_buf4a_addr = getelementptr inbounds [2048 x i1]* @prHat_buf4a, i32 0, i32 %tmp_s
+
+ST_4: StgValue_115 (269)  [1/1] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4960->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:59  store i1 %bpest4_load, i1* %prHat_buf4a_addr, align 1
+
+ST_4: prHat_bufA4_addr (270)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4961->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:60  %prHat_bufA4_addr = getelementptr inbounds [2048 x i1]* @prHat_bufA4, i32 0, i32 %tmp_s
+
+ST_4: StgValue_117 (271)  [1/1] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4961->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:61  store i1 %bpest4_load, i1* %prHat_bufA4_addr, align 1
+
+ST_4: prHat_bufA4a_addr (272)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4962->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:62  %prHat_bufA4a_addr = getelementptr inbounds [2048 x i1]* @prHat_bufA4a, i32 0, i32 %tmp_s
+
+ST_4: StgValue_119 (273)  [1/1] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4962->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:63  store i1 %bpest4_load, i1* %prHat_bufA4a_addr, align 1
+
+ST_4: prHat_bufA4b_addr (274)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4963->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:64  %prHat_bufA4b_addr = getelementptr inbounds [2048 x i1]* @prHat_bufA4b, i32 0, i32 %tmp_s
+
+ST_4: StgValue_121 (275)  [1/1] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4963->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:65  store i1 %bpest4_load, i1* %prHat_bufA4b_addr, align 1
+
+ST_4: prHat_bufB4_addr (276)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4964->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:66  %prHat_bufB4_addr = getelementptr inbounds [2048 x i1]* @prHat_bufB4, i32 0, i32 %tmp_s
+
+ST_4: StgValue_123 (277)  [1/1] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4964->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:67  store i1 %bpest4_load, i1* %prHat_bufB4_addr, align 1
+
+ST_4: bpest5_load (278)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4967->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:68  %bpest5_load = load i1* @bpest5, align 1
+
+ST_4: prHat_bufA5_addr (279)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4967->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:69  %prHat_bufA5_addr = getelementptr inbounds [2048 x i1]* @prHat_bufA5, i32 0, i32 %tmp_s
+
+ST_4: StgValue_126 (280)  [1/1] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4967->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:70  store i1 %bpest5_load, i1* %prHat_bufA5_addr, align 1
+
+ST_4: prHat_bufB5_addr (281)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4968->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:71  %prHat_bufB5_addr = getelementptr inbounds [2048 x i1]* @prHat_bufB5, i32 0, i32 %tmp_s
+
+ST_4: StgValue_128 (282)  [1/1] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4968->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:72  store i1 %bpest5_load, i1* %prHat_bufB5_addr, align 1
+
+ST_4: prHat_bufB5a_addr (283)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4969->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:73  %prHat_bufB5a_addr = getelementptr inbounds [2048 x i1]* @prHat_bufB5a, i32 0, i32 %tmp_s
+
+ST_4: StgValue_130 (284)  [1/1] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4969->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:74  store i1 %bpest5_load, i1* %prHat_bufB5a_addr, align 1
+
+ST_4: prHat_bufB5b_addr (285)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4970->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:75  %prHat_bufB5b_addr = getelementptr inbounds [2048 x i1]* @prHat_bufB5b, i32 0, i32 %tmp_s
+
+ST_4: StgValue_132 (286)  [1/1] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4970->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:76  store i1 %bpest5_load, i1* %prHat_bufB5b_addr, align 1
+
+ST_4: prHat_bufB5c_addr (287)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4971->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:77  %prHat_bufB5c_addr = getelementptr inbounds [2048 x i1]* @prHat_bufB5c, i32 0, i32 %tmp_s
+
+ST_4: StgValue_134 (288)  [1/1] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4971->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:78  store i1 %bpest5_load, i1* %prHat_bufB5c_addr, align 1
+
+ST_4: bpest6_load (289)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4973->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:79  %bpest6_load = load i1* @bpest6, align 1
+
+ST_4: prHat_buf6_addr (290)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4973->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:80  %prHat_buf6_addr = getelementptr inbounds [2048 x i1]* @prHat_buf6, i32 0, i32 %tmp_s
+
+ST_4: StgValue_137 (291)  [1/1] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4973->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:81  store i1 %bpest6_load, i1* %prHat_buf6_addr, align 1
+
+ST_4: prHat_buf6a_addr (292)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4974->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:82  %prHat_buf6a_addr = getelementptr inbounds [2048 x i1]* @prHat_buf6a, i32 0, i32 %tmp_s
+
+ST_4: StgValue_139 (293)  [1/1] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4974->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:83  store i1 %bpest6_load, i1* %prHat_buf6a_addr, align 1
+
+ST_4: prHat_bufA6_addr (294)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4975->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:84  %prHat_bufA6_addr = getelementptr inbounds [2048 x i1]* @prHat_bufA6, i32 0, i32 %tmp_s
+
+ST_4: StgValue_141 (295)  [1/1] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4975->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:85  store i1 %bpest6_load, i1* %prHat_bufA6_addr, align 1
+
+ST_4: prHat_bufA6b_addr (296)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4976->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:86  %prHat_bufA6b_addr = getelementptr inbounds [2048 x i1]* @prHat_bufA6b, i32 0, i32 %tmp_s
+
+ST_4: StgValue_143 (297)  [1/1] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4976->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:87  store i1 %bpest6_load, i1* %prHat_bufA6b_addr, align 1
+
+ST_4: prHat_bufA6c_addr (298)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4977->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:88  %prHat_bufA6c_addr = getelementptr inbounds [2048 x i1]* @prHat_bufA6c, i32 0, i32 %tmp_s
+
+ST_4: StgValue_145 (299)  [1/1] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4977->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:89  store i1 %bpest6_load, i1* %prHat_bufA6c_addr, align 1
+
+ST_4: prHat_bufA6a_addr (300)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4978->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:90  %prHat_bufA6a_addr = getelementptr inbounds [2048 x i1]* @prHat_bufA6a, i32 0, i32 %tmp_s
+
+ST_4: StgValue_147 (301)  [1/1] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4978->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:91  store i1 %bpest6_load, i1* %prHat_bufA6a_addr, align 1
+
+ST_4: prHat_bufB6_addr (302)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4979->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:92  %prHat_bufB6_addr = getelementptr inbounds [2048 x i1]* @prHat_bufB6, i32 0, i32 %tmp_s
+
+ST_4: StgValue_149 (303)  [1/1] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4979->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224
+:93  store i1 %bpest6_load, i1* %prHat_bufB6_addr, align 1
+
+ST_4: StgValue_150 (304)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5220
+:94  br label %1
+
+
+
+============================================================
++ Verbose Summary: Timing violations
+============================================================
+Target clock period: 10ns, clock uncertainty: 1.25ns.
+
+ <State 1>: 1.09ns
+The critical path consists of the following:
+	multiplexor before 'phi' operation ('n') with incoming values : ('n', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5220) [204]  (1.09 ns)
+
+ <State 2>: 1.47ns
+The critical path consists of the following:
+	'phi' operation ('n') with incoming values : ('n', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5220) [204]  (0 ns)
+	'icmp' operation ('exitcond', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5220) [206]  (1.47 ns)
+
+ <State 3>: 0ns
+The critical path consists of the following:
+
+ <State 4>: 2.39ns
+The critical path consists of the following:
+	'load' operation ('bpest0_load', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4930->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224) on global variable 'bpest0' [213]  (0 ns)
+	'store' operation (LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4930->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224) of variable 'bpest0_load', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:4930->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5224 on array 'prHat_buf' [215]  (2.39 ns)
+
+
+============================================================
++ Verbose Summary: Binding
+============================================================
+N/A
+* FSMD analyzer results:
+  - Output states:
+ - Input state : 
+  - Chain level:
+	State 1
+	State 2
+	State 3
+	State 4
+
+
+============================================================
++ Verbose Summary: Datapath Resource usage 
+============================================================
+N/A

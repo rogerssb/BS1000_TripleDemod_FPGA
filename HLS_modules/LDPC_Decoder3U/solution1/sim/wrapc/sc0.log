@@ -1,0 +1,5 @@
+   Build using "C:/Xilinx/Vivado_HLS/2016.3/msys/bin/g++.exe"
+   Compiling HLSLdpcLogDecScaledMin.cpp_pre.cpp.tb.cpp
+   Compiling LDPC_Decoder_check.cpp_pre.cpp.tb.cpp
+   Compiling apatb_HLSLdpcLogDecScaledMin.cpp
+   Generating cosim.tv.exe

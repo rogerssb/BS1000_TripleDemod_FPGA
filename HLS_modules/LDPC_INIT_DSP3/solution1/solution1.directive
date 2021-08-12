@@ -1,0 +1,11 @@
+<AutoPilot:ProjectResources xmlns:AutoPilot="com.autoesl.autopilot.ui.directiveView">
+    <sourceFile name="">
+        <directive functionName="setupLDPC" label="" functionLabel="">
+            <pragma name="INTERFACE">
+                <option name="ap_ovld" value="" positionalBoolean="mode"/>
+                <option name="port" value="nR_M" positionalBoolean="4"/>
+            </pragma>
+        </directive>
+    </sourceFile>
+</AutoPilot:ProjectResources>
+

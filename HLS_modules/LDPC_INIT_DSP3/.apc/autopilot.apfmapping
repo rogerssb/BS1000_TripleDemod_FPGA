@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<autopilotfilemapping:AutoPilotFileMapping xmlns:autopilotfilemapping="www.autoesl.com/autopilotfilemapping">
+  <source>
+    <originFiles name="newtabs4096.h" path="C:\Users\dougo\LDPC_INIT_DSP3\newtabs4096.h"/>
+    <originFiles name="newtabs1024.h" path="C:\Users\dougo\LDPC_INIT_DSP3\newtabs1024.h"/>
+    <originFiles name="LDPC_INIT_DSP3.cpp" path="C:\Users\dougo\LDPC_INIT_DSP3\LDPC_INIT_DSP3.cpp"/>
+  </source>
+  <testbench>
+    <originFiles name="LDPC_INT_TEST.cpp" path="C:\Users\dougo\LDPC_INIT_DSP3\LDPC_INT_TEST.cpp"/>
+  </testbench>
+</autopilotfilemapping:AutoPilotFileMapping>

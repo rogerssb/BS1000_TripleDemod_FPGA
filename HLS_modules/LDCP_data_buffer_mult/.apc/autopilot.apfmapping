@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<autopilotfilemapping:AutoPilotFileMapping xmlns:autopilotfilemapping="www.autoesl.com/autopilotfilemapping">
+  <source>
+    <originFiles name="LDPC_buff.cpp" path="C:\Users\dougo\LDCP_data_buffer_mult\LDPC_buff.cpp"/>
+  </source>
+  <testbench>
+    <originFiles name="buff_bench.cpp" path="C:\Users\dougo\LDCP_data_buffer_mult\buff_bench.cpp"/>
+  </testbench>
+</autopilotfilemapping:AutoPilotFileMapping>

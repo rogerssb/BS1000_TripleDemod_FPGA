@@ -1,0 +1,474 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cdfg:DBCdfg xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cdfg="http://www.autoesl.com/DBCdfg" timeStamp="1552670773096">
+  <ports id="1" name="reset" type="PortType" originalName="reset" bitwidth="1">
+    <dataOutputObjs>read</dataOutputObjs>
+  </ports>
+  <ports id="2" name="rd_clk_out" type="PortType" originalName="rd_clk_out" bitwidth="1" direction="DirOut">
+    <dataInputObjs>write</dataInputObjs>
+    <dataInputObjs>write</dataInputObjs>
+  </ports>
+  <ports id="3" name="clk_div" type="PortType" originalName="clk_div" bitwidth="16">
+    <dataOutputObjs>read</dataOutputObjs>
+  </ports>
+  <ports id="4" name="block_V" type="PortType" bitwidth="2">
+    <dataOutputObjs>read</dataOutputObjs>
+  </ports>
+  <edges id="53" source_obj="//@ports.3" sink_obj="//@blocks.0/@node_objs.0"/>
+  <edges id="56" source_obj="//@ports.2" sink_obj="//@blocks.0/@node_objs.1"/>
+  <edges id="59" source_obj="//@ports.0" sink_obj="//@blocks.0/@node_objs.2"/>
+  <edges id="60" sink_obj="//@blocks.0/@node_objs.3"/>
+  <edges id="61" sink_obj="//@blocks.0/@node_objs.4"/>
+  <edges id="62" sink_obj="//@blocks.0/@node_objs.5"/>
+  <edges id="63" source_obj="//@blocks.0/@node_objs.3" sink_obj="//@blocks.0/@node_objs.6"/>
+  <edges id="64" source_obj="//@blocks.0/@node_objs.5" sink_obj="//@blocks.0/@node_objs.6"/>
+  <edges id="65" source_obj="//@blocks.0/@node_objs.6" sink_obj="//@blocks.0/@node_objs.7"/>
+  <edges id="66" source_obj="//@blocks.0/@node_objs.2" sink_obj="//@blocks.0/@node_objs.7"/>
+  <edges id="67" source_obj="//@blocks.0/@node_objs.7" sink_obj="//@blocks.0/@node_objs.8"/>
+  <edges id="70" source_obj="//@blocks.0/@node_objs.7" sink_obj="//@blocks.0/@node_objs.9"/>
+  <edges id="71" source_obj="//@blocks.0/@node_objs.3" sink_obj="//@blocks.0/@node_objs.9"/>
+  <edges id="74" source_obj="//@blocks.0/@node_objs.0" sink_obj="//@blocks.0/@node_objs.10"/>
+  <edges id="77" source_obj="//@blocks.0/@node_objs.10" sink_obj="//@blocks.0/@node_objs.11"/>
+  <edges id="82" source_obj="//@blocks.0/@node_objs.11" sink_obj="//@blocks.0/@node_objs.12"/>
+  <edges id="83" sink_obj="//@blocks.0/@node_objs.12"/>
+  <edges id="84" source_obj="//@blocks.0/@node_objs.4" sink_obj="//@blocks.0/@node_objs.13"/>
+  <edges id="87" source_obj="//@blocks.0/@node_objs.7" sink_obj="//@blocks.0/@node_objs.14"/>
+  <edges id="88" source_obj="//@blocks.0/@node_objs.13" sink_obj="//@blocks.0/@node_objs.14"/>
+  <edges id="90" source_obj="//@blocks.0/@node_objs.14" sink_obj="//@blocks.0/@node_objs.15"/>
+  <edges id="91" source_obj="//@blocks.0/@node_objs.1" sink_obj="//@blocks.0/@node_objs.15"/>
+  <edges id="92" source_obj="//@blocks.0/@node_objs.9" sink_obj="//@blocks.0/@node_objs.16"/>
+  <edges id="93" source_obj="//@blocks.0/@node_objs.11" sink_obj="//@blocks.0/@node_objs.16"/>
+  <edges id="94" source_obj="//@blocks.0/@node_objs.15" sink_obj="//@blocks.0/@node_objs.17"/>
+  <edges id="95" source_obj="//@blocks.0/@node_objs.16" sink_obj="//@blocks.0/@node_objs.17"/>
+  <edges id="96" source_obj="//@blocks.0/@node_objs.17" sink_obj="//@blocks.0/@node_objs.18"/>
+  <edges id="97" edge_type="CtrlEdge" source_obj="//@blocks.1" sink_obj="//@blocks.0/@node_objs.18"/>
+  <edges id="98" edge_type="CtrlEdge" source_obj="//@blocks.2" sink_obj="//@blocks.0/@node_objs.18"/>
+  <edges id="101" source_obj="//@blocks.2/@node_objs.0" sink_obj="//@ports.1"/>
+  <edges id="103" source_obj="//@blocks.0/@node_objs.9" sink_obj="//@blocks.2/@node_objs.1"/>
+  <edges id="105" edge_type="CtrlEdge" source_obj="//@blocks.3" sink_obj="//@blocks.2/@node_objs.2"/>
+  <edges id="107" source_obj="//@blocks.1/@node_objs.0" sink_obj="//@ports.1"/>
+  <edges id="110" edge_type="CtrlEdge" source_obj="//@blocks.3" sink_obj="//@blocks.1/@node_objs.1"/>
+  <edges id="111" source_obj="//@blocks.3/@node_objs.1" sink_obj="//@blocks.4/@node_objs.0"/>
+  <edges id="112" sink_obj="//@blocks.4/@node_objs.0"/>
+  <edges id="113" edge_type="CtrlEdge" source_obj="//@blocks.5" sink_obj="//@blocks.4/@node_objs.1"/>
+  <edges id="115" edge_type="CtrlEdge" source_obj="//@blocks.2" sink_obj="//@blocks.3/@node_objs.0"/>
+  <edges id="116" source_obj="//@blocks.0/@node_objs.8" sink_obj="//@blocks.3/@node_objs.0"/>
+  <edges id="117" edge_type="CtrlEdge" source_obj="//@blocks.1" sink_obj="//@blocks.3/@node_objs.0"/>
+  <edges id="118" source_obj="//@blocks.2/@node_objs.1" sink_obj="//@blocks.3/@node_objs.1"/>
+  <edges id="119" edge_type="CtrlEdge" source_obj="//@blocks.2" sink_obj="//@blocks.3/@node_objs.1"/>
+  <edges id="121" edge_type="CtrlEdge" source_obj="//@blocks.1" sink_obj="//@blocks.3/@node_objs.1"/>
+  <edges id="123" edge_type="CtrlEdge" source_obj="//@blocks.2" sink_obj="//@blocks.3/@node_objs.2"/>
+  <edges id="124" source_obj="//@blocks.0/@node_objs.14" sink_obj="//@blocks.3/@node_objs.2"/>
+  <edges id="125" edge_type="CtrlEdge" source_obj="//@blocks.1" sink_obj="//@blocks.3/@node_objs.2"/>
+  <edges id="126" source_obj="//@blocks.3/@node_objs.2" sink_obj="//@blocks.3/@node_objs.3"/>
+  <edges id="127" sink_obj="//@blocks.3/@node_objs.3"/>
+  <edges id="128" source_obj="//@blocks.3/@node_objs.0" sink_obj="//@blocks.3/@node_objs.4"/>
+  <edges id="129" edge_type="CtrlEdge" source_obj="//@blocks.5" sink_obj="//@blocks.3/@node_objs.4"/>
+  <edges id="130" edge_type="CtrlEdge" source_obj="//@blocks.4" sink_obj="//@blocks.3/@node_objs.4"/>
+  <edges id="144" edge_type="CtrlEdge" source_obj="//@blocks.0" sink_obj="//@blocks.2"/>
+  <edges id="145" edge_type="CtrlEdge" source_obj="//@blocks.0" sink_obj="//@blocks.1"/>
+  <edges id="146" edge_type="CtrlEdge" source_obj="//@blocks.1" sink_obj="//@blocks.3"/>
+  <edges id="147" edge_type="CtrlEdge" source_obj="//@blocks.2" sink_obj="//@blocks.3"/>
+  <edges id="148" edge_type="CtrlEdge" source_obj="//@blocks.3" sink_obj="//@blocks.4"/>
+  <edges id="149" edge_type="CtrlEdge" source_obj="//@blocks.3" sink_obj="//@blocks.5"/>
+  <edges id="150" edge_type="CtrlEdge" source_obj="//@blocks.4" sink_obj="//@blocks.5"/>
+  <blocks id="32" name="._crit_edge" type="BlockType">
+    <controlOutputObjs>block_39</controlOutputObjs>
+    <controlOutputObjs>._crit_edge5</controlOutputObjs>
+    <node_objs xsi:type="cdfg:CdfgNode" id="13" name="block_V_read" bitwidth="2" opcode="read" m_display="0">
+      <dataInputObjs>block_V</dataInputObjs>
+      <dataOutputObjs>icmp</dataOutputObjs>
+    </node_objs>
+    <node_objs xsi:type="cdfg:CdfgNode" id="14" name="clk_div_read" originalName="clk_div" bitwidth="16" opcode="read" m_display="0">
+      <dataInputObjs>clk_div</dataInputObjs>
+      <dataOutputObjs>icmp</dataOutputObjs>
+    </node_objs>
+    <node_objs xsi:type="cdfg:CdfgNode" id="15" name="reset_read" originalName="reset" bitwidth="1" opcode="read" m_display="0">
+      <dataInputObjs>reset</dataInputObjs>
+      <dataOutputObjs>or</dataOutputObjs>
+    </node_objs>
+    <node_objs xsi:type="cdfg:CdfgNode" id="16" name="out_count_load" lineNumber="21" fileName="LDPC_CLK_DIV/LDPC_Div.cpp" fileDirectory=".." contextFuncName="LDPC_Div" bitwidth="16" opcode="load" m_display="0">
+      <inlineStackInfo fileName="LDPC_CLK_DIV/LDPC_Div.cpp" linenumber="21" fileDirectory="C:\Users\dougo" functionName="LDPC_Div"/>
+      <dataOutputObjs>icmp</dataOutputObjs>
+      <dataOutputObjs>select</dataOutputObjs>
+    </node_objs>
+    <node_objs xsi:type="cdfg:CdfgNode" id="17" name="count_load" lineNumber="32" fileName="LDPC_CLK_DIV/LDPC_Div.cpp" fileDirectory=".." contextFuncName="LDPC_Div" bitwidth="16" opcode="load" m_display="0">
+      <inlineStackInfo fileName="LDPC_CLK_DIV/LDPC_Div.cpp" linenumber="32" fileDirectory="C:\Users\dougo" functionName="LDPC_Div"/>
+      <dataOutputObjs>add</dataOutputObjs>
+    </node_objs>
+    <node_objs xsi:type="cdfg:CdfgNode" id="18" name="max_load" lineNumber="21" fileName="LDPC_CLK_DIV/LDPC_Div.cpp" fileDirectory=".." contextFuncName="LDPC_Div" bitwidth="16" opcode="load" m_display="0">
+      <inlineStackInfo fileName="LDPC_CLK_DIV/LDPC_Div.cpp" linenumber="21" fileDirectory="C:\Users\dougo" functionName="LDPC_Div"/>
+      <dataOutputObjs>icmp</dataOutputObjs>
+    </node_objs>
+    <node_objs xsi:type="cdfg:CdfgNode" id="19" name="tmp" lineNumber="21" fileName="LDPC_CLK_DIV/LDPC_Div.cpp" fileDirectory=".." rtlName="tmp_fu_111_p2" contextFuncName="LDPC_Div" bitwidth="1" opcode="icmp" m_display="0">
+      <inlineStackInfo fileName="LDPC_CLK_DIV/LDPC_Div.cpp" linenumber="21" fileDirectory="C:\Users\dougo" functionName="LDPC_Div"/>
+      <dataInputObjs>load</dataInputObjs>
+      <dataInputObjs>load</dataInputObjs>
+      <dataOutputObjs>or</dataOutputObjs>
+    </node_objs>
+    <node_objs xsi:type="cdfg:CdfgNode" id="20" name="or_cond3" lineNumber="21" fileName="LDPC_CLK_DIV/LDPC_Div.cpp" fileDirectory=".." rtlName="or_cond3_fu_117_p2" contextFuncName="LDPC_Div" bitwidth="1" opcode="or" m_display="0">
+      <inlineStackInfo fileName="LDPC_CLK_DIV/LDPC_Div.cpp" linenumber="21" fileDirectory="C:\Users\dougo" functionName="LDPC_Div"/>
+      <dataInputObjs>icmp</dataInputObjs>
+      <dataInputObjs>read</dataInputObjs>
+      <dataOutputObjs>xor</dataOutputObjs>
+      <dataOutputObjs>select</dataOutputObjs>
+      <dataOutputObjs>select</dataOutputObjs>
+    </node_objs>
+    <node_objs xsi:type="cdfg:CdfgNode" id="21" name="not_or_cond3" lineNumber="21" fileName="LDPC_CLK_DIV/LDPC_Div.cpp" fileDirectory=".." rtlName="not_or_cond3_fu_123_p2" contextFuncName="LDPC_Div" bitwidth="1" opcode="xor" m_display="0">
+      <inlineStackInfo fileName="LDPC_CLK_DIV/LDPC_Div.cpp" linenumber="21" fileDirectory="C:\Users\dougo" functionName="LDPC_Div"/>
+      <dataInputObjs>or</dataInputObjs>
+      <dataOutputObjs>phi</dataOutputObjs>
+      <constName>empty</constName>
+    </node_objs>
+    <node_objs xsi:type="cdfg:CdfgNode" id="22" name="out_count_load_s" lineNumber="21" fileName="LDPC_CLK_DIV/LDPC_Div.cpp" fileDirectory=".." rtlName="out_count_load_s_fu_130_p3" contextFuncName="LDPC_Div" bitwidth="16" opcode="select" m_display="0">
+      <inlineStackInfo fileName="LDPC_CLK_DIV/LDPC_Div.cpp" linenumber="21" fileDirectory="C:\Users\dougo" functionName="LDPC_Div"/>
+      <dataInputObjs>or</dataInputObjs>
+      <dataInputObjs>load</dataInputObjs>
+      <dataOutputObjs>icmp</dataOutputObjs>
+      <dataOutputObjs>add</dataOutputObjs>
+      <constName>empty</constName>
+    </node_objs>
+    <node_objs xsi:type="cdfg:CdfgNode" id="23" name="tmp_1" lineNumber="27" fileName="LDPC_CLK_DIV/LDPC_Div.cpp" fileDirectory=".." rtlName="tmp_1_fu_138_p2" contextFuncName="LDPC_Div" bitwidth="1" opcode="icmp" m_display="0">
+      <inlineStackInfo fileName="LDPC_CLK_DIV/LDPC_Div.cpp" linenumber="27" fileDirectory="C:\Users\dougo" functionName="LDPC_Div"/>
+      <dataInputObjs>read</dataInputObjs>
+      <dataOutputObjs>select</dataOutputObjs>
+      <constName>empty</constName>
+    </node_objs>
+    <node_objs xsi:type="cdfg:CdfgNode" id="24" name="storemerge_cast_cast" lineNumber="27" fileName="LDPC_CLK_DIV/LDPC_Div.cpp" fileDirectory=".." rtlName="storemerge_cast_cast_fu_144_p3" contextFuncName="LDPC_Div" bitwidth="16" opcode="select" m_display="0">
+      <inlineStackInfo fileName="LDPC_CLK_DIV/LDPC_Div.cpp" linenumber="27" fileDirectory="C:\Users\dougo" functionName="LDPC_Div"/>
+      <dataInputObjs>icmp</dataInputObjs>
+      <dataOutputObjs>store</dataOutputObjs>
+      <dataOutputObjs>icmp</dataOutputObjs>
+      <constName>empty</constName>
+    </node_objs>
+    <node_objs xsi:type="cdfg:CdfgNode" id="25" name="node_25" lineNumber="28" fileName="LDPC_CLK_DIV/LDPC_Div.cpp" fileDirectory=".." contextFuncName="LDPC_Div" opcode="store" m_display="0">
+      <inlineStackInfo fileName="LDPC_CLK_DIV/LDPC_Div.cpp" linenumber="28" fileDirectory="C:\Users\dougo" functionName="LDPC_Div"/>
+      <dataInputObjs>select</dataInputObjs>
+    </node_objs>
+    <node_objs xsi:type="cdfg:CdfgNode" id="26" name="count_load_op" lineNumber="32" fileName="LDPC_CLK_DIV/LDPC_Div.cpp" fileDirectory=".." rtlName="count_load_op_fu_158_p2" contextFuncName="LDPC_Div" bitwidth="16" opcode="add" m_display="0">
+      <inlineStackInfo fileName="LDPC_CLK_DIV/LDPC_Div.cpp" linenumber="32" fileDirectory="C:\Users\dougo" functionName="LDPC_Div"/>
+      <dataInputObjs>load</dataInputObjs>
+      <dataOutputObjs>select</dataOutputObjs>
+      <constName>empty</constName>
+    </node_objs>
+    <node_objs xsi:type="cdfg:CdfgNode" id="27" name="tmp_2" lineNumber="32" fileName="LDPC_CLK_DIV/LDPC_Div.cpp" fileDirectory=".." rtlName="tmp_2_fu_164_p3" contextFuncName="LDPC_Div" bitwidth="16" opcode="select" m_display="0">
+      <inlineStackInfo fileName="LDPC_CLK_DIV/LDPC_Div.cpp" linenumber="32" fileDirectory="C:\Users\dougo" functionName="LDPC_Div"/>
+      <dataInputObjs>or</dataInputObjs>
+      <dataInputObjs>add</dataInputObjs>
+      <dataOutputObjs>icmp</dataOutputObjs>
+      <dataOutputObjs>phi</dataOutputObjs>
+      <constName>empty</constName>
+    </node_objs>
+    <node_objs xsi:type="cdfg:CdfgNode" id="28" name="tmp_3" lineNumber="34" fileName="LDPC_CLK_DIV/LDPC_Div.cpp" fileDirectory=".." rtlName="tmp_3_fu_173_p2" contextFuncName="LDPC_Div" bitwidth="1" opcode="icmp" m_display="0">
+      <inlineStackInfo fileName="LDPC_CLK_DIV/LDPC_Div.cpp" linenumber="34" fileDirectory="C:\Users\dougo" functionName="LDPC_Div"/>
+      <dataInputObjs>select</dataInputObjs>
+      <dataInputObjs>read</dataInputObjs>
+      <dataOutputObjs>and</dataOutputObjs>
+    </node_objs>
+    <node_objs xsi:type="cdfg:CdfgNode" id="29" name="tmp_4" lineNumber="34" fileName="LDPC_CLK_DIV/LDPC_Div.cpp" fileDirectory=".." rtlName="tmp_4_fu_179_p2" contextFuncName="LDPC_Div" bitwidth="1" opcode="icmp" m_display="0">
+      <inlineStackInfo fileName="LDPC_CLK_DIV/LDPC_Div.cpp" linenumber="34" fileDirectory="C:\Users\dougo" functionName="LDPC_Div"/>
+      <dataInputObjs>select</dataInputObjs>
+      <dataInputObjs>select</dataInputObjs>
+      <dataOutputObjs>and</dataOutputObjs>
+    </node_objs>
+    <node_objs xsi:type="cdfg:CdfgNode" id="30" name="or_cond" lineNumber="34" fileName="LDPC_CLK_DIV/LDPC_Div.cpp" fileDirectory=".." rtlName="or_cond_fu_185_p2" contextFuncName="LDPC_Div" bitwidth="1" opcode="and" m_display="0">
+      <inlineStackInfo fileName="LDPC_CLK_DIV/LDPC_Div.cpp" linenumber="34" fileDirectory="C:\Users\dougo" functionName="LDPC_Div"/>
+      <dataInputObjs>icmp</dataInputObjs>
+      <dataInputObjs>icmp</dataInputObjs>
+      <dataOutputObjs>br</dataOutputObjs>
+    </node_objs>
+    <node_objs xsi:type="cdfg:CdfgNode" id="31" name="node_31" lineNumber="34" fileName="LDPC_CLK_DIV/LDPC_Div.cpp" fileDirectory=".." contextFuncName="LDPC_Div" opcode="br" m_display="0">
+      <inlineStackInfo fileName="LDPC_CLK_DIV/LDPC_Div.cpp" linenumber="34" fileDirectory="C:\Users\dougo" functionName="LDPC_Div"/>
+      <dataInputObjs>and</dataInputObjs>
+      <controlInputObjs>._crit_edge5</controlInputObjs>
+      <controlInputObjs>block_39</controlInputObjs>
+    </node_objs>
+    <fileValidLineNumbers fileName="LDPC_CLK_DIV/LDPC_Div.cpp">
+      <validLinenumbers>21</validLinenumbers>
+      <validLinenumbers>32</validLinenumbers>
+      <validLinenumbers>27</validLinenumbers>
+      <validLinenumbers>28</validLinenumbers>
+      <validLinenumbers>34</validLinenumbers>
+    </fileValidLineNumbers>
+  </blocks>
+  <blocks id="35" name="._crit_edge5" type="BlockType">
+    <controlInputObjs>._crit_edge</controlInputObjs>
+    <controlOutputObjs>br</controlOutputObjs>
+    <controlOutputObjs>phi</controlOutputObjs>
+    <controlOutputObjs>phi</controlOutputObjs>
+    <controlOutputObjs>phi</controlOutputObjs>
+    <controlOutputObjs>mergeST1</controlOutputObjs>
+    <node_objs xsi:type="cdfg:CdfgNode" id="33" name="node_33" lineNumber="41" fileName="LDPC_CLK_DIV/LDPC_Div.cpp" fileDirectory=".." contextFuncName="LDPC_Div" opcode="write" m_display="0">
+      <inlineStackInfo fileName="LDPC_CLK_DIV/LDPC_Div.cpp" linenumber="41" fileDirectory="C:\Users\dougo" functionName="LDPC_Div"/>
+      <dataOutputObjs>rd_clk_out</dataOutputObjs>
+      <constName>empty</constName>
+    </node_objs>
+    <node_objs xsi:type="cdfg:CdfgNode" id="34" name="node_34" opcode="br" m_display="0">
+      <controlInputObjs>mergeST1</controlInputObjs>
+    </node_objs>
+    <fileValidLineNumbers fileName="LDPC_CLK_DIV/LDPC_Div.cpp">
+      <validLinenumbers>41</validLinenumbers>
+    </fileValidLineNumbers>
+  </blocks>
+  <blocks id="39" name="block_39" type="BlockType">
+    <controlInputObjs>._crit_edge</controlInputObjs>
+    <controlOutputObjs>br</controlOutputObjs>
+    <controlOutputObjs>phi</controlOutputObjs>
+    <controlOutputObjs>phi</controlOutputObjs>
+    <controlOutputObjs>phi</controlOutputObjs>
+    <controlOutputObjs>mergeST1</controlOutputObjs>
+    <node_objs xsi:type="cdfg:CdfgNode" id="36" name="node_36" lineNumber="36" fileName="LDPC_CLK_DIV/LDPC_Div.cpp" fileDirectory=".." contextFuncName="LDPC_Div" opcode="write" m_display="0">
+      <inlineStackInfo fileName="LDPC_CLK_DIV/LDPC_Div.cpp" linenumber="36" fileDirectory="C:\Users\dougo" functionName="LDPC_Div"/>
+      <dataOutputObjs>rd_clk_out</dataOutputObjs>
+      <constName>empty</constName>
+    </node_objs>
+    <node_objs xsi:type="cdfg:CdfgNode" id="37" name="tmp_5" lineNumber="38" fileName="LDPC_CLK_DIV/LDPC_Div.cpp" fileDirectory=".." rtlName="tmp_5_fu_191_p2" contextFuncName="LDPC_Div" bitwidth="16" opcode="add" m_display="0">
+      <inlineStackInfo fileName="LDPC_CLK_DIV/LDPC_Div.cpp" linenumber="38" fileDirectory="C:\Users\dougo" functionName="LDPC_Div"/>
+      <dataInputObjs>select</dataInputObjs>
+      <dataOutputObjs>phi</dataOutputObjs>
+      <constName>empty</constName>
+    </node_objs>
+    <node_objs xsi:type="cdfg:CdfgNode" id="38" name="node_38" lineNumber="39" fileName="LDPC_CLK_DIV/LDPC_Div.cpp" fileDirectory=".." contextFuncName="LDPC_Div" opcode="br" m_display="0">
+      <inlineStackInfo fileName="LDPC_CLK_DIV/LDPC_Div.cpp" linenumber="39" fileDirectory="C:\Users\dougo" functionName="LDPC_Div"/>
+      <controlInputObjs>mergeST1</controlInputObjs>
+    </node_objs>
+    <fileValidLineNumbers fileName="LDPC_CLK_DIV/LDPC_Div.cpp">
+      <validLinenumbers>36</validLinenumbers>
+      <validLinenumbers>38</validLinenumbers>
+      <validLinenumbers>39</validLinenumbers>
+    </fileValidLineNumbers>
+  </blocks>
+  <blocks id="45" name="mergeST1" type="BlockType">
+    <controlInputObjs>._crit_edge5</controlInputObjs>
+    <controlInputObjs>block_39</controlInputObjs>
+    <controlOutputObjs>br</controlOutputObjs>
+    <controlOutputObjs>br</controlOutputObjs>
+    <controlOutputObjs>mergeST</controlOutputObjs>
+    <controlOutputObjs>.new</controlOutputObjs>
+    <node_objs xsi:type="cdfg:CdfgNode" id="40" name="out_count_flag_1" lineNumber="21" fileName="LDPC_CLK_DIV/LDPC_Div.cpp" fileDirectory=".." contextFuncName="LDPC_Div" bitwidth="1" opcode="phi" m_display="0">
+      <inlineStackInfo fileName="LDPC_CLK_DIV/LDPC_Div.cpp" linenumber="21" fileDirectory="C:\Users\dougo" functionName="LDPC_Div"/>
+      <dataInputObjs>xor</dataInputObjs>
+      <dataOutputObjs>br</dataOutputObjs>
+      <controlInputObjs>block_39</controlInputObjs>
+      <controlInputObjs>._crit_edge5</controlInputObjs>
+      <constName>empty</constName>
+    </node_objs>
+    <node_objs xsi:type="cdfg:CdfgNode" id="41" name="out_count_new_1" lineNumber="38" fileName="LDPC_CLK_DIV/LDPC_Div.cpp" fileDirectory=".." contextFuncName="LDPC_Div" bitwidth="16" opcode="phi" m_display="0">
+      <inlineStackInfo fileName="LDPC_CLK_DIV/LDPC_Div.cpp" linenumber="38" fileDirectory="C:\Users\dougo" functionName="LDPC_Div"/>
+      <dataInputObjs>add</dataInputObjs>
+      <dataOutputObjs>store</dataOutputObjs>
+      <controlInputObjs>block_39</controlInputObjs>
+      <controlInputObjs>._crit_edge5</controlInputObjs>
+      <constName>empty</constName>
+    </node_objs>
+    <node_objs xsi:type="cdfg:CdfgNode" id="42" name="count_new" lineNumber="32" fileName="LDPC_CLK_DIV/LDPC_Div.cpp" fileDirectory=".." contextFuncName="LDPC_Div" bitwidth="16" opcode="phi" m_display="0">
+      <inlineStackInfo fileName="LDPC_CLK_DIV/LDPC_Div.cpp" linenumber="32" fileDirectory="C:\Users\dougo" functionName="LDPC_Div"/>
+      <dataInputObjs>select</dataInputObjs>
+      <dataOutputObjs>store</dataOutputObjs>
+      <controlInputObjs>block_39</controlInputObjs>
+      <controlInputObjs>._crit_edge5</controlInputObjs>
+      <constName>empty</constName>
+    </node_objs>
+    <node_objs xsi:type="cdfg:CdfgNode" id="43" name="node_43" lineNumber="24" fileName="LDPC_CLK_DIV/LDPC_Div.cpp" fileDirectory=".." contextFuncName="LDPC_Div" opcode="store" m_display="0">
+      <inlineStackInfo fileName="LDPC_CLK_DIV/LDPC_Div.cpp" linenumber="24" fileDirectory="C:\Users\dougo" functionName="LDPC_Div"/>
+      <dataInputObjs>phi</dataInputObjs>
+    </node_objs>
+    <node_objs xsi:type="cdfg:CdfgNode" id="44" name="node_44" lineNumber="21" fileName="LDPC_CLK_DIV/LDPC_Div.cpp" fileDirectory=".." contextFuncName="LDPC_Div" opcode="br" m_display="0">
+      <inlineStackInfo fileName="LDPC_CLK_DIV/LDPC_Div.cpp" linenumber="21" fileDirectory="C:\Users\dougo" functionName="LDPC_Div"/>
+      <dataInputObjs>phi</dataInputObjs>
+      <controlInputObjs>.new</controlInputObjs>
+      <controlInputObjs>mergeST</controlInputObjs>
+    </node_objs>
+    <fileValidLineNumbers fileName="LDPC_CLK_DIV/LDPC_Div.cpp">
+      <validLinenumbers>21</validLinenumbers>
+      <validLinenumbers>38</validLinenumbers>
+      <validLinenumbers>32</validLinenumbers>
+      <validLinenumbers>24</validLinenumbers>
+    </fileValidLineNumbers>
+  </blocks>
+  <blocks id="48" name="mergeST" type="BlockType">
+    <controlInputObjs>mergeST1</controlInputObjs>
+    <controlOutputObjs>br</controlOutputObjs>
+    <controlOutputObjs>.new</controlOutputObjs>
+    <node_objs xsi:type="cdfg:CdfgNode" id="46" name="node_46" lineNumber="23" fileName="LDPC_CLK_DIV/LDPC_Div.cpp" fileDirectory=".." contextFuncName="LDPC_Div" opcode="store" m_display="0">
+      <inlineStackInfo fileName="LDPC_CLK_DIV/LDPC_Div.cpp" linenumber="23" fileDirectory="C:\Users\dougo" functionName="LDPC_Div"/>
+      <dataInputObjs>phi</dataInputObjs>
+    </node_objs>
+    <node_objs xsi:type="cdfg:CdfgNode" id="47" name="node_47" opcode="br" m_display="0">
+      <controlInputObjs>.new</controlInputObjs>
+    </node_objs>
+    <fileValidLineNumbers fileName="LDPC_CLK_DIV/LDPC_Div.cpp">
+      <validLinenumbers>23</validLinenumbers>
+    </fileValidLineNumbers>
+  </blocks>
+  <blocks id="50" name=".new" type="BlockType">
+    <controlInputObjs>mergeST1</controlInputObjs>
+    <controlInputObjs>mergeST</controlInputObjs>
+    <controlOutputObjs>br</controlOutputObjs>
+    <controlOutputObjs>br</controlOutputObjs>
+    <node_objs xsi:type="cdfg:CdfgNode" id="49" name="node_49" lineNumber="44" fileName="LDPC_CLK_DIV/LDPC_Div.cpp" fileDirectory=".." contextFuncName="LDPC_Div" opcode="ret" m_display="0">
+      <inlineStackInfo fileName="LDPC_CLK_DIV/LDPC_Div.cpp" linenumber="44" fileDirectory="C:\Users\dougo" functionName="LDPC_Div"/>
+    </node_objs>
+    <fileValidLineNumbers fileName="LDPC_CLK_DIV/LDPC_Div.cpp">
+      <validLinenumbers>44</validLinenumbers>
+    </fileValidLineNumbers>
+  </blocks>
+  <ScheduleInfo time="0"/>
+  <regnodes realName="out_count_flag_1_reg_69">
+    <nodeIds>40</nodeIds>
+  </regnodes>
+  <regnodes realName="out_count_new_1_reg_79">
+    <nodeIds>41</nodeIds>
+  </regnodes>
+  <regnodes realName="count_new_reg_89">
+    <nodeIds>42</nodeIds>
+  </regnodes>
+  <expressionNodes realName="tmp_fu_111">
+    <nodeIds>19</nodeIds>
+  </expressionNodes>
+  <expressionNodes realName="tmp_1_fu_138">
+    <nodeIds>23</nodeIds>
+  </expressionNodes>
+  <expressionNodes realName="count_new_phi_fu_92">
+    <nodeIds>42</nodeIds>
+  </expressionNodes>
+  <expressionNodes realName="out_count_new_1_phi_fu_82">
+    <nodeIds>41</nodeIds>
+  </expressionNodes>
+  <expressionNodes realName="tmp_4_fu_179">
+    <nodeIds>29</nodeIds>
+  </expressionNodes>
+  <expressionNodes realName="tmp_3_fu_173">
+    <nodeIds>28</nodeIds>
+  </expressionNodes>
+  <expressionNodes realName="count_load_op_fu_158">
+    <nodeIds>26</nodeIds>
+  </expressionNodes>
+  <expressionNodes realName="or_cond_fu_185">
+    <nodeIds>30</nodeIds>
+  </expressionNodes>
+  <expressionNodes realName="out_count_flag_1_phi_fu_72">
+    <nodeIds>40</nodeIds>
+  </expressionNodes>
+  <expressionNodes realName="tmp_2_fu_164">
+    <nodeIds>27</nodeIds>
+  </expressionNodes>
+  <expressionNodes realName="or_cond3_fu_117">
+    <nodeIds>20</nodeIds>
+  </expressionNodes>
+  <expressionNodes realName="not_or_cond3_fu_123">
+    <nodeIds>21</nodeIds>
+  </expressionNodes>
+  <expressionNodes realName="tmp_5_fu_191">
+    <nodeIds>37</nodeIds>
+  </expressionNodes>
+  <expressionNodes realName="out_count_load_s_fu_130">
+    <nodeIds>22</nodeIds>
+  </expressionNodes>
+  <expressionNodes realName="storemerge_cast_cast_fu_144">
+    <nodeIds>24</nodeIds>
+  </expressionNodes>
+  <ioNodes realName="clk_div_read_read_fu_48">
+    <nodeIds>14</nodeIds>
+  </ioNodes>
+  <ioNodes realName="reset_read_read_fu_54">
+    <nodeIds>15</nodeIds>
+  </ioNodes>
+  <ioNodes realName="max_load_load_fu_107">
+    <nodeIds>18</nodeIds>
+  </ioNodes>
+  <ioNodes realName="out_count_load_load_fu_99">
+    <nodeIds>16</nodeIds>
+  </ioNodes>
+  <ioNodes realName="count_load_load_fu_103">
+    <nodeIds>17</nodeIds>
+  </ioNodes>
+  <ioNodes realName="StgValue_19_store_fu_152">
+    <nodeIds>25</nodeIds>
+  </ioNodes>
+  <ioNodes realName="StgValue_36_store_fu_204">
+    <nodeIds>46</nodeIds>
+  </ioNodes>
+  <ioNodes realName="block_V_read_read_fu_42">
+    <nodeIds>13</nodeIds>
+  </ioNodes>
+  <ioNodes realName="StgValue_34_store_fu_198">
+    <nodeIds>43</nodeIds>
+  </ioNodes>
+  <ioNodes realName="grp_write_fu_60">
+    <nodeIds>33</nodeIds>
+    <nodeIds>36</nodeIds>
+  </ioNodes>
+  <ioPorts name="block_V">
+    <contents name="read">
+      <nodeIds>13</nodeIds>
+    </contents>
+  </ioPorts>
+  <ioPorts name="clk_div">
+    <contents name="read">
+      <nodeIds>14</nodeIds>
+    </contents>
+  </ioPorts>
+  <ioPorts name="rd_clk_out">
+    <contents name="write">
+      <nodeIds>36</nodeIds>
+      <nodeIds>33</nodeIds>
+    </contents>
+  </ioPorts>
+  <ioPorts name="reset">
+    <contents name="read">
+      <nodeIds>15</nodeIds>
+    </contents>
+  </ioPorts>
+  <fsm>
+    <states id="1">
+      <operations id="8" stage="1" latency="1"/>
+      <operations id="9" stage="1" latency="1"/>
+      <operations id="10" stage="1" latency="1"/>
+      <operations id="11" stage="1" latency="1"/>
+      <operations id="12" stage="1" latency="1"/>
+      <operations id="13" stage="1" latency="1"/>
+      <operations id="14" stage="1" latency="1"/>
+      <operations id="15" stage="1" latency="1"/>
+      <operations id="16" stage="1" latency="1"/>
+      <operations id="17" stage="1" latency="1"/>
+      <operations id="18" stage="1" latency="1"/>
+      <operations id="19" stage="1" latency="1"/>
+      <operations id="20" stage="1" latency="1"/>
+      <operations id="21" stage="1" latency="1"/>
+      <operations id="22" stage="1" latency="1"/>
+      <operations id="23" stage="1" latency="1"/>
+      <operations id="24" stage="1" latency="1"/>
+      <operations id="25" stage="1" latency="1"/>
+      <operations id="26" stage="1" latency="1"/>
+      <operations id="27" stage="1" latency="1"/>
+      <operations id="28" stage="1" latency="1"/>
+      <operations id="29" stage="1" latency="1"/>
+      <operations id="30" stage="1" latency="1"/>
+      <operations id="31" stage="1" latency="1"/>
+      <operations id="33" stage="1" latency="1"/>
+      <operations id="34" stage="1" latency="1"/>
+      <operations id="36" stage="1" latency="1"/>
+      <operations id="37" stage="1" latency="1"/>
+      <operations id="38" stage="1" latency="1"/>
+      <operations id="40" stage="1" latency="1"/>
+      <operations id="41" stage="1" latency="1"/>
+      <operations id="42" stage="1" latency="1"/>
+      <operations id="43" stage="1" latency="1"/>
+      <operations id="44" stage="1" latency="1"/>
+      <operations id="46" stage="1" latency="1"/>
+      <operations id="47" stage="1" latency="1"/>
+      <operations id="49" stage="1" latency="1"/>
+    </states>
+  </fsm>
+  <CFGRegionsRoot>
+    <cfgRegions mId="1" mTag="LDPC_Div" mII="-1" mDepth="-1" mMinTripCount="-1" mMaxTripCount="-1" mMaxLatency="-1">
+      <basicBlocks>32</basicBlocks>
+      <basicBlocks>35</basicBlocks>
+      <basicBlocks>39</basicBlocks>
+      <basicBlocks>45</basicBlocks>
+      <basicBlocks>48</basicBlocks>
+      <basicBlocks>50</basicBlocks>
+      <mDfPipe/>
+    </cfgRegions>
+  </CFGRegionsRoot>
+</cdfg:DBCdfg>

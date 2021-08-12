@@ -1,0 +1,166 @@
+
+
+================================================================
+== Vivado HLS Report for 'write_raw_data'
+================================================================
+* Date:           Mon Sep 30 16:33:20 2019
+
+* Version:        2016.3 (Build 1682563 on Mon Oct 10 19:41:59 MDT 2016)
+* Project:        LDCP_data_buffer_mult
+* Solution:       solution1
+* Product family: kintex7
+* Target device:  xc7k160tfbg676-1
+
+
+================================================================
+== Performance Estimates
+================================================================
++ Timing (ns): 
+    * Summary: 
+    +--------+-------+----------+------------+
+    |  Clock | Target| Estimated| Uncertainty|
+    +--------+-------+----------+------------+
+    |ap_clk  |  10.00|      4.10|        1.25|
+    +--------+-------+----------+------------+
+
++ Latency (clock cycles): 
+    * Summary: 
+    +-----+-----+-----+-----+----------+
+    |  Latency  |  Interval | Pipeline |
+    | min | max | min | max |   Type   |
+    +-----+-----+-----+-----+----------+
+    |    0|    0|    1|    1| function |
+    +-----+-----+-----+-----+----------+
+
+    + Detail: 
+        * Instance: 
+        N/A
+
+        * Loop: 
+        N/A
+
+
+
+================================================================
+== Utilization Estimates
+================================================================
+* Summary: 
++-----------------+---------+-------+--------+--------+
+|       Name      | BRAM_18K| DSP48E|   FF   |   LUT  |
++-----------------+---------+-------+--------+--------+
+|DSP              |        -|      -|       -|       -|
+|Expression       |        -|      -|       0|      38|
+|FIFO             |        -|      -|       -|       -|
+|Instance         |        -|      -|       -|       -|
+|Memory           |        -|      -|       -|       -|
+|Multiplexer      |        -|      -|       -|      48|
+|Register         |        -|      -|       -|       -|
++-----------------+---------+-------+--------+--------+
+|Total            |        0|      0|       0|      86|
++-----------------+---------+-------+--------+--------+
+|Available        |      650|    600|  202800|  101400|
++-----------------+---------+-------+--------+--------+
+|Utilization (%)  |        0|      0|       0|   ~0   |
++-----------------+---------+-------+--------+--------+
+
++ Detail: 
+    * Instance: 
+    N/A
+
+    * DSP48: 
+    N/A
+
+    * Memory: 
+    N/A
+
+    * FIFO: 
+    N/A
+
+    * Expression: 
+    +------------------+----------+-------+---+----+------------+------------+
+    |   Variable Name  | Operation| DSP48E| FF| LUT| Bitwidth P0| Bitwidth P1|
+    +------------------+----------+-------+---+----+------------+------------+
+    |tmp_11_fu_278_p2  |     +    |      0|  0|  16|          16|           1|
+    |tmp_13_fu_299_p2  |     +    |      0|  0|  16|          16|           1|
+    |tmp_12_fu_293_p2  |   icmp   |      0|  0|   6|          16|          16|
+    +------------------+----------+-------+---+----+------------+------------+
+    |Total             |          |      0|  0|  38|          48|          18|
+    +------------------+----------+-------+---+----+------------+------------+
+
+    * Multiplexer: 
+    +-----------------------+----+-----------+-----+-----------+
+    |          Name         | LUT| Input Size| Bits| Total Bits|
+    +-----------------------+----+-----------+-----+-----------+
+    |mem_o                  |  16|          2|   16|         32|
+    |pos_new_phi_fu_208_p4  |  16|          3|   16|         48|
+    |pos_r_o                |  16|          2|   16|         32|
+    +-----------------------+----+-----------+-----+-----------+
+    |Total                  |  48|          7|   48|        112|
+    +-----------------------+----+-----------+-----+-----------+
+
+    * Register: 
+    N/A
+
+
+
+================================================================
+== Interface
+================================================================
+* Summary: 
++------------------+-----+-----+-----------+--------------+---------+
+|     RTL Ports    | Dir | Bits|  Protocol | Source Object|  C Type |
++------------------+-----+-----+-----------+--------------+---------+
+|dat               |  in |    8|  ap_none  |      dat     |  scalar |
+|r_dat0_address0   | out |   11| ap_memory |    r_dat0    |  array  |
+|r_dat0_ce0        | out |    1| ap_memory |    r_dat0    |  array  |
+|r_dat0_we0        | out |    1| ap_memory |    r_dat0    |  array  |
+|r_dat0_d0         | out |    8| ap_memory |    r_dat0    |  array  |
+|r_dat1_address0   | out |   11| ap_memory |    r_dat1    |  array  |
+|r_dat1_ce0        | out |    1| ap_memory |    r_dat1    |  array  |
+|r_dat1_we0        | out |    1| ap_memory |    r_dat1    |  array  |
+|r_dat1_d0         | out |    8| ap_memory |    r_dat1    |  array  |
+|r_dat2_address0   | out |   11| ap_memory |    r_dat2    |  array  |
+|r_dat2_ce0        | out |    1| ap_memory |    r_dat2    |  array  |
+|r_dat2_we0        | out |    1| ap_memory |    r_dat2    |  array  |
+|r_dat2_d0         | out |    8| ap_memory |    r_dat2    |  array  |
+|r_dat3_address0   | out |   11| ap_memory |    r_dat3    |  array  |
+|r_dat3_ce0        | out |    1| ap_memory |    r_dat3    |  array  |
+|r_dat3_we0        | out |    1| ap_memory |    r_dat3    |  array  |
+|r_dat3_d0         | out |    8| ap_memory |    r_dat3    |  array  |
+|r_dat4_address0   | out |   10| ap_memory |    r_dat4    |  array  |
+|r_dat4_ce0        | out |    1| ap_memory |    r_dat4    |  array  |
+|r_dat4_we0        | out |    1| ap_memory |    r_dat4    |  array  |
+|r_dat4_d0         | out |    8| ap_memory |    r_dat4    |  array  |
+|r_dat5_address0   | out |   10| ap_memory |    r_dat5    |  array  |
+|r_dat5_ce0        | out |    1| ap_memory |    r_dat5    |  array  |
+|r_dat5_we0        | out |    1| ap_memory |    r_dat5    |  array  |
+|r_dat5_d0         | out |    8| ap_memory |    r_dat5    |  array  |
+|r_dat6_address0   | out |   10| ap_memory |    r_dat6    |  array  |
+|r_dat6_ce0        | out |    1| ap_memory |    r_dat6    |  array  |
+|r_dat6_we0        | out |    1| ap_memory |    r_dat6    |  array  |
+|r_dat6_d0         | out |    8| ap_memory |    r_dat6    |  array  |
+|r_dat7_address0   | out |   10| ap_memory |    r_dat7    |  array  |
+|r_dat7_ce0        | out |    1| ap_memory |    r_dat7    |  array  |
+|r_dat7_we0        | out |    1| ap_memory |    r_dat7    |  array  |
+|r_dat7_d0         | out |    8| ap_memory |    r_dat7    |  array  |
+|r_dat8_address0   | out |   10| ap_memory |    r_dat8    |  array  |
+|r_dat8_ce0        | out |    1| ap_memory |    r_dat8    |  array  |
+|r_dat8_we0        | out |    1| ap_memory |    r_dat8    |  array  |
+|r_dat8_d0         | out |    8| ap_memory |    r_dat8    |  array  |
+|r_dat9_address0   | out |   10| ap_memory |    r_dat9    |  array  |
+|r_dat9_ce0        | out |    1| ap_memory |    r_dat9    |  array  |
+|r_dat9_we0        | out |    1| ap_memory |    r_dat9    |  array  |
+|r_dat9_d0         | out |    8| ap_memory |    r_dat9    |  array  |
+|r_dat10_address0  | out |   10| ap_memory |    r_dat10   |  array  |
+|r_dat10_ce0       | out |    1| ap_memory |    r_dat10   |  array  |
+|r_dat10_we0       | out |    1| ap_memory |    r_dat10   |  array  |
+|r_dat10_d0        | out |    8| ap_memory |    r_dat10   |  array  |
+|mem_i             |  in |   16|  ap_ovld  |      mem     | pointer |
+|mem_o             | out |   16|  ap_ovld  |      mem     | pointer |
+|mem_o_ap_vld      | out |    1|  ap_ovld  |      mem     | pointer |
+|pos_r_i           |  in |   16|  ap_ovld  |     pos_r    | pointer |
+|pos_r_o           | out |   16|  ap_ovld  |     pos_r    | pointer |
+|pos_r_o_ap_vld    | out |    1|  ap_ovld  |     pos_r    | pointer |
+|trig              |  in |   12|  ap_none  |     trig     | pointer |
++------------------+-----+-----+-----------+--------------+---------+
+

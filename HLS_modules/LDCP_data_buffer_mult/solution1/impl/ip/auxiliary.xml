@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xd:acceleratorMap xmlns:xd="http://www.xilinx.com/xidane" xd:functionName="LDPC_buff" xd:componentRef="LDPC_buff" xd:initiationInterval="1" xd:clockPeriod="10.000000" xd:sequential="true" xd:hostMachine="64" xd:reset="control">
+  <xd:controlReg xd:name="control" xd:interfaceRef="ap_ctrl" xd:busTypeRef="acc_handshake" xd:type="acc_handshake"/>
+  <xd:arg xd:name="data_in" xd:originalName="data_in" xd:direction="in" xd:interfaceRef="data_in" xd:busTypeRef="register" xd:handshakeRef="ap_none" xd:dataWidth="8"/>
+  <xd:arg xd:name="reset" xd:originalName="reset" xd:direction="in" xd:interfaceRef="reset" xd:busTypeRef="register" xd:handshakeRef="ap_none" xd:dataWidth="1"/>
+  <xd:arg xd:name="numbits" xd:originalName="numbits" xd:direction="in" xd:interfaceRef="numbits_V" xd:busTypeRef="register" xd:handshakeRef="ap_none" xd:dataWidth="16"/>
+  <xd:arg xd:name="*(overrun)" xd:originalName="overrun" xd:direction="out" xd:interfaceRef="overrun" xd:busTypeRef="register" xd:handshakeRef="ap_vld" xd:dataWidth="1"/>
+  <xd:arg xd:name="*(full)" xd:originalName="full" xd:direction="out" xd:interfaceRef="full" xd:busTypeRef="register" xd:handshakeRef="ap_vld" xd:dataWidth="1"/>
+  <xd:arg xd:name="write" xd:originalName="write" xd:direction="in" xd:interfaceRef="write_r" xd:busTypeRef="register" xd:handshakeRef="ap_none" xd:dataWidth="1"/>
+  <xd:arg xd:name="deran" xd:originalName="deran" xd:direction="in" xd:interfaceRef="deran_V" xd:busTypeRef="register" xd:handshakeRef="ap_none" xd:dataWidth="2"/>
+  <xd:arg xd:name="*(mux)" xd:originalName="mux" xd:direction="out" xd:interfaceRef="mux" xd:busTypeRef="register" xd:handshakeRef="ap_none" xd:dataWidth="1"/>
+  <xd:arg xd:name="decode_done" xd:originalName="decode_done" xd:direction="in" xd:interfaceRef="decode_done" xd:busTypeRef="register" xd:handshakeRef="ap_none" xd:dataWidth="1"/>
+  <xd:arg xd:name="*(decode_start)" xd:originalName="decode_start" xd:direction="out" xd:interfaceRef="decode_start" xd:busTypeRef="register" xd:handshakeRef="ap_vld" xd:dataWidth="1"/>
+  <xd:arg xd:name="decode_ready" xd:originalName="decode_ready" xd:direction="in" xd:interfaceRef="decode_ready" xd:busTypeRef="register" xd:handshakeRef="ap_none" xd:dataWidth="1"/>
+  <xd:arg xd:name="decode_done_b" xd:originalName="decode_done_b" xd:direction="in" xd:interfaceRef="decode_done_b" xd:busTypeRef="register" xd:handshakeRef="ap_none" xd:dataWidth="1"/>
+  <xd:arg xd:name="*(decode_start_b)" xd:originalName="decode_start_b" xd:direction="out" xd:interfaceRef="decode_start_b" xd:busTypeRef="register" xd:handshakeRef="ap_vld" xd:dataWidth="1"/>
+  <xd:arg xd:name="decode_ready_b" xd:originalName="decode_ready_b" xd:direction="in" xd:interfaceRef="decode_ready_b" xd:busTypeRef="register" xd:handshakeRef="ap_none" xd:dataWidth="1"/>
+  <xd:arg xd:name="*(deran_data)" xd:originalName="deran_data" xd:direction="out" xd:interfaceRef="deran_data" xd:busTypeRef="register" xd:handshakeRef="ap_vld" xd:dataWidth="8"/>
+  <xd:arg xd:name="*(cur_write_pos)" xd:originalName="cur_write_pos" xd:direction="out" xd:interfaceRef="cur_write_pos_V" xd:busTypeRef="register" xd:handshakeRef="ap_vld" xd:dataWidth="16"/>
+  <xd:arg xd:name="out_mux" xd:originalName="out_mux" xd:direction="in" xd:interfaceRef="out_mux" xd:busTypeRef="register" xd:handshakeRef="ap_none" xd:dataWidth="1"/>
+  <xd:arg xd:name="raw_dat0_d0" xd:originalName="raw_dat0_d0" xd:direction="out" xd:interfaceRef="raw_dat0_d0" xd:busTypeRef="ap_memory" xd:arraySize="2048" xd:dataWidth="8"/>
+  <xd:arg xd:name="raw_dat1_d0" xd:originalName="raw_dat1_d0" xd:direction="out" xd:interfaceRef="raw_dat1_d0" xd:busTypeRef="ap_memory" xd:arraySize="2048" xd:dataWidth="8"/>
+  <xd:arg xd:name="raw_dat2_d0" xd:originalName="raw_dat2_d0" xd:direction="out" xd:interfaceRef="raw_dat2_d0" xd:busTypeRef="ap_memory" xd:arraySize="2048" xd:dataWidth="8"/>
+  <xd:arg xd:name="raw_dat3_d0" xd:originalName="raw_dat3_d0" xd:direction="out" xd:interfaceRef="raw_dat3_d0" xd:busTypeRef="ap_memory" xd:arraySize="2048" xd:dataWidth="8"/>
+  <xd:arg xd:name="raw_dat4_d0" xd:originalName="raw_dat4_d0" xd:direction="out" xd:interfaceRef="raw_dat4_d0" xd:busTypeRef="ap_memory" xd:arraySize="1024" xd:dataWidth="8"/>
+  <xd:arg xd:name="raw_dat5_d0" xd:originalName="raw_dat5_d0" xd:direction="out" xd:interfaceRef="raw_dat5_d0" xd:busTypeRef="ap_memory" xd:arraySize="1024" xd:dataWidth="8"/>
+  <xd:arg xd:name="raw_dat6_d0" xd:originalName="raw_dat6_d0" xd:direction="out" xd:interfaceRef="raw_dat6_d0" xd:busTypeRef="ap_memory" xd:arraySize="1024" xd:dataWidth="8"/>
+  <xd:arg xd:name="raw_dat7_d0" xd:originalName="raw_dat7_d0" xd:direction="out" xd:interfaceRef="raw_dat7_d0" xd:busTypeRef="ap_memory" xd:arraySize="1024" xd:dataWidth="8"/>
+  <xd:arg xd:name="raw_dat8_d0" xd:originalName="raw_dat8_d0" xd:direction="out" xd:interfaceRef="raw_dat8_d0" xd:busTypeRef="ap_memory" xd:arraySize="1024" xd:dataWidth="8"/>
+  <xd:arg xd:name="raw_dat9_d0" xd:originalName="raw_dat9_d0" xd:direction="out" xd:interfaceRef="raw_dat9_d0" xd:busTypeRef="ap_memory" xd:arraySize="1024" xd:dataWidth="8"/>
+  <xd:arg xd:name="raw_dat10_d0" xd:originalName="raw_dat10_d0" xd:direction="out" xd:interfaceRef="raw_dat10_d0" xd:busTypeRef="ap_memory" xd:arraySize="1024" xd:dataWidth="8"/>
+  <xd:latencyEstimates xd:best-case="0" xd:worst-case="0" xd:average-case="0"/>
+  <xd:resourceEstimates xd:LUT="1179" xd:FF="103" xd:BRAM="0" xd:DSP="0"/>
+</xd:acceleratorMap>

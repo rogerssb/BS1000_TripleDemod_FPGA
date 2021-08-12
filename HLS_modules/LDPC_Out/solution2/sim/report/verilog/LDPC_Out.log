@@ -1,0 +1,166 @@
+@I [SIM-47] Using XSIM for RTL simulation.
+@I [SIM-14] Instrumenting C test bench ...
+   Build using "C:/Xilinx/Vivado_HLS/2016.3/msys/bin/g++.exe"
+   Compiling LDPC_Out.cpp_pre.cpp.tb.cpp
+   Compiling Out_bench.cpp_pre.cpp.tb.cpp
+   Compiling apatb_LDPC_Out.cpp
+   Generating cosim.tv.exe
+@I [SIM-302] Starting C TB testing ... 
+@I [SIM-333] Generating C post check test bench ...
+@I [SIM-12] Generating RTL test bench ...
+@I [SIM-323] Starting verilog simulation. 
+@I [SIM-15] Starting XSIM ...
+@I [SIM-316] Starting C post checking ...
+correct data bit 
+correct read position 
+correct data bit 
+correct read position 
+correct data bit 
+correct read position 
+all test passed 
+
+C:\Users\dougo\LDPC_Out\solution2\sim\verilog>call xelab xil_defaultlib.apatb_LDPC_Out_top -prj LDPC_Out.prj --initfile "C:/Xilinx/Vivado/2016.3/bin/../data/xsim/ip/xsim_ip.ini" --lib "ieee_proposed=./ieee_proposed" -s LDPC_Out -debug wave 
+INFO: [XSIM 43-3496] Using init file passed via -initfile option "C:/Xilinx/Vivado/2016.3/bin/../data/xsim/ip/xsim_ip.ini".
+Vivado Simulator 2016.3
+Copyright 1986-1999, 2001-2016 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2016.3/bin/unwrapped/win64.o/xelab.exe xil_defaultlib.apatb_LDPC_Out_top -prj LDPC_Out.prj --initfile C:/Xilinx/Vivado/2016.3/bin/../data/xsim/ip/xsim_ip.ini --lib ieee_proposed=./ieee_proposed -s LDPC_Out -debug wave 
+Multi-threading is on. Using 6 slave threads.
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Out/solution2/sim/verilog/AESL_automem_mem_out0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_automem_mem_out0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Out/solution2/sim/verilog/AESL_automem_mem_out1.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_automem_mem_out1
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Out/solution2/sim/verilog/AESL_automem_mem_out2.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_automem_mem_out2
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Out/solution2/sim/verilog/AESL_automem_mem_out3.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_automem_mem_out3
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Out/solution2/sim/verilog/AESL_automem_mem_out4.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_automem_mem_out4
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Out/solution2/sim/verilog/AESL_automem_mem_out5.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_automem_mem_out5
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Out/solution2/sim/verilog/AESL_automem_mem_out6.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_automem_mem_out6
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Out/solution2/sim/verilog/AESL_automem_mem_out7.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_automem_mem_out7
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Out/solution2/sim/verilog/LDPC_Out.autotb.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module apatb_LDPC_Out_top
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_Out/solution2/sim/verilog/LDPC_Out.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module LDPC_Out
+Starting static elaboration
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module xil_defaultlib.LDPC_Out
+Compiling module xil_defaultlib.AESL_automem_mem_out0
+Compiling module xil_defaultlib.AESL_automem_mem_out1
+Compiling module xil_defaultlib.AESL_automem_mem_out2
+Compiling module xil_defaultlib.AESL_automem_mem_out3
+Compiling module xil_defaultlib.AESL_automem_mem_out4
+Compiling module xil_defaultlib.AESL_automem_mem_out5
+Compiling module xil_defaultlib.AESL_automem_mem_out6
+Compiling module xil_defaultlib.AESL_automem_mem_out7
+Compiling module xil_defaultlib.apatb_LDPC_Out_top
+Built simulation snapshot LDPC_Out
+
+****** Webtalk v2016.3 (64-bit)
+  **** SW Build 1682563 on Mon Oct 10 19:07:27 MDT 2016
+  **** IP Build 1681267 on Mon Oct 10 21:28:31 MDT 2016
+    ** Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+
+source C:/Users/dougo/LDPC_Out/solution2/sim/verilog/xsim.dir/LDPC_Out/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-186] 'C:/Users/dougo/LDPC_Out/solution2/sim/verilog/xsim.dir/LDPC_Out/webtalk/usage_statistics_ext_xsim.xml' has been successfully sent to Xilinx on Mon Mar 18 10:49:30 2019. For additional details about this file, please refer to the WebTalk help file at C:/Xilinx/Vivado/2016.3/doc/webtalk_introduction.html.
+INFO: [Common 17-206] Exiting Webtalk at Mon Mar 18 10:49:30 2019...
+
+****** xsim v2016.3 (64-bit)
+  **** SW Build 1682563 on Mon Oct 10 19:07:27 MDT 2016
+  **** IP Build 1681267 on Mon Oct 10 21:28:31 MDT 2016
+    ** Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/LDPC_Out/xsim_script.tcl
+# xsim {LDPC_Out} -autoloadwcfg -tclbatch {LDPC_Out.tcl}
+Vivado Simulator 2016.3
+Time resolution is 1 ps
+source LDPC_Out.tcl
+## log_wave [get_objects -filter {type == in_port || type == out_port || type == inout_port || type == port} /apatb_LDPC_Out_top/AESL_inst_LDPC_Out/*]
+## set designtopgroup [add_wave_group "Design Top Signals"]
+## set coutputgroup [add_wave_group "C Outputs" -into $designtopgroup]
+## set cur_read_pos_group [add_wave_group cur_read_pos(wire) -into $coutputgroup]
+## add_wave /apatb_LDPC_Out_top/AESL_inst_LDPC_Out/cur_read_pos_V_ap_vld -into $cur_read_pos_group -color #ffff00 -radix hex
+## add_wave /apatb_LDPC_Out_top/AESL_inst_LDPC_Out/cur_read_pos_V -into $cur_read_pos_group -radix hex
+## set data_out_group [add_wave_group data_out(wire) -into $coutputgroup]
+## add_wave /apatb_LDPC_Out_top/AESL_inst_LDPC_Out/data_out_ap_vld -into $data_out_group -color #ffff00 -radix hex
+## add_wave /apatb_LDPC_Out_top/AESL_inst_LDPC_Out/data_out -into $data_out_group -radix hex
+## set cinputgroup [add_wave_group "C Inputs" -into $designtopgroup]
+## set mem_out7_group [add_wave_group mem_out7(memory) -into $cinputgroup]
+## add_wave /apatb_LDPC_Out_top/AESL_inst_LDPC_Out/mem_out7_q0 -into $mem_out7_group -radix hex
+## add_wave /apatb_LDPC_Out_top/AESL_inst_LDPC_Out/mem_out7_ce0 -into $mem_out7_group -color #ffff00 -radix hex
+## add_wave /apatb_LDPC_Out_top/AESL_inst_LDPC_Out/mem_out7_address0 -into $mem_out7_group -radix hex
+## set mem_out6_group [add_wave_group mem_out6(memory) -into $cinputgroup]
+## add_wave /apatb_LDPC_Out_top/AESL_inst_LDPC_Out/mem_out6_q0 -into $mem_out6_group -radix hex
+## add_wave /apatb_LDPC_Out_top/AESL_inst_LDPC_Out/mem_out6_ce0 -into $mem_out6_group -color #ffff00 -radix hex
+## add_wave /apatb_LDPC_Out_top/AESL_inst_LDPC_Out/mem_out6_address0 -into $mem_out6_group -radix hex
+## set mem_out5_group [add_wave_group mem_out5(memory) -into $cinputgroup]
+## add_wave /apatb_LDPC_Out_top/AESL_inst_LDPC_Out/mem_out5_q0 -into $mem_out5_group -radix hex
+## add_wave /apatb_LDPC_Out_top/AESL_inst_LDPC_Out/mem_out5_ce0 -into $mem_out5_group -color #ffff00 -radix hex
+## add_wave /apatb_LDPC_Out_top/AESL_inst_LDPC_Out/mem_out5_address0 -into $mem_out5_group -radix hex
+## set mem_out4_group [add_wave_group mem_out4(memory) -into $cinputgroup]
+## add_wave /apatb_LDPC_Out_top/AESL_inst_LDPC_Out/mem_out4_q0 -into $mem_out4_group -radix hex
+## add_wave /apatb_LDPC_Out_top/AESL_inst_LDPC_Out/mem_out4_ce0 -into $mem_out4_group -color #ffff00 -radix hex
+## add_wave /apatb_LDPC_Out_top/AESL_inst_LDPC_Out/mem_out4_address0 -into $mem_out4_group -radix hex
+## set mem_out3_group [add_wave_group mem_out3(memory) -into $cinputgroup]
+## add_wave /apatb_LDPC_Out_top/AESL_inst_LDPC_Out/mem_out3_q0 -into $mem_out3_group -radix hex
+## add_wave /apatb_LDPC_Out_top/AESL_inst_LDPC_Out/mem_out3_ce0 -into $mem_out3_group -color #ffff00 -radix hex
+## add_wave /apatb_LDPC_Out_top/AESL_inst_LDPC_Out/mem_out3_address0 -into $mem_out3_group -radix hex
+## set mem_out2_group [add_wave_group mem_out2(memory) -into $cinputgroup]
+## add_wave /apatb_LDPC_Out_top/AESL_inst_LDPC_Out/mem_out2_q0 -into $mem_out2_group -radix hex
+## add_wave /apatb_LDPC_Out_top/AESL_inst_LDPC_Out/mem_out2_ce0 -into $mem_out2_group -color #ffff00 -radix hex
+## add_wave /apatb_LDPC_Out_top/AESL_inst_LDPC_Out/mem_out2_address0 -into $mem_out2_group -radix hex
+## set mem_out1_group [add_wave_group mem_out1(memory) -into $cinputgroup]
+## add_wave /apatb_LDPC_Out_top/AESL_inst_LDPC_Out/mem_out1_q0 -into $mem_out1_group -radix hex
+## add_wave /apatb_LDPC_Out_top/AESL_inst_LDPC_Out/mem_out1_ce0 -into $mem_out1_group -color #ffff00 -radix hex
+## add_wave /apatb_LDPC_Out_top/AESL_inst_LDPC_Out/mem_out1_address0 -into $mem_out1_group -radix hex
+## set mem_out0_group [add_wave_group mem_out0(memory) -into $cinputgroup]
+## add_wave /apatb_LDPC_Out_top/AESL_inst_LDPC_Out/mem_out0_q0 -into $mem_out0_group -radix hex
+## add_wave /apatb_LDPC_Out_top/AESL_inst_LDPC_Out/mem_out0_ce0 -into $mem_out0_group -color #ffff00 -radix hex
+## add_wave /apatb_LDPC_Out_top/AESL_inst_LDPC_Out/mem_out0_address0 -into $mem_out0_group -radix hex
+## set rd_mux_group [add_wave_group rd_mux(wire) -into $cinputgroup]
+## add_wave /apatb_LDPC_Out_top/AESL_inst_LDPC_Out/rd_mux -into $rd_mux_group -radix hex
+## set rd_clk_in_group [add_wave_group rd_clk_in(wire) -into $cinputgroup]
+## add_wave /apatb_LDPC_Out_top/AESL_inst_LDPC_Out/rd_clk_in -into $rd_clk_in_group -radix hex
+## set block_group [add_wave_group block(wire) -into $cinputgroup]
+## add_wave /apatb_LDPC_Out_top/AESL_inst_LDPC_Out/block_V -into $block_group -radix hex
+## set reset_group [add_wave_group reset(wire) -into $cinputgroup]
+## add_wave /apatb_LDPC_Out_top/AESL_inst_LDPC_Out/reset -into $reset_group -radix hex
+## set blocksiggroup [add_wave_group "Block-level IO Handshake" -into $designtopgroup]
+## add_wave /apatb_LDPC_Out_top/AESL_inst_LDPC_Out/ap_start -into $blocksiggroup
+## add_wave /apatb_LDPC_Out_top/AESL_inst_LDPC_Out/ap_done -into $blocksiggroup
+## add_wave /apatb_LDPC_Out_top/AESL_inst_LDPC_Out/ap_idle -into $blocksiggroup
+## add_wave /apatb_LDPC_Out_top/AESL_inst_LDPC_Out/ap_ready -into $blocksiggroup
+## set resetgroup [add_wave_group "Reset" -into $designtopgroup]
+## add_wave /apatb_LDPC_Out_top/AESL_inst_LDPC_Out/ap_rst -into $resetgroup
+## set clockgroup [add_wave_group "Clock" -into $designtopgroup]
+## add_wave /apatb_LDPC_Out_top/AESL_inst_LDPC_Out/ap_clk -into $clockgroup
+## save_wave_config LDPC_Out.wcfg
+## run all
+////////////////////////////////////////////////////////////////////////////////////
+// Inter-Transaction Progress: Completed Transaction / Total Transaction
+// Intra-Transaction Progress: Measured Latency / Latency Estimation * 100%
+//
+// RTL Simulation : "Inter-Transaction Progress" ["Intra-Transaction Progress"] @ "Simulation Time"
+////////////////////////////////////////////////////////////////////////////////////
+// RTL Simulation : 0 / 3 [0.00%] @ "125000"
+// RTL Simulation : 1 / 3 [0.00%] @ "165000"
+// RTL Simulation : 2 / 3 [0.00%] @ "205000"
+// RTL Simulation : 3 / 3 [0.00%] @ "245000"
+////////////////////////////////////////////////////////////////////////////////////
+$finish called at time : 285 ns : File "C:/Users/dougo/LDPC_Out/solution2/sim/verilog/LDPC_Out.autotb.v" Line 880
+## quit
+INFO: [Common 17-206] Exiting xsim at Mon Mar 18 10:49:39 2019...
+correct data bit 
+correct read position 
+correct data bit 
+correct read position 
+correct data bit 
+correct read position 
+all test passed 
+@I [SIM-1000] *** C/RTL co-simulation finished: PASS ***

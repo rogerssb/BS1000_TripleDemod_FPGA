@@ -1,0 +1,110 @@
+ correct 15 input array values 
+ correct -25 input array values 
+ correct 25  input array values 
+data passed fill test  
+all test passed 
+
+C:\Users\dougo\LDCP_data_buffer_mult\solution1\sim\verilog>call xelab xil_defaultlib.apatb_LDPC_buff_top -prj LDPC_buff.prj --initfile "C:/Xilinx/Vivado/2016.3/bin/../data/xsim/ip/xsim_ip.ini" --lib "ieee_proposed=./ieee_proposed" -s LDPC_buff  
+INFO: [XSIM 43-3496] Using init file passed via -initfile option "C:/Xilinx/Vivado/2016.3/bin/../data/xsim/ip/xsim_ip.ini".
+Vivado Simulator 2016.3
+Copyright 1986-1999, 2001-2016 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2016.3/bin/unwrapped/win64.o/xelab.exe xil_defaultlib.apatb_LDPC_buff_top -prj LDPC_buff.prj --initfile C:/Xilinx/Vivado/2016.3/bin/../data/xsim/ip/xsim_ip.ini --lib ieee_proposed=./ieee_proposed -s LDPC_buff 
+Multi-threading is on. Using 6 slave threads.
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDCP_data_buffer_mult/solution1/sim/verilog/AESL_automem_raw_dat0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_automem_raw_dat0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDCP_data_buffer_mult/solution1/sim/verilog/AESL_automem_raw_dat1.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_automem_raw_dat1
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDCP_data_buffer_mult/solution1/sim/verilog/AESL_automem_raw_dat10.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_automem_raw_dat10
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDCP_data_buffer_mult/solution1/sim/verilog/AESL_automem_raw_dat2.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_automem_raw_dat2
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDCP_data_buffer_mult/solution1/sim/verilog/AESL_automem_raw_dat3.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_automem_raw_dat3
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDCP_data_buffer_mult/solution1/sim/verilog/AESL_automem_raw_dat4.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_automem_raw_dat4
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDCP_data_buffer_mult/solution1/sim/verilog/AESL_automem_raw_dat5.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_automem_raw_dat5
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDCP_data_buffer_mult/solution1/sim/verilog/AESL_automem_raw_dat6.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_automem_raw_dat6
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDCP_data_buffer_mult/solution1/sim/verilog/AESL_automem_raw_dat7.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_automem_raw_dat7
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDCP_data_buffer_mult/solution1/sim/verilog/AESL_automem_raw_dat8.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_automem_raw_dat8
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDCP_data_buffer_mult/solution1/sim/verilog/AESL_automem_raw_dat9.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_automem_raw_dat9
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDCP_data_buffer_mult/solution1/sim/verilog/LDPC_buff.autotb.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module apatb_LDPC_buff_top
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDCP_data_buffer_mult/solution1/sim/verilog/LDPC_buff.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module LDPC_buff
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDCP_data_buffer_mult/solution1/sim/verilog/write_raw_data.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module write_raw_data
+Starting static elaboration
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module xil_defaultlib.write_raw_data
+Compiling module xil_defaultlib.LDPC_buff
+Compiling module xil_defaultlib.AESL_automem_raw_dat0
+Compiling module xil_defaultlib.AESL_automem_raw_dat1
+Compiling module xil_defaultlib.AESL_automem_raw_dat2
+Compiling module xil_defaultlib.AESL_automem_raw_dat3
+Compiling module xil_defaultlib.AESL_automem_raw_dat4
+Compiling module xil_defaultlib.AESL_automem_raw_dat5
+Compiling module xil_defaultlib.AESL_automem_raw_dat6
+Compiling module xil_defaultlib.AESL_automem_raw_dat7
+Compiling module xil_defaultlib.AESL_automem_raw_dat8
+Compiling module xil_defaultlib.AESL_automem_raw_dat9
+Compiling module xil_defaultlib.AESL_automem_raw_dat10
+Compiling module xil_defaultlib.apatb_LDPC_buff_top
+Built simulation snapshot LDPC_buff
+
+****** Webtalk v2016.3 (64-bit)
+  **** SW Build 1682563 on Mon Oct 10 19:07:27 MDT 2016
+  **** IP Build 1681267 on Mon Oct 10 21:28:31 MDT 2016
+    ** Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+
+source C:/Users/dougo/LDCP_data_buffer_mult/solution1/sim/verilog/xsim.dir/LDPC_buff/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-186] 'C:/Users/dougo/LDCP_data_buffer_mult/solution1/sim/verilog/xsim.dir/LDPC_buff/webtalk/usage_statistics_ext_xsim.xml' has been successfully sent to Xilinx on Mon Sep 30 16:34:41 2019. For additional details about this file, please refer to the WebTalk help file at C:/Xilinx/Vivado/2016.3/doc/webtalk_introduction.html.
+INFO: [Common 17-206] Exiting Webtalk at Mon Sep 30 16:34:41 2019...
+
+****** xsim v2016.3 (64-bit)
+  **** SW Build 1682563 on Mon Oct 10 19:07:27 MDT 2016
+  **** IP Build 1681267 on Mon Oct 10 21:28:31 MDT 2016
+    ** Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/LDPC_buff/xsim_script.tcl
+# xsim {LDPC_buff} -autoloadwcfg -tclbatch {LDPC_buff.tcl}
+Vivado Simulator 2016.3
+Time resolution is 1 ps
+source LDPC_buff.tcl
+## run all
+////////////////////////////////////////////////////////////////////////////////////
+// Inter-Transaction Progress: Completed Transaction / Total Transaction
+// Intra-Transaction Progress: Measured Latency / Latency Estimation * 100%
+//
+// RTL Simulation : "Inter-Transaction Progress" ["Intra-Transaction Progress"] @ "Simulation Time"
+////////////////////////////////////////////////////////////////////////////////////
+// RTL Simulation : 0 / 13 [n/a] @ "125000"
+// RTL Simulation : 1 / 13 [n/a] @ "145000"
+// RTL Simulation : 2 / 13 [n/a] @ "155000"
+// RTL Simulation : 3 / 13 [n/a] @ "165000"
+// RTL Simulation : 4 / 13 [n/a] @ "175000"
+// RTL Simulation : 5 / 13 [n/a] @ "185000"
+// RTL Simulation : 6 / 13 [n/a] @ "195000"
+// RTL Simulation : 7 / 13 [n/a] @ "205000"
+// RTL Simulation : 8 / 13 [n/a] @ "215000"
+// RTL Simulation : 9 / 13 [n/a] @ "225000"
+// RTL Simulation : 10 / 13 [n/a] @ "235000"
+// RTL Simulation : 11 / 13 [n/a] @ "245000"
+// RTL Simulation : 12 / 13 [n/a] @ "255000"
+// RTL Simulation : 13 / 13 [n/a] @ "265000"
+////////////////////////////////////////////////////////////////////////////////////
+$finish called at time : 305 ns : File "C:/Users/dougo/LDCP_data_buffer_mult/solution1/sim/verilog/LDPC_buff.autotb.v" Line 1776
+## quit
+INFO: [Common 17-206] Exiting xsim at Mon Sep 30 16:34:51 2019...
+ correct 15 input array values 
+ correct -25 input array values 
+ correct 25  input array values 
+data passed fill test  
+all test passed 

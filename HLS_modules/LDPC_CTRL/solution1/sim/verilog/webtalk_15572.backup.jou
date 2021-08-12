@@ -1,0 +1,12 @@
+#-----------------------------------------------------------
+# Webtalk v2016.3 (64-bit)
+# SW Build 1682563 on Mon Oct 10 19:07:27 MDT 2016
+# IP Build 1681267 on Mon Oct 10 21:28:31 MDT 2016
+# Start of session at: Mon Sep 10 17:32:08 2018
+# Process ID: 15572
+# Current directory: C:/Users/dougo/LDPC_CTRL/solution1/sim/verilog
+# Command line: wbtcv.exe -mode batch -source C:/Users/dougo/LDPC_CTRL/solution1/sim/verilog/xsim.dir/LDPC_CTRL/webtalk/xsim_webtalk.tcl -notrace
+# Log file: C:/Users/dougo/LDPC_CTRL/solution1/sim/verilog/webtalk.log
+# Journal file: C:/Users/dougo/LDPC_CTRL/solution1/sim/verilog\webtalk.jou
+#-----------------------------------------------------------
+source C:/Users/dougo/LDPC_CTRL/solution1/sim/verilog/xsim.dir/LDPC_CTRL/webtalk/xsim_webtalk.tcl -notrace

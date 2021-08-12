@@ -1,0 +1,135 @@
+
+
+================================================================
+== Vivado HLS Report for 'setupLDPC'
+================================================================
+* Date:           Thu Mar 14 13:23:54 2019
+
+* Version:        2016.3 (Build 1682563 on Mon Oct 10 19:41:59 MDT 2016)
+* Project:        LDPC_INIT_DSP3
+* Solution:       solution2
+* Product family: kintex7
+* Target device:  xc7k160tffv676-2
+
+
+================================================================
+== Performance Estimates
+================================================================
++ Timing (ns): 
+    * Summary: 
+    +--------+-------+----------+------------+
+    |  Clock | Target| Estimated| Uncertainty|
+    +--------+-------+----------+------------+
+    |ap_clk  |  10.00|      2.88|        1.25|
+    +--------+-------+----------+------------+
+
++ Latency (clock cycles): 
+    * Summary: 
+    +-----+-----+-----+-----+---------+
+    |  Latency  |  Interval | Pipeline|
+    | min | max | min | max |   Type  |
+    +-----+-----+-----+-----+---------+
+    |    0|    0|    1|    1|   none  |
+    +-----+-----+-----+-----+---------+
+
+    + Detail: 
+        * Instance: 
+        N/A
+
+        * Loop: 
+        N/A
+
+
+
+================================================================
+== Utilization Estimates
+================================================================
+* Summary: 
++-----------------+---------+-------+--------+--------+
+|       Name      | BRAM_18K| DSP48E|   FF   |   LUT  |
++-----------------+---------+-------+--------+--------+
+|DSP              |        -|      -|       -|       -|
+|Expression       |        -|      -|       0|       8|
+|FIFO             |        -|      -|       -|       -|
+|Instance         |        -|      -|       -|       -|
+|Memory           |        -|      -|       -|       -|
+|Multiplexer      |        -|      -|       -|      96|
+|Register         |        -|      -|       -|       -|
++-----------------+---------+-------+--------+--------+
+|Total            |        0|      0|       0|     104|
++-----------------+---------+-------+--------+--------+
+|Available        |      650|    600|  202800|  101400|
++-----------------+---------+-------+--------+--------+
+|Utilization (%)  |        0|      0|       0|   ~0   |
++-----------------+---------+-------+--------+--------+
+
++ Detail: 
+    * Instance: 
+    N/A
+
+    * DSP48: 
+    N/A
+
+    * Memory: 
+    N/A
+
+    * FIFO: 
+    N/A
+
+    * Expression: 
+    +-----------------+----------+-------+---+----+------------+------------+
+    |  Variable Name  | Operation| DSP48E| FF| LUT| Bitwidth P0| Bitwidth P1|
+    +-----------------+----------+-------+---+----+------------+------------+
+    |mode_fu_231_p2   |     +    |      0|  0|   2|           5|           5|
+    |tmp1_fu_221_p2   |     +    |      0|  0|   3|           3|           3|
+    |tmp_1_fu_211_p2  |     -    |      0|  0|   2|           5|           5|
+    +-----------------+----------+-------+---+----+------------+------------+
+    |Total            |          |      0|  0|   8|          13|          13|
+    +-----------------+----------+-------+---+----+------------+------------+
+
+    * Multiplexer: 
+    +------------------+----+-----------+-----+-----------+
+    |       Name       | LUT| Input Size| Bits| Total Bits|
+    +------------------+----+-----------+-----+-----------+
+    |etaIndexM_M_V     |  16|          7|   16|        112|
+    |nR_M_V            |  16|          7|   16|        112|
+    |numbits_V         |  16|          7|   16|        112|
+    |pCodeM_V          |  16|          6|   16|         96|
+    |pMaxIterations_V  |  16|          3|   16|         48|
+    |split_V           |  16|          7|   16|        112|
+    +------------------+----+-----------+-----+-----------+
+    |Total             |  96|         37|   96|        592|
+    +------------------+----+-----------+-----+-----------+
+
+    * Register: 
+    N/A
+
+
+
+================================================================
+== Interface
+================================================================
+* Summary: 
++-------------------------+-----+-----+------------+------------------+--------------+
+|        RTL Ports        | Dir | Bits|  Protocol  |   Source Object  |    C Type    |
++-------------------------+-----+-----+------------+------------------+--------------+
+|ap_start                 |  in |    1| ap_ctrl_hs |     setupLDPC    | return value |
+|ap_done                  | out |    1| ap_ctrl_hs |     setupLDPC    | return value |
+|ap_idle                  | out |    1| ap_ctrl_hs |     setupLDPC    | return value |
+|ap_ready                 | out |    1| ap_ctrl_hs |     setupLDPC    | return value |
+|size_V                   |  in |    2|   ap_none  |      size_V      |    scalar    |
+|rate_V                   |  in |    2|   ap_none  |      rate_V      |    scalar    |
+|nR_M_V                   | out |   16|   ap_ovld  |      nR_M_V      |    pointer   |
+|nR_M_V_ap_vld            | out |    1|   ap_ovld  |      nR_M_V      |    pointer   |
+|etaIndexM_M_V            | out |   16|   ap_vld   |   etaIndexM_M_V  |    pointer   |
+|etaIndexM_M_V_ap_vld     | out |    1|   ap_vld   |   etaIndexM_M_V  |    pointer   |
+|pCodeM_V                 | out |   16|   ap_vld   |     pCodeM_V     |    pointer   |
+|pCodeM_V_ap_vld          | out |    1|   ap_vld   |     pCodeM_V     |    pointer   |
+|pMaxIterations_V         | out |   16|   ap_vld   | pMaxIterations_V |    pointer   |
+|pMaxIterations_V_ap_vld  | out |    1|   ap_vld   | pMaxIterations_V |    pointer   |
+|numbits_V                | out |   16|   ap_vld   |     numbits_V    |    pointer   |
+|numbits_V_ap_vld         | out |    1|   ap_vld   |     numbits_V    |    pointer   |
+|split_V                  | out |   16|   ap_vld   |      split_V     |    pointer   |
+|split_V_ap_vld           | out |    1|   ap_vld   |      split_V     |    pointer   |
++-------------------------+-----+-----+------------+------------------+--------------+
+

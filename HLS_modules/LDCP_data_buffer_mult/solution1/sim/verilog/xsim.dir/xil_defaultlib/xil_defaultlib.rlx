@@ -1,0 +1,18 @@
+0.6
+2016.3
+Oct 10 2016
+19:46:48
+C:/Users/dougo/LDCP_data_buffer_mult/solution1/sim/verilog/AESL_automem_raw_dat0.v,1569875670,systemVerilog,,,,AESL_automem_raw_dat0,C:/Xilinx/Vivado/2016.3/bin/../data/xsim/ip/xsim_ip.ini,ieee_proposed=./ieee_proposed,,,,,,
+C:/Users/dougo/LDCP_data_buffer_mult/solution1/sim/verilog/AESL_automem_raw_dat1.v,1569875670,systemVerilog,,,,AESL_automem_raw_dat1,C:/Xilinx/Vivado/2016.3/bin/../data/xsim/ip/xsim_ip.ini,ieee_proposed=./ieee_proposed,,,,,,
+C:/Users/dougo/LDCP_data_buffer_mult/solution1/sim/verilog/AESL_automem_raw_dat10.v,1569875670,systemVerilog,,,,AESL_automem_raw_dat10,C:/Xilinx/Vivado/2016.3/bin/../data/xsim/ip/xsim_ip.ini,ieee_proposed=./ieee_proposed,,,,,,
+C:/Users/dougo/LDCP_data_buffer_mult/solution1/sim/verilog/AESL_automem_raw_dat2.v,1569875670,systemVerilog,,,,AESL_automem_raw_dat2,C:/Xilinx/Vivado/2016.3/bin/../data/xsim/ip/xsim_ip.ini,ieee_proposed=./ieee_proposed,,,,,,
+C:/Users/dougo/LDCP_data_buffer_mult/solution1/sim/verilog/AESL_automem_raw_dat3.v,1569875670,systemVerilog,,,,AESL_automem_raw_dat3,C:/Xilinx/Vivado/2016.3/bin/../data/xsim/ip/xsim_ip.ini,ieee_proposed=./ieee_proposed,,,,,,
+C:/Users/dougo/LDCP_data_buffer_mult/solution1/sim/verilog/AESL_automem_raw_dat4.v,1569875670,systemVerilog,,,,AESL_automem_raw_dat4,C:/Xilinx/Vivado/2016.3/bin/../data/xsim/ip/xsim_ip.ini,ieee_proposed=./ieee_proposed,,,,,,
+C:/Users/dougo/LDCP_data_buffer_mult/solution1/sim/verilog/AESL_automem_raw_dat5.v,1569875670,systemVerilog,,,,AESL_automem_raw_dat5,C:/Xilinx/Vivado/2016.3/bin/../data/xsim/ip/xsim_ip.ini,ieee_proposed=./ieee_proposed,,,,,,
+C:/Users/dougo/LDCP_data_buffer_mult/solution1/sim/verilog/AESL_automem_raw_dat6.v,1569875670,systemVerilog,,,,AESL_automem_raw_dat6,C:/Xilinx/Vivado/2016.3/bin/../data/xsim/ip/xsim_ip.ini,ieee_proposed=./ieee_proposed,,,,,,
+C:/Users/dougo/LDCP_data_buffer_mult/solution1/sim/verilog/AESL_automem_raw_dat7.v,1569875670,systemVerilog,,,,AESL_automem_raw_dat7,C:/Xilinx/Vivado/2016.3/bin/../data/xsim/ip/xsim_ip.ini,ieee_proposed=./ieee_proposed,,,,,,
+C:/Users/dougo/LDCP_data_buffer_mult/solution1/sim/verilog/AESL_automem_raw_dat8.v,1569875670,systemVerilog,,,,AESL_automem_raw_dat8,C:/Xilinx/Vivado/2016.3/bin/../data/xsim/ip/xsim_ip.ini,ieee_proposed=./ieee_proposed,,,,,,
+C:/Users/dougo/LDCP_data_buffer_mult/solution1/sim/verilog/AESL_automem_raw_dat9.v,1569875670,systemVerilog,,,,AESL_automem_raw_dat9,C:/Xilinx/Vivado/2016.3/bin/../data/xsim/ip/xsim_ip.ini,ieee_proposed=./ieee_proposed,,,,,,
+C:/Users/dougo/LDCP_data_buffer_mult/solution1/sim/verilog/LDPC_buff.autotb.v,1569875670,systemVerilog,,,,apatb_LDPC_buff_top,C:/Xilinx/Vivado/2016.3/bin/../data/xsim/ip/xsim_ip.ini,ieee_proposed=./ieee_proposed,,,,,,
+C:/Users/dougo/LDCP_data_buffer_mult/solution1/sim/verilog/LDPC_buff.v,1569875600,systemVerilog,,,,LDPC_buff,C:/Xilinx/Vivado/2016.3/bin/../data/xsim/ip/xsim_ip.ini,ieee_proposed=./ieee_proposed,,,,,,
+C:/Users/dougo/LDCP_data_buffer_mult/solution1/sim/verilog/write_raw_data.v,1569875600,systemVerilog,,,,write_raw_data,C:/Xilinx/Vivado/2016.3/bin/../data/xsim/ip/xsim_ip.ini,ieee_proposed=./ieee_proposed,,,,,,

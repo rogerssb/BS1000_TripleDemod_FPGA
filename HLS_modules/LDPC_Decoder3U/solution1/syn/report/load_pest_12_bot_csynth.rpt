@@ -1,0 +1,282 @@
+
+
+================================================================
+== Vivado HLS Report for 'load_pest_12_bot'
+================================================================
+* Date:           Sat Oct 05 17:17:28 2019
+
+* Version:        2016.3 (Build 1682563 on Mon Oct 10 19:41:59 MDT 2016)
+* Project:        LDPC_Decoder3U
+* Solution:       solution1
+* Product family: kintex7
+* Target device:  xc7k160tfbg676-1
+
+
+================================================================
+== Performance Estimates
+================================================================
++ Timing (ns): 
+    * Summary: 
+    +--------+-------+----------+------------+
+    |  Clock | Target| Estimated| Uncertainty|
+    +--------+-------+----------+------------+
+    |ap_clk  |  10.00|      8.59|        1.25|
+    +--------+-------+----------+------------+
+
++ Latency (clock cycles): 
+    * Summary: 
+    +-----+-----+-----+-----+---------+
+    |  Latency  |  Interval | Pipeline|
+    | min | max | min | max |   Type  |
+    +-----+-----+-----+-----+---------+
+    |    1|    1|    1|    1|   none  |
+    +-----+-----+-----+-----+---------+
+
+    + Detail: 
+        * Instance: 
+        N/A
+
+        * Loop: 
+        N/A
+
+
+
+================================================================
+== Utilization Estimates
+================================================================
+* Summary: 
++-----------------+---------+-------+--------+--------+
+|       Name      | BRAM_18K| DSP48E|   FF   |   LUT  |
++-----------------+---------+-------+--------+--------+
+|DSP              |        -|      -|       -|       -|
+|Expression       |        -|      -|       0|     314|
+|FIFO             |        -|      -|       -|       -|
+|Instance         |        -|      -|       -|       -|
+|Memory           |        -|      -|       -|       -|
+|Multiplexer      |        -|      -|       -|       1|
+|Register         |        -|      -|       2|       -|
++-----------------+---------+-------+--------+--------+
+|Total            |        0|      0|       2|     315|
++-----------------+---------+-------+--------+--------+
+|Available        |      650|    600|  202800|  101400|
++-----------------+---------+-------+--------+--------+
+|Utilization (%)  |        0|      0|   ~0   |   ~0   |
++-----------------+---------+-------+--------+--------+
+
++ Detail: 
+    * Instance: 
+    N/A
+
+    * DSP48: 
+    N/A
+
+    * Memory: 
+    N/A
+
+    * FIFO: 
+    N/A
+
+    * Expression: 
+    +-------------------+----------+-------+---+----+------------+------------+
+    |   Variable Name   | Operation| DSP48E| FF| LUT| Bitwidth P0| Bitwidth P1|
+    +-------------------+----------+-------+---+----+------------+------------+
+    |tmp10_fu_615_p2    |     +    |      0|  0|   8|          16|          16|
+    |tmp11_fu_609_p2    |     +    |      0|  0|   8|          16|          16|
+    |tmp12_fu_633_p2    |     +    |      0|  0|   8|          16|          16|
+    |tmp13_fu_621_p2    |     +    |      0|  0|  16|          16|          16|
+    |tmp14_fu_627_p2    |     +    |      0|  0|  16|          16|          16|
+    |tmp15_fu_651_p2    |     +    |      0|  0|   8|          16|          16|
+    |tmp20_fu_675_p2    |     +    |      0|  0|   8|          16|          16|
+    |tmp21_fu_669_p2    |     +    |      0|  0|   8|          16|          16|
+    |tmp22_fu_693_p2    |     +    |      0|  0|   8|          16|          16|
+    |tmp23_fu_681_p2    |     +    |      0|  0|  16|          16|          16|
+    |tmp24_fu_687_p2    |     +    |      0|  0|  16|          16|          16|
+    |tmp35_fu_735_p2    |     +    |      0|  0|   8|          16|          16|
+    |tmp36_fu_717_p2    |     +    |      0|  0|   8|          16|          16|
+    |tmp37_fu_711_p2    |     +    |      0|  0|   8|          16|          16|
+    |tmp38_fu_729_p2    |     +    |      0|  0|   8|          16|          16|
+    |tmp39_fu_723_p2    |     +    |      0|  0|  16|          16|          16|
+    |tmp3_fu_579_p2     |     +    |      0|  0|  16|          16|          16|
+    |tmp40_fu_771_p2    |     +    |      0|  0|   8|          16|          16|
+    |tmp41_fu_747_p2    |     +    |      0|  0|   8|          16|          16|
+    |tmp42_fu_741_p2    |     +    |      0|  0|   8|          16|          16|
+    |tmp43_fu_765_p2    |     +    |      0|  0|   8|          16|          16|
+    |tmp44_fu_753_p2    |     +    |      0|  0|  16|          16|          16|
+    |tmp45_fu_759_p2    |     +    |      0|  0|   8|          16|          16|
+    |tmp4_fu_591_p2     |     +    |      0|  0|   8|          16|          16|
+    |tmp5_fu_585_p2     |     +    |      0|  0|  16|          16|          16|
+    |tmp_939_fu_639_p2  |     +    |      0|  0|   8|          16|          16|
+    |tmp_940_fu_657_p2  |     +    |      0|  0|   8|          16|          16|
+    |tmp_941_fu_699_p2  |     +    |      0|  0|   8|          16|          16|
+    |tmp_942_fu_777_p2  |     +    |      0|  0|   8|          16|          16|
+    |tmp_s_fu_597_p2    |     +    |      0|  0|   8|          16|          16|
+    |bpest0             |    xor   |      0|  0|   2|           1|           2|
+    |bpest1             |    xor   |      0|  0|   2|           1|           2|
+    |bpest2             |    xor   |      0|  0|   2|           1|           2|
+    |bpest3             |    xor   |      0|  0|   2|           1|           2|
+    |bpest4             |    xor   |      0|  0|   2|           1|           2|
+    +-------------------+----------+-------+---+----+------------+------------+
+    |Total              |          |      0|  0| 314|         485|         490|
+    +-------------------+----------+-------+---+----+------------+------------+
+
+    * Multiplexer: 
+    +-----------+----+-----------+-----+-----------+
+    |    Name   | LUT| Input Size| Bits| Total Bits|
+    +-----------+----+-----------+-----+-----------+
+    |ap_NS_fsm  |   1|          3|    1|          3|
+    +-----------+----+-----------+-----+-----------+
+    |Total      |   1|          3|    1|          3|
+    +-----------+----+-----------+-----+-----------+
+
+    * Register: 
+    +-----------+---+----+-----+-----------+
+    |    Name   | FF| LUT| Bits| Const Bits|
+    +-----------+---+----+-----+-----------+
+    |ap_CS_fsm  |  2|   0|    2|          0|
+    +-----------+---+----+-----+-----------+
+    |Total      |  2|   0|    2|          0|
+    +-----------+---+----+-----+-----------+
+
+
+
+================================================================
+== Interface
+================================================================
+* Summary: 
++------------------------+-----+-----+------------+------------------+--------------+
+|        RTL Ports       | Dir | Bits|  Protocol  |   Source Object  |    C Type    |
++------------------------+-----+-----+------------+------------------+--------------+
+|ap_clk                  |  in |    1| ap_ctrl_hs | load_pest_12_bot | return value |
+|ap_rst                  |  in |    1| ap_ctrl_hs | load_pest_12_bot | return value |
+|ap_start                |  in |    1| ap_ctrl_hs | load_pest_12_bot | return value |
+|ap_done                 | out |    1| ap_ctrl_hs | load_pest_12_bot | return value |
+|ap_idle                 | out |    1| ap_ctrl_hs | load_pest_12_bot | return value |
+|ap_ready                | out |    1| ap_ctrl_hs | load_pest_12_bot | return value |
+|pos_r                   |  in |   13|   ap_none  |       pos_r      |    scalar    |
+|pLambda0_address0       | out |   11|  ap_memory |     pLambda0     |     array    |
+|pLambda0_ce0            | out |    1|  ap_memory |     pLambda0     |     array    |
+|pLambda0_q0             |  in |   16|  ap_memory |     pLambda0     |     array    |
+|prLamB_buf_address0     | out |   10|  ap_memory |    prLamB_buf    |     array    |
+|prLamB_buf_ce0          | out |    1|  ap_memory |    prLamB_buf    |     array    |
+|prLamB_buf_q0           |  in |   16|  ap_memory |    prLamB_buf    |     array    |
+|prLamC_buf_address0     | out |   10|  ap_memory |    prLamC_buf    |     array    |
+|prLamC_buf_ce0          | out |    1|  ap_memory |    prLamC_buf    |     array    |
+|prLamC_buf_q0           |  in |   16|  ap_memory |    prLamC_buf    |     array    |
+|prLam2B_buf_address0    | out |   10|  ap_memory |    prLam2B_buf   |     array    |
+|prLam2B_buf_ce0         | out |    1|  ap_memory |    prLam2B_buf   |     array    |
+|prLam2B_buf_q0          |  in |   16|  ap_memory |    prLam2B_buf   |     array    |
+|prLam2C_buf_address0    | out |   10|  ap_memory |    prLam2C_buf   |     array    |
+|prLam2C_buf_ce0         | out |    1|  ap_memory |    prLam2C_buf   |     array    |
+|prLam2C_buf_q0          |  in |   16|  ap_memory |    prLam2C_buf   |     array    |
+|pest0                   | out |   16|   ap_vld   |       pest0      |    pointer   |
+|pest0_ap_vld            | out |    1|   ap_vld   |       pest0      |    pointer   |
+|pLambda1_address0       | out |   11|  ap_memory |     pLambda1     |     array    |
+|pLambda1_ce0            | out |    1|  ap_memory |     pLambda1     |     array    |
+|pLambda1_q0             |  in |   16|  ap_memory |     pLambda1     |     array    |
+|prLamB_buf1_address0    | out |   10|  ap_memory |    prLamB_buf1   |     array    |
+|prLamB_buf1_ce0         | out |    1|  ap_memory |    prLamB_buf1   |     array    |
+|prLamB_buf1_q0          |  in |   16|  ap_memory |    prLamB_buf1   |     array    |
+|prLamB_buf1a_address0   | out |   10|  ap_memory |   prLamB_buf1a   |     array    |
+|prLamB_buf1a_ce0        | out |    1|  ap_memory |   prLamB_buf1a   |     array    |
+|prLamB_buf1a_q0         |  in |   16|  ap_memory |   prLamB_buf1a   |     array    |
+|prLamC_buf1_address0    | out |   10|  ap_memory |    prLamC_buf1   |     array    |
+|prLamC_buf1_ce0         | out |    1|  ap_memory |    prLamC_buf1   |     array    |
+|prLamC_buf1_q0          |  in |   16|  ap_memory |    prLamC_buf1   |     array    |
+|prLam2B_buf1_address0   | out |   10|  ap_memory |   prLam2B_buf1   |     array    |
+|prLam2B_buf1_ce0        | out |    1|  ap_memory |   prLam2B_buf1   |     array    |
+|prLam2B_buf1_q0         |  in |   16|  ap_memory |   prLam2B_buf1   |     array    |
+|prLam2B_buf1a_address0  | out |   10|  ap_memory |   prLam2B_buf1a  |     array    |
+|prLam2B_buf1a_ce0       | out |    1|  ap_memory |   prLam2B_buf1a  |     array    |
+|prLam2B_buf1a_q0        |  in |   16|  ap_memory |   prLam2B_buf1a  |     array    |
+|prLam2C_buf1_address0   | out |   10|  ap_memory |   prLam2C_buf1   |     array    |
+|prLam2C_buf1_ce0        | out |    1|  ap_memory |   prLam2C_buf1   |     array    |
+|prLam2C_buf1_q0         |  in |   16|  ap_memory |   prLam2C_buf1   |     array    |
+|pest1                   | out |   16|   ap_vld   |       pest1      |    pointer   |
+|pest1_ap_vld            | out |    1|   ap_vld   |       pest1      |    pointer   |
+|pLambda2_address0       | out |   11|  ap_memory |     pLambda2     |     array    |
+|pLambda2_ce0            | out |    1|  ap_memory |     pLambda2     |     array    |
+|pLambda2_q0             |  in |   16|  ap_memory |     pLambda2     |     array    |
+|prLam_buf2_address0     | out |   10|  ap_memory |    prLam_buf2    |     array    |
+|prLam_buf2_ce0          | out |    1|  ap_memory |    prLam_buf2    |     array    |
+|prLam_buf2_q0           |  in |   16|  ap_memory |    prLam_buf2    |     array    |
+|prLam2_buf2_address0    | out |   10|  ap_memory |    prLam2_buf2   |     array    |
+|prLam2_buf2_ce0         | out |    1|  ap_memory |    prLam2_buf2   |     array    |
+|prLam2_buf2_q0          |  in |   16|  ap_memory |    prLam2_buf2   |     array    |
+|pest2                   | out |   16|   ap_vld   |       pest2      |    pointer   |
+|pest2_ap_vld            | out |    1|   ap_vld   |       pest2      |    pointer   |
+|pLambda3_address0       | out |   11|  ap_memory |     pLambda3     |     array    |
+|pLambda3_ce0            | out |    1|  ap_memory |     pLambda3     |     array    |
+|pLambda3_q0             |  in |   16|  ap_memory |     pLambda3     |     array    |
+|prLamB_buf3_address0    | out |   10|  ap_memory |    prLamB_buf3   |     array    |
+|prLamB_buf3_ce0         | out |    1|  ap_memory |    prLamB_buf3   |     array    |
+|prLamB_buf3_q0          |  in |   16|  ap_memory |    prLamB_buf3   |     array    |
+|prLamB_buf3a_address0   | out |   10|  ap_memory |   prLamB_buf3a   |     array    |
+|prLamB_buf3a_ce0        | out |    1|  ap_memory |   prLamB_buf3a   |     array    |
+|prLamB_buf3a_q0         |  in |   16|  ap_memory |   prLamB_buf3a   |     array    |
+|prLamC_buf3_address0    | out |   10|  ap_memory |    prLamC_buf3   |     array    |
+|prLamC_buf3_ce0         | out |    1|  ap_memory |    prLamC_buf3   |     array    |
+|prLamC_buf3_q0          |  in |   16|  ap_memory |    prLamC_buf3   |     array    |
+|prLam2B_buf3_address0   | out |   10|  ap_memory |   prLam2B_buf3   |     array    |
+|prLam2B_buf3_ce0        | out |    1|  ap_memory |   prLam2B_buf3   |     array    |
+|prLam2B_buf3_q0         |  in |   16|  ap_memory |   prLam2B_buf3   |     array    |
+|prLam2B_buf3a_address0  | out |   10|  ap_memory |   prLam2B_buf3a  |     array    |
+|prLam2B_buf3a_ce0       | out |    1|  ap_memory |   prLam2B_buf3a  |     array    |
+|prLam2B_buf3a_q0        |  in |   16|  ap_memory |   prLam2B_buf3a  |     array    |
+|prLam2C_buf3_address0   | out |   10|  ap_memory |   prLam2C_buf3   |     array    |
+|prLam2C_buf3_ce0        | out |    1|  ap_memory |   prLam2C_buf3   |     array    |
+|prLam2C_buf3_q0         |  in |   16|  ap_memory |   prLam2C_buf3   |     array    |
+|pest3                   | out |   16|   ap_vld   |       pest3      |    pointer   |
+|pest3_ap_vld            | out |    1|   ap_vld   |       pest3      |    pointer   |
+|pLambda4_address0       | out |   11|  ap_memory |     pLambda4     |     array    |
+|pLambda4_ce0            | out |    1|  ap_memory |     pLambda4     |     array    |
+|pLambda4_q0             |  in |   16|  ap_memory |     pLambda4     |     array    |
+|prLam_buf4_address0     | out |   10|  ap_memory |    prLam_buf4    |     array    |
+|prLam_buf4_ce0          | out |    1|  ap_memory |    prLam_buf4    |     array    |
+|prLam_buf4_q0           |  in |   16|  ap_memory |    prLam_buf4    |     array    |
+|prLam_buf4a_address0    | out |   10|  ap_memory |    prLam_buf4a   |     array    |
+|prLam_buf4a_ce0         | out |    1|  ap_memory |    prLam_buf4a   |     array    |
+|prLam_buf4a_q0          |  in |   16|  ap_memory |    prLam_buf4a   |     array    |
+|prLamB_buf4_address0    | out |   10|  ap_memory |    prLamB_buf4   |     array    |
+|prLamB_buf4_ce0         | out |    1|  ap_memory |    prLamB_buf4   |     array    |
+|prLamB_buf4_q0          |  in |   16|  ap_memory |    prLamB_buf4   |     array    |
+|prLamC_buf4_address0    | out |   10|  ap_memory |    prLamC_buf4   |     array    |
+|prLamC_buf4_ce0         | out |    1|  ap_memory |    prLamC_buf4   |     array    |
+|prLamC_buf4_q0          |  in |   16|  ap_memory |    prLamC_buf4   |     array    |
+|prLamC_buf4a_address0   | out |   10|  ap_memory |   prLamC_buf4a   |     array    |
+|prLamC_buf4a_ce0        | out |    1|  ap_memory |   prLamC_buf4a   |     array    |
+|prLamC_buf4a_q0         |  in |   16|  ap_memory |   prLamC_buf4a   |     array    |
+|prLamC_buf4b_address0   | out |   10|  ap_memory |   prLamC_buf4b   |     array    |
+|prLamC_buf4b_ce0        | out |    1|  ap_memory |   prLamC_buf4b   |     array    |
+|prLamC_buf4b_q0         |  in |   16|  ap_memory |   prLamC_buf4b   |     array    |
+|prLam2_buf4_address0    | out |   10|  ap_memory |    prLam2_buf4   |     array    |
+|prLam2_buf4_ce0         | out |    1|  ap_memory |    prLam2_buf4   |     array    |
+|prLam2_buf4_q0          |  in |   16|  ap_memory |    prLam2_buf4   |     array    |
+|prLam2_buf4a_address0   | out |   10|  ap_memory |   prLam2_buf4a   |     array    |
+|prLam2_buf4a_ce0        | out |    1|  ap_memory |   prLam2_buf4a   |     array    |
+|prLam2_buf4a_q0         |  in |   16|  ap_memory |   prLam2_buf4a   |     array    |
+|prLam2B_buf4_address0   | out |   10|  ap_memory |   prLam2B_buf4   |     array    |
+|prLam2B_buf4_ce0        | out |    1|  ap_memory |   prLam2B_buf4   |     array    |
+|prLam2B_buf4_q0         |  in |   16|  ap_memory |   prLam2B_buf4   |     array    |
+|prLam2C_buf4_address0   | out |   10|  ap_memory |   prLam2C_buf4   |     array    |
+|prLam2C_buf4_ce0        | out |    1|  ap_memory |   prLam2C_buf4   |     array    |
+|prLam2C_buf4_q0         |  in |   16|  ap_memory |   prLam2C_buf4   |     array    |
+|prLam2C_buf4a_address0  | out |   10|  ap_memory |   prLam2C_buf4a  |     array    |
+|prLam2C_buf4a_ce0       | out |    1|  ap_memory |   prLam2C_buf4a  |     array    |
+|prLam2C_buf4a_q0        |  in |   16|  ap_memory |   prLam2C_buf4a  |     array    |
+|prLam2C_buf4b_address0  | out |   10|  ap_memory |   prLam2C_buf4b  |     array    |
+|prLam2C_buf4b_ce0       | out |    1|  ap_memory |   prLam2C_buf4b  |     array    |
+|prLam2C_buf4b_q0        |  in |   16|  ap_memory |   prLam2C_buf4b  |     array    |
+|pest4                   | out |   16|   ap_vld   |       pest4      |    pointer   |
+|pest4_ap_vld            | out |    1|   ap_vld   |       pest4      |    pointer   |
+|bpest0                  | out |    1|   ap_vld   |      bpest0      |    pointer   |
+|bpest0_ap_vld           | out |    1|   ap_vld   |      bpest0      |    pointer   |
+|bpest1                  | out |    1|   ap_vld   |      bpest1      |    pointer   |
+|bpest1_ap_vld           | out |    1|   ap_vld   |      bpest1      |    pointer   |
+|bpest2                  | out |    1|   ap_vld   |      bpest2      |    pointer   |
+|bpest2_ap_vld           | out |    1|   ap_vld   |      bpest2      |    pointer   |
+|bpest3                  | out |    1|   ap_vld   |      bpest3      |    pointer   |
+|bpest3_ap_vld           | out |    1|   ap_vld   |      bpest3      |    pointer   |
+|bpest4                  | out |    1|   ap_vld   |      bpest4      |    pointer   |
+|bpest4_ap_vld           | out |    1|   ap_vld   |      bpest4      |    pointer   |
++------------------------+-----+-----+------------+------------------+--------------+
+

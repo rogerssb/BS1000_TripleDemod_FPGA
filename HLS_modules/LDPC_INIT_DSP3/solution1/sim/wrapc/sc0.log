@@ -1,0 +1,5 @@
+   Build using "C:/Xilinx/Vivado_HLS/2015.2/msys/bin/g++.exe"
+   Compiling LDPC_INIT_DSP3.cpp_pre.cpp.tb.cpp
+   Compiling LDPC_INT_TEST.cpp_pre.cpp.tb.cpp
+   Compiling apatb_setupLDPC.cpp
+   Generating cosim.tv.exe

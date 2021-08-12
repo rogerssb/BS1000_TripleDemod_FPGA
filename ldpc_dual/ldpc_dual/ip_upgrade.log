@@ -1,0 +1,1210 @@
+Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2016.3 (win64) Build 1682563 Mon Oct 10 19:07:27 MDT 2016
+| Date         : Thu Oct 10 09:02:00 2019
+| Host         : DESKTOP-JTGGDF4 running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7k160tfbg676-1
+------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'design_2_LDPC_Out_0_0'
+
+1. Summary
+----------
+
+SUCCESS in the upgrade of design_2_LDPC_Out_0_0 (xilinx.com:hls:LDPC_Out:1.0) from (Rev. 1910091657) to (Rev. 1910100858)
+
+
+
+
+
+
+Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2016.3 (win64) Build 1682563 Mon Oct 10 19:07:27 MDT 2016
+| Date         : Wed Oct 09 17:00:00 2019
+| Host         : DESKTOP-JTGGDF4 running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7k160tfbg676-1
+------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'design_2_LDPC_Out_0_0'
+
+1. Summary
+----------
+
+SUCCESS in the upgrade of design_2_LDPC_Out_0_0 (xilinx.com:hls:LDPC_Out:1.0) from (Rev. 1910091247) to (Rev. 1910091657)
+
+
+
+
+
+
+Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2016.3 (win64) Build 1682563 Mon Oct 10 19:07:27 MDT 2016
+| Date         : Wed Oct 09 12:50:09 2019
+| Host         : DESKTOP-JTGGDF4 running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7k160tfbg676-1
+------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'design_2_LDPC_Out_0_0'
+
+1. Summary
+----------
+
+SUCCESS in the upgrade of design_2_LDPC_Out_0_0 (xilinx.com:hls:LDPC_Out:1.0) from (Rev. 1909261743) to (Rev. 1910091247)
+
+
+
+
+
+
+Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2016.3 (win64) Build 1682563 Mon Oct 10 19:07:27 MDT 2016
+| Date         : Mon Sep 30 16:37:01 2019
+| Host         : DESKTOP-JTGGDF4 running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7k160tfbg676-1
+------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'design_2_LDPC_buff_0_0'
+
+1. Summary
+----------
+
+SUCCESS in the upgrade of design_2_LDPC_buff_0_0 (xilinx.com:hls:LDPC_buff:1.0) from (Rev. 1909301420) to (Rev. 1909301635)
+
+
+
+
+
+
+Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2016.3 (win64) Build 1682563 Mon Oct 10 19:07:27 MDT 2016
+| Date         : Mon Sep 30 14:21:43 2019
+| Host         : DESKTOP-JTGGDF4 running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7k160tfbg676-1
+------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'design_2_LDPC_buff_0_0'
+
+1. Summary
+----------
+
+SUCCESS in the upgrade of design_2_LDPC_buff_0_0 (xilinx.com:hls:LDPC_buff:1.0) from (Rev. 1909281539) to (Rev. 1909301420)
+
+
+
+
+
+
+Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2016.3 (win64) Build 1682563 Mon Oct 10 19:07:27 MDT 2016
+| Date         : Sat Sep 28 15:41:07 2019
+| Host         : DESKTOP-JTGGDF4 running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7k160tfbg676-1
+------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'design_2_LDPC_buff_0_0'
+
+1. Summary
+----------
+
+SUCCESS in the upgrade of design_2_LDPC_buff_0_0 (xilinx.com:hls:LDPC_buff:1.0) from (Rev. 1909242203) to (Rev. 1909281539)
+
+
+
+
+
+
+Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2016.3 (win64) Build 1682563 Mon Oct 10 19:07:27 MDT 2016
+| Date         : Sat Sep 28 12:39:04 2019
+| Host         : DESKTOP-JTGGDF4 running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7k160tfbg676-1
+------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'design_2_HLSLdpcLogDecScaledMin_0_1'
+
+1. Summary
+----------
+
+SUCCESS in the upgrade of design_2_HLSLdpcLogDecScaledMin_0_1 (xilinx.com:hls:HLSLdpcLogDecScaledMin:1.0) from (Rev. 1909281102) to (Rev. 1909281236)
+
+
+
+
+
+
+Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2016.3 (win64) Build 1682563 Mon Oct 10 19:07:27 MDT 2016
+| Date         : Sat Sep 28 12:39:04 2019
+| Host         : DESKTOP-JTGGDF4 running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7k160tfbg676-1
+------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'design_2_HLSLdpcLogDecScaledMin_0_0'
+
+1. Summary
+----------
+
+SUCCESS in the upgrade of design_2_HLSLdpcLogDecScaledMin_0_0 (xilinx.com:hls:HLSLdpcLogDecScaledMin:1.0) from (Rev. 1909281102) to (Rev. 1909281236)
+
+
+
+
+
+
+Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2016.3 (win64) Build 1682563 Mon Oct 10 19:07:27 MDT 2016
+| Date         : Sat Sep 28 11:10:23 2019
+| Host         : DESKTOP-JTGGDF4 running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7k160tfbg676-1
+------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'design_2_HLSLdpcLogDecScaledMin_0_1'
+
+1. Summary
+----------
+
+SUCCESS in the upgrade of design_2_HLSLdpcLogDecScaledMin_0_1 (xilinx.com:hls:HLSLdpcLogDecScaledMin:1.0) from (Rev. 1909271205) to (Rev. 1909281102)
+
+
+
+
+
+
+Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2016.3 (win64) Build 1682563 Mon Oct 10 19:07:27 MDT 2016
+| Date         : Sat Sep 28 11:10:23 2019
+| Host         : DESKTOP-JTGGDF4 running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7k160tfbg676-1
+------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'design_2_HLSLdpcLogDecScaledMin_0_0'
+
+1. Summary
+----------
+
+SUCCESS in the upgrade of design_2_HLSLdpcLogDecScaledMin_0_0 (xilinx.com:hls:HLSLdpcLogDecScaledMin:1.0) from (Rev. 1909271205) to (Rev. 1909281102)
+
+
+
+
+
+
+Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2016.3 (win64) Build 1682563 Mon Oct 10 19:07:27 MDT 2016
+| Date         : Fri Sep 27 12:10:22 2019
+| Host         : DESKTOP-JTGGDF4 running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7k160tfbg676-1
+------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'design_2_HLSLdpcLogDecScaledMin_0_1'
+
+1. Summary
+----------
+
+SUCCESS in the upgrade of design_2_HLSLdpcLogDecScaledMin_0_1 (xilinx.com:hls:HLSLdpcLogDecScaledMin:1.0) from (Rev. 1909261726) to (Rev. 1909271205)
+
+
+
+
+
+
+Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2016.3 (win64) Build 1682563 Mon Oct 10 19:07:27 MDT 2016
+| Date         : Fri Sep 27 12:10:22 2019
+| Host         : DESKTOP-JTGGDF4 running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7k160tfbg676-1
+------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'design_2_HLSLdpcLogDecScaledMin_0_0'
+
+1. Summary
+----------
+
+SUCCESS in the upgrade of design_2_HLSLdpcLogDecScaledMin_0_0 (xilinx.com:hls:HLSLdpcLogDecScaledMin:1.0) from (Rev. 1909261726) to (Rev. 1909271205)
+
+
+
+
+
+
+Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2016.3 (win64) Build 1682563 Mon Oct 10 19:07:27 MDT 2016
+| Date         : Thu Sep 26 17:47:43 2019
+| Host         : DESKTOP-JTGGDF4 running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7k160tfbg676-1
+------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'design_2_LDPC_buff_0_0'
+
+1. Summary
+----------
+
+CAUTION (success, with warnings) in the upgrade of design_2_LDPC_buff_0_0 (xilinx.com:hls:LDPC_buff:1.0) from (Rev. 1907182233) to (Rev. 1909242203)
+
+After upgrade, an IP may have parameter and port differences compared to the original customization. Please review the parameters within the IP customization GUI to ensure proper functionality. Also, please review the updated IP instantiation template to ensure proper connectivity, and update your design if required.
+
+2. Connection Warnings
+----------------------
+
+Detected external port differences while upgrading 'design_2_LDPC_buff_0_0'. These changes may impact your design.
+
+
+-Upgraded port 'raw_dat0_address0' width 11 differs from original width 10
+
+-Upgraded port 'raw_dat1_address0' width 11 differs from original width 10
+
+-Upgraded port 'raw_dat2_address0' width 11 differs from original width 10
+
+-Upgraded port 'raw_dat3_address0' width 11 differs from original width 10
+
+
+
+
+
+
+
+Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2016.3 (win64) Build 1682563 Mon Oct 10 19:07:27 MDT 2016
+| Date         : Thu Sep 26 17:47:43 2019
+| Host         : DESKTOP-JTGGDF4 running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7k160tfbg676-1
+------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'design_2_LDPC_Out_0_0'
+
+1. Summary
+----------
+
+CAUTION (success, with warnings) in the upgrade of design_2_LDPC_Out_0_0 (xilinx.com:hls:LDPC_Out:1.0) from (Rev. 1907301458) to (Rev. 1909261743)
+
+After upgrade, an IP may have parameter and port differences compared to the original customization. Please review the parameters within the IP customization GUI to ensure proper functionality. Also, please review the updated IP instantiation template to ensure proper connectivity, and update your design if required.
+
+2. Connection Warnings
+----------------------
+
+Detected external port differences while upgrading 'design_2_LDPC_Out_0_0'. These changes may impact your design.
+
+
+-Upgraded port 'mem_out0_address0' width 11 differs from original width 10
+
+-Upgraded port 'mem_out1_address0' width 11 differs from original width 10
+
+
+
+
+
+
+
+Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2016.3 (win64) Build 1682563 Mon Oct 10 19:07:27 MDT 2016
+| Date         : Thu Sep 26 17:47:43 2019
+| Host         : DESKTOP-JTGGDF4 running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7k160tfbg676-1
+------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'design_2_HLSLdpcLogDecScaledMin_0_1'
+
+1. Summary
+----------
+
+CAUTION (success, with warnings) in the upgrade of design_2_HLSLdpcLogDecScaledMin_0_1 (xilinx.com:hls:HLSLdpcLogDecScaledMin:1.0) from (Rev. 1909191700) to (Rev. 1909261726)
+
+After upgrade, an IP may have parameter and port differences compared to the original customization. Please review the parameters within the IP customization GUI to ensure proper functionality. Also, please review the updated IP instantiation template to ensure proper connectivity, and update your design if required.
+
+2. Connection Warnings
+----------------------
+
+Detected external port differences while upgrading 'design_2_HLSLdpcLogDecScaledMin_0_1'. These changes may impact your design.
+
+
+-Upgraded port 'pR1_address0' width 11 differs from original width 10
+
+-Upgraded port 'pR2_address0' width 11 differs from original width 10
+
+-Upgraded port 'pR3_address0' width 11 differs from original width 10
+
+-Upgraded port 'pR_address0' width 11 differs from original width 10
+
+-Upgraded port 'pbhat0_address0' width 11 differs from original width 10
+
+-Upgraded port 'pbhat1_address0' width 11 differs from original width 10
+
+
+
+
+
+
+
+Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2016.3 (win64) Build 1682563 Mon Oct 10 19:07:27 MDT 2016
+| Date         : Thu Sep 26 17:47:43 2019
+| Host         : DESKTOP-JTGGDF4 running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7k160tfbg676-1
+------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'design_2_HLSLdpcLogDecScaledMin_0_0'
+
+1. Summary
+----------
+
+CAUTION (success, with warnings) in the upgrade of design_2_HLSLdpcLogDecScaledMin_0_0 (xilinx.com:hls:HLSLdpcLogDecScaledMin:1.0) from (Rev. 1909191700) to (Rev. 1909261726)
+
+After upgrade, an IP may have parameter and port differences compared to the original customization. Please review the parameters within the IP customization GUI to ensure proper functionality. Also, please review the updated IP instantiation template to ensure proper connectivity, and update your design if required.
+
+2. Connection Warnings
+----------------------
+
+Detected external port differences while upgrading 'design_2_HLSLdpcLogDecScaledMin_0_0'. These changes may impact your design.
+
+
+-Upgraded port 'pR1_address0' width 11 differs from original width 10
+
+-Upgraded port 'pR2_address0' width 11 differs from original width 10
+
+-Upgraded port 'pR3_address0' width 11 differs from original width 10
+
+-Upgraded port 'pR_address0' width 11 differs from original width 10
+
+-Upgraded port 'pbhat0_address0' width 11 differs from original width 10
+
+-Upgraded port 'pbhat1_address0' width 11 differs from original width 10
+
+
+
+
+
+
+
+Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2016.3 (win64) Build 1682563 Mon Oct 10 19:07:27 MDT 2016
+| Date         : Thu Sep 19 17:06:06 2019
+| Host         : DESKTOP-JTGGDF4 running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7k160tfbg676-1
+------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'design_2_HLSLdpcLogDecScaledMin_0_1'
+
+1. Summary
+----------
+
+SUCCESS in the upgrade of design_2_HLSLdpcLogDecScaledMin_0_1 (xilinx.com:hls:HLSLdpcLogDecScaledMin:1.0) from (Rev. 1909092359) to (Rev. 1909191700)
+
+
+
+
+
+
+Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2016.3 (win64) Build 1682563 Mon Oct 10 19:07:27 MDT 2016
+| Date         : Thu Sep 19 17:06:06 2019
+| Host         : DESKTOP-JTGGDF4 running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7k160tfbg676-1
+------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'design_2_HLSLdpcLogDecScaledMin_0_0'
+
+1. Summary
+----------
+
+SUCCESS in the upgrade of design_2_HLSLdpcLogDecScaledMin_0_0 (xilinx.com:hls:HLSLdpcLogDecScaledMin:1.0) from (Rev. 1909092359) to (Rev. 1909191700)
+
+
+
+
+
+
+Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2016.3 (win64) Build 1682563 Mon Oct 10 19:07:27 MDT 2016
+| Date         : Tue Sep 10 00:05:09 2019
+| Host         : DESKTOP-JTGGDF4 running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7k160tfbg676-1
+------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'design_2_HLSLdpcLogDecScaledMin_0_1'
+
+1. Summary
+----------
+
+SUCCESS in the upgrade of design_2_HLSLdpcLogDecScaledMin_0_1 (xilinx.com:hls:HLSLdpcLogDecScaledMin:1.0) from (Rev. 1907261207) to (Rev. 1909092359)
+
+
+
+
+
+
+Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2016.3 (win64) Build 1682563 Mon Oct 10 19:07:27 MDT 2016
+| Date         : Tue Sep 10 00:05:09 2019
+| Host         : DESKTOP-JTGGDF4 running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7k160tfbg676-1
+------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'design_2_HLSLdpcLogDecScaledMin_0_0'
+
+1. Summary
+----------
+
+SUCCESS in the upgrade of design_2_HLSLdpcLogDecScaledMin_0_0 (xilinx.com:hls:HLSLdpcLogDecScaledMin:1.0) from (Rev. 1907261207) to (Rev. 1909092359)
+
+
+
+
+
+
+Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2016.3 (win64) Build 1682563 Mon Oct 10 19:07:27 MDT 2016
+| Date         : Thu Aug 01 12:42:25 2019
+| Host         : DESKTOP-JTGGDF4 running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7k160tfbg676-1
+------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'design_2_LDPC_Out_0_0'
+
+1. Summary
+----------
+
+SUCCESS in the upgrade of design_2_LDPC_Out_0_0 (xilinx.com:hls:LDPC_Out:1.0) from (Rev. 1907182252) to (Rev. 1907301458)
+
+
+
+
+
+
+Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2016.3 (win64) Build 1682563 Mon Oct 10 19:07:27 MDT 2016
+| Date         : Fri Jul 26 12:09:20 2019
+| Host         : DESKTOP-JTGGDF4 running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7k160tfbg676-1
+------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'design_2_HLSLdpcLogDecScaledMin_0_1'
+
+1. Summary
+----------
+
+SUCCESS in the upgrade of design_2_HLSLdpcLogDecScaledMin_0_1 (xilinx.com:hls:HLSLdpcLogDecScaledMin:1.0) from (Rev. 1907182138) to (Rev. 1907261207)
+
+
+
+
+
+
+Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2016.3 (win64) Build 1682563 Mon Oct 10 19:07:27 MDT 2016
+| Date         : Fri Jul 26 12:09:20 2019
+| Host         : DESKTOP-JTGGDF4 running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7k160tfbg676-1
+------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'design_2_HLSLdpcLogDecScaledMin_0_0'
+
+1. Summary
+----------
+
+SUCCESS in the upgrade of design_2_HLSLdpcLogDecScaledMin_0_0 (xilinx.com:hls:HLSLdpcLogDecScaledMin:1.0) from (Rev. 1907182138) to (Rev. 1907261207)
+
+
+
+
+
+
+Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2016.3 (win64) Build 1682563 Mon Oct 10 19:07:27 MDT 2016
+| Date         : Thu Jul 18 23:01:43 2019
+| Host         : DESKTOP-JTGGDF4 running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7k160tfbg676-1
+------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'design_2_HLSLdpcLogDecScaledMin_0_1'
+
+1. Summary
+----------
+
+CAUTION (success, with warnings) in the upgrade of design_2_HLSLdpcLogDecScaledMin_0_1 (xilinx.com:hls:HLSLdpcLogDecScaledMin:1.0) from (Rev. 1904212139) to (Rev. 1907182138)
+
+After upgrade, an IP may have parameter and port differences compared to the original customization. Please review the parameters within the IP customization GUI to ensure proper functionality. Also, please review the updated IP instantiation template to ensure proper connectivity, and update your design if required.
+
+2. Connection Warnings
+----------------------
+
+Detected external port differences while upgrading 'design_2_HLSLdpcLogDecScaledMin_0_1'. These changes may impact your design.
+
+
+-Upgraded port 'pbhat0_address0' width 10 differs from original width 9
+
+-Upgraded port 'pbhat1_address0' width 10 differs from original width 9
+
+-Upgraded port 'pbhat2_address0' width 10 differs from original width 9
+
+-Upgraded port 'pbhat3_address0' width 10 differs from original width 9
+
+-Upgraded port 'pbhat4_address0' width 10 differs from original width 9
+
+-Upgraded port 'pbhat5_address0' width 10 differs from original width 9
+
+-Upgraded port 'pbhat6_address0' width 10 differs from original width 9
+
+-Upgraded port 'pbhat7_address0' width 10 differs from original width 9
+
+
+
+
+
+
+
+Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2016.3 (win64) Build 1682563 Mon Oct 10 19:07:27 MDT 2016
+| Date         : Thu Jul 18 23:01:43 2019
+| Host         : DESKTOP-JTGGDF4 running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7k160tfbg676-1
+------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'design_2_HLSLdpcLogDecScaledMin_0_0'
+
+1. Summary
+----------
+
+CAUTION (success, with warnings) in the upgrade of design_2_HLSLdpcLogDecScaledMin_0_0 (xilinx.com:hls:HLSLdpcLogDecScaledMin:1.0) from (Rev. 1904212139) to (Rev. 1907182138)
+
+After upgrade, an IP may have parameter and port differences compared to the original customization. Please review the parameters within the IP customization GUI to ensure proper functionality. Also, please review the updated IP instantiation template to ensure proper connectivity, and update your design if required.
+
+2. Connection Warnings
+----------------------
+
+Detected external port differences while upgrading 'design_2_HLSLdpcLogDecScaledMin_0_0'. These changes may impact your design.
+
+
+-Upgraded port 'pbhat0_address0' width 10 differs from original width 9
+
+-Upgraded port 'pbhat1_address0' width 10 differs from original width 9
+
+-Upgraded port 'pbhat2_address0' width 10 differs from original width 9
+
+-Upgraded port 'pbhat3_address0' width 10 differs from original width 9
+
+-Upgraded port 'pbhat4_address0' width 10 differs from original width 9
+
+-Upgraded port 'pbhat5_address0' width 10 differs from original width 9
+
+-Upgraded port 'pbhat6_address0' width 10 differs from original width 9
+
+-Upgraded port 'pbhat7_address0' width 10 differs from original width 9
+
+
+
+
+
+
+
+Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2016.3 (win64) Build 1682563 Mon Oct 10 19:07:27 MDT 2016
+| Date         : Thu Jul 18 22:59:10 2019
+| Host         : DESKTOP-JTGGDF4 running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7k160tfbg676-1
+------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'design_2_LDPC_buff_0_0'
+
+1. Summary
+----------
+
+SUCCESS in the upgrade of design_2_LDPC_buff_0_0 (xilinx.com:hls:LDPC_buff:1.0) from (Rev. 1904061154) to (Rev. 1907182233)
+
+
+
+
+
+
+Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2016.3 (win64) Build 1682563 Mon Oct 10 19:07:27 MDT 2016
+| Date         : Thu Jul 18 22:59:10 2019
+| Host         : DESKTOP-JTGGDF4 running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7k160tfbg676-1
+------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'design_2_LDPC_Out_0_0'
+
+1. Summary
+----------
+
+CAUTION (success, with warnings) in the upgrade of design_2_LDPC_Out_0_0 (xilinx.com:hls:LDPC_Out:1.0) from (Rev. 1903271350) to (Rev. 1907182252)
+
+After upgrade, an IP may have parameter and port differences compared to the original customization. Please review the parameters within the IP customization GUI to ensure proper functionality. Also, please review the updated IP instantiation template to ensure proper connectivity, and update your design if required.
+
+2. Interface Information
+------------------------
+
+Detected external interface differences while upgrading 'design_2_LDPC_Out_0_0'.
+
+
+-Upgrade has removed interface 'block_V'
+
+-Upgrade has added interface 'numbits_V' (xilinx.com:signal:data:1.0)
+
+
+3. Connection Warnings
+----------------------
+
+Detected external port differences while upgrading 'design_2_LDPC_Out_0_0'. These changes may impact your design.
+
+
+-Upgrade has removed port 'block_V'
+
+-Upgraded port 'mem_out0_address0' width 10 differs from original width 9
+
+-Upgraded port 'mem_out1_address0' width 10 differs from original width 9
+
+-Upgraded port 'mem_out2_address0' width 10 differs from original width 9
+
+-Upgraded port 'mem_out3_address0' width 10 differs from original width 9
+
+-Upgraded port 'mem_out4_address0' width 10 differs from original width 9
+
+-Upgraded port 'mem_out5_address0' width 10 differs from original width 9
+
+-Upgraded port 'mem_out6_address0' width 10 differs from original width 9
+
+-Upgraded port 'mem_out7_address0' width 10 differs from original width 9
+
+-Upgrade has added port 'numbits_V'
+
+
+
+
+
+
+
+Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2016.3 (win64) Build 1682563 Mon Oct 10 19:07:27 MDT 2016
+| Date         : Sun Apr 21 21:46:37 2019
+| Host         : DESKTOP-JTGGDF4 running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7k160tfbg676-1
+------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'design_2_HLSLdpcLogDecScaledMin_0_1'
+
+1. Summary
+----------
+
+SUCCESS in the upgrade of design_2_HLSLdpcLogDecScaledMin_0_1 (xilinx.com:hls:HLSLdpcLogDecScaledMin:1.0) from (Rev. 1904021701) to (Rev. 1904212139)
+
+
+
+
+
+
+Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2016.3 (win64) Build 1682563 Mon Oct 10 19:07:27 MDT 2016
+| Date         : Sun Apr 21 21:46:37 2019
+| Host         : DESKTOP-JTGGDF4 running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7k160tfbg676-1
+------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'design_2_HLSLdpcLogDecScaledMin_0_0'
+
+1. Summary
+----------
+
+SUCCESS in the upgrade of design_2_HLSLdpcLogDecScaledMin_0_0 (xilinx.com:hls:HLSLdpcLogDecScaledMin:1.0) from (Rev. 1904021701) to (Rev. 1904212139)
+
+
+
+
+
+
+Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2016.3 (win64) Build 1682563 Mon Oct 10 19:07:27 MDT 2016
+| Date         : Sat Apr 06 11:56:05 2019
+| Host         : DESKTOP-JTGGDF4 running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7k160tfbg676-1
+------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'design_2_LDPC_buff_0_0'
+
+1. Summary
+----------
+
+SUCCESS in the upgrade of design_2_LDPC_buff_0_0 (xilinx.com:hls:LDPC_buff:1.0) from (Rev. 1904051750) to (Rev. 1904061154)
+
+
+
+
+
+
+Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2016.3 (win64) Build 1682563 Mon Oct 10 19:07:27 MDT 2016
+| Date         : Fri Apr 05 17:55:01 2019
+| Host         : DESKTOP-JTGGDF4 running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7k160tfbg676-1
+------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'design_2_LDPC_buff_0_0'
+
+1. Summary
+----------
+
+CAUTION (success, with warnings) in the upgrade of design_2_LDPC_buff_0_0 (xilinx.com:hls:LDPC_buff:1.0) from (Rev. 1904041803) to (Rev. 1904051750)
+
+After upgrade, an IP may have parameter and port differences compared to the original customization. Please review the parameters within the IP customization GUI to ensure proper functionality. Also, please review the updated IP instantiation template to ensure proper connectivity, and update your design if required.
+
+2. Interface Information
+------------------------
+
+Detected external interface differences while upgrading 'design_2_LDPC_buff_0_0'.
+
+
+-Upgrade has added interface 'out_mux' (xilinx.com:signal:data:1.0)
+
+
+3. Connection Warnings
+----------------------
+
+Detected external port differences while upgrading 'design_2_LDPC_buff_0_0'. These changes may impact your design.
+
+
+-Upgrade has added port 'out_mux'
+
+
+
+
+
+
+
+Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2016.3 (win64) Build 1682563 Mon Oct 10 19:07:27 MDT 2016
+| Date         : Thu Apr 04 18:05:32 2019
+| Host         : DESKTOP-JTGGDF4 running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7k160tfbg676-1
+------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'design_2_LDPC_buff_0_0'
+
+1. Summary
+----------
+
+SUCCESS in the upgrade of design_2_LDPC_buff_0_0 (xilinx.com:hls:LDPC_buff:1.0) from (Rev. 1904041705) to (Rev. 1904041803)
+
+
+
+
+
+
+Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2016.3 (win64) Build 1682563 Mon Oct 10 19:07:27 MDT 2016
+| Date         : Thu Apr 04 17:06:36 2019
+| Host         : DESKTOP-JTGGDF4 running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7k160tfbg676-1
+------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'design_2_LDPC_buff_0_0'
+
+1. Summary
+----------
+
+SUCCESS in the upgrade of design_2_LDPC_buff_0_0 (xilinx.com:hls:LDPC_buff:1.0) from (Rev. 1904041619) to (Rev. 1904041705)
+
+
+
+
+
+
+Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2016.3 (win64) Build 1682563 Mon Oct 10 19:07:27 MDT 2016
+| Date         : Thu Apr 04 16:22:57 2019
+| Host         : DESKTOP-JTGGDF4 running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7k160tfbg676-1
+------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'design_2_LDPC_buff_0_0'
+
+1. Summary
+----------
+
+SUCCESS in the upgrade of design_2_LDPC_buff_0_0 (xilinx.com:hls:LDPC_buff:1.0) from (Rev. 1904041537) to (Rev. 1904041619)
+
+
+
+
+
+
+Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2016.3 (win64) Build 1682563 Mon Oct 10 19:07:27 MDT 2016
+| Date         : Thu Apr 04 15:40:06 2019
+| Host         : DESKTOP-JTGGDF4 running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7k160tfbg676-1
+------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'design_2_LDPC_buff_0_0'
+
+1. Summary
+----------
+
+SUCCESS in the upgrade of design_2_LDPC_buff_0_0 (xilinx.com:hls:LDPC_buff:1.0) from (Rev. 1904041454) to (Rev. 1904041537)
+
+
+
+
+
+
+Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2016.3 (win64) Build 1682563 Mon Oct 10 19:07:27 MDT 2016
+| Date         : Thu Apr 04 14:56:16 2019
+| Host         : DESKTOP-JTGGDF4 running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7k160tfbg676-1
+------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'design_2_LDPC_buff_0_0'
+
+1. Summary
+----------
+
+CAUTION (success, with warnings) in the upgrade of design_2_LDPC_buff_0_0 (xilinx.com:hls:LDPC_buff:1.0) from (Rev. 1904041015) to (Rev. 1904041454)
+
+After upgrade, an IP may have parameter and port differences compared to the original customization. Please review the parameters within the IP customization GUI to ensure proper functionality. Also, please review the updated IP instantiation template to ensure proper connectivity, and update your design if required.
+
+2. Connection Warnings
+----------------------
+
+Detected external port differences while upgrading 'design_2_LDPC_buff_0_0'. These changes may impact your design.
+
+
+-Upgrade has removed port 'mux_ap_vld'
+
+
+
+
+
+
+
+Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2016.3 (win64) Build 1682563 Mon Oct 10 19:07:27 MDT 2016
+| Date         : Thu Apr 04 10:17:37 2019
+| Host         : DESKTOP-JTGGDF4 running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7k160tfbg676-1
+------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'design_2_LDPC_buff_0_0'
+
+1. Summary
+----------
+
+SUCCESS in the upgrade of design_2_LDPC_buff_0_0 (xilinx.com:hls:LDPC_buff:1.0) from (Rev. 1904031824) to (Rev. 1904041015)
+
+
+
+
+
+
+Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2016.3 (win64) Build 1682563 Mon Oct 10 19:07:27 MDT 2016
+| Date         : Wed Apr 03 18:26:43 2019
+| Host         : DESKTOP-JTGGDF4 running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7k160tfbg676-1
+------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'design_2_LDPC_buff_0_0'
+
+1. Summary
+----------
+
+SUCCESS in the upgrade of design_2_LDPC_buff_0_0 (xilinx.com:hls:LDPC_buff:1.0) from (Rev. 1903271123) to (Rev. 1904031824)
+
+
+
+
+
+
+Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2016.3 (win64) Build 1682563 Mon Oct 10 19:07:27 MDT 2016
+| Date         : Tue Apr 02 17:07:41 2019
+| Host         : DESKTOP-JTGGDF4 running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7k160tfbg676-1
+------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'design_2_HLSLdpcLogDecScaledMin_0_1'
+
+1. Summary
+----------
+
+SUCCESS in the upgrade of design_2_HLSLdpcLogDecScaledMin_0_1 (xilinx.com:hls:HLSLdpcLogDecScaledMin:1.0) from (Rev. 1903291246) to (Rev. 1904021701)
+
+
+
+
+
+
+Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2016.3 (win64) Build 1682563 Mon Oct 10 19:07:27 MDT 2016
+| Date         : Tue Apr 02 17:07:41 2019
+| Host         : DESKTOP-JTGGDF4 running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7k160tfbg676-1
+------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'design_2_HLSLdpcLogDecScaledMin_0_0'
+
+1. Summary
+----------
+
+SUCCESS in the upgrade of design_2_HLSLdpcLogDecScaledMin_0_0 (xilinx.com:hls:HLSLdpcLogDecScaledMin:1.0) from (Rev. 1903291246) to (Rev. 1904021701)
+
+
+
+
+
+
+Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2016.3 (win64) Build 1682563 Mon Oct 10 19:07:27 MDT 2016
+| Date         : Fri Mar 29 12:48:42 2019
+| Host         : DESKTOP-JTGGDF4 running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7k160tfbg676-1
+------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'design_2_HLSLdpcLogDecScaledMin_0_1'
+
+1. Summary
+----------
+
+SUCCESS in the upgrade of design_2_HLSLdpcLogDecScaledMin_0_1 (xilinx.com:hls:HLSLdpcLogDecScaledMin:1.0) from (Rev. 1903251618) to (Rev. 1903291246)
+
+
+
+
+
+
+Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2016.3 (win64) Build 1682563 Mon Oct 10 19:07:27 MDT 2016
+| Date         : Fri Mar 29 12:48:42 2019
+| Host         : DESKTOP-JTGGDF4 running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7k160tfbg676-1
+------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'design_2_HLSLdpcLogDecScaledMin_0_0'
+
+1. Summary
+----------
+
+SUCCESS in the upgrade of design_2_HLSLdpcLogDecScaledMin_0_0 (xilinx.com:hls:HLSLdpcLogDecScaledMin:1.0) from (Rev. 1903251618) to (Rev. 1903291246)
+
+
+
+
+
+
+Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2016.3 (win64) Build 1682563 Mon Oct 10 19:07:27 MDT 2016
+| Date         : Wed Mar 27 13:52:22 2019
+| Host         : DESKTOP-JTGGDF4 running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7k160tfbg676-1
+------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'design_2_LDPC_Out_0_0'
+
+1. Summary
+----------
+
+SUCCESS in the upgrade of design_2_LDPC_Out_0_0 (xilinx.com:hls:LDPC_Out:1.0) from (Rev. 1903181142) to (Rev. 1903271350)
+
+
+
+
+
+
+Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2016.3 (win64) Build 1682563 Mon Oct 10 19:07:27 MDT 2016
+| Date         : Wed Mar 27 11:25:21 2019
+| Host         : DESKTOP-JTGGDF4 running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7k160tfbg676-1
+------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'design_2_LDPC_buff_0_0'
+
+1. Summary
+----------
+
+SUCCESS in the upgrade of design_2_LDPC_buff_0_0 (xilinx.com:hls:LDPC_buff:1.0) from (Rev. 1903251736) to (Rev. 1903271123)
+
+
+
+
+
+
+Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2016.3 (win64) Build 1682563 Mon Oct 10 19:07:27 MDT 2016
+| Date         : Tue Mar 26 10:42:25 2019
+| Host         : DESKTOP-JTGGDF4 running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7k160tfbg676-1
+------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'design_2_LDPC_buff_0_0'
+
+1. Summary
+----------
+
+CAUTION (success, with warnings) in the upgrade of design_2_LDPC_buff_0_0 (xilinx.com:hls:LDPC_buff:1.0) from (Rev. 1903161455) to (Rev. 1903251736)
+
+After upgrade, an IP may have parameter and port differences compared to the original customization. Please review the parameters within the IP customization GUI to ensure proper functionality. Also, please review the updated IP instantiation template to ensure proper connectivity, and update your design if required.
+
+2. Interface Information
+------------------------
+
+Detected external interface differences while upgrading 'design_2_LDPC_buff_0_0'.
+
+
+-Upgrade has added interface 'decode_done_b' (xilinx.com:signal:data:1.0)
+
+-Upgrade has added interface 'decode_ready_b' (xilinx.com:signal:data:1.0)
+
+-Upgrade has added interface 'decode_start_b' (xilinx.com:signal:data:1.0)
+
+
+3. Connection Warnings
+----------------------
+
+Detected external port differences while upgrading 'design_2_LDPC_buff_0_0'. These changes may impact your design.
+
+
+-Upgrade has added port 'decode_done_b'
+
+-Upgrade has added port 'decode_ready_b'
+
+-Upgrade has added port 'decode_start_b'
+
+-Upgrade has added port 'decode_start_b_ap_vld'
+
+
+
+
+
+
+
+Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2016.3 (win64) Build 1682563 Mon Oct 10 19:07:27 MDT 2016
+| Date         : Tue Mar 26 10:42:25 2019
+| Host         : DESKTOP-JTGGDF4 running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7k160tfbg676-1
+------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'design_2_HLSLdpcLogDecScaledMin_0_0'
+
+1. Summary
+----------
+
+CAUTION (success, with warnings) in the upgrade of design_2_HLSLdpcLogDecScaledMin_0_0 (xilinx.com:hls:HLSLdpcLogDecScaledMin:1.0) from (Rev. 1903181017) to (Rev. 1903251618)
+
+After upgrade, an IP may have parameter and port differences compared to the original customization. Please review the parameters within the IP customization GUI to ensure proper functionality. Also, please review the updated IP instantiation template to ensure proper connectivity, and update your design if required.
+
+2. Interface Information
+------------------------
+
+Detected external interface differences while upgrading 'design_2_HLSLdpcLogDecScaledMin_0_0'.
+
+
+-Upgrade has removed interface 'spot'
+
+-Upgrade has added interface 'mux' (xilinx.com:signal:data:1.0)
+
+
+3. Connection Warnings
+----------------------
+
+Detected external port differences while upgrading 'design_2_HLSLdpcLogDecScaledMin_0_0'. These changes may impact your design.
+
+
+-Upgrade has removed port 'spot'
+
+-Upgrade has removed port 'spot_ap_vld'
+
+-Upgrade has added port 'mux'
+
+

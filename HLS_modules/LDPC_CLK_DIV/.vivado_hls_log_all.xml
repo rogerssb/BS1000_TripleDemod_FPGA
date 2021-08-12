@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vivadoHLSLog:LogRoot xmlns:vivadoHLSLog="www.xilinx.com/vivadoHLSLog">
+  <errorLogs>
+    <logs>
+      <synLog/>
+      <simLog/>
+      <mgLog/>
+      <packageLog/>
+      <csimLog/>
+    </logs>
+  </errorLogs>
+  <warningLogs>
+    <logs>
+      <synLog>
+        <logs message="WARNING: [RTGEN 206-101] Register 'max' is power-on initialization." projectName="LDPC_CLK_DIV" solutionName="solution1" date="2019-03-15T13:26:12.847-0400" type="Warning"/>
+        <logs message="WARNING: [RTGEN 206-101] Register 'count' is power-on initialization." projectName="LDPC_CLK_DIV" solutionName="solution1" date="2019-03-15T13:26:12.837-0400" type="Warning"/>
+        <logs message="WARNING: [RTGEN 206-101] Register 'out_count' is power-on initialization." projectName="LDPC_CLK_DIV" solutionName="solution1" date="2019-03-15T13:26:12.825-0400" type="Warning"/>
+      </synLog>
+      <simLog/>
+      <mgLog/>
+      <packageLog/>
+      <csimLog/>
+    </logs>
+  </warningLogs>
+</vivadoHLSLog:LogRoot>

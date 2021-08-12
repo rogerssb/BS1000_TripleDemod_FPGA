@@ -1,0 +1,290 @@
+
+
+================================================================
+== Vivado HLS Report for 'LDPC_CTRL'
+================================================================
+* Date:           Mon Sep 10 17:31:13 2018
+
+* Version:        2016.3 (Build 1682563 on Mon Oct 10 19:41:59 MDT 2016)
+* Project:        LDPC_CTRL
+* Solution:       solution1
+* Product family: kintex7
+* Target device:  xc7k160tffv676-2
+
+
+================================================================
+== Performance Estimates
+================================================================
++ Timing (ns): 
+    * Summary: 
+    +--------+-------+----------+------------+
+    |  Clock | Target| Estimated| Uncertainty|
+    +--------+-------+----------+------------+
+    |ap_clk  |  10.00|      1.47|        1.25|
+    +--------+-------+----------+------------+
+
++ Latency (clock cycles): 
+    * Summary: 
+    +-----+-----+-----+-----+---------+
+    |  Latency  |  Interval | Pipeline|
+    | min | max | min | max |   Type  |
+    +-----+-----+-----+-----+---------+
+    |    0|    0|    1|    1|   none  |
+    +-----+-----+-----+-----+---------+
+
+    + Detail: 
+        * Instance: 
+        N/A
+
+        * Loop: 
+        N/A
+
+============================================================
++ Verbose Summary: Synthesis Manager
+============================================================
+InlineROM: 1
+ExposeGlobal: 0
+============================================================
++ Verbose Summary: CDFG Model
+============================================================
+IsTopModel: 1
+ResetActiveHigh: 1
+IsCombinational: 0
+IsDatapathOnly: 0
+HasWiredReturn: 1
+HasMFsm: 0
+HasVarLatency: 0
+IsPipeline: 0
+IsRtlPipelined: 0
+IsInstanceOverlapped: 0
+IsDontTouch: 0
+HasImplIP: 0
+IsGatedGlobalClock: 0
+
+
+============================================================
++ Verbose Summary: Schedule
+============================================================
+* Number of FSM states: 1
+* Pipeline: 0
+* Dataflow Pipeline: 0
+
+* FSM state transitions: 
+1 --> 
+* FSM state operations: 
+
+ <State 1>: 1.47ns
+ST_1: StgValue_2 (14)  [1/1] 0.00ns
+:0  call void (...)* @_ssdm_op_SpecBitsMap(i2 %block_V), !map !39
+
+ST_1: StgValue_3 (15)  [1/1] 0.00ns
+:1  call void (...)* @_ssdm_op_SpecBitsMap(i2 %code_V), !map !45
+
+ST_1: StgValue_4 (16)  [1/1] 0.00ns
+:2  call void (...)* @_ssdm_op_SpecBitsMap(i1 %run), !map !49
+
+ST_1: StgValue_5 (17)  [1/1] 0.00ns
+:3  call void (...)* @_ssdm_op_SpecBitsMap(i1* %init_start), !map !53
+
+ST_1: StgValue_6 (18)  [1/1] 0.00ns
+:4  call void (...)* @_ssdm_op_SpecBitsMap(i1 %init_done), !map !57
+
+ST_1: StgValue_7 (19)  [1/1] 0.00ns
+:5  call void (...)* @_ssdm_op_SpecBitsMap(i1 %init_ready), !map !61
+
+ST_1: StgValue_8 (20)  [1/1] 0.00ns
+:6  call void (...)* @_ssdm_op_SpecBitsMap(i1* %buff_start), !map !65
+
+ST_1: StgValue_9 (21)  [1/1] 0.00ns
+:7  call void (...)* @_ssdm_op_SpecBitsMap(i2* %status_V), !map !69
+
+ST_1: StgValue_10 (22)  [1/1] 0.00ns
+:8  call void (...)* @_ssdm_op_SpecBitsMap(i16* %err_code), !map !73
+
+ST_1: StgValue_11 (23)  [1/1] 0.00ns
+:9  call void (...)* @_ssdm_op_SpecBitsMap(i2* %size_V), !map !77
+
+ST_1: StgValue_12 (24)  [1/1] 0.00ns
+:10  call void (...)* @_ssdm_op_SpecBitsMap(i2* %rate_V), !map !81
+
+ST_1: StgValue_13 (25)  [1/1] 0.00ns
+:11  call void (...)* @_ssdm_op_SpecBitsMap(i1* %buff_reset), !map !85
+
+ST_1: StgValue_14 (26)  [1/1] 0.00ns
+:12  call void (...)* @_ssdm_op_SpecTopModule([10 x i8]* @LDPC_CTRL_str) nounwind
+
+ST_1: init_ready_read (27)  [1/1] 0.00ns
+:13  %init_ready_read = call i1 @_ssdm_op_Read.ap_auto.i1(i1 %init_ready)
+
+ST_1: init_done_read (28)  [1/1] 0.00ns
+:14  %init_done_read = call i1 @_ssdm_op_Read.ap_auto.i1(i1 %init_done)
+
+ST_1: run_read (29)  [1/1] 0.00ns
+:15  %run_read = call i1 @_ssdm_op_Read.ap_auto.i1(i1 %run)
+
+ST_1: code_V_read (30)  [1/1] 0.00ns
+:16  %code_V_read = call i2 @_ssdm_op_Read.ap_auto.i2(i2 %code_V)
+
+ST_1: block_V_read (31)  [1/1] 0.00ns
+:17  %block_V_read = call i2 @_ssdm_op_Read.ap_auto.i2(i2 %block_V)
+
+ST_1: state_load (32)  [1/1] 0.00ns  loc: LDPC_CTRL/LDPC_CTRL.cpp:34
+:18  %state_load = load i16* @state, align 2
+
+ST_1: StgValue_21 (33)  [1/1] 1.11ns  loc: LDPC_CTRL/LDPC_CTRL.cpp:34
+:19  switch i16 %state_load, label %._crit_edge66 [
+    i16 0, label %1
+    i16 1, label %3
+    i16 2, label %6
+    i16 3, label %8
+  ]
+
+ST_1: StgValue_22 (35)  [1/1] 1.07ns  loc: LDPC_CTRL/LDPC_CTRL.cpp:87
+:0  br i1 %run_read, label %._crit_edge62, label %9
+
+ST_1: StgValue_23 (37)  [1/1] 0.00ns  loc: LDPC_CTRL/LDPC_CTRL.cpp:89
+:0  call void @_ssdm_op_Write.ap_auto.i1P(i1* %buff_start, i1 false)
+
+ST_1: StgValue_24 (38)  [1/1] 1.07ns  loc: LDPC_CTRL/LDPC_CTRL.cpp:92
+:1  br label %._crit_edge62
+
+ST_1: StgValue_25 (40)  [1/1] 1.07ns  loc: LDPC_CTRL/LDPC_CTRL.cpp:73
+:0  br i1 %init_done_read, label %7, label %._crit_edge62
+
+ST_1: StgValue_26 (42)  [1/1] 0.00ns  loc: LDPC_CTRL/LDPC_CTRL.cpp:79
+:0  call void @_ssdm_op_Write.ap_auto.i1P(i1* %buff_start, i1 true)
+
+ST_1: StgValue_27 (43)  [1/1] 1.07ns  loc: LDPC_CTRL/LDPC_CTRL.cpp:83
+:1  br label %._crit_edge62
+
+ST_1: StgValue_28 (45)  [1/1] 1.07ns  loc: LDPC_CTRL/LDPC_CTRL.cpp:60
+:0  br i1 %init_ready_read, label %4, label %._crit_edge62
+
+ST_1: StgValue_29 (47)  [1/1] 0.00ns  loc: LDPC_CTRL/LDPC_CTRL.cpp:62
+:0  call void @_ssdm_op_Write.ap_auto.i1P(i1* %init_start, i1 false)
+
+ST_1: StgValue_30 (48)  [1/1] 1.07ns  loc: LDPC_CTRL/LDPC_CTRL.cpp:64
+:1  br i1 %init_done_read, label %5, label %._crit_edge62
+
+ST_1: StgValue_31 (50)  [1/1] 0.00ns  loc: LDPC_CTRL/LDPC_CTRL.cpp:66
+:0  call void @_ssdm_op_Write.ap_auto.i1P(i1* %buff_start, i1 true)
+
+ST_1: StgValue_32 (51)  [1/1] 1.07ns  loc: LDPC_CTRL/LDPC_CTRL.cpp:68
+:1  br label %._crit_edge62
+
+ST_1: notlhs (53)  [1/1] 0.76ns  loc: LDPC_CTRL/LDPC_CTRL.cpp:38
+:0  %notlhs = icmp ne i2 %block_V_read, 1
+
+ST_1: notrhs (54)  [1/1] 0.76ns  loc: LDPC_CTRL/LDPC_CTRL.cpp:38
+:1  %notrhs = icmp ne i2 %block_V_read, -2
+
+ST_1: or_cond_not (55)  [1/1] 0.00ns  loc: LDPC_CTRL/LDPC_CTRL.cpp:38 (grouped into LUT with out node or_cond1)
+:2  %or_cond_not = and i1 %notrhs, %notlhs
+
+ST_1: tmp_3 (56)  [1/1] 0.76ns  loc: LDPC_CTRL/LDPC_CTRL.cpp:38
+:3  %tmp_3 = icmp eq i2 %code_V_read, 0
+
+ST_1: or_cond1 (57)  [1/1] 0.71ns  loc: LDPC_CTRL/LDPC_CTRL.cpp:38 (out node of the LUT)
+:4  %or_cond1 = or i1 %or_cond_not, %tmp_3
+
+ST_1: StgValue_38 (58)  [1/1] 0.00ns  loc: LDPC_CTRL/LDPC_CTRL.cpp:38
+:5  br i1 %or_cond1, label %._crit_edge60, label %2
+
+ST_1: StgValue_39 (60)  [1/1] 0.00ns  loc: LDPC_CTRL/LDPC_CTRL.cpp:44
+:0  call void @_ssdm_op_Write.ap_auto.i2P(i2* %size_V, i2 %block_V_read)
+
+ST_1: StgValue_40 (61)  [1/1] 0.00ns  loc: LDPC_CTRL/LDPC_CTRL.cpp:45
+:1  call void @_ssdm_op_Write.ap_auto.i2P(i2* %rate_V, i2 %code_V_read)
+
+ST_1: StgValue_41 (62)  [1/1] 0.00ns  loc: LDPC_CTRL/LDPC_CTRL.cpp:46
+:2  call void @_ssdm_op_Write.ap_auto.i1P(i1* %buff_reset, i1 false)
+
+ST_1: StgValue_42 (63)  [1/1] 0.00ns  loc: LDPC_CTRL/LDPC_CTRL.cpp:47
+:3  call void @_ssdm_op_Write.ap_auto.i1P(i1* %init_start, i1 true)
+
+ST_1: StgValue_43 (64)  [1/1] 0.00ns  loc: LDPC_CTRL/LDPC_CTRL.cpp:49
+:4  call void @_ssdm_op_Write.ap_auto.i2P(i2* %status_V, i2 1)
+
+ST_1: StgValue_44 (65)  [1/1] 1.07ns  loc: LDPC_CTRL/LDPC_CTRL.cpp:50
+:5  br label %._crit_edge62
+
+ST_1: StgValue_45 (67)  [1/1] 0.00ns  loc: LDPC_CTRL/LDPC_CTRL.cpp:53
+._crit_edge60:0  call void @_ssdm_op_Write.ap_auto.i16P(i16* %err_code, i16 3)
+
+ST_1: StgValue_46 (68)  [1/1] 1.07ns
+._crit_edge60:1  br label %._crit_edge62
+
+ST_1: StgValue_47 (70)  [1/1] 0.00ns  loc: LDPC_CTRL/LDPC_CTRL.cpp:168
+._crit_edge66:0  call void @_ssdm_op_Write.ap_auto.i2P(i2* %size_V, i2 0)
+
+ST_1: StgValue_48 (71)  [1/1] 0.00ns  loc: LDPC_CTRL/LDPC_CTRL.cpp:169
+._crit_edge66:1  call void @_ssdm_op_Write.ap_auto.i2P(i2* %rate_V, i2 0)
+
+ST_1: StgValue_49 (72)  [1/1] 0.00ns  loc: LDPC_CTRL/LDPC_CTRL.cpp:170
+._crit_edge66:2  call void @_ssdm_op_Write.ap_auto.i1P(i1* %init_start, i1 false)
+
+ST_1: StgValue_50 (73)  [1/1] 0.00ns  loc: LDPC_CTRL/LDPC_CTRL.cpp:175
+._crit_edge66:3  call void @_ssdm_op_Write.ap_auto.i1P(i1* %buff_reset, i1 true)
+
+ST_1: StgValue_51 (74)  [1/1] 0.00ns  loc: LDPC_CTRL/LDPC_CTRL.cpp:177
+._crit_edge66:4  call void @_ssdm_op_Write.ap_auto.i1P(i1* %buff_start, i1 false)
+
+ST_1: StgValue_52 (75)  [1/1] 0.00ns  loc: LDPC_CTRL/LDPC_CTRL.cpp:178
+._crit_edge66:5  call void @_ssdm_op_Write.ap_auto.i16P(i16* %err_code, i16 0)
+
+ST_1: StgValue_53 (76)  [1/1] 0.00ns  loc: LDPC_CTRL/LDPC_CTRL.cpp:179
+._crit_edge66:6  call void @_ssdm_op_Write.ap_auto.i2P(i2* %status_V, i2 0)
+
+ST_1: StgValue_54 (77)  [1/1] 1.07ns  loc: LDPC_CTRL/LDPC_CTRL.cpp:189
+._crit_edge66:7  br label %._crit_edge62
+
+ST_1: state_flag_6 (79)  [1/1] 0.00ns
+._crit_edge62:0  %state_flag_6 = phi i1 [ %run_read, %._crit_edge66 ], [ true, %._crit_edge60 ], [ true, %2 ], [ false, %3 ], [ true, %5 ], [ true, %4 ], [ true, %7 ], [ false, %6 ], [ false, %8 ], [ true, %9 ]
+
+ST_1: state_new_6 (80)  [1/1] 0.00ns
+._crit_edge62:1  %state_new_6 = phi i6 [ 0, %._crit_edge66 ], [ 10, %._crit_edge60 ], [ 1, %2 ], [ undef, %3 ], [ 3, %5 ], [ 2, %4 ], [ 3, %7 ], [ 3, %6 ], [ 10, %8 ], [ 10, %9 ]
+
+ST_1: state_new_6_cast (81)  [1/1] 0.00ns
+._crit_edge62:2  %state_new_6_cast = sext i6 %state_new_6 to i16
+
+ST_1: StgValue_58 (82)  [1/1] 0.00ns
+._crit_edge62:3  br i1 %state_flag_6, label %mergeST, label %.new
+
+ST_1: StgValue_59 (84)  [1/1] 0.00ns  loc: LDPC_CTRL/LDPC_CTRL.cpp:48
+mergeST:0  store i16 %state_new_6_cast, i16* @state, align 2
+
+ST_1: StgValue_60 (85)  [1/1] 0.00ns
+mergeST:1  br label %.new
+
+ST_1: StgValue_61 (87)  [1/1] 0.00ns  loc: LDPC_CTRL/LDPC_CTRL.cpp:194
+.new:0  ret void
+
+
+
+============================================================
++ Verbose Summary: Timing violations
+============================================================
+Target clock period: 10ns, clock uncertainty: 1.25ns.
+
+ <State 1>: 1.47ns
+The critical path consists of the following:
+	wire read on port 'code_V' [30]  (0 ns)
+	'icmp' operation ('tmp_3', LDPC_CTRL/LDPC_CTRL.cpp:38) [56]  (0.764 ns)
+	'or' operation ('or_cond1', LDPC_CTRL/LDPC_CTRL.cpp:38) [57]  (0.71 ns)
+
+
+============================================================
++ Verbose Summary: Binding
+============================================================
+N/A
+* FSMD analyzer results:
+  - Output states:
+ - Input state : 
+  - Chain level:
+	State 1
+
+
+============================================================
++ Verbose Summary: Datapath Resource usage 
+============================================================
+N/A

@@ -1,0 +1,2486 @@
+
+
+================================================================
+== Vivado HLS Report for 'mcalcAA_12'
+================================================================
+* Date:           Sat Oct 05 16:58:04 2019
+
+* Version:        2016.3 (Build 1682563 on Mon Oct 10 19:41:59 MDT 2016)
+* Project:        LDPC_Decoder3U
+* Solution:       solution1
+* Product family: kintex7
+* Target device:  xc7k160tfbg676-1
+
+
+================================================================
+== Performance Estimates
+================================================================
++ Timing (ns): 
+    * Summary: 
+    +--------+-------+----------+------------+
+    |  Clock | Target| Estimated| Uncertainty|
+    +--------+-------+----------+------------+
+    |ap_clk  |  10.00|      6.96|        1.25|
+    +--------+-------+----------+------------+
+
++ Latency (clock cycles): 
+    * Summary: 
+    +-----+-----+-----+-----+----------+
+    |  Latency  |  Interval | Pipeline |
+    | min | max | min | max |   Type   |
+    +-----+-----+-----+-----+----------+
+    |    2|    2|    1|    1| function |
+    +-----+-----+-----+-----+----------+
+
+    + Detail: 
+        * Instance: 
+        N/A
+
+        * Loop: 
+        N/A
+
+============================================================
++ Verbose Summary: Synthesis Manager
+============================================================
+InlineROM: 1
+ExposeGlobal: 0
+============================================================
++ Verbose Summary: CDFG Model
+============================================================
+IsTopModel: 0
+ResetActiveHigh: 1
+IsCombinational: 0
+IsDatapathOnly: 0
+HasWiredReturn: 1
+HasMFsm: 2
+HasVarLatency: 0
+IsPipeline: 1
+IsRtlPipelined: 1
+IsInstanceOverlapped: 0
+IsDontTouch: 0
+HasImplIP: 0
+IsGatedGlobalClock: 0
+
++ Individual pipeline summary: 
+  * Pipeline-0: initiation interval (II) = 1, depth = 3
+
+
+============================================================
++ Verbose Summary: Schedule
+============================================================
+* Number of FSM states: 3
+* Pipeline: 1
+  Pipeline-0: II = 1, D = 3, States = { 1 2 3 }
+* Dataflow Pipeline: 0
+
+* FSM state transitions: 
+1 --> 
+	2  / true
+2 --> 
+	3  / true
+3 --> 
+* FSM state operations: 
+
+ <State 1>: 3.85ns
+ST_1: num_ntB_read (56)  [1/1] 0.00ns
+_ifconv:0  %num_ntB_read = call i16 @_ssdm_op_Read.ap_auto.i16(i16 %num_ntB)
+
+ST_1: num_ntA_read (57)  [1/1] 0.00ns
+_ifconv:1  %num_ntA_read = call i16 @_ssdm_op_Read.ap_auto.i16(i16 %num_ntA)
+
+ST_1: num_nt_read (58)  [1/1] 0.00ns
+_ifconv:2  %num_nt_read = call i16 @_ssdm_op_Read.ap_auto.i16(i16 %num_nt)
+
+ST_1: inx1 (60)  [1/1] 1.46ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1392
+_ifconv:4  %inx1 = add i16 1, %num_nt_read
+
+ST_1: tmp_s (63)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1398
+_ifconv:7  %tmp_s = sext i16 %num_nt_read to i32
+
+ST_1: varinx3_1024_12_addr (64)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1398
+_ifconv:8  %varinx3_1024_12_addr = getelementptr [512 x i31]* @varinx3_1024_12, i32 0, i32 %tmp_s
+
+ST_1: varinx3_1024_12_load (65)  [2/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1398
+_ifconv:9  %varinx3_1024_12_load = load i31* %varinx3_1024_12_addr, align 4
+
+ST_1: tmp_758 (72)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1402
+_ifconv:16  %tmp_758 = sext i16 %inx1 to i32
+
+ST_1: varinx3_1024_12_addr_1 (73)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1402
+_ifconv:17  %varinx3_1024_12_addr_1 = getelementptr [512 x i31]* @varinx3_1024_12, i32 0, i32 %tmp_758
+
+ST_1: varinx3_1024_12_load_1 (74)  [2/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1402
+_ifconv:18  %varinx3_1024_12_load_1 = load i31* %varinx3_1024_12_addr_1, align 4
+
+ST_1: varinx6A_1024_a_addr (81)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1407
+_ifconv:25  %varinx6A_1024_a_addr = getelementptr [512 x i31]* @varinx6A_1024_a, i32 0, i32 %tmp_s
+
+ST_1: varinx6A_1024_a_load (82)  [2/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1407
+_ifconv:26  %varinx6A_1024_a_load = load i31* %varinx6A_1024_a_addr, align 4
+
+ST_1: varinx6A_1024_b_addr (89)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1410
+_ifconv:33  %varinx6A_1024_b_addr = getelementptr [512 x i31]* @varinx6A_1024_b, i32 0, i32 %tmp_s
+
+ST_1: varinx6A_1024_b_load (90)  [2/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1410
+_ifconv:34  %varinx6A_1024_b_load = load i31* %varinx6A_1024_b_addr, align 4
+
+ST_1: varinx6A_1024_a_addr_1 (97)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1415
+_ifconv:41  %varinx6A_1024_a_addr_1 = getelementptr [512 x i31]* @varinx6A_1024_a, i32 0, i32 %tmp_758
+
+ST_1: varinx6A_1024_a_load_1 (98)  [2/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1415
+_ifconv:42  %varinx6A_1024_a_load_1 = load i31* %varinx6A_1024_a_addr_1, align 4
+
+ST_1: varinx6A_1024_b_addr_1 (105)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1418
+_ifconv:49  %varinx6A_1024_b_addr_1 = getelementptr [512 x i31]* @varinx6A_1024_b, i32 0, i32 %tmp_758
+
+ST_1: varinx6A_1024_b_load_1 (106)  [2/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1418
+_ifconv:50  %varinx6A_1024_b_load_1 = load i31* %varinx6A_1024_b_addr_1, align 4
+
+ST_1: varinx6B_1024_a_addr (113)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1423
+_ifconv:57  %varinx6B_1024_a_addr = getelementptr [512 x i31]* @varinx6B_1024_a, i32 0, i32 %tmp_s
+
+ST_1: varinx6B_1024_a_load (114)  [2/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1423
+_ifconv:58  %varinx6B_1024_a_load = load i31* %varinx6B_1024_a_addr, align 4
+
+ST_1: varinx6B_1024_b_addr (121)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1426
+_ifconv:65  %varinx6B_1024_b_addr = getelementptr [512 x i31]* @varinx6B_1024_b, i32 0, i32 %tmp_s
+
+ST_1: varinx6B_1024_b_load (122)  [2/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1426
+_ifconv:66  %varinx6B_1024_b_load = load i31* %varinx6B_1024_b_addr, align 4
+
+ST_1: varinx6B_1024_a_addr_1 (129)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1430
+_ifconv:73  %varinx6B_1024_a_addr_1 = getelementptr [512 x i31]* @varinx6B_1024_a, i32 0, i32 %tmp_758
+
+ST_1: varinx6B_1024_a_load_1 (130)  [2/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1430
+_ifconv:74  %varinx6B_1024_a_load_1 = load i31* %varinx6B_1024_a_addr_1, align 4
+
+ST_1: varinx6B_1024_b_addr_1 (137)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1433
+_ifconv:81  %varinx6B_1024_b_addr_1 = getelementptr [512 x i31]* @varinx6B_1024_b, i32 0, i32 %tmp_758
+
+ST_1: varinx6B_1024_b_load_1 (138)  [2/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1433
+_ifconv:82  %varinx6B_1024_b_load_1 = load i31* %varinx6B_1024_b_addr_1, align 4
+
+ST_1: varinx3_4096_12_addr (145)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1440
+_ifconv:89  %varinx3_4096_12_addr = getelementptr [2048 x i35]* @varinx3_4096_12, i32 0, i32 %tmp_s
+
+ST_1: varinx3_4096_12_load (146)  [2/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1440
+_ifconv:90  %varinx3_4096_12_load = load i35* %varinx3_4096_12_addr, align 8
+
+ST_1: varinx3_4096_12_addr_1 (150)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1444
+_ifconv:94  %varinx3_4096_12_addr_1 = getelementptr [2048 x i35]* @varinx3_4096_12, i32 0, i32 %tmp_758
+
+ST_1: varinx3_4096_12_load_1 (151)  [2/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1444
+_ifconv:95  %varinx3_4096_12_load_1 = load i35* %varinx3_4096_12_addr_1, align 8
+
+ST_1: varinx6A_4096_a_addr (155)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1449
+_ifconv:99  %varinx6A_4096_a_addr = getelementptr [2048 x i35]* @varinx6A_4096_a, i32 0, i32 %tmp_s
+
+ST_1: varinx6A_4096_a_load (156)  [2/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1449
+_ifconv:100  %varinx6A_4096_a_load = load i35* %varinx6A_4096_a_addr, align 8
+
+ST_1: varinx6A_4096_b_addr (160)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1452
+_ifconv:104  %varinx6A_4096_b_addr = getelementptr [2048 x i35]* @varinx6A_4096_b, i32 0, i32 %tmp_s
+
+ST_1: varinx6A_4096_b_load (161)  [2/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1452
+_ifconv:105  %varinx6A_4096_b_load = load i35* %varinx6A_4096_b_addr, align 8
+
+ST_1: varinx6A_4096_a_addr_1 (165)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1456
+_ifconv:109  %varinx6A_4096_a_addr_1 = getelementptr [2048 x i35]* @varinx6A_4096_a, i32 0, i32 %tmp_758
+
+ST_1: varinx6A_4096_a_load_1 (166)  [2/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1456
+_ifconv:110  %varinx6A_4096_a_load_1 = load i35* %varinx6A_4096_a_addr_1, align 8
+
+ST_1: varinx6A_4096_b_addr_1 (170)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1459
+_ifconv:114  %varinx6A_4096_b_addr_1 = getelementptr [2048 x i35]* @varinx6A_4096_b, i32 0, i32 %tmp_758
+
+ST_1: varinx6A_4096_b_load_1 (171)  [2/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1459
+_ifconv:115  %varinx6A_4096_b_load_1 = load i35* %varinx6A_4096_b_addr_1, align 8
+
+ST_1: varinx6B_4096_a_addr (175)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1463
+_ifconv:119  %varinx6B_4096_a_addr = getelementptr [2048 x i35]* @varinx6B_4096_a, i32 0, i32 %tmp_s
+
+ST_1: varinx6B_4096_a_load (176)  [2/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1463
+_ifconv:120  %varinx6B_4096_a_load = load i35* %varinx6B_4096_a_addr, align 8
+
+ST_1: varinx6B_4096_b_addr (180)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1466
+_ifconv:124  %varinx6B_4096_b_addr = getelementptr [2048 x i35]* @varinx6B_4096_b, i32 0, i32 %tmp_s
+
+ST_1: varinx6B_4096_b_load (181)  [2/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1466
+_ifconv:125  %varinx6B_4096_b_load = load i35* %varinx6B_4096_b_addr, align 8
+
+ST_1: varinx6B_4096_a_addr_1 (185)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1470
+_ifconv:129  %varinx6B_4096_a_addr_1 = getelementptr [2048 x i35]* @varinx6B_4096_a, i32 0, i32 %tmp_758
+
+ST_1: varinx6B_4096_a_load_1 (186)  [2/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1470
+_ifconv:130  %varinx6B_4096_a_load_1 = load i35* %varinx6B_4096_a_addr_1, align 8
+
+ST_1: varinx6B_4096_b_addr_1 (190)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1473
+_ifconv:134  %varinx6B_4096_b_addr_1 = getelementptr [2048 x i35]* @varinx6B_4096_b, i32 0, i32 %tmp_758
+
+ST_1: varinx6B_4096_b_load_1 (191)  [2/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1473
+_ifconv:135  %varinx6B_4096_b_load_1 = load i35* %varinx6B_4096_b_addr_1, align 8
+
+ST_1: SpEtaPrev_addr (313)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1518
+_ifconv:257  %SpEtaPrev_addr = getelementptr [2048 x i32]* @SpEtaPrev, i32 0, i32 %tmp_s
+
+ST_1: SpEtaPrev_load (314)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1518
+_ifconv:258  %SpEtaPrev_load = load i32* %SpEtaPrev_addr, align 4
+
+
+ <State 2>: 6.96ns
+ST_2: numb_load (61)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1396
+_ifconv:5  %numb_load = load i16* @numb, align 2
+
+ST_2: tmp (62)  [1/1] 1.55ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1396
+_ifconv:6  %tmp = icmp eq i16 %numb_load, 2048
+
+ST_2: varinx3_1024_12_load (65)  [1/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1398
+_ifconv:9  %varinx3_1024_12_load = load i31* %varinx3_1024_12_addr, align 4
+
+ST_2: tmp_849 (66)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1398
+_ifconv:10  %tmp_849 = trunc i31 %varinx3_1024_12_load to i11
+
+ST_2: a_cast (67)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1398
+_ifconv:11  %a_cast = sext i11 %tmp_849 to i12
+
+ST_2: varinx3_1024_12_inx2 (68)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1399
+_ifconv:12  %varinx3_1024_12_inx2 = call i11 @_ssdm_op_PartSelect.i11.i31.i32.i32(i31 %varinx3_1024_12_load, i32 11, i32 21)
+
+ST_2: b_cast (69)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1399
+_ifconv:13  %b_cast = sext i11 %varinx3_1024_12_inx2 to i12
+
+ST_2: tmp_852 (70)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1402
+_ifconv:14  %tmp_852 = call i9 @_ssdm_op_PartSelect.i9.i31.i32.i32(i31 %varinx3_1024_12_load, i32 22, i32 30)
+
+ST_2: c_cast_cast (71)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1402
+_ifconv:15  %c_cast_cast = zext i9 %tmp_852 to i11
+
+ST_2: varinx3_1024_12_load_1 (74)  [1/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1402
+_ifconv:18  %varinx3_1024_12_load_1 = load i31* %varinx3_1024_12_addr_1, align 4
+
+ST_2: tmp_855 (75)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1402
+_ifconv:19  %tmp_855 = trunc i31 %varinx3_1024_12_load_1 to i11
+
+ST_2: d_cast (76)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1402
+_ifconv:20  %d_cast = sext i11 %tmp_855 to i12
+
+ST_2: varinx3_1024_12_inx2_1 (77)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1403
+_ifconv:21  %varinx3_1024_12_inx2_1 = call i11 @_ssdm_op_PartSelect.i11.i31.i32.i32(i31 %varinx3_1024_12_load_1, i32 11, i32 21)
+
+ST_2: e_cast (78)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1403
+_ifconv:22  %e_cast = sext i11 %varinx3_1024_12_inx2_1 to i12
+
+ST_2: tmp_858 (79)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1407
+_ifconv:23  %tmp_858 = call i9 @_ssdm_op_PartSelect.i9.i31.i32.i32(i31 %varinx3_1024_12_load_1, i32 22, i32 30)
+
+ST_2: f_cast_cast (80)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1407
+_ifconv:24  %f_cast_cast = zext i9 %tmp_858 to i11
+
+ST_2: varinx6A_1024_a_load (82)  [1/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1407
+_ifconv:26  %varinx6A_1024_a_load = load i31* %varinx6A_1024_a_addr, align 4
+
+ST_2: tmp_861 (83)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1407
+_ifconv:27  %tmp_861 = trunc i31 %varinx6A_1024_a_load to i11
+
+ST_2: a18A_cast (84)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1407
+_ifconv:28  %a18A_cast = sext i11 %tmp_861 to i12
+
+ST_2: varinx6A_1024_a_inx2 (85)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1408
+_ifconv:29  %varinx6A_1024_a_inx2 = call i11 @_ssdm_op_PartSelect.i11.i31.i32.i32(i31 %varinx6A_1024_a_load, i32 11, i32 21)
+
+ST_2: b18A_cast (86)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1408
+_ifconv:30  %b18A_cast = sext i11 %varinx6A_1024_a_inx2 to i12
+
+ST_2: tmp_864 (87)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1410
+_ifconv:31  %tmp_864 = call i9 @_ssdm_op_PartSelect.i9.i31.i32.i32(i31 %varinx6A_1024_a_load, i32 22, i32 30)
+
+ST_2: c18A_cast_cast (88)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1410
+_ifconv:32  %c18A_cast_cast = zext i9 %tmp_864 to i11
+
+ST_2: varinx6A_1024_b_load (90)  [1/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1410
+_ifconv:34  %varinx6A_1024_b_load = load i31* %varinx6A_1024_b_addr, align 4
+
+ST_2: tmp_867 (91)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1410
+_ifconv:35  %tmp_867 = trunc i31 %varinx6A_1024_b_load to i11
+
+ST_2: d18A_cast (92)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1410
+_ifconv:36  %d18A_cast = sext i11 %tmp_867 to i12
+
+ST_2: varinx6A_1024_b_inx2 (93)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1411
+_ifconv:37  %varinx6A_1024_b_inx2 = call i11 @_ssdm_op_PartSelect.i11.i31.i32.i32(i31 %varinx6A_1024_b_load, i32 11, i32 21)
+
+ST_2: e18A_cast (94)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1411
+_ifconv:38  %e18A_cast = sext i11 %varinx6A_1024_b_inx2 to i12
+
+ST_2: tmp_872 (95)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1415
+_ifconv:39  %tmp_872 = call i9 @_ssdm_op_PartSelect.i9.i31.i32.i32(i31 %varinx6A_1024_b_load, i32 22, i32 30)
+
+ST_2: f18A_cast_cast (96)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1415
+_ifconv:40  %f18A_cast_cast = zext i9 %tmp_872 to i11
+
+ST_2: varinx6A_1024_a_load_1 (98)  [1/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1415
+_ifconv:42  %varinx6A_1024_a_load_1 = load i31* %varinx6A_1024_a_addr_1, align 4
+
+ST_2: tmp_873 (99)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1415
+_ifconv:43  %tmp_873 = trunc i31 %varinx6A_1024_a_load_1 to i11
+
+ST_2: a18A2_cast (100)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1415
+_ifconv:44  %a18A2_cast = sext i11 %tmp_873 to i12
+
+ST_2: varinx6A_1024_a_inx2_1 (101)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1416
+_ifconv:45  %varinx6A_1024_a_inx2_1 = call i11 @_ssdm_op_PartSelect.i11.i31.i32.i32(i31 %varinx6A_1024_a_load_1, i32 11, i32 21)
+
+ST_2: b18A2_cast (102)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1416
+_ifconv:46  %b18A2_cast = sext i11 %varinx6A_1024_a_inx2_1 to i12
+
+ST_2: tmp_874 (103)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1418
+_ifconv:47  %tmp_874 = call i9 @_ssdm_op_PartSelect.i9.i31.i32.i32(i31 %varinx6A_1024_a_load_1, i32 22, i32 30)
+
+ST_2: c18A2_cast_cast (104)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1418
+_ifconv:48  %c18A2_cast_cast = zext i9 %tmp_874 to i11
+
+ST_2: varinx6A_1024_b_load_1 (106)  [1/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1418
+_ifconv:50  %varinx6A_1024_b_load_1 = load i31* %varinx6A_1024_b_addr_1, align 4
+
+ST_2: tmp_875 (107)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1418
+_ifconv:51  %tmp_875 = trunc i31 %varinx6A_1024_b_load_1 to i11
+
+ST_2: d18A2_cast (108)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1418
+_ifconv:52  %d18A2_cast = sext i11 %tmp_875 to i12
+
+ST_2: varinx6A_1024_b_inx2_1 (109)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1419
+_ifconv:53  %varinx6A_1024_b_inx2_1 = call i11 @_ssdm_op_PartSelect.i11.i31.i32.i32(i31 %varinx6A_1024_b_load_1, i32 11, i32 21)
+
+ST_2: e18A2_cast (110)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1419
+_ifconv:54  %e18A2_cast = sext i11 %varinx6A_1024_b_inx2_1 to i12
+
+ST_2: tmp_876 (111)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1423
+_ifconv:55  %tmp_876 = call i9 @_ssdm_op_PartSelect.i9.i31.i32.i32(i31 %varinx6A_1024_b_load_1, i32 22, i32 30)
+
+ST_2: f18A2_cast_cast (112)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1423
+_ifconv:56  %f18A2_cast_cast = zext i9 %tmp_876 to i11
+
+ST_2: varinx6B_1024_a_load (114)  [1/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1423
+_ifconv:58  %varinx6B_1024_a_load = load i31* %varinx6B_1024_a_addr, align 4
+
+ST_2: tmp_877 (115)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1423
+_ifconv:59  %tmp_877 = trunc i31 %varinx6B_1024_a_load to i11
+
+ST_2: a18B_cast (116)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1423
+_ifconv:60  %a18B_cast = sext i11 %tmp_877 to i12
+
+ST_2: varinx6B_1024_a_inx2 (117)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1424
+_ifconv:61  %varinx6B_1024_a_inx2 = call i11 @_ssdm_op_PartSelect.i11.i31.i32.i32(i31 %varinx6B_1024_a_load, i32 11, i32 21)
+
+ST_2: b18B_cast (118)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1424
+_ifconv:62  %b18B_cast = sext i11 %varinx6B_1024_a_inx2 to i12
+
+ST_2: tmp_878 (119)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1426
+_ifconv:63  %tmp_878 = call i9 @_ssdm_op_PartSelect.i9.i31.i32.i32(i31 %varinx6B_1024_a_load, i32 22, i32 30)
+
+ST_2: c18B_cast_cast (120)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1426
+_ifconv:64  %c18B_cast_cast = zext i9 %tmp_878 to i11
+
+ST_2: varinx6B_1024_b_load (122)  [1/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1426
+_ifconv:66  %varinx6B_1024_b_load = load i31* %varinx6B_1024_b_addr, align 4
+
+ST_2: tmp_879 (123)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1426
+_ifconv:67  %tmp_879 = trunc i31 %varinx6B_1024_b_load to i11
+
+ST_2: d18B_cast (124)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1426
+_ifconv:68  %d18B_cast = sext i11 %tmp_879 to i12
+
+ST_2: varinx6B_1024_b_inx2 (125)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1427
+_ifconv:69  %varinx6B_1024_b_inx2 = call i11 @_ssdm_op_PartSelect.i11.i31.i32.i32(i31 %varinx6B_1024_b_load, i32 11, i32 21)
+
+ST_2: e18B_cast (126)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1427
+_ifconv:70  %e18B_cast = sext i11 %varinx6B_1024_b_inx2 to i12
+
+ST_2: tmp_880 (127)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1430
+_ifconv:71  %tmp_880 = call i9 @_ssdm_op_PartSelect.i9.i31.i32.i32(i31 %varinx6B_1024_b_load, i32 22, i32 30)
+
+ST_2: f18B_cast_cast (128)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1430
+_ifconv:72  %f18B_cast_cast = zext i9 %tmp_880 to i11
+
+ST_2: varinx6B_1024_a_load_1 (130)  [1/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1430
+_ifconv:74  %varinx6B_1024_a_load_1 = load i31* %varinx6B_1024_a_addr_1, align 4
+
+ST_2: tmp_881 (131)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1430
+_ifconv:75  %tmp_881 = trunc i31 %varinx6B_1024_a_load_1 to i11
+
+ST_2: a18B2_cast (132)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1430
+_ifconv:76  %a18B2_cast = sext i11 %tmp_881 to i12
+
+ST_2: varinx6B_1024_a_inx2_1 (133)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1431
+_ifconv:77  %varinx6B_1024_a_inx2_1 = call i11 @_ssdm_op_PartSelect.i11.i31.i32.i32(i31 %varinx6B_1024_a_load_1, i32 11, i32 21)
+
+ST_2: b18B2_cast (134)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1431
+_ifconv:78  %b18B2_cast = sext i11 %varinx6B_1024_a_inx2_1 to i12
+
+ST_2: tmp_882 (135)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1433
+_ifconv:79  %tmp_882 = call i9 @_ssdm_op_PartSelect.i9.i31.i32.i32(i31 %varinx6B_1024_a_load_1, i32 22, i32 30)
+
+ST_2: c18B2_cast_cast (136)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1433
+_ifconv:80  %c18B2_cast_cast = zext i9 %tmp_882 to i11
+
+ST_2: varinx6B_1024_b_load_1 (138)  [1/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1433
+_ifconv:82  %varinx6B_1024_b_load_1 = load i31* %varinx6B_1024_b_addr_1, align 4
+
+ST_2: tmp_883 (139)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1433
+_ifconv:83  %tmp_883 = trunc i31 %varinx6B_1024_b_load_1 to i11
+
+ST_2: d18B2_cast (140)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1433
+_ifconv:84  %d18B2_cast = sext i11 %tmp_883 to i12
+
+ST_2: varinx6B_1024_b_inx2_1 (141)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1434
+_ifconv:85  %varinx6B_1024_b_inx2_1 = call i11 @_ssdm_op_PartSelect.i11.i31.i32.i32(i31 %varinx6B_1024_b_load_1, i32 11, i32 21)
+
+ST_2: e18B2_cast (142)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1434
+_ifconv:86  %e18B2_cast = sext i11 %varinx6B_1024_b_inx2_1 to i12
+
+ST_2: tmp_884 (143)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1440
+_ifconv:87  %tmp_884 = call i9 @_ssdm_op_PartSelect.i9.i31.i32.i32(i31 %varinx6B_1024_b_load_1, i32 22, i32 30)
+
+ST_2: f18B2_cast_cast (144)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1440
+_ifconv:88  %f18B2_cast_cast = zext i9 %tmp_884 to i11
+
+ST_2: varinx3_4096_12_load (146)  [1/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1440
+_ifconv:90  %varinx3_4096_12_load = load i35* %varinx3_4096_12_addr, align 8
+
+ST_2: tmp_885 (147)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1440
+_ifconv:91  %tmp_885 = trunc i35 %varinx3_4096_12_load to i12
+
+ST_2: varinx3_4096_12_inx2_1_1 (148)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1441
+_ifconv:92  %varinx3_4096_12_inx2_1_1 = call i12 @_ssdm_op_PartSelect.i12.i35.i32.i32(i35 %varinx3_4096_12_load, i32 12, i32 23)
+
+ST_2: tmp_774 (149)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1442
+_ifconv:93  %tmp_774 = call i11 @_ssdm_op_PartSelect.i11.i35.i32.i32(i35 %varinx3_4096_12_load, i32 24, i32 34)
+
+ST_2: varinx3_4096_12_load_1 (151)  [1/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1444
+_ifconv:95  %varinx3_4096_12_load_1 = load i35* %varinx3_4096_12_addr_1, align 8
+
+ST_2: tmp_886 (152)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1444
+_ifconv:96  %tmp_886 = trunc i35 %varinx3_4096_12_load_1 to i12
+
+ST_2: varinx3_4096_12_inx2_1 (153)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1445
+_ifconv:97  %varinx3_4096_12_inx2_1 = call i12 @_ssdm_op_PartSelect.i12.i35.i32.i32(i35 %varinx3_4096_12_load_1, i32 12, i32 23)
+
+ST_2: tmp_777 (154)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1446
+_ifconv:98  %tmp_777 = call i11 @_ssdm_op_PartSelect.i11.i35.i32.i32(i35 %varinx3_4096_12_load_1, i32 24, i32 34)
+
+ST_2: varinx6A_4096_a_load (156)  [1/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1449
+_ifconv:100  %varinx6A_4096_a_load = load i35* %varinx6A_4096_a_addr, align 8
+
+ST_2: tmp_887 (157)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1449
+_ifconv:101  %tmp_887 = trunc i35 %varinx6A_4096_a_load to i12
+
+ST_2: varinx6A_4096_a_inx2_1_1 (158)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1450
+_ifconv:102  %varinx6A_4096_a_inx2_1_1 = call i12 @_ssdm_op_PartSelect.i12.i35.i32.i32(i35 %varinx6A_4096_a_load, i32 12, i32 23)
+
+ST_2: tmp_780 (159)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1451
+_ifconv:103  %tmp_780 = call i11 @_ssdm_op_PartSelect.i11.i35.i32.i32(i35 %varinx6A_4096_a_load, i32 24, i32 34)
+
+ST_2: varinx6A_4096_b_load (161)  [1/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1452
+_ifconv:105  %varinx6A_4096_b_load = load i35* %varinx6A_4096_b_addr, align 8
+
+ST_2: tmp_888 (162)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1452
+_ifconv:106  %tmp_888 = trunc i35 %varinx6A_4096_b_load to i12
+
+ST_2: varinx6A_4096_b_inx2_1_1 (163)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1453
+_ifconv:107  %varinx6A_4096_b_inx2_1_1 = call i12 @_ssdm_op_PartSelect.i12.i35.i32.i32(i35 %varinx6A_4096_b_load, i32 12, i32 23)
+
+ST_2: tmp_783 (164)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1454
+_ifconv:108  %tmp_783 = call i11 @_ssdm_op_PartSelect.i11.i35.i32.i32(i35 %varinx6A_4096_b_load, i32 24, i32 34)
+
+ST_2: varinx6A_4096_a_load_1 (166)  [1/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1456
+_ifconv:110  %varinx6A_4096_a_load_1 = load i35* %varinx6A_4096_a_addr_1, align 8
+
+ST_2: tmp_889 (167)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1456
+_ifconv:111  %tmp_889 = trunc i35 %varinx6A_4096_a_load_1 to i12
+
+ST_2: varinx6A_4096_a_inx2_1 (168)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1457
+_ifconv:112  %varinx6A_4096_a_inx2_1 = call i12 @_ssdm_op_PartSelect.i12.i35.i32.i32(i35 %varinx6A_4096_a_load_1, i32 12, i32 23)
+
+ST_2: tmp_786 (169)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1458
+_ifconv:113  %tmp_786 = call i11 @_ssdm_op_PartSelect.i11.i35.i32.i32(i35 %varinx6A_4096_a_load_1, i32 24, i32 34)
+
+ST_2: varinx6A_4096_b_load_1 (171)  [1/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1459
+_ifconv:115  %varinx6A_4096_b_load_1 = load i35* %varinx6A_4096_b_addr_1, align 8
+
+ST_2: tmp_890 (172)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1459
+_ifconv:116  %tmp_890 = trunc i35 %varinx6A_4096_b_load_1 to i12
+
+ST_2: varinx6A_4096_b_inx2_1 (173)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1460
+_ifconv:117  %varinx6A_4096_b_inx2_1 = call i12 @_ssdm_op_PartSelect.i12.i35.i32.i32(i35 %varinx6A_4096_b_load_1, i32 12, i32 23)
+
+ST_2: tmp_789 (174)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1461
+_ifconv:118  %tmp_789 = call i11 @_ssdm_op_PartSelect.i11.i35.i32.i32(i35 %varinx6A_4096_b_load_1, i32 24, i32 34)
+
+ST_2: varinx6B_4096_a_load (176)  [1/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1463
+_ifconv:120  %varinx6B_4096_a_load = load i35* %varinx6B_4096_a_addr, align 8
+
+ST_2: tmp_891 (177)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1463
+_ifconv:121  %tmp_891 = trunc i35 %varinx6B_4096_a_load to i12
+
+ST_2: varinx6B_4096_a_inx2_1_1 (178)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1464
+_ifconv:122  %varinx6B_4096_a_inx2_1_1 = call i12 @_ssdm_op_PartSelect.i12.i35.i32.i32(i35 %varinx6B_4096_a_load, i32 12, i32 23)
+
+ST_2: tmp_792 (179)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1465
+_ifconv:123  %tmp_792 = call i11 @_ssdm_op_PartSelect.i11.i35.i32.i32(i35 %varinx6B_4096_a_load, i32 24, i32 34)
+
+ST_2: varinx6B_4096_b_load (181)  [1/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1466
+_ifconv:125  %varinx6B_4096_b_load = load i35* %varinx6B_4096_b_addr, align 8
+
+ST_2: tmp_892 (182)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1466
+_ifconv:126  %tmp_892 = trunc i35 %varinx6B_4096_b_load to i12
+
+ST_2: varinx6B_4096_b_inx2_1_1 (183)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1467
+_ifconv:127  %varinx6B_4096_b_inx2_1_1 = call i12 @_ssdm_op_PartSelect.i12.i35.i32.i32(i35 %varinx6B_4096_b_load, i32 12, i32 23)
+
+ST_2: tmp_793 (184)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1468
+_ifconv:128  %tmp_793 = call i11 @_ssdm_op_PartSelect.i11.i35.i32.i32(i35 %varinx6B_4096_b_load, i32 24, i32 34)
+
+ST_2: varinx6B_4096_a_load_1 (186)  [1/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1470
+_ifconv:130  %varinx6B_4096_a_load_1 = load i35* %varinx6B_4096_a_addr_1, align 8
+
+ST_2: tmp_893 (187)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1470
+_ifconv:131  %tmp_893 = trunc i35 %varinx6B_4096_a_load_1 to i12
+
+ST_2: varinx6B_4096_a_inx2_1 (188)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1471
+_ifconv:132  %varinx6B_4096_a_inx2_1 = call i12 @_ssdm_op_PartSelect.i12.i35.i32.i32(i35 %varinx6B_4096_a_load_1, i32 12, i32 23)
+
+ST_2: tmp_794 (189)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1472
+_ifconv:133  %tmp_794 = call i11 @_ssdm_op_PartSelect.i11.i35.i32.i32(i35 %varinx6B_4096_a_load_1, i32 24, i32 34)
+
+ST_2: varinx6B_4096_b_load_1 (191)  [1/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1473
+_ifconv:135  %varinx6B_4096_b_load_1 = load i35* %varinx6B_4096_b_addr_1, align 8
+
+ST_2: tmp_894 (192)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1473
+_ifconv:136  %tmp_894 = trunc i35 %varinx6B_4096_b_load_1 to i12
+
+ST_2: varinx6B_4096_b_inx2_1 (193)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1474
+_ifconv:137  %varinx6B_4096_b_inx2_1 = call i12 @_ssdm_op_PartSelect.i12.i35.i32.i32(i35 %varinx6B_4096_b_load_1, i32 12, i32 23)
+
+ST_2: tmp_795 (194)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1475
+_ifconv:138  %tmp_795 = call i11 @_ssdm_op_PartSelect.i11.i35.i32.i32(i35 %varinx6B_4096_b_load_1, i32 24, i32 34)
+
+ST_2: a (195)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:139  %a = select i1 %tmp, i12 %a_cast, i12 %tmp_885
+
+ST_2: eTab_0_write_assign (196)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:140  %eTab_0_write_assign = sext i12 %a to i16
+
+ST_2: b (197)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:141  %b = select i1 %tmp, i12 %b_cast, i12 %varinx3_4096_12_inx2_1_1
+
+ST_2: eTab_1_write_assign (198)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:142  %eTab_1_write_assign = sext i12 %b to i16
+
+ST_2: c (199)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:143  %c = select i1 %tmp, i11 %c_cast_cast, i11 %tmp_774
+
+ST_2: d (201)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1361
+_ifconv:145  %d = select i1 %tmp, i12 %d_cast, i12 %tmp_886
+
+ST_2: eTabE_0_write_assig (202)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1361
+_ifconv:146  %eTabE_0_write_assig = sext i12 %d to i16
+
+ST_2: e (203)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1361
+_ifconv:147  %e = select i1 %tmp, i12 %e_cast, i12 %varinx3_4096_12_inx2_1
+
+ST_2: eTabE_1_write_assig (204)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1361
+_ifconv:148  %eTabE_1_write_assig = sext i12 %e to i16
+
+ST_2: f (205)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1361
+_ifconv:149  %f = select i1 %tmp, i11 %f_cast_cast, i11 %tmp_777
+
+ST_2: a18A (207)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1359
+_ifconv:151  %a18A = select i1 %tmp, i12 %a18A_cast, i12 %tmp_887
+
+ST_2: eTabA_0_write_assig (208)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1359
+_ifconv:152  %eTabA_0_write_assig = sext i12 %a18A to i16
+
+ST_2: b18A (209)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1359
+_ifconv:153  %b18A = select i1 %tmp, i12 %b18A_cast, i12 %varinx6A_4096_a_inx2_1_1
+
+ST_2: eTabA_1_write_assig (210)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1359
+_ifconv:154  %eTabA_1_write_assig = sext i12 %b18A to i16
+
+ST_2: c18A (211)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1359
+_ifconv:155  %c18A = select i1 %tmp, i11 %c18A_cast_cast, i11 %tmp_780
+
+ST_2: d18A (213)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1359
+_ifconv:157  %d18A = select i1 %tmp, i12 %d18A_cast, i12 %tmp_888
+
+ST_2: eTabA_3_write_assig (214)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1359
+_ifconv:158  %eTabA_3_write_assig = sext i12 %d18A to i16
+
+ST_2: e18A (215)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1359
+_ifconv:159  %e18A = select i1 %tmp, i12 %e18A_cast, i12 %varinx6A_4096_b_inx2_1_1
+
+ST_2: eTabA_4_write_assig (216)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1359
+_ifconv:160  %eTabA_4_write_assig = sext i12 %e18A to i16
+
+ST_2: f18A (217)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1359
+_ifconv:161  %f18A = select i1 %tmp, i11 %f18A_cast_cast, i11 %tmp_783
+
+ST_2: a18A2 (219)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1361
+_ifconv:163  %a18A2 = select i1 %tmp, i12 %a18A2_cast, i12 %tmp_889
+
+ST_2: eTabF_0_write_assig (220)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1361
+_ifconv:164  %eTabF_0_write_assig = sext i12 %a18A2 to i16
+
+ST_2: b18A2 (221)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1361
+_ifconv:165  %b18A2 = select i1 %tmp, i12 %b18A2_cast, i12 %varinx6A_4096_a_inx2_1
+
+ST_2: eTabF_1_write_assig (222)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1361
+_ifconv:166  %eTabF_1_write_assig = sext i12 %b18A2 to i16
+
+ST_2: c18A2 (223)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1361
+_ifconv:167  %c18A2 = select i1 %tmp, i11 %c18A2_cast_cast, i11 %tmp_786
+
+ST_2: d18A2 (225)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1361
+_ifconv:169  %d18A2 = select i1 %tmp, i12 %d18A2_cast, i12 %tmp_890
+
+ST_2: eTabF_3_write_assig (226)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1361
+_ifconv:170  %eTabF_3_write_assig = sext i12 %d18A2 to i16
+
+ST_2: e18A2 (227)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1361
+_ifconv:171  %e18A2 = select i1 %tmp, i12 %e18A2_cast, i12 %varinx6A_4096_b_inx2_1
+
+ST_2: eTabF_4_write_assig (228)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1361
+_ifconv:172  %eTabF_4_write_assig = sext i12 %e18A2 to i16
+
+ST_2: f18A2 (229)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1361
+_ifconv:173  %f18A2 = select i1 %tmp, i11 %f18A2_cast_cast, i11 %tmp_789
+
+ST_2: a18B (231)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1360
+_ifconv:175  %a18B = select i1 %tmp, i12 %a18B_cast, i12 %tmp_891
+
+ST_2: eTabB_0_write_assig (232)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1360
+_ifconv:176  %eTabB_0_write_assig = sext i12 %a18B to i16
+
+ST_2: b18B (233)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1360
+_ifconv:177  %b18B = select i1 %tmp, i12 %b18B_cast, i12 %varinx6B_4096_a_inx2_1_1
+
+ST_2: eTabB_1_write_assig (234)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1360
+_ifconv:178  %eTabB_1_write_assig = sext i12 %b18B to i16
+
+ST_2: c18B (235)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1360
+_ifconv:179  %c18B = select i1 %tmp, i11 %c18B_cast_cast, i11 %tmp_792
+
+ST_2: d18B (237)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1360
+_ifconv:181  %d18B = select i1 %tmp, i12 %d18B_cast, i12 %tmp_892
+
+ST_2: eTabB_3_write_assig (238)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1360
+_ifconv:182  %eTabB_3_write_assig = sext i12 %d18B to i16
+
+ST_2: e18B (239)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1360
+_ifconv:183  %e18B = select i1 %tmp, i12 %e18B_cast, i12 %varinx6B_4096_b_inx2_1_1
+
+ST_2: eTabB_4_write_assig (240)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1360
+_ifconv:184  %eTabB_4_write_assig = sext i12 %e18B to i16
+
+ST_2: f18B (241)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1360
+_ifconv:185  %f18B = select i1 %tmp, i11 %f18B_cast_cast, i11 %tmp_793
+
+ST_2: a18B2 (243)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1362
+_ifconv:187  %a18B2 = select i1 %tmp, i12 %a18B2_cast, i12 %tmp_893
+
+ST_2: eTabG_0_write_assig (244)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1362
+_ifconv:188  %eTabG_0_write_assig = sext i12 %a18B2 to i16
+
+ST_2: b18B2 (245)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1362
+_ifconv:189  %b18B2 = select i1 %tmp, i12 %b18B2_cast, i12 %varinx6B_4096_a_inx2_1
+
+ST_2: eTabG_1_write_assig (246)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1362
+_ifconv:190  %eTabG_1_write_assig = sext i12 %b18B2 to i16
+
+ST_2: c18B2 (247)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1362
+_ifconv:191  %c18B2 = select i1 %tmp, i11 %c18B2_cast_cast, i11 %tmp_794
+
+ST_2: d18B2 (249)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1362
+_ifconv:193  %d18B2 = select i1 %tmp, i12 %d18B2_cast, i12 %tmp_894
+
+ST_2: eTabG_3_write_assig (250)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1362
+_ifconv:194  %eTabG_3_write_assig = sext i12 %d18B2 to i16
+
+ST_2: e18B2 (251)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1362
+_ifconv:195  %e18B2 = select i1 %tmp, i12 %e18B2_cast, i12 %varinx6B_4096_b_inx2_1
+
+ST_2: eTabG_4_write_assig (252)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1362
+_ifconv:196  %eTabG_4_write_assig = sext i12 %e18B2 to i16
+
+ST_2: f18B2 (253)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1362
+_ifconv:197  %f18B2 = select i1 %tmp, i11 %f18B2_cast_cast, i11 %tmp_795
+
+ST_2: tmp_895 (255)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1488
+_ifconv:199  %tmp_895 = call i2 @_ssdm_op_PartSelect.i2.i12.i32.i32(i12 %a, i32 10, i32 11)
+
+ST_2: icmp (256)  [1/1] 0.85ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1488
+_ifconv:200  %icmp = icmp eq i2 %tmp_895, 0
+
+ST_2: tmp_760 (257)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1489
+_ifconv:201  %tmp_760 = zext i16 %eTab_0_write_assign to i32
+
+ST_2: Lam_buf2_addr (258)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1489
+_ifconv:202  %Lam_buf2_addr = getelementptr inbounds [1024 x i16]* @Lam_buf2, i32 0, i32 %tmp_760
+
+ST_2: Lam_buf2_load (259)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1489
+_ifconv:203  %Lam_buf2_load = load i16* %Lam_buf2_addr, align 2
+
+ST_2: tmp_761 (260)  [1/1] 1.40ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1491
+_ifconv:204  %tmp_761 = add i12 -1024, %a
+
+ST_2: tmp_1517_cast (261)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1491
+_ifconv:205  %tmp_1517_cast = sext i12 %tmp_761 to i32
+
+ST_2: Lam_buf8_addr (262)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1491
+_ifconv:206  %Lam_buf8_addr = getelementptr inbounds [1024 x i16]* @Lam_buf8, i32 0, i32 %tmp_1517_cast
+
+ST_2: Lam_buf8_load (263)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1491
+_ifconv:207  %Lam_buf8_load = load i16* %Lam_buf8_addr, align 2
+
+ST_2: tmp_896 (265)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1493
+_ifconv:209  %tmp_896 = call i2 @_ssdm_op_PartSelect.i2.i12.i32.i32(i12 %b, i32 10, i32 11)
+
+ST_2: icmp16 (266)  [1/1] 0.85ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1493
+_ifconv:210  %icmp16 = icmp eq i2 %tmp_896, 0
+
+ST_2: tmp_763 (267)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1494
+_ifconv:211  %tmp_763 = zext i16 %eTab_1_write_assign to i32
+
+ST_2: Lam_buf4_addr (268)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1494
+_ifconv:212  %Lam_buf4_addr = getelementptr inbounds [1024 x i16]* @Lam_buf4, i32 0, i32 %tmp_763
+
+ST_2: Lam_buf4_load (269)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1494
+_ifconv:213  %Lam_buf4_load = load i16* %Lam_buf4_addr, align 2
+
+ST_2: tmp_764 (270)  [1/1] 1.40ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1496
+_ifconv:214  %tmp_764 = add i12 -1024, %b
+
+ST_2: tmp_1520_cast (271)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1496
+_ifconv:215  %tmp_1520_cast = sext i12 %tmp_764 to i32
+
+ST_2: Lam_buf6_addr (272)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1496
+_ifconv:216  %Lam_buf6_addr = getelementptr inbounds [1024 x i16]* @Lam_buf6, i32 0, i32 %tmp_1520_cast
+
+ST_2: Lam_buf6_load (273)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1496
+_ifconv:217  %Lam_buf6_load = load i16* %Lam_buf6_addr, align 2
+
+ST_2: tmp_897 (275)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1498
+_ifconv:219  %tmp_897 = call i1 @_ssdm_op_BitSelect.i1.i11.i32(i11 %c, i32 10)
+
+ST_2: tmp_766 (276)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1499
+_ifconv:220  %tmp_766 = zext i11 %c to i32
+
+ST_2: Lam_buf4a_addr (277)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1499
+_ifconv:221  %Lam_buf4a_addr = getelementptr inbounds [1024 x i16]* @Lam_buf4a, i32 0, i32 %tmp_766
+
+ST_2: Lam_buf4a_load (278)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1499
+_ifconv:222  %Lam_buf4a_load = load i16* %Lam_buf4a_addr, align 2
+
+ST_2: tmp_767 (279)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1501
+_ifconv:223  %tmp_767 = xor i11 %c, -1024
+
+ST_2: tmp_1523_cast (280)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1501
+_ifconv:224  %tmp_1523_cast = sext i11 %tmp_767 to i32
+
+ST_2: Lam_buf6a_addr (281)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1501
+_ifconv:225  %Lam_buf6a_addr = getelementptr inbounds [1024 x i16]* @Lam_buf6a, i32 0, i32 %tmp_1523_cast
+
+ST_2: Lam_buf6a_load (282)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1501
+_ifconv:226  %Lam_buf6a_load = load i16* %Lam_buf6a_addr, align 2
+
+ST_2: tmp_898 (284)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1503
+_ifconv:228  %tmp_898 = call i2 @_ssdm_op_PartSelect.i2.i12.i32.i32(i12 %d, i32 10, i32 11)
+
+ST_2: icmp20 (285)  [1/1] 0.85ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1503
+_ifconv:229  %icmp20 = icmp eq i2 %tmp_898, 0
+
+ST_2: tmp_769 (286)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1504
+_ifconv:230  %tmp_769 = zext i16 %eTabE_0_write_assig to i32
+
+ST_2: Lam_buf2_addr_1 (287)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1504
+_ifconv:231  %Lam_buf2_addr_1 = getelementptr inbounds [1024 x i16]* @Lam_buf2, i32 0, i32 %tmp_769
+
+ST_2: Lam_buf2_load_1 (288)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1504
+_ifconv:232  %Lam_buf2_load_1 = load i16* %Lam_buf2_addr_1, align 2
+
+ST_2: tmp_770 (289)  [1/1] 1.40ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1506
+_ifconv:233  %tmp_770 = add i12 -1024, %d
+
+ST_2: tmp_1526_cast (290)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1506
+_ifconv:234  %tmp_1526_cast = sext i12 %tmp_770 to i32
+
+ST_2: Lam_buf8_addr_1 (291)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1506
+_ifconv:235  %Lam_buf8_addr_1 = getelementptr inbounds [1024 x i16]* @Lam_buf8, i32 0, i32 %tmp_1526_cast
+
+ST_2: Lam_buf8_load_1 (292)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1506
+_ifconv:236  %Lam_buf8_load_1 = load i16* %Lam_buf8_addr_1, align 2
+
+ST_2: tmp_899 (294)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1508
+_ifconv:238  %tmp_899 = call i2 @_ssdm_op_PartSelect.i2.i12.i32.i32(i12 %e, i32 10, i32 11)
+
+ST_2: icmp23 (295)  [1/1] 0.85ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1508
+_ifconv:239  %icmp23 = icmp eq i2 %tmp_899, 0
+
+ST_2: tmp_772 (296)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1509
+_ifconv:240  %tmp_772 = zext i16 %eTabE_1_write_assig to i32
+
+ST_2: Lam_buf4_addr_2 (297)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1509
+_ifconv:241  %Lam_buf4_addr_2 = getelementptr inbounds [1024 x i16]* @Lam_buf4, i32 0, i32 %tmp_772
+
+ST_2: Lam_buf4_load_2 (298)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1509
+_ifconv:242  %Lam_buf4_load_2 = load i16* %Lam_buf4_addr_2, align 2
+
+ST_2: tmp_773 (299)  [1/1] 1.40ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1511
+_ifconv:243  %tmp_773 = add i12 -1024, %e
+
+ST_2: tmp_1529_cast (300)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1511
+_ifconv:244  %tmp_1529_cast = sext i12 %tmp_773 to i32
+
+ST_2: Lam_buf6_addr_3 (301)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1511
+_ifconv:245  %Lam_buf6_addr_3 = getelementptr inbounds [1024 x i16]* @Lam_buf6, i32 0, i32 %tmp_1529_cast
+
+ST_2: Lam_buf6_load_3 (302)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1511
+_ifconv:246  %Lam_buf6_load_3 = load i16* %Lam_buf6_addr_3, align 2
+
+ST_2: tmp_900 (304)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1513
+_ifconv:248  %tmp_900 = call i1 @_ssdm_op_BitSelect.i1.i11.i32(i11 %f, i32 10)
+
+ST_2: tmp_775 (305)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1514
+_ifconv:249  %tmp_775 = zext i11 %f to i32
+
+ST_2: Lam_buf4a_addr_1 (306)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1514
+_ifconv:250  %Lam_buf4a_addr_1 = getelementptr inbounds [1024 x i16]* @Lam_buf4a, i32 0, i32 %tmp_775
+
+ST_2: Lam_buf4a_load_1 (307)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1514
+_ifconv:251  %Lam_buf4a_load_1 = load i16* %Lam_buf4a_addr_1, align 2
+
+ST_2: tmp_776 (308)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1516
+_ifconv:252  %tmp_776 = xor i11 %f, -1024
+
+ST_2: tmp_1532_cast (309)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1516
+_ifconv:253  %tmp_1532_cast = sext i11 %tmp_776 to i32
+
+ST_2: Lam_buf6a_addr_2 (310)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1516
+_ifconv:254  %Lam_buf6a_addr_2 = getelementptr inbounds [1024 x i16]* @Lam_buf6a, i32 0, i32 %tmp_1532_cast
+
+ST_2: Lam_buf6a_load_2 (311)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1516
+_ifconv:255  %Lam_buf6a_load_2 = load i16* %Lam_buf6a_addr_2, align 2
+
+ST_2: SpEtaPrev_load (314)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1518
+_ifconv:258  %SpEtaPrev_load = load i32* %SpEtaPrev_addr, align 4
+
+ST_2: tmp_901 (315)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1518
+_ifconv:259  %tmp_901 = trunc i32 %SpEtaPrev_load to i8
+
+ST_2: SpEtaPrev_two_V_load (316)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1519
+_ifconv:260  %SpEtaPrev_two_V_load = call i8 @_ssdm_op_PartSelect.i8.i32.i32.i32(i32 %SpEtaPrev_load, i32 8, i32 15)
+
+ST_2: SpEtaPrev_three_V_lo (317)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1520
+_ifconv:261  %SpEtaPrev_three_V_lo = call i8 @_ssdm_op_PartSelect.i8.i32.i32.i32(i32 %SpEtaPrev_load, i32 16, i32 23)
+
+ST_2: SpEtaPrevC_addr (318)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1522
+_ifconv:262  %SpEtaPrevC_addr = getelementptr [2048 x i32]* @SpEtaPrevC, i32 0, i32 %tmp_758
+
+ST_2: SpEtaPrevC_load (319)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1522
+_ifconv:263  %SpEtaPrevC_load = load i32* %SpEtaPrevC_addr, align 4
+
+ST_2: tmp_903 (323)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1536
+_ifconv:267  %tmp_903 = call i2 @_ssdm_op_PartSelect.i2.i12.i32.i32(i12 %a18A, i32 10, i32 11)
+
+ST_2: icmp29 (324)  [1/1] 0.85ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1536
+_ifconv:268  %icmp29 = icmp eq i2 %tmp_903, 0
+
+ST_2: tmp_778 (325)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1537
+_ifconv:269  %tmp_778 = zext i16 %eTabA_0_write_assig to i32
+
+ST_2: Lam_bufAa_addr (326)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1537
+_ifconv:270  %Lam_bufAa_addr = getelementptr inbounds [1024 x i16]* @Lam_bufAa, i32 0, i32 %tmp_778
+
+ST_2: Lam_bufAa_load (327)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1537
+_ifconv:271  %Lam_bufAa_load = load i16* %Lam_bufAa_addr, align 2
+
+ST_2: tmp_779 (328)  [1/1] 1.40ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1539
+_ifconv:272  %tmp_779 = add i12 -1024, %a18A
+
+ST_2: tmp_1542_cast (329)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1539
+_ifconv:273  %tmp_1542_cast = sext i12 %tmp_779 to i32
+
+ST_2: Lam_bufAb_addr (330)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1539
+_ifconv:274  %Lam_bufAb_addr = getelementptr inbounds [1024 x i16]* @Lam_bufAb, i32 0, i32 %tmp_1542_cast
+
+ST_2: Lam_bufAb_load (331)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1539
+_ifconv:275  %Lam_bufAb_load = load i16* %Lam_bufAb_addr, align 2
+
+ST_2: tmp_904 (333)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1540
+_ifconv:277  %tmp_904 = call i2 @_ssdm_op_PartSelect.i2.i12.i32.i32(i12 %b18A, i32 10, i32 11)
+
+ST_2: icmp30 (334)  [1/1] 0.85ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1540
+_ifconv:278  %icmp30 = icmp eq i2 %tmp_904, 0
+
+ST_2: tmp_781 (335)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1541
+_ifconv:279  %tmp_781 = zext i16 %eTabA_1_write_assig to i32
+
+ST_2: Lam_bufA1_addr (336)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1541
+_ifconv:280  %Lam_bufA1_addr = getelementptr inbounds [1024 x i16]* @Lam_bufA1, i32 0, i32 %tmp_781
+
+ST_2: Lam_bufA1_load (337)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1541
+_ifconv:281  %Lam_bufA1_load = load i16* %Lam_bufA1_addr, align 2
+
+ST_2: tmp_782 (338)  [1/1] 1.40ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1543
+_ifconv:282  %tmp_782 = add i12 -1024, %b18A
+
+ST_2: tmp_1545_cast (339)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1543
+_ifconv:283  %tmp_1545_cast = sext i12 %tmp_782 to i32
+
+ST_2: Lam_bufAc_addr (340)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1543
+_ifconv:284  %Lam_bufAc_addr = getelementptr inbounds [1024 x i16]* @Lam_bufAc, i32 0, i32 %tmp_1545_cast
+
+ST_2: Lam_bufAc_load (341)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1543
+_ifconv:285  %Lam_bufAc_load = load i16* %Lam_bufAc_addr, align 2
+
+ST_2: tmp_905 (343)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1544
+_ifconv:287  %tmp_905 = call i1 @_ssdm_op_BitSelect.i1.i11.i32(i11 %c18A, i32 10)
+
+ST_2: tmp_784 (344)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1545
+_ifconv:288  %tmp_784 = zext i11 %c18A to i32
+
+ST_2: Lam_bufA3_addr (345)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1545
+_ifconv:289  %Lam_bufA3_addr = getelementptr inbounds [1024 x i16]* @Lam_bufA3, i32 0, i32 %tmp_784
+
+ST_2: Lam_bufA3_load (346)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1545
+_ifconv:290  %Lam_bufA3_load = load i16* %Lam_bufA3_addr, align 2
+
+ST_2: tmp_785 (347)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1547
+_ifconv:291  %tmp_785 = xor i11 %c18A, -1024
+
+ST_2: tmp_1548_cast (348)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1547
+_ifconv:292  %tmp_1548_cast = sext i11 %tmp_785 to i32
+
+ST_2: Lam_bufA2a_addr (349)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1547
+_ifconv:293  %Lam_bufA2a_addr = getelementptr inbounds [1024 x i16]* @Lam_bufA2a, i32 0, i32 %tmp_1548_cast
+
+ST_2: Lam_bufA2a_load (350)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1547
+_ifconv:294  %Lam_bufA2a_load = load i16* %Lam_bufA2a_addr, align 2
+
+ST_2: tmp_906 (352)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1548
+_ifconv:296  %tmp_906 = call i2 @_ssdm_op_PartSelect.i2.i12.i32.i32(i12 %d18A, i32 10, i32 11)
+
+ST_2: icmp31 (353)  [1/1] 0.85ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1548
+_ifconv:297  %icmp31 = icmp eq i2 %tmp_906, 0
+
+ST_2: tmp_787 (354)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1549
+_ifconv:298  %tmp_787 = zext i16 %eTabA_3_write_assig to i32
+
+ST_2: Lam_bufA4a_addr (355)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1549
+_ifconv:299  %Lam_bufA4a_addr = getelementptr inbounds [1024 x i16]* @Lam_bufA4a, i32 0, i32 %tmp_787
+
+ST_2: Lam_bufA4a_load (356)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1549
+_ifconv:300  %Lam_bufA4a_load = load i16* %Lam_bufA4a_addr, align 2
+
+ST_2: tmp_788 (357)  [1/1] 1.40ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1551
+_ifconv:301  %tmp_788 = add i12 -1024, %d18A
+
+ST_2: tmp_1551_cast (358)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1551
+_ifconv:302  %tmp_1551_cast = sext i12 %tmp_788 to i32
+
+ST_2: Lam_bufA6_addr (359)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1551
+_ifconv:303  %Lam_bufA6_addr = getelementptr inbounds [1024 x i16]* @Lam_bufA6, i32 0, i32 %tmp_1551_cast
+
+ST_2: Lam_bufA6_load (360)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1551
+_ifconv:304  %Lam_bufA6_load = load i16* %Lam_bufA6_addr, align 2
+
+ST_2: tmp_907 (362)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1552
+_ifconv:306  %tmp_907 = call i2 @_ssdm_op_PartSelect.i2.i12.i32.i32(i12 %e18A, i32 10, i32 11)
+
+ST_2: icmp32 (363)  [1/1] 0.85ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1552
+_ifconv:307  %icmp32 = icmp eq i2 %tmp_907, 0
+
+ST_2: tmp_790 (364)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1553
+_ifconv:308  %tmp_790 = zext i16 %eTabA_4_write_assig to i32
+
+ST_2: Lam_bufA4b_addr (365)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1553
+_ifconv:309  %Lam_bufA4b_addr = getelementptr inbounds [1024 x i16]* @Lam_bufA4b, i32 0, i32 %tmp_790
+
+ST_2: Lam_bufA4b_load (366)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1553
+_ifconv:310  %Lam_bufA4b_load = load i16* %Lam_bufA4b_addr, align 2
+
+ST_2: tmp_791 (367)  [1/1] 1.40ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1555
+_ifconv:311  %tmp_791 = add i12 -1024, %e18A
+
+ST_2: tmp_1554_cast (368)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1555
+_ifconv:312  %tmp_1554_cast = sext i12 %tmp_791 to i32
+
+ST_2: Lam_bufA6b_addr (369)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1555
+_ifconv:313  %Lam_bufA6b_addr = getelementptr inbounds [1024 x i16]* @Lam_bufA6b, i32 0, i32 %tmp_1554_cast
+
+ST_2: Lam_bufA6b_load (370)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1555
+_ifconv:314  %Lam_bufA6b_load = load i16* %Lam_bufA6b_addr, align 2
+
+ST_2: tmp_908 (372)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1556
+_ifconv:316  %tmp_908 = call i1 @_ssdm_op_BitSelect.i1.i11.i32(i11 %f18A, i32 10)
+
+ST_2: tmp_796 (373)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1557
+_ifconv:317  %tmp_796 = zext i11 %f18A to i32
+
+ST_2: Lam_bufA4c_addr (374)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1557
+_ifconv:318  %Lam_bufA4c_addr = getelementptr inbounds [1024 x i16]* @Lam_bufA4c, i32 0, i32 %tmp_796
+
+ST_2: Lam_bufA4c_load (375)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1557
+_ifconv:319  %Lam_bufA4c_load = load i16* %Lam_bufA4c_addr, align 2
+
+ST_2: tmp_797 (376)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1559
+_ifconv:320  %tmp_797 = xor i11 %f18A, -1024
+
+ST_2: tmp_1557_cast (377)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1559
+_ifconv:321  %tmp_1557_cast = sext i11 %tmp_797 to i32
+
+ST_2: Lam_bufA6c_addr (378)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1559
+_ifconv:322  %Lam_bufA6c_addr = getelementptr inbounds [1024 x i16]* @Lam_bufA6c, i32 0, i32 %tmp_1557_cast
+
+ST_2: Lam_bufA6c_load (379)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1559
+_ifconv:323  %Lam_bufA6c_load = load i16* %Lam_bufA6c_addr, align 2
+
+ST_2: tmp_909 (381)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1590
+_ifconv:325  %tmp_909 = call i2 @_ssdm_op_PartSelect.i2.i12.i32.i32(i12 %a18A2, i32 10, i32 11)
+
+ST_2: icmp33 (382)  [1/1] 0.85ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1590
+_ifconv:326  %icmp33 = icmp eq i2 %tmp_909, 0
+
+ST_2: tmp_798 (383)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1591
+_ifconv:327  %tmp_798 = zext i16 %eTabF_0_write_assig to i32
+
+ST_2: Lam_bufAa_addr_2 (384)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1591
+_ifconv:328  %Lam_bufAa_addr_2 = getelementptr inbounds [1024 x i16]* @Lam_bufAa, i32 0, i32 %tmp_798
+
+ST_2: Lam_bufAa_load_2 (385)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1591
+_ifconv:329  %Lam_bufAa_load_2 = load i16* %Lam_bufAa_addr_2, align 2
+
+ST_2: tmp_799 (386)  [1/1] 1.40ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1593
+_ifconv:330  %tmp_799 = add i12 -1024, %a18A2
+
+ST_2: tmp_1560_cast (387)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1593
+_ifconv:331  %tmp_1560_cast = sext i12 %tmp_799 to i32
+
+ST_2: Lam_bufAb_addr_2 (388)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1593
+_ifconv:332  %Lam_bufAb_addr_2 = getelementptr inbounds [1024 x i16]* @Lam_bufAb, i32 0, i32 %tmp_1560_cast
+
+ST_2: Lam_bufAb_load_2 (389)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1593
+_ifconv:333  %Lam_bufAb_load_2 = load i16* %Lam_bufAb_addr_2, align 2
+
+ST_2: tmp_910 (391)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1594
+_ifconv:335  %tmp_910 = call i2 @_ssdm_op_PartSelect.i2.i12.i32.i32(i12 %b18A2, i32 10, i32 11)
+
+ST_2: icmp34 (392)  [1/1] 0.85ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1594
+_ifconv:336  %icmp34 = icmp eq i2 %tmp_910, 0
+
+ST_2: tmp_800 (393)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1595
+_ifconv:337  %tmp_800 = zext i16 %eTabF_1_write_assig to i32
+
+ST_2: Lam_bufA1_addr_2 (394)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1595
+_ifconv:338  %Lam_bufA1_addr_2 = getelementptr inbounds [1024 x i16]* @Lam_bufA1, i32 0, i32 %tmp_800
+
+ST_2: Lam_bufA1_load_2 (395)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1595
+_ifconv:339  %Lam_bufA1_load_2 = load i16* %Lam_bufA1_addr_2, align 2
+
+ST_2: tmp_801 (396)  [1/1] 1.40ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1597
+_ifconv:340  %tmp_801 = add i12 -1024, %b18A2
+
+ST_2: tmp_1563_cast (397)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1597
+_ifconv:341  %tmp_1563_cast = sext i12 %tmp_801 to i32
+
+ST_2: Lam_bufAc_addr_2 (398)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1597
+_ifconv:342  %Lam_bufAc_addr_2 = getelementptr inbounds [1024 x i16]* @Lam_bufAc, i32 0, i32 %tmp_1563_cast
+
+ST_2: Lam_bufAc_load_2 (399)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1597
+_ifconv:343  %Lam_bufAc_load_2 = load i16* %Lam_bufAc_addr_2, align 2
+
+ST_2: tmp_911 (401)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1598
+_ifconv:345  %tmp_911 = call i1 @_ssdm_op_BitSelect.i1.i11.i32(i11 %c18A2, i32 10)
+
+ST_2: tmp_802 (402)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1599
+_ifconv:346  %tmp_802 = zext i11 %c18A2 to i32
+
+ST_2: Lam_bufA3_addr_2 (403)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1599
+_ifconv:347  %Lam_bufA3_addr_2 = getelementptr inbounds [1024 x i16]* @Lam_bufA3, i32 0, i32 %tmp_802
+
+ST_2: Lam_bufA3_load_2 (404)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1599
+_ifconv:348  %Lam_bufA3_load_2 = load i16* %Lam_bufA3_addr_2, align 2
+
+ST_2: tmp_803 (405)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1601
+_ifconv:349  %tmp_803 = xor i11 %c18A2, -1024
+
+ST_2: tmp_1566_cast (406)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1601
+_ifconv:350  %tmp_1566_cast = sext i11 %tmp_803 to i32
+
+ST_2: Lam_bufA2a_addr_2 (407)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1601
+_ifconv:351  %Lam_bufA2a_addr_2 = getelementptr inbounds [1024 x i16]* @Lam_bufA2a, i32 0, i32 %tmp_1566_cast
+
+ST_2: Lam_bufA2a_load_2 (408)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1601
+_ifconv:352  %Lam_bufA2a_load_2 = load i16* %Lam_bufA2a_addr_2, align 2
+
+ST_2: tmp_912 (410)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1602
+_ifconv:354  %tmp_912 = call i2 @_ssdm_op_PartSelect.i2.i12.i32.i32(i12 %d18A2, i32 10, i32 11)
+
+ST_2: icmp35 (411)  [1/1] 0.85ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1602
+_ifconv:355  %icmp35 = icmp eq i2 %tmp_912, 0
+
+ST_2: tmp_804 (412)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1603
+_ifconv:356  %tmp_804 = zext i16 %eTabF_3_write_assig to i32
+
+ST_2: Lam_bufA4a_addr_1 (413)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1603
+_ifconv:357  %Lam_bufA4a_addr_1 = getelementptr inbounds [1024 x i16]* @Lam_bufA4a, i32 0, i32 %tmp_804
+
+ST_2: Lam_bufA4a_load_1 (414)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1603
+_ifconv:358  %Lam_bufA4a_load_1 = load i16* %Lam_bufA4a_addr_1, align 2
+
+ST_2: tmp_805 (415)  [1/1] 1.40ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1605
+_ifconv:359  %tmp_805 = add i12 -1024, %d18A2
+
+ST_2: tmp_1569_cast (416)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1605
+_ifconv:360  %tmp_1569_cast = sext i12 %tmp_805 to i32
+
+ST_2: Lam_bufA6_addr_1 (417)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1605
+_ifconv:361  %Lam_bufA6_addr_1 = getelementptr inbounds [1024 x i16]* @Lam_bufA6, i32 0, i32 %tmp_1569_cast
+
+ST_2: Lam_bufA6_load_1 (418)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1605
+_ifconv:362  %Lam_bufA6_load_1 = load i16* %Lam_bufA6_addr_1, align 2
+
+ST_2: tmp_913 (420)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1606
+_ifconv:364  %tmp_913 = call i2 @_ssdm_op_PartSelect.i2.i12.i32.i32(i12 %e18A2, i32 10, i32 11)
+
+ST_2: icmp36 (421)  [1/1] 0.85ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1606
+_ifconv:365  %icmp36 = icmp eq i2 %tmp_913, 0
+
+ST_2: tmp_806 (422)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1607
+_ifconv:366  %tmp_806 = zext i16 %eTabF_4_write_assig to i32
+
+ST_2: Lam_bufA4b_addr_1 (423)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1607
+_ifconv:367  %Lam_bufA4b_addr_1 = getelementptr inbounds [1024 x i16]* @Lam_bufA4b, i32 0, i32 %tmp_806
+
+ST_2: Lam_bufA4b_load_1 (424)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1607
+_ifconv:368  %Lam_bufA4b_load_1 = load i16* %Lam_bufA4b_addr_1, align 2
+
+ST_2: tmp_807 (425)  [1/1] 1.40ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1609
+_ifconv:369  %tmp_807 = add i12 -1024, %e18A2
+
+ST_2: tmp_1572_cast (426)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1609
+_ifconv:370  %tmp_1572_cast = sext i12 %tmp_807 to i32
+
+ST_2: Lam_bufA6b_addr_2 (427)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1609
+_ifconv:371  %Lam_bufA6b_addr_2 = getelementptr inbounds [1024 x i16]* @Lam_bufA6b, i32 0, i32 %tmp_1572_cast
+
+ST_2: Lam_bufA6b_load_2 (428)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1609
+_ifconv:372  %Lam_bufA6b_load_2 = load i16* %Lam_bufA6b_addr_2, align 2
+
+ST_2: tmp_914 (430)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1610
+_ifconv:374  %tmp_914 = call i1 @_ssdm_op_BitSelect.i1.i11.i32(i11 %f18A2, i32 10)
+
+ST_2: tmp_808 (431)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1611
+_ifconv:375  %tmp_808 = zext i11 %f18A2 to i32
+
+ST_2: Lam_bufA4c_addr_1 (432)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1611
+_ifconv:376  %Lam_bufA4c_addr_1 = getelementptr inbounds [1024 x i16]* @Lam_bufA4c, i32 0, i32 %tmp_808
+
+ST_2: Lam_bufA4c_load_1 (433)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1611
+_ifconv:377  %Lam_bufA4c_load_1 = load i16* %Lam_bufA4c_addr_1, align 2
+
+ST_2: tmp_809 (434)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1613
+_ifconv:378  %tmp_809 = xor i11 %f18A2, -1024
+
+ST_2: tmp_1575_cast (435)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1613
+_ifconv:379  %tmp_1575_cast = sext i11 %tmp_809 to i32
+
+ST_2: Lam_bufA6c_addr_2 (436)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1613
+_ifconv:380  %Lam_bufA6c_addr_2 = getelementptr inbounds [1024 x i16]* @Lam_bufA6c, i32 0, i32 %tmp_1575_cast
+
+ST_2: Lam_bufA6c_load_2 (437)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1613
+_ifconv:381  %Lam_bufA6c_load_2 = load i16* %Lam_bufA6c_addr_2, align 2
+
+ST_2: tmp_810 (439)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1653
+_ifconv:383  %tmp_810 = sext i16 %num_ntA_read to i32
+
+ST_2: SpEtaPrevA_addr (440)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1653
+_ifconv:384  %SpEtaPrevA_addr = getelementptr [2048 x i16]* @SpEtaPrevA, i32 0, i32 %tmp_810
+
+ST_2: SpEtaPrevA_load (441)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1653
+_ifconv:385  %SpEtaPrevA_load = load i16* %SpEtaPrevA_addr, align 2
+
+ST_2: SpEtaPrevAa_addr (444)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1655
+_ifconv:388  %SpEtaPrevAa_addr = getelementptr [2048 x i32]* @SpEtaPrevAa, i32 0, i32 %tmp_810
+
+ST_2: SpEtaPrevAa_load (445)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1655
+_ifconv:389  %SpEtaPrevAa_load = load i32* %SpEtaPrevAa_addr, align 4
+
+ST_2: SpEtaPrevD_addr (450)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1661
+_ifconv:394  %SpEtaPrevD_addr = getelementptr [2048 x i16]* @SpEtaPrevD, i32 0, i32 %tmp_758
+
+ST_2: SpEtaPrevD_load (451)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1661
+_ifconv:395  %SpEtaPrevD_load = load i16* %SpEtaPrevD_addr, align 2
+
+ST_2: SpEtaPrevDa_addr (454)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1663
+_ifconv:398  %SpEtaPrevDa_addr = getelementptr [2048 x i32]* @SpEtaPrevDa, i32 0, i32 %tmp_758
+
+ST_2: SpEtaPrevDa_load (455)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1663
+_ifconv:399  %SpEtaPrevDa_load = load i32* %SpEtaPrevDa_addr, align 4
+
+ST_2: tmp_919 (460)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1686
+_ifconv:404  %tmp_919 = call i2 @_ssdm_op_PartSelect.i2.i12.i32.i32(i12 %a18B, i32 10, i32 11)
+
+ST_2: icmp37 (461)  [1/1] 0.85ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1686
+_ifconv:405  %icmp37 = icmp eq i2 %tmp_919, 0
+
+ST_2: tmp_811 (462)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1687
+_ifconv:406  %tmp_811 = zext i16 %eTabB_0_write_assig to i32
+
+ST_2: Lam_bufB_addr (463)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1687
+_ifconv:407  %Lam_bufB_addr = getelementptr inbounds [1024 x i16]* @Lam_bufB, i32 0, i32 %tmp_811
+
+ST_2: Lam_bufB_load (464)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1687
+_ifconv:408  %Lam_bufB_load = load i16* %Lam_bufB_addr, align 2
+
+ST_2: tmp_812 (465)  [1/1] 1.40ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1689
+_ifconv:409  %tmp_812 = add i12 -1024, %a18B
+
+ST_2: tmp_1591_cast (466)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1689
+_ifconv:410  %tmp_1591_cast = sext i12 %tmp_812 to i32
+
+ST_2: Lam_bufB6_addr (467)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1689
+_ifconv:411  %Lam_bufB6_addr = getelementptr inbounds [1024 x i16]* @Lam_bufB6, i32 0, i32 %tmp_1591_cast
+
+ST_2: Lam_bufB6_load (468)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1689
+_ifconv:412  %Lam_bufB6_load = load i16* %Lam_bufB6_addr, align 2
+
+ST_2: tmp_920 (470)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1690
+_ifconv:414  %tmp_920 = call i2 @_ssdm_op_PartSelect.i2.i12.i32.i32(i12 %b18B, i32 10, i32 11)
+
+ST_2: icmp38 (471)  [1/1] 0.85ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1690
+_ifconv:415  %icmp38 = icmp eq i2 %tmp_920, 0
+
+ST_2: tmp_813 (472)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1691
+_ifconv:416  %tmp_813 = zext i16 %eTabB_1_write_assig to i32
+
+ST_2: Lam_bufB1a_addr (473)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1691
+_ifconv:417  %Lam_bufB1a_addr = getelementptr inbounds [1024 x i16]* @Lam_bufB1a, i32 0, i32 %tmp_813
+
+ST_2: Lam_bufB1a_load (474)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1691
+_ifconv:418  %Lam_bufB1a_load = load i16* %Lam_bufB1a_addr, align 2
+
+ST_2: tmp_814 (475)  [1/1] 1.40ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1693
+_ifconv:419  %tmp_814 = add i12 -1024, %b18B
+
+ST_2: tmp_1594_cast (476)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1693
+_ifconv:420  %tmp_1594_cast = sext i12 %tmp_814 to i32
+
+ST_2: Lam_bufB7a_addr (477)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1693
+_ifconv:421  %Lam_bufB7a_addr = getelementptr inbounds [1024 x i16]* @Lam_bufB7a, i32 0, i32 %tmp_1594_cast
+
+ST_2: Lam_bufB7a_load (478)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1693
+_ifconv:422  %Lam_bufB7a_load = load i16* %Lam_bufB7a_addr, align 2
+
+ST_2: tmp_921 (480)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1694
+_ifconv:424  %tmp_921 = call i1 @_ssdm_op_BitSelect.i1.i11.i32(i11 %c18B, i32 10)
+
+ST_2: tmp_815 (481)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1695
+_ifconv:425  %tmp_815 = zext i11 %c18B to i32
+
+ST_2: Lam_bufB1b_addr (482)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1695
+_ifconv:426  %Lam_bufB1b_addr = getelementptr inbounds [1024 x i16]* @Lam_bufB1b, i32 0, i32 %tmp_815
+
+ST_2: Lam_bufB1b_load (483)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1695
+_ifconv:427  %Lam_bufB1b_load = load i16* %Lam_bufB1b_addr, align 2
+
+ST_2: tmp_816 (484)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1697
+_ifconv:428  %tmp_816 = xor i11 %c18B, -1024
+
+ST_2: tmp_1597_cast (485)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1697
+_ifconv:429  %tmp_1597_cast = sext i11 %tmp_816 to i32
+
+ST_2: Lam_bufB7b_addr (486)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1697
+_ifconv:430  %Lam_bufB7b_addr = getelementptr inbounds [1024 x i16]* @Lam_bufB7b, i32 0, i32 %tmp_1597_cast
+
+ST_2: Lam_bufB7b_load (487)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1697
+_ifconv:431  %Lam_bufB7b_load = load i16* %Lam_bufB7b_addr, align 2
+
+ST_2: tmp_922 (489)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1698
+_ifconv:433  %tmp_922 = call i2 @_ssdm_op_PartSelect.i2.i12.i32.i32(i12 %d18B, i32 10, i32 11)
+
+ST_2: icmp39 (490)  [1/1] 0.85ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1698
+_ifconv:434  %icmp39 = icmp eq i2 %tmp_922, 0
+
+ST_2: tmp_817 (491)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1699
+_ifconv:435  %tmp_817 = zext i16 %eTabB_3_write_assig to i32
+
+ST_2: Lam_bufB3a_addr (492)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1699
+_ifconv:436  %Lam_bufB3a_addr = getelementptr inbounds [1024 x i16]* @Lam_bufB3a, i32 0, i32 %tmp_817
+
+ST_2: Lam_bufB3a_load (493)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1699
+_ifconv:437  %Lam_bufB3a_load = load i16* %Lam_bufB3a_addr, align 2
+
+ST_2: tmp_818 (494)  [1/1] 1.40ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1701
+_ifconv:438  %tmp_818 = add i12 -1024, %d18B
+
+ST_2: tmp_1600_cast (495)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1701
+_ifconv:439  %tmp_1600_cast = sext i12 %tmp_818 to i32
+
+ST_2: Lam_bufB9a_addr (496)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1701
+_ifconv:440  %Lam_bufB9a_addr = getelementptr inbounds [1024 x i16]* @Lam_bufB9a, i32 0, i32 %tmp_1600_cast
+
+ST_2: Lam_bufB9a_load (497)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1701
+_ifconv:441  %Lam_bufB9a_load = load i16* %Lam_bufB9a_addr, align 2
+
+ST_2: tmp_923 (499)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1702
+_ifconv:443  %tmp_923 = call i2 @_ssdm_op_PartSelect.i2.i12.i32.i32(i12 %e18B, i32 10, i32 11)
+
+ST_2: icmp40 (500)  [1/1] 0.85ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1702
+_ifconv:444  %icmp40 = icmp eq i2 %tmp_923, 0
+
+ST_2: tmp_819 (501)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1703
+_ifconv:445  %tmp_819 = zext i16 %eTabB_4_write_assig to i32
+
+ST_2: Lam_bufB3b_addr (502)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1703
+_ifconv:446  %Lam_bufB3b_addr = getelementptr inbounds [1024 x i16]* @Lam_bufB3b, i32 0, i32 %tmp_819
+
+ST_2: Lam_bufB3b_load (503)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1703
+_ifconv:447  %Lam_bufB3b_load = load i16* %Lam_bufB3b_addr, align 2
+
+ST_2: tmp_820 (504)  [1/1] 1.40ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1705
+_ifconv:448  %tmp_820 = add i12 -1024, %e18B
+
+ST_2: tmp_1603_cast (505)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1705
+_ifconv:449  %tmp_1603_cast = sext i12 %tmp_820 to i32
+
+ST_2: Lam_bufB9b_addr (506)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1705
+_ifconv:450  %Lam_bufB9b_addr = getelementptr inbounds [1024 x i16]* @Lam_bufB9b, i32 0, i32 %tmp_1603_cast
+
+ST_2: Lam_bufB9b_load (507)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1705
+_ifconv:451  %Lam_bufB9b_load = load i16* %Lam_bufB9b_addr, align 2
+
+ST_2: tmp_924 (509)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1706
+_ifconv:453  %tmp_924 = call i1 @_ssdm_op_BitSelect.i1.i11.i32(i11 %f18B, i32 10)
+
+ST_2: tmp_821 (510)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1707
+_ifconv:454  %tmp_821 = zext i11 %f18B to i32
+
+ST_2: Lam_bufB4_addr (511)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1707
+_ifconv:455  %Lam_bufB4_addr = getelementptr inbounds [1024 x i16]* @Lam_bufB4, i32 0, i32 %tmp_821
+
+ST_2: Lam_bufB4_load (512)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1707
+_ifconv:456  %Lam_bufB4_load = load i16* %Lam_bufB4_addr, align 2
+
+ST_2: tmp_822 (513)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1709
+_ifconv:457  %tmp_822 = xor i11 %f18B, -1024
+
+ST_2: tmp_1606_cast (514)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1709
+_ifconv:458  %tmp_1606_cast = sext i11 %tmp_822 to i32
+
+ST_2: Lam_bufB10_addr (515)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1709
+_ifconv:459  %Lam_bufB10_addr = getelementptr inbounds [1024 x i16]* @Lam_bufB10, i32 0, i32 %tmp_1606_cast
+
+ST_2: Lam_bufB10_load (516)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1709
+_ifconv:460  %Lam_bufB10_load = load i16* %Lam_bufB10_addr, align 2
+
+ST_2: tmp_925 (518)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1741
+_ifconv:462  %tmp_925 = call i2 @_ssdm_op_PartSelect.i2.i12.i32.i32(i12 %a18B2, i32 10, i32 11)
+
+ST_2: icmp41 (519)  [1/1] 0.85ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1741
+_ifconv:463  %icmp41 = icmp eq i2 %tmp_925, 0
+
+ST_2: tmp_823 (520)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1742
+_ifconv:464  %tmp_823 = zext i16 %eTabG_0_write_assig to i32
+
+ST_2: Lam_bufB_addr_2 (521)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1742
+_ifconv:465  %Lam_bufB_addr_2 = getelementptr inbounds [1024 x i16]* @Lam_bufB, i32 0, i32 %tmp_823
+
+ST_2: Lam_bufB_load_2 (522)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1742
+_ifconv:466  %Lam_bufB_load_2 = load i16* %Lam_bufB_addr_2, align 2
+
+ST_2: tmp_824 (523)  [1/1] 1.40ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1744
+_ifconv:467  %tmp_824 = add i12 -1024, %a18B2
+
+ST_2: tmp_1609_cast (524)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1744
+_ifconv:468  %tmp_1609_cast = sext i12 %tmp_824 to i32
+
+ST_2: Lam_bufB6_addr_2 (525)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1744
+_ifconv:469  %Lam_bufB6_addr_2 = getelementptr inbounds [1024 x i16]* @Lam_bufB6, i32 0, i32 %tmp_1609_cast
+
+ST_2: Lam_bufB6_load_2 (526)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1744
+_ifconv:470  %Lam_bufB6_load_2 = load i16* %Lam_bufB6_addr_2, align 2
+
+ST_2: tmp_926 (528)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1745
+_ifconv:472  %tmp_926 = call i2 @_ssdm_op_PartSelect.i2.i12.i32.i32(i12 %b18B2, i32 10, i32 11)
+
+ST_2: icmp42 (529)  [1/1] 0.85ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1745
+_ifconv:473  %icmp42 = icmp eq i2 %tmp_926, 0
+
+ST_2: tmp_825 (530)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1746
+_ifconv:474  %tmp_825 = zext i16 %eTabG_1_write_assig to i32
+
+ST_2: Lam_bufB1a_addr_2 (531)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1746
+_ifconv:475  %Lam_bufB1a_addr_2 = getelementptr inbounds [1024 x i16]* @Lam_bufB1a, i32 0, i32 %tmp_825
+
+ST_2: Lam_bufB1a_load_2 (532)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1746
+_ifconv:476  %Lam_bufB1a_load_2 = load i16* %Lam_bufB1a_addr_2, align 2
+
+ST_2: tmp_826 (533)  [1/1] 1.40ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1748
+_ifconv:477  %tmp_826 = add i12 -1024, %b18B2
+
+ST_2: tmp_1612_cast (534)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1748
+_ifconv:478  %tmp_1612_cast = sext i12 %tmp_826 to i32
+
+ST_2: Lam_bufB7a_addr_1 (535)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1748
+_ifconv:479  %Lam_bufB7a_addr_1 = getelementptr inbounds [1024 x i16]* @Lam_bufB7a, i32 0, i32 %tmp_1612_cast
+
+ST_2: Lam_bufB7a_load_1 (536)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1748
+_ifconv:480  %Lam_bufB7a_load_1 = load i16* %Lam_bufB7a_addr_1, align 2
+
+ST_2: tmp_927 (538)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1749
+_ifconv:482  %tmp_927 = call i1 @_ssdm_op_BitSelect.i1.i11.i32(i11 %c18B2, i32 10)
+
+ST_2: tmp_827 (539)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1750
+_ifconv:483  %tmp_827 = zext i11 %c18B2 to i32
+
+ST_2: Lam_bufB1b_addr_2 (540)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1750
+_ifconv:484  %Lam_bufB1b_addr_2 = getelementptr inbounds [1024 x i16]* @Lam_bufB1b, i32 0, i32 %tmp_827
+
+ST_2: Lam_bufB1b_load_2 (541)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1750
+_ifconv:485  %Lam_bufB1b_load_2 = load i16* %Lam_bufB1b_addr_2, align 2
+
+ST_2: tmp_828 (542)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1752
+_ifconv:486  %tmp_828 = xor i11 %c18B2, -1024
+
+ST_2: tmp_1615_cast (543)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1752
+_ifconv:487  %tmp_1615_cast = sext i11 %tmp_828 to i32
+
+ST_2: Lam_bufB7b_addr_1 (544)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1752
+_ifconv:488  %Lam_bufB7b_addr_1 = getelementptr inbounds [1024 x i16]* @Lam_bufB7b, i32 0, i32 %tmp_1615_cast
+
+ST_2: Lam_bufB7b_load_1 (545)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1752
+_ifconv:489  %Lam_bufB7b_load_1 = load i16* %Lam_bufB7b_addr_1, align 2
+
+ST_2: tmp_928 (547)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1753
+_ifconv:491  %tmp_928 = call i2 @_ssdm_op_PartSelect.i2.i12.i32.i32(i12 %d18B2, i32 10, i32 11)
+
+ST_2: icmp43 (548)  [1/1] 0.85ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1753
+_ifconv:492  %icmp43 = icmp eq i2 %tmp_928, 0
+
+ST_2: tmp_829 (549)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1754
+_ifconv:493  %tmp_829 = zext i16 %eTabG_3_write_assig to i32
+
+ST_2: Lam_bufB3a_addr_2 (550)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1754
+_ifconv:494  %Lam_bufB3a_addr_2 = getelementptr inbounds [1024 x i16]* @Lam_bufB3a, i32 0, i32 %tmp_829
+
+ST_2: Lam_bufB3a_load_2 (551)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1754
+_ifconv:495  %Lam_bufB3a_load_2 = load i16* %Lam_bufB3a_addr_2, align 2
+
+ST_2: tmp_830 (552)  [1/1] 1.40ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1756
+_ifconv:496  %tmp_830 = add i12 -1024, %d18B2
+
+ST_2: tmp_1618_cast (553)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1756
+_ifconv:497  %tmp_1618_cast = sext i12 %tmp_830 to i32
+
+ST_2: Lam_bufB9a_addr_1 (554)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1756
+_ifconv:498  %Lam_bufB9a_addr_1 = getelementptr inbounds [1024 x i16]* @Lam_bufB9a, i32 0, i32 %tmp_1618_cast
+
+ST_2: Lam_bufB9a_load_1 (555)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1756
+_ifconv:499  %Lam_bufB9a_load_1 = load i16* %Lam_bufB9a_addr_1, align 2
+
+ST_2: tmp_929 (557)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1757
+_ifconv:501  %tmp_929 = call i2 @_ssdm_op_PartSelect.i2.i12.i32.i32(i12 %e18B2, i32 10, i32 11)
+
+ST_2: icmp44 (558)  [1/1] 0.85ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1757
+_ifconv:502  %icmp44 = icmp eq i2 %tmp_929, 0
+
+ST_2: tmp_831 (559)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1758
+_ifconv:503  %tmp_831 = zext i16 %eTabG_4_write_assig to i32
+
+ST_2: Lam_bufB3b_addr_2 (560)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1758
+_ifconv:504  %Lam_bufB3b_addr_2 = getelementptr inbounds [1024 x i16]* @Lam_bufB3b, i32 0, i32 %tmp_831
+
+ST_2: Lam_bufB3b_load_2 (561)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1758
+_ifconv:505  %Lam_bufB3b_load_2 = load i16* %Lam_bufB3b_addr_2, align 2
+
+ST_2: tmp_832 (562)  [1/1] 1.40ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1760
+_ifconv:506  %tmp_832 = add i12 -1024, %e18B2
+
+ST_2: tmp_1621_cast (563)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1760
+_ifconv:507  %tmp_1621_cast = sext i12 %tmp_832 to i32
+
+ST_2: Lam_bufB9b_addr_1 (564)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1760
+_ifconv:508  %Lam_bufB9b_addr_1 = getelementptr inbounds [1024 x i16]* @Lam_bufB9b, i32 0, i32 %tmp_1621_cast
+
+ST_2: Lam_bufB9b_load_1 (565)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1760
+_ifconv:509  %Lam_bufB9b_load_1 = load i16* %Lam_bufB9b_addr_1, align 2
+
+ST_2: tmp_930 (567)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1761
+_ifconv:511  %tmp_930 = call i1 @_ssdm_op_BitSelect.i1.i11.i32(i11 %f18B2, i32 10)
+
+ST_2: tmp_833 (568)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1762
+_ifconv:512  %tmp_833 = zext i11 %f18B2 to i32
+
+ST_2: Lam_bufB4_addr_1 (569)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1762
+_ifconv:513  %Lam_bufB4_addr_1 = getelementptr inbounds [1024 x i16]* @Lam_bufB4, i32 0, i32 %tmp_833
+
+ST_2: Lam_bufB4_load_1 (570)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1762
+_ifconv:514  %Lam_bufB4_load_1 = load i16* %Lam_bufB4_addr_1, align 2
+
+ST_2: tmp_834 (571)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1764
+_ifconv:515  %tmp_834 = xor i11 %f18B2, -1024
+
+ST_2: tmp_1624_cast (572)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1764
+_ifconv:516  %tmp_1624_cast = sext i11 %tmp_834 to i32
+
+ST_2: Lam_bufB10_addr_1 (573)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1764
+_ifconv:517  %Lam_bufB10_addr_1 = getelementptr inbounds [1024 x i16]* @Lam_bufB10, i32 0, i32 %tmp_1624_cast
+
+ST_2: Lam_bufB10_load_1 (574)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1764
+_ifconv:518  %Lam_bufB10_load_1 = load i16* %Lam_bufB10_addr_1, align 2
+
+ST_2: tmp_835 (576)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1806
+_ifconv:520  %tmp_835 = sext i16 %num_ntB_read to i32
+
+ST_2: SpEtaPrevB_addr (577)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1806
+_ifconv:521  %SpEtaPrevB_addr = getelementptr [2048 x i16]* @SpEtaPrevB, i32 0, i32 %tmp_835
+
+ST_2: SpEtaPrevB_load (578)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1806
+_ifconv:522  %SpEtaPrevB_load = load i16* %SpEtaPrevB_addr, align 2
+
+ST_2: SpEtaPrevBa_addr (581)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1808
+_ifconv:525  %SpEtaPrevBa_addr = getelementptr [2048 x i32]* @SpEtaPrevBa, i32 0, i32 %tmp_835
+
+ST_2: SpEtaPrevBa_load (582)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1808
+_ifconv:526  %SpEtaPrevBa_load = load i32* %SpEtaPrevBa_addr, align 4
+
+ST_2: SpEtaPrevE_addr (587)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1814
+_ifconv:531  %SpEtaPrevE_addr = getelementptr [2048 x i16]* @SpEtaPrevE, i32 0, i32 %tmp_758
+
+ST_2: SpEtaPrevE_load (588)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1814
+_ifconv:532  %SpEtaPrevE_load = load i16* %SpEtaPrevE_addr, align 2
+
+ST_2: SpEtaPrevEa_addr (591)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1816
+_ifconv:535  %SpEtaPrevEa_addr = getelementptr [2048 x i32]* @SpEtaPrevEa, i32 0, i32 %tmp_758
+
+ST_2: SpEtaPrevEa_load (592)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1816
+_ifconv:536  %SpEtaPrevEa_load = load i32* %SpEtaPrevEa_addr, align 4
+
+
+ <State 3>: 3.17ns
+ST_3: StgValue_498 (59)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1367
+_ifconv:3  call void (...)* @_ssdm_op_SpecPipeline(i32 -1, i32 1, i32 1, i32 0, [1 x i8]* @p_str) nounwind
+
+ST_3: eTab_2_write_assign (200)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:144  %eTab_2_write_assign = zext i11 %c to i16
+
+ST_3: eTabE_2_write_assig (206)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1361
+_ifconv:150  %eTabE_2_write_assig = zext i11 %f to i16
+
+ST_3: eTabA_2_write_assig (212)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1359
+_ifconv:156  %eTabA_2_write_assig = zext i11 %c18A to i16
+
+ST_3: eTabA_5_write_assig (218)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1359
+_ifconv:162  %eTabA_5_write_assig = zext i11 %f18A to i16
+
+ST_3: eTabF_2_write_assig (224)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1361
+_ifconv:168  %eTabF_2_write_assig = zext i11 %c18A2 to i16
+
+ST_3: eTabF_5_write_assig (230)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1361
+_ifconv:174  %eTabF_5_write_assig = zext i11 %f18A2 to i16
+
+ST_3: eTabB_2_write_assig (236)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1360
+_ifconv:180  %eTabB_2_write_assig = zext i11 %c18B to i16
+
+ST_3: eTabB_5_write_assig (242)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1360
+_ifconv:186  %eTabB_5_write_assig = zext i11 %f18B to i16
+
+ST_3: eTabG_2_write_assig (248)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1362
+_ifconv:192  %eTabG_2_write_assig = zext i11 %c18B2 to i16
+
+ST_3: eTabG_5_write_assig (254)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1362
+_ifconv:198  %eTabG_5_write_assig = zext i11 %f18B2 to i16
+
+ST_3: Lam_buf2_load (259)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1489
+_ifconv:203  %Lam_buf2_load = load i16* %Lam_buf2_addr, align 2
+
+ST_3: Lam_buf8_load (263)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1491
+_ifconv:207  %Lam_buf8_load = load i16* %Lam_buf8_addr, align 2
+
+ST_3: lTab_0_write_assign (264)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:208  %lTab_0_write_assign = select i1 %icmp, i16 %Lam_buf2_load, i16 %Lam_buf8_load
+
+ST_3: Lam_buf4_load (269)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1494
+_ifconv:213  %Lam_buf4_load = load i16* %Lam_buf4_addr, align 2
+
+ST_3: Lam_buf6_load (273)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1496
+_ifconv:217  %Lam_buf6_load = load i16* %Lam_buf6_addr, align 2
+
+ST_3: lTab_1_write_assign (274)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:218  %lTab_1_write_assign = select i1 %icmp16, i16 %Lam_buf4_load, i16 %Lam_buf6_load
+
+ST_3: Lam_buf4a_load (278)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1499
+_ifconv:222  %Lam_buf4a_load = load i16* %Lam_buf4a_addr, align 2
+
+ST_3: Lam_buf6a_load (282)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1501
+_ifconv:226  %Lam_buf6a_load = load i16* %Lam_buf6a_addr, align 2
+
+ST_3: lTab_2_write_assign (283)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:227  %lTab_2_write_assign = select i1 %tmp_897, i16 %Lam_buf6a_load, i16 %Lam_buf4a_load
+
+ST_3: Lam_buf2_load_1 (288)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1504
+_ifconv:232  %Lam_buf2_load_1 = load i16* %Lam_buf2_addr_1, align 2
+
+ST_3: Lam_buf8_load_1 (292)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1506
+_ifconv:236  %Lam_buf8_load_1 = load i16* %Lam_buf8_addr_1, align 2
+
+ST_3: lTabE_0_write_assig (293)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1361
+_ifconv:237  %lTabE_0_write_assig = select i1 %icmp20, i16 %Lam_buf2_load_1, i16 %Lam_buf8_load_1
+
+ST_3: Lam_buf4_load_2 (298)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1509
+_ifconv:242  %Lam_buf4_load_2 = load i16* %Lam_buf4_addr_2, align 2
+
+ST_3: Lam_buf6_load_3 (302)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1511
+_ifconv:246  %Lam_buf6_load_3 = load i16* %Lam_buf6_addr_3, align 2
+
+ST_3: lTabE_1_write_assig (303)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1361
+_ifconv:247  %lTabE_1_write_assig = select i1 %icmp23, i16 %Lam_buf4_load_2, i16 %Lam_buf6_load_3
+
+ST_3: Lam_buf4a_load_1 (307)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1514
+_ifconv:251  %Lam_buf4a_load_1 = load i16* %Lam_buf4a_addr_1, align 2
+
+ST_3: Lam_buf6a_load_2 (311)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1516
+_ifconv:255  %Lam_buf6a_load_2 = load i16* %Lam_buf6a_addr_2, align 2
+
+ST_3: lTabE_2_write_assig (312)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1361
+_ifconv:256  %lTabE_2_write_assig = select i1 %tmp_900, i16 %Lam_buf6a_load_2, i16 %Lam_buf4a_load_1
+
+ST_3: SpEtaPrevC_load (319)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1522
+_ifconv:263  %SpEtaPrevC_load = load i32* %SpEtaPrevC_addr, align 4
+
+ST_3: tmp_902 (320)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1522
+_ifconv:264  %tmp_902 = trunc i32 %SpEtaPrevC_load to i8
+
+ST_3: SpEtaPrevC_two_V_loa (321)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1523
+_ifconv:265  %SpEtaPrevC_two_V_loa = call i8 @_ssdm_op_PartSelect.i8.i32.i32.i32(i32 %SpEtaPrevC_load, i32 8, i32 15)
+
+ST_3: SpEtaPrevC_three_V_l (322)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1524
+_ifconv:266  %SpEtaPrevC_three_V_l = call i8 @_ssdm_op_PartSelect.i8.i32.i32.i32(i32 %SpEtaPrevC_load, i32 16, i32 23)
+
+ST_3: Lam_bufAa_load (327)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1537
+_ifconv:271  %Lam_bufAa_load = load i16* %Lam_bufAa_addr, align 2
+
+ST_3: Lam_bufAb_load (331)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1539
+_ifconv:275  %Lam_bufAb_load = load i16* %Lam_bufAb_addr, align 2
+
+ST_3: lTabA_0_write_assig (332)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1359
+_ifconv:276  %lTabA_0_write_assig = select i1 %icmp29, i16 %Lam_bufAa_load, i16 %Lam_bufAb_load
+
+ST_3: Lam_bufA1_load (337)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1541
+_ifconv:281  %Lam_bufA1_load = load i16* %Lam_bufA1_addr, align 2
+
+ST_3: Lam_bufAc_load (341)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1543
+_ifconv:285  %Lam_bufAc_load = load i16* %Lam_bufAc_addr, align 2
+
+ST_3: lTabA_1_write_assig (342)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1359
+_ifconv:286  %lTabA_1_write_assig = select i1 %icmp30, i16 %Lam_bufA1_load, i16 %Lam_bufAc_load
+
+ST_3: Lam_bufA3_load (346)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1545
+_ifconv:290  %Lam_bufA3_load = load i16* %Lam_bufA3_addr, align 2
+
+ST_3: Lam_bufA2a_load (350)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1547
+_ifconv:294  %Lam_bufA2a_load = load i16* %Lam_bufA2a_addr, align 2
+
+ST_3: lTabA_2_write_assig (351)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1359
+_ifconv:295  %lTabA_2_write_assig = select i1 %tmp_905, i16 %Lam_bufA2a_load, i16 %Lam_bufA3_load
+
+ST_3: Lam_bufA4a_load (356)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1549
+_ifconv:300  %Lam_bufA4a_load = load i16* %Lam_bufA4a_addr, align 2
+
+ST_3: Lam_bufA6_load (360)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1551
+_ifconv:304  %Lam_bufA6_load = load i16* %Lam_bufA6_addr, align 2
+
+ST_3: lTabA_3_write_assig (361)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1359
+_ifconv:305  %lTabA_3_write_assig = select i1 %icmp31, i16 %Lam_bufA4a_load, i16 %Lam_bufA6_load
+
+ST_3: Lam_bufA4b_load (366)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1553
+_ifconv:310  %Lam_bufA4b_load = load i16* %Lam_bufA4b_addr, align 2
+
+ST_3: Lam_bufA6b_load (370)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1555
+_ifconv:314  %Lam_bufA6b_load = load i16* %Lam_bufA6b_addr, align 2
+
+ST_3: lTabA_4_write_assig (371)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1359
+_ifconv:315  %lTabA_4_write_assig = select i1 %icmp32, i16 %Lam_bufA4b_load, i16 %Lam_bufA6b_load
+
+ST_3: Lam_bufA4c_load (375)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1557
+_ifconv:319  %Lam_bufA4c_load = load i16* %Lam_bufA4c_addr, align 2
+
+ST_3: Lam_bufA6c_load (379)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1559
+_ifconv:323  %Lam_bufA6c_load = load i16* %Lam_bufA6c_addr, align 2
+
+ST_3: lTabA_5_write_assig (380)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1359
+_ifconv:324  %lTabA_5_write_assig = select i1 %tmp_908, i16 %Lam_bufA6c_load, i16 %Lam_bufA4c_load
+
+ST_3: Lam_bufAa_load_2 (385)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1591
+_ifconv:329  %Lam_bufAa_load_2 = load i16* %Lam_bufAa_addr_2, align 2
+
+ST_3: Lam_bufAb_load_2 (389)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1593
+_ifconv:333  %Lam_bufAb_load_2 = load i16* %Lam_bufAb_addr_2, align 2
+
+ST_3: lTabF_0_write_assig (390)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1361
+_ifconv:334  %lTabF_0_write_assig = select i1 %icmp33, i16 %Lam_bufAa_load_2, i16 %Lam_bufAb_load_2
+
+ST_3: Lam_bufA1_load_2 (395)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1595
+_ifconv:339  %Lam_bufA1_load_2 = load i16* %Lam_bufA1_addr_2, align 2
+
+ST_3: Lam_bufAc_load_2 (399)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1597
+_ifconv:343  %Lam_bufAc_load_2 = load i16* %Lam_bufAc_addr_2, align 2
+
+ST_3: lTabF_1_write_assig (400)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1361
+_ifconv:344  %lTabF_1_write_assig = select i1 %icmp34, i16 %Lam_bufA1_load_2, i16 %Lam_bufAc_load_2
+
+ST_3: Lam_bufA3_load_2 (404)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1599
+_ifconv:348  %Lam_bufA3_load_2 = load i16* %Lam_bufA3_addr_2, align 2
+
+ST_3: Lam_bufA2a_load_2 (408)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1601
+_ifconv:352  %Lam_bufA2a_load_2 = load i16* %Lam_bufA2a_addr_2, align 2
+
+ST_3: lTabF_2_write_assig (409)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1361
+_ifconv:353  %lTabF_2_write_assig = select i1 %tmp_911, i16 %Lam_bufA2a_load_2, i16 %Lam_bufA3_load_2
+
+ST_3: Lam_bufA4a_load_1 (414)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1603
+_ifconv:358  %Lam_bufA4a_load_1 = load i16* %Lam_bufA4a_addr_1, align 2
+
+ST_3: Lam_bufA6_load_1 (418)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1605
+_ifconv:362  %Lam_bufA6_load_1 = load i16* %Lam_bufA6_addr_1, align 2
+
+ST_3: lTabF_3_write_assig (419)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1361
+_ifconv:363  %lTabF_3_write_assig = select i1 %icmp35, i16 %Lam_bufA4a_load_1, i16 %Lam_bufA6_load_1
+
+ST_3: Lam_bufA4b_load_1 (424)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1607
+_ifconv:368  %Lam_bufA4b_load_1 = load i16* %Lam_bufA4b_addr_1, align 2
+
+ST_3: Lam_bufA6b_load_2 (428)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1609
+_ifconv:372  %Lam_bufA6b_load_2 = load i16* %Lam_bufA6b_addr_2, align 2
+
+ST_3: lTabF_4_write_assig (429)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1361
+_ifconv:373  %lTabF_4_write_assig = select i1 %icmp36, i16 %Lam_bufA4b_load_1, i16 %Lam_bufA6b_load_2
+
+ST_3: Lam_bufA4c_load_1 (433)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1611
+_ifconv:377  %Lam_bufA4c_load_1 = load i16* %Lam_bufA4c_addr_1, align 2
+
+ST_3: Lam_bufA6c_load_2 (437)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1613
+_ifconv:381  %Lam_bufA6c_load_2 = load i16* %Lam_bufA6c_addr_2, align 2
+
+ST_3: lTabF_5_write_assig (438)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1361
+_ifconv:382  %lTabF_5_write_assig = select i1 %tmp_914, i16 %Lam_bufA6c_load_2, i16 %Lam_bufA4c_load_1
+
+ST_3: SpEtaPrevA_load (441)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1653
+_ifconv:385  %SpEtaPrevA_load = load i16* %SpEtaPrevA_addr, align 2
+
+ST_3: tmp_915 (442)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1653
+_ifconv:386  %tmp_915 = trunc i16 %SpEtaPrevA_load to i8
+
+ST_3: SpEtaPrevA_two_V_loa (443)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1654
+_ifconv:387  %SpEtaPrevA_two_V_loa = call i8 @_ssdm_op_PartSelect.i8.i16.i32.i32(i16 %SpEtaPrevA_load, i32 8, i32 15)
+
+ST_3: SpEtaPrevAa_load (445)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1655
+_ifconv:389  %SpEtaPrevAa_load = load i32* %SpEtaPrevAa_addr, align 4
+
+ST_3: tmp_916 (446)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1655
+_ifconv:390  %tmp_916 = trunc i32 %SpEtaPrevAa_load to i8
+
+ST_3: SpEtaPrevAa_four_V_l (447)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1656
+_ifconv:391  %SpEtaPrevAa_four_V_l = call i8 @_ssdm_op_PartSelect.i8.i32.i32.i32(i32 %SpEtaPrevAa_load, i32 8, i32 15)
+
+ST_3: SpEtaPrevAa_five_V_l (448)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1657
+_ifconv:392  %SpEtaPrevAa_five_V_l = call i8 @_ssdm_op_PartSelect.i8.i32.i32.i32(i32 %SpEtaPrevAa_load, i32 16, i32 23)
+
+ST_3: SpEtaPrevAa_six_V_lo (449)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1658
+_ifconv:393  %SpEtaPrevAa_six_V_lo = call i8 @_ssdm_op_PartSelect.i8.i32.i32.i32(i32 %SpEtaPrevAa_load, i32 24, i32 31)
+
+ST_3: SpEtaPrevD_load (451)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1661
+_ifconv:395  %SpEtaPrevD_load = load i16* %SpEtaPrevD_addr, align 2
+
+ST_3: tmp_917 (452)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1661
+_ifconv:396  %tmp_917 = trunc i16 %SpEtaPrevD_load to i8
+
+ST_3: SpEtaPrevD_two_V_loa (453)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1662
+_ifconv:397  %SpEtaPrevD_two_V_loa = call i8 @_ssdm_op_PartSelect.i8.i16.i32.i32(i16 %SpEtaPrevD_load, i32 8, i32 15)
+
+ST_3: SpEtaPrevDa_load (455)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1663
+_ifconv:399  %SpEtaPrevDa_load = load i32* %SpEtaPrevDa_addr, align 4
+
+ST_3: tmp_918 (456)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1663
+_ifconv:400  %tmp_918 = trunc i32 %SpEtaPrevDa_load to i8
+
+ST_3: SpEtaPrevDa_four_V_l (457)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1664
+_ifconv:401  %SpEtaPrevDa_four_V_l = call i8 @_ssdm_op_PartSelect.i8.i32.i32.i32(i32 %SpEtaPrevDa_load, i32 8, i32 15)
+
+ST_3: SpEtaPrevDa_five_V_l (458)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1665
+_ifconv:402  %SpEtaPrevDa_five_V_l = call i8 @_ssdm_op_PartSelect.i8.i32.i32.i32(i32 %SpEtaPrevDa_load, i32 16, i32 23)
+
+ST_3: SpEtaPrevDa_six_V_lo (459)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1666
+_ifconv:403  %SpEtaPrevDa_six_V_lo = call i8 @_ssdm_op_PartSelect.i8.i32.i32.i32(i32 %SpEtaPrevDa_load, i32 24, i32 31)
+
+ST_3: Lam_bufB_load (464)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1687
+_ifconv:408  %Lam_bufB_load = load i16* %Lam_bufB_addr, align 2
+
+ST_3: Lam_bufB6_load (468)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1689
+_ifconv:412  %Lam_bufB6_load = load i16* %Lam_bufB6_addr, align 2
+
+ST_3: lTabB_0_write_assig (469)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1360
+_ifconv:413  %lTabB_0_write_assig = select i1 %icmp37, i16 %Lam_bufB_load, i16 %Lam_bufB6_load
+
+ST_3: Lam_bufB1a_load (474)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1691
+_ifconv:418  %Lam_bufB1a_load = load i16* %Lam_bufB1a_addr, align 2
+
+ST_3: Lam_bufB7a_load (478)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1693
+_ifconv:422  %Lam_bufB7a_load = load i16* %Lam_bufB7a_addr, align 2
+
+ST_3: lTabB_1_write_assig (479)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1360
+_ifconv:423  %lTabB_1_write_assig = select i1 %icmp38, i16 %Lam_bufB1a_load, i16 %Lam_bufB7a_load
+
+ST_3: Lam_bufB1b_load (483)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1695
+_ifconv:427  %Lam_bufB1b_load = load i16* %Lam_bufB1b_addr, align 2
+
+ST_3: Lam_bufB7b_load (487)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1697
+_ifconv:431  %Lam_bufB7b_load = load i16* %Lam_bufB7b_addr, align 2
+
+ST_3: lTabB_2_write_assig (488)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1360
+_ifconv:432  %lTabB_2_write_assig = select i1 %tmp_921, i16 %Lam_bufB7b_load, i16 %Lam_bufB1b_load
+
+ST_3: Lam_bufB3a_load (493)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1699
+_ifconv:437  %Lam_bufB3a_load = load i16* %Lam_bufB3a_addr, align 2
+
+ST_3: Lam_bufB9a_load (497)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1701
+_ifconv:441  %Lam_bufB9a_load = load i16* %Lam_bufB9a_addr, align 2
+
+ST_3: lTabB_3_write_assig (498)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1360
+_ifconv:442  %lTabB_3_write_assig = select i1 %icmp39, i16 %Lam_bufB3a_load, i16 %Lam_bufB9a_load
+
+ST_3: Lam_bufB3b_load (503)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1703
+_ifconv:447  %Lam_bufB3b_load = load i16* %Lam_bufB3b_addr, align 2
+
+ST_3: Lam_bufB9b_load (507)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1705
+_ifconv:451  %Lam_bufB9b_load = load i16* %Lam_bufB9b_addr, align 2
+
+ST_3: lTabB_4_write_assig (508)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1360
+_ifconv:452  %lTabB_4_write_assig = select i1 %icmp40, i16 %Lam_bufB3b_load, i16 %Lam_bufB9b_load
+
+ST_3: Lam_bufB4_load (512)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1707
+_ifconv:456  %Lam_bufB4_load = load i16* %Lam_bufB4_addr, align 2
+
+ST_3: Lam_bufB10_load (516)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1709
+_ifconv:460  %Lam_bufB10_load = load i16* %Lam_bufB10_addr, align 2
+
+ST_3: lTabB_5_write_assig (517)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1360
+_ifconv:461  %lTabB_5_write_assig = select i1 %tmp_924, i16 %Lam_bufB10_load, i16 %Lam_bufB4_load
+
+ST_3: Lam_bufB_load_2 (522)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1742
+_ifconv:466  %Lam_bufB_load_2 = load i16* %Lam_bufB_addr_2, align 2
+
+ST_3: Lam_bufB6_load_2 (526)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1744
+_ifconv:470  %Lam_bufB6_load_2 = load i16* %Lam_bufB6_addr_2, align 2
+
+ST_3: lTabG_0_write_assig (527)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1362
+_ifconv:471  %lTabG_0_write_assig = select i1 %icmp41, i16 %Lam_bufB_load_2, i16 %Lam_bufB6_load_2
+
+ST_3: Lam_bufB1a_load_2 (532)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1746
+_ifconv:476  %Lam_bufB1a_load_2 = load i16* %Lam_bufB1a_addr_2, align 2
+
+ST_3: Lam_bufB7a_load_1 (536)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1748
+_ifconv:480  %Lam_bufB7a_load_1 = load i16* %Lam_bufB7a_addr_1, align 2
+
+ST_3: lTabG_1_write_assig (537)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1362
+_ifconv:481  %lTabG_1_write_assig = select i1 %icmp42, i16 %Lam_bufB1a_load_2, i16 %Lam_bufB7a_load_1
+
+ST_3: Lam_bufB1b_load_2 (541)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1750
+_ifconv:485  %Lam_bufB1b_load_2 = load i16* %Lam_bufB1b_addr_2, align 2
+
+ST_3: Lam_bufB7b_load_1 (545)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1752
+_ifconv:489  %Lam_bufB7b_load_1 = load i16* %Lam_bufB7b_addr_1, align 2
+
+ST_3: lTabG_2_write_assig (546)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1362
+_ifconv:490  %lTabG_2_write_assig = select i1 %tmp_927, i16 %Lam_bufB7b_load_1, i16 %Lam_bufB1b_load_2
+
+ST_3: Lam_bufB3a_load_2 (551)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1754
+_ifconv:495  %Lam_bufB3a_load_2 = load i16* %Lam_bufB3a_addr_2, align 2
+
+ST_3: Lam_bufB9a_load_1 (555)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1756
+_ifconv:499  %Lam_bufB9a_load_1 = load i16* %Lam_bufB9a_addr_1, align 2
+
+ST_3: lTabG_3_write_assig (556)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1362
+_ifconv:500  %lTabG_3_write_assig = select i1 %icmp43, i16 %Lam_bufB3a_load_2, i16 %Lam_bufB9a_load_1
+
+ST_3: Lam_bufB3b_load_2 (561)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1758
+_ifconv:505  %Lam_bufB3b_load_2 = load i16* %Lam_bufB3b_addr_2, align 2
+
+ST_3: Lam_bufB9b_load_1 (565)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1760
+_ifconv:509  %Lam_bufB9b_load_1 = load i16* %Lam_bufB9b_addr_1, align 2
+
+ST_3: lTabG_4_write_assig (566)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1362
+_ifconv:510  %lTabG_4_write_assig = select i1 %icmp44, i16 %Lam_bufB3b_load_2, i16 %Lam_bufB9b_load_1
+
+ST_3: Lam_bufB4_load_1 (570)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1762
+_ifconv:514  %Lam_bufB4_load_1 = load i16* %Lam_bufB4_addr_1, align 2
+
+ST_3: Lam_bufB10_load_1 (574)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1764
+_ifconv:518  %Lam_bufB10_load_1 = load i16* %Lam_bufB10_addr_1, align 2
+
+ST_3: lTabG_5_write_assig (575)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1362
+_ifconv:519  %lTabG_5_write_assig = select i1 %tmp_930, i16 %Lam_bufB10_load_1, i16 %Lam_bufB4_load_1
+
+ST_3: SpEtaPrevB_load (578)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1806
+_ifconv:522  %SpEtaPrevB_load = load i16* %SpEtaPrevB_addr, align 2
+
+ST_3: tmp_931 (579)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1806
+_ifconv:523  %tmp_931 = trunc i16 %SpEtaPrevB_load to i8
+
+ST_3: SpEtaPrevB_two_V_loa (580)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1807
+_ifconv:524  %SpEtaPrevB_two_V_loa = call i8 @_ssdm_op_PartSelect.i8.i16.i32.i32(i16 %SpEtaPrevB_load, i32 8, i32 15)
+
+ST_3: SpEtaPrevBa_load (582)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1808
+_ifconv:526  %SpEtaPrevBa_load = load i32* %SpEtaPrevBa_addr, align 4
+
+ST_3: tmp_932 (583)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1808
+_ifconv:527  %tmp_932 = trunc i32 %SpEtaPrevBa_load to i8
+
+ST_3: SpEtaPrevBa_four_V_l (584)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1809
+_ifconv:528  %SpEtaPrevBa_four_V_l = call i8 @_ssdm_op_PartSelect.i8.i32.i32.i32(i32 %SpEtaPrevBa_load, i32 8, i32 15)
+
+ST_3: SpEtaPrevBa_five_V_l (585)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1810
+_ifconv:529  %SpEtaPrevBa_five_V_l = call i8 @_ssdm_op_PartSelect.i8.i32.i32.i32(i32 %SpEtaPrevBa_load, i32 16, i32 23)
+
+ST_3: SpEtaPrevBa_six_V_lo (586)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1811
+_ifconv:530  %SpEtaPrevBa_six_V_lo = call i8 @_ssdm_op_PartSelect.i8.i32.i32.i32(i32 %SpEtaPrevBa_load, i32 24, i32 31)
+
+ST_3: SpEtaPrevE_load (588)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1814
+_ifconv:532  %SpEtaPrevE_load = load i16* %SpEtaPrevE_addr, align 2
+
+ST_3: tmp_933 (589)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1814
+_ifconv:533  %tmp_933 = trunc i16 %SpEtaPrevE_load to i8
+
+ST_3: SpEtaPrevE_two_V_loa (590)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1815
+_ifconv:534  %SpEtaPrevE_two_V_loa = call i8 @_ssdm_op_PartSelect.i8.i16.i32.i32(i16 %SpEtaPrevE_load, i32 8, i32 15)
+
+ST_3: SpEtaPrevEa_load (592)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1816
+_ifconv:536  %SpEtaPrevEa_load = load i32* %SpEtaPrevEa_addr, align 4
+
+ST_3: tmp_934 (593)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1816
+_ifconv:537  %tmp_934 = trunc i32 %SpEtaPrevEa_load to i8
+
+ST_3: SpEtaPrevEa_four_V_l (594)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1817
+_ifconv:538  %SpEtaPrevEa_four_V_l = call i8 @_ssdm_op_PartSelect.i8.i32.i32.i32(i32 %SpEtaPrevEa_load, i32 8, i32 15)
+
+ST_3: SpEtaPrevEa_five_V_l (595)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1818
+_ifconv:539  %SpEtaPrevEa_five_V_l = call i8 @_ssdm_op_PartSelect.i8.i32.i32.i32(i32 %SpEtaPrevEa_load, i32 16, i32 23)
+
+ST_3: SpEtaPrevEa_six_V_lo (596)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1819
+_ifconv:540  %SpEtaPrevEa_six_V_lo = call i8 @_ssdm_op_PartSelect.i8.i32.i32.i32(i32 %SpEtaPrevEa_load, i32 24, i32 31)
+
+ST_3: nIterationCounter_lo (597)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:541  %nIterationCounter_lo = load i16* @nIterationCounter, align 2
+
+ST_3: tmp_836 (598)  [1/1] 1.55ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:542  %tmp_836 = icmp eq i16 %nIterationCounter_lo, 0
+
+ST_3: pTab_2_write_assign (599)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:543  %pTab_2_write_assign = select i1 %tmp_836, i8 0, i8 %SpEtaPrev_three_V_lo
+
+ST_3: pTab_2_write_assign_2 (600)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:544  %pTab_2_write_assign_2 = sext i8 %pTab_2_write_assign to i16
+
+ST_3: pTab_1_write_assign (601)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:545  %pTab_1_write_assign = select i1 %tmp_836, i8 0, i8 %SpEtaPrev_two_V_load
+
+ST_3: pTab_1_write_assign_2 (602)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:546  %pTab_1_write_assign_2 = sext i8 %pTab_1_write_assign to i16
+
+ST_3: pTab_0_write_assign (603)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:547  %pTab_0_write_assign = select i1 %tmp_836, i8 0, i8 %tmp_901
+
+ST_3: pTab_0_write_assign_2 (604)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:548  %pTab_0_write_assign_2 = sext i8 %pTab_0_write_assign to i16
+
+ST_3: pTabA_0_write_assig (605)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:549  %pTabA_0_write_assig = select i1 %tmp_836, i8 0, i8 %tmp_915
+
+ST_3: pTabA_0_write_assig_2 (606)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:550  %pTabA_0_write_assig_2 = sext i8 %pTabA_0_write_assig to i16
+
+ST_3: pTabA_1_write_assig (607)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:551  %pTabA_1_write_assig = select i1 %tmp_836, i8 0, i8 %SpEtaPrevA_two_V_loa
+
+ST_3: pTabA_1_write_assig_2 (608)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:552  %pTabA_1_write_assig_2 = sext i8 %pTabA_1_write_assig to i16
+
+ST_3: pTabA_2_write_assig (609)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:553  %pTabA_2_write_assig = select i1 %tmp_836, i8 0, i8 %tmp_916
+
+ST_3: pTabA_2_write_assig_2 (610)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:554  %pTabA_2_write_assig_2 = sext i8 %pTabA_2_write_assig to i16
+
+ST_3: pTabA_3_write_assig (611)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:555  %pTabA_3_write_assig = select i1 %tmp_836, i8 0, i8 %SpEtaPrevAa_four_V_l
+
+ST_3: pTabA_3_write_assig_2 (612)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:556  %pTabA_3_write_assig_2 = sext i8 %pTabA_3_write_assig to i16
+
+ST_3: pTabA_4_write_assig (613)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:557  %pTabA_4_write_assig = select i1 %tmp_836, i8 0, i8 %SpEtaPrevAa_five_V_l
+
+ST_3: pTabA_4_write_assig_2 (614)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:558  %pTabA_4_write_assig_2 = sext i8 %pTabA_4_write_assig to i16
+
+ST_3: pTabA_5_write_assig (615)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:559  %pTabA_5_write_assig = select i1 %tmp_836, i8 0, i8 %SpEtaPrevAa_six_V_lo
+
+ST_3: pTabA_5_write_assig_2 (616)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:560  %pTabA_5_write_assig_2 = sext i8 %pTabA_5_write_assig to i16
+
+ST_3: pTabB_0_write_assig (617)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:561  %pTabB_0_write_assig = select i1 %tmp_836, i8 0, i8 %tmp_931
+
+ST_3: pTabB_0_write_assig_2 (618)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:562  %pTabB_0_write_assig_2 = sext i8 %pTabB_0_write_assig to i16
+
+ST_3: pTabB_1_write_assig (619)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:563  %pTabB_1_write_assig = select i1 %tmp_836, i8 0, i8 %SpEtaPrevB_two_V_loa
+
+ST_3: pTabB_1_write_assig_2 (620)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:564  %pTabB_1_write_assig_2 = sext i8 %pTabB_1_write_assig to i16
+
+ST_3: pTabB_2_write_assig (621)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:565  %pTabB_2_write_assig = select i1 %tmp_836, i8 0, i8 %tmp_932
+
+ST_3: pTabB_2_write_assig_2 (622)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:566  %pTabB_2_write_assig_2 = sext i8 %pTabB_2_write_assig to i16
+
+ST_3: pTabB_3_write_assig (623)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:567  %pTabB_3_write_assig = select i1 %tmp_836, i8 0, i8 %SpEtaPrevBa_four_V_l
+
+ST_3: pTabB_3_write_assig_2 (624)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:568  %pTabB_3_write_assig_2 = sext i8 %pTabB_3_write_assig to i16
+
+ST_3: pTabB_4_write_assig (625)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:569  %pTabB_4_write_assig = select i1 %tmp_836, i8 0, i8 %SpEtaPrevBa_five_V_l
+
+ST_3: pTabB_4_write_assig_2 (626)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:570  %pTabB_4_write_assig_2 = sext i8 %pTabB_4_write_assig to i16
+
+ST_3: pTabB_5_write_assig (627)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:571  %pTabB_5_write_assig = select i1 %tmp_836, i8 0, i8 %SpEtaPrevBa_six_V_lo
+
+ST_3: pTabB_5_write_assig_2 (628)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:572  %pTabB_5_write_assig_2 = sext i8 %pTabB_5_write_assig to i16
+
+ST_3: pTabE_2_write_assig (629)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:573  %pTabE_2_write_assig = select i1 %tmp_836, i8 0, i8 %SpEtaPrevC_three_V_l
+
+ST_3: pTabE_2_write_assig_2 (630)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:574  %pTabE_2_write_assig_2 = sext i8 %pTabE_2_write_assig to i16
+
+ST_3: pTabE_1_write_assig (631)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:575  %pTabE_1_write_assig = select i1 %tmp_836, i8 0, i8 %SpEtaPrevC_two_V_loa
+
+ST_3: pTabE_1_write_assig_2 (632)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:576  %pTabE_1_write_assig_2 = sext i8 %pTabE_1_write_assig to i16
+
+ST_3: pTabE_0_write_assig (633)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:577  %pTabE_0_write_assig = select i1 %tmp_836, i8 0, i8 %tmp_902
+
+ST_3: pTabE_0_write_assig_2 (634)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:578  %pTabE_0_write_assig_2 = sext i8 %pTabE_0_write_assig to i16
+
+ST_3: pTabF_5_write_assig (635)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:579  %pTabF_5_write_assig = select i1 %tmp_836, i8 0, i8 %SpEtaPrevDa_six_V_lo
+
+ST_3: pTabF_5_write_assig_2 (636)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:580  %pTabF_5_write_assig_2 = sext i8 %pTabF_5_write_assig to i16
+
+ST_3: pTabF_4_write_assig (637)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:581  %pTabF_4_write_assig = select i1 %tmp_836, i8 0, i8 %SpEtaPrevDa_five_V_l
+
+ST_3: pTabF_4_write_assig_2 (638)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:582  %pTabF_4_write_assig_2 = sext i8 %pTabF_4_write_assig to i16
+
+ST_3: pTabF_3_write_assig (639)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:583  %pTabF_3_write_assig = select i1 %tmp_836, i8 0, i8 %SpEtaPrevDa_four_V_l
+
+ST_3: pTabF_3_write_assig_2 (640)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:584  %pTabF_3_write_assig_2 = sext i8 %pTabF_3_write_assig to i16
+
+ST_3: pTabF_2_write_assig (641)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:585  %pTabF_2_write_assig = select i1 %tmp_836, i8 0, i8 %tmp_918
+
+ST_3: pTabF_2_write_assig_2 (642)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:586  %pTabF_2_write_assig_2 = sext i8 %pTabF_2_write_assig to i16
+
+ST_3: pTabF_1_write_assig (643)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:587  %pTabF_1_write_assig = select i1 %tmp_836, i8 0, i8 %SpEtaPrevD_two_V_loa
+
+ST_3: pTabF_1_write_assig_2 (644)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:588  %pTabF_1_write_assig_2 = sext i8 %pTabF_1_write_assig to i16
+
+ST_3: pTabF_0_write_assig (645)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:589  %pTabF_0_write_assig = select i1 %tmp_836, i8 0, i8 %tmp_917
+
+ST_3: pTabF_0_write_assig_2 (646)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:590  %pTabF_0_write_assig_2 = sext i8 %pTabF_0_write_assig to i16
+
+ST_3: pTabG_0_write_assig (647)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:591  %pTabG_0_write_assig = select i1 %tmp_836, i8 0, i8 %tmp_933
+
+ST_3: pTabG_0_write_assig_2 (648)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:592  %pTabG_0_write_assig_2 = sext i8 %pTabG_0_write_assig to i16
+
+ST_3: pTabG_1_write_assig (649)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:593  %pTabG_1_write_assig = select i1 %tmp_836, i8 0, i8 %SpEtaPrevE_two_V_loa
+
+ST_3: pTabG_1_write_assig_2 (650)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:594  %pTabG_1_write_assig_2 = sext i8 %pTabG_1_write_assig to i16
+
+ST_3: pTabG_2_write_assig (651)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:595  %pTabG_2_write_assig = select i1 %tmp_836, i8 0, i8 %tmp_934
+
+ST_3: pTabG_2_write_assig_2 (652)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:596  %pTabG_2_write_assig_2 = sext i8 %pTabG_2_write_assig to i16
+
+ST_3: pTabG_3_write_assig (653)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:597  %pTabG_3_write_assig = select i1 %tmp_836, i8 0, i8 %SpEtaPrevEa_four_V_l
+
+ST_3: pTabG_3_write_assig_2 (654)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:598  %pTabG_3_write_assig_2 = sext i8 %pTabG_3_write_assig to i16
+
+ST_3: pTabG_4_write_assig (655)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:599  %pTabG_4_write_assig = select i1 %tmp_836, i8 0, i8 %SpEtaPrevEa_five_V_l
+
+ST_3: pTabG_4_write_assig_2 (656)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:600  %pTabG_4_write_assig_2 = sext i8 %pTabG_4_write_assig to i16
+
+ST_3: pTabG_5_write_assig (657)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:601  %pTabG_5_write_assig = select i1 %tmp_836, i8 0, i8 %SpEtaPrevEa_six_V_lo
+
+ST_3: pTabG_5_write_assig_2 (658)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1822
+_ifconv:602  %pTabG_5_write_assig_2 = sext i8 %pTabG_5_write_assig to i16
+
+ST_3: newret (659)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:603  %newret = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } undef, i16 %eTab_0_write_assign, 0
+
+ST_3: newret2 (660)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:604  %newret2 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret, i16 %eTab_1_write_assign, 1
+
+ST_3: newret4 (661)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:605  %newret4 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret2, i16 %eTab_2_write_assign, 2
+
+ST_3: newret6 (662)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:606  %newret6 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret4, i16 %lTab_0_write_assign, 3
+
+ST_3: newret8 (663)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:607  %newret8 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret6, i16 %lTab_1_write_assign, 4
+
+ST_3: newret10 (664)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:608  %newret10 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret8, i16 %lTab_2_write_assign, 5
+
+ST_3: newret12 (665)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:609  %newret12 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret10, i16 %pTab_0_write_assign_2, 6
+
+ST_3: newret14 (666)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:610  %newret14 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret12, i16 %pTab_1_write_assign_2, 7
+
+ST_3: newret16 (667)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:611  %newret16 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret14, i16 %pTab_2_write_assign_2, 8
+
+ST_3: newret18 (668)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:612  %newret18 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret16, i16 %eTabA_0_write_assig, 9
+
+ST_3: newret20 (669)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:613  %newret20 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret18, i16 %eTabA_1_write_assig, 10
+
+ST_3: newret22 (670)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:614  %newret22 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret20, i16 %eTabA_2_write_assig, 11
+
+ST_3: newret24 (671)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:615  %newret24 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret22, i16 %eTabA_3_write_assig, 12
+
+ST_3: newret26 (672)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:616  %newret26 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret24, i16 %eTabA_4_write_assig, 13
+
+ST_3: newret28 (673)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:617  %newret28 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret26, i16 %eTabA_5_write_assig, 14
+
+ST_3: newret30 (674)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:618  %newret30 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret28, i16 %lTabA_0_write_assig, 15
+
+ST_3: newret32 (675)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:619  %newret32 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret30, i16 %lTabA_1_write_assig, 16
+
+ST_3: newret34 (676)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:620  %newret34 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret32, i16 %lTabA_2_write_assig, 17
+
+ST_3: newret36 (677)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:621  %newret36 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret34, i16 %lTabA_3_write_assig, 18
+
+ST_3: newret38 (678)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:622  %newret38 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret36, i16 %lTabA_4_write_assig, 19
+
+ST_3: newret40 (679)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:623  %newret40 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret38, i16 %lTabA_5_write_assig, 20
+
+ST_3: newret42 (680)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:624  %newret42 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret40, i16 %pTabA_0_write_assig_2, 21
+
+ST_3: newret44 (681)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:625  %newret44 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret42, i16 %pTabA_1_write_assig_2, 22
+
+ST_3: newret46 (682)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:626  %newret46 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret44, i16 %pTabA_2_write_assig_2, 23
+
+ST_3: newret48 (683)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:627  %newret48 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret46, i16 %pTabA_3_write_assig_2, 24
+
+ST_3: newret50 (684)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:628  %newret50 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret48, i16 %pTabA_4_write_assig_2, 25
+
+ST_3: newret52 (685)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:629  %newret52 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret50, i16 %pTabA_5_write_assig_2, 26
+
+ST_3: newret54 (686)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:630  %newret54 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret52, i16 %eTabB_0_write_assig, 27
+
+ST_3: newret56 (687)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:631  %newret56 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret54, i16 %eTabB_1_write_assig, 28
+
+ST_3: newret58 (688)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:632  %newret58 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret56, i16 %eTabB_2_write_assig, 29
+
+ST_3: newret60 (689)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:633  %newret60 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret58, i16 %eTabB_3_write_assig, 30
+
+ST_3: newret62 (690)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:634  %newret62 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret60, i16 %eTabB_4_write_assig, 31
+
+ST_3: newret64 (691)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:635  %newret64 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret62, i16 %eTabB_5_write_assig, 32
+
+ST_3: newret66 (692)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:636  %newret66 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret64, i16 %lTabB_0_write_assig, 33
+
+ST_3: newret68 (693)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:637  %newret68 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret66, i16 %lTabB_1_write_assig, 34
+
+ST_3: newret70 (694)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:638  %newret70 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret68, i16 %lTabB_2_write_assig, 35
+
+ST_3: newret72 (695)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:639  %newret72 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret70, i16 %lTabB_3_write_assig, 36
+
+ST_3: newret74 (696)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:640  %newret74 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret72, i16 %lTabB_4_write_assig, 37
+
+ST_3: newret76 (697)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:641  %newret76 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret74, i16 %lTabB_5_write_assig, 38
+
+ST_3: newret78 (698)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:642  %newret78 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret76, i16 %pTabB_0_write_assig_2, 39
+
+ST_3: newret80 (699)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:643  %newret80 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret78, i16 %pTabB_1_write_assig_2, 40
+
+ST_3: newret82 (700)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:644  %newret82 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret80, i16 %pTabB_2_write_assig_2, 41
+
+ST_3: newret84 (701)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:645  %newret84 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret82, i16 %pTabB_3_write_assig_2, 42
+
+ST_3: newret86 (702)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:646  %newret86 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret84, i16 %pTabB_4_write_assig_2, 43
+
+ST_3: newret88 (703)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:647  %newret88 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret86, i16 %pTabB_5_write_assig_2, 44
+
+ST_3: newret90 (704)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:648  %newret90 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret88, i16 %eTabE_0_write_assig, 45
+
+ST_3: newret92 (705)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:649  %newret92 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret90, i16 %eTabE_1_write_assig, 46
+
+ST_3: newret94 (706)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:650  %newret94 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret92, i16 %eTabE_2_write_assig, 47
+
+ST_3: newret96 (707)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:651  %newret96 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret94, i16 %lTabE_0_write_assig, 48
+
+ST_3: newret98 (708)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:652  %newret98 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret96, i16 %lTabE_1_write_assig, 49
+
+ST_3: newret100 (709)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:653  %newret100 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret98, i16 %lTabE_2_write_assig, 50
+
+ST_3: newret102 (710)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:654  %newret102 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret100, i16 %pTabE_0_write_assig_2, 51
+
+ST_3: newret104 (711)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:655  %newret104 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret102, i16 %pTabE_1_write_assig_2, 52
+
+ST_3: newret106 (712)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:656  %newret106 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret104, i16 %pTabE_2_write_assig_2, 53
+
+ST_3: newret108 (713)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:657  %newret108 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret106, i16 %eTabF_0_write_assig, 54
+
+ST_3: newret110 (714)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:658  %newret110 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret108, i16 %eTabF_1_write_assig, 55
+
+ST_3: newret112 (715)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:659  %newret112 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret110, i16 %eTabF_2_write_assig, 56
+
+ST_3: newret114 (716)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:660  %newret114 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret112, i16 %eTabF_3_write_assig, 57
+
+ST_3: newret116 (717)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:661  %newret116 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret114, i16 %eTabF_4_write_assig, 58
+
+ST_3: newret118 (718)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:662  %newret118 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret116, i16 %eTabF_5_write_assig, 59
+
+ST_3: newret120 (719)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:663  %newret120 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret118, i16 %lTabF_0_write_assig, 60
+
+ST_3: newret122 (720)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:664  %newret122 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret120, i16 %lTabF_1_write_assig, 61
+
+ST_3: newret124 (721)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:665  %newret124 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret122, i16 %lTabF_2_write_assig, 62
+
+ST_3: newret126 (722)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:666  %newret126 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret124, i16 %lTabF_3_write_assig, 63
+
+ST_3: newret128 (723)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:667  %newret128 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret126, i16 %lTabF_4_write_assig, 64
+
+ST_3: newret130 (724)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:668  %newret130 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret128, i16 %lTabF_5_write_assig, 65
+
+ST_3: newret132 (725)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:669  %newret132 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret130, i16 %pTabF_0_write_assig_2, 66
+
+ST_3: newret134 (726)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:670  %newret134 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret132, i16 %pTabF_1_write_assig_2, 67
+
+ST_3: newret136 (727)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:671  %newret136 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret134, i16 %pTabF_2_write_assig_2, 68
+
+ST_3: newret138 (728)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:672  %newret138 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret136, i16 %pTabF_3_write_assig_2, 69
+
+ST_3: newret140 (729)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:673  %newret140 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret138, i16 %pTabF_4_write_assig_2, 70
+
+ST_3: newret142 (730)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:674  %newret142 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret140, i16 %pTabF_5_write_assig_2, 71
+
+ST_3: newret144 (731)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:675  %newret144 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret142, i16 %eTabG_0_write_assig, 72
+
+ST_3: newret146 (732)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:676  %newret146 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret144, i16 %eTabG_1_write_assig, 73
+
+ST_3: newret148 (733)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:677  %newret148 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret146, i16 %eTabG_2_write_assig, 74
+
+ST_3: newret150 (734)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:678  %newret150 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret148, i16 %eTabG_3_write_assig, 75
+
+ST_3: newret152 (735)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:679  %newret152 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret150, i16 %eTabG_4_write_assig, 76
+
+ST_3: newret154 (736)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:680  %newret154 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret152, i16 %eTabG_5_write_assig, 77
+
+ST_3: newret156 (737)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:681  %newret156 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret154, i16 %lTabG_0_write_assig, 78
+
+ST_3: newret158 (738)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:682  %newret158 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret156, i16 %lTabG_1_write_assig, 79
+
+ST_3: newret160 (739)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:683  %newret160 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret158, i16 %lTabG_2_write_assig, 80
+
+ST_3: newret162 (740)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:684  %newret162 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret160, i16 %lTabG_3_write_assig, 81
+
+ST_3: newret164 (741)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:685  %newret164 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret162, i16 %lTabG_4_write_assig, 82
+
+ST_3: newret166 (742)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:686  %newret166 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret164, i16 %lTabG_5_write_assig, 83
+
+ST_3: newret168 (743)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:687  %newret168 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret166, i16 %pTabG_0_write_assig_2, 84
+
+ST_3: newret170 (744)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:688  %newret170 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret168, i16 %pTabG_1_write_assig_2, 85
+
+ST_3: newret172 (745)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:689  %newret172 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret170, i16 %pTabG_2_write_assig_2, 86
+
+ST_3: newret174 (746)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:690  %newret174 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret172, i16 %pTabG_3_write_assig_2, 87
+
+ST_3: newret176 (747)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:691  %newret176 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret174, i16 %pTabG_4_write_assig_2, 88
+
+ST_3: newret178 (748)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:692  %newret178 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret176, i16 %pTabG_5_write_assig_2, 89
+
+ST_3: StgValue_787 (749)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358
+_ifconv:693  ret { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %newret178
+
+
+
+============================================================
++ Verbose Summary: Timing violations
+============================================================
+Target clock period: 10ns, clock uncertainty: 1.25ns.
+
+ <State 1>: 3.85ns
+The critical path consists of the following:
+	wire read on port 'num_nt' [58]  (0 ns)
+	'add' operation ('inx1', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1392) [60]  (1.46 ns)
+	'getelementptr' operation ('varinx6B_4096_a_addr_1', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1470) [185]  (0 ns)
+	'load' operation ('varinx6B_4096_a_load_1', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1470) on array 'varinx6B_4096_a' [186]  (2.39 ns)
+
+ <State 2>: 6.96ns
+The critical path consists of the following:
+	'load' operation ('varinx3_1024_12_load', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1398) on array 'varinx3_1024_12' [65]  (2.39 ns)
+	'select' operation ('b', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358) [197]  (0.84 ns)
+	'add' operation ('tmp_764', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1496) [270]  (1.4 ns)
+	'getelementptr' operation ('Lam_buf6_addr', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1496) [272]  (0 ns)
+	'load' operation ('Lam_buf6_load', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1496) on array 'Lam_buf6' [273]  (2.33 ns)
+
+ <State 3>: 3.17ns
+The critical path consists of the following:
+	'load' operation ('Lam_buf2_load', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1489) on array 'Lam_buf2' [259]  (2.33 ns)
+	'select' operation ('lTab[0]', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358) [264]  (0.84 ns)
+	'insertvalue' operation ('newret6', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358) [662]  (0 ns)
+
+
+============================================================
++ Verbose Summary: Binding
+============================================================
+N/A
+* FSMD analyzer results:
+  - Output states:
+ - Input state : 
+  - Chain level:
+	State 1
+	State 2
+	State 3
+
+
+============================================================
++ Verbose Summary: Datapath Resource usage 
+============================================================
+N/A

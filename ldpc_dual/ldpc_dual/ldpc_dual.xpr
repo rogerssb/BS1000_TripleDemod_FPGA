@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Product Version: Vivado v2016.3 (64-bit)              -->
+<!--                                                         -->
+<!-- Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.   -->
+
+<Project Version="7" Minor="17" Path="C:/ldpc_dual/ldpc_dual/ldpc_dual.xpr">
+  <DefaultLaunch Dir="$PRUNDIR"/>
+  <Configuration>
+    <Option Name="Id" Val="7b5c2931ff9f467db4efc64cc4b41775"/>
+    <Option Name="Part" Val="xc7k160tfbg676-1"/>
+    <Option Name="CompiledLibDir" Val="$PCACHEDIR/compile_simlib"/>
+    <Option Name="CompiledLibDirXSim" Val=""/>
+    <Option Name="CompiledLibDirModelSim" Val="$PCACHEDIR/compile_simlib/modelsim"/>
+    <Option Name="CompiledLibDirQuesta" Val="$PCACHEDIR/compile_simlib/questa"/>
+    <Option Name="CompiledLibDirIES" Val="$PCACHEDIR/compile_simlib/ies"/>
+    <Option Name="CompiledLibDirVCS" Val="$PCACHEDIR/compile_simlib/vcs"/>
+    <Option Name="CompiledLibDirRiviera" Val="$PCACHEDIR/compile_simlib/riviera"/>
+    <Option Name="CompiledLibDirActivehdl" Val="$PCACHEDIR/compile_simlib/activehdl"/>
+    <Option Name="BoardPart" Val=""/>
+    <Option Name="ActiveSimSet" Val="sim_1"/>
+    <Option Name="DefaultLib" Val="xil_defaultlib"/>
+    <Option Name="IPRepoPath" Val="$PPRDIR/."/>
+    <Option Name="IPRepoPath" Val="$PPRDIR/../../Users/dougo/LDPC_Decoder3U"/>
+    <Option Name="IPRepoPath" Val="$PPRDIR/../../Users/dougo/LDPC_DecoderU"/>
+    <Option Name="IPRepoPath" Val="$PPRDIR/../../Users/dougo/LDPC_DecoderT"/>
+    <Option Name="IPRepoPath" Val="$PPRDIR/../../Users/dougo/LDPC_DecoderP"/>
+    <Option Name="IPRepoPath" Val="$PPRDIR/../../Users/dougo/LDPC_DecoderM"/>
+    <Option Name="IPRepoPath" Val="$PSRCDIR"/>
+    <Option Name="IPRepoPath" Val="$PPRDIR/../../ldpctest/ldpc test"/>
+    <Option Name="IPRepoPath" Val="$PPRDIR/../../Users/dougo/LDPC_CLK_DIV"/>
+    <Option Name="IPRepoPath" Val="$PPRDIR/../../Users/dougo/LDCP_data_buffer_mult"/>
+    <Option Name="IPRepoPath" Val="$PPRDIR/../../Users/dougo/LDPC_DecoderJ"/>
+    <Option Name="IPRepoPath" Val="$PPRDIR/../../Users/dougo/LDPC_DecoderF"/>
+    <Option Name="IPRepoPath" Val="$PPRDIR/../../Users/dougo/LDPC_DecoderH"/>
+    <Option Name="IPRepoPath" Val="$PPRDIR/../../Users/dougo/LDPC_DecoderE"/>
+    <Option Name="IPRepoPath" Val="$PPRDIR/../../Users/dougo/LDPC_DecoderC"/>
+    <Option Name="IPRepoPath" Val="$PPRDIR/../../Users/dougo/LDPC_DecoderB"/>
+    <Option Name="IPRepoPath" Val="$PPRDIR/../../Users/dougo/LDPC_Out/solution1/impl"/>
+    <Option Name="IPRepoPath" Val="$PPRDIR/../../ldpctest/ldpc test/ldpc test.srcs/sources_1"/>
+    <Option Name="IPRepoPath" Val="$PPRDIR/../../Users/dougo/AppData/Roaming/Xilinx/ip_repo"/>
+    <Option Name="IPRepoPath" Val="$PPRDIR/../../Users/dougo/LDPC_Decoder/solution16_K7/impl"/>
+    <Option Name="IPRepoPath" Val="$PPRDIR/../../Users/dougo/LDPC_CTRL/solution1/impl"/>
+    <Option Name="IPRepoPath" Val="$PPRDIR/../../Users/dougo/LDPC_INIT_DSP3/solution2/impl"/>
+    <Option Name="IPRepoPath" Val="$PPRDIR/../../Users/dougo/LDPC_data_buffer/solution1/impl"/>
+    <Option Name="IPOutputRepo" Val="$PCACHEDIR/ip"/>
+    <Option Name="IPCachePermission" Val="read"/>
+    <Option Name="IPCachePermission" Val="write"/>
+    <Option Name="EnableCoreContainer" Val="FALSE"/>
+    <Option Name="CreateRefXciForCoreContainers" Val="FALSE"/>
+    <Option Name="IPUserFilesDir" Val="$PPRDIR/ldpc_dual.ip_user_files"/>
+    <Option Name="IPStaticSourceDir" Val="$PPRDIR/ldpc_dual.ip_user_files/ipstatic"/>
+    <Option Name="EnableBDX" Val="FALSE"/>
+    <Option Name="DSANumComputeUnits" Val="16"/>
+    <Option Name="WTXSimLaunchSim" Val="38"/>
+    <Option Name="WTModelSimLaunchSim" Val="0"/>
+    <Option Name="WTQuestaLaunchSim" Val="0"/>
+    <Option Name="WTIesLaunchSim" Val="0"/>
+    <Option Name="WTVcsLaunchSim" Val="0"/>
+    <Option Name="WTRivieraLaunchSim" Val="0"/>
+    <Option Name="WTActivehdlLaunchSim" Val="0"/>
+    <Option Name="WTXSimExportSim" Val="112"/>
+    <Option Name="WTModelSimExportSim" Val="112"/>
+    <Option Name="WTQuestaExportSim" Val="112"/>
+    <Option Name="WTIesExportSim" Val="112"/>
+    <Option Name="WTVcsExportSim" Val="112"/>
+    <Option Name="WTRivieraExportSim" Val="112"/>
+    <Option Name="WTActivehdlExportSim" Val="112"/>
+    <Option Name="GenerateIPUpgradeLog" Val="TRUE"/>
+    <Option Name="XSimRadix" Val="hex"/>
+    <Option Name="XSimTimeUnit" Val="ns"/>
+    <Option Name="XSimArrayDisplayLimit" Val="64"/>
+    <Option Name="XSimTraceLimit" Val="65536"/>
+  </Configuration>
+  <FileSets Version="1" Minor="31">
+    <FileSet Name="sources_1" Type="DesignSrcs" RelSrcDir="$PSRCDIR/sources_1">
+      <Filter Type="Srcs"/>
+      <File Path="$PSRCDIR/sources_1/bd/design_2/design_2.bd">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../ldpctest/ldpc test/ldpc test.srcs/sources_1/bd/design_2/design_2.bd"/>
+          <Attr Name="ImportTime" Val="1552938983"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_raw_data_b1_0/design_2_raw_data_b1_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_raw_data_a1_0/design_2_raw_data_a1_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_raw_ce_mux_ba_1/design_2_raw_ce_mux_ba_1.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_raw_ce_mux_aa_1/design_2_raw_ce_mux_aa_1.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_raw_data_b_0/design_2_raw_data_b_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_raw_data_a_0/design_2_raw_data_a_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_LDPC_buff_0_0/design_2_LDPC_buff_0_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_mux_lat_2/design_2_mux_lat_2.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_raw_data_b4_0/design_2_raw_data_b4_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_raw_data_a4_0/design_2_raw_data_a4_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_raw_ce_mux_ba3_0/design_2_raw_ce_mux_ba3_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_raw_ce_mux_aa3_0/design_2_raw_ce_mux_aa3_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_raw_data_b3_0/design_2_raw_data_b3_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_raw_data_a3_0/design_2_raw_data_a3_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_raw_ce_mux_ba2_0/design_2_raw_ce_mux_ba2_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_raw_ce_mux_aa2_0/design_2_raw_ce_mux_aa2_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_raw_data_b2_0/design_2_raw_data_b2_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_raw_data_a2_0/design_2_raw_data_a2_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_raw_ce_mux_ba1_0/design_2_raw_ce_mux_ba1_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_data_ce_mux_bb_2_0/design_2_data_ce_mux_bb_2_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_decode_data_a_2_0/design_2_decode_data_a_2_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_decode_data_b_2_0/design_2_decode_data_b_2_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_raw_ce_mux_aa1_0/design_2_raw_ce_mux_aa1_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_raw_ce_mux_aa4_0/design_2_raw_ce_mux_aa4_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_raw_data_b5_0/design_2_raw_data_b5_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_HLSLdpcLogDecScaledMin_0_0/design_2_HLSLdpcLogDecScaledMin_0_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_data_mux_0/design_2_data_mux_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_decode_data_0_0/design_2_decode_data_0_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_blk_mem_gen_0_4/design_2_blk_mem_gen_0_4.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_raw_data_0_0/design_2_raw_data_0_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_setupLDPC_0_0/design_2_setupLDPC_0_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_blk_mem_gen_0_3/design_2_blk_mem_gen_0_3.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_LDPC_CTRL_0_0/design_2_LDPC_CTRL_0_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_data_ce_mux_0/design_2_data_ce_mux_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_data_ce_mux_1/design_2_data_ce_mux_1.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_raw_ce_mux_ba4_0/design_2_raw_ce_mux_ba4_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_util_vector_logic_0_0/design_2_util_vector_logic_0_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_xlconstant_0_0/design_2_xlconstant_0_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_c_addsub_0_1/design_2_c_addsub_0_1.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_LDPC_Out_0_0/design_2_LDPC_Out_0_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_decode_start_lat_0/design_2_decode_start_lat_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_raw_data_a5_0/design_2_raw_data_a5_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_c_addsub_8_1/design_2_c_addsub_8_1.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_c_addsub_8_0/design_2_c_addsub_8_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_c_addsub_0_0/design_2_c_addsub_0_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_c_addsub_6_0/design_2_c_addsub_6_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_c_addsub_5_0/design_2_c_addsub_5_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_c_addsub_4_0/design_2_c_addsub_4_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_c_addsub_3_1/design_2_c_addsub_3_1.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_mux_lat_1/design_2_mux_lat_1.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_buff_start_lat_0/design_2_buff_start_lat_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_mux_lat_0/design_2_mux_lat_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_c_addsub_0_2/design_2_c_addsub_0_2.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_xlconstant_2_0/design_2_xlconstant_2_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="hdl/design_2.v"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_xlconstant_1_0/design_2_xlconstant_1_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_util_vector_logic_0_1/design_2_util_vector_logic_0_1.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_c_addsub_3_0/design_2_c_addsub_3_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_c_addsub_2_0/design_2_c_addsub_2_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_raw_ce_mux2_0/design_2_raw_ce_mux2_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_data_ce_mux_2/design_2_data_ce_mux_2.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_data_mux11_0/design_2_data_mux11_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_data_ce_mux_ab_1_0/design_2_data_ce_mux_ab_1_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_data_ce_mux_bb_1_0/design_2_data_ce_mux_bb_1_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_decode_data_a_1_0/design_2_decode_data_a_1_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_decode_data_b_1_0/design_2_decode_data_b_1_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_data_mux1_0/design_2_data_mux1_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_data_ce_mux1_0/design_2_data_ce_mux1_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_data_ce_mux_3/design_2_data_ce_mux_3.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_decode_data_b_0_0/design_2_decode_data_b_0_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_decode_data_a_0_0/design_2_decode_data_a_0_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_LDPC_Div_0_0/design_2_LDPC_Div_0_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_xlconstant_0_1/design_2_xlconstant_0_1.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_raw_ce_mux_ba8_0/design_2_raw_ce_mux_ba8_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_raw_ce_mux_aa8_0/design_2_raw_ce_mux_aa8_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_raw_data_b8_0/design_2_raw_data_b8_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_raw_data_a8_0/design_2_raw_data_a8_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_raw_ce_mux_ba7_0/design_2_raw_ce_mux_ba7_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_raw_ce_mux_aa7_0/design_2_raw_ce_mux_aa7_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_raw_data_b7_0/design_2_raw_data_b7_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_raw_data_a7_0/design_2_raw_data_a7_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_decode_start_lat_1/design_2_decode_start_lat_1.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_raw_ce_mux_ba6_0/design_2_raw_ce_mux_ba6_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_raw_ce_mux_aa6_0/design_2_raw_ce_mux_aa6_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_raw_data_b6_0/design_2_raw_data_b6_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_raw_data_a6_0/design_2_raw_data_a6_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_raw_ce_mux_ba5_0/design_2_raw_ce_mux_ba5_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_raw_ce_mux_aa5_0/design_2_raw_ce_mux_aa5_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_itt_num_lat_0/design_2_itt_num_lat_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_xlconstant_3_0/design_2_xlconstant_3_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_HLSLdpcLogDecScaledMin_0_1/design_2_HLSLdpcLogDecScaledMin_0_1.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_data_ce_mux_ab_6_0/design_2_data_ce_mux_ab_6_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_data_ce_mux_bb_6_0/design_2_data_ce_mux_bb_6_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_data_mux16_0/design_2_data_mux16_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_decode_data_a_6_0/design_2_decode_data_a_6_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_decode_data_b_6_0/design_2_decode_data_b_6_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_data_mux15_0/design_2_data_mux15_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_data_ce_mux_ab_5_0/design_2_data_ce_mux_ab_5_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_data_ce_mux_bb_5_0/design_2_data_ce_mux_bb_5_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_decode_data_a_5_0/design_2_decode_data_a_5_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_decode_data_b_5_0/design_2_decode_data_b_5_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_data_ce_mux_ab_4_0/design_2_data_ce_mux_ab_4_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_data_ce_mux_bb_4_0/design_2_data_ce_mux_bb_4_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_data_mux14_0/design_2_data_mux14_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_decode_data_a_4_0/design_2_decode_data_a_4_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_decode_data_b_4_0/design_2_decode_data_b_4_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_data_mux13_0/design_2_data_mux13_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_data_ce_mux_ab_3_0/design_2_data_ce_mux_ab_3_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_data_ce_mux_bb_3_0/design_2_data_ce_mux_bb_3_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_decode_data_a_3_0/design_2_decode_data_a_3_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_decode_data_b_3_0/design_2_decode_data_b_3_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_data_mux12_0/design_2_data_mux12_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="ip/design_2_data_ce_mux_ab_2_0/design_2_data_ce_mux_ab_2_0.xci"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="design_2_ooc.xdc"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="hdl/design_2.hwdef"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="hw_handoff/design_2_bd.tcl"/>
+        <CompFileExtendedInfo CompFileName="design_2.bd" FileRelPathName="hw_handoff/design_2.hwh"/>
+      </File>
+      <File Path="$PSRCDIR/sources_1/bd/design_2/hdl/design_2_wrapper.v">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/bd/design_2/ip/design_2_LDPC_CTRL_0_0/design_2_LDPC_CTRL_0_0.upgrade_log">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../ldpctest/ldpc test/ldpc test.srcs/sources_1/bd/design_2/ip/design_2_LDPC_CTRL_0_0/design_2_LDPC_CTRL_0_0.upgrade_log"/>
+          <Attr Name="ImportTime" Val="1522794983"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/bd/design_2/ip/design_2_HLSLdpcLogDecScaledMin_0_0/design_2_HLSLdpcLogDecScaledMin_0_0.upgrade_log">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../ldpctest/ldpc test/ldpc test.srcs/sources_1/bd/design_2/ip/design_2_HLSLdpcLogDecScaledMin_0_0/design_2_HLSLdpcLogDecScaledMin_0_0.upgrade_log"/>
+          <Attr Name="ImportTime" Val="1535337049"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/bd/design_2/ip/design_2_setupLDPC_0_0/design_2_setupLDPC_0_0.upgrade_log">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../ldpctest/ldpc test/ldpc test.srcs/sources_1/bd/design_2/ip/design_2_setupLDPC_0_0/design_2_setupLDPC_0_0.upgrade_log"/>
+          <Attr Name="ImportTime" Val="1535664104"/>
+        </FileInfo>
+      </File>
+      <File Path="$PPRDIR/component.xml">
+        <FileInfo SFType="IPXACT"/>
+      </File>
+      <Config>
+        <Option Name="DesignMode" Val="RTL"/>
+        <Option Name="TopModule" Val="design_2_wrapper"/>
+        <Option Name="TopAutoSet" Val="TRUE"/>
+      </Config>
+    </FileSet>
+    <FileSet Name="constrs_1" Type="Constrs" RelSrcDir="$PSRCDIR/constrs_1">
+      <Filter Type="Constrs"/>
+      <Config>
+        <Option Name="ConstrsType" Val="XDC"/>
+      </Config>
+    </FileSet>
+    <FileSet Name="sim_1" Type="SimulationSrcs" RelSrcDir="$PSRCDIR/sim_1">
+      <Filter Type="Srcs"/>
+      <File Path="$PPRDIR/design_2_wrapper_behav.wcfg">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <Config>
+        <Option Name="DesignMode" Val="RTL"/>
+        <Option Name="TopModule" Val="design_2_wrapper"/>
+        <Option Name="TopLib" Val="xil_defaultlib"/>
+        <Option Name="TopAutoSet" Val="TRUE"/>
+        <Option Name="TransportPathDelay" Val="0"/>
+        <Option Name="TransportIntDelay" Val="0"/>
+        <Option Name="SrcSet" Val="sources_1"/>
+        <Option Name="XSimWcfgFile" Val="$PPRDIR/../../ldpctest/ldpc test/design_2_wrapper_behav.wcfg"/>
+        <Option Name="XSimWcfgFile" Val="$PPRDIR/../../ldpctest/ldpc test/design_2_wrapper_behav1.wcfg"/>
+        <Option Name="XSimWcfgFile" Val="$PPRDIR/../../ldpctest/ldpc test/design_2_wrapper_behav2.wcfg"/>
+        <Option Name="XSimWcfgFile" Val="$PPRDIR/../../ldpctest/ldpc test/design_2_wrapper_behav.wcfg"/>
+        <Option Name="XSimWcfgFile" Val="$PPRDIR/../../ldpctest/ldpc test/design_2_wrapper_behav1.wcfg"/>
+        <Option Name="XSimWcfgFile" Val="$PPRDIR/../../ldpctest/ldpc test/design_2_wrapper_behav.wcfg"/>
+        <Option Name="XSimWcfgFile" Val="$PPRDIR/design_2_wrapper_behav.wcfg"/>
+      </Config>
+    </FileSet>
+  </FileSets>
+  <Simulators>
+    <Simulator Name="XSim">
+      <Option Name="Description" Val="Vivado Simulator"/>
+      <Option Name="CompiledLib" Val="0"/>
+    </Simulator>
+    <Simulator Name="ModelSim">
+      <Option Name="Description" Val="ModelSim Simulator"/>
+    </Simulator>
+    <Simulator Name="Questa">
+      <Option Name="Description" Val="Questa Advanced Simulator"/>
+    </Simulator>
+    <Simulator Name="Riviera">
+      <Option Name="Description" Val="Riviera-PRO Simulator"/>
+    </Simulator>
+    <Simulator Name="ActiveHDL">
+      <Option Name="Description" Val="Active-HDL Simulator"/>
+    </Simulator>
+  </Simulators>
+  <Runs Version="1" Minor="10">
+    <Run Id="synth_1" Type="Ft3:Synth" SrcSet="sources_1" Part="xc7k160tffv676-2" ConstrsSet="constrs_1" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/synth_1" IncludeInArchive="true">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2016"/>
+        <Step Id="synth_design"/>
+      </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+    </Run>
+    <Run Id="synth_2" Type="Ft3:Synth" SrcSet="sources_1" Part="xc7k160tffv676-2" ConstrsSet="constrs_1" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/synth_2" IncludeInArchive="true">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2016"/>
+        <Step Id="synth_design"/>
+      </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+    </Run>
+    <Run Id="synth_3" Type="Ft3:Synth" SrcSet="sources_1" Part="xc7k160tffv676-2" ConstrsSet="constrs_1" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/synth_3" IncludeInArchive="true">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2016"/>
+        <Step Id="synth_design">
+          <Option Id="FlattenHierarchy">1</Option>
+        </Step>
+      </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+    </Run>
+    <Run Id="synth_4" Type="Ft3:Synth" SrcSet="sources_1" Part="xc7k160tffv676-2" ConstrsSet="constrs_1" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/synth_4" IncludeInArchive="true">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2016"/>
+        <Step Id="synth_design"/>
+      </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+    </Run>
+    <Run Id="synth_5" Type="Ft3:Synth" SrcSet="sources_1" Part="xc7k160tfbg676-1" ConstrsSet="constrs_1" Description="Vivado Synthesis Defaults" State="current" Dir="$PRUNDIR/synth_5" IncludeInArchive="true">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2016"/>
+        <Step Id="synth_design"/>
+      </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+    </Run>
+    <Run Id="impl_1" Type="Ft2:EntireDesign" Part="xc7k160tffv676-2" ConstrsSet="constrs_1" Description="Default settings for Implementation." SynthRun="synth_1" IncludeInArchive="true">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2016"/>
+        <Step Id="init_design"/>
+        <Step Id="opt_design"/>
+        <Step Id="power_opt_design"/>
+        <Step Id="place_design"/>
+        <Step Id="post_place_power_opt_design"/>
+        <Step Id="phys_opt_design"/>
+        <Step Id="route_design"/>
+        <Step Id="post_route_phys_opt_design"/>
+        <Step Id="write_bitstream"/>
+      </Strategy>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+    </Run>
+    <Run Id="impl_2" Type="Ft2:EntireDesign" Part="xc7k160tffv676-2" ConstrsSet="constrs_1" Description="Default settings for Implementation." SynthRun="synth_2" IncludeInArchive="true">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2016"/>
+        <Step Id="init_design"/>
+        <Step Id="opt_design"/>
+        <Step Id="power_opt_design"/>
+        <Step Id="place_design"/>
+        <Step Id="post_place_power_opt_design"/>
+        <Step Id="phys_opt_design"/>
+        <Step Id="route_design"/>
+        <Step Id="post_route_phys_opt_design"/>
+        <Step Id="write_bitstream"/>
+      </Strategy>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+    </Run>
+    <Run Id="impl_3" Type="Ft2:EntireDesign" Part="xc7k160tffv676-2" ConstrsSet="constrs_1" Description="Default settings for Implementation." SynthRun="synth_3" IncludeInArchive="true">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2016"/>
+        <Step Id="init_design"/>
+        <Step Id="opt_design"/>
+        <Step Id="power_opt_design"/>
+        <Step Id="place_design"/>
+        <Step Id="post_place_power_opt_design"/>
+        <Step Id="phys_opt_design"/>
+        <Step Id="route_design"/>
+        <Step Id="post_route_phys_opt_design"/>
+        <Step Id="write_bitstream"/>
+      </Strategy>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+    </Run>
+    <Run Id="impl_4" Type="Ft2:EntireDesign" Part="xc7k160tffv676-2" ConstrsSet="constrs_1" Description="Default settings for Implementation." SynthRun="synth_4" IncludeInArchive="true">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2016"/>
+        <Step Id="init_design"/>
+        <Step Id="opt_design"/>
+        <Step Id="power_opt_design"/>
+        <Step Id="place_design"/>
+        <Step Id="post_place_power_opt_design"/>
+        <Step Id="phys_opt_design"/>
+        <Step Id="route_design"/>
+        <Step Id="post_route_phys_opt_design"/>
+        <Step Id="write_bitstream"/>
+      </Strategy>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+    </Run>
+    <Run Id="impl_5" Type="Ft2:EntireDesign" Part="xc7k160tfbg676-1" ConstrsSet="constrs_1" Description="Default settings for Implementation." State="current" SynthRun="synth_5" IncludeInArchive="true">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2016"/>
+        <Step Id="init_design"/>
+        <Step Id="opt_design"/>
+        <Step Id="power_opt_design"/>
+        <Step Id="place_design"/>
+        <Step Id="post_place_power_opt_design"/>
+        <Step Id="phys_opt_design"/>
+        <Step Id="route_design"/>
+        <Step Id="post_route_phys_opt_design"/>
+        <Step Id="write_bitstream"/>
+      </Strategy>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+    </Run>
+  </Runs>
+</Project>

@@ -1,0 +1,9 @@
+verilog xil_defaultlib "AESL_automem_etaIndexM_V.v"
+verilog xil_defaultlib "AESL_automem_etaIndexN_V.v"
+verilog xil_defaultlib "AESL_automem_lambdaIndexM_V.v"
+verilog xil_defaultlib "setupLDPC.autotb.v"
+verilog xil_defaultlib "setupLDPC.v"
+verilog xil_defaultlib "setupLDPC_load_etaIndexM.v"
+verilog xil_defaultlib "setupLDPC_load_etaIndexN.v"
+verilog xil_defaultlib "setupLDPC_load_lambdaIndexM.v"
+

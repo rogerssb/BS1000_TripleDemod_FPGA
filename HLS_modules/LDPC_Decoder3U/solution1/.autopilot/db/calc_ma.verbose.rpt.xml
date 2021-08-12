@@ -1,0 +1,440 @@
+<profile>
+
+<section name = "Vivado HLS Report for 'calc_ma'" level="0">
+<item name = "Date">Sat Oct 05 17:14:03 2019
+</item>
+<item name = "Version">2016.3 (Build 1682563 on Mon Oct 10 19:41:59 MDT 2016)</item>
+<item name = "Project">LDPC_Decoder3U</item>
+<item name = "Solution">solution1</item>
+<item name = "Product family">kintex7</item>
+<item name = "Target device">xc7k160tfbg676-1</item>
+</section>
+
+<section name = "Performance Estimates" level="0">
+<item name = "Timing (ns)">
+<section name = "" level="1">
+<item name = "Summary"><table name="" hasTotal="0">
+<keys size="4">Clock, Target, Estimated, Uncertainty</keys>
+<column name="ap_clk">10.00, 8.40, 1.25</column>
+</table>
+</item>
+</section>
+</item>
+<item name = "Latency (clock cycles)">
+<section name = "" level="1">
+<item name = "Summary"><table name="" hasTotal="0">
+<keys size="6">, min, max, min, max, Type</keys>
+<column name="">2, 2, 1, 1, function</column>
+</table>
+</item>
+<item name = "Detail">
+<section name = "" level="1">
+<item name = "Instance"><table name="" hasTotal="0">
+<keys size="7">Instance, Module, min, max, min, max, Type</keys>
+<column name="grp_mcalcC_fu_490">mcalcC, 2, 2, 1, 1, function</column>
+<column name="grp_mcalcD_fu_602">mcalcD, 2, 2, 1, 1, function</column>
+<column name="grp_mcalcF_fu_714">mcalcF, 2, 2, 1, 1, function</column>
+<column name="grp_mcalcG_fu_826">mcalcG, 2, 2, 1, 1, function</column>
+<column name="grp_mcalcB_fu_938">mcalcB, 1, 1, 1, 1, function</column>
+<column name="grp_mcalcE_fu_960">mcalcE, 1, 1, 1, 1, function</column>
+</table>
+</item>
+<item name = "Loop"><table name="" hasTotal="0">
+<keys size="8">Loop Name, min, max, Latency, achieved, target, Count, Pipelined</keys>
+</table>
+</item>
+</section>
+</item>
+</section>
+</item>
+</section>
+
+<section name = "Utilization Estimates" level="0">
+<item name = "Summary"><table name="" hasTotal="1">
+<keys size="5">Name, BRAM_18K, DSP48E, FF, LUT</keys>
+<column name="DSP">-, -, -, -</column>
+<column name="Expression">-, -, -, -</column>
+<column name="FIFO">-, -, -, -</column>
+<column name="Instance">-, -, 950, 15244</column>
+<column name="Memory">-, -, -, -</column>
+<column name="Multiplexer">-, -, -, 4</column>
+<column name="Register">-, -, 5, -</column>
+<specialColumn name="Available">650, 600, 202800, 101400</specialColumn>
+<specialColumn name="Utilization (%)">0, 0, ~0, 15</specialColumn>
+</table>
+</item>
+<item name = "Detail">
+<section name = "" level="1">
+<item name = "Instance"><table name="" hasTotal="1">
+<keys size="6">Instance, Module, BRAM_18K, DSP48E, FF, LUT</keys>
+<column name="grp_mcalcB_fu_938">mcalcB, 0, 0, 23, 408</column>
+<column name="grp_mcalcC_fu_490">mcalcC, 0, 0, 226, 3607</column>
+<column name="grp_mcalcD_fu_602">mcalcD, 0, 0, 226, 3607</column>
+<column name="grp_mcalcE_fu_960">mcalcE, 0, 0, 23, 408</column>
+<column name="grp_mcalcF_fu_714">mcalcF, 0, 0, 226, 3607</column>
+<column name="grp_mcalcG_fu_826">mcalcG, 0, 0, 226, 3607</column>
+</table>
+</item>
+<item name = "DSP48"><table name="" hasTotal="0">
+<keys size="3">Instance, Module, Expression</keys>
+</table>
+</item>
+<item name = "Memory"><table name="" hasTotal="1">
+<keys size="9">Memory, Module, BRAM_18K, FF, LUT, Words, Bits, Banks, W*Bits*Banks</keys>
+</table>
+</item>
+<item name = "FIFO"><table name="" hasTotal="1">
+<keys size="7">Name, BRAM_18K, FF, LUT, Depth, Bits, Size:D*B</keys>
+</table>
+</item>
+<item name = "Expression"><table name="" hasTotal="1">
+<keys size="7">Variable Name, Operation, DSP48E, FF, LUT, Bitwidth P0, Bitwidth P1</keys>
+</table>
+</item>
+<item name = "Multiplexer"><table name="" hasTotal="1">
+<keys size="5">Name, LUT, Input Size, Bits, Total Bits</keys>
+<column name="grp_mcalcC_fu_490_ap_start">1, 2, 1, 2</column>
+<column name="grp_mcalcD_fu_602_ap_start">1, 2, 1, 2</column>
+<column name="grp_mcalcF_fu_714_ap_start">1, 2, 1, 2</column>
+<column name="grp_mcalcG_fu_826_ap_start">1, 2, 1, 2</column>
+</table>
+</item>
+<item name = "Register"><table name="" hasTotal="1">
+<keys size="5">Name, FF, LUT, Bits, Const Bits</keys>
+<column name="ap_CS_fsm">1, 0, 1, 0</column>
+<column name="ap_enable_reg_pp0_iter1">1, 0, 1, 0</column>
+<column name="ap_enable_reg_pp0_iter2">1, 0, 1, 0</column>
+<column name="ap_reg_grp_mcalcB_fu_938_ap_start">1, 0, 1, 0</column>
+<column name="ap_reg_grp_mcalcE_fu_960_ap_start">1, 0, 1, 0</column>
+</table>
+</item>
+</section>
+</item>
+</section>
+
+<section name = "Interface" level="0">
+<item name = "Summary"><table name="" hasTotal="0">
+<keys size="6">RTL Ports, Dir, Bits, Protocol, Source Object, C Type</keys>
+<column name="ap_clk">in, 1, ap_ctrl_hs, calc_ma, return value</column>
+<column name="ap_rst">in, 1, ap_ctrl_hs, calc_ma, return value</column>
+<column name="ap_start">in, 1, ap_ctrl_hs, calc_ma, return value</column>
+<column name="ap_done">out, 1, ap_ctrl_hs, calc_ma, return value</column>
+<column name="ap_idle">out, 1, ap_ctrl_hs, calc_ma, return value</column>
+<column name="ap_ready">out, 1, ap_ctrl_hs, calc_ma, return value</column>
+<column name="ap_ce">in, 1, ap_ctrl_hs, calc_ma, return value</column>
+<column name="Lam_tabx_0">in, 16, ap_none, Lam_tabx_0, pointer</column>
+<column name="Peta_tabx_0">in, 16, ap_none, Peta_tabx_0, pointer</column>
+<column name="Lam_tabx_1">in, 16, ap_none, Lam_tabx_1, pointer</column>
+<column name="Peta_tabx_1">in, 16, ap_none, Peta_tabx_1, pointer</column>
+<column name="Lam_tabx_2">in, 16, ap_none, Lam_tabx_2, pointer</column>
+<column name="Peta_tabx_2">in, 16, ap_none, Peta_tabx_2, pointer</column>
+<column name="Eta_ans_0">out, 16, ap_vld, Eta_ans_0, pointer</column>
+<column name="Eta_ans_0_ap_vld">out, 1, ap_vld, Eta_ans_0, pointer</column>
+<column name="Eta_ans_1_32">out, 16, ap_vld, Eta_ans_1_32, pointer</column>
+<column name="Eta_ans_1_32_ap_vld">out, 1, ap_vld, Eta_ans_1_32, pointer</column>
+<column name="Eta_ans_2_25">out, 16, ap_vld, Eta_ans_2_25, pointer</column>
+<column name="Eta_ans_2_25_ap_vld">out, 1, ap_vld, Eta_ans_2_25, pointer</column>
+<column name="Lam_taby_0">in, 16, ap_none, Lam_taby_0, pointer</column>
+<column name="Peta_taby_0">in, 16, ap_none, Peta_taby_0, pointer</column>
+<column name="Lam_taby_1">in, 16, ap_none, Lam_taby_1, pointer</column>
+<column name="Peta_taby_1">in, 16, ap_none, Peta_taby_1, pointer</column>
+<column name="Lam_taby_2">in, 16, ap_none, Lam_taby_2, pointer</column>
+<column name="Peta_taby_2">in, 16, ap_none, Peta_taby_2, pointer</column>
+<column name="Lam_taby_3">in, 16, ap_none, Lam_taby_3, pointer</column>
+<column name="Peta_taby_3">in, 16, ap_none, Peta_taby_3, pointer</column>
+<column name="Lam_taby_4">in, 16, ap_none, Lam_taby_4, pointer</column>
+<column name="Peta_taby_4">in, 16, ap_none, Peta_taby_4, pointer</column>
+<column name="Lam_taby_5">in, 16, ap_none, Lam_taby_5, pointer</column>
+<column name="Peta_taby_5">in, 16, ap_none, Peta_taby_5, pointer</column>
+<column name="Lam_taby_6">in, 16, ap_none, Lam_taby_6, pointer</column>
+<column name="Peta_taby_6">in, 16, ap_none, Peta_taby_6, pointer</column>
+<column name="Lam_taby_7">in, 16, ap_none, Lam_taby_7, pointer</column>
+<column name="Peta_taby_7">in, 16, ap_none, Peta_taby_7, pointer</column>
+<column name="Lam_taby_8">in, 16, ap_none, Lam_taby_8, pointer</column>
+<column name="Peta_taby_8">in, 16, ap_none, Peta_taby_8, pointer</column>
+<column name="Lam_taby_9">in, 16, ap_none, Lam_taby_9, pointer</column>
+<column name="Peta_taby_9">in, 16, ap_none, Peta_taby_9, pointer</column>
+<column name="Lam_taby_10">in, 16, ap_none, Lam_taby_10, pointer</column>
+<column name="Peta_taby_10">in, 16, ap_none, Peta_taby_10, pointer</column>
+<column name="Lam_taby_11">in, 16, ap_none, Lam_taby_11, pointer</column>
+<column name="Peta_taby_11">in, 16, ap_none, Peta_taby_11, pointer</column>
+<column name="Lam_taby_12">in, 16, ap_none, Lam_taby_12, pointer</column>
+<column name="Peta_taby_12">in, 16, ap_none, Peta_taby_12, pointer</column>
+<column name="Lam_taby_13">in, 16, ap_none, Lam_taby_13, pointer</column>
+<column name="Peta_taby_13">in, 16, ap_none, Peta_taby_13, pointer</column>
+<column name="Lam_taby_14">in, 16, ap_none, Lam_taby_14, pointer</column>
+<column name="Peta_taby_14">in, 16, ap_none, Peta_taby_14, pointer</column>
+<column name="Lam_taby_15">in, 16, ap_none, Lam_taby_15, pointer</column>
+<column name="Peta_taby_15">in, 16, ap_none, Peta_taby_15, pointer</column>
+<column name="Lam_taby_16">in, 16, ap_none, Lam_taby_16, pointer</column>
+<column name="Peta_taby_16">in, 16, ap_none, Peta_taby_16, pointer</column>
+<column name="Lam_taby_17">in, 16, ap_none, Lam_taby_17, pointer</column>
+<column name="Peta_taby_17">in, 16, ap_none, Peta_taby_17, pointer</column>
+<column name="Eta_ans_1_0">out, 16, ap_vld, Eta_ans_1_0, pointer</column>
+<column name="Eta_ans_1_0_ap_vld">out, 1, ap_vld, Eta_ans_1_0, pointer</column>
+<column name="Eta_ans_1_1">out, 16, ap_vld, Eta_ans_1_1, pointer</column>
+<column name="Eta_ans_1_1_ap_vld">out, 1, ap_vld, Eta_ans_1_1, pointer</column>
+<column name="Eta_ans_1_2">out, 16, ap_vld, Eta_ans_1_2, pointer</column>
+<column name="Eta_ans_1_2_ap_vld">out, 1, ap_vld, Eta_ans_1_2, pointer</column>
+<column name="Eta_ans_1_3">out, 16, ap_vld, Eta_ans_1_3, pointer</column>
+<column name="Eta_ans_1_3_ap_vld">out, 1, ap_vld, Eta_ans_1_3, pointer</column>
+<column name="Eta_ans_1_4">out, 16, ap_vld, Eta_ans_1_4, pointer</column>
+<column name="Eta_ans_1_4_ap_vld">out, 1, ap_vld, Eta_ans_1_4, pointer</column>
+<column name="Eta_ans_1_5">out, 16, ap_vld, Eta_ans_1_5, pointer</column>
+<column name="Eta_ans_1_5_ap_vld">out, 1, ap_vld, Eta_ans_1_5, pointer</column>
+<column name="Eta_ans_1_6">out, 16, ap_vld, Eta_ans_1_6, pointer</column>
+<column name="Eta_ans_1_6_ap_vld">out, 1, ap_vld, Eta_ans_1_6, pointer</column>
+<column name="Eta_ans_1_7">out, 16, ap_vld, Eta_ans_1_7, pointer</column>
+<column name="Eta_ans_1_7_ap_vld">out, 1, ap_vld, Eta_ans_1_7, pointer</column>
+<column name="Eta_ans_1_8">out, 16, ap_vld, Eta_ans_1_8, pointer</column>
+<column name="Eta_ans_1_8_ap_vld">out, 1, ap_vld, Eta_ans_1_8, pointer</column>
+<column name="Eta_ans_1_9">out, 16, ap_vld, Eta_ans_1_9, pointer</column>
+<column name="Eta_ans_1_9_ap_vld">out, 1, ap_vld, Eta_ans_1_9, pointer</column>
+<column name="Eta_ans_1_10">out, 16, ap_vld, Eta_ans_1_10, pointer</column>
+<column name="Eta_ans_1_10_ap_vld">out, 1, ap_vld, Eta_ans_1_10, pointer</column>
+<column name="Eta_ans_1_11">out, 16, ap_vld, Eta_ans_1_11, pointer</column>
+<column name="Eta_ans_1_11_ap_vld">out, 1, ap_vld, Eta_ans_1_11, pointer</column>
+<column name="Eta_ans_1_12">out, 16, ap_vld, Eta_ans_1_12, pointer</column>
+<column name="Eta_ans_1_12_ap_vld">out, 1, ap_vld, Eta_ans_1_12, pointer</column>
+<column name="Eta_ans_1_13">out, 16, ap_vld, Eta_ans_1_13, pointer</column>
+<column name="Eta_ans_1_13_ap_vld">out, 1, ap_vld, Eta_ans_1_13, pointer</column>
+<column name="Eta_ans_1_14">out, 16, ap_vld, Eta_ans_1_14, pointer</column>
+<column name="Eta_ans_1_14_ap_vld">out, 1, ap_vld, Eta_ans_1_14, pointer</column>
+<column name="Eta_ans_1_15">out, 16, ap_vld, Eta_ans_1_15, pointer</column>
+<column name="Eta_ans_1_15_ap_vld">out, 1, ap_vld, Eta_ans_1_15, pointer</column>
+<column name="Eta_ans_1_16">out, 16, ap_vld, Eta_ans_1_16, pointer</column>
+<column name="Eta_ans_1_16_ap_vld">out, 1, ap_vld, Eta_ans_1_16, pointer</column>
+<column name="Eta_ans_1_17">out, 16, ap_vld, Eta_ans_1_17, pointer</column>
+<column name="Eta_ans_1_17_ap_vld">out, 1, ap_vld, Eta_ans_1_17, pointer</column>
+<column name="Lam_tabz_0">in, 16, ap_none, Lam_tabz_0, pointer</column>
+<column name="Peta_tabz_0">in, 16, ap_none, Peta_tabz_0, pointer</column>
+<column name="Lam_tabz_1">in, 16, ap_none, Lam_tabz_1, pointer</column>
+<column name="Peta_tabz_1">in, 16, ap_none, Peta_tabz_1, pointer</column>
+<column name="Lam_tabz_2">in, 16, ap_none, Lam_tabz_2, pointer</column>
+<column name="Peta_tabz_2">in, 16, ap_none, Peta_tabz_2, pointer</column>
+<column name="Lam_tabz_3">in, 16, ap_none, Lam_tabz_3, pointer</column>
+<column name="Peta_tabz_3">in, 16, ap_none, Peta_tabz_3, pointer</column>
+<column name="Lam_tabz_4">in, 16, ap_none, Lam_tabz_4, pointer</column>
+<column name="Peta_tabz_4">in, 16, ap_none, Peta_tabz_4, pointer</column>
+<column name="Lam_tabz_5">in, 16, ap_none, Lam_tabz_5, pointer</column>
+<column name="Peta_tabz_5">in, 16, ap_none, Peta_tabz_5, pointer</column>
+<column name="Lam_tabz_6">in, 16, ap_none, Lam_tabz_6, pointer</column>
+<column name="Peta_tabz_6">in, 16, ap_none, Peta_tabz_6, pointer</column>
+<column name="Lam_tabz_7">in, 16, ap_none, Lam_tabz_7, pointer</column>
+<column name="Peta_tabz_7">in, 16, ap_none, Peta_tabz_7, pointer</column>
+<column name="Lam_tabz_8">in, 16, ap_none, Lam_tabz_8, pointer</column>
+<column name="Peta_tabz_8">in, 16, ap_none, Peta_tabz_8, pointer</column>
+<column name="Lam_tabz_9">in, 16, ap_none, Lam_tabz_9, pointer</column>
+<column name="Peta_tabz_9">in, 16, ap_none, Peta_tabz_9, pointer</column>
+<column name="Lam_tabz_10">in, 16, ap_none, Lam_tabz_10, pointer</column>
+<column name="Peta_tabz_10">in, 16, ap_none, Peta_tabz_10, pointer</column>
+<column name="Lam_tabz_11">in, 16, ap_none, Lam_tabz_11, pointer</column>
+<column name="Peta_tabz_11">in, 16, ap_none, Peta_tabz_11, pointer</column>
+<column name="Lam_tabz_12">in, 16, ap_none, Lam_tabz_12, pointer</column>
+<column name="Peta_tabz_12">in, 16, ap_none, Peta_tabz_12, pointer</column>
+<column name="Lam_tabz_13">in, 16, ap_none, Lam_tabz_13, pointer</column>
+<column name="Peta_tabz_13">in, 16, ap_none, Peta_tabz_13, pointer</column>
+<column name="Lam_tabz_14">in, 16, ap_none, Lam_tabz_14, pointer</column>
+<column name="Peta_tabz_14">in, 16, ap_none, Peta_tabz_14, pointer</column>
+<column name="Lam_tabz_15">in, 16, ap_none, Lam_tabz_15, pointer</column>
+<column name="Peta_tabz_15">in, 16, ap_none, Peta_tabz_15, pointer</column>
+<column name="Lam_tabz_16">in, 16, ap_none, Lam_tabz_16, pointer</column>
+<column name="Peta_tabz_16">in, 16, ap_none, Peta_tabz_16, pointer</column>
+<column name="Lam_tabz_17">in, 16, ap_none, Lam_tabz_17, pointer</column>
+<column name="Peta_tabz_17">in, 16, ap_none, Peta_tabz_17, pointer</column>
+<column name="Eta_ans_2_0">out, 16, ap_vld, Eta_ans_2_0, pointer</column>
+<column name="Eta_ans_2_0_ap_vld">out, 1, ap_vld, Eta_ans_2_0, pointer</column>
+<column name="Eta_ans_2_1">out, 16, ap_vld, Eta_ans_2_1, pointer</column>
+<column name="Eta_ans_2_1_ap_vld">out, 1, ap_vld, Eta_ans_2_1, pointer</column>
+<column name="Eta_ans_2_2">out, 16, ap_vld, Eta_ans_2_2, pointer</column>
+<column name="Eta_ans_2_2_ap_vld">out, 1, ap_vld, Eta_ans_2_2, pointer</column>
+<column name="Eta_ans_2_3">out, 16, ap_vld, Eta_ans_2_3, pointer</column>
+<column name="Eta_ans_2_3_ap_vld">out, 1, ap_vld, Eta_ans_2_3, pointer</column>
+<column name="Eta_ans_2_4">out, 16, ap_vld, Eta_ans_2_4, pointer</column>
+<column name="Eta_ans_2_4_ap_vld">out, 1, ap_vld, Eta_ans_2_4, pointer</column>
+<column name="Eta_ans_2_5">out, 16, ap_vld, Eta_ans_2_5, pointer</column>
+<column name="Eta_ans_2_5_ap_vld">out, 1, ap_vld, Eta_ans_2_5, pointer</column>
+<column name="Eta_ans_2_6">out, 16, ap_vld, Eta_ans_2_6, pointer</column>
+<column name="Eta_ans_2_6_ap_vld">out, 1, ap_vld, Eta_ans_2_6, pointer</column>
+<column name="Eta_ans_2_7">out, 16, ap_vld, Eta_ans_2_7, pointer</column>
+<column name="Eta_ans_2_7_ap_vld">out, 1, ap_vld, Eta_ans_2_7, pointer</column>
+<column name="Eta_ans_2_8">out, 16, ap_vld, Eta_ans_2_8, pointer</column>
+<column name="Eta_ans_2_8_ap_vld">out, 1, ap_vld, Eta_ans_2_8, pointer</column>
+<column name="Eta_ans_2_9">out, 16, ap_vld, Eta_ans_2_9, pointer</column>
+<column name="Eta_ans_2_9_ap_vld">out, 1, ap_vld, Eta_ans_2_9, pointer</column>
+<column name="Eta_ans_2_10">out, 16, ap_vld, Eta_ans_2_10, pointer</column>
+<column name="Eta_ans_2_10_ap_vld">out, 1, ap_vld, Eta_ans_2_10, pointer</column>
+<column name="Eta_ans_2_11">out, 16, ap_vld, Eta_ans_2_11, pointer</column>
+<column name="Eta_ans_2_11_ap_vld">out, 1, ap_vld, Eta_ans_2_11, pointer</column>
+<column name="Eta_ans_2_12">out, 16, ap_vld, Eta_ans_2_12, pointer</column>
+<column name="Eta_ans_2_12_ap_vld">out, 1, ap_vld, Eta_ans_2_12, pointer</column>
+<column name="Eta_ans_2_13">out, 16, ap_vld, Eta_ans_2_13, pointer</column>
+<column name="Eta_ans_2_13_ap_vld">out, 1, ap_vld, Eta_ans_2_13, pointer</column>
+<column name="Eta_ans_2_14">out, 16, ap_vld, Eta_ans_2_14, pointer</column>
+<column name="Eta_ans_2_14_ap_vld">out, 1, ap_vld, Eta_ans_2_14, pointer</column>
+<column name="Eta_ans_2_15">out, 16, ap_vld, Eta_ans_2_15, pointer</column>
+<column name="Eta_ans_2_15_ap_vld">out, 1, ap_vld, Eta_ans_2_15, pointer</column>
+<column name="Eta_ans_2_16">out, 16, ap_vld, Eta_ans_2_16, pointer</column>
+<column name="Eta_ans_2_16_ap_vld">out, 1, ap_vld, Eta_ans_2_16, pointer</column>
+<column name="Eta_ans_2_17">out, 16, ap_vld, Eta_ans_2_17, pointer</column>
+<column name="Eta_ans_2_17_ap_vld">out, 1, ap_vld, Eta_ans_2_17, pointer</column>
+<column name="Lam_tabe_0">in, 16, ap_none, Lam_tabe_0, pointer</column>
+<column name="Peta_tabe_0">in, 16, ap_none, Peta_tabe_0, pointer</column>
+<column name="Lam_tabe_1">in, 16, ap_none, Lam_tabe_1, pointer</column>
+<column name="Peta_tabe_1">in, 16, ap_none, Peta_tabe_1, pointer</column>
+<column name="Lam_tabe_2">in, 16, ap_none, Lam_tabe_2, pointer</column>
+<column name="Peta_tabe_2">in, 16, ap_none, Peta_tabe_2, pointer</column>
+<column name="Eta_ans_3_0">out, 16, ap_vld, Eta_ans_3_0, pointer</column>
+<column name="Eta_ans_3_0_ap_vld">out, 1, ap_vld, Eta_ans_3_0, pointer</column>
+<column name="Eta_ans_3_1">out, 16, ap_vld, Eta_ans_3_1, pointer</column>
+<column name="Eta_ans_3_1_ap_vld">out, 1, ap_vld, Eta_ans_3_1, pointer</column>
+<column name="Eta_ans_3_2">out, 16, ap_vld, Eta_ans_3_2, pointer</column>
+<column name="Eta_ans_3_2_ap_vld">out, 1, ap_vld, Eta_ans_3_2, pointer</column>
+<column name="Lam_tabf_0">in, 16, ap_none, Lam_tabf_0, pointer</column>
+<column name="Peta_tabf_0">in, 16, ap_none, Peta_tabf_0, pointer</column>
+<column name="Lam_tabf_1">in, 16, ap_none, Lam_tabf_1, pointer</column>
+<column name="Peta_tabf_1">in, 16, ap_none, Peta_tabf_1, pointer</column>
+<column name="Lam_tabf_2">in, 16, ap_none, Lam_tabf_2, pointer</column>
+<column name="Peta_tabf_2">in, 16, ap_none, Peta_tabf_2, pointer</column>
+<column name="Lam_tabf_3">in, 16, ap_none, Lam_tabf_3, pointer</column>
+<column name="Peta_tabf_3">in, 16, ap_none, Peta_tabf_3, pointer</column>
+<column name="Lam_tabf_4">in, 16, ap_none, Lam_tabf_4, pointer</column>
+<column name="Peta_tabf_4">in, 16, ap_none, Peta_tabf_4, pointer</column>
+<column name="Lam_tabf_5">in, 16, ap_none, Lam_tabf_5, pointer</column>
+<column name="Peta_tabf_5">in, 16, ap_none, Peta_tabf_5, pointer</column>
+<column name="Lam_tabf_6">in, 16, ap_none, Lam_tabf_6, pointer</column>
+<column name="Peta_tabf_6">in, 16, ap_none, Peta_tabf_6, pointer</column>
+<column name="Lam_tabf_7">in, 16, ap_none, Lam_tabf_7, pointer</column>
+<column name="Peta_tabf_7">in, 16, ap_none, Peta_tabf_7, pointer</column>
+<column name="Lam_tabf_8">in, 16, ap_none, Lam_tabf_8, pointer</column>
+<column name="Peta_tabf_8">in, 16, ap_none, Peta_tabf_8, pointer</column>
+<column name="Lam_tabf_9">in, 16, ap_none, Lam_tabf_9, pointer</column>
+<column name="Peta_tabf_9">in, 16, ap_none, Peta_tabf_9, pointer</column>
+<column name="Lam_tabf_10">in, 16, ap_none, Lam_tabf_10, pointer</column>
+<column name="Peta_tabf_10">in, 16, ap_none, Peta_tabf_10, pointer</column>
+<column name="Lam_tabf_11">in, 16, ap_none, Lam_tabf_11, pointer</column>
+<column name="Peta_tabf_11">in, 16, ap_none, Peta_tabf_11, pointer</column>
+<column name="Lam_tabf_12">in, 16, ap_none, Lam_tabf_12, pointer</column>
+<column name="Peta_tabf_12">in, 16, ap_none, Peta_tabf_12, pointer</column>
+<column name="Lam_tabf_13">in, 16, ap_none, Lam_tabf_13, pointer</column>
+<column name="Peta_tabf_13">in, 16, ap_none, Peta_tabf_13, pointer</column>
+<column name="Lam_tabf_14">in, 16, ap_none, Lam_tabf_14, pointer</column>
+<column name="Peta_tabf_14">in, 16, ap_none, Peta_tabf_14, pointer</column>
+<column name="Lam_tabf_15">in, 16, ap_none, Lam_tabf_15, pointer</column>
+<column name="Peta_tabf_15">in, 16, ap_none, Peta_tabf_15, pointer</column>
+<column name="Lam_tabf_16">in, 16, ap_none, Lam_tabf_16, pointer</column>
+<column name="Peta_tabf_16">in, 16, ap_none, Peta_tabf_16, pointer</column>
+<column name="Lam_tabf_17">in, 16, ap_none, Lam_tabf_17, pointer</column>
+<column name="Peta_tabf_17">in, 16, ap_none, Peta_tabf_17, pointer</column>
+<column name="Eta_ans_4_0">out, 16, ap_vld, Eta_ans_4_0, pointer</column>
+<column name="Eta_ans_4_0_ap_vld">out, 1, ap_vld, Eta_ans_4_0, pointer</column>
+<column name="Eta_ans_4_1">out, 16, ap_vld, Eta_ans_4_1, pointer</column>
+<column name="Eta_ans_4_1_ap_vld">out, 1, ap_vld, Eta_ans_4_1, pointer</column>
+<column name="Eta_ans_4_2">out, 16, ap_vld, Eta_ans_4_2, pointer</column>
+<column name="Eta_ans_4_2_ap_vld">out, 1, ap_vld, Eta_ans_4_2, pointer</column>
+<column name="Eta_ans_4_3">out, 16, ap_vld, Eta_ans_4_3, pointer</column>
+<column name="Eta_ans_4_3_ap_vld">out, 1, ap_vld, Eta_ans_4_3, pointer</column>
+<column name="Eta_ans_4_4">out, 16, ap_vld, Eta_ans_4_4, pointer</column>
+<column name="Eta_ans_4_4_ap_vld">out, 1, ap_vld, Eta_ans_4_4, pointer</column>
+<column name="Eta_ans_4_5">out, 16, ap_vld, Eta_ans_4_5, pointer</column>
+<column name="Eta_ans_4_5_ap_vld">out, 1, ap_vld, Eta_ans_4_5, pointer</column>
+<column name="Eta_ans_4_6">out, 16, ap_vld, Eta_ans_4_6, pointer</column>
+<column name="Eta_ans_4_6_ap_vld">out, 1, ap_vld, Eta_ans_4_6, pointer</column>
+<column name="Eta_ans_4_7">out, 16, ap_vld, Eta_ans_4_7, pointer</column>
+<column name="Eta_ans_4_7_ap_vld">out, 1, ap_vld, Eta_ans_4_7, pointer</column>
+<column name="Eta_ans_4_8">out, 16, ap_vld, Eta_ans_4_8, pointer</column>
+<column name="Eta_ans_4_8_ap_vld">out, 1, ap_vld, Eta_ans_4_8, pointer</column>
+<column name="Eta_ans_4_9">out, 16, ap_vld, Eta_ans_4_9, pointer</column>
+<column name="Eta_ans_4_9_ap_vld">out, 1, ap_vld, Eta_ans_4_9, pointer</column>
+<column name="Eta_ans_4_10">out, 16, ap_vld, Eta_ans_4_10, pointer</column>
+<column name="Eta_ans_4_10_ap_vld">out, 1, ap_vld, Eta_ans_4_10, pointer</column>
+<column name="Eta_ans_4_11">out, 16, ap_vld, Eta_ans_4_11, pointer</column>
+<column name="Eta_ans_4_11_ap_vld">out, 1, ap_vld, Eta_ans_4_11, pointer</column>
+<column name="Eta_ans_4_12">out, 16, ap_vld, Eta_ans_4_12, pointer</column>
+<column name="Eta_ans_4_12_ap_vld">out, 1, ap_vld, Eta_ans_4_12, pointer</column>
+<column name="Eta_ans_4_13">out, 16, ap_vld, Eta_ans_4_13, pointer</column>
+<column name="Eta_ans_4_13_ap_vld">out, 1, ap_vld, Eta_ans_4_13, pointer</column>
+<column name="Eta_ans_4_14">out, 16, ap_vld, Eta_ans_4_14, pointer</column>
+<column name="Eta_ans_4_14_ap_vld">out, 1, ap_vld, Eta_ans_4_14, pointer</column>
+<column name="Eta_ans_4_15">out, 16, ap_vld, Eta_ans_4_15, pointer</column>
+<column name="Eta_ans_4_15_ap_vld">out, 1, ap_vld, Eta_ans_4_15, pointer</column>
+<column name="Eta_ans_4_16">out, 16, ap_vld, Eta_ans_4_16, pointer</column>
+<column name="Eta_ans_4_16_ap_vld">out, 1, ap_vld, Eta_ans_4_16, pointer</column>
+<column name="Eta_ans_4_17">out, 16, ap_vld, Eta_ans_4_17, pointer</column>
+<column name="Eta_ans_4_17_ap_vld">out, 1, ap_vld, Eta_ans_4_17, pointer</column>
+<column name="Lam_tabg_0">in, 16, ap_none, Lam_tabg_0, pointer</column>
+<column name="Peta_tabg_0">in, 16, ap_none, Peta_tabg_0, pointer</column>
+<column name="Lam_tabg_1">in, 16, ap_none, Lam_tabg_1, pointer</column>
+<column name="Peta_tabg_1">in, 16, ap_none, Peta_tabg_1, pointer</column>
+<column name="Lam_tabg_2">in, 16, ap_none, Lam_tabg_2, pointer</column>
+<column name="Peta_tabg_2">in, 16, ap_none, Peta_tabg_2, pointer</column>
+<column name="Lam_tabg_3">in, 16, ap_none, Lam_tabg_3, pointer</column>
+<column name="Peta_tabg_3">in, 16, ap_none, Peta_tabg_3, pointer</column>
+<column name="Lam_tabg_4">in, 16, ap_none, Lam_tabg_4, pointer</column>
+<column name="Peta_tabg_4">in, 16, ap_none, Peta_tabg_4, pointer</column>
+<column name="Lam_tabg_5">in, 16, ap_none, Lam_tabg_5, pointer</column>
+<column name="Peta_tabg_5">in, 16, ap_none, Peta_tabg_5, pointer</column>
+<column name="Lam_tabg_6">in, 16, ap_none, Lam_tabg_6, pointer</column>
+<column name="Peta_tabg_6">in, 16, ap_none, Peta_tabg_6, pointer</column>
+<column name="Lam_tabg_7">in, 16, ap_none, Lam_tabg_7, pointer</column>
+<column name="Peta_tabg_7">in, 16, ap_none, Peta_tabg_7, pointer</column>
+<column name="Lam_tabg_8">in, 16, ap_none, Lam_tabg_8, pointer</column>
+<column name="Peta_tabg_8">in, 16, ap_none, Peta_tabg_8, pointer</column>
+<column name="Lam_tabg_9">in, 16, ap_none, Lam_tabg_9, pointer</column>
+<column name="Peta_tabg_9">in, 16, ap_none, Peta_tabg_9, pointer</column>
+<column name="Lam_tabg_10">in, 16, ap_none, Lam_tabg_10, pointer</column>
+<column name="Peta_tabg_10">in, 16, ap_none, Peta_tabg_10, pointer</column>
+<column name="Lam_tabg_11">in, 16, ap_none, Lam_tabg_11, pointer</column>
+<column name="Peta_tabg_11">in, 16, ap_none, Peta_tabg_11, pointer</column>
+<column name="Lam_tabg_12">in, 16, ap_none, Lam_tabg_12, pointer</column>
+<column name="Peta_tabg_12">in, 16, ap_none, Peta_tabg_12, pointer</column>
+<column name="Lam_tabg_13">in, 16, ap_none, Lam_tabg_13, pointer</column>
+<column name="Peta_tabg_13">in, 16, ap_none, Peta_tabg_13, pointer</column>
+<column name="Lam_tabg_14">in, 16, ap_none, Lam_tabg_14, pointer</column>
+<column name="Peta_tabg_14">in, 16, ap_none, Peta_tabg_14, pointer</column>
+<column name="Lam_tabg_15">in, 16, ap_none, Lam_tabg_15, pointer</column>
+<column name="Peta_tabg_15">in, 16, ap_none, Peta_tabg_15, pointer</column>
+<column name="Lam_tabg_16">in, 16, ap_none, Lam_tabg_16, pointer</column>
+<column name="Peta_tabg_16">in, 16, ap_none, Peta_tabg_16, pointer</column>
+<column name="Lam_tabg_17">in, 16, ap_none, Lam_tabg_17, pointer</column>
+<column name="Peta_tabg_17">in, 16, ap_none, Peta_tabg_17, pointer</column>
+<column name="Eta_ans_5_0">out, 16, ap_vld, Eta_ans_5_0, pointer</column>
+<column name="Eta_ans_5_0_ap_vld">out, 1, ap_vld, Eta_ans_5_0, pointer</column>
+<column name="Eta_ans_5_1">out, 16, ap_vld, Eta_ans_5_1, pointer</column>
+<column name="Eta_ans_5_1_ap_vld">out, 1, ap_vld, Eta_ans_5_1, pointer</column>
+<column name="Eta_ans_5_2">out, 16, ap_vld, Eta_ans_5_2, pointer</column>
+<column name="Eta_ans_5_2_ap_vld">out, 1, ap_vld, Eta_ans_5_2, pointer</column>
+<column name="Eta_ans_5_3">out, 16, ap_vld, Eta_ans_5_3, pointer</column>
+<column name="Eta_ans_5_3_ap_vld">out, 1, ap_vld, Eta_ans_5_3, pointer</column>
+<column name="Eta_ans_5_4">out, 16, ap_vld, Eta_ans_5_4, pointer</column>
+<column name="Eta_ans_5_4_ap_vld">out, 1, ap_vld, Eta_ans_5_4, pointer</column>
+<column name="Eta_ans_5_5">out, 16, ap_vld, Eta_ans_5_5, pointer</column>
+<column name="Eta_ans_5_5_ap_vld">out, 1, ap_vld, Eta_ans_5_5, pointer</column>
+<column name="Eta_ans_5_6">out, 16, ap_vld, Eta_ans_5_6, pointer</column>
+<column name="Eta_ans_5_6_ap_vld">out, 1, ap_vld, Eta_ans_5_6, pointer</column>
+<column name="Eta_ans_5_7">out, 16, ap_vld, Eta_ans_5_7, pointer</column>
+<column name="Eta_ans_5_7_ap_vld">out, 1, ap_vld, Eta_ans_5_7, pointer</column>
+<column name="Eta_ans_5_8">out, 16, ap_vld, Eta_ans_5_8, pointer</column>
+<column name="Eta_ans_5_8_ap_vld">out, 1, ap_vld, Eta_ans_5_8, pointer</column>
+<column name="Eta_ans_5_9">out, 16, ap_vld, Eta_ans_5_9, pointer</column>
+<column name="Eta_ans_5_9_ap_vld">out, 1, ap_vld, Eta_ans_5_9, pointer</column>
+<column name="Eta_ans_5_10">out, 16, ap_vld, Eta_ans_5_10, pointer</column>
+<column name="Eta_ans_5_10_ap_vld">out, 1, ap_vld, Eta_ans_5_10, pointer</column>
+<column name="Eta_ans_5_11">out, 16, ap_vld, Eta_ans_5_11, pointer</column>
+<column name="Eta_ans_5_11_ap_vld">out, 1, ap_vld, Eta_ans_5_11, pointer</column>
+<column name="Eta_ans_5_12">out, 16, ap_vld, Eta_ans_5_12, pointer</column>
+<column name="Eta_ans_5_12_ap_vld">out, 1, ap_vld, Eta_ans_5_12, pointer</column>
+<column name="Eta_ans_5_13">out, 16, ap_vld, Eta_ans_5_13, pointer</column>
+<column name="Eta_ans_5_13_ap_vld">out, 1, ap_vld, Eta_ans_5_13, pointer</column>
+<column name="Eta_ans_5_14">out, 16, ap_vld, Eta_ans_5_14, pointer</column>
+<column name="Eta_ans_5_14_ap_vld">out, 1, ap_vld, Eta_ans_5_14, pointer</column>
+<column name="Eta_ans_5_15">out, 16, ap_vld, Eta_ans_5_15, pointer</column>
+<column name="Eta_ans_5_15_ap_vld">out, 1, ap_vld, Eta_ans_5_15, pointer</column>
+<column name="Eta_ans_5_16">out, 16, ap_vld, Eta_ans_5_16, pointer</column>
+<column name="Eta_ans_5_16_ap_vld">out, 1, ap_vld, Eta_ans_5_16, pointer</column>
+<column name="Eta_ans_5_17">out, 16, ap_vld, Eta_ans_5_17, pointer</column>
+<column name="Eta_ans_5_17_ap_vld">out, 1, ap_vld, Eta_ans_5_17, pointer</column>
+</table>
+</item>
+</section>
+</profile>

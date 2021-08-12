@@ -1,0 +1,13 @@
+#-----------------------------------------------------------
+# xsim v2016.3 (64-bit)
+# SW Build 1682563 on Mon Oct 10 19:07:27 MDT 2016
+# IP Build 1681267 on Mon Oct 10 21:28:31 MDT 2016
+# Start of session at: Thu Oct 10 20:35:07 2019
+# Process ID: 11460
+# Current directory: C:/Users/dougo/LDPC_Out/solution1/sim/verilog
+# Command line: xsim.exe -mode tcl -source {xsim.dir/LDPC_Out/xsim_script.tcl}
+# Log file: C:/Users/dougo/LDPC_Out/solution1/sim/verilog/xsim.log
+# Journal file: C:/Users/dougo/LDPC_Out/solution1/sim/verilog\xsim.jou
+#-----------------------------------------------------------
+source xsim.dir/LDPC_Out/xsim_script.tcl
+source LDPC_Out.tcl

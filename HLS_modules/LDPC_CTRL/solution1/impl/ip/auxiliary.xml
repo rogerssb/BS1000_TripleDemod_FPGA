@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xd:acceleratorMap xmlns:xd="http://www.xilinx.com/xidane" xd:functionName="LDPC_CTRL" xd:componentRef="LDPC_CTRL" xd:initiationInterval="1" xd:clockPeriod="10.000000" xd:sequential="true" xd:hostMachine="64" xd:reset="control">
+  <xd:controlReg xd:name="control" xd:interfaceRef="ap_ctrl" xd:busTypeRef="acc_handshake" xd:type="acc_handshake"/>
+  <xd:arg xd:name="block" xd:originalName="block" xd:direction="in" xd:interfaceRef="block_V" xd:busTypeRef="register" xd:handshakeRef="ap_none" xd:dataWidth="2"/>
+  <xd:arg xd:name="code" xd:originalName="code" xd:direction="in" xd:interfaceRef="code_V" xd:busTypeRef="register" xd:handshakeRef="ap_none" xd:dataWidth="2"/>
+  <xd:arg xd:name="run" xd:originalName="run" xd:direction="in" xd:interfaceRef="run" xd:busTypeRef="register" xd:handshakeRef="ap_none" xd:dataWidth="1"/>
+  <xd:arg xd:name="*(init_start)" xd:originalName="init_start" xd:direction="out" xd:interfaceRef="init_start" xd:busTypeRef="register" xd:handshakeRef="ap_vld" xd:dataWidth="1"/>
+  <xd:arg xd:name="init_done" xd:originalName="init_done" xd:direction="in" xd:interfaceRef="init_done" xd:busTypeRef="register" xd:handshakeRef="ap_none" xd:dataWidth="1"/>
+  <xd:arg xd:name="init_ready" xd:originalName="init_ready" xd:direction="in" xd:interfaceRef="init_ready" xd:busTypeRef="register" xd:handshakeRef="ap_none" xd:dataWidth="1"/>
+  <xd:arg xd:name="*(buff_start)" xd:originalName="buff_start" xd:direction="out" xd:interfaceRef="buff_start" xd:busTypeRef="register" xd:handshakeRef="ap_vld" xd:dataWidth="1"/>
+  <xd:arg xd:name="*(status)" xd:originalName="status" xd:direction="out" xd:interfaceRef="status_V" xd:busTypeRef="register" xd:handshakeRef="ap_vld" xd:dataWidth="2"/>
+  <xd:arg xd:name="*(err_code)" xd:originalName="err_code" xd:direction="out" xd:interfaceRef="err_code" xd:busTypeRef="register" xd:handshakeRef="ap_vld" xd:dataWidth="16"/>
+  <xd:arg xd:name="*(size)" xd:originalName="size" xd:direction="out" xd:interfaceRef="size_V" xd:busTypeRef="register" xd:handshakeRef="ap_vld" xd:dataWidth="2"/>
+  <xd:arg xd:name="*(rate)" xd:originalName="rate" xd:direction="out" xd:interfaceRef="rate_V" xd:busTypeRef="register" xd:handshakeRef="ap_vld" xd:dataWidth="2"/>
+  <xd:arg xd:name="*(buff_reset)" xd:originalName="buff_reset" xd:direction="out" xd:interfaceRef="buff_reset" xd:busTypeRef="register" xd:handshakeRef="ap_vld" xd:dataWidth="1"/>
+  <xd:latencyEstimates xd:best-case="0" xd:worst-case="0" xd:average-case="0"/>
+  <xd:resourceEstimates xd:LUT="39" xd:FF="17" xd:BRAM="0" xd:DSP="0"/>
+</xd:acceleratorMap>

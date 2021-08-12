@@ -1,0 +1,304 @@
+
+
+================================================================
+== Vivado HLS Report for 'setupLDPC'
+================================================================
+* Date:           Thu Mar 14 13:23:53 2019
+
+* Version:        2016.3 (Build 1682563 on Mon Oct 10 19:41:59 MDT 2016)
+* Project:        LDPC_INIT_DSP3
+* Solution:       solution2
+* Product family: kintex7
+* Target device:  xc7k160tffv676-2
+
+
+================================================================
+== Performance Estimates
+================================================================
++ Timing (ns): 
+    * Summary: 
+    +--------+-------+----------+------------+
+    |  Clock | Target| Estimated| Uncertainty|
+    +--------+-------+----------+------------+
+    |ap_clk  |  10.00|      2.88|        1.25|
+    +--------+-------+----------+------------+
+
++ Latency (clock cycles): 
+    * Summary: 
+    +-----+-----+-----+-----+---------+
+    |  Latency  |  Interval | Pipeline|
+    | min | max | min | max |   Type  |
+    +-----+-----+-----+-----+---------+
+    |    0|    0|    1|    1|   none  |
+    +-----+-----+-----+-----+---------+
+
+    + Detail: 
+        * Instance: 
+        N/A
+
+        * Loop: 
+        N/A
+
+============================================================
++ Verbose Summary: Synthesis Manager
+============================================================
+InlineROM: 1
+ExposeGlobal: 0
+============================================================
++ Verbose Summary: CDFG Model
+============================================================
+IsTopModel: 1
+ResetActiveHigh: 1
+IsCombinational: 0
+IsDatapathOnly: 0
+HasWiredReturn: 1
+HasMFsm: 0
+HasVarLatency: 0
+IsPipeline: 0
+IsRtlPipelined: 0
+IsInstanceOverlapped: 0
+IsDontTouch: 0
+HasImplIP: 0
+IsGatedGlobalClock: 0
+
+
+============================================================
++ Verbose Summary: Schedule
+============================================================
+* Number of FSM states: 1
+* Pipeline: 0
+* Dataflow Pipeline: 0
+
+* FSM state transitions: 
+1 --> 
+* FSM state operations: 
+
+ <State 1>: 2.88ns
+ST_1: StgValue_2 (9)  [1/1] 0.00ns
+:0  call void (...)* @_ssdm_op_SpecBitsMap(i2 %size_V), !map !54
+
+ST_1: StgValue_3 (10)  [1/1] 0.00ns
+:1  call void (...)* @_ssdm_op_SpecBitsMap(i2 %rate_V), !map !60
+
+ST_1: StgValue_4 (11)  [1/1] 0.00ns
+:2  call void (...)* @_ssdm_op_SpecBitsMap(i16* %nR_M_V), !map !64
+
+ST_1: StgValue_5 (12)  [1/1] 0.00ns
+:3  call void (...)* @_ssdm_op_SpecBitsMap(i16* %etaIndexM_M_V), !map !68
+
+ST_1: StgValue_6 (13)  [1/1] 0.00ns
+:4  call void (...)* @_ssdm_op_SpecBitsMap(i16* %pCodeM_V), !map !72
+
+ST_1: StgValue_7 (14)  [1/1] 0.00ns
+:5  call void (...)* @_ssdm_op_SpecBitsMap(i16* %pMaxIterations_V), !map !76
+
+ST_1: StgValue_8 (15)  [1/1] 0.00ns
+:6  call void (...)* @_ssdm_op_SpecBitsMap(i16* %numbits_V), !map !80
+
+ST_1: StgValue_9 (16)  [1/1] 0.00ns
+:7  call void (...)* @_ssdm_op_SpecBitsMap(i16* %split_V), !map !84
+
+ST_1: StgValue_10 (17)  [1/1] 0.00ns
+:8  call void (...)* @_ssdm_op_SpecTopModule([10 x i8]* @setupLDPC_str) nounwind
+
+ST_1: rate_V_read (18)  [1/1] 0.00ns
+:9  %rate_V_read = call i2 @_ssdm_op_Read.ap_auto.i2(i2 %rate_V)
+
+ST_1: size_V_read (19)  [1/1] 0.00ns
+:10  %size_V_read = call i2 @_ssdm_op_Read.ap_auto.i2(i2 %size_V)
+
+ST_1: StgValue_13 (20)  [1/1] 0.00ns  loc: LDPC_INIT_DSP3/LDPC_INIT_DSP3.cpp:34
+:11  call void (...)* @_ssdm_op_SpecInterface(i16* %nR_M_V, [8 x i8]* @p_str, i32 0, i32 0, [1 x i8]* @p_str24, i32 0, i32 0, [1 x i8]* @p_str24, [1 x i8]* @p_str24, [1 x i8]* @p_str24, i32 0, i32 0, i32 0, i32 0, [1 x i8]* @p_str24, [1 x i8]* @p_str24) nounwind
+
+ST_1: tmp_cast2 (21)  [1/1] 0.00ns  loc: LDPC_INIT_DSP3/LDPC_INIT_DSP3.cpp:42
+:12  %tmp_cast2 = zext i2 %size_V_read to i5
+
+ST_1: p_shl (22)  [1/1] 0.00ns  loc: LDPC_INIT_DSP3/LDPC_INIT_DSP3.cpp:42
+:13  %p_shl = call i4 @_ssdm_op_BitConcatenate.i4.i2.i2(i2 %size_V_read, i2 0)
+
+ST_1: p_shl_cast (23)  [1/1] 0.00ns  loc: LDPC_INIT_DSP3/LDPC_INIT_DSP3.cpp:42
+:14  %p_shl_cast = zext i4 %p_shl to i5
+
+ST_1: tmp_1 (24)  [1/1] 0.89ns  loc: LDPC_INIT_DSP3/LDPC_INIT_DSP3.cpp:42
+:15  %tmp_1 = sub i5 %p_shl_cast, %tmp_cast2
+
+ST_1: tmp_2_cast (25)  [1/1] 0.00ns  loc: LDPC_INIT_DSP3/LDPC_INIT_DSP3.cpp:42
+:16  %tmp_2_cast = zext i2 %rate_V_read to i3
+
+ST_1: tmp1 (26)  [1/1] 0.43ns  loc: LDPC_INIT_DSP3/LDPC_INIT_DSP3.cpp:42
+:17  %tmp1 = add i3 %tmp_2_cast, -3
+
+ST_1: tmp1_cast (27)  [1/1] 0.00ns  loc: LDPC_INIT_DSP3/LDPC_INIT_DSP3.cpp:42
+:18  %tmp1_cast = sext i3 %tmp1 to i5
+
+ST_1: mode (28)  [1/1] 0.89ns  loc: LDPC_INIT_DSP3/LDPC_INIT_DSP3.cpp:42
+:19  %mode = add i5 %tmp_1, %tmp1_cast
+
+ST_1: StgValue_22 (29)  [1/1] 1.11ns  loc: LDPC_INIT_DSP3/LDPC_INIT_DSP3.cpp:44
+:20  switch i5 %mode, label %._crit_edge [
+    i5 3, label %1
+    i5 2, label %2
+    i5 1, label %3
+    i5 6, label %4
+    i5 5, label %5
+    i5 4, label %6
+  ]
+
+ST_1: StgValue_23 (31)  [1/1] 0.00ns  loc: LDPC_INIT_DSP3/LDPC_INIT_DSP3.cpp:122
+:0  call void @_ssdm_op_Write.ap_ovld.i16P(i16* %nR_M_V, i16 10240)
+
+ST_1: StgValue_24 (32)  [1/1] 0.00ns  loc: LDPC_INIT_DSP3/LDPC_INIT_DSP3.cpp:123
+:1  call void @_ssdm_op_Write.ap_auto.i16P(i16* %etaIndexM_M_V, i16 -28672)
+
+ST_1: StgValue_25 (33)  [1/1] 0.00ns  loc: LDPC_INIT_DSP3/LDPC_INIT_DSP3.cpp:125
+:2  call void @_ssdm_op_Write.ap_auto.i16P(i16* %pCodeM_V, i16 6144)
+
+ST_1: StgValue_26 (34)  [1/1] 0.00ns  loc: LDPC_INIT_DSP3/LDPC_INIT_DSP3.cpp:126
+:3  call void @_ssdm_op_Write.ap_auto.i16P(i16* %pMaxIterations_V, i16 3)
+
+ST_1: StgValue_27 (35)  [1/1] 0.00ns  loc: LDPC_INIT_DSP3/LDPC_INIT_DSP3.cpp:127
+:4  call void @_ssdm_op_Write.ap_auto.i16P(i16* %numbits_V, i16 8192)
+
+ST_1: StgValue_28 (36)  [1/1] 0.00ns  loc: LDPC_INIT_DSP3/LDPC_INIT_DSP3.cpp:128
+:5  call void @_ssdm_op_Write.ap_auto.i16P(i16* %split_V, i16 1024)
+
+ST_1: StgValue_29 (37)  [1/1] 0.00ns  loc: LDPC_INIT_DSP3/LDPC_INIT_DSP3.cpp:130
+:6  br label %._crit_edge
+
+ST_1: StgValue_30 (39)  [1/1] 0.00ns  loc: LDPC_INIT_DSP3/LDPC_INIT_DSP3.cpp:108
+:0  call void @_ssdm_op_Write.ap_ovld.i16P(i16* %nR_M_V, i16 7168)
+
+ST_1: StgValue_31 (40)  [1/1] 0.00ns  loc: LDPC_INIT_DSP3/LDPC_INIT_DSP3.cpp:109
+:1  call void @_ssdm_op_Write.ap_auto.i16P(i16* %etaIndexM_M_V, i16 26624)
+
+ST_1: StgValue_32 (41)  [1/1] 0.00ns  loc: LDPC_INIT_DSP3/LDPC_INIT_DSP3.cpp:111
+:2  call void @_ssdm_op_Write.ap_auto.i16P(i16* %pCodeM_V, i16 3072)
+
+ST_1: StgValue_33 (42)  [1/1] 0.00ns  loc: LDPC_INIT_DSP3/LDPC_INIT_DSP3.cpp:112
+:3  call void @_ssdm_op_Write.ap_auto.i16P(i16* %pMaxIterations_V, i16 3)
+
+ST_1: StgValue_34 (43)  [1/1] 0.00ns  loc: LDPC_INIT_DSP3/LDPC_INIT_DSP3.cpp:113
+:4  call void @_ssdm_op_Write.ap_auto.i16P(i16* %numbits_V, i16 6144)
+
+ST_1: StgValue_35 (44)  [1/1] 0.00ns  loc: LDPC_INIT_DSP3/LDPC_INIT_DSP3.cpp:114
+:5  call void @_ssdm_op_Write.ap_auto.i16P(i16* %split_V, i16 768)
+
+ST_1: StgValue_36 (45)  [1/1] 0.00ns  loc: LDPC_INIT_DSP3/LDPC_INIT_DSP3.cpp:116
+:6  br label %._crit_edge
+
+ST_1: StgValue_37 (47)  [1/1] 0.00ns  loc: LDPC_INIT_DSP3/LDPC_INIT_DSP3.cpp:94
+:0  call void @_ssdm_op_Write.ap_ovld.i16P(i16* %nR_M_V, i16 5632)
+
+ST_1: StgValue_38 (48)  [1/1] 0.00ns  loc: LDPC_INIT_DSP3/LDPC_INIT_DSP3.cpp:95
+:1  call void @_ssdm_op_Write.ap_auto.i16P(i16* %etaIndexM_M_V, i16 21504)
+
+ST_1: StgValue_39 (49)  [1/1] 0.00ns  loc: LDPC_INIT_DSP3/LDPC_INIT_DSP3.cpp:97
+:2  call void @_ssdm_op_Write.ap_auto.i16P(i16* %pCodeM_V, i16 1536)
+
+ST_1: StgValue_40 (50)  [1/1] 0.00ns  loc: LDPC_INIT_DSP3/LDPC_INIT_DSP3.cpp:98
+:3  call void @_ssdm_op_Write.ap_auto.i16P(i16* %pMaxIterations_V, i16 3)
+
+ST_1: StgValue_41 (51)  [1/1] 0.00ns  loc: LDPC_INIT_DSP3/LDPC_INIT_DSP3.cpp:99
+:4  call void @_ssdm_op_Write.ap_auto.i16P(i16* %numbits_V, i16 5120)
+
+ST_1: StgValue_42 (52)  [1/1] 0.00ns  loc: LDPC_INIT_DSP3/LDPC_INIT_DSP3.cpp:100
+:5  call void @_ssdm_op_Write.ap_auto.i16P(i16* %split_V, i16 512)
+
+ST_1: StgValue_43 (53)  [1/1] 0.00ns  loc: LDPC_INIT_DSP3/LDPC_INIT_DSP3.cpp:102
+:6  br label %._crit_edge
+
+ST_1: StgValue_44 (55)  [1/1] 0.00ns  loc: LDPC_INIT_DSP3/LDPC_INIT_DSP3.cpp:79
+:0  call void @_ssdm_op_Write.ap_ovld.i16P(i16* %nR_M_V, i16 2560)
+
+ST_1: StgValue_45 (56)  [1/1] 0.00ns  loc: LDPC_INIT_DSP3/LDPC_INIT_DSP3.cpp:80
+:1  call void @_ssdm_op_Write.ap_auto.i16P(i16* %etaIndexM_M_V, i16 9216)
+
+ST_1: StgValue_46 (57)  [1/1] 0.00ns  loc: LDPC_INIT_DSP3/LDPC_INIT_DSP3.cpp:82
+:2  call void @_ssdm_op_Write.ap_auto.i16P(i16* %pCodeM_V, i16 1536)
+
+ST_1: StgValue_47 (58)  [1/1] 0.00ns  loc: LDPC_INIT_DSP3/LDPC_INIT_DSP3.cpp:83
+:3  call void @_ssdm_op_Write.ap_auto.i16P(i16* %pMaxIterations_V, i16 3)
+
+ST_1: StgValue_48 (59)  [1/1] 0.00ns  loc: LDPC_INIT_DSP3/LDPC_INIT_DSP3.cpp:84
+:4  call void @_ssdm_op_Write.ap_auto.i16P(i16* %numbits_V, i16 2048)
+
+ST_1: StgValue_49 (60)  [1/1] 0.00ns  loc: LDPC_INIT_DSP3/LDPC_INIT_DSP3.cpp:85
+:5  call void @_ssdm_op_Write.ap_auto.i16P(i16* %split_V, i16 256)
+
+ST_1: StgValue_50 (61)  [1/1] 0.00ns  loc: LDPC_INIT_DSP3/LDPC_INIT_DSP3.cpp:87
+:6  br label %._crit_edge
+
+ST_1: StgValue_51 (63)  [1/1] 0.00ns  loc: LDPC_INIT_DSP3/LDPC_INIT_DSP3.cpp:64
+:0  call void @_ssdm_op_Write.ap_ovld.i16P(i16* %nR_M_V, i16 1792)
+
+ST_1: StgValue_52 (64)  [1/1] 0.00ns  loc: LDPC_INIT_DSP3/LDPC_INIT_DSP3.cpp:65
+:1  call void @_ssdm_op_Write.ap_auto.i16P(i16* %etaIndexM_M_V, i16 6656)
+
+ST_1: StgValue_53 (65)  [1/1] 0.00ns  loc: LDPC_INIT_DSP3/LDPC_INIT_DSP3.cpp:67
+:2  call void @_ssdm_op_Write.ap_auto.i16P(i16* %pCodeM_V, i16 768)
+
+ST_1: StgValue_54 (66)  [1/1] 0.00ns  loc: LDPC_INIT_DSP3/LDPC_INIT_DSP3.cpp:68
+:3  call void @_ssdm_op_Write.ap_auto.i16P(i16* %pMaxIterations_V, i16 3)
+
+ST_1: StgValue_55 (67)  [1/1] 0.00ns  loc: LDPC_INIT_DSP3/LDPC_INIT_DSP3.cpp:69
+:4  call void @_ssdm_op_Write.ap_auto.i16P(i16* %numbits_V, i16 1536)
+
+ST_1: StgValue_56 (68)  [1/1] 0.00ns  loc: LDPC_INIT_DSP3/LDPC_INIT_DSP3.cpp:70
+:5  call void @_ssdm_op_Write.ap_auto.i16P(i16* %split_V, i16 192)
+
+ST_1: StgValue_57 (69)  [1/1] 0.00ns  loc: LDPC_INIT_DSP3/LDPC_INIT_DSP3.cpp:72
+:6  br label %._crit_edge
+
+ST_1: StgValue_58 (71)  [1/1] 0.00ns  loc: LDPC_INIT_DSP3/LDPC_INIT_DSP3.cpp:50
+:0  call void @_ssdm_op_Write.ap_ovld.i16P(i16* %nR_M_V, i16 1408)
+
+ST_1: StgValue_59 (72)  [1/1] 0.00ns  loc: LDPC_INIT_DSP3/LDPC_INIT_DSP3.cpp:51
+:1  call void @_ssdm_op_Write.ap_auto.i16P(i16* %etaIndexM_M_V, i16 5376)
+
+ST_1: StgValue_60 (73)  [1/1] 0.00ns  loc: LDPC_INIT_DSP3/LDPC_INIT_DSP3.cpp:53
+:2  call void @_ssdm_op_Write.ap_auto.i16P(i16* %pCodeM_V, i16 384)
+
+ST_1: StgValue_61 (74)  [1/1] 0.00ns  loc: LDPC_INIT_DSP3/LDPC_INIT_DSP3.cpp:54
+:3  call void @_ssdm_op_Write.ap_auto.i16P(i16* %pMaxIterations_V, i16 30)
+
+ST_1: StgValue_62 (75)  [1/1] 0.00ns  loc: LDPC_INIT_DSP3/LDPC_INIT_DSP3.cpp:55
+:4  call void @_ssdm_op_Write.ap_auto.i16P(i16* %numbits_V, i16 1280)
+
+ST_1: StgValue_63 (76)  [1/1] 0.00ns  loc: LDPC_INIT_DSP3/LDPC_INIT_DSP3.cpp:56
+:5  call void @_ssdm_op_Write.ap_auto.i16P(i16* %split_V, i16 128)
+
+ST_1: StgValue_64 (77)  [1/1] 0.00ns  loc: LDPC_INIT_DSP3/LDPC_INIT_DSP3.cpp:58
+:6  br label %._crit_edge
+
+ST_1: StgValue_65 (79)  [1/1] 0.00ns  loc: LDPC_INIT_DSP3/LDPC_INIT_DSP3.cpp:133
+._crit_edge:0  ret void
+
+
+
+============================================================
++ Verbose Summary: Timing violations
+============================================================
+Target clock period: 10ns, clock uncertainty: 1.25ns.
+
+ <State 1>: 2.88ns
+The critical path consists of the following:
+	wire read on port 'size_V' [19]  (0 ns)
+	'sub' operation ('tmp_1', LDPC_INIT_DSP3/LDPC_INIT_DSP3.cpp:42) [24]  (0.885 ns)
+	'add' operation ('mode', LDPC_INIT_DSP3/LDPC_INIT_DSP3.cpp:42) [28]  (0.885 ns)
+
+
+============================================================
++ Verbose Summary: Binding
+============================================================
+N/A
+* FSMD analyzer results:
+  - Output states:
+ - Input state : 
+  - Chain level:
+	State 1
+
+
+============================================================
++ Verbose Summary: Datapath Resource usage 
+============================================================
+N/A

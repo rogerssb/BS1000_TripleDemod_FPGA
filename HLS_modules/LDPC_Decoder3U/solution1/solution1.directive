@@ -1,0 +1,1152 @@
+<AutoPilot:ProjectResources xmlns:AutoPilot="com.autoesl.autopilot.ui.directiveView">
+    <sourceFile name="">
+        <directive functionName="calc_ma" label="" functionLabel="">
+            <pragma name="PIPELINE"/>
+        </directive>
+        <directive functionName="mcalcB" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="est" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="mcalcB" label="" functionLabel="">
+            <pragma name="UNROLL"/>
+        </directive>
+        <directive functionName="mcalcB" label="" functionLabel="">
+            <pragma name="PIPELINE"/>
+        </directive>
+        <directive functionName="mcalcB" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="sgn" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Lam_tabx" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Peta_tabx" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Eta_tabx" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Eta_ans" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Lam_taby" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Peta_taby" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Eta_taby" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Eta_ans_1" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="mcalcC" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="est" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="mcalcC" label="" functionLabel="">
+            <pragma name="ARRAY_RESHAPE">
+                <option name="variable" value="sgn" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="mcalcC" label="" functionLabel="">
+            <pragma name="UNROLL"/>
+        </directive>
+        <directive functionName="mcalcC" label="" functionLabel="">
+            <pragma name="PIPELINE"/>
+        </directive>
+        <directive functionName="mcalcAA" label="" functionLabel="">
+            <pragma name="PIPELINE"/>
+        </directive>
+        <directive functionName="mcalcAB" label="" functionLabel="">
+            <pragma name="UNROLL"/>
+        </directive>
+        <directive functionName="mcalcAB" label="" functionLabel="">
+            <pragma name="PIPELINE"/>
+        </directive>
+        <directive functionName="mcalcA" label="" functionLabel="">
+            <pragma name="UNROLL"/>
+        </directive>
+        <directive functionName="mcalcA" label="" functionLabel="">
+            <pragma name="PIPELINE"/>
+        </directive>
+        <directive functionName="mcalcD" label="" functionLabel="">
+            <pragma name="UNROLL"/>
+        </directive>
+        <directive functionName="mcalcD" label="" functionLabel="">
+            <pragma name="PIPELINE"/>
+        </directive>
+        <directive functionName="mcalcD" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="est" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="mcalcD" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="sgn" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Lam_tabz" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Peta_tabz" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Eta_tabz" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Eta_ans_2" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Lam_tabe" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Peta_tabe" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Eta_tabe" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Eta_ans_3" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="mcalcAC" label="" functionLabel="">
+            <pragma name="UNROLL"/>
+        </directive>
+        <directive functionName="mcalcAC" label="" functionLabel="">
+            <pragma name="PIPELINE"/>
+        </directive>
+        <directive functionName="mcalcAE" label="" functionLabel="">
+            <pragma name="UNROLL"/>
+        </directive>
+        <directive functionName="mcalcAE" label="" functionLabel="">
+            <pragma name="PIPELINE"/>
+        </directive>
+        <directive functionName="mcalcE" label="" functionLabel="">
+            <pragma name="UNROLL"/>
+        </directive>
+        <directive functionName="mcalcE" label="" functionLabel="">
+            <pragma name="PIPELINE"/>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Lam_tabg" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Lam_tabf" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Peta_tabf" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Eta_tabf" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Eta_ans_4" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Lam_tabg" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Peta_tabg" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Eta_tabg" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Eta_ans_5" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Lam_tabh" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Peta_tabh" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Eta_tabh" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Eta_ans_6" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="mcalcAF" label="" functionLabel="">
+            <pragma name="UNROLL"/>
+        </directive>
+        <directive functionName="mcalcAF" label="" functionLabel="">
+            <pragma name="PIPELINE"/>
+        </directive>
+        <directive functionName="mcalcAG" label="" functionLabel="">
+            <pragma name="UNROLL"/>
+        </directive>
+        <directive functionName="mcalcAG" label="" functionLabel="">
+            <pragma name="PIPELINE"/>
+        </directive>
+        <directive functionName="mcalcAH" label="" functionLabel="">
+            <pragma name="UNROLL"/>
+        </directive>
+        <directive functionName="mcalcAH" label="" functionLabel="">
+            <pragma name="PIPELINE"/>
+        </directive>
+        <directive functionName="mcalcF" label="" functionLabel="">
+            <pragma name="UNROLL"/>
+        </directive>
+        <directive functionName="mcalcF" label="" functionLabel="">
+            <pragma name="PIPELINE"/>
+        </directive>
+        <directive functionName="mcalcG" label="" functionLabel="">
+            <pragma name="UNROLL"/>
+        </directive>
+        <directive functionName="mcalcG" label="" functionLabel="">
+            <pragma name="PIPELINE"/>
+        </directive>
+        <directive functionName="mcalcH" label="" functionLabel="">
+            <pragma name="UNROLL"/>
+        </directive>
+        <directive functionName="mcalcH" label="" functionLabel="">
+            <pragma name="PIPELINE"/>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Lam_tabi" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Peta_tabi" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Eta_tabi" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Eta_ans_7" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Lam_tabj" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Peta_tabj" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Eta_tabj" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Eta_ans_8" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="mcalcAI" label="" functionLabel="">
+            <pragma name="UNROLL"/>
+        </directive>
+        <directive functionName="mcalcAI" label="" functionLabel="">
+            <pragma name="PIPELINE"/>
+        </directive>
+        <directive functionName="mcalcAJ" label="" functionLabel="">
+            <pragma name="UNROLL"/>
+        </directive>
+        <directive functionName="mcalcAJ" label="" functionLabel="">
+            <pragma name="PIPELINE"/>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Lam_tabk" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Peta_tabk" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Eta_tabk" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Eta_ans_9" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Lam_tabl" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Peta_tabl" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Peta_tabl" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Eta_tabl" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Eta_ans_10" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Lam_tabm" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Peta_tabm" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Eta_tabm" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Eta_ans_11" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="mcalcAK" label="" functionLabel="">
+            <pragma name="UNROLL"/>
+        </directive>
+        <directive functionName="mcalcAK" label="" functionLabel="">
+            <pragma name="PIPELINE"/>
+        </directive>
+        <directive functionName="mcalcAL" label="" functionLabel="">
+            <pragma name="UNROLL"/>
+        </directive>
+        <directive functionName="mcalcAL" label="" functionLabel="">
+            <pragma name="PIPELINE"/>
+        </directive>
+        <directive functionName="mcalcAM" label="" functionLabel="">
+            <pragma name="UNROLL"/>
+        </directive>
+        <directive functionName="mcalcAM" label="" functionLabel="">
+            <pragma name="PIPELINE"/>
+        </directive>
+        <directive functionName="mcalcI" label="" functionLabel="">
+            <pragma name="UNROLL"/>
+        </directive>
+        <directive functionName="mcalcI" label="" functionLabel="">
+            <pragma name="PIPELINE"/>
+        </directive>
+        <directive functionName="mcalcJ" label="" functionLabel="">
+            <pragma name="UNROLL"/>
+        </directive>
+        <directive functionName="mcalcJ" label="" functionLabel="">
+            <pragma name="PIPELINE"/>
+        </directive>
+        <directive functionName="mcalcK" label="" functionLabel="">
+            <pragma name="UNROLL"/>
+        </directive>
+        <directive functionName="mcalcK" label="" functionLabel="">
+            <pragma name="PIPELINE"/>
+        </directive>
+        <directive functionName="mcalcL" label="" functionLabel="">
+            <pragma name="UNROLL"/>
+        </directive>
+        <directive functionName="mcalcL" label="" functionLabel="">
+            <pragma name="PIPELINE"/>
+        </directive>
+        <directive functionName="mcalcM" label="" functionLabel="">
+            <pragma name="UNROLL"/>
+        </directive>
+        <directive functionName="mcalcM" label="" functionLabel="">
+            <pragma name="PIPELINE"/>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Peta_tabn" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Eta_tabn" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Eta_ans_12" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Lam_tabo" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Peta_tabo" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Eta_tabo" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Eta_ans_13" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Lam_tabp" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Peta_tabp" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Eta_tabp" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Eta_ans_14" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Peta_tabq" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Eta_tabq" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Eta_ans_15" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Lam_tabn" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="Lam_tabq" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="mcalcAN" label="" functionLabel="">
+            <pragma name="UNROLL"/>
+        </directive>
+        <directive functionName="mcalcAN" label="" functionLabel="">
+            <pragma name="PIPELINE"/>
+        </directive>
+        <directive functionName="mcalcAO" label="" functionLabel="">
+            <pragma name="UNROLL"/>
+        </directive>
+        <directive functionName="mcalcAO" label="" functionLabel="">
+            <pragma name="PIPELINE"/>
+        </directive>
+        <directive functionName="mcalcAP" label="" functionLabel="">
+            <pragma name="UNROLL"/>
+        </directive>
+        <directive functionName="mcalcAP" label="" functionLabel="">
+            <pragma name="PIPELINE"/>
+        </directive>
+        <directive functionName="mcalcAQ" label="" functionLabel="">
+            <pragma name="UNROLL"/>
+        </directive>
+        <directive functionName="mcalcAQ" label="" functionLabel="">
+            <pragma name="PIPELINE"/>
+        </directive>
+        <directive functionName="mcalcN" label="" functionLabel="">
+            <pragma name="UNROLL"/>
+        </directive>
+        <directive functionName="mcalcN" label="" functionLabel="">
+            <pragma name="PIPELINE"/>
+        </directive>
+        <directive functionName="mcalcO" label="" functionLabel="">
+            <pragma name="UNROLL"/>
+        </directive>
+        <directive functionName="mcalcO" label="" functionLabel="">
+            <pragma name="PIPELINE"/>
+        </directive>
+        <directive functionName="mcalcP" label="" functionLabel="">
+            <pragma name="UNROLL"/>
+        </directive>
+        <directive functionName="mcalcP" label="" functionLabel="">
+            <pragma name="PIPELINE"/>
+        </directive>
+        <directive functionName="mcalcQ" label="" functionLabel="">
+            <pragma name="UNROLL"/>
+        </directive>
+        <directive functionName="mcalcQ" label="" functionLabel="">
+            <pragma name="PIPELINE"/>
+        </directive>
+        <directive functionName="calc_n" label="" functionLabel="">
+            <pragma name="PIPELINE"/>
+        </directive>
+        <directive functionName="test_ram" label="" functionLabel="">
+            <pragma name="PIPELINE"/>
+        </directive>
+        <directive functionName="calc_n_1" label="" functionLabel="">
+            <pragma name="PIPELINE"/>
+        </directive>
+        <directive functionName="calc_n_1" label="" functionLabel="">
+            <pragma name="UNROLL"/>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prLam_buf" positionalBoolean="4"/>
+                <option name="core" value="RAM_T2P_BRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prLam_buf1" positionalBoolean="4"/>
+                <option name="core" value="RAM_T2P_BRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prLam_buf2" positionalBoolean="4"/>
+                <option name="core" value="RAM_T2P_BRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prLam_buf3" positionalBoolean="4"/>
+                <option name="core" value="RAM_T2P_BRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prLam_buf4" positionalBoolean="4"/>
+                <option name="core" value="RAM_T2P_BRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prLam_buf5" positionalBoolean="4"/>
+                <option name="core" value="RAM_T2P_BRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prLam_buf6" positionalBoolean="4"/>
+                <option name="core" value="RAM_T2P_BRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prLam_buf7" positionalBoolean="4"/>
+                <option name="core" value="RAM_T2P_BRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prLam_buf8" positionalBoolean="4"/>
+                <option name="core" value="RAM_T2P_BRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prLam_buf9" positionalBoolean="4"/>
+                <option name="core" value="RAM_T2P_BRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prLam_buf10" positionalBoolean="4"/>
+                <option name="core" value="RAM_T2P_BRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="write_result" label="" functionLabel="">
+            <pragma name="PIPELINE"/>
+        </directive>
+        <directive functionName="chk_parity_all" label="" functionLabel="">
+            <pragma name="PIPELINE"/>
+        </directive>
+        <directive functionName="write_result_23" label="" functionLabel="">
+            <pragma name="PIPELINE"/>
+        </directive>
+        <directive functionName="mcalcAA_23" label="" functionLabel="">
+            <pragma name="PIPELINE"/>
+        </directive>
+        <directive functionName="write_result_12" label="" functionLabel="">
+            <pragma name="PIPELINE"/>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="ARRAY_PARTITION">
+                <option name="variable" value="inxtab" positionalBoolean="4"/>
+                <option name="complete" value="" positionalBoolean="type"/>
+                <option name="dim" value="1"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prHat_buf6" positionalBoolean="4"/>
+                <option name="core" value="RAM_S2P_LUTRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prHat_buf" positionalBoolean="4"/>
+                <option name="core" value="RAM_S2P_LUTRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prHat_buf1" positionalBoolean="4"/>
+                <option name="core" value="RAM_S2P_LUTRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prHat_buf2" positionalBoolean="4"/>
+                <option name="core" value="RAM_S2P_LUTRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prHat_buf3" positionalBoolean="4"/>
+                <option name="core" value="RAM_S2P_LUTRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prHat_buf4" positionalBoolean="4"/>
+                <option name="core" value="RAM_S2P_LUTRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prHat_buf8" positionalBoolean="4"/>
+                <option name="core" value="RAM_S2P_LUTRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prHat_buf10" positionalBoolean="4"/>
+                <option name="core" value="RAM_S2P_LUTRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prHat_bufA" positionalBoolean="4"/>
+                <option name="core" value="RAM_S2P_LUTRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prHat_bufA1" positionalBoolean="4"/>
+                <option name="core" value="RAM_S2P_LUTRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prHat_bufA2" positionalBoolean="4"/>
+                <option name="core" value="RAM_S2P_LUTRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prHat_bufA3" positionalBoolean="4"/>
+                <option name="core" value="RAM_S2P_LUTRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prHat_bufA4" positionalBoolean="4"/>
+                <option name="core" value="RAM_S2P_LUTRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prHat_bufA5" positionalBoolean="4"/>
+                <option name="core" value="RAM_S2P_LUTRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prHat_bufA6" positionalBoolean="4"/>
+                <option name="core" value="RAM_S2P_LUTRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prHat_bufA7" positionalBoolean="4"/>
+                <option name="core" value="RAM_S2P_LUTRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prHat_bufA9" positionalBoolean="4"/>
+                <option name="core" value="RAM_S2P_LUTRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prHat_bufA10" positionalBoolean="4"/>
+                <option name="core" value="RAM_S2P_LUTRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prHat_bufB" positionalBoolean="4"/>
+                <option name="core" value="RAM_S2P_LUTRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prHat_bufB1" positionalBoolean="4"/>
+                <option name="core" value="RAM_S2P_LUTRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prHat_bufB2" positionalBoolean="4"/>
+                <option name="core" value="RAM_S2P_LUTRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prHat_bufB3" positionalBoolean="4"/>
+                <option name="core" value="RAM_S2P_LUTRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prHat_bufB4" positionalBoolean="4"/>
+                <option name="core" value="RAM_S2P_LUTRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prHat_bufB5" positionalBoolean="4"/>
+                <option name="core" value="RAM_S2P_LUTRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prHat_bufB6" positionalBoolean="4"/>
+                <option name="core" value="RAM_S2P_LUTRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prHat_bufB7" positionalBoolean="4"/>
+                <option name="core" value="RAM_S2P_LUTRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prHat_bufB9" positionalBoolean="4"/>
+                <option name="core" value="RAM_S2P_LUTRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prHat_bufB10" positionalBoolean="4"/>
+                <option name="core" value="RAM_S2P_LUTRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prHat_buf4a" positionalBoolean="4"/>
+                <option name="core" value="RAM_S2P_LUTRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prHat_bufAa" positionalBoolean="4"/>
+                <option name="core" value="RAM_S2P_LUTRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prHat_bufA4a" positionalBoolean="4"/>
+                <option name="core" value="RAM_S2P_LUTRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prHat_bufB1a" positionalBoolean="4"/>
+                <option name="core" value="RAM_S2P_LUTRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prHat_bufB5a" positionalBoolean="4"/>
+                <option name="core" value="RAM_S2P_LUTRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prHat_bufA2a" positionalBoolean="4"/>
+                <option name="core" value="RAM_S2P_LUTRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prHat_bufA10a" positionalBoolean="4"/>
+                <option name="core" value="RAM_S2P_LUTRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prHat_bufA6a" positionalBoolean="4"/>
+                <option name="core" value="RAM_S2P_LUTRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prHat_bufB3a" positionalBoolean="4"/>
+                <option name="core" value="RAM_S2P_LUTRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prHat_buf10a" positionalBoolean="4"/>
+                <option name="core" value="RAM_S2P_LUTRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prHat_bufB7a" positionalBoolean="4"/>
+                <option name="core" value="RAM_S2P_LUTRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prHat_bufB9a" positionalBoolean="4"/>
+                <option name="core" value="RAM_S2P_LUTRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prHat_buf6a" positionalBoolean="4"/>
+                <option name="core" value="RAM_S2P_LUTRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prHat_bufA4b" positionalBoolean="4"/>
+                <option name="core" value="RAM_S2P_LUTRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="mcalcAA_12" label="" functionLabel="">
+            <pragma name="PIPELINE"/>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prHat_buf10b" positionalBoolean="4"/>
+                <option name="core" value="RAM_S2P_LUTRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prHat_bufB1b" positionalBoolean="4"/>
+                <option name="core" value="RAM_S2P_LUTRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prHat_bufB1c" positionalBoolean="4"/>
+                <option name="core" value="RAM_S2P_LUTRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prHat_bufB5b" positionalBoolean="4"/>
+                <option name="core" value="RAM_S2P_LUTRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prHat_bufB5c" positionalBoolean="4"/>
+                <option name="core" value="RAM_S2P_LUTRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prHat_bufA10b" positionalBoolean="4"/>
+                <option name="core" value="RAM_S2P_LUTRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prHat_bufA10c" positionalBoolean="4"/>
+                <option name="core" value="RAM_S2P_LUTRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prHat_bufAb" positionalBoolean="4"/>
+                <option name="core" value="RAM_S2P_LUTRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prHat_bufAc" positionalBoolean="4"/>
+                <option name="core" value="RAM_S2P_LUTRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prHat_bufB3b" positionalBoolean="4"/>
+                <option name="core" value="RAM_S2P_LUTRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prHat_bufB3c" positionalBoolean="4"/>
+                <option name="core" value="RAM_S2P_LUTRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prHat_bufA2b" positionalBoolean="4"/>
+                <option name="core" value="RAM_S2P_LUTRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prHat_bufA2c" positionalBoolean="4"/>
+                <option name="core" value="RAM_S2P_LUTRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prHat_bufA6b" positionalBoolean="4"/>
+                <option name="core" value="RAM_S2P_LUTRAM"/>
+            </pragma>
+        </directive>
+        <directive functionName="HLSLdpcLogDecScaledMin" label="" functionLabel="">
+            <pragma name="RESOURCE">
+                <option name="variable" value="prHat_bufA6c" positionalBoolean="4"/>
+                <option name="core" value="RAM_S2P_LUTRAM"/>
+            </pragma>
+        </directive>
+    </sourceFile>
+</AutoPilot:ProjectResources>
+

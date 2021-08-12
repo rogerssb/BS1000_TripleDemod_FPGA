@@ -1,0 +1,220 @@
+
+
+================================================================
+== Vivado HLS Report for 'LDPC_Div'
+================================================================
+* Date:           Fri Mar 15 13:26:12 2019
+
+* Version:        2016.3 (Build 1682563 on Mon Oct 10 19:41:59 MDT 2016)
+* Project:        LDPC_CLK_DIV
+* Solution:       solution1
+* Product family: kintex7
+* Target device:  xc7k160tfbg676-1
+
+
+================================================================
+== Performance Estimates
+================================================================
++ Timing (ns): 
+    * Summary: 
+    +--------+-------+----------+------------+
+    |  Clock | Target| Estimated| Uncertainty|
+    +--------+-------+----------+------------+
+    |ap_clk  |  10.00|      5.78|        1.25|
+    +--------+-------+----------+------------+
+
++ Latency (clock cycles): 
+    * Summary: 
+    +-----+-----+-----+-----+---------+
+    |  Latency  |  Interval | Pipeline|
+    | min | max | min | max |   Type  |
+    +-----+-----+-----+-----+---------+
+    |    0|    0|    1|    1|   none  |
+    +-----+-----+-----+-----+---------+
+
+    + Detail: 
+        * Instance: 
+        N/A
+
+        * Loop: 
+        N/A
+
+============================================================
++ Verbose Summary: Synthesis Manager
+============================================================
+InlineROM: 1
+ExposeGlobal: 0
+============================================================
++ Verbose Summary: CDFG Model
+============================================================
+IsTopModel: 1
+ResetActiveHigh: 1
+IsCombinational: 0
+IsDatapathOnly: 0
+HasWiredReturn: 1
+HasMFsm: 0
+HasVarLatency: 0
+IsPipeline: 0
+IsRtlPipelined: 0
+IsInstanceOverlapped: 0
+IsDontTouch: 0
+HasImplIP: 0
+IsGatedGlobalClock: 0
+
+
+============================================================
++ Verbose Summary: Schedule
+============================================================
+* Number of FSM states: 1
+* Pipeline: 0
+* Dataflow Pipeline: 0
+
+* FSM state transitions: 
+1 --> 
+* FSM state operations: 
+
+ <State 1>: 5.78ns
+ST_1: StgValue_2 (8)  [1/1] 0.00ns
+._crit_edge:0  call void (...)* @_ssdm_op_SpecBitsMap(i1 %reset), !map !35
+
+ST_1: StgValue_3 (9)  [1/1] 0.00ns
+._crit_edge:1  call void (...)* @_ssdm_op_SpecBitsMap(i1* %rd_clk_out), !map !41
+
+ST_1: StgValue_4 (10)  [1/1] 0.00ns
+._crit_edge:2  call void (...)* @_ssdm_op_SpecBitsMap(i16 %clk_div), !map !45
+
+ST_1: StgValue_5 (11)  [1/1] 0.00ns
+._crit_edge:3  call void (...)* @_ssdm_op_SpecBitsMap(i2 %block_V), !map !49
+
+ST_1: StgValue_6 (12)  [1/1] 0.00ns
+._crit_edge:4  call void (...)* @_ssdm_op_SpecTopModule([9 x i8]* @LDPC_Div_str) nounwind
+
+ST_1: block_V_read (13)  [1/1] 0.00ns
+._crit_edge:5  %block_V_read = call i2 @_ssdm_op_Read.ap_auto.i2(i2 %block_V)
+
+ST_1: clk_div_read (14)  [1/1] 0.00ns
+._crit_edge:6  %clk_div_read = call i16 @_ssdm_op_Read.ap_auto.i16(i16 %clk_div)
+
+ST_1: reset_read (15)  [1/1] 0.00ns
+._crit_edge:7  %reset_read = call i1 @_ssdm_op_Read.ap_auto.i1(i1 %reset)
+
+ST_1: out_count_load (16)  [1/1] 0.00ns  loc: LDPC_CLK_DIV/LDPC_Div.cpp:21
+._crit_edge:8  %out_count_load = load i16* @out_count, align 2
+
+ST_1: count_load (17)  [1/1] 0.00ns  loc: LDPC_CLK_DIV/LDPC_Div.cpp:32
+._crit_edge:9  %count_load = load i16* @count, align 2
+
+ST_1: max_load (18)  [1/1] 0.00ns  loc: LDPC_CLK_DIV/LDPC_Div.cpp:21
+._crit_edge:10  %max_load = load i16* @max, align 2
+
+ST_1: tmp (19)  [1/1] 1.55ns  loc: LDPC_CLK_DIV/LDPC_Div.cpp:21
+._crit_edge:11  %tmp = icmp slt i16 %out_count_load, %max_load
+
+ST_1: or_cond3 (20)  [1/1] 0.84ns  loc: LDPC_CLK_DIV/LDPC_Div.cpp:21
+._crit_edge:12  %or_cond3 = or i1 %tmp, %reset_read
+
+ST_1: not_or_cond3 (21)  [1/1] 0.84ns  loc: LDPC_CLK_DIV/LDPC_Div.cpp:21
+._crit_edge:13  %not_or_cond3 = xor i1 %or_cond3, true
+
+ST_1: out_count_load_s (22)  [1/1] 0.84ns  loc: LDPC_CLK_DIV/LDPC_Div.cpp:21
+._crit_edge:14  %out_count_load_s = select i1 %or_cond3, i16 %out_count_load, i16 0
+
+ST_1: tmp_1 (23)  [1/1] 0.85ns  loc: LDPC_CLK_DIV/LDPC_Div.cpp:27
+._crit_edge:15  %tmp_1 = icmp eq i2 %block_V_read, 1
+
+ST_1: storemerge_cast_cast (24)  [1/1] 0.84ns  loc: LDPC_CLK_DIV/LDPC_Div.cpp:27
+._crit_edge:16  %storemerge_cast_cast = select i1 %tmp_1, i16 1024, i16 4096
+
+ST_1: StgValue_19 (25)  [1/1] 0.00ns  loc: LDPC_CLK_DIV/LDPC_Div.cpp:28
+._crit_edge:17  store i16 %storemerge_cast_cast, i16* @max, align 2
+
+ST_1: count_load_op (26)  [1/1] 1.46ns  loc: LDPC_CLK_DIV/LDPC_Div.cpp:32
+._crit_edge:18  %count_load_op = add i16 %count_load, 1
+
+ST_1: tmp_2 (27)  [1/1] 0.84ns  loc: LDPC_CLK_DIV/LDPC_Div.cpp:32
+._crit_edge:19  %tmp_2 = select i1 %or_cond3, i16 %count_load_op, i16 1
+
+ST_1: tmp_3 (28)  [1/1] 1.55ns  loc: LDPC_CLK_DIV/LDPC_Div.cpp:34
+._crit_edge:20  %tmp_3 = icmp eq i16 %tmp_2, %clk_div_read
+
+ST_1: tmp_4 (29)  [1/1] 1.55ns  loc: LDPC_CLK_DIV/LDPC_Div.cpp:34
+._crit_edge:21  %tmp_4 = icmp slt i16 %out_count_load_s, %storemerge_cast_cast
+
+ST_1: or_cond (30)  [1/1] 0.84ns  loc: LDPC_CLK_DIV/LDPC_Div.cpp:34
+._crit_edge:22  %or_cond = and i1 %tmp_3, %tmp_4
+
+ST_1: StgValue_25 (31)  [1/1] 0.00ns  loc: LDPC_CLK_DIV/LDPC_Div.cpp:34
+._crit_edge:23  br i1 %or_cond, label %0, label %._crit_edge5
+
+ST_1: StgValue_26 (33)  [1/1] 0.00ns  loc: LDPC_CLK_DIV/LDPC_Div.cpp:41
+._crit_edge5:0  call void @_ssdm_op_Write.ap_auto.i1P(i1* %rd_clk_out, i1 false)
+
+ST_1: StgValue_27 (34)  [1/1] 1.09ns
+._crit_edge5:1  br label %mergeST1
+
+ST_1: StgValue_28 (36)  [1/1] 0.00ns  loc: LDPC_CLK_DIV/LDPC_Div.cpp:36
+:0  call void @_ssdm_op_Write.ap_auto.i1P(i1* %rd_clk_out, i1 true)
+
+ST_1: tmp_5 (37)  [1/1] 1.46ns  loc: LDPC_CLK_DIV/LDPC_Div.cpp:38
+:1  %tmp_5 = add i16 %out_count_load_s, 1
+
+ST_1: StgValue_30 (38)  [1/1] 1.09ns  loc: LDPC_CLK_DIV/LDPC_Div.cpp:39
+:2  br label %mergeST1
+
+ST_1: out_count_flag_1 (40)  [1/1] 0.00ns  loc: LDPC_CLK_DIV/LDPC_Div.cpp:21
+mergeST1:0  %out_count_flag_1 = phi i1 [ true, %0 ], [ %not_or_cond3, %._crit_edge5 ]
+
+ST_1: out_count_new_1 (41)  [1/1] 0.00ns  loc: LDPC_CLK_DIV/LDPC_Div.cpp:38
+mergeST1:1  %out_count_new_1 = phi i16 [ %tmp_5, %0 ], [ 0, %._crit_edge5 ]
+
+ST_1: count_new (42)  [1/1] 0.00ns  loc: LDPC_CLK_DIV/LDPC_Div.cpp:32
+mergeST1:2  %count_new = phi i16 [ 0, %0 ], [ %tmp_2, %._crit_edge5 ]
+
+ST_1: StgValue_34 (43)  [1/1] 0.00ns  loc: LDPC_CLK_DIV/LDPC_Div.cpp:24
+mergeST1:3  store i16 %count_new, i16* @count, align 2
+
+ST_1: StgValue_35 (44)  [1/1] 0.00ns  loc: LDPC_CLK_DIV/LDPC_Div.cpp:21
+mergeST1:4  br i1 %out_count_flag_1, label %mergeST, label %.new
+
+ST_1: StgValue_36 (46)  [1/1] 0.00ns  loc: LDPC_CLK_DIV/LDPC_Div.cpp:23
+mergeST:0  store i16 %out_count_new_1, i16* @out_count, align 2
+
+ST_1: StgValue_37 (47)  [1/1] 0.00ns
+mergeST:1  br label %.new
+
+ST_1: StgValue_38 (49)  [1/1] 0.00ns  loc: LDPC_CLK_DIV/LDPC_Div.cpp:44
+.new:0  ret void
+
+
+
+============================================================
++ Verbose Summary: Timing violations
+============================================================
+Target clock period: 10ns, clock uncertainty: 1.25ns.
+
+ <State 1>: 5.78ns
+The critical path consists of the following:
+	'load' operation ('out_count_load', LDPC_CLK_DIV/LDPC_Div.cpp:21) on static variable 'out_count' [16]  (0 ns)
+	'icmp' operation ('tmp', LDPC_CLK_DIV/LDPC_Div.cpp:21) [19]  (1.55 ns)
+	'or' operation ('or_cond3', LDPC_CLK_DIV/LDPC_Div.cpp:21) [20]  (0.84 ns)
+	'select' operation ('out_count_load_s', LDPC_CLK_DIV/LDPC_Div.cpp:21) [22]  (0.84 ns)
+	'add' operation ('tmp_5', LDPC_CLK_DIV/LDPC_Div.cpp:38) [37]  (1.46 ns)
+	multiplexor before 'phi' operation ('out_count_flag_1', LDPC_CLK_DIV/LDPC_Div.cpp:21) with incoming values : ('not_or_cond3', LDPC_CLK_DIV/LDPC_Div.cpp:21) [40]  (1.09 ns)
+	'phi' operation ('out_count_flag_1', LDPC_CLK_DIV/LDPC_Div.cpp:21) with incoming values : ('not_or_cond3', LDPC_CLK_DIV/LDPC_Div.cpp:21) [40]  (0 ns)
+
+
+============================================================
++ Verbose Summary: Binding
+============================================================
+N/A
+* FSMD analyzer results:
+  - Output states:
+ - Input state : 
+  - Chain level:
+	State 1
+
+
+============================================================
++ Verbose Summary: Datapath Resource usage 
+============================================================
+N/A

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<autopilotfilemapping:AutoPilotFileMapping xmlns:autopilotfilemapping="www.autoesl.com/autopilotfilemapping">
+  <source>
+    <originFiles name="HLSLdpcLogDecScaledMin.cpp" path="C:\Users\dougo\LDPC_Decoder3U\HLSLdpcLogDecScaledMin.cpp"/>
+    <originFiles name="ldpc1024_1_2_1_trichk.h" path="C:\Users\dougo\LDPC_Decoder3U\ldpc1024_1_2_1_trichk.h"/>
+    <originFiles name="ldpc1024_1_2_2_trichk.h" path="C:\Users\dougo\LDPC_Decoder3U\ldpc1024_1_2_2_trichk.h"/>
+    <originFiles name="ldpc1024_1_2_trichk.h" path="C:\Users\dougo\LDPC_Decoder3U\ldpc1024_1_2_trichk.h"/>
+    <originFiles name="ldpc1024_2_3_1_trichk.h" path="C:\Users\dougo\LDPC_Decoder3U\ldpc1024_2_3_1_trichk.h"/>
+    <originFiles name="ldpc1024_2_3_2_trichk.h" path="C:\Users\dougo\LDPC_Decoder3U\ldpc1024_2_3_2_trichk.h"/>
+    <originFiles name="ldpc1024_2_3_3_trichk.h" path="C:\Users\dougo\LDPC_Decoder3U\ldpc1024_2_3_3_trichk.h"/>
+    <originFiles name="ldpc1024_2_3_4_trichk.h" path="C:\Users\dougo\LDPC_Decoder3U\ldpc1024_2_3_4_trichk.h"/>
+    <originFiles name="ldpc1024_2_3_trichk.h" path="C:\Users\dougo\LDPC_Decoder3U\ldpc1024_2_3_trichk.h"/>
+    <originFiles name="ldpc1024_4_5_1_trichk.h" path="C:\Users\dougo\LDPC_Decoder3U\ldpc1024_4_5_1_trichk.h"/>
+    <originFiles name="ldpc1024_4_5_2_trichk.h" path="C:\Users\dougo\LDPC_Decoder3U\ldpc1024_4_5_2_trichk.h"/>
+    <originFiles name="ldpc1024_4_5_3_trichk.h" path="C:\Users\dougo\LDPC_Decoder3U\ldpc1024_4_5_3_trichk.h"/>
+    <originFiles name="ldpc1024_4_5_4_trichk.h" path="C:\Users\dougo\LDPC_Decoder3U\ldpc1024_4_5_4_trichk.h"/>
+    <originFiles name="ldpc1024_4_5_5_trichk.h" path="C:\Users\dougo\LDPC_Decoder3U\ldpc1024_4_5_5_trichk.h"/>
+    <originFiles name="ldpc1024_4_5_6_trichk.h" path="C:\Users\dougo\LDPC_Decoder3U\ldpc1024_4_5_6_trichk.h"/>
+    <originFiles name="ldpc1024_4_5_trichk.h" path="C:\Users\dougo\LDPC_Decoder3U\ldpc1024_4_5_trichk.h"/>
+    <originFiles name="ldpc4096_1_2_1_trichk.h" path="C:\Users\dougo\LDPC_Decoder3U\ldpc4096_1_2_1_trichk.h"/>
+    <originFiles name="ldpc4096_1_2_2_trichk.h" path="C:\Users\dougo\LDPC_Decoder3U\ldpc4096_1_2_2_trichk.h"/>
+    <originFiles name="ldpc4096_1_2_trichk.h" path="C:\Users\dougo\LDPC_Decoder3U\ldpc4096_1_2_trichk.h"/>
+    <originFiles name="ldpc4096_2_3_1_trichk.h" path="C:\Users\dougo\LDPC_Decoder3U\ldpc4096_2_3_1_trichk.h"/>
+    <originFiles name="ldpc4096_2_3_2_trichk.h" path="C:\Users\dougo\LDPC_Decoder3U\ldpc4096_2_3_2_trichk.h"/>
+    <originFiles name="ldpc4096_2_3_3_trichk.h" path="C:\Users\dougo\LDPC_Decoder3U\ldpc4096_2_3_3_trichk.h"/>
+    <originFiles name="ldpc4096_2_3_4_trichk.h" path="C:\Users\dougo\LDPC_Decoder3U\ldpc4096_2_3_4_trichk.h"/>
+    <originFiles name="ldpc4096_2_3_trichk.h" path="C:\Users\dougo\LDPC_Decoder3U\ldpc4096_2_3_trichk.h"/>
+    <originFiles name="ldpc4096_4_5_1_trichk.h" path="C:\Users\dougo\LDPC_Decoder3U\ldpc4096_4_5_1_trichk.h"/>
+    <originFiles name="ldpc4096_4_5_2_trichk.h" path="C:\Users\dougo\LDPC_Decoder3U\ldpc4096_4_5_2_trichk.h"/>
+    <originFiles name="ldpc4096_4_5_3_trichk.h" path="C:\Users\dougo\LDPC_Decoder3U\ldpc4096_4_5_3_trichk.h"/>
+    <originFiles name="ldpc4096_4_5_4_trichk.h" path="C:\Users\dougo\LDPC_Decoder3U\ldpc4096_4_5_4_trichk.h"/>
+    <originFiles name="ldpc4096_4_5_5_trichk.h" path="C:\Users\dougo\LDPC_Decoder3U\ldpc4096_4_5_5_trichk.h"/>
+    <originFiles name="ldpc4096_4_5_6_trichk.h" path="C:\Users\dougo\LDPC_Decoder3U\ldpc4096_4_5_6_trichk.h"/>
+    <originFiles name="ldpc4096_4_5_trichk.h" path="C:\Users\dougo\LDPC_Decoder3U\ldpc4096_4_5_trichk.h"/>
+  </source>
+  <testbench>
+    <originFiles name="LDPC_Decoder_check.cpp" path="C:\Users\dougo\LDPC_Decoder3U\LDPC_Decoder_check.cpp"/>
+    <originFiles name="LDPC_Decoder_parms.h" path="C:\Users\dougo\LDPC_Decoder3U\LDPC_Decoder_parms.h"/>
+    <originFiles name="Txcode_1024_23.h" path="C:\Users\dougo\LDPC_Decoder3U\Txcode_1024_23.h"/>
+    <originFiles name="ldpc1024_23.h" path="C:\Users\dougo\LDPC_Decoder3U\ldpc1024_23.h"/>
+    <originFiles name="ldpc4096_45_code.h" path="C:\Users\dougo\LDPC_Decoder3U\ldpc4096_45_code.h"/>
+    <originFiles name="ldpc4096_45_data.h" path="C:\Users\dougo\LDPC_Decoder3U\ldpc4096_45_data.h"/>
+    <originFiles name="ldpc4096_45_info.h" path="C:\Users\dougo\LDPC_Decoder3U\ldpc4096_45_info.h"/>
+    <originFiles name="txword.h" path="C:\Users\dougo\LDPC_Decoder3U\txword.h"/>
+  </testbench>
+</autopilotfilemapping:AutoPilotFileMapping>

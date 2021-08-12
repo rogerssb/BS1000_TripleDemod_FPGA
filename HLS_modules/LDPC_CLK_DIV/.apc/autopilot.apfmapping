@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<autopilotfilemapping:AutoPilotFileMapping xmlns:autopilotfilemapping="www.autoesl.com/autopilotfilemapping">
+  <source>
+    <originFiles name="LDPC_Div.cpp" path="C:\Users\dougo\LDPC_CLK_DIV\LDPC_Div.cpp"/>
+  </source>
+  <testbench>
+    <originFiles name="out_bench.cpp" path="C:\Users\dougo\LDPC_CLK_DIV\out_bench.cpp"/>
+  </testbench>
+</autopilotfilemapping:AutoPilotFileMapping>

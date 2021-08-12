@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vivadoHLSLog:LogRoot xmlns:vivadoHLSLog="www.xilinx.com/vivadoHLSLog">
+  <errorLogs>
+    <logs>
+      <synLog/>
+      <simLog/>
+      <mgLog/>
+      <packageLog/>
+      <csimLog/>
+    </logs>
+  </errorLogs>
+  <warningLogs>
+    <logs>
+      <synLog>
+        <logs message="WARNING: [RTGEN 206-101] Register 'mux' is power-on initialization." projectName="LDPC_Out" solutionName="solution1" date="2019-10-10T20:34:08.771-0400" type="Warning"/>
+        <logs message="WARNING: [RTGEN 206-101] Register 'mem' is power-on initialization." projectName="LDPC_Out" solutionName="solution1" date="2019-10-10T20:34:08.755-0400" type="Warning"/>
+        <logs message="WARNING: [RTGEN 206-101] Register 'read_cnt_start' is power-on initialization." projectName="LDPC_Out" solutionName="solution1" date="2019-10-10T20:34:08.735-0400" type="Warning"/>
+        <logs message="WARNING: [RTGEN 206-101] Register 'trig' is power-on initialization." projectName="LDPC_Out" solutionName="solution1" date="2019-10-10T20:34:08.717-0400" type="Warning"/>
+        <logs message="WARNING: [RTGEN 206-101] Register 'pos_r' is power-on initialization." projectName="LDPC_Out" solutionName="solution1" date="2019-10-10T20:34:08.700-0400" type="Warning"/>
+        <logs message="WARNING: [RTGEN 206-101] Register 'read_cnt' is power-on initialization." projectName="LDPC_Out" solutionName="solution1" date="2019-10-10T20:34:08.682-0400" type="Warning"/>
+        <logs message="WARNING: [RTGEN 206-101] Register 'max' is power-on initialization." projectName="LDPC_Out" solutionName="solution1" date="2019-10-10T20:34:08.663-0400" type="Warning"/>
+        <logs message="WARNING: [RTGEN 206-101] Register 'zero' is power-on initialization." projectName="LDPC_Out" solutionName="solution1" date="2019-10-10T20:34:08.644-0400" type="Warning"/>
+        <logs message="WARNING: [SCHED 204-63] Please consider increasing the target initiation interval of the pipeline." projectName="LDPC_Out" solutionName="solution1" date="2019-10-10T20:34:08.348-0400" type="Warning"/>
+        <logs message="WARNING: [SCHED 204-63] Unable to schedule the whole 2 cycles 'load' operation ('data', LDPC_Out/LDPC_Out.cpp:91) on array 'mem_out0' within the first cycle (II = 1)." projectName="LDPC_Out" solutionName="solution1" date="2019-10-10T20:34:08.329-0400" type="Warning"/>
+        <logs message="WARNING: [SYN 201-107] Renaming port name 'LDPC_Out/pos' to 'LDPC_Out/pos_r' to avoid the conflict with HDL keywords or other object names." projectName="LDPC_Out" solutionName="solution1" date="2019-10-10T20:34:08.276-0400" type="Warning"/>
+        <logs message="WARNING: [RTGEN 206-101] Port 'LDPC_Out/rd_mux' has no fanin or fanout and is left dangling.&#xD;&#xA;               Please use C simulation to confirm this function argument can be read from or written to." projectName="LDPC_Out" solutionName="solution2" date="2019-03-15T18:33:42.070-0400" type="Warning"/>
+        <logs message="WARNING: [RTGEN 206-101] Register 'mux' is power-on initialization." projectName="LDPC_Out" solutionName="solution2" date="2019-03-15T18:33:42.061-0400" type="Warning"/>
+        <logs message="WARNING: [RTGEN 206-101] Register 'mem' is power-on initialization." projectName="LDPC_Out" solutionName="solution2" date="2019-03-15T18:33:42.052-0400" type="Warning"/>
+        <logs message="WARNING: [RTGEN 206-101] Register 'trig' is power-on initialization." projectName="LDPC_Out" solutionName="solution2" date="2019-03-15T18:33:42.043-0400" type="Warning"/>
+        <logs message="WARNING: [RTGEN 206-101] Register 'pos_r' is power-on initialization." projectName="LDPC_Out" solutionName="solution2" date="2019-03-15T18:33:42.035-0400" type="Warning"/>
+        <logs message="WARNING: [RTGEN 206-101] Register 'read_cnt' is power-on initialization." projectName="LDPC_Out" solutionName="solution2" date="2019-03-15T18:33:42.027-0400" type="Warning"/>
+        <logs message="WARNING: [RTGEN 206-101] Register 'max' is power-on initialization." projectName="LDPC_Out" solutionName="solution2" date="2019-03-15T18:33:42.018-0400" type="Warning"/>
+        <logs message="WARNING: [RTGEN 206-101] Register 'zero' is power-on initialization." projectName="LDPC_Out" solutionName="solution2" date="2019-03-15T18:33:42.010-0400" type="Warning"/>
+        <logs message="WARNING: [SCHED 204-63] Please consider increasing the target initiation interval of the pipeline." projectName="LDPC_Out" solutionName="solution2" date="2019-03-15T18:33:41.820-0400" type="Warning"/>
+        <logs message="WARNING: [SCHED 204-63] Unable to schedule the whole 2 cycles 'load' operation ('data', LDPC_Out/LDPC_Out.cpp:68) on array 'mem_out0' within the first cycle (II = 1)." projectName="LDPC_Out" solutionName="solution2" date="2019-03-15T18:33:41.812-0400" type="Warning"/>
+        <logs message="WARNING: [SYN 201-107] Renaming port name 'LDPC_Out/pos' to 'LDPC_Out/pos_r' to avoid the conflict with HDL keywords or other object names." projectName="LDPC_Out" solutionName="solution2" date="2019-03-15T18:33:41.779-0400" type="Warning"/>
+      </synLog>
+      <simLog/>
+      <mgLog/>
+      <packageLog/>
+      <csimLog/>
+    </logs>
+  </warningLogs>
+</vivadoHLSLog:LogRoot>

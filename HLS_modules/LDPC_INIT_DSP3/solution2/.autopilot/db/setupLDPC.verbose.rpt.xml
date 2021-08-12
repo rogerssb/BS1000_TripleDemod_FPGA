@@ -1,0 +1,127 @@
+<profile>
+
+<section name = "Vivado HLS Report for 'setupLDPC'" level="0">
+<item name = "Date">Thu Mar 14 13:23:54 2019
+</item>
+<item name = "Version">2016.3 (Build 1682563 on Mon Oct 10 19:41:59 MDT 2016)</item>
+<item name = "Project">LDPC_INIT_DSP3</item>
+<item name = "Solution">solution2</item>
+<item name = "Product family">kintex7</item>
+<item name = "Target device">xc7k160tffv676-2</item>
+</section>
+
+<section name = "Performance Estimates" level="0">
+<item name = "Timing (ns)">
+<section name = "" level="1">
+<item name = "Summary"><table name="" hasTotal="0">
+<keys size="4">Clock, Target, Estimated, Uncertainty</keys>
+<column name="ap_clk">10.00, 2.88, 1.25</column>
+</table>
+</item>
+</section>
+</item>
+<item name = "Latency (clock cycles)">
+<section name = "" level="1">
+<item name = "Summary"><table name="" hasTotal="0">
+<keys size="6">, min, max, min, max, Type</keys>
+<column name="">0, 0, 1, 1, none</column>
+</table>
+</item>
+<item name = "Detail">
+<section name = "" level="1">
+<item name = "Instance"><table name="" hasTotal="0">
+<keys size="7">Instance, Module, min, max, min, max, Type</keys>
+</table>
+</item>
+<item name = "Loop"><table name="" hasTotal="0">
+<keys size="8">Loop Name, min, max, Latency, achieved, target, Count, Pipelined</keys>
+</table>
+</item>
+</section>
+</item>
+</section>
+</item>
+</section>
+
+<section name = "Utilization Estimates" level="0">
+<item name = "Summary"><table name="" hasTotal="1">
+<keys size="5">Name, BRAM_18K, DSP48E, FF, LUT</keys>
+<column name="DSP">-, -, -, -</column>
+<column name="Expression">-, -, 0, 8</column>
+<column name="FIFO">-, -, -, -</column>
+<column name="Instance">-, -, -, -</column>
+<column name="Memory">-, -, -, -</column>
+<column name="Multiplexer">-, -, -, 96</column>
+<column name="Register">-, -, -, -</column>
+<specialColumn name="Available">650, 600, 202800, 101400</specialColumn>
+<specialColumn name="Utilization (%)">0, 0, 0, ~0</specialColumn>
+</table>
+</item>
+<item name = "Detail">
+<section name = "" level="1">
+<item name = "Instance"><table name="" hasTotal="1">
+<keys size="6">Instance, Module, BRAM_18K, DSP48E, FF, LUT</keys>
+</table>
+</item>
+<item name = "DSP48"><table name="" hasTotal="0">
+<keys size="3">Instance, Module, Expression</keys>
+</table>
+</item>
+<item name = "Memory"><table name="" hasTotal="1">
+<keys size="9">Memory, Module, BRAM_18K, FF, LUT, Words, Bits, Banks, W*Bits*Banks</keys>
+</table>
+</item>
+<item name = "FIFO"><table name="" hasTotal="1">
+<keys size="7">Name, BRAM_18K, FF, LUT, Depth, Bits, Size:D*B</keys>
+</table>
+</item>
+<item name = "Expression"><table name="" hasTotal="1">
+<keys size="7">Variable Name, Operation, DSP48E, FF, LUT, Bitwidth P0, Bitwidth P1</keys>
+<column name="mode_fu_231_p2">+, 0, 0, 2, 5, 5</column>
+<column name="tmp1_fu_221_p2">+, 0, 0, 3, 3, 3</column>
+<column name="tmp_1_fu_211_p2">-, 0, 0, 2, 5, 5</column>
+</table>
+</item>
+<item name = "Multiplexer"><table name="" hasTotal="1">
+<keys size="5">Name, LUT, Input Size, Bits, Total Bits</keys>
+<column name="etaIndexM_M_V">16, 7, 16, 112</column>
+<column name="nR_M_V">16, 7, 16, 112</column>
+<column name="numbits_V">16, 7, 16, 112</column>
+<column name="pCodeM_V">16, 6, 16, 96</column>
+<column name="pMaxIterations_V">16, 3, 16, 48</column>
+<column name="split_V">16, 7, 16, 112</column>
+</table>
+</item>
+<item name = "Register"><table name="" hasTotal="1">
+<keys size="5">Name, FF, LUT, Bits, Const Bits</keys>
+</table>
+</item>
+</section>
+</item>
+</section>
+
+<section name = "Interface" level="0">
+<item name = "Summary"><table name="" hasTotal="0">
+<keys size="6">RTL Ports, Dir, Bits, Protocol, Source Object, C Type</keys>
+<column name="ap_start">in, 1, ap_ctrl_hs, setupLDPC, return value</column>
+<column name="ap_done">out, 1, ap_ctrl_hs, setupLDPC, return value</column>
+<column name="ap_idle">out, 1, ap_ctrl_hs, setupLDPC, return value</column>
+<column name="ap_ready">out, 1, ap_ctrl_hs, setupLDPC, return value</column>
+<column name="size_V">in, 2, ap_none, size_V, scalar</column>
+<column name="rate_V">in, 2, ap_none, rate_V, scalar</column>
+<column name="nR_M_V">out, 16, ap_ovld, nR_M_V, pointer</column>
+<column name="nR_M_V_ap_vld">out, 1, ap_ovld, nR_M_V, pointer</column>
+<column name="etaIndexM_M_V">out, 16, ap_vld, etaIndexM_M_V, pointer</column>
+<column name="etaIndexM_M_V_ap_vld">out, 1, ap_vld, etaIndexM_M_V, pointer</column>
+<column name="pCodeM_V">out, 16, ap_vld, pCodeM_V, pointer</column>
+<column name="pCodeM_V_ap_vld">out, 1, ap_vld, pCodeM_V, pointer</column>
+<column name="pMaxIterations_V">out, 16, ap_vld, pMaxIterations_V, pointer</column>
+<column name="pMaxIterations_V_ap_vld">out, 1, ap_vld, pMaxIterations_V, pointer</column>
+<column name="numbits_V">out, 16, ap_vld, numbits_V, pointer</column>
+<column name="numbits_V_ap_vld">out, 1, ap_vld, numbits_V, pointer</column>
+<column name="split_V">out, 16, ap_vld, split_V, pointer</column>
+<column name="split_V_ap_vld">out, 1, ap_vld, split_V, pointer</column>
+</table>
+</item>
+</section>
+</profile>

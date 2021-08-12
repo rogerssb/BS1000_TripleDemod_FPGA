@@ -1,0 +1,488 @@
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/calc_ma.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module calc_ma
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/calc_n.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module calc_n
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/calc_n_12.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module calc_n_12
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/calc_n_23.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module calc_n_23
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/HLSLdpcLogDecScal3i2.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module HLSLdpcLogDecScal3i2_ram
+INFO: [VRFC 10-311] analyzing module HLSLdpcLogDecScal3i2
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/HLSLdpcLogDecScal8jQ.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module HLSLdpcLogDecScal8jQ_ram
+INFO: [VRFC 10-311] analyzing module HLSLdpcLogDecScal8jQ
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/HLSLdpcLogDecScalbvn.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module HLSLdpcLogDecScalbvn_ram
+INFO: [VRFC 10-311] analyzing module HLSLdpcLogDecScalbvn
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/HLSLdpcLogDecScalcGz.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module HLSLdpcLogDecScalcGz_ram
+INFO: [VRFC 10-311] analyzing module HLSLdpcLogDecScalcGz
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/HLSLdpcLogDecScaldAI.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module HLSLdpcLogDecScaldAI_ram
+INFO: [VRFC 10-311] analyzing module HLSLdpcLogDecScaldAI
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/HLSLdpcLogDecScaldeE.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module HLSLdpcLogDecScaldeE_ram
+INFO: [VRFC 10-311] analyzing module HLSLdpcLogDecScaldeE
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/HLSLdpcLogDecScaldiF.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module HLSLdpcLogDecScaldiF_ram
+INFO: [VRFC 10-311] analyzing module HLSLdpcLogDecScaldiF
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/HLSLdpcLogDecScaldjF.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module HLSLdpcLogDecScaldjF_ram
+INFO: [VRFC 10-311] analyzing module HLSLdpcLogDecScaldjF
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/HLSLdpcLogDecScaledMin.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module HLSLdpcLogDecScaledMin
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/load_pest_12_bot.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module load_pest_12_bot
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/load_pest_12_top.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module load_pest_12_top
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/load_pest_all.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module load_pest_all
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/load_pest_all_23.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module load_pest_all_23
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcAA.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcAA_12.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_12
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcAA_12_varinxbkb.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_12_varinxbkb_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_12_varinxbkb
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcAA_12_varinxcud.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_12_varinxcud_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_12_varinxcud
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcAA_12_varinxdEe.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_12_varinxdEe_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_12_varinxdEe
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcAA_12_varinxeOg.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_12_varinxeOg_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_12_varinxeOg
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcAA_12_varinxfYi.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_12_varinxfYi_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_12_varinxfYi
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcAA_12_varinxg8j.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_12_varinxg8j_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_12_varinxg8j
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcAA_12_varinxhbi.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_12_varinxhbi_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_12_varinxhbi
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcAA_12_varinxibs.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_12_varinxibs_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_12_varinxibs
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcAA_12_varinxjbC.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_12_varinxjbC_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_12_varinxjbC
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcAA_12_varinxkbM.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_12_varinxkbM_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_12_varinxkbM
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcAA_23.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_23
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcAA_23_varinxAem.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxAem_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxAem
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcAA_23_varinxBew.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxBew_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxBew
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcAA_23_varinxCeG.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxCeG_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxCeG
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcAA_23_varinxlbW.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxlbW_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxlbW
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcAA_23_varinxmb6.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxmb6_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxmb6
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcAA_23_varinxncg.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxncg_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxncg
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcAA_23_varinxocq.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxocq_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxocq
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcAA_23_varinxpcA.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxpcA_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxpcA
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcAA_23_varinxqcK.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxqcK_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxqcK
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcAA_23_varinxrcU.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxrcU_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxrcU
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcAA_23_varinxsc4.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxsc4_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxsc4
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcAA_23_varinxtde.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxtde_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxtde
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcAA_23_varinxudo.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxudo_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxudo
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcAA_23_varinxvdy.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxvdy_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxvdy
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcAA_23_varinxwdI.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxwdI_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxwdI
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcAA_23_varinxxdS.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxxdS_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxxdS
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcAA_23_varinxyd2.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxyd2_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxyd2
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcAA_23_varinxzec.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxzec_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_23_varinxzec
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcAA_varinx18AEe0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18AEe0_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18AEe0
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcAA_varinx18AFfa.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18AFfa_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18AFfa
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcAA_varinx18AGfk.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18AGfk_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18AGfk
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcAA_varinx18AHfu.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18AHfu_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18AHfu
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcAA_varinx18AIfE.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18AIfE_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18AIfE
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcAA_varinx18AJfO.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18AJfO_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18AJfO
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcAA_varinx18ARg6.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18ARg6_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18ARg6
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcAA_varinx18AShg.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18AShg_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18AShg
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcAA_varinx18AThq.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18AThq_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18AThq
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcAA_varinx18AUhA.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18AUhA_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18AUhA
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcAA_varinx18AVhK.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18AVhK_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18AVhK
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcAA_varinx18AWhU.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18AWhU_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18AWhU
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcAA_varinx18B0iy.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18B0iy_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18B0iy
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcAA_varinx18B1iI.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18B1iI_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18B1iI
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcAA_varinx18B2iS.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18B2iS_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18B2iS
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcAA_varinx18BKfY.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18BKfY_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18BKfY
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcAA_varinx18BLf8.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18BLf8_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18BLf8
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcAA_varinx18BMgi.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18BMgi_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18BMgi
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcAA_varinx18BNgs.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18BNgs_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18BNgs
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcAA_varinx18BOgC.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18BOgC_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18BOgC
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcAA_varinx18BPgM.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18BPgM_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18BPgM
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcAA_varinx18BXh4.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18BXh4_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18BXh4
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcAA_varinx18BYie.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18BYie_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18BYie
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcAA_varinx18BZio.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18BZio_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx18BZio
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcAA_varinx3_1DeQ.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx3_1DeQ_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx3_1DeQ
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcAA_varinx3_4QgW.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx3_4QgW_rom
+INFO: [VRFC 10-311] analyzing module mcalcAA_varinx3_4QgW
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcB.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcB
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcC.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcC
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcD.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcD
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcE.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcE
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcF.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcF
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/mcalcG.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mcalcG
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/setup_calc.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module setup_calc
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/setup_calc_12.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module setup_calc_12
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/setup_calc_23.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module setup_calc_23
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/update_hat_all.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module update_hat_all
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/update_lam_all.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module update_lam_all
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/update_lam_all_12.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module update_lam_all_12
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/update_lam_all_23.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module update_lam_all_23
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/write_result.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module write_result
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/write_result_12.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module write_result_12
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/32b0/hdl/verilog/write_result_23.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module write_result_23
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_HLSLdpcLogDecScaledMin_0_0/sim/design_2_HLSLdpcLogDecScaledMin_0_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module design_2_HLSLdpcLogDecScaledMin_0_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/ecf4/hdl/verilog/setupLDPC.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module setupLDPC
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_setupLDPC_0_0/sim/design_2_setupLDPC_0_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module design_2_setupLDPC_0_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_blk_mem_gen_0_3/sim/design_2_blk_mem_gen_0_3.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module design_2_blk_mem_gen_0_3
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_raw_data_0_0/sim/design_2_raw_data_0_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module design_2_raw_data_0_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_blk_mem_gen_0_4/sim/design_2_blk_mem_gen_0_4.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module design_2_blk_mem_gen_0_4
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_decode_data_0_0/sim/design_2_decode_data_0_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module design_2_decode_data_0_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/ipshared/0673/hdl/verilog/LDPC_CTRL.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module LDPC_CTRL
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_LDPC_CTRL_0_0/sim/design_2_LDPC_CTRL_0_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module design_2_LDPC_CTRL_0_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ipshared/e147/xlconstant.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module xlconstant
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_xlconstant_0_0/sim/design_2_xlconstant_0_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module design_2_xlconstant_0_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_xlconstant_1_0/sim/design_2_xlconstant_1_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module design_2_xlconstant_1_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/hdl/design_2.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module design_2
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_xlconstant_2_0/sim/design_2_xlconstant_2_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module design_2_xlconstant_2_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/bd/design_2/ipshared/189a/hdl/verilog/LDPC_Out.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module LDPC_Out
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_LDPC_Out_0_0/sim/design_2_LDPC_Out_0_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module design_2_LDPC_Out_0_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/bd/design_2/ipshared/0a8b/hdl/verilog/LDPC_buff.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module LDPC_buff
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/bd/design_2/ipshared/0a8b/hdl/verilog/write_raw_data.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module write_raw_data
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_LDPC_buff_0_0/sim/design_2_LDPC_buff_0_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module design_2_LDPC_buff_0_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_raw_data_a_0/sim/design_2_raw_data_a_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module design_2_raw_data_a_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_raw_data_b_0/sim/design_2_raw_data_b_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module design_2_raw_data_b_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_raw_data_a1_0/sim/design_2_raw_data_a1_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module design_2_raw_data_a1_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_raw_data_b1_0/sim/design_2_raw_data_b1_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module design_2_raw_data_b1_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_raw_data_a2_0/sim/design_2_raw_data_a2_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module design_2_raw_data_a2_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_raw_data_b2_0/sim/design_2_raw_data_b2_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module design_2_raw_data_b2_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_raw_data_a3_0/sim/design_2_raw_data_a3_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module design_2_raw_data_a3_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_raw_data_b3_0/sim/design_2_raw_data_b3_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module design_2_raw_data_b3_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_raw_data_a4_0/sim/design_2_raw_data_a4_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module design_2_raw_data_a4_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_raw_data_b4_0/sim/design_2_raw_data_b4_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module design_2_raw_data_b4_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_raw_data_a5_0/sim/design_2_raw_data_a5_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module design_2_raw_data_a5_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_raw_data_b5_0/sim/design_2_raw_data_b5_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module design_2_raw_data_b5_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_raw_data_a6_0/sim/design_2_raw_data_a6_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module design_2_raw_data_a6_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_raw_data_b6_0/sim/design_2_raw_data_b6_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module design_2_raw_data_b6_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_raw_data_a7_0/sim/design_2_raw_data_a7_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module design_2_raw_data_a7_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_raw_data_b7_0/sim/design_2_raw_data_b7_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module design_2_raw_data_b7_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_raw_data_a8_0/sim/design_2_raw_data_a8_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module design_2_raw_data_a8_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_raw_data_b8_0/sim/design_2_raw_data_b8_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module design_2_raw_data_b8_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_xlconstant_0_1/sim/design_2_xlconstant_0_1.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module design_2_xlconstant_0_1
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/bd/design_2/ipshared/4430/hdl/verilog/LDPC_Div.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module LDPC_Div
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_LDPC_Div_0_0/sim/design_2_LDPC_Div_0_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module design_2_LDPC_Div_0_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_decode_data_a_0_0/sim/design_2_decode_data_a_0_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module design_2_decode_data_a_0_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_decode_data_b_0_0/sim/design_2_decode_data_b_0_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module design_2_decode_data_b_0_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_decode_data_b_1_0/sim/design_2_decode_data_b_1_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module design_2_decode_data_b_1_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_decode_data_a_1_0/sim/design_2_decode_data_a_1_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module design_2_decode_data_a_1_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_decode_data_b_2_0/sim/design_2_decode_data_b_2_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module design_2_decode_data_b_2_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_decode_data_a_2_0/sim/design_2_decode_data_a_2_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module design_2_decode_data_a_2_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_decode_data_b_3_0/sim/design_2_decode_data_b_3_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module design_2_decode_data_b_3_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_decode_data_a_3_0/sim/design_2_decode_data_a_3_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module design_2_decode_data_a_3_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_decode_data_b_4_0/sim/design_2_decode_data_b_4_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module design_2_decode_data_b_4_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_decode_data_a_4_0/sim/design_2_decode_data_a_4_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module design_2_decode_data_a_4_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_decode_data_b_5_0/sim/design_2_decode_data_b_5_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module design_2_decode_data_b_5_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_decode_data_a_5_0/sim/design_2_decode_data_a_5_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module design_2_decode_data_a_5_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_decode_data_b_6_0/sim/design_2_decode_data_b_6_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module design_2_decode_data_b_6_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_decode_data_a_6_0/sim/design_2_decode_data_a_6_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module design_2_decode_data_a_6_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_HLSLdpcLogDecScaledMin_0_1/sim/design_2_HLSLdpcLogDecScaledMin_0_1.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module design_2_HLSLdpcLogDecScaledMin_0_1
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_xlconstant_3_0/sim/design_2_xlconstant_3_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module design_2_xlconstant_3_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.srcs/sources_1/bd/design_2/hdl/design_2_wrapper.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module design_2_wrapper
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/ldpc_dual/ldpc_dual/ldpc_dual.sim/sim_1/behav/glbl.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module glbl
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_data_mux_0/sim/design_2_data_mux_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_data_mux_0
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ipshared/1d19/hdl/util_vector_logic.vhd" into library util_vector_logic_v2_0
+INFO: [VRFC 10-307] analyzing entity util_vector_logic
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_util_vector_logic_0_0/sim/design_2_util_vector_logic_0_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_util_vector_logic_0_0
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_data_ce_mux_0/sim/design_2_data_ce_mux_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_data_ce_mux_0
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_data_ce_mux_1/sim/design_2_data_ce_mux_1.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_data_ce_mux_1
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_data_ce_mux_2/sim/design_2_data_ce_mux_2.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_data_ce_mux_2
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_raw_ce_mux2_0/sim/design_2_raw_ce_mux2_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_raw_ce_mux2_0
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_util_vector_logic_0_1/sim/design_2_util_vector_logic_0_1.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_util_vector_logic_0_1
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_c_addsub_0_1/sim/design_2_c_addsub_0_1.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_c_addsub_0_1
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_c_addsub_0_2/sim/design_2_c_addsub_0_2.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_c_addsub_0_2
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_c_addsub_2_0/sim/design_2_c_addsub_2_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_c_addsub_2_0
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_c_addsub_3_0/sim/design_2_c_addsub_3_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_c_addsub_3_0
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_c_addsub_3_1/sim/design_2_c_addsub_3_1.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_c_addsub_3_1
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_c_addsub_4_0/sim/design_2_c_addsub_4_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_c_addsub_4_0
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_c_addsub_5_0/sim/design_2_c_addsub_5_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_c_addsub_5_0
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_c_addsub_6_0/sim/design_2_c_addsub_6_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_c_addsub_6_0
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_c_addsub_0_0/sim/design_2_c_addsub_0_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_c_addsub_0_0
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_c_addsub_8_0/sim/design_2_c_addsub_8_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_c_addsub_8_0
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_c_addsub_8_1/sim/design_2_c_addsub_8_1.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_c_addsub_8_1
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_mux_lat_0/sim/design_2_mux_lat_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_mux_lat_0
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_buff_start_lat_0/sim/design_2_buff_start_lat_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_buff_start_lat_0
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_mux_lat_1/sim/design_2_mux_lat_1.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_mux_lat_1
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_decode_start_lat_0/sim/design_2_decode_start_lat_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_decode_start_lat_0
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_mux_lat_2/sim/design_2_mux_lat_2.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_mux_lat_2
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_raw_ce_mux_aa_1/sim/design_2_raw_ce_mux_aa_1.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_raw_ce_mux_aa_1
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_raw_ce_mux_ba_1/sim/design_2_raw_ce_mux_ba_1.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_raw_ce_mux_ba_1
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_raw_ce_mux_aa1_0/sim/design_2_raw_ce_mux_aa1_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_raw_ce_mux_aa1_0
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_raw_ce_mux_ba1_0/sim/design_2_raw_ce_mux_ba1_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_raw_ce_mux_ba1_0
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_raw_ce_mux_aa2_0/sim/design_2_raw_ce_mux_aa2_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_raw_ce_mux_aa2_0
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_raw_ce_mux_ba2_0/sim/design_2_raw_ce_mux_ba2_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_raw_ce_mux_ba2_0
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_raw_ce_mux_aa3_0/sim/design_2_raw_ce_mux_aa3_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_raw_ce_mux_aa3_0
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_raw_ce_mux_ba3_0/sim/design_2_raw_ce_mux_ba3_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_raw_ce_mux_ba3_0
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_raw_ce_mux_aa4_0/sim/design_2_raw_ce_mux_aa4_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_raw_ce_mux_aa4_0
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_raw_ce_mux_ba4_0/sim/design_2_raw_ce_mux_ba4_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_raw_ce_mux_ba4_0
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_raw_ce_mux_aa5_0/sim/design_2_raw_ce_mux_aa5_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_raw_ce_mux_aa5_0
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_raw_ce_mux_ba5_0/sim/design_2_raw_ce_mux_ba5_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_raw_ce_mux_ba5_0
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_raw_ce_mux_aa6_0/sim/design_2_raw_ce_mux_aa6_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_raw_ce_mux_aa6_0
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_raw_ce_mux_ba6_0/sim/design_2_raw_ce_mux_ba6_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_raw_ce_mux_ba6_0
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_raw_ce_mux_aa7_0/sim/design_2_raw_ce_mux_aa7_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_raw_ce_mux_aa7_0
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_raw_ce_mux_ba7_0/sim/design_2_raw_ce_mux_ba7_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_raw_ce_mux_ba7_0
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_raw_ce_mux_aa8_0/sim/design_2_raw_ce_mux_aa8_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_raw_ce_mux_aa8_0
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_raw_ce_mux_ba8_0/sim/design_2_raw_ce_mux_ba8_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_raw_ce_mux_ba8_0
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_data_ce_mux_3/sim/design_2_data_ce_mux_3.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_data_ce_mux_3
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_data_ce_mux1_0/sim/design_2_data_ce_mux1_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_data_ce_mux1_0
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_data_mux1_0/sim/design_2_data_mux1_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_data_mux1_0
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_data_ce_mux_bb_1_0/sim/design_2_data_ce_mux_bb_1_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_data_ce_mux_bb_1_0
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_data_ce_mux_ab_1_0/sim/design_2_data_ce_mux_ab_1_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_data_ce_mux_ab_1_0
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_data_mux11_0/sim/design_2_data_mux11_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_data_mux11_0
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_data_ce_mux_bb_2_0/sim/design_2_data_ce_mux_bb_2_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_data_ce_mux_bb_2_0
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_data_ce_mux_ab_2_0/sim/design_2_data_ce_mux_ab_2_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_data_ce_mux_ab_2_0
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_data_mux12_0/sim/design_2_data_mux12_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_data_mux12_0
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_data_ce_mux_bb_3_0/sim/design_2_data_ce_mux_bb_3_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_data_ce_mux_bb_3_0
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_data_ce_mux_ab_3_0/sim/design_2_data_ce_mux_ab_3_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_data_ce_mux_ab_3_0
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_data_mux13_0/sim/design_2_data_mux13_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_data_mux13_0
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_data_mux14_0/sim/design_2_data_mux14_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_data_mux14_0
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_data_ce_mux_bb_4_0/sim/design_2_data_ce_mux_bb_4_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_data_ce_mux_bb_4_0
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_data_ce_mux_ab_4_0/sim/design_2_data_ce_mux_ab_4_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_data_ce_mux_ab_4_0
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_data_ce_mux_bb_5_0/sim/design_2_data_ce_mux_bb_5_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_data_ce_mux_bb_5_0
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_data_ce_mux_ab_5_0/sim/design_2_data_ce_mux_ab_5_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_data_ce_mux_ab_5_0
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_data_mux15_0/sim/design_2_data_mux15_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_data_mux15_0
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_data_mux16_0/sim/design_2_data_mux16_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_data_mux16_0
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_data_ce_mux_bb_6_0/sim/design_2_data_ce_mux_bb_6_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_data_ce_mux_bb_6_0
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_data_ce_mux_ab_6_0/sim/design_2_data_ce_mux_ab_6_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_data_ce_mux_ab_6_0
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_itt_num_lat_0/sim/design_2_itt_num_lat_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_itt_num_lat_0
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/ldpc_dual/ldpc_dual/ldpc_dual.ip_user_files/bd/design_2/ip/design_2_decode_start_lat_1/sim/design_2_decode_start_lat_1.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity design_2_decode_start_lat_1

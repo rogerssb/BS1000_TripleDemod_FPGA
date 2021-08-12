@@ -1,0 +1,142 @@
+<profile>
+
+<section name = "Vivado HLS Report for 'LDPC_CTRL'" level="0">
+<item name = "Date">Mon Sep 10 17:31:14 2018
+</item>
+<item name = "Version">2016.3 (Build 1682563 on Mon Oct 10 19:41:59 MDT 2016)</item>
+<item name = "Project">LDPC_CTRL</item>
+<item name = "Solution">solution1</item>
+<item name = "Product family">kintex7</item>
+<item name = "Target device">xc7k160tffv676-2</item>
+</section>
+
+<section name = "Performance Estimates" level="0">
+<item name = "Timing (ns)">
+<section name = "" level="1">
+<item name = "Summary"><table name="" hasTotal="0">
+<keys size="4">Clock, Target, Estimated, Uncertainty</keys>
+<column name="ap_clk">10.00, 1.47, 1.25</column>
+</table>
+</item>
+</section>
+</item>
+<item name = "Latency (clock cycles)">
+<section name = "" level="1">
+<item name = "Summary"><table name="" hasTotal="0">
+<keys size="6">, min, max, min, max, Type</keys>
+<column name="">0, 0, 1, 1, none</column>
+</table>
+</item>
+<item name = "Detail">
+<section name = "" level="1">
+<item name = "Instance"><table name="" hasTotal="0">
+<keys size="7">Instance, Module, min, max, min, max, Type</keys>
+</table>
+</item>
+<item name = "Loop"><table name="" hasTotal="0">
+<keys size="8">Loop Name, min, max, Latency, achieved, target, Count, Pipelined</keys>
+</table>
+</item>
+</section>
+</item>
+</section>
+</item>
+</section>
+
+<section name = "Utilization Estimates" level="0">
+<item name = "Summary"><table name="" hasTotal="1">
+<keys size="5">Name, BRAM_18K, DSP48E, FF, LUT</keys>
+<column name="DSP">-, -, -, -</column>
+<column name="Expression">-, -, 0, 7</column>
+<column name="FIFO">-, -, -, -</column>
+<column name="Instance">-, -, -, -</column>
+<column name="Memory">-, -, -, -</column>
+<column name="Multiplexer">-, -, -, 32</column>
+<column name="Register">-, -, 17, -</column>
+<specialColumn name="Available">650, 600, 202800, 101400</specialColumn>
+<specialColumn name="Utilization (%)">0, 0, ~0, ~0</specialColumn>
+</table>
+</item>
+<item name = "Detail">
+<section name = "" level="1">
+<item name = "Instance"><table name="" hasTotal="1">
+<keys size="6">Instance, Module, BRAM_18K, DSP48E, FF, LUT</keys>
+</table>
+</item>
+<item name = "DSP48"><table name="" hasTotal="0">
+<keys size="3">Instance, Module, Expression</keys>
+</table>
+</item>
+<item name = "Memory"><table name="" hasTotal="1">
+<keys size="9">Memory, Module, BRAM_18K, FF, LUT, Words, Bits, Banks, W*Bits*Banks</keys>
+</table>
+</item>
+<item name = "FIFO"><table name="" hasTotal="1">
+<keys size="7">Name, BRAM_18K, FF, LUT, Depth, Bits, Size:D*B</keys>
+</table>
+</item>
+<item name = "Expression"><table name="" hasTotal="1">
+<keys size="7">Variable Name, Operation, DSP48E, FF, LUT, Bitwidth P0, Bitwidth P1</keys>
+<column name="ap_condition_65">and, 0, 0, 1, 1, 1</column>
+<column name="or_cond_not_fu_251_p2">and, 0, 0, 1, 1, 1</column>
+<column name="notlhs_fu_239_p2">icmp, 0, 0, 1, 2, 1</column>
+<column name="notrhs_fu_245_p2">icmp, 0, 0, 2, 2, 3</column>
+<column name="tmp_3_fu_257_p2">icmp, 0, 0, 1, 2, 1</column>
+<column name="or_cond1_fu_263_p2">or, 0, 0, 1, 1, 1</column>
+</table>
+</item>
+<item name = "Multiplexer"><table name="" hasTotal="1">
+<keys size="5">Name, LUT, Input Size, Bits, Total Bits</keys>
+<column name="buff_reset">1, 3, 1, 3</column>
+<column name="buff_start">1, 3, 1, 3</column>
+<column name="err_code">16, 3, 16, 48</column>
+<column name="init_start">1, 3, 1, 3</column>
+<column name="rate_V">2, 3, 2, 6</column>
+<column name="size_V">2, 3, 2, 6</column>
+<column name="state_flag_6_phi_fu_168_p20">1, 4, 1, 4</column>
+<column name="state_new_6_phi_fu_203_p20">6, 6, 6, 36</column>
+<column name="status_V">2, 3, 2, 6</column>
+</table>
+</item>
+<item name = "Register"><table name="" hasTotal="1">
+<keys size="5">Name, FF, LUT, Bits, Const Bits</keys>
+<column name="ap_CS_fsm">1, 0, 1, 0</column>
+<column name="state">16, 0, 16, 0</column>
+</table>
+</item>
+</section>
+</item>
+</section>
+
+<section name = "Interface" level="0">
+<item name = "Summary"><table name="" hasTotal="0">
+<keys size="6">RTL Ports, Dir, Bits, Protocol, Source Object, C Type</keys>
+<column name="ap_clk">in, 1, ap_ctrl_hs, LDPC_CTRL, return value</column>
+<column name="ap_rst">in, 1, ap_ctrl_hs, LDPC_CTRL, return value</column>
+<column name="ap_start">in, 1, ap_ctrl_hs, LDPC_CTRL, return value</column>
+<column name="ap_done">out, 1, ap_ctrl_hs, LDPC_CTRL, return value</column>
+<column name="ap_idle">out, 1, ap_ctrl_hs, LDPC_CTRL, return value</column>
+<column name="ap_ready">out, 1, ap_ctrl_hs, LDPC_CTRL, return value</column>
+<column name="block_V">in, 2, ap_none, block_V, scalar</column>
+<column name="code_V">in, 2, ap_none, code_V, scalar</column>
+<column name="run">in, 1, ap_none, run, scalar</column>
+<column name="init_start">out, 1, ap_vld, init_start, pointer</column>
+<column name="init_start_ap_vld">out, 1, ap_vld, init_start, pointer</column>
+<column name="init_done">in, 1, ap_none, init_done, scalar</column>
+<column name="init_ready">in, 1, ap_none, init_ready, scalar</column>
+<column name="buff_start">out, 1, ap_vld, buff_start, pointer</column>
+<column name="buff_start_ap_vld">out, 1, ap_vld, buff_start, pointer</column>
+<column name="status_V">out, 2, ap_vld, status_V, pointer</column>
+<column name="status_V_ap_vld">out, 1, ap_vld, status_V, pointer</column>
+<column name="err_code">out, 16, ap_vld, err_code, pointer</column>
+<column name="err_code_ap_vld">out, 1, ap_vld, err_code, pointer</column>
+<column name="size_V">out, 2, ap_vld, size_V, pointer</column>
+<column name="size_V_ap_vld">out, 1, ap_vld, size_V, pointer</column>
+<column name="rate_V">out, 2, ap_vld, rate_V, pointer</column>
+<column name="rate_V_ap_vld">out, 1, ap_vld, rate_V, pointer</column>
+<column name="buff_reset">out, 1, ap_vld, buff_reset, pointer</column>
+<column name="buff_reset_ap_vld">out, 1, ap_vld, buff_reset, pointer</column>
+</table>
+</item>
+</section>
+</profile>

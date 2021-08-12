@@ -1,0 +1,4 @@
+   Compiling ../../../LDPC_CTRL.cpp in debug mode
+   Generating csim.exe
+@E [SIM-32] C simulation failed, no 'main' function.
+@E [SIM-1] CSim file generation failed: compilation error(s).

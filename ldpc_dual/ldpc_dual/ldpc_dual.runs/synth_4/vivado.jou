@@ -1,0 +1,12 @@
+#-----------------------------------------------------------
+# Vivado v2016.3 (64-bit)
+# SW Build 1682563 on Mon Oct 10 19:07:27 MDT 2016
+# IP Build 1681267 on Mon Oct 10 21:28:31 MDT 2016
+# Start of session at: Wed Sep 05 19:17:50 2018
+# Process ID: 23472
+# Current directory: C:/ldpctest/ldpc test/ldpc test.runs/synth_4
+# Command line: vivado.exe -log design_2_wrapper.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source design_2_wrapper.tcl
+# Log file: C:/ldpctest/ldpc test/ldpc test.runs/synth_4/design_2_wrapper.vds
+# Journal file: C:/ldpctest/ldpc test/ldpc test.runs/synth_4\vivado.jou
+#-----------------------------------------------------------
+source design_2_wrapper.tcl -notrace

@@ -1,0 +1,191 @@
+
+
+================================================================
+== Vivado HLS Report for 'setupLDPC'
+================================================================
+* Date:           Fri Mar 23 18:05:29 2018
+
+* Version:        2015.2 (Build 1266856 on Fri Jun 26 16:57:37 PM 2015)
+* Project:        LDPC_INIT_DSP3
+* Solution:       solution1
+* Product family: spartan3adsp
+* Target device:  xc3sd3400acs484-4
+
+
+================================================================
+== Performance Estimates
+================================================================
++ Timing (ns): 
+    * Summary: 
+    +--------+-------+----------+------------+
+    |  Clock | Target| Estimated| Uncertainty|
+    +--------+-------+----------+------------+
+    |ap_clk  |  10.00|      7.68|        1.25|
+    +--------+-------+----------+------------+
+
++ Latency (clock cycles): 
+    * Summary: 
+    +-----+---------+-----+---------+---------+
+    |    Latency    |    Interval   | Pipeline|
+    | min |   max   | min |   max   |   Type  |
+    +-----+---------+-----+---------+---------+
+    |    1|  2064494|    2|  2064495|   none  |
+    +-----+---------+-----+---------+---------+
+
+    + Detail: 
+        * Instance: 
+        +----------------------------------------+-----------------------------+--------+--------+--------+--------+---------+
+        |                                        |                             |     Latency     |     Interval    | Pipeline|
+        |                Instance                |            Module           |   min  |   max  |   min  |   max  |   Type  |
+        +----------------------------------------+-----------------------------+--------+--------+--------+--------+---------+
+        |grp_setupLDPC_load_etaIndexM_fu_216     |setupLDPC_load_etaIndexM     |   96803|  663587|   96803|  663587|   none  |
+        |grp_setupLDPC_load_lambdaIndexM_fu_237  |setupLDPC_load_lambdaIndexM  |   96803|  663587|   96803|  663587|   none  |
+        |grp_setupLDPC_load_etaIndexN_fu_258     |setupLDPC_load_etaIndexN     |  115235|  737315|  115235|  737315|   none  |
+        +----------------------------------------+-----------------------------+--------+--------+--------+--------+---------+
+
+        * Loop: 
+        N/A
+
+
+
+================================================================
+== Utilization Estimates
+================================================================
+* Summary: 
++-----------------+---------+-------+-------+-------+
+|       Name      | BRAM_18K| DSP48A|   FF  |  LUT  |
++-----------------+---------+-------+-------+-------+
+|Expression       |        -|      -|      0|     14|
+|FIFO             |        -|      -|      -|      -|
+|Instance         |        -|      -|    225|    426|
+|Memory           |        -|      -|      -|      -|
+|Multiplexer      |        -|      -|      -|    382|
+|Register         |        -|      -|     14|      -|
++-----------------+---------+-------+-------+-------+
+|Total            |        0|      0|    239|    822|
++-----------------+---------+-------+-------+-------+
+|Available        |      126|    126|  47744|  47744|
++-----------------+---------+-------+-------+-------+
+|Utilization (%)  |        0|      0|   ~0  |      1|
++-----------------+---------+-------+-------+-------+
+
++ Detail: 
+    * Instance: 
+    +----------------------------------------+-----------------------------+---------+-------+----+-----+
+    |                Instance                |            Module           | BRAM_18K| DSP48A| FF | LUT |
+    +----------------------------------------+-----------------------------+---------+-------+----+-----+
+    |grp_setupLDPC_load_etaIndexM_fu_216     |setupLDPC_load_etaIndexM     |        0|      0|  75|  142|
+    |grp_setupLDPC_load_etaIndexN_fu_258     |setupLDPC_load_etaIndexN     |        0|      0|  75|  142|
+    |grp_setupLDPC_load_lambdaIndexM_fu_237  |setupLDPC_load_lambdaIndexM  |        0|      0|  75|  142|
+    +----------------------------------------+-----------------------------+---------+-------+----+-----+
+    |Total                                   |                             |        0|      0| 225|  426|
+    +----------------------------------------+-----------------------------+---------+-------+----+-----+
+
+    * Memory: 
+    N/A
+
+    * FIFO: 
+    N/A
+
+    * Expression: 
+    +-----------------+----------+-------+---+----+------------+------------+
+    |  Variable Name  | Operation| DSP48A| FF| LUT| Bitwidth P0| Bitwidth P1|
+    +-----------------+----------+-------+---+----+------------+------------+
+    |mode_fu_315_p2   |     +    |      0|  0|   5|           5|           5|
+    |tmp1_fu_305_p2   |     +    |      0|  0|   3|           3|           3|
+    |tmp_1_fu_295_p2  |     -    |      0|  0|   5|           5|           5|
+    |ap_sig_bdd_537   |    and   |      0|  0|   1|           1|           1|
+    +-----------------+----------+-------+---+----+------------+------------+
+    |Total            |          |      0|  0|  14|          14|          14|
+    +-----------------+----------+-------+---+----+------------+------------+
+
+    * Multiplexer: 
+    +--------------------------------------------+----+-----------+-----+-----------+
+    |                    Name                    | LUT| Input Size| Bits| Total Bits|
+    +--------------------------------------------+----+-----------+-----+-----------+
+    |ap_NS_fsm                                   |   3|          7|    1|          7|
+    |clk                                         |   2|          4|    1|          4|
+    |clk_ap_vld                                  |   2|          4|    1|          4|
+    |cs                                          |   2|          4|    1|          4|
+    |cs_ap_vld                                   |   2|          4|    1|          4|
+    |dout                                        |   2|          4|    1|          4|
+    |dout_ap_vld                                 |   2|          4|    1|          4|
+    |etaIndexM_M_V                               |  48|          7|   16|        112|
+    |etaIndexM_V_ce0                             |   1|          2|    1|          2|
+    |etaIndexM_V_we0                             |   1|          2|    1|          2|
+    |etaIndexN_M_V                               |  48|          7|   16|        112|
+    |etaIndexN_V_ce0                             |   1|          2|    1|          2|
+    |etaIndexN_V_we0                             |   1|          2|    1|          2|
+    |grp_setupLDPC_load_etaIndexM_fu_216_num     |  51|          7|   17|        119|
+    |grp_setupLDPC_load_etaIndexN_fu_258_num     |  51|          7|   17|        119|
+    |grp_setupLDPC_load_lambdaIndexM_fu_237_num  |  51|          7|   17|        119|
+    |lambdaIndexM_V_ce0                          |   1|          2|    1|          2|
+    |lambdaIndexM_V_we0                          |   1|          2|    1|          2|
+    |nR_M_V                                      |  48|          7|   16|        112|
+    |pCodeM_V                                    |  48|          6|   16|         96|
+    |pMaxIterations_V                            |  16|          3|   16|         48|
+    +--------------------------------------------+----+-----------+-----+-----------+
+    |Total                                       | 382|         94|  144|        880|
+    +--------------------------------------------+----+-----------+-----+-----------+
+
+    * Register: 
+    +--------------------------------------------------------------+---+----+-----+-----------+
+    |                             Name                             | FF| LUT| Bits| Const Bits|
+    +--------------------------------------------------------------+---+----+-----+-----------+
+    |ap_CS_fsm                                                     |  6|   0|    6|          0|
+    |grp_setupLDPC_load_etaIndexM_fu_216_ap_start_ap_start_reg     |  1|   0|    1|          0|
+    |grp_setupLDPC_load_etaIndexN_fu_258_ap_start_ap_start_reg     |  1|   0|    1|          0|
+    |grp_setupLDPC_load_lambdaIndexM_fu_237_ap_start_ap_start_reg  |  1|   0|    1|          0|
+    |mode_reg_321                                                  |  5|   0|    5|          0|
+    +--------------------------------------------------------------+---+----+-----+-----------+
+    |Total                                                         | 14|   0|   14|          0|
+    +--------------------------------------------------------------+---+----+-----+-----------+
+
+
+
+================================================================
+== Interface
+================================================================
+* Summary: 
++-------------------------+-----+-----+------------+------------------+--------------+
+|        RTL Ports        | Dir | Bits|  Protocol  |   Source Object  |    C Type    |
++-------------------------+-----+-----+------------+------------------+--------------+
+|ap_clk                   |  in |    1| ap_ctrl_hs |     setupLDPC    | return value |
+|ap_rst                   |  in |    1| ap_ctrl_hs |     setupLDPC    | return value |
+|ap_start                 |  in |    1| ap_ctrl_hs |     setupLDPC    | return value |
+|ap_done                  | out |    1| ap_ctrl_hs |     setupLDPC    | return value |
+|ap_idle                  | out |    1| ap_ctrl_hs |     setupLDPC    | return value |
+|ap_ready                 | out |    1| ap_ctrl_hs |     setupLDPC    | return value |
+|size_V                   |  in |    2|   ap_none  |      size_V      |    scalar    |
+|rate_V                   |  in |    2|   ap_none  |      rate_V      |    scalar    |
+|nR_M_V                   | out |   16|   ap_ovld  |      nR_M_V      |    pointer   |
+|nR_M_V_ap_vld            | out |    1|   ap_ovld  |      nR_M_V      |    pointer   |
+|etaIndexM_M_V            | out |   16|   ap_vld   |   etaIndexM_M_V  |    pointer   |
+|etaIndexM_M_V_ap_vld     | out |    1|   ap_vld   |   etaIndexM_M_V  |    pointer   |
+|etaIndexN_M_V            | out |   16|   ap_vld   |   etaIndexN_M_V  |    pointer   |
+|etaIndexN_M_V_ap_vld     | out |    1|   ap_vld   |   etaIndexN_M_V  |    pointer   |
+|pCodeM_V                 | out |   16|   ap_vld   |     pCodeM_V     |    pointer   |
+|pCodeM_V_ap_vld          | out |    1|   ap_vld   |     pCodeM_V     |    pointer   |
+|pMaxIterations_V         | out |   16|   ap_vld   | pMaxIterations_V |    pointer   |
+|pMaxIterations_V_ap_vld  | out |    1|   ap_vld   | pMaxIterations_V |    pointer   |
+|etaIndexM_V_address0     | out |   16|  ap_memory |    etaIndexM_V   |     array    |
+|etaIndexM_V_ce0          | out |    1|  ap_memory |    etaIndexM_V   |     array    |
+|etaIndexM_V_we0          | out |    1|  ap_memory |    etaIndexM_V   |     array    |
+|etaIndexM_V_d0           | out |   16|  ap_memory |    etaIndexM_V   |     array    |
+|etaIndexN_V_address0     | out |   16|  ap_memory |    etaIndexN_V   |     array    |
+|etaIndexN_V_ce0          | out |    1|  ap_memory |    etaIndexN_V   |     array    |
+|etaIndexN_V_we0          | out |    1|  ap_memory |    etaIndexN_V   |     array    |
+|etaIndexN_V_d0           | out |   16|  ap_memory |    etaIndexN_V   |     array    |
+|lambdaIndexM_V_address0  | out |   16|  ap_memory |  lambdaIndexM_V  |     array    |
+|lambdaIndexM_V_ce0       | out |    1|  ap_memory |  lambdaIndexM_V  |     array    |
+|lambdaIndexM_V_we0       | out |    1|  ap_memory |  lambdaIndexM_V  |     array    |
+|lambdaIndexM_V_d0        | out |   16|  ap_memory |  lambdaIndexM_V  |     array    |
+|dout                     | out |    1|   ap_vld   |       dout       |    pointer   |
+|dout_ap_vld              | out |    1|   ap_vld   |       dout       |    pointer   |
+|din                      |  in |    1|   ap_none  |        din       |    pointer   |
+|cs                       | out |    1|   ap_vld   |        cs        |    pointer   |
+|cs_ap_vld                | out |    1|   ap_vld   |        cs        |    pointer   |
+|clk                      | out |    1|   ap_vld   |        clk       |    pointer   |
+|clk_ap_vld               | out |    1|   ap_vld   |        clk       |    pointer   |
++-------------------------+-----+-----+------------+------------------+--------------+
+

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<autopilotfilemapping:AutoPilotFileMapping xmlns:autopilotfilemapping="www.autoesl.com/autopilotfilemapping">
+  <source>
+    <originFiles name="LDPC_CTRL.cpp" path="C:\Users\dougo\LDPC_CTRL\LDPC_CTRL.cpp"/>
+  </source>
+  <testbench>
+    <originFiles name="LDPC_CTRL_TEST.cpp" path="C:\Users\dougo\LDPC_CTRL\LDPC_CTRL_TEST.cpp"/>
+  </testbench>
+</autopilotfilemapping:AutoPilotFileMapping>

@@ -1,0 +1,68 @@
+@I [SIM-47] Using XSIM for RTL simulation.
+@I [SIM-14] Instrumenting C test bench ...
+   Build using "C:/Xilinx/Vivado_HLS/2016.3/msys/bin/g++.exe"
+   Compiling LDPC_INIT_DSP3.cpp_pre.cpp.tb.cpp
+   Compiling LDPC_INT_TEST.cpp_pre.cpp.tb.cpp
+   Compiling apatb_setupLDPC.cpp
+   Generating cosim.tv.exe
+@I [SIM-302] Starting C TB testing ... 
+@I [SIM-333] Generating C post check test bench ...
+@I [SIM-12] Generating RTL test bench ...
+@I [SIM-323] Starting verilog simulation. 
+@I [SIM-15] Starting XSIM ...
+@I [SIM-316] Starting C post checking ...
+all test passed 
+
+C:\Users\dougo\LDPC_INIT_DSP3\solution2\sim\verilog>call xelab xil_defaultlib.apatb_setupLDPC_top -prj setupLDPC.prj --initfile "C:/Xilinx/Vivado/2016.3/bin/../data/xsim/ip/xsim_ip.ini" --lib "ieee_proposed=./ieee_proposed" -s setupLDPC  
+INFO: [XSIM 43-3496] Using init file passed via -initfile option "C:/Xilinx/Vivado/2016.3/bin/../data/xsim/ip/xsim_ip.ini".
+Vivado Simulator 2016.3
+Copyright 1986-1999, 2001-2016 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2016.3/bin/unwrapped/win64.o/xelab.exe xil_defaultlib.apatb_setupLDPC_top -prj setupLDPC.prj --initfile C:/Xilinx/Vivado/2016.3/bin/../data/xsim/ip/xsim_ip.ini --lib ieee_proposed=./ieee_proposed -s setupLDPC 
+Multi-threading is on. Using 6 slave threads.
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_INIT_DSP3/solution2/sim/verilog/setupLDPC.autotb.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module apatb_setupLDPC_top
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/dougo/LDPC_INIT_DSP3/solution2/sim/verilog/setupLDPC.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module setupLDPC
+Starting static elaboration
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module xil_defaultlib.setupLDPC
+Compiling module xil_defaultlib.apatb_setupLDPC_top
+Built simulation snapshot setupLDPC
+
+****** Webtalk v2016.3 (64-bit)
+  **** SW Build 1682563 on Mon Oct 10 19:07:27 MDT 2016
+  **** IP Build 1681267 on Mon Oct 10 21:28:31 MDT 2016
+    ** Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+
+source C:/Users/dougo/LDPC_INIT_DSP3/solution2/sim/verilog/xsim.dir/setupLDPC/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-186] 'C:/Users/dougo/LDPC_INIT_DSP3/solution2/sim/verilog/xsim.dir/setupLDPC/webtalk/usage_statistics_ext_xsim.xml' has been successfully sent to Xilinx on Thu Mar 14 13:24:54 2019. For additional details about this file, please refer to the WebTalk help file at C:/Xilinx/Vivado/2016.3/doc/webtalk_introduction.html.
+INFO: [Common 17-206] Exiting Webtalk at Thu Mar 14 13:24:54 2019...
+
+****** xsim v2016.3 (64-bit)
+  **** SW Build 1682563 on Mon Oct 10 19:07:27 MDT 2016
+  **** IP Build 1681267 on Mon Oct 10 21:28:31 MDT 2016
+    ** Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/setupLDPC/xsim_script.tcl
+# xsim {setupLDPC} -autoloadwcfg -tclbatch {setupLDPC.tcl}
+Vivado Simulator 2016.3
+Time resolution is 1 ps
+source setupLDPC.tcl
+## run all
+////////////////////////////////////////////////////////////////////////////////////
+// Inter-Transaction Progress: Completed Transaction / Total Transaction
+// Intra-Transaction Progress: Measured Latency / Latency Estimation * 100%
+//
+// RTL Simulation : "Inter-Transaction Progress" ["Intra-Transaction Progress"] @ "Simulation Time"
+////////////////////////////////////////////////////////////////////////////////////
+// RTL Simulation : 0 / 1 [n/a] @ "125000"
+// RTL Simulation : 1 / 1 [n/a] @ "145000"
+////////////////////////////////////////////////////////////////////////////////////
+$finish called at time : 185 ns : File "C:/Users/dougo/LDPC_INIT_DSP3/solution2/sim/verilog/setupLDPC.autotb.v" Line 641
+## quit
+INFO: [Common 17-206] Exiting xsim at Thu Mar 14 13:25:05 2019...
+all test passed 
+@I [SIM-1000] *** C/RTL co-simulation finished: PASS ***

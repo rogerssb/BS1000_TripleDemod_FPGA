@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xd:acceleratorMap xmlns:xd="http://www.xilinx.com/xidane" xd:functionName="LDPC_Out" xd:componentRef="LDPC_Out" xd:initiationInterval="1" xd:clockPeriod="10.000000" xd:sequential="true" xd:hostMachine="64" xd:reset="control">
+  <xd:controlReg xd:name="control" xd:interfaceRef="ap_ctrl" xd:busTypeRef="acc_handshake" xd:type="acc_handshake"/>
+  <xd:arg xd:name="*(data_out)" xd:originalName="data_out" xd:direction="out" xd:interfaceRef="data_out" xd:busTypeRef="register" xd:handshakeRef="ap_vld" xd:dataWidth="1"/>
+  <xd:arg xd:name="reset" xd:originalName="reset" xd:direction="in" xd:interfaceRef="reset" xd:busTypeRef="register" xd:handshakeRef="ap_none" xd:dataWidth="1"/>
+  <xd:arg xd:name="*(cur_read_pos)" xd:originalName="cur_read_pos" xd:direction="out" xd:interfaceRef="cur_read_pos_V" xd:busTypeRef="register" xd:handshakeRef="ap_vld" xd:dataWidth="16"/>
+  <xd:arg xd:name="block" xd:originalName="block" xd:direction="in" xd:interfaceRef="block_V" xd:busTypeRef="register" xd:handshakeRef="ap_none" xd:dataWidth="2"/>
+  <xd:arg xd:name="rd_clk_in" xd:originalName="rd_clk_in" xd:direction="in" xd:interfaceRef="rd_clk_in" xd:busTypeRef="register" xd:handshakeRef="ap_none" xd:dataWidth="1"/>
+  <xd:arg xd:name="*(rd_mux)" xd:originalName="rd_mux" xd:direction="in" xd:interfaceRef="rd_mux" xd:busTypeRef="register" xd:handshakeRef="ap_none" xd:dataWidth="1"/>
+  <xd:arg xd:name="mem_out0_q0" xd:originalName="mem_out0_q0" xd:direction="in" xd:interfaceRef="mem_out0_q0" xd:busTypeRef="ap_memory" xd:arraySize="512" xd:dataWidth="1"/>
+  <xd:arg xd:name="mem_out1_q0" xd:originalName="mem_out1_q0" xd:direction="in" xd:interfaceRef="mem_out1_q0" xd:busTypeRef="ap_memory" xd:arraySize="512" xd:dataWidth="1"/>
+  <xd:arg xd:name="mem_out2_q0" xd:originalName="mem_out2_q0" xd:direction="in" xd:interfaceRef="mem_out2_q0" xd:busTypeRef="ap_memory" xd:arraySize="512" xd:dataWidth="1"/>
+  <xd:arg xd:name="mem_out3_q0" xd:originalName="mem_out3_q0" xd:direction="in" xd:interfaceRef="mem_out3_q0" xd:busTypeRef="ap_memory" xd:arraySize="512" xd:dataWidth="1"/>
+  <xd:arg xd:name="mem_out4_q0" xd:originalName="mem_out4_q0" xd:direction="in" xd:interfaceRef="mem_out4_q0" xd:busTypeRef="ap_memory" xd:arraySize="512" xd:dataWidth="1"/>
+  <xd:arg xd:name="mem_out5_q0" xd:originalName="mem_out5_q0" xd:direction="in" xd:interfaceRef="mem_out5_q0" xd:busTypeRef="ap_memory" xd:arraySize="512" xd:dataWidth="1"/>
+  <xd:arg xd:name="mem_out6_q0" xd:originalName="mem_out6_q0" xd:direction="in" xd:interfaceRef="mem_out6_q0" xd:busTypeRef="ap_memory" xd:arraySize="512" xd:dataWidth="1"/>
+  <xd:arg xd:name="mem_out7_q0" xd:originalName="mem_out7_q0" xd:direction="in" xd:interfaceRef="mem_out7_q0" xd:busTypeRef="ap_memory" xd:arraySize="512" xd:dataWidth="1"/>
+  <xd:latencyEstimates xd:best-case="2" xd:worst-case="2" xd:average-case="2"/>
+  <xd:resourceEstimates xd:LUT="262" xd:FF="96" xd:BRAM="0" xd:DSP="0"/>
+</xd:acceleratorMap>

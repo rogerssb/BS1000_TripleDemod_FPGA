@@ -1,0 +1,5 @@
+                             latency        interval
+transaction       0:               2x
+transaction       1:xx
+transaction       2:xx
+transaction       3:x               x

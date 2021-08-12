@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vivadoHLSLog:LogRoot xmlns:vivadoHLSLog="www.xilinx.com/vivadoHLSLog">
+  <errorLogs>
+    <logs>
+      <synLog/>
+      <simLog/>
+      <mgLog/>
+      <packageLog/>
+      <csimLog/>
+    </logs>
+  </errorLogs>
+  <warningLogs>
+    <logs>
+      <synLog>
+        <logs message="WARNING: [RTGEN 206-101] Register 'irig' is power-on initialization." projectName="LDCP_data_buffer_mult" solutionName="solution1" date="2019-09-30T16:33:20.832-0400" type="Warning"/>
+        <logs message="WARNING: [RTGEN 206-101] Register 'trig' is power-on initialization." projectName="LDCP_data_buffer_mult" solutionName="solution1" date="2019-09-30T16:33:20.789-0400" type="Warning"/>
+        <logs message="WARNING: [RTGEN 206-101] Register 'mem' is power-on initialization." projectName="LDCP_data_buffer_mult" solutionName="solution1" date="2019-09-30T16:33:20.775-0400" type="Warning"/>
+        <logs message="WARNING: [RTGEN 206-101] Register 'pos_r' is power-on initialization." projectName="LDCP_data_buffer_mult" solutionName="solution1" date="2019-09-30T16:33:20.764-0400" type="Warning"/>
+        <logs message="WARNING: [RTGEN 206-101] Register 'mux_pos' is power-on initialization." projectName="LDCP_data_buffer_mult" solutionName="solution1" date="2019-09-30T16:33:20.752-0400" type="Warning"/>
+        <logs message="WARNING: [RTGEN 206-101] Register 'ccsds_V' is power-on initialization." projectName="LDCP_data_buffer_mult" solutionName="solution1" date="2019-09-30T16:33:20.740-0400" type="Warning"/>
+        <logs message="WARNING: [RTGEN 206-101] Register 'write_pos' is power-on initialization." projectName="LDCP_data_buffer_mult" solutionName="solution1" date="2019-09-30T16:33:20.729-0400" type="Warning"/>
+        <logs message="WARNING: [RTGEN 206-101] Port 'mux' with mode 'ap_none' may require an associated data valid signal to correctly communicate with other blocks or a test bench; automatic C/RTL co-simulation may not be able to verify such a port." projectName="LDCP_data_buffer_mult" solutionName="solution1" date="2019-09-30T16:33:20.716-0400" type="Warning"/>
+        <logs message="WARNING: [SYN 201-107] Renaming port name 'LDPC_buff/write' to 'LDPC_buff/write_r' to avoid the conflict with HDL keywords or other object names." projectName="LDCP_data_buffer_mult" solutionName="solution1" date="2019-09-30T16:33:19.845-0400" type="Warning"/>
+      </synLog>
+      <simLog/>
+      <mgLog/>
+      <packageLog/>
+      <csimLog/>
+    </logs>
+  </warningLogs>
+</vivadoHLSLog:LogRoot>

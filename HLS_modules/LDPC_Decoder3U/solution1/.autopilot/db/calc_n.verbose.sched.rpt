@@ -1,0 +1,186 @@
+
+
+================================================================
+== Vivado HLS Report for 'calc_n'
+================================================================
+* Date:           Sat Oct 05 17:10:19 2019
+
+* Version:        2016.3 (Build 1682563 on Mon Oct 10 19:41:59 MDT 2016)
+* Project:        LDPC_Decoder3U
+* Solution:       solution1
+* Product family: kintex7
+* Target device:  xc7k160tfbg676-1
+
+
+================================================================
+== Performance Estimates
+================================================================
++ Timing (ns): 
+    * Summary: 
+    +--------+-------+----------+------------+
+    |  Clock | Target| Estimated| Uncertainty|
+    +--------+-------+----------+------------+
+    |ap_clk  |  10.00|      8.59|        1.25|
+    +--------+-------+----------+------------+
+
++ Latency (clock cycles): 
+    * Summary: 
+    +-----+-----+-----+-----+---------+
+    |  Latency  |  Interval | Pipeline|
+    | min | max | min | max |   Type  |
+    +-----+-----+-----+-----+---------+
+    |    ?|    ?|    ?|    ?|   none  |
+    +-----+-----+-----+-----+---------+
+
+    + Detail: 
+        * Instance: 
+        N/A
+
+        * Loop: 
+        +----------+-----+-----+----------+-----------+-----------+------+----------+
+        |          |  Latency  | Iteration|  Initiation Interval  | Trip |          |
+        | Loop Name| min | max |  Latency |  achieved |   target  | Count| Pipelined|
+        +----------+-----+-----+----------+-----------+-----------+------+----------+
+        |- Loop 1  |    ?|    ?|         4|          -|          -|     ?|    no    |
+        +----------+-----+-----+----------+-----------+-----------+------+----------+
+
+============================================================
++ Verbose Summary: Synthesis Manager
+============================================================
+InlineROM: 1
+ExposeGlobal: 0
+============================================================
++ Verbose Summary: CDFG Model
+============================================================
+IsTopModel: 0
+ResetActiveHigh: 1
+IsCombinational: 2
+IsDatapathOnly: 0
+HasWiredReturn: 1
+HasMFsm: 0
+HasVarLatency: 1
+IsPipeline: 0
+IsRtlPipelined: 0
+IsInstanceOverlapped: 0
+IsDontTouch: 0
+HasImplIP: 0
+IsGatedGlobalClock: 0
+
+
+============================================================
++ Verbose Summary: Schedule
+============================================================
+* Number of FSM states: 5
+* Pipeline: 0
+* Dataflow Pipeline: 0
+
+* FSM state transitions: 
+1 --> 
+	2  / true
+2 --> 
+	3  / (!exitcond)
+3 --> 
+	4  / true
+4 --> 
+	5  / true
+5 --> 
+	2  / true
+* FSM state operations: 
+
+ <State 1>: 1.09ns
+ST_1: nCodeN11_read (215)  [1/1] 0.00ns
+:0  %nCodeN11_read = call i12 @_ssdm_op_Read.ap_auto.i12(i12 %nCodeN11)
+
+ST_1: StgValue_7 (216)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5195
+:1  call void (...)* @_ssdm_op_SpecPipeline(i32 -1, i32 1, i32 1, i32 0, [1 x i8]* @p_str) nounwind
+
+ST_1: StgValue_8 (217)  [1/1] 1.09ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5202
+:2  br label %1
+
+
+ <State 2>: 1.47ns
+ST_2: n (219)  [1/1] 0.00ns
+:0  %n = phi i12 [ 0, %0 ], [ %n_1, %2 ]
+
+ST_2: exitcond (220)  [1/1] 1.47ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5202
+:1  %exitcond = icmp eq i12 %n, %nCodeN11_read
+
+ST_2: n_1 (221)  [1/1] 1.40ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5202
+:2  %n_1 = add i12 %n, 1
+
+ST_2: StgValue_12 (222)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5202
+:3  br i1 %exitcond, label %3, label %2
+
+ST_2: StgValue_13 (230)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5209
+:0  ret void
+
+
+ <State 3>: 0.00ns
+ST_3: n_cast_cast2 (224)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5204
+:0  %n_cast_cast2 = zext i12 %n to i13
+
+ST_3: StgValue_15 (225)  [2/2] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5204
+:1  call fastcc void @load_pest_all(i13 signext %n_cast_cast2)
+
+
+ <State 4>: 0.00ns
+ST_4: StgValue_16 (225)  [1/2] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5204
+:1  call fastcc void @load_pest_all(i13 signext %n_cast_cast2)
+
+
+ <State 5>: 2.39ns
+ST_5: StgValue_17 (226)  [1/1] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5205
+:2  call fastcc void @update_lam_all(i13 signext %n_cast_cast2)
+
+ST_5: StgValue_18 (227)  [1/1] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5206
+:3  call fastcc void @update_hat_all(i13 signext %n_cast_cast2)
+
+ST_5: StgValue_19 (228)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5202
+:4  br label %1
+
+
+
+============================================================
++ Verbose Summary: Timing violations
+============================================================
+Target clock period: 10ns, clock uncertainty: 1.25ns.
+
+ <State 1>: 1.09ns
+The critical path consists of the following:
+	multiplexor before 'phi' operation ('n') with incoming values : ('n', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5202) [219]  (1.09 ns)
+
+ <State 2>: 1.47ns
+The critical path consists of the following:
+	'phi' operation ('n') with incoming values : ('n', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5202) [219]  (0 ns)
+	'icmp' operation ('exitcond', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5202) [220]  (1.47 ns)
+
+ <State 3>: 0ns
+The critical path consists of the following:
+
+ <State 4>: 0ns
+The critical path consists of the following:
+
+ <State 5>: 2.39ns
+The critical path consists of the following:
+	'call' operation (LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5206) to 'update_hat_all' [227]  (2.39 ns)
+
+
+============================================================
++ Verbose Summary: Binding
+============================================================
+N/A
+* FSMD analyzer results:
+  - Output states:
+ - Input state : 
+  - Chain level:
+	State 1
+	State 2
+	State 3
+	State 4
+	State 5
+
+
+============================================================
++ Verbose Summary: Datapath Resource usage 
+============================================================
+N/A
