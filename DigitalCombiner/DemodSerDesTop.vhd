@@ -394,11 +394,15 @@ ARCHITECTURE rtl OF DemodSerDesTop IS
             NoiseGain,
             NoiseI,
             NoiseQ,
-            FilteredNoise1,
-            FilteredNoise2,
-            Noise             : SLV18;
+            NoisePipeI,
+            NoisePipeQ,
+            Noise,
+            adcRmsSlv,
+            NoiseRmsSlv       : SLV18;
    signal   Noise1,
-            Noise2            : SLV16;
+            Noise2,
+            Noise3,
+            Noise4            : SLV16;
    signal   NcodI,
             NcodQ,
             DataIsim,
@@ -411,16 +415,12 @@ ARCHITECTURE rtl OF DemodSerDesTop IS
             NoisyQ            : FLOAT_1_18 := (others=>'0');
    signal   adcRms,
             NoiseRms,
-            FilteredI,
-            FilteredQ,
             AM_Mod,
             NoiseGainedI,
             NoiseGainedQ      : sfixed(1 downto -16) := (others=>'0');
    signal   DataRate          : integer range 0 to 127 := 0;
    signal   FirNoiseIn,
-            FirNoiseOut,
-            FirDataIn,
-            FirDataOut        : std_logic_vector(47 downto 0);
+            FirNoiseOut       : std_logic_vector(47 downto 0);
    signal   NcoData,
             AM_Sines          : std_logic_vector(47 downto 0);
    signal   PhaseInc,
@@ -455,7 +455,7 @@ ARCHITECTURE rtl OF DemodSerDesTop IS
             dac_sclk, dac_sdio, dac0_d, dac1_d : signal is "LVCMOS18";
 
    attribute MARK_DEBUG : string;
-   attribute MARK_DEBUG of DataI, DataQ, Delay, NoiseRms, adcRms, DataRate,
+   attribute MARK_DEBUG of DataI, DataQ, Delay, NoiseRmsSlv, adcRmsSlv, DataRate, IF_Mux,
       MDB_180_1, MDB_182_3, MDB_184_5, MDB_188_9, MDB_186, MDB_187 : signal is "TRUE";
 
 constant in_simulation : boolean := false
@@ -481,9 +481,9 @@ ClkGen : if (in_simulation) generate
 
    MDB_180_1(17 downto 0) <= 18x"03333";        -- NoiseGain
    MDB_182_3              <= 32x"000";    -- PhaseInc
-   MDB_184_5              <= 32x"0010_0000";    -- AM_Freq
+   MDB_184_5              <= 32x"0000_0000";    -- AM_Freq
    MDB_186(11 downto 0)   <= 12x"000" ;         -- ChAgc
-   MDB_187                <= 16x"0100";         -- Options & Delay
+   MDB_187                <= 16x"0000";         -- Options & Delay
    MDB_188_9(17 downto 0) <= 18x"0_4000";       -- AM_Amp
 
    clkLocked      <= '1';
@@ -608,7 +608,36 @@ end generate;
          data_out   => Noise2
       );
 
-   FirNoiseIn <= 6x"0" & Noise1 & "00" & 6x"0" & Noise2 & "00";
+  NoiseGen3: gng
+      GENERIC MAP (
+         INIT_Z1 => 64x"0F80_02FF_FFD0_0FFF",   --  1,116,896,006,119,624,703
+         INIT_Z2 => 64x"FBFB_3FFF_8818_0981",   -- 18,157,176,689,406,773,633
+         INIT_Z3 => 64x"FF6C_180D_913E_C1FF"    -- 18,415,112,223,706,825,215
+      )
+      PORT MAP (
+         clk        => Clk,
+         rstn       => not Reset,
+         ce         => NoiseEn,
+         valid_out  => open,
+         data_out   => Noise3
+      );
+
+  NoiseGen4: gng
+      GENERIC MAP (
+         INIT_Z1 => 64x"936003FFFFC013FF",     -- 10,619,492,319,381,951,487
+         INIT_Z2 => 64x"FBF2FFFF60181A01",     -- 18,154,854,520,177,826,305
+         INIT_Z3 => 64x"FF6AD40001FE57FE"      -- 18,404,755,923,701,487,614
+      )
+      PORT MAP (
+         clk        => Clk,
+         rstn       => not Reset,
+         ce         => NoiseEn,
+         valid_out  => open,
+         data_out   => Noise4
+      );
+
+   FirNoiseIn <= 6x"0" & Noise1 & "00" & 6x"0" & Noise2 & "00" when (FPGA_ID0reg) else
+                 6x"0" & Noise3 & "00" & 6x"0" & Noise4 & "00";
 
    LowpassNoise : Lowpass66
       PORT MAP (
@@ -622,8 +651,8 @@ end generate;
    );
 
    -- allow filter to settle to avoid unknowns in loop filters
-   FilteredNoise1 <= FirNoiseOut(41 downto 24);
-   FilteredNoise2 <= FirNoiseOut(17 downto 00);
+   NoiseI <= FirNoiseOut(41 downto 24);
+   NoiseQ <= FirNoiseOut(17 downto 00);
 
    Delay16  <= 8x"00" & Delay;
    Delay16u <= unsigned(Delay16);
@@ -641,18 +670,17 @@ end generate;
          Output      => DlyData
       );
 
-   Noise <= FilteredNoise1 when (FPGA_ID0reg) else FilteredNoise2;
-   ddc : dualQuadDdc    -- Down convert incoming IF and Noise to baseband, output is decimated
+   ddc : dualQuadDdc    -- Down convert incoming IF to baseband, output is decimated
       port map (
          clk      => clk,
          reset    => reset,
          ifIn1    => DlyData,
-         ifIn2    => Noise,
+         ifIn2    => 18x"0",
          syncOut  => open,
          iOut1    => DataI,
          qOut1    => DataQ,
-         iOut2    => NoiseI,
-         qOut2    => NoiseQ
+         iOut2    => open,
+         qOut2    => open
       );
 
 
@@ -681,23 +709,6 @@ end generate;
          m_axis_data_tdata    => NcoData
       );
 
-   FirDataIn <= 6x"0" & DataI & 6x"0" & DataQ;
-
-   Lowpass : Lowpass66
-      PORT MAP (
-         aclk                 => Clk2x,      -- run at 4x clock rate to reduce DSPs
-         aresetn              => not Reset,
-         s_axis_data_tvalid   => '1',
-         s_axis_data_tdata    => FirDataIn,
-         s_axis_data_tready   => open,
-         m_axis_data_tvalid   => open,
-         m_axis_data_tdata    => FirDataOut
-   );
-
-   -- allow filter to settle to avoid unknowns in loop filters
-   FilteredI        <= to_sfixed(FirDataOut(41 downto 24), FilteredI);
-   FilteredQ        <= to_sfixed(FirDataOut(17 downto 00), FilteredI);
-
    ComplexMult : CmplxMult
       GENERIC MAP(
          IN_WIDTH  => 18,
@@ -712,8 +723,8 @@ end generate;
          ValidIn     => '1',
          StartIn     => '0',
          ReadyIn     => '1',
-         ReInA       => FilteredI,
-         ImInA       => FilteredQ,
+         ReInA       => to_sfixed(DataI, NcodI),
+         ImInA       => to_sfixed(DataQ, NcodI),
          ReInB       => to_sfixed(NcoData(17 downto 0), NcodI),
          ImInB       => to_sfixed(NcoData(24+17 downto 24), NcodI),
          ReOut       => NcodI,
@@ -730,10 +741,12 @@ end generate;
             Reset          <= ResetShft(ResetShft'left);
 
             NoiseEn        <= '1';
-            NoiseGainedI   <= resize(to_sfixed(NoiseI, 4, -13) * to_sfixed(NoiseGain, NoiseRms), NoiseGainedI);
-            NoiseGainedQ   <= resize(to_sfixed(NoiseQ, 4, -13) * to_sfixed(NoiseGain, NoiseRms), NoiseGainedQ);
+            NoisePipeI     <= NoiseI;
+            NoisePipeQ     <= NoiseQ;
+            NoiseGainedI   <= resize(to_sfixed(NoisePipeI, 4, -13) * to_sfixed(NoiseGain, NoiseRms), NoiseGainedI);
+            NoiseGainedQ   <= resize(to_sfixed(NoisePipeQ, 4, -13) * to_sfixed(NoiseGain, NoiseRms), NoiseGainedQ);
 
-            AM_Mod      <= resize(1.0 + (to_sfixed(AM_Amp, 1, -16) * to_sfixed(AM_Sines(17 downto 0), 0, -17)), AM_Mod);
+            AM_Mod      <= resize(1.0 + (to_sfixed(AM_Amp, 1, -16) * to_sfixed(AM_Sines(24+17 downto 24), 0, -17)), AM_Mod);
             IAM_dPipe  <= resize(AM_Mod * NcodI, IAM_d, fixed_wrap, fixed_truncate);
             QAM_dPipe  <= resize(AM_Mod * NcodQ, IAM_d, fixed_wrap, fixed_truncate);
             IAM_d      <= IAM_dPipe;
@@ -748,11 +761,15 @@ end generate;
    begin
       if (rising_edge(Clk)) then
          if (not Reset) then
-            adcRms        <= resize(adcRms - (adcRms sra 11) + (abs(to_sfixed(adc0In, 0, -17)) sra 10), adcRms);
-            NoiseRms      <= resize(NoiseRms - (NoiseRms sra 10) + (abs(NoiseGainedI) sra 10), NoiseRms);
+            adcRms     <= resize(adcRms - (adcRms sra 11) + (abs(to_sfixed(adc0In, 0, -17)) sra 10), adcRms);
+            NoiseRms   <= resize(NoiseRms - (NoiseRms sra 10) + (abs(NoiseGainedI) sra 10), NoiseRms);
+            IF_Mux      <= (AM_d_IF(17 downto 4) xor 14x"2000") when (not MDB_187(8)) else adc0Reg;
          end if;
       end if;
    end process Rms_process;
+
+   adcRmsSlv <= to_slv(adcRms);
+   NoiseRmsSlv <= to_slv(NoiseRms);
 
    GenIF : DUC
       port map (
@@ -763,7 +780,6 @@ end generate;
          ifOut    => AM_d_IF
       );
 
-   IF_Mux <= (AM_d_IF(17 downto 4) xor 14x"2000") when (not MDB_187(8)) else adc0Reg;
 
 DataGen : if (in_simulation) generate
 

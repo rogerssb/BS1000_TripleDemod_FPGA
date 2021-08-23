@@ -56,7 +56,6 @@ entity IF_Align is
          clk4x,
          reset,
          ce             : IN  std_logic;
-         RefLevel,
          Re1In,
          Im1In,
          Re2In,

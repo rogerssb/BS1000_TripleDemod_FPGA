@@ -64,11 +64,9 @@ ENTITY DigitalCombiner IS
       imagout,
       realout,
       ifOut,
-      agc1_gt_agc3,
       gainoutmax,
       gainoutmin,
       phase_detect      : OUT SLV18;
-      agc1_gt_agc1      : OUT SLV12;
       agc1_gt_agc2,
       realxord,
       imagxord,
@@ -110,7 +108,6 @@ ARCHITECTURE rtl OF DigitalCombiner IS
          Clk4x,
          ce,
          Reset          : IN  std_logic;
-         RefLevel,
          Re1In,
          Im1In,
          Re2In,
@@ -143,11 +140,9 @@ ARCHITECTURE rtl OF DigitalCombiner IS
          minrealout,
          imagout,
          realout,
-         agc1_gt_agc3,
          gainoutmax,
          gainoutmin,
          phase_detect      : OUT SLV18;
-         agc1_gt_agc1      : OUT SLV12;
          agc1_gt_agc2,
          realxord,
          imagxord,
@@ -173,8 +168,7 @@ END component DUC;
    signal   Real1Out,
             Imag1Out,
             Real2Out,
-            Imag2Out,
-            refLevel       : SLV18;
+            Imag2Out       : SLV18;
    signal   Index          : SLV8;
    signal   FastAgcDiff    : FLOAT_1_18;
    signal   MDB_180_1,
@@ -219,7 +213,6 @@ BEGIN
          clk4x       => clk4x,
          reset       => reset or not combinerEn,
          ce          => '1',
-         RefLevel    => to_sfixed(MDB_188_9(17 downto 0), 0, -17),
          Re1In       => re1In,
          Im1In       => im1In,
          Re2In       => re2In,
@@ -250,9 +243,7 @@ BEGIN
          reallock       => reallock,
          imaglock       => imaglock,
          locked         => locked,
-         agc1_gt_agc1   => agc1_gt_agc1,
          agc1_gt_agc2   => agc1_gt_agc2,
-         agc1_gt_agc3   => agc1_gt_agc3,
          lag_out        => lag_out,
          nco_control_out=> nco_control_out,
          phase_detect   => phase_detect,

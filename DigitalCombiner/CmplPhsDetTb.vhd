@@ -314,11 +314,9 @@ ARCHITECTURE rtl OF CmplPhsDetTb IS
       imagout,
       realout,
       ifOut,
-      agc1_gt_agc3,
       gainoutmax,
       gainoutmin,
       phase_detect      : OUT SLV18;
-      agc1_gt_agc1      : OUT SLV12;
       agc1_gt_agc2,
       realxord,
       imagxord,
@@ -513,8 +511,7 @@ ARCHITECTURE rtl OF CmplPhsDetTb IS
    signal   IXord,
             QXord,
             RecoveredData  : STD_LOGIC;
-   signal   agc1_gt_agc3,
-            DataISlv,
+   signal   DataISlv,
             DataQSlv,
             NcodISlv,
             NcodQSlv,
@@ -525,7 +522,6 @@ ARCHITECTURE rtl OF CmplPhsDetTb IS
             I2NoisySlv,
             Q2NoisySlv     : SLV18;
    signal   BitCounter     : uint16 := x"0000";
-   signal   agc1_gt_agc1   : STD_LOGIC_VECTOR(11 DOWNTO 0);
    signal   BitCount,
             ErrorCount,
             BitErrors      : uint32 := 32x"0";
@@ -1061,9 +1057,7 @@ end generate;
          reallock       => ILock,
          imaglock       => QLock,
          locked         => PhsDetLocked,
-         agc1_gt_agc1   => agc1_gt_agc1,
          agc1_gt_agc2   => agc1_gt_agc2,
-         agc1_gt_agc3   => agc1_gt_agc3,
          lag_out        => lag_out,
          nco_control_out=> nco_control_out,
          phase_detect   => phase_detect,
