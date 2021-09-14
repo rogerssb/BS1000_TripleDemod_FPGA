@@ -364,9 +364,24 @@ ARCHITECTURE rtl OF DemodSerDesTop IS
       );
    END COMPONENT BERT_LFSR;
 
+   COMPONENT DualAgc IS
+      PORT(
+         Clk,
+         Reset          : IN  std_logic;
+         Attack,
+         Decay          : IN  std_logic_vector(2 downto 0);
+         RealIn,
+         ImagIn,
+         RefLevel       : IN  float_1_18;
+         RealGained,
+         ImagGained,
+         AgcVoltage     : OUT float_1_18
+      );
+   END COMPONENT DualAgc;
+
    -- Constants
-   constant Plus1             : Float_1_18 := to_sfixed( 0.707 / 4.0, 0, -17);
-   constant Neg1              : Float_1_18 := to_sfixed(-0.707 / 4.0, 0, -17);
+   constant Plus1             : Float_1_18 := to_sfixed( 0.707 / 2.0, 0, -17);
+   constant Neg1              : Float_1_18 := to_sfixed(-0.707 / 2.0, 0, -17);
    constant Zero              : Float_1_18 := to_sfixed(0.0, 0, -17);
    type     Modulation        is (BPSK, QPSK, OQPSK, SOQPSK);
 
@@ -384,6 +399,7 @@ ARCHITECTURE rtl OF DemodSerDesTop IS
             Clk2x,
             ClkOver2,
             Reset             : std_logic := '0';
+   signal   SimReset          : std_logic := '1';
    signal   ChAgc             : SLV12;
    signal   DataI,
             DataQ,
@@ -398,7 +414,8 @@ ARCHITECTURE rtl OF DemodSerDesTop IS
             NoisePipeQ,
             Noise,
             adcRmsSlv,
-            NoiseRmsSlv       : SLV18;
+            NoiseRmsSlv,
+            RefLevel          : SLV18;
    signal   Noise1,
             Noise2,
             Noise3,
@@ -411,6 +428,8 @@ ARCHITECTURE rtl OF DemodSerDesTop IS
             QAM_dPipe,
             IAM_d,
             QAM_d,
+            ReAgcd,
+            ImAgcd,
             NoisyI,
             NoisyQ            : FLOAT_1_18 := (others=>'0');
    signal   adcRms,
@@ -430,7 +449,8 @@ ARCHITECTURE rtl OF DemodSerDesTop IS
             MDB_184_5,
             MDB_188_9      : SLV32;
    signal   ResetShft      : SLV18 := 18x"3FFFF";
-   signal   Delay          : SLV8;
+   signal   Delay,
+            Probe9         : SLV8;
    signal   Delay16,
             MDB_186,
             MDB_187        : SLV16;
@@ -479,12 +499,17 @@ ClkGen : if (in_simulation) generate
       end if;
    end process;
 
-   MDB_180_1(17 downto 0) <= 18x"03333";        -- NoiseGain
+   process begin
+      wait for 600 nS;
+      SimReset <= '0';
+   end process;
+
+   MDB_180_1(17 downto 0) <= 18x"00";        -- NoiseGain
    MDB_182_3              <= 32x"000";    -- PhaseInc
    MDB_184_5              <= 32x"0000_0000";    -- AM_Freq
    MDB_186(11 downto 0)   <= 12x"000" ;         -- ChAgc
-   MDB_187                <= 16x"0000";         -- Options & Delay
-   MDB_188_9(17 downto 0) <= 18x"0_4000";       -- AM_Amp
+   MDB_187                <= 16x"1000";         -- Options & Delay
+   MDB_188_9(17 downto 0) <= 18x"0_0000";       -- AM_Amp
 
    clkLocked      <= '1';
    FPGA_ID0reg <= '0';
@@ -557,7 +582,7 @@ else generate
 
    FPGA_ID0reg <= FPGA_ID0;
    FPGA_ID1reg <= FPGA_ID1;
-
+   SimReset    <= '0';
 
 --*****************************************************************************
 --                           Reclock ADC Inputs
@@ -771,15 +796,28 @@ end generate;
    adcRmsSlv <= to_slv(adcRms);
    NoiseRmsSlv <= to_slv(NoiseRms);
 
+   AGCs : DualAgc
+      PORT MAP (
+         Clk         => Clk,
+         Reset       => Reset or SimReset,
+         Attack      => 3x"7", --Probe9(6 downto 4),
+         Decay       => 3x"6", --Probe9(2 downto 0),
+         RealIn      => NoisyI,
+         ImagIn      => NoisyQ,
+         RefLevel    => 18x"01000", --to_sfixed(RefLevel, NoisyI),
+         RealGained  => ReAgcd,
+         ImagGained  => ImAgcd,
+         AgcVoltage  => open
+   );
+
    GenIF : DUC
       port map (
          clk      => clk,
          ce       => '1',
-         realIn   => to_slv(NoisyI),
-         imagIn   => to_slv(NoisyQ),
+         realIn   => to_slv(ReAgcd),
+         imagIn   => to_slv(ImAgcd),
          ifOut    => AM_d_IF
       );
-
 
 DataGen : if (in_simulation) generate
 

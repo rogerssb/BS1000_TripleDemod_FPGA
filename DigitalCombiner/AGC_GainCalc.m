@@ -1,13 +1,14 @@
 % This program is basically a precomputed divider.
 function AGC_Gain = AGC_GainCalc()
-    dBRange=11;
     AGC_Gain = zeros(16384,1);
-    for Index = 0:8191
-        Gain = 0.5*10.^(Index*(-dBRange/20)/8192);
+    dB_Range=11;
+    for Index = 0:8190
+        Linear=10.^(-Index*dB_Range/20/8192);
+        Gain=Linear/(Linear+1);
         AGC_Gain(Index+1) = Gain;
+        AGC_Gain(16384-Index) = 1-Gain;
     end
-    for Index = 8192:16383
-        Gain = 1-0.5*10.^((16383-Index)*(-dBRange/20)/8192);
-        AGC_Gain(Index+1) = Gain;
-    end
+    % if saturated, turn into full strength switch
+    AGC_Gain(8192)=0;
+    AGC_Gain(8193)=1;
 end

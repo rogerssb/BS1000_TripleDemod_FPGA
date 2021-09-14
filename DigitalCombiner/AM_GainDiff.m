@@ -20,4 +20,5 @@ function AM_Gain = AM_GainDiff()
             AM_Gain(Index) = Gain;
         end
     end
+    AM_Gain(1) = 0;     % used to disable output if inputs are zero
 end

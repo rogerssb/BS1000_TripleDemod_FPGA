@@ -123,7 +123,9 @@ ARCHITECTURE rtl OF DigitalCombiner IS
    COMPONENT complexphasedetector_0
       PORT (
          clk,
-         reset             : IN  STD_LOGIC;
+         reset,
+         am_disable,
+         ch1gtch2          : IN STD_LOGIC;
          ch1agc,
          ch2agc            : IN  SLV12;
          ch1imag,
@@ -254,7 +256,9 @@ BEGIN
          realxord       => realxord,
          imagxord       => imagxord,
          gainoutmax     => gainoutmax,
-         gainoutmin     => gainoutmin
+         gainoutmin     => gainoutmin,
+         am_disable     => MDB_188_9(0),
+         ch1gtch2       => MDB_188_9(4)
       );
 
    GenIF : DUC

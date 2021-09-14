@@ -46,9 +46,13 @@ ENTITY DualAgc IS
    PORT(
       Clk,
       Reset          : IN  std_logic;
+      Attack,
+      Decay          : IN  std_logic_vector(2 downto 0);
       RealIn,
       ImagIn,
       RefLevel       : IN  float_1_18;
+      RealGained,
+      ImagGained,
       AgcVoltage     : OUT float_1_18
    );
 END DualAgc;
@@ -82,31 +86,55 @@ ARCHITECTURE rtl OF DualAgc IS
   -- Signals
    signal      RealSq,
                ImagSq         : sfixed(1 downto -16) := (others=>'0');
-   signal      SumSq          : sfixed(3 downto -17) := (others=>'0');
+   signal      SumSq,
+               ShiftAttack,
+               ShiftDecay     : sfixed(3 downto -17) := (others=>'0');
+   signal      GainInt        : sfixed(4 downto -13) := (others=>'0');
    signal      AgcAddr        : sfixed(10 downto 0);
    signal      RomAddr        : natural range 0 to 1023;
 
+   signal      GainIntSlv     : SLV18;
+   attribute MARK_DEBUG : string;
+   attribute MARK_DEBUG of GainIntSlv : signal is "TRUE";
 
 
 BEGIN
 
+   GainIntSlv <= to_slv(GainInt);
 
-   AgcAddr     <= SumSq(3 downto -7);
+   ShiftAttack <= SumSq sra to_integer(unsigned(Attack));
+   ShiftDecay  <= SumSq sra to_integer(unsigned(Decay));
+   AgcAddr     <= GainInt(4 downto -6);
    RomAddr     <= to_integer(ufixed(AgcAddr(9 downto 0)));
 
   Delay_process: process (Clk)
    variable GainInt_v   : sfixed(4 downto -13);
    begin
       if (rising_edge(Clk)) then
-         if (Reset) then
+         if ((Reset) or (and(Attack) and (and(Decay)))) then   -- if Attack and Decay = 7, bypass the fast AGC
+            RealGained <= RealIn;
+            ImagGained <= ImagIn;
             RealSq     <= (others=>'0');
             ImagSq     <= (others=>'0');
             SumSq      <= (others=>'0');
+            GainInt    <= to_sfixed(1.472, GainInt);  -- nominal
             AgcVoltage <= (others=>'0');
          else
-            RealSq     <= resize(RealIn * RealIn, RealSq);
-            ImagSq     <= resize(ImagIn * ImagIn, ImagSq);
+            RealGained <= resize(RealIn * GainInt, RealGained);
+            ImagGained <= resize(ImagIn * GainInt, ImagGained);
+            RealSq     <= resize(RealGained * RealGained, RealSq);
+            ImagSq     <= resize(ImagGained * ImagGained, ImagSq);
             SumSq      <= resize(RefLevel - (RealSq + ImagSq), SumSq);
+            GainInt_v  := resize(GainInt + ShiftAttack, GainInt_v) when not SumSq(1) else resize(GainInt + ShiftDecay, GainInt_v);
+            if (GainInt_v(4)) then  -- saturate to ufixed(3 downto -13) to keep gain positive else gainint runs away
+               if (SumSq < 0) then
+                  GainInt <= to_sfixed(0, GainInt);
+               else
+                  GainInt <= to_sfixed(15.99, GainInt);
+               end if;
+            else
+               GainInt <= GainInt_v;
+            end if;
             AgcVoltage <= AgcRom(RomAddr);
          end if;
       end if;
