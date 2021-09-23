@@ -622,7 +622,7 @@ module semcoDemodTop (
                 .combinerEn         (combinerEn),
                 .reallock           (RealLock),
                 .imaglock           (ImagLock),
-                .locked             (combLocked_n),
+                .locked             (combLocked),
                 .agc1_gt_agc2       (agc1_gt_agc2),
                 .lag_out            (lag_out),
                 .nco_control_out    (nco_control_out),
@@ -2167,8 +2167,8 @@ sdi sdi(
 
         `else
 
-            assign  lockLed0n = !RealLock[12];
-            assign  lockLed1n = !ImagLock[12];
+            assign  lockLed0n = !timingLock;
+            assign  lockLed1n = !combLocked;
 
         `endif
         //******************************************************************************

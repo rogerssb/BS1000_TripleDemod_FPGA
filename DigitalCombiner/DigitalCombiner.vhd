@@ -125,6 +125,7 @@ ARCHITECTURE rtl OF DigitalCombiner IS
          clk,
          reset,
          am_disable,
+         overridech,
          ch1gtch2          : IN STD_LOGIC;
          ch1agc,
          ch2agc            : IN  SLV12;
@@ -135,6 +136,8 @@ ARCHITECTURE rtl OF DigitalCombiner IS
          lag_coef,
          lead_coef,
          swprate           : IN  SLV18;
+         lockhysterisis,
+         lockthreshold     : IN STD_LOGIC_VECTOR(12 DOWNTO 0);
          sweeplmt          : IN  STD_LOGIC_VECTOR(14 DOWNTO 0);
          maximagout,
          maxrealout,
@@ -172,7 +175,6 @@ END component DUC;
             Real2Out,
             Imag2Out       : SLV18;
    signal   Index          : SLV8;
-   signal   FastAgcDiff    : FLOAT_1_18;
    signal   MDB_180_1,
             MDB_182_3,
             MDB_184_5,
@@ -258,7 +260,10 @@ BEGIN
          gainoutmax     => gainoutmax,
          gainoutmin     => gainoutmin,
          am_disable     => MDB_188_9(0),
-         ch1gtch2       => MDB_188_9(4)
+         ch1gtch2       => MDB_188_9(1),
+         overridech     => MDB_188_9(2),
+         lockthreshold  => MDB_188_9(28 downto 16),
+         lockhysterisis => '0' & MDB_188_9(15 downto 4)
       );
 
    GenIF : DUC
