@@ -7,12 +7,17 @@ derivative rights in exchange for negotiated compensation.
 ******************************************************************************/
 
 `timescale 1ns/10ps
+`define COMB_LAG_COEF      5'b0_00xx
+`define COMB_LEAD_COEF     5'b0_01xx
+`define COMB_SWEEP_RATE    5'b0_10xx
+`define COMB_SWEEP_LIMIT   5'b0_110x
+`define COMB_OPTIONS       5'b0_111x
+`define COMB_REF_LEVEL     5'b1_00xx
 
-`include "addressMap.v"
 
 module combinerRegs(
     input               busClk,
-    input       [12:0]  addr,
+    input       [4:0]   addr,
     input       [31:0]  dataIn,
     output  reg [31:0]  dataOut,
     input               cs,

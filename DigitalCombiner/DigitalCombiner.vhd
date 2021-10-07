@@ -54,7 +54,7 @@ ENTITY DigitalCombiner IS
       im2In             : IN  float_1_18;
       ch1agc,
       ch2agc            : IN  SLV12;
-      addr              : IN  std_logic_vector(12 downto 0);
+      addr              : IN  std_logic_vector(4 downto 0);
       dataIn            : IN  SLV32;
       dataOut           : OUT SLV32;
       maximagout,
@@ -89,7 +89,7 @@ ARCHITECTURE rtl OF DigitalCombiner IS
          wr0, wr1, wr2, wr3,
          realLock, imagLock,
          busClk         : IN  std_logic;
-         addr           : IN  std_logic_vector(12 downto 0);
+         addr           : IN  std_logic_vector(4 downto 0);
          dataIn         : IN  SLV32;
          dataOut        : OUT SLV32;
          Index          : IN  SLV8;
@@ -159,15 +159,15 @@ ARCHITECTURE rtl OF DigitalCombiner IS
       );
    END COMPONENT complexphasedetector_0;
 
-component DUC
-      port (
-         clk,
-         ce       : in  std_logic;
-         realIn,
-         imagIn   : in  std_logic_vector(17 downto 0);
-         ifOut    : out std_logic_vector(17 downto 0)
-      );
-END component DUC;
+   component DUC
+         port (
+            clk,
+            ce       : in  std_logic;
+            realIn,
+            imagIn   : in  std_logic_vector(17 downto 0);
+            ifOut    : out std_logic_vector(17 downto 0)
+         );
+   END component DUC;
 
   -- Signals
    signal   Real1Out,
