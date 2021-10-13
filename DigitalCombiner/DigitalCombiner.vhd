@@ -87,7 +87,7 @@ ARCHITECTURE rtl OF DigitalCombiner IS
       PORT (
          cs,
          wr0, wr1, wr2, wr3,
-         realLock, imagLock,
+         realLock, imagLock, locked,
          busClk         : IN  std_logic;
          addr           : IN  std_logic_vector(4 downto 0);
          dataIn         : IN  SLV32;
@@ -200,6 +200,7 @@ BEGIN
          Index       => Index,
          realLock    => realLock(12),
          imagLock    => imagLock(12),
+         locked      => locked,
          MDB_180_1   => MDB_180_1,
          MDB_182_3   => MDB_182_3,
          MDB_186     => MDB_186,

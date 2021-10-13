@@ -185,6 +185,7 @@ ARCHITECTURE rtl OF DemodPreDist IS
 
    -- Signals
    signal   SimReset          : std_logic := '1';
+   signal   DucEn             : SLV4 := "0001";
    signal   DataI,
             DataQ,
             DlyData           : SLV18;
@@ -434,10 +435,16 @@ BEGIN
       end if;
    end process;
 
+   PickPhase : process (Clk) begin
+      if (rising_edge(Clk)) then
+          DucEn <= DucEn(2 downto 0) & '1';
+      end if;
+   end process;
+
    GenIF : DUC
       port map (
          clk      => clk,
-         ce       => '1',
+         ce       => DucEn(3),
          realIn   => RealOut,
          imagIn   => ImagOut,
          ifOut    => ifOut

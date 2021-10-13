@@ -22,7 +22,7 @@ module combinerRegs(
     output  reg [31:0]  dataOut,
     input               cs,
     input               wr0, wr1, wr2, wr3,
-    input               realLock, imagLock,
+    input               realLock, imagLock, locked,
     input       [7:0]   Index,
     output  reg [31:0]  MDB_180_1 = 32'h0000,
     output  reg [31:0]  MDB_182_3 = 32'h0000,
@@ -76,7 +76,7 @@ module combinerRegs(
     end
 
     always @* begin
-        MDB_180_1[31:29] = {realLock | imagLock, realLock, imagLock};
+        MDB_180_1[31:28] = {realLock | imagLock, realLock, imagLock, locked};
         MDB_182_3[31:24] = Index;
         if (cs) begin
             casex (addr)

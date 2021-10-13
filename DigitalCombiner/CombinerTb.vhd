@@ -13,24 +13,30 @@ manufacture, development, or derivation of any designs, or configuration.
 
 Company:     Semco Inc.
 
-Module Name: DemodSerDesTop.vhd
-Description: The IF signal is delayed up to 127 clocks then down converted to baseband
-and decimated by 2 to the ClkOver2 rate. This is then filtered to match the noise bandwidth,
-frequency shifted, noise is added and the sum AM modulated. This composite is the
-up converted to 70MHz and drives the SerDes output to the Combiner.
+Module Name: Cominer Test Bench
+Description: This module is used to measure the result of multiple distortions on a BPSK
+or QPSK sigal running at 10% of the 46MHz clock rate. Bit Error Rate (BER) circuits follow
+the two data outputs to quantify the signal quality. The actual distortions are applied in
+the two DemodPreDist.vhd modules used to simulate the Channel One and Channel Two inputs to
+combiner. This module is used to set distortion parameters, generate a common "RF" signal
+coming from the transmitter, common clocks and MCU interfaces.
+   The combiner input can be either a single 70MHz IF or complex 46MHz I/Q signals with a
+control input to select the desired mode.
+   A processor simulator sets various programmable combiner parameters then reads them back
+to verify the processor bus is functional and report errors.
+   Finally there is a process to run QPSK and BPSK modes with IF or complex inputs
 
-ARGUMENTS :
+   The test bench could be used to hundreds of combinations of distortions so these are
+user settable and results can be derived from simulations. This assumes the user knows what
+to expect and look out for.
 
-Dependencies:
+   Various comments are spread throughout the file to further explain functionallity.
 
-----------------------------------------------------------------------------
-                               DETAILS
-----------------------------------------------------------------------------
 
 ----------------------------------------------------------------------------
                                HISTORY
 ----------------------------------------------------------------------------
-9-6-16 Initial release FZ
+10-8-21 Initial release FZ
 -------------------------------------------------------------
 */
 
@@ -108,7 +114,7 @@ ARCHITECTURE rtl OF CombinerTb IS
          dataIn                  : IN std_logic_vector(31 downto 0);
          reset,
          clk, clk2x, clkOver2,
-         busClk, ComplexOrIF,
+         busClk, ComplexOrIF_n,
          cs,
          wr0, wr1, wr2, wr3      : IN std_logic;
 
@@ -135,6 +141,21 @@ ARCHITECTURE rtl OF CombinerTb IS
    constant Plus1             : Float_1_18 := to_sfixed( 0.707 / 2.0, 0, -17);
    constant Neg1              : Float_1_18 := to_sfixed(-0.707 / 2.0, 0, -17);
    constant Zero              : Float_1_18 := to_sfixed(0.0, 0, -17);
+
+   -- The processor interface is a full duplex 32 bit data bus with 5 address bits and four byte write enables and a chip select.
+   -- COMB_LAG_COEF     Address 0x00  LagCoef=Bits 17:0, 31:28={Real or'd Imag Lock MSBs, RealLock MSB, ImagLock MSB, combLocked}, others unused
+   -- COMB_LEAD_COEF    Address 0x04  LeadCoef=Bits 17:0, Delay Index=31:24 read only, others unused
+   -- COMB_SWEEP_RATE   Address 0x08  Bits 17:0, others unused
+   -- COMB_SWEEP_LIMIT  Address 0x0C  Bits 13:0, others unused
+   -- COMB_OPTIONS      Address 0x0E  Bits 4 is CombinerEn and bit 0 is ifBS_n, others unused
+   --
+   -- COMB_LOCK_THRESH  Address 0x10  see below:
+   --      am_disable     bit 0, turns off AM detector contribution to weighting
+   --      ch1gtch2       bit 1, forces master to channel 1 ('1') or channel 2 ('0') when overRideCh is high
+   --      overRideCh     bit 2, allows user to force which channel is master regardless of AGC voltages
+   --      lockThreshold  bit 28:16, signal must exceed lockThreshold + lockHysterisis to declare lock
+   --      lockHysterisis bits 15:4, signal must drop below lockThreshold - lockHysterisis to declare unlock
+
    constant COMB_LAG_COEF     : std_logic_vector(4 downto 0) :=  5b"0_00--";
    constant COMB_LEAD_COEF    : std_logic_vector(4 downto 0) :=  5b"0_01--";
    constant COMB_SWEEP_RATE   : std_logic_vector(4 downto 0) :=  5b"0_10--";
@@ -143,12 +164,12 @@ ARCHITECTURE rtl OF CombinerTb IS
    constant COMB_LOCK_THRESH  : std_logic_vector(4 downto 0) :=  5b"1_00--";
    constant Fs                : real := 280.0e6/6.0;
 
-   type     Modulation        is (BPSK, QPSK, OQPSK);
+   type     Modulation        is (BPSK, QPSK);
    type     mcuFsm            is (IDLE, SETUP, WRITE, READ, FINISH);
 
    -- Signals
    signal   mcuMode           : mcuFsm := IDLE;
-   signal   Mode              : Modulation := BPSK;
+   signal   Mode              : Modulation;
    signal   PrnDataI,
             PrnDataQ,
             PrnEn,
@@ -159,6 +180,7 @@ ARCHITECTURE rtl OF CombinerTb IS
             Clk,
             Clk2x,
             ClkOver2,
+            ComplexOrIF_n,
             Reset             : std_logic := '0';
    signal   addr              : unsigned(4 downto 0) := 5x"00";
    signal   RealLock, ImagLock : std_logic_vector(12 downto 0);
@@ -225,6 +247,9 @@ ARCHITECTURE rtl OF CombinerTb IS
    signal   IIandD,
             QIandD            : sfixed(2 downto -17);
    signal   BERI, BERQ        : real := 0.0;
+   signal   Capture,
+            PrnOff            : natural;
+
 
 begin
 
@@ -286,14 +311,14 @@ begin
                when QPSK =>
                   DataIsim <= Plus1 when (PrnDataI) else Neg1;
                   DataQsim <= Plus1 when (PrnDataQ) else Neg1;
-               when OQPSK =>
-                  DataIsim <= Plus1 when (PrnDataI) else Neg1;
+--               when OQPSK =>
+--                  DataIsim <= Plus1 when (PrnDataI) else Neg1;
                when others =>
                   DataIsim <= Zero;
                   DataQsim <= Zero;
             end case;
-         elsif ((DataRate = 5) and (Mode = OQPSK)) then
-            DataQsim <= Plus1 when (PrnDataQ) else Neg1;   -- Delay Q a half bit
+--         elsif ((DataRate = 5) and (Mode = OQPSK)) then
+--            DataQsim <= Plus1 when (PrnDataQ) else Neg1;   -- Delay Q a half bit
             -- PrnEn should have gone low on DataRate = 1
          else
             PrnEn <= '0';
@@ -310,19 +335,19 @@ begin
          ifOut    => adc0In
       );
 
-   AM_FreqHz1     <= 1000.0;     -- 0 to ±50KHz
-   AM_AmpPerCent1 <= 5.0;
-   OffsetFreqHz1  <= 4666.0;  --±125KHz but must be withing 10KHz of OffsetFreqHz2 to avoid excess differential offset
-   DelayNs1       <= 2000.0;  -- 0 to 2000, for negative delay, set this to 0 and set DelayNs2 to 0 to 2000, Delay is differential
-   SNRdB1         <= 0.0;     -- 0 to 80
-   AgcVolts1      <= -2.0 + SNRdB1 / 20.0;     -- ±2.0
+   AM_FreqHz1     <= 0.0;  -- 0 to ±50KHz. Used to simulate fades using a sinusoidal droop.
+   AM_AmpPerCent1 <= 0.0;  -- Depth of the droop in perCent AM
+   OffsetFreqHz1  <= 0.0;  --±125KHz but must be withing 10KHz of OffsetFreqHz2 to avoid excess differential offset
+   DelayNs1       <= 0.0;  -- 0 to 2000, for negative delay, set this to 0 and set DelayNs2 to 0 to 2000, Delay is differential
+   SNRdB1         <= 0.0;  -- -10 to 70
+   AgcVolts1      <= -1.5 + SNRdB1 / 20.0; -- calculated based on SNR
 
-   AM_FreqHz2     <= 2000.0;
+   AM_FreqHz2     <= 0.0;
    AM_AmpPerCent2 <= 0.0;
-   OffsetFreqHz2  <= 0.0;     -- if measuring BERs, the stronger signal can't have a frequency offset for the IandDs get beat notes
-   DelayNs2       <= 50.0;
-   SNRdB2         <= 20.0;
-   AgcVolts2      <= -2.0 + SNRdB2 / 20.0;
+   OffsetFreqHz2  <= 0.0;     -- if measuring BERs, the stronger signal can't have a frequency offset or the IandDs get beat notes
+   DelayNs2       <= 0.0;
+   SNRdB2         <= 0.0;
+   AgcVolts2      <= -1.5 + SNRdB2 / 20.0;
 
    NoiseGain1  <= std_logic_vector(to_unsigned(integer(10.0**(-SNRdB1/20.0) * 32768.0),18)); -- 0x08000 is roughly 0dB
    PhaseInc1   <= std_logic_vector(to_unsigned(integer(OffsetFreqHz1 / Fs * 2.0**32),32));
@@ -338,16 +363,19 @@ begin
    Delay2      <= std_logic_vector(to_unsigned(integer(DelayNs2 * 1.0e-9 * Fs),8));
    AM_Amp2     <= std_logic_vector(to_unsigned(integer(2.0**17 * AM_AmpPerCent2 / 100.0),18));
 
-   LagCoef     <= 18x"00C80";
-   LeadCoef    <= 18x"0A000";
-   SweepLimit  <= 14x"0013";
-   SweepRate   <= 18x"00064";
-   LockThresh  <= 32x"00800700";
-   Options     <= 16x"0011";
+   -- These are my usual fixed values, nothing special about them, they just work
+   LagCoef     <= 18x"00C80";    -- LagCoeff affects the bandwidth
+   LeadCoef    <= 18x"0A000";    -- LeadCoeff will depend on lagCoef to settle the loop properly
+   SweepLimit  <= 14x"0010";     -- The phase detector can sweep across at least 100kHz range but 16KHz should suffice
+   SweepRate   <= 18x"00064";    -- The sweep rate is a DC offset to the integrator that is cut off once locked
+   LockThresh  <= 32x"00800700"; -- The lock detectors can droop considerably with high noise and beat notes. This setting
+                                 -- looks for 0x80 - 0x70 = 0x10 when locked (near zero) and 0x80+0x70=0xf0 when unlocked
+   Options     <= 16x"0011";     -- Turn on the combinerEn and ifBS_n signals
+
    NcoReset1_n <= ResetComb_n;
 
-   Channel1 : DemodPreDist
-      port map(
+   Channel1 : DemodPreDist       -- The PreDistortion modules simulate the RF signal travelling from the transmitter to the
+      port map(                  -- antenna feeds. They are not part of the combiner itself but feed signal to it.
          Clk         => Clk,
          ClkOver2    => ClkOver2,
          Clk2x       => Clk2x,
@@ -390,48 +418,52 @@ begin
 
     Combiner : CombinerTop
       port map (
-         Clk               => Clk,
-         ClkOver2          => ClkOver2,
-         Clk2x             => Clk2x,
-         reset             => not resetComb_n,
-         cs                => cs,
-         busClk            => ClkOver2,
-         wr0               => wrLsb,
+         -- inputs
+         Clk               => Clk,              -- 93.3MHz system clock
+         ClkOver2          => ClkOver2,         -- 46.6MHz system clock divided by 2
+         Clk2x             => Clk2x,            -- 186.6MHz system clock times 2
+         reset             => not resetComb_n,  -- reset signal. This on is extended to remove unknowns in simulation
+         cs                => cs,               -- processor chip select
+         busClk            => ClkOver2,         -- processor sourced clock input
+         wr0               => wrLsb,            -- processor byte write enables. This is LSB ie [7:0]
          wr1               => wrLsb,
          wr2               => wrMsb,
-         wr3               => wrMsb,
-         addr              => std_logic_vector(addr),
+         wr3               => wrMsb,            -- processor MSB byte write enable for bits [31:24]
+         addr              => std_logic_vector(addr), -- five bits or processor address bus
          dataIn            => DC_DataIn,
-         dataOut           => DC_DataOut,
-         ch1Adc            => IF1,
+         dataOut           => DC_DataOut,       -- processor data busses
+         ch1Adc            => IF1,              -- 70MHz IF inputs at 93.3MHz rate
          ch2Adc            => IF2,
-         ch1RealIn         => ch1RealIn,
+         ch1RealIn         => ch1RealIn,        -- optional baseband I/Q inputs at 46.6MHz rate
          ch1ImagIn         => ch1ImagIn,
          ch2RealIn         => ch2RealIn,
          ch2ImagIn         => ch2ImagIn,
-         ComplexOrIF       => '1',
-         ch1agc            => Ch1Agc,
-         ch2agc            => Ch2Agc,
-         realout           => realout,
+         ComplexOrIF_n     => ComplexOrIF_n,    -- selects between Complex I/Q baseband ('1') or 70MHz IF ('0') as input source
+         ch1agc            => Ch1Agc,           -- AGC voltage from Channel 1 front end. 20dB/Volt over ±2.2V range. 12 Bit signed
+         ch2agc            => Ch2Agc,           -- The combiner uses the differential AGCs betweent the two channels.
+         -- outputs
+         realout           => realout,          -- Complex combined output at 46.6MHz
          imagout           => imagout,
-         ifOut             => combinerIF,
-         combinerEn        => combinerEn,
-         reallock          => RealLock,
+         ifOut             => combinerIF,       -- upconverted 70MHz IF combined output at 93.3MHz
+         combinerEn        => combinerEn,       -- Combiner is active when high. Set by processor Options register
+         reallock          => RealLock,         -- 13 bit counter outputs measuring correlation between two channels
          imaglock          => ImagLock,
-         locked            => combLocked,
-         agc1_gt_agc2      => agc1_gt_agc2,
-         lag_out           => lag_out,
-         nco_control_out   => nco_control_out,
-         phase_detect      => phase_detect,
+         locked            => combLocked,       -- internal locked detector. Active high
+         agc1_gt_agc2      => agc1_gt_agc2,     -- status output of which channel is master. Ch1 when high
+         lag_out           => lag_out,          -- lag accumulator output, can be used to monitor acquisition settling for lag/lead
+         nco_control_out   => nco_control_out,  -- status output of signal feeding the lag accumulator
+         phase_detect      => phase_detect,     -- raw phase detector output
          maximagout        => maxImagout,
-         maxrealout        => maxRealout,
+         maxrealout        => maxRealout,       -- max (Master) complex outputs after weighting
          minimagout        => minImagout,
-         minrealout        => minRealout,
+         minrealout        => minRealout,       -- min (Slave) complex outputs after weighting
          realxord          => RealXord,
-         imagxord          => ImagXord,
+         imagxord          => ImagXord,         -- single bit correlation output, should be low when locked with occasional blips during bit transitions
          gainoutmax        => gainOutMax,
-         gainoutmin        => gainOutMin,
-         ifBS_n            => open
+         gainoutmin        => gainOutMin,       -- weighting signal for the Max and Min channels. Provides measure of BER improvement. If both weights are
+                                                -- half scale then both channels are contributing equally. Otherwise one weight will increase as other decreases.
+                                                -- The two weights always add to 'one'.
+         ifBS_n            => open              -- not used in core, can be spare output
       );
 
    mcuProcess : process (ClkOver2)
@@ -527,21 +559,36 @@ begin
       end if;
    end process mcuProcess;
 
+   process begin        -- simple test to monitor BERs over four input variations. Modify as desired.
+      ComplexOrIF_n <= '0';
+      Mode        <= QPSK;
+      wait for 200 us;
+      ComplexOrIF_n <= '1';
+      wait for 200 us;
+      Mode        <= BPSK;
+      wait for 200 us;
+      ComplexOrIF_n <= '0';
+      wait;
+   end process;
+
+   Capture <= 0 when  (ComplexOrIF_n = '1') else 7;
+   PrnOff  <= 10 when (ComplexOrIF_n = '1') else 13;
+
    OutProc: process (ClkOver2)
    begin
       if (rising_edge(ClkOver2)) then
-         if (DataRate = 0) then
+         if (DataRate = Capture) then
             IIandD         <= resize(to_sfixed(realOut, DataIsim), IIandD);
             QIandD         <= resize(to_sfixed(imagOut, DataIsim), IIandD);
-            RecoveredDataI <= IIandD(2);
-            RecoveredDataQ <= QIandD(2);
+            RecoveredDataI <= not IIandD(2) when (ComplexOrIF_n = '1') else IIandD(2);
+            RecoveredDataQ <= not QIandD(2) when (ComplexOrIF_n = '1') else QIandD(2);
             PrnDelayI      <= PrnDelayI(PrnDelayI'left-1 downto 0) & PrnDataI;
             PrnDelayQ      <= PrnDelayQ(PrnDelayQ'left-1 downto 0) & PrnDataQ;
          else
             IIandD         <= resize(IIandD + to_sfixed(realOut, DataIsim), IIandD);
             QIandD         <= resize(QIandD + to_sfixed(imagOut, DataIsim), IIandD);
          end if;
-         if (DataRate = 1) then
+         if (DataRate = Capture+1) then
             if (not firstBer_n) then
                if (BitCountI < 25.0) then
                   BitCountI <= BitCountI + 1.0;
@@ -551,8 +598,8 @@ begin
                   BitCountQ  <= 1.0;
                end if;
             else
-               BERI         <= ErrorCountI / BitCountI;
-               BERQ         <= ErrorCountQ / BitCountQ;
+               BERI <= ErrorCountI / BitCountI;    -- calculated continuously to speed results
+               BERQ <= ErrorCountQ / BitCountQ;
                if ((ErrorCountI > 50.0) or (BitCountI > 1.0e5)) then
                   BitCountI    <= 1.0;
                   BitErrorsI   <= ErrorCountI;
@@ -560,7 +607,7 @@ begin
                   ErrorCountI  <= 0.0;
                else
                   BitCountI  <= BitCountI + 1.0;
-                  if (PrnDelayI(10) /= RecoveredDataI) then
+                  if (PrnDelayI(PrnOff) /= RecoveredDataI) then
                      ErrorCountI  <= ErrorCountI + 1.0;
                   end if;
                end if;
@@ -572,7 +619,7 @@ begin
                      ErrorCountQ  <= 0.0;
                   else
                      BitCountQ  <= BitCountQ + 1.0;
-                     if (PrnDelayQ(10) /= RecoveredDataQ) then
+                     if (PrnDelayQ(PrnOff) /= RecoveredDataQ) then
                         ErrorCountQ  <= ErrorCountQ + 1.0;
                      end if;
                   end if;
