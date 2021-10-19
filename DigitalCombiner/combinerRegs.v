@@ -66,7 +66,7 @@ module combinerRegs(
         if (cs && wr3) begin
             casex (addr)
                 `COMB_LAG_COEF:         MDB_180_1[28:24] <= dataIn[28:24];
- //             `COMB_LEAD_COEF:        MDB_182_3[31:24] <= dataIn[31:24];
+ //             `COMB_LEAD_COEF:        MDB_182_3[31:24] <= dataIn[31:24];  // Use MSB for Index feedback
                 `COMB_SWEEP_RATE:       MDB_184_5[31:24] <= dataIn[31:24];
                 `COMB_REF_LEVEL:        MDB_188_9[31:24] <= dataIn[31:24];
                 `COMB_OPTIONS:          MDB_187[15:8]    <= dataIn[31:24];

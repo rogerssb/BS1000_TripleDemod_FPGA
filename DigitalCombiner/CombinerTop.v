@@ -14,12 +14,12 @@ module CombinerTop (
      output            locked, agc1_gt_agc2,
                        RealXord, ImagXord, ifBS_n, combinerEn,
      output    [17:0]  ifOut,
-     output    [31:0]  dataOut/*,
+     output    [31:0]  dataOut,
      output    [17:0]  maxImagout, minImagout, imagout, realout, phase_detect,
      output    [17:0]  maxRealout, minRealout, gainOutMax, gainOutMin,
      output    [12:0]  RealLock, ImagLock,
      output    [31:0]  lag_out,
-     output    [21:0]  nco_control_out*/
+     output    [21:0]  nco_control_out
 );
 
 //******************************************************************************

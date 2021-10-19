@@ -126,9 +126,7 @@ ARCHITECTURE rtl OF CombinerTb IS
          minImagout, minRealout,
          imagout, realout,
          gainOutMax, gainOutMin,
-         phase_detect,
-         ch1RealPre, ch1ImagPre,
-         ch2RealPre, ch2ImagPre  : OUT std_logic_vector(17 downto 0);
+         phase_detect            : OUT std_logic_vector(17 downto 0);
          RealLock, ImagLock      : OUT std_logic_vector(12 downto 0);
          nco_control_out         : OUT std_logic_vector(21 downto 0);
          dataOut                 : OUT std_logic_vector(31 downto 0);
@@ -163,6 +161,7 @@ ARCHITECTURE rtl OF CombinerTb IS
    constant COMB_OPTIONS      : std_logic_vector(4 downto 0) :=  5b"0_111-";
    constant COMB_LOCK_THRESH  : std_logic_vector(4 downto 0) :=  5b"1_00--";
    constant Fs                : real := 280.0e6/6.0;
+   constant OUT_DELAY         : time := 100 ps;    -- used to align inputs to combiner to next clock
 
    type     Modulation        is (BPSK, QPSK);
    type     mcuFsm            is (IDLE, SETUP, WRITE, READ, FINISH);
@@ -175,8 +174,8 @@ ARCHITECTURE rtl OF CombinerTb IS
             PrnEn,
             wrLsb, wrMsb, cs, TwoWords,
             RealXord, ImagXord, combinerEn, combLocked, agc1_gt_agc2,
-            NcoReset1_n, resetComb_n,
-            RecoveredDataI, RecoveredDataQ, FirstBer_n, FirstWr_n,
+            NcoReset1_n, resetUnknowns_n, ResetBers,
+            RecoveredDataI, RecoveredDataQ, FirstWr_n,
             Clk,
             Clk2x,
             ClkOver2,
@@ -200,6 +199,12 @@ ARCHITECTURE rtl OF CombinerTb IS
             ch1ImagIn,
             ch2RealIn,
             ch2ImagIn,
+            IF1Dly,
+            IF2Dly,
+            ch1RealInDly,
+            ch1ImagInDly,
+            ch2RealInDly,
+            ch2ImagInDly,
             maxImagout, maxRealout,
             minImagout, minRealout,
             imagout, realout,
@@ -250,6 +255,11 @@ ARCHITECTURE rtl OF CombinerTb IS
    signal   Capture,
             PrnOff            : natural;
 
+   -- keep the following signals or Vivado strips them from the core when optimizing
+   attribute KEEP : string;
+   attribute KEEP of realout, imagout, combinerIF, combinerEn, RealLock, ImagLock, combLocked, agc1_gt_agc2,
+      lag_out, nco_control_out, phase_detect, maxImagout, maxRealout, minImagout, minRealout,
+      RealXord, ImagXord, gainOutMax, gainOutMin     : signal is "TRUE";
 
 begin
 
@@ -267,14 +277,15 @@ begin
 
    process begin
       wait for 2500 ns;
-      resetComb_n <= '1';
+      resetUnknowns_n <= '1';
+      wait;
    end process;
 
    LFSR11 : BERT_LFSR
       PORT MAP(
          clock       => ClkOver2,
          reset       => Reset,
-         reload      => not resetComb_n,
+         reload      => not resetUnknowns_n,
          enable      => PrnEn,
          poly        => 24x"6000",
          poly_length => 5x"0F",
@@ -287,7 +298,7 @@ begin
       PORT MAP(
          clock       => ClkOver2,
          reset       => Reset,
-         reload      => not resetComb_n,
+         reload      => not resetUnknowns_n,
          enable      => PrnEn,
          poly        => 24x"6000",
          poly_length => 5x"0F",
@@ -339,14 +350,14 @@ begin
    AM_AmpPerCent1 <= 0.0;  -- Depth of the droop in perCent AM
    OffsetFreqHz1  <= 0.0;  --±125KHz but must be withing 10KHz of OffsetFreqHz2 to avoid excess differential offset
    DelayNs1       <= 0.0;  -- 0 to 2000, for negative delay, set this to 0 and set DelayNs2 to 0 to 2000, Delay is differential
-   SNRdB1         <= 0.0;  -- -10 to 70
+   SNRdB1         <= 50.0;  -- -10 to 70
    AgcVolts1      <= -1.5 + SNRdB1 / 20.0; -- calculated based on SNR
 
    AM_FreqHz2     <= 0.0;
    AM_AmpPerCent2 <= 0.0;
    OffsetFreqHz2  <= 0.0;     -- if measuring BERs, the stronger signal can't have a frequency offset or the IandDs get beat notes
    DelayNs2       <= 0.0;
-   SNRdB2         <= 0.0;
+   SNRdB2         <= 50.0;
    AgcVolts2      <= -1.5 + SNRdB2 / 20.0;
 
    NoiseGain1  <= std_logic_vector(to_unsigned(integer(10.0**(-SNRdB1/20.0) * 32768.0),18)); -- 0x08000 is roughly 0dB
@@ -372,7 +383,7 @@ begin
                                  -- looks for 0x80 - 0x70 = 0x10 when locked (near zero) and 0x80+0x70=0xf0 when unlocked
    Options     <= 16x"0011";     -- Turn on the combinerEn and ifBS_n signals
 
-   NcoReset1_n <= ResetComb_n;
+   NcoReset1_n <= resetUnknowns_n;
 
    Channel1 : DemodPreDist       -- The PreDistortion modules simulate the RF signal travelling from the transmitter to the
       port map(                  -- antenna feeds. They are not part of the combiner itself but feed signal to it.
@@ -416,13 +427,20 @@ begin
          ifOut       => IF2
       );
 
-    Combiner : CombinerTop
+   IF1Dly       <= IF1 after OUT_DELAY;
+   IF2Dly       <= IF2 after OUT_DELAY;
+   ch1RealInDly <= ch1RealIn after OUT_DELAY;
+   ch1ImagInDly <= ch1ImagIn after OUT_DELAY;
+   ch2RealInDly <= ch2RealIn after OUT_DELAY;
+   ch2ImagInDly <= ch2ImagIn after OUT_DELAY;
+
+   Combiner : CombinerTop
       port map (
          -- inputs
          Clk               => Clk,              -- 93.3MHz system clock
          ClkOver2          => ClkOver2,         -- 46.6MHz system clock divided by 2
          Clk2x             => Clk2x,            -- 186.6MHz system clock times 2
-         reset             => not resetComb_n,  -- reset signal. This on is extended to remove unknowns in simulation
+         reset             => not resetUnknowns_n,  -- reset signal. This on is extended to remove unknowns in simulation
          cs                => cs,               -- processor chip select
          busClk            => ClkOver2,         -- processor sourced clock input
          wr0               => wrLsb,            -- processor byte write enables. This is LSB ie [7:0]
@@ -517,7 +535,7 @@ begin
                if (FirstWr_n) then
                   case? (std_logic_vector(addr)) is
                      when COMB_LAG_COEF =>
-                        if (DC_DataOut(28 downto 0) /= 11x"000" & LagCoef) then
+                        if (DC_DataOut(27 downto 0) /= 10x"000" & LagCoef) then
                            report "LagCoef read failed. Read " & to_hstring(DC_DataOut);
                         end if;
                      when COMB_LEAD_COEF =>
@@ -562,13 +580,25 @@ begin
    process begin        -- simple test to monitor BERs over four input variations. Modify as desired.
       ComplexOrIF_n <= '0';
       Mode        <= QPSK;
-      wait for 200 us;
+      ResetBers     <= '1';
+      wait for 5 us;
+      ResetBers     <= '0';
+      wait for 15 us;
       ComplexOrIF_n <= '1';
-      wait for 200 us;
+      ResetBers     <= '1';
+      wait for 5 us;
+      ResetBers     <= '0';
+      wait for 15 us;
       Mode        <= BPSK;
-      wait for 200 us;
+      ResetBers     <= '1';
+      wait for 5 us;
+      ResetBers     <= '0';
+      wait for 15 us;
       ComplexOrIF_n <= '0';
-      wait;
+      ResetBers     <= '1';
+      wait for 5 us;
+      ResetBers     <= '0';
+      wait for 15 us;
    end process;
 
    Capture <= 0 when  (ComplexOrIF_n = '1') else 7;
@@ -589,17 +619,14 @@ begin
             QIandD         <= resize(QIandD + to_sfixed(imagOut, DataIsim), IIandD);
          end if;
          if (DataRate = Capture+1) then
-            if (not firstBer_n) then
-               if (BitCountI < 25.0) then
-                  BitCountI <= BitCountI + 1.0;
-               else
-                  firstBer_n <= '1';
-                  BitCountI  <= 1.0;   -- prevent divide by zero
-                  BitCountQ  <= 1.0;
-               end if;
+            if (ResetBers) then
+               BitCountI  <= 0.0;
+               BitCountQ  <= 0.0;
+               ErrorCountI  <= 0.0;
+               ErrorCountQ  <= 0.0;
             else
-               BERI <= ErrorCountI / BitCountI;    -- calculated continuously to speed results
-               BERQ <= ErrorCountQ / BitCountQ;
+               BERI <= 0.0 when (ErrorCountI = 0.0) else ErrorCountI / BitCountI;    -- calculated continuously to speed results
+               BERQ <= 0.0 when (ErrorCountQ = 0.0) else ErrorCountQ / BitCountQ;
                if ((ErrorCountI > 50.0) or (BitCountI > 1.0e5)) then
                   BitCountI    <= 1.0;
                   BitErrorsI   <= ErrorCountI;
