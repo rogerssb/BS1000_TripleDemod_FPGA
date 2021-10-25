@@ -38,13 +38,13 @@
     <Option Name="WTVcsLaunchSim" Val="0"/>
     <Option Name="WTRivieraLaunchSim" Val="0"/>
     <Option Name="WTActivehdlLaunchSim" Val="0"/>
-    <Option Name="WTXSimExportSim" Val="163"/>
-    <Option Name="WTModelSimExportSim" Val="163"/>
-    <Option Name="WTQuestaExportSim" Val="163"/>
-    <Option Name="WTIesExportSim" Val="163"/>
-    <Option Name="WTVcsExportSim" Val="163"/>
-    <Option Name="WTRivieraExportSim" Val="163"/>
-    <Option Name="WTActivehdlExportSim" Val="163"/>
+    <Option Name="WTXSimExportSim" Val="164"/>
+    <Option Name="WTModelSimExportSim" Val="164"/>
+    <Option Name="WTQuestaExportSim" Val="164"/>
+    <Option Name="WTIesExportSim" Val="164"/>
+    <Option Name="WTVcsExportSim" Val="164"/>
+    <Option Name="WTRivieraExportSim" Val="164"/>
+    <Option Name="WTActivehdlExportSim" Val="164"/>
     <Option Name="GenerateIPUpgradeLog" Val="TRUE"/>
     <Option Name="XSimRadix" Val="hex"/>
     <Option Name="XSimTimeUnit" Val="ns"/>
@@ -1623,7 +1623,6 @@
         </FileInfo>
       </File>
       <Config>
-        <Option Name="TargetConstrsFile" Val="$PSRCDIR/constrs_1/new/DebugCombiner.xdc"/>
         <Option Name="ConstrsType" Val="XDC"/>
       </Config>
     </FileSet>
@@ -2084,9 +2083,7 @@
     </Run>
     <Run Id="complexphasedetector_0_synth_1" Type="Ft3:Synth" SrcSet="complexphasedetector_0" Part="xc7k325tfbg676-2" ConstrsSet="complexphasedetector_0" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/complexphasedetector_0_synth_1" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2017">
-          <Desc>Vivado Synthesis Defaults</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2017"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
@@ -2165,9 +2162,7 @@
     </Run>
     <Run Id="complexphasedetector_0_impl_1" Type="Ft2:EntireDesign" Part="xc7k325tfbg676-2" ConstrsSet="complexphasedetector_0" Description="Default settings for Implementation." SynthRun="complexphasedetector_0_synth_1" IncludeInArchive="false">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2017">
-          <Desc>Default settings for Implementation.</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2017"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
