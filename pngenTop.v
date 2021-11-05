@@ -107,15 +107,16 @@ module pngenTop(
     // PN Generator
     `include "bert/bert_functions.v"
     wire [23:0] poly = pnPolyMode ? mirror_taps (pnPolyTaps, pnPolyLength) : pnPolyTaps;
+    wire [23:0] polyData;
     bert_lfsr pn_lfsr (
         .poly(poly),
         .poly_length(pnPolyLength),
         .reset(reset),
         .clock(clk),
         .enable(infoClkEn),
-        .reload(1'b0),
-        .load_data(24'b0),
-        .data(),
+        .reload(~|polyData),    // TODO FZ lfsr was going to all zeroes if fed bad poly. Couldn't recover
+        .load_data(24'h0099),
+        .data(polyData),
         .serial(pnBit0)
     );
 
@@ -124,15 +125,16 @@ module pngenTop(
     // PN Generator
     `include "bert/bert_functions.v"
     wire [23:0] poly = pnPolyMode ? mirror_taps (pnPolyTaps, pnPolyLength) : pnPolyTaps;
+    wire [23:0] polyData;
     bert_lfsr pn_lfsr (
         .poly(poly),
         .poly_length(pnPolyLength),
         .reset(reset),
         .clock(clk),
         .enable(infoClkEn),
-        .reload(1'b0),
+        .reload(~|polyData),    // TODO FZ lfsr was going to all zeroes if fed bad poly. Couldn't recover
         .load_data(24'b0),
-        .data(),
+        .data(polyData),
         .serial(errorFreeNrzBit)
     );
 
@@ -187,8 +189,12 @@ module pngenTop(
         .encBit(pnBitConvEnc),
         .vitG2Inv(vitG2Inv)
     );
+
+
+   wire holdLdpc;
+   reg  ldpcEncReset;
+    `ifndef NO_LDPC_ENC    
     /// LDPC Encoder ///
-    reg ldpcEncReset;
     ldpc_encoder ldpc(
         .clk(clk),
         .clkEn(pnClkEn),
@@ -200,7 +206,8 @@ module pngenTop(
         .blocksize(ldpcBlockSize),
         .randomize(ldpcRandomize)
     );
-
+    `endif  // NO_LDPC_ENC
+    
     assign pause = fecMode==`PNGEN_FEC_CONV ? holdConvEnc :( fecMode==`PNGEN_FEC_LDPC ? holdLdpc : 1'b0) ;
     reg pnBitMux;
     always @(posedge clk) begin
@@ -221,11 +228,13 @@ module pngenTop(
                                 convEncReset <= 0;
                                 ldpcEncReset <= 1;
                                 end
+        `ifndef NO_LDPC_ENC
             `PNGEN_FEC_LDPC:    begin
                                 pnBitMux <= ldpcEncBit;
                                 ldpcEncReset <= 0;
                                 convEncReset <= 1;
                                 end
+        `endif                                
             default:            begin 
                                 pnBitMux <= pnBit0;
                                 convEncReset <= 1;

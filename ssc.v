@@ -280,7 +280,7 @@ always @* begin
     reg [ROM_WIDTH-1:0] window [(2**ROM_ADDR_BITS)-1:0];
     
     initial
-      $readmemh("c:/modem/vivado/hamming_12_15.mem",window, 0, (2**ROM_ADDR_BITS)-1);
+      $readmemh("./hamming_12_15.mem",window, 0, (2**ROM_ADDR_BITS)-1);
                  
     wire [15:0] windowData = winSel ?  {1'b0,window[winAddr[11:0]* wdec]}: 16'b0100000000000000;
     

@@ -144,7 +144,7 @@ module semcoDemodTop (
 
 );
 
-    parameter VER_NUMBER = 16'd690;
+    parameter VER_NUMBER = 16'd718;
 
 
 //******************************************************************************
@@ -339,6 +339,7 @@ module semcoDemodTop (
         .dac2InputSelect(),
         .ch0MuxSelect(),
         .ch1MuxSelect(),
+        .pngenEnable(pngenEnable),
         .framerEnable(framerEnable)
     );
 
@@ -1212,6 +1213,29 @@ module semcoDemodTop (
 `endif //ADD_DQM
 
 
+`ifdef ADD_PN_GEN
+
+//******************************************************************************
+//                               PN Generator
+//******************************************************************************
+    wire    [31:0]  pngenDout;
+    pngenTop pngen(
+        .clk(clk),
+        .clkEn(pngenEnable),
+        .reset(reset),
+        .busClk(busClk),
+        // TODO, needed CS to prevent early writes with garbage only on triple demod
+        .wr0(cs & wr0), .wr1(cs & wr1), .wr2(cs & wr2), .wr3(cs & wr3),
+        .addr(addr),
+        .din(dataIn),
+        .dout(pngenDout),
+        .pnClkEn(pnClkEn),
+        .nrzBit(pnNrzBit),
+        .pnBit(pnBit),
+        .pnClk(pnClk)
+    );
+
+ `endif
 //******************************************************************************
 //                       Clock/Data Jitter Reduction
 //******************************************************************************
@@ -1280,7 +1304,13 @@ module semcoDemodTop (
             `endif
             //`CandD_SRC_MULTIH:
             //`CandD_SRC_STC:
-            //`CandD_SRC_PNGEN;
+            `ifdef ADD_PN_GEN
+            // should never get here since the Pn outputs are on clock1&3
+            `CandD_SRC_PNGEN: begin
+                cAndD0ClkEn = pnClkEn;
+                cAndD0DataIn = {pnBit,2'b0};
+            end
+            `endif
             `ifdef ADD_LDPC
             `CandD_SRC_LDPC: begin
                 cAndD0ClkEn = ldpcBitEnOut;
@@ -1381,7 +1411,12 @@ module semcoDemodTop (
             `endif
             //`CandD_SRC_MULTIH:
             //`CandD_SRC_STC:
-            //`CandD_SRC_PNGEN:
+           `ifdef ADD_PN_GEN
+            `CandD_SRC_PNGEN: begin
+                cAndD1ClkEn = pnClkEn;
+                cAndD1DataIn = {pnBit,2'b0};
+            end
+            `endif            
             `ifdef ADD_LDPC
             `CandD_SRC_LDPC: begin
                 cAndD1ClkEn = ldpcBitEnOut;
@@ -1874,6 +1909,10 @@ sdi sdi(
             `BERT_SPACE:        rd_mux = bertDout;
             `endif
 
+            `ifdef ADD_PN_GEN
+             `PNGEN_SPACE:      rd_mux = pngenDout;
+            `endif
+
             `ifdef ADD_FRAMER
             `FRAMER_SPACE:      rd_mux = framerDout;
             `endif
@@ -2022,6 +2061,10 @@ sdi sdi(
                     rd_mux = framerDout[15:0];
                 end
             end
+            `endif
+
+            `ifdef ADD_PN_GEN
+             `PNGEN_SPACE:      TODO, pnGen is not intended for non6100 builds. FZ
             `endif
 
             `DEMODSPACE,
