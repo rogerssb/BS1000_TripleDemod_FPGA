@@ -181,7 +181,7 @@ ARCHITECTURE rtl OF DigitalCombiner IS
             MDB_188_9      : SLV32;
    signal   MDB_186,
             MDB_187        : SLV16;
-   signal   regCs          : std_logic;
+   signal   bestSource     : std_logic;
    signal   DucCount       : unsigned(1 downto 0) := "00";
 
 BEGIN
@@ -217,6 +217,7 @@ BEGIN
          clk         => clk,
          clk4x       => clk4x,
          reset       => reset or not combinerEn,
+         bestSource  => bestSource,
          ce          => '1',
          Re1In       => re1In,
          Im1In       => im1In,
@@ -249,6 +250,7 @@ BEGIN
          imaglock       => imaglock,
          locked         => locked,
          agc1_gt_agc2   => agc1_gt_agc2,
+         bestsource     => bestSource,
          lag_out        => lag_out,
          nco_control_out=> nco_control_out,
          phase_detect   => phase_detect,

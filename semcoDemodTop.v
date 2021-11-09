@@ -1860,7 +1860,13 @@ module semcoDemodTop (
                 interp0ClkEn <= sbsDac0ClkEn;
             end
             `endif
-            default: begin
+            `ifdef COMBINER
+            15: begin   // add combiner output without modifying addressmap.v
+                interp1DataIn <= nco_control_out[21:4];
+                interp1ClkEn <= clkOver2;
+            end
+            `endif
+           default: begin
                 interp0DataIn <= demodDac0Data;
                 interp0ClkEn <= demodDac0ClkEn;
             end

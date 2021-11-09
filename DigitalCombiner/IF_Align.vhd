@@ -55,6 +55,7 @@ entity IF_Align is
          clk,
          clk4x,
          reset,
+         bestSource,
          ce             : IN  std_logic;
          Re1In,
          Im1In,
@@ -183,15 +184,15 @@ architecture rtl of IF_Align is
          clk,
          reset,
          AbeforeB       : IN  std_logic;
-         DataInA1,
-         DataInA2,
-         DataInB1,
-         DataInB2       : IN  std_logic_vector(DATA_WIDTH-1 downto 0);
+         RealIn1,
+         ImagIn1,
+         RealIn2,
+         ImagIn2        : IN  std_logic_vector(DATA_WIDTH-1 downto 0);
          Diff           : IN  uint8;
-         DataOutA1,
-         DataOutA2,
-         DataOutB1,
-         DataOutB2       : OUT std_logic_vector(DATA_WIDTH-1 downto 0)
+         RealOut1,
+         ImagOut1,
+         RealOut2,
+         ImagOut2       : OUT std_logic_vector(DATA_WIDTH-1 downto 0)
       );
    END COMPONENT DiffDelay;
 
@@ -280,15 +281,15 @@ begin
          clk         => Clk,
          reset       => Reset,
          AbeforeB    => IndexAcc(IndexAcc'left),
-         DataInA1    => to_slv(Re1In),
-         DataInA2    => to_slv(Im1In),
-         DataInB1    => to_slv(Re2In),
-         DataInB2    => to_slv(Im2In),
+         RealIn1     => to_slv(Re1In),
+         ImagIn1     => to_slv(Im1In),
+         RealIn2     => to_slv(Re2In),
+         ImagIn2     => to_slv(Im2In),
          Diff        => IndexAbs,
-         DataOutA1   => Re1Out,
-         DataOutA2   => Im1Out,
-         DataOutB1   => Re2Out,
-         DataOutB2   => Im2Out
+         RealOut1    => Re1Out,
+         ImagOut1    => Im1Out,
+         RealOut2    => Re2Out,
+         ImagOut2    => Im2Out
       );
 
 
@@ -485,7 +486,7 @@ begin
    MaxProcess : process(Clk4x)
    begin
       if (rising_edge(Clk4x)) then
-         if (Reset) then            -- ignore Restart to let previous IndexOut carry over
+         if (Reset or bestSource) then            -- ignore Restart to let previous IndexOut carry over
             Index0      <= 0;
             IndexOut    <= x"00";
             SkipFirst2  <= "00";

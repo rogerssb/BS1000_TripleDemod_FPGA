@@ -45,15 +45,15 @@ ENTITY DiffDelay IS
       clk,
       reset,
       AbeforeB       : IN  std_logic;
-      DataInA1,
-      DataInA2,
-      DataInB1,
-      DataInB2       : IN  std_logic_vector(DATA_WIDTH-1 downto 0);
+      RealIn1,
+      ImagIn1,
+      RealIn2,
+      ImagIn2       : IN  std_logic_vector(DATA_WIDTH-1 downto 0);
       Diff           : IN  uint8;
-      DataOutA1,
-      DataOutA2,
-      DataOutB1,
-      DataOutB2      : OUT std_logic_vector(DATA_WIDTH-1 downto 0)
+      RealOut1,
+      ImagOut1,
+      RealOut2,
+      ImagOut2      : OUT std_logic_vector(DATA_WIDTH-1 downto 0)
    );
 END DiffDelay;
 
@@ -101,12 +101,12 @@ BEGIN
             Cntr        <= (others=>'0');
             CntrA       <= (others=>'0');
             CntrB       <= (others=>'0');
-            DataOutA1   <= (others=>'0');
-            DataOutA2   <= (others=>'0');
-            DataOutB1   <= (others=>'0');
-            DataOutB2   <= (others=>'0');
+            RealOut1    <= (others=>'0');
+            ImagOut1    <= (others=>'0');
+            RealOut2    <= (others=>'0');
+            ImagOut2    <= (others=>'0');
          else
-            Cntr            <= resize(Cntr + 1, Cntr);
+            Cntr <= resize(Cntr + 1, Cntr);
             if (AbeforeB) then
                CntrA <= resize(Cntr - Diff - 1, Cntr);   -- in case Diff is 0, need same cntr
                CntrB <= Cntr - 1;                        -- allow two clocks for data to settle
@@ -115,16 +115,16 @@ BEGIN
                CntrA <= Cntr - 1;
             end if;
 
-            DataOutA1   <= RdOutA(DATA_WIDTH*2-1 downto DATA_WIDTH);
-            DataOutA2   <= RdOutA(DATA_WIDTH-1 downto 0);
-            DataOutB1   <= RdOutB(DATA_WIDTH*2-1 downto DATA_WIDTH);
-            DataOutB2   <= RdOutB(DATA_WIDTH-1 downto 0);
+            RealOut1 <= RdOutA(DATA_WIDTH*2-1 downto DATA_WIDTH);
+            ImagOut1 <= RdOutA(DATA_WIDTH-1 downto 0);
+            RealOut2 <= RdOutB(DATA_WIDTH*2-1 downto DATA_WIDTH);
+            ImagOut2 <= RdOutB(DATA_WIDTH-1 downto 0);
          end if;
       end if;
    end process Delay_process;
 
-   DataInA  <= DataInA1 & DataInA2;
-   DataInB  <= DataInB1 & DataInB2;
+   DataInA  <= RealIn1 & ImagIn1;
+   DataInB  <= RealIn2 & ImagIn2;
 
    FifoRamA : RAM_2Reads_1Write
       GENERIC MAP(
