@@ -9,7 +9,7 @@ derivative rights in exchange for negotiated compensation.
 `include "addressMap.v"
 `timescale 1ns / 10 ps
 
-module demod(
+module scDemod(
     input                       clk, reset,
     `ifdef USE_BUS_CLOCK
     input                       busClk,
@@ -41,11 +41,6 @@ module demod(
     output                      trellisSymEn,
     output      signed  [17:0]  iTrellis,
     output      signed  [17:0]  qTrellis,
-    `ifdef ADD_LDPC
-    output                      iLdpcSymEn,qLdpcSymEn,
-    output      signed  [17:0]  iLdpc,
-    output      signed  [17:0]  qLdpc,
-    `endif
     `ifdef ADD_SUPERBAUD_TED
     output                      multihSymEnEven,
     `endif
@@ -59,14 +54,9 @@ module demod(
     output              [4:0]   demodMode,
     output              [12:0]  mag,
     output                      magClkEn,
-    `ifdef ADD_SUBCARRIER
     output                      enableScPath,
     output      signed  [17:0]  iBBOut, qBBOut,
     output                      bbClkEnOut,
-    `endif
-    `ifdef ADD_DESPREADER
-    output                      iEpoch,qEpoch,
-    `endif
     output                      sdiSymEn,
     output                      eyeSync,
     output      signed  [17:0]  iEye,qEye,
@@ -106,13 +96,7 @@ demodRegs demodRegs(
     .demodLock(carrierLock),
     .fskDeviation(fskDeviation),
     .demodMode(demodMode),
-    `ifdef ADD_DESPREADER
-    .despreadLock(despreadLock),
-    .enableDespreader(enableDespreader),
-    `endif
-    `ifdef ADD_SUBCARRIER
     .enableScPath(enableScPath),
-    `endif
     .oqpskIthenQ(oqpskIthenQ),
     .dac0Select(dac0Select),
     .dac1Select(dac1Select),
@@ -125,9 +109,7 @@ demodRegs demodRegs(
 /******************************************************************************
                                 Downconverter
 ******************************************************************************/
-`ifdef ADD_SUBCARRIER
 wire    [17:0]  iLagOut,qLagOut;
-`endif
 wire    [17:0]  iDdc,qDdc;
 wire    [20:0]  nbAgcGain;
 wire    [31:0]  carrierFreqOffset;
@@ -150,13 +132,8 @@ ddc ddc(
     .bbClkEn(bbClkEn),
     .iBB(iBB), .qBB(qBB),
     .iIn(iRx), .qIn(qRx),
-    `ifdef ADD_SUBCARRIER
     .iLagOut(iBBOut), .qLagOut(qBBOut),
     .lagClkEn(bbClkEnOut),
-    `else
-    .iLagOut(), .qLagOut(),
-    .lagClkEn(),
-    `endif
     .syncOut(ddcSync),
     .iOut(iDdc), .qOut(qDdc)
     );
@@ -180,74 +157,10 @@ channelAGC channelAGC(
     );
 
 
-`ifdef ADD_CMA
-/******************************************************************************
-                                 CMA Equalizer
-******************************************************************************/
-    reg cmaSpace;
-    always @* begin
-        casex(addr)
-            `EQUALIZERSPACE:    cmaSpace = cs;
-            default:            cmaSpace = 0;
-        endcase
-    end
-    wire    signed  [2:0]   stepSizeExponent;
-    wire            [15:0]  cmaReference;
-    `ifdef ADD_CMA_DISPLAY
-    wire            [15:0]  maxWtMag;
-    `endif
-    wire            [31:0]  cmaDout;
-    cmaRegs cmaRegs(
-        .addr(addr),
-        .dataIn(din),
-        .dataOut(cmaDout),
-        .cs(cmaSpace),
-        `ifdef USE_BUS_CLOCK
-        .busClk(busClk),
-        `endif
-        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
-        .wtOvf(cmaWeightOverflow),
-        `ifdef ADD_CMA_DISPLAY
-        .maxWeightMag(maxWtMag),
-        `endif
-        .enableEqualizer(enableEqualizer),
-        .resetEqualizer(resetEqualizer),
-        .eqStepSizeExponent(stepSizeExponent),
-        .cmaReference(cmaReference)
-    );
-
-    wire    signed  [17:0]  iCma;
-    wire    signed  [17:0]  qCma;
-    `ifdef ADD_CMA_DISPLAY
-    wire    signed  [17:0]  cmaWeightVideo;
-    `endif
-    cma cma(
-        .clk(clk),
-        .clkEn(ddcSync),
-        .reset(reset),
-        .wtReset(resetEqualizer),
-        .stepExpo(stepSizeExponent),
-        .refLevel(cmaReference),
-        .iIn(iDdc),
-        .qIn(qDdc),
-        .weightOverflow(cmaWeightOverflow),
-        `ifdef ADD_CMA_DISPLAY
-        .maxMag(maxWtMag),
-        .video(cmaWeightVideo),
-        `endif
-        .iOut(iCma),
-        .qOut(qCma)
-    );
-
-    wire    signed  [17:0]  iFiltered = enableEqualizer ? iCma : iDdc;
-    wire    signed  [17:0]  qFiltered = enableEqualizer ? qCma : qDdc;
-
-`else //ADD_CMA
 
     wire    signed  [17:0]  iFiltered = iDdc;
     wire    signed  [17:0]  qFiltered = qDdc;
 
-`endif //ADD_CMA
 
 /******************************************************************************
                            Phase/Freq/Mag Detector
@@ -270,13 +183,8 @@ wire    [11:0]   negFreq = ~freq + 1;
 wire    [11:0]   freqError;
 fmDemod fmDemod(
     .clk(clk), .reset(reset),
-    `ifdef ADD_DESPREADER
-    .clkEn(fmDemodClkEn),
-    .iFm(iFm),.qFm(qFm),
-    `else
     .clkEn(ddcSync),
     .iFm(iFiltered),.qFm(qFiltered),
-    `endif
     .demodMode(demodMode),
     .phase(phase),
     .phaseError(),
@@ -338,32 +246,8 @@ always @(posedge clk) begin
 wire    [17:0]  fm = {negFreq,6'h0};
 wire    [17:0]  fmInv = {freq,6'h0};
 
-/******************************************************************************
-                           Magnitude Filter
-******************************************************************************/
-reg     [13:0]  magError;
-wire    [39:0]  magAccum;
-always @(posedge clk) begin
-    if (demodSync) begin
-        magError <= {1'b0,mag} - magAccum[39:25];
-        end
-    end
-lagGain12 magLoop(
-    .clk(clk), .clkEn(demodSync), .reset(reset),
-    .error(magError[13:2]),
-    .lagExp(amTC),
-    .upperLimit(32'h7fffffff),
-    .lowerLimit(32'h00000000),
-    .clearAccum(1'b0),
-    .sweepEnable(1'b0),
-    .sweepRateMag(32'h0),
-    .carrierInSync(1'b0),
-    .acqTrackControl(2'b0),
-    .track(1'b0),
-    .lagAccum(magAccum)
-    );
 
-
+`ifdef SCDEMOD_ADD_FALSELOCK
 /******************************************************************************
                              False Lock Detector
 ******************************************************************************/
@@ -453,8 +337,13 @@ always @(posedge clk) begin
         end
     end
 
+`else // SCDEMOD_ADD_FALSELOCK
 
+wire    [17:0]  averageFreq = 0;
+wire    [17:0]  averageAbsFreq = 0;
+always @* highFreqOffset = 1'b0;
 
+`endif // SCDEMOD_ADD_FALSELOCK
 
 /******************************************************************************
                              AFC/Sweep/Costas Loop
@@ -555,49 +444,11 @@ dualResampler resampler(
     );
 
 
-
-
-`ifdef ADD_DESPREADER
-/******************************************************************************
-                                Despreader
-******************************************************************************/
-wire    [17:0]  dsTimingError;
-wire    [31:0]  despreaderDout;
-wire    [2:0]   despreaderMode;
-wire    [17:0]  iDsSymData,qDsSymData;
-wire    [15:0]  dsSyncCount,dsSwapSyncCount;
-dualDespreader despreader(
-    .clk(clk),
-    .clkEn(resampSync), .qClkEn(qSym2xEn),
-    .symEn(iSymEn),   .qSymEn(qSymEn),
-    .reset(reset),
-    `ifdef USE_BUS_CLOCK
-    .busClk(busClk),
-    `endif
-    .cs(cs),
-    .wr0(wr0) , .wr1(wr1), .wr2(wr2), .wr3(wr3),
-    .addr(addr),
-    .din(din),
-    .iIn(iResamp), .qIn(qResamp),
-    .demodMode(demodMode),
-    .dout(despreaderDout),
-    .despreaderMode(despreaderMode),
-    .iDespread(iDsSymData),
-    .qDespread(qDsSymData),
-    .iCode(iCode),.qCode(qCode),
-    .iEpoch(iEpoch), .qEpoch(qEpoch),
-    .despreadLock(despreadLock),
-    .scaledSyncCount(dsSyncCount),
-    .scaledSwapSyncCount(dsSwapSyncCount)
-    );
-`endif
-
-
 /******************************************************************************
                                 Bitsync Loop
 ******************************************************************************/
 
-`ifdef SUBCARRIER_DEMOD
+`ifdef ADD_SECOND_SUBCARRIER
 
 wire    [17:0]  iBsSymData,qBsSymData;
 wire    [17:0]  iBsTrellis,qBsTrellis;
@@ -647,7 +498,7 @@ assign          iTrellis = 0;
 assign          qTrellis = 0;
 wire            timingLock = bitsyncLock;
 
-`else  // SUBCARRIER_DEMOD
+`else  // ADD_SECOND_SUBCARRIER
 
 wire    [17:0]  iBsSymData,qBsSymData;
 wire    [17:0]  iBsTrellis,qBsTrellis;
@@ -664,9 +515,6 @@ bitsync bitsync(
     .auResampClkEn(auResampSync),
     .demodMode(demodMode),
     .oqpskIthenQ(oqpskIthenQ),
-    `ifdef ADD_DESPREADER
-    .enableDespreader(enableDespreader),
-    `endif
     `ifdef USE_BUS_CLOCK
     .busClk(busClk),
     `endif
@@ -706,10 +554,6 @@ bitsync bitsync(
     .auIQSwap(auIQSwap),
     .sdiSymEn(sdiSymEn),
     .iTrellis(iBsTrellis),.qTrellis(qBsTrellis),
-    `ifdef ADD_LDPC
-    .iLdpcSymEn(iLdpcSymEn),.qLdpcSymEn(qLdpcSymEn),
-    .iLdpc(iLdpc), .qLdpc(qLdpc),
-    `endif
     `ifdef ADD_SUPERBAUD_TED
     .bsError(bsError), .bsErrorEn(bsErrorEn),
     .tedOutput(tedOutput), .tedOutputEn(tedOutputEn),
@@ -720,45 +564,6 @@ bitsync bitsync(
     `endif
     );
 
-`ifdef ADD_DESPREADER
-
-reg             auSymClk;
-reg             auBit;
-reg     [17:0]  iSymData;
-reg     [17:0]  qSymData;
-reg     [17:0]  iTrellis,qTrellis;
-reg             timingLock;
-always @* begin
-    if (enableDespreader) begin
-        iSymData = iDsSymData;
-        qSymData = qDsSymData;
-        iTrellis = iDsSymData;
-        qTrellis = qDsSymData;
-        timingLock = despreadLock & bitsyncLock;
-        case (despreaderMode)
-            `DS_MODE_NASA_DG1_MODE3_SPREAD_Q: begin
-                auSymClk = iSymClk;
-                auBit = iBit;
-            end
-            default: begin
-                auSymClk = qSymClk;
-                auBit = qBit;
-            end
-        endcase
-    end
-    else begin
-        iSymData = iBsSymData;
-        qSymData = qBsSymData;
-        iTrellis = iBsTrellis;
-        qTrellis = qBsTrellis;
-        timingLock = bitsyncLock;
-        auSymClk = qSymClk;
-        auBit = qBit;
-    end
-end
-
-`else  // ADD_DESPREADER
-
 assign          auSymClk = qSymClk;
 assign          auBit = qBit;
 assign          iSymData = iBsSymData;
@@ -766,7 +571,6 @@ assign          qSymData = qBsSymData;
 assign          iTrellis = iBsTrellis;
 assign          qTrellis = qBsTrellis;
 assign          timingLock = bitsyncLock;
-`endif
 
 `ifdef SIMULATE
 real iTrellisReal;
@@ -786,74 +590,18 @@ assign cordicModes = ( (demodMode == `MODE_2FSK)
 assign iEye = cordicModes ? iSymData : iResamp;
 assign qEye = cordicModes ? qSymData : qResamp;
 
-`endif // SUBCARRIER_DEMOD
+`endif // ADD_SECOND_SUBCARRIER
 
 
 /******************************************************************************
                                DAC Output Mux
 ******************************************************************************/
 
-`ifdef ADD_VID_FILTER
-// Programmable FIR
-wire    [15:0]  c0c14, c1c13, c2c12, c3c11, c4c10, c5c9 , c6c8 , c7   ;
-reg             firspace;
-always @* begin
-    casex (addr)
-        `VIDFIRSPACE: begin
-            firspace = cs;
-            end
-        default: begin
-            firspace = 0;
-            end
-        endcase
-    end
-
-wire    [31:0]  firDout;
-dualFirCoeffRegs firCoeffRegs (
-    .addr    (addr   ),
-    .dataIn  (din    ),
-    .dataOut (firDout),
-    `ifdef USE_BUS_CLOCK
-    .busClk(busClk),
-    `endif
-    .cs      (firspace),
-    .wr0     (wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
-    .c0      (c0c14  ),
-    .c1      (c1c13  ),
-    .c2      (c2c12  ),
-    .c3      (c3c11  ),
-    .c4      (c4c10  ),
-    .c5      (c5c9   ),
-    .c6      (c6c8   ),
-    .c7      (c7     )
-    );
-
-wire    [17:0]  firOut;
-singleFir interpFir(
-    .clk        (clk),
-    .reset      (reset),
-    .syncIn     (demodSync),
-    .c0c14      (c0c14  ),
-    .c1c13      (c1c13  ),
-    .c2c12      (c2c12  ),
-    .c3c11      (c3c11  ),
-    .c4c10      (c4c10  ),
-    .c5c9       (c5c9   ),
-    .c6c8       (c6c8   ),
-    .c7         (c7     ),
-    .in         (fm),
-    .out        (firOut)
-    );
-`endif
-
 `define NEW_DAC_MUX
 `ifdef NEW_DAC_MUX
     reg     [17:0]  iResampInReg,qResampInReg,fmVideoReg,averageFreqReg,averageAbsFreqReg;
     reg     [17:0]  iSymDataReg,qSymDataReg;
-    `ifdef ADD_DESPREADER
-    reg     [17:0]  dsSyncCountReg,dsSwapSyncCountReg;
-    `endif
-    reg     [17:0]  fmReg,phaseReg,magAccumReg,freqErrorReg;
+    reg     [17:0]  fmReg,phaseReg,freqErrorReg;
     always @(posedge clk) begin
         if (ddcSync) begin
             iResampInReg <= iResampIn;
@@ -865,15 +613,10 @@ singleFir interpFir(
         if (resampSync) begin
             iSymDataReg <= iSymData;
             qSymDataReg <= qSymData;
-            `ifdef ADD_DESPREADER
-            dsSyncCountReg <= {dsSyncCount,2'b0};
-            dsSwapSyncCountReg <= {dsSwapSyncCount,2'b0};
-            `endif
         end
         if (demodSync) begin
             fmReg <= fm;
             phaseReg <= {phase,6'b0};
-            magAccumReg <= {~magAccum[38],magAccum[37:21]};
             freqErrorReg <= {freqError,6'h0};
         end
     end
@@ -898,9 +641,6 @@ always @(posedge clk) begin
             dac0Sync <= resampSync;
             end
         `DAC_FREQ: begin
-            `ifdef FM_FILTER
-            dac0Data <= firOut;
-            `else
             if (fmMode) begin
                 dac0Data <= fmVideoReg;
                 dac0Sync <= ddcSync;
@@ -909,14 +649,9 @@ always @(posedge clk) begin
                 dac0Data <= fmReg;
                 dac0Sync <= demodSync;
                 end
-            `endif
             end
         `DAC_PHASE: begin
             dac0Data <= phaseReg;
-            dac0Sync <= demodSync;
-            end
-        `DAC_MAG: begin
-            dac0Data <= magAccumReg;
             dac0Sync <= demodSync;
             end
         `DAC_PHERROR: begin
@@ -939,20 +674,6 @@ always @(posedge clk) begin
             dac0Data <= freqErrorReg;
             dac0Sync <= demodSync;
             end
-        `ifdef ADD_DESPREADER
-        `DAC_DS_CODE: begin
-            dac0Data <= {iCode,17'h10000};
-            dac0Sync <= iSymEn;
-            end
-        `DAC_DS_LOCK: begin
-            dac0Data <= dsSyncCountReg;
-            dac0Sync <= resampSync;
-            end
-        `DAC_DS_EPOCH: begin
-            dac0Data <= {iEpoch,17'h10000};
-            dac0Sync <= iSymEn;
-            end
-        `endif
         default: begin
             dac0Data <= iResampInReg;
             dac0Sync <= ddcSync;
@@ -990,10 +711,6 @@ always @(posedge clk) begin
             dac1Data <= phaseReg;
             dac1Sync <= demodSync;
             end
-        `DAC_MAG: begin
-            dac1Data <= magAccumReg;
-            dac1Sync <= demodSync;
-            end
         `DAC_PHERROR: begin
             dac1Data <= {demodLoopError,6'h0};
             dac1Sync <= carrierOffsetEn;
@@ -1014,20 +731,6 @@ always @(posedge clk) begin
             dac1Data <= freqErrorReg;
             dac1Sync <= demodSync;
             end
-        `ifdef ADD_DESPREADER
-        `DAC_DS_CODE: begin
-            dac1Data <= {qCode,17'h10000};
-            dac1Sync <= qSymEn;
-            end
-        `DAC_DS_LOCK: begin
-            dac1Data <= dsSwapSyncCountReg;
-            dac1Sync <= resampSync;
-            end
-        `DAC_DS_EPOCH: begin
-            dac1Data <= {qEpoch,17'h10000};
-            dac1Sync <= qSymEn;
-            end
-        `endif
         default: begin
             dac1Data <= iResampInReg;
             dac1Sync <= ddcSync;
@@ -1065,21 +768,6 @@ always @(posedge clk) begin
             dac2Data <= phaseReg;
             dac2Sync <= demodSync;
             end
-        `DAC_MAG: begin
-            `ifdef ADD_CMA_DISPLAY
-            if (enableEqualizer) begin
-                dac2Data <= cmaWeightVideo;
-                dac2Sync <= 1'b1;
-            end
-            else begin
-                dac2Data <= magAccumReg;
-                dac2Sync <= demodSync;
-            end
-            `else
-            dac2Data <= magAccumReg;
-            dac2Sync <= demodSync;
-            `endif
-            end
         `DAC_PHERROR: begin
             dac2Data <= {demodLoopError,6'h0};
             dac2Sync <= carrierOffsetEn;
@@ -1105,12 +793,6 @@ always @(posedge clk) begin
             dac2Data <= freqErrorReg;
             dac2Sync <= demodSync;
             end
-        `ifdef ADD_DESPREADER
-        `DAC_DS_CODE: begin
-            dac2Data <= {iEpoch,17'h10000};
-            dac2Sync <= 1'b1;
-            end
-        `endif
         default: begin
             dac2Data <= iResampInReg;
             dac2Sync <= ddcSync;
@@ -1188,20 +870,6 @@ always @(posedge clk) begin
             dac0Data <= {freqError,6'h0};
             dac0Sync <= demodSync;
             end
-        `ifdef ADD_DESPREADER
-        `DAC_DS_CODE: begin
-            dac0Data <= {iCode,17'h10000};
-            dac0Sync <= iSymEn;
-            end
-        `DAC_DS_LOCK: begin
-            dac0Data <= {dsSyncCount,2'b0};
-            dac0Sync <= resampSync;
-            end
-        `DAC_DS_EPOCH: begin
-            dac0Data <= {iEpoch,17'h10000};
-            dac0Sync <= iSymEn;
-            end
-        `endif
         default: begin
             dac0Data <= iResampIn;
             dac0Sync <= ddcSync;
@@ -1264,20 +932,6 @@ always @(posedge clk) begin
             dac1Data <= {freqError,6'h0};
             dac1Sync <= demodSync;
             end
-        `ifdef ADD_DESPREADER
-        `DAC_DS_CODE: begin
-            dac1Data <= {qCode,17'h10000};
-            dac1Sync <= qSymEn;
-            end
-        `DAC_DS_LOCK: begin
-            dac1Data <= {dsSwapSyncCount,2'b0};
-            dac1Sync <= resampSync;
-            end
-        `DAC_DS_EPOCH: begin
-            dac1Data <= {qEpoch,17'h10000};
-            dac1Sync <= qSymEn;
-            end
-        `endif
         default: begin
             dac1Data <= iResampIn;
             dac1Sync <= ddcSync;
@@ -1340,12 +994,6 @@ always @(posedge clk) begin
             dac2Data <= {freqError,6'h0};
             dac2Sync <= demodSync;
             end
-        `ifdef ADD_DESPREADER
-        `DAC_DS_CODE: begin
-            dac2Data <= {iEpoch,17'h10000};
-            dac2Sync <= 1'b1;
-            end
-        `endif
         default: begin
             dac2Data <= iResampIn;
             dac2Sync <= ddcSync;
@@ -1361,15 +1009,6 @@ always @(posedge clk) begin
 always @* begin
     casex (addr)
         `DEMODSPACE:        dout = demodDout;
-        `ifdef ADD_DESPREADER
-        `DESPREADSPACE:     dout = despreaderDout;
-        `endif
-        `ifdef FM_FILTER
-        `VIDFIRSPACE:       dout = firDout;
-        `endif
-        `ifdef ADD_CMA
-        `EQUALIZERSPACE:    dout = cmaDout;
-        `endif
         `CHAGCSPACE:        dout = nbAgcDout;
         `CICDECSPACE,
         `DDCFIRSPACE,

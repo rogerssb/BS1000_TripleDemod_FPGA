@@ -53,6 +53,7 @@
 
 `ifdef TRIPLE_DEMOD
 `define SEMCO_DEMOD
+`define ADD_SUBCARRIER
 `define ADD_FRAMER
 `define ADD_BITSYNC
 `define ADD_MULTIBOOT
@@ -408,7 +409,7 @@
 //-------------------------------- Semco Demod --------------------------------
 
 // Top level registers
-`define SEMCO_TOP_SPACE     13'b0_00xx_000x_xxxx
+`define SEMCO_TOP_SPACE     13'b0_0000_000x_xxxx
     // Define the system top level memory map
     `define SYS_RESET           13'bx_xxxx_xxx0_000x
     `define SYS_VERSION         13'bx_xxxx_xxx0_001x
@@ -425,7 +426,7 @@
         `define SYS_OUTPUT_SEL_CH1_BS   4'b0010
         `define SYS_OUTPUT_SEL_CH1_PCM  4'b0011
 
-`define SPIGW_SPACE         13'b0_00xx_0010_xxxx
+`define SPIGW_SPACE         13'b0_0000_0010_xxxx
     `define SPIGW_CYCLE32       13'bx_xxxx_xxxx_00xx
     `define SPIGW_CYCLE16       13'bx_xxxx_xxxx_010x
     `define SPIGW_RSVD0         13'bx_xxxx_xxxx_011x
@@ -433,7 +434,7 @@
     `define SPIGW_RSVD1         13'bx_xxxx_xxxx_101x
     `define SPIGW_CONTROL       13'bx_xxxx_xxxx_11xx
 
-`define LDPCSPACE               13'b0_00xx_010x_xxxx
+`define LDPCSPACE               13'b0_0000_010x_xxxx
     `define LDPC_CONTROL            13'bx_xxxx_xxx0_00xx
         `define LDPC_RATE_1_2           2'b01
         `define LDPC_RATE_2_3           2'b10
@@ -448,13 +449,13 @@
     `define LDPC_DLL_GAINS          13'bx_xxxx_xxx1_010x
     `define LDPC_DLL_FDBK_DIV       13'bx_xxxx_xxx1_011x
 
-`define VITERBISPACE            13'b0_00xx_0110_xxxx
+`define VITERBISPACE            13'b0_0000_0110_xxxx
     `define VIT_INVERSE_MEAN        13'bx_xxxx_xxxx_00xx
     `define VIT_BER_TEST_LENGTH     13'bx_xxxx_xxxx_01xx
     `define VIT_STATUS              13'bx_xxxx_xxxx_10xx
 
-`define DUAL_DECODERSPACE   13'b0_00xx_1000_xxxx
-`define CH1_DECODERSPACE    13'b0_00xx_1001_xxxx
+`define DUAL_DECODERSPACE   13'b0_0000_1000_xxxx
+`define CH1_DECODERSPACE    13'b0_0000_1001_xxxx
     `define DEC_CONTROL         13'bx_xxxx_xxxx_00xx
         `define DEC_DERAND_MODE_OFF     3'b000
         `define DEC_DERAND_MODE_RNRZ15  3'b001
@@ -486,9 +487,9 @@
         `define PNGEN_PCM_MDMS          4'b1011
 
 // PLL subsystem registers
-`define PLL0SPACE           13'b0_00xx_1010_xxxx
-`define PLL1SPACE           13'b0_00xx_1100_xxxx
-`define PLL2SPACE           13'b0_00xx_1110_xxxx
+`define PLL0SPACE           13'b0_0000_1010_xxxx
+`define PLL1SPACE           13'b0_0000_1100_xxxx
+`define PLL2SPACE           13'b0_0000_1110_xxxx
     `define PLL0_BITS_0to31     13'bx_xxxx_xxxx_00xx
     `define PLL0_BITS_68to99    13'bx_xxxx_xxxx_01xx
     `define PLL0_BITS_100to131  13'bx_xxxx_xxxx_10xx
@@ -506,9 +507,9 @@
     `define PLL2_XFER           13'bx_xxxx_xxxx_111x
 
 // Clock and Data subsystem registers
-`define CandD0SPACE         13'b0_00xx_1011_xxxx
-`define CandD1SPACE         13'b0_00xx_1101_xxxx
-`define CandD2SPACE         13'b0_00xx_1111_xxxx
+`define CandD0SPACE         13'b0_0000_1011_xxxx
+`define CandD1SPACE         13'b0_0000_1101_xxxx
+`define CandD2SPACE         13'b0_0000_1111_xxxx
     `define CandD_CONTROL           13'bx_xxxx_xxxx_00xx
         `define CandD_SRC_LEGACY_I      4'b0000
         `define CandD_SRC_LEGACY_Q      4'b0001
@@ -516,7 +517,7 @@
         `define CandD_SRC_MULTIH        4'b0011
         `define CandD_SRC_STC           4'b0100
         // caution, pngen and framer both use 5
-        `define CandD_SRC_PNGEN         4'b0101        
+        `define CandD_SRC_PNGEN         4'b0101
         `define CandD_SRC_FRAMER        4'b0101
         `define CandD_SRC_LDPC          4'b0110
         `define CandD_SRC_DQM           4'b0111
@@ -536,24 +537,60 @@
     `define CandD_DLL_GAINS         13'bx_xxxx_xxxx_100x
     `define CandD_DLL_FDBK_DIV      13'bx_xxxx_xxxx_101x
 
-// Legacy Demod subsystem registers
-`define DEMODSPACE          13'b0_0100_000x_xxxx
-`define DDCSPACE            13'b0_0100_0010_xxxx
-`define DDCFIRSPACE         13'b0_0100_0011_xxxx
-`define CICDECSPACE         13'b0_0100_0100_0xxx
-`define RESAMPSPACE         13'b0_0100_0101_xxxx
-`define BITSYNCSPACE        13'b0_0100_011x_xxxx
-`define BITSYNCAUSPACE      13'b0_0100_100x_xxxx
-    `define BS_MODE_SINGLE_CH       2'b00
-    `define BS_MODE_IND_CH          2'b01
-    `define BS_MODE_DUAL_CH         2'b10
-    `define BS_MODE_OFFSET_CH       2'b11
-`define CHAGCSPACE          13'b0_0100_101x_xxxx
-`define CARRIERSPACE        13'b0_0100_110x_xxxx
-`define EQUALIZERSPACE      13'b0_0100_1110_xxxx
-`define TRELLIS_SPACE       13'b0_0100_1111_xxxx
-`define TRELLISLFSPACE      13'b0_0101_000x_xxxx
-`define MULTIH_SPACE        13'b0_0101_0010_xxxx
+// PN Generator subsystem registers
+`define PNGEN_SPACE             13'b0_0001_0000_xxxx
+    `define PNGEN_POLY              13'bx_xxxx_xxxx_00xx
+    `define PNGEN_RATE              13'bx_xxxx_xxxx_01xx
+    `define PNGEN_PCM_MODE          13'bx_xxxx_xxxx_10xx
+        `define PNGEN_PCM_NRZL          4'b0000
+        `define PNGEN_PCM_NRZM          4'b0001
+        `define PNGEN_PCM_NRZS          4'b0010
+        `define PNGEN_PCM_BIPL          4'b0100
+        `define PNGEN_PCM_BIPM          4'b0101
+        `define PNGEN_PCM_BIPS          4'b0110
+        `define PNGEN_PCM_DMM           4'b1000
+        `define PNGEN_PCM_DMS           4'b1001
+        `define PNGEN_PCM_MDMM          4'b1010
+        `define PNGEN_PCM_MDMS          4'b1011
+        `define PNGEN_FEC_OFF           2'b00
+        `define PNGEN_FEC_CONV          2'b01
+        `define PNGEN_FEC_LDPC          2'b10
+        `define PNGEN_LDPC_R1_2         2'b00
+        `define PNGEN_LDPC_R2_3         2'b01
+        //`define PNGEN_LDPC_R3_4         2'b10
+        `define PNGEN_LDPC_R4_5         2'b10
+        `define PNGEN_LDPC_L1024        1'b0
+        `define PNGEN_LDPC_L4096        1'b1
+        `define PNGEN_LDPC_RND_OFF      2'b00
+        `define PNGEN_LDPC_RND_CCSDS    2'b01
+        `define PNGEN_LDPC_RND_IRIG     2'b10
+
+// Demod subsystem registers
+`define PRIDEMODSPACE       13'b0_0100_xxxx_xxxx
+`define SCIFPATHSPACE       13'b0_1010_xxxx_xxxx
+    // interpolator used after the Subcarrier IF Path
+    `define SCINTERPSPACE       13'bx_xxxx_1111_xxxx
+`define SCDEMODSPACE        13'b0_1011_xxxx_xxxx
+
+    `define DEMODSPACE          13'bx_xxxx_000x_xxxx
+    `define DDCSPACE            13'bx_xxxx_0010_xxxx
+    `define DDCFIRSPACE         13'bx_xxxx_0011_xxxx
+    `define CICDECSPACE         13'bx_xxxx_0100_0xxx
+    `define RESAMPSPACE         13'bx_xxxx_0101_xxxx
+    `define BITSYNCSPACE        13'bx_xxxx_011x_xxxx
+    `define BITSYNCAUSPACE      13'bx_xxxx_100x_xxxx
+        `define BS_MODE_SINGLE_CH       b00
+        `define BS_MODE_IND_CH          b01
+        `define BS_MODE_DUAL_CH         b10
+        `define BS_MODE_OFFSET_CH       b11
+    `define CHAGCSPACE          13'bx_xxxx_101x_xxxx
+    `define CARRIERSPACE        13'bx_xxxx_110x_xxxx
+    `define EQUALIZERSPACE      13'bx_xxxx_1110_xxxx
+
+
+`define TRELLIS_SPACE       13'b0_0101_0000_xxxx
+`define MULTIH_SPACE        13'b0_0101_0001_xxxx
+`define TRELLISLFSPACE      13'b0_0101_001x_xxxx
 `define MULTIHLFSPACE       13'b0_0101_010x_xxxx
 `define SDISPACE            13'b0_0101_0110_xxxx
 `define UARTSPACE           13'b0_0101_0111_xxxx
@@ -615,34 +652,6 @@
         `define BERT_SRC_DEC3_CH0    4'b1110
         `define BERT_SRC_DEC3_CH1    4'b1111
 
-// PN Generator subsystem registers
-`define PNGEN_SPACE             13'b0_1100_0000_xxxx
-    `define PNGEN_POLY              13'bx_xxxx_xxxx_00xx
-    `define PNGEN_RATE              13'bx_xxxx_xxxx_01xx
-    `define PNGEN_PCM_MODE          13'bx_xxxx_xxxx_10xx
-        `define PNGEN_PCM_NRZL          4'b0000
-        `define PNGEN_PCM_NRZM          4'b0001
-        `define PNGEN_PCM_NRZS          4'b0010
-        `define PNGEN_PCM_BIPL          4'b0100
-        `define PNGEN_PCM_BIPM          4'b0101
-        `define PNGEN_PCM_BIPS          4'b0110
-        `define PNGEN_PCM_DMM           4'b1000
-        `define PNGEN_PCM_DMS           4'b1001
-        `define PNGEN_PCM_MDMM          4'b1010
-        `define PNGEN_PCM_MDMS          4'b1011
-        `define PNGEN_FEC_OFF           2'b00
-        `define PNGEN_FEC_CONV          2'b01
-        `define PNGEN_FEC_LDPC          2'b10
-        `define PNGEN_LDPC_R1_2         2'b00
-        `define PNGEN_LDPC_R2_3         2'b01
-        //`define PNGEN_LDPC_R3_4         2'b10
-        `define PNGEN_LDPC_R4_5         2'b10
-        `define PNGEN_LDPC_L1024        1'b0
-        `define PNGEN_LDPC_L4096        1'b1
-        `define PNGEN_LDPC_RND_OFF      2'b00
-        `define PNGEN_LDPC_RND_CCSDS    2'b01
-        `define PNGEN_LDPC_RND_IRIG     2'b10
-
 
 // Framesync subsystem registers
 `define FRAMER_SPACE            13'b0_0111_100x_xxxx
@@ -676,6 +685,7 @@
 `define VIDFIR1SPACE        13'b0_1000_0011_xxxx
 `define INTERP2SPACE        13'b0_1000_0100_xxxx
 `define VIDFIR2SPACE        13'b0_1000_0101_xxxx
+
 
 // Video Switch Control registers
 `define VIDSWITCHSPACE      13'b0_1000_1000_xxxx
@@ -723,7 +733,7 @@
 `define SBS_AGCSPACE        13'b0_1001_101x_xxxx
 
 
-`define FMMODSPACE              13'b1_11xx_0000_xxxx
+`define FMMODSPACE          13'b1_11xx_0000_xxxx
     `define FM_MOD_FREQ         12'bxxxx_xxxx_00xx
     `define FM_MOD_DEV          12'bxxxx_xxxx_01xx
     `define FM_MOD_BITRATE      12'bxxxx_xxxx_10xx

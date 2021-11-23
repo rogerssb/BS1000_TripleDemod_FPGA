@@ -1,7 +1,7 @@
 /******************************************************************************
 Copyright 2008-2015 Koos Technical Services, Inc. All Rights Reserved
 
-This source code is the Intellectual Property of Koos Technical Services,Inc. 
+This source code is the Intellectual Property of Koos Technical Services,Inc.
 (KTS) and is provided under a License Agreement which protects KTS' ownership and
 derivative rights in exchange for negotiated compensation.
 ******************************************************************************/
@@ -30,7 +30,7 @@ module demodRegs(
     output  reg                 despreadLock,
     output  reg                 enableDespreader,
     `endif
-    `ifdef ADD_SCPATH
+    `ifdef ADD_SUBCARRIER
     output  reg                 enableScPath,
     `endif
     output  reg     [3:0]       dac0Select,
@@ -67,7 +67,7 @@ module demodRegs(
         if (cs & wr1) begin
             casex (addr)
                 `ifdef ADD_DESPREADER
-                `ifdef ADD_SCPATH
+                `ifdef ADD_SUBCARRIER
                 `DEMOD_CONTROL: begin
                     oqpskIthenQ <= dataIn[13];
                     enableScPath <= dataIn[14];
@@ -80,7 +80,7 @@ module demodRegs(
                     end
                 `endif
                 `else
-                `ifdef ADD_SCPATH
+                `ifdef ADD_SUBCARRIER
                 `DEMOD_CONTROL: begin
                     oqpskIthenQ <= dataIn[13];
                     enableScPath <= dataIn[14];
@@ -131,13 +131,13 @@ module demodRegs(
         if (cs) begin
             casex (addr)
                 `ifdef ADD_DESPREADER
-                `ifdef ADD_SCPATH
+                `ifdef ADD_SUBCARRIER
                 `DEMOD_CONTROL:     dataOut = {16'b0,enableDespreader,enableScPath,oqpskIthenQ,8'b0,demodMode};
                 `else
                 `DEMOD_CONTROL:     dataOut = {16'b0,enableDespreader,1'b0,oqpskIthenQ,8'b0,demodMode};
                 `endif
                 `else
-                `ifdef ADD_SCPATH
+                `ifdef ADD_SUBCARRIER
                 `DEMOD_CONTROL:     dataOut = {16'b0,1'b0,enableScPath,oqpskIthenQ,8'b0,demodMode};
                 `else
                 `DEMOD_CONTROL:     dataOut = {16'b0,2'b0,oqpskIthenQ,8'b0,demodMode};
@@ -192,7 +192,7 @@ module demodRegs(
         if (cs) begin
             casex (addr)
                 `ifdef ADD_DESPREADER
-                `ifdef ADD_SCPATH
+                `ifdef ADD_SUBCARRIER
                 `DEMOD_CONTROL: begin
                     oqpskIthenQ <= dataIn[13];
                     enableScPath <= dataIn[14];
@@ -205,7 +205,7 @@ module demodRegs(
                     end
                 `endif
                 `else
-                `ifdef ADD_SCPATH
+                `ifdef ADD_SUBCARRIER
                 `DEMOD_CONTROL: begin
                     oqpskIthenQ <= dataIn[13];
                     enableScPath <= dataIn[14];
@@ -256,13 +256,13 @@ module demodRegs(
         if (cs) begin
             casex (addr)
                 `ifdef ADD_DESPREADER
-                `ifdef ADD_SCPATH
+                `ifdef ADD_SUBCARRIER
                 `DEMOD_CONTROL:     dataOut = {16'b0,enableDespreader,enableScPath,oqpskIthenQ,8'b0,demodMode};
                 `else
                 `DEMOD_CONTROL:     dataOut = {16'b0,enableDespreader,1'b0,oqpskIthenQ,8'b0,demodMode};
                 `endif
                 `else
-                `ifdef ADD_SCPATH
+                `ifdef ADD_SUBCARRIER
                 `DEMOD_CONTROL:     dataOut = {16'b0,1'b0,enableScPath,oqpskIthenQ,8'b0,demodMode};
                 `else
                 `DEMOD_CONTROL:     dataOut = {16'b0,2'b0,oqpskIthenQ,8'b0,demodMode};

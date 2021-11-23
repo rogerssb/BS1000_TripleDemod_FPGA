@@ -349,9 +349,9 @@ module semcoDemodTop (
 //******************************************************************************
 
     multibootK7 multiboot(
-        .clk(clk), 
-        .pulse(reboot), 
-        .addr(boot_addr), 
+        .clk(clk),
+        .pulse(reboot),
+        .addr(boot_addr),
         .reset(reset)
     );
 
@@ -361,6 +361,17 @@ module semcoDemodTop (
 //                          Legacy Demod
 //******************************************************************************
 
+    reg primaryDemodSpace;
+    always @* begin
+        casex(addr)
+            `PRIDEMODSPACE: primaryDemodSpace = cs;
+            default:        primaryDemodSpace = 0;
+        endcase
+    end
+
+    `ifdef ADD_SUBCARRIER
+    wire    signed  [17:0]  iScPath,qScPath;
+    `endif
     wire    signed  [17:0]  iDemodSymData;
     wire    signed  [17:0]  qDemodSymData;
     wire    signed  [17:0]  iTrellis,qTrellis;
@@ -384,7 +395,7 @@ module semcoDemodTop (
         `ifdef USE_BUS_CLOCK
         .busClk(busClk),
         `endif
-        .cs(cs),
+        .cs(primaryDemodSpace),
         .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
         .addr(addr),
         .din(dataIn),
@@ -431,10 +442,10 @@ module semcoDemodTop (
         .demodMode(demodMode),
         .mag(mag),
         .magClkEn(magClkEn),
-        `ifdef ADD_SCPATH
-        output                  enableScPath,
-        output  signed  [17:0]  iBBOut, qBBOut,
-        output                  bbClkEnOut,
+        `ifdef ADD_SUBCARRIER
+        .enableScPath(enableScPath),
+        .iBBOut(iScPath), .qBBOut(qScPath),
+        .bbClkEnOut(scPathClkEn),
         `endif
         `ifdef ADD_DESPREADER
         output                  iEpoch,qEpoch,
@@ -444,6 +455,142 @@ module semcoDemodTop (
         .iEye(iDemodEye),   .qEye(qDemodEye),
         .eyeOffset(demodEyeOffset)
     );
+
+`ifdef ADD_SUBCARRIER
+//******************************************************************************
+//                           Subcarrier Demod IF Path
+//******************************************************************************
+
+    reg scIfpathSpace;
+    always @* begin
+        casex(addr)
+            `SCIFPATHSPACE: scIfpathSpace = cs;
+            default:        scIfpathSpace = 0;
+        endcase
+    end
+
+    wire signed [17:0]  scDemodOut;
+    wire        [31:0]  scPathDout;
+    scIfPath scIfPath(
+        .clk(clk), .reset(reset),
+        .busClk(busClk),
+        .cs(scIfpathSpace),
+        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .addr(addr),
+        .din(dataIn),
+        .dout(scPathDout),
+        .bbClkEn(scPathClkEn),
+        .iBB(iScPath), .qBB(qScPath),
+        .demodMode(demodMode),
+        .scDemodOut(scDemodOut),
+        .scClkEn(scClkEn)
+    );
+
+    `define ADD_SCINTERP
+    `ifdef ADD_SCINTERP
+    wire        [31:0]  scInterpDout;
+    wire signed [17:0]  scInterpDataOut;
+    scInterpolate #(.RegSpace(`SCINTERPSPACE)) scInterp(
+        .clk(clk), .reset(reset), .clkEn(scClkEn),
+        .busClk(busClk),
+        .cs(scIfpathSpace),
+        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .addr(addr),
+        .din(dataIn),
+        .dout(scInterpDout),
+        .dataIn(scDemodOut),
+        .clkEnOut(),
+        .dataOut(scInterpDataOut)
+        );
+    `endif //ADD_SCINTERP
+
+    reg         [31:0]  scIfPathDout;
+    always @* begin
+        casex(addr)
+            `SCIFPATHSPACE: begin
+                casex (addr)
+                    `SCINTERPSPACE: begin
+                        scIfPathDout = scInterpDout;
+                    end
+                    default: begin
+                        scIfPathDout = scPathDout;
+                    end
+                endcase
+            end
+            default: begin
+                scIfPathDout = 32'hxxxx;
+            end
+        endcase
+    end
+//******************************************************************************
+//                         Subcarrier Demod/Bitsync
+//******************************************************************************
+
+    reg scDemodSpace;
+    always @* begin
+        casex(addr)
+            `SCDEMODSPACE:  scDemodSpace = cs;
+            default:        scDemodSpace = 0;
+        endcase
+    end
+
+    reg                     scSymEn;
+    reg     signed  [17:0]  iScIn,qScIn;
+    always @(posedge clk) begin
+        scSymEn <= trellisSymEn;
+        iScIn <= iTrellis;
+        qScIn <= qTrellis;
+    end
+
+
+    wire    [31:0]  scDemodDout;
+    wire    [17:0]  sc_dac0Data;
+    wire    [17:0]  sc_dac1Data;
+    wire    [17:0]  sc_dac2Data;
+    wire            sc_auSymClk;
+    wire            sc_iBit;
+    wire            sc_iSym2xEn;
+    wire            sc_iSymEn;
+    wire            sc_qBit;
+    wire            sc_qSym2xEn;
+    wire            sc_qSymEn;
+
+    scDemod scDemod(
+        .clk(clk),
+        .reset(reset),
+        `ifdef USE_BUS_CLOCK
+        .busClk(busClk),
+        `endif
+        .cs(scDemodSpace),
+        .wr0(wr0),
+        .wr1(wr1),
+        .wr2(wr2),
+        .wr3(wr3),
+        .addr(addr),
+        .din(dataIn),
+        .dout(scDemodDout),
+        .iRx(scInterpDataOut),
+        .qRx(18'h0),
+        .bbClkEn(scSymEn),
+        .iBB(iScIn),
+        .qBB(qScIn),
+        .dac0Data(sc_dac0Data),
+        .dac0Sync(sc_dac0ClkEn),
+        .dac1Data(sc_dac1Data),
+        .dac1Sync(sc_dac1ClkEn),
+        .dac2Data(sc_dac2Data),
+        .dac2Sync(sc_dac2ClkEn),
+        .iSym2xEn(sc_iSym2xEn),
+        .iSymEn(sc_iSymEn),
+        .iBit(sc_iBit),
+        .qSym2xEn(),
+        .qSymEn(),
+        .qSymClk(),
+        .qBit(sc_qBit)
+    );
+
+`endif //ADD_SUBCARRIER
+
 
 `ifdef ADD_BITSYNC
 //******************************************************************************
@@ -528,7 +675,7 @@ module semcoDemodTop (
 ******************************************************************************/
 /*
     The viterbi was originally used in the bitsync bert card so there's a value
-    called bitsyncMode that doesn't exist in the legacy demod. We re-create it 
+    called bitsyncMode that doesn't exist in the legacy demod. We re-create it
     here from demodMode so we don't have two versions of viterbi to support.
 */
 
@@ -752,7 +899,7 @@ module semcoDemodTop (
     wire    [1:0]   rotation;
     reg             iRotBit,qRotBit,qDemodBitDelay;
     always @(posedge clk) begin
-        case (demodMode) 
+        case (demodMode)
             `MODE_QPSK: begin
                 if (iDemodBitEn) begin
                     case (rotation)
@@ -829,6 +976,14 @@ module semcoDemodTop (
     reg                 dualSym2xEn;
     always @(posedge clk) begin
         case (dualSrcSelect)
+            `ifdef ADD_SUBCARRIER
+            `DEC_SRC_SC0: begin
+                dualCh0Input <= sc_iBit;
+                dualCh1Input <= sc_qBit;
+                dualSymEn <= sc_iSymEn;
+                dualSym2xEn <= sc_iSym2xEn;
+            end
+            `endif
             `ifdef ADD_VITERBI
             `DEC_SRC_VITERBI: begin
                 dualCh0Input <= ch0VitBit;
@@ -929,6 +1084,13 @@ module semcoDemodTop (
     reg                 ch1DecSym2xEn;
     always @(posedge clk) begin
         case (pcmSrcSelect)
+            `ifdef ADD_SUBCARRIER
+            `DEC_SRC_SC0: begin
+                ch1DecInput <= sc_iBit;
+                ch1DecSymEn <= sc_iSymEn;
+                ch1DecSym2xEn <= sc_iSym2xEn;
+            end
+            `endif
             `ifdef ADD_BITSYNC
             `DEC_SRC_SBS: begin
                 ch1DecInput <= sbsBit;
@@ -1305,7 +1467,6 @@ module semcoDemodTop (
             //`CandD_SRC_MULTIH:
             //`CandD_SRC_STC:
             `ifdef ADD_PN_GEN
-            // should never get here since the Pn outputs are on clock1&3
             `CandD_SRC_PNGEN: begin
                 cAndD0ClkEn = pnClkEn;
                 cAndD0DataIn = {pnBit,2'b0};
@@ -1416,7 +1577,7 @@ module semcoDemodTop (
                 cAndD1ClkEn = pnClkEn;
                 cAndD1DataIn = {pnBit,2'b0};
             end
-            `endif            
+            `endif
             `ifdef ADD_LDPC
             `CandD_SRC_LDPC: begin
                 cAndD1ClkEn = ldpcBitEnOut;
@@ -1515,6 +1676,16 @@ module semcoDemodTop (
                 interp0DataIn <= demodDac0Data;
                 interp0ClkEn <= demodDac0ClkEn;
             end
+            `ifdef ADD_SUBCARRIER
+            `DAC_SRC_IFPATH: begin
+                interp0DataIn <= scInterpDataOut;
+                interp0ClkEn <= 1'b1;
+            end
+            `DAC_SRC_SCDEMOD0: begin
+                interp0DataIn <= sc_dac0Data;
+                interp0ClkEn <= sc_dac0ClkEn;
+            end
+            `endif
             `ifdef ADD_TRELLIS
             `DAC_SRC_FMTRELLIS: begin
                 interp0DataIn <= pcmDac0Data;
@@ -1569,8 +1740,19 @@ module semcoDemodTop (
     end
     `else
     always @(posedge clk) begin
+        `ifdef ADD_SUBCARRIER
+        if (dac0Source == `DAC_SRC_IFPATH) begin
+            dac0_d[12:0] <= scInterpDataOut[16:4];
+            dac0_d[13] <= ~scInterpDataOut[17];
+        end
+        else begin
+            dac0_d[12:0] <= interp0DataOut[16:4];
+            dac0_d[13] <= ~interp0DataOut[17];
+        end
+        `else
         dac0_d[12:0] <= interp0DataOut[16:4];
         dac0_d[13] <= ~interp0DataOut[17];
+        `endif
     end
     `endif
 
@@ -1583,6 +1765,12 @@ module semcoDemodTop (
                 interp1DataIn <= demodDac1Data;
                 interp1ClkEn <= demodDac1ClkEn;
             end
+            `ifdef ADD_SUBCARRIER
+            `DAC_SRC_SCDEMOD0: begin
+                interp1DataIn <= sc_dac1Data;
+                interp1ClkEn <= sc_dac1ClkEn;
+            end
+            `endif
             `ifdef ADD_TRELLIS
             `DAC_SRC_FMTRELLIS: begin
                 interp1DataIn <= pcmDac1Data;
@@ -1636,8 +1824,19 @@ module semcoDemodTop (
     end
     `else
     always @(posedge clk) begin
+        `ifdef ADD_SUBCARRIER
+        if (dac1Source == `DAC_SRC_IFPATH) begin
+            dac1_d[12:0] <= scInterpDataOut[16:4];
+            dac1_d[13] <= ~scInterpDataOut[17];
+        end
+        else begin
+            dac1_d[12:0] <= interp1DataOut[16:4];
+            dac1_d[13] <= ~interp1DataOut[17];
+        end
+        `else 
         dac1_d[12:0] <= interp1DataOut[16:4];
         dac1_d[13] <= ~interp1DataOut[17];
+        `endif
     end
     `endif
 
@@ -1651,6 +1850,12 @@ module semcoDemodTop (
                 interp2DataIn <= demodDac2Data;
                 interp2ClkEn <= demodDac2ClkEn;
             end
+            `ifdef ADD_SUBCARRIER
+            `DAC_SRC_SCDEMOD0: begin
+                interp2DataIn <= sc_dac2Data;
+                interp2ClkEn <= sc_dac2ClkEn;
+            end
+            `endif
             `ifdef ADD_TRELLIS
             `DAC_SRC_FMTRELLIS: begin
                 interp2DataIn <= pcmDac2Data;
@@ -1704,8 +1909,19 @@ module semcoDemodTop (
     end
     `else
     always @(posedge clk) begin
+        `ifdef ADD_SUBCARRIER
+        if (dac2Source == `DAC_SRC_IFPATH) begin
+            dac2_d[12:0] <= scInterpDataOut[16:4];
+            dac2_d[13] <= ~scInterpDataOut[17];
+        end
+        else begin
+            dac2_d[12:0] <= interp2DataOut[16:4];
+            dac2_d[13] <= ~interp2DataOut[17];
+        end
+        `else
         dac2_d[12:0] <= interp2DataOut[16:4];
         dac2_d[13] <= ~interp2DataOut[17];
+        `endif
     end
     `endif  //TEST_DACS
 
@@ -1917,21 +2133,7 @@ sdi sdi(
             `FRAMER_SPACE:      rd_mux = framerDout;
             `endif
 
-            `DEMODSPACE,
-            `ifdef ADD_CMA
-            `EQUALIZERSPACE,
-            `endif
-            `ifdef ADD_DESPREADER
-            `DESPREADSPACE,
-            `endif
-            `DDCSPACE,
-            `DDCFIRSPACE,
-            `CICDECSPACE,
-            `BITSYNCSPACE,
-            `BITSYNCAUSPACE,
-            `RESAMPSPACE,
-            `CARRIERSPACE,
-            `CHAGCSPACE :       rd_mux = demodDout;
+            `PRIDEMODSPACE :       rd_mux = demodDout;
 
             `ifdef ADD_MULTIH
             `MULTIH_SPACE,
@@ -1946,13 +2148,9 @@ sdi sdi(
             `UARTSPACE,
             `SDISPACE:          rd_mux = sdiDout;
 
-            `ifdef ADD_SCPATH
-            `SCDDCSPACE,
-            `SCDDCFIRSPACE,
-            `SCCICDECSPACE,
-            `SCAGCSPACE,
-            `SCCARRIERSPACE:    rd_mux = scPathDout;
-            end
+            `ifdef ADD_SUBCARRIER
+            `SCIFPATHSPACE:     rd_mux = scIfPathDout;
+            `SCDEMODSPACE:      rd_mux = scDemodDout;
             `endif
 
             `VIDFIR0SPACE,
@@ -2067,21 +2265,7 @@ sdi sdi(
              `PNGEN_SPACE:      TODO, pnGen is not intended for non6100 builds. FZ
             `endif
 
-            `DEMODSPACE,
-            `ifdef ADD_CMA
-            `EQUALIZERSPACE,
-            `endif
-            `ifdef ADD_DESPREADER
-            `DESPREADSPACE,
-            `endif
-            `DDCSPACE,
-            `DDCFIRSPACE,
-            `CICDECSPACE,
-            `BITSYNCSPACE,
-            `BITSYNCAUSPACE,
-            `RESAMPSPACE,
-            `CARRIERSPACE,
-            `CHAGCSPACE : begin
+            `PRIDEMODSPACE: begin
                 if (addr[1]) begin
                     rd_mux = demodDout[31:16];
                 end
@@ -2122,17 +2306,21 @@ sdi sdi(
                     rd_mux = sdiDout[15:0];
                 end
             end
-            `ifdef ADD_SCPATH
-            `SCDDCSPACE,
-            `SCDDCFIRSPACE,
-            `SCCICDECSPACE,
-            `SCAGCSPACE,
-            `SCCARRIERSPACE: begin
+            `ifdef ADD_SUBCARRIER
+            `SCCIFPATHSPACE: begin
                 if (addr[1]) begin
-                    rd_mux = scPathDout[31:16];
+                    rd_mux = scIfPathDout[31:16];
                 end
                 else begin
-                    rd_mux = scPathDout[15:0];
+                    rd_mux = scIfPathDout[15:0];
+                end
+            end
+            `SCDEMODSPACE: begin
+                if (addr[1]) begin
+                    rd_mux = scDemodDout[31:16];
+                end
+                else begin
+                    rd_mux = scDemodDout[15:0];
                 end
             end
             `endif

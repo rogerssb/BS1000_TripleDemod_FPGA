@@ -1,7 +1,7 @@
 /******************************************************************************
 Copyright 2008-2015 Koos Technical Services, Inc. All Rights Reserved
 
-This source code is the Intellectual Property of Koos Technical Services,Inc. 
+This source code is the Intellectual Property of Koos Technical Services,Inc.
 (KTS) and is provided under a License Agreement which protects KTS' ownership and
 derivative rights in exchange for negotiated compensation.
 ******************************************************************************/
@@ -11,8 +11,12 @@ derivative rights in exchange for negotiated compensation.
 
 `define USE_DDC_FIR
 
-module scDdc( 
+module scDdc(
     clk, reset,
+    `ifdef USE_BUS_CLOCK
+    busClk,
+    `endif
+    cs,
     wr0,wr1,wr2,wr3,
     addr,
     din,
@@ -20,7 +24,7 @@ module scDdc(
     scFreq,
     offsetEn,
     nbAgcGain,
-    iBB, qBB, 
+    iBB, qBB,
     bbClkEn,
     syncOut,
     iOut, qOut
@@ -28,6 +32,10 @@ module scDdc(
 
 input           clk;
 input           reset;
+`ifdef USE_BUS_CLOCK
+input           busClk;
+`endif
+input           cs;
 input           wr0,wr1,wr2,wr3;
 input   [12:0]  addr;
 input   [31:0]  din;
@@ -47,7 +55,7 @@ output  [17:0]  qOut;
 reg ddcSpace;
 always @* begin
     casex(addr)
-        `SCDDCSPACE: ddcSpace    = 1;
+        `DDCSPACE:   ddcSpace    = cs;
         default:     ddcSpace    = 0;
         endcase
     end
@@ -59,6 +67,9 @@ ddcRegs micro(
     .addr(addr),
     .dataIn(din),
     .dataOut(ddcDout),
+    `ifdef USE_BUS_CLOCK
+    .busClk(busClk),
+    `endif
     .cs(ddcSpace),
     .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
     .bypassCic(bypassCic),
@@ -75,7 +86,7 @@ ddcRegs micro(
 // If bypassing the CIC decimator, force its clock enable off to save power
 reg     [17:0]  iCicIn,qCicIn;
 reg             cicClockEn;
-always @(posedge clk) begin      
+always @(posedge clk) begin
     if (bypassCic) begin
         cicClockEn <= 0;
         iCicIn <= 0;
@@ -94,19 +105,23 @@ wire cicSyncOut;
 wire [31:0]cicDout;
 `ifdef SIMULATE
 reg cicReset;
-dualDecimator #(.RegSpace(`SCCICDECSPACE)) cic( 
-    .clk(clk), .reset(cicReset), .sync(cicClockEn),
+dualDecimator #(.RegSpace(`CICDECSPACE)) cic(
+    .clk(clk), .reset(cicReset), .clkEn(cicClockEn),
 `else
-dualDecimator #(.RegSpace(`SCCICDECSPACE)) cic( 
-    .clk(clk), .reset(reset), .sync(cicClockEn),
+dualDecimator #(.RegSpace(`CICDECSPACE)) cic(
+    .clk(clk), .reset(reset), .clkEn(cicClockEn),
 `endif
+    `ifdef USE_BUS_CLOCK
+    .busClk(busClk),
+    `endif
+    .cs(cs),
     .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
     .addr(addr),
     .din(din),
     .dout(cicDout),
     .inI(iCicIn),.inQ(qCicIn),
     .outI(iCic),.outQ(qCic),
-    .syncOut(cicSyncOut)
+    .clkEnOut(cicSyncOut)
     );
 
 reg     [47:0]  iAgcIn,qAgcIn;
@@ -148,16 +163,16 @@ always @(qAgc) qAgcReal = ((qAgc > 131071.0) ? (qAgc - 262144.0) : qAgc)/131072.
 // CIC Compensation
 wire    [17:0]  iComp,qComp;
 cicComp cicCompI(
-    .clk(clk), 
+    .clk(clk),
     .reset(reset),
-    .sync(agcSync), 
+    .clkEn(agcSync),
     .compIn(iAgc),
     .compOut(iComp)
     );
 cicComp cicCompQ(
-    .clk(clk), 
+    .clk(clk),
     .reset(reset),
-    .sync(agcSync), 
+    .clkEn(agcSync),
     .compIn(qAgc),
     .compOut(qComp)
     );
@@ -174,7 +189,7 @@ wire    [17:0]  qMux = bypassCic ? qAgc : qComp;
 // If bypassing the second halfband, force its clock enable off to save power
 reg     [17:0]  iHbIn,qHbIn;
 reg             hbClockEn;
-always @(posedge clk) begin      
+always @(posedge clk) begin
     if (bypassHb) begin
         hbClockEn <= 0;
         iHbIn <= 0;
@@ -189,15 +204,15 @@ always @(posedge clk) begin
 
 // Second Halfband Filter
 wire [17:0]iHb,qHb;
-halfbandDecimate hb( 
+dualHalfbandDecimate hb(
 `ifdef SIMULATE
-    .clk(clk), .reset(cicReset), .sync(hbClockEn),
+    .clk(clk), .reset(cicReset), .clkEn(hbClockEn),
 `else
-    .clk(clk), .reset(reset), .sync(hbClockEn),
+    .clk(clk), .reset(reset), .clkEn(hbClockEn),
 `endif
     .iIn(iHbIn),.qIn(qHbIn),
     .iOut(iHb),.qOut(qHb),
-    .syncOut(hbSyncOut)
+    .clkEnOut(hbSyncOut)
     );
 
 `ifdef SIMULATE
@@ -233,8 +248,12 @@ always @(posedge clk) begin
 
 wire    [31:0]  ddcFirDout;
 wire    [17:0]  iFir,qFir;
-dualFir #(.RegSpace(`SCDDCFIRSPACE)) dualFir ( 
-    .clk(clk), .reset(reset), .syncIn(firClockEn),
+dualFir #(.RegSpace(`DDCFIRSPACE)) dualFir (
+    .clk(clk), .reset(reset), .clkEn(firClockEn),
+    `ifdef USE_BUS_CLOCK
+    .busClk(busClk),
+    `endif
+    .cs(cs),
     .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
     .addr(addr),
     .din(din),
@@ -295,18 +314,40 @@ always @(posedge clk) begin
     end
 
 // Lead Complex Mixer
+`ifdef USE_VIVADO_CORES
+`ifdef SIMULATE
+reg ddsSimReset;
+initial ddsSimReset = 0;
+wire ddsReset = ddsSimReset || reset;
+`else
+wire ddsReset = reset;
+`endif
+wire    [47:0]  lead_m_axis;
+wire    [17:0]  qLeadDds = lead_m_axis[41:24];
+wire    [17:0]  iLeadDds = lead_m_axis[17:0];
+dds6p0 leadDds(
+  .aclk(clk),
+  .aclken(1'b1),
+  .aresetn(!ddsReset),
+  .m_axis_data_tdata(lead_m_axis),
+  .m_axis_data_tvalid(),
+  .s_axis_phase_tdata(newLead),
+  .s_axis_phase_tvalid(1'b1)
+);
+`else
 wire    [17:0]iLeadDds;
 wire    [17:0]qLeadDds;
-dds leadDds ( 
-    .sclr(reset), 
-    .clk(clk), 
+dds leadDds (
+    .sclr(reset),
+    .clk(clk),
     .ce(1'b1),
-    .we(1'b1), 
-    //.data(scFreq), 
-    .data(newLead), 
-    .sine(qLeadDds), 
+    .we(1'b1),
+    //.data(scFreq),
+    .data(newLead),
+    .sine(qLeadDds),
     .cosine(iLeadDds)
     );
+`endif
 `ifdef SIMULATE
 real iLeadDdsReal;
 real qLeadDdsReal;
@@ -318,7 +359,7 @@ always @(qLeadDds) qLeadDdsReal = ((qLeadDds > 131071.0) ? (qLeadDds - 262144.0)
 
 // Complex Multiplier
 wire    [17:0]  iLead,qLead;
-cmpy18 leadMixer( 
+cmpy18 leadMixer(
     .clk(clk),
     .reset(reset),
     .aReal(iLeadIn),
@@ -358,9 +399,9 @@ always @(qOut) qOutReal = ((qOut > 131071.0) ? (qOut - 262144.0) : qOut)/131072.
 reg [31:0]dout;
 always @* begin
     casex (addr)
-        `SCDDCSPACE:        dout = ddcDout;
-        `SCDDCFIRSPACE:     dout = ddcFirDout;
-        `SCCICDECSPACE:     dout = cicDout;    
+        `DDCSPACE:         dout = ddcDout;
+        `DDCFIRSPACE:      dout = ddcFirDout;
+        `CICDECSPACE:      dout = cicDout;
         default:            dout = 32'bx;
         endcase
     end
@@ -368,12 +409,12 @@ always @* begin
 reg [31:0]dout;
 always @* begin
     casex (addr)
-        `SCDDCSPACE:        dout = ddcDout;
-        `SCCICDECSPACE:     dout = cicDout;    
+        `DDCSPACE:         dout = ddcDout;
+        `CICDECSPACE:      dout = cicDout;
         default:            dout = 32'bx;
         endcase
     end
 `endif
 
 endmodule
-                     
+
