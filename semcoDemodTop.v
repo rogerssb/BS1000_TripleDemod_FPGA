@@ -144,7 +144,7 @@ module semcoDemodTop (
 
 );
 
-    parameter VER_NUMBER = 16'd718;
+    parameter VER_NUMBER = 16'd721;
 
 
 //******************************************************************************
@@ -547,13 +547,10 @@ module semcoDemodTop (
     wire    [17:0]  sc_dac0Data;
     wire    [17:0]  sc_dac1Data;
     wire    [17:0]  sc_dac2Data;
-    wire            sc_auSymClk;
     wire            sc_iBit;
     wire            sc_iSym2xEn;
     wire            sc_iSymEn;
     wire            sc_qBit;
-    wire            sc_qSym2xEn;
-    wire            sc_qSymEn;
 
     scDemod scDemod(
         .clk(clk),
@@ -574,6 +571,9 @@ module semcoDemodTop (
         .bbClkEn(scSymEn),
         .iBB(iScIn),
         .qBB(qScIn),
+        .dac0Select(),
+        .dac1Select(),
+        .dac2Select(),
         .dac0Data(sc_dac0Data),
         .dac0Sync(sc_dac0ClkEn),
         .dac1Data(sc_dac1Data),
@@ -582,11 +582,35 @@ module semcoDemodTop (
         .dac2Sync(sc_dac2ClkEn),
         .iSym2xEn(sc_iSym2xEn),
         .iSymEn(sc_iSymEn),
+        .iSymClk(),
+        .iSymData(),
+        .iBitEn(),
         .iBit(sc_iBit),
         .qSym2xEn(),
         .qSymEn(),
         .qSymClk(),
-        .qBit(sc_qBit)
+        .qSymData(),
+        .qBitEn(),
+        .qBit(sc_qBit),
+        .auSymClk(),
+        .auBit(),
+        .timingLock(),
+        .carrierLock(),
+        .trellisSymEn(),
+        .iTrellis(),
+        .qTrellis(),
+        .demodMode(),
+        .mag(),
+        .magClkEn(),
+        .enableScPath(),
+        .iBBOut(),
+        .qBBOut(),
+        .bbClkEnOut(),
+        .sdiSymEn(),
+        .eyeSync(),
+        .iEye(),
+        .qEye(),
+        .eyeOffset()
     );
 
 `endif //ADD_SUBCARRIER
@@ -786,7 +810,11 @@ module semcoDemodTop (
     trellisMultiH multih (
         .clk(clk),
         .reset(reset),
+        `ifdef ADD_SUPERBAUD_TED
         .symEnEvenIn(trellisSymEnEven & multihMode),
+        `else
+        .symEnEvenIn(1'b0),
+        `endif
         .symEnIn(trellisSymEn & multihMode),
         .sym2xEnIn(iDemodSym2xEn & multihMode),
         .iIn(iTrellis),
@@ -1833,7 +1861,7 @@ module semcoDemodTop (
             dac1_d[12:0] <= interp1DataOut[16:4];
             dac1_d[13] <= ~interp1DataOut[17];
         end
-        `else 
+        `else
         dac1_d[12:0] <= interp1DataOut[16:4];
         dac1_d[13] <= ~interp1DataOut[17];
         `endif
