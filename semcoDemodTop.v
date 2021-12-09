@@ -120,9 +120,9 @@ module semcoDemodTop (
     output              amDacCSn,
 
     // Video Switch Select Lines
-    output      [1:0]   video0InSelect,
+    output reg  [1:0]   video0InSelect,
     output reg  [1:0]   video0OutSelect,
-    output      [1:0]   video1InSelect,
+    output reg  [1:0]   video1InSelect,
     output reg  [1:0]   video1OutSelect,
 
 //    output      [2:0]   vidSel,
@@ -157,7 +157,7 @@ module semcoDemodTop (
     output              lockLed0n, lockLed1n,
 
     `ifdef R6100
-        output              Sw50Ohm,
+        output reg          Sw50Ohm,
         input               FPGA_ID0, FPGA_ID1,
 
        `ifdef COMBINER  // both sides need these signals
@@ -2091,7 +2091,6 @@ sdi sdi(
     assign dac1_nCs = 1'b0;
     assign dac2_nCs = 1'b0;
     assign dac_sdio = 1'b0;
-    assign Sw50Ohm  = 1'b0;
 
     `ifdef R6100
 
@@ -2120,7 +2119,7 @@ sdi sdi(
     //******************************************************************************
         `ifndef COMBINER
 
-            assign lockLed0n = !timingLock;
+            assign lockLed0n = NGR_Mode; // TODO!timingLock;
             assign lockLed1n = !carrierLock;
 
             DC_DemodTop combinerOut(
@@ -2194,8 +2193,8 @@ sdi sdi(
         //                          Video Switch Interface
         //******************************************************************************
 
-        wire    [1:0]   vid0Select;
-        wire    [1:0]   vid1Select;
+        wire    [2:0]   vid0Select, vid1Select, vid2Select, vid3Select;
+        wire    NGR_Mode = vid3Select[0];    // legacy or NGR (2 or 3 bits)
         wire    [31:0]  vsDout;
         vidSwitchRegs vsregs(
             .busClk(busClk),
@@ -2209,45 +2208,63 @@ sdi sdi(
             .dout(vsDout),
             .vid0Select(vid0Select),
             .vid1Select(vid1Select),
-            .vid2Select(),
-            .vid3Select()
+            .vid2Select(vid2Select),
+            .vid3Select(vid3Select)
         );
 
-        assign video0InSelect = vid0Select;
-        assign video1InSelect = vid1Select;
+        /*  Legacy      NGR
+            Vid0In0     Vid0Filt0
+            Vid0In1     Vid0Filt1
+            Vid1In0     Vid1Filt0
+            Vid1In1     Vid1Filt1
+            Vid0Out0    Vid0Filt2
+            Vid0Out1    Vid1Filt2
+            Vid1Out0    AGC50OHm
+            Vid1Out1    Analog50Ohm
+            Sw50Ohm     TTL50Ohm
+        */
+        always @* begin
+            if (NGR_Mode) begin      // if three bit NGR video muxes
+                video0InSelect   = vid0Select[1:0];
+                video1InSelect   = vid1Select[1:0];
+                Sw50Ohm          = vid2Select[2];
+                video0OutSelect  = {vid1Select[2], vid0Select[2]};
+                video1OutSelect  = vid2Select[1:0];
+            end
 
-        //This is to fix an error on the board layout
-        always @* begin
-            case (vid0Select)
-                2'b00: begin
-                    video0OutSelect = 2'b00;
-                end
-                2'b01: begin
-                    video0OutSelect = 2'b10;
-                end
-                2'b10: begin
-                    video0OutSelect = 2'b01;
-                end
-                2'b11: begin
-                    video0OutSelect = 2'b11;
-                end
-            endcase
-        end
-        always @* begin
-            case (vid1Select)
-                2'b00: begin
-                    video1OutSelect = 2'b00;
-                end
-                2'b01: begin
-                    video1OutSelect = 2'b10;
-                end
-                2'b10: begin
-                    video1OutSelect = 2'b01;
-                end
-                2'b11: begin
-                    video1OutSelect = 2'b11;
-                end
-            endcase
+            else begin              // else use old two bit decode
+               Sw50Ohm  = 1'b0;
+               //This is to fix an error on the board layout
+               case (vid0Select[1:0])
+                    2'b00: begin
+                        video0OutSelect = 2'b00;
+                    end
+                    2'b01: begin
+                        video0OutSelect = 2'b10;
+                    end
+                    2'b10: begin
+                        video0OutSelect = 2'b01;
+                    end
+                    2'b11: begin
+                        video0OutSelect = 2'b11;
+                    end
+               endcase
+
+               case (vid1Select[1:0])
+                    2'b00: begin
+                        video1OutSelect = 2'b00;
+                    end
+                    2'b01: begin
+                        video1OutSelect = 2'b10;
+                    end
+                    2'b10: begin
+                        video1OutSelect = 2'b01;
+                    end
+                    2'b11: begin
+                        video1OutSelect = 2'b11;
+                    end
+               endcase
+            end
         end
 
     `endif //R6100

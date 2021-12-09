@@ -1,9 +1,11 @@
 
+
+
 create_debug_core u_ila_0 ila
 set_property ALL_PROBE_SAME_MU true [get_debug_cores u_ila_0]
 set_property ALL_PROBE_SAME_MU_CNT 4 [get_debug_cores u_ila_0]
 set_property C_ADV_TRIGGER true [get_debug_cores u_ila_0]
-set_property C_DATA_DEPTH 8192 [get_debug_cores u_ila_0]
+set_property C_DATA_DEPTH 4096 [get_debug_cores u_ila_0]
 set_property C_EN_STRG_QUAL true [get_debug_cores u_ila_0]
 set_property C_INPUT_PIPE_STAGES 2 [get_debug_cores u_ila_0]
 set_property C_TRIGIN_EN false [get_debug_cores u_ila_0]
@@ -11,20 +13,20 @@ set_property C_TRIGOUT_EN false [get_debug_cores u_ila_0]
 set_property port_width 1 [get_debug_ports u_ila_0/clk]
 connect_debug_port u_ila_0/clk [get_nets [list DataGen.demodTop/systemClock/inst/clk1x]]
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe0]
-set_property port_width 18 [get_debug_ports u_ila_0/probe0]
-connect_debug_port u_ila_0/probe0 [get_nets [list {AGCs/GainIntSlv[0]} {AGCs/GainIntSlv[1]} {AGCs/GainIntSlv[2]} {AGCs/GainIntSlv[3]} {AGCs/GainIntSlv[4]} {AGCs/GainIntSlv[5]} {AGCs/GainIntSlv[6]} {AGCs/GainIntSlv[7]} {AGCs/GainIntSlv[8]} {AGCs/GainIntSlv[9]} {AGCs/GainIntSlv[10]} {AGCs/GainIntSlv[11]} {AGCs/GainIntSlv[12]} {AGCs/GainIntSlv[13]} {AGCs/GainIntSlv[14]} {AGCs/GainIntSlv[15]} {AGCs/GainIntSlv[16]} {AGCs/GainIntSlv[17]}]]
+set_property port_width 8 [get_debug_ports u_ila_0/probe0]
+connect_debug_port u_ila_0/probe0 [get_nets [list {GenIF/DucCount[0]} {GenIF/DucCount[1]} {GenIF/DucCount[2]} {GenIF/DucCount[3]} {GenIF/DucCount[4]} {GenIF/DucCount[5]} {GenIF/DucCount[6]} {GenIF/DucCount[7]}]]
 create_debug_port u_ila_0 probe
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe1]
-set_property port_width 14 [get_debug_ports u_ila_0/probe1]
-connect_debug_port u_ila_0/probe1 [get_nets [list {AGCs/RealGained[-13]} {AGCs/RealGained[-12]} {AGCs/RealGained[-11]} {AGCs/RealGained[-10]} {AGCs/RealGained[-9]} {AGCs/RealGained[-8]} {AGCs/RealGained[-7]} {AGCs/RealGained[-6]} {AGCs/RealGained[-5]} {AGCs/RealGained[-4]} {AGCs/RealGained[-3]} {AGCs/RealGained[-2]} {AGCs/RealGained[-1]} {AGCs/RealGained[0]}]]
+set_property port_width 18 [get_debug_ports u_ila_0/probe1]
+connect_debug_port u_ila_0/probe1 [get_nets [list {AGCs/GainIntSlv[0]} {AGCs/GainIntSlv[1]} {AGCs/GainIntSlv[2]} {AGCs/GainIntSlv[3]} {AGCs/GainIntSlv[4]} {AGCs/GainIntSlv[5]} {AGCs/GainIntSlv[6]} {AGCs/GainIntSlv[7]} {AGCs/GainIntSlv[8]} {AGCs/GainIntSlv[9]} {AGCs/GainIntSlv[10]} {AGCs/GainIntSlv[11]} {AGCs/GainIntSlv[12]} {AGCs/GainIntSlv[13]} {AGCs/GainIntSlv[14]} {AGCs/GainIntSlv[15]} {AGCs/GainIntSlv[16]} {AGCs/GainIntSlv[17]}]]
 create_debug_port u_ila_0 probe
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe2]
 set_property port_width 14 [get_debug_ports u_ila_0/probe2]
 connect_debug_port u_ila_0/probe2 [get_nets [list {AGCs/ImagGained[-13]} {AGCs/ImagGained[-12]} {AGCs/ImagGained[-11]} {AGCs/ImagGained[-10]} {AGCs/ImagGained[-9]} {AGCs/ImagGained[-8]} {AGCs/ImagGained[-7]} {AGCs/ImagGained[-6]} {AGCs/ImagGained[-5]} {AGCs/ImagGained[-4]} {AGCs/ImagGained[-3]} {AGCs/ImagGained[-2]} {AGCs/ImagGained[-1]} {AGCs/ImagGained[0]}]]
 create_debug_port u_ila_0 probe
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe3]
-set_property port_width 8 [get_debug_ports u_ila_0/probe3]
-connect_debug_port u_ila_0/probe3 [get_nets [list {GenIF/DucCount[0]} {GenIF/DucCount[1]} {GenIF/DucCount[2]} {GenIF/DucCount[3]} {GenIF/DucCount[4]} {GenIF/DucCount[5]} {GenIF/DucCount[6]} {GenIF/DucCount[7]}]]
+set_property port_width 14 [get_debug_ports u_ila_0/probe3]
+connect_debug_port u_ila_0/probe3 [get_nets [list {AGCs/RealGained[-13]} {AGCs/RealGained[-12]} {AGCs/RealGained[-11]} {AGCs/RealGained[-10]} {AGCs/RealGained[-9]} {AGCs/RealGained[-8]} {AGCs/RealGained[-7]} {AGCs/RealGained[-6]} {AGCs/RealGained[-5]} {AGCs/RealGained[-4]} {AGCs/RealGained[-3]} {AGCs/RealGained[-2]} {AGCs/RealGained[-1]} {AGCs/RealGained[0]}]]
 create_debug_port u_ila_0 probe
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe4]
 set_property port_width 12 [get_debug_ports u_ila_0/probe4]
@@ -83,128 +85,176 @@ set_property port_width 18 [get_debug_ports u_ila_0/probe17]
 connect_debug_port u_ila_0/probe17 [get_nets [list {adcRmsSlv[0]} {adcRmsSlv[1]} {adcRmsSlv[2]} {adcRmsSlv[3]} {adcRmsSlv[4]} {adcRmsSlv[5]} {adcRmsSlv[6]} {adcRmsSlv[7]} {adcRmsSlv[8]} {adcRmsSlv[9]} {adcRmsSlv[10]} {adcRmsSlv[11]} {adcRmsSlv[12]} {adcRmsSlv[13]} {adcRmsSlv[14]} {adcRmsSlv[15]} {adcRmsSlv[16]} {adcRmsSlv[17]}]]
 create_debug_port u_ila_0 probe
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe18]
-set_property port_width 1 [get_debug_ports u_ila_0/probe18]
-connect_debug_port u_ila_0/probe18 [get_nets [list DataGen.demodTop/amDataEn]]
+set_property port_width 13 [get_debug_ports u_ila_0/probe18]
+connect_debug_port u_ila_0/probe18 [get_nets [list {DataGen.demodTop/vsregs/addr[0]} {DataGen.demodTop/vsregs/addr[1]} {DataGen.demodTop/vsregs/addr[2]} {DataGen.demodTop/vsregs/addr[3]} {DataGen.demodTop/vsregs/addr[4]} {DataGen.demodTop/vsregs/addr[5]} {DataGen.demodTop/vsregs/addr[6]} {DataGen.demodTop/vsregs/addr[7]} {DataGen.demodTop/vsregs/addr[8]} {DataGen.demodTop/vsregs/addr[9]} {DataGen.demodTop/vsregs/addr[10]} {DataGen.demodTop/vsregs/addr[11]} {DataGen.demodTop/vsregs/addr[12]}]]
 create_debug_port u_ila_0 probe
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe19]
-set_property port_width 1 [get_debug_ports u_ila_0/probe19]
-connect_debug_port u_ila_0/probe19 [get_nets [list ch3ClkOut_OBUF]]
+set_property port_width 32 [get_debug_ports u_ila_0/probe19]
+connect_debug_port u_ila_0/probe19 [get_nets [list {DataGen.demodTop/vsregs/din[0]} {DataGen.demodTop/vsregs/din[1]} {DataGen.demodTop/vsregs/din[2]} {DataGen.demodTop/vsregs/din[3]} {DataGen.demodTop/vsregs/din[4]} {DataGen.demodTop/vsregs/din[5]} {DataGen.demodTop/vsregs/din[6]} {DataGen.demodTop/vsregs/din[7]} {DataGen.demodTop/vsregs/din[8]} {DataGen.demodTop/vsregs/din[9]} {DataGen.demodTop/vsregs/din[10]} {DataGen.demodTop/vsregs/din[11]} {DataGen.demodTop/vsregs/din[12]} {DataGen.demodTop/vsregs/din[13]} {DataGen.demodTop/vsregs/din[14]} {DataGen.demodTop/vsregs/din[15]} {DataGen.demodTop/vsregs/din[16]} {DataGen.demodTop/vsregs/din[17]} {DataGen.demodTop/vsregs/din[18]} {DataGen.demodTop/vsregs/din[19]} {DataGen.demodTop/vsregs/din[20]} {DataGen.demodTop/vsregs/din[21]} {DataGen.demodTop/vsregs/din[22]} {DataGen.demodTop/vsregs/din[23]} {DataGen.demodTop/vsregs/din[24]} {DataGen.demodTop/vsregs/din[25]} {DataGen.demodTop/vsregs/din[26]} {DataGen.demodTop/vsregs/din[27]} {DataGen.demodTop/vsregs/din[28]} {DataGen.demodTop/vsregs/din[29]} {DataGen.demodTop/vsregs/din[30]} {DataGen.demodTop/vsregs/din[31]}]]
 create_debug_port u_ila_0 probe
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe20]
-set_property port_width 1 [get_debug_ports u_ila_0/probe20]
-connect_debug_port u_ila_0/probe20 [get_nets [list ch3DataOut_OBUF]]
+set_property port_width 32 [get_debug_ports u_ila_0/probe20]
+connect_debug_port u_ila_0/probe20 [get_nets [list {DataGen.demodTop/vsregs/dout[0]} {DataGen.demodTop/vsregs/dout[1]} {DataGen.demodTop/vsregs/dout[2]} {DataGen.demodTop/vsregs/dout[3]} {DataGen.demodTop/vsregs/dout[4]} {DataGen.demodTop/vsregs/dout[5]} {DataGen.demodTop/vsregs/dout[6]} {DataGen.demodTop/vsregs/dout[7]} {DataGen.demodTop/vsregs/dout[8]} {DataGen.demodTop/vsregs/dout[9]} {DataGen.demodTop/vsregs/dout[10]} {DataGen.demodTop/vsregs/dout[11]} {DataGen.demodTop/vsregs/dout[12]} {DataGen.demodTop/vsregs/dout[13]} {DataGen.demodTop/vsregs/dout[14]} {DataGen.demodTop/vsregs/dout[15]} {DataGen.demodTop/vsregs/dout[16]} {DataGen.demodTop/vsregs/dout[17]} {DataGen.demodTop/vsregs/dout[18]} {DataGen.demodTop/vsregs/dout[19]} {DataGen.demodTop/vsregs/dout[20]} {DataGen.demodTop/vsregs/dout[21]} {DataGen.demodTop/vsregs/dout[22]} {DataGen.demodTop/vsregs/dout[23]} {DataGen.demodTop/vsregs/dout[24]} {DataGen.demodTop/vsregs/dout[25]} {DataGen.demodTop/vsregs/dout[26]} {DataGen.demodTop/vsregs/dout[27]} {DataGen.demodTop/vsregs/dout[28]} {DataGen.demodTop/vsregs/dout[29]} {DataGen.demodTop/vsregs/dout[30]} {DataGen.demodTop/vsregs/dout[31]}]]
 create_debug_port u_ila_0 probe
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe21]
-set_property port_width 1 [get_debug_ports u_ila_0/probe21]
-connect_debug_port u_ila_0/probe21 [get_nets [list {NoisyI_reg[-_n_0_1]}]]
+set_property port_width 3 [get_debug_ports u_ila_0/probe21]
+connect_debug_port u_ila_0/probe21 [get_nets [list {DataGen.demodTop/vsregs/vid0Select[0]} {DataGen.demodTop/vsregs/vid0Select[1]} {DataGen.demodTop/vsregs/vid0Select[2]}]]
 create_debug_port u_ila_0 probe
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe22]
-set_property port_width 1 [get_debug_ports u_ila_0/probe22]
-connect_debug_port u_ila_0/probe22 [get_nets [list {NoisyI_reg[-_n_0_2]}]]
+set_property port_width 3 [get_debug_ports u_ila_0/probe22]
+connect_debug_port u_ila_0/probe22 [get_nets [list {DataGen.demodTop/vsregs/vid2Select[0]} {DataGen.demodTop/vsregs/vid2Select[1]} {DataGen.demodTop/vsregs/vid2Select[2]}]]
 create_debug_port u_ila_0 probe
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe23]
-set_property port_width 1 [get_debug_ports u_ila_0/probe23]
-connect_debug_port u_ila_0/probe23 [get_nets [list {NoisyI_reg[-_n_0_3]}]]
+set_property port_width 3 [get_debug_ports u_ila_0/probe23]
+connect_debug_port u_ila_0/probe23 [get_nets [list {DataGen.demodTop/vsregs/vid1Select[0]} {DataGen.demodTop/vsregs/vid1Select[1]} {DataGen.demodTop/vsregs/vid1Select[2]}]]
 create_debug_port u_ila_0 probe
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe24]
-set_property port_width 1 [get_debug_ports u_ila_0/probe24]
-connect_debug_port u_ila_0/probe24 [get_nets [list {NoisyI_reg[-_n_0_4]}]]
+set_property port_width 3 [get_debug_ports u_ila_0/probe24]
+connect_debug_port u_ila_0/probe24 [get_nets [list {DataGen.demodTop/vsregs/vid3Select[0]} {DataGen.demodTop/vsregs/vid3Select[1]} {DataGen.demodTop/vsregs/vid3Select[2]}]]
 create_debug_port u_ila_0 probe
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe25]
 set_property port_width 1 [get_debug_ports u_ila_0/probe25]
-connect_debug_port u_ila_0/probe25 [get_nets [list {NoisyI_reg[-_n_0_5]}]]
+connect_debug_port u_ila_0/probe25 [get_nets [list DataGen.demodTop/amDataEn]]
 create_debug_port u_ila_0 probe
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe26]
 set_property port_width 1 [get_debug_ports u_ila_0/probe26]
-connect_debug_port u_ila_0/probe26 [get_nets [list {NoisyI_reg[-_n_0_6]}]]
+connect_debug_port u_ila_0/probe26 [get_nets [list ch3ClkOut_OBUF]]
 create_debug_port u_ila_0 probe
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe27]
 set_property port_width 1 [get_debug_ports u_ila_0/probe27]
-connect_debug_port u_ila_0/probe27 [get_nets [list {NoisyI_reg[-_n_0_7]}]]
+connect_debug_port u_ila_0/probe27 [get_nets [list ch3DataOut_OBUF]]
 create_debug_port u_ila_0 probe
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe28]
 set_property port_width 1 [get_debug_ports u_ila_0/probe28]
-connect_debug_port u_ila_0/probe28 [get_nets [list {NoisyI_reg[-_n_0_8]}]]
+connect_debug_port u_ila_0/probe28 [get_nets [list DataGen.demodTop/vsregs/cs]]
 create_debug_port u_ila_0 probe
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe29]
 set_property port_width 1 [get_debug_ports u_ila_0/probe29]
-connect_debug_port u_ila_0/probe29 [get_nets [list {NoisyI_reg[-_n_0_9]}]]
+connect_debug_port u_ila_0/probe29 [get_nets [list {NoisyI_reg[-_n_0_1]}]]
 create_debug_port u_ila_0 probe
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe30]
 set_property port_width 1 [get_debug_ports u_ila_0/probe30]
-connect_debug_port u_ila_0/probe30 [get_nets [list {NoisyI_reg[-_n_0_10]}]]
+connect_debug_port u_ila_0/probe30 [get_nets [list {NoisyI_reg[-_n_0_2]}]]
 create_debug_port u_ila_0 probe
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe31]
 set_property port_width 1 [get_debug_ports u_ila_0/probe31]
-connect_debug_port u_ila_0/probe31 [get_nets [list {NoisyI_reg[-_n_0_11]}]]
+connect_debug_port u_ila_0/probe31 [get_nets [list {NoisyI_reg[-_n_0_3]}]]
 create_debug_port u_ila_0 probe
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe32]
 set_property port_width 1 [get_debug_ports u_ila_0/probe32]
-connect_debug_port u_ila_0/probe32 [get_nets [list {NoisyI_reg[-_n_0_12]}]]
+connect_debug_port u_ila_0/probe32 [get_nets [list {NoisyI_reg[-_n_0_4]}]]
 create_debug_port u_ila_0 probe
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe33]
 set_property port_width 1 [get_debug_ports u_ila_0/probe33]
-connect_debug_port u_ila_0/probe33 [get_nets [list {NoisyI_reg[-_n_0_13]}]]
+connect_debug_port u_ila_0/probe33 [get_nets [list {NoisyI_reg[-_n_0_5]}]]
 create_debug_port u_ila_0 probe
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe34]
 set_property port_width 1 [get_debug_ports u_ila_0/probe34]
-connect_debug_port u_ila_0/probe34 [get_nets [list {NoisyI_reg_n_0_[0]}]]
+connect_debug_port u_ila_0/probe34 [get_nets [list {NoisyI_reg[-_n_0_6]}]]
 create_debug_port u_ila_0 probe
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe35]
 set_property port_width 1 [get_debug_ports u_ila_0/probe35]
-connect_debug_port u_ila_0/probe35 [get_nets [list {NoisyQ_reg[-_n_0_1]}]]
+connect_debug_port u_ila_0/probe35 [get_nets [list {NoisyI_reg[-_n_0_7]}]]
 create_debug_port u_ila_0 probe
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe36]
 set_property port_width 1 [get_debug_ports u_ila_0/probe36]
-connect_debug_port u_ila_0/probe36 [get_nets [list {NoisyQ_reg[-_n_0_2]}]]
+connect_debug_port u_ila_0/probe36 [get_nets [list {NoisyI_reg[-_n_0_8]}]]
 create_debug_port u_ila_0 probe
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe37]
 set_property port_width 1 [get_debug_ports u_ila_0/probe37]
-connect_debug_port u_ila_0/probe37 [get_nets [list {NoisyQ_reg[-_n_0_3]}]]
+connect_debug_port u_ila_0/probe37 [get_nets [list {NoisyI_reg[-_n_0_9]}]]
 create_debug_port u_ila_0 probe
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe38]
 set_property port_width 1 [get_debug_ports u_ila_0/probe38]
-connect_debug_port u_ila_0/probe38 [get_nets [list {NoisyQ_reg[-_n_0_4]}]]
+connect_debug_port u_ila_0/probe38 [get_nets [list {NoisyI_reg[-_n_0_10]}]]
 create_debug_port u_ila_0 probe
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe39]
 set_property port_width 1 [get_debug_ports u_ila_0/probe39]
-connect_debug_port u_ila_0/probe39 [get_nets [list {NoisyQ_reg[-_n_0_5]}]]
+connect_debug_port u_ila_0/probe39 [get_nets [list {NoisyI_reg[-_n_0_11]}]]
 create_debug_port u_ila_0 probe
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe40]
 set_property port_width 1 [get_debug_ports u_ila_0/probe40]
-connect_debug_port u_ila_0/probe40 [get_nets [list {NoisyQ_reg[-_n_0_6]}]]
+connect_debug_port u_ila_0/probe40 [get_nets [list {NoisyI_reg[-_n_0_12]}]]
 create_debug_port u_ila_0 probe
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe41]
 set_property port_width 1 [get_debug_ports u_ila_0/probe41]
-connect_debug_port u_ila_0/probe41 [get_nets [list {NoisyQ_reg[-_n_0_7]}]]
+connect_debug_port u_ila_0/probe41 [get_nets [list {NoisyI_reg[-_n_0_13]}]]
 create_debug_port u_ila_0 probe
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe42]
 set_property port_width 1 [get_debug_ports u_ila_0/probe42]
-connect_debug_port u_ila_0/probe42 [get_nets [list {NoisyQ_reg[-_n_0_8]}]]
+connect_debug_port u_ila_0/probe42 [get_nets [list {NoisyI_reg_n_0_[0]}]]
 create_debug_port u_ila_0 probe
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe43]
 set_property port_width 1 [get_debug_ports u_ila_0/probe43]
-connect_debug_port u_ila_0/probe43 [get_nets [list {NoisyQ_reg[-_n_0_9]}]]
+connect_debug_port u_ila_0/probe43 [get_nets [list {NoisyQ_reg[-_n_0_1]}]]
 create_debug_port u_ila_0 probe
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe44]
 set_property port_width 1 [get_debug_ports u_ila_0/probe44]
-connect_debug_port u_ila_0/probe44 [get_nets [list {NoisyQ_reg[-_n_0_10]}]]
+connect_debug_port u_ila_0/probe44 [get_nets [list {NoisyQ_reg[-_n_0_2]}]]
 create_debug_port u_ila_0 probe
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe45]
 set_property port_width 1 [get_debug_ports u_ila_0/probe45]
-connect_debug_port u_ila_0/probe45 [get_nets [list {NoisyQ_reg[-_n_0_11]}]]
+connect_debug_port u_ila_0/probe45 [get_nets [list {NoisyQ_reg[-_n_0_3]}]]
 create_debug_port u_ila_0 probe
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe46]
 set_property port_width 1 [get_debug_ports u_ila_0/probe46]
-connect_debug_port u_ila_0/probe46 [get_nets [list {NoisyQ_reg[-_n_0_12]}]]
+connect_debug_port u_ila_0/probe46 [get_nets [list {NoisyQ_reg[-_n_0_4]}]]
 create_debug_port u_ila_0 probe
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe47]
 set_property port_width 1 [get_debug_ports u_ila_0/probe47]
-connect_debug_port u_ila_0/probe47 [get_nets [list {NoisyQ_reg[-_n_0_13]}]]
+connect_debug_port u_ila_0/probe47 [get_nets [list {NoisyQ_reg[-_n_0_5]}]]
 create_debug_port u_ila_0 probe
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe48]
 set_property port_width 1 [get_debug_ports u_ila_0/probe48]
-connect_debug_port u_ila_0/probe48 [get_nets [list {NoisyQ_reg_n_0_[0]}]]
+connect_debug_port u_ila_0/probe48 [get_nets [list {NoisyQ_reg[-_n_0_6]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe49]
+set_property port_width 1 [get_debug_ports u_ila_0/probe49]
+connect_debug_port u_ila_0/probe49 [get_nets [list {NoisyQ_reg[-_n_0_7]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe50]
+set_property port_width 1 [get_debug_ports u_ila_0/probe50]
+connect_debug_port u_ila_0/probe50 [get_nets [list {NoisyQ_reg[-_n_0_8]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe51]
+set_property port_width 1 [get_debug_ports u_ila_0/probe51]
+connect_debug_port u_ila_0/probe51 [get_nets [list {NoisyQ_reg[-_n_0_9]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe52]
+set_property port_width 1 [get_debug_ports u_ila_0/probe52]
+connect_debug_port u_ila_0/probe52 [get_nets [list {NoisyQ_reg[-_n_0_10]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe53]
+set_property port_width 1 [get_debug_ports u_ila_0/probe53]
+connect_debug_port u_ila_0/probe53 [get_nets [list {NoisyQ_reg[-_n_0_11]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe54]
+set_property port_width 1 [get_debug_ports u_ila_0/probe54]
+connect_debug_port u_ila_0/probe54 [get_nets [list {NoisyQ_reg[-_n_0_12]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe55]
+set_property port_width 1 [get_debug_ports u_ila_0/probe55]
+connect_debug_port u_ila_0/probe55 [get_nets [list {NoisyQ_reg[-_n_0_13]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe56]
+set_property port_width 1 [get_debug_ports u_ila_0/probe56]
+connect_debug_port u_ila_0/probe56 [get_nets [list {NoisyQ_reg_n_0_[0]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe57]
+set_property port_width 1 [get_debug_ports u_ila_0/probe57]
+connect_debug_port u_ila_0/probe57 [get_nets [list DataGen.demodTop/vsregs/wr0]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe58]
+set_property port_width 1 [get_debug_ports u_ila_0/probe58]
+connect_debug_port u_ila_0/probe58 [get_nets [list DataGen.demodTop/vsregs/wr1]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe59]
+set_property port_width 1 [get_debug_ports u_ila_0/probe59]
+connect_debug_port u_ila_0/probe59 [get_nets [list DataGen.demodTop/vsregs/wr2]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe60]
+set_property port_width 1 [get_debug_ports u_ila_0/probe60]
+connect_debug_port u_ila_0/probe60 [get_nets [list DataGen.demodTop/vsregs/wr3]]
 set_property C_CLK_INPUT_FREQ_HZ 300000000 [get_debug_cores dbg_hub]
 set_property C_ENABLE_CLK_DIVIDER false [get_debug_cores dbg_hub]
 set_property C_USER_SCAN_CHAIN 1 [get_debug_cores dbg_hub]

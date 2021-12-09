@@ -5,22 +5,23 @@ This source code is the Intellectual Property of Koos Technical Services,Inc.
 (KTS) and is provided under a License Agreement which protects KTS' ownership and
 derivative rights in exchange for negotiated compensation.
 ******************************************************************************/
-
+// Modified for 3 bit switch options. FZ 12-7-21
+//  0  Vid3[2:0] 0 Vid2[2:0] 0 Vid1[2:0] 0 Vid0[2:0]
 `timescale 1ns/10ps
 
 `include "addressMap.v"
 
 module vidSwitchRegs(
     input               busClk,
-    input       [12:0]  addr,
-    input       [31:0]  din,
-    output  reg [31:0]  dout,
-    input               cs,
-    input               wr0, wr1, wr2, wr3,
-    output  reg [1:0]   vid0Select,
-    output  reg [1:0]   vid1Select,
-    output  reg [1:0]   vid2Select,
-    output  reg [1:0]   vid3Select
+   (* MARK_DEBUG="true" *)    input       [12:0]  addr,
+   (* MARK_DEBUG="true" *)    input       [31:0]  din,
+   (* MARK_DEBUG="true" *)    output  reg [31:0]  dout,
+   (* MARK_DEBUG="true" *)    input               cs,
+   (* MARK_DEBUG="true" *)    input               wr0, wr1, wr2, wr3,
+   (* MARK_DEBUG="true" *)    output  reg [2:0]   vid0Select,
+   (* MARK_DEBUG="true" *)    output  reg [2:0]   vid1Select,
+   (* MARK_DEBUG="true" *)    output  reg [2:0]   vid2Select,
+   (* MARK_DEBUG="true" *)    output  reg [2:0]   vid3Select
 );
 
     parameter RegSpace = `VIDSWITCHSPACE;
@@ -40,8 +41,8 @@ module vidSwitchRegs(
         if (vsSpace && wr0) begin
             casex (addr)
                 `VIDSWITCH_CONTROL:   begin
-                    vid0Select <= din[1:0];
-                    vid1Select <= din[5:4];
+                    vid0Select <= din[2:0];
+                    vid1Select <= din[6:4];
                 end
                 default: ;
             endcase
@@ -49,8 +50,8 @@ module vidSwitchRegs(
         if (vsSpace && wr1) begin
             casex (addr)
                 `VIDSWITCH_CONTROL:   begin
-                    vid2Select <= din[9:8];
-                    vid3Select <= din[13:12];
+                    vid2Select <= din[10:8];
+                    vid3Select <= din[14:12];
                 end
                 default: ;
             endcase
@@ -63,8 +64,8 @@ module vidSwitchRegs(
                 `VIDSWITCH_CONTROL: begin
                     dout = {
                         16'b0,
-                        2'b0,vid3Select,2'b0,vid2Select,
-                        2'b0,vid1Select,2'b0,vid0Select
+                        1'b0,vid3Select,1'b0,vid2Select,
+                        1'b0,vid1Select,1'b0,vid0Select
                     };
                 end
                 default: begin
