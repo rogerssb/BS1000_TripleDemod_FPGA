@@ -379,6 +379,7 @@ ARCHITECTURE rtl OF DemodSerDesTop IS
       );
    END COMPONENT DualAgc;
 
+
    -- Constants
    constant Plus1             : Float_1_18 := to_sfixed( 0.707 / 2.0, 0, -17);
    constant Neg1              : Float_1_18 := to_sfixed(-0.707 / 2.0, 0, -17);
@@ -544,7 +545,7 @@ ClkGen : if (in_simulation) generate
    Delay_process: process (ClkOver2)
    begin
       if (rising_edge(ClkOver2)) then
-         DataRate   <= DataRate + 1 when (DataRate < 9) else 0;
+         DataRate   <= DataRate + 1 when (DataRate < 90) else 0;
          if (DataRate = 0) then
             PrnEn   <= '1';
             case (Mode) is

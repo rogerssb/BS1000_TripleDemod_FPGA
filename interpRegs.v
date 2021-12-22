@@ -28,7 +28,8 @@ module interpRegs(
     output  reg         [4:0]   cicExponent,
     output  reg         [17:0]  cicMantissa,
     output  reg         [4:0]   gainExponent,
-    output  reg         [15:0]  gainMantissa
+    output  reg         [15:0]  gainMantissa,
+    output  reg         [3:0]   timeConstant
 );
 
     `ifdef USE_BUS_CLOCK
@@ -61,7 +62,10 @@ module interpRegs(
         if (cs) begin
     `endif
             casex (addr)
-                `INTERP_CONTROL:        source <= dataIn[11:8];
+                `INTERP_CONTROL: begin
+                                        timeConstant <= dataIn[15:12];
+                                        source <= dataIn[11:8];
+                end
                 `INTERP_CIC_MANTISSA:   cicMantissa[15:8] <= dataIn[15:8];
                 `INTERP_TEST:           testValue[15:8] <= dataIn[15:8];
                 default:  ;
@@ -103,7 +107,7 @@ module interpRegs(
     always @* begin
         if (cs) begin
             casex (addr)
-                `INTERP_CONTROL:        dataOut = {gainMantissa,4'h0,source,4'h0,bypassEQ,invert,test,bypass};
+                `INTERP_CONTROL:        dataOut = {gainMantissa,timeConstant,source,4'h0,bypassEQ,invert,test,bypass};
                 `INTERP_GAIN_MANTISSA:  dataOut = {gainMantissa,4'h0,source,4'h0,bypassEQ,invert,test,bypass};
                 `INTERP_CIC_MANTISSA:   dataOut = {14'b0,cicMantissa};
                 `INTERP_CIC_EXPONENT:   dataOut = {11'b0,gainExponent,11'b0,cicExponent};

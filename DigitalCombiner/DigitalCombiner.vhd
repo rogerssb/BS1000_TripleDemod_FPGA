@@ -107,6 +107,7 @@ ARCHITECTURE rtl OF DigitalCombiner IS
          Clk,
          Clk4x,
          ce,
+         bestSource,
          Reset          : IN  std_logic;
          Re1In,
          Im1In,
@@ -149,6 +150,7 @@ ARCHITECTURE rtl OF DigitalCombiner IS
          gainoutmin,
          phase_detect      : OUT SLV18;
          agc1_gt_agc2,
+         bestSource,
          realxord,
          imagxord,
          locked            : OUT STD_LOGIC;

@@ -59,6 +59,7 @@ module interpolate(
     wire            [15:0]  gainMantissa;
     wire            [4:0]   gainExponent;
     wire            [31:0]  interpDout;
+    wire            [3:0]   timeConstant;
     interpRegs regs  (
         `ifdef USE_BUS_CLOCK
         .busClk(busClk),
@@ -77,7 +78,8 @@ module interpolate(
         .cicExponent(cicExponent),
         .cicMantissa(cicMantissa),
         .gainExponent(gainExponent),
-        .gainMantissa(gainMantissa)
+        .gainMantissa(gainMantissa),
+        .timeConstant(timeConstant)
     );
 
     reg     signed  [17:0]  invertIn;
@@ -254,6 +256,7 @@ module interpolate(
         end
     end
 
+    wire [17:0] vgaData;
     `define USE_VGAIN
     `ifdef USE_VGAIN
     wire    signed  [47:0]  vgInput = {{16{muxOut[17]}},muxOut,14'b0};
@@ -262,11 +265,21 @@ module interpolate(
         .exponent(gainExponent),
         .mantissa(gainMantissa),
         .din(vgInput),
-        .dout(dataOut)
+        .dout(vgaData)
     );
     `else
-    assign dataOut = muxOut;
+    assign vgaData = muxOut;
     `endif
+
+
+    AC_Couple #(.OFFSET(4)) ACcouple (
+      .clk            (clk),
+      .reset          (reset),
+      .ce             (1'b1),
+      .timeConstant   (timeConstant),
+      .datain         (vgaData),
+      .dataOut        (dataOut)
+   );
 
     `ifdef SIMULATE
     real expAdjReal;
