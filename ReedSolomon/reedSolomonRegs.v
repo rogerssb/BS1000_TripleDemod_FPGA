@@ -1,13 +1,21 @@
-//                                 31        24     23        12    11          4   3             1    0
-// Reed Solomon Control Register   FailCnt[7:0]     ErrCnt[11:0]    FrameCnt[7:0]   Interleave[2:0]    R_Index
-// The RS Decoder can do either (255,223) or (255,239) by setting R_Index to 1 or 0
-// Interleave can be 1 to 5
-// FailCnt and ErrCnt will accumulate errors until read, which resets them to 0
-// FrameCnt keeps track of the number of frames between reads so WERs can be calculated
+/*  Per CCSDS 131.0-B-3 the managed parameters for Reed Solomon consists of:
+    Error Correction Capability (E symbols)     8, 16 yielding RS(255,239) and RS(255,223)
+    Interleaving Depths                         1,2, 3, 4, 5, 8
+    Virtual Fill Length (Q symbols)             Integer 0 to 222
 
+                                    15:8        7:4                 0:0
+    Reed Solomon Control Register   Fill[7:0]   Interleave[3:0]     R_Index
+
+                                    31:24           23:16           15:0
+    Reed Solomon Status Register    FailCnt[7:0]    FrameCnt[7:0]   ErrCnt[15:0]
+    The RS Decoder can do either (255,223) or (255,239) by setting R_Index to 1 or 0
+    FailCnt and ErrCnt will accumulate errors until read, which resets them to 0
+    FrameCnt keeps track of the number of frames between reads so WERs can be calculated
+*/
 `timescale 1ns/10ps
 `ifndef RS_CONTROL
 `define RS_CONTROL         5'b0_00xx
+`define RS_STATUS          5'b0_01xx
 `endif
 
 module reedSolomonRegs(
@@ -20,10 +28,10 @@ module reedSolomonRegs(
     input               wr0, wr1, wr2, wr3,
     input       [7:0]   errors,
     input               fail, tlast,
-    output  reg [3:0]   control = 4'b0010
+    output  reg [15:0]  control = 16'h0010
 );
      reg    [7:0]   failCnt, frameCnt;
-     reg    [11:0]  errCnt;
+     reg    [15:0]  errCnt;
      reg            csDly;
 
      always @(posedge rsClk) begin
@@ -34,18 +42,28 @@ module reedSolomonRegs(
             errCnt      <= 0;
         end
         else if (tlast) begin
-            if (fail) begin
+            if ((fail == 1'b1) && (failCnt < 255)) begin // saturate the counters to prevent overflow
                 failCnt <= failCnt + 1;
             end
-            frameCnt <= frameCnt + 1;
-            errCnt   <= errCnt + errors;
+            if (frameCnt < 255) begin
+                frameCnt <= frameCnt + 1;
+            end
+            if (errCnt < 6) begin
+                errCnt   <= errCnt + errors;
+            end
         end
      end
 
     always @(posedge busClk) begin
         if (cs && wr0) begin
             casex (addr)
-                `RS_CONTROL:         control  <= dataIn[3:0];
+                `RS_CONTROL:         control[7:0]  <= dataIn[7:0];
+                default: ;
+            endcase
+        end
+        if (cs && wr1) begin
+            casex (addr)
+                `RS_CONTROL:         control[15:8]  <= dataIn[15:8];
                 default: ;
             endcase
         end
@@ -54,7 +72,8 @@ module reedSolomonRegs(
     always @* begin
         if (cs) begin
             casex (addr)
-                `RS_CONTROL:        dataOut = {failCnt, errCnt, frameCnt, control};
+                `RS_CONTROL:        dataOut = {16'b0, control};
+                `RS_STATUS:         dataOut = {failCnt, frameCnt, errCnt};
                 default:            dataOut = 32'b0;
             endcase
         end
