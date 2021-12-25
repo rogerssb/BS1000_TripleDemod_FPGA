@@ -51,7 +51,7 @@ architecture rtl of RS_ASM_tb is
       Valid          : IN  std_logic;
       DataIn         : IN  std_logic_vector(DATA_WIDTH-1 downto 0);  -- soft decision bit sync output
       Depth          : IN  std_logic_vector(3 downto 0);
-      BitSlips       : IN  std_logic_vector(1 downto 0);
+      BitSlips       : IN  std_logic_vector(2 downto 0);
       IL_BET,                                             -- In Lock Bit Error Threshold. Allowed number of invalid bits
       OOL_BET,                                            -- Out of Lock Bit Error Threshold.
       Verifies,                                           -- number of valid frames before lock declared
@@ -79,7 +79,7 @@ architecture rtl of RS_ASM_tb is
       );
    END COMPONENT gng;
 
-   type  tb_mode_t  is (SYNCING, INVERTED, FLYWHEEL, RESYNC);
+   type  tb_mode_t  is (SYNCING, INVERTED, FLYWHEEL, RESYNC, BIT_SLIP);
    type  asm_mode_t is (SEARCHING, VERIFY, LOCK, FLYWHEEL);
 
    constant SYNC_SIZE      : integer :=32;
@@ -87,6 +87,12 @@ architecture rtl of RS_ASM_tb is
    constant Depth          : integer := 1;   -- 1, 2, 3, 4, 5 or 8
    constant BitSlip        : integer := 3;  -- -3 to 3
    constant SIGNAL_AMP     : real := 32768.0;
+
+   constant BitSlips       : std_logic_vector(2 downto 0) := 3x"3";
+   constant IL_BET         : std_logic_vector(4 downto 0) := 5x"04";
+   constant OOL_BET        : std_logic_vector(4 downto 0) := 5x"04";     -- this sync word is shorter than turbo so needs less BET
+   constant Verifies       : std_logic_vector(4 downto 0) := 5x"3";
+   constant FlyWheels      : std_logic_vector(4 downto 0) := 5x"4";
 
    signal   Mode_tb     : tb_mode_t := SYNCING;
    signal   ModeAsm     : asm_mode_t;
@@ -155,6 +161,16 @@ begin
                   elsif (FrameCnt = 22) then
                      Mode_tb     <= RESYNC;
                      SyncPattern <= SYNC;
+                  elsif (FrameCnt = 28) then
+                     Mode_tb     <= BIT_SLIP;
+                     OutCntr     <= to_signed(2, OutCntr);
+                     SyncPattern <= SYNC;
+                  elsif (FrameCnt = 31) then
+                     OutCntr     <= to_signed(3, OutCntr);
+                  elsif (FrameCnt = 35) then
+                     OutCntr     <= to_signed(-3, OutCntr);
+                  elsif (FrameCnt = 38) then
+                     OutCntr     <= to_signed(-4, OutCntr);
                   end if;
                end if;
                DataIn  <= to_sfixed(SIGNAL_AMP*2.0, DataIn)  when SyncPattern(BitCntr) else to_sfixed(-SIGNAL_AMP*2.0, DataIn);
@@ -223,11 +239,11 @@ begin
          Valid       => ValidData(3),
          DataIn      => to_slv(Sum),
          Depth       => std_logic_vector(to_unsigned(Depth,4)),
-         BitSlips    => 2x"3",
-         IL_BET      => 5x"04",
-         OOL_BET     => 5x"04",
-         Verifies    => 5x"3",
-         FlyWheels   => 5x"4",
+         BitSlips    => BitSlips,
+         IL_BET      => IL_BET,
+         OOL_BET     => OOL_BET,
+         Verifies    => Verifies,
+         FlyWheels   => FlyWheels,
          SyncOut     => SyncOut,
          SyncTime    => SyncTime,
          Invert      => Invert,

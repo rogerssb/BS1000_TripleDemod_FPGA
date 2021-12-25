@@ -48,7 +48,7 @@ ENTITY ReedSolomonASM IS
       Valid          : IN  std_logic;
       DataIn         : IN  std_logic_vector(DATA_WIDTH-1 downto 0);  -- soft decision bit sync output
       Depth          : IN  std_logic_vector(3 downto 0);
-      BitSlips       : IN  std_logic_vector(1 downto 0);  -- Bit Slips is the ±alignment slop between ASMs
+      BitSlips       : IN  std_logic_vector(2 downto 0);  -- Bit Slips is the ±alignment slop between ASMs
       IL_BET,                                             -- In Lock Bit Error Threshold. Allowed number of invalid bits
       OOL_BET,                                            -- Out of Lock Bit Error Threshold.
       Verifies,                                           -- number of valid frames before lock declared
@@ -160,12 +160,17 @@ BEGIN
                   MaxIndex <= 0;
                   MaxFound <= '0';
                   Index    <= 1;
+                  if (MaxCount > (SYNC_SIZE / 2) + BET * 2) then
+                     MaxCount <= MaxCount - BET;
+                  end if;
                elsif (Index > 0) and (Index <= 2 * BitSlips_u) then
                   Index <= Index + 1;
                else
                   Index <= 0;
                end if;
+
                TotalBits_v := MyMax(CountPos_v, CountNeg_v);
+
                if (TotalBits_v > MaxCount) then
                   MaxCount    <= TotalBits_v;
                   FrameLock   <= FrameCnt;
@@ -174,12 +179,8 @@ BEGIN
                   MaxFound    <= '1';
                else
                   CountGood_v := false;
-                  if (FrameCnt = BitSlips_u) then
-                     if (MaxCount > (SYNC_SIZE / 2) + BET * 2) then
-                        MaxCount <= MaxCount - BET;
-                     end if;
-                  end if;
                end if;
+
                CountGood    <= CountGood_v;
                TotalBits    <= TotalBits_v;
 
