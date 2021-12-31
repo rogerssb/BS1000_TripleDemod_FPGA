@@ -29,43 +29,103 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
-
+use work.semco_pkg.all;
 
 entity RS_DecoderTop is
    port (
-      aclk,
-      enc_in_tvalid,
-      dec_ctrl_tvalid,
-      dec_out_tready,
-      enc_in_tlast        : IN  std_logic;
-      dec_ctrl_tdata,
-      enc_in_tdata        : IN  std_logic_vector(7 downto 0);
-
-      enc_in_tready,
-      dec_missing,
-      dec_unexpected,
-      dec_tlast_missing,
-      dec_out_tvalid,
-      dec_out_tlast,
-      dec_stat_tvalid,
-      s_ctrl_tready,
-      dec_ctrl_tdata_invalid,
-      dec_stat_tready,
-      dec_tlast_unexpected  : OUT std_logic;
-      dec_out_tdata            : OUT std_logic_vector(7 downto 0);
-      dec_stat_tdata              : OUT std_logic_vector(31 downto 0)
+      clk,
+      ce,
+      reset,
+      busClk,
+      cs,
+      wr0,
+      wr1,
+      wr2,
+      wr3               : IN  STD_LOGIC;
+      addr              : IN  STD_LOGIC_VECTOR(12 downto 0);
+      din               : IN  SLV32;
+      dout              : OUT SLV32;
+      SymEn,
+      SymData           : IN  STD_LOGIC;
+      dac0Select,
+      dac1Select,
+      dac2Select        : IN  SLV4;
+      dac0ClkEn,
+      dac1ClkEn,
+      dac2ClkEn         : OUT STD_LOGIC;
+      dac0Data,
+      dac1Data,
+      dac2Data          : OUT SLV18;
+      rsDecBitEnOut,
+      rsDecBitOut       : OUT STD_LOGIC
    );
 end RS_DecoderTop;
 
 architecture rtl of RS_DecoderTop is
 
-   COMPONENT rs_encoder_CCSDS       -- s_axis_ctrl = R_IN[13:8]  N_IN[7:0]. N_IN = 255, R_IN = 16 or 32
+   COMPONENT reedSolomonRegs
+      PORT (
+         rsClk
+         busClk,
+         cs,
+         wr0, wr1, wr2, wr3,
+         fail, tlast          : IN  std_logic;
+         addr                 : IN  std_logic_vector(4 downto 0);
+         errors               : IN  SLV8;
+         dataIn               : IN  SLV32;
+         dataOut,
+         ASM_Control          : OUT SLV32;
+         control              : OUT SLV16
+      );
+   END COMPONENT;
+
+   COMPONENT ReedSolomonASM IS
+   PORT (
+      Clk,
+      Reset,
+      Valid,
+      DataIn         : IN  std_logic;                    -- bit sync output
+      FrameLen       : IN  natural range 0 to 16383;     -- total bytes in the frame L=(255-2E-q)*I per CCSDS 131.0-B-3 11.5.3
+      BitSlips       : IN  std_logic_vector(2 downto 0);
+      IL_BET,                                             -- In Lock Bit Error Threshold. Allowed number of invalid bits
+      OOL_BET,                                            -- Out of Lock Bit Error Threshold.
+      Verifies,                                           -- number of valid frames before lock declared
+      FlyWheels      : IN  std_logic_vector(4 downto 0);  -- number of invalid frames before lock lossed
+      SyncOut,
+      SyncTime,
+      Invert,
+      ValidOut       : OUT std_logic;
+      DataOut        : OUT std_logic_vector(DATA_WIDTH-1 downto 0)  -- soft decision invert corrected data
+   );
+   END COMPONENT ReedSolomonASM;
+
+   COMPONENT interLeave
+      GENERIC(
+         DATA_WIDTH  : positive := 8;
+         MAX_WIDTH   : positive := 255;
+         MAX_DEPTH   : positive := 8
+      );
+      PORT(
+         clk,
+         reset,
+         ce,
+         validIn,       -- dataIn is valid
+         pack           : IN  std_logic;     -- pack or unpack
+         WidthSlv       : IN  std_logic_vector (7 downto 0);
+         DepthSlv       : IN  std_logic_vector (3 downto 0);
+         dataIn         : IN  std_logic_vector(DATA_WIDTH-1 downto 0);
+         readyOut       : OUT std_logic;     -- buffer is full and can be read
+         dataOut        : OUT std_logic_vector(DATA_WIDTH-1 downto 0)
+      );
+   END COMPONENT interLeave;
+
+   COMPONENT rs_decoder_CCSDS
       PORT (
          aclk                             : IN STD_LOGIC;
          s_axis_input_tdata               : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
          s_axis_input_tvalid              : IN STD_LOGIC;
-         s_axis_input_tready              : OUT STD_LOGIC;
          s_axis_input_tlast               : IN STD_LOGIC;
+         s_axis_input_tready              : OUT STD_LOGIC;
          s_axis_ctrl_tdata                : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
          s_axis_ctrl_tvalid               : IN STD_LOGIC;
          s_axis_ctrl_tready               : OUT STD_LOGIC;
@@ -73,43 +133,102 @@ architecture rtl of RS_DecoderTop is
          m_axis_output_tvalid             : OUT STD_LOGIC;
          m_axis_output_tready             : IN STD_LOGIC;
          m_axis_output_tlast              : OUT STD_LOGIC;
+         m_axis_stat_tdata                : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+         m_axis_stat_tvalid               : OUT STD_LOGIC;
+         m_axis_stat_tready               : IN STD_LOGIC;
          event_s_input_tlast_missing      : OUT STD_LOGIC;
          event_s_input_tlast_unexpected   : OUT STD_LOGIC;
          event_s_ctrl_tdata_invalid       : OUT STD_LOGIC
       );
    END COMPONENT;
 
-   COMPONENT rs_decoder_CCSDS
-      PORT (
-         aclk : IN STD_LOGIC;
-         s_axis_input_tdata : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
-         s_axis_input_tvalid : IN STD_LOGIC;
-         s_axis_input_tlast : IN STD_LOGIC;
-         s_axis_input_tready : OUT STD_LOGIC;
-         s_axis_ctrl_tdata : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
-         s_axis_ctrl_tvalid : IN STD_LOGIC;
-         s_axis_ctrl_tready : OUT STD_LOGIC;
-         m_axis_output_tdata : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
-         m_axis_output_tvalid : OUT STD_LOGIC;
-         m_axis_output_tready : IN STD_LOGIC;
-         m_axis_output_tlast : OUT STD_LOGIC;
-         m_axis_stat_tdata : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
-         m_axis_stat_tvalid : OUT STD_LOGIC;
-         m_axis_stat_tready : IN STD_LOGIC;
-         event_s_input_tlast_missing : OUT STD_LOGIC;
-         event_s_input_tlast_unexpected : OUT STD_LOGIC;
-         event_s_ctrl_tdata_invalid : OUT STD_LOGIC
-      );
-   END COMPONENT;
-
    signal   dec_tvalid,
             dec_tready,
-            enc_ctrl_tvalid,
-            dec_tlast       : std_logic;
-   signal   dec_tdata,
-            enc_ctrl_tdata       : std_logic_vector(7 downto 0);
+            dec_missing,
+            dec_unexpected,
+            dec_tlast_missing,
+            dec_out_tvalid,
+            dec_out_tlast,
+            dec_stat_tvalid,
+            s_ctrl_tready,
+            dec_ctrl_tdata_invalid,
+            dec_stat_tready,
+            dec_tlast_unexpected,
+            dec_ctrl_tvalid,
+            dec_out_tready,
+            dec_tlastn
+            fail,
+            tlast                      : std_logic;
+   signal   WidthSlv,
+            ASM_Data,
+            dec_tdata,
+            dec_ctrl_tdata,
+            dec_out_tdata,
+            errors                     : SLV8;
+   signal   dec_stat_tdata,
+            ASM_Control                : SLV32;
+   signal   control                    : SLV16;
+   signal   DepthSlv       : SLV4;
 
 begin
+
+   RSregs : reedSolomonRegs
+      PORT MAP(
+         rsClk          => Clk,
+         busClk         => busClk,
+         cs             => cs,
+         wr0            => wr0,
+         wr1            => wr1,
+         wr2            => wr2,
+         wr3            => wr3,
+         fail           => fail,
+         tlast          => tlast,
+         addr           => addr(5downto0),
+         errors         => errors,
+         dataIn         => din,
+         dataOut        => dout,
+         ASM_Control    => ASM_Control,
+         FrameLen       => FrameLen,
+         control        => control
+      );
+
+   RS_Asm : ReedSolomonASM
+      PORT MAP (
+         Clk         => Clk,
+         Reset       => reset,
+         Valid       => BitEn,
+         DataIn      => BitData,
+         FrameLen    => FrameLen,
+         BitSlips    => ASM_Control( downto ),
+         IL_BET      => ASM_Control( downto ),
+         OOL_BET     => ASM_Control( downto ),
+         Verifies    => ASM_Control( downto ),
+         FlyWheels   => ASM_Control( downto ),
+         SyncOut     => SyncOut,
+         SyncTime    => SyncTime,
+         Invert      => Invert,
+         DataOut     => ASM_Data,
+         ValidOut    => ASM_Valid
+   );
+
+   interleaver : interLeave
+      GENERIC MAP(
+         DATA_WIDTH  => 8,
+         MAX_WIDTH   => 255,
+         MAX_DEPTH   => 8
+      )
+      PORT MAP(
+         clk            => clk,
+         reset          => reset,
+         ce             => ce,
+         validIn        => ASM_valid,
+         pack           => '0',
+         WidthSlv       => WidthSlv,
+         DepthSlv       => DepthSlv,
+         dataIn         => ASM_Data,
+         readyOut       => interLeaveOut,
+         dataOut        => interLeaveOut
+      );
 
    myRS_Decoder : rs_decoder_CCSDS
       PORT MAP (

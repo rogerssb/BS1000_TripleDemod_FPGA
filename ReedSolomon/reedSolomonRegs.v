@@ -13,10 +13,10 @@
     FrameCnt keeps track of the number of frames between reads so WERs can be calculated
 */
 `timescale 1ns/10ps
-`ifndef RS_CONTROL
-`define RS_CONTROL         5'b0_00xx
-`define RS_STATUS          5'b0_01xx
-`define RS_ASM_CONTROL     5'b0_10xx
+`ifndef RS_DEC_CONTROL
+`define RS_DEC_CONTROL         5'b0_00xx
+`define RS_DEC_STATUS          5'b0_01xx
+`define RS_DEC_ASM_CONTROL     5'b0_10xx
 `endif
 
 module reedSolomonRegs(
@@ -32,6 +32,7 @@ module reedSolomonRegs(
     output  reg [31:0]  ASM_Control,
     output  reg [15:0]  control = 16'h0010
 );
+
      reg    [7:0]   failCnt, frameCnt;
      reg    [15:0]  errCnt;
      reg            csDly;
@@ -59,30 +60,30 @@ module reedSolomonRegs(
     always @(posedge busClk) begin
         if (cs && wr0) begin
             casex (addr)
-                `RS_CONTROL:         control[7:0]       <= dataIn[7:0];
-                `RS_ASM_CONTROL:     ASM_Control[7:0]   <= dataIn[7:0];
+                `RS_DEC_CONTROL:         control[7:0]       <= dataIn[7:0];
+                `RS_DEC_ASM_CONTROL:     ASM_Control[7:0]   <= dataIn[7:0];
                 default: ;
             endcase
         end
 
         if (cs && wr1) begin
             casex (addr)
-                `RS_CONTROL:         control[15:8]      <= dataIn[15:8];
-                `RS_ASM_CONTROL:     ASM_Control[15:8]  <= dataIn[15:8];
+                `RS_DEC_CONTROL:         control[15:8]      <= dataIn[15:8];
+                `RS_DEC_ASM_CONTROL:     ASM_Control[15:8]  <= dataIn[15:8];
                 default: ;
             endcase
         end
 
         if (cs && wr2) begin
             casex (addr)
-                `RS_ASM_CONTROL:     ASM_Control[23:16] <= dataIn[23:16];
+                `RS_DEC_ASM_CONTROL:     ASM_Control[23:16] <= dataIn[23:16];
                 default: ;
             endcase
         end
 
         if (cs && wr3) begin
             casex (addr)
-                `RS_ASM_CONTROL:     ASM_Control[31:24] <= dataIn[31:24];
+                `RS_DEC_ASM_CONTROL:     ASM_Control[31:24] <= dataIn[31:24];
                 default: ;
             endcase
         end
@@ -91,9 +92,9 @@ module reedSolomonRegs(
     always @* begin
         if (cs) begin
             casex (addr)
-                `RS_CONTROL:        dataOut = {16'b0, control};
-                `RS_STATUS:         dataOut = {failCnt, frameCnt, errCnt};
-                `RS_ASM_CONTROL:    dataOut = ASM_Control;
+                `RS_DEC_CONTROL:        dataOut = {16'b0, control};
+                `RS_DEC_STATUS:         dataOut = {failCnt, frameCnt, errCnt};
+                `RS_DEC_ASM_CONTROL:    dataOut = ASM_Control;
                 default:            dataOut = 32'b0;
             endcase
         end

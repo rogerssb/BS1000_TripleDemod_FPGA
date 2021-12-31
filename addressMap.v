@@ -87,6 +87,7 @@
 `define ADD_SPI_GATEWAY
 `define ADD_BERT
 `define ADD_VITERBI
+`define ADD_RS_DEC
 `endif
 
 `ifdef LDPC_DEMOD
@@ -142,7 +143,7 @@
 `define ADD_TAU
 `endif
 
-`ifdef BITSYNC_BERT
+`ifdef BITSYNC_BERT         ///////////////////////////////////////////////////////////////////////////////// BITSYNC BER TOP LEVEL
 
 // Top level registers
 `define BITSYNC_BERT_SPACE  13'b0_00xx_000x_xxxx
@@ -473,6 +474,7 @@
         `define DEC_SRC_SC1             3'b010
         `define DEC_SRC_VITERBI         3'b011
         `define DEC_SRC_LDPC            3'b100
+        `define DEC_SRC_RS_DEC          3'b100      // uses the same decode as LDPC since they're mutually exclusive
         `define DEC_SRC_SBS             3'b101
         // These are used to define the PCM decoder modes and are
         // shared with the PN Generator which is not used in this build
@@ -521,6 +523,7 @@
         `define CandD_SRC_PNGEN         4'b0101
         `define CandD_SRC_FRAMER        4'b0101
         `define CandD_SRC_LDPC          4'b0110
+        `define CandD_SRC_RS_DEC        4'b0110      // uses the same decode as LDPC since they're mutually exclusive
         `define CandD_SRC_DQM           4'b0111
         `define CandD_SRC_DEC0_CH0      4'b1000
         `define CandD_SRC_DEC0_CH1      4'b1001
@@ -574,6 +577,7 @@
         `define DQM_SRC_STC         4'b0100
         `define DQM_SRC_PNGEN       4'b0101
         `define DQM_SRC_LDPC        4'b0110
+        `define DQM_SRC_RS_DEC      4'b0110      // uses the same decode as LDPC since they're mutually exclusive
         `define DQM_SRC_RSVD0       4'b0111
         `define DQM_SRC_DEC0_CH0    4'b1000
         `define DQM_SRC_DEC0_CH1    4'b1001
@@ -607,6 +611,7 @@
         `define BERT_SRC_STC         4'b0100
         `define BERT_SRC_VIT1        4'b0101
         `define BERT_SRC_LDPC        4'b0110
+        `define BERT_SRC_RS_DEC      4'b0110      // uses the same decode as LDPC since they're mutually exclusive
         `define BERT_SRC_RSVD0       4'b0111
         `define BERT_SRC_DEC0_CH0    4'b1000
         `define BERT_SRC_DEC0_CH1    4'b1001
@@ -654,6 +659,30 @@
     `define COMB_OPTIONS            13'bx_xxxx_xxx0_111x
     `define COMB_REF_LEVEL          13'bx_xxxx_xxx1_00xx
 
+// Reed Solomon Decoder subsystem registers start at x0C80
+`define RS_DEC_SPACE          13'b0_1100_010x_xxxx
+    `define RS_DEC_CONTROL            13'bx_xxxx_xxx0_00xx
+    `define RS_DEC_STATUS             13'bx_xxxx_xxx0_01xx
+    `define RS_DEC_ASM_CONTROL        13'bx_xxxx_xxx0_10xx
+    `define SOURCE_SELECT           13'bx_xxxx_x011_000x
+        `define RS_DEC_SRC_LEGACY_I    4'b0000
+        `define RS_DEC_SRC_LEGACY_Q    4'b0001
+        `define RS_DEC_SRC_PCMTRELLIS  4'b0010
+        `define RS_DEC_SRC_VIT0        4'b0011
+        `define RS_DEC_SRC_STC         4'b0100
+        `define RS_DEC_SRC_VIT1        4'b0101
+        `define RS_DEC_SRC_LDPC        4'b0110
+        `define RS_DEC_SRC_RSVD0       4'b0111
+        `define RS_DEC_SRC_DEC0_CH0    4'b1000
+        `define RS_DEC_SRC_DEC0_CH1    4'b1001
+        `define RS_DEC_SRC_DEC1_CH0    4'b1010
+        `define RS_DEC_SRC_DEC1_CH1    4'b1011
+        `define RS_DEC_SRC_DEC2_CH0    4'b1100
+        `define RS_DEC_SRC_DEC2_CH1    4'b1101
+        `define RS_DEC_SRC_DEC3_CH0    4'b1110
+        `define RS_DEC_SRC_DEC3_CH1    4'b1111
+
+
 // Framesync subsystem registers
 `define FRAMER_SPACE            13'b0_0111_100x_xxxx
     `define FRAMER_CONTROL          13'bx_xxxx_xxx0_00xx
@@ -668,6 +697,7 @@
         `define FRAMER_SRC_STC         4'b0100
         `define FRAMER_SRC_VIT1        4'b0101
         `define FRAMER_SRC_LDPC        4'b0110
+        `define FRAMER_SRC_RS_DEC      4'b0110      // uses the same decode as LDPC since they're mutually exclusive
         `define FRAMER_SRC_RSVD0       4'b0111
         `define FRAMER_SRC_DEC0_CH0    4'b1000
         `define FRAMER_SRC_DEC0_CH1    4'b1001
@@ -814,6 +844,7 @@
         `define CandD_SRC_STC           4'b0100
         `define CandD_SRC_PNGEN         4'b0101
         `define CandD_SRC_LDPC          4'b0110
+        `define CandD_SRC_RS_DEC        4'b0110      // uses the same decode as LDPC since they're mutually exclusive
         `define CandD_SRC_DQM           4'b0111
         `define CandD_SRC_DEC0_CH0      4'b1000
         `define CandD_SRC_DEC0_CH1      4'b1001
@@ -1081,6 +1112,7 @@
         `define DAC_SRC_SOQTRELLIS      5
         `define DAC_SRC_MULTIHTRELLIS   6
         `define DAC_SRC_LDPC            7
+        `define DAC_SRC_RS_DEC          7      // uses the same decode as LDPC since they're mutually exclusive
         `define DAC_SRC_STC             8
         `define DAC_SRC_SBS             9
 `define INTERP_GAIN_MANTISSA    13'bx_xxxx_xxxx_001x

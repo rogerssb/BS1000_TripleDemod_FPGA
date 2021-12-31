@@ -77,7 +77,7 @@ gng_lzd u_gng_lzd (
     .data_out(num_lzd)
 );
 
-always @ (posedge clk) begin
+always @ (posedge clk or negedge rstn) begin
     if (!rstn)
         num_lzd_r <= 6'd0;
     else
@@ -86,7 +86,7 @@ end
 
 
 // Get mask for value x
-always @ (posedge clk) begin
+always @ (posedge clk or negedge rstn) begin
     if (!rstn)
         mask <= 15'b111111111111111;
     else begin
@@ -125,6 +125,7 @@ assign addr = {num_lzd_r, offset};
 
 gng_coef u_gng_coef (
     .clk(clk),
+    .rstn(rstn),
     .addr(addr),
     .c0(c0),
     .c1(c1),
@@ -143,26 +144,49 @@ always @ (posedge clk) begin
 end
 
 always @ (posedge clk) begin
-    x_r1 <= x & mask;
-    x_r2 <= x_r1;
-    x_r3 <= x_r2;
-    x_r4 <= x_r3;
+    if (!rstn) begin
+        x_r1 <= 0;
+        x_r2 <= 0;
+        x_r3 <= 0;
+        x_r4 <= 0;
+    end
+    else begin
+        x_r1 <= x & mask;
+        x_r2 <= x_r1;
+        x_r3 <= x_r2;
+        x_r4 <= x_r3;
+    end
 end
 
 always @ (posedge clk) begin
-    c1_r1 <= c1;
+    if (!rstn)
+        c1_r1 <= 0;
+    else
+        c1_r1 <= c1;
 end
 
 always @ (posedge clk) begin
-    c0_r1 <= c0;
-    c0_r2 <= c0_r1;
-    c0_r3 <= c0_r2;
-    c0_r4 <= c0_r3;
-    c0_r5 <= c0_r4;
+    if (!rstn) begin
+        c0_r1 <= 0;
+        c0_r2 <= 0;
+        c0_r3 <= 0;
+        c0_r4 <= 0;
+        c0_r5 <= 0;
+    end
+    else begin
+        c0_r1 <= c0;
+        c0_r2 <= c0_r1;
+        c0_r3 <= c0_r2;
+        c0_r4 <= c0_r3;
+        c0_r5 <= c0_r4;
+    end
 end
 
 always @ (posedge clk) begin
-    sign_r <= {sign_r[7:0], data_in[0]};
+    if (!rstn)
+        sign_r <= 0;
+    else
+        sign_r <= {sign_r[7:0], data_in[0]};
 end
 
 always @ (posedge clk) begin
@@ -176,6 +200,7 @@ end
 // Polynomial interpolation of order 2
 gng_smul_16_18_sadd_37 u_gng_smul_16_18_sadd_37 (
     .clk(clk),
+    .rstn(rstn),
     .a({1'b0, x_r1}),
     .b({1'b0, c2}),
     .c({c1_r1, 19'd0}),
@@ -186,6 +211,7 @@ assign sum1_new = sum1[37:20];
 
 gng_smul_16_18 u_gng_smul_16_18 (
     .clk(clk),
+    .rstn(rstn),
     .a({1'b0, x_r4}),
     .b(sum1_new),
     .p(mul1)
@@ -194,11 +220,14 @@ gng_smul_16_18 u_gng_smul_16_18 (
 assign mul1_new = mul1[32:19];
 
 always @ (posedge clk) begin
-    sum2 <= $signed({1'b0, c0_r5}) + mul1_new;
-end
-
-always @ (posedge clk) begin
-    sum2_rnd <= sum2[17:3] + sum2[2];
+    if (!rstn) begin
+        sum2 <= 0;
+        sum2_rnd <= 0;
+    end
+    else begin
+        sum2 <= $signed({1'b0, c0_r5}) + mul1_new;
+        sum2_rnd <= sum2[17:3] + sum2[2];
+    end
 end
 
 

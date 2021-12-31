@@ -39,6 +39,7 @@
 module gng_coef (
     // System signals
     input clk,                    // system clock
+          rstn,
 
     // Data interface
     input [7:0] addr,             // read address
@@ -308,10 +309,17 @@ end
 
 
 // Output data
-always @ (posedge clk) begin
+always @ (posedge clk or negedge rstn) begin
+  if(!rstn) begin
+    c0 <= 0;
+    c1 <= 0;
+    c2 <= 0;
+  end
+  else begin
     c0 <= d[52:35];
     c1 <= d[34:17];
     c2 <= d[16:0];
+  end
 end
 
 

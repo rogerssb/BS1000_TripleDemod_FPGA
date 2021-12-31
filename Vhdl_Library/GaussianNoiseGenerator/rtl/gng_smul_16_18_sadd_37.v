@@ -1,11 +1,12 @@
 //------------------------------------------------------------------------------
 //
-// gng_smul_16_18.v
+// gng_smul_16_18_sadd_37.v
 //
 // This file is part of the Gaussian Noise Generator IP Core
 //
 // Description
-//     Signed multiplier 16-bit x 18-bit, delay 2 cycles.
+//     Signed multiplier 16-bit x 18-bit follows signed adder 37-bit,
+// delay 3 cycles¡£
 //
 //------------------------------------------------------------------------------
 //
@@ -36,31 +37,55 @@
 `timescale 1 ns / 1 ps
 
 
-module gng_smul_16_18 (
+module gng_smul_16_18_sadd_37 (
     // System signals
     input clk,                  // system clock
-
+          rstn,
     // Data interface
     input [15:0] a,             // multiplicand
     input [17:0] b,             // multiplicator
-    output [33:0] p             // result
+    input [36:0] c,             // adder
+    output [37:0] p             // result
 );
 
 // Behavioral model
 reg signed [15:0] a_reg;
 reg signed [17:0] b_reg;
+reg signed [36:0] c_reg;
 reg signed [33:0] prod;
+wire signed [37:0] sum;
+reg [37:0] result;
 
 always @ (posedge clk) begin
-    a_reg <= a;
-    b_reg <= b;
+    if (!rstn) begin
+        a_reg <= 0;
+        b_reg <= 0;
+        c_reg <= 0;
+    end
+    else begin
+        a_reg <= a;
+        b_reg <= b;
+        c_reg <= c;
+    end
 end
 
 always @ (posedge clk) begin
-    prod <= a_reg * b_reg;
+    if (!rstn)
+        prod <= 0;
+    else
+        prod <= a_reg * b_reg;
 end
 
-assign p = prod;
+assign sum = c_reg + prod;
+
+always @ (posedge clk) begin
+    if (!rstn)
+        result <= 0;
+    else
+        result <= sum;
+end
+
+assign p = result;
 
 
 endmodule
