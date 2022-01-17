@@ -17,8 +17,11 @@ Module Name: ReedSolomonASM.vhd
 Description: Attached Sync Marker Detector
 
 ARGUMENTS :
-   Fine the repeating 32 bit sync word. The distance between sync words is
-255 * 8 times the interleave depth.
+   Find the repeating 32 bit sync word. The distance between sync words is
+typically 255 * 8 times the interleave depth, but is set to FrameLen by the
+MCU due to shortening options.
+
+   The system acquires in simulation at -2.6dB SNR and losses lock at -3.5dB
 
 Dependencies:
 
@@ -50,6 +53,7 @@ ENTITY ReedSolomonASM IS
       OOL_BET,                                            -- Out of Lock Bit Error Threshold.
       Verifies,                                           -- number of valid frames before lock declared
       FlyWheels      : IN  std_logic_vector(4 downto 0);  -- number of invalid frames before lock lossed
+      tLast,
       SyncOut,
       Invert,
       SyncTime,
@@ -78,7 +82,7 @@ ARCHITECTURE rtl OF ReedSolomonASM IS
             FlyWheelCnt    : natural range 0 to SYNC_SIZE-1 := 0;
    signal   BET            : natural range 0 to 131 := 0;
    signal   FrameCnt,
-            FrameLock      : integer range -3 to FRAME_SIZE * 8;
+            FrameLock      : integer range -4 to FRAME_SIZE * 8;
    signal   CountPos,
             CountNeg,
             TotalBits,
@@ -92,7 +96,7 @@ ARCHITECTURE rtl OF ReedSolomonASM IS
    signal   ValidPipe,
             MaxFound       : std_logic := '0';
    signal   PackBytes      : SLV8;
-   signal   PackCntr       : unsigned(2 downto 0) := "000";
+   signal   PackCntr       : signed(3 downto 0) := "0000";
 
 BEGIN
 
@@ -107,6 +111,7 @@ BEGIN
                CountNeg_v,
                TotalBits_v       : natural range 0 to SYNC_SIZE;
       variable CountGood_v       : boolean := false;
+      variable Signed32          : signed(31 downto 0);
    begin
       if (rising_edge(Clk)) then
          if (Reset) then
@@ -131,7 +136,7 @@ BEGIN
             if (Valid) then
                if (FrameCnt = 29) then
                   SyncTime <= '1';
-               elsif ((FrameCnt = FrameLen - BET) or (FrameCnt = -BET)) then
+               elsif (FrameCnt = -BitSlips_u) then
                   SyncTime <= '0';
                end if;
                SyncDly     <= SyncDly(SyncDly'left - 1 downto 0) & SyncTime;
@@ -157,6 +162,8 @@ BEGIN
                   Index    <= 1;
                   if (MaxCount > (SYNC_SIZE / 2) + BET * 2) then
                      MaxCount <= MaxCount - BET;
+                  else
+                     MaxCount <= (SYNC_SIZE / 2) + BET * 2;
                   end if;
                elsif (Index > 0) and (Index <= 2 * BitSlips_u) then
                   Index <= Index + 1;
@@ -187,32 +194,34 @@ BEGIN
                      else
                         Invert <= '1';
                      end if;
-
-                     case (Mode) is
-                     when SEARCHING =>
-                        if (Verifies_u = 0) then
-                           Mode <= LOCK;
-                        else
-                           Mode <= VERIFY;
-                        end if;
-                        VerifyCnt <= Verifies_u;
-                     when VERIFY =>
-                        if (VerifyCnt > 0) then
-                           VerifyCnt <= VerifyCnt - 1;
-                        else
-                           Mode        <= LOCK;
-                           FlyWheelCnt <= 0;
-                        end if;
-                     when FLYWHEEL =>
-                        Mode <= LOCK;
-                     when others =>
-                     end case;
                   end if;
+
+                  case (Mode) is
+                  when SEARCHING =>
+                     if (Verifies_u = 0) then   -- go immediately to lock
+                        Mode <= LOCK;
+                     else
+                        Mode <= VERIFY;
+                     end if;
+                     FrameCnt <= FrameLen - BitSlips_u - 1; -- no ASM detected, Flywheel if locked, Search if Verifying
+                     VerifyCnt <= Verifies_u;
+                  when VERIFY =>
+                     if (VerifyCnt > 0) then
+                        VerifyCnt <= VerifyCnt - 1;
+                     else
+                        Mode        <= LOCK;
+                        FlyWheelCnt <= 0;
+                     end if;
+                  when FLYWHEEL =>
+                     Mode <= LOCK;
+                     FrameCnt <= FrameLen - BitSlips_u - 1; -- almost locked, recenter
+                  when others =>
+                  end case;
                else
                   if (FrameCnt > -BitSlips_u) then
                      FrameCnt <= FrameCnt - 1;
                   else
-                     if (MaxFound) then
+                     if ((MaxFound = '1') and (Mode /=SEARCHING)) then
                         FrameCnt <= FrameLen - BitSlips_u + MaxIndex - 4 - 1; -- ASM detected, account for bit slip
                      else
                         FrameCnt <= FrameLen - BitSlips_u - 1; -- no ASM detected, Flywheel if locked, Search if Verifying
@@ -236,10 +245,15 @@ BEGIN
             end if;
          end if;
 
-         if (SyncTime and SyncDly(2)) or (not SyncTime and SyncDly(1)) then
-            PackCntr <= "000";
+         if (SyncTime and SyncDly(2)) or (not SyncTime and SyncDly(2)) then
+            Signed32 := to_signed(FrameLock, Signed32);
+            PackCntr <= Signed32(3 downto 0);
          elsif (Valid) then
-            PackCntr <= PackCntr + 1;
+            if (PackCntr < 7) then
+               PackCntr <= PackCntr + 1;
+            else
+               PackCntr <= "0000";
+            end if;
          end if;
 
          if (Valid) then
@@ -253,6 +267,8 @@ BEGIN
          else
             ValidOut <= '0';
          end if;
+
+         tLast <= SyncDly ?= "001";
       end if;
    end process SearchProcess;
 

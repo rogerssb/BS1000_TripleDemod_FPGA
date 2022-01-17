@@ -34,6 +34,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+use ieee.math_real.all;
 use work.fixed_pkg.all;
 use work.semco_pkg.all;
 use std.env.stop;
@@ -57,6 +58,7 @@ architecture rtl of RS_ASM_tb is
          OOL_BET,                                            -- Out of Lock Bit Error Threshold.
          Verifies,                                           -- number of valid frames before lock declared
          FlyWheels      : IN  std_logic_vector(4 downto 0);  -- number of invalid frames before lock lossed
+         tLast,
          SyncOut,
          SyncTime,
          Invert,
@@ -84,7 +86,7 @@ architecture rtl of RS_ASM_tb is
    type  asm_mode_t is (SEARCHING, VERIFY, LOCK, FLYWHEEL);
 
    constant SYNC_SIZE      : integer :=32;
-   constant SYNC           : std_logic_vector(0 to SYNC_SIZE - 1)  := x"1acffc1d";
+   constant SYNC           : std_logic_vector(0 to SYNC_SIZE - 1) := x"1acffc1d";
    constant BitSlip        : integer := 3;  -- -3 to 3
    constant SIGNAL_AMP     : real := 0.25;
    constant AVERAGING      : natural := 13;
@@ -109,7 +111,7 @@ architecture rtl of RS_ASM_tb is
             SyncTime,
             SyncIn,
             SyncOut     : std_logic := '0';
-   signal   OutCntr     : signed(14 downto 0) := (others=>'0');
+   signal   OutCntr     : signed(14 downto 0) := 15d"1000";
    signal   BitCntr,
             VirtualBytes,
             FrameCnt,
@@ -121,37 +123,42 @@ architecture rtl of RS_ASM_tb is
    signal   NoiseAvg,
             DataAvg,
             Sum,
-            DataIn      : sfixed(0 downto -17) := (others=>'0');
+            DataIn      : sfixed(0 downto -17) := to_sfixed(0.1, 0, -17);
    signal   Noise       : sfixed(0 downto -15) := (others=>'0');   -- sixteen bit value from gng
    signal   NoiseGained : sfixed(4 downto -17) := (others=>'0');
-   signal   NoiseGain   : sfixed(3 downto -8) := to_sfixed(0.0, 3, -8);
+   signal   NoiseGain   : sfixed(4 downto -8) := to_sfixed(0.0, 4, -8);
    signal   Fail,
             Done        : boolean := false;
    signal   Depth       : natural := 1;   -- 1, 2, 3, 4, 5 or 8
    signal   ByteIn,
             ByteDly,
             DataOut     : SLV8;
-   signal   Offset      : integer range -4 to 4;
+   signal   Offset      : integer range -4 to 4 := 0;
+   signal   SNR         : real;
+
 begin
 
    process begin
       wait for 2.5 ns;
       Clk <= not Clk;
    end process;
-/*
+
    SEQUENCER_PROC : process
    begin
       wait until (Fail or Done);
-      report "Test: OK";
+      if (Fail) then
+         report "Test Failed";
+      elsif (Done) then
+         report "Test: OK";
+      end if;
       stop;
    end process;
-*/
+
    FrameLen     <= 255 * 8 * Depth;
    VirtualBytes <= 0;   -- Q per CCSDS
 
    clk_process : process(Clk)
       variable Fail_v   : boolean;
-      variable Offset_v : integer range -4 to 4;
    begin
       if (rising_edge(Clk)) then
          reset    <= '0';
@@ -160,8 +167,8 @@ begin
                if (BitCntr < SyncPattern'length - 1) then
                   BitCntr <= BitCntr + 1;
                   SyncIn  <= '0';
-                  Offset_v := 0;
                   if (BitCntr = 0) then
+--                     NoiseGain <= resize(NoiseGain - 0.1, NoiseGain);
                      if (FrameCnt = 8) then
                         Mode_tb     <= INVERTED;
                      elsif (FrameCnt = 10) then
@@ -178,23 +185,6 @@ begin
                      elsif (FrameCnt = 22) then
                         Mode_tb     <= RESYNC;
                         SyncPattern <= SYNC;
-                     elsif (FrameCnt = 28) then
-                        Mode_tb     <= BIT_SLIP;
-                        Offset_v    := 2;
-                        OutCntr     <= to_signed(Offset_v, OutCntr);
-                        FrameCnt <= FrameCnt + 1;
-                     elsif (FrameCnt = 31) then
-                        Offset_v    := 3;
-                        OutCntr     <= to_signed(Offset_v, OutCntr);
-                        FrameCnt <= FrameCnt + 1;
-                     elsif (FrameCnt = 35) then
-                        Offset_v    := -3;
-                        OutCntr     <= to_signed(Offset_v, OutCntr);
-                        FrameCnt <= FrameCnt + 1;
-                     elsif (FrameCnt = 38) then
-                        Offset_v    := -4;
-                        OutCntr     <= to_signed(Offset_v, OutCntr); -- outside of bitslip range, should flywheel, search, verify and lock
-                        FrameCnt <= FrameCnt + 1;
                      elsif (FrameCnt = 52) then
                         NoiseGain   <= to_sfixed(5.0, NoiseGain); -- turn on noise, should not loose lock
                      elsif (FrameCnt = 60) then
@@ -211,7 +201,20 @@ begin
                            Done <= true;
                         end if;
                      end if;
-                     Offset <= Offset_v;
+                  end if;
+                  if (BitCntr = 11) then
+                     if (FrameCnt = 28) then
+                        Mode_tb     <= BIT_SLIP;
+                        Offset      <=  2;
+                     elsif (FrameCnt = 31) then
+                        Offset      <=  3;
+                     elsif (FrameCnt = 35) then
+                        Offset      <=  -3;
+                     elsif (FrameCnt = 38) then
+                        Offset      <=  -4;
+                     else
+                        Offset <= 0;
+                     end if;
                   end if;
                   if (BitCntr = 4) then
                      ByteDly <= ByteIn;
@@ -219,15 +222,9 @@ begin
                else
                   BitCntr <= 0;
                   LastMode <= Mode_tb;
-                  OutCntr <= (others=>'0');
+                  OutCntr <= to_signed(Offset, OutCntr);
                   SyncIn  <= '1';
                   FrameCnt <= FrameCnt + 1;
-                  -- Should verify on first pass,
-                  -- lock on 5,
-                  -- flywheel on 8,
-                  -- relock on 10,
-                  -- flywheel on 18
-                  -- start searching on 22, the verify/lock on 26/30
                end if;
                DataIn  <= to_sfixed(SIGNAL_AMP*1.0, DataIn)  when SyncPattern(BitCntr) else to_sfixed(-SIGNAL_AMP*1.0, DataIn);
             else
@@ -265,24 +262,23 @@ begin
                      Fail_v := (ModeAsm /= SEARCHING);
                   when 23 TO 26 =>
                      Fail_v := (ModeAsm /= VERIFY);
-                  when 27 to 28 =>
+                  when 27 to 39 =>
                      Fail_v := (ModeAsm /= LOCK);
-                  when 29 to 33 =>
+                  when 40 to 44 =>
                      Fail_v := (ModeAsm /= FLYWHEEL);
-                  when 45 =>
-                     Fail_v := (ModeAsm /= SEARCHING);
-                  when 46 to 49 =>
+                  when 45 to 48 =>
                      Fail_v := (ModeAsm /= VERIFY);
-                  when 50 to 53 =>
+                  when 49 to 52 =>
                      Fail_v := (ModeAsm /= LOCK);
                   when others =>
                      Fail_v := ((ModeAsm = SEARCHING) OR (ModeAsm = VERIFY));
                end case;
             end if;
          end if;
-         Fail      <= ((DataOut /= ByteDly ) and (ValidOut = '1') and (ModeAsm = LOCK)) or Fail_v;
+         Fail      <= ((DataOut /= ByteDly ) and (ValidOut = '1') and (ModeAsm = LOCK) and (Offset = 0) and (NoiseGain = 0.0)) or Fail_v;
          DataAvg   <= resize(DataAvg - (DataAvg sra 10) + (abs(DataIn) sra 10), DataAvg);
          NoiseAvg  <= resize(NoiseAvg - (NoiseAvg sra AVERAGING) + (abs(NoiseGained) sra AVERAGING), DataAvg);
+         SNR       <= 20.0*log10(to_real(DataAvg/NoiseAvg));
          ValidData <= ValidData(2 downto 0) & ValidData(3);
          NoiseGained <= resize(NoiseGain * Noise, NoiseGained);
          BitError  <= (Sum(Sum'left) ?/= DataIn(DataIn'left));
@@ -324,6 +320,7 @@ begin
          OOL_BET     => OOL_BET,
          Verifies    => Verifies,
          FlyWheels   => FlyWheels,
+         tLast       => open,
          SyncOut     => SyncOut,
          SyncTime    => SyncTime,
          Invert      => Invert,

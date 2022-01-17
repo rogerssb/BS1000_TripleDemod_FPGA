@@ -13,8 +13,13 @@ manufacture, development, or derivation of any designs, or configuration.
 
 Company:     Semco Inc.
 
-Module Name: ModuleName.vhd
-Description:
+Module Name: InterLeave.vhd
+Description:   Fill a 2D array of Dimension Rows x Cols bytes according to Pack
+input.
+   If Pack, fill across by Cols then down one Row. Read by Rows, then Cols.
+   If unPack, fill by Rows then Cols. Read by Cols then Rows
+
+   Passing data through both processes should recreate the original stream.
 
 ARGUMENTS :
 
@@ -42,11 +47,11 @@ END InterleaveTB;
 
 ARCHITECTURE rtl OF InterleaveTB IS
 
-   COMPONENT interLeave IS
+   COMPONENT InterLeave IS
       GENERIC(
          DATA_WIDTH  : positive := 8;
-         MAX_WIDTH   : positive := 255;
-         MAX_DEPTH   : positive := 5
+         MAX_COLS    : positive := 255;
+         MAX_ROWS    : positive := 5
       );
       PORT(
          clk,
@@ -54,13 +59,13 @@ ARCHITECTURE rtl OF InterleaveTB IS
          ce,
          validIn,       -- dataIn is valid
          pack           : IN  std_logic;     -- pack or unpack
-         WidthSlv       : IN  std_logic_vector (7 downto 0);
-         DepthSlv       : IN  std_logic_vector (3 downto 0);
+         ColsSlv        : IN  std_logic_vector (7 downto 0);
+         RowsSlv        : IN  std_logic_vector (3 downto 0);
          dataIn         : IN  std_logic_vector(DATA_WIDTH-1 downto 0);
          readyOut       : OUT std_logic;     -- buffer is full and can be read
          dataOut        : OUT std_logic_vector(DATA_WIDTH-1 downto 0)
       );
-   END COMPONENT interLeave;
+   END COMPONENT InterLeave;
 
   -- Signals
    signal   clk,
@@ -72,8 +77,8 @@ ARCHITECTURE rtl OF InterleaveTB IS
    signal   dataOut,
             UnPacked       : std_logic_vector(7 downto 0);
    signal   Delay          : unsigned(2 downto 0) := "000";
-   signal   Width          : std_logic_vector(7 downto 0) := x"FF";
-   signal   Depth          : std_logic_vector(3 downto 0) := "0000";
+   signal   Cols           : std_logic_vector(7 downto 0) := x"FF";
+   signal   Rows           : std_logic_vector(3 downto 0) := "0000";
 
 BEGIN
 
@@ -83,7 +88,7 @@ BEGIN
    end process;
 
    process begin
-      Depth <= std_logic_vector(unsigned(Depth) + 1);
+      Rows <= std_logic_vector(unsigned(Rows) + 1);
       wait until rising_edge(clk);
       reset <= '1';
       wait until rising_edge(clk);
@@ -120,8 +125,8 @@ BEGIN
    PackIt : interLeave
          GENERIC  MAP(
             DATA_WIDTH  => 8,
-            MAX_WIDTH   => 255,
-            MAX_DEPTH   => 8
+            MAX_Cols    => 255,
+            MAX_Rows    => 8
          )
          PORT MAP(
             clk         => clk,
@@ -129,8 +134,8 @@ BEGIN
             ce          => '1',
             validIn     => validIn,
             pack        => '1',
-            DepthSlv    => Depth,
-            WidthSlv    => Width,
+            RowsSlv     => Rows,
+            ColsSlv     => Cols,
             dataIn      => std_logic_vector(dataIn),
             readyOut    => packReady,
             dataOut     => dataOut
@@ -139,8 +144,8 @@ BEGIN
    UnPackIt : interLeave
          GENERIC  MAP(
             DATA_WIDTH  => 8,
-            MAX_WIDTH   => 255,
-            MAX_DEPTH   => 8
+            MAX_Cols   => 255,
+            MAX_Rows   => 8
          )
          PORT MAP(
             clk         => clk,
@@ -148,8 +153,8 @@ BEGIN
             ce          => '1',
             validIn     => packReady,
             pack        => '0',
-            DepthSlv    => Depth,
-            WidthSlv    => Width,
+            RowsSlv     => Rows,
+            ColsSlv     => Cols,
             dataIn      => std_logic_vector(dataOut),
             readyOut    => unPackRdy,
             dataOut     => unPacked
