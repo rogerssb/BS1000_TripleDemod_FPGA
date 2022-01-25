@@ -82,7 +82,7 @@ ARCHITECTURE rtl OF ReedSolomonASM IS
             FlyWheelCnt    : natural range 0 to SYNC_SIZE-1 := 0;
    signal   BET            : natural range 0 to 131 := 0;
    signal   FrameCnt,
-            FrameLock      : integer range -4 to FRAME_SIZE * 8;
+            FrameLock      : integer range -4 to 32767; -- FRAME_SIZE * 16 + SYNC_SIZE + Slop;
    signal   CountPos,
             CountNeg,
             TotalBits,

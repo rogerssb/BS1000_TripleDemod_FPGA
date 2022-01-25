@@ -127,14 +127,16 @@ architecture rtl of RS_DecoderTop is
          RowsSlv        : IN  std_logic_vector (MAX_ROW_BITS - 1 downto 0);
          DataIn         : IN  std_logic_vector(DATA_WIDTH-1 downto 0);
          SyncOut,
-         ReadyOut       : OUT std_logic;     -- buffer is full and can be read
+         LastOut,
+         ValidOut       : OUT std_logic;     -- buffer is full and can be read
          DataOut        : OUT std_logic_vector(DATA_WIDTH-1 downto 0)
       );
    END COMPONENT RS_InterLeave;
 
    COMPONENT rs_decoder_CCSDS
       PORT (
-         aclk : IN STD_LOGIC;
+         aclk,
+         aresetn                          : IN STD_LOGIC;
          s_axis_input_tdata               : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
          s_axis_input_tvalid              : IN STD_LOGIC;
          s_axis_input_tlast               : IN STD_LOGIC;
@@ -165,6 +167,7 @@ architecture rtl of RS_DecoderTop is
             Dec_tlast,
             Dec_tlast_missing,
             Dec_out_tvalid,
+            Dec_out_tready,
             Dec_out_tlast,
             Dec_stat_tvalid,
             S_ctrl_tready,
@@ -173,21 +176,24 @@ architecture rtl of RS_DecoderTop is
             SyncTime,
             Invert,
             ValidAsm,
+            ASM_tlast,
             Dec_ctrl_tdata_invalid,
-            Dec_stat_tready,
             Dec_tlast_unexpected,
-            Dec_ctrl_tvalid,
-            Dec_out_tready,
-            Dec_tlastn,
             InterLeaveVld,
+            IntLvLast,
             Fail,
             TLast                      : std_logic;
+   signal   HoldDataValid,
+            HoldCtrlValid              : std_logic := '1';
+   signal   HoldCounter                : UINT8 := 8x"00";
    signal   ColsSlv,
             ASM_Data,
+            Dec_tdata,
             InterLeaveOut,
             Dec_out_tdata,
             BitOutShift                : SLV8;
-   signal   Errors                     : std_logic_vector(5 downto 0);
+   signal   Errors,
+            DecCtrlValid               : std_logic_vector(5 downto 0);
    signal   Dec_stat_tdata             : SLV32;
    signal   T_ValidInterval,
             T_ValidCounter             : unsigned(15 downto 0);
@@ -201,16 +207,13 @@ architecture rtl of RS_DecoderTop is
             FlyWheels                  : std_logic_vector(4 downto 0);
    signal   FrameLen                   : natural range 0 to 16383;     -- total bytes in the frame L=(255-2E-q)*I per CCSDS 131.0-B-3 11.5.3
    signal   BitCounter                 : natural range 0 to 8;
-/*
-   signal   ValidInt_f                 : ufixed(15 downto 0);
-   signal   RecipInt_f,
-            BitOutCounter_f            : ufixed(2 downto -16);
-*/
+   signal   BlockCount                 : natural range 0 to 255;
+   signal   RS_DecReset                : std_logic_vector(1 downto 0);
 
    attribute MARK_DEBUG : string;
    attribute MARK_DEBUG of dec_tready, dec_unexpected, dec_tlast, dec_tlast_missing, dec_out_tvalid, dec_out_tlast,
       dec_stat_tvalid, s_ctrl_tready, SyncOutAsm, SyncOutIntLv, SyncTime, Invert, ValidAsm, dec_ctrl_tdata_invalid,
-      dec_stat_tready, dec_tlast_unexpected, dec_ctrl_tvalid, dec_out_tready, dec_tlastn, InterLeaveVld, Fail, TLast,
+      dec_tlast_unexpected, InterLeaveVld, Fail, TLast,
       ColsSlv, ASM_Data, interLeaveOut, dec_out_tdata, Errors, dec_stat_tdata, FrameLenSlv, dec_ctrl_tdata, RowsSlv,
       BitSlips, IL_BET, OOL_BET, Verifies, FlyWheels, FrameLen : signal is "TRUE";
 
@@ -257,7 +260,7 @@ begin
          Verifies    => Verifies,
          FlyWheels   => FlyWheels,
          SyncOut     => SyncOutAsm,
-         TLast       => Dec_tlast,
+         TLast       => ASM_tlast,     -- not used
          SyncTime    => SyncTime,      -- not used
          Invert      => Invert,        -- not used
          DataOut     => ASM_Data,
@@ -280,20 +283,48 @@ begin
          SyncIn         => SyncOutAsm,
          ValidIn        => ValidAsm,
          DataIn         => ASM_Data,
+         LastOut        => IntLvLast,
          SyncOut        => SyncOutIntLv,
-         ReadyOut       => InterLeaveVld,
+         ValidOut       => InterLeaveVld,
          DataOut        => InterLeaveOut
       );
+
+   -- The RS_Decoder has no way to force it into sync with the interleaver output without
+   -- doing a hard reset for two clocks, wait three then strobe DecCtrlValid.
+   DecControl : process (Clk)
+   begin
+      if (rising_edge(Clk)) then
+         if (Reset) then
+            RS_DecReset    <= "11";
+            DecCtrlValid   <= 6x"0";
+         else
+            if (SyncOutIntLv) then
+               BlockCount   <= 0;
+               RS_DecReset  <= Dec_tlast_missing & Dec_tlast_missing;
+               DecCtrlValid <= "000001";
+            elsif ((InterLeaveVld = '1') and (BlockCount < 255)) then
+               BlockCount <= BlockCount + 1;
+            else
+               RS_DecReset <= RS_DecReset(0) & '0';
+               DecCtrlValid   <= DecCtrlValid(4 downto 0) & '0';
+            end if;
+         end if;
+      end if;
+   end process;
+
+   Dec_tlast <= '1' when (BlockCount = 254) else '0';
+   Dec_tdata <= 8x"55" when (BlockCount = 200) else InterLeaveOut;
 
    myRS_Decoder : rs_decoder_CCSDS
       PORT MAP (
          aclk                             => Clk,
-         s_axis_input_tdata               => InterLeaveOut,
-         s_axis_input_tvalid              => InterLeaveVld,
+         aresetn                          => not RS_DecReset(1),
+         s_axis_input_tdata               => Dec_tdata, -- InterLeaveOut,
+         s_axis_input_tvalid              => not HoldDataValid and InterLeaveVld,
          s_axis_input_tlast               => Dec_tlast,
-         s_axis_input_tready              => Dec_tready,       -- ignored
+         s_axis_input_tready              => dec_tready,       -- ignored
          s_axis_ctrl_tdata                => Dec_ctrl_tdata,   -- control info from MCU
-         s_axis_ctrl_tvalid               => SyncOutIntLv,     -- start of frame
+         s_axis_ctrl_tvalid               => not HoldCtrlValid and DecCtrlValid(5),     -- start of frame
          s_axis_ctrl_tready               => s_ctrl_tready,
          m_axis_output_tdata              => Dec_out_tdata,
          m_axis_output_tvalid             => Dec_out_tvalid,
@@ -301,7 +332,7 @@ begin
          m_axis_output_tlast              => Dec_out_tlast,
          m_axis_stat_tdata                => Dec_stat_tdata,
          m_axis_stat_tvalid               => Dec_stat_tvalid,
-         m_axis_stat_tready               => Dec_stat_tready,
+         m_axis_stat_tready               => '1',
          event_s_input_tlast_missing      => Dec_tlast_missing,
          event_s_input_tlast_unexpected   => Dec_tlast_unexpected,
          event_s_ctrl_tdata_invalid       => Dec_ctrl_tdata_invalid
@@ -311,61 +342,50 @@ begin
    begin
       if (rising_edge(Clk)) then
          if (Reset) then
-            BitOutShift   <= 8x"00";
-            BitCounter    <= 0;
-        else
-            if (Dec_out_tvalid) then
-               BitCounter     <= 8;
-               BitOutShift    <= Dec_out_tdata;
+            BitOutShift    <= 8x"00";
+            BitCounter     <= 0;
+            Dec_out_tready <= '1';
+            HoldDataValid  <= '1';
+            HoldCtrlValid  <= '1';
+            HoldCounter    <= 8x"00";
+            rsDecBitEnOut  <= '0';
+         else
+            if (HoldDataValid) then
+               if (HoldCounter < 255) then
+                  HoldCounter <= HoldCounter + 1;
+                  if (HoldCounter = 10) then
+                     HoldCtrlValid <= '0';
+                  elsif (HoldCounter = 128) then
+                     HoldDataValid <= '0';
+                  end if;
+               end if;
+            elsif (SyncOutIntLv) then  -- use holdCounter to check IntLvVal's per block
+               HoldCounter <= 8x"00";
+            elsif (InterLeaveVld) then
+               HoldCounter <= HoldCounter + 1;
+            end if;
+
+            if (BitCounter > 0) then
+               if (BitCounter = 1) then
+                  rsDecBitEnOut  <= '0';
+                  Dec_out_tready <= '1';
+                  BitCounter     <= 0;
+               else
                rsDecBitEnOut  <= '1';
-            else
-               if (BitCounter = 0) then
-                  rsDecBitEnOut     <= '0';
-               else
-                  BitCounter   <= BitCounter - 1;
-                  BitOutShift    <= BitOutShift sll 1;
+                  BitCounter  <= BitCounter - 1;
+                  BitOutShift <= BitOutShift sll 1;
                end if;
+            elsif (Dec_out_tvalid) then
+               BitOutShift    <= Dec_out_tdata;
+               BitCounter     <= 8;
+               Dec_out_tready <= '0';
             end if;
+            rsDecBitEnOut  <= not Dec_out_tready;
             rsDecBitOut <= BitOutShift(7);
          end if;
       end if;
    end process SpreadBytes;
-/*
-   SpreadBytes : process (Clk)
-   begin
-      if (rising_edge(Clk)) then
-         if (Reset) then
-            T_ValidInterval   <= 16x"0";
-            T_ValidCounter    <= 16x"0";
-            BitOutShift       <= 8x"00";
-            BitOutCounter_f   <= 19x"0";
-        else
 
-            if (Dec_out_tvalid) then   -- determine time between tvalid pulses for each output byte
-               T_ValidInterval <= T_ValidCounter;
-               T_ValidCounter    <= 16x"0";
-               BitOutCounter_f   <= RecipInt_f;
-               BitOutShift       <= Dec_out_tdata;
-               rsDecBitEnOut     <= '1';
-            else
-               T_ValidCounter <= T_ValidCounter + 1;
-               if (BitOutCounter_f < 1) then
-                  BitOutCounter_f   <= resize(BitOutCounter_f + RecipInt_f, BitOutCounter_f);
-                  rsDecBitEnOut     <= '0';
-               else
-                  BitOutCounter_f   <= RecipInt_f;
-                  rsDecBitEnOut  <= '1';
-                  BitOutShift    <= BitOutShift sll 1;
-               end if;
-            end if;
-            rsDecBitOut <= BitOutShift(7);
-
-            ValidInt_f <= to_ufixed(T_ValidInterval);
-            RecipInt_f <= resize(ONE_F / ValidInt_f / EIGHT_F, RecipInt_f);
-         end if;
-      end if;
-   end process SpreadBytes;
-*/
    Fail     <= dec_stat_tdata(0);
    Errors   <= dec_stat_tdata(7 downto 2);
 

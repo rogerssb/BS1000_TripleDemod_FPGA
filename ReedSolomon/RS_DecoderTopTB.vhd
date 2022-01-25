@@ -150,28 +150,40 @@ ARCHITECTURE rtl OF RS_DecoderTopTB IS
    END COMPONENT;
 
 
-   CONSTANT DLLCENTERFREQ        : SLV32 := 32x"af8af8a";
-   CONSTANT DLLLOOPGAIN          : std_logic_vector(4 downto 0) := 5x"1c";
+   CONSTANT DLLCENTERFREQ        : SLV32 := 32x"bc0_0000"; --af8af8a";
+   CONSTANT DLLLOOPGAIN          : std_logic_vector(4 downto 0) := 5x"08";
    CONSTANT DLLFEEDBACKDIVIDER   : SLV8 := 8x"1";
    CONSTANT TestASM              : BOOLEAN := false;
-   CONSTANT SYNC                 : std_logic_vector(0 to 31) := x"1acffc1d";
+   CONSTANT SYNC_SIZE            : natural := 32;
+   CONSTANT SYNC                 : std_logic_vector(0 to SYNC_SIZE - 1) := x"1acffc1d";
    CONSTANT CHECK_SUMS32         : UINT8_ARRAY(0 to 31) := (8d"102",8d"215",8d"187",8d"199",8d"199",
                                        8d"61",8d"46",8d"219",8d"228",8d"51",8d"113",8d"26",8d"62",
                                        8d"204",8d"43",8d"108",8d"92",8d"229",8d"113",8d"41",8d"28",
                                        8d"209",8d"56",8d"111",8d"129",8d"186",8d"49",8d"180",8d"49",
                                        8d"195",8d"204",8d"79");
-   CONSTANT CHECK_SUMS16         : UINT8_ARRAY(0 to 15) := (8d"77",8d"204",8d"10",8d"77",8d"250",
+   CONSTANT CHECK_SUMS16        : UINT8_ARRAY(0 to 15) := (8d"77",8d"204",8d"10",8d"77",8d"250",
                                        8d"123",8d"108",8d"51",8d"45",8d"2",8d"51",8d"151",8d"218",
                                        8d"94",8d"110",8d"111");
-  -- Signals
-   signal   clk                              : std_logic := '0';
-   signal   reset                            : std_logic := '1';
+   constant RS_DEC_CONTROL      : unsigned(12 downto 0) := 13x"00";
+   constant RS_DEC_STATUS       : unsigned(12 downto 0) := 13x"04";
+   constant RS_DEC_ASM_CONTROL  : unsigned(12 downto 0) := 13x"08";
+   type     mcuFsm               is (IDLE, SETUP, WRITE, FINISH);
+   type     asm_mode_t         is (SEARCHING, VERIFY, LOCK, FLYWHEEL);
 
-   signal   MaxCount                         : natural := 16;
+   -- Signals
+
+   signal   ModeAsm           : asm_mode_t := SEARCHING;
+   signal   mcuMode           : mcuFsm := IDLE;
+   signal   addr              : unsigned(12 downto 0) := 13x"0000";
+   signal   clk,
+            ClkOver2                   : std_logic := '0';
+   signal   reset                      : std_logic := '1';
+
+   signal   MaxCount                   : natural := 16;
    signal   FakeCount,
             ValidCount,
             ValidMax,
-            CheckCnt                         : natural range 0 to 64535 := 0;
+            CheckCnt                   : natural range 0 to 64535 := 0;
    signal   DecOutTData,
             Expected1,
             Expected2,
@@ -183,18 +195,20 @@ ARCHITECTURE rtl OF RS_DecoderTopTB IS
             ExpectCols,
             ExpectCntCol,
             SymCount,
-            BlockCount                       : UINT8 := 8x"44";
+            BlockCount              : UINT8 := 8x"44";
    signal   ExpectRows,
-            ExpectCntRow                     : UINT4;
+            ExpectCntRow            : UINT4;
    signal   Dec_out_tvalid,
             DecValidDly1,
             DecValidDly2,
+            RS_DecStatVld,
             rsDecBitEnOut,
             rsDecBitOut,
             NewRow,
             Done,
             Fail1,
             Fail2,
+            Fail3,
             WaitForSync,
             EncoderValidIn,
             EncoderLastIn,
@@ -203,39 +217,54 @@ ARCHITECTURE rtl OF RS_DecoderTopTB IS
             EncoderCtrlRdy,
             EncodedValidOut,
             EncodedLastOut,
+            EncodedLastOutDly,
             EncoderLastMissing,
             EncoderLastWrong,
             EncoderCtrlWrong,
             SyncOutIntLv,
-            InterLeaveVld                    : std_logic := '0';
+            InterLeaveVld           : std_logic := '0';
    signal   s_axis_input_tdata,
             EncodedDataOut,
             EncodedDataOut1,
             InterLeaveOut,
-            ColsSlv                          : SLV8;
-   signal   RowsSlv                          : SLV4;
-   signal   PhaseInc                         : std_logic_vector(31 downto 0);
-   signal   NcoData                          : std_logic_vector(47 downto 0);
-   signal   Ratio                            : real := 2.0**32 * 1.0e6 / 93.3e6;
-
-signal
-DecInReady,
-DecCtrlReady,
-EncodedLastOutDly,
-Dec_out_tlast,
-Dec_stat_tvalid,
-Dec_tlast_missing,
-Dec_tlast_unexpected,
-Dec_ctrl_tdata_invalid     : std_logic;
-signal Dec_out_tdata              : SLV8;
-signal Dec_stat_tdata             : SLV32;
-
+            dllPhaseError,
+            ColsSlv                 : SLV8;
+   signal   RowsSlv                 : SLV4;
+   signal   PhaseInc                : std_logic_vector(31 downto 0);
+   signal   NcoData                 : std_logic_vector(47 downto 0);
+   signal   Ratio                   : real := 2.0**32 * 1.0e6 / 93.3e6;
+   signal   ShiftCount              : natural range 0 to 32;
+   signal   Shifter,
+            RS_DecStatus,
+            McuDataIn,
+            McuDataOut,
+            McuDataCapt             : SLV32;
+   signal   FrameLen                : SLV16;
+   signal   AsmMode,
+            wrLsb,
+            wrMsb,
+            cs,
+            TwoWords,
+            ShiftActive,
+            ShiftValid,
+            ShiftPreValid,
+            Pop,
+            ShiftOut,
+            dllOutputClk,
+            pllReferenceClk         : std_logic;
+   signal   ShiftFifo               : SLV8_ARRAY(0 to 63);
+   signal   FifoWr,
+            FifoRd,
+            SyncCount               : natural range 0 to 63;
 
 BEGIN
 
    process begin
       wait for 5 ns;   -- run at 93MHz rate
          clk <= not clk;
+         if (clk) then
+            ClkOver2 <= not ClkOver2;
+         end if;
    end process;
 
    process begin
@@ -247,9 +276,13 @@ BEGIN
 
    SEQUENCER_PROC : process
    begin
-      wait until (Fail1 or Fail2 or Done);
-      if (Fail1 or Fail2) then
-         report "Test Failed";
+      wait until (Fail1 or Fail2/* or Fail3*/ or Done);
+      if (Fail1) then
+         report "Test1 Failed";
+      elsif (Fail2) then
+         report "Test2 Failed";
+      elsif (Fail3) then
+         report "Test3 Failed";
       elsif (Done) then
          report "Test: OK";
       end if;
@@ -284,7 +317,7 @@ BEGIN
          LastIn_v    := EncoderLastIn;
          EncodedLastOutDly <= EncodedLastOut and EncodedValidOut;
          if (reset) then
-            R_IN        <= 8x"10";
+            R_IN        <= 8x"20";
             N_IN        <= 8x"FF";
             K           <= N_IN - R_IN;
             SymCount    <= 8x"00";
@@ -295,7 +328,7 @@ BEGIN
             Start_v     := '1';
             ColsSlv     <= std_logic_vector(N_IN);
             RowsSlv     <= 4x"01";
-            FakeCount   <= to_integer(Rows_v * 8);
+            FakeCount   <= to_integer(Rows_v) * 16;
          else
             if (EncoderLastIn) then
                if (SymCount < R_IN) then
@@ -329,7 +362,7 @@ BEGIN
                         else
                            Rows_v := Rows_v + 1;
                         end if;
-                        FakeCount   <= to_integer(Rows_v * 8);
+                        FakeCount   <= to_integer(Rows_v) * 16;
                         RowsSlv     <= std_logic_vector(Rows_v);
                         NewRow      <= '1';
                      end if;
@@ -394,7 +427,8 @@ BEGIN
          DataOut        => InterLeaveOut
       );
 
-   PostIntLvProcess : process (clk)
+   PostIntLvVerify : process (clk)
+      variable Good_v   : std_logic;
    begin
       if (rising_edge(clk)) then
          if (reset or NewRow) then
@@ -442,45 +476,86 @@ BEGIN
 
             end if;
          end if;
+      Good_v := (unsigned(InterLeaveOut) ?= Expected1);
+      Good_v := Good_v or (InterleaveOut ?= 8x"00");
+      Fail2 <= not Good_v and (WaitForSync ?= '0');
       end if;
    end process;
 
    PostEncodeProcess : process (clk)
-      variable Good_v   : std_logic;
    begin
       if (rising_edge(clk)) then
          if (reset) then
+            ShiftCount     <= 0;
+            Shifter        <= 32x"0";
+            AsmMode        <= '0';
+            ShiftActive    <= '0';
+            ShiftValid     <= '0';
+            ShiftOut       <= '0';
+            FifoWr         <= 0;
+            FifoRd         <= 0;
+            SyncCount      <= 0;
          else
-            if (EncodedValidOut) then         -- capture encoder data and serialize it
-               EncodedDataOut1 <= EncodedDataOut;
+            ShiftOut   <= Shifter(ShiftCount);
+            ShiftValid <= ShiftPreValid;
+
+            if (InterLeaveVld) then
+               ShiftFifo(FifoWr) <= InterLeaveOut;
+               if (FifoWr < 63) then
+                  FifoWr <= FifoWr + 1;
+               else
+                  FifoWr <= 0;
+               end if;
             end if;
 
---               ShiftCount  <= 8;
---            elsif (ShiftCount > 0) then
-         Good_v := (unsigned(InterLeaveOut) ?= Expected1);
-         Good_v := Good_v or (InterleaveOut ?= 8x"00");
-         Fail2 <= not Good_v and (WaitForSync ?= '0');
+            if (SyncOutIntLv) then
+               SyncCount      <= FifoWr;
+               AsmMode        <= '1';
+               ShiftPreValid  <= '0';  -- hold shifting on sync in
+            elsif (Pop) then
+               Pop            <= '0';
+               Shifter        <= 24x"0" & ShiftFifo(FifoRd);
+               ShiftCount     <= 7;
+               ShiftPreValid  <= '1';
+               if (FifoRd < 63) then
+                  FifoRd <= FifoRd + 1;
+               else
+                  FifoRd <= 0;
+               end if;
+            elsif (ShiftCount > 0) then
+               ShiftPreValid  <= '1';  -- turn back on after sync detected
+               ShiftCount <= ShiftCount - 1;
+            elsif ((FifoRd = SyncCount) and (AsmMode = '1')) then
+                  AsmMode <= '0';
+                  Shifter <= SYNC;
+                  ShiftCount <= 31;
+                  ShiftPreValid  <= '1';
+            elsif (FifoRd /= FifoWr) then
+               Pop <= '1';
+               ShiftPreValid  <= '0';
+            else
+               ShiftPreValid  <= '0';
+            end if;
          end if;
       end if;
    end process;
 
-/*
    RS_Dec : RS_DecoderTop
       port map(
          clk               => clk,
          ce                => '1',
          reset             => reset,
-         busClk            => '0',
-         cs                => '0',
-         wr0               => '0',
-         wr1               => '0',
-         wr2               => '0',
-         wr3               => '0',
-         addr              => 13x"0",
-         din               => 32x"0",
-         dout              => open,
-         bitEn             => '0',
-         bitData           => '0',
+         busClk            => ClkOver2,
+         cs                => cs,
+         wr0               => wrLsb,
+         wr1               => wrLsb,
+         wr2               => wrMsb,
+         wr3               => wrMsb,
+         addr              => std_logic_vector(addr),
+         din               => McuDataIn,
+         dout              => McuDataOut,
+         bitEn             => ShiftValid,
+         bitData           => ShiftOut,
          dac0Select        => 4x"0",
          dac1Select        => 4x"0",
          dac2Select        => 4x"0",
@@ -494,20 +569,88 @@ BEGIN
          rsDecBitOut       => rsDecBitOut
       );
 
-   Dll : digitalPLL
-      port map (
-         clk               => clk,
-         reset             => reset,
-         centerFreq        => DLLCENTERFREQ,
-         loopGain          => DLLLOOPGAIN,
-         feedbackDivider   => DLLFEEDBACKDIVIDER,
-         referenceClkEn    => rsDecBitEnOut,
-         feedbackClkEn     => open,
-         dllOutputClk      => open,
-         filteredRefClk    => open,
-         phaseError        => open
-    );
+   ModeAsm <= <<signal RS_Dec.RS_Asm.Mode : asm_mode_t>>;
+   RS_DecStatus <= <<signal RS_Dec.Dec_stat_tdata : SLV32>>;
+   RS_DecStatVld <= <<signal RS_Dec.Dec_stat_tvalid : STD_LOGIC>>;
+
+   Fail3 <= '1' when ((ModeAsm = LOCK) and (RS_DecStatVld = '1') and (WaitForSync = '0') and (RS_DecStatus /= 32x"040206")) else '0';
+
+/*  Per CCSDS 131.0-B-3 the managed parameters for Reed Solomon consists of:
+    Error Correction Capability (E symbols)     8, 16 yielding RS(255,239) and RS(255,223)
+    yields message length of K = 255-2*E
+    Interleaving Depths I                       1,2, 3, 4, 5, 8
+    Shortend Length (S symbols)                 Integer 0 to K
+
+                                    31:16       15:12               9:8         7:0
+    Reed Solomon Control Register   FrameLen    Interleave[3:0]     R_IN_MSBs   N_IN[7:0]
+R_MSBs = 01 or 10. I append 0000s for 010000 or 100000 for 16 or 32
+N_IN defines the total symbols per frame, usually 255 but could be shortened by Q
+FrameLen needs calculated as I(255 - K + S), for normal frame, S = K so -K+S = 0. FrameLen - 255*I
+
+                                    31:24           23:16           15:0
+    Reed Solomon Status Register    FailCnt[7:0]    FrameCnt[7:0]   ErrCnt[15:0]
+
+                                    31:29       28:24       21:16       13:8        4:0
+    Attached Sync Marker (ASM)      BitSlips    IL_BET      OOL_BET     Verifies    FlyWheels
+            Default
+    BitSlips    3   Allowed number of clock slips between ASMs, slips can be plus or minus
+    IL_BET      4   In Lock Bit Error Threshold is the number of ASM bits than can be wrong when locked
+    OOL_BET     4   Out Of Lock Bit Error Threshold is the number of ASM bits than can be wrong when searching (not locked)
+    Verifies    3   Number of verify frames before declaring Lock. Prevents premature locking on first n correlations above threshold
+    FlyWheels   4   Number of ASM misses before reverting back to Search mode
+
+    FailCnt and ErrCnt will accumulate errors until read, which resets them to 0
+    FrameCnt keeps track of the number of frames between reads so FERs can be calculated
 */
+   mcuProcess : process (ClkOver2)
+   begin
+      if (rising_edge(ClkOver2)) then
+         FrameLen <= std_logic_vector( to_unsigned(to_integer(unsigned(RowsSlv)) * 255 * 8 + SYNC_SIZE, 16));
+         case (mcuMode) is
+            when IDLE =>
+               wrLsb    <= '0';
+               wrMsb    <= '0';
+               cs       <= '0';
+               mcuMode  <= SETUP;
+            when SETUP =>
+               case (addr) is
+                  when RS_DEC_CONTROL =>
+                     McuDataIn <= FrameLen & RowsSlv & std_logic_vector(R_IN(7 downto 4)) & std_logic_vector(N_IN);
+                     TwoWords  <= '1';
+--                  when RS_DEC_STATUS =>
+--                     McuDataIn <= 32x"0"; -- read status only
+--                     TwoWords  <= '1';
+                  when others =>
+                     McuDataIn <= 32x"6404_0304";
+                     TwoWords  <= '1';
+               end case;
+               mcuMode <= WRITE;
+            when WRITE =>
+               if (TwoWords) then
+                  wrLsb <= '1';
+                  wrMsb <= '1';
+               else
+                  wrLsb <= not Addr(1);
+                  wrMsb <= Addr(1);
+               end if;
+               cs       <= '1';
+               mcuMode  <= FINISH;
+            when others =>
+               McuDataCapt <= McuDataOut;
+               if (addr = 13x"08") then
+                  addr <= 13x"00";
+               elsif (TwoWords) then
+                  addr <= addr + 4;
+               else
+                  addr <= addr + 2;
+               end if;
+               wrLsb    <= '0';
+               wrMsb    <= '0';
+               cs       <= '0';
+               mcuMode  <= IDLE;
+         end case;
+      end if;
+   end process mcuProcess;
 
 
 ASMtest: if (TestASM)  generate

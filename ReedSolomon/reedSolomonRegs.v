@@ -53,11 +53,11 @@ module reedSolomonRegs(
                         frameLen
 );
 
-    reg     [7:0]   failCnt, frameCnt, ErrorsDly;
+    reg     [7:0]   failCnt, frameCnt;
     reg     [15:0]  errCnt;
     reg      [1:0]  csDly;
-    reg     [31:0]  control,
-                    ASM_Control = 32'h64040304;
+    reg     [31:0]  control = 32'h081812ff;
+    reg     [31:0]  ASM_Control = 32'h64040304;
 
     assign  BitSlips    = ASM_Control[31:29];
     assign  IL_BET      = ASM_Control[28:24];

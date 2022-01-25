@@ -58,6 +58,7 @@ ENTITY RS_Interleave IS
       RowsSlv        : IN  std_logic_vector (MAX_ROW_BITS - 1 downto 0);
       DataIn         : IN  std_logic_vector(DATA_WIDTH-1 downto 0);
       SyncOut,
+      LastOut,
       ValidOut       : OUT std_logic;     -- buffer is full and can be read
       DataOut        : OUT std_logic_vector(DATA_WIDTH-1 downto 0)
    );
@@ -128,7 +129,9 @@ BEGIN
             RowsCntrRd  <= 0;
             RowsCntrWr  <= 0;
             WaitForSync <= '1';
+            LastOut     <= '1';
             Ping        <= '0';
+            SyncOut     <= '1';  -- kickstart the RS Decoder
          else
             if (SyncIn) then
                WaitForSync <= '0';        -- should never get a Sync and Valid in same clock
@@ -140,13 +143,13 @@ BEGIN
                   end if;
                   ColsCntrWr <= 0;                 -- recenter interleaving with encoder, don't care what Row
                else
+                  ColsCntrRd <= 0;        -- so all counters should roll back to zero before SyncIn.
                   RowsCntrRd <= 0;
+                  ColsCntrWr <= 0;
                   RowsCntrWr <= 0;
                end if;
             else
-               SyncOut <= '0';
-
-               -- Write Routines
+               -- Write Routinescc
                if (CE and ValidIn and not WaitForSync) then      -- use ValidIn to enable the outputs since they're both the same rate
                                                                  -- buffer actions. read one while writing the other
                   if (Pack) then                         -- Count Cols by Rows
@@ -180,6 +183,10 @@ BEGIN
 
                   -- read routines
                if (Pack) then
+                  if (SyncOut) then
+                     SyncOut <= '0';
+                  end if;
+
                   if (ValidIn) then
                      if (RowsCntrRd < Rows - 1) then
                         RowsCntrRd  <= RowsCntrRd + 1;
@@ -189,14 +196,18 @@ BEGIN
                            ColsCntrRd  <= ColsCntrRd + 1;
                         else
                            ColsCntrRd <= 0;
+                           LastOut <= '1';
                         end if;
                      end if;
+                  else
+                     LastOut <= '0';
                   end if;
 
-               else  -- unpack read routine
+               elsif (ValidIn) then     -- unpack read routine
                   if (ColsCntrRd < Cols - 1) then
                      ColsCntrRd  <= ColsCntrRd + 1;
                   else
+                     LastOut    <= '1';
                      ColsCntrRd <= 0;
                      if (RowsCntrRd < Rows-1) then
                         RowsCntrRd  <= RowsCntrRd + 1;
@@ -204,6 +215,9 @@ BEGIN
                         RowsCntrRd  <= 0;
                      end if;
                   end if;
+               else
+                  SyncOut <= LastOut;
+                  LastOut <= '0';
                end if;
             end if;
          end if;
