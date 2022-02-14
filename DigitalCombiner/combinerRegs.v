@@ -7,14 +7,16 @@ derivative rights in exchange for negotiated compensation.
 ******************************************************************************/
 
 `timescale 1ns/10ps
-`ifndef COMB_LAG_COEF
+//`include "./../addressMap.v"
+
+//`ifndef COMB_LAG_COEF
 `define COMB_LAG_COEF      5'b0_00xx
 `define COMB_LEAD_COEF     5'b0_01xx
 `define COMB_SWEEP_RATE    5'b0_10xx
 `define COMB_SWEEP_LIMIT   5'b0_110x
 `define COMB_OPTIONS       5'b0_111x
 `define COMB_REF_LEVEL     5'b1_00xx
-`endif
+//`endif
 
 module combinerRegs(
     input               busClk,
@@ -77,7 +79,7 @@ module combinerRegs(
     end
 
     always @* begin
-        MDB_180_1[31:28] = {realLock | imagLock, realLock, imagLock, locked};
+        MDB_180_1[31:28] = {'0', realLock, imagLock, locked};
         MDB_182_3[31:24] = Index;
         if (cs) begin
             casex (addr)

@@ -68,49 +68,49 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/GaussianNoiseGenerator/rtl/gng.v">
+      <File Path="$PPRDIR/../Vhdl_Library/GaussianNoiseGenerator/rtl/gng.v">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/GaussianNoiseGenerator/rtl/gng_coef.v">
+      <File Path="$PPRDIR/../Vhdl_Library/GaussianNoiseGenerator/rtl/gng_coef.v">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/GaussianNoiseGenerator/rtl/gng_ctg.v">
+      <File Path="$PPRDIR/../Vhdl_Library/GaussianNoiseGenerator/rtl/gng_ctg.v">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/GaussianNoiseGenerator/rtl/gng_interp.v">
+      <File Path="$PPRDIR/../Vhdl_Library/GaussianNoiseGenerator/rtl/gng_interp.v">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/GaussianNoiseGenerator/rtl/gng_lzd.v">
+      <File Path="$PPRDIR/../Vhdl_Library/GaussianNoiseGenerator/rtl/gng_lzd.v">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/GaussianNoiseGenerator/rtl/gng_smul_16_18.v">
+      <File Path="$PPRDIR/../Vhdl_Library/GaussianNoiseGenerator/rtl/gng_smul_16_18_sadd_37.v">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/GaussianNoiseGenerator/rtl/gng_smul_16_18_sadd_37.v">
+      <File Path="$PPRDIR/../Vhdl_Library/GaussianNoiseGenerator/rtl/gng_smul_16_18.v">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>

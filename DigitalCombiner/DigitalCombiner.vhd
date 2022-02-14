@@ -72,6 +72,7 @@ ENTITY DigitalCombiner IS
       imagxord,
       combinerEn,
       locked,
+      CarrierDetect,
       ifBS_n            : OUT STD_LOGIC;
       imaglock,
       reallock          : OUT STD_LOGIC_VECTOR(12 DOWNTO 0);
@@ -107,7 +108,7 @@ ARCHITECTURE rtl OF DigitalCombiner IS
          Clk,
          Clk4x,
          ce,
-         bestSource,
+         CarrierDetect,
          Reset          : IN  std_logic;
          Re1In,
          Im1In,
@@ -150,7 +151,7 @@ ARCHITECTURE rtl OF DigitalCombiner IS
          gainoutmin,
          phase_detect      : OUT SLV18;
          agc1_gt_agc2,
-         bestSource,
+         CarrierDetect,
          realxord,
          imagxord,
          locked            : OUT STD_LOGIC;
@@ -183,7 +184,6 @@ ARCHITECTURE rtl OF DigitalCombiner IS
             MDB_188_9      : SLV32;
    signal   MDB_186,
             MDB_187        : SLV16;
-   signal   bestSource     : std_logic;
    signal   DucCount       : unsigned(1 downto 0) := "00";
 
 BEGIN
@@ -216,20 +216,20 @@ BEGIN
 
    IF_Align_u : IF_Align
       PORT MAP (
-         clk         => clk,
-         clk4x       => clk4x,
-         reset       => reset or not combinerEn,
-         bestSource  => bestSource,
-         ce          => '1',
-         Re1In       => re1In,
-         Im1In       => im1In,
-         Re2In       => re2In,
-         Im2In       => im2In,
-         Re1Out      => Real1Out,
-         Im1Out      => Imag1Out,
-         Re2Out      => Real2Out,
-         Im2Out      => Imag2Out,
-         Index       => Index
+         clk            => clk,
+         clk4x          => clk4x,
+         reset          => reset or not combinerEn,
+         CarrierDetect  => CarrierDetect,
+         ce             => '1',
+         Re1In          => re1In,
+         Im1In          => im1In,
+         Re2In          => re2In,
+         Im2In          => im2In,
+         Re1Out         => Real1Out,
+         Im1Out         => Imag1Out,
+         Re2Out         => Real2Out,
+         Im2Out         => Imag2Out,
+         Index          => Index
      );
 
   CmplxPhsDet : complexphasedetector_0
@@ -252,7 +252,7 @@ BEGIN
          imaglock       => imaglock,
          locked         => locked,
          agc1_gt_agc2   => agc1_gt_agc2,
-         bestsource     => bestSource,
+         CarrierDetect  => CarrierDetect,
          lag_out        => lag_out,
          nco_control_out=> nco_control_out,
          phase_detect   => phase_detect,

@@ -578,26 +578,26 @@ begin
    end process mcuProcess;
 
    process begin        -- simple test to monitor BERs over four input variations. Modify as desired.
-      ComplexOrIF_n <= '0';
-      Mode        <= QPSK;
-      ResetBers     <= '1';
+      ComplexOrIF_n  <= '0';
+      Mode           <= QPSK;
+      ResetBers      <= '1';
       wait for 5 us;
-      ResetBers     <= '0';
+      ResetBers      <= '0';
       wait for 15 us;
-      ComplexOrIF_n <= '1';
-      ResetBers     <= '1';
+      ComplexOrIF_n  <= '1';
+      ResetBers      <= '1';
       wait for 5 us;
-      ResetBers     <= '0';
+      ResetBers      <= '0';
       wait for 15 us;
-      Mode        <= BPSK;
-      ResetBers     <= '1';
+      Mode           <= BPSK;
+      ResetBers      <= '1';
       wait for 5 us;
-      ResetBers     <= '0';
+      ResetBers      <= '0';
       wait for 15 us;
-      ComplexOrIF_n <= '0';
-      ResetBers     <= '1';
+      ComplexOrIF_n  <= '0';
+      ResetBers      <= '1';
       wait for 5 us;
-      ResetBers     <= '0';
+      ResetBers      <= '0';
       wait for 15 us;
    end process;
 

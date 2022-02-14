@@ -55,7 +55,7 @@ entity IF_Align is
          clk,
          clk4x,
          reset,
-         bestSource,
+         CarrierDetect,
          ce             : IN  std_logic;
          Re1In,
          Im1In,
@@ -486,7 +486,7 @@ begin
    MaxProcess : process(Clk4x)
    begin
       if (rising_edge(Clk4x)) then
-         if (Reset or bestSource) then            -- ignore Restart to let previous IndexOut carry over
+         if (Reset or not CarrierDetect) then            -- ignore Restart to let previous IndexOut carry over
             Index0      <= 0;
             IndexOut    <= x"00";
             SkipFirst2  <= "00";

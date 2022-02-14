@@ -651,20 +651,20 @@
         `define PNGEN_LDPC_RND_IRIG     2'b10
 
 // Combiner subsystem registers start at x0C40
-`define COMBINER_SPACE          13'b0_1100_010x_xxxx
-    `define COMB_LAG_COEF           13'bx_xxxx_xxx0_00xx
-    `define COMB_LEAD_COEF          13'bx_xxxx_xxx0_01xx
-    `define COMB_SWEEP_RATE         13'bx_xxxx_xxx0_10xx
-    `define COMB_SWEEP_LIMIT        13'bx_xxxx_xxx0_110x
-    `define COMB_OPTIONS            13'bx_xxxx_xxx0_111x
-    `define COMB_REF_LEVEL          13'bx_xxxx_xxx1_00xx
-
+        `define COMBINER_SPACE          13'b0_1100_010x_xxxx
+        `define COMB_LAG_COEF      5'b0_00xx
+        `define COMB_LEAD_COEF     5'b0_01xx
+        `define COMB_SWEEP_RATE    5'b0_10xx
+        `define COMB_SWEEP_LIMIT   5'b0_110x
+        `define COMB_OPTIONS       5'b0_111x
+        `define COMB_REF_LEVEL     5'b1_00xx
+        
 // Reed Solomon Decoder subsystem registers start at x0C80
 `define RS_DEC_SPACE          13'b0_1100_010x_xxxx
     `define RS_DEC_CONTROL            13'bx_xxxx_xxx0_00xx
     `define RS_DEC_STATUS             13'bx_xxxx_xxx0_01xx
     `define RS_DEC_ASM_CONTROL        13'bx_xxxx_xxx0_10xx
-    `define SOURCE_SELECT           13'bx_xxxx_x011_000x
+    `define RS_DEC_SOURCE_SELECT      13'bx_xxxx_x011_000x
         `define RS_DEC_SRC_LEGACY_I    4'b0000
         `define RS_DEC_SRC_LEGACY_Q    4'b0001
         `define RS_DEC_SRC_PCMTRELLIS  4'b0010
