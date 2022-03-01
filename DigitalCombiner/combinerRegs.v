@@ -79,7 +79,7 @@ module combinerRegs(
     end
 
     always @* begin
-        MDB_180_1[31:28] = {'0', realLock, imagLock, locked};
+        MDB_180_1[31:28] = {1'b0, realLock, imagLock, locked};
         MDB_182_3[31:24] = Index;
         if (cs) begin
             casex (addr)
