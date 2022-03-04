@@ -13,13 +13,25 @@ manufacture, development, or derivation of any designs, or configuration.
 
 Company:     Semco Inc.
 
-Module Name: ModuleName.vhd
+Module Name: AC_Couple.vhd
 Description:
+   The module calculates the DC average of the input with a rolloff defined
+   by timeConstant. The higher the time constant the lower the bandwidth.
+   TimeConstants are four bits of 0000 to 1111.
 
-ARGUMENTS :
+   The DC voltage is then subtracted from the input signal to generate the
+   output signal
+
+   Setting the time constant to 0 disables the DC correction thus bypassing
+   the module.
+
+   The module requires a 4 bit register from the processor and software driver
+   as well as the fixed_pkg_2008.vhd and semco_pkg.vhd files which are VHDL-2008
+
+ARGUMENTS : Offset slides the range of coupling by factors of 2
 
 
-Dependencies:
+Dependencies:  Type must be declared VHDL_2008 in synthesis
 
 ----------------------------------------------------------------------------
                                DETAILS
@@ -82,62 +94,62 @@ BEGIN
             outputSF    <= (others=>'0');
          else
             if (timeConstant = x"0") then
-               shifted := resize(inputSF sra OFFSET, dcOffsetShift);
-               dcOffsetShift := resize(dcOffsetSF, dcOffsetShift);
+               shifted        := resize(inputSF sra OFFSET, dcOffsetShift);
+               dcOffsetShift  := resize(dcOffsetSF, dcOffsetShift);
             elsif (timeConstant = x"1") then
-               shifted := resize(inputSF sra (1+OFFSET), dcOffsetShift);
-               dcOffsetShift := resize(dcOffsetSF sra (1+OFFSET), dcOffsetShift);
+               shifted        := resize(inputSF sra (1+OFFSET), dcOffsetShift);
+               dcOffsetShift  := resize(dcOffsetSF sra (1+OFFSET), dcOffsetShift);
             elsif (timeConstant = x"2") then
-               shifted := resize(inputSF sra (2+OFFSET), dcOffsetShift);
-               dcOffsetShift := resize(dcOffsetSF sra (2+OFFSET), dcOffsetShift);
+               shifted        := resize(inputSF sra (2+OFFSET), dcOffsetShift);
+               dcOffsetShift  := resize(dcOffsetSF sra (2+OFFSET), dcOffsetShift);
             elsif (timeConstant = x"3") then
-               shifted := resize(inputSF sra (3+OFFSET), dcOffsetShift);
-               dcOffsetShift := resize(dcOffsetSF sra (3+OFFSET), dcOffsetShift);
+               shifted        := resize(inputSF sra (3+OFFSET), dcOffsetShift);
+               dcOffsetShift  := resize(dcOffsetSF sra (3+OFFSET), dcOffsetShift);
             elsif (timeConstant = x"4") then
-               shifted := resize(inputSF sra (4+OFFSET), dcOffsetShift);
-               dcOffsetShift := resize(dcOffsetSF sra (4+OFFSET), dcOffsetShift);
+               shifted        := resize(inputSF sra (4+OFFSET), dcOffsetShift);
+               dcOffsetShift  := resize(dcOffsetSF sra (4+OFFSET), dcOffsetShift);
             elsif (timeConstant = x"5") then
-               shifted := resize(inputSF sra (5+OFFSET), dcOffsetShift);
-               dcOffsetShift := resize(dcOffsetSF sra (5+OFFSET), dcOffsetShift);
+               shifted        := resize(inputSF sra (5+OFFSET), dcOffsetShift);
+               dcOffsetShift  := resize(dcOffsetSF sra (5+OFFSET), dcOffsetShift);
             elsif (timeConstant = x"6") then
-               shifted := resize(inputSF sra (6+OFFSET), dcOffsetShift);
-               dcOffsetShift := resize(dcOffsetSF sra (6+OFFSET), dcOffsetShift);
+               shifted        := resize(inputSF sra (6+OFFSET), dcOffsetShift);
+               dcOffsetShift  := resize(dcOffsetSF sra (6+OFFSET), dcOffsetShift);
             elsif (timeConstant = x"7") then
-               shifted := resize(inputSF sra (7+OFFSET), dcOffsetShift);
-               dcOffsetShift := resize(dcOffsetSF sra (7+OFFSET), dcOffsetShift);
+               shifted        := resize(inputSF sra (7+OFFSET), dcOffsetShift);
+               dcOffsetShift  := resize(dcOffsetSF sra (7+OFFSET), dcOffsetShift);
             elsif (timeConstant = x"8") then
-               shifted := resize(inputSF sra (8+OFFSET), dcOffsetShift);
-               dcOffsetShift := resize(dcOffsetSF sra (8+OFFSET), dcOffsetShift);
+               shifted        := resize(inputSF sra (8+OFFSET), dcOffsetShift);
+               dcOffsetShift  := resize(dcOffsetSF sra (8+OFFSET), dcOffsetShift);
             elsif (timeConstant = x"9") then
-               shifted := resize(inputSF sra (9+OFFSET), dcOffsetShift);
-               dcOffsetShift := resize(dcOffsetSF sra (9+OFFSET), dcOffsetShift);
+               shifted        := resize(inputSF sra (9+OFFSET), dcOffsetShift);
+               dcOffsetShift  := resize(dcOffsetSF sra (9+OFFSET), dcOffsetShift);
             elsif (timeConstant = x"A") then
-               shifted := resize(inputSF sra (10+OFFSET), dcOffsetShift);
-               dcOffsetShift := resize(dcOffsetSF sra (10+OFFSET), dcOffsetShift);
+               shifted        := resize(inputSF sra (10+OFFSET), dcOffsetShift);
+               dcOffsetShift  := resize(dcOffsetSF sra (10+OFFSET), dcOffsetShift);
             elsif (timeConstant = x"B") then
-               shifted := resize(inputSF sra (11+OFFSET), dcOffsetShift);
-               dcOffsetShift := resize(dcOffsetSF sra (11+OFFSET), dcOffsetShift);
+               shifted        := resize(inputSF sra (11+OFFSET), dcOffsetShift);
+               dcOffsetShift  := resize(dcOffsetSF sra (11+OFFSET), dcOffsetShift);
             elsif (timeConstant = x"C") then
-               shifted := resize(inputSF sra (12+OFFSET), dcOffsetShift);
-               dcOffsetShift := resize(dcOffsetSF sra (12+OFFSET), dcOffsetShift);
+               shifted        := resize(inputSF sra (12+OFFSET), dcOffsetShift);
+               dcOffsetShift  := resize(dcOffsetSF sra (12+OFFSET), dcOffsetShift);
             elsif (timeConstant = x"D") then
-               shifted := resize(inputSF sra (13+OFFSET), dcOffsetShift);
-               dcOffsetShift := resize(dcOffsetSF sra (13+OFFSET), dcOffsetShift);
+               shifted        := resize(inputSF sra (13+OFFSET), dcOffsetShift);
+               dcOffsetShift  := resize(dcOffsetSF sra (13+OFFSET), dcOffsetShift);
             elsif (timeConstant = x"E") then
-               shifted := resize(inputSF sra (14+OFFSET), dcOffsetShift);
-               dcOffsetShift := resize(dcOffsetSF sra (14+OFFSET), dcOffsetShift);
+               shifted        := resize(inputSF sra (14+OFFSET), dcOffsetShift);
+               dcOffsetShift  := resize(dcOffsetSF sra (14+OFFSET), dcOffsetShift);
             elsif (timeConstant = x"F") then
-               shifted := resize(inputSF sra (15+OFFSET), dcOffsetShift);
-               dcOffsetShift := resize(dcOffsetSF sra (15+OFFSET), dcOffsetShift);
+               shifted        := resize(inputSF sra (15+OFFSET), dcOffsetShift);
+               dcOffsetShift  := resize(dcOffsetSF sra (15+OFFSET), dcOffsetShift);
             end if;
             shiftedSF   <= shifted;
             dcOffShift  <= dcOffsetShift;
             if (timeConstant = x"0") then
                dcOffsetSF <= (others=>'0');
             else
-               dcOffsetSF  <= resize(dcOffsetSF - dcOffsetShift + shifted, dcOffsetSF);
+               dcOffsetSF <= resize(dcOffsetSF - dcOffsetShift + shifted, dcOffsetSF);
             end if;
-            outputSF    <= resize(inputSF - dcOffsetSF, outputSF);
+            outputSF <= resize(inputSF - dcOffsetSF, outputSF);
          end if;
       end if;
    end process;

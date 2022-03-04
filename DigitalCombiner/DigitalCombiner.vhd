@@ -231,7 +231,7 @@ BEGIN
          Im2Out         => Imag2Out,
          Index          => Index
      );
-
+/*
   CmplxPhsDet : complexphasedetector_0
       PORT MAP (
          clk            => clk,
@@ -279,6 +279,6 @@ BEGIN
          imagIn   => imagOut,
          ifOut    => ifOut
       );
-
+*/
 END rtl;
 

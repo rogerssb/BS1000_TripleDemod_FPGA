@@ -62,20 +62,20 @@
     <Option Name="IPStaticSourceDir" Val="$PIPUSERFILESDIR/ipstatic"/>
     <Option Name="EnableBDX" Val="FALSE"/>
     <Option Name="DSANumComputeUnits" Val="16"/>
-    <Option Name="WTXSimLaunchSim" Val="326"/>
+    <Option Name="WTXSimLaunchSim" Val="328"/>
     <Option Name="WTModelSimLaunchSim" Val="0"/>
     <Option Name="WTQuestaLaunchSim" Val="0"/>
     <Option Name="WTIesLaunchSim" Val="0"/>
     <Option Name="WTVcsLaunchSim" Val="0"/>
     <Option Name="WTRivieraLaunchSim" Val="0"/>
     <Option Name="WTActivehdlLaunchSim" Val="0"/>
-    <Option Name="WTXSimExportSim" Val="200"/>
-    <Option Name="WTModelSimExportSim" Val="200"/>
-    <Option Name="WTQuestaExportSim" Val="200"/>
-    <Option Name="WTIesExportSim" Val="200"/>
-    <Option Name="WTVcsExportSim" Val="200"/>
-    <Option Name="WTRivieraExportSim" Val="200"/>
-    <Option Name="WTActivehdlExportSim" Val="200"/>
+    <Option Name="WTXSimExportSim" Val="207"/>
+    <Option Name="WTModelSimExportSim" Val="207"/>
+    <Option Name="WTQuestaExportSim" Val="207"/>
+    <Option Name="WTIesExportSim" Val="207"/>
+    <Option Name="WTVcsExportSim" Val="207"/>
+    <Option Name="WTRivieraExportSim" Val="207"/>
+    <Option Name="WTActivehdlExportSim" Val="207"/>
     <Option Name="GenerateIPUpgradeLog" Val="TRUE"/>
     <Option Name="XSimRadix" Val="hex"/>
     <Option Name="XSimTimeUnit" Val="ns"/>
@@ -88,22 +88,8 @@
   <FileSets Version="1" Minor="31">
     <FileSet Name="sources_1" Type="DesignSrcs" RelSrcDir="$PSRCDIR/sources_1">
       <Filter Type="Srcs"/>
-      <File Path="$PSRCDIR/sources_1/imports/Demods2016/DigitalCombiner/DigitalCombiner.srcs/sources_1/ip/complexphasedetector_0/complexphasedetector_blk_mem_gen_v8_3_i0_vivado.coe">
-        <FileInfo>
-          <Attr Name="ImportPath" Val="$PPRDIR/../DigitalCombiner/DigitalCombiner.srcs/sources_1/ip/complexphasedetector_0/complexphasedetector_blk_mem_gen_v8_3_i0_vivado.coe"/>
-          <Attr Name="ImportTime" Val="1621383866"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
       <File Path="$PPRDIR/../DigitalCombiner/DigitalCombiner.vhd">
         <FileInfo SFType="VHDL2008">
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PSRCDIR/sources_1/ip/halfbandEven/halfbandEven.coe">
-        <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
@@ -194,14 +180,24 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PSRCDIR/sources_1/ip/axi_amm_bridge_0/axi_amm_bridge_0.xci">
+      <File Path="$PSRCDIR/sources_1/bd/design_1/design_1.bd">
         <FileInfo>
+          <Attr Name="UserDisabled" Val="1"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
+        <CompFileExtendedInfo CompFileName="design_1.bd" FileRelPathName="ip/design_1_zynq_ultra_ps_e_0_0/design_1_zynq_ultra_ps_e_0_0.xci">
+          <Proxy FileSetName="design_1_zynq_ultra_ps_e_0_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="design_1.bd" FileRelPathName="ip/design_1_smartconnect_0_0/design_1_smartconnect_0_0.xci">
+          <Proxy FileSetName="design_1_smartconnect_0_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="design_1.bd" FileRelPathName="ip/design_1_usp_rf_data_converter_0_0/design_1_usp_rf_data_converter_0_0.xci">
+          <Proxy FileSetName="design_1_usp_rf_data_converter_0_0"/>
+        </CompFileExtendedInfo>
       </File>
-      <File Path="$PSRCDIR/sources_1/ip/Clock_Times_0r5_1_2/Clock_Times_0r5_1_2.xci">
+      <File Path="$PSRCDIR/sources_1/ip/usp_rf_data_converter_0/usp_rf_data_converter_0.xci">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
@@ -210,7 +206,9 @@
       </File>
       <Config>
         <Option Name="DesignMode" Val="RTL"/>
-        <Option Name="TopModule" Val="TepsTop"/>
+        <Option Name="TopModule" Val="axi_amm_bridge_0"/>
+        <Option Name="TopLib" Val="xil_defaultlib"/>
+        <Option Name="TopArchitecture" Val="STRUCTURE"/>
         <Option Name="VerilogDir" Val="$PPRDIR/../../Demods2016"/>
         <Option Name="UpperCase" Val="1"/>
         <Define Name="TRIPLE_DEMOD"/>
@@ -254,110 +252,9 @@
     </FileSet>
     <FileSet Name="SimCombiner" Type="SimulationSrcs" RelSrcDir="$PSRCDIR/SimCombiner">
       <Filter Type="Srcs"/>
-      <File Path="$PSRCDIR/SimCombiner/imports/rtl/gng_interp.v">
-        <FileInfo>
-          <Attr Name="ImportPath" Val="$PPRDIR/../DigitalCombiner/GaussianNoiseGenerator/rtl/gng_interp.v"/>
-          <Attr Name="ImportTime" Val="1407769607"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PSRCDIR/SimCombiner/imports/rtl/gng_smul_16_18.v">
-        <FileInfo>
-          <Attr Name="ImportPath" Val="$PPRDIR/../DigitalCombiner/GaussianNoiseGenerator/rtl/gng_smul_16_18.v"/>
-          <Attr Name="ImportTime" Val="1407516041"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PSRCDIR/SimCombiner/imports/rtl/gng_smul_16_18_sadd_37.v">
-        <FileInfo>
-          <Attr Name="ImportPath" Val="$PPRDIR/../DigitalCombiner/GaussianNoiseGenerator/rtl/gng_smul_16_18_sadd_37.v"/>
-          <Attr Name="ImportTime" Val="1407516041"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PSRCDIR/SimCombiner/imports/rtl/gng_coef.v">
-        <FileInfo>
-          <Attr Name="ImportPath" Val="$PPRDIR/../DigitalCombiner/GaussianNoiseGenerator/rtl/gng_coef.v"/>
-          <Attr Name="ImportTime" Val="1407516041"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PSRCDIR/SimCombiner/imports/rtl/gng_lzd.v">
-        <FileInfo>
-          <Attr Name="ImportPath" Val="$PPRDIR/../DigitalCombiner/GaussianNoiseGenerator/rtl/gng_lzd.v"/>
-          <Attr Name="ImportTime" Val="1407516041"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PSRCDIR/SimCombiner/imports/rtl/gng_ctg.v">
-        <FileInfo>
-          <Attr Name="ImportPath" Val="$PPRDIR/../DigitalCombiner/GaussianNoiseGenerator/rtl/gng_ctg.v"/>
-          <Attr Name="ImportTime" Val="1407516041"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PSRCDIR/SimCombiner/imports/rtl/gng.v">
-        <FileInfo>
-          <Attr Name="ImportPath" Val="$PPRDIR/../DigitalCombiner/GaussianNoiseGenerator/rtl/gng.v"/>
-          <Attr Name="ImportTime" Val="1407516041"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PPRDIR/../bert/bert_lfsr.v">
-        <FileInfo>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PPRDIR/../DigitalCombiner/CombinerTb.vhd">
-        <FileInfo SFType="VHDL2008">
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PPRDIR/../DigitalCombiner/DualAgc.vhd">
-        <FileInfo SFType="VHDL2008">
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PSRCDIR/SimCombiner/ip/Lowpass66/Lowpass66.xci">
-        <FileInfo>
-          <Attr Name="ImportPath" Val="$PPRDIR/../tripleDemod.srcs/sources_1/ip/Lowpass66/Lowpass66.xci"/>
-          <Attr Name="ImportTime" Val="1624320376"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PSRCDIR/SimCombiner/ip/OffsetNCO/OffsetNCO.xci">
-        <FileInfo>
-          <Attr Name="ImportPath" Val="$PPRDIR/../tripleDemod.srcs/sources_1/ip/OffsetNCO/OffsetNCO.xci"/>
-          <Attr Name="ImportTime" Val="1626450643"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PPRDIR/../DigitalCombiner/DemodPreDist.vhd">
-        <FileInfo SFType="VHDL2008">
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
       <Config>
         <Option Name="DesignMode" Val="RTL"/>
-        <Option Name="TopModule" Val="CombinerTb"/>
+        <Option Name="TopModule" Val="TepsTop"/>
         <Option Name="TopLib" Val="xil_defaultlib"/>
         <Option Name="TransportPathDelay" Val="0"/>
         <Option Name="TransportIntDelay" Val="0"/>
@@ -370,25 +267,6 @@
         <Generic Name="in_simulation" Val="true"/>
       </Config>
     </FileSet>
-    <FileSet Name="usp_rf_data_converter_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/usp_rf_data_converter_0">
-      <File Path="$PSRCDIR/sources_1/ip/usp_rf_data_converter_0/usp_rf_data_converter_0.xci">
-        <FileInfo>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <Config>
-        <Option Name="TopModule" Val="usp_rf_data_converter_0"/>
-        <Option Name="VerilogDir" Val="$PPRDIR/../../Demods2016"/>
-        <Option Name="UpperCase" Val="1"/>
-        <Option Name="UseBlackboxStub" Val="1"/>
-        <Define Name="TRIPLE_DEMOD"/>
-        <Define Name="ADD_PN_GEN"/>
-        <Define Name="NO_LDPC_ENC"/>
-        <Define Name="COMBINER"/>
-      </Config>
-    </FileSet>
     <FileSet Name="zynq_ultra_ps_e_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/zynq_ultra_ps_e_0">
       <File Path="$PSRCDIR/sources_1/ip/zynq_ultra_ps_e_0/zynq_ultra_ps_e_0.xci">
         <FileInfo>
@@ -399,6 +277,80 @@
       </File>
       <Config>
         <Option Name="TopModule" Val="zynq_ultra_ps_e_0"/>
+        <Option Name="VerilogDir" Val="$PPRDIR/../../Demods2016"/>
+        <Option Name="UpperCase" Val="1"/>
+        <Option Name="UseBlackboxStub" Val="1"/>
+        <Define Name="TRIPLE_DEMOD"/>
+        <Define Name="ADD_PN_GEN"/>
+        <Define Name="NO_LDPC_ENC"/>
+        <Define Name="COMBINER"/>
+      </Config>
+    </FileSet>
+    <FileSet Name="axi_amm_bridge_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/axi_amm_bridge_0">
+      <File Path="$PSRCDIR/sources_1/ip/axi_amm_bridge_0/axi_amm_bridge_0.xci">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <Config>
+        <Option Name="TopModule" Val="axi_amm_bridge_0"/>
+        <Option Name="VerilogDir" Val="$PPRDIR/../../Demods2016"/>
+        <Option Name="UpperCase" Val="1"/>
+        <Option Name="UseBlackboxStub" Val="1"/>
+        <Define Name="TRIPLE_DEMOD"/>
+        <Define Name="ADD_PN_GEN"/>
+        <Define Name="NO_LDPC_ENC"/>
+        <Define Name="COMBINER"/>
+      </Config>
+    </FileSet>
+    <FileSet Name="design_1_zynq_ultra_ps_e_0_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/design_1_zynq_ultra_ps_e_0_0">
+      <Config>
+        <Option Name="TopModule" Val="design_1_zynq_ultra_ps_e_0_0"/>
+        <Option Name="VerilogDir" Val="$PPRDIR/../../Demods2016"/>
+        <Option Name="UpperCase" Val="1"/>
+        <Option Name="UseBlackboxStub" Val="1"/>
+        <Define Name="TRIPLE_DEMOD"/>
+        <Define Name="ADD_PN_GEN"/>
+        <Define Name="NO_LDPC_ENC"/>
+        <Define Name="COMBINER"/>
+      </Config>
+    </FileSet>
+    <FileSet Name="design_1_smartconnect_0_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/design_1_smartconnect_0_0">
+      <Config>
+        <Option Name="TopModule" Val="design_1_smartconnect_0_0"/>
+        <Option Name="VerilogDir" Val="$PPRDIR/../../Demods2016"/>
+        <Option Name="UpperCase" Val="1"/>
+        <Option Name="UseBlackboxStub" Val="1"/>
+        <Define Name="TRIPLE_DEMOD"/>
+        <Define Name="ADD_PN_GEN"/>
+        <Define Name="NO_LDPC_ENC"/>
+        <Define Name="COMBINER"/>
+      </Config>
+    </FileSet>
+    <FileSet Name="design_1_usp_rf_data_converter_0_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/design_1_usp_rf_data_converter_0_0">
+      <Config>
+        <Option Name="TopModule" Val="design_1_usp_rf_data_converter_0_0"/>
+        <Option Name="VerilogDir" Val="$PPRDIR/../../Demods2016"/>
+        <Option Name="UpperCase" Val="1"/>
+        <Option Name="UseBlackboxStub" Val="1"/>
+        <Define Name="TRIPLE_DEMOD"/>
+        <Define Name="ADD_PN_GEN"/>
+        <Define Name="NO_LDPC_ENC"/>
+        <Define Name="COMBINER"/>
+      </Config>
+    </FileSet>
+    <FileSet Name="Clock_Times_0r5_1_2" Type="BlockSrcs" RelSrcDir="$PSRCDIR/Clock_Times_0r5_1_2">
+      <File Path="$PSRCDIR/sources_1/ip/Clock_Times_0r5_1_2/Clock_Times_0r5_1_2.xci">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <Config>
+        <Option Name="TopModule" Val="Clock_Times_0r5_1_2"/>
         <Option Name="VerilogDir" Val="$PPRDIR/../../Demods2016"/>
         <Option Name="UpperCase" Val="1"/>
         <Option Name="UseBlackboxStub" Val="1"/>
@@ -448,7 +400,7 @@
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="usp_rf_data_converter_0_synth_1" Type="Ft3:Synth" SrcSet="usp_rf_data_converter_0" Part="xczu48dr-ffvg1517-1-i" ConstrsSet="usp_rf_data_converter_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/usp_rf_data_converter_0_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/usp_rf_data_converter_0_synth_1">
+    <Run Id="zynq_ultra_ps_e_0_synth_1" Type="Ft3:Synth" SrcSet="zynq_ultra_ps_e_0" Part="xczu48dr-ffvg1517-1-i" ConstrsSet="zynq_ultra_ps_e_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/zynq_ultra_ps_e_0_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/zynq_ultra_ps_e_0_synth_1">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2021"/>
         <Step Id="synth_design"/>
@@ -458,9 +410,54 @@
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="zynq_ultra_ps_e_0_synth_1" Type="Ft3:Synth" SrcSet="zynq_ultra_ps_e_0" Part="xczu48dr-ffvg1517-1-i" ConstrsSet="zynq_ultra_ps_e_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/zynq_ultra_ps_e_0_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/zynq_ultra_ps_e_0_synth_1">
+    <Run Id="axi_amm_bridge_0_synth_1" Type="Ft3:Synth" SrcSet="axi_amm_bridge_0" Part="xczu48dr-ffvg1517-1-i" ConstrsSet="axi_amm_bridge_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/axi_amm_bridge_0_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/axi_amm_bridge_0_synth_1">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2021"/>
+        <Step Id="synth_design"/>
+      </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2021"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="design_1_zynq_ultra_ps_e_0_0_synth_1" Type="Ft3:Synth" SrcSet="design_1_zynq_ultra_ps_e_0_0" Part="xczu48dr-ffvg1517-1-i" ConstrsSet="design_1_zynq_ultra_ps_e_0_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/design_1_zynq_ultra_ps_e_0_0_synth_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2021">
+          <Desc>Vivado Synthesis Defaults</Desc>
+        </StratHandle>
+        <Step Id="synth_design"/>
+      </Strategy>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2021"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="design_1_smartconnect_0_0_synth_1" Type="Ft3:Synth" SrcSet="design_1_smartconnect_0_0" Part="xczu48dr-ffvg1517-1-i" ConstrsSet="design_1_smartconnect_0_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/design_1_smartconnect_0_0_synth_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2021">
+          <Desc>Vivado Synthesis Defaults</Desc>
+        </StratHandle>
+        <Step Id="synth_design"/>
+      </Strategy>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2021"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="design_1_usp_rf_data_converter_0_0_synth_1" Type="Ft3:Synth" SrcSet="design_1_usp_rf_data_converter_0_0" Part="xczu48dr-ffvg1517-1-i" ConstrsSet="design_1_usp_rf_data_converter_0_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/design_1_usp_rf_data_converter_0_0_synth_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2021">
+          <Desc>Vivado Synthesis Defaults</Desc>
+        </StratHandle>
+        <Step Id="synth_design"/>
+      </Strategy>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2021"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="Clock_Times_0r5_1_2_synth_1" Type="Ft3:Synth" SrcSet="Clock_Times_0r5_1_2" Part="xczu48dr-ffvg1517-1-i" ConstrsSet="Clock_Times_0r5_1_2" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/Clock_Times_0r5_1_2_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/Clock_Times_0r5_1_2_synth_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2021">
+          <Desc>Vivado Synthesis Defaults</Desc>
+        </StratHandle>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
@@ -504,7 +501,7 @@
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="usp_rf_data_converter_0_impl_1" Type="Ft2:EntireDesign" Part="xczu48dr-ffvg1517-1-i" ConstrsSet="usp_rf_data_converter_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="usp_rf_data_converter_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/usp_rf_data_converter_0_impl_1">
+    <Run Id="zynq_ultra_ps_e_0_impl_1" Type="Ft2:EntireDesign" Part="xczu48dr-ffvg1517-1-i" ConstrsSet="zynq_ultra_ps_e_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="zynq_ultra_ps_e_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/zynq_ultra_ps_e_0_impl_1">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2021"/>
         <Step Id="init_design"/>
@@ -521,9 +518,85 @@
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="zynq_ultra_ps_e_0_impl_1" Type="Ft2:EntireDesign" Part="xczu48dr-ffvg1517-1-i" ConstrsSet="zynq_ultra_ps_e_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="zynq_ultra_ps_e_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/zynq_ultra_ps_e_0_impl_1">
+    <Run Id="axi_amm_bridge_0_impl_1" Type="Ft2:EntireDesign" Part="xczu48dr-ffvg1517-1-i" ConstrsSet="axi_amm_bridge_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="axi_amm_bridge_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/axi_amm_bridge_0_impl_1">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2021"/>
+        <Step Id="init_design"/>
+        <Step Id="opt_design"/>
+        <Step Id="power_opt_design"/>
+        <Step Id="place_design"/>
+        <Step Id="post_place_power_opt_design"/>
+        <Step Id="phys_opt_design"/>
+        <Step Id="route_design"/>
+        <Step Id="post_route_phys_opt_design"/>
+        <Step Id="write_bitstream"/>
+      </Strategy>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2021"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="design_1_zynq_ultra_ps_e_0_0_impl_1" Type="Ft2:EntireDesign" Part="xczu48dr-ffvg1517-1-i" ConstrsSet="design_1_zynq_ultra_ps_e_0_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="design_1_zynq_ultra_ps_e_0_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/design_1_zynq_ultra_ps_e_0_0_impl_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2021">
+          <Desc>Default settings for Implementation.</Desc>
+        </StratHandle>
+        <Step Id="init_design"/>
+        <Step Id="opt_design"/>
+        <Step Id="power_opt_design"/>
+        <Step Id="place_design"/>
+        <Step Id="post_place_power_opt_design"/>
+        <Step Id="phys_opt_design"/>
+        <Step Id="route_design"/>
+        <Step Id="post_route_phys_opt_design"/>
+        <Step Id="write_bitstream"/>
+      </Strategy>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2021"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="design_1_smartconnect_0_0_impl_1" Type="Ft2:EntireDesign" Part="xczu48dr-ffvg1517-1-i" ConstrsSet="design_1_smartconnect_0_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="design_1_smartconnect_0_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/design_1_smartconnect_0_0_impl_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2021">
+          <Desc>Default settings for Implementation.</Desc>
+        </StratHandle>
+        <Step Id="init_design"/>
+        <Step Id="opt_design"/>
+        <Step Id="power_opt_design"/>
+        <Step Id="place_design"/>
+        <Step Id="post_place_power_opt_design"/>
+        <Step Id="phys_opt_design"/>
+        <Step Id="route_design"/>
+        <Step Id="post_route_phys_opt_design"/>
+        <Step Id="write_bitstream"/>
+      </Strategy>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2021"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="design_1_usp_rf_data_converter_0_0_impl_1" Type="Ft2:EntireDesign" Part="xczu48dr-ffvg1517-1-i" ConstrsSet="design_1_usp_rf_data_converter_0_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="design_1_usp_rf_data_converter_0_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/design_1_usp_rf_data_converter_0_0_impl_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2021">
+          <Desc>Default settings for Implementation.</Desc>
+        </StratHandle>
+        <Step Id="init_design"/>
+        <Step Id="opt_design"/>
+        <Step Id="power_opt_design"/>
+        <Step Id="place_design"/>
+        <Step Id="post_place_power_opt_design"/>
+        <Step Id="phys_opt_design"/>
+        <Step Id="route_design"/>
+        <Step Id="post_route_phys_opt_design"/>
+        <Step Id="write_bitstream"/>
+      </Strategy>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2021"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="Clock_Times_0r5_1_2_impl_1" Type="Ft2:EntireDesign" Part="xczu48dr-ffvg1517-1-i" ConstrsSet="Clock_Times_0r5_1_2" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="Clock_Times_0r5_1_2_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/Clock_Times_0r5_1_2_impl_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2021">
+          <Desc>Default settings for Implementation.</Desc>
+        </StratHandle>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
