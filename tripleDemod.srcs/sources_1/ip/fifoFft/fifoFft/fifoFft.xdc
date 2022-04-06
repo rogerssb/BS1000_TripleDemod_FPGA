@@ -60,6 +60,11 @@
 #------------------------------------------------------------------------------#
 
 
+# False path constraint for Built-in FIFO reset
+
+set_false_path -through [get_ports rst] -to [get_pins -hierarchical -filter {NAME =~ *rstbt*/*PRE}]  
+set_false_path -from [get_cells -hierarchical -filter {NAME =~ *rstbt*/*rst_reg[*]}]
+set_false_path -from [get_cells -hierarchical -filter {NAME =~ *rstbt*/*rst_reg_reg}]
 
 
 ################################################################################

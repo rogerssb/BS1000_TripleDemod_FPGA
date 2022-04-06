@@ -1,4 +1,4 @@
-// (c) Copyright 1995-2019 Xilinx, Inc. All rights reserved.
+// (c) Copyright 1995-2022 Xilinx, Inc. All rights reserved.
 // 
 // This file contains confidential and proprietary information
 // of Xilinx, Inc. and is protected under U.S. and
@@ -56,11 +56,11 @@
 //----------- Begin Cut here for INSTANTIATION Template ---// INST_TAG
 fifoFft your_instance_name (
   .clk(clk),      // input wire clk
-  .srst(srst),    // input wire srst
-  .din(din),      // input wire [15 : 0] din
+  .rst(rst),      // input wire rst
+  .din(din),      // input wire [22 : 0] din
   .wr_en(wr_en),  // input wire wr_en
   .rd_en(rd_en),  // input wire rd_en
-  .dout(dout),    // output wire [15 : 0] dout
+  .dout(dout),    // output wire [22 : 0] dout
   .full(full),    // output wire full
   .empty(empty)  // output wire empty
 );

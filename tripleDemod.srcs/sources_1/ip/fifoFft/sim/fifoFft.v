@@ -1,4 +1,4 @@
-// (c) Copyright 1995-2019 Xilinx, Inc. All rights reserved.
+// (c) Copyright 1995-2022 Xilinx, Inc. All rights reserved.
 // 
 // This file contains confidential and proprietary information
 // of Xilinx, Inc. and is protected under U.S. and
@@ -55,7 +55,7 @@
 (* DowngradeIPIdentifiedWarnings = "yes" *)
 module fifoFft (
   clk,
-  srst,
+  rst,
   din,
   wr_en,
   rd_en,
@@ -66,15 +66,15 @@ module fifoFft (
 
 (* X_INTERFACE_INFO = "xilinx.com:signal:clock:1.0 core_clk CLK" *)
 input wire clk;
-input wire srst;
+input wire rst;
 (* X_INTERFACE_INFO = "xilinx.com:interface:fifo_write:1.0 FIFO_WRITE WR_DATA" *)
-input wire [15 : 0] din;
+input wire [22 : 0] din;
 (* X_INTERFACE_INFO = "xilinx.com:interface:fifo_write:1.0 FIFO_WRITE WR_EN" *)
 input wire wr_en;
 (* X_INTERFACE_INFO = "xilinx.com:interface:fifo_read:1.0 FIFO_READ RD_EN" *)
 input wire rd_en;
 (* X_INTERFACE_INFO = "xilinx.com:interface:fifo_read:1.0 FIFO_READ RD_DATA" *)
-output wire [15 : 0] dout;
+output wire [22 : 0] dout;
 (* X_INTERFACE_INFO = "xilinx.com:interface:fifo_write:1.0 FIFO_WRITE FULL" *)
 output wire full;
 (* X_INTERFACE_INFO = "xilinx.com:interface:fifo_read:1.0 FIFO_READ EMPTY" *)
@@ -86,9 +86,9 @@ output wire empty;
     .C_COUNT_TYPE(0),
     .C_DATA_COUNT_WIDTH(12),
     .C_DEFAULT_VALUE("BlankString"),
-    .C_DIN_WIDTH(16),
+    .C_DIN_WIDTH(23),
     .C_DOUT_RST_VAL("0"),
-    .C_DOUT_WIDTH(16),
+    .C_DOUT_WIDTH(23),
     .C_ENABLE_RLOCS(0),
     .C_FAMILY("kintex7"),
     .C_FULL_FLAGS_RST_VAL(0),
@@ -101,16 +101,16 @@ output wire empty;
     .C_HAS_OVERFLOW(0),
     .C_HAS_RD_DATA_COUNT(0),
     .C_HAS_RD_RST(0),
-    .C_HAS_RST(0),
-    .C_HAS_SRST(1),
+    .C_HAS_RST(1),
+    .C_HAS_SRST(0),
     .C_HAS_UNDERFLOW(0),
     .C_HAS_VALID(0),
     .C_HAS_WR_ACK(0),
     .C_HAS_WR_DATA_COUNT(0),
     .C_HAS_WR_RST(0),
-    .C_IMPLEMENTATION_TYPE(0),
+    .C_IMPLEMENTATION_TYPE(6),
     .C_INIT_WR_PNTR_VAL(0),
-    .C_MEMORY_TYPE(1),
+    .C_MEMORY_TYPE(4),
     .C_MIF_FILE_NAME("BlankString"),
     .C_OPTIMIZATION_MODE(0),
     .C_OVERFLOW_LOW(0),
@@ -128,7 +128,7 @@ output wire empty;
     .C_RD_FREQ(1),
     .C_RD_PNTR_WIDTH(12),
     .C_UNDERFLOW_LOW(0),
-    .C_USE_DOUT_RST(1),
+    .C_USE_DOUT_RST(0),
     .C_USE_ECC(0),
     .C_USE_EMBEDDED_REG(0),
     .C_USE_PIPELINE_REG(0),
@@ -287,8 +287,8 @@ output wire empty;
     .backup(1'D0),
     .backup_marker(1'D0),
     .clk(clk),
-    .rst(1'D0),
-    .srst(srst),
+    .rst(rst),
+    .srst(1'D0),
     .wr_clk(1'D0),
     .wr_rst(1'D0),
     .rd_clk(1'D0),

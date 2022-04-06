@@ -20,6 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 `include "addressMap.v"
+`define USE_AVG
 
 module ssc(
     input                [13:0] atod,
@@ -47,6 +48,9 @@ module ssc(
     reg     fftEnable;
     reg     winSel;                 //= 1'b1;
     reg     spectinv;
+`ifdef USE_AVG
+    reg   [2:0] avg;
+`endif
 
 //    ////DEBUG VIO
 //    vio_0 vio_ssc (
@@ -91,7 +95,7 @@ module ssc(
             end
         else if (sdiSpace && wr0) begin
             casex (addr)
-                `SDI_CONTROL: begin
+                `SSC_CONTROL: begin
                     fftEnable <= dataIn[0];
                     end
                 default: ;
@@ -120,6 +124,11 @@ module ssc(
     always@(posedge busClk) begin
         if(sdiSpace && wr1) begin
             casex (addr)
+`ifdef USE_AVG            
+                `SSC_CONTROL    :begin                    
+                    avg                  <= dataIn[10:8];
+                end
+`endif                 
                 `SSC_FRAME_WAIT :begin
                     frameWaitMSec[9:8]   <= dataIn[9:8];
                 end
@@ -133,7 +142,11 @@ module ssc(
                                     sscDOut <= {16'b0,baudDiv};
                                 end
             `SSC_CONTROL:       begin
+`ifdef USE_AVG
+                                    sscDOut <= {21'b0,avg,nfft,winSel,spectinv,fftEnable};
+`else            
                                     sscDOut <= {24'b0,nfft,winSel,spectinv,fftEnable};
+`endif                                    
                                 end
             `SSC_FRAME_WAIT:    begin
                                     sscDOut <= {22'b0,frameWaitMSec};
@@ -201,7 +214,7 @@ always @* begin
     wire [12: 0] fftN;
     wire ce2;
 
-
+   
 
     //(* DONT_TOUCH = "true|yes" *)
     hbf_fft_0 fft0 (
@@ -294,7 +307,11 @@ always @* begin
     reg     fifoEn0,fifoEn;
     wire    fifoFull;
     reg     fifoReset;
+`ifndef USE_AVG    
     reg     fifoRead;
+`else
+    wire    fifoRead;
+`endif    
     wire    [15:0] fifoDataOut;
     wire    fifoEmpty;
 
@@ -311,19 +328,71 @@ always @* begin
             end
         end
 
-    wire fifoWe = fft_mag_m_axis_dout_tvalid && ce2;
+
+
+`ifdef USE_AVG
+    reg  [22:0] fft_avg_div;
+    reg   [7:0] avgN;
+    reg   [7:0] avgCount;
+    wire [22:0] fifoDataOutAvg;
+    wire [22:0] fft_avg_fifo_in = (avg==0)||(avgCount==0) ? fft_avg_div : fifoDataOutAvg + fft_avg_div; 
+    wire [22:0] fdout = {fft_mag_m_axis_tdata_real, 7'h0};
+    assign fifoDataOut = fifoDataOutAvg[22:7];
+    always @(*) begin
+        case(avg)
+            3'b000  : fft_avg_div <= fdout;            /*divide by 2^0*/
+            3'b001  : fft_avg_div <= fdout >>> 1;      /*divide by 2^1*/
+            3'b010  : fft_avg_div <= fdout >>> 2;      /*divide by 2^2*/
+            3'b011  : fft_avg_div <= fdout >>> 3;      /*divide by 2^3*/
+            3'b100  : fft_avg_div <= fdout >>> 4;      /*divide by 2^4*/
+            3'b101  : fft_avg_div <= fdout >>> 5;      /*divide by 2^5*/
+            3'b110  : fft_avg_div <= fdout >>> 6;      /*divide by 2^6*/
+            3'b111  : fft_avg_div <= fdout >>> 7;      /*divide by 2^7*/
+            default : fft_avg_div <= fdout;
+        endcase 
+    end
+    always @(*) begin 
+        case(avg)
+            4'b000  : avgN <= 8'h1-1;
+            4'b001  : avgN <= 8'h2-1;
+            4'b010  : avgN <= 8'h4-1;
+            4'b011  : avgN <= 8'h8-1;
+            4'b100  : avgN <= 8'h10-1;
+            4'b101  : avgN <= 8'h20-1;
+            4'b110  : avgN <= 8'h40-1;
+            4'b111  : avgN <= 8'h80-1;
+            default : avgN <= 8'h0;
+        endcase 
+    end
+`endif
+
+
+`ifndef USE_AVG
+    wire fifoWe= fft_mag_m_axis_dout_tvalid && ce2;
+`else    
+    wire fifoWe;
+`endif    
     fifoFft fifoFft (
           .clk(clk),                            // input wire clk
-          .srst(fifoReset),                     // input wire srst
+//          .srst(fifoReset),                     // input wire srst
+          .rst(fifoReset),
+`ifdef USE_AVG          
+          .din(fft_avg_fifo_in),                // input wire [22 : 0] din
+`else
           .din(fft_mag_m_axis_tdata_real),      // input wire [15 : 0] din
+`endif          
           .wr_en(fifoWe),                       // input wire wr_en
           .rd_en(fifoRead),                     // input wire rd_en
+`ifdef USE_AVG          
+          .dout(fifoDataOutAvg),                // output wire [22 : 0] dout
+`else
           .dout(fifoDataOut),                   // output wire [15 : 0] dout
+`endif                     
           .full(fifoFull),                      // output wire full
           .empty(fifoEmpty)                     // output wire empty
         );
-
-
+ 
+    
   ///----------------------------------------------
   /// Uart
   ///----------------------------------------------
@@ -440,15 +509,26 @@ parameter       SM_IDLE         = 4'b0000,
                 SM_LSB_WAIT     = 4'b1011,
                 SM_LSB_LAST     = 4'b1010,
                 SM_LSB_WT_LAST  = 4'b1000,
-                SM_HOLD         = 4'b1001;
-
+                SM_HOLD         = 4'b1001
+`ifdef USE_AVG                
+                ,SM_AVG_REPEAT   = 4'b1110;
+`else
+                ;                
+`endif                
 
     reg [3:0] smState;
     reg [12:0] count;
-
+    
 `ifdef DBGNOTX
     assign uartDataNeeded = ((smState==SM_START_WAIT)||(smState==SM_HDER1_WAIT)|| (smState==SM_MSB_Wait) ||(smState== SM_LSB_Wait)) ? 1:0;
 `endif
+
+`ifdef USE_AVG
+    wire fifoWe_ = fft_mag_m_axis_dout_tvalid && ce2;
+    reg fifoRdWhenWrite;
+    reg fifoRead_;
+    assign fifoWe = (smState==SM_START2) ? fifoWe_ : 0;
+    assign fifoRead = (fifoRdWhenWrite) ? fifoWe_ : fifoRead_;
 
     always @(posedge clk) begin
         if (reset) begin
@@ -458,9 +538,11 @@ parameter       SM_IDLE         = 4'b0000,
             fifoReset <= 1;
             startn <=0;
             count <= 13'h0000;
-            fifoRead <=0;
+            fifoRead_ <=0;
+            fifoRdWhenWrite <=0;
             rstfifo <=1;
-            timer1msRst <= 1;
+            timer1msRst <= 1;     
+            avgCount <= 0;
         end
         else begin
             case (smState)
@@ -468,7 +550,9 @@ parameter       SM_IDLE         = 4'b0000,
                     fifoReset <= 1;
                     rstfifo <=0;
                     count <=13'h0000;
-                    if(fftEnable) begin
+                    fifoRdWhenWrite <=0;
+                    avgCount <= 0;
+                    if(fftEnable) begin                    
                         smState <= SM_NFFT;
                         nfftwe <= 1;
                     end
@@ -489,17 +573,45 @@ parameter       SM_IDLE         = 4'b0000,
                     end
                 end
                 SM_START        : begin
-                    smState <= SM_START2;
+                    smState <= SM_START2;                 
                 end
                 SM_START2        : begin
                     startn <= 0;                            //must hold for 2 clocks
-                    if(fft_mag_finished && !fifoEmpty) begin
-                        smState <= SM_START_WAIT;
-                        fifoRead <= 1;
+                    if(fft_mag_finished && !fifoEmpty) begin                        
+                        fifoRdWhenWrite <= 0;   
+                        if(avgCount == 0) begin
+                            fifoRead_ <= 1;                 // push the first FIFO value out, fifoRdWhenWrite will do this aftwards for each repeat 
+                        end
+                        if(avgCount < avgN) begin                      
+                            smState <= SM_AVG_REPEAT;   
+                        end
+                        else begin
+                            smState <= SM_START_WAIT;
+                        end 
+                    end                    
+                end
+                SM_AVG_REPEAT   : begin
+                    fifoRead_ <= 0;
+                    if(count < 1) begin
+                        startn <= 1;
+                        count <= count + 1;
                     end
+                    else if(count == 2) begin
+                        startn <= 0;
+                        count <= count +1;
+                    end
+                    else if(count == 6) begin
+                        smState <= SM_START2;
+                        count <= 0;
+                        fifoRdWhenWrite <= 1;
+                        avgCount <= avgCount + 1; 
+                        end                        
+                    else begin
+                        count <= count + 1;
+                    end                                      
                 end
                 SM_START_WAIT    : begin
-                    fifoRead <= 0;
+                    fifoRead_ <= 0;
                     if(uartDataNeeded) begin
                         uartDataAvailable <= 1;
                         uartData <= header[count];  //[(count*8)+:8];
@@ -535,7 +647,7 @@ parameter       SM_IDLE         = 4'b0000,
                     if (uartDataNeeded && !fifoEmpty) begin
                         smState <= SM_LSB;
                         uartData <= fifoDataOut[15:8];
-                        fifoRead <= 1;
+                        fifoRead_ <= 1;
                    end
                    else if (uartDataNeeded && fifoEmpty) begin
                         uartData <= fifoDataOut[15:8];
@@ -543,7 +655,7 @@ parameter       SM_IDLE         = 4'b0000,
                    end
                 end
                 SM_LSB          : begin
-                    fifoRead <=0;
+                    fifoRead_ <=0;
                     if (!uartDataNeeded) begin
                         smState <= SM_LSB_WAIT;
                     end
@@ -581,12 +693,150 @@ parameter       SM_IDLE         = 4'b0000,
                     nfftwe <= 0;
                     startn <=0;
                     count <= 13'h0000;
-                    fifoRead <=0;
+                    fifoRead_ <=0;
+                    fifoRdWhenWrite <= 0;
                     rstfifo <=0;
                 end
           endcase
-
         end
     end
-
+`else //////  USE_AVG  ////
+   always @(posedge clk) begin
+     if (reset) begin
+         smState <= SM_IDLE;
+         uartDataAvailable <= 0;
+         nfftwe <= 0;
+         fifoReset <= 1;
+         startn <=0;
+         count <= 13'h0000;
+         fifoRead <=0;
+         rstfifo <=1;
+         timer1msRst <= 1;
+     end
+     else begin
+         case (smState)
+             SM_IDLE         : begin
+                 fifoReset <= 1;
+                 rstfifo <=0;
+                 count <=13'h0000;
+                 if(fftEnable) begin
+                     smState <= SM_NFFT;
+                     nfftwe <= 1;
+                 end
+             end
+             SM_NFFT         : begin
+                 fifoReset <= 0;
+                 smState <= SM_NFFT2;
+             end
+             SM_NFFT2        : begin
+                 nfftwe <= 0;                        //must hold for 2 clocks
+                 if(count > 6) begin
+                     smState <= SM_START;            //wait to allow to config
+                     startn <= 1;
+                     count <= 0;
+                 end
+                 else begin
+                     count <= count + 1;
+                 end
+             end
+             SM_START        : begin
+                 smState <= SM_START2;
+             end
+             SM_START2        : begin
+                 startn <= 0;                            //must hold for 2 clocks
+                 if(fft_mag_finished && !fifoEmpty) begin
+                     smState <= SM_START_WAIT;
+                     fifoRead <= 1;
+                 end
+             end
+             SM_START_WAIT    : begin
+                 fifoRead <= 0;
+                 if(uartDataNeeded) begin
+                     uartDataAvailable <= 1;
+                     uartData <= header[count];  //[(count*8)+:8];
+                     count <= count + 1;
+                     smState <= SM_HEADER1;
+                 end
+             end
+             SM_HEADER1      : begin
+                 if (!uartDataNeeded) begin
+                    smState <= SM_HDER1_WAIT;
+                 end
+             end
+             SM_HDER1_WAIT   : begin
+                 if (uartDataNeeded) begin
+                     if(count < HEADR_SIZE) begin
+                         smState <= SM_HEADER1;
+                         uartData <= header[count];  // header[(count*8)+:8];
+                         count <= count + 1;
+                     end
+                     else begin
+                         smState <= SM_MSB;
+                         count <= 13'h00000;
+                         uartData <= fifoDataOut[7:0];
+                     end
+                 end
+             end
+             SM_MSB          : begin
+                 if (!uartDataNeeded) begin
+                     smState <= SM_MSB_WAIT;
+                 end
+             end
+             SM_MSB_WAIT     : begin
+                 if (uartDataNeeded && !fifoEmpty) begin
+                     smState <= SM_LSB;
+                     uartData <= fifoDataOut[15:8];
+                     fifoRead <= 1;
+                end
+                else if (uartDataNeeded && fifoEmpty) begin
+                     uartData <= fifoDataOut[15:8];
+                     smState <= SM_LSB_LAST;
+                end
+             end
+             SM_LSB          : begin
+                 fifoRead <=0;
+                 if (!uartDataNeeded) begin
+                     smState <= SM_LSB_WAIT;
+                 end
+             end
+             SM_LSB_WAIT     : begin
+                 if (uartDataNeeded) begin
+                    smState <= SM_MSB;
+                    uartData <= fifoDataOut[7:0];
+                end
+             end
+             SM_LSB_LAST          : begin
+                 if (!uartDataNeeded) begin
+                     smState <= SM_LSB_WT_LAST;
+                      uartDataAvailable <= 0;
+                 end
+             end
+             SM_LSB_WT_LAST     : begin
+                 if (uartDataNeeded) begin
+                    smState <= SM_HOLD;
+                    fifoReset <= 1;
+                    rstfifo <= 1;
+                    timer1msRst <=1;
+                end
+             end
+             SM_HOLD         : begin
+                 timer1msRst <= 0;
+                 if(frameWaitMSec == timer1msCounter) begin
+                     smState <= SM_IDLE;
+                 end
+             end
+             default: begin
+                 timer1msRst <= 1;
+                 smState <= SM_IDLE;
+                 uartDataAvailable <= 0;
+                 nfftwe <= 0;
+                 startn <=0;
+                 count <= 13'h0000;
+                 fifoRead <=0;
+                 rstfifo <=0;
+             end
+       endcase
+     end
+`endif  ////// `else USE_AVG  ////
+    
 endmodule

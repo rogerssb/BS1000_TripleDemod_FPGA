@@ -11,158 +11,309 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="0fs"></ZoomStartTime>
-      <ZoomEndTime time="761000001fs"></ZoomEndTime>
-      <Cursor1Time time="10000000000fs"></Cursor1Time>
+      <ZoomStartTime time="38656766666fs"></ZoomStartTime>
+      <ZoomEndTime time="38804166667fs"></ZoomEndTime>
+      <Cursor1Time time="38739600000fs"></Cursor1Time>
    </zoom_setting>
-   <WVObjectSize size="35" />
-   <wave_markers>
-      <marker time="27669600000" label="" />
-   </wave_markers>
-   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/clk" type="logic">
+   <column_width_setting>
+      <NameColumnWidth column_width="216"></NameColumnWidth>
+      <ValueColumnWidth column_width="57"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="74" />
+   <wvobject type="divider" fp_name="divider105">
+      <obj_property name="label">ssc</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testSSC/ssc/atod" type="array">
+      <obj_property name="ElementShortName">atod[13:0]</obj_property>
+      <obj_property name="ObjectShortName">atod[13:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testSSC/ssc/clk" type="logic">
       <obj_property name="ElementShortName">clk</obj_property>
       <obj_property name="ObjectShortName">clk</obj_property>
    </wvobject>
-   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/uartOut" type="logic">
+   <wvobject fp_name="/testSSC/ssc/reset" type="logic">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testSSC/ssc/busClk" type="logic">
+      <obj_property name="ElementShortName">busClk</obj_property>
+      <obj_property name="ObjectShortName">busClk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testSSC/ssc/cs" type="logic">
+      <obj_property name="ElementShortName">cs</obj_property>
+      <obj_property name="ObjectShortName">cs</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testSSC/ssc/wr0" type="logic">
+      <obj_property name="ElementShortName">wr0</obj_property>
+      <obj_property name="ObjectShortName">wr0</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testSSC/ssc/wr1" type="logic">
+      <obj_property name="ElementShortName">wr1</obj_property>
+      <obj_property name="ObjectShortName">wr1</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testSSC/ssc/wr2" type="logic">
+      <obj_property name="ElementShortName">wr2</obj_property>
+      <obj_property name="ObjectShortName">wr2</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testSSC/ssc/wr3" type="logic">
+      <obj_property name="ElementShortName">wr3</obj_property>
+      <obj_property name="ObjectShortName">wr3</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testSSC/ssc/addr" type="array">
+      <obj_property name="ElementShortName">addr[12:0]</obj_property>
+      <obj_property name="ObjectShortName">addr[12:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testSSC/ssc/dataIn" type="array">
+      <obj_property name="ElementShortName">dataIn[31:0]</obj_property>
+      <obj_property name="ObjectShortName">dataIn[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testSSC/ssc/dataOut" type="array">
+      <obj_property name="ElementShortName">dataOut[31:0]</obj_property>
+      <obj_property name="ObjectShortName">dataOut[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testSSC/ssc/uartOut" type="logic">
       <obj_property name="ElementShortName">uartOut</obj_property>
       <obj_property name="ObjectShortName">uartOut</obj_property>
    </wvobject>
-   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/baudDiv" type="array">
-      <obj_property name="ElementShortName">baudDiv[15:0]</obj_property>
-      <obj_property name="ObjectShortName">baudDiv[15:0]</obj_property>
+   <wvobject fp_name="/testSSC/ssc/sscDOut" type="array">
+      <obj_property name="ElementShortName">sscDOut[31:0]</obj_property>
+      <obj_property name="ObjectShortName">sscDOut[31:0]</obj_property>
    </wvobject>
-   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/nfft" type="array">
-      <obj_property name="ElementShortName">nfft[4:0]</obj_property>
-      <obj_property name="ObjectShortName">nfft[4:0]</obj_property>
-   </wvobject>
-   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/fftEnable" type="logic">
-      <obj_property name="ElementShortName">fftEnable</obj_property>
-      <obj_property name="ObjectShortName">fftEnable</obj_property>
-   </wvobject>
-   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/frameWaitMSec" type="array">
+   <wvobject fp_name="/testSSC/ssc/frameWaitMSec" type="array">
       <obj_property name="ElementShortName">frameWaitMSec[9:0]</obj_property>
       <obj_property name="ObjectShortName">frameWaitMSec[9:0]</obj_property>
    </wvobject>
-   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/ch" type="array">
+   <wvobject fp_name="/testSSC/ssc/ch" type="array">
       <obj_property name="ElementShortName">ch[3:0]</obj_property>
       <obj_property name="ObjectShortName">ch[3:0]</obj_property>
    </wvobject>
-   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/atod" type="array">
-      <obj_property name="ElementShortName">atod[13:0]</obj_property>
-      <obj_property name="ObjectShortName">atod[13:0]</obj_property>
-      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-      <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
+   <wvobject fp_name="/testSSC/ssc/baudDiv" type="array">
+      <obj_property name="ElementShortName">baudDiv[15:0]</obj_property>
+      <obj_property name="ObjectShortName">baudDiv[15:0]</obj_property>
    </wvobject>
-   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/rstfifo" type="array">
-      <obj_property name="ElementShortName">rstfifo[0:0]</obj_property>
-      <obj_property name="ObjectShortName">rstfifo[0:0]</obj_property>
+   <wvobject fp_name="/testSSC/ssc/nfft" type="array">
+      <obj_property name="ElementShortName">nfft[4:0]</obj_property>
+      <obj_property name="ObjectShortName">nfft[4:0]</obj_property>
    </wvobject>
-   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/smState" type="array">
-      <obj_property name="ElementShortName">smState[3:0]</obj_property>
-      <obj_property name="ObjectShortName">smState[3:0]</obj_property>
+   <wvobject fp_name="/testSSC/ssc/fftEnable" type="logic">
+      <obj_property name="ElementShortName">fftEnable</obj_property>
+      <obj_property name="ObjectShortName">fftEnable</obj_property>
    </wvobject>
-   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/uartData" type="array">
-      <obj_property name="ElementShortName">uartData[7:0]</obj_property>
-      <obj_property name="ObjectShortName">uartData[7:0]</obj_property>
+   <wvobject fp_name="/testSSC/ssc/winSel" type="logic">
+      <obj_property name="ElementShortName">winSel</obj_property>
+      <obj_property name="ObjectShortName">winSel</obj_property>
    </wvobject>
-   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/winAddr" type="array">
-      <obj_property name="ElementShortName">winAddr[12:0]</obj_property>
-      <obj_property name="ObjectShortName">winAddr[12:0]</obj_property>
+   <wvobject fp_name="/testSSC/ssc/spectinv" type="logic">
+      <obj_property name="ElementShortName">spectinv</obj_property>
+      <obj_property name="ObjectShortName">spectinv</obj_property>
    </wvobject>
-   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/winCoef" type="array">
-      <obj_property name="ElementShortName">winCoef[15:0]</obj_property>
-      <obj_property name="ObjectShortName">winCoef[15:0]</obj_property>
+   <wvobject fp_name="/testSSC/ssc/avg" type="array">
+      <obj_property name="ElementShortName">avg[2:0]</obj_property>
+      <obj_property name="ObjectShortName">avg[2:0]</obj_property>
    </wvobject>
-   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/uartDataNeeded" type="logic">
-      <obj_property name="ElementShortName">uartDataNeeded</obj_property>
-      <obj_property name="ObjectShortName">uartDataNeeded</obj_property>
+   <wvobject fp_name="/testSSC/ssc/sdiSpace" type="logic">
+      <obj_property name="ElementShortName">sdiSpace</obj_property>
+      <obj_property name="ObjectShortName">sdiSpace</obj_property>
    </wvobject>
-   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/uartDataAvailable" type="logic">
-      <obj_property name="ElementShortName">uartDataAvailable</obj_property>
-      <obj_property name="ObjectShortName">uartDataAvailable</obj_property>
+   <wvobject fp_name="/testSSC/ssc/adDatain" type="array">
+      <obj_property name="ElementShortName">adDatain[13:0]</obj_property>
+      <obj_property name="ObjectShortName">adDatain[13:0]</obj_property>
    </wvobject>
-   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/fifoDataOut" type="array">
-      <obj_property name="ElementShortName">fifoDataOut[15:0]</obj_property>
-      <obj_property name="ObjectShortName">fifoDataOut[15:0]</obj_property>
-      <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
-   </wvobject>
-   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/fifoEmpty" type="logic">
-      <obj_property name="ElementShortName">fifoEmpty</obj_property>
-      <obj_property name="ObjectShortName">fifoEmpty</obj_property>
-   </wvobject>
-   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/fifoRead" type="logic">
-      <obj_property name="ElementShortName">fifoRead</obj_property>
-      <obj_property name="ObjectShortName">fifoRead</obj_property>
-   </wvobject>
-   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/fifoReset" type="logic">
-      <obj_property name="ElementShortName">fifoReset</obj_property>
-      <obj_property name="ObjectShortName">fifoReset</obj_property>
-   </wvobject>
-   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/fifoFull" type="logic">
-      <obj_property name="ElementShortName">fifoFull</obj_property>
-      <obj_property name="ObjectShortName">fifoFull</obj_property>
-   </wvobject>
-   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/fifoEn" type="logic">
-      <obj_property name="ElementShortName">fifoEn</obj_property>
-      <obj_property name="ObjectShortName">fifoEn</obj_property>
-   </wvobject>
-   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/fifoEmpty" type="logic">
-      <obj_property name="ElementShortName">fifoEmpty</obj_property>
-      <obj_property name="ObjectShortName">fifoEmpty</obj_property>
-   </wvobject>
-   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/fifoWe" type="logic">
-      <obj_property name="ElementShortName">fifoWe</obj_property>
-      <obj_property name="ObjectShortName">fifoWe</obj_property>
-   </wvobject>
-   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/rstfifo" type="array">
-      <obj_property name="ElementShortName">rstfifo[0:0]</obj_property>
-      <obj_property name="ObjectShortName">rstfifo[0:0]</obj_property>
-   </wvobject>
-   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/fft_mag_finished" type="array">
-      <obj_property name="ElementShortName">fft_mag_finished[0:0]</obj_property>
-      <obj_property name="ObjectShortName">fft_mag_finished[0:0]</obj_property>
-   </wvobject>
-   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/fft_mag_m_axis_tdata_real" type="array">
-      <obj_property name="ElementShortName">fft_mag_m_axis_tdata_real[15:0]</obj_property>
-      <obj_property name="ObjectShortName">fft_mag_m_axis_tdata_real[15:0]</obj_property>
-      <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
-      <obj_property name="CellHeight">100</obj_property>
-      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
-   </wvobject>
-   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/fft_mag_m_axis_dout_tvalid" type="array">
-      <obj_property name="ElementShortName">fft_mag_m_axis_dout_tvalid[0:0]</obj_property>
-      <obj_property name="ObjectShortName">fft_mag_m_axis_dout_tvalid[0:0]</obj_property>
-   </wvobject>
-   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/fft_axis_tuser_xk_index_d" type="array">
-      <obj_property name="ElementShortName">fft_axis_tuser_xk_index_d[11:0]</obj_property>
-      <obj_property name="ObjectShortName">fft_axis_tuser_xk_index_d[11:0]</obj_property>
-      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
-   </wvobject>
-   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/fft_mag_m_axis_data_tlast" type="array">
-      <obj_property name="ElementShortName">fft_mag_m_axis_data_tlast[0:0]</obj_property>
-      <obj_property name="ObjectShortName">fft_mag_m_axis_data_tlast[0:0]</obj_property>
-   </wvobject>
-   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/count" type="array">
-      <obj_property name="ElementShortName">count[12:0]</obj_property>
-      <obj_property name="ObjectShortName">count[12:0]</obj_property>
-   </wvobject>
-   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/fftN" type="array">
-      <obj_property name="ElementShortName">fftN[12:0]</obj_property>
-      <obj_property name="ObjectShortName">fftN[12:0]</obj_property>
-      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
-   </wvobject>
-   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/nfftwe" type="array">
+   <wvobject fp_name="/testSSC/ssc/nfftwe" type="array">
       <obj_property name="ElementShortName">nfftwe[0:0]</obj_property>
       <obj_property name="ObjectShortName">nfftwe[0:0]</obj_property>
    </wvobject>
-   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/startn" type="array">
+   <wvobject fp_name="/testSSC/ssc/rstfifo" type="array">
+      <obj_property name="ElementShortName">rstfifo[0:0]</obj_property>
+      <obj_property name="ObjectShortName">rstfifo[0:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testSSC/ssc/startn" type="array">
       <obj_property name="ElementShortName">startn[0:0]</obj_property>
       <obj_property name="ObjectShortName">startn[0:0]</obj_property>
    </wvobject>
-   <wvobject type="divider" fp_name="divider171">
+   <wvobject fp_name="/testSSC/ssc/fifofull_i" type="array">
+      <obj_property name="ElementShortName">fifofull_i[0:0]</obj_property>
+      <obj_property name="ObjectShortName">fifofull_i[0:0]</obj_property>
    </wvobject>
-   <wvobject db_ref_id="1" fp_name="/testSSC/ssc/ce2" type="logic">
+   <wvobject fp_name="/testSSC/ssc/fifofull_q" type="array">
+      <obj_property name="ElementShortName">fifofull_q[0:0]</obj_property>
+      <obj_property name="ObjectShortName">fifofull_q[0:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testSSC/ssc/idata" type="array">
+      <obj_property name="ElementShortName">idata[18:0]</obj_property>
+      <obj_property name="ObjectShortName">idata[18:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testSSC/ssc/qdata" type="array">
+      <obj_property name="ElementShortName">qdata[15:0]</obj_property>
+      <obj_property name="ObjectShortName">qdata[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testSSC/ssc/fft_mag_finished" type="array">
+      <obj_property name="ElementShortName">fft_mag_finished[0:0]</obj_property>
+      <obj_property name="ObjectShortName">fft_mag_finished[0:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testSSC/ssc/winCoef" type="array">
+      <obj_property name="ElementShortName">winCoef[15:0]</obj_property>
+      <obj_property name="ObjectShortName">winCoef[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testSSC/ssc/winAddr" type="array">
+      <obj_property name="ElementShortName">winAddr[12:0]</obj_property>
+      <obj_property name="ObjectShortName">winAddr[12:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testSSC/ssc/scalesch" type="array">
+      <obj_property name="ElementShortName">scalesch[11:0]</obj_property>
+      <obj_property name="ObjectShortName">scalesch[11:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testSSC/ssc/fftN" type="array">
+      <obj_property name="ElementShortName">fftN[12:0]</obj_property>
+      <obj_property name="ObjectShortName">fftN[12:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testSSC/ssc/ce2" type="logic">
       <obj_property name="ElementShortName">ce2</obj_property>
       <obj_property name="ObjectShortName">ce2</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testSSC/ssc/wdec" type="array">
+      <obj_property name="ElementShortName">wdec[11:0]</obj_property>
+      <obj_property name="ObjectShortName">wdec[11:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testSSC/ssc/window" type="array">
+      <obj_property name="ElementShortName">window[4095:0][14:0]</obj_property>
+      <obj_property name="ObjectShortName">window[4095:0][14:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testSSC/ssc/windowData" type="array">
+      <obj_property name="ElementShortName">windowData[15:0]</obj_property>
+      <obj_property name="ObjectShortName">windowData[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testSSC/ssc/fft_axis_tuser_xk_index_d" type="array">
+      <obj_property name="ElementShortName">fft_axis_tuser_xk_index_d[11:0]</obj_property>
+      <obj_property name="ObjectShortName">fft_axis_tuser_xk_index_d[11:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testSSC/ssc/fft_mag_m_axis_data_tlast" type="array">
+      <obj_property name="ElementShortName">fft_mag_m_axis_data_tlast[0:0]</obj_property>
+      <obj_property name="ObjectShortName">fft_mag_m_axis_data_tlast[0:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testSSC/ssc/fft_mag_m_axis_dout_tvalid" type="array">
+      <obj_property name="ElementShortName">fft_mag_m_axis_dout_tvalid[0:0]</obj_property>
+      <obj_property name="ObjectShortName">fft_mag_m_axis_dout_tvalid[0:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testSSC/ssc/fft_mag_m_axis_tdata_real" type="array">
+      <obj_property name="ElementShortName">fft_mag_m_axis_tdata_real[15:0]</obj_property>
+      <obj_property name="ObjectShortName">fft_mag_m_axis_tdata_real[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testSSC/ssc/fifoEn0" type="logic">
+      <obj_property name="ElementShortName">fifoEn0</obj_property>
+      <obj_property name="ObjectShortName">fifoEn0</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testSSC/ssc/fifoEn" type="logic">
+      <obj_property name="ElementShortName">fifoEn</obj_property>
+      <obj_property name="ObjectShortName">fifoEn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testSSC/ssc/fifoFull" type="logic">
+      <obj_property name="ElementShortName">fifoFull</obj_property>
+      <obj_property name="ObjectShortName">fifoFull</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testSSC/ssc/fifoReset" type="logic">
+      <obj_property name="ElementShortName">fifoReset</obj_property>
+      <obj_property name="ObjectShortName">fifoReset</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testSSC/ssc/fifoRead" type="logic">
+      <obj_property name="ElementShortName">fifoRead</obj_property>
+      <obj_property name="ObjectShortName">fifoRead</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testSSC/ssc/fifoWe" type="logic">
+      <obj_property name="ElementShortName">fifoWe</obj_property>
+      <obj_property name="ObjectShortName">fifoWe</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testSSC/ssc/fifoDataOut" type="array">
+      <obj_property name="ElementShortName">fifoDataOut[15:0]</obj_property>
+      <obj_property name="ObjectShortName">fifoDataOut[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testSSC/ssc/fifoEmpty" type="logic">
+      <obj_property name="ElementShortName">fifoEmpty</obj_property>
+      <obj_property name="ObjectShortName">fifoEmpty</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testSSC/ssc/fft_avg_div" type="array">
+      <obj_property name="ElementShortName">fft_avg_div[22:0]</obj_property>
+      <obj_property name="ObjectShortName">fft_avg_div[22:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testSSC/ssc/avgN" type="array">
+      <obj_property name="ElementShortName">avgN[7:0]</obj_property>
+      <obj_property name="ObjectShortName">avgN[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testSSC/ssc/avgCount" type="array">
+      <obj_property name="ElementShortName">avgCount[7:0]</obj_property>
+      <obj_property name="ObjectShortName">avgCount[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testSSC/ssc/fifoDataOutAvg" type="array">
+      <obj_property name="ElementShortName">fifoDataOutAvg[22:0]</obj_property>
+      <obj_property name="ObjectShortName">fifoDataOutAvg[22:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testSSC/ssc/fft_avg_fifo_in" type="array">
+      <obj_property name="ElementShortName">fft_avg_fifo_in[22:0]</obj_property>
+      <obj_property name="ObjectShortName">fft_avg_fifo_in[22:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testSSC/ssc/fdout" type="array">
+      <obj_property name="ElementShortName">fdout[22:0]</obj_property>
+      <obj_property name="ObjectShortName">fdout[22:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testSSC/ssc/smState" type="array">
+      <obj_property name="ElementShortName">smState[3:0]</obj_property>
+      <obj_property name="ObjectShortName">smState[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testSSC/ssc/fifoWe_" type="logic">
+      <obj_property name="ElementShortName">fifoWe_</obj_property>
+      <obj_property name="ObjectShortName">fifoWe_</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testSSC/ssc/fifoRdWhenWrite" type="logic">
+      <obj_property name="ElementShortName">fifoRdWhenWrite</obj_property>
+      <obj_property name="ObjectShortName">fifoRdWhenWrite</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testSSC/ssc/uartDataAvailable" type="logic">
+      <obj_property name="ElementShortName">uartDataAvailable</obj_property>
+      <obj_property name="ObjectShortName">uartDataAvailable</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testSSC/ssc/uartDataNeeded" type="logic">
+      <obj_property name="ElementShortName">uartDataNeeded</obj_property>
+      <obj_property name="ObjectShortName">uartDataNeeded</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testSSC/ssc/uartData" type="array">
+      <obj_property name="ElementShortName">uartData[7:0]</obj_property>
+      <obj_property name="ObjectShortName">uartData[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testSSC/ssc/dataCnt" type="array">
+      <obj_property name="ElementShortName">dataCnt[13:0]</obj_property>
+      <obj_property name="ObjectShortName">dataCnt[13:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testSSC/ssc/header" type="array">
+      <obj_property name="ElementShortName">header[0:11][7:0]</obj_property>
+      <obj_property name="ObjectShortName">header[0:11][7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testSSC/ssc/frameEnd" type="array">
+      <obj_property name="ElementShortName">frameEnd[7:0]</obj_property>
+      <obj_property name="ObjectShortName">frameEnd[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testSSC/ssc/baudEn" type="logic">
+      <obj_property name="ElementShortName">baudEn</obj_property>
+      <obj_property name="ObjectShortName">baudEn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testSSC/ssc/timer1msCounter" type="array">
+      <obj_property name="ElementShortName">timer1msCounter[9:0]</obj_property>
+      <obj_property name="ObjectShortName">timer1msCounter[9:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testSSC/ssc/timer1msRst" type="logic">
+      <obj_property name="ElementShortName">timer1msRst</obj_property>
+      <obj_property name="ObjectShortName">timer1msRst</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testSSC/ssc/timer1mS" type="array">
+      <obj_property name="ElementShortName">timer1mS[16:0]</obj_property>
+      <obj_property name="ObjectShortName">timer1mS[16:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testSSC/ssc/count" type="array">
+      <obj_property name="ElementShortName">count[12:0]</obj_property>
+      <obj_property name="ObjectShortName">count[12:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testSSC/ssc/fifoRead_" type="logic">
+      <obj_property name="ElementShortName">fifoRead_</obj_property>
+      <obj_property name="ObjectShortName">fifoRead_</obj_property>
    </wvobject>
 </wave_config>
