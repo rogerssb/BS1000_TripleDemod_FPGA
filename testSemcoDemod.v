@@ -1,8 +1,8 @@
 `timescale 1ns/100ps
 `include "addressMap.v"
 
-`define FM_TEST
-//`define SOQPSK_TEST
+//`define FM_TEST
+`define SOQPSK_TEST
 //`define LDPC_TEST
 //`define AQPSK_TEST
 //`define QPSK_VIT_TEST
@@ -10,24 +10,48 @@
 `define ENABLE_AGC
 //`define TEST_CMA
 
-`ifdef FM_TEST
-    `define TEST_DATA "c:/modem/vivado/testData/pcmfmTestData.txt"
-`elsif SOQPSK_TEST
-    `define TEST_DATA "c:/modem/vivado/testData/soqpskTestData.txt"
-`elsif LDPC_TEST
-    `define TEST_DATA "c:/modem/vivado/testData/ldpcWaveform_1024_4_5.txt"
-    //`define TEST_DATA "c:/modem/vivado/testData/ldpcSyncWaveform.txt"
-`elsif AQPSK_TEST
-    `define TEST_DATA "c:/modem/vivado/testData/soqpskTestData.txt"
-`elsif QPSK_VIT_TEST
-    `define TEST_DATA "c:/semco/qpsk/qpsk_2047_R1_2_K7_G2Inverted.txt"
-`endif
+`ifdef VM_SIM
+    `ifdef FM_TEST
+        `define TEST_DATA "y:/vivado/testData/pcmfmTestData.txt"
+    `elsif SOQPSK_TEST
+        `define TEST_DATA "y:/vivado/testData/soqpskTestData.txt"
+    `elsif LDPC_TEST
+        `define TEST_DATA "y:/vivado/testData/ldpcWaveform_1024_4_5.txt"
+        //`define TEST_DATA "y:/vivado/testData/ldpcSyncWaveform.txt"
+    `elsif AQPSK_TEST
+        `define TEST_DATA "y:/vivado/testData/soqpskTestData.txt"
+    `elsif QPSK_VIT_TEST
+        `define TEST_DATA "c:/semco/qpsk/qpsk_2047_R1_2_K7_G2Inverted.txt"
+    `endif
+
+`else //VM_SIM
+
+    `ifdef FM_TEST
+        `define TEST_DATA "c:/modem/vivado/testData/pcmfmTestData.txt"
+        //`define TEST_DATA "c:/modem/vivado/testData/pcmfmTestData_3sps.txt"
+    `elsif SOQPSK_TEST
+        `define TEST_DATA "c:/modem/vivado/testData/soqpskTestData.txt"
+    `elsif LDPC_TEST
+        `define TEST_DATA "c:/modem/vivado/testData/ldpcWaveform_1024_4_5.txt"
+        //`define TEST_DATA "c:/modem/vivado/testData/ldpcSyncWaveform.txt"
+    `elsif AQPSK_TEST
+        `define TEST_DATA "c:/modem/vivado/testData/soqpskTestData.txt"
+    `elsif QPSK_VIT_TEST
+        `define TEST_DATA "c:/semco/qpsk/qpsk_2047_R1_2_K7_G2Inverted.txt"
+    `endif
+
+`endif //VM_SIM
 
 module test;
     parameter CLOCK_FREQ = 93.333333e6;
     parameter HC = 1e9/CLOCK_FREQ/2;
     parameter C = 2*HC;
     parameter CLOCK_DECIMATION = 1;
+
+    /*
+    Instantiate the global internals for the FPGA library
+    */
+    glbl glbl();
 
     reg     reset;
     initial reset = 0;
@@ -72,6 +96,7 @@ module test;
     parameter               ifSamplesPerBit = 128;
     `else
     parameter               ifSamplesPerBit = 32;
+    //parameter               ifSamplesPerBit = 3;
     `endif
     `define CLOCKS_PER_BIT  (ifSamplesPerBit*CLOCK_DECIMATION)
     initial begin
@@ -127,6 +152,13 @@ module test;
     real bitrateBps;
     initial bitrateBps = (`SAMPLE_FREQ/ifSamplesPerBit);
 
+    //------------------------- DQM Settings ----------------------------------
+    parameter DQM_payloadSize = 128;
+    real dqmBitrateBps;
+    initial dqmBitrateBps = bitrateBps*(DQM_payloadSize + 49)/DQM_payloadSize;
+    reg signed  [31:0]  dqmDllFrequency;
+    always @* dqmDllFrequency = $rtoi(dqmBitrateBps * `SAMPLE_PERIOD * (2.0**32));
+
     //------------------------- Carrier Settings ------------------------------
     real carrierFreqHz;
     initial carrierFreqHz = 23333333.3;
@@ -151,7 +183,7 @@ module test;
     `ifdef NEW_DDC_SETTINGS
     parameter samplesPerSymbol = 2;
     integer minDdcSamplesPerSymbol;
-    always @* begin
+    initial begin
         `ifdef SOQPSK_TEST
         minDdcSamplesPerSymbol = $rtoi(2.0*ifSamplesPerBit/samplesPerSymbol + 0.5);
         `else
@@ -174,9 +206,17 @@ module test;
     integer ddcControl;
     always @* begin
         $display("Bitrate = %f:\n", bitrateBps);
-        if (ifSamplesPerBit < 5) begin
-            $display("ERROR - bitrate too low\n");
+        if (ifSamplesPerBit < 2) begin
+            $display("ERROR - bitrate too high\n");
             $stop;
+        end
+        else if (minDdcSamplesPerSymbol <= 3) begin
+            cicDecimation = 1;
+            ddcControl = 23;
+            $display("\tHB0 bypassed\n");
+            $display("\tCIC bypassed\n");
+            $display("\tHB  bypassed\n");
+            ddcOutputFreq = (`SAMPLE_FREQ);
         end
         else if (minDdcSamplesPerSymbol <= 4) begin
             cicDecimation = 1;
@@ -265,9 +305,9 @@ module test;
     //---------------------------- Resampler Settings -------------------------
 
     real resamplerFreqNorm;
-    initial resamplerFreqNorm = resamplerFreqSps/(ddcOutputFreq)*(2.0**32);
+    always @* resamplerFreqNorm = resamplerFreqSps/(ddcOutputFreq)*(2.0**32);
     integer resamplerFreqInt;
-    initial resamplerFreqInt = $rtoi((resamplerFreqNorm >= (2.0**31)) ? (resamplerFreqNorm - (2.0**32))
+    always @* resamplerFreqInt = $rtoi((resamplerFreqNorm >= (2.0**31)) ? (resamplerFreqNorm - (2.0**32))
                                                                       : resamplerFreqNorm);
     integer resamplerLimitInt;
     always @(resamplerFreqSps) begin
@@ -362,6 +402,8 @@ module test;
 
         // Init the downcoverter register set
         //`define USE_0p1_FIR
+        //`define USE_0p3_FIR
+        //`define USE_0p4_FIR
         `ifdef USE_0p1_FIR
         ddcControl = ddcControl & ~32'h00000004;
         write16(createAddress(`DDCFIRSPACE,`DDC_FIR_COEFF_0),-46);
@@ -372,6 +414,26 @@ module test;
         write16(createAddress(`DDCFIRSPACE,`DDC_FIR_COEFF_5),4302);
         write16(createAddress(`DDCFIRSPACE,`DDC_FIR_COEFF_6),7178);
         write16(createAddress(`DDCFIRSPACE,`DDC_FIR_COEFF_7),8409);
+        `elsif USE_0p3_FIR
+        ddcControl = ddcControl & ~32'h00000004;
+        write16(createAddress(`DDCFIRSPACE,`DDC_FIR_COEFF_0), 32);
+        write16(createAddress(`DDCFIRSPACE,`DDC_FIR_COEFF_1),-22);
+        write16(createAddress(`DDCFIRSPACE,`DDC_FIR_COEFF_2),-393);
+        write16(createAddress(`DDCFIRSPACE,`DDC_FIR_COEFF_3), 978);
+        write16(createAddress(`DDCFIRSPACE,`DDC_FIR_COEFF_4),-136);
+        write16(createAddress(`DDCFIRSPACE,`DDC_FIR_COEFF_5),-3582);
+        write16(createAddress(`DDCFIRSPACE,`DDC_FIR_COEFF_6), 8689);
+        write16(createAddress(`DDCFIRSPACE,`DDC_FIR_COEFF_7), 21634);
+        `elsif USE_0p4_FIR
+        ddcControl = ddcControl & ~32'h00000004;
+        write16(createAddress(`DDCFIRSPACE,`DDC_FIR_COEFF_0),-113);
+        write16(createAddress(`DDCFIRSPACE,`DDC_FIR_COEFF_1),-76);
+        write16(createAddress(`DDCFIRSPACE,`DDC_FIR_COEFF_2), 617);
+        write16(createAddress(`DDCFIRSPACE,`DDC_FIR_COEFF_3),-1551);
+        write16(createAddress(`DDCFIRSPACE,`DDC_FIR_COEFF_4), 2765);
+        write16(createAddress(`DDCFIRSPACE,`DDC_FIR_COEFF_5),-3998);
+        write16(createAddress(`DDCFIRSPACE,`DDC_FIR_COEFF_6), 4921);
+        write16(createAddress(`DDCFIRSPACE,`DDC_FIR_COEFF_7), 27637);
         `endif
         write32(createAddress(`DDCSPACE,`DDC_CONTROL),ddcControl);
         write32(createAddress(`DDCSPACE,`DDC_CENTER_FREQ), carrierFreq);
@@ -425,9 +487,12 @@ module test;
         // MSE Estimator
         write16(createAddress(`DQMSPACE, `DQM_LOG10MSE_OFFSET),-16'sd250);
         write32(createAddress(`DQMSPACE, `DQM_MSE_CONTROL),{16'd255,16'd23253});
-        write16(createAddress(`DQMSPACE, `DQM_CLKS_PER_BIT),15);
-        write16(createAddress(`DQMSPACE, `DQM_PAYLOAD_SIZE),127);
-        //read16(createAddress(`DQMSPACE,  `DQM_CLKS_PER_BIT));
+        `ifdef DQM_USE_DPLL
+        write32(createAddress(`DQMSPACE, `DQM_DLL_FREQUENCY),dqmDllFrequency);
+        `else
+        write16(createAddress(`DQMSPACE, `DQM_CLKS_PER_BIT),22);
+        `endif
+        write16(createAddress(`DQMSPACE, `DQM_PAYLOAD_SIZE),(DQM_payloadSize-1));
         `endif
 
         `ifdef TEST_CMA
@@ -441,11 +506,13 @@ module test;
         write32(createAddress(`UARTSPACE,`UART_BAUD_DIV),32'h0000000f);
 
         `ifdef QPSK_VIT_TEST
-        // Set for inverse of 0.45 which is a smidge less than the AGC setpoint of 0.5 to 
+        // Set for inverse of 0.45 which is a smidge less than the AGC setpoint of 0.5 to
         // account for shaping filter losses.
         write32(createAddress(`VITERBISPACE, `VIT_INVERSE_MEAN), 32'h00018e39);
         write32(createAddress(`VITERBISPACE, `VIT_BER_TEST_LENGTH), 32'd8);
         `endif
+
+        write32(createAddress(`DUAL_DECODERSPACE, `DEC_CONTROL),32'h40);
 
         reset = 1;
         repeat (2) @ (posedge clk) ;
@@ -657,6 +724,42 @@ module test;
         .eyeSync(eyeClkEn),
         .iEye(iEye), .qEye(qEye),
         .eyeOffset()
+    );
+
+    reg dualDecoderSpace;
+    always @* begin
+        casex(a)
+            `DUAL_DECODERSPACE:     dualDecoderSpace = cs;
+            default:                dualDecoderSpace = 0;
+        endcase
+    end
+    wire    [31:0]  dualDecDout;
+    decoder dualDecoder
+    (
+        .clk(clk),
+        .reset(reset),
+        .en(dualDecoderSpace),
+        `ifdef USE_BUS_CLOCK
+        .busClk(busClk),
+        `endif
+        .wr0(wr0),
+        .wr1(wr1),
+        .wr2(wr2),
+        .wr3(wr3),
+        .addr(a),
+        .din(d),
+        .dout(dualDecDout),
+        .symb_clk_en(iBitEn),          // symbol rate clock enable
+        .symb_clk_2x_en(sym2xEn),     // 2x symbol rate clock enable
+        .symb_i(demodBit),            // data input,
+        .symb_q(),                    // data input,
+        .dout_i(dualDataI),
+        .dout_q(dualDataQ),
+        .outputClkEn(dualPcmClkEn),
+        .fifo_reset(),
+        .clkPhase(),
+        .symb_clk(dualPcmSymClk),
+        .inputSelect()
     );
 
     wire    [31:0]  dac0Dout;

@@ -41,6 +41,7 @@ module demod(
     output                      trellisSymEn,
     output      signed  [17:0]  iTrellis,
     output      signed  [17:0]  qTrellis,
+    output                      legacyBit,
     `ifdef ADD_LDPC
     output                      iLdpcSymEn,qLdpcSymEn,
     output      signed  [17:0]  iLdpc,
@@ -706,6 +707,7 @@ bitsync bitsync(
     .auIQSwap(auIQSwap),
     .sdiSymEn(sdiSymEn),
     .iTrellis(iBsTrellis),.qTrellis(qBsTrellis),
+    .legacyBit(legacyBit),
     `ifdef ADD_LDPC
     .iLdpcSymEn(iLdpcSymEn),.qLdpcSymEn(qLdpcSymEn),
     .iLdpc(iLdpc), .qLdpc(qLdpc),
@@ -848,6 +850,7 @@ singleFir interpFir(
 
 `define NEW_DAC_MUX
 `ifdef NEW_DAC_MUX
+    reg     [17:0]  iResampOutReg;
     reg     [17:0]  iResampInReg,qResampInReg,fmVideoReg,averageFreqReg,averageAbsFreqReg;
     reg     [17:0]  iSymDataReg,qSymDataReg;
     `ifdef ADD_DESPREADER
@@ -863,6 +866,7 @@ singleFir interpFir(
             averageAbsFreqReg <= averageAbsFreq;
         end
         if (resampSync) begin
+            iResampOutReg <= iResamp;
             iSymDataReg <= iSymData;
             qSymDataReg <= qSymData;
             `ifdef ADD_DESPREADER
@@ -961,8 +965,8 @@ always @(posedge clk) begin
 
     case (dac1Select)
         `DAC_I: begin
-            dac1Data <= iResampInReg;
-            dac1Sync <= ddcSync;
+            dac1Data <= iResampOutReg;
+            dac1Sync <= resampSync;
             end
         `DAC_Q: begin
             dac1Data <= qResampInReg;

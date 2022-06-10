@@ -4,10 +4,10 @@ writeMatFile = 0;
 writeTestVectors = 1;
 
 % Samples per symbol
-U = 32;
+U = 3;
 
 % Order of the pn sequence
-O= 6;  
+O= 6;
 
 % Mod Index
 h=14/20;
@@ -66,5 +66,5 @@ end
 if writeTestVectors == 1
     z = z .* exp(-j*2*pi*(1:length(z))/4);
     realz = real(z);
-    save('pcmfmTestData.txt','realz','-ascii');
+    save('pcmfmTestData_3sps.txt','realz','-ascii');
 end

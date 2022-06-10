@@ -1,16 +1,17 @@
 /******************************************************************************
 Copyright 2008-2015 Koos Technical Services, Inc. All Rights Reserved
 
-This source code is the Intellectual Property of Koos Technical Services,Inc. 
+This source code is the Intellectual Property of Koos Technical Services,Inc.
 (KTS) and is provided under a License Agreement which protects KTS' ownership and
 derivative rights in exchange for negotiated compensation.
 ******************************************************************************/
 
 `timescale 1ns / 10 ps
+`include "addressMap.v"
 
 //************************ Single Channel Version *****************************
 
-module halfbandDecimate( 
+module halfbandDecimate(
     clk, reset, sync,
     din,
     dout,
@@ -29,8 +30,8 @@ always @(posedge clk) begin
     if (reset) begin
         evenSync <= 0;
         end
-    else if (sync) begin  
-        evenSync <= ~evenSync;    
+    else if (sync) begin
+        evenSync <= ~evenSync;
         end
     end
 
@@ -334,7 +335,7 @@ initial begin
     sync = 1;
     syncCount = 0;
     clk = 0;
-    bitCount = 0;       
+    bitCount = 0;
 
     // Turn on the clock
     clken=1;

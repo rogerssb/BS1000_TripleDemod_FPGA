@@ -11,99 +11,81 @@ derivative rights in exchange for negotiated compensation.
 
 
 module ddc(
-    clk, reset,
+
+    input                       clk,
+    input                       reset,
     `ifdef USE_BUS_CLOCK
-    busClk,
+    input                       busClk,
     `endif
-    cs,
-    wr0,wr1,wr2,wr3,
-    addr,
-    din,
-    dout,
-    ddcFreqOffset,
-    leadFreq,
-    offsetEn,
-    nbAgcGain,
-    bbClkEn,
-    iBB, qBB,
-    iIn, qIn,
-    iLagOut, qLagOut,
-    lagClkEn,
-    syncOut,
-    iOut, qOut
-    );
+    input                       cs,
+    input                       wr0,wr1,wr2,wr3,
+    input               [12:0]  addr,
+    input               [31:0]  din,
+    output  reg         [31:0]  dout,
+    input       signed  [31:0]  ddcFreqOffset,
+    input       signed  [31:0]  leadFreq,
+    input                       offsetEn,
+    input               [20:0]  nbAgcGain,
+    input                       bbClkEn,
+    input       signed  [17:0]  iBB,
+    input       signed  [17:0]  qBB,
+    input       signed  [17:0]  iIn,
+    input       signed  [17:0]  qIn,
+    output      signed  [17:0]  iLagOut,
+    output      signed  [17:0]  qLagOut,
+    output                      lagClkEn,
+    output  reg                 syncOut,
+    output  reg signed  [17:0]  iOut,
+    output  reg signed  [17:0]  qOut
+);
 
-input           clk;
-input           reset;
-`ifdef USE_BUS_CLOCK
-input           busClk;
-`endif
-input           cs;
-input           wr0,wr1,wr2,wr3;
-input   [12:0]  addr;
-input   [31:0]  din;
-output  [31:0]  dout;
-input   [31:0]  ddcFreqOffset;
-input   [31:0]  leadFreq;
-input           offsetEn;
-input   [20:0]  nbAgcGain;
-input           bbClkEn;
-input   [17:0]  iBB;
-input   [17:0]  qBB;
-input   [17:0]  iIn;
-input   [17:0]  qIn;
-output  [17:0]  iLagOut;
-output  [17:0]  qLagOut;
-output          lagClkEn;
-output          syncOut;
-output  [17:0]  iOut;
-output  [17:0]  qOut;
-
-
-// Microprocessor interface
-reg ddcSpace;
-always @* begin
-    casex(addr)
-        `DDCSPACE:  ddcSpace    = cs;
-        default:    ddcSpace    = 0;
+    // Microprocessor interface
+    reg ddcSpace;
+    always @* begin
+        casex(addr)
+            `DDCSPACE:  ddcSpace    = cs;
+            default:    ddcSpace    = 0;
         endcase
     end
 
-wire    [31:0]  ddcCenterFreq;
-wire    [7:0]   adcDecimation;
-wire    [31:0]  ddcDout;
-ddcRegs micro(
-    .addr(addr),
-    .dataIn(din),
-    .dataOut(ddcDout),
-    `ifdef USE_BUS_CLOCK
-    .busClk(busClk),
-    `endif
-    .cs(ddcSpace),
-    .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
-    .bypassCic(bypassCic),
-    .bypassHb(bypassHb),
-    `ifdef USE_DDC_FIR
-    .bypassFir(bypassFir),
-    `endif
-    .enableBasebandInputs(enableBasebandInputs),
-    .ddcCenterFreq(ddcCenterFreq),
-    .adcDecimation(adcDecimation)
+    wire    signed  [31:0]  ddcCenterFreq;
+    wire            [7:0]   adcDecimation;
+    wire            [31:0]  ddcDout;
+    ddcRegs micro(
+        .addr(addr),
+        .dataIn(din),
+        .dataOut(ddcDout),
+        `ifdef USE_BUS_CLOCK
+        .busClk(busClk),
+        `endif
+        .cs(ddcSpace),
+        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        `ifdef ADD_HB0_BYPASS
+        .bypassHb0(bypassHb0),
+        `endif
+        .bypassCic(bypassCic),
+        .bypassHb(bypassHb),
+        `ifdef USE_DDC_FIR
+        .bypassFir(bypassFir),
+        `endif
+        .enableBasebandInputs(enableBasebandInputs),
+        .ddcCenterFreq(ddcCenterFreq),
+        .adcDecimation(adcDecimation)
     );
 
 
 // Create the LO frequency
-reg [31:0] ddcFreq;
-reg [31:0] newOffset;
-always @(posedge clk) begin
-    if (reset) begin
-        newOffset <= 0;
+    reg signed  [31:0] ddcFreq;
+    reg signed  [31:0] newOffset;
+    always @(posedge clk) begin
+        if (reset) begin
+            newOffset <= 0;
         end
-    else if (offsetEn) begin
-        newOffset <= ddcFreqOffset;
+        else if (offsetEn) begin
+            newOffset <= ddcFreqOffset;
         end
-    //ddcFreq <= ddcFreqOffset - ddcCenterFreq;
-    ddcFreq <= newOffset - ddcCenterFreq;
+        //ddcFreq <= ddcFreqOffset - ddcCenterFreq;
+        ddcFreq <= newOffset - ddcCenterFreq;
     end
 
 // LO Generator
@@ -263,24 +245,33 @@ dualDecimator #(.RegSpace(`CICDECSPACE)) cic(
     .clkEnOut(cicSyncOut)
     );
 
-reg     [47:0]  iAgcIn,qAgcIn;
-reg             agcSync;
-always @(posedge clk) begin
-    if (bypassCic) begin
-        `ifdef ADD_BB
-        iAgcIn <=   enableBasebandInputs ? {iBB,30'h0} : {iHb0,30'h0};
-        qAgcIn <=   enableBasebandInputs ? {qBB,30'h0} : {qHb0,30'h0};
-        agcSync <= (enableBasebandInputs ? bbClkEn : hb0SyncOut) & adcClkEn;
-        `else
-        iAgcIn <=  {iHb0,30'h0};
-        qAgcIn <=  {qHb0,30'h0};
-        agcSync <= hb0SyncOut & adcClkEn;
-        `endif
+    reg signed  [47:0]  iAgcIn,qAgcIn;
+    reg             agcSync;
+    always @(posedge clk) begin
+        `ifdef ADD_HB0_BYPASS
+        if (bypassHb0) begin
+            iAgcIn <= {iFir,30'h0};
+            qAgcIn <= {qFir,30'h0};
+            agcSync <= 1'b1;
         end
-    else begin
-        iAgcIn <= iCic;
-        qAgcIn <= qCic;
-        agcSync <= cicSyncOut;
+        else if (bypassCic) begin
+        `else
+        if (bypassCic) begin
+        `endif
+            `ifdef ADD_BB
+            iAgcIn <=   enableBasebandInputs ? {iBB,30'h0} : {iHb0,30'h0};
+            qAgcIn <=   enableBasebandInputs ? {qBB,30'h0} : {qHb0,30'h0};
+            agcSync <= (enableBasebandInputs ? bbClkEn : hb0SyncOut) & adcClkEn;
+            `else
+            iAgcIn <=  {iHb0,30'h0};
+            qAgcIn <=  {qHb0,30'h0};
+            agcSync <= hb0SyncOut & adcClkEn;
+            `endif
+        end
+        else begin
+            iAgcIn <= iCic;
+            qAgcIn <= qCic;
+            agcSync <= cicSyncOut;
         end
     end
 
@@ -386,7 +377,16 @@ always @(posedge clk) begin
         qFirIn <= 0;
         end
     else begin
+        `ifdef ADD_HB0_BYPASS
+        if (bypassHb0) begin
+            firClockEn <= 1'b1;
+            iFirIn <= iMix;
+            qFirIn <= qMix;
+        end
+        else if (bypassHb) begin
+        `else
         if (bypassHb) begin
+        `endif
             firClockEn <= agcSync;
             iFirIn <= iMux;
             qFirIn <= qMux;
@@ -416,7 +416,6 @@ dualFir #(.RegSpace(`DDCFIRSPACE)) dualFir (
     );
 
 reg     [17:0]  iLeadIn,qLeadIn;
-reg             syncOut;
 always @(posedge clk) begin
     if (bypassFir) begin
         if (bypassHb) begin
@@ -430,6 +429,13 @@ always @(posedge clk) begin
             qLeadIn <= qHb;
             end
         end
+    `ifdef ADD_HB0_BYPASS
+    else if (bypassHb0) begin
+        iLeadIn <= iAgc;
+        qLeadIn <= qAgc;
+        syncOut <= agcSync;
+    end
+    `endif
     else begin
         iLeadIn <= iFir;
         qLeadIn <= qFir;
@@ -505,7 +511,7 @@ always @(qLeadDds) qLeadDdsReal = ((qLeadDds > 131071.0) ? (qLeadDds - 262144.0)
 
 // Complex Multiplier
 wire    [17:0]  iLead,qLead;
-cmpy18 leadMixer(
+cmpy18 #(.UnityGain(1)) leadMixer(
     .clk(clk),
     .reset(reset),
     .aReal(iLeadIn),
@@ -517,7 +523,6 @@ cmpy18 leadMixer(
     );
 
 reg     [17:0]  iLeadOut,qLeadOut;
-reg     [17:0]  iOut,qOut;
 always @(posedge clk) begin
     if (syncOut) begin
         iLeadOut <= iLead;
@@ -542,7 +547,6 @@ always @(qOut) qOutReal = ((qOut > 131071.0) ? (qOut - 262144.0) : qOut)/131072.
 
 
 `ifdef USE_DDC_FIR
-reg [31:0]dout;
 always @* begin
     casex (addr)
         `DDCSPACE:          dout = ddcDout;

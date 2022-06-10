@@ -54,6 +54,7 @@ module bitsync(
     output  reg                 auIQSwap,
     output                      sdiSymEn,
     output      signed  [17:0]  iTrellis,qTrellis,
+    output  reg                 legacyBit,
     `ifdef ADD_LDPC
     output                      iLdpcSymEn,qLdpcSymEn,
     output  reg signed  [17:0]  iLdpc,qLdpc,
@@ -222,8 +223,19 @@ module bitsync(
     wire fmTrellisModes = ( (demodMode == `MODE_MULTIH)
                          || (demodMode == `MODE_PCMTRELLIS)
                           );
+
+    `ifdef NEW_FM_TIMING
+    reg signed  [17:0]  iTrellis,qTrellis;
+    always @(posedge clk) begin
+        if (sym2xClkEn) begin
+            iTrellis <= iMF;
+            qTrellis <= qMF;
+        end
+    end
+    `else
     assign iTrellis = iMF;
     assign qTrellis = qMF;
+    `endif
 
     `ifdef ADD_SUPERBAUD_TED
     //********************** Multih Superbaud TED *********************************
@@ -436,7 +448,7 @@ module bitsync(
                                 end
                                 // Or low to high?
                                 else begin
-                                    timingErrorI <= -offTimeI;;
+                                    timingErrorI <= -offTimeI;
                                     slipError <= earlyOnTimeI;
                                 end
                             end
@@ -770,7 +782,7 @@ module bitsync(
     // Variables used for lock detection
     reg     signed  [17:0]  auOffTimeLevel;
     reg     signed  [17:0]  auOnTimeLevel;
-    reg     signed          auTransition;
+    reg                     auTransition;
 
     // Variables used to slip the TED to break false locks
     reg                     auSlip;
@@ -1014,6 +1026,9 @@ module bitsync(
                 else begin
                     iBit <= bbSRI[1][17];
                 end
+            end
+            if (timingErrorEn) begin
+                legacyBit <= bbSRI[1][17];
             end
         end
 

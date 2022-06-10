@@ -24,7 +24,7 @@ module ddcRegs(
     `else
     output  reg signed  [31:0]  ddcCenterFreq,
     `endif
-    output  reg                 bypassCic, bypassHb,bypassFir,
+    output  reg                 bypassHb0,bypassCic,bypassHb,bypassFir,
     output  reg                 enableBasebandInputs,
     output  reg         [7:0]   adcDecimation
 );
@@ -45,6 +45,7 @@ module ddcRegs(
                     bypassHb <= dataIn[1];
                     bypassFir <= dataIn[2];
                     enableBasebandInputs <= dataIn[3];
+                    bypassHb0 <= dataIn[4];
                     end
                 `DDC_DECIMATION: begin
                     adcDecimation[7:0] <= dataIn[7:0];
@@ -100,7 +101,7 @@ module ddcRegs(
         if (cs) begin
             casex (addr)
                 `DDC_CENTER_FREQ:   dataOut = ddcCenterFreq;
-                `DDC_CONTROL:       dataOut = {28'h0,enableBasebandInputs,bypassFir,bypassHb,bypassCic};
+                `DDC_CONTROL:       dataOut = {27'h0,bypassHb0,enableBasebandInputs,bypassFir,bypassHb,bypassCic};
                 `DDC_DECIMATION:    dataOut = {24'h0,adcDecimation};
                 default:            dataOut = 32'h0;
             endcase

@@ -119,13 +119,18 @@ endmodule
 `ifdef TEST_RESAMPLER
 
 //`define RAMP_TEST
-//`define SINEWAVE_TEST
-`define IMPULSE_TEST
+`define SINEWAVE_TEST
+//`define IMPULSE_TEST
 //`define MATLAB_VECTORS
 
 `timescale 1ns/100ps
 
 module test;
+
+    /*
+    Instantiate the global internals for the FPGA library
+    */
+    glbl glbl();
 
 reg reset,clk;
 reg [4:0]   demodMode;
@@ -134,13 +139,14 @@ reg [4:0]   demodMode;
 parameter SAMPLE_FREQ = 9.333333e6;
 parameter HC = 1e9/SAMPLE_FREQ/2;
 parameter C = 2*HC;
-parameter clkEnDecimation = 3;
+parameter clkEnDecimation = 1;
 parameter DC = clkEnDecimation*C;
 reg clken;
 always #HC clk = clk^clken;
 
 reg clkEn;
 reg [3:0]clkEnCount;
+initial clkEnCount = 0;
 always @(posedge clk) begin
     if (clkEnCount == 0) begin
         clkEnCount <= clkEnDecimation-1;
@@ -150,8 +156,6 @@ always @(posedge clk) begin
         clkEnCount <= clkEnCount - 1;
         clkEn <= 0;
         end
-    //clkEn <= ~clkEn;
-    //clkEn <= 1;
     end
 
 `define SAMPLE_PERIOD   (C*1e-9)

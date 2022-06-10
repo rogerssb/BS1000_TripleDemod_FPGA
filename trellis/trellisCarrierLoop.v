@@ -535,7 +535,7 @@ dds dds(
 `ifdef SIMULATE
 wire    [11:0]  signalFreq;
 fmDemodWithCE signalDemod(
-    .clk(clk), .reset(reset), .sync(sym2xEn),
+    .clk(clk), .reset(reset), .clkEn(sym2xEn),
     .iFm(iInput),.qFm(qInput),
     .demodMode(`MODE_2FSK),
     .freq(signalFreq)
@@ -544,7 +544,7 @@ assign dac0Output = signalFreq;
 
 wire    [11:0]  corrFreq;
 fmDemodWithCE corrDemod(
-    .clk(clk), .reset(reset), .sync(sym2xEn),
+    .clk(clk), .reset(reset), .clkEn(sym2xEn),
     .iFm(bReal),.qFm(bImag),
     .demodMode(`MODE_2FSK),
     .freq(corrFreq)

@@ -19,6 +19,8 @@ module mseEstimate
     output  signed      [15:0]          log10MSE
 );
 
+    //`define MSE_USE_INSIDE_POINTS
+
     /*
     This calculates a normalized MSE estimate for constant envelope signals.
     It normalizes the mean to one. It assumes the mean is the radius of the
@@ -66,7 +68,16 @@ module mseEstimate
             sofSR <= {sofSR[0],startEstimate};
             avgCompleteDelayed <= avgComplete;
             if (avgComplete) begin
+                `ifdef MSE_USE_INSIDE_POINTS
+                if (diff <= 0) begin
+                    diffAccum <= diffSquared;
+                end
+                else begin
+                    diffAccum <= 0;
+                end
+                `else
                 diffAccum <= diffSquared;
+                `endif
                 if (!avgCompleteDelayed) begin  // Leading edge of avgComplete?
                     diffTotal <= diffAccum;
                 end
@@ -75,13 +86,22 @@ module mseEstimate
                 end
             end
             else begin
+
+                `ifdef MSE_USE_INSIDE_POINTS
+                if (diff <= 0) begin
+                    avgCount <= avgCount - 1;
+                    diffAccum <= diffAccum + diffSquared;
+                end
+                `else
                 avgCount <= avgCount - 1;
+                diffAccum <= diffAccum + diffSquared;
+                `endif
+
                 `ifdef BITSYNC_BERT
                 diff <= $signed({1'b0,mag,4'b0}) - $signed({1'b0,meanMag,1'b0});
                 `else
                 diff <= $signed({mag,5'b0}) - $signed({1'b0,meanMag,1'b0});
                 `endif
-                diffAccum <= diffAccum + diffSquared;
             end
         end
     end

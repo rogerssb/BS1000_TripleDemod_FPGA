@@ -12,12 +12,12 @@
    </db_ref_list>
    <zoom_setting>
       <ZoomStartTime time="0fs"></ZoomStartTime>
-      <ZoomEndTime time="8342700001fs"></ZoomEndTime>
-      <Cursor1Time time="8299800000fs"></Cursor1Time>
+      <ZoomEndTime time="8389833900fs"></ZoomEndTime>
+      <Cursor1Time time="8342700000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="175"></NameColumnWidth>
-      <ValueColumnWidth column_width="130"></ValueColumnWidth>
+      <ValueColumnWidth column_width="128"></ValueColumnWidth>
    </column_width_setting>
    <WVObjectSize size="3" />
    <wvobject fp_name="group101" type="group">
@@ -583,6 +583,18 @@
       <wvobject fp_name="/test/tcl/sym2xEnDly" type="logic">
          <obj_property name="ElementShortName">sym2xEnDly</obj_property>
          <obj_property name="ObjectShortName">sym2xEnDly</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/tcl/devCorrection" type="array">
+         <obj_property name="ElementShortName">devCorrection[31:0]</obj_property>
+         <obj_property name="ObjectShortName">devCorrection[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/tcl/newOffset" type="array">
+         <obj_property name="ElementShortName">newOffset[31:0]</obj_property>
+         <obj_property name="ObjectShortName">newOffset[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/test/tcl/ddsFreq" type="array">
+         <obj_property name="ElementShortName">ddsFreq[31:0]</obj_property>
+         <obj_property name="ObjectShortName">ddsFreq[31:0]</obj_property>
       </wvobject>
    </wvobject>
 </wave_config>

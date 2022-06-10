@@ -287,7 +287,7 @@ module viterbiMultiH
    acsMultH #( 3,14, 9, 4,   3,15,11, 7, ACS_BITS, MF_BITS, ROT_BITS, 0)  acsMultH15   (.clk(clk), .reset(reset), .symEn(symEnRotMux), .sym2xEn(sym2xEnRotMux), .symEnEven(symEnEvenIn), .symEnEvenRot(symEnEvenRotMux), .iMfInRot(iMfInRot3), .qMfInRot(qMfInRot3), .accMetMuxOut_0(accMuxOut12_0), .accMetMuxOut_1(accMuxOut12_1), .accMetMuxOut_2(accMuxOut12_2), .accMetMuxOut_3(accMuxOut12_3), .selOut(selOut15), .normalizeIn(s), .normalizeOut(s15), .accMetOut(accMetOut15), .iOut(/*iOut15*/), .qOut(qOut15), .symEnOut(), .sym2xEnOut());
 
    `ifdef USE_DECAY
-   `ifdef SEMCO_DEMOD
+   `ifdef USE_VIVADO_CORES
    acsMuxMpy #(ACS_BITS) acsMux0    (.decayFactor(decayFactor), .symEnEven(symEnEvenAcsMux), .accMet_45_0(accMetOut0 ), .accMet_45_1(accMetOut45), .accMet_45_2(accMetOut26), .accMet_45_3(accMetOut7 ), .accMet_54_0(accMetOut0 ), .accMet_54_1(accMetOut49), .accMet_54_2(accMetOut34), .accMet_54_3(accMetOut19), .accMuxOut0(accMuxOut0_0 ), .accMuxOut1(accMuxOut0_1 ), .accMuxOut2(accMuxOut0_2 ), .accMuxOut3(accMuxOut0_3 ));
    `else
    acsMuxLut #(ACS_BITS) acsMux0    (.decayFactor(decayFactor), .symEnEven(symEnEvenAcsMux), .accMet_45_0(accMetOut0 ), .accMet_45_1(accMetOut45), .accMet_45_2(accMetOut26), .accMet_45_3(accMetOut7 ), .accMet_54_0(accMetOut0 ), .accMet_54_1(accMetOut49), .accMet_54_2(accMetOut34), .accMet_54_3(accMetOut19), .accMuxOut0(accMuxOut0_0 ), .accMuxOut1(accMuxOut0_1 ), .accMuxOut2(accMuxOut0_2 ), .accMuxOut3(accMuxOut0_3 ));

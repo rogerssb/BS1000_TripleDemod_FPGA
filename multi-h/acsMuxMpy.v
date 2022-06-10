@@ -41,7 +41,7 @@ always @(symEnEven or
         end
     end
 
-`ifdef SEMCO_DEMOD
+`ifdef USE_VIVADO_CORES
 wire    [ACS_BITS:0]  decay0Out;
 decayMpy10x8 decay0(
     .A(muxOut0),
@@ -73,7 +73,7 @@ decayMpy10x8 decay3(
     .P(decay3Out)
     );
 assign accMuxOut3 = decay3Out[ACS_BITS:1] + decay3Out[0];
-`else //SEMCO_DEMOD
+`else //USE_VIVADO_CORES
 wire    [ACS_BITS:0]  decay0Out;
 decayMpy10x8 decay0(
     .a(muxOut0),
@@ -105,7 +105,7 @@ decayMpy10x8 decay3(
     .p(decay3Out)
     );
 assign accMuxOut3 = decay3Out[ACS_BITS:1] + decay3Out[0];
-`endif //SEMCO_DEMOD
+`endif //USE_VIVADO_CORES
 
 endmodule
 

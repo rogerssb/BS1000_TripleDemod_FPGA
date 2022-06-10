@@ -22,6 +22,8 @@
 `define SYM_DEVIATION
 `define ADD_SOQPSK_TRELLIS
 //`define FM_FILTER
+`define DQM_USE_DPLL
+//`define NEW_FM_TIMING
 
 `ifdef LEGACY_DEMOD
 `define CIC_COMP_USE_MPY
@@ -61,8 +63,19 @@
 `define R6100
 `endif
 
+`ifdef TRIPLE_MULTIH
+`define MULTIH_DEMOD
+`define ADD_FRAMER
+`define ADD_BITSYNC
+`define ADD_MULTIBOOT
+`define ADD_SPECTRAL_SWEEP
+`define R6100
+`endif
+
 `ifdef TRIPLE_LDPC
 `define LDPC_DEMOD
+`define ADD_MULTIBOOT
+`define ADD_SPECTRAL_SWEEP
 `define R6100
 `endif
 
@@ -72,12 +85,25 @@
 `define USE_BUS_CLOCK
 `define USE_VIVADO_CORES
 `define USE_DDC_FIR
-//`define ADD_DESPREADER
-//`define ADD_SCPATH
+`define ADD_HB0_BYPASS
 `define ADD_CMA
 `define ADD_TRELLIS
+`define ADD_DQM
+`define ADD_SPI_GATEWAY
+`define ADD_BERT
+`define ADD_VITERBI
+`define ADD_PN_GEN
+`define NO_LDPC_ENC
+`endif
+
+`ifdef MULTIH_DEMOD
+`define FPGA_TYPE           `MULTIH_DEMOD_IMAGE
+`define SEMCO_DEMOD_MAP
+`define USE_BUS_CLOCK
+`define USE_VIVADO_CORES
+`define USE_DDC_FIR
+`define ADD_CMA
 `define ADD_MULTIH
-//`define ADD_LDPC
 `define ADD_DQM
 //`define ADD_SUPERBAUD_TED
 `ifndef SIMULATE
@@ -86,6 +112,8 @@
 `define ADD_SPI_GATEWAY
 `define ADD_BERT
 `define ADD_VITERBI
+`define ADD_PN_GEN
+`define NO_LDPC_ENC
 `endif
 
 `ifdef LDPC_DEMOD
@@ -94,21 +122,11 @@
 `define USE_BUS_CLOCK
 `define USE_VIVADO_CORES
 `define USE_DDC_FIR
-//`define ADD_DESPREADER
-//`define ADD_SCPATH
 `define ADD_CMA
-//`define ADD_TRELLIS
-//`define ADD_MULTIH
 `define ADD_LDPC
 `define ADD_DQM
-`define ADD_SUPERBAUD_TED
-`ifndef SIMULATE
-`define EMBED_MULTIH_CARRIER_LOOP
-`endif
 `define ADD_SPI_GATEWAY
 `define ADD_BERT
-`define ADD_MULTIBOOT
-`define ADD_SPECTRAL_SWEEP
 `endif
 
 `ifdef ADD_LDPC
@@ -572,6 +590,25 @@
     `define SCINTERPSPACE       13'bx_xxxx_1111_xxxx
 `define SCDEMODSPACE        13'b0_1011_xxxx_xxxx
 
+    `ifdef SIMULATE
+
+    `define DEMODSPACE          13'b0_0100_000x_xxxx
+    `define DDCSPACE            13'b0_0100_0010_xxxx
+    `define DDCFIRSPACE         13'b0_0100_0011_xxxx
+    `define CICDECSPACE         13'b0_0100_0100_0xxx
+    `define RESAMPSPACE         13'b0_0100_0101_xxxx
+    `define BITSYNCSPACE        13'b0_0100_011x_xxxx
+    `define BITSYNCAUSPACE      13'b0_0100_100x_xxxx
+        `define BS_MODE_SINGLE_CH       2'b00
+        `define BS_MODE_IND_CH          2'b01
+        `define BS_MODE_DUAL_CH         2'b10
+        `define BS_MODE_OFFSET_CH       2'b11
+    `define CHAGCSPACE          13'b0_0100_101x_xxxx
+    `define CARRIERSPACE        13'b0_0100_110x_xxxx
+    `define EQUALIZERSPACE      13'b0_0100_1110_xxxx
+
+    `else //SIMULATE
+
     `define DEMODSPACE          13'bx_xxxx_000x_xxxx
     `define DDCSPACE            13'bx_xxxx_0010_xxxx
     `define DDCFIRSPACE         13'bx_xxxx_0011_xxxx
@@ -579,13 +616,15 @@
     `define RESAMPSPACE         13'bx_xxxx_0101_xxxx
     `define BITSYNCSPACE        13'bx_xxxx_011x_xxxx
     `define BITSYNCAUSPACE      13'bx_xxxx_100x_xxxx
-        `define BS_MODE_SINGLE_CH       b00
-        `define BS_MODE_IND_CH          b01
-        `define BS_MODE_DUAL_CH         b10
-        `define BS_MODE_OFFSET_CH       b11
+        `define BS_MODE_SINGLE_CH       2'b00
+        `define BS_MODE_IND_CH          2'b01
+        `define BS_MODE_DUAL_CH         2'b10
+        `define BS_MODE_OFFSET_CH       2'b11
     `define CHAGCSPACE          13'bx_xxxx_101x_xxxx
     `define CARRIERSPACE        13'bx_xxxx_110x_xxxx
     `define EQUALIZERSPACE      13'bx_xxxx_1110_xxxx
+
+    `endif //SIMULATE
 
 
 `define TRELLIS_SPACE       13'b0_0101_0000_xxxx
@@ -599,9 +638,22 @@
     `define DQM_MSE_CONTROL     13'bx_xxxx_xxxx_00xx
     `define DQM_LOG10MSE        13'bx_xxxx_xxxx_01xx
         `define DQM_LOG10MSE_OFFSET 13'bx_xxxx_xxxx_011x
+
+
+    `ifdef DQM_USE_DPLL
+
+    `define DQM_DLL_FREQUENCY   13'bx_xxxx_xxxx_10xx
+    `define DQM_SRC_SELECT      13'bx_xxxx_xxxx_110x
+    `define DQM_PAYLOAD_SIZE    13'bx_xxxx_xxxx_111x
+
+    `else //DQM_USE_DPLL
+
     `define DQM_CLKS_PER_BIT    13'bx_xxxx_xxxx_100x
     `define DQM_PAYLOAD_SIZE    13'bx_xxxx_xxxx_101x
     `define DQM_SRC_SELECT      13'bx_xxxx_xxxx_11xx
+
+    `endif //DQM_USE_DPLL
+
         `define DQM_SRC_LEGACY_I    4'b0000
         `define DQM_SRC_LEGACY_Q    4'b0001
         `define DQM_SRC_PCMTRELLIS  4'b0010
@@ -697,10 +749,12 @@
 // Standalone, Single Channel Bitsync
 `define SBS_TOP_SPACE       13'b0_1001_000x_xxxx
     `define BS_TOP_CONTROL          13'bx_xxxx_xxx0_00xx
+        `ifndef BS_MODE_SINGLE_CH
         `define BS_MODE_SINGLE_CH       2'b00
         `define BS_MODE_IND_CH          2'b01
         `define BS_MODE_DUAL_CH         2'b10
         `define BS_MODE_OFFSET_CH       2'b11
+        `endif
     `define BS_TOP_CH0_CONTROL      13'bx_xxxx_xxx0_01xx
     `define BS_TOP_CH1_CONTROL      13'bx_xxxx_xxx0_10xx
     `define BS_DAC_ADC                  4'b0000

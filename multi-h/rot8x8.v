@@ -116,7 +116,7 @@ module rot8x8
    wire [15:6] ixCi, qxCi;
    wire [15:6] ixCr, qxCr;
 
-    `ifdef SEMCO_DEMOD
+    `ifdef USE_VIVADO_CORES
    mult8x8 reCr
      (
       .SCLR  (reset          ),
@@ -156,7 +156,7 @@ module rot8x8
       .B     (cReal          ),  // [7 : 0]
       .P     (qxCr           )   // [15 : 6]
       );
-    `else //SEMCO_DEMOD
+    `else //USE_VIVADO_CORES
    mult8x8 reCr
      (
       .sclr  (reset          ),
@@ -196,7 +196,7 @@ module rot8x8
       .b     (cReal          ),  // [7 : 0]
       .p     (qxCr           )   // [15 : 6]
       );
-    `endif //SEMCO_DEMOD
+    `endif //USE_VIVADO_CORES
 
 
    //******************************************************

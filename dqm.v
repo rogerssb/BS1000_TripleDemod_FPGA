@@ -38,7 +38,11 @@ module dqm #(parameter regSpace = `DQMSPACE,
     wire            [15:0]  mseMean;
     wire            [15:0]  mseAvgLength;
     wire            [13:0]  payloadSize;
+    `ifdef DQM_USE_DPLL
+    wire            [31:0]  dllCenterFreq;
+    `else
     wire            [15:0]  clksPerBit;
+    `endif
     wire            [31:0]  regDout;
     dqmRegs dqmr(
         .cs(dqmSpace),
@@ -54,7 +58,11 @@ module dqm #(parameter regSpace = `DQMSPACE,
         .mseMean(mseMean),
         .mseAvgLength(mseAvgLength),
         .payloadSize(payloadSize),
+        `ifdef DQM_USE_DPLL
+        .dllCenterFreq(dllCenterFreq),
+        `else
         .clksPerBit(clksPerBit),
+        `endif
         .sourceSelect(sourceSelect)
     );
 
@@ -104,7 +112,11 @@ module dqm #(parameter regSpace = `DQMSPACE,
         .payloadSize(payloadSize),
         .payloadBitEn(bitClkEn),
         .payloadBit(payloadBit),
+        `ifdef DQM_USE_DPLL
+        .dllCenterFreq(dllCenterFreq),
+        `else
         .clksPerBit(clksPerBit),
+        `endif
         .dqmStartOfFrame(dqmStartOfFrame),
         .dqmBitEn(dqmBitEn),
         .dqmBit(dqmBit)

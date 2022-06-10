@@ -144,7 +144,7 @@ module semcoDemodTop (
 
 );
 
-    parameter VER_NUMBER = 16'd733;
+    parameter VER_NUMBER = 16'd735;
 
 
 //******************************************************************************
@@ -422,6 +422,7 @@ module semcoDemodTop (
         .trellisSymEn(trellisSymEn),
         .iTrellis(iTrellis),
         .qTrellis(qTrellis),
+        .legacyBit(legacyBit),
         `ifdef ADD_LDPC
         .iLdpcSymEn(iLdpcSymEn),.qLdpcSymEn(qLdpcSymEn),
         .iLdpc(iLdpc),
@@ -783,7 +784,11 @@ module semcoDemodTop (
         .symEn(pcmSymEn),
         .sym2xEn(pcmSym2xEn),
         .iIn(iPcmIn),.qIn(qPcmIn),
+        `ifdef NEW_FM_TIMING
+        .legacyBit(legacyBit),
+        `else
         .legacyBit(iDemodBit),
+        `endif
         .dac0Select(demodDac0Select),
         .dac1Select(demodDac1Select),
         .dac2Select(demodDac2Select),
@@ -813,7 +818,7 @@ module semcoDemodTop (
         `ifdef ADD_SUPERBAUD_TED
         .symEnEvenIn(trellisSymEnEven & multihMode),
         `else
-        .symEnEvenIn(1'b0),
+        .symEnEvenIn(trellisSymEnEven & multihMode),
         `endif
         .symEnIn(trellisSymEn & multihMode),
         .sym2xEnIn(iDemodSym2xEn & multihMode),
@@ -1052,6 +1057,30 @@ module semcoDemodTop (
 
                 `else //ADD_TRELLIS
 
+                `ifdef ADD_MULTIH
+
+                if (multihMode) begin
+                    dualCh0Input <= multihBit[0];
+                    dualCh1Input <= multihBit[1];
+                    dualSymEn <= multihSymEnOut;
+                    dualSym2xEn <= multihSym2xEnOut;
+                end
+                else begin
+                    `ifdef ADD_FRAMER
+                    dualCh0Input <= iRotBit;
+                    dualCh1Input <= qRotBit;
+                    dualSymEn <= iDemodBitEn;
+                    dualSym2xEn <= iDemodSym2xEn;
+                    `else //ADD_FRAMER
+                    dualCh0Input <= iDemodBit;
+                    dualCh1Input <= qDemodBit;
+                    dualSymEn <= iDemodBitEn;
+                    dualSym2xEn <= iDemodSym2xEn;
+                    `endif //ADD_FRAMER
+                end
+
+                `else // ADD_MULTIH
+
                 `ifdef ADD_FRAMER
                 dualCh0Input <= iRotBit;
                 dualCh1Input <= qRotBit;
@@ -1063,6 +1092,8 @@ module semcoDemodTop (
                 dualSymEn <= iDemodBitEn;
                 dualSym2xEn <= iDemodSym2xEn;
                 `endif //ADD_FRAMER
+
+                `endif //ADD_MULTIH
 
                 `endif //ADD_TRELLIS
             end
@@ -1673,7 +1704,7 @@ module semcoDemodTop (
     assign ch1ClkOut = ldpcBitEnOut;
     assign ch3ClkOut = cAndD1ClkOut;
     assign ch3DataOut = cAndD1DataOut[2];
-    `elif BYPASS_CANDD1
+    `elsif BYPASS_CANDD1
     assign ch1ClkOut = cAndD1ClkEn;
     assign ch1DataOut = cAndD1DataIn[2];
     assign ch3ClkOut = cAndD1ClkEn;
@@ -2290,7 +2321,14 @@ sdi sdi(
             `endif
 
             `ifdef ADD_PN_GEN
-             `PNGEN_SPACE:      TODO, pnGen is not intended for non6100 builds. FZ
+             `PNGEN_SPACE:      begin
+                if (addr[1]) begin
+                    rd_mux = pngenDout[31:16];
+                end
+                else begin
+                    rd_mux = pngenDout[15:0];
+                end
+            end
             `endif
 
             `PRIDEMODSPACE: begin
