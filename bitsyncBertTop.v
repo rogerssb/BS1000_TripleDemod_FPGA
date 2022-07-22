@@ -84,7 +84,7 @@ module bitsyncBertTop (
 
 );
 
-    parameter VER_NUMBER = 16'd674;
+    parameter VER_NUMBER = 16'd675;
 
 
 //******************************************************************************
@@ -107,8 +107,9 @@ module bitsyncBertTop (
 /******************************************************************************
                              Bus Interface
 ******************************************************************************/
-    wire    [12:0]  addr;
-    wire    [31:0]  dataIn;
+(* MARK_DEBUG="true" *)    wire    [12:0]  addr;
+(* MARK_DEBUG="true" *)    wire    [31:0]  dataIn;
+(* MARK_DEBUG="true" *)    wire cs, wr0, wr1, wr2, wr3;
     flexbus flexbus(
         .fb_clk(fb_clk),
         .fb_ale(fb_ale),
@@ -606,6 +607,47 @@ clockAndDataInputSync diffSync(
 
 
 //******************************************************************************
+//                               Reed Solomon Encoder
+//******************************************************************************
+wire    [31:0] rsEncDout;
+wire    [17:0]  rsEncDac0Data,
+                rsEncDac1Data,
+                rsEncDac2Data;
+
+    reg rsEncSpace;
+    always @* begin
+        casex(addr)
+            `RSENC_SPACE:           rsEncSpace = cs;
+            default:                rsEncSpace = 0;
+        endcase
+    end
+
+    RS_EncoderTop rsEnc(
+        .clk(clk),
+        .ce(1'b1),
+        .cs(rsEncSpace),
+        .reset(reset),
+        .busClk(fb_clk),
+        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .addr(addr),
+        .din(dataIn),
+        .dout(rsEncDout),
+        .sourceSelect(),
+        .bitEn(pnClkEn),
+        .bitData(pnBit),
+        .dac0ClkEn(rsEncDac0ClkEn),
+        .dac1ClkEn(rsEncDac1ClkEn),
+        .dac2ClkEn(rsEncDac2ClkEn),
+        .dac0Data(rsEncDac0Data),
+        .dac1Data(rsEncDac1Data),
+        .dac2Data(rsEncDac2Data),
+        .encDataOut(rsEncData),
+        .encDataEn(rsEncClkEn),
+        .syncOutIntLv(),
+        .FrameCount(4'b0100)
+   );
+
+//******************************************************************************
 //                       Clock/Data Jitter Reduction
 //******************************************************************************
 
@@ -649,8 +691,13 @@ clockAndDataInputSync diffSync(
             end
             `endif
             default: begin
+            `ifdef RS_ENCODER_TEST
+                 cAndD0ClkEn  = framer_ClkEn;
+                 cAndD0DataIn = framer_Data;
+            `else
                 cAndD0ClkEn = dualPcmClkEn;
                 cAndD0DataIn = {dualDataI,dualDataQ,1'b0};
+            `endif
             end
         endcase
     end
@@ -688,8 +735,13 @@ clockAndDataInputSync diffSync(
             end
             `endif
             default: begin
+            `ifdef RS_ENCODER_TEST
+                 cAndD1ClkEn  = rsEncClkEn;
+                 cAndD1DataIn = {rsEncData,2'b0};
+            `else
                 cAndD1ClkEn = ch1PcmClkEn;
                 cAndD1DataIn = {ch1PcmData,2'b0};
+            `endif
             end
         endcase
     end
@@ -1044,7 +1096,7 @@ clockAndDataInputSync diffSync(
 //******************************************************************************
 //                               Framer
 //******************************************************************************
-    clockAndDataMux framerMux(
+    clockAndDataBufgMux framerMux(      // Use BufgMux's since the outputs go to fabric
         .muxSelect(framerInputMuxSelect),
         .clk0(dll0_Clk),
         .clkInvert0(1'b0),
@@ -1067,10 +1119,10 @@ clockAndDataInputSync diffSync(
         .clk6(1'b0),
         .clkInvert6(1'b0),
         .data6(1'b0),
-        .clk7(1'b0),
+        .clk7(clk),
         .clkInvert7(1'b0),
         .data7(1'b0),
-        .outputClk(framer_Clk),
+        .outputClk(framerClkIn),
         .outputData(framerData)
     );
 
@@ -1084,13 +1136,14 @@ clockAndDataInputSync diffSync(
         .addr(addr),
         .din(dataIn),
         .dout(framerDout),
-        .clk(framer_Clk),
+        .clk(framerClkIn),
         .clkEn(1'b1),
         .dataBitIn(framerData),
         .rotation(framerRotation),
         .inputSourceSelect(),
         .framesyncPulse(framer_Sync),
         .framedBitOut(framer_Data),
+        .framedClkEn(framer_ClkEn),
         .framesync(framesync)
     );
 
@@ -1129,6 +1182,11 @@ clockAndDataInputSync diffSync(
             `SYS_DAC_INPUT_SEL_TURBO: begin
                 interp0DataIn <= turboDac0Data;
                 interp0ClkEn <= turboDac0ClkEn;
+            end
+            `else
+            `SYS_DAC_INPUT_SEL_TURBO: begin
+                interp0DataIn <= rsEncDac0Data;
+                interp0ClkEn  <= rsEncDac0ClkEn;
             end
             `endif
             default: begin
@@ -1174,6 +1232,11 @@ clockAndDataInputSync diffSync(
                 interp1DataIn <= turboDac1Data;
                 interp1ClkEn <= turboDac1ClkEn;
             end
+            `else
+            `SYS_DAC_INPUT_SEL_TURBO: begin
+                interp1DataIn <= rsEncDac1Data;
+                interp1ClkEn  <= rsEncDac1ClkEn;
+            end
             `endif
             default: begin
                 interp1DataIn <= ch0Dac1Data;
@@ -1217,6 +1280,11 @@ clockAndDataInputSync diffSync(
             `SYS_DAC_INPUT_SEL_TURBO: begin
                 interp2DataIn <= turboDac2Data;
                 interp2ClkEn <= turboDac2ClkEn;
+            end
+            `else
+            `SYS_DAC_INPUT_SEL_TURBO: begin
+                interp2DataIn <= rsEncDac2Data;
+                interp2ClkEn  <= rsEncDac2ClkEn;
             end
             `endif
             default: begin
@@ -1295,7 +1363,7 @@ clockAndDataMux bsMux(
     .clk6(pll2_Clk),
     .clkInvert6(1'b0),
     .data6(pll2_Data),
-    .clk7(framer_Clk),
+    .clk7(framer_ClkOut),
     .clkInvert7(1'b0),
     .data7(framer_Data),
     .outputClk(bsClkOut),
@@ -1327,7 +1395,7 @@ clockAndDataMux bsDiffMux(
     .clk6(pll2_Clk),
     .clkInvert6(1'b0),
     .data6(pll2_Data),
-    .clk7(framer_Clk),
+    .clk7(framer_ClkOut),
     .clkInvert7(1'b0),
     .data7(framer_Data),
     .outputClk(bsDiffClkOut),
@@ -1357,7 +1425,7 @@ clockAndDataMux encMux(
     .clk6(pll2_Clk),
     .clkInvert6(1'b0),
     .data6(pll2_Data),
-    .clk7(framer_Clk),
+    .clk7(framer_ClkOut),
     .clkInvert7(1'b0),
     .data7(framer_Data),
     .outputClk(encClkOut),
@@ -1387,7 +1455,7 @@ clockAndDataMux fsMux(
     .clk6(pll2_Clk),
     .clkInvert6(1'b0),
     .data6(pll2_Data),
-    .clk7(framer_Clk),
+    .clk7(framer_ClkOut),
     .clkInvert7(1'b0),
     .data7(framer_Data),
     .outputClk(fsClkOut),
@@ -1417,7 +1485,7 @@ clockAndDataMux fsDiffMux(
     .clk6(pll2_Clk),
     .clkInvert6(1'b0),
     .data6(pll2_Data),
-    .clk7(framer_Clk),
+    .clk7(framer_ClkOut),
     .clkInvert7(1'b0),
     .data7(framer_Data),
     .outputClk(fsDiffClkOut),
@@ -1447,7 +1515,7 @@ clockAndDataMux spareMux(
     .clk6(pll2_Clk),
     .clkInvert6(1'b0),
     .data6(pll2_Data),
-    .clk7(framer_Clk),
+    .clk7(framer_ClkOut),
     .clkInvert7(1'b0),
     .data7(framer_Data),
     .outputClk(spareClock),
@@ -1460,7 +1528,7 @@ assign ch1Lockn = !ch1Lock;
 //******************************************************************************
 //                           Processor Read Data Mux
 //******************************************************************************
-reg [15:0] rd_mux;
+(* MARK_DEBUG="true" *) reg [15:0] rd_mux;
 always @* begin
     casex(addr)
         `ifdef ADD_MSE
@@ -1497,6 +1565,14 @@ always @* begin
             end
             else begin
                 rd_mux = pngenDout[15:0];
+            end
+        end
+        `RSENC_SPACE: begin
+            if (addr[1]) begin
+                rd_mux = rsEncDout[31:16];
+            end
+            else begin
+                rd_mux = rsEncDout[15:0];
             end
         end
         `FRAMER_SPACE: begin

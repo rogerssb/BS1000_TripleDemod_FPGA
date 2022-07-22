@@ -45,17 +45,17 @@ ENTITY RS_Interleave IS
       GENERIC(
          DATA_WIDTH     : positive := 8;
          MAX_COL_BITS   : positive := 8;
-         MAX_ROW_BITS   : positive := 4
+         MAX_INT_BITS   : positive := 4;
+         PACK           : boolean  := false
       );
    PORT(
       Clk,
       Reset,
       CE,
       ValidIn,       -- dataIn is valid
-      SyncIn,        -- start of frame
-      Pack           : IN  std_logic;     -- pack or unpack
+      SyncIn         : IN  std_logic; -- start of frame
       ColsSlv        : IN  std_logic_vector (MAX_COL_BITS - 1 downto 0);
-      RowsSlv        : IN  std_logic_vector (MAX_ROW_BITS - 1 downto 0);
+      InterLeave     : IN  std_logic_vector (MAX_INT_BITS - 1 downto 0);
       DataIn         : IN  std_logic_vector(DATA_WIDTH-1 downto 0);
       SyncOut,
       LastOut,
@@ -91,35 +91,42 @@ ARCHITECTURE rtl OF RS_Interleave IS
       );
    END COMPONENT RAM_2Reads_1Write;
 
-   constant ADDR_WIDTH           : natural := MAX_COL_BITS + MAX_ROW_BITS;
+   constant ADDR_WIDTH           : natural := MAX_COL_BITS + MAX_INT_BITS;
 
    SIGNAL   ColsCntrRd,
             ColsCntrWr           : natural range 0 to 2**MAX_COL_BITS-1;
    signal   RowsCntrRd,
-            RowsCntrWr           : natural range 0 to 2**MAX_ROW_BITS-1;
-   signal   Ping,
-            PingDly,
+            RowsCntrWr           : natural range 0 to 2**MAX_INT_BITS-1;
+   signal   WrBuff1,
+            WrBuff1Dly,
+            RdBuff1,
+            RdBuff1Dly,
             ValidIn0,
             ValidIn1,
             WaitForSync          : std_logic;
    signal   Cols,
             ColsPrev             : unsigned(ColsSlv'range);
    signal   Rows,
-            RowsPrev             : unsigned(RowsSlv'range);
+            RowsPrev             : unsigned(InterLeave'range);
    signal   DataOut0,
             DataOut1             : std_logic_vector(DATA_WIDTH-1 DOWNTO 0);
    signal   WrAddr,
             RdAddr               : natural range 0 to 2**ADDR_WIDTH - 1;
 
+attribute MARK_DEBUG : string;
+attribute MARK_DEBUG of ColsCntrRd,ColsCntrWr,RowsCntrRd,RowsCntrWr,WrBuff1,WrBuff1Dly,ValidIn0,ValidIn1,
+         WaitForSync,ColsPrev,RowsPrev,DataOut0,DataOut1,WrAddr,RdAddr : signal is "TRUE";
+
 BEGIN
 
    Cols <= unsigned(ColsSlv);
-   Rows <= unsigned(RowsSlv);
+   Rows <= unsigned(InterLeave);
 
   RS_InterleaveProcess: process (Clk)
    begin
       if (rising_edge(Clk)) then
-         PingDly     <= Ping;
+         WrBuff1Dly     <= WrBuff1;
+         RdBuff1Dly     <= RdBuff1;
          ValidOut    <= ValidIn;
          ColsPrev    <= Cols;
          RowsPrev    <= Rows;
@@ -129,19 +136,21 @@ BEGIN
             RowsCntrRd  <= 0;
             RowsCntrWr  <= 0;
             WaitForSync <= '1';
-            LastOut     <= '1';
-            Ping        <= '0';
+            LastOut     <= '1';  -- Hmm? FZ
+            WrBuff1        <= '0';
+            RdBuff1        <= '1';
             SyncOut     <= '1';  -- kickstart the RS Decoder
          else
             if (SyncIn) then
                WaitForSync <= '0';        -- should never get a Sync and Valid in same clock
-               if (Pack) then
+               if (PACK) then
                   if (RowsCntrWr = Rows - 1) then  -- if Packing, sync is from RS encoder per codeblock
                      RowsCntrRd  <= 0;             -- ignore SyncIn until interleave depth reached
                      ColsCntrRd  <= 0;
-                     SyncOut     <= '1';
+ --  FZ TODO                   SyncOut     <= '1';
                   end if;
                   ColsCntrWr <= 0;                 -- recenter interleaving with encoder, don't care what Row
+                  LastOut <= '0';
                else
                   ColsCntrRd <= 0;        -- so all counters should roll back to zero before SyncIn.
                   RowsCntrRd <= 0;
@@ -149,10 +158,10 @@ BEGIN
                   RowsCntrWr <= 0;
                end if;
             else
-               -- Write Routinescc
+               -- Write Routines
                if (CE and ValidIn and not WaitForSync) then      -- use ValidIn to enable the outputs since they're both the same rate
                                                                  -- buffer actions. read one while writing the other
-                  if (Pack) then                         -- Count Cols by Rows
+                  if (PACK) then                         -- Count Cols by Rows
                      if (ColsCntrWr < Cols-1) then
                         ColsCntrWr <= ColsCntrWr + 1;
                      else
@@ -160,8 +169,8 @@ BEGIN
                         if (RowsCntrWr < Rows - 1) then
                            RowsCntrWr <= RowsCntrWr + 1;
                         else
-                           RowsCntrWr <= 0;              -- buffer is full, ping and sync write counters
-                           Ping <= not Ping;
+                           RowsCntrWr <= 0;              -- buffer is full, flip WrBuff1 and sync write counters
+                           WrBuff1       <= not WrBuff1;
                         end if;
                      end if;
 
@@ -173,20 +182,16 @@ BEGIN
                         if (ColsCntrWr < Cols-1) then
                            ColsCntrWr <= ColsCntrWr + 1;
                         else
-                           ColsCntrWr <= 0;              -- buffer is full, ping and sync all counters
+                           ColsCntrWr <= 0;              -- buffer is full, flip WrBuff1 and sync all counters
                            RowsCntrWr <= 0;
-                           Ping <= not Ping;
+                           WrBuff1    <= not WrBuff1;
                         end if;
                      end if;
                   end if;
                end if;
 
                   -- read routines
-               if (Pack) then
-                  if (SyncOut) then
-                     SyncOut <= '0';
-                  end if;
-
+               if (PACK) then
                   if (ValidIn) then
                      if (RowsCntrRd < Rows - 1) then
                         RowsCntrRd  <= RowsCntrRd + 1;
@@ -196,7 +201,8 @@ BEGIN
                            ColsCntrRd  <= ColsCntrRd + 1;
                         else
                            ColsCntrRd <= 0;
-                           LastOut <= '1';
+                           RdBuff1    <= not RdBuff1;
+                           LastOut    <= '1';
                         end if;
                      end if;
                   else
@@ -212,24 +218,25 @@ BEGIN
                      if (RowsCntrRd < Rows-1) then
                         RowsCntrRd  <= RowsCntrRd + 1;
                      else
+                        RdBuff1     <= not RdBuff1;
                         RowsCntrRd  <= 0;
                      end if;
                   end if;
                else
-                  SyncOut <= LastOut;
                   LastOut <= '0';
                end if;
             end if;
+            SyncOut <= LastOut and ValidOut; -- Encoder tends to throw spare LastOuts on reset
          end if;
       end if;
    end process RS_InterleaveProcess;
 
 
-   DataOut <= DataOut1 when (PingDly) else DataOut0;
+   DataOut <= DataOut1 when (RdBuff1Dly) else DataOut0;
    WrAddr <= (RowsCntrWr * 256) + ColsCntrWr;
    RdAddr <= (RowsCntrRd * 256) + ColsCntrRd;
-   ValidIn0 <= ValidIn and not WaitForSync and Ping;
-   ValidIn1 <= ValidIn and not WaitForSync and not Ping;
+   ValidIn0 <= ValidIn and not WaitForSync and not WrBuff1;
+   ValidIn1 <= ValidIn and not WaitForSync and WrBuff1;
 
    Buffer0 : RAM_2Reads_1Write
       GENERIC MAP (

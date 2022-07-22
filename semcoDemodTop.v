@@ -144,7 +144,7 @@ module semcoDemodTop (
 
 );
 
-    parameter VER_NUMBER = 16'd735;
+    parameter VER_NUMBER = 16'd736;
 
 
 //******************************************************************************
@@ -1205,6 +1205,112 @@ module semcoDemodTop (
     );
 
 
+`ifdef ADD_RS_DEC
+
+//******************************************************************************
+//                              Reed Solomon Decoder
+//******************************************************************************
+
+    wire    [3:0]   rsDecSourceSelect;
+    reg             rsDecClkEn;
+    reg             rsDecDataIn;
+    always @* begin
+        casex (rsDecSourceSelect)
+            `RS_DEC_SRC_LEGACY_I: begin
+                `ifdef ADD_FRAMER
+                rsDecClkEn = iDemodBitEn;
+                rsDecDataIn = iRotBit;
+                `else
+                rsDecClkEn = iDemodBitEn;
+                rsDecDataIn = iDemodBit;
+                `endif
+            end
+            `RS_DEC_SRC_LEGACY_Q: begin
+                `ifdef ADD_FRAMER
+                rsDecClkEn = qDemodBitEn;
+                rsDecDataIn = qRotBit;
+                `else
+                rsDecClkEn = qDemodBitEn;
+                rsDecDataIn = qDemodBit;
+                `endif
+            end
+            `ifdef ADD_TRELLIS
+            `RS_DEC_SRC_PCMTRELLIS: begin
+                rsDecClkEn = pcmTrellisSymEnOut;
+                rsDecDataIn = pcmTrellisBit;
+            end
+            `endif
+            `ifdef ADD_LDPC
+            `RS_DEC_SRC_LDPC: begin
+                rsDecClkEn = ldpcBitEnOut;
+                rsDecDataIn = ldpcBitOut;
+            end
+            `endif
+            `RS_DEC_SRC_DEC0_CH0: begin
+                rsDecClkEn = dualPcmClkEn;
+                rsDecDataIn = dualDataI;
+            end
+            `RS_DEC_SRC_DEC0_CH1: begin
+                rsDecClkEn = dualPcmClkEn;
+                rsDecDataIn = dualDataQ;
+            end
+            `RS_DEC_SRC_DEC1_CH0: begin
+                rsDecClkEn = ch1PcmClkEn;
+                rsDecDataIn = ch1PcmData;
+            end
+            //`RS_DEC_SRC_DEC1_CH1:
+            //`RS_DEC_SRC_DEC2_CH0:
+            //`RS_DEC_SRC_DEC2_CH1:
+            //`RS_DEC_SRC_DEC3_CH0:
+            //`RS_DEC_SRC_DEC3_CH1:
+            default:   begin
+                rsDecClkEn = iDemodBitEn;
+                rsDecDataIn = iDemodBit;
+            end
+        endcase
+    end
+
+    reg rsDecSpace;
+    always @* begin
+        casex(addr)
+            `RS_DEC_SPACE:      rsDecSpace = cs;
+            default:           rsDecSpace = 0;
+        endcase
+    end
+
+    wire            [17:0]  rsDecDac0Data;
+    wire            [17:0]  rsDecDac1Data;
+    wire            [17:0]  rsDecDac2Data;
+    wire            [31:0]  rsDecDout;
+    wire                    rsDecDac0ClkEn, rsDecDac1ClkEn, rsDecDac2ClkEn, rsDecBitEnOut, rsDecBitOut;
+
+    RS_DecoderTop RS_Dec(
+        .clk(clk), .ce(1'b1), .reset(reset),
+        .busClk(busClk),
+        .cs(rsDecSpace),
+        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .addr(addr),
+        .din(dataIn),
+        .dout(rsDecDout),
+        .sourceSelect(rsDecSourceSelect),
+        .bitEn(rsDecClkEn),
+        .bitData(rsDecDataIn),
+        .dac0Select(demodDac0Select),
+        .dac1Select(demodDac1Select),
+        .dac2Select(demodDac2Select),
+        .dac0ClkEn(rsDecDac0ClkEn),
+        .dac0Data(rsDecDac0Data),
+        .dac1ClkEn(rsDecDac1ClkEn),
+        .dac1Data(rsDecDac1Data),
+        .dac2ClkEn(rsDecDac2ClkEn),
+        .dac2Data(rsDecDac2Data),
+        .rsDecBitEnOut(rsDecBitEnOut),
+        .rsDecBitOut(rsDecBitOut)
+    );
+
+`endif   // RS_Dec
+
+
 `ifdef ADD_BERT
 //******************************************************************************
 //                            Bit Error Rate Tester
@@ -1251,6 +1357,11 @@ module semcoDemodTop (
             `BERT_SRC_LDPC: begin
                 bertClkEn = ldpcBitEnOut;
                 bertDataIn = ldpcBitOut;
+            end
+            `elsif ADD_RS_DEC
+            `BERT_SRC_RS_DEC: begin
+                bertClkEn  = rsDecBitEnOut;
+                bertDataIn = rsDecBitOut;
             end
             `endif
             `BERT_SRC_DEC0_CH0: begin
@@ -1332,7 +1443,12 @@ module semcoDemodTop (
                 framerClkEn = ldpcBitEnOut;
                 framerDataIn = ldpcBitOut;
             end
-            `endif
+             `elsif ADD_RS_DEC
+            `FRAMER_SRC_RS_DEC: begin
+                framerClkEn  = rsDecBitEnOut;
+                framerDataIn = rsDecBitOut;
+            end
+           `endif
             `FRAMER_SRC_DEC0_CH0: begin
                 framerClkEn = dualPcmClkEn;
                 framerDataIn = dualDataI;
@@ -1555,11 +1671,17 @@ module semcoDemodTop (
                 cAndD0ClkEn = ch1PcmClkEn;
                 cAndD0DataIn = {ch1PcmData,1'b0,1'b0};
             end
+            `ifdef ADD_RS_DEC
+            `CandD_SRC_RD_SOL: begin
+                cAndD0ClkEn = rsDecBitEnOut;
+                cAndD0DataIn = {rsDecBitOut,2'b0};
+            end
+            `endif
             //`CandD_SRC_DEC1_CH1:
             //`CandD_SRC_DEC2_CH0:
             //`CandD_SRC_DEC2_CH1:
             //`CandD_SRC_DEC3_CH0:
-            //`CandD_SRC_DEC3_CH1:
+            //`CandD_SRC_RD_SOL  :
             default:   begin
                 cAndD0ClkEn = iDemodBitEn;
                 cAndD0DataIn = {iDemodBit,qDemodBit,1'b0};
@@ -1661,11 +1783,16 @@ module semcoDemodTop (
                 cAndD1ClkEn = ch1PcmClkEn;
                 cAndD1DataIn = {ch1PcmData,1'b0,1'b0};
             end
+            `ifdef ADD_RS_DEC
+            `CandD_SRC_RD_SOL: begin
+                cAndD1ClkEn = rsDecBitEnOut;
+                cAndD1DataIn = {rsDecBitOut,2'b0};
+            end
+            `endif
             //`CandD_SRC_DEC1_CH1:
             //`CandD_SRC_DEC2_CH0:
             //`CandD_SRC_DEC2_CH1:
             //`CandD_SRC_DEC3_CH0:
-            //`CandD_SRC_DEC3_CH1:
             default:   begin
                 cAndD1ClkEn = iDemodBitEn;
                 cAndD1DataIn = {iDemodBit,qDemodBit,1'b0};
@@ -2175,6 +2302,10 @@ sdi sdi(
             `LDPCSPACE:         rd_mux = ldpcDout;
             `endif
 
+            `ifdef ADD_RS_DEC
+            `RS_DEC_SPACE:      rd_mux = rsDecDout;
+            `endif
+
             `ifdef ADD_DQM
             `DQMLUTSPACE,
             `DQMSPACE:          rd_mux = dqmDout;
@@ -2282,6 +2413,17 @@ sdi sdi(
                 end
                 else begin
                     rd_mux = ldpcDout[15:0];
+                end
+            end
+            `endif
+
+            `ifdef ADD_RS_DEC
+            `RS_DEC_SPACE:         begin
+                if (addr[1]) begin
+                    rd_mux = rsDecDout[31:16];
+                end
+                else begin
+                    rd_mux = rsDecDout[15:0];
                 end
             end
             `endif

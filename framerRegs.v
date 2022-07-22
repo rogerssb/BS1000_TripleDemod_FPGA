@@ -11,12 +11,15 @@ module framerRegs(
     input                       framesync,
     input               [1:0]   syncState,
     input                       invertData,
+    input               [31:0]  lockCount, unLockCount,
+    input               [15:0]  DqmSmooth, DqmRaw, DqmMax, DqmMin,
     output reg          [4:0]   bitsPerWord,
     output reg          [15:0]  wordsPerFrame,
     output reg          [31:0]  syncwordMask,
     output reg          [31:0]  syncword,
     output      signed  [6:0]   syncThreshold,
-    output reg          [3:0]   inputSourceSelect
+    output reg          [3:0]   inputSourceSelect = 3'b111,
+    output reg                  framerCountsReset
 );
 
     parameter RegSpace = `FRAMER_SPACE;
@@ -39,6 +42,7 @@ module framerRegs(
                 `FRAMER_SYNCWORD:       syncword[7:0] <= din[7:0];
                 `FRAMER_SYNCWORD_MASK:  syncwordMask[7:0] <= din[7:0];
                 `FRAMER_SOURCE_SELECT:  inputSourceSelect <= din[3:0];
+                `FRAMER_LOCK_COUNTS:    framerCountsReset <= din[0];
                 default: ;
             endcase
         end
@@ -76,6 +80,12 @@ module framerRegs(
                 `FRAMER_SYNCWORD_MASK:  dout = syncwordMask;
                 `FRAMER_STATUS:         dout = {23'b0,invertData,2'b0,syncState,3'b0,framesync};
                 `FRAMER_SOURCE_SELECT:  dout = {28'b0,inputSourceSelect};
+                `FRAMER_LOCK_COUNTS:    dout = lockCount;
+                `FRAMER_UNLOCK_COUNTS:  dout = unLockCount;
+                `FRAMER_DQM:            dout = {16'b0, DqmRaw};
+                `FRAMER_MAX_DQM:        dout = {16'b0, DqmMax};
+                `FRAMER_MIN_DQM:        dout = {16'b0, DqmMin};
+                `FRAMER_DQM_SMOOTH:     dout = {16'b0, DqmSmooth};
                 default:                dout = 32'hx;
             endcase
         end

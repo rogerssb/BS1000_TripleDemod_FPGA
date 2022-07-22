@@ -18,7 +18,7 @@ Description: Attached Sync Marker Detector
 
 ARGUMENTS :
    Find the repeating 32 bit sync word. The distance between sync words is
-typically 255 * 8 times the interleave depth, but is set to FrameLen by the
+typically 255 * 8 times the interleave depth + 32 for ASM, but is set to FrameLen by the
 MCU due to shortening options.
 
    The system acquires in simulation at -2.6dB SNR and losses lock at -3.5dB
@@ -47,18 +47,16 @@ ENTITY ReedSolomonASM IS
       Reset,
       Valid          : IN  std_logic;
       DataIn         : IN  std_logic;
+      SyncWord       : IN  SLV32;
       FrameLen       : IN  natural range 0 to 16383;
       BitSlips       : IN  std_logic_vector(2 downto 0);  -- Bit Slips is the ±alignment slop between ASMs
       IL_BET,                                             -- In Lock Bit Error Threshold. Allowed number of invalid bits
       OOL_BET,                                            -- Out of Lock Bit Error Threshold.
       Verifies,                                           -- number of valid frames before lock declared
       FlyWheels      : IN  std_logic_vector(4 downto 0);  -- number of invalid frames before lock lossed
-      tLast,
       SyncOut,
-      Invert,
-      SyncTime,
       ValidOut       : OUT std_logic;
-      DataOut        : OUT SLV8                          -- invert corrected bytes
+      DataOut        : OUT SLV8
    );
 END ReedSolomonASM;
 
@@ -68,7 +66,7 @@ ARCHITECTURE rtl OF ReedSolomonASM IS
    -- constants
    constant FRAME_SIZE     : integer := 255 * 8;   -- 255 bytes
    constant SYNC_SIZE      : natural := 32;
-   constant SYNC           : std_logic_vector(SYNC_SIZE-1 downto 0)  := x"1acffc1d";
+--   constant SYNC           : std_logic_vector(SYNC_SIZE-1 downto 0)  := x"1acffc1d";
 
    type     asm_mode_t         is (SEARCHING, VERIFY, LOCK, FLYWHEEL);
 
@@ -87,16 +85,23 @@ ARCHITECTURE rtl OF ReedSolomonASM IS
             CountNeg,
             TotalBits,
             MaxCount       : natural range 0 to SYNC_SIZE;  -- just test points
-   signal   CountGood      : boolean := false;
    signal   Index,
             MaxIndex       : natural range 0 to 15;
    signal   BitSlips_u     : integer range 0 to 3;
    signal   DataDly        : std_logic_vector(4 downto 0);
    signal   SyncDly        : std_logic_vector(2 downto 0);
    signal   ValidPipe,
+            CountGood,
+            Invert,
+            SyncTime,
+            ValidFrame,
             MaxFound       : std_logic := '0';
    signal   PackBytes      : SLV8;
    signal   PackCntr       : signed(3 downto 0) := "0000";
+
+   attribute MARK_DEBUG : string;
+   attribute MARK_DEBUG of Search, SyncWord, FrameLen, CountPos, CountNeg, Mode,
+      Valid, DataIn, SyncOut, ValidOut, DataOut : signal is "TRUE";
 
 BEGIN
 
@@ -110,7 +115,7 @@ BEGIN
       variable CountPos_v,
                CountNeg_v,
                TotalBits_v       : natural range 0 to SYNC_SIZE;
-      variable CountGood_v       : boolean := false;
+      variable CountGood_v       : std_logic := '0';
       variable Signed32          : signed(31 downto 0);
    begin
       if (rising_edge(Clk)) then
@@ -120,6 +125,7 @@ BEGIN
             VerifyCnt   <= 0;
             FlyWheelCnt <= 0;
             FrameCnt    <= FrameLen - 1;
+            FrameLock   <= 0;
             Index       <= 0;
             MaxIndex    <= 0;
             MaxCount    <= SYNC_SIZE - BET;
@@ -127,11 +133,19 @@ BEGIN
             ValidPipe   <= '0';
             SyncTime    <= '0';
             SyncOut     <= '0';
+            SyncDly     <= "000";
             Invert      <= '0';
             DataDly     <= (others=>'0');
-         else
+            CountPos    <= 0;
+            CountNeg    <= 0;
+            TotalBits   <= 0;
+            CountGood   <= '0';
+            ValidFrame  <= '0';
+            PackBytes   <= 8x"00";
+            PackCntr    <= "0000";
+                     else
             ValidPipe   <= Valid;
-            SyncOut     <= (not SyncTime and SyncDly(0) and Valid);
+            SyncOut     <= CountGood and Valid;  -- just needs to ping before first output
 
             if (Valid) then
                if (FrameCnt = 29) then
@@ -139,16 +153,16 @@ BEGIN
                elsif (FrameCnt = -BitSlips_u) then
                   SyncTime <= '0';
                end if;
-               SyncDly     <= SyncDly(SyncDly'left - 1 downto 0) & SyncTime;
+               SyncDly     <= SyncDly(SyncDly'left - 1 downto 0) & SyncTime;  -- Disable ASM outputs
                Search      <= Search(30 downto 0) & DataIn;
                DataDly     <= DataDly(DataDly'left-1 downto 0) & DataIn;         -- data for output
                CountPos_v  := 0;
                CountNeg_v  := 0;
                if ( (Index > 0) or (Mode = SEARCHING) or (VerifyCnt = Verifies_u) ) then
                    for i in 0 to SYNC_SIZE-1 loop
-                     if (Search(i) = SYNC(i)) then
+                     if (Search(i) = SyncWord(i)) then
                         CountPos_v := CountPos_v + 1;
-                     elsif (Search(i) = not Sync(i)) then  -- avoid compare to 'X'
+                     elsif (Search(i) = not SyncWord(i)) then  -- avoid compare to 'X'
                         CountNeg_v := CountNeg_v + 1;
                      end if;
                   end loop;
@@ -176,18 +190,17 @@ BEGIN
                if (TotalBits_v > MaxCount) then
                   MaxCount    <= TotalBits_v;
                   FrameLock   <= FrameCnt;
-                  CountGood_v := true;
+                  CountGood_v := '1';
                   MaxIndex    <= Index;
                   MaxFound    <= '1';
                else
-                  CountGood_v := false;
+                  CountGood_v := '0';
                end if;
 
                CountGood    <= CountGood_v;
                TotalBits    <= TotalBits_v;
 
                if (CountGood_v) then   -- on valid hit, recenter the counter
-                  FrameCnt <= FrameCnt - 1;
                   if (Index > 0) then
                      if (CountPos_v > CountNeg_v) then
                         Invert <= '0';
@@ -206,6 +219,7 @@ BEGIN
                      FrameCnt <= FrameLen - BitSlips_u - 1; -- no ASM detected, Flywheel if locked, Search if Verifying
                      VerifyCnt <= Verifies_u;
                   when VERIFY =>
+                     FrameCnt <= FrameCnt - 1;
                      if (VerifyCnt > 0) then
                         VerifyCnt <= VerifyCnt - 1;
                      else
@@ -245,10 +259,9 @@ BEGIN
             end if;
          end if;
 
-         if (SyncTime and SyncDly(2)) or (not SyncTime and SyncDly(2)) then
-            Signed32 := to_signed(FrameLock, Signed32);
-            PackCntr <= Signed32(3 downto 0);
-         elsif (Valid) then
+         if (CountGood or Reset) then
+            PackCntr <= "0000";
+         elsif (Valid and ValidFrame) then
             if (PackCntr < 7) then
                PackCntr <= PackCntr + 1;
             else
@@ -256,9 +269,9 @@ BEGIN
             end if;
          end if;
 
-         if (Valid) then
+         if (Valid and not Reset) then
             PackBytes   <= PackBytes(6 downto 0) & (DataDly(DataDly'left) xor Invert);
-            if (PackCntr = 6) and (SyncDly(SyncDly'left) = '0') then
+            if (PackCntr = 3) and (SyncDly(SyncDly'left) = '0') then
                DataOut <= PackBytes;
                ValidOut <= '1';
             else
@@ -268,9 +281,14 @@ BEGIN
             ValidOut <= '0';
          end if;
 
-         tLast <= SyncDly ?= "001";
+         if (Reset) then            -- need a Valid synchronized with the frame
+            ValidFrame <= '0';
+         elsif ((Mode /= SEARCHING) and (CountGood = '1')) then
+            ValidFrame <= '1';
+         end if;
+
       end if;
    end process SearchProcess;
 
-END rtl;
 
+END rtl;
