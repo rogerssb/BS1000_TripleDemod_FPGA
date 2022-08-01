@@ -144,7 +144,7 @@ module semcoDemodTop (
 
 );
 
-    parameter VER_NUMBER = 16'd736;
+    parameter VER_NUMBER = 16'd738;
 
 
 //******************************************************************************
@@ -1269,7 +1269,6 @@ module semcoDemodTop (
             end
         endcase
     end
-
     reg rsDecSpace;
     always @* begin
         casex(addr)
@@ -1448,7 +1447,7 @@ module semcoDemodTop (
                 framerClkEn  = rsDecBitEnOut;
                 framerDataIn = rsDecBitOut;
             end
-           `endif
+            `endif
             `FRAMER_SRC_DEC0_CH0: begin
                 framerClkEn = dualPcmClkEn;
                 framerDataIn = dualDataI;

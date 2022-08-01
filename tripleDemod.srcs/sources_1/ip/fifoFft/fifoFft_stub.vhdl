@@ -1,10 +1,10 @@
--- Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
+-- Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
--- Tool Version: Vivado v.2017.2.1 (win64) Build 1957588 Wed Aug  9 16:32:24 MDT 2017
--- Date        : Fri Jun 17 01:27:28 2022
--- Host        : SEMCO_1039B running 64-bit major release  (build 9200)
+-- Tool Version: Vivado v.2016.4 (win64) Build 1756540 Mon Jan 23 19:11:23 MST 2017
+-- Date        : Wed Jul 27 18:46:16 2022
+-- Host        : DESKTOP-6PPS5M0 running 64-bit major release  (build 9200)
 -- Command     : write_vhdl -force -mode synth_stub
---               C:/Semco/Vivado/BitSyncBertMods/tripleDemod.srcs/sources_1/ip/fifoFft/fifoFft_stub.vhdl
+--               C:/Engineering/Triple_Demod/BS1000-FPGA/branches/vivado/tripleDemod.srcs/sources_1/ip/fifoFft/fifoFft_stub.vhdl
 -- Design      : fifoFft
 -- Purpose     : Stub declaration of top-level module interface
 -- Device      : xc7k160tfbg676-1
@@ -32,6 +32,6 @@ attribute black_box_pad_pin : string;
 attribute syn_black_box of stub : architecture is true;
 attribute black_box_pad_pin of stub : architecture is "clk,rst,din[22:0],wr_en,rd_en,dout[22:0],full,empty";
 attribute x_core_info : string;
-attribute x_core_info of stub : architecture is "fifo_generator_v13_1_4,Vivado 2017.2.1";
+attribute x_core_info of stub : architecture is "fifo_generator_v13_1_3,Vivado 2016.4";
 begin
 end;

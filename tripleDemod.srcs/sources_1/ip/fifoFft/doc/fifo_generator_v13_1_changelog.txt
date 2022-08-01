@@ -1,26 +1,14 @@
-2017.2:
- * Version 13.1 (Rev. 4)
- * No changes
-
-2017.1:
- * Version 13.1 (Rev. 4)
- * Bug Fix: FIFO Generator core was constructing the buit-in FIFO sub-optimally for 2K-deep and 36-bit wide configuration. This is corrected to use the optimal FIFO structure
- * Bug Fix: In order to enable the tool to perform the recovery check on the reset, set_false_path for reset is kept only from the input port to the first flop where it connects to
- * Feature Enhancement: Updated the FIFO Generator's constraints to improve tool performance processing its XDC
- * Other: Internal device family change, no functional changes
- * Revision change in one or more subcores
-
 2016.4:
  * Version 13.1 (Rev. 3)
  * Port Change: None
- * Bug Fix: Supported features table in the first page of GUI updated to reflect the asymmetry support for common clock BRAM FIFO
+ * Bug Fix: HASH(0x17205da0)
  * Feature Enhancement: None
  * Revision change in one or more subcores
 
 2016.3:
  * Version 13.1 (Rev. 2)
  * Port Change: wr_rst_busy and rd_rst_busy ports made available if safety circuit is enabled
- * Bug Fix: Fixed issue which was causing the m_axis_tvalid to go high after the reset is released and no valid data written to the FIFO
+ * Bug Fix: HASH(0x17205cd0)
  * Feature Enhancement: Safety circuit is made independent of Output Register and Enable Reset Synchronization options
  * Other: Added support for future devices
  * Other: Source HDL files are concatenated into a single file to speed up synthesis and simulation. No changes required by the user

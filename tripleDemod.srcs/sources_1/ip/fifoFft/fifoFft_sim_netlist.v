@@ -1,10 +1,10 @@
-// Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
+// Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
-// Tool Version: Vivado v.2017.2.1 (win64) Build 1957588 Wed Aug  9 16:32:24 MDT 2017
-// Date        : Fri Jun 17 01:27:28 2022
-// Host        : SEMCO_1039B running 64-bit major release  (build 9200)
+// Tool Version: Vivado v.2016.4 (win64) Build 1756540 Mon Jan 23 19:11:23 MST 2017
+// Date        : Wed Jul 27 18:46:16 2022
+// Host        : DESKTOP-6PPS5M0 running 64-bit major release  (build 9200)
 // Command     : write_verilog -force -mode funcsim
-//               C:/Semco/Vivado/BitSyncBertMods/tripleDemod.srcs/sources_1/ip/fifoFft/fifoFft_sim_netlist.v
+//               C:/Engineering/Triple_Demod/BS1000-FPGA/branches/vivado/tripleDemod.srcs/sources_1/ip/fifoFft/fifoFft_sim_netlist.v
 // Design      : fifoFft
 // Purpose     : This verilog netlist is a functional simulation representation of the design and should not be modified
 //               or synthesized. This netlist cannot be used for SDF annotated simulation.
@@ -12,7 +12,7 @@
 // --------------------------------------------------------------------------------
 `timescale 1 ps / 1 ps
 
-(* CHECK_LICENSE_TYPE = "fifoFft,fifo_generator_v13_1_4,{}" *) (* downgradeipidentifiedwarnings = "yes" *) (* x_core_info = "fifo_generator_v13_1_4,Vivado 2017.2.1" *) 
+(* CHECK_LICENSE_TYPE = "fifoFft,fifo_generator_v13_1_3,{}" *) (* downgradeipidentifiedwarnings = "yes" *) (* x_core_info = "fifo_generator_v13_1_3,Vivado 2016.4" *) 
 (* NotValidForBitStream *)
 module fifoFft
    (clk,
@@ -366,7 +366,7 @@ module fifoFft
   (* C_WR_PNTR_WIDTH_WDCH = "10" *) 
   (* C_WR_PNTR_WIDTH_WRCH = "4" *) 
   (* C_WR_RESPONSE_LATENCY = "1" *) 
-  fifoFft_fifo_generator_v13_1_4 U0
+  fifoFft_fifo_generator_v13_1_3 U0
        (.almost_empty(NLW_U0_almost_empty_UNCONNECTED),
         .almost_full(NLW_U0_almost_full_UNCONNECTED),
         .axi_ar_data_count(NLW_U0_axi_ar_data_count_UNCONNECTED[4:0]),
@@ -836,6 +836,7 @@ module fifoFft_builtin_prim_v6
   wire [12:12]\NLW_gf36e1_inst.sngfifo36e1_RDCOUNT_UNCONNECTED ;
   wire [12:12]\NLW_gf36e1_inst.sngfifo36e1_WRCOUNT_UNCONNECTED ;
 
+  (* CLOCK_DOMAINS = "COMMON" *) 
   (* box_type = "PRIMITIVE" *) 
   FIFO36E1 #(
     .ALMOST_EMPTY_OFFSET(13'h0002),
@@ -942,6 +943,7 @@ module fifoFft_builtin_prim_v6_2
   wire [12:12]\NLW_gf36e1_inst.sngfifo36e1_RDCOUNT_UNCONNECTED ;
   wire [12:12]\NLW_gf36e1_inst.sngfifo36e1_WRCOUNT_UNCONNECTED ;
 
+  (* CLOCK_DOMAINS = "COMMON" *) 
   (* box_type = "PRIMITIVE" *) 
   FIFO36E1 #(
     .ALMOST_EMPTY_OFFSET(13'h0002),
@@ -1052,6 +1054,7 @@ module fifoFft_builtin_prim_v6_3
   wire [12:12]\NLW_gf36e1_inst.sngfifo36e1_RDCOUNT_UNCONNECTED ;
   wire [12:12]\NLW_gf36e1_inst.sngfifo36e1_WRCOUNT_UNCONNECTED ;
 
+  (* CLOCK_DOMAINS = "COMMON" *) 
   (* box_type = "PRIMITIVE" *) 
   FIFO36E1 #(
     .ALMOST_EMPTY_OFFSET(13'h0002),
@@ -1180,7 +1183,7 @@ module fifoFft_fifo_generator_top
   wire rst;
   wire wr_en;
 
-  fifoFft_fifo_generator_v13_1_4_builtin \gbi.bi 
+  fifoFft_fifo_generator_v13_1_3_builtin \gbi.bi 
        (.clk(clk),
         .din(din),
         .dout(dout),
@@ -1258,8 +1261,8 @@ endmodule
 (* C_WR_DEPTH_WRCH = "16" *) (* C_WR_FREQ = "1" *) (* C_WR_PNTR_WIDTH = "12" *) 
 (* C_WR_PNTR_WIDTH_AXIS = "10" *) (* C_WR_PNTR_WIDTH_RACH = "4" *) (* C_WR_PNTR_WIDTH_RDCH = "10" *) 
 (* C_WR_PNTR_WIDTH_WACH = "4" *) (* C_WR_PNTR_WIDTH_WDCH = "10" *) (* C_WR_PNTR_WIDTH_WRCH = "4" *) 
-(* C_WR_RESPONSE_LATENCY = "1" *) (* ORIG_REF_NAME = "fifo_generator_v13_1_4" *) 
-module fifoFft_fifo_generator_v13_1_4
+(* C_WR_RESPONSE_LATENCY = "1" *) (* ORIG_REF_NAME = "fifo_generator_v13_1_3" *) 
+module fifoFft_fifo_generator_v13_1_3
    (backup,
     backup_marker,
     clk,
@@ -2269,7 +2272,7 @@ module fifoFft_fifo_generator_v13_1_4
        (.G(\<const0> ));
   VCC VCC
        (.P(\<const1> ));
-  fifoFft_fifo_generator_v13_1_4_synth inst_fifo_gen
+  fifoFft_fifo_generator_v13_1_3_synth inst_fifo_gen
        (.clk(clk),
         .din(din),
         .dout(dout),
@@ -2280,8 +2283,8 @@ module fifoFft_fifo_generator_v13_1_4
         .wr_en(wr_en));
 endmodule
 
-(* ORIG_REF_NAME = "fifo_generator_v13_1_4_builtin" *) 
-module fifoFft_fifo_generator_v13_1_4_builtin
+(* ORIG_REF_NAME = "fifo_generator_v13_1_3_builtin" *) 
+module fifoFft_fifo_generator_v13_1_3_builtin
    (empty,
     full,
     dout,
@@ -2324,8 +2327,8 @@ module fifoFft_fifo_generator_v13_1_4_builtin
         .wr_en(wr_en));
 endmodule
 
-(* ORIG_REF_NAME = "fifo_generator_v13_1_4_synth" *) 
-module fifoFft_fifo_generator_v13_1_4_synth
+(* ORIG_REF_NAME = "fifo_generator_v13_1_3_synth" *) 
+module fifoFft_fifo_generator_v13_1_3_synth
    (empty,
     full,
     dout,
@@ -2606,8 +2609,8 @@ module glbl ();
     reg JTAG_USER_TDO3_GLBL = 1'bz;
     reg JTAG_USER_TDO4_GLBL = 1'bz;
 
-    assign (strong1, weak0) GSR = GSR_int;
-    assign (strong1, weak0) GTS = GTS_int;
+    assign (weak1, weak0) GSR = GSR_int;
+    assign (weak1, weak0) GTS = GTS_int;
     assign (weak1, weak0) PRLD = PRLD_int;
 
     initial begin

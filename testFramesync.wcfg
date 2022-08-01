@@ -11,120 +11,81 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="79227500000fs"></ZoomStartTime>
-      <ZoomEndTime time="134592500000fs"></ZoomEndTime>
-      <Cursor1Time time="125365000000fs"></Cursor1Time>
+      <ZoomStartTime time="0fs"></ZoomStartTime>
+      <ZoomEndTime time="10000000001fs"></ZoomEndTime>
+      <Cursor1Time time="10000000000fs"></Cursor1Time>
    </zoom_setting>
-   <column_width_setting>
-      <NameColumnWidth column_width="191"></NameColumnWidth>
-      <ValueColumnWidth column_width="77"></ValueColumnWidth>
-   </column_width_setting>
-   <WVObjectSize size="24" />
-   <wvobject fp_name="/test/framer/bitsPerWord" type="array">
+   <WVObjectSize size="18" />
+   <wvobject db_ref_id="1" fp_name="/test/reset" type="logic">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/test/clk" type="logic">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/test/bc" type="logic">
+      <obj_property name="ElementShortName">bc</obj_property>
+      <obj_property name="ObjectShortName">bc</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/test/clken" type="logic">
+      <obj_property name="ElementShortName">clken</obj_property>
+      <obj_property name="ObjectShortName">clken</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/test/framer/clk" type="logic">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/test/framer/clkEn" type="logic">
+      <obj_property name="ElementShortName">clkEn</obj_property>
+      <obj_property name="ObjectShortName">clkEn</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/test/framer/dataBitIn" type="logic">
+      <obj_property name="ElementShortName">dataBitIn</obj_property>
+      <obj_property name="ObjectShortName">dataBitIn</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/test/framer/rotation" type="array">
+      <obj_property name="ElementShortName">rotation[1:0]</obj_property>
+      <obj_property name="ObjectShortName">rotation[1:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/test/framer/bitsPerWord" type="array">
       <obj_property name="ElementShortName">bitsPerWord[4:0]</obj_property>
       <obj_property name="ObjectShortName">bitsPerWord[4:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/test/framer/wordsPerFrame" type="array">
+   <wvobject db_ref_id="1" fp_name="/test/framer/wordsPerFrame" type="array">
       <obj_property name="ElementShortName">wordsPerFrame[15:0]</obj_property>
       <obj_property name="ObjectShortName">wordsPerFrame[15:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/test/framer/invertData" type="logic">
+   <wvobject db_ref_id="1" fp_name="/test/framer/syncwordMask" type="array">
+      <obj_property name="ElementShortName">syncwordMask[31:0]</obj_property>
+      <obj_property name="ObjectShortName">syncwordMask[31:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/test/framer/syncword" type="array">
+      <obj_property name="ElementShortName">syncword[31:0]</obj_property>
+      <obj_property name="ObjectShortName">syncword[31:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/test/framer/syncThreshold" type="array">
+      <obj_property name="ElementShortName">syncThreshold[6:0]</obj_property>
+      <obj_property name="ObjectShortName">syncThreshold[6:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/test/framer/bitSum" type="array">
+      <obj_property name="ElementShortName">bitSum[6:0]</obj_property>
+      <obj_property name="ObjectShortName">bitSum[6:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/test/framer/invertData" type="logic">
       <obj_property name="ElementShortName">invertData</obj_property>
       <obj_property name="ObjectShortName">invertData</obj_property>
    </wvobject>
-   <wvobject fp_name="/test/framer/framesync" type="logic">
+   <wvobject db_ref_id="1" fp_name="/test/framer/framedBitOut" type="logic">
+      <obj_property name="ElementShortName">framedBitOut</obj_property>
+      <obj_property name="ObjectShortName">framedBitOut</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/test/framer/framesync" type="logic">
       <obj_property name="ElementShortName">framesync</obj_property>
       <obj_property name="ObjectShortName">framesync</obj_property>
    </wvobject>
-   <wvobject fp_name="/test/framer/syncDetected" type="logic">
-      <obj_property name="ElementShortName">syncDetected</obj_property>
-      <obj_property name="ObjectShortName">syncDetected</obj_property>
-   </wvobject>
-   <wvobject fp_name="/test/framer/framesyncPulse" type="logic">
+   <wvobject db_ref_id="1" fp_name="/test/framer/framesyncPulse" type="logic">
       <obj_property name="ElementShortName">framesyncPulse</obj_property>
       <obj_property name="ObjectShortName">framesyncPulse</obj_property>
-   </wvobject>
-   <wvobject fp_name="/test/framer/framerRegs/framerSpace" type="logic">
-      <obj_property name="ElementShortName">framerSpace</obj_property>
-      <obj_property name="ObjectShortName">framerSpace</obj_property>
-   </wvobject>
-   <wvobject fp_name="/test/framer/framerRegs/framesync" type="logic">
-      <obj_property name="ElementShortName">framesync</obj_property>
-      <obj_property name="ObjectShortName">framesync</obj_property>
-   </wvobject>
-   <wvobject fp_name="/test/framer/framerRegs/invertData" type="logic">
-      <obj_property name="ElementShortName">invertData</obj_property>
-      <obj_property name="ObjectShortName">invertData</obj_property>
-   </wvobject>
-   <wvobject fp_name="/test/framer/syncState" type="array">
-      <obj_property name="ElementShortName">syncState[1:0]</obj_property>
-      <obj_property name="ObjectShortName">syncState[1:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/test/framer/correlation" type="other">
-      <obj_property name="ElementShortName">correlation</obj_property>
-      <obj_property name="ObjectShortName">correlation</obj_property>
-   </wvobject>
-   <wvobject fp_name="/test/framer/wordCount" type="array">
-      <obj_property name="ElementShortName">wordCount[15:0]</obj_property>
-      <obj_property name="ObjectShortName">wordCount[15:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/test/framer/endOfPayload" type="logic">
-      <obj_property name="ElementShortName">endOfPayload</obj_property>
-      <obj_property name="ObjectShortName">endOfPayload</obj_property>
-   </wvobject>
-   <wvobject fp_name="/test/framer/bitCount" type="array">
-      <obj_property name="ElementShortName">bitCount[4:0]</obj_property>
-      <obj_property name="ObjectShortName">bitCount[4:0]</obj_property>
-      <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
-   </wvobject>
-   <wvobject fp_name="/test/framer/framerCountsReset" type="logic">
-      <obj_property name="ElementShortName">framerCountsReset</obj_property>
-      <obj_property name="ObjectShortName">framerCountsReset</obj_property>
-   </wvobject>
-   <wvobject fp_name="/test/framer/framerCountsResetDly" type="logic">
-      <obj_property name="ElementShortName">framerCountsResetDly</obj_property>
-      <obj_property name="ObjectShortName">framerCountsResetDly</obj_property>
-   </wvobject>
-   <wvobject fp_name="/test/framer/framerCountsResetLatch" type="logic">
-      <obj_property name="ElementShortName">framerCountsResetLatch</obj_property>
-      <obj_property name="ObjectShortName">framerCountsResetLatch</obj_property>
-   </wvobject>
-   <wvobject fp_name="/test/framer/unLockCount" type="array">
-      <obj_property name="ElementShortName">unLockCount[31:0]</obj_property>
-      <obj_property name="ObjectShortName">unLockCount[31:0]</obj_property>
-      <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
-   </wvobject>
-   <wvobject fp_name="/test/framer/lockCount" type="array">
-      <obj_property name="ElementShortName">lockCount[31:0]</obj_property>
-      <obj_property name="ObjectShortName">lockCount[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/test/framer/DqmCapture" type="array">
-      <obj_property name="ElementShortName">DqmCapture[15:0]</obj_property>
-      <obj_property name="ObjectShortName">DqmCapture[15:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/test/framer/DqmMax" type="array">
-      <obj_property name="ElementShortName">DqmMax[15:0]</obj_property>
-      <obj_property name="ObjectShortName">DqmMax[15:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/test/framer/DqmMin" type="array">
-      <obj_property name="ElementShortName">DqmMin[15:0]</obj_property>
-      <obj_property name="ObjectShortName">DqmMin[15:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/test/framer/DqmSmooth" type="array">
-      <obj_property name="ElementShortName">DqmSmooth[15:0]</obj_property>
-      <obj_property name="ObjectShortName">DqmSmooth[15:0]</obj_property>
-      <obj_property name="CellHeight">100</obj_property>
-      <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
-      <obj_property name="AnalogYRangeMin">0.000000</obj_property>
-      <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
-      <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
-      <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
-      <obj_property name="AnalogHorizLine">0.000000</obj_property>
-      <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
-   </wvobject>
-   <wvobject fp_name="/test/framer/syncDelay" type="array">
-      <obj_property name="ElementShortName">syncDelay[31:0]</obj_property>
-      <obj_property name="ObjectShortName">syncDelay[31:0]</obj_property>
-      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
    </wvobject>
 </wave_config>
