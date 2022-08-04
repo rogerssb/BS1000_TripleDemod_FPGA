@@ -1,0 +1,120 @@
+# ----- REMOVE LINES ABOVE HERE --------------------------
+#
+# This license is valid from Tue Aug 02 19:12:05 UTC 2022.
+#
+# This is license NODELOCKED to HOSTID=b80edfd7;
+# there is no need to run lmgrd for this license.
+#
+#
+# This is a permanent license generated on Tue Aug 02 19:12:05 UTC 2022
+INCREMENT rs_decoder xilinxd 2023.06 permanent uncounted 77FD33CC8508 \
+VENDOR_STRING=License_Type:Bought;frank.ziegler@semco.com,rs_decoder,ip,permanent,_212494681_1777571906_210762903_307 \
+HOSTID=DISK_SERIAL_NUM=b80edfd7 ISSUER="Xilinx Inc" \
+NOTICE="The license for this core was generated for \
+frank.ziegler@semco.com on 08/03/2022It is the responsibility \
+of the Licensee of this core to adhere to all terms and \
+conditions of the applicable license agreement when using this \
+core." START=02-Aug-2022 TS_OK
+#
+# Licenses for rs_decoder_v5_1
+FEATURE rs_decoder_v5_1 xilinxd 1.0 permanent uncounted 5A46CA593D0E \
+VENDOR_STRING=License_Type:Bought \
+HOSTID=DISK_SERIAL_NUM=b80edfd7 ISSUER=Xilinx NOTICE="The \
+license for this core was generated for \
+frank.ziegler@semco.com on 08/03/2022It is the responsibility \
+of the Licensee of this core to adhere to all terms and \
+conditions of the applicable license agreement when using this \
+core." TS_OK
+#
+# Licenses for rs_decoder_v4_1
+FEATURE rs_decoder_v4_1 xilinxd 1.0 permanent uncounted 6C5B9BF29F67 \
+VENDOR_STRING=License_Type:Bought \
+HOSTID=DISK_SERIAL_NUM=b80edfd7 ISSUER=Xilinx NOTICE="The \
+license for this core was generated for \
+frank.ziegler@semco.com on 08/03/2022It is the responsibility \
+of the Licensee of this core to adhere to all terms and \
+conditions of the applicable license agreement when using this \
+core." TS_OK
+#
+# Licenses for rs_decoder_v4_0
+FEATURE rs_decoder_v4_0 xilinxd 1.0 permanent uncounted 07FFE17E786E \
+VENDOR_STRING=License_Type:Bought \
+HOSTID=DISK_SERIAL_NUM=b80edfd7 ISSUER=Xilinx NOTICE="The \
+license for this core was generated for \
+frank.ziegler@semco.com on 08/03/2022It is the responsibility \
+of the Licensee of this core to adhere to all terms and \
+conditions of the applicable license agreement when using this \
+core." TS_OK
+#
+# Licenses for rs_decoder_v6
+FEATURE rs_decoder_v6 xilinxd 1.0 permanent uncounted 1C0AD4A24293 \
+VENDOR_STRING=License_Type:Bought \
+HOSTID=DISK_SERIAL_NUM=b80edfd7 ISSUER=Xilinx NOTICE="The \
+license for this core was generated for \
+frank.ziegler@semco.com on 08/03/2022It is the responsibility \
+of the Licensee of this core to adhere to all terms and \
+conditions of the applicable license agreement when using this \
+core." TS_OK
+#
+# Licenses for rs_decoder_v5_0
+FEATURE rs_decoder_v5_0 xilinxd 1.0 permanent uncounted 186A34E1F22D \
+VENDOR_STRING=License_Type:Bought \
+HOSTID=DISK_SERIAL_NUM=b80edfd7 ISSUER=Xilinx NOTICE="The \
+license for this core was generated for \
+frank.ziegler@semco.com on 08/03/2022It is the responsibility \
+of the Licensee of this core to adhere to all terms and \
+conditions of the applicable license agreement when using this \
+core." TS_OK
+#
+# This is a permanent license generated on Tue Aug 02 19:12:05 UTC 2022
+INCREMENT rs_encoder xilinxd 2023.06 permanent uncounted 1147E7F135F9 \
+VENDOR_STRING=License_Type:Bought;frank.ziegler@semco.com,rs_encoder,ip,permanent,_212494681_1777571906_210762904_846 \
+HOSTID=DISK_SERIAL_NUM=b80edfd7 ISSUER="Xilinx Inc" \
+NOTICE="The license for this core was generated for \
+frank.ziegler@semco.com on 08/03/2022It is the responsibility \
+of the Licensee of this core to adhere to all terms and \
+conditions of the applicable license agreement when using this \
+core." START=02-Aug-2022 TS_OK
+#
+# Licenses for rs_encoder_v5_0
+FEATURE rs_encoder_v5_0 xilinxd 1.0 permanent uncounted 737561B45A20 \
+VENDOR_STRING=License_Type:Bought \
+HOSTID=DISK_SERIAL_NUM=b80edfd7 ISSUER=Xilinx NOTICE="The \
+license for this core was generated for \
+frank.ziegler@semco.com on 08/03/2022It is the responsibility \
+of the Licensee of this core to adhere to all terms and \
+conditions of the applicable license agreement when using this \
+core." TS_OK
+#
+# Licenses for rs_encoder_v4_0
+FEATURE rs_encoder_v4_0 xilinxd 1.0 permanent uncounted 3EEEBEB9882D \
+VENDOR_STRING=License_Type:Bought \
+HOSTID=DISK_SERIAL_NUM=b80edfd7 ISSUER=Xilinx NOTICE="The \
+license for this core was generated for \
+frank.ziegler@semco.com on 08/03/2022It is the responsibility \
+of the Licensee of this core to adhere to all terms and \
+conditions of the applicable license agreement when using this \
+core." TS_OK
+#
+# Licenses for rs_encoder_v6
+FEATURE rs_encoder_v6 xilinxd 1.0 permanent uncounted 6E5CB9A7D29E \
+VENDOR_STRING=License_Type:Bought \
+HOSTID=DISK_SERIAL_NUM=b80edfd7 ISSUER=Xilinx NOTICE="The \
+license for this core was generated for \
+frank.ziegler@semco.com on 08/03/2022It is the responsibility \
+of the Licensee of this core to adhere to all terms and \
+conditions of the applicable license agreement when using this \
+core." TS_OK
+#
+# Licenses for rs_encoder_v4_1
+FEATURE rs_encoder_v4_1 xilinxd 1.0 permanent uncounted C9FE9491137A \
+VENDOR_STRING=License_Type:Bought \
+HOSTID=DISK_SERIAL_NUM=b80edfd7 ISSUER=Xilinx NOTICE="The \
+license for this core was generated for \
+frank.ziegler@semco.com on 08/03/2022It is the responsibility \
+of the Licensee of this core to adhere to all terms and \
+conditions of the applicable license agreement when using this \
+core." TS_OK
+#
+# ----- REMOVE LINES BELOW HERE --------------------------
+

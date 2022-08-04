@@ -315,6 +315,7 @@ module bitsync(
                    );
     wire dualRailModes = ( (demodMode == `MODE_QPSK)
                         || (demodMode == `MODE_OQPSK)
+                        || (demodMode == `MODE_SOQPSK)
                         || (demodMode == `MODE_AQPSK)
                         || (demodMode == `MODE_AUQPSK)
                         || (demodMode == `MODE_UQPSK)

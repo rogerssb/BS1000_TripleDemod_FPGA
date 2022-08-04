@@ -40,7 +40,7 @@ module test;
 
 
     //************************** uP Interface *********************************
-    `ifdef TRIPLE_DEMOD
+    `ifdef R6100
         `include "upSpiTasks.v"
     `else
         `include "upBusTasks.v"
@@ -194,7 +194,7 @@ module test;
 
 
     //******************************* UUT *************************************
-    `ifdef TRIPLE_DEMOD
+    `ifdef R6100
     spiBusInterface spi(
         .clk(clk),
         .reset(reset),

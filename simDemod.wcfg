@@ -11,15 +11,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="98589766666fs"></ZoomStartTime>
-      <ZoomEndTime time="100789766667fs"></ZoomEndTime>
-      <Cursor1Time time="114048100000fs"></Cursor1Time>
+      <ZoomStartTime time="0fs"></ZoomStartTime>
+      <ZoomEndTime time="154310400001fs"></ZoomEndTime>
+      <Cursor1Time time="30000000000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="179"></NameColumnWidth>
-      <ValueColumnWidth column_width="96"></ValueColumnWidth>
+      <ValueColumnWidth column_width="94"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="34" />
+   <WVObjectSize size="38" />
    <wave_markers>
       <marker time="41817000000" label="" />
    </wave_markers>
@@ -186,10 +186,6 @@
    <wvobject fp_name="/test/sym2xEn" type="logic">
       <obj_property name="ElementShortName">sym2xEn</obj_property>
       <obj_property name="ObjectShortName">sym2xEn</obj_property>
-   </wvobject>
-   <wvobject fp_name="/test/demodBit" type="logic">
-      <obj_property name="ElementShortName">demodBit</obj_property>
-      <obj_property name="ObjectShortName">demodBit</obj_property>
    </wvobject>
    <wvobject fp_name="/test/sdiSymEn" type="logic">
       <obj_property name="ElementShortName">sdiSymEn</obj_property>
@@ -426,7 +422,6 @@
    <wvobject fp_name="group137" type="group">
       <obj_property name="label">DQM</obj_property>
       <obj_property name="DisplayName">label</obj_property>
-      <obj_property name="isExpanded"></obj_property>
       <wvobject fp_name="/test/dqm/dqmm/clk" type="logic">
          <obj_property name="ElementShortName">clk</obj_property>
          <obj_property name="ObjectShortName">clk</obj_property>
@@ -590,54 +585,6 @@
             <obj_property name="radix_realType">UNSIGNEDFIXEDPOINTRADIX</obj_property>
             <obj_property name="radix_fractionWidth">34</obj_property>
             <obj_property name="radix_otherWidth">0</obj_property>
-         </wvobject>
-         <wvobject fp_name="/test/dqm/dqmm/initialX" type="array">
-            <obj_property name="ElementShortName">initialX[5:0]</obj_property>
-            <obj_property name="ObjectShortName">initialX[5:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/test/dqm/dqmm/initialLogX" type="array">
-            <obj_property name="ElementShortName">initialLogX[10:0]</obj_property>
-            <obj_property name="ObjectShortName">initialLogX[10:0]</obj_property>
-            <obj_property name="Radix">REALRADIX</obj_property>
-            <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
-            <obj_property name="radix_fractionWidth">7</obj_property>
-            <obj_property name="radix_otherWidth">0</obj_property>
-         </wvobject>
-         <wvobject fp_name="/test/dqm/dqmm/xScale" type="array">
-            <obj_property name="ElementShortName">xScale[0:5][6:0]</obj_property>
-            <obj_property name="ObjectShortName">xScale[0:5][6:0]</obj_property>
-            <obj_property name="Radix">REALRADIX</obj_property>
-            <obj_property name="radix_realType">UNSIGNEDFIXEDPOINTRADIX</obj_property>
-            <obj_property name="radix_fractionWidth">6</obj_property>
-            <obj_property name="radix_otherWidth">0</obj_property>
-         </wvobject>
-         <wvobject fp_name="/test/dqm/dqmm/logXScale" type="array">
-            <obj_property name="ElementShortName">logXScale[0:5][10:0]</obj_property>
-            <obj_property name="ObjectShortName">logXScale[0:5][10:0]</obj_property>
-            <obj_property name="Radix">REALRADIX</obj_property>
-            <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
-            <obj_property name="radix_fractionWidth">7</obj_property>
-            <obj_property name="radix_otherWidth">0</obj_property>
-         </wvobject>
-         <wvobject fp_name="/test/dqm/dqmm/currentX" type="array">
-            <obj_property name="ElementShortName">currentX[0:6][12:0]</obj_property>
-            <obj_property name="ObjectShortName">currentX[0:6][12:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/test/dqm/dqmm/currentLogX" type="array">
-            <obj_property name="ElementShortName">currentLogX[0:6][10:0]</obj_property>
-            <obj_property name="ObjectShortName">currentLogX[0:6][10:0]</obj_property>
-            <obj_property name="Radix">REALRADIX</obj_property>
-            <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
-            <obj_property name="radix_fractionWidth">7</obj_property>
-            <obj_property name="radix_otherWidth">0</obj_property>
-         </wvobject>
-         <wvobject fp_name="/test/dqm/dqmm/possibleX" type="array">
-            <obj_property name="ElementShortName">possibleX[0:5][12:0]</obj_property>
-            <obj_property name="ObjectShortName">possibleX[0:5][12:0]</obj_property>
-         </wvobject>
-         <wvobject fp_name="/test/dqm/dqmm/possibleOverflow" type="array">
-            <obj_property name="ElementShortName">possibleOverflow[0:5]</obj_property>
-            <obj_property name="ObjectShortName">possibleOverflow[0:5]</obj_property>
          </wvobject>
          <wvobject fp_name="/test/dqm/dqmm/log10MseOffset" type="array">
             <obj_property name="ElementShortName">log10MseOffset[15:0]</obj_property>
@@ -1268,5 +1215,25 @@
          <obj_property name="AnalogHorizLine">0.000000</obj_property>
          <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
       </wvobject>
+   </wvobject>
+   <wvobject fp_name="/test/enableBERT" type="logic">
+      <obj_property name="ElementShortName">enableBERT</obj_property>
+      <obj_property name="ObjectShortName">enableBERT</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/soqTrellisBitEn" type="logic">
+      <obj_property name="ElementShortName">soqTrellisBitEn</obj_property>
+      <obj_property name="ObjectShortName">soqTrellisBitEn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/soqTrellisBit" type="logic">
+      <obj_property name="ElementShortName">soqTrellisBit</obj_property>
+      <obj_property name="ObjectShortName">soqTrellisBit</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/randData" type="logic">
+      <obj_property name="ElementShortName">randData</obj_property>
+      <obj_property name="ObjectShortName">randData</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test/bitError" type="array">
+      <obj_property name="ElementShortName">bitError[31:0]</obj_property>
+      <obj_property name="ObjectShortName">bitError[31:0]</obj_property>
    </wvobject>
 </wave_config>

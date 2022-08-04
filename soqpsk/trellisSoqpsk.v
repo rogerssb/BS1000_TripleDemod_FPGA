@@ -11,59 +11,108 @@
 `timescale 1ns/1ps
 `include "addressMap.v"
 
-module trellisSoqpsk
-  (
-   clk,reset,symEn,sym2xEn,
-   iIn,qIn,
-   wr0,wr1,wr2,wr3,
-   addr,
-   din,dout,
-   dac0Select,dac1Select,dac2Select,
-   dac0Sync,
-   dac0Data,
-   dac1Sync,
-   dac1Data,
-   dac2Sync,
-   dac2Data,
-   decision,
-   ternarySymEnOut,
-   ternarySym2xEnOut
-   );
-   
-   parameter size = 8;
-   parameter ROT_BITS = 10;
-   
-   parameter MFM_CONST_REAL = 18'h09615;
-   parameter MFM_CONST_IMAG = 18'h1E982;
-   parameter MFP_CONST_REAL = 18'h09615;
-   parameter MFP_CONST_IMAG = 18'h2167E;
+module trellisSoqpsk(
+    clk,reset,symEn,sym2xEn,
+    iIn,qIn,
+    busClk,
+    cs,
+    wr0,wr1,wr2,wr3,
+    addr,
+    din,dout,
+    dac0Select,dac1Select,dac2Select,
+    dac0Sync,
+    dac0Data,
+    dac1Sync,
+    dac1Data,
+    dac2Sync,
+    dac2Data,
+    decision,
+    ternarySymEnOut,
+    ternarySym2xEnOut
+);
 
-   input         clk,reset,symEn,sym2xEn;
-   input [17:0]  iIn,qIn;
-   input         wr0,wr1,wr2,wr3;
-   input [12:0]  addr;
-   input [31:0]  din;
-   output [31:0] dout;
-   input [3:0]   dac0Select,dac1Select,dac2Select;
-   output        dac0Sync;
-   output [17:0] dac0Data;
-   output        dac1Sync;
-   output [17:0] dac1Data;
-   output        dac2Sync;
-   output [17:0] dac2Data;
-   output        decision;
-   output        ternarySymEnOut;
-   output        ternarySym2xEnOut;
-   
-   
-   wire [ROT_BITS-1:0] phaseError;
+    parameter size = 8;
+    parameter ROT_BITS = 10;
+
+    /*
+    parameter MFM_CONST_REAL = 18'h09615;
+    parameter MFM_CONST_IMAG = 18'h1E982;
+    parameter MFP_CONST_REAL = 18'h09615;
+    parameter MFP_CONST_IMAG = 18'h2167E;
+    parameter MFM_CONST_REAL =  $rtoi(0.293*(2**17));
+    parameter MFM_CONST_IMAG =  $rtoi(0.956*(2**17));
+    parameter MFP_CONST_REAL =  $rtoi(0.293*(2**17));
+    parameter MFP_CONST_IMAG = -$rtoi(0.956*(2**17));
+    parameter MFM_CONST_REAL =  $rtoi(0.08716*(2**17));
+    parameter MFM_CONST_IMAG =  $rtoi(0.99619*(2**17));
+    parameter MFP_CONST_REAL =  $rtoi(0.08716*(2**17));
+    parameter MFP_CONST_IMAG = -$rtoi(0.99619*(2**17));
+    */
+    parameter MFM_CONST_REAL = 18'h0;
+    parameter MFM_CONST_IMAG = 18'h1ffff;
+    parameter MFP_CONST_REAL = 18'h0;
+    parameter MFP_CONST_IMAG = 18'h20001;
+
+   input                    clk,reset,symEn,sym2xEn;
+   input    signed  [17:0]  iIn,qIn;
+   input                    busClk;
+   input                    cs;
+   input                    wr0,wr1,wr2,wr3;
+   input            [12:0]  addr;
+   input            [31:0]  din;
+   output           [31:0]  dout;
+   input            [3:0]   dac0Select,dac1Select,dac2Select;
+   output                   dac0Sync;
+   output           [17:0]  dac0Data;
+   output                   dac1Sync;
+   output           [17:0]  dac1Data;
+   output                   dac2Sync;
+   output           [17:0]  dac2Data;
+   output                   decision;
+   output                   ternarySymEnOut;
+   output                   ternarySym2xEnOut;
+
+`define SOQPSK_USE_2TAP_MF
+
+`ifdef SIMULATE
+
+    `ifdef SOQPSK_USE_2TAP_MF
+    reg     [17:0]          carrierLoopIOut,carrierLoopQOut;
+
+    always @(posedge clk) begin
+        if (sym2xEn) begin
+            // No Rotation
+            carrierLoopIOut <= iIn;
+            carrierLoopQOut <= qIn;
+            // +45 Rotation
+            //carrierLoopIOut <= $signed({iIn[17],iIn[17:1]}) - $signed({qIn[17],qIn[17:1]});
+            //carrierLoopQOut <= $signed({qIn[17],qIn[17:1]}) + $signed({iIn[17],iIn[17:1]});
+            // -45 Rotation
+            //assign carrierLoopIOut = $signed({iIn[17],iIn[17:1]}) + $signed({qIn[17],qIn[17:1]});
+            //assign carrierLoopQOut = $signed({qIn[17],qIn[17:1]}) - $signed({iIn[17],iIn[17:1]});
+        end
+    end
+    `else
+    wire    [17:0]          carrierLoopIOut,carrierLoopQOut;
+
+    assign carrierLoopIOut = $signed({iIn[17],iIn[17:1]}) - $signed({qIn[17],qIn[17:1]});
+    assign carrierLoopQOut = $signed({qIn[17],qIn[17:1]}) + $signed({iIn[17],iIn[17:1]});
+    `endif
+    wire                    ternarySymEnOut = sym2xEn;
+    wire    [ROT_BITS-1:0]  phaseError;
+    reg     [7:0]           phErrShft;
+    wire    [31:0]          trellisLoopDout;
+
+/*
+`elsif SOQPSK_USE_CARRIER_LOOP
+
+    wire [ROT_BITS-1:0] phaseError;
    wire                decision;
-   
+
    reg [7:0]           phErrShft;
    wire [17:0]         carrierLoopIOut,carrierLoopQOut;
    wire [31:0]         trellisLoopDout;
-   soqpskCarrierLoop soqpskCarrierLoop
-     (
+    soqpskCarrierLoop soqpskCarrierLoop(
       .clk(clk),
       .reset(reset),
       .symEn(symEn),
@@ -78,7 +127,7 @@ module trellisSoqpsk
       .addr(addr),
       .din(din),
       .dout(trellisLoopDout)
-          `ifndef ALDEC_SIM
+        `ifndef SIMULATE
       , .iOut(carrierLoopIOut),
       .qOut(carrierLoopQOut),
       .symEnDly(),
@@ -86,21 +135,57 @@ module trellisSoqpsk
           `endif
        );
 
-`ifdef ALDEC_SIM           
-   assign carrierLoopIOut = iIn;
-   assign carrierLoopQOut = qIn;
-   wire   ternarySymEnOut = sym2xEn;
- `endif  
-   
-   
-`ifdef SIMULATE
+*/
+`else  // SIMULATE
+
+    `ifdef SOQPSK_USE_2TAP_MF
+
+
+    reg signed  [17:0]          carrierLoopIOut,carrierLoopQOut;
+    //always @* begin
+    always @(posedge clk) begin
+        if (sym2xEn) begin
+            // No Rotation
+            carrierLoopIOut <= iIn;
+            carrierLoopQOut <= qIn;
+            // +45 Rotation
+            //carrierLoopIOut <= $signed({iIn[17],iIn[17:1]}) - $signed({qIn[17],qIn[17:1]});
+            //carrierLoopQOut <= $signed({qIn[17],qIn[17:1]}) + $signed({iIn[17],iIn[17:1]});
+        end
+    end
+
+    wire   ternarySymEnOut = sym2xEn;
+    wire            [ROT_BITS-1:0] phaseError;
+    reg             [7:0]       phErrShft;
+    wire            [31:0]      trellisLoopDout;
+
+    `else //SOQPSK_USE_2TAP_MF
+
+    wire    signed  [17:0]     carrierLoopIOut,carrierLoopQOut;
+    assign carrierLoopIOut = $signed({iIn[17],iIn[17:1]}) - $signed({qIn[17],qIn[17:1]});
+    assign carrierLoopQOut = $signed({iIn[17],iIn[17:1]}) + $signed({qIn[17],qIn[17:1]});
+    wire   ternarySymEnOut = sym2xEn;
+    wire            [ROT_BITS-1:0] phaseError;
+    reg             [7:0]       phErrShft;
+    wire            [31:0]      trellisLoopDout;
+
+    `endif //SOQPSK_USE_2TAP_MF
+
+
+`endif //SIMULATE
+
+
+
+
+
+`ifdef SILOS
    real                phErrReal;
    always @(phaseError) phErrReal = $itor($signed(phaseError))/(2**9);
 `endif
-   
 
-   
-`ifdef SIMULATE
+
+
+`ifdef SILOS
    real                carrierLoopIOut_REAL, carrierLoopQOut_REAL;
    always @(carrierLoopIOut) carrierLoopIOut_REAL = $itor($signed(carrierLoopIOut))/(2**17);
    always @(carrierLoopQOut) carrierLoopQOut_REAL = $itor($signed(carrierLoopQOut))/(2**17);
@@ -111,92 +196,98 @@ module trellisSoqpsk
 
 
 
-//`define SYN_NETLIST_MFILT
-`ifdef SYN_NETLIST_MFILT
-//   wire [17:0] mfzI_syn,mfzQ_syn;
-//   wire [17:0] mfmI_syn,mfmQ_syn;
-//   wire [17:0] mfpI_syn,mfpQ_syn;
-//
-//   mfWrap_syn mfWrap 
-//     (
-//      .clk(clk), .reset(reset), .symEn(), .sym2xEn(ternarySymEnOut), 
-//      .mfmI(mfmI_syn), .mfmQ(mfmQ_syn), 
-//      .mfpI(mfpI_syn), .mfpQ(mfpQ_syn), 
-//      .mfzI(mfzI_syn), .mfzQ(mfzQ_syn), 
-//      .iIn(carrierLoopIOut), .qIn(carrierLoopQOut)
-//      );
-          
-          
-   wire [17:0] mfzI,mfzQ;
-   wire [17:0] mfmI,mfmQ;
-   wire [17:0] mfpI,mfpQ;
+`ifdef SOQPSK_USE_2TAP_MF
 
-   mfWrap_syn mfWrap 
-     (
-      .clk(clk), .reset(reset), .symEn(), .sym2xEn(ternarySymEnOut), 
-      .mfmI(mfmI), .mfmQ(mfmQ), 
-      .mfpI(mfpI), .mfpQ(mfpQ), 
-      .mfzI(mfzI), .mfzQ(mfzQ), 
-      .iIn(carrierLoopIOut), .qIn(carrierLoopQOut),
-      );
+    wire    signed  [17:0] mfpI,mfpQ;
+    wire    signed  [17:0] mfzI,mfzQ;
+    wire    signed  [17:0] mfmI,mfmQ;
+    soqpsk2TapMF #(
+        `ifdef SIMULATE
+        .ACOEF($rtoi(0.897474*(2**17))),
+        .BCOEF($rtoi(0.441067*(2**17)))
+        `else
+        .ACOEF($signed(18'd117634)),
+        .BCOEF($signed(18'd57812))
+        `endif
+    )
+    mf (
+        .clk(clk),
+        .reset(),
+        .symEn(),
+        .sym2xEn(ternarySymEnOut),
+        .iIn(carrierLoopIOut),
+        .qIn(carrierLoopQOut),
+        .ipOut(mfpI),
+        .qpOut(mfpQ),
+        .izOut(mfzI),
+        .qzOut(mfzQ),
+        .imOut(mfmI),
+        .qmOut(mfmQ)
+    );
 
 `else
-   
+
    // match filter zero (constant 1 multiply so we add 4 flops to align with "mfm" and "mfp")
    // Now due to a scaling factor in the mfilter the mfm and mfp output has to be scaled back by mult by 2, this
    // adds another flop.
-   reg [17:0]         mfzISr0, mfzISr1, mfzISr2, mfzISr3, mfzISr4, mfzISr5, 
+   reg [17:0]         mfzISr0, mfzISr1, mfzISr2, mfzISr3, mfzISr4, mfzISr5,
                       mfzQSr0, mfzQSr1, mfzQSr2, mfzQSr3, mfzQSr4, mfzQSr5;
    always @(posedge clk) begin
       if (ternarySymEnOut) begin
          mfzISr0  <=  carrierLoopIOut;
          mfzISr1  <=  mfzISr0;
          mfzISr2  <=  mfzISr1;
-         mfzISr3  <=  mfzISr2; 
-         mfzISr4  <=  mfzISr3; 
-         mfzISr5  <=  mfzISr4; 
+         mfzISr3  <=  mfzISr2;
+         mfzISr4  <=  mfzISr3;
+         mfzISr5  <=  mfzISr4;
          mfzQSr0  <=  carrierLoopQOut;
          mfzQSr1  <=  mfzQSr0;
          mfzQSr2  <=  mfzQSr1;
-         mfzQSr3  <=  mfzQSr2; 
-         mfzQSr4  <=  mfzQSr3; 
-         mfzQSr5  <=  mfzQSr4; 
+         mfzQSr3  <=  mfzQSr2;
+         mfzQSr4  <=  mfzQSr3;
+         mfzQSr5  <=  mfzQSr4;
       end
    end
    wire [17:0]          mfzI=mfzISr2;
    wire [17:0]          mfzQ=mfzQSr2;
 
-   // Match filter minus
-   wire [17:0] mfmI,mfmQ;
-   soqpskMfilter #(MFM_CONST_REAL, MFM_CONST_IMAG) mfm
-     (
-      .clk     (clk              ), 
-      .reset   (reset            ), 
-      .sym2xEn (ternarySymEnOut  ),
-      .symEn   (                 ), 
-      .iIn     (carrierLoopIOut  ),
-      .qIn     (carrierLoopQOut  ),
-      .iOut    (mfmI             ),
-      .qOut    (mfmQ             )
-      );
+    // Match filter minus
+    wire [17:0] mfmI,mfmQ;
+    soqpskMfilter #(
+        .reC(MFM_CONST_REAL),
+        .imC(MFM_CONST_IMAG)
+    )
+    mfm (
+        .clk     (clk              ),
+        .reset   (reset            ),
+        .sym2xEn (ternarySymEnOut  ),
+        .symEn   (                 ),
+        .iIn     (carrierLoopIOut  ),
+        .qIn     (carrierLoopQOut  ),
+        .iOut    (mfmI             ),
+        .qOut    (mfmQ             )
+    );
 
-   // Match filter plus
-   wire [17:0] mfpI,mfpQ;
-   soqpskMfilter #(MFP_CONST_REAL, MFP_CONST_IMAG) mfp
-     (
-      .clk     (clk              ), 
-      .reset   (reset            ), 
-      .sym2xEn (ternarySymEnOut  ),
-      .symEn   (                 ), 
-      .iIn     (carrierLoopIOut  ),
-      .qIn     (carrierLoopQOut  ),
-      .iOut    (mfpI             ),
-      .qOut    (mfpQ             )
-      );
-        
-`endif  
-          
-          
+    // Match filter plus
+    wire [17:0] mfpI,mfpQ;
+    soqpskMfilter #(
+        .reC(MFP_CONST_REAL),
+        .imC(MFP_CONST_IMAG)
+    )
+    mfp (
+        .clk     (clk              ),
+        .reset   (reset            ),
+        .sym2xEn (ternarySymEnOut  ),
+        .symEn   (                 ),
+        .iIn     (carrierLoopIOut  ),
+        .qIn     (carrierLoopQOut  ),
+        .iOut    (mfpI             ),
+        .qOut    (mfpQ             )
+    );
+
+`endif
+
+
    // Rotations
    wire [ROT_BITS-1:0] rotMfz0Real, rotMfz1Real, rotMfz2Real, rotMfz3Real,  // 4 real part rotated "match filter zero" outputs
                        rotMfm0Real, rotMfm1Real, rotMfm2Real, rotMfm3Real,  // 4 real part rotated "match filter minus" outputs
@@ -204,11 +295,51 @@ module trellisSoqpsk
                        rotMfz0Imag, rotMfz1Imag, rotMfz2Imag, rotMfz3Imag,  // 4 imag part rotated "match filter zero" outputs
                        rotMfm0Imag, rotMfm1Imag, rotMfm2Imag, rotMfm3Imag,  // 4 imag part rotated "match filter minus" output
                        rotMfp0Imag, rotMfp1Imag, rotMfp2Imag, rotMfp3Imag;  // 4 imag part rotated "match filter plus" outputs
-   
+
    // Instead of multipying the minus and plus mfR's I divide the mfZ by two (It's done by shifitng the vector and sign extending the with the sign bit).
-   // The reason for this is to get around a sutuation issue with the multBy2withSat() 
+   // The reason for this is to get around a sutuation issue with the multBy2withSat()
+   //`define SOQPSK_REVERSE_ROT
+`ifndef SOQPSK_USE_2TAP_MF
+   `define SOQPSK_MFZ_ROT_DIV2
+`endif
+   //`define SOQPSK_MF_ROT_DIV2
+   `ifdef SOQPSK_MF_ROT_DIV2
+
    assign              rotMfz0Real =  {mfzI[17], mfzI[17:17-(ROT_BITS-2)]}, rotMfz0Imag =  {mfzQ[17], mfzQ[17:17-(ROT_BITS-2)]};
-   assign              rotMfz1Real =  {mfzQ[17], mfzQ[17:17-(ROT_BITS-2)]}, rotMfz1Imag = -{mfzI[17], mfzI[17:17-(ROT_BITS-2)]}; 
+   assign              rotMfz1Real =  {mfzQ[17], mfzQ[17:17-(ROT_BITS-2)]}, rotMfz1Imag = -{mfzI[17], mfzI[17:17-(ROT_BITS-2)]};
+   assign              rotMfz2Real = -{mfzI[17], mfzI[17:17-(ROT_BITS-2)]}, rotMfz2Imag = -{mfzQ[17], mfzQ[17:17-(ROT_BITS-2)]};
+   assign              rotMfz3Real = -{mfzQ[17], mfzQ[17:17-(ROT_BITS-2)]}, rotMfz3Imag =  {mfzI[17], mfzI[17:17-(ROT_BITS-2)]};
+
+   assign              rotMfm0Real =  {mfmI[17], mfmI[17:17-(ROT_BITS-2)]}, rotMfm0Imag =  {mfmQ[17], mfmQ[17:17-(ROT_BITS-2)]};
+   assign              rotMfm1Real =  {mfmQ[17], mfmQ[17:17-(ROT_BITS-2)]}, rotMfm1Imag = -{mfmI[17], mfmI[17:17-(ROT_BITS-2)]};
+   assign              rotMfm2Real = -{mfmI[17], mfmI[17:17-(ROT_BITS-2)]}, rotMfm2Imag = -{mfmQ[17], mfmQ[17:17-(ROT_BITS-2)]};
+   assign              rotMfm3Real = -{mfmQ[17], mfmQ[17:17-(ROT_BITS-2)]}, rotMfm3Imag =  {mfmI[17], mfmI[17:17-(ROT_BITS-2)]};
+
+   assign              rotMfp0Real =  {mfpI[17], mfpI[17:17-(ROT_BITS-2)]}, rotMfp0Imag =  {mfpQ[17], mfpQ[17:17-(ROT_BITS-2)]};
+   assign              rotMfp1Real =  {mfpQ[17], mfpQ[17:17-(ROT_BITS-2)]}, rotMfp1Imag = -{mfpI[17], mfpI[17:17-(ROT_BITS-2)]};
+   assign              rotMfp2Real = -{mfpI[17], mfpI[17:17-(ROT_BITS-2)]}, rotMfp2Imag = -{mfpQ[17], mfpQ[17:17-(ROT_BITS-2)]};
+   assign              rotMfp3Real = -{mfpQ[17], mfpQ[17:17-(ROT_BITS-2)]}, rotMfp3Imag =  {mfpI[17], mfpI[17:17-(ROT_BITS-2)]};
+
+   `elsif SOQPSK_MFZ_ROT_DIV2
+
+   `ifdef SOQPSK_REVERSE_ROT
+   assign              rotMfz0Real =  {mfzI[17], mfzI[17:17-(ROT_BITS-2)]}, rotMfz0Imag =  {mfzQ[17], mfzQ[17:17-(ROT_BITS-2)]};
+   assign              rotMfz3Real =  {mfzQ[17], mfzQ[17:17-(ROT_BITS-2)]}, rotMfz1Imag = -{mfzI[17], mfzI[17:17-(ROT_BITS-2)]};
+   assign              rotMfz2Real = -{mfzI[17], mfzI[17:17-(ROT_BITS-2)]}, rotMfz2Imag = -{mfzQ[17], mfzQ[17:17-(ROT_BITS-2)]};
+   assign              rotMfz1Real = -{mfzQ[17], mfzQ[17:17-(ROT_BITS-2)]}, rotMfz3Imag =  {mfzI[17], mfzI[17:17-(ROT_BITS-2)]};
+
+   assign              rotMfm0Real =  mfmI[17:17-(ROT_BITS-1)], rotMfm0Imag =  mfmQ[17:17-(ROT_BITS-1)];
+   assign              rotMfm3Real =  mfmQ[17:17-(ROT_BITS-1)], rotMfm1Imag = -mfmI[17:17-(ROT_BITS-1)];
+   assign              rotMfm2Real = -mfmI[17:17-(ROT_BITS-1)], rotMfm2Imag = -mfmQ[17:17-(ROT_BITS-1)];
+   assign              rotMfm1Real = -mfmQ[17:17-(ROT_BITS-1)], rotMfm3Imag =  mfmI[17:17-(ROT_BITS-1)];
+
+   assign              rotMfp0Real =  mfpI[17:17-(ROT_BITS-1)], rotMfp0Imag =  mfpQ[17:17-(ROT_BITS-1)];
+   assign              rotMfp3Real =  mfpQ[17:17-(ROT_BITS-1)], rotMfp1Imag = -mfpI[17:17-(ROT_BITS-1)];
+   assign              rotMfp2Real = -mfpI[17:17-(ROT_BITS-1)], rotMfp2Imag = -mfpQ[17:17-(ROT_BITS-1)];
+   assign              rotMfp1Real = -mfpQ[17:17-(ROT_BITS-1)], rotMfp3Imag =  mfpI[17:17-(ROT_BITS-1)];
+   `else
+   assign              rotMfz0Real =  {mfzI[17], mfzI[17:17-(ROT_BITS-2)]}, rotMfz0Imag =  {mfzQ[17], mfzQ[17:17-(ROT_BITS-2)]};
+   assign              rotMfz1Real =  {mfzQ[17], mfzQ[17:17-(ROT_BITS-2)]}, rotMfz1Imag = -{mfzI[17], mfzI[17:17-(ROT_BITS-2)]};
    assign              rotMfz2Real = -{mfzI[17], mfzI[17:17-(ROT_BITS-2)]}, rotMfz2Imag = -{mfzQ[17], mfzQ[17:17-(ROT_BITS-2)]};
    assign              rotMfz3Real = -{mfzQ[17], mfzQ[17:17-(ROT_BITS-2)]}, rotMfz3Imag =  {mfzI[17], mfzI[17:17-(ROT_BITS-2)]};
 
@@ -221,6 +352,26 @@ module trellisSoqpsk
    assign              rotMfp1Real =  mfpQ[17:17-(ROT_BITS-1)], rotMfp1Imag = -mfpI[17:17-(ROT_BITS-1)];
    assign              rotMfp2Real = -mfpI[17:17-(ROT_BITS-1)], rotMfp2Imag = -mfpQ[17:17-(ROT_BITS-1)];
    assign              rotMfp3Real = -mfpQ[17:17-(ROT_BITS-1)], rotMfp3Imag =  mfpI[17:17-(ROT_BITS-1)];
+   `endif
+
+   `else
+
+   assign              rotMfz0Real =  mfzI[17:17-(ROT_BITS-1)], rotMfz0Imag =  mfzQ[17:17-(ROT_BITS-1)];
+   assign              rotMfz1Real =  mfzQ[17:17-(ROT_BITS-1)], rotMfz1Imag = -mfzI[17:17-(ROT_BITS-1)];
+   assign              rotMfz2Real = -mfzI[17:17-(ROT_BITS-1)], rotMfz2Imag = -mfzQ[17:17-(ROT_BITS-1)];
+   assign              rotMfz3Real = -mfzQ[17:17-(ROT_BITS-1)], rotMfz3Imag =  mfzI[17:17-(ROT_BITS-1)];
+
+   assign              rotMfm0Real =  mfmI[17:17-(ROT_BITS-1)], rotMfm0Imag =  mfmQ[17:17-(ROT_BITS-1)];
+   assign              rotMfm1Real =  mfmQ[17:17-(ROT_BITS-1)], rotMfm1Imag = -mfmI[17:17-(ROT_BITS-1)];
+   assign              rotMfm2Real = -mfmI[17:17-(ROT_BITS-1)], rotMfm2Imag = -mfmQ[17:17-(ROT_BITS-1)];
+   assign              rotMfm3Real = -mfmQ[17:17-(ROT_BITS-1)], rotMfm3Imag =  mfmI[17:17-(ROT_BITS-1)];
+
+   assign              rotMfp0Real =  mfpI[17:17-(ROT_BITS-1)], rotMfp0Imag =  mfpQ[17:17-(ROT_BITS-1)];
+   assign              rotMfp1Real =  mfpQ[17:17-(ROT_BITS-1)], rotMfp1Imag = -mfpI[17:17-(ROT_BITS-1)];
+   assign              rotMfp2Real = -mfpI[17:17-(ROT_BITS-1)], rotMfp2Imag = -mfpQ[17:17-(ROT_BITS-1)];
+   assign              rotMfp3Real = -mfpQ[17:17-(ROT_BITS-1)], rotMfp3Imag =  mfpI[17:17-(ROT_BITS-1)];
+
+   `endif
 
    reg [ROT_BITS-1:0]  rotMfz0RealOut, rotMfz1RealOut, rotMfz2RealOut, rotMfz3RealOut,
                        rotMfm0RealOut, rotMfm1RealOut, rotMfm2RealOut, rotMfm3RealOut,
@@ -228,7 +379,7 @@ module trellisSoqpsk
                        rotMfz0ImagOut, rotMfz1ImagOut, rotMfz2ImagOut, rotMfz3ImagOut,
                        rotMfm0ImagOut, rotMfm1ImagOut, rotMfm2ImagOut, rotMfm3ImagOut,
                        rotMfp0ImagOut, rotMfp1ImagOut, rotMfp2ImagOut, rotMfp3ImagOut;
-   
+
    // sync with sym2xEn
    always @(posedge clk) begin
       if (ternarySymEnOut) begin
@@ -265,7 +416,7 @@ module trellisSoqpsk
       end
    end
 
-`ifdef SIMULATE
+`ifdef SILOS
 
    real rotMfz0ImagOut_REAL,
      rotMfz1ImagOut_REAL,
@@ -275,12 +426,12 @@ module trellisSoqpsk
      rotMfp1ImagOut_REAL,
      rotMfp2ImagOut_REAL,
      rotMfp3ImagOut_REAL,
-     rotMfm0ImagOut_REAL, 
+     rotMfm0ImagOut_REAL,
      rotMfm1ImagOut_REAL,
-     rotMfm2ImagOut_REAL, 
+     rotMfm2ImagOut_REAL,
      rotMfm3ImagOut_REAL;
-   
-   
+
+
    always @(posedge clk)begin
       if(ternarySymEnOut)begin
          rotMfz0ImagOut_REAL = $itor($signed(rotMfz0ImagOut))/(2**(ROT_BITS-2));
@@ -298,18 +449,18 @@ module trellisSoqpsk
 
       end
    end
-`endif   
+`endif
 
    wire    [1:0]   index;
 
-reg     [7:0]   decayFactor;      
+reg     [7:0]   decayFactor;
 //`define SYN_NETLIST
 `ifdef SYN_NETLIST
 soqpskViterbi_syn #(size, ROT_BITS) soqpskViterbi
    (
     // For the SOQPSK mode the there is one sample per symbol and there for the faster sym2xEn is used as symEn
     .clk(clk), .reset(reset), .symEn(ternarySymEnOut),
-        `ifdef ALDEC_SIM
+    `ifdef SIMULATE
     .decayFactor(8'hff),
         `else
     .decayFactor(decayFactor),
@@ -328,12 +479,12 @@ soqpskViterbi_syn #(size, ROT_BITS) soqpskViterbi
     .devError()
     );
 `else
-        
+
 soqpskViterbi #(size, ROT_BITS) soqpskViterbi
    (
     // For the SOQPSK mode the there is one sample per symbol and there for the faster sym2xEn is used as symEn
     .clk(clk), .reset(reset), .symEn(ternarySymEnOut),
-        `ifdef ALDEC_SIM
+    `ifdef SIMULATE
     .decayFactor(8'hff),
         `else
     .decayFactor(decayFactor),
@@ -355,7 +506,7 @@ soqpskViterbi #(size, ROT_BITS) soqpskViterbi
 `endif
 
    reg [7:0]            dataBits;
-  
+
    reg                  satPos,satNeg;
    wire                 sign = phaseError[9];
 
@@ -373,7 +524,7 @@ soqpskViterbi #(size, ROT_BITS) soqpskViterbi
          else begin
             phErrShft <= dataBits;
          end
-      end   
+      end
    end
 
 // This is a kludge to create a 2x clock enable from the 1x clock enable to satisfy the design
@@ -385,45 +536,45 @@ always @(posedge clk) begin
     se0 <= ternarySymEnOut;
     end
 
-   
+
 /************************ Trellis Register Definitions ************************/
 
-reg trellisSpace;
-always @* begin
-    casex(addr)
-        `TRELLIS_SPACE: trellisSpace = 1;
-        default:        trellisSpace = 0;
+    reg trellisSpace;
+    always @* begin
+        casex(addr)
+            `SOQTRELLIS_SPACE:  trellisSpace = cs;
+            default:            trellisSpace = 0;
         endcase
     end
 
-always @(negedge wr0) begin
-    if (trellisSpace) begin
-        casex (addr) 
-            `TRELLIS_DECAY:     decayFactor <= din[7:0];
-            default: ;
+    always @(posedge busClk) begin
+        if (trellisSpace & wr0) begin
+            casex (addr)
+                `TRELLIS_DECAY:     decayFactor <= din[7:0];
+                default: ;
             endcase
         end
     end
 
-reg [31:0]trellisDout;
-always @* begin
-    if (trellisSpace) begin
+    reg [31:0]trellisDout;
+    always @* begin
+        if (trellisSpace) begin
+            casex (addr)
+                `TRELLIS_DECAY:     trellisDout = {24'b0,decayFactor};
+                default:            trellisDout = 32'hx;
+            endcase
+        end
+        else begin
+            trellisDout = 32'hx;
+        end
+    end
+
+    reg [31:0]dout;
+    always @* begin
         casex (addr)
-            `TRELLIS_DECAY:     trellisDout = {24'b0,decayFactor};
-            default:            trellisDout = 32'hx;
-            endcase
-        end
-    else begin
-        trellisDout = 32'hx;
-        end
-    end
-
-reg [31:0]dout;
-always @* begin
-    casex (addr)
-        `TRELLIS_SPACE:     dout = trellisDout;
-        `TRELLISLFSPACE:    dout = trellisLoopDout;
-        default:            dout = 32'hx;
+            `SOQTRELLIS_SPACE:     dout = trellisDout;
+            `SOQTRELLISLFSPACE:    dout = trellisLoopDout;
+            default:            dout = 32'hx;
         endcase
     end
 
@@ -440,7 +591,7 @@ reg     [17:0]  dac1Data;
 reg             dac2Sync;
 reg     [17:0]  dac2Data;
 always @(posedge clk) begin
-    case (dac0Select) 
+    case (dac0Select)
         `DAC_TRELLIS_I: begin
             dac0Data <= carrierLoopIOut;
             dac0Sync <= ternarySymEnOut;
@@ -463,7 +614,7 @@ always @(posedge clk) begin
             end
         endcase
 
-    case (dac1Select) 
+    case (dac1Select)
         `DAC_TRELLIS_I: begin
             dac1Data <= carrierLoopIOut;
             dac1Sync <= ternarySymEnOut;
@@ -486,7 +637,7 @@ always @(posedge clk) begin
             end
         endcase
 
-    case (dac2Select) 
+    case (dac2Select)
         `DAC_TRELLIS_I: begin
             dac2Data <= carrierLoopIOut;
             dac2Sync <= ternarySymEnOut;

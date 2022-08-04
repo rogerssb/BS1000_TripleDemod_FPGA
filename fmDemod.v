@@ -1,7 +1,7 @@
 /******************************************************************************
 Copyright 2008-2015 Koos Technical Services, Inc. All Rights Reserved
 
-This source code is the Intellectual Property of Koos Technical Services,Inc. 
+This source code is the Intellectual Property of Koos Technical Services,Inc.
 (KTS) and is provided under a License Agreement which protects KTS' ownership and
 derivative rights in exchange for negotiated compensation.
 ******************************************************************************/
@@ -9,7 +9,7 @@ derivative rights in exchange for negotiated compensation.
 `timescale 1ns / 10 ps
 `include "addressMap.v"
 
-module fmDemod( 
+module fmDemod(
     input                       clk, reset, clkEn,
     input       signed  [17:0]  iFm,qFm,
     input               [4:0]   demodMode,
@@ -63,6 +63,7 @@ module fmDemod(
                     end
                 `MODE_QPSK,
                 `MODE_OQPSK,
+                `MODE_SOQPSK,
                 `MODE_AQPSK: begin
                     phaseError <= $signed({qpskPhase[9:0],2'b0});
                     end
@@ -113,7 +114,7 @@ module fmDemod(
     always @(phaseError) phaseErrorReal = $itor(phaseError)/(2**11);
     real freqReal;
     always @(freq) freqReal = $itor(freq)/(2**11);
-    real freqErrorReal; 
+    real freqErrorReal;
     always @(freqError) freqErrorReal = $itor(freqError)/(2**11);
     `endif
 

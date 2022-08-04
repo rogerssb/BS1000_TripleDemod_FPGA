@@ -1,16 +1,16 @@
 % soqpskwave.m - create a stimulus waveform for the sig gen
 
 writeMatFile = 0;
-writeTestVectors = 1;
+writeTestVectors = 0;
 
 % Samples per bit
-U = 32;  
+U = 16;
 
-% Order of PN Sequency
-O = 11;  
+% Order of PN Sequence
+O = 6;
 
 PHASE_ROLLOVER = 2;
-NCYCLES=PHASE_ROLLOVER*4
+NCYCLES=PHASE_ROLLOVER*4*4;
 NBITS = NCYCLES*(2^O-1)
 
 bitsIn = pngen(O,NBITS);
@@ -27,7 +27,7 @@ midSectionEnd = (NCYCLES-PHASE_ROLLOVER)*U*(2^O-1)
 beginning = angle(z(midSectionStart-16:midSectionStart+16));
 endz = angle(z(midSectionEnd-16:midSectionEnd+16));
 
-figure;
+figure (2);
 plot(beginning, '*');
 %figure;
 %plot(middle, '*');
@@ -49,7 +49,7 @@ endingPhase = angle(z(end))
 %figure;
 %plot(angle(z), '*');
 
-if (writeMatFile == 1) 
+if (writeMatFile == 1)
     fprintf('Generating soqpsk_pn%d.mat\n', O);
     title = sprintf('soqpsk_pn%d.mat', O);
     I=real(z);
@@ -62,8 +62,8 @@ if (writeMatFile == 1)
 end
 
 if writeTestVectors == 1
-    z = z .* exp(-j*2*pi*(1:length(z))/4);
-    realz = real(z);
+    z = z .* exp(-j*(2*pi*(1:length(z))/4));
+    realz = real(z)';
     save('soqpskTestData.txt','realz','-ascii');
 end
 

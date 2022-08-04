@@ -761,26 +761,45 @@ end
 
 `else  // ADD_DESPREADER
 
+    reg soqTrellisMode;
+    always @* begin
+        casex (demodMode)
+            `MODE_SOQPSK:   soqTrellisMode = 1;
+            default:        soqTrellisMode = 0;
+        endcase
+    end
+//wire            soqTrellisMode = (demodMode == `MODE_SOQPSK);
 assign          auSymClk = qSymClk;
 assign          auBit = qBit;
 assign          iSymData = iBsSymData;
 assign          qSymData = qBsSymData;
-assign          iTrellis = iBsTrellis;
-assign          qTrellis = qBsTrellis;
+assign          iTrellis = soqTrellisMode ? iResamp : iBsTrellis;
+assign          qTrellis = soqTrellisMode ? qResamp : qBsTrellis;
+assign          trellisSymEn = soqTrellisMode ? iBitEn : (iBitEn & resampSync);
 assign          timingLock = bitsyncLock;
 `endif
 
 `ifdef SIMULATE
+real iResampReal;
+always @* iResampReal = $itor($signed(iResamp))/(2.0**17);
+real qResampReal;
+always @* qResampReal = $itor($signed(qResamp))/(2.0**17);
 real iTrellisReal;
 always @* iTrellisReal = $itor($signed(iTrellis))/(2.0**17);
+real qTrellisReal;
+always @* qTrellisReal = $itor($signed(qTrellis))/(2.0**17);
 real iSymReal;
 always @* iSymReal = $itor($signed(iSymData))/(2.0**17);
+real iSoq;
+always @* iSoq = iResampReal + qResampReal;
+real qSoq;
+always @* qSoq = qResampReal - iResampReal;
 `endif
 
-assign trellisSymEn = iBitEn & resampSync;
+//assign trellisSymEn = iBitEn & resampSync;
 
 assign eyeSync = resampSync;
-assign cordicModes = ( (demodMode == `MODE_2FSK)
+wire   cordicModes = ( (demodMode == `MODE_2FSK)
                     || (demodMode == `MODE_PCMTRELLIS)
                     || (demodMode == `MODE_FM)
                     || (demodMode == `MODE_PM));

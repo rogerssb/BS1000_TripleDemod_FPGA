@@ -3,7 +3,7 @@
 <!--                                                         -->
 <!-- Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.   -->
 
-<Project Version="7" Minor="17" Path="C:/Engineering/Triple_Demod/BS1000-FPGA/branches/vivado/tripleDemod.xpr">
+<Project Version="7" Minor="17" Path="Y:/vivado/tripleDemod.xpr">
   <DefaultLaunch Dir="$PRUNDIR"/>
   <Configuration>
     <Option Name="Id" Val="44e7233ad56b455bb07920429618d9e5"/>
@@ -17,10 +17,9 @@
     <Option Name="CompiledLibDirRiviera" Val="$PCACHEDIR/compile_simlib/riviera"/>
     <Option Name="CompiledLibDirActivehdl" Val="$PCACHEDIR/compile_simlib/activehdl"/>
     <Option Name="BoardPart" Val=""/>
-    <Option Name="ActiveSimSet" Val="simTrellisCarrierLoop"/>
+    <Option Name="ActiveSimSet" Val="sim_1"/>
     <Option Name="DefaultLib" Val="xil_defaultlib"/>
     <Option Name="IPRepoPath" Val="$PPRDIR/ldpc_dual"/>
-    <Option Name="IPRepoPath" Val="$PPRDIR/hbf_fft"/>
     <Option Name="IPOutputRepo" Val="$PCACHEDIR/ip"/>
     <Option Name="IPCachePermission" Val="read"/>
     <Option Name="IPCachePermission" Val="write"/>
@@ -30,20 +29,20 @@
     <Option Name="IPStaticSourceDir" Val="$PPRDIR/tripleDemod.ip_user_files/ipstatic"/>
     <Option Name="EnableBDX" Val="FALSE"/>
     <Option Name="DSANumComputeUnits" Val="16"/>
-    <Option Name="WTXSimLaunchSim" Val="370"/>
+    <Option Name="WTXSimLaunchSim" Val="372"/>
     <Option Name="WTModelSimLaunchSim" Val="0"/>
     <Option Name="WTQuestaLaunchSim" Val="0"/>
     <Option Name="WTIesLaunchSim" Val="0"/>
     <Option Name="WTVcsLaunchSim" Val="0"/>
     <Option Name="WTRivieraLaunchSim" Val="0"/>
     <Option Name="WTActivehdlLaunchSim" Val="0"/>
-    <Option Name="WTXSimExportSim" Val="72"/>
-    <Option Name="WTModelSimExportSim" Val="72"/>
-    <Option Name="WTQuestaExportSim" Val="72"/>
-    <Option Name="WTIesExportSim" Val="72"/>
-    <Option Name="WTVcsExportSim" Val="72"/>
-    <Option Name="WTRivieraExportSim" Val="72"/>
-    <Option Name="WTActivehdlExportSim" Val="72"/>
+    <Option Name="WTXSimExportSim" Val="68"/>
+    <Option Name="WTModelSimExportSim" Val="68"/>
+    <Option Name="WTQuestaExportSim" Val="68"/>
+    <Option Name="WTIesExportSim" Val="68"/>
+    <Option Name="WTVcsExportSim" Val="68"/>
+    <Option Name="WTRivieraExportSim" Val="68"/>
+    <Option Name="WTActivehdlExportSim" Val="68"/>
     <Option Name="GenerateIPUpgradeLog" Val="TRUE"/>
     <Option Name="XSimRadix" Val="hex"/>
     <Option Name="XSimTimeUnit" Val="ns"/>
@@ -64,13 +63,6 @@
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PPRDIR/Vhdl_Library/fixed_pkg_2008.vhd">
-        <FileInfo SFType="VHDL2008">
-          <Attr Name="Library" Val="work"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
@@ -164,16 +156,8 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/Vhdl_Library/RAM_2Reads_1Write.vhd">
+      <File Path="$PPRDIR/Vhdl_Library/fixed_pkg_2008.vhd">
         <FileInfo SFType="VHDL2008">
-          <Attr Name="Library" Val="work"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PPRDIR/Vhdl_Library/Semco_pkg.vhd">
-        <FileInfo SFType="VHDL2008">
-          <Attr Name="Library" Val="work"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
@@ -427,6 +411,60 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
+      <File Path="$PPRDIR/log10Estimate.v">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PPRDIR/soqpsk/soqpskComp4.v">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PPRDIR/soqpsk/traceBackSoqpsk.v">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PPRDIR/soqpsk/acsSoqpsk.v">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PPRDIR/Vhdl_Library/RAM_2Reads_1Write.vhd">
+        <FileInfo SFType="VHDL2008">
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PPRDIR/Vhdl_Library/Semco_pkg.vhd">
+        <FileInfo SFType="VHDL2008">
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PPRDIR/soqpsk/soqpsk2TapMF.v">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PPRDIR/mseEstimate.v">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
       <File Path="$PPRDIR/fmDemod.v">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -547,13 +585,6 @@
         </FileInfo>
       </File>
       <File Path="$PPRDIR/pcmAgc.v">
-        <FileInfo>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PPRDIR/mseEstimate.v">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
@@ -776,7 +807,7 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PSRCDIR/sources_1/ip/hbf_fft_0_1/hbf_fft_0.xci">
+      <File Path="$PPRDIR/soqpsk/soqpskViterbi.v">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
@@ -792,15 +823,20 @@
       </File>
       <File Path="$PPRDIR/ReedSolomon/RS_InterLeave.vhd">
         <FileInfo SFType="VHDL2008">
-          <Attr Name="Library" Val="work"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
       <File Path="$PPRDIR/ReedSolomon/ReedSolomonASM.vhd">
         <FileInfo SFType="VHDL2008">
-          <Attr Name="Library" Val="work"/>
           <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PPRDIR/dqmChip2Chip.v">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
@@ -979,9 +1015,15 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
+      <File Path="$PPRDIR/soqpsk/trellisSoqpsk.v">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
       <File Path="$PPRDIR/ReedSolomon/RS_DecoderTop.vhd">
         <FileInfo SFType="VHDL2008">
-          <Attr Name="Library" Val="work"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
@@ -1231,11 +1273,19 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/ReedSolomon/rsEncRegs.v">
+      <File Path="C:/Xilinx/Vivado/2016.4/data/verilog/src/glbl.v">
         <FileInfo>
           <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/ip/rs_decoder/R_IN.coe">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/xc7k160t-IP/rs_decoder/R_IN.coe"/>
+          <Attr Name="ImportTime" Val="1659530639"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
@@ -1299,9 +1349,10 @@
         <Option Name="VerilogDir" Val="$PPRDIR/."/>
         <Option Name="TransportPathDelay" Val="0"/>
         <Option Name="TransportIntDelay" Val="0"/>
-        <Option Name="SimMode" Val="post-implementation"/>
+        <Option Name="SimMode" Val="post-synthesis"/>
         <Option Name="SrcSet" Val="sources_1"/>
         <Option Name="XSimWcfgFile" Val="$PPRDIR/simDemod.wcfg"/>
+        <Option Name="NLNetlistMode" Val="funcsim"/>
         <Define Name="SEMCO_DEMOD"/>
         <Define Name="SIMULATE"/>
         <Define Name="VM_SIM"/>
@@ -1766,7 +1817,6 @@
       <Filter Type="Srcs"/>
       <File Path="$PPRDIR/resampler/resampler.v">
         <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
@@ -1976,8 +2026,8 @@
         <Define Name="TRIPLE_DEMOD"/>
       </Config>
     </FileSet>
-    <FileSet Name="fifo_EightToOne" Type="BlockSrcs" RelSrcDir="$PSRCDIR/fifo_EightToOne">
-      <File Path="$PPRDIR/xc7k160t-IP/fifo_EightToOne/fifo_EightToOne.xci">
+    <FileSet Name="hbf_fft_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/hbf_fft_0">
+      <File Path="$PSRCDIR/sources_1/ip/hbf_fft_0_1/hbf_fft_0.xci">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
@@ -1985,15 +2035,17 @@
         </FileInfo>
       </File>
       <Config>
-        <Option Name="TopModule" Val="fifo_EightToOne"/>
+        <Option Name="TopModule" Val="hbf_fft_0"/>
         <Option Name="VerilogDir" Val="$PPRDIR/."/>
         <Option Name="UseBlackboxStub" Val="1"/>
         <Define Name="TRIPLE_DEMOD"/>
       </Config>
     </FileSet>
     <FileSet Name="xilinxViterbi9p1" Type="BlockSrcs" RelSrcDir="$PSRCDIR/xilinxViterbi9p1">
-      <File Path="$PPRDIR/xc7k160t-IP/xilinxViterbi9p1/xilinxViterbi9p1.xci">
+      <File Path="$PSRCDIR/sources_1/ip/xilinxViterbi9p1/xilinxViterbi9p1.xci">
         <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/xc7k160t-IP/xilinxViterbi9p1/xilinxViterbi9p1.xci"/>
+          <Attr Name="ImportTime" Val="1564020867"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
@@ -2001,6 +2053,40 @@
       </File>
       <Config>
         <Option Name="TopModule" Val="xilinxViterbi9p1"/>
+        <Option Name="VerilogDir" Val="$PPRDIR/."/>
+        <Option Name="UseBlackboxStub" Val="1"/>
+        <Define Name="TRIPLE_DEMOD"/>
+      </Config>
+    </FileSet>
+    <FileSet Name="dqmc2c_constrs" Type="Constrs" RelSrcDir="$PSRCDIR/dqmc2c_constrs">
+      <File Path="$PPRDIR/tripleDemodDC_K7_timing.xdc">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PPRDIR/tripleDemodDqmC2C_DC_K7_pinout.xdc">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+        </FileInfo>
+      </File>
+      <Config>
+        <Option Name="ConstrsType" Val="XDC"/>
+      </Config>
+    </FileSet>
+    <FileSet Name="fifo_EightToOne" Type="BlockSrcs" RelSrcDir="$PSRCDIR/fifo_EightToOne">
+      <File Path="$PSRCDIR/sources_1/ip/fifo_EightToOne/fifo_EightToOne.xci">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/xc7k160t-IP/fifo_EightToOne/fifo_EightToOne.xci"/>
+          <Attr Name="ImportTime" Val="1659553020"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <Config>
+        <Option Name="TopModule" Val="fifo_EightToOne"/>
         <Option Name="VerilogDir" Val="$PPRDIR/."/>
         <Option Name="UseBlackboxStub" Val="1"/>
         <Define Name="TRIPLE_DEMOD"/>
@@ -2041,7 +2127,7 @@
     </Simulator>
   </Simulators>
   <Runs Version="1" Minor="10">
-    <Run Id="synth_1" Type="Ft3:Synth" SrcSet="sources_1" Part="xc7k160tfbg676-1" ConstrsSet="constrs_1" Description="Vivado Synthesis Defaults" State="current" Dir="$PRUNDIR/synth_1" IncludeInArchive="true">
+    <Run Id="synth_1" Type="Ft3:Synth" SrcSet="sources_1" Part="xc7k160tfbg676-1" ConstrsSet="dqmc2c_constrs" Description="Vivado Synthesis Defaults" State="current" Dir="$PRUNDIR/synth_1" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2016"/>
         <Step Id="synth_design"/>
@@ -2217,7 +2303,7 @@
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
     </Run>
-    <Run Id="fifo_EightToOne_synth_1" Type="Ft3:Synth" SrcSet="fifo_EightToOne" Part="xc7k160tfbg676-1" ConstrsSet="fifo_EightToOne" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/fifo_EightToOne_synth_1" IncludeInArchive="true">
+    <Run Id="hbf_fft_0_synth_1" Type="Ft3:Synth" SrcSet="hbf_fft_0" Part="xc7k160tfbg676-1" ConstrsSet="hbf_fft_0" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/hbf_fft_0_synth_1" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2016"/>
         <Step Id="synth_design"/>
@@ -2233,6 +2319,14 @@
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
     </Run>
+    <Run Id="fifo_EightToOne_synth_1" Type="Ft3:Synth" SrcSet="fifo_EightToOne" Part="xc7k160tfbg676-1" ConstrsSet="fifo_EightToOne" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/fifo_EightToOne_synth_1" IncludeInArchive="true">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2016"/>
+        <Step Id="synth_design"/>
+      </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+    </Run>
     <Run Id="rs_decoder_synth_1" Type="Ft3:Synth" SrcSet="rs_decoder" Part="xc7k160tfbg676-1" ConstrsSet="rs_decoder" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/rs_decoder_synth_1" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2016"/>
@@ -2241,7 +2335,16 @@
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
     </Run>
-    <Run Id="impl_1" Type="Ft2:EntireDesign" Part="xc7k160tfbg676-1" ConstrsSet="constrs_1" Description="Default settings for Implementation." State="current" Dir="$PRUNDIR/impl_1" SynthRun="synth_1" IncludeInArchive="true">
+    <Run Id="dqmC2CSynth" Type="Ft3:Synth" SrcSet="sources_1" Part="xc7k160tfbg676-1" ConstrsSet="dqmc2c_constrs" Description="Vivado Synthesis Defaults" IncludeInArchive="true">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2016">
+          <Desc>Vivado Synthesis Defaults</Desc>
+        </StratHandle>
+        <Step Id="synth_design"/>
+      </Strategy>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+    </Run>
+    <Run Id="impl_1" Type="Ft2:EntireDesign" Part="xc7k160tfbg676-1" ConstrsSet="dqmc2c_constrs" Description="Default settings for Implementation." State="current" Dir="$PRUNDIR/impl_1" SynthRun="synth_1" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2016"/>
         <Step Id="init_design"/>
@@ -2572,7 +2675,7 @@
       </Strategy>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
     </Run>
-    <Run Id="fifo_EightToOne_impl_1" Type="Ft2:EntireDesign" Part="xc7k160tfbg676-1" ConstrsSet="fifo_EightToOne" Description="Default settings for Implementation." SynthRun="fifo_EightToOne_synth_1" IncludeInArchive="false">
+    <Run Id="hbf_fft_0_impl_1" Type="Ft2:EntireDesign" Part="xc7k160tfbg676-1" ConstrsSet="hbf_fft_0" Description="Default settings for Implementation." SynthRun="hbf_fft_0_synth_1" IncludeInArchive="false">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2016"/>
         <Step Id="init_design"/>
@@ -2602,9 +2705,41 @@
       </Strategy>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
     </Run>
+    <Run Id="fifo_EightToOne_impl_1" Type="Ft2:EntireDesign" Part="xc7k160tfbg676-1" ConstrsSet="fifo_EightToOne" Description="Default settings for Implementation." SynthRun="fifo_EightToOne_synth_1" IncludeInArchive="false">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2016"/>
+        <Step Id="init_design"/>
+        <Step Id="opt_design"/>
+        <Step Id="power_opt_design"/>
+        <Step Id="place_design"/>
+        <Step Id="post_place_power_opt_design"/>
+        <Step Id="phys_opt_design"/>
+        <Step Id="route_design"/>
+        <Step Id="post_route_phys_opt_design"/>
+        <Step Id="write_bitstream"/>
+      </Strategy>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+    </Run>
     <Run Id="rs_decoder_impl_1" Type="Ft2:EntireDesign" Part="xc7k160tfbg676-1" ConstrsSet="rs_decoder" Description="Default settings for Implementation." SynthRun="rs_decoder_synth_1" IncludeInArchive="false">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2016"/>
+        <Step Id="init_design"/>
+        <Step Id="opt_design"/>
+        <Step Id="power_opt_design"/>
+        <Step Id="place_design"/>
+        <Step Id="post_place_power_opt_design"/>
+        <Step Id="phys_opt_design"/>
+        <Step Id="route_design"/>
+        <Step Id="post_route_phys_opt_design"/>
+        <Step Id="write_bitstream"/>
+      </Strategy>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+    </Run>
+    <Run Id="impl_2" Type="Ft2:EntireDesign" Part="xc7k160tfbg676-1" ConstrsSet="constrs_1" Description="Default settings for Implementation." SynthRun="dqmC2CSynth" IncludeInArchive="true">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2016">
+          <Desc>Default settings for Implementation.</Desc>
+        </StratHandle>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>

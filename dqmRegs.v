@@ -31,10 +31,12 @@ module dqmRegs(
                 `DQM_MSE_CONTROL:   mseMean[7:0] <= dataIn[7:0];
                 `ifdef DQM_USE_DPLL
                 `DQM_DLL_FREQUENCY: dllCenterFreq[7:0] <= dataIn[7:0];
-                `else 
+                `else
                 `DQM_CLKS_PER_BIT:  clksPerBit[7:0] <= dataIn[7:0];
                 `endif
-                `DQM_SRC_SELECT:    sourceSelect <= dataIn[3:0];
+                `DQM_SRC_SELECT:    begin
+                    sourceSelect <= dataIn[3:0];
+                end
                 default: ;
             endcase
         end
@@ -46,7 +48,7 @@ module dqmRegs(
                 `DQM_MSE_CONTROL:   mseMean[15:8] <= dataIn[15:8];
                 `ifdef DQM_USE_DPLL
                 `DQM_DLL_FREQUENCY: dllCenterFreq[15:8] <= dataIn[15:8];
-                `else 
+                `else
                 `DQM_CLKS_PER_BIT:  clksPerBit[15:8] <= dataIn[15:8];
                 `endif
                 default:  ;
@@ -61,7 +63,7 @@ module dqmRegs(
                 `DQM_MSE_CONTROL:   mseAvgLength[7:0] <= dataIn[23:16];
                 `ifdef DQM_USE_DPLL
                 `DQM_DLL_FREQUENCY: dllCenterFreq[23:16] <= dataIn[23:16];
-                `endif 
+                `endif
                 `DQM_PAYLOAD_SIZE:  payloadSize[7:0] <= dataIn[23:16];
                 default: ;
             endcase
@@ -75,7 +77,7 @@ module dqmRegs(
                 `DQM_MSE_CONTROL:   mseAvgLength[15:8] <= dataIn[31:24];
                 `ifdef DQM_USE_DPLL
                 `DQM_DLL_FREQUENCY: dllCenterFreq[31:24] <= dataIn[31:24];
-                `endif 
+                `endif
                 `DQM_PAYLOAD_SIZE:  payloadSize[13:8] <= dataIn[29:24];
                 default:  ;
             endcase

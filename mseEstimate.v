@@ -10,12 +10,20 @@ module mseEstimate
 (
     input                               clk,
     input                               reset,
+    input                               combinerInput,
+    input                               combinerStartOfFrame,
+    input   signed      [33:0]          ch0MseSum,
+    input   signed      [LOG_BITS-1:0]  ch0Log10MSE,
+    input   signed      [33:0]          ch1MseSum,
+    input   signed      [LOG_BITS-1:0]  ch1Log10MSE,
     input                               startEstimate,
     input                               magClkEn,
     input               [12:0]          mag,
     input               [15:0]          meanMag,
     input               [15:0]          avgLength,
     input   signed      [15:0]          log10MseOffset,
+    output  signed      [33:0]          mseSum,
+    output  signed      [LOG_BITS-1:0]  log10MseSum,
     output  signed      [15:0]          log10MSE
 );
 
@@ -69,11 +77,16 @@ module mseEstimate
             avgCompleteDelayed <= avgComplete;
             if (avgComplete) begin
                 `ifdef MSE_USE_INSIDE_POINTS
-                if (diff <= 0) begin
-                    diffAccum <= diffSquared;
+                if (combinerInput) begin
+                    if (diff <= 0) begin
+                        diffAccum <= diffSquared;
+                    end
+                    else begin
+                        diffAccum <= 0;
+                    end
                 end
                 else begin
-                    diffAccum <= 0;
+                    diffAccum <= diffSquared;
                 end
                 `else
                 diffAccum <= diffSquared;
@@ -88,7 +101,13 @@ module mseEstimate
             else begin
 
                 `ifdef MSE_USE_INSIDE_POINTS
-                if (diff <= 0) begin
+                if (combinerInput) begin
+                    if (diff <= 0) begin
+                        avgCount <= avgCount - 1;
+                        diffAccum <= diffAccum + diffSquared;
+                    end
+                end
+                else begin
                     avgCount <= avgCount - 1;
                     diffAccum <= diffAccum + diffSquared;
                 end
@@ -105,6 +124,41 @@ module mseEstimate
             end
         end
     end
+
+    `define USE_LOG10_MODULE
+    `ifdef USE_LOG10_MODULE
+
+    wire            [33:0]          linearValue = combinerInput ? ch0MseSum + ch1MseSum
+                                                                : diffTotal[47:14];
+    wire    signed  [LOG_BITS-1:0]  logValue;
+    log10Estimate
+        #(.NUM_ITERS(NUM_ITERS),
+          .LOG_BITS(LOG_BITS),
+          .LOG_FRAC_BITS(LOG_FRAC_BITS)
+        )
+    logDiff (
+        .clk(clk),
+        .outputClkEn(avgComplete),
+        .linearValue(linearValue),
+        .log10Estimate(logValue)
+    );
+
+    // Calculate the combined MSE including the fudge factor.
+    wire    signed  [LOG_BITS-1:0]  log10CmbMSE = ch0Log10MSE
+                                                + ch1Log10MSE
+                                                - (logValue + log10MseOffset[LOG_BITS-1:0]);
+
+    // Add in the fudge factor offset for non-combiner operation
+    wire    signed  [LOG_BITS-1:0] finalLogX = logValue + log10MseOffset[LOG_BITS-1:0];
+
+    // Mux and Sign extend to get the final output
+    assign log10MSE = combinerInput ? {{16-LOG_BITS{log10CmbMSE[LOG_BITS-1]}},log10CmbMSE}
+                                    : {{16-LOG_BITS{finalLogX[LOG_BITS-1]}},finalLogX};
+
+    assign mseSum = diffTotal[47:14];
+    assign log10MseSum = finalLogX;
+
+    `else  //USE_LOG10_MODULE
 
     // Log10 MSE Estimate
     /*
@@ -127,154 +181,155 @@ module mseEstimate
     */
 
     wire        [27:0]  testBits = diffTotal[47:20];
-    reg         [NUM_ITERS-1:0]   initialX;
-    reg signed  [LOG_BITS-1:0]   initialLogX;        // Q4.7
+    wire        [47:0]  linearMSE = diffTotal;
+    reg         [NUM_ITERS-1:0] initialX;
+    reg signed  [LOG_BITS-1:0]  initialLogX;        // Q4.7
     always @* begin
         casex (testBits)
             // NOTE: The extra underscore shows where the implied binary point is
             28'b1xxx_xxxx_xxxx_xx_xx_xxxx_xxxx_xxxx:
                 begin
-                initialX = diffTotal[47:42];
+                initialX = linearMSE[47:42];
                 initialLogX = 11'd539;          //$rtoi($log10(2.0**14) * (2.0**LOG_FRAC_BITS));
                 end
             28'b01xx_xxxx_xxxx_xx_xx_xxxx_xxxx_xxxx:
                 begin
-                initialX = diffTotal[46:41];
+                initialX = linearMSE[46:41];
                 initialLogX = 11'd501;          //$rtoi($log10(2.0**13) * (2.0**LOG_FRAC_BITS));
                 end
             28'b001x_xxxx_xxxx_xx_xx_xxxx_xxxx_xxxx:
                 begin
-                initialX = diffTotal[45:40];
+                initialX = linearMSE[45:40];
                 initialLogX = 11'd462;          //$rtoi($log10(2.0**12) * (2.0**LOG_FRAC_BITS));
                 end
             28'b0001_xxxx_xxxx_xx_xx_xxxx_xxxx_xxxx:
                 begin
-                initialX = diffTotal[44:39];
+                initialX = linearMSE[44:39];
                 initialLogX = 11'd424;          //$rtoi($log10(2.0**11) * (2.0**LOG_FRAC_BITS));
                 end
             28'b0000_1xxx_xxxx_xx_xx_xxxx_xxxx_xxxx:
                 begin
-                initialX = diffTotal[43:38];
+                initialX = linearMSE[43:38];
                 initialLogX = 11'd385;          //$rtoi($log10(2.0**10) * (2.0**LOG_FRAC_BITS));
                 end
             28'b0000_01xx_xxxx_xx_xx_xxxx_xxxx_xxxx:
                 begin
-                initialX = diffTotal[42:37];
+                initialX = linearMSE[42:37];
                 initialLogX = 11'd347;          //$rtoi($log10(2.0**9) * (2.0**LOG_FRAC_BITS));
                 end
             28'b0000_001x_xxxx_xx_xx_xxxx_xxxx_xxxx:
                 begin
-                initialX = diffTotal[41:36];
+                initialX = linearMSE[41:36];
                 initialLogX = 11'd308;          //$rtoi($log10(2.0**8) * (2.0**LOG_FRAC_BITS));
                 end
             28'b0000_0001_xxxx_xx_xx_xxxx_xxxx_xxxx:
                 begin
-                initialX = diffTotal[40:35];
+                initialX = linearMSE[40:35];
                 initialLogX = 11'd270;          //$rtoi($log10(2.0**7) * (2.0**LOG_FRAC_BITS));
                 end
             28'b0000_0000_1xxx_xx_xx_xxxx_xxxx_xxxx:
                 begin
-                initialX = diffTotal[39:34];
+                initialX = linearMSE[39:34];
                 initialLogX = 11'd231;          //$rtoi($log10(2.0**6) * (2.0**LOG_FRAC_BITS));
                 end
             28'b0000_0000_01xx_xx_xx_xxxx_xxxx_xxxx:
                 begin
-                initialX = diffTotal[38:33];
+                initialX = linearMSE[38:33];
                 initialLogX = 11'd193;          //$rtoi($log10(2.0**5) * (2.0**LOG_FRAC_BITS));
                 end
             28'b0000_0000_001x_xx_xx_xxxx_xxxx_xxxx:
                 begin
-                initialX = diffTotal[37:32];
+                initialX = linearMSE[37:32];
                 initialLogX = 11'd154;          //$rtoi($log10(2.0**4) * (2.0**LOG_FRAC_BITS));
                 end
             28'b0000_0000_0001_xx_xx_xxxx_xxxx_xxxx:
                 begin
-                initialX = diffTotal[36:31];
+                initialX = linearMSE[36:31];
                 initialLogX = 11'd116;          //$rtoi($log10(2.0**3) * (2.0**LOG_FRAC_BITS));
                 end
             28'b0000_0000_0000_1x_xx_xxxx_xxxx_xxxx:
                 begin
-                initialX = diffTotal[35:30];
+                initialX = linearMSE[35:30];
                 initialLogX = 11'd77;           //$rtoi($log10(2.0**2) * (2.0**LOG_FRAC_BITS));
                 end
             28'b0000_0000_0000_01_xx_xxxx_xxxx_xxxx:
                 begin
-                initialX = diffTotal[34:29];
+                initialX = linearMSE[34:29];
                 initialLogX = 11'd39;           //$rtoi($log10(2.0**1) * (2.0**LOG_FRAC_BITS));
                 end
             28'b0000_0000_0000_00_1x_xxxx_xxxx_xxxx:
                 begin
-                initialX = diffTotal[33:28];
+                initialX = linearMSE[33:28];
                 initialLogX = 11'd0;            //$rtoi($log10(2.0**0) * (2.0**LOG_FRAC_BITS));
                 end
             28'b0000_0000_0000_00_01_xxxx_xxxx_xxxx:
                 begin
-                initialX = diffTotal[32:27];
+                initialX = linearMSE[32:27];
                 initialLogX = -11'sd39;         //$rtoi($log10(2.0**-1) * (2.0**LOG_FRAC_BITS));
                 end
             28'b0000_0000_0000_00_00_1xxx_xxxx_xxxx:
                 begin
-                initialX = diffTotal[31:26];
+                initialX = linearMSE[31:26];
                 initialLogX = -11'sd77;         //$rtoi($log10(2.0**-2) * (2.0**LOG_FRAC_BITS));
                 end
             28'b0000_0000_0000_00_00_01xx_xxxx_xxxx:
                 begin
-                initialX = diffTotal[30:25];
+                initialX = linearMSE[30:25];
                 initialLogX = -11'sd116;        //$rtoi($log10(2.0**-3) * (2.0**LOG_FRAC_BITS));
                 end
             28'b0000_0000_0000_00_00_001x_xxxx_xxxx:
                 begin
-                initialX = diffTotal[29:24];
+                initialX = linearMSE[29:24];
                 initialLogX = -11'sd154;        //$rtoi($log10(2.0**-4) * (2.0**LOG_FRAC_BITS));
                 end
             28'b0000_0000_0000_00_00_0001_xxxx_xxxx:
                 begin
-                initialX = diffTotal[28:23];
+                initialX = linearMSE[28:23];
                 initialLogX = -11'sd193;        //$rtoi($log10(2.0**-5) * (2.0**LOG_FRAC_BITS));
                 end
             28'b0000_0000_0000_00_00_0000_1xxx_xxxx:
                 begin
-                initialX = diffTotal[27:22];
+                initialX = linearMSE[27:22];
                 initialLogX = -11'sd231;        //$rtoi($log10(2.0**-6) * (2.0**LOG_FRAC_BITS));
                 end
             28'b0000_0000_0000_00_00_0000_01xx_xxxx:
                 begin
-                initialX = diffTotal[26:21];
+                initialX = linearMSE[26:21];
                 initialLogX = -11'sd270;        //$rtoi($log10(2.0**-7) * (2.0**LOG_FRAC_BITS));
                 end
             28'b0000_0000_0000_00_00_0000_001x_xxxx:
                 begin
-                initialX = diffTotal[25:20];
+                initialX = linearMSE[25:20];
                 initialLogX = -11'sd308;        //$rtoi($log10(2.0**-8) * (2.0**LOG_FRAC_BITS));
                 end
             28'b0000_0000_0000_00_00_0000_0001_xxxx:
                 begin
-                initialX = diffTotal[24:19];
+                initialX = linearMSE[24:19];
                 initialLogX = -11'sd347;        //$rtoi($log10(2.0**-9) * (2.0**LOG_FRAC_BITS));
                 end
             28'b0000_0000_0000_00_00_0000_0000_1xxx:
                 begin
-                initialX = diffTotal[23:18];
+                initialX = linearMSE[23:18];
                 initialLogX = -11'sd385;        //$rtoi($log10(2.0**-10) * (2.0**LOG_FRAC_BITS));
                 end
             28'b0000_0000_0000_00_00_0000_0000_01xx:
                 begin
-                initialX = diffTotal[22:17];
+                initialX = linearMSE[22:17];
                 initialLogX = -11'sd424;        //$rtoi($log10(2.0**-11) * (2.0**LOG_FRAC_BITS));
                 end
             28'b0000_0000_0000_00_00_0000_0000_001x:
                 begin
-                initialX = diffTotal[21:16];
+                initialX = linearMSE[21:16];
                 initialLogX = -11'sd462;        //$rtoi($log10(2.0**-12) * (2.0**LOG_FRAC_BITS));
                 end
             28'b0000_0000_0000_00_00_0000_0000_0001:
                 begin
-                initialX = diffTotal[20:15];
+                initialX = linearMSE[20:15];
                 initialLogX = -11'sd501;        //$rtoi($log10(2.0**-13) * (2.0**LOG_FRAC_BITS));
                 end
             default:
                 begin
-                initialX = diffTotal[19:14];
+                initialX = linearMSE[19:14];
                 initialLogX = -11'sd539;        //$rtoi($log10(2.0**-14) * (2.0**LOG_FRAC_BITS));
                 end
         endcase
@@ -352,6 +407,7 @@ module mseEstimate
         end
     end
 
+    `endif //USE_LOG10_MODULE
 
 endmodule
 

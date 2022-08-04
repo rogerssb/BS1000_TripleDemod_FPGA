@@ -2,7 +2,8 @@
 `include "addressMap.v"
 
 //`define FM_TEST
-`define SOQPSK_TEST
+//`define SOQPSK_TEST
+`define SOQTRELLIS_TEST
 //`define LDPC_TEST
 //`define AQPSK_TEST
 //`define QPSK_VIT_TEST
@@ -10,10 +11,19 @@
 `define ENABLE_AGC
 //`define TEST_CMA
 
+`ifdef SOQPSK_TEST
+    `define SOQPSK_ENABLED
+`endif
+
+`ifdef SOQTRELLIS_TEST
+    `define SOQPSK_ENABLED
+`endif
+
+
 `ifdef VM_SIM
     `ifdef FM_TEST
         `define TEST_DATA "y:/vivado/testData/pcmfmTestData.txt"
-    `elsif SOQPSK_TEST
+    `elsif SOQPSK_ENABLED
         `define TEST_DATA "y:/vivado/testData/soqpskTestData.txt"
     `elsif LDPC_TEST
         `define TEST_DATA "y:/vivado/testData/ldpcWaveform_1024_4_5.txt"
@@ -29,7 +39,7 @@
     `ifdef FM_TEST
         `define TEST_DATA "c:/modem/vivado/testData/pcmfmTestData.txt"
         //`define TEST_DATA "c:/modem/vivado/testData/pcmfmTestData_3sps.txt"
-    `elsif SOQPSK_TEST
+    `elsif SOQPSK_ENABLED
         `define TEST_DATA "c:/modem/vivado/testData/soqpskTestData.txt"
     `elsif LDPC_TEST
         `define TEST_DATA "c:/modem/vivado/testData/ldpcWaveform_1024_4_5.txt"
@@ -94,6 +104,8 @@ module test;
     real                    ifSampleFloat;
     `ifdef LDPC_TEST
     parameter               ifSamplesPerBit = 128;
+    `elsif SOQPSK_ENABLED
+    parameter               ifSamplesPerBit = 16;
     `else
     parameter               ifSamplesPerBit = 32;
     //parameter               ifSamplesPerBit = 3;
@@ -110,7 +122,7 @@ module test;
                 end
             end
             else begin
-                //enableInput <= 0;
+                enableInput <= 0;
                 $display("Out of if samples");
                 $rewind(fp_if);
                 #1 x <= $fscanf(fp_if,"%f",ifSampleFloat);
@@ -137,6 +149,55 @@ module test;
             else begin
                 ifSample <= $rtoi((2**17)*ifSampleScaled);
             end
+        end
+    end
+
+    //************************ PN Sequence for Comparison *********************
+    `ifdef SOQTRELLIS_TEST
+    reg     enableBERT;
+    initial enableBERT = 0;
+    `elsif SOQPSK_TEST
+    reg     enableBERT;
+    initial enableBERT = 0;
+    `endif
+    parameter PN8 = 16'h008e,
+              MASK8 = 16'h00ff;
+
+    parameter PN6 = 16'b0000_0000_00110000,
+              MASK6 = 16'h003f;
+
+    reg [15:0]sr;
+    reg [4:0]zeroCount;
+    reg [63:0]  randDataSR;
+    reg  randData;
+    integer pnBitcount;
+    always @(posedge clk) begin
+        if (reset) begin
+            pnBitcount <= ifSamplesPerBit - 1;
+            zeroCount <= 5'b0;
+            sr <= MASK6;
+        end
+        else if (pnBitcount > 0) begin
+            pnBitcount <= pnBitcount - 1;
+        end
+        else begin
+            pnBitcount <= ifSamplesPerBit - 1;
+            if (sr[0] | (zeroCount == 5'b11111))
+                begin
+                zeroCount <= 5'h0;
+                sr <= {1'b0, sr[15:1]} ^ PN6;
+            end
+            else
+                begin
+                zeroCount <= zeroCount + 5'h1;
+                sr <= sr >> 1;
+            end
+            randDataSR <= {randDataSR[62:0],~sr[0]};
+            `ifdef SOQPSK_TEST
+            randData <= randDataSR[40];
+            `elsif SOQTRELLIS_TEST
+            randData <= randDataSR[37];
+            `endif
         end
     end
 
@@ -184,8 +245,8 @@ module test;
     parameter samplesPerSymbol = 2;
     integer minDdcSamplesPerSymbol;
     initial begin
-        `ifdef SOQPSK_TEST
-        minDdcSamplesPerSymbol = $rtoi(2.0*ifSamplesPerBit/samplesPerSymbol + 0.5);
+        `ifdef SOQPSK_ENABLED
+        minDdcSamplesPerSymbol = $rtoi(ifSamplesPerBit/samplesPerSymbol/2.0 + 0.5);
         `else
         minDdcSamplesPerSymbol = $rtoi(ifSamplesPerBit/samplesPerSymbol + 0.5);
         `endif
@@ -193,7 +254,7 @@ module test;
 
     real resamplerFreqSps;
     always @(bitrateBps) begin
-        `ifdef SOQPSK_TEST
+        `ifdef SOQPSK_ENABLED
         resamplerFreqSps = bitrateBps;
         `else
         resamplerFreqSps = 2.0*bitrateBps;
@@ -326,6 +387,8 @@ module test;
         write32(createAddress(`DEMODSPACE,`DEMOD_CONTROL),{16'bx,13'bx,`MODE_2FSK});
         `elsif SOQPSK_TEST
         write32(createAddress(`DEMODSPACE,`DEMOD_CONTROL),{16'bx,13'bx,`MODE_OQPSK});
+        `elsif SOQTRELLIS_TEST
+        write32(createAddress(`DEMODSPACE,`DEMOD_CONTROL),{16'bx,13'bx,`MODE_SOQPSK});
         `elsif LDPC_TEST
         write32(createAddress(`DEMODSPACE,`DEMOD_CONTROL),{16'bx,13'bx,`MODE_OQPSK});
         `elsif AQPSK_TEST
@@ -339,7 +402,7 @@ module test;
         write32(createAddress(`BITSYNCSPACE,`LF_CONTROL),1);    // Zero the error
         `ifdef FM_TEST
         write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h001a0010);
-        `elsif SOQPSK_TEST
+        `elsif SOQPSK_ENABLED
         write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h001a0010);
         `elsif LDPC_TEST
         write32(createAddress(`BITSYNCSPACE,`LF_LEAD_LAG),32'h001a0010);
@@ -361,7 +424,7 @@ module test;
         write32(createAddress(`CARRIERSPACE,`CLF_ULIMIT),  carrierLimit);
         write32(createAddress(`CARRIERSPACE,`CLF_LLIMIT), -carrierLimit);
         write32(createAddress(`CARRIERSPACE,`CLF_LOOPDATA), sweepRate);
-        `elsif SOQPSK_TEST
+        `elsif SOQPSK_ENABLED
         write32(createAddress(`CARRIERSPACE,`CLF_CONTROL),1);    // Zero the error
         write32(createAddress(`CARRIERSPACE,`CLF_LEAD_LAG),32'h18180808);
         write32(createAddress(`CARRIERSPACE,`CLF_ULIMIT),  carrierLimit);
@@ -563,10 +626,16 @@ module test;
         repeat (2*`CLOCKS_PER_BIT) @ (posedge clk) ;
         interpReset = 0;
 
-        // Enable the sample rate loop without 2 sample summer
-        write32(createAddress(`BITSYNCSPACE,`LF_CONTROL),32'h0000_0000);
-        `ifdef AQPSK_TEST
+        // Enable the sample rate loop
+        `ifdef SOQTRELLIS_TEST
+        // With the 2 sample summer
+        write32(createAddress(`BITSYNCSPACE,`LF_CONTROL),32'h0000_0010);
+        `elsif AQPSK_TEST
+        // Without the 2 sample summer
         write32(createAddress(`BITSYNCAUSPACE,`LF_CONTROL),32'h0000_0000);
+        `else
+        // Without the 2 sample summer
+        write32(createAddress(`BITSYNCSPACE,`LF_CONTROL),32'h0000_0000);
         `endif
 
 
@@ -613,7 +682,7 @@ module test;
         write32(createAddress(`CHAGCSPACE,`ALF_CONTROL),0);
         `endif
 
-        `ifdef SOQPSK_TEST
+        `ifdef SOQPSK_ENABLED
         write32(createAddress(`CARRIERSPACE,`CLF_CONTROL),2);
         `endif
 
@@ -633,6 +702,15 @@ module test;
         `ifdef TRELLIS
         // Turn on the trellis carrier loop
         write32(createAddress(`TRELLIS_SPACE,`LF_CONTROL),32'h0);
+        `endif
+
+        `ifdef SOQTRELLIS_TEST
+        soqTrellis.soqpskViterbi.simReset = 1;
+        repeat (2*`CLOCKS_PER_BIT) @ (posedge clk) ;
+        soqTrellis.soqpskViterbi.simReset = 0;
+
+        repeat (20*`CLOCKS_PER_BIT) @ (posedge clk) ;
+        enableBERT = 1;
         `endif
 
         `ifdef QPSK_VIT_TEST
@@ -705,10 +783,11 @@ module test;
         .iSym2xEn(sym2xEn),
         .iSymData(iSymData),
         .iBitEn(iBitEn),
-        .iBit(demodBit),
+        .iBit(iBit),
         .qSymEn(qSymEn),
         .qSym2xEn(qSym2xEn),
         .qSymData(qSymData),
+        .qBit(qBit),
         .sdiSymEn(sdiSymEn),
         .trellisSymEn(trellisSymEn),
         .iTrellis(iTrellis),
@@ -725,6 +804,46 @@ module test;
         .iEye(iEye), .qEye(qEye),
         .eyeOffset()
     );
+
+    `ifdef SOQTRELLIS_TEST
+    trellisSoqpsk soqTrellis(
+        .clk(clk), .reset(reset),
+        .busClk(busClk),
+        .cs(cs),
+        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .addr(a),
+        .din(d),
+        .dout(),
+        .symEn(trellisSymEn),
+        .sym2xEn(sym2xEn),
+        .iIn(iTrellis),
+        .qIn(qTrellis),
+        .dac0Select(),
+        .dac1Select(),
+        .dac2Select(),
+        .dac0Sync(),
+        .dac0Data(),
+        .dac1Sync(),
+        .dac1Data(),
+        .dac2Sync(),
+        .dac2Data(),
+        .decision(soqTrellisBit),
+        .ternarySymEnOut(soqTrellisBitEn),
+        .ternarySym2xEnOut()
+    );
+
+    integer bitError;
+    always @(posedge clk) begin
+        if (!enableBERT) begin
+            bitError <= 0;
+        end
+        else if (soqTrellisBitEn) begin
+            if (soqTrellisBit != randData) begin
+                bitError <= bitError + 1;
+            end
+        end
+    end
+    `endif  //SOQTRELLIS_TEST
 
     reg dualDecoderSpace;
     always @* begin
@@ -751,8 +870,8 @@ module test;
         .dout(dualDecDout),
         .symb_clk_en(iBitEn),          // symbol rate clock enable
         .symb_clk_2x_en(sym2xEn),     // 2x symbol rate clock enable
-        .symb_i(demodBit),            // data input,
-        .symb_q(),                    // data input,
+        .symb_i(iBit),            // data input,
+        .symb_q(qBit),            // data input,
         .dout_i(dualDataI),
         .dout_q(dualDataQ),
         .outputClkEn(dualPcmClkEn),
@@ -761,6 +880,22 @@ module test;
         .symb_clk(dualPcmSymClk),
         .inputSelect()
     );
+
+    `ifdef SOQPSK_TEST
+    integer bitError;
+    integer bitCount;
+    always @(posedge clk) begin
+        if (!enableBERT) begin
+            bitError <= 0;
+        end
+        else if (dualPcmClkEn) begin
+            bitCount <= bitCount + 1;
+            if (dualDataI != randData) begin
+                bitError <= bitError + 1;
+            end
+        end
+    end
+    `endif
 
     wire    [31:0]  dac0Dout;
     wire    [17:0]  dac0Data;
@@ -901,11 +1036,11 @@ module test;
         casex (dqmSourceSelect)
             `DQM_SRC_DEC0_CH0: begin
                 dqmBitEnIn <= iBitEn;
-                dqmBitIn <= demodBit;
+                dqmBitIn <= iBit;
             end
             default: begin
                 dqmBitEnIn <= iBitEn;
-                dqmBitIn <= demodBit;
+                dqmBitIn <= iBit;
             end
         endcase
     end

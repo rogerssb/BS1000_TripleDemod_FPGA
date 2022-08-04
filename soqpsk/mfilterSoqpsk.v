@@ -10,20 +10,20 @@
 
 `timescale 1ns/1ps
 
-module soqpskMfilter
+module soqpskMfilter #(
+    parameter   reC = 18'h0,
+                imC = 18'h0
+)
   (
    clk, reset, symEn, sym2xEn,
    iIn,qIn,
    iOut,qOut
    );
-   
+
    input         clk,reset,symEn,sym2xEn;
    input [17:0]  iIn,qIn;
    output [17:0] iOut,qOut;
-   
-   // assign coefficients at module instantiation
-   parameter     reC = 18'h0, imC = 18'h0;
-   
+
    wire [17:0]       iOutMult, qOutMult;
    // Complex mult
    cmpy18WithCe cmpMult
@@ -41,7 +41,7 @@ module soqpskMfilter
 
    // latch the samples
    reg [17:0]       iOut, qOut;
- 
+
    always @(posedge clk)begin
       if(sym2xEn)begin
          iOut <= iOutMult;
@@ -50,7 +50,7 @@ module soqpskMfilter
    end
 
 
-`ifdef SIMULATE
+`ifdef SILOS
    real iIn_REAL, qIn_REAL, reC_REAL, imC_REAL, iOut_REAL, qOut_REAL, simI_REAL, simQ_REAL;
    always @(iIn)           iIn_REAL = $itor($signed(iIn))/(2**17);
    always @(qIn)           qIn_REAL = $itor($signed(qIn))/(2**17);
@@ -62,5 +62,5 @@ module soqpskMfilter
    always @(iIn_REAL or qIn_REAL) simQ_REAL = iIn_REAL*imC_REAL + qIn_REAL*reC_REAL;  //  $itor($signed(iIn*imC) + $signed(qIn*reC))/(2**17);
 `endif
 
-   
+
 endmodule
