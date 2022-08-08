@@ -653,7 +653,7 @@
     `define DQM_SYNC_WORD       16'hfac4
     `define DQM_MSE_CONTROL     13'bx_xxxx_xxxx_00xx
     `define DQM_LOG10MSE        13'bx_xxxx_xxxx_01xx
-        `define DQM_LOG10MSE_OFFSET 13'bx_xxxx_xxxx_011x
+    `define DQM_LOG10MSE_OFFSET 13'bx_xxxx_xxxx_011x
 
 
     `ifdef DQM_USE_DPLL
