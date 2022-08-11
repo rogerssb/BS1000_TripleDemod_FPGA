@@ -21,7 +21,8 @@ module dqmRegs(
     `else
     output  reg         [15:0]  clksPerBit,
     `endif
-    output  reg         [3:0]   sourceSelect
+    output  reg         [3:0]   sourceSelect,
+    output  reg         [2:0]   combinerMode
 );
 
     `ifdef USE_BUS_CLOCK
@@ -51,6 +52,7 @@ module dqmRegs(
                 `else
                 `DQM_CLKS_PER_BIT:  clksPerBit[15:8] <= dataIn[15:8];
                 `endif
+                `DQM_SRC_SELECT:    combinerMode <= dataIn[10:8];
                 default:  ;
             endcase
         end
@@ -93,8 +95,8 @@ module dqmRegs(
                 `DQM_MSE_CONTROL:   dataOut = {mseAvgLength,mseMean};
                 `DQM_LOG10MSE:      dataOut = {log10MseOffset,log10MSE};
                 `DQM_DLL_FREQUENCY: dataOut = {dllCenterFreq};
-                `DQM_SRC_SELECT:    dataOut = {2'b0,payloadSize,12'b0,sourceSelect};
-                `DQM_PAYLOAD_SIZE:  dataOut = {2'b0,payloadSize,12'b0,sourceSelect};
+                `DQM_SRC_SELECT:    dataOut = {2'b0,payloadSize,5'b0,combinerMode,4'b0,sourceSelect};
+                `DQM_PAYLOAD_SIZE:  dataOut = {2'b0,payloadSize,5'b0,combinerMode,4'b0,sourceSelect};
 
                 `else //DQM_USE_DPLL
 

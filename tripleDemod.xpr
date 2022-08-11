@@ -1742,6 +1742,13 @@
     </FileSet>
     <FileSet Name="simTrellisCarrierLoop" Type="SimulationSrcs" RelSrcDir="$PSRCDIR/simTrellisCarrierLoop">
       <Filter Type="Srcs"/>
+      <File Path="$PPRDIR/fmDemod/fmDemodWithCE.v">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
       <File Path="$PPRDIR/fmMod/cicInterpolate.v">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -1779,14 +1786,6 @@
       </File>
       <File Path="$PPRDIR/trellis/testTrellisCarrierLoop.v">
         <FileInfo>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PPRDIR/fmDemod/fmDemodWithCE.v">
-        <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
@@ -2339,7 +2338,9 @@
     <Run Id="dqmC2CSynth" Type="Ft3:Synth" SrcSet="sources_1" Part="xc7k160tfbg676-1" ConstrsSet="dqmc2c_constrs" Description="Vivado Synthesis Defaults" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2016"/>
-        <Step Id="synth_design"/>
+        <Step Id="synth_design">
+          <Option Id="MoreOptsStr"><![CDATA[-verilog_define DQM_USE_CHIP_TO_CHIP=1]]></Option>
+        </Step>
       </Strategy>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
     </Run>

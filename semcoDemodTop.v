@@ -165,7 +165,7 @@ module semcoDemodTop (
 
 );
 
-    parameter VER_NUMBER = 16'd741;
+    parameter VER_NUMBER = 16'd742;
 
 
 //******************************************************************************
@@ -1595,7 +1595,7 @@ module semcoDemodTop (
 
     `ifdef DQM_USE_CHIP_TO_CHIP
     // Chip to Chip serial bus routing
-    reg                                 combinerInput;
+    wire                [2:0]           dqmCombinerMode; 
     reg                                 ch0SCLK;
     reg                                 ch0SFS;
     reg                                 ch0SDATA;
@@ -1603,37 +1603,16 @@ module semcoDemodTop (
     reg                                 ch1SFS;
     reg                                 ch1SDATA;
     always @* begin
-        case (demodSlot)
-            `DEMOD_SLOT_0: begin
-                combinerInput = 0;
-
+        case (dqmCombinerMode)
+            `DQM_CMB_MODE_DISABLED: begin
                 toPrev_CLK =    mseMCLK;
                 toPrev_FS =     mseMFS;
                 toPrev_DATA =   mseMDATA;
-
-                toNext_CLK = 0;
-                toNext_FS = 0;
-                toNext_DATA = 0;
-
-                ch0SCLK = 0;
-                ch0SFS = 0;
-                ch0SDATA = 0;
-
-                ch1SCLK = 0;
-                ch1SFS = 0;
-                ch1SDATA = 0;
-            end
-            `DEMOD_SLOT_1: begin
-                combinerInput = 0;
 
                 toNext_CLK =    mseMCLK;
                 toNext_FS =     mseMFS;
                 toNext_DATA =   mseMDATA;
 
-                toPrev_CLK = 0;
-                toPrev_FS = 0;
-                toPrev_DATA = 0;
-
                 ch0SCLK = 0;
                 ch0SFS = 0;
                 ch0SDATA = 0;
@@ -1642,9 +1621,7 @@ module semcoDemodTop (
                 ch1SFS = 0;
                 ch1SDATA = 0;
             end
-            `DEMOD_SLOT_2: begin
-                combinerInput = 1;
-
+            default: begin
                 toPrev_CLK = 0;
                 toPrev_FS = 0;
                 toPrev_DATA = 0;
@@ -1660,25 +1637,6 @@ module semcoDemodTop (
                 ch1SCLK =   fromPrev_CLK;
                 ch1SFS =    fromPrev_FS;
                 ch1SDATA =  fromPrev_DATA;
-            end
-            default: begin
-                combinerInput = 0;
-
-                toPrev_CLK = 0;
-                toPrev_FS = 0;
-                toPrev_DATA = 0;
-
-                toNext_CLK = 0;
-                toNext_FS = 0;
-                toNext_DATA = 0;
-
-                ch0SCLK = 0;
-                ch0SFS = 0;
-                ch0SDATA = 0;
-
-                ch1SCLK = 0;
-                ch1SFS = 0;
-                ch1SDATA = 0;
             end
         endcase
     end
@@ -1720,7 +1678,6 @@ module semcoDemodTop (
         .addr(addr),
         .din(dataIn),
         .dout(dqmDout),
-        .combinerInput(combinerInput),
         .combinerStartOfFrame(),
         .ch0MseSum(ch0MseSum),
         .ch0Log10MSE(ch0Log10MSE),
@@ -1731,6 +1688,7 @@ module semcoDemodTop (
         .magClkEn(magClkEn),
         .mag(mag),
         .sourceSelect(dqmSourceSelect),
+        .combinerMode(dqmCombinerMode),
         .dqmStartOfFrame(),
         .mseSum(mseSum),
         .log10MseSum(log10MSE),

@@ -589,6 +589,25 @@ module bitsync(
     always @(qMF) qMFReal = $itor(qMF)/(2**17);
     `endif
 
+    `define DEVIATION_USE_LONGER_AVG
+    `ifdef DEVIATION_USE_LONGER_AVG
+    // Calculation of average DC offset (freq offset in FSK mode) and average FSK deviation.
+    // This is an alpha/(1-alpha) filter where alpha = 1/(2^17).
+    reg             [34:0]  avgDeviation;
+    assign                  fskDeviation = avgDeviation[34:19];
+    always @(posedge clk) begin
+        if (reset) begin
+            avgDeviation <= 0;
+        end
+        else if (sym2xClkEn) begin
+            // Only use deviations isolated from a transition.
+            if (offsetEn && (noTransitionCount > 0) && (earlySignI == lateSignI)) begin
+                avgDeviation <= (avgDeviation - {{17{avgDeviation[34]}},avgDeviation[34:17]})
+                              + {{17{absDeviation[17]}},absDeviation};
+            end
+        end
+    end
+    `else // DEVIATION_USE_LONGER_AVG
     // Calculation of average DC offset (freq offset in FSK mode) and average FSK deviation.
     reg             [24:0]  avgDeviation;
     assign                  fskDeviation = avgDeviation[24:9];
@@ -604,6 +623,7 @@ module bitsync(
             end
         end
     end
+    `endif // DEVIATION_USE_LONGER_AVG
 
     `ifdef SIMULATE
     reg     [24:0]  avgOffsetError;
@@ -618,10 +638,14 @@ module bitsync(
             end
         end
     end
+
+    `ifdef SILOS
     real avgOffsetReal;
     always @* avgOffsetReal = $itor($signed(avgOffsetError[24:7]))/(2**17);
     real avgDevReal;
     always @* avgDevReal = $itor(avgDeviation[24:7])/(2**17);
+    `endif
+
     `endif
 
     //******************************** Loop Filter ********************************

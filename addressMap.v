@@ -660,16 +660,6 @@
 
     `define DQM_DLL_FREQUENCY   13'bx_xxxx_xxxx_10xx
     `define DQM_SRC_SELECT      13'bx_xxxx_xxxx_110x
-    `define DQM_PAYLOAD_SIZE    13'bx_xxxx_xxxx_111x
-
-    `else //DQM_USE_DPLL
-
-    `define DQM_CLKS_PER_BIT    13'bx_xxxx_xxxx_100x
-    `define DQM_PAYLOAD_SIZE    13'bx_xxxx_xxxx_101x
-    `define DQM_SRC_SELECT      13'bx_xxxx_xxxx_11xx
-
-    `endif //DQM_USE_DPLL
-
         `define DQM_SRC_LEGACY_I    4'b0000
         `define DQM_SRC_LEGACY_Q    4'b0001
         `define DQM_SRC_PCMTRELLIS  4'b0010
@@ -686,6 +676,39 @@
         `define DQM_SRC_DEC2_CH1    4'b1101
         `define DQM_SRC_DEC3_CH0    4'b1110
         `define DQM_SRC_RS_DEC      4'b1111
+
+        `define DQM_CMB_MODE_DISABLED   3'b000
+        `define DQM_CMB_MODE_CH0SELECT  3'b001
+        `define DQM_CMB_MODE_CH1SELECT  3'b010
+        `define DQM_CMB_MODE_OPTSELECT  3'b011
+        `define DQM_CMD_MODE_OPTRATIO   3'b100
+
+    `define DQM_PAYLOAD_SIZE    13'bx_xxxx_xxxx_111x
+
+    `else //DQM_USE_DPLL
+
+    `define DQM_CLKS_PER_BIT    13'bx_xxxx_xxxx_100x
+    `define DQM_PAYLOAD_SIZE    13'bx_xxxx_xxxx_101x
+    `define DQM_SRC_SELECT      13'bx_xxxx_xxxx_11xx
+        `define DQM_SRC_LEGACY_I    4'b0000
+        `define DQM_SRC_LEGACY_Q    4'b0001
+        `define DQM_SRC_PCMTRELLIS  4'b0010
+        `define DQM_SRC_SOQTRELLIS  4'b0011
+        `define DQM_SRC_STC         4'b0100
+        `define DQM_SRC_PNGEN       4'b0101
+        `define DQM_SRC_LDPC        4'b0110
+        `define DQM_SRC_RSVD0       4'b0111
+        `define DQM_SRC_DEC0_CH0    4'b1000
+        `define DQM_SRC_DEC0_CH1    4'b1001
+        `define DQM_SRC_DEC1_CH0    4'b1010
+        `define DQM_SRC_DEC1_CH1    4'b1011
+        `define DQM_SRC_DEC2_CH0    4'b1100
+        `define DQM_SRC_DEC2_CH1    4'b1101
+        `define DQM_SRC_DEC3_CH0    4'b1110
+        `define DQM_SRC_RS_DEC      4'b1111
+
+    `endif //DQM_USE_DPLL
+
 
 `define SOQTRELLIS_SPACE    13'b0_0101_1001_xxxx
 `define SOQTRELLISLFSPACE   13'b0_0101_101x_xxxx

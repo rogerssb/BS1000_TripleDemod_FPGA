@@ -10,7 +10,7 @@ module mseEstimate
 (
     input                               clk,
     input                               reset,
-    input                               combinerInput,
+    input               [2:0]           combinerMode,
     input                               combinerStartOfFrame,
     input   signed      [33:0]          ch0MseSum,
     input   signed      [LOG_BITS-1:0]  ch0Log10MSE,
@@ -127,7 +127,7 @@ module mseEstimate
 
     `define USE_LOG10_MODULE
     `ifdef USE_LOG10_MODULE
-
+    wire                            combinerInput = (combinerMode == `DQM_CMD_MODE_OPTRATIO);
     wire            [33:0]          linearValue = combinerInput ? ch0MseSum + ch1MseSum
                                                                 : diffTotal[47:14];
     wire    signed  [LOG_BITS-1:0]  logValue;
@@ -152,9 +152,22 @@ module mseEstimate
     wire    signed  [LOG_BITS-1:0] finalLogX = logValue + log10MseOffset[LOG_BITS-1:0];
 
     // Mux and Sign extend to get the final output
+    reg signed  [LOG_BITS-1:0]  log10MSEMux;
+    always @* begin
+        case (combinerMode)
+            `DQM_CMB_MODE_DISABLED:     log10MSEMux = finalLogX;
+            `DQM_CMB_MODE_CH0SELECT:    log10MSEMux = ch0Log10MSE;
+            `DQM_CMB_MODE_CH1SELECT:    log10MSEMux = ch1Log10MSE;
+            `DQM_CMB_MODE_OPTSELECT:    log10MSEMux = (ch0Log10MSE < ch1Log10MSE) ? ch0Log10MSE : ch1Log10MSE;
+            `DQM_CMD_MODE_OPTRATIO:     log10MSEMux = log10CmbMSE;
+            default:                    log10MSEMux = finalLogX;
+        endcase
+    end
+    assign log10MSE = {{16-LOG_BITS{log10MSEMux[LOG_BITS-1]}},log10MSEMux};
+    /*
     assign log10MSE = combinerInput ? {{16-LOG_BITS{log10CmbMSE[LOG_BITS-1]}},log10CmbMSE}
                                     : {{16-LOG_BITS{finalLogX[LOG_BITS-1]}},finalLogX};
-
+    */
     assign mseSum = diffTotal[47:14];
     assign log10MseSum = finalLogX;
 

@@ -15,7 +15,6 @@ module dqmFramer #(parameter VERSION=4'd0)
     `else
     input               [15:0]  clksPerBit,
     `endif
-    input                       combinerInput,
     input                       combinerStartOfFrame,
     output                      dqmStartOfFrame,
     output  reg                 dqmBitEn,

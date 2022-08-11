@@ -17,7 +17,6 @@ module dqm #(parameter regSpace = `DQMSPACE,
     input               [12:0]  addr,
     input               [31:0]  din,
     output reg          [31:0]  dout,
-    input                       combinerInput,
     input                       combinerStartOfFrame,
     input   signed      [33:0]          ch0MseSum,
     input   signed      [LOG_BITS-1:0]  ch0Log10MSE,
@@ -28,6 +27,7 @@ module dqm #(parameter regSpace = `DQMSPACE,
     input                       magClkEn,
     input               [12:0]  mag,
     output              [3:0]   sourceSelect,
+    output              [2:0]   combinerMode,
     output                      dqmStartOfFrame,
     output  signed      [33:0]          mseSum,
     output  signed      [LOG_BITS-1:0]  log10MseSum,
@@ -73,7 +73,8 @@ module dqm #(parameter regSpace = `DQMSPACE,
         `else
         .clksPerBit(clksPerBit),
         `endif
-        .sourceSelect(sourceSelect)
+        .sourceSelect(sourceSelect),
+        .combinerMode(combinerMode)
     );
 
 
@@ -83,7 +84,7 @@ module dqm #(parameter regSpace = `DQMSPACE,
     mseEstimate #(.LOG_BITS(LOG_BITS)) dqmm(
         .clk(clk),
         .reset(reset),
-        .combinerInput(combinerInput),
+        .combinerMode(combinerMode),
         .combinerStartOfFrame(combinerStartOfFrame),
         .ch0MseSum(ch0MseSum),
         .ch0Log10MSE(ch0Log10MSE),
@@ -135,7 +136,6 @@ module dqm #(parameter regSpace = `DQMSPACE,
         `else
         .clksPerBit(clksPerBit),
         `endif
-        .combinerInput(combinerInput),
         .combinerStartOfFrame(combinerStartOfFrame),
         .dqmStartOfFrame(dqmStartOfFrame),
         .dqmBitEn(dqmBitEn),
