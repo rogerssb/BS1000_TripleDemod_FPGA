@@ -145,9 +145,9 @@ begin
          clk_Nx            => ClkNx
     );
 
-   SyncRstProcess : process(Clk93M)
+   SyncRstProcess : process(ClkX1)
    begin
-      if (rising_edge(Clk93M)) then
+      if (rising_edge(ClkX1)) then
          if (Lock200 and LockedXn and not Reset) then
             SyncRst <= SyncRst(14 downto 0) & '0' ;
          else

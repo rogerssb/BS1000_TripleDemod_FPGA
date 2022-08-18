@@ -78,25 +78,24 @@ ARCHITECTURE rtl OF RAM_2Reads_1Write IS
    -- The decimal place is set in Matlab such that BinPt bits are right justified in a 32 bit word. This routine reads
    -- the 32 bit hex values, then takes the rightmost DataWidth values. Having data width minimizes the ram width.
    impure function initramfromfile (RamFileName : in string) return MyRam is
-      file     FilePntr    : text;
+      file     FilePntr    : text open read_mode is RamFileName;
       variable ramfileline : line;
       variable FuncRam     : MyRam;
-      variable SLV         : std_logic_vector(31 downto 0);
+      variable SLV         : std_logic_vector(DATA_WIDTH-1 downto 0);
       variable RealValue   : real;
       variable Good_v      : boolean;
    begin
-      file_open(FilePntr, RamFileName, read_mode);
       for i in MyRam'range loop
          if not ENDFILE(FilePntr) then
             readline (FilePntr, ramfileline);
             if (FILE_IS_SLV) then
                hread(ramfileline, SLV, Good_v);
-               assert Good_v report "Failed to convert hex of: " & ramfileline.all severity FAILURE;
+               assert Good_v report "Failed to convert hex of: " & ramfileline.all severity warning;
                FuncRam(i) := SLV(DATA_WIDTH-1 downto 0);
             else
                read(ramfileline, RealValue, Good_v);
                FuncRam(i) := to_slv(to_sfixed(RealValue, DATA_WIDTH + BINPT - 1, BINPT, fixed_saturate, fixed_truncate));
-               assert Good_v report "Failed to convert real of: " & ramfileline.all severity FAILURE;
+               assert Good_v report "Failed to convert real of: " & ramfileline.all severity warning;
             end if;
          else
             if (i < MyRam'high) then

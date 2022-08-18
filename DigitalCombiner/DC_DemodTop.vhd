@@ -47,8 +47,12 @@ ENTITY DC_DemodTop IS
       FPGA_ID0,
       FPGA_ID1,
       amDataEn,
+      dqmBitEn,
+      dqmBit,
       iDemodBit,
-      qDemodBit         : IN  std_logic;
+      qDemodBit,
+      iDemodClk,
+      qDemodClk         : IN  std_logic;
       amDataIn          : IN  SLV12;
       adc0              : IN  std_logic_vector(13 downto 0);
       -- interFpga data
@@ -127,7 +131,7 @@ BEGIN
                TxData1(1) <=  iDemodBit & qDemodBit & adc0(13 downto 8);
                TxData1(2) <=  amDataIn(7 downto 0);
                TxData1(3) <=  amDataEn & "000" & amDataIn(11 downto 8);
-               TxData1(4) <= std_logic_vector(TxData4);   -- spare channel, setup for debug
+               TxData1(4) <= std_logic_vector(TxData4);   -- DQM Muxed
                TxData2(0) <= x"00";
                TxData2(1) <= x"00";
                TxData2(2) <= x"00";

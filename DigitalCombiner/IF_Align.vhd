@@ -15,16 +15,12 @@
 
       Module Name: IF_Align.vhd
 
-      Description: Pack the data into 128 sample packets then do an FFT. Multiply
-   the FFT output with stored FFTs of the pilot at -66KHz, 0Hz and +66KHz as
-   cross correlations of the incoming pilot and the stored pilots. Do IFFTs of
+      Description: Pack the two complex inputs into 128 sample packets then do an FFT
+   on both complex pairs. Multiply the FFT outputs together. Do IFFTs of
    the cross correlations then overlap from previous frame and add the results.
-   Then search the result for the largest magnitude. This points
-   to the start of the pilot in the incoming signal. Now repack the resampled
-   inputs such that pilot is contained in one packet.
-      If the incoming pilot data is split across two packets the results of each
-   are less than normal and comparable to each other. To prevent this the routine
-   request that the front end packetizer skip 256 sample
+   Then search the result for the largest magnitude. This Index points to the offset
+   of the two IFs.
+      The incoming IFs are then delayed per the Index to align the output IFs.
 
    Dependencies: Top level module
 

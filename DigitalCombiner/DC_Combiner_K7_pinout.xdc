@@ -240,20 +240,6 @@ set_property SLEW SLOW [get_ports amDacCSn]
 
 
 
-#[Place 30-876] Port 'adcClk'  is assigned to PACKAGE_PIN 'D18'  which can only be used as the N side of a differential clock input.
-#Please use the following constraint(s) to pass this DRC check:
-# set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets systemClock/inst/clk_in1_systemClock]
-# set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets spiClk_IBUF]
-# set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets DdsSyncClk_IBUF]
-# set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets pll0_OUT1_IBUF]
-# set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets pll1_OUT1_IBUF]
-# set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets dac1_clk_OBUF]
-
-set_property CFGBVS VCCO [current_design]
-set_property CONFIG_VOLTAGE 3.3 [current_design]
-set_property BITSTREAM.CONFIG.CONFIGRATE 66 [current_design]
-set_property BITSTREAM.CONFIG.SPI_32BIT_ADDR YES [current_design]
-set_property BITSTREAM.CONFIG.SPI_BUSWIDTH 4 [current_design]
 
 
 

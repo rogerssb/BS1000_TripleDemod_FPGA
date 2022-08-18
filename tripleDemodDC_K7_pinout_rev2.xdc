@@ -60,6 +60,7 @@ set_property PACKAGE_PIN B15 [get_ports {dac1_d[0]}]
 
 set_property PACKAGE_PIN AF25 [get_ports DQMOut]
 set_property PACKAGE_PIN AD26 [get_ports sdiOut]
+set_property PACKAGE_PIN AB26 [get_ports Sw50Ohm]
 
 set_property PACKAGE_PIN AE21 [get_ports ch0ClkOut]
 set_property PACKAGE_PIN AD21 [get_ports ch0DataOut]
@@ -95,9 +96,41 @@ set_property PACKAGE_PIN AF22 [get_ports amDacClk]
 set_property PACKAGE_PIN AE22 [get_ports amDacCSn]
 set_property PACKAGE_PIN Y20 [get_ports amDacDataOut]
 
-# set_property PACKAGE_PIN AE23 [get_ports vidSel[0]]
-# set_property PACKAGE_PIN AF23 [get_ports vidSel[1]]
-# set_property PACKAGE_PIN AD25 [get_ports vidSel[2]]
+set_property PACKAGE_PIN AD5 [get_ports {bsAdc[13]}]
+set_property PACKAGE_PIN V1  [get_ports {bsAdc[12]}]
+set_property PACKAGE_PIN AB1 [get_ports {bsAdc[11]}]
+set_property PACKAGE_PIN V2  [get_ports {bsAdc[10]}]
+set_property PACKAGE_PIN Y6  [get_ports {bsAdc[9]}]
+set_property PACKAGE_PIN Y2  [get_ports {bsAdc[8]}]
+set_property PACKAGE_PIN AA5 [get_ports {bsAdc[7]}]
+set_property PACKAGE_PIN AC4 [get_ports {bsAdc[6]}]
+set_property PACKAGE_PIN AC6 [get_ports {bsAdc[5]}]
+set_property PACKAGE_PIN AB6 [get_ports {bsAdc[4]}]
+set_property PACKAGE_PIN AB5 [get_ports {bsAdc[3]}]
+set_property PACKAGE_PIN Y5  [get_ports {bsAdc[2]}]
+set_property PACKAGE_PIN AC3 [get_ports {bsAdc[1]}]
+set_property PACKAGE_PIN Y3  [get_ports {bsAdc[0]}]
+set_property PACKAGE_PIN AD6 [get_ports bsAdc_overflow]
+set_property IOSTANDARD LVCMOS18 [get_ports {bsAdc[*]}]
+set_property IOSTANDARD LVCMOS18 [get_ports bsAdc_overflow]
+set_property PACKAGE_PIN W3  [get_ports bsAdc_powerDown]
+set_property IOSTANDARD LVCMOS18 [get_ports bsAdc_powerDown]
+
+set_property PACKAGE_PIN U2  [get_ports bsHighImpedance]
+set_property IOSTANDARD LVCMOS18 [get_ports bsHighImpedance]
+set_property PACKAGE_PIN AD1 [get_ports bsSingleEnded]
+set_property IOSTANDARD LVCMOS18 [get_ports bsSingleEnded]
+
+set_property PACKAGE_PIN AE3 [get_ports bsDacSELn]
+set_property PACKAGE_PIN AE2 [get_ports bsDacSCLK]
+set_property PACKAGE_PIN AE6 [get_ports bsDacMOSI]
+set_property IOSTANDARD LVCMOS18 [get_ports bsDacSELn]
+set_property IOSTANDARD LVCMOS18 [get_ports bsDacSCLK]
+set_property IOSTANDARD LVCMOS18 [get_ports bsDacMOSI]
+
+# set_property PACKAGE_PIN AA3 [get_ports BS_Clk]
+# set_property PACKAGE_PIN AF5 [get_ports BS_I2C_SCl]
+# set_property PACKAGE_PIN AF4 [get_ports BS_I2C_SDa]
 
 # enable MonData.xdc in project
 # set_property PACKAGE_PIN H17 [get_ports MonClk]
@@ -117,12 +150,8 @@ set_property PACKAGE_PIN Y20 [get_ports amDacDataOut]
 # set_property PACKAGE_PIN L18 [get_ports {MonData[1]}]
 # set_property PACKAGE_PIN L17 [get_ports {MonData[0]}]
 
-# set_property PACKAGE_PIN AE23 [get_ports {VidSel[2]}]
-# set_property PACKAGE_PIN AF23 [get_ports {VidSel[1]}]
-# set_property PACKAGE_PIN AD25 [get_ports {VidSel[0]}]
-
-set_property PACKAGE_PIN AB21 [get_ports lockLed0n]
-set_property PACKAGE_PIN AC21 [get_ports lockLed1n]
+set_property PACKAGE_PIN AB21 [get_ports {lockLed0n}]
+set_property PACKAGE_PIN AC21 [get_ports {lockLed1n}]
 
 set_property PACKAGE_PIN W21 [get_ports {video1OutSelect[1]}]
 set_property PACKAGE_PIN V21 [get_ports {video1OutSelect[0]}]
@@ -309,6 +338,7 @@ set_property CONFIG_VOLTAGE 3.3 [current_design]
 set_property BITSTREAM.CONFIG.CONFIGRATE 66 [current_design]
 set_property BITSTREAM.CONFIG.SPI_32BIT_ADDR YES [current_design]
 set_property BITSTREAM.CONFIG.SPI_BUSWIDTH 4 [current_design]
+
 
 
 

@@ -733,61 +733,6 @@ end generate;
          serial      => PrnDataQ
    );
 
-   Delay_process: process (ClkOver2)
-   begin
-      if (rising_edge(ClkOver2)) then
-         if (Locked) then
-            ResetShft  <= ResetShft(16 downto 0) & not Locked;
-            DataRate   <= DataRate + 1 when (DataRate < 9) else 0;
-            if (BitCounter > 256) then
-               NotFirstTime <= '1';
-            end if;
-            if (DataRate = 0) then
-               BitCounter <= 16x"0" when (BitCounter = 1280) else BitCounter + 1;
-               PrnEn   <= '1';
-               case (Mode) is
-                  when BPSK =>
-                     DataI <= Plus1 when (PrnDataI) else Neg1;
-                     DataQ <= Zero;
-                  when QPSK =>
-                     DataI <= Plus1 when (PrnDataI) else Neg1;
-                     DataQ <= Plus1 when (PrnDataQ) else Neg1;
-                  when OQPSK =>
-                     DataI <= Plus1 when (PrnDataI) else Neg1;
-                  when others =>
-                     DataI <= Zero;
-                     DataQ <= Zero;
-               end case;
-            elsif ((DataRate = 5) and (Mode = OQPSK)) then
-               DataQ <= Plus1 when (PrnDataQ) else Neg1;   -- Delay Q a half bit
-               -- PrnEn should have gone low on DataRate = 1
-            else
-               PrnEn <= '0';
-            end if;
-
-            DataDlyI <= DataDlyI(126 downto 0) & FilteredI;
-            DataDlyQ <= DataDlyQ(126 downto 0) & FilteredQ;
-
-            -- generate noise at twice the data rate to get a nice wide noise bandwidth
-            NoiseEn      <= '1' when ((DataRate = 0) or (DataRate = 5)) else '0';
-
-            I1Noisy      <= resize(AM_Mod1 * (Filtered1Noise    + OffTunedI), I1Noisy);
-            Q1Noisy      <= resize(AM_Mod1 * (Filtered1NoiseDly + OffTunedQ), I1Noisy);
-            Filtered1NoiseDly <= Filtered1Noise;
-
-            I2Noisy      <= resize(AM_Mod2 * (Filtered2Noise    + NcodI), I2Noisy);
-            Q2Noisy      <= resize(AM_Mod2 * (Filtered2NoiseDly + NcodQ), I2Noisy);
-            Filtered2NoiseDly <= Filtered2Noise;
-
-            Noise1Gained    <= resize(to_sfixed(Noise1, 3, -12) * to_sfixed(NoiseGain1, DataI), Noise1Gained);
-            Noise2Gained    <= resize(to_sfixed(Noise2, 3, -12) * to_sfixed(NoiseGain2, DataI), Noise2Gained);
-
-            Noise2Rms <= resize(Noise2Rms - (Noise2Rms sra 10) + (abs(Filtered2Noise) sra 10), I1Rms);
-            I1Rms  <= resize(I1Rms  - (I1Rms  sra 10) + (abs(FilteredI)  sra 10), I1Rms);
-         end if;
-      end if;
-   end process Delay_process;
-
    Ch1ThenCh2 <= VioBits(4);
 
   NoiseGen1 : gng
@@ -964,6 +909,63 @@ end generate;
          StartOut    => open
    );
 
+   Delay_process: process (ClkOver2)
+   begin
+      if (rising_edge(ClkOver2)) then
+         if (Locked) then
+            ResetShft  <= ResetShft(16 downto 0) & not Locked;
+            DataRate   <= DataRate + 1 when (DataRate < 9) else 0;
+            if (BitCounter > 256) then
+               NotFirstTime <= '1';
+            end if;
+            if (DataRate = 0) then
+               BitCounter <= 16x"0" when (BitCounter = 1280) else BitCounter + 1;
+               PrnEn   <= '1';
+               case (Mode) is
+                  when BPSK =>
+                     DataI <= Plus1 when (PrnDataI) else Neg1;
+                     DataQ <= Zero;
+                  when QPSK =>
+                     DataI <= Plus1 when (PrnDataI) else Neg1;
+                     DataQ <= Plus1 when (PrnDataQ) else Neg1;
+                  when OQPSK =>
+                     DataI <= Plus1 when (PrnDataI) else Neg1;
+                  when others =>
+                     DataI <= Zero;
+                     DataQ <= Zero;
+               end case;
+            elsif ((DataRate = 5) and (Mode = OQPSK)) then
+               DataQ <= Plus1 when (PrnDataQ) else Neg1;   -- Delay Q a half bit
+               -- PrnEn should have gone low on DataRate = 1
+            else
+               PrnEn <= '0';
+            end if;
+
+            DataDlyI <= DataDlyI(126 downto 0) & FilteredI;
+            DataDlyQ <= DataDlyQ(126 downto 0) & FilteredQ;
+
+            -- generate noise at twice the data rate to get a nice wide noise bandwidth
+            NoiseEn      <= '1' when ((DataRate = 0) or (DataRate = 5)) else '0';
+
+            I1Noisy      <= resize(AM_Mod1 * (Filtered1Noise    + OffTunedI), I1Noisy);
+            Q1Noisy      <= resize(AM_Mod1 * (Filtered1NoiseDly + OffTunedQ), I1Noisy);
+            Filtered1NoiseDly <= Filtered1Noise;
+
+            I2Noisy      <= resize(AM_Mod2 * (Filtered2Noise    + NcodI), I2Noisy);
+            Q2Noisy      <= resize(AM_Mod2 * (Filtered2NoiseDly + NcodQ), I2Noisy);
+            Filtered2NoiseDly <= Filtered2Noise;
+
+            Noise1Gained    <= resize(to_sfixed(Noise1, 3, -12) * to_sfixed(NoiseGain1, DataI), Noise1Gained);
+            Noise2Gained    <= resize(to_sfixed(Noise2, 3, -12) * to_sfixed(NoiseGain2, DataI), Noise2Gained);
+
+            Noise2Rms <= resize(Noise2Rms - (Noise2Rms sra 10) + (abs(Filtered2Noise) sra 10), I1Rms);
+            I1Rms  <= resize(I1Rms  - (I1Rms  sra 10) + (abs(FilteredI)  sra 10), I1Rms);
+         end if;
+      end if;
+   end process Delay_process;
+
+
+
    -- COMB_LAG_COEF           13'bx_xxxx_xxxx_00xx
    -- COMB_LEAD_COEF          13'bx_xxxx_xxxx_01xx
    -- COMB_SWEEP_RATE         13'bx_xxxx_xxxx_10xx
@@ -1105,6 +1107,7 @@ end generate;
    ch1DataOut  <= RecoveredData;
    ch1ClkOut   <= '1' when (DataRate > 4) else '0';
 
+/*
    DdsProc: process (DdsPdClkBufG)
    begin
       if (rising_edge(DdsPdClkBufG)) then
@@ -1161,6 +1164,7 @@ end generate;
          iOut2    => open,
          qOut2    => open
       );
+*/
 
 END rtl;
 

@@ -230,9 +230,6 @@ ARCHITECTURE rtl OF RS_DecoderTopTB IS
             dllPhaseError,
             ColsSlv                 : SLV8;
    signal   RowsSlv                 : SLV4;
-   signal   PhaseInc                : std_logic_vector(31 downto 0);
-   signal   NcoData                 : std_logic_vector(47 downto 0);
-   signal   Ratio                   : real := 2.0**32 * 1.0e6 / 93.3e6;
    signal   ShiftCount              : natural range 0 to 32;
    signal   Shifter,
             RS_DecStatus,
@@ -274,35 +271,21 @@ BEGIN
       wait;
    end process;
 
-   SEQUENCER_PROC : process
-   begin
-      wait until (Fail1 or Fail2/* or Fail3*/ or Done);
-      if (Fail1) then
-         report "Test1 Failed";
-      elsif (Fail2) then
-         report "Test2 Failed";
-      elsif (Fail3) then
-         report "Test3 Failed";
-      elsif (Done) then
-         report "Test: OK";
-      end if;
-      stop;
-   end process;
+--   SEQUENCER_PROC : process
+--   begin
+--      wait until (Fail1 or Fail2/* or Fail3*/ or Done);
+--      if (Fail1) then
+--         report "Test1 Failed";
+--      elsif (Fail2) then
+--         report "Test2 Failed";
+--      elsif (Fail3) then
+--         report "Test3 Failed";
+--      elsif (Done) then
+--         report "Test: OK";
+--      end if;
+--      stop;
+--   end process;
 
-   PhaseInc <= std_logic_vector(to_unsigned(integer(Ratio),32));
-
-
-   NCO : OffsetNCO
-      PORT MAP (
-         aclk                 => Clk,
-         aresetn              => '1',
-         s_axis_config_tvalid => '1',
-         s_axis_config_tdata  => PhaseInc,
-         m_axis_data_tready   => EncoderValidIn,
-         s_axis_config_tready => open,
-         m_axis_data_tvalid   => open,
-         m_axis_data_tdata    => NcoData
-      );
 
    EncodeProcess : process (clk)
       variable Rows_v      : UINT4;
@@ -390,7 +373,7 @@ BEGIN
    RS_Enc : rs_encoder_CCSDS
       PORT MAP (
          aclk                             => clk,
-         s_axis_input_tdata               => std_logic_vector(BlockCount), -- + FakeCount), --NcoData(18 downto 11),
+         s_axis_input_tdata               => std_logic_vector(BlockCount),
          s_axis_input_tvalid              => EncoderValidIn,
          s_axis_input_tready              => EncoderReady,
          s_axis_input_tlast               => EncoderLastIn,

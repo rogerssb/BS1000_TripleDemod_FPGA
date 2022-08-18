@@ -79,7 +79,9 @@ PACKAGE Semco_pkg IS
    type  UINT5_ARRAY       is array (NATURAL RANGE <>) OF UINT5;
    type  UINT8_ARRAY       is array (NATURAL RANGE <>) OF UINT8;
    type  SLV8_ARRAY        is array (natural range <>) of SLV8;
+   type  SLV12_ARRAY       is array (natural range <>) of SLV12;
    type  SLV16_ARRAY       is array (natural range <>) of SLV16;
+   type  SLV18_ARRAY       is array (natural range <>) of SLV18;
    type  SLV32_ARRAY       is array (natural range <>) of SLV32;
    type  SFIX18_17_ARRAY   is array (natural range <>) of sfixed(0 downto -17);
 

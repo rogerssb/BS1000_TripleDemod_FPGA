@@ -35,6 +35,8 @@ Dependencies:
 LIBRARY IEEE;
 USE IEEE.std_logic_1164.ALL;
 USE IEEE.numeric_std.ALL;
+LIBRARY unisim;
+USE unisim.vcomponents.ALL;
 USE work.fixed_pkg.ALL;
 USE work.semco_pkg.ALL;
 
@@ -48,8 +50,10 @@ ENTITY TepsTop IS
       adc2_clk_n,
       adc3_clk_p,    -- Pin AF5/4
       adc3_clk_n,
-      sysref_in_p,   -- Pins U5/4
+      sysref_in_p,   -- Pin U5/4
       sysref_in_n,
+      clk_pl_user1_p, -- Pin C8,7   Program to 100MHz, 1:1 with PLL input
+      clk_pl_user1_n,
       vin0_01_p,     -- Pin AB2/1
       vin0_01_n,
       vin0_23_p,     -- Pin Y2/1
@@ -77,7 +81,10 @@ ENTITY TepsTop IS
       SpiReset,
       RF_Pll_CSB,    -- Pin F6
       RF_PLL_SDI,    -- Pin B5
-      RF_PLL_SCK     : OUT std_logic   -- Pin A5
+      RF_PLL_SCK     : OUT std_logic;   -- Pin A5
+      ImagOut,
+      RealOut,
+      IfOut          : OUT SLV18_ARRAY(3 downto 0)
 
    );
 END TepsTop;
@@ -226,7 +233,6 @@ ARCHITECTURE rtl OF TepsTop IS
          clk2x,      -- `93.3MHz
          clk4x,      -- twice Clk2x
          reset,
-         ce,
          cs,
          wr0, wr1, wr2, wr3,
          busClk            : IN  std_logic;
@@ -327,7 +333,7 @@ ARCHITECTURE rtl OF TepsTop IS
       PORT (
          reset,
          clk_in1     : IN STD_LOGIC;
-         Clk10,
+         Clk8r33,
          Clk50,
          Clk100,
          Clk200,
@@ -402,7 +408,8 @@ ARCHITECTURE rtl OF TepsTop IS
             avm_readdata        : SLV32;
    signal   Mcu_awaddr,
             Mcu_araddr          : STD_LOGIC_VECTOR(39 DOWNTO 0);
-   signal   Clk,
+   signal   clk_pl_user1,
+            Clk8r33,
             Clk50,
             Clk100,
             Clk200,
@@ -418,8 +425,6 @@ ARCHITECTURE rtl OF TepsTop IS
             m0_axis_aresetn,
             m00_axis_tvalid      : STD_LOGIC;
    signal   Agc                  : SLV12_ARRAY(7 downto 0);
-   signal   ImagOut,
-            RealOut              : SLV18_ARRAY(3 downto 0);
    signal   CombRdData           : SLV32_ARRAY(3 downto 0);
    signal   ChRealSlv16,
             ChImagSlv16          : SLV16_ARRAY(7 downto 0);
@@ -434,10 +439,16 @@ ARCHITECTURE rtl OF TepsTop IS
 BEGIN
 
 
-   Clk         <= clk_adc0;         -- 125MHz
    RfAdcRdCs   <= Mcu_arvalid when (Mcu_araddr ?= 40x"04----") else '0';
    RfAdcWrCs   <= Mcu_awvalid when (Mcu_awaddr ?= 40x"04----") else '0';
    CombAddr    <= '1'         when (Mcu_araddr ?= 40x"08----") else '0';
+
+   pl_sysref : IBUFDS
+      port map (
+         I  => clk_pl_user1_p,
+         IB => clk_pl_user1_n,
+         O  => clk_pl_user1
+      );
 
    -- All 8 A/D channels
    RFSOC : usp_rf_data_converter_0
@@ -492,13 +503,13 @@ BEGIN
          irq               => pl_ps_irq0(0),
          sysref_in_p       => sysref_in_p,      -- from Dac1 reference
          sysref_in_n       => sysref_in_n,
-         user_sysref_adc   => ,
+         user_sysref_adc   => Clk8r33,
          m0_axis_aresetn   => Reset_n,  -- mX_axis it the RF channel
          m0_axis_aclk      => clk_adc0,         -- mX_axis_aclk is an input that clocks the data out of the channel
          m00_axis_tdata    => ChRealSlv16(0),   -- driving all output data with a commone clock makes all the stream coherent
-         m00_axis_tvalid   => m00_axis_tvalid,  -- mX0 is the I output, mX1 is the Q
+         m00_axis_tvalid   => open,
          m00_axis_tready   => '1',
-         m01_axis_tdata    => ChImagSlv16(0),
+         m01_axis_tdata    => ChImagSlv16(0),  -- mX0 is the I output, mX1 is the Q
          m01_axis_tvalid   => open,
          m01_axis_tready   => '1',
          m02_axis_tdata    => ChRealSlv16(1),
@@ -553,7 +564,7 @@ BEGIN
 
    Read7606_u : Read7606
       PORT MAP(
-         Clk            => Clk,
+         Clk            => clk_adc0,
          Reset          => not Reset_n,
          CE             => '1',
          DoutA          => DoutA,
@@ -576,8 +587,8 @@ BEGIN
    ClkGen : Clock_Times_0r5_1_2
       PORT MAP(
          reset          => not Reset_n,
-         clk_in1        => clk_adc0,
-         Clk10          => Clk10,
+         clk_in1        => clk_pl_user1,
+         Clk8r33        => Clk8r33,
          Clk50          => Clk50,
          Clk100         => Clk100,
          Clk200         => Clk200,
@@ -585,7 +596,7 @@ BEGIN
    );
 
 
-GenLable :
+GenLabel :
    for n in 0 to 3 generate
       begin
          ChReal_f(2*n)     <= to_sfixed(ChRealSlv16(2*n)   & "00", ChReal_f(0));
@@ -609,11 +620,10 @@ GenLable :
          addr              => avm_address(4 downto 0),
          dataIn            => avm_writedata,
          dataOut           => CombRdData(n),
-         ce                => m00_axis_tvalid,
-         re1In             => ChReal_f(n),
-         im1In             => ChImag_f(n),
-         re2In             => ChReal_f(n+1),
-         im2In             => ChImag_f(n+1),
+         re1In             => ChReal_f(2*n),
+         im1In             => ChImag_f(2*n),
+         re2In             => ChReal_f(2*n+1),
+         im2In             => ChImag_f(2*n+1),
          ch1agc            => Agc(n),
          ch2agc            => Agc(n+1),
          maximagout        => open,
@@ -622,7 +632,7 @@ GenLable :
          minrealout        => open,
          imagout           => ImagOut(n),    -- combined Q
          realout           => RealOut(n),    -- combined I
-         ifOut             => open,
+         ifOut             => IfOut(n),
          gainoutmax        => open,
          gainoutmin        => open,
          phase_detect      => open,
@@ -642,7 +652,7 @@ GenLable :
    end generate;
 
    Mcu_rdata <= RfSocRdData when (RfAdcRdCs) else
-      CombRdData(to_integer(unsigned(Mcu_araddr(6 downto 5))))a   when (CombCs) else 32x"0";
+      CombRdData(to_integer(unsigned(Mcu_araddr(6 downto 5)))) when (CombAddr) else 32x"0";
    Mcu_awready    <= RfSoc_awready when (RfAdcWrCs) else '0';
    Mcu_wready     <= RfSoc_wready  when (RfAdcWrCs) else '0';
    Mcu_arready    <= RfSoc_arready when (RfAdcRdCs) else '0';
@@ -654,7 +664,7 @@ GenLable :
    Mcu_rresp      <= RfSoc_rresp  when (RfAdcRdCs) else (others=>'0');
    Mcu_rlast      <= RfSoc_rlast  when (RfAdcRdCs) else '0';
    Mcu_rvalid     <= RfSoc_rvalid when (RfAdcRdCs) else '0';
-
+   RfSoc_bready   <= Mcu_bready   when (RfAdcWrCs) else '0';
 
    MCU : zynq_ultra_ps_e_0
       PORT MAP (

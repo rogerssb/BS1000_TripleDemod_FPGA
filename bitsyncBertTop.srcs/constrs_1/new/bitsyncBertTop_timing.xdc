@@ -15,23 +15,20 @@ create_generated_clock -name {cAndD1/pllDivider_reg_n_0_[0]} -source [get_ports 
 create_generated_clock -name cAndD2/dll/dllOutputClk -source [get_pins systemClock/inst/mmcm_adv_inst/CLKOUT0] -divide_by 1 [get_pins cAndD2/dll/dllOutputClk_reg/Q]
 create_generated_clock -name {cAndD2/dllDivider_reg_n_0_[0]} -source [get_pins cAndD2/dll/dllOutputClk_reg/Q] -divide_by 4 [get_pins {cAndD2/dllDivider_reg[0]/Q}]
 create_generated_clock -name {cAndD2/pllDivider_reg_n_0_[0]} -source [get_ports pll2_OUT1] -divide_by 4 [get_pins {cAndD2/pllDivider_reg[0]/Q}]
+create_generated_clock -name {pngen/pngenRegs/data_out_reg[0]} -source [get_pins flexbusClock/inst/mmcm_adv_inst/CLKOUT0] -divide_by 4 [get_pins {pngen/pngenRegs/ldpcRate_reg[0]/Q}]
+create_generated_clock -name {pngen/pngenRegs/data_out_reg[1]} -source [get_pins flexbusClock/inst/mmcm_adv_inst/CLKOUT0] -divide_by 4 [get_pins {pngen/pngenRegs/ldpcRate_reg[1]/Q}]
+create_clock -period 10.714 -name FramerClk -waveform {0.000 5.357} [get_pins framer/clk]
 
-set_multicycle_path -setup -from [get_pins -hierarchical -regexp {.*mse/mse./diffTotal_reg.*/C$}] -to [get_pins -hierarchical -regexp {.*mse/mse./.*/D$}] 4
-set_multicycle_path -hold -from [get_pins -hierarchical -regexp {.*mse/mse./diffTotal_reg.*/C$}] -to [get_pins -hierarchical -regexp {.*mse/mse./.*/D$}] 3
+set_multicycle_path -setup 4 -from [get_pins -hierarchical -regexp {.*mse/mse./diffTotal_reg.*/C$}] -to [get_pins -hierarchical -regexp {.*mse/mse./.*/D$}]
+set_multicycle_path -hold  3 -from [get_pins -hierarchical -regexp {.*mse/mse./diffTotal_reg.*/C$}] -to [get_pins -hierarchical -regexp {.*mse/mse./.*/D$}]
 
 
 set_input_delay -clock [get_clocks sysClk] -min -add_delay 1.800 [get_ports {adc0[*]}]
 set_input_delay -clock [get_clocks sysClk] -max -add_delay 5.400 [get_ports {adc0[*]}]
 set_input_delay -clock [get_clocks sysClk] -min -add_delay 1.800 [get_ports {adc1[*]}]
 set_input_delay -clock [get_clocks sysClk] -max -add_delay 5.400 [get_ports {adc1[*]}]
-set_input_delay -clock [get_clocks fbClk] -min -add_delay 0.500 [get_ports {fb_addr[*]}]
-set_input_delay -clock [get_clocks fbClk] -max -add_delay 13.500 [get_ports {fb_addr[*]}]
-set_input_delay -clock [get_clocks fbClk] -min -add_delay 0.500 [get_ports fb_ale]
-set_input_delay -clock [get_clocks fbClk] -max -add_delay 13.500 [get_ports fb_ale]
-set_input_delay -clock [get_clocks fbClk] -min -add_delay 0.500 [get_ports fb_csn]
-set_input_delay -clock [get_clocks fbClk] -max -add_delay 13.500 [get_ports fb_csn]
-set_input_delay -clock [get_clocks fbClk] -min -add_delay 0.500 [get_ports fb_wrn]
-set_input_delay -clock [get_clocks fbClk] -max -add_delay 13.500 [get_ports fb_wrn]
+set_input_delay -clock [get_clocks fbClk] -min -add_delay 0.500 [get_ports fb_*]
+set_input_delay -clock [get_clocks fbClk] -max -add_delay 13.500 [get_ports fb_*]
 set_input_delay -clock [get_clocks virtual_clock] -min -add_delay 1.000 [get_ports fb_oen]
 set_input_delay -clock [get_clocks virtual_clock] -max -add_delay 1.000 [get_ports fb_oen]
 set_input_delay -clock [get_clocks differentialClk] -min -add_delay 12.500 [get_ports differentialData]
@@ -149,27 +146,6 @@ set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets differentialClk_IBUF_BUFG]
 set_false_path -from * -to [get_clocks sysClk]
 set_clock_groups -name Clocks -asynchronous -group [get_clocks -include_generated_clocks fbClk] -group [list [get_clocks -include_generated_clocks sysClk] [get_clocks [list cAndD0/dll/dllOutputClk cAndD1/dll/dllOutputClk cAndD2/dll/dllOutputClk sysClk [get_clocks -of_objects [get_pins systemClock/inst/mmcm_adv_inst/CLKOUT0]]]]] -group [get_clocks -include_generated_clocks differentialClk] -group [get_clocks -include_generated_clocks singleEndedClk] -group [get_clocks -include_generated_clocks pll0_OUT1] -group [get_clocks -include_generated_clocks pll1_OUT1] -group [get_clocks -include_generated_clocks pll2_OUT1]
 
-set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks fbClk] -group [get_clocks -include_generated_clocks sysClk]
-set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks differentialClk] -group [get_clocks -include_generated_clocks sysClk]
-set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks singleEndedClk] -group [get_clocks -include_generated_clocks sysClk]
-set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks pll0_OUT1] -group [get_clocks -include_generated_clocks sysClk]
-set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks pll1_OUT1] -group [get_clocks -include_generated_clocks sysClk]
-set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks pll2_OUT1] -group [get_clocks -include_generated_clocks sysClk]
-# set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks fbClk] -group [get_clocks -include_generated_clocks singleEndedClk]
-# set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks fbClk] -group [get_clocks -include_generated_clocks differentialClk]
-# set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks fbClk] -group [get_clocks -include_generated_clocks pll0_OUT1]
-# set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks fbClk] -group [get_clocks -include_generated_clocks pll1_OUT1]
-# set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks singleEndedClk] -group [get_clocks -include_generated_clocks differentialClk]
-# set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks singleEndedClk] -group [get_clocks -include_generated_clocks pll0_OUT1]
-# set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks singleEndedClk] -group [get_clocks -include_generated_clocks pll1_OUT1]
-# set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks singleEndedClk] -group [get_clocks -include_generated_clocks sysClk]
-# set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks differentialClk] -group [get_clocks -include_generated_clocks pll0_OUT1]
-# set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks differentialClk] -group [get_clocks -include_generated_clocks pll1_OUT1]
-# set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks differentialClk] -group [get_clocks -include_generated_clocks sysClk]
-# set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks pll0_OUT1] -group [get_clocks -include_generated_clocks pll1_OUT1]
-# set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks pll0_OUT1] -group [get_clocks -include_generated_clocks sysClk]
-# set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks pll1_OUT1] -group [get_clocks -include_generated_clocks sysClk]
-
 # set_multicycle_path -from [get_pins {dacInterface/sr_reg[15]/C}] -to [get_ports dacMOSI] 2
 
 
@@ -196,6 +172,15 @@ set_false_path -from [get_clocks sysClk] -to [get_ports ch1Lockn]
 set_false_path -from [get_clocks fbClk] -to [get_ports pll*_PWDn]
 set_false_path -from [get_clocks fbClk] -to [get_ports ch*HighImpedance]
 set_false_path -from [get_clocks fbClk] -to [get_ports ch*SingleEnded]
+
+
+
+set_clock_groups -name Clocks -asynchronous -group [get_clocks -include_generated_clocks fbClk] -group [list [get_clocks -include_generated_clocks sysClk] [get_clocks [list cAndD0/dll/dllOutputClk cAndD1/dll/dllOutputClk cAndD2/dll/dllOutputClk sysClk [get_clocks -of_objects [get_pins systemClock/inst/mmcm_adv_inst/CLKOUT0]]]]] -group [get_clocks -include_generated_clocks fbClk] -group [get_clocks -include_generated_clocks sysClk] -group [get_clocks -include_generated_clocks *diff*] -group [get_clocks -include_generated_clocks *sin*] -group [get_clocks -include_generated_clocks *pll0*] -group [get_clocks -include_generated_clocks *pll1*] -group [get_clocks -include_generated_clocks *pll2*] -group [get_clocks FramerClk]
+
+set_false_path -to [get_ports *ch*SELn*]
+set_false_path -to [get_ports {dacMOSI dacSCLK}]
+set_false_path -to [get_ports {dacMOSI dacSCLK pll*_REF *sDiffClkOut *sDiffDataOut *sClkOut *sDataOut encClkOut encDataOut spareData}]
+
 
 
 

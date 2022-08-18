@@ -266,7 +266,7 @@ ARCHITECTURE rtl OF DemodSerDesTop IS
    END component DUC;
 
    -- this is the testbench version of semcoDemodTop
-   component semcoDemodTop
+   component semcoDemodTopDemod
       port (
          spiClk,
          spiCSn,
@@ -276,15 +276,10 @@ ARCHITECTURE rtl OF DemodSerDesTop IS
          pll0_OUT1,
          pll1_OUT1,
          amAdcDataIn,
-         spiFlashMISO,
          FPGA_ID0,
          FPGA_ID1          : in  std_logic;
          adc0              : in  std_logic_vector(13 downto 0);
          spiDataOut        : inout std_logic;
-         clk,
-         clk2x,
-         clkOver2,
-         clkLocked,
          adc01_powerDown,
          dac_rst,
          dac_sclk,
@@ -302,8 +297,6 @@ ARCHITECTURE rtl OF DemodSerDesTop IS
          NextClk_n,
          PrevClk_p,
          PrevClk_n,
-         spiFlashCSn,
-         spiFlashMOSI,
          lockLed0n,
          lockLed1n,
          ch0ClkOut,ch0DataOut,
@@ -333,7 +326,7 @@ ARCHITECTURE rtl OF DemodSerDesTop IS
          MDB_186,
          MDB_187              : out SLV16
       );
-   end component semcoDemodTop;
+   end component semcoDemodTopDemod;
 
    COMPONENT vm_cordic_fast IS
       GENERIC (
@@ -504,14 +497,14 @@ ClkGen : if (in_simulation) generate
       wait for 600 nS;
       SimReset <= '0';
    end process;
-
+/*
    MDB_180_1(17 downto 0) <= 18x"00";        -- NoiseGain
    MDB_182_3              <= 32x"000";    -- PhaseInc
    MDB_184_5              <= 32x"0000_0000";    -- AM_Freq
    MDB_186(11 downto 0)   <= 12x"000" ;         -- ChAgc
    MDB_187                <= 16x"1000";         -- Options & Delay
    MDB_188_9(17 downto 0) <= 18x"0_0000";       -- AM_Amp
-
+*/
    clkLocked      <= '1';
    FPGA_ID0reg <= '0';
    FPGA_ID1reg <= '0';
@@ -845,13 +838,9 @@ DataGen : if (in_simulation) generate
 
 else generate
 
-   demodTop : semcoDemodTop
+   demodTop : semcoDemodTopDemod
       port map (
          adc0Clk           => adc0Clk,
-         clk               => Clk,
-         clk2x             => Clk2x,
-         clkOver2          => ClkOver2,
-         clkLocked         => clkLocked,
          spiClk            => spiClk,
          spiCSn            => spiCSn,
          spiDataIn         => spiDataIn,
@@ -859,7 +848,6 @@ else generate
          pll0_OUT1         => pll0_OUT1,
          pll1_OUT1         => pll1_OUT1,
          amAdcDataIn       => amAdcDataIn,
-         spiFlashMISO      => spiFlashMISO,
          FPGA_ID0          => FPGA_ID0,
          FPGA_ID1          => FPGA_ID1,
          adc0              => IF_Mux,
@@ -881,8 +869,6 @@ else generate
          NextClk_n         => NextClk_n,
          PrevClk_p         => PrevClk_p,
          PrevClk_n         => PrevClk_n,
-         spiFlashCSn       => spiFlashCSn,
-         spiFlashMOSI      => spiFlashMOSI,
          lockLed0n         => lockLed0n,
          lockLed1n         => lockLed1n,
          Sw50Ohm           => Sw50Ohm,

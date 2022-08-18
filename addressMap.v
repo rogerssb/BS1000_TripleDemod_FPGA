@@ -75,9 +75,6 @@
 //`define ADD_SCPATH
 `define ADD_CMA
 `define ADD_TRELLIS
-`ifndef NO_MULTIH
-   `define ADD_MULTIH
-`endif
 //`define ADD_LDPC
 `define ADD_DQM
 //`define ADD_SUPERBAUD_TED
@@ -658,7 +655,7 @@
         `define COMB_SWEEP_LIMIT   5'b0_110x
         `define COMB_OPTIONS       5'b0_111x
         `define COMB_REF_LEVEL     5'b1_00xx
-        
+
 // Reed Solomon Decoder subsystem registers start at x0C80
 `define RS_DEC_SPACE          13'b0_1100_010x_xxxx
     `define RS_DEC_CONTROL            13'bx_xxxx_xxx0_00xx
