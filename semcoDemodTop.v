@@ -165,7 +165,7 @@ module semcoDemodTop (
 
 );
 
-    parameter VER_NUMBER = 16'd742;
+    parameter VER_NUMBER = 16'd744;
 
 
 //******************************************************************************
@@ -736,6 +736,7 @@ module semcoDemodTop (
     end
 
     wire    [31:0]  vitDout;
+    wire    [4:0]   viterbiMode;
     viterbi viterbi(
         .clk(clk),
         .clkEn(1'b1),
@@ -747,6 +748,7 @@ module semcoDemodTop (
         .din(dataIn),
         .dout(vitDout),
         .bitsyncMode(bitsyncMode),
+        .viterbiMode(viterbiMode),
         .ch0SymEn(iDemodSymEn),
         .ch0SymData(iDemodSymData),
         .ch1SymEn(qDemodSymEn),
@@ -759,17 +761,32 @@ module semcoDemodTop (
     reg                 ch0VitSym2xEn;
     reg                 ch1VitSym2xEn;
     always @* begin
-        case (bitsyncMode)
-            `BS_MODE_DUAL_CH,
-            `BS_MODE_OFFSET_CH: begin
-                ch0VitSym2xEn = iDemodSym2xEn;
-                ch1VitSym2xEn = iDemodSym2xEn;
-            end
-            default: begin
-                ch0VitSym2xEn = iDemodSymEn;
-                ch1VitSym2xEn = qDemodSymEn;
-            end
-        endcase
+        if (viterbiMode[4]) begin
+            case (viterbiMode[2:0])
+                `VIT_MODE_DUAL_CH,
+                `VIT_MODE_OFFSET_CH: begin
+                    ch0VitSym2xEn = iDemodSym2xEn;
+                    ch1VitSym2xEn = iDemodSym2xEn;
+                end
+                default: begin
+                    ch0VitSym2xEn = iDemodSymEn;
+                    ch1VitSym2xEn = qDemodSymEn;
+                end
+            endcase
+        end
+        else begin
+            case (bitsyncMode)
+                `BS_MODE_DUAL_CH,
+                `BS_MODE_OFFSET_CH: begin
+                    ch0VitSym2xEn = iDemodSym2xEn;
+                    ch1VitSym2xEn = iDemodSym2xEn;
+                end
+                default: begin
+                    ch0VitSym2xEn = iDemodSymEn;
+                    ch1VitSym2xEn = qDemodSymEn;
+                end
+            endcase
+        end
     end
 `endif //ADD_VITERBI
 
@@ -1077,7 +1094,7 @@ module semcoDemodTop (
             `ifdef ADD_VITERBI
             `DEC_SRC_VITERBI: begin
                 dualCh0Input <= ch0VitBit;
-                dualCh1Input <= ch0VitBit;
+                dualCh1Input <= (viterbiMode[3]) ? ch1VitBit : ch0VitBit;
                 dualSymEn <= ch0VitBitEn;
                 dualSym2xEn <= ch0VitSym2xEn;
             end
@@ -1595,7 +1612,7 @@ module semcoDemodTop (
 
     `ifdef DQM_USE_CHIP_TO_CHIP
     // Chip to Chip serial bus routing
-    wire                [2:0]           dqmCombinerMode; 
+    wire                [2:0]           dqmCombinerMode;
     reg                                 ch0SCLK;
     reg                                 ch0SFS;
     reg                                 ch0SDATA;

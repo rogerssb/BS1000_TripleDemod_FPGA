@@ -11,8 +11,9 @@ module viterbiRegs(
     output  reg         [31:0]  dataOut,
     input                       ch0InSync,
     input                       ch1InSync,
-    input               [2:0]   ch0SyncState,
-    input               [2:0]   ch1SyncState,
+    input               [3:0]   ch0SyncState,
+    input               [3:0]   ch1SyncState,
+    output  reg         [4:0]   viterbiMode,
     output  reg         [15:0]  inverseMeanMantissa,
     output  reg         [2:0]   inverseMeanExponent,
     output  reg         [15:0]  berTestLength
@@ -25,7 +26,10 @@ module viterbiRegs(
                     inverseMeanMantissa[7:0] <= dataIn[7:0];
                 end
                 `VIT_BER_TEST_LENGTH: begin
-                    berTestLength[7:0] <= dataIn[7:0];
+                    berTestLength[7:0]      <= dataIn[7:0];
+                end
+                `VIT_CONTROL: begin
+                    viterbiMode             <= dataIn[4:0];
                 end
                 default: ;
             endcase
@@ -64,7 +68,8 @@ module viterbiRegs(
                 `VIT_INVERSE_MEAN:      dataOut = {13'h0,inverseMeanExponent,inverseMeanMantissa};
                 `VIT_BER_TEST_LENGTH:   dataOut = {16'h0,berTestLength};
                 `VIT_STATUS:            dataOut = {ch1InSync,ch0InSync,14'h0,
-                                                   8'b0,1'b0,ch1SyncState,1'b0,ch0SyncState};
+                                                   8'b0,ch1SyncState,ch0SyncState};
+                `VIT_CONTROL:           dataOut = {27'b0, viterbiMode};
                 default:                dataOut = 32'h0;
             endcase
         end
